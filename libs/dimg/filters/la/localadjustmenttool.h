@@ -79,10 +79,11 @@ public:
     /** Standard constructor with image container to parse
          */
 //    explicit LocalAdjustments(DImg* const orgImage, int x, int y, int radius, QObject* const parent = 0);
+//    explicit LocalAdjustments(DImg* const orgImage, int n, LAContainer lac[], QObject* const parent = 0);
 
     explicit LocalAdjustments(DImg* const orgImage, QObject* const parent = 0);
 
-//    explicit LocalAdjustments(DImg* const orgImage, int n, LAContainer lac[], QObject* const parent = 0);
+
 
     ~LocalAdjustments();
 
@@ -94,11 +95,7 @@ public:
 
 //    void filterImage();
 
-    /** Returns a QPoint of the center of the selection.
-         */
-    QPoint centerSelection();
 
-    QPoint centerSelection(int x, int y, int radius);
 
     /**
      * @brief addSelection
@@ -108,7 +105,94 @@ public:
      */
     int addSelection(LAContainer lac);
 
+    /**
+     * @brief getSelection
+     * Returns the selection of that particular Index (for testing)
+     * @param index
+     * index of the selection. (integer from 0 to 19)
+     * @return
+     */
     DImg getSelection(int index);
+
+
+
+    /**
+         * Applies the DImg selection on the parent photo. Uses normal
+         * blending. ##INCOMPLETE##
+         */
+    DImg applyDImgSelection(int index);
+
+    DImg returnOrigImage();
+
+
+    /**
+     * @brief modifyRGBA   to change the parameters of the RGBA of that selection
+     * @param index        to fix the selection
+     * @param r            red component
+     * @param g            green component
+     * @param b            blue component
+     * @param a            alpha component
+     */
+    void modifyRGBA(int index, double r, double g, double b, double a);
+
+//    DImg getModifiedSelection(double r, double g, double b, double a);
+
+    /**
+     * @brief getModifiedSelection
+     * Returns the immediate modSelection of that index. Used for tests
+     * @param index
+     * @return
+     */
+
+    DImg getModifiedSelection(int index);
+
+    /**
+     * @brief getFinalImage
+     * It performs all the tasks, and recreates the final image, and gives as a output
+     * N.B. - you need to explicitly run, startFilterDirectly, before running this
+     *        function
+     * @return
+     *        a DImg as the same size of m_orgImage
+     */
+    DImg getFinalImage();
+
+
+    /**
+         * @brief changeBrightness increases or decreases brightness, takes in
+         * a value -255 to 255
+         * @param brightness integer ranging from -255 to 255 (even for 16bit images)
+         */
+    //void changeBrightness(int brightness);
+
+    /**
+         * @brief printHSL
+         * prints the HSL values of the pixels in a file. Check for study only
+         * @param image
+         */
+    //void printHSL(DImg image);
+
+    /**
+         * @brief changeRGBA
+         * all the parameters are values ranging from -100.0 to 100.0
+         * @param r - red component
+         * @param g - green component
+         * @param b - blue component
+         * @param a - alpha component
+         * @return
+         */
+//    void changeRGBA(LAContainer &lac, double r, double g, double b, double a);
+
+
+    //DImg* applySelection(QString path);
+
+
+private :
+
+    /** Returns a QPoint of the center of the selection.
+         */
+    QPoint centerSelection();
+
+    QPoint centerSelection(int x, int y, int radius);
 
     /** Returns the selection in RGBA32 format
          *  QImage source is the image from which the selection is to be taken
@@ -166,60 +250,34 @@ public:
     /** Returns the file, after applying the selection Image on the
          *  original image, to produce the output.
          */
-    DImg applySelection(DImg* selection);
+    void apply8bitSelection(DImg &destination, DImg &source);
 
     /**
-         * Applies the DImg selection on the parent photo. Uses normal
-         * blending. ##INCOMPLETE##
-         */
-    DImg applyDImgSelection(DImg& selection);
-    //DImg* applySelection(QString path);
-
-
-    /**
-         * @brief changeBrightness increases or decreases brightness, takes in
-         * a value -255 to 255
-         * @param brightness integer ranging from -255 to 255 (even for 16bit images)
-         */
-    //void changeBrightness(int brightness);
+     * @brief apply16bitSelection
+     *        ##INCOMPLETE##
+     * @param selection
+     * @return
+     */
+    void apply16bitSelection(DImg &destination, DImg &source);
 
     /**
-         * @brief printHSL
-         * prints the HSL values of the pixels in a file. Check for study only
-         * @param image
-         */
-    //void printHSL(DImg image);
-
-    /**
-         * @brief changeRGBA
-         * all the parameters are values ranging from -100.0 to 100.0
-         * @param r - red component
-         * @param g - green component
-         * @param b - blue component
-         * @param a - alpha component
-         * @return
-         */
-//    void changeRGBA(LAContainer &lac, double r, double g, double b, double a);
-
+     * @brief changeSingleRGBA
+     * creates modSelection for a single selection identified by index
+     * @param index
+     */
     void changeSingleRGBA(int index);
 
+    /**
+     * @brief changeAllRGBA
+     * to create modSelection from Selection
+     */
     void changeAllRGBA();
 
     /**
-     * @brief modifyRGBA   to change the parameters of the RGBA of that selection
-     * @param index        to fix the selection
-     * @param r            red component
-     * @param g            green component
-     * @param b            blue component
-     * @param a            alpha component
+     * @brief applyAllSelections
+     * Applies all the selections to the finalImage.
      */
-    void modifyRGBA(int index, double r, double g, double b, double a);
-
-//    DImg getModifiedSelection(double r, double g, double b, double a);
-
-    DImg getModifiedSelection(int index);
-
-private :
+    void applyAllSelections();
 
     /** returns the circular selection with color
          *  QImage source is the original image from which the selection is to be made
@@ -227,7 +285,7 @@ private :
          *  QPoint origCenter is the center in the source Image.
          *  QImage getcolorSelection(QImage selection, QPoint selectionCenter);
          */
-    QImage getcolorSelection(QImage selection, QPoint selectionCenter);
+    //QImage getcolorSelection(QImage selection, QPoint selectionCenter);
 
     /** Returns the blurred/soft edge selection
          *  QImage selection is the hard selection
@@ -235,11 +293,13 @@ private :
          *  int outerRadius determines the radius beyond which alpha values are 0
          *  QPoint selectionCenter determines the center of the selection with respect to the original Image
          */
-    QImage getSoftSelection(QImage source, int innerRadius, int outerRadius, QPoint origCenter);
+    //QImage getSoftSelection(QImage source, int innerRadius, int outerRadius, QPoint origCenter);
 
     QImage createLayer(QImage selection);
 
-    DImg createDImgLayer();
+    DImg createDImgLayer(DImg &selection, QPoint SelectionCenter, QPoint origCenter);
+
+    DImg createDImgLayer(int index);
 
     /** Image Conversions */
     void srgb2lch(float fimg[][4], int size);

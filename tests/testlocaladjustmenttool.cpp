@@ -126,30 +126,48 @@ int main(int argc, char** argv)
         DImg selection = la.getSelection(0);
         selection.save(selectionFilePath,"PNG");
 
-//        LocalAdjustments la(&img, x, y, radius);
-//        la.startFilterDirectly();
-//        DImg selection=la.getDImgSoftSelection();
-//        selection = la.getDImgColorSelection();
+        /**
+        LocalAdjustments la(&img, x, y, radius);
+        la.startFilterDirectly();
+        DImg selection=la.getDImgSoftSelection();
+        selection = la.getDImgColorSelection();
 
-//        LAContainer lac[1];
-//        lac[0].center.setX(x);
-//        lac[0].center.setY(y);
-//        lac[0].radius = radius;
-//        LocalAdjustments la(&img, 1, lac);
-//        la.filterImage();
-////        la.startAnalyse();
-//        DImg selection = la.getSelection(0);
-//        selection.save(selectionFilePath,"PNG");
+        LAContainer lac[1];
+        lac[0].center.setX(x);
+        lac[0].center.setY(y);
+        lac[0].radius = radius;
+        LocalAdjustments la(&img, 1, lac);
+        la.filterImage();
+//        la.startAnalyse();
+        DImg selection = la.getSelection(0);
+        selection.save(selectionFilePath,"PNG");
 
-        //to test modify
-//        selection = la.getModifiedSelection(0.0, 0.0, 0.0, 0.0);
+        to test modify
+        selection = la.getModifiedSelection(0.0, 0.0, 0.0, 0.0);
+        */
+
         selection = la.getModifiedSelection(0);
         selection.save(modifiedSelectionFilePath,"PNG");
+
+        qDebug() << "Modified Selection saved";
+        qDebug() << "Enter 1 to continue or ^C to exit";
+        int check;
+        cin >> check;
+        if (check == 1 )
+        {
+            qDebug() << "Procedure to get the final image";
+            qDebug() << "Procedure starts";
+            DImg output = la.getFinalImage();
+            output.save("finalImage.png","PNG");
+        }
+        DImg out = la.returnOrigImage();
+        out.save("Orig Image.png","PNG");
     }
+
 
     if ( choice == "-a" )
     {
-        /*
+/*
         //attach selection to image
         QString temp(argv[4]);
         int x      = temp.toInt();
@@ -163,7 +181,7 @@ int main(int argc, char** argv)
         DImg selection(maskPath.filePath(), 0, DRawDecoding(settings));
         DImg output = la.applyDImgSelection(selection);
         output.save(outFilePath, "PNG");
-        */
+*/
     }
 //    if ( choice == "-m")
 //    {

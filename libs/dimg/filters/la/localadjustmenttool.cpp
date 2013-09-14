@@ -51,7 +51,6 @@
 #include <qmath.h>
 #include <QFileDialog>
 #include <QMessageBox>
-#include <QDebug>
 #include <QGraphicsItem>
 #include <QGraphicsScene>
 #include <QGraphicsPixmapItem>
@@ -141,6 +140,7 @@ public:
     {
     }
     DImg selection;
+    DImg finalImage;
     QPoint selectionCenter;
     int centerX;
     int centerY;
@@ -156,31 +156,6 @@ LocalAdjustments::LocalAdjustments(DImg* const img, QObject* const parent)
     d->count = 0;
     setOriginalImage(*img);
 }
-
-
-/*
-LocalAdjustments::LocalAdjustments(DImg *const orgImage, int n, LAContainer lac[], QObject *const parent)
-: DImgThreadedAnalyser(parent, "LocalAdjustments"), d(new Private)
-{
-    setOriginalImage(*orgImage);
-    for ( int i = 0 ; i < n ; i++)
-    {
-        d->sln[i] = lac[i];
-    }
-    d->count = n;
-}
-*/
-
-/**
-LocalAdjustments::LocalAdjustments(DImg* const img, int x, int y, int radius, QObject* const parent)
-: DImgThreadedAnalyser(parent, "LocalAdjustments"), d(new Private)
-{
-    setOriginalImage(*img);
-    d->centerX = x;
-    d->centerY = y;
-    d->radius  = radius;
-}
-*/
 
 LocalAdjustments::~LocalAdjustments()
 {
@@ -212,6 +187,7 @@ void LocalAdjustments::createSelection(int index)
     d->sln[index].selection                 = getDImgSoftSelection(d->sln[index].center, d->sln[index].selectionCenter, d->sln[index].radius);
     DImg temp                               = d->sln[index].selection;
     d->sln[index].selection                 = getDImgColorSelection(temp, d->sln[index].selectionCenter );
+    d->sln[index].selection.save("After Creation.png","PNG");
 }
 
 //void LocalAdjustments::filterImage()
@@ -232,6 +208,7 @@ void LocalAdjustments::startAnalyse()
     for (i = 0 ; (i < d->count) && (i < 20); i ++ )
     {
         createSelection(i);
+        changeSingleRGBA(i);
     }
 
     //color modify the selections based on RGBA
@@ -281,279 +258,11 @@ QPoint LocalAdjustments::centerSelection(int x, int y, int radius)
     return sCenter;
 }
 
-QPoint LocalAdjustments::centerSelection()
-{
-    QImage img         = m_orgImage.copyQImage();
-    int outerRadius    = d->radius;
-    QPoint origCenter;
-    origCenter.setX(d->centerX);
-    origCenter.setY(d->centerY);
-    if (outerRadius == 0)
-    {
-        return origCenter;
-    }
-    int leftlimit   = origCenter.x() - outerRadius;
-    int rightlimit  = origCenter.x() + outerRadius - 1;
-    int toplimit    = origCenter.y() - outerRadius;
-    int bottomlimit = origCenter.y() + outerRadius - 1;
-    QPoint sCenter;
-    
-    //-----Check if borders exceed image boundaries
-    if (leftlimit < 0 )
-    {
-        leftlimit = 0;
-    }
-    if (rightlimit >= img.width())
-    {
-        rightlimit = img.width()-1;
-    }
-    if (toplimit < 0 )
-    {
-        toplimit = 0;
-    }
-    if ( bottomlimit >= img.height())
-    {
-        bottomlimit = img.height() -1;
-    }
-    
-    sCenter.setX(origCenter.x()-leftlimit);
-    sCenter.setY(origCenter.y()-toplimit);
-    qDebug() << "scenter X = " << sCenter.x();
-    qDebug() << "scenter Y = " << sCenter.y();
-    return sCenter;
-}
-
 DImg LocalAdjustments::getSelection(int index)
 {
     return d->sln[index].selection;
 }
 
-DImg LocalAdjustments::getSelection()
-{
-    QImage img = m_orgImage.copyQImage();
-    QImage selection;
-    int outerRadius = d->radius;
-    int innerRadius = 0.7 * outerRadius;
-    QPoint origCenter;
-    origCenter.setX(d->centerX);
-    origCenter.setY(d->centerY);
-    //    selection=getbasicSelection(img,outerRadius,origCenter);
-    selection=getSoftSelection(img,innerRadius,outerRadius,origCenter);
-    selection=getcolorSelection(selection,centerSelection());
-
-    // we return a DImg object, so it'll be in DImg format.
-    DImg mask(selection);
-    return (mask);
-}
-
-DImg LocalAdjustments::getDImgSoftSelection()
-{
-    uint i          = 0;      //loop variables
-    uint j          = 0;      //loop variables
-    uint x          = 0;      //loop variables
-    uint y          = 0;      //loop variables
-    int innerRadius = 0.7 * d->radius;
-    int outerRadius = d->radius;
-    QPoint origCenter;
-    origCenter.setX(d->centerX);
-    origCenter.setY(d->centerY);
-    int leftlimit   = origCenter.x() - outerRadius;
-    int rightlimit  = origCenter.x() + outerRadius - 1;
-    int toplimit    = origCenter.y() - outerRadius;
-    int bottomlimit = origCenter.y() + outerRadius - 1;
-    int width = m_orgImage.width();
-    int height = m_orgImage.height();
-    QRect crop;
-    QSize size;
-    
-    //---- Fixing out of bounds for the boudaries -----------------------------
-    
-    if (leftlimit < 0 )
-    {
-        leftlimit = 0;
-    }
-    if (rightlimit >= width)
-    {
-        rightlimit = width - 1;
-    }
-    if (toplimit < 0 )
-    {
-        toplimit = 0;
-    }
-    if ( bottomlimit >= height)
-    {
-        bottomlimit = height - 1;
-    }
- 
-    //---- Setting up Crop ----------------------------------------------------
-
-    QPoint p1;
-    p1.setX(leftlimit);
-    p1.setY(toplimit);
-    QPoint p2;
-    p2.setX(rightlimit);
-    p2.setY(bottomlimit);
-    crop.setTopLeft(p1);
-    crop.setBottomRight(p2);
-
-    //---- Fixing the size of the QSize size -----------------------------------
-
-    size.setHeight(bottomlimit-toplimit+1);
-    size.setWidth(rightlimit - leftlimit + 1);
-    qDebug() << "Rect : "<<crop;
-    
-//    DImg mask(crop.width(), crop.height(), m_orgImage.sixteenBit(), true, 0, true);
-    DImg mask(m_orgImage.width() , m_orgImage.height(), m_orgImage.sixteenBit(), true, 0, true);
-//    DImg mask = m_orgImage;
-    mask.crop(crop);
-    
-    //---- Copy the m_orgImage data to mask -----------------------------------
-
-    uint iStart = crop.topLeft().x();
-    uint iStop  = crop.topRight().x();
-    uint jStart = crop.topLeft().y();
-    uint jStop  = crop.bottomRight().y();
-
-    qDebug() << "crop.topLeft().x()    = " << crop.topLeft().x();
-    qDebug() << "crop.topRight().x()   = " << crop.topRight().x();
-    qDebug() << "crop.topLeft().y()    = " << crop.topLeft().y();
-    qDebug() << "crop.bottomLeft().y() = " << crop.bottomLeft().y();
-
-    QFile file("check data.txt");
-    file.open(QIODevice::WriteOnly | QIODevice::Text);
-    QTextStream out(&file);
-    out << "This file is generated by Qt\n";
-
-    //testing the basic fill command
-    DColor fill;
-    fill.setRed(255);
-    fill.setBlue(255);
-    fill.setGreen(255);
-    fill.setAlpha(100);
-
-    mask.fill(fill);
-
-
-    for ( i = iStart , x = 0  ; i <= iStop ; i++ , x++ )
-    {
-        for ( j = jStart , y = 0 ; j <= jStop; j++ , y++)
-        {
-            DColor pixel = m_orgImage.getPixelColor(i,j);
-            DColor setPixel;
-            setPixel.setRed(pixel.red());
-            setPixel.setGreen(pixel.green());
-            setPixel.setBlue(pixel.blue());
-            setPixel.setAlpha(pixel.alpha());
-            out << "m_orgImage (i,j) " << i << "\t" << j << "\t" << pixel.red() << "\t" << pixel.green() << "\t" << pixel.blue() << "\t" << pixel.alpha() << "\n";//<< "\t mask : " << x << "\t" << y << "\n";
-            //out << "VAlue = " << pixel.red() << "\t" << pixel.green() << "\t" << pixel.blue() << "\t" << pixel.alpha() << "\n";
-            mask.setPixelColor(x,y,setPixel);
-        }
-    }
-
-    mask.save("Trymefirst.png","PNG");
-//    return mask;
-
-    //---- Make the circular selection ------------------------------------------
-    
-    QPoint selectionCenter = d->selectionCenter;
-    qDebug() << "selection Center is  : " << selectionCenter;
-    int centerx            = selectionCenter.x();
-    int centery            = selectionCenter.y();
-    uint sz                 = mask.height() * mask.width();
-    float diffRadius       = outerRadius - innerRadius;
-    int limit              = (m_orgImage.sixteenBit() ? 65535 : 255 );
-    //int r;          //red
-    //int g;          //green
-    //int b;          //blue
-    float a;        //alpha value temp
-    DColor col;     //to store color of a pixel
-    float distance; //to store the value of distance between variables
-    float fimg[sz] [4];
-    qDebug() << "outerRadius = " << outerRadius;
-    qDebug() << "innerRadius = " << innerRadius;
-    qDebug() << "Limit is " << limit;
-
-    //--- check for proper data transfer
-
-    qDebug() << " Working properly, all variables initialized";
-
-    x = 0;
-    for (i = 0; (i < mask.width()); i++)
-    {
-        for (j = 0; (j < mask.height()); j++)
-        {
-            col           = mask.getPixelColor(i, j);
-            fimg[x][0] = col.red();
-            fimg[x][1] = col.green();
-            fimg[x][2] = col.blue();
-            fimg[x][3] = col.alpha();
-            x++;
-        }
-    }
-    qDebug() << "X is " << x << "; Size is " << sz;
-
-    qDebug() << "mask.height()" << mask.height();
-    qDebug() << "mask.width()" << mask.width();
-
-    x = 0;
-    for (i = 0; runningFlag() && (i < mask.width()); i++)
-    {
-        for (j = 0; runningFlag() && (j < mask.height()); j++)
-        {
-            //if distance > outer radius, make alpha = zero
-//            distance=(i-centery)*(i-centery)+(j-centerx)*(j-centerx);
-            distance=(j-centery)*(j-centery)+(i-centerx)*(i-centerx);
-            distance=qSqrt(distance);
-            if (distance < outerRadius)
-            {
-                if (distance <= innerRadius)
-                {
-                    //mask.setPixel(j,i,QColor(r,g,b,255).rgba());
-                    fimg[x][3] = limit;
-                }
-                else
-                {
-                    a = (diffRadius-(distance-innerRadius))/diffRadius;
-                    a = a * limit;
-                    //**** UNCOMMENT FOR CHECK (next line) ***
-                    //                    qDebug() << "Alpha Value = " << a;
-                    //mask.setPixel(j,i,QColor(r,g,b,((int)(qFloor(a)))).rgba());
-                    fimg[x][3] = a;
-                }
-            }
-            else
-            {
-                fimg[x][3] = 0;
-            }
-            out << "Distance  = " << distance << "; alpha value  = " << ((int)qFloor(fimg[x][3])) << "\n";
-            x++;
-        }
-    }
-    //Q_ASSERT(check);
-
-
-    bool sixteenBit=false;
-    if (limit == 65535)
-    {
-        col.setSixteenBit(true);
-        sixteenBit = true;
-    }
-    x = 0;
-    for ( i = 0 ; i<mask.width() ; i++ )
-    {
-        for ( j=0 ; j<mask.height() ; j++ )
-        {
-            DColor pixel(fimg[x][0],fimg[x][1],fimg[x][2],(int)(qFloor(fimg[x][3])),sixteenBit);
-            out << "VAlue = " << fimg[x][0] << " " << fimg[x][1] << " " << fimg[x][2] << " " << (int)(qFloor(fimg[x][3])) << "\n";
-            mask.setPixelColor( i, j, pixel);
-            x++;
-        }
-    }
-    mask.save("Circular Selection.png","PNG");
-    d->selection = mask;
-    //save new file, save it as "testingDImg2.txt"
-    return mask;
-}
 
 DImg LocalAdjustments::getDImgSoftSelection(QPoint origCenter, QPoint selectionCenter, int radius)
 {
@@ -760,154 +469,6 @@ DImg LocalAdjustments::getDImgSoftSelection(QPoint origCenter, QPoint selectionC
     return mask;
 }
 
-DImg LocalAdjustments::getDImgColorSelection()
-{
-    //---- Color Selection ---------------------------------------------------
-    uint i,j,x;
-    uint sz;
-    DImg mask = d->selection;
-    sz = mask.width() * mask.height();
-    float fimg[sz][4];
-    int n = (d->selectionCenter.y() * mask.width()) + d->selectionCenter.x();
-    int limit = (m_orgImage.sixteenBit() ? 65535 : 255 );
-    float difference[sz];
-
-    QFile checkfile("testingColor.txt");
-    checkfile.open(QIODevice::WriteOnly | QIODevice::Text);
-    QTextStream print(&checkfile);
-    print << "This file is generated by Qt\n";
-
-    //---- Fill the fimg array ------------------------------------------------
-
-    mask.save("colorSelectionInit.png","PNG");
-    x = 0;
-    for (i = 0; (i < mask.width()); i++)
-    {
-        for (j = 0; (j < mask.height()); j++)
-        {
-            if ( (i == d->selectionCenter.x() ) && (j == d->selectionCenter.y()))
-            {
-                qDebug() << "found the correct n = " << x;
-            }
-            DColor col = mask.getPixelColor(i, j);
-            fimg[x][0] = col.red();
-            fimg[x][1] = col.green();
-            fimg[x][2] = col.blue();
-            fimg[x][3] = col.alpha();
-            print << fimg[x][0] << "\t" << fimg[x][1] << "\t" << fimg[x][2] << "\t" << fimg[x][3] << "\n";
-            x++;
-        }
-    }
-
-    qDebug() << "========= In Color Selection Function =========";
-    qDebug() << "X is " << x << "; Size is " << sz;
-    qDebug() << "Limit = " << limit;
-
-    //---- Convert the fimg[sz][4] to values from 0 to 1
-    for ( i = 0 ; i < sz ; i ++ )
-    {
-        for ( j = 0 ; j < 4 ; j++)
-        {
-            fimg[i][j] = fimg[i][j] / limit;
-        }
-    }
-
-    //---- set up sixteenBit for sixteenBit data
-    bool sixteenBit=false;
-    if (limit == 65535)
-    {
-        sixteenBit = true;
-    }
-
-    //-----We convert the whole image to CIELAB -------------------------------
-    qDebug() << "n = " << n;
-    srgb2lab(fimg,sz);
-
-    //store the lab values in some file (say labme.txt)
-    QFile fileLab("labme.txt");
-    fileLab.open(QIODevice::WriteOnly | QIODevice::Text);
-    QTextStream outLab(&fileLab);
-    for (i=0; i<sz; i++)
-    {
-        outLab << fimg[i][0] << "\t" << fimg[i][1] << "\t" << fimg[i][2] << "\t" << fimg[i][3]<<"\n";
-    }
-    fileLab.close();
-    qDebug() << "After conversion:";
-
-    //-----Comparing with Center Pixel ----------------------------------------
-    //Here we consider the central pixel, i.e. center, we take the color of those pixels
-    float reference[4];
-    //test check of the selectionCenter values
-    qDebug() << "Selection Center X = " << d->selectionCenter.x();
-    qDebug() << "Selection Center Y = " << d->selectionCenter.y();
-    DColor col = mask.getPixelColor(d->selectionCenter.x(), d->selectionCenter.y());
-    qDebug() << "col value : " << col.red() << "\t" << col.green() << "\t" << col.blue() << "\t" << col.alpha();
-
-    for ( i = 0 ; i < 4 ; i++)
-    {
-        reference[i] = fimg[n][i];
-    }
-    qDebug() << "New Reference Values : ";
-    qDebug() << reference[0] << "\t" << reference[1] << "\t" << reference[2] << "\t" << reference[3];
-    colorDifference(fimg,reference,difference,sz);
-
-    //-----We convert the whole Image back to SRGB-----------------------------
-
-    lab2srgb(fimg,sz);
-    for ( i=0; i<sz; i++)
-    {
-        for (j=0 ; j<4 ; j++)
-        {
-            fimg[i][j] = fimg[i][j] * limit;
-        }
-    }
-    x=0;
-    for (i=0;i<mask.width(); i++)
-    {
-        for(j=0;j<mask.height();j++)
-        {
-//            c=QColor::fromRgba(selection.pixel(j,i));
-//            for (k = 0; k < 3 ; k++)
-//            {
-//                fimg[x][k] = fimg[x][k] * limit;
-//            }
-            if (difference[x]<0.2)
-            {
-                fimg[x][3] = fimg[x][3] * (0.2 - difference[x]) * 5;
-//                selection.setPixel(j,i,QColor(((int)(fimg[x][0]*limit)),((int)(fimg[x][1]*limit)),((int)(fimg[x][2]*limit)),(fimg[x][3]*limit*(0.2-difference[x])*5)).rgba());
-            }
-            else
-            {
-                fimg[x][3] = 0;
-//                selection.setPixel(j,i,QColor(((int)(fimg[x][0]*limit)),((int)(fimg[x][1]*limit)),((int)(fimg[x][2]*limit)),0).rgba());
-            }
-            print << "difference[x] = " << difference[x] << "\t\tAlpha value multiplier" << (limit * (0.2 - difference[x]) * 5) << "\n";
-            x++;
-        }
-    }
-
-    // ---- convert fimg to DImg
-    //we will refill mask
-
-    x = 0;
-    for ( i = 0 ; i<mask.width() ; i++ )
-    {
-        for ( j=0 ; j<mask.height() ; j++ )
-        {
-            DColor pixel((int)fimg[x][0], (int) fimg[x][1],(int) fimg[x][2],(int)(qFloor(fimg[x][3])),sixteenBit);
-            print << "VAlue = " << (int) fimg[x][0] << "\t" << (int) fimg[x][1] << "\t" << (int) fimg[x][2] << "\t" << (int)(qFloor(fimg[x][3])) << "\n";
-            mask.setPixelColor( i, j, pixel);
-            x++;
-        }
-    }
-
-    // ---- Test Save ---------------------------------------------------------
-    bool istrue=mask.save("Localadj DImg Circular.png","PNG");
-    qDebug() << "Check for good save : " << istrue;
-
-    return mask;
-}
-
 DImg LocalAdjustments::getDImgColorSelection(DImg &selection, QPoint selectionCenter)
 {
     //---- Color Selection ---------------------------------------------------
@@ -1056,207 +617,21 @@ DImg LocalAdjustments::getDImgColorSelection(DImg &selection, QPoint selectionCe
     return mask;
 }
 
-QImage LocalAdjustments::getSoftSelection(QImage source, int innerRadius, int outerRadius, QPoint origCenter)
-{
-    int leftlimit   = origCenter.x() - outerRadius;
-    int rightlimit  = origCenter.x() + outerRadius - 1;
-    int toplimit    = origCenter.y() - outerRadius;
-    int bottomlimit = origCenter.y() + outerRadius - 1;
-    QRect crop;
-    QSize size;
-    QImage mask;
-    
-    //---- Fixing out of bounds for the boudaries -----------------------------
-    
-    if (leftlimit < 0 )
-    {
-        leftlimit = 0;
-    }
-    if (rightlimit >= source.width())
-    {
-        rightlimit = source.width()-1;
-    }
-    if (toplimit < 0 )
-    {
-        toplimit = 0;
-    }
-    if ( bottomlimit >= source.height())
-    {
-        bottomlimit = source.height() -1;
-    }
 
-    //---- Setting up Crop ----------------------------------------------------
 
-    QPoint p1;
-    p1.setX(leftlimit);
-    p1.setY(toplimit);
-    QPoint p2;
-    p2.setX(rightlimit);
-    p2.setY(bottomlimit);
-    crop.setTopLeft(p1);
-    crop.setBottomRight(p2);
-
-    //---- Fixing the size of the QSize size -----------------------------------
-
-    size.setHeight(bottomlimit-toplimit+1);
-    size.setWidth(rightlimit - leftlimit + 1);
-    qDebug() << "Rect : "<<crop;
-    
-    //---- Copying the crop into mask -------------------------------------------
-
-    mask = source.copy(crop);
-    mask = mask.convertToFormat(QImage::Format_ARGB32);
-
-    //---- Saving the mask for check --------------------------------------------
-
-    mask.save("localadj maskedimage.jpg");
-
-    QPoint selectionCenter=d->selectionCenter;
-
-    //---- Make the circular selection ------------------------------------------
-
-    int centerx=selectionCenter.x();
-    int centery=selectionCenter.y();
-    int r,g,b;
-    int i,j;
-    float a;
-    QColor c;
-    float distance;
-    float diffRadius = outerRadius - innerRadius;
-    //outerRadius=outerRadius*outerRadius;
-    //innerRadius=innerRadius*innerRadius;
-    qDebug() << "outerRadius = "<< outerRadius;
-    for (i=0;i<mask.height(); i++)
-    {
-        for (j=0;j<mask.width(); j++)
-        {
-            c=QColor::fromRgba(mask.pixel(j,i));
-            r=c.red();
-            g=c.green();
-            b=c.blue();
-            a=c.alpha();
-            //if distance > outer radius, make alpha = zero
-            distance=(i-centery)*(i-centery)+(j-centerx)*(j-centerx);
-            distance=qSqrt(distance);
-            if (distance<outerRadius)
-            {
-                if (distance<=innerRadius)
-                {
-                    mask.setPixel(j,i,QColor(r,g,b,255).rgba());
-                }
-                else
-                {
-                    a=(diffRadius-(distance-innerRadius))/diffRadius;
-                    a=a*255;
-                    //**** UNCOMMENT FOR CHECK (next line) ***
-                    //                    qDebug() << "Alpha Value = " << a;
-                    mask.setPixel(j,i,QColor(r,g,b,((int)(qFloor(a)))).rgba());
-                }
-            }
-            else
-            {
-                mask.setPixel(j,i,QColor(r,g,b,0).rgba());
-            }
-        }
-    }
-    bool check = mask.save("localadj Circular.png");
-    Q_ASSERT(check);
-    return mask;
-}
-
-QImage LocalAdjustments::getcolorSelection(QImage selection, QPoint selectionCenter)
-{
-    //here we consider the color of the point of the selectionCenter and we proceed to make
-    //the color baised selection.
-    uint sz = selection.height() * selection.width();
-    float fimg[sz][4];
-    QColor c;
-    int x = 0;
-    int i = 0;
-    int j = 0;
-    //---- converting the data to a fimg array --------------------------------
-    for (i=0;i<selection.height(); i++)
-    {
-        for(j=0;j<selection.width();j++)
-        {
-            c=QColor::fromRgba(selection.pixel(j,i));
-            fimg[x][0]=c.redF();
-            fimg[x][1]=c.blueF();
-            fimg[x][2]=c.greenF();
-            fimg[x][3]=c.alphaF();
-            x++;
-        }
-    }
-
-    //---- Check for correct conversion ---------------------------------------
-    qDebug() << "LocalAdjustments : x = " << x << " size = "<< sz;
-
-    //-----We convert the whole image to CIELAB -------------------------------
-    srgb2lab(fimg,sz);
-    qDebug() << "After conversion:";
-
-    //-----Comparing with Center Pixel ----------------------------------------
-    //Here we consider the central pixel, i.e. center, we take the color of those pixels
-    float reference[4];
-    c=QColor::fromRgba(selection.pixel(selectionCenter));
-    float difference[sz];
-    float ref[1][4];
-    ref[0][0]=c.redF();
-    ref[0][1]=c.greenF();
-    ref[0][2]=c.blueF();
-    ref[0][3]=c.alphaF();
-    qDebug() << "ref srgb";
-    qDebug() << ref[0][0] << "\t" << ref[0][1] << "\t" << ref[0][2] << "\t" << ref[0][3];
-    srgb2lab(ref,1);
-    qDebug() << "ref lab";
-    qDebug() << ref[0][0] << "\t" << ref[0][1] << "\t" << ref[0][2] << "\t" << ref[0][3];
-    reference[0]=ref[0][0];
-    reference[1]=ref[0][1];
-    reference[2]=ref[0][2];
-    reference[3]=ref[0][3];
-    qDebug() << reference[0] << "\t" << reference[1] << "\t" << reference[2];
-    colorDifference(fimg,reference,difference,sz);
-    lab2srgb(fimg,sz);
-    x=0;
-    for (i=0;i<selection.height(); i++)
-    {
-        for(j=0;j<selection.width();j++)
-        {
-            c=QColor::fromRgba(selection.pixel(j,i));
-            if (difference[x]<0.2)
-            {
-                selection.setPixel(j,i,QColor(((int)(fimg[x][0]*255)),((int)(fimg[x][1]*255)),((int)(fimg[x][2]*255)),(fimg[x][3]*255*(0.2-difference[x])*5)).rgba());
-            }
-            else
-            {
-                selection.setPixel(j,i,QColor(((int)(fimg[x][0]*255)),((int)(fimg[x][1]*255)),((int)(fimg[x][2]*255)),0).rgba());
-            }
-            x++;
-        }
-    }
-    bool istrue=selection.save("Localadj Colored Circular.png");
-    qDebug() << "Check for good save : " << istrue;
-    return selection;
-}
-
-DImg LocalAdjustments::createDImgLayer()
+DImg LocalAdjustments::createDImgLayer(DImg &selection, QPoint selectionCenter, QPoint origCenter)
 {
     //this would create the DImg in the size of the m_orgImage, and keep the data
-    //of the Selection in the correct location as in d->selectionCenter
-    QPoint origCenter;
-    QPoint selectionCenter = d->selectionCenter;
-    origCenter.setX(d->centerX);
-    origCenter.setY(d->centerY);
+    //of the Selection in the correct location
     bool sixteenBit = m_orgImage.sixteenBit();
     DImg layer(m_orgImage.width() , m_orgImage.height(), m_orgImage.sixteenBit(), true, 0, true);
     uint i,j,x,y;
-
+    DColor col(0,0,0,0,sixteenBit);
     //---- initialize layer to null and transparent ---------------------------
     for( x=0; x<layer.width(); x++)
     {
         for ( y=0; y<layer.height(); y++)
         {
-            DColor col(0,0,0,0,sixteenBit);
             layer.setPixelColor(x,y,col);
         }
     }
@@ -1275,11 +650,48 @@ DImg LocalAdjustments::createDImgLayer()
     {
         for (y=toplimit, j=0 ; y < bottomlimit ; y++, j++)
         {
-            layer.setPixelColor(x,y,d->selection.getPixelColor(i,j));
+            layer.setPixelColor(x,y,selection.getPixelColor(i,j));
         }
     }
     return layer;
 }
+
+DImg LocalAdjustments::createDImgLayer(int index)
+{
+    //this would create the DImg in the size of the m_orgImage, and data of selection
+    bool sixteenBit = m_orgImage.sixteenBit();
+    DImg layer(m_orgImage.width() , m_orgImage.height(), m_orgImage.sixteenBit(), true, 0, true);
+    uint i,j,x,y;
+    DColor col(0,0,0,0,sixteenBit);
+    //---- initialize layer to null and transparent ---------------------------
+    for( x=0; x<layer.width(); x++)
+    {
+        for ( y=0; y<layer.height(); y++)
+        {
+            layer.setPixelColor(x,y,col);
+        }
+    }
+
+    //---- Placing the selection in the correct position of the layer ---------
+    uint leftlimit;
+    uint rightlimit;
+    uint toplimit;
+    uint bottomlimit;
+    leftlimit = d->sln[index].center.x() - d->sln[index].selectionCenter.x();
+    toplimit  = d->sln[index].center.y() - d->sln[index].selectionCenter.y();
+    rightlimit = leftlimit + d->sln[index].selection.width();
+    bottomlimit = toplimit + d->sln[index].selection.height();
+
+    for(x=leftlimit, i=0 ; x < rightlimit ; x++, i++ )
+    {
+        for (y=toplimit, j=0 ; y < bottomlimit ; y++, j++)
+        {
+            layer.setPixelColor(x,y,d->sln[index].modSelection.getPixelColor(i,j));
+        }
+    }
+    return layer;
+}
+
 
 QImage LocalAdjustments::createLayer(QImage selection)
 {
@@ -1321,6 +733,7 @@ QImage LocalAdjustments::createLayer(QImage selection)
     }
     return layer;
 }
+
 
 void LocalAdjustments::srgb2lch(float fimg[][4], int size)
 {
@@ -1551,47 +964,48 @@ void LocalAdjustments::colorDifference(float fimg[][4], float reference[4], floa
     
 }
 
-DImg  LocalAdjustments::applySelection(DImg* selection)
+void  LocalAdjustments::apply8bitSelection(DImg  &destination, DImg &source)
 {
     //now we create a layer from the selection, and paste the layer on the image
-    QImage mask  = selection->copyQImage();
-    QImage layer = createLayer(mask);
-    QImage img   = m_orgImage.copyQImage();
+    //works for 8 bit only
+    qDebug() << "In apply8bitSelection Function";
+    QImage mask  = destination.copyQImage();
+    QImage img   = source.copyQImage();
 
     QPainter painter(&img);
     QPointF point;
     point.setX(0);
     point.setY(0);
-    painter.drawImage(point,layer);
+    painter.drawImage(point,mask);
 
     DImg result(img);
-    return result;
+    source = result;
+    qDebug() << "Done with filling source with the required output";
+    //return result;
 }
 
-DImg LocalAdjustments::applyDImgSelection(DImg &selection)
+void LocalAdjustments::apply16bitSelection(DImg &destination, DImg &source)
 {
-    d->selection=selection;
-    DImg layer = createDImgLayer();
 
     //---- Make a new result DIMG, with the one on another one ----------------
 
     DColorComposer* composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
-    if ( m_orgImage.sixteenBit() )
-    {
-        layer.convertToSixteenBit();
-    }
+//    if ( m_orgImage.sixteenBit() )
+//    {
+//        destination.convertToSixteenBit();
+//    }
 
-    //---- Make the src layer premultiplied ----------------------------------
+    //---- Make the src destination premultiplied ----------------------------------
 
     uint i,j;
 
-    for (i = 0 ; i < layer.width() ; j++)
+    for (i = 0 ; i < destination.width() ; j++)
     {
-        for ( j = 0 ; j< layer.width() ; j++)
+        for ( j = 0 ; j< destination.width() ; j++)
         {
-            DColor pixel = layer.getPixelColor(i,j);
+            DColor pixel = destination.getPixelColor(i,j);
             pixel.premultiply();
-            layer.setPixelColor(i,j,pixel);
+            destination.setPixelColor(i,j,pixel);
         }
     }
 
@@ -1613,154 +1027,65 @@ DImg LocalAdjustments::applyDImgSelection(DImg &selection)
         }
     }
 
-    output.bitBlendImage(composer, &layer, 0, 0, layer.width(), layer.height(),0,0 );
-    return output;
+    output.bitBlendImage(composer, &destination, 0, 0, destination.width(), destination.height(),0,0 );
+    source = output;
 }
 
-/*
-void LocalAdjustments::changeBrightness(int brightness)
+
+//For test purposes only, do delete when tests are done.
+DImg LocalAdjustments::applyDImgSelection(int index)
 {
-    int limit = 255;
-    if (d->selection.sixteenBit)
+    d->finalImage = m_orgImage;
+    DImg layer = createDImgLayer(index);
+    //apply the selection one by one to the main image
+    if (m_orgImage.sixteenBit())
     {
-        if (brightness > 0 )
+        qDebug() << "Sorry 16bit application is incomplete";
+        kDebug() << "Sorry 16bit application is incomplete";
+    }
+    else
+    {
+        apply8bitSelection(layer,d->finalImage);
+    }
+    return d->finalImage;
+}
+
+//make private when tests are done.
+void LocalAdjustments::applyAllSelections()
+{
+    int i;
+    qDebug() << "In applyAllSelections() functions";
+    d->finalImage = m_orgImage;
+    for (i = 0 ; i < d->count ; i ++)
+    {
+        //apply the selection one by one to the main image
+        if (m_orgImage.sixteenBit())
         {
-            brightness = (brightness + 1) * 256 - 1;
+            qDebug() << "Sorry 16bit application is incomplete";
+            kDebug() << "Sorry 16bit application is incomplete";
+            DImg layer = createDImgLayer(i);
+            apply16bitSelection( layer ,d->finalImage);
         }
         else
         {
-            brightness = (brightness - 1) * 256 + 1;
-        }
-        limit = 65535;
-    }
-
-    //---- Add brightness value to every pixel --------------------------------
-
-    uint i,j;
-    int red, green, blue;
-    for ( i = 0 ; i < d->selection.width ; i++ )
-    {
-        for ( j = 0 ; j < d->selection.height ; j++ )
-        {
-            DColor pixel = d->selection.getPixelColor(i,j);
-            red   = pixel.red() + brightness;
-            blue  = pixel.blue() + brightness;
-            green = pixel.green() + brightness;
-            if (red < 0 )
-            {
-                red = 0;
-            }
-            if (green <  0 )
-            {
-                green = 0;
-            }
-            if ( blue < 0 )
-            {
-                blue = 0;
-            }
-            if ( red > limit )
-            {
-                red = limit;
-            }
-            if (blue > limit)
-            {
-                blue = limit;
-            }
-            if (green > limit)
-            {
-                green = limit;
-            }
-            pixel.setRed(red);
-            pixel.setBlue(blue);
-            pixel.setGreen(green);
-            d->selection.setPixelColor(i,j,pixel);
+            qDebug() << "creating layer for index = " << i;
+            DImg layer = createDImgLayer(i);
+            qDebug() << "Calling 8bitSelection for index = " << i;
+            apply8bitSelection( layer ,d->finalImage);
+            qDebug() << "Done with 8bit Selection of index = " << i << "\n\n";
         }
     }
 }
-*/
 
-/*
-void LocalAdjustments::printHSL(DImg image)
+DImg LocalAdjustments::getFinalImage()
 {
-    //convert the image to HSL and then print the image
-    int size = image.width() * image.height();
-    float fimg[size][4];
-    float limit = (image.sixteenBit)? 65535.0 : 255.0;
-    uint i,j,x;
-    DColor col;
-    //copy the whole image to fimg
-    for (i = 0; (i < image.width()); i++)
-    {
-        for (j = 0; (j < image.height()); j++)
-        {
-            col        = image.getPixelColor(i, j);
-            fimg[x][0] = col.red();
-            fimg[x][1] = col.green();
-            fimg[x][2] = col.blue();
-            fimg[x][3] = col.alpha();
-            x++;
-        }
-    }
-    qDebug() << "in PrintHSL function";
-    qDebug() << "x = " << x << " Size = " << size;
-
-    for ( i = 0 ; i < sz ; i ++ )
-    {
-        for ( j = 0 ; j < 4 ; j ++ )
-        {
-            fimg[i][j] = fimg[i][j] / limit;
-        }
-    }
-
-
+    //apply all selections
+    //return the final image
+    qDebug() << "In the getFinalImage Function";
+    applyAllSelections();
+    qDebug() << "Done with all calculations, d->final image is filled sucessfully";
+    return (d->finalImage);
 }
-*/
-
-/*
-void LocalAdjustments::srgb2hsv(float fimg[][4], int size)
-{
-    //http://www.rapidtables.com/convert/color/rgb-to-hsv.htm
-    int i;
-    float cmax = 0.0;
-    float cmin = 0.0;
-    float del  = 0.0;
-    for ( i = 0 ; i < size ; i ++ )
-    {
-        cmax = fimg[i][0];
-        cmin = fimg[i][0];
-        if ( fimg[i][1] > cmax )
-        {
-            cmax = fimg[i][1];
-        }
-        else if (fimg[i][1] < cmin)
-        {
-            cmin = fimg[i][1];
-        }
-        if (fimg[i][2] > cmax)
-        {
-            cmax = fimg[i][2];
-        }
-        else if ( fimg[i][2] < cmin)
-        {
-            cmin = fimg[i][2];
-        }
-        del = cmax - cmin;
-        if ( cmax == fimg[i][0])
-        {
-
-        }
-        else if ( cmax == fimg[i][1])
-        {
-
-        }
-        else if ( cmax == fimg[i][2])
-        {
-
-        }
-
-    }
-}
-*/
 
 void LocalAdjustments::changeAllRGBA()
 {
@@ -1769,6 +1094,11 @@ void LocalAdjustments::changeAllRGBA()
     {
         changeSingleRGBA(i);
     }
+}
+
+DImg LocalAdjustments::returnOrigImage()
+{
+    return m_orgImage;
 }
 
 void LocalAdjustments::changeSingleRGBA(int index)
@@ -1790,6 +1120,16 @@ void LocalAdjustments::changeSingleRGBA(int index)
     DColor col;
     float sixteenBit = m_orgImage.sixteenBit();
 //    qDebug() << "In actual function : " << r << "\t" <<  g << "\t" <<  b << "\t" << a;
+
+    d->sln[index].selection.save("Selectionb4Mod.png","PNG");
+
+    //---- alpha check --------------------------------------------------------
+
+    if (d->sln[index].alpha > 0)
+    {
+        d->sln[index].alpha = 0;
+    }
+
     if (sixteenBit)
     {
         limit = 65535;
@@ -1818,15 +1158,28 @@ void LocalAdjustments::changeSingleRGBA(int index)
     QTextStream out(&file);
     out << "This file is generated by Qt\n";
 
-    d->sln[index].modSelection = d->sln[index].selection;
+    //d->sln[index].modSelection = d->sln[index].selection;
+
+    //---- Create a deep copy to create a copy of selection to modselection
+
+    DImg layer(d->sln[index].selection.width() , d->sln[index].selection.height(), m_orgImage.sixteenBit(), true, 0, true);
+
+    for ( i = 0 ; i < layer.width() ; i++)
+    {
+        for ( j = 0 ; j < layer.height() ; j++)
+        {
+            col = d->sln[index].selection.getPixelColor(i,j);
+            layer.setPixelColor(i,j,col);
+        }
+    }
 
     //-- Apply the values on every pixel with a boundary check
 
-    for ( i = 0 ; i < d->sln[index].selection.width() ; i++)
+    for ( i = 0 ; i < layer.width() ; i++)
     {
-        for ( j = 0 ; j < d->sln[index].selection.height() ; j++)
+        for ( j = 0 ; j < layer.height() ; j++)
         {
-            col = d->sln[index].selection.getPixelColor(i,j);
+            col = layer.getPixelColor(i,j);
             tempR = col.red();
             tempG = col.green();
             tempB = col.blue();
@@ -1877,10 +1230,13 @@ void LocalAdjustments::changeSingleRGBA(int index)
             col.setBlue(tempB);
             col.setGreen(tempG);
             col.setAlpha(tempA);
-            d->sln[index].modSelection.setPixelColor(i,j,col);
+            layer.setPixelColor(i,j,col);
         }
     }
     file.close();
+    d->sln[index].selection.save("SelectionAfterMod.png","PNG");
+    d->sln[index].modSelection = layer;
+
 }
 
 DImg LocalAdjustments::getModifiedSelection(int index)
@@ -1888,22 +1244,5 @@ DImg LocalAdjustments::getModifiedSelection(int index)
     changeSingleRGBA(index);
     return d->sln[index].modSelection;
 }
-
-/*
-DImg LocalAdjustments::getModifiedSelection(double r, double g, double b, double a)
-{
-//    qDebug() << "wrapper function says " << r << "\t" <<  g << "\t" <<  b << "\t" << a;
-    changeRGBA(r,g,b,a);
-    return d->selection;
-}
-*/
-//DImg* LocalAdjustments::applySelection(QString path)
-//{
-//    //we load the image, and send it to the QImage applySelection(QImage layer, QPoint origCenter, QPoint selcCenter)
-//    QImage img;
-//    img.load(path);
-//    DImg image(img);
-//    return(applySelection(&image));
-//}
 
 } //namespace Digikam
