@@ -81,7 +81,7 @@ public:
         fullScreen       = false;
         zoom             = 1.0;
         initialZoom      = true;
-        rubber       = 0;
+        rubber           = 0;
         wrapItem         = 0;
     }
 
@@ -186,8 +186,6 @@ Canvas::Canvas(QWidget* const parent)
 
     connect(this, SIGNAL(signalSelected(bool)),
             this, SLOT(slotSelected()));
-
-    layout()->fitToWindow();
 }
 
 Canvas::~Canvas()
@@ -229,6 +227,7 @@ void Canvas::slotImageLoaded(const QString& filePath, bool success)
 {
     d_ptr->canvasItem->setImage(d_ptr->canvasItem->im()->getImg()->copyImageData());
     d_ptr->canvasItem->zoomSettings()->setZoomFactor(d_ptr->zoom);
+    d_ptr->canvasItem->im()->zoom(d_ptr->zoom);
 
     if (d_ptr->autoZoom || d_ptr->initialZoom)
     {
@@ -372,6 +371,8 @@ void Canvas::updateAutoZoom()
 {
     d_ptr->zoom = calcAutoZoomFactor();
     d_ptr->canvasItem->zoomSettings()->setZoomFactor(d_ptr->zoom);
+    d_ptr->canvasItem->im()->zoom(d_ptr->zoom);
+    qDebug()<<"updateAutoZoom()"<<d_ptr->zoom;
 
     emit signalZoomChanged(d_ptr->zoom);
 }
@@ -381,17 +382,18 @@ void Canvas::updateContentsSize(bool deleteRubber)
     Q_UNUSED(deleteRubber);
     viewport()->setUpdatesEnabled(false);
 
-    //if (deleteRubber && d_ptr->rubber->isActive())
-    //{
-    //    d_ptr->rubber->setActive(false);
-    viewport()->unsetCursor();
-    viewport()->setMouseTracking(false);
-
-    if (d_ptr->canvasItem->im()->imageValid())
+    if (deleteRubber && d_ptr->rubber && d_ptr->rubber->isVisible())
     {
-        emit signalSelected(false);
+        d_ptr->rubber->setVisible(false);
+        viewport()->unsetCursor();
+        viewport()->setMouseTracking(false);
+        addRubber();
+
+        if (d_ptr->canvasItem->im()->imageValid())
+        {
+            emit signalSelected(false);
+        }
     }
-    //}
 
     setSceneRect(d_ptr->canvasItem->boundingRect());
     viewport()->setUpdatesEnabled(true); //necessary
@@ -537,6 +539,7 @@ void Canvas::setZoomFactor(double zoom)
     d_ptr->zoom    = zoom;
 
     d_ptr->canvasItem->zoomSettings()->setZoomFactor(d_ptr->zoom);
+    d_ptr->canvasItem->im()->zoom(d_ptr->zoom);
     updateContentsSize(false);
 
     emit signalZoomChanged(d_ptr->zoom);
@@ -562,11 +565,10 @@ void Canvas::fitToSelect()
         emit signalToggleOffFitToWindow();
 
         d_ptr->canvasItem->zoomSettings()->setZoomFactor(d_ptr->zoom);
+        d_ptr->canvasItem->im()->zoom(d_ptr->zoom);
         updateContentsSize(true);
 
-//         viewport()->setUpdatesEnabled(false);
         centerOn(cpx * d_ptr->zoom, cpy * d_ptr->zoom);
-//         viewport()->setUpdatesEnabled(true);
         viewport()->update();
 
         emit signalZoomChanged(d_ptr->zoom);
@@ -585,6 +587,7 @@ void Canvas::toggleFitToWindow()
 
 void Canvas::setFitToWindow(bool fit)
 {
+    qDebug()<<"setFitToWindow";
     d_ptr->autoZoom = fit;
 
     if (d_ptr->autoZoom)
@@ -595,6 +598,7 @@ void Canvas::setFitToWindow(bool fit)
     {
         d_ptr->zoom = 1.0;
         d_ptr->canvasItem->zoomSettings()->setZoomFactor(d_ptr->zoom);
+        d_ptr->canvasItem->im()->zoom(d_ptr->zoom);
         emit signalZoomChanged(d_ptr->zoom);
     }
 
@@ -604,26 +608,31 @@ void Canvas::setFitToWindow(bool fit)
 
 void Canvas::slotRotate90()
 {
+    d_ptr->canvasItem->clearCache();
     d_ptr->canvasItem->im()->rotate90();
 }
 
 void Canvas::slotRotate180()
 {
+    d_ptr->canvasItem->clearCache();
     d_ptr->canvasItem->im()->rotate180();
 }
 
 void Canvas::slotRotate270()
 {
+    d_ptr->canvasItem->clearCache();
     d_ptr->canvasItem->im()->rotate270();
 }
 
 void Canvas::slotFlipHoriz()
 {
+    d_ptr->canvasItem->clearCache();
     d_ptr->canvasItem->im()->flipHoriz();
 }
 
 void Canvas::slotFlipVert()
 {
+    d_ptr->canvasItem->clearCache();
     d_ptr->canvasItem->im()->flipVert();
 }
 
@@ -631,6 +640,7 @@ void Canvas::slotAutoCrop()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
+    d_ptr->canvasItem->clearCache();
     AutoCrop ac(d_ptr->canvasItem->im()->getImg());
     ac.startFilterDirectly();
     QRect rect = ac.autoInnerCrop();
@@ -641,6 +651,7 @@ void Canvas::slotAutoCrop()
 
 void Canvas::slotCrop()
 {
+    d_ptr->canvasItem->clearCache();
     QRect sel = d_ptr->canvasItem->im()->getSelectedArea();
 
     if (sel.size().isNull())   // No current selection.
@@ -664,6 +675,7 @@ void Canvas::setBackgroundColor(const QColor& color)
 
 void Canvas::setICCSettings(const ICCSettingsContainer& cmSettings)
 {
+    d_ptr->canvasItem->clearCache();
     ICCSettingsContainer old = d_ptr->canvasItem->im()->getICCSettings();
     d_ptr->canvasItem->im()->setICCSettings(cmSettings);
     viewport()->update();
@@ -671,18 +683,21 @@ void Canvas::setICCSettings(const ICCSettingsContainer& cmSettings)
 
 void Canvas::setSoftProofingEnabled(bool enable)
 {
+    d_ptr->canvasItem->clearCache();
     d_ptr->canvasItem->im()->setSoftProofingEnabled(enable);
     viewport()->update();
 }
 
 void Canvas::setExposureSettings(ExposureSettingsContainer* const expoSettings)
 {
+    d_ptr->canvasItem->clearCache();
     d_ptr->canvasItem->im()->setExposureSettings(expoSettings);
     viewport()->update();
 }
 
 void Canvas::setExifOrient(bool exifOrient)
 {
+    d_ptr->canvasItem->clearCache();
     d_ptr->canvasItem->im()->setExifOrient(exifOrient);
     viewport()->update();
 }
@@ -696,6 +711,7 @@ void Canvas::slotUndo(int steps)
 {
     emit signalUndoSteps(steps);
 
+    d_ptr->canvasItem->clearCache();
     while (steps > 0)
     {
         d_ptr->canvasItem->im()->undo();
@@ -707,6 +723,7 @@ void Canvas::slotRedo(int steps)
 {
     emit signalRedoSteps(steps);
 
+    d_ptr->canvasItem->clearCache();
     while (steps > 0)
     {
         d_ptr->canvasItem->im()->redo();
@@ -751,7 +768,7 @@ QRect Canvas::calcSelectedArea() const
     int x = 0, y = 0, w = 0, h = 0;
     if (d_ptr->rubber && d_ptr->rubber->isVisible())
     {
-        QRect r(d_ptr->rubber->boundingRect().toAlignedRect());
+        QRect r(d_ptr->rubber->boundingRect().toRect());
 
         if (r.isValid())
         {
@@ -998,18 +1015,23 @@ void Canvas::mousePressEvent(QMouseEvent* event)
     GraphicsDImgView::mousePressEvent(event);
     QPoint p(event->pos());
     QRect r = calcSelectedArea();
-    if (d_ptr->rubber && d_ptr->rubber->isVisible()
-            && !(p.x() > r.left() && p.x() < r.right()
-            && p.y() > r.top() && p.y() < r.bottom()))
+    GraphicsDImgItem* item = (GraphicsDImgItem*)itemAt(event->pos());
+    if (item)
     {
-        d_ptr->rubber->setVisible(false);
-        addRubber();
+        QString className(item->className());
+        if (className == "Digikam::RubberItem" || className == "Digikam::ClickDragReleaseItem")
+        {
+            return;
+        }
+        else
+        {
+            if (d_ptr->rubber && d_ptr->rubber->isVisible())
+            {
+                d_ptr->rubber->setVisible(false);
+            }
+            addRubber();
+        }
     }
-    else
-    {
-        addRubber();
-    }
-
 }
 
 void Canvas::wheelEvent(QWheelEvent* event)
