@@ -31,7 +31,6 @@
 #include "showfotodelegate.h"
 #include "showfotofiltermodel.h"
 #include "showfotooverlays.h"
-#include "showfotodragdrop.h"
 #include "itemviewtooltip.h"
 #include "showfototooltipfiller.h"
 #include "showfotocategorizedview.h"

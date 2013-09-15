@@ -9,7 +9,6 @@
 #include "thumbbar/showfotomodel.h"
 #include "splashscreen.h"
 #include "imagepropertiessidebar.h"
-#include "thumbbar/showfotodragdrop.h"
 #include "thumbbar/showfotodelegate.h"
 
 namespace ShowFoto {
@@ -31,7 +30,7 @@ public:
         thumbLoadThread(0),
         thumbBar(0),
         thumbBarDock(0),
-        dragDropHandler(0),
+        //dragDropHandler(0),
         normalDelegate(0),
         rightSideBar(0),
         splash(0)
@@ -58,7 +57,7 @@ public:
     Digikam::ThumbnailLoadThread*    thumbLoadThread;
     ShowfotoThumbnailBar*            thumbBar;
     Digikam::ThumbBarDock*           thumbBarDock;
-    ShowfotoDragDropHandler          dragDropHandler;
+    //ShowfotoDragDropHandler          dragDropHandler;
     ShowfotoNormalDelegate*          normalDelegate;
     Digikam::ImagePropertiesSideBar* rightSideBar;
     Digikam::SplashScreen*           splash;

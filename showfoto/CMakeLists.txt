@@ -27,7 +27,6 @@ SET(showfoto_SRCS
     thumbbar/showfotodelegate.cpp
     thumbbar/showfototooltipfiller.cpp
     thumbbar/showfotooverlays.cpp
-    thumbbar/showfotodragdrop.cpp
     thumbbar/showfotocategorizedview.cpp
     thumbbar/showfotothumbnailbar.cpp
     
