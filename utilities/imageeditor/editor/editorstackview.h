@@ -37,7 +37,6 @@ namespace Digikam
 
 class Canvas;
 class GraphicsDImgView;
-class PreviewWidget;
 
 class DIGIKAM_EXPORT EditorStackView : public QStackedWidget
 {
@@ -92,7 +91,6 @@ private Q_SLOTS:
 
 private:
 
-    PreviewWidget*    previewWidget_old() const;
     GraphicsDImgView* previewWidget()     const;
 
 private:
