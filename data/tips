@@ -311,7 +311,24 @@
 <img src="hicolor/32x32/apps/digikam.png">
 </td>
 <td>
-... that the input box "Enter new tag here..." in the <b>Caption/Tags</b> sidebar can also be used to assign existing tags to the selected image(s)? <br>Start typing the tag, autocomplete with one or more TABs, assign with ENTER, PAGE_DOWN to next image.
+... that the input box "Enter new tag here..." in the <b>Caption/Tags</b> sidebar can also be used to assign existing tags to the selected image(s)? <br>Start typing the tag, autocomplete with one or more TABs, assign with ENTER and then either ENTER again or PAGE_DOWN to proceed to the next image.
+</td>
+</tr>
+</table>
+</p>
+</html>
+</tip>
+
+<tip category="Digikam|General">
+<html>
+<p>
+<table border="0" cellpadding="0" cellspacing="10" align="center">
+<tr>
+<td>
+<img src="hicolor/32x32/apps/digikam.png">
+</td>
+<td>
+... that the input box "Enter new tag here..." in the <b>Caption/Tags</b> sidebar can be focussed by pressing <b>T</b> (or any keyboard shortcut you've assigned to <i>Assign Tag</i>)?
 </td>
 </tr>
 </table>

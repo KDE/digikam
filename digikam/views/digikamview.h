@@ -159,6 +159,8 @@ public Q_SLOTS:
     void slotDeleteTag();
     void slotEditTag();
     void slotOpenTagsManager();
+    void slotAssignTag();
+
 
     // Search action slots
     void slotNewKeywordSearch();
@@ -206,6 +208,8 @@ public Q_SLOTS:
     void slotLeftSideBarActivate(SidebarWidget* widget);
     void slotLeftSideBarActivateAlbums();
     void slotLeftSideBarActivateTags();
+
+    void slotFocusAndNextImage();
 
 #ifdef USE_PRESENTATION_MODE
     void slotSlideShowQml();

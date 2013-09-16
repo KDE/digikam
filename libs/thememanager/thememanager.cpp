@@ -27,16 +27,12 @@
 
 #include <QStringList>
 #include <QFileInfo>
-#include <QFile>
-#include <QApplication>
 #include <QPalette>
 #include <QColor>
 #include <QActionGroup>
 #include <QBitmap>
 #include <QPainter>
 #include <QPixmap>
-#include <QDate>
-#include <QDesktopWidget>
 
 // KDE includes
 
@@ -116,7 +112,7 @@ QString ThemeManager::currentThemeName() const
     if (!d->themeMenuAction || !d->themeMenuActionGroup)
         return defaultThemeName();
 
-    QAction* action = d->themeMenuActionGroup->checkedAction();
+    QAction* const action = d->themeMenuActionGroup->checkedAction();
 
     return (!action ? defaultThemeName()
                     : action->text().remove('&'));
@@ -148,53 +144,12 @@ void ThemeManager::slotChangePalette()
     if (theme == defaultThemeName() || theme.isEmpty())
         theme = currentKDEdefaultTheme();
 
-    kDebug() << theme;
-
     QString filename        = d->themeMap.value(theme);
     KSharedConfigPtr config = KSharedConfig::openConfig(filename);
+    kapp->setPalette(KGlobalSettings::createNewApplicationPalette(config));
 
-    /*
-    TODO: with recent KDE4 api, we can use KGlobalSettings::createNewApplicationPalette()
-    d->palette = KGlobalSettings::createNewApplicationPalette(config);
-    */
+    kDebug() << theme << " :: " << filename;
 
-    QPalette palette               = kapp->palette();
-    QPalette::ColorGroup states[3] = { QPalette::Active, QPalette::Inactive, QPalette::Disabled };
-    kDebug() << filename;
-    // TT thinks tooltips shouldn't use active, so we use our active colors for all states
-    KColorScheme schemeTooltip(QPalette::Active, KColorScheme::Tooltip, config);
-
-    for ( int i = 0; i < 3 ; ++i )
-    {
-        QPalette::ColorGroup state = states[i];
-        KColorScheme schemeView(state,      KColorScheme::View,      config);
-        KColorScheme schemeWindow(state,    KColorScheme::Window,    config);
-        KColorScheme schemeButton(state,    KColorScheme::Button,    config);
-        KColorScheme schemeSelection(state, KColorScheme::Selection, config);
-
-        palette.setBrush(state, QPalette::WindowText,      schemeWindow.foreground());
-        palette.setBrush(state, QPalette::Window,          schemeWindow.background());
-        palette.setBrush(state, QPalette::Base,            schemeView.background());
-        palette.setBrush(state, QPalette::Text,            schemeView.foreground());
-        palette.setBrush(state, QPalette::Button,          schemeButton.background());
-        palette.setBrush(state, QPalette::ButtonText,      schemeButton.foreground());
-        palette.setBrush(state, QPalette::Highlight,       schemeSelection.background());
-        palette.setBrush(state, QPalette::HighlightedText, schemeSelection.foreground());
-        palette.setBrush(state, QPalette::ToolTipBase,     schemeTooltip.background());
-        palette.setBrush(state, QPalette::ToolTipText,     schemeTooltip.foreground());
-
-        palette.setColor(state, QPalette::Light,           schemeWindow.shade(KColorScheme::LightShade));
-        palette.setColor(state, QPalette::Midlight,        schemeWindow.shade(KColorScheme::MidlightShade));
-        palette.setColor(state, QPalette::Mid,             schemeWindow.shade(KColorScheme::MidShade));
-        palette.setColor(state, QPalette::Dark,            schemeWindow.shade(KColorScheme::DarkShade));
-        palette.setColor(state, QPalette::Shadow,          schemeWindow.shade(KColorScheme::ShadowShade));
-
-        palette.setBrush(state, QPalette::AlternateBase,   schemeView.background(KColorScheme::AlternateBackground));
-        palette.setBrush(state, QPalette::Link,            schemeView.foreground(KColorScheme::LinkText));
-        palette.setBrush(state, QPalette::LinkVisited,     schemeView.foreground(KColorScheme::VisitedText));
-    }
-
-    kapp->setPalette(palette);
     emit signalThemeChanged();
 }
 
@@ -222,7 +177,7 @@ void ThemeManager::populateThemeMenu()
     d->themeMenuAction->menu()->clear();
     delete d->themeMenuActionGroup;
 
-    d->themeMenuActionGroup = new QActionGroup(d->themeMenuAction);
+    d->themeMenuActionGroup       = new QActionGroup(d->themeMenuAction);
 
     connect(d->themeMenuActionGroup, SIGNAL(triggered(QAction*)),
             this, SLOT(slotChangePalette()));
@@ -297,7 +252,7 @@ void ThemeManager::updateCurrentKDEdefaultThemePreview()
     }
 }
 
-QPixmap ThemeManager::createSchemePreviewIcon(const KSharedConfigPtr& config)
+QPixmap ThemeManager::createSchemePreviewIcon(const KSharedConfigPtr& config) const
 {
     // code taken from kdebase/workspace/kcontrol/colors/colorscm.cpp
     const uchar bits1[] = { 0xff, 0xff, 0xff, 0x2c, 0x16, 0x0b };
