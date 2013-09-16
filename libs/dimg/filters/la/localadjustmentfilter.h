@@ -70,9 +70,10 @@ public:
     DImg modSelection;
 };
 
+//! kDebug() stream operator. Writes property @a inf to the debug output in a nicely formatted way.
+DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const LAContainer& inf);
 
-
-class DIGIKAM_EXPORT LocalAdjustments : public DImgThreadedAnalyser
+class DIGIKAM_EXPORT LocalAdjustments : public DImgThreadedFilter
 {
 public:
 
@@ -83,7 +84,7 @@ public:
 
     explicit LocalAdjustments(DImg* const orgImage, QObject* const parent = 0);
 
-
+    LocalAdjustments(DImg *const orgImage, QObject *const parent, const LAContainer& settings);
 
     ~LocalAdjustments();
 
@@ -93,7 +94,18 @@ public:
      */
     void startAnalyse();
 
-//    void filterImage();
+    void filterImage();
+
+
+    void readParameters(const FilterAction& action);
+
+    virtual FilterAction    filterAction();
+    virtual QString         filterIdentifier() const;
+
+    static QString          FilterIdentifier();
+    static QString          DisplayableName();
+    static QList<int>       SupportedVersions();
+    static int              CurrentVersion();
 
 
 

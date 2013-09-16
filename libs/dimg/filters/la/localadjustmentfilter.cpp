@@ -151,10 +151,18 @@ public:
 
 
 LocalAdjustments::LocalAdjustments(DImg* const img, QObject* const parent)
-: DImgThreadedAnalyser(parent, "LocalAdjustments"), d(new Private)
+    : DImgThreadedFilter(parent, "LocalAdjustments"), d(new Private)
 {
     d->count = 0;
     setOriginalImage(*img);
+}
+
+LocalAdjustments::LocalAdjustments(DImg *const orgImage, QObject *const parent, const LAContainer &settings)
+    : DImgThreadedFilter(orgImage, parent, "Local Adjustments"), d(new Private)
+{
+    d->sln[0] = settings;
+    d->count  = 1;
+    initFilter();
 }
 
 LocalAdjustments::~LocalAdjustments()
@@ -190,14 +198,95 @@ void LocalAdjustments::createSelection(int index)
     d->sln[index].selection.save("After Creation.png","PNG");
 }
 
-//void LocalAdjustments::filterImage()
-//{
-//    int i;
-//    for (i = 0 ; (i < d->count) && (i < 20); i ++ )
-//    {
-//        createSelection(i);
-//    }
-//}
+void LocalAdjustments::filterImage()
+{
+    postProgress(0);
+    int i;
+    uint x;
+    uint y;
+    DColor col;
+
+    for (i = 0 ; (i < d->count) && (i < 20); i ++ )
+    {
+        createSelection(i);
+        changeSingleRGBA(i);
+    }
+
+    postProgress(50);
+
+    applyAllSelections();
+
+    postProgress(100);
+
+    for ( x = 0 ; runningFlag() && (x < m_orgImage.width()); ++x)
+    {
+        for ( y = 0 ; runningFlag() && (y < m_orgImage.width()); ++y)
+        {
+            col = d->finalImage.getPixelColor(x,y);
+            m_destImage.setPixelColor(x,y,col);
+        }
+    }
+}
+
+FilterAction LocalAdjustments::filterAction()
+{
+    FilterAction action(FilterIdentifier(), CurrentVersion());
+    action.setDisplayableName(DisplayableName());
+
+    action.addParameter("centerX",    d->sln[0].center.x());
+    action.addParameter("centerY",    d->sln[0].center.y());
+    action.addParameter("radius",     d->sln[0].radius);
+    action.addParameter("red",        d->sln[0].red);
+    action.addParameter("blue",       d->sln[0].blue);
+    action.addParameter("green",      d->sln[0].green);
+    action.addParameter("alpha",      d->sln[0].alpha);
+    action.addParameter("hue",        d->sln[0].hue);
+    action.addParameter("lightness",  d->sln[0].lightness);
+    action.addParameter("saturation", d->sln[0].saturation);
+    action.addParameter("vibrance",   d->sln[0].vibrance);
+
+    return action;
+}
+
+void LocalAdjustments::readParameters(const FilterAction& action)
+{
+    d->sln[0].center.setX(action.parameter("centerX").toDouble());
+    d->sln[0].center.setY(action.parameter("centerY").toDouble());
+    d->sln[0].radius       = action.parameter("radius").toDouble();
+    d->sln[0].red          = action.parameter("red").toDouble();
+    d->sln[0].blue         = action.parameter("blue").toDouble();
+    d->sln[0].green        = action.parameter("green").toDouble();
+    d->sln[0].alpha        = action.parameter("alpha").toDouble();
+    d->sln[0].hue          = action.parameter("hue").toDouble();
+    d->sln[0].lightness    = action.parameter("lightness").toDouble();
+    d->sln[0].saturation   = action.parameter("saturation").toDouble();
+    d->sln[0].vibrance     = action.parameter("vibrance").toDouble();
+}
+
+QString LocalAdjustments::filterIdentifier() const
+{
+    return FilterIdentifier();
+}
+
+QString LocalAdjustments::FilterIdentifier()
+{
+    return "digikam:LocalAdjustmentFilter";
+}
+
+QString LocalAdjustments::DisplayableName()
+{
+    return I18N_NOOP("Local Adjustment Filter");
+}
+
+QList<int> LocalAdjustments::SupportedVersions()
+{
+    return QList<int>() << 1;
+}
+
+int LocalAdjustments::CurrentVersion()
+{
+    return 1;
+}
 
 void LocalAdjustments::startAnalyse()
 {
