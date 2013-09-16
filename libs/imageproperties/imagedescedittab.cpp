@@ -82,12 +82,9 @@
 #include "colorlabelwidget.h"
 #include "picklabelwidget.h"
 #include "fileactionprogress.h"
-<<<<<<< HEAD
 #include "tagsmanager.h"
-=======
 #include "searchtextbar.h"
 #include "addtagslineedit.h"
->>>>>>> master
 
 namespace Digikam
 {

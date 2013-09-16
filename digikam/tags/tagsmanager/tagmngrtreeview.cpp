@@ -98,6 +98,7 @@ void TagMngrTreeView::contextMenuEvent(QContextMenuEvent* event)
 void TagMngrTreeView::setAlbumFilterModel(TagsManagerFilterModel* filteredModel,
                                           CheckableAlbumFilterModel* filterModel)
 {
+    Q_UNUSED(filterModel);
     m_tfilteredModel = filteredModel;
     //AbstractCheckableAlbumTreeView::setAlbumFilterModel(albumFilterModel());
     albumFilterModel()->setSourceFilterModel(m_tfilteredModel);
