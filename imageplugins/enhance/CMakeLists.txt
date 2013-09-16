@@ -4,6 +4,7 @@ SET(digikamimageplugin_enhance_PART_SRCS imageplugin_enhance.cpp
                                          sharpentool.cpp
                                          noisereductiontool.cpp
                                          localcontrasttool.cpp
+                                         localadjustmenttool.cpp
                                          redeyetool.cpp
                                          inpaintingtool.cpp
                                          antivignettingtool.cpp

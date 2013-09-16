@@ -42,6 +42,7 @@
 #include "sharpentool.h"
 #include "noisereductiontool.h"
 #include "localcontrasttool.h"
+#include "localadjustmenttool.h"
 #include "redeyetool.h"
 #include "imageiface.h"
 #include "inpaintingtool.h"
@@ -98,6 +99,7 @@ public:
         sharpenAction(0),
         noiseReductionAction(0),
         localContrastAction(0),
+        localAdjustmentAction(0),
         inPaintingAction(0)
     {
     }
@@ -112,6 +114,7 @@ public:
     KAction* sharpenAction;
     KAction* noiseReductionAction;
     KAction* localContrastAction;
+    KAction* localAdjustmentAction;
     KAction* inPaintingAction;
 };
 
@@ -143,6 +146,11 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* const parent, const QVariantLi
     actionCollection()->addAction("imageplugin_localcontrast", d->localContrastAction);
     connect(d->localContrastAction, SIGNAL(triggered(bool)),
             this, SLOT(slotLocalContrast()));
+
+    d->localAdjustmentAction = new KAction(KIcon("localadjustment"), i18n("Local Adjustment..."), this);
+    actionCollection()->addAction("imageplugin_localadjustment", d->localAdjustmentAction);
+    connect(d->localAdjustmentAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotLocalAdjustment()));
 
     d->redeyeAction = new KAction(KIcon("redeyes"), i18n("Red Eye..."), this);
     d->redeyeAction->setWhatsThis(i18n("This filter can be used to correct red eyes in a photo. "
@@ -202,6 +210,7 @@ void ImagePlugin_Enhance::setEnabledActions(bool b)
     d->blurAction->setEnabled(b);
     d->sharpenAction->setEnabled(b);
     d->noiseReductionAction->setEnabled(b);
+    d->localAdjustmentAction->setEnabled(b);
     d->localContrastAction->setEnabled(b);
     d->redeyeAction->setEnabled(b);
     d->inPaintingAction->setEnabled(b);
@@ -247,6 +256,11 @@ void ImagePlugin_Enhance::slotNoiseReduction()
 void ImagePlugin_Enhance::slotLocalContrast()
 {
     loadTool(new LocalContrastTool(this));
+}
+
+void ImagePlugin_Enhance::slotLocalAdjustment()
+{
+    loadTool(new LocalAdjustmentTool(this));
 }
 
 void ImagePlugin_Enhance::slotRedEye()
