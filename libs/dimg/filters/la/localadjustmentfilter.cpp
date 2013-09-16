@@ -29,7 +29,7 @@
 
 // local Includes
 
-#include "localadjustmenttool.h"
+#include "localadjustmentfilter.h"
 
 // C++ includes
 

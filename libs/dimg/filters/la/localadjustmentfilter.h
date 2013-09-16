@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef LOCALADJUSTMENTTOOL_H
-#define LOCALADJUSTMENTTOOL_H
+#ifndef LOCALADJUSTMENTFILTER_H
+#define LOCALADJUSTMENTFILTER_H
 
 // Qt includes
 
@@ -327,5 +327,5 @@ private :
 
 }   //  namespace Digikam
 
-#endif /*LOCALADJUSTMENTTOOL_H*/
+#endif /*LOCALADJUSTMENTFILTER_H*/
 

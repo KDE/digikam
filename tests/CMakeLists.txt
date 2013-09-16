@@ -380,9 +380,9 @@ TARGET_LINK_LIBRARIES (testautocrop
 
 #------------------------------------------------------------------------
 
-SET (testlocaladjustmenttool_SRCS testlocaladjustmenttool)
-KDE4_ADD_EXECUTABLE(testlocaladjustmenttool NOGUI ${testlocaladjustmenttool_SRCS})
-TARGET_LINK_LIBRARIES (testlocaladjustmenttool
+SET (testlocaladjustmentfilter_SRCS testlocaladjustmentfilter)
+KDE4_ADD_EXECUTABLE(testlocaladjustmentfilter NOGUI ${testlocaladjustmentfilter_SRCS})
+TARGET_LINK_LIBRARIES (testlocaladjustmentfilter
                digikamcore
                ${QT_QTCORE_LIBRARY}
                ${QT_QTGUI_LIBRARY}

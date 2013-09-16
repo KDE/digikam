@@ -43,7 +43,7 @@
 
 #include "dimg.h"
 #include "drawdecoding.h"
-#include "localadjustmenttool.h"
+#include "localadjustmentfilter.h"
 #include "dimgthreadedfilter.h"
 
 using namespace Digikam;
