@@ -41,6 +41,7 @@
 #include "Nepomuk2/ResourceWatcher"
 #include "Nepomuk2/ResourceManager"
 #include "Nepomuk2/Service"
+#include "dknepomukwrap.h"
 
 // Local includes
 #include "albumdb.h"
@@ -435,8 +436,21 @@ void DkNepomukService::slotImageTagChange(const ImageTagChangeset& changeset)
     }
 }
 
-void DkNepomukService::slotTagChange(const TagChangeset&)
+void DkNepomukService::slotTagChange(const TagChangeset& change)
 {
+    switch(change.operation())
+    {
+        case TagChangeset::Added:
+            //NOTE: Add them to ignore list???
+            DkNepomukWrap::digikamToNepomukTag(change.tagId());
+            break;
+        case TagChangeset::Renamed:
+            break;
+        case TagChangeset::Deleted:
+        default:
+            break;
+    }
+    //DkNepomukWrap::renameNepomuk
 }
 
 void DkNepomukService::fullSyncDigikamToNepomuk()
@@ -514,7 +528,8 @@ static int nepomukToDigikamRating(int nepomukRating)
 
 static int digikamToNepomukRating(int digikamRating)
 {
-    // Map [-1, 5] -> [0, 10]: 1->2, 2->4, 3->6, 4->8, 5->10 so that there are "full" and not half stars in dolphin
+    // Map [-1, 5] -> [0, 10]: 1->2, 2->4, 3->6, 4->8, 5->10
+    // so that there are "full" and not half stars in dolphin
     if (digikamRating == -1)
     {
         return 0;
@@ -572,59 +587,14 @@ void DkNepomukService::syncToNepomuk(const QList<ImageInfo>& infos, SyncToNepomu
     }
 }
 
-static Nepomuk2::Tag nepomukForDigikamTag(int tagId)
-{
-    if (tagId <= 0)
-    {
-        return Nepomuk2::Tag();
-    }
 
-    if (TagsCache::instance()->isInternalTag(tagId))
-    {
-        return Nepomuk2::Tag();
-    }
-
-    QString tagName = TagsCache::instance()->tagName(tagId);
-
-    if (tagName.isEmpty())
-    {
-        return Nepomuk2::Tag();
-    }
-
-    Nepomuk2::Tag tag(tagName);
-
-    if (!tag.exists())
-    {
-        // from dolphin's panels/information/newtagdialog.cpp
-        tag.setLabel(tagName);
-        tag.addIdentifier(tagName);
-
-        TagInfo info = DatabaseAccess().db()->getTagInfo(tagId);
-
-        if (info.icon.isNull())
-        {
-            // Don't think we can use actual large files for tag icon
-            /*
-             / / *album image icon
-             QString albumRootPath = CollectionManager::instance()->albumRootPath(info.iconAlbumRootId);
-             album->m_icon         = albumRootPath + info.iconRelativePath;
-             */
-        }
-        else
-        {
-            tag.addSymbol(info.icon);
-        }
-    }
-
-    return tag;
-}
 
 void DkNepomukService::syncTagsToNepomuk(const QList<qlonglong>& imageIds, const QList<int>& tagIds, bool addOrRemove)
 {
     foreach(int tagId, tagIds)
     {
         ChangingNepomuk changing(d);
-        Nepomuk2::Tag tag = nepomukForDigikamTag(tagId);
+        Nepomuk2::Tag tag = DkNepomukWrap::digikamToNepomukTag(tagId);
         kDebug() << tag.uri();
 
         if (tag.isValid())
@@ -638,15 +608,7 @@ void DkNepomukService::syncTagsToNepomuk(const QList<qlonglong>& imageIds, const
                     Nepomuk2::Resource res(info.fileUrl());
                     kDebug() << res.uri() << addOrRemove; //<< res.properties();
 
-                    if (addOrRemove)
-                    {
-                        res.addTag(tag);
-                    }
-                    else
-                    {
-                        // TODO: Port to Nepomuk2
-                        //res.removeProperty(Soprano::Vocabulary::NAO::hasTag(), tag.uri());
-                    }
+                    DkNepomukWrap::setUnsetTag(res,tag, addOrRemove);
 
                     d->addIgnoreUri(res.uri(), NaoTags);
                     //kDebug() << "after change:" << res.properties();
@@ -666,13 +628,14 @@ void DkNepomukService::pushTagsToNepomuk(const QList<ImageInfo>& imageInfos)
         {
             foreach(int tagId, info.tagIds())
             {
-                Nepomuk2::Tag tag = nepomukForDigikamTag(tagId);
+                Nepomuk2::Tag tag = DkNepomukWrap::digikamToNepomukTag(tagId);
 
                 if (tag.isValid())
                 {
                     Nepomuk2::Resource res(info.fileUrl());
 
-                    res.addTag(tag);
+                    // the same as res.addTag(tag)
+                    DkNepomukWrap::setUnsetTag(res,tag, true);
 
                     d->addIgnoreUri(res.uri(), NaoTags);
                 }
