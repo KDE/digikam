@@ -48,6 +48,7 @@ public:
 public:
 
     bool enableSorter;
+
     bool detectBlur;
     bool detectNoise;
     bool detectCompression;
@@ -56,6 +57,12 @@ public:
     bool highQAccepted;
 
     int  speed;
+    int  rejectedThreshold;
+    int  pendingThreshold;
+    int  acceptedThreshold ;
+    int  blurWeight;
+    int  noiseWeight;
+    int  compressionWeight;
 };
 
 //! kDebug() stream operator. Writes property @a s to the debug output in a nicely formatted way.

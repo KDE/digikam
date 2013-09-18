@@ -41,7 +41,15 @@ ImageQualitySettings::ImageQualitySettings()
     lowQRejected       = true;
     mediumQPending     = true;
     highQAccepted      = true;
+    rejectedThreshold       =10;
+    pendingThreshold      =40;
+    acceptedThreshold        =60;
+    blurWeight  =100;
+    noiseWeight =100;
+    compressionWeight   =100;
+
     speed              = 1;
+
 }
 
 ImageQualitySettings::~ImageQualitySettings()
@@ -61,6 +69,12 @@ void ImageQualitySettings::readFromConfig()
     mediumQPending    = group.readEntry("MediumQ Pending",    true);
     highQAccepted     = group.readEntry("HighQ Accepted",     true);
     speed             = group.readEntry("Speed",              1);
+    rejectedThreshold       = group.readEntry("Rejected Threshold",              10);
+    pendingThreshold      = group.readEntry("Pending Threshold",              40);
+    acceptedThreshold        = group.readEntry("Accepted Threshold",              60);
+    blurWeight  = group.readEntry("Blur Weight",              100);
+    noiseWeight = group.readEntry("Noise Weight",              100);
+    compressionWeight   = group.readEntry("Compression Weight",              100);
 }
 
 void ImageQualitySettings::writeToConfig()
@@ -76,6 +90,14 @@ void ImageQualitySettings::writeToConfig()
     group.writeEntry("MediumQ Pending",    mediumQPending);
     group.writeEntry("HighQ Accepted",     highQAccepted);
     group.writeEntry("Speed",              speed);
+    group.writeEntry("Rejected Threshold",      rejectedThreshold);
+    group.writeEntry("Pending Threshold",       pendingThreshold              );
+    group.writeEntry("Accepted Threshold",      acceptedThreshold);
+    group.writeEntry("Blur Weight",     blurWeight);
+    group.writeEntry("Noise Weight",    noiseWeight);
+    group.writeEntry("Compression Weight",      compressionWeight);
+
+
 }
 
 QDebug operator<<(QDebug dbg, const ImageQualitySettings& s)
@@ -89,6 +111,13 @@ QDebug operator<<(QDebug dbg, const ImageQualitySettings& s)
     dbg.nospace() << "MediumQPending    : " << s.mediumQPending << endl;
     dbg.nospace() << "HighQAccepted     : " << s.highQAccepted << endl;
     dbg.nospace() << "Speed             : " << s.speed << endl;
+    dbg.nospace() << "Rejected Threshold        : " << s.rejectedThreshold << endl;
+    dbg.nospace() << "Pending Threshold             : " << s.pendingThreshold << endl;
+    dbg.nospace() << "Accepted Threshold             : " << s.acceptedThreshold << endl;
+    dbg.nospace() << "Blur Weight             : " << s.blurWeight << endl;
+    dbg.nospace() << "Noise Weight             : " << s.noiseWeight << endl;
+    dbg.nospace() << "Compression Weight             : " << s.compressionWeight << endl;
+
 
     return dbg.space();
 }

@@ -79,7 +79,7 @@ void ImageQualityTask::slotCancel()
 
 void ImageQualityTask::run()
 {
-    if(!d->cancel)
+    if (!d->cancel)
     {
         // Get item preview to perform quality analysis. No need to load whole image, this will be slower.
         // TODO : check if 1024 pixels size is enough to get suitable Quality results.
@@ -90,8 +90,10 @@ void ImageQualityTask::run()
         description.rawDecodingHint                               = LoadingDescription::RawDecodingTimeOptimized;
         DImg dimg                                                 = PreviewLoadThread::loadSynchronously(description);
 
-        if(d->cancel)
+        if (d->cancel)
+        {
             return;
+        }
 
         if (!dimg.isNull())
         {
@@ -116,5 +118,4 @@ void ImageQualityTask::run()
         emit signalFinished(qimg);
     }
 }
-
 }  // namespace Digikam

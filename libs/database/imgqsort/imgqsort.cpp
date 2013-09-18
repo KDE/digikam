@@ -95,6 +95,10 @@ public:
     double blurrejected;
     double blur;
 
+    double acceptedThreshold;
+    double pendingThreshold;
+    double rejectedThreshold;
+
     QString     path;   // Path to host result file
 };
 
@@ -132,6 +136,12 @@ PickLabel ImgQSort::analyseQuality(const DImg& img, ImageQualitySettings imq)
     d->imq.mediumQPending    = imq.mediumQPending;
     d->imq.highQAccepted     = imq.highQAccepted;
     d->imq.speed             = imq.speed;
+    d->imq.rejectedThreshold    = imq.rejectedThreshold;
+    d->imq.pendingThreshold     = imq.pendingThreshold;
+    d->imq.acceptedThreshold    = imq.acceptedThreshold;
+    d->imq.blurWeight                  = imq.blurWeight;
+    d->imq.noiseWeight                = imq.noiseWeight;
+    d->imq.compressionWeight    = imq.compressionWeight;
 
 
     d->image   = img;
