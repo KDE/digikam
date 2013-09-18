@@ -70,10 +70,6 @@ public:
     Private() :
        minZoom(0.1), maxZoom(12.0), zoomMultiplier(1.2)
     {
-        dragActive       = false;
-        midButtonPressed = false;
-        midButtonX       = 0;
-        midButtonY       = 0;
         panIconPopup     = 0;
         cornerButton     = 0;
         parent           = 0;
@@ -87,20 +83,7 @@ public:
 
     bool                     autoZoom;
     bool                     fullScreen;
-    bool                     ltActive;
-    bool                     rtActive;
-    bool                     lbActive;
-    bool                     rbActive;
-    bool                     lsActive;
-    bool                     rsActive;
-    bool                     bsActive;
-    bool                     tsActive;
-    bool                     dragActive;
-    bool                     midButtonPressed;
     bool                     initialZoom;
-
-    int                      midButtonX;
-    int                      midButtonY;
 
     double                   zoom;
     const double             minZoom;
@@ -609,6 +592,7 @@ void Canvas::setFitToWindow(bool fit)
 void Canvas::slotRotate90()
 {
     d_ptr->canvasItem->clearCache();
+    d_ptr->canvasItem->toggleRotated();
     d_ptr->canvasItem->im()->rotate90();
 }
 
@@ -621,6 +605,7 @@ void Canvas::slotRotate180()
 void Canvas::slotRotate270()
 {
     d_ptr->canvasItem->clearCache();
+    d_ptr->canvasItem->toggleRotated();
     d_ptr->canvasItem->im()->rotate270();
 }
 
@@ -1013,8 +998,6 @@ void Canvas::cancelAddItem()
 void Canvas::mousePressEvent(QMouseEvent* event)
 {
     GraphicsDImgView::mousePressEvent(event);
-    QPoint p(event->pos());
-    QRect r = calcSelectedArea();
     GraphicsDImgItem* item = (GraphicsDImgItem*)itemAt(event->pos());
     if (item)
     {

@@ -53,12 +53,14 @@ public:
     {
         im         = 0;
         view       = 0;
+        rotated    = false;
     }
 
     EditorCore*      im;
     Canvas*          view;
     QRect            drawRect;
     QPixmap          pix;
+    bool             rotated;
 };
 
 CanvasItem::CanvasItem(Canvas *widget):
@@ -75,9 +77,28 @@ CanvasItem::~CanvasItem()
     delete d_ptr;
 }
 
+void CanvasItem::toggleRotated()
+{
+    d_ptr->rotated = !d_ptr->rotated;
+}
+
 EditorCore* CanvasItem::im()
 {
     return d_ptr->im;
+}
+
+QRectF CanvasItem::boundingRect() const
+{
+    // always return full integer sizes, we can only scale to integer
+    if (!d_ptr->rotated)
+    {
+        return QRectF(QPointF(0,0), zoomSettings()->zoomedSize()).toAlignedRect();
+    }
+    else
+    {
+        double newWidth = pow(zoomSettings()->zoomedSize().height(), 2) / zoomSettings()->zoomedSize().width();
+        return QRectF(0, 0, newWidth, zoomSettings()->zoomedSize().height()).toAlignedRect();
+    }
 }
 
 void CanvasItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
