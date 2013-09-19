@@ -355,14 +355,12 @@ void Canvas::updateAutoZoom()
     d_ptr->zoom = calcAutoZoomFactor();
     d_ptr->canvasItem->zoomSettings()->setZoomFactor(d_ptr->zoom);
     d_ptr->canvasItem->im()->zoom(d_ptr->zoom);
-    qDebug()<<"updateAutoZoom()"<<d_ptr->zoom;
 
     emit signalZoomChanged(d_ptr->zoom);
 }
 
 void Canvas::updateContentsSize(bool deleteRubber)
 {
-    Q_UNUSED(deleteRubber);
     viewport()->setUpdatesEnabled(false);
 
     if (deleteRubber && d_ptr->rubber && d_ptr->rubber->isVisible())
@@ -450,7 +448,6 @@ void Canvas::slotIncreaseZoom()
 
     double zoom = d_ptr->zoom * d_ptr->zoomMultiplier;
     zoom        = snapZoom(zoom);
-    qDebug()<<"slotIncreaseZoom()"<<zoom;
     setZoomFactor(zoom);
 }
 
@@ -821,7 +818,9 @@ void Canvas::slotCornerButtonPressed()
     connect(pan, SIGNAL(signalHidden()),
             this, SLOT(slotPanIconHidden()));
 
-    QRect r = d_ptr->canvasItem->boundingRect().toRect();
+    QRectF visibleRect = mapToScene(viewport()->geometry()).boundingRect();
+    QRect r((int)visibleRect.topLeft().x()/d_ptr->zoom, (int)visibleRect.topLeft().y()/d_ptr->zoom,
+            (int)visibleRect.width()/d_ptr->zoom, (int)visibleRect.height()/d_ptr->zoom);
     pan->setImage(180, 120, d_ptr->canvasItem->im()->getImg()->copyQImage());
     pan->setRegionSelection(r);
     pan->setMouseFocus();
