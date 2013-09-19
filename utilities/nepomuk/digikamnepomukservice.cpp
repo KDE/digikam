@@ -29,6 +29,7 @@
 #include <QDBusConnectionInterface>
 #include <QDBusInterface>
 #include <QThread>
+#include <QPointer>
 
 // KDE includes
 #include <kpluginfactory.h>
@@ -38,10 +39,11 @@
 
 // Nepomuk includes
 #include "Nepomuk2/Tag"
-#include "Nepomuk2/ResourceWatcher"
 #include "Nepomuk2/ResourceManager"
 #include "Nepomuk2/Service"
+
 #include "dknepomukwrap.h"
+#include "nepomukwatcher.h"
 
 // Local includes
 #include "albumdb.h"
@@ -91,6 +93,7 @@ public:
     QTimer*                                  nepomukChangeTimer;
     QTimer*                                  cleanIgnoreListTimer;
     QMultiHash<QUrl, WatchedNepomukProperty> ignoreUris;
+    QPointer<NepomukWatcher>                nepomukWatch;
 
     bool checkIgnoreUris(const QUrl& url, WatchedNepomukProperty property)
     {
@@ -182,11 +185,17 @@ DkNepomukService::DkNepomukService(QObject* parent, const QVariantList&)
             this, SLOT(cleanIgnoreList()));
 
     readConfig();
+
+    d->nepomukWatch = new NepomukWatcher(this);
 }
 
 DkNepomukService::~DkNepomukService()
 {
-
+    if(!d->nepomukWatch.isNull())
+    {
+        kDebug() << "Deleting nepomukWatch";
+        delete d->nepomukWatch;
+    }
 }
 
 
@@ -849,6 +858,7 @@ void DkNepomukService::syncTagsToDigikam(const KUrl::List& fileUrls, const QList
 
     if (!infos.isEmpty())
     {
+        ChangingDB changing(d);
         DatabaseAccess access;
         DatabaseTransaction transaction(&access);
         const int infosSize = infos.size();

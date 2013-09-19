@@ -90,15 +90,17 @@ public Q_SLOTS:
     Q_SCRIPTABLE void enableSyncToNepomuk(bool syncToNepomuk);
     Q_SCRIPTABLE void triggerResync();
 
+    void syncTagsToDigikam(const KUrl::List& filePaths, const QList<QUrl>& tags);
+    void syncRatingToDigikam(const KUrl::List& filePaths, const QList<int>& ratings);
+    void syncCommentToDigikam(const KUrl::List& filePaths, const QStringList& ratings);
+    void removeTagInDigikam(const KUrl& fileUrl, const QUrl& tag);
+
 protected Q_SLOTS:
 
     void slotImageChange(const ImageChangeset& changeset);
     void slotImageTagChange(const ImageTagChangeset& changeset);
     void slotTagChange(const TagChangeset& changeset);
     //void slotCollectionImageChange(const CollectionImageChangeset& changeset);
-
-    //void slotStatementAdded(const Soprano::Statement& statement);
-    //void slotStatementRemoved(const Soprano::Statement& statement);
 
     void syncNepomukToDigikam();
     void fullSyncDigikamToNepomuk();
@@ -125,11 +127,8 @@ protected:
     void syncToNepomuk(const QList<qlonglong>& imageid, SyncToNepomukSettings syncSettings);
     void syncToNepomuk(const QList<ImageInfo>& infos, SyncToNepomukSettings syncSettings);
     void syncTagsToNepomuk(const QList<qlonglong>& imageIds, const QList<int>& tagIds, bool addOrRemove);
-    void syncRatingToDigikam(const KUrl::List& filePaths, const QList<int>& ratings);
-    void syncCommentToDigikam(const KUrl::List& filePaths, const QStringList& ratings);
-    void syncTagsToDigikam(const KUrl::List& filePaths, const QList<QUrl>& tags);
+
     void syncAddedImagesToDigikam(const QList<qlonglong>& ids);
-    void removeTagInDigikam(const KUrl& fileUrl, const QUrl& tag);
     void pushTagsToNepomuk(const QList<ImageInfo>& imageInfos);
 
     int bestDigikamTagForTagName(const ImageInfo& info, const QString& tagName);
