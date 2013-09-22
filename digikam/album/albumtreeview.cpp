@@ -296,11 +296,18 @@ void AbstractAlbumTreeView::setAlbumFilterModel(AlbumFilterModel* const filterMo
         connect(m_albumFilterModel, SIGNAL(searchTextSettingsChanged(bool,bool)),
                 this, SLOT(slotSearchTextSettingsChanged(bool,bool)));
 
-        connect(selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-                this, SLOT(slotCurrentChanged()));
+        // NOTE: When only single selection was awailable, everything was
+        //       implemented using currentAlbum() which was equal with selectedAlbum()
+        //       after enabling multiple selection they are no longer the same
+        //       and some options must use selected others only currentAlbum
+        //       Now AlbumManager implementation is a little bit of mess
+        //       because selected are now currentAlbums()...
+
+        //connect(selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+        //        this, SLOT(slotCurrentChanged()));
 
         connect(selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-                this, SLOT(slotCurrentChanged()));
+                this, SLOT(slotSelectionChanged()));
 
         connect(m_albumFilterModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
                 this, SLOT(adaptColumnsOnDataChange(QModelIndex,QModelIndex)));
@@ -545,6 +552,11 @@ void AbstractAlbumTreeView::slotSelectionChanged()
 {
     /** Dead signal? Nobody listens to it **/
     //emit selectedAlbumsChanged(selectedAlbums<Album>(selectionModel(), m_albumFilterModel));
+    if(d->selectAlbumOnClick)
+    {
+        AlbumManager::instance()->setCurrentAlbums(selectedAlbums<Album>(selectionModel(),
+                                                                     m_albumFilterModel));
+    }
 }
 
 void AbstractAlbumTreeView::mousePressEvent(QMouseEvent* e)
@@ -588,23 +600,6 @@ void AbstractAlbumTreeView::mousePressEvent(QMouseEvent* e)
 
     QTreeView::mousePressEvent(e);
 
-    /**
-     * Multi selection fix for currentAlbum(), use only after
-     * QTreeView::mousePressEvent, to get the right selection
-     */
-    if(d->selectAlbumOnClick)
-    {
-        QModelIndexList list = selectionModel()->selectedIndexes();
-        QList<Album*> currentAlbums;
-        currentAlbums.reserve(list.size());
-
-        foreach(QModelIndex index, list)
-        {
-            currentAlbums.push_back(m_albumFilterModel->albumForIndex(index));
-        }
-
-        AlbumManager::instance()->setCurrentAlbums(currentAlbums);
-    }
 }
 
 void AbstractAlbumTreeView::middleButtonPressed(Album*)

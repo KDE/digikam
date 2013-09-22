@@ -20,14 +20,14 @@ DONE:
     19. Add custom list for tagmanager
     20. Add database options
     21. Obsolete tags are not deleted [Fixed in Master]
+    22. Disconnect tagmanager from album mamanger
 
 TODO:
     1. Port Nepomuk
     2. core/libs/models/imagealbummodel.cpp:193 TODO: treat root album on QList
-    3. Disconnect tagmanager from album mamanger
-    4. Add option to delete tag from images [BugZilla entry]
-    5. Hide root album from Album Tree and Tag Tree
-    6. Drag-n-drop images on tag tree will assign multiple tags to images
+    3. Add option to delete tag from images [BugZilla entry]
+    4. Hide root album from Album Tree and Tag Tree
+    5. Drag-n-drop images on tag tree will assign multiple tags to images
 
 DEAD CODE:
     1. Albumtreeview.cpp 306-309 deleting this 2 connects doesn't affect digikam behaviour ???

@@ -54,6 +54,7 @@ TagMngrTreeView::TagMngrTreeView(TagsManager* parent, TagModel* model)
 {
     d->tagMngr = parent;
     setAlbumFilterModel(new TagsManagerFilterModel(this), albumFilterModel());
+    setSelectAlbumOnClick(false);
     expand(albumFilterModel()->rootAlbumIndex());
 }
 
@@ -100,7 +101,6 @@ void TagMngrTreeView::setAlbumFilterModel(TagsManagerFilterModel* filteredModel,
 {
     Q_UNUSED(filterModel);
     m_tfilteredModel = filteredModel;
-    //AbstractCheckableAlbumTreeView::setAlbumFilterModel(albumFilterModel());
     albumFilterModel()->setSourceFilterModel(m_tfilteredModel);
 }
 
