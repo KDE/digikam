@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2005      by Joern Ahrens <joern dot ahrens at kdemail dot net>
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,6 +38,7 @@
 // KDE includes
 
 #include <kstandarddirs.h>
+#include <kdiskfreespaceinfo.h>
 #include <kaboutdata.h>
 #include <kcomponentdata.h>
 #include <kdebug.h>
@@ -59,6 +60,7 @@ public:
         return QString("%1-%2.bin").arg(cachePrefix).arg(level);
     }
 
+    QString   cacheDir;
     QString   cachePrefix;
     QSet<int> cachedLevels;
 };
@@ -66,14 +68,14 @@ public:
 UndoCache::UndoCache()
     : d(new Private)
 {
-    QString cacheDir = KStandardDirs::locateLocal("cache", KGlobal::mainComponent().aboutData()->programName() + '/');
+    d->cacheDir    = KStandardDirs::locateLocal("cache", KGlobal::mainComponent().aboutData()->programName() + '/');
 
-    d->cachePrefix   = QString("%1undocache-%2")
-                       .arg(cacheDir)
-                       .arg(QCoreApplication::applicationPid());
+    d->cachePrefix = QString("%1undocache-%2")
+                     .arg(d->cacheDir)
+                     .arg(QCoreApplication::applicationPid());
 
     // remove any remnants
-    QDir dir(cacheDir);
+    QDir dir(d->cacheDir);
 
     foreach(const QFileInfo& info, dir.entryInfoList(QStringList() << (d->cachePrefix + '*')))
     {
@@ -112,8 +114,14 @@ void UndoCache::clearFrom(int fromLevel)
 bool UndoCache::putData(int level, const DImg& img) const
 {
     QFile file(d->cacheFile(level));
-
-    if (file.exists() || !file.open(QIODevice::WriteOnly))
+    KDiskFreeSpaceInfo info = KDiskFreeSpaceInfo::freeSpaceInfo(d->cacheDir);
+    
+    unsigned long fspace = (unsigned long)(info.available()/1024.0/1024.0);
+    kDebug() << "Free space available in Editor cache (Mbytes): " << fspace;
+    
+    if (file.exists() || 
+        !file.open(QIODevice::WriteOnly) || 
+        fspace < 1024) // Check if free space is over 1 Gb to put data in cache. 
     {
         return false;
     }
