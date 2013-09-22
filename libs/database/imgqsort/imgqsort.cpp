@@ -152,6 +152,7 @@ PickLabel ImgQSort::analyseQuality(const DImg& img, ImageQualitySettings imq)
     short blur2=0;
     double noise=0.0;
     int compressionlevel=0;
+    float finalquality=0.0;
 
     //If blur option is selected in settings, run the algorithms
     if (d->imq.detectBlur==true)
@@ -182,6 +183,7 @@ PickLabel ImgQSort::analyseQuality(const DImg& img, ImageQualitySettings imq)
         kDebug() << "Amount of compression artifacts present in image is : " << compressionlevel;
     }
 
+
 #ifdef TRACE
     QFile filems("imgqsortresult.txt");
 
@@ -209,8 +211,38 @@ PickLabel ImgQSort::analyseQuality(const DImg& img, ImageQualitySettings imq)
 
 #endif
 
+    //Calculating finalquality
 
-    // FIXME
+    //all the results to have a range of 1 to 100.
+    float finalblur = (blur*100)  + ((blur2/32767)*100);
+    float finalnoise = noise*100;
+    float finalcompression = (compressionlevel / 1024) * 100; //we are processing 1024 pixels size image
+
+    finalquality = finalblur*d->imq.blurWeight +
+                   finalnoise*d->imq.noiseWeight +
+                   finalcompression*d->imq.compressionWeight;
+
+    finalquality = finalquality / 100;
+    //Assigning PickLabels
+
+    if (finalquality==0.0)
+    {
+        //Algorithms have not been run. So return noPickLabel
+        return NoPickLabel;
+    }
+    else if (finalquality<d->imq.rejectedThreshold)
+    {
+        return RejectedLabel;
+    }
+    else if (finalquality>d->imq.rejectedThreshold && finalquality<d->imq.acceptedThreshold)
+    {
+        return PendingLabel;
+    }
+    else
+    {
+        return AcceptedLabel;
+    }
+
     return NoPickLabel;
 }
 
