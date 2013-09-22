@@ -133,10 +133,15 @@ void TagMngrTreeView::setContexMenuItems(ContextMenuHelper& cmh, QList< TAlbum* 
     KAction* expandSel     = new KAction(KIcon("format-indent-more"),
                                          i18n("Expand Selected Nodes"), this);
 
+    KAction* delTagFromImg = new KAction(KIcon("tag-delete"),
+                                         i18n("Remove Tag from Images"), this);
+
     cmh.addAction(resetIcon,d->tagMngr, SLOT(slotResetTagIcon()), false);
     cmh.addAction(invSel, d->tagMngr, SLOT(slotInvertSel()), false);
     cmh.addAction(expandTree, this, SLOT(slotExpandTree()),false);
     cmh.addAction(expandSel, this , SLOT(slotExpandSelected()), false);
+    cmh.addAction(delTagFromImg, d->tagMngr, SLOT(slotRemoveTagsFromImgs()),
+                  false);
 }
 void TagMngrTreeView::slotExpandSelected()
 {

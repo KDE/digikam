@@ -22,7 +22,6 @@
  * ============================================================ */
 
 /** Qt includes **/
-#include <QtAlgorithms>
 #include <QQueue>
 #include <QTreeView>
 #include <QtGui/QHeaderView>
@@ -59,6 +58,7 @@
 #include "albumdb.h"
 #include "dlogoaction.h"
 #include "metadatasynchronizer.h"
+#include "fileactionmngr.h"
 
 namespace Digikam
 {
@@ -553,6 +553,23 @@ void TagsManager::slotForkTags()
     }
 }
 
+void TagsManager::slotRemoveTagsFromImgs()
+{
+    QModelIndexList selList = d->tagMngrView->selectionModel()->selectedIndexes();
+
+    foreach(QModelIndex index, selList)
+    {
+        TAlbum* t = static_cast<TAlbum*>(d->tagMngrView->albumForIndex(index));
+
+        AlbumPointer<TAlbum> tag(t);
+        if(tag->isRoot())
+            continue;
+
+        QList<qlonglong> assignedItems = DatabaseAccess().db()->getItemIDsInTag(tag->id());
+        ImageInfoList imgList(assignedItems);
+        FileActionMngr::instance()->removeTag(imgList, tag->id());
+    }
+}
 void TagsManager::closeEvent(QCloseEvent* event)
 {
     d->listView->saveSettings();
@@ -597,6 +614,8 @@ void TagsManager::setupActions()
 
     KAction* expandSel     = new KAction(KIcon("format-indent-more"),
                                          i18n("Expand Selected Nodes"), this);
+    KAction* delTagFromImg = new KAction(KIcon("tag-delete"),
+                                         i18n("Remove Tag from Images"), this);
 
     /** Tool tips  **/
     d->addAction->setHelpText(i18n("Add new tag to current tag. "
@@ -616,6 +635,9 @@ void TagsManager::setupActions()
 
     expandSel->setHelpText(i18n("Selected items will be expanded"));
 
+    delTagFromImg->setHelpText(i18n("Delete selected tag(s) from images. "
+                                    "Works with multiple selection "));
+
     connect(resetIcon, SIGNAL(triggered()),
             this, SLOT(slotResetTagIcon()));
 
@@ -631,11 +653,15 @@ void TagsManager::setupActions()
     connect(expandSel, SIGNAL(triggered()),
             d->tagMngrView, SLOT(slotExpandSelected()));
 
+    connect(delTagFromImg, SIGNAL(triggered()),
+            this, SLOT(slotRemoveTagsFromImgs()));
+
     d->organizeAction->addAction(resetIcon);
     d->organizeAction->addAction(createTagAddr);
     d->organizeAction->addAction(invSel);
     d->organizeAction->addAction(expandTree);
     d->organizeAction->addAction(expandSel);
+    d->organizeAction->addAction(delTagFromImg);
 
     /** Sync & Export Group **/
     d->syncexportAction = new KActionMenu(KIcon("server-database"),
@@ -717,7 +743,7 @@ void TagsManager::setupActions()
      */
     d->rightToolBar = new KMultiTabBar(KMultiTabBar::Right);
     d->rightToolBar->appendTab(KIcon("tag-properties").pixmap(10,10),
-                               0,"Tag Properties");
+                               0,i18n("Tag Properties"));
     d->rightToolBar->setStyle(KMultiTabBar::KDEV3ICON);
 
     connect(d->rightToolBar->tab(0),SIGNAL(clicked()),
