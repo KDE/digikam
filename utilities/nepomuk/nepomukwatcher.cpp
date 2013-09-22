@@ -45,11 +45,9 @@ public:
     NepomukWatcherPriv()
     {
         resWatch = 0;
-        locked   = false;
     };
     ResourceWatcher* resWatch;
     DkNepomukService* parent;
-    bool                locked;
 };
 
 NepomukWatcher::NepomukWatcher(DkNepomukService* parent)
@@ -60,7 +58,9 @@ NepomukWatcher::NepomukWatcher(DkNepomukService* parent)
     d->resWatch->addProperty(NAO::hasTag());
     d->resWatch->addProperty(NAO::numericRating());
     d->resWatch->addProperty(NAO::description());
+
     d->resWatch->addType(Nepomuk2::Vocabulary::NFO::Image());
+    d->resWatch->addType(NAO::hasTag());
 
     connect(d->resWatch, SIGNAL(propertyAdded(Nepomuk2::Resource,
                                               Nepomuk2::Types::Property,
@@ -76,6 +76,13 @@ NepomukWatcher::NepomukWatcher(DkNepomukService* parent)
                                        Nepomuk2::Types::Property,
                                        QVariant)));
 
+    connect(d->resWatch, SIGNAL(resourceCreated(Nepomuk2::Resource, QList<QUrl>)),
+            this, SLOT(slotResAdded(Nepomuk2::Resource, QList<QUrl>)));
+
+    connect(d->resWatch, SIGNAL(resourceRemoved(QUrl, QList<QUrl>)),
+            this, SLOT(slotResRemoved(QUrl, QList<QUrl>)));
+
+    kDebug() << "Starting Resource Watcher ...";
     d->resWatch->start();
 }
 
@@ -90,10 +97,10 @@ void NepomukWatcher::slotPropertyAdded(Resource res, Types::Property prop, QVari
     //kDebug() << "Property Added " << prop << " " <<  var << " +++++++++++++++++++++++++";
     //kDebug() << var << "++++++++++++++++++++++++++";
 
-    if(d->locked)
-        return;
+    //if(d->locked)
+    //    return;
 
-    d->locked = true;
+    //d->locked = true;
     //TODO: use change DkNepomukService's functions to use only one argument
     if(prop == NAO::hasTag())
     {
@@ -127,7 +134,6 @@ void NepomukWatcher::slotPropertyAdded(Resource res, Types::Property prop, QVari
         d->parent->syncCommentToDigikam(resList, commentList);
     }
 
-    d->locked = false;
 }
 
 void NepomukWatcher::slotPropertyRemoved(Resource res, Types::Property prop, QVariant var)
@@ -136,10 +142,10 @@ void NepomukWatcher::slotPropertyRemoved(Resource res, Types::Property prop, QVa
     //kDebug() << "Property Removed " << prop << " " << var << "+++++++++++++++++++++++++";
     //kDebug() << var << "++++++++++++++++++++++++++";
 
-    if(d->locked)
-        return;
+    //if(d->locked)
+    //    return;
 
-    d->locked = true;
+    //d->locked = true;
 
     kDebug() << (res.type() == NAO::hasTag());
     if(prop == NAO::hasTag())
@@ -150,7 +156,25 @@ void NepomukWatcher::slotPropertyRemoved(Resource res, Types::Property prop, QVa
         d->parent->removeTagInDigikam(url, tag);
     }
 
-    d->locked = false;
 }
 
+void NepomukWatcher::slotResAdded(Resource res, QList<QUrl> types)
+{
+    kDebug() << "Resource created++++++++++++";
+
+    if(types.contains(NAO::hasTag()))
+    {
+        kDebug() << "Will add tags";
+    }
+}
+
+void NepomukWatcher::slotResRemoved(QUrl url, QList<QUrl> types)
+{
+    kDebug() << "Resource removed +++++++++++++++++";
+
+    if(types.contains(NAO::hasTag()))
+    {
+        kDebug() << "Will remove tags";
+    }
+}
 }

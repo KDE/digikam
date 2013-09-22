@@ -40,8 +40,14 @@ public:
     ~NepomukWatcher();
 
 private Q_SLOTS:
-    void slotPropertyAdded(Nepomuk2::Resource res, Nepomuk2::Types::Property prop, QVariant var);
-    void slotPropertyRemoved(Nepomuk2::Resource res, Nepomuk2::Types::Property prop, QVariant var);
+    void slotPropertyAdded(Nepomuk2::Resource res,
+                           Nepomuk2::Types::Property prop, QVariant var);
+    void slotPropertyRemoved(Nepomuk2::Resource res,
+                             Nepomuk2::Types::Property prop, QVariant var);
+
+    void slotResAdded(Nepomuk2::Resource res, QList<QUrl> types);
+
+    void slotResRemoved(QUrl url, QList<QUrl> types);
 
 private:
     class NepomukWatcherPriv;

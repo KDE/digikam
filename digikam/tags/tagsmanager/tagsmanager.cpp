@@ -112,10 +112,8 @@ TagsManager::TagsManager()
     : KMainWindow(0), d(new PrivateTagMngr())
 {
 
-    /** No buttons **/
     d->tagModel = new TagModel(AbstractAlbumModel::IncludeRootAlbum, this);;
     d->tagModel->setCheckable(false);
-
     setupUi(this);
 
     /*----------------------------Connects---------------------------*/
@@ -128,6 +126,7 @@ TagsManager::TagsManager()
 
     connect(d->delAction, SIGNAL(triggered()), this, SLOT(slotDeleteAction()));
 
+    d->tagMngrView->setCurrentIndex(d->tagMngrView->model()->index(0,0));
 
     /** Set KMainWindow in center of the screen **/
     this->move(QApplication::desktop()->screen()->rect().center()

@@ -38,3 +38,19 @@ Gilles suggestions:
     2. [DONE]Add tooltips for menu actions
     3. [DROPPED]Move Tag Properties button from right sidebar
     4. [DONE]Add DLogoAction
+
+Nepomuk implementation:
+    1. Sync Tags, Comments Ratings from digikam to Nepomuk one time at start-up
+    2. Sync Tags, Comments, Ratings digiKam -> Nepomuk when:
+        2.1 Tags are asigned or removed from images
+        2.2 Comments are added or removed
+        2.3 Ratings are added or removed
+
+    3. Sync Tags, Comments, Ratings Nepomuk -> digiKam when:
+        3.1 Tags, Ratings, Comments are added
+        3.2 Tags Removed (ratings & comments are simply overwritten by add)
+
+Nepomuk-TODO:
+    1. Wrap Nepomuk Api code
+    2. Implement Nepomuk -> digiKam manual sync
+    3. Sync when tags are added or removed

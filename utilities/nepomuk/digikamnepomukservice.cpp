@@ -185,8 +185,6 @@ DkNepomukService::DkNepomukService(QObject* parent, const QVariantList&)
             this, SLOT(cleanIgnoreList()));
 
     readConfig();
-
-    d->nepomukWatch = new NepomukWatcher(this);
 }
 
 DkNepomukService::~DkNepomukService()
@@ -242,31 +240,11 @@ void DkNepomukService::enableSyncToDigikam(bool syncToDigikam)
         return;
     }
 
-    // TODO: Use Nepomuk Api
-    /*
-    if (d->syncToDigikam)
-    {
-        connect(mainModel(), SIGNAL(statementAdded(Soprano::Statement)),
-                this, SLOT(slotStatementAdded(Soprano::Statement)));
-
-        connect(mainModel(), SIGNAL(statementRemoved(Soprano::Statement)),
-                this, SLOT(slotStatementRemoved(Soprano::Statement)));
-
-
-        if (lastSyncToDigikam().isNull())
-        {
-            d->triggerSyncToDigikam();
-        }
-    }
-    else
-    {
-        disconnect(mainModel(), SIGNAL(statementAdded(Soprano::Statement)),
-                   this, SLOT(slotStatementAdded(Soprano::Statement)));
-
-        disconnect(mainModel(), SIGNAL(statementRemoved(Soprano::Statement)),
-                   this, SLOT(slotStatementRemoved(Soprano::Statement)));
-    }
-    */
+    /**
+     * This class will watch for changes and will keep digiKam database in sync
+     * with nepomuk, if enabled
+     */
+    d->nepomukWatch = new NepomukWatcher(this);
 }
 
 void DkNepomukService::enableSyncToNepomuk(bool syncToNepomuk)
@@ -598,7 +576,8 @@ void DkNepomukService::syncToNepomuk(const QList<ImageInfo>& infos, SyncToNepomu
 
 
 
-void DkNepomukService::syncTagsToNepomuk(const QList<qlonglong>& imageIds, const QList<int>& tagIds, bool addOrRemove)
+void DkNepomukService::syncTagsToNepomuk(const QList<qlonglong>& imageIds,
+                                         const QList<int>& tagIds, bool addOrRemove)
 {
     foreach(int tagId, tagIds)
     {
@@ -998,7 +977,8 @@ bool DkNepomukService::hasSyncToNepomuk()
 
 void DkNepomukService::markAsSyncedToDigikam()
 {
-    DatabaseAccess().db()->setSetting("SyncNepomukToDigikam-1-Time", QDateTime::currentDateTime().toString(Qt::ISODate));
+    DatabaseAccess().db()->setSetting("SyncNepomukToDigikam-1-Time",
+                                      QDateTime::currentDateTime().toString(Qt::ISODate));
 }
 
 void DkNepomukService::markAsSyncedToNepomuk()
@@ -1070,147 +1050,3 @@ KSharedConfig::Ptr DkNepomukService::digikamConfig() const
 
 NEPOMUK_EXPORT_SERVICE( Digikam::DkNepomukService, "digikamnepomukservice")
 
-/*
-void NepomukService::slotCollectionImageChange(const CollectionImageChangeset& changeset)
-{
-    kDebug() << changeset.operation() << changeset.ids();
-    if (changeset.operation() == CollectionImageChangeset::Added)
-    {
-        syncAddedImagesToDigikam(changeset.ids());
-    }
-}
-*/
-
-/** NOTE: Drop low level stuff
-void NepomukService::slotStatementAdded(const Soprano::Statement& statement)
-{
-    if (d->changingNepomuk) // no effect currently
-    {
-        return;
-    }
-
-    const Soprano::Node& subject = statement.subject();
-
-    const Soprano::Node& predicate = statement.predicate();
-
-    if (predicate == Soprano::Vocabulary::NAO::numericRating())
-    {
-        if (d->checkIgnoreUris(subject.uri(), NaoRating))
-        {
-            return;
-        }
-
-        //kDebug() << "Changed rating" << subject.toN3() << statement.object().toN3() << d->changingNepomuk;
-        d->triggerSyncToDigikam();
-    }
-    else if (predicate == Soprano::Vocabulary::NAO::description())
-    {
-        if (d->checkIgnoreUris(subject.uri(), NaoDescription))
-        {
-            return;
-        }
-
-        //kDebug() << "Changed comment" << subject.toN3() << statement.object().toN3() << d->changingNepomuk;
-        d->triggerSyncToDigikam();
-    }
-    else if (predicate == Soprano::Vocabulary::NAO::hasTag())
-    {
-        if (d->checkIgnoreUris(subject.uri(), NaoTags))
-        {
-            return;
-        }
-
-        //kDebug() << "Added tag" << subject.toN3() << statement.object().toN3() << d->changingNepomuk;
-        d->triggerSyncToDigikam();
-    }
-}
-
-void NepomukService::slotStatementRemoved(const Soprano::Statement& statement)
-{
-    Q_UNUSED(statement);
-
-    if (d->changingNepomuk) // no effect currently
-    {
-        return;
-    }
-
-    const Soprano::Node& subject   = statement.subject();
-
-    const Soprano::Node& predicate = statement.predicate();
-
-    if (predicate == Soprano::Vocabulary::NAO::hasTag())
-    {
-        if (d->checkIgnoreUris(subject.uri(), NaoTags))
-        {
-            return;
-        }
-
-        kDebug() << "Removed tag" << subject.toN3() << statement.object().toN3() << d->changingNepomuk;
-        Nepomuk::Resource res(subject.uri());
-        removeTagInDigikam(res.property(Nepomuk::Vocabulary::NIE::url()).toString(), statement.object().uri());
-    }
-}
-
-*/
-
-/** NOTE: This type of queries should be dropped
-static QString nepomukChangeQuery(const QString& predicate, const QDateTime& dateTime)
-{
-    return  QString("PREFIX nao: <%1> "
-                    "PREFIX xls: <%2> "
-                    "PREFIX nie: <%3> "
-                    "SELECT DISTINCT ?path ?value "
-                    " WHERE { GRAPH ?g { ?r %4 ?value . } . "
-                    " ?r nie:url ?path ."
-                    " ?g nao:created ?t . "
-                    " FILTER ( ?t > \"%5\"^^xls:dateTime ) . } ")
-            .arg(Soprano::Vocabulary::NAO::naoNamespace().toString())
-            .arg(Soprano::Vocabulary::XMLSchema::xsdNamespace().toString())
-            .arg(Nepomuk::Vocabulary::NIE::nieNamespace().toString())
-            .arg(predicate)
-            .arg(Soprano::LiteralValue(dateTime).toString());
-
-    More elegant, for Soprano 2.2.65
-                            " FILTER ( ?t > %2 ) . } ")
-                            .arg(Soprano::Node::literalToN3(lastSyncDate));
-
-                            .arg(Soprano::Node::resourceToN3(Nepomuk::Vocabulary::NIE::url())
-
-}
-*/
-
-/*
-TODO: Integrate to ImageScanner
-void NepomukService::syncAddedImagesToDigikam(const QList<qlonglong> &ids)
-{
-    foreach(qlonglong id, ids)
-    {
-        ImageInfo info(id);
-        if (info.isNull())
-            continue;
-
-        ChangingDB changing(d);
-
-        Nepomuk::Resource res(info.fileUrl(), Nepomuk::Vocabulary::NFO::FileDataObject());
-        Nepomuk::Variant rating = res.property(Soprano::Vocabulary::NAO::numericRating());
-        if (rating.isValid())
-            info.setRating(nepomukToDigikamRating(rating.toInt()));
-
-        Nepomuk::Variant comment = res.property(Soprano::Vocabulary::NAO::description());
-        if (comment.isValid())
-        {
-            DatabaseAccess access;
-            ImageComments comments = info.imageComments(access);
-            comments.addComment(comment.toString());
-        }
-
-        QList<Nepomuk::Tag> tags = res.tags();
-        foreach(const Nepomuk::Tag& tag, tags)
-        {
-            int id = bestDigikamTagForTagName(info, tag.genericLabel());
-            if (id)
-                info.setTag(id);
-        }
-    }
-}
-*/
