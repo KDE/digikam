@@ -117,7 +117,7 @@ bool UndoCache::putData(int level, const DImg& img) const
     KDiskFreeSpaceInfo info = KDiskFreeSpaceInfo::freeSpaceInfo(d->cacheDir);
     
     unsigned long fspace = (unsigned long)(info.available()/1024.0/1024.0);
-    kDebug() << "Free space available in Editor cache (Mbytes): " << fspace;
+    kDebug() << "Free space available in Editor cache [" << d->cacheDir << "] in Mbytes: " << fspace;
     
     if (file.exists() || 
         !file.open(QIODevice::WriteOnly) || 
