@@ -141,7 +141,8 @@ FaceDetector::FaceDetector(const FaceScanSettings& settings, ProgressItem* const
         d->pipeline.plugBenchmarker();
         d->pipeline.construct();
     }
-    else if (settings.task == FaceScanSettings::DetectAndRecognize)
+    else if ((settings.task == FaceScanSettings::DetectAndRecognize) || 
+             (settings.task == FaceScanSettings::Detect))
     {
         FacePipeline::FilterMode filterMode;
         FacePipeline::WriteMode  writeMode;
@@ -174,10 +175,14 @@ FaceDetector::FaceDetector(const FaceScanSettings& settings, ProgressItem* const
             d->pipeline.plugFaceDetector();
         }
 
-        d->pipeline.plugFaceRecognizer();
+        if(settings.task == FaceScanSettings::DetectAndRecognize)
+        {
+            d->pipeline.plugRerecognizingDatabaseFilter();
+            d->pipeline.plugFaceRecognizer();
+        }
         d->pipeline.plugDatabaseWriter(writeMode);
-        d->pipeline.construct();
         d->pipeline.setDetectionAccuracy(settings.accuracy);
+        d->pipeline.construct();
     }
     else // if (settings.task == FaceScanSettings::RecognizeMarkedFaces)
     {
