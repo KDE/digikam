@@ -22,11 +22,11 @@ DONE:
     21. Obsolete tags are not deleted [Fixed in Master]
     22. Disconnect tagmanager from album mamanger[FIXED]
     23. Add option to delete tag from images [BugZilla entry][DONE]
+    24. Drag-n-drop images on tag tree will assign multiple tags to images
 TODO:
     1. Port Nepomuk
     2. core/libs/models/imagealbummodel.cpp:193 TODO: treat root album on QList
     3. Hide root album from Album Tree and Tag Tree ??
-    4. Drag-n-drop images on tag tree will assign multiple tags to images
 
 DEAD CODE:
     1. Albumtreeview.cpp 306-309 deleting this 2 connects doesn't affect digikam behaviour ???

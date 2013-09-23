@@ -40,6 +40,7 @@
 #include "albummanager.h"
 #include "ddragobjects.h"
 #include "imageinfo.h"
+#include "albumtreeview.h"
 
 namespace Digikam
 {
@@ -186,6 +187,19 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
         // popup menu.
         bool assign = false;
 
+        // Use selected tags instead of dropped on.
+        QList<int> tagIdList;
+        QStringList tagNames;
+
+        QList<Album*> selTags = ((AbstractAlbumTreeView*)view)->selectedItems();
+
+        for(int it = 0 ; it < selTags.count(); ++it)
+        {
+            TAlbum* temp = dynamic_cast<TAlbum*>(selTags.at(it));
+            tagIdList << temp->id();
+            tagNames << temp->title();
+        }
+
         if (e->keyboardModifiers() == Qt::ControlModifier)
         {
             assign = true;
@@ -195,7 +209,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
             KMenu popMenu(view);
             popMenu.addTitle(SmallIcon("digikam"), i18n("My Tags"));
             QAction* const assignAction = popMenu.addAction(SmallIcon("tag"),
-                                                      i18n("Assign Tag '%1' to Items", destAlbum->prettyUrl()));
+                                                            i18n("Assign Tag(s) '%1' to Items", tagNames.join(", ")));
             popMenu.addSeparator();
             popMenu.addAction( SmallIcon("dialog-cancel"), i18n("C&ancel") );
 
@@ -206,7 +220,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
 
         if (assign)
         {
-            emit assignTags(imageIDs, QList<int>() << destAlbum->id());
+            emit assignTags(imageIDs, tagIdList);
         }
 
         return true;

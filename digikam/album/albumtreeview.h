@@ -215,6 +215,11 @@ public:
     // for internal use: public viewportEvent
     virtual bool viewportEvent(QEvent* event);
 
+    /**
+     * @brief selectedItems() -
+     */
+    QList<Album*> selectedItems();
+
 public Q_SLOTS:
 
     void setSearchTextSettings(const SearchTextSettings& settings);

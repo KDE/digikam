@@ -703,6 +703,10 @@ bool AbstractAlbumTreeView::viewportEvent(QEvent* event)
     return QTreeView::viewportEvent(event);
 }
 
+QList<Album*> AbstractAlbumTreeView::selectedItems()
+{
+    return selectedAlbums<Album>(selectionModel(), m_albumFilterModel);
+}
 void AbstractAlbumTreeView::doLoadState()
 {
     KConfigGroup configGroup = getConfigGroup();
