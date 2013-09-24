@@ -44,6 +44,7 @@
 
 #include "dknepomukwrap.h"
 #include "nepomukwatcher.h"
+#include "nepomukquery.h"
 
 // Local includes
 #include "albumdb.h"
@@ -94,6 +95,7 @@ public:
     QTimer*                                  cleanIgnoreListTimer;
     QMultiHash<QUrl, WatchedNepomukProperty> ignoreUris;
     QPointer<NepomukWatcher>                nepomukWatch;
+    QPointer<NepomukQuery>                  nepomukQuery;
 
     bool checkIgnoreUris(const QUrl& url, WatchedNepomukProperty property)
     {
@@ -168,14 +170,6 @@ DkNepomukService::DkNepomukService(QObject* parent, const QVariantList&)
 {
     Nepomuk2::ResourceManager::instance()->init();
 
-    d->nepomukChangeTimer = new QTimer(this);
-    d->nepomukChangeTimer->setSingleShot(true);
-    d->nepomukChangeTimer->setInterval(5000);
-
-    connect(d->nepomukChangeTimer, SIGNAL(timeout()),
-            this, SLOT(syncNepomukToDigikam()));
-
-
     d->cleanIgnoreListTimer = new QTimer(this);
     d->cleanIgnoreListTimer->setSingleShot(true);
     d->cleanIgnoreListTimer->setInterval(5000);
@@ -185,6 +179,15 @@ DkNepomukService::DkNepomukService(QObject* parent, const QVariantList&)
             this, SLOT(cleanIgnoreList()));
 
     readConfig();
+
+    d->nepomukChangeTimer = new QTimer(this);
+    d->nepomukChangeTimer->setSingleShot(true);
+    d->nepomukChangeTimer->setInterval(5000);
+
+    connect(d->nepomukChangeTimer, SIGNAL(timeout()),
+            this, SLOT(syncNepomukToDigikam()));
+
+    d->nepomukChangeTimer->start();
 }
 
 DkNepomukService::~DkNepomukService()
@@ -193,6 +196,11 @@ DkNepomukService::~DkNepomukService()
     {
         kDebug() << "Deleting nepomukWatch";
         delete d->nepomukWatch;
+    }
+    if(!d->nepomukQuery.isNull())
+    {
+        kDebug() << "Deleting nepomukQuery";
+        delete d->nepomukQuery;
     }
 }
 
@@ -245,6 +253,12 @@ void DkNepomukService::enableSyncToDigikam(bool syncToDigikam)
      * with nepomuk, if enabled
      */
     d->nepomukWatch = new NepomukWatcher(this);
+
+    /**
+     * NepomukQuery class will handle all Nepomuk queries
+     * from DigikamNepomukService
+     */
+    d->nepomukQuery = new NepomukQuery(this);
 }
 
 void DkNepomukService::enableSyncToNepomuk(bool syncToNepomuk)
@@ -640,11 +654,14 @@ void DkNepomukService::syncNepomukToDigikam()
     // wait until digikam -> nepomuk initial sync, if any, has finished
 
     // TODO: Rewrite this to use Nepomuk2 Api
-    /*
+    kDebug() << "Sync Nepomuk To digiKam +++++++++++ ...";
     if (d->fullSyncJobs)
     {
         d->triggerSyncToDigikam();
     }
+
+    if(d->nepomukQuery.isNull())
+        return;
 
     QDateTime lastSyncDate = lastSyncToDigikam();
 
@@ -653,6 +670,9 @@ void DkNepomukService::syncNepomukToDigikam()
         lastSyncDate = QDateTime::fromTime_t(0);
     }
 
+
+    d->nepomukQuery->queryImagesProperties();
+    /**
     QString query;
     KUrl::List fileUrls;
     KUrl fileUrl;

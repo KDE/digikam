@@ -1214,6 +1214,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/nepomuk/digikamnepomukservice.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/nepomuk/dknepomukwrap.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/nepomuk/nepomukwatcher.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/nepomuk/nepomukquery.cpp
        )
 
     SET(libfacemanagement_SRCS
