@@ -328,6 +328,7 @@ void DkNepomukService::triggerResync()
         return;
     }
 
+    kDebug() << " Triggered Resync";
     clearSyncedToDigikam();
     clearSyncedToNepomuk();
 
@@ -671,7 +672,9 @@ void DkNepomukService::syncNepomukToDigikam()
     }
 
 
+    d->nepomukQuery->queryTags();
     d->nepomukQuery->queryImagesProperties();
+
     /**
     QString query;
     KUrl::List fileUrls;

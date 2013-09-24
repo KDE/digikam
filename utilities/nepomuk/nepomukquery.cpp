@@ -53,36 +53,6 @@ NepomukQuery::NepomukQuery(DkNepomukService* const service)
     this->service = service;
 }
 
-Query::Query buildImagePropertiesQuery()
-{
-
-    // Query structure: (isImage() && (hasTag() || hasRating() || hasComment()))
-
-    Query::ResourceTypeTerm imgType(Vocabulary::NFO::Image());
-
-    Query::ComparisonTerm hasTag(Soprano::Vocabulary::NAO::hasTag(),
-                                            Nepomuk2::Query::Term());
-
-    Query::ComparisonTerm hasRating(Soprano::Vocabulary::NAO::numericRating(),
-                                               Nepomuk2::Query::Term());
-
-    Query::ComparisonTerm hasComment(Soprano::Vocabulary::NAO::description(),
-                                               Nepomuk2::Query::Term());
-    Query::OrTerm  hasProperties;
-    hasProperties.addSubTerm(hasTag);
-    hasProperties.addSubTerm(hasRating);
-    hasProperties.addSubTerm(hasComment);
-
-    Query::AndTerm finalTerm;
-
-    finalTerm.addSubTerm(imgType);
-    finalTerm.addSubTerm(hasProperties);
-
-    Query::Query query(finalTerm);
-
-    return query;
-
-}
 void NepomukQuery::queryImagesProperties()
 {
     Query::Query query = buildImagePropertiesQuery();
@@ -114,6 +84,52 @@ void NepomukQuery::queryImagesProperties()
 
 void NepomukQuery::queryTags()
 {
+    Query::Query query = buildTagsQuery();
 
+    Query::ResultIterator it(query);
+
+    int nr = 0;
+    while(it.next())
+    {
+        nr++;
+    }
+    kDebug() << "Got " << nr << "tags";
+}
+
+Query::Query NepomukQuery::buildImagePropertiesQuery()
+{
+
+    // Query structure: (isImage() && (hasTag() || hasRating() || hasComment()))
+
+    Query::ResourceTypeTerm imgType(Vocabulary::NFO::Image());
+
+    Query::ComparisonTerm hasTag(Soprano::Vocabulary::NAO::hasTag(),
+                                            Nepomuk2::Query::Term());
+
+    Query::ComparisonTerm hasRating(Soprano::Vocabulary::NAO::numericRating(),
+                                               Nepomuk2::Query::Term());
+
+    Query::ComparisonTerm hasComment(Soprano::Vocabulary::NAO::description(),
+                                               Nepomuk2::Query::Term());
+    Query::OrTerm  hasProperties;
+    hasProperties.addSubTerm(hasTag);
+    hasProperties.addSubTerm(hasRating);
+    hasProperties.addSubTerm(hasComment);
+
+    Query::AndTerm finalTerm;
+
+    finalTerm.addSubTerm(imgType);
+    finalTerm.addSubTerm(hasProperties);
+
+    return Query::Query(finalTerm);
+
+
+}
+
+Query::Query NepomukQuery::buildTagsQuery()
+{
+    Query::ResourceTypeTerm tagType(Soprano::Vocabulary::NAO::Tag());
+
+    return Query::Query(tagType);
 }
 } // namespace Digikam

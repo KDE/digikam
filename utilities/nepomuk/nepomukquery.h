@@ -53,7 +53,8 @@ public:
 
 private:
 
-    Nepomuk2::Query::Query getImagePropertiesQuery();
+    Nepomuk2::Query::Query buildImagePropertiesQuery();
+    Nepomuk2::Query::Query buildTagsQuery();
     DkNepomukService* service;
 };
 
