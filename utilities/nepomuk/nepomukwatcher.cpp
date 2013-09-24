@@ -47,6 +47,7 @@ public:
         resWatch = 0;
     };
     ResourceWatcher* resWatch;
+    ResourceWatcher* tagWatch;
     DkNepomukService* parent;
 };
 
@@ -60,7 +61,9 @@ NepomukWatcher::NepomukWatcher(DkNepomukService* parent)
     d->resWatch->addProperty(NAO::description());
 
     d->resWatch->addType(Nepomuk2::Vocabulary::NFO::Image());
-    d->resWatch->addType(NAO::hasTag());
+
+    d->tagWatch = new ResourceWatcher();
+    d->tagWatch->addType(NAO::Tag());
 
     connect(d->resWatch, SIGNAL(propertyAdded(Nepomuk2::Resource,
                                               Nepomuk2::Types::Property,
@@ -76,19 +79,23 @@ NepomukWatcher::NepomukWatcher(DkNepomukService* parent)
                                        Nepomuk2::Types::Property,
                                        QVariant)));
 
-    connect(d->resWatch, SIGNAL(resourceCreated(Nepomuk2::Resource, QList<QUrl>)),
+    connect(d->tagWatch, SIGNAL(resourceCreated(Nepomuk2::Resource, QList<QUrl>)),
             this, SLOT(slotResAdded(Nepomuk2::Resource, QList<QUrl>)));
 
-    connect(d->resWatch, SIGNAL(resourceRemoved(QUrl, QList<QUrl>)),
+    connect(d->tagWatch, SIGNAL(resourceRemoved(QUrl, QList<QUrl>)),
             this, SLOT(slotResRemoved(QUrl, QList<QUrl>)));
 
     kDebug() << "Starting Resource Watcher ...";
     d->resWatch->start();
+    d->tagWatch->start();
 }
 
 NepomukWatcher::~NepomukWatcher()
 {
+    d->resWatch->stop();
+    d->tagWatch->stop();
     delete d->resWatch;
+    delete d->tagWatch;
 }
 
 void NepomukWatcher::slotPropertyAdded(Resource res, Types::Property prop, QVariant var)
