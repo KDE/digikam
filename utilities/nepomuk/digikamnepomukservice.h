@@ -78,8 +78,8 @@ public Q_SLOTS:
     Q_SCRIPTABLE void enableSyncToNepomuk(bool syncToNepomuk);
     Q_SCRIPTABLE void triggerResync();
 
-    void syncTagsToDigikam(const KUrl::List& filePaths, const QList<QUrl>& tags);
-    void syncRatingToDigikam(const KUrl::List& filePaths, const QList<int>& ratings);
+    void syncTagsToDigikam(const KUrl& filePath, const QList<QUrl>& tags);
+    void syncRatingToDigikam(const KUrl& filePath, const int ratings);
     void syncCommentToDigikam(const KUrl& filePath, const QString& comment);
     void removeTagInDigikam(const KUrl& fileUrl, const QUrl& tag);
 

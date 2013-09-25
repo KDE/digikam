@@ -24,6 +24,7 @@
  *
  * ============================================================ */
 #include "dknepomukwrap.h"
+#include <kdebug.h>
 
 #include <Nepomuk2/Resource>
 #include <Nepomuk2/Variant>
@@ -66,6 +67,7 @@ Nepomuk2::Tag DkNepomukWrap::digikamToNepomukTag(int tagId)
         return Nepomuk2::Tag();
     }
 
+    kDebug() << "Tag Name " << tagName << "++++++++++++++++++++";
     Nepomuk2::Tag tag(tagName);
 
     if (!tag.exists())

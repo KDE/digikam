@@ -100,35 +100,19 @@ NepomukWatcher::~NepomukWatcher()
 
 void NepomukWatcher::slotPropertyAdded(Resource res, Types::Property prop, QVariant var)
 {
-    //kDebug() << "Property Added !!! ++++++++++++++++++++++++" << res.uri();
-    //kDebug() << "Property Added " << prop << " " <<  var << " +++++++++++++++++++++++++";
-    //kDebug() << var << "++++++++++++++++++++++++++";
-
-    //if(d->locked)
-    //    return;
-
-    //d->locked = true;
-    //TODO: use change DkNepomukService's functions to use only one argument
     if(prop == NAO::hasTag())
     {
-        KUrl::List resList;
         QList<QUrl> tagList;
         kDebug() << "Will add tags to image";
         KUrl url(res.property(Nepomuk2::Vocabulary::NIE::url()).toUrl());
-        //kDebug() << var.toUrl() << "++++++++";
-        resList << url;
         tagList << var.toUrl();
-        d->parent->syncTagsToDigikam(resList, tagList);
+        d->parent->syncTagsToDigikam(url, tagList);
     }
     if(prop == NAO::numericRating())
     {
         kDebug() << "Will change rating to image";
-        KUrl::List resList;
-        QList<int> ratingList;
         KUrl url(res.property(Nepomuk2::Vocabulary::NIE::url()).toUrl());
-        resList << url;
-        ratingList << var.toInt();
-        d->parent->syncRatingToDigikam(resList, ratingList);
+        d->parent->syncRatingToDigikam(url, var.toInt());
     }
     if(prop == NAO::description())
     {
@@ -142,14 +126,6 @@ void NepomukWatcher::slotPropertyAdded(Resource res, Types::Property prop, QVari
 
 void NepomukWatcher::slotPropertyRemoved(Resource res, Types::Property prop, QVariant var)
 {
-    //kDebug() << "Property Removed !!! ++++++++++++++++++++++++" << res.uri();
-    //kDebug() << "Property Removed " << prop << " " << var << "+++++++++++++++++++++++++";
-    //kDebug() << var << "++++++++++++++++++++++++++";
-
-    //if(d->locked)
-    //    return;
-
-    //d->locked = true;
 
     kDebug() << (res.type() == NAO::hasTag());
     if(prop == NAO::hasTag())

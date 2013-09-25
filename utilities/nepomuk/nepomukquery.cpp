@@ -71,34 +71,33 @@ void NepomukQuery::queryImagesProperties()
         if(!tags.isEmpty())
         {
             kDebug() << "Image " << ind << " Have Tags";
-            KUrl::List tagUrls;
-            QList<QUrl> resName;
+            QList<QUrl> tagUrls;
             for(QList<Tag>::iterator it = tags.begin(); it != tags.end(); ++it)
             {
                 tagUrls << KUrl((*it).property(Vocabulary::NIE::url()).toUrl());
             }
-            resName << KUrl (res.property(Vocabulary::NIE::url()).toUrl());
-            this->service->syncTagsToDigikam(resName, tagUrls);
+            KUrl imgPath(res.property(Vocabulary::NIE::url()).toUrl());
+            this->service->syncTagsToDigikam(imgPath, tagUrls);
         }
 
-        Variant rating = res.property(Soprano::Vocabulary::NAO::numericRating());
-        if(rating.isValid())
+        Variant ratingVar = res.property(Soprano::Vocabulary::NAO::numericRating());
+        if(ratingVar.isValid())
         {
-            kDebug() << "Image " << ind << " Have Rating";
-            KUrl::List resList;
-            QList<int> ratingList;
-            resList << (res.property(Nepomuk2::Vocabulary::NIE::url()).toUrl());
-            ratingList << res.property(Nepomuk2::Vocabulary::NIE::url()).toInt();
-            this->service->syncRatingToDigikam(resList,ratingList);
+            KUrl imgPath(res.property(Nepomuk2::Vocabulary::NIE::url()).toUrl());
+            int ratingValue = ratingVar.toInt();
+            if(ratingValue > 0 && ratingValue < 10)
+            {
+                kDebug() << "Image " << ind << " Have Rating";
+                this->service->syncRatingToDigikam(imgPath,ratingValue);
+            }
         }
-        Variant comment = res.property(Soprano::Vocabulary::NAO::description());
-        if(comment.isValid())
+        Variant commentVar = res.property(Soprano::Vocabulary::NAO::description());
+        if(commentVar.isValid())
         {
             kDebug() << "Image " << ind << " Have Comments";
             KUrl imgPath(res.property(Vocabulary::NIE::url()).toUrl());
-            QString comment = res.property(Vocabulary::NIE::url()).toString();
 
-            this->service->syncCommentToDigikam(imgPath,comment);
+            this->service->syncCommentToDigikam(imgPath,commentVar.toString());
         }
 
         ++ind;

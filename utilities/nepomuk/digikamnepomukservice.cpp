@@ -7,6 +7,7 @@
  * Description : Service to sync digikam and nepomuk storages
  *
  * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2013 by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -569,7 +570,7 @@ void DkNepomukService::syncToNepomuk(const QList<ImageInfo>& infos, SyncToNepomu
 
             if (rating != -1 || (syncSettings & SyncHasNoRating))
             {
-                //kDebug() << "Setting rating" << info.rating() << res.uri() << res.isValid();
+                kDebug() << "Setting rating" << info.rating() << res.uri() << res.isValid();
                 res.setRating(digikamToNepomukRating(info.rating()));
                 d->addIgnoreUri(res.uri(), NaoRating);
             }
@@ -581,7 +582,7 @@ void DkNepomukService::syncToNepomuk(const QList<ImageInfo>& infos, SyncToNepomu
 
             if (!comment.isEmpty())
             {
-                //kDebug() << "Setting comment" << info.comment() << res.uri() << res.isValid();
+                kDebug() << "Setting comment" << info.comment() << res.uri() << res.isValid();
                 res.setDescription(info.comment());
                 d->addIgnoreUri(res.uri(), NaoDescription);
             }
@@ -675,116 +676,28 @@ void DkNepomukService::syncNepomukToDigikam()
     d->nepomukQuery->queryTags();
     d->nepomukQuery->queryImagesProperties();
 
-    /**
-    QString query;
-    KUrl::List fileUrls;
-    KUrl fileUrl;
-    Soprano::QueryResultIterator it;
-    QString pathBinding("path"), valueBinding("value");
-
-    query = nepomukChangeQuery("nao:numericRating", lastSyncDate);
-    it    = mainModel()->executeQuery(query, Soprano::Query::QueryLanguageSparql);
-    QList<int> ratings;
-    int rating;
-
-    while (it.next())
-    {
-        fileUrl = KUrl(it.binding(pathBinding).uri());
-        rating  = it.binding(valueBinding).literal().toInt();
-
-        if (!fileUrl.isEmpty() && rating >= 0 && rating <= 10)
-        {
-            fileUrls << fileUrl;
-            ratings << rating;
-        }
-    }
-
-    syncRatingToDigikam(fileUrls, ratings);
-
-    fileUrls.clear();
-    query = nepomukChangeQuery("nao:description", lastSyncDate);
-    it    = mainModel()->executeQuery(query, Soprano::Query::QueryLanguageSparql);
-    QList<QString> comments;
-    QString comment;
-
-    while (it.next())
-    {
-        fileUrl = KUrl(it.binding(pathBinding).uri());
-        comment = it.binding(valueBinding).literal().toString();
-
-        if (!fileUrl.isEmpty())
-        {
-            fileUrls << fileUrl;
-            comments << comment;
-        }
-    }
-
-    syncCommentToDigikam(fileUrls, comments);
-
-    fileUrls.clear();
-    query = nepomukChangeQuery("nao:hasTag", lastSyncDate);
-    it    = mainModel()->executeQuery(query, Soprano::Query::QueryLanguageSparql);
-    QList<QUrl> tags;
-    QUrl tag;
-
-    while (it.next())
-    {
-        fileUrl = KUrl(it.binding(pathBinding).uri());
-        tag     = it.binding(valueBinding).uri();
-
-        if (!fileUrl.isEmpty())
-        {
-            fileUrls << fileUrl;
-            tags << tag;
-        }
-    }
-
-    syncTagsToDigikam(fileUrls, tags);
-
-    // we mark this regardless of having changed anything
     markAsSyncedToDigikam();
-    */
+
 }
 
-
-
-void DkNepomukService::syncRatingToDigikam(const KUrl::List& fileUrls, const QList<int>& ratings)
+void DkNepomukService::syncRatingToDigikam(const KUrl& fileUrl, int rating)
 {
-    if (fileUrls.isEmpty())
+
+    // If the path is not in digikam collections, info will be null.
+    // It does the same check first that we would be doing here
+    ImageInfo info(fileUrl);
+
+    if(info.isNull())
     {
         return;
     }
-
-    QList<ImageInfo> infos;
-    QList<int> ratingsForInfos;
-    const int size = fileUrls.size();
-
-    for (int i = 0; i < size; ++i)
-    {
-        // If the path is not in digikam collections, info will be null.
-        // It does the same check first that we would be doing here
-        ImageInfo info(fileUrls.at(i));
-
-        if (!info.isNull())
-        {
-            infos << info;
-            ratingsForInfos << nepomukToDigikamRating(ratings.at(i));
-        }
-    }
-
-    if (!infos.isEmpty())
-    {
         ChangingDB changing(d);
 
-        DatabaseAccess access;
-        DatabaseTransaction transaction(&access);
-        const int infosSize = infos.size();
+    DatabaseAccess access;
+    DatabaseTransaction transaction(&access);
 
-        for (int i = 0; i < infosSize; ++i)
-        {
-            infos[i].setRating(ratingsForInfos.at(i));
-        }
-    }
+    info.setRating(nepomukToDigikamRating(rating));
+
 }
 
 void DkNepomukService::syncCommentToDigikam(const KUrl& fileUrl, const QString& comment)
@@ -807,46 +720,42 @@ void DkNepomukService::syncCommentToDigikam(const KUrl& fileUrl, const QString& 
     comments.addComment(comment);
 }
 
-void DkNepomukService::syncTagsToDigikam(const KUrl::List& fileUrls, const QList<QUrl>& tags)
+void DkNepomukService::syncTagsToDigikam(const KUrl& fileUrl, const QList<QUrl>& tags)
 {
-    if (fileUrls.isEmpty())
+
+    QList<int> tagIdsForInfo;
+    ImageInfo info(fileUrl);
+
+    // If the path is not in digikam collections, info will be null.
+    // It does the same check first that we would be doing here
+    if(info.isNull())
     {
         return;
     }
 
-    QList<ImageInfo> infos;
-    QList<int> tagIdsForInfos;
-    const int size = fileUrls.size();
+    const int size = tags.size();
 
     for (int i = 0; i < size; ++i)
     {
-        // If the path is not in digikam collections, info will be null.
-        // It does the same check first that we would be doing here
-        ImageInfo info(fileUrls.at(i));
 
-        if (!info.isNull())
+        QString tagName = tagnameForNepomukTag(tags.at(i));
+        int tagId = bestDigikamTagForTagName(info, tagName);
+
+        if (tagId)
         {
-            infos << info;
-            QString tagName = tagnameForNepomukTag(tags.at(i));
-            int tagId = bestDigikamTagForTagName(info, tagName);
-
-            if (tagId)
-            {
-                tagIdsForInfos << tagId;
-            }
+            tagIdsForInfo << tagId;
         }
     }
 
-    if (!infos.isEmpty())
+    if (!tagIdsForInfo.isEmpty())
     {
         ChangingDB changing(d);
         DatabaseAccess access;
         DatabaseTransaction transaction(&access);
-        const int infosSize = infos.size();
-        kDebug() << "Sometimes it crashes here. Infos size" << infosSize;
+        const int infosSize = tagIdsForInfo.size();
         for (int i = 0; i < infosSize; ++i)
         {
-            infos[i].setTag(tagIdsForInfos.at(i));
+            info.setTag(tagIdsForInfo.at(i));
         }
     }
 }
