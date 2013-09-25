@@ -80,7 +80,7 @@ public Q_SLOTS:
 
     void syncTagsToDigikam(const KUrl::List& filePaths, const QList<QUrl>& tags);
     void syncRatingToDigikam(const KUrl::List& filePaths, const QList<int>& ratings);
-    void syncCommentToDigikam(const KUrl::List& filePaths, const QStringList& ratings);
+    void syncCommentToDigikam(const KUrl& filePath, const QString& comment);
     void removeTagInDigikam(const KUrl& fileUrl, const QUrl& tag);
 
 protected Q_SLOTS:

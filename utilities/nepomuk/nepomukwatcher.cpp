@@ -133,12 +133,9 @@ void NepomukWatcher::slotPropertyAdded(Resource res, Types::Property prop, QVari
     if(prop == NAO::description())
     {
         kDebug() << "Will add description";
-        KUrl::List resList;
-        QList<QString> commentList;
+        QString comment = var.toString();
         KUrl url(res.property(Nepomuk2::Vocabulary::NIE::url()).toUrl());
-        resList << url;
-        commentList << var.toString();
-        d->parent->syncCommentToDigikam(resList, commentList);
+        d->parent->syncCommentToDigikam(url, comment);
     }
 
 }

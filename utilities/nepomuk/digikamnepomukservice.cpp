@@ -787,45 +787,24 @@ void DkNepomukService::syncRatingToDigikam(const KUrl::List& fileUrls, const QLi
     }
 }
 
-void DkNepomukService::syncCommentToDigikam(const KUrl::List& fileUrls, const QStringList& comments)
+void DkNepomukService::syncCommentToDigikam(const KUrl& fileUrl, const QString& comment)
 {
-    if (fileUrls.isEmpty())
+    // If the path is not in digikam collections, info will be null.
+    // It does the same check first that we would be doing here
+    ImageInfo info(fileUrl);
+
+    if(info.isNull())
     {
         return;
     }
 
-    QList<ImageInfo> infos;
-    QList<QString> commentsForInfos;
-    const int size = fileUrls.size();
+    ChangingDB changing(d);
 
-    for (int i = 0; i < size; ++i)
-    {
-        // If the path is not in digikam collections, info will be null.
-        // It does the same check first that we would be doing here
-        ImageInfo info(fileUrls.at(i));
+    DatabaseAccess access;
+    DatabaseTransaction transaction(&access);
 
-        if (!info.isNull())
-        {
-            infos << info;
-            commentsForInfos << comments.at(i);
-        }
-    }
-
-    if (!infos.isEmpty())
-    {
-        ChangingDB changing(d);
-
-        DatabaseAccess access;
-        DatabaseTransaction transaction(&access);
-        const int infosSize = infos.size();
-
-        for (int i = 0; i < infosSize; ++i)
-        {
-            DatabaseAccess access;
-            ImageComments comments = infos.at(i).imageComments(access);
-            comments.addComment(commentsForInfos.at(i));
-        }
-    }
+    ImageComments comments = info.imageComments(access);
+    comments.addComment(comment);
 }
 
 void DkNepomukService::syncTagsToDigikam(const KUrl::List& fileUrls, const QList<QUrl>& tags)
@@ -864,7 +843,7 @@ void DkNepomukService::syncTagsToDigikam(const KUrl::List& fileUrls, const QList
         DatabaseAccess access;
         DatabaseTransaction transaction(&access);
         const int infosSize = infos.size();
-
+        kDebug() << "Sometimes it crashes here. Infos size" << infosSize;
         for (int i = 0; i < infosSize; ++i)
         {
             infos[i].setTag(tagIdsForInfos.at(i));

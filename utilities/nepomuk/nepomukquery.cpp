@@ -27,6 +27,7 @@
 #include "digikamnepomukservice.h"
 
 #include <kdebug.h>
+#include <kurl.h>
 
 #include <Nepomuk2/Query/ResourceTypeTerm>
 #include <Nepomuk2/Query/ComparisonTerm>
@@ -39,9 +40,11 @@
 #include <Nepomuk2/Query/ResultIterator>
 
 #include <Nepomuk2/Vocabulary/NFO>
+#include <Nepomuk2/Vocabulary/NIE>
 #include <Soprano/Vocabulary/NAO>
 #include <Nepomuk2/Types/Property>
 #include <Nepomuk2/Variant>
+#include <Nepomuk2/Tag>
 
 using namespace Nepomuk2;
 
@@ -64,17 +67,39 @@ void NepomukQuery::queryImagesProperties()
     {
         Resource res = it.current().resource();
 
-        Variant tag = res.property(Soprano::Vocabulary::NAO::hasTag());
-        if(tag.isValid())
+        QList<Tag> tags = res.tags();
+        if(!tags.isEmpty())
+        {
             kDebug() << "Image " << ind << " Have Tags";
+            KUrl::List tagUrls;
+            QList<QUrl> resName;
+            for(QList<Tag>::iterator it = tags.begin(); it != tags.end(); ++it)
+            {
+                tagUrls << KUrl((*it).property(Vocabulary::NIE::url()).toUrl());
+            }
+            resName << KUrl (res.property(Vocabulary::NIE::url()).toUrl());
+            this->service->syncTagsToDigikam(resName, tagUrls);
+        }
 
         Variant rating = res.property(Soprano::Vocabulary::NAO::numericRating());
         if(rating.isValid())
+        {
             kDebug() << "Image " << ind << " Have Rating";
-
+            KUrl::List resList;
+            QList<int> ratingList;
+            resList << (res.property(Nepomuk2::Vocabulary::NIE::url()).toUrl());
+            ratingList << res.property(Nepomuk2::Vocabulary::NIE::url()).toInt();
+            this->service->syncRatingToDigikam(resList,ratingList);
+        }
         Variant comment = res.property(Soprano::Vocabulary::NAO::description());
         if(comment.isValid())
+        {
             kDebug() << "Image " << ind << " Have Comments";
+            KUrl imgPath(res.property(Vocabulary::NIE::url()).toUrl());
+            QString comment = res.property(Vocabulary::NIE::url()).toString();
+
+            this->service->syncCommentToDigikam(imgPath,comment);
+        }
 
         ++ind;
     }
