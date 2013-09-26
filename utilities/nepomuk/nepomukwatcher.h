@@ -36,17 +36,58 @@ class NepomukWatcher : public QObject
 {
     Q_OBJECT
 public:
+
+    /**
+     * @brief NepomukWatcher      - Will set up two resourceWatchers,
+     *                              one for image properties and other for
+     *                              tags.
+     */
     NepomukWatcher(DkNepomukService* parent);
     ~NepomukWatcher();
 
 private Q_SLOTS:
+
+    /**
+     * @brief slotPropertyAdded   - a tag, a rating or a comment was added
+     *                              to Nepomuk image resource
+     * @param res                 - Nepomuk image resource
+     *
+     * @param prop                - property that was added, only NAO::hasTag()
+     *                              NAO::numericRating() and NAO::description()
+     *                              are watched
+     * @param var                 - value of property that was added
+     */
     void slotPropertyAdded(Nepomuk2::Resource res,
                            Nepomuk2::Types::Property prop, QVariant var);
+    /**
+     * @brief slotPropertyRemoved - a tag, a rating or a comment was removed
+     *                              from Nepomuk image resource
+     * @param res                 - Nepomuk image resource
+     *
+     * @param prop                - property that was removed, only NAO::hasTag()
+     *                              NAO::numericRating() and NAO::description()
+     *                              are watched
+     * @param var                 - value of property that was added
+     */
     void slotPropertyRemoved(Nepomuk2::Resource res,
                              Nepomuk2::Types::Property prop, QVariant var);
 
+    /**
+     * @brief slotResAdded         - a tag resource was added to Nepomuk and
+     *                               it will be added to digiKam
+     * @param res                  - tag resource that was added
+     *
+     * @param types                - should contain NAO::Tag()
+     */
     void slotResAdded(Nepomuk2::Resource res, QList<QUrl> types);
 
+    /**
+     * @brief slotResRemoved       - a tag resource was removed to Nepomuk and
+     *                               it will be removed to digiKam
+     * @param res                  - tag resource that was removed
+     *
+     * @param types                - should contain NAO::Tag()
+     */
     void slotResRemoved(QUrl url, QList<QUrl> types);
 
 private:
