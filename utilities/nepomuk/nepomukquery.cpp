@@ -60,12 +60,12 @@ void NepomukQuery::queryImagesProperties()
 {
     Query::Query query = buildImagePropertiesQuery();
 
-    Query::ResultIterator it(query);
+    Query::ResultIterator its(query);
 
     int ind = 0;
-    while(it.next())
+    while(its.next())
     {
-        Resource res = it.current().resource();
+        Resource res = its.current().resource();
 
         QList<Tag> tags = res.tags();
         if(!tags.isEmpty())
@@ -77,7 +77,7 @@ void NepomukQuery::queryImagesProperties()
                 tagUrls << KUrl((*it).property(Vocabulary::NIE::url()).toUrl());
             }
             KUrl imgPath(res.property(Vocabulary::NIE::url()).toUrl());
-            this->service->syncTagsToDigikam(imgPath, tagUrls);
+            this->service->syncImgTagsToDigikam(imgPath, tagUrls);
         }
 
         Variant ratingVar = res.property(Soprano::Vocabulary::NAO::numericRating());
@@ -88,7 +88,7 @@ void NepomukQuery::queryImagesProperties()
             if(ratingValue > 0 && ratingValue < 10)
             {
                 kDebug() << "Image " << ind << " Have Rating";
-                this->service->syncRatingToDigikam(imgPath,ratingValue);
+                this->service->syncImgRatingToDigikam(imgPath,ratingValue);
             }
         }
         Variant commentVar = res.property(Soprano::Vocabulary::NAO::description());
@@ -97,7 +97,7 @@ void NepomukQuery::queryImagesProperties()
             kDebug() << "Image " << ind << " Have Comments";
             KUrl imgPath(res.property(Vocabulary::NIE::url()).toUrl());
 
-            this->service->syncCommentToDigikam(imgPath,commentVar.toString());
+            this->service->syncImgCommentToDigikam(imgPath,commentVar.toString());
         }
 
         ++ind;
@@ -112,12 +112,12 @@ void NepomukQuery::queryTags()
 
     Query::ResultIterator it(query);
 
-    int nr = 0;
     while(it.next())
     {
-        nr++;
+        Resource res = it.current().resource();
+        this->service->addTagInDigikam(res.uri());
     }
-    kDebug() << "Got " << nr << "tags";
+
 }
 
 Query::Query NepomukQuery::buildImagePropertiesQuery()

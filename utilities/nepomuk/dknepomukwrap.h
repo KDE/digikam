@@ -65,6 +65,8 @@ public:
     static void setUnsetTag(Nepomuk2::Resource res, Nepomuk2::Tag tagToSet,
                             bool toSet);
 
+    static void removeTag(QString tagName);
+
 };
 
 }

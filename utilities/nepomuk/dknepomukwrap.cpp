@@ -109,4 +109,11 @@ void DkNepomukWrap::setUnsetTag(Nepomuk2::Resource res, Nepomuk2::Tag tag, bool 
     }
 }
 
+void DkNepomukWrap::removeTag(QString tagName)
+{
+    kDebug() << "Removing a Tag from Nepomuk";
+    Nepomuk2::Tag res(tagName);
+
+    res.remove();
+}
 }

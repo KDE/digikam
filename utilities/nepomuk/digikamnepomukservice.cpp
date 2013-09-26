@@ -188,7 +188,6 @@ DkNepomukService::DkNepomukService(QObject* parent, const QVariantList&)
     connect(d->nepomukChangeTimer, SIGNAL(timeout()),
             this, SLOT(syncNepomukToDigikam()));
 
-    d->nepomukChangeTimer->start();
 }
 
 DkNepomukService::~DkNepomukService()
@@ -450,6 +449,16 @@ void DkNepomukService::slotTagChange(const TagChangeset& change)
         case TagChangeset::Renamed:
             break;
         case TagChangeset::Deleted:
+        {
+            QString tagName = TagsCache::instance()->tagName(change.tagId());
+            if (tagName.isEmpty())
+            {
+                kDebug() << "Tag Name is empty :(";
+                break;
+            }
+            DkNepomukWrap::removeTag(tagName);
+            break;
+        }
         default:
             break;
     }
@@ -654,9 +663,6 @@ void DkNepomukService::pushTagsToNepomuk(const QList<ImageInfo>& imageInfos)
 void DkNepomukService::syncNepomukToDigikam()
 {
     // wait until digikam -> nepomuk initial sync, if any, has finished
-
-    // TODO: Rewrite this to use Nepomuk2 Api
-    kDebug() << "Sync Nepomuk To digiKam +++++++++++ ...";
     if (d->fullSyncJobs)
     {
         d->triggerSyncToDigikam();
@@ -680,7 +686,7 @@ void DkNepomukService::syncNepomukToDigikam()
 
 }
 
-void DkNepomukService::syncRatingToDigikam(const KUrl& fileUrl, int rating)
+void DkNepomukService::syncImgRatingToDigikam(const KUrl& fileUrl, int rating)
 {
 
     // If the path is not in digikam collections, info will be null.
@@ -700,7 +706,7 @@ void DkNepomukService::syncRatingToDigikam(const KUrl& fileUrl, int rating)
 
 }
 
-void DkNepomukService::syncCommentToDigikam(const KUrl& fileUrl, const QString& comment)
+void DkNepomukService::syncImgCommentToDigikam(const KUrl& fileUrl, const QString& comment)
 {
     // If the path is not in digikam collections, info will be null.
     // It does the same check first that we would be doing here
@@ -720,7 +726,7 @@ void DkNepomukService::syncCommentToDigikam(const KUrl& fileUrl, const QString& 
     comments.addComment(comment);
 }
 
-void DkNepomukService::syncTagsToDigikam(const KUrl& fileUrl, const QList<QUrl>& tags)
+void DkNepomukService::syncImgTagsToDigikam(const KUrl& fileUrl, const QList<QUrl>& tags)
 {
 
     QList<int> tagIdsForInfo;
@@ -760,7 +766,7 @@ void DkNepomukService::syncTagsToDigikam(const KUrl& fileUrl, const QList<QUrl>&
     }
 }
 
-void DkNepomukService::removeTagInDigikam(const KUrl& fileUrl, const QUrl& tag)
+void DkNepomukService::removeImgTagInDigikam(const KUrl& fileUrl, const QUrl& tag)
 {
     if (fileUrl.isEmpty())
     {
@@ -865,6 +871,23 @@ QString DkNepomukService::tagnameForNepomukTag(const QUrl& tagUri) const
     }
 
     return QString();
+}
+
+void DkNepomukService::addTagInDigikam(const QUrl& tagUrl)
+{
+    Nepomuk2::Tag tag(tagUrl);
+    QString tagName = tag.genericLabel();
+
+    QList<int> existList = TagsCache::instance()->tagsForName(tagName);
+
+    // Tag with the same name exist, do not add anything
+    if(!existList.isEmpty())
+    {
+        return;
+    }
+
+    kDebug() << "Adding tag to digikam " << tagName;
+    DatabaseAccess().db()->addTag(0, tagName, QString(), 0);
 }
 
 // ------------------- Utilities ------------------------

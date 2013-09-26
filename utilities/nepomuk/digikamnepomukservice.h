@@ -103,45 +103,55 @@ public Q_SLOTS:
     Q_SCRIPTABLE void triggerResync();
 
     /**
-     * @brief syncTagsToDigikam   - sync image tags to digiKam database.
-     *                              Called by NepomukWatcher or NepomukQuery
-     *                              class.
+     * @brief syncImgTagsToDigikam   - sync image tags to digiKam database.
+     *                                 Called by NepomukWatcher or NepomukQuery
+     *                                 class.
      *
-     * @param filePath            - path to image to which tags should be added
+     * @param filePath               - path to image to which tags should be added
      *
-     * @param tags                - list of tags that should be added
+     * @param tags                   - list of tags that should be added
      *
      */
-    void syncTagsToDigikam(const KUrl& filePath, const QList<QUrl>& tags);
+    void syncImgTagsToDigikam(const KUrl& filePath, const QList<QUrl>& tags);
 
     /**
-     * @brief syncRatingToDigikam  - sync image rating to digiKam database.
-     *                               Called by NepomukWatcher of NepomukQuery
-     *                               class.
-     * @param filePath             - path to image to which rating should be added
+     * @brief syncImgRatingToDigikam   - sync image rating to digiKam database.
+     *                                   Called by NepomukWatcher of NepomukQuery
+     *                                   class.
+     * @param filePath                 - path to image to which rating should
+     *                                   be added
      *
-     * @param rating               - current rating value
+     * @param rating                   - current rating value
      */
-    void syncRatingToDigikam(const KUrl& filePath, const int ratings);
+    void syncImgRatingToDigikam(const KUrl& filePath, const int ratings);
 
     /**
-     * @brief syncCommentToDigikam - sync image comment to digiKam database.
-     *                               Called by NepomukWatcher of NepomukQuery
-     *                               class.
-     * @param filePath             - path to image to which comment should be added
+     * @brief syncImgCommentToDigikam - sync image comment to digiKam database.
+     *                                  Called by NepomukWatcher of NepomukQuery
+     *                                  class.
+     * @param filePath                - path to image to which comment should be
+     *                                  added
      *
-     * @param comment              - comment to be set
+     * @param comment                 - comment to be set
      */
-    void syncCommentToDigikam(const KUrl& filePath, const QString& comment);
+    void syncImgCommentToDigikam(const KUrl& filePath, const QString& comment);
 
     /**
-     * @brief syncRatingToDigikam  - remove tag from image properties in digiKam
-     *                               database.
-     * @param filePath             - path to image to which tag should be removed
+     * @brief removeImgTagToDigikam    - remove tag from image properties in digiKam
+     *                                   database.
+     * @param filePath                 - path to image to which tag should be
+     *                                   removed
      *
-     * @param tag                  - tag to be removed
+     * @param tag                      - tag to be removed
      */
-    void removeTagInDigikam(const KUrl& fileUrl, const QUrl& tag);
+    void removeImgTagInDigikam(const KUrl& fileUrl, const QUrl& tag);
+
+    /**
+     * @brief addTagInDigikam         - add Nepomuk tag into digiKam.
+     *                                  All added tags will be listed under
+     *                                  /Nepomuk
+     */
+    void addTagInDigikam(const QUrl& tagUrl);
 
 protected Q_SLOTS:
 

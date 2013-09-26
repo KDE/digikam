@@ -106,20 +106,20 @@ void NepomukWatcher::slotPropertyAdded(Resource res, Types::Property prop, QVari
         kDebug() << "Will add tags to image";
         KUrl url(res.property(Nepomuk2::Vocabulary::NIE::url()).toUrl());
         tagList << var.toUrl();
-        d->parent->syncTagsToDigikam(url, tagList);
+        d->parent->syncImgTagsToDigikam(url, tagList);
     }
     if(prop == NAO::numericRating())
     {
         kDebug() << "Will change rating to image";
         KUrl url(res.property(Nepomuk2::Vocabulary::NIE::url()).toUrl());
-        d->parent->syncRatingToDigikam(url, var.toInt());
+        d->parent->syncImgRatingToDigikam(url, var.toInt());
     }
     if(prop == NAO::description())
     {
         kDebug() << "Will add description";
         QString comment = var.toString();
         KUrl url(res.property(Nepomuk2::Vocabulary::NIE::url()).toUrl());
-        d->parent->syncCommentToDigikam(url, comment);
+        d->parent->syncImgCommentToDigikam(url, comment);
     }
 
 }
@@ -133,18 +133,17 @@ void NepomukWatcher::slotPropertyRemoved(Resource res, Types::Property prop, QVa
         QUrl tag = var.toUrl();
         kDebug() << "Will remove tags from image";
         KUrl url(res.property(Nepomuk2::Vocabulary::NIE::url()).toUrl());
-        d->parent->removeTagInDigikam(url, tag);
+        d->parent->removeImgTagInDigikam(url, tag);
     }
 
 }
 
 void NepomukWatcher::slotResAdded(Resource res, QList<QUrl> types)
 {
-    kDebug() << "Resource created++++++++++++";
-
-    if(types.contains(NAO::hasTag()))
+    if(types.contains(NAO::Tag()))
     {
         kDebug() << "Will add tags";
+        d->parent->addTagInDigikam(res.uri());
     }
 }
 
@@ -152,7 +151,7 @@ void NepomukWatcher::slotResRemoved(QUrl url, QList<QUrl> types)
 {
     kDebug() << "Resource removed +++++++++++++++++";
 
-    if(types.contains(NAO::hasTag()))
+    if(types.contains(NAO::Tag()))
     {
         kDebug() << "Will remove tags";
     }
