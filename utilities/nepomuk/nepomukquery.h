@@ -47,13 +47,35 @@ class NepomukQuery : public QObject
 public:
     NepomukQuery(DkNepomukService* const service);
 
+    /**
+     * @brief queryImagesProperties   - query Nepomuk data for images with
+     *                                  tags or rating or comment and
+     *                                  sync them to digiKam.
+     *                                  Query executed is syncronous
+     */
     void queryImagesProperties();
 
+    /**
+     * @brief queryImagesProperties    - query all tags from Nepomuk and
+     *                                   add them to digiKam
+     */
     void queryTags();
 
 private:
 
+    /**
+     * @brief buildImagePropertiesQuery   - build a query that will return
+     *                                      all images that contains tags or
+     *                                      ratings or comments
+     * @return                            - query to be executed
+     */
     Nepomuk2::Query::Query buildImagePropertiesQuery();
+
+    /**
+     * @brief buildTagsQuery  - build a query that will return all tags from
+     *                          Nepomuk
+     * @return                - query to be executed
+     */
     Nepomuk2::Query::Query buildTagsQuery();
     DkNepomukService* service;
 };
