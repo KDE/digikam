@@ -826,6 +826,13 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
+    d->assignTagAction = new KAction(KIcon("tag-new"), i18n("Assign Tag"), this);
+    d->assignTagAction->setShortcut(KShortcut(Qt::Key_T));
+    connect(d->assignTagAction, SIGNAL(triggered()), d->view, SLOT(slotAssignTag()));
+    actionCollection()->addAction("tag_assign", d->assignTagAction);
+
+    // -----------------------------------------------------------
+
     d->imageViewSelectionAction = new KSelectAction(KIcon("viewimage"), i18n("Views"), this);
     //d->imageViewSelectionAction->setDelayed(false);
     actionCollection()->addAction("view_selection", d->imageViewSelectionAction);

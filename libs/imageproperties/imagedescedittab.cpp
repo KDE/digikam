@@ -81,6 +81,8 @@
 #include "colorlabelwidget.h"
 #include "picklabelwidget.h"
 #include "fileactionprogress.h"
+#include "searchtextbar.h"
+#include "addtagslineedit.h"
 
 namespace Digikam
 {
@@ -488,6 +490,13 @@ void ImageDescEditTab::writeSettings(KConfigGroup& group)
 
     d->tagCheckView->saveState();
     d->tagsSearchBar->saveState();
+}
+
+void ImageDescEditTab::setFocusToNewTagEdit()
+{
+    //select "Tags" tab and focus the NewTagLineEdit widget
+    d->tabWidget->setCurrentIndex(Private::TAGS);
+    d->newTagEdit->setFocus();
 }
 
 bool ImageDescEditTab::singleSelection() const
@@ -1477,4 +1486,8 @@ void ImageDescEditTab::initProgressIndicator()
     }
 }
 
+AddTagsLineEdit* ImageDescEditTab::getNewTagEdit()
+{
+    return d->newTagEdit;
+}
 }  // namespace Digikam

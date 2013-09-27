@@ -89,6 +89,7 @@ Q_SIGNALS:
     void taggingActionActivated(const TaggingAction& action);
     /// Emitted when an action is selected. This already happens if anything is typed.
     void taggingActionSelected(const TaggingAction& action);
+    void taggingActionFinished();
 
 protected Q_SLOTS:
 

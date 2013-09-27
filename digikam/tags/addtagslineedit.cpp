@@ -41,6 +41,9 @@
 #include "album.h"
 #include "albummodel.h"
 #include "albumtreeview.h"
+#include "tagscache.h"
+#include "databaseaccess.h"
+#include "albumdb.h"
 
 namespace Digikam
 {
@@ -254,7 +257,28 @@ void AddTagsLineEdit::makeCompletion(const QString& text)
         }
         else
         {
-            setCompletedItems(comp->allMatches());
+
+            TagsCache * tc = TagsCache::instance();
+
+            QStringList allMatches = comp->allMatches();
+
+            //get previously entered tags
+            QList<int> recentTagIDs = DatabaseAccess().db()->getRecentlyAssignedTags();
+
+            //reorder matches according to previously entered tags
+            QListIterator<int> id(recentTagIDs);
+            id.toBack();
+            while (id.hasPrevious())
+            {
+                QString tagName = tc->tagName(id.previous());
+                int pos = allMatches.indexOf(tagName);
+                if(pos>0)
+                {
+                    allMatches.move(pos,0);
+                }
+            }
+
+            setCompletedItems(allMatches);
         }
     }
     else // Auto,  ShortAuto (Man) and Shell
@@ -365,7 +389,14 @@ void AddTagsLineEdit::slotCompletionBoxCancelled()
 
 void AddTagsLineEdit::slotReturnPressed(const QString& text)
 {
-    Q_UNUSED(text);
+    if (text.isEmpty())
+    {
+      //focus back to mainview
+      emit taggingActionFinished();
+      return;
+    }
+
+    //Q_UNUSED(text);
     emit taggingActionActivated(currentTaggingAction());
 }
 

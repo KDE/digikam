@@ -33,6 +33,7 @@
 
 #include "sidebar.h"
 #include "digikam_export.h"
+#include "searchtextbar.h"
 
 class QWidget;
 class QRect;
