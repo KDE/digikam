@@ -125,8 +125,6 @@ private Q_SLOTS:
 
     void slotDbToNepomuk();
 
-    void slotForkTags();
-
     /**
      * @brief slotRemoveTagsFromImg - will remove selected tags from all
      *                                images that have them.

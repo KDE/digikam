@@ -525,34 +525,6 @@ void TagsManager::slotDbToNepomuk()
 
 }
 
-void TagsManager::slotForkTags()
-{
-    int numTags = 10;
-    TAlbum* parent = d->tagMngrView->currentAlbum();
-
-    if(!parent)
-        return;
-
-    QMap<QString, QString> errMap;
-
-    for(int it =0; it< numTags; it++)
-    {
-        QString      title, icon;
-        QKeySequence ks;
-        icon = parent->icon();
-        title = parent->title() + QString::number(it);
-        AlbumList tList = TagEditDlg::createTAlbum(parent, title, icon, ks,
-                                                   errMap);
-        for(int jt = 0 ; jt < numTags; jt++)
-        {
-            QString childname = title + "H" + QString::number(jt);
-            AlbumList jList = TagEditDlg::createTAlbum((TAlbum*)tList.first(),
-                                                       childname,
-                                                       icon, ks, errMap);
-        }
-    }
-}
-
 void TagsManager::slotRemoveTagsFromImgs()
 {
     QModelIndexList selList = d->tagMngrView->selectionModel()->selectedIndexes();
@@ -679,13 +651,6 @@ void TagsManager::setupActions()
                                           i18n("Wipe all tags from Database "
                                               "and read from images"), this);
 
-    KAction* DbToNepomuk    = new KAction(KIcon("nepomuk"),
-                                          i18n("Sync Database with Nepomuk"),
-                                          this);
-
-    KAction* NepomukToDb    = new KAction(KIcon("nepomuk"),
-                                          i18n("Sync Nepomuk to Database"), this);
-
 
     wrDbImg->setHelpText(i18n("Write Tags Metadata to Image."));
 
@@ -695,11 +660,7 @@ void TagsManager::setupActions()
     wipeAll->setHelpText(i18n("Delete all tags from database. "
                              "Proceed with caution."));
 
-    DbToNepomuk->setHelpText(i18n("Export all tags from Database to Nepomuk. "
-                                 "Digikam with nepomuk support is required "));
 
-    NepomukToDb->setHelpText(i18n("Import tags from Nepomuk."
-                                 "Digikam with nepomuk support is required" ));
 
     connect(wrDbImg, SIGNAL(triggered()),
             this, SLOT(slotWriteToImg()));
@@ -710,31 +671,40 @@ void TagsManager::setupActions()
     connect(wipeAll, SIGNAL(triggered()),
             this, SLOT(slotWipeAll()));
 
+
+
+    d->syncexportAction->addAction(wrDbImg);
+    d->syncexportAction->addAction(readTags);
+    d->syncexportAction->addAction(wipeAll);
+
+#ifdef HAVE_NEPOMUK
+    KAction* DbToNepomuk    = new KAction(KIcon("nepomuk"),
+                                          i18n("Sync Database with Nepomuk"),
+                                          this);
+
+    KAction* NepomukToDb    = new KAction(KIcon("nepomuk"),
+                                          i18n("Sync Nepomuk to Database"), this);
+    DbToNepomuk->setHelpText(i18n("Export all tags from Database to Nepomuk. "
+                                 "Digikam with nepomuk support is required "));
+
+    NepomukToDb->setHelpText(i18n("Import tags from Nepomuk."
+                                 "Digikam with nepomuk support is required" ));
+
     connect(DbToNepomuk, SIGNAL(triggered()),
             this, SLOT(slotNepomukToDb()));
 
     connect(NepomukToDb, SIGNAL(triggered()),
             this, SLOT(slotNepomukToDb()));
 
-    d->syncexportAction->addAction(wrDbImg);
-    d->syncexportAction->addAction(readTags);
-    d->syncexportAction->addAction(wipeAll);
     d->syncexportAction->addAction(DbToNepomuk);
     d->syncexportAction->addAction(NepomukToDb);
 
-    /**
-     * For testing only
-     */
-    KAction* forkTags = new KAction(KIcon(),"Create a very big tag tree)",this);
-
-    connect(forkTags, SIGNAL(triggered()), this,
-            SLOT(slotForkTags()));
+#endif
 
     d->mainToolbar->addAction(d->addAction);
     d->mainToolbar->addAction(d->delAction);
     d->mainToolbar->addAction(d->organizeAction);
     d->mainToolbar->addAction(d->syncexportAction);
-    d->mainToolbar->addAction(forkTags);
     d->mainToolbar->addAction(new DLogoAction(this));
     this->addToolBar(d->mainToolbar);
 
