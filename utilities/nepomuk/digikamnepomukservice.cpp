@@ -354,6 +354,9 @@ void DkNepomukService::setDatabase(const QString& paramsUrl)
     KUrl url(paramsUrl);
     kDebug() << "Got database params pushed from running instance:" << url;
     connectToDatabase(DatabaseParameters(url));
+
+    connect(TagsCache::instance(), SIGNAL(tagAboutToBeDeleted(QString)),
+            this, SLOT(slotTagDeleted(QString)));
 }
 
 void DkNepomukService::connectToDatabase(const DatabaseParameters& params)
@@ -448,21 +451,15 @@ void DkNepomukService::slotTagChange(const TagChangeset& change)
             break;
         case TagChangeset::Renamed:
             break;
-        case TagChangeset::Deleted:
-        {
-            QString tagName = TagsCache::instance()->tagName(change.tagId());
-            if (tagName.isEmpty())
-            {
-                kDebug() << "Tag Name is empty :(";
-                break;
-            }
-            DkNepomukWrap::removeTag(tagName);
-            break;
-        }
         default:
             break;
     }
     //DkNepomukWrap::renameNepomuk
+}
+
+void DkNepomukService::slotTagDeleted(QString name)
+{
+    DkNepomukWrap::removeTag(name);
 }
 
 void DkNepomukService::fullSyncDigikamToNepomuk()

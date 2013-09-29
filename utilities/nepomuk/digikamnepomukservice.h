@@ -178,6 +178,8 @@ protected Q_SLOTS:
      */
     void slotTagChange(const TagChangeset& changeset);
 
+    void slotTagDeleted(QString string);
+
     void syncNepomukToDigikam();
     void fullSyncDigikamToNepomuk();
 
