@@ -352,6 +352,9 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
 
     slotSidebarTabTitleStyleChanged();
     setupConnections();
+
+    connect(d->rightSideBar->imageDescEditTab()->getNewTagEdit(), SIGNAL(taggingActionFinished()),
+            this, SLOT(slotFocusAndNextImage()));
 }
 
 DigikamView::~DigikamView()
@@ -887,6 +890,17 @@ void DigikamView::slotDeleteTag()
 void DigikamView::slotEditTag()
 {
     d->tagModificationHelper->slotTagEdit(d->tagViewSideBar->currentAlbum());
+}
+
+void DigikamView::slotAssignTag()
+{
+    ImageDescEditTab* imageDescEditTab = d->rightSideBar->imageDescEditTab();
+
+    //activate image properties tab
+    d->rightSideBar->setActiveTab(imageDescEditTab);
+
+    //activate tags tab on properties tab
+    imageDescEditTab->setFocusToNewTagEdit();
 }
 
 void DigikamView::slotNewKeywordSearch()
@@ -2054,6 +2068,15 @@ void DigikamView::slotPickLabelChanged(const KUrl& url, int pick)
 bool DigikamView::hasCurrentItem() const
 {
     return !currentInfo().isNull();
+}
+
+void DigikamView::slotFocusAndNextImage()
+{
+    //slot is called on pressing "return" a second time after assigning a tag
+    d->stackedview->currentWidget()->setFocus();
+
+    //select next image, since the user is probably done tagging the current image
+    d->iconView->toNextIndex();
 }
 
 void DigikamView::slotImageExifOrientation(int orientation)

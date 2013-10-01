@@ -103,15 +103,22 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
                 i18n("Yes") : i18n("No"));
 #endif
 
+#if KDCRAW_VERSION >= 0x020400
+    list.insert(i18n("Demosaic GPL2 pack support"),  KDcraw::librawUseGPL2DemosaicPack() ?
+                i18n("Yes") : i18n("No"));
+    list.insert(i18n("Demosaic GPL3 pack support"),  KDcraw::librawUseGPL3DemosaicPack() ?
+                i18n("Yes") : i18n("No"));
+#endif
+
 #if KDCRAW_VERSION >= 0x020200
     list.insert(i18n("RawSpeed codec support"),      KDcraw::librawUseRawSpeed() ?
                 i18n("Yes") : i18n("No"));
 #endif
 
 #ifdef HAVE_EIGEN3
-    list.insert(i18n("LibEigen"),                               QString(EIGEN3_VERSION_STRING));
+    list.insert(i18n("LibEigen"),                    QString(EIGEN3_VERSION_STRING));
 #endif // HAVE_EIGEN3
-      
+
     list.insert(i18n("LibKExiv2"),                   KExiv2::version());
     list.insert(i18n("LibExiv2"),                    KExiv2::Exiv2Version());
     list.insert(i18n("Exiv2 supports XMP metadata"), KExiv2::supportXmp() ?

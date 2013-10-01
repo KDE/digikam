@@ -158,6 +158,7 @@ public Q_SLOTS:
     void slotNewTag();
     void slotDeleteTag();
     void slotEditTag();
+    void slotAssignTag();
 
     // Search action slots
     void slotNewKeywordSearch();
@@ -209,6 +210,8 @@ public Q_SLOTS:
     //Image Quality Sorting slot 
     void slotNewQualitySort(Album* album);
     
+
+    void slotFocusAndNextImage();
 
 #ifdef USE_PRESENTATION_MODE
     void slotSlideShowQml();

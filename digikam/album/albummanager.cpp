@@ -321,11 +321,11 @@ AlbumManager::AlbumManager()
 
     // this operation is much more expensive than the other scan methods
     d->scanDAlbumsTimer = new QTimer(this);
-    d->scanDAlbumsTimer->setInterval(5000);
+    d->scanDAlbumsTimer->setInterval(60 * 1000);
     d->scanDAlbumsTimer->setSingleShot(true);
 
     connect(d->scanDAlbumsTimer, SIGNAL(timeout()),
-            this, SLOT(scanDAlbums()));
+            this, SLOT(scanDAlbumsScheduled()));
 
     // moderately expensive
     d->albumItemCountTimer = new QTimer(this);
@@ -1717,6 +1717,17 @@ void AlbumManager::scanSAlbums()
         d->allAlbumsIdHash[album->globalID()] = album;
         emit signalAlbumAdded(album);
     }
+}
+
+void AlbumManager::scanDAlbumsScheduled()
+{
+    // Avoid a cycle of killing a job which takes longer than the timer interval
+    if (d->dateListJob)
+    {
+        d->scanDAlbumsTimer->start();
+        return;
+    }
+    scanDAlbums();
 }
 
 void AlbumManager::scanDAlbums()

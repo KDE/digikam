@@ -44,6 +44,8 @@
 #include "albummanager.h"
 #include "albummodel.h"
 #include "metadatahub.h"
+#include "searchtextbar.h"
+#include "addtagslineedit.h"
 
 namespace Digikam
 {
@@ -66,6 +68,8 @@ public:
     void setItems(const ImageInfoList& infos);
     void populateTags();
     void setFocusToTagsView();
+    void setFocusToNewTagEdit();
+    AddTagsLineEdit* getNewTagEdit();
 
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);

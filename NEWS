@@ -1,22 +1,8 @@
 *****************************************************************************************************
-digiKam 3.4.0 - Release date: 2013-09-01
+digiKam 4.0.0 - Release date: 2013-10-20
 
 NEW FEATURES:
 
-General         : Add interroperabilty with Capture NX about Color Labels support.
-MaintenanceTool : add new options to select Albums and Tags to process.
-MaintenanceTool : add multi-threading and multi-core CPU support for Metadata Synchronizer, Thumbs Generator,
-                  and Fingerprint Generator tools.
-
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 276092 - Change defaults for noise reduction.
-002 ==> 323271 - Face Recognition doesn't work.
-003 ==> 323253 - When face tag scanning, digikam exhausts all memory on computer.
-004 ==> 318198 - Failed to process item - rw2 to jpeg batch queue manager conversion.
-005 ==> 323165 - Delete pictures and folders are not removed from table-view
-006 ==> 323498 - (Some) Image Editor Color tools hang when starting them.
-007 ==> 323062 - digikam (core): Schema update to V 7 failed!
-008 ==> 268688 - Write metadata to all images does not remove obsolete tags.
-009 ==> 
-
+001 ==>  

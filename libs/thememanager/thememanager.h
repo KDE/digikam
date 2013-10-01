@@ -78,7 +78,7 @@ private:
     ThemeManager();
 
     void    populateThemeMenu();
-    QPixmap createSchemePreviewIcon(const KSharedConfigPtr& config);
+    QPixmap createSchemePreviewIcon(const KSharedConfigPtr& config) const;
     QString currentKDEdefaultTheme() const;
     void    updateCurrentKDEdefaultThemePreview();
 
