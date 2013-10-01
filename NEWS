@@ -1,14 +1,8 @@
 *****************************************************************************************************
-digiKam 3.5.0 - Release date: 2013-09-29
+digiKam 4.0.0 - Release date: 2013-10-20
 
 NEW FEATURES:
 
-General : new RAW cameras supported : Richon GR, Panasonic LF1, Canon EOS 70D, Sony RX100II, Sony RX1R, Olympus E-P5.
-
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 324349 : Removing tags limited to 250 selected pictures.
-002 ==> 323648 : Kipi-plugins cannot be deselected or digiKam not reading digikamrc.
-003 ==> 325111 : undo/redo does not take effect in the image.
-004 ==> 
-
+001 ==>  
