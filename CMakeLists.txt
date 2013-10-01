@@ -21,12 +21,12 @@ OPTION(DIGIKAM_ENABLE_MODELTEST "Enable ModelTest on some models for debugging (
 # Information to update before to release this package.
 
 # digiKam version
-SET(DIGIKAM_MAJOR_VERSION "3")
-SET(DIGIKAM_MINOR_VERSION "5")
+SET(DIGIKAM_MAJOR_VERSION "4")
+SET(DIGIKAM_MINOR_VERSION "0")
 SET(DIGIKAM_PATCH_VERSION "0")
 
 #digiKam release date
-SET(DIGIKAM_RELEASE_DATE "2013-XX-XX")
+SET(DIGIKAM_RELEASE_DATE "2013-10-20")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
@@ -35,7 +35,7 @@ SET(DIGIKAM_RELEASE_DATE "2013-XX-XX")
 # "-beta3" : beta3 release.
 # "-rc"    : release candidate.
 # ""       : final release. Can be used in production.
-SET(DIGIKAM_SUFFIX_VERSION "")
+SET(DIGIKAM_SUFFIX_VERSION "-beta1")
 
 # ==================================================================================================
 # Set env. variables accordingly.
