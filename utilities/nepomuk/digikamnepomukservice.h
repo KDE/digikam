@@ -99,8 +99,10 @@ public Q_SLOTS:
      *                              and Nepomuk -> digiKam full sync
      *                              Usually called by digiKam via D-bus
      *                              call
+     * @param toDigikam           - if true, sync Nepomuk to digiKam
+     * @param toNepomuk           - if true, sync digiKam to Nepomuk
      */
-    Q_SCRIPTABLE void triggerResync();
+    Q_SCRIPTABLE void triggerResync(bool toDigikam, bool toNepomuk);
 
     /**
      * @brief syncImgTagsToDigikam   - sync image tags to digiKam database.

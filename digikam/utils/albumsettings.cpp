@@ -1840,7 +1840,7 @@ void AlbumSettings::triggerResyncWithNepomuk() const
 
     if (interface.isValid())
     {
-        interface.call(QDBus::NoBlock, "triggerResync");
+        interface.call(QDBus::NoBlock, "triggerResync", true, true);
     }
 
 #endif // HAVE_NEPOMUK

@@ -321,7 +321,7 @@ void DkNepomukService::cleanIgnoreList()
 }
 
 
-void DkNepomukService::triggerResync()
+void DkNepomukService::triggerResync(bool toDigikam, bool toNepomuk)
 {
     if (!d->isConnected)
     {
@@ -329,15 +329,16 @@ void DkNepomukService::triggerResync()
     }
 
     kDebug() << " Triggered Resync";
+
     clearSyncedToDigikam();
     clearSyncedToNepomuk();
 
-    if (d->syncToNepomuk)
+    if (d->syncToNepomuk && toNepomuk)
     {
         fullSyncDigikamToNepomuk();
     }
 
-    if (d->syncToDigikam)
+    if (d->syncToDigikam && toDigikam)
     {
         d->triggerSyncToDigikam();
     }
