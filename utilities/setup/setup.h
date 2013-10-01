@@ -67,6 +67,7 @@ public:
         ICCPage,
         LightTablePage,
         SlideshowPage,
+        ImageQualityPage,
         CameraPage,
         KipiPluginsPage,
         MiscellaneousPage,

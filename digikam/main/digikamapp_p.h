@@ -285,6 +285,7 @@ public:
     KAction*                            bqmAction;
     KAction*                            maintenanceAction;
     KAction*                            slideShowQmlAction;
+    KAction*                            qualityAction;
 
 #ifdef USE_SCRIPT_IFACE
     KAction*                            scriptConsoleAction;

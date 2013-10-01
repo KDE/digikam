@@ -3,10 +3,11 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2012-01-30
- * Description : maintenance dialog
+ * Date        : 2013-08-19
+ * Description : Image Quality setup page
  *
- * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013 by Gowtham Ashok <gwty93 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,42 +22,29 @@
  *
  * ============================================================ */
 
-#ifndef MAINTENANCEDLG_H
-#define MAINTENANCEDLG_H
+#ifndef SETUPIMAGEQUALITYSORTER_H
+#define SETUPIMAGEQUALITYSORTER_H
 
-// KDE includes
+// Qt includes
 
-#include <kdialog.h>
-
-// Local includes
-
-#include "digikam_export.h"
-#include "maintenancesettings.h"
+#include <QScrollArea>
 
 namespace Digikam
 {
 
-class MaintenanceDlg : public KDialog
+class SetupImageQualitySorter : public QScrollArea
 {
     Q_OBJECT
 
 public:
 
-    explicit MaintenanceDlg(QWidget* const parent = 0);
-    ~MaintenanceDlg();
+    explicit SetupImageQualitySorter(QWidget* const parent = 0);
+    ~SetupImageQualitySorter();
 
-    MaintenanceSettings settings() const;
-
-private Q_SLOTS:
-
-    void slotItemToggled(int index, bool b);
-    void slotMetadataSetup();
-    void slotQualitySetup();
-    void slotOk();
+    void applySettings();
 
 private:
 
-    void writeSettings();
     void readSettings();
 
 private:
@@ -65,6 +53,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+}   // namespace Digikam
 
-#endif  // MAINTENANCEDLG_H
+#endif /* SETUPIMAGEQUALITYSORTER_H */

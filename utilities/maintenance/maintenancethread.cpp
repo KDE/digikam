@@ -34,6 +34,8 @@
 #include "metadatatask.h"
 #include "thumbstask.h"
 #include "fingerprintstask.h"
+#include "imagequalitytask.h"
+#include "imagequalitysettings.h"
 
 using namespace Solid;
 
@@ -116,6 +118,27 @@ void MaintenanceThread::generateFingerprints(const QStringList& paths)
     {
         FingerprintsTask* const t = new FingerprintsTask();
         t->setItem(paths.at(i));
+
+        connect(t, SIGNAL(signalFinished(QImage)),
+                this, SIGNAL(signalAdvance(QImage)));
+
+        connect(this, SIGNAL(signalCanceled()),
+                t, SLOT(slotCancel()), Qt::QueuedConnection);
+
+        collection->addJob(t);
+    }
+
+    appendJob(collection);
+}
+
+void MaintenanceThread::sortByImageQuality(const QStringList& paths, const ImageQualitySettings& quality)
+{
+    JobCollection* const collection = new JobCollection();
+
+    for(int i=0; i < paths.size(); i++)
+    {
+        ImageQualityTask* const t = new ImageQualityTask();
+        t->setItem(paths.at(i), quality);
 
         connect(t, SIGNAL(signalFinished(QImage)),
                 this, SIGNAL(signalAdvance(QImage)));

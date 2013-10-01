@@ -40,6 +40,8 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
+class ImageQualitySettings;
+
 class MaintenanceThread : public RActionThreadBase
 {
     Q_OBJECT
@@ -54,6 +56,7 @@ public:
     void syncMetadata(const ImageInfoList& items, MetadataSynchronizer::SyncDirection dir);
     void generateThumbs(const QStringList& paths);
     void generateFingerprints(const QStringList& paths);
+    void sortByImageQuality(const QStringList& paths, const ImageQualitySettings& quality);
 
     void cancel();
 

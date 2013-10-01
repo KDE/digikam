@@ -1199,6 +1199,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupfacetags.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupversioning.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/importfilters.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupimagequalitysorter.cpp
        )
 
     SET(libkipiiface_SRCS
@@ -1224,6 +1225,12 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/facescandialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/assignnamewidget.cpp
        )
+
+    SET(libimgqsort_SRCS
+#        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imgqsort/qualityscandialog.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imgqsort/imgqsort.cpp
+       )
+
 
     SET(libfirstrun_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/assistantdlg.cpp
@@ -1271,6 +1278,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/thumbstask.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/fingerprintsgenerator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/fingerprintstask.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/imagequalitysorter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/imagequalitysettings.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/imagequalitytask.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancedlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancemngr.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancetool.cpp
@@ -1606,6 +1616,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/haar
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imgqsort
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagehistory
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/faces
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs
@@ -1706,6 +1717,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imgqsort
 
         # version.h, gitversion.h config-digikam.h
         ${CMAKE_CURRENT_BINARY_DIR}/digikam/utils

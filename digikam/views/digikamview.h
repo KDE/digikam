@@ -208,6 +208,10 @@ public Q_SLOTS:
     void slotLeftSideBarActivate(SidebarWidget* widget);
     void slotLeftSideBarActivateAlbums();
     void slotLeftSideBarActivateTags();
+    
+    //Image Quality Sorting slot 
+    void slotNewQualitySort(Album* album);
+    
 
     void slotFocusAndNextImage();
 

@@ -1,12 +1,13 @@
 /* ============================================================
- *
+ * 
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2012-01-30
- * Description : maintenance dialog
+ * Date        : 
+ * Description :
  *
- * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2014 by Gowtham Ashok <gwty93 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,8 +22,12 @@
  *
  * ============================================================ */
 
-#ifndef MAINTENANCEDLG_H
-#define MAINTENANCEDLG_H
+#ifndef QUALITYSCANDIALOG_H
+#define QUALITYSCANDIALOG_H
+
+// Qt includes
+
+#include <QList>
 
 // KDE includes
 
@@ -30,34 +35,35 @@
 
 // Local includes
 
-#include "digikam_export.h"
-#include "maintenancesettings.h"
 
 namespace Digikam
 {
 
-class MaintenanceDlg : public KDialog
+class QualityScanDialog : public KDialog
 {
     Q_OBJECT
 
 public:
 
-    explicit MaintenanceDlg(QWidget* const parent = 0);
-    ~MaintenanceDlg();
+    explicit QualityScanDialog(QWidget* const parent = 0);
+    ~QualityScanDialog();
 
-    MaintenanceSettings settings() const;
+protected:
 
-private Q_SLOTS:
+    void doLoadState();
+    void doSaveState();
+    void accept();
 
-    void slotItemToggled(int index, bool b);
-    void slotMetadataSetup();
-    void slotQualitySetup();
-    void slotOk();
+protected Q_SLOTS:
+
+    void setDetectionDefaultParameters();
+    void updateClearButtons();
+    void benchmarkButtonToggled(bool on);
 
 private:
 
-    void writeSettings();
-    void readSettings();
+    void setupUi();
+    void setupConnections();
 
 private:
 
@@ -65,6 +71,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // MAINTENANCEDLG_H
+#endif // QUALITYSCANDIALOG_H

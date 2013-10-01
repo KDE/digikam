@@ -248,6 +248,7 @@ SET(digikam_SRCS ${libeditorgui_SRCS}
                  ${libtemplate_SRCS}
                  ${libdatabaseui_SRCS}
                  ${libfacemanagement_SRCS}
+                 ${libimgqsort_SRCS}
                  main/main.cpp
 )
 
