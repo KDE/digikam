@@ -124,7 +124,7 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     QLabel* const tipLabel2 = new QLabel(this);
     tipLabel2->setTextFormat(Qt::RichText);
     tipLabel2->setWordWrap(true);
-    tipLabel2->setText(i18n("<p><b>Note</b>: this shortcut can be used"
+    tipLabel2->setText(i18n("<p><b>Note</b>: this shortcut can be used "
                             "to assign or unassign tag to items.</p>"));
 
     d->saveButton = new QPushButton("Save");

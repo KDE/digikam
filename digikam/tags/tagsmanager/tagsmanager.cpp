@@ -576,7 +576,7 @@ void TagsManager::setupActions()
                                          i18n("Reset tag Icon"), this);
 
     KAction* createTagAddr = new KAction(KIcon("tag-addressbook"),
-                                         i18n("Create Tag from Addess Book"),
+                                         i18n("Create Tag from Address Book"),
                                          this);
     KAction* invSel        = new KAction(KIcon(),
                                          i18n("Invert Selection"), this);
@@ -591,14 +591,14 @@ void TagsManager::setupActions()
 
     /** Tool tips  **/
     d->addAction->setHelpText(i18n("Add new tag to current tag. "
-                                  "Current tag is last clicked tag"));
+                                  "Current tag is last clicked tag."));
 
     d->delAction->setHelpText(i18n("Delete selected items. "
                                   "Also work with multiple items, "
-                                  "but won't delete the root tag"));
+                                  "but won't delete the root tag."));
 
     resetIcon->setHelpText(i18n("Reset icon to selected tags. "
-                               "Works with multiple selection" ));
+                               "Works with multiple selection." ));
 
     invSel->setHelpText(i18n("Invert selection. "
                             "Only visible items will be selected"));
@@ -608,7 +608,7 @@ void TagsManager::setupActions()
     expandSel->setHelpText(i18n("Selected items will be expanded"));
 
     delTagFromImg->setHelpText(i18n("Delete selected tag(s) from images. "
-                                    "Works with multiple selection "));
+                                    "Works with multiple selection."));
 
     connect(resetIcon, SIGNAL(triggered()),
             this, SLOT(slotResetTagIcon()));
@@ -654,7 +654,7 @@ void TagsManager::setupActions()
 
     wrDbImg->setHelpText(i18n("Write Tags Metadata to Image."));
 
-    readTags->setHelpText(i18n("Read tags from Images into Database"
+    readTags->setHelpText(i18n("Read tags from Images into Database. "
                               "Existing tags won't be affected"));
 
     wipeAll->setHelpText(i18n("Delete all tags from database. "
@@ -685,10 +685,10 @@ void TagsManager::setupActions()
     KAction* NepomukToDb    = new KAction(KIcon("nepomuk"),
                                           i18n("Sync Nepomuk to Database"), this);
     DbToNepomuk->setHelpText(i18n("Export all tags from Database to Nepomuk. "
-                                 "Digikam with nepomuk support is required "));
+                                 "digiKam with Nepomuk support is required."));
 
-    NepomukToDb->setHelpText(i18n("Import tags from Nepomuk."
-                                 "Digikam with nepomuk support is required" ));
+    NepomukToDb->setHelpText(i18n("Import tags from Nepomuk. "
+                                 "digiKam with Nepomuk support is required." ));
 
     connect(DbToNepomuk, SIGNAL(triggered()),
             this, SLOT(slotNepomukToDb()));

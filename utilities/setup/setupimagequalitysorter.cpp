@@ -104,7 +104,7 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
     QVBoxLayout* const layout = new QVBoxLayout(panel);
 
     d->enableSorter = new QCheckBox(i18n("Enable Image Quality Sorting"), panel);
-    d->enableSorter->setWhatsThis(i18n("Enabled this option to assign automatically Pick Labels based on image quality."));
+    d->enableSorter->setWhatsThis(i18n("Enable this option to assign automatically Pick Labels based on image quality."));
 
     d->optionsView  = new KVBox(panel);
 

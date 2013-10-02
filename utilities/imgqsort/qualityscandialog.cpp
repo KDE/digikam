@@ -430,7 +430,7 @@ void QualityScanDialog::setupUi()
     d->benchmarkButton = new QCheckBox;
     d->benchmarkButton->setText(i18nc("@option:check", "Benchmark quality sorting"));
     d->benchmarkButton->setToolTip(i18nc("@info:tooltip",
-                                         "This will run quality sorting and compare the results ");
+                                         "This will run quality sorting and compare the results.");
 
     advancedLayout->addWidget(cpuExplanation);
     advancedLayout->addWidget(d->useFullCpuButto1n);
