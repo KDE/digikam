@@ -563,9 +563,9 @@ void TagsManager::setupActions()
 
     d->mainToolbar->addSeparator();
 
-    d->addAction = new KAction(KIcon("list-add"),i18n(""),d->treeWindow);
+    d->addAction = new KAction(KIcon("list-add"),"",d->treeWindow);
 
-    d->delAction = new KAction(KIcon("list-remove"),i18n(""),d->treeWindow);
+    d->delAction = new KAction(KIcon("list-remove"),"",d->treeWindow);
 
     /** organize group **/
     d->organizeAction   = new KActionMenu(KIcon("autocorrection"),
