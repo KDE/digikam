@@ -70,7 +70,6 @@ void NepomukQuery::queryImagesProperties()
         QList<Tag> tags = res.tags();
         if(!tags.isEmpty())
         {
-            kDebug() << "Image " << ind << " Have Tags";
             QList<QUrl> tagUrls;
             for(QList<Tag>::iterator it = tags.begin(); it != tags.end(); ++it)
             {
@@ -87,14 +86,12 @@ void NepomukQuery::queryImagesProperties()
             int ratingValue = ratingVar.toInt();
             if(ratingValue > 0 && ratingValue < 10)
             {
-                kDebug() << "Image " << ind << " Have Rating";
                 this->service->syncImgRatingToDigikam(imgPath,ratingValue);
             }
         }
         Variant commentVar = res.property(Soprano::Vocabulary::NAO::description());
         if(commentVar.isValid())
         {
-            kDebug() << "Image " << ind << " Have Comments";
             KUrl imgPath(res.property(Vocabulary::NIE::url()).toUrl());
 
             this->service->syncImgCommentToDigikam(imgPath,commentVar.toString());

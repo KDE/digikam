@@ -31,6 +31,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QDesktopWidget>
+#include <QDBusInterface>
 
 /** KDE includes **/
 #include <kdebug.h>
@@ -517,12 +518,30 @@ void TagsManager::slotWipeAll()
 
 void TagsManager::slotNepomukToDb()
 {
+#ifdef HAVE_NEPOMUK
+    QDBusInterface interface("org.kde.nepomuk.services.digikamnepomukservice",
+                             "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
 
+    if (interface.isValid())
+    {
+        interface.call(QDBus::NoBlock, "triggerResync", true, false);
+    }
+
+#endif // HAVE_NEPOMUK
 }
 
 void TagsManager::slotDbToNepomuk()
 {
+#ifdef HAVE_NEPOMUK
+    QDBusInterface interface("org.kde.nepomuk.services.digikamnepomukservice",
+                             "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
 
+    if (interface.isValid())
+    {
+        interface.call(QDBus::NoBlock, "triggerResync", false, true);
+    }
+
+#endif // HAVE_NEPOMUK
 }
 
 void TagsManager::slotRemoveTagsFromImgs()
@@ -691,7 +710,7 @@ void TagsManager::setupActions()
                                  "digiKam with Nepomuk support is required." ));
 
     connect(DbToNepomuk, SIGNAL(triggered()),
-            this, SLOT(slotNepomukToDb()));
+            this, SLOT(slotDbToNepomuk()));
 
     connect(NepomukToDb, SIGNAL(triggered()),
             this, SLOT(slotNepomukToDb()));

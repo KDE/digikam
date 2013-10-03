@@ -465,6 +465,7 @@ void DkNepomukService::slotTagDeleted(QString name)
 
 void DkNepomukService::fullSyncDigikamToNepomuk()
 {
+    kDebug() << "Digikam to Nepomuk Sync Triggered +++++++++++++++";
     // List album root albums of all available collections recursively
     QList<CollectionLocation> collections = CollectionManager::instance()->allAvailableLocations();
     foreach(const CollectionLocation& location, collections)
@@ -660,6 +661,7 @@ void DkNepomukService::pushTagsToNepomuk(const QList<ImageInfo>& imageInfos)
 
 void DkNepomukService::syncNepomukToDigikam()
 {
+    kDebug() << "Sync Nepomuk To Digikam ++++++++++++";
     // wait until digikam -> nepomuk initial sync, if any, has finished
     if (d->fullSyncJobs)
     {
