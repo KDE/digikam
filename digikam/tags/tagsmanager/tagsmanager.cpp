@@ -21,7 +21,10 @@
  *
  * ============================================================ */
 
-/** Qt includes **/
+#include "tagsmanager.moc"
+
+// Qt includes
+
 #include <QQueue>
 #include <QTreeView>
 #include <QtGui/QHeaderView>
@@ -33,7 +36,8 @@
 #include <QDesktopWidget>
 #include <QDBusInterface>
 
-/** KDE includes **/
+// KDE includes
+
 #include <kdebug.h>
 #include <klocale.h>
 #include <kiconloader.h>
@@ -46,12 +50,11 @@
 #include <kapplication.h>
 #include <kmessagebox.h>
 
-/** local includes **/
-#include "tagsmanager.h"
+// local includes
+
 #include "tagpropwidget.h"
 #include "tagmngrtreeview.h"
 #include "taglist.h"
-
 #include "tagfolderview.h"
 #include "ddragobjects.h"
 #include "searchtextbar.h"
@@ -66,53 +69,53 @@ namespace Digikam
 
 QPointer<TagsManager> TagsManager::internalPtr = QPointer<TagsManager>();
 
-class TagsManager::PrivateTagMngr
+class TagsManager::Private
 {
 
 public:
 
-    PrivateTagMngr()
+    Private()
     {
-        tagPixmap       = 0;
-        searchBar       = 0;
-        treeWinLayout   = 0;
-        treeWindow      = 0;
-        mainToolbar     = 0;
-        rightToolBar    = 0;
-        organizeAction  = 0;
+        tagPixmap        = 0;
+        searchBar        = 0;
+        treeWinLayout    = 0;
+        treeWindow       = 0;
+        mainToolbar      = 0;
+        rightToolBar     = 0;
+        organizeAction   = 0;
         syncexportAction = 0;
-        tagProperties   = 0;
-        addAction       = 0;
-        delAction       = 0;
-        listView        = 0;
-        tagPropWidget   = 0;
-        tagMngrView     = 0;
+        tagProperties    = 0;
+        addAction        = 0;
+        delAction        = 0;
+        listView         = 0;
+        tagPropWidget    = 0;
+        tagMngrView      = 0;
+        tagModel         = 0;
     }
 
-    TagMngrTreeView*  tagMngrView;
-    QLabel*         tagPixmap;
-    SearchTextBar*  searchBar;
+    TagMngrTreeView* tagMngrView;
+    QLabel*          tagPixmap;
+    SearchTextBar*   searchBar;
 
 
-    QHBoxLayout*    treeWinLayout;
-    KMainWindow*    treeWindow;
-    KToolBar*       mainToolbar;
-    KMultiTabBar*   rightToolBar;
-    KActionMenu*    organizeAction;
-    KActionMenu*    syncexportAction;
-    KAction*        tagProperties;
-    KAction*        addAction;
-    KAction*        delAction;
+    QHBoxLayout*     treeWinLayout;
+    KMainWindow*     treeWindow;
+    KToolBar*        mainToolbar;
+    KMultiTabBar*    rightToolBar;
+    KActionMenu*     organizeAction;
+    KActionMenu*     syncexportAction;
+    KAction*         tagProperties;
+    KAction*         addAction;
+    KAction*         delAction;
 
-    TagList*        listView;
-    TagPropWidget*  tagPropWidget;
-    TagModel*       tagModel;
+    TagList*         listView;
+    TagPropWidget*   tagPropWidget;
+    TagModel*        tagModel;
 };
 
 TagsManager::TagsManager()
-    : KMainWindow(0), d(new PrivateTagMngr())
+    : KMainWindow(0), d(new Private())
 {
-
     d->tagModel = new TagModel(AbstractAlbumModel::IncludeRootAlbum, this);;
     d->tagModel->setCheckable(false);
     setupUi(this);
@@ -123,15 +126,16 @@ TagsManager::TagsManager()
             SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(slotSelectionChanged()));
 
-    connect(d->addAction, SIGNAL(triggered()), this, SLOT(slotAddAction()));
+    connect(d->addAction, SIGNAL(triggered()),
+            this, SLOT(slotAddAction()));
 
-    connect(d->delAction, SIGNAL(triggered()), this, SLOT(slotDeleteAction()));
+    connect(d->delAction, SIGNAL(triggered()),
+            this, SLOT(slotDeleteAction()));
 
     d->tagMngrView->setCurrentIndex(d->tagMngrView->model()->index(0,0));
 
     /** Set KMainWindow in center of the screen **/
-    this->move(QApplication::desktop()->screen()->rect().center()
-               - this->rect().center());
+    this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
 }
 
 TagsManager::~TagsManager()
@@ -148,16 +152,16 @@ TagsManager* TagsManager::instance()
     {
         TagsManager::internalPtr = new TagsManager();
     }
+
     return TagsManager::internalPtr;
 }
 
-void TagsManager::setupUi(KMainWindow *Dialog)
+void TagsManager::setupUi(KMainWindow* const Dialog)
 {
-
      Dialog->resize(972, 722);
      Dialog->setWindowTitle(i18n("Tags Manager"));
 
-     QHBoxLayout* mainLayout = new QHBoxLayout();
+     QHBoxLayout* const mainLayout = new QHBoxLayout();
 
      d->tagPixmap = new QLabel();
      d->tagPixmap->setText("Tag Pixmap");
@@ -193,7 +197,7 @@ void TagsManager::setupUi(KMainWindow *Dialog)
      d->listView = new TagList(d->tagMngrView,Dialog);
      d->listView->setMaximumWidth(300);
 
-     QWidget* treeCentralW = new QWidget(this);
+     QWidget* const treeCentralW = new QWidget(this);
      treeCentralW->setLayout(d->treeWinLayout);
      d->treeWindow->setCentralWidget(treeCentralW);
 
@@ -201,20 +205,19 @@ void TagsManager::setupUi(KMainWindow *Dialog)
      mainLayout->addWidget(d->treeWindow,9);
      mainLayout->addWidget(d->rightToolBar);
 
-     QWidget* centraW = new QWidget(this);
+     QWidget* const centraW = new QWidget(this);
      centraW->setLayout(mainLayout);
      this->setCentralWidget(centraW);
-
 }
 
 void TagsManager::slotOpenProperties()
 {
-    KMultiTabBarTab* sender = (KMultiTabBarTab*)QObject::sender();
+    KMultiTabBarTab* const sender = (KMultiTabBarTab*)QObject::sender();
+
     if(sender->isChecked())
         d->tagPropWidget->show();
     else
         d->tagPropWidget->hide();
-
 }
 
 void TagsManager::slotSelectionChanged()
@@ -224,13 +227,11 @@ void TagsManager::slotSelectionChanged()
 
 void TagsManager::slotItemChanged()
 {
-
 }
 
 void TagsManager::slotAddAction()
 {
-
-    TAlbum* parent = d->tagMngrView->currentAlbum();
+    TAlbum* const parent = d->tagMngrView->currentAlbum();
     QString      title, icon;
     QKeySequence ks;
 
@@ -246,7 +247,6 @@ void TagsManager::slotAddAction()
 
 void TagsManager::slotDeleteAction()
 {
-
     QModelIndexList selected = d->tagMngrView->selectionModel()->selectedIndexes();
 
     QString tagWithChildrens;
@@ -258,7 +258,7 @@ void TagsManager::slotDeleteAction()
         if(!index.isValid())
             return;
 
-        TAlbum* t = static_cast<TAlbum*>(d->tagMngrView->albumForIndex(index));
+        TAlbum* const t = static_cast<TAlbum*>(d->tagMngrView->albumForIndex(index));
 
         int deph = 0;
 
@@ -346,6 +346,7 @@ void TagsManager::slotDeleteAction()
             for(it = sortedTags.end()-1; it != sortedTags.begin()-1; --it)
             {
                 QString errMsg;
+
                 if (!AlbumManager::instance()->deleteTAlbum(it.value(), errMsg))
                 {
                     KMessageBox::error(0, errMsg);
@@ -366,24 +367,27 @@ void TagsManager::slotResetTagIcon()
 
     for(it = selected.begin(); it != selected.end(); ++it )
     {
-        TAlbum* tag = dynamic_cast<TAlbum*>(*it);
-        if (!AlbumManager::instance()->updateTAlbumIcon(tag, icon, 0, errMsg))
+        TAlbum* const tag = dynamic_cast<TAlbum*>(*it);
+
+        if (tag)
         {
-            KMessageBox::error(0, errMsg);
+            if (!AlbumManager::instance()->updateTAlbumIcon(tag, icon, 0, errMsg))
+            {
+                KMessageBox::error(0, errMsg);
+            }
         }
     }
 }
 
 void TagsManager::slotCreateTagAddr()
 {
-
 }
 
 void TagsManager::slotInvertSel()
 {
-    QModelIndex root = d->tagMngrView->model()->index(0,0);
-    QItemSelectionModel* model = d->tagMngrView->selectionModel();
-    QModelIndexList selected = model->selectedIndexes();
+    QModelIndex root                 = d->tagMngrView->model()->index(0,0);
+    QItemSelectionModel* const model = d->tagMngrView->selectionModel();
+    QModelIndexList selected         = model->selectedIndexes();
 
     QQueue<QModelIndex> greyNodes;
     bool currentSet = false;
@@ -395,10 +399,12 @@ void TagsManager::slotInvertSel()
     while(!greyNodes.isEmpty())
     {
         QModelIndex current = greyNodes.dequeue();
+
         if(!(current.isValid()))
         {
             continue;
         }
+
         int it = 0;
         QModelIndex child = current.child(it++,0);
 
@@ -415,12 +421,15 @@ void TagsManager::slotInvertSel()
                     d->tagMngrView->setCurrentIndex(child);
                     currentSet = true;
                 }
+
                 model->select(child, model->Select);
             }
+
             if(d->tagMngrView->isExpanded(child))
             {
                 greyNodes.enqueue(child);
             }
+
             child = current.child(it++,0);
         }
     }
@@ -438,8 +447,9 @@ void TagsManager::slotWriteToImg()
     {
         return;
     }
-    MetadataSynchronizer* tool = new MetadataSynchronizer(AlbumList(),
-                                                          MetadataSynchronizer::WriteFromDatabaseToFile);
+
+    MetadataSynchronizer* const tool = new MetadataSynchronizer(AlbumList(),
+                                                                MetadataSynchronizer::WriteFromDatabaseToFile);
     tool->setTagsOnly(true);
     tool->start();
 }
@@ -456,8 +466,9 @@ void TagsManager::slotReadFromImg()
     {
         return;
     }
-    MetadataSynchronizer* tool = new MetadataSynchronizer(AlbumList(),
-                                                          MetadataSynchronizer::ReadFromFileToDatabase);
+
+    MetadataSynchronizer* const tool = new MetadataSynchronizer(AlbumList(),
+                                                                MetadataSynchronizer::ReadFromFileToDatabase);
     tool->setTagsOnly(true);
     tool->start();
 }
@@ -487,8 +498,8 @@ void TagsManager::slotWipeAll()
     }
 
     AlbumPointerList<TAlbum> tagList;
-    QModelIndex root = d->tagMngrView->model()->index(0,0);
-    int iter = 0;
+    QModelIndex root  = d->tagMngrView->model()->index(0,0);
+    int iter          = 0;
     QModelIndex child = root.child(iter++,0);
 
     while(child.isValid())
@@ -498,9 +509,11 @@ void TagsManager::slotWipeAll()
     }
 
     AlbumPointerList<TAlbum>::iterator it;
+
     for(it = tagList.begin(); it != tagList.end(); ++it)
     {
         QString errMsg;
+
         if (!AlbumManager::instance()->deleteTAlbum(*it, errMsg))
         {
             KMessageBox::error(0, errMsg);
@@ -509,11 +522,10 @@ void TagsManager::slotWipeAll()
 
     /** Write all changes to file **/
 
-    MetadataSynchronizer* tool = new MetadataSynchronizer(AlbumList(),
-                                                          MetadataSynchronizer::WriteFromDatabaseToFile);
+    MetadataSynchronizer* const tool = new MetadataSynchronizer(AlbumList(),
+                                                                MetadataSynchronizer::WriteFromDatabaseToFile);
     tool->setTagsOnly(true);
     tool->start();
-
 }
 
 void TagsManager::slotNepomukToDb()
@@ -550,9 +562,10 @@ void TagsManager::slotRemoveTagsFromImgs()
 
     foreach(QModelIndex index, selList)
     {
-        TAlbum* t = static_cast<TAlbum*>(d->tagMngrView->albumForIndex(index));
+        TAlbum* const t = static_cast<TAlbum*>(d->tagMngrView->albumForIndex(index));
 
         AlbumPointer<TAlbum> tag(t);
+
         if(tag->isRoot())
             continue;
 
@@ -571,10 +584,10 @@ void TagsManager::setupActions()
 {
     d->mainToolbar = new KToolBar(d->treeWindow);
 
-    QWidgetAction* pixMapAction = new QWidgetAction(this);
+    QWidgetAction* const pixMapAction = new QWidgetAction(this);
     pixMapAction->setDefaultWidget(d->tagPixmap);
 
-    QWidgetAction* searchAction = new QWidgetAction(this);
+    QWidgetAction* const searchAction = new QWidgetAction(this);
     searchAction->setDefaultWidget(d->searchBar);
 
     d->mainToolbar->addAction(pixMapAction);
@@ -587,8 +600,8 @@ void TagsManager::setupActions()
     d->delAction = new KAction(KIcon("list-remove"),"",d->treeWindow);
 
     /** organize group **/
-    d->organizeAction   = new KActionMenu(KIcon("autocorrection"),
-                                          i18n("Organize"),this);
+    d->organizeAction      = new KActionMenu(KIcon("autocorrection"),
+                                             i18n("Organize"),this);
     d->organizeAction->setDelayed(false);
 
     KAction* resetIcon     = new KAction(KIcon("view-refresh"),
@@ -659,14 +672,14 @@ void TagsManager::setupActions()
                                           i18n("Sync &Export"),this);
     d->syncexportAction->setDelayed(false);
 
-    KAction* wrDbImg        = new KAction(KIcon("view-refresh"),
+    KAction* const wrDbImg  = new KAction(KIcon("view-refresh"),
                                           i18n("Write Tags from Database "
                                               "to Image"), this);
 
-    KAction* readTags       = new KAction(KIcon("tag-new"),
+    KAction* const readTags = new KAction(KIcon("tag-new"),
                                           i18n("Read Tags from Image"), this);
 
-    KAction* wipeAll        = new KAction(KIcon("draw-eraser"),
+    KAction* const wipeAll  = new KAction(KIcon("draw-eraser"),
                                           i18n("Wipe all tags from Database "
                                               "and read from images"), this);
 
@@ -679,8 +692,6 @@ void TagsManager::setupActions()
     wipeAll->setHelpText(i18n("Delete all tags from database. "
                              "Proceed with caution."));
 
-
-
     connect(wrDbImg, SIGNAL(triggered()),
             this, SLOT(slotWriteToImg()));
 
@@ -690,19 +701,17 @@ void TagsManager::setupActions()
     connect(wipeAll, SIGNAL(triggered()),
             this, SLOT(slotWipeAll()));
 
-
-
     d->syncexportAction->addAction(wrDbImg);
     d->syncexportAction->addAction(readTags);
     d->syncexportAction->addAction(wipeAll);
 
 #ifdef HAVE_NEPOMUK
-    KAction* DbToNepomuk    = new KAction(KIcon("nepomuk"),
-                                          i18n("Sync Database with Nepomuk"),
-                                          this);
+    KAction* const DbToNepomuk = new KAction(KIcon("nepomuk"),
+                                             i18n("Sync Database with Nepomuk"),
+                                             this);
 
-    KAction* NepomukToDb    = new KAction(KIcon("nepomuk"),
-                                          i18n("Sync Nepomuk to Database"), this);
+    KAction* const NepomukToDb = new KAction(KIcon("nepomuk"),
+                                             i18n("Sync Nepomuk to Database"), this);
     DbToNepomuk->setHelpText(i18n("Export all tags from Database to Nepomuk. "
                                  "digiKam with Nepomuk support is required."));
 

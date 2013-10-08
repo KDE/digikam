@@ -20,8 +20,14 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-#include <kmainwindow.h>
+
+// Qt includes
+
 #include <QPointer>
+
+// KDE includes
+
+#include <kmainwindow.h>
 
 namespace Digikam
 {
@@ -34,6 +40,7 @@ class TagsManager : public KMainWindow
     Q_OBJECT
 
 public:
+
     TagsManager();
     ~TagsManager();
 
@@ -41,13 +48,14 @@ public:
      * @brief setupUi   setup all gui elements for Tag Manager
      * @param Dialog    parent dialog
      */
-    void setupUi(KMainWindow *Dialog);
+    void setupUi(KMainWindow* const Dialog);
 
     static QPointer<TagsManager> internalPtr;
     static TagsManager* instance();
     static bool isCreated() { return !(internalPtr.isNull()); }
 
 Q_SIGNALS:
+
     void signalSelectionChanged(TAlbum* album);
 
 private Q_SLOTS:
@@ -134,11 +142,15 @@ private Q_SLOTS:
 protected:
 
     void closeEvent(QCloseEvent* event);
+
 private:
 
     void setupActions();
-    class PrivateTagMngr;
-    PrivateTagMngr* d;
+
+private:
+
+    class Private;
+    Private* const d;
 };
 
-}
+} // namespace Digikam
