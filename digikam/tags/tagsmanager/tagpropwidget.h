@@ -25,6 +25,8 @@
 #ifndef TAGPROPWIDGET_H
 #define TAGPROPWIDGET_H
 
+// Qt includes
+
 #include <QWidget>
 
 namespace Digikam
@@ -37,13 +39,24 @@ class TagPropWidget : public QWidget
     Q_OBJECT
 
 public:
+
+    enum ItemsEnable
+    {
+        DisabledAll,
+        EnabledAll,
+        IconOnly
+    };
+
+public:
+
     TagPropWidget(QWidget* const parent);
 
-    enum ItemsEnable { DisabledAll, EnabledAll, IconOnly};
-
 public Q_SLOTS:
+
     void slotSelectionChanged(QList<Album*> albums);
+
 private Q_SLOTS:
+
     void slotIconResetClicked();
     void slotIconChanged();
     void slotDataChanged();
@@ -60,10 +73,12 @@ private:
      */
     void enableItems(ItemsEnable value);
 
-    class PrivateTagProp;
-    PrivateTagProp* d;
+private:
+
+    class Private;
+    Private* d;
 };
 
-}
+} // namespace Digikam
 
-#endif //TAGPROPWIDGET
+#endif // TAGPROPWIDGET

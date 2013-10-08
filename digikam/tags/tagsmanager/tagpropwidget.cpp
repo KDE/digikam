@@ -22,10 +22,16 @@
  *
  * ============================================================ */
 
-#include "tagpropwidget.h"
+#include "tagpropwidget.moc"
+
+// Qt includes
+
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QPushButton>
+
+// KDE includes
+
 #include <kkeysequencewidget.h>
 #include <kseparator.h>
 #include <kicon.h>
@@ -36,6 +42,8 @@
 #include <kicondialog.h>
 #include <kmessagebox.h>
 
+// local includes
+
 #include "searchtextbar.h"
 #include "album.h"
 #include "albummanager.h"
@@ -45,15 +53,17 @@
 namespace Digikam
 {
 
-class TagPropWidget::PrivateTagProp
+class TagPropWidget::Private
 {
 public:
 
-    PrivateTagProp()
+    Private()
     {
         titleEdit       = 0;
         iconButton      = 0;
         resetIconButton = 0;
+        saveButton      = 0;
+        discardButton   = 0;
         topLabel        = 0;
         keySeqWidget    = 0;
         changed         = false;
@@ -75,9 +85,8 @@ public:
 };
 
 TagPropWidget::TagPropWidget(QWidget* const parent)
-    : QWidget(parent), d(new PrivateTagProp())
+    : QWidget(parent), d(new Private())
 {
-
     QGridLayout* const grid = new QGridLayout(this);
     QLabel* const logo      = new QLabel(this);
 
@@ -110,9 +119,7 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     d->iconButton->setFixedSize(40, 40);
     iconTextLabel->setBuddy(d->iconButton);
 
-
-    d->resetIconButton = new QPushButton(KIcon("view-refresh"),
-                                         i18n("Reset"), this);
+    d->resetIconButton = new QPushButton(KIcon("view-refresh"), i18n("Reset"), this);
 
     QLabel* const kscTextLabel = new QLabel(this);
     kscTextLabel->setText(i18n("&Shortcut:"));
@@ -155,14 +162,19 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
 
     connect(d->iconButton, SIGNAL(clicked()),
             this, SLOT(slotIconChanged()));
+
     connect(d->titleEdit, SIGNAL(textEdited(QString)),
             this, SLOT(slotDataChanged()));
+
     connect(d->resetIconButton, SIGNAL(clicked()),
             this,SLOT(slotIconResetClicked()));
+
     connect(d->keySeqWidget, SIGNAL(keySequenceChanged(QKeySequence)),
             this, SLOT(slotDataChanged()));
+
     connect(d->saveButton, SIGNAL(clicked()),
             this, SLOT(slotSaveChanges()));
+
     connect(d->discardButton, SIGNAL(clicked()),
             this, SLOT(slotDiscardChanges()));
 
@@ -187,20 +199,24 @@ void TagPropWidget::slotSelectionChanged(QList<Album*> albums)
         {
             slotSaveChanges();
         }
+
         d->changed = false;
     }
+
     if(albums.size() == 1)
     {
-        TAlbum* album = dynamic_cast<TAlbum*>(albums.first());
+        TAlbum* const album = dynamic_cast<TAlbum*>(albums.first());
+
         if(!album)
         {
             return;
         }
+
         QString Seq = album->property(TagPropertyName::tagKeyboardShortcut());
         d->selectedAlbums.clear();
         d->selectedAlbums.append(album);
         d->titleEdit->setText(album->title());
-        d->icon = album->icon();
+        d->icon     = album->icon();
         d->iconButton->setIcon(SyncJob::getTagThumbnail(album));
         d->keySeqWidget->setKeySequence(Seq);
 
@@ -210,11 +226,15 @@ void TagPropWidget::slotSelectionChanged(QList<Album*> albums)
     {
         d->selectedAlbums.clear();
         QList<Album*>::iterator it;
+
         for(it = albums.begin(); it != albums.end(); ++it)
         {
-            TAlbum* temp = dynamic_cast<TAlbum*>(*it);
-            d->selectedAlbums.append(temp);
+            TAlbum* const temp = dynamic_cast<TAlbum*>(*it);
+
+            if (temp)
+                d->selectedAlbums.append(temp);
         }
+
         d->titleEdit->clear();
         d->icon.clear();
         d->iconButton->setIcon(KIcon());
@@ -233,14 +253,12 @@ void TagPropWidget::slotIconResetClicked()
     }
 
     d->changed = true;
-    d->icon = QString("tag");
-    d->iconButton->setIcon(KIconLoader::global()->loadIcon(d->icon,
-                                                           KIconLoader::NoGroup,
-                                                           20));
+    d->icon    = QString("tag");
+    d->iconButton->setIcon(KIconLoader::global()->loadIcon(d->icon, KIconLoader::NoGroup, 20));
 }
 void TagPropWidget::slotIconChanged()
 {
-    d->changed = true;
+    d->changed   = true;
     KIconDialog dlg(this);
     dlg.setup(KIconLoader::NoGroup, KIconLoader::Application, false,
               20, false, false, false);
@@ -252,9 +270,7 @@ void TagPropWidget::slotIconChanged()
     }
 
     d->icon = icon;
-    d->iconButton->setIcon(KIconLoader::global()->loadIcon(d->icon,
-                                                           KIconLoader::NoGroup,
-                                                           20));
+    d->iconButton->setIcon(KIconLoader::global()->loadIcon(d->icon, KIconLoader::NoGroup, 20));
 }
 
 void TagPropWidget::slotDataChanged()
@@ -266,10 +282,10 @@ void TagPropWidget::slotSaveChanges()
 {
     if(d->selectedAlbums.size() == 1)
     {
-        QString title = d->titleEdit->text();
-        TAlbum* tag = d->selectedAlbums.first();
-        QString icon = d->icon;
-        QKeySequence ks = d->keySeqWidget->keySequence();
+        QString title     = d->titleEdit->text();
+        TAlbum* const tag = d->selectedAlbums.first();
+        QString icon      = d->icon;
+        QKeySequence ks   = d->keySeqWidget->keySequence();
 
         if (tag && tag->title() != title)
         {
@@ -299,15 +315,15 @@ void TagPropWidget::slotSaveChanges()
     else
     {
         QList<TAlbum*>::iterator it;
+
         for(it = d->selectedAlbums.begin(); it != d->selectedAlbums.end(); ++it)
         {
-            TAlbum* tag = *it;
+            TAlbum* const tag = *it;
             if (tag && tag->icon() != d->icon)
             {
                 QString errMsg;
 
-                if (!AlbumManager::instance()->updateTAlbumIcon(tag, d->icon,
-                                                                0, errMsg))
+                if (!AlbumManager::instance()->updateTAlbumIcon(tag, d->icon, 0, errMsg))
                 {
                     KMessageBox::error(0, errMsg);
                 }
@@ -320,11 +336,11 @@ void TagPropWidget::slotDiscardChanges()
 {
     if(d->selectedAlbums.size() == 1)
     {
-        TAlbum* album = d->selectedAlbums.first();
-        QString Seq = album->property(TagPropertyName::tagKeyboardShortcut());
+        TAlbum* const album = d->selectedAlbums.first();
+        QString Seq         = album->property(TagPropertyName::tagKeyboardShortcut());
 
         d->titleEdit->setText(album->title());
-        d->icon = album->icon();
+        d->icon             = album->icon();
         d->iconButton->setIcon(SyncJob::getTagThumbnail(album));
         d->keySeqWidget->setKeySequence(Seq);
     }
@@ -332,41 +348,40 @@ void TagPropWidget::slotDiscardChanges()
     {
         d->icon.clear();
     }
+
     d->changed = false;
 }
 
 void TagPropWidget::enableItems(TagPropWidget::ItemsEnable value)
 {
 
-    bool val = false;
+    bool val        = false;
     bool iconEnable = false;
 
     if(value == TagPropWidget::DisabledAll)
     {
-        val = false;
+        val        = false;
         iconEnable = false;
     }
 
     if(value == TagPropWidget::EnabledAll)
     {
-        val = true;
+        val        = true;
         iconEnable = true;
     }
 
     if(value == TagPropWidget::IconOnly)
     {
-        val = false;
+        val        = false;
         iconEnable = true;
     }
 
     d->titleEdit->setEnabled(val);
     d->keySeqWidget->setEnabled(val);
-
     d->resetIconButton->setEnabled(iconEnable);
     d->iconButton->setEnabled(iconEnable);
     d->saveButton->setEnabled(iconEnable);
     d->discardButton->setEnabled(iconEnable);
-
 }
 
-}
+} // namespace Digikam
