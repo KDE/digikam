@@ -7,7 +7,7 @@
  * Description : Metadata handling
  *
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -815,13 +815,12 @@ bool MetadataHub::writeTags(const QString& filePath,
     }
 
     DMetadata metadata(filePath);
-    bool saveTags ,dirty = false;
+    bool dirty     = false;
     bool saveFaces = settings.saveFaceTags;
+    bool saveTags  = false;
 
     if (settings.saveTags)
     {
-        saveTags = false;
-
         // find at least one tag to write
         for (QMap<int, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
         {
@@ -834,9 +833,13 @@ bool MetadataHub::writeTags(const QString& filePath,
     }
 
     if(saveFaces)
+    {
         metadata.setImageFacesMap(d->faceTagsList,true);
+    }
     else
+    {
         metadata.setImageFacesMap(d->faceTagsList,false);
+    }
 
     if (saveTags)
     {
@@ -863,8 +866,7 @@ bool MetadataHub::writeTags(const QString& filePath,
                 // In both situations, tags which had originally been loaded
                 // have explicitly been removed with setTag.
                 QString tagName = TagsCache::instance()->tagName(it.key());
-                QString tagPath = TagsCache::instance()->tagPath(it.key(),
-                                                                 TagsCache::NoLeadingSlash);
+                QString tagPath = TagsCache::instance()->tagPath(it.key(), TagsCache::NoLeadingSlash);
 
                 if (it.value().hasTag)
                 {
@@ -1367,21 +1369,19 @@ void Digikam::MetadataHub::loadFaceTags(const ImageInfo info, QSize size)
 
     if(!facesList.isEmpty())
     {
-        foreach(DatabaseFace dface,facesList)
+        foreach(DatabaseFace dface, facesList)
         {
             QString faceName = FaceTags::faceNameForTag(dface.tagId());
+
             if(faceName.isEmpty())
                 continue;
 
-            QRect   temprect = dface.region().toRect();
-            QRectF  faceRect = TagRegion::absoluteToRelative(temprect,size);
-
+            QRect   temprect          = dface.region().toRect();
+            QRectF  faceRect          = TagRegion::absoluteToRelative(temprect,size);
             d->faceTagsList[faceName] = QVariant(faceRect);
         }
 
     }
-
-
 }
 
 } // namespace Digikam
