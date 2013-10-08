@@ -21,11 +21,16 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
+// Qt includes
+
 #include <QDrag>
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QMimeData>
 #include <QItemSelectionModel>
+
+// KDE includes
 
 #include <kdebug.h>
 #include <kmenu.h>
@@ -33,25 +38,33 @@
 #include <kicon.h>
 #include <klocale.h>
 
+// Local includes
+
 #include "contextmenuhelper.h"
 #include "tagmngrlistview.h"
 #include "tagmngrlistmodel.h"
 #include "tagmngrlistitem.h"
-#include <taglist.h>
+#include "taglist.h"
 
+namespace Digikam
+{
 
-namespace Digikam {
-
-TagMngrListView::TagMngrListView(QWidget *parent) :
-    QListView(parent)
+TagMngrListView::TagMngrListView(QWidget* const parent)
+    : QListView(parent)
 {
 }
 void TagMngrListView::startDrag(Qt::DropActions supportedActions)
 {
-    QModelIndexList list = this->selectionModel()->selectedIndexes();
+    QModelIndexList list             = this->selectionModel()->selectedIndexes();
+    TagMngrListModel* const tagmodel = dynamic_cast<TagMngrListModel*>(this->model());
 
-    TagMngrListModel* tagmodel = dynamic_cast<TagMngrListModel*>(this->model());
-    QMimeData* data = tagmodel->mimeData(list);
+    if(!tagmodel)
+    {
+        kDebug() << "Error! no model available!";
+        return;
+    }
+
+    QMimeData* const data = tagmodel->mimeData(list);
 
     if(!data)
     {
@@ -59,7 +72,7 @@ void TagMngrListView::startDrag(Qt::DropActions supportedActions)
         return;
     }
 
-    QDrag* drag = new QDrag(this);
+    QDrag* const drag = new QDrag(this);
     drag->setMimeData(data);
     drag->exec(supportedActions, Qt::IgnoreAction);
 }
@@ -67,11 +80,16 @@ void TagMngrListView::startDrag(Qt::DropActions supportedActions)
 void TagMngrListView::dropEvent(QDropEvent *e)
 {
 
-    QModelIndex index = indexVisuallyAt(e->pos());
-    TagMngrListModel* tagmodel = dynamic_cast<TagMngrListModel*>(this->model());
+    QModelIndex index                = indexVisuallyAt(e->pos());
+    TagMngrListModel* const tagmodel = dynamic_cast<TagMngrListModel*>(this->model());
 
-    tagmodel->dropMimeData(e->mimeData(),e->dropAction(), index.row(),
-                           index.column(),index.parent());
+    if(!tagmodel)
+    {
+        kDebug() << "Error! no model available!";
+        return;
+    }
+
+    tagmodel->dropMimeData(e->mimeData(),e->dropAction(), index.row(), index.column(),index.parent());
 
     QList<int> toSel = tagmodel->getDragNewSelection();
 
@@ -80,7 +98,7 @@ void TagMngrListView::dropEvent(QDropEvent *e)
         return;
     }
 
-    QItemSelectionModel* model = this->selectionModel();
+    QItemSelectionModel* const model = this->selectionModel();
 
     model->clearSelection();
     this->setCurrentIndex(tagmodel->index(toSel.first()+1,0));
@@ -114,15 +132,14 @@ void TagMngrListView::contextMenuEvent(QContextMenuEvent* event)
     KMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
 
-    TagList* tagList = dynamic_cast<TagList*>(this->parent());
+    TagList* const tagList = dynamic_cast<TagList*>(this->parent());
 
     if(!tagList)
     {
         return;
     }
 
-    KAction* delAction = new KAction(KIcon("user-trash"),
-                                     i18n("Delete Selected"),this);
+    KAction* const delAction = new KAction(KIcon("user-trash"), i18n("Delete Selected"),this);
     cmhelper.addAction(delAction, tagList, SLOT(slotDeleteSelected()),false);
 
     cmhelper.exec(QCursor::pos());
@@ -135,12 +152,19 @@ void TagMngrListView::slotDeleteSelected()
     if(sel.isEmpty())
         return;
 
-    TagMngrListModel* tagmodel = dynamic_cast<TagMngrListModel*>(this->model());
+    TagMngrListModel* const tagmodel = dynamic_cast<TagMngrListModel*>(this->model());
+
+    if(!tagmodel)
+    {
+        kDebug() << "Error! no model available!";
+        return;
+    }
 
     foreach(QModelIndex index, sel)
     {
-        ListItem* item = static_cast<ListItem*>(index.internalPointer());
+        ListItem* const item = static_cast<ListItem*>(index.internalPointer());
         tagmodel->deleteItem(item);
     }
 }
+
 } // namespace Digikam

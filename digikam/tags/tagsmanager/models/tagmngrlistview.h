@@ -25,17 +25,22 @@
 #ifndef TAGMNGRLISTVIEW_H
 #define TAGMNGRLISTVIEW_H
 
+// Qt includes
+
 #include <QListView>
 
 class QPoint;
 
-namespace Digikam {
+namespace Digikam
+{
 
 class TagMngrListView : public QListView
 {
     Q_OBJECT
+
 public:
-    explicit TagMngrListView(QWidget *parent = 0);
+
+    explicit TagMngrListView(QWidget* const parent = 0);
 
 protected:
 
@@ -59,7 +64,6 @@ public slots:
      * @brief slotDeleteSelected - delete selected item from Quick Access List
      */
     void slotDeleteSelected();
-
 };
 
 } // namespace Digikam
