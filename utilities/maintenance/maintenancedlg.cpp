@@ -88,6 +88,7 @@ public:
         qualityScanMode(0),
         faceScannedHandling(0),
         metadataSetup(0),
+        qualitySetup(0),
         syncDirection(0),
         hbox(0),
         vbox(0),
@@ -236,7 +237,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     d->vbox               = new KVBox;
     KHBox* const hbox11   = new KHBox(d->vbox);
     new QLabel(i18n("Scan Mode: "), hbox11);
-    QWidget* const space7  = new QWidget(hbox11);
+    QWidget* const space7 = new QWidget(hbox11);
     hbox11->setStretchFactor(space7, 10);
 
     d->qualityScanMode    = new QComboBox(hbox11);
