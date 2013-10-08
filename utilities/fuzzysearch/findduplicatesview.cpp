@@ -63,6 +63,7 @@ public:
 
     Private()
     {
+        includeAlbumsLabel = 0;
         listView           = 0;
         scanDuplicatesBtn  = 0;
         updateFingerPrtBtn = 0;
