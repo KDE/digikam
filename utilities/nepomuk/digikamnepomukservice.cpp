@@ -288,13 +288,13 @@ void DkNepomukService::enableSyncToNepomuk(bool syncToNepomuk)
     if (d->syncToNepomuk)
     {
         connect(DatabaseAccess::databaseWatch(), SIGNAL(imageChange(ImageChangeset)),
-                this, SLOT(slotImageChange(ImageChangeset)));
+                this, SLOT(slotImageChange(ImageChangeset)), Qt::QueuedConnection);
 
         connect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(ImageTagChangeset)),
-                this, SLOT(slotImageTagChange(ImageTagChangeset)));
+                this, SLOT(slotImageTagChange(ImageTagChangeset)), Qt::QueuedConnection);
 
         connect(DatabaseAccess::databaseWatch(), SIGNAL(tagChange(TagChangeset)),
-                this, SLOT(slotTagChange(TagChangeset)));
+                this, SLOT(slotTagChange(TagChangeset)), Qt::QueuedConnection);
 
         // initial pushing to Nepomuk?
         if (!hasSyncToNepomuk())
@@ -688,9 +688,13 @@ void DkNepomukService::syncNepomukToDigikam()
 
 void DkNepomukService::syncImgRatingToDigikam(const KUrl& fileUrl, int rating)
 {
+    Nepomuk2::Resource res(fileUrl);
 
+    if(d->checkIgnoreUris(res.uri(), NaoRating))
+        return;
     // If the path is not in digikam collections, info will be null.
     // It does the same check first that we would be doing here
+
     ImageInfo info(fileUrl);
 
     if(info.isNull())
@@ -708,6 +712,10 @@ void DkNepomukService::syncImgRatingToDigikam(const KUrl& fileUrl, int rating)
 
 void DkNepomukService::syncImgCommentToDigikam(const KUrl& fileUrl, const QString& comment)
 {
+    Nepomuk2::Resource res(fileUrl);
+
+    if(d->checkIgnoreUris(res.uri(), NaoDescription))
+        return;
     // If the path is not in digikam collections, info will be null.
     // It does the same check first that we would be doing here
     ImageInfo info(fileUrl);
@@ -728,6 +736,11 @@ void DkNepomukService::syncImgCommentToDigikam(const KUrl& fileUrl, const QStrin
 
 void DkNepomukService::syncImgTagsToDigikam(const KUrl& fileUrl, const QList<QUrl>& tags)
 {
+
+    Nepomuk2::Resource res(fileUrl);
+
+    if(d->checkIgnoreUris(res.uri(), NaoTags))
+        return;
 
     QList<int> tagIdsForInfo;
     ImageInfo info(fileUrl);
