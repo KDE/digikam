@@ -77,12 +77,6 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotThreadFinished();
-
-private:
-    /**
-     * Tags Manager require only tag sync
-     */
-    bool tagsOnly;
 };
 
 }  // namespace Digikam
