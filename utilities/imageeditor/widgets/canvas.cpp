@@ -323,7 +323,7 @@ QRect Canvas::getSelectedArea() const
 QRect Canvas::visibleArea() const
 {
     //return (QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight()));
-    return (d_ptr->canvasItem->boundingRect().toRect());
+    return (mapToScene(viewport()->geometry()).boundingRect().toRect());
 }
 
 EditorCore* Canvas::interface() const
@@ -376,7 +376,10 @@ void Canvas::updateContentsSize(bool deleteRubber)
         }
     }
 
-    setSceneRect(d_ptr->canvasItem->boundingRect());
+    QPoint center(d_ptr->canvasItem->boundingRect().center().toPoint());
+    QSize canvasItemSize = d_ptr->canvasItem->image().size();
+    QPoint topLeft = QPoint(center.x()- canvasItemSize.width()/2, center.y()-canvasItemSize.height()/2);
+    setSceneRect(QRect(topLeft, canvasItemSize));
     viewport()->setUpdatesEnabled(true); //necessary
 }
 
@@ -567,7 +570,6 @@ void Canvas::toggleFitToWindow()
 
 void Canvas::setFitToWindow(bool fit)
 {
-    qDebug()<<"setFitToWindow";
     d_ptr->autoZoom = fit;
 
     if (d_ptr->autoZoom)
