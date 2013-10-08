@@ -143,17 +143,17 @@ int ListItem::row() const
     return 0;
 }
 
-bool ListItem::containsItem(ListItem* item)
+ListItem* ListItem::containsItem(ListItem* item)
 {
     /** We need to compare items and not pointers **/
     for(int it=0; it < childItems.size(); ++it)
     {
         if(item->equal(childItems.at(it)))
         {
-            return true;
+            return childItems.at(it);
         }
     }
-    return false;
+    return NULL;
 }
 
 bool ListItem::equal(ListItem* item)

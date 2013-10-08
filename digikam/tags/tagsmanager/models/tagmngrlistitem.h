@@ -53,7 +53,15 @@ public:
 
     QList<ListItem*> allChildren() { return childItems; }
     QList<int> getTagIds() const { return tagIds; }
-    bool containsItem(ListItem* item);
+    /**
+     * @brief containsItem  - search child items if contains a ListItem with
+     *                        the same data as item
+     * @param item          - ListItem pointer for which we should search if there
+     *                        is a similar item
+     * @return              - NULL if no similar item was found and a valid ListItem
+     *                        if a ListItem with the same data was found
+     */
+    ListItem* containsItem(ListItem* item);
     bool equal(ListItem* item);
 
 private:

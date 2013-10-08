@@ -49,14 +49,22 @@ ListItem* TagMngrListModel::addItem(QList<QVariant> values)
 {
     emit layoutAboutToBeChanged();
     ListItem* item = new ListItem(values, rootItem);
-    if(!(rootItem->containsItem(item)))
+
+    /** containsItem will return a valid pointer if item with the same
+     *  values is already added to it's children list.
+     */
+    ListItem* existingItem = rootItem->containsItem(item);
+    if(!existingItem)
     {
         rootItem->appendChild(item);
+        emit layoutChanged();
+        return item;
     }
-
-    emit layoutChanged();
-
-    return item;
+    else
+    {
+        delete item;
+        return existingItem;
+    }
 }
 
 QList< ListItem* > TagMngrListModel::allItems()
@@ -68,6 +76,7 @@ void TagMngrListModel::deleteItem(ListItem* item)
 {
     emit layoutAboutToBeChanged();
     rootItem->deleteChild(item);
+    delete item;
     emit layoutChanged();
 }
 int TagMngrListModel::columnCount(const QModelIndex &parent) const
