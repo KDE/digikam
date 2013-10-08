@@ -22,26 +22,35 @@
  *
  * ============================================================ */
 
+#include "taglist.moc"
+
+// Qt includes
+
 #include <QVBoxLayout>
 #include <QListWidget>
 #include <QPushButton>
 #include <QVariant>
 
+// KDE includes
+
 #include <kdebug.h>
 
-#include "taglist.h"
+// Local includes
+
 #include "albumtreeview.h"
 #include "tagmngrtreeview.h"
 #include "tagmngrlistmodel.h"
 #include "tagmngrlistview.h"
 #include "tagmngrlistitem.h"
 
-namespace Digikam {
+namespace Digikam
+{
 
-class TagList::TagListPriv
+class TagList::Private
 {
 public:
-    TagListPriv()
+
+    Private()
     {
         addButton       = 0;
         tagList         = 0;
@@ -49,24 +58,22 @@ public:
         treeView        = 0;
     }
 
-    QPushButton*        addButton;
-    TagMngrListView*    tagList;
-    TagMngrListModel*   tagListModel;
-    TagMngrTreeView*      treeView;
+    QPushButton*                 addButton;
+    TagMngrListView*             tagList;
+    TagMngrListModel*            tagListModel;
+    TagMngrTreeView*             treeView;
     QMap<int, QList<ListItem*> > tagMap;
-
 };
 
-TagList::TagList(TagMngrTreeView* treeView, QWidget* parent)
-        : QWidget(parent), d(new TagListPriv())
+TagList::TagList(TagMngrTreeView* const treeView, QWidget* const parent)
+        : QWidget(parent), d(new Private())
 {
-    d->treeView     = treeView;
-
-    QVBoxLayout* layout = new QVBoxLayout();
-    d->addButton    = new QPushButton(i18n("Add to List"));
+    d->treeView               = treeView;
+    QVBoxLayout* const layout = new QVBoxLayout();
+    d->addButton              = new QPushButton(i18n("Add to List"));
     d->addButton->setToolTip(i18n("Add selected tags to Quick Access List"));
-    d->tagList      = new TagMngrListView(this);
-    d->tagListModel = new TagMngrListModel(this);
+    d->tagList                = new TagMngrListView(this);
+    d->tagListModel           = new TagMngrListModel(this);
 
     d->tagList->setModel(d->tagListModel);
     d->tagList->setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -114,14 +121,14 @@ void TagList::saveSettings()
     {
         QList<int> ids = currentItems.at(it)->getTagIds();
         QString saveData;
+
         for(int jt = 0; jt < ids.size(); jt++)
         {
             saveData.append(QString::number(ids.at(jt)) + " ");
         }
-        group.writeEntry(QString("item%1").arg(it-1),
-                         saveData);
-    }
 
+        group.writeEntry(QString("item%1").arg(it-1), saveData);
+    }
 }
 
 void TagList::restoreSettings()
@@ -135,8 +142,7 @@ void TagList::restoreSettings()
     /**
      * If config is empty add generic All Tags
      */
-    d->tagListModel->addItem(QList<QVariant>()
-                             << QBrush(Qt::cyan, Qt::Dense2Pattern));
+    d->tagListModel->addItem(QList<QVariant>() << QBrush(Qt::cyan, Qt::Dense2Pattern));
 
     if(size == 0 || size < 0)
     {
@@ -146,6 +152,7 @@ void TagList::restoreSettings()
     for(int it = 0; it < size; it++)
     {
         QString data = group.readEntry(QString("item%1").arg(it), "");
+
         if(data.isEmpty())
             continue;
 
@@ -155,14 +162,16 @@ void TagList::restoreSettings()
 
         foreach(QString tagId, ids)
         {
-            TAlbum* item = AlbumManager::instance()->findTAlbum(tagId.toInt());
+            TAlbum* const item = AlbumManager::instance()->findTAlbum(tagId.toInt());
+
             if(item)
             {
                 itemData << item->id();
             }
         }
 
-        ListItem* listItem = d->tagListModel->addItem(itemData);
+        ListItem* const listItem = d->tagListModel->addItem(itemData);
+
         /** Use this map to find all List Items that contain specific tag
          *  usually to remove deleted tag
          */
@@ -171,6 +180,7 @@ void TagList::restoreSettings()
             d->tagMap[tagId].append(listItem);
         }
     }
+
     /** "All Tags" item should be selected **/
     QModelIndex rootIndex = d->tagList->model()->index(0,0);
     d->tagList->setCurrentIndex(rootIndex);
@@ -188,7 +198,7 @@ void TagList::slotAddPressed()
 
     foreach(QModelIndex index, selected)
     {
-        TAlbum* album = static_cast<TAlbum*>(d->treeView->albumForIndex(index));
+        TAlbum* const album = static_cast<TAlbum*>(d->treeView->albumForIndex(index));
         itemData << album->id();
     }
     ListItem* listItem = d->tagListModel->addItem(itemData);
@@ -200,35 +210,32 @@ void TagList::slotAddPressed()
     {
         d->tagMap[tagId].append(listItem);
     }
-
 }
 
 void TagList::slotSelectionChanged()
 {
-    QModelIndex index = d->tagList->currentIndex();
-
-    ListItem* item = static_cast<ListItem*>(index.internalPointer());
-
-    TagsManagerFilterModel* filterModel = d->treeView->getFilterModel();
+    QModelIndex index                         = d->tagList->currentIndex();
+    ListItem* const item                      = static_cast<ListItem*>(index.internalPointer());
+    TagsManagerFilterModel* const filterModel = d->treeView->getFilterModel();
 
     filterModel->setQuickListTags(item->getTagIds());
-
 }
 
 void TagList::slotTagDeleted(Album* album)
 {
-    TAlbum* talbum = dynamic_cast<TAlbum*>(album);
+    TAlbum* const talbum = dynamic_cast<TAlbum*>(album);
 
     if(!talbum)
         return;
-;
+
     int delId = talbum->id();
 
     QList<ListItem*> items = d->tagMap[delId];
 
-    foreach(ListItem* item, items)
+    foreach(ListItem* const item, items)
     {
         item->removeTagId(delId);
+
         if(item->getTagIds().isEmpty())
         {
             d->tagListModel->deleteItem(item);
@@ -246,8 +253,9 @@ void TagList::slotDeleteSelected()
 
     foreach(QModelIndex index, sel)
     {
-        ListItem* item = static_cast<ListItem*>(index.internalPointer());
+        ListItem* const item = static_cast<ListItem*>(index.internalPointer());
         d->tagListModel->deleteItem(item);
     }
 }
-}
+
+} // namespace Digikam

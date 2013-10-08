@@ -22,6 +22,8 @@
  *
  * ============================================================ */
 
+// Qt includes
+
 #include <QWidget>
 
 namespace Digikam
@@ -35,7 +37,8 @@ class TagList : public QWidget
     Q_OBJECT
 
 public:
-    TagList(TagMngrTreeView* treeView, QWidget* parent);
+
+    TagList(TagMngrTreeView* const treeView, QWidget* const parent);
     ~TagList();
 
     /**
@@ -48,7 +51,9 @@ public:
      *                          config and populate model with data
      */
     void restoreSettings();
+
 private Q_SLOTS:
+
     void slotAddPressed();
 
     void slotSelectionChanged();
@@ -58,9 +63,9 @@ private Q_SLOTS:
     void slotDeleteSelected();
 
 private:
-    class TagListPriv;
 
-    TagListPriv* const d;
+    class Private;
+    Private* const d;
 };
 
-}
+} // namespace Digikam
