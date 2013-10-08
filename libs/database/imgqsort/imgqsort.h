@@ -46,7 +46,7 @@ public:
 
     /** Perform  quality estimation and return Pick Label value accordingly.
      */
-    PickLabel analyseQuality(const DImg& img, ImageQualitySettings imq);
+    PickLabel analyseQuality(const DImg& img, const ImageQualitySettings& imq);
 
 private:
 
@@ -62,7 +62,7 @@ private:
     void   CannyThreshold(int, void*) const;
 
     double blurdetector()        const;
-    short blurdetector2()       const;
+    short  blurdetector2()       const;
     double noisedetector()       const;
     int    compressiondetector() const;
     bool   runningFlag()         const;

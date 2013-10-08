@@ -68,38 +68,43 @@ public:
             fimg[c] = 0;
         }
 
-        edgeThresh   = 1;
-        lowThreshold = 0.4;   // given in research paper
-        ratio        = 3;
-        kernel_size  = 3;
+        edgeThresh        = 1;
+        lowThreshold      = 0.4;   // given in research paper
+        ratio             = 3;
+        kernel_size       = 3;
+        blurrejected      = 0.0;
+        blur              = 0.0;
+        acceptedThreshold = 0.0;
+        pendingThreshold  = 0.0;
+        rejectedThreshold = 0.0;
     }
 
-    float*     fimg[3];
-    const uint clusterCount;
-    const uint size;   // Size of squared original image.
+    float*               fimg[3];
+    const uint           clusterCount;
+    const uint           size;   // Size of squared original image.
 
-    Mat        src_gray;
-    Mat        detected_edges;
+    Mat                  src_gray;
+    Mat                  detected_edges;
 
-    int        edgeThresh;
-    int        ratio;
-    int        kernel_size;
+    int                  edgeThresh;
+    int                  ratio;
+    int                  kernel_size;
 
-    double     lowThreshold;
+    double               lowThreshold;
 
-    DImg       image;
-    DImg       neimage;          //noise estimation image[ for color]
+    DImg                 image;
+    DImg                 neimage;          // noise estimation image[ for color]
 
     ImageQualitySettings imq;
 
-    double blurrejected;
-    double blur;
+    double               blurrejected;
+    double               blur;
 
-    double acceptedThreshold;
-    double pendingThreshold;
-    double rejectedThreshold;
+    double               acceptedThreshold;
+    double               pendingThreshold;
+    double               rejectedThreshold;
 
-    QString     path;   // Path to host result file
+    QString              path;             // Path to host result file
 };
 
 ImgQSort::ImgQSort()
@@ -122,7 +127,7 @@ bool ImgQSort::runningFlag() const
     return true;
 }
 
-PickLabel ImgQSort::analyseQuality(const DImg& img, ImageQualitySettings imq)
+PickLabel ImgQSort::analyseQuality(const DImg& img, const ImageQualitySettings& imq)
 {
     // For ImgQNREstimate
     // Use the Top/Left corner of 256x256 pixels to analyse noise contents from image.
@@ -136,26 +141,25 @@ PickLabel ImgQSort::analyseQuality(const DImg& img, ImageQualitySettings imq)
     d->imq.mediumQPending    = imq.mediumQPending;
     d->imq.highQAccepted     = imq.highQAccepted;
     d->imq.speed             = imq.speed;
-    d->imq.rejectedThreshold    = imq.rejectedThreshold;
-    d->imq.pendingThreshold     = imq.pendingThreshold;
-    d->imq.acceptedThreshold    = imq.acceptedThreshold;
-    d->imq.blurWeight                  = imq.blurWeight;
-    d->imq.noiseWeight                = imq.noiseWeight;
-    d->imq.compressionWeight    = imq.compressionWeight;
+    d->imq.rejectedThreshold = imq.rejectedThreshold;
+    d->imq.pendingThreshold  = imq.pendingThreshold;
+    d->imq.acceptedThreshold = imq.acceptedThreshold;
+    d->imq.blurWeight        = imq.blurWeight;
+    d->imq.noiseWeight       = imq.noiseWeight;
+    d->imq.compressionWeight = imq.compressionWeight;
+    d->image                 = img;
+    d->neimage               = img;
 
-
-    d->image   = img;
-    d->neimage = img;
     readImage();
 
-    double blur=0.0;
-    short blur2=0;
-    double noise=0.0;
-    int compressionlevel=0;
-    float finalquality=0.0;
+    double blur             = 0.0;
+    short  blur2            = 0;
+    double noise            = 0.0;
+    int    compressionlevel = 0;
+    float  finalquality     = 0.0;
 
     //If blur option is selected in settings, run the algorithms
-    if (d->imq.detectBlur==true)
+    if (d->imq.detectBlur)
     {
         //Returns blur value between 0 and 1.
         //If NaN is returned just assign NoPickLabel
@@ -168,7 +172,7 @@ PickLabel ImgQSort::analyseQuality(const DImg& img, ImageQualitySettings imq)
         kDebug() << "Amount of Blur present in image [using LoG Filter] is : " << blur2;
     }
 
-    if (d->imq.detectNoise==true)
+    if (d->imq.detectNoise)
     {
         //Some images give very low noise value. Assign NoPickLabel in that case.
         //Returns noise value between 0 and 1.
@@ -176,7 +180,7 @@ PickLabel ImgQSort::analyseQuality(const DImg& img, ImageQualitySettings imq)
         kDebug() << "Amount of Noise present in image is : " << noise;
     }
 
-    if (d->imq.detectCompression==true)
+    if (d->imq.detectCompression)
     {
         //Returns number of blocks in the image.
         compressionlevel = compressiondetector();
@@ -192,13 +196,13 @@ PickLabel ImgQSort::analyseQuality(const DImg& img, ImageQualitySettings imq)
         QTextStream oms(&filems);
         oms << "File:" << img.originalFilePath() << endl;
 
-        if (d->imq.detectBlur==true)
+        if (d->imq.detectBlur)
         {
             oms << "Blur Present:" << blur << endl;
             oms << "Blur Present(using LoG filter):"<< blur2 << endl;
         }
 
-        if (d->imq.detectNoise==true)
+        if (d->imq.detectNoise)
         {
             oms << "Noise Present:" << noise << endl;
         }
@@ -214,27 +218,27 @@ PickLabel ImgQSort::analyseQuality(const DImg& img, ImageQualitySettings imq)
     //Calculating finalquality
 
     //all the results to have a range of 1 to 100.
-    float finalblur = (blur*100)  + ((blur2/32767)*100);
-    float finalnoise = noise*100;
-    float finalcompression = (compressionlevel / 1024) * 100; //we are processing 1024 pixels size image
+    float finalblur        = (blur*100)  + ((blur2/32767)*100);
+    float finalnoise       = noise*100;
+    float finalcompression = (compressionlevel / 1024) * 100; // we are processing 1024 pixels size image
 
-    finalquality = finalblur*d->imq.blurWeight +
+    finalquality = finalblur*d->imq.blurWeight   +
                    finalnoise*d->imq.noiseWeight +
                    finalcompression*d->imq.compressionWeight;
 
     finalquality = finalquality / 100;
     //Assigning PickLabels
 
-    if (finalquality==0.0)
+    if (finalquality == 0.0)
     {
         //Algorithms have not been run. So return noPickLabel
         return NoPickLabel;
     }
-    else if (finalquality<d->imq.rejectedThreshold)
+    else if (finalquality < d->imq.rejectedThreshold)
     {
         return RejectedLabel;
     }
-    else if (finalquality>d->imq.rejectedThreshold && finalquality<d->imq.acceptedThreshold)
+    else if (finalquality > d->imq.rejectedThreshold && finalquality<d->imq.acceptedThreshold)
     {
         return PendingLabel;
     }
@@ -257,7 +261,7 @@ void ImgQSort::readImage()
     d->image.putImageData(mixer.getTargetImage().bits());
     d->src_gray = cvCreateMat(d->image.numPixels(), 1, CV_8UC1);
 
-    if (d->imq.detectNoise==true)
+    if (d->imq.detectNoise)
     {
         DColor col;
 
@@ -325,9 +329,9 @@ short ImgQSort::blurdetector2() const
 
     // aperture size of 1 corresponds to the correct matrix
     int kernel_size = 3;
-    int scale = 1;
-    int delta = 0;
-    int ddepth = CV_16S;
+    int scale       = 1;
+    int delta       = 0;
+    int ddepth      = CV_16S;
 
     Laplacian(noise_free, out, ddepth, kernel_size, scale, delta, BORDER_DEFAULT );
 
