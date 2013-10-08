@@ -66,7 +66,8 @@ public:
         setRejected(0),
         setPending(0),
         setAccepted(0),
-        setSpeed(0)
+        setSpeed(0),
+        setCompressionWeight(0)
     {}
 
     KVBox*        optionsView;
@@ -86,7 +87,6 @@ public:
     KIntNumInput* setBlurWeight;
     KIntNumInput* setNoiseWeight;
     KIntNumInput* setCompressionWeight;
-
 };
 
 // --------------------------------------------------------
@@ -167,9 +167,6 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
     QLabel* const workIcon3 = new QLabel(hlay3);
     workIcon3->setPixmap(SmallIcon("flag-green"));
 
-    QWidget* const vspace   = new QWidget(d->optionsView);
-    d->optionsView->setStretchFactor(vspace, 10);
-
     // ------------------------------------------------------------------------------
 
     d->setRejectedThreshold = new KIntNumInput(5, d->optionsView);
@@ -208,6 +205,9 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
     d->setCompressionWeight->setLabel(i18n("Compression Weight:"), Qt::AlignLeft | Qt::AlignTop);
     d->setCompressionWeight->setWhatsThis(i18n("Weight to assign to Compression Algorithm"));
 
+    QWidget* const vspace   = new QWidget(d->optionsView);
+    d->optionsView->setStretchFactor(vspace, 10);
+
     connect(d->enableSorter, SIGNAL(toggled(bool)),
             d->optionsView, SLOT(setEnabled(bool)));
 
@@ -231,12 +231,12 @@ void SetupImageQualitySorter::applySettings()
     imq.lowQRejected      = d->setRejected->isChecked();
     imq.mediumQPending    = d->setPending->isChecked();
     imq.highQAccepted     = d->setAccepted->isChecked();
-    imq.rejectedThreshold              = d->setRejectedThreshold->value();
-    imq.pendingThreshold              = d->setPendingThreshold->value();
-    imq.acceptedThreshold              = d->setAcceptedThreshold->value();
-    imq.blurWeight            = d->setBlurWeight->value();
-    imq.noiseWeight             = d->setNoiseWeight->value();
-    imq.compressionWeight              = d->setCompressionWeight->value();
+    imq.rejectedThreshold = d->setRejectedThreshold->value();
+    imq.pendingThreshold  = d->setPendingThreshold->value();
+    imq.acceptedThreshold = d->setAcceptedThreshold->value();
+    imq.blurWeight        = d->setBlurWeight->value();
+    imq.noiseWeight       = d->setNoiseWeight->value();
+    imq.compressionWeight = d->setCompressionWeight->value();
 
     imq.writeToConfig();
 }
