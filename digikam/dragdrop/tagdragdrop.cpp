@@ -94,6 +94,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
             {
                 return false;
             }
+
             if (choice == gotoAction)
             {
                 TAlbum* newParentTag = 0;
@@ -111,9 +112,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
 
                 QString errMsg;
 
-                if (!AlbumManager::instance()->moveTAlbum(talbum,
-                                                          newParentTag,
-                                                          errMsg))
+                if (!AlbumManager::instance()->moveTAlbum(talbum, newParentTag, errMsg))
                 {
                     KMessageBox::error(view, errMsg);
                 }
@@ -195,9 +194,13 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
 
         for(int it = 0 ; it < selTags.count(); ++it)
         {
-            TAlbum* temp = dynamic_cast<TAlbum*>(selTags.at(it));
-            tagIdList << temp->id();
-            tagNames << temp->title();
+            TAlbum* const temp = dynamic_cast<TAlbum*>(selTags.at(it));
+
+            if (temp)
+            {
+                tagIdList << temp->id();
+                tagNames << temp->title();
+            }
         }
 
         if (e->keyboardModifiers() == Qt::ControlModifier)
@@ -311,10 +314,12 @@ QMimeData* TagDragDropHandler::createMimeData(const QList<Album*>& albums)
     }
 
         QList<int> ids;
-        foreach(Album* album, albums)
+
+        foreach(Album* const album, albums)
         {
             ids << album->id();
         }
+
         return new DTagListDrag(ids);
 }
 
