@@ -181,6 +181,11 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     enableItems(TagPropWidget::DisabledAll);
 }
 
+TagPropWidget::~TagPropWidget()
+{
+    delete d;
+}
+
 void TagPropWidget::slotSelectionChanged(QList<Album*> albums)
 {
 
@@ -319,6 +324,7 @@ void TagPropWidget::slotSaveChanges()
         for(it = d->selectedAlbums.begin(); it != d->selectedAlbums.end(); ++it)
         {
             TAlbum* const tag = *it;
+
             if (tag && tag->icon() != d->icon)
             {
                 QString errMsg;
@@ -330,8 +336,10 @@ void TagPropWidget::slotSaveChanges()
             }
         }
     }
+
     d->changed = false;
 }
+
 void TagPropWidget::slotDiscardChanges()
 {
     if(d->selectedAlbums.size() == 1)
@@ -354,7 +362,6 @@ void TagPropWidget::slotDiscardChanges()
 
 void TagPropWidget::enableItems(TagPropWidget::ItemsEnable value)
 {
-
     bool val        = false;
     bool iconEnable = false;
 

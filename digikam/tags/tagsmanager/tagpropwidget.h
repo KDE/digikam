@@ -50,6 +50,7 @@ public:
 public:
 
     TagPropWidget(QWidget* const parent);
+    ~TagPropWidget();
 
 public Q_SLOTS:
 
