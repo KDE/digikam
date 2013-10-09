@@ -54,9 +54,9 @@ public:
     int row() const;
     ListItem* parent();
 
-    void deleteChild(ListItem* item) { childItems.removeOne(item); }
-    QList<ListItem*> allChildren()   { return childItems;          }
-    QList<int> getTagIds() const     { return tagIds;              }
+    void deleteChild(ListItem* item);
+    QList<ListItem*> allChildren();
+    QList<int> getTagIds() const;
 
     /**
      * @brief containsItem  - search child items if contains a ListItem with
@@ -72,11 +72,8 @@ public:
 
 private:
 
-    QList<ListItem*> childItems;
-    QList<QVariant> itemData;
-    QList<int> tagIds;
-    QList<int> tagsToDel;
-    ListItem *parentItem;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

@@ -39,62 +39,95 @@
 namespace Digikam
 {
 
-ListItem::ListItem(QList<QVariant>& data, ListItem* const parent)
+class ListItem::Private
 {
-    parentItem = parent;
-    itemData.append(data);
+public:
+
+    Private()
+    {
+        parentItem = 0;
+    }
+
+    QList<ListItem*> childItems;
+    QList<QVariant>  itemData;
+    QList<int>       tagIds;
+    QList<int>       tagsToDel;
+    ListItem*        parentItem;
+};
+
+ListItem::ListItem(QList<QVariant>& data, ListItem* const parent)
+    : d(new Private())
+{
+    d->parentItem = parent;
+    d->itemData.append(data);
 
     data.pop_front();
 
     foreach(QVariant val, data)
     {
-        tagIds.append(val.toInt());
+        d->tagIds.append(val.toInt());
     }
 }
 
 ListItem::~ListItem()
 {
-    qDeleteAll(childItems);
+    qDeleteAll(d->childItems);
+    delete d;
+}
+
+void ListItem::deleteChild(ListItem* item)
+{
+    d->childItems.removeOne(item);
+}
+
+QList<ListItem*> ListItem::allChildren()
+{
+    return d->childItems;
+}
+
+QList<int> ListItem::getTagIds() const
+{
+    return d->tagIds;
 }
 
 void ListItem::appendChild(ListItem* item)
 {
-    childItems.append(item);
+    d->childItems.append(item);
 }
 
 void ListItem::removeTagId(int tagId)
 {
-    tagIds.removeOne(tagId);
+    d->tagIds.removeOne(tagId);
 }
 
 ListItem* ListItem::child(int row)
 {
-    return childItems.value(row);
+    return d->childItems.value(row);
 }
 
 int ListItem::childCount() const
 {
-    return childItems.count();
+    return d->childItems.count();
 }
 
 void ListItem::deleteChild(int row)
 {
-    return childItems.removeAt(row);
+    return d->childItems.removeAt(row);
 }
 
 void ListItem::removeAll()
 {
-    childItems.clear();
+    d->childItems.clear();
 }
 
 void ListItem::appendList(QList<ListItem*> items)
 {
-    childItems.append(items);
+    d->childItems.append(items);
 }
 
 int ListItem::columnCount() const
 {
-    return itemData.count();
+    return d->itemData.count();
 }
 
 QVariant ListItem::data(int role) const
@@ -106,7 +139,7 @@ QVariant ListItem::data(int role) const
         {
             QString display;
 
-            foreach(int tagId, tagIds)
+            foreach(int tagId, d->tagIds)
             {
                 TAlbum* const album = AlbumManager::instance()->findTAlbum(tagId);
 
@@ -130,7 +163,7 @@ QVariant ListItem::data(int role) const
         }
         case Qt::BackgroundRole:
         {
-            return itemData.first();
+            return d->itemData.first();
         }
         default:
         {
@@ -141,18 +174,18 @@ QVariant ListItem::data(int role) const
 
 void ListItem::setData(QList<QVariant>& data)
 {
-    itemData = data;
+    d->itemData = data;
 }
 
 ListItem* ListItem::parent()
 {
-    return parentItem;
+    return d->parentItem;
 }
 
 int ListItem::row() const
 {
-    if (parentItem)
-        return parentItem->childItems.indexOf(const_cast<ListItem*>(this));
+    if (d->parentItem)
+        return d->parentItem->d->childItems.indexOf(const_cast<ListItem*>(this));
 
     return 0;
 }
@@ -161,11 +194,11 @@ ListItem* ListItem::containsItem(ListItem* item)
 {
     // We need to compare items and not pointers
 
-    for(int it=0; it < childItems.size(); ++it)
+    for(int it=0; it < d->childItems.size(); ++it)
     {
-        if(item->equal(childItems.at(it)))
+        if(item->equal(d->childItems.at(it)))
         {
-            return childItems.at(it);
+            return d->childItems.at(it);
         }
     }
 
@@ -174,7 +207,7 @@ ListItem* ListItem::containsItem(ListItem* item)
 
 bool ListItem::equal(ListItem* item)
 {
-    return (this->tagIds) == (item->getTagIds());
+    return (this->d->tagIds) == (item->getTagIds());
 }
 
 } // namespace Digikam
