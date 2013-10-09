@@ -56,9 +56,9 @@ public:
      * @brief allItems  - return all items from List, usually to be saved
      *                    in KConfig
      */
-    QList<ListItem*> allItems();
+    QList<ListItem*> allItems() const;
 
-    void deleteItem(ListItem* item);
+    void deleteItem(ListItem* const item);
 
     /**
      * Standard methods to be implemented when subcassing QAbstractItemModel
@@ -88,15 +88,12 @@ public:
     QMimeData* mimeData(const QModelIndexList& indexes) const;
     bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent);
 
-    QList<int> getDragNewSelection() const
-    {
-        return dragNewSelection;
-    }
+    QList<int> getDragNewSelection() const;
 
 private:
 
-    ListItem*  rootItem;
-    QList<int> dragNewSelection;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
