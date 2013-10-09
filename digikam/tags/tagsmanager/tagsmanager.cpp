@@ -52,6 +52,7 @@
 
 // local includes
 
+#include "config-digikam.h"
 #include "tagpropwidget.h"
 #include "tagmngrtreeview.h"
 #include "taglist.h"
@@ -178,11 +179,9 @@ void TagsManager::setupUi(KMainWindow* const Dialog)
      d->searchBar->setMaximumWidth(200);
      d->searchBar->setFilterModel(d->tagMngrView->albumFilterModel());
 
-
-
      /** Tree Widget & Actions + Tag Properties sidebar **/
 
-     d->treeWindow = new KMainWindow(this);
+     d->treeWindow    = new KMainWindow(this);
      setupActions();
 
      d->treeWinLayout = new QHBoxLayout();
@@ -194,7 +193,7 @@ void TagsManager::setupUi(KMainWindow* const Dialog)
      d->treeWinLayout->addWidget(d->tagPropWidget,3);
      d->tagPropWidget->hide();
 
-     d->listView = new TagList(d->tagMngrView,Dialog);
+     d->listView      = new TagList(d->tagMngrView,Dialog);
      d->listView->setMaximumWidth(300);
 
      QWidget* const treeCentralW = new QWidget(this);
@@ -232,8 +231,8 @@ void TagsManager::slotItemChanged()
 void TagsManager::slotAddAction()
 {
     TAlbum* const parent = d->tagMngrView->currentAlbum();
-    QString      title, icon;
-    QKeySequence ks;
+    QString       title, icon;
+    QKeySequence  ks;
 
     if (!TagEditDlg::tagCreate(kapp->activeWindow(), parent, title, icon, ks))
     {
@@ -302,67 +301,68 @@ void TagsManager::slotDeleteAction()
 
         sortedTags.insert(deph,tag);
     }
-            // ask for deletion of children
-        if (!tagWithChildrens.isEmpty())
-        {
-            int result = KMessageBox::warningContinueCancel(this,
-                                                            i18n("Tags '%1' has one or more subtags. "
-                                                                "Deleting this will also delete "
-                                                                "the subtag."
-                                                                "Do you want to continue?",
-                                                                tagWithChildrens));
 
-            if (result != KMessageBox::Continue)
+    // ask for deletion of children
+
+    if (!tagWithChildrens.isEmpty())
+    {
+        int result = KMessageBox::warningContinueCancel(this,
+                                                        i18n("Tags '%1' has one or more subtags. "
+                                                            "Deleting this will also delete "
+                                                            "the subtag."
+                                                            "Do you want to continue?",
+                                                            tagWithChildrens));
+
+        if (result != KMessageBox::Continue)
+        {
+            return;
+        }
+    }
+
+    QString message;
+
+    if (!tagWithImages.isEmpty())
+    {
+        message = i18n("Tags '%1' are assigned to one or more items. "
+                        "Do you want to continue?",
+                        tagWithImages);
+    }
+    else
+    {
+        message = i18n("Delete '%1' tag(s)?", tagWithImages);
+    }
+
+    int result = KMessageBox::warningContinueCancel(0, message,
+                                                    i18n("Delete Tag"),
+                                                    KGuiItem(i18n("Delete"),
+                                                            "edit-delete"));
+
+    if (result == KMessageBox::Continue)
+    {
+        QMultiMap<int, TAlbum*>::iterator it;
+
+        /**
+         * QMultimap doesn't provide reverse iterator, -1 is required
+         * because end() points after the last element
+         */
+        for(it = sortedTags.end()-1; it != sortedTags.begin()-1; --it)
+        {
+            QString errMsg;
+
+            if (!AlbumManager::instance()->deleteTAlbum(it.value(), errMsg))
             {
-                return;
+                KMessageBox::error(0, errMsg);
             }
         }
-
-        QString message;
-
-        if (!tagWithImages.isEmpty())
-        {
-            message = i18n("Tags '%1' are assigned to one or more items. "
-                            "Do you want to continue?",
-                            tagWithImages);
-        }
-        else
-        {
-            message = i18n("Delete '%1' tag(s)?", tagWithImages);
-        }
-
-        int result = KMessageBox::warningContinueCancel(0, message,
-                                                        i18n("Delete Tag"),
-                                                        KGuiItem(i18n("Delete"),
-                                                                "edit-delete"));
-
-        if (result == KMessageBox::Continue)
-        {
-            QMultiMap<int, TAlbum*>::iterator it;
-            /**
-             * QMultimap doesn't provide reverse iterator, -1 is required
-             * because end() points after the last element
-             */
-            for(it = sortedTags.end()-1; it != sortedTags.begin()-1; --it)
-            {
-                QString errMsg;
-
-                if (!AlbumManager::instance()->deleteTAlbum(it.value(), errMsg))
-                {
-                    KMessageBox::error(0, errMsg);
-                }
-            }
-        }
+    }
 }
-
-
 
 void TagsManager::slotResetTagIcon()
 {
     QString errMsg;
 
     QList<Album*> selected = d->tagMngrView->selectedTags();
-    QString icon = QString("tag");
+    QString icon           = QString("tag");
     QList<Album*>::iterator it;
 
     for(it = selected.begin(); it != selected.end(); ++it )
@@ -405,7 +405,7 @@ void TagsManager::slotInvertSel()
             continue;
         }
 
-        int it = 0;
+        int it            = 0;
         QModelIndex child = current.child(it++,0);
 
         while(child.isValid())
@@ -574,6 +574,7 @@ void TagsManager::slotRemoveTagsFromImgs()
         FileActionMngr::instance()->removeTag(imgList, tag->id());
     }
 }
+
 void TagsManager::closeEvent(QCloseEvent* event)
 {
     d->listView->saveSettings();
@@ -747,4 +748,5 @@ void TagsManager::setupActions()
     connect(d->rightToolBar->tab(0),SIGNAL(clicked()),
             this, SLOT(slotOpenProperties()));
 }
+
 } // namespace Digikam
