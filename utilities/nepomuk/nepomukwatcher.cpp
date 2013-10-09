@@ -21,17 +21,27 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-#include "nepomukwatcher.h"
-#include "digikamnepomukservice.h"
+
+#include "nepomukwatcher.moc"
+
+// Qt includes
+
+#include <QVariant>
+
+// KDE includes
+
 #include <kdebug.h>
 #include <kurl.h>
 
 #include <Nepomuk2/ResourceWatcher>
 #include <Nepomuk2/Variant>
-#include <QVariant>
-#include <Soprano/Vocabulary/NAO>
 #include <Nepomuk2/Vocabulary/NFO>
 #include <Nepomuk2/Vocabulary/NIE>
+#include <Soprano/Vocabulary/NAO>
+
+// Local includes
+
+#include "digikamnepomukservice.h"
 
 using namespace Nepomuk2;
 using namespace Soprano::Vocabulary;
@@ -39,20 +49,24 @@ using namespace Soprano::Vocabulary;
 namespace Digikam
 {
 
-class NepomukWatcher::NepomukWatcherPriv
+class NepomukWatcher::Private
 {
 public:
-    NepomukWatcherPriv()
+
+    Private()
     {
         resWatch = 0;
+        tagWatch = 0;
+        parent   = 0;
     };
-    ResourceWatcher* resWatch;
-    ResourceWatcher* tagWatch;
+
+    ResourceWatcher*  resWatch;
+    ResourceWatcher*  tagWatch;
     DkNepomukService* parent;
 };
 
-NepomukWatcher::NepomukWatcher(DkNepomukService* parent)
-    : QObject(parent), d(new NepomukWatcherPriv())
+NepomukWatcher::NepomukWatcher(DkNepomukService* const parent)
+    : QObject(parent), d(new Private())
 {
     d->parent   = parent;
     d->resWatch = new ResourceWatcher();
@@ -68,16 +82,16 @@ NepomukWatcher::NepomukWatcher(DkNepomukService* parent)
     connect(d->resWatch, SIGNAL(propertyAdded(Nepomuk2::Resource,
                                               Nepomuk2::Types::Property,
                                               QVariant)),
-        this, SLOT(slotPropertyAdded(Nepomuk2::Resource,
-                                     Nepomuk2::Types::Property,
-                                     QVariant)));
+            this, SLOT(slotPropertyAdded(Nepomuk2::Resource,
+                                         Nepomuk2::Types::Property,
+                                         QVariant)));
 
     connect(d->resWatch, SIGNAL(propertyRemoved(Nepomuk2::Resource,
                                                 Nepomuk2::Types::Property,
                                                 QVariant)),
-        this, SLOT(slotPropertyRemoved(Nepomuk2::Resource,
-                                       Nepomuk2::Types::Property,
-                                       QVariant)));
+            this, SLOT(slotPropertyRemoved(Nepomuk2::Resource,
+                                           Nepomuk2::Types::Property,
+                                           QVariant)));
 
     connect(d->tagWatch, SIGNAL(resourceCreated(Nepomuk2::Resource, QList<QUrl>)),
             this, SLOT(slotResAdded(Nepomuk2::Resource, QList<QUrl>)));
@@ -96,6 +110,7 @@ NepomukWatcher::~NepomukWatcher()
     d->tagWatch->stop();
     delete d->resWatch;
     delete d->tagWatch;
+    delete d;
 }
 
 void NepomukWatcher::slotPropertyAdded(Resource res, Types::Property prop, QVariant var)
@@ -108,12 +123,14 @@ void NepomukWatcher::slotPropertyAdded(Resource res, Types::Property prop, QVari
         tagList << var.toUrl();
         d->parent->syncImgTagsToDigikam(url, tagList);
     }
+
     if(prop == NAO::numericRating())
     {
         kDebug() << "Will change rating to image";
         KUrl url(res.property(Nepomuk2::Vocabulary::NIE::url()).toUrl());
         d->parent->syncImgRatingToDigikam(url, var.toInt());
     }
+
     if(prop == NAO::description())
     {
         kDebug() << "Will add description";
@@ -121,13 +138,12 @@ void NepomukWatcher::slotPropertyAdded(Resource res, Types::Property prop, QVari
         KUrl url(res.property(Nepomuk2::Vocabulary::NIE::url()).toUrl());
         d->parent->syncImgCommentToDigikam(url, comment);
     }
-
 }
 
 void NepomukWatcher::slotPropertyRemoved(Resource res, Types::Property prop, QVariant var)
 {
-
     kDebug() << (res.type() == NAO::hasTag());
+
     if(prop == NAO::hasTag())
     {
         QUrl tag = var.toUrl();
@@ -135,7 +151,6 @@ void NepomukWatcher::slotPropertyRemoved(Resource res, Types::Property prop, QVa
         KUrl url(res.property(Nepomuk2::Vocabulary::NIE::url()).toUrl());
         d->parent->removeImgTagInDigikam(url, tag);
     }
-
 }
 
 void NepomukWatcher::slotResAdded(Resource res, QList<QUrl> types)
@@ -147,7 +162,7 @@ void NepomukWatcher::slotResAdded(Resource res, QList<QUrl> types)
     }
 }
 
-void NepomukWatcher::slotResRemoved(QUrl url, QList<QUrl> types)
+void NepomukWatcher::slotResRemoved(QUrl /*url*/, QList<QUrl> types)
 {
     kDebug() << "Resource removed +++++++++++++++++";
 
@@ -156,4 +171,5 @@ void NepomukWatcher::slotResRemoved(QUrl url, QList<QUrl> types)
         kDebug() << "Will remove tags";
     }
 }
-}
+
+} // namespace Digikam

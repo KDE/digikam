@@ -21,15 +21,20 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
 #ifndef NEPOMUKWATCHER_H
 #define NEPOMUKWATCHER_H
+
+// KDE includes
 
 #include <Nepomuk2/Resource>
 #include <Nepomuk2/Types/Property>
 
 class QVariant;
+
 namespace Digikam
 {
+
 class DkNepomukService;
 
 class NepomukWatcher : public QObject
@@ -42,7 +47,7 @@ public:
      *                              one for image properties and other for
      *                              tags.
      */
-    NepomukWatcher(DkNepomukService* parent);
+    NepomukWatcher(DkNepomukService* const parent);
     ~NepomukWatcher();
 
 private Q_SLOTS:
@@ -59,6 +64,7 @@ private Q_SLOTS:
      */
     void slotPropertyAdded(Nepomuk2::Resource res,
                            Nepomuk2::Types::Property prop, QVariant var);
+
     /**
      * @brief slotPropertyRemoved - a tag, a rating or a comment was removed
      *                              from Nepomuk image resource
@@ -91,9 +97,11 @@ private Q_SLOTS:
     void slotResRemoved(QUrl url, QList<QUrl> types);
 
 private:
-    class NepomukWatcherPriv;
-    NepomukWatcherPriv* d;
+
+    class Private;
+    Private* const d;
 };
 
-}
+} // namespace Digikam
+
 #endif // NEPOMUKWATCHER_H
