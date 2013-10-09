@@ -24,11 +24,14 @@
 #ifndef LISTMODEL_H
 #define LISTMODEL_H
 
+// Qt includes
+
 #include <QAbstractItemModel>
 #include <QModelIndex>
 #include <QVariant>
 
-namespace Digikam {
+namespace Digikam
+{
 
 class ListItem;
 
@@ -37,7 +40,8 @@ class TagMngrListModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
-    TagMngrListModel(QObject *parent = 0);
+
+    TagMngrListModel(QObject* const parent = 0);
     ~TagMngrListModel();
 
     /**
@@ -59,23 +63,21 @@ public:
     /**
      * Standard methods to be implemented when subcassing QAbstractItemModel
      */
-    QVariant data(const QModelIndex &index, int role) const;
+    QVariant data(const QModelIndex& index, int role) const;
 
-    Qt::ItemFlags flags(const QModelIndex &index) const;
+    Qt::ItemFlags flags(const QModelIndex& index) const;
 
-    QVariant headerData(int section, Qt::Orientation orientation,
-                        int role = Qt::DisplayRole) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
-    QModelIndex index(int row, int column,
-                      const QModelIndex &parent = QModelIndex()) const;
+    QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
 
-    QModelIndex parent(const QModelIndex &index) const;
+    QModelIndex parent(const QModelIndex& index) const;
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const;
 
-    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex& parent = QModelIndex()) const;
 
-    bool setData(const QModelIndex &index, const QVariant &value, int role);
+    bool setData(const QModelIndex& index, const QVariant& value, int role);
 
     /**
      * Reimplemented methods for handling drag-n-drop, encoding and decoding
@@ -83,15 +85,17 @@ public:
      */
     Qt::DropActions supportedDropActions() const;
     QStringList mimeTypes() const;
-    QMimeData* mimeData(const QModelIndexList &indexes) const;
-    bool dropMimeData(const QMimeData *data, Qt::DropAction action,
-                      int row, int column, const QModelIndex &parent);
+    QMimeData* mimeData(const QModelIndexList& indexes) const;
+    bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent);
 
-    QList<int> getDragNewSelection() { return dragNewSelection; }
+    QList<int> getDragNewSelection() const
+    {
+        return dragNewSelection;
+    }
 
 private:
 
-    ListItem *rootItem;
+    ListItem*  rootItem;
     QList<int> dragNewSelection;
 };
 

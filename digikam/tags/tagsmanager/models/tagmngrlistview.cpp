@@ -79,7 +79,6 @@ void TagMngrListView::startDrag(Qt::DropActions supportedActions)
 
 void TagMngrListView::dropEvent(QDropEvent *e)
 {
-
     QModelIndex index                = indexVisuallyAt(e->pos());
     TagMngrListModel* const tagmodel = dynamic_cast<TagMngrListModel*>(this->model());
 
@@ -107,7 +106,6 @@ void TagMngrListView::dropEvent(QDropEvent *e)
     {
         model->select(tagmodel->index(it,0), model->Select);
     }
-
 }
 
 QModelIndex TagMngrListView::indexVisuallyAt(const QPoint& p)

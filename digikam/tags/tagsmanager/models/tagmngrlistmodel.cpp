@@ -20,19 +20,27 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
+// Qt includes
+
 #include <QStringList>
 #include <QSize>
 #include <QBrush>
 #include <QMimeData>
 
+// KDE includes
+
 #include <kdebug.h>
+
+// Local includes
 
 #include "tagmngrlistitem.h"
 #include "tagmngrlistmodel.h"
 
-namespace Digikam {
+namespace Digikam
+{
 
-TagMngrListModel::TagMngrListModel(QObject* parent)
+TagMngrListModel::TagMngrListModel(QObject* const parent)
     : QAbstractItemModel(parent)
 {
     QList<QVariant> rootData;
@@ -48,12 +56,13 @@ TagMngrListModel::~TagMngrListModel()
 ListItem* TagMngrListModel::addItem(QList<QVariant> values)
 {
     emit layoutAboutToBeChanged();
-    ListItem* item = new ListItem(values, rootItem);
+    ListItem* const item = new ListItem(values, rootItem);
 
     /** containsItem will return a valid pointer if item with the same
      *  values is already added to it's children list.
      */
-    ListItem* existingItem = rootItem->containsItem(item);
+    ListItem* const existingItem = rootItem->containsItem(item);
+
     if(!existingItem)
     {
         rootItem->appendChild(item);
@@ -79,7 +88,8 @@ void TagMngrListModel::deleteItem(ListItem* item)
     delete item;
     emit layoutChanged();
 }
-int TagMngrListModel::columnCount(const QModelIndex &parent) const
+
+int TagMngrListModel::columnCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent);
     return 1;
@@ -97,16 +107,17 @@ QStringList TagMngrListModel::mimeTypes() const
     return types;
 }
 
-bool TagMngrListModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool TagMngrListModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
     Q_UNUSED(role);
-    ListItem* parent = static_cast<ListItem*>(index.internalPointer());
+    ListItem* const parent = static_cast<ListItem*>(index.internalPointer());
 
     if(!parent)
     {
         kDebug() << "No node found";
         return false;
     }
+
     QList<QVariant> itemDa;
     itemDa << value;
     parent->appendChild(new ListItem(itemDa,parent));
@@ -114,13 +125,14 @@ bool TagMngrListModel::setData(const QModelIndex &index, const QVariant &value, 
     return true;
 }
 
-QMimeData *TagMngrListModel::mimeData(const QModelIndexList& indexes) const
+QMimeData* TagMngrListModel::mimeData(const QModelIndexList& indexes) const
 {
-    QMimeData* mimeData = new QMimeData();
+    QMimeData* const mimeData = new QMimeData();
     QByteArray encodedData;
 
     QDataStream stream(&encodedData, QIODevice::WriteOnly);
-    foreach(const QModelIndex &index, indexes)
+
+    foreach(const QModelIndex& index, indexes)
     {
         if(index.isValid())
         {
@@ -132,8 +144,8 @@ QMimeData *TagMngrListModel::mimeData(const QModelIndexList& indexes) const
     return mimeData;
 }
 
-bool TagMngrListModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
-                                    int row, int column, const QModelIndex &parent)
+bool TagMngrListModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
+                                    int row, int column, const QModelIndex& parent)
 {
     Q_UNUSED(column);
     Q_UNUSED(parent);
@@ -144,28 +156,29 @@ bool TagMngrListModel::dropMimeData(const QMimeData *data, Qt::DropAction action
     if(!(data->hasFormat("application/vnd.text.list")))
         return false;
 
-
-    QByteArray encodedData = data->data("application/vnd.text.list");
-    QDataStream stream(&encodedData, QIODevice::ReadOnly);
+    QByteArray       encodedData = data->data("application/vnd.text.list");
+    QDataStream      stream(&encodedData, QIODevice::ReadOnly);
     QList<ListItem*> newItems;
     QList<ListItem*> finalItems;
-    QList<int> toRemove;
+    QList<int>       toRemove;
 
     int itemPoz;
     int temp = 0;
+
     while(!stream.atEnd())
     {
         stream >> itemPoz;
         newItems << rootItem->child(itemPoz);
+
         if(itemPoz < row)
         {
             temp++;
         }
-        toRemove.append(itemPoz);
 
+        toRemove.append(itemPoz);
     }
 
-    row-=temp;
+    row -= temp;
     emit layoutAboutToBeChanged();
 
     for(QList<int>::iterator itr = toRemove.end() -1 ; itr != toRemove.begin() -1 ; --itr)
@@ -178,6 +191,7 @@ bool TagMngrListModel::dropMimeData(const QMimeData *data, Qt::DropAction action
     for(int it = 0; it < rootItem->childCount(); it++)
     {
         finalItems.append(rootItem->child(it));
+
         if(it == row)
         {
             finalItems.append(newItems);
@@ -198,8 +212,7 @@ bool TagMngrListModel::dropMimeData(const QMimeData *data, Qt::DropAction action
     return true;
 }
 
-
-QVariant TagMngrListModel::data(const QModelIndex &index, int role) const
+QVariant TagMngrListModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid())
         return QVariant();
@@ -210,11 +223,11 @@ QVariant TagMngrListModel::data(const QModelIndex &index, int role) const
     if(role == Qt::TextAlignmentRole)
         return Qt::AlignCenter;
 
-    ListItem *item = static_cast<ListItem*>(index.internalPointer());
+    ListItem* const item = static_cast<ListItem*>(index.internalPointer());
     return item->data(role);
 }
 
-Qt::ItemFlags TagMngrListModel::flags(const QModelIndex &index) const
+Qt::ItemFlags TagMngrListModel::flags(const QModelIndex& index) const
 {
     if (!index.isValid())
         return 0;
@@ -223,8 +236,7 @@ Qt::ItemFlags TagMngrListModel::flags(const QModelIndex &index) const
                              | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
 }
 
-QVariant TagMngrListModel::headerData(int section, Qt::Orientation orientation,
-                               int role) const
+QVariant TagMngrListModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
         return rootItem->data(section);
@@ -232,20 +244,21 @@ QVariant TagMngrListModel::headerData(int section, Qt::Orientation orientation,
     return QVariant();
 }
 
-QModelIndex TagMngrListModel::index(int row, int column, const QModelIndex &parent)
+QModelIndex TagMngrListModel::index(int row, int column, const QModelIndex& parent)
             const
 {
     if (!hasIndex(row, column, parent))
         return QModelIndex();
 
-    ListItem *parentItem;
+    ListItem* parentItem = 0;
 
     if (!parent.isValid())
         parentItem = rootItem;
     else
         parentItem = static_cast<ListItem*>(parent.internalPointer());
 
-    ListItem *childItem = parentItem->child(row);
+    ListItem* const childItem = parentItem->child(row);
+
     if (childItem)
         return createIndex(row, column, childItem);
     else
@@ -257,8 +270,8 @@ QModelIndex TagMngrListModel::parent(const QModelIndex &index) const
     if (!index.isValid())
         return QModelIndex();
 
-    ListItem *childItem = static_cast<ListItem*>(index.internalPointer());
-    ListItem *parentItem = childItem->parent();
+    ListItem* const childItem  = static_cast<ListItem*>(index.internalPointer());
+    ListItem* const parentItem = childItem->parent();
 
     if (parentItem == rootItem)
         return QModelIndex();
@@ -268,7 +281,8 @@ QModelIndex TagMngrListModel::parent(const QModelIndex &index) const
 
 int TagMngrListModel::rowCount(const QModelIndex &parent) const
 {
-    ListItem *parentItem;
+    ListItem* parentItem = 0;
+
     if (parent.column() > 0)
         return 0;
 
