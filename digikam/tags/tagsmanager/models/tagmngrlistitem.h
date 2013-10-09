@@ -39,24 +39,23 @@ public:
     ListItem(QList<QVariant>& data, ListItem* const parent = 0);
     ~ListItem();
 
-    void appendChild(ListItem* child);
-
+    void appendChild(ListItem* const child);
     void removeTagId(int tagId);
-
-    ListItem* child(int row);
-    int childCount() const;
     void deleteChild(int row);
+    void setData(const QList<QVariant>& data);
     void removeAll();
-    void appendList(QList<ListItem*> items);
-    int columnCount() const;
-    QVariant data(int column) const;
-    void setData(QList<QVariant>& data);
-    int row() const;
-    ListItem* parent();
+    void appendList(const QList<ListItem*>& items);
+    void deleteChild(ListItem* const item);
 
-    void deleteChild(ListItem* item);
-    QList<ListItem*> allChildren();
-    QList<int> getTagIds() const;
+    ListItem* child(int row)         const;
+    QVariant data(int column)        const;
+    ListItem* parent()               const;
+    int childCount()                 const;
+    int columnCount()                const;
+    int row()                        const;
+    QList<int> getTagIds()           const;
+    QList<ListItem*> allChildren()   const;
+    bool equal(ListItem* const item) const;
 
     /**
      * @brief containsItem  - search child items if contains a ListItem with
@@ -66,9 +65,7 @@ public:
      * @return              - NULL if no similar item was found and a valid ListItem
      *                        if a ListItem with the same data was found
      */
-    ListItem* containsItem(ListItem* item);
-
-    bool equal(ListItem* item);
+    ListItem* containsItem(ListItem* const item) const;
 
 private:
 

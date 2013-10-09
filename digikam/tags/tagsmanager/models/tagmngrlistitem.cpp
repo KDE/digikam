@@ -75,12 +75,12 @@ ListItem::~ListItem()
     delete d;
 }
 
-void ListItem::deleteChild(ListItem* item)
+void ListItem::deleteChild(ListItem* const item)
 {
     d->childItems.removeOne(item);
 }
 
-QList<ListItem*> ListItem::allChildren()
+QList<ListItem*> ListItem::allChildren() const
 {
     return d->childItems;
 }
@@ -90,7 +90,7 @@ QList<int> ListItem::getTagIds() const
     return d->tagIds;
 }
 
-void ListItem::appendChild(ListItem* item)
+void ListItem::appendChild(ListItem* const item)
 {
     d->childItems.append(item);
 }
@@ -100,7 +100,7 @@ void ListItem::removeTagId(int tagId)
     d->tagIds.removeOne(tagId);
 }
 
-ListItem* ListItem::child(int row)
+ListItem* ListItem::child(int row) const
 {
     return d->childItems.value(row);
 }
@@ -120,7 +120,7 @@ void ListItem::removeAll()
     d->childItems.clear();
 }
 
-void ListItem::appendList(QList<ListItem*> items)
+void ListItem::appendList(const QList<ListItem*>& items)
 {
     d->childItems.append(items);
 }
@@ -172,12 +172,12 @@ QVariant ListItem::data(int role) const
     }
 }
 
-void ListItem::setData(QList<QVariant>& data)
+void ListItem::setData(const QList<QVariant>& data)
 {
     d->itemData = data;
 }
 
-ListItem* ListItem::parent()
+ListItem* ListItem::parent() const
 {
     return d->parentItem;
 }
@@ -190,7 +190,7 @@ int ListItem::row() const
     return 0;
 }
 
-ListItem* ListItem::containsItem(ListItem* item)
+ListItem* ListItem::containsItem(ListItem* const item) const
 {
     // We need to compare items and not pointers
 
@@ -205,7 +205,7 @@ ListItem* ListItem::containsItem(ListItem* item)
     return 0;
 }
 
-bool ListItem::equal(ListItem* item)
+bool ListItem::equal(ListItem* const item) const
 {
     return (this->d->tagIds) == (item->getTagIds());
 }
