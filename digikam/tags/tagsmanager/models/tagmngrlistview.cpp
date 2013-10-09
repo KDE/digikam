@@ -22,6 +22,8 @@
  *
  * ============================================================ */
 
+#include "tagmngrlistview.moc"
+
 // Qt includes
 
 #include <QDrag>
@@ -41,7 +43,6 @@
 // Local includes
 
 #include "contextmenuhelper.h"
-#include "tagmngrlistview.h"
 #include "tagmngrlistmodel.h"
 #include "tagmngrlistitem.h"
 #include "taglist.h"
