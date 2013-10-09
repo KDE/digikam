@@ -24,35 +24,40 @@
 #ifndef LISTITEM_H
 #define LISTITEM_H
 
+// Qt includes
+
 #include <QList>
 #include <QVariant>
 
-namespace Digikam {
+namespace Digikam
+{
 
 class ListItem
 {
 public:
-    ListItem(QList<QVariant> &data, ListItem *parent = 0);
+
+    ListItem(QList<QVariant>& data, ListItem* const parent = 0);
     ~ListItem();
 
-    void appendChild(ListItem *child);
+    void appendChild(ListItem* child);
 
     void removeTagId(int tagId);
 
-    ListItem *child(int row);
+    ListItem* child(int row);
     int childCount() const;
     void deleteChild(int row);
-    void deleteChild(ListItem* item) { childItems.removeOne(item); }
     void removeAll();
     void appendList(QList<ListItem*> items);
     int columnCount() const;
     QVariant data(int column) const;
-    void setData(QList<QVariant> &data);
+    void setData(QList<QVariant>& data);
     int row() const;
-    ListItem *parent();
+    ListItem* parent();
 
-    QList<ListItem*> allChildren() { return childItems; }
-    QList<int> getTagIds() const { return tagIds; }
+    void deleteChild(ListItem* item) { childItems.removeOne(item); }
+    QList<ListItem*> allChildren()   { return childItems;          }
+    QList<int> getTagIds() const     { return tagIds;              }
+
     /**
      * @brief containsItem  - search child items if contains a ListItem with
      *                        the same data as item
@@ -62,6 +67,7 @@ public:
      *                        if a ListItem with the same data was found
      */
     ListItem* containsItem(ListItem* item);
+
     bool equal(ListItem* item);
 
 private:
@@ -74,4 +80,5 @@ private:
 };
 
 } // namespace Digikam
-#endif
+
+#endif // LISTITEM_H

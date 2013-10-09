@@ -21,19 +21,25 @@
  *
  * ============================================================ */
 
+// Qt includes
+
 #include <QStringList>
+
+// KDE includes
 
 #include <klocale.h>
 #include <kdebug.h>
+
+// Local includes
 
 #include "tagmngrlistitem.h"
 #include "albummanager.h"
 #include "album.h"
 
+namespace Digikam
+{
 
-namespace Digikam {
-
-ListItem::ListItem(QList<QVariant> &data, ListItem *parent)
+ListItem::ListItem(QList<QVariant>& data, ListItem* const parent)
 {
     parentItem = parent;
     itemData.append(data);
@@ -51,7 +57,7 @@ ListItem::~ListItem()
     qDeleteAll(childItems);
 }
 
-void ListItem::appendChild(ListItem *item)
+void ListItem::appendChild(ListItem* item)
 {
     childItems.append(item);
 }
@@ -61,7 +67,7 @@ void ListItem::removeTagId(int tagId)
     tagIds.removeOne(tagId);
 }
 
-ListItem *ListItem::child(int row)
+ListItem* ListItem::child(int row)
 {
     return childItems.value(row);
 }
@@ -99,21 +105,27 @@ QVariant ListItem::data(int role) const
         case Qt::ToolTipRole:
         {
             QString display;
+
             foreach(int tagId, tagIds)
             {
-                TAlbum* album = AlbumManager::instance()->findTAlbum(tagId);
+                TAlbum* const album = AlbumManager::instance()->findTAlbum(tagId);
+
                 if(!album)
                 {
                     continue;
                 }
+
                 display.append(album->title()+ ", ");
+
                 if(role == Qt::DisplayRole && display.size() > 30)
                     break;
             }
+
             if(display.isEmpty())
                 display.append(i18n("All Tags"));
             else
                 display.remove(display.size()-2, 2);
+
             return QVariant(display);
         }
         case Qt::BackgroundRole:
@@ -121,16 +133,18 @@ QVariant ListItem::data(int role) const
             return itemData.first();
         }
         default:
+        {
             return QVariant();
+        }
     }
 }
 
-void ListItem::setData(QList<QVariant> &data)
+void ListItem::setData(QList<QVariant>& data)
 {
     itemData = data;
 }
 
-ListItem *ListItem::parent()
+ListItem* ListItem::parent()
 {
     return parentItem;
 }
@@ -145,7 +159,8 @@ int ListItem::row() const
 
 ListItem* ListItem::containsItem(ListItem* item)
 {
-    /** We need to compare items and not pointers **/
+    // We need to compare items and not pointers
+
     for(int it=0; it < childItems.size(); ++it)
     {
         if(item->equal(childItems.at(it)))
@@ -153,11 +168,13 @@ ListItem* ListItem::containsItem(ListItem* item)
             return childItems.at(it);
         }
     }
-    return NULL;
+
+    return 0;
 }
 
 bool ListItem::equal(ListItem* item)
 {
     return (this->tagIds) == (item->getTagIds());
 }
+
 } // namespace Digikam
