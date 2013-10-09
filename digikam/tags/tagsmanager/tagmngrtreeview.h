@@ -23,26 +23,34 @@
  *
  * ============================================================ */
 
+// Local includes
+
 #include "tagfolderview.h"
 
-namespace Digikam {
+namespace Digikam
+{
 
 class TagsManager;
 
 class TagMngrTreeView : public TagFolderView
 {
     Q_OBJECT
+
 public:
-    TagMngrTreeView(TagsManager* parent, TagModel* model);
+
+    TagMngrTreeView(TagsManager* const parent, TagModel* const model);
     virtual ~TagMngrTreeView();
 
     /**
      * @brief setAlbumFilterModel - reimplement from AbstractAlbumTree
      */
-    void setAlbumFilterModel(TagsManagerFilterModel* filteredModel,
-                             CheckableAlbumFilterModel* filterModel);
+    void setAlbumFilterModel(TagsManagerFilterModel* const filteredModel,
+                             CheckableAlbumFilterModel* const filterModel);
 
-    TagsManagerFilterModel* getFilterModel() { return m_tfilteredModel; }
+    TagsManagerFilterModel* getFilterModel() const
+    {
+        return m_tfilteredModel; 
+    }
 
 protected:
 
@@ -55,7 +63,7 @@ protected:
      *                             basic actions
      * @param albums             - List of currently selected albums
      */
-    virtual void setContexMenuItems(ContextMenuHelper& cmh, QList< TAlbum* > albums);
+    virtual void setContexMenuItems(ContextMenuHelper& cmh, QList<TAlbum*> albums);
 
     /**
      * @brief contextMenuEvent   - Reimplement contextMenuEvent from AbstractAlbumTree
@@ -64,6 +72,8 @@ protected:
      * @param event context menu event triggered by right click
      */
     void contextMenuEvent(QContextMenuEvent* event);
+
+protected:
 
     TagsManagerFilterModel* m_tfilteredModel;
 
@@ -82,8 +92,9 @@ public Q_SLOTS:
     void slotExpandSelected();
 
 private:
-    class TagMngrTreeViewPriv;
-        TagMngrTreeViewPriv* d;
+
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
