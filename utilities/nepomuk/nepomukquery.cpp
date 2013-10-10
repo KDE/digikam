@@ -23,28 +23,29 @@
  *
  * ============================================================ */
 
-#include "nepomukquery.h"
-#include "digikamnepomukservice.h"
+// KDE includes
 
 #include <kdebug.h>
 #include <kurl.h>
-
 #include <Nepomuk2/Query/ResourceTypeTerm>
 #include <Nepomuk2/Query/ComparisonTerm>
 #include <Nepomuk2/Query/AndTerm>
 #include <Nepomuk2/Query/OrTerm>
 #include <Nepomuk2/Query/Term>
 #include <Nepomuk2/Query/LiteralTerm>
-
 #include <Nepomuk2/Query/Query>
 #include <Nepomuk2/Query/ResultIterator>
-
 #include <Nepomuk2/Vocabulary/NFO>
 #include <Nepomuk2/Vocabulary/NIE>
-#include <Soprano/Vocabulary/NAO>
 #include <Nepomuk2/Types/Property>
 #include <Nepomuk2/Variant>
 #include <Nepomuk2/Tag>
+#include <Soprano/Vocabulary/NAO>
+
+// Local includes
+
+#include "nepomukquery.h"
+#include "digikamnepomukservice.h"
 
 using namespace Nepomuk2;
 
@@ -58,38 +59,43 @@ NepomukQuery::NepomukQuery(DkNepomukService* const service)
 
 void NepomukQuery::queryImagesProperties()
 {
+    int ind            = 0;
     Query::Query query = buildImagePropertiesQuery();
-
     Query::ResultIterator its(query);
 
-    int ind = 0;
     while(its.next())
     {
-        Resource res = its.current().resource();
-
+        Resource res    = its.current().resource();
         QList<Tag> tags = res.tags();
+
         if(!tags.isEmpty())
         {
             QList<QUrl> tagUrls;
+
             for(QList<Tag>::iterator it = tags.begin(); it != tags.end(); ++it)
             {
                 tagUrls << KUrl((*it).property(Vocabulary::NIE::url()).toUrl());
             }
+
             KUrl imgPath(res.property(Vocabulary::NIE::url()).toUrl());
             this->service->syncImgTagsToDigikam(imgPath, tagUrls);
         }
 
         Variant ratingVar = res.property(Soprano::Vocabulary::NAO::numericRating());
+
         if(ratingVar.isValid())
         {
             KUrl imgPath(res.property(Nepomuk2::Vocabulary::NIE::url()).toUrl());
             int ratingValue = ratingVar.toInt();
+
             if(ratingValue > 0 && ratingValue < 10)
             {
                 this->service->syncImgRatingToDigikam(imgPath,ratingValue);
             }
         }
+
         Variant commentVar = res.property(Soprano::Vocabulary::NAO::description());
+
         if(commentVar.isValid())
         {
             KUrl imgPath(res.property(Vocabulary::NIE::url()).toUrl());
@@ -99,9 +105,7 @@ void NepomukQuery::queryImagesProperties()
 
         ++ind;
     }
-
 }
-
 
 void NepomukQuery::queryTags()
 {
@@ -114,24 +118,20 @@ void NepomukQuery::queryTags()
         Resource res = it.current().resource();
         this->service->addTagInDigikam(res.uri());
     }
-
 }
 
-Query::Query NepomukQuery::buildImagePropertiesQuery()
+Query::Query NepomukQuery::buildImagePropertiesQuery() const
 {
-
     // Query structure: (isImage() && (hasTag() || hasRating() || hasComment()))
 
     Query::ResourceTypeTerm imgType(Vocabulary::NFO::Image());
 
-    Query::ComparisonTerm hasTag(Soprano::Vocabulary::NAO::hasTag(),
-                                            Nepomuk2::Query::Term());
+    Query::ComparisonTerm hasTag(Soprano::Vocabulary::NAO::hasTag(), Nepomuk2::Query::Term());
 
-    Query::ComparisonTerm hasRating(Soprano::Vocabulary::NAO::numericRating(),
-                                               Nepomuk2::Query::Term());
+    Query::ComparisonTerm hasRating(Soprano::Vocabulary::NAO::numericRating(), Nepomuk2::Query::Term());
 
-    Query::ComparisonTerm hasComment(Soprano::Vocabulary::NAO::description(),
-                                               Nepomuk2::Query::Term());
+    Query::ComparisonTerm hasComment(Soprano::Vocabulary::NAO::description(), Nepomuk2::Query::Term());
+
     Query::OrTerm  hasProperties;
     hasProperties.addSubTerm(hasTag);
     hasProperties.addSubTerm(hasRating);
@@ -143,14 +143,13 @@ Query::Query NepomukQuery::buildImagePropertiesQuery()
     finalTerm.addSubTerm(hasProperties);
 
     return Query::Query(finalTerm);
-
-
 }
 
-Query::Query NepomukQuery::buildTagsQuery()
+Query::Query NepomukQuery::buildTagsQuery() const
 {
     Query::ResourceTypeTerm tagType(Soprano::Vocabulary::NAO::Tag());
 
     return Query::Query(tagType);
 }
+
 } // namespace Digikam

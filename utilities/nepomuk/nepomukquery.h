@@ -44,6 +44,7 @@ class DkNepomukService;
 class NepomukQuery : public QObject
 {
     Q_OBJECT
+
 public:
     NepomukQuery(DkNepomukService* const service);
 
@@ -69,14 +70,17 @@ private:
      *                                      ratings or comments
      * @return                            - query to be executed
      */
-    Nepomuk2::Query::Query buildImagePropertiesQuery();
+    Nepomuk2::Query::Query buildImagePropertiesQuery() const;
 
     /**
      * @brief buildTagsQuery  - build a query that will return all tags from
      *                          Nepomuk
      * @return                - query to be executed
      */
-    Nepomuk2::Query::Query buildTagsQuery();
+    Nepomuk2::Query::Query buildTagsQuery() const;
+
+private:
+
     DkNepomukService* service;
 };
 
