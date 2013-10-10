@@ -113,7 +113,7 @@ NepomukWatcher::~NepomukWatcher()
     delete d;
 }
 
-void NepomukWatcher::slotPropertyAdded(Resource res, Types::Property prop, QVariant var)
+void NepomukWatcher::slotPropertyAdded(Resource res, Types::Property prop, const QVariant& var)
 {
     if(prop == NAO::hasTag())
     {
@@ -140,7 +140,7 @@ void NepomukWatcher::slotPropertyAdded(Resource res, Types::Property prop, QVari
     }
 }
 
-void NepomukWatcher::slotPropertyRemoved(Resource res, Types::Property prop, QVariant var)
+void NepomukWatcher::slotPropertyRemoved(Resource res, Types::Property prop, const QVariant& var)
 {
     kDebug() << (res.type() == NAO::hasTag());
 
@@ -153,7 +153,7 @@ void NepomukWatcher::slotPropertyRemoved(Resource res, Types::Property prop, QVa
     }
 }
 
-void NepomukWatcher::slotResAdded(Resource res, QList<QUrl> types)
+void NepomukWatcher::slotResAdded(Resource res, const QList<QUrl>& types)
 {
     if(types.contains(NAO::Tag()))
     {
@@ -162,7 +162,7 @@ void NepomukWatcher::slotResAdded(Resource res, QList<QUrl> types)
     }
 }
 
-void NepomukWatcher::slotResRemoved(QUrl /*url*/, QList<QUrl> types)
+void NepomukWatcher::slotResRemoved(const QUrl& /*url*/, const QList<QUrl>& types)
 {
     kDebug() << "Resource removed +++++++++++++++++";
 

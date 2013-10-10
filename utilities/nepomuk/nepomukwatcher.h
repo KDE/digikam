@@ -62,8 +62,7 @@ private Q_SLOTS:
      *                              are watched
      * @param var                 - value of property that was added
      */
-    void slotPropertyAdded(Nepomuk2::Resource res,
-                           Nepomuk2::Types::Property prop, QVariant var);
+    void slotPropertyAdded(Nepomuk2::Resource res, Nepomuk2::Types::Property prop, const QVariant& var);
 
     /**
      * @brief slotPropertyRemoved - a tag, a rating or a comment was removed
@@ -75,8 +74,7 @@ private Q_SLOTS:
      *                              are watched
      * @param var                 - value of property that was added
      */
-    void slotPropertyRemoved(Nepomuk2::Resource res,
-                             Nepomuk2::Types::Property prop, QVariant var);
+    void slotPropertyRemoved(Nepomuk2::Resource res, Nepomuk2::Types::Property prop, const QVariant& var);
 
     /**
      * @brief slotResAdded         - a tag resource was added to Nepomuk and
@@ -85,7 +83,7 @@ private Q_SLOTS:
      *
      * @param types                - should contain NAO::Tag()
      */
-    void slotResAdded(Nepomuk2::Resource res, QList<QUrl> types);
+    void slotResAdded(Nepomuk2::Resource res, const QList<QUrl>& types);
 
     /**
      * @brief slotResRemoved       - a tag resource was removed to Nepomuk and
@@ -94,7 +92,7 @@ private Q_SLOTS:
      *
      * @param types                - should contain NAO::Tag()
      */
-    void slotResRemoved(QUrl url, QList<QUrl> types);
+    void slotResRemoved(const QUrl& url, const QList<QUrl>& types);
 
 private:
 
