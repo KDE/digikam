@@ -7,7 +7,7 @@
  * Description : Service to sync digikam and nepomuk storages
  *
  * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2013 by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
+ * Copyright (C) 2013      by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,6 +25,8 @@
 #ifndef DIGIKAMNEPOMUKSERVICE_H
 #define DIGIKAMNEPOMUKSERVICE_H
 
+// Qt includes
+
 #include <QString>
 
 // KDE includes
@@ -36,14 +38,15 @@
 // Local includes
 
 class KJob;
+
 namespace KIO
 {
-class Job;
+    class Job;
 }
 
 namespace Soprano
 {
-class Statement;
+    class Statement;
 }
 
 namespace Digikam
@@ -56,14 +59,14 @@ class ImageChangeset;
 class ImageTagChangeset;
 class TagChangeset;
 
-
 class DkNepomukService : public Nepomuk2::Service
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.digikam.DigikamNepomukService")
+
 public:
 
-    DkNepomukService(QObject* parent, const QVariantList&);
+    DkNepomukService(QObject* const parent, const QVariantList&);
     ~DkNepomukService();
 
     void getNepomukTags();
@@ -180,7 +183,7 @@ protected Q_SLOTS:
      */
     void slotTagChange(const TagChangeset& changeset);
 
-    void slotTagDeleted(QString string);
+    void slotTagDeleted(const QString& string);
 
     void syncNepomukToDigikam();
     void fullSyncDigikamToNepomuk();
@@ -192,8 +195,6 @@ protected Q_SLOTS:
 
 protected:
 
-    void connectToDatabase(const DatabaseParameters& params);
-
     enum SyncToNepomukSettings
     {
         SyncNothing     = 0x00,
@@ -202,15 +203,15 @@ protected:
         SyncComment     = 0x04
     };
 
+protected:
+
+    void connectToDatabase(const DatabaseParameters& params);
 
     void readConfig();
 
-    void syncToNepomuk(const QList<qlonglong>& imageid,
-                       SyncToNepomukSettings syncSettings);
-    void syncToNepomuk(const QList<ImageInfo>& infos,
-                       SyncToNepomukSettings syncSettings);
-    void syncTagsToNepomuk(const QList<qlonglong>& imageIds,
-                           const QList<int>& tagIds, bool addOrRemove);
+    void syncToNepomuk(const QList<qlonglong>& imageid, SyncToNepomukSettings syncSettings);
+    void syncToNepomuk(const QList<ImageInfo>& infos, SyncToNepomukSettings syncSettings);
+    void syncTagsToNepomuk(const QList<qlonglong>& imageIds, const QList<int>& tagIds, bool addOrRemove);
 
     void syncAddedImagesToDigikam(const QList<qlonglong>& ids);
 
@@ -235,13 +236,13 @@ protected:
 public:
 
     // Declared as public due to use in ChangingNepomuk and ChangingDB classes.
-    class NepomukServicePriv;
+    class Private;
 
 private:
-    NepomukServicePriv* const d;
 
+    Private* const d;
 };
 
-}
-#endif
+} // namespace Digikam
 
+#endif // DIGIKAMNEPOMUKSERVICE_H
