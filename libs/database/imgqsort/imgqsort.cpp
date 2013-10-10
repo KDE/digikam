@@ -110,7 +110,7 @@ public:
 ImgQSort::ImgQSort()
     : d(new Private)
 {
-    //commented out option to use only part of image for computation
+    // Commented out option to use only part of image for computation
     //int w = (img->width()  > d->size) ? d->size : img->width();
     //int h = (img->height() > d->size) ? d->size : img->height();
     //setOriginalImage(img->copy(0, 0, w, h));
@@ -127,13 +127,13 @@ bool ImgQSort::runningFlag() const
     return true;
 }
 
-PickLabel ImgQSort::analyseQuality(const DImg& img, const ImageQualitySettings& imq)
+PickLabel ImgQSort::analyseQuality(const DImg& img, const ImageQualitySettings& imq) const
 {
     // For ImgQNREstimate
     // Use the Top/Left corner of 256x256 pixels to analyse noise contents from image.
     // This will speed-up computation time with OpenCV.
 
-    //reading settings
+    // Reading settings
     d->imq.detectBlur        = imq.detectBlur;
     d->imq.detectNoise       = imq.detectNoise;
     d->imq.detectCompression = imq.detectCompression;
@@ -152,43 +152,43 @@ PickLabel ImgQSort::analyseQuality(const DImg& img, const ImageQualitySettings& 
 
     readImage();
 
-    double blur             = 0.0;
-    short  blur2            = 0;
-    double noise            = 0.0;
-    int    compressionlevel = 0;
-    float  finalquality     = 0.0;
+    double blur              = 0.0;
+    short  blur2             = 0;
+    double noise             = 0.0;
+    int    compressionlevel  = 0;
+    float  finalquality      = 0.0;
 
-    //If blur option is selected in settings, run the algorithms
+    // If blur option is selected in settings, run the algorithms
     if (d->imq.detectBlur)
     {
-        //Returns blur value between 0 and 1.
-        //If NaN is returned just assign NoPickLabel
+        // Returns blur value between 0 and 1.
+        // If NaN is returned just assign NoPickLabel
         blur          = blurdetector();
         kDebug() << "Amount of Blur present in image is  : " << blur;
 
-        //Returns blur value between 1 and 32767.
-        //If 1 is returned just assign NoPickLabel
+        // Returns blur value between 1 and 32767.
+        // If 1 is returned just assign NoPickLabel
         blur2           = blurdetector2();
         kDebug() << "Amount of Blur present in image [using LoG Filter] is : " << blur2;
     }
 
     if (d->imq.detectNoise)
     {
-        //Some images give very low noise value. Assign NoPickLabel in that case.
-        //Returns noise value between 0 and 1.
+        // Some images give very low noise value. Assign NoPickLabel in that case.
+        // Returns noise value between 0 and 1.
         noise         = noisedetector();
         kDebug() << "Amount of Noise present in image is : " << noise;
     }
 
     if (d->imq.detectCompression)
     {
-        //Returns number of blocks in the image.
+        // Returns number of blocks in the image.
         compressionlevel = compressiondetector();
         kDebug() << "Amount of compression artifacts present in image is : " << compressionlevel;
     }
 
-
 #ifdef TRACE
+
     QFile filems("imgqsortresult.txt");
 
     if (filems.open(QIODevice::Append | QIODevice::Text))
@@ -213,25 +213,27 @@ PickLabel ImgQSort::analyseQuality(const DImg& img, const ImageQualitySettings& 
         }
     }
 
-#endif
+#endif // TRACE
 
-    //Calculating finalquality
+    // Calculating finalquality
 
-    //all the results to have a range of 1 to 100.
+    // all the results to have a range of 1 to 100.
+
     float finalblur        = (blur*100)  + ((blur2/32767)*100);
     float finalnoise       = noise*100;
     float finalcompression = (compressionlevel / 1024) * 100; // we are processing 1024 pixels size image
 
-    finalquality = finalblur*d->imq.blurWeight   +
-                   finalnoise*d->imq.noiseWeight +
-                   finalcompression*d->imq.compressionWeight;
+    finalquality           = finalblur*d->imq.blurWeight   +
+                             finalnoise*d->imq.noiseWeight +
+                             finalcompression*d->imq.compressionWeight;
 
-    finalquality = finalquality / 100;
-    //Assigning PickLabels
+    finalquality           = finalquality / 100;
+
+    // Assigning PickLabels
 
     if (finalquality == 0.0)
     {
-        //Algorithms have not been run. So return noPickLabel
+        // Algorithms have not been run. So return noPickLabel
         return NoPickLabel;
     }
     else if (finalquality < d->imq.rejectedThreshold)
@@ -250,7 +252,7 @@ PickLabel ImgQSort::analyseQuality(const DImg& img, const ImageQualitySettings& 
     return NoPickLabel;
 }
 
-void ImgQSort::readImage()
+void ImgQSort::readImage() const
 {
     MixerContainer settings;
     settings.bMonochrome = true;
@@ -319,15 +321,15 @@ double ImgQSort::blurdetector() const
 
 short ImgQSort::blurdetector2() const
 {
-    //Algorithm using Laplacian of Gaussian Filter to detect blur.
+    // Algorithm using Laplacian of Gaussian Filter to detect blur.
     Mat out;
     Mat noise_free;
     kDebug() << "Algorithm using LoG Filter started " <<endl;
 
-    //to remove noise from the image
+    // To remove noise from the image
     GaussianBlur(d->src_gray, noise_free, Size(3,3), 0, 0, BORDER_DEFAULT );
 
-    // aperture size of 1 corresponds to the correct matrix
+    // Aperture size of 1 corresponds to the correct matrix
     int kernel_size = 3;
     int scale       = 1;
     int delta       = 0;
@@ -335,10 +337,10 @@ short ImgQSort::blurdetector2() const
 
     Laplacian(noise_free, out, ddepth, kernel_size, scale, delta, BORDER_DEFAULT );
 
-    //noise_free The input image without noise.
-    //out: Destination (output) image
-    //ddepth: Depth of the destination image. Since our input is CV_8U we define ddepth = CV_16S to avoid overflow
-    //kernel_size: The kernel size of the Sobel operator to be applied internally. We use 3 ihere
+    // noise_free:  The input image without noise.
+    // out:         Destination (output) image
+    // ddepth:      Depth of the destination image. Since our input is CV_8U we define ddepth = CV_16S to avoid overflow
+    // kernel_size: The kernel size of the Sobel operator to be applied internally. We use 3 ihere
 
     short maxLap = -32767;
 
@@ -618,38 +620,37 @@ double ImgQSort::noisedetector() const
             delete [] d->fimg[i];
         }
 
-        /*
-                // NOTE: My original algorithm. lowThreshold should be adjusted precisely for this to work.
+/*
+        // NOTE: My original algorithm. lowThreshold should be adjusted precisely for this to work.
 
-                kDebug()<<"Estimated noise is "<< nre.settings();
-                d->lowThreshold    = 0.0005;   // Given in research paper for noise. Variable parameter
-                //   d->ratio    = 1;
-                double noiseresult = 0.0;
-                double average     = 0.0;
-                double maxval      = 0.0;
+        kDebug()<<"Estimated noise is "<< nre.settings();
+        d->lowThreshold    = 0.0005;   // Given in research paper for noise. Variable parameter
+        //   d->ratio    = 1;
+        double noiseresult = 0.0;
+        double average     = 0.0;
+        double maxval      = 0.0;
 
-                // Apply Canny Edge Detector to get the edges
-                CannyThreshold(0, 0);
+        // Apply Canny Edge Detector to get the edges
+        CannyThreshold(0, 0);
 
-                average     = mean(d->detected_edges)[0];
-                int* maxIdx = new int[sizeof(d->detected_edges)];
+        average     = mean(d->detected_edges)[0];
+        int* maxIdx = new int[sizeof(d->detected_edges)];
 
-                // To find the maxim1um edge intensity value
-                minMaxIdx(d->detected_edges, 0, &maxval, 0, maxIdx);
+        // To find the maxim1um edge intensity value
+        minMaxIdx(d->detected_edges, 0, &maxval, 0, maxIdx);
 
-                noiseresult = average/maxval;
+        noiseresult = average/maxval;
 
-                kDebug() << "The average of the edge intensity is " << average;
-                kDebug() << "The maximum of the edge intensity is " << maxval;
-                kDebug() << "The result of the edge intensity is "  << noiseresult;
+        kDebug() << "The average of the edge intensity is " << average;
+        kDebug() << "The maximum of the edge intensity is " << maxval;
+        kDebug() << "The result of the edge intensity is "  << noiseresult;
 
-                delete [] maxIdx;
-        */
+        delete [] maxIdx;
+*/
     }
 
     return noiseresult;
 }
-
 
 int ImgQSort::compressiondetector() const
 {

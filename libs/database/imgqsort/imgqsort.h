@@ -46,26 +46,26 @@ public:
 
     /** Perform  quality estimation and return Pick Label value accordingly.
      */
-    PickLabel analyseQuality(const DImg& img, const ImageQualitySettings& imq);
+    PickLabel analyseQuality(const DImg& img, const ImageQualitySettings& imq) const;
 
 private:
 
     /** Internal method dedicated to convert DImg pixels from integer values to float values.
      *  These ones will by used internally by ImgQSort through OpenCV API.
      */
-    void readImage();
+    void readImage() const;
 
     /**
-    * @function CannyThreshold
-    * @brief Trackbar callback - Canny thresholds input with a ratio 1:3
-    */
+     * @function CannyThreshold
+     * @brief Trackbar callback - Canny thresholds input with a ratio 1:3
+     */
     void   CannyThreshold(int, void*) const;
 
-    double blurdetector()        const;
-    short  blurdetector2()       const;
-    double noisedetector()       const;
-    int    compressiondetector() const;
-    bool   runningFlag()         const;
+    double blurdetector()             const;
+    short  blurdetector2()            const;
+    double noisedetector()            const;
+    int    compressiondetector()      const;
+    bool   runningFlag()              const;
 
 private:
 
