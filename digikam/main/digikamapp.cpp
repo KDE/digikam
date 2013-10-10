@@ -116,7 +116,6 @@
 #include "iccsettings.h"
 #include "imageattributeswatch.h"
 #include "imageinfo.h"
-#include "imagesortsettings.h"
 #include "imagewindow.h"
 #include "lighttablewindow.h"
 #include "queuemgrwindow.h"
@@ -1273,13 +1272,6 @@ void DigikamApp::setupActions()
     duplicatesAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_D));
     connect(duplicatesAction, SIGNAL(triggered()), d->view, SLOT(slotNewDuplicatesSearch()));
     actionCollection()->addAction("find_duplicates", duplicatesAction);
-
-    // -----------------------------------------------------------
-
-    KAction* qualityAction = new KAction(KIcon("tools-wizard"), i18n("Sort by Quality"), this);
-    qualityAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_Q));
-    connect(qualityAction, SIGNAL(triggered()), d->view, SLOT(slotQualitySort()));
-    actionCollection()->addAction("sort_quality", qualityAction);
 
     // -----------------------------------------------------------
 
