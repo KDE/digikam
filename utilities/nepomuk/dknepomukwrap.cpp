@@ -23,16 +23,20 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-#include "dknepomukwrap.h"
-#include <kdebug.h>
-
-#include <Nepomuk2/Resource>
-#include <Nepomuk2/Variant>
-
-#include <Soprano/Vocabulary/NAO>
 
 // QList<int> metatype defined in Nepomuk/Variant
 #define DATABASECHANGESETS_H_NO_QLIST_METATYPE_DECLARATION
+
+// KDE includes
+
+#include <kdebug.h>
+#include <Nepomuk2/Resource>
+#include <Nepomuk2/Variant>
+#include <Soprano/Vocabulary/NAO>
+
+// Local includes
+
+#include "dknepomukwrap.h"
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "tagscache.h"
@@ -45,7 +49,6 @@ namespace Digikam
 
 DkNepomukWrap::DkNepomukWrap()
 {
-
 }
 
 Nepomuk2::Tag DkNepomukWrap::digikamToNepomukTag(int tagId)
@@ -80,7 +83,6 @@ Nepomuk2::Tag DkNepomukWrap::digikamToNepomukTag(int tagId)
 
         if (!(info.icon.isNull()))
         {
-
             tag.addSymbol(info.icon);
         }
     }
@@ -88,7 +90,7 @@ Nepomuk2::Tag DkNepomukWrap::digikamToNepomukTag(int tagId)
     return tag;
 }
 
-void DkNepomukWrap::renameNepomukTag(QString oldName, QString newName)
+void DkNepomukWrap::renameNepomukTag(const QString& oldName, const QString& newName)
 {
     Nepomuk2::Tag nTag(oldName);
     Nepomuk2::Variant value( newName );
@@ -109,11 +111,12 @@ void DkNepomukWrap::setUnsetTag(Nepomuk2::Resource res, Nepomuk2::Tag tag, bool 
     }
 }
 
-void DkNepomukWrap::removeTag(QString tagName)
+void DkNepomukWrap::removeTag(const QString& tagName)
 {
     kDebug() << "Removing a Tag from Nepomuk";
     Nepomuk2::Tag res(tagName);
 
     res.remove();
 }
-}
+
+} // namespace Digikam

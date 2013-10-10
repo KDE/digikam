@@ -23,8 +23,11 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
 #ifndef DKNEPOMUKWRAP_H
 #define DKNEPOMUKWRAP_H
+
+// KDE includes
 
 #include <Nepomuk2/Tag>
 
@@ -39,6 +42,7 @@ class DkNepomukWrap
 {
 
 public:
+
     DkNepomukWrap();
 
     /**
@@ -54,7 +58,7 @@ public:
      * @param oldName           - tag's old name to be identified in Nepomuk base
      * @param newName           - tag's new name
      */
-    static void renameNepomukTag(QString oldName, QString newName);
+    static void renameNepomukTag(const QString& oldName, const QString& newName);
 
     /**
      * @brief setUnsetTag   - used to add or remove a tag from specified resource
@@ -62,13 +66,11 @@ public:
      * @param tagToSet      - tag to be added or removed from resource
      * @param toSet         - true if tag will be set and false to remove
      */
-    static void setUnsetTag(Nepomuk2::Resource res, Nepomuk2::Tag tagToSet,
-                            bool toSet);
+    static void setUnsetTag(Nepomuk2::Resource res, Nepomuk2::Tag tagToSet, bool toSet);
 
-    static void removeTag(QString tagName);
-
+    static void removeTag(const QString& tagName);
 };
 
-}
+} // namespace Digikam
 
 #endif // DKNEPOMUKWRAP_H
