@@ -347,7 +347,7 @@ void TagModificationHelper::slotMultipleTagDel(QList<TAlbum* >& tags)
             int result = KMessageBox::warningContinueCancel(0,
                                                             i18n("Tags '%1' have one or more subtags. "
                                                                 "Deleting them will also delete "
-                                                                "the subtags."
+                                                                "the subtags. "
                                                                 "Do you want to continue?",
                                                                 tagWithChildrens));
 
