@@ -45,12 +45,14 @@ public:
 
     Private()
     {
-        cancel  = false;
+        cancel   = false;
+        imgqsort = 0;
     }
 
     bool                 cancel;
-    ImageQualitySettings quality;
     QString              path;
+    ImageQualitySettings quality;
+    ImgQSort*            imgqsort;
 };
 
 // -------------------------------------------------------
@@ -75,6 +77,9 @@ void ImageQualityTask::setItem(const QString& path, const ImageQualitySettings& 
 void ImageQualityTask::slotCancel()
 {
     d->cancel = true;
+
+    if (d->imgqsort)
+        d->imgqsort->cancelFilter();
 }
 
 void ImageQualityTask::run()
@@ -90,12 +95,7 @@ void ImageQualityTask::run()
         description.rawDecodingHint                               = LoadingDescription::RawDecodingTimeOptimized;
         DImg dimg                                                 = PreviewLoadThread::loadSynchronously(description);
 
-        if (d->cancel)
-        {
-            return;
-        }
-
-        if (!dimg.isNull())
+        if (!dimg.isNull() && !d->cancel)
         {
             // TODO : run here Quality analysis backend and store Pick Label result to DB.
             // Backend Input : d->quality as Quality analysis settings,
@@ -106,8 +106,8 @@ void ImageQualityTask::run()
             // Warning       : All code here will run in a separated thread and must be re-entrant/thread-safe. Only pure computation
             //                 must be processed. GUI calls are prohibited. ImageInfo and DImg can be used safety in thread.
 
-            ImgQSort imgqsort;
-            PickLabel pick = imgqsort.analyseQuality(dimg,d->quality);
+            PickLabel pick;
+            d->imgqsort = new ImgQSort(dimg, d->quality, &pick);
 
             ImageInfo info(d->path);
             info.setPickLabel(pick);

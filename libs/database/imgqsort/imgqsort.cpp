@@ -41,11 +41,10 @@
 
 // Local includes
 
-#include "nrestimate.h"
 #include "libopencv.h"
+#include "nrestimate.h"
 #include "mixerfilter.h"
 #include "nrfilter.h"
-#include "imagequalitysettings.h"
 
 // To switch on/off log trace file.
 #define TRACE 1
@@ -77,6 +76,7 @@ public:
         acceptedThreshold = 0.0;
         pendingThreshold  = 0.0;
         rejectedThreshold = 0.0;
+        label             = 0;
     }
 
     float*               fimg[3];
@@ -105,33 +105,17 @@ public:
     double               rejectedThreshold;
 
     QString              path;             // Path to host result file
+
+    PickLabel*           label;
 };
 
-ImgQSort::ImgQSort()
-    : d(new Private)
+ImgQSort::ImgQSort(const DImg& img, const ImageQualitySettings& imq, PickLabel* const label)
+    : DImgThreadedAnalyser(), d(new Private)
 {
     // Commented out option to use only part of image for computation
     //int w = (img->width()  > d->size) ? d->size : img->width();
     //int h = (img->height() > d->size) ? d->size : img->height();
     //setOriginalImage(img->copy(0, 0, w, h));
-}
-
-ImgQSort::~ImgQSort()
-{
-    delete d;
-}
-
-//FIXME: This may cause threading issues in noisedetector()
-bool ImgQSort::runningFlag() const
-{
-    return true;
-}
-
-PickLabel ImgQSort::analyseQuality(const DImg& img, const ImageQualitySettings& imq) const
-{
-    // For ImgQNREstimate
-    // Use the Top/Left corner of 256x256 pixels to analyse noise contents from image.
-    // This will speed-up computation time with OpenCV.
 
     // Reading settings
     d->imq.detectBlur        = imq.detectBlur;
@@ -149,6 +133,19 @@ PickLabel ImgQSort::analyseQuality(const DImg& img, const ImageQualitySettings& 
     d->imq.compressionWeight = imq.compressionWeight;
     d->image                 = img;
     d->neimage               = img;
+    d->label                 = label;
+}
+
+ImgQSort::~ImgQSort()
+{
+    delete d;
+}
+
+void ImgQSort::startAnalyse()
+{
+    // For ImgQNREstimate
+    // Use the Top/Left corner of 256x256 pixels to analyse noise contents from image.
+    // This will speed-up computation time with OpenCV.
 
     readImage();
 
@@ -194,7 +191,7 @@ PickLabel ImgQSort::analyseQuality(const DImg& img, const ImageQualitySettings& 
     if (filems.open(QIODevice::Append | QIODevice::Text))
     {
         QTextStream oms(&filems);
-        oms << "File:" << img.originalFilePath() << endl;
+        oms << "File:" << d->image.originalFilePath() << endl;
 
         if (d->imq.detectBlur)
         {
@@ -234,22 +231,22 @@ PickLabel ImgQSort::analyseQuality(const DImg& img, const ImageQualitySettings& 
     if (finalquality == 0.0)
     {
         // Algorithms have not been run. So return noPickLabel
-        return NoPickLabel;
+        *d->label = NoPickLabel;
     }
     else if (finalquality < d->imq.rejectedThreshold)
     {
-        return RejectedLabel;
+        *d->label = RejectedLabel;
     }
     else if (finalquality > d->imq.rejectedThreshold && finalquality<d->imq.acceptedThreshold)
     {
-        return PendingLabel;
+        *d->label = PendingLabel;
     }
     else
     {
-        return AcceptedLabel;
+        *d->label = AcceptedLabel;
     }
 
-    return NoPickLabel;
+    *d->label = NoPickLabel;
 }
 
 void ImgQSort::readImage() const

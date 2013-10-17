@@ -31,22 +31,23 @@
 #include "dimg.h"
 #include "globals.h"
 #include "imagequalitysettings.h"
+#include "dimgthreadedanalyser.h"
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ImgQSort
+class DIGIKAM_EXPORT ImgQSort : public DImgThreadedAnalyser
 {
 public:
 
-    /** Standard constructor with image container to parse
+    /** Standard constructor with picklabel container to fill at end of analyse
      */
-    explicit ImgQSort();
+    explicit ImgQSort(const DImg& img, const ImageQualitySettings& imq, PickLabel* const label);
     ~ImgQSort();
 
-    /** Perform  quality estimation and return Pick Label value accordingly.
+    /** Perform  quality estimation and fill Pick Label value accordingly.
      */
-    PickLabel analyseQuality(const DImg& img, const ImageQualitySettings& imq) const;
+    void startAnalyse();
 
 private:
 
@@ -65,7 +66,6 @@ private:
     short  blurdetector2()            const;
     double noisedetector()            const;
     int    compressiondetector()      const;
-    bool   runningFlag()              const;
 
 private:
 
