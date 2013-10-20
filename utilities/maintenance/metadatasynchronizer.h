@@ -57,6 +57,8 @@ public:
      */
     explicit MetadataSynchronizer(const ImageInfoList& list, SyncDirection = WriteFromDatabaseToFile, ProgressItem* const parent = 0);
 
+    void setTagsOnly(bool value);
+
     ~MetadataSynchronizer();
 
     void setUseMultiCoreCPU(bool b);

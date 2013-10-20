@@ -213,6 +213,13 @@ public:
                const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
 
     /**
+        Will write only Tags to image. Used by TagsManager to write tags to image
+        Other metadata are not updated.
+        @return if tags were succesfully written.
+    */
+    bool writeTags(const QString& filePath, WriteMode writeMode = FullWrite,
+               const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
+    /**
         With the currently applied changes, the given writeMode and settings,
         returns if write(DMetadata), write(QString) or write(DImg) will actually
         apply any changes.

@@ -28,12 +28,35 @@
 
 #include <QString>
 #include <QWidget>
+#include <QHash>
+#include <QtGlobal>
+#include <kdebug.h>
+
 
 // Local includes
 
 #include "album.h"
 #include "imageinfo.h"
 #include "albummanager.h"
+
+uint qHash(QList<Digikam::Album*> key)
+{
+    if(key.isEmpty())
+        return 0;
+
+    uint value;
+    Digikam::Album* temp = key.first();
+    quint64 myint = (unsigned long long)temp;
+    value = qHash(myint);
+    for(int it = 1; it < key.size(); ++it)
+    {
+        Digikam::Album* al = key.at(it);
+        quint64 myint = (unsigned long long)al;
+        value ^= qHash(myint);
+    }
+
+    return value;
+}
 
 namespace Digikam
 {
@@ -48,22 +71,26 @@ public:
 
     HistoryItem()
     {
-        album  = 0;
         widget = 0;
     };
 
-    HistoryItem(Album* const a, QWidget* const w)
+    HistoryItem(QList<Album*> const a, QWidget* const w)
     {
-        album  = a;
+        albums.append(a);
         widget = w;
     };
 
     bool operator==(const HistoryItem& item)
     {
-        return (album == item.album) && (widget == item.widget);
+        if(widget != item.widget)
+        {
+            return false;
+        }
+
+        return albums == item.albums;
     }
 
-    Album*   album;
+    QList<Album*>   albums;
     QWidget* widget;
 };
 
@@ -114,7 +141,7 @@ public:
 
     QList<HistoryItem>            backwardStack;
     QList<HistoryItem>            forwardStack;
-    QMap<Album*, HistoryPosition> historyPos;
+    QHash<QList<Album*>, HistoryPosition> historyPos;
 };
 
 void AlbumHistory::Private::forward(unsigned int steps)
@@ -153,22 +180,23 @@ void AlbumHistory::clearHistory()
     d->moving = false;
 }
 
-void AlbumHistory::addAlbum(Album* const album, QWidget* const widget)
+void AlbumHistory::addAlbums(QList<Album*> const albums, QWidget* const widget)
 {
-    if (!album || !widget || d->moving)
+
+    if (albums.isEmpty() || !widget || d->moving)
     {
         d->moving = false;
         return;
     }
 
     // Same album as before in the history
-    if (!d->backwardStack.isEmpty() && d->backwardStack.last().album == album)
+    if (!d->backwardStack.isEmpty() && d->backwardStack.last().albums == albums)
     {
         d->backwardStack.last().widget = widget;
         return;
     }
 
-    d->backwardStack << HistoryItem(album, widget);
+    d->backwardStack << HistoryItem(albums, widget);
 
     // The forward stack has to be cleared, if backward stack was changed
     d->forwardStack.clear();
@@ -180,13 +208,16 @@ void AlbumHistory::deleteAlbum(Album* const album)
     {
         return;
     }
+    QList<Album*> albums;
+    albums << album;
 
     //  Search all HistoryItems, with album and delete them
     QList<HistoryItem>::iterator it = d->backwardStack.begin();
 
+
     while (it != d->backwardStack.end())
     {
-        if (it->album == album)
+        if (it->albums == albums)
         {
             it = d->backwardStack.erase(it);
         }
@@ -200,7 +231,7 @@ void AlbumHistory::deleteAlbum(Album* const album)
 
     while (it != d->forwardStack.end())
     {
-        if (it->album == album)
+        if (it->albums == albums)
         {
             it = d->forwardStack.erase(it);
         }
@@ -283,9 +314,18 @@ void AlbumHistory::getBackwardHistory(QStringList& list) const
 
     for (; it != (d->backwardStack.isEmpty() ? d->backwardStack.constEnd() : --d->backwardStack.constEnd()); ++it)
     {
-        if (it->album)
+        if (!(it->albums.isEmpty()))
         {
-            list.push_front(it->album->title());
+            QString name;
+            for(int iter = 0; iter < it->albums.size(); ++iter)
+            {
+                name.append(it->albums.at(iter)->title());
+                if(iter+1 < it->albums.size())
+                {
+                    name.append("/");
+                }
+            }
+            list.push_front(name);
         }
     }
 }
@@ -301,16 +341,24 @@ void AlbumHistory::getForwardHistory(QStringList& list) const
 
     for (it = d->forwardStack.constBegin(); it != d->forwardStack.constEnd(); ++it)
     {
-        if (it->album)
+        if (!(it->albums.isEmpty()))
         {
-            list.append(it->album->title());
+            QString name;
+            for(int iter = 0; iter < it->albums.size(); ++iter)
+            {
+                name.append(it->albums.at(iter)->title());
+                if(iter+1 < it->albums.size())
+                {
+                    name.append("/");
+                }
+            }
+            list.push_front(name);
         }
     }
 }
 
-void AlbumHistory::back(Album** const album, QWidget** const widget, unsigned int steps)
+void AlbumHistory::back(QList<Album*>& album, QWidget** const widget, unsigned int steps)
 {
-    *album  = 0;
     *widget = 0;
 
     if (d->backwardStack.count() <= 1 || (int)steps > d->backwardStack.count())
@@ -331,13 +379,13 @@ void AlbumHistory::back(Album** const album, QWidget** const widget, unsigned in
         return;
     }
 
-    *album  = d->backwardStack.last().album;
+    album.append(d->backwardStack.last().albums);
     *widget = d->backwardStack.last().widget;
 }
 
-void AlbumHistory::forward(Album** const album, QWidget** const widget, unsigned int steps)
+void AlbumHistory::forward(QList<Album*>& album, QWidget** const widget, unsigned int steps)
 {
-    *album  = 0;
+
     *widget = 0;
 
     if (d->forwardStack.isEmpty() || (int)steps > d->forwardStack.count())
@@ -352,7 +400,7 @@ void AlbumHistory::forward(Album** const album, QWidget** const widget, unsigned
         return;
     }
 
-    *album  = d->backwardStack.last().album;
+    album.append(d->backwardStack.last().albums);
     *widget = d->backwardStack.last().widget;
 }
 
@@ -366,7 +414,10 @@ void AlbumHistory::getCurrentAlbum(Album** const album, QWidget** const widget) 
         return;
     }
 
-    *album  = d->backwardStack.last().album;
+    if(!(d->backwardStack.last().albums.isEmpty()))
+    {
+        *album  = d->backwardStack.last().albums.first();
+    }
     *widget = d->backwardStack.last().widget;
 }
 
@@ -384,24 +435,24 @@ bool AlbumHistory::isBackwardEmpty() const
 
 void AlbumHistory::slotAlbumSelected()
 {
-    Album* const currentAlbum = AlbumManager::instance()->currentAlbum();
+    QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
 
-    if (d->historyPos.contains(currentAlbum))
+    if (d->historyPos.contains(albumList))
     {
         d->blockSelection = true;
-        emit signalSetCurrent(d->historyPos[currentAlbum].current.id());
+        emit signalSetCurrent(d->historyPos[albumList].current.id());
     }
 }
 
 void AlbumHistory::slotAlbumCurrentChanged()
 {
-    Album* const currentAlbum = AlbumManager::instance()->currentAlbum();
+    QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
 
-    if (d->historyPos.contains(currentAlbum))
+    if (!(albumList.isEmpty()) && d->historyPos.contains(albumList))
     {
-        if (d->historyPos[currentAlbum].select.size())
+        if (d->historyPos[albumList].select.size())
         {
-            emit signalSetSelectedInfos(d->historyPos[currentAlbum].select);
+            emit signalSetSelectedInfos(d->historyPos[albumList].select);
         }
     }
 
@@ -410,8 +461,12 @@ void AlbumHistory::slotAlbumCurrentChanged()
 
 void AlbumHistory::slotCurrentChange(const ImageInfo& info)
 {
-    Album* const currentAlbum           = AlbumManager::instance()->currentAlbum();
-    d->historyPos[currentAlbum].current = info;
+    QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
+
+    if(albumList.isEmpty())
+        return;
+
+    d->historyPos[albumList].current = info;
 }
 
 void AlbumHistory::slotImageSelected(const ImageInfoList& selectedImages)
@@ -421,41 +476,46 @@ void AlbumHistory::slotImageSelected(const ImageInfoList& selectedImages)
         return;
     }
 
-    Album* const currentAlbum = AlbumManager::instance()->currentAlbum();
+    QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
 
-    if (d->historyPos.contains(currentAlbum))
+    if (d->historyPos.contains(albumList))
     {
-        d->historyPos[currentAlbum].select = selectedImages;
+        d->historyPos[albumList].select = selectedImages;
     }
 }
 
 void AlbumHistory::slotClearSelectPAlbum(const ImageInfo& imageInfo)
 {
     Album* const album = dynamic_cast<Album*>(AlbumManager::instance()->findPAlbum(imageInfo.albumId()));
-
-    if (d->historyPos.contains(album))
+    QList<Album*> albums;
+    albums << album;
+    if (d->historyPos.contains(albums))
     {
-        d->historyPos[album].select.clear();
+        d->historyPos[albums].select.clear();
     }
 }
 
 void AlbumHistory::slotClearSelectTAlbum(int id)
 {
     Album* const album = dynamic_cast<Album*>(AlbumManager::instance()->findTAlbum(id));
+    QList<Album*> albums;
+    albums << album;
 
-    if (d->historyPos.contains(album))
+    if (d->historyPos.contains(albums))
     {
-        d->historyPos[album].select.clear();
+        d->historyPos[albums].select.clear();
     }
 }
 
 void AlbumHistory::slotAlbumDeleted(Album* album)
 {
     deleteAlbum(album);
+    QList<Album*> albums;
+    albums << album;
 
-    if (d->historyPos.contains(album))
+    if (d->historyPos.contains(albums))
     {
-        d->historyPos.remove(album);
+        d->historyPos.remove(albums);
     }
 }
 

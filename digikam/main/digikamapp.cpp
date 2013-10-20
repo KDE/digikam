@@ -116,7 +116,6 @@
 #include "iccsettings.h"
 #include "imageattributeswatch.h"
 #include "imageinfo.h"
-#include "imagesortsettings.h"
 #include "imagewindow.h"
 #include "lighttablewindow.h"
 #include "queuemgrwindow.h"
@@ -146,6 +145,8 @@
 #include "thumbsgenerator.h"
 #include "kipipluginloader.h"
 #include "imagepluginloader.h"
+#include "tagsmanager.h"
+#include "qualityscandialog.h"
 
 #ifdef USE_SCRIPT_IFACE
 #include "scriptiface.h"
@@ -336,6 +337,10 @@ DigikamApp::~DigikamApp()
         QueueMgrWindow::queueManagerWindow()->close();
     }
 
+    if(TagsManager::isCreated())
+    {
+        TagsManager::instance()->close();
+    }
     delete d->view;
 
     AlbumSettings::instance()->setRecurseAlbums(d->recurseAlbumsAction->isChecked());
@@ -807,6 +812,11 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
+    d->openTagMngrAction = new KAction(KIcon("tag"), i18n("Open Tag Manager"), this);
+    connect(d->openTagMngrAction, SIGNAL(triggered()), d->view, SLOT(slotOpenTagsManager()));
+    actionCollection()->addAction("open_tag_mngr", d->openTagMngrAction);
+
+    // -----------------------------------------------------------
     d->newTagAction = new KAction(KIcon("tag-new"), i18nc("new tag", "N&ew..."), this);
     connect(d->newTagAction, SIGNAL(triggered()), d->view, SLOT(slotNewTag()));
     actionCollection()->addAction("tag_new", d->newTagAction);
@@ -1142,9 +1152,9 @@ void DigikamApp::setupActions()
     d->showBarAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_T));
     connect(d->showBarAction, SIGNAL(triggered()), this, SLOT(slotToggleShowBar()));
     actionCollection()->addAction("showthumbs", d->showBarAction);
-    
+
     d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
-    
+
     KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          actionCollection());
     KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      actionCollection());
     KStandardAction::configureNotifications(this, SLOT(slotConfNotifications()), actionCollection());
@@ -1155,7 +1165,7 @@ void DigikamApp::setupActions()
 
     // Provides a menu entry that allows showing/hiding the statusbar
     createStandardStatusBarAction();
-    
+
     // -----------------------------------------------------------
 
     d->zoomPlusAction  = KStandardAction::zoomIn(d->view, SLOT(slotZoomIn()), this);
@@ -1379,7 +1389,13 @@ void DigikamApp::slotAlbumSelected(bool val)
 {
     // NOTE: val is true when a PAlbum is selected.
 
-    Album* album = AlbumManager::instance()->currentAlbum();
+    QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
+    Album* album = 0;
+
+    if(!albumList.isEmpty())
+    {
+        album = albumList.first();
+    }
 
     if (album)
     {
@@ -1435,7 +1451,13 @@ void DigikamApp::slotAlbumSelected(bool val)
 
 void DigikamApp::slotTagSelected(bool val)
 {
-    Album* album = AlbumManager::instance()->currentAlbum();
+    QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
+    Album* album = 0;
+
+    if(!albumList.isEmpty())
+    {
+        album = albumList.first();
+    }
 
     if (!album)
     {
@@ -2430,7 +2452,9 @@ void DigikamApp::loadPlugins()
     new KipiPluginLoader(this, d->splashScreen);
 
     // Setting the initial menu options after all plugins have been loaded
-    d->view->slotAlbumSelected(AlbumManager::instance()->currentAlbum());
+    QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
+
+    d->view->slotAlbumSelected(albumList);
 
     // Load Image Editor plugins.
     new ImagePluginLoader(this, d->splashScreen);
@@ -2475,6 +2499,25 @@ void DigikamApp::slotDatabaseMigration()
     dlg.exec();
 }
 
+void DigikamApp::slotQuality()
+{
+/*
+    QualityScanDialog* qdlg =new QualityScanDialog(this);
+    if (qdlg->exec() == QDialog::Accepted)
+    {
+        d->qualityAction->setEnabled(false);
+
+
+        MaintenanceMngr* mngr = new MaintenanceMngr(this);
+
+        connect(mngr, SIGNAL(signalComplete()),
+                this, SLOT(slotMaintenanceDone()));
+
+        mngr->setSettings(dlg->settings());
+    }
+*/
+}
+
 void DigikamApp::slotMaintenance()
 {
     MaintenanceDlg* dlg = new MaintenanceDlg(this);
@@ -2509,7 +2552,15 @@ void DigikamApp::slotMaintenanceDone()
 
 void DigikamApp::slotRebuildAlbumThumbnails()
 {
-    ThumbsGenerator* tool = new ThumbsGenerator(true, AlbumManager::instance()->currentAlbum()->id());
+    QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
+    int id = 0;
+
+    if(!albumList.isEmpty())
+    {
+        id = albumList.first()->id();
+    }
+
+    ThumbsGenerator* tool = new ThumbsGenerator(true, id);
     tool->start();
 }
 
@@ -2590,7 +2641,13 @@ void DigikamApp::slotImportAddFolders()
         return;
     }
 
-    Album* album = AlbumManager::instance()->currentAlbum();
+    QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
+    Album* album = 0;
+
+    if(!albumList.isEmpty())
+    {
+        album = albumList.first();
+    }
 
     if (album && album->type() != Album::PHYSICAL)
     {
@@ -3011,7 +3068,7 @@ void DigikamApp::toogleShowBar()
         case StackedView::MediaPlayerMode:
             d->showBarAction->setEnabled(true);
             break;
-            
+
         default:
             d->showBarAction->setEnabled(false);
             break;

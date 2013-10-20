@@ -64,7 +64,7 @@ public:
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(Album* album);
+    void    changeAlbumFromHistory(QList<Album*> album);
     QPixmap getIcon();
     QString getCaption();
 
@@ -105,7 +105,7 @@ public:
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(Album* album);
+    void    changeAlbumFromHistory(QList<Album*> album);
     QPixmap getIcon();
     QString getCaption();
 
@@ -114,6 +114,7 @@ public:
 public Q_SLOTS:
 
     void setCurrentAlbum(TAlbum* album);
+    void slotOpenTagManager();
 
 Q_SIGNALS:
 
@@ -150,7 +151,7 @@ public:
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(Album* album);
+    void    changeAlbumFromHistory(QList<Album*> album);
     QPixmap getIcon();
     QString getCaption();
 
@@ -185,7 +186,7 @@ public:
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(Album* album);
+    void    changeAlbumFromHistory(QList<Album*> album);
     QPixmap getIcon();
     QString getCaption();
 
@@ -231,7 +232,7 @@ public:
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(Album* album);
+    void    changeAlbumFromHistory(QList<Album*> album);
     QPixmap getIcon();
     QString getCaption();
 
@@ -263,7 +264,7 @@ public:
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(Album* album);
+    void    changeAlbumFromHistory(QList<Album*> album);
     QPixmap getIcon();
     QString getCaption();
 
@@ -298,7 +299,7 @@ public:
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(Album* album);
+    void    changeAlbumFromHistory(QList<Album*> album);
     QPixmap getIcon();
     QString getCaption();
 
@@ -333,7 +334,7 @@ public:
     void    doLoadState();
     void    doSaveState();
     void    applySettings();
-    void    changeAlbumFromHistory(Album* album);
+    void    changeAlbumFromHistory(QList<Album*> album);
     QPixmap getIcon();
     QString getCaption();
 

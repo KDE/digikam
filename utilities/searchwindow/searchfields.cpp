@@ -581,7 +581,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         SearchFieldRangeInt* field = new SearchFieldRangeInt(parent);
         field->setFieldName(name);
         field->setText(i18n("Duration"), i18n("Length of the video"));
-        field->setBetweenText(i18nc("Find video with a lenght between...and...", "and"));
+        field->setBetweenText(i18nc("Find video with a length between...and...", "and"));
         field->setNumberPrefixAndSuffix(QString(), i18nc("Seconds", "s"));
         field->setBoundary(1, 10000, 100);
         field->setSuggestedValues(QList<int>()

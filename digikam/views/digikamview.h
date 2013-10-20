@@ -100,7 +100,7 @@ public:
     void toggleTag(int tagID);
     QList<SidebarWidget*> leftSidebarWidgets() const;
     StackedView::StackedViewMode viewMode() const;
-    
+
 Q_SIGNALS:
 
     void signalAlbumSelected(bool val);
@@ -145,7 +145,7 @@ public Q_SLOTS:
     void slotAlbumHistoryForward(int steps=1);
     void slotAlbumWriteMetadata();
     void slotAlbumReadMetadata();
-    void slotAlbumSelected(Album* album);
+    void slotAlbumSelected(QList<Album*> albums);
 
     void slotGotoAlbumAndItem(const ImageInfo& imageInfo);
     void slotGotoDateAndItem(const ImageInfo& imageInfo);
@@ -158,7 +158,9 @@ public Q_SLOTS:
     void slotNewTag();
     void slotDeleteTag();
     void slotEditTag();
+    void slotOpenTagsManager();
     void slotAssignTag();
+
 
     // Search action slots
     void slotNewKeywordSearch();
@@ -206,6 +208,10 @@ public Q_SLOTS:
     void slotLeftSideBarActivate(SidebarWidget* widget);
     void slotLeftSideBarActivateAlbums();
     void slotLeftSideBarActivateTags();
+    
+    //Image Quality Sorting slot 
+    void slotNewQualitySort(Album* album);
+    
 
     void slotFocusAndNextImage();
 
@@ -219,7 +225,7 @@ private:
     void setupConnections();
     void loadViewState();
     void saveViewState();
-    void changeAlbumFromHistory(Album* const album, QWidget* const widget);
+    void changeAlbumFromHistory(QList<Album*> album, QWidget* const widget);
     void slideShow(const ImageInfoList& infoList);
 
 private Q_SLOTS:

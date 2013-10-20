@@ -301,7 +301,8 @@ Album* TableViewTreeView::albumAt(const QPoint& pos) const
 
     if (albumModel)
     {
-        return albumModel->currentAlbum();
+        if(!(albumModel->currentAlbums().isEmpty()))
+            return albumModel->currentAlbums().first();
     }
 
     return 0;

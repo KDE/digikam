@@ -1061,6 +1061,12 @@ public:
     QList<ItemScanInfo> getIdenticalFiles(qlonglong id);
     QList<ItemScanInfo> getIdenticalFiles(const QString& uniqueHash, qlonglong fileSize, qlonglong sourceId = -1);
 
+    /**
+     * Returns a list of all images where tagId is assigned
+     * Return item URLs.
+     */
+     QStringList getItemsURLsWithTag(int tagId);
+    
     // ----------- Items and their tags -----------
 
     /**

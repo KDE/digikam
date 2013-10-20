@@ -433,7 +433,7 @@ void QueueListView::dragMoveEvent(QDragMoveEvent* e)
 
     if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs) ||
         DAlbumDrag::decode(e->mimeData(), urls, albumID)                    ||
-        DTagDrag::canDecode(e->mimeData()))
+        DTagListDrag::canDecode(e->mimeData()))
     {
         if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
         {
@@ -529,16 +529,16 @@ void QueueListView::dropEvent(QDropEvent* e)
             e->acceptProposedAction();
         }
     }
-    else if (DTagDrag::canDecode(e->mimeData()))
+    else if (DTagListDrag::canDecode(e->mimeData()))
     {
-        int tagID;
+        QList<int> tagIDs;
 
-        if (!DTagDrag::decode(e->mimeData(), tagID))
+        if (!DTagListDrag::decode(e->mimeData(), tagIDs))
         {
             return;
         }
 
-        QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
+        QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagIDs.first(), true);
         ImageInfoList imageInfoList;
 
         for (QList<qlonglong>::const_iterator it = itemIDs.constBegin();

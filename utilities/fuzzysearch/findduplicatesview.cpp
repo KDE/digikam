@@ -63,6 +63,7 @@ public:
 
     Private()
     {
+        includeAlbumsLabel = 0;
         listView           = 0;
         scanDuplicatesBtn  = 0;
         updateFingerPrtBtn = 0;
@@ -307,7 +308,8 @@ void FindDuplicatesView::slotDuplicatesAlbumActived(QTreeWidgetItem* item, int)
 
     if (sitem)
     {
-        AlbumManager::instance()->setCurrentAlbum(sitem->album());
+        AlbumManager::instance()->setCurrentAlbums(QList<Album*>()
+                                                   << sitem->album());
     }
 }
 

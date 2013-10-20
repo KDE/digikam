@@ -30,6 +30,7 @@
 #include <QCheckBox>
 #include <QGridLayout>
 #include <QComboBox>
+#include <QScrollArea>
 
 // Libkdcraw includes
 
@@ -43,7 +44,6 @@
 #include <kstandarddirs.h>
 #include <knuminput.h>
 #include <kvbox.h>
-#include <kseparator.h>
 #include <kconfig.h>
 
 // Local includes
@@ -51,6 +51,7 @@
 #include "setup.h"
 #include "albumselectors.h"
 #include "facescansettings.h"
+#include "imagequalitysettings.h"
 #include "metadatasynchronizer.h"
 
 using namespace KDcrawIface;
@@ -64,11 +65,13 @@ public:
 
     enum Operation
     {
-        NewItems = 0,
+        Options = 0,
+        NewItems,
         Thumbnails,
         FingerPrints,
         Duplicates,
         FaceManagement,
+        ImageQualitySorter,
         MetadataSync,
 
         Stretch
@@ -82,8 +85,10 @@ public:
         scanThumbs(0),
         scanFingerPrints(0),
         useMutiCoreCPU(0),
+        qualityScanMode(0),
         faceScannedHandling(0),
         metadataSetup(0),
+        qualitySetup(0),
         syncDirection(0),
         hbox(0),
         vbox(0),
@@ -105,6 +110,8 @@ public:
     static const QString configSimilarity;
     static const QString configFaceManagement;
     static const QString configFaceScannedHandling;
+    static const QString configImageQualitySorter;
+    static const QString configQualityScanMode;
     static const QString configMetadataSync;
     static const QString configSyncDirection;
 
@@ -113,11 +120,14 @@ public:
     QCheckBox*           scanThumbs;
     QCheckBox*           scanFingerPrints;
     QCheckBox*           useMutiCoreCPU;
+    QComboBox*           qualityScanMode;
     QComboBox*           faceScannedHandling;
     QPushButton*         metadataSetup;
+    QPushButton*         qualitySetup;
     QComboBox*           syncDirection;
     KHBox*               hbox;
     KVBox*               vbox;
+    KVBox*               vbox2;
     KHBox*               hbox3;
     KIntNumInput*        similarity;
     RExpanderBox*        expanderBox;
@@ -135,6 +145,8 @@ const QString MaintenanceDlg::Private::configDuplicates("Duplicates");
 const QString MaintenanceDlg::Private::configSimilarity("Similarity");
 const QString MaintenanceDlg::Private::configFaceManagement("FaceManagement");
 const QString MaintenanceDlg::Private::configFaceScannedHandling("FaceScannedHandling");
+const QString MaintenanceDlg::Private::configImageQualitySorter("ImageQualitySorter");
+const QString MaintenanceDlg::Private::configQualityScanMode("QualityScanMode");
 const QString MaintenanceDlg::Private::configMetadataSync("MetadataSync");
 const QString MaintenanceDlg::Private::configSyncDirection("SyncDirection");
 
@@ -146,19 +158,30 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     setButtons(Ok | Help | Cancel);
     setDefaultButton(Cancel);
 
-    QWidget* const page     = new QWidget(this);
-    setMainWidget(page);
+    QScrollArea* const main = new QScrollArea(this);
+    QWidget* const page     = new QWidget(main->viewport());
+    main->setWidget(page);
+    main->setWidgetResizable(true);
+    main->setAutoFillBackground(false);
+    main->viewport()->setAutoFillBackground(false);
+    page->setAutoFillBackground(false);
+
+    setMainWidget(main);
 
     QGridLayout* const grid = new QGridLayout(page);
 
     d->logo                 = new QLabel(page);
     d->logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                        .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-
     d->title                = new QLabel(i18n("<qt><b>Select Maintenance Operations to Process</b></qt>"), page);
-    d->albumSelectors       = new AlbumSelectors(i18nc("@label", "Process items from:"), d->configGroupName, page);
-    d->useMutiCoreCPU       = new QCheckBox(i18nc("@option:check", "Work on all processor cores"), page);
     d->expanderBox          = new RExpanderBox(page);
+
+    // --------------------------------------------------------------------------------------
+
+    KVBox* const options    = new KVBox;
+    d->albumSelectors       = new AlbumSelectors(i18nc("@label", "Process items from:"), d->configGroupName, options);
+    d->useMutiCoreCPU       = new QCheckBox(i18nc("@option:check", "Work on all processor cores"), options);
+    d->expanderBox->insertItem(Private::Options, options, SmallIcon("configure"), i18n("Common Options"), "Options", true);
 
     // --------------------------------------------------------------------------------------
 
@@ -211,21 +234,42 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
 
     // --------------------------------------------------------------------------------------
 
-    d->vbox              = new KVBox;
-    KHBox* const hbox21  = new KHBox(d->vbox);
+    d->vbox               = new KVBox;
+    KHBox* const hbox11   = new KHBox(d->vbox);
+    new QLabel(i18n("Scan Mode: "), hbox11);
+    QWidget* const space7 = new QWidget(hbox11);
+    hbox11->setStretchFactor(space7, 10);
+
+    d->qualityScanMode    = new QComboBox(hbox11);
+    d->qualityScanMode->addItem(i18n("Clean all and re-scan"),  ImageQualitySorter::AllItems);
+    d->qualityScanMode->addItem(i18n("Scan non-assigned only"), ImageQualitySorter::NonAssignedItems);
+
+    KHBox* const hbox12   = new KHBox(d->vbox);
+    new QLabel(i18n("Check quality sorter setup panel for details: "), hbox12);
+    QWidget* const space2 = new QWidget(hbox12);
+    hbox12->setStretchFactor(space2, 10);
+    d->qualitySetup       = new QPushButton(i18n("Settings..."), hbox12);
+    d->expanderBox->insertItem(Private::ImageQualitySorter, d->vbox, SmallIcon("flag-green"),
+                               i18n("Image Quality Sorter"), "ImageQualitySorter", false);
+    d->expanderBox->setCheckBoxVisible(Private::ImageQualitySorter, true);
+
+    // --------------------------------------------------------------------------------------
+
+    d->vbox2              = new KVBox;
+    KHBox* const hbox21   = new KHBox(d->vbox2);
     new QLabel(i18n("Sync Direction: "), hbox21);
-    QWidget* const space4  = new QWidget(hbox21);
-    hbox21->setStretchFactor(space4, 10);
-    d->syncDirection = new QComboBox(hbox21);
+    QWidget* const space5 = new QWidget(hbox21);
+    hbox21->setStretchFactor(space5, 10);
+    d->syncDirection      = new QComboBox(hbox21);
     d->syncDirection->addItem(i18n("From database to image metadata"), MetadataSynchronizer::WriteFromDatabaseToFile);
     d->syncDirection->addItem(i18n("From image metadata to database"), MetadataSynchronizer::ReadFromFileToDatabase);
 
-    KHBox* const hbox22  = new KHBox(d->vbox);
+    KHBox* const hbox22   = new KHBox(d->vbox2);
     new QLabel(i18n("Check metadata setup panel for details: "), hbox22);
-    QWidget* const space2 = new QWidget(hbox22);
-    hbox22->setStretchFactor(space2, 10);
+    QWidget* const space6 = new QWidget(hbox22);
+    hbox22->setStretchFactor(space6, 10);
     d->metadataSetup      = new QPushButton(i18n("Settings..."), hbox22);
-    d->expanderBox->insertItem(Private::MetadataSync, d->vbox, SmallIcon("run-build-file"),
+    d->expanderBox->insertItem(Private::MetadataSync, d->vbox2, SmallIcon("run-build-file"),
                                i18n("Sync Metadata and Database"), "MetadataSync", false);
     d->expanderBox->setCheckBoxVisible(Private::MetadataSync, true);
     d->expanderBox->insertStretch(Private::Stretch);
@@ -234,10 +278,6 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
 
     grid->addWidget(d->logo,                        0, 0, 1, 1);
     grid->addWidget(d->title,                       0, 1, 1, 1);
-    grid->addWidget(new KSeparator(Qt::Horizontal), 1, 1, 1, 1);
-    grid->addWidget(d->albumSelectors,              2, 1, 1, 1);
-    grid->addWidget(d->useMutiCoreCPU,              3, 1, 1, 1);
-    grid->addWidget(new KSeparator(Qt::Horizontal), 4, 1, 1, 1);
     grid->addWidget(d->expanderBox,                 5, 0, 3, 2);
     grid->setSpacing(spacingHint());
     grid->setMargin(0);
@@ -255,8 +295,11 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     connect(d->metadataSetup, SIGNAL(clicked()),
             this, SLOT(slotMetadataSetup()));
 
-    setMinimumSize(500, 350);
-    adjustSize();
+    connect(d->qualitySetup, SIGNAL(clicked()),
+            this, SLOT(slotQualitySetup()));
+
+    // --------------------------------------------------------------------------------------
+
     readSettings();
 }
 
@@ -288,6 +331,11 @@ MaintenanceSettings MaintenanceDlg::settings() const
     prm.faceManagement                      = d->expanderBox->isChecked(Private::FaceManagement);
     prm.faceSettings.alreadyScannedHandling = (FaceScanSettings::AlreadyScannedHandling)d->faceScannedHandling->itemData(d->syncDirection->currentIndex()).toInt();
     prm.faceSettings.albums                 = d->albumSelectors->selectedAlbums();
+    prm.qualitySort                         = d->expanderBox->isChecked(Private::ImageQualitySorter);
+    prm.qualityScanMode                     = d->qualityScanMode->itemData(d->syncDirection->currentIndex()).toInt();
+    ImageQualitySettings imgq;
+    imgq.readFromConfig();
+    prm.quality                             = imgq;
     prm.metadataSync                        = d->expanderBox->isChecked(Private::MetadataSync);
     prm.syncDirection                       = d->syncDirection->itemData(d->syncDirection->currentIndex()).toInt();
     return prm;
@@ -302,23 +350,29 @@ void MaintenanceDlg::readSettings()
 
     MaintenanceSettings prm;
 
-    d->useMutiCoreCPU->setChecked(group.readEntry(d->configUseMutiCoreCPU,                       prm.useMutiCoreCPU));
-    d->expanderBox->setChecked(Private::NewItems,       group.readEntry(d->configNewItems,       prm.newItems));
-    d->expanderBox->setChecked(Private::Thumbnails,     group.readEntry(d->configThumbnails,     prm.thumbnails));
-    d->scanThumbs->setChecked(group.readEntry(d->configScanThumbs,                               prm.scanThumbs));
-    d->expanderBox->setChecked(Private::FingerPrints,   group.readEntry(d->configFingerPrints,   prm.fingerPrints));
-    d->scanFingerPrints->setChecked(group.readEntry(d->configScanFingerPrints,                   prm.scanFingerPrints));
-    d->expanderBox->setChecked(Private::Duplicates,     group.readEntry(d->configDuplicates,     prm.duplicates));
-    d->similarity->setValue(group.readEntry(d->configSimilarity,                                 prm.similarity));
-    d->expanderBox->setChecked(Private::FaceManagement, group.readEntry(d->configFaceManagement, prm.faceManagement));
-    d->faceScannedHandling->setCurrentIndex(group.readEntry(d->configFaceScannedHandling,        (int)prm.faceSettings.alreadyScannedHandling));
-    d->expanderBox->setChecked(Private::MetadataSync,   group.readEntry(d->configMetadataSync,   prm.metadataSync));
-    d->syncDirection->setCurrentIndex(group.readEntry(d->configSyncDirection,                    prm.syncDirection));
+    d->useMutiCoreCPU->setChecked(group.readEntry(d->configUseMutiCoreCPU,                               prm.useMutiCoreCPU));
+    d->expanderBox->setChecked(Private::NewItems,           group.readEntry(d->configNewItems,           prm.newItems));
+    d->expanderBox->setChecked(Private::Thumbnails,         group.readEntry(d->configThumbnails,         prm.thumbnails));
+    d->scanThumbs->setChecked(group.readEntry(d->configScanThumbs,                                       prm.scanThumbs));
+    d->expanderBox->setChecked(Private::FingerPrints,       group.readEntry(d->configFingerPrints,       prm.fingerPrints));
+    d->scanFingerPrints->setChecked(group.readEntry(d->configScanFingerPrints,                           prm.scanFingerPrints));
+    d->expanderBox->setChecked(Private::Duplicates,         group.readEntry(d->configDuplicates,         prm.duplicates));
+    d->similarity->setValue(group.readEntry(d->configSimilarity,                                         prm.similarity));
+    d->expanderBox->setChecked(Private::FaceManagement,     group.readEntry(d->configFaceManagement,     prm.faceManagement));
+    d->faceScannedHandling->setCurrentIndex(group.readEntry(d->configFaceScannedHandling,                (int)prm.faceSettings.alreadyScannedHandling));
+    d->expanderBox->setChecked(Private::MetadataSync,       group.readEntry(d->configMetadataSync,       prm.metadataSync));
+    d->syncDirection->setCurrentIndex(group.readEntry(d->configSyncDirection,                            prm.syncDirection));
+    d->expanderBox->setChecked(Private::ImageQualitySorter, group.readEntry(d->configImageQualitySorter, prm.qualitySort));
+    d->qualityScanMode->setCurrentIndex(group.readEntry(d->configQualityScanMode,                        prm.qualityScanMode));
+    d->expanderBox->setChecked(Private::MetadataSync,       group.readEntry(d->configMetadataSync,       prm.metadataSync));
+    d->syncDirection->setCurrentIndex(group.readEntry(d->configSyncDirection,                            prm.syncDirection));
 
     for (int i = Private::NewItems ; i < Private::Stretch ; ++i)
     {
         slotItemToggled(i, d->expanderBox->isChecked(i));
     }
+    
+    restoreDialogSize(group);
 }
 
 void MaintenanceDlg::writeSettings()
@@ -340,8 +394,12 @@ void MaintenanceDlg::writeSettings()
     group.writeEntry(d->configSimilarity,          prm.similarity);
     group.writeEntry(d->configFaceManagement,      prm.faceManagement);
     group.writeEntry(d->configFaceScannedHandling, (int)prm.faceSettings.alreadyScannedHandling);
+    group.writeEntry(d->configImageQualitySorter,  prm.qualitySort);
+    group.writeEntry(d->configQualityScanMode,     prm.qualityScanMode);
     group.writeEntry(d->configMetadataSync,        prm.metadataSync);
     group.writeEntry(d->configSyncDirection,       prm.syncDirection);
+    
+    saveDialogSize(group);
 }
 
 void MaintenanceDlg::slotItemToggled(int index, bool b)
@@ -364,8 +422,12 @@ void MaintenanceDlg::slotItemToggled(int index, bool b)
             d->hbox3->setEnabled(b);
             break;
 
-        case Private::MetadataSync:
+        case Private::ImageQualitySorter:
             d->vbox->setEnabled(b);
+            break;
+
+        case Private::MetadataSync:
+            d->vbox2->setEnabled(b);
             break;
 
         default :  // NewItems
@@ -376,6 +438,11 @@ void MaintenanceDlg::slotItemToggled(int index, bool b)
 void MaintenanceDlg::slotMetadataSetup()
 {
     Setup::execSinglePage(this, Setup::MetadataPage);
+}
+
+void MaintenanceDlg::slotQualitySetup()
+{
+    Setup::execSinglePage(this, Setup::ImageQualityPage);
 }
 
 }  // namespace Digikam

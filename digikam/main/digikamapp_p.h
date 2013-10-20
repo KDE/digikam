@@ -109,6 +109,7 @@ public:
         writeAlbumMetadataAction(0),
         readAlbumMetadataAction(0),
         browseTagsAction(0),
+        openTagMngrAction(0),
         newTagAction(0),
         deleteTagAction(0),
         editTagAction(0),
@@ -219,6 +220,7 @@ public:
 
     // Tag Actions
     KAction*                            browseTagsAction;
+    KAction*                            openTagMngrAction;
     KAction*                            newTagAction;
     KAction*                            deleteTagAction;
     KAction*                            editTagAction;
@@ -283,6 +285,7 @@ public:
     KAction*                            bqmAction;
     KAction*                            maintenanceAction;
     KAction*                            slideShowQmlAction;
+    KAction*                            qualityAction;
 
 #ifdef USE_SCRIPT_IFACE
     KAction*                            scriptConsoleAction;

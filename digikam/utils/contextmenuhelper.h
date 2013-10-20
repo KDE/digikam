@@ -249,6 +249,7 @@ public:
      */
     void addActionNewTag(TagModificationHelper* helper, TAlbum* parentTag = 0);
     void addActionDeleteTag(TagModificationHelper* helper, TAlbum* tag);
+    void addActionDeleteTags(TagModificationHelper* helper, QList< TAlbum* > tags);
     void addActionEditTag(TagModificationHelper* helper, TAlbum* tag);
 
     /**

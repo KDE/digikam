@@ -101,7 +101,7 @@ KipiInterface::~KipiInterface()
 
 KIPI::ImageCollection KipiInterface::currentAlbum()
 {
-    Album* currAlbum = d->albumManager->currentAlbum();
+    Album* currAlbum = d->albumManager->currentAlbums().first();
 
     if (currAlbum)
     {
@@ -117,7 +117,7 @@ KIPI::ImageCollection KipiInterface::currentAlbum()
 
 KIPI::ImageCollection KipiInterface::currentSelection()
 {
-    Album* currAlbum = d->albumManager->currentAlbum();
+    Album* currAlbum = d->albumManager->currentAlbums().first();
 
     if (currAlbum)
     {
@@ -278,9 +278,9 @@ void KipiInterface::slotSelectionChanged(int count)
     emit selectionChanged(count);
 }
 
-void KipiInterface::slotCurrentAlbumChanged(Album* album)
+void KipiInterface::slotCurrentAlbumChanged(QList<Album*> albums)
 {
-    emit currentAlbumChanged(album != 0);
+    emit currentAlbumChanged(!(albums.isEmpty()));
 }
 
 void KipiInterface::thumbnail(const KUrl& url, int /*size*/)

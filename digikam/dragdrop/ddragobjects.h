@@ -74,24 +74,6 @@ public:
 // ------------------------------------------------------------------------
 
 /**
- * Provides a drag object for a tag
- *
- * When a tag is moved through drag'n'drop an object of this class
- * is created.
- */
-class DTagDrag : public QMimeData
-{
-public:
-
-    explicit DTagDrag(int albumid);
-    static QStringList mimeTypes();
-    static bool canDecode(const QMimeData* e);
-    static bool decode(const QMimeData* e, int& tagID);
-};
-
-// ------------------------------------------------------------------------
-
-/**
  * Provides a drag object for an album
  *
  * When an album is moved through drag'n'drop an object of this class
