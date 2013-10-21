@@ -99,20 +99,16 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
     list.insert(i18n("LibRaw"),                      KDcraw::librawVersion());
 
 #if KDCRAW_VERSION >= 0x000500
-    list.insert(i18n("Parallelized demosaicing"),    KDcraw::librawUseGomp() ?
-                i18n("Yes") : i18n("No"));
+    list.insert(i18n("Parallelized demosaicing"),    checkTriState(KDcraw::librawUseGomp()));
 #endif
 
 #if KDCRAW_VERSION >= 0x020400
-    list.insert(i18n("Demosaic GPL2 pack support"),  KDcraw::librawUseGPL2DemosaicPack() ?
-                i18n("Yes") : i18n("No"));
-    list.insert(i18n("Demosaic GPL3 pack support"),  KDcraw::librawUseGPL3DemosaicPack() ?
-                i18n("Yes") : i18n("No"));
+    list.insert(i18n("Demosaic GPL2 pack support"),  checkTriState(KDcraw::librawUseGPL2DemosaicPack()));
+    list.insert(i18n("Demosaic GPL3 pack support"),  checkTriState(KDcraw::librawUseGPL3DemosaicPack()));
 #endif
 
 #if KDCRAW_VERSION >= 0x020200
-    list.insert(i18n("RawSpeed codec support"),      KDcraw::librawUseRawSpeed() ?
-                i18n("Yes") : i18n("No"));
+    list.insert(i18n("RawSpeed codec support"),      checkTriState(KDcraw::librawUseRawSpeed()));
 #endif
 
 #ifdef HAVE_EIGEN3
@@ -165,6 +161,19 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
 
 LibsInfoDlg::~LibsInfoDlg()
 {
+}
+
+QString LibsInfoDlg::checkTriState(int value)
+{
+    switch(value)
+    {
+        case true:
+            return i18n("Yes");
+        case false:
+            return i18n("No");
+        default:
+            return i18n("Unknow");
+    }
 }
 
 }  // namespace Digikam
