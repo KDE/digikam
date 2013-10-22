@@ -31,23 +31,23 @@ MaintenanceSettings::MaintenanceSettings()
     wholeAlbums        = true;
     wholeTags          = true;
     useMutiCoreCPU     = false;
-    
+
     newItems           = false;
-    
+
     thumbnails         = false;
     scanThumbs         = false;
-    
+
     fingerPrints       = false;
     scanFingerPrints   = false;
-    
+
     duplicates         = false;
     similarity         = 90;
-    
+
     faceManagement     = false;
-    
+
     qualitySort        = false;
     qualityScanMode    = true;   // NOTE: turn on by default to prevent clearing whole Pick Labels from Collection
-    
+
     metadataSync       = false;
     syncDirection      = MetadataSynchronizer::WriteFromDatabaseToFile;
 }

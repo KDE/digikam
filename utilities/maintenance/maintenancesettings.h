@@ -87,7 +87,7 @@ public:
     int                  qualityScanMode;
     /// Image Quality Sorting Settings.
     ImageQualitySettings quality;
-    
+
     /// Sync metadata and DB.
     bool                 metadataSync;
     /// Sync direction (image metadata <-> DB).

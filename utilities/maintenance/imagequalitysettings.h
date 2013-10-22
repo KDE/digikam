@@ -28,8 +28,6 @@
 
 #include <QDebug>
 
-class KConfigGroup;
-
 namespace Digikam
 {
 

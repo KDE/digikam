@@ -371,7 +371,7 @@ void MaintenanceDlg::readSettings()
     {
         slotItemToggled(i, d->expanderBox->isChecked(i));
     }
-    
+
     restoreDialogSize(group);
 }
 

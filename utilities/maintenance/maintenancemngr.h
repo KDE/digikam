@@ -69,7 +69,7 @@ private:
 
     void done();    // Called when all scheduled tools are done.
     void cancel();  // Called when a tol is canceled.
-    
+
 private:
 
     class Private;
