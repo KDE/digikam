@@ -7,4 +7,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 325702 - digikam crashes when deleting photos.
 002 ==> 307146 - Build against shared LibRaw.
-003 ==> 
+003 ==> 326368 - Can't make digikam from git with test enable : error with libraw 5 ubuntu precise.
+004 ==> 
