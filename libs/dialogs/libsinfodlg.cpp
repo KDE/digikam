@@ -172,7 +172,7 @@ QString LibsInfoDlg::checkTriState(int value)
         case false:
             return i18n("No");
         default:
-            return i18n("Unknow");
+            return i18n("Unknown");
     }
 }
 
