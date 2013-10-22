@@ -146,7 +146,6 @@
 #include "kipipluginloader.h"
 #include "imagepluginloader.h"
 #include "tagsmanager.h"
-#include "qualityscandialog.h"
 
 #ifdef USE_SCRIPT_IFACE
 #include "scriptiface.h"
