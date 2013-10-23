@@ -111,9 +111,6 @@ public:
      */
     bool setImageFacesMap(QMap<QString,QVariant>& facesPath, bool write) const;
 
-    /** Delete all face tags from image's xmp metadata **/
-    void removeImageFaces() const;
-
     bool     setMetadataTemplate(const Template& t) const;
     Template getMetadataTemplate() const;
     bool     removeMetadataTemplate() const;
