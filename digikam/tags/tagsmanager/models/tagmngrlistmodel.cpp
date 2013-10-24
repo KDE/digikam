@@ -31,6 +31,7 @@
 // KDE includes
 
 #include <kdebug.h>
+#include <klocale.h>
 
 // Local includes
 
@@ -102,10 +103,22 @@ QList<int> TagMngrListModel::getDragNewSelection() const
 
 void TagMngrListModel::deleteItem(ListItem* const item)
 {
+    if(!item)
+        return;
+
+    /**  Do not delete "All Tags" item **/
+    if(item->data(Qt::DisplayRole) == i18n("All Tags"))
+        return;
+
     emit layoutAboutToBeChanged();
     d->rootItem->deleteChild(item);
-    delete item;
     emit layoutChanged();
+
+    /** NOTE: trying to delete the item here will cause a crash since
+     *  somehow, View still use the old item
+     *  Even deleteLater() doesn't help ...
+     */
+    //item->deleteLater();
 }
 
 int TagMngrListModel::columnCount(const QModelIndex& parent) const

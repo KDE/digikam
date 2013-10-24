@@ -185,7 +185,9 @@ ListItem* ListItem::parent() const
 int ListItem::row() const
 {
     if (d->parentItem)
-        return d->parentItem->d->childItems.indexOf(const_cast<ListItem*>(this));
+    {
+        return d->parentItem->allChildren().indexOf(const_cast<ListItem*>(this));
+    }
 
     return 0;
 }

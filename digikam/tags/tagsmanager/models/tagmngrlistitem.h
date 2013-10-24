@@ -32,8 +32,10 @@
 namespace Digikam
 {
 
-class ListItem
+class ListItem : public QObject
 {
+    Q_OBJECT
+
 public:
 
     ListItem(QList<QVariant>& data, ListItem* const parent = 0);
