@@ -54,7 +54,10 @@ public:
 ThumbsTask::ThumbsTask()
     : Job(0), d(new Private)
 {
-    d->catcher = new ThumbnailImageCatcher(ThumbnailLoadThread::defaultThread(), this);
+    ThumbnailLoadThread* const thread = new ThumbnailLoadThread;
+    thread->setPixmapRequested(false);
+    thread->setThumbnailSize(ThumbnailLoadThread::maximumThumbnailSize());
+    d->catcher                        = new ThumbnailImageCatcher(thread, this);
 }
 
 ThumbsTask::~ThumbsTask()
@@ -80,11 +83,10 @@ void ThumbsTask::run()
     d->catcher->thread()->deleteThumbnail(d->path);
     d->catcher->thread()->find(d->path);
     d->catcher->enqueue();
-
     QList<QImage> images = d->catcher->waitForThumbnails();
-    d->catcher->setActive(false);
-
     emit signalFinished(images.first());
+
+    d->catcher->setActive(false);
 }
 
 }  // namespace Digikam
