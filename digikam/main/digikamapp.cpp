@@ -2498,33 +2498,15 @@ void DigikamApp::slotDatabaseMigration()
     dlg.exec();
 }
 
-void DigikamApp::slotQuality()
-{
-/*
-    QualityScanDialog* qdlg =new QualityScanDialog(this);
-    if (qdlg->exec() == QDialog::Accepted)
-    {
-        d->qualityAction->setEnabled(false);
-
-
-        MaintenanceMngr* mngr = new MaintenanceMngr(this);
-
-        connect(mngr, SIGNAL(signalComplete()),
-                this, SLOT(slotMaintenanceDone()));
-
-        mngr->setSettings(dlg->settings());
-    }
-*/
-}
-
 void DigikamApp::slotMaintenance()
 {
-    MaintenanceDlg* dlg = new MaintenanceDlg(this);
+    MaintenanceDlg* const dlg = new MaintenanceDlg(this);
+
     if (dlg->exec() == QDialog::Accepted)
     {
         d->maintenanceAction->setEnabled(false);
 
-        MaintenanceMngr* mngr = new MaintenanceMngr(this);
+        MaintenanceMngr* const mngr = new MaintenanceMngr(this);
 
         connect(mngr, SIGNAL(signalComplete()),
                 this, SLOT(slotMaintenanceDone()));

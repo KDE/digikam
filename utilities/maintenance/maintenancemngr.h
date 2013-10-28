@@ -68,7 +68,7 @@ private:
     void stage7();  // Metadata
 
     void done();    // Called when all scheduled tools are done.
-    void cancel();  // Called when a tol is canceled.
+    void cancel();  // Called when a tool is canceled.
 
 private:
 

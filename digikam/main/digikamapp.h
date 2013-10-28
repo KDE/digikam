@@ -211,8 +211,6 @@ private Q_SLOTS:
     void slotImportAddImages();
     void slotImportAddFolders();
     void slotThemeChanged();
-    
-    void slotQuality();
 
 #ifdef USE_SCRIPT_IFACE
     void slotScriptConsole();
