@@ -6,7 +6,7 @@
  * Date        : 2009-05-29
  * Description : PGF utils.
  *
- * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -172,32 +172,40 @@ bool writePGFImageFile(const QImage& image, const QString& filePath, int quality
 
 bool writePGFImageData(const QImage& image, QByteArray& data, int quality, bool verbose)
 {
-    // TODO : optimize memory allocation...
-    CPGFMemoryStream stream(256000);
+    // We will use uncompressed image bytes size to allocate PGF stream in memory. In all case, due to PGF compression ratio,
+    // PGF data will be so far lesser than image raw size.
+    int rawSize          = image.byteCount();
+    CPGFMemoryStream stream(rawSize);
+
+    if (verbose)
+        kDebug() << "PGF stream memory allocation in bytes: " << rawSize;
+
     UINT32 nWrittenBytes = 0;
     bool ret             = writePGFImageDataToStream(image, stream, quality, nWrittenBytes, verbose);
-    data                 = QByteArray((const char*)stream.GetBuffer(),
-
+    int pgfsize          =
 #ifdef PGFCodecVersionID
 #   if PGFCodecVersionID == 0x061224
                                       // Wrap around libpgf 6.12.24 about CPGFMemoryStream bytes size generated to make PGF file data.
                                       // It miss 16 bytes at end. This solution fix the problem. Problem have been fixed in 6.12.27.
-                                      nWrittenBytes + 16);
+                                      nWrittenBytes + 16;
 #   else
-                                      nWrittenBytes);
+                                      nWrittenBytes;
 #   endif
 #else
-                                      nWrittenBytes);
+                                      nWrittenBytes;
 #endif
 
-    if (!nWrittenBytes)
+    data                 = QByteArray((const char*)stream.GetBuffer(), pgfsize);
+
+    if (!pgfsize)
     {
         kDebug() << "Encoded PGF image : data size is null";
         ret = false;
     }
     else
     {
-        if (verbose) kDebug() << "data size written : " << nWrittenBytes;
+        if (verbose)
+            kDebug() << "data size written : " << pgfsize;
     }
 
     return ret;
