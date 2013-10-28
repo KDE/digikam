@@ -73,6 +73,7 @@ void ThumbsTask::setItem(const QString& path)
 
 void ThumbsTask::slotCancel()
 {
+    d->catcher->thread()->stopAllTasks();
     d->catcher->cancel();
 }
 
