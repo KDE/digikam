@@ -21,6 +21,8 @@
  *
  * ============================================================ */
 
+#include "tagmngrlistitem.moc"
+
 // Qt includes
 
 #include <QStringList>
@@ -32,7 +34,6 @@
 
 // Local includes
 
-#include "tagmngrlistitem.h"
 #include "albummanager.h"
 #include "album.h"
 
