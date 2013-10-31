@@ -176,9 +176,9 @@ void MapWidgetView::doSaveState()
 void MapWidgetView::openAlbum(Album* const album)
 {
     if(album)
+    {
         d->imageModel->openAlbum(QList<Album*>() << album);
-    else
-        d->imageModel->openAlbum(QList<Album*>() << album);
+    }
 }
 
 /**
