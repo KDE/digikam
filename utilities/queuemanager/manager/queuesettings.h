@@ -84,6 +84,10 @@ public:
     /// If true, original file dir will be used to process queue items.
     bool                useOrgAlbum;
 
+    /// Use External Tools for post processing bunch of files
+    bool                useETools;
+    QString             externalTool;
+    
     QString             renamingParser;
 
     KUrl                workingUrl;

@@ -92,6 +92,8 @@
 #include "knotificationwrapper.h"
 #include "scancontroller.h"
 
+#include "etrunner.h"
+
 namespace Digikam
 {
 
@@ -134,7 +136,7 @@ QueueMgrWindow::QueueMgrWindow()
     m_instance = this;
     BatchToolsManager::instance();        // Create first instance here
     WorkflowManager::instance();             // Create first instance here
-    d->thread  = new ActionThread(this);
+    d->manager = new QueueMgr(this);
 
     setWindowFlags(Qt::Window);
     setCaption(i18n("Batch Queue Manager"));
@@ -327,14 +329,14 @@ void QueueMgrWindow::setupConnections()
 
     // -- Multithreaded interface connections -------------------------------
 
-    connect(d->thread, SIGNAL(signalStarting(Digikam::ActionData)),
+//     connect(d->manager, SIGNAL(started()),
+//             this, SLOT(slotQueueStarted()));    
+    
+    connect(d->manager, SIGNAL(action(Digikam::ActionData)),
             this, SLOT(slotAction(Digikam::ActionData)));
-
-    connect(d->thread, SIGNAL(signalFinished(Digikam::ActionData)),
-            this, SLOT(slotAction(Digikam::ActionData)));
-
-    connect(d->thread, SIGNAL(signalQueueProcessed()),
-            this, SLOT(slotQueueProcessed()));
+    
+    connect(d->manager, SIGNAL(finished()),
+            this, SLOT(slotQueueProcessed()));    
 
     // -- GUI connections ---------------------------------------------------
 
@@ -770,11 +772,14 @@ void QueueMgrWindow::processOneQueue()
         tools4Items.append(one);
     }
 
-    d->thread->setSettings(settings);
-    d->thread->processQueueItems(tools4Items);
-
-    if (!d->thread->isRunning())
-        d->thread->start();
+    if (!d->manager->setup(settings, tools4Items))
+    {
+        KMessageBox::error(this,
+                           i18n("Can't start queue \"%1\" - queue already processing", d->queuePool->queueTitle(d->currentQueueToProcess)),
+                           i18n("Processed items album settings"));
+        processingAborted();
+        return;
+    }
 }
 
 void QueueMgrWindow::busy(bool busy)
@@ -996,7 +1001,7 @@ void QueueMgrWindow::addHistoryMessage(QueueListViewItem* const cItem, const QSt
 
 void QueueMgrWindow::slotStop()
 {
-    d->thread->cancel();
+    d->manager->cancel();
     d->queuePool->currentQueue()->cancelItems();
     d->currentQueueToProcess = 0;
     processingAborted();

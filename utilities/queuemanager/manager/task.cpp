@@ -113,7 +113,15 @@ void Task::emitActionData(ActionData::ActionStatus st, const QString& mess, cons
     ad.status  = st;
     ad.message = mess;
     ad.destUrl = dest;
-    emit signalFinished(ad);
+    
+    if (st == ActionData::BatchStarted)
+    {
+        emit signalStarting(ad);
+    }
+    else
+    {
+        emit signalFinished(ad);
+    }
 }
 
 void Task::run()

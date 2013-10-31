@@ -34,6 +34,7 @@
 #include <QTimer>
 #include <QTreeWidget>
 #include <QVBoxLayout>
+#include <QComboBox>
 
 // KDE includes
 
@@ -57,6 +58,7 @@
 #include "albumselectwidget.h"
 #include "batchtool.h"
 #include "queuesettings.h"
+#include "etwidget.h"
 
 using namespace KDcrawIface;
 
@@ -72,7 +74,8 @@ public:
         TARGET = 0,
         RENAMING,
         BEHAVIOR,
-        RAW
+        RAW,
+        EXTERNALTOOLS
     };
 
 public:
@@ -114,7 +117,10 @@ public:
 
     QCheckBox*             useOrgAlbum;
     QCheckBox*             useMutiCoreCPU;
+    QCheckBox*             useETools;    
 
+    QComboBox*             externalTool;
+    
     AlbumSelectWidget*     albumSel;
 
     AdvancedRenameManager* advancedRenameManager;
@@ -144,6 +150,8 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
 
     d->useOrgAlbum           = new QCheckBox(i18n("Use original Album"), vbox3);
     d->albumSel              = new AlbumSelectWidget(vbox3);
+    d->useETools             = new QCheckBox(i18n("Use External Tools"), vbox3);
+    d->externalTool          = new QComboBox(vbox3);
     insertTab(Private::TARGET, sv3, SmallIcon("folder-image"), i18n("Target"));
 
     // --------------------------------------------------------
@@ -245,6 +253,12 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
 
     insertTab(Private::RAW, d->rawSettings, SmallIcon("kdcraw"), i18n("Raw Decoding"));
 
+    QScrollArea* const et     = new QScrollArea(this);
+    ETWidget* etw             = new ETWidget(et);
+    et->setViewport(etw);
+    insertTab(Private::EXTERNALTOOLS, et, SmallIcon("dialog-information"), i18n("Extrenal Tools"));
+    
+    
     // --------------------------------------------------------
 
     connect(d->useOrgAlbum, SIGNAL(toggled(bool)),
@@ -252,8 +266,14 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
 
     connect(d->useMutiCoreCPU, SIGNAL(toggled(bool)),
             this, SLOT(slotSettingsChanged()));
+    
+    connect(d->useETools, SIGNAL(toggled(bool)),
+            this, SLOT(slotSettingsChanged()));
         
     connect(d->albumSel, SIGNAL(itemSelectionChanged()),
+            this, SLOT(slotSettingsChanged()));
+    
+    connect(d->externalTool, SIGNAL(activated(int)),
             this, SLOT(slotSettingsChanged()));
 
     connect(d->renamingButtonGroup, SIGNAL(buttonClicked(int)),
@@ -313,12 +333,15 @@ void QueueSettingsView::slotResetSettings()
     d->rawLoadingButtonGroup->button(QueueSettings::DEMOSAICING)->setChecked(true);
     d->advancedRenameWidget->clearParseString();
     d->rawSettings->resetToDefault();
+    d->useETools->setChecked(false);
+    d->externalTool->clear();
     blockSignals(false);
     slotSettingsChanged();
 }
 
 void QueueSettingsView::slotQueueSelected(int, const QueueSettings& settings, const AssignedBatchTools&)
 {
+    blockSignals(true);
     d->useOrgAlbum->setChecked(settings.useOrgAlbum);
     d->useMutiCoreCPU->setChecked(settings.useMultiCoreCPU);
     d->albumSel->setEnabled(!settings.useOrgAlbum);
@@ -336,7 +359,23 @@ void QueueSettingsView::slotQueueSelected(int, const QueueSettings& settings, co
     d->advancedRenameWidget->setParseString(settings.renamingParser);
 
     d->rawSettings->setSettings(settings.rawDecodingSettings);
+
+    d->useETools->setChecked(settings.useETools);
+    int index = d->externalTool->findData(settings.externalTool);
+    if (index == -1)
+    {
+        d->useETools->setChecked(false);
+    }
+    else
+    {
+        d->externalTool->setCurrentIndex(index);
+    }
+
+    blockSignals(false);
+    slotSettingsChanged();
 }
+
+
 
 void QueueSettingsView::slotSettingsChanged()
 {
@@ -358,7 +397,27 @@ void QueueSettingsView::slotSettingsChanged()
 
     settings.rawDecodingSettings = d->rawSettings->settings();
 
+
+    const QVariant currentTool = d->externalTool->itemData(d->externalTool->currentIndex());
+    
+    ETConfig::Ptr cfg(ETConfig::config());
+    d->externalTool->clear();
+    foreach(const QString& group, cfg->cfg.groupList())
+    {
+        KConfigGroup toolcfg = cfg->cfg.group(group);
+        d->externalTool->addItem(toolcfg.readEntry<QString>(ETConfig::name, QString()), group);
+        if (group == currentTool.toString())
+        {
+            d->externalTool->setCurrentIndex(d->externalTool->count() - 1);
+        }
+    }
+    
+    d->externalTool->setEnabled(d->useETools->isChecked());    
+    settings.useETools = d->useETools->isChecked();
+    settings.externalTool = d->externalTool->itemData(d->externalTool->currentIndex()).toString();
+    
     emit signalSettingsChanged(settings);
 }
+
 
 }  // namespace Digikam

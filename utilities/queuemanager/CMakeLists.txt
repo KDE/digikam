@@ -49,7 +49,16 @@ SET(libqueuemanager_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/views/toolsview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/views/workflowlist.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/main/queuemgrwindow.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/main/queuemgr.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/main/etwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/main/etrunner.cpp
 )
+
+FILE(GLOB etwidget_UI 
+        ${CMAKE_CURRENT_SOURCE_DIR}/main/*.ui
+)
+
+KDE4_ADD_UI_FILES(libqueuemanager_SRCS ${etwidget_UI})
 
 IF(LENSFUN_FOUND)
     SET(libqueuemanager_SRCS ${libqueuemanager_SRCS}

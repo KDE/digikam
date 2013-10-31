@@ -47,6 +47,7 @@
 #include "sidebar.h"
 #include "toolsettingsview.h"
 #include "toolsview.h"
+#include "queuemgr.h"
 
 namespace Digikam
 {
@@ -91,7 +92,7 @@ public:
         batchToolsMgr          = 0;
         toolSettings           = 0;
         showMenuBarAction      = 0;
-        thread                 = 0;
+        manager                = 0;        
         currentQueueToProcess  = 0;
     }
 
@@ -128,7 +129,7 @@ public:
 
     StatusProgressBar*       statusProgressBar;
 
-    ActionThread*            thread;
+    QueueMgr*                manager;
 
     ToolsView*               toolsView;
     ToolSettingsView*        toolSettings;

@@ -248,6 +248,11 @@ bool WorkflowManager::save()
             data.setAttribute(QString::fromLatin1("value"), q.qSettings.rawLoadingRule);
             elm.appendChild(data);
 
+            data = doc.createElement(QString::fromLatin1("externaltools"));
+            data.setAttribute(QString::fromLatin1("value"), q.qSettings.useETools);
+            data.setAttribute(QString::fromLatin1("name"), q.qSettings.externalTool);
+            elm.appendChild(data);
+
             // ----------------------
 
             QDomElement rawdecodingsettings = doc.createElement(QString::fromLatin1("rawdecodingsettings"));
@@ -405,6 +410,11 @@ bool WorkflowManager::load(QStringList& failed)
             {
                 DRawDecoding::decodingSettingsFromXml(e2, q.qSettings.rawDecodingSettings);
             }
+            else if (name2 == "externaltools")
+            {
+                q.qSettings.useETools = (bool)(e2.attribute(QString::fromLatin1("value"), "0").toUInt(&ok));
+                q.qSettings.externalTool = e2.attribute(QString::fromLatin1("name"));
+            }            
             else if (name2 == "tool")
             {
                 BatchToolSet set;
