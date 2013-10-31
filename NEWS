@@ -9,6 +9,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 002 ==> 307146 - Build against shared LibRaw.
 003 ==> 326368 - Can't make digikam from git with test enable : error with libraw 5 ubuntu precise.
 004 ==> 302810 - Crash when closing digikam during face recognition.
-005 ==> 289931 - Digikam crashed after trying to open the geolocation sidebar
-006 ==> 
+005 ==> 289931 - digiKam crashed after trying to open the geolocation sidebar
+006 ==> 285250 - digiKam crashed after saving changed file.
+007 ==> 
 
