@@ -12,5 +12,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 289931 - digiKam crashed after trying to open the geolocation sidebar
 006 ==> 285250 - digiKam crashed after saving changed file.
 007 ==> 256050 - digiKam crashed after modifying tag name.
-008 ==> 
-
+008 ==> 324425 - How to switch off (get rid of) thumbnail preview?
+009 ==> 
