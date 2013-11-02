@@ -1370,25 +1370,50 @@ bool DMetadata::setImageFacesMap(QMap< QString, QVariant >& facesPath, bool writ
     QString areahTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:h");
     QString areanormTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:unit");
 
+    QString winQxmpTagName("Xmp.MP.RegionInfo/MPRI:Regions");
+    QString winRectTagKey = winQxmpTagName + QString("[%1]/MPReg:Rectangle");
+    QString winNameTagKey = winQxmpTagName + QString("[%1]/MPReg:PersonDisplayName");
+
     if(!write)
     {
-        QString check = getXmpTagString(nameTagKey.arg(0).toLatin1());
+        QString check = getXmpTagString(nameTagKey.arg(1).toLatin1());
 
         if(check.isEmpty())
             return true;
     }
-    removeImageFaces();
 
     setXmpTagString(qxmpTagName.toLatin1(),
                     QString(),KExiv2::XmpTagType(1),false);
 
+    setXmpTagString(winQxmpTagName.toLatin1(),
+                    QString(),KExiv2::XmpTagType(1),false);
+
     QMap<QString,QVariant>::const_iterator it = facesPath.constBegin();
-    int i =1;
+    int i = 1;
     bool ok = true;
     while(it != facesPath.constEnd())
     {
         qreal x,y,w,h;
         it.value().toRectF().getRect(&x,&y,&w,&h);
+
+        /** Write face tags in Windows Live Photo format **/
+
+        QString rectString;
+
+        rectString.append(QString::number(x) + QString(", "));
+        rectString.append(QString::number(y) + QString(", "));
+        rectString.append(QString::number(w) + QString(", "));
+        rectString.append(QString::number(h));
+
+        /** Set tag rect **/
+        setXmpTagString(winRectTagKey.arg(i).toLatin1(), rectString,
+                             KExiv2::XmpTagType(0),false);
+        /** Set tag name **/
+
+        setXmpTagString(winNameTagKey.arg(i).toLatin1(),it.key(),
+                             KExiv2::XmpTagType(0),false);
+
+        /** Writing rectangle in Metadata Group format **/
         x += w/2;
         y += h/2;
 
@@ -1433,41 +1458,6 @@ bool DMetadata::setImageFacesMap(QMap< QString, QVariant >& facesPath, bool writ
     Q_UNUSED(write);
     return false;
 #endif
-}
-void DMetadata::removeImageFaces() const
-{
-    QString qxmpTagName("Xmp.mwg-rs.Regions/mwg-rs:RegionList");
-    QString regionTagKey = qxmpTagName + QString("[%1]");
-    QString nameTagKey = qxmpTagName + QString("[%1]/mwg-rs:Name");
-    QString typeTagKey = qxmpTagName + QString("[%1]/mwg-rs:Type");
-    QString areaTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area");
-    QString areaxTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:x");
-    QString areayTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:y");
-    QString areawTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:w");
-    QString areahTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:h");
-    QString areanormTagKey = qxmpTagName + QString("[%1]/mwg-rs:Area/stArea:unit");
-
-    removeXmpTag(qxmpTagName.toLatin1(),false);
-    bool dirty= true;
-    int i=1;
-
-    /** Check if we could delete at least one entry. This method delete all
-         * tags, even invalid face tag data structures
-         */
-    while(dirty)
-    {
-        dirty = false;
-        dirty |=removeXmpTag(regionTagKey.arg(i).toLatin1(),false);
-        dirty |=removeXmpTag(nameTagKey.arg(i).toLatin1(),false);
-        dirty |=removeXmpTag(typeTagKey.arg(i).toLatin1(),false);
-        dirty |=removeXmpTag(areaTagKey.arg(i).toLatin1(),false);
-        dirty |=removeXmpTag(areaxTagKey.arg(i).toLatin1(),false);
-        dirty |=removeXmpTag(areayTagKey.arg(i).toLatin1(),false);
-        dirty |=removeXmpTag(areawTagKey.arg(i).toLatin1(),false);
-        dirty |=removeXmpTag(areahTagKey.arg(i).toLatin1(),false);
-        dirty |=removeXmpTag(areanormTagKey.arg(i).toLatin1(),false);
-        i++;
-    }
 }
 
 bool DMetadata::setMetadataTemplate(const Template& t) const

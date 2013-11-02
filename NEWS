@@ -1,14 +1,16 @@
 *****************************************************************************************************
-digiKam 3.5.0 - Release date: 2013-09-29
+digiKam 4.0.0 - Release date: 2013-10-20
 
 NEW FEATURES:
 
-General : new RAW cameras supported : Richon GR, Panasonic LF1, Canon EOS 70D, Sony RX100II, Sony RX1R, Olympus E-P5.
-
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 324349 : Removing tags limited to 250 selected pictures.
-002 ==> 323648 : Kipi-plugins cannot be deselected or digiKam not reading digikamrc.
-003 ==> 325111 : undo/redo does not take effect in the image.
-004 ==> 325264 : Feature request: Setting in digiKam to only detect faces, not trying to recognize them automatically.
-005 ==> 
+001 ==> 325702 - digiKam crashes when deleting photos.
+002 ==> 307146 - Build against shared LibRaw.
+003 ==> 326368 - Can't make digiKam from git with test enable : error with libraw 5 ubuntu precise.
+004 ==> 302810 - Crash when closing digiKam during face recognition.
+005 ==> 289931 - digiKam crashed after trying to open the geolocation sidebar
+006 ==> 285250 - digiKam crashed after saving changed file.
+007 ==> 256050 - digiKam crashed after modifying tag name.
+008 ==> 324425 - How to switch off (get rid of) thumbnail preview?
+009 ==> 

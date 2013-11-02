@@ -42,6 +42,7 @@
 #include "thumbsgenerator.h"
 #include "fingerprintsgenerator.h"
 #include "duplicatesfinder.h"
+#include "imagequalitysorter.h"
 #include "metadatasynchronizer.h"
 #include "facedetector.h"
 #include "knotificationwrapper.h"
@@ -63,6 +64,7 @@ public:
         duplicatesFinder      = 0;
         faceDetector          = 0;
         metadataSynchronizer  = 0;
+        imageQualitySorter    = 0;
     }
 
     bool                   running;
@@ -77,6 +79,7 @@ public:
     DuplicatesFinder*      duplicatesFinder;
     FaceDetector*          faceDetector;
     MetadataSynchronizer*  metadataSynchronizer;
+    ImageQualitySorter*    imageQualitySorter;
 };
 
 MaintenanceMngr::MaintenanceMngr(QObject* const parent)
@@ -139,6 +142,11 @@ void MaintenanceMngr::slotToolCompleted(ProgressItem* tool)
         d->faceDetector = 0;
         stage6();
     }
+   else if (tool == dynamic_cast<ProgressItem*>(d->imageQualitySorter))
+    {
+        d->imageQualitySorter = 0;
+        stage7();
+    }
     else if (tool == dynamic_cast<ProgressItem*>(d->metadataSynchronizer))
     {
         d->metadataSynchronizer = 0;
@@ -153,6 +161,7 @@ void MaintenanceMngr::slotToolCanceled(ProgressItem* tool)
         tool == dynamic_cast<ProgressItem*>(d->fingerPrintsGenerator) ||
         tool == dynamic_cast<ProgressItem*>(d->duplicatesFinder)      ||
         tool == dynamic_cast<ProgressItem*>(d->faceDetector)          ||
+        tool == dynamic_cast<ProgressItem*>(d->imageQualitySorter)    ||
         tool == dynamic_cast<ProgressItem*>(d->metadataSynchronizer))
     {
         cancel();
@@ -273,6 +282,28 @@ void MaintenanceMngr::stage5()
 void MaintenanceMngr::stage6()
 {
     kDebug() << "stage6";
+
+    if (d->settings.qualitySort && d->settings.quality.enableSorter)
+    {
+        AlbumList list;
+        list << d->settings.albums;
+        list << d->settings.tags;
+
+        d->imageQualitySorter = new ImageQualitySorter((ImageQualitySorter::QualityScanMode)d->settings.qualityScanMode, list, d->settings.quality);
+        d->imageQualitySorter->setNotificationEnabled(false);
+        d->imageQualitySorter->setUseMultiCoreCPU(d->settings.useMutiCoreCPU);
+        d->imageQualitySorter->start();
+    }
+    else
+    {
+        stage7();
+    }
+}
+
+
+void MaintenanceMngr::stage7()
+{
+    kDebug() << "stage7";
 
     if (d->settings.metadataSync)
     {

@@ -46,6 +46,7 @@
 #include <kmessagebox.h>
 #include <kdialog.h>
 #include <ktabwidget.h>
+#include <kpushbutton.h>
 #include <kdebug.h>
 
 // Libkexiv2 includes
@@ -81,6 +82,7 @@
 #include "colorlabelwidget.h"
 #include "picklabelwidget.h"
 #include "fileactionprogress.h"
+#include "tagsmanager.h"
 #include "searchtextbar.h"
 #include "addtagslineedit.h"
 
@@ -116,6 +118,7 @@ public:
         applyBtn                   = 0;
         moreButton                 = 0;
         revertBtn                  = 0;
+        openTagMngr                = 0;
         moreMenu                   = 0;
         applyToAllVersionsButton   = 0;
         recentTagsMapper           = 0;
@@ -139,6 +142,7 @@ public:
     QToolButton*         recentTagsBtn;
     QToolButton*         assignedTagsBtn;
     QToolButton*         revertBtn;
+    KPushButton*         openTagMngr;
 
     KMenu*               moreMenu;
 
@@ -288,6 +292,9 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     d->tagCheckView = new TagCheckView(tagsArea, d->tagModel);
     d->tagCheckView->setCheckNewTags(true);
 
+    d->openTagMngr = new KPushButton( i18n("Open Tag Manger"));
+    connect(d->openTagMngr,SIGNAL(clicked()),this, SLOT(slotOpenTagsManager()));
+
     d->newTagEdit   = new AddTagsLineEdit(tagsArea);
     d->newTagEdit->setModel(d->tagModel);
     d->newTagEdit->setTagTreeView(d->tagCheckView);
@@ -322,9 +329,10 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     d->recentTagsBtn->setPopupMode(QToolButton::InstantPopup);
     d->recentTagsMapper   = new QSignalMapper(this);
 
-    grid3->addWidget(d->newTagEdit,   0, 0, 1, 2);
-    grid3->addWidget(d->tagCheckView, 1, 0, 1, 2);
-    grid3->addWidget(tagsSearch,      2, 0, 1, 2);
+    grid3->addWidget(d->openTagMngr,    0, 0, 1, 2);
+    grid3->addWidget(d->newTagEdit,     1, 0, 1, 2);
+    grid3->addWidget(d->tagCheckView,   2, 0, 1, 2);
+    grid3->addWidget(tagsSearch,        3, 0, 1, 2);
     grid3->setRowStretch(1, 10);
 
     d->tabWidget->insertTab(Private::TAGS, sv3, i18n("Tags"));
@@ -1222,6 +1230,13 @@ void ImageDescEditTab::slotImageTagsChanged(qlonglong imageId)
     metadataChange(imageId);
 }
 
+void ImageDescEditTab::slotOpenTagsManager()
+{
+    TagsManager* tagMngr = TagsManager::instance();
+    tagMngr->show();
+    tagMngr->activateWindow();
+    tagMngr->raise();
+}
 void ImageDescEditTab::slotImagesChanged(int albumId)
 {
     if (d->ignoreImageAttributesWatch || d->modified)
@@ -1490,4 +1505,5 @@ AddTagsLineEdit* ImageDescEditTab::getNewTagEdit()
 {
     return d->newTagEdit;
 }
+
 }  // namespace Digikam

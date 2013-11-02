@@ -938,6 +938,12 @@ int TagsCache::getOrCreateInternalTag(const QString& tagName)
 
 void TagsCache::slotTagChanged(const TagChangeset& changeset)
 {
+    if(changeset.operation() == TagChangeset::Deleted)
+    {
+        QString name = this->tagName(changeset.tagId());
+        emit tagAboutToBeDeleted(name);
+    }
+
     if (!d->changingDB && changeset.operation() != TagChangeset::IconChanged)
     {
         invalidate();

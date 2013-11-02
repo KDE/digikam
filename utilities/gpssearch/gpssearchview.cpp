@@ -306,7 +306,7 @@ void GPSSearchView::doLoadState()
 
     d->searchTreeView->loadState();
 
-    AlbumManager::instance()->setCurrentAlbum(0);
+    AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
 
     d->searchTreeView->clearSelection();
 }
@@ -346,8 +346,8 @@ void GPSSearchView::setActive(bool state)
 
         if (d->searchTreeView->currentAlbum())
         {
-            AlbumManager::instance()->setCurrentAlbum(
-                d->searchTreeView->currentAlbum());
+            AlbumManager::instance()->setCurrentAlbums(QList<Album*>()
+                                                       << d->searchTreeView->currentAlbum());
         }
 
         slotClearImages();
@@ -356,7 +356,7 @@ void GPSSearchView::setActive(bool state)
 
 void GPSSearchView::changeAlbumFromHistory(SAlbum* album)
 {
-    d->searchTreeView->setCurrentAlbum(album);
+    d->searchTreeView->setCurrentAlbums(QList<Album*>() << album);
 }
 
 /**
@@ -408,7 +408,7 @@ void GPSSearchView::slotRegionSelectionChanged()
  */
 void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
 {
-    //AlbumManager::instance()->setCurrentAlbum(0);
+    //AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
 
     // We query the database here
 
@@ -444,10 +444,10 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
     writer.finishGroup();
 
     SAlbum* const salbum = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::MapSearch, writer.xml());
-    AlbumManager::instance()->setCurrentAlbum(salbum);
+    AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << salbum);
     d->imageInfoJob.allItemsFromAlbum(salbum);
-    d->searchTreeView->setCurrentAlbum(salbum);
-    d->imageAlbumModel->openAlbum(salbum);
+    d->searchTreeView->setCurrentAlbums(QList<Album*>() << salbum);
+    d->imageAlbumModel->openAlbum(QList<Album*>() << salbum);
 }
 
 /**

@@ -102,6 +102,10 @@ public Q_SLOTS:
 
     void slotLayoutFirstItem();
 
+Q_SIGNALS:
+
+    void signalTransactionViewIsEmpty();
+
 protected:
 
     virtual void resizeEvent(QResizeEvent* event);

@@ -145,48 +145,6 @@ bool DItemDrag::decode(const QMimeData* e,
 
 // ------------------------------------------------------------------------
 
-DTagDrag::DTagDrag(int albumid)
-    : QMimeData()
-{
-    QByteArray  ba;
-    QDataStream ds(&ba, QIODevice::WriteOnly);
-    ds << albumid;
-    setData("digikam/tag-id", ba);
-}
-
-QStringList DTagDrag::mimeTypes()
-{
-    return QStringList() << "digikam/tag-id";
-}
-
-bool DTagDrag::canDecode(const QMimeData* e)
-{
-    return e->hasFormat("digikam/tag-id");
-}
-
-bool DTagDrag::decode(const QMimeData* e, int& tagID)
-{
-    tagID = 0;
-
-    QByteArray ba = e->data("digikam/tag-id");
-
-    if (ba.size())
-    {
-        QDataStream ds(ba);
-
-        if (!ds.atEnd())
-        {
-            ds >> tagID;
-        }
-
-        return true;
-    }
-
-    return false;
-}
-
-// ------------------------------------------------------------------------
-
 DAlbumDrag::DAlbumDrag(const KUrl& databaseUrl, int albumid, const KUrl& fileUrl)
     : QMimeData()
 {

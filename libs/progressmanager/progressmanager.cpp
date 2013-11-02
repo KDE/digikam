@@ -32,6 +32,7 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QThread>
+#include <QEventLoop>
 
 // KDE includes
 
@@ -324,7 +325,8 @@ class ProgressManager::Private
 public:
 
     Private()
-        : uID(1000)
+        : uID(1000),
+          waitingLoop(0)
     {
     }
 
@@ -336,6 +338,8 @@ public:
     QMutex                        mutex;
     QHash<QString, ProgressItem*> transactions;
     QAtomicInt                    uID;
+
+    QEventLoop*                   waitingLoop;
 };
 
 K_GLOBAL_STATIC(ProgressManagerCreator, creator)
@@ -377,6 +381,8 @@ void ProgressManager::Private::removeItem(ProgressItem* const t)
 ProgressManager::ProgressManager()
     : d(new Private)
 {
+    d->waitingLoop = new QEventLoop(this);
+
     if (thread() != QApplication::instance()->thread())
     {
         kWarning() << "Attention: ProgressManager was created from a thread. Create it in the main thread!";
@@ -584,6 +590,13 @@ void ProgressManager::slotAbortAll()
         it.next();
         it.value()->cancel();
     }
+
+    d->waitingLoop->exec(QEventLoop::ExcludeUserInputEvents);
+}
+
+void ProgressManager::slotTransactionViewIsEmpty()
+{
+    d->waitingLoop->quit();
 }
 
 void ProgressManager::emitShowProgressView()

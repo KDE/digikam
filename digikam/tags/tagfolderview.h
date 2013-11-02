@@ -99,6 +99,24 @@ protected:
      */
     virtual void handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album);
 
+    /**
+     * Reimplement contextMenuEvent from AbstractAlbumTree to support multiple
+     * selection
+     *
+     * @param event context menu event triggered by right click
+     */
+    void contextMenuEvent(QContextMenuEvent* event);
+
+    /**
+     * Implementation of AddCustomContextMenuActions(see above) that handle
+     * multiple selection. If only one element is selected, only
+     * AddCustomContextMenuActions is called
+     *
+     * @param cmh       - helper object to create context menu
+     * @param albums    - vector of selected albums to be used on menu actions
+     */
+    virtual void setContexMenuItems(ContextMenuHelper& cmh, QList< TAlbum* > albums);
+
 private Q_SLOTS:
 
     void slotTagNewFromABCMenu(const QString& personName);

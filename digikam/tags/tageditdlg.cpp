@@ -302,13 +302,13 @@ void TagEditDlg::slotTitleChanged(const QString& newtitle)
         else
         {
             d->topLabel->setText(i18n("<b>Create New Tag in<br/>"
-                                      "<i>\"%1\"</i></b>", tagName));
+                                      "\"%1\"</b>", tagName));
         }
     }
     else
     {
         d->topLabel->setText(i18n("<b>Properties of Tag<br/>"
-                                  "<i>\"%1\"</i></b>", tagName));
+                                  "\"%1\"</b>", tagName));
     }
 
     QRegExp emptyTitle = QRegExp("^\\s*$");

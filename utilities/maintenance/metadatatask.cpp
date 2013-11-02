@@ -44,9 +44,11 @@ public:
     {
         cancel    = false;
         direction = MetadataSynchronizer::WriteFromDatabaseToFile;
+        tagsOnly  = false;
     }
 
     bool                                cancel;
+    bool                                tagsOnly;
 
     ImageInfo                           item;
     MetadataSynchronizer::SyncDirection direction;
@@ -71,6 +73,10 @@ void MetadataTask::setItem(const ImageInfo& item, MetadataSynchronizer::SyncDire
     d->direction = dir;
 }
 
+void MetadataTask::setTagsOnly(bool value)
+{
+    d->tagsOnly = value;
+}
 void MetadataTask::slotCancel()
 {
     d->cancel = true;
@@ -91,7 +97,14 @@ void MetadataTask::run()
         fileHub.load(d->item);
 
         // write out to file DMetadata
-        fileHub.write(d->item.filePath());
+        if(d->tagsOnly)
+        {
+            fileHub.writeTags(d->item.filePath());
+        }
+        else
+        {
+            fileHub.write(d->item.filePath());
+        }
     }
     else // MetadataSynchronizer::ReadFromFileToDatabase
     {

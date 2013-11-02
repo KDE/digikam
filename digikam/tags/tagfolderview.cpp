@@ -30,7 +30,7 @@
 
 #include <QAction>
 #include <QEvent>
-
+#include <QContextMenuEvent>
 // KDE includes
 
 #include <kdebug.h>
@@ -43,6 +43,7 @@
 #include "albummanager.h"
 #include "contextmenuhelper.h"
 #include "tagmodificationhelper.h"
+
 
 namespace Digikam
 {
@@ -162,4 +163,80 @@ void TagFolderView::handleCustomContextMenuAction(QAction* action, AlbumPointer<
     }
 }
 
+void TagFolderView::setContexMenuItems(ContextMenuHelper& cmh, QList< TAlbum* > albums)
+{
+
+    if(albums.size() == 1)
+    {
+        addCustomContextMenuActions(cmh, albums.first());
+        return;
+    }
+
+    if (d->showFindDuplicateAction)
+    {
+        cmh.addAction(d->findDuplAction);
+    }
+    cmh.addExportMenu();
+    cmh.addBatchMenu();
+    cmh.addActionDeleteTags(tagModificationHelper(),albums);
+    cmh.addSeparator();
+}
+
+void TagFolderView::contextMenuEvent(QContextMenuEvent* event)
+{
+    /**
+    if (!d->enableContextMenu)
+    {
+        return;
+    }
+    */
+    Album* album = albumFilterModel()->albumForIndex(indexAt(event->pos()));
+
+
+    if (!showContextMenuAt(event, album))
+    {
+        return;
+    }
+    // switch to the selected album if need
+    /**
+    if (d->selectOnContextMenu && album)
+    {
+        setCurrentAlbum(album);
+    }
+    */
+    // --------------------------------------------------------
+    QModelIndexList selectedItems = selectionModel()->selectedIndexes();
+
+    qSort(selectedItems.begin(),selectedItems.end());
+    QList<TAlbum*> items;
+
+    foreach(QModelIndex mIndex, selectedItems)
+    {
+        TAlbum* temp = static_cast<TAlbum*>(albumForIndex(mIndex));
+        items.push_back(temp);
+    }
+
+    /**
+     * If no item is selected append root tag
+     */
+    if(items.isEmpty())
+    {
+        QModelIndex root = this->model()->index(0,0);
+        items.append(static_cast<TAlbum*>(albumForIndex(root)));
+    }
+    KMenu popmenu(this);
+    popmenu.addTitle(contextMenuIcon(), contextMenuTitle());
+    ContextMenuHelper cmhelper(&popmenu);
+
+    setContexMenuItems(cmhelper, items);
+    /**
+    foreach(ContextMenuElement* const element, d->contextMenuElements)
+    {
+        element->addActions(this, cmhelper, album);
+    }
+     */
+    AlbumPointer<Album> albumPointer(album);
+    QAction* const choice = cmhelper.exec(QCursor::pos());
+    handleCustomContextMenuAction(choice, albumPointer);
+}
 } // namespace Digikam

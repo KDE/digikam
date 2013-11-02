@@ -171,7 +171,6 @@ public:
         rootDAlbum(0),
         rootSAlbum(0),
         currentlyMovingAlbum(0),
-        currentAlbum(0),
         changingDB(false),
         scanPAlbumsTimer(0),
         scanTAlbumsTimer(0),
@@ -211,7 +210,8 @@ public:
 
     QMultiHash<Album*, Album**> guardedPointers;
 
-    Album*                      currentAlbum;
+    /** For multiple selection support **/
+    QList<Album*>               currentAlbums;
 
     bool                        changingDB;
     QTimer*                     scanPAlbumsTimer;
@@ -651,8 +651,8 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
 
     cleanUp();
 
-    d->currentAlbum = 0;
-    emit signalAlbumCurrentChanged(0);
+    d->currentAlbums.clear();
+    emit signalAlbumCurrentChanged(d->currentAlbums);
     emit signalAlbumsCleared();
 
     d->albumPathHash.clear();
@@ -1835,30 +1835,51 @@ AlbumList AlbumManager::allDAlbums() const
     return list;
 }
 
-void AlbumManager::setCurrentAlbum(Album* album)
+void AlbumManager::setCurrentAlbums(QList<Album*> albums)
 {
-    if (d->currentAlbum == album)
-    {
+    if(albums.isEmpty())
         return;
-    }
 
-    d->currentAlbum = album;
-    emit signalAlbumCurrentChanged(album);
+    /**
+     * Sort is needed to identify selection correctly, ex AlbumHistory
+     */
+    qSort(albums.begin(),albums.end());
+    d->currentAlbums.clear();
+    d->currentAlbums+=albums;
+    emit signalAlbumCurrentChanged(d->currentAlbums);
 }
 
-Album* AlbumManager::currentAlbum() const
+AlbumList AlbumManager::currentAlbums() const
 {
-    return d->currentAlbum;
+    return d->currentAlbums;
 }
 
 PAlbum* AlbumManager::currentPAlbum() const
 {
-    return dynamic_cast<PAlbum*>(d->currentAlbum);
+    /**
+     * Temporary fix, to return multiple items,
+     * iterate and cast each element
+     */
+    if(!d->currentAlbums.isEmpty())
+        return dynamic_cast<PAlbum*>(d->currentAlbums.first());
+    else
+        return 0;
 }
 
-TAlbum* AlbumManager::currentTAlbum() const
+QList<TAlbum*> AlbumManager::currentTAlbums() const
 {
-    return dynamic_cast<TAlbum*>(d->currentAlbum);
+    /**
+     * This method is not yet used
+     */
+    QList<TAlbum*> talbums;
+    QList<Album*>::iterator it;
+    for(it = d->currentAlbums.begin(); it != d->currentAlbums.end(); ++it)
+    {
+        TAlbum* temp = dynamic_cast<TAlbum*>(*it);
+        if(temp)
+            talbums.push_back(temp);
+    }
+    return talbums;
 }
 
 PAlbum* AlbumManager::findPAlbum(const KUrl& url) const
@@ -2747,10 +2768,11 @@ bool AlbumManager::updateSAlbum(SAlbum* album, const QString& changedQuery,
         emit signalAlbumRenamed(album);
     }
 
-    if (d->currentAlbum == album)
-    {
-        emit signalAlbumCurrentChanged(d->currentAlbum);
-    }
+    if(!d->currentAlbums.isEmpty())
+        if (d->currentAlbums.first() == album)
+        {
+            emit signalAlbumCurrentChanged(d->currentAlbums);
+        }
 
     return true;
 }
@@ -2851,11 +2873,12 @@ void AlbumManager::removePAlbum(PAlbum* album)
 
     DatabaseUrl url = album->databaseUrl();
 
-    if (album == d->currentAlbum)
-    {
-        d->currentAlbum = 0;
-        emit signalAlbumCurrentChanged(0);
-    }
+    if(!d->currentAlbums.isEmpty())
+        if (album == d->currentAlbums.first())
+        {
+            d->currentAlbums.clear();
+            emit signalAlbumCurrentChanged(d->currentAlbums);
+        }
 
     if (album->isAlbumRoot())
     {
@@ -2914,10 +2937,13 @@ void AlbumManager::removeTAlbum(TAlbum* album)
     emit signalAlbumAboutToBeDeleted(album);
     d->allAlbumsIdHash.remove(album->globalID());
 
-    if (album == d->currentAlbum)
+    if(!d->currentAlbums.isEmpty())
     {
-        d->currentAlbum = 0;
-        emit signalAlbumCurrentChanged(0);
+        if (album == d->currentAlbums.first())
+        {
+            d->currentAlbums.clear();
+            emit signalAlbumCurrentChanged(d->currentAlbums);
+        }
     }
 
     emit signalAlbumDeleted(album);
@@ -3278,14 +3304,17 @@ void AlbumManager::slotSearchChange(const SearchChangeset& changeset)
             break;
 
         case SearchChangeset::Changed:
-
-            if (d->currentAlbum && d->currentAlbum->type() == Album::SEARCH
-                && d->currentAlbum->id() == changeset.searchId())
+            if(!d->currentAlbums.isEmpty())
             {
-                // the pointer is the same, but the contents changed
-                emit signalAlbumCurrentChanged(d->currentAlbum);
-            }
+                Album* currentAlbum = d->currentAlbums.first();
 
+                if (currentAlbum && currentAlbum->type() == Album::SEARCH
+                    && currentAlbum->id() == changeset.searchId())
+                {
+                    // the pointer is the same, but the contents changed
+                    emit signalAlbumCurrentChanged(d->currentAlbums);
+                }
+            }
             break;
 
         case SearchChangeset::Unknown:

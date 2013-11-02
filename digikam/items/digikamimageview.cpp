@@ -256,9 +256,11 @@ void DigikamImageView::confirmFaces(const QList<QModelIndex>& indexes, int tagId
     QList<QModelIndex> sourceIndexes;
 
     // fast-remove in the "unknown person" view
-    const bool needFastRemove = d->faceMode
-                                && imageAlbumModel()->currentAlbum()
-                                && tagId != imageAlbumModel()->currentAlbum()->id();
+
+    bool needFastRemove;
+    if(imageAlbumModel()->currentAlbums().size() == 1)
+        needFastRemove = d->faceMode
+                         && (tagId != imageAlbumModel()->currentAlbums().first()->id());
 
     foreach(const QModelIndex& index, indexes)
     {
@@ -534,7 +536,7 @@ void DigikamImageView::deleteSelected(const ImageViewUtilities::DeleteMode delet
 void DigikamImageView::deleteSelectedDirectly(const ImageViewUtilities::DeleteMode deleteMode)
 {
     ImageInfoList imageInfoList = selectedImageInfos();
-    
+
     d->utilities->deleteImagesDirectly(imageInfoList, deleteMode);
     awayFromSelection();
 }

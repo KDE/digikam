@@ -39,6 +39,7 @@ public:
 
     enum ScanTask
     {
+        Detect,
         DetectAndRecognize,
         RecognizeMarkedFaces,
         RetrainAll,
@@ -59,7 +60,7 @@ public:
     {
         useFullCpu             = true;
         accuracy               = 80;
-        task                   = DetectAndRecognize;
+        task                   = Detect;
         alreadyScannedHandling = Skip;
     }
 
