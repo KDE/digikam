@@ -56,6 +56,7 @@ ThumbsTask::ThumbsTask()
 {
     ThumbnailLoadThread* const thread = new ThumbnailLoadThread;
     thread->setPixmapRequested(false);
+    thread->setDisplayingWidget(0);     // Force to not use a widget if CM is disabled.
     thread->setThumbnailSize(ThumbnailLoadThread::maximumThumbnailSize());
     d->catcher                        = new ThumbnailImageCatcher(thread, this);
 }
