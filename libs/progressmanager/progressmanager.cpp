@@ -381,13 +381,13 @@ void ProgressManager::Private::removeItem(ProgressItem* const t)
 ProgressManager::ProgressManager()
     : d(new Private)
 {
-    d->waitingLoop = new QEventLoop(this);
-
     if (thread() != QApplication::instance()->thread())
     {
         kWarning() << "Attention: ProgressManager was created from a thread. Create it in the main thread!";
         moveToThread(QApplication::instance()->thread());
     }
+
+    d->waitingLoop = new QEventLoop();
 }
 
 ProgressManager::~ProgressManager()
