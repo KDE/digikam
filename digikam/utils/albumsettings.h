@@ -61,6 +61,12 @@ public:
         ByDate
     };
 
+    enum AlbumSortSetting
+    {
+        Ascending = 0,
+        Descending
+    };
+
     enum ItemLeftClickAction
     {
         ShowPreview = 0,
@@ -120,6 +126,9 @@ public:
 
     void setImageSortOrder(int order);
     int  getImageSortOrder() const;
+
+    void setAlbumSortSetting(int order);
+    int  getAlbumSortSetting() const;
 
     // means ascending or descending
     void setImageSorting(int sorting);

@@ -1867,6 +1867,22 @@ void DigikamView::slotSortImagesOrder(int order)
     d->iconView->imageFilterModel()->setSortOrder((ImageSortSettings::SortOrder) order);
 }
 
+void DigikamView::slotSortAlbumName(int order)
+{
+    AlbumSettings* settings = AlbumSettings::instance();
+
+    if (!settings)
+    {
+        return;
+    }
+    //qDebug() << "VALLLUE: " << order;
+
+    AlbumSettings::instance()->setAlbumSortSetting(order);
+    AlbumSettings::instance()->saveSettings();
+    d->albumFolderSideBar->doSaveState();
+    d->albumFolderSideBar->doLoadState();
+}
+
 void DigikamView::slotGroupImages(int categoryMode)
 {
     AlbumSettings* const settings = AlbumSettings::instance();

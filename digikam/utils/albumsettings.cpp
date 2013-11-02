@@ -146,6 +146,7 @@ public:
     static const QString                configGroupFaceDetection;
     static const QString                configAlbumCollectionsEntry;
     static const QString                configAlbumSortOrderEntry;
+    static const QString                configAlbumSortSettingEntry;
     static const QString                configImageSortOrderEntry;
     static const QString                configImageSortingEntry;
     static const QString                configImageGroupModeEntry;
@@ -317,6 +318,7 @@ public:
     int                                 imageSortOrder;
     int                                 imageSorting;
     int                                 imageGroupMode;
+    int                                 albumSortSetting;
     AlbumSettings::ItemLeftClickAction  itemLeftClickAction;
 
     // nepomuk settings
@@ -343,6 +345,7 @@ const QString AlbumSettings::Private::configGroupGeneral("General Settings");
 const QString AlbumSettings::Private::configGroupVersioning("Versioning Settings");
 const QString AlbumSettings::Private::configGroupFaceDetection("Face Detection Settings");
 const QString AlbumSettings::Private::configAlbumCollectionsEntry("Album Collections");
+const QString AlbumSettings::Private::configAlbumSortSettingEntry("Album Sort Setting");
 const QString AlbumSettings::Private::configAlbumSortOrderEntry("Album Sort Order");
 const QString AlbumSettings::Private::configImageSortOrderEntry("Image Sort Order");
 const QString AlbumSettings::Private::configImageSortingEntry("Image Sorting");
@@ -575,7 +578,7 @@ void AlbumSettings::readSettings()
     d->imageSortOrder               = group.readEntry(d->configImageSortOrderEntry, (int)ImageSortSettings::SortByFileName);
     d->imageSorting                 = group.readEntry(d->configImageSortingEntry,   (int)ImageSortSettings::AscendingOrder);
     d->imageGroupMode               = group.readEntry(d->configImageGroupModeEntry, (int)ImageSortSettings::CategoryByAlbum);
-
+    d->albumSortSetting             = group.readEntry(d->configAlbumSortSettingEntry, (int)AlbumSettings::Ascending);
     d->itemLeftClickAction          = AlbumSettings::ItemLeftClickAction(group.readEntry( d->configItemLeftClickActionEntry,
                                                                          (int)AlbumSettings::ShowPreview));
 
@@ -699,6 +702,7 @@ void AlbumSettings::saveSettings()
 
     group.writeEntry(d->configAlbumCollectionsEntry,             d->albumCategoryNames);
     group.writeEntry(d->configAlbumSortOrderEntry,               (int)d->albumSortOrder);
+    group.writeEntry(d->configAlbumSortSettingEntry,             (int)d->albumSortSetting);
     group.writeEntry(d->configImageSortOrderEntry,               (int)d->imageSortOrder);
     group.writeEntry(d->configImageSortingEntry,                 (int)d->imageSorting);
     group.writeEntry(d->configImageGroupModeEntry,               (int)d->imageGroupMode);
@@ -877,6 +881,16 @@ void AlbumSettings::setImageSortOrder(int order)
 int AlbumSettings::getImageSortOrder() const
 {
     return d->imageSortOrder;
+}
+
+void AlbumSettings::setAlbumSortSetting(int order)
+{
+    d->albumSortSetting = order;
+}
+
+int AlbumSettings::getAlbumSortSetting() const
+{
+    return d->albumSortSetting;
 }
 
 void AlbumSettings::setImageSorting(int sorting)

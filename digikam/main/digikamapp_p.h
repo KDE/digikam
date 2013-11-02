@@ -146,6 +146,7 @@ public:
         zoomMinusAction(0),
         zoomFitToWindowAction(0),
         zoomTo100percents(0),
+        AlbumSortOrderAction(0),
         imageSortAction(0),
         imageSortOrderAction(0),
         imageGroupAction(0),
@@ -268,6 +269,7 @@ public:
     KAction*                            zoomMinusAction;
     KAction*                            zoomFitToWindowAction;
     KAction*                            zoomTo100percents;
+    KSelectAction*                      AlbumSortOrderAction;
     KSelectAction*                      imageSortAction;
     KSelectAction*                      imageSortOrderAction;
     KSelectAction*                      imageGroupAction;

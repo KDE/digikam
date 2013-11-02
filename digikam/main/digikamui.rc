@@ -103,6 +103,8 @@
      <Action name="image_group" />
      <Action name="albums_recursive" />
      <Action name="tags_recursive" />
+     <Separator />
+     <Action name="Album_Sort_By_Name" />
   </Menu>
 
   <Menu name="Tools"><text>&amp;Tools</text>
