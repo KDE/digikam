@@ -225,7 +225,7 @@ class SearchSideBarWidget : public SidebarWidget
 public:
 
     SearchSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
-                        SearchModificationHelper* const searchModeificationHelper);
+                        SearchModificationHelper* const searchModificationHelper);
     virtual ~SearchSideBarWidget();
 
     void    setActive(bool active);

@@ -854,7 +854,7 @@ public:
 };
 
 SearchSideBarWidget::SearchSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
-                                         SearchModificationHelper* const searchModeificationHelper)
+                                         SearchModificationHelper* const searchModificationHelper)
     : SidebarWidget(parent), d(new Private)
 {
     setObjectName("Search Sidebar");
@@ -864,8 +864,7 @@ SearchSideBarWidget::SearchSideBarWidget(QWidget* const parent, SearchModel* con
     QVBoxLayout* layout = new QVBoxLayout(this);
 
     d->searchTabHeader  = new SearchTabHeader(this);
-    d->searchTreeView   = new NormalSearchTreeView(this, searchModel,
-                                                   searchModeificationHelper);
+    d->searchTreeView   = new NormalSearchTreeView(this, searchModel, searchModificationHelper);
     d->searchTreeView->setConfigGroup(getConfigGroup());
     d->searchTreeView->filteredModel()->listNormalSearches();
     d->searchTreeView->filteredModel()->setListTemporarySearches(true);
