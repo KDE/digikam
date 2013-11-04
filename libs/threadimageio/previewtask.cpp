@@ -130,9 +130,6 @@ void PreviewLoadingTask::execute()
                 }
             }
 
-            // do not wait on other loading processes?
-            //m_usedProcess = cache->retrieveLoadingProcess(m_loadingDescription.cacheKey());
-
             if (m_usedProcess)
             {
                 // Other process is right now loading this image.
@@ -181,6 +178,15 @@ void PreviewLoadingTask::execute()
 
         // The image from the cache may or may not be rotated and post processed.
         // exifRotate() and postProcess() will detect if work is needed.
+        // We check before to find out if we need to provide a deep copy
+
+        const bool needExifRotate = MetadataSettings::instance()->settings().exifRotate && !LoadSaveThread::wasExifRotated(m_img);
+        const bool needPostProcess = needsPostProcessing();
+        if (accessMode() == LoadSaveThread::AccessModeReadWrite && (needExifRotate || needPostProcess))
+        {
+            m_img.detach();
+        }
+
         if (MetadataSettings::instance()->settings().exifRotate)
         {
             LoadSaveThread::exifRotate(m_img, m_loadingDescription.filePath);
