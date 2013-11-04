@@ -343,7 +343,6 @@ SearchWindow* SearchTabHeader::searchWindow() const
 
 void SearchTabHeader::selectedSearchChanged(Album* a)
 {
-
     SAlbum* album = dynamic_cast<SAlbum*>(a);
 
     // Signal from SearchFolderView that a search has been selected.
@@ -504,6 +503,7 @@ void SearchTabHeader::saveSearch()
 
     SAlbum* newAlbum = AlbumManager::instance()->createSAlbum(name, d->currentAlbum->searchType(),
                                                               d->currentAlbum->query());
+    selectedSearchChanged(newAlbum);
     emit searchShallBeSelected(QList<Album*>() << newAlbum);
 }
 
@@ -558,6 +558,7 @@ void SearchTabHeader::advancedSearchEdited(int id, const QString& query)
         if (album)
         {
             AlbumManager::instance()->updateSAlbum(album, query, album->title(), type);
+            selectedSearchChanged(album);
             emit searchShallBeSelected(QList<Album*>() << album);
         }
     }
@@ -581,6 +582,7 @@ void SearchTabHeader::setCurrentSearch(DatabaseSearch::Type type, const QString&
 
     if (selectCurrentAlbum)
     {
+        selectedSearchChanged(album);
         emit searchShallBeSelected(QList<Album*>() << album);
     }
 }

@@ -15,4 +15,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 324425 - How to switch off (get rid of) thumbnail preview?
 009 ==> 326953 - Add loadEmbeddedPreview reading from QBuffer.
 010 ==> 309061 - digiKam crash when moving tag.
-011 ==> 
+011 ==> 327124 - Add loadHalfPreview reading from QBuffer.
+012 ==> 
