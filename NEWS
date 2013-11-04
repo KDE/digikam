@@ -14,4 +14,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 007 ==> 256050 - digiKam crashed after modifying tag name.
 008 ==> 324425 - How to switch off (get rid of) thumbnail preview?
 009 ==> 326953 - Add loadEmbeddedPreview reading from QBuffer.
-010 ==> 
+010 ==> 309061 - digiKam crash when moving tag.
+011 ==> 
