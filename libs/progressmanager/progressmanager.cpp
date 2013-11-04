@@ -580,6 +580,10 @@ void ProgressManager::slotAbortAll()
     QHash<QString,ProgressItem*> hash;
     {
         QMutexLocker lock(&d->mutex);
+        if (d->transactions.isEmpty())
+        {
+            return;
+        }
         hash = d->transactions;
     }
 
