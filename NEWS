@@ -16,4 +16,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 009 ==> 326953 - Add loadEmbeddedPreview reading from QBuffer.
 010 ==> 309061 - digiKam crash when moving tag.
 011 ==> 327124 - Add loadHalfPreview reading from QBuffer.
-012 ==> 
+012 ==> 326959 - digiKam crash while scanning pictures for thumnails maintenance.
+013 ==> 
