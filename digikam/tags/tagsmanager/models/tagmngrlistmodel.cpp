@@ -114,11 +114,6 @@ void TagMngrListModel::deleteItem(ListItem* const item)
     d->rootItem->deleteChild(item);
     emit layoutChanged();
 
-    /** NOTE: trying to delete the item here will cause a crash since
-     *  somehow, View still use the old item
-     *  Even deleteLater() doesn't help ...
-     */
-    //item->deleteLater();
 }
 
 int TagMngrListModel::columnCount(const QModelIndex& parent) const

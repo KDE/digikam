@@ -18,5 +18,10 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 011 ==> 327124 - Add loadHalfPreview reading from QBuffer.
 012 ==> 326959 - digiKam crash while scanning pictures for thumnails maintenance.
 013 ==> 318873 - digiKam crashes when clicking on image in thumbnails [patch].
-014 ==>
-
+014 ==> 263299 - need a Tags Manager
+015 ==> 312373 - deleting all the tags known to digiKam at once
+016 ==> 326542 - Tagging some face then go to tag manager and test tag manager UI...
+017 ==> 158791 - Multi-select tags (i.e. to delete more than one at a time)
+018 ==> 256252 - assign Tag with Drag and Drop doesnt work since Version 1.2.0
+019 ==> 196927 - No easy way to expand or collapse deep tag hierarchies [patch]
+020 ==>
