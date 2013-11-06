@@ -24,4 +24,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 017 ==> 158791 - Multi-select tags (i.e. to delete more than one at a time)
 018 ==> 256252 - assign Tag with Drag and Drop doesnt work since Version 1.2.0
 019 ==> 196927 - No easy way to expand or collapse deep tag hierarchies [patch]
-020 ==>
+020 ==> 317943 - (Auto) rotate/flip using EXIF Information destroys pictures.
+021 ==> 
+
