@@ -53,7 +53,7 @@ class CEncoder {
 		//////////////////////////////////////////////////////////////////////
 		/// Constructor: Initializes new macro block.
 		/// @param encoder Pointer to outer class.
-		explicit CMacroBlock(CEncoder *encoder)
+		CMacroBlock(CEncoder *encoder)
 		: m_header(0)
 		, m_encoder(encoder)
 		{

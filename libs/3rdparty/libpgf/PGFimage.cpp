@@ -73,7 +73,7 @@ CPGFImage::CPGFImage()
 {
 
 	// init preHeader
-	memcpy(m_preHeader.magic, Magic, 3);
+	memcpy(m_preHeader.magic, PGFMagic, 3);
 	m_preHeader.version = PGFVersion;
 	m_preHeader.hSize = 0;
 
@@ -845,7 +845,7 @@ void CPGFImage::SetHeader(const PGFHeader& header, BYTE flags /*=0*/, UINT8* use
 #endif
 
 	// init preHeader
-	memcpy(m_preHeader.magic, Magic, 3);
+	memcpy(m_preHeader.magic, PGFMagic, 3);
 	m_preHeader.version = PGFVersion | flags;
 	m_preHeader.hSize = HeaderSize;
 
@@ -933,26 +933,41 @@ UINT32 CPGFImage::WriteHeader(CPGFStream* stream) THROW_ {
 					if (temp) {
 						memcpy(temp, m_channel[i], size*DataTSize);
 						delete m_wtChannel[i];	// also deletes m_channel
+						m_channel[i] = NULL;
 					} else {
 						error = InsufficientMemory;
 					}
 				}
 				if (error == NoError) {
-					if (temp) m_channel[i] = temp;
+					if (temp) {
+						ASSERT(!m_channel[i]);
+						m_channel[i] = temp;
+					}
 					m_wtChannel[i] = new CWaveletTransform(m_width[i], m_height[i], m_header.nLevels, m_channel[i]);
-				#ifdef __PGFROISUPPORT__
-					m_wtChannel[i]->SetROI(PGFRect(0, 0, m_header.width, m_header.height));
-				#endif
+					if (m_wtChannel[i]) {
+					#ifdef __PGFROISUPPORT__
+						m_wtChannel[i]->SetROI(PGFRect(0, 0, m_width[i], m_height[i]));
+					#endif
 					
-					// wavelet subband decomposition 
-					for (int l=0; error == NoError && l < m_header.nLevels; l++) {
-						OSError err = m_wtChannel[i]->ForwardTransform(l, m_quant);
-						if (err != NoError) error = err;
+						// wavelet subband decomposition 
+						for (int l=0; error == NoError && l < m_header.nLevels; l++) {
+							OSError err = m_wtChannel[i]->ForwardTransform(l, m_quant);
+							if (err != NoError) error = err;
+						}
+					} else {
+						delete[] m_channel[i];
+						error = InsufficientMemory;
 					}
 				}
 			}
 		}
-		if (error != NoError) ReturnWithError(error);
+		if (error != NoError) {
+			// free already allocated memory
+			for (int i=0; i < m_header.channels; i++) {
+				delete m_wtChannel[i];
+			}
+			ReturnWithError(error);
+		}
 
 		m_currentLevel = m_header.nLevels;
 

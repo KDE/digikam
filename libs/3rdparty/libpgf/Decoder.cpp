@@ -132,7 +132,7 @@ CDecoder::CDecoder(CPGFStream* stream, PGFPreHeader& preHeader, PGFHeader& heade
 	preHeader.hSize = __VAL(preHeader.hSize);
 
 	// check magic number
-	if (memcmp(preHeader.magic, Magic, 3) != 0) {
+	if (memcmp(preHeader.magic, PGFMagic, 3) != 0) {
 		// error condition: wrong Magic number
 		ReturnWithError(FormatCannotRead);
 	}
