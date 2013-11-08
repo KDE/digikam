@@ -26,5 +26,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 019 ==> 196927 - No easy way to expand or collapse deep tag hierarchies [patch]
 020 ==> 317943 - (Auto) rotate/flip using EXIF Information destroys pictures.
 021 ==> 327242 - EXIF tags sorted in the reverse order (not alphabetically).
-022 ==> 
+022 ==> 199975 - Issues in Album view on Windows.
+023 ==> 
 
