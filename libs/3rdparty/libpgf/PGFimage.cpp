@@ -56,6 +56,7 @@ CPGFImage::CPGFImage()
 : m_decoder(0)
 , m_encoder(0)
 , m_levelLength(0)
+, m_currentLevel(0)
 , m_quant(0)
 , m_userDataPos(0)
 , m_downsample(false)
@@ -425,7 +426,9 @@ void CPGFImage::Read(int level /*= 0*/, CallbackPtr cb /*= NULL*/, void *data /*
 			}
 
 			volatile OSError error = NoError; // volatile prevents optimizations
+#ifdef LIBPGF_USE_OPENMP
 			#pragma omp parallel for default(shared) 
+#endif
 			for (int i=0; i < m_header.channels; i++) {
 				// inverse transform from m_wtChannel to m_channel
 				if (error == NoError) {
@@ -526,7 +529,9 @@ void CPGFImage::Read(PGFRect& rect, int level /*= 0*/, CallbackPtr cb /*= NULL*/
 			}
 
 			volatile OSError error = NoError; // volatile prevents optimizations
+#ifdef LIBPGF_USE_OPENMP
 			#pragma omp parallel for default(shared) 
+#endif
 			for (int i=0; i < m_header.channels; i++) {
 				// inverse transform from m_wtChannel to m_channel
 				if (error == NoError) {
@@ -921,7 +926,9 @@ UINT32 CPGFImage::WriteHeader(CPGFStream* stream) THROW_ {
 	if (m_header.nLevels > 0) {
 		volatile OSError error = NoError; // volatile prevents optimizations
 		// create new wt channels
+#ifdef LIBPGF_USE_OPENMP
 		#pragma omp parallel for default(shared)
+#endif
 		for (int i=0; i < m_header.channels; i++) {
 			DataT *temp = NULL;
 			if (error == NoError) {
@@ -2448,7 +2455,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 			// to do
 		}
 
-		delete[] buffStart;
+		delete[] buffStart; buffStart = 0;
 	}
 #endif
 }			

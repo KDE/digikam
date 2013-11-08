@@ -500,9 +500,10 @@ void CDecoder::DecodeBuffer() THROW_ {
 				}
 			}
 		}
-
+#ifdef LIBPGF_USE_OPENMP
 		// decode in parallel
 		#pragma omp parallel for default(shared) //no declared exceptions in next block
+#endif
 		for (int i=0; i < m_macroBlocksAvailable; i++) {
 			m_macroBlocks[i]->BitplaneDecode();
 		}

@@ -54,8 +54,12 @@ class CEncoder {
 		/// Constructor: Initializes new macro block.
 		/// @param encoder Pointer to outer class.
 		CMacroBlock(CEncoder *encoder)
-		: m_header(0)
+#pragma warning( suppress : 4351 )
+		: m_value()
+		, m_codeBuffer()
+		, m_header(0)
 		, m_encoder(encoder)
+		, m_sigFlagVector()
 		{
 			ASSERT(m_encoder);
 			Init(-1);

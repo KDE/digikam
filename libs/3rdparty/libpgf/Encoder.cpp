@@ -81,6 +81,8 @@ CEncoder::CEncoder(CPGFStream* stream, PGFPreHeader preHeader, PGFHeader header,
 	ASSERT(m_stream);
 
 	int count;
+	m_lastMacroBlock = 0;
+	m_levelLength = NULL;
 
 	// set number of threads
 #ifdef LIBPGF_USE_OPENMP
@@ -97,7 +99,6 @@ CEncoder::CEncoder(CPGFStream* stream, PGFPreHeader preHeader, PGFHeader header,
 		m_macroBlocks = new(std::nothrow) CMacroBlock*[m_macroBlockLen];
 		if (!m_macroBlocks) ReturnWithError(InsufficientMemory);
 		for (int i=0; i < m_macroBlockLen; i++) m_macroBlocks[i] = new CMacroBlock(this);
-		m_lastMacroBlock = 0;
 		m_currentBlock = m_macroBlocks[m_lastMacroBlock++];
 	} else {
 		m_macroBlocks = 0;
@@ -354,11 +355,15 @@ void CEncoder::EncodeBuffer(ROIBlockHeader h) THROW_ {
 			// encode macro blocks
 			/*
 			volatile OSError error = NoError;
+			#ifdef LIBPGF_USE_OPENMP
 			#pragma omp parallel for ordered default(shared)
+			#endif
 			for (int i=0; i < m_lastMacroBlock; i++) {
 				if (error == NoError) {
 					m_macroBlocks[i]->BitplaneEncode();
+					#ifdef LIBPGF_USE_OPENMP
 					#pragma omp ordered
+					#endif
 					{
 						try {
 							WriteMacroBlock(m_macroBlocks[i]);
@@ -371,7 +376,9 @@ void CEncoder::EncodeBuffer(ROIBlockHeader h) THROW_ {
 			}
 			if (error != NoError) ReturnWithError(error);
 			*/
+#ifdef LIBPGF_USE_OPENMP
 			#pragma omp parallel for default(shared) //no declared exceptions in next block
+#endif
 			for (int i=0; i < m_lastMacroBlock; i++) {
 				m_macroBlocks[i]->BitplaneEncode();
 			}
