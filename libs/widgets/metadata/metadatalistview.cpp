@@ -59,6 +59,9 @@ MetadataListView::MetadataListView(QWidget* parent)
     labels.append( "Value" );       // no i18n here: hidden header
     setHeaderLabels(labels);
 
+    setSortingEnabled(true);
+    sortByColumn(0, Qt::AscendingOrder);
+
     m_parent = dynamic_cast<MetadataWidget*>(parent);
 
     connect(this, SIGNAL(itemClicked(QTreeWidgetItem*,int)),

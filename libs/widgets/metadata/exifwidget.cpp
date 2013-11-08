@@ -61,8 +61,6 @@ namespace Digikam
 ExifWidget::ExifWidget(QWidget* parent, const char* name)
     : MetadataWidget(parent, name)
 {
-    view()->setSortingEnabled(false);
-
     for (int i=0 ; QString(StandardExifEntryList[i]) != QString("-1") ; ++i)
     {
         m_keysFilter << StandardExifEntryList[i];
