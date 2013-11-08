@@ -145,8 +145,12 @@ CEncoder::CEncoder(CPGFStream* stream, PGFPreHeader preHeader, PGFHeader header,
 //////////////////////////////////////////////////////
 // Destructor
 CEncoder::~CEncoder() {	
-	delete m_currentBlock;
-	delete[] m_macroBlocks;
+	if (m_macroBlocks) {
+		for (int i=0; i < m_macroBlockLen; i++) delete m_macroBlocks[i];
+		delete[] m_macroBlocks;
+	} else {
+		delete m_currentBlock;
+	}
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -401,8 +405,9 @@ void CEncoder::EncodeBuffer(ROIBlockHeader h) THROW_ {
 // It might throw an IOException.
 void CEncoder::WriteMacroBlock(CMacroBlock* block) THROW_ {
 	ASSERT(block);
-
+#ifdef __PGFROISUPPORT__
 	ROIBlockHeader h = block->m_header;
+#endif
 	UINT16 wordLen = UINT16(NumberOfWords(block->m_codePos)); ASSERT(wordLen <= CodeBufferLen);
 	int count = sizeof(UINT16);
 	

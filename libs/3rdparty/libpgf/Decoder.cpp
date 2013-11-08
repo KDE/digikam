@@ -496,7 +496,7 @@ void CDecoder::DecodeBuffer() THROW_ {
 				if (ex.error == MissingData) {
 					break; // no further data available
 				} else {
-					throw ex;
+					throw;
 				}
 			}
 		}
