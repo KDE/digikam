@@ -34,34 +34,6 @@
 
 #include "etwidget.h"
 
-// class ETEventLoop : public QEventLoop
-// {
-//     Q_OBJECT
-// public:
-//     explicit ETEventLoop(QObject *parent = 0) : QEventLoop(parent) {}
-//     
-//     Q_SLOT void quitNormal()
-//     {
-//         if (isRunning())
-//         {
-//             exit(0);
-//         }
-//     }
-//     
-//     Q_SLOT void quitError(const QString& title, const QString& text)
-//     {
-//         if (isRunning())
-//         {
-//             errorTitle = title;
-//             errorText = text;
-//             exit(-1);
-//         }
-//     }
-//     
-//     QString errorTitle;
-//     QString errorText;
-// };
-
 class ETRunner : public QObject
 {
     Q_OBJECT
