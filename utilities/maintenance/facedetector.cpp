@@ -189,6 +189,7 @@ FaceDetector::FaceDetector(const FaceScanSettings& settings, ProgressItem* const
         d->pipeline.plugRerecognizingDatabaseFilter();
         d->pipeline.plugFaceRecognizer();
         d->pipeline.plugDatabaseWriter(FacePipeline::NormalWrite);
+        d->pipeline.setDetectionAccuracy(settings.accuracy);
         d->pipeline.construct();
     }
 
