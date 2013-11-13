@@ -3,13 +3,20 @@ digiKam 4.0.0 - Release date: 2013-10-20
 
 NEW FEATURES:
 
+General  : New Tags Manager window for easy tag management.
+General  : New images quality sorter tool, based on blur, noise, and compression analysis.
+General  : Multiple selection/ multiple drag-n-drop on Tags Manager and tag sidebars.
+
+Metadata : Nepomuk Service fixed to use current Api. Enable it from digikam metadata settings.
+Metadata : Support for writing face rectangles in Windows Live Photo format.
+
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 325702 - digiKam crashes when deleting photos.
 002 ==> 307146 - Build against shared LibRaw.
 003 ==> 326368 - Can't make digiKam from git with test enable : error with libraw 5 ubuntu precise.
 004 ==> 302810 - Crash when closing digiKam during face recognition.
-005 ==> 289931 - digiKam crashed after trying to open the geolocation sidebar
+005 ==> 289931 - digiKam crashed after trying to open the geolocation sidebar.
 006 ==> 285250 - digiKam crashed after saving changed file.
 007 ==> 256050 - digiKam crashed after modifying tag name.
 008 ==> 324425 - How to switch off (get rid of) thumbnail preview?
@@ -18,14 +25,15 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 011 ==> 327124 - Add loadHalfPreview reading from QBuffer.
 012 ==> 326959 - digiKam crash while scanning pictures for thumnails maintenance.
 013 ==> 318873 - digiKam crashes when clicking on image in thumbnails [patch].
-014 ==> 263299 - need a Tags Manager
-015 ==> 312373 - deleting all the tags known to digiKam at once
-016 ==> 326542 - Tagging some face then go to tag manager and test tag manager UI...
-017 ==> 158791 - Multi-select tags (i.e. to delete more than one at a time)
-018 ==> 256252 - assign Tag with Drag and Drop doesnt work since Version 1.2.0
-019 ==> 196927 - No easy way to expand or collapse deep tag hierarchies [patch]
-020 ==> 317943 - (Auto) rotate/flip using EXIF Information destroys pictures.
+014 ==> 263299 - Need a Tags Manager.
+015 ==> 312373 - Deleting all the tags known to digiKam at once.
+016 ==> 326542 - Tagging some face then go to tag manager and test tag manager UI.
+017 ==> 158791 - Multi-select tags (i.e. to delete more than one at a time).
+018 ==> 256252 - Assign Tag with Drag and Drop doesnt work since Version 1.2.0.
+019 ==> 196927 - No easy way to expand or collapse deep tag hierarchies [patch].
+020 ==> 317943 - Auto-rotate/flip using EXIF Information destroys pictures.
 021 ==> 327242 - EXIF tags sorted in the reverse order (not alphabetically).
 022 ==> 199975 - Issues in Album view on Windows.
-023 ==> 
+023 ==> 327143 - TableView: Crash on image metadata change.
+024 ==> 
 
