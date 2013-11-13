@@ -3,7 +3,8 @@ digiKam 4.0.0 - Release date: 2013-10-20
 
 NEW FEATURES:
 
-General  : Tags Manager window for easy tag management.
+General  : New Tags Manager window for easy tag management.
+General  : New images quality sorter tool, based on blur, noise, and compression analysis.
 General  : Multiple selection/ multiple drag-n-drop on Tags Manager and tag sidebars.
 
 Metadata : Nepomuk Service fixed to use current Api. Enable it from digikam metadata settings.
