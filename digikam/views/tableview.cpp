@@ -34,6 +34,7 @@
 #include <kaction.h>
 #include <kmenu.h>
 #include <klinkitemselectionmodel.h>
+#include <kactioncollection.h>
 #include <boost/concept_check.hpp>
 
 // local includes
@@ -251,6 +252,20 @@ void TableView::showTreeViewContextMenuOnItem(QContextMenuEvent* const event, co
     cmHelper.addSeparator();
     // ---
     cmHelper.addAction("image_rename");
+    // ---
+    //FIXME HACK I don't know another way to get group of items again :(
+    static const char* name_c = "action_name";    
+    static const char* group_c = "action_group";    
+    
+    const QString etools_group = "etools_exec";
+    foreach(QAction* action, cmHelper.actionCollection()->actions()) 
+    {
+        if (action->property(group_c).toString() == etools_group)
+        {
+            cmHelper.addAction(action->property(name_c).toString());
+        }
+    }
+    // ---
     cmHelper.addAction("cut_album_selection");
     cmHelper.addAction("copy_album_selection");
     cmHelper.addAction("paste_album_selection");

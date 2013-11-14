@@ -72,6 +72,8 @@ public:
     ~ETWidget();
 
     QString currentTool();
+    
+    Q_SIGNAL void configChanged();
 
 public Q_SLOTS:
     void save();

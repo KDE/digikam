@@ -123,6 +123,7 @@ void ETWidget::save()
     cfg->cfg.writeEntry(ETConfig::shortcut, ui_->shortcut->keySequence().toString());
 
     cfg->cfg.sync();
+    Q_EMIT configChanged();
 }
 
 void ETWidget::remove()

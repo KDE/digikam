@@ -78,6 +78,7 @@
 #include "versionmanagersettings.h"
 #include "tableview.h"
 #include "tagsmanager.h"
+#include "etdialog.h"
 
 #ifdef USE_PRESENTATION_MODE
 #include "qmlshow.h"
@@ -940,6 +941,14 @@ void DigikamView::slotNewQualitySort(Album* album)
 {
     slotLeftSideBarActivate(d->fuzzySearchSideBar);
     d->fuzzySearchSideBar->newDuplicatesSearch(album);
+}
+
+void DigikamView::slotEToolsExec()
+{
+    const QString tool = qobject_cast<QAction*>(sender())->data().toString();
+    ETDialog dlg(this, d->iconView->selectedUrls(), tool);
+    connect(&dlg, SIGNAL(configChanged()), DigikamApp::instance(), SLOT(slotUpdateActions()));
+    dlg.exec();
 }
 
 void DigikamView::slotAlbumsCleared()

@@ -168,7 +168,12 @@ ContextMenuHelper::~ContextMenuHelper()
     delete d;
 }
 
-void ContextMenuHelper::addAction(const char* name, bool addDisabled)
+KActionCollection* ContextMenuHelper::actionCollection() const
+{
+    return d->stdActionCollection;
+}
+
+void ContextMenuHelper::addAction(const QString& name, bool addDisabled)
 {
     QAction* action = d->stdActionCollection->action(name);
     addAction(action, addDisabled);

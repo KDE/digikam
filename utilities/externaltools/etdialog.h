@@ -43,6 +43,7 @@ public:
     virtual void slotButtonClicked(int button);
 
     Q_SIGNAL void processFinished();
+    Q_SIGNAL void configChanged();
 
 private Q_SLOTS:
 

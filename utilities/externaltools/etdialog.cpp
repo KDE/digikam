@@ -32,6 +32,7 @@ ETDialog::ETDialog(QWidget* parent, const QList<KUrl>& images, const QString& to
     m_etwidget = new ETWidget(main, tool);
     main->layout()->addWidget(m_etwidget);
 
+    connect(m_etwidget, SIGNAL(configChanged()), this, SIGNAL(configChanged()));
     connect(this, SIGNAL(finished()), m_etwidget, SLOT(save()));
     connect(this, SIGNAL(tryClicked()), m_etwidget, SLOT(save()));
 

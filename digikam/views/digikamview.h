@@ -211,7 +211,7 @@ public Q_SLOTS:
     
     //Image Quality Sorting slot 
     void slotNewQualitySort(Album* album);
-    
+    void slotEToolsExec();    
 
     void slotFocusAndNextImage();
 
