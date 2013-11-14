@@ -1,4 +1,5 @@
 ADD_SUBDIRECTORY(advancedrename)
+ADD_SUBDIRECTORY(externaltools)
 ADD_SUBDIRECTORY(importui)
 ADD_SUBDIRECTORY(hotplug)
 ADD_SUBDIRECTORY(imageeditor)

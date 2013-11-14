@@ -1671,6 +1671,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/advancedrename/parser/options/database/keys
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/externaltools
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/importui
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/importui/backend
