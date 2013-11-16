@@ -36,5 +36,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 022 ==> 199975 - Issues in Album view on Windows.
 023 ==> 327143 - TableView: Crash on image metadata change.
 024 ==> 326525 - Severe memory leak during maintainance scan for rebuild thumbnails.
-025 ==> 
+025 ==> 321403 - digiKam Crashes When Trying to Start.
+026 ==> 
 
