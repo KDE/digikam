@@ -35,6 +35,7 @@
 #include <QTreeWidget>
 #include <QVBoxLayout>
 #include <QComboBox>
+#include <QLayout>
 
 // KDE includes
 
@@ -150,8 +151,6 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
 
     d->useOrgAlbum           = new QCheckBox(i18n("Use original Album"), vbox3);
     d->albumSel              = new AlbumSelectWidget(vbox3);
-    d->useETools             = new QCheckBox(i18n("Use External Tools"), vbox3);
-    d->externalTool          = new QComboBox(vbox3);
     insertTab(Private::TARGET, sv3, SmallIcon("folder-image"), i18n("Target"));
 
     // --------------------------------------------------------
@@ -253,10 +252,22 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
 
     insertTab(Private::RAW, d->rawSettings, SmallIcon("kdcraw"), i18n("Raw Decoding"));
 
-    QScrollArea* const et     = new QScrollArea(this);
-    ETWidget* etw             = new ETWidget(et);
-    et->setViewport(etw);
-    insertTab(Private::EXTERNALTOOLS, et, SmallIcon("dialog-information"), i18n("Extrenal Tools"));
+    
+    QWidget* etw = new QWidget(this);
+    etw->setLayout(new QVBoxLayout(etw));
+    etw->layout()->setContentsMargins(0,0,0,0);
+    
+    d->useETools        = new QCheckBox(i18n("Use External Tools"), etw);
+    d->externalTool     = new QComboBox(etw);
+    QGroupBox* etcfg    = new QGroupBox(i18n("External Tools configuration"), etw);
+    etcfg->setLayout(new QVBoxLayout(etcfg));
+    etcfg->layout()->addWidget(new ETWidget(etcfg));
+    
+    etw->layout()->addWidget(d->useETools);
+    etw->layout()->addWidget(d->externalTool);
+    etw->layout()->addWidget(etcfg);
+    
+    insertTab(Private::EXTERNALTOOLS, etw, SmallIcon("dialog-information"), i18n("Extrenal Tools"));
     
     
     // --------------------------------------------------------
