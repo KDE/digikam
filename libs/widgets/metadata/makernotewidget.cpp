@@ -7,7 +7,7 @@
  * Description : a widget to display non standard Exif metadata
  *               used by camera makers
  *
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,7 +31,6 @@
 
 // KDE includes
 
-
 #include <klocale.h>
 
 // Local includes
@@ -53,7 +52,7 @@ static const char* ExifEntryListToIgnore[] =
     "-1"
 };
 
-MakerNoteWidget::MakerNoteWidget(QWidget* parent, const char* name)
+MakerNoteWidget::MakerNoteWidget(QWidget* const parent, const char* name)
     : MetadataWidget(parent, name)
 {
     for (int i=0 ; QString(ExifEntryListToIgnore[i]) != QString("-1") ; ++i)

@@ -6,7 +6,7 @@
  * Date        : 2006-02-22
  * Description : a generic widget to display metadata
  *
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,7 +57,7 @@ public:
 
 public:
 
-    explicit MetadataWidget(QWidget* parent, const char* name=0);
+    explicit MetadataWidget(QWidget* const parent, const char* name=0);
     ~MetadataWidget();
 
     int     getMode();
@@ -69,7 +69,7 @@ public:
     QString getCurrentItemKey() const;
     void    setCurrentItemByKey(const QString& itemKey);
 
-    void    setUserAreaWidget(QWidget* w);
+    void    setUserAreaWidget(QWidget* const w);
 
     virtual QString getTagTitle(const QString& key);
     virtual QString getTagDescription(const QString& key);
@@ -113,8 +113,8 @@ protected:
 
 private:
 
-    class MetadataWidgetPriv;
-    MetadataWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

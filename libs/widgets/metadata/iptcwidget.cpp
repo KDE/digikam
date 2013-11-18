@@ -6,7 +6,7 @@
  * Date        : 2006-02-20
  * Description : A widget to display IPTC metadata
  *
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,7 +30,6 @@
 
 // KDE includes
 
-
 #include <klocale.h>
 
 // Local includes
@@ -50,7 +49,7 @@ static const char* StandardIptcEntryList[] =
 namespace Digikam
 {
 
-IptcWidget::IptcWidget(QWidget* parent, const char* name)
+IptcWidget::IptcWidget(QWidget* const parent, const char* name)
     : MetadataWidget(parent, name)
 {
     for (int i=0 ; QString(StandardIptcEntryList[i]) != QString("-1") ; ++i)
