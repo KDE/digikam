@@ -37,5 +37,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 023 ==> 327143 - TableView: Crash on image metadata change.
 024 ==> 326525 - Severe memory leak during maintainance scan for rebuild thumbnails.
 025 ==> 321403 - digiKam Crashes When Trying to Start.
-026 ==> 
+026 ==> 327707 - Custom list of metadata cannot be customized.
+027 ==> 
 
