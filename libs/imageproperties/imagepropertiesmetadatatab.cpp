@@ -40,6 +40,7 @@
 #include <kdialog.h>
 #include <kfileitem.h>
 #include <kglobal.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -127,10 +128,17 @@ void ImagePropertiesMetaDataTab::readSettings(const KConfigGroup& group)
     d->makernoteWidget->setCurrentItemByKey(group.readEntry("Current MAKERNOTE Item", QString()));
     d->iptcWidget->setCurrentItemByKey(group.readEntry("Current IPTC Item",           QString()));
     d->xmpWidget->setCurrentItemByKey(group.readEntry("Current XMP Item",             QString()));
-    d->exifWidget->setTagsFilter(group.readEntry("EXIF Tags Filter",                  MetadataPanel::defaultExifFilter()));
-    d->makernoteWidget->setTagsFilter(group.readEntry("MAKERNOTE Tags Filter",        MetadataPanel::defaultMknoteFilter()));
-    d->iptcWidget->setTagsFilter(group.readEntry("IPTC Tags Filter",                  MetadataPanel::defaultIptcFilter()));
-    d->xmpWidget->setTagsFilter(group.readEntry("XMP Tags Filter",                    MetadataPanel::defaultXmpFilter()));
+
+    loadFilters();
+}
+
+void ImagePropertiesMetaDataTab::loadFilters()
+{
+    KConfigGroup grp2 = KGlobal::config()->group("Image Properties SideBar");
+    d->exifWidget->setTagsFilter(grp2.readEntry("EXIF Tags Filter",                 MetadataPanel::defaultExifFilter()));
+    d->makernoteWidget->setTagsFilter(grp2.readEntry("MAKERNOTE Tags Filter",       MetadataPanel::defaultMknoteFilter()));
+    d->iptcWidget->setTagsFilter(grp2.readEntry("IPTC Tags Filter",                 MetadataPanel::defaultIptcFilter()));
+    d->xmpWidget->setTagsFilter(grp2.readEntry("XMP Tags Filter",                   MetadataPanel::defaultXmpFilter()));
 }
 
 void ImagePropertiesMetaDataTab::writeSettings(KConfigGroup& group)

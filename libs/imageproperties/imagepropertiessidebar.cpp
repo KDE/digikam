@@ -382,4 +382,9 @@ void ImagePropertiesSideBar::doSaveState()
     m_metadataTab->writeSettings(groupMetadataTab);
 }
 
+void ImagePropertiesSideBar::slotLoadMetadataFilters()
+{
+    m_metadataTab->loadFilters();
+}
+
 }  // namespace Digikam

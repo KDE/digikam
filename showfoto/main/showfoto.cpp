@@ -598,6 +598,8 @@ void ShowFoto::applySettings()
     settings.showPhotoFlash = group.readEntry("ToolTips Show Photo Flash", false);
     settings.showPhotoWB    = group.readEntry("ToolTips Show Photo WB",    false);
     d->thumbBar->setToolTipSettings(settings);
+
+    d->rightSideBar->slotLoadMetadataFilters();
 }
 
 void ShowFoto::slotOpenFile()

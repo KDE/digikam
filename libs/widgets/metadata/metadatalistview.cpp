@@ -32,7 +32,7 @@
 
 // KDE includes
 
-
+#include <kdebug.h>
 #include <klocale.h>
 
 // Local includes
@@ -264,9 +264,17 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
                 // We ignore all unknown tags if necessary.
                 if (!it.key().section('.', 2, 2).startsWith(QLatin1String("0x")))
                 {
-                    if (!filters.isEmpty() && filters.at(0) != QString("FULL"))
+                    if (filters.contains("FULL"))
                     {
-                        // We using the filter to make a more user friendly output (Simple Mode)
+                        // We don't filter the output (Complete Mode)
+
+                        QString tagTitle = m_parent->getTagTitle(it.key());
+                        new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());
+                        ++subItems;
+                    }
+                    else if (!filters.isEmpty())
+                    {
+                        // We using the filter to make a more user friendly output (Custom Mode)
 
                         // Filter is not a list of complete tag keys
                         if (!filters.at(0).contains(".") && filters.contains(it.key().section('.', 2, 2)))
@@ -283,14 +291,6 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
                             ++subItems;
                             filters.removeAll(it.key());
                         }
-                    }
-                    else
-                    {
-                        // We don't filter the output (Complete Mode)
-
-                        QString tagTitle = m_parent->getTagTitle(it.key());
-                        new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());
-                        ++subItems;
                     }
                 }
             }

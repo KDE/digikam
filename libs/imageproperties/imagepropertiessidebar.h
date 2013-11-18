@@ -62,6 +62,7 @@ public:
 
 public Q_SLOTS:
 
+    void slotLoadMetadataFilters();
     void slotImageSelectionChanged(const QRect& rect);
     virtual void slotNoCurrentItem();
 

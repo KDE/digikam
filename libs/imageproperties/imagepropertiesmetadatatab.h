@@ -54,6 +54,8 @@ public:
     void setCurrentData(const DMetadata& metadata=DMetadata(),
                         const QString& filename=QString());
 
+    void loadFilters();
+
     void readSettings(const KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
 

@@ -53,6 +53,7 @@
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Libkexiv2 includes
 
