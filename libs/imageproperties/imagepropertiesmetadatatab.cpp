@@ -6,7 +6,7 @@
  * Date        : 2004-11-17
  * Description : a tab to display metadata information of images
  *
- * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -109,11 +109,35 @@ ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* const parent)
     {
         d->xmpWidget->hide();
     }
+
+    connect(d->exifWidget, SIGNAL(signalSetupMetadataFilters()),
+            this, SLOT(slotSetupMetadataFilters()));
+
+    connect(d->makernoteWidget, SIGNAL(signalSetupMetadataFilters()),
+            this, SLOT(slotSetupMetadataFilters()));
+
+    connect(d->iptcWidget, SIGNAL(signalSetupMetadataFilters()),
+            this, SLOT(slotSetupMetadataFilters()));
+
+    connect(d->xmpWidget, SIGNAL(signalSetupMetadataFilters()),
+            this, SLOT(slotSetupMetadataFilters()));
 }
 
 ImagePropertiesMetaDataTab::~ImagePropertiesMetaDataTab()
 {
     delete d;
+}
+
+void ImagePropertiesMetaDataTab::slotSetupMetadataFilters()
+{
+    if (sender() == d->exifWidget)
+        emit signalSetupMetadataFilters(Private::EXIF);
+    else if (sender() == d->makernoteWidget)
+        emit signalSetupMetadataFilters(Private::MAKERNOTE);
+    else if (sender() == d->iptcWidget)
+        emit signalSetupMetadataFilters(Private::IPTC);
+    else if (sender() == d->xmpWidget)
+        emit signalSetupMetadataFilters(Private::XMP);
 }
 
 void ImagePropertiesMetaDataTab::readSettings(const KConfigGroup& group)

@@ -77,6 +77,10 @@ public:
     virtual bool loadFromData(const QString& fileName, const DMetadata& data=DMetadata());
     virtual bool loadFromURL(const KUrl& url)=0;
 
+Q_SIGNALS:
+
+    void signalSetupMetadataFilters();
+
 private Q_SLOTS:
 
     void slotModeChanged(int);

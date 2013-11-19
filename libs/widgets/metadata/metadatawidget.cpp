@@ -65,6 +65,7 @@
 #include "metadatalistviewitem.h"
 #include "mdkeylistviewitem.h"
 #include "searchtextbar.h"
+#include "setup.h"
 
 namespace Digikam
 {
@@ -120,28 +121,32 @@ MetadataWidget::MetadataWidget(QWidget* const parent, const char* name)
     QHBoxLayout* const hlay1 = new QHBoxLayout(d->levelGBox);
     d->levelButtons->setExclusive(true);
 
-    QToolButton* const simpleLevel = new QToolButton(d->levelGBox);
-    simpleLevel->setIcon(iconLoader->loadIcon("user-identity", (KIconLoader::Group)KIconLoader::Toolbar));
-    simpleLevel->setCheckable(true);
-#if KEXIV2_VERSION >= 0x010000
-    simpleLevel->setWhatsThis(i18n("Switch the tags view to a custom human-readable list. "
-                                   "To customize the tag filter list, go to the Metadata configuration panel."));
-    simpleLevel->setToolTip(i18n("Custom list"));
-#else
-    simpleLevel->setWhatsThis(i18n("Switch the tags view to a human-readable list"));
-    simpleLevel->setToolTip(i18n("Human-readable list"));
-#endif
-    d->levelButtons->addButton(simpleLevel, CUSTOM);
-
     QToolButton* const fullLevel = new QToolButton(d->levelGBox);
-    fullLevel->setIcon(iconLoader->loadIcon("view-media-playlist", (KIconLoader::Group)KIconLoader::Toolbar));
+    fullLevel->setIcon(iconLoader->loadIcon("view-list-text", (KIconLoader::Group)KIconLoader::Toolbar));
     fullLevel->setCheckable(true);
     fullLevel->setWhatsThis(i18n("Switch the tags view to a full list"));
     fullLevel->setToolTip(i18n("Full list"));
     d->levelButtons->addButton(fullLevel, FULL);
 
-    hlay1->addWidget(simpleLevel);
+    QToolButton* const customLevel = new QToolButton(d->levelGBox);
+    customLevel->setIcon(iconLoader->loadIcon("format-list-unordered", (KIconLoader::Group)KIconLoader::Toolbar));
+    customLevel->setCheckable(true);
+#if KEXIV2_VERSION >= 0x010000
+    customLevel->setWhatsThis(i18n("Switch the tags view to a custom human-readable list. "
+                                   "To customize the tag filter list, go to the Metadata configuration panel."));
+    customLevel->setToolTip(i18n("Custom list"));
+#else
+    customLevel->setWhatsThis(i18n("Switch the tags view to a human-readable list"));
+    customLevel->setToolTip(i18n("Human-readable list"));
+#endif
+    d->levelButtons->addButton(customLevel, CUSTOM);
+
+    QToolButton* const configBtn = new QToolButton(d->levelGBox);
+    configBtn->setIcon(iconLoader->loadIcon("configure", (KIconLoader::Group)KIconLoader::Toolbar));
+
     hlay1->addWidget(fullLevel);
+    hlay1->addWidget(customLevel);
+    hlay1->addWidget(configBtn);
     hlay1->setSpacing(KDialog::spacingHint());
     hlay1->setMargin(0);
 
@@ -194,6 +199,9 @@ MetadataWidget::MetadataWidget(QWidget* const parent, const char* name)
 
     connect(d->levelButtons, SIGNAL(buttonReleased(int)),
             this, SLOT(slotModeChanged(int)));
+
+    connect(configBtn, SIGNAL(clicked()),
+            this, SIGNAL(signalSetupMetadataFilters()));
 
     connect(copy2ClipBoard, SIGNAL(clicked()),
             this, SLOT(slotCopy2Clipboard()));
