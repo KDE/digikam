@@ -46,6 +46,7 @@ class NepomukQuery : public QObject
     Q_OBJECT
 
 public:
+
     NepomukQuery(DkNepomukService* const service);
 
     /**

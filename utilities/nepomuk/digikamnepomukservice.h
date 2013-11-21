@@ -222,10 +222,10 @@ protected:
      */
     void pushTagsToNepomuk(const QList<ImageInfo>& imageInfos);
 
-    int bestDigikamTagForTagName(const ImageInfo& info, const QString& tagName);
+    int bestDigikamTagForTagName(const ImageInfo& info, const QString& tagName) const;
     void markAsSyncedToDigikam();
     void clearSyncedToDigikam();
-    bool hasSyncToNepomuk();
+    bool hasSyncToNepomuk() const;
     void markAsSyncedToNepomuk();
     void clearSyncedToNepomuk();
     QString tagnameForNepomukTag(const QUrl& tagUri) const;
