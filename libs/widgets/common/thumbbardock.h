@@ -124,7 +124,7 @@ public:
     void restoreVisibility();
 
     static QPixmap generateFuzzyRect(const QSize& size, const QColor& color, int radius);    
-    
+
 public Q_SLOTS:
 
     void showThumbBar(bool);
