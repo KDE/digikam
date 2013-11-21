@@ -38,5 +38,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 024 ==> 326525 - Severe memory leak during maintainance scan for rebuild thumbnails.
 025 ==> 321403 - digiKam Crashes When Trying to Start.
 026 ==> 327707 - Custom list of metadata cannot be customized.
-027 ==> 
-
+027 ==> 180322 - compute 35mm equivalent focal length.
+028 ==> 
