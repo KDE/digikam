@@ -23,6 +23,8 @@
  *
  * ============================================================ */
 
+#include "nepomukquery.moc"
+
 // KDE includes
 
 #include <kdebug.h>
@@ -44,7 +46,6 @@
 
 // Local includes
 
-#include "nepomukquery.h"
 #include "digikamnepomukservice.h"
 
 using namespace Nepomuk2;

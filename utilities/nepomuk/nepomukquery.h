@@ -26,6 +26,8 @@
 #ifndef DKNEPOMUKQUERY_H
 #define DKNEPOMUKQUERY_H
 
+// Qt includes
+
 #include <QObject>
 
 namespace Nepomuk2
