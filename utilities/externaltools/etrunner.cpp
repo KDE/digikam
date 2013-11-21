@@ -4,11 +4,15 @@
 
 #include <kcomponentdata.h>
 #include <kdebug.h>
-#include <ktemporaryfile.h>
 #include <klocalizedstring.h>
+#include <kshell.h>
+#include <ktemporaryfile.h>
 
 #include "etrunner.h"
 
+typedef ETConfig::Type::Executable   Exec;
+typedef ETConfig::Type::Script       Script;
+typedef ETConfig::Type::SimpleScript SimpleScript;
 
 ETRunner::ETRunner(QObject* parent, const QString& tool, const QList<KUrl>& urls)
     : QObject(parent)
@@ -28,27 +32,68 @@ bool ETRunner::run()
     connect(process_, SIGNAL(finished(int,QProcess::ExitStatus)), SLOT(onFinished(int,QProcess::ExitStatus)));
     connect(process_, SIGNAL(started()), SLOT(onStarted()));
 
-    KTemporaryFile* script = new KTemporaryFile();
-    script->setParent(process_);
-
-    if (!script->open() || !script->setPermissions(QFile::ReadOwner | QFile::WriteOwner))
+    if (!setupProcess())
     {
-        Q_EMIT error(i18n("Can't execute script"), i18n("Can't create script file"));
         Q_EMIT finished();
         return false;
     }
+    
+    process_->start();   
+    return true;
+}
 
-    if (script->write(toolcfg_->cfg.readEntry(ETConfig::script, QString()).toLocal8Bit()) == -1)
+bool ETRunner::setupProcess()
+{
+    const QString type = toolcfg_->readEntry(ETConfig::type, QString());
+    QString     program;
+    QStringList arguments;
+    
+    const QString defprog = "/bin/sh";
+    
+    if (type == Exec::type)
     {
-        Q_EMIT error(i18n("Can't execute script"), i18n("Can't write to script file"));
-        Q_EMIT finished();
+        KShell::Errors err;
+        
+        program   = toolcfg_->readTypeEntry(type, Exec::path, defprog);
+        arguments = KShell::splitArgs(toolcfg_->readTypeEntry(type, Exec::arguments, QString()), KShell::NoOptions, &err);
+        if (err != KShell::NoError)
+        {
+            Q_EMIT error(i18n("Can't execute program"), i18n("Bad quoting in arguments"));
+            return false;
+        }
+    }
+    else if (type == Script::type)
+    {
+        program   = toolcfg_->readTypeEntry(type, Script::path, defprog);
+        arguments << toolcfg_->readTypeEntry(type, Script::script, QString());
+    }
+    else if (type == SimpleScript::type)
+    {
+        KTemporaryFile* script = new KTemporaryFile();
+        script->setParent(process_);
+
+        if (!script->open() || !script->setPermissions(QFile::ReadOwner | QFile::WriteOwner))
+        {
+            Q_EMIT error(i18n("Can't execute script"), i18n("Can't create script file"));
+            return false;
+        }
+        
+        if (script->write(toolcfg_->readTypeEntry(type, SimpleScript::body, QString()).toLocal8Bit()) == -1)
+        {
+            Q_EMIT error(i18n("Can't execute script"), i18n("Can't write to script file"));
+            return false;
+        }
+
+        script->flush();
+        program   = toolcfg_->readTypeEntry(type, SimpleScript::path, defprog);
+        arguments << QFileInfo(*script).absoluteFilePath();
+    }
+    else
+    {
         return false;
     }
-
-    script->flush();
-
-    process_->setProgram(toolcfg_->cfg.readEntry(ETConfig::interpretter, "/bin/sh"), QStringList() << QFileInfo(*script).absoluteFilePath());
-    process_->start();
+    
+    process_->setProgram(program, arguments);
     return true;
 }
 

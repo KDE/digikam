@@ -34,32 +34,75 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 
-namespace Ui
-{
-struct etwidget;
-}
-
-
 struct ETConfig
 {
-    typedef QSharedPointer<ETConfig> Ptr;
-
-    static ETConfig::Ptr config(const QString& tool = QString());
-
-    KConfig main;
-    KConfigGroup cfg;
-
+    //Language to access KConfig fields and groups
+    
     static const QString pluginName();
 
     static const QString firstStart;
     static const QString showInContext;
     static const QString shortcut;
     static const QString name;
-    static const QString interpretter;
-    static const QString script;
+    static const QString type;
+    
+    struct Type
+    {
+        struct Executable
+        {
+            static const QString type;
+            static const QString path;
+            static const QString arguments;
+        };
+        struct Script
+        {
+            static const QString type;
+            static const QString path;
+            static const QString script;
+        };
+        struct SimpleScript
+        {
+            static const QString type;
+            static const QString path;
+            static const QString body;
+        };
+    };
 
+    typedef QSharedPointer<ETConfig> Ptr;
+
+    static ETConfig::Ptr config(const QString& tool = QString());
+
+    template <typename T>
+    T readEntry(const QString& path, const T& defvalue) const
+    {
+        return cfg.readEntry<T>(path, defvalue);
+    }
+    
+    template <typename T>
+    T readTypeEntry(const QString& type, const QString& path, const T& defvalue) const
+    {
+        return cfg.group(type).readEntry<T>(path, defvalue);
+    }
+    
+    template <typename T>
+    void writeEntry(const QString& path, const T& value)
+    {
+        cfg.writeEntry<T>(path, value);
+    }
+    
+    template <typename T>
+    void writeTypeEntry(const QString& type, const QString& path, const T& value)
+    {
+        cfg.group(type).writeEntry<T>(path, value);
+    }
+    
+    KConfigGroup cfg;
+    
 private:
     ETConfig();
+    
+private:
+    KConfig main;
 };
 
 class ETWidget : public QWidget
@@ -80,14 +123,17 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
+    void typeSelected(int index);
     void scriptSelected(int index);
     void remove();
+    void scriptEdit(bool);
 
 private:
     void update(const QString& tool);
 
 private:
-    QScopedPointer<Ui::etwidget> ui_;
+    class Private;
+    QScopedPointer<Private> d;    
 };
 
 

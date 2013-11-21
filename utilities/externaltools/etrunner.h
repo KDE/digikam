@@ -63,6 +63,9 @@ private Q_SLOTS:
     void onFinished(int exitCode, QProcess::ExitStatus exitStatus);
 
 private:
+    bool setupProcess();
+    
+private:
     ETConfig::Ptr toolcfg_;
     QList<KUrl> urls_;
     KProcess* process_;

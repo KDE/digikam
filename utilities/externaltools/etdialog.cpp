@@ -52,6 +52,7 @@ ETDialog::~ETDialog()
 void ETDialog::slotButtonClicked(int button)
 {
     saveDialogSize(ETConfig::config()->cfg);
+    KDialog::slotButtonClicked(button);    
 
     if (button == KDialog::Try)
     {
@@ -62,8 +63,6 @@ void ETDialog::slotButtonClicked(int button)
         connect(runner, SIGNAL(finished()), runner, SLOT(deleteLater()));
         runner->run();
     }
-
-    KDialog::slotButtonClicked(button);
 }
 
 void ETDialog::onError(const QString& title, const QString& text)
