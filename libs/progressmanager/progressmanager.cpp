@@ -387,7 +387,7 @@ ProgressManager::ProgressManager()
         moveToThread(QApplication::instance()->thread());
     }
 
-    d->waitingLoop = new QEventLoop();
+    d->waitingLoop = new QEventLoop(this);
 }
 
 ProgressManager::~ProgressManager()
