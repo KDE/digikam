@@ -38,12 +38,25 @@ class SetupMetadata : public QScrollArea
 
 public:
 
+    enum MetadataTab
+    {
+        Behavior = 0,
+        Rotation,
+        Display,
+        Nepomuk
+    };
+
+public:
+
     explicit SetupMetadata(QWidget* const parent = 0);
     ~SetupMetadata();
 
     void applySettings();
 
     bool exifAutoRotateAsChanged() const;
+
+    void setActiveMainTab(MetadataTab tab);
+    void setActiveSubTab(int tab);
 
 private:
 

@@ -208,9 +208,6 @@ public Q_SLOTS:
     void slotLeftSideBarActivate(SidebarWidget* widget);
     void slotLeftSideBarActivateAlbums();
     void slotLeftSideBarActivateTags();
-    
-    //Image Quality Sorting slot 
-    void slotNewQualitySort(Album* album);
     void slotEToolsExec();    
 
     void slotFocusAndNextImage();
@@ -264,6 +261,7 @@ private Q_SLOTS:
     void slotPickLabelChanged(const KUrl&, int);
 
     void slotPopupFiltersView();
+    void slotSetupMetadataFilters(int);
 
 private:
 

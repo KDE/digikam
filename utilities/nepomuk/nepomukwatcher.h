@@ -40,6 +40,7 @@ class DkNepomukService;
 class NepomukWatcher : public QObject
 {
     Q_OBJECT
+
 public:
 
     /**

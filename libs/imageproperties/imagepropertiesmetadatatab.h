@@ -6,7 +6,7 @@
  * Date        : 2004-11-17
  * Description : a tab to display metadata information of images
  *
- * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,8 +54,18 @@ public:
     void setCurrentData(const DMetadata& metadata=DMetadata(),
                         const QString& filename=QString());
 
+    void loadFilters();
+
     void readSettings(const KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
+
+Q_SIGNALS:
+
+    void signalSetupMetadataFilters(int);
+
+private Q_SLOTS:
+
+    void slotSetupMetadataFilters();
 
 private:
 

@@ -410,6 +410,9 @@ void ShowFoto::setupConnections()
 
     connect(this, SIGNAL(signalNoCurrentItem()),
             d->rightSideBar, SLOT(slotNoCurrentItem()));
+
+    connect(d->rightSideBar, SIGNAL(signalSetupMetadataFilters(int)),
+            this, SLOT(slotSetupMetadataFilters(int)));
 }
 
 void ShowFoto::setupUserArea()
@@ -598,6 +601,8 @@ void ShowFoto::applySettings()
     settings.showPhotoFlash = group.readEntry("ToolTips Show Photo Flash", false);
     settings.showPhotoWB    = group.readEntry("ToolTips Show Photo WB",    false);
     d->thumbBar->setToolTipSettings(settings);
+
+    d->rightSideBar->slotLoadMetadataFilters();
 }
 
 void ShowFoto::slotOpenFile()
@@ -1283,6 +1288,11 @@ bool ShowFoto::saveNewVersionAs()
 bool ShowFoto::saveNewVersionInFormat(const QString&)
 {
     return false;
+}
+
+void ShowFoto::slotSetupMetadataFilters(int tab)
+{
+    Setup::execMetadataFilters(this, tab+1);
 }
 
 }   // namespace ShowFoto

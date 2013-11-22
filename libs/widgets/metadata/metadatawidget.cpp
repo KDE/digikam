@@ -6,7 +6,7 @@
  * Date        : 2006-02-22
  * Description : a generic widget to display metadata
  *
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,6 +53,7 @@
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Libkexiv2 includes
 
@@ -64,16 +65,17 @@
 #include "metadatalistviewitem.h"
 #include "mdkeylistviewitem.h"
 #include "searchtextbar.h"
+#include "setup.h"
 
 namespace Digikam
 {
 
-class MetadataWidget::MetadataWidgetPriv
+class MetadataWidget::Private
 {
 
 public:
 
-    MetadataWidgetPriv()
+    Private()
     {
         toolButtons  = 0;
         levelButtons = 0;
@@ -104,8 +106,8 @@ public:
     DMetadata::MetaDataMap metaDataMap;
 };
 
-MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
-    : QWidget(parent), d(new MetadataWidgetPriv)
+MetadataWidget::MetadataWidget(QWidget* const parent, const char* name)
+    : QWidget(parent), d(new Private)
 {
     setObjectName(name);
 
@@ -114,55 +116,59 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
 
     // -----------------------------------------------------------------
 
-    d->levelGBox       = new QWidget(this);
-    d->levelButtons    = new QButtonGroup(d->levelGBox);
-    QHBoxLayout* hlay1 = new QHBoxLayout(d->levelGBox);
+    d->levelGBox             = new QWidget(this);
+    d->levelButtons          = new QButtonGroup(d->levelGBox);
+    QHBoxLayout* const hlay1 = new QHBoxLayout(d->levelGBox);
     d->levelButtons->setExclusive(true);
 
-    QToolButton* simpleLevel = new QToolButton(d->levelGBox);
-    simpleLevel->setIcon(iconLoader->loadIcon("user-identity", (KIconLoader::Group)KIconLoader::Toolbar));
-    simpleLevel->setCheckable(true);
-#if KEXIV2_VERSION >= 0x010000
-    simpleLevel->setWhatsThis(i18n("Switch the tags view to a custom human-readable list. "
-                                   "To customize the tag filter list, go to the Metadata configuration panel."));
-    simpleLevel->setToolTip(i18n("Custom list"));
-#else
-    simpleLevel->setWhatsThis(i18n("Switch the tags view to a human-readable list"));
-    simpleLevel->setToolTip(i18n("Human-readable list"));
-#endif
-    d->levelButtons->addButton(simpleLevel, CUSTOM);
-
-    QToolButton* fullLevel = new QToolButton(d->levelGBox);
-    fullLevel->setIcon(iconLoader->loadIcon("view-media-playlist", (KIconLoader::Group)KIconLoader::Toolbar));
+    QToolButton* const fullLevel = new QToolButton(d->levelGBox);
+    fullLevel->setIcon(iconLoader->loadIcon("view-list-text", (KIconLoader::Group)KIconLoader::Toolbar));
     fullLevel->setCheckable(true);
     fullLevel->setWhatsThis(i18n("Switch the tags view to a full list"));
     fullLevel->setToolTip(i18n("Full list"));
     d->levelButtons->addButton(fullLevel, FULL);
 
-    hlay1->addWidget(simpleLevel);
+    QToolButton* const customLevel = new QToolButton(d->levelGBox);
+    customLevel->setIcon(iconLoader->loadIcon("format-list-unordered", (KIconLoader::Group)KIconLoader::Toolbar));
+    customLevel->setCheckable(true);
+#if KEXIV2_VERSION >= 0x010000
+    customLevel->setWhatsThis(i18n("Switch the tags view to a custom human-readable list. "
+                                   "To customize the tag filter list, go to the Metadata configuration panel."));
+    customLevel->setToolTip(i18n("Custom list"));
+#else
+    customLevel->setWhatsThis(i18n("Switch the tags view to a human-readable list"));
+    customLevel->setToolTip(i18n("Human-readable list"));
+#endif
+    d->levelButtons->addButton(customLevel, CUSTOM);
+
+    QToolButton* const configBtn = new QToolButton(d->levelGBox);
+    configBtn->setIcon(iconLoader->loadIcon("configure", (KIconLoader::Group)KIconLoader::Toolbar));
+
     hlay1->addWidget(fullLevel);
+    hlay1->addWidget(customLevel);
+    hlay1->addWidget(configBtn);
     hlay1->setSpacing(KDialog::spacingHint());
     hlay1->setMargin(0);
 
     // -----------------------------------------------------------------
 
-    d->toolsGBox       = new QWidget(this);
-    d->toolButtons     = new QButtonGroup(d->toolsGBox);
-    QHBoxLayout* hlay2 = new QHBoxLayout(d->toolsGBox);
+    d->toolsGBox             = new QWidget(this);
+    d->toolButtons           = new QButtonGroup(d->toolsGBox);
+    QHBoxLayout* const hlay2 = new QHBoxLayout(d->toolsGBox);
 
-    QToolButton* saveMetadata = new QToolButton(d->toolsGBox);
+    QToolButton* const saveMetadata = new QToolButton(d->toolsGBox);
     saveMetadata->setIcon(iconLoader->loadIcon("document-save", (KIconLoader::Group)KIconLoader::Toolbar));
     saveMetadata->setWhatsThis(i18n("Save metadata to a binary file"));
     saveMetadata->setToolTip(i18n("Save metadata"));
     d->toolButtons->addButton(saveMetadata);
 
-    QToolButton* printMetadata = new QToolButton(d->toolsGBox);
+    QToolButton* const printMetadata = new QToolButton(d->toolsGBox);
     printMetadata->setIcon(iconLoader->loadIcon("document-print", (KIconLoader::Group)KIconLoader::Toolbar));
     printMetadata->setWhatsThis(i18n("Print metadata to printer"));
     printMetadata->setToolTip(i18n("Print metadata"));
     d->toolButtons->addButton(printMetadata);
 
-    QToolButton* copy2ClipBoard = new QToolButton(d->toolsGBox);
+    QToolButton* const copy2ClipBoard = new QToolButton(d->toolsGBox);
     copy2ClipBoard->setIcon( iconLoader->loadIcon("edit-copy", (KIconLoader::Group)KIconLoader::Toolbar));
     copy2ClipBoard->setWhatsThis(i18n("Copy metadata to clipboard"));
     copy2ClipBoard->setToolTip(i18n("Copy metadata to clipboard"));
@@ -193,6 +199,9 @@ MetadataWidget::MetadataWidget(QWidget* parent, const char* name)
 
     connect(d->levelButtons, SIGNAL(buttonReleased(int)),
             this, SLOT(slotModeChanged(int)));
+
+    connect(configBtn, SIGNAL(clicked()),
+            this, SIGNAL(signalSetupMetadataFilters()));
 
     connect(copy2ClipBoard, SIGNAL(clicked()),
             this, SLOT(slotCopy2Clipboard()));
@@ -330,8 +339,8 @@ void MetadataWidget::slotCopy2Clipboard()
 
     do
     {
-        item                      = d->view->topLevelItem(i);
-        MdKeyListViewItem* lvItem = dynamic_cast<MdKeyListViewItem*>(item);
+        item                            = d->view->topLevelItem(i);
+        MdKeyListViewItem* const lvItem = dynamic_cast<MdKeyListViewItem*>(item);
 
         if (lvItem)
         {
@@ -344,8 +353,8 @@ void MetadataWidget::slotCopy2Clipboard()
 
             do
             {
-                item2                         = dynamic_cast<QTreeWidgetItem*>(lvItem)->child(j);
-                MetadataListViewItem* lvItem2 = dynamic_cast<MetadataListViewItem*>(item2);
+                item2                               = dynamic_cast<QTreeWidgetItem*>(lvItem)->child(j);
+                MetadataListViewItem* const lvItem2 = dynamic_cast<MetadataListViewItem*>(item2);
 
                 if (lvItem2)
                 {
@@ -364,7 +373,7 @@ void MetadataWidget::slotCopy2Clipboard()
     }
     while (item);
 
-    QMimeData* mimeData = new QMimeData();
+    QMimeData* const mimeData = new QMimeData();
     mimeData->setText(textmetadata);
     QApplication::clipboard()->setMimeData(mimeData, QClipboard::Clipboard);
 }
@@ -379,8 +388,8 @@ void MetadataWidget::slotPrintMetadata()
 
     do
     {
-        item                      = d->view->topLevelItem(i);
-        MdKeyListViewItem* lvItem = dynamic_cast<MdKeyListViewItem*>(item);
+        item                            = d->view->topLevelItem(i);
+        MdKeyListViewItem* const lvItem = dynamic_cast<MdKeyListViewItem*>(item);
 
         if (lvItem)
         {
@@ -393,8 +402,8 @@ void MetadataWidget::slotPrintMetadata()
 
             do
             {
-                item2                         = dynamic_cast<QTreeWidgetItem*>(lvItem)->child(j);
-                MetadataListViewItem* lvItem2 = dynamic_cast<MetadataListViewItem*>(item2);
+                item2                               = dynamic_cast<QTreeWidgetItem*>(lvItem)->child(j);
+                MetadataListViewItem* const lvItem2 = dynamic_cast<MetadataListViewItem*>(item2);
 
                 if (lvItem2)
                 {
@@ -435,8 +444,7 @@ void MetadataWidget::slotPrintMetadata()
 
 KUrl MetadataWidget::saveMetadataToFile(const QString& caption, const QString& fileFilter)
 {
-    QPointer<KFileDialog> fileSaveDialog = new KFileDialog(KUrl(KGlobalSettings::documentPath()),
-            QString(), this);
+    QPointer<KFileDialog> fileSaveDialog = new KFileDialog(KUrl(KGlobalSettings::documentPath()), QString(), this);
     fileSaveDialog->setOperationMode(KFileDialog::Saving);
     fileSaveDialog->setMode(KFile::File);
     fileSaveDialog->setSelection(d->fileName);
@@ -503,9 +511,9 @@ void MetadataWidget::setFileName(const QString& fileName)
     d->fileName = fileName;
 }
 
-void MetadataWidget::setUserAreaWidget(QWidget* w)
+void MetadataWidget::setUserAreaWidget(QWidget* const w)
 {
-    QVBoxLayout* vLayout = new QVBoxLayout();
+    QVBoxLayout* const vLayout = new QVBoxLayout();
     vLayout->setSpacing(KDialog::spacingHint());
     vLayout->addWidget(w);
     vLayout->addStretch();

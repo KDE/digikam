@@ -9,7 +9,7 @@ OPTION(ENABLE_PRESENTATIONMODE "Build digiKam with presentation mode support (de
 OPTION(ENABLE_THUMBS_DB        "Build digiKam with thumbnails database support (default=ON)"           ON)
 OPTION(ENABLE_INTERNALMYSQL    "Look for MySQL server executable at build time (default=ON)"           ON)
 OPTION(ENABLE_ADVANCEDDEBUGMSG "Build digiKam with more internal debug message (default=OFF)"          OFF)
-OPTION(ENABLE_NEPOMUKSUPPORT   "Build digiKam with Nepomuk support (default=ON)"                      ON)
+OPTION(ENABLE_NEPOMUKSUPPORT   "Build digiKam with Nepomuk support (default=ON)"                       ON)
 OPTION(ENABLE_LCMS2            "Link digiKam to LCMS2 instead LCMS1 (experimental) (default=OFF)"      OFF)
 
 # NOTE: since 6.11.24, libpgf do not support very well OpenMP. We disable it temporally.
@@ -433,21 +433,21 @@ MACRO_BOOL_TO_01(ENABLE_ADVANCEDDEBUGMSG USE_ADVANCEDDEBUGMSG)
 # Win32 compilation with Nepomuk is broken. It's temporally disabled.
 IF (ENABLE_NEPOMUKSUPPORT)
     IF (${KDE_VERSION} VERSION_GREATER "4.3.99")
-        MACRO_OPTIONAL_FIND_PACKAGE(Nepomuk)
-        MACRO_LOG_FEATURE(NEPOMUK_FOUND "NepomukCore" "The Nepomuk libraries"
+        MACRO_OPTIONAL_FIND_PACKAGE(NepomukCore)
+        MACRO_LOG_FEATURE(NepomukCore_FOUND "NepomukCore" "The Nepomuk libraries"
                 "http://www.kde.org" TRUE "" "Nepomuk extends the search and tagging")
 
         MACRO_OPTIONAL_FIND_PACKAGE(SharedDesktopOntologies 0.2)
         MACRO_LOG_FEATURE(SHAREDDESKTOPONTOLOGIES_FOUND "Shared desktop ontologies" "Desktop ontologies"
             "http://oscaf.sourceforge.net" TRUE "0.2" "Ontologies necessary for the Nepomuk semantic desktop.")
 
-        IF (NEPOMUK_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
-            SET(NEPOMUK_FOUND TRUE)
-        ELSE (NEPOMUK_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
-            SET(NEPOMUK_FOUND FALSE)
-        ENDIF (NEPOMUK_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
+        IF (NepomukCore_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
+            SET(NepomukCore_FOUND TRUE)
+        ELSE (NepomukCore_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
+            SET(NepomukCore_FOUND FALSE)
+        ENDIF (NepomukCore_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
 
-       MACRO_BOOL_TO_01(NEPOMUK_FOUND HAVE_NEPOMUK)
+       MACRO_BOOL_TO_01(NepomukCore_FOUND HAVE_NEPOMUK)
     ENDIF (${KDE_VERSION} VERSION_GREATER "4.3.99")
 ENDIF (ENABLE_NEPOMUKSUPPORT)
 
@@ -544,9 +544,9 @@ ENDIF(KDEPIMLIBS_FOUND)
 
 # ================================================================
 
-IF(NEPOMUK_FOUND)
+IF(NepomukCore_FOUND)
     MESSAGE(STATUS " Nepomuk libraries found.................. YES (optional)")
-ELSE(NEPOMUK_FOUND)
+ELSE(NepomukCore_FOUND)
     IF (${KDE_VERSION} VERSION_GREATER "4.4.0")
         MESSAGE(STATUS " Nepomuk libraries found.................. NO  (optional)")
     ELSE (${KDE_VERSION} VERSION_GREATER "4.4.0")
@@ -555,7 +555,7 @@ ELSE(NEPOMUK_FOUND)
     MESSAGE(STATUS "")
     MESSAGE(STATUS " digiKam will be compiled without support for the Nepomuk semantic desktop services.")
     MESSAGE(STATUS "")
-ENDIF(NEPOMUK_FOUND)
+ENDIF(NepomukCore_FOUND)
 
 # ================================================================
 
@@ -714,9 +714,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/utilities/qmlshow)
     ENDIF(USE_PRESENTATION_MODE)
 
-    IF(NEPOMUK_FOUND)
-        INCLUDE_DIRECTORIES(${SOPRANO_INCLUDE_DIR} ${NEPOMUK_INCLUDES})
-    ENDIF(NEPOMUK_FOUND)
+    IF(NepomukCore_FOUND)
+        INCLUDE_DIRECTORIES(${SOPRANO_INCLUDE_DIR} ${NEPOMUK_CORE_INCLUDE_DIR})
+    ENDIF(NepomukCore_FOUND)
 
     IF(PGF_FOUND)
        INCLUDE_DIRECTORIES(${PGF_INCLUDE_DIRS})

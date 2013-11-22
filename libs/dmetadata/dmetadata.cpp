@@ -1194,7 +1194,7 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
     }
 
     // See B.K.O #269418 : try to get Tags Path list from M$ Windows Live Photo Gallery.
-    tagsPath = getXmpTagStringSeq("Xmp.MicrosoftPhoto.LastKeywordXMP", false);
+    tagsPath = getXmpTagStringBag("Xmp.MicrosoftPhoto.LastKeywordXMP", false);
     if (!tagsPath.isEmpty())
     {
         return true;
@@ -1262,7 +1262,7 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath) const
         }
 
         // See B.K.O #269418 : register Tags path list for Windows Live Photo Gallery.
-        if (!setXmpTagStringSeq("Xmp.MicrosoftPhoto.LastKeywordXMP", tagsPath))
+        if (!setXmpTagStringBag("Xmp.MicrosoftPhoto.LastKeywordXMP", tagsPath))
         {
             return false;
         }
