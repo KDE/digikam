@@ -73,6 +73,8 @@ PreviewThreadWrapper::~PreviewThreadWrapper()
         delete filter;
     }
 
+    d->map.clear();
+
     delete d;
 }
 
