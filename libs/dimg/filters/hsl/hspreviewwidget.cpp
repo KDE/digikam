@@ -108,7 +108,7 @@ void HSPreviewWidget::updatePixmap()
 
     for (int s = ySize - 1 ; s >= 0 ; --s)
     {
-        p = (uint*)image.scanLine(ySize - s - 1);
+        p = reinterpret_cast<uint*>(image.scanLine(ySize - s - 1));
 
         for (int h = 0 ; h < xSize ; ++h)
         {

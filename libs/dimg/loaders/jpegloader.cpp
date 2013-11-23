@@ -861,7 +861,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observe
     }
     else
     {
-        unsigned short* srcPtr = (unsigned short*)data;
+        unsigned short* srcPtr = reinterpret_cast<unsigned short*>(data);
 
         for (uint j = 0; j < h; ++j)
         {

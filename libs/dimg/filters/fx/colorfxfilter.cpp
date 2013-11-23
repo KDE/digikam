@@ -134,10 +134,10 @@ void ColorFXFilter::solarize(DImg* const orgImage, DImg* const destImage, int fa
     }
     else                            // 16 bits image.
     {
-        uint threshold      = (uint)((100 - factor) * (65535 + 1) / 100);
-        threshold           = qMax((uint)1, threshold);
-        const unsigned short* ptr = (const unsigned short*)data;
-        unsigned short* dst = (unsigned short*)pResBits;
+        uint threshold            = (uint)((100 - factor) * (65535 + 1) / 100);
+        threshold                 = qMax((uint)1, threshold);
+        const unsigned short* ptr = reinterpret_cast<const unsigned short*>(data);
+        unsigned short* dst       = reinterpret_cast<unsigned short*>(pResBits);
         unsigned short  a, r, g, b;
 
         for (int x = 0 ; x < w * h ; ++x)
@@ -314,9 +314,9 @@ void ColorFXFilter::neonFindEdges(DImg* const orgImage, DImg* const destImage, b
             {
                 for (int k = 0; k <= 2; ++k)
                 {
-                    colorPoint  = ((unsigned short*)ptr)[k];
-                    colorOther1 = ((unsigned short*)ptr1)[k];
-                    colorOther2 = ((unsigned short*)ptr2)[k];
+                    colorPoint  = reinterpret_cast<unsigned short*>(ptr)[k];
+                    colorOther1 = reinterpret_cast<unsigned short*>(ptr1)[k];
+                    colorOther2 = reinterpret_cast<unsigned short*>(ptr2)[k];
                     color_1     = (colorPoint - colorOther1) * (colorPoint - colorOther1);
                     color_2     = (colorPoint - colorOther2) * (colorPoint - colorOther2);
 
@@ -326,11 +326,11 @@ void ColorFXFilter::neonFindEdges(DImg* const orgImage, DImg* const destImage, b
 
                     if (neon)
                     {
-                        ((unsigned short*)ptr)[k] = CLAMP065535((int)(sqrt((double)color_1 + color_2) * intensityFactor));
+                        reinterpret_cast<unsigned short*>(ptr)[k] = CLAMP065535((int)(sqrt((double)color_1 + color_2) * intensityFactor));
                     }
                     else
                     {
-                        ((unsigned short*)ptr)[k] = 65535 - CLAMP065535((int)(sqrt((double)color_1 + color_2) * intensityFactor));
+                        reinterpret_cast<unsigned short*>(ptr)[k] = 65535 - CLAMP065535((int)(sqrt((double)color_1 + color_2) * intensityFactor));
                     }
                 }
             }

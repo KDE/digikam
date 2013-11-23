@@ -171,8 +171,8 @@ void DistortionFXFilter::setPixelFromOther(int Width, int Height, bool sixteenBi
 
         if (sixteenBit)
         {
-            unsigned short* ptr16 = (unsigned short*)ptr;
-            PixelsAliasFilter().pixelAntiAliasing16((unsigned short*)data, Width, Height, nw, nh,
+            unsigned short* ptr16 = reinterpret_cast<unsigned short*>(ptr);
+            PixelsAliasFilter().pixelAntiAliasing16(reinterpret_cast<unsigned short*>(data), Width, Height, nw, nh,
                                                     ptr16 + 3, ptr16 + 2, ptr16 + 1, ptr16);
         }
         else

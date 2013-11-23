@@ -113,7 +113,7 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver* const obser
         return false;
     }
 
-    uint*  sptr = (uint*)target.bits();
+    uint*  sptr = reinterpret_cast<uint*>(target.bits());
     uchar* dptr = data;
 
     for (uint i = 0 ; i < w * h ; ++i)

@@ -176,7 +176,7 @@ bool RAWLoader::loadedFromRawData(const QByteArray& data, int width, int height,
             return false;
         }
 
-        unsigned short* dst = (unsigned short*)image;
+        unsigned short* dst = reinterpret_cast<unsigned short*>(image);
         uchar*          src = (uchar*)data.data();
         float fac           = 65535.0 / rgbmax;
         checkpoint          = 0;
