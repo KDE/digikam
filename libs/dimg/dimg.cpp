@@ -156,7 +156,7 @@ DImg::DImg(const QImage& image)
 
         if (allocateData())
         {
-            uint*  sptr       = (uint*)target.bits();
+            uint*  sptr       = reinterpret_cast<uint*>(target.bits());
             uchar* dptr       = m_priv->data;
             const uint pixels = numPixels();
 
@@ -2554,10 +2554,10 @@ void DImg::flip(FLIP direction)
             if (sixteenBit())
             {
                 unsigned short  tmp[4];
-                unsigned short* line1;
-                unsigned short* line2;
+                unsigned short* line1 = 0;
+                unsigned short* line2 = 0;
 
-                unsigned short* data = (unsigned short*) bits();
+                unsigned short* data = reinterpret_cast<unsigned short*>(bits());
 
                 // can be done inplace
                 uint hHalf = (h / 2);
@@ -2739,7 +2739,7 @@ void DImg::convertDepth(int depth)
 
         uchar*  data = new uchar[width()*height() * 4];
         uchar*  dptr = data;
-        ushort* sptr = (ushort*)bits();
+        ushort* sptr = reinterpret_cast<ushort*>(bits());
 
         uint dim = width() * height() * 4;
 
@@ -2757,7 +2757,7 @@ void DImg::convertDepth(int depth)
         // upgrading from 8 bit to 16 bit
 
         uchar*  data = new uchar[width()*height() * 8];
-        ushort* dptr = (ushort*)data;
+        ushort* dptr = reinterpret_cast<ushort*>(data);
         uchar*  sptr = bits();
 
         // use default seed of the generator
@@ -2798,7 +2798,7 @@ void DImg::fill(const DColor& color)
 
     if (sixteenBit())
     {
-        unsigned short* imgData16 = (unsigned short*)m_priv->data;
+        unsigned short* imgData16 = reinterpret_cast<unsigned short*>(m_priv->data);
         unsigned short red        = (unsigned short)color.red();
         unsigned short green      = (unsigned short)color.green();
         unsigned short blue       = (unsigned short)color.blue();
