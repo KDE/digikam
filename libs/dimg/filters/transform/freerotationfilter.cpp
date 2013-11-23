@@ -142,7 +142,7 @@ void FreeRotationFilter::filterImage()
     int nHeight = m_orgImage.height();
 
     uchar* pBits            = m_orgImage.bits();
-    unsigned short* pBits16 = (unsigned short*)m_orgImage.bits();
+    unsigned short* pBits16 = reinterpret_cast<unsigned short*>(m_orgImage.bits());
 
     // first of all, we need to calculate the sin and cos of the given angle
 
@@ -185,7 +185,7 @@ void FreeRotationFilter::filterImage()
     m_destImage.fill(DColor(d->settings.backgroundColor.rgb(), sixteenBit));
 
     uchar* pResBits            = m_destImage.bits();
-    unsigned short* pResBits16 = (unsigned short*)m_destImage.bits();
+    unsigned short* pResBits16 = reinterpret_cast<unsigned short*>(m_destImage.bits());
 
     PixelsAliasFilter alias;
 
