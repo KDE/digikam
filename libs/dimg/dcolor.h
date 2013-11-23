@@ -56,7 +56,7 @@ public:
 
     /** Read value from data. Equivalent to setColor()
      */
-    explicit DColor(const uchar* data, bool sixteenBit = false)
+    explicit DColor(uchar* data, bool sixteenBit = false)
     {
         setColor(data, sixteenBit);
     }
@@ -83,7 +83,7 @@ public:
         If sixteenBit is true, 8 bytes are read.
         Inline method.
      */
-    inline void setColor(const uchar* const data, bool sixteenBit = false);
+    inline void setColor(uchar* const data, bool sixteenBit = false);
 
     /** Write the values of this color to the given memory location.
         If sixteenBit is false, 4 bytes are written.

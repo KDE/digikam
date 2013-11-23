@@ -1753,7 +1753,7 @@ void DImg::bitBlendImage(DColorComposer* const composer, const DImg* const src,
              src->bytesDepth(), bytesDepth(), multiplicationFlags);
 }
 
-void DImg::bitBlend(DColorComposer* const composer, const uchar* const src, uchar* const dest,
+void DImg::bitBlend(DColorComposer* const composer, uchar* const src, uchar* const dest,
                     int sx, int sy, int w, int h, int dx, int dy,
                     uint swidth, uint sheight, uint dwidth, uint dheight,
                     bool sixteenBit, int sdepth, int ddepth,
@@ -1765,16 +1765,13 @@ void DImg::bitBlend(DColorComposer* const composer, const uchar* const src, ucha
         return;
     }
 
-    const uchar* sptr;
-
-    uchar* dptr;
+    uchar* sptr = 0;
+    uchar* dptr = 0;
 
     uint   slinelength = swidth * sdepth;
-
     uint   dlinelength = dwidth * ddepth;
 
     int scurY = sy;
-
     int dcurY = dy;
 
     for (int j = 0 ; j < h ; ++j, ++scurY, ++dcurY)
