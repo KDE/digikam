@@ -139,7 +139,7 @@ void NREstimate::startAnalyse()
     CvMat* clusters  = cvCreateMat(m_orgImage.numPixels(), 1, CV_32SC1);
 
     // pointer variable to handle the CvMat* points (the image in CvMat format)
-    float* pointsPtr = (float*)points->data.ptr;
+    float* pointsPtr = reinterpret_cast<float*>(points->data.ptr);
 
     for (uint x=0 ; runningFlag() && (x < m_orgImage.numPixels()) ; x++)
     {
@@ -240,7 +240,7 @@ void NREstimate::startAnalyse()
 
     if (runningFlag())
     {
-        ptr = (float*)sd->data.ptr;
+        ptr = reinterpret_cast<float*>(sd->data.ptr);
     }
 
     kDebug() << "The rowPosition array is ready!";
@@ -252,7 +252,7 @@ void NREstimate::startAnalyse()
         rowIndex    = rPosition[columnIndex];
 
         //moving to the right row
-        ptr         = (float*)(sd->data.ptr + rowIndex*(sd->step));
+        ptr         = reinterpret_cast<float*>(sd->data.ptr + rowIndex*(sd->step));
 
         //moving to the right column
         for (int j=0 ; runningFlag() && (j < columnIndex) ; j++)
@@ -288,8 +288,8 @@ void NREstimate::startAnalyse()
     {
         meanStore    = cvCreateMat(d->clusterCount, points->cols, CV_32FC1);
         stdStore     = cvCreateMat(d->clusterCount, points->cols, CV_32FC1);
-        meanStorePtr = (float*)(meanStore->data.ptr);
-        stdStorePtr  = (float*)(stdStore->data.ptr);
+        meanStorePtr = reinterpret_cast<float*>(meanStore->data.ptr);
+        stdStorePtr  = reinterpret_cast<float*>(stdStore->data.ptr);
     }
 
     for (int i=0 ; runningFlag() && (i < sd->cols) ; i++)
@@ -297,7 +297,7 @@ void NREstimate::startAnalyse()
         if (runningFlag() && (rowPosition[(i/points->cols)] >= 1))
         {
             CvMat* workingArr = cvCreateMat(rowPosition[(i / points->cols)], 1, CV_32FC1);
-            ptr               = (float*)(workingArr->data.ptr);
+            ptr               = reinterpret_cast<float*>(workingArr->data.ptr);
 
             for (int j=0 ; runningFlag() && (j < rowPosition[(i / (points->cols))]) ; j++)
             {
@@ -319,8 +319,8 @@ void NREstimate::startAnalyse()
 
     if (runningFlag())
     {
-        meanStorePtr = (float*)meanStore->data.ptr;
-        stdStorePtr  = (float*)stdStore->data.ptr;
+        meanStorePtr = reinterpret_cast<float*>(meanStore->data.ptr);
+        stdStorePtr  = reinterpret_cast<float*>(stdStore->data.ptr);
     }
 
     if (!d->path.isEmpty() && runningFlag())
@@ -394,8 +394,8 @@ void NREstimate::startAnalyse()
 
     for (int j=0 ; runningFlag() && (j < points->cols) ; j++)
     {
-        meanStorePtr = (float*)meanStore->data.ptr;
-        stdStorePtr  = (float*)stdStore->data.ptr;
+        meanStorePtr = reinterpret_cast<float*>(meanStore->data.ptr);
+        stdStorePtr  = reinterpret_cast<float*>(stdStore->data.ptr);
 
         for (int moveToChannel=0 ; moveToChannel <= j ; moveToChannel++)
         {

@@ -196,7 +196,7 @@ void ImageHistogram::calculate()
     if (isSixteenBit())         // 16 bits image.
     {
         unsigned short blue, green, red, alpha;
-        unsigned short* const data = (unsigned short*)d->img.bits();
+        unsigned short* const data = reinterpret_cast<unsigned short*>(d->img.bits());
 
         for (i = 0 ; (i < d->img.width() * d->img.height() * 4) && runningFlag() ; i += 4)
         {
