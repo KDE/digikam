@@ -342,8 +342,8 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
                     offset = 0;
                 }
 
-                ushort* stripPtr = (ushort*)(strip.data());
-                ushort* dataPtr  = (ushort*)(data.data() + offset);
+                ushort* stripPtr = reinterpret_cast<ushort*>(strip.data());
+                ushort* dataPtr  = reinterpret_cast<ushort*>(data.data() + offset);
                 ushort* p;
 
                 // tiff data is read as BGR or ABGR or Greyscale
@@ -525,7 +525,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
                 // Read data
 
-                if (TIFFRGBAImageGet(&img, (uint32*)strip.data(), img.width, rows_to_read) == -1)
+                if (TIFFRGBAImageGet(&img, reinterpret_cast<uint32*>(strip.data()), img.width, rows_to_read) == -1)
                 {
                     kDebug() << "Failed to read image data";
                     TIFFClose(tif);
@@ -760,7 +760,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver* const observe
 
             if (imageSixteenBit())          // 16 bits image.
             {
-                pixel16 = (ushort*)pixel;
+                pixel16 = reinterpret_cast<ushort*>(pixel);
                 b16 = pixel16[0];
                 g16 = pixel16[1];
                 r16 = pixel16[2];
@@ -778,7 +778,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver* const observe
 
                 // This might be endian dependent
 
-                buf16 = (ushort*)(buf+i);
+                buf16    = reinterpret_cast<ushort*>(buf+i);
                 *buf16++ = r16;
                 *buf16++ = g16;
                 *buf16++ = b16;

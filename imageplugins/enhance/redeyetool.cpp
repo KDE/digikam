@@ -493,8 +493,8 @@ void RedEyeTool::redEyeFilter(DImg& selection)
     }
     else                                 // 16 bits image.
     {
-        unsigned short* ptr  = (unsigned short*)selection.bits();
-        unsigned short* mptr = (unsigned short*)mask.bits();
+        unsigned short* ptr  = reinterpret_cast<unsigned short*>(selection.bits());
+        unsigned short* mptr = reinterpret_cast<unsigned short*>(mask.bits());
         unsigned short  r, g, b, r1, g1, b1;
 
         for (uint i = 0 ; i < selection.width() * selection.height() ; ++i)
@@ -557,8 +557,8 @@ void RedEyeTool::redEyeFilter(DImg& selection)
     }
     else                                // 16 bits image.
     {
-        unsigned short* mptr  = (unsigned short*)mask.bits();
-        unsigned short* mptr2 = (unsigned short*)mask2.bits();
+        unsigned short* mptr  = reinterpret_cast<unsigned short*>(mask.bits());
+        unsigned short* mptr2 = reinterpret_cast<unsigned short*>(mask2.bits());
 
         for (uint i = 0 ; i < mask2.width() * mask2.height() ; ++i)
         {

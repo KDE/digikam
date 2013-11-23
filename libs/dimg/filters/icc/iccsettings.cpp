@@ -273,8 +273,10 @@ IccProfile IccSettings::Private::profileFromWindowSystem(QWidget* const widget)
 
 #elif defined Q_WS_WIN
     //TODO
+    Q_UNUSED(widget);
 #elif defined Q_WS_MAC
     //TODO
+    Q_UNUSED(widget);
 #endif
 
     return IccProfile();

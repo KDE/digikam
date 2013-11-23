@@ -338,7 +338,7 @@ void WBFilter::findChanelsMax(const DImg* const img, int& maxr, int& maxg, int& 
     }
     else                    // 16 bits image.
     {
-        const unsigned short* ptr = (const unsigned short*)data;
+        const unsigned short* ptr = reinterpret_cast<const unsigned short*>(data);
 
         for (uint j = 0 ; j < size; ++j)
         {
@@ -469,7 +469,7 @@ void WBFilter::adjustWhiteBalance(uchar* const data, int width, int height, bool
     else               // 16 bits image.
     {
         unsigned short  red, green, blue;
-        unsigned short* ptr = (unsigned short*)data;
+        unsigned short* ptr = reinterpret_cast<unsigned short*>(data);
 
         for (j = 0 ; runningFlag() && (j < size) ; ++j)
         {

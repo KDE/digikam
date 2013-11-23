@@ -271,7 +271,7 @@ void BCGFilter::applyBCG(uchar* const bits, uint width, uint height, bool sixtee
     }
     else                                        // 16 bits image.
     {
-        ushort* data = (ushort*)bits;
+        ushort* data = reinterpret_cast<ushort*>(bits);
 
         for (uint i = 0; runningFlag() && (i < size); ++i)
         {

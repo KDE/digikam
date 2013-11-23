@@ -268,7 +268,7 @@ void CBFilter::applyCBFilter(DImg& image, double r, double g, double b, double a
     }
     else                                        // 16 bits image.
     {
-        ushort* data = (ushort*) image.bits();
+        ushort* data = reinterpret_cast<ushort*>(image.bits());
 
         for (uint i = 0; runningFlag() && (i < size); ++i)
         {

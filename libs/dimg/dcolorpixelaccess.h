@@ -33,7 +33,7 @@ namespace Digikam
  * Providing them as inline methods allows the compiler to optimize better.
  */
 
-inline void DColor::setColor(const uchar* const data, bool sixteenBit)
+inline void DColor::setColor(uchar* const data, bool sixteenBit)
 {
     m_sixteenBit = sixteenBit;
 
@@ -46,7 +46,7 @@ inline void DColor::setColor(const uchar* const data, bool sixteenBit)
     }
     else                      // 16 bits image
     {
-        unsigned short* data16 = (unsigned short*)data;
+        unsigned short* data16 = reinterpret_cast<unsigned short*>(data);
         setBlue (data16[0]);
         setGreen(data16[1]);
         setRed  (data16[2]);
@@ -58,7 +58,7 @@ inline void DColor::setPixel(uchar* const data) const
 {
     if (sixteenBit())       // 16 bits image.
     {
-        unsigned short* data16 = (unsigned short*)data;
+        unsigned short* data16 = reinterpret_cast<unsigned short*>(data);
         data16[0]              = (unsigned short)blue();
         data16[1]              = (unsigned short)green();
         data16[2]              = (unsigned short)red();

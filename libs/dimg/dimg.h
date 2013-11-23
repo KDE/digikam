@@ -666,7 +666,7 @@ private:
                        int sx, int sy, int w, int h, int dx, int dy,
                        uint swidth, uint sheight, uint dwidth, uint dheight,
                        bool sixteenBit, int sdepth, int ddepth);
-    static void bitBlend(DColorComposer* const composer, const uchar* const src, uchar* const dest,
+    static void bitBlend(DColorComposer* const composer, uchar* const src, uchar* const dest,
                          int sx, int sy, int w, int h, int dx, int dy,
                          uint swidth, uint sheight, uint dwidth, uint dheight,
                          bool sixteenBit, int sdepth, int ddepth,

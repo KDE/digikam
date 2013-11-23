@@ -76,8 +76,8 @@ void AntiVignettingFilter::filterImage()
     uchar* NewBits = m_destImage.bits();
     uchar* data    = m_orgImage.bits();
 
-    unsigned short* NewBits16 = (unsigned short*)m_destImage.bits();
-    unsigned short* data16    = (unsigned short*)m_orgImage.bits();
+    unsigned short* NewBits16 = reinterpret_cast<unsigned short*>(m_destImage.bits());
+    unsigned short* data16    = reinterpret_cast<unsigned short*>(m_orgImage.bits());
 
     int Width  = m_orgImage.width();
     int Height = m_orgImage.height();

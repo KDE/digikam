@@ -114,7 +114,7 @@ void ColorGradientWidget::paintEvent( QPaintEvent* )
                         color1.green() + int(greenDiff * scale),
                         color1.blue()  + int(blueDiff  * scale) );
 
-            unsigned int* p = (uint*) image.scanLine( y );
+            unsigned int* p = reinterpret_cast<uint*>(image.scanLine(y));
 
             for ( int x = 0; x < image.width(); ++x )
             {
@@ -124,7 +124,7 @@ void ColorGradientWidget::paintEvent( QPaintEvent* )
     }
     else
     {
-        unsigned int* p = (uint*) image.scanLine( 0 );
+        unsigned int* p = reinterpret_cast<uint*>(image.scanLine(0));
 
         for ( int x = 0; x < image.width(); ++x )
         {

@@ -203,7 +203,7 @@ void EqualizeFilter::equalizeImage()
     else               // 16 bits image.
     {
         unsigned short  red, green, blue, alpha;
-        unsigned short* ptr = (unsigned short*)data;
+        unsigned short* ptr = reinterpret_cast<unsigned short*>(data);
 
         for (i = 0 ; runningFlag() && (i < size) ; ++i)
         {

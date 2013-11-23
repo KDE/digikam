@@ -433,6 +433,10 @@ MACRO_BOOL_TO_01(ENABLE_ADVANCEDDEBUGMSG USE_ADVANCEDDEBUGMSG)
 # Win32 compilation with Nepomuk is broken. It's temporally disabled.
 IF (ENABLE_NEPOMUKSUPPORT)
     IF (${KDE_VERSION} VERSION_GREATER "4.3.99")
+        MACRO_OPTIONAL_FIND_PACKAGE(Soprano)
+        MACRO_LOG_FEATURE(Soprano_FOUND "Soprano" "C++/Qt4 framework for RDF data"
+                "http://soprano.sourceforge.net" TRUE "" "Storage of semantic data")
+
         MACRO_OPTIONAL_FIND_PACKAGE(NepomukCore)
         MACRO_LOG_FEATURE(NepomukCore_FOUND "NepomukCore" "The Nepomuk libraries"
                 "http://www.kde.org" TRUE "" "Nepomuk extends the search and tagging")
@@ -441,11 +445,11 @@ IF (ENABLE_NEPOMUKSUPPORT)
         MACRO_LOG_FEATURE(SHAREDDESKTOPONTOLOGIES_FOUND "Shared desktop ontologies" "Desktop ontologies"
             "http://oscaf.sourceforge.net" TRUE "0.2" "Ontologies necessary for the Nepomuk semantic desktop.")
 
-        IF (NepomukCore_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
+        IF (Soprano_FOUND AND NepomukCore_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
             SET(NepomukCore_FOUND TRUE)
-        ELSE (NepomukCore_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
+        ELSE (Soprano_FOUND AND NepomukCore_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
             SET(NepomukCore_FOUND FALSE)
-        ENDIF (NepomukCore_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
+        ENDIF (Soprano_FOUND AND NepomukCore_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
 
        MACRO_BOOL_TO_01(NepomukCore_FOUND HAVE_NEPOMUK)
     ENDIF (${KDE_VERSION} VERSION_GREATER "4.3.99")

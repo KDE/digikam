@@ -21,6 +21,8 @@
  *
  * ============================================================ */
 
+#include "tagmngrlistmodel.moc"
+
 // Qt includes
 
 #include <QStringList>
@@ -36,7 +38,6 @@
 // Local includes
 
 #include "tagmngrlistitem.h"
-#include "tagmngrlistmodel.h"
 
 namespace Digikam
 {
