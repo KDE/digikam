@@ -267,7 +267,7 @@ VersionNameCreator::VersionNameCreator(const VersionFileInfo& loadedFile,
       m_fromRaw(false), m_newVersion(false), q(q)
 {
     m_loadedFile.format   = m_loadedFile.format.toUpper();
-    m_fromRaw             = (m_loadedFile.format.startsWith("RAW")); // also accept RAW-... format
+    m_fromRaw             = (m_loadedFile.format.startsWith(QLatin1String("RAW"))); // also accept RAW-... format
     m_version             = q->namingScheme()->initialCounter();
     m_intermediateCounter = q->namingScheme()->initialCounter();
 }

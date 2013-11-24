@@ -933,7 +933,7 @@ QString DMetadata::getImageUniqueId() const
         // The Exif ImageUniqueID is 128bit, or 32 hex digits.
         // If the first 20 are zero, it's probably a counter,
         // the left 12 are sufficient for more then 10^14 clicks.
-        if (!exifUid.isEmpty() && !exifUid.startsWith("00000000000000000000"))
+        if (!exifUid.isEmpty() && !exifUid.startsWith(QLatin1String("00000000000000000000")))
         {
             return exifUid;
         }
