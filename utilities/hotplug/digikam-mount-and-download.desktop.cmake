@@ -33,7 +33,6 @@ Name[nl]=Foto's met digiKam downloaden
 Name[nn]=Last ned foto med digiKam
 Name[pa]=ਡਿਜਿਕੈਮ ਨਾਲ ਫੋਟੋ ਡਾਊਨਲੋਡ ਕਰੋ
 Name[pl]=Pobierz zdjęcia z digiKam
-Name[pt]=Obter Fotos com o digiKam
 Name[pt_BR]=Transferir as fotos com o digiKam
 Name[ro]=Descărcați fotografii cu digiKam
 Name[ru]=Скопировать фотографии в альбом digiKam
