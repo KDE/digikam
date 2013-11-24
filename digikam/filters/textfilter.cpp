@@ -43,25 +43,25 @@ public:
 
     Private()
     {
-        imageNameAction        = 0;
-        imageTitleAction       = 0;
-        imageCommentAction     = 0;
-        tagNameAction          = 0;
-        albumNameAction        = 0;
-        optionsBtn             = 0;
-        optionsMenu            = 0;
-        searchTextBar          = 0;
-        imageAspectRatioAction = 0;
-        imagePixelSizeAction   = 0;
+        itemNameAction        = 0;
+        itemTitleAction       = 0;
+        itemCommentAction     = 0;
+        tagNameAction         = 0;
+        albumNameAction       = 0;
+        optionsBtn            = 0;
+        optionsMenu           = 0;
+        searchTextBar         = 0;
+        itemAspectRatioAction = 0;
+        itemPixelSizeAction   = 0;
     }
 
-    QAction*       imageNameAction;
-    QAction*       imageTitleAction;
-    QAction*       imageCommentAction;
+    QAction*       itemNameAction;
+    QAction*       itemTitleAction;
+    QAction*       itemCommentAction;
     QAction*       tagNameAction;
     QAction*       albumNameAction;
-    QAction*       imageAspectRatioAction;
-    QAction*       imagePixelSizeAction;
+    QAction*       itemAspectRatioAction;
+    QAction*       itemPixelSizeAction;
 
     QToolButton*   optionsBtn;
 
@@ -77,7 +77,7 @@ TextFilter::TextFilter(QWidget* const parent)
     d->searchTextBar->setTextQueryCompletion(true);
     d->searchTextBar->setToolTip(i18n("Text quick filter (search)"));
     d->searchTextBar->setWhatsThis(i18n("Enter search patterns to quickly filter this view on "
-                                        "file names, captions (comments), and tags"));
+                                        "item names, captions (comments), and tags"));
 
     d->optionsBtn = new QToolButton(this);
     d->optionsBtn->setToolTip( i18n("Text Search Fields"));
@@ -85,21 +85,21 @@ TextFilter::TextFilter(QWidget* const parent)
     d->optionsBtn->setPopupMode(QToolButton::InstantPopup);
     d->optionsBtn->setWhatsThis(i18n("Defines which fields to search for the text in."));
 
-    d->optionsMenu            = new KMenu(d->optionsBtn);
-    d->imageNameAction        = d->optionsMenu->addAction(i18n("Image Name"));
-    d->imageNameAction->setCheckable(true);
-    d->imageTitleAction       = d->optionsMenu->addAction(i18n("Image Title"));
-    d->imageTitleAction->setCheckable(true);
-    d->imageCommentAction     = d->optionsMenu->addAction(i18n("Image Comment"));
-    d->imageCommentAction->setCheckable(true);
-    d->tagNameAction          = d->optionsMenu->addAction(i18n("Tag Name"));
+    d->optionsMenu           = new KMenu(d->optionsBtn);
+    d->itemNameAction        = d->optionsMenu->addAction(i18n("Item Name"));
+    d->itemNameAction->setCheckable(true);
+    d->itemTitleAction       = d->optionsMenu->addAction(i18n("Item Title"));
+    d->itemTitleAction->setCheckable(true);
+    d->itemCommentAction     = d->optionsMenu->addAction(i18n("Item Comment"));
+    d->itemCommentAction->setCheckable(true);
+    d->tagNameAction         = d->optionsMenu->addAction(i18n("Tag Name"));
     d->tagNameAction->setCheckable(true);
-    d->albumNameAction        = d->optionsMenu->addAction(i18n("Album Name"));
+    d->albumNameAction       = d->optionsMenu->addAction(i18n("Album Name"));
     d->albumNameAction->setCheckable(true);
-    d->imageAspectRatioAction = d->optionsMenu->addAction(i18n("Image Aspect Ratio"));
-    d->imageAspectRatioAction->setCheckable(true);
-    d->imagePixelSizeAction   = d->optionsMenu->addAction(i18n("Image Pixel Size"));
-    d->imagePixelSizeAction->setCheckable(true);
+    d->itemAspectRatioAction = d->optionsMenu->addAction(i18n("Item Aspect Ratio"));
+    d->itemAspectRatioAction->setCheckable(true);
+    d->itemPixelSizeAction   = d->optionsMenu->addAction(i18n("Item Pixel Size"));
+    d->itemPixelSizeAction->setCheckable(true);
     d->optionsBtn->setMenu(d->optionsMenu);
 
     setMargin(0);
@@ -126,15 +126,15 @@ SearchTextFilterSettings::TextFilterFields TextFilter::searchTextFields()
 {
     int fields = SearchTextFilterSettings::None;
 
-    if (d->imageNameAction->isChecked())
+    if (d->itemNameAction->isChecked())
     {
         fields |= SearchTextFilterSettings::ImageName;
     }
-    if (d->imageTitleAction->isChecked())
+    if (d->itemTitleAction->isChecked())
     {
         fields |= SearchTextFilterSettings::ImageTitle;
     }
-    if (d->imageCommentAction->isChecked())
+    if (d->itemCommentAction->isChecked())
     {
         fields |= SearchTextFilterSettings::ImageComment;
     }
@@ -146,11 +146,11 @@ SearchTextFilterSettings::TextFilterFields TextFilter::searchTextFields()
     {
         fields |= SearchTextFilterSettings::AlbumName;
     }
-    if (d->imageAspectRatioAction->isChecked())
+    if (d->itemAspectRatioAction->isChecked())
     {
         fields |= SearchTextFilterSettings::ImageAspectRatio;
     }
-    if (d->imagePixelSizeAction->isChecked())
+    if (d->itemPixelSizeAction->isChecked())
     {
         fields |= SearchTextFilterSettings::ImagePixelSize;
     }
@@ -160,13 +160,13 @@ SearchTextFilterSettings::TextFilterFields TextFilter::searchTextFields()
 
 void TextFilter::setsearchTextFields(SearchTextFilterSettings::TextFilterFields fields)
 {
-    d->imageNameAction->setChecked(fields & SearchTextFilterSettings::ImageName);
-    d->imageTitleAction->setChecked(fields & SearchTextFilterSettings::ImageTitle);
-    d->imageCommentAction->setChecked(fields & SearchTextFilterSettings::ImageComment);
+    d->itemNameAction->setChecked(fields & SearchTextFilterSettings::ImageName);
+    d->itemTitleAction->setChecked(fields & SearchTextFilterSettings::ImageTitle);
+    d->itemCommentAction->setChecked(fields & SearchTextFilterSettings::ImageComment);
     d->tagNameAction->setChecked(fields & SearchTextFilterSettings::TagName);
     d->albumNameAction->setChecked(fields & SearchTextFilterSettings::AlbumName);
-    d->imageAspectRatioAction->setChecked(fields & SearchTextFilterSettings::ImageAspectRatio);
-    d->imagePixelSizeAction->setChecked(fields & SearchTextFilterSettings::ImagePixelSize);
+    d->itemAspectRatioAction->setChecked(fields & SearchTextFilterSettings::ImageAspectRatio);
+    d->itemPixelSizeAction->setChecked(fields & SearchTextFilterSettings::ImagePixelSize);
 }
 
 void TextFilter::slotSearchFieldsChanged()
