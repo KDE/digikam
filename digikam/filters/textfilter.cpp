@@ -53,6 +53,8 @@ public:
         searchTextBar         = 0;
         itemAspectRatioAction = 0;
         itemPixelSizeAction   = 0;
+        clearAllAction        = 0;
+        selAllAction          = 0;
     }
 
     QAction*       itemNameAction;
@@ -62,6 +64,8 @@ public:
     QAction*       albumNameAction;
     QAction*       itemAspectRatioAction;
     QAction*       itemPixelSizeAction;
+    QAction*       clearAllAction;
+    QAction*       selAllAction;
 
     QToolButton*   optionsBtn;
 
@@ -100,6 +104,11 @@ TextFilter::TextFilter(QWidget* const parent)
     d->itemAspectRatioAction->setCheckable(true);
     d->itemPixelSizeAction   = d->optionsMenu->addAction(i18n("Item Pixel Size"));
     d->itemPixelSizeAction->setCheckable(true);
+    d->optionsMenu->addSeparator();
+    d->clearAllAction        = d->optionsMenu->addAction(i18n("Clear All"));
+    d->clearAllAction->setCheckable(false);
+    d->selAllAction          = d->optionsMenu->addAction(i18n("Select All"));
+    d->selAllAction->setCheckable(false);
     d->optionsBtn->setMenu(d->optionsMenu);
 
     setMargin(0);
@@ -109,7 +118,7 @@ TextFilter::TextFilter(QWidget* const parent)
             this, SLOT(slotSearchFieldsChanged()));
 
     connect(d->optionsMenu, SIGNAL(triggered(QAction*)),
-            this, SLOT(slotSearchFieldsChanged()));
+            this, SLOT(slotSearchFieldsChanged(QAction*)));
 }
 
 TextFilter::~TextFilter()
@@ -169,8 +178,28 @@ void TextFilter::setsearchTextFields(SearchTextFilterSettings::TextFilterFields 
     d->itemPixelSizeAction->setChecked(fields & SearchTextFilterSettings::ImagePixelSize);
 }
 
-void TextFilter::slotSearchFieldsChanged()
+void TextFilter::checkMenuActions(bool checked)
 {
+    d->itemNameAction->setChecked(checked);
+    d->itemTitleAction->setChecked(checked);
+    d->itemCommentAction->setChecked(checked);
+    d->tagNameAction->setChecked(checked);
+    d->albumNameAction->setChecked(checked);
+    d->itemAspectRatioAction->setChecked(checked);
+    d->itemPixelSizeAction->setChecked(checked);
+}
+
+void TextFilter::slotSearchFieldsChanged(QAction* action)
+{
+    if (action == d->clearAllAction)
+    {
+        checkMenuActions(false);
+    }
+    if (action == d->selAllAction)
+    {
+        checkMenuActions(true);
+    }
+
     SearchTextFilterSettings settings(d->searchTextBar->searchTextSettings());
     settings.textFields = searchTextFields();
 
