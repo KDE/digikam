@@ -50,5 +50,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 036 ==> 306782 - Rotating several times quickly corrupts images.
 037 ==> 323891 - Tooltips are blank (while using gnome).
 038 ==> 255523 - digiKam shows html in notification after moving pictures.
-039 ==> 
+039 ==> 230060 - Delete Album is an absolutely terrifying procedure.
+040 ==> 
 
