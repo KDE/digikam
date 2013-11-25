@@ -46,5 +46,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 032 ==> 314774 - When staring, error message "" occurs.
 033 ==> 140175 - Mishandling of symbolic links [patch].
 034 ==> 301284 - Crashed at exit of digiKam.
-035 ==> 
-
+035 ==> 261526 - Other applications to edit the photos cannot be added in the "open , "others" - error: path is not correct.
+036 ==> 
