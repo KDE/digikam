@@ -44,4 +44,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 030 ==> 277928 - database upgrade v4 to v5 failed : digiKam fails to start properly, lost albums.
 031 ==> 325112 - Hang when opening folder of images to view thumbs.
 032 ==> 314774 - when staring, error message "" occurs.
-033 ==> 
+033 ==> 140175 - mishandling of symbolic links [patch].
+034 ==> 
