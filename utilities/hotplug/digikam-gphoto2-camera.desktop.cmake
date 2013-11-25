@@ -31,6 +31,7 @@ Name[nb]=digiKam «oppdag og last ned»
 Name[nl]=Detecteren en downloaden
 Name[pa]=ਡਿਜਿਕੈਮ ਖੋਜ ਅਤੇ ਡਾਊਨਲੋਡ
 Name[pl]=Wykrywanie i pobieranie za pomocą digiKam
+Name[pt]=Detectar e Transferir com o digiKam
 Name[pt_BR]=Detectar e baixar com o digiKam
 Name[ro]=Detectare și descărcare cu digiKam
 Name[ru]=Копировать в digiKam
