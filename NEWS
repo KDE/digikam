@@ -41,4 +41,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 027 ==> 180322 - Compute 35mm equivalent focal length.
 028 ==> 320185 - Compatibility issue with hierarchical tags between Digikam and WLPG (and perhaps other software).
 029 ==> 327957 - Text Filter Returns All Videos Regardless of String.
-030 ==> 
+030 ==> 277928 - database upgrade v4 to v5 failed : digiKam fails to start properly, lost albums.
+031 ==> 
