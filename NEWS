@@ -48,4 +48,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 034 ==> 301284 - Crashed at exit of digiKam.
 035 ==> 261526 - Other applications to edit the photos cannot be added in the "open , "others" - error: path is not correct.
 036 ==> 306782 - Rotating several times quickly corrupts images.
-037 ==> 
+037 ==> 323891 - Tooltips are blank (while using gnome).
+038 ==> 
