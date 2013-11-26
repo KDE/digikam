@@ -57,5 +57,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 043 ==> 240048 - Open images with double instead of single click.
 044 ==> 278664 - Image Names are not displayed completely in the AlbumUI.
 045 ==> 187654 - Photos should be in reverse chronological order in default view.
-046 ==> 
+046 ==> 317731 - digikam crashed while adding tags to images.
+047 ==> 
 
