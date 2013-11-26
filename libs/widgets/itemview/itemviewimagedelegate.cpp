@@ -318,7 +318,9 @@ void ItemViewImageDelegate::drawName(QPainter* p,const QRect& nameRect, const QS
 {
     Q_D(const ItemViewImageDelegate);
     p->setFont(d->fontReg);
-    p->drawText(nameRect, Qt::AlignCenter, name);//squeezedTextCached(p, nameRect.width(), name));
+    // NOTE: in case of file name are long, use squeezedTextCached to adjust string elide mode.
+    // See B.K.O #278664 fro details
+    p->drawText(nameRect, Qt::AlignCenter, squeezedTextCached(p, nameRect.width(), name));
 }
 
 void ItemViewImageDelegate::drawTitle(QPainter *p, const QRect& titleRect, const QString& title) const
