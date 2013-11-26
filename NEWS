@@ -53,5 +53,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 039 ==> 230060 - Delete Album is an absolutely terrifying procedure.
 040 ==> 181727 - digitaglinktree does not work if albumdir is not on root-partition.
 041 ==> 275687 - Artifacts when scrolling in album GUI.
-042 ==> 
+042 ==> 293297 - Digitaglinktree does not process any photos even if tags exists under People category + new option for year subdirectory [patch].
+043 ==> 
 
