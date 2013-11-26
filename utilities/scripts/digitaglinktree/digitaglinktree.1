@@ -106,9 +106,11 @@ digikam.db .
 .TP
 \fB \-r \fIrootdir\fR 
 \fIrootdir\fR denotes the digikam base directory containing all your photos if you are using
-digikam in a version before 0.10. If you are using digikam 0.10 or newer you must not
-use this option. If you do it anyway you will see a hint that the option given will be ignored because 
-digikams version 0.10 database contains the root directories of all albums defined in digikam.  
+digikam in a version before 0.10 where this option is mandatory. 
+If you are using digikam 0.10 or newer there should be 
+no need to use this option because all album root directories are searched automatically by looking
+in digikams database. In case where an album root directory and all photos below it
+cannot be found automatically you can try to use this option to set the root manually. 
 
 .TP
 \fB \-C\fR
