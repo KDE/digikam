@@ -58,5 +58,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 044 ==> 278664 - Image Names are not displayed completely in the AlbumUI.
 045 ==> 187654 - Photos should be in reverse chronological order in default view.
 046 ==> 317731 - digikam crashed while adding tags to images.
-047 ==> 
+047 ==> 320455 - Tip of the Day dialog don't show digiKam icon.
+048 ==> 
+
 
