@@ -52,5 +52,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 038 ==> 255523 - digiKam shows html in notification after moving pictures.
 039 ==> 230060 - Delete Album is an absolutely terrifying procedure.
 040 ==> 181727 - digitaglinktree does not work if albumdir is not on root-partition.
-041 ==> 
+041 ==> 275687 - Artifacts when scrolling in album GUI.
+042 ==> 
 
