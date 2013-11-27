@@ -82,7 +82,7 @@ public:
         view           = 0;
         mainLayout     = 0;
         filterBtn      = 0;
-        toolBtn      = 0;
+        toolBtn        = 0;
         searchBar      = 0;
         optionsMenu    = 0;
         noneAction     = 0;
@@ -133,7 +133,7 @@ MetadataWidget::MetadataWidget(QWidget* const parent, const char* name)
     d->optionsMenu                  = new KMenu(d->filterBtn);
     QActionGroup* const filterGroup = new QActionGroup(this);
 
-    d->noneAction     = d->optionsMenu->addAction(i18n("None"));
+    d->noneAction     = d->optionsMenu->addAction(i18n("No filter"));
     d->noneAction->setCheckable(true);
     filterGroup->addAction(d->noneAction);
     d->photoAction    = d->optionsMenu->addAction(i18n("Photograph"));
