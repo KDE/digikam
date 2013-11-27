@@ -171,12 +171,19 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
             subItems      = 0;
         }
 
-        // We ignore all unknown tags if necessary.
-        if (!it.key().section('.', 2, 2).startsWith(QLatin1String("0x")))
+        if (filters.isEmpty())
         {
+            QString tagTitle = m_parent->getTagTitle(it.key());
+            new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());
+            ++subItems;
+        }
+        else if (!it.key().section('.', 2, 2).startsWith(QLatin1String("0x")))
+        {
+            // We ignore all unknown tags if necessary.
+
             if (filters.contains("FULL"))
             {
-                // We don't filter the output (Complete Mode)
+                // We don't filter the output (Photo Mode)
 
                 QString tagTitle = m_parent->getTagTitle(it.key());
                 new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());
@@ -261,12 +268,19 @@ void MetadataListView::setIfdList(const DMetadata::MetaDataMap& ifds, const QStr
 
             if ( *itKeysFilter == it.key().section('.', 1, 1) )
             {
-                // We ignore all unknown tags if necessary.
-                if (!it.key().section('.', 2, 2).startsWith(QLatin1String("0x")))
+                if (filters.isEmpty())
                 {
+                    QString tagTitle = m_parent->getTagTitle(it.key());
+                    new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());
+                    ++subItems;
+                }
+                else if (!it.key().section('.', 2, 2).startsWith(QLatin1String("0x")))
+                {
+                    // We ignore all unknown tags if necessary.
+
                     if (filters.contains("FULL"))
                     {
-                        // We don't filter the output (Complete Mode)
+                        // We don't filter the output (Photo Mode)
 
                         QString tagTitle = m_parent->getTagTitle(it.key());
                         new MetadataListViewItem(parentifDItem, it.key(), tagTitle, it.value());

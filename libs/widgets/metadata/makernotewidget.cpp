@@ -113,13 +113,19 @@ bool MakerNoteWidget::decodeMetadata()
 
 void MakerNoteWidget::buildView()
 {
-    if (getMode() == CUSTOM)
+    switch (getMode())
     {
-        setIfdList(getMetadataMap(), getTagsFilter());
-    }
-    else
-    {
-        setIfdList(getMetadataMap(), QStringList() << QString("FULL"));
+        case CUSTOM:
+            setIfdList(getMetadataMap(), getTagsFilter());
+            break;
+
+        case PHOTO:
+            setIfdList(getMetadataMap(), QStringList() << QString("FULL"));
+            break;
+
+        default: // NONE
+            setIfdList(getMetadataMap(), QStringList());
+            break;
     }
 
     MetadataWidget::buildView();
