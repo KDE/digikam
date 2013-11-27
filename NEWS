@@ -60,6 +60,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 046 ==> 317731 - digikam crashed while adding tags to images.
 047 ==> 320455 - Tip of the Day dialog don't show digiKam icon.
 048 ==> 328018 - Face-related XMP metadata not displayed.
-049 ==> 
+049 ==> 142813 - No clock while processing display with color management.
+050 ==> 
 
 
