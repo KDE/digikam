@@ -106,11 +106,9 @@ digikam.db .
 .TP
 \fB \-r \fIrootdir\fR 
 \fIrootdir\fR denotes the digikam base directory containing all your photos if you are using
-digikam in a version before 0.10 where this option is mandatory. 
-If you are using digikam 0.10 or newer there should be 
-no need to use this option because all album root directories are searched automatically by looking
-in digikams database. In case where an album root directory and all photos below it
-cannot be found automatically you can try to use this option to set the root manually. 
+digikam in a version before 0.10. If you are using digikam 0.10 or newer you must not
+use this option. If you do it anyway you will see a hint that the option given will be ignored because 
+digikams version 0.10 database contains the root directories of all albums defined in digikam.  
 
 .TP
 \fB \-C\fR
@@ -145,6 +143,38 @@ regular tag just as its parent tag so digitaglinktree will create all subdirecto
 for tags and subtags at the same level independent of the tag - subtag hierarchy.
 
 .TP
+\fB \-Y \fR
+Create year directory under each tag directory. Year information is taken from "Date taken" in database. 
+
+.TP
+\fB \-i \fItag1,..,tagn\fR 
+\fItag1,..,tagn\fR Include only images with tags in the list. Use comma
+as tag separator. Default is "none". Use "all" to include all tags at
+once if you really want this. Better try a list with only some tags first to
+see how long it takes to complete.
+
+.TP
+\fB \-e \fItag1,..,tagn\fR 
+\fItag1,..,tagn\fR Exclude images with tags in the list. Use comma as tag separator. Default is "none".      
+
+.TP
+\fB \-M \fIlevel_number\fR 
+\fIlevel_number\fR specify the number of directory level. \fI-M\fR specifies that instead of following normal tag hierarchy, 
+it creates a hierarchy combining different tags together and not only
+within one tag hierarchy (for example combining Places and People tags).
+You have to add tags to be included by using the option -i (see above).
+Depending on the level given and the number of tags you have included and how
+many photos you manage using digikam, this option may take a considerable amount of time
+(possibly more than one  hour) to complete!
+\fIlevel_number\fR of "5" seems to be the maximum reasonable level to
+start with in this mode. 
+Options -A -C -a -H -f not tested with this option!
+
+.TP
+\fB \-V \fR
+Verbose mode.
+
+.TP
 \fB \-v \fR
 Prints the scripts version number and exits.
 
@@ -175,7 +205,7 @@ for digikam version 0.7x.
 
 A call to digitaglinktree is shown below:
 
-digiTagLinktree  -l /home/user/tags \
+digiTagLinktree  -l /home/user/tags
             -d /home/user/photos/digikam.db
 
 In this example we assume that you are running digikam version 0.10 or higher so that no 
@@ -183,9 +213,8 @@ option -r was used to specify the photo root dir. Instead this information will 
 
 In case you want to run the script on a digikam database that was created by digikam version 0.9 or earlier you have to use -r to specify the root directory where you keep all your photos that are managed by digikam:
 
-digiTagLinktree -r /home/user/photos -l /home/user/tags \
+digiTagLinktree -l /home/user/tags
             -d /home/user/photos/digikam.db
-
 
 In this example digikams photo root denoted by -r is /home/user/photos.  
 
@@ -193,6 +222,27 @@ Option -l /home/user/tags
 tells the script that all the subdirectories and symbolic links will be placed in 
 the directory /home/user/tags. The folder was chosen so that the tags-directory is not under digikams photo root. You may put the tags folder inside digikams photoroot but this is not the preferred method. 
 Because the link directory contains only links this tag structure does hardly need any additional space on your harddisk. 
+
+digiTagLinktree -r /home/user/photos -l /home/user/tags
+	    -d /home/user/photos/digikam.db
+            -i People,Place
+            -M 2
+            -Y
+
+In this example if you have an image with the tags People/me, Place/home from 1970 it will create the following directory (link to the image under _all directory)
+
+/home/user/tags/Date/1970/_all/
+
+/home/user/tags/Date/1970/People/me/_all/
+
+/home/user/tags/Date/1970/People/me/Place/home/_all/
+
+/home/user/tags/Date/1970/Place/home/_all/
+
+/home/user/tags/Date/1970/Place/home/People/me/_all/
+
+same starting with /Place ...
+same starting with /People ...
 
 .SH AUTHORS
 .B digitaglinktree
