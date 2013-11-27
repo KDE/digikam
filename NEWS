@@ -61,6 +61,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 047 ==> 320455 - Tip of the Day dialog don't show digiKam icon.
 048 ==> 328018 - Face-related XMP metadata not displayed.
 049 ==> 142813 - No clock while processing display with color management.
-050 ==> 
+050 ==> 138446 - Add "Assign ICC profile" entry to 'Image' menu.
+051 ==> 
 
 
