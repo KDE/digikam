@@ -62,6 +62,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 048 ==> 328018 - Face-related XMP metadata not displayed.
 049 ==> 142813 - No clock while processing display with color management.
 050 ==> 138446 - Add "Assign ICC profile" entry to 'Image' menu.
-051 ==> 
+051 ==> 293832 - Digitaglinktree - Multi tag level combination - find any image though directory browsing [patch].
+052 ==> 
 
 
