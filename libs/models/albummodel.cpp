@@ -245,6 +245,8 @@ DateAlbumModel::DateAlbumModel(QObject* parent)
                                  AlbumManager::instance()->findDAlbum(0),
                                  IgnoreRootAlbum, parent)
 {
+    m_columnHeader = i18n("My Calendar");
+
     connect(AlbumManager::instance(), SIGNAL(signalDAlbumsDirty(QMap<YearMonth,int>)),
             this, SLOT(setYearMonthMap(QMap<YearMonth,int>)));
 
