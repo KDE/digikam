@@ -166,7 +166,7 @@ public:
      */
     bool getNeedResetExifOrientation() const;
 
-    /** Set that RAW files loading rule to use (demosaicing or JPEG embeded).
+    /** Set that RAW files loading rule to use (demosaicing or JPEG embedded).
      */
     void setRawLoadingRules(QueueSettings::RawLoadingRule rule);
 

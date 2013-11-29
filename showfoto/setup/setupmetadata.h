@@ -37,10 +37,23 @@ class SetupMetadata : public QScrollArea
 
 public:
 
+    enum MetadataTab
+    {
+        Behavior = 0,
+        ExifViewer,
+        MakernotesViewer,
+        IptcViewer,
+        XmpViewer
+    };
+
+public:
+
     explicit SetupMetadata(QWidget* const parent = 0);
     ~SetupMetadata();
 
     void applySettings();
+
+    void setActiveTab(MetadataTab tab);
 
 private:
 

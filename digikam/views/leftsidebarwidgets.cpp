@@ -211,7 +211,8 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
     layout->addWidget(d->tagFolderView);
     layout->addWidget(d->tagSearchBar);
 
-    connect(d->openTagMngr, SIGNAL(clicked()),this,SLOT(slotOpenTagManager()));
+    connect(d->openTagMngr, SIGNAL(clicked()),
+            this,SLOT(slotOpenTagManager()));
 
     connect(d->tagFolderView, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
             this, SIGNAL(signalFindDuplicatesInAlbum(Album*)));
@@ -271,7 +272,7 @@ void TagViewSideBarWidget::setCurrentAlbum(TAlbum* album)
 
 void TagViewSideBarWidget::slotOpenTagManager()
 {
-    TagsManager* tagMngr = TagsManager::instance();
+    TagsManager* const tagMngr = TagsManager::instance();
     tagMngr->show();
     tagMngr->activateWindow();
     tagMngr->raise();
@@ -297,9 +298,9 @@ DateFolderViewSideBarWidget::DateFolderViewSideBarWidget(QWidget* const parent, 
 {
     setObjectName("DateFolderView Sidebar");
 
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    QVBoxLayout* const layout = new QVBoxLayout(this);
 
-    d->dateFolderView   = new DateFolderView(this, model);
+    d->dateFolderView         = new DateFolderView(this, model);
     d->dateFolderView->setConfigGroup(getConfigGroup());
     d->dateFolderView->setImageModel(imageFilterModel);
 
@@ -419,19 +420,19 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
     d->timer                    = new QTimer(this);
     setAttribute(Qt::WA_DeleteOnClose);
 
-    QVBoxLayout* vlay = new QVBoxLayout(this);
-    QFrame* panel     = new QFrame(this);
+    QVBoxLayout* const vlay = new QVBoxLayout(this);
+    QFrame* const panel     = new QFrame(this);
     panel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     panel->setLineWidth(1);
 
-    QGridLayout* grid = new QGridLayout(panel);
+    QGridLayout* const grid = new QGridLayout(panel);
 
     // ---------------------------------------------------------------
 
-    QWidget* hbox1    = new QWidget(panel);
-    QHBoxLayout* hlay = new QHBoxLayout(hbox1);
+    QWidget* const hbox1    = new QWidget(panel);
+    QHBoxLayout* const hlay = new QHBoxLayout(hbox1);
 
-    QLabel* label1 = new QLabel(i18n("Time Unit:"), hbox1);
+    QLabel* const label1    = new QLabel(i18n("Time Unit:"), hbox1);
     d->timeUnitCB  = new KComboBox(hbox1);
     d->timeUnitCB->addItem(i18n("Day"),   TimeLineWidget::Day);
     d->timeUnitCB->addItem(i18n("Week"),  TimeLineWidget::Week);
@@ -490,7 +491,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
 
     // ---------------------------------------------------------------
 
-    KHBox* hbox2 = new KHBox(panel);
+    KHBox* const hbox2 = new KHBox(panel);
     hbox2->setMargin(0);
     hbox2->setSpacing(KDialog::spacingHint());
 
@@ -748,7 +749,7 @@ void TimelineSideBarWidget::slotAlbumSelected(Album* album)
         return;
     }
 
-    SAlbum* salbum = dynamic_cast<SAlbum*>(album);
+    SAlbum* const salbum = dynamic_cast<SAlbum*>(album);
 
     if (!salbum)
     {
@@ -854,18 +855,16 @@ public:
 };
 
 SearchSideBarWidget::SearchSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
-                                         SearchModificationHelper* const searchModeificationHelper)
+                                         SearchModificationHelper* const searchModificationHelper)
     : SidebarWidget(parent), d(new Private)
 {
     setObjectName("Search Sidebar");
 
-    d->searchModel      = searchModel;
-
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    d->searchModel            = searchModel;
+    QVBoxLayout* const layout = new QVBoxLayout(this);
 
     d->searchTabHeader  = new SearchTabHeader(this);
-    d->searchTreeView   = new NormalSearchTreeView(this, searchModel,
-                                                   searchModeificationHelper);
+    d->searchTreeView   = new NormalSearchTreeView(this, searchModel, searchModificationHelper);
     d->searchTreeView->setConfigGroup(getConfigGroup());
     d->searchTreeView->filteredModel()->listNormalSearches();
     d->searchTreeView->filteredModel()->setListTemporarySearches(true);
@@ -969,12 +968,12 @@ FuzzySearchSideBarWidget::FuzzySearchSideBarWidget(QWidget* const parent, Search
 {
     setObjectName("Fuzzy Search Sidebar");
 
-    d->searchModel      = searchModel;
+    d->searchModel            = searchModel;
 
-    d->fuzzySearchView  = new FuzzySearchView(searchModel, searchModificationHelper, this);
+    d->fuzzySearchView        = new FuzzySearchView(searchModel, searchModificationHelper, this);
     d->fuzzySearchView->setConfigGroup(getConfigGroup());
 
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    QVBoxLayout* const layout = new QVBoxLayout(this);
 
     layout->addWidget(d->fuzzySearchView);
 }
@@ -1067,9 +1066,8 @@ GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget* const parent, SearchMode
     d->gpsSearchView = new GPSSearchView(this, searchModel, searchModificationHelper, imageFilterModel, itemSelectionModel);
     d->gpsSearchView->setConfigGroup(getConfigGroup());
 
-    QScrollArea* scrollArea = new QScrollArea(this);
-
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    QScrollArea* const scrollArea = new QScrollArea(this);
+    QVBoxLayout* const layout = new QVBoxLayout(this);
 
     layout->addWidget(scrollArea);
     scrollArea->setWidget(d->gpsSearchView);
@@ -1147,8 +1145,8 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* const parent, TagModel* const 
 
     d->tagModel                 = model;
     d->searchModificationHelper = searchModificationHelper;
-    QVBoxLayout* layout         = new QVBoxLayout;
-    QHBoxLayout* hlay           = new QHBoxLayout;
+    QVBoxLayout* const layout   = new QVBoxLayout;
+    QHBoxLayout* const hlay     = new QHBoxLayout;
     d->tagFolderView            = new TagFolderView(this, model);
     d->tagFolderView->setConfigGroup(getConfigGroup());
     d->tagFolderView->setExpandNewCurrentItem(true);
@@ -1166,10 +1164,8 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* const parent, TagModel* const 
     d->rescanButton   = new QPushButton;
     d->rescanButton->setText(i18n("Scan collection for faces"));
 
-    KIcon* icon       = new KIcon(QString("edit-image-face-show"));
-    QPixmap personPix = icon->pixmap(QSize(48, 48));
     d->personIcon     = new QLabel;
-    d->personIcon->setPixmap(personPix);
+    d->personIcon->setPixmap(KIconLoader::global()->loadIcon("edit-image-face-show", KIconLoader::NoGroup, 48));
 
     d->textLabel      = new QLabel(i18n("People Tags"));
 
@@ -1249,6 +1245,5 @@ void PeopleSideBarWidget::slotScanForFaces()
         tool->start();
     }
 }
-
 
 } // namespace Digikam

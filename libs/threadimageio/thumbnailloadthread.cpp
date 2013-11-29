@@ -79,7 +79,7 @@ public:
     {
         storageMethod      = ThumbnailCreator::FreeDesktopStandard;
         provider           = 0;
-        displayingWidget   = 0;
+        profile		   = IccProfile::sRGB();
         firstThreadCreated = false;
     }
 
@@ -92,7 +92,7 @@ public:
 
     ThumbnailCreator::StorageMethod storageMethod;
     ThumbnailInfoProvider*          provider;
-    QWidget*                        displayingWidget;
+    IccProfile                      profile;
 
     bool                            firstThreadCreated;
 };
@@ -227,7 +227,7 @@ void ThumbnailLoadThread::initializeThumbnailDatabase(const DatabaseParameters& 
 
 void ThumbnailLoadThread::setDisplayingWidget(QWidget* const widget)
 {
-    static_d->displayingWidget = widget;
+    static_d->profile = IccManager::displayProfile(widget);
 }
 
 void ThumbnailLoadThread::setThumbnailSize(int size, bool forFace)
@@ -332,7 +332,7 @@ LoadingDescription ThumbnailLoadThread::Private::createLoadingDescription(const 
     if (IccSettings::instance()->isEnabled())
     {
         description.postProcessingParameters.colorManagement = LoadingDescription::ConvertForDisplay;
-        description.postProcessingParameters.setProfile(IccManager::displayProfile(static_d->displayingWidget));
+        description.postProcessingParameters.setProfile(static_d->profile);
     }
 
     if (setLastDescription)
@@ -358,7 +358,7 @@ LoadingDescription ThumbnailLoadThread::Private::createLoadingDescription(const 
     if (IccSettings::instance()->isEnabled())
     {
         description.postProcessingParameters.colorManagement = LoadingDescription::ConvertForDisplay;
-        description.postProcessingParameters.setProfile(IccManager::displayProfile(static_d->displayingWidget));
+        description.postProcessingParameters.setProfile(static_d->profile);
     }
 
     if (setLastDescription)

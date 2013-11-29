@@ -157,7 +157,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent )
     mainLayout->addWidget(box);
     mainLayout->addStretch();
 
-    d->tab->insertTab(0, panel, i18n("Behavior"));
+    d->tab->insertTab(Behavior, panel, i18n("Behavior"));
 
     // --------------------------------------------------------
 
@@ -218,6 +218,11 @@ void SetupMetadata::readSettings()
 
     d->exifRotateBox->setChecked(set.exifRotate);
     d->exifSetOrientationBox->setChecked(set.exifSetOrientation);
+}
+
+void SetupMetadata::setActiveTab(MetadataTab tab)
+{
+    d->tab->setCurrentIndex(tab);
 }
 
 }  // namespace ShowFoto

@@ -470,6 +470,26 @@ bool Setup::execTemplateEditor(QWidget* const parent, const Template& t)
     return success;
 }
 
+bool Setup::execMetadataFilters(QWidget* const parent, int tab)
+{
+    QPointer<Setup> setup = new Setup(parent);
+    setup->showPage(MetadataPage);
+    setup->setFaceType(Plain);
+
+    KPageWidgetItem* const cur  = setup->currentPage();
+    if (!cur) return false;
+
+    SetupMetadata* const widget = dynamic_cast<SetupMetadata*>(cur->widget());
+    if (!widget) return false;
+
+    widget->setActiveMainTab(SetupMetadata::Display);
+    widget->setActiveSubTab(tab);
+
+    bool success                = setup->KPageDialog::exec() == QDialog::Accepted;
+    delete setup;
+    return success;
+}
+
 void Setup::slotSearchTextChanged(const SearchTextSettings& settings)
 {
     d->pluginsPage->slotSetFilter(settings.text, settings.caseSensitive);
@@ -638,7 +658,7 @@ Setup::Page Setup::activePageIndex() const
     {
         return ImageQualityPage;
     }
-        
+
     if (cur == d->page_icc)
     {
         return ICCPage;

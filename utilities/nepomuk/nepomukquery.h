@@ -26,6 +26,8 @@
 #ifndef DKNEPOMUKQUERY_H
 #define DKNEPOMUKQUERY_H
 
+// Qt includes
+
 #include <QObject>
 
 namespace Nepomuk2
@@ -46,6 +48,7 @@ class NepomukQuery : public QObject
     Q_OBJECT
 
 public:
+
     NepomukQuery(DkNepomukService* const service);
 
     /**

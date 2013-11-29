@@ -6,7 +6,7 @@
  * Date        : 2009-07-17
  * Description : Metadata tags selector config panel.
  *
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -169,11 +169,11 @@ static const char* XmpHumanList[] =
     "-1"
 };
 
-class MetadataPanel::MetadataPanelPriv
+class MetadataPanel::Private
 {
 public:
 
-    MetadataPanelPriv()
+    Private()
     {
         tab                = 0;
         exifViewerConfig   = 0;
@@ -187,7 +187,7 @@ public:
         setDefaultFilter(XmpHumanList,       defaultXmpFilter);
     };
 
-    void setDefaultFilter(const char** list, QStringList& filter)
+    void setDefaultFilter(const char** const list, QStringList& filter)
     {
         for (int i=0 ; QString(list[i]) != QString("-1") ; ++i)
         {
@@ -208,8 +208,8 @@ public:
     MetadataSelectorView* xmpViewerConfig;
 };
 
-MetadataPanel::MetadataPanel(KTabWidget* tab)
-    : QObject(tab), d(new MetadataPanelPriv)
+MetadataPanel::MetadataPanel(KTabWidget* const tab)
+    : QObject(tab), d(new Private)
 {
     d->tab = tab;
 
@@ -250,25 +250,25 @@ MetadataPanel::~MetadataPanel()
 
 QStringList MetadataPanel::defaultExifFilter()
 {
-    MetadataPanelPriv d;
+    Private d;
     return d.defaultExifFilter;
 }
 
 QStringList MetadataPanel::defaultMknoteFilter()
 {
-    MetadataPanelPriv d;
+    Private d;
     return d.defaultMknoteFilter;
 }
 
 QStringList MetadataPanel::defaultIptcFilter()
 {
-    MetadataPanelPriv d;
+    Private d;
     return d.defaultIptcFilter;
 }
 
 QStringList MetadataPanel::defaultXmpFilter()
 {
-    MetadataPanelPriv d;
+    Private d;
     return d.defaultXmpFilter;
 }
 

@@ -102,7 +102,7 @@ void TonalityFilter::filterImage()
     }
     else               // 16 bits image.
     {
-        unsigned short* ptr = (unsigned short*)bits;
+        unsigned short* ptr = reinterpret_cast<unsigned short*>(bits);
 
         for (uint i = 0 ; i < size ; ++i)
         {

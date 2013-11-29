@@ -6,7 +6,7 @@
  * Date        : 2009-07-16
  * Description : metadata selector.
  *
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,7 +50,7 @@ class DIGIKAM_EXPORT MetadataSelectorItem : public QTreeWidgetItem
 
 public:
 
-    MetadataSelectorItem(MdKeyListViewItem* parent, const QString& key, const QString& title, const QString& desc);
+    MetadataSelectorItem(MdKeyListViewItem* const parent, const QString& key, const QString& title, const QString& desc);
     virtual ~MetadataSelectorItem();
 
     QString key() const;
@@ -69,7 +69,7 @@ class DIGIKAM_EXPORT MetadataSelector : public QTreeWidget
 
 public:
 
-    explicit MetadataSelector(QWidget* parent);
+    explicit MetadataSelector(QWidget* const parent);
     virtual ~MetadataSelector();
 
 #if KEXIV2_VERSION >= 0x010000
@@ -100,7 +100,7 @@ public:
     };
     Q_DECLARE_FLAGS(ControlElements, ControlElement)
 
-    explicit MetadataSelectorView(QWidget* parent);
+    explicit MetadataSelectorView(QWidget* const parent);
     virtual ~MetadataSelectorView();
 
     int itemsCount() const;
@@ -135,8 +135,8 @@ private:
 
 private:
 
-    class MetadataSelectorViewPriv;
-    MetadataSelectorViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

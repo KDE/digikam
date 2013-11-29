@@ -46,6 +46,7 @@
 
 // Local includes
 
+#include "albumsettings.h"
 #include "databaseinfocontainers.h"
 #include "databasewatch.h"
 #include "digikam2kgeomap_database.h"
@@ -99,7 +100,7 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* const parent, Sideba
     d->desceditTab        = new ImageDescEditTab(parent);
     d->versionsHistoryTab = new ImagePropertiesVersionsTab(parent);
 
-    appendTab(d->desceditTab, SmallIcon("imagecomment"), i18n("Caption/Tags"));
+    appendTab(d->desceditTab,        SmallIcon("imagecomment"), i18n("Caption/Tags"));
     appendTab(d->versionsHistoryTab, SmallIcon("view-catalog"), i18n("Versioning"));
 
     // ----------------------------------------------------------
@@ -121,6 +122,9 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* const parent, Sideba
 
     connect(ImageAttributesWatch::instance(), SIGNAL(signalFileMetadataChanged(KUrl)),
             this, SLOT(slotFileMetadataChanged(KUrl)));
+
+    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+            this, SLOT(slotLoadMetadataFilters()));
 }
 
 ImagePropertiesSideBarDB::~ImagePropertiesSideBarDB()

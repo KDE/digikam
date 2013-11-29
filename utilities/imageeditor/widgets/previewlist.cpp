@@ -7,7 +7,7 @@
  * Description : a list of selectable options with preview
  *               effects as thumbnails.
  *
- * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -68,16 +68,17 @@ PreviewThreadWrapper::PreviewThreadWrapper(QObject* const parent)
 
 PreviewThreadWrapper::~PreviewThreadWrapper()
 {
-    foreach(DImgThreadedFilter* const filter, d->map.values())
-    {
-        delete filter;
-    }
+    qDeleteAll(d->map.values());
+    d->map.clear();
 
     delete d;
 }
 
 void PreviewThreadWrapper::registerFilter(int id, DImgThreadedFilter* const filter)
 {
+    if(d->map.contains(id))
+        return;
+
     filter->setParent(this);
     d->map.insert(id, filter);
 
@@ -182,10 +183,10 @@ void PreviewListItem::setPixmap(const QPixmap& pix)
     //  We make sure the preview icon stays the same regardless of the role
     icon.addPixmap(pix, QIcon::Selected, QIcon::On);
     icon.addPixmap(pix, QIcon::Selected, QIcon::Off);
-    icon.addPixmap(pix, QIcon::Active, QIcon::On);
-    icon.addPixmap(pix, QIcon::Active, QIcon::Off);
-    icon.addPixmap(pix, QIcon::Normal, QIcon::On);
-    icon.addPixmap(pix, QIcon::Normal, QIcon::Off);
+    icon.addPixmap(pix, QIcon::Active,   QIcon::On);
+    icon.addPixmap(pix, QIcon::Active,   QIcon::Off);
+    icon.addPixmap(pix, QIcon::Normal,   QIcon::On);
+    icon.addPixmap(pix, QIcon::Normal,   QIcon::Off);
     setIcon(icon);
 }
 

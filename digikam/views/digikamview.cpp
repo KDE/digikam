@@ -65,6 +65,7 @@
 #include "fileactionmngr.h"
 #include "queuemgrwindow.h"
 #include "scancontroller.h"
+#include "setup.h"
 #include "sidebar.h"
 #include "slideshow.h"
 #include "slideshowbuilder.h"
@@ -356,6 +357,9 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
 
     connect(d->rightSideBar->imageDescEditTab()->getNewTagEdit(), SIGNAL(taggingActionFinished()),
             this, SLOT(slotFocusAndNextImage()));
+
+    connect(d->rightSideBar, SIGNAL(signalSetupMetadataFilters(int)),
+            this, SLOT(slotSetupMetadataFilters(int)));
 }
 
 DigikamView::~DigikamView()
@@ -607,7 +611,7 @@ void DigikamView::setupConnections()
     connect(this, SIGNAL(signalAlbumSelected(bool)),
             d->albumHistory, SLOT(slotAlbumSelected()));
 
-    connect(this, SIGNAL(signalImageSelected(ImageInfoList, ImageInfoList)),
+    connect(this, SIGNAL(signalImageSelected(ImageInfoList,ImageInfoList)),
             d->albumHistory, SLOT(slotImageSelected(ImageInfoList)));
 
     connect(d->iconView, SIGNAL(currentChanged(ImageInfo)),
@@ -931,12 +935,6 @@ void DigikamView::slotNewAdvancedSearch()
 }
 
 void DigikamView::slotNewDuplicatesSearch(Album* album)
-{
-    slotLeftSideBarActivate(d->fuzzySearchSideBar);
-    d->fuzzySearchSideBar->newDuplicatesSearch(album);
-}
-
-void DigikamView::slotNewQualitySort(Album* album)
 {
     slotLeftSideBarActivate(d->fuzzySearchSideBar);
     d->fuzzySearchSideBar->newDuplicatesSearch(album);
@@ -2230,6 +2228,11 @@ void DigikamView::slotAwayFromSelection()
 StackedView::StackedViewMode DigikamView::viewMode() const
 {
     return d->stackedview->viewMode();
+}
+
+void DigikamView::slotSetupMetadataFilters(int tab)
+{
+    Setup::execMetadataFilters(this, tab);
 }
 
 #ifdef USE_PRESENTATION_MODE

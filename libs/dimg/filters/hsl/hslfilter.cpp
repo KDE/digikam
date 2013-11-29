@@ -250,7 +250,7 @@ void HSLFilter::applyHSL(DImg& image)
 
     if (sixteenBit)                   // 16 bits image.
     {
-        unsigned short* data = (unsigned short*) image.bits();
+        unsigned short* data = reinterpret_cast<unsigned short*>(image.bits());
 
         for (uint i = 0; runningFlag() && (i < numberOfPixels); ++i)
         {

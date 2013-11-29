@@ -135,7 +135,7 @@ void MixerFilter::filterImage()
     else               // 16 bits image.
     {
         unsigned short  nGray, red, green, blue;
-        unsigned short* ptr = (unsigned short*)bits;
+        unsigned short* ptr = reinterpret_cast<unsigned short*>(bits);
 
         for (i = 0 ; i < size ; ++i)
         {

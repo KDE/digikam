@@ -373,7 +373,7 @@ double ImgQSort::noisedetector() const
     CvMat* clusters  = cvCreateMat(d->neimage.numPixels(), 1, CV_32SC1);
 
     // Pointer variable to handle the CvMat* points (the image in CvMat format).
-    float* pointsPtr = (float*)points->data.ptr;
+    float* pointsPtr = reinterpret_cast<float*>(points->data.ptr);
 
     for (uint x=0 ; runningFlag() && (x < d->neimage.numPixels()) ; x++)
     {
@@ -459,7 +459,7 @@ double ImgQSort::noisedetector() const
 
     if (runningFlag())
     {
-        ptr = (float*)sd->data.ptr;
+        ptr = reinterpret_cast<float*>(sd->data.ptr);
     }
 
     kDebug() << "The rowPosition array is ready!";
@@ -471,7 +471,7 @@ double ImgQSort::noisedetector() const
 
         // Moving to the right row.
 
-        ptr         = (float*)(sd->data.ptr + rowIndex*(sd->step));
+        ptr         = reinterpret_cast<float*>(sd->data.ptr + rowIndex*(sd->step));
 
         // Moving to the right column.
 
@@ -507,8 +507,8 @@ double ImgQSort::noisedetector() const
     {
         meanStore    = cvCreateMat(d->clusterCount, points->cols, CV_32FC1);
         stdStore     = cvCreateMat(d->clusterCount, points->cols, CV_32FC1);
-        meanStorePtr = (float*)(meanStore->data.ptr);
-        stdStorePtr  = (float*)(stdStore->data.ptr);
+        meanStorePtr = reinterpret_cast<float*>(meanStore->data.ptr);
+        stdStorePtr  = reinterpret_cast<float*>(stdStore->data.ptr);
     }
 
     for (int i=0 ; runningFlag() && (i < sd->cols) ; i++)
@@ -516,7 +516,7 @@ double ImgQSort::noisedetector() const
         if (runningFlag() && (rowPosition[(i/points->cols)] >= 1))
         {
             CvMat* workingArr = cvCreateMat(rowPosition[(i / points->cols)], 1, CV_32FC1);
-            ptr               = (float*)(workingArr->data.ptr);
+            ptr               = reinterpret_cast<float*>(workingArr->data.ptr);
 
             for (int j=0 ; runningFlag() && (j < rowPosition[(i / (points->cols))]) ; j++)
             {
@@ -537,8 +537,8 @@ double ImgQSort::noisedetector() const
 
     if (runningFlag())
     {
-        meanStorePtr = (float*)meanStore->data.ptr;
-        stdStorePtr  = (float*)stdStore->data.ptr;
+        meanStorePtr = reinterpret_cast<float*>(meanStore->data.ptr);
+        stdStorePtr  = reinterpret_cast<float*>(stdStore->data.ptr);
     }
 
     kDebug() << "Done with the basic work of storing the mean and the std";
@@ -552,8 +552,8 @@ double ImgQSort::noisedetector() const
 
     for (int j=0 ; runningFlag() && (j < points->cols) ; j++)
     {
-        meanStorePtr = (float*)meanStore->data.ptr;
-        stdStorePtr  = (float*)stdStore->data.ptr;
+        meanStorePtr = reinterpret_cast<float*>(meanStore->data.ptr);
+        stdStorePtr  = reinterpret_cast<float*>(stdStore->data.ptr);
 
         for (int moveToChannel=0 ; moveToChannel <= j ; moveToChannel++)
         {

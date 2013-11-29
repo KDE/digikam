@@ -327,6 +327,7 @@ void ShowFoto::setupConnections()
     connect(this, SIGNAL(signalSelectionChanged(QRect)),
             d->rightSideBar, SLOT(slotImageSelectionChanged(QRect)));
 
+<<<<<<< HEAD
     connect(this, SIGNAL(signalOpenFolder(KUrl)),
             this, SLOT(slotOpenFolder(KUrl)));
 
@@ -341,6 +342,13 @@ void ShowFoto::setupConnections()
 
     connect(d->thumbBarDock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             d->thumbBar, SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
+
+    connect(this, SIGNAL(signalNoCurrentItem()),
+            d->rightSideBar, SLOT(slotNoCurrentItem()));
+
+    connect(d->rightSideBar, SIGNAL(signalSetupMetadataFilters(int)),
+            this, SLOT(slotSetupMetadataFilters(int)));
+
 }
 
 void ShowFoto::setupUserArea()
@@ -517,6 +525,27 @@ void ShowFoto::applySettings()
         m_fileDeleteAction->setIcon(KIcon("edit-delete"));
         m_fileDeleteAction->setText(i18n("Delete File"));
     }
+
+
+    Digikam::ThumbBarToolTipSettings settings;
+    settings.showToolTips   = group.readEntry("Show ToolTips",             true);
+    settings.font           = group.readEntry("ToolTips Font",             KGlobalSettings::generalFont());
+    settings.showFileName   = group.readEntry("ToolTips Show File Name",   true);
+    settings.showFileDate   = group.readEntry("ToolTips Show File Date",   false);
+    settings.showFileSize   = group.readEntry("ToolTips Show File Size",   false);
+    settings.showImageType  = group.readEntry("ToolTips Show Image Type",  false);
+    settings.showImageDim   = group.readEntry("ToolTips Show Image Dim",   true);
+    settings.showPhotoMake  = group.readEntry("ToolTips Show Photo Make",  true);
+    settings.showPhotoDate  = group.readEntry("ToolTips Show Photo Date",  true);
+    settings.showPhotoFocal = group.readEntry("ToolTips Show Photo Focal", true);
+    settings.showPhotoExpo  = group.readEntry("ToolTips Show Photo Expo",  true);
+    settings.showPhotoMode  = group.readEntry("ToolTips Show Photo Mode",  true);
+    settings.showPhotoFlash = group.readEntry("ToolTips Show Photo Flash", false);
+    settings.showPhotoWB    = group.readEntry("ToolTips Show Photo WB",    false);
+    d->thumbBar->setToolTipSettings(settings);
+
+    d->rightSideBar->slotLoadMetadataFilters();
+
 }
 
 void ShowFoto::slotOpenFile()
@@ -1089,6 +1118,7 @@ bool ShowFoto::saveNewVersionInFormat(const QString&)
     return false;
 }
 
+
 void ShowFoto::openFolder(const KUrl& url)
 {
     if (!url.isValid() || !url.isLocalFile())
@@ -1247,5 +1277,11 @@ void ShowFoto::openFolder(const KUrl& url)
 
 }
 
+
+
+void ShowFoto::slotSetupMetadataFilters(int tab)
+{
+    Setup::execMetadataFilters(this, tab+1);
+}
 
 }   // namespace ShowFoto

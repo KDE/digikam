@@ -186,7 +186,7 @@ INSTALL(TARGETS digikamdatabase ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 # digiKam nepomuk services #########################################################
 
-IF (NEPOMUK_FOUND)
+IF (NepomukCore_FOUND)
 
     SET(digikamnepomukservices_SRCS ${libnepomukservices_SRCS} )
 
@@ -224,7 +224,7 @@ IF (NEPOMUK_FOUND)
     INSTALL(TARGETS digikamnepomukservice
             DESTINATION ${PLUGIN_INSTALL_DIR})
 
-ENDIF (NEPOMUK_FOUND)
+ENDIF (NepomukCore_FOUND)
 
 # digiKam binary progam #########################################################
 

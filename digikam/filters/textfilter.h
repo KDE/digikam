@@ -62,7 +62,11 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void slotSearchFieldsChanged();
+    void slotSearchFieldsChanged(QAction*);
+
+private:
+
+    void checkMenuActions(bool checked);
 
 private:
 

@@ -699,7 +699,7 @@ void EditorCore::paintOnDevice(QPaintDevice* const p,
     img.convertDepth(32);
     QPainter painter(p);
 
-    uint* data  = (uint*)img.bits();
+    uint* data  = reinterpret_cast<uint*>(img.bits());
     uchar r, g, b, a;
 
     for (int j = 0; j < (int)img.height(); ++j)

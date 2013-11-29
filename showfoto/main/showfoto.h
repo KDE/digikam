@@ -126,6 +126,7 @@ private Q_SLOTS:
 
     void slotContextMenu();
     void slotRevert();
+    void slotSetupMetadataFilters(int);
 
 Q_SIGNALS:
     void signalLoadCurrentItem(const KUrl::List& urlList);

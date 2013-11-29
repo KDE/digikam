@@ -825,7 +825,7 @@ void DkNepomukService::removeImgTagInDigikam(const KUrl& fileUrl, const QUrl& ta
     }
 }
 
-int DkNepomukService::bestDigikamTagForTagName(const ImageInfo& info, const QString& tagname)
+int DkNepomukService::bestDigikamTagForTagName(const ImageInfo& info, const QString& tagname) const
 {
     if (tagname.isEmpty())
     {
@@ -926,7 +926,7 @@ QDateTime DkNepomukService::lastSyncToDigikam() const
     return QDateTime();
 }
 
-bool DkNepomukService::hasSyncToNepomuk()
+bool DkNepomukService::hasSyncToNepomuk() const
 {
     return DatabaseAccess().db()->getSetting("InitialSyncDigikamToNepomuk-1") == "yes";
 }

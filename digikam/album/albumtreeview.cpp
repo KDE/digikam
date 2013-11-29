@@ -303,8 +303,8 @@ void AbstractAlbumTreeView::setAlbumFilterModel(AlbumFilterModel* const filterMo
         //       Now AlbumManager implementation is a little bit of mess
         //       because selected are now currentAlbums()...
 
-        //connect(selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-        //        this, SLOT(slotCurrentChanged()));
+        connect(selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+                this, SLOT(slotCurrentChanged()));
 
         connect(selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
                 this, SLOT(slotSelectionChanged()));

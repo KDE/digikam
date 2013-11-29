@@ -562,8 +562,8 @@ void ImageLevels::levelsLutProcess(uchar* const srcPR, uchar* const destPR, int 
     else               // 16 bits image.
     {
         unsigned short red, green, blue, alpha;
-        unsigned short* ptr = (unsigned short*)srcPR;
-        unsigned short* dst = (unsigned short*)destPR;
+        unsigned short* ptr = reinterpret_cast<unsigned short*>(srcPR);
+        unsigned short* dst = reinterpret_cast<unsigned short*>(destPR);
 
         for (i = 0 ; i < w * h ; ++i)
         {

@@ -308,7 +308,7 @@ public:
 
 protected:
 
-    friend class CImg<T>;
+    friend struct CImg<T>;
 
     QMutex         mutex;
     QWaitCondition condVar;
@@ -356,7 +356,7 @@ protected:
 
         if (numberOfThreads)
         {
-            for (unsigned int k=0; k<numberOfThreads; k++)
+            for (int k=0; k<(int)numberOfThreads; k++)
             {
                 if (threads.size() == k) {
                     GreycstorationWorkingThread* thread = new GreycstorationWorkingThread(this, k);
