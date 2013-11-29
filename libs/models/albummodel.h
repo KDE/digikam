@@ -40,7 +40,7 @@ class AlbumModel : public AbstractCheckableAlbumModel
 public:
 
     /// Create a model containing all physical albums
-    explicit AlbumModel(RootAlbumBehavior rootBehavior = IncludeRootAlbum, QObject* parent = 0);
+    explicit AlbumModel(RootAlbumBehavior rootBehavior = IncludeRootAlbum, QObject* const parent = 0);
     virtual ~AlbumModel();
 
     PAlbum* albumForIndex(const QModelIndex& index) const;
@@ -71,7 +71,7 @@ public:
 public:
 
     /// Create a model containing all tags
-    explicit TagModel(RootAlbumBehavior rootBehavior = IncludeRootAlbum, QObject* parent = 0);
+    explicit TagModel(RootAlbumBehavior rootBehavior = IncludeRootAlbum, QObject* const parent = 0);
 
     TAlbum* albumForIndex(const QModelIndex& index) const;
     void    setColumnHeader(const QString& header);
@@ -92,7 +92,7 @@ class SearchModel : public AbstractCheckableAlbumModel
 public:
 
     /// Create a model containing searches
-    explicit SearchModel(QObject* parent = 0);
+    explicit SearchModel(QObject* const parent = 0);
 
     SAlbum* albumForIndex(const QModelIndex& index) const;
 
@@ -140,7 +140,7 @@ public:
      *
      * @param parent parent for Qt's parent child mechanism
      */
-    explicit DateAlbumModel(QObject* parent = 0);
+    explicit DateAlbumModel(QObject* const parent = 0);
 
     DAlbum* albumForIndex(const QModelIndex& index) const;
 
