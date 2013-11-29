@@ -66,6 +66,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 052 ==> 309393 - Modify date and time changes the previous changes picture too.
 053 ==> 236850 - Export iptc to file.
 054 ==> 103201 - Wish: easy transport of albums, including tags, comments, etc.
-055 ==> 
+055 ==> 228376 - Tags filter should tick checkbox on 'enter'.
+056 ==> 
 
 
