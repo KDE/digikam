@@ -1,0 +1,250 @@
+From 5b99ac2e550f87139274ce95ae601f2cc11f38eb Mon Sep 17 00:00:00 2001
+From: Mohamed Anwer <mohammed.ahmed.anwer@gmail.com>
+Date: Sat, 2 Nov 2013 03:26:04 +0200
+Subject: [PATCH] album sorting
+
+---
+ digikam/album/albumtreeview.cpp | 10 ++++++----
+ digikam/main/digikamapp.cpp     | 22 ++++++++++++++++++++++
+ digikam/main/digikamapp_p.h     |  2 ++
+ digikam/main/digikamui.rc       |  2 ++
+ digikam/utils/albumsettings.cpp | 16 +++++++++++++++-
+ digikam/utils/albumsettings.h   |  9 +++++++++
+ digikam/views/digikamview.cpp   | 16 ++++++++++++++++
+ digikam/views/digikamview.h     |  1 +
+ 8 files changed, 73 insertions(+), 5 deletions(-)
+
+diff --git a/digikam/album/albumtreeview.cpp b/digikam/album/albumtreeview.cpp
+index 998174d..7dbf449 100644
+--- a/digikam/album/albumtreeview.cpp
++++ b/digikam/album/albumtreeview.cpp
+@@ -769,10 +769,11 @@ void AbstractAlbumTreeView::doLoadState()
+     //kDebug() << "initial restore run with " << model()->rowCount() << " rows";
+     restoreStateForHierarchy(QModelIndex(), d->statesByAlbumId);
+ 
++    qDebug() << "LOADING";
+     // also restore the sorting order
++    configGroup.sync();
+     sortByColumn(configGroup.readEntry(entryName(d->configSortColumnEntry), 0),
+-                 (Qt::SortOrder) configGroup.readEntry(entryName(d->configSortOrderEntry), (int) Qt::AscendingOrder));
+-
++        (Qt::SortOrder) configGroup.readEntry(entryName(d->configSortOrderEntry), (int) Qt::AscendingOrder));
+     // use a timer to scroll to the first possible selected album
+     QTimer* const selectCurrentTimer = new QTimer(this);
+     selectCurrentTimer->setInterval(200);
+@@ -958,8 +959,9 @@ void AbstractAlbumTreeView::doSaveState()
+     configGroup.writeEntry(entryName(d->configSelectionEntry), selection);
+     configGroup.writeEntry(entryName(d->configExpansionEntry), expansion);
+     configGroup.writeEntry(entryName(d->configCurrentIndexEntry), currentIndex);
+-    configGroup.writeEntry(entryName(d->configSortColumnEntry), albumFilterModel()->sortColumn());
+-    configGroup.writeEntry(entryName(d->configSortOrderEntry), (int) albumFilterModel()->sortOrder());
++    configGroup.writeEntry(entryName(d->configSortColumnEntry), 0);
++    // qDebug() << "Get ALBUM SORT SETTING: " << AlbumSettings::instance()->getAlbumSortSetting();
++    configGroup.writeEntry(entryName(d->configSortOrderEntry), AlbumSettings::instance()->getAlbumSortSetting());
+ }
+ 
+ void AbstractAlbumTreeView::saveStateRecursive(const QModelIndex& index, QList<int>& selection, QList<int>& expansion)
+diff --git a/digikam/main/digikamapp.cpp b/digikam/main/digikamapp.cpp
+index 67ebadd..8155480 100644
+--- a/digikam/main/digikamapp.cpp
++++ b/digikam/main/digikamapp.cpp
+@@ -1083,6 +1083,27 @@ void DigikamApp::setupActions()
+ 
+     // -----------------------------------------------------------
+ 
++    d->AlbumSortOrderAction = new KSelectAction(i18n("&Sort Albums By Name"), this);
++    d->AlbumSortOrderAction->setWhatsThis(i18n("Defines whether Albums names are sorted in ascending or descending manner."));
++    QSignalMapper* AlbumNameSortOrderMapper = new QSignalMapper(this);
++    connect(AlbumNameSortOrderMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortAlbumName(int)));
++    actionCollection()->addAction("Album_Sort_By_Name", d->AlbumSortOrderAction);
++
++
++    QAction* sortNameAscendingAction = d->AlbumSortOrderAction->addAction(KIcon("view-sort-ascending"), i18n("Ascending"));
++    QAction* sortNameDescendingAction = d->AlbumSortOrderAction->addAction(KIcon("view-sort-descending"), i18n("Descending"));
++
++    connect(sortNameAscendingAction, SIGNAL(triggered()), AlbumNameSortOrderMapper, SLOT(map()));
++    connect(sortNameDescendingAction, SIGNAL(triggered()), AlbumNameSortOrderMapper, SLOT(map()));
++
++    //connect(d->AlbumSortOrderAction, SIGNAL(triggered()), AlbumSettings::instance(), SIGNAL(setupChanged()));
++
++    AlbumNameSortOrderMapper->setMapping(sortNameAscendingAction, (int)Qt::AscendingOrder);
++    AlbumNameSortOrderMapper->setMapping(sortNameDescendingAction, (int)Qt::DescendingOrder);
++
++    // -----------------------------------------------------------
++
++
+     d->imageSortOrderAction = new KSelectAction(i18n("Image Sorting &Order"), this);
+     d->imageSortOrderAction->setWhatsThis(i18n("Defines whether images are sorted in ascending or descending manner."));
+     QSignalMapper* imageSortOrderMapper = new QSignalMapper(this);
+@@ -1335,6 +1356,7 @@ void DigikamApp::initGui()
+     d->showBarAction->setChecked(AlbumSettings::instance()->getShowThumbbar());
+     d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
+ 
++    d->AlbumSortOrderAction->setCurrentItem(AlbumSettings::instance()->getAlbumSortSetting());
+     slotSwitchedToIconView();
+ }
+ 
+diff --git a/digikam/main/digikamapp_p.h b/digikam/main/digikamapp_p.h
+index 30e56cc..f404fa8 100644
+--- a/digikam/main/digikamapp_p.h
++++ b/digikam/main/digikamapp_p.h
+@@ -146,6 +146,7 @@ public:
+         zoomMinusAction(0),
+         zoomFitToWindowAction(0),
+         zoomTo100percents(0),
++        AlbumSortOrderAction(0),
+         imageSortAction(0),
+         imageSortOrderAction(0),
+         imageGroupAction(0),
+@@ -268,6 +269,7 @@ public:
+     KAction*                            zoomMinusAction;
+     KAction*                            zoomFitToWindowAction;
+     KAction*                            zoomTo100percents;
++    KSelectAction*                      AlbumSortOrderAction;
+     KSelectAction*                      imageSortAction;
+     KSelectAction*                      imageSortOrderAction;
+     KSelectAction*                      imageGroupAction;
+diff --git a/digikam/main/digikamui.rc b/digikam/main/digikamui.rc
+index c359123..f162858 100644
+--- a/digikam/main/digikamui.rc
++++ b/digikam/main/digikamui.rc
+@@ -103,6 +103,8 @@
+      <Action name="image_group" />
+      <Action name="albums_recursive" />
+      <Action name="tags_recursive" />
++     <Separator />
++     <Action name="Album_Sort_By_Name" />
+   </Menu>
+ 
+   <Menu name="Tools"><text>&amp;Tools</text>
+diff --git a/digikam/utils/albumsettings.cpp b/digikam/utils/albumsettings.cpp
+index 06b35ca..2bf8416 100644
+--- a/digikam/utils/albumsettings.cpp
++++ b/digikam/utils/albumsettings.cpp
+@@ -146,6 +146,7 @@ public:
+     static const QString                configGroupFaceDetection;
+     static const QString                configAlbumCollectionsEntry;
+     static const QString                configAlbumSortOrderEntry;
++    static const QString                configAlbumSortSettingEntry;
+     static const QString                configImageSortOrderEntry;
+     static const QString                configImageSortingEntry;
+     static const QString                configImageGroupModeEntry;
+@@ -317,6 +318,7 @@ public:
+     int                                 imageSortOrder;
+     int                                 imageSorting;
+     int                                 imageGroupMode;
++    int                                 albumSortSetting;
+     AlbumSettings::ItemLeftClickAction  itemLeftClickAction;
+ 
+     // nepomuk settings
+@@ -343,6 +345,7 @@ const QString AlbumSettings::Private::configGroupGeneral("General Settings");
+ const QString AlbumSettings::Private::configGroupVersioning("Versioning Settings");
+ const QString AlbumSettings::Private::configGroupFaceDetection("Face Detection Settings");
+ const QString AlbumSettings::Private::configAlbumCollectionsEntry("Album Collections");
++const QString AlbumSettings::Private::configAlbumSortSettingEntry("Album Sort Setting");
+ const QString AlbumSettings::Private::configAlbumSortOrderEntry("Album Sort Order");
+ const QString AlbumSettings::Private::configImageSortOrderEntry("Image Sort Order");
+ const QString AlbumSettings::Private::configImageSortingEntry("Image Sorting");
+@@ -575,7 +578,7 @@ void AlbumSettings::readSettings()
+     d->imageSortOrder               = group.readEntry(d->configImageSortOrderEntry, (int)ImageSortSettings::SortByFileName);
+     d->imageSorting                 = group.readEntry(d->configImageSortingEntry,   (int)ImageSortSettings::AscendingOrder);
+     d->imageGroupMode               = group.readEntry(d->configImageGroupModeEntry, (int)ImageSortSettings::CategoryByAlbum);
+-
++    d->albumSortSetting             = group.readEntry(d->configAlbumSortSettingEntry, (int)AlbumSettings::Ascending);
+     d->itemLeftClickAction          = AlbumSettings::ItemLeftClickAction(group.readEntry( d->configItemLeftClickActionEntry,
+                                                                          (int)AlbumSettings::ShowPreview));
+ 
+@@ -699,6 +702,7 @@ void AlbumSettings::saveSettings()
+ 
+     group.writeEntry(d->configAlbumCollectionsEntry,             d->albumCategoryNames);
+     group.writeEntry(d->configAlbumSortOrderEntry,               (int)d->albumSortOrder);
++    group.writeEntry(d->configAlbumSortSettingEntry,             (int)d->albumSortSetting);
+     group.writeEntry(d->configImageSortOrderEntry,               (int)d->imageSortOrder);
+     group.writeEntry(d->configImageSortingEntry,                 (int)d->imageSorting);
+     group.writeEntry(d->configImageGroupModeEntry,               (int)d->imageGroupMode);
+@@ -879,6 +883,16 @@ int AlbumSettings::getImageSortOrder() const
+     return d->imageSortOrder;
+ }
+ 
++void AlbumSettings::setAlbumSortSetting(int order)
++{
++    d->albumSortSetting = order;
++}
++
++int AlbumSettings::getAlbumSortSetting() const
++{
++    return d->albumSortSetting;
++}
++
+ void AlbumSettings::setImageSorting(int sorting)
+ {
+     d->imageSorting = sorting;
+diff --git a/digikam/utils/albumsettings.h b/digikam/utils/albumsettings.h
+index bfda5dc..37a9f93 100644
+--- a/digikam/utils/albumsettings.h
++++ b/digikam/utils/albumsettings.h
+@@ -61,6 +61,12 @@ public:
+         ByDate
+     };
+ 
++    enum AlbumSortSetting
++    {
++        Ascending = 0,
++        Descending
++    };
++
+     enum ItemLeftClickAction
+     {
+         ShowPreview = 0,
+@@ -121,6 +127,9 @@ public:
+     void setImageSortOrder(int order);
+     int  getImageSortOrder() const;
+ 
++    void setAlbumSortSetting(int order);
++    int  getAlbumSortSetting() const;
++
+     // means ascending or descending
+     void setImageSorting(int sorting);
+     int  getImageSorting() const;
+diff --git a/digikam/views/digikamview.cpp b/digikam/views/digikamview.cpp
+index 8f7845d..77897d4 100644
+--- a/digikam/views/digikamview.cpp
++++ b/digikam/views/digikamview.cpp
+@@ -1867,6 +1867,22 @@ void DigikamView::slotSortImagesOrder(int order)
+     d->iconView->imageFilterModel()->setSortOrder((ImageSortSettings::SortOrder) order);
+ }
+ 
++void DigikamView::slotSortAlbumName(int order)
++{
++    AlbumSettings* settings = AlbumSettings::instance();
++
++    if (!settings)
++    {
++        return;
++    }
++    //qDebug() << "VALLLUE: " << order;
++
++    AlbumSettings::instance()->setAlbumSortSetting(order);
++    AlbumSettings::instance()->saveSettings();
++    d->albumFolderSideBar->doSaveState();
++    d->albumFolderSideBar->doLoadState();
++}
++
+ void DigikamView::slotGroupImages(int categoryMode)
+ {
+     AlbumSettings* const settings = AlbumSettings::instance();
+diff --git a/digikam/views/digikamview.h b/digikam/views/digikamview.h
+index 1d75344..f9d6319 100644
+--- a/digikam/views/digikamview.h
++++ b/digikam/views/digikamview.h
+@@ -192,6 +192,7 @@ public Q_SLOTS:
+     void slotSelectInvert();
+     void slotSortImages(int order);
+     void slotSortImagesOrder(int order);
++    void slotSortAlbumName(int order);
+     void slotGroupImages(int mode);
+     void slotMoveSelectionToAlbum();
+ 
+-- 
+1.8.3.2
+

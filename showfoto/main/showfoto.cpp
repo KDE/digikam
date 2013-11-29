@@ -327,7 +327,6 @@ void ShowFoto::setupConnections()
     connect(this, SIGNAL(signalSelectionChanged(QRect)),
             d->rightSideBar, SLOT(slotImageSelectionChanged(QRect)));
 
-<<<<<<< HEAD
     connect(this, SIGNAL(signalOpenFolder(KUrl)),
             this, SLOT(slotOpenFolder(KUrl)));
 
