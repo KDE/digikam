@@ -64,6 +64,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 050 ==> 138446 - Add "Assign ICC profile" entry to 'Image' menu.
 051 ==> 293832 - Digitaglinktree - Multi tag level combination - find any image though directory browsing [patch].
 052 ==> 309393 - Modify date and time changes the previous changes picture too.
-053 ==> 
+053 ==> 236850 - Export iptc to file.
+054 ==> 
 
 
