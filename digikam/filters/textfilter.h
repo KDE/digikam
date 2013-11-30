@@ -62,6 +62,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
+    void slotSearchTextFieldsChanged();
     void slotSearchFieldsChanged(QAction*);
 
 private:

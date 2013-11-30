@@ -115,7 +115,7 @@ TextFilter::TextFilter(QWidget* const parent)
     setSpacing(0);
 
     connect(d->searchTextBar, SIGNAL(signalSearchTextSettings(SearchTextSettings)),
-            this, SLOT(slotSearchFieldsChanged()));
+            this, SLOT(slotSearchTextFieldsChanged()));
 
     connect(d->optionsMenu, SIGNAL(triggered(QAction*)),
             this, SLOT(slotSearchFieldsChanged(QAction*)));
@@ -200,6 +200,11 @@ void TextFilter::slotSearchFieldsChanged(QAction* action)
         checkMenuActions(true);
     }
 
+    slotSearchTextFieldsChanged();
+}
+
+void TextFilter::slotSearchTextFieldsChanged()
+{
     SearchTextFilterSettings settings(d->searchTextBar->searchTextSettings());
     settings.textFields = searchTextFields();
 
