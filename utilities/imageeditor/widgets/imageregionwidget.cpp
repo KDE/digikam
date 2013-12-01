@@ -56,6 +56,7 @@ public:
         renderingPreviewMode(PreviewToolBar::PreviewBothImagesVertCont),
         oldRenderingPreviewMode(PreviewToolBar::PreviewBothImagesVertCont)
     {
+        item = 0;
     }
 
     bool        onMouseMovePreviewToggled; // For PreviewToggleOnMouseOver mode.

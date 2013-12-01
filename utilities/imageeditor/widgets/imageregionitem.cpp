@@ -52,7 +52,8 @@ public:
         renderingPreviewMode(PreviewToolBar::PreviewBothImagesVertCont),
         onMouseMovePreviewToggled(false)
     {
-      
+        view = 0;
+        iface = 0;
     }
 
     QPixmap   pix;          // Pixmap of original region to render for paint method.

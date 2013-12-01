@@ -79,6 +79,7 @@ public:
         initialZoom      = true;
         rubber           = 0;
         wrapItem         = 0;
+        canvasItem       = 0;
     }
 
     bool                     autoZoom;
