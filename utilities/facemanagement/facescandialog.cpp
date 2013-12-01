@@ -101,6 +101,7 @@ public:
     Private()
         : configName("Face Detection Dialog"),
           configMainTask("Face Scan Main Task"),
+          configValueDetect("Detect"),
           configValueDetectAndRecognize("Detect and Recognize Faces"),
           configValueRecognizedMarkedFaces("Recognize Marked Faces"),
           configAlreadyScannedHandling("Already Scanned Handling"),
@@ -109,6 +110,7 @@ public:
     {
         optionGroupBox           = 0;
         detectAndRecognizeButton = 0;
+	detectButton             = 0;
         alreadyScannedBox        = 0;
         reRecognizeButton        = 0;
         tabWidget                = 0;
@@ -122,6 +124,7 @@ public:
 
     QGroupBox*                   optionGroupBox;
     QRadioButton*                detectAndRecognizeButton;
+    QRadioButton*                detectButton;
     QComboBox*                   alreadyScannedBox;
     QRadioButton*                reRecognizeButton;
 
@@ -138,6 +141,7 @@ public:
 
     const QString                configName;
     const QString                configMainTask;
+    const QString                configValueDetect;
     const QString                configValueDetectAndRecognize;
     const QString                configValueRecognizedMarkedFaces;
     const QString                configAlreadyScannedHandling;
@@ -190,9 +194,13 @@ void FaceScanDialog::doLoadState()
     {
         d->reRecognizeButton->setChecked(true);
     }
-    else // if (mainTask == d->configValueDetectAndRecognize)
+    else if (mainTask == d->configValueDetectAndRecognize)
     {
         d->detectAndRecognizeButton->setChecked(true);
+    }
+    else
+    {
+        d->detectButton->setChecked(true);
     }
 
     FaceScanSettings::AlreadyScannedHandling handling;
@@ -293,16 +301,23 @@ void FaceScanDialog::setupUi()
 
     d->optionGroupBox               = new QGroupBox;
     QGridLayout* const optionLayout = new QGridLayout;
-
+    
+    d->detectButton                                    = new QRadioButton(i18nc("@option:radio", "Detect faces"));
     d->detectAndRecognizeButton                        = new QRadioButton(i18nc("@option:radio", "Detect and recognize faces"));
     ButtonExtendedLabel* const detectAndRecognizeLabel = new ButtonExtendedLabel;
+    ButtonExtendedLabel* const detectLabel             = new ButtonExtendedLabel;
     detectAndRecognizeLabel->setText(i18nc("@info",
                                            "Find all faces in your photos<nl/> and try to recognize "
                                            "which person is depicted"));
     //detectAndRecognizeLabel->setWordWrap(true);
+    detectLabel->setButton(d->detectButton);
+    detectLabel->setText(i18nc("@info",
+                                "Find all faces in your photos"));
     detectAndRecognizeLabel->setButton(d->detectAndRecognizeButton);
     ButtonExtendedLabel* const detectAndRecognizeIcon  = new ButtonExtendedLabel;
+    ButtonExtendedLabel* const detectIcon              = new ButtonExtendedLabel;
     detectAndRecognizeIcon->setPixmap(SmallIcon("edit-image-face-detect", KIconLoader::SizeLarge));
+    detectIcon->setButton(d->detectButton);
     detectAndRecognizeIcon->setButton(d->detectAndRecognizeButton);
     detectAndRecognizeIcon->setAlignment(Qt::AlignCenter);
     d->alreadyScannedBox                               = new QComboBox;
@@ -313,8 +328,7 @@ void FaceScanDialog::setupUi()
     QGridLayout* const detectAndRecognizeLabelLayout   = new QGridLayout;
     detectAndRecognizeLabelLayout->addWidget(detectAndRecognizeLabel, 0, 0, 1, -1);
     detectAndRecognizeLabelLayout->setColumnMinimumWidth(0, 10);
-    detectAndRecognizeLabelLayout->addWidget(d->alreadyScannedBox, 1, 1);
-
+    
     d->reRecognizeButton                        = new QRadioButton(i18nc("@option:radio", "Recognize faces"));
     ButtonExtendedLabel* const reRecognizeLabel = new ButtonExtendedLabel;
     reRecognizeLabel->setText(i18nc("@info",
@@ -326,12 +340,15 @@ void FaceScanDialog::setupUi()
     reRecognizeIcon->setButton(d->reRecognizeButton);
     reRecognizeIcon->setAlignment(Qt::AlignCenter);
 
-    optionLayout->addWidget(d->detectAndRecognizeButton,   0, 0, 1, 2);
-    optionLayout->addWidget(detectAndRecognizeIcon,        0, 2, 2, 1);
-    optionLayout->addLayout(detectAndRecognizeLabelLayout, 1, 1);
-    optionLayout->addWidget(d->reRecognizeButton,          2, 0, 1, 2);
-    optionLayout->addWidget(reRecognizeIcon,               2, 2, 2, 1);
-    optionLayout->addWidget(reRecognizeLabel,              3, 1);
+    optionLayout->addWidget(d->alreadyScannedBox,          0, 0, 1, 2);
+    optionLayout->addWidget(d->detectButton,               1, 0, 1, 2);
+    optionLayout->addWidget(detectAndRecognizeIcon,        1, 2, 2, 1);
+    optionLayout->addWidget(detectLabel,                   2, 1);
+    optionLayout->addWidget(d->detectAndRecognizeButton,   3, 0, 1, 2);
+    optionLayout->addLayout(detectAndRecognizeLabelLayout, 4, 1);
+    optionLayout->addWidget(d->reRecognizeButton,          5, 0, 1, 2);
+    optionLayout->addWidget(reRecognizeIcon,               5, 2, 2, 1);
+    optionLayout->addWidget(reRecognizeLabel,              6, 1);
 
     QStyleOptionButton buttonOption;
     buttonOption.initFrom(d->detectAndRecognizeButton);
@@ -436,6 +453,9 @@ void FaceScanDialog::setupUi()
 
 void FaceScanDialog::setupConnections()
 {
+    connect(d->detectButton, SIGNAL(toggled(bool)),
+            d->alreadyScannedBox, SLOT(setEnabled(bool)));
+    
     connect(d->detectAndRecognizeButton, SIGNAL(toggled(bool)),
             d->alreadyScannedBox, SLOT(setEnabled(bool)));
 
@@ -473,6 +493,10 @@ FaceScanSettings FaceScanDialog::settings() const
     else if (d->benchmarkButton->isChecked())
     {
         settings.task = FaceScanSettings::Benchmark;
+    }
+    else if(d->detectButton->isChecked())
+    {
+        settings.task = FaceScanSettings::Detect;    
     }
     else
     {

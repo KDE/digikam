@@ -1299,7 +1299,7 @@ void CollectionScanner::scanFileUpdateHashReuseThumbnail(const QFileInfo& info, 
         if (fileWasEdited)
         {
             // The file was edited in such a way that we know that the pixel content did not change, so we can reuse the thumbnail.
-            // We need to add a link the the thumbnail data with the new hash/file size _and_ adjust
+            // We need to add a link to the thumbnail data with the new hash/file size _and_ adjust
             // the file modification date in the data table.
             DatabaseThumbnailInfo thumbDbInfo = ThumbnailDatabaseAccess().db()->findByHash(oldHash, oldSize);
 

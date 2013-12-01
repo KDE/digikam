@@ -37,6 +37,7 @@
 // KDE includes
 
 #include <kcombobox.h>
+#include <kpushbutton.h>
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kicon.h>
@@ -62,6 +63,7 @@
 #include "timelinewidget.h"
 #include "facescandialog.h"
 #include "facedetector.h"
+#include "tagsmanager.h"
 
 namespace Digikam
 {
@@ -119,7 +121,7 @@ void AlbumFolderViewSideBarWidget::setActive(bool active)
 {
     if (active)
     {
-        AlbumManager::instance()->setCurrentAlbum(d->albumFolderView->currentAlbum());
+        AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << d->albumFolderView->currentAlbum());
     }
 }
 
@@ -139,9 +141,9 @@ void AlbumFolderViewSideBarWidget::applySettings()
     d->albumFolderView->setEnableToolTips(settings->getShowAlbumToolTips());
 }
 
-void AlbumFolderViewSideBarWidget::changeAlbumFromHistory(Album* album)
+void AlbumFolderViewSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
 {
-    d->albumFolderView->setCurrentAlbum(dynamic_cast<PAlbum*>(album));
+    d->albumFolderView->setCurrentAlbums(album);
 }
 
 AlbumPointer<PAlbum> AlbumFolderViewSideBarWidget::currentAlbum() const
@@ -152,7 +154,7 @@ AlbumPointer<PAlbum> AlbumFolderViewSideBarWidget::currentAlbum() const
 void AlbumFolderViewSideBarWidget::setCurrentAlbum(PAlbum* album)
 {
     // Change the current album in list view.
-    d->albumFolderView->setCurrentAlbum(album);
+    d->albumFolderView->setCurrentAlbums(QList<Album*>() << album);
 }
 
 QPixmap AlbumFolderViewSideBarWidget::getIcon()
@@ -172,13 +174,13 @@ class TagViewSideBarWidget::Private
 public:
 
     Private() :
-        tagModel(0),
+        openTagMngr(0),
         tagSearchBar(0),
         tagFolderView(0)
     {
     }
 
-    TagModel*      tagModel;
+    KPushButton*   openTagMngr;
     SearchTextBar* tagSearchBar;
     TagFolderView* tagFolderView;
 };
@@ -188,10 +190,9 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
 {
     setObjectName("TagView Sidebar");
 
-    d->tagModel = model;
+    QVBoxLayout* const layout = new QVBoxLayout(this);
 
-    QVBoxLayout* layout = new QVBoxLayout(this);
-
+    d->openTagMngr   = new KPushButton( i18n("Open Tag Manager"));
     d->tagFolderView = new TagFolderView(this, model);
     d->tagFolderView->setConfigGroup(getConfigGroup());
     d->tagFolderView->setExpandNewCurrentItem(true);
@@ -201,8 +202,12 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
     d->tagSearchBar->setModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->tagSearchBar->setFilterModel(d->tagFolderView->albumFilterModel());
 
+    layout->addWidget(d->openTagMngr);
     layout->addWidget(d->tagFolderView);
     layout->addWidget(d->tagSearchBar);
+
+    connect(d->openTagMngr, SIGNAL(clicked()),
+            this,SLOT(slotOpenTagManager()));
 
     connect(d->tagFolderView, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
             this, SIGNAL(signalFindDuplicatesInAlbum(Album*)));
@@ -217,7 +222,7 @@ void TagViewSideBarWidget::setActive(bool active)
 {
     if (active)
     {
-        AlbumManager::instance()->setCurrentAlbum(d->tagFolderView->currentAlbum());
+        AlbumManager::instance()->setCurrentAlbums(d->tagFolderView->selectedTags());
     }
 }
 
@@ -235,9 +240,9 @@ void TagViewSideBarWidget::applySettings()
 {
 }
 
-void TagViewSideBarWidget::changeAlbumFromHistory(Album* album)
+void TagViewSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
 {
-    d->tagFolderView->setCurrentAlbum(dynamic_cast<TAlbum*>(album));
+    d->tagFolderView->setCurrentAlbums(album);
 }
 
 AlbumPointer<TAlbum> TagViewSideBarWidget::currentAlbum() const
@@ -257,7 +262,15 @@ QString TagViewSideBarWidget::getCaption()
 
 void TagViewSideBarWidget::setCurrentAlbum(TAlbum* album)
 {
-    d->tagFolderView->setCurrentAlbum(album);
+    d->tagFolderView->setCurrentAlbums(QList<Album*>() << album);
+}
+
+void TagViewSideBarWidget::slotOpenTagManager()
+{
+    TagsManager* const tagMngr = TagsManager::instance();
+    tagMngr->show();
+    tagMngr->activateWindow();
+    tagMngr->raise();
 }
 
 // -----------------------------------------------------------------------------
@@ -280,9 +293,9 @@ DateFolderViewSideBarWidget::DateFolderViewSideBarWidget(QWidget* const parent, 
 {
     setObjectName("DateFolderView Sidebar");
 
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    QVBoxLayout* const layout = new QVBoxLayout(this);
 
-    d->dateFolderView   = new DateFolderView(this, model);
+    d->dateFolderView         = new DateFolderView(this, model);
     d->dateFolderView->setConfigGroup(getConfigGroup());
     d->dateFolderView->setImageModel(imageFilterModel);
 
@@ -313,9 +326,9 @@ void DateFolderViewSideBarWidget::applySettings()
 {
 }
 
-void DateFolderViewSideBarWidget::changeAlbumFromHistory(Album* album)
+void DateFolderViewSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
 {
-    d->dateFolderView->changeAlbumFromHistory(dynamic_cast<DAlbum*>(album));
+    d->dateFolderView->changeAlbumFromHistory(dynamic_cast<DAlbum*>(album.first()));
 }
 
 AlbumPointer<DAlbum> DateFolderViewSideBarWidget::currentAlbum() const
@@ -357,9 +370,9 @@ public:
         searchDateBar(0),
         timeLineFolderView(0),
         timeLineWidget(0),
-        searchModel(0),
         searchModificationHelper(0)
-    {}
+    {
+    }
 
     static const QString      configHistogramTimeUnitEntry;
     static const QString      configHistogramScaleEntry;
@@ -379,8 +392,6 @@ public:
     SearchTextBar*            searchDateBar;
     EditableSearchTreeView*   timeLineFolderView;
     TimeLineWidget*           timeLineWidget;
-
-    SearchModel*              searchModel;
 
     SearchModificationHelper* searchModificationHelper;
 
@@ -402,19 +413,19 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
     d->timer                    = new QTimer(this);
     setAttribute(Qt::WA_DeleteOnClose);
 
-    QVBoxLayout* vlay = new QVBoxLayout(this);
-    QFrame* panel     = new QFrame(this);
+    QVBoxLayout* const vlay = new QVBoxLayout(this);
+    QFrame* const panel     = new QFrame(this);
     panel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     panel->setLineWidth(1);
 
-    QGridLayout* grid = new QGridLayout(panel);
+    QGridLayout* const grid = new QGridLayout(panel);
 
     // ---------------------------------------------------------------
 
-    QWidget* hbox1    = new QWidget(panel);
-    QHBoxLayout* hlay = new QHBoxLayout(hbox1);
+    QWidget* const hbox1    = new QWidget(panel);
+    QHBoxLayout* const hlay = new QHBoxLayout(hbox1);
 
-    QLabel* label1 = new QLabel(i18n("Time Unit:"), hbox1);
+    QLabel* const label1    = new QLabel(i18n("Time Unit:"), hbox1);
     d->timeUnitCB  = new KComboBox(hbox1);
     d->timeUnitCB->addItem(i18n("Day"),   TimeLineWidget::Day);
     d->timeUnitCB->addItem(i18n("Week"),  TimeLineWidget::Week);
@@ -425,9 +436,9 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
     d->timeUnitCB->setWhatsThis(i18n("<p>Select the histogram time unit.</p>"
                                      "<p>You can change the graph decade to zoom in or zoom out over time.</p>"));
 
-    QWidget* scaleBox  = new QWidget(hbox1);
-    QHBoxLayout* hlay2 = new QHBoxLayout(scaleBox);
-    d->scaleBG         = new QButtonGroup(scaleBox);
+    QWidget* const scaleBox  = new QWidget(hbox1);
+    QHBoxLayout* const hlay2 = new QHBoxLayout(scaleBox);
+    d->scaleBG               = new QButtonGroup(scaleBox);
     d->scaleBG->setExclusive(true);
     scaleBox->setWhatsThis( i18n("<p>Select the histogram scale.</p>"
                                  "<p>If the date's maximal counts are small, you can use the linear scale.</p>"
@@ -435,13 +446,13 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
                                  "if it is used, all values (small and large) will be visible on the "
                                  "graph.</p>"));
 
-    QToolButton* linHistoButton = new QToolButton(scaleBox);
+    QToolButton* const linHistoButton = new QToolButton(scaleBox);
     linHistoButton->setToolTip( i18n( "Linear" ) );
     linHistoButton->setIcon(KIcon("view-object-histogram-linear"));
     linHistoButton->setCheckable(true);
     d->scaleBG->addButton(linHistoButton, TimeLineWidget::LinScale);
 
-    QToolButton* logHistoButton = new QToolButton(scaleBox);
+    QToolButton* const logHistoButton = new QToolButton(scaleBox);
     logHistoButton->setToolTip( i18n( "Logarithmic" ) );
     logHistoButton->setIcon(KIcon("view-object-histogram-logarithmic"));
     logHistoButton->setCheckable(true);
@@ -473,7 +484,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
 
     // ---------------------------------------------------------------
 
-    KHBox* hbox2 = new KHBox(panel);
+    KHBox* const hbox2 = new KHBox(panel);
     hbox2->setMargin(0);
     hbox2->setSpacing(KDialog::spacingHint());
 
@@ -601,7 +612,7 @@ void TimelineSideBarWidget::setActive(bool active)
         }
         if (d->currentTimelineSearch)
         {
-            AlbumManager::instance()->setCurrentAlbum(d->currentTimelineSearch);
+            AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << d->currentTimelineSearch);
         }
         else
         {
@@ -652,9 +663,9 @@ void TimelineSideBarWidget::applySettings()
     // nothing to do here right now
 }
 
-void TimelineSideBarWidget::changeAlbumFromHistory(Album* album)
+void TimelineSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
 {
-    d->timeLineFolderView->setCurrentAlbum(dynamic_cast<SAlbum*>(album));
+    d->timeLineFolderView->setCurrentAlbums(album);
 }
 
 QPixmap TimelineSideBarWidget::getIcon()
@@ -730,7 +741,7 @@ void TimelineSideBarWidget::slotAlbumSelected(Album* album)
         return;
     }
 
-    SAlbum* salbum = dynamic_cast<SAlbum*>(album);
+    SAlbum* const salbum = dynamic_cast<SAlbum*>(album);
 
     if (!salbum)
     {
@@ -738,7 +749,7 @@ void TimelineSideBarWidget::slotAlbumSelected(Album* album)
     }
 
     d->currentTimelineSearch = salbum;
-    AlbumManager::instance()->setCurrentAlbum(salbum);
+    AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << salbum);
 
     SearchXmlReader reader(salbum->query());
 
@@ -792,7 +803,7 @@ void TimelineSideBarWidget::slotResetSelection()
 {
     d->timeLineWidget->slotResetSelection();
     slotCheckAboutSelection();
-    AlbumManager::instance()->setCurrentAlbum(0);
+    AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
 }
 
 void TimelineSideBarWidget::slotCheckAboutSelection()
@@ -821,33 +832,29 @@ void TimelineSideBarWidget::slotCheckAboutSelection()
 class SearchSideBarWidget::Private
 {
 public:
+
     Private() :
         searchSearchBar(0),
         searchTreeView(0),
-        searchTabHeader(0),
-        searchModel(0)
+        searchTabHeader(0)
     {
     }
 
     SearchTextBar*        searchSearchBar;
     NormalSearchTreeView* searchTreeView;
     SearchTabHeader*      searchTabHeader;
-    SearchModel*          searchModel;
 };
 
 SearchSideBarWidget::SearchSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
-                                         SearchModificationHelper* const searchModeificationHelper)
+                                         SearchModificationHelper* const searchModificationHelper)
     : SidebarWidget(parent), d(new Private)
 {
     setObjectName("Search Sidebar");
 
-    d->searchModel      = searchModel;
-
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    QVBoxLayout* const layout = new QVBoxLayout(this);
 
     d->searchTabHeader  = new SearchTabHeader(this);
-    d->searchTreeView   = new NormalSearchTreeView(this, searchModel,
-                                                   searchModeificationHelper);
+    d->searchTreeView   = new NormalSearchTreeView(this, searchModel, searchModificationHelper);
     d->searchTreeView->setConfigGroup(getConfigGroup());
     d->searchTreeView->filteredModel()->listNormalSearches();
     d->searchTreeView->filteredModel()->setListTemporarySearches(true);
@@ -871,8 +878,8 @@ SearchSideBarWidget::SearchSideBarWidget(QWidget* const parent, SearchModel* con
     connect(d->searchTreeView, SIGNAL(currentAlbumChanged(Album*)),
             d->searchTabHeader, SLOT(selectedSearchChanged(Album*)));
 
-    connect(d->searchTabHeader, SIGNAL(searchShallBeSelected(SAlbum*)),
-            d->searchTreeView, SLOT(setCurrentAlbum(SAlbum*)));
+    connect(d->searchTabHeader, SIGNAL(searchShallBeSelected(QList<Album*>)),
+            d->searchTreeView, SLOT(setCurrentAlbums(QList<Album*>)));
 }
 
 SearchSideBarWidget::~SearchSideBarWidget()
@@ -884,7 +891,7 @@ void SearchSideBarWidget::setActive(bool active)
 {
     if (active)
     {
-        AlbumManager::instance()->setCurrentAlbum(d->searchTreeView->currentAlbum());
+        AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << d->searchTreeView->currentAlbum());
     }
 }
 
@@ -902,9 +909,9 @@ void SearchSideBarWidget::applySettings()
 {
 }
 
-void SearchSideBarWidget::changeAlbumFromHistory(Album* album)
+void SearchSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
 {
-    d->searchTreeView->setCurrentAlbum(dynamic_cast<SAlbum*>(album));
+    d->searchTreeView->setCurrentAlbums(album);
 }
 
 QPixmap SearchSideBarWidget::getIcon()
@@ -934,13 +941,11 @@ class FuzzySearchSideBarWidget::Private
 public:
     Private() :
         fuzzySearchView(0),
-        searchModel(0),
         searchModificationHelper(0)
     {
     }
 
     FuzzySearchView*          fuzzySearchView;
-    SearchModel*              searchModel;
     SearchModificationHelper* searchModificationHelper;
 };
 
@@ -950,12 +955,10 @@ FuzzySearchSideBarWidget::FuzzySearchSideBarWidget(QWidget* const parent, Search
 {
     setObjectName("Fuzzy Search Sidebar");
 
-    d->searchModel      = searchModel;
-
-    d->fuzzySearchView  = new FuzzySearchView(searchModel, searchModificationHelper, this);
+    d->fuzzySearchView        = new FuzzySearchView(searchModel, searchModificationHelper, this);
     d->fuzzySearchView->setConfigGroup(getConfigGroup());
 
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    QVBoxLayout* const layout = new QVBoxLayout(this);
 
     layout->addWidget(d->fuzzySearchView);
 }
@@ -971,7 +974,7 @@ void FuzzySearchSideBarWidget::setActive(bool active)
 
     if (active)
     {
-        AlbumManager::instance()->setCurrentAlbum(d->fuzzySearchView->currentAlbum());
+        AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << d->fuzzySearchView->currentAlbum());
     }
 }
 
@@ -989,9 +992,9 @@ void FuzzySearchSideBarWidget::applySettings()
 {
 }
 
-void FuzzySearchSideBarWidget::changeAlbumFromHistory(Album* album)
+void FuzzySearchSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
 {
-    SAlbum* salbum = dynamic_cast<SAlbum*>(album);
+    SAlbum* const salbum = dynamic_cast<SAlbum*>(album.first());
     d->fuzzySearchView->setCurrentAlbum(salbum);
 }
 
@@ -1026,13 +1029,11 @@ class GPSSearchSideBarWidget::Private
 {
 public:
     Private() :
-        gpsSearchView(0),
-        searchModel(0)
+        gpsSearchView(0)
     {
     }
 
     GPSSearchView* gpsSearchView;
-    SearchModel*   searchModel;
 };
 
 GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
@@ -1042,14 +1043,11 @@ GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget* const parent, SearchMode
 {
     setObjectName("GPS Search Sidebar");
 
-    d->searchModel   = searchModel;
-
     d->gpsSearchView = new GPSSearchView(this, searchModel, searchModificationHelper, imageFilterModel, itemSelectionModel);
     d->gpsSearchView->setConfigGroup(getConfigGroup());
 
-    QScrollArea* scrollArea = new QScrollArea(this);
-
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    QScrollArea* const scrollArea = new QScrollArea(this);
+    QVBoxLayout* const layout     = new QVBoxLayout(this);
 
     layout->addWidget(scrollArea);
     scrollArea->setWidget(d->gpsSearchView);
@@ -1083,9 +1081,9 @@ void GPSSearchSideBarWidget::applySettings()
 {
 }
 
-void GPSSearchSideBarWidget::changeAlbumFromHistory(Album* album)
+void GPSSearchSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
 {
-    d->gpsSearchView->changeAlbumFromHistory(dynamic_cast<SAlbum*>(album));
+    d->gpsSearchView->changeAlbumFromHistory(dynamic_cast<SAlbum*>(album.first()));
 }
 
 QPixmap GPSSearchSideBarWidget::getIcon()
@@ -1125,10 +1123,9 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* const parent, TagModel* const 
 {
     setObjectName("People Sidebar");
 
-    d->tagModel                 = model;
     d->searchModificationHelper = searchModificationHelper;
-    QVBoxLayout* layout         = new QVBoxLayout;
-    QHBoxLayout* hlay           = new QHBoxLayout;
+    QVBoxLayout* const layout   = new QVBoxLayout;
+    QHBoxLayout* const hlay     = new QHBoxLayout;
     d->tagFolderView            = new TagFolderView(this, model);
     d->tagFolderView->setConfigGroup(getConfigGroup());
     d->tagFolderView->setExpandNewCurrentItem(true);
@@ -1146,10 +1143,8 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* const parent, TagModel* const 
     d->rescanButton   = new QPushButton;
     d->rescanButton->setText(i18n("Scan collection for faces"));
 
-    KIcon* icon       = new KIcon(QString("edit-image-face-show"));
-    QPixmap personPix = icon->pixmap(QSize(48, 48));
     d->personIcon     = new QLabel;
-    d->personIcon->setPixmap(personPix);
+    d->personIcon->setPixmap(KIconLoader::global()->loadIcon("edit-image-face-show", KIconLoader::NoGroup, 48));
 
     d->textLabel      = new QLabel(i18n("People Tags"));
 
@@ -1196,7 +1191,7 @@ void PeopleSideBarWidget::setActive(bool active)
 
     if (active)
     {
-        d->tagFolderView->setCurrentAlbum(d->tagFolderView->currentAlbum());
+        d->tagFolderView->setCurrentAlbums(QList<Album*>() << d->tagFolderView->currentAlbum());
     }
 }
 
@@ -1214,9 +1209,9 @@ void PeopleSideBarWidget::applySettings()
 {
 }
 
-void PeopleSideBarWidget::changeAlbumFromHistory(Album* album)
+void PeopleSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
 {
-    d->tagFolderView->setCurrentAlbum(dynamic_cast<TAlbum*>(album));
+    d->tagFolderView->setCurrentAlbums(album);
 }
 
 void PeopleSideBarWidget::slotScanForFaces()
@@ -1225,7 +1220,7 @@ void PeopleSideBarWidget::slotScanForFaces()
 
     if (dialog.exec() == QDialog::Accepted)
     {
-        FaceDetector* tool = new FaceDetector(dialog.settings());
+        FaceDetector* const tool = new FaceDetector(dialog.settings());
         tool->start();
     }
 }

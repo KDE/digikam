@@ -52,7 +52,8 @@ public:
     Private() :
         imageInfoJob(0),
         thread(0),
-        direction(MetadataSynchronizer::WriteFromDatabaseToFile)
+        direction(MetadataSynchronizer::WriteFromDatabaseToFile),
+        tagsOnly(false)
     {
     }
 
@@ -66,6 +67,7 @@ public:
     MaintenanceThread*                  thread;
 
     MetadataSynchronizer::SyncDirection direction;
+    bool                                tagsOnly;
 };
 
 MetadataSynchronizer::MetadataSynchronizer(const AlbumList& list, SyncDirection direction, ProgressItem* const parent)
@@ -74,7 +76,7 @@ MetadataSynchronizer::MetadataSynchronizer(const AlbumList& list, SyncDirection 
 {
     if (list.isEmpty())
         d->palbumList = AlbumManager::instance()->allPAlbums();
-    else 
+    else
         d->palbumList = list;
 
     init(direction);
@@ -89,6 +91,11 @@ MetadataSynchronizer::MetadataSynchronizer(const ImageInfoList& list, SyncDirect
 }
 
 // Common methods ----------------------------------------------------------------------------
+
+void MetadataSynchronizer::setTagsOnly(bool value)
+{
+    d->tagsOnly = value;
+}
 
 void MetadataSynchronizer::init(SyncDirection direction)
 {

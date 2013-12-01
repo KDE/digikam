@@ -7,7 +7,7 @@
  * Description : a generic list view item widget to
  *               display metadata key like a title
  *
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-MdKeyListViewItem::MdKeyListViewItem(QTreeWidget* parent, const QString& key)
+MdKeyListViewItem::MdKeyListViewItem(QTreeWidget* const parent, const QString& key)
     : QObject(parent), QTreeWidgetItem(parent)
 {
     m_key          = key;

@@ -45,14 +45,14 @@
 // Version 6:	modified data structure PGFPreHeader: hSize (header size) is now a UINT32 instead of a UINT16 (backward compatibility assured)
 //
 //-------------------------------------------------------------------------------
-#define PGFCodecVersion		"6.12.27"			///< Major number
+#define PGFCodecVersion		"6.13.45"			///< Major number
 												///< Minor number: Year (2) Week (2)
-#define PGFCodecVersionID   0x061227            ///< Codec version ID to use for API check in client implementation
+#define PGFCodecVersionID   0x061345			///< Codec version ID to use for API check in client implementation
 
 //-------------------------------------------------------------------------------
 //	Image constants
 //-------------------------------------------------------------------------------
-#define Magic				"PGF"				///< PGF identification
+#define PGFMagic			"PGF"				///< PGF identification
 #define MaxLevel			30					///< maximum number of transform levels
 #define NSubbands			4					///< number of subbands per level
 #define MaxChannels			8					///< maximum number of (color) channels
@@ -182,7 +182,7 @@ struct IOException {
 	IOException() : error(NoError) {}
 	/// Constructor
 	/// @param err Run-time error
-	explicit IOException(OSError err) : error(err) {}
+	IOException(OSError err) : error(err) {}
 
 	OSError error;				///< operating system error code
 };

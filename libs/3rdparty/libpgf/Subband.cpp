@@ -33,8 +33,13 @@
 /////////////////////////////////////////////////////////////////////
 // Default constructor
 CSubband::CSubband() 
-: m_size(0)
+: m_width(0)
+, m_height(0)
+, m_size(0)
+, m_level(0)
+, m_orientation(LL)
 , m_data(0)
+, m_dataPos(0)
 #ifdef __PGFROISUPPORT__
 , m_nTiles(0)
 #endif
@@ -261,7 +266,7 @@ void CSubband::TilePosition(UINT32 tileX, UINT32 tileY, UINT32& xPos, UINT32& yP
 
 	while (nTiles > 1) {
 		// compute xPos and w with binary search
-		m = (left + right) >> 1;
+		m = left + ((right - left) >> 1);
 		if (tileX >= m) {
 			xPos += (w + 1) >> 1;
 			w >>= 1;
@@ -271,7 +276,7 @@ void CSubband::TilePosition(UINT32 tileX, UINT32 tileY, UINT32& xPos, UINT32& yP
 			right = m;
 		}
 		// compute yPos and h with binary search
-		m = (top + bottom) >> 1;
+		m = top + ((bottom - top) >> 1);
 		if (tileY >= m) {
 			yPos += (h + 1) >> 1;
 			h >>= 1;

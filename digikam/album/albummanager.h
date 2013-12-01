@@ -174,16 +174,15 @@ public:
     AlbumList allFAlbums() const;
 
     /**
-    * set the current album to @p album. Call this from views which show
-    * listing of albums. This also causes it to fire the signal
-    * signalAlbumCurrentChanged()
+    * set current album to @p albums. It's similar to setCurrentAlbum,
+    * but suport multiple selected albums
     */
-    void      setCurrentAlbum(Album* album);
+    void setCurrentAlbums(QList<Album*> albums);
 
     /**
-    * @returns the current album
+    * @returns current albums, previously set up by setCurrentAlbums
     */
-    Album*    currentAlbum() const;
+    AlbumList currentAlbums() const;
 
     /**
      * @returns the current PAlbum or null if no one is selected
@@ -193,7 +192,7 @@ public:
     /**
      * @returns the current TAlbum or null if no one is selected
      */
-    TAlbum* currentTAlbum() const;
+    QList<TAlbum*> currentTAlbums() const;
 
     /**
      * @returns the current FAlbum or null if no one is selected
@@ -622,7 +621,7 @@ Q_SIGNALS:
     /// For identification purposes, the former album pointer is passed.
     void signalAlbumHasBeenDeleted(void*);
     void signalAlbumsCleared();
-    void signalAlbumCurrentChanged(Album* album);
+    void signalAlbumCurrentChanged(QList<Album*> album);
     void signalAllAlbumsLoaded();
     void signalAllDAlbumsLoaded();
     void signalAlbumIconChanged(Album* album);
@@ -685,6 +684,7 @@ private Q_SLOTS:
      * Scan dates from the database (via IOSlave) and
      * updates the DAlbums.
      */
+    void scanDAlbumsScheduled();
     void scanDAlbums();
 
     void getAlbumItemsCount();
@@ -839,5 +839,6 @@ Q_DECLARE_METATYPE(Digikam::AlbumPointer<Digikam::PAlbum>)
 Q_DECLARE_METATYPE(Digikam::AlbumPointer<Digikam::TAlbum>)
 Q_DECLARE_METATYPE(Digikam::AlbumPointer<Digikam::SAlbum>)
 Q_DECLARE_METATYPE(Digikam::AlbumPointer<Digikam::DAlbum>)
+Q_DECLARE_METATYPE(QList<Digikam::TAlbum*>)
 
 #endif /* ALBUMMANAGER_H */

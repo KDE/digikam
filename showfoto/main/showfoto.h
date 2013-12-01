@@ -125,6 +125,7 @@ private Q_SLOTS:
 
     void slotContextMenu();
     void slotRevert();
+    void slotSetupMetadataFilters(int);
 
 private:
 

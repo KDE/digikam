@@ -109,7 +109,7 @@ void AlbumSelectTreeView::slotNewAlbum()
 
         if (createdAlbum)
         {
-            setCurrentAlbum(createdAlbum, false);
+            setCurrentAlbums(QList<Album*>() << createdAlbum, false);
         }
     }
 }
@@ -188,7 +188,7 @@ AlbumSelectWidget::AlbumSelectWidget(QWidget* const parent, PAlbum* const albumT
         select = AlbumManager::instance()->currentPAlbum();
     }
 
-    d->albumTreeView->setCurrentAlbum(select, false);
+    d->albumTreeView->setCurrentAlbums(QList<Album*>() << select, false);
 
     // ------------------------------------------------------------------------------------
 
@@ -219,7 +219,7 @@ PAlbum* AlbumSelectWidget::currentAlbum() const
 
 void AlbumSelectWidget::setCurrentAlbum(PAlbum* const albumToSelect)
 {
-    d->albumTreeView->setCurrentAlbum(albumToSelect);
+    d->albumTreeView->setCurrentAlbums(QList<Album*>() << albumToSelect);
 }
 
 KUrl AlbumSelectWidget::currentAlbumUrl() const
@@ -240,7 +240,7 @@ void AlbumSelectWidget::setCurrentAlbumUrl(const KUrl& albumUrl)
 
     if (urlAlbum)
     {
-        d->albumTreeView->setCurrentAlbum(urlAlbum);
+        d->albumTreeView->setCurrentAlbums(QList<Album*>() << urlAlbum);
     }
     else
     {

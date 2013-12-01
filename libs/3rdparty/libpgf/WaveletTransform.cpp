@@ -273,11 +273,62 @@ OSError CWaveletTransform::InverseTransform(int srcLevel, UINT32* w, UINT32* h, 
 	}
 
 	// init source buffer position
-	for (int i=0; i < NSubbands; i++) {
-		UINT32 left = (destROI.left >> 1) - m_subband[srcLevel][i].GetROI().left;
-		UINT32 top = (destROI.top >> 1) - m_subband[srcLevel][i].GetROI().top;
-		m_subband[srcLevel][i].InitBuffPos(left, top);
+	const UINT32 leftD = destROI.left >> 1;
+	const UINT32 left0 = m_subband[srcLevel][LL].GetROI().left;
+	const UINT32 left1 = m_subband[srcLevel][HL].GetROI().left;
+	const UINT32 topD = destROI.top >> 1;
+	const UINT32 top0 = m_subband[srcLevel][LL].GetROI().top;
+	const UINT32 top1 = m_subband[srcLevel][LH].GetROI().top;
+	ASSERT(m_subband[srcLevel][LH].GetROI().left == left0);
+	ASSERT(m_subband[srcLevel][HH].GetROI().left == left1);
+	ASSERT(m_subband[srcLevel][HL].GetROI().top == top0);
+	ASSERT(m_subband[srcLevel][HH].GetROI().top == top1);
+
+	UINT32 srcOffsetX[2] = { 0, 0 };
+	UINT32 srcOffsetY[2] = { 0, 0 };
+
+	if (leftD >= __max(left0, left1)) {
+		srcOffsetX[0] = leftD - left0;
+		srcOffsetX[1] = leftD - left1;
+	} else {
+		if (left0 <= left1) {
+			const UINT32 dx = (left1 - leftD) << 1;
+			destROI.left += dx;
+			origin += dx;
+			width -= dx;
+			srcOffsetX[0] = left1 - left0;
+		} else {
+			const UINT32 dx = (left0 - leftD) << 1;
+			destROI.left += dx;
+			origin += dx;
+			width -= dx;
+			srcOffsetX[1] = left0 - left1;
+		}
 	}
+	if (topD >= __max(top0, top1)) {
+		srcOffsetY[0] = topD - top0;
+		srcOffsetY[1] = topD - top1;
+	} else {
+		if (top0 <= top1) {
+			const UINT32 dy = (top1 - topD) << 1;
+			destROI.top += dy;
+			origin += dy*destWidth;
+			height -= dy;
+			srcOffsetY[0] = top1 - top0;
+		} else {
+			const UINT32 dy = (top0 - topD) << 1;
+			destROI.top += dy;
+			origin += dy*destWidth;
+			height -= dy;
+			srcOffsetY[1] = top0 - top1;
+		}
+	}
+		
+	m_subband[srcLevel][LL].InitBuffPos(srcOffsetX[0], srcOffsetY[0]);
+	m_subband[srcLevel][HL].InitBuffPos(srcOffsetX[1], srcOffsetY[0]);
+	m_subband[srcLevel][LH].InitBuffPos(srcOffsetX[0], srcOffsetY[1]);
+	m_subband[srcLevel][HH].InitBuffPos(srcOffsetX[1], srcOffsetY[1]);
+
 #else
 	width = destBand->GetWidth();
 	height = destBand->GetHeight();
@@ -534,7 +585,7 @@ void CRoiIndices::ComputeTileIndex(UINT32 width, UINT32 height, UINT32 pos, bool
 
 		// compute values
 		tileIndex <<= 1;
-		m = (tileMin + tileMax)/2;
+		m = tileMin + (tileMax - tileMin)/2;
 		if (pos >= m) {
 			tileMin = m;
 			tileIndex++;

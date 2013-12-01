@@ -1,22 +1,72 @@
 *****************************************************************************************************
-digiKam 3.4.0 - Release date: 2013-09-01
+digiKam 4.0.0 - Release date: 2013-10-20
 
 NEW FEATURES:
 
-General         : Add interroperabilty with Capture NX about Color Labels support.
-MaintenanceTool : add new options to select Albums and Tags to process.
-MaintenanceTool : add multi-threading and multi-core CPU support for Metadata Synchronizer, Thumbs Generator,
-                  and Fingerprint Generator tools.
+General  : New Tags Manager window for easy tags management.
+General  : New images quality sorter tool, based on blur, noise, and compression analysis.
+General  : Multiple selection and multiple drag-n-drop capabilities on Tags Manager and Tags View from sidebars.
+
+Metadata : Nepomuk Service fixed to use current Api. Enable it from digikam metadata settings.
+Metadata : Support for writing face rectangles in Windows Live Photo format.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 276092 - Change defaults for noise reduction.
-002 ==> 323271 - Face Recognition doesn't work.
-003 ==> 323253 - When face tag scanning, digikam exhausts all memory on computer.
-004 ==> 318198 - Failed to process item - rw2 to jpeg batch queue manager conversion.
-005 ==> 323165 - Delete pictures and folders are not removed from table-view
-006 ==> 323498 - (Some) Image Editor Color tools hang when starting them.
-007 ==> 323062 - digikam (core): Schema update to V 7 failed!
-008 ==> 268688 - Write metadata to all images does not remove obsolete tags.
-009 ==> 
+001 ==> 325702 - digiKam crashes when deleting photos.
+002 ==> 307146 - Build against shared LibRaw.
+003 ==> 326368 - Can't make digiKam from git with test enable : error with libraw 5 ubuntu precise.
+004 ==> 302810 - Crash when closing digiKam during face recognition.
+005 ==> 289931 - digiKam crashed after trying to open the geolocation sidebar.
+006 ==> 285250 - digiKam crashed after saving changed file.
+007 ==> 256050 - digiKam crashed after modifying tag name.
+008 ==> 324425 - How to switch off (get rid of) thumbnail preview?
+009 ==> 326953 - Add loadEmbeddedPreview reading from QBuffer.
+010 ==> 309061 - digiKam crash when moving tag.
+011 ==> 327124 - Add loadHalfPreview reading from QBuffer.
+012 ==> 326959 - digiKam crash while scanning pictures for thumnails maintenance.
+013 ==> 318873 - digiKam crashes when clicking on image in thumbnails [patch].
+014 ==> 263299 - Need a Tags Manager.
+015 ==> 312373 - Deleting all the tags known to digiKam at once.
+016 ==> 326542 - Tagging some face then go to tag manager and test tag manager UI.
+017 ==> 158791 - Multi-select tags (i.e. to delete more than one at a time).
+018 ==> 256252 - Assign Tag with Drag and Drop doesnt work since Version 1.2.0.
+019 ==> 196927 - No easy way to expand or collapse deep tag hierarchies [patch].
+020 ==> 317943 - Auto-rotate/flip using EXIF Information destroys pictures.
+021 ==> 327242 - EXIF tags sorted in the reverse order (not alphabetically).
+022 ==> 199975 - Issues in Album view on Windows.
+023 ==> 327143 - TableView: Crash on image metadata change.
+024 ==> 326525 - Severe memory leak during maintainance scan for rebuild thumbnails.
+025 ==> 321403 - digiKam Crashes When Trying to Start.
+026 ==> 327707 - Custom list of metadata cannot be customized.
+027 ==> 180322 - Compute 35mm equivalent focal length.
+028 ==> 320185 - Compatibility issue with hierarchical tags between Digikam and WLPG (and perhaps other software).
+029 ==> 327957 - Text Filter Returns All Videos Regardless of String.
+030 ==> 277928 - Database upgrade v4 to v5 failed : digiKam fails to start properly, lost albums.
+031 ==> 325112 - Hang when opening folder of images to view thumbs.
+032 ==> 314774 - When staring, error message "" occurs.
+033 ==> 140175 - Mishandling of symbolic links [patch].
+034 ==> 301284 - Crashed at exit of digiKam.
+035 ==> 261526 - Other applications to edit the photos cannot be added in the "open , "others" - error: path is not correct.
+036 ==> 306782 - Rotating several times quickly corrupts images.
+037 ==> 323891 - Tooltips are blank (while using gnome).
+038 ==> 255523 - digiKam shows html in notification after moving pictures.
+039 ==> 230060 - Delete Album is an absolutely terrifying procedure.
+040 ==> 181727 - digitaglinktree does not work if albumdir is not on root-partition.
+041 ==> 275687 - Artifacts when scrolling in album GUI.
+042 ==> 293297 - Digitaglinktree does not process any photos even if tags exists under People category + new option for year subdirectory [patch].
+043 ==> 240048 - Open images with double instead of single click.
+044 ==> 278664 - Image Names are not displayed completely in the AlbumUI.
+045 ==> 187654 - Photos should be in reverse chronological order in default view.
+046 ==> 317731 - digikam crashed while adding tags to images.
+047 ==> 320455 - Tip of the Day dialog don't show digiKam icon.
+048 ==> 328018 - Face-related XMP metadata not displayed.
+049 ==> 142813 - No clock while processing display with color management.
+050 ==> 138446 - Add "Assign ICC profile" entry to 'Image' menu.
+051 ==> 293832 - Digitaglinktree - Multi tag level combination - find any image though directory browsing [patch].
+052 ==> 309393 - Modify date and time changes the previous changes picture too.
+053 ==> 236850 - Export iptc to file.
+054 ==> 103201 - Wish: easy transport of albums, including tags, comments, etc.
+055 ==> 228376 - Tags filter should tick checkbox on 'enter'.
+056 ==> 
+
 

@@ -314,12 +314,18 @@ int LoadSaveThread::exifOrientation(const QString& filePath, const DMetadata& me
     return exifOrientation;
 }
 
-bool LoadSaveThread::exifRotate(DImg& image, const QString& filePath)
+bool LoadSaveThread::wasExifRotated(DImg& image)
 {
     // Keep in sync with the variant in thumbnailcreator.cpp
     QVariant attribute(image.attribute("exifRotated"));
 
-    if (attribute.isValid() && attribute.toBool())
+    return attribute.isValid() && attribute.toBool();
+}
+
+bool LoadSaveThread::exifRotate(DImg& image, const QString& filePath)
+{
+    // Keep in sync with the variant in thumbnailcreator.cpp
+    if (wasExifRotated(image))
     {
         return false;
     }

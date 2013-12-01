@@ -6,7 +6,7 @@
  * Date        : 2007-07-19
  * Description : A widget to display XMP metadata
  *
- * Copyright (C) 2007-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -68,7 +68,7 @@ static const char* StandardXmpEntryList[] =
     "-1"
 };
 
-XmpWidget::XmpWidget(QWidget* parent, const char* name)
+XmpWidget::XmpWidget(QWidget* const parent, const char* name)
     : MetadataWidget(parent, name)
 {
     for (int i=0 ; QString(StandardXmpEntryList[i]) != QString("-1") ; ++i)
@@ -123,19 +123,25 @@ bool XmpWidget::decodeMetadata()
     }
 
     // Update all metadata contents.
-    setMetadataMap(data.getXmpTagsDataList(m_keysFilter));
+    setMetadataMap(data.getXmpTagsDataList());
     return true;
 }
 
 void XmpWidget::buildView()
 {
-    if (getMode() == CUSTOM)
+    switch (getMode())
     {
-        setIfdList(getMetadataMap(), getTagsFilter());
-    }
-    else
-    {
-        setIfdList(getMetadataMap(), QStringList() << QString("FULL"));
+        case CUSTOM:
+            setIfdList(getMetadataMap(), m_keysFilter, getTagsFilter());
+            break;
+
+        case PHOTO:
+            setIfdList(getMetadataMap(), m_keysFilter, QStringList() << QString("FULL"));
+            break;
+
+        default: // NONE
+            setIfdList(getMetadataMap(), QStringList());
+            break;
     }
 
     MetadataWidget::buildView();

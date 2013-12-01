@@ -346,7 +346,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
         uint   checkPoint     = 0;
         uchar* dst            = data.data();
-        unsigned short* dst16 = (unsigned short*)data.data();
+        unsigned short* dst16 = reinterpret_cast<unsigned short*>(data.data());
 
         for (y = 0 ; y < (long)imageHeight() ; ++y)
         {

@@ -6,7 +6,7 @@
  * Date        : 2009-07-17
  * Description : Metadata tags selector config panel.
  *
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,7 +45,7 @@ class DIGIKAM_EXPORT MetadataPanel : public QObject
 
 public:
 
-    explicit MetadataPanel(KTabWidget* tab);
+    explicit MetadataPanel(KTabWidget* const tab);
     ~MetadataPanel();
 
     void                         applySettings();
@@ -58,18 +58,14 @@ public:
     static QStringList defaultIptcFilter();
     static QStringList defaultXmpFilter();
 
-private:
-
-    void readSettings();
-
 private Q_SLOTS:
 
     void slotTabChanged(int);
 
 private:
 
-    class MetadataPanelPriv;
-    MetadataPanelPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

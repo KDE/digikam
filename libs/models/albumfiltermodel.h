@@ -340,6 +340,22 @@ protected:
     QSet<QString>        m_propertiesWhiteList;
 };
 
+class TagsManagerFilterModel : public TagPropertiesFilterModel
+{
+    Q_OBJECT
+
+public:
+    explicit TagsManagerFilterModel(QObject* data = 0);
+
+    void setQuickListTags(QList<int> tags);
+protected:
+
+    virtual bool matches(Album* album) const;
+
+    QSet<int> m_keywords;
+
+};
+
 } // namespace Digikam
 
 #endif // ALBUMFILTERMODEL_H

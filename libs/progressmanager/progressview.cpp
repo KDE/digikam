@@ -134,11 +134,15 @@ void TransactionItemView::slotLayoutFirstItem()
         be the first item very shortly. That's the one we want to remove the
         hline for.
     */
-    TransactionItem* ti = m_bigBox->findChild<TransactionItem*>("TransactionItem");
+    TransactionItem* const ti = m_bigBox->findChild<TransactionItem*>("TransactionItem");
 
-    if ( ti )
+    if (ti)
     {
         ti->hideHLine();
+    }
+    else
+    {
+        emit signalTransactionViewIsEmpty();
     }
 }
 
@@ -364,6 +368,9 @@ ProgressView::ProgressView(QWidget* const alignWidget, QWidget* const parent, co
 
     connect(pm, SIGNAL(showProgressView()),
             this, SLOT(slotShow()));
+
+    connect(d->scrollView, SIGNAL(signalTransactionViewIsEmpty()),
+            pm, SLOT(slotTransactionViewIsEmpty()));
 }
 
 ProgressView::~ProgressView()

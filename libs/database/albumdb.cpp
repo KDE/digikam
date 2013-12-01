@@ -59,6 +59,7 @@ extern "C"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
 #include "dbactiontype.h"
+#include "tagscache.h"
 
 namespace Digikam
 {
@@ -2654,6 +2655,41 @@ QStringList AlbumDB::getDirtyOrMissingFingerprintURLs()
     return urls;
 }
 
+QStringList AlbumDB::getItemsURLsWithTag(int tagId)
+{
+    QList<QVariant> values;
+
+    d->db->execSql(QString("SELECT Albums.albumRoot, Albums.relativePath, Images.name FROM Images "
+                           "LEFT JOIN ImageTags ON Images.id=ImageTags.imageid "
+                           "LEFT JOIN Albums ON Albums.id=Images.album "
+                           " WHERE Images.status=1 AND Images.category=1 AND ImageTags.tagid=?; "),
+                   tagId, &values);
+    
+    QStringList urls;
+    QString     albumRootPath, relativePath, name;
+
+    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+    {
+        albumRootPath = CollectionManager::instance()->albumRootPath((*it).toInt());
+        ++it;
+        relativePath = (*it).toString();
+        ++it;
+        name = (*it).toString();
+        ++it;
+
+        if (relativePath == "/")
+        {
+            urls << albumRootPath + relativePath + name;
+        }
+        else
+        {
+            urls << albumRootPath + relativePath + '/' + name;
+        }
+    }
+
+    return urls;
+}
+
 QStringList AlbumDB::getDirtyOrMissingFaceImageUrls()
 {
     QList<QVariant> values;
@@ -3173,17 +3209,21 @@ void AlbumDB::addItemTag(qlonglong imageID, int tagID)
 
     d->db->recordChangeset(ImageTagChangeset(imageID, tagID, ImageTagChangeset::Added));
 
-    if (!d->recentlyAssignedTags.contains(tagID))
+    TagsCache * tc = TagsCache::instance();
+
+    //don't save pick or color tags
+    if (tc->isInternalTag(tagID))
+        return;
+
+    //move current tag to front
+    d->recentlyAssignedTags.removeAll(tagID);
+    d->recentlyAssignedTags.push_front(tagID);
+    if (d->recentlyAssignedTags.size() > 10)
     {
-        d->recentlyAssignedTags.push_front(tagID);
-
-        if (d->recentlyAssignedTags.size() > 10)
-        {
-            d->recentlyAssignedTags.pop_back();
-        }
-
-        writeSettings();
+        d->recentlyAssignedTags.pop_back();
     }
+
+    writeSettings();
 }
 
 void AlbumDB::addItemTag(int albumID, const QString& name, int tagID)

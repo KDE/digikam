@@ -424,6 +424,15 @@ void ContextMenuHelper::addActionDeleteTag(TagModificationHelper* helper, TAlbum
             helper, SLOT(slotTagDelete()));
 }
 
+void ContextMenuHelper::addActionDeleteTags(Digikam::TagModificationHelper* helper, QList< TAlbum* > tags)
+{
+    QAction* deleteTagsAction = new QAction(SmallIcon("user-trash"), i18n("Delete Tags"), this);
+    addAction(deleteTagsAction);
+    helper->bindMultipleTags(deleteTagsAction, tags);
+    connect(deleteTagsAction, SIGNAL(triggered()),
+            helper, SLOT(slotMultipleTagDel()));
+}
+
 void ContextMenuHelper::addActionEditTag(TagModificationHelper* helper, TAlbum* tag)
 {
     QAction* editTagAction = new QAction(SmallIcon("tag-properties"), i18nc("Edit Tag Properties", "Properties..."), this);
@@ -499,8 +508,8 @@ void ContextMenuHelper::addRemoveTagsMenu(const imageIds &ids)
     d->parent->addMenu(removeTagsPopup);
 
     // Performance: Only check for tags if there are <250 images selected
-    // Also disable the remove Tag popup menu, if there are no tags at all.
-    if (ids.count() > 250 || !DatabaseAccess().db()->hasTags(ids))
+    // Otherwise enable it regardless if there are tags or not
+    if (ids.count() < 250 && !DatabaseAccess().db()->hasTags(ids))
     {
         removeTagsPopup->menuAction()->setEnabled(false);
     }
@@ -721,7 +730,20 @@ void ContextMenuHelper::addGotoMenu(const imageIds &ids)
         gotoTag->setEnabled(false);
     }
 
-    Album* currentAlbum = AlbumManager::instance()->currentAlbum();
+    /**
+     * TODO:tags to be ported to multiple selection
+     */
+    QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
+    Album* currentAlbum = 0;
+
+    if(!albumList.isEmpty())
+    {
+        currentAlbum = albumList.first();
+    }
+    else
+    {
+        return;
+    }
 
     if (currentAlbum->type() == Album::PHYSICAL)
     {

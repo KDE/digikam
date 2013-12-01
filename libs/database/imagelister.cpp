@@ -66,6 +66,13 @@
 namespace Digikam
 {
 
+/**
+ * Used by QSet
+ */
+uint qHash(const ImageListerRecord& key)
+{
+    return key.imageID;
+}
 /*
  * The binary field for file size is only 32 bit.
  * If the value fits, we pass it. If it does not, we pass -1,
@@ -149,7 +156,7 @@ void ImageLister::list(ImageListerReceiver* const receiver, const DatabaseUrl& u
     }
     else if (url.isTagUrl())
     {
-        listTag(receiver, url.tagId());
+        listTag(receiver, url.tagIds());
     }
     else if (url.isDateUrl())
     {
@@ -277,68 +284,79 @@ void ImageLister::listAlbum(ImageListerReceiver* const receiver, int albumRootId
     }
 }
 
-void ImageLister::listTag(ImageListerReceiver* const receiver, int tagId)
+void ImageLister::listTag(ImageListerReceiver* const receiver, QList<int> tagIds)
 {
-    QList<QVariant>         values;
-    QMap<QString, QVariant> parameters;
-    parameters.insert(":tagPID", tagId);
-    parameters.insert(":tagID",  tagId);
-
-    DatabaseAccess access;
-
-    if (d->recursive)
+    QSet<ImageListerRecord> records;
+    QList<int>::iterator it;
+    for(it = tagIds.begin(); it != tagIds.end(); ++it)
     {
-        access.backend()->execDBAction(access.backend()->getDBAction(QString("listTagRecursive")), parameters, &values);
-    }
-    else
-    {
-        access.backend()->execDBAction(access.backend()->getDBAction(QString("listTag")), parameters, &values);
-    }
+        QList<QVariant>         values;
+        QMap<QString, QVariant> parameters;
+        parameters.insert(":tagPID", *it);
+        parameters.insert(":tagID",  *it);
 
-    QSet<int> albumRoots = albumRootsToList();
+        DatabaseAccess access;
 
-    int width, height;
-
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
-    {
-        ImageListerRecord record;
-
-        record.imageID           = (*it).toLongLong();
-        ++it;
-        record.name              = (*it).toString();
-        ++it;
-        record.albumID           = (*it).toInt();
-        ++it;
-        record.albumRootID       = (*it).toInt();
-        ++it;
-        record.rating            = (*it).toInt();
-        ++it;
-        record.category          = (DatabaseItem::Category)(*it).toInt();
-        ++it;
-        record.format            = (*it).toString();
-        ++it;
-        record.creationDate      = (*it).isNull() ? QDateTime()
-                                   : QDateTime::fromString((*it).toString(), Qt::ISODate);
-        ++it;
-        record.modificationDate  = (*it).isNull() ? QDateTime()
-                                   : QDateTime::fromString((*it).toString(), Qt::ISODate);
-        ++it;
-        record.fileSize          = toInt32BitSafe(it);
-        ++it;
-        width                    = (*it).toInt();
-        ++it;
-        height                   = (*it).toInt();
-        ++it;
-
-        if (d->listOnlyAvailableImages && !albumRoots.contains(record.albumRootID))
+        if (d->recursive)
         {
-            continue;
+            access.backend()->execDBAction(access.backend()->getDBAction(QString("listTagRecursive")), parameters, &values);
+        }
+        else
+        {
+            access.backend()->execDBAction(access.backend()->getDBAction(QString("listTag")), parameters, &values);
         }
 
-        record.imageSize         = QSize(width, height);
+        QSet<int> albumRoots = albumRootsToList();
 
-        receiver->receive(record);
+        int width, height;
+
+        for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
+        {
+            ImageListerRecord record;
+
+            record.imageID           = (*it).toLongLong();
+            ++it;
+            record.name              = (*it).toString();
+            ++it;
+            record.albumID           = (*it).toInt();
+            ++it;
+            record.albumRootID       = (*it).toInt();
+            ++it;
+            record.rating            = (*it).toInt();
+            ++it;
+            record.category          = (DatabaseItem::Category)(*it).toInt();
+            ++it;
+            record.format            = (*it).toString();
+            ++it;
+            record.creationDate      = (*it).isNull() ? QDateTime()
+                                    : QDateTime::fromString((*it).toString(), Qt::ISODate);
+            ++it;
+            record.modificationDate  = (*it).isNull() ? QDateTime()
+                                    : QDateTime::fromString((*it).toString(), Qt::ISODate);
+            ++it;
+            record.fileSize          = toInt32BitSafe(it);
+            ++it;
+            width                    = (*it).toInt();
+            ++it;
+            height                   = (*it).toInt();
+            ++it;
+
+            if (d->listOnlyAvailableImages && !albumRoots.contains(record.albumRootID))
+            {
+                continue;
+            }
+
+            record.imageSize         = QSize(width, height);
+
+            records.insert(record);
+        }
     }
+
+    for(QSet<ImageListerRecord>::iterator it = records.begin(); it != records.end(); ++it)
+    {
+        receiver->receive(*it);
+    }
+
 }
 
 void ImageLister::listFaces(ImageListerReceiver* const receiver, int personId)

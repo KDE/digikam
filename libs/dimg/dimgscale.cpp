@@ -236,13 +236,13 @@ DImg DImg::smoothScaleClipped(int dw, int dh, int clipx, int clipy, int clipw, i
     {
         if (hasAlpha())
         {
-            dimgScaleAARGBA16(scaleinfo, (ullong*) buffer.bits(),
+            dimgScaleAARGBA16(scaleinfo, reinterpret_cast<ullong*>(buffer.bits()),
                               0, 0, dw, dh, clipw, w,
                               clipx, clipy, clipw, cliph);
         }
         else
         {
-            dimgScaleAARGB16(scaleinfo, (ullong*) buffer.bits(),
+            dimgScaleAARGB16(scaleinfo, reinterpret_cast<ullong*>(buffer.bits()),
                              0, 0, dw, dh, clipw, w,
                              clipx, clipy, clipw, cliph);
         }
@@ -251,13 +251,13 @@ DImg DImg::smoothScaleClipped(int dw, int dh, int clipx, int clipy, int clipw, i
     {
         if (hasAlpha())
         {
-            dimgScaleAARGBA(scaleinfo, (uint*)buffer.bits(),
+            dimgScaleAARGBA(scaleinfo, reinterpret_cast<uint*>(buffer.bits()),
                             0, 0, dw, dh, clipw, w,
                             clipx, clipy, clipw, cliph);
         }
         else
         {
-            dimgScaleAARGB(scaleinfo, (uint*)buffer.bits(),
+            dimgScaleAARGB(scaleinfo, reinterpret_cast<uint*>(buffer.bits()),
                            0, 0, dw, dh, clipw, w,
                            clipx, clipy, clipw, cliph);
         }
@@ -343,7 +343,7 @@ DImg DImg::smoothScaleSection(int sx, int sy,
     {
         if (hasAlpha())
         {
-            dimgScaleAARGBA16(scaleinfo, (ullong*) buffer.bits(),
+            dimgScaleAARGBA16(scaleinfo, reinterpret_cast<ullong*>(buffer.bits()),
                               ((sx * dw) / sw),
                               ((sy * dh) / sh),
                               dw, dh,
@@ -351,7 +351,7 @@ DImg DImg::smoothScaleSection(int sx, int sy,
         }
         else
         {
-            dimgScaleAARGB16(scaleinfo, (ullong*) buffer.bits(),
+            dimgScaleAARGB16(scaleinfo, reinterpret_cast<ullong*>(buffer.bits()),
                              ((sx * dw) / sw),
                              ((sy * dh) / sh),
                              dw, dh,
@@ -363,7 +363,7 @@ DImg DImg::smoothScaleSection(int sx, int sy,
         if (hasAlpha())
         {
             dimgScaleAARGBA(scaleinfo,
-                            (uint*)buffer.bits(),
+                            reinterpret_cast<uint*>(buffer.bits()),
                             ((sx * dw) / sw),
                             ((sy * dh) / sh),
                             dw, dh,
@@ -372,7 +372,7 @@ DImg DImg::smoothScaleSection(int sx, int sy,
         else
         {
             dimgScaleAARGB(scaleinfo,
-                           (uint*)buffer.bits(),
+                           reinterpret_cast<uint*>(buffer.bits()),
                            ((sx * dw) / sw),
                            ((sy * dh) / sh),
                            dw, dh,
@@ -526,12 +526,12 @@ DImgScaleInfo* DImgScale::dimgCalcScaleInfo(const DImg& img,
     if (img.sixteenBit())
     {
         isi->ypoints   = 0;
-        isi->ypoints16 = dimgCalcYPoints16((ullong*)img.bits(), img.width(), img.height(), sch);
+        isi->ypoints16 = dimgCalcYPoints16(reinterpret_cast<ullong*>(img.bits()), img.width(), img.height(), sch);
     }
     else
     {
         isi->ypoints16 = 0;
-        isi->ypoints   = dimgCalcYPoints((uint*)img.bits(), img.width(), img.height(), sch);
+        isi->ypoints   = dimgCalcYPoints(reinterpret_cast<uint*>(img.bits()), img.width(), img.height(), sch);
     }
 
     if (aa)

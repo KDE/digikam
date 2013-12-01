@@ -150,10 +150,10 @@ void DXmlGuiWindow::createHelpActions(bool coreOptions)
 
     d->about = new DAboutData(this);
     d->about->registerHelpActions();
-    
+
     m_animLogo = new DLogoAction(this);
     actionCollection()->addAction("logo_action", m_animLogo);
-    
+
     // Add options only for core components (typically all excepted Showfoto)
     if (coreOptions)
     {
@@ -451,7 +451,7 @@ QAction* DXmlGuiWindow::statusBarMenuAction() const
         if (act && QString(act->objectName()) == QString("options_show_statusbar"))
             return act;
     }
-    
+
     return 0;
 }
 

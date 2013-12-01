@@ -186,7 +186,7 @@ INSTALL(TARGETS digikamdatabase ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 # digiKam nepomuk services #########################################################
 
-IF (NEPOMUK_FOUND)
+IF (NepomukCore_FOUND)
 
     SET(digikamnepomukservices_SRCS ${libnepomukservices_SRCS} )
 
@@ -208,7 +208,7 @@ IF (NEPOMUK_FOUND)
                           ${KDCRAW_LIBRARIES}
                           ${SOPRANO_CLIENT_LIBRARIES}
                           ${SOPRANO_LIBRARIES}
-                          ${NEPOMUK_LIBRARIES}
+                          ${NEPOMUK_CORE_LIBRARY}
 
                           digikamcore
                           digikamdatabase
@@ -224,7 +224,7 @@ IF (NEPOMUK_FOUND)
     INSTALL(TARGETS digikamnepomukservice
             DESTINATION ${PLUGIN_INSTALL_DIR})
 
-ENDIF (NEPOMUK_FOUND)
+ENDIF (NepomukCore_FOUND)
 
 # digiKam binary progam #########################################################
 
@@ -248,6 +248,7 @@ SET(digikam_SRCS ${libeditorgui_SRCS}
                  ${libtemplate_SRCS}
                  ${libdatabaseui_SRCS}
                  ${libfacemanagement_SRCS}
+                 ${libimgqsort_SRCS}
                  main/main.cpp
 )
 
@@ -293,9 +294,9 @@ TARGET_LINK_LIBRARIES(digikam
         queuemanager
 
         importui
-        
+
         ${OpenCV_LIBRARIES}
-        
+
         # See B.K.O #258931: libgphoto2 library must be the last arg for linker.
         ${GPHOTO2_LIBRARIES}
 )

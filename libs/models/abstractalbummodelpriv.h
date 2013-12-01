@@ -27,11 +27,11 @@
 namespace Digikam
 {
 
-class AbstractAlbumModel::AlbumModelPriv
+class AbstractAlbumModel::Private
 {
 public:
 
-    AlbumModelPriv()
+    Private()
     {
         rootAlbum       = 0;
         type            = Album::PHYSICAL;
@@ -55,7 +55,7 @@ public:
 
 public:
 
-    Album* findNthChild(Album* parent, int n)
+    Album* findNthChild(Album* const parent, int n) const
     {
         // return the n-th of the children of parent, or 0
         Album* a = parent->firstChild();
@@ -78,10 +78,10 @@ public:
         return a;
     }
 
-    int findIndexAsChild(Album* child)
+    int findIndexAsChild(Album* const child)
     {
         // return index of child in the list of children of its parent
-        Album* parent = child->parent();
+        Album* const parent = child->parent();
 
         if (!parent)
         {
@@ -89,7 +89,7 @@ public:
         }
 
         Album* a = parent->firstChild();
-        int i = 0;
+        int i    = 0;
 
         while (a != child)
         {
@@ -106,9 +106,9 @@ public:
         return i;
     }
 
-    int numberOfChildren(Album* parent)
+    int numberOfChildren(Album* const parent)
     {
-        Album* a = parent->firstChild();
+        Album* a  = parent->firstChild();
         int count = 0;
 
         while (a)

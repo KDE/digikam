@@ -134,6 +134,7 @@ public:
      * Returns false if a rotation was not needed.
      */
     static bool exifRotate(DImg& image, const QString& filePath);
+    static bool wasExifRotated(DImg& image);
 
     /**
      * Retrieves the Exif orientation, either from the info provider if available,

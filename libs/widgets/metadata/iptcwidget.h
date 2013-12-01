@@ -6,7 +6,7 @@
  * Date        : 2006-02-20
  * Description : A widget to display IPTC metadata
  *
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,7 +38,7 @@ class DIGIKAM_EXPORT IptcWidget : public MetadataWidget
 
 public:
 
-    explicit IptcWidget(QWidget* parent, const char* name=0);
+    explicit IptcWidget(QWidget* const parent, const char* name=0);
     ~IptcWidget();
 
     bool loadFromURL(const KUrl& url);

@@ -145,7 +145,7 @@ void BlurFilter::cimgBlurImage(uchar* data, int width, int height, bool sixteenB
     else                                // 16 bits image.
     {
         // convert DImg (interleaved RGBA) to CImg (planar RGBA)
-        CImg<unsigned short> img = CImg<unsigned short>((unsigned short*)data, 4, width, height, 1, true).
+        CImg<unsigned short> img = CImg<unsigned short>(reinterpret_cast<unsigned short*>(data), 4, width, height, 1, true).
                                    get_permute_axes("yzvx");
         postProgress(25);
 
@@ -156,7 +156,7 @@ void BlurFilter::cimgBlurImage(uchar* data, int width, int height, bool sixteenB
         // Copy CImg onto destination.
         kDebug() << "BlurFilter::Finalization...";
 
-        unsigned short* ptr = (unsigned short*)m_destImage.bits();
+        unsigned short* ptr = reinterpret_cast<unsigned short*>(m_destImage.bits());
 
         for (int y = 0; y < height; ++y)
         {
@@ -248,9 +248,9 @@ void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixt
     // We need to initialize all the loop and iterator variables
 
     nSumA = nSumR = nSumG = nSumB = nCount = i = j = 0;
-    unsigned short* data16     = (unsigned short*)data;
-    unsigned short* pBlur16    = (unsigned short*)pBlur.data();
-    unsigned short* pOutBits16 = (unsigned short*)pOutBits;
+    unsigned short* data16     = reinterpret_cast<unsigned short*>(data);
+    unsigned short* pBlur16    = reinterpret_cast<unsigned short*>(pBlur.data());
+    unsigned short* pOutBits16 = reinterpret_cast<unsigned short*>(pOutBits);
 
     // Now, we enter in the main loop
 

@@ -94,7 +94,7 @@ void LocalContrastFilter::filterImage()
         {
             // sixteen bit image
             QScopedArrayPointer<unsigned short> data(new unsigned short[size]);
-            unsigned short* dataImg = (unsigned short*)(m_orgImage.bits());
+            unsigned short* dataImg = reinterpret_cast<unsigned short*>(m_orgImage.bits());
 
             for (i = 0, j = 0; runningFlag() && (i < size); i += 3, j += 4)
             {

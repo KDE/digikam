@@ -156,7 +156,7 @@ DImg::DImg(const QImage& image)
 
         if (allocateData())
         {
-            uint*  sptr       = (uint*)target.bits();
+            uint*  sptr       = reinterpret_cast<uint*>(target.bits());
             uchar* dptr       = m_priv->data;
             const uint pixels = numPixels();
 
@@ -1483,7 +1483,7 @@ bool DImg::hasTransparentPixels() const
     }
     else
     {
-        unsigned short* srcPtr = (unsigned short*)m_priv->data;
+        unsigned short* srcPtr = reinterpret_cast<unsigned short*>(m_priv->data);
 
         for (uint j = 0; j < h; ++j)
         {
@@ -1753,7 +1753,7 @@ void DImg::bitBlendImage(DColorComposer* const composer, const DImg* const src,
              src->bytesDepth(), bytesDepth(), multiplicationFlags);
 }
 
-void DImg::bitBlend(DColorComposer* const composer, const uchar* const src, uchar* const dest,
+void DImg::bitBlend(DColorComposer* const composer, uchar* const src, uchar* const dest,
                     int sx, int sy, int w, int h, int dx, int dy,
                     uint swidth, uint sheight, uint dwidth, uint dheight,
                     bool sixteenBit, int sdepth, int ddepth,
@@ -1765,16 +1765,13 @@ void DImg::bitBlend(DColorComposer* const composer, const uchar* const src, ucha
         return;
     }
 
-    const uchar* sptr;
-
-    uchar* dptr;
+    uchar* sptr = 0;
+    uchar* dptr = 0;
 
     uint   slinelength = swidth * sdepth;
-
     uint   dlinelength = dwidth * ddepth;
 
     int scurY = sy;
-
     int dcurY = dy;
 
     for (int j = 0 ; j < h ; ++j, ++scurY, ++dcurY)
@@ -1897,7 +1894,7 @@ QImage DImg::copyQImage() const
     }
 
     uchar* sptr = bits();
-    uint*  dptr = (uint*)img.bits();
+    uint*  dptr = reinterpret_cast<uint*>(img.bits());
 
     for (uint i = 0; i < width()*height(); ++i)
     {
@@ -1993,7 +1990,7 @@ QPixmap DImg::convertToPixmap() const
         QImage img(width(), height(), hasAlpha() ? QImage::Format_ARGB32 : QImage::Format_RGB32);
 
         uchar* sptr = bits();
-        uint*  dptr = (uint*)img.bits();
+        uint*  dptr = reinterpret_cast<uint*>(img.bits());
 
         uint dim = width() * height();
 
@@ -2086,7 +2083,7 @@ QImage DImg::pureColorMask(ExposureSettingsContainer* const expoSettings) const
 
     if (sixteenBit())
     {
-        unsigned short* sptr = (unsigned short*)m_priv->data;
+        unsigned short* sptr = reinterpret_cast<unsigned short*>(m_priv->data);
 
         for (uint i = 0; i < dim; ++i)
         {
@@ -2277,8 +2274,8 @@ void DImg::rotate(ANGLE angle)
             {
                 ullong* newData = DImgLoader::new_failureTolerant<ullong>(w * h);
 
-                ullong* from = (ullong*) m_priv->data;
-                ullong* to;
+                ullong* from = reinterpret_cast<ullong*>(m_priv->data);
+                ullong* to   = 0;
 
                 for (int y = w - 1; y >= 0; --y)
                 {
@@ -2300,8 +2297,8 @@ void DImg::rotate(ANGLE angle)
             {
                 uint* newData = DImgLoader::new_failureTolerant<uint>(w * h);
 
-                uint* from = (uint*) m_priv->data;
-                uint* to;
+                uint* from = reinterpret_cast<uint*>(m_priv->data);
+                uint* to   = 0;
 
                 for (int y = w - 1; y >= 0; --y)
                 {
@@ -2340,7 +2337,7 @@ void DImg::rotate(ANGLE angle)
                 ullong* line1;
                 ullong* line2;
 
-                ullong* data = (ullong*) bits();
+                ullong* data = reinterpret_cast<ullong*>(bits());
                 ullong  tmp;
 
                 // can be done inplace
@@ -2369,10 +2366,10 @@ void DImg::rotate(ANGLE angle)
             }
             else
             {
-                uint* line1;
-                uint* line2;
+                uint* line1 = 0;
+                uint* line2 = 0;
 
-                uint* data = (uint*) bits();
+                uint* data = reinterpret_cast<uint*>(bits());
                 uint  tmp;
 
                 // can be done inplace
@@ -2412,8 +2409,8 @@ void DImg::rotate(ANGLE angle)
             {
                 ullong* newData = DImgLoader::new_failureTolerant<ullong>(w * h);
 
-                ullong* from = (ullong*) m_priv->data;
-                ullong* to;
+                ullong* from = reinterpret_cast<ullong*>(m_priv->data);
+                ullong* to   = 0;
 
                 for (uint y = 0; y < w; ++y)
                 {
@@ -2435,8 +2432,8 @@ void DImg::rotate(ANGLE angle)
             {
                 uint* newData = DImgLoader::new_failureTolerant<uint>(w * h);
 
-                uint* from = (uint*) m_priv->data;
-                uint* to;
+                uint* from = reinterpret_cast<uint*>(m_priv->data);
+                uint* to   = 0;
 
                 for (uint y = 0; y < w; ++y)
                 {
@@ -2494,10 +2491,10 @@ void DImg::flip(FLIP direction)
             if (sixteenBit())
             {
                 unsigned short  tmp[4];
-                unsigned short* beg;
-                unsigned short* end;
+                unsigned short* beg = 0;
+                unsigned short* end = 0;
 
-                unsigned short* data = (unsigned short*)bits();
+                unsigned short* data = reinterpret_cast<unsigned short*>(bits());
 
                 // can be done inplace
                 uint wHalf = (w / 2);
@@ -2557,10 +2554,10 @@ void DImg::flip(FLIP direction)
             if (sixteenBit())
             {
                 unsigned short  tmp[4];
-                unsigned short* line1;
-                unsigned short* line2;
+                unsigned short* line1 = 0;
+                unsigned short* line2 = 0;
 
-                unsigned short* data = (unsigned short*) bits();
+                unsigned short* data = reinterpret_cast<unsigned short*>(bits());
 
                 // can be done inplace
                 uint hHalf = (h / 2);
@@ -2742,7 +2739,7 @@ void DImg::convertDepth(int depth)
 
         uchar*  data = new uchar[width()*height() * 4];
         uchar*  dptr = data;
-        ushort* sptr = (ushort*)bits();
+        ushort* sptr = reinterpret_cast<ushort*>(bits());
 
         uint dim = width() * height() * 4;
 
@@ -2760,7 +2757,7 @@ void DImg::convertDepth(int depth)
         // upgrading from 8 bit to 16 bit
 
         uchar*  data = new uchar[width()*height() * 8];
-        ushort* dptr = (ushort*)data;
+        ushort* dptr = reinterpret_cast<ushort*>(data);
         uchar*  sptr = bits();
 
         // use default seed of the generator
@@ -2801,7 +2798,7 @@ void DImg::fill(const DColor& color)
 
     if (sixteenBit())
     {
-        unsigned short* imgData16 = (unsigned short*)m_priv->data;
+        unsigned short* imgData16 = reinterpret_cast<unsigned short*>(m_priv->data);
         unsigned short red        = (unsigned short)color.red();
         unsigned short green      = (unsigned short)color.green();
         unsigned short blue       = (unsigned short)color.blue();

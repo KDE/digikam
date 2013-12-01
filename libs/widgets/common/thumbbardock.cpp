@@ -66,7 +66,7 @@ DragHandle::~DragHandle()
 void DragHandle::paintEvent(QPaintEvent*)
 {
     QPainter p(this);
-    QStyle* style = d->parent->style();
+    QStyle* const style = d->parent->style();
 
     // The QStyleOptionToolBar contains every parameter needed to draw the
     // handle.
@@ -85,9 +85,9 @@ void DragHandle::paintEvent(QPaintEvent*)
     else
     {
         opt.state |= QStyle::State_Horizontal;
-        opt.rect  = QRect(opt.rect.x(), opt.rect.y(),
-                          style->pixelMetric(QStyle::PM_ToolBarHandleExtent),
-                          d->parent->height());
+        opt.rect   = QRect(opt.rect.x(), opt.rect.y(),
+                           style->pixelMetric(QStyle::PM_ToolBarHandleExtent),
+                           d->parent->height());
     }
 
     // Draw the toolbar handle.
@@ -115,10 +115,10 @@ void DragHandle::dockLocationChanged(Qt::DockWidgetArea area)
 QSize DragHandle::sizeHint() const
 {
     // Size is the sum of the margin, frame width and the handle itself.
-    QStyle* style   = d->parent->style();
-    int handleWidth = style->pixelMetric(QStyle::PM_ToolBarHandleExtent);
-    int margin      = style->pixelMetric(QStyle::PM_ToolBarItemMargin) +
-                      style->pixelMetric(QStyle::PM_ToolBarFrameWidth);
+    QStyle* const style = d->parent->style();
+    int handleWidth     = style->pixelMetric(QStyle::PM_ToolBarHandleExtent);
+    int margin          = style->pixelMetric(QStyle::PM_ToolBarItemMargin) +
+                          style->pixelMetric(QStyle::PM_ToolBarFrameWidth);
 
     if (d->currentArea == Qt::LeftDockWidgetArea || d->currentArea == Qt::RightDockWidgetArea)
     {

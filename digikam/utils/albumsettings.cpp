@@ -660,7 +660,7 @@ void AlbumSettings::readSettings()
     d->sidebarApplyDirectly      = group.readEntry(d->configApplySidebarChangesDirectlyEntry,                 false);
     d->stringComparisonType      = (StringComparisonType) group.readEntry(d->configStringComparisonTypeEntry, (int) Natural);
     setApplicationStyle(group.readEntry(d->configApplicationStyleEntry, kapp->style()->objectName()));
-    
+
     // ---------------------------------------------------------------------
 
     d->databaseParams.readFromConfig();
@@ -1840,7 +1840,7 @@ void AlbumSettings::triggerResyncWithNepomuk() const
 
     if (interface.isValid())
     {
-        interface.call(QDBus::NoBlock, "triggerResync");
+        interface.call(QDBus::NoBlock, "triggerResync", true, true);
     }
 
 #endif // HAVE_NEPOMUK
