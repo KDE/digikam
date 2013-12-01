@@ -67,6 +67,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 053 ==> 236850 - Export iptc to file.
 054 ==> 103201 - Wish: easy transport of albums, including tags, comments, etc.
 055 ==> 228376 - Tags filter should tick checkbox on 'enter'.
-056 ==> 
+056 ==> 289184 - "Toggle auto" in Tag panel does not remember settings between restarts of digiKam.
+057 ==> 
 
 
