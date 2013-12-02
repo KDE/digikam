@@ -72,5 +72,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 058 ==> 261566 - Cannot right-click below tree in tag sidebars.
 059 ==> 278908 - Create new tags in category not possible.
 060 ==> 117810 - Dates view sidebar does not take into account tag filters.
-061 ==> 
+061 ==> 307848 - digiKam import mtp, failure.
+062 ==> 
 
