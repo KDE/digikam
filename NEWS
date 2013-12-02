@@ -71,5 +71,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 057 ==> 218824 - Allow state of the tag tree to be saved.
 058 ==> 261566 - Cannot right-click below tree in tag sidebars.
 059 ==> 278908 - Create new tags in category not possible.
-060 ==> 
+060 ==> 117810 - Dates view sidebar does not take into account tag filters.
+061 ==> 
 
