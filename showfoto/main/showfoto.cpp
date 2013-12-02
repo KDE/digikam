@@ -541,7 +541,7 @@ void ShowFoto::applySettings()
     settings.showPhotoMode  = group.readEntry("ToolTips Show Photo Mode",  true);
     settings.showPhotoFlash = group.readEntry("ToolTips Show Photo Flash", false);
     settings.showPhotoWB    = group.readEntry("ToolTips Show Photo WB",    false);
-    d->thumbBar->setToolTipSettings(settings);
+    //d->thumbBar->setToolTipSettings(settings);
 
     d->rightSideBar->slotLoadMetadataFilters();
 
