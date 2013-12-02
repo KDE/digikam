@@ -123,7 +123,7 @@ bool XmpWidget::decodeMetadata()
     }
 
     // Update all metadata contents.
-    setMetadataMap(data.getXmpTagsDataList());
+    setMetadataMap(data.getXmpTagsDataList(QStringList()));
     return true;
 }
 
