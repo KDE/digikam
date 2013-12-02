@@ -74,5 +74,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 060 ==> 117810 - Dates view sidebar does not take into account tag filters.
 061 ==> 307848 - digiKam import mtp, failure.
 062 ==> 306454 - Rotated images gets wrong permission.
-063 ==> 
+063 ==> 270159 - Tag replaced instead of added.
+064 ==> 
 
