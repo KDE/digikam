@@ -67,6 +67,10 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 053 ==> 236850 - Export iptc to file.
 054 ==> 103201 - Wish: easy transport of albums, including tags, comments, etc.
 055 ==> 228376 - Tags filter should tick checkbox on 'enter'.
-056 ==> 
-
+056 ==> 289184 - "Toggle auto" in Tag panel does not remember settings between restarts of digiKam.
+057 ==> 218824 - Allow state of the tag tree to be saved.
+058 ==> 261566 - Cannot right-click below tree in tag sidebars.
+059 ==> 278908 - Create new tags in category not possible.
+060 ==> 117810 - Dates view sidebar does not take into account tag filters.
+061 ==> 
 
