@@ -112,7 +112,7 @@ bool ExifWidget::decodeMetadata()
     }
 
     // Update all metadata contents.
-    setMetadataMap(data.getExifTagsDataList());
+    setMetadataMap(data.getExifTagsDataList(QStringList()));
     return true;
 }
 
