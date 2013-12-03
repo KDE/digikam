@@ -245,11 +245,11 @@ void AlbumCustomizer::slotCustomizerChanged()
 
         if (customDateFormatIsValid())
         {
-            d->customExample->setText(i18n("Ex.: %1", date.toString(customDateFormat())));
+            d->customExample->setText(i18nc("Example of custom date format for album naming", "Ex.: %1", date.toString(customDateFormat())));
         }
         else
         {
-            d->customExample->setText(i18n("Format is not valid..."));
+            d->customExample->setText(i18nc("Custom date format", "Format is not valid..."));
         }
     }
     else
