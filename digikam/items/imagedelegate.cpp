@@ -54,7 +54,6 @@
 #include "imagemodel.h"
 #include "imagefiltermodel.h"
 #include "imagethumbnailmodel.h"
-#include "thumbbar.h"
 #include "thumbnailloadthread.h"
 
 namespace Digikam

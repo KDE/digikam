@@ -2,7 +2,6 @@
 #define SHOWFOTO_P_H
 
 #include "showfoto.h"
-#include "thumbbar.h"
 #include "QDir"
 #include "thumbbar/showfotoiteminfo.h"
 #include "thumbbar/showfotothumbnailbar.h"
