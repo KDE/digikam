@@ -57,6 +57,14 @@ public:
      */
     explicit MetadataSynchronizer(const ImageInfoList& list, SyncDirection = WriteFromDatabaseToFile, ProgressItem* const parent = 0);
 
+    /** Constructor which sync all pictures metadata from an URL list
+     */
+    explicit MetadataSynchronizer(const QStringList& urlList, SyncDirection = WriteFromDatabaseToFile, ProgressItem* const parent = 0);
+
+    /** Constructor which sync all pictures metadata from an Item ID list
+     */
+    explicit MetadataSynchronizer(const QList<qlonglong>& idList, SyncDirection = WriteFromDatabaseToFile, ProgressItem* const parent = 0);
+
     void setTagsOnly(bool value);
 
     ~MetadataSynchronizer();

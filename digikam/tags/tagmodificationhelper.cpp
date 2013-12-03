@@ -47,6 +47,7 @@
 #include "statusprogressbar.h"
 #include "tagsactionmngr.h"
 #include "tageditdlg.h"
+#include "metadatasynchronizer.h"
 
 namespace Digikam
 {
@@ -168,6 +169,14 @@ void TagModificationHelper::slotTagEdit(TAlbum* t)
     }
 
     AlbumPointer<TAlbum> tag(t);
+    // First, collect the items with this tag
+    // set up MetadataSynchronizer to write tags back to files,
+    // which is started after tag are edited
+    QList<qlonglong> itemIds =
+	DatabaseAccess().db()->getItemIDsInTag(tag->id());
+    MetadataSynchronizer* const tool =
+	new MetadataSynchronizer(itemIds,
+				 MetadataSynchronizer::WriteFromDatabaseToFile);
 
     QString      title, icon;
     QKeySequence ks;
@@ -204,6 +213,7 @@ void TagModificationHelper::slotTagEdit(TAlbum* t)
         TagsActionMngr::defaultManager()->updateTagShortcut(tag->id(), ks);
     }
 
+    tool->start();
     emit tagEdited(tag);
 }
 
@@ -273,6 +283,15 @@ void TagModificationHelper::slotTagDelete(TAlbum* t)
                                                     KGuiItem(i18n("Delete"),
                                                              "edit-delete"));
 
+    // First, collect the items with this tag
+    // set up MetadataSynchronizer to write tags back to files,
+    // which is started after tag is deleted
+    QList<qlonglong> itemIds =
+        DatabaseAccess().db()->getItemIDsInTag(tag->id());
+    MetadataSynchronizer* const tool =
+        new MetadataSynchronizer(itemIds,
+				 MetadataSynchronizer::WriteFromDatabaseToFile);
+
     if (result == KMessageBox::Continue && tag)
     {
         emit aboutToDeleteTag(tag);
@@ -283,6 +302,7 @@ void TagModificationHelper::slotTagDelete(TAlbum* t)
             KMessageBox::error(0, errMsg);
         }
     }
+    tool->start();
 }
 
 void TagModificationHelper::slotTagDelete()

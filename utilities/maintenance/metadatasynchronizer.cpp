@@ -90,6 +90,33 @@ MetadataSynchronizer::MetadataSynchronizer(const ImageInfoList& list, SyncDirect
     init(direction);
 }
 
+MetadataSynchronizer::MetadataSynchronizer(const QStringList& urlList, SyncDirection direction, ProgressItem* const parent)
+    : MaintenanceTool("MetadataSynchronizer", parent),
+      d(new Private)
+{
+    for (QStringList::const_iterator it = urlList.constBegin(); it != urlList.constEnd(); ++it)
+    {
+        ImageInfo info(*it);
+        d->imageInfoList << info;
+    }
+
+    init(direction);
+}
+
+MetadataSynchronizer::MetadataSynchronizer(const QList<qlonglong>& idList, SyncDirection direction, ProgressItem* const parent)
+    : MaintenanceTool("MetadataSynchronizer", parent),
+      d(new Private)
+{
+    for (QList<qlonglong>::const_iterator it = idList.constBegin(); it != idList.constEnd(); ++it)
+    {
+        ImageInfo info(*it);
+        d->imageInfoList << info;
+    }
+
+    init(direction);
+}
+
+
 // Common methods ----------------------------------------------------------------------------
 
 void MetadataSynchronizer::setTagsOnly(bool value)
