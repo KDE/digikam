@@ -77,5 +77,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 063 ==> 270159 - Tag replaced instead of added.
 064 ==> 273180 - Enable Fingerprints Rebuilding For Specific Albums....The Same As Reloading Thumbnails.
 065 ==> 328294 - bootstrap.local invokes wrong shell [patch].
-066 ==> 
-
+066 ==> 315881 - Cmake misplaces local KDE graphics components.
+067 ==> 
