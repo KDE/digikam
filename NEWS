@@ -81,4 +81,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 067 ==> 224038 - Thumbnails not shown on launch of digiKam.
 068 ==> 294835 - Albums are listed with (0) photos, but Database Statistics shows correct numbers of photos.
 069 ==> 186672 - Zoom slider should change amount of pictures, not picture size directly.
-070 ==> 
+070 ==> 305104 - digiKam does not show some jpg images in files.
+071 ==> 
