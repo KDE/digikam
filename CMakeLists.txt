@@ -1234,7 +1234,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imgqsort/imgqsort.cpp
        )
 
-
     SET(libfirstrun_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/assistantdlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/assistantdlgpage.cpp
@@ -1421,7 +1420,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch/sketchwidget.cpp
        )
 
-
     SET(libgpssearch_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpssearchview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpsmarkertiler.cpp
@@ -1525,7 +1523,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tageditdlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagmodificationhelper.cpp
 
-        #--------- Tag Manager --------------------
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager/tagsmanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager/tagpropwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager/taglist.cpp
