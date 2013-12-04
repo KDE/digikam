@@ -98,7 +98,7 @@ public:
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::DisplayRole);
 
     bool pixmapForItem(QString url, QPixmap& pix) const;
-    bool getThumbnail(const ShowfotoItemInfo itemInfo, QImage& thumbnail) const;
+    bool getThumbnail(const ShowfotoItemInfo& itemInfo, QImage& thumbnail) const;
 
 public Q_SLOTS:
 

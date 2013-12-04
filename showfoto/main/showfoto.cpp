@@ -224,7 +224,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
 
     // -- Load current items ---------------------------
 
-    slotOpenFilesInFolder();
+    //slotOpenFilesInFolder();
 }
 
 ShowFoto::~ShowFoto()

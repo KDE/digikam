@@ -240,7 +240,7 @@ void ShowfotoThumbnailModel::slotThumbnailLoaded(const LoadingDescription& loadi
     }
 }
 
-bool ShowfotoThumbnailModel::getThumbnail(const ShowfotoItemInfo itemInfo, QImage& thumbnail) const
+bool ShowfotoThumbnailModel::getThumbnail(const ShowfotoItemInfo& itemInfo, QImage& thumbnail) const
 {
     QString path = itemInfo.folder + QString("/") + itemInfo.name;
 
