@@ -79,4 +79,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 065 ==> 328294 - bootstrap.local invokes wrong shell [patch].
 066 ==> 315881 - Cmake misplaces local KDE graphics components.
 067 ==> 224038 - Thumbnails not shown on launch of digiKam.
-068 ==> 
+068 ==> 294835 - Albums are listed with (0) photos, but Database Statistics shows correct numbers of photos.
+069 ==> 
