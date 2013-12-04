@@ -769,11 +769,10 @@ void AbstractAlbumTreeView::doLoadState()
     //kDebug() << "initial restore run with " << model()->rowCount() << " rows";
     restoreStateForHierarchy(QModelIndex(), d->statesByAlbumId);
 
-    qDebug() << "LOADING";
     // also restore the sorting order
-    configGroup.sync();
     sortByColumn(configGroup.readEntry(entryName(d->configSortColumnEntry), 0),
-        (Qt::SortOrder) configGroup.readEntry(entryName(d->configSortOrderEntry), (int) Qt::AscendingOrder));
+                 (Qt::SortOrder) configGroup.readEntry(entryName(d->configSortOrderEntry), (int) Qt::AscendingOrder));
+
     // use a timer to scroll to the first possible selected album
     QTimer* const selectCurrentTimer = new QTimer(this);
     selectCurrentTimer->setInterval(200);
@@ -959,9 +958,8 @@ void AbstractAlbumTreeView::doSaveState()
     configGroup.writeEntry(entryName(d->configSelectionEntry), selection);
     configGroup.writeEntry(entryName(d->configExpansionEntry), expansion);
     configGroup.writeEntry(entryName(d->configCurrentIndexEntry), currentIndex);
-    configGroup.writeEntry(entryName(d->configSortColumnEntry), 0);
-    // qDebug() << "Get ALBUM SORT SETTING: " << AlbumSettings::instance()->getAlbumSortSetting();
-    configGroup.writeEntry(entryName(d->configSortOrderEntry), AlbumSettings::instance()->getAlbumSortSetting());
+    configGroup.writeEntry(entryName(d->configSortColumnEntry), albumFilterModel()->sortColumn());
+    configGroup.writeEntry(entryName(d->configSortOrderEntry), (int) albumFilterModel()->sortOrder());
 }
 
 void AbstractAlbumTreeView::saveStateRecursive(const QModelIndex& index, QList<int>& selection, QList<int>& expansion)

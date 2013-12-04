@@ -1083,27 +1083,6 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->AlbumSortOrderAction = new KSelectAction(i18n("&Sort Albums By Name"), this);
-    d->AlbumSortOrderAction->setWhatsThis(i18n("Defines whether Albums names are sorted in ascending or descending manner."));
-    QSignalMapper* AlbumNameSortOrderMapper = new QSignalMapper(this);
-    connect(AlbumNameSortOrderMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortAlbumName(int)));
-    actionCollection()->addAction("Album_Sort_By_Name", d->AlbumSortOrderAction);
-
-
-    QAction* sortNameAscendingAction = d->AlbumSortOrderAction->addAction(KIcon("view-sort-ascending"), i18n("Ascending"));
-    QAction* sortNameDescendingAction = d->AlbumSortOrderAction->addAction(KIcon("view-sort-descending"), i18n("Descending"));
-
-    connect(sortNameAscendingAction, SIGNAL(triggered()), AlbumNameSortOrderMapper, SLOT(map()));
-    connect(sortNameDescendingAction, SIGNAL(triggered()), AlbumNameSortOrderMapper, SLOT(map()));
-
-    //connect(d->AlbumSortOrderAction, SIGNAL(triggered()), AlbumSettings::instance(), SIGNAL(setupChanged()));
-
-    AlbumNameSortOrderMapper->setMapping(sortNameAscendingAction, (int)Qt::AscendingOrder);
-    AlbumNameSortOrderMapper->setMapping(sortNameDescendingAction, (int)Qt::DescendingOrder);
-
-    // -----------------------------------------------------------
-
-
     d->imageSortOrderAction = new KSelectAction(i18n("Image Sorting &Order"), this);
     d->imageSortOrderAction->setWhatsThis(i18n("Defines whether images are sorted in ascending or descending manner."));
     QSignalMapper* imageSortOrderMapper = new QSignalMapper(this);
@@ -1356,7 +1335,6 @@ void DigikamApp::initGui()
     d->showBarAction->setChecked(AlbumSettings::instance()->getShowThumbbar());
     d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
 
-    d->AlbumSortOrderAction->setCurrentItem(AlbumSettings::instance()->getAlbumSortSetting());
     slotSwitchedToIconView();
 }
 
