@@ -86,5 +86,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 072 ==> 320249 - Table view crashes when adressing tags.
 073 ==> 309578 - crash importing images from an android usb storage.
 074 ==> 322360 - Camera found as PTP Device, but if importing Images abort with "connection error".
-075 ==> 
+075 ==> 328362 - Crash on start (macports install on OSX 10.9) - Exception Type: EXC_GUARD.
+076 ==> 
 
