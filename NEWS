@@ -84,5 +84,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 070 ==> 305104 - digiKam does not show some jpg images in files.
 071 ==> 317669 - Two alert windows on overwrite alert.
 072 ==> 320249 - Table view crashes when adressing tags.
-073 ==> 
+073 ==> 309578 - crash importing images from an android usb storage.
+074 ==> 
 
