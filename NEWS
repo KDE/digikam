@@ -90,5 +90,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 076 ==> 301371 - Exiv2 mix library strangeness.
 077 ==> 328500 - Less unused space in Configure dialog.
 078 ==> 328124 - digiKam extremely unresponsive and slow (probably related to tags).
-079 ==> 
-
+079 ==> 273519 - When adding rating portrait images are rotated to landscape.
+080 ==> 
