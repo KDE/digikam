@@ -89,4 +89,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 075 ==> 328362 - Crash on start (macports install on OSX 10.9) - Exception Type: EXC_GUARD.
 076 ==> 301371 - Exiv2 mix library strangeness.
 077 ==> 328500 - Less unused space in Configure dialog.
-078 ==> 
+078 ==> 328124 - digiKam extremely unresponsive and slow (probably related to tags).
+079 ==> 
+
