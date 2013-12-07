@@ -446,14 +446,14 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     QLabel* const displayLabel       = new QLabel(i18nc("@info:label", "Select Metadata Fields to Be Displayed"));
 
     QLabel* const displayIcon        = new QLabel;
-    displayIcon->setPixmap(SmallIcon("view-list-tree", KIconLoader::SizeMedium));//"folder-image"));
+    displayIcon->setPixmap(SmallIcon("view-list-tree", KIconLoader::SizeMedium));
 
     d->displaySubTab                 = new KTabWidget;
     d->tagsCfgPanel                  = new MetadataPanel(d->displaySubTab);
 
     displayLayout->addWidget(displayIcon,      0, 0);
     displayLayout->addWidget(displayLabel,     0, 1);
-    displayLayout->addWidget(d->displaySubTab, 1, 1, 1, 2);
+    displayLayout->addWidget(d->displaySubTab, 1, 0, 1, 3);
     displayLayout->setColumnStretch(2, 1);
 
     displayPanel->setLayout(displayLayout);
