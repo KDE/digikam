@@ -91,4 +91,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 077 ==> 328500 - Less unused space in Configure dialog.
 078 ==> 328124 - digiKam extremely unresponsive and slow (probably related to tags).
 079 ==> 273519 - When adding rating portrait images are rotated to landscape.
-080 ==> 
+080 ==> 315156 - CR2 files from Canon PowerShot G1 X the colours are messed up.
+081 ==> 
