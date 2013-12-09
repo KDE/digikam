@@ -41,6 +41,8 @@
 #include "ddragobjects.h"
 #include "imageinfo.h"
 #include "albumtreeview.h"
+#include "metadatasynchronizer.h"
+#include "albumdb.h"
 
 namespace Digikam
 {
@@ -80,6 +82,18 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
         popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
         popMenu.setMouseTracking(true);
         QAction* const choice     = popMenu.exec(QCursor::pos());
+
+        // First, collect the items with these tag
+        // set up MetadataSynchronizer to write tags back to files,
+        // which is started after tag are edited
+        QList<qlonglong> itemIds;
+        for(int index=0;index<tagIDs.count();++index)
+        {
+            itemIds += DatabaseAccess().db()->getItemIDsInTag(tagIDs.at(index));
+        }
+        MetadataSynchronizer* const tool =
+            new MetadataSynchronizer(itemIds,
+                                     MetadataSynchronizer::WriteFromDatabaseToFile);
 
         for(int index=0;index<tagIDs.count();++index)
         {
@@ -123,6 +137,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
                 }
             }
         }
+        tool->start();
         return true;
     }
     else if (DItemDrag::canDecode(e->mimeData()))
@@ -141,6 +156,14 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
         {
             return false;
         }
+
+        // First, collect the items with these tag
+        // set up MetadataSynchronizer to write tags back to files,
+        // which is started after tag are edited
+        MetadataSynchronizer* const tool =
+            new MetadataSynchronizer(imageIDs,
+                                     MetadataSynchronizer::WriteFromDatabaseToFile);
+
 
         if (imageIDs.size() == 1 && ImageInfo(imageIDs.first()).tagIds().contains(destAlbum->id()))
         {
@@ -226,6 +249,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
             emit assignTags(imageIDs, tagIdList);
         }
 
+        tool->start();
         return true;
     }
 
