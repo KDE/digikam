@@ -257,9 +257,9 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     etw->setLayout(new QVBoxLayout(etw));
     etw->layout()->setContentsMargins(0,0,0,0);
     
-    d->useETools        = new QCheckBox(i18n("Use External Tools"), etw);
+    d->useETools        = new QCheckBox(i18n("Use Post-processing"), etw);
     d->externalTool     = new QComboBox(etw);
-    QGroupBox* etcfg    = new QGroupBox(i18n("External Tools configuration"), etw);
+    QGroupBox* etcfg    = new QGroupBox(i18n("Post-processing configuration"), etw);
     etcfg->setLayout(new QVBoxLayout(etcfg));
     etcfg->layout()->addWidget(new ETWidget(etcfg));
     
@@ -267,7 +267,7 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     etw->layout()->addWidget(d->externalTool);
     etw->layout()->addWidget(etcfg);
     
-    insertTab(Private::EXTERNALTOOLS, etw, SmallIcon("dialog-information"), i18n("Extrenal Tools"));
+    insertTab(Private::EXTERNALTOOLS, etw, SmallIcon("dialog-information"), i18n("Post-processing"));
     
     
     // --------------------------------------------------------

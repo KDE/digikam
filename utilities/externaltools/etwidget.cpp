@@ -73,11 +73,13 @@ ETWidget::ETWidget(QWidget* parent, const QString& tool)
     d->ui.reset(new Ui::etwidget());
     d->ui->setupUi(this);
 
-    d->ui->add->setIcon(KIcon("list-add"));
-    d->ui->remove->setIcon(KIcon("list-remove"));
+    d->ui->add->setIcon(KIcon("document-save"));
+    d->ui->remove->setIcon(KIcon("user-trash"));
     d->ui->scriptedit->setIcon(KIcon("accessories-text-editor"));    
 
     connect(d->ui->name, SIGNAL(currentIndexChanged(int)), SLOT(scriptSelected(int)));
+    connect(d->ui->name, SIGNAL(editTextChanged(const QString&)), SLOT(scriptRenamed(const QString&)));
+        
     connect(d->ui->add, SIGNAL(clicked(bool)), SLOT(save()));
     connect(d->ui->remove, SIGNAL(clicked(bool)), SLOT(remove()));
 
@@ -167,6 +169,20 @@ void ETWidget::scriptSelected(int index)
     
     d->ui->context->setChecked(cfg->readEntry<bool>(ETConfig::showInContext, false));
     d->ui->shortcut->setKeySequence(cfg->readEntry<QString>(ETConfig::shortcut, QString()));  
+}
+
+void ETWidget::scriptRenamed(const QString& newname)
+{
+    if (d->ui->name->findText(d->ui->name->currentText()) != -1)
+    {
+        d->ui->add->setIcon(KIcon("document-save"));
+        d->ui->remove->setIcon(KIcon("user-trash"));  
+    }
+    else
+    {
+        d->ui->add->setIcon(KIcon("list-add"));
+        d->ui->remove->setIcon(KIcon("list-remove"));
+    }
 }
 
 void ETWidget::save()

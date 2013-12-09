@@ -123,6 +123,7 @@ private Q_SLOTS:
 
     void typeSelected(int index);
     void scriptSelected(int index);
+    void scriptRenamed(const QString&);
     void remove();
     void scriptEdit(bool);
 
