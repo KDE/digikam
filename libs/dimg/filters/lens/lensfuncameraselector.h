@@ -62,7 +62,7 @@ public:
 
     void resetToDefault();
 
-    /** Special mode used with BQM which work wich process multiple items at the same time.
+    /** Special mode used with BQM which processes multiple items at the same time.
      */
     void setPassiveMetadataUsage(bool b);
 

@@ -44,6 +44,7 @@
 #include <QTextDocument>
 #include <QToolButton>
 #include <QVBoxLayout>
+#include <QActionGroup>
 
 // KDE includes
 
@@ -54,6 +55,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kmenu.h>
 
 // Libkexiv2 includes
 
@@ -77,26 +79,33 @@ public:
 
     Private()
     {
-        toolButtons  = 0;
-        levelButtons = 0;
-        view         = 0;
-        mainLayout   = 0;
-        toolsGBox    = 0;
-        levelGBox    = 0;
-        searchBar    = 0;
+        view           = 0;
+        mainLayout     = 0;
+        filterBtn      = 0;
+        toolBtn        = 0;
+        searchBar      = 0;
+        optionsMenu    = 0;
+        noneAction     = 0;
+        photoAction    = 0;
+        customAction   = 0;
+        settingsAction = 0;
     }
 
-    QWidget*               levelGBox;
-    QWidget*               toolsGBox;
+    QAction*               noneAction;
+    QAction*               photoAction;
+    QAction*               customAction;
+    QAction*               settingsAction;
 
     QGridLayout*           mainLayout;
 
-    QButtonGroup*          toolButtons;
-    QButtonGroup*          levelButtons;
+    QToolButton*           filterBtn;
+    QToolButton*           toolBtn;
 
     QString                fileName;
 
     QStringList            tagsFilter;
+
+    KMenu*                 optionsMenu;
 
     MetadataListView*      view;
 
@@ -111,105 +120,77 @@ MetadataWidget::MetadataWidget(QWidget* const parent, const char* name)
 {
     setObjectName(name);
 
-    d->mainLayout           = new QGridLayout(this);
-    KIconLoader* iconLoader = KIconLoader::global();
+    d->mainLayout = new QGridLayout(this);
 
     // -----------------------------------------------------------------
 
-    d->levelGBox             = new QWidget(this);
-    d->levelButtons          = new QButtonGroup(d->levelGBox);
-    QHBoxLayout* const hlay1 = new QHBoxLayout(d->levelGBox);
-    d->levelButtons->setExclusive(true);
+    d->filterBtn  = new QToolButton(this);
+    d->filterBtn->setToolTip(i18n("Tags filter options"));
+    d->filterBtn->setIcon(KIconLoader::global()->loadIcon("view-filter", KIconLoader::Toolbar));
+    d->filterBtn->setPopupMode(QToolButton::InstantPopup);
+    d->filterBtn->setWhatsThis(i18n("Apply tags filter over metadata."));
 
-    QToolButton* const fullLevel = new QToolButton(d->levelGBox);
-    fullLevel->setIcon(iconLoader->loadIcon("view-list-text", (KIconLoader::Group)KIconLoader::Toolbar));
-    fullLevel->setCheckable(true);
-    fullLevel->setWhatsThis(i18n("Switch the tags view to a full list"));
-    fullLevel->setToolTip(i18n("Full list"));
-    d->levelButtons->addButton(fullLevel, FULL);
+    d->optionsMenu                  = new KMenu(d->filterBtn);
+    QActionGroup* const filterGroup = new QActionGroup(this);
 
-    QToolButton* const customLevel = new QToolButton(d->levelGBox);
-    customLevel->setIcon(iconLoader->loadIcon("format-list-unordered", (KIconLoader::Group)KIconLoader::Toolbar));
-    customLevel->setCheckable(true);
-#if KEXIV2_VERSION >= 0x010000
-    customLevel->setWhatsThis(i18n("Switch the tags view to a custom human-readable list. "
-                                   "To customize the tag filter list, go to the Metadata configuration panel."));
-    customLevel->setToolTip(i18n("Custom list"));
-#else
-    customLevel->setWhatsThis(i18n("Switch the tags view to a human-readable list"));
-    customLevel->setToolTip(i18n("Human-readable list"));
-#endif
-    d->levelButtons->addButton(customLevel, CUSTOM);
+    d->noneAction     = d->optionsMenu->addAction(i18n("No filter"));
+    d->noneAction->setCheckable(true);
+    filterGroup->addAction(d->noneAction);
+    d->photoAction    = d->optionsMenu->addAction(i18n("Photograph"));
+    d->photoAction->setCheckable(true);
+    filterGroup->addAction(d->photoAction);
+    d->customAction   = d->optionsMenu->addAction(i18n("Custom"));
+    d->customAction->setCheckable(true);
+    filterGroup->addAction(d->customAction);
+    d->optionsMenu->addSeparator();
+    d->settingsAction = d->optionsMenu->addAction(i18n("Settings"));
+    d->settingsAction->setCheckable(false);
 
-    QToolButton* const configBtn = new QToolButton(d->levelGBox);
-    configBtn->setIcon(iconLoader->loadIcon("configure", (KIconLoader::Group)KIconLoader::Toolbar));
-
-    hlay1->addWidget(fullLevel);
-    hlay1->addWidget(customLevel);
-    hlay1->addWidget(configBtn);
-    hlay1->setSpacing(KDialog::spacingHint());
-    hlay1->setMargin(0);
+    filterGroup->setExclusive(true);
+    d->filterBtn->setMenu(d->optionsMenu);
 
     // -----------------------------------------------------------------
 
-    d->toolsGBox             = new QWidget(this);
-    d->toolButtons           = new QButtonGroup(d->toolsGBox);
-    QHBoxLayout* const hlay2 = new QHBoxLayout(d->toolsGBox);
+    d->toolBtn = new QToolButton(this);
+    d->toolBtn->setToolTip(i18n("Tools"));
+    d->toolBtn->setIcon(KIconLoader::global()->loadIcon("system-run", KIconLoader::Toolbar));
+    d->toolBtn->setPopupMode(QToolButton::InstantPopup);
+    d->toolBtn->setWhatsThis(i18n("Run tool over metadata tags."));
 
-    QToolButton* const saveMetadata = new QToolButton(d->toolsGBox);
-    saveMetadata->setIcon(iconLoader->loadIcon("document-save", (KIconLoader::Group)KIconLoader::Toolbar));
-    saveMetadata->setWhatsThis(i18n("Save metadata to a binary file"));
-    saveMetadata->setToolTip(i18n("Save metadata"));
-    d->toolButtons->addButton(saveMetadata);
-
-    QToolButton* const printMetadata = new QToolButton(d->toolsGBox);
-    printMetadata->setIcon(iconLoader->loadIcon("document-print", (KIconLoader::Group)KIconLoader::Toolbar));
-    printMetadata->setWhatsThis(i18n("Print metadata to printer"));
-    printMetadata->setToolTip(i18n("Print metadata"));
-    d->toolButtons->addButton(printMetadata);
-
-    QToolButton* const copy2ClipBoard = new QToolButton(d->toolsGBox);
-    copy2ClipBoard->setIcon( iconLoader->loadIcon("edit-copy", (KIconLoader::Group)KIconLoader::Toolbar));
-    copy2ClipBoard->setWhatsThis(i18n("Copy metadata to clipboard"));
-    copy2ClipBoard->setToolTip(i18n("Copy metadata to clipboard"));
-    d->toolButtons->addButton(copy2ClipBoard);
-
-    hlay2->addWidget(saveMetadata);
-    hlay2->addWidget(printMetadata);
-    hlay2->addWidget(copy2ClipBoard);
-    hlay2->setSpacing(KDialog::spacingHint());
-    hlay1->setMargin(0);
+    KMenu* const toolMenu         = new KMenu(d->toolBtn);
+    QAction* const saveMetadata   = toolMenu->addAction(i18n("Save in file"));
+    QAction* const printMetadata  = toolMenu->addAction(i18n("Print"));
+    QAction* const copy2ClipBoard = toolMenu->addAction(i18n("Copy to Clipboard"));
+    d->toolBtn->setMenu(toolMenu);
 
     d->view         = new MetadataListView(this);
+
     QString barName = QString(name) + "SearchBar";
     d->searchBar    = new SearchTextBar(this, barName.toAscii());
 
     // -----------------------------------------------------------------
 
-    d->mainLayout->addWidget(d->levelGBox, 0, 0, 1, 2);
-    d->mainLayout->addWidget(d->toolsGBox, 0, 4, 1, 1);
+    d->mainLayout->addWidget(d->filterBtn, 0, 0, 1, 1);
+    d->mainLayout->addWidget(d->searchBar, 0, 1, 1, 3);
+    d->mainLayout->addWidget(d->toolBtn, 0, 4, 1, 1);
     d->mainLayout->addWidget(d->view,      1, 0, 1, 5);
-    d->mainLayout->addWidget(d->searchBar, 2, 0, 1, 5);
-    d->mainLayout->setColumnStretch(3, 10);
+    d->mainLayout->setColumnStretch(2, 10);
     d->mainLayout->setRowStretch(1, 10);
     d->mainLayout->setSpacing(0);
     d->mainLayout->setMargin(KDialog::spacingHint());
 
     // -----------------------------------------------------------------
 
-    connect(d->levelButtons, SIGNAL(buttonReleased(int)),
-            this, SLOT(slotModeChanged(int)));
+    connect(d->optionsMenu, SIGNAL(triggered(QAction*)),
+            this, SLOT(slotFilterChanged(QAction*)));
 
-    connect(configBtn, SIGNAL(clicked()),
-            this, SIGNAL(signalSetupMetadataFilters()));
-
-    connect(copy2ClipBoard, SIGNAL(clicked()),
+    connect(copy2ClipBoard, SIGNAL(triggered(bool)),
             this, SLOT(slotCopy2Clipboard()));
 
-    connect(printMetadata, SIGNAL(clicked()),
+    connect(printMetadata, SIGNAL(triggered(bool)),
             this, SLOT(slotPrintMetadata()));
 
-    connect(saveMetadata, SIGNAL(clicked()),
+    connect(saveMetadata, SIGNAL(triggered(bool)),
             this, SLOT(slotSaveMetadataToFile()));
 
     connect(d->searchBar, SIGNAL(signalSearchTextSettings(SearchTextSettings)),
@@ -222,6 +203,20 @@ MetadataWidget::MetadataWidget(QWidget* const parent, const char* name)
 MetadataWidget::~MetadataWidget()
 {
     delete d;
+}
+
+void MetadataWidget::slotFilterChanged(QAction* action)
+{
+    if (action == d->settingsAction)
+    {
+        emit signalSetupMetadataFilters();
+    }
+    else if (action == d->noneAction  ||
+             action == d->photoAction ||
+             action == d->customAction)
+    {
+        buildView();
+    }
 }
 
 QStringList MetadataWidget::getTagsFilter() const
@@ -242,7 +237,7 @@ MetadataListView* MetadataWidget::view() const
 
 void MetadataWidget::enabledToolButtons(bool b)
 {
-    d->toolsGBox->setEnabled(b);
+    d->toolBtn->setEnabled(b);
 }
 
 bool MetadataWidget::setMetadata(const DMetadata& data)
@@ -324,11 +319,6 @@ void MetadataWidget::setIfdList(const DMetadata::MetaDataMap& ifds, const QStrin
                                 const QStringList& tagsFilter)
 {
     d->view->setIfdList(ifds, keysFilter, tagsFilter);
-}
-
-void MetadataWidget::slotModeChanged(int)
-{
-    buildView();
 }
 
 void MetadataWidget::slotCopy2Clipboard()
@@ -465,19 +455,29 @@ KUrl MetadataWidget::saveMetadataToFile(const QString& caption, const QString& f
 
 void MetadataWidget::setMode(int mode)
 {
-    if (d->levelButtons->checkedId() == mode)
+    if (getMode() == mode)
     {
         return;
     }
 
-    d->levelButtons->button(mode)->setChecked(true);
+    if (mode == NONE)
+        d->noneAction->setChecked(true);
+    else if (mode == PHOTO)
+        d->photoAction->setChecked(true);
+    else
+        d->customAction->setChecked(true);
+
     buildView();
 }
 
-int MetadataWidget::getMode()
+int MetadataWidget::getMode() const
 {
-    int level = d->levelButtons->checkedId();
-    return level;
+    if (d->noneAction->isChecked())
+        return NONE;
+    else if (d->photoAction->isChecked())
+        return PHOTO;
+
+    return CUSTOM;
 }
 
 QString MetadataWidget::getCurrentItemKey() const

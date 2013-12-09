@@ -65,15 +65,15 @@ public:
 
     enum TextFilterFields
     {
-        None         = 0x00,
-        ImageName    = 0x01,
-        ImageTitle   = 0x02,
-        ImageComment = 0x04,
-        TagName      = 0x08,
-        AlbumName    = 0x10,
+        None             = 0x00,
+        ImageName        = 0x01,
+        ImageTitle       = 0x02,
+        ImageComment     = 0x04,
+        TagName          = 0x08,
+        AlbumName        = 0x10,
         ImageAspectRatio = 0x12,
         ImagePixelSize   = 0x14,
-        All          = ImageName | ImageTitle | ImageComment | TagName | AlbumName | ImageAspectRatio | ImagePixelSize
+        All              = ImageName | ImageTitle | ImageComment | TagName | AlbumName | ImageAspectRatio | ImagePixelSize
     };
 
 public:
@@ -121,7 +121,7 @@ public:
     void setTagFilter(const QList<int>& includedTags,
                       const QList<int>& excludedTags,
                       MatchingCondition matchingCond,
-                      bool showUnTagged,
+                      bool              showUnTagged,
                       const QList<int>& clTagIds,
                       const QList<int>& plTagIds);
 
@@ -155,9 +155,9 @@ public:
 
     /// --- Mime filter ---
     void setMimeTypeFilter(int mimeTypeFilter);
-    
+
 public:
-    
+
     /// --- Geolocation filter
     enum GeolocationCondition
     {
@@ -171,31 +171,31 @@ public:
 public:
 
     /// Returns if the day is a filter criteria
-    bool isFilteringByDay() const;
+    bool isFilteringByDay()         const;
 
     /// Returns if the type mime is a filter criteria
-    bool isFilteringByTypeMime() const;
-    
+    bool isFilteringByTypeMime()    const;
+
     /// Returns whether geolocation is a filter criteria
     bool isFilteringByGeolocation() const;
 
     /// Returns if the rating is a filter criteria
-    bool isFilteringByRating() const;
+    bool isFilteringByRating()      const;
 
     /// Returns if the pick labels is a filter criteria
-    bool isFilteringByPickLabels() const;
+    bool isFilteringByPickLabels()  const;
 
     /// Returns if the color labels is a filter criteria
     bool isFilteringByColorLabels() const;
 
     /// Returns if the tag is a filter criteria
-    bool isFilteringByTags() const;
+    bool isFilteringByTags()        const;
 
     /// Returns if the text (including comment) is a filter criteria
-    bool isFilteringByText() const;
+    bool isFilteringByText()        const;
 
     /// Returns if images will be filtered by these criteria at all
-    bool isFiltering() const;
+    bool isFiltering()              const;
 
 public:
 
@@ -250,7 +250,7 @@ private:
 
     /// --- Mime filter ---
     MimeFilter::TypeMimeFilter       m_mimeTypeFilter;
-    
+
     /// --- Geolocation filter
     GeolocationCondition             m_geolocationCondition;
 
@@ -277,7 +277,7 @@ public:
      */
     bool matches(const ImageInfo& info) const;
 
-    bool isHiddenBySettings(const ImageInfo& info) const;
+    bool isHiddenBySettings(const ImageInfo& info)   const;
     bool isExemptedBySettings(const ImageInfo& info) const;
 
     /// --- Tags filter ---

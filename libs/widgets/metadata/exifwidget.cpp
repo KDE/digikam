@@ -112,19 +112,25 @@ bool ExifWidget::decodeMetadata()
     }
 
     // Update all metadata contents.
-    setMetadataMap(data.getExifTagsDataList(m_keysFilter));
+    setMetadataMap(data.getExifTagsDataList(QStringList()));
     return true;
 }
 
 void ExifWidget::buildView()
 {
-    if (getMode() == CUSTOM)
+    switch (getMode())
     {
-        setIfdList(getMetadataMap(), m_keysFilter, getTagsFilter());
-    }
-    else
-    {
-        setIfdList(getMetadataMap(), m_keysFilter, QStringList() << QString("FULL"));
+        case CUSTOM:
+            setIfdList(getMetadataMap(), m_keysFilter, getTagsFilter());
+            break;
+
+        case PHOTO:
+            setIfdList(getMetadataMap(), m_keysFilter, QStringList() << QString("FULL"));
+            break;
+
+        default: // NONE
+            setIfdList(getMetadataMap(), m_keysFilter, QStringList());
+            break;
     }
 
     MetadataWidget::buildView();

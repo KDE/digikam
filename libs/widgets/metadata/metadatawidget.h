@@ -49,10 +49,11 @@ class DIGIKAM_EXPORT MetadataWidget : public QWidget
 
 public:
 
-    enum Mode
+    enum TagFilters
     {
-        CUSTOM=0,
-        FULL
+        NONE = 0,
+        PHOTO,
+        CUSTOM
     };
 
 public:
@@ -60,7 +61,7 @@ public:
     explicit MetadataWidget(QWidget* const parent, const char* name=0);
     ~MetadataWidget();
 
-    int     getMode();
+    int     getMode() const;
     void    setMode(int mode);
 
     QStringList getTagsFilter() const;
@@ -83,7 +84,6 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void slotModeChanged(int);
     void slotCopy2Clipboard();
     void slotPrintMetadata();
 
@@ -114,6 +114,10 @@ protected:
     virtual bool decodeMetadata()=0;
     virtual QString getMetadataTitle()=0;
     virtual void setMetadataEmpty();
+
+private Q_SLOTS :
+
+    void slotFilterChanged(QAction*);
 
 private:
 

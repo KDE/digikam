@@ -24,9 +24,11 @@
  *
  * ============================================================ */
 
-#include <math.h>
-
 #include "imagefiltersettings.h"
+
+// C++ includes
+
+#include <cmath>
 
 // Qt includes
 
@@ -82,7 +84,7 @@ DatabaseFields::Set ImageFilterSettings::watchFlags() const
         set |= DatabaseFields::Category;
         set |= DatabaseFields::Format;
     }
-    
+
     if (isFilteringByGeolocation())
     {
         set |= DatabaseFields::ImagePositionsAll;
@@ -178,7 +180,7 @@ bool ImageFilterSettings::isFilteringByRating() const
 
 bool ImageFilterSettings::isFilteringInternally() const
 {
-    return isFiltering() || !m_urlWhitelists.isEmpty() || !m_idWhitelists.isEmpty();
+    return (isFiltering() || !m_urlWhitelists.isEmpty() || !m_idWhitelists.isEmpty());
 }
 
 bool ImageFilterSettings::isFiltering() const
@@ -402,7 +404,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* const foundText) 
     if (!m_colorLabelTagFilter.isEmpty())
     {
         QList<int> tagIds = info.tagIds();
-        bool matchCL = false;
+        bool matchCL      = false;
 
         if (containsAnyOf(m_colorLabelTagFilter, tagIds))
         {
@@ -411,6 +413,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* const foundText) 
         else if (!matchCL)
         {
             int noColorLabelTagId = TagsCache::instance()->tagForColorLabel(NoColorLabel);
+
             if (m_colorLabelTagFilter.contains(noColorLabelTagId))
             {
                 // Searching for "has no ColorLabel" requires special handling:
@@ -471,7 +474,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* const foundText) 
 
     switch (m_mimeTypeFilter)
     {
-            // info.format is a standardized string: Only one possibility per mime type
+        // info.format is a standardized string: Only one possibility per mime type
         case MimeFilter::ImageFiles:
         {
             if (info.category() != DatabaseItem::Image)
@@ -573,8 +576,9 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* const foundText) 
             break;
         }
     }
-    
+
     //-- Filter by geolocation ----------------------------------------------------
+
     if (m_geolocationCondition!=GeolocationNoFilter)
     {
         if (m_geolocationCondition==GeolocationNoCoordinates)
@@ -642,15 +646,19 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* const foundText) 
         {
             QRegExp expRatio ("^\\d+:\\d+$");
             QRegExp expFloat ("^\\d+(.\\d+)?$");
+
             if (expRatio.indexIn(m_textFilterSettings.text) > -1 && m_textFilterSettings.text.contains(QRegExp(":\\d+")))
             {
                 QString trimmedTextFilterSettingsText = m_textFilterSettings.text;
-                QStringList numberStringList = trimmedTextFilterSettingsText.split(":", QString::SkipEmptyParts);
+                QStringList numberStringList          = trimmedTextFilterSettingsText.split(":", QString::SkipEmptyParts);
+
                 if (numberStringList.length() == 2)
                 {
-                    QString numString = (QString)numberStringList.at(0), denomString = (QString)numberStringList.at(1);
-                    bool canConverseNum, canConverseDenom;
-                    int num = numString.toInt(&canConverseNum, 10), denom = denomString.toInt(&canConverseDenom, 10);
+                    QString numString     = (QString)numberStringList.at(0), denomString = (QString)numberStringList.at(1);
+                    bool canConverseNum   = false;
+                    bool canConverseDenom = false;
+                    int num               = numString.toInt(&canConverseNum, 10), denom = denomString.toInt(&canConverseDenom, 10);
+
                     if (canConverseNum && canConverseDenom)
                     {
                         if (fabs(info.aspectRatio() - (double)num / denom) < 0.1)
@@ -661,8 +669,9 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* const foundText) 
             else if (expFloat.indexIn(m_textFilterSettings.text) > -1)
             {
                 QString trimmedTextFilterSettingsText = m_textFilterSettings.text;
-                bool canConverse;
-                double ratio = trimmedTextFilterSettingsText.toDouble(&canConverse);
+                bool    canConverse;
+                double  ratio = trimmedTextFilterSettingsText.toDouble(&canConverse);
+
                 if (canConverse)
                 {
                     if (fabs(info.aspectRatio() - ratio) < 0.1)
@@ -875,8 +884,8 @@ GroupImageFilterSettings::GroupImageFilterSettings()
 
 bool GroupImageFilterSettings::operator==(const GroupImageFilterSettings& other) const
 {
-    return m_allOpen    == other.m_allOpen &&
-           m_openGroups == other.m_openGroups;
+    return (m_allOpen    == other.m_allOpen &&
+            m_openGroups == other.m_openGroups);
 }
 
 bool GroupImageFilterSettings::matches(const ImageInfo& info) const

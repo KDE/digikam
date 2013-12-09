@@ -295,7 +295,8 @@ void TagModificationHelper::slotMultipleTagDel(QList<TAlbum* >& tags)
     QString tagWithChildrens;
     QString tagWithImages;
     QMultiMap<int, TAlbum*> sortedTags;
-    foreach(TAlbum* t, tags)
+
+    foreach(TAlbum* const t, tags)
     {
 
         if (!t || t->isRoot())
@@ -331,6 +332,7 @@ void TagModificationHelper::slotMultipleTagDel(QList<TAlbum* >& tags)
 
         Album* parent = t;
         int depth = 0;
+
         while(!parent->isRoot())
         {
             parent = parent->parent();
@@ -341,62 +343,64 @@ void TagModificationHelper::slotMultipleTagDel(QList<TAlbum* >& tags)
 
     }
 
-            // ask for deletion of children
-        if (!tagWithChildrens.isEmpty())
-        {
-            int result = KMessageBox::warningContinueCancel(0,
-                                                            i18n("Tags '%1' have one or more subtags. "
-                                                                "Deleting them will also delete "
-                                                                "the subtags. "
-                                                                "Do you want to continue?",
-                                                                tagWithChildrens));
+    // ask for deletion of children
 
-            if (result != KMessageBox::Continue)
+    if (!tagWithChildrens.isEmpty())
+    {
+        int result = KMessageBox::warningContinueCancel(0,
+                                                        i18n("Tags '%1' have one or more subtags. "
+                                                             "Deleting them will also delete "
+                                                             "the subtags. "
+                                                             "Do you want to continue?",
+                                                             tagWithChildrens));
+
+        if (result != KMessageBox::Continue)
+        {
+            return;
+        }
+    }
+
+    QString message;
+
+    if (!tagWithImages.isEmpty())
+    {
+        message = i18n("Tags '%1' are assigned to one or more items. "
+                        "Do you want to continue?",
+                        tagWithImages);
+    }
+    else
+    {
+        message = i18n("Delete '%1' tag(s)?", tagWithImages);
+    }
+
+    int result = KMessageBox::warningContinueCancel(0, message,
+                                                    i18n("Delete Tag"),
+                                                    KGuiItem(i18n("Delete"),
+                                                            "edit-delete"));
+
+    if (result == KMessageBox::Continue)
+    {
+        QMultiMap<int, TAlbum*>::iterator it;
+        /**
+         * QMultimap doesn't provide reverse iterator, -1 is required
+         * because end() points after the last element
+         */
+        for(it = sortedTags.end()-1; it != sortedTags.begin()-1; --it)
+        {
+            emit aboutToDeleteTag(it.value());
+            QString errMsg;
+
+            if (!AlbumManager::instance()->deleteTAlbum(it.value(), errMsg))
             {
-                return;
+                KMessageBox::error(0, errMsg);
             }
         }
-
-        QString message;
-
-        if (!tagWithImages.isEmpty())
-        {
-            message = i18n("Tags '%1' are assigned to one or more items. "
-                            "Do you want to continue?",
-                            tagWithImages);
-        }
-        else
-        {
-            message = i18n("Delete '%1' tag(s)?", tagWithImages);
-        }
-
-        int result = KMessageBox::warningContinueCancel(0, message,
-                                                        i18n("Delete Tag"),
-                                                        KGuiItem(i18n("Delete"),
-                                                                "edit-delete"));
-
-        if (result == KMessageBox::Continue)
-        {
-            QMultiMap<int, TAlbum*>::iterator it;
-            /**
-             * QMultimap doesn't provide reverse iterator, -1 is required
-             * because end() points after the last element
-             */
-            for(it = sortedTags.end()-1; it != sortedTags.begin()-1; --it)
-            {
-                emit aboutToDeleteTag(it.value());
-                QString errMsg;
-                if (!AlbumManager::instance()->deleteTAlbum(it.value(), errMsg))
-                {
-                    KMessageBox::error(0, errMsg);
-                }
-            }
-        }
+    }
 }
 
 void TagModificationHelper::slotMultipleTagDel()
 {
-    QList<TAlbum* > lst = boundMultipleTags(sender());
+    QList<TAlbum*> lst = boundMultipleTags(sender());
     kDebug() << lst.size();
     slotMultipleTagDel(lst);
 }

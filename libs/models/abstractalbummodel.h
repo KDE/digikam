@@ -7,7 +7,7 @@
  * Description : Qt Model for Albums
  *
  * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2010 by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C) 2010      by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -88,8 +88,8 @@ public:
      * Pass the root album if it is already available.
      * Do not use this class directly, but one of the subclasses.
      */
-    AbstractAlbumModel(Album::Type albumType, Album* rootAlbum, RootAlbumBehavior rootBehavior = IncludeRootAlbum,
-                       QObject* parent = 0);
+    AbstractAlbumModel(Album::Type albumType, Album* const rootAlbum, RootAlbumBehavior rootBehavior = IncludeRootAlbum,
+                       QObject* const parent = 0);
     ~AbstractAlbumModel();
 
     /// Set a drag drop handler.
@@ -187,8 +187,8 @@ protected Q_SLOTS:
 
 private:
 
-    class AlbumModelPriv;
-    AlbumModelPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // ------------------------------------------------------------------
@@ -200,9 +200,9 @@ class AbstractSpecificAlbumModel : public AbstractAlbumModel
 public:
 
     /// Abstract base class, do not instantiate.
-    AbstractSpecificAlbumModel(Album::Type albumType, Album* rootAlbum,
+    AbstractSpecificAlbumModel(Album::Type albumType, Album* const rootAlbum,
                                RootAlbumBehavior rootBehavior = IncludeRootAlbum,
-                               QObject* parent = 0);
+                               QObject* const parent = 0);
 
 protected:
 
@@ -234,9 +234,10 @@ public:
 
     /// Supports displaying a count alongside the album name in DisplayRole
 
-    AbstractCountingAlbumModel(Album::Type albumType, Album* rootAlbum,
+    AbstractCountingAlbumModel(Album::Type albumType, Album* const rootAlbum,
                                RootAlbumBehavior rootBehavior = IncludeRootAlbum,
-                               QObject* parent = 0);
+                               QObject* const parent = 0);
+    ~AbstractCountingAlbumModel();
 
 public Q_SLOTS:
 
@@ -291,10 +292,8 @@ private:
 
 private:
 
-    bool            m_showCount;
-    QMap<int, int>  m_countMap;
-    QHash<int, int> m_countHashReady;
-    QSet<int>       m_includeChildrenAlbums;
+    class Private;
+    Private* const d;
 };
 
 // ------------------------------------------------------------------
@@ -308,9 +307,9 @@ public:
     /// Abstract base class that manages the check state of Albums.
     /// Call setCheckable(true) to enable checkable albums.
 
-    AbstractCheckableAlbumModel(Album::Type albumType, Album* rootAlbum,
+    AbstractCheckableAlbumModel(Album::Type albumType, Album* const rootAlbum,
                                 RootAlbumBehavior rootBehavior = IncludeRootAlbum,
-                                QObject* parent = 0);
+                                QObject* const parent = 0);
     ~AbstractCheckableAlbumModel();
 
     /// Triggers if the albums in this model are checkable
@@ -318,14 +317,16 @@ public:
     bool isCheckable() const;
 
     /** Triggers if the root album is checkable.
-     *  Only applicable if the root album is contained at all, and if isCheckable() is true. */
+     *  Only applicable if the root album is contained at all, and if isCheckable() is true.
+     */
     void setRootCheckable(bool rootIsCheckable);
     bool rootIsCheckable() const;
 
     /** Triggers if the albums in this model are tristate.
      *  Used to allow the user to actively set a third state,
      *  don't use if you only want to display a third state.
-     *  Note that you want to set setCheckable(true) before. */
+     *  Note that you want to set setCheckable(true) before.
+     */
     void setTristate(bool isTristate);
     bool isTristate() const;
 
@@ -412,8 +413,8 @@ private:
 
 private:
 
-    class AbstractCheckableAlbumModelPriv;
-    AbstractCheckableAlbumModelPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

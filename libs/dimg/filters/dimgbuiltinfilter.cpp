@@ -454,7 +454,7 @@ QString DImgBuiltinFilter::filterIcon(const QString& filterIdentifier)
 
 bool DImgBuiltinFilter::isSupported(const QString& filterIdentifier)
 {
-    return filterIdentifier.startsWith("transform:") && supportedFilters().contains(filterIdentifier);
+    return filterIdentifier.startsWith(QLatin1String("transform:")) && supportedFilters().contains(filterIdentifier);
 }
 
 bool DImgBuiltinFilter::isSupported(const QString& filterIdentifier, int version)

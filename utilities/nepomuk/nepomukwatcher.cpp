@@ -93,11 +93,11 @@ NepomukWatcher::NepomukWatcher(DkNepomukService* const parent)
                                            Nepomuk2::Types::Property,
                                            QVariant)));
 
-    connect(d->tagWatch, SIGNAL(resourceCreated(Nepomuk2::Resource, QList<QUrl>)),
-            this, SLOT(slotResAdded(Nepomuk2::Resource, QList<QUrl>)));
+    connect(d->tagWatch, SIGNAL(resourceCreated(Nepomuk2::Resource,QList<QUrl>)),
+            this, SLOT(slotResAdded(Nepomuk2::Resource,QList<QUrl>)));
 
-    connect(d->tagWatch, SIGNAL(resourceRemoved(QUrl, QList<QUrl>)),
-            this, SLOT(slotResRemoved(QUrl, QList<QUrl>)));
+    connect(d->tagWatch, SIGNAL(resourceRemoved(QUrl,QList<QUrl>)),
+            this, SLOT(slotResRemoved(QUrl,QList<QUrl>)));
 
     kDebug() << "Starting Resource Watcher ...";
     d->resWatch->start();

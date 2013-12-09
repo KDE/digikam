@@ -160,6 +160,7 @@ ImportFilters::ImportFilters(QWidget* const parent)
 
 ImportFilters::~ImportFilters()
 {
+    delete d;
 }
 
 void ImportFilters::fileNameCheckBoxClicked()

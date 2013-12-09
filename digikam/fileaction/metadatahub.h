@@ -215,7 +215,7 @@ public:
     /**
         Will write only Tags to image. Used by TagsManager to write tags to image
         Other metadata are not updated.
-        @return if tags were succesfully written.
+        @return if tags were successfully written.
     */
     bool writeTags(const QString& filePath, WriteMode writeMode = FullWrite,
                const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());

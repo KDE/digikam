@@ -690,7 +690,7 @@ QString ToolTipFiller::filterActionTipContents(const FilterAction& action)
                     continue;
                 }
 
-                if (it.key().startsWith("curveData"))
+                if (it.key().startsWith(QLatin1String("curveData")))
                 {
                     str = i18n("<i>Binary Data</i>");
                 }

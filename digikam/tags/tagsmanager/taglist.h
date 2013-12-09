@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 20013-07-31
- * Description : Tag List implementation as Quick Acess for various
+ * Description : Tag List implementation as Quick Access for various
  *               subtrees in Tag Manager
  *
  * Copyright (C) 2013 by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>

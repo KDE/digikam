@@ -123,19 +123,25 @@ bool XmpWidget::decodeMetadata()
     }
 
     // Update all metadata contents.
-    setMetadataMap(data.getXmpTagsDataList(m_keysFilter));
+    setMetadataMap(data.getXmpTagsDataList(QStringList()));
     return true;
 }
 
 void XmpWidget::buildView()
 {
-    if (getMode() == CUSTOM)
+    switch (getMode())
     {
-        setIfdList(getMetadataMap(), getTagsFilter());
-    }
-    else
-    {
-        setIfdList(getMetadataMap(), QStringList() << QString("FULL"));
+        case CUSTOM:
+            setIfdList(getMetadataMap(), m_keysFilter, getTagsFilter());
+            break;
+
+        case PHOTO:
+            setIfdList(getMetadataMap(), m_keysFilter, QStringList() << QString("FULL"));
+            break;
+
+        default: // NONE
+            setIfdList(getMetadataMap(), QStringList());
+            break;
     }
 
     MetadataWidget::buildView();

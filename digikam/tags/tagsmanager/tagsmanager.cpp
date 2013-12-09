@@ -307,11 +307,11 @@ void TagsManager::slotDeleteAction()
     if (!tagWithChildrens.isEmpty())
     {
         int result = KMessageBox::warningContinueCancel(this,
-                                                        i18n("Tags '%1' has one or more subtags. "
-                                                            "Deleting this will also delete "
-                                                            "the subtag."
-                                                            "Do you want to continue?",
-                                                            tagWithChildrens));
+                                                        i18n("Tags '%1' have one or more subtags. "
+                                                             "Deleting them will also delete "
+                                                             "the subtags. "
+                                                             "Do you want to continue?",
+                                                             tagWithChildrens));
 
         if (result != KMessageBox::Continue)
         {

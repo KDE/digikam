@@ -612,7 +612,7 @@ void DigikamView::setupConnections()
     connect(this, SIGNAL(signalAlbumSelected(bool)),
             d->albumHistory, SLOT(slotAlbumSelected()));
 
-    connect(this, SIGNAL(signalImageSelected(ImageInfoList, ImageInfoList)),
+    connect(this, SIGNAL(signalImageSelected(ImageInfoList,ImageInfoList)),
             d->albumHistory, SLOT(slotImageSelected(ImageInfoList)));
 
     connect(d->iconView, SIGNAL(currentChanged(ImageInfo)),
