@@ -146,7 +146,6 @@
 #include "kipipluginloader.h"
 #include "imagepluginloader.h"
 #include "tagsmanager.h"
-#include "etwidget.h"
 
 #ifdef USE_SCRIPT_IFACE
 #include "scriptiface.h"
@@ -1293,8 +1292,6 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    slotUpdateActions();
-    
     // Load Cameras -- do this before the createGUI so that the cameras
     // are plugged into the toolbar at startup
     if (d->splashScreen)
@@ -2479,66 +2476,6 @@ void DigikamApp::populateThemes()
 void DigikamApp::slotThemeChanged()
 {
     AlbumSettings::instance()->setCurrentTheme(ThemeManager::instance()->currentThemeName());
-}
-
-void DigikamApp::slotUpdateActions()
-{
-    static const char* name_c = "action_name";    
-    static const char* group_c = "action_group";
-    
-    const QString group = "etools_exec";
-    
-    //FIXME HACK I don't know another way to remove actions
-    //and to group actions to be finded in KActionCollectin later
-    //why KActionCollection does not provide getting list of all registerd NAMES?
-    // This done to be able to insert multimple actions in context menu later
-    // AND to add posibility dynamicaly add/remove actions in list
-    // from External Tools config dialog, through configChanged() signal
-    // connected to DigikamApp::slotUpdateActions() slot.
-    foreach(QAction* action, actionCollection()->actions()) 
-    {
-        if (action->property(group_c).toString() == group)
-        {
-            delete actionCollection()->takeAction(action);
-        }
-    }
-    
-    KAction* etools = new KAction(KIcon("utilities-terminal"), i18n("Run external tools"), this);
-    etools->setWhatsThis(i18n("Run external tools on currently selected items list."));
-    connect(etools, SIGNAL(triggered()), d->view, SLOT(slotEToolsExec()));
-    etools->setEnabled(true);
-    etools->setProperty(group_c, group);
-    etools->setProperty(name_c,  group);
-    
-    actionCollection()->addAction(group, etools);
-
-    
-    ETConfig::Ptr cfg = ETConfig::config();
-    foreach(const QString tool, cfg->cfg.groupList())
-    {
-        KConfigGroup toolcfg = cfg->cfg.group(tool);
-
-        if (!toolcfg.readEntry<bool>(ETConfig::showInContext, false))
-        {
-            continue;
-        }
-        const QString name = QString("etools_%1_exec").arg(tool);
-
-        KAction* action = new KAction(this);
-        action->setData(tool);
-        const QString text = i18n("Run %1 [%2]")
-                             .arg(toolcfg.readEntry<QString>(ETConfig::name, i18n("unnamed")))
-                             .arg(ETConfig::pluginName());
-        action->setText(text);
-        action->setIcon(KIcon("utilities-terminal"));
-        action->setShortcut(toolcfg.readEntry<QString>(ETConfig::shortcut, QString()));
-        action->setEnabled(true);
-        action->setProperty(group_c, group);
-        action->setProperty(name_c,  name);
-
-        connect(action, SIGNAL(triggered()), d->view, SLOT(slotEToolsExec()));
-        actionCollection()->addAction(name, action);
-    }
 }
 
 void DigikamApp::preloadWindows()

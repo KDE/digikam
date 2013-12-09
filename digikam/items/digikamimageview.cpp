@@ -357,20 +357,6 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
     cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction("image_rename");
-    // --------------------------------------------------------
-    //FIXME HACK I don't know another way to get group of items again :(
-    static const char* name_c = "action_name";    
-    static const char* group_c = "action_group";    
-    
-    const QString etools_group = "etools_exec";
-    foreach(QAction* action, cmhelper.actionCollection()->actions()) 
-    {
-        if (action->property(group_c).toString() == etools_group)
-        {
-            cmhelper.addAction(action->property(name_c).toString());
-        }
-    }
-    // --------------------------------------------------------
     cmhelper.addAction("cut_album_selection");
     cmhelper.addAction("copy_album_selection");
     cmhelper.addAction("paste_album_selection");

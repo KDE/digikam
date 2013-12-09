@@ -199,7 +199,6 @@ void ETWidget::save()
     cfg->writeTypeEntry(SimpleScript::type, SimpleScript::body, d->ui->simplescriptbody->toPlainText());
 
     cfg->cfg.sync();
-    Q_EMIT configChanged();
 }
 
 void ETWidget::remove()
