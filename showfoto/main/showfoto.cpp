@@ -571,7 +571,8 @@ void ShowFoto::slotOpenFile()
         }
         else
         {
-            d->infoList<<infos;
+            //replace the equal sign with "<<" to keep the previous pics in the thumbbar model
+            d->infoList = infos;
             d->model->clearShowfotoItemInfos();
             emit signalInfoList(d->infoList);
         }
@@ -1249,7 +1250,8 @@ void ShowFoto::openFolder(const KUrl& url)
     }
     else
     {
-        d->infoList<<infos;
+        //replace the equal sign with "<<" to keep the previous pics in the thumbbar model
+        d->infoList = infos;
         d->model->clearShowfotoItemInfos();
         emit signalInfoList(d->infoList);
     }
