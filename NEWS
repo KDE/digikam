@@ -93,5 +93,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 079 ==> 273519 - When adding rating portrait images are rotated to landscape.
 080 ==> 315156 - CR2 files from Canon PowerShot G1 X the colours are messed up.
 081 ==> 228239 - Raw import tool: meaning of the Esc.
-082 ==> 
+082 ==> 287102 - digiKam does not show selected album at startup.
+083 ==> 307330 - digiKam does not connect to the album folder automatically unless it has been preselected in my folders.
+084 ==> 
+
 
