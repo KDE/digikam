@@ -96,6 +96,7 @@ private:
     void slideShow(Digikam::SlideShowSettings& settings);
 
     void openFolder(const KUrl& url);
+    void openUrls(const KUrl::List& urls);
 
     Digikam::ThumbBarDock* thumbBar()     const;
     Digikam::Sidebar*      rightSideBar() const;

@@ -134,7 +134,6 @@ namespace ShowFoto
 ShowFoto::ShowFoto(const KUrl::List& urlList)
     : Digikam::EditorWindow("Showfoto"), d(new Private)
 {
-    Q_UNUSED(urlList);
     setXMLFile("showfotoui.rc");
 
     m_nonDestructive = false;
@@ -225,6 +224,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     // -- Load current items ---------------------------
 
     //slotOpenFilesInFolder();
+    openUrls(urlList);
 }
 
 ShowFoto::~ShowFoto()
@@ -537,7 +537,11 @@ void ShowFoto::slotOpenFile()
     }
 
     KUrl::List urls = Digikam::ImageDialog::getImageURLs(this, d->lastOpenedDirectory);
+    openUrls(urls);
+}
 
+void ShowFoto::openUrls(const KUrl::List &urls)
+{
     if (!urls.isEmpty())
     {
         ShowfotoItemInfoList infos;
