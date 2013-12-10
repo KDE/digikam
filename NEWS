@@ -95,6 +95,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 081 ==> 228239 - Raw import tool: meaning of the Esc.
 082 ==> 287102 - digiKam does not show selected album at startup.
 083 ==> 307330 - digiKam does not connect to the album folder automatically unless it has been preselected in my folders.
-084 ==> 
+084 ==> 163293 - Only generate thumbnail when needed [patch].
+085 ==> 
 
 
