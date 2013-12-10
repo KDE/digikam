@@ -542,9 +542,9 @@ void AbstractAlbumTreeView::slotCurrentChanged()
 {
     QList<Album*> selected = selectedAlbums<Album>(selectionModel(),
                                                    m_albumFilterModel);
+
     if(selected.isEmpty())
         return;
-
     emit currentAlbumChanged(selected.first());
 }
 
@@ -950,10 +950,6 @@ void AbstractAlbumTreeView::doSaveState()
     {
         currentIndex = QString::number(selectedAlbum->id());
     }
-
-    //    kDebug() << "selection: " << selection;
-    //    kDebug() << "expansion: " << expansion;
-    //    kDebug() << "currentIndex: " << currentIndex;
 
     configGroup.writeEntry(entryName(d->configSelectionEntry), selection);
     configGroup.writeEntry(entryName(d->configExpansionEntry), expansion);

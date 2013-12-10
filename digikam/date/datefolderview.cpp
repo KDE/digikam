@@ -84,7 +84,6 @@ DateFolderView::DateFolderView(QWidget* const parent, DateAlbumModel* const date
 
     d->dateTreeView = new DateAlbumTreeView(this);
     d->dateTreeView->setAlbumModel(dateAlbumModel);
-    d->dateTreeView->setSelectAlbumOnClick(true);
     d->dateTreeView->setAlbumManagerCurrentAlbum(true);
     d->monthview    = new MonthWidget(this);
 
@@ -155,6 +154,11 @@ void DateFolderView::slotSelectionChanged(Album* selectedAlbum)
         QDate date = dalbum->date();
         d->monthview->setActive(true);
         d->monthview->setYearMonth(date.year(), date.month());
+    }
+
+    if (d->active)
+    {
+        AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << dalbum);
     }
 }
 
