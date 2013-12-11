@@ -97,6 +97,10 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 083 ==> 307330 - digiKam does not connect to the album folder automatically unless it has been preselected in my folders.
 084 ==> 163293 - Only generate thumbnail when needed [patch].
 085 ==> 328632 - "Save change" create a new file with filename_v1.jpg.
-086 ==> 
+086 ==> 233657 - Thumbnails are created for thumbnails.
+087 ==> 328034 - Preload the next photo in the folder in a memory cache to speed up transitions.
+088 ==> 196649 - Very poor usability when browsing JPEG and RAW files.
+089 ==> 308343 - Tag FolderView Icons are blurry when using 48px setting.
+090 ==> 
 
 
