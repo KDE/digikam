@@ -92,4 +92,16 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 078 ==> 328124 - digiKam extremely unresponsive and slow (probably related to tags).
 079 ==> 273519 - When adding rating portrait images are rotated to landscape.
 080 ==> 315156 - CR2 files from Canon PowerShot G1 X the colours are messed up.
-081 ==> 
+081 ==> 228239 - Raw import tool: meaning of the Esc.
+082 ==> 287102 - digiKam does not show selected album at startup.
+083 ==> 307330 - digiKam does not connect to the album folder automatically unless it has been preselected in my folders.
+084 ==> 163293 - Only generate thumbnail when needed [patch].
+085 ==> 328632 - "Save change" create a new file with filename_v1.jpg.
+086 ==> 233657 - Thumbnails are created for thumbnails.
+087 ==> 328034 - Preload the next photo in the folder in a memory cache to speed up transitions.
+088 ==> 196649 - Very poor usability when browsing JPEG and RAW files.
+089 ==> 308343 - Tag FolderView Icons are blurry when using 48px setting.
+090 ==> 328578 - Crash when opening settings.
+091 ==> 
+
+
