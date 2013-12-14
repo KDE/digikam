@@ -104,5 +104,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 090 ==> 328578 - Crash when opening settings.
 091 ==> 307281 - digiKam crashes while scrolling list of photos previews.
 092 ==> 146318 - Usability: goto next item/ forward buttons are inconsistent between edit and view mode.
-093 ==> 
+093 ==> 293194 - Disable versioning side panel if versioning disabled in preferences.
+094 ==> 
 
