@@ -35,6 +35,7 @@
 // Local includes
 
 #include "editorwindow.h"
+#include "thumbbar/showfotoiteminfo.h"
 
 class KJob;
 
@@ -95,6 +96,7 @@ private:
     void slideShow(Digikam::SlideShowSettings& settings);
 
     void openFolder(const KUrl& url);
+    void openUrls(const KUrl::List& urls);
 
     Digikam::ThumbBarDock* thumbBar()     const;
     Digikam::Sidebar*      rightSideBar() const;
@@ -108,7 +110,7 @@ private Q_SLOTS:
     void slotFilePrint();
 
     void slotOpenFile();
-    void slotOpenUrl(const KUrl&);
+    void slotOpenUrl(const ShowfotoItemInfo& info);
     void slotOpenFolder(const KUrl&);
     void slotOpenFilesInFolder();
     void slotDeleteCurrentItem();
@@ -126,6 +128,13 @@ private Q_SLOTS:
     void slotContextMenu();
     void slotRevert();
     void slotSetupMetadataFilters(int);
+
+Q_SIGNALS:
+    void signalLoadCurrentItem(const KUrl::List& urlList);
+    void signalOpenFolder(const KUrl&);
+    void signalOpenFile(const KUrl::List& urls);
+    void signalInfoList(ShowfotoItemInfoList&);
+    
 
 private:
 

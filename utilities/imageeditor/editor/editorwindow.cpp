@@ -53,6 +53,7 @@
 #include <QVBoxLayout>
 #include <QWidgetAction>
 #include <QButtonGroup>
+#include <QLineEdit>
 
 // KDE includes
 
