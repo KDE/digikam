@@ -87,11 +87,23 @@ ETWidget::ETWidget(QWidget* parent, const QString& tool)
     {
         ETConfig::config()->writeEntry(ETConfig::firstStart, false);    
         
-        ETConfig::Ptr newcfg = ETConfig::config("archive");
-        newcfg->writeEntry(ETConfig::name, QString("/tmp/images.tar.gz"));
-        newcfg->writeEntry(ETConfig::type, SimpleScript::type);
-        newcfg->writeTypeEntry(SimpleScript::type, SimpleScript::path, QString("/bin/sh"));
-        newcfg->writeTypeEntry(SimpleScript::type, SimpleScript::body, QString("exec tar -czf /tmp/images.tar.gz --transform='s,.*/,,' -T -"));
+        ETConfig::Ptr arcfg = ETConfig::config("archive");
+        arcfg->writeEntry(ETConfig::name, QString("/tmp/images.tar.gz"));
+        arcfg->writeEntry(ETConfig::type, SimpleScript::type);
+        arcfg->writeTypeEntry(SimpleScript::type, SimpleScript::path, QString("/bin/sh"));
+        arcfg->writeTypeEntry(SimpleScript::type, SimpleScript::body, QString("exec tar -czf /tmp/images.tar.gz --transform='s,.*/,,' -T -"));
+        
+        ETConfig::Ptr ftpcfg = ETConfig::config("ftp");
+        ftpcfg->writeEntry(ETConfig::name, QString("upload to ftp"));
+        ftpcfg->writeEntry(ETConfig::type, SimpleScript::type);
+        ftpcfg->writeTypeEntry(SimpleScript::type, SimpleScript::path, QString("/bin/sh"));
+        ftpcfg->writeTypeEntry(SimpleScript::type, SimpleScript::body, QString("while read file; do curl -T $file ftp://ftp.example.com --user user:secret; done"));
+        
+        ETConfig::Ptr scpcfg = ETConfig::config("ssh");
+        scpcfg->writeEntry(ETConfig::name, QString("upload by ssh"));
+        scpcfg->writeEntry(ETConfig::type, SimpleScript::type);
+        scpcfg->writeTypeEntry(SimpleScript::type, SimpleScript::path, QString("/bin/sh"));
+        scpcfg->writeTypeEntry(SimpleScript::type, SimpleScript::body, QString("while read file; do scp $file user@remote.org:/tmp/; done"));
     }
     
     d->name2index[Exec::type]        = d->ui->types->indexOf(d->ui->types->findChild<QWidget*>(Exec::type));
