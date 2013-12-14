@@ -33,7 +33,8 @@
 
 using namespace Digikam;
 
-namespace ShowFoto {
+namespace ShowFoto
+{
 
 typedef QPair<ShowfotoItemInfo, QPixmap> CachedItem;
 
@@ -49,7 +50,7 @@ public:
      *  Adjust the thumbnail size to your needs.
      *  Note that setKeepsFilePatindexesForPathhCache is enabled per default.
      */
-    explicit ShowfotoThumbnailModel(QObject* parent);
+    explicit ShowfotoThumbnailModel(QObject* const parent);
     ~ShowfotoThumbnailModel();
 
     /** Enable thumbnail loading and set the thread that shall be used.
@@ -103,6 +104,7 @@ public:
 public Q_SLOTS:
 
     void slotThumbInfoLoaded(const ShowfotoItemInfo& info, const QImage& thumbnailImage);
+
 Q_SIGNALS:
 
     void thumbnailAvailable(const QModelIndex& index, int requestedSize);
@@ -124,6 +126,6 @@ private:
     Private* const d;
 };
 
-}
+} // namespace ShowFoto
 
 #endif // SHOWFOTOTHUMBNAILMODEL_H

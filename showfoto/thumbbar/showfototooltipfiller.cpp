@@ -46,8 +46,8 @@ namespace ShowFoto
 QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInfo& info)
 {
     QString str;
-    KSharedConfigPtr config         = KGlobal::config();
-    KConfigGroup group              = config->group("ImageViewer Settings");
+    KSharedConfigPtr config        = KGlobal::config();
+    KConfigGroup group             = config->group("ImageViewer Settings");
     DToolTipStyleSheet cnt(group.readEntry("ToolTips Font"));
 
     PhotoInfoContainer photoInfo   = info.photoInfo;
@@ -58,8 +58,8 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
     if (group.readEntry("ToolTips Show File Name",         true)   ||
         group.readEntry("ToolTips Show File Date",         false)  ||
         group.readEntry("ToolTips Show File Size",         false)  ||
-        group.readEntry("ToolTips Show File Type",        false)  ||
-        group.readEntry("ToolTips Show File Dim",         true) )
+        group.readEntry("ToolTips Show File Type",         false)  ||
+        group.readEntry("ToolTips Show File Dim",          true) )
     {
         tip += cnt.headBeg + i18n("File Properties") + cnt.headEnd;
 
@@ -113,7 +113,7 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
     // NOTE: these info require \"Use File Metadata\" option from Camera Setup Behavior page.
 
     if (group.readEntry("ToolTips Show Photo Make",  true)  ||
-        group.readEntry("ToolTips Show Photo Focal", true) ||
+        group.readEntry("ToolTips Show Photo Focal", true)  ||
         group.readEntry("ToolTips Show Photo Expo",  true)  ||
         group.readEntry("ToolTips Show Photo Flash", false) ||
         group.readEntry("ToolTips Show Photo WB",    false) ||
@@ -142,8 +142,8 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
                 if (info.ctime.isValid())
                 {
                     QDateTime createdDate  = info.ctime;
-                    str                     = KGlobal::locale()->formatDateTime(createdDate, KLocale::ShortDate, true);
-                    tip                    += cnt.cellBeg + i18n("Date:") + cnt.cellMid + str + cnt.cellEnd;
+                    str                    = KGlobal::locale()->formatDateTime(createdDate, KLocale::ShortDate, true);
+                    tip                   += cnt.cellBeg + i18n("Date:") + cnt.cellMid + str + cnt.cellEnd;
                 }
                 else
                 {
@@ -221,5 +221,3 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
 }
 
 }  // namespace ShowFoto
-
-

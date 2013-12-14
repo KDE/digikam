@@ -40,7 +40,8 @@
 
 using namespace Digikam;
 
-namespace ShowFoto {
+namespace ShowFoto
+{
 
 class ShowfotoImageModel : public QAbstractListModel, public DragDropModelImplementation
 {
@@ -55,14 +56,14 @@ public:
 
         /// Returns a thumbnail pixmap. May be implemented by subclasses.
         /// Returns either a valid pixmap or a null QVariant.
-        ThumbnailRole               = Qt::UserRole + 2,
+        ThumbnailRole                 = Qt::UserRole + 2,
         /// Return (optional) extraData field
-        ExtraDataRole               = Qt::UserRole + 3,
+        ExtraDataRole                 = Qt::UserRole + 3,
 
         /// Returns the number of duplicate indexes for the same image id
-        ExtraDataDuplicateCount     = Qt::UserRole + 6,
+        ExtraDataDuplicateCount       = Qt::UserRole + 6,
 
-        FilterModelRoles            = Qt::UserRole + 100
+        FilterModelRoles              = Qt::UserRole + 100
     };
 
 public:
@@ -71,7 +72,8 @@ public:
     ~ShowfotoImageModel();
 
     /** If a cache is kept, lookup by file path is fast,
-     *  without a cache it is O(n). Default is false. */
+     *  without a cache it is O(n). Default is false.
+     */
     void setKeepsFileUrlCache(bool keepCache);
     bool keepsFileUrlCache() const;
 

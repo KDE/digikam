@@ -86,7 +86,7 @@ public:
 
     QPersistentModelIndex     editingRating;
 
-    ItemViewShowfotoDelegate*   q;
+    ItemViewShowfotoDelegate* q;
 
     QRect                     oneRowRegRect;
     QRect                     oneRowComRect;

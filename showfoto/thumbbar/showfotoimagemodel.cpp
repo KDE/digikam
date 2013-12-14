@@ -27,9 +27,11 @@
 
 #include <QHash>
 #include <QDebug>
+
+// Local includes
+
 #include "showfoto.h"
 #include "showfotoiteminfo.h"
-
 
 namespace ShowFoto
 {
@@ -106,7 +108,6 @@ ShowfotoImageModel::ShowfotoImageModel(QObject* const parent)
 {
     d->incrementalUpdater = new ShowfotoImageModelIncrementalUpdater(d);
 }
-
 
 ShowfotoImageModel::~ShowfotoImageModel()
 {
@@ -473,7 +474,7 @@ QList<qlonglong> ShowfotoImageModel::showfotoItemIds() const
 QList<ShowfotoItemInfo> ShowfotoImageModel::uniqueShowfotoItemInfos() const
 {
     QList<ShowfotoItemInfo> uniqueInfos;
-    const int          size = d->infos.size();
+    const int size = d->infos.size();
 
     for (int i = 0; i < size; i++)
     {
@@ -530,8 +531,6 @@ void ShowfotoImageModel::appendInfos(const QList<ShowfotoItemInfo>& infos)
 
     publiciseInfos(infos);
 }
-
-
 
 void ShowfotoImageModel::reAddShowfotoItemInfos(ShowfotoItemInfoList& infos)
 {
@@ -864,7 +863,7 @@ void ShowfotoImageModelIncrementalUpdater::appendInfos(const QList<ShowfotoItemI
     for (int i = 0; i < infos.size(); i++)
     {
         const ShowfotoItemInfo& info = infos.at(i);
-        bool found              = false;
+        bool found                   = false;
         QHash<qlonglong, int>::iterator it;
 
         for (it = oldIds.find(info.id) ; it != oldIds.end() ; ++it)
@@ -983,7 +982,6 @@ int ShowfotoImageModel::rowCount(const QModelIndex& parent) const
 
     return d->infos.size();
 }
-
 
 Qt::ItemFlags ShowfotoImageModel::flags(const QModelIndex& index) const
 {

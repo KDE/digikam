@@ -27,8 +27,8 @@
 
 #include <QDataStream>
 
-namespace ShowFoto {
-
+namespace ShowFoto
+{
 
 ShowfotoItemInfo::ShowfotoItemInfo()
 {
@@ -78,7 +78,6 @@ bool ShowfotoItemInfo::operator!=(const ShowfotoItemInfo& info) const
     return !operator==(info);
 }
 
-
 QDataStream& operator<<(QDataStream& ds, const ShowfotoItemInfo& info)
 {
     ds << info.name;
@@ -121,4 +120,4 @@ QDebug operator<<(QDebug dbg, const ShowfotoItemInfo& info)
     return dbg.space();
 }
 
-}
+} // namepsace Showfoto

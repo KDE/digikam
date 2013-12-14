@@ -34,7 +34,8 @@
 #include "itemviewshowfotodelegate.h"
 #include "showfotothumbnailmodel.h"
 
-namespace ShowFoto {
+namespace ShowFoto
+{
 
 class ShowfotoThumbnailBar;
 class ShowfotoThumbnailDelegatePrivate;
@@ -79,7 +80,8 @@ public:
     static QPixmap retrieveThumbnailPixmap(const QModelIndex& index, int thumbnailSize);
 
     /** Call this from a paint event, with all indexes expected to be painted immediately,
-     *  so that thumbnails become available in order. */
+     *  so that thumbnails become available in order.
+     */
     void prepareThumbnails(ShowfotoThumbnailModel* thumbModel, const QList<QModelIndex>& indexes);
 
 public:

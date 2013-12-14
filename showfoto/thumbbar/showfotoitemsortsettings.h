@@ -32,12 +32,13 @@
 
 #include "showfotoiteminfo.h"
 
-namespace ShowFoto {
-
+namespace ShowFoto
+{
 
 class ShowfotoItemSortSettings
 {
 public:
+
     ShowfotoItemSortSettings();
     ~ShowfotoItemSortSettings();
 
@@ -172,5 +173,7 @@ public:
         return compareByOrder(KStringHandler::naturalCompare(a, b, caseSensitive), sortOrder);
     }
 };
-}
+
+} // namespace ShowFoto
+
 #endif // SHOWFOTOITEMSORTSETTINGS_H

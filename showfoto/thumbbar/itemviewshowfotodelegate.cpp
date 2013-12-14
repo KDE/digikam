@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "itemviewshowfotodelegate.h"
+#include "itemviewshowfotodelegate.moc"
 
 // Qt includes
 
@@ -39,7 +39,6 @@
 #include "showfotoiteminfo.h"
 #include "colorlabelwidget.h"
 #include "itemviewshowfotodelegatepriv.h"
-
 
 namespace ShowFoto
 {
@@ -257,7 +256,7 @@ void ItemViewShowfotoDelegate::invalidatePaintingCache()
 }
 
 QRect ItemViewShowfotoDelegate::drawThumbnail(QPainter* p, const QRect& thumbRect, const QPixmap& background,
-                                            const QPixmap& thumbnail) const
+                                              const QPixmap& thumbnail) const
 {
     p->drawPixmap(0, 0, background);
 
@@ -283,7 +282,7 @@ QRect ItemViewShowfotoDelegate::drawThumbnail(QPainter* p, const QRect& thumbRec
 }
 
 void ItemViewShowfotoDelegate::drawRating(QPainter* p, const QModelIndex& index, const QRect& ratingRect,
-                                       int rating, bool isSelected) const
+                                          int rating, bool isSelected) const
 {
     Q_D(const ItemViewShowfotoDelegate);
 
@@ -356,8 +355,10 @@ void ItemViewShowfotoDelegate::drawImageSize(QPainter* p, const QRect& dimsRect,
         mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
 
         if (dims.isValid())
+        {
             resolution = i18nc("%1 width, %2 height, %3 mpixels", "%1x%2 (%3Mpx)",
                                dims.width(), dims.height(), mpixels);
+        }
         else
         {
             resolution = i18nc("unknown image resolution", "Unknown");
@@ -444,32 +445,6 @@ void ItemViewShowfotoDelegate::drawPanelSideIcon(QPainter* p, bool left, bool ri
     }
 }
 
-
-//void ItemViewShowfotoDelegate::drawDownloadIndicator(QPainter* p, const QRect& r, int itemType) const
-//{
-//    QIcon icon;
-
-//    if (itemType == ShowfotoItemInfo::DownloadUnknown)
-//    {
-//        icon = KIconLoader::global()->loadIcon("dialog-information", KIconLoader::NoGroup, KIconLoader::SizeSmall);
-//    }
-
-//    if (itemType == ShowfotoItemInfo::NewPicture)
-//    {
-//        icon = KIconLoader::global()->loadIcon("get-hot-new-stuff", KIconLoader::NoGroup, KIconLoader::SizeSmall);
-//    }
-
-//    if (itemType == ShowfotoItemInfo::DownloadedYes)
-//    {
-//        icon = KIconLoader::global()->loadIcon("dialog-ok", KIconLoader::NoGroup, KIconLoader::SizeSmall);
-//    }
-
-//    qreal op = p->opacity();
-//    p->setOpacity(0.5);
-//    icon.paint(p, r);
-//    p->setOpacity(op);
-//}
-
 void ItemViewShowfotoDelegate::drawLockIndicator(QPainter* p, const QRect& r, int lockStatus) const
 {
     QIcon icon;
@@ -491,7 +466,7 @@ void ItemViewShowfotoDelegate::drawLockIndicator(QPainter* p, const QRect& r, in
 }
 
 void ItemViewShowfotoDelegate::drawFocusRect(QPainter* p, const QStyleOptionViewItem& option,
-                                          bool isSelected) const
+                                             bool isSelected) const
 {
     Q_D(const ItemViewShowfotoDelegate);
 
@@ -505,7 +480,7 @@ void ItemViewShowfotoDelegate::drawFocusRect(QPainter* p, const QStyleOptionView
 }
 
 void ItemViewShowfotoDelegate::drawGroupIndicator(QPainter* p, const QRect& r,
-                                                int numberOfGroupedImages, bool open) const
+                                                  int numberOfGroupedImages, bool open) const
 {
     if (numberOfGroupedImages)
     {
@@ -682,7 +657,7 @@ QPixmap ItemViewShowfotoDelegate::ratingPixmap(int rating, bool selected) const
 
     if (rating < 1 || rating > 5)
     {
-        /*
+/*
         QPixmap pix;
         if (selected)
             pix = d->selPixmap.copy(d->ratingRect);
@@ -690,7 +665,7 @@ QPixmap ItemViewShowfotoDelegate::ratingPixmap(int rating, bool selected) const
             pix = d->regPixmap.copy(d->ratingRect);
 
         return pix;
-        */
+*/
         return QPixmap();
     }
 

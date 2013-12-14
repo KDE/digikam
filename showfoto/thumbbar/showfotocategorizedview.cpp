@@ -21,15 +21,15 @@
  *
  * ============================================================ */
 
-#include "showfotocategorizedview.h"
+#include "showfotocategorizedview.moc"
 
 // Qt includes
 
-#include "QTimer"
+#include <QTimer>
 
 // KDE includes
 
-#include "kdebug.h"
+#include <kdebug.h>
 #include <kglobal.h>
 
 // Local include
@@ -41,7 +41,8 @@
 
 using namespace Digikam;
 
-namespace ShowFoto {
+namespace ShowFoto
+{
 
 class ShowfotoItemViewToolTip : public ItemViewToolTip
 {
@@ -85,13 +86,13 @@ public:
     ShowfotoSortFilterModel* filterModel;
 
     ShowfotoDelegate*        delegate;
-    bool                   showToolTip;
+    bool                     showToolTip;
 
-    qlonglong              scrollToItemId;
+    qlonglong                scrollToItemId;
 
-    QTimer*                delayedEnterTimer;
+    QTimer*                  delayedEnterTimer;
 
-    QMouseEvent*           currentMouseEvent;
+    QMouseEvent*             currentMouseEvent;
 };
 
 ShowfotoCategorizedView::ShowfotoCategorizedView(QWidget* const parent)
@@ -193,8 +194,8 @@ ShowfotoDelegate* ShowfotoCategorizedView::delegate() const
 
 void ShowfotoCategorizedView::setItemDelegate(ShowfotoDelegate* delegate)
 {
-    ThumbnailSize oldSize       = thumbnailSize();
-    ShowfotoDelegate* oldDelegate = d->delegate;
+    ThumbnailSize oldSize               = thumbnailSize();
+    ShowfotoDelegate* const oldDelegate = d->delegate;
 
     if (oldDelegate)
     {
@@ -205,6 +206,7 @@ void ShowfotoCategorizedView::setItemDelegate(ShowfotoDelegate* delegate)
         // Note: Be precise, no wildcard disconnect!
         disconnect(d->delegate, SIGNAL(requestNotification(QModelIndex,QString)),
                    this, SLOT(showIndexNotification(QModelIndex,QString)));
+
         disconnect(d->delegate, SIGNAL(hideNotification()),
                    this, SLOT(hideIndexNotification()));
     }
@@ -249,7 +251,7 @@ QList<ShowfotoItemInfo> ShowfotoCategorizedView::selectedShowfotoItemInfosCurren
 {
     QList<QModelIndex> indexes = selectedIndexes();
     QModelIndex        current = currentIndex();
-    QList<ShowfotoItemInfo>   infos;
+    QList<ShowfotoItemInfo> infos;
 
     foreach(const QModelIndex& index, indexes)
     {
@@ -276,7 +278,7 @@ QList<ShowfotoItemInfo> ShowfotoCategorizedView::showfotoItemInfos() const
 KUrl::List ShowfotoCategorizedView::urls() const
 {
     QList<ShowfotoItemInfo> infos = showfotoItemInfos();
-    KUrl::List       urls;
+    KUrl::List              urls;
 
     foreach(const ShowfotoItemInfo& info, infos)
     {
@@ -289,7 +291,7 @@ KUrl::List ShowfotoCategorizedView::urls() const
 KUrl::List ShowfotoCategorizedView::selectedUrls() const
 {
     QList<ShowfotoItemInfo> infos = selectedShowfotoItemInfos();
-    KUrl::List       urls;
+    KUrl::List              urls;
 
     foreach(const ShowfotoItemInfo& info, infos)
     {
@@ -318,8 +320,8 @@ ShowfotoItemInfo ShowfotoCategorizedView::nextInOrder(const ShowfotoItemInfo& st
 
 QModelIndex ShowfotoCategorizedView::nextIndexHint(const QModelIndex& anchor, const QItemSelectionRange& removed) const
 {
-    QModelIndex hint = DCategorizedView::nextIndexHint(anchor, removed);
-    ShowfotoItemInfo info   = d->filterModel->showfotoItemInfo(anchor);
+    QModelIndex hint      = DCategorizedView::nextIndexHint(anchor, removed);
+    ShowfotoItemInfo info = d->filterModel->showfotoItemInfo(anchor);
 
     //kDebug() << "Having initial hint" << hint << "for" << anchor << d->model->numberOfIndexesForShowfotoItemInfo(info);
 
@@ -330,7 +332,7 @@ QModelIndex ShowfotoCategorizedView::nextIndexHint(const QModelIndex& anchor, co
         // The hint is for a different info, but we may have a hint for the same info
         if (info != d->filterModel->showfotoItemInfo(hint))
         {
-            int minDiff                            = d->filterModel->rowCount();
+            int minDiff                                   = d->filterModel->rowCount();
             QList<QModelIndex> indexesForShowfotoItemInfo = d->filterModel->mapListFromSource(d->model->indexesForShowfotoItemInfo(info));
 
             foreach(const QModelIndex& index, indexesForShowfotoItemInfo)
@@ -345,7 +347,7 @@ QModelIndex ShowfotoCategorizedView::nextIndexHint(const QModelIndex& anchor, co
                 if (distance < minDiff)
                 {
                     minDiff = distance;
-                    hint = index;
+                    hint    = index;
                     //kDebug() << "Chose index" << hint << "at distance" << minDiff << "to" << anchor;
                 }
             }
@@ -422,7 +424,7 @@ void ShowfotoCategorizedView::setSelectedUrls(const KUrl::List& urlList)
 
     for (KUrl::List::const_iterator it = urlList.constBegin(); it!=urlList.constEnd(); ++it)
     {
-        const QString path = it->path();
+        const QString path      = it->path();
         const QModelIndex index = d->filterModel->indexForPath(path);
 
         if (!index.isValid())
@@ -489,7 +491,7 @@ void ShowfotoCategorizedView::addOverlay(ImageDelegateOverlay* overlay, Showfoto
 
 void ShowfotoCategorizedView::removeOverlay(ImageDelegateOverlay* overlay)
 {
-    ShowfotoDelegate* delegate = dynamic_cast<ShowfotoDelegate*>(overlay->delegate());
+    ShowfotoDelegate* const delegate = dynamic_cast<ShowfotoDelegate*>(overlay->delegate());
 
     if (delegate)
     {
@@ -617,5 +619,4 @@ AbstractItemDragDropHandler* ShowfotoCategorizedView::dragDropHandler() const
     return d->model->dragDropHandler();
 }
 
-
-}
+} // namespace Showfoto

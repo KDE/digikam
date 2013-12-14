@@ -25,6 +25,7 @@
 #define SHOWFOTOFILTERMODEL_H
 
 // Qt includes
+
 #include <QObject>
 
 // KDE includes
@@ -47,7 +48,7 @@ class ShowfotoSortFilterModel : public KCategorizedSortFilterProxyModel
     Q_OBJECT
 
 public:
-    explicit ShowfotoSortFilterModel(QObject *parent = 0);
+    explicit ShowfotoSortFilterModel(QObject* const parent = 0);
     ~ShowfotoSortFilterModel();
 
     void setSourceShowfotoModel(ShowfotoImageModel* const sourceModel);
@@ -59,20 +60,20 @@ public:
     /// Convenience methods mapped to ShowfotoImageModel.
     /// Mentioned indexes returned come from the source Showfoto image model.
     QModelIndex mapToSourceShowfotoModel(const QModelIndex& proxyIndex)                       const;
-    QModelIndex mapFromSourceShowfotoModel(const QModelIndex& ShowfotoModelIndex)               const;
+    QModelIndex mapFromSourceShowfotoModel(const QModelIndex& ShowfotoModelIndex)             const;
     QModelIndex mapFromDirectSourceToSourceShowfotoModel(const QModelIndex& sourceModelIndex) const;
 
     QList<QModelIndex> mapListToSource(const QList<QModelIndex>& indexes)         const;
     QList<QModelIndex> mapListFromSource(const QList<QModelIndex>& sourceIndexes) const;
 
     ShowfotoItemInfo        showfotoItemInfo(const QModelIndex& index)           const;
-    qlonglong          showfotoItemId(const QModelIndex& index)             const;
+    qlonglong          showfotoItemId(const QModelIndex& index)                  const;
     QList<ShowfotoItemInfo> showfotoItemInfos(const QList<QModelIndex>& indexes) const;
-    QList<qlonglong>   showfotoItemIds(const QList<QModelIndex>& indexes)   const;
+    QList<qlonglong>   showfotoItemIds(const QList<QModelIndex>& indexes)        const;
 
-    QModelIndex indexForPath(const QString& filePath)        const;
+    QModelIndex indexForPath(const QString& filePath)                  const;
     QModelIndex indexForShowfotoItemInfo(const ShowfotoItemInfo& info) const;
-    QModelIndex indexForShowfotoItemId(qlonglong id)              const;
+    QModelIndex indexForShowfotoItemId(qlonglong id)                   const;
 
     /** Returns a list of all showfoto infos, sorted according to this model.
      *  If you do not need a sorted list, use ShowfotoImageModel's showfotoItemInfo() method.
@@ -91,8 +92,7 @@ protected:
 
 protected:
 
-    ShowfotoSortFilterModel* m_chainedModel;
-    
+    ShowfotoSortFilterModel* m_chainedModel;    
 };
 
 // ------------------------------------------------------------------------------------------
@@ -115,7 +115,7 @@ public:
         CategoryFormatRole           = ShowfotoImageModel::FilterModelRoles + 3,
 
         /// Returns true if the given showfoto item is a group leader, and the group is opened.
-        //TODO: GroupIsOpenRole            = ShowfotoImageModel::FilterModelRoles + 4
+        //TODO: GroupIsOpenRole        = ShowfotoImageModel::FilterModelRoles + 4
         ShowfotoFilterModelPointerRole = ShowfotoImageModel::FilterModelRoles + 50
     };
 
@@ -136,7 +136,7 @@ public:
     //bool isAllGroupsOpen() const;
 
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual ShowfotoFilterModel* showfotoFilterModel()                              const;
+    virtual ShowfotoFilterModel* showfotoFilterModel()                          const;
 
 public Q_SLOTS:
 
@@ -220,8 +220,7 @@ protected:
     virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
 };
 
-
-}// namespace ShowFoto
+} // namespace ShowFoto
 
 Q_DECLARE_METATYPE(ShowFoto::ShowfotoFilterModel*)
 

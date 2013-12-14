@@ -24,9 +24,12 @@
 #ifndef SHOWFOTOTOOLTIPFILLER_H
 #define SHOWFOTOTOOLTIPFILLER_H
 
-#include "QString"
+// Qt include
 
-namespace ShowFoto {
+#include <QString>
+
+namespace ShowFoto
+{
 
 class ShowfotoItemInfo;
 
@@ -35,5 +38,6 @@ namespace ShowfotoToolTipFiller
     QString ShowfotoItemInfoTipContents(const ShowfotoItemInfo& info);
 }
 
-}
+} // namespace ShowFoto
+
 #endif // SHOWFOTOTOOLTIPFILLER_H

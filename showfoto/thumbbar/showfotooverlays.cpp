@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "showfotooverlays.h"
+#include "showfotooverlays.moc"
 
 // KDE includes
 

@@ -79,7 +79,7 @@ public:
 
     QCache<int, QRect>     actualPixmapRectCache;
 
-    ShowfotoThumbnailBar* currentView;
+    ShowfotoThumbnailBar*  currentView;
     QAbstractItemModel*    currentModel;
 
 public:

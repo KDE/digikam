@@ -208,11 +208,11 @@ QRect ShowfotoDelegate::groupIndicatorRect() const
 QPixmap ShowfotoDelegate::retrieveThumbnailPixmap(const QModelIndex& index, int thumbnailSize)
 {
     // work around constness
-    QAbstractItemModel* model = const_cast<QAbstractItemModel*>(index.model());
+    QAbstractItemModel* const model = const_cast<QAbstractItemModel*>(index.model());
     // set requested thumbnail size
     model->setData(index, thumbnailSize, ShowfotoImageModel::ThumbnailRole);
     // get data from model
-    QVariant thumbData        = index.data(ShowfotoImageModel::ThumbnailRole);
+    QVariant thumbData              = index.data(ShowfotoImageModel::ThumbnailRole);
 
     return thumbData.value<QPixmap>();
 }
@@ -276,7 +276,6 @@ void ShowfotoDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, co
 //    {
 //        p->drawPixmap(d->pixmapRect.right()-24, d->pixmapRect.bottom()-24, KIcon("svn_switch").pixmap(22, 22));
 //    }
-
 
     if (!d->nameRect.isNull())
     {
@@ -361,19 +360,19 @@ QPixmap ShowfotoDelegate::pixmapForDrag(const QStyleOptionViewItem& option, cons
 }
 
 bool ShowfotoDelegate::acceptsToolTip(const QPoint& pos, const QRect& visualRect, const QModelIndex& index,
-                                   QRect* toolTipRect) const
+                                      QRect* toolTipRect) const
 {
     return onActualPixmapRect(pos, visualRect, index, toolTipRect);
 }
 
 bool ShowfotoDelegate::acceptsActivation(const QPoint& pos, const QRect& visualRect, const QModelIndex& index,
-                                      QRect* activationRect) const
+                                         QRect* activationRect) const
 {
     return onActualPixmapRect(pos, visualRect, index, activationRect);
 }
 
 bool ShowfotoDelegate::onActualPixmapRect(const QPoint& pos, const QRect& visualRect, const QModelIndex& index,
-                                       QRect* returnRect) const
+                                          QRect* returnRect) const
 {
     QRect actualRect = actualPixmapRect(index);
 

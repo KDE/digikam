@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include "kurl.h"
+#include <kurl.h>
 
 // Local includes
 
@@ -45,10 +45,10 @@ class QDataStream;
 namespace ShowFoto
 {
 
-
 class ShowfotoItemInfo
 {
 public:
+
     ShowfotoItemInfo();
     ~ShowfotoItemInfo();
 
@@ -95,5 +95,6 @@ typedef QList<ShowfotoItemInfo> ShowfotoItemInfoList;
 //! kDebug() stream operator. Writes property @a info to the debug output in a nicely formatted way.
 QDebug operator<<(QDebug dbg, const ShowfotoItemInfo& info);
 
-}
+} // namespace Showfoto
+
 #endif // ShowfotoItemInfo_H

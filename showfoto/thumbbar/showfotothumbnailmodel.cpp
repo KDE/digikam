@@ -42,7 +42,9 @@
 #include "loadingdescription.h"
 
 using namespace Digikam;
-namespace ShowFoto {
+
+namespace ShowFoto
+{
 
 class ShowfotoThumbnailModel::Private
 {
@@ -79,7 +81,7 @@ public:
     }
 };
 
-ShowfotoThumbnailModel::ShowfotoThumbnailModel(QObject* parent)
+ShowfotoThumbnailModel::ShowfotoThumbnailModel(QObject* const parent)
     : ShowfotoImageModel(parent), d(new Private)
 {
     connect(this,SIGNAL(signalThumbInfo(ShowfotoItemInfo,QImage)),
@@ -115,7 +117,7 @@ ThumbnailSize ShowfotoThumbnailModel::thumbnailSize() const
 void ShowfotoThumbnailModel::setThumbnailSize(const ThumbnailSize& size)
 {
     d->lastGlobalThumbSize = size;
-    d->thumbSize = size;
+    d->thumbSize           = size;
 }
 
 void ShowfotoThumbnailModel::setPreloadThumbnailSize(const ThumbnailSize& size)
@@ -144,8 +146,8 @@ QVariant ShowfotoThumbnailModel::data(const QModelIndex& index, int role) const
         QImage    thumbnailImage;
         QPixmap   pixmap;
         ShowfotoItemInfo info = showfotoItemInfo(index);
-        QString url = info.url.prettyUrl();
-        QString path = info.folder + QString("/") + info.name;
+        QString url           = info.url.prettyUrl();
+        QString path          = info.folder + QString("/") + info.name;
 
         if (info.isNull() || url.isEmpty())
         {
@@ -317,50 +319,34 @@ bool ShowfotoThumbnailModel::getThumbnail(const ShowfotoItemInfo& itemInfo, QIma
 }
 
 bool ShowfotoThumbnailModel::pixmapForItem(QString url, QPixmap& pix) const
-
 {
-
     if (d->thumbSize.size() > d->maxThumbSize)
-
     {
-
         //TODO: Install a widget maximum size to prevent this situation
 
         bool hasPixmap = d->thread->find(url, pix, d->maxThumbSize);
 
         if (hasPixmap)
-
         {
 
             kWarning() << "Thumbbar: Requested thumbnail size" << d->thumbSize.size()
-
                        << "is larger than the maximum thumbnail size" << d->maxThumbSize
-
                        << ". Returning a scaled-up image.";
 
             pix = pix.scaled(d->thumbSize.size(), d->thumbSize.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
             return true;
-
         }
-
         else
-
         {
-
             return false;
 
         }
     }
-
     else
-
     {
-
         return d->thread->find(url, pix, d->thumbSize.size());
-
     }
-
 }
 
 void ShowfotoThumbnailModel::slotThumbInfoLoaded(const ShowfotoItemInfo& info, const QImage& thumbnailImage)
@@ -388,7 +374,6 @@ void ShowfotoThumbnailModel::slotThumbInfoLoaded(const ShowfotoItemInfo& info, c
             }
         }
     }
-
 }
 
 } // namespace ShowFoto

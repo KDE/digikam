@@ -179,9 +179,9 @@ public:
     ShowfotoRotateOverlay(ShowfotoRotateOverlayDirection dir, QObject* const parent);
     virtual void setActive(bool active);
 
-    ShowfotoRotateOverlayDirection direction() const     { return m_direction;                                               }
-    bool isLeft() const                                { return m_direction  == ShowfotoRotateOverlayLeft;                   }
-    bool isRight() const                               { return m_direction == ShowfotoRotateOverlayRight;                   }
+    ShowfotoRotateOverlayDirection direction() const     { return m_direction;                                                   }
+    bool isLeft() const                                  { return m_direction  == ShowfotoRotateOverlayLeft;                     }
+    bool isRight() const                                 { return m_direction == ShowfotoRotateOverlayRight;                     }
 
     static ShowfotoRotateOverlay* left(QObject* parent)  { return new ShowfotoRotateOverlay(ShowfotoRotateOverlayLeft, parent);  }
     static ShowfotoRotateOverlay* right(QObject* parent) { return new ShowfotoRotateOverlay(ShowfotoRotateOverlayRight, parent); }
@@ -208,6 +208,5 @@ private:
 };
 
 } // namespace ShowFoto
-
 
 #endif // SHOWFOTOOVERLAYS_H

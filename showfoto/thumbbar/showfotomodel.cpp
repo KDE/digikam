@@ -21,10 +21,10 @@
  *
  * ============================================================ */
 
-#include "showfotomodel.h"
+#include "showfotomodel.moc"
 
-namespace ShowFoto {
-
+namespace ShowFoto
+{
 
 ShowfotoModel::ShowfotoModel(QObject* const parent)
     : ShowfotoThumbnailModel(parent)
@@ -35,9 +35,9 @@ ShowfotoModel::~ShowfotoModel()
 {
 }
 
-void ShowfotoModel::setThumbnailLoadThread(ThumbnailLoadThread *thread)
+void ShowfotoModel::setThumbnailLoadThread(ThumbnailLoadThread* thread)
 {
     ShowfotoThumbnailModel::setThumbnailLoadThread(thread);
 }
 
-}//namespace ShowFoto
+} // namespace ShowFoto

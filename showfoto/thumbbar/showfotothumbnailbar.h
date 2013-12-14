@@ -24,11 +24,12 @@
 #ifndef SHOWFOTOTHUMBNAILBAR_H
 #define SHOWFOTOTHUMBNAILBAR_H
 
-//Local Includes
+// Local Includes
 
 #include "showfotocategorizedview.h"
 
-namespace ShowFoto {
+namespace ShowFoto
+{
 
 class ShowfotoItemViewToolTip;
 
@@ -78,5 +79,6 @@ private:
     Private* const d;
 };
 
-}
+} // namespace ShowFoto
+
 #endif // SHOWFOTOTHUMBNAILBAR_H

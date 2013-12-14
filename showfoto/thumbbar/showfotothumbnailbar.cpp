@@ -21,10 +21,15 @@
  *
  * ============================================================ */
 
-#include "showfotothumbnailbar.h"
+#include "showfotothumbnailbar.moc"
 
-#include "KDebug"
-#include "QTimer"
+// Qt includes
+
+#include <QTimer>
+
+// KDE includes
+
+#include <kdebug.h>
 
 // Local includes
 
@@ -36,7 +41,8 @@
 #include "showfotocategorizedview.h"
 #include "imageselectionoverlay.h"
 
-namespace ShowFoto {
+namespace ShowFoto
+{
 
 class ShowfotoThumbnailBar::Private
 {
@@ -86,7 +92,7 @@ void ShowfotoThumbnailBar::setModelsFiltered(ShowfotoImageModel* model, Showfoto
 
 void ShowfotoThumbnailBar::installRatingOverlay()
 {
-    ShowfotoRatingOverlay* ratingOverlay = new ShowfotoRatingOverlay(this);
+    ShowfotoRatingOverlay* const ratingOverlay = new ShowfotoRatingOverlay(this);
     addOverlay(ratingOverlay);
 
     connect(ratingOverlay, SIGNAL(ratingEdited(QList<QModelIndex>,int)),
@@ -135,7 +141,7 @@ void ShowfotoThumbnailBar::setFlow(QListView::Flow flow)
 
     ShowfotoCategorizedView::setFlow(flow);
 
-    ShowfotoThumbnailDelegate* del = static_cast<ShowfotoThumbnailDelegate*>(delegate());
+    ShowfotoThumbnailDelegate* const del = static_cast<ShowfotoThumbnailDelegate*>(delegate());
     del->setFlow(flow);
 
     // Reset the minimum and maximum sizes.
@@ -211,9 +217,8 @@ QModelIndex ShowfotoThumbnailBar::lastIndex() const
 ShowfotoItemInfo ShowfotoThumbnailBar::findItemByUrl(const KUrl url)
 {
     ShowfotoItemInfoList lst = showfotoItemInfos();
-    int i;
 
-    for(i = 0 ; i< lst.size() ; i++)
+    for(int i = 0 ; i< lst.size() ; i++)
     {
         if(lst.at(i).url == url)
         {
@@ -223,4 +228,5 @@ ShowfotoItemInfo ShowfotoThumbnailBar::findItemByUrl(const KUrl url)
 
     return ShowfotoItemInfo();
 }
+
 } // namespace ShowFoto

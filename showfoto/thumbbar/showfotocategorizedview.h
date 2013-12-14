@@ -33,13 +33,15 @@
 #include "showfotoiteminfo.h"
 #include "imagedelegateoverlay.h"
 
-namespace ShowFoto {
+namespace ShowFoto
+{
 
 class ShowfotoDelegate;
 
 class ShowfotoCategorizedView : public DCategorizedView
 {
 public:
+
     Q_OBJECT
 
 public:
@@ -49,37 +51,39 @@ public:
 
     void setModels(ShowfotoImageModel* model, ShowfotoSortFilterModel* filterModel);
 
-    ShowfotoImageModel*      showfotoImageModel()                 const;
-    ShowfotoSortFilterModel* showfotoSortFilterModel()            const;
+    ShowfotoImageModel*      showfotoImageModel()      const;
+    ShowfotoSortFilterModel* showfotoSortFilterModel() const;
 
-    QItemSelectionModel*     getSelectionModel()                const;
+    QItemSelectionModel*     getSelectionModel()       const;
 
     /// Returns any ShowfotoFilterModel in chain. May not be sourceModel()
-    ShowfotoFilterModel*     showfotoFilterModel()                const;
+    ShowfotoFilterModel*     showfotoFilterModel()     const;
 
     /// Returns 0 if the ShowfotoImageModel is not an ShowfotoThumbnailModel
-    ShowfotoThumbnailModel*  showfotoThumbnailModel()             const;
+    ShowfotoThumbnailModel*  showfotoThumbnailModel()  const;
 
-    ShowfotoDelegate*        delegate()                         const;
+    ShowfotoDelegate*        delegate()                const;
 
-    ShowfotoItemInfo       currentInfo()                      const;
-    KUrl                   currentUrl()                       const;
+    ShowfotoItemInfo       currentInfo()               const;
+    KUrl                   currentUrl()                const;
 
     QList<ShowfotoItemInfo>     selectedShowfotoItemInfos()             const;
     QList<ShowfotoItemInfo>     selectedShowfotoItemInfosCurrentFirst() const;
-    KUrl::List                  selectedUrls()                     const;
+    KUrl::List                  selectedUrls()                          const;
 
-    QList<ShowfotoItemInfo>     showfotoItemInfos()                     const;
-    KUrl::List             urls()                             const;
+    QList<ShowfotoItemInfo>     showfotoItemInfos()    const;
+    KUrl::List             urls()                      const;
 
-    /** Selects the index as current and scrolls to it */
+    /** Selects the index as current and scrolls to it
+     */
     void toIndex(const KUrl& url);
 
     /** Returns the n-th info after the given one.
      *  Specifically, return the previous info for nth = -1
      *  and the next info for n = 1.
      *  Returns a null info if either startingPoint or the nth info are
-     *  not contained in the model */
+     *  not contained in the model
+     */
     ShowfotoItemInfo nextInOrder(const ShowfotoItemInfo& startingPoint, int nth);
 
     ShowfotoItemInfo previousInfo(const ShowfotoItemInfo& info)
@@ -108,22 +112,28 @@ public Q_SLOTS:
 
     void setThumbnailSize(int size);
 
-    /** Scroll the view to the given item when it becomes available */
+    /** Scroll the view to the given item when it becomes available
+     */
     void setCurrentWhenAvailable(qlonglong ShowfotoItemId);
 
-    /** Set as current item the item identified by its file url */
+    /** Set as current item the item identified by its file url
+     */
     void setCurrentUrl(const KUrl& url);
 
-    /** Set as current item the item identified by the ShowfotoItemInfo */
+    /** Set as current item the item identified by the ShowfotoItemInfo
+     */
     void setCurrentInfo(const ShowfotoItemInfo& info);
 
-    /** Set selected items identified by their file urls */
+    /** Set selected items identified by their file urls
+     */
     void setSelectedUrls(const KUrl::List& urlList);
 
-    /** Set selected items */
+    /** Set selected items
+     */
     void setSelectedShowfotoItemInfos(const QList<ShowfotoItemInfo>& infos);
 
-    /** Does something to gain attention for info, but not changing current selection */
+    /** Does something to gain attention for info, but not changing current selection
+     */
     void hintAt(const ShowfotoItemInfo& info);
 
 Q_SIGNALS:
@@ -181,5 +191,7 @@ private:
     class Private;
     Private* const d;
 };
-}
+
+} // namespace Showfoto 
+
 #endif // SHOWFOTOCATEGORIZEDVIEW_H

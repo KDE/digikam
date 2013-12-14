@@ -21,12 +21,14 @@
  *
  * ============================================================ */
 
+#include "showfotofiltermodel.moc"
+
 // Local includes
 
-#include "showfotofiltermodel.h"
 #include "showfotoiteminfo.h"
 
-namespace ShowFoto {
+namespace ShowFoto
+{
 
 ShowfotoSortFilterModel::ShowfotoSortFilterModel(QObject* const parent)
     : KCategorizedSortFilterProxyModel(parent),
@@ -189,7 +191,7 @@ QModelIndex ShowfotoSortFilterModel::indexForShowfotoItemId(qlonglong id) const
 QList<ShowfotoItemInfo> ShowfotoSortFilterModel::showfotoItemInfosSorted() const
 {
     QList<ShowfotoItemInfo> infos;
-    const int          size = rowCount();
+    const int size = rowCount();
 
     for (int i = 0; i < size; i++)
     {
@@ -228,7 +230,7 @@ public:
 
     ShowfotoFilterModelPrivate()
     {
-        q                = 0;
+        q                  = 0;
         showfotoImageModel = 0;
     }
 
@@ -504,5 +506,4 @@ bool NoDuplicatesShowfotoFilterModel::filterAcceptsRow(int source_row, const QMo
     return true;
 }
 
-
-}// namespace ShowFoto
+} // namespace ShowFoto

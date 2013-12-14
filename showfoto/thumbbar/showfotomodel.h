@@ -26,18 +26,21 @@
 
 #include "showfotothumbnailmodel.h"
 
-namespace ShowFoto {
-
+namespace ShowFoto
+{
 
 class ShowfotoModel : public ShowfotoThumbnailModel
 {
     Q_OBJECT
 
 public:
+
     explicit ShowfotoModel(QObject* const parent = 0);
     ~ShowfotoModel();
 
-    void setThumbnailLoadThread(ThumbnailLoadThread *thread);
+    void setThumbnailLoadThread(ThumbnailLoadThread* thread);
 };
-}
+    
+} // namespace ShowFoto
+
 #endif // SHOWFOTOMODEL_H
