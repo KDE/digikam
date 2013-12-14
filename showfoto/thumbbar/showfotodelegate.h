@@ -52,11 +52,8 @@ public:
 
     void setView(ShowfotoThumbnailBar* view);
 
-    //QRect commentsRect() const;
-    QRect tagsRect() const;
     QRect actualPixmapRect(const QModelIndex& index) const;
     QRect groupIndicatorRect() const;
-    QRect lockIndicatorRect() const;
 
     int calculatethumbSizeToFit(int ws);
 

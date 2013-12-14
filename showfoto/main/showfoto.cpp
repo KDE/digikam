@@ -552,7 +552,6 @@ void ShowFoto::openUrls(const KUrl::List &urls)
              it != urls.constEnd(); ++it)
         {
             QFileInfo fi((*it).toLocalFile());
-            iteminfo.id = 1 + i;
             iteminfo.name = fi.fileName();
             iteminfo.mime = fi.suffix();
             iteminfo.size = fi.size();
@@ -1230,7 +1229,6 @@ void ShowFoto::openFolder(const KUrl& url)
 
     for (fi = fileinfolist.constBegin(); fi != fileinfolist.constEnd(); ++fi)
     {
-        iteminfo.id = 1 + i;
         iteminfo.name = (*fi).fileName();
         iteminfo.mime = (*fi).suffix();
         iteminfo.size = (*fi).size();

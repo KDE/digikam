@@ -35,7 +35,6 @@
 
 #include "showfotodelegate.h"
 #include "showfotofiltermodel.h"
-#include "showfotooverlays.h"
 #include "itemviewtooltip.h"
 #include "showfototooltipfiller.h"
 #include "showfotocategorizedview.h"
@@ -159,19 +158,6 @@ void ShowfotoThumbnailBar::setFlow(QListView::Flow flow)
 void ShowfotoThumbnailBar::slotSetupChanged()
 {
     ShowfotoCategorizedView::slotSetupChanged();
-}
-
-void ShowfotoThumbnailBar::assignRating(const QList<QModelIndex>& indexes, int rating)
-{
-   QList<QModelIndex> mappedIndexes = showfotoSortFilterModel()->mapListToSource(indexes);
-
-   foreach(QModelIndex index, mappedIndexes)
-   {
-       if (index.isValid())
-       {
-            showfotoImageModel()->showfotoItemInfoRef(index).rating = rating;
-       }
-   }
 }
 
 bool ShowfotoThumbnailBar::event(QEvent* e)

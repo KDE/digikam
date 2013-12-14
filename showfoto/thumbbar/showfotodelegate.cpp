@@ -138,12 +138,6 @@ void ShowfotoDelegate::setSpacing(int spacing)
     ItemViewShowfotoDelegate::setSpacing(spacing);
 }
 
-QRect ShowfotoDelegate::tagsRect() const
-{
-    Q_D(const ShowfotoDelegate);
-    return d->tagRect;
-}
-
 QRect ShowfotoDelegate::pixmapRect() const
 {
     Q_D(const ShowfotoDelegate);
@@ -339,13 +333,6 @@ void ShowfotoDelegate::updateSizeRectsAndPixmaps()
 
     prepareBackground();
 
-    if (!d->ratingRect.isNull())
-    {
-        //Normally we prepare the pixmaps over the background of the rating rect.
-        //If the rating is drawn over the thumbnail, we can only draw over a transparent pixmap.
-        prepareRatingPixmaps(!d->ratingOverThumbnail);
-    }
-
     // ---- Drawing related caches ----
 
     clearCaches();
@@ -369,12 +356,6 @@ void ShowfotoDelegate::modelChanged()
     Q_D(ShowfotoDelegate);
     clearModelDataCaches();
     setModel(d->currentView ? d->currentView->model() : 0);
-}
-
-QRect ShowfotoDelegate::lockIndicatorRect() const
-{
-    Q_D(const ShowfotoDelegate);
-    return d->lockRect;
 }
 
 void ShowfotoDelegate::modelContentsChanged()
