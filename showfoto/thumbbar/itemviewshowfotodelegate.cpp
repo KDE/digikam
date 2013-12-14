@@ -169,12 +169,6 @@ QRect ItemViewShowfotoDelegate::ratingRect() const
     return d->ratingRect;
 }
 
-void ItemViewShowfotoDelegate::setRatingEdited(const QModelIndex& index)
-{
-    Q_D(ItemViewShowfotoDelegate);
-    d->editingRating = index;
-}
-
 QSize ItemViewShowfotoDelegate::sizeHint(const QStyleOptionViewItem& /*option*/, const QModelIndex& /*index*/) const
 {
     Q_D(const ItemViewShowfotoDelegate);

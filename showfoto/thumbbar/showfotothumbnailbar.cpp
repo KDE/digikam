@@ -90,15 +90,6 @@ void ShowfotoThumbnailBar::setModelsFiltered(ShowfotoImageModel* model, Showfoto
     ShowfotoCategorizedView::setModels(model, d->duplicatesFilter);
 }
 
-void ShowfotoThumbnailBar::installRatingOverlay()
-{
-    ShowfotoRatingOverlay* const ratingOverlay = new ShowfotoRatingOverlay(this);
-    addOverlay(ratingOverlay);
-
-    connect(ratingOverlay, SIGNAL(ratingEdited(QList<QModelIndex>,int)),
-            this, SLOT(assignRating(QList<QModelIndex>,int)));
-}
-
 void ShowfotoThumbnailBar::slotDockLocationChanged(Qt::DockWidgetArea area)
 {
     if (area == Qt::LeftDockWidgetArea || area == Qt::RightDockWidgetArea)
