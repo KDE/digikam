@@ -51,17 +51,10 @@ void ShowfotoDelegate::ShowfotoDelegatePrivate::clearRects()
     dateRect             = QRect(0, 0, 0, 0);
     pixmapRect           = QRect(0, 0, 0, 0);
     nameRect             = QRect(0, 0, 0, 0);
-//  titleRect            = QRect(0, 0, 0, 0);
-//  commentsRect         = QRect(0, 0, 0, 0);
     resolutionRect       = QRect(0, 0, 0, 0);
     sizeRect             = QRect(0, 0, 0, 0);
-//  downloadRect         = QRect(0, 0, 0, 0);
-    lockRect             = QRect(0, 0, 0, 0);
-    tagRect              = QRect(0, 0, 0, 0);
-    ratingRect           = QRect(0, 0, 0, 0);
     imageInformationRect = QRect(0, 0, 0, 0);
     pickLabelRect        = QRect(0, 0, 0, 0);
-    groupRect            = QRect(0, 0, 0, 0);
 }
 
 ShowfotoDelegate::ShowfotoDelegate(QObject* const parent)
@@ -142,27 +135,8 @@ void ShowfotoDelegate::setModel(QAbstractItemModel* model)
 
 void ShowfotoDelegate::setSpacing(int spacing)
 {
-    //Q_D(ShowfotoDelegate);
-
-//    if (d->categoryDrawer)
-//    {
-//        d->categoryDrawer->setLowerSpacing(spacing);
-//    }
-
     ItemViewShowfotoDelegate::setSpacing(spacing);
 }
-
-//ShowfotoCategoryDrawer* ShowfotoDelegate::categoryDrawer() const
-//{
-//    Q_D(const ShowfotoDelegate);
-//    return d->categoryDrawer;
-//}
-
-//QRect ShowfotoDelegate::commentsRect() const
-//{
-//    Q_D(const ShowfotoDelegate);
-//    return d->commentsRect;
-//}
 
 QRect ShowfotoDelegate::tagsRect() const
 {
@@ -187,23 +161,6 @@ QRect ShowfotoDelegate::groupIndicatorRect() const
     Q_D(const ShowfotoDelegate);
     return d->groupRect;
 }
-
-//QRect ShowfotoDelegate::downloadIndicatorRect() const
-//{
-//    Q_D(const ShowfotoDelegate);
-//    return d->downloadRect;
-//}
-
-//QRect ShowfotoDelegate::lockIndicatorRect() const
-//{
-//    Q_D(const ShowfotoDelegate);
-//    return d->lockRect;
-//}
-
-//void ShowfotoDelegate::prepareThumbnails(ShowfotoThumbnailModel* thumbModel, const QList<QModelIndex>& indexes)
-//{
-//    thumbModel->prepareThumbnails(indexes, thumbnailSize());
-//}
 
 QPixmap ShowfotoDelegate::retrieveThumbnailPixmap(const QModelIndex& index, int thumbnailSize)
 {
@@ -259,72 +216,23 @@ void ShowfotoDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, co
         const_cast<ShowfotoDelegate*>(this)->updateActualPixmapRect(index, actualPixmapRect);
     }
 
-//    if (!d->ratingRect.isNull())
-//    {
-//        drawRating(p, index, d->ratingRect, info.rating, isSelected);
-//    }
-
-    // Draw Color Label rectangle
-//    drawColorLabelRect(p, option, isSelected, info.colorLabel);
-
     p->setPen(isSelected ? kapp->palette().color(QPalette::HighlightedText)
                          : kapp->palette().color(QPalette::Text));
-
-
-//    // If there is ImageHistory present, paint a small icon over the thumbnail to indicate that this is derived image
-//    if (info.hasImageHistory())
-//    {
-//        p->drawPixmap(d->pixmapRect.right()-24, d->pixmapRect.bottom()-24, KIcon("svn_switch").pixmap(22, 22));
-//    }
 
     if (!d->nameRect.isNull())
     {
         drawName(p, d->nameRect, info.name);
     }
 
-//    if (!d->dateRect.isNull())
-//    {
-//        drawCreationDate(p, d->dateRect, info.ctime);
-//    }
+    if (!d->dateRect.isNull())
+    {
+        drawCreationDate(p, d->dateRect, info.ctime);
+    }
 
     if (!d->sizeRect.isNull())
     {
         drawFileSize(p, d->sizeRect, info.size);
     }
-
-//    if (!d->downloadRect.isNull())
-//    {
-//        drawDownloadIndicator(p, d->downloadRect, info.downloaded);
-//    }
-
-//    if (!d->lockRect.isNull())
-//    {
-//        drawLockIndicator(p, d->lockRect, info.writePermissions);
-//    }
-
-//    if (!d->resolutionRect.isNull())
-//    {
-//        QSize dimensions(info.width, info.height);
-//        drawImageSize(p, d->resolutionRect, dimensions);
-//    }
-
-    //TODO: Implement grouping in Showfoto
-    /*if (!d->groupRect.isNull())
-    {
-        drawGroupIndicator(p, d->groupRect, info.numberOfGroupedImages(),
-                           index.data(ShowfotoFilterModel::GroupIsOpenRole).toBool());
-    }*/
-
-//    if (!d->tagRect.isNull())
-//    {
-//        QString tags = AlbumManager::instance()->tagNames(info.tagIds).join(", ");
-//        drawTags(p, d->tagRect, tags, isSelected);
-//    }
-
-//    if (!d->pickLabelRect.isNull())
-//    {
-//        drawPickLabelIcon(p, d->pickLabelRect, info.pickLabel);
-//    }
 
     if (d->drawImageFormat)
     {
@@ -393,24 +301,12 @@ bool ShowfotoDelegate::onActualPixmapRect(const QPoint& pos, const QRect& visual
 
 void ShowfotoDelegate::setDefaultViewOptions(const QStyleOptionViewItem& option)
 {
-    //Q_D(ShowfotoDelegate);
-
-//    if (d->categoryDrawer)
-//    {
-//        d->categoryDrawer->setDefaultViewOptions(option);
-//    }
 
     ItemViewShowfotoDelegate::setDefaultViewOptions(option);
 }
 
 void ShowfotoDelegate::invalidatePaintingCache()
 {
-    //Q_D(ShowfotoDelegate);
-
-//    if (d->categoryDrawer)
-//    {
-//        d->categoryDrawer->invalidatePaintingCache();
-//    }
 
     ItemViewShowfotoDelegate::invalidatePaintingCache();
 }
@@ -657,13 +553,6 @@ void ShowfotoThumbnailDelegate::updateRects()
 
     d->pixmapRect      = QRect(d->margin, d->margin, d->contentWidth, d->contentWidth);
     d->rect            = QRect(0, 0, d->contentWidth + 2*d->margin, d->contentWidth + 2*d->margin);
-//    d->drawImageFormat = ShowfotoSettings::instance()->getIconShowImageFormat();
-
-//    if (true)
-//    {
-//        int top       = d->rect.bottom() - d->margin - d->starPolygonSize.height() - 2;
-//        d->ratingRect = QRect(d->margin, top, d->contentWidth, d->starPolygonSize.height());
-//    }
 
     if (d->flow == QListView::LeftToRight)
     {
@@ -713,51 +602,9 @@ void ShowfotoNormalDelegate::updateRects()
     d->pixmapRect                              = QRect(d->margin, y, d->contentWidth, d->contentWidth);
     y                                          = d->pixmapRect.bottom();
     d->imageInformationRect                    = QRect(d->margin, y, d->contentWidth, 0);
-//    const ShowfotoSettings* const ShowfotoSettings = ShowfotoSettings::instance();
-//    d->drawImageFormat                         = ShowfotoSettings->getIconShowImageFormat();
     const int iconSize                         = KIconLoader::SizeSmall;
 
     d->pickLabelRect   = QRect(d->margin, y, iconSize, iconSize);
-//  d->groupRect       = QRect(d->contentWidth - iconSize, y, iconSize, iconSize); // TODO
-//    d->downloadRect    =  QRect(d->contentWidth - iconSize - 14, d->pixmapRect.top(), iconSize, iconSize);
-//    d->lockRect        =  QRect(d->contentWidth - iconSize + 2, d->pixmapRect.top(), iconSize, iconSize);
-
-//    if (ShowfotoSettings->getIconShowRating())
-//    {
-//        d->ratingRect = QRect(d->margin, y, d->contentWidth, d->starPolygonSize.height());
-//        y             = d->ratingRect.bottom();
-//    }
-
-//    if (ShowfotoSettings->getIconShowName())
-//    {
-//        d->nameRect = QRect(d->margin, y, d->contentWidth-d->margin, d->oneRowRegRect.height());
-//        y           = d->nameRect.bottom();
-//    }
-
-//    if (ShowfotoSettings->getIconShowDate())
-//    {
-//        d->dateRect = QRect(d->margin, y, d->contentWidth, d->oneRowXtraRect.height());
-//        y           = d->dateRect.bottom();
-//    }
-
-    //TODO: Add resolution entry in ShowfotoSettings.
-    /*if (ShowfotoSettings->getIconShowResolution())
-    {
-        d->resolutionRect = QRect(d->margin, y, d->contentWidth, d->oneRowXtraRect.height());
-        y                 = d->resolutionRect.bottom() ;
-    }*/
-
-//    if (ShowfotoSettings->getIconShowSize())
-//    {
-//        d->sizeRect = QRect(d->margin, y, d->contentWidth, d->oneRowXtraRect.height());
-//        y           = d->sizeRect.bottom();
-//    }
-
-//    if (ShowfotoSettings->getIconShowTags())
-//    {
-//        d->tagRect = QRect(d->margin, y, d->contentWidth, d->oneRowComRect.height());
-//        y          = d->tagRect.bottom();
-//    }
 
     d->imageInformationRect.setBottom(y);
 
