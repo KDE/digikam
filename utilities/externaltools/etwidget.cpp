@@ -18,6 +18,9 @@ const QString ETConfig::showInContext = "showInContext";
 const QString ETConfig::shortcut      = "shortcut";
 const QString ETConfig::name          = "name";
 const QString ETConfig::type          = "type";
+const QString ETConfig::showTerminal  = "showTerminal";
+const QString ETConfig::noClose       = "noClose";
+const QString ETConfig::terminalArgs  = "terminalArgs";
 
 const QString ETConfig::Type::Executable::type      = "executable";
 const QString ETConfig::Type::Executable::path      = "path";
@@ -134,7 +137,9 @@ void ETWidget::update(const QString& tool)
     
     d->ui->name->clear();
 
-    foreach(const QString& group, cfg->cfg.groupList())
+    QStringList groups = cfg->cfg.groupList();
+    groups.sort();
+    foreach(const QString& group, groups)
     {
         KConfigGroup toolcfg = cfg->cfg.group(group);
         d->ui->name->addItem(toolcfg.readEntry<QString>(ETConfig::name, QString()), group);
@@ -169,6 +174,10 @@ void ETWidget::scriptSelected(int index)
 
     const QString type = cfg->cfg.readEntry<QString>(ETConfig::type, Exec::type);
     d->ui->type->setCurrentIndex(d->ui->type->findData(type));
+    
+    d->ui->terminal->setChecked(cfg->cfg.readEntry<bool>(ETConfig::showTerminal, false));
+    d->ui->noclose->setChecked(cfg->cfg.readEntry<bool>(ETConfig::noClose, false));
+    d->ui->termargs->setText(cfg->cfg.readEntry<QString>(ETConfig::terminalArgs, QString()));
         
     d->ui->execurl->setText(cfg->readTypeEntry(Exec::type, Exec::path, QString()));
     d->ui->execargs->setText(cfg->readTypeEntry(Exec::type, Exec::arguments, QString()));
@@ -185,6 +194,7 @@ void ETWidget::scriptSelected(int index)
 
 void ETWidget::scriptRenamed(const QString& newname)
 {
+    Q_UNUSED(newname);
     if (d->ui->name->findText(d->ui->name->currentText()) != -1)
     {
         d->ui->add->setIcon(KIcon("document-save"));
@@ -214,6 +224,10 @@ void ETWidget::save()
     cfg->writeEntry(ETConfig::name, d->ui->name->currentText());
     cfg->writeEntry(ETConfig::type, d->ui->type->itemData(d->ui->type->currentIndex()).toString());
 
+    cfg->writeEntry(ETConfig::showTerminal, d->ui->terminal->isChecked());
+    cfg->writeEntry(ETConfig::noClose, d->ui->noclose->isChecked());
+    cfg->writeEntry(ETConfig::terminalArgs, d->ui->termargs->text());
+    
     cfg->writeEntry(ETConfig::showInContext, d->ui->context->isChecked());
     cfg->writeEntry(ETConfig::shortcut,      d->ui->shortcut->keySequence().toString());
     
@@ -227,6 +241,7 @@ void ETWidget::save()
     cfg->writeTypeEntry(SimpleScript::type, SimpleScript::body, d->ui->simplescriptbody->toPlainText());
 
     cfg->cfg.sync();
+    scriptRenamed(QString());
 }
 
 void ETWidget::remove()

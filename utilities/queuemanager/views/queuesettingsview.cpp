@@ -413,7 +413,9 @@ void QueueSettingsView::slotSettingsChanged()
     
     ETConfig::Ptr cfg(ETConfig::config());
     d->externalTool->clear();
-    foreach(const QString& group, cfg->cfg.groupList())
+    QStringList groups = cfg->cfg.groupList();
+    groups.sort();
+    foreach(const QString& group, groups)
     {
         KConfigGroup toolcfg = cfg->cfg.group(group);
         d->externalTool->addItem(toolcfg.readEntry<QString>(ETConfig::name, QString()), group);

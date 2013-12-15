@@ -55,7 +55,7 @@ bool ETRunner::setupProcess()
         KShell::Errors err;
         
         program   = toolcfg_->readTypeEntry(type, Exec::path, defprog);
-        arguments = KShell::splitArgs(toolcfg_->readTypeEntry(type, Exec::arguments, QString()), KShell::NoOptions, &err);
+        arguments = KShell::splitArgs(toolcfg_->readTypeEntry(type, Exec::arguments, QString()), KShell::AbortOnMeta, &err);
         if (err != KShell::NoError)
         {
             Q_EMIT error(i18n("Can't execute program"), i18n("Bad quoting in arguments"));
@@ -91,6 +91,35 @@ bool ETRunner::setupProcess()
     else
     {
         return false;
+    }
+    
+    if (toolcfg_->readEntry<bool>(ETConfig::showTerminal, false))
+    {
+        //This code copied from KToolInvocation::invokeTerminal in ktoolinvocation_x11.cpp
+        //=====================
+        KConfigGroup confGroup(KGlobal::config(), "General");
+        QString exec = confGroup.readPathEntry("TerminalApplication", QString::fromLatin1("konsole"));
+        
+        if (exec == QLatin1String("konsole")) {
+            exec += QString::fromLatin1(" --nofork");
+        }
+        //=====================
+        
+        if (toolcfg_->readEntry<bool>(ETConfig::noClose, false))
+        {
+            exec += " --noclose ";
+        }
+        exec += " " + toolcfg_->readEntry<QString>(ETConfig::terminalArgs, QString()) + " ";
+        
+        exec += QString::fromLatin1(" -e ") + program + QString::fromLatin1(" ") + KShell::joinArgs(arguments);
+        KShell::Errors err;
+        arguments = KShell::splitArgs(exec, KShell::AbortOnMeta, &err);
+        if (err != KShell::NoError)
+        {
+            Q_EMIT error(i18n("Can't execute program"), i18n("Bad quoting in arguments when using 'start in terminal'"));
+            return false;
+        }        
+        program = arguments.takeFirst();
     }
     
     process_->setProgram(program, arguments);

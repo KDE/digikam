@@ -45,6 +45,9 @@ struct ETConfig
     static const QString shortcut;
     static const QString name;
     static const QString type;
+    static const QString showTerminal;
+    static const QString noClose;
+    static const QString terminalArgs;
     
     struct Type
     {
