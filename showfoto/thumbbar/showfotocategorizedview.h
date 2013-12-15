@@ -154,10 +154,6 @@ Q_SIGNALS:
     /// Emitted when a new model is set
     void modelChanged();
 
-protected Q_SLOTS:
-
-    void slotShowfotoItemInfosAdded();
-
 protected:
 
     // reimplemented from parent class
