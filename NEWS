@@ -106,5 +106,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 092 ==> 146318 - Usability: goto next item/ forward buttons are inconsistent between edit and view mode.
 093 ==> 293194 - Disable versioning side panel if versioning disabled in preferences.
 094 ==> 328818 - 4.0.0-beta1 - Build Errors (kevix2.h).
-095 ==> 
+095 ==> 328830 - Digikam compile error because of commit f3e488b56e4d56be0bb1022e32258add72c3c68a.
+096 ==> 
 
