@@ -327,7 +327,7 @@ QModelIndex ShowfotoCategorizedView::nextIndexHint(const QModelIndex& anchor, co
 
     // Fixes a special case of multiple (face) entries for the same image.
     // If one is removed, any entry of the same image shall be preferred.
-    if (d->model->numberOfIndexesForShowfotoItemInfo(info) > 1)
+    if (d->model->indexesForShowfotoItemInfo(info).size() > 1)
     {
         // The hint is for a different info, but we may have a hint for the same info
         if (info != d->filterModel->showfotoItemInfo(hint))
@@ -521,28 +521,6 @@ void ShowfotoCategorizedView::slotDelayedEnter()
     KConfigGroup group        = config->group("ImageViewer Settings");
 
     setToolTipEnabled(group.readEntry("Show ToolTips",             true));
-}
-
-void ShowfotoCategorizedView::scrollToStoredItem()
-{
-    if (d->scrollToItemId)
-    {
-        if (d->model->hasImage(d->scrollToItemId))
-        {
-            QModelIndex index = d->filterModel->indexForShowfotoItemId(d->scrollToItemId);
-            setCurrentIndex(index);
-            scrollToRelaxed(index, QAbstractItemView::PositionAtCenter);
-            d->scrollToItemId = 0;
-        }
-    }
-}
-
-void ShowfotoCategorizedView::slotShowfotoItemInfosAdded()
-{
-    if (d->scrollToItemId)
-    {
-        scrollToStoredItem();
-    }
 }
 
 void ShowfotoCategorizedView::slotFileChanged(const QString& filePath)

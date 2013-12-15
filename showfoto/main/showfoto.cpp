@@ -414,7 +414,7 @@ void ShowFoto::setupUserArea()
 
     d->thumbBar->setModels(d->model, d->filterModel);
     d->thumbBar->setSelectionMode(QAbstractItemView::SingleSelection);
-    d->thumbBar->setModelsFiltered(d->model,d->filterModel);
+    //d->thumbBar->setModelsFiltered(d->model,d->filterModel);
 
     viewContainer->setAutoSaveSettings("ImageViewer Thumbbar", true);
 
@@ -1004,7 +1004,7 @@ void ShowFoto::slotDeleteCurrentItemResult(KJob* job)
     }
 
     // No error, remove item in thumbbar.
-    d->model->removeShowfotoItemInfo(d->thumbBar->currentInfo());
+    //d->model->removeShowfotoItemInfo(d->thumbBar->currentInfo());
 
 //    // Disable menu actions and SideBar if no current image.
 

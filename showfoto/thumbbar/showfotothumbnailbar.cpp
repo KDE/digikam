@@ -78,17 +78,6 @@ ShowfotoThumbnailBar::~ShowfotoThumbnailBar()
     delete d;
 }
 
-void ShowfotoThumbnailBar::setModelsFiltered(ShowfotoImageModel* model, ShowfotoSortFilterModel* filterModel)
-{
-    if (!d->duplicatesFilter)
-    {
-        d->duplicatesFilter = new NoDuplicatesShowfotoFilterModel(this);
-    }
-
-    d->duplicatesFilter->setSourceFilterModel(filterModel);
-    ShowfotoCategorizedView::setModels(model, d->duplicatesFilter);
-}
-
 void ShowfotoThumbnailBar::slotDockLocationChanged(Qt::DockWidgetArea area)
 {
     if (area == Qt::LeftDockWidgetArea || area == Qt::RightDockWidgetArea)

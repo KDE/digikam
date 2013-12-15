@@ -47,8 +47,6 @@ public:
         reAdding                    = false;
         incrementalRefreshRequested = false;
         sendRemovalSignals          = false;
-        incrementalUpdater          = 0;
-
     }
 
     inline bool isValid(const QModelIndex& index)
@@ -72,32 +70,6 @@ public:
     bool                                      incrementalRefreshRequested;
 
     bool                                      sendRemovalSignals;
-
-    class ShowfotoImageModelIncrementalUpdater* incrementalUpdater;
-};
-
-// ----------------------------------------------------------------------------------------------------
-
-typedef QPair<int, int> IntPair;
-typedef QList<IntPair>  IntPairList;
-
-class ShowfotoImageModelIncrementalUpdater
-{
-public:
-
-    explicit ShowfotoImageModelIncrementalUpdater(ShowfotoImageModel::Private* const d);
-
-    void            appendInfos(const QList<ShowfotoItemInfo>& infos);
-    void            aboutToBeRemovedInModel(const IntPairList& aboutToBeRemoved);
-    QList<IntPair>  oldIndexes();
-
-    static QList<IntPair> toContiguousPairs(const QList<int>& ids);
-
-public:
-
-    QHash<qlonglong, int>      oldIds;
-    QList<ShowfotoItemInfo>    newInfos;
-    QList<IntPairList>         modelRemovals;
 };
 
 // ----------------------------------------------------------------------------------------------------
@@ -106,22 +78,11 @@ ShowfotoImageModel::ShowfotoImageModel(QObject* const parent)
     : QAbstractListModel(parent),
       d(new Private)
 {
-    d->incrementalUpdater = new ShowfotoImageModelIncrementalUpdater(d);
 }
 
 ShowfotoImageModel::~ShowfotoImageModel()
 {
     delete d;
-}
-
-void ShowfotoImageModel::setKeepsFileUrlCache(bool keepCache)
-{
-    d->keepFileUrlCache = keepCache;
-}
-
-bool ShowfotoImageModel::keepsFileUrlCache() const
-{
-    return d->keepFileUrlCache;
 }
 
 bool ShowfotoImageModel::isEmpty() const
@@ -144,16 +105,6 @@ ShowfotoItemInfo& ShowfotoImageModel::showfotoItemInfoRef(const QModelIndex& ind
     return d->infos[index.row()];
 }
 
-qlonglong ShowfotoImageModel::showfotoItemId(const QModelIndex& index) const
-{
-    if (!d->isValid(index))
-    {
-        return -1;
-    }
-
-    return d->infos.at(index.row()).id;
-}
-
 QList<ShowfotoItemInfo> ShowfotoImageModel::showfotoItemInfos(const QList<QModelIndex>& indexes) const
 {
     QList<ShowfotoItemInfo> infos;
@@ -164,18 +115,6 @@ QList<ShowfotoItemInfo> ShowfotoImageModel::showfotoItemInfos(const QList<QModel
     }
 
     return infos;
-}
-
-QList<qlonglong> ShowfotoImageModel::showfotoItemIds(const QList<QModelIndex>& indexes) const
-{
-    QList<qlonglong> ids;
-
-    foreach(const QModelIndex& index, indexes)
-    {
-        ids << showfotoItemId(index);
-    }
-
-    return ids;
 }
 
 ShowfotoItemInfo ShowfotoImageModel::showfotoItemInfo(int row) const
@@ -193,24 +132,14 @@ ShowfotoItemInfo& ShowfotoImageModel::showfotoItemInfoRef(int row) const
     return d->infos[row];
 }
 
-qlonglong ShowfotoImageModel::showfotoItemId(int row) const
-{
-    if (row < 0 || (row >= d->infos.size()))
-    {
-        return -1;
-    }
-
-    return d->infos.at(row).id;
-}
-
 QModelIndex ShowfotoImageModel::indexForShowfotoItemInfo(const ShowfotoItemInfo& info) const
 {
-    return indexForShowfotoItemId(info.id);
+    return indexForUrl(info.url);
 }
 
 QList<QModelIndex> ShowfotoImageModel::indexesForShowfotoItemInfo(const ShowfotoItemInfo& info) const
 {
-    return indexesForShowfotoItemId(info.id);
+    return indexesForUrl(info.url);
 }
 
 QModelIndex ShowfotoImageModel::indexForShowfotoItemId(qlonglong id) const
@@ -223,38 +152,6 @@ QModelIndex ShowfotoImageModel::indexForShowfotoItemId(qlonglong id) const
     }
 
     return QModelIndex();
-}
-
-QList<QModelIndex> ShowfotoImageModel::indexesForShowfotoItemId(qlonglong id) const
-{
-    QList<QModelIndex> indexes;
-
-    QHash<qlonglong, int>::const_iterator it;
-
-    for (it = d->idHash.constFind(id); it != d->idHash.constEnd() && it.key() == id; ++it)
-    {
-       indexes << createIndex(it.value(), 0);
-    }
-
-    return indexes;
-}
-
-int ShowfotoImageModel::numberOfIndexesForShowfotoItemInfo(const ShowfotoItemInfo& info) const
-{
-    return numberOfIndexesForShowfotoItemId(info.id);
-}
-
-int ShowfotoImageModel::numberOfIndexesForShowfotoItemId(qlonglong id) const
-{
-    int count = 0;
-    QHash<qlonglong,int>::const_iterator it;
-
-    for (it = d->idHash.constFind(id); it != d->idHash.constEnd() && it.key() == id; ++it)
-    {
-        ++count;
-    }
-
-    return count;
 }
 
 // static method
@@ -276,33 +173,8 @@ ShowfotoItemInfo ShowfotoImageModel::retrieveShowfotoItemInfo(const QModelIndex&
     return model->showfotoItemInfo(row);
 }
 
-// static method
-qlonglong ShowfotoImageModel::retrieveShowfotoItemId(const QModelIndex& index)
-{
-    if (!index.isValid())
-    {
-        return -1;
-    }
-
-    ShowfotoImageModel* const model = index.data(ShowfotoImageModelPointerRole).value<ShowfotoImageModel*>();
-    int                       row   = index.data(ShowfotoImageModelInternalId).toInt();
-
-    if (!model)
-    {
-        return -1;
-    }
-
-    return model->showfotoItemId(row);
-}
-
 QModelIndex ShowfotoImageModel::indexForUrl(const KUrl& fileUrl) const
 {
-    if (d->keepFileUrlCache)
-    {
-        return indexForShowfotoItemId(d->fileUrlHash.value(fileUrl.prettyUrl()));
-    }
-    else
-    {
         const int size = d->infos.size();
 
         for (int i = 0; i < size; i++)
@@ -312,19 +184,12 @@ QModelIndex ShowfotoImageModel::indexForUrl(const KUrl& fileUrl) const
                 return createIndex(i, 0);
             }
         }
-    }
 
     return QModelIndex();
 }
 
 QList<QModelIndex> ShowfotoImageModel::indexesForUrl(const KUrl& fileUrl) const
 {
-    if (d->keepFileUrlCache)
-    {
-        return indexesForShowfotoItemId(d->fileUrlHash.value(fileUrl.prettyUrl()));
-    }
-    else
-    {
         QList<QModelIndex> indexes;
         const int          size = d->infos.size();
 
@@ -337,27 +202,10 @@ QList<QModelIndex> ShowfotoImageModel::indexesForUrl(const KUrl& fileUrl) const
         }
 
         return indexes;
-    }
 }
 
 ShowfotoItemInfo ShowfotoImageModel::showfotoItemInfo(const KUrl& fileUrl) const
 {
-    if (d->keepFileUrlCache)
-    {
-        qlonglong id = d->fileUrlHash.value(fileUrl.prettyUrl());
-
-        if (id)
-        {
-            int index = d->idHash.value(id, -1);
-
-            if (index != -1)
-            {
-                return d->infos.at(index);
-            }
-        }
-    }
-    else
-    {
         foreach(const ShowfotoItemInfo& info, d->infos)
         {
             if (info.url == fileUrl)
@@ -365,7 +213,6 @@ ShowfotoItemInfo ShowfotoImageModel::showfotoItemInfo(const KUrl& fileUrl) const
                 return info;
             }
         }
-    }
 
     return ShowfotoItemInfo();
 }
@@ -374,20 +221,7 @@ QList<ShowfotoItemInfo> ShowfotoImageModel::showfotoItemInfos(const KUrl& fileUr
 {
     QList<ShowfotoItemInfo> infos;
 
-    if (d->keepFileUrlCache)
-    {
-        qlonglong id = d->fileUrlHash.value(fileUrl.prettyUrl());
 
-        if (id)
-        {
-            foreach(int index, d->idHash.values(id))
-            {
-                infos << d->infos.at(index);
-            }
-        }
-    }
-    else
-    {
         foreach(const ShowfotoItemInfo& info, d->infos)
         {
             if (info.url == fileUrl)
@@ -395,7 +229,6 @@ QList<ShowfotoItemInfo> ShowfotoImageModel::showfotoItemInfos(const KUrl& fileUr
                 infos << info;
             }
         }
-    }
 
     return infos;
 }
@@ -412,14 +245,8 @@ void ShowfotoImageModel::addShowfotoItemInfos(const QList<ShowfotoItemInfo>& inf
         return;
     }
 
-    if (d->incrementalUpdater)
-    {
-        d->incrementalUpdater->appendInfos(infos);
-    }
-    else
-    {
         appendInfos(infos);
-    }
+
 }
 
 void ShowfotoImageModel::addShowfotoItemInfoSynchronously(const ShowfotoItemInfo& info)
@@ -441,12 +268,7 @@ void ShowfotoImageModel::addShowfotoItemInfosSynchronously(const QList<ShowfotoI
 void ShowfotoImageModel::clearShowfotoItemInfos()
 {
     d->infos.clear();
-    d->idHash.clear();
     d->fileUrlHash.clear();
-
-    delete d->incrementalUpdater;
-
-    d->incrementalUpdater          = 0;
     d->reAdding                    = false;
     d->refreshing                  = false;
     d->incrementalRefreshRequested = false;
@@ -464,34 +286,6 @@ void ShowfotoImageModel::setShowfotoItemInfos(const QList<ShowfotoItemInfo>& inf
 QList<ShowfotoItemInfo> ShowfotoImageModel::showfotoItemInfos() const
 {
     return d->infos;
-}
-
-QList<qlonglong> ShowfotoImageModel::showfotoItemIds() const
-{
-    return d->idHash.keys();
-}
-
-QList<ShowfotoItemInfo> ShowfotoImageModel::uniqueShowfotoItemInfos() const
-{
-    QList<ShowfotoItemInfo> uniqueInfos;
-    const int size = d->infos.size();
-
-    for (int i = 0; i < size; i++)
-    {
-        const ShowfotoItemInfo& info = d->infos.at(i);
-
-        if (d->idHash.value(info.id) == i)
-        {
-            uniqueInfos << info;
-        }
-    }
-
-    return uniqueInfos;
-}
-
-bool ShowfotoImageModel::hasImage(qlonglong id) const
-{
-    return d->idHash.contains(id);
 }
 
 bool ShowfotoImageModel::hasImage(const ShowfotoItemInfo& info) const
@@ -540,7 +334,7 @@ void ShowfotoImageModel::reAddShowfotoItemInfos(ShowfotoItemInfoList& infos)
 void ShowfotoImageModel::reAddingFinished()
 {
     d->reAdding = false;
-    cleanSituationChecks();
+    //cleanSituationChecks();
 }
 
 void ShowfotoImageModel::slotFileDeleted(const QString& folder, const QString& file, bool status)
@@ -548,49 +342,12 @@ void ShowfotoImageModel::slotFileDeleted(const QString& folder, const QString& f
     Q_UNUSED(status)
 
     ShowfotoItemInfo info = showfotoItemInfo(KUrl::fromLocalFile(folder + file));
-    removeShowfotoItemInfo(info);
+    //removeShowfotoItemInfo(info);
 }
 
 void ShowfotoImageModel::slotFileUploaded(const ShowfotoItemInfo& info)
 {
     addShowfotoItemInfo(info);
-}
-
-void ShowfotoImageModel::startRefresh()
-{
-    d->refreshing = true;
-}
-
-void ShowfotoImageModel::finishRefresh()
-{
-    d->refreshing = false;
-    cleanSituationChecks();
-}
-
-bool ShowfotoImageModel::isRefreshing() const
-{
-    return d->refreshing;
-}
-
-void ShowfotoImageModel::cleanSituationChecks()
-{
-    // For starting an incremental refresh we want a clear situation:
-    // Any remaining batches from non-incremental refreshing subclasses have been received in appendInfos(),
-    // any batches sent to preprocessor for re-adding have been re-added.
-    if (d->refreshing || d->reAdding)
-    {
-        return;
-    }
-
-    if (d->incrementalRefreshRequested)
-    {
-        d->incrementalRefreshRequested = false;
-        emit readyForIncrementalRefresh();
-    }
-    else
-    {
-        emit allRefreshingFinished();
-    }
 }
 
 void ShowfotoImageModel::publiciseInfos(const QList<ShowfotoItemInfo>& infos)
@@ -620,48 +377,6 @@ void ShowfotoImageModel::publiciseInfos(const QList<ShowfotoItemInfo>& infos)
     }
     endInsertRows();
     emit itemInfosAdded(infos);
-}
-
-void ShowfotoImageModel::requestIncrementalRefresh()
-{
-    if (d->reAdding)
-    {
-        d->incrementalRefreshRequested = true;
-    }
-    else
-    {
-        emit readyForIncrementalRefresh();
-    }
-}
-
-bool ShowfotoImageModel::hasIncrementalRefreshPending() const
-{
-    return d->incrementalRefreshRequested;
-}
-
-void ShowfotoImageModel::startIncrementalRefresh()
-{
-    delete d->incrementalUpdater;
-
-    d->incrementalUpdater = new ShowfotoImageModelIncrementalUpdater(d);
-}
-
-void ShowfotoImageModel::finishIncrementalRefresh()
-{
-    if (!d->incrementalUpdater)
-    {
-        return;
-    }
-
-    // remove old entries
-    QList<QPair<int, int> > pairs = d->incrementalUpdater->oldIndexes();
-    removeRowPairs(pairs);
-
-    // add new indexes
-    appendInfos(d->incrementalUpdater->newInfos);
-
-    delete d->incrementalUpdater;
-    d->incrementalUpdater = 0;
 }
 
 template <class List, typename T>
@@ -718,44 +433,12 @@ void ShowfotoImageModel::removeIndexs(const QList<QModelIndex>& indexes)
         return;
     }
 
-    removeRowPairsWithCheck(ShowfotoImageModelIncrementalUpdater::toContiguousPairs(indexesList));
-}
-
-void ShowfotoImageModel::removeShowfotoItemInfo(const ShowfotoItemInfo& info)
-{
-    removeShowfotoItemInfos(QList<ShowfotoItemInfo>() << info);
-}
-
-void ShowfotoImageModel::removeShowfotoItemInfos(const QList<ShowfotoItemInfo>& infos)
-{
-    QList<int> indexesList;
-
-    foreach(const ShowfotoItemInfo& info, infos)
-    {
-        QModelIndex index = indexForShowfotoItemId(info.id);
-
-        if (index.isValid())
-        {
-            indexesList << index.row();
-        }
-    }
-
-    removeRowPairsWithCheck(ShowfotoImageModelIncrementalUpdater::toContiguousPairs(indexesList));
+    //removeRowPairsWithCheck(ShowfotoImageModelIncrementalUpdater::toContiguousPairs(indexesList));
 }
 
 void ShowfotoImageModel::setSendRemovalSignals(bool send)
 {
     d->sendRemovalSignals = send;
-}
-
-void ShowfotoImageModel::removeRowPairsWithCheck(const QList<QPair<int, int> >& toRemove)
-{
-    if (d->incrementalUpdater)
-    {
-        d->incrementalUpdater->aboutToBeRemovedInModel(toRemove);
-    }
-
-    removeRowPairs(toRemove);
 }
 
 void ShowfotoImageModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
@@ -844,130 +527,6 @@ void ShowfotoImageModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
             }
         }
     }
-}
-
-// ------------ ShowfotoImageModelIncrementalUpdater ------------
-
-ShowfotoImageModelIncrementalUpdater::ShowfotoImageModelIncrementalUpdater(ShowfotoImageModel::Private* const d)
-{
-    oldIds = d->idHash;
-}
-
-void ShowfotoImageModelIncrementalUpdater::aboutToBeRemovedInModel(const IntPairList& toRemove)
-{
-    modelRemovals << toRemove;
-}
-
-void ShowfotoImageModelIncrementalUpdater::appendInfos(const QList<ShowfotoItemInfo>& infos)
-{
-    for (int i = 0; i < infos.size(); i++)
-    {
-        const ShowfotoItemInfo& info = infos.at(i);
-        bool found                   = false;
-        QHash<qlonglong, int>::iterator it;
-
-        for (it = oldIds.find(info.id) ; it != oldIds.end() ; ++it)
-        {
-            if (it.key() == info.id)
-            {
-                found = true;
-                break;
-            }
-        }
-
-        if (found)
-        {
-            oldIds.erase(it);
-        }
-        else
-        {
-            newInfos << info;
-        }
-    }
-}
-
-QList<QPair<int, int> > ShowfotoImageModelIncrementalUpdater::toContiguousPairs(const QList<int>& unsorted)
-{
-    // Take the given indices and return them as contiguous pairs [begin, end]
-
-    QList<QPair<int, int> > pairs;
-
-    if (unsorted.isEmpty())
-    {
-        return pairs;
-    }
-
-    QList<int> indices(unsorted);
-    qSort(indices);
-
-    QPair<int, int> pair(indices.first(), indices.first());
-
-    for (int i=1; i < indices.size(); i++)
-    {
-        const int &index = indices.at(i);
-
-        if (index == pair.second + 1)
-        {
-            pair.second = index;
-            continue;
-        }
-
-        pairs << pair; // insert last pair
-        pair.first  = index;
-        pair.second = index;
-    }
-
-    pairs << pair;
-
-    return pairs;
-}
-
-QList<QPair<int, int> > ShowfotoImageModelIncrementalUpdater::oldIndexes()
-{
-    // first, apply all changes to indexes by direct removal in model
-    // while the updater was active
-    foreach(const IntPairList& list, modelRemovals)
-    {
-        int removedRows = 0;
-        int offset      = 0;
-
-        foreach(const IntPair& pair, list)
-        {
-            const int begin = pair.first  - offset;
-            const int end   = pair.second - offset; // inclusive
-            removedRows     = end - begin + 1;
-
-            // when removing from the list, all subsequent indexes are affected
-            offset += removedRows;
-
-            // update idHash - which points to indexes of d->infos, and these change now!
-            QHash<qlonglong, int>::iterator it;
-
-            for (it = oldIds.begin(); it != oldIds.end(); )
-            {
-                if (it.value() >= begin)
-                {
-                    if (it.value() > end)
-                    {
-                        // after the removed interval: adjust index
-                        it.value() -= removedRows;
-                    }
-                    else
-                    {
-                        // in the removed interval
-                        it = oldIds.erase(it);
-                        continue;
-                    }
-                }
-
-                ++it;
-            }
-        }
-    }
-
-    modelRemovals.clear();
-
-    return toContiguousPairs(oldIds.values());
 }
 
 // ------------ QAbstractItemModel implementation -------------

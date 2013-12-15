@@ -86,8 +86,6 @@ ShowfotoThumbnailModel::ShowfotoThumbnailModel(QObject* const parent)
 {
     connect(this,SIGNAL(signalThumbInfo(ShowfotoItemInfo,QImage)),
             this,SLOT(slotThumbInfoLoaded(ShowfotoItemInfo,QImage)));
-
-    setKeepsFileUrlCache(true);
 }
 
 ShowfotoThumbnailModel::~ShowfotoThumbnailModel()
