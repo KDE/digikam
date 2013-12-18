@@ -108,5 +108,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 094 ==> 328818 - 4.0.0-beta1 - Build Errors (kevix2.h).
 095 ==> 328830 - digiKam compile error because of commit f3e488b56e4d56be0bb1022e32258add72c3c68a.
 096 ==> 292120 - Batch rename returns 'file does not exist' during rename.
-097 ==> 
-
+097 ==> 198100 - ACDSee XMP sidecar from Raw pictures is not loaded.
+098 ==> 
