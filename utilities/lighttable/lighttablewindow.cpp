@@ -80,6 +80,7 @@
 #include "uifilevalidator.h"
 #include "albummodel.h"
 #include "databasechangesets.h"
+#include "tagsactionmngr.h"
 #include "thumbbardock.h"
 #include "thumbnailsize.h"
 #include "thumbnailloadthread.h"
@@ -634,6 +635,9 @@ void LightTableWindow::setupActions()
     actionCollection()->addAction("lighttable_backward_shift_space", altBackwardAction);
     altBackwardAction->setShortcut(KShortcut(Qt::SHIFT + Qt::Key_Space));
     connect(altBackwardAction, SIGNAL(triggered()), this, SLOT(slotBackward()));
+
+    // Labels shortcuts must be registered here to be saved in XML GUI files if user customize it.
+    TagsActionMngr::defaultManager()->registerLabelsActions(actionCollection());
 
     // ---------------------------------------------------------------------------------
 

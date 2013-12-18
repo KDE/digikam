@@ -126,6 +126,7 @@
 #include "slideshow.h"
 #include "statusprogressbar.h"
 #include "syncjob.h"
+#include "tagsactionmngr.h"
 #include "tagscache.h"
 #include "tagspopupmenu.h"
 #include "thememanager.h"
@@ -460,6 +461,9 @@ void ImageWindow::setupActions()
     // ---------------------------------------------------------------------------------
 
     createHelpActions();
+
+    // Labels shortcuts must be registered here to be saved in XML GUI files if user customize it.
+    TagsActionMngr::defaultManager()->registerLabelsActions(actionCollection());
 
     // ---------------------------------------------------------------------------------
 
