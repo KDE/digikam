@@ -178,6 +178,8 @@ void ShowfotoDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, co
 {
     Q_D(const ShowfotoDelegate);
     ShowfotoItemInfo info = ShowfotoImageModel::retrieveShowfotoItemInfo(index);
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("ImageViewer Settings");
 
     if (info.isNull())
     {
@@ -228,9 +230,9 @@ void ShowfotoDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, co
         drawFileSize(p, d->sizeRect, info.size);
     }
 
-    if (d->drawImageFormat)
+    if (d->drawImageFormat && group.readEntry("ShowMimeOverImage",false))
     {
-        QString frm = info.mime;
+        QString frm = info.mime;        
         drawImageFormat(p, actualPixmapRect, frm);
     }
 
