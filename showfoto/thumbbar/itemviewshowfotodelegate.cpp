@@ -288,9 +288,7 @@ void ItemViewShowfotoDelegate::drawImageFormat(QPainter* p, const QRect& r, cons
 
     if (!mime.isEmpty() && !r.isNull())
     {
-        QString type = mime.split('/').at(1);
-        //TODO
-        //type         = ImageScanner::formatToString(type);
+        QString type = mime;
 
         p->save();
 
