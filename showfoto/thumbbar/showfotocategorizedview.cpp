@@ -133,12 +133,6 @@ void ShowfotoCategorizedView::setModels(ShowfotoImageModel* model, ShowfotoSortF
                    this, SLOT(layoutWasChanged()));
     }
 
-    if (d->model)
-    {
-        disconnect(d->model, SIGNAL(itemInfosAdded(QList<ShowfotoItemInfo>)),
-                   this, SLOT(slotShowfotoItemInfosAdded()));
-    }
-
     d->model       = model;
     d->filterModel = filterModel;
 
@@ -150,9 +144,6 @@ void ShowfotoCategorizedView::setModels(ShowfotoImageModel* model, ShowfotoSortF
     connect(d->filterModel, SIGNAL(layoutChanged()),
             this, SLOT(layoutWasChanged()),
             Qt::QueuedConnection);
-
-    connect(d->model, SIGNAL(itemInfosAdded(QList<ShowfotoItemInfo>)),
-            this, SLOT(slotShowfotoItemInfosAdded()));
 
     emit modelChanged();
 
