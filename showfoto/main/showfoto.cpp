@@ -339,15 +339,11 @@ void ShowFoto::setupConnections()
     connect(d->thumbLoadThread,SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             d->model,SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
 
-    connect(d->thumbBarDock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
-            d->thumbBar, SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
-
     connect(this, SIGNAL(signalNoCurrentItem()),
             d->rightSideBar, SLOT(slotNoCurrentItem()));
 
     connect(d->rightSideBar, SIGNAL(signalSetupMetadataFilters(int)),
             this, SLOT(slotSetupMetadataFilters(int)));
-
 }
 
 void ShowFoto::setupUserArea()
@@ -379,21 +375,19 @@ void ShowFoto::setupUserArea()
     m_stackView->setCanvas(m_canvas);
     m_stackView->setViewMode(Digikam::EditorStackView::CanvasMode);
 
-    m_splitter->setFrameStyle( QFrame::NoFrame );
-    m_splitter->setFrameShadow( QFrame::Plain );
-    m_splitter->setFrameShape( QFrame::NoFrame );
+    m_splitter->setFrameStyle(QFrame::NoFrame);
+    m_splitter->setFrameShadow(QFrame::Plain);
+    m_splitter->setFrameShape(QFrame::NoFrame);
     m_splitter->setOpaqueResize(false);
 
     // Code to check for the now depreciated HorizontalThumbar directive. It
     // is found, it is honored and deleted. The state will from than on be saved
     // by viewContainers built-in mechanism.
-    Qt::DockWidgetArea dockArea    = Qt::LeftDockWidgetArea;
+    Qt::DockWidgetArea dockArea = Qt::LeftDockWidgetArea;
 
     d->thumbBarDock = new Digikam::ThumbBarDock(viewContainer, Qt::Tool);
     d->thumbBarDock->setObjectName("editor_thumbbar");
-    d->thumbBarDock->setAllowedAreas(Qt::LeftDockWidgetArea |
-                                     Qt::TopDockWidgetArea  |
-                                    Qt::BottomDockWidgetArea);
+    d->thumbBarDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::TopDockWidgetArea  | Qt::BottomDockWidgetArea);
     d->thumbBar     = new ShowfotoThumbnailBar(d->thumbBarDock);
 
     d->thumbBarDock->setWidget(d->thumbBar);
@@ -418,9 +412,9 @@ void ShowFoto::setupUserArea()
 
     viewContainer->setAutoSaveSettings("ImageViewer Thumbbar", true);
 
-//        TODO: Implement selection overlay
-//        d->normalDelegate = new ShowfotoNormalDelegate(d->thumbBar);
-//        d->thumbBar->addSelectionOverlay(d->normalDelegate);
+//  TODO: Implement selection overlay
+//  d->normalDelegate = new ShowfotoNormalDelegate(d->thumbBar);
+//  d->thumbBar->addSelectionOverlay(d->normalDelegate);
 
     setCentralWidget(widget);
 }
