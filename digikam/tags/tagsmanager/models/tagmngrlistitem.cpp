@@ -162,10 +162,6 @@ QVariant ListItem::data(int role) const
 
             return QVariant(display);
         }
-        case Qt::BackgroundRole:
-        {
-            return d->itemData.first();
-        }
         default:
         {
             return QVariant();

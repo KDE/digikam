@@ -583,7 +583,7 @@ void TagsManager::closeEvent(QCloseEvent* event)
 
 void TagsManager::setupActions()
 {
-    d->mainToolbar = new KToolBar(d->treeWindow);
+    d->mainToolbar = new KToolBar(d->treeWindow, true);
 
     QWidgetAction* const pixMapAction = new QWidgetAction(this);
     pixMapAction->setDefaultWidget(d->tagPixmap);
