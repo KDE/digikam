@@ -111,5 +111,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 097 ==> 198100 - ACDSee XMP sidecar from Raw pictures is not loaded.
 098 ==> 303194 - Filemanagement xml-files.
 099 ==> 313856 - Re-enable the possibility to set up the shortcuts for rating and labeling (color and pick).
-100 ==> 
+100 ==> 294580 - Unclear status of jpg-pics: how to check for hidden or even malicious data in jpg?
+101 ==> 
 
