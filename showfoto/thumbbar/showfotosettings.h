@@ -6,7 +6,7 @@
  * Date        : 2013-12-20
  * Description : Settings for the Showfoto tool
  *
- * Copyright (C) 2013      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
+ * Copyright (C) 2013 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ShowfotoSETTINGS_H
-#define ShowfotoSETTINGS_H
+#ifndef SHOWFOTOSETTINGS_H
+#define SHOWFOTOSETTINGS_H
 
 // Qt includes
 
@@ -62,4 +62,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ShowfotoSETTINGS_H
+#endif // SHOWFOTOSETTINGS_H

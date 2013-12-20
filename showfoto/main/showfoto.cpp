@@ -455,8 +455,7 @@ void ShowFoto::readSettings()
 
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
-
-    QString defaultDir =group.readEntry("Last Opened Directory", QString());
+    QString defaultDir        = group.readEntry("Last Opened Directory", QString());
 
     if (defaultDir.isNull())
     {
@@ -523,7 +522,6 @@ void ShowFoto::applySettings()
     ShowfotoSettings::instance()->readSettings();
 
     d->rightSideBar->slotLoadMetadataFilters();
-
 }
 
 void ShowFoto::slotOpenFile()
