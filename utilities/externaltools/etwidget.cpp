@@ -100,13 +100,13 @@ ETWidget::ETWidget(QWidget* parent, const QString& tool)
         ftpcfg->writeEntry(ETConfig::name, QString("upload to ftp"));
         ftpcfg->writeEntry(ETConfig::type, SimpleScript::type);
         ftpcfg->writeTypeEntry(SimpleScript::type, SimpleScript::path, QString("/bin/sh"));
-        ftpcfg->writeTypeEntry(SimpleScript::type, SimpleScript::body, QString("while read file; do curl -T $file ftp://ftp.example.com --user user:secret; done"));
+        ftpcfg->writeTypeEntry(SimpleScript::type, SimpleScript::body, QString("while read file; do curl -T $file ftp://ftp.example.com --user user:secret || { kdialog --error \"Can't send ${file} through ftp\"; exit 1; } ; done"));
         
         ETConfig::Ptr scpcfg = ETConfig::config("ssh");
         scpcfg->writeEntry(ETConfig::name, QString("upload by ssh"));
         scpcfg->writeEntry(ETConfig::type, SimpleScript::type);
         scpcfg->writeTypeEntry(SimpleScript::type, SimpleScript::path, QString("/bin/sh"));
-        scpcfg->writeTypeEntry(SimpleScript::type, SimpleScript::body, QString("while read file; do scp $file user@remote.org:/tmp/; done"));
+        scpcfg->writeTypeEntry(SimpleScript::type, SimpleScript::body, QString("while read file; do scp $file user@remote.org:/tmp/  || { kdialog --error \"Can't scp ${file}\"; exit 1; }; done"));
     }
     
     d->name2index[Exec::type]        = d->ui->types->indexOf(d->ui->types->findChild<QWidget*>(Exec::type));
