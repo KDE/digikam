@@ -35,7 +35,6 @@
 
 #include "showfotodelegate.h"
 #include "showfotofiltermodel.h"
-#include "showfotooverlays.h"
 #include "itemviewtooltip.h"
 #include "showfototooltipfiller.h"
 #include "showfotocategorizedview.h"
@@ -77,26 +76,6 @@ ShowfotoThumbnailBar::ShowfotoThumbnailBar(QWidget* const parent)
 ShowfotoThumbnailBar::~ShowfotoThumbnailBar()
 {
     delete d;
-}
-
-void ShowfotoThumbnailBar::setModelsFiltered(ShowfotoImageModel* model, ShowfotoSortFilterModel* filterModel)
-{
-    if (!d->duplicatesFilter)
-    {
-        d->duplicatesFilter = new NoDuplicatesShowfotoFilterModel(this);
-    }
-
-    d->duplicatesFilter->setSourceFilterModel(filterModel);
-    ShowfotoCategorizedView::setModels(model, d->duplicatesFilter);
-}
-
-void ShowfotoThumbnailBar::installRatingOverlay()
-{
-    ShowfotoRatingOverlay* const ratingOverlay = new ShowfotoRatingOverlay(this);
-    addOverlay(ratingOverlay);
-
-    connect(ratingOverlay, SIGNAL(ratingEdited(QList<QModelIndex>,int)),
-            this, SLOT(assignRating(QList<QModelIndex>,int)));
 }
 
 void ShowfotoThumbnailBar::slotDockLocationChanged(Qt::DockWidgetArea area)
@@ -168,19 +147,6 @@ void ShowfotoThumbnailBar::setFlow(QListView::Flow flow)
 void ShowfotoThumbnailBar::slotSetupChanged()
 {
     ShowfotoCategorizedView::slotSetupChanged();
-}
-
-void ShowfotoThumbnailBar::assignRating(const QList<QModelIndex>& indexes, int rating)
-{
-   QList<QModelIndex> mappedIndexes = showfotoSortFilterModel()->mapListToSource(indexes);
-
-   foreach(QModelIndex index, mappedIndexes)
-   {
-       if (index.isValid())
-       {
-            showfotoImageModel()->showfotoItemInfoRef(index).rating = rating;
-       }
-   }
 }
 
 bool ShowfotoThumbnailBar::event(QEvent* e)

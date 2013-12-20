@@ -126,6 +126,7 @@ extern "C"
 #include "knotificationwrapper.h"
 #include "thumbbar/showfotodelegate.h"
 #include "thumbbar/showfotocategorizedview.h"
+#include "showfotosettings.h"
 #include "showfoto_p.h"
 
 namespace ShowFoto
@@ -339,15 +340,11 @@ void ShowFoto::setupConnections()
     connect(d->thumbLoadThread,SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
             d->model,SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
 
-    connect(d->thumbBarDock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
-            d->thumbBar, SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
-
     connect(this, SIGNAL(signalNoCurrentItem()),
             d->rightSideBar, SLOT(slotNoCurrentItem()));
 
     connect(d->rightSideBar, SIGNAL(signalSetupMetadataFilters(int)),
             this, SLOT(slotSetupMetadataFilters(int)));
-
 }
 
 void ShowFoto::setupUserArea()
@@ -379,21 +376,19 @@ void ShowFoto::setupUserArea()
     m_stackView->setCanvas(m_canvas);
     m_stackView->setViewMode(Digikam::EditorStackView::CanvasMode);
 
-    m_splitter->setFrameStyle( QFrame::NoFrame );
-    m_splitter->setFrameShadow( QFrame::Plain );
-    m_splitter->setFrameShape( QFrame::NoFrame );
+    m_splitter->setFrameStyle(QFrame::NoFrame);
+    m_splitter->setFrameShadow(QFrame::Plain);
+    m_splitter->setFrameShape(QFrame::NoFrame);
     m_splitter->setOpaqueResize(false);
 
     // Code to check for the now depreciated HorizontalThumbar directive. It
     // is found, it is honored and deleted. The state will from than on be saved
     // by viewContainers built-in mechanism.
-    Qt::DockWidgetArea dockArea    = Qt::LeftDockWidgetArea;
+    Qt::DockWidgetArea dockArea = Qt::LeftDockWidgetArea;
 
     d->thumbBarDock = new Digikam::ThumbBarDock(viewContainer, Qt::Tool);
     d->thumbBarDock->setObjectName("editor_thumbbar");
-    d->thumbBarDock->setAllowedAreas(Qt::LeftDockWidgetArea |
-                                     Qt::TopDockWidgetArea  |
-                                    Qt::BottomDockWidgetArea);
+    d->thumbBarDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::TopDockWidgetArea  | Qt::BottomDockWidgetArea);
     d->thumbBar     = new ShowfotoThumbnailBar(d->thumbBarDock);
 
     d->thumbBarDock->setWidget(d->thumbBar);
@@ -414,13 +409,13 @@ void ShowFoto::setupUserArea()
 
     d->thumbBar->setModels(d->model, d->filterModel);
     d->thumbBar->setSelectionMode(QAbstractItemView::SingleSelection);
-    d->thumbBar->setModelsFiltered(d->model,d->filterModel);
+    //d->thumbBar->setModelsFiltered(d->model,d->filterModel);
 
     viewContainer->setAutoSaveSettings("ImageViewer Thumbbar", true);
 
-//        TODO: Implement selection overlay
-//        d->normalDelegate = new ShowfotoNormalDelegate(d->thumbBar);
-//        d->thumbBar->addSelectionOverlay(d->normalDelegate);
+//  TODO: Implement selection overlay
+//  d->normalDelegate = new ShowfotoNormalDelegate(d->thumbBar);
+//  d->thumbBar->addSelectionOverlay(d->normalDelegate);
 
     setCentralWidget(widget);
 }
@@ -460,8 +455,7 @@ void ShowFoto::readSettings()
 
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
-
-    QString defaultDir =group.readEntry("Last Opened Directory", QString());
+    QString defaultDir        = group.readEntry("Last Opened Directory", QString());
 
     if (defaultDir.isNull())
     {
@@ -525,8 +519,9 @@ void ShowFoto::applySettings()
         m_fileDeleteAction->setText(i18n("Delete File"));
     }
 
-    d->rightSideBar->slotLoadMetadataFilters();
+    ShowfotoSettings::instance()->readSettings();
 
+    d->rightSideBar->slotLoadMetadataFilters();
 }
 
 void ShowFoto::slotOpenFile()
@@ -552,7 +547,6 @@ void ShowFoto::openUrls(const KUrl::List &urls)
              it != urls.constEnd(); ++it)
         {
             QFileInfo fi((*it).toLocalFile());
-            iteminfo.id = 1 + i;
             iteminfo.name = fi.fileName();
             iteminfo.mime = fi.suffix();
             iteminfo.size = fi.size();
@@ -1005,7 +999,7 @@ void ShowFoto::slotDeleteCurrentItemResult(KJob* job)
     }
 
     // No error, remove item in thumbbar.
-    d->model->removeShowfotoItemInfo(d->thumbBar->currentInfo());
+    //d->model->removeShowfotoItemInfo(d->thumbBar->currentInfo());
 
 //    // Disable menu actions and SideBar if no current image.
 
@@ -1230,7 +1224,6 @@ void ShowFoto::openFolder(const KUrl& url)
 
     for (fi = fileinfolist.constBegin(); fi != fileinfolist.constEnd(); ++fi)
     {
-        iteminfo.id = 1 + i;
         iteminfo.name = (*fi).fileName();
         iteminfo.mime = (*fi).suffix();
         iteminfo.size = (*fi).size();

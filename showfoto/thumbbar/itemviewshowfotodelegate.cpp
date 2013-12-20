@@ -54,8 +54,6 @@ ItemViewShowfotoDelegatePrivate::ItemViewShowfotoDelegatePrivate()
     margin        = 5;
 
     makeStarPolygon();
-
-    ratingPixmaps = QVector<QPixmap>(10);
 }
 
 void ItemViewShowfotoDelegatePrivate::init(ItemViewShowfotoDelegate* const _q)
@@ -70,7 +68,6 @@ void ItemViewShowfotoDelegatePrivate::clearRects()
 {
     gridSize   = QSize(0, 0);
     rect       = QRect(0, 0, 0, 0);
-    ratingRect = QRect(0, 0, 0, 0);
 }
 
 void ItemViewShowfotoDelegatePrivate::makeStarPolygon()
@@ -161,18 +158,6 @@ QRect ItemViewShowfotoDelegate::pixmapRect() const
 QRect ItemViewShowfotoDelegate::imageInformationRect() const
 {
     return QRect();
-}
-
-QRect ItemViewShowfotoDelegate::ratingRect() const
-{
-    Q_D(const ItemViewShowfotoDelegate);
-    return d->ratingRect;
-}
-
-void ItemViewShowfotoDelegate::setRatingEdited(const QModelIndex& index)
-{
-    Q_D(ItemViewShowfotoDelegate);
-    d->editingRating = index;
 }
 
 QSize ItemViewShowfotoDelegate::sizeHint(const QStyleOptionViewItem& /*option*/, const QModelIndex& /*index*/) const
@@ -281,21 +266,6 @@ QRect ItemViewShowfotoDelegate::drawThumbnail(QPainter* p, const QRect& thumbRec
     return actualPixmapRect;
 }
 
-void ItemViewShowfotoDelegate::drawRating(QPainter* p, const QModelIndex& index, const QRect& ratingRect,
-                                          int rating, bool isSelected) const
-{
-    Q_D(const ItemViewShowfotoDelegate);
-
-    if (d->editingRating != index)
-    {
-        p->drawPixmap(ratingRect, ratingPixmap(rating, isSelected));
-    }
-/*
-    else
-        p->drawPixmap(r, ratingPixmap(-1, isSelected));
-*/
-}
-
 void ItemViewShowfotoDelegate::drawName(QPainter* p,const QRect& nameRect, const QString& name) const
 {
     Q_D(const ItemViewShowfotoDelegate);
@@ -318,9 +288,7 @@ void ItemViewShowfotoDelegate::drawImageFormat(QPainter* p, const QRect& r, cons
 
     if (!mime.isEmpty() && !r.isNull())
     {
-        QString type = mime.split('/').at(1);
-        //TODO
-        //type         = ImageScanner::formatToString(type);
+        QString type = mime;
 
         p->save();
 
@@ -373,96 +341,6 @@ void ItemViewShowfotoDelegate::drawFileSize(QPainter* p, const QRect& r, qlonglo
     Q_D(const ItemViewShowfotoDelegate);
     p->setFont(d->fontXtra);
     p->drawText(r, Qt::AlignCenter, KIO::convertSize(bytes));//squeezedTextCached(p, r.width(), KIO::convertSize(bytes)));
-}
-
-void ItemViewShowfotoDelegate::drawTags(QPainter* p, const QRect& r, const QString& tagsString,
-                                     bool isSelected) const
-{
-    Q_D(const ItemViewShowfotoDelegate);
-    p->setFont(d->fontCom);
-    p->setPen(isSelected ? kapp->palette().color(QPalette::HighlightedText)
-                         : kapp->palette().color(QPalette::Link));
-
-    p->drawText(r, Qt::AlignCenter, squeezedTextCached(p, r.width(), tagsString));
-}
-
-void ItemViewShowfotoDelegate::drawPickLabelIcon(QPainter* p, const QRect& r, int pickId) const
-{
-    // Draw Pick Label icon
-    if (pickId != NoPickLabel)
-    {
-        QIcon icon;
-
-        if (pickId == RejectedLabel)
-        {
-            icon = KIconLoader::global()->loadIcon("flag-red", KIconLoader::NoGroup, r.width());
-        }
-        else if (pickId == PendingLabel)
-        {
-            icon = KIconLoader::global()->loadIcon("flag-yellow", KIconLoader::NoGroup, r.width());
-        }
-        else if (pickId == AcceptedLabel)
-        {
-            icon = KIconLoader::global()->loadIcon("flag-green", KIconLoader::NoGroup, r.width());
-        }
-
-        icon.paint(p, r);
-    }
-}
-
-void ItemViewShowfotoDelegate::drawColorLabelRect(QPainter* p, const QStyleOptionViewItem& option,
-                                               bool isSelected, int colorId) const
-{
-    Q_D(const ItemViewShowfotoDelegate);
-    Q_UNUSED(option);
-    Q_UNUSED(isSelected);
-
-    if (colorId > NoColorLabel)
-    {
-        // This draw a simple rectangle around item.
-        p->setPen(QPen(ColorLabelWidget::labelColor((ColorLabel)colorId), 5, Qt::SolidLine));
-        p->drawRect(3, 3, d->rect.width()-7, d->rect.height()-7);
-    }
-}
-
-void ItemViewShowfotoDelegate::drawPanelSideIcon(QPainter* p, bool left, bool right) const
-{
-    Q_D(const ItemViewShowfotoDelegate);
-    int iconSize = KIconLoader::SizeSmall;
-
-    if (left)
-    {
-        QRect r(3, d->rect.height()/2 - iconSize/2, iconSize, iconSize);
-        QIcon icon = KIconLoader::global()->loadIcon("arrow-left", KIconLoader::NoGroup, iconSize);
-        icon.paint(p, r);
-    }
-
-    if (right)
-    {
-        QRect r(d->rect.width() - 3 - iconSize, d->rect.height()/2 - iconSize/2, iconSize, iconSize);
-        QIcon icon = KIconLoader::global()->loadIcon("arrow-right", KIconLoader::NoGroup, iconSize);
-        icon.paint(p, r);
-    }
-}
-
-void ItemViewShowfotoDelegate::drawLockIndicator(QPainter* p, const QRect& r, int lockStatus) const
-{
-    QIcon icon;
-
-    if (lockStatus == 0)
-    {
-        icon = KIconLoader::global()->loadIcon("object-locked", KIconLoader::NoGroup, KIconLoader::SizeSmall);
-    }
-
-    if (lockStatus == 1)
-    {
-        icon = KIconLoader::global()->loadIcon("object-unlocked", KIconLoader::NoGroup, KIconLoader::SizeSmall);
-    }
-
-    qreal op = p->opacity();
-    p->setOpacity(0.5);
-    icon.paint(p, r);
-    p->setOpacity(op);
 }
 
 void ItemViewShowfotoDelegate::drawFocusRect(QPainter* p, const QStyleOptionViewItem& option,
@@ -580,104 +458,6 @@ void ItemViewShowfotoDelegate::prepareBackground()
         QPainter p2(&d->selPixmap);
         p2.setPen(kapp->palette().color(QPalette::Midlight));
         p2.drawRect(0, 0, d->rect.width()-1, d->rect.height()-1);
-    }
-}
-
-void ItemViewShowfotoDelegate::prepareRatingPixmaps(bool composeOverBackground)
-{
-    /// Please call this method after prepareBackground() and when d->ratingPixmap is set
-
-    Q_D(ItemViewShowfotoDelegate);
-
-    if (!d->ratingRect.isValid())
-    {
-        return;
-    }
-
-    // We use antialiasing and want to pre-render the pixmaps.
-    // So we need the background at the time of painting,
-    // and the background may be a gradient, and will be different for selected items.
-    // This makes 5*2 (small) pixmaps.
-    for (int sel=0; sel<2; ++sel)
-    {
-        QPixmap basePix;
-
-        if (composeOverBackground)
-        {
-            // do this once for regular, once for selected backgrounds
-            if (sel)
-            {
-                basePix = d->selPixmap.copy(d->ratingRect);
-            }
-            else
-            {
-                basePix = d->regPixmap.copy(d->ratingRect);
-            }
-        }
-        else
-        {
-            basePix = QPixmap(d->ratingRect.size());
-            basePix.fill(Qt::transparent);
-        }
-
-        for (int rating=1; rating<=5; ++rating)
-        {
-            // we store first the 5 regular, then the 5 selected pixmaps, for simplicity
-            int index = (sel * 5 + rating) - 1;
-
-            // copy background
-            d->ratingPixmaps[index] = basePix;
-            // open a painter
-            QPainter painter(&d->ratingPixmaps[index]);
-
-            // use antialiasing
-            painter.setRenderHint(QPainter::Antialiasing, true);
-            painter.setBrush(kapp->palette().color(QPalette::Link));
-            QPen pen(kapp->palette().color(QPalette::Text));
-            // set a pen which joins the lines at a filled angle
-            pen.setJoinStyle(Qt::MiterJoin);
-            painter.setPen(pen);
-
-            // move painter while drawing polygons
-            painter.translate( lround((d->ratingRect.width() - d->margin - rating*(d->starPolygonSize.width()+1))/2.0) + 2, 1 );
-
-            for (int s=0; s<rating; ++s)
-            {
-                painter.drawPolygon(d->starPolygon, Qt::WindingFill);
-                painter.translate(d->starPolygonSize.width() + 1, 0);
-            }
-        }
-    }
-}
-
-//TODO: make sure that u won't use this
-QPixmap ItemViewShowfotoDelegate::ratingPixmap(int rating, bool selected) const
-{
-    Q_D(const ItemViewShowfotoDelegate);
-
-    if (rating < 1 || rating > 5)
-    {
-/*
-        QPixmap pix;
-        if (selected)
-            pix = d->selPixmap.copy(d->ratingRect);
-        else
-            pix = d->regPixmap.copy(d->ratingRect);
-
-        return pix;
-*/
-        return QPixmap();
-    }
-
-    --rating;
-
-    if (selected)
-    {
-        return d->ratingPixmaps.at(5 + rating);
-    }
-    else
-    {
-        return d->ratingPixmaps.at(rating);
     }
 }
 

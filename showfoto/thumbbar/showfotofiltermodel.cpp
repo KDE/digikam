@@ -142,10 +142,10 @@ ShowfotoItemInfo ShowfotoSortFilterModel::showfotoItemInfo(const QModelIndex& in
     return sourceShowfotoModel()->showfotoItemInfo(mapToSourceShowfotoModel(index));
 }
 
-qlonglong ShowfotoSortFilterModel::showfotoItemId(const QModelIndex& index) const
-{
-    return sourceShowfotoModel()->showfotoItemId(mapToSourceShowfotoModel(index));
-}
+//qlonglong ShowfotoSortFilterModel::showfotoItemId(const QModelIndex& index) const
+//{
+//    return sourceShowfotoModel()->showfotoItemId(mapToSourceShowfotoModel(index));
+//}
 
 QList<ShowfotoItemInfo> ShowfotoSortFilterModel::showfotoItemInfos(const QList<QModelIndex>& indexes) const
 {
@@ -157,18 +157,6 @@ QList<ShowfotoItemInfo> ShowfotoSortFilterModel::showfotoItemInfos(const QList<Q
     }
 
     return infos;
-}
-
-QList<qlonglong> ShowfotoSortFilterModel::showfotoItemIds(const QList<QModelIndex>& indexes) const
-{
-    QList<qlonglong> ids;
-
-    foreach (const QModelIndex& index, indexes)
-    {
-        ids << showfotoItemId(index);
-    }
-
-    return ids;
 }
 
 QModelIndex ShowfotoSortFilterModel::indexForPath(const QString& filePath) const
@@ -495,12 +483,6 @@ bool NoDuplicatesShowfotoFilterModel::filterAcceptsRow(int source_row, const QMo
     if (!previousIndex.isValid())
     {
         return true;
-    }
-
-    if (sourceShowfotoModel()->showfotoItemId(mapFromDirectSourceToSourceShowfotoModel(index)) ==
-        sourceShowfotoModel()->showfotoItemId(mapFromDirectSourceToSourceShowfotoModel(previousIndex)))
-    {
-        return false;
     }
 
     return true;

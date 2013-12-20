@@ -80,7 +80,6 @@ TagList::TagList(TagMngrTreeView* const treeView, QWidget* const parent)
     d->tagList->setDragEnabled(true);
     d->tagList->setAcceptDrops(true);
     d->tagList->setDropIndicatorShown(true);
-    d->tagList->setSpacing(3);
 
     layout->addWidget(d->addButton);
     layout->addWidget(d->tagList);

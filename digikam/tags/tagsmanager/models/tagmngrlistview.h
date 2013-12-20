@@ -27,14 +27,14 @@
 
 // Qt includes
 
-#include <QListView>
+#include <QTreeView>
 
 class QPoint;
 
 namespace Digikam
 {
 
-class TagMngrListView : public QListView
+class TagMngrListView : public QTreeView
 {
     Q_OBJECT
 

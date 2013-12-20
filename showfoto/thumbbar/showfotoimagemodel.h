@@ -74,8 +74,7 @@ public:
     /** If a cache is kept, lookup by file path is fast,
      *  without a cache it is O(n). Default is false.
      */
-    void setKeepsFileUrlCache(bool keepCache);
-    bool keepsFileUrlCache() const;
+    void setKeepsFileUrlCache(bool keepCache);   
 
     /**
      *  Returns the ShowfotoItemInfo object, reference from the underlying data pointed to by the index.
@@ -180,13 +179,6 @@ public:
      */
     void setSendRemovalSignals(bool send);
 
-    /**
-     * Returns true if this model is currently refreshing.
-     * For a preprocessor this means that, although the preprocessor may currently have
-     * processed all it got, more batches are to be expected.
-     */
-    bool isRefreshing() const;
-
 Q_SIGNALS:
 
     /**
@@ -247,21 +239,11 @@ public Q_SLOTS:
 protected:
 
     /**
-     * Subclasses that add ShowfotoItemInfos in batches shall call startRefresh()
-     * when they start sending batches and finishRefresh() when they have finished.
-     * No incremental refreshes will be started while listing.
-     * A clearShowfotoItemInfos() always stops listing, calling finishRefresh() is then not necessary.
-     */
-    void startRefresh();
-    void finishRefresh();
-
-    /**
      * As soon as the model is ready to start an incremental refresh, the signal
      * readyForIncrementalRefresh() will be emitted. The signal will be emitted inline
      * if the model is ready right now.
      */
     void requestIncrementalRefresh();
-    bool hasIncrementalRefreshPending() const;
 
     /**
      * Starts an incremental refresh operation. You shall only call this method from a slot

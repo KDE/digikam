@@ -35,13 +35,13 @@
 // Local includes
 
 #include "editorwindow.h"
-#include "thumbbar/showfotoiteminfo.h"
+#include "showfotoiteminfo.h"
 
 class KJob;
 
 namespace Digikam
 {
-class ThumbBarView;
+    class ThumbBarView;
 }
 
 namespace ShowFoto
@@ -130,11 +130,11 @@ private Q_SLOTS:
     void slotSetupMetadataFilters(int);
 
 Q_SIGNALS:
+
     void signalLoadCurrentItem(const KUrl::List& urlList);
     void signalOpenFolder(const KUrl&);
     void signalOpenFile(const KUrl::List& urls);
     void signalInfoList(ShowfotoItemInfoList&);
-    
 
 private:
 

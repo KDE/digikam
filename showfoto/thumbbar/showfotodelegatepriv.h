@@ -46,7 +46,7 @@ public:
     {
       //categoryDrawer      = 0;
         contentWidth        = 0;
-        drawImageFormat     = false;
+        drawImageFormat     = true;
         drawMouseOverFrame  = true;
         drawFocusFrame      = true;
         ratingOverThumbnail = false;

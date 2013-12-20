@@ -103,6 +103,15 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 089 ==> 308343 - Tag FolderView Icons are blurry when using 48px setting.
 090 ==> 328578 - Crash when opening settings.
 091 ==> 307281 - digiKam crashes while scrolling list of photos previews.
-092 ==> 
-
+092 ==> 146318 - Usability: goto next item/ forward buttons are inconsistent between edit and view mode.
+093 ==> 293194 - Disable versioning side panel if versioning disabled in preferences.
+094 ==> 328818 - 4.0.0-beta1 - Build Errors (kevix2.h).
+095 ==> 328830 - digiKam compile error because of commit f3e488b56e4d56be0bb1022e32258add72c3c68a.
+096 ==> 292120 - Batch rename returns 'file does not exist' during rename.
+097 ==> 198100 - ACDSee XMP sidecar from Raw pictures is not loaded.
+098 ==> 303194 - Filemanagement xml-files.
+099 ==> 313856 - Re-enable the possibility to set up the shortcuts for rating and labeling (color and pick).
+100 ==> 294580 - Unclear status of jpg-pics: how to check for hidden or even malicious data in jpg?
+101 ==> 322652 - Crashes on camera import.
+102 ==> 
 

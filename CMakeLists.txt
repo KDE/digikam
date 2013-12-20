@@ -1715,7 +1715,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imgqsort
 
         # version.h, gitversion.h config-digikam.h
         ${CMAKE_CURRENT_BINARY_DIR}/digikam/utils

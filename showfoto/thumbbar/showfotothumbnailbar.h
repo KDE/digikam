@@ -57,15 +57,10 @@ public:
     void setScrollBarPolicy(Qt::ScrollBarPolicy policy);
     void setFlow(QListView::Flow newFlow);
 
-    void installRatingOverlay();
     ShowfotoItemInfo findItemByUrl(const KUrl url);
-
-    //Implement this function
-    //void addSelectionOverlay(ShowfotoDelegate* delegate);
 
 public Q_SLOTS:
 
-    void assignRating(const QList<QModelIndex>& index, int rating);
     void slotDockLocationChanged(Qt::DockWidgetArea area);
 
 protected:

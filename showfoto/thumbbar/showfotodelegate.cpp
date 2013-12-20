@@ -41,6 +41,7 @@
 #include "showfotothumbnailbar.h"
 #include "showfotoiteminfo.h"
 #include "showfotothumbnailmodel.h"
+#include "showfotosettings.h"
 
 namespace ShowFoto
 {
@@ -138,12 +139,6 @@ void ShowfotoDelegate::setSpacing(int spacing)
     ItemViewShowfotoDelegate::setSpacing(spacing);
 }
 
-QRect ShowfotoDelegate::tagsRect() const
-{
-    Q_D(const ShowfotoDelegate);
-    return d->tagRect;
-}
-
 QRect ShowfotoDelegate::pixmapRect() const
 {
     Q_D(const ShowfotoDelegate);
@@ -184,6 +179,8 @@ void ShowfotoDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, co
 {
     Q_D(const ShowfotoDelegate);
     ShowfotoItemInfo info = ShowfotoImageModel::retrieveShowfotoItemInfo(index);
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group("ImageViewer Settings");
 
     if (info.isNull())
     {
@@ -234,9 +231,9 @@ void ShowfotoDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, co
         drawFileSize(p, d->sizeRect, info.size);
     }
 
-    if (d->drawImageFormat)
+    if (ShowfotoSettings::instance()->getShowFormatOverThumbnail())
     {
-        QString frm = info.mime;
+        QString frm = info.mime;        
         drawImageFormat(p, actualPixmapRect, frm);
     }
 
@@ -339,13 +336,6 @@ void ShowfotoDelegate::updateSizeRectsAndPixmaps()
 
     prepareBackground();
 
-    if (!d->ratingRect.isNull())
-    {
-        //Normally we prepare the pixmaps over the background of the rating rect.
-        //If the rating is drawn over the thumbnail, we can only draw over a transparent pixmap.
-        prepareRatingPixmaps(!d->ratingOverThumbnail);
-    }
-
     // ---- Drawing related caches ----
 
     clearCaches();
@@ -369,12 +359,6 @@ void ShowfotoDelegate::modelChanged()
     Q_D(ShowfotoDelegate);
     clearModelDataCaches();
     setModel(d->currentView ? d->currentView->model() : 0);
-}
-
-QRect ShowfotoDelegate::lockIndicatorRect() const
-{
-    Q_D(const ShowfotoDelegate);
-    return d->lockRect;
 }
 
 void ShowfotoDelegate::modelContentsChanged()

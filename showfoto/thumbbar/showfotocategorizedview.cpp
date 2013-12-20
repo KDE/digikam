@@ -133,12 +133,6 @@ void ShowfotoCategorizedView::setModels(ShowfotoImageModel* model, ShowfotoSortF
                    this, SLOT(layoutWasChanged()));
     }
 
-    if (d->model)
-    {
-        disconnect(d->model, SIGNAL(itemInfosAdded(QList<ShowfotoItemInfo>)),
-                   this, SLOT(slotShowfotoItemInfosAdded()));
-    }
-
     d->model       = model;
     d->filterModel = filterModel;
 
@@ -150,9 +144,6 @@ void ShowfotoCategorizedView::setModels(ShowfotoImageModel* model, ShowfotoSortF
     connect(d->filterModel, SIGNAL(layoutChanged()),
             this, SLOT(layoutWasChanged()),
             Qt::QueuedConnection);
-
-    connect(d->model, SIGNAL(itemInfosAdded(QList<ShowfotoItemInfo>)),
-            this, SLOT(slotShowfotoItemInfosAdded()));
 
     emit modelChanged();
 
@@ -327,7 +318,7 @@ QModelIndex ShowfotoCategorizedView::nextIndexHint(const QModelIndex& anchor, co
 
     // Fixes a special case of multiple (face) entries for the same image.
     // If one is removed, any entry of the same image shall be preferred.
-    if (d->model->numberOfIndexesForShowfotoItemInfo(info) > 1)
+    if (d->model->indexesForShowfotoItemInfo(info).size() > 1)
     {
         // The hint is for a different info, but we may have a hint for the same info
         if (info != d->filterModel->showfotoItemInfo(hint))
@@ -520,29 +511,7 @@ void ShowfotoCategorizedView::slotDelayedEnter()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("ImageViewer Settings");
 
-    setToolTipEnabled(group.readEntry("Show ToolTips",             true));
-}
-
-void ShowfotoCategorizedView::scrollToStoredItem()
-{
-    if (d->scrollToItemId)
-    {
-        if (d->model->hasImage(d->scrollToItemId))
-        {
-            QModelIndex index = d->filterModel->indexForShowfotoItemId(d->scrollToItemId);
-            setCurrentIndex(index);
-            scrollToRelaxed(index, QAbstractItemView::PositionAtCenter);
-            d->scrollToItemId = 0;
-        }
-    }
-}
-
-void ShowfotoCategorizedView::slotShowfotoItemInfosAdded()
-{
-    if (d->scrollToItemId)
-    {
-        scrollToStoredItem();
-    }
+    setToolTipEnabled(group.readEntry("Show ToolTips", true));
 }
 
 void ShowfotoCategorizedView::slotFileChanged(const QString& filePath)

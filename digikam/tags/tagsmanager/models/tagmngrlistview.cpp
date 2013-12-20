@@ -51,8 +51,10 @@ namespace Digikam
 {
 
 TagMngrListView::TagMngrListView(QWidget* const parent)
-    : QListView(parent)
+    : QTreeView(parent)
 {
+    setRootIsDecorated(false);
+    setAlternatingRowColors(true);
 }
 void TagMngrListView::startDrag(Qt::DropActions supportedActions)
 {
@@ -138,7 +140,7 @@ void TagMngrListView::contextMenuEvent(QContextMenuEvent* event)
         return;
     }
 
-    KAction* const delAction = new KAction(KIcon("user-trash"), i18n("Delete Selected"),this);
+    KAction* const delAction = new KAction(KIcon("user-trash"), i18n("Delete Selected from List"),this);
     cmhelper.addAction(delAction, tagList, SLOT(slotDeleteSelected()),false);
 
     cmhelper.exec(QCursor::pos());
