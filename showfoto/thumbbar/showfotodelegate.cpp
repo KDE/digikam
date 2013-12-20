@@ -41,6 +41,7 @@
 #include "showfotothumbnailbar.h"
 #include "showfotoiteminfo.h"
 #include "showfotothumbnailmodel.h"
+#include "showfotosettings.h"
 
 namespace ShowFoto
 {
@@ -230,7 +231,7 @@ void ShowfotoDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, co
         drawFileSize(p, d->sizeRect, info.size);
     }
 
-    if (d->drawImageFormat && group.readEntry("ShowMimeOverImage",false))
+    if (ShowfotoSettings::instance()->getShowFormatOverThumbnail())
     {
         QString frm = info.mime;        
         drawImageFormat(p, actualPixmapRect, frm);

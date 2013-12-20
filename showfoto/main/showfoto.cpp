@@ -126,6 +126,7 @@ extern "C"
 #include "knotificationwrapper.h"
 #include "thumbbar/showfotodelegate.h"
 #include "thumbbar/showfotocategorizedview.h"
+#include "showfotosettings.h"
 #include "showfoto_p.h"
 
 namespace ShowFoto
@@ -518,6 +519,8 @@ void ShowFoto::applySettings()
         m_fileDeleteAction->setIcon(KIcon("edit-delete"));
         m_fileDeleteAction->setText(i18n("Delete File"));
     }
+
+    ShowfotoSettings::instance()->readSettings();
 
     d->rightSideBar->slotLoadMetadataFilters();
 

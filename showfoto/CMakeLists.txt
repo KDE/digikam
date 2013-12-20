@@ -28,6 +28,7 @@ SET(showfoto_SRCS
     thumbbar/showfototooltipfiller.cpp
     thumbbar/showfotocategorizedview.cpp
     thumbbar/showfotothumbnailbar.cpp
+    thumbbar/showfotosettings.cpp
     
     main/main.cpp
     main/showfoto.cpp
