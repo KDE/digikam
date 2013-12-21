@@ -113,5 +113,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 099 ==> 313856 - Re-enable the possibility to set up the shortcuts for rating and labeling (color and pick).
 100 ==> 294580 - Unclear status of jpg-pics: how to check for hidden or even malicious data in jpg?
 101 ==> 322652 - Crashes on camera import.
-102 ==> 
+102 ==> 312285 - Crash in image editor when moving to the next image.
+103 ==> 
 
