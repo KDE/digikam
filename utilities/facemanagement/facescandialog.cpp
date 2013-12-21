@@ -35,12 +35,12 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QRadioButton>
-#include <QTabWidget>
 #include <QToolButton>
 #include <QVBoxLayout>
 
 // KDE includes
 
+#include <ktabwidget.h>
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kiconloader.h>
@@ -110,7 +110,7 @@ public:
     {
         optionGroupBox           = 0;
         detectAndRecognizeButton = 0;
-	detectButton             = 0;
+        detectButton             = 0;
         alreadyScannedBox        = 0;
         reRecognizeButton        = 0;
         tabWidget                = 0;
@@ -128,7 +128,7 @@ public:
     QComboBox*                   alreadyScannedBox;
     QRadioButton*                reRecognizeButton;
 
-    QTabWidget*                  tabWidget;
+    KTabWidget*                  tabWidget;
 
     AlbumSelectors*              albumSelectors;
 
@@ -370,27 +370,27 @@ void FaceScanDialog::setupUi()
 
     // --- Tab Widget ---
 
-    d->tabWidget = new QTabWidget;
+    d->tabWidget = new KTabWidget;
 
     // ---- Album tab ----
 
-    d->albumSelectors = new AlbumSelectors(i18nc("@label", "Search in:"), d->configName);
+    d->albumSelectors = new AlbumSelectors(i18nc("@label", "Search in:"), d->configName, d->tabWidget);
     d->tabWidget->addTab(d->albumSelectors, i18nc("@title:tab", "Albums"));
 
     // ---- Parameters tab ----
 
-    QWidget* const parametersTab        = new QWidget;
-    QGridLayout* const parametersLayout = new QGridLayout;
+    QWidget* const parametersTab        = new QWidget(d->tabWidget);
+    QGridLayout* const parametersLayout = new QGridLayout(parametersTab);
 
-    QLabel* const detectionLabel        = new QLabel(i18nc("@label", "Parameters for face detection and Recognition"));
+    QLabel* const detectionLabel        = new QLabel(i18nc("@label", "Parameters for face detection and Recognition"), (parametersTab));
 
-    d->parametersResetButton            = new QToolButton;
+    d->parametersResetButton            = new QToolButton(parametersTab);
     d->parametersResetButton->setAutoRaise(true);
     d->parametersResetButton->setFocusPolicy(Qt::NoFocus);
     d->parametersResetButton->setIcon(SmallIcon("document-revert"));
     d->parametersResetButton->setToolTip(i18nc("@action:button", "Reset to default values"));
 
-    d->accuracyInput                    = new KIntNumInput;
+    d->accuracyInput                    = new KIntNumInput(parametersTab);
     d->accuracyInput->setRange(0, 100, 10);
     d->accuracyInput->setSliderEnabled();
     d->accuracyInput->setLabel(i18nc("@label Two extremities of a scale", "Fast   -   Accurate"),
@@ -399,55 +399,55 @@ void FaceScanDialog::setupUi()
                                        "Adjust speed versus accuracy: The higher the value, the more accurate the results "
                                        "will be, but it will take more time."));
 
-    parametersLayout->addWidget(detectionLabel, 0, 0);
+    parametersLayout->addWidget(detectionLabel,           0, 0);
     parametersLayout->addWidget(d->parametersResetButton, 0, 1);
-    parametersLayout->addWidget(d->accuracyInput, 1, 0, 1, -1);
-    parametersLayout->setColumnStretch(0, 1);
+    parametersLayout->addWidget(d->accuracyInput,         1, 0, 1, -1);
+    parametersLayout->setColumnStretch(0, 10);
+    parametersLayout->setRowStretch(2, 10);
 
-    parametersTab->setLayout(parametersLayout);
     d->tabWidget->addTab(parametersTab, i18nc("@title:tab", "Parameters"));
 
     // ---- Advanced tab ----
 
-    QWidget* const advancedTab        = new QWidget;
-    QVBoxLayout* const advancedLayout = new QVBoxLayout;
+    QWidget* const advancedTab        = new QWidget(d->tabWidget);
+    QGridLayout* const advancedLayout = new QGridLayout(advancedTab);
 
-    QLabel* const cpuExplanation      = new QLabel;
+    QLabel* const cpuExplanation      = new QLabel(advancedTab);
     cpuExplanation->setText(i18nc("@info",
                                   "Face detection is a time-consuming task. "
-                                  "You can choose if you wish to employ all processor cores on your system, "
-                                  "or work in the background only on one core."));
+                                  "You can choose if you wish to employ all processor cores "
+                                  "on your system, or work in the background only on one core."));
     cpuExplanation->setWordWrap(true);
 
-    d->useFullCpuButton = new QCheckBox;
+    d->useFullCpuButton = new QCheckBox(advancedTab);
     d->useFullCpuButton->setText(i18nc("@option:check", "Work on all processor cores"));
 
-    d->retrainAllButton = new QCheckBox;
+    d->retrainAllButton = new QCheckBox(advancedTab);
     d->retrainAllButton->setText(i18nc("@option:check", "Clear and rebuild all training data"));
     d->retrainAllButton->setToolTip(i18nc("@info:tooltip",
                                           "This will clear all training data for recognition "
                                           "and rebuild it from all available faces. "
                                           "Be careful if any other application helped in building your training database. "));
 
-    d->benchmarkButton = new QCheckBox;
+    d->benchmarkButton = new QCheckBox(advancedTab);
     d->benchmarkButton->setText(i18nc("@option:check", "Benchmark face detection"));
     d->benchmarkButton->setToolTip(i18nc("@info:tooltip",
                                          "This will run face detection and compare the results "
                                          "with faces already marked, which are taken as ground truth. "
                                          "At the end, benchmark results will be presented. "));
 
-    advancedLayout->addWidget(cpuExplanation);
-    advancedLayout->addWidget(d->useFullCpuButton);
-    advancedLayout->addWidget(new KSeparator(Qt::Horizontal));
-    advancedLayout->addWidget(d->retrainAllButton);
-    advancedLayout->addWidget(d->benchmarkButton);
-    advancedLayout->addStretch(1);
+    advancedLayout->addWidget(cpuExplanation,                 0, 0);
+    advancedLayout->addWidget(d->useFullCpuButton,            1, 0);
+    advancedLayout->addWidget(new KSeparator(Qt::Horizontal), 2, 0);
+    advancedLayout->addWidget(d->retrainAllButton,            3, 0);
+    advancedLayout->addWidget(d->benchmarkButton,             4, 0);
+    parametersLayout->setRowStretch(5, 10);
 
-    advancedTab->setLayout(advancedLayout);
     d->tabWidget->addTab(advancedTab, i18nc("@title:tab", "Advanced"));
 
     // ---
 
+    d->tabWidget->setAutomaticResizeTabs(true);
     setDetailsWidget(d->tabWidget);
 }
 
