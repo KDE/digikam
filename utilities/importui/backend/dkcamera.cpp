@@ -44,6 +44,7 @@ DKCamera::DKCamera(const QString& title, const QString& model, const QString& po
     m_mkDirSupport                = false;
     m_delDirSupport               = false;
     m_captureImageSupport         = false;
+    m_captureImagePreviewSupport  = false;
 
     AlbumSettings* const settings = AlbumSettings::instance();
     m_imageFilter                 = settings->getImageFileFilter();
@@ -114,6 +115,12 @@ bool DKCamera::captureImageSupport() const
 {
     return m_captureImageSupport;
 }
+
+bool DKCamera::captureImagePreviewSupport() const
+{
+    return m_captureImagePreviewSupport;
+}
+
 
 QString DKCamera::mimeType(const QString& fileext) const
 {

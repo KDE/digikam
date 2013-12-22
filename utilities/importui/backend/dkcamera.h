@@ -102,6 +102,7 @@ public:
     bool    mkDirSupport() const;
     bool    delDirSupport() const;
     bool    captureImageSupport() const;
+    bool    captureImagePreviewSupport() const;
 
     QString mimeType(const QString& fileext) const;
 
@@ -117,6 +118,7 @@ protected:
     bool    m_mkDirSupport;
     bool    m_delDirSupport;
     bool    m_captureImageSupport;
+    bool    m_captureImagePreviewSupport;
 
     QString m_imageFilter;
     QString m_movieFilter;

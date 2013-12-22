@@ -170,7 +170,10 @@ QByteArray GPCamera::cameraMD5ID()
     // We don't use camera title from digiKam settings panel to compute MD5 fingerprint,
     // because it can be changed by users between session.
     camData.append(model());
-    camData.append(port());
+    // TODO comparing to the port number does not make any sense, right? 
+    // replugging a camera might change the usb device number
+    // example is usb:002,020 ..
+    //camData.append(port());
     camData.append(path());
     KMD5 md5(camData.toUtf8());
     md5data = md5.hexDigest();
@@ -280,6 +283,12 @@ bool GPCamera::doConnect()
         GP_OPERATION_CAPTURE_IMAGE)
     {
         m_captureImageSupport = true;
+    }
+
+    if (d->cameraAbilities.operations &
+        GP_OPERATION_CAPTURE_PREVIEW)
+    {
+        m_captureImagePreviewSupport = true;
     }
 
     // -- Try and initialize the camera to see if its connected -----------------

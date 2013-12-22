@@ -292,6 +292,16 @@ bool CameraController::cameraCaptureImageSupport() const
     return d->camera->captureImageSupport();
 }
 
+bool CameraController::cameraCaptureImagePreviewSupport() const
+{
+    if (!d->camera)
+    {
+        return false;
+    }
+
+    return d->camera->captureImageSupport() && d->camera->captureImagePreviewSupport();
+}
+
 QString CameraController::cameraPath() const
 {
     if (!d->camera)
@@ -895,6 +905,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
     }
     else
     {
+        // TODO why two signals??
         emit signalDownloaded(folder, file, CamItemInfo::DownloadedYes);
         emit signalDownloadComplete(folder, file, info.path(), info.fileName());
         sendLogMsg(i18n("Download successfully %1...", file), DHistoryView::StartingEntry, folder, file);

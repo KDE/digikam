@@ -65,6 +65,7 @@ public:
     bool cameraMkDirSupport() const;
     bool cameraDelDirSupport() const;
     bool cameraCaptureImageSupport() const;
+    bool cameraCaptureImagePreviewSupport() const;
 
     QString cameraPath() const;
     QString cameraTitle() const;
