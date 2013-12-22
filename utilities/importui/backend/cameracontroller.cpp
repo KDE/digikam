@@ -74,6 +74,7 @@ extern "C"
 #include "gpcamera.h"
 #include "umscamera.h"
 #include "jpegutils.h"
+#include "downloadhistory.h"
 
 namespace Digikam
 {
@@ -525,6 +526,10 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                     // skip
                     continue;
                 }
+                DownloadHistory::Status status = DownloadHistory::status(d->camera->cameraMD5ID(), info.name, info.size, info.ctime);
+                // TODO this is ugly, using different enums to point the similar status..
+                // TODO can we differentiate at all between whether the status is unknown and not downloaded? how?
+                info.downloaded  = status;
                 numberOfItems++;
                 info.id += numberOfItems;
                 list.append(info);

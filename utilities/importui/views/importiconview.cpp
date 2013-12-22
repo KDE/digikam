@@ -146,7 +146,10 @@ int ImportIconView::fitToWidthIcons()
 
 CamItemInfo ImportIconView::camItemInfo(const QString& folder, const QString& file)
 {
-    QModelIndex indexForCamItemInfo = importFilterModel()->indexForPath(QString(folder + file));
+    KUrl url(folder);
+    url.adjustPath(KUrl::AddTrailingSlash);
+    url.setFileName(file);
+    QModelIndex indexForCamItemInfo = importFilterModel()->indexForPath(url.toLocalFile());
 
     if(indexForCamItemInfo.isValid())
     {
@@ -158,7 +161,10 @@ CamItemInfo ImportIconView::camItemInfo(const QString& folder, const QString& fi
 
 CamItemInfo& ImportIconView::camItemInfoRef(const QString& folder, const QString& file)
 {
-    QModelIndex indexForCamItemInfo = importFilterModel()->indexForPath(QString(folder + file));
+    KUrl url(folder);
+    url.adjustPath(KUrl::AddTrailingSlash);
+    url.setFileName(file);
+    QModelIndex indexForCamItemInfo = importFilterModel()->indexForPath(url.toLocalFile());
     QModelIndex mappedIndex = importFilterModel()->mapToSource(indexForCamItemInfo);
     return importImageModel()->camItemInfoRef(mappedIndex);
 }

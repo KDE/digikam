@@ -1194,6 +1194,7 @@ void ImportUI::slotFolderList(const QStringList& folderList)
     }
 }
 
+// FIXME d->filesToBeAdded seems to be unused...
 void ImportUI::slotFileList(const CamItemInfoList& fileList)
 {
     if (d->closed)
@@ -2288,6 +2289,7 @@ void ImportUI::slotNewSelection(bool hasSelection)
         d->renameCustomizer->renameManager()->parseFiles();
     }
 
+    // TODO why new name is calculated on selection basis?!
     slotDownloadNameChanged();
 
     unsigned long fSize = 0;
