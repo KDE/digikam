@@ -117,5 +117,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 103 ==> 299755 - After latest X upgrades the Level Tools upgrade is a solid color (black, white, gray).
 104 ==> 328835 - Crash when opening "Configure Digikam" settings.
 105 ==> 329127 - Remove Tag menu entry is enabled if a picture has no Tags.
-106 ==> 
+106 ==> 297804 - Saving an image loses portait orientation.
+107 ==> 
+
 
