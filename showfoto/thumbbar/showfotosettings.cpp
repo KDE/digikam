@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2013-12-20
- * Description : Settings for the Showfoto tool
+ * Description : Settings for Showfoto
  *
  * Copyright (C) 2013 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
