@@ -110,7 +110,7 @@ QString WelcomePageView::infoPage() const
     newFeatures << i18n("Items preview when downloading from camera device;");
     newFeatures << i18n("Video Metadata support;");
     newFeatures << i18n("Multi-core CPU support in Batch Queue Manager;");
-    newFeatures << i18n("Full RAW demosacising settings customizable in Batch Queue Manager;");
+    newFeatures << i18n("Full RAW demosaising settings customizable in Batch Queue Manager;");
     newFeatures << i18n("Raw preview extraction support in Batch Queue Manager;");
     newFeatures << i18n("Add Workflow concept to Batch Queue Manager to load/save Queue Settings between sessions;");
     newFeatures << i18n("Add Crop tool to Batch Queue Manager;");
