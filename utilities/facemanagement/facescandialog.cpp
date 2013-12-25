@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QApplication>
+#include <QButtonGroup>
 #include <QCheckBox>
 #include <QComboBox>
 #include <QGridLayout>
@@ -119,7 +120,8 @@ public:
         accuracyInput            = 0;
         useFullCpuButton         = 0;
         retrainAllButton         = 0;
-        benchmarkButton          = 0;
+        benchmarkDetectionButton   = 0;
+        benchmarkRecognitionButton = 0;
     }
 
     QGroupBox*                   optionGroupBox;
@@ -137,7 +139,8 @@ public:
 
     QCheckBox*                   useFullCpuButton;
     QCheckBox*                   retrainAllButton;
-    QCheckBox*                   benchmarkButton;
+    QCheckBox*                   benchmarkDetectionButton;
+    QCheckBox*                   benchmarkRecognitionButton;
 
     const QString                configName;
     const QString                configMainTask;
@@ -227,7 +230,7 @@ void FaceScanDialog::doLoadState()
 
     d->useFullCpuButton->setChecked(group.readEntry(entryName(d->configUseFullCpu), true));
 
-    // do not load retrainAllButton and benchmarkButton state from config, dangerous
+    // do not load retrainAllButton and benchmarkDetectionButton state from config, dangerous
 
     setDetailsWidgetVisible(group.readEntry(entryName(d->configSettingsVisible), false));
 }
@@ -429,18 +432,31 @@ void FaceScanDialog::setupUi()
                                           "and rebuild it from all available faces. "
                                           "Be careful if any other application helped in building your training database. "));
 
-    d->benchmarkButton = new QCheckBox(advancedTab);
-    d->benchmarkButton->setText(i18nc("@option:check", "Benchmark face detection"));
-    d->benchmarkButton->setToolTip(i18nc("@info:tooltip",
+    d->benchmarkDetectionButton = new QCheckBox(advancedTab);
+    d->benchmarkDetectionButton->setText(i18nc("@option:check", "Benchmark face detection"));
+    d->benchmarkDetectionButton->setToolTip(i18nc("@info:tooltip",
                                          "This will run face detection and compare the results "
                                          "with faces already marked, which are taken as ground truth. "
                                          "At the end, benchmark results will be presented. "));
+
+    d->benchmarkRecognitionButton = new QCheckBox(advancedTab);
+    d->benchmarkRecognitionButton->setText(i18nc("@option:check", "Benchmark face recognition"));
+    d->benchmarkRecognitionButton->setToolTip(i18nc("@info:tooltip",
+                                         "This will run face recognition on known faces compare the results "
+                                         "with the known faces, which are taken as ground truth. "
+                                         "For some recognition modes, this procedure does not make sense. "
+                                         "At the end, benchmark results will be presented. "));
+    QButtonGroup* benchmarkGroup = new QButtonGroup(this);
+    benchmarkGroup->setExclusive(true);
+    benchmarkGroup->addButton(d->benchmarkDetectionButton);
+    benchmarkGroup->addButton(d->benchmarkRecognitionButton);
 
     advancedLayout->addWidget(cpuExplanation,                 0, 0);
     advancedLayout->addWidget(d->useFullCpuButton,            1, 0);
     advancedLayout->addWidget(new KSeparator(Qt::Horizontal), 2, 0);
     advancedLayout->addWidget(d->retrainAllButton,            3, 0);
-    advancedLayout->addWidget(d->benchmarkButton,             4, 0);
+    advancedLayout->addWidget(d->benchmarkDetectionButton,    4, 0);
+    advancedLayout->addWidget(d->benchmarkRecognitionButton,  5, 0);
     parametersLayout->setRowStretch(5, 10);
 
     d->tabWidget->addTab(advancedTab, i18nc("@title:tab", "Advanced"));
@@ -465,7 +481,10 @@ void FaceScanDialog::setupConnections()
     connect(d->retrainAllButton, SIGNAL(toggled(bool)),
             this, SLOT(retrainAllButtonToggled(bool)));
 
-    connect(d->benchmarkButton, SIGNAL(toggled(bool)),
+    connect(d->benchmarkDetectionButton, SIGNAL(toggled(bool)),
+            this, SLOT(benchmarkButtonToggled(bool)));
+
+    connect(d->benchmarkRecognitionButton, SIGNAL(toggled(bool)),
             this, SLOT(benchmarkButtonToggled(bool)));
 }
 
@@ -473,13 +492,14 @@ void FaceScanDialog::retrainAllButtonToggled(bool on)
 {
     d->optionGroupBox->setEnabled(!on);
     d->albumSelectors->setEnabled(!on);
-    d->benchmarkButton->setEnabled(!on);
+    d->benchmarkDetectionButton->setEnabled(!on);
 }
 
-void FaceScanDialog::benchmarkButtonToggled(bool on)
+void FaceScanDialog::benchmarkButtonToggled(bool)
 {
-    d->optionGroupBox->setEnabled(!on);
-    d->retrainAllButton->setEnabled(!on);
+    bool anyOn = d->benchmarkDetectionButton->isChecked() || d->benchmarkRecognitionButton->isChecked();
+    d->optionGroupBox->setEnabled(!anyOn);
+    d->retrainAllButton->setEnabled(!anyOn);
 }
 
 FaceScanSettings FaceScanDialog::settings() const
@@ -490,9 +510,13 @@ FaceScanSettings FaceScanDialog::settings() const
     {
         settings.task = FaceScanSettings::RetrainAll;
     }
-    else if (d->benchmarkButton->isChecked())
+    else if (d->benchmarkDetectionButton->isChecked())
     {
-        settings.task = FaceScanSettings::Benchmark;
+        settings.task = FaceScanSettings::BenchmarkDetection;
+    }
+    else if (d->benchmarkRecognitionButton->isChecked())
+    {
+        settings.task = FaceScanSettings::BenchmarkRecognition;
     }
     else if(d->detectButton->isChecked())
     {

@@ -330,13 +330,13 @@ protected:
 
 // ----------------------------------------------------------------------------------------
 
-class Benchmarker : public WorkerObject
+class DetectionBenchmarker : public WorkerObject
 {
     Q_OBJECT
 
 public:
 
-    explicit Benchmarker(FacePipeline::Private* const d);
+    explicit DetectionBenchmarker(FacePipeline::Private* const d);
     QString result() const;
 
 public Q_SLOTS:
@@ -362,6 +362,40 @@ protected:
     int                          falsePositiveFaces;
 
     FacePipeline::Private* const d;
+};
+
+// ----------------------------------------------------------------------------------------
+
+class RecognitionBenchmarker : public WorkerObject
+{
+    Q_OBJECT
+
+public:
+
+    explicit RecognitionBenchmarker(FacePipeline::Private* const d);
+    QString result() const;
+
+public Q_SLOTS:
+
+    void process(FacePipelineExtendedPackage::Ptr package);
+
+Q_SIGNALS:
+
+    void processed(FacePipelineExtendedPackage::Ptr package);
+
+protected:
+
+    class Statistics
+    {
+    public:
+        Statistics();
+        int knownFaces;
+        int correctlyRecognized;
+    };
+    QMap<int, Statistics> results;
+
+    FacePipeline::Private* const d;
+    KFaceIface::RecognitionDatabase database;
 };
 
 // ----------------------------------------------------------------------------------------
@@ -405,7 +439,8 @@ public:
     RecognitionWorker*   recognitionWorker;
     DatabaseWriter*      databaseWriter;
     Trainer*             trainer;
-    Benchmarker*         benchmarker;
+    DetectionBenchmarker*  detectionBenchmarker;
+    RecognitionBenchmarker*recognitionBenchmarker;
 
     QList<QObject*>      pipeline;
     QThread::Priority    priority;
