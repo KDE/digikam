@@ -53,8 +53,7 @@ public:
     {
     }
 
-    ImageFilterModelTodoPackage(const QVector<ImageInfo>& infos, int version, bool isForReAdd,
-                                const QVector<QVariant>& extraValues = QVector<QVariant>())
+    ImageFilterModelTodoPackage(const QVector<ImageInfo>& infos, const QVector<QVariant>& extraValues, int version, bool isForReAdd)
         : infos(infos), extraValues(extraValues), version(version), isForReAdd(isForReAdd)
     {
     }
