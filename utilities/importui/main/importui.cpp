@@ -462,7 +462,7 @@ void ImportUI::setupActions()
     d->itemSortAction                    = new KSelectAction(i18n("&Sort Items"), this);
     d->itemSortAction->setWhatsThis(i18n("The value by which the items are sorted in the thumbnail view"));
     QSignalMapper* const imageSortMapper = new QSignalMapper(this);
-    connect(imageSortMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImages(int)));
+    connect(imageSortMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImagesBy(int)));
     actionCollection()->addAction("item_sort", d->itemSortAction);
 
     // map to CamItemSortSettings enum
@@ -487,7 +487,7 @@ void ImportUI::setupActions()
     imageSortMapper->setMapping(sortByRatingAction, (int)CamItemSortSettings::SortByRating);
     imageSortMapper->setMapping(sortByDownloadAction, (int)CamItemSortSettings::SortByDownloadState);
 
-    d->itemSortAction->setCurrentItem(ImportSettings::instance()->getImageSortOrder());
+    d->itemSortAction->setCurrentItem(ImportSettings::instance()->getImageSortBy());
 
     // -- Item Sort Order ------------------------------------------------------------
 
@@ -506,7 +506,7 @@ void ImportUI::setupActions()
     imageSortOrderMapper->setMapping(sortAscendingAction, (int)CamItemSortSettings::AscendingOrder);
     imageSortOrderMapper->setMapping(sortDescendingAction, (int)CamItemSortSettings::DescendingOrder);
 
-    d->itemSortOrderAction->setCurrentItem(ImportSettings::instance()->getImageSorting());
+    d->itemSortOrderAction->setCurrentItem(ImportSettings::instance()->getImageSortOrder());
 
     // -- Item Grouping ------------------------------------------------------------
 
@@ -2589,7 +2589,6 @@ bool ImportUI::thumbbarVisibility() const
 
 void ImportUI::slotSwitchedToPreview()
 {
-    d->camItemPreviewAction->setChecked(true);
     d->zoomBar->setBarMode(DZoomBar::PreviewZoomCtrl);
     d->imageViewSelectionAction->setCurrentAction(d->camItemPreviewAction);
     toogleShowBar();
@@ -2598,7 +2597,6 @@ void ImportUI::slotSwitchedToPreview()
 void ImportUI::slotSwitchedToIconView()
 {
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
-    d->iconViewAction->setChecked(true);
     d->imageViewSelectionAction->setCurrentAction(d->iconViewAction);
     toogleShowBar();
 }
@@ -2606,7 +2604,6 @@ void ImportUI::slotSwitchedToIconView()
 void ImportUI::slotSwitchedToMapView()
 {
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
-    d->mapViewAction->setChecked(true);
     d->imageViewSelectionAction->setCurrentAction(d->mapViewAction);
     toogleShowBar();
 }

@@ -730,7 +730,7 @@ void ImportView::slotSelectInvert()
     d->iconView->invertSelection();
 }
 
-void ImportView::slotSortImages(int sortRole)
+void ImportView::slotSortImagesBy(int sortBy)
 {
     ImportSettings* const settings = ImportSettings::instance();
 
@@ -739,8 +739,8 @@ void ImportView::slotSortImages(int sortRole)
         return;
     }
 
-    settings->setImageSortOrder(sortRole);
-    d->iconView->importFilterModel()->setSortRole((CamItemSortSettings::SortRole) sortRole);
+    settings->setImageSortBy(sortBy);
+    d->iconView->importFilterModel()->setSortRole((CamItemSortSettings::SortRole) sortBy);
 }
 
 void ImportView::slotSortImagesOrder(int order)
@@ -752,7 +752,7 @@ void ImportView::slotSortImagesOrder(int order)
         return;
     }
 
-    settings->setImageSorting(order);
+    settings->setImageSortOrder(order);
     d->iconView->importFilterModel()->setSortOrder((CamItemSortSettings::SortOrder) order);
 }
 

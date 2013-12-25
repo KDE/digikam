@@ -78,8 +78,8 @@ void ImportIconView::init(CameraController* const controller)
     setDropIndicatorShown(false);
 
     setToolTipEnabled(settings->showToolTipsIsValid());
-    importFilterModel()->setSortRole((CamItemSortSettings::SortRole)settings->getImageSortOrder());
-    importFilterModel()->setSortOrder((CamItemSortSettings::SortOrder)settings->getImageSorting());
+    importFilterModel()->setSortRole((CamItemSortSettings::SortRole)settings->getImageSortBy());
+    importFilterModel()->setSortOrder((CamItemSortSettings::SortOrder)settings->getImageSortOrder());
     importFilterModel()->setCategorizationMode((CamItemSortSettings::CategorizationMode)settings->getImageGroupMode());
 
     // selection overlay
