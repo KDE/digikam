@@ -170,10 +170,7 @@ QByteArray GPCamera::cameraMD5ID()
     // We don't use camera title from digiKam settings panel to compute MD5 fingerprint,
     // because it can be changed by users between session.
     camData.append(model());
-    // TODO comparing to the port number does not make any sense, right? 
-    // replugging a camera might change the usb device number
-    // example is usb:002,020 ..
-    //camData.append(port());
+    camData.append(port());
     camData.append(path());
     KMD5 md5(camData.toUtf8());
     md5data = md5.hexDigest();
