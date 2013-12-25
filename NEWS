@@ -118,6 +118,10 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 104 ==> 328835 - Crash when opening "Configure Digikam" settings.
 105 ==> 329127 - Remove Tag menu entry is enabled if a picture has no Tags.
 106 ==> 297804 - Saving an image loses portait orientation.
-107 ==> 
+107 ==> 279996 - Crash while running face detection.
+108 ==> 278049 - Crash during tagging while scanning run in background (Digikam::ImageModel::removeRowPairs).
+109 ==> 262596 - Crash when finding faces (Digikam::ImageModel::removeRowPairs).
+110 ==> 
+
 
 
