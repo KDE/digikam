@@ -29,8 +29,8 @@
 #include <kglobalsettings.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include "kapplication.h"
-#include "QStyle"
+#include <kapplication.h>
+#include <QStyle>
 
 // Local includes
 
