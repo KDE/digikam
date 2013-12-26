@@ -451,11 +451,11 @@ void ShowFoto::setupActions()
 
 void ShowFoto::readSettings()
 {
+    d->settings = ShowfotoSettings::instance();
+
     readStandardSettings();
 
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
-    QString defaultDir        = group.readEntry("Last Opened Directory", QString());
+    QString defaultDir        = d->settings->getLastOpenedDir();
 
     if (defaultDir.isNull())
     {
@@ -470,43 +470,38 @@ void ShowFoto::readSettings()
 
     d->rightSideBar->loadState();
 
-    Digikam::ThemeManager::instance()->setCurrentTheme(group.readEntry("Theme",
-                                                       Digikam::ThemeManager::instance()->defaultThemeName()));
+    Digikam::ThemeManager::instance()->setCurrentTheme(d->settings->getCurrentTheme());
+
+    d->thumbBar->setToolTipEnabled(d->settings->getShowToolTip());
 }
 
 void ShowFoto::saveSettings()
 {
     saveStandardSettings();
 
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
-
-    group.writeEntry("Last Opened Directory", d->lastOpenedDirectory.toLocalFile() );
-    group.writeEntry("Theme", Digikam::ThemeManager::instance()->currentThemeName());
+    d->settings->setLastOpenedDir(d->lastOpenedDirectory.toLocalFile());
+    d->settings->setCurrentTheme(Digikam::ThemeManager::instance()->currentThemeName());
 
     d->rightSideBar->saveState();
-
-    config->sync();
 }
 
 void ShowFoto::applySettings()
 {
     applyStandardSettings();
 
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
+    d->settings->readSettings();
 
-    d->rightSideBar->setStyle(group.readEntry("Sidebar Title Style", 0) == 0 ?
+    d->rightSideBar->setStyle(d->settings->getRightSideBarStyle() == 0 ?
                               KMultiTabBar::VSNET : KMultiTabBar::KDEV3ICON);
 
     QString currentStyle = kapp->style()->objectName();
-    QString newStyle     = group.readEntry("Application Style", currentStyle);
+    QString newStyle     = d->settings->getApplicationStyle();
 
     if (newStyle != currentStyle)
         kapp->setStyle(newStyle);
 
     // Current image deleted go to trash ?
-    d->deleteItem2Trash = group.readEntry("DeleteItem2Trash", true);
+    d->deleteItem2Trash = d->settings->getDeleteItem2Trash();
 
     if (d->deleteItem2Trash)
     {
@@ -519,7 +514,7 @@ void ShowFoto::applySettings()
         m_fileDeleteAction->setText(i18n("Delete File"));
     }
 
-    ShowfotoSettings::instance()->readSettings();
+    d->thumbBar->setToolTipEnabled(d->settings->getShowToolTip());
 
     d->rightSideBar->slotLoadMetadataFilters();
 }
@@ -1218,7 +1213,6 @@ void ShowFoto::openFolder(const KUrl& url)
     ShowfotoItemInfo iteminfo;
     ShowfotoItemInfoList infos;
     DMetadata meta;
-    int i = 0;
 
     // And open all items in image editor.
 
@@ -1236,8 +1230,6 @@ void ShowFoto::openFolder(const KUrl& url)
         iteminfo.height = meta.getImageDimensions().height();
         iteminfo.photoInfo = meta.getPhotographInformation();
         infos.append(iteminfo);
-
-        i++;
     }
 
     if(d->infoList.isEmpty())
@@ -1254,7 +1246,7 @@ void ShowFoto::openFolder(const KUrl& url)
     }
 
     slotOpenUrl(d->infoList.at(0));
-
+    d->lastOpenedDirectory = d->infoList.at(0).url;
 }
 
 

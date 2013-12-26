@@ -28,6 +28,7 @@
 
 #include <QObject>
 #include <QFont>
+#include <QString>
 
 namespace ShowFoto
 {
@@ -41,9 +42,34 @@ public:
     static ShowfotoSettings* instance();
 
     void readSettings();
-    void saveSettings();
+
+    QString getLastOpenedDir();
+    bool getDeleteItem2Trash();
+    QString getCurrentTheme();
+    int getRightSideBarStyle();
+    QString getApplicationStyle();
 
     bool getShowFormatOverThumbnail();
+
+    bool getShowToolTip();
+
+    bool getShowFileName();
+    bool getShowFileDate();
+    bool getShowFileSize();
+    bool getShowFileType();
+    bool getShowFileDim();
+
+    bool getShowPhotoMake();
+    bool getShowPhotoFocal();
+    bool getShowPhotoExpo();
+    bool getShowPhotoFlash();
+    bool getShowPhotoWB();
+    bool getShowPhotoDate();
+
+    QFont getToolTipFont();
+
+    void setLastOpenedDir(QString dir);
+    void setCurrentTheme(QString theme);
 
 private:
 

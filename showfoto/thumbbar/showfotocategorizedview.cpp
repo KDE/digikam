@@ -507,11 +507,6 @@ void ShowfotoCategorizedView::slotDelayedEnter()
     {
         emit DigikamKCategorizedView::entered(mouseIndex);
     }
-
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group("ImageViewer Settings");
-
-    setToolTipEnabled(group.readEntry("Show ToolTips", true));
 }
 
 void ShowfotoCategorizedView::slotFileChanged(const QString& filePath)

@@ -3,12 +3,13 @@
 
 #include "showfoto.h"
 #include "QDir"
-#include "thumbbar/showfotoiteminfo.h"
-#include "thumbbar/showfotothumbnailbar.h"
-#include "thumbbar/showfotomodel.h"
+#include "showfotoiteminfo.h"
+#include "showfotothumbnailbar.h"
+#include "showfotomodel.h"
 #include "splashscreen.h"
 #include "imagepropertiessidebar.h"
-#include "thumbbar/showfotodelegate.h"
+#include "showfotodelegate.h"
+#include "showfotosettings.h"
 
 namespace ShowFoto {
 
@@ -31,7 +32,8 @@ public:
         thumbBarDock(0),
         normalDelegate(0),
         rightSideBar(0),
-        splash(0)
+        splash(0),
+        settings(0)
     {
     }
 
@@ -58,7 +60,7 @@ public:
     ShowfotoNormalDelegate*          normalDelegate;
     Digikam::ImagePropertiesSideBar* rightSideBar;
     Digikam::SplashScreen*           splash;
-
+    ShowfotoSettings*                settings;
 };
 } // namespace Showfoto
 #endif // SHOWFOTO_P_H
