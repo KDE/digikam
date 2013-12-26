@@ -50,6 +50,7 @@ public:
     bool detectBlur;
     bool detectNoise;
     bool detectCompression;
+    bool detectOverexposure;
     bool lowQRejected;
     bool mediumQPending;
     bool highQAccepted;

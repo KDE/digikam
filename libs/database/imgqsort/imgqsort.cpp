@@ -83,6 +83,7 @@ public:
     const uint           clusterCount;
     const uint           size;   // Size of squared original image.
 
+    Mat                  src;
     Mat                  src_gray;
     Mat                  detected_edges;
 
@@ -121,6 +122,7 @@ ImgQSort::ImgQSort(const DImg& img, const ImageQualitySettings& imq, PickLabel* 
     d->imq.detectBlur        = imq.detectBlur;
     d->imq.detectNoise       = imq.detectNoise;
     d->imq.detectCompression = imq.detectCompression;
+    d->imq.detectOverexposure= imq.detectOverexposure;
     d->imq.lowQRejected      = imq.lowQRejected;
     d->imq.mediumQPending    = imq.mediumQPending;
     d->imq.highQAccepted     = imq.highQAccepted;
@@ -154,6 +156,7 @@ void ImgQSort::startAnalyse()
     double noise             = 0.0;
     int    compressionlevel  = 0;
     float  finalquality      = 0.0;
+    int    exposurelevel     = 0;
 
     // If blur option is selected in settings, run the algorithms
     if (d->imq.detectBlur)
@@ -183,6 +186,13 @@ void ImgQSort::startAnalyse()
         compressionlevel = compressiondetector();
         kDebug() << "Amount of compression artifacts present in image is : " << compressionlevel;
     }
+    
+        if (d->imq.detectOverexposure)
+    {
+        // Returns number of blocks in the image.
+        exposurelevel = exposureamount();
+        kDebug() << "Exposure level present in image is : " << exposurelevel;
+    }
 
 #ifdef TRACE
 
@@ -204,9 +214,14 @@ void ImgQSort::startAnalyse()
             oms << "Noise Present:" << noise << endl;
         }
 
-        if (d->imq.detectCompression==true)
+        if (d->imq.detectCompression)
         {
             oms << "Compression Present:" << compressionlevel << endl;
+        }
+        
+        if (d->imq.detectOverexposure)
+        {
+            oms << "Exposure Present:" << exposurelevel << endl;
         }
     }
 
@@ -258,6 +273,7 @@ void ImgQSort::readImage() const
     mixer.startFilterDirectly();
 
     d->image.putImageData(mixer.getTargetImage().bits());
+    d->src = cvCreateMat(d->image.numPixels(), 3, CV_8UC3);
     d->src_gray = cvCreateMat(d->image.numPixels(), 1, CV_8UC1);
 
     if (d->imq.detectNoise)
@@ -789,6 +805,52 @@ int ImgQSort::compressiondetector() const
     }
 
     return number_of_blocks;
+}
+
+int ImgQSort::exposureamount() const
+{
+        /// Separate the image in 3 places ( B, G and R )
+          vector<Mat> bgr_planes;
+          split( d->src, bgr_planes );
+          
+          /// Establish the number of bins
+          int histSize = 256;
+          
+          /// Set the ranges ( for B,G,R) )
+          float range[] = { 0, 256 } ;
+          const float* histRange = { range };
+          
+          bool uniform = true; bool accumulate = false;
+          
+          Mat b_hist, g_hist, r_hist;
+          
+          /// Compute the histograms:
+          calcHist( &bgr_planes[0], 1, 0, Mat(), b_hist, 1, &histSize, &histRange, uniform, accumulate );
+          calcHist( &bgr_planes[1], 1, 0, Mat(), g_hist, 1, &histSize, &histRange, uniform, accumulate );
+          calcHist( &bgr_planes[2], 1, 0, Mat(), r_hist, 1, &histSize, &histRange, uniform, accumulate );         
+
+          
+          // Draw the histograms for B, G and R
+          int hist_w = 512; int hist_h = 400;
+          int bin_w = cvRound( (double) hist_w/histSize );
+          
+          Mat histImage( hist_h, hist_w, CV_8UC3, Scalar( 0,0,0) );
+          
+          /// Normalize the histograms:
+          
+          normalize(b_hist, b_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat() );
+          normalize(g_hist, g_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat() );
+          normalize(r_hist, r_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat() );
+          
+          ///Sum the histograms
+          Scalar rmean,gmean,bmean;
+          rmean = mean(r_hist);
+          gmean = mean(g_hist);
+          bmean = mean(b_hist);
+          
+          int exposurelevel = (rmean[0] + gmean[0] + bmean[0]) / 3;
+          
+          return exposurelevel;
 }
 
 }  // namespace Digikam

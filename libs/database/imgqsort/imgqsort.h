@@ -66,6 +66,7 @@ private:
     short  blurdetector2()            const;
     double noisedetector()            const;
     int    compressiondetector()      const;
+    int    exposureamount()           const;
 
 private:
 

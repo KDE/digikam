@@ -38,6 +38,7 @@ ImageQualitySettings::ImageQualitySettings()
     detectBlur         = true;
     detectNoise        = true;
     detectCompression  = true;
+    detectOverexposure = true;
     lowQRejected       = true;
     mediumQPending     = true;
     highQAccepted      = true;
@@ -63,6 +64,7 @@ void ImageQualitySettings::readFromConfig()
     detectBlur        = group.readEntry("Detect Blur",        true);
     detectNoise       = group.readEntry("Detect Noise",       true);
     detectCompression = group.readEntry("Detect Compression", true);
+    detectOverexposure= group.readEntry("Detect Overexposure", true);
     lowQRejected      = group.readEntry("LowQ Rejected",      true);
     mediumQPending    = group.readEntry("MediumQ Pending",    true);
     highQAccepted     = group.readEntry("HighQ Accepted",     true);
@@ -84,6 +86,7 @@ void ImageQualitySettings::writeToConfig()
     group.writeEntry("Detect Blur",        detectBlur);
     group.writeEntry("Detect Noise",       detectNoise);
     group.writeEntry("Detect Compression", detectCompression);
+    group.writeEntry("Detect Overexposure", detectOverexposure);
     group.writeEntry("LowQ Rejected",      lowQRejected);
     group.writeEntry("MediumQ Pending",    mediumQPending);
     group.writeEntry("HighQ Accepted",     highQAccepted);
@@ -103,6 +106,7 @@ QDebug operator<<(QDebug dbg, const ImageQualitySettings& s)
     dbg.nospace() << "DetectBlur        : " << s.detectBlur << endl;
     dbg.nospace() << "DetectNoise       : " << s.detectNoise << endl;
     dbg.nospace() << "DetectCompression : " << s.detectCompression << endl;
+    dbg.nospace() << "DetectOverexposure : " << s.detectOverexposure << endl;
     dbg.nospace() << "LowQRejected      : " << s.lowQRejected << endl;
     dbg.nospace() << "MediumQPending    : " << s.mediumQPending << endl;
     dbg.nospace() << "HighQAccepted     : " << s.highQAccepted << endl;
