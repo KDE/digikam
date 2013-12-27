@@ -67,8 +67,10 @@ public:
             fimg[c] = 0;
         }
 
+        // Setting the default values found by experimentation
+
         edgeThresh        = 1;
-        lowThreshold      = 0.4;   // given in research paper
+        lowThreshold      = 0.4;
         ratio             = 3;
         kernel_size       = 3;
         blurrejected      = 0.0;
@@ -83,17 +85,20 @@ public:
     const uint           clusterCount;
     const uint           size;   // Size of squared original image.
 
-    Mat                  src;
-    Mat                  src_gray;
-    Mat                  detected_edges;
+    Mat                  src;                       // Matrix of the original source image
+    Mat                  src_gray;                  // Matrix of the grayscaled source image
+    Mat                  detected_edges;          // Matrix containing only edges in the image
 
+    // threshold above which we say that edges are present at a point
     int                  edgeThresh;
-    int                  ratio;
+    int                  ratio;            // lower:upper threshold for canny edge detector algorithm
     int                  kernel_size;
+    // kernel size for for the Sobel operations to be performed internally
+    // by the edge detector
 
     double               lowThreshold;
 
-    DImg                 image;
+    DImg                 image;            // original image
     DImg                 neimage;          // noise estimation image[ for color]
 
     ImageQualitySettings imq;
@@ -118,7 +123,7 @@ ImgQSort::ImgQSort(const DImg& img, const ImageQualitySettings& imq, PickLabel* 
     //int h = (img->height() > d->size) ? d->size : img->height();
     //setOriginalImage(img->copy(0, 0, w, h));
 
-    // Reading settings
+    // Reading settings from GUI
     d->imq.detectBlur        = imq.detectBlur;
     d->imq.detectNoise       = imq.detectNoise;
     d->imq.detectCompression = imq.detectCompression;
@@ -145,7 +150,7 @@ ImgQSort::~ImgQSort()
 
 void ImgQSort::startAnalyse()
 {
-    // For ImgQNREstimate
+    // For Noise Estimation
     // Use the Top/Left corner of 256x256 pixels to analyse noise contents from image.
     // This will speed-up computation time with OpenCV.
 
@@ -158,7 +163,7 @@ void ImgQSort::startAnalyse()
     float  finalquality      = 0.0;
     int    exposurelevel     = 0;
 
-    // If blur option is selected in settings, run the algorithms
+    // If blur option is selected in settings, run the blur detection algorithms
     if (d->imq.detectBlur)
     {
         // Returns blur value between 0 and 1.
@@ -186,7 +191,7 @@ void ImgQSort::startAnalyse()
         compressionlevel = compressiondetector();
         kDebug() << "Amount of compression artifacts present in image is : " << compressionlevel;
     }
-    
+
     if (d->imq.detectOverexposure)
     {
         // Returns if there is overexposure in the image
@@ -218,7 +223,7 @@ void ImgQSort::startAnalyse()
         {
             oms << "Compression Present:" << compressionlevel << endl;
         }
-        
+
         if (d->imq.detectOverexposure)
         {
             oms << "Exposure Present:" << exposurelevel << endl;
@@ -633,33 +638,33 @@ double ImgQSort::noisedetector() const
             delete [] d->fimg[i];
         }
 
-/*
-        // NOTE: My original algorithm. lowThreshold should be adjusted precisely for this to work.
+        /*
+                // NOTE: My original algorithm. lowThreshold should be adjusted precisely for this to work.
 
-        kDebug()<<"Estimated noise is "<< nre.settings();
-        d->lowThreshold    = 0.0005;   // Given in research paper for noise. Variable parameter
-        //   d->ratio    = 1;
-        double noiseresult = 0.0;
-        double average     = 0.0;
-        double maxval      = 0.0;
+                kDebug()<<"Estimated noise is "<< nre.settings();
+                d->lowThreshold    = 0.0005;   // Given in research paper for noise. Variable parameter
+                //   d->ratio    = 1;
+                double noiseresult = 0.0;
+                double average     = 0.0;
+                double maxval      = 0.0;
 
-        // Apply Canny Edge Detector to get the edges
-        CannyThreshold(0, 0);
+                // Apply Canny Edge Detector to get the edges
+                CannyThreshold(0, 0);
 
-        average     = mean(d->detected_edges)[0];
-        int* maxIdx = new int[sizeof(d->detected_edges)];
+                average     = mean(d->detected_edges)[0];
+                int* maxIdx = new int[sizeof(d->detected_edges)];
 
-        // To find the maxim1um edge intensity value
-        minMaxIdx(d->detected_edges, 0, &maxval, 0, maxIdx);
+                // To find the maxim1um edge intensity value
+                minMaxIdx(d->detected_edges, 0, &maxval, 0, maxIdx);
 
-        noiseresult = average/maxval;
+                noiseresult = average/maxval;
 
-        kDebug() << "The average of the edge intensity is " << average;
-        kDebug() << "The maximum of the edge intensity is " << maxval;
-        kDebug() << "The result of the edge intensity is "  << noiseresult;
+                kDebug() << "The average of the edge intensity is " << average;
+                kDebug() << "The maximum of the edge intensity is " << maxval;
+                kDebug() << "The result of the edge intensity is "  << noiseresult;
 
-        delete [] maxIdx;
-*/
+                delete [] maxIdx;
+        */
     }
 
     return noiseresult;
@@ -809,47 +814,49 @@ int ImgQSort::compressiondetector() const
 
 int ImgQSort::exposureamount() const
 {
-        /// Separate the image in 3 places ( B, G and R )
-          vector<Mat> bgr_planes;
-          split( d->src, bgr_planes );
-          
-          /// Establish the number of bins
-          int histSize = 256;
-          
-          /// Set the ranges ( for B,G,R) )
-          float range[] = { 0, 256 } ;
-          const float* histRange = { range };
-          
-          bool uniform = true; bool accumulate = false;
-          
-          Mat b_hist, g_hist, r_hist;
-          
-          /// Compute the histograms:
-          calcHist( &bgr_planes[0], 1, 0, Mat(), b_hist, 1, &histSize, &histRange, uniform, accumulate );
-          calcHist( &bgr_planes[1], 1, 0, Mat(), g_hist, 1, &histSize, &histRange, uniform, accumulate );
-          calcHist( &bgr_planes[2], 1, 0, Mat(), r_hist, 1, &histSize, &histRange, uniform, accumulate );         
+    /// Separate the image in 3 places ( B, G and R )
+    vector<Mat> bgr_planes;
+    split( d->src, bgr_planes );
 
-          
-          // Draw the histograms for B, G and R
-          int hist_w = 512; int hist_h = 400;
-          
-          Mat histImage( hist_h, hist_w, CV_8UC3, Scalar( 0,0,0) );
-          
-          /// Normalize the histograms:
-          
-          normalize(b_hist, b_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat() );
-          normalize(g_hist, g_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat() );
-          normalize(r_hist, r_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat() );
-          
-          ///Sum the histograms
-          Scalar rmean,gmean,bmean;
-          rmean = mean(r_hist);
-          gmean = mean(g_hist);
-          bmean = mean(b_hist);
-          
-          int exposurelevel = (rmean[0] + gmean[0] + bmean[0]) / 3;
-          
-          return exposurelevel;
+    /// Establish the number of bins
+    int histSize = 256;
+
+    /// Set the ranges ( for B,G,R) )
+    float range[] = { 0, 256 } ;
+    const float* histRange = { range };
+
+    bool uniform = true;
+    bool accumulate = false;
+
+    Mat b_hist, g_hist, r_hist;
+
+    /// Compute the histograms:
+    calcHist( &bgr_planes[0], 1, 0, Mat(), b_hist, 1, &histSize, &histRange, uniform, accumulate );
+    calcHist( &bgr_planes[1], 1, 0, Mat(), g_hist, 1, &histSize, &histRange, uniform, accumulate );
+    calcHist( &bgr_planes[2], 1, 0, Mat(), r_hist, 1, &histSize, &histRange, uniform, accumulate );
+
+
+    // Draw the histograms for B, G and R
+    int hist_w = 512;
+    int hist_h = 400;
+
+    Mat histImage( hist_h, hist_w, CV_8UC3, Scalar( 0,0,0) );
+
+    /// Normalize the histograms:
+
+    normalize(b_hist, b_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat() );
+    normalize(g_hist, g_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat() );
+    normalize(r_hist, r_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat() );
+
+    ///Sum the histograms
+    Scalar rmean,gmean,bmean;
+    rmean = mean(r_hist);
+    gmean = mean(g_hist);
+    bmean = mean(b_hist);
+
+    int exposurelevel = (rmean[0] + gmean[0] + bmean[0]) / 3;
+
+    return exposurelevel;
 }
 
 }  // namespace Digikam
