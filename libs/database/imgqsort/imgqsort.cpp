@@ -187,9 +187,9 @@ void ImgQSort::startAnalyse()
         kDebug() << "Amount of compression artifacts present in image is : " << compressionlevel;
     }
     
-        if (d->imq.detectOverexposure)
+    if (d->imq.detectOverexposure)
     {
-        // Returns number of blocks in the image.
+        // Returns if there is overexposure in the image
         exposurelevel = exposureamount();
         kDebug() << "Exposure level present in image is : " << exposurelevel;
     }
@@ -832,7 +832,6 @@ int ImgQSort::exposureamount() const
           
           // Draw the histograms for B, G and R
           int hist_w = 512; int hist_h = 400;
-          int bin_w = cvRound( (double) hist_w/histSize );
           
           Mat histImage( hist_h, hist_w, CV_8UC3, Scalar( 0,0,0) );
           

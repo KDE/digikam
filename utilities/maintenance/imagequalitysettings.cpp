@@ -106,7 +106,7 @@ QDebug operator<<(QDebug dbg, const ImageQualitySettings& s)
     dbg.nospace() << "DetectBlur        : " << s.detectBlur << endl;
     dbg.nospace() << "DetectNoise       : " << s.detectNoise << endl;
     dbg.nospace() << "DetectCompression : " << s.detectCompression << endl;
-    dbg.nospace() << "DetectOverexposure : " << s.detectOverexposure << endl;
+    dbg.nospace() << "DetectOverexposure :" << s.detectOverexposure << endl;
     dbg.nospace() << "LowQRejected      : " << s.lowQRejected << endl;
     dbg.nospace() << "MediumQPending    : " << s.mediumQPending << endl;
     dbg.nospace() << "HighQAccepted     : " << s.highQAccepted << endl;
