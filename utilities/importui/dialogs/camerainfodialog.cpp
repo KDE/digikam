@@ -55,7 +55,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget* const parent, const QString& summary
     summaryView->setWordWrapMode(QTextOption::WordWrap);
     summaryView->setReadOnly(true);
 
-    KPageWidgetItem* const p1    = addPage(summaryView, i18n("Summary"));
+    KPageWidgetItem* const p1    = addPage(summaryView, i18nc("Device information summary", "Summary"));
     p1->setHeader(i18n("Device Summary"));
     p1->setIcon(KIcon("dialog-information"));
 
@@ -65,7 +65,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget* const parent, const QString& summary
     manualView->setWordWrapMode(QTextOption::WordWrap);
     manualView->setReadOnly(true);
 
-    KPageWidgetItem* const p2    = addPage(manualView, i18n("Manual"));
+    KPageWidgetItem* const p2    = addPage(manualView, i18nc("Manual of the device", "Manual"));
     p2->setHeader(i18n("Device Manual"));
     p2->setIcon(KIcon("help-contents"));
 
@@ -75,7 +75,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget* const parent, const QString& summary
     aboutView->setWordWrapMode(QTextOption::WordWrap);
     aboutView->setReadOnly(true);
 
-    KPageWidgetItem* const p3    = addPage(aboutView, i18n("About"));
+    KPageWidgetItem* const p3    = addPage(aboutView, i18nc("About device driver", "About"));
     p3->setHeader(i18n("About Driver"));
     p3->setIcon(KIcon("camera-photo"));
 }
