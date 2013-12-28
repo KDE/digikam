@@ -121,7 +121,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 107 ==> 279996 - Crash while running face detection.
 108 ==> 278049 - Crash during tagging while scanning run in background (Digikam::ImageModel::removeRowPairs).
 109 ==> 262596 - Crash when finding faces (Digikam::ImageModel::removeRowPairs).
-110 ==> 
+110 ==> 329323 - Compile time error: flandmark_detector.cpp: No such file or directory.
+111 ==> 
 
 
 
