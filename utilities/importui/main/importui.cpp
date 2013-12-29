@@ -1367,7 +1367,7 @@ void ImportUI::slotUploadItems(const KUrl::List& urls)
             QString msg(i18n("Camera Folder <b>%1</b> already contains the item <b>%2</b>.<br/>"
                              "Please enter a new filename (without extension):",
                              cameraFolder, fi.fileName()));
-            name = KInputDialog::getText(i18n("File already exists"), msg, name, &ok, this);
+            uploadInfo.name = KInputDialog::getText(i18n("File already exists"), msg, name, &ok, this) + ext;
 
             if (!ok)
             {
@@ -1375,7 +1375,7 @@ void ImportUI::slotUploadItems(const KUrl::List& urls)
             }
         }
 
-        d->controller->upload(fi, name + ext, cameraFolder);
+        d->controller->upload(fi, uploadInfo.name, cameraFolder);
     }
 
     delete dlg;
