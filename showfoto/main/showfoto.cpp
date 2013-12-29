@@ -322,8 +322,8 @@ void ShowFoto::setupConnections()
     connect(d->thumbBarDock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             d->thumbBar, SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
 
-    connect(d->thumbBar, SIGNAL(showfotoItemInfoActivated(const ShowfotoItemInfo&)),
-            this, SLOT(slotOpenUrl(const ShowfotoItemInfo&)));
+    connect(d->thumbBar, SIGNAL(showfotoItemInfoActivated(ShowfotoItemInfo)),
+            this, SLOT(slotOpenUrl(ShowfotoItemInfo)));
 
     connect(this, SIGNAL(signalSelectionChanged(QRect)),
             d->rightSideBar, SLOT(slotImageSelectionChanged(QRect)));
@@ -337,8 +337,8 @@ void ShowFoto::setupConnections()
     connect(this,SIGNAL(signalInfoList(ShowfotoItemInfoList&)),
             d->model,SLOT(reAddShowfotoItemInfos(ShowfotoItemInfoList&)));
 
-    connect(d->thumbLoadThread,SIGNAL(signalThumbnailLoaded(const LoadingDescription&, const QPixmap&)),
-            d->model,SLOT(slotThumbnailLoaded(const LoadingDescription&, const QPixmap&)));
+    connect(d->thumbLoadThread,SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+            d->model,SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
 
     connect(this, SIGNAL(signalNoCurrentItem()),
             d->rightSideBar, SLOT(slotNoCurrentItem()));

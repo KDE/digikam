@@ -520,11 +520,9 @@ void DigikamView::setupConnections()
     ImageAlbumFilterModel* const model = d->iconView->imageAlbumFilterModel();
 
     connect(d->filterWidget,
-            SIGNAL(signalTagFilterChanged(const QList<int>&, const QList<int>&,
-                                          ImageFilterSettings::MatchingCondition, bool, const QList<int>&, const QList<int>&)),
+            SIGNAL(signalTagFilterChanged(QList<int>,QList<int>,ImageFilterSettings::MatchingCondition,bool,QList<int>,QList<int>)),
             d->iconView->imageFilterModel(),
-            SLOT(setTagFilter(const QList<int>&, const QList<int>&,
-                              ImageFilterSettings::MatchingCondition, bool, const QList<int>&, const QList<int>&)));
+            SLOT(setTagFilter(QList<int>,QList<int>,ImageFilterSettings::MatchingCondition,bool,QList<int>,QList<int>)));
 
     connect(d->filterWidget, SIGNAL(signalRatingFilterChanged(int,ImageFilterSettings::RatingCondition)),
             model, SLOT(setRatingFilter(int,ImageFilterSettings::RatingCondition)));
