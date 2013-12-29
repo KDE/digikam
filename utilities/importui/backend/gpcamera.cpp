@@ -817,6 +817,11 @@ void GPCamera::getItemInfoInternal(const QString& folder, const QString& itemNam
     gp_camera_file_get_info(d->camera, QFile::encodeName(info.folder).constData(),
                             QFile::encodeName(info.name).constData(), &cfinfo, d->status->context);
 
+    // if preview has size field, it's a valid preview most likely, otherwise we'll skip it later on
+    if(cfinfo.preview.fields & GP_FILE_INFO_SIZE) {
+        info.previewPossible = true;
+    }
+    
     if (cfinfo.file.fields & GP_FILE_INFO_STATUS)
     {
         if (cfinfo.file.status == GP_FILE_STATUS_DOWNLOADED)

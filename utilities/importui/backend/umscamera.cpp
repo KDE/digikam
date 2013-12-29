@@ -183,7 +183,7 @@ void UMSCamera::getItemInfo(const QString& folder, const QString& itemName, CamI
     info.readPermissions  = fi.isReadable();
     info.writePermissions = fi.isWritable();
     info.mime             = mimeType(fi.suffix().toLower());
-
+    
     if (!info.mime.isEmpty())
     {
         if (useMetadata)
@@ -204,6 +204,12 @@ void UMSCamera::getItemInfo(const QString& folder, const QString& itemName, CamI
             // Only use file system date
             info.ctime = ImageScanner::creationDateFromFilesystem(fi);
         }
+    }
+    
+    // if we have an image, allow previews
+    // TODO allow video previews at some point?
+    if(info.mime.startsWith("image/")) {
+        info.previewPossible = true;
     }
 }
 

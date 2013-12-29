@@ -109,7 +109,10 @@ QVariant ImportThumbnailModel::data(const QModelIndex& index, int role) const
         QString     path = info.url().prettyUrl();
         CachedItem  item;
 
-        if (info.isNull() || path.isEmpty())
+        // use mimetype thumbnail also if the mime is set to something else than to image
+        // this is to avoid querying the device for previews with unsupported file formats
+        // at least gphoto2 doesn't really like it and will error a lot and slow down
+        if (info.isNull() || path.isEmpty() || !info.previewPossible)
         {
             return QVariant(d->controller->mimeTypeThumbnail(path, d->thumbSize.size()));
         }

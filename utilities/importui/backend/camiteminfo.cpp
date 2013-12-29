@@ -43,6 +43,7 @@ CamItemInfo::CamItemInfo()
     rating           = 0;
     pickLabel        = 0;
     colorLabel       = 0;
+    previewPossible  = false;
 }
 
 CamItemInfo::~CamItemInfo()
@@ -185,6 +186,8 @@ QDebug operator<<(QDebug dbg, const CamItemInfo& info)
                   << info.colorLabel;
     dbg.nospace() << "CamItemInfo::tagIds: "
                   << info.tagIds;
+    dbg.nospace() << "CamItemInfo::previewPossible: "
+                  << info.previewPossible;
     return dbg.space();
 }
 
