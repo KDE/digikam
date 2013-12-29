@@ -84,6 +84,9 @@ public:
         context = gp_context_new();
         cancel  = false;
         gp_context_set_cancel_func(context, cancel_func, 0);
+        gp_context_set_progress_funcs(context, start_func, update_func, stop_func, 0);
+        gp_context_set_error_func(context, error_func, 0);
+        gp_context_set_status_func(context, status_func, 0);
 #endif /* HAVE_GPHOTO2 */
     }
 
@@ -100,10 +103,31 @@ public:
 #ifdef HAVE_GPHOTO2
     GPContext*  context;
 
+    static void error_func(GPContext*, const char* msg, void*) {
+        kDebug() << "error:" << msg;
+    }
+    static void status_func(GPContext*, const char* msg, void*) {
+        kDebug() << "status:" << msg;
+    }
     static GPContextFeedback cancel_func(GPContext*, void*)
     {
         return (cancel ? GP_CONTEXT_FEEDBACK_CANCEL :
                 GP_CONTEXT_FEEDBACK_OK);
+    }
+    
+    static unsigned int start_func(GPContext*, float target, const char *text, void *data)
+    {
+        kDebug() << "start:" << target << "- text:" << text;
+        return 0;
+
+    }
+    static void update_func(GPContext*, unsigned int id, float target, void *data)
+    {
+        kDebug() << "update:" << id << "- target:" << target;
+    }
+    static void stop_func(GPContext*, unsigned int id, void *data)
+    {
+        kDebug() << "stop:" << id;
     }
 #endif /* HAVE_GPHOTO2 */
 };
@@ -372,8 +396,8 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
         if (sinfos[i].fields & GP_STORAGEINFO_BASE)
         {
             kDebug() << "Storage base-dir: " << QString(sinfos[i].basedir);
-            /* TODO in order for this to work, the upload dialog needs to be fixed.
-            if(nrofsinfos == 1) {
+            // TODO in order for this to work, the upload dialog needs to be fixed.
+            /*if(nrofsinfos == 1) {
                 kDebug() << "Only one storage, so setting storage directory to" << sinfos[i].basedir;
                 m_path = QString(sinfos[i].basedir);
             }*/
