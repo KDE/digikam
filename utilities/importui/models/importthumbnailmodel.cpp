@@ -26,7 +26,7 @@
 // Qt includes
 
 #include <QCache>
-#include <QReadWriteLock>>
+#include <QReadWriteLock>
 
 // KDE includes
 
