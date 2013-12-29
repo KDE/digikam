@@ -51,28 +51,28 @@ public:
 
     void setModels(ShowfotoImageModel* model, ShowfotoSortFilterModel* filterModel);
 
-    ShowfotoImageModel*      showfotoImageModel()      const;
-    ShowfotoSortFilterModel* showfotoSortFilterModel() const;
+    ShowfotoImageModel*         showfotoImageModel()                    const;
+    ShowfotoSortFilterModel*    showfotoSortFilterModel()               const;
 
-    QItemSelectionModel*     getSelectionModel()       const;
+    QItemSelectionModel*        getSelectionModel()                     const;
 
     /// Returns any ShowfotoFilterModel in chain. May not be sourceModel()
-    ShowfotoFilterModel*     showfotoFilterModel()     const;
+    ShowfotoFilterModel*        showfotoFilterModel()                   const;
 
     /// Returns 0 if the ShowfotoImageModel is not an ShowfotoThumbnailModel
-    ShowfotoThumbnailModel*  showfotoThumbnailModel()  const;
+    ShowfotoThumbnailModel*     showfotoThumbnailModel()                const;
 
-    ShowfotoDelegate*        delegate()                const;
+    ShowfotoDelegate*           delegate()                              const;
 
-    ShowfotoItemInfo       currentInfo()               const;
-    KUrl                   currentUrl()                const;
+    ShowfotoItemInfo            currentInfo()                           const;
+    KUrl                        currentUrl()                            const;
 
     QList<ShowfotoItemInfo>     selectedShowfotoItemInfos()             const;
     QList<ShowfotoItemInfo>     selectedShowfotoItemInfosCurrentFirst() const;
     KUrl::List                  selectedUrls()                          const;
 
-    QList<ShowfotoItemInfo>     showfotoItemInfos()    const;
-    KUrl::List             urls()                      const;
+    QList<ShowfotoItemInfo>     showfotoItemInfos()                     const;
+    KUrl::List                  urls()                                  const;
 
     /** Selects the index as current and scrolls to it
      */

@@ -106,13 +106,13 @@ public:
     enum ShowfotoFilterModelRoles
     {
         /// Returns the current categorization mode.
-        CategorizationModeRole       = ShowfotoImageModel::FilterModelRoles + 1,
+        CategorizationModeRole         = ShowfotoImageModel::FilterModelRoles + 1,
 
         /// Returns the current sort order.
-        SortOrderRole                = ShowfotoImageModel::FilterModelRoles + 2,
+        SortOrderRole                  = ShowfotoImageModel::FilterModelRoles + 2,
 
         /// Returns the format of the index which is used for category.
-        CategoryFormatRole           = ShowfotoImageModel::FilterModelRoles + 3,
+        CategoryFormatRole             = ShowfotoImageModel::FilterModelRoles + 3,
 
         /// Returns true if the given showfoto item is a group leader, and the group is opened.
         //TODO: GroupIsOpenRole        = ShowfotoImageModel::FilterModelRoles + 4

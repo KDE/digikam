@@ -241,102 +241,102 @@ void ShowfotoSettings::readSettings()
     d->toolTipsFont            = group.readEntry(d->configToolTipsFont,KGlobalSettings::generalFont());
 }
 
-QString ShowfotoSettings::getLastOpenedDir()
+QString ShowfotoSettings::getLastOpenedDir() const
 {
     return d->lastOpenedDir;
 }
 
-bool ShowfotoSettings::getDeleteItem2Trash()
+bool ShowfotoSettings::getDeleteItem2Trash() const
 {
     return d->deleteItem2Trash;
 }
 
-QString ShowfotoSettings::getCurrentTheme()
+QString ShowfotoSettings::getCurrentTheme() const
 {
     return d->theme;
 }
 
-int ShowfotoSettings::getRightSideBarStyle()
+int ShowfotoSettings::getRightSideBarStyle() const
 {
     return d->rightSideBarStyle;
 }
 
-bool ShowfotoSettings::getShowFormatOverThumbnail()
+bool ShowfotoSettings::getShowFormatOverThumbnail() const
 {
     return d->drawFormatOverThumbnail;
 }
 
-QString ShowfotoSettings::getApplicationStyle()
+QString ShowfotoSettings::getApplicationStyle() const
 {
     return d->applicationStyle;
 }
 
-bool ShowfotoSettings::getShowToolTip()
+bool ShowfotoSettings::getShowToolTip() const
 {
     return d->showToolTip;
 }
 
-bool ShowfotoSettings::getShowFileName()
+bool ShowfotoSettings::getShowFileName() const
 {
     return d->showFileName;
 }
 
-bool ShowfotoSettings::getShowFileDate()
+bool ShowfotoSettings::getShowFileDate() const
 {
     return d->showFileDate;
 }
 
-bool ShowfotoSettings::getShowFileSize()
+bool ShowfotoSettings::getShowFileSize() const
 {
     return d->showFileSize;
 }
 
-bool ShowfotoSettings::getShowFileType()
+bool ShowfotoSettings::getShowFileType() const
 {
     return d->showFileType;
 }
 
-bool ShowfotoSettings::getShowFileDim()
+bool ShowfotoSettings::getShowFileDim() const
 {
     return d->showFileDim;
 }
 
-bool ShowfotoSettings::getShowPhotoMake()
+bool ShowfotoSettings::getShowPhotoMake() const
 {
     return d->showPhotoMake;
 }
 
-bool ShowfotoSettings::getShowPhotoFocal()
+bool ShowfotoSettings::getShowPhotoFocal() const
 {
     return d->showPhotoFocal;
 }
 
-bool ShowfotoSettings::getShowPhotoExpo()
+bool ShowfotoSettings::getShowPhotoExpo() const
 {
     return d->showPhotoExpo;
 }
 
-bool ShowfotoSettings::getShowPhotoFlash()
+bool ShowfotoSettings::getShowPhotoFlash() const
 {
     return d->showPhotoFlash;
 }
 
-bool ShowfotoSettings::getShowPhotoWB()
+bool ShowfotoSettings::getShowPhotoWB() const
 {
     return d->showPhotoWB;
 }
 
-bool ShowfotoSettings::getShowPhotoDate()
+bool ShowfotoSettings::getShowPhotoDate() const
 {
     return d->showPhotoDate;
 }
 
-QFont ShowfotoSettings::getToolTipFont()
+QFont ShowfotoSettings::getToolTipFont() const
 {
     return d->toolTipsFont;
 }
 
-void ShowfotoSettings::setLastOpenedDir(QString dir)
+void ShowfotoSettings::setLastOpenedDir(const QString& dir)
 {
     KConfigGroup group         = d->config->group(d->configGroupDefault);
 
@@ -344,7 +344,7 @@ void ShowfotoSettings::setLastOpenedDir(QString dir)
     d->config->sync();
 }
 
-void ShowfotoSettings::setCurrentTheme(QString theme)
+void ShowfotoSettings::setCurrentTheme(const QString& theme)
 {
     KConfigGroup group         = d->config->group(d->configGroupDefault);
 

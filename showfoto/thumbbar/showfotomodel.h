@@ -40,7 +40,7 @@ public:
 
     void setThumbnailLoadThread(ThumbnailLoadThread* thread);
 };
-    
+
 } // namespace ShowFoto
 
 #endif // SHOWFOTOMODEL_H

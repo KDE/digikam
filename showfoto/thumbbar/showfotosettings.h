@@ -43,33 +43,33 @@ public:
 
     void readSettings();
 
-    QString getLastOpenedDir();
-    bool getDeleteItem2Trash();
-    QString getCurrentTheme();
-    int getRightSideBarStyle();
-    QString getApplicationStyle();
+    QString getLastOpenedDir() const;
+    bool getDeleteItem2Trash() const;
+    QString getCurrentTheme() const;
+    int getRightSideBarStyle() const;
+    QString getApplicationStyle() const;
 
-    bool getShowFormatOverThumbnail();
+    bool getShowFormatOverThumbnail() const;
 
-    bool getShowToolTip();
+    bool getShowToolTip() const;
 
-    bool getShowFileName();
-    bool getShowFileDate();
-    bool getShowFileSize();
-    bool getShowFileType();
-    bool getShowFileDim();
+    bool getShowFileName() const;
+    bool getShowFileDate() const;
+    bool getShowFileSize() const;
+    bool getShowFileType() const;
+    bool getShowFileDim() const;
 
-    bool getShowPhotoMake();
-    bool getShowPhotoFocal();
-    bool getShowPhotoExpo();
-    bool getShowPhotoFlash();
-    bool getShowPhotoWB();
-    bool getShowPhotoDate();
+    bool getShowPhotoMake() const;
+    bool getShowPhotoFocal() const;
+    bool getShowPhotoExpo() const;
+    bool getShowPhotoFlash() const;
+    bool getShowPhotoWB() const;
+    bool getShowPhotoDate() const;
 
-    QFont getToolTipFont();
+    QFont getToolTipFont() const;
 
-    void setLastOpenedDir(QString dir);
-    void setCurrentTheme(QString theme);
+    void setLastOpenedDir(const QString& dir);
+    void setCurrentTheme(const QString& theme);
 
 private:
 

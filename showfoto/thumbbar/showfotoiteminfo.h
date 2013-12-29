@@ -78,7 +78,7 @@ public:
     /// Unique image id
     qlonglong          id;
 
-    PhotoInfoContainer photoInfo;    
+    PhotoInfoContainer photoInfo;
 
     QDateTime          dtime;                // creation time on disk
     QDateTime          ctime;                // camera date stamp

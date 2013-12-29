@@ -26,7 +26,6 @@
 // Qt includes
 
 #include <QHash>
-#include <QDebug>
 
 // Local includes
 
@@ -375,6 +374,7 @@ void ShowfotoImageModel::publiciseInfos(const QList<ShowfotoItemInfo>& infos)
             d->fileUrlHash[info.url.prettyUrl()] = id;
         }
     }
+
     endInsertRows();
     emit itemInfosAdded(infos);
 }

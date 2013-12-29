@@ -233,7 +233,7 @@ void ShowfotoDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, co
 
     if (ShowfotoSettings::instance()->getShowFormatOverThumbnail())
     {
-        QString frm = info.mime;        
+        QString frm = info.mime;
         drawImageFormat(p, actualPixmapRect, frm);
     }
 

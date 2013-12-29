@@ -231,8 +231,8 @@ Q_SIGNALS:
 
 public:
 
-    ShowfotoFilterModel*  q;
-    ShowfotoImageModel*   showfotoImageModel;
+    ShowfotoFilterModel*     q;
+    ShowfotoImageModel*      showfotoImageModel;
     ShowfotoItemSortSettings sorter;
 };
 
