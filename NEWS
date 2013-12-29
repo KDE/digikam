@@ -124,7 +124,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 110 ==> 329323 - Compile time error: flandmark_detector.cpp: No such file or directory.
 111 ==> 308734 - digiKam/kioslave: a lot of "KIO::Slave::timeout: Houston, we lost our slave" and "slave died".
 112 ==> 304207 - Progress manager: more control on appearance/disappearance.
-113 ==> 
-
+113 ==> 313678 - digiKam fails to know which images in my camera is new.
+114 ==> 
 
 
