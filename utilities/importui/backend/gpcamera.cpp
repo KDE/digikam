@@ -343,107 +343,103 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
 
     for (int i = 0 ; i < nrofsinfos ; ++i)
     {
-        if (sinfos[i].fields & GP_STORAGEINFO_FILESYSTEMTYPE)
-        {
-            switch (sinfos[i].fstype)
-            {
-                case GP_STORAGEINFO_FST_DCF:       // Camera layout (DCIM)
-                {
-                    if (sinfos[i].fields & GP_STORAGEINFO_LABEL)
-                    {
-                        kDebug() << "Storage label: " << QString(sinfos[i].label);
-                    }
-
-                    if (sinfos[i].fields & GP_STORAGEINFO_DESCRIPTION)
-                    {
-                        kDebug() << "Storage description: " << QString(sinfos[i].description);
-                    }
-
-                    if (sinfos[i].fields & GP_STORAGEINFO_BASE)
-                    {
-                        kDebug() << "Storage base-dir: " << QString(sinfos[i].basedir);
-                    }
-
-                    if (sinfos[i].fields & GP_STORAGEINFO_ACCESS)
-                    {
-                        switch (sinfos[i].access)
-                        {
-                            case GP_STORAGEINFO_AC_READWRITE:
-                                kDebug() << "Storage access: R/W";
-                                break;
-
-                            case GP_STORAGEINFO_AC_READONLY:
-                                kDebug() << "Storage access: RO";
-                                break;
-
-                            case GP_STORAGEINFO_AC_READONLY_WITH_DELETE:
-                                kDebug() << "Storage access: RO + Del";
-                                break;
-
-                            default:
-                                break;
-                        }
-                    }
-
-                    if (sinfos[i].fields & GP_STORAGEINFO_STORAGETYPE)
-                    {
-                        switch (sinfos[i].type)
-                        {
-                            case GP_STORAGEINFO_ST_FIXED_ROM:
-                                kDebug() << "Storage type: fixed ROM";
-                                break;
-
-                            case GP_STORAGEINFO_ST_REMOVABLE_ROM:
-                                kDebug() << "Storage type: removable ROM";
-                                break;
-
-                            case GP_STORAGEINFO_ST_FIXED_RAM:
-                                kDebug() << "Storage type: fixed RAM";
-                                break;
-
-                            case GP_STORAGEINFO_ST_REMOVABLE_RAM:
-                                kDebug() << "Storage type: removable RAM";
-                                break;
-
-                            case GP_STORAGEINFO_ST_UNKNOWN:
-                            default:
-                                kDebug() << "Storage type: unknown";
-                                break;
-                        }
-                    }
-
-                    if (sinfos[i].fields & GP_STORAGEINFO_MAXCAPACITY)
-                    {
-                        kBSize = sinfos[i].capacitykbytes;
-                        kDebug() << "Storage capacity: " << kBSize;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-
-                    if (sinfos[i].fields & GP_STORAGEINFO_FREESPACEKBYTES)
-                    {
-                        kBAvail = sinfos[i].freekbytes;
-                        kDebug() << "Storage free-space: " << kBAvail;
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-
-                    break;
-                }
-
+        if (sinfos[i].fields & GP_STORAGEINFO_FILESYSTEMTYPE) {
+            switch(sinfos[i].fstype) {
                 case GP_STORAGEINFO_FST_UNDEFINED:
+                    kDebug() << "Storage fstype: undefined";
+                    break;
                 case GP_STORAGEINFO_FST_GENERICFLAT:
+                    kDebug() << "Storage fstype: flat, all in one directory";
+                    break;
                 case GP_STORAGEINFO_FST_GENERICHIERARCHICAL:
+                    kDebug() << "Storage fstype: generic tree hierarchy";
+                    break;
+                case GP_STORAGEINFO_FST_DCF:
+                    kDebug() << "DCIM style storage";
+                    break;
+            }
+        }
+        if (sinfos[i].fields & GP_STORAGEINFO_LABEL)
+        {
+            kDebug() << "Storage label: " << QString(sinfos[i].label);
+        }
+
+        if (sinfos[i].fields & GP_STORAGEINFO_DESCRIPTION)
+        {
+            kDebug() << "Storage description: " << QString(sinfos[i].description);
+        }
+
+        if (sinfos[i].fields & GP_STORAGEINFO_BASE)
+        {
+            kDebug() << "Storage base-dir: " << QString(sinfos[i].basedir);
+            /* TODO in order for this to work, the upload dialog needs to be fixed.
+            if(nrofsinfos == 1) {
+                kDebug() << "Only one storage, so setting storage directory to" << sinfos[i].basedir;
+                m_path = QString(sinfos[i].basedir);
+            }*/
+        }
+
+        if (sinfos[i].fields & GP_STORAGEINFO_ACCESS)
+        {
+            switch (sinfos[i].access)
+            {
+                case GP_STORAGEINFO_AC_READWRITE:
+                    kDebug() << "Storage access: R/W";
+                    break;
+
+                case GP_STORAGEINFO_AC_READONLY:
+                    kDebug() << "Storage access: RO";
+                    break;
+
+                case GP_STORAGEINFO_AC_READONLY_WITH_DELETE:
+                    kDebug() << "Storage access: RO + Del";
+                    break;
+
                 default:
                     break;
             }
         }
-    }
+
+        if (sinfos[i].fields & GP_STORAGEINFO_STORAGETYPE)
+        {
+            switch (sinfos[i].type)
+            {
+                case GP_STORAGEINFO_ST_FIXED_ROM:
+                    kDebug() << "Storage type: fixed ROM";
+                    break;
+
+                case GP_STORAGEINFO_ST_REMOVABLE_ROM:
+                    kDebug() << "Storage type: removable ROM";
+                    break;
+
+                case GP_STORAGEINFO_ST_FIXED_RAM:
+                    kDebug() << "Storage type: fixed RAM";
+                    break;
+
+                case GP_STORAGEINFO_ST_REMOVABLE_RAM:
+                    kDebug() << "Storage type: removable RAM";
+                    break;
+
+                case GP_STORAGEINFO_ST_UNKNOWN:
+                default:
+                    kDebug() << "Storage type: unknown";
+                    break;
+            }
+        }
+
+        if (sinfos[i].fields & GP_STORAGEINFO_MAXCAPACITY)
+        {
+            kBSize += sinfos[i].capacitykbytes;
+            kDebug() << "Storage capacity: " << kBSize;
+        }
+
+        if (sinfos[i].fields & GP_STORAGEINFO_FREESPACEKBYTES)
+        {
+            kBAvail += sinfos[i].freekbytes;
+            kDebug() << "Storage free-space: " << kBAvail;
+        }
+     }
+
 
     return true;
 #else
