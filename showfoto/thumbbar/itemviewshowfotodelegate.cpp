@@ -51,9 +51,7 @@ ItemViewShowfotoDelegatePrivate::ItemViewShowfotoDelegatePrivate()
 
     // painting constants
     radius        = 3;
-    margin        = 5;
-
-    makeStarPolygon();
+    margin        = 5;    
 }
 
 void ItemViewShowfotoDelegatePrivate::init(ItemViewShowfotoDelegate* const _q)
@@ -68,23 +66,6 @@ void ItemViewShowfotoDelegatePrivate::clearRects()
 {
     gridSize   = QSize(0, 0);
     rect       = QRect(0, 0, 0, 0);
-}
-
-void ItemViewShowfotoDelegatePrivate::makeStarPolygon()
-{
-    // Pre-computed star polygon for a 15x15 pixmap.
-    starPolygon << QPoint(0,  6);
-    starPolygon << QPoint(5,  5);
-    starPolygon << QPoint(7,  0);
-    starPolygon << QPoint(9,  5);
-    starPolygon << QPoint(14, 6);
-    starPolygon << QPoint(10, 9);
-    starPolygon << QPoint(11, 14);
-    starPolygon << QPoint(7,  11);
-    starPolygon << QPoint(3,  14);
-    starPolygon << QPoint(4,  9);
-
-    starPolygonSize = QSize(15, 15);
 }
 
 // ---- ItemViewShowfotoDelegate -----------------------------------------------

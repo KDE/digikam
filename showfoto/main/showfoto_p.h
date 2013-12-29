@@ -5,7 +5,6 @@
 #include "QDir"
 #include "showfotoiteminfo.h"
 #include "showfotothumbnailbar.h"
-#include "showfotomodel.h"
 #include "splashscreen.h"
 #include "imagepropertiessidebar.h"
 #include "showfotodelegate.h"
@@ -52,7 +51,7 @@ public:
     KAction*                         first;
     QDir                             dir;
     ShowfotoItemInfoList             infoList;
-    ShowfotoModel*                   model;
+    ShowfotoThumbnailModel*          model;
     ShowfotoFilterModel*             filterModel;
     Digikam::ThumbnailLoadThread*    thumbLoadThread;
     ShowfotoThumbnailBar*            thumbBar;

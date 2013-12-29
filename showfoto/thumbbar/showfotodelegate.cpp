@@ -54,8 +54,7 @@ void ShowfotoDelegate::ShowfotoDelegatePrivate::clearRects()
     nameRect             = QRect(0, 0, 0, 0);
     resolutionRect       = QRect(0, 0, 0, 0);
     sizeRect             = QRect(0, 0, 0, 0);
-    imageInformationRect = QRect(0, 0, 0, 0);
-    pickLabelRect        = QRect(0, 0, 0, 0);
+    imageInformationRect = QRect(0, 0, 0, 0);    
 }
 
 ShowfotoDelegate::ShowfotoDelegate(QObject* const parent)
@@ -585,10 +584,7 @@ void ShowfotoNormalDelegate::updateRects()
     int y                                      = d->margin;
     d->pixmapRect                              = QRect(d->margin, y, d->contentWidth, d->contentWidth);
     y                                          = d->pixmapRect.bottom();
-    d->imageInformationRect                    = QRect(d->margin, y, d->contentWidth, 0);
-    const int iconSize                         = KIconLoader::SizeSmall;
-
-    d->pickLabelRect   = QRect(d->margin, y, iconSize, iconSize);
+    d->imageInformationRect                    = QRect(d->margin, y, d->contentWidth, 0);        
 
     d->imageInformationRect.setBottom(y);
 

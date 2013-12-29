@@ -57,8 +57,6 @@ public:
 
     void init(ItemViewShowfotoDelegate* const _q);
 
-    void makeStarPolygon();
-
     /// Resets cached rects. Remember to reimplement in subclass for added rects.
     virtual void clearRects();
 
@@ -68,7 +66,6 @@ public:
     QSize                     gridSize;
 
     QRect                     rect;
-    QRect                     ratingRect;
 
     QPixmap                   regPixmap;
     QPixmap                   selPixmap;
@@ -79,12 +76,7 @@ public:
     QFont                     fontCom;
     QFont                     fontXtra;
 
-    QPolygon                  starPolygon;
-    QSize                     starPolygonSize;
-
     ThumbnailSize             thumbSize;
-
-    QPersistentModelIndex     editingRating;
 
     ItemViewShowfotoDelegate* q;
 

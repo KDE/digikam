@@ -43,13 +43,11 @@ class ShowfotoDelegate::ShowfotoDelegatePrivate : public ItemViewShowfotoDelegat
 public:
 
     ShowfotoDelegatePrivate()
-    {
-      //categoryDrawer      = 0;
+    {      
         contentWidth        = 0;
         drawImageFormat     = true;
         drawMouseOverFrame  = true;
-        drawFocusFrame      = true;
-        ratingOverThumbnail = false;
+        drawFocusFrame      = true;        
         currentModel        = 0;
         currentView         = 0;
 
@@ -61,21 +59,14 @@ public:
     QRect                  dateRect;
     QRect                  pixmapRect;
     QRect                  nameRect;
-//  QRect                  titleRect;
-//  QRect                  commentsRect;
     QRect                  resolutionRect;
-    QRect                  sizeRect;
-//  QRect                  downloadRect;
-    QRect                  lockRect;
-    QRect                  tagRect;
-    QRect                  imageInformationRect;
-    QRect                  pickLabelRect;
+    QRect                  sizeRect;        
+    QRect                  imageInformationRect;    
     QRect                  groupRect;
 
     bool                   drawImageFormat;
     bool                   drawFocusFrame;
-    bool                   drawMouseOverFrame;
-    bool                   ratingOverThumbnail;
+    bool                   drawMouseOverFrame;    
 
     QCache<int, QRect>     actualPixmapRectCache;
 
@@ -99,10 +90,7 @@ public:
 
         // switch off drawing of frames
         drawMouseOverFrame  = false;
-        drawFocusFrame      = false;
-
-        // switch off composing rating over background
-        ratingOverThumbnail = false;
+        drawFocusFrame      = false;        
     }
 
     void init(ShowfotoThumbnailDelegate* const q);

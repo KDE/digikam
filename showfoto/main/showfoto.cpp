@@ -397,7 +397,7 @@ void ShowFoto::setupUserArea()
     d->thumbBarDock->setFloating(false);
 
 
-    d->model = new ShowfotoModel(d->thumbBar);
+    d->model = new ShowfotoThumbnailModel(d->thumbBar);
     d->model->setThumbnailLoadThread(d->thumbLoadThread);
 
     d->filterModel = new ShowfotoFilterModel(d->thumbBar);
