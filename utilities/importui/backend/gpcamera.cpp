@@ -59,6 +59,8 @@ extern "C"
 #include "config-digikam.h"
 #include "dmetadata.h"
 
+//#define GPHOTO2_DEBUG 1
+
 #ifdef HAVE_GPHOTO2
 
 // LibGphoto2 includes
@@ -84,9 +86,11 @@ public:
         context = gp_context_new();
         cancel  = false;
         gp_context_set_cancel_func(context, cancel_func, 0);
+#ifdef GPHOTO2_DEBUG
         gp_context_set_progress_funcs(context, start_func, update_func, stop_func, 0);
         gp_context_set_error_func(context, error_func, 0);
         gp_context_set_status_func(context, status_func, 0);
+#endif /* GPHOTO2_DEBUG */
 #endif /* HAVE_GPHOTO2 */
     }
 
@@ -103,17 +107,20 @@ public:
 #ifdef HAVE_GPHOTO2
     GPContext*  context;
 
+    static GPContextFeedback cancel_func(GPContext*, void*)
+    {
+        return (cancel ? GP_CONTEXT_FEEDBACK_CANCEL :
+                GP_CONTEXT_FEEDBACK_OK);
+    }
+
+#ifdef GPHOTO2_DEBUG
     static void error_func(GPContext*, const char* msg, void*) {
         kDebug() << "error:" << msg;
     }
     static void status_func(GPContext*, const char* msg, void*) {
         kDebug() << "status:" << msg;
     }
-    static GPContextFeedback cancel_func(GPContext*, void*)
-    {
-        return (cancel ? GP_CONTEXT_FEEDBACK_CANCEL :
-                GP_CONTEXT_FEEDBACK_OK);
-    }
+ 
     
     static unsigned int start_func(GPContext*, float target, const char *text, void *data)
     {
@@ -132,6 +139,7 @@ public:
         Q_UNUSED(data);
         kDebug() << "stop:" << id;
     }
+#endif /* GPHOTO2_DEBUG */
 #endif /* HAVE_GPHOTO2 */
 };
 
