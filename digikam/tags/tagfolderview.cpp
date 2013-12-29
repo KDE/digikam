@@ -160,7 +160,7 @@ void TagFolderView::slotExpandNode()
 
     QQueue<QModelIndex> greyNodes;
 
-    foreach(QModelIndex index, selected)
+    foreach(const QModelIndex& index, selected)
     {
         greyNodes.append(index);
         expand(index);
@@ -195,7 +195,7 @@ void TagFolderView::slotCollapseNode()
 
     QQueue<QModelIndex> greyNodes;
 
-    foreach(QModelIndex index, selected)
+    foreach(const QModelIndex& index, selected)
     {
         greyNodes.append(index);
         collapse(index);
@@ -304,7 +304,7 @@ void TagFolderView::contextMenuEvent(QContextMenuEvent* event)
     qSort(selectedItems.begin(),selectedItems.end());
     QList<TAlbum*> items;
 
-    foreach(QModelIndex mIndex, selectedItems)
+    foreach(const QModelIndex& mIndex, selectedItems)
     {
         TAlbum* temp = static_cast<TAlbum*>(albumForIndex(mIndex));
         items.push_back(temp);

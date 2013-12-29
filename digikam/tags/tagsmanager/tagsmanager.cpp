@@ -252,7 +252,7 @@ void TagsManager::slotDeleteAction()
     QString tagWithImages;
     QMultiMap<int, TAlbum*> sortedTags;
 
-    foreach(QModelIndex index, selected)
+    foreach(const QModelIndex& index, selected)
     {
         if(!index.isValid())
             return;
@@ -560,7 +560,7 @@ void TagsManager::slotRemoveTagsFromImgs()
 {
     QModelIndexList selList = d->tagMngrView->selectionModel()->selectedIndexes();
 
-    foreach(QModelIndex index, selList)
+    foreach(const QModelIndex& index, selList)
     {
         TAlbum* const t = static_cast<TAlbum*>(d->tagMngrView->albumForIndex(index));
 

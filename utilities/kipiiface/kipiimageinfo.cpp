@@ -357,7 +357,7 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
                 if (!list.isEmpty())
                 {
                     rights.removeCreators();
-                    foreach(QString val, list)
+                    foreach(const QString& val, list)
                     {
                         rights.setCreator(val, ImageCopyright::AddEntryToExisting);
                     }

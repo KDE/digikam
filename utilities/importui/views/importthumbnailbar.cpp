@@ -177,7 +177,7 @@ void ImportThumbnailBar::assignRating(const QList<QModelIndex>& indexes, int rat
 {
    QList<QModelIndex> mappedIndexes = importSortFilterModel()->mapListToSource(indexes);
 
-   foreach(QModelIndex index, mappedIndexes)
+   foreach(const QModelIndex& index, mappedIndexes)
    {
        if (index.isValid())
        {

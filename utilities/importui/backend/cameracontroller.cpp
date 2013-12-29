@@ -1174,7 +1174,7 @@ void CameraController::downloadPrep()
 
 void CameraController::download(const DownloadSettingsList& list)
 {
-    foreach(DownloadSettings downloadSettings, list)
+    foreach(const DownloadSettings& downloadSettings, list)
     {
         download(downloadSettings);
     }

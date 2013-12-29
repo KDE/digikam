@@ -79,7 +79,7 @@ QString AssignedBatchTools::targetSuffix(bool* const extSet) const
 {
     QString suffix;
 
-    foreach(BatchToolSet set, m_toolsList)
+    foreach(const BatchToolSet& set, m_toolsList)
     {
         BatchTool* const tool = BatchToolsManager::instance()->findTool(set.name, set.group);
         if (tool)
