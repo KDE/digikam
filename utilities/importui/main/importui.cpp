@@ -163,9 +163,8 @@ ImportUI::ImportUI(QWidget* const parent, const QString& cameraTitle,
     setCaption(d->cameraTitle);
 
     // -- Init. backend controller ----------------------------------------
-
+    // Note, this needs to be in place before setupUserArea is called. Could use some refactoring...
     setupCameraController(model, port, path);
-    QTimer::singleShot(0, d->controller, SLOT(slotConnect()));
 
     // --------------------------------------------------------
 
@@ -210,6 +209,9 @@ ImportUI::ImportUI(QWidget* const parent, const QString& cameraTitle,
 
     slotThumbSizeChanged(ImportSettings::instance()->getDefaultIconSize());
     slotZoomSliderChanged(ImportSettings::instance()->getDefaultIconSize());
+    
+    // try to connect in the end, this allows us not to block the UI to show up..
+    QTimer::singleShot(0, d->controller, SLOT(slotConnect()));
 }
 
 ImportUI::~ImportUI()
@@ -1745,6 +1747,7 @@ void ImportUI::toggleLock(CamItemInfo& info)
     }
 }
 
+// TODO is this really necessary? why not just use the folders from listfolders call?
 QMap<QString, int> ImportUI::countItemsByFolders() const
 {
     QString                      path;
