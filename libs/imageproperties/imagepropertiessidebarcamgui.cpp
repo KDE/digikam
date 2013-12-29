@@ -89,7 +89,7 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget* const parent
     d->gpsTab        = new ImagePropertiesGPSTab(parent);
 
     appendTab(d->cameraItemTab, SmallIcon("document-properties"),   i18n("Properties"));
-    appendTab(d->metadataTab,   SmallIcon("exifinfo"),              i18n("Metadata"));
+    appendTab(d->metadataTab,   SmallIcon("exifinfo"),              i18n("Metadata")); // krazy:exclude=iconnames
     appendTab(d->gpsTab,        SmallIcon("applications-internet"), i18n("Geolocation"));
 
     // ----------------------------------------------------------
