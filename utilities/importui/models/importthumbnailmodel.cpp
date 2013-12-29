@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QCache>
+#include <QReadWriteLock>>
 
 // KDE includes
 
@@ -61,6 +62,7 @@ public:
     ThumbnailSize            thumbSize;
     ThumbnailSize            lastGlobalThumbSize;
     bool                     emitDataChanged;
+    QReadWriteLock           cacheLock;
 };
 
 ImportThumbnailModel::ImportThumbnailModel(QObject* const parent)
@@ -165,7 +167,9 @@ bool ImportThumbnailModel::getThumbInfo(const CamItemInfo& info, CachedItem& ite
     // If thumbSize changed clear cache and reload thumbs for items.
     if(thumbChanged)
     {
-        d->cache.clear();
+        // TODO unsafe to call cache clear probably? clearCache() doesn't work, as this is a const method..
+        // d->cache.clear();
+        //clearCache();
         d->pendingItems.clear();
     }
 
@@ -228,6 +232,7 @@ void ImportThumbnailModel::slotThumbInfoFailed(const QString& folder, const QStr
 {
     Q_UNUSED(folder);
 
+    // TODO share the completely same images? f.ex. in case of error message, it's not worth storing a separate entry for it..
     if (d->controller->cameraDriverType() == DKCamera::UMSDriver)
     {
         QPixmap pix = d->controller->mimeTypeThumbnail(file, d->thumbSize.size());
@@ -383,20 +388,28 @@ bool ImportThumbnailModel::hasItemFromCache(const KUrl& url) const
 
 void ImportThumbnailModel::putItemToCache(const KUrl& url, const CamItemInfo& info, const QPixmap& thumb)
 {
+    QWriteLocker locker(&d->cacheLock);
+    //kDebug() << "url:" << url << "cache count:" << d->cache.count() << "maxcost:" << d->cache.maxCost() << "totalcost:" << d->cache.totalCost();
+    // TODO is it worth to save the thumb costs separately, or just count the items?
     int infoCost  = sizeof(info);
     int thumbCost = thumb.width() * thumb.height() * thumb.depth() / 8;
-    d->cache.insert(url,
+    if(!d->cache.insert(url,
                     new CachedItem(info, thumb),
-                    infoCost + thumbCost);
+                    infoCost + thumbCost)) 
+    {
+        kWarning() << "thumbnail for:" << url << " not inserted to the cache. infocost:" << infoCost << "thumbCost:" << thumbCost << "maxcost:" << d->cache.maxCost();
+    }
 }
 
 void ImportThumbnailModel::removeItemFromCache(const KUrl& url)
 {
+    QWriteLocker locker(&d->cacheLock);
     d->cache.remove(url);
 }
 
 void ImportThumbnailModel::clearCache()
 {
+    QWriteLocker locker(&d->cacheLock);
     d->cache.clear();
 }
 

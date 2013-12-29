@@ -493,7 +493,6 @@ void CameraController::executeCommand(CameraCommand* const cmd)
         case (CameraCommand::cam_listfolders):
         {
             sendLogMsg(i18n("Listing folders..."));
-
             QStringList folderList;
             folderList.append(d->camera->path());
             d->camera->getAllFolders(d->camera->path(), folderList);
@@ -508,7 +507,6 @@ void CameraController::executeCommand(CameraCommand* const cmd)
         {
             QString folder   = cmd->map["folder"].toString();
             bool useMetadata = cmd->map["useMetadata"].toBool();
-
             sendLogMsg(i18n("Listing files in %1...", folder));
 
             CamItemInfoList itemsList;
@@ -558,10 +556,12 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                 QString file   = (*it).toStringList().at(1);
 
                 sendLogMsg(i18n("Getting thumbs info for %1...", file), DHistoryView::StartingEntry, folder, file);
-
+                // TODO filter what kind of thumbnails we try to ask? no need to ask for thumbs on random files..
+                /* TODO we have info already after the item list loading, no need to query the camera again...
+                d->camera->getItemInfo(folder, file, info, true);*/
                 CamItemInfo info;
-                d->camera->getItemInfo(folder, file, info, true);
-
+                info.folder = folder;
+                info.name = file;
                 QImage thumbnail;
 
                 if (d->camera->getThumbnail(folder, file, thumbnail))

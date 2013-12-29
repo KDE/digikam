@@ -226,6 +226,7 @@ public:
 };
 
 const QString ImportUI::Private::configGroupName("Camera Settings");
+// FIXME is the name really correct?
 const QString ImportUI::Private::configUseMetadataDateEntry("UseThemeBackgroundColor");
 const QString ImportUI::Private::configUseDefaultTargetAlbum("UseDefaultTargetAlbum");
 const QString ImportUI::Private::configDefaultTargetAlbumId("DefaultTargetAlbumId");
