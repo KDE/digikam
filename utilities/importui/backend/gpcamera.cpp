@@ -117,16 +117,19 @@ public:
     
     static unsigned int start_func(GPContext*, float target, const char *text, void *data)
     {
+        Q_UNUSED(data);
         kDebug() << "start:" << target << "- text:" << text;
         return 0;
 
     }
     static void update_func(GPContext*, unsigned int id, float target, void *data)
     {
+        Q_UNUSED(data);
         kDebug() << "update:" << id << "- target:" << target;
     }
     static void stop_func(GPContext*, unsigned int id, void *data)
     {
+        Q_UNUSED(data);
         kDebug() << "stop:" << id;
     }
 #endif /* HAVE_GPHOTO2 */
