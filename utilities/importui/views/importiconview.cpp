@@ -78,8 +78,8 @@ void ImportIconView::init(CameraController* const controller)
     setDropIndicatorShown(false);
 
     setToolTipEnabled(settings->showToolTipsIsValid());
-    importFilterModel()->setSortRole((CamItemSortSettings::SortRole)settings->getImageSortOrder());
-    importFilterModel()->setSortOrder((CamItemSortSettings::SortOrder)settings->getImageSorting());
+    importFilterModel()->setSortRole((CamItemSortSettings::SortRole)settings->getImageSortBy());
+    importFilterModel()->setSortOrder((CamItemSortSettings::SortOrder)settings->getImageSortOrder());
     importFilterModel()->setCategorizationMode((CamItemSortSettings::CategorizationMode)settings->getImageGroupMode());
 
     // selection overlay
@@ -146,7 +146,10 @@ int ImportIconView::fitToWidthIcons()
 
 CamItemInfo ImportIconView::camItemInfo(const QString& folder, const QString& file)
 {
-    QModelIndex indexForCamItemInfo = importFilterModel()->indexForPath(QString(folder + file));
+    KUrl url(folder);
+    url.adjustPath(KUrl::AddTrailingSlash);
+    url.setFileName(file);
+    QModelIndex indexForCamItemInfo = importFilterModel()->indexForPath(url.toLocalFile());
 
     if(indexForCamItemInfo.isValid())
     {
@@ -158,7 +161,10 @@ CamItemInfo ImportIconView::camItemInfo(const QString& folder, const QString& fi
 
 CamItemInfo& ImportIconView::camItemInfoRef(const QString& folder, const QString& file)
 {
-    QModelIndex indexForCamItemInfo = importFilterModel()->indexForPath(QString(folder + file));
+    KUrl url(folder);
+    url.adjustPath(KUrl::AddTrailingSlash);
+    url.setFileName(file);
+    QModelIndex indexForCamItemInfo = importFilterModel()->indexForPath(url.toLocalFile());
     QModelIndex mappedIndex = importFilterModel()->mapToSource(indexForCamItemInfo);
     return importImageModel()->camItemInfoRef(mappedIndex);
 }

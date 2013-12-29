@@ -163,9 +163,8 @@ ImportUI::ImportUI(QWidget* const parent, const QString& cameraTitle,
     setCaption(d->cameraTitle);
 
     // -- Init. backend controller ----------------------------------------
-
+    // Note, this needs to be in place before setupUserArea is called. Could use some refactoring...
     setupCameraController(model, port, path);
-    QTimer::singleShot(0, d->controller, SLOT(slotConnect()));
 
     // --------------------------------------------------------
 
@@ -210,6 +209,9 @@ ImportUI::ImportUI(QWidget* const parent, const QString& cameraTitle,
 
     slotThumbSizeChanged(ImportSettings::instance()->getDefaultIconSize());
     slotZoomSliderChanged(ImportSettings::instance()->getDefaultIconSize());
+    
+    // try to connect in the end, this allows us not to block the UI to show up..
+    QTimer::singleShot(0, d->controller, SLOT(slotConnect()));
 }
 
 ImportUI::~ImportUI()
@@ -462,7 +464,7 @@ void ImportUI::setupActions()
     d->itemSortAction                    = new KSelectAction(i18n("&Sort Items"), this);
     d->itemSortAction->setWhatsThis(i18n("The value by which the items are sorted in the thumbnail view"));
     QSignalMapper* const imageSortMapper = new QSignalMapper(this);
-    connect(imageSortMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImages(int)));
+    connect(imageSortMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImagesBy(int)));
     actionCollection()->addAction("item_sort", d->itemSortAction);
 
     // map to CamItemSortSettings enum
@@ -487,7 +489,7 @@ void ImportUI::setupActions()
     imageSortMapper->setMapping(sortByRatingAction, (int)CamItemSortSettings::SortByRating);
     imageSortMapper->setMapping(sortByDownloadAction, (int)CamItemSortSettings::SortByDownloadState);
 
-    d->itemSortAction->setCurrentItem(ImportSettings::instance()->getImageSortOrder());
+    d->itemSortAction->setCurrentItem(ImportSettings::instance()->getImageSortBy());
 
     // -- Item Sort Order ------------------------------------------------------------
 
@@ -506,7 +508,7 @@ void ImportUI::setupActions()
     imageSortOrderMapper->setMapping(sortAscendingAction, (int)CamItemSortSettings::AscendingOrder);
     imageSortOrderMapper->setMapping(sortDescendingAction, (int)CamItemSortSettings::DescendingOrder);
 
-    d->itemSortOrderAction->setCurrentItem(ImportSettings::instance()->getImageSorting());
+    d->itemSortOrderAction->setCurrentItem(ImportSettings::instance()->getImageSortOrder());
 
     // -- Item Grouping ------------------------------------------------------------
 
@@ -1194,6 +1196,7 @@ void ImportUI::slotFolderList(const QStringList& folderList)
     }
 }
 
+// FIXME d->filesToBeAdded seems to be unused...
 void ImportUI::slotFileList(const CamItemInfoList& fileList)
 {
     if (d->closed)
@@ -1273,7 +1276,7 @@ void ImportUI::slotUpload()
     patternList.append(QString("\n%1|Camera RAW files").arg(QString(KDcrawIface::KDcraw::rawFiles())));
     fileformats = patternList.join("\n");
 
-    kDebug() << "fileformats=" << fileformats;
+    //kDebug() << "fileformats=" << fileformats;
 
     KUrl::List urls = KFileDialog::getOpenUrls(CollectionManager::instance()->oneAlbumRootPath(),
                                                fileformats, this, i18n("Select Image to Upload"));
@@ -1366,7 +1369,7 @@ void ImportUI::slotUploadItems(const KUrl::List& urls)
             QString msg(i18n("Camera Folder <b>%1</b> already contains the item <b>%2</b>.<br/>"
                              "Please enter a new filename (without extension):",
                              cameraFolder, fi.fileName()));
-            name = KInputDialog::getText(i18n("File already exists"), msg, name, &ok, this);
+            uploadInfo.name = KInputDialog::getText(i18n("File already exists"), msg, name, &ok, this) + ext;
 
             if (!ok)
             {
@@ -1374,7 +1377,7 @@ void ImportUI::slotUploadItems(const KUrl::List& urls)
             }
         }
 
-        d->controller->upload(fi, name + ext, cameraFolder);
+        d->controller->upload(fi, uploadInfo.name, cameraFolder);
     }
 
     delete dlg;
@@ -1744,6 +1747,7 @@ void ImportUI::toggleLock(CamItemInfo& info)
     }
 }
 
+// TODO is this really necessary? why not just use the folders from listfolders call?
 QMap<QString, int> ImportUI::countItemsByFolders() const
 {
     QString                      path;
@@ -2288,6 +2292,7 @@ void ImportUI::slotNewSelection(bool hasSelection)
         d->renameCustomizer->renameManager()->parseFiles();
     }
 
+    // TODO why new name is calculated on selection basis?!
     slotDownloadNameChanged();
 
     unsigned long fSize = 0;
@@ -2587,7 +2592,6 @@ bool ImportUI::thumbbarVisibility() const
 
 void ImportUI::slotSwitchedToPreview()
 {
-    d->camItemPreviewAction->setChecked(true);
     d->zoomBar->setBarMode(DZoomBar::PreviewZoomCtrl);
     d->imageViewSelectionAction->setCurrentAction(d->camItemPreviewAction);
     toogleShowBar();
@@ -2596,7 +2600,6 @@ void ImportUI::slotSwitchedToPreview()
 void ImportUI::slotSwitchedToIconView()
 {
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
-    d->iconViewAction->setChecked(true);
     d->imageViewSelectionAction->setCurrentAction(d->iconViewAction);
     toogleShowBar();
 }
@@ -2604,7 +2607,6 @@ void ImportUI::slotSwitchedToIconView()
 void ImportUI::slotSwitchedToMapView()
 {
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
-    d->mapViewAction->setChecked(true);
     d->imageViewSelectionAction->setCurrentAction(d->mapViewAction);
     toogleShowBar();
 }

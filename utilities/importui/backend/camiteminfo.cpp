@@ -74,6 +74,7 @@ KUrl CamItemInfo::url() const
 {
     KUrl url;
     url.addPath(folder);
+    url.adjustPath(KUrl::AddTrailingSlash);
     url.setFileName(name);
     return url;
 }

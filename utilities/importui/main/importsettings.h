@@ -75,8 +75,8 @@ public:
     void setImageSortOrder(int order);
     int getImageSortOrder() const;
 
-    void setImageSorting(int sorting);
-    int getImageSorting() const;
+    void setImageSortBy(int sortBy);
+    int getImageSortBy() const;
 
     void setImageGroupMode(int mode);
     int getImageGroupMode() const;

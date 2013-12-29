@@ -2222,11 +2222,11 @@ void DigikamApp::fillSolidMenus()
             {
                 labelOrProduct = volume->label();
             }
-            else if (volumeDevice.product().isEmpty())
+            else if (!volumeDevice.product().isEmpty())
             {
                 labelOrProduct = volumeDevice.product();
             }
-            else if (volumeDevice.vendor().isEmpty())
+            else if (!volumeDevice.vendor().isEmpty())
             {
                 labelOrProduct = volumeDevice.vendor();
             }

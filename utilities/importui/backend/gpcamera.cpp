@@ -84,6 +84,9 @@ public:
         context = gp_context_new();
         cancel  = false;
         gp_context_set_cancel_func(context, cancel_func, 0);
+        gp_context_set_progress_funcs(context, start_func, update_func, stop_func, 0);
+        gp_context_set_error_func(context, error_func, 0);
+        gp_context_set_status_func(context, status_func, 0);
 #endif /* HAVE_GPHOTO2 */
     }
 
@@ -100,10 +103,31 @@ public:
 #ifdef HAVE_GPHOTO2
     GPContext*  context;
 
+    static void error_func(GPContext*, const char* msg, void*) {
+        kDebug() << "error:" << msg;
+    }
+    static void status_func(GPContext*, const char* msg, void*) {
+        kDebug() << "status:" << msg;
+    }
     static GPContextFeedback cancel_func(GPContext*, void*)
     {
         return (cancel ? GP_CONTEXT_FEEDBACK_CANCEL :
                 GP_CONTEXT_FEEDBACK_OK);
+    }
+    
+    static unsigned int start_func(GPContext*, float target, const char *text, void *data)
+    {
+        kDebug() << "start:" << target << "- text:" << text;
+        return 0;
+
+    }
+    static void update_func(GPContext*, unsigned int id, float target, void *data)
+    {
+        kDebug() << "update:" << id << "- target:" << target;
+    }
+    static void stop_func(GPContext*, unsigned int id, void *data)
+    {
+        kDebug() << "stop:" << id;
     }
 #endif /* HAVE_GPHOTO2 */
 };
@@ -170,7 +194,8 @@ QByteArray GPCamera::cameraMD5ID()
     // We don't use camera title from digiKam settings panel to compute MD5 fingerprint,
     // because it can be changed by users between session.
     camData.append(model());
-    camData.append(port());
+    // TODO is it really necessary to have a path here? I think model+filename+size+ctime should be enough to give unique fingerprint
+    // while still allowing you to move files around in the camera if needed
     camData.append(path());
     KMD5 md5(camData.toUtf8());
     md5data = md5.hexDigest();
@@ -342,107 +367,103 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
 
     for (int i = 0 ; i < nrofsinfos ; ++i)
     {
-        if (sinfos[i].fields & GP_STORAGEINFO_FILESYSTEMTYPE)
-        {
-            switch (sinfos[i].fstype)
-            {
-                case GP_STORAGEINFO_FST_DCF:       // Camera layout (DCIM)
-                {
-                    if (sinfos[i].fields & GP_STORAGEINFO_LABEL)
-                    {
-                        kDebug() << "Storage label: " << QString(sinfos[i].label);
-                    }
-
-                    if (sinfos[i].fields & GP_STORAGEINFO_DESCRIPTION)
-                    {
-                        kDebug() << "Storage description: " << QString(sinfos[i].description);
-                    }
-
-                    if (sinfos[i].fields & GP_STORAGEINFO_BASE)
-                    {
-                        kDebug() << "Storage base-dir: " << QString(sinfos[i].basedir);
-                    }
-
-                    if (sinfos[i].fields & GP_STORAGEINFO_ACCESS)
-                    {
-                        switch (sinfos[i].access)
-                        {
-                            case GP_STORAGEINFO_AC_READWRITE:
-                                kDebug() << "Storage access: R/W";
-                                break;
-
-                            case GP_STORAGEINFO_AC_READONLY:
-                                kDebug() << "Storage access: RO";
-                                break;
-
-                            case GP_STORAGEINFO_AC_READONLY_WITH_DELETE:
-                                kDebug() << "Storage access: RO + Del";
-                                break;
-
-                            default:
-                                break;
-                        }
-                    }
-
-                    if (sinfos[i].fields & GP_STORAGEINFO_STORAGETYPE)
-                    {
-                        switch (sinfos[i].type)
-                        {
-                            case GP_STORAGEINFO_ST_FIXED_ROM:
-                                kDebug() << "Storage type: fixed ROM";
-                                break;
-
-                            case GP_STORAGEINFO_ST_REMOVABLE_ROM:
-                                kDebug() << "Storage type: removable ROM";
-                                break;
-
-                            case GP_STORAGEINFO_ST_FIXED_RAM:
-                                kDebug() << "Storage type: fixed RAM";
-                                break;
-
-                            case GP_STORAGEINFO_ST_REMOVABLE_RAM:
-                                kDebug() << "Storage type: removable RAM";
-                                break;
-
-                            case GP_STORAGEINFO_ST_UNKNOWN:
-                            default:
-                                kDebug() << "Storage type: unknown";
-                                break;
-                        }
-                    }
-
-                    if (sinfos[i].fields & GP_STORAGEINFO_MAXCAPACITY)
-                    {
-                        kBSize = sinfos[i].capacitykbytes;
-                        kDebug() << "Storage capacity: " << kBSize;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-
-                    if (sinfos[i].fields & GP_STORAGEINFO_FREESPACEKBYTES)
-                    {
-                        kBAvail = sinfos[i].freekbytes;
-                        kDebug() << "Storage free-space: " << kBAvail;
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-
-                    break;
-                }
-
+        if (sinfos[i].fields & GP_STORAGEINFO_FILESYSTEMTYPE) {
+            switch(sinfos[i].fstype) {
                 case GP_STORAGEINFO_FST_UNDEFINED:
+                    kDebug() << "Storage fstype: undefined";
+                    break;
                 case GP_STORAGEINFO_FST_GENERICFLAT:
+                    kDebug() << "Storage fstype: flat, all in one directory";
+                    break;
                 case GP_STORAGEINFO_FST_GENERICHIERARCHICAL:
+                    kDebug() << "Storage fstype: generic tree hierarchy";
+                    break;
+                case GP_STORAGEINFO_FST_DCF:
+                    kDebug() << "DCIM style storage";
+                    break;
+            }
+        }
+        if (sinfos[i].fields & GP_STORAGEINFO_LABEL)
+        {
+            kDebug() << "Storage label: " << QString(sinfos[i].label);
+        }
+
+        if (sinfos[i].fields & GP_STORAGEINFO_DESCRIPTION)
+        {
+            kDebug() << "Storage description: " << QString(sinfos[i].description);
+        }
+
+        if (sinfos[i].fields & GP_STORAGEINFO_BASE)
+        {
+            kDebug() << "Storage base-dir: " << QString(sinfos[i].basedir);
+            // TODO in order for this to work, the upload dialog needs to be fixed.
+            /*if(nrofsinfos == 1) {
+                kDebug() << "Only one storage, so setting storage directory to" << sinfos[i].basedir;
+                m_path = QString(sinfos[i].basedir);
+            }*/
+        }
+
+        if (sinfos[i].fields & GP_STORAGEINFO_ACCESS)
+        {
+            switch (sinfos[i].access)
+            {
+                case GP_STORAGEINFO_AC_READWRITE:
+                    kDebug() << "Storage access: R/W";
+                    break;
+
+                case GP_STORAGEINFO_AC_READONLY:
+                    kDebug() << "Storage access: RO";
+                    break;
+
+                case GP_STORAGEINFO_AC_READONLY_WITH_DELETE:
+                    kDebug() << "Storage access: RO + Del";
+                    break;
+
                 default:
                     break;
             }
         }
-    }
+
+        if (sinfos[i].fields & GP_STORAGEINFO_STORAGETYPE)
+        {
+            switch (sinfos[i].type)
+            {
+                case GP_STORAGEINFO_ST_FIXED_ROM:
+                    kDebug() << "Storage type: fixed ROM";
+                    break;
+
+                case GP_STORAGEINFO_ST_REMOVABLE_ROM:
+                    kDebug() << "Storage type: removable ROM";
+                    break;
+
+                case GP_STORAGEINFO_ST_FIXED_RAM:
+                    kDebug() << "Storage type: fixed RAM";
+                    break;
+
+                case GP_STORAGEINFO_ST_REMOVABLE_RAM:
+                    kDebug() << "Storage type: removable RAM";
+                    break;
+
+                case GP_STORAGEINFO_ST_UNKNOWN:
+                default:
+                    kDebug() << "Storage type: unknown";
+                    break;
+            }
+        }
+
+        if (sinfos[i].fields & GP_STORAGEINFO_MAXCAPACITY)
+        {
+            kBSize += sinfos[i].capacitykbytes;
+            kDebug() << "Storage capacity: " << kBSize;
+        }
+
+        if (sinfos[i].fields & GP_STORAGEINFO_FREESPACEKBYTES)
+        {
+            kBAvail += sinfos[i].freekbytes;
+            kDebug() << "Storage free-space: " << kBAvail;
+        }
+     }
+
 
     return true;
 #else

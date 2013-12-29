@@ -42,9 +42,10 @@ public:
 
     enum Status
     {
-        StatusUnknown,
-        Downloaded,
-        NotDownloaded
+        StatusUnknown = -1,
+        NotDownloaded = 0,
+        Downloaded = 1,
+
     };
 
     /**
