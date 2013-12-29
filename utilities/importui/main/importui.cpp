@@ -979,18 +979,21 @@ void ImportUI::finishDialog()
         }
     }
 
-    // When a directory is created, a watch is put on it to spot new files
-    // but it can occur that the file is copied there before the watch is
-    // completely setup. That is why as an extra safeguard run CollectionScanner
-    // over the folders we used. Bug: 119201
+    if (!d->foldersToScan.isEmpty()) {
+        // TODO is this note valid anymore with new progress handling?
+        // When a directory is created, a watch is put on it to spot new files
+        // but it can occur that the file is copied there before the watch is
+        // completely setup. That is why as an extra safeguard run CollectionScanner
+        // over the folders we used. Bug: 119201
 
-    d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
+        d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
                                           i18n("Scanning for new files, please wait..."));
 
-    NewItemsFinder* tool = new NewItemsFinder(NewItemsFinder::ScheduleCollectionScan, d->foldersToScan.toList());
-    tool->start();
+        NewItemsFinder* tool = new NewItemsFinder(NewItemsFinder::ScheduleCollectionScan, d->foldersToScan.toList());
+        tool->start();
 
-    d->foldersToScan.clear();
+        d->foldersToScan.clear();
+    }
 
     deleteLater();
 
