@@ -60,6 +60,7 @@ public:
         showPhotoFlash(false),
         showPhotoWB(false),
         showPhotoDate(true),
+        showPhotoMode(false),
         rightSideBarStyle(0)
     {
     }
@@ -88,6 +89,7 @@ public:
     static const QString configShowPhotoFlash;
     static const QString configShowPhotoWB;
     static const QString configShowPhotoDate;
+    static const QString configShowPhotoMode;
 
     static const QString configToolTipsFont;
 
@@ -109,6 +111,7 @@ public:
     bool                 showPhotoFlash;
     bool                 showPhotoWB;
     bool                 showPhotoDate;
+    bool                 showPhotoMode;
 
     int                  rightSideBarStyle;
 
@@ -151,6 +154,7 @@ const QString ShowfotoSettings::Private::configShowPhotoExpo("ToolTips Show Phot
 const QString ShowfotoSettings::Private::configShowPhotoFlash("ToolTips Show Photo Flash");
 const QString ShowfotoSettings::Private::configShowPhotoWB("ToolTips Show Photo WB");
 const QString ShowfotoSettings::Private::configShowPhotoDate("ToolTips Show Photo Date");
+const QString ShowfotoSettings::Private::configShowPhotoMode("ToolTips Show Photo Mode");
 
 //Tool Tips Font
 const QString ShowfotoSettings::Private::configToolTipsFont("ToolTips Font");
@@ -207,6 +211,7 @@ void ShowfotoSettings::init()
     d->showPhotoFlash          = false;
     d->showPhotoWB             = false;
     d->showPhotoDate           = true;
+    d->showPhotoMode           = true;
 
 }
 
@@ -228,7 +233,7 @@ void ShowfotoSettings::readSettings()
     d->showFileName            = group.readEntry(d->configShowFileName,true);
     d->showFileDate            = group.readEntry(d->configShowFileDate,false);
     d->showFileSize            = group.readEntry(d->configShowFileSize,false);
-    d->showFileType            = group.readEntry(d->configShowFileDim,false);
+    d->showFileType            = group.readEntry(d->configShowFileType,false);
     d->showFileDim             = group.readEntry(d->configShowFileDim, true);
 
     d->showPhotoMake           = group.readEntry(d->configShowPhotoMake,true);
@@ -237,6 +242,7 @@ void ShowfotoSettings::readSettings()
     d->showPhotoFlash          = group.readEntry(d->configShowPhotoFlash,false);
     d->showPhotoWB             = group.readEntry(d->configShowPhotoWB,false);
     d->showPhotoDate           = group.readEntry(d->configShowPhotoDate,true);
+    d->showPhotoMode           = group.readEntry(d->configShowPhotoMode,true);
 
     d->toolTipsFont            = group.readEntry(d->configToolTipsFont,KGlobalSettings::generalFont());
 }
@@ -329,6 +335,11 @@ bool ShowfotoSettings::getShowPhotoWB() const
 bool ShowfotoSettings::getShowPhotoDate() const
 {
     return d->showPhotoDate;
+}
+
+bool ShowfotoSettings::getShowPhotoMode() const
+{
+    return d->showPhotoMode;
 }
 
 QFont ShowfotoSettings::getToolTipFont() const

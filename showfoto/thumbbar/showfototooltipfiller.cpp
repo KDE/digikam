@@ -119,7 +119,8 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
         settings->getShowPhotoExpo()  ||
         settings->getShowPhotoFlash() ||
         settings->getShowPhotoWB()    ||
-        settings->getShowPhotoDate()    )
+        settings->getShowPhotoDate()  ||
+        settings->getShowPhotoMode()    )
     {
         if (!photoInfo.isNull())
         {
@@ -186,6 +187,33 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
                 }
 
                 metaStr += cnt.cellBeg + i18n("Exposure/Sensitivity:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+            }
+
+            if (settings->getShowPhotoMode())
+            {
+                if (photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
+                {
+                    str = cnt.unavailable;
+                }
+                else if (!photoInfo.exposureMode.isEmpty() && photoInfo.exposureProgram.isEmpty())
+                {
+                    str = photoInfo.exposureMode;
+                }
+                else if (photoInfo.exposureMode.isEmpty() && !photoInfo.exposureProgram.isEmpty())
+                {
+                    str = photoInfo.exposureProgram;
+                }
+                else
+                {
+                    str = QString("%1 / %2").arg(photoInfo.exposureMode).arg(photoInfo.exposureProgram);
+                }
+
+                if (str.length() > cnt.maxStringLength)
+                {
+                    str = str.left(cnt.maxStringLength-3) + "...";
+                }
+
+                metaStr += cnt.cellBeg + i18n("Mode/Program:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
             }
 
             if (settings->getShowPhotoFlash())

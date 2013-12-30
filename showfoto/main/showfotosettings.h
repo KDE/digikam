@@ -41,7 +41,7 @@ public:
 
     static ShowfotoSettings* instance();
 
-    void readSettings();
+    void readSettings();    
 
     QString getLastOpenedDir() const;
     bool getDeleteItem2Trash() const;
@@ -65,6 +65,7 @@ public:
     bool getShowPhotoFlash() const;
     bool getShowPhotoWB() const;
     bool getShowPhotoDate() const;
+    bool getShowPhotoMode() const;
 
     QFont getToolTipFont() const;
 
