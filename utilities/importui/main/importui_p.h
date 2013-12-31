@@ -129,7 +129,7 @@ public:
     }
 
     static const QString          configGroupName;
-    static const QString          configUseMetadataDateEntry;
+    static const QString          configUseFileMetadata;
     static const QString          configUseDefaultTargetAlbum;
     static const QString          configDefaultTargetAlbumId;
     static const QString          importFiltersConfigGroupName;
@@ -226,8 +226,7 @@ public:
 };
 
 const QString ImportUI::Private::configGroupName("Camera Settings");
-// FIXME is the name really correct?
-const QString ImportUI::Private::configUseMetadataDateEntry("UseThemeBackgroundColor");
+const QString ImportUI::Private::configUseFileMetadata("UseFileMetadata");
 const QString ImportUI::Private::configUseDefaultTargetAlbum("UseDefaultTargetAlbum");
 const QString ImportUI::Private::configDefaultTargetAlbumId("DefaultTargetAlbumId");
 const QString ImportUI::Private::importFiltersConfigGroupName("Import Filters");

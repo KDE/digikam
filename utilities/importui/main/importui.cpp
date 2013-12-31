@@ -1190,7 +1190,7 @@ void ImportUI::slotFolderList(const QStringList& folderList)
 
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
-    bool useMetadata          = group.readEntry(d->configUseMetadataDateEntry, false);
+    bool useMetadata          = group.readEntry(d->configUseFileMetadata, false);
 
     for (QStringList::const_iterator it = folderList.constBegin();
          it != folderList.constEnd(); ++it)
