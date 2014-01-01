@@ -80,6 +80,7 @@ public:
         rubber           = 0;
         wrapItem         = 0;
         canvasItem       = 0;
+        im               = 0;
     }
 
     bool                     autoZoom;
@@ -109,11 +110,13 @@ public:
 
     RubberItem*              rubber;
     ClickDragReleaseItem*    wrapItem;
+    EditorCore*              im;
 };
 
 Canvas::Canvas(QWidget* const parent)
     : GraphicsDImgView(parent), d_ptr(new Private)
 {
+    d_ptr->im     = new EditorCore();
     d_ptr->parent = parent;
     d_ptr->bgColor.setRgb(0, 0, 0);
     d_ptr->canvasItem = new CanvasItem(this);
@@ -139,6 +142,8 @@ Canvas::Canvas(QWidget* const parent)
 
     addRubber();
 
+    layout()->fitToWindow();
+
     // ------------------------------------------------------------
 
     connect(this, SIGNAL(signalZoomChanged(double)),
@@ -147,25 +152,25 @@ Canvas::Canvas(QWidget* const parent)
     connect(d_ptr->cornerButton, SIGNAL(pressed()),
             this, SLOT(slotCornerButtonPressed()));
 
-    connect(d_ptr->canvasItem->im(), SIGNAL(signalModified()),
+    connect(d_ptr->im, SIGNAL(signalModified()),
             this, SLOT(slotModified()));
 
-    connect(d_ptr->canvasItem->im(), SIGNAL(signalLoadingStarted(QString)),
+    connect(d_ptr->im, SIGNAL(signalLoadingStarted(QString)),
             this, SIGNAL(signalLoadingStarted(QString)));
 
-    connect(d_ptr->canvasItem->im(), SIGNAL(signalImageLoaded(QString,bool)),
+    connect(d_ptr->im, SIGNAL(signalImageLoaded(QString,bool)),
             this, SLOT(slotImageLoaded(QString,bool)));
 
-    connect(d_ptr->canvasItem->im(), SIGNAL(signalImageSaved(QString,bool)),
+    connect(d_ptr->im, SIGNAL(signalImageSaved(QString,bool)),
             this, SLOT(slotImageSaved(QString,bool)));
 
-    connect(d_ptr->canvasItem->im(), SIGNAL(signalLoadingProgress(QString,float)),
+    connect(d_ptr->im, SIGNAL(signalLoadingProgress(QString,float)),
             this, SIGNAL(signalLoadingProgress(QString,float)));
 
-    connect(d_ptr->canvasItem->im(), SIGNAL(signalSavingStarted(QString)),
+    connect(d_ptr->im, SIGNAL(signalSavingStarted(QString)),
             this, SIGNAL(signalSavingStarted(QString)));
 
-    connect(d_ptr->canvasItem->im(), SIGNAL(signalSavingProgress(QString,float)),
+    connect(d_ptr->im, SIGNAL(signalSavingProgress(QString,float)),
             this, SIGNAL(signalSavingProgress(QString,float)));
 
     connect(this, SIGNAL(signalSelected(bool)),
@@ -174,6 +179,7 @@ Canvas::Canvas(QWidget* const parent)
 
 Canvas::~Canvas()
 {
+    delete d_ptr->im;
     delete d_ptr->canvasItem;
     delete d_ptr;
 }
@@ -181,7 +187,7 @@ Canvas::~Canvas()
 void Canvas::resetImage()
 {
     reset();
-    d_ptr->canvasItem->im()->resetImage();
+    d_ptr->im->resetImage();  
 }
 
 void Canvas::reset()
@@ -190,7 +196,7 @@ void Canvas::reset()
     {
         d_ptr->rubber->setVisible(false);
 
-        if (d_ptr->canvasItem->im()->imageValid())
+        if (d_ptr->im->imageValid())
         {
             emit signalSelected(false);
         }
@@ -204,14 +210,14 @@ void Canvas::load(const QString& filename, IOFileSettings* const IOFileSettings)
 {
     reset();
     emit signalPrepareToLoad();
-    d_ptr->canvasItem->im()->load(filename, IOFileSettings);
+    d_ptr->im->load(filename, IOFileSettings);
 }
 
 void Canvas::slotImageLoaded(const QString& filePath, bool success)
 {
-    d_ptr->canvasItem->setImage(d_ptr->canvasItem->im()->getImg()->copyImageData());
+    d_ptr->canvasItem->setImage(d_ptr->im->getImg()->copyImageData());
     d_ptr->canvasItem->zoomSettings()->setZoomFactor(d_ptr->zoom);
-    d_ptr->canvasItem->im()->zoom(d_ptr->zoom);
+    d_ptr->im->zoom(d_ptr->zoom);
 
     if (d_ptr->autoZoom || d_ptr->initialZoom)
     {
@@ -245,18 +251,18 @@ void Canvas::applyTransform(const IccTransform& t)
 
     if (transform.willHaveEffect())
     {
-        d_ptr->canvasItem->im()->applyTransform(transform);
+        d_ptr->im->applyTransform(transform);
     }
     else
     {
-        d_ptr->canvasItem->im()->updateColorManagement();
+        d_ptr->im->updateColorManagement();
         viewport()->update();
     }
 }
 
 void Canvas::preload(const QString& /*filename*/)
 {
-    //    d_ptr->canvasItem->im()->preload(filename);
+    //    d_ptr->im->preload(filename);
 }
 
 void Canvas::slotImageSaved(const QString& filePath, bool success)
@@ -266,22 +272,22 @@ void Canvas::slotImageSaved(const QString& filePath, bool success)
 
 void Canvas::abortSaving()
 {
-    d_ptr->canvasItem->im()->abortSaving();
+    d_ptr->im->abortSaving();
 }
 
 void Canvas::setModified()
 {
-    d_ptr->canvasItem->im()->setModified();
+    d_ptr->im->setModified();
 }
 
 QString Canvas::ensureHasCurrentUuid() const
 {
-    return d_ptr->canvasItem->im()->ensureHasCurrentUuid();
+    return d_ptr->im->ensureHasCurrentUuid();
 }
 
 DImg Canvas::currentImage() const
 {
-    DImg* image = d_ptr->canvasItem->im()->getImg();
+    DImg* image = d_ptr->im->getImg();
 
     if (image)
     {
@@ -293,32 +299,32 @@ DImg Canvas::currentImage() const
 
 QString Canvas::currentImageFileFormat() const
 {
-    return d_ptr->canvasItem->im()->getImageFormat();
+    return d_ptr->im->getImageFormat();
 }
 
 QString Canvas::currentImageFilePath() const
 {
-    return d_ptr->canvasItem->im()->getImageFilePath();
+    return d_ptr->im->getImageFilePath();
 }
 
 int Canvas::imageWidth() const
 {
-    return d_ptr->canvasItem->im()->origWidth();
+    return d_ptr->im->origWidth();
 }
 
 int Canvas::imageHeight() const
 {
-    return d_ptr->canvasItem->im()->origHeight();
+    return d_ptr->im->origHeight();
 }
 
 bool Canvas::isReadOnly() const
 {
-    return d_ptr->canvasItem->im()->isReadOnly();
+    return d_ptr->im->isReadOnly();
 }
 
 QRect Canvas::getSelectedArea() const
 {
-    return (d_ptr->canvasItem->im()->getSelectedArea());
+    return d_ptr->im->getSelectedArea();
 }
 
 QRect Canvas::visibleArea() const
@@ -329,23 +335,23 @@ QRect Canvas::visibleArea() const
 
 EditorCore* Canvas::interface() const
 {
-    return d_ptr->canvasItem->im();
+    return d_ptr->im;
 }
 
 void Canvas::makeDefaultEditingCanvas()
 {
-    EditorCore::setDefaultInstance(d_ptr->canvasItem->im());
+    EditorCore::setDefaultInstance(d_ptr->im);
 }
 
 double Canvas::calcAutoZoomFactor() const
 {
-    if (!d_ptr->canvasItem->im()->imageValid())
+    if (!d_ptr->im->imageValid())
     {
         return d_ptr->zoom;
     }
 
-    double srcWidth  = d_ptr->canvasItem->im()->origWidth();
-    double srcHeight = d_ptr->canvasItem->im()->origHeight();
+    double srcWidth  = d_ptr->im->origWidth();
+    double srcHeight = d_ptr->im->origHeight();
     double dstWidth  = contentsRect().width();
     double dstHeight = contentsRect().height();
     return qMin(dstWidth / srcWidth, dstHeight / srcHeight);
@@ -355,7 +361,7 @@ void Canvas::updateAutoZoom()
 {
     d_ptr->zoom = calcAutoZoomFactor();
     d_ptr->canvasItem->zoomSettings()->setZoomFactor(d_ptr->zoom);
-    d_ptr->canvasItem->im()->zoom(d_ptr->zoom);
+    d_ptr->im->zoom(d_ptr->zoom);
 
     emit signalZoomChanged(d_ptr->zoom);
 }
@@ -371,7 +377,7 @@ void Canvas::updateContentsSize(bool deleteRubber)
         viewport()->setMouseTracking(false);
         addRubber();
 
-        if (d_ptr->canvasItem->im()->imageValid())
+        if (d_ptr->im->imageValid())
         {
             emit signalSelected(false);
         }
@@ -406,7 +412,7 @@ double Canvas::zoomMin() const
 
 bool Canvas::exifRotated() const
 {
-    return d_ptr->canvasItem->im()->exifRotated();
+    return d_ptr->im->exifRotated();
 }
 
 double Canvas::snapZoom(double zoom) const
@@ -516,14 +522,11 @@ void Canvas::setZoomFactor(double zoom)
         emit signalToggleOffFitToWindow();
     }
 
-    // TODO: Zoom using center of canvas.
-
     d_ptr->canvasItem->clearCache();
-
     d_ptr->zoom    = zoom;
 
     d_ptr->canvasItem->zoomSettings()->setZoomFactor(d_ptr->zoom);
-    d_ptr->canvasItem->im()->zoom(d_ptr->zoom);
+
     updateContentsSize(false);
 
     emit signalZoomChanged(d_ptr->zoom);
@@ -531,7 +534,7 @@ void Canvas::setZoomFactor(double zoom)
 
 void Canvas::fitToSelect()
 {
-    QRect sel = d_ptr->canvasItem->im()->getSelectedArea();
+    QRect sel = d_ptr->im->getSelectedArea();
 
     if (!sel.size().isNull())
     {
@@ -549,7 +552,7 @@ void Canvas::fitToSelect()
         emit signalToggleOffFitToWindow();
 
         d_ptr->canvasItem->zoomSettings()->setZoomFactor(d_ptr->zoom);
-        d_ptr->canvasItem->im()->zoom(d_ptr->zoom);
+        //d_ptr->im->zoom(d_ptr->zoom);
         updateContentsSize(true);
 
         centerOn(cpx * d_ptr->zoom, cpy * d_ptr->zoom);
@@ -581,7 +584,7 @@ void Canvas::setFitToWindow(bool fit)
     {
         d_ptr->zoom = 1.0;
         d_ptr->canvasItem->zoomSettings()->setZoomFactor(d_ptr->zoom);
-        d_ptr->canvasItem->im()->zoom(d_ptr->zoom);
+        //d_ptr->im->zoom(d_ptr->zoom);
         emit signalZoomChanged(d_ptr->zoom);
     }
 
@@ -593,32 +596,42 @@ void Canvas::slotRotate90()
 {
     d_ptr->canvasItem->clearCache();
     d_ptr->canvasItem->toggleRotated();
-    d_ptr->canvasItem->im()->rotate90();
+    d_ptr->im->rotate90();
+
+    d_ptr->canvasItem->setImage(currentImage());
 }
 
 void Canvas::slotRotate180()
 {
     d_ptr->canvasItem->clearCache();
-    d_ptr->canvasItem->im()->rotate180();
+    d_ptr->im->rotate180();
+
+    d_ptr->canvasItem->setImage(currentImage());
 }
 
 void Canvas::slotRotate270()
 {
     d_ptr->canvasItem->clearCache();
     d_ptr->canvasItem->toggleRotated();
-    d_ptr->canvasItem->im()->rotate270();
+    d_ptr->im->rotate270();
+
+    d_ptr->canvasItem->setImage(currentImage());
 }
 
 void Canvas::slotFlipHoriz()
 {
     d_ptr->canvasItem->clearCache();
-    d_ptr->canvasItem->im()->flipHoriz();
+    d_ptr->im->flipHoriz();
+
+    d_ptr->canvasItem->setImage(currentImage());
 }
 
 void Canvas::slotFlipVert()
 {
     d_ptr->canvasItem->clearCache();
-    d_ptr->canvasItem->im()->flipVert();
+    d_ptr->im->flipVert();
+
+    d_ptr->canvasItem->setImage(currentImage());
 }
 
 void Canvas::slotAutoCrop()
@@ -626,10 +639,12 @@ void Canvas::slotAutoCrop()
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
     d_ptr->canvasItem->clearCache();
-    AutoCrop ac(d_ptr->canvasItem->im()->getImg());
+    AutoCrop ac(d_ptr->im->getImg());
     ac.startFilterDirectly();
     QRect rect = ac.autoInnerCrop();
-    d_ptr->canvasItem->im()->crop(rect);
+    d_ptr->im->crop(rect);
+
+    d_ptr->canvasItem->setImage(currentImage());
 
     QApplication::restoreOverrideCursor();
 }
@@ -637,14 +652,16 @@ void Canvas::slotAutoCrop()
 void Canvas::slotCrop()
 {
     d_ptr->canvasItem->clearCache();
-    QRect sel = d_ptr->canvasItem->im()->getSelectedArea();
+    QRect sel = d_ptr->im->getSelectedArea();
 
     if (sel.size().isNull())   // No current selection.
     {
         return;
     }
 
-    d_ptr->canvasItem->im()->crop(sel);
+    d_ptr->im->crop(sel);
+
+    d_ptr->canvasItem->setImage(currentImage());
 }
 
 void Canvas::setBackgroundColor(const QColor& color)
@@ -661,35 +678,46 @@ void Canvas::setBackgroundColor(const QColor& color)
 void Canvas::setICCSettings(const ICCSettingsContainer& cmSettings)
 {
     d_ptr->canvasItem->clearCache();
-    ICCSettingsContainer old = d_ptr->canvasItem->im()->getICCSettings();
-    d_ptr->canvasItem->im()->setICCSettings(cmSettings);
+    ICCSettingsContainer old = d_ptr->im->getICCSettings();
+    d_ptr->im->setICCSettings(cmSettings);
+
+    d_ptr->canvasItem->setImage(currentImage());
     viewport()->update();
 }
 
 void Canvas::setSoftProofingEnabled(bool enable)
 {
     d_ptr->canvasItem->clearCache();
-    d_ptr->canvasItem->im()->setSoftProofingEnabled(enable);
+    d_ptr->im->setSoftProofingEnabled(enable);
+
+    d_ptr->canvasItem->setImage(currentImage());
     viewport()->update();
 }
 
 void Canvas::setExposureSettings(ExposureSettingsContainer* const expoSettings)
 {
     d_ptr->canvasItem->clearCache();
-    d_ptr->canvasItem->im()->setExposureSettings(expoSettings);
+    d_ptr->im->setExposureSettings(expoSettings);
+
+    d_ptr->canvasItem->setImage(currentImage());
     viewport()->update();
 }
 
 void Canvas::setExifOrient(bool exifOrient)
 {
     d_ptr->canvasItem->clearCache();
-    d_ptr->canvasItem->im()->setExifOrient(exifOrient);
+    d_ptr->im->setExifOrient(exifOrient);
+
+    d_ptr->canvasItem->setImage(currentImage());
     viewport()->update();
 }
 
 void Canvas::slotRestore()
 {
-    d_ptr->canvasItem->im()->restore();
+    d_ptr->im->restore();
+
+    d_ptr->canvasItem->setImage(currentImage());
+    viewport()->update();
 }
 
 void Canvas::slotUndo(int steps)
@@ -699,9 +727,12 @@ void Canvas::slotUndo(int steps)
     d_ptr->canvasItem->clearCache();
     while (steps > 0)
     {
-        d_ptr->canvasItem->im()->undo();
+        d_ptr->im->undo();
         --steps;
     }
+
+    d_ptr->canvasItem->setImage(currentImage());
+    viewport()->update();
 }
 
 void Canvas::slotRedo(int steps)
@@ -711,14 +742,17 @@ void Canvas::slotRedo(int steps)
     d_ptr->canvasItem->clearCache();
     while (steps > 0)
     {
-        d_ptr->canvasItem->im()->redo();
+        d_ptr->im->redo();
         --steps;
     }
+
+    d_ptr->canvasItem->setImage(currentImage());
+    viewport()->update();
 }
 
 void Canvas::slotCopy()
 {
-    QRect sel = d_ptr->canvasItem->im()->getSelectedArea();
+    QRect sel = d_ptr->im->getSelectedArea();
 
     if (sel.size().isNull())   // No current selection.
     {
@@ -727,7 +761,7 @@ void Canvas::slotCopy()
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    DImg selDImg        = d_ptr->canvasItem->im()->getImgSelection();
+    DImg selDImg        = d_ptr->im->getImgSelection();
     QImage selImg       = selDImg.copyQImage();
     QMimeData* mimeData = new QMimeData();
     mimeData->setImageData(selImg);
@@ -745,7 +779,7 @@ void Canvas::slotSelected()
         sel = calcSelectedArea();
     }
 
-    d_ptr->canvasItem->im()->setSelectedArea(sel);
+    d_ptr->im->setSelectedArea(sel);
 }
 
 QRect Canvas::calcSelectedArea() const
@@ -824,7 +858,7 @@ void Canvas::slotCornerButtonPressed()
     QRectF visibleRect = mapToScene(viewport()->geometry()).boundingRect();
     QRect r((int)visibleRect.topLeft().x()/d_ptr->zoom, (int)visibleRect.topLeft().y()/d_ptr->zoom,
             (int)visibleRect.width()/d_ptr->zoom, (int)visibleRect.height()/d_ptr->zoom);
-    pan->setImage(180, 120, d_ptr->canvasItem->im()->getImg()->copyQImage());
+    pan->setImage(180, 120, d_ptr->im->getImg()->copyQImage());
     pan->setRegionSelection(r);
     pan->setMouseFocus();
     d_ptr->panIconPopup->setMainWidget(pan);
@@ -876,7 +910,7 @@ void Canvas::slotSelectAll()
     viewport()->setMouseTracking(true);
     viewport()->update();
 
-    if (d_ptr->canvasItem->im()->imageValid())
+    if (d_ptr->im->imageValid())
     {
         emit signalSelected(true);
     }

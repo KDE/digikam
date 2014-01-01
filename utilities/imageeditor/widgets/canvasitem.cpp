@@ -51,12 +51,10 @@ public:
     Private()
         
     {
-        im         = 0;
         view       = 0;
         rotated    = false;
     }
 
-    EditorCore*      im;
     Canvas*          view;
     QRect            drawRect;
     QPixmap          pix;
@@ -67,24 +65,16 @@ CanvasItem::CanvasItem(Canvas *widget):
     d_ptr(new Private)
 {
     d_ptr->view = widget;
-    d_ptr->im   = new EditorCore();
-    d_ptr->im->setDisplayingWidget(d_ptr->view);
 }
 
 CanvasItem::~CanvasItem()
 {
-    delete d_ptr->im;
     delete d_ptr;
 }
 
 void CanvasItem::toggleRotated()
 {
     d_ptr->rotated = !d_ptr->rotated;
-}
-
-EditorCore* CanvasItem::im()
-{
-    return d_ptr->im;
 }
 
 QRectF CanvasItem::boundingRect() const
@@ -96,23 +86,24 @@ QRectF CanvasItem::boundingRect() const
     }
     else
     {
-        double newWidth = pow(zoomSettings()->zoomedSize().height(), 2) / zoomSettings()->zoomedSize().width();
-        return QRectF(0, 0, newWidth, zoomSettings()->zoomedSize().height()).toAlignedRect();
+        double newHeight = pow(zoomSettings()->zoomedSize().height(), 2) / zoomSettings()->zoomedSize().width();
+        return QRectF(0, 0, zoomSettings()->zoomedSize().height(), newHeight).toAlignedRect();
     }
 }
 
 void CanvasItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     Q_D(GraphicsDImgItem);
-    Q_UNUSED(option);
 
-    if (d_ptr->im->getImg())
+    GraphicsDImgItem::paint(painter, option, widget);
+
+    /*if (d_ptr->view->im->getImg())
     {
         QRect   pixSourceRect;
         QSize   completeSize = boundingRect().size().toSize();
         DImg    scaledImage;
         d_ptr->drawRect = boundingRect().toAlignedRect();
-        scaledImage = d_ptr->im->getImg()->smoothScale(completeSize.width(), completeSize.height(), Qt::IgnoreAspectRatio);
+        scaledImage = d_ptr->view->im->getImg()->smoothScale(completeSize.width(), completeSize.height(), Qt::IgnoreAspectRatio);
 
         if (d->cachedPixmaps.find(d_ptr->drawRect, &d_ptr->pix, &pixSourceRect))
         {
@@ -127,7 +118,7 @@ void CanvasItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
         }
         else
         {
-            ICCSettingsContainer iccSettings = d_ptr->im->getICCSettings();
+            ICCSettingsContainer iccSettings = d_ptr->view->im->getICCSettings();
 
             if (iccSettings.enableCM && iccSettings.useManagedView)
             {
@@ -157,7 +148,7 @@ void CanvasItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
                 painter->drawPixmap(d_ptr->drawRect.topLeft(), pixMask);
             }
         }
-    }
+    }*/
 }
 
 }
