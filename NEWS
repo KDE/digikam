@@ -126,5 +126,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 112 ==> 304207 - Progress manager: more control on appearance/disappearance.
 113 ==> 313678 - digiKam fails to know which images in my camera is new.
 114 ==> 314952 - Import window should not lock the interface while reading photos.
-115 ==> 
+115 ==> 282728 - Importing photos with "Date based subalbums". The folder name "date" is wrong.
+116 ==> 
 
