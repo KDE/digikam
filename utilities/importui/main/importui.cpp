@@ -1174,7 +1174,11 @@ void ImportUI::slotConnected(bool val)
     else
     {
         refreshFreeSpace();
-        d->controller->listFolders();
+        // FIXME ugly c&p from slotFolderList
+        KSharedConfig::Ptr config = KGlobal::config();
+        KConfigGroup group        = config->group(d->configGroupName);
+        bool useMetadata          = group.readEntry(d->configUseFileMetadata, false);
+        d->controller->listRootFolder(useMetadata);
     }
 }
 
@@ -1192,10 +1196,12 @@ void ImportUI::slotFolderList(const QStringList& folderList)
     KConfigGroup group        = config->group(d->configGroupName);
     bool useMetadata          = group.readEntry(d->configUseFileMetadata, false);
 
+    // when getting a list of subfolders, request their contents and also their subfolders
     for (QStringList::const_iterator it = folderList.constBegin();
          it != folderList.constEnd(); ++it)
     {
         d->controller->listFiles(*it, useMetadata);
+        d->controller->listFolders(*it);
     }
 }
 

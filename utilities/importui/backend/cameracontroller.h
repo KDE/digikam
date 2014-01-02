@@ -75,7 +75,8 @@ public:
     QByteArray cameraMD5ID() const;
 
     void capture();
-    void listFolders();
+    void listRootFolder(bool useMetadata);
+    void listFolders(const QString& folder = QString());
     void listFiles(const QString& folder, bool useMetadata);
     void getFreeSpace();
     void getMetadata(const QString& folder, const QString& file);

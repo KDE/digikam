@@ -135,12 +135,44 @@ void UMSCamera::cancel()
     m_cancel = true;
 }
 
-void UMSCamera::getAllFolders(const QString& folder, QStringList& subFolderList)
+bool UMSCamera::getFolders(const QString& folder)
 {
-    m_cancel = false;
-    subFolderList.clear();
-    subFolderList.append(folder);
-    listFolders(folder, subFolderList);
+    if (m_cancel)
+    {
+        return false;
+    }
+
+    QDir dir(folder);
+    dir.setFilter(QDir::Dirs | QDir::Executable);
+
+    const QFileInfoList list = dir.entryInfoList();
+
+    if (list.isEmpty())
+    {
+        return false;
+    }
+
+    QFileInfoList::const_iterator fi;
+    QStringList subFolderList;
+    for (fi = list.constBegin() ; !m_cancel && (fi != list.constEnd()) ; ++fi)
+    {
+        if (fi->fileName() == "." || fi->fileName() == "..")
+        {
+            continue;
+        }
+
+        QString subFolder = folder + QString(folder.endsWith('/') ? "" : "/") + fi->fileName();
+        subFolderList.append(subFolder);
+
+    }
+    
+    if(subFolderList.isEmpty()) {
+        return false;
+    }
+    
+    emit signalFolderList(subFolderList);
+    
+    return true;
 }
 
 bool UMSCamera::getItemsInfoList(const QString& folder, bool useMetadata, CamItemInfoList& infoList)
@@ -514,39 +546,6 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
     }
 
     return true;
-}
-
-void UMSCamera::listFolders(const QString& folder, QStringList& subFolderList)
-{
-    if (m_cancel)
-    {
-        return;
-    }
-
-    QDir dir(folder);
-    dir.setFilter(QDir::Dirs | QDir::Executable);
-
-    const QFileInfoList list = dir.entryInfoList();
-
-    if (list.isEmpty())
-    {
-        return;
-    }
-
-    QFileInfoList::const_iterator fi;
-    QString                       subfolder;
-
-    for (fi = list.constBegin() ; !m_cancel && (fi != list.constEnd()) ; ++fi)
-    {
-        if (fi->fileName() == "." || fi->fileName() == "..")
-        {
-            continue;
-        }
-
-        subfolder = folder + QString(folder.endsWith('/') ? "" : "/") + fi->fileName();
-        subFolderList.append(subfolder);
-        listFolders(subfolder, subFolderList);
-    }
 }
 
 bool UMSCamera::cameraSummary(QString& summary)

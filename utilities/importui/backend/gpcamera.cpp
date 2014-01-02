@@ -243,9 +243,8 @@ bool GPCamera::doConnect()
     gp_port_info_list_new(&infoList);
     gp_port_info_list_load(infoList);
 
-    int modelNum = -1, portNum = -1;
-    modelNum     = gp_abilities_list_lookup_model(abilList, m_model.toLatin1());
-    portNum      = gp_port_info_list_lookup_path(infoList, m_port.toLatin1());
+    int modelNum     = gp_abilities_list_lookup_model(abilList, m_model.toLatin1());
+    int portNum      = gp_port_info_list_lookup_path(infoList, m_port.toLatin1());
 
     gp_abilities_list_get_abilities(abilList, modelNum, &d->cameraAbilities);
 
@@ -633,26 +632,7 @@ bool GPCamera::capture(CamItemInfo& itemInfo)
 #endif /* HAVE_GPHOTO2 */
 }
 
-void GPCamera::getAllFolders(const QString& rootFolder, QStringList& folderList)
-{
-    QStringList subfolders;
-    getSubFolders(rootFolder, subfolders);
-
-    for (QStringList::iterator it = subfolders.begin();
-         it != subfolders.end(); ++it)
-    {
-        *it = rootFolder + QString(rootFolder.endsWith('/') ? "" : "/") + (*it);
-        folderList.append(*it);
-    }
-
-    for (QStringList::const_iterator it = subfolders.constBegin();
-         it != subfolders.constEnd(); ++it)
-    {
-        getAllFolders(*it, folderList);
-    }
-}
-
-bool GPCamera::getSubFolders(const QString& folder, QStringList& subFolderList)
+bool GPCamera::getFolders(const QString& folder)
 {
 #ifdef HAVE_GPHOTO2
     int         errorCode;
@@ -670,8 +650,11 @@ bool GPCamera::getSubFolders(const QString& folder, QStringList& subFolderList)
         return false;
     }
 
+    QStringList subFolderList;
     int count = gp_list_count(clist);
-
+    if(count < 1) {
+        return true;
+    }
     for (int i = 0 ; i < count ; ++i)
     {
         const char* subFolder = 0;
@@ -685,10 +668,13 @@ bool GPCamera::getSubFolders(const QString& folder, QStringList& subFolderList)
             return false;
         }
 
-        subFolderList.append(QFile::decodeName(subFolder));
+        subFolderList.append(folder + QFile::decodeName(subFolder) + '/');
     }
 
     gp_list_unref(clist);
+
+    emit signalFolderList(subFolderList);
+    
     return true;
 #else
     Q_UNUSED(folder);
@@ -697,6 +683,7 @@ bool GPCamera::getSubFolders(const QString& folder, QStringList& subFolderList)
 #endif /* HAVE_GPHOTO2 */
 }
 
+// TODO unused, remove?
 bool GPCamera::getItemsList(const QString& folder, QStringList& itemsList)
 {
 #ifdef HAVE_GPHOTO2
@@ -778,6 +765,7 @@ bool GPCamera::getItemsInfoList(const QString& folder, bool useMetadata, CamItem
             return false;
         }
 
+        // TODO for further speed-up, getItemInfoInternal call could be called separately when needed
         CamItemInfo info;
         getItemInfoInternal(folder, QFile::decodeName(cname), info, useMetadata);
         items.append(info);
@@ -995,10 +983,10 @@ bool GPCamera::getMetadata(const QString& folder, const QString& itemName, DMeta
     // to please with Exiv2...
 
     kDebug() << "Size of Exif metadata from camera = " << exifData.size();
-    char exifHeader[] = { 0x45, 0x78, 0x69, 0x66, 0x00, 0x00 };
 
     if (!exifData.isEmpty())
     {
+        char exifHeader[] = { 0x45, 0x78, 0x69, 0x66, 0x00, 0x00 };
         int i = exifData.indexOf(*exifHeader);
 
         if (i != -1)
@@ -1171,7 +1159,8 @@ bool GPCamera::deleteItem(const QString& folder, const QString& itemName)
 #endif /* HAVE_GPHOTO2 */
 }
 
-// recursively delete all items
+// TODO fix to go through all folders
+// TODO this was never even used..
 bool GPCamera::deleteAllItems(const QString& folder)
 {
 #ifdef HAVE_GPHOTO2
@@ -1179,25 +1168,7 @@ bool GPCamera::deleteAllItems(const QString& folder)
     QStringList folderList;
 
     d->status->cancel = false;
-    // Get all subfolders in this folder
-    getSubFolders(folder, folderList);
-
-    if (folderList.count() > 0)
-    {
-        for (int i = 0 ; i < folderList.count() ; i++)
-        {
-            QString subFolder(folder);
-
-            if (!subFolder.endsWith('/'))
-            {
-                subFolder += '/';
-            }
-
-            subFolder += folderList.at(i);
-            deleteAllItems(subFolder);
-        }
-    }
-
+ 
     errorCode = gp_camera_folder_delete_all(d->camera, QFile::encodeName(folder).constData(),
                                             d->status->context);
 

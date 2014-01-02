@@ -32,7 +32,7 @@
 namespace Digikam
 {
 
-DKCamera::DKCamera(const QString& title, const QString& model, const QString& port, const QString& path)
+DKCamera::DKCamera(const QString& title, const QString& model, const QString& port, const QString& path) : QObject()
 {
     m_title                       = title;
     m_model                       = model;

@@ -187,6 +187,8 @@ CameraController::CameraController(QWidget* const parent,
         }
     }
 
+    connect(d->camera, SIGNAL(signalFolderList(QStringList)), this, SIGNAL(signalFolderList(QStringList)));
+    
     // setup inter-thread signals
 
     qRegisterMetaType<CamItemInfo>("CamItemInfo");
@@ -420,6 +422,7 @@ void CameraController::run()
 
 void CameraController::executeCommand(CameraCommand* const cmd)
 {
+    // TODO should this be moved inside the file listing? or should IDs roll always?
     static int numberOfItems; // to give the appropriate id for each CamItemInfo.
     if (!cmd)
     {
@@ -492,14 +495,13 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
         case (CameraCommand::cam_listfolders):
         {
-            sendLogMsg(i18n("Listing folders..."));
-            QStringList folderList;
-            folderList.append(d->camera->path());
-            d->camera->getAllFolders(d->camera->path(), folderList);
-
-            emit signalFolderList(folderList);
-            sendLogMsg(i18n("The folders have been listed."));
-
+            QString folder = cmd->map["folder"].toString();
+            sendLogMsg(i18n("Listing folders in %1...").arg(folder));
+            
+            d->camera->getFolders(folder);
+            
+            // TODO do we need to track when the folder listing is completed? it'd make things much harder...
+            sendLogMsg(i18n("The folders in %1 have been listed.").arg(folder));
             break;
         }
 
@@ -555,10 +557,8 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                 QString folder = (*it).toStringList().at(0);
                 QString file   = (*it).toStringList().at(1);
 
+                // TODO fix i18n to be more human
                 sendLogMsg(i18n("Getting thumbs info for %1...", file), DHistoryView::StartingEntry, folder, file);
-                // TODO filter what kind of thumbnails we try to ask? no need to ask for thumbs on random files..
-                /* TODO we have info already after the item list loading, no need to query the camera again...
-                d->camera->getItemInfo(folder, file, info, true);*/
                 CamItemInfo info;
                 info.folder = folder;
                 info.name = file;
@@ -690,7 +690,8 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                         // convert failed. delete the temp file
                         unlink(QFile::encodeName(tempURL.toLocalFile()));
                         unlink(QFile::encodeName(tempURL2.toLocalFile()));
-                        result = false;
+                        // TODO error reporting?
+                        //result = false;
                     }
                     else
                     {
@@ -1074,11 +1075,19 @@ void CameraController::slotConnect()
     addCommand(cmd);
 }
 
-void CameraController::listFolders()
+void CameraController::listRootFolder(bool useMetadata)
+{
+    listFolders(d->camera->path());
+    listFiles(d->camera->path(), useMetadata);
+}
+
+void CameraController::listFolders(const QString &folder)
 {
     d->canceled        = false;
     CameraCommand* cmd = new CameraCommand;
     cmd->action        = CameraCommand::cam_listfolders;
+    cmd->map.insert("folder", QVariant(folder));
+
     addCommand(cmd);
 }
 

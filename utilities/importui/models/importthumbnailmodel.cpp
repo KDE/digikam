@@ -192,6 +192,7 @@ bool ImportThumbnailModel::getThumbInfo(const CamItemInfo& info, CachedItem& ite
         d->pendingItems << info.url();
         // kDebug() << "Request thumbs from camera : " << info.url();
         d->controller->getThumbsInfo(CamItemInfoList() << info, thumbSize);
+        // TODO set the thumb to indicate loading process?
     }
 
     item = CachedItem(info, d->controller->mimeTypeThumbnail(info.name, d->thumbSize.size()));
