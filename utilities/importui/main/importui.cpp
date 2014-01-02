@@ -2440,7 +2440,7 @@ bool ImportUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
         }
         else
         {
-            errMsg = i18np("@info", "A file with the same name (<filename>%1</filename>) already exists in folder <resource>%2</resource>.",
+            errMsg = i18nc("@info", "A file with the same name (<filename>%1</filename>) already exists in folder <resource>%2</resource>.",
                           sub, parentURL.toLocalFile());
             return false;
         }
@@ -2452,7 +2452,7 @@ bool ImportUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
 
     if (!parent)
     {
-        errMsg = i18np("@info", "Failed to find Album for path <filename>%1</filename>.", parentURL.toLocalFile());
+        errMsg = i18nc("@info", "Failed to find Album for path <filename>%1</filename>.", parentURL.toLocalFile());
         return false;
     }
 
