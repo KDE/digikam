@@ -162,12 +162,6 @@ QString DKCamera::mimeType(const QString& fileext) const
     return mime;
 }
 
-void DKCamera::setBusy(bool busy)
-{
-    Q_UNUSED(busy);
-}
-
-
 void DKCamera::fillItemInfoFromMetadata(CamItemInfo& info, const DMetadata& meta) const
 {
     QSize dims     = meta.getImageDimensions();

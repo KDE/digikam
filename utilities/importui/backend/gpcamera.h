@@ -85,8 +85,6 @@ public:
     bool getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail);
     bool getPreview(QImage& preview);
     bool capture(CamItemInfo& itemInfo);
-    
-    void setBusy(bool);
 
     // Public static methods shared with Setup Camera
 
