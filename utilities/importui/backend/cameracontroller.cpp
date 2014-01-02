@@ -496,12 +496,12 @@ void CameraController::executeCommand(CameraCommand* const cmd)
         case (CameraCommand::cam_listfolders):
         {
             QString folder = cmd->map["folder"].toString();
-            sendLogMsg(i18n("Listing folders in %1...").arg(folder));
+            sendLogMsg(i18n("Listing folders in %1...", folder));
             
             d->camera->getFolders(folder);
             
             // TODO do we need to track when the folder listing is completed? it'd make things much harder...
-            sendLogMsg(i18n("The folders in %1 have been listed.").arg(folder));
+            sendLogMsg(i18n("The folders in %1 have been listed.", folder));
             break;
         }
 
@@ -1007,17 +1007,15 @@ void CameraController::slotDeleteFailed(const QString& folder, const QString& fi
     emit signalDeleted(folder, file, false);
     sendLogMsg(i18n("Failed to delete %1...", file), DHistoryView::ErrorEntry, folder, file);
 
-    QString msg = i18n("Failed to delete file \"%1\".", file);
-
     if (!d->canceled)
     {
         if (queueIsEmpty())
         {
-            KMessageBox::error(d->parent, msg);
+            KMessageBox::error(d->parent, i18n("Failed to delete file \"%1\".", file));
         }
         else
         {
-            msg += i18n(" Do you want to continue?");
+            const QString msg = i18n("Failed to delete file \"%1\". Do you want to continue?", file);
             int result = KMessageBox::warningContinueCancel(d->parent, msg);
 
             if (result != KMessageBox::Continue)
@@ -1033,17 +1031,15 @@ void CameraController::slotLockFailed(const QString& folder, const QString& file
     emit signalLocked(folder, file, false);
     sendLogMsg(i18n("Failed to lock %1...", file), DHistoryView::ErrorEntry, folder, file);
 
-    QString msg = i18n("Failed to toggle lock file \"%1\".", file);
-
     if (!d->canceled)
     {
         if (queueIsEmpty())
         {
-            KMessageBox::error(d->parent, msg);
+            KMessageBox::error(d->parent, i18n("Failed to toggle lock file \"%1\".", file));
         }
         else
         {
-            msg += i18n(" Do you want to continue?");
+            const QString msg = i18n("Failed to toggle lock file \"%1\". Do you want to continue?", file);
             int result = KMessageBox::warningContinueCancel(d->parent, msg);
 
             if (result != KMessageBox::Continue)
