@@ -597,16 +597,12 @@ void Canvas::slotRotate90()
     d_ptr->canvasItem->clearCache();
     d_ptr->canvasItem->toggleRotated();
     d_ptr->im->rotate90();
-
-    d_ptr->canvasItem->setImage(currentImage());
 }
 
 void Canvas::slotRotate180()
 {
     d_ptr->canvasItem->clearCache();
     d_ptr->im->rotate180();
-
-    d_ptr->canvasItem->setImage(currentImage());
 }
 
 void Canvas::slotRotate270()
@@ -614,24 +610,18 @@ void Canvas::slotRotate270()
     d_ptr->canvasItem->clearCache();
     d_ptr->canvasItem->toggleRotated();
     d_ptr->im->rotate270();
-
-    d_ptr->canvasItem->setImage(currentImage());
 }
 
 void Canvas::slotFlipHoriz()
 {
     d_ptr->canvasItem->clearCache();
     d_ptr->im->flipHoriz();
-
-    d_ptr->canvasItem->setImage(currentImage());
 }
 
 void Canvas::slotFlipVert()
 {
     d_ptr->canvasItem->clearCache();
     d_ptr->im->flipVert();
-
-    d_ptr->canvasItem->setImage(currentImage());
 }
 
 void Canvas::slotAutoCrop()
@@ -643,9 +633,6 @@ void Canvas::slotAutoCrop()
     ac.startFilterDirectly();
     QRect rect = ac.autoInnerCrop();
     d_ptr->im->crop(rect);
-
-    d_ptr->canvasItem->setImage(currentImage());
-
     QApplication::restoreOverrideCursor();
 }
 
@@ -660,8 +647,6 @@ void Canvas::slotCrop()
     }
 
     d_ptr->im->crop(sel);
-
-    d_ptr->canvasItem->setImage(currentImage());
 }
 
 void Canvas::setBackgroundColor(const QColor& color)
@@ -680,44 +665,29 @@ void Canvas::setICCSettings(const ICCSettingsContainer& cmSettings)
     d_ptr->canvasItem->clearCache();
     ICCSettingsContainer old = d_ptr->im->getICCSettings();
     d_ptr->im->setICCSettings(cmSettings);
-
-    d_ptr->canvasItem->setImage(currentImage());
-    viewport()->update();
 }
 
 void Canvas::setSoftProofingEnabled(bool enable)
 {
     d_ptr->canvasItem->clearCache();
     d_ptr->im->setSoftProofingEnabled(enable);
-
-    d_ptr->canvasItem->setImage(currentImage());
-    viewport()->update();
 }
 
 void Canvas::setExposureSettings(ExposureSettingsContainer* const expoSettings)
 {
     d_ptr->canvasItem->clearCache();
     d_ptr->im->setExposureSettings(expoSettings);
-
-    d_ptr->canvasItem->setImage(currentImage());
-    viewport()->update();
 }
 
 void Canvas::setExifOrient(bool exifOrient)
 {
     d_ptr->canvasItem->clearCache();
     d_ptr->im->setExifOrient(exifOrient);
-
-    d_ptr->canvasItem->setImage(currentImage());
-    viewport()->update();
 }
 
 void Canvas::slotRestore()
 {
     d_ptr->im->restore();
-
-    d_ptr->canvasItem->setImage(currentImage());
-    viewport()->update();
 }
 
 void Canvas::slotUndo(int steps)
@@ -730,9 +700,6 @@ void Canvas::slotUndo(int steps)
         d_ptr->im->undo();
         --steps;
     }
-
-    d_ptr->canvasItem->setImage(currentImage());
-    viewport()->update();
 }
 
 void Canvas::slotRedo(int steps)
@@ -745,9 +712,6 @@ void Canvas::slotRedo(int steps)
         d_ptr->im->redo();
         --steps;
     }
-
-    d_ptr->canvasItem->setImage(currentImage());
-    viewport()->update();
 }
 
 void Canvas::slotCopy()
@@ -828,6 +792,7 @@ void Canvas::slotModified()
     }
 
     updateContentsSize(true);
+    d_ptr->canvasItem->setImage(currentImage());
     viewport()->update();
 
     // To be sure than corner widget used to pan image will be hide/show

@@ -80,15 +80,7 @@ void CanvasItem::toggleRotated()
 QRectF CanvasItem::boundingRect() const
 {
     // always return full integer sizes, we can only scale to integer
-    if (!d_ptr->rotated)
-    {
-        return QRectF(QPointF(0,0), zoomSettings()->zoomedSize()).toAlignedRect();
-    }
-    else
-    {
-        double newHeight = pow(zoomSettings()->zoomedSize().height(), 2) / zoomSettings()->zoomedSize().width();
-        return QRectF(0, 0, zoomSettings()->zoomedSize().height(), newHeight).toAlignedRect();
-    }
+    return QRectF(QPointF(0,0), zoomSettings()->zoomedSize()).toAlignedRect();
 }
 
 void CanvasItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
