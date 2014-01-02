@@ -246,8 +246,10 @@ void ImportThumbnailModel::slotThumbInfoFailed(const QString& folder, const QStr
     else
     {
         QPixmap pix = d->controller->mimeTypeThumbnail(file, d->thumbSize.size());
-        putItemToCache(info.url(), info, pix);
-        d->pendingItems.removeAll(info.url());
+        // TODO don't put failed image to the cache, as it may be that the camera has been busy?
+        // TODO we should have a separate spinner for waiting
+        //putItemToCache(info.url(), info, pix);
+        //d->pendingItems.removeAll(info.url());
 
         // In case of multiple occurrence, we currently do not know which thumbnail is this. Signal change on all.
         foreach(const QModelIndex& index, indexesForUrl(info.url()))

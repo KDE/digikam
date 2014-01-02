@@ -87,6 +87,8 @@ public:
 
     virtual DKCamera::CameraDriverType cameraDriverType() = 0;
     virtual QByteArray                 cameraMD5ID() = 0;
+    
+    virtual void setBusy(bool busy);
 
 public:
 
@@ -130,7 +132,7 @@ protected:
     QString m_path;
     QString m_title;
     QString m_uuid;
-    
+
 Q_SIGNALS:
     void signalFolderList(const QStringList&);
 };

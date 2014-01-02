@@ -399,6 +399,7 @@ void CameraController::run()
             else
             {
                 emit signalBusy(false);
+                d->camera->setBusy(false);
                 d->condVar.wait(&d->mutex);
                 continue;
             }

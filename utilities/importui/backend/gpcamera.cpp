@@ -196,6 +196,22 @@ GPCamera::~GPCamera()
     delete d;
 }
 
+void GPCamera::setBusy(bool busy)
+{
+#ifdef HAVE_GPHOTO2
+    if(d->camera) {
+        int errorCode = gp_camera_exit(d->camera, d->status->context);
+        if(errorCode != GP_OK) {
+            kWarning() << "Unable to release the camera connection.";
+            printGphotoErrorDescription(errorCode);
+        }
+    }
+#else
+    Q_UNUSED(busy);
+#endif
+}
+
+
 QByteArray GPCamera::cameraMD5ID()
 {
     QByteArray md5data;
