@@ -555,7 +555,8 @@ bool UMSCamera::cameraSummary(QString& summary)
 
     // we do not expect titel/model/etc. to contain newlines,
     // so we just escape HTML characters
-    summary += i18n("Title: <b>%1</b><br/>"
+    summary += i18nc("@info List of device properties",
+                    "Title: <b>%1</b><br/>"
                     "Model: <b>%2</b><br/>"
                     "Port: <b>%3</b><br/>"
                     "Path: <b>%4</b><br/>"
@@ -566,7 +567,8 @@ bool UMSCamera::cameraSummary(QString& summary)
                     Qt::escape(path()),
                     Qt::escape(uuid()));
 
-    summary += i18n("Thumbnails: <b>%1</b><br/>"
+    summary += i18nc("@info List of supported device operations",
+                    "Thumbnails: <b>%1</b><br/>"
                     "Capture image: <b>%2</b><br/>"
                     "Delete items: <b>%3</b><br/>"
                     "Upload items: <b>%4</b><br/>"

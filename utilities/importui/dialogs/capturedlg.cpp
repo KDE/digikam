@@ -67,10 +67,10 @@ CaptureDlg::CaptureDlg(QWidget* const parent, CameraController* const controller
     : KDialog(parent), d(new Private)
 {
     d->controller = controller;
-    setCaption(i18n("Capture from %1", cameraTitle));
+    setCaption(i18nc("@title:window %1: name of the camera", "Capture from %1", cameraTitle));
     setButtons(Help | Cancel | Ok);
     setDefaultButton(Ok);
-    setButtonText(Ok, i18n("Capture"));
+    setButtonText(Ok, i18nc("@action:button", "Capture"));
     setModal(true);
     setHelp("camerainterface.anchor", "digikam");
 

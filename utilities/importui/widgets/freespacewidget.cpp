@@ -340,21 +340,21 @@ void FreeSpaceWidget::updateToolTip()
 
         if (d->dSizeKb > 0)
         {
-            tip += cnt.cellBeg + i18n("Capacity:") + cnt.cellMid;
+            tip += cnt.cellBeg + i18nc("@info Storage", "Capacity:") + cnt.cellMid;
             tip += KIO::convertSizeFromKiB(d->kBSize) + cnt.cellEnd;
 
-            tip += cnt.cellBeg + i18n("Available:") + cnt.cellMid;
+            tip += cnt.cellBeg + i18nc("@info Storage", "Available:") + cnt.cellMid;
             tip += KIO::convertSizeFromKiB(d->kBAvail) + cnt.cellEnd;
 
-            tip += cnt.cellBeg + i18n("Require:") + cnt.cellMid;
+            tip += cnt.cellBeg + i18nc("@info Storage", "Require:") + cnt.cellMid;
             tip += KIO::convertSizeFromKiB(d->dSizeKb) + cnt.cellEnd;
         }
         else
         {
-            tip += cnt.cellBeg + i18n("Capacity:") + cnt.cellMid;
+            tip += cnt.cellBeg + i18nc("@info Storage", "Capacity:") + cnt.cellMid;
             tip += KIO::convertSizeFromKiB(d->kBSize) + cnt.cellEnd;
 
-            tip += cnt.cellBeg + i18n("Available:") + cnt.cellMid;
+            tip += cnt.cellBeg + i18nc("@info Storage", "Available:") + cnt.cellMid;
             tip += KIO::convertSizeFromKiB(d->kBAvail) + cnt.cellEnd;
         }
 

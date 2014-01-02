@@ -41,7 +41,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget* const parent, const QString& summary
                                    const QString& about)
     : KPageDialog(parent)
 {
-    setCaption(i18n("Device Information"));
+    setCaption(i18nc("@title:window", "Device Information"));
     setButtons(KDialog::Help | KDialog::Ok);
     setDefaultButton(KDialog::Ok);
     setHelp("digitalstillcamera.anchor", "digikam");

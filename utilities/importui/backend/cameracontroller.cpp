@@ -557,8 +557,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                 QString folder = (*it).toStringList().at(0);
                 QString file   = (*it).toStringList().at(1);
 
-                // TODO fix i18n to be more human
-                sendLogMsg(i18n("Getting thumbs info for %1...", file), DHistoryView::StartingEntry, folder, file);
+                sendLogMsg(i18n("Getting thumbnail for <filename>%1</filename>...", file), DHistoryView::StartingEntry, folder, file);
                 CamItemInfo info;
                 info.folder = folder;
                 info.name = file;
@@ -821,7 +820,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
                 break;
             }
 
-            QPointer<KIO::RenameDialog> dlg = new KIO::RenameDialog(d->parent, i18n("Rename File"),
+            QPointer<KIO::RenameDialog> dlg = new KIO::RenameDialog(d->parent, i18nc("@title:window", "Rename File"),
                                                                     QString(folder + QLatin1String("/") + file), dest,
                                                                     KIO::RenameDialog_Mode(KIO::M_MULTI     |
                                                                             KIO::M_OVERWRITE |
@@ -953,18 +952,17 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
 
 void CameraController::slotDownloadFailed(const QString& folder, const QString& file)
 {
-    QString msg = i18n("Failed to download file \"%1\".", file);
     sendLogMsg(i18n("Failed to download %1...", file), DHistoryView::ErrorEntry, folder, file);
 
     if (!d->canceled)
     {
         if (queueIsEmpty())
         {
-            KMessageBox::error(d->parent, msg);
+            KMessageBox::error(d->parent, i18n("Failed to download file <filename>%1</filename>.", file));
         }
         else
         {
-            msg += i18n(" Do you want to continue?");
+            const QString msg = i18n("Failed to download file <filename>%1</filename>. Do you want to continue?", file);
             int result = KMessageBox::warningContinueCancel(d->parent, msg);
 
             if (result != KMessageBox::Continue)
@@ -980,18 +978,17 @@ void CameraController::slotUploadFailed(const QString& folder, const QString& fi
     Q_UNUSED(folder);
     Q_UNUSED(src);
 
-    QString msg = i18n("Failed to upload file \"%1\".", file);
     sendLogMsg(i18n("Failed to upload %1...", file), DHistoryView::ErrorEntry);
 
     if (!d->canceled)
     {
         if (queueIsEmpty())
         {
-            KMessageBox::error(d->parent, msg);
+            KMessageBox::error(d->parent, i18n("Failed to upload file <filename>%1</filename>.", file));
         }
         else
         {
-            msg += i18n(" Do you want to continue?");
+            const QString msg = i18n("Failed to upload file <filename>%1</filename>. Do you want to continue?", file);
             int result = KMessageBox::warningContinueCancel(d->parent, msg);
 
             if (result != KMessageBox::Continue)
@@ -1005,17 +1002,17 @@ void CameraController::slotUploadFailed(const QString& folder, const QString& fi
 void CameraController::slotDeleteFailed(const QString& folder, const QString& file)
 {
     emit signalDeleted(folder, file, false);
-    sendLogMsg(i18n("Failed to delete %1...", file), DHistoryView::ErrorEntry, folder, file);
+    sendLogMsg(i18n("Failed to delete <filename>%1...", file), DHistoryView::ErrorEntry, folder, file);
 
     if (!d->canceled)
     {
         if (queueIsEmpty())
         {
-            KMessageBox::error(d->parent, i18n("Failed to delete file \"%1\".", file));
+            KMessageBox::error(d->parent, i18n("Failed to delete file <filename>%1</filename>.", file));
         }
         else
         {
-            const QString msg = i18n("Failed to delete file \"%1\". Do you want to continue?", file);
+            const QString msg = i18n("Failed to delete file <filename>%1</filename>. Do you want to continue?", file);
             int result = KMessageBox::warningContinueCancel(d->parent, msg);
 
             if (result != KMessageBox::Continue)
@@ -1029,17 +1026,17 @@ void CameraController::slotDeleteFailed(const QString& folder, const QString& fi
 void CameraController::slotLockFailed(const QString& folder, const QString& file)
 {
     emit signalLocked(folder, file, false);
-    sendLogMsg(i18n("Failed to lock %1...", file), DHistoryView::ErrorEntry, folder, file);
+    sendLogMsg(i18n("Failed to lock <filename>%1...", file), DHistoryView::ErrorEntry, folder, file);
 
     if (!d->canceled)
     {
         if (queueIsEmpty())
         {
-            KMessageBox::error(d->parent, i18n("Failed to toggle lock file \"%1\".", file));
+            KMessageBox::error(d->parent, i18n("Failed to toggle lock file <filename>%1</filename>.", file));
         }
         else
         {
-            const QString msg = i18n("Failed to toggle lock file \"%1\". Do you want to continue?", file);
+            const QString msg = i18n("Failed to toggle lock file <filename>%1</filename>. Do you want to continue?", file);
             int result = KMessageBox::warningContinueCancel(d->parent, msg);
 
             if (result != KMessageBox::Continue)
