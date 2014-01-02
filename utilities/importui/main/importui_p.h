@@ -140,6 +140,7 @@ public:
     static const QString          configGroupName;
     static const QString          configUseFileMetadata;
     static const QString          configUseDefaultTargetAlbum;
+    static const QString          configLastTargetAlbum;
     static const QString          configDefaultTargetAlbumId;
     static const QString          importFiltersConfigGroupName;
 
@@ -237,6 +238,7 @@ public:
 const QString ImportUI::Private::configGroupName("Camera Settings");
 const QString ImportUI::Private::configUseFileMetadata("UseFileMetadata");
 const QString ImportUI::Private::configUseDefaultTargetAlbum("UseDefaultTargetAlbum");
+const QString ImportUI::Private::configLastTargetAlbum("LastTargetAlbum");
 const QString ImportUI::Private::configDefaultTargetAlbumId("DefaultTargetAlbumId");
 const QString ImportUI::Private::importFiltersConfigGroupName("Import Filters");
 

@@ -1496,7 +1496,8 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
         }
         else
         {
-            album = man->currentAlbums().first();
+            int albumId = group.readEntry(d->configLastTargetAlbum, man->currentAlbums().first()->globalID());
+            album = man->findAlbum(albumId);
 
             if (album && album->type() != Album::PHYSICAL)
             {
@@ -1514,6 +1515,7 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
             }
 
             pAlbum = dynamic_cast<PAlbum*>(album);
+            group.writeEntry(d->configLastTargetAlbum, album->globalID());
         }
     }
     else
