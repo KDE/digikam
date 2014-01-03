@@ -47,11 +47,6 @@ public:
 
     CanvasItem(Canvas* view);
     virtual ~CanvasItem();
-    
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
-    EditorCore* im();
-    QRectF boundingRect() const;
-    void toggleRotated();
 
 private:
 

@@ -384,9 +384,11 @@ void Canvas::updateContentsSize(bool deleteRubber)
     }
 
     QPoint center(d_ptr->canvasItem->boundingRect().center().toPoint());
-    QSize canvasItemSize = d_ptr->canvasItem->image().size();
+    QSize canvasItemSize = QSize(imageWidth()*d_ptr->zoom, imageHeight()*d_ptr->zoom);
+    qDebug()<<canvasItemSize<<"boundingRect"<<d_ptr->canvasItem->boundingRect().size();
     QPoint topLeft = QPoint(center.x()- canvasItemSize.width()/2, center.y()-canvasItemSize.height()/2);
     setSceneRect(QRect(topLeft, canvasItemSize));
+    centerOn(d_ptr->canvasItem->boundingRect().center().toPoint());
     viewport()->setUpdatesEnabled(true); //necessary
 }
 
@@ -595,7 +597,6 @@ void Canvas::setFitToWindow(bool fit)
 void Canvas::slotRotate90()
 {
     d_ptr->canvasItem->clearCache();
-    d_ptr->canvasItem->toggleRotated();
     d_ptr->im->rotate90();
 }
 
@@ -608,7 +609,6 @@ void Canvas::slotRotate180()
 void Canvas::slotRotate270()
 {
     d_ptr->canvasItem->clearCache();
-    d_ptr->canvasItem->toggleRotated();
     d_ptr->im->rotate270();
 }
 
@@ -793,6 +793,7 @@ void Canvas::slotModified()
 
     updateContentsSize(true);
     d_ptr->canvasItem->setImage(currentImage());
+    centerOn(d_ptr->canvasItem->boundingRect().center().toPoint());
     viewport()->update();
 
     // To be sure than corner widget used to pan image will be hide/show
