@@ -188,7 +188,7 @@ CameraController::CameraController(QWidget* const parent,
     }
 
     connect(d->camera, SIGNAL(signalFolderList(QStringList)), this, SIGNAL(signalFolderList(QStringList)));
-    
+
     // setup inter-thread signals
 
     qRegisterMetaType<CamItemInfo>("CamItemInfo");
@@ -497,9 +497,9 @@ void CameraController::executeCommand(CameraCommand* const cmd)
         {
             QString folder = cmd->map["folder"].toString();
             sendLogMsg(i18n("Listing folders in %1...", folder));
-            
+
             d->camera->getFolders(folder);
-            
+
             // TODO do we need to track when the folder listing is completed? it'd make things much harder...
             sendLogMsg(i18n("The folders in %1 have been listed.", folder));
             break;
@@ -1002,7 +1002,7 @@ void CameraController::slotUploadFailed(const QString& folder, const QString& fi
 void CameraController::slotDeleteFailed(const QString& folder, const QString& file)
 {
     emit signalDeleted(folder, file, false);
-    sendLogMsg(i18n("Failed to delete <filename>%1...", file), DHistoryView::ErrorEntry, folder, file);
+    sendLogMsg(i18n("Failed to delete <filename>%1</filename>...", file), DHistoryView::ErrorEntry, folder, file);
 
     if (!d->canceled)
     {
@@ -1026,7 +1026,7 @@ void CameraController::slotDeleteFailed(const QString& folder, const QString& fi
 void CameraController::slotLockFailed(const QString& folder, const QString& file)
 {
     emit signalLocked(folder, file, false);
-    sendLogMsg(i18n("Failed to lock <filename>%1...", file), DHistoryView::ErrorEntry, folder, file);
+    sendLogMsg(i18n("Failed to lock <filename>%1</filename>...", file), DHistoryView::ErrorEntry, folder, file);
 
     if (!d->canceled)
     {
