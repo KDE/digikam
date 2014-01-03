@@ -1375,7 +1375,7 @@ void ImportUI::slotUploadItems(const KUrl::List& urls)
 
         while (d->view->hasImage(uploadInfo))
         {
-            QString msg(i18nc("@info", "Camera Folder <resource>%1<resource> already contains the item <resource>%2</resource>.<nl>"
+            QString msg(i18nc("@info", "Camera Folder <resource>%1</resource> already contains the item <resource>%2</resource>.<nl>"
                              "Please enter a new filename (without extension):",
                              cameraFolder, fi.fileName()));
             uploadInfo.name = KInputDialog::getText(i18nc("@title:window", "File already exists"), msg, name, &ok, this) + ext;
