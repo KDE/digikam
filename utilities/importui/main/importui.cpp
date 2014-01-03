@@ -209,7 +209,7 @@ ImportUI::ImportUI(QWidget* const parent, const QString& cameraTitle,
 
     slotThumbSizeChanged(ImportSettings::instance()->getDefaultIconSize());
     slotZoomSliderChanged(ImportSettings::instance()->getDefaultIconSize());
-    
+
     // try to connect in the end, this allows us not to block the UI to show up..
     QTimer::singleShot(0, d->controller, SLOT(slotConnect()));
 }
@@ -1055,7 +1055,7 @@ void ImportUI::slotBusy(bool val)
         m_animLogo->stop();
         d->statusProgressBar->setProgressValue(0);
         d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18nc("@info:status", "Ready"));
-        
+
         // like WDestructiveClose, but after camera controller operation has safely finished
         if (d->closed)
         {
@@ -1159,7 +1159,7 @@ void ImportUI::slotConnected(bool val)
                                            "Please make sure it is connected "
                                            "properly and turned on. "
                                            "Would you like to try again?"),
-                                      i18n("@title:window Connection Failed"),
+                                      i18nc("@title:window", "Connection Failed"),
                                       KGuiItem(i18nc("@action Connection failed, try again?", "Retry")),
                                       KGuiItem(i18nc("@action Connection failed, try again?", "Abort")))
                 == KMessageBox::Yes)
@@ -2337,7 +2337,7 @@ void ImportUI::slotImageSelected(const CamItemInfoList& selection, const CamItem
 
                 int index = listAll.indexOf(selection.first()) + 1;
 
-                d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, 
+                d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
                                                       i18nc("@info:status Filename of first selected item of number of items",
                                                             "<filename>%1</filename> (%2 of %3)",
                                                             selection.first().url().fileName(), index, num_images));
@@ -2345,7 +2345,7 @@ void ImportUI::slotImageSelected(const CamItemInfoList& selection, const CamItem
             else
             {
                 d->rightSideBar->slotNoCurrentItem();
-                d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, 
+                d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
                                                       i18ncp("@info:status", "No item selected (%1 item)",
                                                                              "No item selected (%1 items)",
                                                                              num_images));
