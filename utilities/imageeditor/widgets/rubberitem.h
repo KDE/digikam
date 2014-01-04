@@ -6,7 +6,7 @@
 * Date        : 2013-09-13
 * Description : rubber item for Canvas
 *
-* Copyright (C) 2013      by Yiou Wang <geow812 at gmail dot com>
+* Copyright (C) 2013-2014 by Yiou Wang <geow812 at gmail dot com>
 *
 * This program is free software; you can redistribute it
 * and/or modify it under the terms of the GNU General
@@ -45,11 +45,12 @@ namespace Digikam
 class DIGIKAM_EXPORT RubberItem : public RegionFrameItem
 {
     Q_OBJECT
-    
+
 public:
-    RubberItem(CanvasItem* item);
+
+    RubberItem(CanvasItem* const item);
     virtual ~RubberItem();
-    void setCanvas(Canvas* canvas);
+    void setCanvas(Canvas* const canvas);
 
 protected:
 

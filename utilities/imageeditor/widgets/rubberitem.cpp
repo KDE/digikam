@@ -6,7 +6,7 @@
 * Date        : 2013-09-13
 * Description : rubber item for Canvas
 *
-* Copyright (C) 2013      by Yiou Wang <geow812 at gmail dot com>
+* Copyright (C) 2013-2014 by Yiou Wang <geow812 at gmail dot com>
 *
 * This program is free software; you can redistribute it
 * and/or modify it under the terms of the GNU General
@@ -22,7 +22,6 @@
 * ============================================================ */
 
 #include "rubberitem.moc"
-
 
 namespace Digikam
 {
@@ -50,7 +49,7 @@ RubberItem::~RubberItem()
     delete d;
 }
 
-void RubberItem::setCanvas(Canvas* canvas)
+void RubberItem::setCanvas(Canvas* const canvas)
 {
     d->canvas = canvas;
 }
@@ -60,6 +59,5 @@ void RubberItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     RegionFrameItem::mouseReleaseEvent(event);
     emit d->canvas->slotSelected();
 }
-
 
 } // namespace Digikam
