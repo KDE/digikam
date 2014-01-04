@@ -115,7 +115,6 @@ Q_SIGNALS:
     void signalZoomChanged(double zoom);
     void signalMaxZoom();
     void signalMinZoom();
-    void signalChanged();
     void signalSelected(bool);
     void signalRightButtonClicked();
     void signalShowNextImage();
@@ -175,7 +174,6 @@ private Q_SLOTS:
     void slotImageLoaded(const QString& filePath, bool success);
     void slotImageSaved(const QString& filePath, bool success);
     void slotCornerButtonPressed();
-    void slotZoomChanged(double);
     void slotPanIconSelectionMoved(const QRect&, bool);
     void slotPanIconHidden();
     void slotAddItemStarted(const QPointF& pos);

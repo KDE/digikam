@@ -75,6 +75,7 @@ public:
         parent           = 0;
         autoZoom         = false;
         fullScreen       = false;
+        isWheelEvent     = false;
         zoom             = 1.0;
         initialZoom      = true;
         rubber           = 0;
@@ -86,6 +87,9 @@ public:
     bool                     autoZoom;
     bool                     fullScreen;
     bool                     initialZoom;
+    bool                     isWheelEvent;
+
+    QPoint                   wheelEventPoint;
 
     double                   zoom;
     const double             minZoom;
@@ -145,9 +149,6 @@ Canvas::Canvas(QWidget* const parent)
     layout()->fitToWindow();
 
     // ------------------------------------------------------------
-
-    connect(this, SIGNAL(signalZoomChanged(double)),
-            this, SLOT(slotZoomChanged(double)));
 
     connect(d_ptr->cornerButton, SIGNAL(pressed()),
             this, SLOT(slotCornerButtonPressed()));
@@ -329,8 +330,7 @@ QRect Canvas::getSelectedArea() const
 
 QRect Canvas::visibleArea() const
 {
-    //return (QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight()));
-    return (mapToScene(viewport()->geometry()).boundingRect().toRect());
+    return mapToScene(viewport()->geometry()).boundingRect().toRect();
 }
 
 EditorCore* Canvas::interface() const
@@ -385,10 +385,18 @@ void Canvas::updateContentsSize(bool deleteRubber)
 
     QPoint center(d_ptr->canvasItem->boundingRect().center().toPoint());
     QSize canvasItemSize = QSize(imageWidth()*d_ptr->zoom, imageHeight()*d_ptr->zoom);
-    qDebug()<<canvasItemSize<<"boundingRect"<<d_ptr->canvasItem->boundingRect().size();
     QPoint topLeft = QPoint(center.x()- canvasItemSize.width()/2, center.y()-canvasItemSize.height()/2);
     setSceneRect(QRect(topLeft, canvasItemSize));
-    centerOn(d_ptr->canvasItem->boundingRect().center().toPoint());
+
+    if (!d_ptr->isWheelEvent)
+    {
+        centerOn(center);
+    }
+    else
+    {
+        centerOn(d_ptr->wheelEventPoint);
+        d_ptr->isWheelEvent = false;
+    }
     viewport()->setUpdatesEnabled(true); //necessary
 }
 
@@ -554,7 +562,7 @@ void Canvas::fitToSelect()
         emit signalToggleOffFitToWindow();
 
         d_ptr->canvasItem->zoomSettings()->setZoomFactor(d_ptr->zoom);
-        //d_ptr->im->zoom(d_ptr->zoom);
+
         updateContentsSize(true);
 
         centerOn(cpx * d_ptr->zoom, cpy * d_ptr->zoom);
@@ -586,12 +594,11 @@ void Canvas::setFitToWindow(bool fit)
     {
         d_ptr->zoom = 1.0;
         d_ptr->canvasItem->zoomSettings()->setZoomFactor(d_ptr->zoom);
-        //d_ptr->im->zoom(d_ptr->zoom);
+
         emit signalZoomChanged(d_ptr->zoom);
     }
 
     updateContentsSize(false);
-    slotZoomChanged(d_ptr->zoom);
 }
 
 void Canvas::slotRotate90()
@@ -792,15 +799,7 @@ void Canvas::slotModified()
     }
 
     updateContentsSize(true);
-    d_ptr->canvasItem->setImage(currentImage());
-    centerOn(d_ptr->canvasItem->boundingRect().center().toPoint());
-    viewport()->update();
 
-    // To be sure than corner widget used to pan image will be hide/show
-    // accordingly with new image size (if changed).
-    slotZoomChanged(d_ptr->zoom);
-
-    emit signalChanged();
 }
 
 void Canvas::slotCornerButtonPressed()
@@ -821,7 +820,7 @@ void Canvas::slotCornerButtonPressed()
     connect(pan, SIGNAL(signalHidden()),
             this, SLOT(slotPanIconHidden()));
 
-    QRectF visibleRect = mapToScene(viewport()->geometry()).boundingRect();
+    QRect visibleRect = visibleArea();
     QRect r((int)visibleRect.topLeft().x()/d_ptr->zoom, (int)visibleRect.topLeft().y()/d_ptr->zoom,
             (int)visibleRect.width()/d_ptr->zoom, (int)visibleRect.height()/d_ptr->zoom);
     pan->setImage(180, 120, d_ptr->im->getImg()->copyQImage());
@@ -855,18 +854,6 @@ void Canvas::slotPanIconSelectionMoved(const QRect& r, bool b)
         d_ptr->panIconPopup->deleteLater();
         d_ptr->panIconPopup = 0;
         slotPanIconHidden();
-    }
-}
-
-void Canvas::slotZoomChanged(double /*zoom*/)
-{
-    if (horizontalScrollBar()->isVisible() || verticalScrollBar()->isVisible())
-    {
-        d_ptr->cornerButton->show();
-    }
-    else
-    {
-        d_ptr->cornerButton->hide();
     }
 }
 
@@ -1021,6 +1008,7 @@ void Canvas::mousePressEvent(QMouseEvent* event)
 
 void Canvas::wheelEvent(QWheelEvent* event)
 {
+    GraphicsDImgView::wheelEvent(event);
     event->accept();
 
     if (event->modifiers() & Qt::ShiftModifier)
@@ -1038,6 +1026,10 @@ void Canvas::wheelEvent(QWheelEvent* event)
     }
     else if (event->modifiers() & Qt::ControlModifier)
     {
+
+        d_ptr->isWheelEvent = true;
+        d_ptr->wheelEventPoint = event->pos();
+
         if (event->delta() < 0)
         {
             slotDecreaseZoom();
@@ -1049,8 +1041,6 @@ void Canvas::wheelEvent(QWheelEvent* event)
 
         return;
     }
-
-    GraphicsDImgView::wheelEvent(event);
 }
 
 }  // namespace Digikam
