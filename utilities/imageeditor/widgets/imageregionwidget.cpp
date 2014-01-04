@@ -6,7 +6,7 @@
  * Date        : 2013-07-15
  * Description : a widget to draw an image clip region.
  *
- * Copyright (C) 2013 by Yiou Wang <geow812 at gmail dot com>
+ * Copyright (C) 2013-2014 by Yiou Wang <geow812 at gmail dot com>
  * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2011-2013 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -54,19 +54,19 @@ public:
         onMouseMovePreviewToggled(true),
         capturePtMode(false),
         renderingPreviewMode(PreviewToolBar::PreviewBothImagesVertCont),
-        oldRenderingPreviewMode(PreviewToolBar::PreviewBothImagesVertCont)
+        oldRenderingPreviewMode(PreviewToolBar::PreviewBothImagesVertCont),
+        item(0)
     {
-        item = 0;
     }
 
-    bool        onMouseMovePreviewToggled; // For PreviewToggleOnMouseOver mode.
-    bool        capturePtMode;
+    bool             onMouseMovePreviewToggled; // For PreviewToggleOnMouseOver mode.
+    bool             capturePtMode;
 
-    int         renderingPreviewMode;
-    int         oldRenderingPreviewMode;
+    int              renderingPreviewMode;
+    int              oldRenderingPreviewMode;
 
-    QPolygon    hightlightPoints;
-    
+    QPolygon         hightlightPoints;
+
     ImageRegionItem* item;
 };
 
@@ -145,17 +145,16 @@ void ImageRegionWidget::slotPreviewModeChanged(int mode)
 
 double ImageRegionWidget::zoomFactor() const
 {
-    return d_ptr->item->zoomSettings()->zoomFactor();
+    return (d_ptr->item->zoomSettings()->zoomFactor());
 }
 
 QRect ImageRegionWidget::getOriginalImageRegionToRender() const
 {
     QRect r = d_ptr->item->getImageRegion();
-
-    int x = (int)((double)r.x() / zoomFactor());
-    int y = (int)((double)r.y() / zoomFactor());
-    int w = (int)((double)r.width() / zoomFactor());
-    int h = (int)((double)r.height() / zoomFactor());
+    int x   = (int)((double)r.x()      / zoomFactor());
+    int y   = (int)((double)r.y()      / zoomFactor());
+    int w   = (int)((double)r.width()  / zoomFactor());
+    int h   = (int)((double)r.height() / zoomFactor());
 
     QRect rect(x, y, w, h);
     return (rect);
@@ -175,7 +174,7 @@ void ImageRegionWidget::setPreviewImage(const DImg& img)
     {
         image.setIccProfile(d_ptr->item->image().getIccProfile());
     }
-    
+
     d_ptr->item->setTargetImage(image);
 }
 
@@ -203,7 +202,7 @@ void ImageRegionWidget::slotOriginalImageRegionChanged(bool targetDone)
 {
     if (targetDone)
     {
-        emit signalOriginalClipFocusChanged();//For Image Edit Tools
+        emit signalOriginalClipFocusChanged(); // For Image Edit Tools
     }
 }
 

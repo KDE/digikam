@@ -6,7 +6,7 @@
  * Date        : 2013-07-15
  * Description : a widget to draw an image clip region.
  *
- * Copyright (C) 2013 by Yiou Wang <geow812 at gmail dot com>
+ * Copyright (C) 2013-2014 by Yiou Wang <geow812 at gmail dot com>
  * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2011-2013 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -84,9 +84,11 @@ public:
     void   setZoomFactor(double zoom);
 
 private:
+
     double zoomFactor() const;
 
 Q_SIGNALS:
+
     void signalOriginalClipFocusChanged();
     void signalCapturedPointFromOriginal(const Digikam::DColor&, const QPoint&);
     void signalContentsMovedEvent(bool);
