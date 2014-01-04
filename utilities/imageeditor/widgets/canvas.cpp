@@ -995,8 +995,7 @@ void Canvas::mousePressEvent(QMouseEvent* event)
 
     if (item)
     {
-        QString className(item->className());
-
+        QString className(item->metaObject()->className());
         if (className == "Digikam::RubberItem" || className == "Digikam::ClickDragReleaseItem")
         {
             return;

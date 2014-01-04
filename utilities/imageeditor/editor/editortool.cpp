@@ -296,17 +296,20 @@ void EditorTool::slotPreviewModeChanged()
 void EditorTool::setBackgroundColor(const QColor& bg)
 {
     ImageGuideWidget* const view = dynamic_cast<ImageGuideWidget*>(d->view);
+    QPalette palette;
 
     if (view)
     {
-        view->setBackgroundColor(bg);
+        palette.setColor(view->backgroundRole(), bg);
+        view->setPalette(palette);
     }
 
     ImageRegionWidget* const view2 = dynamic_cast<ImageRegionWidget*>(d->view);
 
     if (view2)
     {
-        view2->setBackgroundColor(bg);
+        palette.setColor(view->backgroundRole(), bg);
+        view2->setPalette(palette);
     }
 }
 
