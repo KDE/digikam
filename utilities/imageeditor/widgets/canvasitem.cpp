@@ -24,6 +24,7 @@
 #include "canvasitem.h"
 
 // Qt includes
+
 #include <QPixmap>
 #include <QPainter>
 
@@ -32,6 +33,7 @@
 #include <klocale.h>
 
 // Local includes
+
 #include "previewtoolbar.h"
 #include "dimgitemspriv.h"
 #include "iccsettingscontainer.h"
@@ -47,26 +49,25 @@ namespace Digikam
 class CanvasItem::Private
 {
 public:
-  
+
     Private()
-        
+
     {
-        view       = 0;
+        view = 0;
     }
 
-    Canvas*          view;
+    Canvas* view;
 };
 
-CanvasItem::CanvasItem(Canvas *widget):
-    d_ptr(new Private)
+CanvasItem::CanvasItem(Canvas* const widget):
+    d(new Private)
 {
-    d_ptr->view = widget;
+    d->view = widget;
 }
 
 CanvasItem::~CanvasItem()
 {
-    delete d_ptr;
+    delete d;
 }
 
-}
-// namespace Digikam
+} // namespace Digikam

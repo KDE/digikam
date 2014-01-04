@@ -45,16 +45,16 @@ class DIGIKAM_EXPORT CanvasItem : public GraphicsDImgItem
 
 public:
 
-    CanvasItem(Canvas* view);
+    CanvasItem(Canvas* const view);
     virtual ~CanvasItem();
 
 private:
 
     class Private;
-    Private* const d_ptr;
+    Private* const d;
 
 };
 
 }  // namespace Digikam
 
-#endif
+#endif // CANVASITEM_H

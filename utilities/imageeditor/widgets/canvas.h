@@ -6,7 +6,7 @@
  * Date        : 2013-08-04
  * Description : image editor canvas management class
  *
- * Copyright (C) 2013 by Yiou Wang <geow812 at gmail dot com>
+ * Copyright (C) 2013-2014 by Yiou Wang <geow812 at gmail dot com>
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -156,12 +156,14 @@ public Q_SLOTS:
     void slotSelected();
 
 protected:
+
     void keyPressEvent(QKeyEvent*);
     void mousePressEvent(QMouseEvent*);
     void addRubber();
     void wheelEvent(QWheelEvent*);
 
 private:
+
     void   updateAutoZoom();
     void   updateContentsSize(bool deleteRubber);
     double calcAutoZoomFactor() const;
@@ -180,11 +182,11 @@ private Q_SLOTS:
     void slotAddItemMoving(const QRectF& rect);
     void slotAddItemFinished(const QRectF& rect);
     void cancelAddItem();
-    
+
 private:
 
     class Private;
-    Private* const d_ptr;
+    Private* const d;
 };
 
 }  // namespace Digikam
