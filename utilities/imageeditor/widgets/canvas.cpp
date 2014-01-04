@@ -801,6 +801,7 @@ void Canvas::slotModified()
         updateAutoZoom();
     }
 
+    d->canvasItem->setImage(currentImage());
     updateContentsSize(true);
 
 }
