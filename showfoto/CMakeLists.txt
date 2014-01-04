@@ -3,6 +3,7 @@ SET_DEBUG_AREA_CODE(${AREA_CODE_SHOWFOTO})
 # We need to include the setup dir for showfoto BEFORE the other include dirs,
 # otherwise the one from the "utilities" dir will be used
 INCLUDE_DIRECTORIES(BEFORE
+        ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar
         ${CMAKE_CURRENT_SOURCE_DIR}/setup
         ${CMAKE_CURRENT_SOURCE_DIR}/main
 )
@@ -15,7 +16,19 @@ ENDIF(NOT MSVC)
 SET(showfoto_SRCS
     ${libsetupshowfoto_SRCS}
     ${libshowfotosetup_SRCS}
-
+    
+    thumbbar/showfotoiteminfo.cpp
+    thumbbar/showfotoimagemodel.cpp
+    thumbbar/showfotothumbnailmodel.cpp
+    thumbbar/showfotofiltermodel.cpp
+    thumbbar/showfotoitemsortsettings.cpp
+    thumbbar/itemviewshowfotodelegate.cpp
+    thumbbar/showfotodelegate.cpp
+    thumbbar/showfototooltipfiller.cpp
+    thumbbar/showfotocategorizedview.cpp
+    thumbbar/showfotothumbnailbar.cpp
+    
+    main/showfotosettings.cpp
     main/main.cpp
     main/showfoto.cpp
    )
@@ -35,7 +48,6 @@ TARGET_LINK_LIBRARIES(showfoto
                       ${KGEOMAP_LIBRARIES}
                       ${KDE4_KIO_LIBS}
                       ${LCMS_LIBRARIES}
-                      ${QT_QT3SUPPORT_LIBRARY}
 
                       # To link under Solaris (see B.K.O #274484)
                       ${MATH_LIBRARY}

@@ -279,7 +279,7 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ImageInfo& info,
 
     QMap<QString, QRect> ajustedFaces;
 
-    foreach(DatabaseFace dface, facesList)
+    foreach(const DatabaseFace& dface, facesList)
     {
         QString name = FaceTags::faceNameForTag(dface.tagId());
 

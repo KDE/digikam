@@ -220,7 +220,7 @@ void ThumbnailLoadThread::initializeThumbnailDatabase(const DatabaseParameters& 
     }
     else
     {
-        KMessageBox::information(0, i18n("Error message: %1").arg(ThumbnailDatabaseAccess().lastError()),
+        KMessageBox::information(0, i18n("Error message: %1", ThumbnailDatabaseAccess().lastError()),
                                  i18n("Failed to initialize thumbnail database"));
     }
 }

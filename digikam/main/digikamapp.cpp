@@ -253,6 +253,9 @@ DigikamApp::DigikamApp()
 
     d->modelCollection = new DigikamModelCollection;
 
+    // This manager must be created after collection setup and before accelerators setup.
+    d->tagsActionManager = new TagsActionMngr(this);
+
     // First create everything, then connect.
     // Otherwise some items may send signals and the slots can try
     // to access items which were not created yet.
@@ -260,12 +263,10 @@ DigikamApp::DigikamApp()
     setupAccelerators();
     setupActions();
     setupStatusBar();
+
     initGui();
 
     setupViewConnections();
-
-    // This manager must be created after collection setup.
-    d->tagsActionManager = new TagsActionMngr(this);
 
     applyMainWindowSettings(group);
 
@@ -656,6 +657,9 @@ void DigikamApp::setupAccelerators()
 
     d->pasteItemsAction = KStandardAction::paste(this, SIGNAL(signalPasteAlbumItemsSelection()), this);
     actionCollection()->addAction("paste_album_selection", d->pasteItemsAction);
+
+    // Labels shortcuts must be registered here to be saved in XML GUI files if user customize it.
+    d->tagsActionManager->registerLabelsActions(actionCollection());
 }
 
 void DigikamApp::setupActions()
@@ -2218,11 +2222,11 @@ void DigikamApp::fillSolidMenus()
             {
                 labelOrProduct = volume->label();
             }
-            else if (volumeDevice.product().isEmpty())
+            else if (!volumeDevice.product().isEmpty())
             {
                 labelOrProduct = volumeDevice.product();
             }
-            else if (volumeDevice.vendor().isEmpty())
+            else if (!volumeDevice.vendor().isEmpty())
             {
                 labelOrProduct = volumeDevice.vendor();
             }
@@ -2489,7 +2493,7 @@ void DigikamApp::preloadWindows()
     ImageWindow::imageWindow();
     LightTableWindow::lightTableWindow();
 
-    d->tagsActionManager->registerActionCollections();
+    d->tagsActionManager->registerTagsActionCollections();
 }
 
 void DigikamApp::slotDatabaseMigration()

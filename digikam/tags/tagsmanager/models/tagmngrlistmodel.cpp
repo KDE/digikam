@@ -267,7 +267,7 @@ Qt::ItemFlags TagMngrListModel::flags(const QModelIndex& index) const
 QVariant TagMngrListModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
-        return d->rootItem->data(section);
+        return QVariant(i18n("Quick Access List"));
 
     return QVariant();
 }

@@ -38,6 +38,7 @@
 
 #include "loadingdescription.h"
 #include "metadatasettings.h"
+#include "tagscache.h"
 #include "threadmanager.h"
 
 namespace Digikam
@@ -654,8 +655,8 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
 
         for (int i=0; i<package->databaseFaces.size(); i++)
         {
-            if ((package->databaseFaces[i].roles & FacePipelineDatabaseFace::ForRecognition)
-                && !package->recognitionResults[i].isNull())
+            if (package->databaseFaces[i].roles & FacePipelineDatabaseFace::ForRecognition)
+                //&& !package->recognitionResults[i].isNull()) // comment out: Allow to overwrite existing recognition with new, possibly valid, "not recognized" status
             {
                 int tagId = FaceTags::getOrCreateTagForIdentity(package->recognitionResults[i].attributes);
                 package->databaseFaces[i] = utils.changeSuggestedName(package->databaseFaces[i], tagId);
@@ -720,7 +721,7 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
 
 // ----------------------------------------------------------------------------------------
 
-Benchmarker::Benchmarker(FacePipeline::Private* const d)
+DetectionBenchmarker::DetectionBenchmarker(FacePipeline::Private* const d)
     : totalImages(0),
       faces(0),
       totalPixels(0),
@@ -736,7 +737,7 @@ Benchmarker::Benchmarker(FacePipeline::Private* const d)
 {
 }
 
-void Benchmarker::process(FacePipelineExtendedPackage::Ptr package)
+void DetectionBenchmarker::process(FacePipelineExtendedPackage::Ptr package)
 {
     if (package->databaseFaces.isEmpty())
     {
@@ -815,7 +816,7 @@ void Benchmarker::process(FacePipelineExtendedPackage::Ptr package)
     emit processed(package);
 }
 
-QString Benchmarker::result() const
+QString DetectionBenchmarker::result() const
 {
     kDebug() << "Per-image:" << trueNegativeImages << falsePositiveFaces;
     kDebug() << "Per-face:" << truePositiveFaces << falseNegativeFaces << falsePositiveFaces; // 26 7 1
@@ -881,6 +882,61 @@ QString Benchmarker::result() const
             .arg(sensitivity * 100, 0, 'f', 1).arg(ppv * 100, 0, 'f', 1)
             .arg(specificityWarning).arg(sensitivityWarning);
 }
+
+// ----------------------------------------------------------------------------------------
+
+RecognitionBenchmarker::Statistics::Statistics()
+: knownFaces(0), correctlyRecognized(0)
+{}
+
+RecognitionBenchmarker::RecognitionBenchmarker(FacePipeline::Private* const d)
+    : d(d)
+{
+    database = KFaceIface::RecognitionDatabase::addDatabase();
+}
+
+QString RecognitionBenchmarker::result() const
+{
+    int totalImages = 0;
+    foreach (const Statistics& stat, results)
+    {
+        totalImages += stat.knownFaces;
+    }
+
+    QString s = QString("<p>"
+                        "<u>Collection Properties:</u><br/>"
+                        "%1 Images <br/>"
+                        "%2 Identities <br/>"
+                        "</p><p>").arg(totalImages).arg(results.size());
+    for (QMap<int, Statistics>::const_iterator it = results.begin(); it != results.end(); ++it)
+    {
+        const Statistics& stat = it.value();
+        double correctRate = double(stat.correctlyRecognized) / stat.knownFaces;
+        s += TagsCache::instance()->tagName(it.key());
+        s += QString(": %1 faces, %2 (%3%) correctly recognized<br/>")
+            .arg(stat.knownFaces).arg(stat.correctlyRecognized).arg(correctRate * 100);
+    }
+    s += "</p>";
+    return s;
+}
+
+void RecognitionBenchmarker::process(FacePipelineExtendedPackage::Ptr package)
+{
+    FaceUtils utils;
+
+    for (int i=0; i<package->databaseFaces.size(); i++)
+    {
+        KFaceIface::Identity identity = utils.identityForTag(package->databaseFaces[i].tagId(), database);
+        Statistics& result = results[package->databaseFaces[i].tagId()];
+        result.knownFaces++;
+        if (identity == package->recognitionResults[i])
+        {
+            result.correctlyRecognized++;
+        }
+    }
+    emit processed(package);
+}
+
 
 // ----------------------------------------------------------------------------------------
 
@@ -998,7 +1054,8 @@ FacePipeline::Private::Private(FacePipeline* const q)
     recognitionWorker    = 0;
     databaseWriter       = 0;
     trainer              = 0;
-    benchmarker          = 0;
+    detectionBenchmarker = 0;
+    recognitionBenchmarker = 0;
     priority             = QThread::LowPriority;
     started              = false;
     infosForFiltering    = 0;
@@ -1189,6 +1246,11 @@ void FacePipeline::Private::stop()
         previewThread->cancel();
     }
 
+    foreach (ThumbnailLoadThread* thread, thumbnailLoadThreads)
+    {
+        thread->stopAllTasks();
+    }
+
     WorkerObject* workerObject = 0;
     ParallelPipes* pipes       = 0;
     DynamicThread* thread      = 0;
@@ -1222,6 +1284,11 @@ void FacePipeline::Private::wait()
     if (previewThread)
     {
         previewThread->wait();
+    }
+
+    foreach (ThumbnailLoadThread* thread, thumbnailLoadThreads)
+    {
+        thread->wait();
     }
 
     WorkerObject* workerObject = 0;
@@ -1292,8 +1359,7 @@ FacePipeline::FacePipeline()
 
 FacePipeline::~FacePipeline()
 {
-    cancel();
-    d->wait();
+    shutDown();
 
     delete d->databaseFilter;
     delete d->previewThread;
@@ -1303,8 +1369,15 @@ FacePipeline::~FacePipeline()
     delete d->databaseWriter;
     delete d->trainer;
     qDeleteAll(d->thumbnailLoadThreads);
-    delete d->benchmarker;
+    delete d->detectionBenchmarker;
+    delete d->recognitionBenchmarker;
     delete d;
+}
+
+void FacePipeline::shutDown()
+{
+    cancel();
+    d->wait();
 }
 
 bool FacePipeline::hasFinished() const
@@ -1314,12 +1387,15 @@ bool FacePipeline::hasFinished() const
 
 QString FacePipeline::benchmarkResult() const
 {
-    if (!d->benchmarker)
+    if (d->detectionBenchmarker)
     {
-        return QString();
+        return d->detectionBenchmarker->result();
     }
-
-    return d->benchmarker->result();
+    if (d->recognitionBenchmarker)
+    {
+        return d->recognitionBenchmarker->result();
+    }
+    return QString();
 }
 
 void FacePipeline::plugDatabaseFilter(FilterMode mode)
@@ -1395,10 +1471,15 @@ void FacePipeline::plugTrainer()
     d->createThumbnailLoadThread();
 }
 
-void FacePipeline::plugBenchmarker()
+void FacePipeline::plugDetectionBenchmarker()
 {
-    d->benchmarker = new Benchmarker(d);
+    d->detectionBenchmarker = new DetectionBenchmarker(d);
     d->createThumbnailLoadThread();
+}
+
+void FacePipeline::plugRecognitionBenchmarker()
+{
+    d->recognitionBenchmarker = new RecognitionBenchmarker(d);
 }
 
 void FacePipeline::plugDatabaseEditor()
@@ -1428,9 +1509,14 @@ void FacePipeline::construct()
         d->pipeline << d->recognitionWorker;
     }
 
-    if (d->benchmarker)
+    if (d->detectionBenchmarker)
     {
-        d->pipeline << d->benchmarker;
+        d->pipeline << d->detectionBenchmarker;
+    }
+
+    if (d->recognitionBenchmarker)
+    {
+        d->pipeline << d->recognitionBenchmarker;
     }
 
     if (d->databaseWriter)

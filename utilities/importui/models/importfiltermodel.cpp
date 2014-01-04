@@ -23,6 +23,7 @@
 
 #include "importfiltermodel.moc"
 #include "camiteminfo.h"
+#include <KDebug>
 
 namespace Digikam
 {

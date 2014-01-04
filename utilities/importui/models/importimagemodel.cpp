@@ -680,11 +680,10 @@ static bool pairsContain(const List& list, T value)
     typename List::const_iterator begin = list.begin();
     typename List::const_iterator end   = list.end();
     int n                               = int(end - begin);
-    int half;
 
     while(n > 0)
     {
-        half   = n >> 1;
+        int half   = n >> 1;
         middle = begin + half;
 
         if ((middle->first <= value) && (middle->second >= value))
@@ -780,7 +779,6 @@ void ImportImageModel::removeRowPairs(const QList<QPair<int, int> >& toRemove)
 
     int                     removedRows = 0;
     int                     offset      = 0;
-    typedef QPair<int, int> IntPair;
 
     foreach(const IntPair& pair, toRemove)
     {

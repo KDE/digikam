@@ -336,30 +336,35 @@ void ImageFilterModel::ImageFilterModelPrivate::infosToProcess(const QList<Image
         preparer->schedule();
     }
 
+    Q_ASSERT(extraValues.isEmpty() || infos.size() == extraValues.size());
+
     // prepare and filter in chunks
     const int size                      = infos.size();
     const int maxChunkSize              = needPrepare ? PrepareChunkSize : FilterChunkSize;
-    QList<ImageInfo>::const_iterator it = infos.constBegin();
-    QList<QVariant>::const_iterator xit = extraValues.constBegin();
+    const bool hasExtraValues           = !extraValues.isEmpty();
+    QList<ImageInfo>::const_iterator it = infos.constBegin(), end;
+    QList<QVariant>::const_iterator xit = extraValues.constBegin(), xend;
     int index                           = 0;
+    QVector<ImageInfo>  infoVector;
     QVector<QVariant> extraValueVector;
 
     while (it != infos.constEnd())
     {
-        QVector<ImageInfo> infoVector(qMin(maxChunkSize, size - index));
-        QList<ImageInfo>::const_iterator end = it + infoVector.size();
+        const int chunkSize = qMin(maxChunkSize, size - index);
+        infoVector.resize(chunkSize);
+        end = it + chunkSize;
         qCopy(it, end, infoVector.begin());
 
-        if (xit != extraValues.constEnd())
+        if (hasExtraValues)
         {
-            extraValueVector                     = QVector<QVariant>(infoVector.size());
-            QList<QVariant>::const_iterator xend = xit + extraValueVector.size();
+            extraValueVector.resize(chunkSize);
+            xend = xit + chunkSize;
             qCopy(xit, xend, extraValueVector.begin());
             xit = xend;
         }
 
         it    = end;
-        index += infoVector.size();
+        index += chunkSize;
 
         ++sentOut;
 
@@ -370,11 +375,11 @@ void ImageFilterModel::ImageFilterModelPrivate::infosToProcess(const QList<Image
 
         if (needPrepare)
         {
-            emit packageToPrepare(ImageFilterModelTodoPackage(infoVector, version, forReAdd, extraValueVector));
+            emit packageToPrepare(ImageFilterModelTodoPackage(infoVector, extraValueVector, version, forReAdd));
         }
         else
         {
-            emit packageToFilter(ImageFilterModelTodoPackage(infoVector, version, forReAdd, extraValueVector));
+            emit packageToFilter(ImageFilterModelTodoPackage(infoVector, extraValueVector, version, forReAdd));
         }
     }
 }
@@ -438,11 +443,11 @@ void ImageFilterModel::ImageFilterModelPrivate::packageDiscarded(const ImageFilt
 
         if (needPrepare)
         {
-            emit packageToPrepare(ImageFilterModelTodoPackage(package.infos, version, package.isForReAdd));
+            emit packageToPrepare(ImageFilterModelTodoPackage(package.infos, package.extraValues, version, package.isForReAdd));
         }
         else
         {
-            emit packageToFilter(ImageFilterModelTodoPackage(package.infos, version, package.isForReAdd));
+            emit packageToFilter(ImageFilterModelTodoPackage(package.infos, package.extraValues, version, package.isForReAdd));
         }
     }
 }

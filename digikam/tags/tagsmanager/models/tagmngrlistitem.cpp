@@ -64,7 +64,7 @@ ListItem::ListItem(QList<QVariant>& data, ListItem* const parent)
 
     data.pop_front();
 
-    foreach(QVariant val, data)
+    foreach(const QVariant& val, data)
     {
         d->tagIds.append(val.toInt());
     }
@@ -161,10 +161,6 @@ QVariant ListItem::data(int role) const
                 display.remove(display.size()-2, 2);
 
             return QVariant(display);
-        }
-        case Qt::BackgroundRole:
-        {
-            return d->itemData.first();
         }
         default:
         {

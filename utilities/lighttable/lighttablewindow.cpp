@@ -80,6 +80,7 @@
 #include "uifilevalidator.h"
 #include "albummodel.h"
 #include "databasechangesets.h"
+#include "tagsactionmngr.h"
 #include "thumbbardock.h"
 #include "thumbnailsize.h"
 #include "thumbnailloadthread.h"
@@ -298,6 +299,10 @@ void LightTableWindow::setupUserArea()
     // Restore the previous state. This doesn't emit the proper signals to the
     // dock widget, so it has to be manually reinitialized.
     viewContainer->setAutoSaveSettings("LightTable Thumbbar", true);
+
+    connect(d->barViewDock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
+            d->thumbView, SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
+
     d->barViewDock->reInitialize();
 
     setCentralWidget(mainW);
@@ -630,6 +635,9 @@ void LightTableWindow::setupActions()
     actionCollection()->addAction("lighttable_backward_shift_space", altBackwardAction);
     altBackwardAction->setShortcut(KShortcut(Qt::SHIFT + Qt::Key_Space));
     connect(altBackwardAction, SIGNAL(triggered()), this, SLOT(slotBackward()));
+
+    // Labels shortcuts must be registered here to be saved in XML GUI files if user customize it.
+    TagsActionMngr::defaultManager()->registerLabelsActions(actionCollection());
 
     // ---------------------------------------------------------------------------------
 

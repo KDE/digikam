@@ -111,7 +111,7 @@ ImagePlugin_Transform::ImagePlugin_Transform(QObject* const parent, const QVaria
 
     //-----------------------------------------------------------------------------------
 
-    d->freerotationAction = new KAction(KIcon("freerotation"), QString("%1...").arg(i18n("Free Rotation")), this);
+    d->freerotationAction = new KAction(KIcon("freerotation"), i18n("Free Rotation..."), this);
     actionCollection()->addAction("imageplugin_freerotation", d->freerotationAction );
     connect(d->freerotationAction, SIGNAL(triggered(bool)),
             this, SLOT(slotFreeRotation()));

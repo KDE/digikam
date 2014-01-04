@@ -73,5 +73,59 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 059 ==> 278908 - Create new tags in category not possible.
 060 ==> 117810 - Dates view sidebar does not take into account tag filters.
 061 ==> 307848 - digiKam import mtp, failure.
-062 ==> 
-
+062 ==> 306454 - Rotated images gets wrong permission.
+063 ==> 270159 - Tag replaced instead of added.
+064 ==> 273180 - Enable Fingerprints Rebuilding For Specific Albums....The Same As Reloading Thumbnails.
+065 ==> 328294 - bootstrap.local invokes wrong shell [patch].
+066 ==> 315881 - Cmake misplaces local KDE graphics components.
+067 ==> 224038 - Thumbnails not shown on launch of digiKam.
+068 ==> 294835 - Albums are listed with (0) photos, but Database Statistics shows correct numbers of photos.
+069 ==> 186672 - Zoom slider should change amount of pictures, not picture size directly.
+070 ==> 305104 - digiKam does not show some jpg images in files.
+071 ==> 317669 - Two alert windows on overwrite alert.
+072 ==> 320249 - Table view crashes when adressing tags.
+073 ==> 309578 - crash importing images from an android usb storage.
+074 ==> 322360 - Camera found as PTP Device, but if importing Images abort with "connection error".
+075 ==> 328362 - Crash on start (macports install on OSX 10.9) - Exception Type: EXC_GUARD.
+076 ==> 301371 - Exiv2 mix library strangeness.
+077 ==> 328500 - Less unused space in Configure dialog.
+078 ==> 328124 - digiKam extremely unresponsive and slow (probably related to tags).
+079 ==> 273519 - When adding rating portrait images are rotated to landscape.
+080 ==> 315156 - CR2 files from Canon PowerShot G1 X the colours are messed up.
+081 ==> 228239 - Raw import tool: meaning of the Esc.
+082 ==> 287102 - digiKam does not show selected album at startup.
+083 ==> 307330 - digiKam does not connect to the album folder automatically unless it has been preselected in my folders.
+084 ==> 163293 - Only generate thumbnail when needed [patch].
+085 ==> 328632 - "Save change" create a new file with filename_v1.jpg.
+086 ==> 233657 - Thumbnails are created for thumbnails.
+087 ==> 328034 - Preload the next photo in the folder in a memory cache to speed up transitions.
+088 ==> 196649 - Very poor usability when browsing JPEG and RAW files.
+089 ==> 308343 - Tag FolderView Icons are blurry when using 48px setting.
+090 ==> 328578 - Crash when opening settings.
+091 ==> 307281 - digiKam crashes while scrolling list of photos previews.
+092 ==> 146318 - Usability: goto next item/ forward buttons are inconsistent between edit and view mode.
+093 ==> 293194 - Disable versioning side panel if versioning disabled in preferences.
+094 ==> 328818 - 4.0.0-beta1 - Build Errors (kevix2.h).
+095 ==> 328830 - digiKam compile error because of commit f3e488b56e4d56be0bb1022e32258add72c3c68a.
+096 ==> 292120 - Batch rename returns 'file does not exist' during rename.
+097 ==> 198100 - ACDSee XMP sidecar from Raw pictures is not loaded.
+098 ==> 303194 - Filemanagement xml-files.
+099 ==> 313856 - Re-enable the possibility to set up the shortcuts for rating and labeling (color and pick).
+100 ==> 294580 - Unclear status of jpg-pics: how to check for hidden or even malicious data in jpg?
+101 ==> 322652 - Crashes on camera import.
+102 ==> 312285 - Crash in image editor when moving to the next image.
+103 ==> 299755 - After latest X upgrades the Level Tools upgrade is a solid color (black, white, gray).
+104 ==> 328835 - Crash when opening "Configure Digikam" settings.
+105 ==> 329127 - Remove Tag menu entry is enabled if a picture has no Tags.
+106 ==> 297804 - Saving an image loses portait orientation.
+107 ==> 279996 - Crash while running face detection.
+108 ==> 278049 - Crash during tagging while scanning run in background (Digikam::ImageModel::removeRowPairs).
+109 ==> 262596 - Crash when finding faces (Digikam::ImageModel::removeRowPairs).
+110 ==> 329323 - Compile time error: flandmark_detector.cpp: No such file or directory.
+111 ==> 308734 - digiKam/kioslave: a lot of "KIO::Slave::timeout: Houston, we lost our slave" and "slave died".
+112 ==> 304207 - Progress manager: more control on appearance/disappearance.
+113 ==> 313678 - digiKam fails to know which images in my camera is new.
+114 ==> 314952 - Import window should not lock the interface while reading photos.
+115 ==> 282728 - Importing photos with "Date based subalbums". The folder name "date" is wrong.
+116 ==> 320398 - Select Album window should remember last used destination.
+117 ==> 

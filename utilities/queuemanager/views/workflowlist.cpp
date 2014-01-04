@@ -110,7 +110,7 @@ WorkflowList::WorkflowList(QWidget* const parent)
     QStringList failed;
     mngr->load(failed);
 
-    foreach (Workflow q, mngr->queueSettingsList())
+    foreach (const Workflow& q, mngr->queueSettingsList())
     {
         slotsAddQueueSettings(q.title);
     }

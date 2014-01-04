@@ -144,16 +144,16 @@ void FilterComboBox::defaultFilters(FilterList* const filters)
     if (filters->count() == 0)
     {
         Filter*       f = new Filter;
-        f->name         = i18n("All Files");
+        f->name         = i18nc("@item:inlistbox", "All Files");
         filters->append(f);
 
         f               = new Filter;
-        f->name         = i18n("Only New Files");
+        f->name         = i18nc("@item:inlistbox", "Only New Files");
         f->onlyNew      = true;
         filters->append(f);
 
         f               = new Filter;
-        f->name         = i18n("Raw Files");
+        f->name         = i18nc("@item:inlistbox", "Raw Files");
         f->mimeFilter   = "image/x-nikon-nef;image/x-fuji-raf;image/x-adobe-dng;"
                           "image/x-panasonic-raw;image/x-olympus-orf;image/x-kodak-dcr;"
                           "image/x-kodak-k25;image/x-sony-arw;image/x-minolta-mrw;"
@@ -163,12 +163,12 @@ void FilterComboBox::defaultFilters(FilterList* const filters)
         filters->append(f);
 
         f               = new Filter;
-        f->name         = i18n("JPG/TIFF Files");
+        f->name         = i18nc("@item:inlistbox", "JPG/TIFF Files");
         f->mimeFilter   = "image/jpeg;image/tiff";
         filters->append(f);
 
         f               = new Filter;
-        f->name         = i18n("Video Files");
+        f->name         = i18nc("@item:inlistbox", "Video Files");
         f->mimeFilter   = "video/quicktime;video/mp4;video/x-msvideo;video/mpeg";
         filters->append(f);
     }

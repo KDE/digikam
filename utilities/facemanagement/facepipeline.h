@@ -214,11 +214,14 @@ public:
     void plugDatabaseWriter(WriteMode mode);
     void plugDatabaseEditor();
     void plugTrainer();
-    void plugBenchmarker();
+    void plugDetectionBenchmarker();
+    void plugRecognitionBenchmarker();
     void construct();
 
     /** Cancels all processing */
     void cancel();
+    /** Cancels and waits for the pipeline to finish */
+    void shutDown();
 
     bool hasFinished() const;
     QString benchmarkResult() const;

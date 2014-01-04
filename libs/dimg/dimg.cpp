@@ -98,7 +98,7 @@ DImg::DImg()
     : m_priv(new Private)
 {
 }
-
+;
 DImg::DImg(const QByteArray& filePath, DImgLoaderObserver* const observer,
            const DRawDecoding& rawDecodingSettings)
     : m_priv(new Private)

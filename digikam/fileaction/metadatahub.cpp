@@ -1369,7 +1369,7 @@ void Digikam::MetadataHub::loadFaceTags(const ImageInfo info, QSize size)
 
     if(!facesList.isEmpty())
     {
-        foreach(DatabaseFace dface, facesList)
+        foreach(const DatabaseFace& dface, facesList)
         {
             QString faceName = FaceTags::faceNameForTag(dface.tagId());
 

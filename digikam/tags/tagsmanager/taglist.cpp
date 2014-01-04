@@ -80,7 +80,6 @@ TagList::TagList(TagMngrTreeView* const treeView, QWidget* const parent)
     d->tagList->setDragEnabled(true);
     d->tagList->setAcceptDrops(true);
     d->tagList->setDropIndicatorShown(true);
-    d->tagList->setSpacing(3);
 
     layout->addWidget(d->addButton);
     layout->addWidget(d->tagList);
@@ -160,7 +159,7 @@ void TagList::restoreSettings()
         QList<QVariant> itemData;
         itemData << QBrush(Qt::cyan, Qt::Dense2Pattern);
 
-        foreach(QString tagId, ids)
+        foreach(const QString& tagId, ids)
         {
             TAlbum* const item = AlbumManager::instance()->findTAlbum(tagId.toInt());
 
@@ -196,7 +195,7 @@ void TagList::slotAddPressed()
     QList<QVariant> itemData;
     itemData << QBrush(Qt::cyan, Qt::Dense2Pattern);
 
-    foreach(QModelIndex index, selected)
+    foreach(const QModelIndex& index, selected)
     {
         TAlbum* const album = static_cast<TAlbum*>(d->treeView->albumForIndex(index));
         itemData << album->id();
@@ -251,7 +250,7 @@ void TagList::slotDeleteSelected()
     if(sel.isEmpty())
         return;
 
-    foreach(QModelIndex index, sel)
+    foreach(const QModelIndex& index, sel)
     {
         ListItem* const item = static_cast<ListItem*>(index.internalPointer());
         d->tagListModel->deleteItem(item);

@@ -135,12 +135,44 @@ void UMSCamera::cancel()
     m_cancel = true;
 }
 
-void UMSCamera::getAllFolders(const QString& folder, QStringList& subFolderList)
+bool UMSCamera::getFolders(const QString& folder)
 {
-    m_cancel = false;
-    subFolderList.clear();
-    subFolderList.append(folder);
-    listFolders(folder, subFolderList);
+    if (m_cancel)
+    {
+        return false;
+    }
+
+    QDir dir(folder);
+    dir.setFilter(QDir::Dirs | QDir::Executable);
+
+    const QFileInfoList list = dir.entryInfoList();
+
+    if (list.isEmpty())
+    {
+        return false;
+    }
+
+    QFileInfoList::const_iterator fi;
+    QStringList subFolderList;
+    for (fi = list.constBegin() ; !m_cancel && (fi != list.constEnd()) ; ++fi)
+    {
+        if (fi->fileName() == "." || fi->fileName() == "..")
+        {
+            continue;
+        }
+
+        QString subFolder = folder + QString(folder.endsWith('/') ? "" : "/") + fi->fileName();
+        subFolderList.append(subFolder);
+
+    }
+    
+    if(subFolderList.isEmpty()) {
+        return false;
+    }
+    
+    emit signalFolderList(subFolderList);
+    
+    return true;
 }
 
 bool UMSCamera::getItemsInfoList(const QString& folder, bool useMetadata, CamItemInfoList& infoList)
@@ -183,7 +215,7 @@ void UMSCamera::getItemInfo(const QString& folder, const QString& itemName, CamI
     info.readPermissions  = fi.isReadable();
     info.writePermissions = fi.isWritable();
     info.mime             = mimeType(fi.suffix().toLower());
-
+    
     if (!info.mime.isEmpty())
     {
         if (useMetadata)
@@ -204,6 +236,12 @@ void UMSCamera::getItemInfo(const QString& folder, const QString& itemName, CamI
             // Only use file system date
             info.ctime = ImageScanner::creationDateFromFilesystem(fi);
         }
+    }
+    
+    // if we have an image, allow previews
+    // TODO allow video previews at some point?
+    if(info.mime.startsWith("image/")) {
+        info.previewPossible = true;
     }
 }
 
@@ -510,39 +548,6 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
     return true;
 }
 
-void UMSCamera::listFolders(const QString& folder, QStringList& subFolderList)
-{
-    if (m_cancel)
-    {
-        return;
-    }
-
-    QDir dir(folder);
-    dir.setFilter(QDir::Dirs | QDir::Executable);
-
-    const QFileInfoList list = dir.entryInfoList();
-
-    if (list.isEmpty())
-    {
-        return;
-    }
-
-    QFileInfoList::const_iterator fi;
-    QString                       subfolder;
-
-    for (fi = list.constBegin() ; !m_cancel && (fi != list.constEnd()) ; ++fi)
-    {
-        if (fi->fileName() == "." || fi->fileName() == "..")
-        {
-            continue;
-        }
-
-        subfolder = folder + QString(folder.endsWith('/') ? "" : "/") + fi->fileName();
-        subFolderList.append(subfolder);
-        listFolders(subfolder, subFolderList);
-    }
-}
-
 bool UMSCamera::cameraSummary(QString& summary)
 {
     summary =  QString(i18n("<b>Mounted Camera</b> driver for USB/IEEE1394 mass storage cameras and "
@@ -550,7 +555,8 @@ bool UMSCamera::cameraSummary(QString& summary)
 
     // we do not expect titel/model/etc. to contain newlines,
     // so we just escape HTML characters
-    summary += i18n("Title: <b>%1</b><br/>"
+    summary += i18nc("@info List of device properties",
+                    "Title: <b>%1</b><br/>"
                     "Model: <b>%2</b><br/>"
                     "Port: <b>%3</b><br/>"
                     "Path: <b>%4</b><br/>"
@@ -561,7 +567,8 @@ bool UMSCamera::cameraSummary(QString& summary)
                     Qt::escape(path()),
                     Qt::escape(uuid()));
 
-    summary += i18n("Thumbnails: <b>%1</b><br/>"
+    summary += i18nc("@info List of supported device operations",
+                    "Thumbnails: <b>%1</b><br/>"
                     "Capture image: <b>%2</b><br/>"
                     "Delete items: <b>%3</b><br/>"
                     "Upload items: <b>%4</b><br/>"

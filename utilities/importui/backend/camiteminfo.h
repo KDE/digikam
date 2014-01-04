@@ -113,6 +113,7 @@ public:
     int                colorLabel;           // Pre-picklabel value of camera file.
 
     QList<int>         tagIds;               // Pre-tags ids of camera file.
+    bool               previewPossible;
 };
 
 QDataStream& operator<<(QDataStream&, const CamItemInfo&);

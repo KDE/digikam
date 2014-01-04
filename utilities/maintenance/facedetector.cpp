@@ -123,7 +123,7 @@ FaceDetector::FaceDetector(const FaceScanSettings& settings, ProgressItem* const
         d->pipeline.plugTrainer();
         d->pipeline.construct();
     }
-    else if (settings.task == FaceScanSettings::Benchmark)
+    else if (settings.task == FaceScanSettings::BenchmarkDetection)
     {
         d->benchmark = true;
         d->pipeline.plugDatabaseFilter(FacePipeline::ScanAll);
@@ -138,7 +138,15 @@ FaceDetector::FaceDetector(const FaceScanSettings& settings, ProgressItem* const
             d->pipeline.plugFaceDetector();
         }
 
-        d->pipeline.plugBenchmarker();
+        d->pipeline.plugDetectionBenchmarker();
+        d->pipeline.construct();
+    }
+    else if (settings.task == FaceScanSettings::BenchmarkRecognition)
+    {
+        d->benchmark = true;
+        d->pipeline.plugRetrainingDatabaseFilter();
+        d->pipeline.plugFaceRecognizer();
+        d->pipeline.plugRecognitionBenchmarker();
         d->pipeline.construct();
     }
     else if ((settings.task == FaceScanSettings::DetectAndRecognize) || 
@@ -340,7 +348,7 @@ void FaceDetector::slotDone()
 
 void FaceDetector::slotCancel()
 {
-    d->pipeline.cancel();
+    d->pipeline.shutDown();
     MaintenanceTool::slotCancel();
 }
 

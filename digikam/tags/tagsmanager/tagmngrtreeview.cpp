@@ -77,7 +77,7 @@ void TagMngrTreeView::contextMenuEvent(QContextMenuEvent* event)
     qSort(selectedItems.begin(),selectedItems.end());
     QList<TAlbum*> items;
 
-    foreach(QModelIndex mIndex, selectedItems)
+    foreach(const QModelIndex& mIndex, selectedItems)
     {
         TAlbum* const temp = static_cast<TAlbum*>(albumForIndex(mIndex));
         items.push_back(temp);
@@ -152,7 +152,7 @@ void TagMngrTreeView::slotExpandSelected()
 {
     QModelIndexList list = selectionModel()->selectedIndexes();
 
-    foreach(QModelIndex index, list)
+    foreach(const QModelIndex& index, list)
     {
         expand(index);
     }

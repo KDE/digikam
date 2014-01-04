@@ -43,7 +43,8 @@ public:
         DetectAndRecognize,
         RecognizeMarkedFaces,
         RetrainAll,
-        Benchmark
+        BenchmarkDetection,
+        BenchmarkRecognition
     };
 
     // for detect and recognize

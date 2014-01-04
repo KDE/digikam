@@ -192,8 +192,7 @@ void DatabaseWatch::initializeRemote(DatabaseMode mode)
         d->connectWithDBus("imageTagChange", this,
                            SLOT(slotImageTagChangeDBus(QString,QString,Digikam::ImageTagChangeset)));
         d->connectWithDBus("collectionImageChange", this,
-                           SLOT(slotCollectionImageChangeDBus(const QString&,
-                                   const QString&, const Digikam::CollectionImageChangeset&)));
+                           SLOT(slotCollectionImageChangeDBus(QString,QString,Digikam::CollectionImageChangeset)));
         d->connectWithDBus("albumChange", this,
                            SLOT(slotAlbumChangeDBus(QString,QString,Digikam::AlbumChangeset)));
         d->connectWithDBus("tagChange", this,

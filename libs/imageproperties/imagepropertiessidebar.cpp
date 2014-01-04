@@ -86,7 +86,7 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget* const parent,
         m_propertiesTab->setVideoInfoDisable(true);
 
     appendTab(m_propertiesTab, SmallIcon("document-properties"),   i18n("Properties"));
-    appendTab(m_metadataTab,   SmallIcon("exifinfo"),              i18n("Metadata"));
+    appendTab(m_metadataTab,   SmallIcon("exifinfo"),              i18n("Metadata")); // krazy:exclude=iconnames
     appendTab(m_colorTab,      SmallIcon("format-fill-color"),     i18n("Colors"));
     appendTab(m_gpsTab,        SmallIcon("applications-internet"), i18n("Geolocation"));
 

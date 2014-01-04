@@ -81,6 +81,11 @@ NewItemsFinder::NewItemsFinder(const FinderMode mode, const QStringList& folders
     connect(ScanController::instance(), SIGNAL(partialScanDone(QString)),
             this, SLOT(slotPartialScanDone(QString)));
 
+    // If we are scanning for newly imported files, we need to have the folders for scanning...
+    if(mode == ScheduleCollectionScan && foldersToScan.isEmpty()) {
+        kWarning() << "NewItemsFinder called without any folders. This is a bug.";
+    }
+    
     d->foldersToScan = foldersToScan;
     d->foldersToScan.sort();
 }

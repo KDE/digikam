@@ -122,7 +122,7 @@ void ImageQualitySorter::slotStart()
 
         if (d->mode == NonAssignedItems)
         {
-            foreach(QString path, aPaths)
+            foreach(const QString& path, aPaths)
             {
                 if (dirty.contains(path))
                 {

@@ -63,6 +63,7 @@ public:
         detectBlur(0),
         detectNoise(0),
         detectCompression(0),
+        detectOverexposure(0),
         setRejected(0),
         setPending(0),
         setAccepted(0),
@@ -76,6 +77,7 @@ public:
     QCheckBox*    detectBlur;
     QCheckBox*    detectNoise;
     QCheckBox*    detectCompression;
+    QCheckBox*    detectOverexposure;
     QCheckBox*    setRejected;
     QCheckBox*    setPending;
     QCheckBox*    setAccepted;
@@ -127,6 +129,9 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
 
     d->detectCompression = new QCheckBox(i18n("Detect Compression"), d->optionsView);
     d->detectCompression->setWhatsThis(i18n("Detect the amount of compression in the images passed to it"));
+    
+    d->detectOverexposure = new QCheckBox(i18n("Detect Overexposure"), d->optionsView);
+    d->detectOverexposure->setWhatsThis(i18n("Detect if the images are overexposed"));
 
     // ------------------------------------------------------------------------------
 
@@ -228,6 +233,7 @@ void SetupImageQualitySorter::applySettings()
     imq.detectBlur        = d->detectBlur->isChecked();
     imq.detectNoise       = d->detectNoise->isChecked();
     imq.detectCompression = d->detectCompression->isChecked();
+    imq.detectOverexposure= d->detectOverexposure->isChecked();
     imq.lowQRejected      = d->setRejected->isChecked();
     imq.mediumQPending    = d->setPending->isChecked();
     imq.highQAccepted     = d->setAccepted->isChecked();
@@ -251,6 +257,7 @@ void SetupImageQualitySorter::readSettings()
     d->detectBlur->setChecked(imq.detectBlur);
     d->detectNoise->setChecked(imq.detectNoise);
     d->detectCompression->setChecked(imq.detectCompression);
+    d->detectOverexposure->setChecked(imq.detectOverexposure);
     d->setRejected->setChecked(imq.lowQRejected);
     d->setPending->setChecked(imq.mediumQPending);
     d->setAccepted->setChecked(imq.highQAccepted);

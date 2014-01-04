@@ -793,10 +793,8 @@ void SetupCamera::slotAddCamera()
 {
     CameraSelection* const select = new CameraSelection;
 
-    connect(select, SIGNAL(signalOkClicked(const QString&, const QString&,
-                                           const QString&, const QString&)),
-            this,   SLOT(slotAddedCamera(const QString&, const QString&,
-                                         const QString&, const QString&)));
+    connect(select, SIGNAL(signalOkClicked(QString,QString,QString,QString)),
+            this,   SLOT(slotAddedCamera(QString,QString,QString,QString)));
 
     select->show();
 }
@@ -834,10 +832,8 @@ void SetupCamera::slotEditCamera()
     CameraSelection* const select = new CameraSelection;
     select->setCamera(ctype->title(), ctype->model(), ctype->port(), ctype->path());
 
-    connect(select, SIGNAL(signalOkClicked(const QString&, const QString&,
-                                           const QString&, const QString&)),
-            this,   SLOT(slotEditedCamera(const QString&, const QString&,
-                                          const QString&, const QString&)));
+    connect(select, SIGNAL(signalOkClicked(QString,QString,QString,QString)),
+            this,   SLOT(slotEditedCamera(QString,QString,QString,QString)));
 
     select->show();
 }
