@@ -6,7 +6,7 @@
  * Date        : 2013-07-25
  * Description : image region widget item for image editor.
  *
- * Copyright (C) 2013 Yiou Wang <geow812 at gmail dot com>
+ * Copyright (C) 2013-2014 Yiou Wang <geow812 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,6 +24,7 @@
 #include "imageregionitem.h"
 
 // Qt includes
+
 #include <QPixmap>
 #include <QPainter>
 
@@ -32,6 +33,7 @@
 #include <klocale.h>
 
 // Local includes
+
 #include "previewtoolbar.h"
 #include "dimgitemspriv.h"
 #include "iccsettingscontainer.h"
@@ -50,27 +52,27 @@ public:
   
     Private():
         renderingPreviewMode(PreviewToolBar::PreviewBothImagesVertCont),
-        onMouseMovePreviewToggled(false)
+        onMouseMovePreviewToggled(false),
+        view(0),
+        iface(0)
     {
-        view = 0;
-        iface = 0;
     }
 
-    QPixmap   pix;          // Pixmap of original region to render for paint method.
-    QPixmap   targetPix;    // Pixmap of target region to render for paint method.
-    DImg      targetImage;
-    int       renderingPreviewMode;
-    QRect     drawRect;
-    QPolygon  hightlightPoints;
-    bool      onMouseMovePreviewToggled;
+    QPixmap            pix;          // Pixmap of original region to render for paint method.
+    QPixmap            targetPix;    // Pixmap of target region to render for paint method.
+    DImg               targetImage;
+    int                renderingPreviewMode;
+    QRect              drawRect;
+    QPolygon           hightlightPoints;
+    bool               onMouseMovePreviewToggled;
     ImageRegionWidget* view;
-    ImageIface* iface;
+    ImageIface*        iface;
 };
 
-ImageRegionItem::ImageRegionItem(ImageRegionWidget *widget):
+ImageRegionItem::ImageRegionItem(ImageRegionWidget* const widget):
     d_ptr(new Private)
 {
-    d_ptr->view = widget;
+    d_ptr->view  = widget;
     d_ptr->iface = new ImageIface;
     setImage(d_ptr->iface->original()->copy());
     setAcceptHoverEvents(true);
@@ -90,7 +92,7 @@ QRect ImageRegionItem::getImageRegion()
 void ImageRegionItem::setTargetImage(const DImg& img)
 {
     d_ptr->targetImage = img;
-    d_ptr->targetPix = d_ptr->iface->convertToPixmap(d_ptr->targetImage);
+    d_ptr->targetPix   = d_ptr->iface->convertToPixmap(d_ptr->targetImage);
     update();
 }
 
@@ -104,12 +106,12 @@ void ImageRegionItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* o
 {
     Q_D(GraphicsDImgItem);
     Q_UNUSED(option);
-    
-    d_ptr->drawRect = boundingRect().toAlignedRect();
-    QRect     pixSourceRect;
 
-    QSize   completeSize = boundingRect().size().toSize();
-    DImg scaledImage     = d->image.smoothScale(completeSize.width(), completeSize.height(), Qt::IgnoreAspectRatio);
+    d_ptr->drawRect = boundingRect().toAlignedRect();
+    QRect pixSourceRect;
+
+    QSize   completeSize   = boundingRect().size().toSize();
+    DImg scaledImage       = d->image.smoothScale(completeSize.width(), completeSize.height(), Qt::IgnoreAspectRatio);
     DImg scaledTargetImage = d_ptr->targetImage.smoothScale(completeSize.width(), completeSize.height(), Qt::IgnoreAspectRatio);
 
     if (d->cachedPixmaps.find(d_ptr->drawRect, &d_ptr->pix, &pixSourceRect))
@@ -131,11 +133,11 @@ void ImageRegionItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* o
         {
             IccManager   manager(scaledImage);
             IccTransform monitorICCtrans = manager.displayTransform(widget);
-            d_ptr->pix = scaledImage.convertToPixmap(monitorICCtrans);
+            d_ptr->pix                   = scaledImage.convertToPixmap(monitorICCtrans);
 
             IccManager   targetManager(scaledTargetImage);
             IccTransform targetMonitorICCtrans = targetManager.displayTransform(widget);
-            d_ptr->targetPix = scaledTargetImage.convertToPixmap(targetMonitorICCtrans);
+            d_ptr->targetPix                   = scaledTargetImage.convertToPixmap(targetMonitorICCtrans);
         }
         else
         {
@@ -171,9 +173,10 @@ void ImageRegionItem::setHighLightPoints(const QPolygon& pointsList)
 
 void ImageRegionItem::paintExtraData(QPainter* p)
 {
-    QRect viewportRect  = d_ptr->view->viewport()->rect();
-    QRect fontRectBefore  = p->fontMetrics().boundingRect(viewportRect, 0, i18n("Before"));
+    QRect viewportRect   = d_ptr->view->viewport()->rect();
+    QRect fontRectBefore = p->fontMetrics().boundingRect(viewportRect, 0, i18n("Before"));
     QRect fontRectAfter  = p->fontMetrics().boundingRect(viewportRect, 0, i18n("After"));
+
     if (!d_ptr->pix.isNull())
     {
         p->setRenderHint(QPainter::Antialiasing, true);
@@ -247,7 +250,7 @@ void ImageRegionItem::paintExtraData(QPainter* p)
 
             for (int i = 0 ; i < d_ptr->hightlightPoints.count() ; ++i)
             {
-                pt = d_ptr->hightlightPoints.point(i);
+                pt             = d_ptr->hightlightPoints.point(i);
                 int zoomFactor = this->zoomSettings()->zoomFactor();
 
                 if (d_ptr->drawRect.contains(pt))
@@ -277,17 +280,16 @@ void ImageRegionItem::paintExtraData(QPainter* p)
     }
 }
 
-void ImageRegionItem::hoverEnterEvent ( QGraphicsSceneHoverEvent * )
+void ImageRegionItem::hoverEnterEvent(QGraphicsSceneHoverEvent*)
 {
     d_ptr->onMouseMovePreviewToggled = false;
     update();
 }
 
-void ImageRegionItem::hoverLeaveEvent ( QGraphicsSceneHoverEvent * )
+void ImageRegionItem::hoverLeaveEvent(QGraphicsSceneHoverEvent*)
 {
     d_ptr->onMouseMovePreviewToggled = true;
     update();
 }
 
-}
-// namespace Digikam
+} // namespace Digikam

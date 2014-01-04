@@ -6,7 +6,7 @@
  * Date        : 2013-07-25
  * Description : image region widget item for image editor.
  *
- * Copyright (C) 2013 Yiou Wang <geow812 at gmail dot com>
+ * Copyright (C) 2013-2014 Yiou Wang <geow812 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,25 +47,24 @@ class DIGIKAM_EXPORT ImageRegionItem : public GraphicsDImgItem
 
 public:
 
-    ImageRegionItem(ImageRegionWidget* view);
+    ImageRegionItem(ImageRegionWidget* const view);
     virtual ~ImageRegionItem();
-    
+
     void setTargetImage(const DImg& img);
     void setHighLightPoints(const QPolygon& pointsList);
     void setRenderingPreviewMode(int mode);
     void paintExtraData(QPainter* painter);
     QRect getImageRegion();
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
-    void hoverEnterEvent ( QGraphicsSceneHoverEvent * );
-    void hoverLeaveEvent ( QGraphicsSceneHoverEvent * );
+    void hoverEnterEvent(QGraphicsSceneHoverEvent*);
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
 
 private:
 
     class Private;
     Private* const d_ptr;
-
 };
 
 }  // namespace Digikam
 
-#endif
+#endif // IMAGEREGIONITEM_H
