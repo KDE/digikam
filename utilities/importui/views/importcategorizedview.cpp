@@ -118,7 +118,6 @@ ImportCategorizedView::~ImportCategorizedView()
     delete d;
 }
 
-//FIXME: Needs testing
 void ImportCategorizedView::installDefaultModels(CameraController* const controller)
 {
     ImportModel* model             = new ImportModel(this);
@@ -127,11 +126,6 @@ void ImportCategorizedView::installDefaultModels(CameraController* const control
 
     filterModel->setSourceImportModel(model);
 
-//    ImportSettings* settings = ImportSettings::instance();
-
-    filterModel->setSortRole(CamItemSortSettings::SortByFileName);
-    filterModel->setSortOrder(CamItemSortSettings::AscendingOrder);
-    filterModel->setCategorizationMode(CamItemSortSettings::CategoryByFormat);
     filterModel->sort(0); // an initial sorting is necessary
 
     setModels(model, filterModel);

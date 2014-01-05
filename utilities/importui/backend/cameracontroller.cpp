@@ -117,6 +117,7 @@ public:
         skipAll(false),
         canceled(false),
         running(false),
+        folderList(0),
         downloadTotal(0),
         parent(0),
         timer(0),
@@ -129,6 +130,8 @@ public:
     bool                  skipAll;
     bool                  canceled;
     bool                  running;
+
+    QStringList           folderList;
 
     int                   downloadTotal;
 
@@ -500,7 +503,13 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
             d->camera->getFolders(folder);
 
-            // TODO do we need to track when the folder listing is completed? it'd make things much harder...
+            // if the the last folder of the folderList is met, the will be no other listing to do,
+            // so we can send signal to sort the itmes.
+            if (d->folderList.last() == folder)
+            {
+                emit signalFinished();
+            }
+
             sendLogMsg(i18n("The folders in %1 have been listed.", folder));
             break;
         }
@@ -537,6 +546,12 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
             emit signalFileList(list);
 
+            // folderList is empty so when listing files is finished there will be no other listing to do,
+            // so we can send signal to sort the items.
+            if (d->folderList.last() == "")
+            {
+                emit signalFinished();
+            }
             sendLogMsg(i18n("The files in %1 have been listed.", folder));
 
             break;
@@ -784,6 +799,11 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             break;
         }
     }
+}
+
+void CameraController::getFolderList(const QStringList& lastFolder)
+{
+    d->folderList = lastFolder;
 }
 
 void CameraController::sendLogMsg(const QString& msg, DHistoryView::EntryType type,

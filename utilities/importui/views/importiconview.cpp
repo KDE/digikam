@@ -67,9 +67,6 @@ void ImportIconView::init(CameraController* const controller)
 
     ImportSettings* settings = ImportSettings::instance();
 
-    //FIXME: What is the purpose of this line.
-    importFilterModel()->setCategorizationMode(CamItemSortSettings::CategoryByFolder);
-
     setThumbnailSize((ThumbnailSize::Size)settings->getDefaultIconSize());
 
     importImageModel()->setDragDropHandler(new ImportDragDropHandler(importImageModel()));
@@ -78,9 +75,6 @@ void ImportIconView::init(CameraController* const controller)
     setDropIndicatorShown(false);
 
     setToolTipEnabled(settings->showToolTipsIsValid());
-    importFilterModel()->setSortRole((CamItemSortSettings::SortRole)settings->getImageSortBy());
-    importFilterModel()->setSortOrder((CamItemSortSettings::SortOrder)settings->getImageSortOrder());
-    importFilterModel()->setCategorizationMode((CamItemSortSettings::CategorizationMode)settings->getImageGroupMode());
 
     // selection overlay
     addSelectionOverlay(d->normalDelegate);
