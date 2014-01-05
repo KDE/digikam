@@ -270,6 +270,7 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     QGridLayout* const grid = new QGridLayout(panel);
     d->listView             = new QTreeWidget(panel);
+    d->listView->sortItems(0, Qt::AscendingOrder);
     d->listView->setColumnCount(4);
     d->listView->setRootIsDecorated(false);
     d->listView->setSelectionMode(QAbstractItemView::SingleSelection);
