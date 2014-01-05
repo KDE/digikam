@@ -129,5 +129,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 115 ==> 282728 - Importing photos with "Date based subalbums". The folder name "date" is wrong.
 116 ==> 320398 - Select Album window should remember last used destination.
 117 ==> 313880 - "Sort items" choice not respected in the import Dialog box.
-118 ==> 
+118 ==> 323937 - Sorting of several camera types is missing or wrong.
+119 ==> 
 
