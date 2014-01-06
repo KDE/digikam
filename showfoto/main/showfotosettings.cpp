@@ -48,6 +48,8 @@ public:
     Private() :
         deleteItem2Trash(true),
         drawFormatOverThumbnail(false),
+        showSplash(true),
+        reverseSort(false),
         showToolTip(true),
         showFileName(true),
         showFileDate(false),
@@ -61,7 +63,8 @@ public:
         showPhotoWB(false),
         showPhotoDate(true),
         showPhotoMode(false),
-        rightSideBarStyle(0)
+        rightSideBarStyle(0),
+        sortOrder(0)
     {
     }
 
@@ -72,8 +75,10 @@ public:
     static const QString configCurrentTheme;
     static const QString configRightSideBarStyle;
     static const QString configApplicationStyle;
-
     static const QString configDrawFormatOverThumbnail;
+    static const QString configShowSplash;
+    static const QString configSortOrder;
+    static const QString configReverseSort;
 
     static const QString configShowToolTip;
 
@@ -94,8 +99,9 @@ public:
     static const QString configToolTipsFont;
 
     bool                 deleteItem2Trash;
-
     bool                 drawFormatOverThumbnail;
+    bool                 showSplash;
+    bool                 reverseSort;
 
     bool                 showToolTip;
 
@@ -114,6 +120,7 @@ public:
     bool                 showPhotoMode;
 
     int                  rightSideBarStyle;
+    int                  sortOrder;
 
     QFont                toolTipsFont;
 
@@ -128,15 +135,16 @@ public:
 //Configuration Group
 const QString ShowfotoSettings::Private::configGroupDefault("ImageViewer Settings");
 
-//Showfoto Generals Settings
+//Misc. & Showfoto Generals Settings
 const QString ShowfotoSettings::Private::configLastOpenedDir("Last Opened Directory");
 const QString ShowfotoSettings::Private::configDeleteItem2Trash("DeleteItem2Trash");
 const QString ShowfotoSettings::Private::configCurrentTheme("Theme");
 const QString ShowfotoSettings::Private::configRightSideBarStyle("Sidebar Title Style");
 const QString ShowfotoSettings::Private::configApplicationStyle("Application Style");
-
-//Misc.
 const QString ShowfotoSettings::Private::configDrawFormatOverThumbnail("ShowMimeOverImage");
+const QString ShowfotoSettings::Private::configShowSplash("ShowSplash");
+const QString ShowfotoSettings::Private::configSortOrder("SortOrder");
+const QString ShowfotoSettings::Private::configReverseSort("ReverseSort");
 
 //Tool Tip Enable/Disable
 const QString ShowfotoSettings::Private::configShowToolTip("Show ToolTips");
@@ -195,7 +203,10 @@ ShowfotoSettings::~ShowfotoSettings()
 void ShowfotoSettings::init()
 {
     d->rightSideBarStyle       = 0;
+    d->sortOrder               = 0;
     d->deleteItem2Trash        = true;
+    d->showSplash              = true;
+    d->reverseSort             = false;
 
     d->drawFormatOverThumbnail = false;
 
@@ -226,7 +237,9 @@ void ShowfotoSettings::readSettings()
     d->theme                   = group.readEntry(d->configCurrentTheme, Digikam::ThemeManager::instance()->defaultThemeName());
     d->rightSideBarStyle       = group.readEntry(d->configRightSideBarStyle, 0);
     d->applicationStyle        = group.readEntry(d->configApplicationStyle, kapp->style()->objectName());
-
+    d->showSplash              = group.readEntry(d->configShowSplash, true);
+    d->sortOrder               = group.readEntry(d->configSortOrder, 0);
+    d->reverseSort             = group.readEntry(d->configReverseSort, false);
     d->drawFormatOverThumbnail = group.readEntry(d->configDrawFormatOverThumbnail, false);
 
     d->showToolTip             = group.readEntry(d->configShowToolTip, true);
@@ -276,6 +289,21 @@ bool ShowfotoSettings::getShowFormatOverThumbnail() const
 QString ShowfotoSettings::getApplicationStyle() const
 {
     return d->applicationStyle;
+}
+
+bool ShowfotoSettings::getShowSplash() const
+{
+    return d->showSplash;
+}
+
+bool ShowfotoSettings::getSortOrder() const
+{
+    return d->sortOrder;
+}
+
+bool ShowfotoSettings::getReverseSort() const
+{
+    return d->reverseSort;
 }
 
 bool ShowfotoSettings::getShowToolTip() const
@@ -423,9 +451,44 @@ void ShowfotoSettings::setLastOpenedDir(const QString& dir)
     d->group.writeEntry(d->configLastOpenedDir,dir);
 }
 
+void ShowfotoSettings::setDeleteItem2Trash(bool D2t)
+{
+    d->group.writeEntry(d->configDeleteItem2Trash, D2t);
+}
+
 void ShowfotoSettings::setCurrentTheme(const QString& theme)
 {    
     d->group.writeEntry(d->configCurrentTheme, theme);
+}
+
+void ShowfotoSettings::setRightSideBarStyle(int style)
+{
+    d->group.writeEntry(d->configRightSideBarStyle, style);
+}
+
+void ShowfotoSettings::setApplicationStyle(const QString& style)
+{
+    d->group.writeEntry(d->configApplicationStyle, style);
+}
+
+void ShowfotoSettings::setShowFormatOverThumbnail(bool show)
+{
+    d->group.writeEntry(d->configDrawFormatOverThumbnail, show);
+}
+
+void ShowfotoSettings::setShowSplash(bool show)
+{
+    d->group.writeEntry(d->configShowSplash, show);
+}
+
+void ShowfotoSettings::setSortOrder(int order)
+{
+    d->group.writeEntry(d->configSortOrder, order);
+}
+
+void ShowfotoSettings::setReverseSort(bool reverse)
+{
+    d->group.writeEntry(d->configReverseSort, reverse);
 }
 
 void ShowfotoSettings::syncConfig()

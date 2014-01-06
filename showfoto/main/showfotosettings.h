@@ -43,14 +43,29 @@ public:
 
     void readSettings();    
 
-    QString getLastOpenedDir() const;
-    bool getDeleteItem2Trash() const;
-    QString getCurrentTheme() const;
-    int getRightSideBarStyle() const;
+    //Misc. Getters
+    QString getLastOpenedDir()    const;
+    bool getDeleteItem2Trash()    const;
+    QString getCurrentTheme()     const;
+    int getRightSideBarStyle()    const;
     QString getApplicationStyle() const;
-
     bool getShowFormatOverThumbnail() const;
+    bool getShowSplash()  const;
+    bool getSortOrder()   const;
+    bool getReverseSort() const;
 
+    //Misc. Setters
+    void setLastOpenedDir(const QString& dir);
+    void setDeleteItem2Trash(bool D2t);
+    void setCurrentTheme(const QString& theme);
+    void setRightSideBarStyle(int style);
+    void setApplicationStyle(const QString& style);
+    void setShowFormatOverThumbnail(bool show);
+    void setShowSplash(bool show);
+    void setSortOrder(int order);
+    void setReverseSort(bool reverse);
+
+    //ToolTip Getters
     bool getShowToolTip() const;
 
     bool getShowFileName() const;
@@ -69,6 +84,7 @@ public:
 
     QFont getToolTipFont() const;
 
+    //ToolTip Setters
     void setShowToolTip(bool show);
 
     void setShowFileName(bool show);
@@ -77,18 +93,15 @@ public:
     void setShowFileType(bool show);
     void setShowFileDim(bool show);
 
-    void setShowPhotoMake(bool show)  ;
-    void setShowPhotoFocal(bool show) ;
-    void setShowPhotoExpo(bool show)  ;
-    void setShowPhotoFlash(bool show) ;
-    void setShowPhotoWB(bool show)    ;
-    void setShowPhotoDate(bool show)  ;
-    void setShowPhotoMode(bool show)  ;
+    void setShowPhotoMake(bool show);
+    void setShowPhotoFocal(bool show);
+    void setShowPhotoExpo(bool show);
+    void setShowPhotoFlash(bool show);
+    void setShowPhotoWB(bool show);
+    void setShowPhotoDate(bool show);
+    void setShowPhotoMode(bool show);
 
-    void setToolTipFont(QFont font);
-
-    void setLastOpenedDir(const QString& dir);
-    void setCurrentTheme(const QString& theme);
+    void setToolTipFont(QFont font);    
 
     void syncConfig();
 
