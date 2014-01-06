@@ -57,20 +57,40 @@ public:
     bool getShowFileDate() const;
     bool getShowFileSize() const;
     bool getShowFileType() const;
-    bool getShowFileDim() const;
+    bool getShowFileDim()  const;
 
-    bool getShowPhotoMake() const;
+    bool getShowPhotoMake()  const;
     bool getShowPhotoFocal() const;
-    bool getShowPhotoExpo() const;
+    bool getShowPhotoExpo()  const;
     bool getShowPhotoFlash() const;
-    bool getShowPhotoWB() const;
-    bool getShowPhotoDate() const;
-    bool getShowPhotoMode() const;
+    bool getShowPhotoWB()    const;
+    bool getShowPhotoDate()  const;
+    bool getShowPhotoMode()  const;
 
     QFont getToolTipFont() const;
 
+    void setShowToolTip(bool show);
+
+    void setShowFileName(bool show);
+    void setShowFileDate(bool show);
+    void setShowFileSize(bool show);
+    void setShowFileType(bool show);
+    void setShowFileDim(bool show);
+
+    void setShowPhotoMake(bool show)  ;
+    void setShowPhotoFocal(bool show) ;
+    void setShowPhotoExpo(bool show)  ;
+    void setShowPhotoFlash(bool show) ;
+    void setShowPhotoWB(bool show)    ;
+    void setShowPhotoDate(bool show)  ;
+    void setShowPhotoMode(bool show)  ;
+
+    void setToolTipFont(QFont font);
+
     void setLastOpenedDir(const QString& dir);
     void setCurrentTheme(const QString& theme);
+
+    void syncConfig();
 
 private:
 

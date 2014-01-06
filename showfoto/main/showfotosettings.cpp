@@ -122,6 +122,7 @@ public:
     QString              applicationStyle;
 
     KSharedConfigPtr     config;
+    KConfigGroup         group;
 };
 
 //Configuration Group
@@ -181,6 +182,7 @@ ShowfotoSettings::ShowfotoSettings()
     : QObject(), d(new Private)
 {
     d->config = KGlobal::config();
+    d->group  = d->config->group(d->configGroupDefault);
     init();
     readSettings();
 }
@@ -217,8 +219,7 @@ void ShowfotoSettings::init()
 
 void ShowfotoSettings::readSettings()
 {
-    KSharedConfigPtr config    = d->config;
-    KConfigGroup group         = config->group(d->configGroupDefault);
+    KConfigGroup group         = d->group;
 
     d->lastOpenedDir           = group.readEntry(d->configLastOpenedDir, QString());
     d->deleteItem2Trash        = group.readEntry(d->configDeleteItem2Trash, true);
@@ -347,19 +348,88 @@ QFont ShowfotoSettings::getToolTipFont() const
     return d->toolTipsFont;
 }
 
+void ShowfotoSettings::setShowToolTip(bool show)
+{
+    d->group.writeEntry(d->configShowToolTip, show);
+}
+
+void ShowfotoSettings::setShowFileName(bool show)
+{
+    d->group.writeEntry(d->configShowFileName, show);
+}
+
+void ShowfotoSettings::setShowFileDate(bool show)
+{
+    d->group.writeEntry(d->configShowFileDate, show);
+}
+
+void ShowfotoSettings::setShowFileSize(bool show)
+{
+    d->group.writeEntry(d->configShowFileSize, show);
+}
+
+void ShowfotoSettings::setShowFileType(bool show)
+{
+    d->group.writeEntry(d->configShowFileType, show);
+}
+
+void ShowfotoSettings::setShowFileDim(bool show)
+{
+    d->group.writeEntry(d->configShowFileDim, show);
+}
+
+void ShowfotoSettings::setShowPhotoMake(bool show)
+{
+    d->group.writeEntry(d->configShowPhotoMake, show);
+}
+
+void ShowfotoSettings::setShowPhotoFocal(bool show)
+{
+    d->group.writeEntry(d->configShowPhotoFocal, show);
+}
+
+void ShowfotoSettings::setShowPhotoExpo(bool show)
+{
+    d->group.writeEntry(d->configShowPhotoExpo, show);
+}
+
+void ShowfotoSettings::setShowPhotoFlash(bool show)
+{
+    d->group.writeEntry(d->configShowPhotoFlash, show);
+}
+
+void ShowfotoSettings::setShowPhotoWB(bool show)
+{
+    d->group.writeEntry(d->configShowPhotoWB, show);
+}
+
+void ShowfotoSettings::setShowPhotoDate(bool show)
+{
+    d->group.writeEntry(d->configShowPhotoDate, show);
+}
+
+void ShowfotoSettings::setShowPhotoMode(bool show)
+{
+    d->group.writeEntry(d->configShowPhotoMode, show);
+}
+
+void ShowfotoSettings::setToolTipFont(QFont font)
+{
+    d->group.writeEntry(d->configToolTipsFont, font);
+}
+
 void ShowfotoSettings::setLastOpenedDir(const QString& dir)
 {
-    KConfigGroup group         = d->config->group(d->configGroupDefault);
-
-    group.writeEntry(d->configLastOpenedDir,dir);
-    d->config->sync();
+    d->group.writeEntry(d->configLastOpenedDir,dir);
 }
 
 void ShowfotoSettings::setCurrentTheme(const QString& theme)
-{
-    KConfigGroup group         = d->config->group(d->configGroupDefault);
+{    
+    d->group.writeEntry(d->configCurrentTheme, theme);
+}
 
-    group.writeEntry(d->configCurrentTheme, theme);
+void ShowfotoSettings::syncConfig()
+{
     d->config->sync();
 }
 

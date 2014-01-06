@@ -42,6 +42,7 @@
 // Local includes
 
 #include "dfontselect.h"
+#include "showfotosettings.h"
 
 using namespace Digikam;
 
@@ -68,24 +69,9 @@ public:
         showToolTipsBox(0),
         fileSettingBox(0),
         photoSettingBox(0),
-        fontSelect(0)
+        fontSelect(0),
+        settings(0)
     {}
-
-    static const QString configGroupName;
-    static const QString configShowToolTipsEntry;
-    static const QString configToolTipsFontEntry;
-    static const QString configToolTipsShowFileNameEntry;
-    static const QString configToolTipsShowFileDateEntry;
-    static const QString configToolTipsShowFileSizeEntry;
-    static const QString configToolTipsShowImageTypeEntry;
-    static const QString configToolTipsShowImageDimEntry;
-    static const QString configToolTipsShowPhotoMakeEntry;
-    static const QString configToolTipsShowPhotoDateEntry;
-    static const QString configToolTipsShowPhotoFocalEntry;
-    static const QString configToolTipsShowPhotoExpoEntry;
-    static const QString configToolTipsShowPhotoModeEntry;
-    static const QString configToolTipsShowPhotoFlashEntry;
-    static const QString configToolTipsShowPhotoWBEntry;
 
     QCheckBox*           showFileDateBox;
     QCheckBox*           showFileNameBox;
@@ -105,23 +91,8 @@ public:
     QGroupBox*           photoSettingBox;
 
     DFontSelect*         fontSelect;
+    ShowfotoSettings*    settings;
 };
-
-const QString SetupToolTip::Private::configGroupName("ImageViewer Settings");
-const QString SetupToolTip::Private::configShowToolTipsEntry("Show ToolTips");
-const QString SetupToolTip::Private::configToolTipsFontEntry("ToolTips Font");
-const QString SetupToolTip::Private::configToolTipsShowFileNameEntry("ToolTips Show File Name");
-const QString SetupToolTip::Private::configToolTipsShowFileDateEntry("ToolTips Show File Date");
-const QString SetupToolTip::Private::configToolTipsShowFileSizeEntry("ToolTips Show File Size");
-const QString SetupToolTip::Private::configToolTipsShowImageTypeEntry("ToolTips Show Image Type");
-const QString SetupToolTip::Private::configToolTipsShowImageDimEntry("ToolTips Show Image Dim");
-const QString SetupToolTip::Private::configToolTipsShowPhotoMakeEntry("ToolTips Show Photo Make");
-const QString SetupToolTip::Private::configToolTipsShowPhotoDateEntry("ToolTips Show Photo Date");
-const QString SetupToolTip::Private::configToolTipsShowPhotoFocalEntry("ToolTips Show Photo Focal");
-const QString SetupToolTip::Private::configToolTipsShowPhotoExpoEntry("ToolTips Show Photo Expo");
-const QString SetupToolTip::Private::configToolTipsShowPhotoModeEntry("ToolTips Show Photo Mode");
-const QString SetupToolTip::Private::configToolTipsShowPhotoFlashEntry("ToolTips Show Photo Flash");
-const QString SetupToolTip::Private::configToolTipsShowPhotoWBEntry("ToolTips Show Photo WB");
 
 // --------------------------------------------------------
 
@@ -248,53 +219,49 @@ SetupToolTip::~SetupToolTip()
 
 void SetupToolTip::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(d->configGroupName);
+    d->settings = ShowfotoSettings::instance();
 
-    d->showToolTipsBox->setChecked(group.readEntry(d->configShowToolTipsEntry, true));
-    d->fontSelect->setFont(group.readEntry(d->configToolTipsFontEntry,         KGlobalSettings::generalFont()));
+    d->showToolTipsBox->setChecked(d->settings->getShowToolTip());
+    d->fontSelect->setFont(d->settings->getToolTipFont());
 
-    d->showFileNameBox->setChecked(group.readEntry(d->configToolTipsShowFileNameEntry,   true));
-    d->showFileDateBox->setChecked(group.readEntry(d->configToolTipsShowFileDateEntry,   false));
-    d->showFileSizeBox->setChecked(group.readEntry(d->configToolTipsShowFileSizeEntry,   false));
-    d->showImageTypeBox->setChecked(group.readEntry(d->configToolTipsShowImageTypeEntry, false));
-    d->showImageDimBox->setChecked(group.readEntry(d->configToolTipsShowImageDimEntry,   true));
+    d->showFileNameBox->setChecked(d->settings->getShowFileName());
+    d->showFileDateBox->setChecked(d->settings->getShowFileDate());
+    d->showFileSizeBox->setChecked(d->settings->getShowFileSize());
+    d->showImageTypeBox->setChecked(d->settings->getShowFileType());
+    d->showImageDimBox->setChecked(d->settings->getShowFileDim());
 
-    d->showPhotoMakeBox->setChecked(group.readEntry(d->configToolTipsShowPhotoMakeEntry,   true));
-    d->showPhotoDateBox->setChecked(group.readEntry(d->configToolTipsShowPhotoDateEntry,   true));
-    d->showPhotoFocalBox->setChecked(group.readEntry(d->configToolTipsShowPhotoFocalEntry, true));
-    d->showPhotoExpoBox->setChecked(group.readEntry(d->configToolTipsShowPhotoExpoEntry,   true));
-    d->showPhotoModeBox->setChecked(group.readEntry(d->configToolTipsShowPhotoModeEntry,   true));
-    d->showPhotoFlashBox->setChecked(group.readEntry(d->configToolTipsShowPhotoFlashEntry, false));
-    d->showPhotoWbBox->setChecked(group.readEntry(d->configToolTipsShowPhotoWBEntry,       false));
+    d->showPhotoMakeBox->setChecked(d->settings->getShowPhotoMake());
+    d->showPhotoDateBox->setChecked(d->settings->getShowPhotoDate());
+    d->showPhotoFocalBox->setChecked(d->settings->getShowPhotoFocal());
+    d->showPhotoExpoBox->setChecked(d->settings->getShowPhotoExpo());
+    d->showPhotoModeBox->setChecked(d->settings->getShowPhotoMode());
+    d->showPhotoFlashBox->setChecked(d->settings->getShowPhotoFlash());
+    d->showPhotoWbBox->setChecked(d->settings->getShowPhotoWB());
 
-    d->fileSettingBox->setEnabled(d->showToolTipsBox->isChecked());
-    d->photoSettingBox->setEnabled(d->showToolTipsBox->isChecked());
+    d->fileSettingBox->setEnabled(d->settings->getShowToolTip());
+    d->photoSettingBox->setEnabled(d->settings->getShowToolTip());
 }
 
 void SetupToolTip::applySettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(d->configGroupName);
+    d->settings->setShowToolTip(d->showToolTipsBox->isChecked());
+    d->settings->setToolTipFont(d->fontSelect->font());
 
-    group.writeEntry(d->configShowToolTipsEntry,           d->showToolTipsBox->isChecked());
-    group.writeEntry(d->configToolTipsFontEntry,           d->fontSelect->font());
+    d->settings->setShowFileName(d->showFileNameBox->isChecked());
+    d->settings->setShowFileDate(d->showFileDateBox->isChecked());
+    d->settings->setShowFileSize(d->showFileSizeBox->isChecked());
+    d->settings->setShowFileType(d->showImageTypeBox->isChecked());
+    d->settings->setShowFileDim(d->showImageDimBox->isChecked());
 
-    group.writeEntry(d->configToolTipsShowFileNameEntry,   d->showFileNameBox->isChecked());
-    group.writeEntry(d->configToolTipsShowFileDateEntry,   d->showFileDateBox->isChecked());
-    group.writeEntry(d->configToolTipsShowFileSizeEntry,   d->showFileSizeBox->isChecked());
-    group.writeEntry(d->configToolTipsShowImageTypeEntry,  d->showImageTypeBox->isChecked());
-    group.writeEntry(d->configToolTipsShowImageDimEntry,   d->showImageDimBox->isChecked());
+    d->settings->setShowPhotoMake(d->showPhotoMakeBox->isChecked());
+    d->settings->setShowPhotoDate(d->showPhotoDateBox->isChecked());
+    d->settings->setShowPhotoFocal(d->showPhotoFocalBox->isChecked());
+    d->settings->setShowPhotoExpo(d->showPhotoExpoBox->isChecked());
+    d->settings->setShowPhotoMode(d->showPhotoModeBox->isChecked());
+    d->settings->setShowPhotoFlash(d->showPhotoFlashBox->isChecked());
+    d->settings->setShowPhotoWB(d->showPhotoWbBox->isChecked());
 
-    group.writeEntry(d->configToolTipsShowPhotoMakeEntry,  d->showPhotoMakeBox->isChecked());
-    group.writeEntry(d->configToolTipsShowPhotoDateEntry,  d->showPhotoDateBox->isChecked());
-    group.writeEntry(d->configToolTipsShowPhotoFocalEntry, d->showPhotoFocalBox->isChecked());
-    group.writeEntry(d->configToolTipsShowPhotoExpoEntry,  d->showPhotoExpoBox->isChecked());
-    group.writeEntry(d->configToolTipsShowPhotoModeEntry,  d->showPhotoModeBox->isChecked());
-    group.writeEntry(d->configToolTipsShowPhotoFlashEntry, d->showPhotoFlashBox->isChecked());
-    group.writeEntry(d->configToolTipsShowPhotoWBEntry,    d->showPhotoWbBox->isChecked());
-
-    config->sync();
+    d->settings->syncConfig();
 }
 
 }  // namespace ShowFoto

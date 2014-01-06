@@ -481,6 +481,7 @@ void ShowFoto::saveSettings()
 
     d->settings->setLastOpenedDir(d->lastOpenedDirectory.toLocalFile());
     d->settings->setCurrentTheme(Digikam::ThemeManager::instance()->currentThemeName());
+    d->settings->syncConfig();
 
     d->rightSideBar->saveState();
 }
