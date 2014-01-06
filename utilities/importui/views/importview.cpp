@@ -659,15 +659,11 @@ void ImportView::slotTogglePreviewMode(const CamItemInfo& info, bool downloadPre
           && !info.isNull() )
     {
         d->lastViewMode = d->stackedView->viewMode();
-
-        if (d->stackedView->viewMode() == ImportStackedView::PreviewCameraMode)
-        {
-            d->stackedView->setPreviewItem(info, d->iconView->previousInfo(info), d->iconView->nextInfo(info));
+        CamItemInfo previous = CamItemInfo();
+        if(!downloadPreview) {
+            previous = d->iconView->previousInfo(info);
         }
-        else
-        {
-            d->stackedView->setPreviewItem(info, CamItemInfo(), CamItemInfo());
-        }
+        d->stackedView->setPreviewItem(info, previous, d->iconView->nextInfo(info));
     }
     else
     {
