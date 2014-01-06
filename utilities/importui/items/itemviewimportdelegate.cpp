@@ -459,7 +459,7 @@ void ItemViewImportDelegate::drawDownloadIndicator(QPainter* p, const QRect& r, 
 
     if (itemType == CamItemInfo::DownloadedNo) // TODO: CamItemInfo::NewPicture
     {
-        icon = KIconLoader::global()->loadIcon("get-hot-new-stuff", KIconLoader::NoGroup, KIconLoader::SizeSmall);
+        icon = KIconLoader::global()->loadIcon("favorites", KIconLoader::NoGroup, KIconLoader::SizeSmall);
     }
 
     if (itemType == CamItemInfo::DownloadedYes)
@@ -477,14 +477,15 @@ void ItemViewImportDelegate::drawLockIndicator(QPainter* p, const QRect& r, int 
 {
     QIcon icon;
 
+    if (lockStatus == 1)
+    {
+        return; // draw lock only when image is locked
+        //icon = KIconLoader::global()->loadIcon("object-unlocked", KIconLoader::NoGroup, KIconLoader::SizeSmall);
+    }
+    
     if (lockStatus == 0)
     {
         icon = KIconLoader::global()->loadIcon("object-locked", KIconLoader::NoGroup, KIconLoader::SizeSmall);
-    }
-
-    if (lockStatus == 1)
-    {
-        icon = KIconLoader::global()->loadIcon("object-unlocked", KIconLoader::NoGroup, KIconLoader::SizeSmall);
     }
 
     qreal op = p->opacity();

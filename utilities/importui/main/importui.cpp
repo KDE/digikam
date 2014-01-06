@@ -350,11 +350,11 @@ void ImportUI::setupActions()
 
     // --- Download actions ----------------------------------------------------
 
-    d->downloadAction = new KActionMenu(KIcon("get-hot-new-stuff"), i18nc("@title:menu", "Download"), this);
+    d->downloadAction = new KActionMenu(KIcon("document-save"), i18nc("@title:menu", "Download"), this);
     d->downloadAction->setDelayed(false);
     actionCollection()->addAction("importui_imagedownload", d->downloadAction);
 
-    d->downloadNewAction = new KAction(KIcon("get-hot-new-stuff"), i18nc("@action", "Download New"), this);
+    d->downloadNewAction = new KAction(KIcon("favorites"), i18nc("@action", "Download New"), this);
     d->downloadNewAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_N));
     connect(d->downloadNewAction, SIGNAL(triggered()), this, SLOT(slotDownloadNew()));
     actionCollection()->addAction("importui_imagedownloadnew", d->downloadNewAction);
