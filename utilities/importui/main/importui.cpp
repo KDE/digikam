@@ -720,6 +720,9 @@ void ImportUI::setupCameraController(const QString& model, const QString& port, 
 {
     d->controller = new CameraController(this, d->cameraTitle, model, port, path);
 
+    connect(d->controller, SIGNAL(signalFinished()),
+            this, SLOT(slotSortItems()));
+
     connect(d->controller, SIGNAL(signalConnected(bool)),
             this, SLOT(slotConnected(bool)));
 
@@ -743,9 +746,6 @@ void ImportUI::setupCameraController(const QString& model, const QString& port, 
 
     connect(d->controller, SIGNAL(signalDownloadComplete(QString,QString,QString,QString)),
             this, SLOT(slotDownloadComplete(QString,QString,QString,QString)));
-
-    //connect(d->controller, SIGNAL(signalFinished()),
-    //this, SLOT(slotFinished()));
 
     connect(d->controller, SIGNAL(signalSkipped(QString,QString)),
             this, SLOT(slotSkipped(QString,QString)));
@@ -877,6 +877,13 @@ DownloadSettings ImportUI::downloadSettings() const
     DownloadSettings settings = d->advancedSettings->settings();
     d->scriptingSettings->settings(&settings);
     return settings;
+}
+
+void ImportUI::slotSortItems()
+{
+    d->view->slotGroupImages(ImportSettings::instance()->getImageGroupMode());
+    d->view->slotSortImagesBy(ImportSettings::instance()->getImageSortBy());
+    d->view->slotSortImagesOrder(ImportSettings::instance()->getImageSortOrder());
 }
 
 void ImportUI::slotCancelButton()
@@ -1196,6 +1203,7 @@ void ImportUI::slotFolderList(const QStringList& folderList)
     KConfigGroup group        = config->group(d->configGroupName);
     bool useMetadata          = group.readEntry(d->configUseFileMetadata, false);
 
+    d->controller->getFolderList(folderList); // send the folder list to the controller to be able to determine if listing is finish.
     // when getting a list of subfolders, request their contents and also their subfolders
     for (QStringList::const_iterator it = folderList.constBegin();
          it != folderList.constEnd(); ++it)

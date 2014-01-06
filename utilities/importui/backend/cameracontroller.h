@@ -96,6 +96,7 @@ public:
     void openFile(const QString& folder, const QString& file);
 
     QPixmap mimeTypeThumbnail(const QString& itemName, int thumbSize) const;
+    void getFolderList(const QStringList& lastFolder);
 
 Q_SIGNALS:
 

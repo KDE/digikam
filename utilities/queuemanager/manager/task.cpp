@@ -216,7 +216,7 @@ void Task::run()
                 else
                 {
                     i++;
-                    dest.setFileName(nfi.completeBaseName() + QString("_%1.").arg(i) + nfi.completeSuffix());
+                    dest.setFileName(fi.completeBaseName() + QString("_%1.").arg(i) + fi.completeSuffix());
                     fileFound = true;
                 }
             }
