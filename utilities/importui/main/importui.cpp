@@ -373,21 +373,21 @@ void ImportUI::setupActions()
 
     // -------------------------------------------------------------------------
 
-    d->downloadDelNewAction = new KAction(i18nc("@action", "Download & Delete New"), this);
+    d->downloadDelNewAction = new KAction(i18nc("@action", "Download && Delete New"), this);
     d->downloadDelNewAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_N));
     connect(d->downloadDelNewAction, SIGNAL(triggered()), this, SLOT(slotDownloadAndDeleteNew()));
     actionCollection()->addAction("importui_imagedownloaddeletenew", d->downloadDelNewAction);
 
     // -----------------------------------------------------------------
 
-    d->downloadDelSelectedAction = new KAction(i18nc("@action", "Download & Delete Selected"), this);
+    d->downloadDelSelectedAction = new KAction(i18nc("@action", "Download && Delete Selected"), this);
     connect(d->downloadDelSelectedAction, SIGNAL(triggered()), this, SLOT(slotDownloadAndDeleteSelected()));
     actionCollection()->addAction("importui_imagedownloaddeleteselected", d->downloadDelSelectedAction);
     d->downloadDelSelectedAction->setEnabled(false);
 
     // -------------------------------------------------------------------------
 
-    d->downloadDelAllAction = new KAction(i18nc("@action", "Download & Delete All"), this);
+    d->downloadDelAllAction = new KAction(i18nc("@action", "Download && Delete All"), this);
     connect(d->downloadDelAllAction, SIGNAL(triggered()), this, SLOT(slotDownloadAndDeleteAll()));
     actionCollection()->addAction("importui_imagedownloaddeleteall", d->downloadDelAllAction);
 
@@ -1725,7 +1725,7 @@ void ImportUI::slotSelectNew()
 
     foreach (CamItemInfo info, infos)
     {
-        if (info.downloaded == CamItemInfo::NewPicture)
+        if (info.downloaded == CamItemInfo::DownloadedNo)
         {
             toBeSelected << info;
         }
