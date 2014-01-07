@@ -161,6 +161,7 @@ void ImageHistogram::run()
 
 void ImageHistogram::calculate()
 {
+    // TODO this gets even called with null img
     if (d->img.isNull())
     {
         emit calculationFinished(false);
@@ -198,7 +199,9 @@ void ImageHistogram::calculate()
         unsigned short blue, green, red, alpha;
         unsigned short* const data = reinterpret_cast<unsigned short*>(d->img.bits());
 
-        for (i = 0 ; (i < d->img.width() * d->img.height() * 4) && runningFlag() ; i += 4)
+        // count here instead of inside the loop, because d is not optimized because it's not defined in the header
+        uint count = d->img.width() * d->img.height() * 4;
+        for (i = 0 ; i < count && runningFlag() ; i += 4)
         {
             blue  = data[i    ];
             green = data[i + 1];
@@ -227,7 +230,9 @@ void ImageHistogram::calculate()
         uchar blue, green, red, alpha;
         const uchar* const data = d->img.bits();
 
-        for (i = 0 ; (i < d->img.width() * d->img.height() * 4) && runningFlag() ; i += 4)
+        // count here instead of inside the loop, because d is not optimized because it's not defined in the header
+        uint count = d->img.width() * d->img.height() * 4;
+        for (i = 0 ; i < count && runningFlag() ; i += 4)
         {
             blue  = data[i    ];
             green = data[i + 1];
