@@ -41,69 +41,81 @@ public:
 
     static ShowfotoSettings* instance();
 
-    void readSettings();    
+    void readSettings();
+    void syncConfig();
 
-    //Misc. Getters
-    QString getLastOpenedDir()    const;
-    bool getDeleteItem2Trash()    const;
-    QString getCurrentTheme()     const;
-    int getRightSideBarStyle()    const;
-    QString getApplicationStyle() const;
-    bool getShowFormatOverThumbnail() const;
-    bool getShowSplash()  const;
-    bool getSortOrder()   const;
-    bool getReverseSort() const;
+    // -- Misc. Settings ---------------------------------------
 
-    //Misc. Setters
+    QString getLastOpenedDir() const;
     void setLastOpenedDir(const QString& dir);
+
+    bool getDeleteItem2Trash() const;
     void setDeleteItem2Trash(bool D2t);
+
+    QString getCurrentTheme() const;
     void setCurrentTheme(const QString& theme);
+
+    int getRightSideBarStyle() const;
     void setRightSideBarStyle(int style);
+
+    QString getApplicationStyle() const;
     void setApplicationStyle(const QString& style);
+
+    bool getShowFormatOverThumbnail() const;
     void setShowFormatOverThumbnail(bool show);
+
+    bool getShowSplash() const;
     void setShowSplash(bool show);
+
+    bool getSortOrder() const;
     void setSortOrder(int order);
+
+    bool getReverseSort() const;
     void setReverseSort(bool reverse);
 
-    //ToolTip Getters
+    // -- ToolTip Settings --------------------------------------
+
     bool getShowToolTip() const;
-
-    bool getShowFileName() const;
-    bool getShowFileDate() const;
-    bool getShowFileSize() const;
-    bool getShowFileType() const;
-    bool getShowFileDim()  const;
-
-    bool getShowPhotoMake()  const;
-    bool getShowPhotoFocal() const;
-    bool getShowPhotoExpo()  const;
-    bool getShowPhotoFlash() const;
-    bool getShowPhotoWB()    const;
-    bool getShowPhotoDate()  const;
-    bool getShowPhotoMode()  const;
-
-    QFont getToolTipFont() const;
-
-    //ToolTip Setters
     void setShowToolTip(bool show);
 
+    bool getShowFileName() const;
     void setShowFileName(bool show);
+
+    bool getShowFileDate() const;
     void setShowFileDate(bool show);
+
+    bool getShowFileSize() const;
     void setShowFileSize(bool show);
+
+    bool getShowFileType() const;
     void setShowFileType(bool show);
+
+    bool getShowFileDim() const;
     void setShowFileDim(bool show);
 
+    bool getShowPhotoMake() const;
     void setShowPhotoMake(bool show);
+
+    bool getShowPhotoFocal() const;
     void setShowPhotoFocal(bool show);
+
+    bool getShowPhotoExpo() const;
     void setShowPhotoExpo(bool show);
+
+    bool getShowPhotoFlash() const;
     void setShowPhotoFlash(bool show);
+
+    bool getShowPhotoWB() const;
     void setShowPhotoWB(bool show);
+
+    bool getShowPhotoDate() const;
     void setShowPhotoDate(bool show);
+
+    bool getShowPhotoMode() const;
     void setShowPhotoMode(bool show);
 
-    void setToolTipFont(QFont font);    
-
-    void syncConfig();
+    QFont getToolTipFont() const;
+    void setToolTipFont(QFont font);
 
 private:
 
