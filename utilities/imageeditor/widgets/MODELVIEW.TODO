@@ -1,0 +1,40 @@
+Model-view port of image editor canvas TODO list:
+
+01/ Current image loaded in editor do not show any information relevant in right sidebar (as image properties, metadata, colors, etc...).
+
+02/ Select a rectangle over canvas and change zoom level. Selected region is not maintained at the right place.
+
+03/ Select a rectangle over canvas and crop image. Sometime the resulted image is broken.
+
+04/ Press mouse wheel button to pan canvas content do not work.
+
+05/ Select a rectangle over canvas. region position and size are displayed on statusbar. Deselect selection, nothing change : full image size must be shown.
+
+06/ Fit image to window, and now switch zoom to 100%. canvas show a black hole from cyberspace.
+
+07/ Changing zoom level with CTRL+mouse wheel must follow the position of cursor over canvas to zoom in/out image content.
+
+08/ Applying Color/Negative menu option crash digiKam : 
+
+[KCrash Handler]
+#5  0x00007f8da1814230 in QWidget::backgroundRole() const () from /lib64/libQtGui.so.4
+#6  0x00007f8da85ddb00 in Digikam::EditorTool::setBackgroundColor (this=0xc15fe70, bg=...) at /mnt/devel/GIT/3.x/core/utilities/imageeditor/editor/editortool.cpp:311
+#7  0x00007f8da85e091a in Digikam::EditorToolIface::themeChanged (this=0x7cc58d0) at /mnt/devel/GIT/3.x/core/utilities/imageeditor/editor/editortooliface.cpp:248
+#8  0x00007f8da85e02a2 in Digikam::EditorToolIface::loadTool (this=0x7cc58d0, tool=0xc15fe70) at /mnt/devel/GIT/3.x/core/utilities/imageeditor/editor/editortooliface.cpp:140
+#9  0x00007f8da86015f1 in Digikam::ImagePlugin::loadTool (this=0x8e82be0, tool=0xc15fe70) at /mnt/devel/GIT/3.x/core/utilities/imageeditor/plugin/imageplugin.cpp:58
+#10 0x00007f8ce79c2e30 in DigikamColorImagePlugin::ImagePlugin_Color::slotFilm (this=0x8e82be0) at /mnt/devel/GIT/3.x/core/imageplugins/color/imageplugin_color.cpp:398
+#11 0x00007f8ce79bf30f in DigikamColorImagePlugin::ImagePlugin_Color::qt_static_metacall (_o=0x8e82be0, _c=QMetaObject::InvokeMetaMethod, _id=14, _a=0x7fffc6d71970) at /mnt/devel/GIT/3.x/build/core/imageplugins/color/imageplugin_color.moc:87
+
+In fact it's the same dysfunction with all other editor tools... It's certainly due to you recent backgroundRole() warning patch commited. Few days ago, this crash was not reproducible.
+
+09/ Select a rectangle over canvas. Sometime, selection mode still active after to complete selection. Without to press any mouse button, selection area can be changed as well when mouse is simply moved over canvas.
+
+10/ Use zoom in/out buttons from status bar. Image is zommed through the center of image which is fine, but when zoom level fit content, image is discentered on the top/left corner.
+
+11/ Go to Setup/Editor page and change background color of canvas (use Red for ex). Nothing happen.
+
+12/ Go to Setup/Editor page and set over/under exposure indicator to be very restrictive (as 5% value for both). Nothing happen if image content is under-exposed or over-exposed if you turn on .
+
+13/ Go to Setup/CM and set a dumy monitor profile as ProRGB. Enable CM from statusbar and look as nothing happen (color rendered in canvas must be corrupted)
+
+14/ Edit/Select All do nothing.
