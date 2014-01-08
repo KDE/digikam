@@ -311,8 +311,9 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
 
     kDebug() << "Use DImg loader to get thumbnail from : " << path;
 
-    DImg dimgThumb(path);
-
+    DImg dimgThumb;
+    // skip loading the data we don't need to speed it up.
+    dimgThumb.load(path, false /*loadMetadata*/, false /*loadICCData*/, false /*loadUniqueHash*/, false /*loadHistory*/);
     if (!dimgThumb.isNull())
     {
         thumbnail = dimgThumb.copyQImage();

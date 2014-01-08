@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="304" name="importui" >
+<gui version="305" name="importui" >
 
 <MenuBar>
 
@@ -86,11 +86,9 @@
 </MenuBar>
 
 <ToolBar name="mainToolBar" ><text>Main Toolbar</text>
-     <Action name="importui_capture" />
      <Action name="importui_imagedownload" />
      <Action name="importui_cancelprocess" />
      <Separator/>
-     <Action name="importui_imageupload" />
      <Action name="importui_imagelock" />
      <Separator/>
      <Separator/>

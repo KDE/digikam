@@ -713,8 +713,8 @@ void ImportNormalDelegate::updateRects()
 
     d->pickLabelRect   = QRect(d->margin, y, iconSize, iconSize);
 //  d->groupRect       = QRect(d->contentWidth - iconSize, y, iconSize, iconSize); // TODO
-    d->downloadRect    =  QRect(d->contentWidth - iconSize - 14, d->pixmapRect.top(), iconSize, iconSize);
-    d->lockRect        =  QRect(d->contentWidth - iconSize + 2, d->pixmapRect.top(), iconSize, iconSize);
+    d->lockRect        =  QRect(d->contentWidth - iconSize - 14, d->pixmapRect.top(), iconSize, iconSize);
+    d->downloadRect    =  QRect(d->contentWidth - iconSize + 2, d->pixmapRect.top(), iconSize, iconSize);
 
     if (importSettings->getIconShowRating())
     {

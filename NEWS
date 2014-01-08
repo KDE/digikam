@@ -130,5 +130,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 116 ==> 320398 - Select Album window should remember last used destination.
 117 ==> 313880 - "Sort items" choice not respected in the import Dialog box.
 118 ==> 323937 - Sorting of several camera types is missing or wrong.
-119 ==> 
+119 ==> 329652 - import (ctrl+n) does not import.
+120 ==> 
 

@@ -6,7 +6,7 @@
  * Date        : 2008-07-30
  * Description : digiKam about data.
  *
- * Copyright (C) 2008-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -103,7 +103,7 @@ KLocalizedString DAboutData::digiKamSlogan()
 
 KLocalizedString DAboutData::copyright()
 {
-    return ki18n("(c) 2002-2013, digiKam developers team");
+    return ki18n("(c) 2002-2014, digiKam developers team");
 }
 
 KUrl DAboutData::webProjectUrl()
@@ -113,65 +113,75 @@ KUrl DAboutData::webProjectUrl()
 
 void DAboutData::authorsRegistration(KAboutData& aboutData)
 {
+    // -- Core team --------------------------------------------------------------
+
     aboutData.addAuthor ( ki18n("Caulier Gilles"),
-                          ki18n("Main developer and coordinator"),
+                          ki18n("Developer and coordinator"),
                           "caulier dot gilles at gmail dot com",
-                          "http://www.digikam.org/?q=blog/3");
+                          "https://plus.google.com/+GillesCaulier"
+                        );
 
     aboutData.addAuthor ( ki18n("Marcel Wiesweg"),
                           ki18n("Developer"),
                           "marcel dot wiesweg at gmx dot de",
-                          "http://www.digikam.org/?q=blog/8");
+                          "https://www.facebook.com/marcel.wiesweg"
+                        );
 
     aboutData.addAuthor ( ki18n("Andi Clemens"),
                           ki18n("Developer"),
                           "andi dot clemens at gmail dot com",
-                          "http://www.digikam.org/?q=blog/135");
+                          "https://plus.google.com/110531606986594589135"
+                        );
+
+    aboutData.addAuthor ( ki18n("Michael G. Hansen"),
+                          ki18n("Developer"),
+                          "mike at mghansen dot de",
+                          "https://plus.google.com/u/0/104267286808136900704"
+                        );
+
+    // -- Contributors -----------------------------------------------------------
+
+    aboutData.addAuthor ( ki18n("Teemu Rytilahti"),
+                          ki18n("Developer"),
+                          "tpr at iki dot fi",
+                          "https://plus.google.com/u/0/105136119348505864693"
+                        );
 
     aboutData.addAuthor ( ki18n("Matthias Welwarsky"),
                           ki18n("Developer"),
-                          "matze at welwarsky dot de");
+                          "matze at welwarsky dot de",
+                          "https://plus.google.com/s/Matthias%20Welwarsky"
+                        );
 
     aboutData.addAuthor ( ki18n("Julien Narboux"),
                           ki18n("Developer"),
-                          "Julien at narboux dot fr");
-
-    aboutData.addAuthor ( ki18n("Julien Pontabry"),
-                          ki18n("Developer"),
-                          "julien dot pontabry at ulp dot u-strasbg dot fr");
+                          "Julien at narboux dot fr",
+                          "https://plus.google.com/+JulienNarboux"
+                        );
 
     aboutData.addAuthor ( ki18n("Patrick Spendrin"),
                           ki18n("Developer and Windows port"),
                           "patrick_spendrin at gmx dot de",
                           "http://saroengels.blogspot.com");
 
+    // -- Former contributors ----------------------------------------------------
+
+    aboutData.addCredit ( ki18n("Johannes Wienke"),
+                          ki18n("Developer"),
+                          "languitar at semipol dot de",
+                          "http://www.semipol.de");
+
+    aboutData.addAuthor ( ki18n("Julien Pontabry"),
+                          ki18n("Developer"),
+                          "julien dot pontabry at ulp dot u-strasbg dot fr");
+
     aboutData.addAuthor ( ki18n("Arnd Baecker"),
                           ki18n("Developer"),
-                          "arnd dot baecker at web dot de",
-                          "http://www.digikam.org/?q=blog/133");
-
-    aboutData.addAuthor ( ki18n("Renchi Raju"),
-                          ki18n("Developer (2002-2005)"),
-                          "renchi dot raju at gmail dot com");
-
-    aboutData.addAuthor ( ki18n("Joern Ahrens"),
-                          ki18n("Developer (2004-2005)"),
-                          "kde at jokele dot de",
-                          "http://www.digikam.org/?q=blog/1");
-
-    aboutData.addAuthor ( ki18n("Tom Albers"),
-                          ki18n("Developer (2004-2005)"),
-                          "tomalbers at kde dot nl",
-                          "http://www.omat.nl/drupal/?q=blog/1");
-
-    aboutData.addAuthor ( ki18n("Ralf Holzer"),
-                          ki18n("Developer (2004)"),
-                          "kde at ralfhoelzer dot com");
+                          "arnd dot baecker at web dot de");
 
     aboutData.addAuthor ( ki18n("Francisco J. Cruz"),
                           ki18n("Developer (2005-2006)"),
-                          "fj dot cruz at supercable dot es",
-                          "http://www.digikam.org/?q=blog/5");
+                          "fj dot cruz at supercable dot es");
 
     aboutData.addCredit ( ki18n("Pieter Edelman"),
                           ki18n("Developer"),
@@ -180,15 +190,6 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
     aboutData.addCredit ( ki18n("Holger Foerster"),
                           ki18n("Developer"),
                           "hamsi2k at freenet dot de");
-
-    aboutData.addCredit ( ki18n("Michael G. Hansen"),
-                          ki18n("Developer"),
-                          "mike at mghansen dot de");
-
-    aboutData.addCredit ( ki18n("Johannes Wienke"),
-                          ki18n("Developer"),
-                          "languitar at semipol dot de",
-                          "http://www.semipol.de");
 
     aboutData.addCredit ( ki18n("Risto Saukonpaa"),
                           ki18n("Design, icons, logo, banner, mockup, beta tester"),
@@ -218,10 +219,6 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
                           ki18n("Developer"),
                           "todd at theshoemakers dot net");
 
-    aboutData.addCredit ( ki18n("Gregory Kokanosky"),
-                          ki18n("Developer"),
-                          "gregory dot kokanosky at free dot fr");
-
     aboutData.addCredit ( ki18n("Gerhard Kulzer"),
                           ki18n("Handbook writer, alpha tester, webmaster"),
                           "gerhard at kulzer dot net");
@@ -233,10 +230,6 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
     aboutData.addCredit ( ki18n("Charles Bouveyron"),
                           ki18n("Beta tester"),
                           "c dot bouveyron at tuxfamily dot org");
-
-    aboutData.addCredit ( ki18n("Richard Groult"),
-                          ki18n("Plugin contributor and beta tester"),
-                          "Richard dot Groult at jalix dot org");
 
     aboutData.addCredit ( ki18n("Richard Taylor"),
                           ki18n("Feedback and patches. Handbook writer"),
@@ -257,6 +250,28 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
     aboutData.addCredit ( ki18n("Tung Nguyen"),
                           ki18n("Bug reports, feedback and icons"),
                           "ntung at free dot fr");
+
+    // -- Former Members ---------------------------------------------------------
+
+    aboutData.addAuthor ( ki18n("Renchi Raju"),
+                          ki18n("Developer (2002-2005)"),
+                          "renchi dot raju at gmail dot com"
+                          "https://www.facebook.com/renchi.raju"
+                        );
+
+    aboutData.addAuthor ( ki18n("Joern Ahrens"),
+                          ki18n("Developer (2004-2005)"),
+                          "kde at jokele dot de",
+                          "http://www.jokele.de/");
+
+    aboutData.addAuthor ( ki18n("Tom Albers"),
+                          ki18n("Developer (2004-2005)"),
+                          "tomalbers at kde dot nl",
+                          "http://www.omat.nl/drupal/?q=blog/1");
+
+    aboutData.addAuthor ( ki18n("Ralf Holzer"),
+                          ki18n("Developer (2004)"),
+                          "kde at ralfhoelzer dot com");
 }
 
 }  // namespace Digikam
