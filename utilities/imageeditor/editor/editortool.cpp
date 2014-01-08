@@ -308,7 +308,7 @@ void EditorTool::setBackgroundColor(const QColor& bg)
 
     if (view2)
     {
-        palette.setColor(view->backgroundRole(), bg);
+        palette.setColor(view2->backgroundRole(), bg);
         view2->setPalette(palette);
     }
 }
