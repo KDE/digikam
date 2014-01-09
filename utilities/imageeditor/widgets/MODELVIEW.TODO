@@ -4,7 +4,7 @@ MODEL-VIEW PORT OF IMAGE EDITOR CANVAS TODO LIST
 MAIN EDITOR CANVAS:
 -------------------
 
-01/ 
+01/ [FIXED]
 
 Current image loaded in editor do not show any information relevant in right sidebar (as image properties, metadata, colors, etc...).
 
@@ -71,7 +71,7 @@ Go to Setup/CM and set a dumy monitor profile as ProRGB. Enable CM from statusba
 
 "Edit/Select All" do nothing.
 
-15/ 
+15/ [FIXED]
 
 One slot connection from Editor is broken and visible on the console :
 

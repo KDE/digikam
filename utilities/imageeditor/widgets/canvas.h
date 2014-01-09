@@ -115,6 +115,7 @@ Q_SIGNALS:
     void signalZoomChanged(double zoom);
     void signalMaxZoom();
     void signalMinZoom();
+    void signalChanged();
     void signalSelected(bool);
     void signalRightButtonClicked();
     void signalShowNextImage();

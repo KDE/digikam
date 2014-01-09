@@ -804,6 +804,7 @@ void Canvas::slotModified()
     d->canvasItem->setImage(currentImage());
     updateContentsSize(true);
 
+    emit signalChanged();
 }
 
 void Canvas::slotCornerButtonPressed()
