@@ -131,5 +131,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 117 ==> 313880 - "Sort items" choice not respected in the import Dialog box.
 118 ==> 323937 - Sorting of several camera types is missing or wrong.
 119 ==> 329652 - import (ctrl+n) does not import.
-120 ==> 
+120 ==> 329608 - Thumbnail of picture in dolphin never updated after picture manipulation.
+121 ==> 
 
