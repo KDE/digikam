@@ -1009,6 +1009,7 @@ void Canvas::mousePressEvent(QMouseEvent* event)
                 d->rubber->setVisible(false);
             }
 
+            emit signalSelected(false);
             addRubber();
         }
     }

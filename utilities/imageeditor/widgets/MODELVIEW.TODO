@@ -20,7 +20,7 @@ Select a rectangle over canvas and crop image. Sometime the resulted image is br
 
 Press mouse wheel button to pan canvas content do not work.
 
-05/ 
+05/ [FIXED]
 
 Select a rectangle over canvas. region position and size are displayed on statusbar. Deselect selection, nothing change : full image size must be shown.
 
