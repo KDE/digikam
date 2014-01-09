@@ -2566,8 +2566,26 @@ bool EditorWindow::localFileRename(const QString& src, const QString& destPath)
     {
         filePermissions = stbuf.st_mode;
     }
-
 #endif
+
+    struct stat st;
+
+    if (::stat(QFile::encodeName(m_savingContext.srcURL.toLocalFile()), &st) == 0)
+    {
+        // See B.K.O #329608: Restore file modification time from original file only if updateFileTimeStamp for Setup/Metadata is turned off.
+
+        if (!MetadataSettings::instance()->settings().updateFileTimeStamp)
+        {
+            struct utimbuf ut;
+            ut.modtime = st.st_mtime;
+            ut.actime  = st.st_atime;
+
+            if (::utime(QFile::encodeName(src), &ut) != 0)
+            {
+                kWarning() << "Failed to restore modification time for file " << dest;
+            }
+        }
+    }
 
     // rename tmp file to dest
     // KDE::rename() takes care of QString -> bytestring encoding
@@ -2577,13 +2595,11 @@ bool EditorWindow::localFileRename(const QString& src, const QString& destPath)
     }
 
 #ifndef Q_OS_WIN
-
     // restore permissions
     if (::chmod(dstFileName, filePermissions) != 0)
     {
         kWarning() << "Failed to restore file permissions for file " << dstFileName;
     }
-
 #endif
 
     return true;

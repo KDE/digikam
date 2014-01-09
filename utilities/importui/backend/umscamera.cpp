@@ -7,7 +7,7 @@
  * Description : USB Mass Storage camera interface
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -154,6 +154,7 @@ bool UMSCamera::getFolders(const QString& folder)
 
     QFileInfoList::const_iterator fi;
     QStringList subFolderList;
+
     for (fi = list.constBegin() ; !m_cancel && (fi != list.constEnd()) ; ++fi)
     {
         if (fi->fileName() == "." || fi->fileName() == "..")
@@ -165,13 +166,14 @@ bool UMSCamera::getFolders(const QString& folder)
         subFolderList.append(subFolder);
 
     }
-    
-    if(subFolderList.isEmpty()) {
+
+    if(subFolderList.isEmpty())
+    {
         return false;
     }
-    
+
     emit signalFolderList(subFolderList);
-    
+
     return true;
 }
 
@@ -215,7 +217,7 @@ void UMSCamera::getItemInfo(const QString& folder, const QString& itemName, CamI
     info.readPermissions  = fi.isReadable();
     info.writePermissions = fi.isWritable();
     info.mime             = mimeType(fi.suffix().toLower());
-    
+
     if (!info.mime.isEmpty())
     {
         if (useMetadata)
@@ -237,10 +239,11 @@ void UMSCamera::getItemInfo(const QString& folder, const QString& itemName, CamI
             info.ctime = ImageScanner::creationDateFromFilesystem(fi);
         }
     }
-    
+
     // if we have an image, allow previews
     // TODO allow video previews at some point?
-    if(info.mime.startsWith("image/")) {
+    if(info.mime.startsWith("image/"))
+    {
         info.previewPossible = true;
     }
 }
@@ -390,8 +393,8 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
     sFile.close();
     dFile.close();
 
-    // set the file modification time of the downloaded file to that
-    // of the original file
+    // Set the file modification time of the downloaded file to the original file.
+    // NOTE: this behavior don't need to be managed through Setup/Metadata settings.
     struct stat st;
 
     if (::stat(QFile::encodeName(src), &st) == 0)
@@ -497,8 +500,8 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
     sFile.close();
     dFile.close();
 
-    // set the file modification time of the uploaded file to that
-    // of the original file
+    // Set the file modification time of the uploaded file to original file.
+    // NOTE: this behavior don't need to be managed through Setup/Metadata settings.
     struct stat st;
 
     if (::stat(QFile::encodeName(src), &st) == 0)
