@@ -1,4 +1,8 @@
-Model-view port of image editor canvas TODO list:
+MODEL-VIEW PORT OF IMAGE EDITOR CANVAS TODO LIST
+
+
+MAIN EDITOR CANVAS:
+-------------------
 
 01/ 
 
@@ -57,7 +61,7 @@ Go to Setup/Editor page and change background color of canvas (use Red for ex). 
 
 12/ 
 
-Go to Setup/Editor page and set over/under exposure indicator to be very restrictive (as 5% value for both). Nothing happen if image content is under-exposed or over-exposed if you turn on .
+Go to Setup/Editor page and set over/under exposure indicator to be very restrictive (as 5% value for both). Nothing happen if image content is under-exposed or over-exposed if you turn on.
 
 13/ 
 
@@ -74,4 +78,24 @@ One slot connection from Editor is broken and visible on the console :
 Object::connect: No such signal Digikam::Canvas::signalChanged() in /mnt/devel/GIT/3.x/core/utilities/imageeditor/editor/editorwindow.cpp:268
 Object::connect:  (receiver name: 'Image Editor')
 
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+EDITOR TOOL CANVAS (tested with BCG tool):
+------------------------------------------
+
+01/ 
+
+If a separate preview mode is selected (as before/after vetically), zoom in/out do must show after view on the canvas (if processing is long, zomm feature is unsuitable). We must show original image instead (before view)
+
+02/ 
+
+At a certain zoom level, switching from a preview mode to another one do not show after image at the righ place in the canvas. In fact tool computing is started but never stop (see progress bar on left/bottom)
+
+03/ 
+
+"Before" and "After" labels are not show over the canvas (on left/top corner of respected view) if zoom in/out is performed.
+
+04/ 
+
+At init of BCG tool, if separate preview mode is "vertical split contigous", separation line do not appears on canvas center.
 
