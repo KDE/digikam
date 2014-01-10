@@ -136,7 +136,7 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
     aboutData.addAuthor ( ki18n("Michael G. Hansen"),
                           ki18n("Developer"),
                           "mike at mghansen dot de",
-                          "https://plus.google.com/u/0/104267286808136900704"
+                          "http://www.mghansen.de"
                         );
 
     // -- Contributors -----------------------------------------------------------
