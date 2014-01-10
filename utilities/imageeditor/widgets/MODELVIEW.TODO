@@ -59,11 +59,11 @@ Use zoom in/out buttons from status bar. Image is zommed through the center of i
 
 Go to Setup/Editor page and change background color of canvas (use Red for ex). Nothing happen.
 
-12/ 
+12/ [FIXED]
 
 Go to Setup/Editor page and set over/under exposure indicator to be very restrictive (as 5% value for both). Nothing happen if image content is under-exposed or over-exposed if you turn on.
 
-13/ 
+13/ [FIXED]
 
 Go to Setup/CM and set a dumy monitor profile as ProRGB. Enable CM from statusbar and look as nothing happen (color rendered in canvas must be corrupted)
 

@@ -39,7 +39,7 @@ public:
     Canvas* canvas;
 };
 
-RubberItem::RubberItem(CanvasItem* const parent)
+RubberItem::RubberItem(ImagePreviewItem* const parent)
     : RegionFrameItem(parent), d(new Private)
 {
 }

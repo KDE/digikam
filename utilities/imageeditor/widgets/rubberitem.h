@@ -33,7 +33,7 @@
 // Local includes
 
 #include "canvas.h"
-#include "canvasitem.h"
+#include "imagepreviewitem.h"
 #include "regionframeitem.h"
 #include "digikam_export.h"
 
@@ -48,7 +48,7 @@ class DIGIKAM_EXPORT RubberItem : public RegionFrameItem
 
 public:
 
-    RubberItem(CanvasItem* const item);
+    RubberItem(ImagePreviewItem* const item);
     virtual ~RubberItem();
     void setCanvas(Canvas* const canvas);
 

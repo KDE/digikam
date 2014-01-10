@@ -51,7 +51,7 @@
 #include "exposurecontainer.h"
 #include "iofilesettings.h"
 #include "loadingcacheinterface.h"
-#include "canvasitem.h"
+#include "imagepreviewitem.h"
 #include "previewlayout.h"
 #include "imagezoomsettings.h"
 #include "clickdragreleaseitem.h"
@@ -108,7 +108,7 @@ public:
 
     QString                  errorMessage;
     
-    CanvasItem*              canvasItem;
+    ImagePreviewItem*        canvasItem;
 
     RubberItem*              rubber;
     ClickDragReleaseItem*    wrapItem;
@@ -121,7 +121,7 @@ Canvas::Canvas(QWidget* const parent)
     d->im     = new EditorCore();
     d->parent = parent;
     d->bgColor.setRgb(0, 0, 0);
-    d->canvasItem = new CanvasItem(this);
+    d->canvasItem = new ImagePreviewItem;
     setItem(d->canvasItem);
 
     d->qcheck = QPixmap(16, 16);
@@ -672,29 +672,34 @@ void Canvas::setICCSettings(const ICCSettingsContainer& cmSettings)
     d->canvasItem->clearCache();
     ICCSettingsContainer old = d->im->getICCSettings();
     d->im->setICCSettings(cmSettings);
+    viewport()->update();
 }
 
 void Canvas::setSoftProofingEnabled(bool enable)
 {
     d->canvasItem->clearCache();
     d->im->setSoftProofingEnabled(enable);
+    viewport()->update();
 }
 
 void Canvas::setExposureSettings(ExposureSettingsContainer* const expoSettings)
 {
     d->canvasItem->clearCache();
     d->im->setExposureSettings(expoSettings);
+    viewport()->update();
 }
 
 void Canvas::setExifOrient(bool exifOrient)
 {
     d->canvasItem->clearCache();
     d->im->setExifOrient(exifOrient);
+    viewport()->update();
 }
 
 void Canvas::slotRestore()
 {
     d->im->restore();
+    viewport()->update();
 }
 
 void Canvas::slotUndo(int steps)
