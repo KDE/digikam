@@ -132,5 +132,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 118 ==> 323937 - Sorting of several camera types is missing or wrong.
 119 ==> 329652 - import (ctrl+n) does not import.
 120 ==> 329608 - Thumbnail of picture in dolphin never updated after picture manipulation.
-121 ==> 
-
+121 ==> 307844 - digiKam import, ignore the user selection, replaces it by "all selected".
+122 ==> 
