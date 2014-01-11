@@ -89,6 +89,9 @@ public:
     MapWidgetView*                     mapView;
     ImportStackedView*                 stackedView;
     ImportStackedView::StackedViewMode lastViewMode;
+    
+    ImportImageModel*                  model;
+    ImportFilterModel*                 filterModel;
 
     //FIXME: FilterSideBarWidget* filterWidget;
 
@@ -110,9 +113,12 @@ void ImportView::Private::addPageUpDownActions(ImportView* const q, QWidget* con
             q, SLOT(slotPrevItem()));
 }
 
-ImportView::ImportView(ImportUI* const ui, QWidget* const parent)
+ImportView::ImportView(ImportUI* const ui, ImportImageModel* model, ImportFilterModel *filterModel, QWidget* const parent)
     : KHBox(parent), d(new Private)
 {
+    d->model = model;
+    d->filterModel = filterModel;
+    
     d->parent   = static_cast<ImportUI*>(ui);
     d->splitter = new SidebarSplitter;
     d->splitter->setFrameStyle(QFrame::NoFrame);
@@ -122,9 +128,12 @@ ImportView::ImportView(ImportUI* const ui, QWidget* const parent)
     d->splitter->setParent(this);
 
     // The dock area where the thumbnail bar is allowed to go.
+    // TODO qmainwindow here, wtf?
     d->dockArea    = new QMainWindow(this, Qt::Widget);
     d->splitter->addWidget(d->dockArea);
-    d->stackedView = new ImportStackedView(d->parent->getCameraController(), d->dockArea);
+    d->stackedView = new ImportStackedView(d->dockArea);
+    d->stackedView->setModels(d->model, d->filterModel);
+    d->stackedView->setViewMode(ImportStackedView::PreviewCameraMode); // call here, because the models need to be set first..
     d->dockArea->setCentralWidget(d->stackedView);
     d->stackedView->setDockArea(d->dockArea);
 

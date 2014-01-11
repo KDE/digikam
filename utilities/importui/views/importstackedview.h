@@ -58,7 +58,7 @@ public:
 
 public:
 
-    explicit ImportStackedView(CameraController* const controller, QWidget* const parent = 0);
+    explicit ImportStackedView(QWidget*const parent = 0);
     ~ImportStackedView();
 
     void setDockArea(QMainWindow*);
@@ -113,6 +113,7 @@ Q_SIGNALS:
 public Q_SLOTS:
 
     void slotEscapePreview();
+    void setModels(ImportImageModel* model, ImportFilterModel* filterModel);
 
 private Q_SLOTS:
 

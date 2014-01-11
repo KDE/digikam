@@ -232,10 +232,18 @@ ImportUI* ImportUI::instance()
 
 void ImportUI::setupUserArea()
 {
+    ImportModel* model             = new ImportModel(this);
+    model->setupCameraController(d->controller);
+    ImportFilterModel* filterModel = new ImportFilterModel(this);
+
+    filterModel->setSourceImportModel(model);
+
+    filterModel->sort(0); // an initial sorting is necessary
+    
     KHBox* const widget = new KHBox(this);
     d->splitter         = new SidebarSplitter(widget);
     KVBox* const vbox   = new KVBox(d->splitter);
-    d->view             = new ImportView(this, vbox);
+    d->view             = new ImportView(this, model, filterModel, vbox);
     d->historyView      = new DHistoryView(vbox);
     d->rightSideBar     = new ImagePropertiesSideBarCamGui(widget, d->splitter, KMultiTabBar::Right, true);
     d->rightSideBar->setObjectName("CameraGui Sidebar Right");

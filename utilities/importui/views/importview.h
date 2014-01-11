@@ -47,7 +47,7 @@ class ImportView : public KHBox
 
 public:
 
-    ImportView(ImportUI* const ui, QWidget* const parent);
+    ImportView(Digikam::ImportUI*const ui, Digikam::ImportImageModel* model, Digikam::ImportFilterModel* filterModel, QWidget*const parent);
     ~ImportView();
 
     void applySettings();

@@ -56,10 +56,8 @@ ImportIconView::ImportIconView(QWidget* const parent)
 {
 }
 
-void ImportIconView::init(CameraController* const controller)
+void ImportIconView::init()
 {
-    installDefaultModels(controller);
-
     d->normalDelegate = new ImportNormalDelegate(this);
 
     setItemDelegate(d->normalDelegate);
