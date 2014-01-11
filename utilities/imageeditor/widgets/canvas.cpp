@@ -664,7 +664,8 @@ void Canvas::setBackgroundColor(const QColor& color)
     }
 
     d->bgColor = color;
-    viewport()->update();
+    setBackgroundBrush(QBrush(color));
+    //viewport()->update();
 }
 
 void Canvas::setICCSettings(const ICCSettingsContainer& cmSettings)

@@ -104,65 +104,7 @@ void ImageRegionItem::setRenderingPreviewMode(int mode)
 
 void ImageRegionItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
-    Q_D(GraphicsDImgItem);
-    Q_UNUSED(option);
-
-    d_ptr->drawRect = boundingRect().toAlignedRect();
-    QRect pixSourceRect;
-
-    QSize   completeSize   = boundingRect().size().toSize();
-    DImg scaledImage       = d->image.smoothScale(completeSize.width(), completeSize.height(), Qt::IgnoreAspectRatio);
-    DImg scaledTargetImage = d_ptr->targetImage.smoothScale(completeSize.width(), completeSize.height(), Qt::IgnoreAspectRatio);
-
-    if (d->cachedPixmaps.find(d_ptr->drawRect, &d_ptr->pix, &pixSourceRect))
-    {
-        if (pixSourceRect.isNull())
-        {
-            painter->drawPixmap(d_ptr->drawRect.topLeft(), d_ptr->pix);
-        }
-        else
-        {
-            painter->drawPixmap(d_ptr->drawRect.topLeft(), d_ptr->pix, pixSourceRect);
-        }
-    }
-    else
-    {
-        ICCSettingsContainer iccSettings = EditorCore::defaultInstance()->getICCSettings();
-
-        if (iccSettings.enableCM && iccSettings.useManagedView)
-        {
-            IccManager   manager(scaledImage);
-            IccTransform monitorICCtrans = manager.displayTransform(widget);
-            d_ptr->pix                   = scaledImage.convertToPixmap(monitorICCtrans);
-
-            IccManager   targetManager(scaledTargetImage);
-            IccTransform targetMonitorICCtrans = targetManager.displayTransform(widget);
-            d_ptr->targetPix                   = scaledTargetImage.convertToPixmap(targetMonitorICCtrans);
-        }
-        else
-        {
-            d_ptr->pix = scaledImage.convertToPixmap();
-        }
-
-        d->cachedPixmaps.insert(d_ptr->drawRect, d_ptr->pix);
-
-        painter->drawPixmap(d_ptr->drawRect.topLeft(), d_ptr->pix);
-    }
-
-    // Show the Over/Under exposure pixels indicators
-
-    ExposureSettingsContainer* const expoSettings = EditorCore::defaultInstance()->getExposureSettings();
-
-    if (expoSettings)
-    {
-        if (expoSettings->underExposureIndicator || expoSettings->overExposureIndicator)
-        {
-            QImage pureColorMask = scaledImage.pureColorMask(expoSettings);
-            QPixmap pixMask      = QPixmap::fromImage(pureColorMask);
-            painter->drawPixmap(d_ptr->drawRect.topLeft(), pixMask);
-        }
-    }
-
+    ImagePreviewItem::paint(painter, option, widget);
     paintExtraData(painter);
 }
 

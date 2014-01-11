@@ -55,7 +55,7 @@ Select a rectangle over canvas. Sometime, selection mode still active after to c
 
 Use zoom in/out buttons from status bar. Image is zommed through the center of image which is fine, but when zoom level fit content, image is discentered on the top/left corner.
 
-11/ 
+11/ [FIXED]
 
 Go to Setup/Editor page and change background color of canvas (use Red for ex). Nothing happen.
 
