@@ -25,7 +25,7 @@ At hight zoom level, press mouse wheel button to pan canvas content do not work.
 
 Select a rectangle over canvas. region position and size are displayed on statusbar. Deselect selection, nothing change : full image size must be shown.
 
-06/ 
+06/ [FIXED]
 
 Fit image to window, and now switch zoom to 100%. canvas show a black hole from cyberspace.
 
