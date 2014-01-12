@@ -14,11 +14,12 @@ Select a rectangle over canvas and change zoom level. Selected region is not mai
 
 03/ 
 
-Select a rectangle over canvas and crop image. Sometime the resulted image is broken.
+Select a rectangle over canvas and crop image. Sometime the resulted cropped image is broken.
+This typically happens when zoom level is low and when image do not fit to the canvas. It's not always reproducible.
 
 04/ 
 
-Press mouse wheel button to pan canvas content do not work.
+At hight zoom level, press mouse wheel button to pan canvas content do not work.
 
 05/ [FIXED]
 
@@ -77,6 +78,11 @@ One slot connection from Editor is broken and visible on the console :
 
 Object::connect: No such signal Digikam::Canvas::signalChanged() in /mnt/devel/GIT/3.x/core/utilities/imageeditor/editor/editorwindow.cpp:268
 Object::connect:  (receiver name: 'Image Editor')
+
+16/ 
+
+If canvas do not fit full image content (as image is very small on view using zoom-), you can start to select a region stating somewhere on image and completed outside image content.
+Selection must be automatically limite to image size.
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
