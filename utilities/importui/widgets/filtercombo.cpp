@@ -33,7 +33,6 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kconfiggroup.h>
-#include <kmimetype.h>
 
 // Local includes
 
@@ -48,43 +47,6 @@ const QString FilterComboBox::defaultIgnoreNames("mgr_data pgr_mgr");
 // HP Photosmart camera (see B.K.O #156338).
 // Minolta camera in PTP mode
 const QString FilterComboBox::defaultIgnoreExtensions("dsp dps");
-
-Filter::Filter()
-    : onlyNew(false)
-{
-}
-
-QString Filter::toString()
-{
-    return QString("%1|%2|%3|%4|%5")
-           .arg(name)
-           .arg(onlyNew ? "true" : "false")
-           .arg(fileFilter.join(";"))
-           .arg(pathFilter.join(";"))
-           .arg(mimeFilter);
-}
-
-void Filter::fromString(const QString& filter)
-{
-    QStringList s = filter.split('|');
-    name          = s.value(0);
-    onlyNew       = (s.value(1) == "true");
-
-    if (!s.value(2).isEmpty())
-    {
-        fileFilter = s.value(2).split(';');
-    }
-
-    if (!s.value(3).isEmpty())
-    {
-        pathFilter = s.value(3).split(';');
-    }
-
-    if (!s.value(4).isEmpty())
-    {
-        mimeFilter = s.value(4);
-    }
-}
 
 // ---------------------------------------------------------------------------------
 
@@ -129,14 +91,21 @@ public:
 FilterComboBox::FilterComboBox(QWidget* const parent)
     : KComboBox(parent), d(new Private)
 {
+    fillCombo();
+    
     connect(this, SIGNAL(activated(int)),
             this, SLOT(indexChanged(int)));
-
-    fillCombo();
 }
 
 FilterComboBox::~FilterComboBox()
 {
+    delete d;
+}
+
+Filter* FilterComboBox::currentFilter()
+{
+    Filter *filter = d->filters.value(d->currentFilter);
+    return filter;
 }
 
 void FilterComboBox::defaultFilters(FilterList* const filters)
@@ -176,10 +145,7 @@ void FilterComboBox::defaultFilters(FilterList* const filters)
 
 void FilterComboBox::fillCombo()
 {
-    while (count() > 0)
-    {
-        removeItem(0);
-    }
+    clear();
 
     foreach(Filter* const f, d->filters)
     {
@@ -194,7 +160,8 @@ void FilterComboBox::indexChanged(int index)
     if (index != d->currentFilter)
     {
         d->currentFilter = index;
-        emit filterChanged();
+        Filter *filter = d->filters.value(d->currentFilter);
+        emit filterChanged(filter);
     }
 }
 
@@ -204,110 +171,6 @@ void FilterComboBox::saveSettings()
     KConfigGroup group        = config->group("Import Filters");
 
     group.writeEntry("CurrentFilter", d->currentFilter);
-}
-
-const QRegExp& FilterComboBox::regexp(const QString& wildcard)
-{
-    if (!d->filterHash.contains(wildcard))
-    {
-        QRegExp rx(wildcard.toLower());
-        rx.setPatternSyntax(QRegExp::Wildcard);
-        d->filterHash[wildcard] = rx;
-    }
-
-    return d->filterHash[wildcard];
-}
-
-bool FilterComboBox::match(const QStringList& wildcards, const QString& name)
-{
-    bool match = false;
-
-    foreach(const QString& wildcard, wildcards)
-    {
-        match = regexp(wildcard).exactMatch(name);
-        //kDebug() << "**" << wildcard << name << match;
-        if (match)
-        {
-            break;
-        }
-    }
-
-    return match;
-}
-
-const QStringList& FilterComboBox::mimeWildcards(const QString& mime)
-{
-    if (!d->mimeHash.contains(mime))
-    {
-        QStringList& wc  = d->mimeHash[mime];
-        QStringList list = mime.split(';');
-
-        foreach(const QString& m, list)
-        {
-            KMimeType::Ptr mime = KMimeType::mimeType(m);
-
-            if (!mime)
-            {
-                continue;
-            }
-
-            foreach(const QString& pattern, mime->patterns())
-            {
-                wc.append(pattern);
-            }
-        }
-    }
-
-    return d->mimeHash[mime];
-}
-
-bool FilterComboBox::matchesCurrentFilter(const CamItemInfo& item)
-{
-    //kDebug() << item.downloaded << item.folder << item.name;
-
-    Filter* const currentFilter = d->filters.value(d->currentFilter);
-
-    if (!currentFilter)
-    {
-        return true;
-    }
-
-    if (currentFilter->onlyNew)
-    {
-        if (item.downloaded == CamItemInfo::DownloadedYes)
-        {
-            return false;
-        }
-    }
-
-    QString folder = item.folder.toLower();
-    QString name   = item.name.toLower();
-
-    if (!currentFilter->fileFilter.isEmpty())
-    {
-        if (!match(currentFilter->fileFilter, name))
-        {
-            return false;
-        }
-    }
-
-    if (!currentFilter->pathFilter.isEmpty())
-    {
-        if (!match(currentFilter->pathFilter, folder))
-        {
-            return false;
-        }
-    }
-
-    if (!currentFilter->mimeFilter.isEmpty())
-    {
-        if (!match(mimeWildcards(currentFilter->mimeFilter), name))
-        {
-            return false;
-        }
-    }
-
-    return true;
 }
 
 }  // namespace Digikam

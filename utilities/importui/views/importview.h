@@ -81,6 +81,7 @@ public:
 
     ThumbnailSize thumbnailSize();
     ImportStackedView::StackedViewMode viewMode() const;
+    ImportFilterModel *importFilterModel();
 
 Q_SIGNALS:
 

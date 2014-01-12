@@ -814,6 +814,11 @@ void ImportView::slotImageExifOrientation(int orientation)
 }
 */
 
+ImportFilterModel* ImportView::importFilterModel()
+{
+    return d->filterModel;
+}
+
 ImportStackedView::StackedViewMode ImportView::viewMode() const
 {
     return d->stackedView->viewMode();

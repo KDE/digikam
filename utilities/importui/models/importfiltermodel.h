@@ -39,7 +39,7 @@
 
 namespace Digikam
 {
-
+class Filter;
 class ImportFilterModel;
 
 class ImportSortFilterModel : public KCategorizedSortFilterProxyModel
@@ -143,6 +143,7 @@ public Q_SLOTS:
     void setCategorizationMode(CamItemSortSettings::CategorizationMode mode);
     void setSortRole(CamItemSortSettings::SortRole role);
     void setSortOrder(CamItemSortSettings::SortOrder order);
+    void setFilter(Filter *);
 
     //TODO: Implement grouping in import tool.
     //void setGroupOpen(qlonglong group, bool open);
@@ -181,7 +182,7 @@ protected:
 
     virtual void setDirectSourceImportModel(ImportImageModel* const sourceModel);
 
-    //TODO: virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
+    virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
 
     virtual int compareCategories(const QModelIndex& left, const QModelIndex& right) const;
     virtual bool subSortLessThan(const QModelIndex& left, const QModelIndex& right) const;
