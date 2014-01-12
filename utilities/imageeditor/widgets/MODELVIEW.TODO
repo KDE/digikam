@@ -29,7 +29,7 @@ Select a rectangle over canvas. region position and size are displayed on status
 
 Fit image to window, and now switch zoom to 100%. canvas show a black hole from cyberspace.
 
-07/ 
+07/ [FIXED]
 
 Changing zoom level with CTRL+mouse wheel must follow the position of cursor over canvas to zoom in/out image content.
 

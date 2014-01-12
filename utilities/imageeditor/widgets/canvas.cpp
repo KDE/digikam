@@ -393,7 +393,7 @@ void Canvas::updateContentsSize(bool deleteRubber)
     }
     else
     {
-        centerOn(d->wheelEventPoint);
+        centerOn(mapToScene(d->wheelEventPoint));
         d->isWheelEvent = false;
     }
 
