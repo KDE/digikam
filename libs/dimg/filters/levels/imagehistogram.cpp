@@ -200,7 +200,7 @@ void ImageHistogram::calculate()
         unsigned short* const data = reinterpret_cast<unsigned short*>(d->img.bits());
 
         // count here instead of inside the loop, because d is not optimized because it's not defined in the header
-        uint count = d->img.width() * d->img.height() * 4;
+        const uint count = d->img.width() * d->img.height() * 4;
         for (i = 0 ; i < count && runningFlag() ; i += 4)
         {
             blue  = data[i    ];
@@ -231,7 +231,7 @@ void ImageHistogram::calculate()
         const uchar* const data = d->img.bits();
 
         // count here instead of inside the loop, because d is not optimized because it's not defined in the header
-        uint count = d->img.width() * d->img.height() * 4;
+        const uint count = d->img.width() * d->img.height() * 4;
         for (i = 0 ; i < count && runningFlag() ; i += 4)
         {
             blue  = data[i    ];
