@@ -23,6 +23,8 @@
 
 #include "importfiltermodel.moc"
 #include "camiteminfo.h"
+#include "filtercombo.h"
+#include "filter.h"
 #include <KDebug>
 
 namespace Digikam
@@ -230,6 +232,7 @@ public:
     {
         q                = 0;
         importImageModel = 0;
+        filter = 0;
     }
 
     void init(ImportFilterModel* const _q);
@@ -244,6 +247,7 @@ public:
     ImportFilterModel*  q;
     ImportImageModel*   importImageModel;
     CamItemSortSettings sorter;
+    Filter*             filter;
 };
 
 void ImportFilterModel::ImportFilterModelPrivate::init(ImportFilterModel* const _q)
@@ -329,6 +333,14 @@ void ImportFilterModel::setSortOrder(CamItemSortSettings::SortOrder order)
     d->sorter.setSortOrder(order);
     setCamItemSortSettings(d->sorter);
 }
+
+void ImportFilterModel::setFilter(Digikam::Filter* filter)
+{
+    Q_D(ImportFilterModel);
+    d->filter = filter;
+    invalidateFilter();
+}
+
 
 void ImportFilterModel::setSendCamItemInfoSignals(bool sendSignals)
 {
@@ -471,6 +483,25 @@ QString ImportFilterModel::categoryIdentifier(const CamItemInfo& info) const
             return QString();
     }
 }
+
+bool ImportFilterModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
+{
+    Q_D(const ImportFilterModel);
+    
+    if(!d->filter) {
+        return true;
+    }
+
+    QModelIndex idx = sourceModel()->index(source_row, 0, source_parent);
+    const CamItemInfo &info = d->importImageModel->camItemInfo(idx);
+
+    if(d->filter->matchesCurrentFilter(info)) {
+        return true;
+    }
+    
+    return false;
+}
+
 
 // -------------------------------------------------------------------------------------------------------
 

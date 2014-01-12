@@ -134,6 +134,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 120 ==> 329608 - Thumbnail of picture in dolphin never updated after picture manipulation.
 121 ==> 307844 - digiKam import, ignore the user selection, replaces it by "all selected".
 122 ==> 292318 - digiKam marble maps does not work.
-123 ==> 198406] xmp not synchronized, uncomplete.
-124 ==> 
-
+123 ==> 198406 - Xmp not synchronized, uncomplete.
+124 ==> 147921 - Gps widget in French please.
+125 ==> 

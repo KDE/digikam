@@ -69,7 +69,23 @@ public:
     MapWidgetView*      mapWidgetView;
 };
 
-ImportStackedView::ImportStackedView(CameraController* const controller, QWidget* const parent)
+void ImportStackedView::setModels(ImportImageModel* model, ImportFilterModel* filterModel)
+{
+    d->importIconView->setModels(model, filterModel);
+    d->thumbBar->setModelsFiltered(model, filterModel);
+    
+    // TODO this is currently here because the code structure, waiting for restructuring..
+    d->importIconView->init();
+    
+    // TODO refactor MapWidgetView not to require the models on startup?
+    d->mapWidgetView   = new MapWidgetView(d->importIconView->getSelectionModel(),
+                                           d->importIconView->importFilterModel(), this, false);
+    d->mapWidgetView->setObjectName("import_mapwidgetview");
+    insertWidget(MapWidgetMode,     d->mapWidgetView);
+}
+
+
+ImportStackedView::ImportStackedView(QWidget* const parent)
     : QStackedWidget(parent), d(new Private)
 {
     d->importIconView    = new ImportIconView(this);
@@ -77,27 +93,16 @@ ImportStackedView::ImportStackedView(CameraController* const controller, QWidget
     d->thumbBarDock      = new ThumbBarDock();
     d->thumbBar          = new ImportThumbnailBar(d->thumbBarDock);
 
-    if(controller)
-    {
-        d->importIconView->init(controller);
-        d->thumbBar->setModelsFiltered(d->importIconView->importImageModel(), d->importIconView->importFilterModel());
-    }
-
     d->thumbBar->installRatingOverlay();
     d->thumbBarDock->setWidget(d->thumbBar);
     d->thumbBarDock->setObjectName("import_thumbbar");
 
     d->mediaPlayerView = new MediaPlayerView(this);
-    d->mapWidgetView   = new MapWidgetView(d->importIconView->getSelectionModel(),
-                                           d->importIconView->importFilterModel(), this, false);
-    d->mapWidgetView->setObjectName("import_mapwidgetview");
 
     insertWidget(PreviewCameraMode, d->importIconView);
     insertWidget(PreviewImageMode,  d->importPreviewView);
     insertWidget(MediaPlayerMode,   d->mediaPlayerView);
-    insertWidget(MapWidgetMode,     d->mapWidgetView);
 
-    setViewMode(PreviewCameraMode);
     setAttribute(Qt::WA_DeleteOnClose);
 
     readSettings();
@@ -350,6 +355,10 @@ void ImportStackedView::syncSelection(ImportCategorizedView* const from, ImportC
 {
     ImportSortFilterModel* fromModel = from->importSortFilterModel();
     ImportSortFilterModel* toModel   = to->importSortFilterModel();
+    if(!fromModel || !toModel) {
+        kWarning() << "one or both of the models are null?! from:" << from << "to:" << to;
+        return;
+    }
     // set current info
     QModelIndex currentIndex         = toModel->indexForCamItemInfo(from->currentInfo());
     to->selectionModel()->setCurrentIndex(currentIndex, QItemSelectionModel::NoUpdate);

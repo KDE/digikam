@@ -232,10 +232,18 @@ ImportUI* ImportUI::instance()
 
 void ImportUI::setupUserArea()
 {
+    ImportModel* model             = new ImportModel(this);
+    model->setupCameraController(d->controller);
+    ImportFilterModel* filterModel = new ImportFilterModel(this);
+
+    filterModel->setSourceImportModel(model);
+
+    filterModel->sort(0); // an initial sorting is necessary
+    
     KHBox* const widget = new KHBox(this);
     d->splitter         = new SidebarSplitter(widget);
     KVBox* const vbox   = new KVBox(d->splitter);
-    d->view             = new ImportView(this, vbox);
+    d->view             = new ImportView(this, model, filterModel, vbox);
     d->historyView      = new DHistoryView(vbox);
     d->rightSideBar     = new ImagePropertiesSideBarCamGui(widget, d->splitter, KMultiTabBar::Right, true);
     d->rightSideBar->setObjectName("CameraGui Sidebar Right");
@@ -701,9 +709,10 @@ void ImportUI::setupStatusBar()
     //------------------------------------------------------------------------------
 
     //TODO: Replace it with FilterStatusBar after advanced filtring is implemented.
-    //d->filterComboBox = new FilterComboBox(statusBar());
-    //statusBar()->addWidget(d->filterComboBox, 1);
-    //connect(d->filterComboBox, SIGNAL(filterChanged()), this, SLOT(slotFilterChanged()));
+    d->filterComboBox = new FilterComboBox(statusBar());
+    setFilter(d->filterComboBox->currentFilter());
+    statusBar()->addWidget(d->filterComboBox, 1);
+    connect(d->filterComboBox, SIGNAL(filterChanged(Filter*)), this, SLOT(setFilter(Filter*)));
 
     //------------------------------------------------------------------------------
 
@@ -847,7 +856,7 @@ void ImportUI::saveSettings()
 
     d->rightSideBar->saveState();
     d->splitter->saveState(group);
-    //d->filterComboBox->saveSettings();
+    d->filterComboBox->saveSettings();
 
     config->sync();
 }
@@ -1053,7 +1062,7 @@ void ImportUI::slotBusy(bool val)
         d->markAsDownloadedAction->setEnabled(true);
         d->cameraInfoAction->setEnabled(true);
         d->cameraCaptureAction->setEnabled(d->controller->cameraCaptureImageSupport());
-        //d->filterComboBox->setEnabled(true);
+        d->filterComboBox->setEnabled(true);
 
         // selection-dependent update of lockAction, markAsDownloadedAction,
         // downloadSelectedAction, downloadDelSelectedAction, deleteSelectedAction
@@ -1114,7 +1123,7 @@ void ImportUI::slotBusy(bool val)
         d->markAsDownloadedAction->setEnabled(false);
         d->cameraInfoAction->setEnabled(false);
         d->cameraCaptureAction->setEnabled(false);
-        //d->filterComboBox->setEnabled(false);
+        d->filterComboBox->setEnabled(false);
     }
 }
 
@@ -1229,16 +1238,9 @@ void ImportUI::slotFileList(const CamItemInfoList& fileList)
     d->filesToBeAdded << fileList;
 }
 
-// FIXME: To be removed.
-void ImportUI::slotFilterChanged()
+void ImportUI::setFilter(Filter *filter)
 {
-    //    CamItemInfoList items = d->view->allItems();
-
-    //    foreach(CamItemInfo info, items)
-    //    {
-    //        d->view->removeItem(info);
-    //    }
-    //    d->historyUpdater->addItems(d->controller->cameraMD5ID(), d->map);
+    d->view->importFilterModel()->setFilter(filter);
 }
 
 void ImportUI::slotCapture()

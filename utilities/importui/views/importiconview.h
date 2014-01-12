@@ -42,7 +42,7 @@ public:
     explicit ImportIconView(QWidget* const parent = 0);
     ~ImportIconView();
 
-    void init(CameraController* const controller);
+    void init();
 
     ImageViewUtilities* utilities() const;
 
