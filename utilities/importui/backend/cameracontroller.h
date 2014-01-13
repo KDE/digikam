@@ -96,7 +96,6 @@ public:
     void openFile(const QString& folder, const QString& file);
 
     QPixmap mimeTypeThumbnail(const QString& itemName, int thumbSize) const;
-    void getFolderList(const QStringList& lastFolder);
 
 Q_SIGNALS:
 
@@ -114,7 +113,6 @@ Q_SIGNALS:
     void signalDownloaded(const QString& folder, const QString& file, int status);
     void signalDownloadComplete(const QString& sourceFolder, const QString& sourceFile,
                                 const QString& destFolder, const QString& destFile);
-    void signalFinished();
     void signalSkipped(const QString& folder, const QString& file);
     void signalDeleted(const QString& folder, const QString& file, bool status);
     void signalLocked(const QString& folder, const QString& file, bool status);

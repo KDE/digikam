@@ -34,6 +34,7 @@ ImportSortFilterModel::ImportSortFilterModel(QObject* const parent)
     : KCategorizedSortFilterProxyModel(parent),
       m_chainedModel(0)
 {
+    setDynamicSortFilter(true);
 }
 
 ImportSortFilterModel::~ImportSortFilterModel()

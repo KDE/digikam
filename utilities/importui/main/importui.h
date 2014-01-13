@@ -98,8 +98,6 @@ Q_SIGNALS:
     void signalNewSelection(bool);
 
 public Q_SLOTS:
-
-    void slotSortItems();
     void slotDownload(bool onlySelected, bool deleteAfter, Album* pAlbum = 0);
     void slotUploadItems(const KUrl::List&); // public to be used in drag'n'drop
 
@@ -149,6 +147,7 @@ private:
     bool thumbbarVisibility() const;
     void customizedFullScreenMode(bool set);
     void toogleShowBar();
+    void setInitialSorting();
 
 private Q_SLOTS:
 
