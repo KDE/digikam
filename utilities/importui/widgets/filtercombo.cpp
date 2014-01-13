@@ -92,7 +92,7 @@ FilterComboBox::FilterComboBox(QWidget* const parent)
     : KComboBox(parent), d(new Private)
 {
     fillCombo();
-    
+
     connect(this, SIGNAL(activated(int)),
             this, SLOT(indexChanged(int)));
 }
@@ -104,7 +104,7 @@ FilterComboBox::~FilterComboBox()
 
 Filter* FilterComboBox::currentFilter()
 {
-    Filter *filter = d->filters.value(d->currentFilter);
+    Filter* const filter = d->filters.value(d->currentFilter);
     return filter;
 }
 
@@ -160,7 +160,7 @@ void FilterComboBox::indexChanged(int index)
     if (index != d->currentFilter)
     {
         d->currentFilter = index;
-        Filter *filter = d->filters.value(d->currentFilter);
+        Filter* const filter = d->filters.value(d->currentFilter);
         emit filterChanged(filter);
     }
 }

@@ -7,7 +7,7 @@
  * Description : Filter for filter combobox
  *
  * Copyright (C) 2010-2011 by Petri Damstén <petri.damsten@iki.fi>
- * Copyright (C) 2014 by Teemu Rytilahti <tpr@iki.fi>
+ * Copyright (C) 2014      by Teemu Rytilahti <tpr@iki.fi>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,36 +25,38 @@
 #ifndef FILTER_H
 #define FILTER_H
 
+// Qt includes
+
 #include <QString>
 #include <QStringList>
-
 #include <QRegExp>
 
 namespace Digikam
 {
 
 class CamItemInfo;
-    
+
 class Filter
 {
 public:
 
     Filter();
+    ~Filter();
 
     QString toString();
-    void fromString(const QString& filter);
-    bool match(const QStringList& wildcards, const QString& name);
+    void  fromString(const QString& filter);
+    bool  match(const QStringList& wildcards, const QString& name);
     const QRegExp& regexp(const QString& wildcard);
     const QStringList& mimeWildcards(const QString& mime);
-    bool matchesCurrentFilter(const CamItemInfo& item);
+    bool  matchesCurrentFilter(const CamItemInfo& item);
 
 public:
 
-    QString     name;
-    bool        onlyNew;
-    QStringList fileFilter;
-    QStringList pathFilter;
-    QString     mimeFilter;
+    QString                     name;
+    bool                        onlyNew;
+    QStringList                 fileFilter;
+    QStringList                 pathFilter;
+    QString                     mimeFilter;
     QHash<QString, QRegExp>     filterHash;
     QHash<QString, QStringList> mimeHash;
 };
