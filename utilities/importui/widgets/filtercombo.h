@@ -28,6 +28,8 @@
 
 #include <kcombobox.h>
 
+// Local includes
+
 #include "filter.h"
 
 namespace Digikam

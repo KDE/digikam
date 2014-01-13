@@ -7,7 +7,7 @@
  * Description : Filter for filter combobox
  *
  * Copyright (C) 2010-2011 by Petri Damstén <petri.damsten@iki.fi>
- * Copyright (C) 2014 by Teemu Rytilahti <tpr@iki.fi>
+ * Copyright (C) 2014      by Teemu Rytilahti <tpr@iki.fi>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,18 +22,24 @@
  *
  * ============================================================ */
 
+// KDE includes
+
 #include <KMimeType>
 
-#include <QRegExp>
+// Local includes
 
 #include "camiteminfo.h"
 #include "filter.h"
 
 namespace Digikam
 {
-    
+
 Filter::Filter()
     : onlyNew(false)
+{
+}
+
+Filter::~Filter()
 {
 }
 
@@ -84,6 +90,7 @@ const QRegExp& Filter::regexp(const QString& wildcard)
 bool Filter::match(const QStringList& wildcards, const QString& name)
 {
     bool match = false;
+
     foreach(const QString& wildcard, wildcards)
     {
         match = regexp(wildcard).exactMatch(name);
@@ -122,7 +129,6 @@ const QStringList& Filter::mimeWildcards(const QString& mime)
 
     return mimeHash[mime];
 }
-
 
 bool Filter::matchesCurrentFilter(const CamItemInfo& item)
 {
@@ -163,6 +169,5 @@ bool Filter::matchesCurrentFilter(const CamItemInfo& item)
 
     return true;
 }
-
 
 } // namespace Digikam

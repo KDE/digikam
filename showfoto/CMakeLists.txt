@@ -16,7 +16,7 @@ ENDIF(NOT MSVC)
 SET(showfoto_SRCS
     ${libsetupshowfoto_SRCS}
     ${libshowfotosetup_SRCS}
-    
+
     thumbbar/showfotoiteminfo.cpp
     thumbbar/showfotoimagemodel.cpp
     thumbbar/showfotothumbnailmodel.cpp
@@ -27,7 +27,7 @@ SET(showfoto_SRCS
     thumbbar/showfototooltipfiller.cpp
     thumbbar/showfotocategorizedview.cpp
     thumbbar/showfotothumbnailbar.cpp
-    
+
     main/showfotosettings.cpp
     main/main.cpp
     main/showfoto.cpp

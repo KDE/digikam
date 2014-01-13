@@ -259,15 +259,22 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
 
     // -- Former contributors ----------------------------------------------------
 
+    aboutData.addCredit ( ki18n("Francesco Riosa"),
+                          ki18n("LCMS2 port"),
+                          "francesco plus kde at pnpitalia dot it",
+                          "https://plus.google.com/u/0/113237307210359236747"
+                        );
+
     aboutData.addCredit ( ki18n("Johannes Wienke"),
                           ki18n("Developer"),
                           "languitar at semipol dot de",
-                          "http://www.semipol.de"
+                          "https://www.facebook.com/languitar"
                         );
 
     aboutData.addAuthor ( ki18n("Julien Pontabry"),
                           ki18n("Developer"),
-                          "julien dot pontabry at ulp dot u-strasbg dot fr"
+                          "julien dot pontabry at ulp dot u-strasbg dot fr",
+                          "https://www.facebook.com/julien.pontabry"
                         );
 
     aboutData.addAuthor ( ki18n("Arnd Baecker"),
@@ -276,17 +283,19 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
                         );
 
     aboutData.addAuthor ( ki18n("Francisco J. Cruz"),
-                          ki18n("Developer (2005-2006)"),
-                          "fj dot cruz at supercable dot es"
+                          ki18n("Color Management"),
+                          "fj dot cruz at supercable dot es",
+                          "https://plus.google.com/u/0/+FranciscoJCruz"
                         );
 
     aboutData.addCredit ( ki18n("Pieter Edelman"),
                           ki18n("Developer"),
-                          "p dot edelman at gmx dot net"
+                          "p dot edelman at gmx dot net",
+                          "https://www.facebook.com/pieter.edelman"
                         );
 
     aboutData.addCredit ( ki18n("Holger Foerster"),
-                          ki18n("Developer"),
+                          ki18n("MySQL interface"),
                           "hamsi2k at freenet dot de"
                         );
 
@@ -297,22 +306,26 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
 
     aboutData.addCredit ( ki18n("Mikolaj Machowski"),
                           ki18n("Bug reports and patches"),
-                          "mikmach at wp dot pl"
+                          "mikmach at wp dot pl",
+                          "https://www.facebook.com/mikolaj.machowski"
                         );
 
     aboutData.addCredit ( ki18n("Achim Bohnet"),
                           ki18n("Bug reports and patches"),
-                          "ach at mpe dot mpg dot de"
+                          "ach at mpe dot mpg dot de",
+                          "https://www.facebook.com/achim.bohnet"
                         );
 
     aboutData.addCredit ( ki18n("Luka Renko"),
                           ki18n("Developer"),
-                          "lure at kubuntu dot org"
+                          "lure at kubuntu dot org",
+                          "https://www.facebook.com/luka.renko"
                         );
 
     aboutData.addCredit ( ki18n("Angelo Naselli"),
                           ki18n("Developer"),
-                          "a dot naselli at libero dot it"
+                          "a dot naselli at libero dot it",
+                          "https://plus.google.com/u/0/s/Angelo%20Naselli"
                         );
 
     aboutData.addCredit ( ki18n("Fabien Salvi"),
@@ -327,7 +340,8 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
 
     aboutData.addCredit ( ki18n("Gerhard Kulzer"),
                           ki18n("Handbook writer, alpha tester, webmaster"),
-                          "gerhard at kulzer dot net"
+                          "gerhard at kulzer dot net",
+                          "https://plus.google.com/u/0/+GerhardKulzer"
                         );
 
     aboutData.addCredit ( ki18n("Oliver Doerr"),
@@ -352,7 +366,8 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
 
     aboutData.addCredit ( ki18n("Aaron Seigo"),
                           ki18n("Various usability fixes and general application polishing"),
-                          "aseigo at kde dot org"
+                          "aseigo at kde dot org",
+                          "https://plus.google.com/u/0/+AaronSeigo"
                         );
 
     aboutData.addCredit ( ki18n("Yves Chaufour"),
@@ -382,7 +397,7 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
     aboutData.addAuthor ( ki18n("Tom Albers"),
                           ki18n("Developer (2004-2005)"),
                           "tomalbers at kde dot nl",
-                          "http://www.omat.nl/drupal/?q=blog/1"
+                          "https://plus.google.com/u/0/+TomAlbers"
                         );
 
     aboutData.addAuthor ( ki18n("Ralf Holzer"),
