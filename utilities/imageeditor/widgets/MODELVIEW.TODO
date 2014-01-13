@@ -107,7 +107,7 @@ At init of BCG tool, if separate preview mode is "vertical split contigous", sep
 
 05/ 
 
-Starting an editor tool as now effect since few days. This error messages can be seen on the console (here Color Auto-Correction):
+Starting an editor tool based on ImageRegionWidget preview widget as now effect since few days. This error messages can be seen on the console (here Color Auto-Correction):
 
 digikam(5265)/digikam (core) Digikam::EditorToolThreaded::slotPreview: Preview  "Auto Correction"  started...
 digikam(5265)/digikam (core) Digikam::DImg::copy:  : return null image!
@@ -115,4 +115,7 @@ digikam(5265)/digikam (core) Digikam::EditorToolThreaded::slotFilterFinished: Pr
 digikam(5265)/digikam (core) Digikam::DImgThreadedFilter::startFilter: "AutoLevelsFilter" ::No valid image data !!! ...
 
 Tool is loaded properly, but effect cannot be preview or applied on image.
+
+Tools based on ImageRegionWidget preview widget work properlly (for ex FreeRotation tool).
+
 
