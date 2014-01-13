@@ -63,7 +63,8 @@ public:
         iconView(0),
         mapView(0),
         stackedView(0),
-        lastViewMode(ImportStackedView::PreviewCameraMode)
+        lastViewMode(ImportStackedView::PreviewCameraMode),
+        filterModel(0)
         //FIXME: filterWidget(0)
     {
     }
