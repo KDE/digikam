@@ -116,27 +116,27 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
     // -- Core team --------------------------------------------------------------
 
     aboutData.addAuthor ( ki18n("Caulier Gilles"),
-                          ki18n("Developer and coordinator"),
+                          ki18n("Coordinator, Developer, and Mentoring"),
                           "caulier dot gilles at gmail dot com",
                           "https://plus.google.com/+GillesCaulier"
                         );
 
     aboutData.addAuthor ( ki18n("Marcel Wiesweg"),
-                          ki18n("Developer"),
+                          ki18n("Developer and Mentoring"),
                           "marcel dot wiesweg at gmx dot de",
                           "https://www.facebook.com/marcel.wiesweg"
+                        );
+
+    aboutData.addAuthor ( ki18n("Michael G. Hansen"),
+                          ki18n("Developer and Mentoring"),
+                          "mike at mghansen dot de",
+                          "http://www.mghansen.de"
                         );
 
     aboutData.addAuthor ( ki18n("Andi Clemens"),
                           ki18n("Developer"),
                           "andi dot clemens at gmail dot com",
                           "https://plus.google.com/110531606986594589135"
-                        );
-
-    aboutData.addAuthor ( ki18n("Michael G. Hansen"),
-                          ki18n("Developer"),
-                          "mike at mghansen dot de",
-                          "http://www.mghansen.de"
                         );
 
     // -- Contributors -----------------------------------------------------------
@@ -162,94 +162,208 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
     aboutData.addAuthor ( ki18n("Patrick Spendrin"),
                           ki18n("Developer and Windows port"),
                           "patrick_spendrin at gmx dot de",
-                          "http://saroengels.blogspot.com");
+                          "http://saroengels.blogspot.com"
+                        );
+
+    // -- Students ---------------------------------------------------------------
+
+    aboutData.addCredit ( ki18n("Veaceslav Munteanu"),
+                          ki18n("Tags Manager"),
+                          "veaceslav dot munteanu90 at gmail dot com",
+                          "https://plus.google.com/114906808699351374523"
+                        );
+
+    aboutData.addCredit ( ki18n("Mohamed Anwer"),
+                          ki18n("Model/View Port of Showfoto Thumbbar"),
+                          "mohammed dot ahmed dot anwer at gmail dot com",
+                          "https://plus.google.com/106020792892118847381"
+                        );
+
+    aboutData.addCredit ( ki18n("Yiou Wang"),
+                          ki18n("Model/View Port of Image Editor Canvas"),
+                          "geow812 at gmail dot com",
+                          "https://plus.google.com/101883964009694930513"
+                        );
+
+    aboutData.addCredit ( ki18n("Gowtham Ashok"),
+                          ki18n("Image Quality Sorter"),
+                          "gwty93 at gmail dot com",
+                          "https://plus.google.com/u/0/113235187016472722859"
+                        );
+
+    aboutData.addCredit ( ki18n("Aditya Bhatt"),
+                          ki18n("Face Detection"),
+                          "aditya at bhatts dot org",
+                          "https://twitter.com/aditya_bhatt"
+                        );
+
+    aboutData.addCredit ( ki18n("Martin Klapetek"),
+                          ki18n("Non-destructive image editing"),
+                          "martin dot klapetek at gmail dot com",
+                          "https://plus.google.com/u/0/101026761070865237619"
+                        );
+
+    aboutData.addCredit ( ki18n("Gabriel Voicu"),
+                          ki18n("Reverse Geo-Coding"),
+                          "ping dot gabi at gmail dot com",
+                          "https://plus.google.com/u/0/101476692615103604273"
+                        );
+
+    aboutData.addCredit ( ki18n("Mahesh Hegde"),
+                          ki18n("Face Recognition"),
+                          "maheshmhegade at gmail dot com",
+                          "https://plus.google.com/113704327590506304403"
+                        );
+
+    aboutData.addCredit ( ki18n("Pankaj Kumar"),
+                          ki18n("Multi-core Support in Batch Queue Manager and Mentoring"),
+                          "me at panks dot me",
+                          "https://plus.google.com/114958890691877878308"
+                        );
+
+    aboutData.addCredit ( ki18n("Smit Mehta"),
+                          ki18n("UPnP / DLNA Export tool and Mentoring"),
+                          "smit dot tmeh at gmail dot com",
+                          "https://plus.google.com/u/0/113404087048256151794"
+                        );
+
+    aboutData.addCredit ( ki18n("Islam Wazery"),
+                          ki18n("Model/View port of Import Tool and Mentoring"),
+                          "wazery at ubuntu dot com",
+                          "https://plus.google.com/u/0/114444774108176364727"
+                        );
+
+    aboutData.addCredit ( ki18n("Abhinav Badola"),
+                          ki18n("Video Metadata Support and Mentoring"),
+                          "mail dot abu dot to at gmail dot com",
+                          "https://plus.google.com/u/0/107198225472060439855"
+                        );
+
+    aboutData.addCredit ( ki18n("Benjamin Girault"),
+                          ki18n("Panoram Tool and Mentoring"),
+                          "benjamin dot girault at gmail dot com",
+                          "https://plus.google.com/u/0/109282675370620103497"
+                        );
+
+    aboutData.addCredit ( ki18n("Victor Dodon"),
+                          ki18n("KDE XML-GUI port of Libkipi"),
+                          "dodonvictor at gmail dot com",
+                          "https://plus.google.com/u/0/107198225472060439855"
+                        );
+
+    aboutData.addCredit ( ki18n("Sayantan Datta"),
+                          ki18n("Auto Noise Reduction"),
+                          "sayantan dot knz at gmail dot com",
+                          "https://plus.google.com/100302360459800439676"
+                        );
 
     // -- Former contributors ----------------------------------------------------
 
     aboutData.addCredit ( ki18n("Johannes Wienke"),
                           ki18n("Developer"),
                           "languitar at semipol dot de",
-                          "http://www.semipol.de");
+                          "http://www.semipol.de"
+                        );
 
     aboutData.addAuthor ( ki18n("Julien Pontabry"),
                           ki18n("Developer"),
-                          "julien dot pontabry at ulp dot u-strasbg dot fr");
+                          "julien dot pontabry at ulp dot u-strasbg dot fr"
+                        );
 
     aboutData.addAuthor ( ki18n("Arnd Baecker"),
                           ki18n("Developer"),
-                          "arnd dot baecker at web dot de");
+                          "arnd dot baecker at web dot de"
+                        );
 
     aboutData.addAuthor ( ki18n("Francisco J. Cruz"),
                           ki18n("Developer (2005-2006)"),
-                          "fj dot cruz at supercable dot es");
+                          "fj dot cruz at supercable dot es"
+                        );
 
     aboutData.addCredit ( ki18n("Pieter Edelman"),
                           ki18n("Developer"),
-                          "p dot edelman at gmx dot net");
+                          "p dot edelman at gmx dot net"
+                        );
 
     aboutData.addCredit ( ki18n("Holger Foerster"),
                           ki18n("Developer"),
-                          "hamsi2k at freenet dot de");
+                          "hamsi2k at freenet dot de"
+                        );
 
     aboutData.addCredit ( ki18n("Risto Saukonpaa"),
                           ki18n("Design, icons, logo, banner, mockup, beta tester"),
-                          "paristo at gmail dot com");
+                          "paristo at gmail dot com"
+                        );
 
     aboutData.addCredit ( ki18n("Mikolaj Machowski"),
                           ki18n("Bug reports and patches"),
-                          "mikmach at wp dot pl");
+                          "mikmach at wp dot pl"
+                        );
 
     aboutData.addCredit ( ki18n("Achim Bohnet"),
                           ki18n("Bug reports and patches"),
-                          "ach at mpe dot mpg dot de");
+                          "ach at mpe dot mpg dot de"
+                        );
 
     aboutData.addCredit ( ki18n("Luka Renko"),
                           ki18n("Developer"),
-                          "lure at kubuntu dot org");
+                          "lure at kubuntu dot org"
+                        );
 
     aboutData.addCredit ( ki18n("Angelo Naselli"),
                           ki18n("Developer"),
-                          "a dot naselli at libero dot it");
+                          "a dot naselli at libero dot it"
+                        );
 
     aboutData.addCredit ( ki18n("Fabien Salvi"),
                           ki18n("Webmaster"),
-                          "fabien dot ubuntu at gmail dot com");
+                          "fabien dot ubuntu at gmail dot com"
+                        );
 
     aboutData.addCredit ( ki18n("Todd Shoemaker"),
                           ki18n("Developer"),
-                          "todd at theshoemakers dot net");
+                          "todd at theshoemakers dot net"
+                        );
 
     aboutData.addCredit ( ki18n("Gerhard Kulzer"),
                           ki18n("Handbook writer, alpha tester, webmaster"),
-                          "gerhard at kulzer dot net");
+                          "gerhard at kulzer dot net"
+                        );
 
     aboutData.addCredit ( ki18n("Oliver Doerr"),
                           ki18n("Beta tester"),
-                          "oliver at doerr-privat dot de");
+                          "oliver at doerr-privat dot de"
+                        );
 
     aboutData.addCredit ( ki18n("Charles Bouveyron"),
                           ki18n("Beta tester"),
-                          "c dot bouveyron at tuxfamily dot org");
+                          "c dot bouveyron at tuxfamily dot org"
+                        );
 
     aboutData.addCredit ( ki18n("Richard Taylor"),
                           ki18n("Feedback and patches. Handbook writer"),
-                          "rjt-digicam at thegrindstone dot me dot uk");
+                          "rjt-digicam at thegrindstone dot me dot uk"
+                        );
 
     aboutData.addCredit ( ki18n("Hans Karlsson"),
                           ki18n("digiKam website banner and application icons"),
-                          "karlsson dot h at home dot se");
+                          "karlsson dot h at home dot se"
+                        );
 
     aboutData.addCredit ( ki18n("Aaron Seigo"),
                           ki18n("Various usability fixes and general application polishing"),
-                          "aseigo at kde dot org");
+                          "aseigo at kde dot org"
+                        );
 
     aboutData.addCredit ( ki18n("Yves Chaufour"),
                           ki18n("digiKam website, Feedback"),
-                          "yves dot chaufour at wanadoo dot fr");
+                          "yves dot chaufour at wanadoo dot fr"
+                        );
 
     aboutData.addCredit ( ki18n("Tung Nguyen"),
                           ki18n("Bug reports, feedback and icons"),
-                          "ntung at free dot fr");
+                          "ntung at free dot fr"
+                        );
 
     // -- Former Members ---------------------------------------------------------
 
@@ -262,16 +376,19 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
     aboutData.addAuthor ( ki18n("Joern Ahrens"),
                           ki18n("Developer (2004-2005)"),
                           "kde at jokele dot de",
-                          "http://www.jokele.de/");
+                          "http://www.jokele.de/"
+                        );
 
     aboutData.addAuthor ( ki18n("Tom Albers"),
                           ki18n("Developer (2004-2005)"),
                           "tomalbers at kde dot nl",
-                          "http://www.omat.nl/drupal/?q=blog/1");
+                          "http://www.omat.nl/drupal/?q=blog/1"
+                        );
 
     aboutData.addAuthor ( ki18n("Ralf Holzer"),
                           ki18n("Developer (2004)"),
-                          "kde at ralfhoelzer dot com");
+                          "kde at ralfhoelzer dot com"
+                        );
 }
 
 }  // namespace Digikam
