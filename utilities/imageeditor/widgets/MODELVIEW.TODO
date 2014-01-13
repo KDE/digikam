@@ -105,3 +105,14 @@ At a certain zoom level, switching from a preview mode to another one do not sho
 
 At init of BCG tool, if separate preview mode is "vertical split contigous", separation line do not appears on canvas center.
 
+05/ 
+
+Starting an editor tool as now effect since few days. This error messages can be seen on the console (here Color Auto-Correction):
+
+digikam(5265)/digikam (core) Digikam::EditorToolThreaded::slotPreview: Preview  "Auto Correction"  started...
+digikam(5265)/digikam (core) Digikam::DImg::copy:  : return null image!
+digikam(5265)/digikam (core) Digikam::EditorToolThreaded::slotFilterFinished: Preview  "Auto Correction"  failed...
+digikam(5265)/digikam (core) Digikam::DImgThreadedFilter::startFilter: "AutoLevelsFilter" ::No valid image data !!! ...
+
+Tool is loaded properly, but effect cannot be preview or applied on image.
+
