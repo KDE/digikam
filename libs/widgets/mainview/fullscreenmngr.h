@@ -112,25 +112,6 @@ private:
     Private* const d;
 };
 
-// -------------------------------------------------------------------------------------------------------------
-
-class DIGIKAM_EXPORT FullScreenSettings : public QWidget
-{
-
-public:
-
-    explicit FullScreenSettings(int options, QWidget* const parent);
-    virtual ~FullScreenSettings();
-
-    void readSettings(const KConfigGroup& group);
-    void saveSettings(KConfigGroup& group);
-
-private:
-
-    class Private;
-    Private* const d;
-};
-
 } // namespace Digikam
 
 #endif /* FULLSCREENMNGR_H */
