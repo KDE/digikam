@@ -977,12 +977,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/comboboxutilities.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dcursortracker.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dfontselect.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dhistoryview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dgradientslider.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/ditemtooltip.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dlogoaction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dragdropimplementations.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dzoombar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/filesaveoptionsbox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/fullscreensettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/knotificationwrapper.cpp
@@ -996,14 +993,16 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/ratingwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/colorlabelwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/picklabelwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/thumbbardock.cpp
        )
 
     SET(libmainview_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/sidebar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/dxmlguiwindow.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/daboutdata.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/fullscreenmngr.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/dzoombar.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/dlogoaction.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/thumbbardock.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/dhistoryview.cpp
        )
 
     SET(libitemview_SRCS
