@@ -240,7 +240,7 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
                         );
 
     aboutData.addCredit ( ki18n("Benjamin Girault"),
-                          ki18n("Panoram Tool and Mentoring"),
+                          ki18n("Panorama Tool and Mentoring"),
                           "benjamin dot girault at gmail dot com",
                           "https://plus.google.com/u/0/109282675370620103497"
                         );
