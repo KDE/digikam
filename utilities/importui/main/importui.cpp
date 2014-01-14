@@ -169,6 +169,7 @@ ImportUI::ImportUI(QWidget* const parent, const QString& cameraTitle,
     // --------------------------------------------------------
 
     setupUserArea();
+    setInitialSorting();
     setupActions();
     setupStatusBar();
     setupAccelerators();
@@ -729,9 +730,6 @@ void ImportUI::setupCameraController(const QString& model, const QString& port, 
 {
     d->controller = new CameraController(this, d->cameraTitle, model, port, path);
 
-    connect(d->controller, SIGNAL(signalFinished()),
-            this, SLOT(slotSortItems()));
-
     connect(d->controller, SIGNAL(signalConnected(bool)),
             this, SLOT(slotConnected(bool)));
 
@@ -888,7 +886,7 @@ DownloadSettings ImportUI::downloadSettings() const
     return settings;
 }
 
-void ImportUI::slotSortItems()
+void ImportUI::setInitialSorting()
 {
     d->view->slotGroupImages(ImportSettings::instance()->getImageGroupMode());
     d->view->slotSortImagesBy(ImportSettings::instance()->getImageSortBy());
@@ -1212,7 +1210,6 @@ void ImportUI::slotFolderList(const QStringList& folderList)
     KConfigGroup group        = config->group(d->configGroupName);
     bool useMetadata          = group.readEntry(d->configUseFileMetadata, false);
 
-    d->controller->getFolderList(folderList); // send the folder list to the controller to be able to determine if listing is finish.
     // when getting a list of subfolders, request their contents and also their subfolders
     for (QStringList::const_iterator it = folderList.constBegin();
          it != folderList.constEnd(); ++it)
