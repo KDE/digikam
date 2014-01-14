@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2013-2014 by Yiou Wang <geow812 at gmail dot com>
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -107,7 +107,7 @@ public:
     KPopupFrame*             panIconPopup;
 
     QString                  errorMessage;
-    
+
     ImagePreviewItem*        canvasItem;
 
     RubberItem*              rubber;
@@ -118,13 +118,13 @@ public:
 Canvas::Canvas(QWidget* const parent)
     : GraphicsDImgView(parent), d(new Private)
 {
-    d->im     = new EditorCore();
-    d->parent = parent;
+    d->im         = new EditorCore();
+    d->parent     = parent;
     d->bgColor.setRgb(0, 0, 0);
     d->canvasItem = new ImagePreviewItem;
     setItem(d->canvasItem);
 
-    d->qcheck = QPixmap(16, 16);
+    d->qcheck     = QPixmap(16, 16);
     QPainter p(&d->qcheck);
     p.fillRect(0, 0, 8, 8, QColor(144, 144, 144));
     p.fillRect(8, 8, 8, 8, QColor(144, 144, 144));
@@ -286,7 +286,7 @@ QString Canvas::ensureHasCurrentUuid() const
 
 DImg Canvas::currentImage() const
 {
-    DImg* image = d->im->getImg();
+    DImg* const image = d->im->getImg();
 
     if (image)
     {
@@ -740,9 +740,9 @@ void Canvas::slotCopy()
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    DImg selDImg        = d->im->getImgSelection();
-    QImage selImg       = selDImg.copyQImage();
-    QMimeData* mimeData = new QMimeData();
+    DImg selDImg              = d->im->getImgSelection();
+    QImage selImg             = selDImg.copyQImage();
+    QMimeData* const mimeData = new QMimeData();
     mimeData->setImageData(selImg);
     QApplication::clipboard()->setMimeData(mimeData, QClipboard::Clipboard);
 

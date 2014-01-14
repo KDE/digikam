@@ -84,7 +84,7 @@ ImageRegionItem::~ImageRegionItem()
     delete d_ptr;
 }
 
-QRect ImageRegionItem::getImageRegion()
+QRect ImageRegionItem::getImageRegion() const
 {
     return d_ptr->drawRect;
 }
@@ -113,7 +113,7 @@ void ImageRegionItem::setHighLightPoints(const QPolygon& pointsList)
     d_ptr->hightlightPoints = pointsList;
 }
 
-void ImageRegionItem::paintExtraData(QPainter* p)
+void ImageRegionItem::paintExtraData(QPainter* const p)
 {
     QRect viewportRect   = d_ptr->view->viewport()->rect();
     QRect fontRectBefore = p->fontMetrics().boundingRect(viewportRect, 0, i18n("Before"));
@@ -129,6 +129,7 @@ void ImageRegionItem::paintExtraData(QPainter* p)
         {
             d_ptr->view->drawText(p, QRectF(QPointF(d_ptr->drawRect.topLeft().x() + 20, d_ptr->drawRect.topLeft().y() + 20), fontRectBefore.size()), i18n("Before"));
         }
+
         else if (d_ptr->renderingPreviewMode == PreviewToolBar::PreviewTargetImage ||
                  d_ptr->renderingPreviewMode == PreviewToolBar::NoPreviewMode      ||
                  (d_ptr->renderingPreviewMode == PreviewToolBar::PreviewToggleOnMouseOver && d_ptr->onMouseMovePreviewToggled))
@@ -141,6 +142,7 @@ void ImageRegionItem::paintExtraData(QPainter* p)
                 d_ptr->view->drawText(p, QRectF(QPointF(d_ptr->drawRect.topLeft().x() + 20, d_ptr->drawRect.topLeft().y() + 20), fontRectAfter.size()), i18n("After"));
             }
         }
+
         else if (d_ptr->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVert ||
                  d_ptr->renderingPreviewMode == PreviewToolBar::PreviewBothImagesVertCont)
         {
@@ -161,6 +163,7 @@ void ImageRegionItem::paintExtraData(QPainter* p)
             d_ptr->view->drawText(p, QRectF(QPointF(d_ptr->drawRect.topLeft().x() + 20, d_ptr->drawRect.topLeft().y() + 20), fontRectBefore.size()), i18n("Before"));
             d_ptr->view->drawText(p, QRectF(QPointF(d_ptr->drawRect.topLeft().x() + d_ptr->drawRect.width()/2 + 20, d_ptr->drawRect.topLeft().y() + 20), fontRectAfter.size()), i18n("After"));
         }
+
         else if (d_ptr->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorz ||
                  d_ptr->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorzCont)
         {
@@ -188,7 +191,7 @@ void ImageRegionItem::paintExtraData(QPainter* p)
         if (!d_ptr->hightlightPoints.isEmpty())
         {
             QPoint pt;
-            QRectF  hpArea;
+            QRectF hpArea;
 
             for (int i = 0 ; i < d_ptr->hightlightPoints.count() ; ++i)
             {
@@ -206,16 +209,16 @@ void ImageRegionItem::paintExtraData(QPainter* p)
                     hpArea.moveCenter(hp);
 
                     p->setPen(QPen(Qt::white, 2, Qt::SolidLine));
-                    p->drawLine(hp.x(), hpArea.y(), hp.x(), hp.y() - (int)(3 * zoomFactor));
-                    p->drawLine(hp.x(), hp.y() + (int)(3 * zoomFactor), hp.x(), hpArea.bottom());
-                    p->drawLine(hpArea.x(), hp.y(), hp.x() - (int)(3 * zoomFactor), hp.y());
-                    p->drawLine(hp.x() + (int)(3 * zoomFactor), hp.y(), hpArea.right(), hp.y());
+                    p->drawLine(hp.x(),                         hpArea.y(),                     hp.x(),                         hp.y() - (int)(3 * zoomFactor));
+                    p->drawLine(hp.x(),                         hp.y() + (int)(3 * zoomFactor), hp.x(),                         hpArea.bottom());
+                    p->drawLine(hpArea.x(),                     hp.y(),                         hp.x() - (int)(3 * zoomFactor), hp.y());
+                    p->drawLine(hp.x() + (int)(3 * zoomFactor), hp.y(),                         hpArea.right(),                 hp.y());
 
                     p->setPen(QPen(Qt::red, 2, Qt::DotLine));
-                    p->drawLine(hp.x(), hpArea.y(), hp.x(), hp.y() - (int)(3 * zoomFactor));
-                    p->drawLine(hp.x(), hp.y() + (int)(3 * zoomFactor), hp.x(), hpArea.bottom());
-                    p->drawLine(hpArea.x(), hp.y(), hp.x() - (int)(3 * zoomFactor), hp.y());
-                    p->drawLine(hp.x() + (int)(3 * zoomFactor), hp.y(), hpArea.right(), hp.y());
+                    p->drawLine(hp.x(),                         hpArea.y(),                     hp.x(),                         hp.y() - (int)(3 * zoomFactor));
+                    p->drawLine(hp.x(),                         hp.y() + (int)(3 * zoomFactor), hp.x(),                         hpArea.bottom());
+                    p->drawLine(hpArea.x(),                     hp.y(),                         hp.x() - (int)(3 * zoomFactor), hp.y());
+                    p->drawLine(hp.x() + (int)(3 * zoomFactor), hp.y(),                         hpArea.right(),                 hp.y());
                 }
             }
         }

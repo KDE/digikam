@@ -53,8 +53,10 @@ public:
     void setTargetImage(const DImg& img);
     void setHighLightPoints(const QPolygon& pointsList);
     void setRenderingPreviewMode(int mode);
-    void paintExtraData(QPainter* painter);
-    QRect getImageRegion();
+
+    void  paintExtraData(QPainter* const painter);
+    QRect getImageRegion() const;
+
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
     void hoverEnterEvent(QGraphicsSceneHoverEvent*);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
