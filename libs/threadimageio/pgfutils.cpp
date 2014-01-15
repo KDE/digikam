@@ -172,43 +172,58 @@ bool writePGFImageFile(const QImage& image, const QString& filePath, int quality
 
 bool writePGFImageData(const QImage& image, QByteArray& data, int quality, bool verbose)
 {
-    // We will use uncompressed image bytes size to allocate PGF stream in memory. In all case, due to PGF compression ratio,
-    // PGF data will be so far lesser than image raw size.
-    int rawSize          = image.byteCount();
-    CPGFMemoryStream stream(rawSize);
+    try
+    {
+        // We will use uncompressed image bytes size to allocate PGF stream in memory. In all case, due to PGF compression ratio,
+        // PGF data will be so far lesser than image raw size.
+        int rawSize          = image.byteCount();
+        CPGFMemoryStream stream(rawSize);
 
-    if (verbose)
-        kDebug() << "PGF stream memory allocation in bytes: " << rawSize;
+        if (verbose)
+            kDebug() << "PGF stream memory allocation in bytes: " << rawSize;
 
-    UINT32 nWrittenBytes = 0;
-    bool ret             = writePGFImageDataToStream(image, stream, quality, nWrittenBytes, verbose);
-    int pgfsize          =
+        UINT32 nWrittenBytes = 0;
+        bool ret             = writePGFImageDataToStream(image, stream, quality, nWrittenBytes, verbose);
+        int pgfsize          =
 #ifdef PGFCodecVersionID
 #   if PGFCodecVersionID == 0x061224
-                                      // Wrap around libpgf 6.12.24 about CPGFMemoryStream bytes size generated to make PGF file data.
-                                      // It miss 16 bytes at end. This solution fix the problem. Problem have been fixed in 6.12.27.
-                                      nWrittenBytes + 16;
+                               // Wrap around libpgf 6.12.24 about CPGFMemoryStream bytes size generated to make PGF file data.
+                               // It miss 16 bytes at end. This solution fix the problem. Problem have been fixed in 6.12.27.
+                               nWrittenBytes + 16;
 #   else
-                                      nWrittenBytes;
+                               nWrittenBytes;
 #   endif
 #else
-                                      nWrittenBytes;
+                               nWrittenBytes;
 #endif
 
-    data                 = QByteArray((const char*)stream.GetBuffer(), pgfsize);
+        data                 = QByteArray((const char*)stream.GetBuffer(), pgfsize);
 
-    if (!pgfsize)
-    {
-        kDebug() << "Encoded PGF image : data size is null";
-        ret = false;
-    }
-    else
-    {
-        if (verbose)
-            kDebug() << "data size written : " << pgfsize;
-    }
+        if (!pgfsize)
+        {
+            kDebug() << "Encoded PGF image : data size is null";
+            ret = false;
+        }
+        else
+        {
+            if (verbose)
+                kDebug() << "data size written : " << pgfsize;
+        }
 
-    return ret;
+        return ret;
+    }
+    catch (IOException& e)
+    {
+        int err = e.error;
+
+        if (err >= AppError)
+        {
+            err -= AppError;
+        }
+
+        kDebug() << "Error running libpgf (" << err << ")!";
+        return false;
+    }
 }
 
 bool writePGFImageDataToStream(const QImage& image, CPGFStream& stream, int quality, UINT32& nWrittenBytes, bool verbose)
