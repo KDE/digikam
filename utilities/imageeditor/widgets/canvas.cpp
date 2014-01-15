@@ -1004,6 +1004,7 @@ void Canvas::mousePressEvent(QMouseEvent* event)
     if (item)
     {
         QString className(item->metaObject()->className());
+
         if (className == "Digikam::RubberItem" || className == "Digikam::ClickDragReleaseItem")
         {
             return;
@@ -1028,6 +1029,8 @@ void Canvas::wheelEvent(QWheelEvent* event)
 
     if (event->modifiers() & Qt::ShiftModifier)
     {
+        // We switch between next or previous items if SHIFT is pressed
+
         if (event->delta() < 0)
         {
             emit signalShowNextImage();
@@ -1041,6 +1044,7 @@ void Canvas::wheelEvent(QWheelEvent* event)
     }
     else if (event->modifiers() & Qt::ControlModifier)
     {
+        // We switch between zoom level if CTRL is pressed
 
         d->isWheelEvent    = true;
         d->wheelEventPoint = event->pos();
