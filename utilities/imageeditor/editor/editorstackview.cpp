@@ -131,7 +131,7 @@ void EditorStackView::increaseZoom()
 {
     if (viewMode() == CanvasMode)
     {
-        d->canvas->slotIncreaseZoom();
+        d->canvas->layout()->increaseZoom();
     }
     else
     {
@@ -148,7 +148,7 @@ void EditorStackView::decreaseZoom()
 {
     if (viewMode() == CanvasMode)
     {
-        d->canvas->slotDecreaseZoom();
+        d->canvas->layout()->decreaseZoom();
     }
     else
     {
@@ -166,7 +166,7 @@ void EditorStackView::toggleFitToWindow()
     // Fit to window action is common place to switch view in this mode.
     // User want to see the same behavors between canvas and tool preview.
     // Both are toggle at the same time.
-    d->canvas->toggleFitToWindow();
+    d->canvas->layout()->toggleFitToWindow();
 
     GraphicsDImgView* const preview = previewWidget();
 
@@ -188,7 +188,7 @@ void EditorStackView::zoomTo100Percent()
 {
     if (viewMode() == CanvasMode)
     {
-        d->canvas->setZoomFactor(1.0);
+        d->canvas->layout()->setZoomFactor(1.0);
     }
     else
     {
@@ -206,7 +206,7 @@ void EditorStackView::setZoomFactor(double zoom)
 {
     if (viewMode() == CanvasMode)
     {
-        d->canvas->setZoomFactor(zoom);
+        d->canvas->layout()->setZoomFactor(zoom);
     }
     else
     {
@@ -224,7 +224,7 @@ double EditorStackView::zoomMax() const
 {
     if (viewMode() == CanvasMode)
     {
-        return d->canvas->zoomMax();
+        return d->canvas->layout()->maxZoomFactor();
     }
     else
     {
@@ -244,7 +244,7 @@ double EditorStackView::zoomMin() const
 {
     if (viewMode() == CanvasMode)
     {
-        return d->canvas->zoomMin();
+        return d->canvas->layout()->minZoomFactor();
     }
     else
     {
@@ -273,7 +273,7 @@ void EditorStackView::slotZoomSliderChanged(int size)
 
     if (viewMode() == CanvasMode)
     {
-        d->canvas->setZoomFactorSnapped(z);
+        d->canvas->layout()->setZoomFactorSnapped(z);
     }
     else
     {
@@ -292,8 +292,8 @@ void EditorStackView::slotZoomChanged(double zoom)
 
     if (viewMode() == CanvasMode)
     {
-        max = d->canvas->maxZoom();
-        min = d->canvas->minZoom();
+        max = d->canvas->layout()->atMaxZoom();
+        min = d->canvas->layout()->atMinZoom();
         emit signalZoomChanged(max, min, zoom);
     }
     else
@@ -302,7 +302,6 @@ void EditorStackView::slotZoomChanged(double zoom)
 
         if (preview)
         {
-            //qDebug("EditorStackView::slotZoomChanged");
             max = preview->layout()->atMaxZoom();
             min = preview->layout()->atMinZoom();
             emit signalZoomChanged(max, min, zoom);

@@ -103,7 +103,7 @@ ImageRegionWidget::~ImageRegionWidget()
 void ImageRegionWidget::setHighLightPoints(const QPolygon& pointsList)
 {
     d_ptr->item->setHighLightPoints(pointsList);
-    update();
+    viewport()->update();
 }
 
 void ImageRegionWidget::setCapturePointMode(bool b)
@@ -140,7 +140,7 @@ void ImageRegionWidget::slotPreviewModeChanged(int mode)
     d_ptr->renderingPreviewMode = mode;
     d_ptr->item->setRenderingPreviewMode(mode);
     slotZoomFactorChanged();
-    update();
+    viewport()->update();
 }
 
 double ImageRegionWidget::zoomFactor() const
@@ -209,13 +209,13 @@ void ImageRegionWidget::slotOriginalImageRegionChanged(bool targetDone)
 void ImageRegionWidget::exposureSettingsChanged()
 {
     d_ptr->item->clearCache();
-    update();
+    viewport()->update();
 }
 
 void ImageRegionWidget::ICCSettingsChanged()
 {
     d_ptr->item->clearCache();
-    update();
+    viewport()->update();
 }
 
 void ImageRegionWidget::toggleFitToWindow()

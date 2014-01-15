@@ -73,28 +73,15 @@ public:
     EditorCore* interface() const;
     void makeDefaultEditingCanvas();
 
-    double snapZoom(double z) const;
-    void   setZoomFactorSnapped(double zoom);
-
-    void   setZoomFactor(double z);
-    double zoomFactor() const;
-
-    void   setFitToWindow(bool enable);
-    bool   fitToWindow() const;
-
     QString ensureHasCurrentUuid()   const;
     DImg    currentImage()           const;
     QString currentImageFileFormat() const;
     QString currentImageFilePath()   const;
-    double zoomMax()                 const;
-    double zoomMin()                 const;
-    bool   maxZoom()                 const;
-    bool   minZoom()                 const;
-    int    imageWidth()              const;
-    int    imageHeight()             const;
-    bool   exifRotated()             const;
-    QRect  getSelectedArea()         const;
-    QRect  visibleArea()             const;
+    int     imageWidth()              const;
+    int     imageHeight()             const;
+    bool    exifRotated()             const;
+    QRect   getSelectedArea()         const;
+    QRect   visibleArea()             const;
 
     // If current image file format is only available in read only,
     // typically all RAW image file formats.
@@ -112,9 +99,6 @@ public:
 
 Q_SIGNALS:
 
-    void signalZoomChanged(double zoom);
-    void signalMaxZoom();
-    void signalMinZoom();
     void signalChanged();
     void signalSelected(bool);
     void signalRightButtonClicked();
@@ -133,9 +117,6 @@ Q_SIGNALS:
     void signalRedoSteps(int);
 
 public Q_SLOTS:
-
-    void slotIncreaseZoom();
-    void slotDecreaseZoom();
 
     // image modifiers
     void slotRotate90();
@@ -161,13 +142,9 @@ protected:
     void keyPressEvent(QKeyEvent*);
     void mousePressEvent(QMouseEvent*);
     void addRubber();
-    void wheelEvent(QWheelEvent*);
 
 private:
 
-    void   updateAutoZoom();
-    void   updateContentsSize(bool deleteRubber);
-    double calcAutoZoomFactor() const;
     QRect  calcSelectedArea() const;
     void   reset();
 
@@ -176,9 +153,6 @@ private Q_SLOTS:
     void slotModified();
     void slotImageLoaded(const QString& filePath, bool success);
     void slotImageSaved(const QString& filePath, bool success);
-    void slotCornerButtonPressed();
-    void slotPanIconSelectionMoved(const QRect&, bool);
-    void slotPanIconHidden();
     void slotAddItemStarted(const QPointF& pos);
     void slotAddItemMoving(const QRectF& rect);
     void slotAddItemFinished(const QRectF& rect);

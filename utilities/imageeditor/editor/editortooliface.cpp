@@ -38,6 +38,7 @@
 #include "editorwindow.h"
 #include "imageguidewidget.h"
 #include "imageregionwidget.h"
+#include "previewlayout.h"
 
 namespace Digikam
 {
@@ -123,13 +124,13 @@ void EditorToolIface::loadTool(EditorTool* const tool)
         connect(d->editor, SIGNAL(signalPreviewModeChanged(int)),
                 view2, SLOT(slotPreviewModeChanged(int)));
 
-        if (d->editor->editorStackView()->canvas()->fitToWindow())
+        if (d->editor->editorStackView()->canvas()->layout()->isFitToWindow())
         {
             view2->toggleFitToWindow();
         }
         else
         {
-            view2->setZoomFactor(d->editor->editorStackView()->canvas()->zoomFactor());
+            view2->setZoomFactor(d->editor->editorStackView()->canvas()->layout()->zoomFactor());
             QPoint tl = d->editor->editorStackView()->canvas()->visibleArea().topLeft();
             view2->setContentsPos(tl.x(), tl.y());
         }
@@ -170,9 +171,9 @@ void EditorToolIface::unLoadTool()
     d->editor->setPreviewModeMask(PreviewToolBar::NoPreviewMode);
 
     // To restore canvas zoom level in zoom combobox.
-    if (!d->editor->editorStackView()->canvas()->fitToWindow())
+    if (!d->editor->editorStackView()->canvas()->layout()->isFitToWindow())
     {
-        d->editor->editorStackView()->setZoomFactor(d->editor->editorStackView()->canvas()->zoomFactor());
+        d->editor->editorStackView()->setZoomFactor(d->editor->editorStackView()->canvas()->layout()->zoomFactor());
     }
 
     delete d->tool;
