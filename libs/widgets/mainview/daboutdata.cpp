@@ -159,10 +159,16 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
                           "https://plus.google.com/+JulienNarboux"
                         );
 
-    aboutData.addAuthor ( ki18n("Patrick Spendrin"),
-                          ki18n("Developer and Windows port"),
-                          "patrick_spendrin at gmx dot de",
-                          "http://saroengels.blogspot.com"
+    aboutData.addAuthor ( ki18n("Ananta Palani"),
+                          ki18n("Windows Port and Release Manager"),
+                          "anantapalani at gmail dot com",
+                          "https://plus.google.com/u/0/+AnantaPalani"
+                        );
+
+    aboutData.addAuthor ( ki18n("Nicolas Lécureuil"),
+                          ki18n("Releases Manager"),
+                          "neoclust dot kde at gmail dot com",
+                          "https://plus.google.com/u/0/111733995327568706391"
                         );
 
     // -- Students ---------------------------------------------------------------
@@ -246,7 +252,7 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
                         );
 
     aboutData.addCredit ( ki18n("Victor Dodon"),
-                          ki18n("KDE XML-GUI port of Libkipi"),
+                          ki18n("XML based GUI port of Libkipi"),
                           "dodonvictor at gmail dot com",
                           "https://plus.google.com/u/0/107198225472060439855"
                         );
@@ -259,8 +265,14 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
 
     // -- Former contributors ----------------------------------------------------
 
+    aboutData.addAuthor ( ki18n("Patrick Spendrin"),
+                          ki18n("Developer and Windows port"),
+                          "patrick_spendrin at gmx dot de",
+                          "https://plus.google.com/u/0/107813275713575797754"
+                        );
+
     aboutData.addCredit ( ki18n("Francesco Riosa"),
-                          ki18n("LCMS2 port"),
+                          ki18n("LCMS2 library port"),
                           "francesco plus kde at pnpitalia dot it",
                           "https://plus.google.com/u/0/113237307210359236747"
                         );
