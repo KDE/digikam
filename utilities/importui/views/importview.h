@@ -47,7 +47,7 @@ class ImportView : public KHBox
 
 public:
 
-    ImportView(Digikam::ImportUI*const ui, Digikam::ImportImageModel* model, Digikam::ImportFilterModel* filterModel, QWidget*const parent);
+    ImportView(Digikam::ImportUI* const ui, ImportImageModel* const model, ImportFilterModel* const filterModel, QWidget* const parent);
     ~ImportView();
 
     void applySettings();
@@ -62,26 +62,24 @@ public:
 
     void scrollTo(const QString& folder, const QString& file);
 
-    CamItemInfo  camItemInfo(const QString& folder, const QString& file) const;
-    CamItemInfo& camItemInfoRef(const QString& folder, const QString& file) const;
-    bool hasImage(const CamItemInfo& info);
+    CamItemInfo  camItemInfo(const QString& folder, const QString& file)     const;
+    CamItemInfo& camItemInfoRef(const QString& folder, const QString& file)  const;
+    bool         hasImage(const CamItemInfo& info)                           const;
 
-    KUrl::List         allUrls() const;
-    KUrl::List         selectedUrls() const;
-    QList<CamItemInfo> selectedCamItemInfos() const;
-    QList<CamItemInfo> allItems() const;
+    KUrl::List         allUrls()                                             const;
+    KUrl::List         selectedUrls()                                        const;
+    QList<CamItemInfo> selectedCamItemInfos()                                const;
+    QList<CamItemInfo> allItems()                                            const;
     void               setSelectedCamItemInfos(const CamItemInfoList& infos) const;
-    int                downloadedCamItemInfos() const;
-    bool               hasCurrentItem() const;
+    int                downloadedCamItemInfos()                              const;
+    bool               hasCurrentItem()                                      const;
+    bool               isSelected(const KUrl& url)                           const;
 
-    bool isSelected(const KUrl url);
-
-    double zoomMin();
-    double zoomMax();
-
-    ThumbnailSize thumbnailSize();
-    ImportStackedView::StackedViewMode viewMode() const;
-    ImportFilterModel *importFilterModel();
+    double                             zoomMin()           const;
+    double                             zoomMax()           const;
+    ThumbnailSize                      thumbnailSize()     const;
+    ImportStackedView::StackedViewMode viewMode()          const;
+    ImportFilterModel*                 importFilterModel() const;
 
 Q_SIGNALS:
 
