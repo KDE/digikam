@@ -40,7 +40,6 @@
 #include "graphicsdimgview.h"
 #include "editorcore.h"
 
-class QResizeEvent;
 class QWheelEvent;
 class QKeyEvent;
 

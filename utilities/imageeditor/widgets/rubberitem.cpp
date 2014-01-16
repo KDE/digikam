@@ -57,7 +57,7 @@ void RubberItem::setCanvas(Canvas* const canvas)
 void RubberItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 {
     RegionFrameItem::mouseReleaseEvent(event);
-    emit d->canvas->slotSelected();
+    d->canvas->slotSelected();
 }
 
 } // namespace Digikam

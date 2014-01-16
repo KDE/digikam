@@ -72,8 +72,6 @@ public:
         im         = 0;
     }
 
-    QPixmap               qcheck;
-
     QString               errorMessage;
 
     ImagePreviewItem*     canvasItem;

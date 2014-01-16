@@ -28,8 +28,6 @@
 
 #include <QFlags>
 
-// KDE includes
-
 // Local includes
 
 #include "canvas.h"
@@ -50,6 +48,7 @@ public:
 
     RubberItem(ImagePreviewItem* const item);
     virtual ~RubberItem();
+
     void setCanvas(Canvas* const canvas);
 
 protected:

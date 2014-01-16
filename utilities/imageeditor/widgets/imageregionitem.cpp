@@ -49,7 +49,7 @@ namespace Digikam
 class ImageRegionItem::Private
 {
 public:
-  
+
     Private():
         renderingPreviewMode(PreviewToolBar::PreviewBothImagesVertCont),
         onMouseMovePreviewToggled(false),
