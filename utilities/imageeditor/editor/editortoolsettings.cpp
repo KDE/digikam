@@ -6,7 +6,7 @@
  * Date        : 2008-08-21
  * Description : Editor tool settings template box
  *
- * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -137,17 +137,17 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
 
     // ---------------------------------------------------------------
 
-    QGridLayout* gridSettings = new QGridLayout(d->settingsArea);
-    d->plainPage              = new QWidget;
-    d->guideBox               = new KHBox;
-    d->histogramBox           = new HistogramBox;
+    QGridLayout* const gridSettings = new QGridLayout(d->settingsArea);
+    d->plainPage                    = new QWidget;
+    d->guideBox                     = new KHBox;
+    d->histogramBox                 = new HistogramBox;
 
     // ---------------------------------------------------------------
 
-    QFrame* toolDescriptor = new QFrame;
-    d->toolName            = new QLabel();
-    d->toolIcon            = new QLabel();
-    QFont font             = d->toolName->font();
+    QFrame* const toolDescriptor = new QFrame;
+    d->toolName                  = new QLabel();
+    d->toolIcon                  = new QLabel();
+    QFont font                   = d->toolName->font();
     font.setBold(true);
     d->toolName->setFont(font);
 
@@ -178,10 +178,10 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
     // ---------------------------------------------------------------
 
     new QLabel(i18n("Guide:"), d->guideBox);
-    QLabel* space4  = new QLabel(d->guideBox);
-    d->guideColorBt = new KColorButton(QColor(Qt::red), d->guideBox);
+    QLabel* const space4 = new QLabel(d->guideBox);
+    d->guideColorBt      = new KColorButton(QColor(Qt::red), d->guideBox);
     d->guideColorBt->setWhatsThis(i18n("Set here the color used to draw dashed guide lines."));
-    d->guideSize    = new RIntNumInput(d->guideBox);
+    d->guideSize         = new RIntNumInput(d->guideBox);
     d->guideSize->input()->setSuffix(QString("px"));
     d->guideSize->setRange(1, 5, 1);
     d->guideSize->setSliderEnabled(true);
@@ -206,7 +206,7 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
     d->cancelBtn = new KPushButton;
     d->cancelBtn->setGuiItem(KStandardGuiItem::cancel());
 
-    QHBoxLayout* hbox1 = new QHBoxLayout;
+    QHBoxLayout* const hbox1 = new QHBoxLayout;
     hbox1->addWidget(d->defaultBtn);
     hbox1->addStretch(1);
     hbox1->addWidget(d->okBtn);
@@ -228,7 +228,7 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
     d->tryBtn->setText(i18n("Try"));
     d->tryBtn->setToolTip(i18n("Try all settings."));
 
-    QHBoxLayout* hbox2 = new QHBoxLayout;
+    QHBoxLayout* const hbox2 = new QHBoxLayout;
     hbox2->addWidget(d->loadBtn);
     hbox2->addWidget(d->saveAsBtn);
     hbox2->addStretch(1);
@@ -236,12 +236,12 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
 
     // ---------------------------------------------------------------
 
-    gridSettings->addWidget(toolDescriptor,    0, 0, 1, -1);
-    gridSettings->addWidget(d->histogramBox,   1, 0, 2, 2);
-    gridSettings->addWidget(d->plainPage,      4, 0, 1, 2);
-    gridSettings->addWidget(d->guideBox,       5, 0, 1, 2);
-    gridSettings->addLayout(hbox2,             6, 0, 1, 2);
-    gridSettings->addLayout(hbox1,             7, 0, 1, 2);
+    gridSettings->addWidget(toolDescriptor,  0, 0, 1, -1);
+    gridSettings->addWidget(d->histogramBox, 1, 0, 2, 2);
+    gridSettings->addWidget(d->plainPage,    4, 0, 1, 2);
+    gridSettings->addWidget(d->guideBox,     5, 0, 1, 2);
+    gridSettings->addLayout(hbox2,           6, 0, 1, 2);
+    gridSettings->addLayout(hbox1,           7, 0, 1, 2);
     gridSettings->setSpacing(spacingHint());
     gridSettings->setMargin(spacingHint());
 
@@ -287,11 +287,11 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    setTabOrder(d->tryBtn, d->okBtn);
-    setTabOrder(d->okBtn, d->cancelBtn);
-    setTabOrder(d->cancelBtn, d->defaultBtn);
+    setTabOrder(d->tryBtn,     d->okBtn);
+    setTabOrder(d->okBtn,      d->cancelBtn);
+    setTabOrder(d->cancelBtn,  d->defaultBtn);
     setTabOrder(d->defaultBtn, d->loadBtn);
-    setTabOrder(d->loadBtn, d->saveAsBtn);
+    setTabOrder(d->loadBtn,    d->saveAsBtn);
 
     // ---------------------------------------------------------------
 

@@ -6,7 +6,7 @@
  * Date        : 2008-08-20
  * Description : Image editor interface used by editor tools.
  *
- * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -162,15 +162,18 @@ void EditorToolIface::unLoadTool()
     d->editor->editorStackView()->setViewMode(EditorStackView::CanvasMode);
     d->editor->editorStackView()->setToolView(0);
     d->editor->rightSideBar()->deleteTab(d->tool->toolSettings());
+
     if (!d->editor->rightSideBar()->isVisible())
     {
         d->editor->rightSideBar()->shrink();
     }
+
     d->editor->toggleActions(true);
     d->editor->toggleToolActions();
     d->editor->setPreviewModeMask(PreviewToolBar::NoPreviewMode);
 
     // To restore canvas zoom level in zoom combobox.
+
     if (!d->editor->editorStackView()->canvas()->layout()->isFitToWindow())
     {
         d->editor->editorStackView()->setZoomFactor(d->editor->editorStackView()->canvas()->layout()->zoomFactor());
@@ -264,7 +267,7 @@ void EditorToolIface::updateExposureSettings()
 {
     ExposureSettingsContainer* const expoSettings = d->editor->exposureSettings();
     d->editor->editorStackView()->canvas()->setExposureSettings(expoSettings);
-    EditorTool* const tool = dynamic_cast<EditorTool*>(d->tool);
+    EditorTool* const tool                        = dynamic_cast<EditorTool*>(d->tool);
 
     if (tool)
     {
