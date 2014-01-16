@@ -159,6 +159,7 @@ Q_SIGNALS:
     void signalToggleOffFitToWindow();
     void signalUndoSteps(int);
     void signalRedoSteps(int);
+    void signalZoomChanged(double);
 
 public Q_SLOTS:
 

@@ -84,7 +84,7 @@ Object::connect:  (receiver name: 'Image Editor')
 If canvas do not fit full image content (as image is very small on view using zoom-), you can start to select a region starting somewhere on image and completed outside image content.
 Selection must be automatically limite to image size.
 
-17/ 
+17/ [FIXED]
 
 One signal is missing from Canvas:
 
