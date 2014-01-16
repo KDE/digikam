@@ -638,6 +638,7 @@ void ImportImageModel::publiciseInfos(const CamItemInfoList& infos)
     }
 
     endInsertRows();
+    emit processAdded(infos);
     emit itemInfosAdded(infos);
 }
 

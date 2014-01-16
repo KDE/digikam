@@ -34,7 +34,6 @@ ImportSortFilterModel::ImportSortFilterModel(QObject* const parent)
     : KCategorizedSortFilterProxyModel(parent),
       m_chainedModel(0)
 {
-    setDynamicSortFilter(true);
 }
 
 ImportSortFilterModel::~ImportSortFilterModel()
@@ -396,8 +395,10 @@ void ImportFilterModel::setDirectSourceImportModel(ImportImageModel* const sourc
         //disconnect(d->importImageModel, SIGNAL(modelReset()),
                            //this, SLOT(slotModelReset()));
         //TODO: slotModelReset(); will be added when implementing filtering options
+        disconnect(d->importImageModel, SIGNAL(processAdded(QList<CamItemInfo>)), this, SLOT(slotProcessAdded(QList<CamItemInfo>)));
     }
 
+    // TODO do we need to delete the old one?
     d->importImageModel = sourceModel;
 
     if (d->importImageModel)
@@ -409,10 +410,17 @@ void ImportFilterModel::setDirectSourceImportModel(ImportImageModel* const sourc
                 //d->importImageModel, SLOT(reAddingFinished()));
 
         //TODO: connect(d->importImageModel, SIGNAL(modelReset()), this, SLOT(slotModelReset()));
+        connect(d->importImageModel, SIGNAL(processAdded(QList<CamItemInfo>)), this, SLOT(slotProcessAdded(QList<CamItemInfo>)));
     }
 
     setSourceModel(d->importImageModel);
 }
+
+void ImportFilterModel::slotProcessAdded(const QList< CamItemInfo >&)
+{
+    invalidate();
+}
+
 
 int ImportFilterModel::compareCategories(const QModelIndex& left, const QModelIndex& right) const
 {
