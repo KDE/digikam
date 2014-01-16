@@ -81,8 +81,17 @@ Object::connect:  (receiver name: 'Image Editor')
 
 16/ 
 
-If canvas do not fit full image content (as image is very small on view using zoom-), you can start to select a region stating somewhere on image and completed outside image content.
+If canvas do not fit full image content (as image is very small on view using zoom-), you can start to select a region starting somewhere on image and completed outside image content.
 Selection must be automatically limite to image size.
+
+17/ 
+
+One signal is missing from Canvas:
+
+Object::connect: No such signal Digikam::Canvas::signalZoomChanged(double) in /mnt/devel/GIT/3.x/core/utilities/imageeditor/editor/editorstackview.cpp:72
+
+Zoom-bar from status-bar is not updated when user change zoom level using mouse wheel and CTRL key.
+
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
