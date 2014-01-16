@@ -512,6 +512,11 @@ void Canvas::slotModified()
 
 void Canvas::slotSelectAll()
 {
+    if (!d->rubber)
+    {
+        d->rubber = new RubberItem(d->canvasItem);
+        d->rubber->setCanvas(this);
+    }
     d->rubber->setRectInSceneCoordinates(d->canvasItem->boundingRect());
     viewport()->setMouseTracking(true);
     viewport()->update();

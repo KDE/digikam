@@ -8,7 +8,7 @@ MAIN EDITOR CANVAS:
 
 Current image loaded in editor do not show any information relevant in right sidebar (as image properties, metadata, colors, etc...).
 
-02/ 
+02/ [FIXED]
 
 Select a rectangle over canvas and change zoom level. Selected region is not maintained at the right place.
 
@@ -52,7 +52,7 @@ In fact it's the same dysfunction with all other editor tools... It's certainly 
 
 Select a rectangle over canvas. Sometime, selection mode still active after to complete selection. Without to press any mouse button, selection area can be changed as well when mouse is simply moved over canvas.
 
-10/ 
+10/ [FIXED]
 
 Use zoom in/out buttons from status bar. Image is zommed through the center of image which is fine, but when zoom level fit content, image is discentered on the top/left corner.
 
@@ -68,7 +68,7 @@ Go to Setup/Editor page and set over/under exposure indicator to be very restric
 
 Go to Setup/CM and set a dumy monitor profile as ProRGB. Enable CM from statusbar and look as nothing happen (color rendered in canvas must be corrupted)
 
-14/ 
+14/ [FIXED]
 
 "Edit/Select All" do nothing.
 
@@ -79,7 +79,7 @@ One slot connection from Editor is broken and visible on the console :
 Object::connect: No such signal Digikam::Canvas::signalChanged() in /mnt/devel/GIT/3.x/core/utilities/imageeditor/editor/editorwindow.cpp:268
 Object::connect:  (receiver name: 'Image Editor')
 
-16/ 
+16/ [FIXED]
 
 If canvas do not fit full image content (as image is very small on view using zoom-), you can start to select a region starting somewhere on image and completed outside image content.
 Selection must be automatically limite to image size.
