@@ -73,25 +73,25 @@ public:
         im               = 0;
     }
 
-    bool                     fullScreen;
+    bool                  fullScreen;
 
-    QPoint                   wheelEventPoint;
+    QPoint                wheelEventPoint;
 
-    QPoint                   dragStart;
-    QRect                    dragStartRect;
+    QPoint                dragStart;
+    QRect                 dragStartRect;
 
-    QColor                   bgColor;
+    QColor                bgColor;
 
-    QWidget*                 parent;
-    QPixmap                  qcheck;
+    QWidget*              parent;
+    QPixmap               qcheck;
 
-    QString                  errorMessage;
+    QString               errorMessage;
 
-    ImagePreviewItem*        canvasItem;
+    ImagePreviewItem*     canvasItem;
 
-    RubberItem*              rubber;
-    ClickDragReleaseItem*    wrapItem;
-    EditorCore*              im;
+    RubberItem*           rubber;
+    ClickDragReleaseItem* wrapItem;
+    EditorCore*           im;
 };
 
 Canvas::Canvas(QWidget* const parent)
@@ -665,7 +665,7 @@ void Canvas::cancelAddItem()
 void Canvas::mousePressEvent(QMouseEvent* event)
 {
     GraphicsDImgView::mousePressEvent(event);
-    GraphicsDImgItem* const item = (GraphicsDImgItem*)itemAt(event->pos());
+    GraphicsDImgItem* const item = dynamic_cast<GraphicsDImgItem*>(itemAt(event->pos()));
 
     if (item)
     {

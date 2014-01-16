@@ -62,30 +62,31 @@ public:
     explicit Canvas(QWidget* const parent = 0);
     ~Canvas();
 
-    void    load(const QString& filename, IOFileSettings* const IOFileSettings);
-    void    preload(const QString& filename);
+    void load(const QString& filename, IOFileSettings* const IOFileSettings);
+    void preload(const QString& filename);
 
-    void    resetImage();
-    void    abortSaving();
-    void    applyTransform(const IccTransform& transform);
-    void    setModified();
+    void resetImage();
+    void abortSaving();
+    void applyTransform(const IccTransform& transform);
+    void setModified();
 
-    EditorCore* interface() const;
     void makeDefaultEditingCanvas();
 
-    QString ensureHasCurrentUuid()   const;
-    DImg    currentImage()           const;
-    QString currentImageFileFormat() const;
-    QString currentImageFilePath()   const;
-    int     imageWidth()              const;
-    int     imageHeight()             const;
-    bool    exifRotated()             const;
-    QRect   getSelectedArea()         const;
-    QRect   visibleArea()             const;
+    EditorCore* interface()              const;
+    QString     ensureHasCurrentUuid()   const;
+    DImg        currentImage()           const;
+    QString     currentImageFileFormat() const;
+    QString     currentImageFilePath()   const;
+    int         imageWidth()             const;
+    int         imageHeight()            const;
+    bool        exifRotated()            const;
+    QRect       getSelectedArea()        const;
+    QRect       visibleArea()            const;
 
-    // If current image file format is only available in read only,
-    // typically all RAW image file formats.
-    bool  isReadOnly()               const;
+    /** If current image file format is only available in read only,
+     * typically all RAW image file formats.
+     */
+    bool        isReadOnly()            const;
 
     void  setBackgroundColor(const QColor& color);
     void  setICCSettings(const ICCSettingsContainer& cmSettings);
@@ -145,8 +146,8 @@ protected:
 
 private:
 
-    QRect  calcSelectedArea() const;
-    void   reset();
+    QRect calcSelectedArea() const;
+    void  reset();
 
 private Q_SLOTS:
 
