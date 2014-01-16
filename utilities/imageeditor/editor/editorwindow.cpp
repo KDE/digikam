@@ -6,7 +6,7 @@
  * Date        : 2006-01-20
  * Description : core image editor GUI implementation
  *
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -2926,7 +2926,7 @@ void EditorWindow::slotThemeChanged()
         m_bgColor = palette().color(QPalette::Base);
     }
 
-    m_canvas->setBackgroundColor(m_bgColor);
+    m_canvas->setBackgroundBrush(QBrush(m_bgColor));
     d->toolIface->themeChanged();
 }
 
@@ -2972,9 +2972,9 @@ bool EditorWindow::thumbbarVisibility() const
 
 void EditorWindow::customizedFullScreenMode(bool set)
 {
-    set ? m_canvas->setBackgroundColor(QColor(Qt::black))
-        : m_canvas->setBackgroundColor(m_bgColor);
-        
+    set ? m_canvas->setBackgroundBrush(QBrush(Qt::black))
+        : m_canvas->setBackgroundBrush(QBrush(m_bgColor));
+
     statusBarMenuAction()->setEnabled(!set);
     toolBarMenuAction()->setEnabled(!set);
     d->showMenuBarAction->setEnabled(!set);

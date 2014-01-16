@@ -66,23 +66,12 @@ public:
 
     Private()
     {
-        fullScreen       = false;
-        rubber           = 0;
-        wrapItem         = 0;
-        canvasItem       = 0;
-        im               = 0;
+        rubber     = 0;
+        wrapItem   = 0;
+        canvasItem = 0;
+        im         = 0;
     }
 
-    bool                  fullScreen;
-
-    QPoint                wheelEventPoint;
-
-    QPoint                dragStart;
-    QRect                 dragStartRect;
-
-    QColor                bgColor;
-
-    QWidget*              parent;
     QPixmap               qcheck;
 
     QString               errorMessage;
@@ -98,8 +87,6 @@ Canvas::Canvas(QWidget* const parent)
     : GraphicsDImgView(parent), d(new Private)
 {
     d->im         = new EditorCore();
-    d->parent     = parent;
-    d->bgColor.setRgb(0, 0, 0);
     d->canvasItem = new ImagePreviewItem;
     setItem(d->canvasItem);
 
@@ -381,18 +368,6 @@ void Canvas::slotCrop()
     {
         d->rubber->setVisible(false);
     }
-}
-
-void Canvas::setBackgroundColor(const QColor& color)
-{
-    if (d->bgColor == color)
-    {
-        return;
-    }
-
-    d->bgColor = color;
-    setBackgroundBrush(QBrush(color));
-    //viewport()->update();
 }
 
 void Canvas::setICCSettings(const ICCSettingsContainer& cmSettings)

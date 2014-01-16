@@ -86,9 +86,8 @@ public:
     /** If current image file format is only available in read only,
      * typically all RAW image file formats.
      */
-    bool        isReadOnly()            const;
+    bool        isReadOnly()             const;
 
-    void  setBackgroundColor(const QColor& color);
     void  setICCSettings(const ICCSettingsContainer& cmSettings);
     void  setExposureSettings(ExposureSettingsContainer* const expoSettings);
     void  setSoftProofingEnabled(bool enable);
