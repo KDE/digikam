@@ -377,7 +377,6 @@ void Canvas::slotCrop()
 void Canvas::setICCSettings(const ICCSettingsContainer& cmSettings)
 {
     d->canvasItem->clearCache();
-    ICCSettingsContainer old = d->im->getICCSettings();
     d->im->setICCSettings(cmSettings);
     viewport()->update();
 }

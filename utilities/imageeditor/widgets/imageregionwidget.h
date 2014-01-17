@@ -81,11 +81,6 @@ public:
     void   exposureSettingsChanged();
 
     void   toggleFitToWindow();
-    void   setZoomFactor(double zoom);
-
-private:
-
-    double zoomFactor() const;
 
 Q_SIGNALS:
 
@@ -104,12 +99,11 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void slotZoomFactorChanged();
-    void slotPanIconSelectionMoved(const QRect& rect, bool targetDone);
 
 private:
 
     class Private;
-    Private* const d_ptr;
+    Private* const d;
 };
 
 }  // namespace Digikam

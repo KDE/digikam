@@ -130,7 +130,7 @@ void EditorToolIface::loadTool(EditorTool* const tool)
         }
         else
         {
-            view2->setZoomFactor(d->editor->editorStackView()->canvas()->layout()->zoomFactor());
+            view2->layout()->setZoomFactor(d->editor->editorStackView()->canvas()->layout()->zoomFactor());
             QPoint tl = d->editor->editorStackView()->canvas()->visibleArea().topLeft();
             view2->setContentsPos(tl.x(), tl.y());
         }

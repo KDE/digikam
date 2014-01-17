@@ -91,7 +91,7 @@ ImageRegionWidget::ImageRegionWidget(QWidget* const parent)
             this, SLOT(slotOriginalImageRegionChanged(bool)));
 
     layout()->fitToWindow();
-
+    installPanIcon();
 }
 
 ImageRegionWidget::~ImageRegionWidget()
@@ -143,18 +143,13 @@ void ImageRegionWidget::slotPreviewModeChanged(int mode)
     viewport()->update();
 }
 
-double ImageRegionWidget::zoomFactor() const
-{
-    return (d_ptr->item->zoomSettings()->zoomFactor());
-}
-
 QRect ImageRegionWidget::getOriginalImageRegionToRender() const
 {
     QRect r = d_ptr->item->getImageRegion();
-    int x   = (int)((double)r.x()      / zoomFactor());
-    int y   = (int)((double)r.y()      / zoomFactor());
-    int w   = (int)((double)r.width()  / zoomFactor());
-    int h   = (int)((double)r.height() / zoomFactor());
+    int x   = (int)((double)r.x()      / layout()->zoomFactor());
+    int y   = (int)((double)r.y()      / layout()->zoomFactor());
+    int w   = (int)((double)r.width()  / layout()->zoomFactor());
+    int h   = (int)((double)r.height() / layout()->zoomFactor());
 
     QRect rect(x, y, w, h);
     return (rect);
@@ -191,13 +186,6 @@ DImg ImageRegionWidget::getOriginalRegionImage(bool useDownscaledImage) const
     return (image);
 }
 
-void ImageRegionWidget::slotPanIconSelectionMoved(const QRect& rect, bool targetDone)
-{
-    GraphicsDImgView::slotPanIconSelectionMoved(rect, targetDone);
-    //setContentsPosition((int)(rect.x()*zoomFactor()), (int)(rect.y()*zoomFactor()), targetDone);
-    scrollContentsBy((int)(rect.x()*zoomFactor()), (int)(rect.y()*zoomFactor()));
-}
-
 void ImageRegionWidget::slotOriginalImageRegionChanged(bool targetDone)
 {
     if (targetDone)
@@ -222,11 +210,6 @@ void ImageRegionWidget::toggleFitToWindow()
 {
     layout()->toggleFitToWindow();
     update();
-}
-
-void ImageRegionWidget::setZoomFactor(double zoom)
-{
-    d_ptr->item->zoomSettings()->setZoomFactor(zoom);
 }
 
 }  // namespace Digikam
