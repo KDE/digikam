@@ -168,6 +168,7 @@ protected Q_SLOTS:
 
     void slotRowsInserted(const QModelIndex& parent, int start, int end);
     void slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
+    void slotProcessAdded(const QList<CamItemInfo>&);
 
 public:
 
