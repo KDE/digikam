@@ -22,7 +22,7 @@
  * ============================================================ */
 
 #include "showfotosettings.moc"
-
+#include "QDebug"
 // KDE includes
 
 #include <kglobal.h>
@@ -296,8 +296,8 @@ bool ShowfotoSettings::getShowSplash() const
     return d->showSplash;
 }
 
-bool ShowfotoSettings::getSortOrder() const
-{
+int ShowfotoSettings::getSortRole() const
+{    
     return d->sortOrder;
 }
 
@@ -481,9 +481,9 @@ void ShowfotoSettings::setShowSplash(bool show)
     d->group.writeEntry(d->configShowSplash, show);
 }
 
-void ShowfotoSettings::setSortOrder(int order)
+void ShowfotoSettings::setSortRole(int order)
 {
-    d->group.writeEntry(d->configSortOrder, order);
+    d->group.writeEntry(d->configSortOrder, order);   
 }
 
 void ShowfotoSettings::setReverseSort(bool reverse)
