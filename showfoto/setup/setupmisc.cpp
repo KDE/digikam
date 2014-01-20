@@ -180,7 +180,7 @@ void SetupMisc::readSettings()
     d->showSplash->setChecked(d->settings->getShowSplash());
     d->showMimeOverImage->setChecked(d->settings->getShowFormatOverThumbnail());
     d->sidebarType->setCurrentIndex(d->settings->getRightSideBarStyle());
-    d->sortOrderComboBox->setCurrentIndex(d->settings->getSortOrder());
+    d->sortOrderComboBox->setCurrentIndex(d->settings->getSortRole());
     d->sortReverse->setChecked(d->settings->getReverseSort());
     d->applicationStyle->setCurrentIndex(d->applicationStyle->
         findText(d->settings->getApplicationStyle()));
@@ -192,8 +192,8 @@ void SetupMisc::applySettings()
     d->settings->setShowSplash(d->showSplash->isChecked());
     d->settings->setShowFormatOverThumbnail(d->showMimeOverImage->isChecked());
     d->settings->setRightSideBarStyle(d->sidebarType->currentIndex());
-    d->settings->setSortOrder(d->sortOrderComboBox->currentIndex());
-    d->settings->setSortOrder(d->sortReverse->isChecked());
+    d->settings->setSortRole(d->sortOrderComboBox->currentIndex());
+    d->settings->setReverseSort(d->sortReverse->isChecked());
     d->settings->setApplicationStyle(d->applicationStyle->currentText());
     d->settings->syncConfig();
 }

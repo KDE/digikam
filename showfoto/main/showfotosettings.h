@@ -67,8 +67,8 @@ public:
     bool getShowSplash() const;
     void setShowSplash(bool show);
 
-    bool getSortOrder() const;
-    void setSortOrder(int order);
+    int  getSortRole() const;
+    void setSortRole(int order);
 
     bool getReverseSort() const;
     void setReverseSort(bool reverse);

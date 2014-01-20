@@ -142,11 +142,6 @@ ShowfotoItemInfo ShowfotoSortFilterModel::showfotoItemInfo(const QModelIndex& in
     return sourceShowfotoModel()->showfotoItemInfo(mapToSourceShowfotoModel(index));
 }
 
-//qlonglong ShowfotoSortFilterModel::showfotoItemId(const QModelIndex& index) const
-//{
-//    return sourceShowfotoModel()->showfotoItemId(mapToSourceShowfotoModel(index));
-//}
-
 QList<ShowfotoItemInfo> ShowfotoSortFilterModel::showfotoItemInfos(const QList<QModelIndex>& indexes) const
 {
     QList<ShowfotoItemInfo> infos;

@@ -59,7 +59,7 @@ class ImgQSort::Private
 public:
 
     Private() :
-        clusterCount(30),
+        clusterCount(30),       //used for k-means clustering algorithm in noise detection
         size(512)
     {
         for (int c = 0 ; c < 3; c++)
@@ -67,7 +67,7 @@ public:
             fimg[c] = 0;
         }
 
-        // Setting the default values found by experimentation
+        // Setting the default values
 
         edgeThresh        = 1;
         lowThreshold      = 0.4;
@@ -85,12 +85,11 @@ public:
     const uint           clusterCount;
     const uint           size;   // Size of squared original image.
 
-    Mat                  src;                       // Matrix of the original source image
-    Mat                  src_gray;                  // Matrix of the grayscaled source image
-    Mat                  detected_edges;          // Matrix containing only edges in the image
+    Mat                  src;                      // Matrix of the original source image
+    Mat                  src_gray;                 // Matrix of the grayscaled source image
+    Mat                  detected_edges;           // Matrix containing only edges in the image
 
-    // threshold above which we say that edges are present at a point
-    int                  edgeThresh;
+    int                  edgeThresh;       // threshold above which we say that edges are present at a point
     int                  ratio;            // lower:upper threshold for canny edge detector algorithm
     int                  kernel_size;
     // kernel size for for the Sobel operations to be performed internally
@@ -278,8 +277,8 @@ void ImgQSort::readImage() const
     mixer.startFilterDirectly();
 
     d->image.putImageData(mixer.getTargetImage().bits());
-    d->src = cvCreateMat(d->image.numPixels(), 3, CV_8UC3);
-    d->src_gray = cvCreateMat(d->image.numPixels(), 1, CV_8UC1);
+    d->src = cvCreateMat(d->image.numPixels(), 3, CV_8UC3);     //create a matrix containing the pixel values of original image
+    d->src_gray = cvCreateMat(d->image.numPixels(), 1, CV_8UC1);//create a matrix containing the pixel values of grayscaled image
 
     if (d->imq.detectNoise)
     {
@@ -637,34 +636,6 @@ double ImgQSort::noisedetector() const
         {
             delete [] d->fimg[i];
         }
-
-        /*
-                // NOTE: My original algorithm. lowThreshold should be adjusted precisely for this to work.
-
-                kDebug()<<"Estimated noise is "<< nre.settings();
-                d->lowThreshold    = 0.0005;   // Given in research paper for noise. Variable parameter
-                //   d->ratio    = 1;
-                double noiseresult = 0.0;
-                double average     = 0.0;
-                double maxval      = 0.0;
-
-                // Apply Canny Edge Detector to get the edges
-                CannyThreshold(0, 0);
-
-                average     = mean(d->detected_edges)[0];
-                int* maxIdx = new int[sizeof(d->detected_edges)];
-
-                // To find the maxim1um edge intensity value
-                minMaxIdx(d->detected_edges, 0, &maxval, 0, maxIdx);
-
-                noiseresult = average/maxval;
-
-                kDebug() << "The average of the edge intensity is " << average;
-                kDebug() << "The maximum of the edge intensity is " << maxval;
-                kDebug() << "The result of the edge intensity is "  << noiseresult;
-
-                delete [] maxIdx;
-        */
     }
 
     return noiseresult;

@@ -101,12 +101,9 @@ public:
 
     enum SortRole
     {
-        SortByFileName,
-        SortByFilePath,
         SortByCreationDate,
-        SortByFileSize,
-        SortByDownloadState,
-        SortByRating
+        SortByFileName,               
+        SortByFileSize
     };
 
     SortOrder   sortOrder;
