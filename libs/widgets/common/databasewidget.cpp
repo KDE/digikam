@@ -168,7 +168,7 @@ void DatabaseWidget::setupMainArea()
                                   "It's the default and recommended backend.</p>"
                                   "<p><b>MySQL</b> backend is a more robust solution especially for remote and shared database storage. "
                                   "It's also more efficient to manage huge collection sizes. "
-                                  "Be carefull: this one still in experimental stage.</p>"));
+                                  "Be careful: this one still in experimental stage.</p>"));
     setDatabaseInputFields(DatabaseParameters::SQLiteDatabaseType());
 
     // --------------------------------------------------------
