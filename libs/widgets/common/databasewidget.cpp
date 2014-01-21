@@ -165,10 +165,10 @@ void DatabaseWidget::setupMainArea()
     databaseType->addItem(i18n("MySQL (experimental)"), DatabaseParameters::MySQLDatabaseType());
     databaseType->setToolTip(i18n("<p>Select here the type of database backend.</p>"
                                   "<p><b>SQlite</b> backend is for local database storage with a small and medium collection sizes (less than 100K items). "
-                                  "It's the default and recommended backend.</p>"
+                                  "It is the default and recommended backend.</p>"
                                   "<p><b>MySQL</b> backend is a more robust solution especially for remote and shared database storage. "
-                                  "It's also more efficient to manage huge collection sizes. "
-                                  "Be careful: this one still in experimental stage.</p>"));
+                                  "It is also more efficient to manage huge collection sizes. "
+                                  "Be careful: this one it is still in experimental stage.</p>"));
     setDatabaseInputFields(DatabaseParameters::SQLiteDatabaseType());
 
     // --------------------------------------------------------
