@@ -12,7 +12,7 @@ Current image loaded in editor do not show any information relevant in right sid
 
 Select a rectangle over canvas and change zoom level. Selected region is not maintained at the right place.
 
-03/ 
+03/ [FIXED]
 
 Select a rectangle over canvas and crop image. Sometime the resulted cropped image is broken.
 This typically happens when zoom level is low and when image do not fit to the canvas. It's not always reproducible.
