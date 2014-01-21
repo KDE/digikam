@@ -119,6 +119,9 @@ Canvas::Canvas(QWidget* const parent)
     connect(this, SIGNAL(signalSelected(bool)),
             this, SLOT(slotSelected()));
 
+    connect(d->canvasItem, SIGNAL(signalContextMenu()),
+            this, SIGNAL(signalRightButtonClicked()));
+
     connect(layout(), SIGNAL(zoomFactorChanged(double)),
             this, SIGNAL(signalZoomChanged(double)));
 }

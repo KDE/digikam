@@ -92,7 +92,7 @@ Object::connect: No such signal Digikam::Canvas::signalZoomChanged(double) in /m
 
 Zoom-bar from status-bar is not updated when user change zoom level using mouse wheel and CTRL key.
 
-18/ 
+18/  [FIXED]
 
 Right mouse button over the canvas must show contextual popup menu.
 
