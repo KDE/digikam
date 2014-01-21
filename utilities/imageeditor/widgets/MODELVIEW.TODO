@@ -17,7 +17,7 @@ Select a rectangle over canvas and change zoom level. Selected region is not mai
 Select a rectangle over canvas and crop image. Sometime the resulted cropped image is broken.
 This typically happens when zoom level is low and when image do not fit to the canvas. It's not always reproducible.
 
-04/ 
+04/ [FIXED]
 
 At hight zoom level, press mouse wheel button to pan canvas content do not work.
 

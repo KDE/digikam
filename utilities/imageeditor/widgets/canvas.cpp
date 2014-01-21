@@ -645,28 +645,28 @@ void Canvas::cancelAddItem()
 
 void Canvas::mousePressEvent(QMouseEvent* event)
 {
-    GraphicsDImgView::mousePressEvent(event);
-    GraphicsDImgItem* const item = dynamic_cast<GraphicsDImgItem*>(itemAt(event->pos()));
-
-    if (item)
+    if (event->button() == Qt::LeftButton)
     {
-        QString className(item->metaObject()->className());
+        GraphicsDImgItem* const item = dynamic_cast<GraphicsDImgItem*>(itemAt(event->pos()));
 
-        if (className == "Digikam::RubberItem" || className == "Digikam::ClickDragReleaseItem")
+        if (item)
         {
-            return;
-        }
-        else
-        {
-            if (d->rubber && d->rubber->isVisible())
+            QString className(item->metaObject()->className());
+
+            if (!(className == "Digikam::RubberItem" || className == "Digikam::ClickDragReleaseItem"))
             {
-                d->rubber->setVisible(false);
-            }
+                if (d->rubber && d->rubber->isVisible())
+                {
+                    d->rubber->setVisible(false);
+                }
 
-            emit signalSelected(false);
-            addRubber();
+                emit signalSelected(false);
+                addRubber();
+            }
         }
     }
+
+    GraphicsDImgView::mousePressEvent(event);
 }
 
 }  // namespace Digikam
