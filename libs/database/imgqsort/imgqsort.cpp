@@ -6,8 +6,8 @@
  * Date        : 25/08/2013
  * Description : Image Quality Sorter
  *
- * Copyright (C) 2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2013 by Gowtham Ashok <gwty93 at gmail dot com>
+ * Copyright (C) 2013-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2014 by Gowtham Ashok <gwty93 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,7 +30,7 @@
 #include <cfloat>
 #include <cstdio>
 
-// Qt includes.
+// Qt includes
 
 #include <QTextStream>
 #include <QFile>
@@ -167,12 +167,12 @@ void ImgQSort::startAnalyse()
     {
         // Returns blur value between 0 and 1.
         // If NaN is returned just assign NoPickLabel
-        blur          = blurdetector();
+        blur  = blurdetector();
         kDebug() << "Amount of Blur present in image is  : " << blur;
 
         // Returns blur value between 1 and 32767.
         // If 1 is returned just assign NoPickLabel
-        blur2           = blurdetector2();
+        blur2 = blurdetector2();
         kDebug() << "Amount of Blur present in image [using LoG Filter] is : " << blur2;
     }
 
@@ -180,7 +180,7 @@ void ImgQSort::startAnalyse()
     {
         // Some images give very low noise value. Assign NoPickLabel in that case.
         // Returns noise value between 0 and 1.
-        noise         = noisedetector();
+        noise = noisedetector();
         kDebug() << "Amount of Noise present in image is : " << noise;
     }
 
@@ -233,7 +233,7 @@ void ImgQSort::startAnalyse()
 
     // Calculating finalquality
 
-    // all the results to have a range of 1 to 100.
+    // All the results to have a range of 1 to 100.
 
     float finalblur        = (blur*100)  + ((blur2/32767)*100);
     float finalnoise       = noise*100;
@@ -277,8 +277,8 @@ void ImgQSort::readImage() const
     mixer.startFilterDirectly();
 
     d->image.putImageData(mixer.getTargetImage().bits());
-    d->src = cvCreateMat(d->image.numPixels(), 3, CV_8UC3);     //create a matrix containing the pixel values of original image
-    d->src_gray = cvCreateMat(d->image.numPixels(), 1, CV_8UC1);//create a matrix containing the pixel values of grayscaled image
+    d->src      = cvCreateMat(d->image.numPixels(), 3, CV_8UC3); // Create a matrix containing the pixel values of original image
+    d->src_gray = cvCreateMat(d->image.numPixels(), 1, CV_8UC1); // Create a matrix containing the pixel values of grayscaled image
 
     if (d->imq.detectNoise)
     {
@@ -308,10 +308,10 @@ void ImgQSort::readImage() const
 void ImgQSort::CannyThreshold(int, void*) const
 {
     // Reduce noise with a kernel 3x3.
-    blur(d->src_gray, d->detected_edges, Size(3,3) );
+    blur(d->src_gray, d->detected_edges, Size(3,3));
 
     // Canny detector.
-    Canny(d->detected_edges, d->detected_edges, d->lowThreshold, d->lowThreshold*d->ratio,d-> kernel_size );
+    Canny(d->detected_edges, d->detected_edges, d->lowThreshold, d->lowThreshold*d->ratio,d-> kernel_size);
 }
 
 double ImgQSort::blurdetector() const
@@ -331,7 +331,7 @@ double ImgQSort::blurdetector() const
 
     kDebug() << "The average of the edge intensity is " << average;
     kDebug() << "The maximum of the edge intensity is " << maxval;
-    kDebug() << "The result of the edge intensity is "  << blurresult;
+    kDebug() << "The result of the edge intensity is  " << blurresult;
 
     return blurresult;
 }
@@ -341,10 +341,10 @@ short ImgQSort::blurdetector2() const
     // Algorithm using Laplacian of Gaussian Filter to detect blur.
     Mat out;
     Mat noise_free;
-    kDebug() << "Algorithm using LoG Filter started " <<endl;
+    kDebug() << "Algorithm using LoG Filter started";
 
     // To remove noise from the image
-    GaussianBlur(d->src_gray, noise_free, Size(3,3), 0, 0, BORDER_DEFAULT );
+    GaussianBlur(d->src_gray, noise_free, Size(3,3), 0, 0, BORDER_DEFAULT);
 
     // Aperture size of 1 corresponds to the correct matrix
     int kernel_size = 3;
@@ -352,7 +352,7 @@ short ImgQSort::blurdetector2() const
     int delta       = 0;
     int ddepth      = CV_16S;
 
-    Laplacian(noise_free, out, ddepth, kernel_size, scale, delta, BORDER_DEFAULT );
+    Laplacian(noise_free, out, ddepth, kernel_size, scale, delta, BORDER_DEFAULT);
 
     // noise_free:  The input image without noise.
     // out:         Destination (output) image
@@ -365,11 +365,11 @@ short ImgQSort::blurdetector2() const
     {
         for (int j = 0; j < out.cols; j++)
         {
-            short value=out.at<short>(i,j);
+            short value = out.at<short>(i,j);
 
-            if (value>maxLap)
+            if (value > maxLap)
             {
-                maxLap=value ;
+                maxLap = value ;
             }
         }
     }
@@ -662,7 +662,7 @@ int ImgQSort::compressiondetector() const
         {
             sum = 0;
 
-            for (int k=j; k<block_size; k++)
+            for (int k = j; k < block_size; k++)
             {
                 sum += (int)d->src_gray.at<uchar>(i, j);
             }
@@ -676,7 +676,7 @@ int ImgQSort::compressiondetector() const
         {
             sum = 0;
 
-            for (int k=j; k<block_size; k++)
+            for (int k = j; k < block_size; k++)
             {
                 sum += (int)d->src_gray.at<uchar>(i+1, j);
             }
@@ -692,7 +692,7 @@ int ImgQSort::compressiondetector() const
         {
             sum = 0;
 
-            for (int k=j; k<block_size; k++)
+            for (int k = j; k < block_size; k++)
             {
                 sum += (int)d->src_gray.at<uchar>(i+2, j);
             }
@@ -704,7 +704,7 @@ int ImgQSort::compressiondetector() const
         // Check if the average intensity of 8 blocks in the top, middle and bottom rows are equal.
         // If so increment number_of_blocks.
 
-        for (int j=0; j<countblocks; j++)
+        for (int j = 0; j < countblocks; j++)
         {
             if ((average_middle[j] == (average_top[j]+average_bottom[j])/2) &&
                 average_middle[j] > THRESHOLD)
@@ -720,15 +720,15 @@ int ImgQSort::compressiondetector() const
 
     // Iterating through rows.
 
-    for (int j= 0; j < d->src_gray.cols; j++)
+    for (int j = 0; j < d->src_gray.cols; j++)
     {
         // Calculating intensity of top row.
 
-        for (int i = 0; i< d->src_gray.rows; i+=8)
+        for (int i = 0; i < d->src_gray.rows; i+=8)
         {
             sum = 0;
 
-            for (int k=i; k<block_size; k++)
+            for (int k = i; k < block_size; k++)
             {
                 sum += (int)d->src_gray.at<uchar>(i, j);
             }
@@ -738,11 +738,11 @@ int ImgQSort::compressiondetector() const
 
         // Calculating intensity of middle row.
 
-        for (int i= 0; i< d->src_gray.rows; i+=8)
+        for (int i= 0; i < d->src_gray.rows; i+=8)
         {
             sum = 0;
 
-            for (int k=i; k<block_size; k++)
+            for (int k = i; k < block_size; k++)
             {
                 sum += (int)d->src_gray.at<uchar>(i, j+1);
             }
@@ -752,13 +752,13 @@ int ImgQSort::compressiondetector() const
 
         // Calculating intensity of bottom row.
 
-        countblocks=0;
+        countblocks = 0;
 
-        for (int i = 0; i< d->src_gray.rows; i+=8)
+        for (int i = 0; i < d->src_gray.rows; i+=8)
         {
             sum = 0;
 
-            for (int k=i; k<block_size; k++)
+            for (int k = i; k < block_size; k++)
             {
                 sum += (int)d->src_gray.at<uchar>(i, j+2);
             }
@@ -770,7 +770,7 @@ int ImgQSort::compressiondetector() const
         // Check if the average intensity of 8 blocks in the top, middle and bottom rows are equal.
         // If so increment number_of_blocks.
 
-        for (int i=0; i<countblocks; i++)
+        for (int i = 0; i < countblocks; i++)
         {
             if ((average_middle[i] == (average_top[i]+average_bottom[i])/2) &&
                 average_middle[i] > THRESHOLD)
@@ -787,25 +787,24 @@ int ImgQSort::exposureamount() const
 {
     /// Separate the image in 3 places ( B, G and R )
     vector<Mat> bgr_planes;
-    split( d->src, bgr_planes );
+    split(d->src, bgr_planes);
 
     /// Establish the number of bins
-    int histSize = 256;
+    int histSize           = 256;
 
     /// Set the ranges ( for B,G,R) )
-    float range[] = { 0, 256 } ;
+    float range[]          = { 0, 256 } ;
     const float* histRange = { range };
 
-    bool uniform = true;
-    bool accumulate = false;
+    bool uniform           = true;
+    bool accumulate        = false;
 
     Mat b_hist, g_hist, r_hist;
 
-    /// Compute the histograms:
-    calcHist( &bgr_planes[0], 1, 0, Mat(), b_hist, 1, &histSize, &histRange, uniform, accumulate );
-    calcHist( &bgr_planes[1], 1, 0, Mat(), g_hist, 1, &histSize, &histRange, uniform, accumulate );
-    calcHist( &bgr_planes[2], 1, 0, Mat(), r_hist, 1, &histSize, &histRange, uniform, accumulate );
-
+    /// Compute the histograms
+    calcHist(&bgr_planes[0], 1, 0, Mat(), b_hist, 1, &histSize, &histRange, uniform, accumulate);
+    calcHist(&bgr_planes[1], 1, 0, Mat(), g_hist, 1, &histSize, &histRange, uniform, accumulate);
+    calcHist(&bgr_planes[2], 1, 0, Mat(), r_hist, 1, &histSize, &histRange, uniform, accumulate);
 
     // Draw the histograms for B, G and R
     int hist_w = 512;
@@ -815,15 +814,15 @@ int ImgQSort::exposureamount() const
 
     /// Normalize the histograms:
 
-    normalize(b_hist, b_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat() );
-    normalize(g_hist, g_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat() );
-    normalize(r_hist, r_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat() );
+    normalize(b_hist, b_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat());
+    normalize(g_hist, g_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat());
+    normalize(r_hist, r_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat());
 
-    ///Sum the histograms
+    /// Sum the histograms
     Scalar rmean,gmean,bmean;
-    rmean = mean(r_hist);
-    gmean = mean(g_hist);
-    bmean = mean(b_hist);
+    rmean             = mean(r_hist);
+    gmean             = mean(g_hist);
+    bmean             = mean(b_hist);
 
     int exposurelevel = (rmean[0] + gmean[0] + bmean[0]) / 3;
 

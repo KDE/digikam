@@ -78,8 +78,11 @@ void ImageQualityTask::slotCancel()
 {
     d->cancel = true;
 
-    if (d->imgqsort)
+   //TODO: Investigate if commented code is necessary
+   /* if (d->imgqsort)
         d->imgqsort->cancelFilter();
+      
+   */
 }
 
 void ImageQualityTask::run()
@@ -111,8 +114,9 @@ void ImageQualityTask::run()
 
             ImageInfo info(d->path);
             info.setPickLabel(pick);
+            if(d->imgqsort)
+                    delete d->imgqsort;                 //delete image data after setting label
         }
-
         // Dispatch progress to Progress Manager
         QImage qimg = dimg.smoothScale(22, 22, Qt::KeepAspectRatio).copyQImage();
         emit signalFinished(qimg);

@@ -136,4 +136,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 122 ==> 292318 - digiKam marble maps does not work.
 123 ==> 198406 - Xmp not synchronized, uncomplete.
 124 ==> 147921 - Gps widget in French please.
-125 ==> 
+125 ==> 330230 - Memory leak in Image Quality Sorter.
+126 ==> 
