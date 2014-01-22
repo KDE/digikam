@@ -130,4 +130,5 @@ Tool is loaded properly, but effect cannot be preview or applied on image.
 
 Tools based on ImageGuideWidget preview widget work properly (for ex FreeRotation tool).
 
-
+Origin of the problem: ImageRegionWidget::getOriginalRegionImage get a copy of item image instance. This copy is a region of image delemited by rectangle returned by ImageRegionWidget::getOriginalImageRegionToRender().
+This rectangle is null. It computed through ImageRegionItem::getImageRegion() which return d_ptr->drawRect. This one is never updated following PreviewToolBar preview mode.
