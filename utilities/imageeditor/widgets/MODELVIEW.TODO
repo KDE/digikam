@@ -51,6 +51,9 @@ In fact it's the same dysfunction with all other editor tools... It's certainly 
 09/ 
 
 Select a rectangle over canvas. Sometime, selection mode still active after to complete selection. Without to press any mouse button, selection area can be changed as well when mouse is simply moved over canvas.
+To reproduce, start to draw a region and click quickly to close region without to move mouse.
+
+This dysfunction is located in parent classes. Problem is also reproducible with face rectangle editor in preview mode from album-view (F4).
 
 10/ [FIXED]
 
