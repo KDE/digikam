@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEPREVIEWITEM_H
-#define IMAGEPREVIEWITEM_H
+#ifndef IMAGEPREVIEWVIEWITEM_H
+#define IMAGEPREVIEWVIEWITEM_H
 
 // Local includes
 
@@ -40,12 +40,12 @@ namespace Digikam
 class ImagePreviewView;
 class FaceGroup;
 
-class ImagePreviewItem : public DImgPreviewItem
+class ImagePreviewViewItem : public DImgPreviewItem
 {
 public:
 
-    explicit ImagePreviewItem(ImagePreviewView* const view);
-    virtual ~ImagePreviewItem();
+    explicit ImagePreviewViewItem(ImagePreviewView* const view);
+    virtual ~ImagePreviewViewItem();
 
     void setImageInfo(const ImageInfo& info);
     ImageInfo imageInfo() const;
@@ -67,4 +67,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* IMAGEPREVIEWITEM_H */
+#endif /* IMAGEPREVIEWVIEWITEM_H */

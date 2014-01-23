@@ -52,7 +52,7 @@
 
 // Local includes
 
-#include "imagepreviewitem.h"
+#include "imagepreviewviewitem.h"
 #include "albumsettings.h"
 #include "contextmenuhelper.h"
 #include "digikamapp.h"
@@ -106,7 +106,7 @@ public:
 
     ImagePreviewView::Mode mode;
 
-    ImagePreviewItem*      item;
+    ImagePreviewViewItem*      item;
 
     QAction*               escapePreviewAction;
     QAction*               prevAction;
@@ -126,7 +126,7 @@ ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode)
     : GraphicsDImgView(parent), d(new Private)
 {
     d->mode      = mode;
-    d->item      = new ImagePreviewItem(this);
+    d->item      = new ImagePreviewViewItem(this);
     setItem(d->item);
 
     d->faceGroup = new FaceGroup(this);
@@ -463,7 +463,7 @@ void ImagePreviewView::slotRotateLeft()
     d->rotationLock = true;
 
     /**
-     * Setting lock won't allow mouse hover events in ImagePreviewItem class
+     * Setting lock won't allow mouse hover events in ImagePreviewViewItem class
      */
     d->item->setAcceptHoverEvents(false);
 
@@ -482,7 +482,7 @@ void ImagePreviewView::slotRotateRight()
     d->rotationLock = true;
 
     /**
-     * Setting lock won't allow mouse hover events in ImagePreviewItem class
+     * Setting lock won't allow mouse hover events in ImagePreviewViewItem class
      */
     d->item->setAcceptHoverEvents(false);
 
