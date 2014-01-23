@@ -871,8 +871,7 @@ void DigikamView::slotSortAlbums(int order)
     }
 
     settings->setAlbumSortOrder((AlbumSettings::AlbumSortOrder) order);
-    // TODO sorting by anything else then the name is currently not supported by the model
-    //d->folderView->resort();
+    settings->saveSettings();
 }
 
 void DigikamView::slotNewAlbum()
