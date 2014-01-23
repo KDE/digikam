@@ -6,7 +6,7 @@
  * Date        : 2007-03-05
  * Description : digiKam light table GUI
  *
- * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -256,18 +256,18 @@ void LightTableWindow::showEvent(QShowEvent*)
 
 void LightTableWindow::setupUserArea()
 {
-    QWidget* mainW    = new QWidget(this);
-    d->hSplitter      = new SidebarSplitter(Qt::Horizontal, mainW);
-    QHBoxLayout* hlay = new QHBoxLayout(mainW);
+    QWidget* const mainW    = new QWidget(this);
+    d->hSplitter            = new SidebarSplitter(Qt::Horizontal, mainW);
+    QHBoxLayout* const hlay = new QHBoxLayout(mainW);
 
     // The left sidebar
-    d->leftSideBar    = new ImagePropertiesSideBarDB(mainW, d->hSplitter, KMultiTabBar::Left, true);
+    d->leftSideBar          = new ImagePropertiesSideBarDB(mainW, d->hSplitter, KMultiTabBar::Left, true);
 
     // The central preview is wrapped in a KMainWindow so that the thumbnail
     // bar can float around it.
-    KMainWindow* viewContainer = new KMainWindow(mainW, Qt::Widget);
+    KMainWindow* const viewContainer = new KMainWindow(mainW, Qt::Widget);
     d->hSplitter->addWidget(viewContainer);
-    d->previewView             = new LightTableView(viewContainer);
+    d->previewView                   = new LightTableView(viewContainer);
     viewContainer->setCentralWidget(d->previewView);
 
     // The right sidebar.
@@ -516,7 +516,7 @@ void LightTableWindow::setupActions()
     connect(d->fileDeleteFinalAction, SIGNAL(triggered()), this, SLOT(slotDeleteFinalItem()));
     actionCollection()->addAction("lighttable_filefinaldelete", d->fileDeleteFinalAction);
 
-    KAction* closeAction = KStandardAction::close(this, SLOT(close()), this);
+    KAction* const closeAction = KStandardAction::close(this, SLOT(close()), this);
     actionCollection()->addAction("lighttable_close", closeAction);
 
     // -- Standard 'View' menu actions ---------------------------------------------
@@ -631,7 +631,7 @@ void LightTableWindow::setupActions()
 
     // -- Keyboard-only actions added to <MainWindow> ------------------------------
 
-    KAction* altBackwardAction = new KAction(i18n("Previous Image"), this);
+    KAction* const altBackwardAction = new KAction(i18n("Previous Image"), this);
     actionCollection()->addAction("lighttable_backward_shift_space", altBackwardAction);
     altBackwardAction->setShortcut(KShortcut(Qt::SHIFT + Qt::Key_Space));
     connect(altBackwardAction, SIGNAL(triggered()), this, SLOT(slotBackward()));
@@ -1042,8 +1042,8 @@ void LightTableWindow::deleteItem(bool permanently)
 
 void LightTableWindow::deleteItem(const ImageInfo& info, bool permanently)
 {
-    KUrl u         = info.fileUrl();
-    PAlbum* palbum = AlbumManager::instance()->findPAlbum(u.directory());
+    KUrl u               = info.fileUrl();
+    PAlbum* const palbum = AlbumManager::instance()->findPAlbum(u.directory());
 
     if (!palbum)
     {
@@ -1101,28 +1101,28 @@ void LightTableWindow::slotRemoveItem()
 
 void LightTableWindow::slotRemoveItem(const ImageInfo& info)
 {
-    /*
-        if (!d->previewView->leftImageInfo().isNull())
+/*
+    if (!d->previewView->leftImageInfo().isNull())
+    {
+        if (d->previewView->leftImageInfo() == info)
         {
-            if (d->previewView->leftImageInfo() == info)
-            {
-                d->previewView->setLeftImageInfo();
-                d->leftSideBar->slotNoCurrentItem();
-            }
+            d->previewView->setLeftImageInfo();
+            d->leftSideBar->slotNoCurrentItem();
         }
+    }
 
-        if (!d->previewView->rightImageInfo().isNull())
+    if (!d->previewView->rightImageInfo().isNull())
+    {
+        if (d->previewView->rightImageInfo() == info)
         {
-            if (d->previewView->rightImageInfo() == info)
-            {
-                d->previewView->setRightImageInfo();
-                d->rightSideBar->slotNoCurrentItem();
-            }
+            d->previewView->setRightImageInfo();
+            d->rightSideBar->slotNoCurrentItem();
         }
+    }
 
-        d->thumbView->removeItemByInfo(info);
-        d->thumbView->setSelected(d->thumbView->currentItem());
-    */
+    d->thumbView->removeItemByInfo(info);
+    d->thumbView->setSelected(d->thumbView->currentItem());
+*/
 
     // When either the image from the left or right panel is removed,
     // there are various situations to account for.
@@ -1361,8 +1361,8 @@ void LightTableWindow::slotEditItem()
 
 void LightTableWindow::slotEditItem(const ImageInfo& info)
 {
-    ImageWindow* im    = ImageWindow::imageWindow();
-    ImageInfoList list = d->thumbView->imageInfos();
+    ImageWindow* const im = ImageWindow::imageWindow();
+    ImageInfoList list    = d->thumbView->imageInfos();
 
     im->loadImageInfos(list, info, i18n("Light Table"));
 
@@ -1421,7 +1421,7 @@ void LightTableWindow::slideShow(SlideShowSettings& settings)
 
     if (!d->cancelSlideShow)
     {
-        SlideShow* slide = new SlideShow(settings);
+        SlideShow* const slide = new SlideShow(settings);
 
         if (settings.startWithCurrent)
         {

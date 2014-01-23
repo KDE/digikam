@@ -6,7 +6,7 @@
  * Date        : 2007-04-11
  * Description : light table thumbs bar
  *
- * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -74,7 +74,7 @@ class LightTableImageListModel : public ImageListModel
 {
 public:
 
-    explicit LightTableImageListModel(QObject* parent = 0)
+    explicit LightTableImageListModel(QObject* const parent = 0)
         : ImageListModel(parent), m_exclusive(false)
     {
     }
@@ -119,6 +119,7 @@ public:
             }
 
             m_leftIndexes << index.row();
+
             return true;
         }
         else if (role == LTRightPanelRole)
@@ -129,6 +130,7 @@ public:
             }
 
             m_rightIndexes << index.row();
+
             return true;
         }
 
@@ -153,12 +155,12 @@ protected:
     bool      m_exclusive;
 };
 
-class LightTableThumbBar::LightTableThumbBarPriv
+class LightTableThumbBar::Private
 {
 
 public:
 
-    LightTableThumbBarPriv()
+    Private()
     {
         navigateByPair   = false;
         imageInfoModel   = 0;
@@ -166,16 +168,16 @@ public:
         dragDropHandler  = 0;
     }
 
-    bool                  navigateByPair;
+    bool                      navigateByPair;
 
     LightTableImageListModel* imageInfoModel;
-    ImageFilterModel*     imageFilterModel;
-    ImageDragDropHandler* dragDropHandler;
+    ImageFilterModel*         imageFilterModel;
+    ImageDragDropHandler*     dragDropHandler;
 };
 
-LightTableThumbBar::LightTableThumbBar(QWidget* parent)
+LightTableThumbBar::LightTableThumbBar(QWidget* const parent)
     : ImageThumbnailBar(parent),
-      d(new LightTableThumbBarPriv)
+      d(new Private)
 {
     d->imageInfoModel   = new LightTableImageListModel(this);
     // only one is left, only one is right at a time
@@ -193,7 +195,7 @@ LightTableThumbBar::LightTableThumbBar(QWidget* parent)
     d->imageFilterModel->setAllGroupsOpen(true); // disable filtering out by group, see bug #308948
     d->imageFilterModel->sort(0); // an initial sorting is necessary
 
-    d->dragDropHandler = new ImageDragDropHandler(d->imageInfoModel);
+    d->dragDropHandler  = new ImageDragDropHandler(d->imageInfoModel);
     d->dragDropHandler->setReadOnlyDrop(true);
     d->imageInfoModel->setDragDropHandler(d->dragDropHandler);
 
