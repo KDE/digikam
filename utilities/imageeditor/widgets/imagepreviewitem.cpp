@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagepreviewitem.moc"
+#include "imagepreviewitem.h"
 
 // Qt includes
 
@@ -49,11 +49,6 @@ ImagePreviewItem::ImagePreviewItem()
 
 ImagePreviewItem::~ImagePreviewItem()
 {
-}
-
-void ImagePreviewItem::contextMenuEvent(QGraphicsSceneContextMenuEvent*)
-{
-    emit signalContextMenu();
 }
 
 void ImagePreviewItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)

@@ -38,7 +38,6 @@ namespace Digikam
 
 class DIGIKAM_EXPORT ImagePreviewItem : public GraphicsDImgItem
 {
-    Q_OBJECT
 
 public:
 
@@ -46,14 +45,6 @@ public:
     virtual ~ImagePreviewItem();
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
-
-Q_SIGNALS:
-
-    void signalContextMenu();
-
-protected:
-
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
 };
 
 }  // namespace Digikam
