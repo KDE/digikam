@@ -52,6 +52,7 @@
 
 // Local includes
 
+#include "imagepreviewitem.h"
 #include "albumsettings.h"
 #include "contextmenuhelper.h"
 #include "digikamapp.h"
@@ -71,61 +72,6 @@
 
 namespace Digikam
 {
-
-class ImagePreviewViewItem : public DImgPreviewItem
-{
-public:
-
-    explicit ImagePreviewViewItem(ImagePreviewView* const view)
-        : m_view(view), m_group(0)
-    {
-        setAcceptHoverEvents(true);
-    }
-
-    void setFaceGroup(FaceGroup* const group)
-    {
-        m_group = group;
-    }
-
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
-    {
-        m_view->showContextMenu(m_info, event);
-    }
-
-    void setImageInfo(const ImageInfo& info)
-    {
-        m_info = info;
-        setPath(info.filePath());
-    }
-
-    void hoverEnterEvent(QGraphicsSceneHoverEvent* e)
-    {
-        m_group->itemHoverEnterEvent(e);
-    }
-
-    void hoverLeaveEvent(QGraphicsSceneHoverEvent* e)
-    {
-        m_group->itemHoverLeaveEvent(e);
-    }
-
-    void hoverMoveEvent(QGraphicsSceneHoverEvent* e)
-    {
-        m_group->itemHoverMoveEvent(e);
-    }
-
-    ImageInfo imageInfo() const
-    {
-        return m_info;
-    }
-
-protected:
-
-    ImagePreviewView* m_view;
-    FaceGroup*        m_group;
-    ImageInfo         m_info;
-};
-
-// ---------------------------------------------------------------------
 
 class ImagePreviewView::Private
 {
@@ -160,7 +106,7 @@ public:
 
     ImagePreviewView::Mode mode;
 
-    ImagePreviewViewItem*  item;
+    ImagePreviewItem*      item;
 
     QAction*               escapePreviewAction;
     QAction*               prevAction;
@@ -180,7 +126,7 @@ ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode)
     : GraphicsDImgView(parent), d(new Private)
 {
     d->mode      = mode;
-    d->item      = new ImagePreviewViewItem(this);
+    d->item      = new ImagePreviewItem(this);
     setItem(d->item);
 
     d->faceGroup = new FaceGroup(this);
@@ -517,7 +463,7 @@ void ImagePreviewView::slotRotateLeft()
     d->rotationLock = true;
 
     /**
-     * Setting lock won't allow mouse hover events in ImagePreviewViewItem class
+     * Setting lock won't allow mouse hover events in ImagePreviewItem class
      */
     d->item->setAcceptHoverEvents(false);
 
@@ -536,7 +482,7 @@ void ImagePreviewView::slotRotateRight()
     d->rotationLock = true;
 
     /**
-     * Setting lock won't allow mouse hover events in ImagePreviewViewItem class
+     * Setting lock won't allow mouse hover events in ImagePreviewItem class
      */
     d->item->setAcceptHoverEvents(false);
 

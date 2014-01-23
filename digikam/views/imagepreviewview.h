@@ -30,7 +30,6 @@
 
 #include "graphicsdimgview.h"
 #include "imageinfo.h"
-#include "digikam_export.h"
 
 class QPixmap;
 
