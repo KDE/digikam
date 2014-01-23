@@ -69,8 +69,14 @@ public:
 
 Q_SIGNALS:
 
+    void showContextMenu(QGraphicsSceneContextMenuEvent* e);
     void imageChanged();
     void imageSizeChanged(const QSizeF& size);
+
+
+protected:
+
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent* e);
 
 public:
 

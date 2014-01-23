@@ -231,4 +231,9 @@ void GraphicsDImgItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
     }
 }
 
+void GraphicsDImgItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* e)
+{
+    emit showContextMenu(e);
+}
+
 } // namespace Digikam
