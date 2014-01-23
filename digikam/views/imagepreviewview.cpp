@@ -6,7 +6,7 @@
  * Date        : 2006-21-12
  * Description : a embedded view to show the image preview widget.
  *
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2010-2011 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
  *
@@ -126,7 +126,7 @@ ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode)
     : GraphicsDImgView(parent), d(new Private)
 {
     d->mode      = mode;
-    d->item      = new ImagePreviewViewItem(this);
+    d->item      = new ImagePreviewViewItem();
     setItem(d->item);
 
     d->faceGroup = new FaceGroup(this);
@@ -139,6 +139,9 @@ ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode)
 
     connect(d->item, SIGNAL(loadingFailed()),
             this, SLOT(imageLoadingFailed()));
+
+    connect(d->item, SIGNAL(showContextMenu(QGraphicsSceneContextMenuEvent*)),
+            this, SLOT(slotShowContextMenu(QGraphicsSceneContextMenuEvent*)));
 
     // set default zoom
     layout()->fitToWindow();
@@ -304,8 +307,10 @@ void ImagePreviewView::showEvent(QShowEvent* e)
     d->faceGroup->setVisible(d->peopleToggleAction->isChecked());
 }
 
-void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneContextMenuEvent* event)
+void ImagePreviewView::slotShowContextMenu(QGraphicsSceneContextMenuEvent* event)
 {
+    ImageInfo info = d->item->imageInfo();
+
     if (info.isNull())
     {
         return;
