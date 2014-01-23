@@ -34,6 +34,7 @@
 
 #include "albummodel.h"
 #include "searchtextbar.h"
+#include "KStringHandler"
 
 namespace Digikam
 {
@@ -126,6 +127,45 @@ public:
      *         any filtering without checking if this really happens.
      */
     virtual bool isFiltering() const;
+
+    /** Returns the usual compare result of -1, 0, or 1 for lessThan, equals and greaterThan. */
+    template <typename T>
+    static inline int compareValue(const T& a, const T& b)
+    {
+        if (a == b)
+        {
+            return 0;
+        }
+
+        if (a < b)
+        {
+            return -1;
+        }
+        else
+        {
+            return 1;
+        }
+    }
+
+    /** Takes a typical result from a compare method (0 is equal, -1 is less than, 1 is greater than)
+     *  and applies the given sort order to it. */
+    static inline int compareByOrder(int compareResult,  Qt::SortOrder sortOrder)
+    {
+        if (sortOrder == Qt::AscendingOrder)
+        {
+            return compareResult;
+        }
+        else
+        {
+            return - compareResult;
+        }
+    }
+
+    template <typename T>
+    static inline int compareByOrder(const T& a, const T& b, Qt::SortOrder sortOrder)
+    {
+        return compareByOrder(compareValue(a, b), sortOrder);
+    }
 
 public Q_SLOTS:
 
@@ -223,6 +263,7 @@ private:
      *         the model
      */
     bool settingsFilter(const SearchTextSettings& settings) const;
+    AlbumModel* albumModel;
 
 };
 
