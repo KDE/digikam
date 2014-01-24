@@ -43,7 +43,7 @@ namespace Digikam
 {
 
 AlbumFilterModel::AlbumFilterModel(QObject* parent)
-    : QSortFilterProxyModel(parent)
+    : QSortFilterProxyModel(parent),albumModel(0)
 {
     m_filterBehavior = FullFiltering;
     m_chainedModel   = 0;
@@ -336,11 +336,14 @@ bool AlbumFilterModel::filterAcceptsRow(int source_row, const QModelIndex& sourc
 
 bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& right) const
 {
+    if(!albumModel)
+    {
+        return 0;
+    }
+
     PAlbum* leftAlbum = albumModel->albumForIndex(left);
     PAlbum* rightAlbum = albumModel->albumForIndex(right);
     AlbumSettings::AlbumSortOrder sortRole = AlbumSettings::instance()->getAlbumSortOrder();
-
-    //qDebug() << leftAlbum->date() << "&&" << rightAlbum->date() ;
 
     if (leftAlbum && rightAlbum)
     {
@@ -366,7 +369,6 @@ bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& righ
     {
         return QSortFilterProxyModel::lessThan(left, right);
     }
-    //return 0;
 }
 
 void AlbumFilterModel::slotAlbumRenamed(Album* album)
