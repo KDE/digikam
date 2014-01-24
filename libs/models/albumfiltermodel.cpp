@@ -43,13 +43,12 @@ namespace Digikam
 {
 
 AlbumFilterModel::AlbumFilterModel(QObject* parent)
-    : QSortFilterProxyModel(parent),albumModel(0)
+    : QSortFilterProxyModel(parent)
 {
     m_filterBehavior = FullFiltering;
     m_chainedModel   = 0;
     setSortRole(AbstractAlbumModel::AlbumSortRole);
     setSortCaseSensitivity(Qt::CaseInsensitive);
-    albumModel = new AlbumModel();
 
     // sorting may have changed when the string comparison is different
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
@@ -336,13 +335,8 @@ bool AlbumFilterModel::filterAcceptsRow(int source_row, const QModelIndex& sourc
 
 bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& right) const
 {
-    if(!albumModel)
-    {
-        return 0;
-    }
-
-    PAlbum* leftAlbum = albumModel->albumForIndex(left);
-    PAlbum* rightAlbum = albumModel->albumForIndex(right);
+    PAlbum* leftAlbum = AlbumManager::instance()->findPAlbum(albumForIndex(left)->id());
+    PAlbum* rightAlbum = AlbumManager::instance()->findPAlbum(albumForIndex(right)->id());
     AlbumSettings::AlbumSortOrder sortRole = AlbumSettings::instance()->getAlbumSortOrder();
 
     if (leftAlbum && rightAlbum)
