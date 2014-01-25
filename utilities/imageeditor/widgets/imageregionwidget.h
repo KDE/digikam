@@ -103,7 +103,7 @@ private Q_SLOTS:
 private:
 
     class Private;
-    Private* const d;
+    Private* const d_ptr;
 };
 
 }  // namespace Digikam
