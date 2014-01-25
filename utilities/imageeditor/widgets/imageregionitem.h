@@ -30,7 +30,7 @@
 
 // Local includes
 
-#include "imagepreviewitem.h"
+#include "graphicsdimgitem.h"
 #include "digikam_export.h"
 #include "dimg.h"
 #include "imagepreviewitem.h"
@@ -43,7 +43,7 @@ namespace Digikam
 class DImg;
 class ImageIface;
 
-class DIGIKAM_EXPORT ImageRegionItem : public ImagePreviewItem
+class DIGIKAM_EXPORT ImageRegionItem : public GraphicsDImgItem
 {
 
 public:

@@ -104,8 +104,68 @@ void ImageRegionItem::setRenderingPreviewMode(int mode)
 
 void ImageRegionItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
-    ImagePreviewItem::paint(painter, option, widget);
+    Q_D(GraphicsDImgItem);
+
+    d_ptr->drawRect     = option->exposedRect.intersected(boundingRect()).toAlignedRect();
+    QRect   pixSourceRect;
+    QPixmap pix;
+    QSize   completeSize = boundingRect().size().toSize();
+
+    // scale "as if" scaling to whole image, but clip output to our exposed region
+    DImg scaledImage     = d->image.smoothScaleClipped(completeSize.width(), completeSize.height(),
+                                                       d_ptr->drawRect.x(), d_ptr->drawRect.y(), d_ptr->drawRect.width(), d_ptr->drawRect.height());
+
+    if (d->cachedPixmaps.find(d_ptr->drawRect, &pix, &pixSourceRect))
+    {
+        if (pixSourceRect.isNull())
+        {
+            painter->drawPixmap(d_ptr->drawRect.topLeft(), pix);
+        }
+        else
+        {
+            painter->drawPixmap(d_ptr->drawRect.topLeft(), pix, pixSourceRect);
+        }
+    }
+    else
+    {
+        // TODO: factoring ICC settings code using ImageIface/EditorCore methods.
+
+        // Apply CM settings.
+
+        ICCSettingsContainer iccSettings = EditorCore::defaultInstance()->getICCSettings();
+
+        if (iccSettings.enableCM && iccSettings.useManagedView)
+        {
+            IccManager   manager(scaledImage);
+            IccTransform monitorICCtrans = manager.displayTransform(widget);
+            pix                          = scaledImage.convertToPixmap(monitorICCtrans);
+        }
+        else
+        {
+            pix = scaledImage.convertToPixmap();
+        }
+
+        d->cachedPixmaps.insert(d_ptr->drawRect, pix);
+
+        painter->drawPixmap(d_ptr->drawRect.topLeft(), pix);
+    }
+
     paintExtraData(painter);
+
+    // Show the Over/Under exposure pixels indicators
+
+    ExposureSettingsContainer* const expoSettings = EditorCore::defaultInstance()->getExposureSettings();
+
+    if (expoSettings)
+    {
+        if (expoSettings->underExposureIndicator || expoSettings->overExposureIndicator)
+        {
+            QImage pureColorMask = scaledImage.pureColorMask(expoSettings);
+            QPixmap pixMask      = QPixmap::fromImage(pureColorMask);
+            painter->drawPixmap(d_ptr->drawRect.topLeft(), pixMask);
+        }
+    }
+
 }
 
 void ImageRegionItem::setHighLightPoints(const QPolygon& pointsList)

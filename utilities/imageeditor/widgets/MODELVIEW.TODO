@@ -112,15 +112,15 @@ If a separate preview mode is selected (as before/after vetically), zoom in/out 
 
 At a certain zoom level, switching from a preview mode to another one do not show after image at the righ place in the canvas. In fact tool computing is started but never stop (see progress bar on left/bottom)
 
-03/ 
+03/ [FIXED]
 
 "Before" and "After" labels are not show over the canvas (on left/top corner of respected view) if zoom in/out is performed.
 
-04/ 
+04/ [FIXED]
 
 At init of BCG tool, if separate preview mode is "vertical split contigous", separation line do not appears on canvas center.
 
-05/ 
+05/ [FIXED]
 
 Starting an editor tool based on ImageRegionWidget preview widget as now effect since few days. This error messages can be seen on the console (here Color Auto-Correction):
 
