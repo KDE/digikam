@@ -956,6 +956,7 @@ void AbstractAlbumTreeView::doSaveState()
     configGroup.writeEntry(entryName(d->configExpansionEntry), expansion);
     configGroup.writeEntry(entryName(d->configCurrentIndexEntry), currentIndex);
     configGroup.writeEntry(entryName(d->configSortColumnEntry), albumFilterModel()->sortColumn());
+    //A dummy way to force the tree view to resort if the album sort role changed
     if(AlbumSettings::instance()->getAlbumSortChanged())
     {
         if(((int) albumFilterModel()->sortOrder()) == 0)

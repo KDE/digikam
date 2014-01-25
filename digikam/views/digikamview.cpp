@@ -873,6 +873,7 @@ void DigikamView::slotSortAlbums(int order)
 
     settings->setAlbumSortOrder((AlbumSettings::AlbumSortOrder) order);
     settings->saveSettings();
+    //A dummy way to force the tree view to resort if the album sort role changed
     settings->setAlbumSortChanged(true);
     d->albumFolderSideBar->doSaveState();
     d->albumFolderSideBar->doLoadState();
