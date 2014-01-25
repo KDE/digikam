@@ -7,7 +7,7 @@
  * Description : a widget to display 2 preview image on
  *               lightable to compare pictures.
  *
- * Copyright (C) 2007-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,11 +47,11 @@
 namespace Digikam
 {
 
-class LightTableView::LightTableViewPriv
+class LightTableView::Private
 {
 public:
 
-    LightTableViewPriv() :
+    Private() :
         syncPreview(false),
         grid(0),
         leftFrame(0),
@@ -73,26 +73,26 @@ public:
     LightTablePreview* rightPreview;
 };
 
-LightTableView::LightTableView(QWidget* parent)
-    : QFrame(parent), d(new LightTableViewPriv)
+LightTableView::LightTableView(QWidget* const parent)
+    : QFrame(parent), d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setFrameStyle(QFrame::NoFrame);
     setLineWidth(0);
 
-    d->grid           = new QGridLayout();
+    d->grid                 = new QGridLayout();
     setLayout(d->grid);
 
-    d->leftFrame      = new QLabel(this);
-    d->leftPreview    = new LightTablePreview(this);
-    QVBoxLayout* llay = new QVBoxLayout(d->leftFrame);
+    d->leftFrame            = new QLabel(this);
+    d->leftPreview          = new LightTablePreview(this);
+    QVBoxLayout* const llay = new QVBoxLayout(d->leftFrame);
     llay->addWidget(d->leftPreview);
     llay->setMargin(3);
     llay->setSpacing(0);
 
-    d->rightFrame     = new QLabel(this);
-    d->rightPreview   = new LightTablePreview(this);
-    QVBoxLayout* rlay = new QVBoxLayout(d->rightFrame);
+    d->rightFrame           = new QLabel(this);
+    d->rightPreview         = new LightTablePreview(this);
+    QVBoxLayout* const rlay = new QVBoxLayout(d->rightFrame);
     rlay->addWidget(d->rightPreview);
     rlay->setMargin(3);
     rlay->setSpacing(0);
@@ -235,42 +235,42 @@ void LightTableView::slotRightFitToWindow()
     d->rightPreview->layout()->fitToWindow();
 }
 
-double LightTableView::leftZoomMax()
+double LightTableView::leftZoomMax() const
 {
     return d->leftPreview->layout()->maxZoomFactor();
 }
 
-double LightTableView::leftZoomMin()
+double LightTableView::leftZoomMin() const
 {
     return d->leftPreview->layout()->minZoomFactor();
 }
 
-bool LightTableView::leftMaxZoom()
+bool LightTableView::leftMaxZoom() const
 {
     return d->leftPreview->layout()->atMaxZoom();
 }
 
-bool LightTableView::leftMinZoom()
+bool LightTableView::leftMinZoom() const
 {
     return d->leftPreview->layout()->atMinZoom();
 }
 
-double LightTableView::rightZoomMax()
+double LightTableView::rightZoomMax() const
 {
     return d->rightPreview->layout()->maxZoomFactor();
 }
 
-double LightTableView::rightZoomMin()
+double LightTableView::rightZoomMin() const
 {
     return d->rightPreview->layout()->minZoomFactor();
 }
 
-bool LightTableView::rightMaxZoom()
+bool LightTableView::rightMaxZoom() const
 {
     return d->rightPreview->layout()->atMaxZoom();
 }
 
-bool LightTableView::rightMinZoom()
+bool LightTableView::rightMinZoom() const
 {
     return d->rightPreview->layout()->atMinZoom();
 }
@@ -362,7 +362,7 @@ void LightTableView::setLeftImageInfo(const ImageInfo& info)
 
     if (info.isNull())
     {
-        d->leftPreview->setDragAndDropMessage();
+        d->leftPreview->showDragAndDropMessage();
     }
 }
 
@@ -372,7 +372,7 @@ void LightTableView::setRightImageInfo(const ImageInfo& info)
 
     if (info.isNull())
     {
-        d->rightPreview->setDragAndDropMessage();
+        d->rightPreview->showDragAndDropMessage();
     }
 }
 

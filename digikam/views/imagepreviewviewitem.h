@@ -37,14 +37,13 @@ class QGraphicsSceneHoverEvent;
 namespace Digikam
 {
 
-class ImagePreviewView;
 class FaceGroup;
 
 class ImagePreviewViewItem : public DImgPreviewItem
 {
 public:
 
-    explicit ImagePreviewViewItem(ImagePreviewView* const view);
+    explicit ImagePreviewViewItem();
     virtual ~ImagePreviewViewItem();
 
     void setImageInfo(const ImageInfo& info);
@@ -54,7 +53,6 @@ public:
 
 protected:
 
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent* e);
     void hoverEnterEvent(QGraphicsSceneHoverEvent* e);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent* e);
     void hoverMoveEvent(QGraphicsSceneHoverEvent* e);

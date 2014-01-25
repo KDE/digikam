@@ -44,19 +44,16 @@ public:
 
     Private()
     {
-        view  = 0;
         group = 0;
     }
 
-    ImagePreviewView* view;
     FaceGroup*        group;
     ImageInfo         info;
 };
 
-ImagePreviewViewItem::ImagePreviewViewItem(ImagePreviewView* const view)
+ImagePreviewViewItem::ImagePreviewViewItem()
     : d(new Private)
 {
-    d->view = view;
     setAcceptHoverEvents(true);
 }
 
@@ -79,11 +76,6 @@ void ImagePreviewViewItem::setImageInfo(const ImageInfo& info)
 ImageInfo ImagePreviewViewItem::imageInfo() const
 {
     return d->info;
-}
-
-void ImagePreviewViewItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* e)
-{
-    d->view->showContextMenu(d->info, e);
 }
 
 void ImagePreviewViewItem::hoverEnterEvent(QGraphicsSceneHoverEvent* e)
