@@ -872,6 +872,12 @@ void DigikamView::slotSortAlbums(int order)
 
     settings->setAlbumSortOrder((AlbumSettings::AlbumSortOrder) order);
     settings->saveSettings();
+    settings->setAlbumSortChanged(true);
+    d->albumFolderSideBar->doSaveState();
+    d->albumFolderSideBar->doLoadState();
+    d->albumFolderSideBar->doSaveState();
+    d->albumFolderSideBar->doLoadState();
+    settings->setAlbumSortChanged(false);
 }
 
 void DigikamView::slotNewAlbum()

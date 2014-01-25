@@ -118,6 +118,9 @@ public:
     void setAlbumSortOrder(const AlbumSortOrder order);
     AlbumSortOrder getAlbumSortOrder() const;
 
+    void setAlbumSortChanged(bool val);
+    bool getAlbumSortChanged() const;
+
     void setImageSortOrder(int order);
     int  getImageSortOrder() const;
 

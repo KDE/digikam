@@ -955,7 +955,21 @@ void AbstractAlbumTreeView::doSaveState()
     configGroup.writeEntry(entryName(d->configExpansionEntry), expansion);
     configGroup.writeEntry(entryName(d->configCurrentIndexEntry), currentIndex);
     configGroup.writeEntry(entryName(d->configSortColumnEntry), albumFilterModel()->sortColumn());
-    configGroup.writeEntry(entryName(d->configSortOrderEntry), (int) albumFilterModel()->sortOrder());
+    if(AlbumSettings::instance()->getAlbumSortChanged())
+    {
+        if(((int) albumFilterModel()->sortOrder()) == 0)
+        {
+            configGroup.writeEntry(entryName(d->configSortOrderEntry), 1);
+        }
+        else
+        {
+            configGroup.writeEntry(entryName(d->configSortOrderEntry), 0);
+        }
+    }
+    else
+    {
+        configGroup.writeEntry(entryName(d->configSortOrderEntry), (int) albumFilterModel()->sortOrder());
+    }
 }
 
 void AbstractAlbumTreeView::saveStateRecursive(const QModelIndex& index, QList<int>& selection, QList<int>& expansion)
