@@ -42,6 +42,7 @@
 #include "icctransform.h"
 #include "exposurecontainer.h"
 #include "editortool.h"
+#include "imageiface.h"
 
 namespace Digikam
 {
@@ -106,14 +107,15 @@ void ImageRegionItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* o
 {
     Q_D(GraphicsDImgItem);
 
-    d_ptr->drawRect     = option->exposedRect.intersected(boundingRect()).toAlignedRect();
+    d_ptr->drawRect      = option->exposedRect.intersected(boundingRect()).toAlignedRect();
     QRect   pixSourceRect;
     QPixmap pix;
     QSize   completeSize = boundingRect().size().toSize();
 
     // scale "as if" scaling to whole image, but clip output to our exposed region
     DImg scaledImage     = d->image.smoothScaleClipped(completeSize.width(), completeSize.height(),
-                                                       d_ptr->drawRect.x(), d_ptr->drawRect.y(), d_ptr->drawRect.width(), d_ptr->drawRect.height());
+                                                       d_ptr->drawRect.x(), d_ptr->drawRect.y(), 
+                                                       d_ptr->drawRect.width(), d_ptr->drawRect.height());
 
     if (d->cachedPixmaps.find(d_ptr->drawRect, &pix, &pixSourceRect))
     {

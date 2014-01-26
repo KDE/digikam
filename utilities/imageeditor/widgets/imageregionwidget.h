@@ -46,7 +46,6 @@
 namespace Digikam
 {
 
-class ImageZoomSettings;
 class GraphicsDImgViewPrivate;
 
 class DIGIKAM_EXPORT ImageRegionWidget : public GraphicsDImgView
