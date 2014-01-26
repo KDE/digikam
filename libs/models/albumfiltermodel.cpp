@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2014      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -335,19 +336,30 @@ bool AlbumFilterModel::filterAcceptsRow(int source_row, const QModelIndex& sourc
 
 bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& right) const
 {
-    QVariant valLeft  = left.data(sortRole());
-    QVariant valRight = right.data(sortRole());
+    PAlbum* leftAlbum = AlbumManager::instance()->findPAlbum(albumForIndex(left)->id());
+    PAlbum* rightAlbum = AlbumManager::instance()->findPAlbum(albumForIndex(right)->id());
+    AlbumSettings::AlbumSortOrder sortRole = AlbumSettings::instance()->getAlbumSortOrder();
 
-    if ((valLeft.type() == QVariant::String) && (valRight.type() == QVariant::String))
-        switch (AlbumSettings::instance()->getStringComparisonType())
+    if (leftAlbum && rightAlbum)
+    {
+        switch (sortRole)
         {
-            case AlbumSettings::Natural:
-                return KStringHandler::naturalCompare(valLeft.toString(), valRight.toString(), sortCaseSensitivity()) < 0;
+            case AlbumSettings::ByFolder:
+                switch (AlbumSettings::instance()->getStringComparisonType())
+                {
+                    case AlbumSettings::Natural:
+                        return KStringHandler::naturalCompare(leftAlbum->title(), rightAlbum->title(), sortCaseSensitivity()) < 0;
 
-            case AlbumSettings::Normal:
+                    case AlbumSettings::Normal:
+                    default:
+                        return QString::compare(leftAlbum->title(), rightAlbum->title(), sortCaseSensitivity()) < 0;
+                }
+            case AlbumSettings::ByDate:
+                return compareByOrder(leftAlbum->date(),rightAlbum->date(),Qt::Ascending) < 0;
             default:
-                return QString::compare(valLeft.toString(), valRight.toString(), sortCaseSensitivity()) < 0;
+                return KStringHandler::naturalCompare(leftAlbum->category(),rightAlbum->category()) < 0;
         }
+    }
     else
     {
         return QSortFilterProxyModel::lessThan(left, right);

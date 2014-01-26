@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C) 2014      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -955,7 +956,22 @@ void AbstractAlbumTreeView::doSaveState()
     configGroup.writeEntry(entryName(d->configExpansionEntry), expansion);
     configGroup.writeEntry(entryName(d->configCurrentIndexEntry), currentIndex);
     configGroup.writeEntry(entryName(d->configSortColumnEntry), albumFilterModel()->sortColumn());
-    configGroup.writeEntry(entryName(d->configSortOrderEntry), (int) albumFilterModel()->sortOrder());
+    //A dummy way to force the tree view to resort if the album sort role changed
+    if(AlbumSettings::instance()->getAlbumSortChanged())
+    {
+        if(((int) albumFilterModel()->sortOrder()) == 0)
+        {
+            configGroup.writeEntry(entryName(d->configSortOrderEntry), 1);
+        }
+        else
+        {
+            configGroup.writeEntry(entryName(d->configSortOrderEntry), 0);
+        }
+    }
+    else
+    {
+        configGroup.writeEntry(entryName(d->configSortOrderEntry), (int) albumFilterModel()->sortOrder());
+    }
 }
 
 void AbstractAlbumTreeView::saveStateRecursive(const QModelIndex& index, QList<int>& selection, QList<int>& expansion)

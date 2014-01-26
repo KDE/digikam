@@ -9,6 +9,7 @@
  * Copyright (C) 2003-2004 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2003-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007      by Arnd Baecker <arnd dot baecker at web dot de>
+ * Copyright (C) 2014      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -126,6 +127,7 @@ public:
         recursiveTags(false),
         sidebarTitleStyle(KMultiTabBar::VSNET),
         albumSortOrder(AlbumSettings::ByFolder),
+        albumSortChanged(false),
         imageSortOrder(0),
         imageSorting(0),
         imageGroupMode(0),
@@ -312,6 +314,7 @@ public:
 
     // album view settings
     AlbumSettings::AlbumSortOrder       albumSortOrder;
+    bool                                albumSortChanged;
 
     // icon view settings
     int                                 imageSortOrder;
@@ -499,7 +502,7 @@ void AlbumSettings::init()
     d->tooltipShowFileSize          = false;
     d->tooltipShowImageType         = false;
     d->tooltipShowImageDim          = true;
-    d->tooltipShowImageAR          = true;
+    d->tooltipShowImageAR           = true;
     d->tooltipShowPhotoMake         = true;
     d->tooltipShowPhotoDate         = true;
     d->tooltipShowPhotoFocal        = true;
@@ -538,11 +541,12 @@ void AlbumSettings::init()
 
     d->syncToDigikam                = false;
     d->syncToNepomuk                = false;
+    d->albumSortChanged             = false;
 
     d->faceDetectionAccuracy        = 0.8;
 
     d->stringComparisonType         = AlbumSettings::Natural;
-    d->applicationStyle             = kapp->style()->objectName();
+    d->applicationStyle             = kapp->style()->objectName();    
 
     connect(this, SIGNAL(nepomukSettingsChanged()),
             this, SLOT(applyNepomukSettings()));
@@ -1858,6 +1862,16 @@ void AlbumSettings::setApplicationStyle(const QString& style)
 QString AlbumSettings::getApplicationStyle() const
 {
     return d->applicationStyle;
+}
+
+void AlbumSettings::setAlbumSortChanged(bool val)
+{
+    d->albumSortChanged = val;
+}
+
+bool AlbumSettings::getAlbumSortChanged() const
+{
+    return d->albumSortChanged;
 }
 
 }  // namespace Digikam
