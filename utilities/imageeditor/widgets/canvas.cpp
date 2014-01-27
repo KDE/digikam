@@ -93,6 +93,9 @@ Canvas::Canvas(QWidget* const parent)
     layout()->fitToWindow();
     installPanIcon();
 
+    setAcceptDrops(true);
+    viewport()->setAcceptDrops(true);
+
     // ------------------------------------------------------------
 
     connect(d->im, SIGNAL(signalModified()),
@@ -669,6 +672,32 @@ void Canvas::mousePressEvent(QMouseEvent* event)
     }
 
     GraphicsDImgView::mousePressEvent(event);
+}
+
+void Canvas::dragEnterEvent(QDragEnterEvent* e)
+{
+    QGraphicsView::dragEnterEvent(e);
+
+    if (e->mimeData()->hasUrls())
+    {
+        e->acceptProposedAction();
+    }
+}
+
+void Canvas::dragMoveEvent(QDragMoveEvent* e)
+{
+    QGraphicsView::dragMoveEvent(e);
+
+    if (e->mimeData()->hasUrls())
+    {
+        e->acceptProposedAction();
+    }
+}
+
+void Canvas::dropEvent(QDropEvent* e)
+{
+    QGraphicsView::dropEvent(e);
+    emit signalAddedDropedItems(e);
 }
 
 }  // namespace Digikam

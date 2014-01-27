@@ -159,6 +159,7 @@ Q_SIGNALS:
     void signalUndoSteps(int);
     void signalRedoSteps(int);
     void signalZoomChanged(double);
+    void signalAddedDropedItems(QDropEvent*);
 
 public Q_SLOTS:
 
@@ -186,6 +187,10 @@ protected:
     void keyPressEvent(QKeyEvent*);
     void mousePressEvent(QMouseEvent*);
     void addRubber();
+
+    void dragMoveEvent(QDragMoveEvent*);
+    void dragEnterEvent(QDragEnterEvent*);
+    void dropEvent(QDropEvent*);
 
 private:
 

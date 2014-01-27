@@ -6,7 +6,7 @@
  * Date        : 2004-11-22
  * Description : stand alone digiKam image editor GUI
  *
- * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
@@ -1250,11 +1250,32 @@ void ShowFoto::openFolder(const KUrl& url)
     d->lastOpenedDirectory = d->infoList.at(0).url;
 }
 
-
-
 void ShowFoto::slotSetupMetadataFilters(int tab)
 {
     Setup::execMetadataFilters(this, tab+1);
+}
+
+void ShowFoto::slotAddedDropedItems(QDropEvent* e)
+{
+    QList<QUrl> list = e->mimeData()->urls();
+    KUrl::List urls;
+
+    foreach(const QUrl& url, list)
+    {
+        QFileInfo fi(url.path());
+
+        if (fi.isFile() && fi.exists())
+        {
+            urls.append(KUrl(url));
+        }
+    }
+
+    e->accept();
+
+    if (!urls.isEmpty())
+    {
+        openUrls(urls);
+    }
 }
 
 }   // namespace ShowFoto

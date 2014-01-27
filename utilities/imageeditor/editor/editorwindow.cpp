@@ -268,6 +268,9 @@ void EditorWindow::setupStandardConnections()
     connect(m_canvas, SIGNAL(signalChanged()),
             this, SLOT(slotChanged()));
 
+    connect(m_canvas, SIGNAL(signalAddedDropedItems(QDropEvent*)),
+            this, SLOT(slotAddedDropedItems(QDropEvent*)));
+
     connect(m_canvas->interface(), SIGNAL(signalUndoStateChanged()),
             this, SLOT(slotUndoStateChanged()));
 

@@ -7,7 +7,7 @@
  * Description : digiKam image editor GUI
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -1626,6 +1626,45 @@ void ImageWindow::slotComponentsInfo()
 void ImageWindow::slotDBStat()
 {
     showDigikamDatabaseStat();
+}
+
+void ImageWindow::slotAddedDropedItems(QDropEvent* e)
+{
+    int              albumID;
+    QList<int>       albumIDs;
+    QList<qlonglong> imageIDs;
+    KUrl::List       urls, kioURLs;
+    ImageInfoList    imgList;
+
+    if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
+    {
+        imgList = ImageInfoList(imageIDs);
+    }
+    else if (DAlbumDrag::decode(e->mimeData(), urls, albumID))
+    {
+        QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
+
+        imgList = ImageInfoList(itemIDs);
+    }
+    else if (DTagListDrag::canDecode(e->mimeData()))
+    {
+        QList<int> tagIDs;
+
+        if (!DTagListDrag::decode(e->mimeData(), tagIDs))
+        {
+            return;
+        }
+
+        QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagIDs.first(), true);
+        imgList = ImageInfoList(itemIDs);
+    }
+
+    e->accept();
+
+    if (!imgList.isEmpty())
+    {
+        loadImageInfos(imgList, imgList.first(), QString());
+    }
 }
 
 }  // namespace Digikam
