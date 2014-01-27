@@ -225,7 +225,17 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     // -- Load current items ---------------------------
 
     //slotOpenFilesInFolder();
-    openUrls(urlList);
+    if(!urlList.isEmpty())
+    {
+        if(KMimeType::findByUrl( urlList.first() )->name() == "inode/directory" )
+        {
+            slotOpenFolder(urlList.first());
+        }
+        else
+        {
+            openUrls(urlList);
+        }
+    }
 }
 
 ShowFoto::~ShowFoto()
@@ -527,7 +537,7 @@ void ShowFoto::slotOpenFile()
         return;
     }
 
-    KUrl::List urls = Digikam::ImageDialog::getImageURLs(this, d->lastOpenedDirectory);
+    KUrl::List urls = Digikam::ImageDialog::getImageURLs(this, d->lastOpenedDirectory);    
     openUrls(urls);
 }
 
