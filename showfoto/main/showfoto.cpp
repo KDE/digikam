@@ -1288,7 +1288,7 @@ void ShowFoto::slotAddedDropedItems(QDropEvent* e)
 
     if (!urls.isEmpty())
     {
-        openUrls(urls);
+        openUrlsWrapper(urls);
     }
 }
 
