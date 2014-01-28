@@ -344,6 +344,9 @@ void ShowFoto::setupConnections()
 
     connect(d->rightSideBar, SIGNAL(signalSetupMetadataFilters(int)),
             this, SLOT(slotSetupMetadataFilters(int)));
+
+    connect(d->dDHandler, SIGNAL(signalDroppedUrls(KUrl::List)),
+            this, SLOT(slotDroppedUrls(KUrl::List)));
 }
 
 void ShowFoto::setupUserArea()
@@ -398,6 +401,8 @@ void ShowFoto::setupUserArea()
 
     d->model = new ShowfotoThumbnailModel(d->thumbBar);
     d->model->setThumbnailLoadThread(d->thumbLoadThread);
+    d->dDHandler = new ShowfotoDragDropHandler(d->model);
+    d->model->setDragDropHandler(d->dDHandler);
 
     d->filterModel = new ShowfotoFilterModel(d->thumbBar);
     d->filterModel->setSourceShowfotoModel(d->model);
@@ -572,14 +577,15 @@ void ShowFoto::openUrls(const KUrl::List &urls)
             i++;
         }
 
-        if(d->infoList.isEmpty())
+        if(d->droppedUrls)
         {
-            d->infoList=infos;
+            //replace the equal sign with "<<" to keep the previous pics in the list
+            d->infoList << infos;
+            d->model->clearShowfotoItemInfos();
             emit signalInfoList(d->infoList);
         }
         else
         {
-            //replace the equal sign with "<<" to keep the previous pics in the list
             d->infoList = infos;
             d->model->clearShowfotoItemInfos();
             emit signalInfoList(d->infoList);
@@ -906,7 +912,7 @@ void ShowFoto::saveAsIsComplete()
 
 //    // Add the file to the list of thumbbar images if it's not there already
 //    Digikam::ThumbBarItem* foundItem = d->thumbBar->findItemByUrl(m_savingContext.destinationURL);
-//    d->thumbBar->invalidateThumb(foundItem);
+//    d->thumbBar->invalidateThumb(foundItem);qDebug() << wantedUrls;
 
 //    if (!foundItem)
 //    {
@@ -1264,7 +1270,12 @@ void ShowFoto::openFolder(const KUrl& url)
     d->lastOpenedDirectory = d->infoList.at(0).url;
 }
 
-
+void ShowFoto::slotDroppedUrls(const KUrl::List urls)
+{
+    d->droppedUrls = true;
+    openUrls(urls);
+    d->droppedUrls = false;
+}
 
 void ShowFoto::slotSetupMetadataFilters(int tab)
 {

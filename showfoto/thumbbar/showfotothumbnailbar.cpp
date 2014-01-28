@@ -66,9 +66,9 @@ ShowfotoThumbnailBar::ShowfotoThumbnailBar(QWidget* const parent)
     setScrollStepGranularity(3);
     setScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
-    setDragEnabled(false);
-    setAcceptDrops(false);
-    setDropIndicatorShown(false);
+    setDragEnabled(true);
+    setAcceptDrops(true);
+    setDropIndicatorShown(true);
 
     slotSetupChanged();
 }

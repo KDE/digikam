@@ -9,6 +9,7 @@
 #include "imagepropertiessidebar.h"
 #include "showfotodelegate.h"
 #include "showfotosettings.h"
+#include "showfotodragdrophandler.h"
 
 namespace ShowFoto {
 
@@ -19,6 +20,7 @@ public:
     Private() :
         deleteItem2Trash(true),
         validIccPath(true),
+        droppedUrls(0),
         itemsNb(0),
         vSplitter(0),
         fileOpenAction(0),
@@ -38,6 +40,7 @@ public:
 
     bool                             deleteItem2Trash;
     bool                             validIccPath;
+    bool                             droppedUrls;
 
     int                              itemsNb;
 
@@ -52,6 +55,7 @@ public:
     QDir                             dir;
     ShowfotoItemInfoList             infoList;
     ShowfotoThumbnailModel*          model;
+    ShowfotoDragDropHandler*         dDHandler;
     ShowfotoFilterModel*             filterModel;
     Digikam::ThumbnailLoadThread*    thumbLoadThread;
     ShowfotoThumbnailBar*            thumbBar;

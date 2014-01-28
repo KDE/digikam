@@ -21,6 +21,7 @@ SET(showfoto_SRCS
     thumbbar/showfotoimagemodel.cpp
     thumbbar/showfotothumbnailmodel.cpp
     thumbbar/showfotofiltermodel.cpp
+    thumbbar/showfotodragdrophandler.cpp
     thumbbar/showfotoitemsortsettings.cpp
     thumbbar/itemviewshowfotodelegate.cpp
     thumbbar/showfotodelegate.cpp
