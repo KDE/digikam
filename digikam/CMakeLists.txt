@@ -24,7 +24,6 @@ SET(digikamcore_LIB_SRCS
         ${libdmetadata_SRCS}
         ${libjpegutils_SRCS}
         ${libprogressmanager_SRCS}
-        ${libthememanager_SRCS}
         ${libdatabasecore_SRCS}
         ${libthreadimageio_SRCS}
         ${libpgf_SRCS}
