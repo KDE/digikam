@@ -264,7 +264,7 @@ Qt::ItemFlags TagMngrListModel::flags(const QModelIndex& index) const
                              | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
 }
 
-QVariant TagMngrListModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant TagMngrListModel::headerData(int /*section*/, Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
         return QVariant(i18n("Quick Access List"));

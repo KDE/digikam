@@ -1003,6 +1003,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/dlogoaction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/thumbbardock.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/dhistoryview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/thememanager.cpp
        )
 
     SET(libitemview_SRCS
@@ -1128,11 +1129,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/statusbarprogresswidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/statusprogressbar.cpp
        )
-
-    SET(libthememanager_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/thememanager/thememanager.cpp
-       )
-
     SET(libtthread_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/threadmanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/workerobject.cpp
@@ -1650,7 +1646,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/${DIGIKAM_LIBJPEG_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/template
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/thememanager
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads
