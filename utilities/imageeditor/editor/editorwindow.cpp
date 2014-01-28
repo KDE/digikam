@@ -593,7 +593,7 @@ void EditorWindow::setupStandardActions()
 
     m_showBarAction = thumbBar()->getToggleAction(this);
     actionCollection()->addAction("editorwindow_showthumbs", m_showBarAction);
-    
+
     d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
     d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
 
@@ -601,13 +601,13 @@ void EditorWindow::setupStandardActions()
     KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      actionCollection());
     KStandardAction::configureNotifications(this, SLOT(slotConfNotifications()), actionCollection());
     KStandardAction::preferences(this,            SLOT(setup()),                 actionCollection());
-    
+
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
 
     // Provides a menu entry that allows showing/hiding the statusbar
     createStandardStatusBarAction();
-    
+
     // ---------------------------------------------------------------------------------
 
     ThemeManager::instance()->registerThemeActions(this);
@@ -677,6 +677,7 @@ void EditorWindow::setupStatusBar()
             m_stackView, SLOT(setZoomFactor(double)));
 
     d->previewToolBar = new PreviewToolBar(statusBar());
+    d->previewToolBar->registerMenuActionGroup(this);
     d->previewToolBar->setEnabled(false);
     statusBar()->addPermanentWidget(d->previewToolBar);
 

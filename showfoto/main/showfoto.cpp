@@ -194,8 +194,8 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     // -- Build the GUI -----------------------------------
 
     setupUserArea();
-    setupActions();
     setupStatusBar();
+    setupActions();
 
     // Load image plugins to GUI
 
