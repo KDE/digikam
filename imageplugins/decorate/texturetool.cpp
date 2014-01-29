@@ -173,9 +173,6 @@ TextureTool::TextureTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    connect(d->previewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotPreview()));
-
     connect(d->textureType, SIGNAL(activated(int)),
             this, SLOT(slotPreview()));
 

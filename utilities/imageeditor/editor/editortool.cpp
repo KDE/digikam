@@ -415,13 +415,19 @@ DImgThreadedFilter* EditorToolThreaded::filter() const
 void EditorToolThreaded::slotInit()
 {
     EditorTool::slotInit();
-    
+
     QWidget* const view = toolView();
-    
+
     if (dynamic_cast<ImageGuideWidget*>(view) || dynamic_cast<ImageRegionWidget*>(view))
     {
         connect(view, SIGNAL(signalResized()),
                 this, SLOT(slotResized()));
+    }
+
+    if (dynamic_cast<ImageRegionWidget*>(view))
+    {
+        connect(view, SIGNAL(signalOriginalClipFocusChanged()),
+                this, SLOT(slotTimer()));
     }
 }
 
