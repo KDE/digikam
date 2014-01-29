@@ -84,7 +84,7 @@ ImageRegionWidget::ImageRegionWidget(QWidget* const parent)
                       "<p>Click and drag the mouse cursor in the "
                       "image to change the clip focus.</p>"));
 
-    connect(this, SIGNAL(signalZoomFactorChanged(double)),
+    connect(layout(), SIGNAL(zoomFactorChanged(double)),
             this, SLOT(slotZoomFactorChanged()));
 
     connect(this, SIGNAL(contentsMoved(bool)),

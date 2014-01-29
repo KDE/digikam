@@ -88,7 +88,6 @@ Q_SIGNALS:
     void signalContentsMovedEvent(bool);
     //void signalContentTakeFocus();
     void signalResized();
-    void signalZoomFactorChanged(double);
 
 public Q_SLOTS:
 
