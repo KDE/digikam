@@ -57,7 +57,7 @@ public:
 Q_SIGNALS:
 
     void dioResult(KJob*);
-    void signalDroppedUrls(const KUrl::List& urls);
+    void signalDroppedUrls(const KUrl::List& imagesUrls,const KUrl::List& foldersUrls);
 
 private:
 
