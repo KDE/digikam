@@ -73,7 +73,6 @@ Q_SIGNALS:
     void imageChanged();
     void imageSizeChanged(const QSizeF& size);
 
-
 protected:
 
     void contextMenuEvent(QGraphicsSceneContextMenuEvent* e);
