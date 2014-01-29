@@ -141,5 +141,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 127 ==> 218023 - Albums tree does not remember sorting order (ascending/descending).
 128 ==> 126116 - Keep directory hierarchy when albums are view by category.
 129 ==> 225786 - Proposed digiKam Menu Changes.
-130 ==> 
+130 ==> 246903 - Editor Canvas : not updated when zoom level changes in plugins.
+131 ==> 129941 - Editor Canvas : Ability to Drag and Drop an image.
+132 ==> 
 
