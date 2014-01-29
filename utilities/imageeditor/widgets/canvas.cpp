@@ -292,11 +292,6 @@ QRect Canvas::getSelectedArea() const
     return d->im->getSelectedArea();
 }
 
-QRect Canvas::visibleArea() const
-{
-    return mapToScene(viewport()->geometry()).boundingRect().toRect();
-}
-
 EditorCore* Canvas::interface() const
 {
     return d->im;

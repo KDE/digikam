@@ -105,6 +105,7 @@ void EditorToolIface::loadTool(EditorTool* const tool)
     d->editor->toggleToolActions(d->tool);
 
     // If editor tool has zoomable preview, switch on zoom actions.
+    
     d->editor->toggleZoomActions(d->editor->editorStackView()->isZoomablePreview());
 
     ImageGuideWidget* const view = dynamic_cast<ImageGuideWidget*>(d->tool->toolView());
@@ -116,6 +117,8 @@ void EditorToolIface::loadTool(EditorTool* const tool)
 
         view->slotPreviewModeChanged(d->editor->previewMode());
     }
+
+    // To set zoomable preview zoom level and position accordingly with main canvas.
 
     ImageRegionWidget* const view2 = dynamic_cast<ImageRegionWidget*>(d->tool->toolView());
 
@@ -159,6 +162,24 @@ void EditorToolIface::unLoadTool()
         return;
     }
 
+    // To restore  zoom level and position accordingly with zoomable preview.
+
+    ImageRegionWidget* const view2 = dynamic_cast<ImageRegionWidget*>(d->tool->toolView());
+
+    if (view2)
+    {
+        if (view2->layout()->isFitToWindow())
+        {
+            d->editor->editorStackView()->canvas()->toggleFitToWindow();
+        }
+        else
+        {
+            d->editor->editorStackView()->canvas()->layout()->setZoomFactor(view2->layout()->zoomFactor());
+            QPoint tl = view2->visibleArea().topLeft();
+            d->editor->editorStackView()->canvas()->setContentsPos(tl.x(), tl.y());
+        }
+    }
+
     d->editor->editorStackView()->setViewMode(EditorStackView::CanvasMode);
     d->editor->editorStackView()->setToolView(0);
     d->editor->rightSideBar()->deleteTab(d->tool->toolSettings());
@@ -171,13 +192,6 @@ void EditorToolIface::unLoadTool()
     d->editor->toggleActions(true);
     d->editor->toggleToolActions();
     d->editor->setPreviewModeMask(PreviewToolBar::NoPreviewMode);
-
-    // To restore canvas zoom level in zoom combobox.
-
-    if (!d->editor->editorStackView()->canvas()->layout()->isFitToWindow())
-    {
-        d->editor->editorStackView()->setZoomFactor(d->editor->editorStackView()->canvas()->layout()->zoomFactor());
-    }
 
     delete d->tool;
     d->tool = 0;

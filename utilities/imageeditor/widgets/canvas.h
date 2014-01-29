@@ -99,10 +99,6 @@ public:
      */
     QRect       getSelectedArea()        const;
 
-    /** Return the region of image visible on canvas widget.
-     */
-    QRect       visibleArea()            const;
-
     /** If current image file format is only available in read only,
      *  typically all RAW image file formats.
      */
@@ -131,10 +127,6 @@ public:
     /** Return true if image have been rotated following Exif information.
      */
     bool exifRotated() const;
-
-    /** Change zoom level to fit whole image on canvas size.
-     */
-    void toggleFitToWindow();
 
     /** Change zoom level to fit current selection on canvas size.
      */

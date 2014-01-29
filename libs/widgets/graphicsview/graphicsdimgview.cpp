@@ -493,4 +493,15 @@ void GraphicsDImgView::setShowText(bool val)
     d->showText = val;
 }
 
+QRect GraphicsDImgView::visibleArea() const
+{
+    return (mapToScene(viewport()->geometry()).boundingRect().toRect());
+}
+
+void GraphicsDImgView::toggleFitToWindow()
+{
+    layout()->toggleFitToWindow();
+    update();
+}
+
 } // namespace Digikam

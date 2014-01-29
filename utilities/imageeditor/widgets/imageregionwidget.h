@@ -79,8 +79,6 @@ public:
     void   ICCSettingsChanged();
     void   exposureSettingsChanged();
 
-    void   toggleFitToWindow();
-
 Q_SIGNALS:
 
     void signalOriginalClipFocusChanged();

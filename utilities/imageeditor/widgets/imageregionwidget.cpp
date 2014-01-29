@@ -203,10 +203,4 @@ void ImageRegionWidget::ICCSettingsChanged()
     viewport()->update();
 }
 
-void ImageRegionWidget::toggleFitToWindow()
-{
-    layout()->toggleFitToWindow();
-    update();
-}
-
 }  // namespace Digikam

@@ -70,9 +70,11 @@ public:
     // Change from protected to public to be used by ImageRegionWidget and ImageRegionItem
     void drawText(QPainter* p, const QRectF& rect, const QString& text);
 
-    int  contentsX() const;
-    int  contentsY() const;
-    void setContentsPos(int x, int y);
+    int   contentsX()   const;
+    int   contentsY()   const;
+    QRect visibleArea() const;
+    void  setContentsPos(int x, int y);
+    void  toggleFitToWindow();
 
 Q_SIGNALS:
 
