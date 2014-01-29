@@ -32,15 +32,14 @@
 // KDE includes
 
 #include <kiconloader.h>
-#include <kcursor.h>
 #include <klocale.h>
 #include <kdebug.h>
 
 // Local includes
 
+#include "imageregionitem.h"
 #include "previewtoolbar.h"
 #include "previewlayout.h"
-#include "imageregionitem.h"
 
 namespace Digikam
 {

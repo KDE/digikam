@@ -7,6 +7,8 @@
  * Description : image region widget item for image editor.
  *
  * Copyright (C) 2013-2014 Yiou Wang <geow812 at gmail dot com>
+ * Copyright (C) 2013-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,8 +40,6 @@
 namespace Digikam
 {
 
-class DImg;
-
 class DIGIKAM_EXPORT ImageRegionItem : public GraphicsDImgItem
 {
 
@@ -48,7 +48,7 @@ public:
     ImageRegionItem(ImageRegionWidget* const view);
     virtual ~ImageRegionItem();
 
-    void setTargetImage(const DImg& img);
+    void setTargetImage(DImg& img);
     void setHighLightPoints(const QPolygon& pointsList);
     void setRenderingPreviewMode(int mode);
 

@@ -46,8 +46,6 @@
 namespace Digikam
 {
 
-class GraphicsDImgViewPrivate;
-
 class DIGIKAM_EXPORT ImageRegionWidget : public GraphicsDImgView
 {
     Q_OBJECT

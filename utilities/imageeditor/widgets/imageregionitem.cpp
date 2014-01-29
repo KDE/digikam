@@ -7,6 +7,7 @@
  * Description : image region widget item for image editor.
  *
  * Copyright (C) 2013-2014 Yiou Wang <geow812 at gmail dot com>
+ * Copyright (C) 2013-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,15 +35,14 @@
 
 // Local includes
 
-#include "previewtoolbar.h"
 #include "dimgitemspriv.h"
-#include "iccsettingscontainer.h"
 #include "editorcore.h"
+#include "exposurecontainer.h"
 #include "iccmanager.h"
 #include "icctransform.h"
-#include "exposurecontainer.h"
-#include "editortool.h"
+#include "iccsettingscontainer.h"
 #include "imageiface.h"
+#include "previewtoolbar.h"
 
 namespace Digikam
 {
@@ -52,20 +52,20 @@ class ImageRegionItem::Private
 public:
 
     Private():
-        renderingPreviewMode(PreviewToolBar::PreviewBothImagesVertCont),
         onMouseMovePreviewToggled(false),
+        renderingPreviewMode(PreviewToolBar::PreviewBothImagesVertCont),
         view(0),
         iface(0)
     {
     }
 
-    QPixmap            pix;          // Pixmap of original region to render for paint method.
-    QPixmap            targetPix;    // Pixmap of target region to render for paint method.
-    DImg               targetImage;
+    bool               onMouseMovePreviewToggled;
     int                renderingPreviewMode;
+
+    QPixmap            targetPix;    // Pixmap of target region to render for paint method.
     QRect              drawRect;
     QPolygon           hightlightPoints;
-    bool               onMouseMovePreviewToggled;
+
     ImageRegionWidget* view;
     ImageIface*        iface;
 };
@@ -90,10 +90,9 @@ QRect ImageRegionItem::getImageRegion() const
     return d_ptr->drawRect;
 }
 
-void ImageRegionItem::setTargetImage(const DImg& img)
+void ImageRegionItem::setTargetImage(DImg& img)
 {
-    d_ptr->targetImage = img;
-    d_ptr->targetPix   = d_ptr->iface->convertToPixmap(d_ptr->targetImage);
+    d_ptr->targetPix = d_ptr->iface->convertToPixmap(img);
     update();
 }
 
@@ -101,6 +100,11 @@ void ImageRegionItem::setRenderingPreviewMode(int mode)
 {
     d_ptr->renderingPreviewMode = mode;
     update();
+}
+
+void ImageRegionItem::setHighLightPoints(const QPolygon& pointsList)
+{
+    d_ptr->hightlightPoints = pointsList;
 }
 
 void ImageRegionItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
@@ -113,8 +117,8 @@ void ImageRegionItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* o
     QSize   completeSize = boundingRect().size().toSize();
 
     // scale "as if" scaling to whole image, but clip output to our exposed region
-    DImg scaledImage     = d->image.smoothScaleClipped(completeSize.width(), completeSize.height(),
-                                                       d_ptr->drawRect.x(), d_ptr->drawRect.y(), 
+    DImg scaledImage     = d->image.smoothScaleClipped(completeSize.width(),    completeSize.height(),
+                                                       d_ptr->drawRect.x(),     d_ptr->drawRect.y(), 
                                                        d_ptr->drawRect.width(), d_ptr->drawRect.height());
 
     if (d->cachedPixmaps.find(d_ptr->drawRect, &pix, &pixSourceRect))
@@ -167,11 +171,6 @@ void ImageRegionItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* o
             painter->drawPixmap(d_ptr->drawRect.topLeft(), pixMask);
         }
     }
-}
-
-void ImageRegionItem::setHighLightPoints(const QPolygon& pointsList)
-{
-    d_ptr->hightlightPoints = pointsList;
 }
 
 void ImageRegionItem::paintExtraData(QPainter* const p)
@@ -255,7 +254,7 @@ void ImageRegionItem::paintExtraData(QPainter* const p)
         for (int i = 0 ; i < d_ptr->hightlightPoints.count() ; ++i)
         {
             pt             = d_ptr->hightlightPoints.point(i);
-            int zoomFactor = this->zoomSettings()->zoomFactor();
+            int zoomFactor = zoomSettings()->zoomFactor();
 
             if (d_ptr->drawRect.contains(pt))
             {
