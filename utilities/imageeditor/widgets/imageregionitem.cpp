@@ -167,7 +167,6 @@ void ImageRegionItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* o
             painter->drawPixmap(d_ptr->drawRect.topLeft(), pixMask);
         }
     }
-
 }
 
 void ImageRegionItem::setHighLightPoints(const QPolygon& pointsList)
@@ -220,8 +219,8 @@ void ImageRegionItem::paintExtraData(QPainter* const p)
         p->drawLine(d_ptr->drawRect.topLeft().x()+d_ptr->drawRect.width()/2, d_ptr->drawRect.topLeft().y(), d_ptr->drawRect.topLeft().x()+d_ptr->drawRect.width()/2, d_ptr->drawRect.bottomLeft().y());
         p->setPen(QPen(Qt::red, 2, Qt::DotLine));
         p->drawLine(d_ptr->drawRect.topLeft().x() + d_ptr->drawRect.width()/2, d_ptr->drawRect.topLeft().y(), d_ptr->drawRect.topLeft().x()+d_ptr->drawRect.width()/2, d_ptr->drawRect.bottomLeft().y());
-        d_ptr->view->drawText(p, QRectF(QPointF(d_ptr->drawRect.topLeft().x() + 20, d_ptr->drawRect.topLeft().y() + 20), fontRectBefore.size()), i18n("Before"));
-        d_ptr->view->drawText(p, QRectF(QPointF(d_ptr->drawRect.topLeft().x() + d_ptr->drawRect.width()/2 + 20, d_ptr->drawRect.topLeft().y() + 20), fontRectAfter.size()), i18n("After"));
+        d_ptr->view->drawText(p, QRectF(QPointF(d_ptr->drawRect.topLeft().x() + 20,                             d_ptr->drawRect.topLeft().y() + 20), fontRectBefore.size()), i18n("Before"));
+        d_ptr->view->drawText(p, QRectF(QPointF(d_ptr->drawRect.topLeft().x() + d_ptr->drawRect.width()/2 + 20, d_ptr->drawRect.topLeft().y() + 20), fontRectAfter.size()),  i18n("After"));
     }
 
     else if (d_ptr->renderingPreviewMode == PreviewToolBar::PreviewBothImagesHorz ||
@@ -242,8 +241,8 @@ void ImageRegionItem::paintExtraData(QPainter* const p)
         p->setPen(QPen(Qt::red, 2, Qt::DotLine));
         p->drawLine(d_ptr->drawRect.topLeft().x() + 1, d_ptr->drawRect.topLeft().y() + d_ptr->drawRect.height()/2, d_ptr->drawRect.topRight().x() - 1, d_ptr->drawRect.topLeft().y() + d_ptr->drawRect.height()/2);
 
-        d_ptr->view->drawText(p, QRectF(QPointF(d_ptr->drawRect.topLeft().x() + 20, d_ptr->drawRect.topLeft().y() + 20), fontRectBefore.size()), i18n("Before"));
-        d_ptr->view->drawText(p, QRectF(QPointF(d_ptr->drawRect.topLeft().x() + 20, d_ptr->drawRect.topLeft().y() + d_ptr->drawRect.height()/2 + 20), fontRectAfter.size()), i18n("After"));
+        d_ptr->view->drawText(p, QRectF(QPointF(d_ptr->drawRect.topLeft().x() + 20, d_ptr->drawRect.topLeft().y() + 20),                              fontRectBefore.size()), i18n("Before"));
+        d_ptr->view->drawText(p, QRectF(QPointF(d_ptr->drawRect.topLeft().x() + 20, d_ptr->drawRect.topLeft().y() + d_ptr->drawRect.height()/2 + 20), fontRectAfter.size()),  i18n("After"));
     }
 
     // Drawing highlighted points.
