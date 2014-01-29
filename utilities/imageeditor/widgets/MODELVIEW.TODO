@@ -136,3 +136,7 @@ Tools based on ImageGuideWidget preview widget work properly (for ex FreeRotatio
 
 Origin of the problem: ImageRegionWidget::getOriginalRegionImage get a copy of item image instance. This copy is a region of image delemited by rectangle returned by ImageRegionWidget::getOriginalImageRegionToRender().
 This rectangle is null. It computed through ImageRegionItem::getImageRegion() which return d_ptr->drawRect. This one is never updated following PreviewToolBar preview mode.
+
+06/ 
+
+After an ImageRegionWidget session, main canvas position and zoom must be restored. (See https://bugs.kde.org/show_bug.cgi?id=246903)
