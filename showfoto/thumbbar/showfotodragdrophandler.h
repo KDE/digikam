@@ -47,7 +47,7 @@ public:
 
     explicit ShowfotoDragDropHandler(ShowfotoImageModel* const model);
 
-    ShowfotoImageModel* model() const;
+    ShowfotoImageModel*    model() const;
 
     virtual bool           dropEvent(QAbstractItemView* view, const QDropEvent* e, const QModelIndex& droppedOn);
     virtual Qt::DropAction accepts(const QDropEvent* e, const QModelIndex& dropIndex);
@@ -57,7 +57,7 @@ public:
 Q_SIGNALS:
 
     void dioResult(KJob*);
-    void signalDroppedUrls(const KUrl::List urls);
+    void signalDroppedUrls(const KUrl::List& urls);
 
 private:
 

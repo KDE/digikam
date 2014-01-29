@@ -124,8 +124,8 @@ extern "C"
 #include "thumbnailsize.h"
 #include "uifilevalidator.h"
 #include "knotificationwrapper.h"
-#include "thumbbar/showfotodelegate.h"
-#include "thumbbar/showfotocategorizedview.h"
+#include "showfotodelegate.h"
+#include "showfotocategorizedview.h"
 #include "showfotosettings.h"
 #include "showfoto_p.h"
 
@@ -1270,7 +1270,7 @@ void ShowFoto::openFolder(const KUrl& url)
     d->lastOpenedDirectory = d->infoList.at(0).url;
 }
 
-void ShowFoto::slotDroppedUrls(const KUrl::List urls)
+void ShowFoto::slotDroppedUrls(const KUrl::List& urls)
 {
     d->droppedUrls = true;
     openUrls(urls);
