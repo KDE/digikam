@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "showfotodragdrophandler.h"
+#include "showfotodragdrophandler.moc"
 
 // Qt includes
 
@@ -33,13 +33,13 @@
 #include <kiconloader.h>
 #include <kio/job.h>
 #include <klocale.h>
+#include <kmimetype.h>
 
 // Local includes
 
 #include "ddragobjects.h"
 #include "showfotocategorizedview.h"
 #include "showfotoiteminfo.h"
-#include "KMimeType"
 #include "ddragobjects.h"
 
 namespace ShowFoto
@@ -75,7 +75,7 @@ bool ShowfotoDragDropHandler::dropEvent(QAbstractItemView* abstractview, const Q
 
     foreach (KUrl url, urls)
     {
-        if(KMimeType::findByUrl(url)->name().startsWith("image",Qt::CaseInsensitive))
+        if(KMimeType::findByUrl(url)->name().startsWith("image", Qt::CaseInsensitive))
         {
             wantedUrls << url;
         }
@@ -107,7 +107,7 @@ QStringList ShowfotoDragDropHandler::mimeTypes() const
 QMimeData* ShowfotoDragDropHandler::createMimeData(const QList<QModelIndex>& indexes)
 {
     QList<ShowfotoItemInfo> infos = model()->showfotoItemInfos(indexes);
-    QMimeData* mimeData = new QMimeData();
+    QMimeData* const mimeData     = new QMimeData();
 
     KUrl::List       urls;
 
