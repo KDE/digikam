@@ -224,7 +224,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
 
     // -- Load current items ---------------------------
 
-    openUrlsWrapper(urlList);
+    slotDroppedUrls(urlList);
 }
 
 ShowFoto::~ShowFoto()
@@ -345,8 +345,8 @@ void ShowFoto::setupConnections()
     connect(d->rightSideBar, SIGNAL(signalSetupMetadataFilters(int)),
             this, SLOT(slotSetupMetadataFilters(int)));
 
-    connect(d->dDHandler, SIGNAL(signalDroppedUrls(KUrl::List,KUrl::List)),
-            this, SLOT(slotDroppedUrls(KUrl::List,KUrl::List)));
+    connect(d->dDHandler, SIGNAL(signalDroppedUrls(KUrl::List)),
+            this, SLOT(slotDroppedUrls(KUrl::List)));
 }
 
 void ShowFoto::setupUserArea()
@@ -1266,27 +1266,46 @@ void ShowFoto::openFolder(const KUrl& url)
     d->lastOpenedDirectory = d->infoList.at(0).url;
 }
 
-void ShowFoto::slotDroppedUrls(const KUrl::List& imagesUrls,const KUrl::List& foldersUrls)
+void ShowFoto::slotDroppedUrls(const KUrl::List& droppedUrls)
 {
-    d->droppedUrls = true;
-
-    if(!imagesUrls.isEmpty())
+    if(!droppedUrls.isEmpty())
     {
-        openUrls(imagesUrls);
-    }
+        d->droppedUrls = true;
 
-    if(!foldersUrls.isEmpty())
-    {
-        foreach (KUrl fUrl, foldersUrls)
+        KUrl::List imagesUrls;
+        KUrl::List foldersUrls;
+
+        foreach (KUrl url, droppedUrls)
         {
-            openFolder(fUrl);
+            if(KMimeType::findByUrl(url)->name().startsWith("image", Qt::CaseInsensitive))
+            {
+                imagesUrls << url;
+            }
+
+            if(KMimeType::findByUrl(url)->name() == "inode/directory")
+            {
+                foldersUrls << url;
+            }
         }
+
+        if(!imagesUrls.isEmpty())
+        {
+            openUrls(imagesUrls);
+        }
+
+        if(!foldersUrls.isEmpty())
+        {
+            foreach (KUrl fUrl, foldersUrls)
+            {
+                openFolder(fUrl);
+            }
+        }
+
+        d->model->clearShowfotoItemInfos();
+        emit signalInfoList(d->infoList);
+
+        d->droppedUrls = false;
     }
-
-    d->model->clearShowfotoItemInfos();
-    emit signalInfoList(d->infoList);
-
-    d->droppedUrls = false;
 }
 
 void ShowFoto::slotSetupMetadataFilters(int tab)
