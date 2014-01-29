@@ -69,7 +69,7 @@ KDE4_ADD_LIBRARY(digikamcore SHARED ${digikamcore_LIB_SRCS})
 ADD_DEPENDENCIES(digikamcore digikam-gitversion)
 
 TARGET_LINK_LIBRARIES(digikamcore
-        ${QT_QT3SUPPORT_LIBRARY}
+#        ${QT_QT3SUPPORT_LIBRARY}
         ${QT_QTSQL_LIBRARY}
 
         ${KDE4_KDECORE_LIBS}
@@ -268,7 +268,7 @@ KDE4_ADD_EXECUTABLE(digikam ${digikam_SRCS})
 
 TARGET_LINK_LIBRARIES(digikam
         ${QT_QTSQL_LIBRARY}
-        ${QT_QT3SUPPORT_LIBRARY}
+#        ${QT_QT3SUPPORT_LIBRARY}
         ${QT_QTTEST_LIBRARY}
 
         ${KDE4_KPARTS_LIBS}

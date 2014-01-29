@@ -645,6 +645,7 @@ void Canvas::cancelAddItem()
 
 void Canvas::mousePressEvent(QMouseEvent* event)
 {
+    GraphicsDImgView::mousePressEvent(event);
     if (event->button() == Qt::LeftButton)
     {
         GraphicsDImgItem* const item = dynamic_cast<GraphicsDImgItem*>(itemAt(event->pos()));
@@ -665,8 +666,6 @@ void Canvas::mousePressEvent(QMouseEvent* event)
             }
         }
     }
-
-    GraphicsDImgView::mousePressEvent(event);
 }
 
 void Canvas::dragEnterEvent(QDragEnterEvent* e)
