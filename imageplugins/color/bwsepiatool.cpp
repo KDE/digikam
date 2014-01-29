@@ -120,9 +120,6 @@ BWSepiaTool::BWSepiaTool(QObject* const parent)
 
     connect(d->bwsepiaSettings, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotTimer()));
-
-    connect(d->previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotPreview()));
 }
 
 BWSepiaTool::~BWSepiaTool()

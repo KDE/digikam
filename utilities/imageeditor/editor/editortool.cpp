@@ -418,7 +418,7 @@ void EditorToolThreaded::slotInit()
 
     QWidget* const view = toolView();
 
-    if (dynamic_cast<ImageGuideWidget*>(view) || dynamic_cast<ImageRegionWidget*>(view))
+    if (dynamic_cast<ImageGuideWidget*>(view))
     {
         connect(view, SIGNAL(signalResized()),
                 this, SLOT(slotResized()));

@@ -110,9 +110,6 @@ CBTool::CBTool(QObject* const parent)
 
     connect(d->cbSettings, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotTimer()));
-
-    connect(d->previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotPreview()));
 }
 
 CBTool::~CBTool()

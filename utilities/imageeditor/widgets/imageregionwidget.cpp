@@ -85,7 +85,10 @@ ImageRegionWidget::ImageRegionWidget(QWidget* const parent)
                       "image to change the clip focus.</p>"));
 
     connect(layout(), SIGNAL(zoomFactorChanged(double)),
-            this, SLOT(slotZoomFactorChanged()));
+            this, SLOT(slotOriginalImageRegionChanged()));
+
+    connect(this, SIGNAL(viewportRectChanged(const QRectF&)),
+            this, SLOT(slotOriginalImageRegionChanged()));
 
     connect(this, SIGNAL(contentsMoved(bool)),
             this, SLOT(slotOriginalImageRegionChanged(bool)));
@@ -129,17 +132,11 @@ bool ImageRegionWidget::capturePointMode() const
     return d_ptr->capturePtMode;
 }
 
-void ImageRegionWidget::slotZoomFactorChanged()
-{
-    emit signalResized();
-    emit signalContentsMovedEvent(true);
-}
-
 void ImageRegionWidget::slotPreviewModeChanged(int mode)
 {
     d_ptr->renderingPreviewMode = mode;
     d_ptr->item->setRenderingPreviewMode(mode);
-    slotZoomFactorChanged();
+    slotOriginalImageRegionChanged();
     viewport()->update();
 }
 

@@ -85,18 +85,11 @@ Q_SIGNALS:
 
     void signalOriginalClipFocusChanged();
     void signalCapturedPointFromOriginal(const Digikam::DColor&, const QPoint&);
-    void signalContentsMovedEvent(bool);
-    //void signalContentTakeFocus();
-    void signalResized();
 
 public Q_SLOTS:
 
     void slotPreviewModeChanged(int mode);
-    void slotOriginalImageRegionChanged(bool targetDone);
-
-private Q_SLOTS:
-
-    void slotZoomFactorChanged();
+    void slotOriginalImageRegionChanged(bool targetDone=true);
 
 private:
 

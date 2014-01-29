@@ -355,9 +355,6 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
     // -------------------------------------------------------------
     // Channels and scale selection slots.
 
-    connect(d->previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotPreview()));
-
     connect(d->previewWidget, SIGNAL(signalCapturedPointFromOriginal(Digikam::DColor,QPoint)),
             this, SLOT(slotSpotColorChanged(Digikam::DColor)));
 /*

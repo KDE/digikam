@@ -129,9 +129,6 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* const parent)
     connect(d->settingsView, SIGNAL(signalPickerColorButtonActived()),
             this, SLOT(slotPickerColorButtonActived()));
 
-    connect(d->previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotPreview()));
-
     connect(d->previewWidget, SIGNAL(signalCapturedPointFromOriginal(Digikam::DColor,QPoint)),
             this, SLOT(slotColorSelectedFromOriginal(Digikam::DColor)));
 /*

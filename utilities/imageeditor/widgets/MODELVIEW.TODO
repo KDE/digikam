@@ -104,7 +104,7 @@ Right mouse button over the canvas must show contextual popup menu.
 EDITOR TOOL CANVAS (tested with BCG tool):
 ------------------------------------------
 
-01/ 
+01/ [FIXED]
 
 If a separate preview mode is selected (as before/after vertically), zoom in/out must show "before view" on the canvas and preview recomputed.
 If image processing is long, zoom feature is unsuitable as well in real time.
