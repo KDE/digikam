@@ -87,7 +87,7 @@ ImageRegionWidget::ImageRegionWidget(QWidget* const parent)
     connect(this, SIGNAL(signalZoomFactorChanged(double)),
             this, SLOT(slotZoomFactorChanged()));
 
-    connect(this, SIGNAL(signalContentsMovedEvent(bool)),
+    connect(this, SIGNAL(contentsMoved(bool)),
             this, SLOT(slotOriginalImageRegionChanged(bool)));
 
     layout()->fitToWindow();
