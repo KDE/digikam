@@ -140,5 +140,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 126 ==> 227530 - Album-sorting gone from menus [patch].
 127 ==> 218023 - Albums tree does not remember sorting order (ascending/descending).
 128 ==> 126116 - Keep directory hierarchy when albums are view by category.
-129 ==> 
+129 ==> 225786 - Proposed digiKam Menu Changes.
+130 ==> 
 
