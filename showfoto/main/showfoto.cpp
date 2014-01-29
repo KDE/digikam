@@ -1270,7 +1270,7 @@ void ShowFoto::openFolder(const KUrl& url)
     d->lastOpenedDirectory = d->infoList.at(0).url;
 }
 
-void ShowFoto::slotDroppedUrls(const KUrl::List urls)
+void ShowFoto::slotDroppedUrls(const KUrl::List& urls)
 {
     d->droppedUrls = true;
     openUrls(urls);

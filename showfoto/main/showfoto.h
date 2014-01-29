@@ -114,7 +114,7 @@ private Q_SLOTS:
     void slotOpenUrl(const ShowfotoItemInfo& info);
     void slotOpenFolder(const KUrl&);
     void slotOpenFilesInFolder();
-    void slotDroppedUrls(const KUrl::List urls);
+    void slotDroppedUrls(const KUrl::List& urls);
     void slotDeleteCurrentItem();
 
     void slotChanged();
