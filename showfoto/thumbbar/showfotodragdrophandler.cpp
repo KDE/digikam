@@ -71,19 +71,25 @@ bool ShowfotoDragDropHandler::dropEvent(QAbstractItemView* abstractview, const Q
     }
 
     KUrl::List urls = e->mimeData()->urls();
-    KUrl::List wantedUrls ;
+    KUrl::List imagesUrls;
+    KUrl::List foldersUrls;
 
     foreach (KUrl url, urls)
     {
         if(KMimeType::findByUrl(url)->name().startsWith("image", Qt::CaseInsensitive))
         {
-            wantedUrls << url;
+            imagesUrls << url;
+        }
+
+        if(KMimeType::findByUrl(url)->name() == "inode/directory")
+        {
+            foldersUrls << url;
         }
     }
 
-    signalDroppedUrls(wantedUrls);
+    emit signalDroppedUrls(imagesUrls,foldersUrls);
 
-    return false;
+    return true;
 }
 
 Qt::DropAction ShowfotoDragDropHandler::accepts(const QDropEvent* e, const QModelIndex& /*dropIndex*/)

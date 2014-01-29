@@ -345,8 +345,8 @@ void ShowFoto::setupConnections()
     connect(d->rightSideBar, SIGNAL(signalSetupMetadataFilters(int)),
             this, SLOT(slotSetupMetadataFilters(int)));
 
-    connect(d->dDHandler, SIGNAL(signalDroppedUrls(KUrl::List)),
-            this, SLOT(slotDroppedUrls(KUrl::List)));
+    connect(d->dDHandler, SIGNAL(signalDroppedUrls(KUrl::List,KUrl::List)),
+            this, SLOT(slotDroppedUrls(KUrl::List,KUrl::List)));
 }
 
 void ShowFoto::setupUserArea()
@@ -580,9 +580,7 @@ void ShowFoto::openUrls(const KUrl::List &urls)
         if(d->droppedUrls)
         {
             //replace the equal sign with "<<" to keep the previous pics in the list
-            d->infoList << infos;
-            d->model->clearShowfotoItemInfos();
-            emit signalInfoList(d->infoList);
+            d->infoList << infos;            
         }
         else
         {
@@ -1253,14 +1251,12 @@ void ShowFoto::openFolder(const KUrl& url)
         infos.append(iteminfo);
     }
 
-    if(d->infoList.isEmpty())
+    if(d->droppedUrls)
     {
-        d->infoList=infos;
-        emit signalInfoList(d->infoList);
+        d->infoList << infos;
     }
     else
     {
-        //replace the equal sign with "<<" to keep the previous pics in the list
         d->infoList = infos;
         d->model->clearShowfotoItemInfos();
         emit signalInfoList(d->infoList);
@@ -1270,10 +1266,26 @@ void ShowFoto::openFolder(const KUrl& url)
     d->lastOpenedDirectory = d->infoList.at(0).url;
 }
 
-void ShowFoto::slotDroppedUrls(const KUrl::List& urls)
+void ShowFoto::slotDroppedUrls(const KUrl::List& imagesUrls,const KUrl::List& foldersUrls)
 {
     d->droppedUrls = true;
-    openUrls(urls);
+
+    if(!imagesUrls.isEmpty())
+    {
+        openUrls(imagesUrls);
+    }
+
+    if(!foldersUrls.isEmpty())
+    {
+        foreach (KUrl fUrl, foldersUrls)
+        {
+            openFolder(fUrl);
+        }
+    }
+
+    d->model->clearShowfotoItemInfos();
+    emit signalInfoList(d->infoList);
+
     d->droppedUrls = false;
 }
 
