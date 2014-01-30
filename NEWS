@@ -143,5 +143,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 129 ==> 225786 - Proposed digiKam Menu Changes.
 130 ==> 246903 - Editor Canvas : not updated when zoom level changes in plugins.
 131 ==> 129941 - Editor Canvas : Ability to Drag and Drop an image.
-132 ==> 
+132 ==> 224246 - Editor Canvas : displays useless scroll bars.
+133 ==> 
 
