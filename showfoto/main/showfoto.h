@@ -97,7 +97,6 @@ private:
 
     void openFolder(const KUrl& url);
     void openUrls(const KUrl::List& urls);
-    void openUrlsWrapper(const KUrl::List& urlList);
 
     Digikam::ThumbBarDock* thumbBar()     const;
     Digikam::Sidebar*      rightSideBar() const;

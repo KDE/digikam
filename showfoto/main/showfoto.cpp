@@ -532,43 +532,29 @@ void ShowFoto::slotOpenFile()
     openUrls(urls);
 }
 
-void ShowFoto::openUrlsWrapper(const KUrl::List& urlList)
-{
-    if (!urlList.isEmpty())
-    {
-        if (KMimeType::findByUrl( urlList.first() )->name() == "inode/directory" )
-        {
-            slotOpenFolder(urlList.first());
-        }
-        else
-        {
-            openUrls(urlList);
-        }
-    }
-}
-
 void ShowFoto::openUrls(const KUrl::List &urls)
 {
     if (!urls.isEmpty())
     {
         ShowfotoItemInfoList infos;
-        ShowfotoItemInfo iteminfo;
-        DMetadata meta;
+        ShowfotoItemInfo     iteminfo;
+        DMetadata            meta;
         int i = 0;
+
         for (KUrl::List::const_iterator it = urls.constBegin();
              it != urls.constEnd(); ++it)
         {
             QFileInfo fi((*it).toLocalFile());
-            iteminfo.name = fi.fileName();
-            iteminfo.mime = fi.suffix();
-            iteminfo.size = fi.size();
-            iteminfo.url  = fi.filePath();
-            iteminfo.folder = fi.path();
-            iteminfo.dtime = fi.created();
+            iteminfo.name      = fi.fileName();
+            iteminfo.mime      = fi.suffix();
+            iteminfo.size      = fi.size();
+            iteminfo.url       = fi.filePath();
+            iteminfo.folder    = fi.path();
+            iteminfo.dtime     = fi.created();
             meta.load(fi.filePath());
-            iteminfo.ctime = meta.getImageDateTime();
-            iteminfo.width = meta.getImageDimensions().width();
-            iteminfo.height = meta.getImageDimensions().height();
+            iteminfo.ctime     = meta.getImageDateTime();
+            iteminfo.width     = meta.getImageDimensions().width();
+            iteminfo.height    = meta.getImageDimensions().height();
             iteminfo.photoInfo = meta.getPhotographInformation();
             infos.append(iteminfo);
             i++;
@@ -577,7 +563,7 @@ void ShowFoto::openUrls(const KUrl::List &urls)
         if(d->droppedUrls)
         {
             //replace the equal sign with "<<" to keep the previous pics in the list
-            d->infoList << infos;            
+            d->infoList << infos;
         }
         else
         {
@@ -731,6 +717,7 @@ void ShowFoto::slotOpenFolder(const KUrl& url)
     {
         return;
     }
+
     m_canvas->load(QString(), m_IOFileSettings);
     d->thumbBar->showfotoItemInfos().clear();
     emit signalNoCurrentItem();
@@ -810,7 +797,6 @@ void ShowFoto::slotBackward()
          d->thumbBar->toPreviousIndex();
          slotOpenUrl(d->thumbBar->currentInfo());
     }
-
 }
 
 void ShowFoto::toggleNavigation(int index)
@@ -903,27 +889,29 @@ void ShowFoto::saveIsComplete()
 void ShowFoto::saveAsIsComplete()
 {
     resetOriginSwitchFile();
-//    Digikam::LoadingCacheInterface::putImage(m_savingContext.destinationURL.toLocalFile(), m_canvas->currentImage());
+/*
+    Digikam::LoadingCacheInterface::putImage(m_savingContext.destinationURL.toLocalFile(), m_canvas->currentImage());
 
-//    // Add the file to the list of thumbbar images if it's not there already
-//    Digikam::ThumbBarItem* foundItem = d->thumbBar->findItemByUrl(m_savingContext.destinationURL);
-//    d->thumbBar->invalidateThumb(foundItem);qDebug() << wantedUrls;
+    // Add the file to the list of thumbbar images if it's not there already
+    Digikam::ThumbBarItem* foundItem = d->thumbBar->findItemByUrl(m_savingContext.destinationURL);
+    d->thumbBar->invalidateThumb(foundItem);qDebug() << wantedUrls;
 
-//    if (!foundItem)
-//    {
-//        foundItem = new Digikam::ThumbBarItem(d->thumbBar, m_savingContext.destinationURL);
-//    }
+    if (!foundItem)
+    {
+        foundItem = new Digikam::ThumbBarItem(d->thumbBar, m_savingContext.destinationURL);
+    }
 
-//    // shortcut slotOpenUrl
-//    d->thumbBar->blockSignals(true);
-//    d->thumbBar->setSelected(foundItem);
-//    d->thumbBar->blockSignals(false);
-//    d->currentItem = foundItem;
-//    slotUpdateItemInfo();
+    // shortcut slotOpenUrl
+    d->thumbBar->blockSignals(true);
+    d->thumbBar->setSelected(foundItem);
+    d->thumbBar->blockSignals(false);
+    d->currentItem = foundItem;
+    slotUpdateItemInfo();
 
-//    // Pop-up a message to bring user when save is done.
-//    Digikam::KNotificationWrapper("editorsavefilecompleted", i18n("Image saved successfully"),
-//                                  this, windowTitle());
+    // Pop-up a message to bring user when save is done.
+    Digikam::KNotificationWrapper("editorsavefilecompleted", i18n("Image saved successfully"),
+                                    this, windowTitle());
+*/
 }
 
 void ShowFoto::saveVersionIsComplete()
@@ -1012,7 +1000,7 @@ void ShowFoto::slotDeleteCurrentItemResult(KJob* job)
     // No error, remove item in thumbbar.
     //d->model->removeShowfotoItemInfo(d->thumbBar->currentInfo());
 
-//    // Disable menu actions and SideBar if no current image.
+    // Disable menu actions and SideBar if no current image.
 
     d->itemsNb = d->thumbBar->showfotoItemInfos().size();
 
@@ -1104,11 +1092,11 @@ bool ShowFoto::saveNewVersionAs()
 {
     return false;
 }
+
 bool ShowFoto::saveNewVersionInFormat(const QString&)
 {
     return false;
 }
-
 
 void ShowFoto::openFolder(const KUrl& url)
 {
@@ -1234,16 +1222,16 @@ void ShowFoto::openFolder(const KUrl& url)
 
     for (fi = fileinfolist.constBegin(); fi != fileinfolist.constEnd(); ++fi)
     {
-        iteminfo.name = (*fi).fileName();
-        iteminfo.mime = (*fi).suffix();
-        iteminfo.size = (*fi).size();
-        iteminfo.folder = (*fi).path();
-        iteminfo.url = (*fi).filePath();
-        iteminfo.dtime = (*fi).created();
+        iteminfo.name      = (*fi).fileName();
+        iteminfo.mime      = (*fi).suffix();
+        iteminfo.size      = (*fi).size();
+        iteminfo.folder    = (*fi).path();
+        iteminfo.url       = (*fi).filePath();
+        iteminfo.dtime     = (*fi).created();
         meta.load((*fi).filePath());
-        iteminfo.ctime = meta.getImageDateTime();
-        iteminfo.width = meta.getImageDimensions().width();
-        iteminfo.height = meta.getImageDimensions().height();
+        iteminfo.ctime     = meta.getImageDateTime();
+        iteminfo.width     = meta.getImageDimensions().width();
+        iteminfo.height    = meta.getImageDimensions().height();
         iteminfo.photoInfo = meta.getPhotographInformation();
         infos.append(iteminfo);
     }
@@ -1329,7 +1317,7 @@ void ShowFoto::slotAddedDropedItems(QDropEvent* e)
 
     if (!urls.isEmpty())
     {
-        openUrlsWrapper(urls);
+        slotDroppedUrls(urls);
     }
 }
 
