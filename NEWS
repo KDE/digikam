@@ -150,5 +150,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 130 ==> 246903 - Editor Canvas : not updated when zoom level changes in plugins.
 131 ==> 129941 - Editor Canvas : Ability to Drag and Drop an image.
 132 ==> 224246 - Editor Canvas : displays useless scroll bars.
-133 ==> 
-
+133 ==> 233773 - Editor Canvas : ctrl + shift + e doesn't enable scrolling.
+134 ==> 
