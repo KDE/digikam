@@ -6,9 +6,15 @@ NEW FEATURES:
 General  : New Tags Manager window for easy tags management.
 General  : New images quality sorter tool, based on blur, noise, and compression analysis.
 General  : Multiple selection and multiple drag-n-drop capabilities on Tags Manager and Tags View from sidebars.
+General  : Drop of Qt3Support classes. Now digiKam is pure Qt4 implementation.
 
 Metadata : Nepomuk Service fixed to use current Api. Enable it from digikam metadata settings.
 Metadata : Support for writing face rectangles in Windows Live Photo format.
+
+Editor   : Port of canvas to Qt Model/view.
+
+Showfoto : Port of Thumbbar to Qt Model/view.
+
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
