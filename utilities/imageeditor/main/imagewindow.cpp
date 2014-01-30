@@ -180,8 +180,9 @@ ImageWindow::ImageWindow()
     // -- Build the GUI -------------------------------
 
     setupUserArea();
-    setupStatusBar();
     setupActions();
+    setupStatusBar();
+    createGUI(xmlFile());
 
     // Load image plugins to GUI
 
@@ -464,10 +465,6 @@ void ImageWindow::setupActions()
 
     // Labels shortcuts must be registered here to be saved in XML GUI files if user customize it.
     TagsActionMngr::defaultManager()->registerLabelsActions(actionCollection());
-
-    // ---------------------------------------------------------------------------------
-
-    createGUI(xmlFile());
 }
 
 void ImageWindow::slotSetupChanged()

@@ -194,8 +194,9 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     // -- Build the GUI -----------------------------------
 
     setupUserArea();
-    setupStatusBar();
     setupActions();
+    setupStatusBar();
+    createGUI(xmlFile());
 
     // Load image plugins to GUI
 
@@ -204,7 +205,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
 
     // Create context menu.
 
-     setupContextMenu();
+    setupContextMenu();
 
     // Make signals/slots connections
 
@@ -447,10 +448,6 @@ void ShowFoto::setupActions()
     // -- Standard 'Help' menu actions ---------------------------------------------
 
     createHelpActions(false);
-
-    // --- Create the GUI ----------------------------------------------------
-
-    createGUI(xmlFile());
 }
 
 void ShowFoto::readSettings()
