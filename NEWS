@@ -151,4 +151,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 131 ==> 129941 - Editor Canvas : Ability to Drag and Drop an image.
 132 ==> 224246 - Editor Canvas : displays useless scroll bars.
 133 ==> 233773 - Editor Canvas : ctrl + shift + e doesn't enable scrolling.
-134 ==> 
+134 ==> 170364 - Editor Canvas : Expand selection rectangle by dragging sides in image editor [patch].
+135 ==> 
