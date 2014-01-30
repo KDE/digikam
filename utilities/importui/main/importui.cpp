@@ -84,6 +84,7 @@
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
 #include <kvbox.h>
+#include <KMessageWidget>
 
 // Libkdcraw includes
 
@@ -259,6 +260,11 @@ void ImportUI::setupUserArea()
     vbox->setMargin(0);
     vbox->setSpacing(0);
 
+    d->errorWidget = new KMessageWidget(vbox);
+    d->errorWidget->setMessageType(KMessageWidget::Error);
+    d->errorWidget->setCloseButtonVisible(false);
+    d->errorWidget->hide();
+    
     // -------------------------------------------------------------------------
 
     d->advBox = new RExpanderBox(d->rightSideBar);
@@ -590,7 +596,7 @@ void ImportUI::setupActions()
     KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          actionCollection());
     KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      actionCollection());
     KStandardAction::configureNotifications(this, SLOT(slotConfNotifications()), actionCollection());
-    KStandardAction::preferences(this,            SLOT(slotSetup()),             actionCollection());
+    d->showPreferencesAction = KStandardAction::preferences(this,            SLOT(slotSetup()),             actionCollection());
 
     // ---------------------------------------------------------------------------------
 
@@ -615,6 +621,9 @@ void ImportUI::setupActions()
 
     // ---------------------------------------------------------------------------------
 
+    d->connectAction = new KAction(KIcon("view-refresh"), i18nc("@action Connection failed, try again?", "Retry"), this);
+    connect(d->connectAction, SIGNAL(triggered()), d->controller, SLOT(slotConnect()));
+    
     createGUI(xmlFile());
 
     d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
@@ -1168,25 +1177,18 @@ void ImportUI::slotConnected(bool val)
 {
     if (!val)
     {
-        if (KMessageBox::warningYesNo(this,
-                                      i18nc("@info", "Failed to connect to the camera. "
-                                           "Please make sure it is connected "
-                                           "properly and turned on. "
-                                           "Would you like to try again?"),
-                                      i18nc("@title:window", "Connection Failed"),
-                                      KGuiItem(i18nc("@action Connection failed, try again?", "Retry")),
-                                      KGuiItem(i18nc("@action Connection failed, try again?", "Abort")))
-                == KMessageBox::Yes)
-        {
-            QTimer::singleShot(0, d->controller, SLOT(slotConnect()));
-        }
-        else
-        {
-            close();
-        }
+        d->errorWidget->setText(i18nc("@info", "Failed to connect to the camera. "
+                                               "Please make sure it is connected "
+                                               "properly and turned on."));
+
+        d->errorWidget->actions().clear();
+        d->errorWidget->addAction(d->connectAction);
+        d->errorWidget->addAction(d->showPreferencesAction);
+        d->errorWidget->animatedShow();
     }
     else
     {
+        d->errorWidget->hide();
         refreshFreeSpace();
         // FIXME ugly c&p from slotFolderList
         KSharedConfig::Ptr config = KGlobal::config();

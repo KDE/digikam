@@ -62,6 +62,8 @@
 
 using namespace KDcrawIface;
 
+class KMessageWidget;
+
 namespace Digikam
 {
 
@@ -104,10 +106,12 @@ public:
         markAsDownloadedAction(0),
         resumeAction(0),
         pauseAction(0),
+        connectAction(0),
         itemSortAction(0),
         itemSortOrderAction(0),
         itemsGroupAction(0),
         showMenuBarAction(0),
+        showPreferencesAction(0),
         showLogAction(0),
         showBarAction(0),
         imageViewSelectionAction(0),
@@ -133,7 +137,8 @@ public:
         progressTimer(0),
         progressValue(0),
         historyView(0),
-        filterComboBox(0)
+        filterComboBox(0),
+        errorWidget(0)
     {
     }
 
@@ -187,10 +192,12 @@ public:
     KAction*                      markAsDownloadedAction;
     KAction*                      resumeAction;
     KAction*                      pauseAction;
+    KAction*                      connectAction;
     KSelectAction*                itemSortAction;
     KSelectAction*                itemSortOrderAction;
     KSelectAction*                itemsGroupAction;
     KToggleAction*                showMenuBarAction;
+    KAction*                      showPreferencesAction;
     KToggleAction*                showLogAction;
     KToggleAction*                showBarAction;
     KSelectAction*                imageViewSelectionAction;
@@ -233,6 +240,8 @@ public:
     FilterComboBox*               filterComboBox;
 
     CHUpdateItemMap               map;
+    
+    KMessageWidget*               errorWidget;
 };
 
 const QString ImportUI::Private::configGroupName("Camera Settings");
