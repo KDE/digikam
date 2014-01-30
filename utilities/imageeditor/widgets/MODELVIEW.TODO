@@ -48,7 +48,7 @@ Applying Color/Negative menu option crash digiKam :
 
 In fact it's the same dysfunction with all other editor tools... It's certainly due to you recent backgroundRole() warning patch commited. Few days ago, this crash was not reproducible.
 
-09/ 
+09/ [FIXED]
 
 Select a rectangle over canvas. Sometime, selection mode still active after to complete selection. Without to press any mouse button, selection area can be changed as well when mouse is simply moved over canvas.
 To reproduce, start to draw a region and click quickly to close region without to move mouse.
@@ -101,8 +101,8 @@ Right mouse button over the canvas must show contextual popup menu.
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-EDITOR TOOL CANVAS (tested with BCG tool):
-------------------------------------------
+EDITOR TOOL CANVAS :
+--------------------
 
 01/ [FIXED]
 
@@ -140,3 +140,8 @@ This rectangle is null. It computed through ImageRegionItem::getImageRegion() wh
 06/ [FIXED]
 
 After an ImageRegionWidget session, main canvas position and zoom must be restored. (See https://bugs.kde.org/show_bug.cgi?id=246903)
+
+07/ 
+
+With White Balance or Levels Adjust tools, color picker do not have any effect to select color components from original image.
+
