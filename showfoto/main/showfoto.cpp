@@ -998,7 +998,7 @@ void ShowFoto::slotDeleteCurrentItemResult(KJob* job)
     }
 
     // No error, remove item in thumbbar.
-    //d->model->removeShowfotoItemInfo(d->thumbBar->currentInfo());
+    //d->model->removeIndex(d->thumbBar->currentIndex());
 
     // Disable menu actions and SideBar if no current image.
 
@@ -1307,7 +1307,7 @@ void ShowFoto::slotAddedDropedItems(QDropEvent* e)
     {
         QFileInfo fi(url.path());
 
-        if (fi.isFile() && fi.exists())
+        if (fi.exists())
         {
             urls.append(KUrl(url));
         }
