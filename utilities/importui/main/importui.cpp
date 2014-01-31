@@ -650,6 +650,19 @@ void ImportUI::setupActions()
     createGUI(xmlFile());
 
     d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
+    
+    // hide the unsupported actions
+    d->uploadAction->setVisible(d->controller->cameraUploadSupport());
+
+    d->downloadDelSelectedAction->setVisible(d->controller->cameraDeleteSupport());
+    d->downloadDelAllAction->setVisible(d->controller->cameraDeleteSupport());
+    d->downloadDelNewAction->setVisible(d->controller->cameraDeleteSupport());
+
+    d->deleteNewAction->setVisible(d->controller->cameraDeleteSupport());
+    d->deleteSelectedAction->setVisible(d->controller->cameraDeleteSupport());
+    d->deleteAllAction->setVisible(d->controller->cameraDeleteSupport());
+
+    d->cameraCaptureAction->setVisible(d->controller->cameraCaptureImageSupport());
 }
 
 void ImportUI::setupConnections()
@@ -1068,20 +1081,6 @@ void ImportUI::slotBusy(bool val)
         d->busy = false;
         d->cameraActions->setEnabled(true);
         d->advBox->setEnabled(true);
-        
-        // TODO see if we could just hide these actions, if no support is available..
-        // or would it be too confusing, when actions appear based on what's available?
-        d->uploadAction->setEnabled(d->controller->cameraUploadSupport());
-
-        d->downloadDelSelectedAction->setEnabled(d->controller->cameraDeleteSupport());
-        d->downloadDelAllAction->setEnabled(d->controller->cameraDeleteSupport());
-        d->downloadDelNewAction->setEnabled(d->controller->cameraDeleteSupport());
-
-        d->deleteNewAction->setEnabled(d->controller->cameraDeleteSupport());
-        d->deleteSelectedAction->setEnabled(d->controller->cameraDeleteSupport());
-        d->deleteAllAction->setEnabled(d->controller->cameraDeleteSupport());
-
-        d->cameraCaptureAction->setEnabled(d->controller->cameraCaptureImageSupport());
 
         // selection-dependent update of lockAction, markAsDownloadedAction,
         // downloadSelectedAction, downloadDelSelectedAction, deleteSelectedAction
