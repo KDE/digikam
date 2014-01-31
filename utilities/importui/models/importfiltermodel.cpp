@@ -25,6 +25,7 @@
 #include "camiteminfo.h"
 #include "filtercombo.h"
 #include "filter.h"
+#include "importimagemodel.h"
 #include <KDebug>
 
 namespace Digikam
@@ -341,6 +342,11 @@ void ImportFilterModel::setFilter(Digikam::Filter* filter)
     invalidateFilter();
 }
 
+void ImportFilterModel::setCameraController(Digikam::CameraController* controller)
+{
+    Q_D(ImportFilterModel);
+    d->importImageModel->setCameraController(controller);
+}
 
 void ImportFilterModel::setSendCamItemInfoSignals(bool sendSignals)
 {

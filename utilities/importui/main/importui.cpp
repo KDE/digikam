@@ -116,7 +116,6 @@
 #include "fileactionmngr.h"
 #include "freespacewidget.h"
 #include "imagepropertiessidebarcamgui.h"
-#include "importmodel.h"
 #include "importsettings.h"
 #include "importview.h"
 #include "knotificationwrapper.h"
@@ -130,6 +129,7 @@
 #include "thememanager.h"
 #include "thumbnailsize.h"
 #include "uifilevalidator.h"
+#include "importthumbnailmodel.h"
 
 using namespace KDcrawIface;
 
@@ -163,14 +163,9 @@ ImportUI::ImportUI(QWidget* const parent, const QString& cameraTitle,
     d->cameraTitle = (title.isEmpty()) ? cameraTitle : title;
     setCaption(d->cameraTitle);
 
-    // -- Init. backend controller ----------------------------------------
-    // Note, this needs to be in place before setupUserArea is called. Could use some refactoring...
-    setupCameraController(model, port, path);
-
-    // --------------------------------------------------------
-
     setupUserArea();
     setInitialSorting();
+    setupCameraController(model, port, path);
     setupActions();
     setupStatusBar();
     setupAccelerators();
@@ -234,12 +229,10 @@ ImportUI* ImportUI::instance()
 
 void ImportUI::setupUserArea()
 {
-    ImportModel* model             = new ImportModel(this);
-    model->setupCameraController(d->controller);
+    ImportThumbnailModel* model = new ImportThumbnailModel(this);
     ImportFilterModel* filterModel = new ImportFilterModel(this);
 
     filterModel->setSourceImportModel(model);
-
     filterModel->sort(0); // an initial sorting is necessary
     
     KHBox* const widget = new KHBox(this);
