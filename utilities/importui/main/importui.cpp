@@ -305,25 +305,29 @@ void ImportUI::setupUserArea()
 
 void ImportUI::setupActions()
 {
+    d->cameraActions = new QActionGroup(this);
     // -- File menu ----------------------------------------------------
 
     d->cameraCancelAction = new KAction(KIcon("process-stop"), i18nc("@action Cancel process", "Cancel"), this);
     connect(d->cameraCancelAction, SIGNAL(triggered()), this, SLOT(slotCancelButton()));
     actionCollection()->addAction("importui_cancelprocess", d->cameraCancelAction);
     d->cameraCancelAction->setEnabled(false);
+    d->cameraActions->addAction(d->cameraCancelAction);
 
     // -----------------------------------------------------------------
 
     d->cameraInfoAction = new KAction(KIcon("camera-photo"), i18nc("@action Information about camera", "Information"), this);
     connect(d->cameraInfoAction, SIGNAL(triggered()), this, SLOT(slotInformation()));
     actionCollection()->addAction("importui_info", d->cameraInfoAction);
-
+    d->cameraActions->addAction(d->cameraInfoAction);
+    
     // -----------------------------------------------------------------
 
     d->cameraCaptureAction = new KAction(KIcon("webcamreceive"), i18nc("@action Capture photo from camera", "Capture"), this);
     connect(d->cameraCaptureAction, SIGNAL(triggered()), this, SLOT(slotCapture()));
     actionCollection()->addAction("importui_capture", d->cameraCaptureAction);
-
+    d->cameraActions->addAction(d->cameraCaptureAction);
+    
     // -----------------------------------------------------------------
 
     KAction* closeAction = KStandardAction::close(this, SLOT(close()), this);
@@ -335,6 +339,7 @@ void ImportUI::setupActions()
     d->selectAllAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_A));
     connect(d->selectAllAction, SIGNAL(triggered()), d->view, SLOT(slotSelectAll()));
     actionCollection()->addAction("importui_selectall", d->selectAllAction);
+    d->cameraActions->addAction(d->selectAllAction);
 
     // -----------------------------------------------------------------
 
@@ -342,6 +347,7 @@ void ImportUI::setupActions()
     d->selectNoneAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_A));
     connect(d->selectNoneAction, SIGNAL(triggered()), d->view, SLOT(slotSelectNone()));
     actionCollection()->addAction("importui_selectnone", d->selectNoneAction);
+    d->cameraActions->addAction(d->selectNoneAction);
 
     // -----------------------------------------------------------------
 
@@ -349,12 +355,14 @@ void ImportUI::setupActions()
     d->selectInvertAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_Asterisk));
     connect(d->selectInvertAction, SIGNAL(triggered()), d->view, SLOT(slotSelectInvert()));
     actionCollection()->addAction("importui_selectinvert", d->selectInvertAction);
+    d->cameraActions->addAction(d->selectInvertAction);
 
     // -----------------------------------------------------------
 
     d->selectNewItemsAction = new KAction(KIcon("favorites"), i18nc("@action:inmenu", "Select New Items"), this);
     connect(d->selectNewItemsAction, SIGNAL(triggered()), this, SLOT(slotSelectNew()));
     actionCollection()->addAction("importui_selectnewitems", d->selectNewItemsAction);
+    d->cameraActions->addAction(d->selectNewItemsAction);
 
     // -----------------------------------------------------------
 
@@ -362,29 +370,34 @@ void ImportUI::setupActions()
     d->selectLockedItemsAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_L));
     connect(d->selectLockedItemsAction, SIGNAL(triggered()), this, SLOT(slotSelectLocked()));
     actionCollection()->addAction("importui_selectlockeditems", d->selectLockedItemsAction);
+    d->cameraActions->addAction(d->selectLockedItemsAction);
 
     // --- Download actions ----------------------------------------------------
 
     d->downloadAction = new KActionMenu(KIcon("document-save"), i18nc("@title:menu", "Download"), this);
     d->downloadAction->setDelayed(false);
     actionCollection()->addAction("importui_imagedownload", d->downloadAction);
+    d->cameraActions->addAction(d->downloadAction);
 
     d->downloadNewAction = new KAction(KIcon("favorites"), i18nc("@action", "Download New"), this);
     d->downloadNewAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_N));
     connect(d->downloadNewAction, SIGNAL(triggered()), this, SLOT(slotDownloadNew()));
     actionCollection()->addAction("importui_imagedownloadnew", d->downloadNewAction);
     d->downloadAction->addAction(d->downloadNewAction);
+    d->cameraActions->addAction(d->downloadNewAction);
 
     d->downloadSelectedAction = new KAction(KIcon("document-save"), i18nc("@action", "Download Selected"), this);
     connect(d->downloadSelectedAction, SIGNAL(triggered()), this, SLOT(slotDownloadSelected()));
     actionCollection()->addAction("importui_imagedownloadselected", d->downloadSelectedAction);
     d->downloadSelectedAction->setEnabled(false);
     d->downloadAction->addAction(d->downloadSelectedAction);
+    d->cameraActions->addAction(d->downloadSelectedAction);
 
     d->downloadAllAction = new KAction(KIcon("document-save"), i18nc("@action", "Download All"), this);
     connect(d->downloadAllAction, SIGNAL(triggered()), this, SLOT(slotDownloadAll()));
     actionCollection()->addAction("importui_imagedownloadall", d->downloadAllAction);
     d->downloadAction->addAction(d->downloadAllAction);
+    d->cameraActions->addAction(d->downloadAllAction);
 
     // -------------------------------------------------------------------------
 
@@ -392,6 +405,7 @@ void ImportUI::setupActions()
     d->downloadDelNewAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_N));
     connect(d->downloadDelNewAction, SIGNAL(triggered()), this, SLOT(slotDownloadAndDeleteNew()));
     actionCollection()->addAction("importui_imagedownloaddeletenew", d->downloadDelNewAction);
+    d->cameraActions->addAction(d->downloadDelNewAction);
 
     // -----------------------------------------------------------------
 
@@ -399,12 +413,14 @@ void ImportUI::setupActions()
     connect(d->downloadDelSelectedAction, SIGNAL(triggered()), this, SLOT(slotDownloadAndDeleteSelected()));
     actionCollection()->addAction("importui_imagedownloaddeleteselected", d->downloadDelSelectedAction);
     d->downloadDelSelectedAction->setEnabled(false);
+    d->cameraActions->addAction(d->downloadDelSelectedAction);
 
     // -------------------------------------------------------------------------
 
     d->downloadDelAllAction = new KAction(i18nc("@action", "Download && Delete All"), this);
     connect(d->downloadDelAllAction, SIGNAL(triggered()), this, SLOT(slotDownloadAndDeleteAll()));
     actionCollection()->addAction("importui_imagedownloaddeleteall", d->downloadDelAllAction);
+    d->cameraActions->addAction(d->downloadDelAllAction);
 
     // -------------------------------------------------------------------------
 
@@ -412,6 +428,7 @@ void ImportUI::setupActions()
     d->uploadAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_U));
     connect(d->uploadAction, SIGNAL(triggered()), this, SLOT(slotUpload()));
     actionCollection()->addAction("importui_imageupload", d->uploadAction);
+    d->cameraActions->addAction(d->uploadAction);
 
     // -------------------------------------------------------------------------
 
@@ -419,18 +436,21 @@ void ImportUI::setupActions()
     d->lockAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_L));
     connect(d->lockAction, SIGNAL(triggered()), this, SLOT(slotToggleLock()));
     actionCollection()->addAction("importui_imagelock", d->lockAction);
+    d->cameraActions->addAction(d->lockAction);
 
     // -------------------------------------------------------------------------
 
     d->markAsDownloadedAction = new KAction(KIcon("dialog-ok"), i18nc("@action", "Mark as downloaded"), this);
     connect(d->markAsDownloadedAction, SIGNAL(triggered()), this, SLOT(slotMarkAsDownloaded()));
     actionCollection()->addAction("importui_imagemarkasdownloaded", d->markAsDownloadedAction);
+    d->cameraActions->addAction(d->markAsDownloadedAction);
 
     // --- Delete actions ------------------------------------------------------
 
     d->deleteAction = new KActionMenu(KIcon("user-trash"), i18nc("@title:menu", "Delete"), this);
     d->deleteAction->setDelayed(false);
     actionCollection()->addAction("importui_delete", d->deleteAction);
+    d->cameraActions->addAction(d->deleteAction);
 
     d->deleteSelectedAction = new KAction(KIcon("edit-delete"), i18nc("@action", "Delete Selected"), this);
     connect(d->deleteSelectedAction, SIGNAL(triggered()), this, SLOT(slotDeleteSelected()));
@@ -438,16 +458,19 @@ void ImportUI::setupActions()
     d->deleteSelectedAction->setShortcut(KShortcut(Qt::Key_Delete));
     d->deleteSelectedAction->setEnabled(false);
     d->deleteAction->addAction(d->deleteSelectedAction);
+    d->cameraActions->addAction(d->deleteSelectedAction);
 
     d->deleteAllAction = new KAction(KIcon("edit-delete"), i18nc("@action", "Delete All"), this);
     connect(d->deleteAllAction, SIGNAL(triggered()), this, SLOT(slotDeleteAll()));
     actionCollection()->addAction("importui_imagedeleteall", d->deleteAllAction);
     d->deleteAction->addAction(d->deleteAllAction);
+    d->cameraActions->addAction(d->deleteAllAction);
 
     d->deleteNewAction = new KAction(KIcon("edit-delete"), i18nc("@action", "Delete New"), this);
     connect(d->deleteNewAction, SIGNAL(triggered()), this, SLOT(slotDeleteNew()));
     actionCollection()->addAction("importui_imagedeletenew", d->deleteNewAction);
     d->deleteAction->addAction(d->deleteNewAction);
+    d->cameraActions->addAction(d->deleteNewAction);
 
     // --- Icon view, items preview, and map actions ------------------------------------------------------
 
@@ -596,7 +619,7 @@ void ImportUI::setupActions()
     KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          actionCollection());
     KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      actionCollection());
     KStandardAction::configureNotifications(this, SLOT(slotConfNotifications()), actionCollection());
-    d->showPreferencesAction = KStandardAction::preferences(this,            SLOT(slotSetup()),             actionCollection());
+    d->showPreferencesAction = KStandardAction::preferences(this, SLOT(slotSetup()), actionCollection());
 
     // ---------------------------------------------------------------------------------
 
@@ -777,6 +800,11 @@ void ImportUI::setupCameraController(const QString& model, const QString& port, 
 
     connect(d->controller, SIGNAL(signalUploaded(CamItemInfo)),
             this, SLOT(slotUploaded(CamItemInfo)));
+
+    // TODO make this nicer...
+    d->view->importFilterModel()->setCameraController(d->controller);
+
+    d->controller->start();
 }
 
 CameraController* ImportUI::getCameraController() const
@@ -1038,20 +1066,14 @@ void ImportUI::slotBusy(bool val)
         }
 
         d->busy = false;
-        d->cameraCancelAction->setEnabled(false);
-        //d->view->setEnabled(false);
-
+        d->cameraActions->setEnabled(true);
         d->advBox->setEnabled(true);
-        // B.K.O #127614: The Focus need to be restored in custom prefix widget.
-        // commenting this out again: If we do not disable, no need to restore focus
-        // d->renameCustomizer->restoreFocus();
-
+        
+        // TODO see if we could just hide these actions, if no support is available..
+        // or would it be too confusing, when actions appear based on what's available?
         d->uploadAction->setEnabled(d->controller->cameraUploadSupport());
 
-        d->downloadSelectedAction->setEnabled(true);
         d->downloadDelSelectedAction->setEnabled(d->controller->cameraDeleteSupport());
-        d->downloadNewAction->setEnabled(true);
-        d->downloadAllAction->setEnabled(true);
         d->downloadDelAllAction->setEnabled(d->controller->cameraDeleteSupport());
         d->downloadDelNewAction->setEnabled(d->controller->cameraDeleteSupport());
 
@@ -1059,17 +1081,7 @@ void ImportUI::slotBusy(bool val)
         d->deleteSelectedAction->setEnabled(d->controller->cameraDeleteSupport());
         d->deleteAllAction->setEnabled(d->controller->cameraDeleteSupport());
 
-        d->selectNewItemsAction->setEnabled(true);
-        d->selectAllAction->setEnabled(true);
-        d->selectInvertAction->setEnabled(true);
-        d->selectLockedItemsAction->setEnabled(true);
-        d->selectNoneAction->setEnabled(true);
-
-        d->lockAction->setEnabled(true);
-        d->markAsDownloadedAction->setEnabled(true);
-        d->cameraInfoAction->setEnabled(true);
         d->cameraCaptureAction->setEnabled(d->controller->cameraCaptureImageSupport());
-        d->filterComboBox->setEnabled(true);
 
         // selection-dependent update of lockAction, markAsDownloadedAction,
         // downloadSelectedAction, downloadDelSelectedAction, deleteSelectedAction
@@ -1098,39 +1110,10 @@ void ImportUI::slotBusy(bool val)
         }
 
         d->busy = true;
-
-        // Has camera icon view item selection is used to control download post processing,
-        // all selection actions are disable when camera interface is busy.
-        //d->view->setEnabled(false);
-
-        // Settings tab is disabled in slotDownload, selectively when downloading
-        // Fast dis/enabling would create the impression of flicker, e.g. when retrieving EXIF from camera
+        d->cameraActions->setEnabled(false);
+        
+        // TODO see if this can be enabled too, except while downloading..
         d->advBox->setEnabled(false);
-
-        d->uploadAction->setEnabled(false);
-
-        d->downloadSelectedAction->setEnabled(false);
-        d->downloadDelSelectedAction->setEnabled(false);
-        d->downloadNewAction->setEnabled(false);
-        d->downloadAllAction->setEnabled(false);
-        d->downloadDelAllAction->setEnabled(false);
-        d->downloadDelNewAction->setEnabled(false);
-
-        d->deleteNewAction->setEnabled(false);
-        d->deleteSelectedAction->setEnabled(false);
-        d->deleteAllAction->setEnabled(false);
-
-        d->selectNewItemsAction->setEnabled(false);
-        d->selectAllAction->setEnabled(false);
-        d->selectInvertAction->setEnabled(false);
-        d->selectLockedItemsAction->setEnabled(false);
-        d->selectNoneAction->setEnabled(false);
-
-        d->lockAction->setEnabled(false);
-        d->markAsDownloadedAction->setEnabled(false);
-        d->cameraInfoAction->setEnabled(false);
-        d->cameraCaptureAction->setEnabled(false);
-        d->filterComboBox->setEnabled(false);
     }
 }
 

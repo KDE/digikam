@@ -118,6 +118,7 @@ public:
         iconViewAction(0),
         camItemPreviewAction(0),
         mapViewAction(0),
+        cameraActions(0),
         helpMenu(0),
         advBox(0),
         splitter(0),
@@ -204,6 +205,8 @@ public:
     KToggleAction*                iconViewAction;
     KToggleAction*                camItemPreviewAction;
     KToggleAction*                mapViewAction;
+    
+    QActionGroup*                 cameraActions;
 
     KUrl                          lastDestURL;
 

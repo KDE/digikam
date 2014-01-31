@@ -214,7 +214,6 @@ CameraController::CameraController(QWidget* const parent,
             Qt::BlockingQueuedConnection);
 
     d->running = true;
-    start();
 }
 
 CameraController::~CameraController()
