@@ -39,6 +39,7 @@
 #include "showfototooltipfiller.h"
 #include "showfotocategorizedview.h"
 #include "imageselectionoverlay.h"
+#include "showfotokineticscroller.h"
 
 namespace ShowFoto
 {
@@ -51,10 +52,12 @@ public:
     {
         scrollPolicy     = Qt::ScrollBarAlwaysOn;
         duplicatesFilter = 0;
+        kScrolling       = 0;
     }
 
     Qt::ScrollBarPolicy              scrollPolicy;
     NoDuplicatesShowfotoFilterModel* duplicatesFilter;
+    ShowfotoKineticScroller*         kScrolling;
 };
 
 ShowfotoThumbnailBar::ShowfotoThumbnailBar(QWidget* const parent)
@@ -70,6 +73,9 @@ ShowfotoThumbnailBar::ShowfotoThumbnailBar(QWidget* const parent)
     setAcceptDrops(true);
     setDropIndicatorShown(true);
 
+    d->kScrolling = new ShowfotoKineticScroller();
+    d->kScrolling->enableKineticScrollFor(this);
+
     slotSetupChanged();
 }
 
@@ -83,10 +89,12 @@ void ShowfotoThumbnailBar::slotDockLocationChanged(Qt::DockWidgetArea area)
     if (area == Qt::LeftDockWidgetArea || area == Qt::RightDockWidgetArea)
     {
         setFlow(TopToBottom);
+        d->kScrolling->setScrollFlow(TopToBottom);
     }
     else
     {
         setFlow(LeftToRight);
+        d->kScrolling->setScrollFlow(LeftToRight);
     }
 
     scrollTo(currentIndex());
