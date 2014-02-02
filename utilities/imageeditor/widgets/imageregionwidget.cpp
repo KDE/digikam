@@ -40,6 +40,7 @@
 #include "imageregionitem.h"
 #include "previewtoolbar.h"
 #include "previewlayout.h"
+#include "dimgitemspriv.h"
 
 namespace Digikam
 {
@@ -84,7 +85,7 @@ ImageRegionWidget::ImageRegionWidget(QWidget* const parent)
     connect(layout(), SIGNAL(zoomFactorChanged(double)),
             this, SLOT(slotOriginalImageRegionChanged()));
 
-    connect(this, SIGNAL(viewportRectChanged(const QRectF&)),
+    connect(this, SIGNAL(resized()),
             this, SLOT(slotOriginalImageRegionChanged()));
 
     connect(this, SIGNAL(contentsMoved(bool)),
