@@ -1008,7 +1008,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     SET(libitemview_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/digikamkcategorizedview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/dcategorizedview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/dkineticscroller.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/dcategorizedview.cpp        
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/ditemdelegate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/imagedelegateoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/itemviewhoverbutton.cpp

@@ -44,6 +44,7 @@
 #include "ditemdelegate.h"
 #include "abstractitemdragdrophandler.h"
 #include "itemviewtooltip.h"
+#include "dkineticscroller.h"
 
 namespace Digikam
 {
@@ -65,7 +66,8 @@ public:
         ensureOneSelectedItem(false),
         ensureInitialSelectedItem(false),
         hintAtSelectionRow(-1),
-        q(q)
+        q(q),
+        kScroller(0)
     {
     }
 
@@ -88,6 +90,7 @@ public:
     QPersistentModelIndex   hintAtScrollPosition;
 
     DCategorizedView* const q;
+    DKineticScroller*       kScroller;
 };
 
 QModelIndex DCategorizedView::Private::scrollPositionHint() const
@@ -146,6 +149,9 @@ DCategorizedView::DCategorizedView(QWidget* const parent)
 
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
+
+    d->kScroller = new DKineticScroller();
+    d->kScroller->enableKineticScrollFor(this);
 }
 
 DCategorizedView::~DCategorizedView()
@@ -578,6 +584,11 @@ void DCategorizedView::userInteraction()
     // as soon as the user did anything affecting selection, we don't interfere anymore
     d->ensureInitialSelectedItem = false;
     d->hintAtSelectionIndex      = QModelIndex();
+}
+
+void DCategorizedView::setKineticScrollFlow(QListView::Flow flow)
+{
+    d->kScroller->setScrollFlow(flow);
 }
 
 void DCategorizedView::ensureSelectionAfterChanges()

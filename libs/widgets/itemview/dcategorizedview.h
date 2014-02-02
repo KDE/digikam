@@ -136,6 +136,7 @@ protected:
     void setItemDelegate(DItemDelegate* delegate);
     void updateDelegateSizes();
     void userInteraction();
+    void setKineticScrollFlow(QListView::Flow flow);
 
     /** Returns an index that is representative for the category at position pos */
     QModelIndex indexForCategoryAt(const QPoint& pos) const;
