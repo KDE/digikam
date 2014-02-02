@@ -39,7 +39,6 @@
 #include "showfototooltipfiller.h"
 #include "showfotocategorizedview.h"
 #include "imageselectionoverlay.h"
-#include "showfotokineticscroller.h"
 
 namespace ShowFoto
 {
