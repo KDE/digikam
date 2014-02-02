@@ -40,7 +40,7 @@ enhance
   /localcontrast            DONE                 DONE                  DONE
   /redeyetool               DONE                 TODO                   NO
   /inpainting               DONE                  NO                    NO
-  /autocorrection           DONE                 TODO                  DONE
+  /autocorrection           DONE                 DONE                  DONE
   /distortion               DONE                 TODO                  TODO
   /vignetting               DONE                  NO                   DONE
   /hotpixels                DONE                 DONE                  TODO
