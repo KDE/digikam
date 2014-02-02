@@ -40,6 +40,7 @@
 #include "imageregionitem.h"
 #include "previewtoolbar.h"
 #include "previewlayout.h"
+#include "dimgitemspriv.h"
 
 namespace Digikam
 {
@@ -50,7 +51,6 @@ class ImageRegionWidget::Private
 public:
 
     Private() :
-        onMouseMovePreviewToggled(true),
         capturePtMode(false),
         renderingPreviewMode(PreviewToolBar::PreviewBothImagesVertCont),
         oldRenderingPreviewMode(PreviewToolBar::PreviewBothImagesVertCont),
@@ -58,7 +58,6 @@ public:
     {
     }
 
-    bool             onMouseMovePreviewToggled; // For PreviewToggleOnMouseOver mode.
     bool             capturePtMode;
 
     int              renderingPreviewMode;
@@ -86,7 +85,7 @@ ImageRegionWidget::ImageRegionWidget(QWidget* const parent)
     connect(layout(), SIGNAL(zoomFactorChanged(double)),
             this, SLOT(slotOriginalImageRegionChanged()));
 
-    connect(this, SIGNAL(viewportRectChanged(const QRectF&)),
+    connect(this, SIGNAL(resized()),
             this, SLOT(slotOriginalImageRegionChanged()));
 
     connect(this, SIGNAL(contentsMoved(bool)),
@@ -124,11 +123,6 @@ void ImageRegionWidget::setCapturePointMode(bool b)
         slotPreviewModeChanged(d_ptr->oldRenderingPreviewMode);
         viewport()->unsetCursor();
     }
-}
-
-bool ImageRegionWidget::capturePointMode() const
-{
-    return d_ptr->capturePtMode;
 }
 
 void ImageRegionWidget::slotPreviewModeChanged(int mode)
@@ -200,6 +194,40 @@ void ImageRegionWidget::ICCSettingsChanged()
 {
     d_ptr->item->clearCache();
     viewport()->update();
+}
+
+void ImageRegionWidget::mousePressEvent(QMouseEvent* e)
+{
+    if (d_ptr->capturePtMode)
+    {
+        emitCapturedPointFromOriginal(mapToScene(e->pos()));
+        QGraphicsView::mousePressEvent(e);
+        return;
+    }
+
+    GraphicsDImgView::mousePressEvent(e);
+}
+
+void ImageRegionWidget::mouseReleaseEvent(QMouseEvent* e)
+{
+    if (d_ptr->capturePtMode)
+    {
+        setCapturePointMode(false);
+        QGraphicsView::mouseReleaseEvent(e);
+        return;
+    }
+
+    GraphicsDImgView::mouseReleaseEvent(e);
+}
+
+void ImageRegionWidget::emitCapturedPointFromOriginal(const QPointF& pt)
+{
+    int x        = (int)(pt.x() / layout()->zoomFactor());
+    int y        = (int)(pt.y() / layout()->zoomFactor());
+    QPoint imgPt(x, y);
+    DColor color = d_ptr->item->image().getPixelColor(x, y);
+    kDebug() << "Captured point from image : " << imgPt;
+    emit signalCapturedPointFromOriginal(color, imgPt);
 }
 
 }  // namespace Digikam

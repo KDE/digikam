@@ -87,6 +87,15 @@ public Q_SLOTS:
     void slotPreviewModeChanged(int mode);
     void slotOriginalImageRegionChanged(bool targetDone=true);
 
+protected:
+
+    void mousePressEvent(QMouseEvent*);
+    void mouseReleaseEvent(QMouseEvent*);
+
+private:
+
+    void emitCapturedPointFromOriginal(const QPointF&);
+
 private:
 
     class Private;

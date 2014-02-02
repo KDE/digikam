@@ -141,7 +141,7 @@ This rectangle is null. It computed through ImageRegionItem::getImageRegion() wh
 
 After an ImageRegionWidget session, main canvas position and zoom must be restored. (See https://bugs.kde.org/show_bug.cgi?id=246903)
 
-07/ 
+07/ [FIXED]
 
 With White Balance or Levels Adjust tools, color picker do not have any effect to select color components from original image.
 
