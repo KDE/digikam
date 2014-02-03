@@ -152,4 +152,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 132 ==> 224246 - Editor Canvas : displays useless scroll bars.
 133 ==> 233773 - Editor Canvas : ctrl + shift + e doesn't enable scrolling.
 134 ==> 170364 - Editor Canvas : Expand selection rectangle by dragging sides in image editor [patch].
-135 ==> 
+135 ==> 288761 - Cached image corrupted after modifying metadata.
+136 ==> 
