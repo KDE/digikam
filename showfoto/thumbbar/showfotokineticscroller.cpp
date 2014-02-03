@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "dkineticscroller.h"
+#include "showfotokineticscroller.h"
 
 #include <QApplication>
 #include <QScrollBar>
@@ -33,8 +33,7 @@
 #include <QTimer>
 #include <cstddef> // for NULL
 
-namespace Digikam
-{
+namespace ShowFoto {
 
 /**
  *A number of mouse moves are ignored after a press to differentiate
@@ -59,7 +58,7 @@ static const int gMaxDecelerationSpeed = 30;
  */
 static const int gFriction = 1;
 
-class DKineticScroller::Private
+class ShowfotoKineticScroller::Private
 {
 public:
 
@@ -98,18 +97,18 @@ public:
     QListView::Flow scrollFlow;
 };
 
-DKineticScroller::DKineticScroller(QObject *parent)
+ShowfotoKineticScroller::ShowfotoKineticScroller(QObject *parent)
     : QObject(parent), d(new Private())
 {
     connect(&d->kineticTimer, SIGNAL(timeout()), SLOT(onKineticTimerElapsed()));
 }
 
-DKineticScroller::~DKineticScroller()
+ShowfotoKineticScroller::~ShowfotoKineticScroller()
 {
     delete d;
 }
 
-void DKineticScroller::enableKineticScrollFor(QAbstractScrollArea* scrollArea)
+void ShowfotoKineticScroller::enableKineticScrollFor(QAbstractScrollArea* scrollArea)
 {
     if( !scrollArea )
     {
@@ -132,7 +131,7 @@ void DKineticScroller::enableKineticScrollFor(QAbstractScrollArea* scrollArea)
 }
 
 //! intercepts mouse events to make the scrolling work
-bool DKineticScroller::eventFilter(QObject* object, QEvent* event)
+bool ShowfotoKineticScroller::eventFilter(QObject* object, QEvent* event)
 {
     const QEvent::Type eventType = event->type();
 
@@ -237,7 +236,7 @@ bool DKineticScroller::eventFilter(QObject* object, QEvent* event)
     return true; // filter event
 }
 
-void DKineticScroller::onKineticTimerElapsed()
+void ShowfotoKineticScroller::onKineticTimerElapsed()
 {
     if( d->isPressed && d->isMoving )
     {
@@ -283,7 +282,7 @@ void DKineticScroller::onKineticTimerElapsed()
     }
 }
 
-void DKineticScroller::setScrollFlow(QListView::Flow flow)
+void ShowfotoKineticScroller::setScrollFlow(QListView::Flow flow)
 {
     d->scrollFlow = flow;
 }

@@ -22,27 +22,27 @@
  *
  * ============================================================ */
 
-#ifndef DKINETICSCROLLER_H
-#define DKINETICSCROLLER_H
+#ifndef SHOWFOTOKINETICSCROLLER_H
+#define SHOWFOTOKINETICSCROLLER_H
 
 #include <QObject>
 #include <QScopedPointer>
 #include <QAbstractScrollArea>
 #include <QListView>
 
-namespace Digikam
+namespace ShowFoto
 {
 
 //! Vertical kinetic scroller implementation without overshoot and bouncing.
 //! A temporary solution to get kinetic-like scrolling on Symbian.
 
-class DKineticScroller: public QObject
+class ShowfotoKineticScroller: public QObject
 {
    Q_OBJECT
 
 public:
-   DKineticScroller(QObject* parent = 0);
-   ~DKineticScroller();
+   ShowfotoKineticScroller(QObject* parent = 0);
+   ~ShowfotoKineticScroller();
    //! enabled for one widget only, new calls remove previous association
    void enableKineticScrollFor(QAbstractScrollArea* scrollArea);
    void setScrollFlow(QListView::Flow flow);
@@ -59,4 +59,4 @@ private:
 };
 
 }
-#endif // DKineticScroller_H
+#endif // SHOWFOTOKINETICSCROLLER_H
