@@ -105,7 +105,7 @@ public:
 public Q_SLOTS:
 
     void slotSelectionChanged(int count);
-    void slotCurrentAlbumChanged(Album* palbum);
+    void slotCurrentAlbumChanged(QList<Album*> albums);
 
 private Q_SLOTS:
 

@@ -7,7 +7,7 @@
  * Description : simple image properties side bar (without support
  *               of digiKam database).
  *
- * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -81,17 +81,20 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget* const parent,
     m_colorTab           = new ImagePropertiesColorsTab(parent);
     m_gpsTab             = new ImagePropertiesGPSTab(parent);
 
-    // NOTE: Special case with Showfoto which willonly be able to load image, not video.
+    // NOTE: Special case with Showfoto which will only be able to load image, not video.
     if (KGlobal::mainComponent().aboutData()->appName() != QString("digikam"))
         m_propertiesTab->setVideoInfoDisable(true);
 
     appendTab(m_propertiesTab, SmallIcon("document-properties"),   i18n("Properties"));
-    appendTab(m_metadataTab,   SmallIcon("exifinfo"),              i18n("Metadata"));
+    appendTab(m_metadataTab,   SmallIcon("exifinfo"),              i18n("Metadata")); // krazy:exclude=iconnames
     appendTab(m_colorTab,      SmallIcon("format-fill-color"),     i18n("Colors"));
     appendTab(m_gpsTab,        SmallIcon("applications-internet"), i18n("Geolocation"));
 
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
+
+    connect(m_metadataTab, SIGNAL(signalSetupMetadataFilters(int)),
+            this, SIGNAL(signalSetupMetadataFilters(int)));
 }
 
 ImagePropertiesSideBar::~ImagePropertiesSideBar()
@@ -380,6 +383,11 @@ void ImagePropertiesSideBar::doSaveState()
 
     KConfigGroup groupMetadataTab = KConfigGroup(&group, entryName("Metadata Properties Tab"));
     m_metadataTab->writeSettings(groupMetadataTab);
+}
+
+void ImagePropertiesSideBar::slotLoadMetadataFilters()
+{
+    m_metadataTab->loadFilters();
 }
 
 }  // namespace Digikam

@@ -245,7 +245,7 @@ void QueuePool::slotRemoveCurrentQueue()
     else
     {
         for (int i = 0; i < count(); ++i)
-        {   
+        {
             setTabText(i, QString("#%1").arg(i + 1));
         }
     }
@@ -383,7 +383,7 @@ void QueuePool::slotTestCanDecode(const QDragMoveEvent* e, bool& accept)
 
     if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs) ||
         DAlbumDrag::decode(e->mimeData(), urls, albumID)                    ||
-        DTagDrag::canDecode(e->mimeData()))
+        DTagListDrag::canDecode(e->mimeData()))
     {
         accept = true;
         return;

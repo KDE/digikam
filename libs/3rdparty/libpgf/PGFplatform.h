@@ -120,9 +120,9 @@
 
 
 //-------------------------------------------------------------------------------
-// WINDOWS 32
+// WINDOWS 
 //-------------------------------------------------------------------------------
-#if defined(WIN32) || defined(WINCE)
+#if defined(WIN32) || defined(WINCE) || defined(WIN64)
 #define VC_EXTRALEAN		// Exclude rarely-used stuff from Windows headers
 
 //-------------------------------------------------------------------------------
@@ -591,7 +591,7 @@ __inline UINT32 ByteSwap(UINT32 dwX) {
 #endif 
 }
 
-#if defined WIN32
+#if defined(WIN32) || defined(WIN64)
 __inline UINT64 ByteSwap(UINT64 ui64) { 
 	return _byteswap_uint64(ui64);
 }
@@ -608,24 +608,24 @@ __inline UINT64 ByteSwap(UINT64 ui64) {
 // OpenMP rules (inspired from libraw project)
 // NOTE: Use LIBPGF_DISABLE_OPENMP to disable OpenMP support in whole libpgf
 #ifndef LIBPGF_DISABLE_OPENMP
-#if defined (_OPENMP)
-# if defined (WIN32)
-#  if defined (_MSC_VER) && (_MSC_VER >= 1500)
-//  VS2008 SP1 and VS2010+ : OpenMP works OK
-#   define LIBPGF_USE_OPENMP
-#  elif defined (__INTEL_COMPILER) && (__INTEL_COMPILER >=910)
-//  untested on 9.x and 10.x, Intel documentation claims OpenMP 2.5 support in 9.1
-#   define LIBPGF_USE_OPENMP
-#  else
+# if defined (_OPENMP)
+#  if defined (WIN32) || defined(WIN64)
+#   if defined (_MSC_VER) && (_MSC_VER >= 1500)
+//   VS2008 SP1 and VS2010+ : OpenMP works OK
+#    define LIBPGF_USE_OPENMP
+#   elif defined (__INTEL_COMPILER) && (__INTEL_COMPILER >=910)
+//   untested on 9.x and 10.x, Intel documentation claims OpenMP 2.5 support in 9.1
+#    define LIBPGF_USE_OPENMP
+#   else
+#    undef LIBPGF_USE_OPENMP
+#   endif
+//  Not Win32
+#  elif (defined(__APPLE__) || defined(__MACOSX__)) && defined(_REENTRANT)
 #   undef LIBPGF_USE_OPENMP
+#  else
+#   define LIBPGF_USE_OPENMP
 #  endif
-// Not Win32
-# elif (defined(__APPLE__) || defined(__MACOSX__)) && defined(_REENTRANT)
-#  undef LIBPGF_USE_OPENMP
-# else
-#  define LIBPGF_USE_OPENMP
-# endif
-#endif // defined (_OPENMP)
+# endif // defined (_OPENMP)
 #endif // ifndef LIBPGF_DISABLE_OPENMP
 #ifdef LIBPGF_USE_OPENMP
 #include <omp.h>

@@ -369,11 +369,10 @@ LCMSAPI QString LCMSEXPORT dkCmsTakeProductName(cmsHPROFILE hProfile)
 LCMSAPI QString LCMSEXPORT dkCmsTakeProductDesc(cmsHPROFILE hProfile)
 {
     static char Name[2048];
-    cmsMLU*     mlu = 0;
 
     if (cmsIsTag(hProfile, cmsSigProfileDescriptionTag))
     {
-        mlu = static_cast<cmsMLU*>( cmsReadTag(hProfile, cmsSigProfileDescriptionTag) );
+        cmsMLU* const mlu = static_cast<cmsMLU*>( cmsReadTag(hProfile, cmsSigProfileDescriptionTag) );
         cmsMLUgetASCII(mlu, "en", "US", Name, 1024);
     }
     else
@@ -518,11 +517,10 @@ LCMSBOOL dkCmsAdaptMatrixFromD50(LPMAT3 r, LPcmsCIExyY DestWhitePt)
 {
     // TODO: all based on private stuff, need to understand what digikam do in cietonguewidget with dkCmsAdaptMatrixFromD50
     cmsMAT3 result;
-    bool ret = FALSE;
 
     _l1LPMAT3tol2cmsMAT3(r, &result);
 
-    ret = cmsAdaptMatrixFromD50(&result, static_cast<const cmsCIExyY*>( DestWhitePt ));
+    bool ret = cmsAdaptMatrixFromD50(&result, static_cast<const cmsCIExyY*>( DestWhitePt ));
 
     _l2cmsMAT3tol1LPMAT3(&result, r);
 
@@ -533,7 +531,6 @@ LCMSBOOL dkCmsAdaptMatrixFromD50(LPMAT3 r, LPcmsCIExyY DestWhitePt)
 // {
 //     // TODO: all based on private stuff, need to understand what digikam do in cietonguewidget with dkCmsAdaptMatrixFromD50
 //     cmsMAT3 result;
-//     bool ret = FALSE;
 //
 //     result.v[0].n[0] = r->Red.X  ;
 //     result.v[0].n[1] = r->Red.Y  ;
@@ -545,7 +542,7 @@ LCMSBOOL dkCmsAdaptMatrixFromD50(LPMAT3 r, LPcmsCIExyY DestWhitePt)
 //     result.v[2].n[1] = r->Blue.Y ;
 //     result.v[2].n[2] = r->Blue.Z ;
 //
-//     ret = cmsAdaptMatrixFromD50(&result, static_cast<const cmsCIExyY*>( DestWhitePt ));
+//     bool ret   = cmsAdaptMatrixFromD50(&result, static_cast<const cmsCIExyY*>( DestWhitePt ));
 //
 //     r->Red.X   = result.v[0].n[0];
 //     r->Red.Y   = result.v[0].n[1];

@@ -59,8 +59,8 @@ FileActionMngr::FileActionMngrPriv::FileActionMngrPriv(FileActionMngr* const q)
     //connect(fileWorker, SIGNAL(imageTransformFinished()),
     //        this, SIGNAL(signalTransformFinished()));
 
-    connect(this, SIGNAL(signalTransform(FileActionImageInfoList, int)),
-            fileWorker, SLOT(transform(FileActionImageInfoList, int)), Qt::DirectConnection);
+    connect(this, SIGNAL(signalTransform(FileActionImageInfoList,int)),
+            fileWorker, SLOT(transform(FileActionImageInfoList,int)), Qt::DirectConnection);
 
     connect(fileWorker, SIGNAL(imageDataChanged(QString,bool,bool)),
             this, SLOT(slotImageDataChanged(QString,bool,bool)));

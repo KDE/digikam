@@ -457,7 +457,7 @@ void ItemViewImportDelegate::drawDownloadIndicator(QPainter* p, const QRect& r, 
         icon = KIconLoader::global()->loadIcon("dialog-information", KIconLoader::NoGroup, KIconLoader::SizeSmall);
     }
 
-    if (itemType == CamItemInfo::NewPicture)
+    if (itemType == CamItemInfo::DownloadedNo) // TODO: CamItemInfo::NewPicture
     {
         icon = KIconLoader::global()->loadIcon("get-hot-new-stuff", KIconLoader::NoGroup, KIconLoader::SizeSmall);
     }

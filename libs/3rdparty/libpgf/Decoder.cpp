@@ -132,7 +132,7 @@ CDecoder::CDecoder(CPGFStream* stream, PGFPreHeader& preHeader, PGFHeader& heade
 	preHeader.hSize = __VAL(preHeader.hSize);
 
 	// check magic number
-	if (memcmp(preHeader.magic, Magic, 3) != 0) {
+	if (memcmp(preHeader.magic, PGFMagic, 3) != 0) {
 		// error condition: wrong Magic number
 		ReturnWithError(FormatCannotRead);
 	}
@@ -496,13 +496,14 @@ void CDecoder::DecodeBuffer() THROW_ {
 				if (ex.error == MissingData) {
 					break; // no further data available
 				} else {
-					throw ex;
+					throw;
 				}
 			}
 		}
-
+#ifdef LIBPGF_USE_OPENMP
 		// decode in parallel
 		#pragma omp parallel for default(shared) //no declared exceptions in next block
+#endif
 		for (int i=0; i < m_macroBlocksAvailable; i++) {
 			m_macroBlocks[i]->BitplaneDecode();
 		}

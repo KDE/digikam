@@ -267,8 +267,8 @@ void PixelAccess::cubicInterpolate(uchar* src, int rowStride, uchar* dst,
 
     if (sixteenBit)
     {
-        unsigned short* src16 = (unsigned short*)src;
-        unsigned short* dst16 = (unsigned short*)dst;
+        unsigned short* src16 = reinterpret_cast<unsigned short*>(src);
+        unsigned short* dst16 = reinterpret_cast<unsigned short*>(dst);
 
         // for each component, read the values of 4 pixels into array
 

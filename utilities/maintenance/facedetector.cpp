@@ -123,7 +123,7 @@ FaceDetector::FaceDetector(const FaceScanSettings& settings, ProgressItem* const
         d->pipeline.plugTrainer();
         d->pipeline.construct();
     }
-    else if (settings.task == FaceScanSettings::Benchmark)
+    else if (settings.task == FaceScanSettings::BenchmarkDetection)
     {
         d->benchmark = true;
         d->pipeline.plugDatabaseFilter(FacePipeline::ScanAll);
@@ -138,10 +138,19 @@ FaceDetector::FaceDetector(const FaceScanSettings& settings, ProgressItem* const
             d->pipeline.plugFaceDetector();
         }
 
-        d->pipeline.plugBenchmarker();
+        d->pipeline.plugDetectionBenchmarker();
         d->pipeline.construct();
     }
-    else if (settings.task == FaceScanSettings::DetectAndRecognize)
+    else if (settings.task == FaceScanSettings::BenchmarkRecognition)
+    {
+        d->benchmark = true;
+        d->pipeline.plugRetrainingDatabaseFilter();
+        d->pipeline.plugFaceRecognizer();
+        d->pipeline.plugRecognitionBenchmarker();
+        d->pipeline.construct();
+    }
+    else if ((settings.task == FaceScanSettings::DetectAndRecognize) || 
+             (settings.task == FaceScanSettings::Detect))
     {
         FacePipeline::FilterMode filterMode;
         FacePipeline::WriteMode  writeMode;
@@ -174,16 +183,21 @@ FaceDetector::FaceDetector(const FaceScanSettings& settings, ProgressItem* const
             d->pipeline.plugFaceDetector();
         }
 
-        d->pipeline.plugFaceRecognizer();
+        if(settings.task == FaceScanSettings::DetectAndRecognize)
+        {
+            d->pipeline.plugRerecognizingDatabaseFilter();
+            d->pipeline.plugFaceRecognizer();
+        }
         d->pipeline.plugDatabaseWriter(writeMode);
-        d->pipeline.construct();
         d->pipeline.setDetectionAccuracy(settings.accuracy);
+        d->pipeline.construct();
     }
     else // if (settings.task == FaceScanSettings::RecognizeMarkedFaces)
     {
         d->pipeline.plugRerecognizingDatabaseFilter();
         d->pipeline.plugFaceRecognizer();
         d->pipeline.plugDatabaseWriter(FacePipeline::NormalWrite);
+        d->pipeline.setDetectionAccuracy(settings.accuracy);
         d->pipeline.construct();
     }
 
@@ -334,7 +348,7 @@ void FaceDetector::slotDone()
 
 void FaceDetector::slotCancel()
 {
-    d->pipeline.cancel();
+    d->pipeline.shutDown();
     MaintenanceTool::slotCancel();
 }
 

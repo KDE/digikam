@@ -79,7 +79,7 @@ public:
     /** Create common actions from Help menu for all digiKam main windows
      */
     void createHelpActions(bool coreOptions=true);
-    
+
     /** Set full-screen options to managed window
      */
     void setFullScreenOptions(int options);
@@ -102,13 +102,13 @@ public:
     /** Return true if managed window is currently in Full Screen Mode
      */
     bool fullScreenIsActive() const;
-    
+
     QAction* statusBarMenuAction() const;
 
 protected:
 
     DLogoAction* m_animLogo;
-    
+
 protected:
 
     bool eventFilter(QObject* obj, QEvent* ev);
@@ -136,7 +136,7 @@ protected:
 private Q_SLOTS:
 
     void slotToggleFullScreen(bool);
-    
+
     // Slots for common Help Actions
     virtual void slotComponentsInfo() {};
     virtual void slotDBStat()         {};

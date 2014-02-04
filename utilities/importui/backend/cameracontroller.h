@@ -65,6 +65,7 @@ public:
     bool cameraMkDirSupport() const;
     bool cameraDelDirSupport() const;
     bool cameraCaptureImageSupport() const;
+    bool cameraCaptureImagePreviewSupport() const;
 
     QString cameraPath() const;
     QString cameraTitle() const;
@@ -74,7 +75,8 @@ public:
     QByteArray cameraMD5ID() const;
 
     void capture();
-    void listFolders();
+    void listRootFolder(bool useMetadata);
+    void listFolders(const QString& folder = QString());
     void listFiles(const QString& folder, bool useMetadata);
     void getFreeSpace();
     void getMetadata(const QString& folder, const QString& file);
@@ -94,6 +96,7 @@ public:
     void openFile(const QString& folder, const QString& file);
 
     QPixmap mimeTypeThumbnail(const QString& itemName, int thumbSize) const;
+    void getFolderList(const QStringList& lastFolder);
 
 Q_SIGNALS:
 

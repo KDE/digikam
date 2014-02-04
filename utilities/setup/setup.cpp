@@ -60,6 +60,7 @@
 #include "setupmime.h"
 #include "setupmisc.h"
 #include "setupslideshow.h"
+#include "setupimagequalitysorter.h"
 #include "setuptooltip.h"
 #include "setupdatabase.h"
 #include "setupfacetags.h"
@@ -93,6 +94,7 @@ public:
         page_raw(0),
         page_iofiles(0),
         page_slideshow(0),
+        page_imagequalitysorter(0),
         page_icc(0),
         page_camera(0),
         page_misc(0),
@@ -115,6 +117,7 @@ public:
         rawPage(0),
         iofilesPage(0),
         slideshowPage(0),
+        imageQualitySorterPage(0),
         iccPage(0),
         cameraPage(0),
         //faceTagsPage(0),
@@ -128,53 +131,55 @@ public:
     {
     }
 
-    KPageWidgetItem*    page_database;
-    KPageWidgetItem*    page_collections;
-    KPageWidgetItem*    page_albumView;
-    KPageWidgetItem*    page_tooltip;
-    KPageWidgetItem*    page_metadata;
-    KPageWidgetItem*    page_template;
-    KPageWidgetItem*    page_category;
-    KPageWidgetItem*    page_mime;
-    KPageWidgetItem*    page_lighttable;
-    KPageWidgetItem*    page_editor;
-    KPageWidgetItem*    page_raw;
-    KPageWidgetItem*    page_iofiles;
-    KPageWidgetItem*    page_slideshow;
-    KPageWidgetItem*    page_icc;
-    KPageWidgetItem*    page_camera;
-    KPageWidgetItem*    page_misc;
-    KPageWidgetItem*    page_plugins;
+    KPageWidgetItem*         page_database;
+    KPageWidgetItem*         page_collections;
+    KPageWidgetItem*         page_albumView;
+    KPageWidgetItem*         page_tooltip;
+    KPageWidgetItem*         page_metadata;
+    KPageWidgetItem*         page_template;
+    KPageWidgetItem*         page_category;
+    KPageWidgetItem*         page_mime;
+    KPageWidgetItem*         page_lighttable;
+    KPageWidgetItem*         page_editor;
+    KPageWidgetItem*         page_raw;
+    KPageWidgetItem*         page_iofiles;
+    KPageWidgetItem*         page_slideshow;
+    KPageWidgetItem*         page_imagequalitysorter;
+    KPageWidgetItem*         page_icc;
+    KPageWidgetItem*         page_camera;
+    KPageWidgetItem*         page_misc;
+    KPageWidgetItem*         page_plugins;
 #ifdef USE_SCRIPT_IFACE
-    KPageWidgetItem*    page_scriptmanager;
+    KPageWidgetItem*         page_scriptmanager;
 #endif
-    KPageWidgetItem*    page_facetags;
-    KPageWidgetItem*    page_versioning;
+    KPageWidgetItem*         page_facetags;
+    KPageWidgetItem*         page_versioning;
 
-    SetupDatabase*      databasePage;
-    SetupCollections*   collectionsPage;
-    SetupAlbumView*     albumViewPage;
-    SetupToolTip*       tooltipPage;
-    SetupMetadata*      metadataPage;
-    SetupTemplate*      templatePage;
-    SetupCategory*      categoryPage;
-    SetupMime*          mimePage;
-    SetupLightTable*    lighttablePage;
-    SetupEditor*        editorPage;
-    SetupRaw*           rawPage;
-    SetupIOFiles*       iofilesPage;
-    SetupSlideShow*     slideshowPage;
-    SetupICC*           iccPage;
-    SetupCamera*        cameraPage;
-    SetupMisc*          miscPage;
-    ConfigWidget*       pluginsPage;
+    SetupDatabase*           databasePage;
+    SetupCollections*        collectionsPage;
+    SetupAlbumView*          albumViewPage;
+    SetupToolTip*            tooltipPage;
+    SetupMetadata*           metadataPage;
+    SetupTemplate*           templatePage;
+    SetupCategory*           categoryPage;
+    SetupMime*               mimePage;
+    SetupLightTable*         lighttablePage;
+    SetupEditor*             editorPage;
+    SetupRaw*                rawPage;
+    SetupIOFiles*            iofilesPage;
+    SetupSlideShow*          slideshowPage;
+    SetupImageQualitySorter* imageQualitySorterPage;
+    SetupICC*                iccPage;
+    SetupCamera*             cameraPage;
+    SetupMisc*               miscPage;
+    ConfigWidget*            pluginsPage;
 #ifdef USE_SCRIPT_IFACE
-    SetupScriptManager* scriptManagerPage;
+    SetupScriptManager*      scriptManagerPage;
 #endif
     //SetupFaceTags*      faceTagsPage;
-    SetupVersioning*    versioningPage;
+    SetupVersioning*         versioningPage;
 
-    SearchTextBar*      pluginFilter;
+    SearchTextBar*           pluginFilter;
 
 public:
 
@@ -233,7 +238,7 @@ Setup::Setup(QWidget* const parent)
     d->page_metadata = addPage(d->metadataPage, i18n("Metadata"));
     d->page_metadata->setHeader(i18n("<qt>Embedded Image Information Management<br/>"
                                      "<i>Setup relations between images and metadata</i></qt>"));
-    d->page_metadata->setIcon(KIcon("exifinfo"));
+    d->page_metadata->setIcon(KIcon("exifinfo")); // krazy:exclude=iconnames
 
     d->templatePage  = new SetupTemplate();
     d->page_template = addPage(d->templatePage, i18n("Templates"));
@@ -262,7 +267,7 @@ Setup::Setup(QWidget* const parent)
     d->rawPage  = new SetupRaw();
     d->page_raw = addPage(d->rawPage, i18n("RAW Decoding"));
     d->page_raw->setHeader(i18n("<qt>Image Editor: RAW File Decoding<br/>"
-                                  "<i>Configure RAW decoding settings of the image editor</i></qt>"));
+                                "<i>Configure RAW decoding settings of the image editor</i></qt>"));
     d->page_raw->setIcon(KIcon("kdcraw"));
 
     d->iofilesPage  = new SetupIOFiles();
@@ -289,6 +294,11 @@ Setup::Setup(QWidget* const parent)
                                       "<i>Customize slideshow settings</i></qt>"));
     d->page_slideshow->setIcon(KIcon("view-presentation"));
 
+    d->imageQualitySorterPage = new SetupImageQualitySorter();
+    d->page_imagequalitysorter = addPage(d->imageQualitySorterPage, i18n("Image Quality Sorter"));
+    d->page_imagequalitysorter->setHeader(i18n("<qt>Image Quality Sorter Settings<br/>"));
+    d->page_imagequalitysorter->setIcon(KIcon("flag-green"));
+
     d->cameraPage  = new SetupCamera();
     d->page_camera = addPage(d->cameraPage, i18n("Cameras"));
     d->page_camera->setHeader(i18n("<qt>Camera Settings<br/>"
@@ -297,7 +307,7 @@ Setup::Setup(QWidget* const parent)
 
     connect(d->cameraPage, SIGNAL(signalUseFileMetadataChanged(bool)),
             d->tooltipPage, SLOT(slotUseFileMetadataChanged(bool)));
-    
+
     d->pluginsPage  = new ConfigWidget();
     d->pluginFilter = new SearchTextBar(d->pluginsPage, "PluginsSearchBar");
     d->pluginsPage->setFilterWidget(d->pluginFilter);
@@ -460,9 +470,29 @@ bool Setup::execTemplateEditor(QWidget* const parent, const Template& t)
     return success;
 }
 
+bool Setup::execMetadataFilters(QWidget* const parent, int tab)
+{
+    QPointer<Setup> setup = new Setup(parent);
+    setup->showPage(MetadataPage);
+    setup->setFaceType(Plain);
+
+    KPageWidgetItem* const cur  = setup->currentPage();
+    if (!cur) return false;
+
+    SetupMetadata* const widget = dynamic_cast<SetupMetadata*>(cur->widget());
+    if (!widget) return false;
+
+    widget->setActiveMainTab(SetupMetadata::Display);
+    widget->setActiveSubTab(tab);
+
+    bool success                = setup->KPageDialog::exec() == QDialog::Accepted;
+    delete setup;
+    return success;
+}
+
 void Setup::slotSearchTextChanged(const SearchTextSettings& settings)
 {
-     d->pluginsPage->slotSetFilter(settings.text, settings.caseSensitive);
+    d->pluginsPage->slotSetFilter(settings.text, settings.caseSensitive);
 }
 
 void Setup::slotButtonClicked(int button)
@@ -501,6 +531,7 @@ void Setup::okClicked()
     d->rawPage->applySettings();
     d->iofilesPage->applySettings();
     d->slideshowPage->applySettings();
+    d->imageQualitySorterPage->applySettings();
     d->iccPage->applySettings();
     d->miscPage->applySettings();
     d->pluginsPage->apply();
@@ -623,6 +654,11 @@ Setup::Page Setup::activePageIndex() const
         return SlideshowPage;
     }
 
+    if (cur == d->page_imagequalitysorter)
+    {
+        return ImageQualityPage;
+    }
+
     if (cur == d->page_icc)
     {
         return ICCPage;
@@ -708,6 +744,9 @@ KPageWidgetItem* Setup::Private::pageItem(Setup::Page page) const
         case Setup::SlideshowPage:
             return page_slideshow;
 
+        case Setup::ImageQualityPage:
+            return page_imagequalitysorter;
+            
         case Setup::ICCPage:
             return page_icc;
 

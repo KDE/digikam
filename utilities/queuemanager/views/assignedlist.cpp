@@ -461,7 +461,7 @@ void AssignedListView::slotQueueSelected(int, const QueueSettings&, const Assign
     {
         blockSignals(true);
 
-        foreach (BatchToolSet set, tools.m_toolsList)
+        foreach (const BatchToolSet& set, tools.m_toolsList)
         {
             addTool(set);
         }

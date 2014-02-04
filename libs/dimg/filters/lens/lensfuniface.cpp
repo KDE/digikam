@@ -262,19 +262,14 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
             if (!d->lensDescription.isEmpty())
             {
-
-                QMap<int, LensPtr> bestMatches;
-                QString            lensCutted;
-                LensList           lensList;
+                LensList lensMatches;
+                QString  lensCutted;
+                LensList lensList;
 
                 // STAGE 1, search in LensFun database as well.
                 lensList = findLenses(d->usedCamera, d->lensDescription);
                 kDebug() << "* Check for lens by direct query (" << d->lensDescription << " : " << lensList.count() << ")";
-
-                if (!lensList.isEmpty())
-                {
-                    bestMatches.insert(lensList.count(), lensList.at(0));
-                }
+                lensMatches.append(lensList);
 
                 // STAGE 2, Adapt exiv2 strings to lensfun strings for Nikon.
                 lensCutted = d->lensDescription;
@@ -286,11 +281,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
                     lensCutted.replace("IF-ID", "ED-IF");
                     lensList = findLenses(d->usedCamera, lensCutted);
                     kDebug() << "* Check for Nikon lens (" << lensCutted << " : " << lensList.count() << ")";
-
-                    if (!lensList.isEmpty())
-                    {
-                        bestMatches.insert(lensList.count(), lensList.at(0));
-                    }
+                    lensMatches.append(lensList);
                 }
 
                 // TODO : Add here more specific lens maker rules.
@@ -303,15 +294,11 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
                 lensCutted.replace(" mm", "mn");
                 lensList   = findLenses(d->usedCamera, lensCutted);
                 kDebug() << "* Check for no maker lens (" << lensCutted << " : " << lensList.count() << ")";
-
-                if (!lensList.isEmpty())
-                {
-                    bestMatches.insert(lensList.count(), lensList.at(0));
-                }
+                lensMatches.append(lensList);
 
                 // Display the results.
 
-                if (bestMatches.isEmpty())
+                if (lensMatches.isEmpty())
                 {
                     kDebug() << "lens matches   : NOT FOUND";
                     exactMatch &= false;
@@ -319,18 +306,34 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
                 else
                 {
                     // Best case for an exact match is to have only one item returned by Lensfun searches.
-                    QMap<int, LensPtr>::const_iterator it = bestMatches.constFind(1);
-
-                    if (it != bestMatches.constEnd())
+                    if(lensMatches.count() == 1)
                     {
-                        setUsedLens(bestMatches[it.key()]);
+                        setUsedLens(lensMatches.first());
                         kDebug() << "Lens found     : " << d->settings.lensModel;
                         kDebug() << "Crop Factor    : " << d->settings.cropFactor;
                     }
                     else
                     {
                         kDebug() << "lens matches   : more than one...";
-                        exactMatch &= false;
+                        const lfLens* exact = 0;
+
+                        Q_FOREACH(const lfLens* const l, lensMatches)
+                        {
+                            if(l->Model == d->lensDescription)
+                            {
+                                kDebug() << "found exact match from" << lensMatches.count() << "possitibilites:" << l->Model;
+                                exact = l;
+                            }
+                        }
+
+                        if(exact)
+                        {
+                            setUsedLens(exact);
+                        }
+                        else 
+                        {
+                            exactMatch &= false;
+                        }
                     }
                 }
             }
@@ -422,9 +425,12 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
         temp                        = temp.remove(" m");
         bool ok;
         d->settings.subjectDistance = temp.toDouble(&ok);
-        if(!ok) {
+
+        if(!ok)
+        {
             d->settings.subjectDistance = -1.0;
         }
+
         kDebug() << "Subject dist.  : " << d->settings.subjectDistance;
     }
 

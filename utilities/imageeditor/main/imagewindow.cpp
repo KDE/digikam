@@ -126,6 +126,7 @@
 #include "slideshow.h"
 #include "statusprogressbar.h"
 #include "syncjob.h"
+#include "tagsactionmngr.h"
 #include "tagscache.h"
 #include "tagspopupmenu.h"
 #include "thememanager.h"
@@ -459,7 +460,10 @@ void ImageWindow::setupActions()
 
     // ---------------------------------------------------------------------------------
 
-    createHelpActions(); 
+    createHelpActions();
+
+    // Labels shortcuts must be registered here to be saved in XML GUI files if user customize it.
+    TagsActionMngr::defaultManager()->registerLabelsActions(actionCollection());
 
     // ---------------------------------------------------------------------------------
 
@@ -1431,7 +1435,7 @@ void ImageWindow::dragMoveEvent(QDragMoveEvent* e)
 
     if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs) ||
         DAlbumDrag::decode(e->mimeData(), urls, albumID) ||
-        DTagDrag::canDecode(e->mimeData()))
+        DTagListDrag::canDecode(e->mimeData()))
     {
         e->accept();
         return;
@@ -1495,17 +1499,17 @@ void ImageWindow::dropEvent(QDropEvent* e)
                        i18n("Album \"%1\"", ATitle));
         e->accept();
     }
-    else if (DTagDrag::canDecode(e->mimeData()))
+    else if (DTagListDrag::canDecode(e->mimeData()))
     {
-        int tagID;
+        QList<int> tagIDs;
 
-        if (!DTagDrag::decode(e->mimeData(), tagID))
+        if (!DTagListDrag::decode(e->mimeData(), tagIDs))
         {
             return;
         }
 
         AlbumManager* man        = AlbumManager::instance();
-        QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagID, true);
+        QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagIDs.first(), true);
         ImageInfoList imageInfoList(itemIDs);
 
         if (imageInfoList.isEmpty())
@@ -1515,7 +1519,7 @@ void ImageWindow::dropEvent(QDropEvent* e)
         }
 
         QString ATitle;
-        TAlbum* talbum     = man->findTAlbum(tagID);
+        TAlbum* talbum     = man->findTAlbum(tagIDs.first());
 
         if (talbum)
         {

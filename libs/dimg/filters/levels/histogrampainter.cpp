@@ -7,7 +7,7 @@
  * Description : a class that manages painting histograms
  *
  * Copyright (C) 2009      by Johannes Wienke <languitar at semipol dot de>
- * Copyright (C) 2011-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,7 +48,7 @@ class HistogramPainter::Private
 
 public:
 
-    explicit Private(HistogramPainter* const q) :
+    explicit Private() :
         histogram(0),
         widgetToInitFrom(0),
         scale(LogScaleHistogram),
@@ -57,8 +57,7 @@ public:
         selectionMin(0.0),
         selectionMax(0.0),
         showColorGuide(false),
-        showXGrid(true),
-        q(q)
+        showXGrid(true)
     {
     }
 
@@ -360,13 +359,13 @@ public:
 
         p2.setCompositionMode(QPainter::CompositionMode_Screen);
         p2.setPen(QPen(QColor(63, 63, 255), 1, Qt::SolidLine));
-        p2.setBrush(QBrush(QColor(0, 0, 192), Qt::SolidPattern));
+        p2.setBrush(QBrush(QColor(0, 0, 192),  Qt::SolidPattern));
         p2.drawPath(curveBlue);
         p2.setPen(QPen(QColor(255, 63, 63), 1, Qt::SolidLine));
-        p2.setBrush(QBrush(QColor(192, 0, 0), Qt::SolidPattern));
+        p2.setBrush(QBrush(QColor(192, 0, 0),  Qt::SolidPattern));
         p2.drawPath(curveRed);
         p2.setPen(QPen(QColor(63, 255, 63), 1, Qt::SolidLine));
-        p2.setBrush(QBrush(QColor(0, 192, 0), Qt::SolidPattern));
+        p2.setBrush(QBrush(QColor(0, 192, 0),  Qt::SolidPattern));
         p2.drawPath(curveGreen);
 
         // Highlight
@@ -378,12 +377,12 @@ public:
             p2.fillRect((int)(selectionMin * wWidth), 0,
                         (int)(selectionMax * wWidth - selectionMin * wWidth), wHeight,
                         palette.color(QPalette::Active, QPalette::Foreground));
-            p2.fillPath(curveBlue, QBrush(Qt::black, Qt::SolidPattern));
-            p2.fillPath(curveRed, QBrush(Qt::black, Qt::SolidPattern));
+            p2.fillPath(curveBlue, QBrush(Qt::black,  Qt::SolidPattern));
+            p2.fillPath(curveRed, QBrush(Qt::black,   Qt::SolidPattern));
             p2.fillPath(curveGreen, QBrush(Qt::black, Qt::SolidPattern));
             p2.setCompositionMode(QPainter::CompositionMode_Screen);
-            p2.fillPath(curveBlue, QBrush(QColor(0, 0, 255), Qt::SolidPattern));
-            p2.fillPath(curveRed, QBrush(QColor(255, 0, 0), Qt::SolidPattern));
+            p2.fillPath(curveBlue, QBrush(QColor(0, 0, 255),  Qt::SolidPattern));
+            p2.fillPath(curveRed, QBrush(QColor(255, 0, 0),   Qt::SolidPattern));
             p2.fillPath(curveGreen, QBrush(QColor(0, 255, 0), Qt::SolidPattern));
             p2.setClipRect(0, 0, wWidth, wHeight);
         }
@@ -509,14 +508,10 @@ public:
     bool              showColorGuide;
     bool              showXGrid;
     DColor            colorGuide;
-
-private:
-
-    HistogramPainter* q;
 };
 
 HistogramPainter::HistogramPainter(QObject* const parent)
-    : QObject(parent), d(new Private(this))
+    : QObject(parent), d(new Private())
 {
 }
 

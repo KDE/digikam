@@ -64,11 +64,12 @@ private:
     void stage3();  // Finger-prints
     void stage4();  // Duplicates
     void stage5();  // Faces Management
-    void stage6();  // Metadata
+    void stage6();  // Image Quality Sorter
+    void stage7();  // Metadata
 
     void done();    // Called when all scheduled tools are done.
-    void cancel();  // Called when a tol is canceled.
-    
+    void cancel();  // Called when a tool is canceled.
+
 private:
 
     class Private;

@@ -6,7 +6,7 @@
  * Date        : 2009-07-16
  * Description : metadata selector.
  *
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,7 +44,7 @@
 namespace Digikam
 {
 
-MetadataSelectorItem::MetadataSelectorItem(MdKeyListViewItem* parent, const QString& key,
+MetadataSelectorItem::MetadataSelectorItem(MdKeyListViewItem* const parent, const QString& key,
         const QString& title, const QString& desc)
     : QTreeWidgetItem(parent), m_key(key), m_parent(parent)
 {
@@ -84,7 +84,7 @@ QString MetadataSelectorItem::mdKeyTitle() const
 
 // ------------------------------------------------------------------------------------
 
-MetadataSelector::MetadataSelector(QWidget* parent)
+MetadataSelector::MetadataSelector(QWidget* const parent)
     : QTreeWidget(parent)
 {
     setRootIsDecorated(false);
@@ -133,7 +133,7 @@ void MetadataSelector::setTagsMap(const DMetadata::TagsMap& map)
 
             parentifDItem = new MdKeyListViewItem(0, currentIfDName);
             toplevelItems << parentifDItem;
-            subItems = 0;
+            subItems      = 0;
         }
 
         // We ignore all unknown tags if necessary.
@@ -167,7 +167,7 @@ void MetadataSelector::setcheckedTagsList(const QStringList& list)
 
     while (*it)
     {
-        MetadataSelectorItem* item = dynamic_cast<MetadataSelectorItem*>(*it);
+        MetadataSelectorItem* const item = dynamic_cast<MetadataSelectorItem*>(*it);
 
         if (item && list.contains(item->key()))
         {
@@ -185,7 +185,7 @@ QStringList MetadataSelector::checkedTagsList()
 
     while (*it)
     {
-        MetadataSelectorItem* item = dynamic_cast<MetadataSelectorItem*>(*it);
+        MetadataSelectorItem* const item = dynamic_cast<MetadataSelectorItem*>(*it);
 
         if (item)
         {
@@ -206,7 +206,7 @@ void MetadataSelector::clearSelection()
 
     while (*it)
     {
-        MetadataSelectorItem* item = dynamic_cast<MetadataSelectorItem*>(*it);
+        MetadataSelectorItem* const item = dynamic_cast<MetadataSelectorItem*>(*it);
 
         if (item)
         {
@@ -227,7 +227,7 @@ void MetadataSelector::selectAll()
 
     while (*it)
     {
-        MetadataSelectorItem* item = dynamic_cast<MetadataSelectorItem*>(*it);
+        MetadataSelectorItem* const item = dynamic_cast<MetadataSelectorItem*>(*it);
 
         if (item)
         {
@@ -242,11 +242,11 @@ void MetadataSelector::selectAll()
 
 // ------------------------------------------------------------------------------------
 
-class MetadataSelectorView::MetadataSelectorViewPriv
+class MetadataSelectorView::Private
 {
 public:
 
-    MetadataSelectorViewPriv()
+    Private()
     {
         selectAllBtn        = 0;
         clearSelectionBtn   = 0;
@@ -266,15 +266,15 @@ public:
     SearchTextBar*    searchBar;
 };
 
-MetadataSelectorView::MetadataSelectorView(QWidget* parent)
-    : QWidget(parent), d(new MetadataSelectorViewPriv)
+MetadataSelectorView::MetadataSelectorView(QWidget* const parent)
+    : QWidget(parent), d(new Private)
 {
-    QGridLayout* grid      = new QGridLayout(this);
-    d->selector            = new MetadataSelector(this);
-    d->searchBar           = new SearchTextBar(this, "MetadataSelectorView");
-    d->selectAllBtn        = new KPushButton(i18n("Select All"),this);
-    d->clearSelectionBtn   = new KPushButton(i18n("Clear"),this);
-    d->defaultSelectionBtn = new KPushButton(i18n("Default"),this);
+    QGridLayout* const grid = new QGridLayout(this);
+    d->selector             = new MetadataSelector(this);
+    d->searchBar            = new SearchTextBar(this, "MetadataSelectorView");
+    d->selectAllBtn         = new KPushButton(i18n("Select All"),this);
+    d->clearSelectionBtn    = new KPushButton(i18n("Clear"),this);
+    d->defaultSelectionBtn  = new KPushButton(i18n("Default"),this);
 
     grid->addWidget(d->selector,            0, 0, 1, 5);
     grid->addWidget(d->searchBar,           1, 0, 1, 1);
@@ -351,7 +351,7 @@ void MetadataSelectorView::slotSearchTextChanged(const SearchTextSettings& setti
 
     while (*it2)
     {
-        MdKeyListViewItem* item = dynamic_cast<MdKeyListViewItem*>(*it2);
+        MdKeyListViewItem* const item = dynamic_cast<MdKeyListViewItem*>(*it2);
 
         if (item)
         {
@@ -365,7 +365,7 @@ void MetadataSelectorView::slotSearchTextChanged(const SearchTextSettings& setti
 
     while (*it)
     {
-        MetadataSelectorItem* item = dynamic_cast<MetadataSelectorItem*>(*it);
+        MetadataSelectorItem* const item = dynamic_cast<MetadataSelectorItem*>(*it);
 
         if (item)
         {
@@ -398,7 +398,7 @@ void MetadataSelectorView::cleanUpMdKeyItem()
 
     while (*it)
     {
-        MdKeyListViewItem* item = dynamic_cast<MdKeyListViewItem*>(*it);
+        MdKeyListViewItem* const item = dynamic_cast<MdKeyListViewItem*>(*it);
 
         if (item)
         {
@@ -407,7 +407,7 @@ void MetadataSelectorView::cleanUpMdKeyItem()
 
             for (int i = 0 ; i < children; ++i)
             {
-                QTreeWidgetItem* citem = (*it)->child(i);
+                QTreeWidgetItem* const citem = (*it)->child(i);
 
                 if (!citem->isHidden())
                 {
@@ -436,7 +436,7 @@ void MetadataSelectorView::slotDeflautSelection()
 
     while (*it)
     {
-        MetadataSelectorItem* item = dynamic_cast<MetadataSelectorItem*>(*it);
+        MetadataSelectorItem* const item = dynamic_cast<MetadataSelectorItem*>(*it);
 
         if (item)
         {

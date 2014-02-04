@@ -30,19 +30,23 @@
 
 #include <QAction>
 #include <QEvent>
-
+#include <QContextMenuEvent>
+#include <QQueue>
 // KDE includes
 
 #include <kdebug.h>
 #include <kmenu.h>
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kicon.h>
+#include <kaction.h>
 
 // Local includes
 
 #include "albummanager.h"
 #include "contextmenuhelper.h"
 #include "tagmodificationhelper.h"
+
 
 namespace Digikam
 {
@@ -106,6 +110,18 @@ void TagFolderView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* a
     cmh.addAction(d->resetIconAction);
     cmh.addSeparator();
 
+    KAction* const expandSel     = new KAction(KIcon("format-indent-more"),
+                                                i18n("Expand Selected Nodes"), this);
+
+    cmh.addAction(expandSel, this, SLOT(slotExpandNode()), false);
+
+    KAction* const collapseSel     = new KAction(KIcon("format-indent-more"),
+                                                i18n("Collapse Selected Recursively"), this);
+
+    cmh.addAction(collapseSel, this, SLOT(slotCollapseNode()), false);
+
+    cmh.addSeparator();
+
     if (d->showFindDuplicateAction)
     {
         cmh.addAction(d->findDuplAction);
@@ -136,6 +152,75 @@ void TagFolderView::slotTagNewFromABCMenu(const QString& personName)
     tagModificationHelper()->slotTagNew(parent, personName, "tag-people");
 }
 
+void TagFolderView::slotExpandNode()
+{
+    //QModelIndex root                 = this->model()->index(0,0);
+    QItemSelectionModel* const model = this->selectionModel();
+    QModelIndexList selected         = model->selectedIndexes();
+
+    QQueue<QModelIndex> greyNodes;
+
+    foreach(const QModelIndex& index, selected)
+    {
+        greyNodes.append(index);
+        expand(index);
+    }
+
+    while(!greyNodes.isEmpty())
+    {
+        QModelIndex current = greyNodes.dequeue();
+
+        if(!(current.isValid()))
+        {
+            continue;
+        }
+
+        int it            = 0;
+        QModelIndex child = current.child(it++, 0);
+
+        while(child.isValid())
+        {
+            expand(child);
+            greyNodes.enqueue(child);
+            child = current.child(it++,0);
+        }
+    }
+}
+
+void TagFolderView::slotCollapseNode()
+{
+    //QModelIndex root                 = this->model()->index(0,0);
+    QItemSelectionModel* const model = this->selectionModel();
+    QModelIndexList selected         = model->selectedIndexes();
+
+    QQueue<QModelIndex> greyNodes;
+
+    foreach(const QModelIndex& index, selected)
+    {
+        greyNodes.append(index);
+        collapse(index);
+    }
+
+    while(!greyNodes.isEmpty())
+    {
+        QModelIndex current = greyNodes.dequeue();
+
+        if(!(current.isValid()))
+        {
+            continue;
+        }
+
+        int it            = 0;
+        QModelIndex child = current.child(it++, 0);
+
+        while(child.isValid())
+        {
+            collapse(child);
+            greyNodes.enqueue(child);
+            child = current.child(it++,0);
+        }
+    }
+}
 void TagFolderView::handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album)
 {
     Album* a    = album;
@@ -162,4 +247,90 @@ void TagFolderView::handleCustomContextMenuAction(QAction* action, AlbumPointer<
     }
 }
 
+void TagFolderView::setContexMenuItems(ContextMenuHelper& cmh, QList< TAlbum* > albums)
+{
+
+    if(albums.size() == 1)
+    {
+        addCustomContextMenuActions(cmh, albums.first());
+        return;
+    }
+
+    if (d->showFindDuplicateAction)
+    {
+        cmh.addAction(d->findDuplAction);
+    }
+    KAction* const expandSel     = new KAction(KIcon("format-indent-more"),
+                                                i18n("Expand Selected Recursively"), this);
+
+    cmh.addAction(expandSel, this, SLOT(slotExpandNode()), false);
+
+    KAction* const collapseSel     = new KAction(KIcon("format-indent-more"),
+                                                i18n("Collapse Selected Recursively"), this);
+
+    cmh.addAction(collapseSel, this, SLOT(slotCollapseNode()), false);
+    cmh.addSeparator();
+    cmh.addExportMenu();
+    cmh.addBatchMenu();
+    cmh.addActionDeleteTags(tagModificationHelper(),albums);
+    cmh.addSeparator();
+}
+
+void TagFolderView::contextMenuEvent(QContextMenuEvent* event)
+{
+    /**
+    if (!d->enableContextMenu)
+    {
+        return;
+    }
+    */
+    Album* album = albumFilterModel()->albumForIndex(indexAt(event->pos()));
+
+
+    if (!showContextMenuAt(event, album))
+    {
+        return;
+    }
+    // switch to the selected album if need
+    /**
+    if (d->selectOnContextMenu && album)
+    {
+        setCurrentAlbum(album);
+    }
+    */
+    // --------------------------------------------------------
+    QModelIndexList selectedItems = selectionModel()->selectedIndexes();
+
+    qSort(selectedItems.begin(),selectedItems.end());
+    QList<TAlbum*> items;
+
+    foreach(const QModelIndex& mIndex, selectedItems)
+    {
+        TAlbum* temp = static_cast<TAlbum*>(albumForIndex(mIndex));
+        items.push_back(temp);
+    }
+
+    /**
+     * If no item is selected append root tag
+     */
+    if(items.isEmpty())
+    {
+        QModelIndex root = this->model()->index(0,0);
+        items.append(static_cast<TAlbum*>(albumForIndex(root)));
+    }
+    KMenu popmenu(this);
+    popmenu.addTitle(contextMenuIcon(), contextMenuTitle());
+    ContextMenuHelper cmhelper(&popmenu);
+
+    setContexMenuItems(cmhelper, items);
+    /**
+    foreach(ContextMenuElement* const element, d->contextMenuElements)
+    {
+        element->addActions(this, cmhelper, album);
+    }
+     */
+    AlbumPointer<Album> albumPointer(album);
+    QAction* const choice = cmhelper.exec(QCursor::pos());
+    handleCustomContextMenuAction(choice, albumPointer);
+}
 } // namespace Digikam

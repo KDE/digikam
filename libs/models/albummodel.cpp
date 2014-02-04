@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-AlbumModel::AlbumModel(RootAlbumBehavior rootBehavior, QObject* parent)
+AlbumModel::AlbumModel(RootAlbumBehavior rootBehavior, QObject* const parent)
     : AbstractCheckableAlbumModel(Album::PHYSICAL,
                                   AlbumManager::instance()->findPAlbum(0),
                                   rootBehavior, parent)
@@ -48,8 +48,8 @@ AlbumModel::AlbumModel(RootAlbumBehavior rootBehavior, QObject* parent)
     m_columnHeader = i18n("My Albums");
     setupThumbnailLoading();
 
-    connect(AlbumManager::instance(), SIGNAL(signalPAlbumsDirty(QMap<int,int>)),
-            this, SLOT(setCountMap(QMap<int,int>)));
+    connect(AlbumManager::instance(), SIGNAL(signalPAlbumsDirty(QMap<int, int>)),
+            this, SLOT(setCountMap(QMap<int, int>)));
 
     setCountMap(AlbumManager::instance()->getPAlbumsCount());
 }
@@ -78,7 +78,7 @@ Album* AlbumModel::albumForId(int id) const
 
 // ------------------------------------------------------------------
 
-TagModel::TagModel(RootAlbumBehavior rootBehavior, QObject* parent)
+TagModel::TagModel(RootAlbumBehavior rootBehavior, QObject* const parent)
     : AbstractCheckableAlbumModel(Album::TAG,
                                   AlbumManager::instance()->findTAlbum(0),
                                   rootBehavior, parent)
@@ -137,11 +137,13 @@ void TagModel::setTagCount(TagCountMode mode)
 
 // ------------------------------------------------------------------
 
-SearchModel::SearchModel(QObject* parent)
+SearchModel::SearchModel(QObject* const parent)
     : AbstractCheckableAlbumModel(Album::SEARCH,
                                   AlbumManager::instance()->findSAlbum(0),
                                   IgnoreRootAlbum, parent)
 {
+    m_columnHeader = i18n("My Searches");
+
     setShowCount(false);
 
     // handle search icons
@@ -199,15 +201,15 @@ QVariant SearchModel::albumData(Album* a, int role) const
 {
     if (role == Qt::DisplayRole || role == AlbumTitleRole || role == Qt::ToolTipRole)
     {
-        SAlbum* salbum       = static_cast<SAlbum*>(a);
+        SAlbum* const salbum = static_cast<SAlbum*>(a);
         QString title        = a->title();
         QString displayTitle = salbum->displayTitle();
         return m_replaceNames.value(title, displayTitle);
     }
     else if (role == Qt::DecorationRole)
     {
-        SAlbum* salbum = static_cast<SAlbum*>(a);
-        QPixmap pixmap = m_pixmaps.value(salbum->searchType());
+        SAlbum* const salbum = static_cast<SAlbum*>(a);
+        QPixmap pixmap       = m_pixmaps.value(salbum->searchType());
 
         if (pixmap.isNull() && salbum->isNormalSearch())
         {
@@ -240,11 +242,13 @@ void SearchModel::albumSettingsChanged()
 
 // ------------------------------------------------------------------
 
-DateAlbumModel::DateAlbumModel(QObject* parent)
+DateAlbumModel::DateAlbumModel(QObject* const parent)
     : AbstractCountingAlbumModel(Album::DATE,
                                  AlbumManager::instance()->findDAlbum(0),
                                  IgnoreRootAlbum, parent)
 {
+    m_columnHeader = i18n("My Calendar");
+
     connect(AlbumManager::instance(), SIGNAL(signalDAlbumsDirty(QMap<YearMonth,int>)),
             this, SLOT(setYearMonthMap(QMap<YearMonth,int>)));
 
@@ -253,7 +257,7 @@ DateAlbumModel::DateAlbumModel(QObject* parent)
 
 DAlbum* DateAlbumModel::albumForIndex(const QModelIndex& index) const
 {
-    return static_cast<DAlbum*>(AbstractCountingAlbumModel::albumForIndex(index));
+    return (static_cast<DAlbum*>(AbstractCountingAlbumModel::albumForIndex(index)));
 }
 
 QModelIndex DateAlbumModel::monthIndexForDate(const QDate& date) const
@@ -261,12 +265,13 @@ QModelIndex DateAlbumModel::monthIndexForDate(const QDate& date) const
     // iterate over all years
     for (int yearIndex = 0; yearIndex < rowCount(); ++yearIndex)
     {
-        QModelIndex year  = index(yearIndex, 0);
-        DAlbum* yearAlbum = albumForIndex(year);
+        QModelIndex year        = index(yearIndex, 0);
+        DAlbum* const yearAlbum = albumForIndex(year);
 
         // do not search through months if we are sure, that the year already
         // does not match
-        if (yearAlbum && (yearAlbum->range() == DAlbum::Year) &&
+        if (yearAlbum                            &&
+            (yearAlbum->range() == DAlbum::Year) &&
             (yearAlbum->date().year() != date.year()))
         {
             continue;
@@ -275,8 +280,8 @@ QModelIndex DateAlbumModel::monthIndexForDate(const QDate& date) const
         // search the album with the correct month
         for (int monthIndex = 0; monthIndex < rowCount(year); ++monthIndex)
         {
-            QModelIndex month  = index(monthIndex, 0, year);
-            DAlbum* monthAlbum = albumForIndex(month);
+            QModelIndex month        = index(monthIndex, 0, year);
+            DAlbum* const monthAlbum = albumForIndex(month);
 
             if (monthAlbum && (monthAlbum->range() == DAlbum::Month) &&
                 (monthAlbum->date().year() == date.year())           &&
@@ -299,7 +304,7 @@ void DateAlbumModel::setPixmaps(const QPixmap& forYearAlbums, const QPixmap& for
 
 QString DateAlbumModel::albumName(Album* album) const
 {
-    DAlbum* dalbum = static_cast<DAlbum*>(album);
+    DAlbum* const dalbum = static_cast<DAlbum*>(album);
 
     if (dalbum->range() == DAlbum::Year)
     {
@@ -313,7 +318,7 @@ QString DateAlbumModel::albumName(Album* album) const
 
 QVariant DateAlbumModel::decorationRoleData(Album* album) const
 {
-    DAlbum* dalbum = static_cast<DAlbum*>(album);
+    DAlbum* const dalbum = static_cast<DAlbum*>(album);
 
     if (dalbum->range() == DAlbum::Year)
     {
@@ -327,7 +332,7 @@ QVariant DateAlbumModel::decorationRoleData(Album* album) const
 
 QVariant DateAlbumModel::sortRoleData(Album* a) const
 {
-    DAlbum* dalbum = static_cast<DAlbum*>(a);
+    DAlbum* const dalbum = static_cast<DAlbum*>(a);
 
     if (dalbum)
     {
@@ -351,8 +356,8 @@ void DateAlbumModel::setYearMonthMap(const QMap<YearMonth, int>& yearMonthMap)
 
     while (it.current())
     {
-        DAlbum* dalbum = static_cast<DAlbum*>(*it);
-        QDate date     = dalbum->date();
+        DAlbum* const dalbum = static_cast<DAlbum*>(*it);
+        QDate date           = dalbum->date();
 
         switch (dalbum->range())
         {

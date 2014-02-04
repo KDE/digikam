@@ -660,7 +660,7 @@ QPoint PerspectiveWidget::buildPerspective(const QPoint& orignTopLeft, const QPo
 void PerspectiveWidget::transformAffine(DImg* const orgImage, DImg* const destImage,
                                         const Matrix& matrix, const DColor& background)
 {
-    Matrix m(matrix), inv(matrix);
+    Matrix m(matrix);
 
     int    x1,   y1, x2, y2;     // target bounding box
     int    x,    y;              // target coordinates
@@ -776,8 +776,8 @@ void PerspectiveWidget::transformAffine(DImg* const orgImage, DImg* const destIm
 
                     if (sixteenBit)
                     {
-                        unsigned short* d16 = (unsigned short*)d2;
-                        alias.pixelAntiAliasing16((unsigned short*)data, width, height, finalU, finalV, d16+3, d16+2, d16+1, d16);
+                        unsigned short* d16 = reinterpret_cast<unsigned short*>(d2);
+                        alias.pixelAntiAliasing16(reinterpret_cast<unsigned short*>(data), width, height, finalU, finalV, d16+3, d16+2, d16+1, d16);
                     }
                     else
                     {

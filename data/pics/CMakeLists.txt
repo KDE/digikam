@@ -3,8 +3,7 @@ ADD_SUBDIRECTORY(texturepatterns)
 
 # digiKam files ######################################################
 
-INSTALL(FILES tag.png
-              tag-new.png
+INSTALL(FILES tag-new.png
               tag-properties.png
               tag-delete.png
               tag-reset.png
@@ -22,6 +21,10 @@ INSTALL(FILES tag.png
               underexposure.png
               overexposure.png
         DESTINATION ${DATA_INSTALL_DIR}/digikam/icons/hicolor/32x32/actions
+       )
+
+INSTALL(FILES tag.png
+        DESTINATION ${DATA_INSTALL_DIR}/digikam/icons/hicolor/128x128/actions
        )
 
 INSTALL(FILES splash-digikam.png

@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QApplication>
+#include <QButtonGroup>
 #include <QCheckBox>
 #include <QComboBox>
 #include <QGridLayout>
@@ -35,12 +36,12 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QRadioButton>
-#include <QTabWidget>
 #include <QToolButton>
 #include <QVBoxLayout>
 
 // KDE includes
 
+#include <ktabwidget.h>
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kiconloader.h>
@@ -101,6 +102,7 @@ public:
     Private()
         : configName("Face Detection Dialog"),
           configMainTask("Face Scan Main Task"),
+          configValueDetect("Detect"),
           configValueDetectAndRecognize("Detect and Recognize Faces"),
           configValueRecognizedMarkedFaces("Recognize Marked Faces"),
           configAlreadyScannedHandling("Already Scanned Handling"),
@@ -109,6 +111,7 @@ public:
     {
         optionGroupBox           = 0;
         detectAndRecognizeButton = 0;
+        detectButton             = 0;
         alreadyScannedBox        = 0;
         reRecognizeButton        = 0;
         tabWidget                = 0;
@@ -117,15 +120,17 @@ public:
         accuracyInput            = 0;
         useFullCpuButton         = 0;
         retrainAllButton         = 0;
-        benchmarkButton          = 0;
+        benchmarkDetectionButton   = 0;
+        benchmarkRecognitionButton = 0;
     }
 
     QGroupBox*                   optionGroupBox;
     QRadioButton*                detectAndRecognizeButton;
+    QRadioButton*                detectButton;
     QComboBox*                   alreadyScannedBox;
     QRadioButton*                reRecognizeButton;
 
-    QTabWidget*                  tabWidget;
+    KTabWidget*                  tabWidget;
 
     AlbumSelectors*              albumSelectors;
 
@@ -134,10 +139,12 @@ public:
 
     QCheckBox*                   useFullCpuButton;
     QCheckBox*                   retrainAllButton;
-    QCheckBox*                   benchmarkButton;
+    QCheckBox*                   benchmarkDetectionButton;
+    QCheckBox*                   benchmarkRecognitionButton;
 
     const QString                configName;
     const QString                configMainTask;
+    const QString                configValueDetect;
     const QString                configValueDetectAndRecognize;
     const QString                configValueRecognizedMarkedFaces;
     const QString                configAlreadyScannedHandling;
@@ -190,9 +197,13 @@ void FaceScanDialog::doLoadState()
     {
         d->reRecognizeButton->setChecked(true);
     }
-    else // if (mainTask == d->configValueDetectAndRecognize)
+    else if (mainTask == d->configValueDetectAndRecognize)
     {
         d->detectAndRecognizeButton->setChecked(true);
+    }
+    else
+    {
+        d->detectButton->setChecked(true);
     }
 
     FaceScanSettings::AlreadyScannedHandling handling;
@@ -219,7 +230,7 @@ void FaceScanDialog::doLoadState()
 
     d->useFullCpuButton->setChecked(group.readEntry(entryName(d->configUseFullCpu), true));
 
-    // do not load retrainAllButton and benchmarkButton state from config, dangerous
+    // do not load retrainAllButton and benchmarkDetectionButton state from config, dangerous
 
     setDetailsWidgetVisible(group.readEntry(entryName(d->configSettingsVisible), false));
 }
@@ -293,16 +304,23 @@ void FaceScanDialog::setupUi()
 
     d->optionGroupBox               = new QGroupBox;
     QGridLayout* const optionLayout = new QGridLayout;
-
+    
+    d->detectButton                                    = new QRadioButton(i18nc("@option:radio", "Detect faces"));
     d->detectAndRecognizeButton                        = new QRadioButton(i18nc("@option:radio", "Detect and recognize faces"));
     ButtonExtendedLabel* const detectAndRecognizeLabel = new ButtonExtendedLabel;
+    ButtonExtendedLabel* const detectLabel             = new ButtonExtendedLabel;
     detectAndRecognizeLabel->setText(i18nc("@info",
                                            "Find all faces in your photos<nl/> and try to recognize "
                                            "which person is depicted"));
     //detectAndRecognizeLabel->setWordWrap(true);
+    detectLabel->setButton(d->detectButton);
+    detectLabel->setText(i18nc("@info",
+                                "Find all faces in your photos"));
     detectAndRecognizeLabel->setButton(d->detectAndRecognizeButton);
     ButtonExtendedLabel* const detectAndRecognizeIcon  = new ButtonExtendedLabel;
+    ButtonExtendedLabel* const detectIcon              = new ButtonExtendedLabel;
     detectAndRecognizeIcon->setPixmap(SmallIcon("edit-image-face-detect", KIconLoader::SizeLarge));
+    detectIcon->setButton(d->detectButton);
     detectAndRecognizeIcon->setButton(d->detectAndRecognizeButton);
     detectAndRecognizeIcon->setAlignment(Qt::AlignCenter);
     d->alreadyScannedBox                               = new QComboBox;
@@ -313,8 +331,7 @@ void FaceScanDialog::setupUi()
     QGridLayout* const detectAndRecognizeLabelLayout   = new QGridLayout;
     detectAndRecognizeLabelLayout->addWidget(detectAndRecognizeLabel, 0, 0, 1, -1);
     detectAndRecognizeLabelLayout->setColumnMinimumWidth(0, 10);
-    detectAndRecognizeLabelLayout->addWidget(d->alreadyScannedBox, 1, 1);
-
+    
     d->reRecognizeButton                        = new QRadioButton(i18nc("@option:radio", "Recognize faces"));
     ButtonExtendedLabel* const reRecognizeLabel = new ButtonExtendedLabel;
     reRecognizeLabel->setText(i18nc("@info",
@@ -326,12 +343,15 @@ void FaceScanDialog::setupUi()
     reRecognizeIcon->setButton(d->reRecognizeButton);
     reRecognizeIcon->setAlignment(Qt::AlignCenter);
 
-    optionLayout->addWidget(d->detectAndRecognizeButton,   0, 0, 1, 2);
-    optionLayout->addWidget(detectAndRecognizeIcon,        0, 2, 2, 1);
-    optionLayout->addLayout(detectAndRecognizeLabelLayout, 1, 1);
-    optionLayout->addWidget(d->reRecognizeButton,          2, 0, 1, 2);
-    optionLayout->addWidget(reRecognizeIcon,               2, 2, 2, 1);
-    optionLayout->addWidget(reRecognizeLabel,              3, 1);
+    optionLayout->addWidget(d->alreadyScannedBox,          0, 0, 1, 2);
+    optionLayout->addWidget(d->detectButton,               1, 0, 1, 2);
+    optionLayout->addWidget(detectAndRecognizeIcon,        1, 2, 2, 1);
+    optionLayout->addWidget(detectLabel,                   2, 1);
+    optionLayout->addWidget(d->detectAndRecognizeButton,   3, 0, 1, 2);
+    optionLayout->addLayout(detectAndRecognizeLabelLayout, 4, 1);
+    optionLayout->addWidget(d->reRecognizeButton,          5, 0, 1, 2);
+    optionLayout->addWidget(reRecognizeIcon,               5, 2, 2, 1);
+    optionLayout->addWidget(reRecognizeLabel,              6, 1);
 
     QStyleOptionButton buttonOption;
     buttonOption.initFrom(d->detectAndRecognizeButton);
@@ -353,27 +373,27 @@ void FaceScanDialog::setupUi()
 
     // --- Tab Widget ---
 
-    d->tabWidget = new QTabWidget;
+    d->tabWidget = new KTabWidget;
 
     // ---- Album tab ----
 
-    d->albumSelectors = new AlbumSelectors(i18nc("@label", "Search in:"), d->configName);
+    d->albumSelectors = new AlbumSelectors(i18nc("@label", "Search in:"), d->configName, d->tabWidget);
     d->tabWidget->addTab(d->albumSelectors, i18nc("@title:tab", "Albums"));
 
     // ---- Parameters tab ----
 
-    QWidget* const parametersTab        = new QWidget;
-    QGridLayout* const parametersLayout = new QGridLayout;
+    QWidget* const parametersTab        = new QWidget(d->tabWidget);
+    QGridLayout* const parametersLayout = new QGridLayout(parametersTab);
 
-    QLabel* const detectionLabel        = new QLabel(i18nc("@label", "Parameters for face detection and Recognition"));
+    QLabel* const detectionLabel        = new QLabel(i18nc("@label", "Parameters for face detection and Recognition"), (parametersTab));
 
-    d->parametersResetButton            = new QToolButton;
+    d->parametersResetButton            = new QToolButton(parametersTab);
     d->parametersResetButton->setAutoRaise(true);
     d->parametersResetButton->setFocusPolicy(Qt::NoFocus);
     d->parametersResetButton->setIcon(SmallIcon("document-revert"));
     d->parametersResetButton->setToolTip(i18nc("@action:button", "Reset to default values"));
 
-    d->accuracyInput                    = new KIntNumInput;
+    d->accuracyInput                    = new KIntNumInput(parametersTab);
     d->accuracyInput->setRange(0, 100, 10);
     d->accuracyInput->setSliderEnabled();
     d->accuracyInput->setLabel(i18nc("@label Two extremities of a scale", "Fast   -   Accurate"),
@@ -382,60 +402,76 @@ void FaceScanDialog::setupUi()
                                        "Adjust speed versus accuracy: The higher the value, the more accurate the results "
                                        "will be, but it will take more time."));
 
-    parametersLayout->addWidget(detectionLabel, 0, 0);
+    parametersLayout->addWidget(detectionLabel,           0, 0);
     parametersLayout->addWidget(d->parametersResetButton, 0, 1);
-    parametersLayout->addWidget(d->accuracyInput, 1, 0, 1, -1);
-    parametersLayout->setColumnStretch(0, 1);
+    parametersLayout->addWidget(d->accuracyInput,         1, 0, 1, -1);
+    parametersLayout->setColumnStretch(0, 10);
+    parametersLayout->setRowStretch(2, 10);
 
-    parametersTab->setLayout(parametersLayout);
     d->tabWidget->addTab(parametersTab, i18nc("@title:tab", "Parameters"));
 
     // ---- Advanced tab ----
 
-    QWidget* const advancedTab        = new QWidget;
-    QVBoxLayout* const advancedLayout = new QVBoxLayout;
+    QWidget* const advancedTab        = new QWidget(d->tabWidget);
+    QGridLayout* const advancedLayout = new QGridLayout(advancedTab);
 
-    QLabel* const cpuExplanation      = new QLabel;
+    QLabel* const cpuExplanation      = new QLabel(advancedTab);
     cpuExplanation->setText(i18nc("@info",
                                   "Face detection is a time-consuming task. "
-                                  "You can choose if you wish to employ all processor cores on your system, "
-                                  "or work in the background only on one core."));
+                                  "You can choose if you wish to employ all processor cores "
+                                  "on your system, or work in the background only on one core."));
     cpuExplanation->setWordWrap(true);
 
-    d->useFullCpuButton = new QCheckBox;
+    d->useFullCpuButton = new QCheckBox(advancedTab);
     d->useFullCpuButton->setText(i18nc("@option:check", "Work on all processor cores"));
 
-    d->retrainAllButton = new QCheckBox;
+    d->retrainAllButton = new QCheckBox(advancedTab);
     d->retrainAllButton->setText(i18nc("@option:check", "Clear and rebuild all training data"));
     d->retrainAllButton->setToolTip(i18nc("@info:tooltip",
                                           "This will clear all training data for recognition "
                                           "and rebuild it from all available faces. "
                                           "Be careful if any other application helped in building your training database. "));
 
-    d->benchmarkButton = new QCheckBox;
-    d->benchmarkButton->setText(i18nc("@option:check", "Benchmark face detection"));
-    d->benchmarkButton->setToolTip(i18nc("@info:tooltip",
+    d->benchmarkDetectionButton = new QCheckBox(advancedTab);
+    d->benchmarkDetectionButton->setText(i18nc("@option:check", "Benchmark face detection"));
+    d->benchmarkDetectionButton->setToolTip(i18nc("@info:tooltip",
                                          "This will run face detection and compare the results "
                                          "with faces already marked, which are taken as ground truth. "
                                          "At the end, benchmark results will be presented. "));
 
-    advancedLayout->addWidget(cpuExplanation);
-    advancedLayout->addWidget(d->useFullCpuButton);
-    advancedLayout->addWidget(new KSeparator(Qt::Horizontal));
-    advancedLayout->addWidget(d->retrainAllButton);
-    advancedLayout->addWidget(d->benchmarkButton);
-    advancedLayout->addStretch(1);
+    d->benchmarkRecognitionButton = new QCheckBox(advancedTab);
+    d->benchmarkRecognitionButton->setText(i18nc("@option:check", "Benchmark face recognition"));
+    d->benchmarkRecognitionButton->setToolTip(i18nc("@info:tooltip",
+                                         "This will run face recognition on known faces compare the results "
+                                         "with the known faces, which are taken as ground truth. "
+                                         "For some recognition modes, this procedure does not make sense. "
+                                         "At the end, benchmark results will be presented. "));
+    QButtonGroup* benchmarkGroup = new QButtonGroup(this);
+    benchmarkGroup->setExclusive(true);
+    benchmarkGroup->addButton(d->benchmarkDetectionButton);
+    benchmarkGroup->addButton(d->benchmarkRecognitionButton);
 
-    advancedTab->setLayout(advancedLayout);
+    advancedLayout->addWidget(cpuExplanation,                 0, 0);
+    advancedLayout->addWidget(d->useFullCpuButton,            1, 0);
+    advancedLayout->addWidget(new KSeparator(Qt::Horizontal), 2, 0);
+    advancedLayout->addWidget(d->retrainAllButton,            3, 0);
+    advancedLayout->addWidget(d->benchmarkDetectionButton,    4, 0);
+    advancedLayout->addWidget(d->benchmarkRecognitionButton,  5, 0);
+    parametersLayout->setRowStretch(5, 10);
+
     d->tabWidget->addTab(advancedTab, i18nc("@title:tab", "Advanced"));
 
     // ---
 
+    d->tabWidget->setAutomaticResizeTabs(true);
     setDetailsWidget(d->tabWidget);
 }
 
 void FaceScanDialog::setupConnections()
 {
+    connect(d->detectButton, SIGNAL(toggled(bool)),
+            d->alreadyScannedBox, SLOT(setEnabled(bool)));
+    
     connect(d->detectAndRecognizeButton, SIGNAL(toggled(bool)),
             d->alreadyScannedBox, SLOT(setEnabled(bool)));
 
@@ -445,7 +481,10 @@ void FaceScanDialog::setupConnections()
     connect(d->retrainAllButton, SIGNAL(toggled(bool)),
             this, SLOT(retrainAllButtonToggled(bool)));
 
-    connect(d->benchmarkButton, SIGNAL(toggled(bool)),
+    connect(d->benchmarkDetectionButton, SIGNAL(toggled(bool)),
+            this, SLOT(benchmarkButtonToggled(bool)));
+
+    connect(d->benchmarkRecognitionButton, SIGNAL(toggled(bool)),
             this, SLOT(benchmarkButtonToggled(bool)));
 }
 
@@ -453,13 +492,14 @@ void FaceScanDialog::retrainAllButtonToggled(bool on)
 {
     d->optionGroupBox->setEnabled(!on);
     d->albumSelectors->setEnabled(!on);
-    d->benchmarkButton->setEnabled(!on);
+    d->benchmarkDetectionButton->setEnabled(!on);
 }
 
-void FaceScanDialog::benchmarkButtonToggled(bool on)
+void FaceScanDialog::benchmarkButtonToggled(bool)
 {
-    d->optionGroupBox->setEnabled(!on);
-    d->retrainAllButton->setEnabled(!on);
+    bool anyOn = d->benchmarkDetectionButton->isChecked() || d->benchmarkRecognitionButton->isChecked();
+    d->optionGroupBox->setEnabled(!anyOn);
+    d->retrainAllButton->setEnabled(!anyOn);
 }
 
 FaceScanSettings FaceScanDialog::settings() const
@@ -470,9 +510,17 @@ FaceScanSettings FaceScanDialog::settings() const
     {
         settings.task = FaceScanSettings::RetrainAll;
     }
-    else if (d->benchmarkButton->isChecked())
+    else if (d->benchmarkDetectionButton->isChecked())
     {
-        settings.task = FaceScanSettings::Benchmark;
+        settings.task = FaceScanSettings::BenchmarkDetection;
+    }
+    else if (d->benchmarkRecognitionButton->isChecked())
+    {
+        settings.task = FaceScanSettings::BenchmarkRecognition;
+    }
+    else if(d->detectButton->isChecked())
+    {
+        settings.task = FaceScanSettings::Detect;    
     }
     else
     {

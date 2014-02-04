@@ -136,7 +136,7 @@ void Task::run()
     DImg       tmpImage;
     QString    errMsg;
 
-    foreach (BatchToolSet set, d->tools.m_toolsList)
+    foreach (const BatchToolSet& set, d->tools.m_toolsList)
     {
         d->tool = BatchToolsManager::instance()->findTool(set.name, set.group)->clone();
         inUrl   = outUrl;
@@ -186,7 +186,7 @@ void Task::run()
     // We don't remove last output tmp url.
     tmp2del.removeAll(outUrl);
 
-    foreach (KUrl url, tmp2del)
+    foreach (const KUrl& url, tmp2del)
     {
         unlink(QFile::encodeName(url.toLocalFile()));
     }
@@ -216,7 +216,7 @@ void Task::run()
                 else
                 {
                     i++;
-                    dest.setFileName(nfi.completeBaseName() + QString("_%1.").arg(i) + nfi.completeSuffix());
+                    dest.setFileName(fi.completeBaseName() + QString("_%1.").arg(i) + fi.completeSuffix());
                     fileFound = true;
                 }
             }

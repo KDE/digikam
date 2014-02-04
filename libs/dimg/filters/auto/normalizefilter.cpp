@@ -143,7 +143,7 @@ void NormalizeFilter::normalizeImage()
     else                    // 16 bits image.
     {
         unsigned short  red, green, blue;
-        unsigned short* ptr = (unsigned short*)m_refImage.bits();
+        unsigned short* ptr = reinterpret_cast<unsigned short*>(m_refImage.bits());
 
         for (uint i = 0 ; runningFlag() && (i < refSize) ; ++i)
         {
@@ -240,7 +240,7 @@ void NormalizeFilter::normalizeImage()
     else                    // 16 bits image.
     {
         unsigned short  red, green, blue;
-        unsigned short* ptr = (unsigned short*)data;
+        unsigned short* ptr = reinterpret_cast<unsigned short*>(data);
 
         for (uint i = 0 ; runningFlag() && (i < size) ; ++i)
         {

@@ -1,0 +1,55 @@
+DONE:
+    1. Tag Manager GUI
+    2. Add Option
+    3. Del Option with multi-selection(tag manager option & context menu version)
+    4. Tag properties
+    5. Enable multi-drop on tree view
+    6. Custom context menu for single & multiple selection
+    7. Port current Album to QList<Album*>
+    8. Port ImageAlbumModel to QList<Album*>
+    9. Port HistoryItem to QList<Album*>
+    10. Fix AlbumHistory: slotAlbumSelected, slotCurrentAlbumChanged, slot currentChanged, slotImagechanged
+    11. Selection is not cleared on moving Forward/backward
+    12. Images on view are not displayed after navigating backward/forward
+    13. Patch views to support multiple tags
+    14. Tag Manager layout change (Gilles suggestions)
+    15. Use DLogoAction (Gilles suggestions)
+    16. Add tooltips to menu actions (Gilles suggestions)
+    17. Tag Properties don't save changes
+    18. Tag Properties don't save changes [FIXED]
+    19. Add custom list for tagmanager
+    20. Add database options
+    21. Obsolete tags are not deleted [Fixed in Master]
+    22. Disconnect tagmanager from album mamanger[FIXED]
+    23. Add option to delete tag from images [BugZilla entry][DONE]
+    24. Drag-n-drop images on tag tree will assign multiple tags to images
+TODO:
+    1. Port Nepomuk
+    2. core/libs/models/imagealbummodel.cpp:193 TODO: treat root album on QList
+    3. Hide root album from Album Tree and Tag Tree ??
+
+DEAD CODE:
+    1. Albumtreeview.cpp 306-309 deleting this 2 connects doesn't affect digikam behaviour ???
+    2. listedAlbumChanged(QList<Album*> album); in imagealbummodel.cpp
+
+Gilles suggestions:
+    1. [DONE]Tag Manager layout change
+    2. [DONE]Add tooltips for menu actions
+    3. [DROPPED]Move Tag Properties button from right sidebar
+    4. [DONE]Add DLogoAction
+
+Nepomuk implementation:
+    1. Sync Tags, Comments Ratings from digikam to Nepomuk one time at start-up
+    2. Sync Tags, Comments, Ratings digiKam -> Nepomuk when:
+        2.1 Tags are asigned or removed from images
+        2.2 Comments are added or removed
+        2.3 Ratings are added or removed
+
+    3. Sync Tags, Comments, Ratings Nepomuk -> digiKam when:
+        3.1 Tags, Ratings, Comments are added
+        3.2 Tags Removed (ratings & comments are simply overwritten by add)
+
+Nepomuk-TODO:
+    1. Wrap Nepomuk Api code
+    2. Implement Nepomuk -> digiKam manual sync
+    3. Sync when tags are added or removed

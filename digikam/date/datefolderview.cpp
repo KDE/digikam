@@ -84,7 +84,6 @@ DateFolderView::DateFolderView(QWidget* const parent, DateAlbumModel* const date
 
     d->dateTreeView = new DateAlbumTreeView(this);
     d->dateTreeView->setAlbumModel(dateAlbumModel);
-    d->dateTreeView->setSelectAlbumOnClick(true);
     d->dateTreeView->setAlbumManagerCurrentAlbum(true);
     d->monthview    = new MonthWidget(this);
 
@@ -122,7 +121,8 @@ void DateFolderView::setActive(bool val)
 
     if (d->active)
     {
-        AlbumManager::instance()->setCurrentAlbum(d->dateTreeView->currentAlbum());
+        AlbumManager::instance()->setCurrentAlbums(QList<Album*>()
+                                                    << d->dateTreeView->currentAlbum());
         slotSelectionChanged(d->dateTreeView->currentAlbum());
     }
     else
@@ -155,14 +155,19 @@ void DateFolderView::slotSelectionChanged(Album* selectedAlbum)
         d->monthview->setActive(true);
         d->monthview->setYearMonth(date.year(), date.month());
     }
+
+    if (d->active)
+    {
+        AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << dalbum);
+    }
 }
 
 void DateFolderView::slotAllAlbumsLoaded()
 {
     if (d->active)
     {
-        AlbumManager::instance()->setCurrentAlbum(
-            d->dateTreeView->currentAlbum());
+        AlbumManager::instance()->setCurrentAlbums(QList<Album*>()
+                                                    << d->dateTreeView->currentAlbum());
         slotSelectionChanged(d->dateTreeView->currentAlbum());
     }
 }
@@ -206,13 +211,13 @@ void DateFolderView::gotoDate(const QDate& dt)
 
     kDebug() << "Got date album " << dateAlbum;
 
-    d->dateTreeView->setCurrentAlbum(dateAlbum);
+    d->dateTreeView->setCurrentAlbums(QList<Album*>() << dateAlbum);
 
 }
 
 void DateFolderView::changeAlbumFromHistory(DAlbum* const album)
 {
-    d->dateTreeView->setCurrentAlbum(album);
+    d->dateTreeView->setCurrentAlbums(QList<Album*>() << album);
 }
 
 AlbumPointer<DAlbum> DateFolderView::currentAlbum() const

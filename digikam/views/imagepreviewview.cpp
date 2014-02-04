@@ -6,7 +6,7 @@
  * Date        : 2006-21-12
  * Description : a embedded view to show the image preview widget.
  *
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2010-2011 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
  *
@@ -82,7 +82,7 @@ public:
         setAcceptHoverEvents(true);
     }
 
-    void setFaceGroup(FaceGroup* group)
+    void setFaceGroup(FaceGroup* const group)
     {
         m_group = group;
     }
@@ -148,6 +148,7 @@ public:
         peopleToggleAction  = 0;
         addPersonAction     = 0;
         faceGroup           = 0;
+        forgetFacesAction   = 0;
         mode                = ImagePreviewView::IconViewPreview;
     }
 
@@ -178,8 +179,8 @@ public:
 ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode)
     : GraphicsDImgView(parent), d(new Private)
 {
-    d->mode = mode;
-    d->item = new ImagePreviewViewItem(this);
+    d->mode      = mode;
+    d->item      = new ImagePreviewViewItem(this);
     setItem(d->item);
 
     d->faceGroup = new FaceGroup(this);
@@ -204,17 +205,17 @@ ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode)
 
     // ------------------------------------------------------------
 
-    d->escapePreviewAction   = new QAction(SmallIcon("folder-image"),        i18n("Escape preview"),                 this);
-    d->prevAction         = new QAction(SmallIcon("go-previous"),         i18nc("go to previous image", "Back"),  this);
-    d->nextAction         = new QAction(SmallIcon("go-next"),             i18nc("go to next image", "Forward"),   this);
-    d->rotLeftAction      = new QAction(SmallIcon("object-rotate-left"),  i18nc("@info:tooltip", "Rotate Left"),  this);
-    d->rotRightAction     = new QAction(SmallIcon("object-rotate-right"), i18nc("@info:tooltip", "Rotate Right"), this);
-    d->addPersonAction    = new QAction(SmallIcon("list-add-user"),       i18n("Add a Face Tag"),                 this);
-    d->forgetFacesAction  = new QAction(SmallIcon("list-remove-user"),    i18n("Clear all faces on this image"),  this);
-    d->peopleToggleAction = new KToggleAction(i18n("Show Face Tags"),                                             this);
+    d->escapePreviewAction = new QAction(SmallIcon("folder-image"),        i18n("Escape preview"),                 this);
+    d->prevAction          = new QAction(SmallIcon("go-previous"),         i18nc("go to previous image", "Back"),  this);
+    d->nextAction          = new QAction(SmallIcon("go-next"),             i18nc("go to next image", "Forward"),   this);
+    d->rotLeftAction       = new QAction(SmallIcon("object-rotate-left"),  i18nc("@info:tooltip", "Rotate Left"),  this);
+    d->rotRightAction      = new QAction(SmallIcon("object-rotate-right"), i18nc("@info:tooltip", "Rotate Right"), this);
+    d->addPersonAction     = new QAction(SmallIcon("list-add-user"),       i18n("Add a Face Tag"),                 this);
+    d->forgetFacesAction   = new QAction(SmallIcon("list-remove-user"),    i18n("Clear all faces on this image"),  this);
+    d->peopleToggleAction  = new KToggleAction(i18n("Show Face Tags"),                                             this);
     d->peopleToggleAction->setIcon(SmallIcon("user-identity"));
 
-    d->toolBar = new QToolBar(this);
+    d->toolBar             = new QToolBar(this);
 
     if (mode == IconViewPreview)
     {
@@ -291,10 +292,8 @@ void ImagePreviewView::imageLoaded()
 
     d->faceGroup->setInfo(d->item->imageInfo());
 
-    connect(d->item,
-            SIGNAL(imageChanged()),
-            this,
-            SLOT(slotUpdateFaces()));
+    connect(d->item, SIGNAL(imageChanged()),
+            this, SLOT(slotUpdateFaces()));
 }
 
 void ImagePreviewView::imageLoadingFailed()

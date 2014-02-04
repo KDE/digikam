@@ -67,10 +67,10 @@ CaptureDlg::CaptureDlg(QWidget* const parent, CameraController* const controller
     : KDialog(parent), d(new Private)
 {
     d->controller = controller;
-    setCaption(i18n("Capture from %1", cameraTitle));
+    setCaption(i18nc("@title:window %1: name of the camera", "Capture from %1", cameraTitle));
     setButtons(Help | Cancel | Ok);
     setDefaultButton(Ok);
-    setButtonText(Ok, i18n("Capture"));
+    setButtonText(Ok, i18nc("@action:button", "Capture"));
     setModal(true);
     setHelp("camerainterface.anchor", "digikam");
 
@@ -78,12 +78,6 @@ CaptureDlg::CaptureDlg(QWidget* const parent, CameraController* const controller
     setMainWidget(d->captureWidget);
     restoreDialogSize(KGlobal::config()->group("Capture Tool Dialog"));
 
-    d->timer = new QTimer(this);
-
-    connect( d->timer, SIGNAL(timeout()),
-             this, SLOT(slotPreview()) );
-
-    d->timer->setSingleShot(true);
 
     // -------------------------------------------------------------
 
@@ -98,19 +92,30 @@ CaptureDlg::CaptureDlg(QWidget* const parent, CameraController* const controller
 
     // -------------------------------------------------------------
 
-    d->timer->start(0);
+    if(d->controller->cameraCaptureImagePreviewSupport()) {
+        d->timer = new QTimer(this);
+
+        connect( d->timer, SIGNAL(timeout()),
+                this, SLOT(slotPreview()) );
+
+        d->timer->setSingleShot(true);
+
+        d->timer->start(0);
+    }
 }
 
 CaptureDlg::~CaptureDlg()
 {
-    delete d->timer;
+    delete d->timer; // TODO is there a need to call this even separately? As parent is set to this widget in any case, so it should be destroyed?
     delete d;
 }
 
 void CaptureDlg::closeEvent(QCloseEvent* e)
 {
     d->stopPreview = true;
-    d->timer->stop();
+    if(d->timer) {
+        d->timer->stop();
+    }
     KConfigGroup group = KGlobal::config()->group("Capture Tool Dialog");
     saveDialogSize(group);
     e->accept();
@@ -119,7 +124,9 @@ void CaptureDlg::closeEvent(QCloseEvent* e)
 void CaptureDlg::slotCancel()
 {
     d->stopPreview = true;
-    d->timer->stop();
+    if(d->timer) {
+        d->timer->stop();
+    }
     KConfigGroup group = KGlobal::config()->group("Capture Tool Dialog");
     saveDialogSize(group);
     done(Cancel);
@@ -133,7 +140,9 @@ void CaptureDlg::slotPreview()
 void CaptureDlg::slotCapture()
 {
     d->stopPreview = true;
-    d->timer->stop();
+    if(d->timer) {
+        d->timer->stop();
+    }
 
     disconnect(d->controller, SIGNAL(signalPreview(QImage)),
                this, SLOT(slotPreviewDone(QImage)));
@@ -148,7 +157,7 @@ void CaptureDlg::slotPreviewDone(const QImage& preview)
 {
     d->captureWidget->setPreview(preview);
 
-    if (!d->stopPreview)
+    if (!d->stopPreview && d->timer)
     {
         d->timer->start(0);
     }

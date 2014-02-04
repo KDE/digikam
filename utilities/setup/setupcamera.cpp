@@ -270,6 +270,7 @@ SetupCamera::SetupCamera(QWidget* const parent)
 
     QGridLayout* const grid = new QGridLayout(panel);
     d->listView             = new QTreeWidget(panel);
+    d->listView->sortItems(0, Qt::AscendingOrder);
     d->listView->setColumnCount(4);
     d->listView->setRootIsDecorated(false);
     d->listView->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -793,10 +794,8 @@ void SetupCamera::slotAddCamera()
 {
     CameraSelection* const select = new CameraSelection;
 
-    connect(select, SIGNAL(signalOkClicked(const QString&, const QString&,
-                                           const QString&, const QString&)),
-            this,   SLOT(slotAddedCamera(const QString&, const QString&,
-                                         const QString&, const QString&)));
+    connect(select, SIGNAL(signalOkClicked(QString,QString,QString,QString)),
+            this,   SLOT(slotAddedCamera(QString,QString,QString,QString)));
 
     select->show();
 }
@@ -834,10 +833,8 @@ void SetupCamera::slotEditCamera()
     CameraSelection* const select = new CameraSelection;
     select->setCamera(ctype->title(), ctype->model(), ctype->port(), ctype->path());
 
-    connect(select, SIGNAL(signalOkClicked(const QString&, const QString&,
-                                           const QString&, const QString&)),
-            this,   SLOT(slotEditedCamera(const QString&, const QString&,
-                                          const QString&, const QString&)));
+    connect(select, SIGNAL(signalOkClicked(QString,QString,QString,QString)),
+            this,   SLOT(slotEditedCamera(QString,QString,QString,QString)));
 
     select->show();
 }

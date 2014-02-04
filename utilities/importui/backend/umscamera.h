@@ -52,7 +52,7 @@ public:
     bool doConnect();
     void cancel();
 
-    void getAllFolders(const QString& folder, QStringList& subFolderList);
+    bool getFolders(const QString& folder);
     bool getItemsInfoList(const QString& folder, bool useMetadata, CamItemInfoList& infoList);
     void getItemInfo(const QString& folder, const QString& itemName, CamItemInfo& info, bool useMetadata);
 

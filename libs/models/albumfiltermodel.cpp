@@ -659,4 +659,50 @@ bool TagPropertiesFilterModel::matches(Album* album) const
     return true;
 }
 
+TagsManagerFilterModel::TagsManagerFilterModel(QObject* parent)
+    : TagPropertiesFilterModel(parent)
+{
+
+}
+
+void TagsManagerFilterModel::setQuickListTags(QList<int> tags)
+{
+    m_keywords.clear();
+
+    foreach(int tag, tags)
+    {
+        m_keywords << tag;
+    }
+    invalidateFilter();
+    emit filterChanged();
+}
+
+bool TagsManagerFilterModel::matches(Album* album) const
+{
+    if(!TagPropertiesFilterModel::matches(album))
+    {
+        return false;
+    }
+
+    if(m_keywords.isEmpty())
+        return true;
+
+    bool dirty = false;
+
+    for(QSet<int>::const_iterator it = m_keywords.begin(); it != m_keywords.end(); ++it)
+    {
+        TAlbum* talbum = AlbumManager::instance()->findTAlbum(*it);
+        if(!talbum)
+        {
+            continue;
+        }
+        if(talbum->title().contains(album->title()))
+        {
+            dirty = true;
+        }
+    }
+
+    return dirty;
+}
+
 } // namespace Digikam

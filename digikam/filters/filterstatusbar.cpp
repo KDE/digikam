@@ -29,7 +29,6 @@
 #include <QToolButton>
 #include <QPainter>
 #include <QHBoxLayout>
-#include <QLabel>
 
 // KDE includes
 
@@ -75,20 +74,6 @@ FilterStatusBar::FilterStatusBar(QWidget* const parent)
     : QWidget(parent), d(new Private)
 {
     QHBoxLayout* const vlay = new QHBoxLayout(this);
-    QLabel* const space     = new QLabel(this);
-    space->setFixedWidth(KDialog::spacingHint());
-
-    d->resetBtn    = new QToolButton(this);
-    d->resetBtn->setIcon(KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar));
-    d->resetBtn->setToolTip(i18n("Reset all active filters"));
-    d->resetBtn->setFocusPolicy(Qt::NoFocus);
-    d->resetBtn->setAutoRaise(true);
-
-    d->settingsBtn = new QToolButton(this);
-    d->settingsBtn->setIcon(KIconLoader::global()->loadIcon("configure", KIconLoader::Toolbar));
-    d->settingsBtn->setToolTip(i18n("Open filter settings panel"));
-    d->settingsBtn->setFocusPolicy(Qt::NoFocus);
-    d->settingsBtn->setAutoRaise(true);
 
     d->info        = new KLineEdit(this);
     d->info->setClearButtonShown(false);
@@ -107,10 +92,21 @@ FilterStatusBar::FilterStatusBar(QWidget* const parent)
                                "Press the Reset button from the right side to clear all filter settings.\n"
                                "Press the Settings button from the right side to open the filters panel."));
 
-    vlay->addWidget(space);
+    d->resetBtn    = new QToolButton(this);
+    d->resetBtn->setIcon(KIconLoader::global()->loadIcon("edit-delete", KIconLoader::Toolbar));
+    d->resetBtn->setToolTip(i18n("Reset all active filters"));
+    d->resetBtn->setFocusPolicy(Qt::NoFocus);
+    d->resetBtn->setAutoRaise(true);
+
+    d->settingsBtn = new QToolButton(this);
+    d->settingsBtn->setIcon(KIconLoader::global()->loadIcon("view-filter", KIconLoader::Toolbar));
+    d->settingsBtn->setToolTip(i18n("Open filter settings panel"));
+    d->settingsBtn->setFocusPolicy(Qt::NoFocus);
+    d->settingsBtn->setAutoRaise(true);
+
+    vlay->addWidget(d->info);
     vlay->addWidget(d->resetBtn);
     vlay->addWidget(d->settingsBtn);
-    vlay->addWidget(d->info);
     vlay->setSpacing(KDialog::spacingHint());
     vlay->setMargin(0);
     vlay->setStretchFactor(d->info, 10);

@@ -419,6 +419,7 @@ private Q_SLOTS:
 
     void slotTransactionCompleted(ProgressItem* item);
     void slotTransactionCompletedDeferred(ProgressItem* item);
+    void slotTransactionViewIsEmpty();
 
 private:
 

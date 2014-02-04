@@ -83,9 +83,11 @@ public:
         decreaseThumbsAction(0),
         zoomFitToWindowAction(0),
         zoomTo100percents(0),
+        deleteAction(0),
         deleteNewAction(0),
         deleteAllAction(0),
         deleteSelectedAction(0),
+        downloadAction(0),
         downloadNewAction(0),
         downloadAllAction(0),
         downloadSelectedAction(0),
@@ -107,6 +109,11 @@ public:
         itemsGroupAction(0),
         showMenuBarAction(0),
         showLogAction(0),
+        showBarAction(0),
+        imageViewSelectionAction(0),
+        iconViewAction(0),
+        camItemPreviewAction(0),
+        mapViewAction(0),
         helpMenu(0),
         advBox(0),
         splitter(0),
@@ -116,6 +123,8 @@ public:
         renameCustomizer(0),
         albumCustomizer(0),
         advancedSettings(0),
+        scriptingSettings(0),
+        filterStatusBar(0),
         rightSideBar(0),
         zoomBar(0),
         statusProgressBar(0),
@@ -129,8 +138,9 @@ public:
     }
 
     static const QString          configGroupName;
-    static const QString          configUseMetadataDateEntry;
+    static const QString          configUseFileMetadata;
     static const QString          configUseDefaultTargetAlbum;
+    static const QString          configLastTargetAlbum;
     static const QString          configDefaultTargetAlbumId;
     static const QString          importFiltersConfigGroupName;
 
@@ -226,8 +236,9 @@ public:
 };
 
 const QString ImportUI::Private::configGroupName("Camera Settings");
-const QString ImportUI::Private::configUseMetadataDateEntry("UseThemeBackgroundColor");
+const QString ImportUI::Private::configUseFileMetadata("UseFileMetadata");
 const QString ImportUI::Private::configUseDefaultTargetAlbum("UseDefaultTargetAlbum");
+const QString ImportUI::Private::configLastTargetAlbum("LastTargetAlbum");
 const QString ImportUI::Private::configDefaultTargetAlbumId("DefaultTargetAlbumId");
 const QString ImportUI::Private::importFiltersConfigGroupName("Import Filters");
 

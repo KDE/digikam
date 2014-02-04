@@ -80,10 +80,10 @@ AdvancedSettings::AdvancedSettings(QWidget* const parent)
 {
     QVBoxLayout* onFlyVlay = new QVBoxLayout(this);
     d->templateSelector    = new TemplateSelector(this);
-    d->fixDateTimeCheck    = new QCheckBox(i18n("Fix internal date && time"), this);
+    d->fixDateTimeCheck    = new QCheckBox(i18nc("@option:check", "Fix internal date && time"), this);
     d->dateTimeEdit        = new DDateTimeEdit(this, "datepicker");
-    d->autoRotateCheck     = new QCheckBox(i18n("Auto-rotate/flip image"), this);
-    d->convertJpegCheck    = new QCheckBox(i18n("Convert to lossless file format"), this);
+    d->autoRotateCheck     = new QCheckBox(i18nc("@option:check", "Auto-rotate/flip image"), this);
+    d->convertJpegCheck    = new QCheckBox(i18nc("@option:check", "Convert to lossless file format"), this);
     KHBox* hbox2           = new KHBox(this);
     d->formatLabel         = new QLabel(i18n("New image format:"), hbox2);
     d->losslessFormat      = new KComboBox(hbox2);

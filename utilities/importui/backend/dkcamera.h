@@ -42,9 +42,9 @@ namespace Digikam
 
 class DMetadata;
 
-class DKCamera
+class DKCamera : public QObject
 {
-
+    Q_OBJECT
 public:
 
     enum CameraDriverType
@@ -63,7 +63,7 @@ public:
     virtual bool doConnect() = 0;
     virtual void cancel() = 0;
 
-    virtual void getAllFolders(const QString& folder, QStringList& subFolderList) = 0;
+    virtual bool getFolders(const QString& folder) = 0;
 
     /// If getImageDimensions is false, the camera shall set width and height to -1
     /// if the values are not immediately available
@@ -102,6 +102,7 @@ public:
     bool    mkDirSupport() const;
     bool    delDirSupport() const;
     bool    captureImageSupport() const;
+    bool    captureImagePreviewSupport() const;
 
     QString mimeType(const QString& fileext) const;
 
@@ -117,6 +118,7 @@ protected:
     bool    m_mkDirSupport;
     bool    m_delDirSupport;
     bool    m_captureImageSupport;
+    bool    m_captureImagePreviewSupport;
 
     QString m_imageFilter;
     QString m_movieFilter;
@@ -128,6 +130,9 @@ protected:
     QString m_path;
     QString m_title;
     QString m_uuid;
+    
+Q_SIGNALS:
+    void signalFolderList(const QStringList&);
 };
 
 }  // namespace Digikam

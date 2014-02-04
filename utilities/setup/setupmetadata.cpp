@@ -72,6 +72,7 @@ namespace Digikam
 
 class SetupMetadata::Private
 {
+
 public:
 
     Private() :
@@ -104,6 +105,7 @@ public:
         readFromNepomukBox(0),
         resyncButton(0),
         tab(0),
+        displaySubTab(0),
         tagsCfgPanel(0)
     {
     }
@@ -143,6 +145,7 @@ public:
     QToolButton*   resyncButton;
 
     KTabWidget*    tab;
+    KTabWidget*    displaySubTab;
 
     MetadataPanel* tagsCfgPanel;
 };
@@ -329,7 +332,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     mainLayout->addWidget(infoBox);
     panel->setLayout(mainLayout);
 
-    d->tab->addTab(panel, i18n("Behavior"));
+    d->tab->insertTab(Behavior, panel, i18nc("@title:tab", "Behavior"));
 
     // --------------------------------------------------------
 
@@ -433,7 +436,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     rotationLayout->addStretch();
     rotationPanel->setLayout(rotationLayout);
 
-    d->tab->addTab(rotationPanel, i18n("Rotation"));
+    d->tab->insertTab(Rotation, rotationPanel, i18nc("@title:tab", "Rotation"));
 
     // --------------------------------------------------------
 
@@ -443,18 +446,18 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     QLabel* const displayLabel       = new QLabel(i18nc("@info:label", "Select Metadata Fields to Be Displayed"));
 
     QLabel* const displayIcon        = new QLabel;
-    displayIcon->setPixmap(SmallIcon("view-list-tree", KIconLoader::SizeMedium));//"folder-image"));
+    displayIcon->setPixmap(SmallIcon("view-list-tree", KIconLoader::SizeMedium));
 
-    KTabWidget* const displaySubTab  = new KTabWidget;
-    d->tagsCfgPanel                  = new MetadataPanel(displaySubTab);
+    d->displaySubTab                 = new KTabWidget;
+    d->tagsCfgPanel                  = new MetadataPanel(d->displaySubTab);
 
-    displayLayout->addWidget(displayIcon,   0, 0);
-    displayLayout->addWidget(displayLabel,  0, 1);
-    displayLayout->addWidget(displaySubTab, 1, 1, 1, 2);
+    displayLayout->addWidget(displayIcon,      0, 0);
+    displayLayout->addWidget(displayLabel,     0, 1);
+    displayLayout->addWidget(d->displaySubTab, 1, 0, 1, 3);
     displayLayout->setColumnStretch(2, 1);
 
     displayPanel->setLayout(displayLayout);
-    d->tab->addTab(displayPanel, i18nc("@title:tab", "Display"));
+    d->tab->insertTab(Display, displayPanel, i18nc("@title:tab", "Display"));
 
     // --------------------------------------------------------
 
@@ -492,7 +495,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     connect(d->readFromNepomukBox, SIGNAL(toggled(bool)),
             this, SLOT(slotNepomukToggled()));
 
-    d->tab->addTab(nepoPanel, i18n("Nepomuk"));
+    d->tab->insertTab(Nepomuk, nepoPanel, i18nc("@title:tab", "Nepomuk"));
 
     // --------------------------------------------------------
 
@@ -557,6 +560,16 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 SetupMetadata::~SetupMetadata()
 {
     delete d;
+}
+
+void SetupMetadata::setActiveMainTab(MetadataTab tab)
+{
+    d->tab->setCurrentIndex(tab);
+}
+
+void SetupMetadata::setActiveSubTab(int tab)
+{
+    d->displaySubTab->setCurrentIndex(tab);
 }
 
 void SetupMetadata::slotProcessExiv2Url(const QString& url)

@@ -634,6 +634,7 @@ ItemVisibilityController::ItemVisibilityController(QObject* parent)
 ItemVisibilityController::~ItemVisibilityController()
 {
     clear();
+    delete d->control;
     delete d;
 }
 

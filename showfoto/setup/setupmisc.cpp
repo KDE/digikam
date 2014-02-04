@@ -56,6 +56,7 @@ public:
         sidebarTypeLabel(0),
         applicationStyleLabel(0),
         showSplash(0),
+        showMimeOverImage(0),
         sortReverse(0),
         useTrash(0),
         sidebarType(0),
@@ -66,6 +67,7 @@ public:
     static const QString configGroupName;
     static const QString configDeleteItem2TrashEntry;
     static const QString configShowSplashEntry;
+    static const QString configShowMimeOverImage;
     static const QString configSidebarTitleStyleEntry;
     static const QString configSortOrderEntry;
     static const QString configReverseSortEntry;
@@ -75,6 +77,7 @@ public:
     QLabel*              applicationStyleLabel;
 
     QCheckBox*           showSplash;
+    QCheckBox*           showMimeOverImage;
     QCheckBox*           sortReverse;
     QCheckBox*           useTrash;
 
@@ -86,6 +89,7 @@ public:
 const QString SetupMisc::Private::configGroupName("ImageViewer Settings");
 const QString SetupMisc::Private::configDeleteItem2TrashEntry("DeleteItem2Trash");
 const QString SetupMisc::Private::configShowSplashEntry("ShowSplash");
+const QString SetupMisc::Private::configShowMimeOverImage("ShowMimeOverImage");
 const QString SetupMisc::Private::configSidebarTitleStyleEntry("Sidebar Title Style");
 const QString SetupMisc::Private::configSortOrderEntry("SortOrder");
 const QString SetupMisc::Private::configReverseSortEntry("ReverseSort");
@@ -107,8 +111,9 @@ SetupMisc::SetupMisc(QWidget* const parent)
     QGroupBox* miscOptionsGroup = new QGroupBox(i18n("Behavior"), panel);
     QVBoxLayout* gLayout5       = new QVBoxLayout();
 
-    d->useTrash         = new QCheckBox(i18n("&Deleted items should go to the trash"), miscOptionsGroup);
-    d->showSplash       = new QCheckBox(i18n("&Show splash screen at startup"), miscOptionsGroup);
+    d->useTrash          = new QCheckBox(i18n("&Deleted items should go to the trash"), miscOptionsGroup);
+    d->showSplash        = new QCheckBox(i18n("&Show splash screen at startup"), miscOptionsGroup);
+    d->showMimeOverImage = new QCheckBox(i18n("&Show Mime Type Over Image"), miscOptionsGroup);
 
     KHBox* tabStyleHbox = new KHBox(miscOptionsGroup);
     d->sidebarTypeLabel = new QLabel(i18n("Sidebar tab title:"), tabStyleHbox);
@@ -128,6 +133,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
 
     gLayout5->addWidget(d->useTrash);
     gLayout5->addWidget(d->showSplash);
+    gLayout5->addWidget(d->showMimeOverImage);
     gLayout5->addWidget(tabStyleHbox);
     gLayout5->addWidget(appStyleHbox);
     miscOptionsGroup->setLayout(gLayout5);
@@ -182,6 +188,7 @@ void SetupMisc::readSettings()
     KConfigGroup group        = config->group(d->configGroupName);
     d->useTrash->setChecked(group.readEntry(d->configDeleteItem2TrashEntry,          false));
     d->showSplash->setChecked(group.readEntry(d->configShowSplashEntry,              true));
+    d->showMimeOverImage->setChecked(group.readEntry(d->configShowMimeOverImage,     false));
     d->sidebarType->setCurrentIndex(group.readEntry(d->configSidebarTitleStyleEntry, 0));
     d->sortOrderComboBox->setCurrentIndex(group.readEntry(d->configSortOrderEntry,   (int)SortByDate));
     d->sortReverse->setChecked(group.readEntry(d->configReverseSortEntry,            false));
@@ -195,6 +202,7 @@ void SetupMisc::applySettings()
     KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configDeleteItem2TrashEntry,  d->useTrash->isChecked());
     group.writeEntry(d->configShowSplashEntry,        d->showSplash->isChecked());
+    group.writeEntry(d->configShowMimeOverImage,      d->showMimeOverImage->isChecked());
     group.writeEntry(d->configSidebarTitleStyleEntry, d->sidebarType->currentIndex());
     group.writeEntry(d->configSortOrderEntry,         d->sortOrderComboBox->currentIndex());
     group.writeEntry(d->configReverseSortEntry,       d->sortReverse->isChecked());

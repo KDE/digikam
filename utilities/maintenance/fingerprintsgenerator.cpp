@@ -117,7 +117,7 @@ void FingerPrintsGenerator::slotStart()
 
         if (!d->rebuildAll)
         {
-            foreach(QString path, aPaths)
+            foreach(const QString& path, aPaths)
             {
                 if (dirty.contains(path))
                 {

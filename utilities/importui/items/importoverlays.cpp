@@ -178,7 +178,7 @@ bool ImportDownloadOverlay::checkIndex(const QModelIndex& index) const
         return true;
     }
 
-    if (info.downloaded == CamItemInfo::NewPicture)
+    if (info.downloaded == CamItemInfo::DownloadedNo) // TODO: CamItemInfo::NewPicture
     {
         m_widget->setToolTip(i18nc("@info:tooltip", "This item download status is new"));
         return true;

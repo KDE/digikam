@@ -785,6 +785,8 @@ void ImageModel::publiciseInfos(const QList<ImageInfo>& infos, const QList<QVari
         return;
     }
 
+    Q_ASSERT(infos.size() == extraValues.size() || (extraValues.isEmpty() && d->extraValues.isEmpty()));
+
     emit imageInfosAboutToBeAdded(infos);
     const int firstNewIndex = d->infos.size();
     const int lastNewIndex  = d->infos.size() + infos.size() - 1;

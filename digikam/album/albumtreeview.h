@@ -209,8 +209,16 @@ public:
     void removeContextMenuElement(ContextMenuElement* const element);
     QList<ContextMenuElement*> contextMenuElements() const;
 
+    template<class A>
+    QList<A*> currentAlbums();
+
     // for internal use: public viewportEvent
     virtual bool viewportEvent(QEvent* event);
+
+    /**
+     * @brief selectedItems() -
+     */
+    QList<Album*> selectedItems();
 
 public Q_SLOTS:
 
@@ -223,7 +231,7 @@ public Q_SLOTS:
      * @param selectInAlbumManager the album will be set as current album, if both
      * this parameter is true and setAlbumManagerCurrentAlbum() was set to true.
      */
-    void setCurrentAlbum(Album* album, bool selectInAlbumManager = true);
+    void setCurrentAlbums(QList<Album*> albums, bool selectInAlbumManager = true);
 
     /**
      * Adapt the column sizes to the contents of the tree view.
@@ -517,7 +525,7 @@ public:
 
 public Q_SLOTS:
 
-    void setCurrentAlbum(PAlbum* album, bool selectInAlbumManager = true);
+    void setCurrentAlbums(QList<Album*> albums, bool selectInAlbumManager = true);
     void setCurrentAlbum(int albumId, bool selectInAlbumManager = true);
 };
 
@@ -537,7 +545,19 @@ public:
     /// Contains only the tags filtered by properties - prefer to albumModel()
     TagPropertiesFilterModel* filteredModel() const;
 
+    /**
+     * @brief currentAlbum     - even if multiple selection is enabled current
+     *                           Album can be only one, the last clicked item
+     *                          if you need selected items, see seletectedAlbums()
+     *                          It's NOT the same as AlbumManager::currentAlbums()
+     */
     TAlbum* currentAlbum() const;
+
+    /**
+     * @brief selectedAlbums - return a list of all selected items in tag model
+     */
+    QList<Album*> selectedTags();
+
     TAlbum* albumForIndex(const QModelIndex& index) const;
     TagModificationHelper* tagModificationHelper() const;
 
@@ -546,7 +566,7 @@ public:
 
 public Q_SLOTS:
 
-    void setCurrentAlbum(TAlbum* tag, bool selectInAlbumManager = true);
+    void setCurrentAlbums(QList<Album*> tags, bool selectInAlbumManager = true);
     void setCurrentAlbum(int tagId, bool selectInAlbumManager = true);
 
 Q_SIGNALS:
@@ -582,7 +602,7 @@ public:
 
 public Q_SLOTS:
 
-    void setCurrentAlbum(SAlbum* album, bool selectInAlbumManager = true);
+    void setCurrentAlbums(QList<Album*> albums, bool selectInAlbumManager = true);
     void setCurrentAlbum(int searchId, bool selectInAlbumManager = true);
 
 protected:
@@ -609,7 +629,7 @@ public:
 
 public Q_SLOTS:
 
-    void setCurrentAlbum(DAlbum* album, bool selectInAlbumManager = true);
+    void setCurrentAlbums(QList<Album*> albums, bool selectInAlbumManager = true);
     void setCurrentAlbum(int dateId, bool selectInAlbumManager = true);
 };
 

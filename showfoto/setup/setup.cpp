@@ -6,7 +6,7 @@
  * Date        : 2005-04-02
  * Description : showFoto setup dialog.
  *
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,6 +22,10 @@
  * ============================================================ */
 
 #include "setup.moc"
+
+// Qt includes
+
+#include <QPointer>
 
 // KDE includes
 
@@ -114,7 +118,7 @@ Setup::Setup(QWidget* const parent, Setup::Page page)
     d->page_metadata  = addPage(d->metadataPage, i18n("Metadata"));
     d->page_metadata->setHeader(i18n("<qt>Embedded Image Information Management<br/>"
                                      "<i>Setup relations between images and metadata</i></qt>"));
-    d->page_metadata->setIcon(KIcon("exifinfo"));
+    d->page_metadata->setIcon(KIcon("exifinfo")); // krazy:exclude=iconnames
 
     d->toolTipPage    = new SetupToolTip();
     d->page_tooltip   = addPage(d->toolTipPage, i18n("Tool Tip"));
@@ -309,6 +313,25 @@ KPageWidgetItem* Setup::Private::pageItem(Setup::Page page) const
         default:
             return 0;
     }
+}
+
+bool Setup::execMetadataFilters(QWidget* const parent, int tab)
+{
+    QPointer<Setup> setup = new Setup(parent);
+    setup->showPage(MetadataPage);
+    setup->setFaceType(Plain);
+
+    KPageWidgetItem* const cur  = setup->currentPage();
+    if (!cur) return false;
+
+    SetupMetadata* const widget = dynamic_cast<SetupMetadata*>(cur->widget());
+    if (!widget) return false;
+
+    widget->setActiveTab((SetupMetadata::MetadataTab)tab);
+
+    bool success                = setup->KPageDialog::exec() == QDialog::Accepted;
+    delete setup;
+    return success;
 }
 
 }   // namespace ShowFoto

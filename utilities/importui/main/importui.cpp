@@ -163,9 +163,8 @@ ImportUI::ImportUI(QWidget* const parent, const QString& cameraTitle,
     setCaption(d->cameraTitle);
 
     // -- Init. backend controller ----------------------------------------
-
+    // Note, this needs to be in place before setupUserArea is called. Could use some refactoring...
     setupCameraController(model, port, path);
-    QTimer::singleShot(0, d->controller, SLOT(slotConnect()));
 
     // --------------------------------------------------------
 
@@ -210,6 +209,9 @@ ImportUI::ImportUI(QWidget* const parent, const QString& cameraTitle,
 
     slotThumbSizeChanged(ImportSettings::instance()->getDefaultIconSize());
     slotZoomSliderChanged(ImportSettings::instance()->getDefaultIconSize());
+
+    // try to connect in the end, this allows us not to block the UI to show up..
+    QTimer::singleShot(0, d->controller, SLOT(slotConnect()));
 }
 
 ImportUI::~ImportUI()
@@ -290,20 +292,20 @@ void ImportUI::setupActions()
 {
     // -- File menu ----------------------------------------------------
 
-    d->cameraCancelAction = new KAction(KIcon("process-stop"), i18n("Cancel"), this);
+    d->cameraCancelAction = new KAction(KIcon("process-stop"), i18nc("@action Cancel process", "Cancel"), this);
     connect(d->cameraCancelAction, SIGNAL(triggered()), this, SLOT(slotCancelButton()));
     actionCollection()->addAction("importui_cancelprocess", d->cameraCancelAction);
     d->cameraCancelAction->setEnabled(false);
 
     // -----------------------------------------------------------------
 
-    d->cameraInfoAction = new KAction(KIcon("camera-photo"), i18n("Information"), this);
+    d->cameraInfoAction = new KAction(KIcon("camera-photo"), i18nc("@action Information about camera", "Information"), this);
     connect(d->cameraInfoAction, SIGNAL(triggered()), this, SLOT(slotInformation()));
     actionCollection()->addAction("importui_info", d->cameraInfoAction);
 
     // -----------------------------------------------------------------
 
-    d->cameraCaptureAction = new KAction(KIcon("webcamreceive"), i18n("Capture"), this);
+    d->cameraCaptureAction = new KAction(KIcon("webcamreceive"), i18nc("@action Capture photo from camera", "Capture"), this);
     connect(d->cameraCaptureAction, SIGNAL(triggered()), this, SLOT(slotCapture()));
     actionCollection()->addAction("importui_capture", d->cameraCaptureAction);
 
@@ -314,127 +316,127 @@ void ImportUI::setupActions()
 
     // -- Edit menu ----------------------------------------------------
 
-    d->selectAllAction = new KAction(i18n("Select All"), this);
+    d->selectAllAction = new KAction(i18nc("@action:inmenu", "Select All"), this);
     d->selectAllAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_A));
     connect(d->selectAllAction, SIGNAL(triggered()), d->view, SLOT(slotSelectAll()));
     actionCollection()->addAction("importui_selectall", d->selectAllAction);
 
     // -----------------------------------------------------------------
 
-    d->selectNoneAction = new KAction(i18n("Select None"), this);
+    d->selectNoneAction = new KAction(i18nc("@action:inmenu", "Select None"), this);
     d->selectNoneAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_A));
     connect(d->selectNoneAction, SIGNAL(triggered()), d->view, SLOT(slotSelectNone()));
     actionCollection()->addAction("importui_selectnone", d->selectNoneAction);
 
     // -----------------------------------------------------------------
 
-    d->selectInvertAction = new KAction(i18n("Invert Selection"), this);
+    d->selectInvertAction = new KAction(i18nc("@action:inmenu", "Invert Selection"), this);
     d->selectInvertAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_Asterisk));
     connect(d->selectInvertAction, SIGNAL(triggered()), d->view, SLOT(slotSelectInvert()));
     actionCollection()->addAction("importui_selectinvert", d->selectInvertAction);
 
     // -----------------------------------------------------------
 
-    d->selectNewItemsAction = new KAction(KIcon("document-new"), i18n("Select New Items"), this);
+    d->selectNewItemsAction = new KAction(KIcon("document-new"), i18nc("@action:inmenu", "Select New Items"), this);
     connect(d->selectNewItemsAction, SIGNAL(triggered()), this, SLOT(slotSelectNew()));
     actionCollection()->addAction("importui_selectnewitems", d->selectNewItemsAction);
 
     // -----------------------------------------------------------
 
-    d->selectLockedItemsAction = new KAction(KIcon("object-locked"), i18n("Select Locked Items"), this);
+    d->selectLockedItemsAction = new KAction(KIcon("object-locked"), i18nc("@action:inmenu", "Select Locked Items"), this);
     d->selectLockedItemsAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_L));
     connect(d->selectLockedItemsAction, SIGNAL(triggered()), this, SLOT(slotSelectLocked()));
     actionCollection()->addAction("importui_selectlockeditems", d->selectLockedItemsAction);
 
     // --- Download actions ----------------------------------------------------
 
-    d->downloadAction = new KActionMenu(KIcon("get-hot-new-stuff"), i18n("Download"), this);
+    d->downloadAction = new KActionMenu(KIcon("get-hot-new-stuff"), i18nc("@title:menu", "Download"), this);
     d->downloadAction->setDelayed(false);
     actionCollection()->addAction("importui_imagedownload", d->downloadAction);
 
-    d->downloadNewAction = new KAction(KIcon("get-hot-new-stuff"), i18n("Download New"), this);
+    d->downloadNewAction = new KAction(KIcon("get-hot-new-stuff"), i18nc("@action", "Download New"), this);
     d->downloadNewAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_N));
     connect(d->downloadNewAction, SIGNAL(triggered()), this, SLOT(slotDownloadNew()));
     actionCollection()->addAction("importui_imagedownloadnew", d->downloadNewAction);
     d->downloadAction->addAction(d->downloadNewAction);
 
-    d->downloadSelectedAction = new KAction(KIcon("document-save"), i18n("Download Selected"), this);
+    d->downloadSelectedAction = new KAction(KIcon("document-save"), i18nc("@action", "Download Selected"), this);
     connect(d->downloadSelectedAction, SIGNAL(triggered()), this, SLOT(slotDownloadSelected()));
     actionCollection()->addAction("importui_imagedownloadselected", d->downloadSelectedAction);
     d->downloadSelectedAction->setEnabled(false);
     d->downloadAction->addAction(d->downloadSelectedAction);
 
-    d->downloadAllAction = new KAction(KIcon("document-save"), i18n("Download All"), this);
+    d->downloadAllAction = new KAction(KIcon("document-save"), i18nc("@action", "Download All"), this);
     connect(d->downloadAllAction, SIGNAL(triggered()), this, SLOT(slotDownloadAll()));
     actionCollection()->addAction("importui_imagedownloadall", d->downloadAllAction);
     d->downloadAction->addAction(d->downloadAllAction);
 
     // -------------------------------------------------------------------------
 
-    d->downloadDelNewAction = new KAction(i18n("Download/Delete New"), this);
+    d->downloadDelNewAction = new KAction(i18nc("@action", "Download & Delete New"), this);
     d->downloadDelNewAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_N));
     connect(d->downloadDelNewAction, SIGNAL(triggered()), this, SLOT(slotDownloadAndDeleteNew()));
     actionCollection()->addAction("importui_imagedownloaddeletenew", d->downloadDelNewAction);
 
     // -----------------------------------------------------------------
 
-    d->downloadDelSelectedAction = new KAction(i18n("Download/Delete Selected"), this);
+    d->downloadDelSelectedAction = new KAction(i18nc("@action", "Download & Delete Selected"), this);
     connect(d->downloadDelSelectedAction, SIGNAL(triggered()), this, SLOT(slotDownloadAndDeleteSelected()));
     actionCollection()->addAction("importui_imagedownloaddeleteselected", d->downloadDelSelectedAction);
     d->downloadDelSelectedAction->setEnabled(false);
 
     // -------------------------------------------------------------------------
 
-    d->downloadDelAllAction = new KAction(i18n("Download/Delete All"), this);
+    d->downloadDelAllAction = new KAction(i18nc("@action", "Download & Delete All"), this);
     connect(d->downloadDelAllAction, SIGNAL(triggered()), this, SLOT(slotDownloadAndDeleteAll()));
     actionCollection()->addAction("importui_imagedownloaddeleteall", d->downloadDelAllAction);
 
     // -------------------------------------------------------------------------
 
-    d->uploadAction = new KAction(KIcon("media-flash-smart-media"), i18n("Upload..."), this);
+    d->uploadAction = new KAction(KIcon("media-flash-smart-media"), i18nc("@action", "Upload..."), this);
     d->uploadAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_U));
     connect(d->uploadAction, SIGNAL(triggered()), this, SLOT(slotUpload()));
     actionCollection()->addAction("importui_imageupload", d->uploadAction);
 
     // -------------------------------------------------------------------------
 
-    d->lockAction = new KAction(KIcon("object-locked"), i18n("Toggle Lock"), this);
+    d->lockAction = new KAction(KIcon("object-locked"), i18nc("@action", "Toggle Lock"), this);
     d->lockAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_L));
     connect(d->lockAction, SIGNAL(triggered()), this, SLOT(slotToggleLock()));
     actionCollection()->addAction("importui_imagelock", d->lockAction);
 
     // -------------------------------------------------------------------------
 
-    d->markAsDownloadedAction = new KAction(KIcon("dialog-ok"), i18n("Mark as downloaded"), this);
+    d->markAsDownloadedAction = new KAction(KIcon("dialog-ok"), i18nc("@action", "Mark as downloaded"), this);
     connect(d->markAsDownloadedAction, SIGNAL(triggered()), this, SLOT(slotMarkAsDownloaded()));
     actionCollection()->addAction("importui_imagemarkasdownloaded", d->markAsDownloadedAction);
 
     // --- Delete actions ------------------------------------------------------
 
-    d->deleteAction = new KActionMenu(KIcon("user-trash"), i18n("Delete"), this);
+    d->deleteAction = new KActionMenu(KIcon("user-trash"), i18nc("@title:menu", "Delete"), this);
     d->deleteAction->setDelayed(false);
     actionCollection()->addAction("importui_delete", d->deleteAction);
 
-    d->deleteSelectedAction = new KAction(KIcon("edit-delete"), i18n("Delete Selected"), this);
+    d->deleteSelectedAction = new KAction(KIcon("edit-delete"), i18nc("@action", "Delete Selected"), this);
     connect(d->deleteSelectedAction, SIGNAL(triggered()), this, SLOT(slotDeleteSelected()));
     actionCollection()->addAction("importui_imagedeleteselected", d->deleteSelectedAction);
     d->deleteSelectedAction->setShortcut(KShortcut(Qt::Key_Delete));
     d->deleteSelectedAction->setEnabled(false);
     d->deleteAction->addAction(d->deleteSelectedAction);
 
-    d->deleteAllAction = new KAction(KIcon("edit-delete"), i18n("Delete All"), this);
+    d->deleteAllAction = new KAction(KIcon("edit-delete"), i18nc("@action", "Delete All"), this);
     connect(d->deleteAllAction, SIGNAL(triggered()), this, SLOT(slotDeleteAll()));
     actionCollection()->addAction("importui_imagedeleteall", d->deleteAllAction);
     d->deleteAction->addAction(d->deleteAllAction);
 
-    d->deleteNewAction = new KAction(KIcon("edit-delete"), i18n("Delete New"), this);
+    d->deleteNewAction = new KAction(KIcon("edit-delete"), i18nc("@action", "Delete New"), this);
     connect(d->deleteNewAction, SIGNAL(triggered()), this, SLOT(slotDeleteNew()));
     actionCollection()->addAction("importui_imagedeletenew", d->deleteNewAction);
     d->deleteAction->addAction(d->deleteNewAction);
 
     // --- Icon view, items preview, and map actions ------------------------------------------------------
 
-    d->imageViewSelectionAction = new KSelectAction(KIcon("viewimage"), i18n("Views"), this);
+    d->imageViewSelectionAction = new KSelectAction(KIcon("viewimage"), i18nc("@title:group", "Views"), this);
     actionCollection()->addAction("importui_view_selection", d->imageViewSelectionAction);
 
     d->iconViewAction = new KToggleAction(KIcon("view-list-icons"),
@@ -443,7 +445,7 @@ void ImportUI::setupActions()
     connect(d->iconViewAction, SIGNAL(triggered()), d->view, SLOT(slotIconView()));
     d->imageViewSelectionAction->addAction(d->iconViewAction);
 
-    d->camItemPreviewAction = new KToggleAction(KIcon("viewimage"), i18nc("View the selected image", "Preview Item"), this);
+    d->camItemPreviewAction = new KToggleAction(KIcon("viewimage"), i18nc("@action View the selected image", "Preview Item"), this);
     d->camItemPreviewAction->setShortcut(KShortcut(Qt::Key_F3));
     actionCollection()->addAction("importui_item_view", d->camItemPreviewAction);
     connect(d->camItemPreviewAction, SIGNAL(triggered()), d->view, SLOT(slotImagePreview()));
@@ -459,19 +461,19 @@ void ImportUI::setupActions()
 
     // -- Item Sorting ------------------------------------------------------------
 
-    d->itemSortAction                    = new KSelectAction(i18n("&Sort Items"), this);
-    d->itemSortAction->setWhatsThis(i18n("The value by which the items are sorted in the thumbnail view"));
+    d->itemSortAction                    = new KSelectAction(i18nc("@title:menu", "&Sort Items"), this);
+    d->itemSortAction->setWhatsThis(i18nc("@info:whatsthis", "The value by which the items are sorted in the thumbnail view"));
     QSignalMapper* const imageSortMapper = new QSignalMapper(this);
-    connect(imageSortMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImages(int)));
+    connect(imageSortMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImagesBy(int)));
     actionCollection()->addAction("item_sort", d->itemSortAction);
 
     // map to CamItemSortSettings enum
-    QAction* const sortByNameAction     = d->itemSortAction->addAction(i18n("By Name"));
-    QAction* const sortByPathAction     = d->itemSortAction->addAction(i18n("By Path"));
-    QAction* const sortByDateAction     = d->itemSortAction->addAction(i18n("By Date")); //TODO: Implement sort by creation date.
-    QAction* const sortByFileSizeAction = d->itemSortAction->addAction(i18n("By Size"));
-    QAction* const sortByRatingAction   = d->itemSortAction->addAction(i18n("By Rating"));
-    QAction* const sortByDownloadAction = d->itemSortAction->addAction(i18n("By Download State"));
+    QAction* const sortByNameAction     = d->itemSortAction->addAction(i18nc("item:inmenu Sort by", "By Name"));
+    QAction* const sortByPathAction     = d->itemSortAction->addAction(i18nc("item:inmenu Sort by", "By Path"));
+    QAction* const sortByDateAction     = d->itemSortAction->addAction(i18nc("item:inmenu Sort by", "By Date")); //TODO: Implement sort by creation date.
+    QAction* const sortByFileSizeAction = d->itemSortAction->addAction(i18nc("item:inmenu Sort by", "By Size"));
+    QAction* const sortByRatingAction   = d->itemSortAction->addAction(i18nc("item:inmenu Sort by", "By Rating"));
+    QAction* const sortByDownloadAction = d->itemSortAction->addAction(i18nc("item:inmenu Sort by", "By Download State"));
 
     connect(sortByNameAction,     SIGNAL(triggered()), imageSortMapper, SLOT(map()));
     connect(sortByPathAction,     SIGNAL(triggered()), imageSortMapper, SLOT(map()));
@@ -487,18 +489,18 @@ void ImportUI::setupActions()
     imageSortMapper->setMapping(sortByRatingAction, (int)CamItemSortSettings::SortByRating);
     imageSortMapper->setMapping(sortByDownloadAction, (int)CamItemSortSettings::SortByDownloadState);
 
-    d->itemSortAction->setCurrentItem(ImportSettings::instance()->getImageSortOrder());
+    d->itemSortAction->setCurrentItem(ImportSettings::instance()->getImageSortBy());
 
     // -- Item Sort Order ------------------------------------------------------------
 
-    d->itemSortOrderAction                    = new KSelectAction(i18n("Item Sorting &Order"), this);
-    d->itemSortOrderAction->setWhatsThis(i18n("Defines whether items are sorted in ascending or descending manner."));
+    d->itemSortOrderAction                    = new KSelectAction(i18nc("@title:inmenu", "Item Sorting &Order"), this);
+    d->itemSortOrderAction->setWhatsThis(i18nc("@info:whatsthis", "Defines whether items are sorted in ascending or descending manner."));
     QSignalMapper* const imageSortOrderMapper = new QSignalMapper(this);
     connect(imageSortOrderMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImagesOrder(int)));
     actionCollection()->addAction("item_sort_order", d->itemSortOrderAction);
 
-    QAction* const sortAscendingAction = d->itemSortOrderAction->addAction(KIcon("view-sort-ascending"), i18n("Ascending"));
-    QAction* const sortDescendingAction = d->itemSortOrderAction->addAction(KIcon("view-sort-descending"), i18n("Descending"));
+    QAction* const sortAscendingAction = d->itemSortOrderAction->addAction(KIcon("view-sort-ascending"), i18nc("@item:inmenu Sorting Order", "Ascending"));
+    QAction* const sortDescendingAction = d->itemSortOrderAction->addAction(KIcon("view-sort-descending"), i18nc("@item:inmenu Sorting Order", "Descending"));
 
     connect(sortAscendingAction,  SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
     connect(sortDescendingAction, SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
@@ -506,20 +508,20 @@ void ImportUI::setupActions()
     imageSortOrderMapper->setMapping(sortAscendingAction, (int)CamItemSortSettings::AscendingOrder);
     imageSortOrderMapper->setMapping(sortDescendingAction, (int)CamItemSortSettings::DescendingOrder);
 
-    d->itemSortOrderAction->setCurrentItem(ImportSettings::instance()->getImageSorting());
+    d->itemSortOrderAction->setCurrentItem(ImportSettings::instance()->getImageSortOrder());
 
     // -- Item Grouping ------------------------------------------------------------
 
-    d->itemsGroupAction                  = new KSelectAction(i18n("&Group Items"), this);
-    d->itemsGroupAction->setWhatsThis(i18n("The categories in which the items in the thumbnail view are displayed"));
+    d->itemsGroupAction                  = new KSelectAction(i18nc("@title:menu", "&Group Items"), this);
+    d->itemsGroupAction->setWhatsThis(i18nc("@info:whatsthis", "The categories in which the items in the thumbnail view are displayed"));
     QSignalMapper* const itemGroupMapper = new QSignalMapper(this);
     connect(itemGroupMapper, SIGNAL(mapped(int)), d->view, SLOT(slotGroupImages(int)));
     actionCollection()->addAction("item_group", d->itemsGroupAction);
 
     // map to CamItemSortSettings enum
-    QAction* const noCategoriesAction  = d->itemsGroupAction->addAction(i18n("Flat List"));
-    QAction* const CategoryByFolderAction = d->itemsGroupAction->addAction(i18n("By Folder"));
-    QAction* const groupByFormatAction = d->itemsGroupAction->addAction(i18n("By Format"));
+    QAction* const noCategoriesAction  = d->itemsGroupAction->addAction(i18nc("@item:inmenu Group Items", "Flat List"));
+    QAction* const CategoryByFolderAction = d->itemsGroupAction->addAction(i18nc("@item:inmenu Group Items", "By Folder"));
+    QAction* const groupByFormatAction = d->itemsGroupAction->addAction(i18nc("@item:inmenu Group Items", "By Format"));
 
     connect(noCategoriesAction,     SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
     connect(CategoryByFolderAction, SIGNAL(triggered()), itemGroupMapper, SLOT(map()));
@@ -547,12 +549,12 @@ void ImportUI::setupActions()
     d->decreaseThumbsAction->setShortcut(keysMinus);
     actionCollection()->addAction("importui_zoomminus", d->decreaseThumbsAction);
 
-    d->zoomFitToWindowAction = new KAction(KIcon("zoom-fit-best"), i18n("Fit to &Window"), this);
+    d->zoomFitToWindowAction = new KAction(KIcon("zoom-fit-best"), i18nc("@action:inmenu", "Fit to &Window"), this);
     d->zoomFitToWindowAction->setShortcut(KShortcut(Qt::ALT + Qt::CTRL + Qt::Key_E));
     connect(d->zoomFitToWindowAction, SIGNAL(triggered()), d->view, SLOT(slotFitToWindow()));
     actionCollection()->addAction("import_zoomfit2window", d->zoomFitToWindowAction);
 
-    d->zoomTo100percents = new KAction(KIcon("zoom-original"), i18n("Zoom to 100%"), this);
+    d->zoomTo100percents = new KAction(KIcon("zoom-original"), i18nc("@action:inmenu", "Zoom to 100%"), this);
     d->zoomTo100percents->setShortcut(KShortcut(Qt::CTRL + Qt::Key_Comma));
     connect(d->zoomTo100percents, SIGNAL(triggered()), d->view, SLOT(slotZoomTo100Percents()));
     actionCollection()->addAction("import_zoomto100percents", d->zoomTo100percents);
@@ -561,12 +563,12 @@ void ImportUI::setupActions()
 
     createFullScreenAction("importui_fullscreen");
 
-    d->showLogAction = new KToggleAction(KIcon("view-history"), i18n("Show History"), this);
+    d->showLogAction = new KToggleAction(KIcon("view-history"), i18nc("@option:check", "Show History"), this);
     d->showLogAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_H));
     connect(d->showLogAction, SIGNAL(triggered()), this, SLOT(slotShowLog()));
     actionCollection()->addAction("importui_showlog", d->showLogAction);
 
-    d->showBarAction = new KToggleAction(KIcon("view-choose"), i18n("Show Thumbbar"), this);
+    d->showBarAction = new KToggleAction(KIcon("view-choose"), i18nc("@option:check", "Show Thumbbar"), this);
     d->showBarAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_T));
     connect(d->showBarAction, SIGNAL(triggered()), this, SLOT(slotToggleShowBar()));
     actionCollection()->addAction("showthumbs", d->showBarAction);
@@ -588,7 +590,7 @@ void ImportUI::setupActions()
     // -- Standard 'Help' menu actions ---------------------------------------------
 
     createHelpActions();
-    
+
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
 
@@ -597,7 +599,7 @@ void ImportUI::setupActions()
 
     // -- Keyboard-only actions added to <MainWindow> ------------------------------
 
-    KAction* const altBackwardAction = new KAction(i18n("Previous Image"), this);
+    KAction* const altBackwardAction = new KAction(i18nc("@action", "Previous Image"), this);
     actionCollection()->addAction("importui_backward_shift_space", altBackwardAction);
     altBackwardAction->setShortcut(KShortcut(Qt::SHIFT + Qt::Key_Space));
     connect(altBackwardAction, SIGNAL(triggered()), d->view, SLOT(slotPrevItem()));
@@ -718,6 +720,9 @@ void ImportUI::setupCameraController(const QString& model, const QString& port, 
 {
     d->controller = new CameraController(this, d->cameraTitle, model, port, path);
 
+    connect(d->controller, SIGNAL(signalFinished()),
+            this, SLOT(slotSortItems()));
+
     connect(d->controller, SIGNAL(signalConnected(bool)),
             this, SLOT(slotConnected(bool)));
 
@@ -742,9 +747,6 @@ void ImportUI::setupCameraController(const QString& model, const QString& port, 
     connect(d->controller, SIGNAL(signalDownloadComplete(QString,QString,QString,QString)),
             this, SLOT(slotDownloadComplete(QString,QString,QString,QString)));
 
-    //connect(d->controller, SIGNAL(signalFinished()),
-    //this, SLOT(slotFinished()));
-
     connect(d->controller, SIGNAL(signalSkipped(QString,QString)),
             this, SLOT(slotSkipped(QString,QString)));
 
@@ -768,34 +770,34 @@ CameraController* ImportUI::getCameraController() const
 
 void ImportUI::setupAccelerators()
 {
-    KAction* escapeAction = new KAction(i18n("Exit Preview Mode"), this);
+    KAction* escapeAction = new KAction(i18nc("@action", "Exit Preview Mode"), this);
     actionCollection()->addAction("exit_preview_mode", escapeAction);
     escapeAction->setShortcut( KShortcut(Qt::Key_Escape) );
     connect(escapeAction, SIGNAL(triggered()), this, SIGNAL(signalEscapePressed()));
-    
-    KAction* nextImageAction = new KAction(i18n("Next Image"), this);
+
+    KAction* nextImageAction = new KAction(i18nc("@action","Next Image"), this);
     nextImageAction->setIcon(SmallIcon("go-next"));
     actionCollection()->addAction("next_image", nextImageAction);
     nextImageAction->setShortcut(KShortcut(Qt::Key_Space));
     connect(nextImageAction, SIGNAL(triggered()), d->view, SLOT(slotNextItem()));
 
-    KAction* previousImageAction = new KAction(i18n("Previous Image"), this);
+    KAction* previousImageAction = new KAction(i18nc("@action", "Previous Image"), this);
     previousImageAction->setIcon(SmallIcon("go-previous"));
     actionCollection()->addAction("previous_image", previousImageAction);
     previousImageAction->setShortcut(KShortcut(Qt::Key_Backspace));
     connect(previousImageAction, SIGNAL(triggered()), d->view, SLOT(slotPrevItem()));
 
-    KAction* altpreviousImageAction = new KAction(i18n("Previous Image"), this);
+    KAction* altpreviousImageAction = new KAction(i18nc("@action", "Previous Image"), this);
     actionCollection()->addAction("alt_previous_image_shift_space", altpreviousImageAction);
     altpreviousImageAction->setShortcut( KShortcut(Qt::SHIFT+Qt::Key_Space) );
     connect(altpreviousImageAction, SIGNAL(triggered()), d->view, SLOT(slotPrevItem()));
 
-    KAction* firstImageAction = new KAction(i18n("First Image"), this);
+    KAction* firstImageAction = new KAction(i18nc("@action Go to first image", "First Image"), this);
     actionCollection()->addAction("first_image", firstImageAction);
     firstImageAction->setShortcut(KShortcut(Qt::Key_Home) );
     connect(firstImageAction, SIGNAL(triggered()), d->view, SLOT(slotFirstItem()));
 
-    KAction* lastImageAction = new KAction(i18n("Last Image"), this);
+    KAction* lastImageAction = new KAction(i18nc("@action Go to last image", "Last Image"), this);
     actionCollection()->addAction("last_image", lastImageAction);
     lastImageAction->setShortcut(KShortcut(Qt::Key_End) );
     connect(lastImageAction, SIGNAL(triggered()), d->view, SLOT(slotLastItem()));
@@ -877,10 +879,17 @@ DownloadSettings ImportUI::downloadSettings() const
     return settings;
 }
 
+void ImportUI::slotSortItems()
+{
+    d->view->slotGroupImages(ImportSettings::instance()->getImageGroupMode());
+    d->view->slotSortImagesBy(ImportSettings::instance()->getImageSortBy());
+    d->view->slotSortImagesOrder(ImportSettings::instance()->getImageSortOrder());
+}
+
 void ImportUI::slotCancelButton()
 {
     d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
-                                          i18n("Canceling current operation, please wait..."));
+                                          i18nc("@info:status", "Canceling current operation, please wait..."));
     d->controller->slotCancel();
     d->historyUpdater->slotCancel();
     d->currentlyDeleting.clear();
@@ -935,7 +944,7 @@ bool ImportUI::dialogClosed()
     if (isBusy())
     {
         if (KMessageBox::questionYesNo(this,
-                                       i18n("Do you want to close the dialog "
+                                       i18nc("@info", "Do you want to close the dialog "
                                             "and cancel the current operation?"))
                 == KMessageBox::No)
         {
@@ -944,7 +953,7 @@ bool ImportUI::dialogClosed()
     }
 
     d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
-                                          i18n("Disconnecting from camera, please wait..."));
+                                          i18nc("@info:status", "Disconnecting from camera, please wait..."));
 
     if (isBusy())
     {
@@ -977,18 +986,21 @@ void ImportUI::finishDialog()
         }
     }
 
-    // When a directory is created, a watch is put on it to spot new files
-    // but it can occur that the file is copied there before the watch is
-    // completely setup. That is why as an extra safeguard run CollectionScanner
-    // over the folders we used. Bug: 119201
+    if (!d->foldersToScan.isEmpty()) {
+        // TODO is this note valid anymore with new progress handling?
+        // When a directory is created, a watch is put on it to spot new files
+        // but it can occur that the file is copied there before the watch is
+        // completely setup. That is why as an extra safeguard run CollectionScanner
+        // over the folders we used. Bug: 119201
 
-    d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
-                                          i18n("Scanning for new files, please wait..."));
+        d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
+                                          i18nc("@info:status", "Scanning for new files, please wait..."));
 
-    NewItemsFinder* tool = new NewItemsFinder(NewItemsFinder::ScheduleCollectionScan, d->foldersToScan.toList());
-    tool->start();
+        NewItemsFinder* tool = new NewItemsFinder(NewItemsFinder::ScheduleCollectionScan, d->foldersToScan.toList());
+        tool->start();
 
-    d->foldersToScan.clear();
+        d->foldersToScan.clear();
+    }
 
     deleteLater();
 
@@ -1049,8 +1061,8 @@ void ImportUI::slotBusy(bool val)
 
         m_animLogo->stop();
         d->statusProgressBar->setProgressValue(0);
-        d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18n("Ready"));
-        
+        d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18nc("@info:status", "Ready"));
+
         // like WDestructiveClose, but after camera controller operation has safely finished
         if (d->closed)
         {
@@ -1150,13 +1162,13 @@ void ImportUI::slotConnected(bool val)
     if (!val)
     {
         if (KMessageBox::warningYesNo(this,
-                                      i18n("Failed to connect to the camera. "
+                                      i18nc("@info", "Failed to connect to the camera. "
                                            "Please make sure it is connected "
                                            "properly and turned on. "
                                            "Would you like to try again?"),
-                                      i18n("Connection Failed"),
-                                      KGuiItem(i18n("Retry")),
-                                      KGuiItem(i18n("Abort")))
+                                      i18nc("@title:window", "Connection Failed"),
+                                      KGuiItem(i18nc("@action Connection failed, try again?", "Retry")),
+                                      KGuiItem(i18nc("@action Connection failed, try again?", "Abort")))
                 == KMessageBox::Yes)
         {
             QTimer::singleShot(0, d->controller, SLOT(slotConnect()));
@@ -1169,7 +1181,11 @@ void ImportUI::slotConnected(bool val)
     else
     {
         refreshFreeSpace();
-        d->controller->listFolders();
+        // FIXME ugly c&p from slotFolderList
+        KSharedConfig::Ptr config = KGlobal::config();
+        KConfigGroup group        = config->group(d->configGroupName);
+        bool useMetadata          = group.readEntry(d->configUseFileMetadata, false);
+        d->controller->listRootFolder(useMetadata);
     }
 }
 
@@ -1185,15 +1201,19 @@ void ImportUI::slotFolderList(const QStringList& folderList)
 
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
-    bool useMetadata          = group.readEntry(d->configUseMetadataDateEntry, false);
+    bool useMetadata          = group.readEntry(d->configUseFileMetadata, false);
 
+    d->controller->getFolderList(folderList); // send the folder list to the controller to be able to determine if listing is finish.
+    // when getting a list of subfolders, request their contents and also their subfolders
     for (QStringList::const_iterator it = folderList.constBegin();
          it != folderList.constEnd(); ++it)
     {
         d->controller->listFiles(*it, useMetadata);
+        d->controller->listFolders(*it);
     }
 }
 
+// FIXME d->filesToBeAdded seems to be unused...
 void ImportUI::slotFileList(const CamItemInfoList& fileList)
 {
     if (d->closed)
@@ -1273,10 +1293,10 @@ void ImportUI::slotUpload()
     patternList.append(QString("\n%1|Camera RAW files").arg(QString(KDcrawIface::KDcraw::rawFiles())));
     fileformats = patternList.join("\n");
 
-    kDebug() << "fileformats=" << fileformats;
+    //kDebug() << "fileformats=" << fileformats;
 
     KUrl::List urls = KFileDialog::getOpenUrls(CollectionManager::instance()->oneAlbumRootPath(),
-                                               fileformats, this, i18n("Select Image to Upload"));
+                                               fileformats, this, i18nc("@title:window", "Select Image to Upload"));
 
     if (!urls.isEmpty())
     {
@@ -1309,7 +1329,7 @@ void ImportUI::slotUploadItems(const KUrl::List& urls)
 
         if (totalKbSize >= d->cameraFreeSpace->kBAvail())
         {
-            KMessageBox::error(this, i18n("There is not enough free space on the Camera Medium "
+            KMessageBox::error(this, i18nc("@info", "There is not enough free space on the Camera Medium "
                                           "to upload pictures.\n\n"
                                           "Space require: %1\n"
                                           "Available free space: %2",
@@ -1363,10 +1383,10 @@ void ImportUI::slotUploadItems(const KUrl::List& urls)
 
         while (d->view->hasImage(uploadInfo))
         {
-            QString msg(i18n("Camera Folder <b>%1</b> already contains the item <b>%2</b>.<br/>"
+            QString msg(i18nc("@info", "Camera Folder <resource>%1</resource> already contains the item <resource>%2</resource>.<nl>"
                              "Please enter a new filename (without extension):",
                              cameraFolder, fi.fileName()));
-            name = KInputDialog::getText(i18n("File already exists"), msg, name, &ok, this);
+            uploadInfo.name = KInputDialog::getText(i18nc("@title:window", "File already exists"), msg, name, &ok, this) + ext;
 
             if (!ok)
             {
@@ -1374,7 +1394,7 @@ void ImportUI::slotUploadItems(const KUrl::List& urls)
             }
         }
 
-        d->controller->upload(fi, name + ext, cameraFolder);
+        d->controller->upload(fi, uploadInfo.name, cameraFolder);
     }
 
     delete dlg;
@@ -1427,7 +1447,7 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
     if (d->albumCustomizer->folderDateFormat() == AlbumCustomizer::CustomDateFormat &&
             !d->albumCustomizer->customDateFormatIsValid())
     {
-        KMessageBox::information(this, i18n("Your custom target album date format is not valid. Please check your settings..."));
+        KMessageBox::information(this, i18nc("@info", "Your custom target album date format is not valid. Please check your settings..."));
         return;
     }
 
@@ -1466,7 +1486,7 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 
                 if (!cl.isAvailable() || cl.isNull())
                 {
-                    KMessageBox::information(this, i18n("Collection which host your default target album set to process "
+                    KMessageBox::information(this, i18nc("@info", "Collection which host your default target album set to process "
                                                         "download from camera device is not available. Please select another one from "
                                                         "camera configuration dialog."));
                     return;
@@ -1474,7 +1494,7 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
             }
             else
             {
-                KMessageBox::information(this, i18n("Your default target album set to process download "
+                KMessageBox::information(this, i18nc("@info", "Your default target album set to process download "
                                                     "from camera device is not available. Please select another one from "
                                                     "camera configuration dialog."));
                 return;
@@ -1484,14 +1504,15 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
         }
         else
         {
-            album = man->currentAlbum();
+            int albumId = group.readEntry(d->configLastTargetAlbum, man->currentAlbums().first()->globalID());
+            album = man->findAlbum(albumId);
 
             if (album && album->type() != Album::PHYSICAL)
             {
                 album = 0;
             }
 
-            QString header(i18n("<p>Please select the destination album from the digiKam library to "
+            QString header(i18nc("@info", "<p>Please select the destination album from the digiKam library to "
                                 "import the camera pictures into.</p>"));
 
             album = AlbumSelectDialog::selectAlbum(this, (PAlbum*)album, header);
@@ -1502,6 +1523,7 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
             }
 
             pAlbum = dynamic_cast<PAlbum*>(album);
+            group.writeEntry(d->configLastTargetAlbum, album->globalID());
         }
     }
     else
@@ -1584,11 +1606,11 @@ void ImportUI::slotDownloaded(const QString& folder, const QString& file, int st
             // Pop-up a notification to inform user when all is done, and inform if auto-rotation will take place.
             if (autoRotate)
             {
-                KNotificationWrapper("cameradownloaded", i18n("Images download finished, you can now detach your camera while the images will be auto-rotated"), this, windowTitle());
+                KNotificationWrapper("cameradownloaded", i18nc("@info Popup notification", "Images download finished, you can now detach your camera while the images will be auto-rotated"), this, windowTitle());
             }
             else
             {
-                KNotificationWrapper("cameradownloaded", i18n("Images download finished"), this, windowTitle());
+                KNotificationWrapper("cameradownloaded", i18nc("@info Popup notification", "Images download finished"), this, windowTitle());
             }
         }
     }
@@ -1744,6 +1766,7 @@ void ImportUI::toggleLock(CamItemInfo& info)
     }
 }
 
+// TODO is this really necessary? why not just use the folders from listfolders call?
 QMap<QString, int> ImportUI::countItemsByFolders() const
 {
     QString                      path;
@@ -1890,7 +1913,7 @@ void ImportUI::deleteItems(bool onlySelected, bool onlyDownloaded)
     // If we want to delete some locked files, just give a feedback to user.
     if (!lockedList.isEmpty())
     {
-        QString infoMsg(i18n("The items listed below are locked by camera (read-only). "
+        QString infoMsg(i18nc("@info", "The items listed below are locked by camera (read-only). "
                              "These items will not be deleted. If you really want to delete these items, "
                              "please unlock them and try again."));
         //CameraMessageBox::informationList(this, infoMsg, lockedList, i18n("Information"));
@@ -1901,11 +1924,11 @@ void ImportUI::deleteItems(bool onlySelected, bool onlyDownloaded)
         return;
     }
 
-    QString warnMsg(i18np("About to delete this image. "
-                          "Deleted file is unrecoverable. "
+    QString warnMsg(i18ncp("@info", "About to delete this image. "
+                          "<warning>Deleted file is unrecoverable.</warning> "
                           "Are you sure?",
                           "About to delete these %1 images. "
-                          "Deleted files are unrecoverable. "
+                          "<warning>Deleted files are unrecoverable.</warning> "
                           "Are you sure?",
                           deleteList.count()));
 
@@ -1951,18 +1974,18 @@ bool ImportUI::checkDiskSpace(PAlbum *pAlbum)
     if (dSize >= kBAvail)
     {
         KGuiItem cont = KStandardGuiItem::cont();
-        cont.setText(i18n("Try Anyway"));
+        cont.setText(i18nc("@action:button Not enough disk-space warning", "Try Anyway"));
         KGuiItem cancel = KStandardGuiItem::cancel();
-        cancel.setText(i18n("Cancel Download"));
+        cancel.setText(i18nc("@action:button Not enough disk-space warning", "Cancel Download"));
         int result =
                 KMessageBox::warningYesNo(this,
-                                          i18n("There is not enough free space on the disk of the album you selected "
+                                          i18nc("@info", "There is not enough free space on the disk of the album you selected "
                                                "to download and process the selected pictures from the camera.\n\n"
                                                "Estimated space required: %1\n"
                                                "Available free space: %2",
                                                KIO::convertSizeFromKiB(dSize),
                                                KIO::convertSizeFromKiB(kBAvail)),
-                                          i18n("Insufficient Disk Space"),
+                                          i18nc("@title:window", "Insufficient Disk Space"),
                                           cont, cancel);
 
         if (result == KMessageBox::No)
@@ -2288,6 +2311,7 @@ void ImportUI::slotNewSelection(bool hasSelection)
         d->renameCustomizer->renameManager()->parseFiles();
     }
 
+    // TODO why new name is calculated on selection basis?!
     slotDownloadNameChanged();
 
     unsigned long fSize = 0;
@@ -2304,7 +2328,7 @@ void ImportUI::slotImageSelected(const CamItemInfoList& selection, const CamItem
     {
         case 0:
         {
-            d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18np("No item selected (%1 item)",
+            d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18ncp("@info:status", "No item selected (%1 item)",
                                                                                      "No item selected (%1 items)",
                                                                                      num_images));
 
@@ -2321,22 +2345,25 @@ void ImportUI::slotImageSelected(const CamItemInfoList& selection, const CamItem
 
                 int index = listAll.indexOf(selection.first()) + 1;
 
-                d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, selection.first().url().fileName()
-                                                      + i18n(" (%1 of %2)", index, num_images));
+                d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
+                                                      i18nc("@info:status Filename of first selected item of number of items",
+                                                            "<filename>%1</filename> (%2 of %3)",
+                                                            selection.first().url().fileName(), index, num_images));
             }
             else
             {
                 d->rightSideBar->slotNoCurrentItem();
-                d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18np("No item selected (%1 item)",
-                                                                                         "No item selected (%1 items)",
-                                                                                         num_images));
+                d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
+                                                      i18ncp("@info:status", "No item selected (%1 item)",
+                                                                             "No item selected (%1 items)",
+                                                                             num_images));
             }
 
             break;
         }
         default:
         {
-            d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18np("%2/%1 item selected",
+            d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, i18ncp("@info:status", "%2/%1 item selected",
                                                                                      "%2/%1 items selected",
                                                                                      num_images, selection.count()));
             break;
@@ -2423,7 +2450,7 @@ bool ImportUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
         }
         else
         {
-            errMsg = i18n("A file with the same name (%1) already exists in folder %2.",
+            errMsg = i18nc("@info", "A file with the same name (<filename>%1</filename>) already exists in folder <resource>%2</resource>.",
                           sub, parentURL.toLocalFile());
             return false;
         }
@@ -2435,7 +2462,7 @@ bool ImportUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
 
     if (!parent)
     {
-        errMsg = i18n("Failed to find Album for path '%1'.", parentURL.toLocalFile());
+        errMsg = i18nc("@info", "Failed to find Album for path <filename>%1</filename>.", parentURL.toLocalFile());
         return false;
     }
 
@@ -2446,7 +2473,7 @@ void ImportUI::slotEditKeys()
 {
     KShortcutsDialog dialog(KShortcutsEditor::AllActions,
                             KShortcutsEditor::LetterShortcutsAllowed, this);
-    dialog.addCollection(actionCollection(), i18n("General"));
+    dialog.addCollection(actionCollection(), i18nc("@title", "General"));
     dialog.configure();
 }
 
@@ -2587,7 +2614,6 @@ bool ImportUI::thumbbarVisibility() const
 
 void ImportUI::slotSwitchedToPreview()
 {
-    d->camItemPreviewAction->setChecked(true);
     d->zoomBar->setBarMode(DZoomBar::PreviewZoomCtrl);
     d->imageViewSelectionAction->setCurrentAction(d->camItemPreviewAction);
     toogleShowBar();
@@ -2596,7 +2622,6 @@ void ImportUI::slotSwitchedToPreview()
 void ImportUI::slotSwitchedToIconView()
 {
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
-    d->iconViewAction->setChecked(true);
     d->imageViewSelectionAction->setCurrentAction(d->iconViewAction);
     toogleShowBar();
 }
@@ -2604,7 +2629,6 @@ void ImportUI::slotSwitchedToIconView()
 void ImportUI::slotSwitchedToMapView()
 {
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
-    d->mapViewAction->setChecked(true);
     d->imageViewSelectionAction->setCurrentAction(d->mapViewAction);
     toogleShowBar();
 }

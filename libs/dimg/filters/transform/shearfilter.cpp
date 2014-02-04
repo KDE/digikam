@@ -113,7 +113,7 @@ void ShearFilter::filterImage()
     int nWidth              = m_orgImage.width();
     int nHeight             = m_orgImage.height();
     uchar* pBits            = m_orgImage.bits();
-    unsigned short* pBits16 = (unsigned short*)m_orgImage.bits();
+    unsigned short* pBits16 = reinterpret_cast<unsigned short*>(m_orgImage.bits());
 
     // get beta ( complementary ) angle for horizontal and vertical angles
     horz_beta_angle = (((d->hAngle < 0.0) ? 180.0 : 90.0) - d->hAngle) * DEG2RAD;
@@ -168,7 +168,7 @@ void ShearFilter::filterImage()
     m_destImage.fill(DColor(d->backgroundColor.rgb(), sixteenBit));
 
     uchar* pResBits            = m_destImage.bits();
-    unsigned short* pResBits16 = (unsigned short*)m_destImage.bits();
+    unsigned short* pResBits16 = reinterpret_cast<unsigned short*>(m_destImage.bits());
 
     PixelsAliasFilter alias;
 

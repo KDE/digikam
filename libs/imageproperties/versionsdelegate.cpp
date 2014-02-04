@@ -322,7 +322,7 @@ void VersionsDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
 
     if (index.row() == 0 && index.model()->rowCount() > 1)
     {
-        painter->drawText(textRect, Qt::AlignVCenter, i18n("%1 (Original)").arg(path.fileName()));
+        painter->drawText(textRect, Qt::AlignVCenter, i18n("%1 (Original)", path.fileName()));
     }
     else if (index.row() == 0 && index.model()->rowCount() == 1)
     {

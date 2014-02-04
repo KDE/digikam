@@ -76,6 +76,7 @@ public Q_SLOTS:
     void slotAssignColorLabel(int);
     void slotAssignRating(int);
     void slotRatingChanged(const KUrl&, int);
+    void slotDockLocationChanged(Qt::DockWidgetArea area);
 
 private:
 

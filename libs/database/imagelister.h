@@ -94,9 +94,10 @@ public:
     void listAlbum(ImageListerReceiver* const receiver, int albumRootId, const QString& album);
 
     /**
-     * List the images which have assigned the tag specified by tagId
+     * List the images which have assigned the tags specified by tagIds
+     * Updated to support multiple tags
      */
-    void listTag(ImageListerReceiver* receiver, int tagId);
+    void listTag(ImageListerReceiver* receiver, QList<int> tagIds);
 
     /**
      * List the images which have faces. An image with n faces will be listed n times.

@@ -49,6 +49,7 @@
 #include "thumbnailschemaupdater.h"
 #include "dbactiontype.h"
 
+//#define DATABASCOREBACKEND_DEBUG 1
 namespace Digikam
 {
 

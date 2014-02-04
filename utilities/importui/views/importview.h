@@ -114,7 +114,7 @@ public Q_SLOTS:
 
     void slotImageRename();
 
-    void slotSortImages(int order);
+    void slotSortImagesBy(int sortBy);
     void slotSortImagesOrder(int order);
     void slotGroupImages(int mode);
 

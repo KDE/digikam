@@ -55,7 +55,7 @@ public:
         iconShowImageFormat(false),
         thumbnailSize(0),
         imageSortOrder(0),
-        imageSorting(0),
+        imageSortBy(0),
         imageGroupMode(0),
         itemLeftClickAction(ImportSettings::ShowPreview),
         showToolTips(false),
@@ -82,7 +82,7 @@ public:
 
     static const QString                configGroupDefault;
     static const QString                configImageSortOrderEntry;
-    static const QString                configImageSortingEntry;
+    static const QString                configImageSortByEntry;
     static const QString                configImageGroupModeEntry;
     static const QString                configItemLeftClickActionEntry;
     static const QString                configDefaultIconSizeEntry;
@@ -132,7 +132,7 @@ public:
 
     int                                 thumbnailSize;
     int                                 imageSortOrder;
-    int                                 imageSorting;
+    int                                 imageSortBy;
     int                                 imageGroupMode;
     ImportSettings::ItemLeftClickAction itemLeftClickAction;
 
@@ -165,7 +165,7 @@ public:
 
 const QString ImportSettings::Private::configGroupDefault("Import Settings");
 const QString ImportSettings::Private::configImageSortOrderEntry("Image Sort Order");
-const QString ImportSettings::Private::configImageSortingEntry("Image Sorting");
+const QString ImportSettings::Private::configImageSortByEntry("Image Sorting"); // TODO not changed due to backwards compatibility
 const QString ImportSettings::Private::configImageGroupModeEntry("Image Group Mode");
 const QString ImportSettings::Private::configItemLeftClickActionEntry("Item Left Click Action");
 const QString ImportSettings::Private::configDefaultIconSizeEntry("Default Icon Size");
@@ -234,8 +234,8 @@ ImportSettings::~ImportSettings()
 
 void ImportSettings::init()
 {
-    d->imageSortOrder               = CamItemSortSettings::SortByFileName;
-    d->imageSorting                 = CamItemSortSettings::AscendingOrder;
+    d->imageSortBy                  = CamItemSortSettings::SortByFileName;
+    d->imageSortOrder               = CamItemSortSettings::AscendingOrder;
     d->imageGroupMode               = CamItemSortSettings::CategoryByFolder;
     d->itemLeftClickAction          = ImportSettings::ShowPreview;
 
@@ -278,8 +278,8 @@ void ImportSettings::readSettings()
 
     KConfigGroup group              = config->group(d->configGroupDefault);
 
-    d->imageSortOrder               = group.readEntry(d->configImageSortOrderEntry, (int)CamItemSortSettings::SortByFileName);
-    d->imageSorting                 = group.readEntry(d->configImageSortingEntry,   (int)CamItemSortSettings::AscendingOrder);
+    d->imageSortOrder               = group.readEntry(d->configImageSortOrderEntry, (int)CamItemSortSettings::AscendingOrder);
+    d->imageSortBy                  = group.readEntry(d->configImageSortByEntry,    (int)CamItemSortSettings::SortByFileName);
     d->imageGroupMode               = group.readEntry(d->configImageGroupModeEntry, (int)CamItemSortSettings::CategoryByFolder);
 
     d->itemLeftClickAction          = ImportSettings::ItemLeftClickAction(group.readEntry( d->configItemLeftClickActionEntry,
@@ -334,7 +334,7 @@ void ImportSettings::saveSettings()
     KConfigGroup group = config->group(d->configGroupDefault);
 
     group.writeEntry(d->configImageSortOrderEntry,               (int)d->imageSortOrder);
-    group.writeEntry(d->configImageSortingEntry,                 (int)d->imageSorting);
+    group.writeEntry(d->configImageSortByEntry,                  (int)d->imageSortBy);
     group.writeEntry(d->configImageGroupModeEntry,               (int)d->imageGroupMode);
     group.writeEntry(d->configItemLeftClickActionEntry,          (int)d->itemLeftClickAction);
     group.writeEntry(d->configDefaultIconSizeEntry,              QString::number(d->thumbnailSize));
@@ -388,14 +388,14 @@ int ImportSettings::getImageSortOrder() const
     return d->imageSortOrder;
 }
 
-void ImportSettings::setImageSorting(int sorting)
+void ImportSettings::setImageSortBy(int sortBy)
 {
-    d->imageSorting = sorting;
+    d->imageSortBy = sortBy;
 }
 
-int ImportSettings::getImageSorting() const
+int ImportSettings::getImageSortBy() const
 {
-    return d->imageSorting;
+    return d->imageSortBy;
 }
 
 void ImportSettings::setImageGroupMode(int mode)

@@ -228,7 +228,7 @@ void GreycstorationFilter::filterImage()
     }
     else                                    // 16 bits image.
     {
-        d->img = CImg<unsigned short>((unsigned short*)data, 4, width, height, 1, false).
+        d->img = CImg<unsigned short>(reinterpret_cast<unsigned short*>(data), 4, width, height, 1, false).
                  get_permute_axes("yzvx");
     }
 
@@ -297,7 +297,7 @@ void GreycstorationFilter::filterImage()
     }
     else                                     // 16 bits image.
     {
-        unsigned short* ptr = (unsigned short*)newData;
+        unsigned short* ptr = reinterpret_cast<unsigned short*>(newData);
 
         for (y = 0; y < newHeight; ++y)
         {

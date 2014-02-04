@@ -605,8 +605,10 @@ void TableViewModel::slotDatabaseImageChanged(const ImageChangeset& imageChanges
     ///       let the TableViewColumn object decide which are relevant
     /// @todo Re-population of the model is also triggered, thus making this
     ///       check irrelevant. Needs to be fixed.
+    /// @todo If the user has never set which column should define the sorting,
+    ///       the sortColumn is invalid. We should set a useful default.
     bool needToResort = false;
-    if ((d->sortColumn>=0)&&(d->sortColumn<=d->columnObjects.count()))
+    if ((d->sortColumn>=0)&&(d->sortColumn<d->columnObjects.count()))
     {
         TableViewColumn* const sortColumnObject = d->columnObjects.at(d->sortColumn);
         needToResort = sortColumnObject->columnAffectedByChangeset(imageChangeset);

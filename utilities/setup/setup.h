@@ -39,8 +39,6 @@
 namespace Digikam
 {
 
-class SetupPlugins;
-
 class Setup : public KPageDialog
 {
     Q_OBJECT
@@ -67,6 +65,7 @@ public:
         ICCPage,
         LightTablePage,
         SlideshowPage,
+        ImageQualityPage,
         CameraPage,
         KipiPluginsPage,
         MiscellaneousPage,
@@ -83,6 +82,7 @@ public:
      */
     static bool exec(Page page = LastPageUsed);
     static bool exec(QWidget* const parent, Page page = LastPageUsed);
+
     /** Show a setup dialog. Only the specified page will be available.
      */
     static bool execSinglePage(Page page);
@@ -90,6 +90,8 @@ public:
 
     static bool execTemplateEditor(QWidget* const parent, const Template& t);
     void setTemplate(const Template& t);
+
+    static bool execMetadataFilters(QWidget* const parent, int tab);
 
     QSize sizeHint() const;
 

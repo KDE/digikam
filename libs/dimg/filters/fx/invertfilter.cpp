@@ -80,7 +80,7 @@ void InvertFilter::filterImage()
     }
     else               // 16 bits image.
     {
-        unsigned short* ptr = (unsigned short*)m_destImage.bits();
+        unsigned short* ptr = reinterpret_cast<unsigned short*>(m_destImage.bits());
 
         for (uint i = 0 ; i < m_destImage.numPixels() ; ++i)
         {

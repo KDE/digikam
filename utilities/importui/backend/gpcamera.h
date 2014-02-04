@@ -55,8 +55,7 @@ public:
 
     void cancel();
 
-    void getAllFolders(const QString& folder, QStringList& subFolderList);
-    bool getSubFolders(const QString& folder, QStringList& subFolderList);
+    bool getFolders(const QString& folder);
     bool getItemsList(const QString& folder, QStringList& itemsList);
     bool getItemsInfoList(const QString& folder, bool useMetadata, CamItemInfoList& items);
     void getItemInfo(const QString& folder, const QString& itemName, CamItemInfo& info, bool useMetadata);
