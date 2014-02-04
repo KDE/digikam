@@ -7,7 +7,7 @@
  * Description : abstract camera interface class
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,6 +45,7 @@ class DMetadata;
 class DKCamera : public QObject
 {
     Q_OBJECT
+
 public:
 
     enum CameraDriverType
@@ -96,12 +97,12 @@ public:
     QString path()  const;
     QString uuid()  const;
 
-    bool    thumbnailSupport() const;
-    bool    deleteSupport() const;
-    bool    uploadSupport() const;
-    bool    mkDirSupport() const;
-    bool    delDirSupport() const;
-    bool    captureImageSupport() const;
+    bool    thumbnailSupport()           const;
+    bool    deleteSupport()              const;
+    bool    uploadSupport()              const;
+    bool    mkDirSupport()               const;
+    bool    delDirSupport()              const;
+    bool    captureImageSupport()        const;
     bool    captureImagePreviewSupport() const;
 
     QString mimeType(const QString& fileext) const;
@@ -130,8 +131,9 @@ protected:
     QString m_path;
     QString m_title;
     QString m_uuid;
-    
+
 Q_SIGNALS:
+
     void signalFolderList(const QStringList&);
 };
 
