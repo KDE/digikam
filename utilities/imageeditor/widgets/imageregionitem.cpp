@@ -259,7 +259,7 @@ void ImageRegionItem::paintExtraData(QPainter* const p)
             if (d_ptr->drawRect.contains(pt))
             {
                 int x = (int)((double)pt.x() / zoomFactor);
-                int y = (int)((double)pt.y()/ zoomFactor);
+                int y = (int)((double)pt.y() / zoomFactor);
 
                 //QPoint hp(contentsToViewport(QPointF(x, y)));
                 QPointF hp(mapToScene(QPointF(x, y)));
