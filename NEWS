@@ -153,4 +153,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 133 ==> 233773 - Editor Canvas : ctrl + shift + e doesn't enable scrolling.
 134 ==> 170364 - Editor Canvas : Expand selection rectangle by dragging sides in image editor [patch].
 135 ==> 288761 - Cached image corrupted after modifying metadata.
-136 ==> 
+136 ==> 326018 - Freezes when I attempt to use the sharpen/refocus tool.
+137 ==> 
