@@ -1428,8 +1428,8 @@ void DigikamApp::slotAlbumSelected(bool val)
             d->deleteAction->setEnabled(isNormalAlbum);
             d->addImagesAction->setEnabled(isNormalAlbum || isAlbumRoot);
             d->propsEditAction->setEnabled(isNormalAlbum);
-            d->openInFileManagerAction->setEnabled(true);
-            d->openInTerminalAction->setEnabled(true);
+            d->openInFileManagerAction->setEnabled(isNormalAlbum || isAlbumRoot);
+            d->openInTerminalAction->setEnabled(isNormalAlbum || isAlbumRoot);
             d->newAction->setEnabled(isNormalAlbum || isAlbumRoot);
             d->addFoldersAction->setEnabled(isNormalAlbum || isAlbumRoot);
             d->writeAlbumMetadataAction->setEnabled(isNormalAlbum || isAlbumRoot);
