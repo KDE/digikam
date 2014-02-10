@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QRegExp>
+#include <QPalette>
 
 // KDE includes
 

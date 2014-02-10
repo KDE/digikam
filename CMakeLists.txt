@@ -690,9 +690,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                     ${KGEOMAP_DEFINITIONS}
                    )
 
-    # QT3 support rules
-    ADD_DEFINITIONS(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
-
     # Enable C++ Exceptions support, require by Greycstoration algorithm (CImg.h)
     IF(NOT MSVC)
         ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})

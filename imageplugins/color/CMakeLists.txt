@@ -27,12 +27,10 @@ TARGET_LINK_LIBRARIES(
     ${QT_QTGUI_LIBRARY}
     ${KDCRAW_LIBRARIES}
     ${KEXIV2_LIBRARIES}
-
-#    ${QT_QT3SUPPORT_LIBRARY}
     )
 
-INSTALL(TARGETS digikamimageplugin_color DESTINATION ${PLUGIN_INSTALL_DIR})
-INSTALL(FILES digikamimageplugin_color_ui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam)
+INSTALL(TARGETS digikamimageplugin_color       DESTINATION ${PLUGIN_INSTALL_DIR})
+INSTALL(FILES digikamimageplugin_color_ui.rc   DESTINATION ${DATA_INSTALL_DIR}/digikam)
 INSTALL(FILES digikamimageplugin_color.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-INSTALL(FILES adjustlevelstool.upd DESTINATION ${DATA_INSTALL_DIR}/kconf_update)
+INSTALL(FILES adjustlevelstool.upd             DESTINATION ${DATA_INSTALL_DIR}/kconf_update)
 

@@ -42,6 +42,7 @@ extern "C"
 #include <QMatrix>
 #include <QStringList>
 #include <QTextDocument>
+#include <QtGlobal>
 
 // KDE includes
 
@@ -378,11 +379,11 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
 
     const int MAX_IPC_SIZE = (1024 * 32);
     char      buffer[MAX_IPC_SIZE];
-    Q_LONG    len;
+    qint64    len;
 
     while (((len = sFile.read(buffer, MAX_IPC_SIZE)) != 0) && !m_cancel)
     {
-        if ((len == -1) || (dFile.write(buffer, (Q_ULONG)len) != len))
+        if ((len == -1) || (dFile.write(buffer, (quint64)len) != len))
         {
             sFile.close();
             dFile.close();
@@ -485,11 +486,11 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
 
     char buffer[MAX_IPC_SIZE];
 
-    Q_LONG len;
+    qint64 len;
 
     while (((len = sFile.read(buffer, MAX_IPC_SIZE)) != 0) && !m_cancel)
     {
-        if ((len == -1) || (dFile.write(buffer, (Q_ULONG)len) == -1))
+        if ((len == -1) || (dFile.write(buffer, (quint64)len) == -1))
         {
             sFile.close();
             dFile.close();

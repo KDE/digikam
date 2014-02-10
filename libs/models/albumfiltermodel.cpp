@@ -7,7 +7,7 @@
  * Description : Qt Model for Albums - filter model
  *
  * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2009      by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2014      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -355,7 +355,7 @@ bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& righ
                         return QString::compare(leftAlbum->title(), rightAlbum->title(), sortCaseSensitivity()) < 0;
                 }
             case AlbumSettings::ByDate:
-                return compareByOrder(leftAlbum->date(),rightAlbum->date(),Qt::Ascending) < 0;
+                return compareByOrder(leftAlbum->date(),rightAlbum->date(),Qt::AscendingOrder) < 0;
             default:
                 return KStringHandler::naturalCompare(leftAlbum->category(),rightAlbum->category()) < 0;
         }

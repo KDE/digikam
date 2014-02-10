@@ -6,7 +6,7 @@
  * Date        : 2006-20-12
  * Description : a view to embed Phonon media player.
  *
- * Copyright (C) 2006-2012 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,13 +61,13 @@ bool MediaPlayerMouseClickFilter::eventFilter(QObject* obj, QEvent* event)
 {
     if (event->type() == QEvent::MouseButtonPress)
     {
-        QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(event);
+        QMouseEvent* const mouseEvent = dynamic_cast<QMouseEvent*>(event);
 
         if (mouseEvent && mouseEvent->button() == Qt::LeftButton)
         {
             if (m_parent)
             {
-                MediaPlayerView* mplayer = dynamic_cast<MediaPlayerView*>(m_parent);
+                MediaPlayerView* const mplayer = dynamic_cast<MediaPlayerView*>(m_parent);
 
                 if (mplayer)
                 {
@@ -146,10 +146,10 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     QLabel* errorMsg       = new QLabel(i18n("An error has occurred with the media player...."), this);
 
     errorMsg->setAlignment(Qt::AlignCenter);
-    d->errorView->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
+    d->errorView->setFrameStyle(QFrame::StyledPanel|QFrame::Plain);
     d->errorView->setLineWidth(1);
 
-    QGridLayout* grid = new QGridLayout;
+    QGridLayout* const grid = new QGridLayout;
     grid->addWidget(errorMsg, 1, 0, 1, 3 );
     grid->setColumnStretch(0, 10);
     grid->setColumnStretch(2, 10);
@@ -170,7 +170,7 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     d->player->mediaObject()->setTickInterval(100);
     d->player->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    d->playerView->setFrameStyle(QFrame::GroupBoxPanel|QFrame::Plain);
+    d->playerView->setFrameStyle(QFrame::StyledPanel|QFrame::Plain);
     d->playerView->setLineWidth(1);
 
     d->grid = new QGridLayout;

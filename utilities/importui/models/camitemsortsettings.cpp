@@ -128,7 +128,7 @@ Qt::SortOrder CamItemSortSettings::defaultSortOrderForSortRole(SortRole role)
         case SortByCreationDate:
             return Qt::AscendingOrder;
         case SortByDownloadState:
-            return Qt::Ascending;
+            return Qt::AscendingOrder;
         case SortByRating:
             return Qt::DescendingOrder;
         default:
