@@ -106,7 +106,7 @@ public:
 
     ImagePreviewView::Mode mode;
 
-    ImagePreviewViewItem*      item;
+    ImagePreviewViewItem*  item;
 
     QAction*               escapePreviewAction;
     QAction*               prevAction;
