@@ -187,9 +187,10 @@ IF (NepomukCore_FOUND)
 
     SET(digikamnepomukservices_SRCS ${libnepomukservices_SRCS} )
 
-    INCLUDE(SopranoAddOntology)
-    SOPRANO_ADD_ONTOLOGY(digikamnepomukservices_SRCS "${SHAREDDESKTOPONTOLOGIES_ROOT_DIR}/nie/nie.trig" "NIE" "Nepomuk::Vocabulary" "trig")
-    SOPRANO_ADD_ONTOLOGY(digikamnepomukservices_SRCS "${SHAREDDESKTOPONTOLOGIES_ROOT_DIR}/nie/nfo.trig" "NFO" "Nepomuk::Vocabulary" "trig")
+    # Veaceslav Note: These lines fail when generating cmake if Nepomuk Support is disabled
+    #INCLUDE(SopranoAddOntology)
+    #SOPRANO_ADD_ONTOLOGY(digikamnepomukservices_SRCS "${SHAREDDESKTOPONTOLOGIES_ROOT_DIR}/nie/nie.trig" "NIE" "Nepomuk::Vocabulary" "trig")
+    #SOPRANO_ADD_ONTOLOGY(digikamnepomukservices_SRCS "${SHAREDDESKTOPONTOLOGIES_ROOT_DIR}/nie/nfo.trig" "NFO" "Nepomuk::Vocabulary" "trig")
 
     KDE4_ADD_PLUGIN(digikamnepomukservice ${digikamnepomukservices_SRCS})
 
