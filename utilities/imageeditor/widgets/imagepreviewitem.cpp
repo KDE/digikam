@@ -45,6 +45,8 @@ namespace Digikam
 
 ImagePreviewItem::ImagePreviewItem()
 {
+    Q_D(GraphicsDImgItem);
+    d->init(this);
 }
 
 ImagePreviewItem::~ImagePreviewItem()
