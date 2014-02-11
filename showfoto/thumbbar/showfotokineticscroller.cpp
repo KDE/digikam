@@ -229,8 +229,6 @@ bool ShowfotoKineticScroller::eventFilter(QObject* object, QEvent* event)
         }
     }
         break;
-    default:
-        break;
     }
 
     return true; // filter event
