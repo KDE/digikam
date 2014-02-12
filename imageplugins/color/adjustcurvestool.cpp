@@ -140,9 +140,6 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* const parent)
     connect(d->gboxSettings, SIGNAL(signalScaleChanged()),
             this, SLOT(slotScaleChanged()));
 
-    connect(d->previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotPreview()));
-
     connect(d->previewWidget, SIGNAL(signalCapturedPointFromOriginal(Digikam::DColor,QPoint)),
             d->settingsView, SLOT(slotSpotColorChanged(Digikam::DColor)));
 

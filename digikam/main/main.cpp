@@ -7,7 +7,7 @@
  * Description : main program from digiKam
  *
  * Copyright (C) 2002-2006 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2002-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -83,11 +83,11 @@ int main(int argc, char* argv[])
     KCmdLineArgs::init(argc, argv, &aboutData);
 
     KCmdLineOptions options;
-    options.add("download-from <path>", ki18n("Open camera dialog at <path>"));
-    options.add("download-from-udi <udi>", ki18n("Open camera dialog for the device with Solid UDI <udi>"));
-    options.add("detect-camera", ki18n("Automatically detect and open a connected gphoto2 camera"));
+    options.add("download-from <path>",     ki18n("Open camera dialog at <path>"));
+    options.add("download-from-udi <udi>",  ki18n("Open camera dialog for the device with Solid UDI <udi>"));
+    options.add("detect-camera",            ki18n("Automatically detect and open a connected gphoto2 camera"));
     options.add("database-directory <dir>", ki18n("Start digikam with the SQLite database file found in the directory <dir>"));
-    KCmdLineArgs::addCmdLineOptions( options );
+    KCmdLineArgs::addCmdLineOptions(options);
 
     KExiv2Iface::KExiv2::initializeExiv2();
 
@@ -95,8 +95,8 @@ int main(int argc, char* argv[])
 
     // Check if SQLite Qt4 plugin is available.
 
-    if (!QSqlDatabase::isDriverAvailable(DatabaseParameters::SQLiteDatabaseType())
-        && !QSqlDatabase::isDriverAvailable(DatabaseParameters::MySQLDatabaseType()))
+    if (!QSqlDatabase::isDriverAvailable(DatabaseParameters::SQLiteDatabaseType()) &&
+        !QSqlDatabase::isDriverAvailable(DatabaseParameters::MySQLDatabaseType()))
     {
         if (QSqlDatabase::drivers().isEmpty())
         {
@@ -179,8 +179,8 @@ int main(int argc, char* argv[])
      * The first real dbus instance is registered within the DigikamApp() constructor,
      * so we create a service on dbus which is unregistered after initialization the application.
      */
-    QDBusConnection::sessionBus().registerService("org.kde.digikam.startup-"
-            + QString::number(QCoreApplication::instance()->applicationPid()));
+    QDBusConnection::sessionBus().registerService("org.kde.digikam.startup-" +
+                     QString::number(QCoreApplication::instance()->applicationPid()));
 
     // initialize database
     AlbumManager::instance()->setDatabase(params, !commandLineDBPath.isNull(), firstAlbumPath);
@@ -194,11 +194,12 @@ int main(int argc, char* argv[])
     //
     // Right now this is the easiest and cleanest fix for the described problem, but we might re-think the
     // solution later on, just in case there are better ways to do it.
-    QObject::connect(digikam, SIGNAL(destroyed(QObject*)), &app, SLOT(quit()));
+    QObject::connect(digikam, SIGNAL(destroyed(QObject*)),
+                     &app, SLOT(quit()));
 
     // Unregister the dummy service
-    QDBusConnection::sessionBus().unregisterService("org.kde.digikam.startup-"
-            + QString::number(QCoreApplication::instance()->applicationPid()));
+    QDBusConnection::sessionBus().unregisterService("org.kde.digikam.startup-" +
+                     QString::number(QCoreApplication::instance()->applicationPid()));
 
 
     app.setTopWidget(digikam);

@@ -121,9 +121,6 @@ BlurTool::BlurTool(QObject* const parent)
 
     connect(d->radiusInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
-
-    connect(d->previewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotTimer()));
 }
 
 BlurTool::~BlurTool()

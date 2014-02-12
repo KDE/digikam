@@ -6,7 +6,7 @@
  * Date        : 2006-21-12
  * Description : digiKam light table preview item.
  *
- * Copyright (C) 2006-2011 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -35,7 +35,6 @@
 
 #include "imageinfo.h"
 #include "imagepreviewview.h"
-#include "digikam_export.h"
 
 namespace Digikam
 {
@@ -46,11 +45,11 @@ class LightTablePreview : public ImagePreviewView
 
 public:
 
-    explicit LightTablePreview(QWidget* parent = 0);
+    explicit LightTablePreview(QWidget* const parent = 0);
     ~LightTablePreview();
 
     void setDragAndDropEnabled(bool b);
-    void setDragAndDropMessage();
+    void showDragAndDropMessage();
 
 Q_SIGNALS:
 

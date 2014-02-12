@@ -3,8 +3,6 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/../data/database/dbconfigversion.h.cm
 
 # Shared libdigikamcore ################################################################
 
-
-
 IF(NOT PGF_FOUND)
    # Disable libpgf warnings.
    SET_SOURCE_FILES_PROPERTIES(${libpgf_SRCS} PROPERTIES COMPILE_FLAGS "-w")
@@ -24,7 +22,6 @@ SET(digikamcore_LIB_SRCS
         ${libdmetadata_SRCS}
         ${libjpegutils_SRCS}
         ${libprogressmanager_SRCS}
-        ${libthememanager_SRCS}
         ${libdatabasecore_SRCS}
         ${libthreadimageio_SRCS}
         ${libpgf_SRCS}
@@ -37,6 +34,7 @@ SET(digikamcore_LIB_SRCS
 
         # widgets and dialogs
         ${libcommonwidgets_SRCS}
+        ${libmainview_SRCS}
         ${libitemview_SRCS}
         ${libeditorwidgets_SRCS}
         ${libiccprofileswidgets_SRCS}
@@ -69,7 +67,6 @@ KDE4_ADD_LIBRARY(digikamcore SHARED ${digikamcore_LIB_SRCS})
 ADD_DEPENDENCIES(digikamcore digikam-gitversion)
 
 TARGET_LINK_LIBRARIES(digikamcore
-        ${QT_QT3SUPPORT_LIBRARY}
         ${QT_QTSQL_LIBRARY}
 
         ${KDE4_KDECORE_LIBS}
@@ -122,7 +119,7 @@ IF(GLIB2_FOUND)
     TARGET_LINK_LIBRARIES(digikamcore ${GLIB2_LIBRARIES} ${liblqr_LIBS} ${liblensfun_LIBS})
 ENDIF(GLIB2_FOUND)
 
-SET_TARGET_PROPERTIES(digikamcore PROPERTIES VERSION 3.0.0 SOVERSION 3)
+SET_TARGET_PROPERTIES(digikamcore PROPERTIES VERSION ${DIGIKAM_MAJOR_VERSION}.0.0 SOVERSION ${DIGIKAM_MAJOR_VERSION})
 
 IF(WIN32)
     SET_TARGET_PROPERTIES(digikamcore PROPERTIES COMPILE_FLAGS -DJPEG_STATIC)
@@ -179,7 +176,7 @@ IF(SQLITE2_FOUND)
     TARGET_LINK_LIBRARIES(digikamdatabase ${SQLITE2_LIBRARIES})
 ENDIF(SQLITE2_FOUND)
 
-SET_TARGET_PROPERTIES(digikamdatabase PROPERTIES VERSION 3.0.0 SOVERSION 3)
+SET_TARGET_PROPERTIES(digikamdatabase PROPERTIES VERSION ${DIGIKAM_MAJOR_VERSION}.0.0 SOVERSION ${DIGIKAM_MAJOR_VERSION})
 
 INSTALL(TARGETS digikamdatabase ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
@@ -190,9 +187,10 @@ IF (NepomukCore_FOUND)
 
     SET(digikamnepomukservices_SRCS ${libnepomukservices_SRCS} )
 
-    INCLUDE(SopranoAddOntology)
-    SOPRANO_ADD_ONTOLOGY(digikamnepomukservices_SRCS "${SHAREDDESKTOPONTOLOGIES_ROOT_DIR}/nie/nie.trig" "NIE" "Nepomuk::Vocabulary" "trig")
-    SOPRANO_ADD_ONTOLOGY(digikamnepomukservices_SRCS "${SHAREDDESKTOPONTOLOGIES_ROOT_DIR}/nie/nfo.trig" "NFO" "Nepomuk::Vocabulary" "trig")
+    # Veaceslav Note: These lines fail when generating cmake if Nepomuk Support is disabled
+    #INCLUDE(SopranoAddOntology)
+    #SOPRANO_ADD_ONTOLOGY(digikamnepomukservices_SRCS "${SHAREDDESKTOPONTOLOGIES_ROOT_DIR}/nie/nie.trig" "NIE" "Nepomuk::Vocabulary" "trig")
+    #SOPRANO_ADD_ONTOLOGY(digikamnepomukservices_SRCS "${SHAREDDESKTOPONTOLOGIES_ROOT_DIR}/nie/nfo.trig" "NFO" "Nepomuk::Vocabulary" "trig")
 
     KDE4_ADD_PLUGIN(digikamnepomukservice ${digikamnepomukservices_SRCS})
 
@@ -268,7 +266,6 @@ KDE4_ADD_EXECUTABLE(digikam ${digikam_SRCS})
 
 TARGET_LINK_LIBRARIES(digikam
         ${QT_QTSQL_LIBRARY}
-        ${QT_QT3SUPPORT_LIBRARY}
         ${QT_QTTEST_LIBRARY}
 
         ${KDE4_KPARTS_LIBS}
@@ -318,11 +315,10 @@ IF(KDEPIMLIBS_FOUND)
   TARGET_LINK_LIBRARIES(digikam ${KDE4_KABC_LIBS})
 ENDIF(KDEPIMLIBS_FOUND)
 
-
 INSTALL(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 # Others Files to install #######################################################
 
 INSTALL(PROGRAMS main/digikam.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
-INSTALL(FILES main/digikamui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam)
-INSTALL(FILES main/digikam.notifyrc DESTINATION ${DATA_INSTALL_DIR}/digikam)
+INSTALL(FILES main/digikamui.rc       DESTINATION ${DATA_INSTALL_DIR}/digikam)
+INSTALL(FILES main/digikam.notifyrc   DESTINATION ${DATA_INSTALL_DIR}/digikam)

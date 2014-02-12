@@ -11,6 +11,7 @@
  * Copyright (C) 2009-2011 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2011-2013 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2014      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -871,8 +872,14 @@ void DigikamView::slotSortAlbums(int order)
     }
 
     settings->setAlbumSortOrder((AlbumSettings::AlbumSortOrder) order);
-    // TODO sorting by anything else then the name is currently not supported by the model
-    //d->folderView->resort();
+    settings->saveSettings();
+    //A dummy way to force the tree view to resort if the album sort role changed
+    settings->setAlbumSortChanged(true);
+    d->albumFolderSideBar->doSaveState();
+    d->albumFolderSideBar->doLoadState();
+    d->albumFolderSideBar->doSaveState();
+    d->albumFolderSideBar->doLoadState();
+    settings->setAlbumSortChanged(false);
 }
 
 void DigikamView::slotNewAlbum()

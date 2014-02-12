@@ -67,9 +67,14 @@ public:
      */
     void scrollPointOnPoint(const QPointF& scenePos, const QPoint& viewportPos);
 
-    int  contentsX() const;
-    int  contentsY() const;
-    void setContentsPos(int x, int y);
+    // Change from protected to public to be used by ImageRegionWidget and ImageRegionItem
+    void drawText(QPainter* p, const QRectF& rect, const QString& text);
+
+    int   contentsX()   const;
+    int   contentsY()   const;
+    QRect visibleArea() const;
+    void  setContentsPos(int x, int y);
+    void  toggleFitToWindow();
 
 Q_SIGNALS:
 
@@ -89,7 +94,6 @@ Q_SIGNALS:
 protected:
 
     void drawForeground(QPainter* painter, const QRectF& rect);
-    void drawText(QPainter* p, const QRectF& rect, const QString& text);
 
     /** Store internal instance of item as GraphicsDImgItem. You can store DImgPreviewItem object also by this method.
      *  Use item() or previewItem() to get right version.

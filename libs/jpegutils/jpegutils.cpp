@@ -70,6 +70,7 @@ extern "C"
 
 #include "config-digikam.h"
 #include "dmetadata.h"
+#include "metadatasettings.h"
 #include "filereadwritelock.h"
 #include "transupp.h"
 
@@ -450,12 +451,14 @@ void JpegRotator::updateMetadata(const QString& fileName, const RotationMatrix &
 
     // Update the image thumbnail.
     QImage exifThumb = m_metadata.getExifThumbnail(true);
+
     if (!exifThumb.isNull())
     {
         m_metadata.setExifThumbnail(exifThumb.transformed(qmatrix));
     }
 
     QImage imagePreview;
+
     if (m_metadata.getImagePreview(imagePreview))
     {
         m_metadata.setImagePreview(imagePreview.transformed(qmatrix));
@@ -467,31 +470,38 @@ void JpegRotator::updateMetadata(const QString& fileName, const RotationMatrix &
     // We update all new metadata now...
     m_metadata.save(fileName);
 
-    // set the file modification time of the temp file to that
-    // of the original file
+    // File properties restoration.
+
     struct stat st;
+
     if (::stat(QFile::encodeName(m_file), &st) == 0)
     {
-        struct utimbuf ut;
-        ut.modtime = st.st_mtime;
-        ut.actime  = st.st_atime;
+        // See B.K.O #329608: Restore file modification time from original file only if updateFileTimeStamp for Setup/Metadata is turned off.
 
-        if (::utime(QFile::encodeName(fileName), &ut) != 0)
+        if (!MetadataSettings::instance()->settings().updateFileTimeStamp)
         {
-            kWarning() << "Failed to restore modification time for file " << fileName;
+            struct utimbuf ut;
+            ut.modtime = st.st_mtime;
+            ut.actime  = st.st_atime;
+
+            if (::utime(QFile::encodeName(fileName), &ut) != 0)
+            {
+                kWarning() << "Failed to restore modification time for file " << fileName;
+            }
         }
-    }
+
+        // Restore permissions in all cases
 
 #ifndef Q_OS_WIN
-    // restore permissions
-    if (::chmod(QFile::encodeName(fileName), st.st_mode) != 0)
-    {
-        kWarning() << "Failed to restore file permissions for file " << fileName;
-    }
+        if (::chmod(QFile::encodeName(fileName), st.st_mode) != 0)
+        {
+            kWarning() << "Failed to restore file permissions for file " << fileName;
+        }
 #else
-    QFile::Permissions permissions = QFile::permissions(m_file);
-    QFile::setPermissions(fileName, permissions);
+        QFile::Permissions permissions = QFile::permissions(m_file);
+        QFile::setPermissions(fileName, permissions);
 #endif
+    }
 }
 
 bool JpegRotator::performJpegTransform(TransformAction action, const QString& src, const QString& dest)

@@ -7,7 +7,7 @@
  * Description : database migration dialog
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
- * Copyright (C) 2010-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -161,8 +161,14 @@ void DatabaseWidget::setupMainArea()
 
     // --------- fill with default values ---------------------
 
-    databaseType->addItem(i18n("SQLite"), DatabaseParameters::SQLiteDatabaseType());
-    databaseType->addItem(i18n("MySQL"), DatabaseParameters::MySQLDatabaseType());
+    databaseType->addItem(i18n("SQLite"),               DatabaseParameters::SQLiteDatabaseType());
+    databaseType->addItem(i18n("MySQL (experimental)"), DatabaseParameters::MySQLDatabaseType());
+    databaseType->setToolTip(i18n("<p>Select here the type of database backend.</p>"
+                                  "<p><b>SQlite</b> backend is for local database storage with a small and medium collection sizes (less than 100K items). "
+                                  "It is the default and recommended backend.</p>"
+                                  "<p><b>MySQL</b> backend is a more robust solution especially for remote and shared database storage. "
+                                  "It is also more efficient to manage huge collection sizes. "
+                                  "Be careful: this one it is still in experimental stage.</p>"));
     setDatabaseInputFields(DatabaseParameters::SQLiteDatabaseType());
 
     // --------------------------------------------------------

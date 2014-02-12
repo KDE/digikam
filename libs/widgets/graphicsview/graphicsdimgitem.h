@@ -61,15 +61,21 @@ public:
     ImageZoomSettings*       zoomSettings();
 
     void            sizeHasChanged();
+    void            clearCache();
 
     virtual QRectF  boundingRect() const;
     virtual void    paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
-    virtual QString userLoadingHint() const { return QString(); };
+    virtual QString userLoadingHint() const { return QString(); }
 
 Q_SIGNALS:
 
+    void showContextMenu(QGraphicsSceneContextMenuEvent* e);
     void imageChanged();
     void imageSizeChanged(const QSizeF& size);
+
+protected:
+
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent* e);
 
 public:
 

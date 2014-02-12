@@ -120,9 +120,6 @@ EmbossTool::EmbossTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    connect(d->previewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotPreview()));
-
     connect(d->depthInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 }

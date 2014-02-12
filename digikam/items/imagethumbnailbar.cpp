@@ -125,11 +125,11 @@ void ImageThumbnailBar::slotDockLocationChanged(Qt::DockWidgetArea area)
 {
     if (area == Qt::LeftDockWidgetArea || area == Qt::RightDockWidgetArea)
     {
-        setFlow(TopToBottom);
+        setFlow(TopToBottom);        
     }
     else
     {
-        setFlow(LeftToRight);
+        setFlow(LeftToRight);        
     }
 
     scrollTo(currentIndex());

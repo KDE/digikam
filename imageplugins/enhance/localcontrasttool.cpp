@@ -114,11 +114,6 @@ LocalContrastTool::LocalContrastTool(QObject* const parent)
 
     d->settingsView = new LocalContrastSettings(d->gboxSettings->plainPage());
     setToolSettings(d->gboxSettings);
-
-    // -------------------------------------------------------------
-
-    connect(d->previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotPreview()));
 }
 
 LocalContrastTool::~LocalContrastTool()

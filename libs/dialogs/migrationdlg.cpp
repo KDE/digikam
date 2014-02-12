@@ -7,7 +7,7 @@
  * Description : database migration dialog
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
- * Copyright (C) 2010-2012 by Gilles Caulier<caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2014 by Gilles Caulier<caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -82,7 +82,7 @@ void DatabaseCopyThread::run()
     m_copyManager.copyDatabases(d->fromDatabaseParameters, d->toDatabaseParameters);
 }
 
-void DatabaseCopyThread::init(DatabaseParameters fromDatabaseParameters, DatabaseParameters toDatabaseParameters)
+void DatabaseCopyThread::init(const DatabaseParameters& fromDatabaseParameters, const DatabaseParameters& toDatabaseParameters)
 {
     d->fromDatabaseParameters = fromDatabaseParameters;
     d->toDatabaseParameters   = toDatabaseParameters;
@@ -137,8 +137,8 @@ void MigrationDlg::setupMainArea()
     d->cancelButton                    = new QPushButton(i18n("Cancel"), this);
     d->cancelButton->setEnabled(false);
 
-    QGroupBox* progressBox             = new QGroupBox(i18n("Progress Information"), this);
-    QVBoxLayout* vlay                  = new QVBoxLayout(progressBox);
+    QGroupBox* const progressBox       = new QGroupBox(i18n("Progress Information"), this);
+    QVBoxLayout* const vlay            = new QVBoxLayout(progressBox);
 
     d->progressBar                     = new QProgressBar(progressBox);
     d->progressBar->setTextVisible(true);
@@ -153,8 +153,8 @@ void MigrationDlg::setupMainArea()
     vlay->addWidget(d->overallStepTitle);
     vlay->addWidget(d->progressBarSmallStep);
 
-    QWidget* mainWidget = new QWidget;
-    QGridLayout* layout = new QGridLayout;
+    QWidget* const mainWidget = new QWidget;
+    QGridLayout* const layout = new QGridLayout;
     mainWidget->setLayout(layout);
 
     layout->addWidget(d->fromDatabaseWidget,   0, 0, 4, 1);
@@ -162,8 +162,6 @@ void MigrationDlg::setupMainArea()
     layout->addWidget(d->cancelButton,         2, 1);
     layout->addWidget(d->toDatabaseWidget,     0, 2, 4, 1);
     layout->addWidget(progressBox,             4, 0, 1, 3);
-//  layout->addWidget(d->progressBar,          4, 0, 1, 3);
-//  layout->addWidget(d->progressBarSmallStep, 5, 0, 1, 3);
 
     setMainWidget(mainWidget);
     dataInit();

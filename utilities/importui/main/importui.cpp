@@ -169,6 +169,7 @@ ImportUI::ImportUI(QWidget* const parent, const QString& cameraTitle,
     // --------------------------------------------------------
 
     setupUserArea();
+    setInitialSorting();
     setupActions();
     setupStatusBar();
     setupAccelerators();
@@ -232,10 +233,18 @@ ImportUI* ImportUI::instance()
 
 void ImportUI::setupUserArea()
 {
+    ImportModel* model             = new ImportModel(this);
+    model->setupCameraController(d->controller);
+    ImportFilterModel* filterModel = new ImportFilterModel(this);
+
+    filterModel->setSourceImportModel(model);
+
+    filterModel->sort(0); // an initial sorting is necessary
+    
     KHBox* const widget = new KHBox(this);
     d->splitter         = new SidebarSplitter(widget);
     KVBox* const vbox   = new KVBox(d->splitter);
-    d->view             = new ImportView(this, vbox);
+    d->view             = new ImportView(this, model, filterModel, vbox);
     d->historyView      = new DHistoryView(vbox);
     d->rightSideBar     = new ImagePropertiesSideBarCamGui(widget, d->splitter, KMultiTabBar::Right, true);
     d->rightSideBar->setObjectName("CameraGui Sidebar Right");
@@ -337,7 +346,7 @@ void ImportUI::setupActions()
 
     // -----------------------------------------------------------
 
-    d->selectNewItemsAction = new KAction(KIcon("document-new"), i18nc("@action:inmenu", "Select New Items"), this);
+    d->selectNewItemsAction = new KAction(KIcon("favorites"), i18nc("@action:inmenu", "Select New Items"), this);
     connect(d->selectNewItemsAction, SIGNAL(triggered()), this, SLOT(slotSelectNew()));
     actionCollection()->addAction("importui_selectnewitems", d->selectNewItemsAction);
 
@@ -350,11 +359,11 @@ void ImportUI::setupActions()
 
     // --- Download actions ----------------------------------------------------
 
-    d->downloadAction = new KActionMenu(KIcon("get-hot-new-stuff"), i18nc("@title:menu", "Download"), this);
+    d->downloadAction = new KActionMenu(KIcon("document-save"), i18nc("@title:menu", "Download"), this);
     d->downloadAction->setDelayed(false);
     actionCollection()->addAction("importui_imagedownload", d->downloadAction);
 
-    d->downloadNewAction = new KAction(KIcon("get-hot-new-stuff"), i18nc("@action", "Download New"), this);
+    d->downloadNewAction = new KAction(KIcon("favorites"), i18nc("@action", "Download New"), this);
     d->downloadNewAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_N));
     connect(d->downloadNewAction, SIGNAL(triggered()), this, SLOT(slotDownloadNew()));
     actionCollection()->addAction("importui_imagedownloadnew", d->downloadNewAction);
@@ -373,21 +382,21 @@ void ImportUI::setupActions()
 
     // -------------------------------------------------------------------------
 
-    d->downloadDelNewAction = new KAction(i18nc("@action", "Download & Delete New"), this);
+    d->downloadDelNewAction = new KAction(i18nc("@action", "Download && Delete New"), this);
     d->downloadDelNewAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_N));
     connect(d->downloadDelNewAction, SIGNAL(triggered()), this, SLOT(slotDownloadAndDeleteNew()));
     actionCollection()->addAction("importui_imagedownloaddeletenew", d->downloadDelNewAction);
 
     // -----------------------------------------------------------------
 
-    d->downloadDelSelectedAction = new KAction(i18nc("@action", "Download & Delete Selected"), this);
+    d->downloadDelSelectedAction = new KAction(i18nc("@action", "Download && Delete Selected"), this);
     connect(d->downloadDelSelectedAction, SIGNAL(triggered()), this, SLOT(slotDownloadAndDeleteSelected()));
     actionCollection()->addAction("importui_imagedownloaddeleteselected", d->downloadDelSelectedAction);
     d->downloadDelSelectedAction->setEnabled(false);
 
     // -------------------------------------------------------------------------
 
-    d->downloadDelAllAction = new KAction(i18nc("@action", "Download & Delete All"), this);
+    d->downloadDelAllAction = new KAction(i18nc("@action", "Download && Delete All"), this);
     connect(d->downloadDelAllAction, SIGNAL(triggered()), this, SLOT(slotDownloadAndDeleteAll()));
     actionCollection()->addAction("importui_imagedownloaddeleteall", d->downloadDelAllAction);
 
@@ -701,9 +710,10 @@ void ImportUI::setupStatusBar()
     //------------------------------------------------------------------------------
 
     //TODO: Replace it with FilterStatusBar after advanced filtring is implemented.
-    //d->filterComboBox = new FilterComboBox(statusBar());
-    //statusBar()->addWidget(d->filterComboBox, 1);
-    //connect(d->filterComboBox, SIGNAL(filterChanged()), this, SLOT(slotFilterChanged()));
+    d->filterComboBox = new FilterComboBox(statusBar());
+    setFilter(d->filterComboBox->currentFilter());
+    statusBar()->addWidget(d->filterComboBox, 1);
+    connect(d->filterComboBox, SIGNAL(filterChanged(Filter*)), this, SLOT(setFilter(Filter*)));
 
     //------------------------------------------------------------------------------
 
@@ -719,9 +729,6 @@ void ImportUI::setupStatusBar()
 void ImportUI::setupCameraController(const QString& model, const QString& port, const QString& path)
 {
     d->controller = new CameraController(this, d->cameraTitle, model, port, path);
-
-    connect(d->controller, SIGNAL(signalFinished()),
-            this, SLOT(slotSortItems()));
 
     connect(d->controller, SIGNAL(signalConnected(bool)),
             this, SLOT(slotConnected(bool)));
@@ -847,7 +854,7 @@ void ImportUI::saveSettings()
 
     d->rightSideBar->saveState();
     d->splitter->saveState(group);
-    //d->filterComboBox->saveSettings();
+    d->filterComboBox->saveSettings();
 
     config->sync();
 }
@@ -879,7 +886,7 @@ DownloadSettings ImportUI::downloadSettings() const
     return settings;
 }
 
-void ImportUI::slotSortItems()
+void ImportUI::setInitialSorting()
 {
     d->view->slotGroupImages(ImportSettings::instance()->getImageGroupMode());
     d->view->slotSortImagesBy(ImportSettings::instance()->getImageSortBy());
@@ -1053,7 +1060,7 @@ void ImportUI::slotBusy(bool val)
         d->markAsDownloadedAction->setEnabled(true);
         d->cameraInfoAction->setEnabled(true);
         d->cameraCaptureAction->setEnabled(d->controller->cameraCaptureImageSupport());
-        //d->filterComboBox->setEnabled(true);
+        d->filterComboBox->setEnabled(true);
 
         // selection-dependent update of lockAction, markAsDownloadedAction,
         // downloadSelectedAction, downloadDelSelectedAction, deleteSelectedAction
@@ -1114,7 +1121,7 @@ void ImportUI::slotBusy(bool val)
         d->markAsDownloadedAction->setEnabled(false);
         d->cameraInfoAction->setEnabled(false);
         d->cameraCaptureAction->setEnabled(false);
-        //d->filterComboBox->setEnabled(false);
+        d->filterComboBox->setEnabled(false);
     }
 }
 
@@ -1203,7 +1210,6 @@ void ImportUI::slotFolderList(const QStringList& folderList)
     KConfigGroup group        = config->group(d->configGroupName);
     bool useMetadata          = group.readEntry(d->configUseFileMetadata, false);
 
-    d->controller->getFolderList(folderList); // send the folder list to the controller to be able to determine if listing is finish.
     // when getting a list of subfolders, request their contents and also their subfolders
     for (QStringList::const_iterator it = folderList.constBegin();
          it != folderList.constEnd(); ++it)
@@ -1229,16 +1235,9 @@ void ImportUI::slotFileList(const CamItemInfoList& fileList)
     d->filesToBeAdded << fileList;
 }
 
-// FIXME: To be removed.
-void ImportUI::slotFilterChanged()
+void ImportUI::setFilter(Filter *filter)
 {
-    //    CamItemInfoList items = d->view->allItems();
-
-    //    foreach(CamItemInfo info, items)
-    //    {
-    //        d->view->removeItem(info);
-    //    }
-    //    d->historyUpdater->addItems(d->controller->cameraMD5ID(), d->map);
+    d->view->importFilterModel()->setFilter(filter);
 }
 
 void ImportUI::slotCapture()
@@ -1725,7 +1724,7 @@ void ImportUI::slotSelectNew()
 
     foreach (CamItemInfo info, infos)
     {
-        if (info.downloaded == CamItemInfo::NewPicture)
+        if (info.downloaded == CamItemInfo::DownloadedNo)
         {
             toBeSelected << info;
         }

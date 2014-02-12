@@ -6,7 +6,7 @@
  * Date        : 2006-21-12
  * Description : a embedded view to show the image preview widget.
  *
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2010-2011 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
  *
@@ -52,6 +52,7 @@
 
 // Local includes
 
+#include "imagepreviewviewitem.h"
 #include "albumsettings.h"
 #include "contextmenuhelper.h"
 #include "digikamapp.h"
@@ -71,61 +72,6 @@
 
 namespace Digikam
 {
-
-class ImagePreviewViewItem : public DImgPreviewItem
-{
-public:
-
-    explicit ImagePreviewViewItem(ImagePreviewView* const view)
-        : m_view(view), m_group(0)
-    {
-        setAcceptHoverEvents(true);
-    }
-
-    void setFaceGroup(FaceGroup* const group)
-    {
-        m_group = group;
-    }
-
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
-    {
-        m_view->showContextMenu(m_info, event);
-    }
-
-    void setImageInfo(const ImageInfo& info)
-    {
-        m_info = info;
-        setPath(info.filePath());
-    }
-
-    void hoverEnterEvent(QGraphicsSceneHoverEvent* e)
-    {
-        m_group->itemHoverEnterEvent(e);
-    }
-
-    void hoverLeaveEvent(QGraphicsSceneHoverEvent* e)
-    {
-        m_group->itemHoverLeaveEvent(e);
-    }
-
-    void hoverMoveEvent(QGraphicsSceneHoverEvent* e)
-    {
-        m_group->itemHoverMoveEvent(e);
-    }
-
-    ImageInfo imageInfo() const
-    {
-        return m_info;
-    }
-
-protected:
-
-    ImagePreviewView* m_view;
-    FaceGroup*        m_group;
-    ImageInfo         m_info;
-};
-
-// ---------------------------------------------------------------------
 
 class ImagePreviewView::Private
 {
@@ -180,7 +126,7 @@ ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode)
     : GraphicsDImgView(parent), d(new Private)
 {
     d->mode      = mode;
-    d->item      = new ImagePreviewViewItem(this);
+    d->item      = new ImagePreviewViewItem();
     setItem(d->item);
 
     d->faceGroup = new FaceGroup(this);
@@ -193,6 +139,9 @@ ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode)
 
     connect(d->item, SIGNAL(loadingFailed()),
             this, SLOT(imageLoadingFailed()));
+
+    connect(d->item, SIGNAL(showContextMenu(QGraphicsSceneContextMenuEvent*)),
+            this, SLOT(slotShowContextMenu(QGraphicsSceneContextMenuEvent*)));
 
     // set default zoom
     layout()->fitToWindow();
@@ -358,8 +307,10 @@ void ImagePreviewView::showEvent(QShowEvent* e)
     d->faceGroup->setVisible(d->peopleToggleAction->isChecked());
 }
 
-void ImagePreviewView::showContextMenu(const ImageInfo& info, QGraphicsSceneContextMenuEvent* event)
+void ImagePreviewView::slotShowContextMenu(QGraphicsSceneContextMenuEvent* event)
 {
+    ImageInfo info = d->item->imageInfo();
+
     if (info.isNull())
     {
         return;

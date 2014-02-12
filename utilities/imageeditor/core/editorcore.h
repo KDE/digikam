@@ -110,17 +110,6 @@ public:
 
     void    zoom(double val);
 
-    void    paintOnDevice(QPaintDevice* const p,
-                          const QRect& src,
-                          const QRect& dst,
-                          const QRect& mrt,
-                          int antialias);
-
-    void    paintOnDevice(QPaintDevice* const p,
-                          const QRect& src,
-                          const QRect& dst,
-                          int antialias);
-
     DImg    getImgSelection() const;
     DImg*   getImg()          const;
     bool    imageValid()      const;

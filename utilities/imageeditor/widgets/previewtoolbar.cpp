@@ -6,7 +6,7 @@
  * Date        : 2010-01-10
  * Description : a tool bar for preview mode
  *
- * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,6 +39,12 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kactioncollection.h>
+#include <kactionmenu.h>
+
+// Local includes
+
+#include "editorwindow.h"
 
 namespace Digikam
 {
@@ -56,7 +62,9 @@ public:
         previewDupplicateBothButtonHorz(0),
         previewtargetButton(0),
         previewToggleMouseOverButton(0),
-        previewButtons(0)
+        previewButtons(0),
+        actionsGroup(0),
+        actionsMenu(0)
     {
     }
 
@@ -69,6 +77,9 @@ public:
     QToolButton*  previewToggleMouseOverButton;
 
     QButtonGroup* previewButtons;
+    QActionGroup* actionsGroup;
+
+    KActionMenu*  actionsMenu;
 };
 
 PreviewToolBar::PreviewToolBar(QWidget* const parent)
@@ -76,8 +87,8 @@ PreviewToolBar::PreviewToolBar(QWidget* const parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
-    QHBoxLayout* hlay = new QHBoxLayout(this);
-    d->previewButtons = new QButtonGroup(this);
+    QHBoxLayout* const hlay = new QHBoxLayout(this);
+    d->previewButtons       = new QButtonGroup(this);
     d->previewButtons->setExclusive(true);
     hlay->setSpacing(0);
     hlay->setMargin(0);
@@ -155,7 +166,7 @@ PreviewToolBar::PreviewToolBar(QWidget* const parent)
     d->previewToggleMouseOverButton->setToolTip(i18n("Mouse-over mode"));
 
     connect(d->previewButtons, SIGNAL(buttonReleased(int)),
-            this, SIGNAL(signalPreviewModeChanged(int)));
+            this, SLOT(slotButtonReleased(int)));
 }
 
 PreviewToolBar::~PreviewToolBar()
@@ -163,15 +174,72 @@ PreviewToolBar::~PreviewToolBar()
     delete d;
 }
 
+void PreviewToolBar::registerMenuActionGroup(EditorWindow* const editor)
+{
+    d->actionsMenu  = new KActionMenu(i18nc("@action Select image editor preview mode", "Preview Mode"), editor);
+    d->actionsGroup = new QActionGroup(d->actionsMenu);
+
+    connect(d->actionsGroup, SIGNAL(triggered(QAction*)),
+            this, SLOT(slotActionTriggered(QAction*)));
+
+    foreach (QAbstractButton* const btn, d->previewButtons->buttons())
+    {
+        KAction* const ac = new KAction(btn->toolTip(), d->actionsGroup);
+        ac->setData(QVariant(d->previewButtons->id(btn)));
+        ac->setIcon(btn->icon());
+        ac->setCheckable(true);
+        ac->setShortcutConfigurable(true);
+        d->actionsMenu->addAction(ac);
+    }
+
+    editor->actionCollection()->addAction("editorwindow_previewmode", d->actionsMenu);
+}
+
+void PreviewToolBar::slotActionTriggered(QAction* ac)
+{
+    int id = ac->data().toInt();
+    d->previewButtons->button(id)->setChecked(true);
+
+    emit signalPreviewModeChanged(id);
+}
+
+void PreviewToolBar::slotButtonReleased(int id)
+{
+    setCheckedAction(id);
+
+    emit signalPreviewModeChanged(id);
+}
+
+void PreviewToolBar::setCheckedAction(int id)
+{
+    if (!d->actionsGroup) return;
+
+    foreach (QAction* const ac, d->actionsGroup->actions())
+    {
+        if (ac->data().toInt() == id)
+        {
+            ac->setChecked(true);
+            return;
+        }
+    }
+}
+
 void PreviewToolBar::setPreviewModeMask(int mask)
 {
     if (mask == NoPreviewMode)
     {
         setDisabled(true);
+
+        if (d->actionsMenu)
+            d->actionsMenu->setDisabled(true);
+
         return;
     }
 
     setDisabled(false);
+
+    if (d->actionsMenu)
+        d->actionsMenu->setDisabled(false);
 
     d->previewOriginalButton->setEnabled(mask           & PreviewOriginalImage);
     d->previewBothButtonVert->setEnabled(mask           & PreviewBothImagesHorz);
@@ -180,6 +248,14 @@ void PreviewToolBar::setPreviewModeMask(int mask)
     d->previewDupplicateBothButtonHorz->setEnabled(mask & PreviewBothImagesVertCont);
     d->previewtargetButton->setEnabled(mask             & PreviewTargetImage);
     d->previewToggleMouseOverButton->setEnabled(mask    & PreviewToggleOnMouseOver);
+
+    if (d->actionsGroup)
+    {
+        foreach (QAction* const ac, d->actionsGroup->actions())
+        {
+            ac->setEnabled(mask & ac->data().toInt());
+        }
+    }
 
     // When we switch to another mask, check if current mode is valid.
     PreviewToolBar::PreviewMode mode = previewMode();
@@ -195,6 +271,7 @@ void PreviewToolBar::setPreviewModeMask(int mask)
                 if (btn && btn->isEnabled())
                 {
                     btn->setChecked(true);
+                    setCheckedAction(d->previewButtons->id(btn));
                     return;
                 }
             }
@@ -207,6 +284,7 @@ void PreviewToolBar::setPreviewMode(PreviewMode mode)
     if (d->previewButtons->button(mode))
     {
         d->previewButtons->button(mode)->setChecked(true);
+        setCheckedAction((int)mode);
     }
 }
 

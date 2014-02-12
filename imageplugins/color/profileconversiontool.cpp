@@ -154,9 +154,6 @@ ProfileConversionTool::ProfileConversionTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    connect(d->previewWidget, SIGNAL(signalOriginalClipFocusChanged()),
-            this, SLOT(slotTimer()));
-
     connect(currentProfInfo, SIGNAL(clicked()),
             this, SLOT(slotCurrentProfInfo()));
 

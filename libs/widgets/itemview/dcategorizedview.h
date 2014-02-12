@@ -135,7 +135,7 @@ protected:
     void setToolTip(ItemViewToolTip* tip);
     void setItemDelegate(DItemDelegate* delegate);
     void updateDelegateSizes();
-    void userInteraction();
+    void userInteraction();    
 
     /** Returns an index that is representative for the category at position pos */
     QModelIndex indexForCategoryAt(const QPoint& pos) const;

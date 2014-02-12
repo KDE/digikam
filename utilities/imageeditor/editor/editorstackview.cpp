@@ -6,7 +6,7 @@
  * Date        : 2008-08-20
  * Description : A widget stack to embed editor view.
  *
- * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,7 +30,6 @@
 #include "thumbnailsize.h"
 #include "graphicsdimgview.h"
 #include "previewlayout.h"
-#include "previewwidget.h"
 
 namespace Digikam
 {
@@ -96,20 +95,6 @@ void EditorStackView::setToolView(QWidget* const view)
         insertWidget(ToolViewMode, d->toolView);
     }
 
-    // TODO: to remove when PreviewWidget will be unused...
-    PreviewWidget* const old_preview = previewWidget_old();
-
-    if (old_preview)
-    {
-        connect(old_preview, SIGNAL(signalZoomFactorChanged(double)),
-                this, SLOT(slotZoomChanged(double)));
-
-        connect(old_preview, SIGNAL(signalToggleOffFitToWindow()),
-                this, SIGNAL(signalToggleOffFitToWindow()));
-
-        return;
-    }
-
     GraphicsDImgView* const preview = previewWidget();
 
     if (preview)
@@ -146,18 +131,10 @@ void EditorStackView::increaseZoom()
 {
     if (viewMode() == CanvasMode)
     {
-        d->canvas->slotIncreaseZoom();
+        d->canvas->layout()->increaseZoom();
     }
     else
     {
-        PreviewWidget* const old_preview = previewWidget_old();
-
-        if (old_preview)
-        {
-            old_preview->slotIncreaseZoom();
-            return;
-        }
-
         GraphicsDImgView* const preview = previewWidget();
 
         if (preview)
@@ -171,18 +148,10 @@ void EditorStackView::decreaseZoom()
 {
     if (viewMode() == CanvasMode)
     {
-        d->canvas->slotDecreaseZoom();
+        d->canvas->layout()->decreaseZoom();
     }
     else
     {
-        PreviewWidget* const old_preview = previewWidget_old();
-
-        if (old_preview)
-        {
-            old_preview->slotDecreaseZoom();
-            return;
-        }
-
         GraphicsDImgView* const preview = previewWidget();
 
         if (preview)
@@ -197,15 +166,7 @@ void EditorStackView::toggleFitToWindow()
     // Fit to window action is common place to switch view in this mode.
     // User want to see the same behavors between canvas and tool preview.
     // Both are toggle at the same time.
-    d->canvas->toggleFitToWindow();
-
-    PreviewWidget* const old_preview = previewWidget_old();
-
-    if (old_preview)
-    {
-        old_preview->toggleFitToWindow();
-        return;
-    }
+    d->canvas->layout()->toggleFitToWindow();
 
     GraphicsDImgView* const preview = previewWidget();
 
@@ -227,18 +188,10 @@ void EditorStackView::zoomTo100Percent()
 {
     if (viewMode() == CanvasMode)
     {
-        d->canvas->setZoomFactor(1.0);
+        d->canvas->layout()->setZoomFactor(1.0);
     }
     else
     {
-        PreviewWidget* const old_preview = previewWidget_old();
-
-        if (old_preview)
-        {
-            old_preview->setZoomFactor(1.0);
-            return;
-        }
-
         GraphicsDImgView* const preview = previewWidget();
 
         if (preview)
@@ -252,18 +205,10 @@ void EditorStackView::setZoomFactor(double zoom)
 {
     if (viewMode() == CanvasMode)
     {
-        d->canvas->setZoomFactor(zoom);
+        d->canvas->layout()->setZoomFactor(zoom);
     }
     else
     {
-        PreviewWidget* const old_preview = previewWidget_old();
-
-        if (old_preview)
-        {
-            old_preview->setZoomFactor(zoom);
-            return;
-        }
-
         GraphicsDImgView* const preview = previewWidget();
 
         if (preview)
@@ -277,18 +222,13 @@ double EditorStackView::zoomMax() const
 {
     if (viewMode() == CanvasMode)
     {
-        return d->canvas->zoomMax();
+        return d->canvas->layout()->maxZoomFactor();
     }
     else
     {
         GraphicsDImgView* const preview  = previewWidget();
-        PreviewWidget* const old_preview = previewWidget_old();
 
-        if (old_preview)
-        {
-            return old_preview->zoomMax();
-        }
-        else if (preview)
+        if (preview)
         {
             return preview->layout()->maxZoomFactor();
         }
@@ -303,18 +243,13 @@ double EditorStackView::zoomMin() const
 {
     if (viewMode() == CanvasMode)
     {
-        return d->canvas->zoomMin();
+        return d->canvas->layout()->minZoomFactor();
     }
     else
     {
         GraphicsDImgView* const preview  = previewWidget();
-        PreviewWidget* const old_preview = previewWidget_old();
 
-        if (old_preview)
-        {
-            return old_preview->zoomMin();
-        }
-        else if (preview)
+        if (preview)
         {
             return preview->layout()->minZoomFactor();
         }
@@ -336,18 +271,10 @@ void EditorStackView::slotZoomSliderChanged(int size)
 
     if (viewMode() == CanvasMode)
     {
-        d->canvas->setZoomFactorSnapped(z);
+        d->canvas->layout()->setZoomFactorSnapped(z);
     }
     else
     {
-        PreviewWidget* const old_preview = previewWidget_old();
-
-        if (old_preview)
-        {
-            old_preview->setZoomFactorSnapped(z);
-            return;
-        }
-
         GraphicsDImgView* const preview = previewWidget();
 
         if (preview)
@@ -363,22 +290,12 @@ void EditorStackView::slotZoomChanged(double zoom)
 
     if (viewMode() == CanvasMode)
     {
-        max = d->canvas->maxZoom();
-        min = d->canvas->minZoom();
+        max = d->canvas->layout()->atMaxZoom();
+        min = d->canvas->layout()->atMinZoom();
         emit signalZoomChanged(max, min, zoom);
     }
     else
     {
-        PreviewWidget* const old_preview = previewWidget_old();
-
-        if (old_preview)
-        {
-            max = old_preview->maxZoom();
-            min = old_preview->minZoom();
-            emit signalZoomChanged(max, min, zoom);
-            return;
-        }
-
         GraphicsDImgView* const preview = previewWidget();
 
         if (preview)
@@ -410,21 +327,9 @@ GraphicsDImgView* EditorStackView::previewWidget() const
     return 0;
 }
 
-PreviewWidget* EditorStackView::previewWidget_old() const
-{
-    PreviewWidget* const preview = dynamic_cast<PreviewWidget*>(d->toolView);
-
-    if (preview)
-    {
-        return preview;
-    }
-
-    return 0;
-}
-
 bool EditorStackView::isZoomablePreview() const
 {
-    return (previewWidget_old() || previewWidget());
+    return previewWidget();
 }
 
 }  // namespace Digikam

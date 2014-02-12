@@ -336,12 +336,9 @@ FilmTool::FilmTool(QObject* const parent)
 
     // Slots --------------------------------------------------------
 
-    connect(d->previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotPreview()));
-    
     connect(d->previewWidget, SIGNAL(signalCapturedPointFromOriginal(Digikam::DColor,QPoint)),
             this, SLOT(slotColorSelectedFromTarget(Digikam::DColor,QPoint)));
-   
+
     connect(d->exposureInput, SIGNAL(valueChanged(double)),
             this, SLOT(slotExposureChanged(double)));
 

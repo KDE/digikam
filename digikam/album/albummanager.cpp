@@ -1572,7 +1572,7 @@ void AlbumManager::scanTAlbums()
         // Its a new album. Find the parent of the album
         TagMap::const_iterator iter = tmap.constFind(info.pid);
 
-        if (iter == tmap.end())
+        if (iter == tmap.constEnd())
         {
             kWarning() << "Failed to find parent tag for tag "
                        << info.name

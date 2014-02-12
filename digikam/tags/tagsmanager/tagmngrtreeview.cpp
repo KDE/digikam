@@ -130,7 +130,7 @@ void TagMngrTreeView::setContexMenuItems(ContextMenuHelper& cmh, QList<TAlbum*> 
     KAction* const resetIcon     = new KAction(KIcon("view-refresh"),
                                                i18n("Reset tag Icon"), this);
 
-    KAction* const invSel        = new KAction(KIcon(),
+    KAction* const invSel        = new KAction(KIcon("tag-reset"),
                                                i18n("Invert Selection"), this);
 
     KAction* const expandTree    = new KAction(KIcon("format-indent-more"),

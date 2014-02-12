@@ -11,6 +11,7 @@
  * Copyright (C) 2002-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2013      by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2014      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -1028,8 +1029,7 @@ void DigikamApp::setupActions()
     d->albumSortAction = new KSelectAction(i18n("&Sort Albums"), this);
     d->albumSortAction->setWhatsThis(i18n("Sort Albums in tree-view."));
     connect(d->albumSortAction, SIGNAL(triggered(int)), d->view, SLOT(slotSortAlbums(int)));
-    // TODO this action is currently not supported by the model
-    //actionCollection()->addAction("album_sort", d->albumSortAction);
+    actionCollection()->addAction("album_sort", d->albumSortAction);
 
     // Use same list order as in albumsettings enum
     QStringList sortActionList;
@@ -1428,8 +1428,8 @@ void DigikamApp::slotAlbumSelected(bool val)
             d->deleteAction->setEnabled(isNormalAlbum);
             d->addImagesAction->setEnabled(isNormalAlbum || isAlbumRoot);
             d->propsEditAction->setEnabled(isNormalAlbum);
-            d->openInFileManagerAction->setEnabled(true);
-            d->openInTerminalAction->setEnabled(true);
+            d->openInFileManagerAction->setEnabled(isNormalAlbum || isAlbumRoot);
+            d->openInTerminalAction->setEnabled(isNormalAlbum || isAlbumRoot);
             d->newAction->setEnabled(isNormalAlbum || isAlbumRoot);
             d->addFoldersAction->setEnabled(isNormalAlbum || isAlbumRoot);
             d->writeAlbumMetadataAction->setEnabled(isNormalAlbum || isAlbumRoot);

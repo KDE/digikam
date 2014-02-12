@@ -20,6 +20,7 @@ SET(libimportui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/albumcustomizer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/advancedsettings.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/scriptingsettings.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/filter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/filtercombo.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/importcontextmenu.cpp
 

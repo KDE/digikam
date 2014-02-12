@@ -33,6 +33,7 @@
 #include <QTimer>
 #include <QToolButton>
 #include <QVBoxLayout>
+#include <QColorGroup>
 
 // KDE includes
 
@@ -102,7 +103,7 @@ public:
         if (adv)
         {
             QPalette p = palette();
-            p.setColor(QColorGroup::Text, p.color(QPalette::Disabled, QColorGroup::Text));
+            p.setColor(QPalette::Text, p.color(QPalette::Disabled, QPalette::Text));
             setPalette(p);
 
             setText(i18n("(Advanced Search)"));

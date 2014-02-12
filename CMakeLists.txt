@@ -9,7 +9,7 @@ OPTION(ENABLE_PRESENTATIONMODE "Build digiKam with presentation mode support (de
 OPTION(ENABLE_THUMBS_DB        "Build digiKam with thumbnails database support (default=ON)"           ON)
 OPTION(ENABLE_INTERNALMYSQL    "Look for MySQL server executable at build time (default=ON)"           ON)
 OPTION(ENABLE_ADVANCEDDEBUGMSG "Build digiKam with more internal debug message (default=OFF)"          OFF)
-OPTION(ENABLE_NEPOMUKSUPPORT   "Build digiKam with Nepomuk support (default=ON)"                       ON)
+OPTION(ENABLE_NEPOMUKSUPPORT   "Build digiKam with Nepomuk support (default=ON)"                       OFF)
 OPTION(ENABLE_LCMS2            "Link digiKam to LCMS2 instead LCMS1 (experimental) (default=OFF)"      OFF)
 
 # NOTE: since 6.11.24, libpgf do not support very well OpenMP. We disable it temporally.
@@ -26,7 +26,7 @@ SET(DIGIKAM_MINOR_VERSION "0")
 SET(DIGIKAM_PATCH_VERSION "0")
 
 #digiKam release date
-SET(DIGIKAM_RELEASE_DATE "2014-01-12")
+SET(DIGIKAM_RELEASE_DATE "2014-03-09")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
@@ -35,7 +35,7 @@ SET(DIGIKAM_RELEASE_DATE "2014-01-12")
 # "-beta3" : beta3 release.
 # "-rc"    : release candidate.
 # ""       : final release. Can be used in production.
-SET(DIGIKAM_SUFFIX_VERSION "-beta2")
+SET(DIGIKAM_SUFFIX_VERSION "-beta4")
 
 # ==================================================================================================
 # Set env. variables accordingly.
@@ -690,9 +690,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                     ${KGEOMAP_DEFINITIONS}
                    )
 
-    # QT3 support rules
-    ADD_DEFINITIONS(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
-
     # Enable C++ Exceptions support, require by Greycstoration algorithm (CImg.h)
     IF(NOT MSVC)
         ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
@@ -979,20 +976,15 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/comboboxutilities.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dcursortracker.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dfontselect.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dhistoryview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dgradientslider.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/ditemtooltip.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dlogoaction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dragdropimplementations.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dzoombar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/filesaveoptionsbox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/fullscreensettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dxmlguiwindow.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/knotificationwrapper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/modelcompletion.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/paniconwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/searchtextbar.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/sidebar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/splashscreen.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statesavingobject.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/visibilitycontroller.cpp
@@ -1000,12 +992,22 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/ratingwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/colorlabelwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/picklabelwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/thumbbardock.cpp
+       )
+
+    SET(libmainview_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/sidebar.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/dxmlguiwindow.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/daboutdata.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/dzoombar.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/dlogoaction.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/thumbbardock.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/dhistoryview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/thememanager.cpp
        )
 
     SET(libitemview_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/digikamkcategorizedview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/dcategorizedview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/dcategorizedview.cpp        
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/ditemdelegate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/imagedelegateoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/itemviewhoverbutton.cpp
@@ -1057,9 +1059,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     IF(USE_PRESENTATION_MODE)
 
-    SET(libpresentationview_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/qmlshow/qmlshow.cpp
-       )
+        SET(libpresentationview_SRCS
+            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/qmlshow/qmlshow.cpp
+           )
 
     ENDIF(USE_PRESENTATION_MODE)
 
@@ -1082,11 +1084,10 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imagepreviewitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/previewtoolbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/previewlist.cpp
-
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/q3support/drubberband.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/q3support/previewwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/q3support/imageregionwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/q3support/canvas.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imageregionwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imageregionitem.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/rubberitem.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/canvas.cpp
        )
 
     SET(libeditordlg_SRCS
@@ -1126,11 +1127,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/statusbarprogresswidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/statusprogressbar.cpp
        )
-
-    SET(libthememanager_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/thememanager/thememanager.cpp
-       )
-
     SET(libtthread_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/threadmanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/workerobject.cpp
@@ -1170,7 +1166,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/libsinfodlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/rawcameradlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/triplechoicedialog.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/daboutdata.cpp
        )
 
     SET(libdeletedialog_SRCS
@@ -1540,6 +1535,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/stackedview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/digikamview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/imagepreviewviewitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/imagepreviewview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/mediaplayerview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/mapwidgetview.cpp
@@ -1649,12 +1645,11 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/${DIGIKAM_LIBJPEG_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/template
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/thememanager
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/versionmanager
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/q3support
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview

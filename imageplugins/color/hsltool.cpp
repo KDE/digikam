@@ -110,9 +110,6 @@ HSLTool::HSLTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    connect(d->previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotPreview()));
-
     connect(d->hslSettings, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotTimer()));
 }

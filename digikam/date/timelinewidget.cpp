@@ -901,8 +901,8 @@ void TimeLineWidget::keyPressEvent(QKeyEvent *e)
     QDateTime ref       = d->cursorDateTime;
     bool isScrollNext;
 
-    bool ctrlPressed    = e->modifiers() & Qt::ControlButton;
-    bool shiftPressed   = e->modifiers() & Qt::ShiftButton;
+    bool ctrlPressed    = e->modifiers() & Qt::ControlModifier;
+    bool shiftPressed   = e->modifiers() & Qt::ShiftModifier;
 
     if (!ctrlPressed && !shiftPressed)
     {
@@ -1823,8 +1823,8 @@ void TimeLineWidget::mousePressEvent(QMouseEvent* e)
     {
         QPoint pt(e->x(), e->y());
 
-        bool ctrlPressed    = e->modifiers() & Qt::ControlButton;
-        bool shiftPressed   = e->modifiers() & Qt::ShiftButton;
+        bool ctrlPressed    = e->modifiers() & Qt::ControlModifier;
+        bool shiftPressed   = e->modifiers() & Qt::ShiftModifier;
         QDateTime ref       = dateTimeForPoint(pt, d->selMouseEvent);
 
         if (d->selMouseEvent)

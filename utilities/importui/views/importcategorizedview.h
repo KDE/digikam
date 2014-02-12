@@ -148,10 +148,6 @@ protected Q_SLOTS:
     void slotCamItemInfosAdded();
 
 protected:
-
-    /// install default ImportModel and filter model, ready for use
-    void installDefaultModels(CameraController* const controller);
-
     // reimplemented from parent class
     QSortFilterProxyModel*       filterModel()     const;
     AbstractItemDragDropHandler* dragDropHandler() const;

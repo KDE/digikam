@@ -120,17 +120,11 @@ Qt::SortOrder ShowfotoItemSortSettings::defaultSortOrderForSortRole(SortRole rol
 {
     switch (role)
     {
-        case SortByFileName:
-        case SortByFilePath:
-            return Qt::AscendingOrder;
+        case SortByFileName:        
         case SortByFileSize:
             return Qt::DescendingOrder;
         case SortByCreationDate:
-            return Qt::AscendingOrder;
-        case SortByDownloadState:
-            return Qt::Ascending;
-        case SortByRating:
-            return Qt::DescendingOrder;
+            return Qt::AscendingOrder;        
         default:
             return Qt::AscendingOrder;
     }
@@ -173,27 +167,6 @@ bool ShowfotoItemSortSettings::lessThan(const ShowfotoItemInfo& left, const Show
     {
         return result < 0;
     }
-
-    if ( (result = compare(left, right, SortByFilePath)) != 0)
-    {
-        return result < 0;
-    }
-
-    if ( (result = compare(left, right, SortByFileSize)) != 0)
-    {
-        return result < 0;
-    }
-
-    if ( (result = compare(left, right, SortByRating)) != 0)
-    {
-        return result < 0;
-    }
-
-    if ( (result = compare(left, right, SortByDownloadState)) != 0)
-    {
-        return result < 0;
-    }
-
     return false;
 }
 
@@ -207,19 +180,13 @@ int ShowfotoItemSortSettings::compare(const ShowfotoItemInfo& left, const Showfo
     switch (role)
     {
         case SortByFileName:
-            return naturalCompare(left.name, right.name, currentSortOrder, sortCaseSensitivity);
-        case SortByFilePath:
-        return naturalCompare(left.url.toLocalFile(), right.url.toLocalFile(), currentSortOrder, sortCaseSensitivity);
+            return naturalCompare(left.name, right.name, currentSortOrder, sortCaseSensitivity);        
         case SortByFileSize:
             return compareByOrder(left.size, right.size, currentSortOrder);
             //FIXME: Change it to creation date instead of modification date.
             //TODO : complete the needed functions
-//        case SortByCreationDate:
-//            return compareByOrder(left.ctime, right.ctime, currentSortOrder);
-//        case SortByRating:
-//            return compareByOrder(left.rating, right.rating, currentSortOrder);
-//        case SortByDownloadState:
-//            return compareByOrder(left.downloaded, right.downloaded, currentSortOrder);
+        case SortByCreationDate:
+            return compareByOrder(left.ctime, right.ctime, currentSortOrder);
         default:
             return 1;
     }

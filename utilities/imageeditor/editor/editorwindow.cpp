@@ -6,7 +6,7 @@
  * Date        : 2006-01-20
  * Description : core image editor GUI implementation
  *
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -267,6 +267,9 @@ void EditorWindow::setupStandardConnections()
 
     connect(m_canvas, SIGNAL(signalChanged()),
             this, SLOT(slotChanged()));
+
+    connect(m_canvas, SIGNAL(signalAddedDropedItems(QDropEvent*)),
+            this, SLOT(slotAddedDropedItems(QDropEvent*)));
 
     connect(m_canvas->interface(), SIGNAL(signalUndoStateChanged()),
             this, SLOT(slotUndoStateChanged()));
@@ -590,7 +593,7 @@ void EditorWindow::setupStandardActions()
 
     m_showBarAction = thumbBar()->getToggleAction(this);
     actionCollection()->addAction("editorwindow_showthumbs", m_showBarAction);
-    
+
     d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
     d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
 
@@ -598,13 +601,13 @@ void EditorWindow::setupStandardActions()
     KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      actionCollection());
     KStandardAction::configureNotifications(this, SLOT(slotConfNotifications()), actionCollection());
     KStandardAction::preferences(this,            SLOT(setup()),                 actionCollection());
-    
+
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
 
     // Provides a menu entry that allows showing/hiding the statusbar
     createStandardStatusBarAction();
-    
+
     // ---------------------------------------------------------------------------------
 
     ThemeManager::instance()->registerThemeActions(this);
@@ -674,6 +677,7 @@ void EditorWindow::setupStatusBar()
             m_stackView, SLOT(setZoomFactor(double)));
 
     d->previewToolBar = new PreviewToolBar(statusBar());
+    d->previewToolBar->registerMenuActionGroup(this);
     d->previewToolBar->setEnabled(false);
     statusBar()->addPermanentWidget(d->previewToolBar);
 
@@ -816,6 +820,7 @@ void EditorWindow::slotZoomTo100Percents()
 
 void EditorWindow::slotZoomChanged(bool isMax, bool isMin, double zoom)
 {
+    //qDebug()<<"EditorWindow::slotZoomChanged";
     d->zoomPlusAction->setEnabled(!isMax);
     d->zoomMinusAction->setEnabled(!isMin);
 
@@ -2565,8 +2570,26 @@ bool EditorWindow::localFileRename(const QString& src, const QString& destPath)
     {
         filePermissions = stbuf.st_mode;
     }
-
 #endif
+
+    struct stat st;
+
+    if (::stat(QFile::encodeName(m_savingContext.srcURL.toLocalFile()), &st) == 0)
+    {
+        // See B.K.O #329608: Restore file modification time from original file only if updateFileTimeStamp for Setup/Metadata is turned off.
+
+        if (!MetadataSettings::instance()->settings().updateFileTimeStamp)
+        {
+            struct utimbuf ut;
+            ut.modtime = st.st_mtime;
+            ut.actime  = st.st_atime;
+
+            if (::utime(QFile::encodeName(src), &ut) != 0)
+            {
+                kWarning() << "Failed to restore modification time for file " << dest;
+            }
+        }
+    }
 
     // rename tmp file to dest
     // KDE::rename() takes care of QString -> bytestring encoding
@@ -2576,13 +2599,11 @@ bool EditorWindow::localFileRename(const QString& src, const QString& destPath)
     }
 
 #ifndef Q_OS_WIN
-
     // restore permissions
     if (::chmod(dstFileName, filePermissions) != 0)
     {
         kWarning() << "Failed to restore file permissions for file " << dstFileName;
     }
-
 #endif
 
     return true;
@@ -2909,7 +2930,7 @@ void EditorWindow::slotThemeChanged()
         m_bgColor = palette().color(QPalette::Base);
     }
 
-    m_canvas->setBackgroundColor(m_bgColor);
+    m_canvas->setBackgroundBrush(QBrush(m_bgColor));
     d->toolIface->themeChanged();
 }
 
@@ -2955,9 +2976,9 @@ bool EditorWindow::thumbbarVisibility() const
 
 void EditorWindow::customizedFullScreenMode(bool set)
 {
-    set ? m_canvas->setBackgroundColor(QColor(Qt::black))
-        : m_canvas->setBackgroundColor(m_bgColor);
-        
+    set ? m_canvas->setBackgroundBrush(QBrush(Qt::black))
+        : m_canvas->setBackgroundBrush(QBrush(m_bgColor));
+
     statusBarMenuAction()->setEnabled(!set);
     toolBarMenuAction()->setEnabled(!set);
     d->showMenuBarAction->setEnabled(!set);

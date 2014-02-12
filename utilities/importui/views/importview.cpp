@@ -63,7 +63,9 @@ public:
         iconView(0),
         mapView(0),
         stackedView(0),
-        lastViewMode(ImportStackedView::PreviewCameraMode)
+        lastViewMode(ImportStackedView::PreviewCameraMode),
+        model(0),
+        filterModel(0)
         //FIXME: filterWidget(0)
     {
     }
@@ -90,29 +92,37 @@ public:
     ImportStackedView*                 stackedView;
     ImportStackedView::StackedViewMode lastViewMode;
 
-    //FIXME: FilterSideBarWidget* filterWidget;
+    ImportImageModel*                  model;
+    ImportFilterModel*                 filterModel;
 
-    QString                       optionAlbumViewPrefix;
+    //FIXME: FilterSideBarWidget*      filterWidget;
+
+    QString                            optionAlbumViewPrefix;
 };
 
 void ImportView::Private::addPageUpDownActions(ImportView* const q, QWidget* const w)
 {
-    QShortcut* nextImageShortcut = new QShortcut(w);
+    QShortcut* const nextImageShortcut = new QShortcut(w);
     nextImageShortcut->setKey(Qt::Key_PageDown);
     nextImageShortcut->setContext(Qt::WidgetWithChildrenShortcut);
+
     connect(nextImageShortcut, SIGNAL(activated()),
             q, SLOT(slotNextItem()));
 
-    QShortcut* prevImageShortcut = new QShortcut(w);
+    QShortcut* const prevImageShortcut = new QShortcut(w);
     prevImageShortcut->setKey(Qt::Key_PageUp);
     prevImageShortcut->setContext(Qt::WidgetWithChildrenShortcut);
+
     connect(prevImageShortcut, SIGNAL(activated()),
             q, SLOT(slotPrevItem()));
 }
 
-ImportView::ImportView(ImportUI* const ui, QWidget* const parent)
+ImportView::ImportView(ImportUI* const ui, ImportImageModel* const model, ImportFilterModel* const filterModel, QWidget* const parent)
     : KHBox(parent), d(new Private)
 {
+    d->model       = model;
+    d->filterModel = filterModel;
+
     d->parent   = static_cast<ImportUI*>(ui);
     d->splitter = new SidebarSplitter;
     d->splitter->setFrameStyle(QFrame::NoFrame);
@@ -122,14 +132,17 @@ ImportView::ImportView(ImportUI* const ui, QWidget* const parent)
     d->splitter->setParent(this);
 
     // The dock area where the thumbnail bar is allowed to go.
+    // TODO qmainwindow here, wtf?
     d->dockArea    = new QMainWindow(this, Qt::Widget);
     d->splitter->addWidget(d->dockArea);
-    d->stackedView = new ImportStackedView(d->parent->getCameraController(), d->dockArea);
+    d->stackedView = new ImportStackedView(d->dockArea);
+    d->stackedView->setModels(d->model, d->filterModel);
+    d->stackedView->setViewMode(ImportStackedView::PreviewCameraMode); // call here, because the models need to be set first..
     d->dockArea->setCentralWidget(d->stackedView);
     d->stackedView->setDockArea(d->dockArea);
 
-    d->iconView    = d->stackedView->importIconView();
-    d->mapView     = d->stackedView->mapWidgetView();
+    d->iconView = d->stackedView->importIconView();
+    d->mapView  = d->stackedView->mapWidgetView();
 
     d->addPageUpDownActions(this, d->stackedView->importPreviewView());
     d->addPageUpDownActions(this, d->stackedView->thumbBar());
@@ -310,7 +323,7 @@ CamItemInfo& ImportView::camItemInfoRef(const QString& folder, const QString& fi
     return d->iconView->camItemInfoRef(folder, file);
 }
 
-bool ImportView::hasImage(const CamItemInfo& info)
+bool ImportView::hasImage(const CamItemInfo& info) const
 {
     return d->iconView->importImageModel()->hasImage(info);
 }
@@ -343,11 +356,11 @@ void ImportView::setSelectedCamItemInfos(const CamItemInfoList& infos) const
 int ImportView::downloadedCamItemInfos() const
 {
     QList<CamItemInfo> infos = d->iconView->camItemInfos();
-    int numberOfDownloaded = 0;
+    int numberOfDownloaded   = 0;
 
     foreach(const CamItemInfo& info, infos)
     {
-        if(info.downloaded == CamItemInfo::DownloadedYes)
+        if (info.downloaded == CamItemInfo::DownloadedYes)
         {
             ++numberOfDownloaded;
         }
@@ -356,13 +369,13 @@ int ImportView::downloadedCamItemInfos() const
     return numberOfDownloaded;
 }
 
-bool ImportView::isSelected(const KUrl url)
+bool ImportView::isSelected(const KUrl& url) const
 {
     QList<KUrl> urlsList = selectedUrls();
 
     foreach(const KUrl& selected, urlsList)
     {
-        if(url == selected)
+        if (url == selected)
         {
             return true;
         }
@@ -447,12 +460,12 @@ void ImportView::slotDispatchImageSelected()
     }
 }
 
-double ImportView::zoomMin()
+double ImportView::zoomMin() const
 {
     return d->stackedView->zoomMin();
 }
 
-double ImportView::zoomMax()
+double ImportView::zoomMax() const
 {
     return d->stackedView->zoomMax();
 }
@@ -496,7 +509,7 @@ void ImportView::setThumbSize(int size)
     }
 }
 
-ThumbnailSize ImportView::thumbnailSize()
+ThumbnailSize ImportView::thumbnailSize() const
 {
     return d->thumbSize;
 }
@@ -655,19 +668,18 @@ void ImportView::slotImagePreview()
 void ImportView::slotTogglePreviewMode(const CamItemInfo& info, bool downloadPreview)
 {
     if (  (d->stackedView->viewMode() == ImportStackedView::PreviewCameraMode ||
-           d->stackedView->viewMode() == ImportStackedView::MapWidgetMode || downloadPreview)
-          && !info.isNull() )
+           d->stackedView->viewMode() == ImportStackedView::MapWidgetMode || downloadPreview) &&
+           !info.isNull() )
     {
-        d->lastViewMode = d->stackedView->viewMode();
+        d->lastViewMode      = d->stackedView->viewMode();
+        CamItemInfo previous = CamItemInfo();
 
-        if (d->stackedView->viewMode() == ImportStackedView::PreviewCameraMode)
+        if (!downloadPreview)
         {
-            d->stackedView->setPreviewItem(info, d->iconView->previousInfo(info), d->iconView->nextInfo(info));
+            previous = d->iconView->previousInfo(info);
         }
-        else
-        {
-            d->stackedView->setPreviewItem(info, CamItemInfo(), CamItemInfo());
-        }
+
+        d->stackedView->setPreviewItem(info, previous, d->iconView->nextInfo(info));
     }
     else
     {
@@ -696,9 +708,11 @@ void ImportView::slotViewModeChanged()
             emit signalSwitchedToPreview();
             slotZoomFactorChanged(d->stackedView->zoomFactor());
             break;
-        //TODO: case ImportStackedView::WelcomePageMode:
-            //emit signalSwitchedToIconView();
-            //break;
+/* TODO
+        case ImportStackedView::WelcomePageMode:
+            emit signalSwitchedToIconView();
+            break;
+*/
         case ImportStackedView::MediaPlayerMode:
             emit signalSwitchedToPreview();
             break;
@@ -772,7 +786,7 @@ void ImportView::slotGroupImages(int categoryMode)
 void ImportView::toggleShowBar(bool b)
 {
     d->stackedView->thumbBarDock()->showThumbBar(b);
-    
+
     // See B.K.O #319876 : force to reload current view mode to set thumbbar visibility properly.
     d->stackedView->setViewMode(viewMode());
 }
@@ -808,6 +822,11 @@ void ImportView::slotImageExifOrientation(int orientation)
     FileActionMngr::instance()->setExifOrientation(d->iconView->selectedCamItemInfos(), orientation);
 }
 */
+
+ImportFilterModel* ImportView::importFilterModel() const
+{
+    return d->filterModel;
+}
 
 ImportStackedView::StackedViewMode ImportView::viewMode() const
 {

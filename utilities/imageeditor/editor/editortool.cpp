@@ -296,17 +296,20 @@ void EditorTool::slotPreviewModeChanged()
 void EditorTool::setBackgroundColor(const QColor& bg)
 {
     ImageGuideWidget* const view = dynamic_cast<ImageGuideWidget*>(d->view);
+    QPalette palette;
 
     if (view)
     {
-        view->setBackgroundColor(bg);
+        palette.setColor(view->backgroundRole(), bg);
+        view->setPalette(palette);
     }
 
     ImageRegionWidget* const view2 = dynamic_cast<ImageRegionWidget*>(d->view);
 
     if (view2)
     {
-        view2->setBackgroundColor(bg);
+        palette.setColor(view2->backgroundRole(), bg);
+        view2->setPalette(palette);
     }
 }
 
@@ -412,13 +415,19 @@ DImgThreadedFilter* EditorToolThreaded::filter() const
 void EditorToolThreaded::slotInit()
 {
     EditorTool::slotInit();
-    
+
     QWidget* const view = toolView();
-    
-    if (dynamic_cast<ImageGuideWidget*>(view) || dynamic_cast<ImageRegionWidget*>(view))
+
+    if (dynamic_cast<ImageGuideWidget*>(view))
     {
         connect(view, SIGNAL(signalResized()),
                 this, SLOT(slotResized()));
+    }
+
+    if (dynamic_cast<ImageRegionWidget*>(view))
+    {
+        connect(view, SIGNAL(signalOriginalClipFocusChanged()),
+                this, SLOT(slotTimer()));
     }
 }
 

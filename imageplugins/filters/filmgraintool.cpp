@@ -105,9 +105,6 @@ FilmGrainTool::FilmGrainTool(QObject* const parent)
 
     connect(d->settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotTimer()));
-
-    connect(d->previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotPreview()));
 }
 
 FilmGrainTool::~FilmGrainTool()

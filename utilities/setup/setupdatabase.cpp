@@ -7,7 +7,7 @@
  * Description : database setup tab
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
- * Copyright (C)      2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -90,7 +90,7 @@ SetupDatabase::SetupDatabase(KPageDialog* const dialog, QWidget* const parent)
     : QScrollArea(parent), d(new Private)
 {
     d->mainDialog           = dialog;
-    QWidget* page           = new QWidget;
+    QWidget* const page     = new QWidget;
     QVBoxLayout* mainLayout = new QVBoxLayout;
 
     d->databaseWidget       = new DatabaseWidget;
@@ -98,10 +98,10 @@ SetupDatabase::SetupDatabase(KPageDialog* const dialog, QWidget* const parent)
 
     if (!SchemaUpdater::isUniqueHashUpToDate())
     {
-        d->updateBox        = new QGroupBox(i18nc("@title:group", "Updates"));
-        QGridLayout* updateLayout = new QGridLayout;
+        d->updateBox                    = new QGroupBox(i18nc("@title:group", "Updates"));
+        QGridLayout* const updateLayout = new QGridLayout;
 
-        d->hashesButton     = new QPushButton(i18nc("@action:button", "Update File Hashes"));
+        d->hashesButton                 = new QPushButton(i18nc("@action:button", "Update File Hashes"));
         d->hashesButton->setWhatsThis(i18nc("@info:tooltip",
                                             "File hashes are used to identify identical files and to display thumbnails. "
                                             "A new, improved algorithm to create the hash is now used. "
@@ -110,7 +110,7 @@ SetupDatabase::SetupDatabase(KPageDialog* const dialog, QWidget* const parent)
                                             "<note>After the upgrade you cannot use your database with a digiKam version "
                                             "prior to 2.0.</note>"));
 
-        QPushButton* infoHash = new QPushButton;
+        QPushButton* const infoHash     = new QPushButton;
         infoHash->setIcon(SmallIcon("dialog-information"));
         infoHash->setToolTip(i18nc("@info:tooltip", "Get information about <interface>Update File Hashes</interface>"));
 

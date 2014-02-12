@@ -191,9 +191,6 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* const parent)
 
     connect(d->correctionTools, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotPreview()));
-
-    connect(d->previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotTimer()));
 }
 
 AutoCorrectionTool::~AutoCorrectionTool()

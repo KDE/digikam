@@ -3,10 +3,12 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2004-08-17
+ * Date        : 2013-07-15
  * Description : a widget to draw an image clip region.
  *
- * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2014 by Yiou Wang <geow812 at gmail dot com>
+ * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2011-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -19,31 +21,32 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * ============================================================ */
+ * ============================================================ */ 
 
 #ifndef IMAGEREGIONWIDGET_H
 #define IMAGEREGIONWIDGET_H
 
 // Qt includes
 
-#include <QtCore/QPoint>
-#include <QtCore/QRect>
-#include <QtCore/QEvent>
-#include <QtGui/QPolygon>
-#include <QtGui/QPixmap>
-#include <QtGui/QResizeEvent>
-#include <QtGui/QWheelEvent>
+#include <QPoint>
+#include <QRect>
+#include <QEvent>
+#include <QPolygon>
+#include <QPixmap>
+#include <QResizeEvent>
+#include <QWheelEvent>
 
 // Local includes
 
 #include "dimg.h"
-#include "previewwidget.h"
+#include "graphicsdimgview.h"
+#include "imagezoomsettings.h"
 #include "digikam_export.h"
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ImageRegionWidget : public PreviewWidget
+class DIGIKAM_EXPORT ImageRegionWidget : public GraphicsDImgView
 {
     Q_OBJECT
 
@@ -70,7 +73,6 @@ public:
     bool   capturePointMode() const;
 
     void   setHighLightPoints(const QPolygon& pointsList);
-    void   setCenterImageRegionPosition();
 
     void   ICCSettingsChanged();
     void   exposureSettingsChanged();
@@ -83,49 +85,21 @@ Q_SIGNALS:
 public Q_SLOTS:
 
     void slotPreviewModeChanged(int mode);
-    void slotOriginalImageRegionChanged(bool targetDone);
+    void slotOriginalImageRegionChanged(bool targetDone=true);
 
-private Q_SLOTS:
+protected:
 
-    void slotZoomFactorChanged();
-    void slotPanIconSelectionMoved(const QRect& rect, bool targetDone);
-    void slotContentTakeFocus();
-    void slotContentLeaveFocus();
+    void mousePressEvent(QMouseEvent*);
+    void mouseReleaseEvent(QMouseEvent*);
 
 private:
 
-    void   setContentsPosition(int x, int y, bool targetDone);
-
-    /** To get image region including original or/and target area depending of separate view mode.
-        The region is given using not scaled image unit.
-     */
-    QRect  getOriginalImageRegion()      const;
-
-    QRect  getLocalImageRegionToRender() const;
-
-    void   backupPixmapRegion();
-    void   restorePixmapRegion();
-
-    void   enterEvent(QEvent*);
-    void   leaveEvent(QEvent*);
-    void   contentsMousePressEvent(QMouseEvent*);
-    void   contentsMouseReleaseEvent(QMouseEvent*);
-
-    int    previewWidth()  const;
-    int    previewHeight() const;
-    bool   previewIsNull() const;
-    void   resetPreview();
-    QImage previewToQImage() const;
-
-    void   viewportPaintExtraData();
-    void   emitCapturedPointFromOriginal(const QPoint& pt);
-
-    inline void paintPreview(QPixmap* const pix, int sx, int sy, int sw, int sh);
+    void emitCapturedPointFromOriginal(const QPointF&);
 
 private:
 
     class Private;
-    Private* const d;
+    Private* const d_ptr;
 };
 
 }  // namespace Digikam

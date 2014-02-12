@@ -272,9 +272,11 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->writeRawFilesBox->setEnabled(KExiv2::supportMetadataWritting("image/x-raw"));
 
     d->updateFileTimeStampBox = new QCheckBox;
-    d->updateFileTimeStampBox->setText(i18nc("@option:check", "&Update file timestamp when metadata is saved"));
+    d->updateFileTimeStampBox->setText(i18nc("@option:check", "&Update file timestamp when files are modified"));
     d->updateFileTimeStampBox->setWhatsThis(i18nc("@info:whatsthis",
-                                                  "Turn on this option to update file timestamps when metadata saved."));
+                                                  "Turn off this option to not update file timestamps when files are changed as when you update metadata or image data. "
+                                                  "Note: disabling this option can introduce some dysfunctions with applications which use file timestamps properties to "
+                                                  "detect file modifications automatically."));
 
     readWriteLayout->addWidget(readWriteIconLabel,        0, 0);
     readWriteLayout->addWidget(readWriteLabel,            0, 1);

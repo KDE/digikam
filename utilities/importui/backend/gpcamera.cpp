@@ -678,7 +678,6 @@ bool GPCamera::getFolders(const QString& folder)
     return true;
 #else
     Q_UNUSED(folder);
-    Q_UNUSED(subFolderList);
     return false;
 #endif /* HAVE_GPHOTO2 */
 }

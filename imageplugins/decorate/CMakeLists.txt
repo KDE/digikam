@@ -16,10 +16,8 @@ TARGET_LINK_LIBRARIES(
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${KDCRAW_LIBRARIES}
-
-    ${QT_QT3SUPPORT_LIBRARY}
     )
 
-INSTALL(TARGETS digikamimageplugin_decorate DESTINATION ${PLUGIN_INSTALL_DIR})
-INSTALL(FILES digikamimageplugin_decorate_ui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam)
+INSTALL(TARGETS digikamimageplugin_decorate       DESTINATION ${PLUGIN_INSTALL_DIR})
+INSTALL(FILES digikamimageplugin_decorate_ui.rc   DESTINATION ${DATA_INSTALL_DIR}/digikam)
 INSTALL(FILES digikamimageplugin_decorate.desktop DESTINATION ${SERVICES_INSTALL_DIR})

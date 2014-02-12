@@ -27,6 +27,7 @@
 
 #include <QSqlError>
 #include <QSqlDriver>
+#include <QSqlRecord>
 
 // KDE Includes
 

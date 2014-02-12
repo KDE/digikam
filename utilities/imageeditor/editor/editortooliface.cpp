@@ -6,7 +6,7 @@
  * Date        : 2008-08-20
  * Description : Image editor interface used by editor tools.
  *
- * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,6 +38,7 @@
 #include "editorwindow.h"
 #include "imageguidewidget.h"
 #include "imageregionwidget.h"
+#include "previewlayout.h"
 
 namespace Digikam
 {
@@ -104,6 +105,7 @@ void EditorToolIface::loadTool(EditorTool* const tool)
     d->editor->toggleToolActions(d->tool);
 
     // If editor tool has zoomable preview, switch on zoom actions.
+    
     d->editor->toggleZoomActions(d->editor->editorStackView()->isZoomablePreview());
 
     ImageGuideWidget* const view = dynamic_cast<ImageGuideWidget*>(d->tool->toolView());
@@ -116,6 +118,8 @@ void EditorToolIface::loadTool(EditorTool* const tool)
         view->slotPreviewModeChanged(d->editor->previewMode());
     }
 
+    // To set zoomable preview zoom level and position accordingly with main canvas.
+
     ImageRegionWidget* const view2 = dynamic_cast<ImageRegionWidget*>(d->tool->toolView());
 
     if (view2)
@@ -123,13 +127,13 @@ void EditorToolIface::loadTool(EditorTool* const tool)
         connect(d->editor, SIGNAL(signalPreviewModeChanged(int)),
                 view2, SLOT(slotPreviewModeChanged(int)));
 
-        if (d->editor->editorStackView()->canvas()->fitToWindow())
+        if (d->editor->editorStackView()->canvas()->layout()->isFitToWindow())
         {
             view2->toggleFitToWindow();
         }
         else
         {
-            view2->setZoomFactor(d->editor->editorStackView()->canvas()->zoomFactor());
+            view2->layout()->setZoomFactor(d->editor->editorStackView()->canvas()->layout()->zoomFactor());
             QPoint tl = d->editor->editorStackView()->canvas()->visibleArea().topLeft();
             view2->setContentsPos(tl.x(), tl.y());
         }
@@ -158,22 +162,36 @@ void EditorToolIface::unLoadTool()
         return;
     }
 
+    // To restore  zoom level and position accordingly with zoomable preview.
+
+    ImageRegionWidget* const view2 = dynamic_cast<ImageRegionWidget*>(d->tool->toolView());
+
+    if (view2)
+    {
+        if (view2->layout()->isFitToWindow())
+        {
+            d->editor->editorStackView()->canvas()->toggleFitToWindow();
+        }
+        else
+        {
+            d->editor->editorStackView()->canvas()->layout()->setZoomFactor(view2->layout()->zoomFactor());
+            QPoint tl = view2->visibleArea().topLeft();
+            d->editor->editorStackView()->canvas()->setContentsPos(tl.x(), tl.y());
+        }
+    }
+
     d->editor->editorStackView()->setViewMode(EditorStackView::CanvasMode);
     d->editor->editorStackView()->setToolView(0);
     d->editor->rightSideBar()->deleteTab(d->tool->toolSettings());
+
     if (!d->editor->rightSideBar()->isVisible())
     {
         d->editor->rightSideBar()->shrink();
     }
+
     d->editor->toggleActions(true);
     d->editor->toggleToolActions();
     d->editor->setPreviewModeMask(PreviewToolBar::NoPreviewMode);
-
-    // To restore canvas zoom level in zoom combobox.
-    if (!d->editor->editorStackView()->canvas()->fitToWindow())
-    {
-        d->editor->editorStackView()->setZoomFactor(d->editor->editorStackView()->canvas()->zoomFactor());
-    }
 
     delete d->tool;
     d->tool = 0;
@@ -263,7 +281,7 @@ void EditorToolIface::updateExposureSettings()
 {
     ExposureSettingsContainer* const expoSettings = d->editor->exposureSettings();
     d->editor->editorStackView()->canvas()->setExposureSettings(expoSettings);
-    EditorTool* const tool = dynamic_cast<EditorTool*>(d->tool);
+    EditorTool* const tool                        = dynamic_cast<EditorTool*>(d->tool);
 
     if (tool)
     {

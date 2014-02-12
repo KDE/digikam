@@ -106,7 +106,6 @@ public:
 MonthWidget::MonthWidget(QWidget* const parent)
     : QWidget(parent), d(new Private)
 {
-    setWindowFlags(Qt::WNoAutoErase);
     init();
 
     QDate date = QDate::currentDate();

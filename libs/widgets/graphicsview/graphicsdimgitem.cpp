@@ -172,6 +172,12 @@ void GraphicsDImgItem::sizeHasChanged()
     emit imageSizeChanged(d->zoomSettings.zoomedSize());
 }
 
+void GraphicsDImgItem::clearCache()
+{
+    Q_D(GraphicsDImgItem);
+    d->cachedPixmaps.clear();
+}
+
 const ImageZoomSettings* GraphicsDImgItem::zoomSettings() const
 {
     Q_D(const GraphicsDImgItem);
@@ -223,6 +229,11 @@ void GraphicsDImgItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 
         painter->drawPixmap(drawRect.topLeft(), pix);
     }
+}
+
+void GraphicsDImgItem::contextMenuEvent(QGraphicsSceneContextMenuEvent* e)
+{
+    emit showContextMenu(e);
 }
 
 } // namespace Digikam

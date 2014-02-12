@@ -6,7 +6,7 @@
  * Date        : 2004-11-22
  * Description : stand alone digiKam image editor GUI
  *
- * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
@@ -124,8 +124,8 @@ extern "C"
 #include "thumbnailsize.h"
 #include "uifilevalidator.h"
 #include "knotificationwrapper.h"
-#include "thumbbar/showfotodelegate.h"
-#include "thumbbar/showfotocategorizedview.h"
+#include "showfotodelegate.h"
+#include "showfotocategorizedview.h"
 #include "showfotosettings.h"
 #include "showfoto_p.h"
 
@@ -196,6 +196,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     setupUserArea();
     setupActions();
     setupStatusBar();
+    createGUI(xmlFile());
 
     // Load image plugins to GUI
 
@@ -204,7 +205,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
 
     // Create context menu.
 
-     setupContextMenu();
+    setupContextMenu();
 
     // Make signals/slots connections
 
@@ -224,8 +225,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
 
     // -- Load current items ---------------------------
 
-    //slotOpenFilesInFolder();
-    openUrls(urlList);
+    slotDroppedUrls(urlList);
 }
 
 ShowFoto::~ShowFoto()
@@ -345,6 +345,9 @@ void ShowFoto::setupConnections()
 
     connect(d->rightSideBar, SIGNAL(signalSetupMetadataFilters(int)),
             this, SLOT(slotSetupMetadataFilters(int)));
+
+    connect(d->dDHandler, SIGNAL(signalDroppedUrls(KUrl::List)),
+            this, SLOT(slotDroppedUrls(KUrl::List)));
 }
 
 void ShowFoto::setupUserArea()
@@ -399,6 +402,8 @@ void ShowFoto::setupUserArea()
 
     d->model = new ShowfotoThumbnailModel(d->thumbBar);
     d->model->setThumbnailLoadThread(d->thumbLoadThread);
+    d->dDHandler = new ShowfotoDragDropHandler(d->model);
+    d->model->setDragDropHandler(d->dDHandler);
 
     d->filterModel = new ShowfotoFilterModel(d->thumbBar);
     d->filterModel->setSourceShowfotoModel(d->model);
@@ -443,10 +448,6 @@ void ShowFoto::setupActions()
     // -- Standard 'Help' menu actions ---------------------------------------------
 
     createHelpActions(false);
-
-    // --- Create the GUI ----------------------------------------------------
-
-    createGUI(xmlFile());
 }
 
 void ShowFoto::readSettings()
@@ -481,6 +482,7 @@ void ShowFoto::saveSettings()
 
     d->settings->setLastOpenedDir(d->lastOpenedDirectory.toLocalFile());
     d->settings->setCurrentTheme(Digikam::ThemeManager::instance()->currentThemeName());
+    d->settings->syncConfig();
 
     d->rightSideBar->saveState();
 }
@@ -526,7 +528,7 @@ void ShowFoto::slotOpenFile()
         return;
     }
 
-    KUrl::List urls = Digikam::ImageDialog::getImageURLs(this, d->lastOpenedDirectory);
+    KUrl::List urls = Digikam::ImageDialog::getImageURLs(this, d->lastOpenedDirectory);    
     openUrls(urls);
 }
 
@@ -535,36 +537,36 @@ void ShowFoto::openUrls(const KUrl::List &urls)
     if (!urls.isEmpty())
     {
         ShowfotoItemInfoList infos;
-        ShowfotoItemInfo iteminfo;
-        DMetadata meta;
+        ShowfotoItemInfo     iteminfo;
+        DMetadata            meta;
         int i = 0;
+
         for (KUrl::List::const_iterator it = urls.constBegin();
              it != urls.constEnd(); ++it)
         {
             QFileInfo fi((*it).toLocalFile());
-            iteminfo.name = fi.fileName();
-            iteminfo.mime = fi.suffix();
-            iteminfo.size = fi.size();
-            iteminfo.url  = fi.filePath();
-            iteminfo.folder = fi.path();
-            iteminfo.dtime = fi.created();
+            iteminfo.name      = fi.fileName();
+            iteminfo.mime      = fi.suffix();
+            iteminfo.size      = fi.size();
+            iteminfo.url       = fi.filePath();
+            iteminfo.folder    = fi.path();
+            iteminfo.dtime     = fi.created();
             meta.load(fi.filePath());
-            iteminfo.ctime = meta.getImageDateTime();
-            iteminfo.width = meta.getImageDimensions().width();
-            iteminfo.height = meta.getImageDimensions().height();
+            iteminfo.ctime     = meta.getImageDateTime();
+            iteminfo.width     = meta.getImageDimensions().width();
+            iteminfo.height    = meta.getImageDimensions().height();
             iteminfo.photoInfo = meta.getPhotographInformation();
             infos.append(iteminfo);
             i++;
         }
 
-        if(d->infoList.isEmpty())
+        if(d->droppedUrls)
         {
-            d->infoList=infos;
-            emit signalInfoList(d->infoList);
+            //replace the equal sign with "<<" to keep the previous pics in the list
+            d->infoList << infos;
         }
         else
         {
-            //replace the equal sign with "<<" to keep the previous pics in the list
             d->infoList = infos;
             d->model->clearShowfotoItemInfos();
             emit signalInfoList(d->infoList);
@@ -715,6 +717,7 @@ void ShowFoto::slotOpenFolder(const KUrl& url)
     {
         return;
     }
+
     m_canvas->load(QString(), m_IOFileSettings);
     d->thumbBar->showfotoItemInfos().clear();
     emit signalNoCurrentItem();
@@ -794,7 +797,6 @@ void ShowFoto::slotBackward()
          d->thumbBar->toPreviousIndex();
          slotOpenUrl(d->thumbBar->currentInfo());
     }
-
 }
 
 void ShowFoto::toggleNavigation(int index)
@@ -887,27 +889,29 @@ void ShowFoto::saveIsComplete()
 void ShowFoto::saveAsIsComplete()
 {
     resetOriginSwitchFile();
-//    Digikam::LoadingCacheInterface::putImage(m_savingContext.destinationURL.toLocalFile(), m_canvas->currentImage());
+/*
+    Digikam::LoadingCacheInterface::putImage(m_savingContext.destinationURL.toLocalFile(), m_canvas->currentImage());
 
-//    // Add the file to the list of thumbbar images if it's not there already
-//    Digikam::ThumbBarItem* foundItem = d->thumbBar->findItemByUrl(m_savingContext.destinationURL);
-//    d->thumbBar->invalidateThumb(foundItem);
+    // Add the file to the list of thumbbar images if it's not there already
+    Digikam::ThumbBarItem* foundItem = d->thumbBar->findItemByUrl(m_savingContext.destinationURL);
+    d->thumbBar->invalidateThumb(foundItem);qDebug() << wantedUrls;
 
-//    if (!foundItem)
-//    {
-//        foundItem = new Digikam::ThumbBarItem(d->thumbBar, m_savingContext.destinationURL);
-//    }
+    if (!foundItem)
+    {
+        foundItem = new Digikam::ThumbBarItem(d->thumbBar, m_savingContext.destinationURL);
+    }
 
-//    // shortcut slotOpenUrl
-//    d->thumbBar->blockSignals(true);
-//    d->thumbBar->setSelected(foundItem);
-//    d->thumbBar->blockSignals(false);
-//    d->currentItem = foundItem;
-//    slotUpdateItemInfo();
+    // shortcut slotOpenUrl
+    d->thumbBar->blockSignals(true);
+    d->thumbBar->setSelected(foundItem);
+    d->thumbBar->blockSignals(false);
+    d->currentItem = foundItem;
+    slotUpdateItemInfo();
 
-//    // Pop-up a message to bring user when save is done.
-//    Digikam::KNotificationWrapper("editorsavefilecompleted", i18n("Image saved successfully"),
-//                                  this, windowTitle());
+    // Pop-up a message to bring user when save is done.
+    Digikam::KNotificationWrapper("editorsavefilecompleted", i18n("Image saved successfully"),
+                                    this, windowTitle());
+*/
 }
 
 void ShowFoto::saveVersionIsComplete()
@@ -994,9 +998,9 @@ void ShowFoto::slotDeleteCurrentItemResult(KJob* job)
     }
 
     // No error, remove item in thumbbar.
-    //d->model->removeShowfotoItemInfo(d->thumbBar->currentInfo());
+    //d->model->removeIndex(d->thumbBar->currentIndex());
 
-//    // Disable menu actions and SideBar if no current image.
+    // Disable menu actions and SideBar if no current image.
 
     d->itemsNb = d->thumbBar->showfotoItemInfos().size();
 
@@ -1088,11 +1092,11 @@ bool ShowFoto::saveNewVersionAs()
 {
     return false;
 }
+
 bool ShowFoto::saveNewVersionInFormat(const QString&)
 {
     return false;
 }
-
 
 void ShowFoto::openFolder(const KUrl& url)
 {
@@ -1218,28 +1222,26 @@ void ShowFoto::openFolder(const KUrl& url)
 
     for (fi = fileinfolist.constBegin(); fi != fileinfolist.constEnd(); ++fi)
     {
-        iteminfo.name = (*fi).fileName();
-        iteminfo.mime = (*fi).suffix();
-        iteminfo.size = (*fi).size();
-        iteminfo.folder = (*fi).path();
-        iteminfo.url = (*fi).filePath();
-        iteminfo.dtime = (*fi).created();
+        iteminfo.name      = (*fi).fileName();
+        iteminfo.mime      = (*fi).suffix();
+        iteminfo.size      = (*fi).size();
+        iteminfo.folder    = (*fi).path();
+        iteminfo.url       = (*fi).filePath();
+        iteminfo.dtime     = (*fi).created();
         meta.load((*fi).filePath());
-        iteminfo.ctime = meta.getImageDateTime();
-        iteminfo.width = meta.getImageDimensions().width();
-        iteminfo.height = meta.getImageDimensions().height();
+        iteminfo.ctime     = meta.getImageDateTime();
+        iteminfo.width     = meta.getImageDimensions().width();
+        iteminfo.height    = meta.getImageDimensions().height();
         iteminfo.photoInfo = meta.getPhotographInformation();
         infos.append(iteminfo);
     }
 
-    if(d->infoList.isEmpty())
+    if(d->droppedUrls)
     {
-        d->infoList=infos;
-        emit signalInfoList(d->infoList);
+        d->infoList << infos;
     }
     else
     {
-        //replace the equal sign with "<<" to keep the previous pics in the list
         d->infoList = infos;
         d->model->clearShowfotoItemInfos();
         emit signalInfoList(d->infoList);
@@ -1249,11 +1251,74 @@ void ShowFoto::openFolder(const KUrl& url)
     d->lastOpenedDirectory = d->infoList.at(0).url;
 }
 
+void ShowFoto::slotDroppedUrls(const KUrl::List& droppedUrls)
+{
+    if(!droppedUrls.isEmpty())
+    {
+        d->droppedUrls = true;
 
+        KUrl::List imagesUrls;
+        KUrl::List foldersUrls;
+
+        foreach (KUrl url, droppedUrls)
+        {
+            if(KMimeType::findByUrl(url)->name().startsWith("image", Qt::CaseInsensitive))
+            {
+                imagesUrls << url;
+            }
+
+            if(KMimeType::findByUrl(url)->name() == "inode/directory")
+            {
+                foldersUrls << url;
+            }
+        }
+
+        if(!imagesUrls.isEmpty())
+        {
+            openUrls(imagesUrls);
+        }
+
+        if(!foldersUrls.isEmpty())
+        {
+            foreach (KUrl fUrl, foldersUrls)
+            {
+                openFolder(fUrl);
+            }
+        }
+
+        d->model->clearShowfotoItemInfos();
+        emit signalInfoList(d->infoList);
+
+        d->droppedUrls = false;
+    }
+}
 
 void ShowFoto::slotSetupMetadataFilters(int tab)
 {
     Setup::execMetadataFilters(this, tab+1);
+}
+
+void ShowFoto::slotAddedDropedItems(QDropEvent* e)
+{
+    QList<QUrl> list = e->mimeData()->urls();
+    KUrl::List urls;
+
+    foreach(const QUrl& url, list)
+    {
+        QFileInfo fi(url.path());
+
+        if (fi.exists())
+        {
+            urls.append(KUrl(url));
+        }
+    }
+
+    e->accept();
+
+    if (!urls.isEmpty())
+    {
+        slotDroppedUrls(urls);
+    }
 }
 
 }   // namespace ShowFoto

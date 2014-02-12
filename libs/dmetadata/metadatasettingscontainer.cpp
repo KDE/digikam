@@ -6,7 +6,7 @@
  * Date        : 2010-08-20
  * Description : Metadata Settings Container.
  *
- * Copyright (C) 2010-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,7 +49,7 @@ MetadataSettingsContainer::MetadataSettingsContainer()
     writeRawFiles         = false;
     useXMPSidecar4Reading = false;
     metadataWritingMode   = KExiv2::WRITETOIMAGEONLY;
-    updateFileTimeStamp   = false;
+    updateFileTimeStamp   = true;
     rotationBehavior      = RotatingFlags | RotateByLosslessRotation;
 }
 
@@ -70,9 +70,9 @@ void MetadataSettingsContainer::readFromConfig(KConfigGroup& group)
 
     writeRawFiles         = group.readEntry("Write RAW Files",             false);
     useXMPSidecar4Reading = group.readEntry("Use XMP Sidecar For Reading", false);
-    metadataWritingMode   = (KExiv2::MetadataWritingMode)group.readEntry("Metadata Writing Mode",
-                                                                           (int)KExiv2::WRITETOIMAGEONLY);
-    updateFileTimeStamp   = group.readEntry("Update File Timestamp",       false);
+    metadataWritingMode   = (KExiv2::MetadataWritingMode)
+                            group.readEntry("Metadata Writing Mode",       (int)KExiv2::WRITETOIMAGEONLY);
+    updateFileTimeStamp   = group.readEntry("Update File Timestamp",       true);
 
     rotationBehavior      = NoRotation;
 

@@ -140,9 +140,6 @@ ChannelMixerTool::ChannelMixerTool(QObject* const parent)
     connect(d->settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotTimer()));
 
-    connect(d->previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotPreview()));
-
     connect(d->settingsView, SIGNAL(signalOutChannelChanged()),
             this, SLOT(slotOutChannelChanged()));
 }

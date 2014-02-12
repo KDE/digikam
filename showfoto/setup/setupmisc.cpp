@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C)      2008 by Arnd Baecker <arnd dot baecker at web dot de>
+ * Copyright (C)      2014 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,6 +46,10 @@
 #include <knuminput.h>
 #include <kvbox.h>
 
+//Local includes
+
+#include "showfotosettings.h"
+
 namespace ShowFoto
 {
 
@@ -61,17 +66,9 @@ public:
         useTrash(0),
         sidebarType(0),
         sortOrderComboBox(0),
-        applicationStyle(0)
+        applicationStyle(0),
+        settings(0)
     {}
-
-    static const QString configGroupName;
-    static const QString configDeleteItem2TrashEntry;
-    static const QString configShowSplashEntry;
-    static const QString configShowMimeOverImage;
-    static const QString configSidebarTitleStyleEntry;
-    static const QString configSortOrderEntry;
-    static const QString configReverseSortEntry;
-    static const QString configApplicationStyleEntry;
 
     QLabel*              sidebarTypeLabel;
     QLabel*              applicationStyleLabel;
@@ -84,16 +81,9 @@ public:
     KComboBox*           sidebarType;
     KComboBox*           sortOrderComboBox;
     KComboBox*           applicationStyle;
-};
 
-const QString SetupMisc::Private::configGroupName("ImageViewer Settings");
-const QString SetupMisc::Private::configDeleteItem2TrashEntry("DeleteItem2Trash");
-const QString SetupMisc::Private::configShowSplashEntry("ShowSplash");
-const QString SetupMisc::Private::configShowMimeOverImage("ShowMimeOverImage");
-const QString SetupMisc::Private::configSidebarTitleStyleEntry("Sidebar Title Style");
-const QString SetupMisc::Private::configSortOrderEntry("SortOrder");
-const QString SetupMisc::Private::configReverseSortEntry("ReverseSort");
-const QString SetupMisc::Private::configApplicationStyleEntry("Application Style");
+    ShowfotoSettings*    settings;
+};
 
 // --------------------------------------------------------
 
@@ -184,30 +174,28 @@ SetupMisc::~SetupMisc()
 
 void SetupMisc::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(d->configGroupName);
-    d->useTrash->setChecked(group.readEntry(d->configDeleteItem2TrashEntry,          false));
-    d->showSplash->setChecked(group.readEntry(d->configShowSplashEntry,              true));
-    d->showMimeOverImage->setChecked(group.readEntry(d->configShowMimeOverImage,     false));
-    d->sidebarType->setCurrentIndex(group.readEntry(d->configSidebarTitleStyleEntry, 0));
-    d->sortOrderComboBox->setCurrentIndex(group.readEntry(d->configSortOrderEntry,   (int)SortByDate));
-    d->sortReverse->setChecked(group.readEntry(d->configReverseSortEntry,            false));
+    d->settings = ShowfotoSettings::instance();
+
+    d->useTrash->setChecked(d->settings->getDeleteItem2Trash());
+    d->showSplash->setChecked(d->settings->getShowSplash());
+    d->showMimeOverImage->setChecked(d->settings->getShowFormatOverThumbnail());
+    d->sidebarType->setCurrentIndex(d->settings->getRightSideBarStyle());
+    d->sortOrderComboBox->setCurrentIndex(d->settings->getSortRole());
+    d->sortReverse->setChecked(d->settings->getReverseSort());
     d->applicationStyle->setCurrentIndex(d->applicationStyle->
-        findText(group.readEntry(d->configApplicationStyleEntry, kapp->style()->objectName())));
+        findText(d->settings->getApplicationStyle()));
 }
 
 void SetupMisc::applySettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(d->configGroupName);
-    group.writeEntry(d->configDeleteItem2TrashEntry,  d->useTrash->isChecked());
-    group.writeEntry(d->configShowSplashEntry,        d->showSplash->isChecked());
-    group.writeEntry(d->configShowMimeOverImage,      d->showMimeOverImage->isChecked());
-    group.writeEntry(d->configSidebarTitleStyleEntry, d->sidebarType->currentIndex());
-    group.writeEntry(d->configSortOrderEntry,         d->sortOrderComboBox->currentIndex());
-    group.writeEntry(d->configReverseSortEntry,       d->sortReverse->isChecked());
-    group.writeEntry(d->configApplicationStyleEntry,  d->applicationStyle->currentText());
-    config->sync();
+    d->settings->setDeleteItem2Trash(d->useTrash->isChecked());
+    d->settings->setShowSplash(d->showSplash->isChecked());
+    d->settings->setShowFormatOverThumbnail(d->showMimeOverImage->isChecked());
+    d->settings->setRightSideBarStyle(d->sidebarType->currentIndex());
+    d->settings->setSortRole(d->sortOrderComboBox->currentIndex());
+    d->settings->setReverseSort(d->sortReverse->isChecked());
+    d->settings->setApplicationStyle(d->applicationStyle->currentText());
+    d->settings->syncConfig();
 }
 
 }   // namespace ShowFoto

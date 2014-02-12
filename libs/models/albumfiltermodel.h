@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2014      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -34,6 +35,7 @@
 
 #include "albummodel.h"
 #include "searchtextbar.h"
+#include "KStringHandler"
 
 namespace Digikam
 {
@@ -126,6 +128,45 @@ public:
      *         any filtering without checking if this really happens.
      */
     virtual bool isFiltering() const;
+
+    /** Returns the usual compare result of -1, 0, or 1 for lessThan, equals and greaterThan. */
+    template <typename T>
+    static inline int compareValue(const T& a, const T& b)
+    {
+        if (a == b)
+        {
+            return 0;
+        }
+
+        if (a < b)
+        {
+            return -1;
+        }
+        else
+        {
+            return 1;
+        }
+    }
+
+    /** Takes a typical result from a compare method (0 is equal, -1 is less than, 1 is greater than)
+     *  and applies the given sort order to it. */
+    static inline int compareByOrder(int compareResult,  Qt::SortOrder sortOrder)
+    {
+        if (sortOrder == Qt::AscendingOrder)
+        {
+            return compareResult;
+        }
+        else
+        {
+            return - compareResult;
+        }
+    }
+
+    template <typename T>
+    static inline int compareByOrder(const T& a, const T& b, Qt::SortOrder sortOrder)
+    {
+        return compareByOrder(compareValue(a, b), sortOrder);
+    }
 
 public Q_SLOTS:
 
@@ -222,7 +263,7 @@ private:
      * @return <code>true</code> if the provided settings result in filtering
      *         the model
      */
-    bool settingsFilter(const SearchTextSettings& settings) const;
+    bool settingsFilter(const SearchTextSettings& settings) const;    
 
 };
 

@@ -6,7 +6,7 @@
  * Date        : 2006-21-12
  * Description : a embedded view to show the image preview widget.
  *
- * Copyright (C) 2006-2013 by Gilles Caulier  <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2010-2011 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
  *
@@ -30,7 +30,6 @@
 
 #include "graphicsdimgview.h"
 #include "imageinfo.h"
-#include "digikam_export.h"
 
 class QPixmap;
 
@@ -65,8 +64,6 @@ public:
     void reload();
     void setImagePath(const QString& path=QString());
     void setPreviousNextPaths(const QString& previous, const QString& next);
-
-    void showContextMenu(const ImageInfo& info, QGraphicsSceneContextMenuEvent* event);
 
 Q_SIGNALS:
 
@@ -114,9 +111,11 @@ private Q_SLOTS:
 
     /**
      * @brief slotUpdateFaces - after applying some transformation on
-     *                             image, update face tags position
+     *                          image, update face tags position
      */
     void slotUpdateFaces();
+
+    void slotShowContextMenu(QGraphicsSceneContextMenuEvent* event);
 
 private:
 

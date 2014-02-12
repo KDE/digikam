@@ -117,9 +117,6 @@ public:
     CamItemInfo        camItemInfo(const KUrl& fileUrl)   const;
     QList<CamItemInfo> camItemInfos(const KUrl& fileUrl)  const;
 
-    void addCamItemInfo(const CamItemInfo& info);
-    void addCamItemInfos(const QList<CamItemInfo>& infos);
-
     /**
      * Clears the CamItemInfos and resets the model.
      */
@@ -132,12 +129,12 @@ public:
      * This method also bypasses any incremental updates.
      */
     void addCamItemInfoSynchronously(const CamItemInfo& info);
-    void addCamItemInfosSynchronously(const QList<CamItemInfo>& infos);
+    void addCamItemInfosSynchronously(const Digikam::CamItemInfoList& infos);
 
     /**
      * Clears and adds infos.
      */
-    void setCamItemInfos(const QList<CamItemInfo>& infos);
+    void setCamItemInfos(const CamItemInfoList& infos);
 
     QList<CamItemInfo> camItemInfos()       const;
     QList<qlonglong>   camItemIds()         const;
@@ -244,6 +241,8 @@ public Q_SLOTS:
     void reAddingFinished();
     void slotFileDeleted(const QString& folder, const QString& file, bool status);
     void slotFileUploaded(const CamItemInfo& info);
+    void addCamItemInfo(const CamItemInfo& info);
+    void addCamItemInfos(const CamItemInfoList& infos);
 
 protected:
 
@@ -283,8 +282,8 @@ protected:
 
 private:
 
-    void appendInfos(const QList<CamItemInfo>& infos);
-    void publiciseInfos(const QList<CamItemInfo>& infos);
+    void appendInfos(const CamItemInfoList& infos);
+    void publiciseInfos(const CamItemInfoList& infos);
     void cleanSituationChecks();
     void removeRowPairs(const QList<QPair<int, int> >& toRemove);
     void removeRowPairsWithCheck(const QList<QPair<int, int> >& toRemove);

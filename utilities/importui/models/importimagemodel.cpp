@@ -24,8 +24,9 @@
 #include "importimagemodel.moc"
 
 // Qt includes
-
+#include "downloadhistory.h"
 #include <QHash>
+#include <KDebug>
 
 namespace Digikam
 {
@@ -111,9 +112,8 @@ ImportImageModel::~ImportImageModel()
 void ImportImageModel::setCameraController(CameraController* const controller)
 {
     d->controller = controller;
-
     connect(d->controller, SIGNAL(signalFileList(CamItemInfoList)),
-            SLOT(reAddCamItemInfos(CamItemInfoList)));
+            SLOT(addCamItemInfos(CamItemInfoList)));
 
     connect(d->controller, SIGNAL(signalDeleted(QString,QString,bool)),
             SLOT(slotFileDeleted(QString,QString,bool)));
@@ -413,7 +413,7 @@ void ImportImageModel::addCamItemInfo(const CamItemInfo& info)
     addCamItemInfos(QList<CamItemInfo>() << info);
 }
 
-void ImportImageModel::addCamItemInfos(const QList<CamItemInfo>& infos)
+void ImportImageModel::addCamItemInfos(const CamItemInfoList& infos)
 {
     if (infos.isEmpty())
     {
@@ -435,7 +435,7 @@ void ImportImageModel::addCamItemInfoSynchronously(const CamItemInfo& info)
     addCamItemInfosSynchronously(QList<CamItemInfo>() << info);
 }
 
-void ImportImageModel::addCamItemInfosSynchronously(const QList<CamItemInfo>& infos)
+void ImportImageModel::addCamItemInfosSynchronously(const CamItemInfoList& infos)
 {
     if (infos.isEmpty())
     {
@@ -463,7 +463,8 @@ void ImportImageModel::clearCamItemInfos()
     camItemInfosCleared();
 }
 
-void ImportImageModel::setCamItemInfos(const QList<CamItemInfo>& infos)
+// TODO unused
+void ImportImageModel::setCamItemInfos(const CamItemInfoList& infos)
 {
     clearCamItemInfos();
     addCamItemInfos(infos);
@@ -530,7 +531,7 @@ void ImportImageModel::emitDataChangedForSelections(const QItemSelection& select
     }
 }
 
-void ImportImageModel::appendInfos(const QList<CamItemInfo>& infos)
+void ImportImageModel::appendInfos(const CamItemInfoList& infos)
 {
     if (infos.isEmpty())
     {
@@ -601,7 +602,7 @@ void ImportImageModel::cleanSituationChecks()
     }
 }
 
-void ImportImageModel::publiciseInfos(const QList<CamItemInfo>& infos)
+void ImportImageModel::publiciseInfos(const CamItemInfoList& infos)
 {
     if (infos.isEmpty())
     {
@@ -617,7 +618,16 @@ void ImportImageModel::publiciseInfos(const QList<CamItemInfo>& infos)
 
     for (int i = firstNewIndex; i <= lastNewIndex; ++i)
     {
-        const CamItemInfo& info = d->infos.at(i);
+        CamItemInfo& info = d->infos[i];
+            
+        // TODO move this to a separate thread, see CameraHistoryUpdater
+        // TODO this is ugly, using different enums to point the similar status..
+        // TODO can we/do we want to differentiate at all between whether the status is unknown and not downloaded?
+        DownloadHistory::Status status = DownloadHistory::status(d->controller->cameraMD5ID(), info.name, info.size, info.ctime);
+        info.downloaded  = status;
+        // TODO is this safe? if so, is there a need to store this inside idHash separately?
+        info.id = i;
+
         qlonglong id            = info.id;
         d->idHash.insertMulti(id, i);
 
@@ -628,6 +638,7 @@ void ImportImageModel::publiciseInfos(const QList<CamItemInfo>& infos)
     }
 
     endInsertRows();
+    emit processAdded(infos);
     emit itemInfosAdded(infos);
 }
 

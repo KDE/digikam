@@ -6,7 +6,7 @@
  * Date        : 2004-07-20
  * Description : image histogram adjust levels.
  *
- * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -98,7 +98,7 @@ public:
         pickBlack(0),
         pickGray(0),
         pickWhite(0),
-        pickerColorButtonGroup(0),
+        pickerType(0),
         minInput(0),
         maxInput(0),
         minOutput(0),
@@ -132,7 +132,7 @@ public:
     QToolButton*         pickGray;
     QToolButton*         pickWhite;
 
-    QButtonGroup*        pickerColorButtonGroup;
+    QButtonGroup*        pickerType;
 
     RIntNumInput*        minInput;
     RIntNumInput*        maxInput;
@@ -208,7 +208,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
     d->levelsHistogramWidget->updateData(*d->originalImage);
     d->levelsHistogramWidget->setWhatsThis(i18n("This is the histogram drawing of the selected channel "
                                            "from the original image."));
-    QHBoxLayout* inputLevelsLayout = new QHBoxLayout;
+    QHBoxLayout* const inputLevelsLayout = new QHBoxLayout;
     inputLevelsLayout->addWidget(d->levelsHistogramWidget);
 
     // -------------------------------------------------------------
@@ -289,10 +289,10 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
                                     "image used to set <b>Highlight Tone</b> "
                                     "input levels on the Red, Green, Blue, and Luminosity channels."));
 
-    d->pickerColorButtonGroup = new QButtonGroup(d->pickerBox);
-    d->pickerColorButtonGroup->addButton(d->pickBlack, Private::BlackTonal);
-    d->pickerColorButtonGroup->addButton(d->pickGray,  Private::GrayTonal);
-    d->pickerColorButtonGroup->addButton(d->pickWhite, Private::WhiteTonal);
+    d->pickerType = new QButtonGroup(d->pickerBox);
+    d->pickerType->addButton(d->pickBlack, Private::BlackTonal);
+    d->pickerType->addButton(d->pickGray,  Private::GrayTonal);
+    d->pickerType->addButton(d->pickWhite, Private::WhiteTonal);
 
     QHBoxLayout* pickerBoxLayout = new QHBoxLayout;
     pickerBoxLayout->setMargin(0);
@@ -302,7 +302,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
     pickerBoxLayout->addWidget(d->pickWhite);
     d->pickerBox->setLayout(pickerBoxLayout);
 
-    d->pickerColorButtonGroup->setExclusive(true);
+    d->pickerType->setExclusive(true);
 
     // -------------------------------------------------------------
 
@@ -319,10 +319,10 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
                                       "from the currently selected channel "
                                       "will be reset to the default values."));
 
-    QLabel* space = new QLabel();
+    QLabel* const space   = new QLabel();
     space->setFixedWidth(d->gboxSettings->spacingHint());
 
-    QHBoxLayout* l3 = new QHBoxLayout();
+    QHBoxLayout* const l3 = new QHBoxLayout();
     l3->addWidget(d->pickerBox);
     l3->addWidget(d->autoButton);
     l3->addWidget(space);
@@ -331,7 +331,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    QGridLayout* grid = new QGridLayout();
+    QGridLayout* const grid = new QGridLayout();
     grid->addLayout(inputLevelsLayout, 0, 0, 1, 7);
     grid->addWidget(d->inputLevels,    1, 0, 1, 7);
     grid->addWidget(d->minInput,       2, 1, 1, 1);
@@ -354,9 +354,6 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
 
     // -------------------------------------------------------------
     // Channels and scale selection slots.
-
-    connect(d->previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotPreview()));
 
     connect(d->previewWidget, SIGNAL(signalCapturedPointFromOriginal(Digikam::DColor,QPoint)),
             this, SLOT(slotSpotColorChanged(Digikam::DColor)));
@@ -403,7 +400,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
     connect(d->resetButton, SIGNAL(clicked()),
             this, SLOT(slotResetCurrentChannel()));
 
-    connect(d->pickerColorButtonGroup, SIGNAL(buttonReleased(int)),
+    connect(d->pickerType, SIGNAL(buttonReleased(int)),
             this, SLOT(slotPickerColorButtonActived(int)));
 }
 
@@ -523,8 +520,6 @@ void AdjustLevelsTool::slotSpotColorChanged(const DColor& color)
             for (int i = RedChannel; i <= BlueChannel; i++)
                 d->levels->levelsBlackToneAdjustByColors(i, color);
         }
-
-        d->pickBlack->setChecked(false);
     }
     else if ( d->pickGray->isChecked() )
     {
@@ -533,8 +528,6 @@ void AdjustLevelsTool::slotSpotColorChanged(const DColor& color)
             // Gray tonal levels point.
             d->levels->levelsGrayToneAdjustByColors(channel, color);
         }
-
-        d->pickGray->setChecked(false);
     }
     else if ( d->pickWhite->isChecked() )
     {
@@ -548,14 +541,18 @@ void AdjustLevelsTool::slotSpotColorChanged(const DColor& color)
             for (int i = RedChannel; i <= BlueChannel; i++)
                 d->levels->levelsWhiteToneAdjustByColors(i, color);
         }
-
-        d->pickWhite->setChecked(false);
     }
     else
     {
         d->levelsHistogramWidget->setHistogramGuideByColor(color);
         return;
     }
+
+    d->pickerType->setExclusive(false);
+    d->pickBlack->setChecked(false);
+    d->pickGray->setChecked(false);
+    d->pickWhite->setChecked(false);
+    d->pickerType->setExclusive(true);
 
     // Refresh the current levels config.
     slotChannelChanged();

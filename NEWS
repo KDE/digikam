@@ -1,14 +1,20 @@
 *****************************************************************************************************
-digiKam 4.0.0-beta2 - Release date: 2014-01-12
+digiKam 4.0.0-beta4 - Release date: 2014-03-09
 
 NEW FEATURES:
 
 General  : New Tags Manager window for easy tags management.
 General  : New images quality sorter tool, based on blur, noise, and compression analysis.
 General  : Multiple selection and multiple drag-n-drop capabilities on Tags Manager and Tags View from sidebars.
+General  : Drop of Qt3Support classes. Now digiKam is pure Qt4 implementation.
 
 Metadata : Nepomuk Service fixed to use current Api. Enable it from digikam metadata settings.
 Metadata : Support for writing face rectangles in Windows Live Photo format.
+
+Editor   : Port of canvas to Qt Model/view.
+
+Showfoto : Port of Thumbbar to Qt Model/view.
+
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -130,5 +136,22 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 116 ==> 320398 - Select Album window should remember last used destination.
 117 ==> 313880 - "Sort items" choice not respected in the import Dialog box.
 118 ==> 323937 - Sorting of several camera types is missing or wrong.
-119 ==> 
-
+119 ==> 329652 - import (ctrl+n) does not import.
+120 ==> 329608 - Thumbnail of picture in dolphin never updated after picture manipulation.
+121 ==> 307844 - digiKam import, ignore the user selection, replaces it by "all selected".
+122 ==> 292318 - digiKam marble maps does not work.
+123 ==> 198406 - Xmp not synchronized, uncomplete.
+124 ==> 147921 - Gps widget in French please.
+125 ==> 330230 - Memory leak in Image Quality Sorter.
+126 ==> 227530 - Album-sorting gone from menus [patch].
+127 ==> 218023 - Albums tree does not remember sorting order (ascending/descending).
+128 ==> 126116 - Keep directory hierarchy when albums are view by category.
+129 ==> 225786 - Proposed digiKam Menu Changes.
+130 ==> 246903 - Editor Canvas : not updated when zoom level changes in plugins.
+131 ==> 129941 - Editor Canvas : Ability to Drag and Drop an image.
+132 ==> 224246 - Editor Canvas : displays useless scroll bars.
+133 ==> 233773 - Editor Canvas : ctrl + shift + e doesn't enable scrolling.
+134 ==> 170364 - Editor Canvas : Expand selection rectangle by dragging sides in image editor [patch].
+135 ==> 288761 - Cached image corrupted after modifying metadata.
+136 ==> 326018 - Freezes when I attempt to use the sharpen/refocus tool.
+137 ==> 

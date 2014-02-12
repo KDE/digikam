@@ -74,7 +74,6 @@ extern "C"
 #include "gpcamera.h"
 #include "umscamera.h"
 #include "jpegutils.h"
-#include "downloadhistory.h"
 
 namespace Digikam
 {
@@ -118,7 +117,6 @@ public:
         canceled(false),
         running(false),
         folderList(0),
-        downloadTotal(0),
         parent(0),
         timer(0),
         camera(0)
@@ -132,8 +130,6 @@ public:
     bool                  running;
 
     QStringList           folderList;
-
-    int                   downloadTotal;
 
     QWidget*              parent;
 
@@ -425,8 +421,6 @@ void CameraController::run()
 
 void CameraController::executeCommand(CameraCommand* const cmd)
 {
-    // TODO should this be moved inside the file listing? or should IDs roll always?
-    static int numberOfItems; // to give the appropriate id for each CamItemInfo.
     if (!cmd)
     {
         return;
@@ -503,13 +497,6 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
             d->camera->getFolders(folder);
 
-            // if the the last folder of the folderList is met, the will be no other listing to do,
-            // so we can send signal to sort the itmes.
-            if (d->folderList.last() == folder)
-            {
-                emit signalFinished();
-            }
-
             sendLogMsg(i18n("The folders in %1 have been listed.", folder));
             break;
         }
@@ -527,31 +514,20 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                 sendLogMsg(i18n("Failed to list files in %1.", folder), DHistoryView::ErrorEntry);
             }
 
-            CamItemInfoList list;
-            foreach(CamItemInfo info, itemsList)
+            // TODO would it be okay to pass this to the ImportImageModel and let it filter it for us?
+            for(CamItemInfoList::iterator it = itemsList.begin(); it!=itemsList.end();) 
             {
+                CamItemInfo &info = (*it);
                 if (info.mime.isEmpty())
                 {
-                    // skip
+                    it = itemsList.erase(it);
                     continue;
                 }
-                DownloadHistory::Status status = DownloadHistory::status(d->camera->cameraMD5ID(), info.name, info.size, info.ctime);
-                // TODO this is ugly, using different enums to point the similar status..
-                // TODO can we differentiate at all between whether the status is unknown and not downloaded? how?
-                info.downloaded  = status;
-                numberOfItems++;
-                info.id += numberOfItems;
-                list.append(info);
+                it++;
             }
 
-            emit signalFileList(list);
+            emit signalFileList(itemsList);
 
-            // folderList is empty so when listing files is finished there will be no other listing to do,
-            // so we can send signal to sort the items.
-            if (d->folderList.last() == "")
-            {
-                emit signalFinished();
-            }
             sendLogMsg(i18n("The files in %1 have been listed.", folder));
 
             break;
@@ -799,11 +775,6 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             break;
         }
     }
-}
-
-void CameraController::getFolderList(const QStringList& lastFolder)
-{
-    d->folderList = lastFolder;
 }
 
 void CameraController::sendLogMsg(const QString& msg, DHistoryView::EntryType type,
@@ -1191,7 +1162,6 @@ void CameraController::downloadPrep()
 {
     d->overwriteAll  = false;
     d->skipAll       = false;
-    d->downloadTotal = 0;
 }
 
 void CameraController::download(const DownloadSettingsList& list)

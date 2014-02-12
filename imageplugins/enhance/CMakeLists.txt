@@ -35,14 +35,12 @@ TARGET_LINK_LIBRARIES(
     ${QT_QTGUI_LIBRARY}
     ${KDCRAW_LIBRARIES}
     ${KEXIV2_LIBRARIES}
-
-    ${QT_QT3SUPPORT_LIBRARY}
     )
 
 IF(LENSFUN_FOUND)
    TARGET_LINK_LIBRARIES(digikamimageplugin_enhance ${LENSFUN_LIBRARIES})
 ENDIF()
 
-INSTALL(TARGETS digikamimageplugin_enhance DESTINATION ${PLUGIN_INSTALL_DIR} )
-INSTALL(FILES digikamimageplugin_enhance_ui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam)
+INSTALL(TARGETS digikamimageplugin_enhance       DESTINATION ${PLUGIN_INSTALL_DIR})
+INSTALL(FILES digikamimageplugin_enhance_ui.rc   DESTINATION ${DATA_INSTALL_DIR}/digikam)
 INSTALL(FILES digikamimageplugin_enhance.desktop DESTINATION ${SERVICES_INSTALL_DIR})

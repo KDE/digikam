@@ -421,6 +421,7 @@ void DCategorizedView::reset()
 {
     DigikamKCategorizedView::reset();
 
+    // FIXME emiting this causes a crash importstackedview, because the model is not yet set. atm there's a check agaisnt null models though..
     emit selectionChanged();
     emit selectionCleared();
 
@@ -506,7 +507,11 @@ void DCategorizedView::rowsAboutToBeRemoved(const QModelIndex& parent, int start
 
 void DCategorizedView::layoutAboutToBeChanged()
 {
-    d->ensureOneSelectedItem = selectionModel()->hasSelection();
+    if(selectionModel()) {
+        d->ensureOneSelectedItem = selectionModel()->hasSelection();
+    } else {
+        kWarning() << "Called without selection model, check whether the models are ok..";
+    }
     QModelIndex current      = currentIndex();
 
     // store some hints so that if all selected items were removed do not need to default to 0,0.

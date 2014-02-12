@@ -16,18 +16,20 @@ ENDIF(NOT MSVC)
 SET(showfoto_SRCS
     ${libsetupshowfoto_SRCS}
     ${libshowfotosetup_SRCS}
-    
+
     thumbbar/showfotoiteminfo.cpp
     thumbbar/showfotoimagemodel.cpp
     thumbbar/showfotothumbnailmodel.cpp
     thumbbar/showfotofiltermodel.cpp
+    thumbbar/showfotodragdrophandler.cpp
+    thumbbar/showfotokineticscroller.cpp
     thumbbar/showfotoitemsortsettings.cpp
     thumbbar/itemviewshowfotodelegate.cpp
     thumbbar/showfotodelegate.cpp
     thumbbar/showfototooltipfiller.cpp
     thumbbar/showfotocategorizedview.cpp
     thumbbar/showfotothumbnailbar.cpp
-    
+
     main/showfotosettings.cpp
     main/main.cpp
     main/showfoto.cpp

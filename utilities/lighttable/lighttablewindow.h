@@ -6,7 +6,7 @@
  * Date        : 2007-03-05
  * Description : digiKam light table GUI
  *
- * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -80,7 +80,7 @@ protected:
     void moveEvent(QMoveEvent* e);
 
 private:
-    
+
     void customizedFullScreenMode(bool set);
     void showSideBars(bool visible);
     void closeEvent(QCloseEvent* e);

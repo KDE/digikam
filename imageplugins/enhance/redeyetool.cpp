@@ -217,9 +217,6 @@ RedEyeTool::RedEyeTool(QObject* const parent)
     connect(d->previewWidget, SIGNAL(spotPositionChangedFromTarget(Digikam::DColor,QPoint)),
             this, SLOT(slotColorSelectedFromTarget(Digikam::DColor)));
 
-    connect(d->previewWidget, SIGNAL(signalResized()),
-            this, SLOT(slotPreview()));
-
     connect(d->redThreshold, SIGNAL(valueChanged(int)),
             this, SLOT(slotTimer()));
 

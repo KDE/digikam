@@ -28,32 +28,14 @@
 
 #include <kcombobox.h>
 
+// Local includes
+
+#include "filter.h"
+
 namespace Digikam
 {
 
 class CamItemInfo;
-
-class Filter
-{
-public:
-
-    Filter();
-
-    QString toString();
-    void fromString(const QString& filter);
-
-public:
-
-    QString     name;
-    bool        onlyNew;
-    QStringList fileFilter;
-    QStringList pathFilter;
-    QString     mimeFilter;
-};
-
-typedef QList<Filter*> FilterList;
-
-// ---------------------------------------------------------------------
 
 class FilterComboBox : public KComboBox
 {
@@ -64,7 +46,7 @@ public:
     explicit FilterComboBox(QWidget* const parent);
     ~FilterComboBox();
 
-    bool matchesCurrentFilter(const CamItemInfo& item);
+    Filter* currentFilter();
     void saveSettings();
 
     static void  defaultFilters(FilterList* const filters);
@@ -73,14 +55,11 @@ public:
 
 Q_SIGNALS:
 
-    void filterChanged();
+    void filterChanged(Filter *);
 
 protected:
 
     void  fillCombo();
-    const QRegExp& regexp(const QString& wildcard);
-    bool  match(const QStringList& wildcards, const QString& name);
-    const QStringList& mimeWildcards(const QString& mime);
 
 protected Q_SLOTS:
 
@@ -93,7 +72,5 @@ private:
 };
 
 }  // namespace Digikam
-
-Q_DECLARE_METATYPE(Digikam::Filter*)
 
 #endif /* FILTERCOMBOBOX_H */
