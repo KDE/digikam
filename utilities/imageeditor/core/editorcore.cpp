@@ -582,7 +582,7 @@ void EditorCore::setUndoManagerOrigin()
     emit signalFileOriginChanged(getImageFilePath());
 }
 
-bool EditorCore::imageValid() const
+bool EditorCore::isValid() const
 {
     return d->valid;
 }
