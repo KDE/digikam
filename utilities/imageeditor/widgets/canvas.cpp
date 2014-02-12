@@ -148,7 +148,7 @@ void Canvas::reset()
     {
         d->rubber->setVisible(false);
 
-        if (d->im->imageValid())
+        if (d->im->isValid())
         {
             emit signalSelected(false);
         }
@@ -517,11 +517,12 @@ void Canvas::slotSelectAll()
         d->rubber = new RubberItem(d->canvasItem);
         d->rubber->setCanvas(this);
     }
+
     d->rubber->setRectInSceneCoordinates(d->canvasItem->boundingRect());
     viewport()->setMouseTracking(true);
     viewport()->update();
 
-    if (d->im->imageValid())
+    if (d->im->isValid())
     {
         emit signalSelected(true);
     }

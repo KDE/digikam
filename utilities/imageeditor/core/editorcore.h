@@ -110,37 +110,28 @@ public:
 
     void    zoom(double val);
 
-    void    paintOnDevice(QPaintDevice* const p,
-                          const QRect& src,
-                          const QRect& dst,
-                          const QRect& mrt,
-                          int antialias);
-
-    void    paintOnDevice(QPaintDevice* const p,
-                          const QRect& src,
-                          const QRect& dst,
-                          int antialias);
-
+    /** Image properties
+     */
     DImg    getImgSelection() const;
     DImg*   getImg()          const;
-    bool    imageValid()      const;
+    bool    isValid()         const;
+    bool    isReadOnly()      const;
+    bool    hasAlpha()        const;
+    bool    sixteenBit()      const;
+    bool    exifRotated()     const;
     int     width()           const;
     int     height()          const;
     int     origWidth()       const;
     int     origHeight()      const;
     int     bytesDepth()      const;
-    bool    hasAlpha()        const;
-    bool    sixteenBit()      const;
-    bool    exifRotated()     const;
-    bool    isReadOnly()      const;
 
+    /** Image transforms
+     */
     void    rotate90();
     void    rotate180();
     void    rotate270();
-
     void    flipHoriz();
     void    flipVert();
-
     void    convertDepth(int depth);
     void    crop(const QRect& rect);
 

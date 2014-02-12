@@ -582,7 +582,7 @@ void EditorCore::setUndoManagerOrigin()
     emit signalFileOriginChanged(getImageFilePath());
 }
 
-bool EditorCore::imageValid() const
+bool EditorCore::isValid() const
 {
     return d->valid;
 }
@@ -645,107 +645,6 @@ void EditorCore::setSelectedArea(const QRect& rect)
 QRect EditorCore::getSelectedArea() const
 {
     return (QRect(d->selX, d->selY, d->selW, d->selH));
-}
-
-void EditorCore::paintOnDevice(QPaintDevice* const p,
-                                  const QRect& src,
-                                  const QRect& dst,
-                                  int /*antialias*/)
-{
-    if (d->image.isNull())
-    {
-        return;
-    }
-
-    DImg img = d->image.smoothScaleSection(src, dst.size());
-    img.convertDepth(32);
-    QPainter painter(p);
-
-    if (d->cmSettings.enableCM && (d->cmSettings.useManagedView || d->doSoftProofing))
-    {
-        QPixmap pix(img.convertToPixmap(d->monitorICCtrans));
-        painter.drawPixmap(dst.topLeft(), pix, QRect(0, 0, pix.width(), pix.height()));
-    }
-    else
-    {
-        QPixmap pix(img.convertToPixmap());
-        painter.drawPixmap(dst.topLeft(), pix, QRect(0, 0, pix.width(), pix.height()));
-    }
-
-    // Show the Over/Under exposure pixels indicators
-
-    if (d->expoSettings->underExposureIndicator || d->expoSettings->overExposureIndicator)
-    {
-        QImage pureColorMask = img.pureColorMask(d->expoSettings);
-        QPixmap pixMask      = QPixmap::fromImage(pureColorMask);
-        painter.drawPixmap(dst.topLeft(), pixMask, QRect(0, 0, pixMask.width(), pixMask.height()));
-    }
-
-    painter.end();
-}
-
-void EditorCore::paintOnDevice(QPaintDevice* const p,
-                                  const QRect& src,
-                                  const QRect& dst,
-                                  const QRect& mrt,
-                                  int /*antialias*/)
-{
-    if (d->image.isNull())
-    {
-        return;
-    }
-
-    DImg img = d->image.smoothScaleSection(src, dst.size());
-    img.convertDepth(32);
-    QPainter painter(p);
-
-    uint* data  = reinterpret_cast<uint*>(img.bits());
-    uchar r, g, b, a;
-
-    for (int j = 0; j < (int)img.height(); ++j)
-    {
-        for (int i = 0; i < (int)img.width(); ++i)
-        {
-            if (i < (mrt.x() - dst.x()) || i > (mrt.x() - dst.x() + mrt.width()  - 1) ||
-                j < (mrt.y() - dst.y()) || j > (mrt.y() - dst.y() + mrt.height() - 1))
-            {
-                a = (*data >> 24) & 0xff;
-                r = (*data >> 16) & 0xff;
-                g = (*data >>  8) & 0xff;
-                b = (*data)       & 0xff;
-
-                r += (uchar)((RCOL - r) * OPACITY);
-                g += (uchar)((GCOL - g) * OPACITY);
-                b += (uchar)((BCOL - b) * OPACITY);
-
-                *data = (a << 24) | (r << 16) | (g << 8) | b;
-            }
-
-            ++data;
-        }
-    }
-
-    if (d->cmSettings.enableCM && (d->cmSettings.useManagedView || d->doSoftProofing))
-    {
-        QPixmap pix(img.convertToPixmap(d->monitorICCtrans));
-        painter.drawPixmap(dst.topLeft(), pix, QRect(0, 0, pix.width(), pix.height()));
-    }
-    else
-    {
-        QPixmap pix(img.convertToPixmap());
-        painter.drawPixmap(dst.topLeft(), pix, QRect(0, 0, pix.width(), pix.height()));
-    }
-
-    // Show the Over/Under exposure pixels indicators
-
-    if (d->expoSettings->underExposureIndicator || d->expoSettings->overExposureIndicator)
-    {
-        QImage pureColorMask = img.pureColorMask(d->expoSettings);
-        QPixmap pixMask      = QPixmap::fromImage(pureColorMask);
-        painter.drawPixmap(dst.topLeft(), pixMask, QRect(0, 0, pixMask.width(), pixMask.height()));
-    }
-
-    painter.end();
 }
 
 void EditorCore::zoom(double val)
