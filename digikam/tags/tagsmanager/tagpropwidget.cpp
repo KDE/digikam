@@ -102,18 +102,24 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
 
     QLabel* const titleLabel = new QLabel(this);
     titleLabel->setText(i18n("&Title:"));
+    titleLabel->setMargin(10);
+    titleLabel->setIndent(10);
 
     d->titleEdit = new SearchTextBar(this, "TagEditDlgTitleEdit",
-                                     i18n("Enter tag name here..."));
+                                     i18n("Enter tag name here"));
     d->titleEdit->setCaseSensitive(false);
     titleLabel->setBuddy(d->titleEdit);
 
     QLabel* const tipLabel = new QLabel(this);
     tipLabel->setTextFormat(Qt::RichText);
     tipLabel->setWordWrap(true);
+    tipLabel->setMargin(10);
+    tipLabel->setIndent(10);
 
     QLabel* const iconTextLabel = new QLabel(this);
     iconTextLabel->setText(i18n("&Icon:"));
+    iconTextLabel->setMargin(10);
+    iconTextLabel->setIndent(10);
 
     d->iconButton         = new QPushButton(this);
     d->iconButton->setFixedSize(40, 40);
@@ -123,6 +129,8 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
 
     QLabel* const kscTextLabel = new QLabel(this);
     kscTextLabel->setText(i18n("&Shortcut:"));
+    kscTextLabel->setMargin(10);
+    kscTextLabel->setIndent(10);
 
     d->keySeqWidget      = new KKeySequenceWidget(this);
     kscTextLabel->setBuddy(d->keySeqWidget);
@@ -131,8 +139,10 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     QLabel* const tipLabel2 = new QLabel(this);
     tipLabel2->setTextFormat(Qt::RichText);
     tipLabel2->setWordWrap(true);
-    tipLabel2->setText(i18n("<p><b>Note</b>: this shortcut can be used "
-                            "to assign or unassign tag to items.</p>"));
+    tipLabel2->setText(i18n("<p><b>Note:</b> <i>This shortcut can be used "
+                            "to assign or unassign tag to items.</i></p>"));
+    tipLabel2->setMargin(10);
+    tipLabel2->setIndent(10);
 
     d->saveButton = new QPushButton("Save");
     d->discardButton = new QPushButton("Discard");
@@ -155,7 +165,7 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     grid->addWidget(d->discardButton,   7, 1, 1, 1);
     grid->setRowStretch(8, 10);
     grid->setColumnStretch(3, 10);
-    grid->setMargin(0);
+    grid->setMargin(10);
     grid->setVerticalSpacing(10);
 
     adjustSize();
