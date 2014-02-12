@@ -611,7 +611,7 @@ void TagsManager::setupActions()
     KAction* createTagAddr = new KAction(KIcon("tag-addressbook"),
                                          i18n("Create Tag from Address Book"),
                                          this);
-    KAction* invSel        = new KAction(KIcon(),
+    KAction* invSel        = new KAction(KIcon("tag-reset"),
                                          i18n("Invert Selection"), this);
 
     KAction* expandTree    = new KAction(KIcon("format-indent-more"),
