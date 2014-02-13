@@ -40,6 +40,7 @@ SET(DIGIKAM_SUFFIX_VERSION "-beta4")
 # ==================================================================================================
 # Set env. variables accordingly.
 
+# NOTE: This string is used to set libdigikamcore and libdigikamdatabase SO version ID
 SET(DIGIKAM_VERSION_SHORT
     "${DIGIKAM_MAJOR_VERSION}.${DIGIKAM_MINOR_VERSION}.${DIGIKAM_PATCH_VERSION}"
    )
