@@ -34,7 +34,6 @@
 
 #include <kkeysequencewidget.h>
 #include <kseparator.h>
-#include <kicon.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <kicon.h>

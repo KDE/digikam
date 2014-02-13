@@ -22,6 +22,9 @@
  *
  * ============================================================ */
 
+#ifndef IMAGEWINDOW_P_H
+#define IMAGEWINDOW_P_H
+
 // Local includes
 
 #include "versionmanager.h"
@@ -167,3 +170,5 @@ const QString ImageWindow::Private::configShowThumbbarEntry("Show Thumbbar");
 const QString ImageWindow::Private::configHorizontalThumbbarEntry("HorizontalThumbbar");
 
 }  // namespace Digikam
+
+#endif // IMAGEWINDOW_P_H

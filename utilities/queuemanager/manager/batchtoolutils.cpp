@@ -21,6 +21,8 @@
  *
  * ============================================================ */
 
+#include "batchtoolutils.h"
+
 // Qt includes
 
 #include <QFileInfo>
@@ -28,7 +30,6 @@
 // Local includes
 
 #include "batchtool.h"
-#include "batchtoolutils.h"
 #include "batchtoolsmanager.h"
 
 namespace Digikam
