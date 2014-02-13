@@ -39,7 +39,6 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "searchtextbar.h"
 #include "imageinfolist.h"
 #include "albummanager.h"
 #include "albummodel.h"
