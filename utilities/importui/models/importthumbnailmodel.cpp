@@ -27,12 +27,15 @@
 
 #include <QCache>
 #include <QReadWriteLock>
+#include <QElapsedTimer>
 
 // KDE includes
 
 #include <kio/previewjob.h>
 #include <kdebug.h>
 #include <kdeversion.h>
+
+#include "thumbloader.h"
 
 namespace Digikam
 {
@@ -63,6 +66,9 @@ public:
     ThumbnailSize            lastGlobalThumbSize;
     bool                     emitDataChanged;
     QReadWriteLock           cacheLock;
+    QElapsedTimer            timer;
+    int                      counter;
+    ThumbLoader*             thloader;
 };
 
 ImportThumbnailModel::ImportThumbnailModel(QObject* const parent)
@@ -70,6 +76,8 @@ ImportThumbnailModel::ImportThumbnailModel(QObject* const parent)
 {
     setKeepsFileUrlCache(true);
     setCacheSize(200);
+    d->counter = 0;
+    d->thloader = new ThumbLoader(parent,QString(), QString(), QString(), QString());
 }
 
 ImportThumbnailModel::~ImportThumbnailModel()
@@ -103,18 +111,23 @@ void ImportThumbnailModel::setEmitDataChanged(bool emitSignal)
 
 QVariant ImportThumbnailModel::data(const QModelIndex& index, int role) const
 {
+
     if (role == ThumbnailRole && d->controller && index.isValid())
     {
         CamItemInfo info = camItemInfo(index);
         QString     path = info.url().prettyUrl();
         CachedItem  item;
 
+
         // use mimetype thumbnail also if the mime is set to something else than to image
         // this is to avoid querying the device for previews with unsupported file formats
         // at least gphoto2 doesn't really like it and will error a lot and slow down
+        /*
         if (info.isNull() || path.isEmpty() || !info.previewPossible)
         {
+            d->timer.restart();
             return QVariant(d->controller->mimeTypeThumbnail(path, d->thumbSize.size()));
+            kDebug() << "Time to get Thumb++++ " << d->timer.elapsed() << "ms";
         }
 
         bool thumbChanged = false;
@@ -122,12 +135,21 @@ QVariant ImportThumbnailModel::data(const QModelIndex& index, int role) const
         {
             thumbChanged = true;
         }
-
-        if (getThumbInfo(info, item, d->thumbSize, thumbChanged))
+        */
+        /**
+        if (getThumbInfo(info, item, d->thumbSize, false))
         {
             return QVariant(item.second);
         }
-
+        */
+        d->counter++;
+        QString send = QString("Go") + QString::number(d->counter);
+        d->thloader->addToWork(send);
+        //d->timer.restart();
+        //d->controller->getThumbsInfo(CamItemInfoList() << info, d->thumbSize);
+        //item = CachedItem(info, d->controller->mimeTypeThumbnail(info.name, d->thumbSize.size()));
+        //kDebug() << "returning a pixmap  " << d->timer.elapsed() << " ms";
+        //return QVariant(item.second);
         return QVariant(d->controller->mimeTypeThumbnail(path, d->thumbSize.size()));
     }
 
@@ -190,7 +212,7 @@ bool ImportThumbnailModel::getThumbInfo(const CamItemInfo& info, CachedItem& ite
     else if (!d->pendingItems.contains(info.url()))
     {
         d->pendingItems << info.url();
-        // kDebug() << "Request thumbs from camera : " << info.url();
+         kDebug() << "Request thumbs from camera : " << info.url();
         d->controller->getThumbsInfo(CamItemInfoList() << info, thumbSize);
         // TODO set the thumb to indicate loading process?
     }
@@ -399,7 +421,7 @@ void ImportThumbnailModel::putItemToCache(const KUrl& url, const CamItemInfo& in
     int thumbCost = thumb.width() * thumb.height() * thumb.depth() / 8;
     if(!d->cache.insert(url,
                     new CachedItem(info, thumb),
-                    infoCost + thumbCost)) 
+                    infoCost + thumbCost))
     {
         kWarning() << "thumbnail for:" << url << " not inserted to the cache. infocost:" << infoCost << "thumbCost:" << thumbCost << "maxcost:" << d->cache.maxCost();
     }

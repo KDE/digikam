@@ -3,6 +3,7 @@ SET(libimportui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/main/importsettings.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/backend/cameracontroller.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/backend/thumbloader.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backend/camerahistoryupdater.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backend/dkcamera.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backend/gpcamera.cpp
