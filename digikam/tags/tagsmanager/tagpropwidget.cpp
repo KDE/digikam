@@ -41,7 +41,7 @@
 #include <kiconloader.h>
 #include <kicondialog.h>
 #include <kmessagebox.h>
-
+#include <kdialog.h>
 // local includes
 
 #include "searchtextbar.h"
@@ -102,7 +102,7 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
 
     QLabel* const titleLabel = new QLabel(this);
     titleLabel->setText(i18n("&Title:"));
-    titleLabel->setMargin(10);
+    titleLabel->setMargin(KDialog::marginHint());
     titleLabel->setIndent(10);
 
     d->titleEdit = new SearchTextBar(this, "TagEditDlgTitleEdit",
@@ -113,12 +113,12 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     QLabel* const tipLabel = new QLabel(this);
     tipLabel->setTextFormat(Qt::RichText);
     tipLabel->setWordWrap(true);
-    tipLabel->setMargin(10);
+    tipLabel->setMargin(KDialog::marginHint());
     tipLabel->setIndent(10);
 
     QLabel* const iconTextLabel = new QLabel(this);
     iconTextLabel->setText(i18n("&Icon:"));
-    iconTextLabel->setMargin(10);
+    iconTextLabel->setMargin(KDialog::marginHint());
     iconTextLabel->setIndent(10);
 
     d->iconButton         = new QPushButton(this);
@@ -129,7 +129,7 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
 
     QLabel* const kscTextLabel = new QLabel(this);
     kscTextLabel->setText(i18n("&Shortcut:"));
-    kscTextLabel->setMargin(10);
+    kscTextLabel->setMargin(KDialog::marginHint());
     kscTextLabel->setIndent(10);
 
     d->keySeqWidget      = new KKeySequenceWidget(this);
@@ -141,7 +141,7 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     tipLabel2->setWordWrap(true);
     tipLabel2->setText(i18n("<p><b>Note:</b> <i>This shortcut can be used "
                             "to assign or unassign tag to items.</i></p>"));
-    tipLabel2->setMargin(10);
+    tipLabel2->setMargin(KDialog::marginHint() );
     tipLabel2->setIndent(10);
 
     d->saveButton = new QPushButton("Save");
@@ -165,7 +165,7 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     grid->addWidget(d->discardButton,   7, 1, 1, 1);
     grid->setRowStretch(8, 10);
     grid->setColumnStretch(3, 10);
-    grid->setMargin(10);
+    grid->setMargin(KDialog::marginHint());
     grid->setVerticalSpacing(10);
 
     adjustSize();
