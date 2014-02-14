@@ -43,6 +43,7 @@
 #include <kseparator.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
+#include <kdialog.h>
 #include <kkeysequencewidget.h>
 
 // Local includes
@@ -222,7 +223,7 @@ TagEditDlg::TagEditDlg(QWidget* const parent, TAlbum* const album, bool create)
     grid->addWidget(tipLabel2,          6, 0, 1, 4);
     grid->setRowStretch(7, 10);
     grid->setColumnStretch(3, 10);
-    grid->setMargin(0);
+    grid->setMargin(KDialog::marginHint());
     grid->setSpacing(KDialog::spacingHint());
 
     // --------------------------------------------------------
@@ -488,8 +489,8 @@ TagsListCreationErrorDialog::TagsListCreationErrorDialog(QWidget* const parent, 
 
     vLay->addWidget(label);
     vLay->addWidget(listView);
-    vLay->setMargin(0);
-    vLay->setSpacing(0);
+    vLay->setMargin(KDialog::marginHint());
+    vLay->setSpacing(KDialog::spacingHint());
 
     for (QMap<QString, QString>::const_iterator it = errMap.constBegin(); it != errMap.constEnd(); ++it)
     {
