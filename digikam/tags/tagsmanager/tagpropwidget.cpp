@@ -103,7 +103,7 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     QLabel* const titleLabel = new QLabel(this);
     titleLabel->setText(i18n("&Title:"));
     titleLabel->setMargin(KDialog::marginHint());
-    titleLabel->setIndent(10);
+    titleLabel->setIndent(KDialog::spacingHint());
 
     d->titleEdit = new SearchTextBar(this, "TagEditDlgTitleEdit",
                                      i18n("Enter tag name here"));
@@ -114,12 +114,12 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     tipLabel->setTextFormat(Qt::RichText);
     tipLabel->setWordWrap(true);
     tipLabel->setMargin(KDialog::marginHint());
-    tipLabel->setIndent(10);
+    tipLabel->setIndent(KDialog::spacingHint());
 
     QLabel* const iconTextLabel = new QLabel(this);
     iconTextLabel->setText(i18n("&Icon:"));
     iconTextLabel->setMargin(KDialog::marginHint());
-    iconTextLabel->setIndent(10);
+    iconTextLabel->setIndent(KDialog::spacingHint());
 
     d->iconButton         = new QPushButton(this);
     d->iconButton->setFixedSize(40, 40);
@@ -130,7 +130,7 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     QLabel* const kscTextLabel = new QLabel(this);
     kscTextLabel->setText(i18n("&Shortcut:"));
     kscTextLabel->setMargin(KDialog::marginHint());
-    kscTextLabel->setIndent(10);
+    kscTextLabel->setIndent(KDialog::spacingHint());
 
     d->keySeqWidget      = new KKeySequenceWidget(this);
     kscTextLabel->setBuddy(d->keySeqWidget);
@@ -166,7 +166,7 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     grid->setRowStretch(8, 10);
     grid->setColumnStretch(3, 10);
     grid->setMargin(KDialog::marginHint());
-    grid->setVerticalSpacing(10);
+    grid->setVerticalSpacing(KDialog::spacingHint());
 
     adjustSize();
 
