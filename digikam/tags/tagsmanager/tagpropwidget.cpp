@@ -141,7 +141,7 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     tipLabel2->setText(i18n("<p><b>Note:</b> <i>This shortcut can be used "
                             "to assign or unassign tag to items.</i></p>"));
     tipLabel2->setMargin(KDialog::marginHint() );
-    tipLabel2->setIndent(10);
+    tipLabel2->setIndent(KDialog::spacingHint());
 
     d->saveButton = new QPushButton("Save");
     d->discardButton = new QPushButton("Discard");
