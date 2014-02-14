@@ -23,6 +23,9 @@
  *
  * ============================================================ */
 
+#ifndef TAGMNGRTREEVIEW_H
+#define TAGMNGRTREEVIEW_H
+
 // Local includes
 
 #include "tagfolderview.h"
@@ -98,3 +101,5 @@ private:
 };
 
 } // namespace Digikam
+
+#endif // TAGMNGRTREEVIEW_H

@@ -84,7 +84,6 @@
 #include "fileactionprogress.h"
 #include "tagsmanager.h"
 #include "searchtextbar.h"
-#include "addtagslineedit.h"
 
 namespace Digikam
 {

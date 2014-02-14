@@ -40,7 +40,6 @@
 #include "ddragobjects.h"
 #include "showfotocategorizedview.h"
 #include "showfotoiteminfo.h"
-#include "ddragobjects.h"
 
 namespace ShowFoto
 {

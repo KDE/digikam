@@ -21,6 +21,9 @@
  *
  * ============================================================ */
 
+#ifndef TAGSMANAGER_H
+#define TAGSMANAGER_H
+
 // Qt includes
 
 #include <QPointer>
@@ -154,3 +157,5 @@ private:
 };
 
 } // namespace Digikam
+
+#endif // TAGSMANAGER_H
