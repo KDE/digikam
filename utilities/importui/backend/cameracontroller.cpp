@@ -515,7 +515,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             }
 
             // TODO would it be okay to pass this to the ImportImageModel and let it filter it for us?
-            for(CamItemInfoList::iterator it = itemsList.begin(); it!=itemsList.end();) 
+            for(CamItemInfoList::iterator it = itemsList.begin(); it!=itemsList.end();)
             {
                 CamItemInfo &info = (*it);
                 if (info.mime.isEmpty())
@@ -1223,6 +1223,11 @@ void CameraController::openFile(const QString& folder, const QString& file)
     cmd->map.insert("file",   QVariant(file));
     cmd->map.insert("dest",   QVariant(KStandardDirs::locateLocal("tmp", file)));
     addCommand(cmd);
+}
+
+DKCamera* CameraController::getDKCamera()
+{
+    return d->camera;
 }
 
 }  // namespace Digikam

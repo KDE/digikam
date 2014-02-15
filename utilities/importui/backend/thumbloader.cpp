@@ -1,25 +1,62 @@
 #include <QThread>
 #include <QTest>
 
+#include <QMutex>
+#include <QImage>
 #include <kdebug.h>
 
 #include "thumbloader.h"
 #include "dkcamera.h"
 #include "umscamera.h"
 #include "gpcamera.h"
+#include "cameracontroller.h"
 
 namespace Digikam
 {
 
-PixWorker::PixWorker(): QObject()
+class PixWorker::PixWorkerPriv
 {
+public:
+    PixWorkerPriv()
+    {
 
+    }
+    DKCamera* cam;
+    QHash<QString, QImage>* localPix;
+    QMutex* localPixLock;
+
+};
+
+PixWorker::PixWorker(QHash<QString, QImage>* localPix, QMutex* localPixLock)
+          : QObject(), d(new PixWorkerPriv())
+{
+    d->localPix = localPix;
+    d->localPixLock = localPixLock;
 }
 
-void PixWorker::doWork(QString result)
+void PixWorker::setDKCamera(DKCamera* cam)
 {
-    QTest::qSleep(1000);
-    emit resultReady(result + QString("gata"));
+    d->cam = cam;
+}
+
+void PixWorker::doWork(CamItemInfo camItem, int thumbSize)
+{
+    //QTest::qSleep(1000);
+    //CamItemInfo camItem;
+    QImage thumbnail;
+    QString path = camItem.url().prettyUrl();
+
+    if (d->cam->getThumbnail(camItem.folder, camItem.name, thumbnail))
+    {
+        thumbnail = thumbnail.scaled(thumbSize, thumbSize, Qt::KeepAspectRatio);
+        kDebug() << "Got thumbnail";
+        //emit signalThumbInfo(folder, file, info, thumbnail);
+        d->localPixLock->lock();
+        d->localPix->insert(path, thumbnail);
+        d->localPixLock->unlock();
+    }
+
+    //emit resultReady(result + QString("gata"));
 }
 
 
@@ -32,9 +69,9 @@ public:
     }
     DKCamera* cam;
     QThread* thread;
-    QHash<KUrl, QPixmap> localPix;
+    QHash<QString, QImage>* localPix;
     PixWorker* pworker;
-
+    QMutex* localPixLock;
 };
 
 ThumbLoader::ThumbLoader(QObject* const parent,
@@ -47,11 +84,16 @@ ThumbLoader::ThumbLoader(QObject* const parent,
     Q_UNUSED(port);
     Q_UNUSED(path);
     d->thread = new QThread();
-    d->pworker = new PixWorker();
+    d->localPixLock = new QMutex();
+        d->localPix = new QHash<QString, QImage>();
+    d->pworker = new PixWorker(d->localPix, d->localPixLock);
     d->pworker->moveToThread(d->thread);
-    connect(d->thread, SIGNAL(finished()), d->pworker, SLOT(deleteLater()));
-    connect(this, SIGNAL(signalStartWork(QString)), d->pworker, SLOT(doWork(QString)),Qt::QueuedConnection);
-    connect(d->pworker, SIGNAL(resultReady(QString)), this, SLOT(handleResult(QString)));
+    connect(d->thread, SIGNAL(finished()),
+            d->pworker, SLOT(deleteLater()));
+    connect(this, SIGNAL(signalStartWork(CamItemInfo,int)),
+            d->pworker, SLOT(doWork(CamItemInfo, int)),Qt::QueuedConnection);
+    connect(d->pworker, SIGNAL(resultReady(QString)),
+            this, SLOT(handleResult(QString)));
     d->thread->start();
 }
 
@@ -63,14 +105,22 @@ ThumbLoader::~ThumbLoader()
      * Remember to solve the problem with Q Thread exit. Terminate is not acceptable
      */
     d->thread->terminate();
-         d->thread->quit();
-         d->thread->wait();
+    d->thread->quit();
+    d->thread->wait();
+    delete d->localPix;
+    d->thread->deleteLater();
+    delete d->localPixLock;
 }
 
-void ThumbLoader::addToWork(QString data)
+void ThumbLoader::addToWork(CamItemInfo camInfo, int thSize)
 {
-    kDebug() << "Adding work " << data;
-    emit signalStartWork(data);
+    //kDebug() << "Adding work " << data;
+    emit signalStartWork(camInfo,thSize);
+}
+
+void ThumbLoader::setDKCamera(CameraController* cam)
+{
+    d->pworker->setDKCamera(cam->getDKCamera());
 }
 
 void ThumbLoader::handleResult(QString result)

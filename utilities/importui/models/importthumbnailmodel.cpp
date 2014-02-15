@@ -89,6 +89,7 @@ ImportThumbnailModel::~ImportThumbnailModel()
 void ImportThumbnailModel::setCameraController(CameraController* const controller)
 {
     d->controller = controller;
+    d->thloader->setDKCamera(controller);
 
     connect(d->controller, SIGNAL(signalThumbInfo(QString,QString,CamItemInfo,QImage)),
             this, SLOT(slotThumbInfoLoaded(QString,QString,CamItemInfo,QImage)));
@@ -144,7 +145,7 @@ QVariant ImportThumbnailModel::data(const QModelIndex& index, int role) const
         */
         d->counter++;
         QString send = QString("Go") + QString::number(d->counter);
-        d->thloader->addToWork(send);
+        d->thloader->addToWork(info, d->thumbSize.size());
         //d->timer.restart();
         //d->controller->getThumbsInfo(CamItemInfoList() << info, d->thumbSize);
         //item = CachedItem(info, d->controller->mimeTypeThumbnail(info.name, d->thumbSize.size()));

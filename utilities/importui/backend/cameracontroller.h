@@ -96,6 +96,7 @@ public:
     void openFile(const QString& folder, const QString& file);
 
     QPixmap mimeTypeThumbnail(const QString& itemName, int thumbSize) const;
+    DKCamera* getDKCamera();
 
 Q_SIGNALS:
 

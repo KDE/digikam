@@ -25,38 +25,54 @@
 #define THUMBLOADER_H
 
 #include<QWidget>
+#include <QHash>
 
+#include <kurl.h>
+#include "camiteminfo.h"
+
+class QMutex;
 
 namespace Digikam
 {
+class CameraController;
+class DKCamera;
 
 class PixWorker : public QObject
 {
     Q_OBJECT
 public:
-    PixWorker();
+    PixWorker(QHash<QString, QImage>* localPix,
+              QMutex* localPixLock);
+
+    void setDKCamera(DKCamera* cam);
 
 public slots:
-    void doWork(QString result);
+    void doWork(CamItemInfo camInfo, int thSize);
 
 signals:
     void resultReady(const QString result);
+private:
+    class PixWorkerPriv;
+    PixWorkerPriv* d;
 };
 
 class ThumbLoader : public QObject
 {
     Q_OBJECT
 public:
-    ThumbLoader(QObject* const parent, QString title, QString model, QString port, QString path);
+    ThumbLoader(QObject* const parent,
+                QString title, QString model,
+                QString port, QString path);
     ~ThumbLoader();
 
-    void addToWork(QString data);
+    void addToWork(CamItemInfo camInfo, int thSize);
+    void setDKCamera(CameraController* cam);
 
 private slots:
     void handleResult(QString result);
 
 signals:
-    void signalStartWork(QString todo);
+    void signalStartWork(CamItemInfo camInfo, int thSize);
 private:
     class ThumbLoaderPriv;
     ThumbLoaderPriv* d;
