@@ -155,4 +155,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 135 ==> 288761 - Cached image corrupted after modifying metadata.
 136 ==> 326018 - Freezes when I attempt to use the sharpen/refocus tool.
 137 ==> 330947 - Icons for protected/unprotected pictures too similar on import.
-138 ==> 
+138 ==> 305079 - Please allow nepomuk digikam service being installable separately.
+139 ==> 
