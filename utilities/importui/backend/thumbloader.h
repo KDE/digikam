@@ -50,7 +50,7 @@ public slots:
     void doWork(CamItemInfo camInfo, int thSize);
 
 signals:
-    void resultReady(const QString result);
+    void resultReady(const KUrl result);
 private:
     class PixWorkerPriv;
     PixWorkerPriv* d;
@@ -65,14 +65,16 @@ public:
                 QString port, QString path);
     ~ThumbLoader();
 
+    QImage getThumbnail(CamItemInfo camInfo, int thSize);
     void addToWork(CamItemInfo camInfo, int thSize);
     void setDKCamera(CameraController* cam);
 
 private slots:
-    void handleResult(QString result);
+    void handleResult(KUrl result);
 
 signals:
     void signalStartWork(CamItemInfo camInfo, int thSize);
+    void signalUpdateModel(KUrl item);
 private:
     class ThumbLoaderPriv;
     ThumbLoaderPriv* d;

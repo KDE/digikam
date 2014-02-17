@@ -54,6 +54,7 @@ void PixWorker::doWork(CamItemInfo camItem, int thumbSize)
         d->localPixLock->lock();
         d->localPix->insert(path, thumbnail);
         d->localPixLock->unlock();
+        emit resultReady(camItem.url());
     }
 
     //emit resultReady(result + QString("gata"));
@@ -92,8 +93,8 @@ ThumbLoader::ThumbLoader(QObject* const parent,
             d->pworker, SLOT(deleteLater()));
     connect(this, SIGNAL(signalStartWork(CamItemInfo,int)),
             d->pworker, SLOT(doWork(CamItemInfo, int)),Qt::QueuedConnection);
-    connect(d->pworker, SIGNAL(resultReady(QString)),
-            this, SLOT(handleResult(QString)));
+    connect(d->pworker, SIGNAL(resultReady(KUrl)),
+            this, SIGNAL(signalUpdateModel(KUrl)));
     d->thread->start();
 }
 
@@ -112,10 +113,26 @@ ThumbLoader::~ThumbLoader()
     delete d->localPixLock;
 }
 
+QImage ThumbLoader::getThumbnail(CamItemInfo camInfo, int thSize)
+{
+    //d->localPixLock->lock();
+    QString path = camInfo.url().prettyUrl();
+    if(d->localPix->contains(path))
+    {
+        return d->localPix->value(path);
+    }
+    else
+    {
+        emit signalStartWork(camInfo,thSize);
+    }
+    //d->localPixLock->unlock();
+    return QImage();
+}
+
 void ThumbLoader::addToWork(CamItemInfo camInfo, int thSize)
 {
     //kDebug() << "Adding work " << data;
-    emit signalStartWork(camInfo,thSize);
+
 }
 
 void ThumbLoader::setDKCamera(CameraController* cam)
@@ -123,9 +140,10 @@ void ThumbLoader::setDKCamera(CameraController* cam)
     d->pworker->setDKCamera(cam->getDKCamera());
 }
 
-void ThumbLoader::handleResult(QString result)
+void ThumbLoader::handleResult(KUrl result)
 {
     kDebug() << "Got the result " << result;
+    emit signalUpdateModel(result);
 }
 
 } // namespace Digikam

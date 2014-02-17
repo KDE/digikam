@@ -105,6 +105,7 @@ public Q_SLOTS:
     void slotGotKDEPreview(const KFileItem&, const QPixmap&);
     void slotFailedKDEPreview(const KFileItem&);
     void slotKdePreviewFinished(KJob*);
+    void slotUpdateThumb(KUrl url);
 
 private:
 

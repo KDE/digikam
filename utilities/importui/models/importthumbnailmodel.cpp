@@ -91,6 +91,8 @@ void ImportThumbnailModel::setCameraController(CameraController* const controlle
     d->controller = controller;
     d->thloader->setDKCamera(controller);
 
+    connect (d->thloader,SIGNAL(signalUpdateModel(KUrl)),
+             this, SLOT(slotUpdateThumb(KUrl)));
     connect(d->controller, SIGNAL(signalThumbInfo(QString,QString,CamItemInfo,QImage)),
             this, SLOT(slotThumbInfoLoaded(QString,QString,CamItemInfo,QImage)));
 
@@ -145,13 +147,19 @@ QVariant ImportThumbnailModel::data(const QModelIndex& index, int role) const
         */
         d->counter++;
         QString send = QString("Go") + QString::number(d->counter);
-        d->thloader->addToWork(info, d->thumbSize.size());
+        QImage img =d->thloader->getThumbnail(info, d->thumbSize.size());
+
+        if(!img.isNull())
+            return QVariant(img);
+        else
+            return QVariant(d->controller->mimeTypeThumbnail(path, d->thumbSize.size()));
+
         //d->timer.restart();
         //d->controller->getThumbsInfo(CamItemInfoList() << info, d->thumbSize);
         //item = CachedItem(info, d->controller->mimeTypeThumbnail(info.name, d->thumbSize.size()));
         //kDebug() << "returning a pixmap  " << d->timer.elapsed() << " ms";
         //return QVariant(item.second);
-        return QVariant(d->controller->mimeTypeThumbnail(path, d->thumbSize.size()));
+        //return QVariant(d->controller->mimeTypeThumbnail(path, d->thumbSize.size()));
     }
 
     return ImportImageModel::data(index, role);
@@ -446,4 +454,12 @@ void ImportThumbnailModel::setCacheSize(int numberOfItems)
                         (numberOfItems * 1024 * 2));
 }
 
+void ImportThumbnailModel::slotUpdateThumb(KUrl url)
+{
+
+    foreach(const QModelIndex& index, indexesForUrl(url))
+    {
+        emit dataChanged(index, index);
+    }
+}
 } // namespace Digikam
