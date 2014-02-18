@@ -108,11 +108,6 @@ ThumbLoader::~ThumbLoader()
     d->pworker->stop();
     d->thread->quit();
     d->thread->wait();
-    kDebug() << "ThumbLoader destructor";
-    /**
-     * Remember to solve the problem with Q Thread exit. Terminate is not acceptable
-     */
-    //d->thread->terminate();
 
     delete d->thread;
     delete d->localPix;
@@ -121,7 +116,6 @@ ThumbLoader::~ThumbLoader()
 
 QImage ThumbLoader::getThumbnail(CamItemInfo camInfo, int thSize)
 {
-    //d->localPixLock->lock();
     QString path = camInfo.url().prettyUrl();
     QMutexLocker(d->localPixLock);
     if(d->localPix->contains(path))

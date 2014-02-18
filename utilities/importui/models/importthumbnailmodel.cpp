@@ -67,7 +67,6 @@ public:
     bool                     emitDataChanged;
     QReadWriteLock           cacheLock;
     QElapsedTimer            timer;
-    int                      counter;
     ThumbLoader*             thloader;
 };
 
@@ -75,14 +74,13 @@ ImportThumbnailModel::ImportThumbnailModel(QObject* const parent)
     : ImportImageModel(parent), d(new Private)
 {
     setKeepsFileUrlCache(true);
-    setCacheSize(200);
-    d->counter = 0;
+    //setCacheSize(200);
     d->thloader = new ThumbLoader(parent,QString(), QString(), QString(), QString());
 }
 
 ImportThumbnailModel::~ImportThumbnailModel()
 {
-    clearCache();
+    //clearCache();
     delete d;
 }
 
@@ -145,8 +143,6 @@ QVariant ImportThumbnailModel::data(const QModelIndex& index, int role) const
             return QVariant(item.second);
         }
         */
-        d->counter++;
-        QString send = QString("Go") + QString::number(d->counter);
         QImage img =d->thloader->getThumbnail(info, d->thumbSize.size());
 
         if(!img.isNull())
@@ -196,6 +192,7 @@ bool ImportThumbnailModel::setData(const QModelIndex& index, const QVariant& val
     return ImportImageModel::setData(index, value, role);
 }
 
+/**
 bool ImportThumbnailModel::getThumbInfo(const CamItemInfo& info, CachedItem& item, ThumbnailSize thumbSize, bool thumbChanged) const
 {
     // If thumbSize changed clear cache and reload thumbs for items.
@@ -299,7 +296,7 @@ void ImportThumbnailModel::slotThumbInfoFailed(const QString& folder, const QStr
         }
     }
 }
-/**
+
 void ImportThumbnailModel::loadWithKDE(const CamItemInfo& info)
 {
     d->kdeTodo << info;
@@ -413,6 +410,7 @@ void ImportThumbnailModel::slotKdePreviewFinished(KJob*)
 */
 // -- Cache management methods ------------------------------------------------------------
 
+/** NOTE: Must be cleared if ThumbLoader implementation is stable enough
 const CachedItem* ImportThumbnailModel::retrieveItemFromCache(const KUrl& url) const
 {
     return d->cache[url];
@@ -455,7 +453,7 @@ void ImportThumbnailModel::setCacheSize(int numberOfItems)
     d->cache.setMaxCost((numberOfItems * 256 * 256 * QPixmap::defaultDepth() / 8) +
                         (numberOfItems * 1024 * 2));
 }
-
+*/
 void ImportThumbnailModel::slotUpdateThumb(KUrl url)
 {
 
@@ -464,4 +462,5 @@ void ImportThumbnailModel::slotUpdateThumb(KUrl url)
         emit dataChanged(index, index);
     }
 }
+
 } // namespace Digikam

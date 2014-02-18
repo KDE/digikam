@@ -83,15 +83,15 @@ public:
      */
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::DisplayRole);
 
-    bool getThumbInfo(const CamItemInfo& info, CachedItem& item, ThumbnailSize thumbSize, bool thumbChanged) const;
+    //bool getThumbInfo(const CamItemInfo& info, CachedItem& item, ThumbnailSize thumbSize, bool thumbChanged) const;
 
     // -- Cache management methods ------------------------------------------------------------
-    const CachedItem* retrieveItemFromCache(const KUrl& url) const;
-    bool hasItemFromCache(const KUrl& url) const;
-    void putItemToCache(const KUrl& url, const CamItemInfo& info, const QPixmap& thumb);
-    void removeItemFromCache(const KUrl& url);
-    void clearCache();
-    void setCacheSize(int numberOfItems);
+    //const CachedItem* retrieveItemFromCache(const KUrl& url) const;
+    //bool hasItemFromCache(const KUrl& url) const;
+    //void putItemToCache(const KUrl& url, const CamItemInfo& info, const QPixmap& thumb);
+    //void removeItemFromCache(const KUrl& url);
+    //void clearCache();
+    //void setCacheSize(int numberOfItems);
 
 Q_SIGNALS:
 
@@ -100,8 +100,8 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    void slotThumbInfoLoaded(const QString& folder, const QString& file, const CamItemInfo& info, const QImage& thumb);
-    void slotThumbInfoFailed(const QString& folder, const QString& file, const CamItemInfo& info);
+    //void slotThumbInfoLoaded(const QString& folder, const QString& file, const CamItemInfo& info, const QImage& thumb);
+    //void slotThumbInfoFailed(const QString& folder, const QString& file, const CamItemInfo& info);
     //void slotGotKDEPreview(const KFileItem&, const QPixmap&);
     //void slotFailedKDEPreview(const KFileItem&);
     //void slotKdePreviewFinished(KJob*);
