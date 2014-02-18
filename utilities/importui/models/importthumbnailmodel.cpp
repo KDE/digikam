@@ -272,7 +272,7 @@ void ImportThumbnailModel::slotThumbInfoFailed(const QString& folder, const QStr
     {
         QPixmap pix = d->controller->mimeTypeThumbnail(file, d->thumbSize.size());
         putItemToCache(info.url(), info, pix);
-        loadWithKDE(info);
+        //loadWithKDE(info);
     }
     else
     {
@@ -299,7 +299,7 @@ void ImportThumbnailModel::slotThumbInfoFailed(const QString& folder, const QStr
         }
     }
 }
-
+/**
 void ImportThumbnailModel::loadWithKDE(const CamItemInfo& info)
 {
     d->kdeTodo << info;
@@ -344,6 +344,7 @@ void ImportThumbnailModel::startKdePreviewJob()
     connect(d->kdeJob, SIGNAL(finished(KJob*)),
             this, SLOT(slotKdePreviewFinished(KJob*)));
 }
+
 
 void ImportThumbnailModel::slotGotKDEPreview(const KFileItem& item, const QPixmap& pix)
 {
@@ -403,12 +404,13 @@ void ImportThumbnailModel::procressKDEPreview(const KFileItem& item, const QPixm
     }
 }
 
+
 void ImportThumbnailModel::slotKdePreviewFinished(KJob*)
 {
     d->kdeJob = 0;
     startKdePreviewJob();
 }
-
+*/
 // -- Cache management methods ------------------------------------------------------------
 
 const CachedItem* ImportThumbnailModel::retrieveItemFromCache(const KUrl& url) const

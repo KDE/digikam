@@ -102,16 +102,16 @@ public Q_SLOTS:
 
     void slotThumbInfoLoaded(const QString& folder, const QString& file, const CamItemInfo& info, const QImage& thumb);
     void slotThumbInfoFailed(const QString& folder, const QString& file, const CamItemInfo& info);
-    void slotGotKDEPreview(const KFileItem&, const QPixmap&);
-    void slotFailedKDEPreview(const KFileItem&);
-    void slotKdePreviewFinished(KJob*);
+    //void slotGotKDEPreview(const KFileItem&, const QPixmap&);
+    //void slotFailedKDEPreview(const KFileItem&);
+    //void slotKdePreviewFinished(KJob*);
     void slotUpdateThumb(KUrl url);
 
 private:
 
-    void loadWithKDE(const CamItemInfo& info);
-    void startKdePreviewJob();
-    void procressKDEPreview(const KFileItem& item, const QPixmap& pix);
+    //void loadWithKDE(const CamItemInfo& info);
+    //void startKdePreviewJob();
+    //void procressKDEPreview(const KFileItem& item, const QPixmap& pix);
 
 private:
 

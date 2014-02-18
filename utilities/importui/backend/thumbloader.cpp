@@ -19,12 +19,12 @@ class PixWorker::PixWorkerPriv
 public:
     PixWorkerPriv()
     {
-
+        stop = false;
     }
     DKCamera* cam;
     QHash<QString, QImage>* localPix;
     QMutex* localPixLock;
-
+    bool stop;
 };
 
 PixWorker::PixWorker(QHash<QString, QImage>* localPix, QMutex* localPixLock)
@@ -39,25 +39,28 @@ void PixWorker::setDKCamera(DKCamera* cam)
     d->cam = cam;
 }
 
+void PixWorker::stop()
+{
+    d->stop = true;
+}
+
 void PixWorker::doWork(CamItemInfo camItem, int thumbSize)
 {
-    //QTest::qSleep(1000);
-    //CamItemInfo camItem;
+
+    if(d->stop)
+        return;
     QImage thumbnail;
     QString path = camItem.url().prettyUrl();
 
     if (d->cam->getThumbnail(camItem.folder, camItem.name, thumbnail))
     {
         thumbnail = thumbnail.scaled(thumbSize, thumbSize, Qt::KeepAspectRatio);
-        kDebug() << "Got thumbnail";
-        //emit signalThumbInfo(folder, file, info, thumbnail);
         d->localPixLock->lock();
         d->localPix->insert(path, thumbnail);
         d->localPixLock->unlock();
         emit resultReady(camItem.url());
     }
 
-    //emit resultReady(result + QString("gata"));
 }
 
 
@@ -86,8 +89,9 @@ ThumbLoader::ThumbLoader(QObject* const parent,
     Q_UNUSED(path);
     d->thread = new QThread();
     d->localPixLock = new QMutex();
-        d->localPix = new QHash<QString, QImage>();
+    d->localPix = new QHash<QString, QImage>();
     d->pworker = new PixWorker(d->localPix, d->localPixLock);
+
     d->pworker->moveToThread(d->thread);
     connect(d->thread, SIGNAL(finished()),
             d->pworker, SLOT(deleteLater()));
@@ -95,21 +99,23 @@ ThumbLoader::ThumbLoader(QObject* const parent,
             d->pworker, SLOT(doWork(CamItemInfo, int)),Qt::QueuedConnection);
     connect(d->pworker, SIGNAL(resultReady(KUrl)),
             this, SIGNAL(signalUpdateModel(KUrl)));
+
     d->thread->start();
 }
 
 ThumbLoader::~ThumbLoader()
 {
+    d->pworker->stop();
     d->thread->quit();
+    d->thread->wait();
     kDebug() << "ThumbLoader destructor";
     /**
      * Remember to solve the problem with Q Thread exit. Terminate is not acceptable
      */
-    d->thread->terminate();
-    d->thread->quit();
-    d->thread->wait();
+    //d->thread->terminate();
+
+    delete d->thread;
     delete d->localPix;
-    d->thread->deleteLater();
     delete d->localPixLock;
 }
 
@@ -117,22 +123,17 @@ QImage ThumbLoader::getThumbnail(CamItemInfo camInfo, int thSize)
 {
     //d->localPixLock->lock();
     QString path = camInfo.url().prettyUrl();
+    QMutexLocker(d->localPixLock);
     if(d->localPix->contains(path))
     {
         return d->localPix->value(path);
     }
     else
     {
+        d->localPix->insert(path, QImage());
         emit signalStartWork(camInfo,thSize);
     }
-    //d->localPixLock->unlock();
     return QImage();
-}
-
-void ThumbLoader::addToWork(CamItemInfo camInfo, int thSize)
-{
-    //kDebug() << "Adding work " << data;
-
 }
 
 void ThumbLoader::setDKCamera(CameraController* cam)

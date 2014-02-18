@@ -45,6 +45,7 @@ public:
               QMutex* localPixLock);
 
     void setDKCamera(DKCamera* cam);
+    void stop();
 
 public slots:
     void doWork(CamItemInfo camInfo, int thSize);
@@ -66,7 +67,6 @@ public:
     ~ThumbLoader();
 
     QImage getThumbnail(CamItemInfo camInfo, int thSize);
-    void addToWork(CamItemInfo camInfo, int thSize);
     void setDKCamera(CameraController* cam);
 
 private slots:
