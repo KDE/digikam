@@ -156,4 +156,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 136 ==> 326018 - Freezes when I attempt to use the sharpen/refocus tool.
 137 ==> 330947 - Icons for protected/unprotected pictures too similar on import.
 138 ==> 305079 - Please allow nepomuk digikam service being installable separately.
-139 ==> 
+139 ==> 323284 - Compile 3.3.0 failed - lensfuniface.cpp undefined reference.
+140 ==> 
+
