@@ -347,6 +347,8 @@ IF(LENSFUN_FOUND)
 
                           # To link under Solaris (see B.K.O #274484)
                           ${MATH_LIBRARY}
+
+                          ${LENSFUN_LIBRARIES}
                      )
 ENDIF()
 
@@ -377,4 +379,3 @@ TARGET_LINK_LIBRARIES (testautocrop
                ${KDCRAW_LIBRARIES}
                ${OpenCV_LIBRARIES}
                )
-

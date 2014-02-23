@@ -678,6 +678,11 @@ void ImportNormalDelegatePrivate::init(ImportNormalDelegate* const q, ImportCate
                      q, SLOT(slotSetupChanged()));
 }
 
+ImportNormalDelegatePrivate::~ImportNormalDelegatePrivate()
+{
+    delete categoryDrawer;
+}
+
 // ------------------------------------------------------------------------------------------------
 
 ImportNormalDelegate::ImportNormalDelegate(ImportCategorizedView* const parent)

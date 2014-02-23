@@ -28,7 +28,6 @@ SET(libimportui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/models/importimagemodel.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/models/importthumbnailmodel.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/models/importfiltermodel.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/models/importmodel.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/models/camitemsortsettings.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/items/camerafolderitem.cpp

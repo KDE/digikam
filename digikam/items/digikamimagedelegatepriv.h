@@ -46,6 +46,7 @@ public:
     DigikamImageDelegatePrivate()
     {
     }
+    virtual ~DigikamImageDelegatePrivate();
 
     void init(DigikamImageDelegate* q, ImageCategorizedView* parent);
 };

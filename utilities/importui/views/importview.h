@@ -33,7 +33,6 @@
 #include "camiteminfo.h"
 #include "sidebarwidget.h"
 #include "importui.h"
-#include "importmodel.h"
 #include "importstackedview.h"
 
 namespace Digikam
