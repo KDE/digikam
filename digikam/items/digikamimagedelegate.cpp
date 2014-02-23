@@ -55,6 +55,11 @@ void DigikamImageDelegatePrivate::init(DigikamImageDelegate* q, ImageCategorized
                      q, SLOT(slotSetupChanged()));
 }
 
+DigikamImageDelegatePrivate::~DigikamImageDelegatePrivate()
+{
+    delete categoryDrawer;
+}
+
 // ------------------------------------------------------------------------------------------------
 
 DigikamImageDelegate::DigikamImageDelegate(ImageCategorizedView* parent)

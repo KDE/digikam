@@ -125,6 +125,7 @@ public:
     ImportNormalDelegatePrivate()
     {
     }
+    virtual ~ImportNormalDelegatePrivate();
 
     void init(ImportNormalDelegate* const q, ImportCategorizedView* const parent);
 };
