@@ -406,7 +406,7 @@ void SlideShow::updatePixmap()
             PhotoInfoContainer photoInfo = d->settings.pictInfoMap[d->currentImage].photoInfo;
             QString            comment   = d->settings.pictInfoMap[d->currentImage].comment;
             QString            title     = d->settings.pictInfoMap[d->currentImage].title;
-            int offset                   = d->toolBar->height() + 30;
+            int offset                   = d->settings.printLabels ? 30 : 0;
 
             // Display Labels.
 
@@ -799,26 +799,19 @@ void SlideShow::keyPressEvent(QKeyEvent* e)
 }
 
 void SlideShow::makeCornerRectangles(const QRect& desktopRect, const QSize& size,
-                                     QRect* const topLeft, QRect* const topRight, QRect* const bottomLeft, QRect* const bottomRight,
-                                     QRect* const topLeftLarger, QRect* const topRightLarger, QRect* const bottomLeftLarger,
-                                     QRect* const bottomRightLarger)
+                                     QRect* topLeft, QRect* topRight,
+                                     QRect* topLeftLarger, QRect* topRightLarger)
 {
     QRect sizeRect(QPoint(0, 0), size);
     *topLeft     = sizeRect;
     *topRight    = sizeRect;
-    *bottomLeft  = sizeRect;
-    *bottomRight = sizeRect;
 
     topLeft->moveTo(desktopRect.x(), desktopRect.y());
     topRight->moveTo(desktopRect.x() + desktopRect.width() - sizeRect.width() - 1, topLeft->y());
-    bottomLeft->moveTo(topLeft->x(), desktopRect.y() + desktopRect.height() - sizeRect.height() - 1);
-    bottomRight->moveTo(topRight->x(), bottomLeft->y());
 
     const int marginX  = 25, marginY = 10;
     *topLeftLarger     = topLeft->adjusted(0, 0, marginX, marginY);
     *topRightLarger    = topRight->adjusted(-marginX, 0, 0, marginY);
-    *bottomLeftLarger  = bottomLeft->adjusted(0, -marginY, marginX, 0);
-    *bottomRightLarger = bottomRight->adjusted(-marginX, -marginY, 0, 0);
 }
 
 void SlideShow::mouseMoveEvent(QMouseEvent* e)
@@ -835,11 +828,10 @@ void SlideShow::mouseMoveEvent(QMouseEvent* e)
     QPoint pos(e->pos());
 
     QRect sizeRect(QPoint(0, 0), d->toolBar->size());
-    QRect topLeft, topRight, bottomLeft, bottomRight;
-    QRect topLeftLarger, topRightLarger, bottomLeftLarger, bottomRightLarger;
+    QRect topLeft, topRight;
+    QRect topLeftLarger, topRightLarger;
     makeCornerRectangles(QRect(d->deskY, d->deskY, d->deskWidth, d->deskHeight), d->toolBar->size(),
-                         &topLeft, &topRight, &bottomLeft, &bottomRight,
-                         &topLeftLarger, &topRightLarger, &bottomLeftLarger, &bottomRightLarger);
+                               &topLeft, &topRight, &topLeftLarger, &topRightLarger);
 
     if (topLeftLarger.contains(pos))
     {
@@ -849,16 +841,6 @@ void SlideShow::mouseMoveEvent(QMouseEvent* e)
     else if (topRightLarger.contains(pos))
     {
         d->toolBar->move(topRight.topLeft());
-        d->toolBar->show();
-    }
-    else if (bottomLeftLarger.contains(pos))
-    {
-        d->toolBar->move(bottomLeft.topLeft());
-        d->toolBar->show();
-    }
-    else if (bottomRightLarger.contains(pos))
-    {
-        d->toolBar->move(bottomRight.topLeft());
         d->toolBar->show();
     }
     else
@@ -875,14 +857,12 @@ void SlideShow::slotMouseMoveTimeOut()
     QPoint pos(QCursor::pos());
 
     QRect sizeRect(QPoint(0, 0), d->toolBar->size());
-    QRect topLeft, topRight, bottomLeft, bottomRight;
-    QRect topLeftLarger, topRightLarger, bottomLeftLarger, bottomRightLarger;
+    QRect topLeft, topRight;
+    QRect topLeftLarger, topRightLarger;
     makeCornerRectangles(QRect(d->deskY, d->deskY, d->deskWidth, d->deskHeight), d->toolBar->size(),
-                         &topLeft, &topRight, &bottomLeft, &bottomRight,
-                         &topLeftLarger, &topRightLarger, &bottomLeftLarger, &bottomRightLarger);
+                         &topLeft, &topRight, &topLeftLarger, &topRightLarger);
 
-    if (topLeftLarger.contains(pos)    || topRightLarger.contains(pos) ||
-        bottomLeftLarger.contains(pos) || bottomRightLarger.contains(pos))
+    if (topLeftLarger.contains(pos)    || topRightLarger.contains(pos))
     {
         return;
     }
