@@ -188,7 +188,7 @@ void TableViewTreeView::slotHeaderContextMenuAddColumn()
     }
 
     const TableViewColumnDescription desc = actionData.value<TableViewColumnDescription>();
-    qDebug()<<"clicked: "<<desc.columnTitle;
+    kDebug() << "clicked: " << desc.columnTitle;
     const int newColumnLogicalIndex = d->headerContextMenuActiveColumn+1;
     s->tableViewModel->addColumnAt(desc, newColumnLogicalIndex);
 
@@ -219,7 +219,7 @@ void TableViewTreeView::slotHeaderContextMenuAddColumn()
 
 void TableViewTreeView::slotHeaderContextMenuActionRemoveColumnTriggered()
 {
-    qDebug()<<"remove column "<<d->headerContextMenuActiveColumn;
+    kDebug() << "remove column " << d->headerContextMenuActiveColumn;
     s->tableViewModel->removeColumnAt(d->headerContextMenuActiveColumn);
 }
 

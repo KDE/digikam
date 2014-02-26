@@ -894,7 +894,8 @@ void ShowFoto::saveAsIsComplete()
 
     // Add the file to the list of thumbbar images if it's not there already
     Digikam::ThumbBarItem* foundItem = d->thumbBar->findItemByUrl(m_savingContext.destinationURL);
-    d->thumbBar->invalidateThumb(foundItem);qDebug() << wantedUrls;
+    d->thumbBar->invalidateThumb(foundItem);
+    kDebug() << wantedUrls;
 
     if (!foundItem)
     {
