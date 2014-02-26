@@ -27,7 +27,6 @@
 
 // Local includes
 
-#include "digikam_export.h"
 #include "dimg.h"
 #include "globals.h"
 #include "imagequalitysettings.h"
@@ -36,7 +35,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ImgQSort : public DImgThreadedAnalyser
+class ImgQSort : public DImgThreadedAnalyser
 {
 public:
 
