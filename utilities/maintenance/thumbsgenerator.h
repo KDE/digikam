@@ -6,7 +6,7 @@
  * Date        : 2006-30-08
  * Description : batch thumbnails generator
  *
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,11 +44,11 @@ public:
 
     /** Constructor using Album Id as argument. If Id = -1, whole Albums collection is processed.
      */
-    explicit ThumbsGenerator(const bool rebuildAll = true, int albumId=-1, ProgressItem* const parent = 0);
+    explicit ThumbsGenerator(const bool rebuildAll, int albumId, ProgressItem* const parent = 0);
 
     /** Constructor using AlbumList as argument. If list is empty, whole Albums collection is processed.
      */
-    ThumbsGenerator(const bool rebuildAll = true, const AlbumList& list=AlbumList(), ProgressItem* const parent = 0);
+    ThumbsGenerator(const bool rebuildAll, const AlbumList& list, ProgressItem* const parent = 0);
     ~ThumbsGenerator();
 
     void setUseMultiCoreCPU(bool b);
