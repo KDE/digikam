@@ -10,7 +10,7 @@ OPTION(ENABLE_THUMBS_DB        "Build digiKam with thumbnails database support (
 OPTION(ENABLE_INTERNALMYSQL    "Look for MySQL server executable at build time (default=ON)"           ON)
 OPTION(ENABLE_ADVANCEDDEBUGMSG "Build digiKam with more internal debug message (default=OFF)"          OFF)
 OPTION(ENABLE_NEPOMUKSUPPORT   "Build digiKam with Nepomuk support (default=ON)"                       OFF)
-OPTION(ENABLE_LCMS2            "Link digiKam to LCMS2 instead LCMS1 (experimental) (default=OFF)"      OFF)
+OPTION(ENABLE_LCMS2            "Link digiKam to LCMS2 instead LCMS1 (default=OFF)"                     OFF)
 
 # NOTE: since 6.11.24, libpgf do not support very well OpenMP. We disable it temporally.
 # See B.K.O #273765 for details.
@@ -247,8 +247,6 @@ ELSE (ENABLE_LCMS2)
         FIND_PACKAGE(LCMS2)
         IF (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION VERSION_GREATER 2.1))
             MESSAGE(STATUS "Found LCMS2 instead LCMS1: ${LCMS2_LIBRARIES} ${LCMS2_INCLUDE_DIR}")
-            MESSAGE(WARNING "Support of LCMS2 still experimental")
-            MESSAGE(WARNING "Please install LCMS1 if possible")
             SET(LCMS_FOUND ${LCMS2_FOUND})
             SET(LCMS_LIBRARIES ${LCMS2_LIBRARIES})
             SET(LCMS_INCLUDE_DIR ${LCMS2_INCLUDE_DIR})
