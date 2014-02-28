@@ -32,6 +32,10 @@
 #include <cmath>
 #include <cfloat>
 
+// OpenCV includes
+
+#include "libopencv.h"
+
 // Qt includes.
 
 #include <QTextStream>
@@ -45,7 +49,6 @@
 
 #include "nrestimate.h"
 #include "nrfilter.h"
-#include "libopencv.h"
 
 namespace Digikam
 {

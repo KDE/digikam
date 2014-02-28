@@ -22,6 +22,7 @@
  *
  * ============================================================ */
 
+#include "libopencv.h"
 #include "imgqsort.h"
 
 // C++ includes
@@ -41,10 +42,9 @@
 
 // Local includes
 
-#include "libopencv.h"
-#include "nrestimate.h"
 #include "mixerfilter.h"
 #include "nrfilter.h"
+#include "nrestimate.h"
 
 // To switch on/off log trace file.
 #define TRACE 1
