@@ -158,4 +158,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 138 ==> 305079 - Please allow nepomuk digikam service being installable separately.
 139 ==> 323284 - Compile 3.3.0 failed - lensfuniface.cpp undefined reference.
 140 ==> 302422 - Slideshow info is displayed too high.
-141 ==>
+141 ==> 292114 - showfoto not capable for drag-and-drop?
+142 ==>
