@@ -160,4 +160,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 140 ==> 302422 - Slideshow info is displayed too high.
 141 ==> 292114 - Showfoto not capable for drag-and-drop?
 142 ==> 159220 - Non printable characters in IPTC keyword set by digiKam (UTF-8 support with IPTC metadata) [patch].
-143 ==> 
+143 ==> 331700 - Some metadata are written with corrupted encoding of non-latin characters.
+144 ==> 
