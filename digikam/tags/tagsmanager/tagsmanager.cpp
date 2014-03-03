@@ -692,6 +692,9 @@ void TagsManager::setupActions()
 
     wipeAll->setHelpText(i18n("Delete all tags from database. "
                              "Proceed with caution."));
+    
+    /** BUG: Disabled temporary, will cause all tags from images to be lost **/
+    wipeAll->setEnabled(false);
 
     connect(wrDbImg, SIGNAL(triggered()),
             this, SLOT(slotWriteToImg()));
