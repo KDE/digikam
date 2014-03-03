@@ -25,6 +25,7 @@ Name[is]=Hala niður myndum með digiKam
 Name[it]=Scarica foto con digiKam
 Name[ja]=digiKam で写真をダウンロード
 Name[km]=ទាញយក​រូបថត​ដោយ digiKam
+Name[ko]=digiKam으로 사진 다운로드
 Name[lt]=Atsisiųsti nuotraukas su digiKam
 Name[lv]=Ielādēt fotogrāfijas ar digiKam
 Name[mr]=डिजिकॅमने फोटो डाउनलोड करा
