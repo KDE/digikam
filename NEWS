@@ -162,4 +162,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 142 ==> 159220 - Non printable characters in IPTC keyword set by digiKam (UTF-8 support with IPTC metadata) [patch].
 143 ==> 331700 - Some metadata are written with corrupted encoding of non-latin characters.
 144 ==> 331578 - digiKam deadlocks on batch renaming/moving images.
-145 ==> 
+145 ==> 257933 - digiKam zoom slider resets to minimum when returning from image preview [patch].
+146 ==> 
