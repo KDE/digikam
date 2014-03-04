@@ -277,12 +277,12 @@ ThumbnailCreator* ThumbnailLoadThread::thumbnailCreator() const
     return d->creator;
 }
 
-int ThumbnailLoadThread::thumbnailPixmapSize(int size) const
+int ThumbnailLoadThread::thumbnailToPixmapSize(int size) const
 {
     return d->pixmapSizeForThumbnailSize(size);
 }
 
-int ThumbnailLoadThread::thumbnailPixmapSize(bool withHighlight, int size)
+int ThumbnailLoadThread::thumbnailToPixmapSize(bool withHighlight, int size)
 {
     if (withHighlight && size >= 10)
     {
@@ -290,6 +290,11 @@ int ThumbnailLoadThread::thumbnailPixmapSize(bool withHighlight, int size)
     }
 
     return size;
+}
+
+int ThumbnailLoadThread::pixmapToThumbnailSize(int size) const
+{
+    return d->thumbnailSizeForPixmapSize(size);
 }
 
 bool ThumbnailLoadThread::Private::hasHighlightingBorder() const
