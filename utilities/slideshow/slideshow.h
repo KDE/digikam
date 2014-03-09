@@ -95,9 +95,8 @@ private:
     void inhibitScreenSaver();
     void allowScreenSaver();
     void makeCornerRectangles(const QRect& desktopRect, const QSize& size,
-                              QRect* const topLeft, QRect* const topRight, QRect* const bottomLeft, QRect* const bottomRight,
-                              QRect* const topLeftLarger, QRect* const topRightLarger, QRect* const bottomLeftLarger,
-                              QRect* const bottomRightLarger);
+                              QRect* const topLeft, QRect* const topRight,
+                              QRect* const topLeftLarger, QRect* const topRightLarger);
 
 private:
 

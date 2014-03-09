@@ -89,16 +89,16 @@ void _l2cmsMAT3tol1LPMAT3(cmsMAT3* const l2, LPMAT3 l1)
 
 #define MATRIX_DET_TOLERANCE    0.0001
 
-// Initiate a vector
-void CMSEXPORT _cmsVEC3init(cmsVEC3* const r, cmsFloat64Number x, cmsFloat64Number y, cmsFloat64Number z)
+/// Initiate a vector
+void CMSEXPORT _cmsVEC3init(cmsVEC3* r, cmsFloat64Number x, cmsFloat64Number y, cmsFloat64Number z)
 {
     r -> n[VX] = x;
     r -> n[VY] = y;
     r -> n[VZ] = z;
 }
 
-// Multiply two matrices
-void CMSEXPORT _cmsMAT3per(cmsMAT3* const r, const cmsMAT3* const a, const cmsMAT3* const b)
+/// Multiply two matrices
+void CMSEXPORT _cmsMAT3per(cmsMAT3* r, const cmsMAT3* const a, const cmsMAT3* const b)
 {
 #define ROWCOL(i, j) \
     a->v[i].n[0]*b->v[0].n[j] + a->v[i].n[1]*b->v[1].n[j] + a->v[i].n[2]*b->v[2].n[j]
@@ -110,9 +110,8 @@ void CMSEXPORT _cmsMAT3per(cmsMAT3* const r, const cmsMAT3* const a, const cmsMA
 #undef ROWCOL //(i, j)
 }
 
-
-// Inverse of a matrix b = a^(-1)
-cmsBool CMSEXPORT _cmsMAT3inverse(const cmsMAT3* const a, cmsMAT3* const b)
+/// Inverse of a matrix b = a^(-1)
+cmsBool CMSEXPORT _cmsMAT3inverse(const cmsMAT3* const a, cmsMAT3* b)
 {
    cmsFloat64Number det, c0, c1, c2;
 
@@ -122,7 +121,8 @@ cmsBool CMSEXPORT _cmsMAT3inverse(const cmsMAT3* const a, cmsMAT3* const b)
 
    det = a -> v[0].n[0]*c0 + a -> v[0].n[1]*c1 + a -> v[0].n[2]*c2;
 
-   if (fabs(det) < MATRIX_DET_TOLERANCE) return FALSE;  // singular matrix; can't invert
+   if (fabs(det) < MATRIX_DET_TOLERANCE)
+       return FALSE;  // singular matrix; can't invert
 
    b -> v[0].n[0] = c0/det;
    b -> v[0].n[1] = (a -> v[0].n[2]*a -> v[2].n[1] - a -> v[0].n[1]*a -> v[2].n[2])/det;
@@ -138,7 +138,7 @@ cmsBool CMSEXPORT _cmsMAT3inverse(const cmsMAT3* const a, cmsMAT3* const b)
 }
 
 /// Evaluate a vector across a matrix
-void CMSEXPORT _cmsMAT3eval(cmsVEC3* const r, const cmsMAT3* const a, const cmsVEC3* const v)
+void CMSEXPORT _cmsMAT3eval(cmsVEC3* r, const cmsMAT3* a, const cmsVEC3* v)
 {
     r->n[VX] = a->v[0].n[VX]*v->n[VX] + a->v[0].n[VY]*v->n[VY] + a->v[0].n[VZ]*v->n[VZ];
     r->n[VY] = a->v[1].n[VX]*v->n[VX] + a->v[1].n[VY]*v->n[VY] + a->v[1].n[VZ]*v->n[VZ];
@@ -157,7 +157,9 @@ static cmsBool ComputeChromaticAdaptation(cmsMAT3* const Conversion,
     cmsMAT3 Cone, Tmp;
 
     Tmp = *Chad;
-    if (!_cmsMAT3inverse(&Tmp, &Chad_Inv)) return FALSE;
+
+    if (!_cmsMAT3inverse(&Tmp, &Chad_Inv))
+        return FALSE;
 
     _cmsVEC3init(&ConeSourceXYZ, SourceWhitePoint -> X,
                                  SourceWhitePoint -> Y,
@@ -182,9 +184,9 @@ static cmsBool ComputeChromaticAdaptation(cmsMAT3* const Conversion,
     return TRUE;
 }
 
-/** Returns the final chrmatic adaptation from illuminant FromIll to Illuminant ToIll
-    The cone matrix can be specified in ConeMatrix. If NULL, Bradford is assumed
-*/
+/** Returns the final chromatic adaptation from illuminant FromIll to Illuminant ToIll
+ *  The cone matrix can be specified in ConeMatrix. If NULL, Bradford is assumed
+ */
 cmsBool _cmsAdaptationMatrix(cmsMAT3* const r, const cmsMAT3* ConeMatrix, const cmsCIEXYZ* const FromIll, const cmsCIEXYZ* const ToIll)
 {
     // Bradford matrix
@@ -272,9 +274,7 @@ cmsBool _cmsBuildRGB2XYZtransferMatrix(cmsMAT3* const r, const cmsCIExyY* const 
     return _cmsAdaptMatrixToD50(r, WhitePt);
 }
 
-
 ///////////////////////////////////////////////////////////////////////
-
 
 /// WAS: Same as anterior, but assuming D50 source. White point is given in xyY
 static cmsBool cmsAdaptMatrixFromD50(cmsMAT3* const r, const cmsCIExyY* const DestWhitePt)
@@ -469,7 +469,7 @@ LCMSAPI QString LCMSEXPORT dkCmsTakeModel(cmsHPROFILE hProfile)
 {
     char buffer[1024];
     const cmsMLU* const mlu = (const cmsMLU* const)cmsReadTag(hProfile, cmsSigDeviceModelDescTag);
-    buffer[0]         = '\0';
+    buffer[0]               = '\0';
 
     if (mlu == NULL)
         return QString();

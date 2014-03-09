@@ -1350,7 +1350,7 @@ bool DMetadata::getImageFacesMap(QMap<QString,QVariant>& faces) const
                     h);
 
         faces[person] = rect;
-        qDebug() << "Found new rect " << person << " "<< rect;
+        kDebug() << "Found new rect " << person << " "<< rect;
     }
 #endif
 

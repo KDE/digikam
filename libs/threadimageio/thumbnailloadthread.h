@@ -194,8 +194,13 @@ public:
      * Computes the pixmap size for the give thumbnail size.
      * These can differ when highlighting is turned on.
      */
-    int thumbnailPixmapSize(int size) const;
-    static int thumbnailPixmapSize(bool withHighlight, int size);
+    int thumbnailToPixmapSize(int size) const;
+    static int thumbnailToPixmapSize(bool withHighlight, int size);
+
+    /**
+     * Computes the thumbnail size for the give pixmap size.
+     */
+    int pixmapToThumbnailSize(int size) const;
 
     /**
      * If you enable this, the thread will try hard to send a pixmap if thumbnail loading failed.

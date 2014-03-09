@@ -131,6 +131,7 @@ private Q_SLOTS:
      * @brief slotNepomukToDb     - coonected to syncNepomuk action and
      *                               will sync all Database tags with nepomuk
      *                               interface
+     * @deprecated                - Nepomuk support will be dropped soon
      */
     void slotNepomukToDb();
 
@@ -141,6 +142,7 @@ private Q_SLOTS:
      *                                images that have them.
      */
     void slotRemoveTagsFromImgs();
+
 
 protected:
 

@@ -10,7 +10,7 @@ OPTION(ENABLE_THUMBS_DB        "Build digiKam with thumbnails database support (
 OPTION(ENABLE_INTERNALMYSQL    "Look for MySQL server executable at build time (default=ON)"           ON)
 OPTION(ENABLE_ADVANCEDDEBUGMSG "Build digiKam with more internal debug message (default=OFF)"          OFF)
 OPTION(ENABLE_NEPOMUKSUPPORT   "Build digiKam with Nepomuk support (default=ON)"                       OFF)
-OPTION(ENABLE_LCMS2            "Link digiKam to LCMS2 instead LCMS1 (experimental) (default=OFF)"      OFF)
+OPTION(ENABLE_LCMS2            "Link digiKam to LCMS2 instead LCMS1 (default=OFF)"                     OFF)
 
 # NOTE: since 6.11.24, libpgf do not support very well OpenMP. We disable it temporally.
 # See B.K.O #273765 for details.
@@ -150,12 +150,14 @@ INCLUDE(FindPackageHandleStandardArgs)
 INCLUDE(FindPkgConfig)
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH} )
 
-FIND_PACKAGE(Kipi 2.0.0 REQUIRED)
-FIND_PACKAGE(Kexiv2     REQUIRED)
-FIND_PACKAGE(Kdcraw     REQUIRED)
-FIND_PACKAGE(JPEG       REQUIRED)
-FIND_PACKAGE(PNG        REQUIRED)
-FIND_PACKAGE(TIFF       REQUIRED)
+SET(KIPI_MIN_VERSION "2.0.0")
+
+FIND_PACKAGE(Kipi ${KIPI_MIN_VERSION} REQUIRED)
+FIND_PACKAGE(Kexiv2                   REQUIRED)
+FIND_PACKAGE(Kdcraw                   REQUIRED)
+FIND_PACKAGE(JPEG                     REQUIRED)
+FIND_PACKAGE(PNG                      REQUIRED)
+FIND_PACKAGE(TIFF                     REQUIRED)
 
 FIND_PACKAGE(PkgConfig)
 FIND_PACKAGE(Jasper)
@@ -247,8 +249,6 @@ ELSE (ENABLE_LCMS2)
         FIND_PACKAGE(LCMS2)
         IF (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION VERSION_GREATER 2.1))
             MESSAGE(STATUS "Found LCMS2 instead LCMS1: ${LCMS2_LIBRARIES} ${LCMS2_INCLUDE_DIR}")
-            MESSAGE(WARNING "Support of LCMS2 still experimental")
-            MESSAGE(WARNING "Please install LCMS1 if possible")
             SET(LCMS_FOUND ${LCMS2_FOUND})
             SET(LCMS_LIBRARIES ${LCMS2_LIBRARIES})
             SET(LCMS_INCLUDE_DIR ${LCMS2_INCLUDE_DIR})
@@ -1649,7 +1649,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/versionmanager
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/q3support
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles
@@ -1688,7 +1687,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/printiface
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/q3support
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/nepomuk

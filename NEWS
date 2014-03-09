@@ -157,5 +157,10 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 137 ==> 330947 - Icons for protected/unprotected pictures too similar on import.
 138 ==> 305079 - Please allow nepomuk digikam service being installable separately.
 139 ==> 323284 - Compile 3.3.0 failed - lensfuniface.cpp undefined reference.
-140 ==> 
-
+140 ==> 302422 - Slideshow info is displayed too high.
+141 ==> 292114 - Showfoto not capable for drag-and-drop?
+142 ==> 159220 - Non printable characters in IPTC keyword set by digiKam (UTF-8 support with IPTC metadata) [patch].
+143 ==> 331700 - Some metadata are written with corrupted encoding of non-latin characters.
+144 ==> 331578 - digiKam deadlocks on batch renaming/moving images.
+145 ==> 257933 - digiKam zoom slider resets to minimum when returning from image preview [patch].
+146 ==> 
