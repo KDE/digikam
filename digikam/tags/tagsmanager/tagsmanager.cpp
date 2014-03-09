@@ -64,6 +64,7 @@
 #include "dlogoaction.h"
 #include "metadatasynchronizer.h"
 #include "fileactionmngr.h"
+#include "metadatasettings.h"
 
 namespace Digikam
 {
@@ -112,6 +113,7 @@ public:
     TagList*         listView;
     TagPropWidget*   tagPropWidget;
     TagModel*        tagModel;
+
 };
 
 TagsManager::TagsManager()
@@ -469,6 +471,7 @@ void TagsManager::slotReadFromImg()
 
     MetadataSynchronizer* const tool = new MetadataSynchronizer(AlbumList(),
                                                                 MetadataSynchronizer::ReadFromFileToDatabase);
+
     tool->setTagsOnly(true);
     tool->start();
 }
@@ -476,9 +479,9 @@ void TagsManager::slotReadFromImg()
 void TagsManager::slotWipeAll()
 {
     int result = KMessageBox::warningContinueCancel(this,
-                                                    i18n("This operation will wipe all tags "
-                                                         "from database and will write changes "
-                                                         "to image metadata.\n"
+                                                    i18n("This operation will wipe all tags from database only.\n"
+                                                         "To apply changes to files "
+                                                         "you must choose write metadata to file later\n"
                                                          "Do you want to continue?"
                                                     ));
 
@@ -486,15 +489,20 @@ void TagsManager::slotWipeAll()
     {
         return;
     }
-    result = KMessageBox::warningContinueCancel(this,
-                                                i18n("This operation can take long time "
-                                                     "depending on collection size.\n"
-                                                     "Do you want to continue?"
-                                                    ));
 
-    if (result != KMessageBox::Continue)
+
+    /** Disable writting tags to images **/
+    MetadataSettings* metaSettings = MetadataSettings::instance();
+    MetadataSettingsContainer backUpContainer = metaSettings->settings();
+    MetadataSettingsContainer newContainer = backUpContainer;
+    bool settingsChanged = false;
+
+    if(backUpContainer.saveTags == true || backUpContainer.saveFaceTags == true)
     {
-        return;
+        settingsChanged = true;
+        newContainer.saveTags = false;
+        newContainer.saveFaceTags = false;
+        metaSettings->setSettings(newContainer);
     }
 
     AlbumPointerList<TAlbum> tagList;
@@ -520,40 +528,12 @@ void TagsManager::slotWipeAll()
         }
     }
 
-    /** Write all changes to file **/
-
-    MetadataSynchronizer* const tool = new MetadataSynchronizer(AlbumList(),
-                                                                MetadataSynchronizer::WriteFromDatabaseToFile);
-    tool->setTagsOnly(true);
-    tool->start();
-}
-
-void TagsManager::slotNepomukToDb()
-{
-#ifdef HAVE_NEPOMUK
-    QDBusInterface interface("org.kde.nepomuk.services.digikamnepomukservice",
-                             "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
-
-    if (interface.isValid())
+    /** Restore settings after tag deletion **/
+    if(settingsChanged)
     {
-        interface.call(QDBus::NoBlock, "triggerResync", true, false);
+        metaSettings->setSettings(backUpContainer);
     }
 
-#endif // HAVE_NEPOMUK
-}
-
-void TagsManager::slotDbToNepomuk()
-{
-#ifdef HAVE_NEPOMUK
-    QDBusInterface interface("org.kde.nepomuk.services.digikamnepomukservice",
-                             "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
-
-    if (interface.isValid())
-    {
-        interface.call(QDBus::NoBlock, "triggerResync", false, true);
-    }
-
-#endif // HAVE_NEPOMUK
 }
 
 void TagsManager::slotRemoveTagsFromImgs()
@@ -681,8 +661,7 @@ void TagsManager::setupActions()
                                           i18n("Read Tags from Image"), this);
 
     KAction* const wipeAll  = new KAction(KIcon("draw-eraser"),
-                                          i18n("Wipe all tags from Database "
-                                              "and read from images"), this);
+                                          i18n("Wipe all tags from Database only"), this);
 
 
     wrDbImg->setHelpText(i18n("Write Tags Metadata to Image."));
@@ -690,11 +669,11 @@ void TagsManager::setupActions()
     readTags->setHelpText(i18n("Read tags from Images into Database. "
                               "Existing tags won't be affected"));
 
-    wipeAll->setHelpText(i18n("Delete all tags from database. "
+    wipeAll->setHelpText(i18n("Delete all tags from database only. Will not sync with files"
                              "Proceed with caution."));
-    
+
     /** BUG: Disabled temporary, will cause all tags from images to be lost **/
-    wipeAll->setEnabled(false);
+    //wipeAll->setEnabled(false);
 
     connect(wrDbImg, SIGNAL(triggered()),
             this, SLOT(slotWriteToImg()));
@@ -752,4 +731,34 @@ void TagsManager::setupActions()
             this, SLOT(slotOpenProperties()));
 }
 
+
+// Nepomuk is deprecated, marked to be deleted
+
+void TagsManager::slotNepomukToDb()
+{
+#ifdef HAVE_NEPOMUK
+    QDBusInterface interface("org.kde.nepomuk.services.digikamnepomukservice",
+                             "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
+
+    if (interface.isValid())
+    {
+        interface.call(QDBus::NoBlock, "triggerResync", true, false);
+    }
+
+#endif // HAVE_NEPOMUK
+}
+
+void TagsManager::slotDbToNepomuk()
+{
+#ifdef HAVE_NEPOMUK
+    QDBusInterface interface("org.kde.nepomuk.services.digikamnepomukservice",
+                             "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
+
+    if (interface.isValid())
+    {
+        interface.call(QDBus::NoBlock, "triggerResync", false, true);
+    }
+
+#endif // HAVE_NEPOMUK
+}
 } // namespace Digikam
