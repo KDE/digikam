@@ -50,13 +50,15 @@
 namespace Digikam
 {
 
-class QmlShow::QmlShowPriv
+class QmlShow::Private
 {
 public:
 
-    QmlShowPriv()
+    Private()
         : ui(0),
           imageno(0),
+          screen_height(0),
+          screen_width(0),
           list(0)
     {
     }
@@ -71,7 +73,7 @@ public:
 
 QmlShow::QmlShow(const ImageInfoList& list, const SlideShowSettings& settings)
     : QMainWindow(0, Qt::FramelessWindowHint),
-      d(new QmlShowPriv)
+      d(new Private)
 {
     d->ui                     = new QDeclarativeView;
     d->list                   = new ImageInfoList(list);
@@ -81,10 +83,12 @@ QmlShow::QmlShow(const ImageInfoList& list, const SlideShowSettings& settings)
 //    ctxt->setContextProperty("myModel", QVariant::fromValue(d->list));
 
     QStringList nameslist;
+
     foreach (const ImageInfo& info, list)
     {
         nameslist << info.filePath();
     }
+
     ctxt->setContextProperty("myModel", QVariant::fromValue(nameslist));
 
     // FIXME: Use KStandardDirs and install qml file properly (see data/database/dbconfig.xml as example)
@@ -167,21 +171,21 @@ void QmlShow::prevImage()
 
 void QmlShow::play()
 {
-    QObject* object = d->ui->rootObject();
+    QObject* const object = d->ui->rootObject();
     object->setProperty("bool_pp", true);
 }
 
 void QmlShow::pause()
 {
-    QObject* object = d->ui->rootObject();
+    QObject* const object = d->ui->rootObject();
     object->setProperty("bool_pp", false);
 }
 
 void QmlShow::changePicture(int index)
 {
-    QObject* object  = d->ui->rootObject();
-    int image_height = d->list->at(index).imageCommonContainer().height;
-    int image_width  = d->list->at(index).imageCommonContainer().width;
+    QObject* const object = d->ui->rootObject();
+    int image_height      = d->list->at(index).imageCommonContainer().height;
+    int image_width       = d->list->at(index).imageCommonContainer().width;
 
     if(d->screen_height < image_height)
     {
@@ -209,15 +213,16 @@ void QmlShow::changePicture(int index)
 
 void QmlShow::setMetaData()
 {
-    QDeclarativeContext* ctxt = d->ui->rootContext();
-    QObject* object           = d->ui->rootObject();
-    QObject* editBox          = 0;
-    MetadataHubOnTheRoad hub  = MetadataHub();
+    QDeclarativeContext* const ctxt = d->ui->rootContext();
+    QObject* const object           = d->ui->rootObject();
+    QObject* const editBox          = 0;
+    MetadataHubOnTheRoad hub        = MetadataHub();
     hub.load(d->list->at(d->imageno));
 
     foreach(editBox, object->children())
     {
-        if(editBox->objectName().compare("editbox") == 0) break;
+        if (editBox->objectName().compare("editbox") == 0)
+            break;
     }
 
     editBox->setProperty("name",        d->list->at(d->imageno).name());
@@ -292,21 +297,21 @@ void QmlShow::setMetaData()
     //ctxt->setContextProperty("imagedate", date);
 
 /*
-    QObject* editBox = d->ui->findChild<QObject *>("editbox");
-    QMessageBox* msg=new QMessageBox(0);
-    if(editBox==NULL) msg->setText("Screw you!");
+    QObject* const editBox = d->ui->findChild<QObject *>("editbox");
+    QMessageBox* const msg = new QMessageBox(0);
+    if(editBox == NULL) msg->setText("Screw you!");
     else msg->setText(d->list->at(d->imageno).name());
     msg->show();
 */
 /*
-    QObject* object = d->ui->rootObject();
-    QObject* editBox = d->ui->findChild<QObject *>("editbox");
+    QObject* const object  = d->ui->rootObject();
+    QObject* const editBox = d->ui->findChild<QObject *>("editbox");
     editBox->setProperty("name",d->list->at(d->imageno).name());
 */
 /*
     d->editBox = new QDeclarativeView;
     d->editBox->setSource(QUrl::fromLocalFile("../core/utilities/qmlShow/qmlview/editbox.qml"));
-    QObject *object = d->editBox->rootObject();
+    QObject* const object = d->editBox->rootObject();
     object->setProperty("name","Hello world");
     int height = QApplication::desktop()->height();
     int width = QApplication::desktop()->width();
