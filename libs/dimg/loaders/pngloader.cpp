@@ -6,7 +6,7 @@
  * Date        : 2005-11-01
  * Description : a PNG image loader for DImg framework.
  *
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,7 +61,7 @@ extern "C"
 #ifdef Q_CC_MSVC
 void _ReadProc(struct png_struct_def* png_ptr, unsigned char* data, unsigned int size)
 {
-    FILE* file_handle = (FILE*)png_get_io_ptr(png_ptr);
+    FILE* const file_handle = (FILE*)png_get_io_ptr(png_ptr);
     fread(data, size, 1, file_handle);
 }
 #endif
@@ -86,10 +86,10 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 {
     png_uint_32  w32, h32;
     int          width, height;
-    FILE*        f;
+    FILE*        f          = 0;
     int          bit_depth, color_type, interlace_type;
-    png_structp  png_ptr  = NULL;
-    png_infop    info_ptr = NULL;
+    png_structp  png_ptr    = NULL;
+    png_infop    info_ptr   = NULL;
     int          colorModel = DImg::COLORMODELUNKNOWN;
 
     readMetadata(filePath, DImg::PNG);
@@ -156,12 +156,14 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
     class CleanupData
     {
     public:
+
         CleanupData()
         {
             data  = 0;
             lines = 0;
             f     = 0;
         }
+
         ~CleanupData()
         {
             delete [] data;
@@ -172,22 +174,27 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
                 fclose(f);
             }
         }
-        void setData(uchar* d)
+
+        void setData(uchar* const d)
         {
             data = d;
         }
-        void setLines(uchar** l)
+
+        void setLines(uchar** const l)
         {
             lines = l;
         }
-        void setFile(FILE* file)
+
+        void setFile(FILE* const file)
         {
             f = file;
         }
+
         void takeData()
         {
             data = 0;
         }
+
         void freeLines()
         {
             if (lines)
@@ -197,10 +204,12 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
             lines = 0;
         }
-        uchar* data;
+
+        uchar*  data;
         uchar** lines;
-        FILE*  f;
+        FILE*   f;
     };
+
     CleanupData* cleanupData = new CleanupData;
     cleanupData->setFile(f);
 
@@ -433,7 +442,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
         cleanupData->setData(data);
 
         uchar** lines = 0;
-        lines = (uchar**)malloc(height * sizeof(uchar*));
+        lines         = (uchar**)malloc(height * sizeof(uchar*));
         cleanupData->setLines(lines);
 
         if (!data || !lines)
@@ -621,7 +630,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
 bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* const observer)
 {
-    FILE*          f;
+    FILE*          f          = 0;
     png_structp    png_ptr;
     png_infop      info_ptr;
     uchar*         ptr, *data = 0;
@@ -672,11 +681,13 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* const observer
     class CleanupData
     {
     public:
+
         CleanupData()
         {
             data  = 0;
             f     = 0;
         }
+
         ~CleanupData()
         {
             delete [] data;
@@ -686,11 +697,13 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* const observer
                 fclose(f);
             }
         }
-        void setData(uchar* d)
+
+        void setData(uchar* const d)
         {
             data = d;
         }
-        void setFile(FILE* file)
+
+        void setFile(FILE* const file)
         {
             f = file;
         }
@@ -698,6 +711,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* const observer
         uchar* data;
         FILE*  f;
     };
+
     CleanupData* cleanupData = new CleanupData;
     cleanupData->setFile(f);
 
