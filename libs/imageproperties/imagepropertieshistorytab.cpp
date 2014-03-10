@@ -60,10 +60,11 @@ public:
 
     Private()
     {
-        view     = 0;
-        model    = 0;
-        layout   = 0;
-        delegate = 0;
+        view        = 0;
+        model       = 0;
+        layout      = 0;
+        delegate    = 0;
+        headerLabel = 0;
     }
 
     QTreeView*                       view;
@@ -100,6 +101,7 @@ ImagePropertiesHistoryTab::~ImagePropertiesHistoryTab()
     delete d->model;
     delete d->view;
     delete d->delegate;
+    delete d;
 }
 
 void ImagePropertiesHistoryTab::setCurrentURL(const KUrl& url)
