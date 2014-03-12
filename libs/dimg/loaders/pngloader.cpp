@@ -157,11 +157,11 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
     {
     public:
 
-        CleanupData()
+        CleanupData():
+            data(0),
+            lines(0),
+            f(0)
         {
-            data  = 0;
-            lines = 0;
-            f     = 0;
         }
 
         ~CleanupData()
@@ -210,7 +210,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
         FILE*   f;
     };
 
-    CleanupData* cleanupData = new CleanupData;
+    CleanupData* const cleanupData = new CleanupData;
     cleanupData->setFile(f);
 
 #if PNG_LIBPNG_VER >= 10400
@@ -560,8 +560,8 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
     // -------------------------------------------------------------------
     // Get embedded text data.
 
-    png_text* text_ptr;
-    int num_comments = png_get_text(png_ptr, info_ptr, &text_ptr, NULL);
+    png_text* text_ptr = 0;
+    int num_comments   = png_get_text(png_ptr, info_ptr, &text_ptr, NULL);
 
     /*
     Standard Embedded text includes in PNG :
@@ -630,10 +630,11 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
 bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* const observer)
 {
-    FILE*          f          = 0;
+    FILE*          f           = 0;
     png_structp    png_ptr;
     png_infop      info_ptr;
-    uchar*         ptr, *data = 0;
+    uchar*         ptr         = 0;
+    uchar*         data        = 0;
     uint           x, y, j;
     png_bytep      row_ptr;
     png_color_8    sig_bit;
@@ -682,10 +683,10 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* const observer
     {
     public:
 
-        CleanupData()
+        CleanupData():
+            data(0),
+            f(0)
         {
-            data  = 0;
-            f     = 0;
         }
 
         ~CleanupData()
@@ -712,7 +713,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* const observer
         FILE*  f;
     };
 
-    CleanupData* cleanupData = new CleanupData;
+    CleanupData* const cleanupData = new CleanupData;
     cleanupData->setFile(f);
 
 #if PNG_LIBPNG_VER >= 10400
