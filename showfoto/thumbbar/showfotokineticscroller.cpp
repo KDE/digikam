@@ -139,15 +139,13 @@ void ShowfotoKineticScroller::enableKineticScrollFor(QAbstractScrollArea* const 
 bool ShowfotoKineticScroller::eventFilter(QObject* object, QEvent* event)
 {
     const QEvent::Type eventType = event->type();
-
     const bool isMouseAction     = QEvent::MouseButtonPress == eventType || QEvent::MouseButtonRelease == eventType;
-
     const bool isMouseEvent      = isMouseAction || QEvent::MouseMove == eventType;
 
-    if( !isMouseEvent || !d->scrollArea )
+    if (!isMouseEvent || !d->scrollArea)
         return false;
 
-    if( isMouseAction && d->ignoredMouseActions-- > 0 ) // don't filter simulated click
+    if (isMouseAction && d->ignoredMouseActions-- > 0) // don't filter simulated click
         return false;
 
     QMouseEvent* const mouseEvent = static_cast<QMouseEvent*>(event);
@@ -159,7 +157,7 @@ bool ShowfotoKineticScroller::eventFilter(QObject* object, QEvent* event)
             d->isPressed      = true;
             d->lastPressPoint = mouseEvent->pos();
 
-            if(d->scrollFlow == QListView::TopToBottom)
+            if (d->scrollFlow == QListView::TopToBottom)
             {
                 d->lastScrollBarPosition = d->scrollArea->verticalScrollBar()->value();
             }
@@ -168,27 +166,30 @@ bool ShowfotoKineticScroller::eventFilter(QObject* object, QEvent* event)
                 d->lastScrollBarPosition = d->scrollArea->horizontalScrollBar()->value();
             }
 
-            if( d->isMoving ) // press while kinetic scrolling, so stop
+            if (d->isMoving)
+            {
+                // press while kinetic scrolling, so stop
                 d->stopMotion();
-            
+            }
+
             break;
         }
         case QEvent::MouseMove:
         {
-            if( !d->isMoving && d->isPressed)
+            if (!d->isMoving && d->isPressed)
             {
                 // A few move events are ignored as "click jitter", but after that we
                 // assume that the user is doing a click & drag
-                if( d->ignoredMouseMoves < gMaxIgnoredMouseMoves )
+                if (d->ignoredMouseMoves < gMaxIgnoredMouseMoves)
                 {
                     ++d->ignoredMouseMoves;
                 }
-                else if(d->isPressed)
+                else if (d->isPressed)
                 {
                     d->ignoredMouseMoves = 0;
-                    d->isMoving = true;
+                    d->isMoving          = true;
 
-                    if(d->scrollFlow == QListView::TopToBottom)
+                    if (d->scrollFlow == QListView::TopToBottom)
                     {
                         d->lastMouseYPos = mouseEvent->pos().y();
                     }
@@ -197,14 +198,14 @@ bool ShowfotoKineticScroller::eventFilter(QObject* object, QEvent* event)
                         d->lastMouseXPos = mouseEvent->pos().x();
                     }
 
-                    if( !d->kineticTimer.isActive() )
+                    if (!d->kineticTimer.isActive())
                         d->kineticTimer.start(gTimerInterval);
                 }
             }
             else if(d->isPressed)
             {
                 // manual scroll
-                if(d->scrollFlow == QListView::TopToBottom)
+                if (d->scrollFlow == QListView::TopToBottom)
                 {
                     const int dragDistance = mouseEvent->pos().y() - d->lastPressPoint.y();
                     d->scrollArea->verticalScrollBar()->setValue(d->lastScrollBarPosition - dragDistance);
@@ -215,22 +216,21 @@ bool ShowfotoKineticScroller::eventFilter(QObject* object, QEvent* event)
                     d->scrollArea->horizontalScrollBar()->setValue(d->lastScrollBarPosition - dragDistance);
                 }
             }
-            
+
             break;
         }
         case QEvent::MouseButtonRelease:
         {
             d->isPressed = false;
+
             // Looks like the user wanted a single click. Simulate the click,
             // as the events were already consumed
             if( !d->isMoving )
             {
-                QMouseEvent* mousePress = new QMouseEvent(QEvent::MouseButtonPress,
-                                                        d->lastPressPoint, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-                QMouseEvent* mouseRelease = new QMouseEvent(QEvent::MouseButtonRelease,
-                                                            d->lastPressPoint, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+                QMouseEvent* const mousePress   = new QMouseEvent(QEvent::MouseButtonPress,   d->lastPressPoint, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+                QMouseEvent* const mouseRelease = new QMouseEvent(QEvent::MouseButtonRelease, d->lastPressPoint, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+                d->ignoredMouseActions          = 2;
 
-                d->ignoredMouseActions = 2;
                 QApplication::postEvent(object, mousePress);
                 QApplication::postEvent(object, mouseRelease);
             }
@@ -238,6 +238,7 @@ bool ShowfotoKineticScroller::eventFilter(QObject* object, QEvent* event)
             break;
         }
         default:
+            // Nothing to do here.
             break;
     }
 
@@ -246,9 +247,9 @@ bool ShowfotoKineticScroller::eventFilter(QObject* object, QEvent* event)
 
 void ShowfotoKineticScroller::onKineticTimerElapsed()
 {
-    if( d->isPressed && d->isMoving )
+    if (d->isPressed && d->isMoving)
     {
-        if(d->scrollFlow == QListView::TopToBottom)
+        if (d->scrollFlow == QListView::TopToBottom)
         {
             // the speed is measured between two timer ticks
             const int cursorYPos = d->scrollArea->mapFromGlobal(QCursor::pos()).y();
@@ -262,7 +263,7 @@ void ShowfotoKineticScroller::onKineticTimerElapsed()
             d->lastMouseXPos     = cursorXPos;
         }
     }
-    else if( !d->isPressed && d->isMoving )
+    else if (!d->isPressed && d->isMoving)
     {
         // use the previously recorded speed and gradually decelerate
         d->velocity = qBound(-gMaxDecelerationSpeed, d->velocity, gMaxDecelerationSpeed);
@@ -274,7 +275,7 @@ void ShowfotoKineticScroller::onKineticTimerElapsed()
         if( qAbs(d->velocity) < qAbs(gFriction) )
             d->stopMotion();
 
-        if(d->scrollFlow == QListView::TopToBottom)
+        if (d->scrollFlow == QListView::TopToBottom)
         {
             const int scrollBarYPos = d->scrollArea->verticalScrollBar()->value();
             d->scrollArea->verticalScrollBar()->setValue(scrollBarYPos - d->velocity);
