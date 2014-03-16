@@ -100,7 +100,7 @@ AlbumCustomizer::AlbumCustomizer(QWidget* const parent)
                                       "expression. Examples, if date is 20 July 1969:<p>"
                                       "<p><b>dd.MM.yyyy</b> : 20.07.1969</p>"
                                       "<p><b>ddd MMMM d yy</b> : Sun July 20 69</p>"
-                                      "<p><b>'Photo shoted' dddd</b> : Photo shotted Sunday</p>"
+                                      "<p><b>'Photo shot on ' dddd</b> : Photo shot on Sunday</p>"
                                      ));
     d->tooltipDialog->resize(650, 530);
 
