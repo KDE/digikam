@@ -165,4 +165,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 145 ==> 257933 - digiKam zoom slider resets to minimum when returning from image preview [patch].
 146 ==> 311936 - FindKdcraw.cmake is outdated and causes digikam to fail building against KDE 4.10.
 147 ==> 331714 - Showfoto crash when opening RAW.
-148 ==> 
+148 ==> 332280 - freerotationfilter.cpp:92: (style) Same expression on both sides of '||'.
+149 ==> 
+
