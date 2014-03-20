@@ -166,5 +166,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 146 ==> 311936 - FindKdcraw.cmake is outdated and causes digikam to fail building against KDE 4.10.
 147 ==> 331714 - Showfoto crash when opening RAW.
 148 ==> 332280 - freerotationfilter.cpp:92: (style) Same expression on both sides of '||'.
-149 ==> 
+149 ==> 332346 - Cannot delete (or Download & Delete) from the import dialog.
+150 ==> 
 
