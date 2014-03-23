@@ -168,5 +168,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 148 ==> 332280 - freerotationfilter.cpp:92: (style) Same expression on both sides of '||'.
 149 ==> 332346 - Cannot delete (or Download & Delete) from the import dialog.
 150 ==> 327676 - Automated picture cutting produces _quadratic_ pics.
-151 ==> 
+151 ==> 306283 - Browsing large pic collections and select subsequent subsets of these: workflow?
+152 ==> 250213 - Wish for automatic area selection from irregular contours.
+153 ==> 
 
