@@ -167,5 +167,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 147 ==> 331714 - Showfoto crash when opening RAW.
 148 ==> 332280 - freerotationfilter.cpp:92: (style) Same expression on both sides of '||'.
 149 ==> 332346 - Cannot delete (or Download & Delete) from the import dialog.
-150 ==> 
+150 ==> 327676 - Automated picture cutting produces _quadratic_ pics.
+151 ==> 
 
