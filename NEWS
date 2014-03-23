@@ -170,5 +170,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 150 ==> 327676 - Automated picture cutting produces _quadratic_ pics.
 151 ==> 306283 - Browsing large pic collections and select subsequent subsets of these: workflow?
 152 ==> 250213 - Wish for automatic area selection from irregular contours.
-153 ==> 
+153 ==> 279544 - Tag image for unsharp pictures.
+154 ==> 279543 - Filter pictures by "average" brightness.
+155 ==> 
+
 
