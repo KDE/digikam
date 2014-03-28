@@ -172,6 +172,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 152 ==> 250213 - Wish for automatic area selection from irregular contours.
 153 ==> 279544 - Tag image for unsharp pictures.
 154 ==> 279543 - Filter pictures by "average" brightness.
-155 ==> 
+155 ==> 249023 - Running the batch queue twice on same target directory fails with "Failed to save item...".
+156 ==> 
+
 
 
