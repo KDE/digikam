@@ -173,7 +173,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 153 ==> 279544 - Tag image for unsharp pictures.
 154 ==> 279543 - Filter pictures by "average" brightness.
 155 ==> 249023 - Running the batch queue twice on same target directory fails with "Failed to save item...".
-156 ==> 
+156 ==> 332663 - Wrong location of documentation translations.
+157 ==> 
 
 
 
