@@ -32,6 +32,9 @@
 #include "imageinfo.h"
 
 class QPixmap;
+class QDragMoveEvent;
+class QDropEvent;
+class QDragEnterEvent;
 
 namespace Digikam
 {
@@ -84,12 +87,16 @@ Q_SIGNALS:
     void signalGotoTagAndItem(int);
     void signalPopupTagsView();
 
+
 protected:
 
     bool acceptsMouseClick(QMouseEvent* e);
     void enterEvent(QEvent* e);
     void leaveEvent(QEvent* e);
     void showEvent(QShowEvent* e);
+    void dropEvent(QDropEvent* e);
+    void dragMoveEvent(QDragMoveEvent* e);
+    void dragEnterEvent(QDragEnterEvent* e);
 
 private Q_SLOTS:
 

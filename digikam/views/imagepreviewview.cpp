@@ -31,6 +31,9 @@
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMouseEvent>
 #include <QToolBar>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <QDragEnterEvent>
 
 // KDE includes
 
@@ -55,6 +58,7 @@
 #include "imagepreviewviewitem.h"
 #include "albumsettings.h"
 #include "contextmenuhelper.h"
+#include "ddragobjects.h"
 #include "digikamapp.h"
 #include "dimg.h"
 #include "dimgpreviewitem.h"
@@ -511,6 +515,56 @@ void Digikam::ImagePreviewView::slotUpdateFaces()
      * Release rotation lock after rotation
      */
     d->rotationLock = false;
+}
+
+void ImagePreviewView::dragMoveEvent(QDragMoveEvent* e)
+{
+    if (DTagListDrag::canDecode(e->mimeData()))
+    {
+        e->accept();
+        return;
+    }
+
+    e->ignore();
+}
+
+void ImagePreviewView::dragEnterEvent(QDragEnterEvent* e)
+{
+  if (DTagListDrag::canDecode(e->mimeData()))
+    {
+        e->accept();
+        return;
+    }
+
+    e->ignore();
+}
+
+void ImagePreviewView::dropEvent(QDropEvent* e)
+{
+    if (DTagListDrag::canDecode(e->mimeData()))
+    {
+        QList<int> tagIDs;
+
+        if (!DTagListDrag::decode(e->mimeData(), tagIDs))
+        {
+            return;
+        }
+
+        KMenu popMenu(this);
+        QAction* assignToThisAction = popMenu.addAction(SmallIcon("tag"), i18n("Assign Tags to &This Item"));
+        popMenu.addSeparator();
+        popMenu.addAction(SmallIcon("dialog-cancel"), i18n("&Cancel"));
+        popMenu.setMouseTracking(true);
+        QAction* const choice = popMenu.exec(this->mapToGlobal(e->pos()));
+
+        if(choice==assignToThisAction)
+        {
+            FileActionMngr::instance()->assignTags(d->item->imageInfo(),tagIDs);
+        }
+    }
+
+    e->accept();
+    return;
 }
 
 }  // namespace Digikam
