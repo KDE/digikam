@@ -176,6 +176,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 156 ==> 332663 - Wrong location of documentation translations.
 157 ==> 332287 - digiKam crashes repeatedly while tagging faces with names.
 158 ==> 281785 - No prohibition warning while tagging thumbnail above preview.
-159 ==> 
+159 ==> 329313 - WISH: howto update installed version _stable_ without harming existing system?
+160 ==> 
 
 
