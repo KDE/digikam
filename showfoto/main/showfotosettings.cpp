@@ -22,15 +22,19 @@
  * ============================================================ */
 
 #include "showfotosettings.moc"
-#include "QDebug"
+
+// Qt includes
+
+#include <QStyle>
+
 // KDE includes
 
 #include <kglobal.h>
 #include <kglobalsettings.h>
+#include <kdebug.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kapplication.h>
-#include <QStyle>
 
 // Local includes
 

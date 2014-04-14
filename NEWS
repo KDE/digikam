@@ -1,5 +1,5 @@
 *****************************************************************************************************
-digiKam 4.0.0-beta4 - Release date: 2014-03-09
+digiKam 4.0.0-rc - Release date: 2014-04-13
 
 NEW FEATURES:
 
@@ -163,4 +163,21 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 143 ==> 331700 - Some metadata are written with corrupted encoding of non-latin characters.
 144 ==> 331578 - digiKam deadlocks on batch renaming/moving images.
 145 ==> 257933 - digiKam zoom slider resets to minimum when returning from image preview [patch].
-146 ==> 
+146 ==> 311936 - FindKdcraw.cmake is outdated and causes digikam to fail building against KDE 4.10.
+147 ==> 331714 - Showfoto crash when opening RAW.
+148 ==> 332280 - freerotationfilter.cpp:92: (style) Same expression on both sides of '||'.
+149 ==> 332346 - Cannot delete (or Download & Delete) from the import dialog.
+150 ==> 327676 - Automated picture cutting produces _quadratic_ pics.
+151 ==> 306283 - Browsing large pic collections and select subsequent subsets of these: workflow?
+152 ==> 250213 - Wish for automatic area selection from irregular contours.
+153 ==> 279544 - Tag image for unsharp pictures.
+154 ==> 279543 - Filter pictures by "average" brightness.
+155 ==> 249023 - Running the batch queue twice on same target directory fails with "Failed to save item...".
+156 ==> 332663 - Wrong location of documentation translations.
+157 ==> 332287 - digiKam crashes repeatedly while tagging faces with names.
+158 ==> 281785 - No prohibition warning while tagging thumbnail above preview.
+159 ==> 329313 - WISH: howto update installed version _stable_ without harming existing system?
+160 ==> 333299 - Crash segmentation fault at starts.
+161 ==> 
+
+

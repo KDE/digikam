@@ -92,6 +92,7 @@ public:
         syncDirection(0),
         hbox(0),
         vbox(0),
+        vbox2(0),
         hbox3(0),
         similarity(0),
         expanderBox(0),

@@ -53,7 +53,6 @@
  * (This ordering ensures that the APP2 marker(s) will appear after the
  * SOI and JFIF or Adobe markers, but before all else.)
  */
-
 extern void write_icc_profile JPP((j_compress_ptr cinfo,
                                    const JOCTET* icc_data_ptr,
                                    unsigned int icc_data_len));
@@ -74,7 +73,6 @@ extern void write_icc_profile JPP((j_compress_ptr cinfo,
 /**
  * Prepare for reading an ICC profile
  */
-
 extern void setup_read_icc_profile JPP((j_decompress_ptr cinfo));
 
 
@@ -93,7 +91,6 @@ extern void setup_read_icc_profile JPP((j_decompress_ptr cinfo));
  * at jpeg_finish_decompress() time.  But it seems likely that many apps
  * will prefer to have the data stick around after decompression finishes.)
  */
-
 extern boolean read_icc_profile JPP((j_decompress_ptr cinfo,
                                      JOCTET** icc_data_ptr,
                                      unsigned int* icc_data_len));

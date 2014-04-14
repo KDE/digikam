@@ -647,14 +647,6 @@ void ImportUI::setupActions()
     // hide the unsupported actions
     d->uploadAction->setVisible(d->controller->cameraUploadSupport());
 
-    d->downloadDelSelectedAction->setVisible(d->controller->cameraDeleteSupport());
-    d->downloadDelAllAction->setVisible(d->controller->cameraDeleteSupport());
-    d->downloadDelNewAction->setVisible(d->controller->cameraDeleteSupport());
-
-    d->deleteNewAction->setVisible(d->controller->cameraDeleteSupport());
-    d->deleteSelectedAction->setVisible(d->controller->cameraDeleteSupport());
-    d->deleteAllAction->setVisible(d->controller->cameraDeleteSupport());
-
     d->cameraCaptureAction->setVisible(d->controller->cameraCaptureImageSupport());
 }
 

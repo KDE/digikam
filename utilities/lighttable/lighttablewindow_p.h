@@ -119,9 +119,6 @@ public:
     KAction*                  backwardAction;
     KAction*                  firstAction;
     KAction*                  lastAction;
-    KAction*                  donateMoneyAction;
-    KAction*                  contributeAction;
-    KAction*                  rawCameraListAction;
 
     KToggleAction*            showBarAction;
     KToggleAction*            syncPreviewAction;

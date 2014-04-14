@@ -68,6 +68,11 @@ public:
         setPending(0),
         setAccepted(0),
         setSpeed(0),
+        setRejectedThreshold(0),
+        setPendingThreshold(0),
+        setAcceptedThreshold(0),
+        setBlurWeight(0),
+        setNoiseWeight(0),
         setCompressionWeight(0)
     {}
 

@@ -669,7 +669,7 @@ void TagsManager::setupActions()
     readTags->setHelpText(i18n("Read tags from Images into Database. "
                               "Existing tags won't be affected"));
 
-    wipeAll->setHelpText(i18n("Delete all tags from database only. Will not sync with files"
+    wipeAll->setHelpText(i18n("Delete all tags from database only. Will not sync with files. "
                              "Proceed with caution."));
 
     /** BUG: Disabled temporary, will cause all tags from images to be lost **/

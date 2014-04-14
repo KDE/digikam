@@ -6,7 +6,7 @@
  * Date        : 2006-01-20
  * Description : core image editor GUI implementation private data.
  *
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -150,15 +150,12 @@ public:
 
     KActionCollection*         imagepluginsActionCollection;
 
-    KAction*                   contributeAction;
     KAction*                   copyAction;
     KAction*                   cropAction;
     KAction*                   autoCropAction;
-    KAction*                   donateMoneyAction;
     KAction*                   filePrintAction;
     KAction*                   flipHorizAction;
     KAction*                   flipVertAction;
-    KAction*                   rawCameraListAction;
     KAction*                   rotateLeftAction;
     KAction*                   rotateRightAction;
     KAction*                   selectAllAction;

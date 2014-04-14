@@ -167,7 +167,8 @@ void Canvas::load(const QString& filename, IOFileSettings* const IOFileSettings)
 
 void Canvas::slotImageLoaded(const QString& filePath, bool success)
 {
-    d->canvasItem->setImage(*d->im->getImg());
+    if(d->im->getImg())
+        d->canvasItem->setImage(*d->im->getImg());
 
     // Note: in showFoto, we using a null filename to clear canvas.
     if (!success && !filePath.isEmpty())

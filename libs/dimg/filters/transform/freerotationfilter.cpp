@@ -6,7 +6,7 @@
  * Date        : 2005-07-18
  * Description : Free rotation threaded image filter.
  *
- * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -90,8 +90,8 @@ double FreeRotationFilter::calculateAngle(const QPoint& p1, const QPoint& p2)
     // but we want to be really sure here
 
     if (p1.x() < 0 ||
-        p2.y() < 0 ||
-        p1.x() < 0 ||
+        p1.y() < 0 ||
+        p2.x() < 0 ||
         p2.y() < 0)
     {
         return 0.0;
@@ -116,16 +116,16 @@ double FreeRotationFilter::calculateAngle(const QPoint& p1, const QPoint& p2)
     }
 
     // do we rotate to the left (counter clock wise)?
-    bool ccw = ((p1.x() < p2.x()) && (p2.y() > p1.y())) ||
-               ((p1.x() > p2.x()) && (p2.y() < p1.y()));
+    bool ccw     = ((p1.x() < p2.x()) && (p2.y() > p1.y())) ||
+                   ((p1.x() > p2.x()) && (p2.y() < p1.y()));
 
     // calculate the angle
     double angle = 0.0;
     double ly    = fabs((double)p2.y() - p1.y());
     double lx    = fabs((double)p2.x() - p1.x());
 
-    angle = atan2(ly, lx) * 180.0 / M_PI;
-    angle = ccw ? -angle : angle;
+    angle        = atan2(ly, lx) * 180.0 / M_PI;
+    angle        = ccw ? -angle : angle;
 
     return angle;
 }
@@ -285,10 +285,9 @@ void FreeRotationFilter::filterImage()
 
             if (!autoCrop.isValid())
             {
-                m_destImage = DImg(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(),
-                                   m_orgImage.hasAlpha());
+                m_destImage         = DImg(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
                 m_destImage.fill(DColor(d->settings.backgroundColor.rgb(), sixteenBit));
-                d->settings.newSize   = QSize();
+                d->settings.newSize = QSize();
             }
             else
             {
@@ -345,10 +344,9 @@ void FreeRotationFilter::filterImage()
 
             if (!autoCrop.isValid())
             {
-                m_destImage = DImg(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(),
-                                   m_orgImage.hasAlpha());
+                m_destImage         = DImg(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
                 m_destImage.fill(DColor(d->settings.backgroundColor.rgb(), sixteenBit));
-                d->settings.newSize   = QSize();
+                d->settings.newSize = QSize();
             }
             else
             {
@@ -399,12 +397,12 @@ FilterAction FreeRotationFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("angle", d->settings.angle);
-    action.addParameter("antiAlias", d->settings.antiAlias);
-    action.addParameter("autoCrop", d->settings.autoCrop);
-    action.addParameter("newSize", d->settings.newSize);
-    action.addParameter("orgH", d->settings.orgH);
-    action.addParameter("orgW", d->settings.orgW);
+    action.addParameter("angle",            d->settings.angle);
+    action.addParameter("antiAlias",        d->settings.antiAlias);
+    action.addParameter("autoCrop",         d->settings.autoCrop);
+    action.addParameter("newSize",          d->settings.newSize);
+    action.addParameter("orgH",             d->settings.orgH);
+    action.addParameter("orgW",             d->settings.orgW);
     action.addParameter("backgroundColorR", d->settings.backgroundColor.red());
     action.addParameter("backgroundColorG", d->settings.backgroundColor.green());
     action.addParameter("backgroundColorB", d->settings.backgroundColor.blue());
@@ -415,12 +413,12 @@ FilterAction FreeRotationFilter::filterAction()
 
 void FreeRotationFilter::readParameters(const FilterAction& action)
 {
-    d->settings.angle = action.parameter("angle").toDouble();
+    d->settings.angle     = action.parameter("angle").toDouble();
     d->settings.antiAlias = action.parameter("antiAlias").toBool();
-    d->settings.autoCrop = action.parameter("autoCrop").toInt();
-    d->settings.newSize = action.parameter("newSize").toSize();
-    d->settings.orgH = action.parameter("orgH").toInt();
-    d->settings.orgW = action.parameter("orgW").toInt();
+    d->settings.autoCrop  = action.parameter("autoCrop").toInt();
+    d->settings.newSize   = action.parameter("newSize").toSize();
+    d->settings.orgH      = action.parameter("orgH").toInt();
+    d->settings.orgW      = action.parameter("orgW").toInt();
     d->settings.backgroundColor.setRed(action.parameter("backgroundColorR").toInt());
     d->settings.backgroundColor.setGreen(action.parameter("backgroundColorG").toInt());
     d->settings.backgroundColor.setBlue(action.parameter("backgroundColorB").toInt());
