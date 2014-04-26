@@ -262,11 +262,6 @@ bool ShowFoto::queryClose()
         return false;
     }
 
-    return true;
-}
-
-bool ShowFoto::queryExit()
-{
     saveSettings();
     return true;
 }

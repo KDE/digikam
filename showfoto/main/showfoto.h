@@ -66,7 +66,6 @@ private:
     bool setup(bool iccSetupPage=false);
 
     bool queryClose();
-    bool queryExit();
 
     void setupActions();
     void setupConnections();
