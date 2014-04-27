@@ -33,6 +33,7 @@
 #include <QScrollBar>
 #include <QTimer>
 #include <QToolButton>
+#include <QTreeWidget>
 
 // KDE includes
 
@@ -193,6 +194,11 @@ public:
     SearchTextBar* tagSearchBar;
     KTabWidget*    tabWidget;
     TagFolderView* tagFolderView;
+    QTreeWidget*   colorsAndLabelsTreeWidget;
+    QFont          rootFont;
+    QFont          regularFont;
+    QSize          iconSize;
+    QSize          rootSizeHint;
 };
 
 TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* const model)
@@ -204,14 +210,13 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
     d->tabWidget = new KTabWidget(this);
     layout->addWidget(d->tabWidget);
 
+    // --------- Tags treeView ---------------------------------
+
     QWidget* const tagsWidget = new QWidget();
     QVBoxLayout* const tagsLayout = new QVBoxLayout(tagsWidget);
 
-    QWidget* const colorLabelWidget = new QWidget();
-    QVBoxLayout* const colorLabelLayout = new QVBoxLayout(colorLabelWidget);
-
     d->openTagMngr   = new KPushButton( i18n("Open Tag Manager"));
-    d->tagFolderView = new TagFolderView(this, model);
+    d->tagFolderView = new TagFolderView(tagsWidget,model);
     d->tagFolderView->setConfigGroup(getConfigGroup());
     d->tagFolderView->setExpandNewCurrentItem(true);
     d->tagFolderView->setAlbumManagerCurrentAlbum(true);
@@ -223,6 +228,47 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
     tagsLayout->addWidget(d->openTagMngr);
     tagsLayout->addWidget(d->tagFolderView);
     tagsLayout->addWidget(d->tagSearchBar);
+
+    // --------- Colors and Lables treeView --------------------
+
+    QWidget* const colorLabelWidget = new QWidget();
+    QVBoxLayout* const colorLabelLayout = new QVBoxLayout(colorLabelWidget);
+
+    d->rootFont = QFont("Times",18,-1,false);
+    d->regularFont = QFont("Times",12,-1,false);
+    d->iconSize = QSize(25 ,25);
+    d->rootSizeHint = QSize(1,40);
+
+    d->colorsAndLabelsTreeWidget = new QTreeWidget(colorLabelWidget);
+    d->colorsAndLabelsTreeWidget->setHeaderLabel("Colors And Labels");
+    d->colorsAndLabelsTreeWidget->setSelectionMode(QAbstractItemView::MultiSelection);
+    d->colorsAndLabelsTreeWidget->setUniformRowHeights(false);
+    d->colorsAndLabelsTreeWidget->setIconSize(d->iconSize);
+
+    QTreeWidgetItem* rating = new QTreeWidgetItem(d->colorsAndLabelsTreeWidget);
+    rating->setText(0, tr("Rating"));
+    rating->setIcon(0,KIcon("digikam"));
+    rating->setSizeHint(0,d->rootSizeHint);
+    rating->setFont(0,d->rootFont);
+    rating->setFlags(Qt::ItemIsEnabled);
+
+    QTreeWidgetItem *labels = new QTreeWidgetItem(d->colorsAndLabelsTreeWidget);
+    labels->setText(0, tr("Labels"));
+    labels->setIcon(0,KIcon("digikam"));
+    labels->setSizeHint(0,d->rootSizeHint);
+    labels->setFont(0,d->rootFont);
+    labels->setFlags(Qt::ItemIsEnabled);
+
+    QTreeWidgetItem *colors = new QTreeWidgetItem(d->colorsAndLabelsTreeWidget);
+    colors->setText(0, tr("Colors"));
+    colors->setIcon(0,KIcon("digikam"));
+    colors->setSizeHint(0,d->rootSizeHint);
+    colors->setFont(0,d->rootFont);
+    colors->setFlags(Qt::ItemIsEnabled);
+
+    colorLabelLayout->addWidget(d->colorsAndLabelsTreeWidget);
+
+    // ---------------------------------------------------------
 
     d->tabWidget->insertTab(Private::TAGS,tagsWidget,KIcon("tag"),"Tags");
     d->tabWidget->insertTab(Private::COLORSANDLABELS,colorLabelWidget,"Colors and Labels");
