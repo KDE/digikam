@@ -45,6 +45,7 @@
 #include <kinputdialog.h>
 #include <klocale.h>
 #include <ksqueezedtextlabel.h>
+#include <KTabWidget>
 
 // Local includes
 
@@ -171,6 +172,14 @@ QString AlbumFolderViewSideBarWidget::getCaption()
 
 class TagViewSideBarWidget::Private
 {
+
+public:
+    enum TagsTab
+    {
+        TAGS = 0,
+        COLORSANDLABELS
+    };
+
 public:
 
     Private() :
@@ -182,6 +191,7 @@ public:
 
     KPushButton*   openTagMngr;
     SearchTextBar* tagSearchBar;
+    KTabWidget*    tabWidget;
     TagFolderView* tagFolderView;
 };
 
@@ -191,6 +201,14 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
     setObjectName("TagView Sidebar");
 
     QVBoxLayout* const layout = new QVBoxLayout(this);
+    d->tabWidget = new KTabWidget(this);
+    layout->addWidget(d->tabWidget);
+
+    QWidget* const tagsWidget = new QWidget();
+    QVBoxLayout* const tagsLayout = new QVBoxLayout(tagsWidget);
+
+    QWidget* const colorLabelWidget = new QWidget();
+    QVBoxLayout* const colorLabelLayout = new QVBoxLayout(colorLabelWidget);
 
     d->openTagMngr   = new KPushButton( i18n("Open Tag Manager"));
     d->tagFolderView = new TagFolderView(this, model);
@@ -202,9 +220,12 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
     d->tagSearchBar->setModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->tagSearchBar->setFilterModel(d->tagFolderView->albumFilterModel());
 
-    layout->addWidget(d->openTagMngr);
-    layout->addWidget(d->tagFolderView);
-    layout->addWidget(d->tagSearchBar);
+    tagsLayout->addWidget(d->openTagMngr);
+    tagsLayout->addWidget(d->tagFolderView);
+    tagsLayout->addWidget(d->tagSearchBar);
+
+    d->tabWidget->insertTab(Private::TAGS,tagsWidget,KIcon("tag"),"Tags");
+    d->tabWidget->insertTab(Private::COLORSANDLABELS,colorLabelWidget,"Colors and Labels");
 
     connect(d->openTagMngr, SIGNAL(clicked()),
             this,SLOT(slotOpenTagManager()));
