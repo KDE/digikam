@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : threaded image filter class.
  *
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -103,12 +103,13 @@ public:
     /** Returns the action description corresponding to currently set options.
      */
     virtual FilterAction filterAction() = 0;
-    
+
     virtual void readParameters(const FilterAction&) = 0;
-    
-    /** Return the identifier for this filter in the image history.*/
+
+    /** Return the identifier for this filter in the image history.
+     */
     virtual QString filterIdentifier() const = 0;
-    
+
     virtual QList<int> supportedVersions() const;
 
     /**
@@ -145,7 +146,7 @@ Q_SIGNALS:
     /** Emitted when progress info from the calculation is available.
      */
     void progress(int progress);
-    
+
     /** Emitted when the computation has completed.
         @param success True if computation finished without interruption on valid data
                        False if the thread was canceled, or no data is available.
@@ -193,7 +194,7 @@ protected:
       that the slave filter uses in the parent filter's progress.
       Any derived filter class that is publicly available to other filters
       should implement an additional constructor using this constructor.
-      */
+     */
     DImgThreadedFilter(DImgThreadedFilter* const master, const DImg& orgImage, const DImg& destImage,
                        int progressBegin=0, int progressEnd=100, const QString& name=QString());
 
@@ -218,7 +219,7 @@ protected:
      * Convenience class to spare the few repeating lines of code
      */
     template <class Filter>
-    
+
     class DefaultFilterAction : public FilterAction
     {
     public:
