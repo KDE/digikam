@@ -9,7 +9,7 @@
  *
  * Copyright (C) 2009      by Nasca Octavian Paul <zynaddsubfx at yahoo dot com>
  * Copyright (C) 2009      by Julien Pontabry <julien dot pontabry at gmail dot com>
- * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -60,14 +60,14 @@ public:
     RandomNumberGenerator  generator;
 };
 
-LocalContrastFilter::LocalContrastFilter(QObject* parent)
+LocalContrastFilter::LocalContrastFilter(QObject* const parent)
     : DImgThreadedFilter(parent),
       d(new Private)
 {
     initFilter();
 }
 
-LocalContrastFilter::LocalContrastFilter(DImg* image, QObject* parent, const LocalContrastContainer& par)
+LocalContrastFilter::LocalContrastFilter(DImg* const image, QObject* const parent, const LocalContrastContainer& par)
     : DImgThreadedFilter(image, parent, "LocalContrast"),
       d(new Private)
 {
