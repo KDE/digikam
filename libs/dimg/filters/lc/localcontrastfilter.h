@@ -97,6 +97,9 @@ private:
     inline void rgb2hsv(const float& r, const float& g, const float& b, float& h, float& s, float& v);
     inline void hsv2rgb(const float& h, const float& s, const float& v, float& r, float& g, float& b);
 
+    void blurMultithreaded(int start, int stop, float* const img, float* const blurimage);
+    void saturationMultithreaded(int start, int stop, float* const img, float* const srcimg);
+
 private:
 
     class Private;

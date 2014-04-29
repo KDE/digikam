@@ -1,55 +1,55 @@
 Editor tools pending task
 
-                        Multithreaded      Zommable Preview        Port to BQM
+                        Multithreaded   Multicore    Zommable Preview        Port to BQM
 
 color
-  /adjustcurves             DONE                 DONE                  DONE
-  /adjustlevels             DONE                 DONE                  TODO
-  /autocorrectiontool       DONE                 DONE                  DONE
-  /bcgtool                  DONE                 DONE                  DONE
-  /bwsepiatool              DONE                 DONE                  DONE
-  /cbtool                   DONE                 DONE                  DONE
-  /channelmixer             DONE                 DONE                  DONE
-  /hsltool                  DONE                 DONE                  DONE
-  /profileconversiontool    DONE                 DONE                  DONE
-  /whitebalance             DONE                 DONE                  DONE
-  /Invert                    NO                   NO                   DONE
-  /Convert 8/16 bits         NO                   NO                   DONE
-  /Convert 16/18 bits        NO                   NO                   DONE
+  /adjustcurves             DONE          TODO             DONE                  DONE
+  /adjustlevels             DONE          TODO             DONE                  TODO
+  /autocorrectiontool       DONE          TODO             DONE                  DONE
+  /bcgtool                  DONE          TODO             DONE                  DONE
+  /bwsepiatool              DONE          TODO             DONE                  DONE
+  /cbtool                   DONE          TODO             DONE                  DONE
+  /channelmixer             DONE          TODO             DONE                  DONE
+  /hsltool                  DONE          TODO             DONE                  DONE
+  /profileconversiontool    DONE          TODO             DONE                  DONE
+  /whitebalance             DONE          TODO             DONE                  DONE
+  /Invert                    NO           TODO              NO                   DONE
+  /Convert 8/16 bits         NO           TODO              NO                   DONE
+  /Convert 16/18 bits        NO           TODO              NO                   DONE
 
 decorate
-  /border                   DONE                  NO                   DONE
-  /inserttext               TODO                  NO                   TODO (though BQM Watermark tool)
-  /texture                  DONE                 DONE                  TODO
+  /border                   DONE          TODO              NO                   DONE
+  /inserttext               TODO          TODO              NO                   TODO (though BQM Watermark tool)
+  /texture                  DONE          TODO             DONE                  TODO
 
 filters
-  /colorfx                  DONE                 DONE                  DONE
-  /charcoal                 DONE                 DONE                  TODO
-  /distortionfx             DONE                 TODO                  TODO
-  /emboss                   DONE                 DONE                  TODO
-  /oilpaint                 DONE                 DONE                  TODO
-  /blurfx                   DONE                 DONE                  TODO
-  /raindrop                 DONE                  NO                   TODO
-  /filmgrain                DONE                 DONE                  DONE
+  /colorfx                  DONE          TODO             DONE                  DONE
+  /charcoal                 DONE          TODO             DONE                  TODO
+  /distortionfx             DONE          TODO             TODO                  TODO
+  /emboss                   DONE          TODO             DONE                  TODO
+  /oilpaint                 DONE          TODO             DONE                  TODO
+  /blurfx                   DONE          TODO             DONE                  TODO
+  /raindrop                 DONE          TODO              NO                   TODO
+  /filmgrain                DONE          TODO             DONE                  DONE
 
 enhance
-  /noisereductiontool       DONE                 DONE                  DONE
-  /sharpentool              DONE                 DONE                  DONE
-  /restoration              DONE                 DONE                  DONE
-  /blurtool                 DONE                 DONE                  DONE
-  /localcontrast            DONE                 DONE                  DONE
-  /redeyetool               DONE                 TODO                   NO
-  /inpainting               DONE                  NO                    NO
-  /autocorrection           DONE                 DONE                  DONE
-  /distortion               DONE                 TODO                  TODO
-  /vignetting               DONE                  NO                   DONE
-  /hotpixels                DONE                 DONE                  TODO
+  /noisereductiontool       DONE          TODO             DONE                  DONE
+  /sharpentool              DONE          TODO             DONE                  DONE
+  /restoration              DONE          TODO             DONE                  DONE
+  /blurtool                 DONE          TODO             DONE                  DONE
+  /localcontrast            DONE          DONE             DONE                  DONE
+  /redeyetool               DONE          TODO             TODO                   NO
+  /inpainting               DONE          TODO              NO                    NO
+  /autocorrection           DONE          TODO             DONE                  DONE
+  /distortion               DONE          TODO             TODO                  TODO
+  /vignetting               DONE          TODO              NO                   DONE
+  /hotpixels                DONE          TODO             DONE                  TODO
 
 transform
-  /ratiocrop                DONE                  NO                    NO
-  /resizetool               DONE                 TODO                  DONE
-  /freerotation             DONE                  NO                   DONE
-  /perspective               NO                   NO                    NO
-  /sheartool                DONE                  NO                   TODO
-  /contentawareresizing     DONE                 TODO                  TODO
+  /ratiocrop                DONE          TODO              NO                    NO
+  /resizetool               DONE          TODO             TODO                  DONE
+  /freerotation             DONE          TODO              NO                   DONE
+  /perspective               NO           TODO              NO                    NO
+  /sheartool                DONE          TODO              NO                   TODO
+  /contentawareresizing     DONE          TODO             TODO                  TODO
 
