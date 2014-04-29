@@ -75,7 +75,7 @@ UnsharpMaskFilter::~UnsharpMaskFilter()
     cancelFilter();
 }
 
-void UnsharpMaskFilter::unsharpMaskMultithreaded(int start, int stop, uint y)
+void UnsharpMaskFilter::unsharpMaskMultithreaded(uint start, uint stop, uint y)
 {
     long int zero = 0;
     double   value;
@@ -85,7 +85,7 @@ void UnsharpMaskFilter::unsharpMaskMultithreaded(int start, int stop, uint y)
     long int quantum        = m_destImage.sixteenBit() ? 65535 : 255;
     double quantumThreshold = quantum * m_threshold;
 
-    for (uint x = start ; runningFlag() && (x < (uint)stop) ; ++x)
+    for (uint x = start ; runningFlag() && (x < stop) ; ++x)
     {
         p = m_orgImage.getPixelColor(x, y);
         q = m_destImage.getPixelColor(x, y);

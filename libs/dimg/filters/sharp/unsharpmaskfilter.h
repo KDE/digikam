@@ -81,7 +81,7 @@ public:
 private:
 
     void filterImage();
-    void unsharpMaskMultithreaded(int start, int stop, uint y);
+    void unsharpMaskMultithreaded(uint start, uint stop, uint y);
 
 private:
 

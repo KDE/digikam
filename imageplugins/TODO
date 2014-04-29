@@ -34,7 +34,7 @@ filters
 
 enhance
   /noisereductiontool       DONE          TODO             DONE                  DONE
-  /sharpentool              DONE          TODO             DONE                  DONE
+  /sharpentool              DONE          DONE             DONE                  DONE
   /restoration              DONE          TODO             DONE                  DONE
   /blurtool                 DONE          TODO             DONE                  DONE
   /localcontrast            DONE          DONE             DONE                  DONE
