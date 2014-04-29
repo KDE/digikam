@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : Refocus threaded image filter.
  *
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009      by Matthias Welwarsky <matze at welwarsky dot de>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -28,6 +28,10 @@
 // C++ includes
 
 #include <cmath>
+
+// Qt includes
+
+#include <QtConcurrentRun>
 
 // KDE includes
 
@@ -190,118 +194,145 @@ void RefocusFilter::refocusImage(uchar* const data, int width, int height, bool 
 
     // Apply deconvolution kernel to image.
     kDebug() << "RefocusFilter::Apply Matrix to image...";
-    convolveImage(data, d->preImage.bits(), width, height, sixteenBit,
-                  matrix->data, 2 * matrixSize + 1);
+
+    Args prm;
+    prm.orgData    = data;
+    prm.destData   = d->preImage.bits();
+    prm.width      = width;
+    prm.height     = height;
+    prm.sixteenBit = sixteenBit;
+    prm.matrix     = matrix->data;
+    prm.mat_size   = 2 * matrixSize + 1;
+
+    convolveImage(prm);
 
     // Clean up memory
     delete matrix;
 }
 
-void RefocusFilter::convolveImage(uchar* const orgData, uchar* const destData, int width, int height,
-                                  bool sixteenBit, const double* const matrix, int mat_size)
+void RefocusFilter::convolveImageMultithreaded(int start, int stop, int y1, const Args& prm)
 {
-    int progress;
-    unsigned short* orgData16  = (unsigned short*)orgData;
-    unsigned short* destData16 = (unsigned short*)destData;
+    unsigned short* orgData16  = (unsigned short*)prm.orgData;
+    unsigned short* destData16 = (unsigned short*)prm.destData;
 
     double valRed, valGreen, valBlue;
-    int    x1, y1, x2, y2, index1, index2;
+    int    x1, x2, y2, index1, index2;
 
-    const int imageSize  = width * height;
-    const int mat_offset = mat_size / 2;
+    const int imageSize  = prm.width * prm.height;
+    const int mat_offset = prm.mat_size / 2;
 
-    for (y1 = 0; runningFlag() && (y1 < height); ++y1)
+    for (x1 = start; runningFlag() && (x1 < stop); ++x1)
     {
-        for (x1 = 0; runningFlag() && (x1 < width); ++x1)
+        valRed = valGreen = valBlue = 0.0;
+
+        if (!prm.sixteenBit)        // 8 bits image.
         {
-            valRed = valGreen = valBlue = 0.0;
+            uchar red, green, blue;
+            uchar* ptr = 0;
 
-            if (!sixteenBit)        // 8 bits image.
+            for (y2 = 0; runningFlag() && (y2 < prm.mat_size); ++y2)
             {
-                uchar red, green, blue;
-                uchar* ptr = 0;
+                int y2_matsize = y2 * prm.mat_size;
 
-                for (y2 = 0; runningFlag() && (y2 < mat_size); ++y2)
+                for (x2 = 0; runningFlag() && (x2 < prm.mat_size); ++x2)
                 {
-                    int y2_matsize = y2 * mat_size;
+                    index1 = prm.width * (y1 + y2 - mat_offset) + x1 + x2 - mat_offset;
 
-                    for (x2 = 0; runningFlag() && (x2 < mat_size); ++x2)
+                    if (index1 >= 0 && index1 < imageSize)
                     {
-                        index1 = width * (y1 + y2 - mat_offset) + x1 + x2 - mat_offset;
-
-                        if (index1 >= 0 && index1 < imageSize)
-                        {
-                            ptr                      =  &orgData[index1 * 4];
-                            blue                     =  ptr[0];
-                            green                    =  ptr[1];
-                            red                      =  ptr[2];
-                            const double matrixValue =  matrix[y2_matsize + x2];
-                            valRed                   += matrixValue * red;
-                            valGreen                 += matrixValue * green;
-                            valBlue                  += matrixValue * blue;
-                        }
+                        ptr                      =  &prm.orgData[index1 * 4];
+                        blue                     =  ptr[0];
+                        green                    =  ptr[1];
+                        red                      =  ptr[2];
+                        const double matrixValue =  prm.matrix[y2_matsize + x2];
+                        valRed                   += matrixValue * red;
+                        valGreen                 += matrixValue * green;
+                        valBlue                  += matrixValue * blue;
                     }
-                }
-
-                index2 = y1 * width + x1;
-
-                if (index2 >= 0 && index2 < imageSize)
-                {
-                    // To get Alpha channel value from original (unchanged)
-                    memcpy(&destData[index2 * 4], &orgData[index2 * 4], 4);
-                    ptr = &destData[index2 * 4];
-
-                    // Overwrite RGB values to destination.
-                    ptr[0] = (uchar) CLAMP(valBlue,  0.0, 255.0);
-                    ptr[1] = (uchar) CLAMP(valGreen, 0.0, 255.0);
-                    ptr[2] = (uchar) CLAMP(valRed,   0.0, 255.0);
                 }
             }
-            else                 // 16 bits image.
+
+            index2 = y1 * prm.width + x1;
+
+            if (index2 >= 0 && index2 < imageSize)
             {
-                unsigned short red, green, blue;
-                unsigned short* ptr = 0;
+                // To get Alpha channel value from original (unchanged)
+                memcpy(&prm.destData[index2 * 4], &prm.orgData[index2 * 4], 4);
+                ptr = &prm.destData[index2 * 4];
 
-                for (y2 = 0; runningFlag() && (y2 < mat_size); ++y2)
-                {
-                    int y2_matsize = y2 * mat_size;
-
-                    for (x2 = 0; runningFlag() && (x2 < mat_size); ++x2)
-                    {
-                        index1 = width * (y1 + y2 - mat_offset) + x1 + x2 - mat_offset;
-
-                        if (index1 >= 0 && index1 < imageSize)
-                        {
-                            ptr                      =  &orgData16[index1 * 4];
-                            blue                     =  ptr[0];
-                            green                    =  ptr[1];
-                            red                      =  ptr[2];
-                            const double matrixValue =  matrix[y2_matsize + x2];
-                            valRed                   += matrixValue * red;
-                            valGreen                 += matrixValue * green;
-                            valBlue                  += matrixValue * blue;
-                        }
-                    }
-                }
-
-                index2 = y1 * width + x1;
-
-                if (index2 >= 0 && index2 < imageSize)
-                {
-                    // To get Alpha channel value from original (unchanged)
-                    memcpy(&destData16[index2 * 4], &orgData16[index2 * 4], 8);
-                    ptr = &destData16[index2 * 4];
-
-                    // Overwrite RGB values to destination.
-                    ptr[0] = (unsigned short) CLAMP(valBlue,  0.0, 65535.0);
-                    ptr[1] = (unsigned short) CLAMP(valGreen, 0.0, 65535.0);
-                    ptr[2] = (unsigned short) CLAMP(valRed,   0.0, 65535.0);
-                }
+                // Overwrite RGB values to destination.
+                ptr[0] = (uchar) CLAMP(valBlue,  0.0, 255.0);
+                ptr[1] = (uchar) CLAMP(valGreen, 0.0, 255.0);
+                ptr[2] = (uchar) CLAMP(valRed,   0.0, 255.0);
             }
         }
+        else                 // 16 bits image.
+        {
+            unsigned short red, green, blue;
+            unsigned short* ptr = 0;
+
+            for (y2 = 0; runningFlag() && (y2 < prm.mat_size); ++y2)
+            {
+                int y2_matsize = y2 * prm.mat_size;
+
+                for (x2 = 0; runningFlag() && (x2 < prm.mat_size); ++x2)
+                {
+                    index1 = prm.width * (y1 + y2 - mat_offset) + x1 + x2 - mat_offset;
+
+                    if (index1 >= 0 && index1 < imageSize)
+                    {
+                        ptr                      =  &orgData16[index1 * 4];
+                        blue                     =  ptr[0];
+                        green                    =  ptr[1];
+                        red                      =  ptr[2];
+                        const double matrixValue =  prm.matrix[y2_matsize + x2];
+                        valRed                   += matrixValue * red;
+                        valGreen                 += matrixValue * green;
+                        valBlue                  += matrixValue * blue;
+                    }
+                }
+            }
+
+            index2 = y1 * prm.width + x1;
+
+            if (index2 >= 0 && index2 < imageSize)
+            {
+                // To get Alpha channel value from original (unchanged)
+                memcpy(&destData16[index2 * 4], &orgData16[index2 * 4], 8);
+                ptr = &destData16[index2 * 4];
+
+                // Overwrite RGB values to destination.
+                ptr[0] = (unsigned short) CLAMP(valBlue,  0.0, 65535.0);
+                ptr[1] = (unsigned short) CLAMP(valGreen, 0.0, 65535.0);
+                ptr[2] = (unsigned short) CLAMP(valRed,   0.0, 65535.0);
+            }
+        }
+    }
+}
+
+void RefocusFilter::convolveImage(const Args& prm)
+{
+    int progress;
+
+    int nbCore = QThreadPool::globalInstance()->maxThreadCount();
+    int step   = prm.width / nbCore;
+
+    for (int y1 = 0; runningFlag() && (y1 < prm.height); ++y1)
+    {
+        QList <QFuture<void> > tasks;
+
+        for (int j = 0 ; runningFlag() && (j < nbCore) ; ++j)
+        {
+            tasks.append(QtConcurrent::run(this,
+                                           &RefocusFilter::convolveImageMultithreaded,
+                                           j*step, (j+1)*step, y1, prm));
+        }
+
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
 
         // Update the progress bar in dialog.
-        progress = (int)(((double)y1 * 100.0) / height);
+        progress = (int)(((double)y1 * 100.0) / prm.height);
 
         if (progress % 5 == 0)
         {
