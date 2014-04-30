@@ -326,7 +326,8 @@ void TagsManager::slotDeleteAction()
     {
         const int result = KMessageBox::warningContinueCancel(
                 this,
-                i18np(
+                i18ncp(
+                        "%2 is a comma separated list of tags to be deleted.",
                         "Tag %2 has one or more subtags. "
                         "Deleting it will also delete "
                         "the subtags. "
@@ -349,7 +350,8 @@ void TagsManager::slotDeleteAction()
     QString message;
     if (!tagsWithImages.isEmpty())
     {
-        message = i18np(
+        message = i18ncp(
+                "%2 is a comma separated list of tags to be deleted.",
                 "Tag %2 is assigned to one or more items. "
                 "Do you want to delete it?",
                 "Tags %2 are assigned to one or more items. "
@@ -360,7 +362,8 @@ void TagsManager::slotDeleteAction()
     }
     else
     {
-        message = i18np(
+        message = i18ncp(
+                "%2 is a comma separated list of tags to be deleted.",
                 "Delete tag %2?",
                 "Delete tags %2?",
                 tagNames.count(),
@@ -474,11 +477,14 @@ void TagsManager::slotInvertSel()
 
 void TagsManager::slotWriteToImg()
 {
-    int result = KMessageBox::warningContinueCancel(this,
-                                                    i18n("This operation can take long time "
-                                                         "depending on collection size.\n"
-                                                         "Do you want to continue?"
-                                                    ));
+    int result = KMessageBox::warningContinueCancel(
+            this,
+            i18n(
+                    "This operation can take long time "
+                    "depending on collection size.\n"
+                    "Do you want to continue?"
+                )
+        );
 
     if (result != KMessageBox::Continue)
     {
@@ -493,11 +499,14 @@ void TagsManager::slotWriteToImg()
 
 void TagsManager::slotReadFromImg()
 {
-    int result = KMessageBox::warningContinueCancel(this,
-                                                    i18n("This operation can take long time "
-                                                         "depending on collection size.\n"
-                                                         "Do you want to continue?"
-                                                    ));
+    int result = KMessageBox::warningContinueCancel(
+            this,
+            i18n(
+                    "This operation can take long time "
+                    "depending on collection size.\n"
+                    "Do you want to continue?"
+                )
+        );
 
     if (result != KMessageBox::Continue)
     {
@@ -513,12 +522,15 @@ void TagsManager::slotReadFromImg()
 
 void TagsManager::slotWipeAll()
 {
-    const int result = KMessageBox::warningContinueCancel(this,
-                                                    i18n("This operation will wipe all tags from database only.\n"
-                                                         "To apply changes to files, "
-                                                         "you must choose write metadata to file later.\n"
-                                                         "Do you want to continue?"
-                                                    ));
+    const int result = KMessageBox::warningContinueCancel(
+            this,
+            i18n(
+                    "This operation will wipe all tags from database only.\n"
+                    "To apply changes to files, "
+                    "you must choose write metadata to file later.\n"
+                    "Do you want to continue?"
+                )
+        );
 
     if (result != KMessageBox::Continue)
     {
