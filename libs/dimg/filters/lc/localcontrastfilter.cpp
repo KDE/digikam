@@ -119,6 +119,8 @@ void LocalContrastFilter::filterImage()
                                                            65535, true));
                 }
             }
+
+            postProgress(90);
         }
         else
         {
@@ -144,6 +146,8 @@ void LocalContrastFilter::filterImage()
                     m_destImage.setPixelColor(x, y, DColor(data[i + 2], data[i + 1], data[i], 255, false));
                 }
             }
+
+            postProgress(90);
         }
     }
 
@@ -160,6 +164,8 @@ void LocalContrastFilter::process8bitRgbImage(unsigned char* const img, int size
         // convert to floating point
         tmpimage[i] = (float)(img[i] / 255.0);
     }
+
+    postProgress(20);
 
     processRgbImage(tmpimage.data(), sizex, sizey);
 
@@ -188,6 +194,8 @@ void LocalContrastFilter::process16bitRgbImage(unsigned short* const img, int si
         // convert to floating point
         tmpimage[i] = (float)(img[i] / 65535.0);
     }
+
+    postProgress(20);
 
     processRgbImage(tmpimage.data(), sizex, sizey);
 
@@ -240,11 +248,11 @@ float LocalContrastFilter::func(float x1, float x2)
     return result;
 }
 
-void LocalContrastFilter::blurMultithreaded(int start, int stop, float* const img, float* const blurimage)
+void LocalContrastFilter::blurMultithreaded(uint start, uint stop, float* const img, float* const blurimage)
 {
-    int pos = start * 3;
+    uint pos = start * 3;
 
-    for (int i = start ; runningFlag() && (i < stop) ; ++i)
+    for (uint i = start ; runningFlag() && (i < stop) ; ++i)
     {
         float src_r  = img[pos];
         float src_g  = img[pos + 1];
@@ -264,17 +272,17 @@ void LocalContrastFilter::blurMultithreaded(int start, int stop, float* const im
     }
 }
 
-void LocalContrastFilter::saturationMultithreaded(int start, int stop, float* const img, float* const srcimg)
+void LocalContrastFilter::saturationMultithreaded(uint start, uint stop, float* const img, float* const srcimg)
 {
     float src_h,  src_s,  src_v;
     float dest_h, dest_s, dest_v;
     float destSaturation, s1;
 
-    int pos                 = start * 3;
-    int highSaturationValue = 100 - d->par.highSaturation;
-    int lowSaturationValue  = 100 - d->par.lowSaturation;
+    uint pos                 = start * 3;
+    int  highSaturationValue = 100 - d->par.highSaturation;
+    int  lowSaturationValue  = 100 - d->par.lowSaturation;
 
-    for (int i = start ; runningFlag() && (i < stop) ; ++i)
+    for (uint i = start ; runningFlag() && (i < stop) ; ++i)
     {
         rgb2hsv(srcimg[pos], srcimg[pos + 1], srcimg[pos + 2], src_h, src_s, src_v);
         rgb2hsv(img[pos], img[pos + 1], img[pos + 2], dest_h, dest_s, dest_v);
@@ -304,14 +312,18 @@ void LocalContrastFilter::processRgbImage(float* const img, int sizex, int sizey
         srcimg[i] = img[i];
     }
 
+    postProgress(30);
+
     if (d->par.stretchContrast)
     {
         stretchContrast(img, size * 3);
     }
 
-    int nbCore = QThreadPool::globalInstance()->maxThreadCount();
-    int step   = size / nbCore;
-    int pos    = 0;
+    postProgress(40);
+
+    int   nbCore = QThreadPool::globalInstance()->maxThreadCount();
+    float step   = size / nbCore;
+    int   pos    = 0;
 
     for (int nstage = 0 ; runningFlag() && (nstage < TONEMAPPING_MAX_STAGES) ; ++nstage)
     {
@@ -339,7 +351,7 @@ void LocalContrastFilter::processRgbImage(float* const img, int sizex, int sizey
             {
                 tasks.append(QtConcurrent::run(this,
                                                &LocalContrastFilter::blurMultithreaded,
-                                               j*step, (j+1)*step,
+                                               (uint)(j*step), (uint)((j+1)*step),
                                                img,
                                                blurimage.data()));
             }
@@ -348,7 +360,7 @@ void LocalContrastFilter::processRgbImage(float* const img, int sizex, int sizey
                 t.waitForFinished();
         }
 
-        postProgress(30 + nstage * 10);
+        postProgress(50 + nstage * 5);
     }
 
     if ((d->par.highSaturation != 100) || (d->par.lowSaturation != 100))
@@ -362,7 +374,7 @@ void LocalContrastFilter::processRgbImage(float* const img, int sizex, int sizey
         {
             tasks.append(QtConcurrent::run(this,
                                            &LocalContrastFilter::saturationMultithreaded,
-                                           j*step, (j+1)*step,
+                                           (uint)(j*step), (uint)((j+1)*step),
                                            img,
                                            srcimg.data()));
         }
@@ -376,9 +388,9 @@ void LocalContrastFilter::processRgbImage(float* const img, int sizex, int sizey
 
 void LocalContrastFilter::inplaceBlurYMultithreaded(const Args& prm)
 {
-    for (int y = prm.start ; runningFlag() && (y < prm.stop) ; ++y)
+    for (uint y = prm.start ; runningFlag() && (y < prm.stop) ; ++y)
     {
-        int pos   = y * prm.sizex;
+        uint pos  = y * prm.sizex;
         float old = prm.data[pos];
         ++pos;
 
@@ -402,9 +414,9 @@ void LocalContrastFilter::inplaceBlurYMultithreaded(const Args& prm)
 
 void LocalContrastFilter::inplaceBlurXMultithreaded(const Args& prm)
 {
-    for (int x = prm.start ; runningFlag() && (x < prm.stop) ; ++x)
+    for (uint x = prm.start ; runningFlag() && (x < prm.stop) ; ++x)
     {
-        int pos   = x;
+        uint pos  = x;
         float old = prm.data[pos];
 
         for (int y = 1 ; runningFlag() && (y < prm.sizey) ; ++y)
@@ -448,9 +460,9 @@ void LocalContrastFilter::inplaceBlur(float* const data, int sizex, int sizey, f
     prm.blur            = blur;
     prm.denormal_remove = (float)(1e-15);
 
-    int nbCore = QThreadPool::globalInstance()->maxThreadCount();
-    int stepy  = prm.sizey / nbCore;
-    int stepx  = prm.sizex / nbCore;
+    int   nbCore = QThreadPool::globalInstance()->maxThreadCount();
+    float stepy  = prm.sizey / nbCore;
+    float stepx  = prm.sizex / nbCore;
 
     for (int stage = 0 ; runningFlag() && (stage < 2) ; ++stage)
     {
@@ -458,8 +470,8 @@ void LocalContrastFilter::inplaceBlur(float* const data, int sizex, int sizey, f
 
         for (int j = 0 ; runningFlag() && (j < nbCore) ; ++j)
         {
-            prm.start = j*stepy;
-            prm.stop  = (j+1)*stepy;
+            prm.start = (uint)(j*stepy);
+            prm.stop  = (uint)((j+1)*stepy);
             tasks.append(QtConcurrent::run(this,
                                            &LocalContrastFilter::inplaceBlurYMultithreaded,
                                            prm));
@@ -472,8 +484,8 @@ void LocalContrastFilter::inplaceBlur(float* const data, int sizex, int sizey, f
 
         for (int j = 0 ; runningFlag() && (j < nbCore) ; ++j)
         {
-            prm.start = j*stepx;
-            prm.stop  = (j+1)*stepx;
+            prm.start = (uint)(j*stepx);
+            prm.stop  = (uint)((j+1)*stepx);
             tasks.append(QtConcurrent::run(this,
                                            &LocalContrastFilter::inplaceBlurXMultithreaded,
                                            prm));

@@ -85,8 +85,8 @@ private:
 
     struct Args
     {
-        int    start;
-        int    stop;
+        uint   start;
+        uint   stop;
         float  a;
         float* data;
         int    sizex;
@@ -111,8 +111,8 @@ private:
     inline void rgb2hsv(const float& r, const float& g, const float& b, float& h, float& s, float& v);
     inline void hsv2rgb(const float& h, const float& s, const float& v, float& r, float& g, float& b);
 
-    void blurMultithreaded(int start, int stop, float* const img, float* const blurimage);
-    void saturationMultithreaded(int start, int stop, float* const img, float* const srcimg);
+    void blurMultithreaded(uint start, uint stop, float* const img, float* const blurimage);
+    void saturationMultithreaded(uint start, uint stop, float* const img, float* const srcimg);
 
     void inplaceBlurYMultithreaded(const Args& prm);
     void inplaceBlurXMultithreaded(const Args& prm);
