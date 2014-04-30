@@ -46,9 +46,6 @@ public:
     float getPower(int nstage)  const;
     float getBlur(int nstage)   const;
 
-    float getUnsharpMaskPower() const;
-    float getUnsharpMaskBlur()  const;
-
 public:
 
     bool stretchContrast;
@@ -64,15 +61,6 @@ public:
         float blur;
     }
     stage[TONEMAPPING_MAX_STAGES];
-
-    struct
-    {
-        bool  enabled;       // digiKam Unsharp Mask settings:
-        float blur;          // Radius    : 0.00 - 120.00
-        float power;         // Amount    : 0.0  - 5.0
-        int   threshold;     // threshold : 0.00 - 1.00
-    }
-    unsharpMask;
 };
 
 } // namespace Digikam

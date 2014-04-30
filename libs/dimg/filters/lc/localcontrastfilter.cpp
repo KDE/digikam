@@ -175,7 +175,7 @@ void LocalContrastFilter::process8bitRgbImage(unsigned char* const img, int size
         pos += 3;
     }
 
-    postProgress(90);
+    postProgress(80);
 }
 
 void LocalContrastFilter::process16bitRgbImage(unsigned short int* const img, int sizex, int sizey)
@@ -203,7 +203,7 @@ void LocalContrastFilter::process16bitRgbImage(unsigned short int* const img, in
         pos += 3;
     }
 
-    postProgress(90);
+    postProgress(80);
 }
 
 float LocalContrastFilter::func(float x1, float x2)
@@ -213,7 +213,7 @@ float LocalContrastFilter::func(float x1, float x2)
 
     switch (d->par.functionId)
     {
-        case 0:  //power function
+        case 0:  // power function
         {
             p = (float)(qPow((double)10.0, (double)qFabs((x2 * 2.0 - 1.0)) * d->current_process_power_value * 0.02));
 
@@ -229,7 +229,7 @@ float LocalContrastFilter::func(float x1, float x2)
             break;
         }
 
-        case 1:  //linear function
+        case 1:  // linear function
         {
             p      = (float)(1.0 / (1 + qExp(-(x2 * 2.0 - 1.0) * d->current_process_power_value * 0.04)));
             result = (x1 < p) ? (float)(x1 * (1.0 - p) / p) : (float)((1.0 - p) + (x1 - p) * p / (1.0 - p));
@@ -372,100 +372,7 @@ void LocalContrastFilter::processRgbImage(float* const img, int sizex, int sizey
     }
 
     postProgress(70);
-
-    // Unsharp Mask filter
-
-    if (d->par.unsharpMask.enabled)
-    {
-        QScopedArrayPointer<float> val(new float[size]);
-
-        // compute the desatured image
-
-        int pos = 0;
-
-        for (int i = 0 ; runningFlag() && (i < size) ; ++i)
-        {
-            val[i] = blurimage[i] = (float)((img[pos] + img[pos + 1] + img[pos + 2]) / 3.0);
-            //val[i] = blurimage[i] = (float)(max3(img[pos],img[pos+1],img[pos+2]));
-            pos += 3;
-        }
-
-        float blur_value = d->par.getUnsharpMaskBlur();
-        inplaceBlur(blurimage.data(), sizex, sizey, blur_value);
-
-        pos              = 0;
-        float pw         = (float)(2.5 * d->par.getUnsharpMaskPower());
-        float threshold  = (float)(d->par.unsharpMask.threshold * pw / 250.0);
-        float threshold2 = threshold / 2;
-
-        for (int i = 0 ; runningFlag() && (i < size) ; ++i)
-        {
-            float dval     = (val[i] - blurimage[i]) * pw;
-            float abs_dval = qFabs(dval);
-
-            if (abs_dval < threshold)
-            {
-                if (abs_dval > threshold2)
-                {
-                    bool sign = (dval < 0.0);
-                    dval      = (float)((abs_dval - threshold2) * 2.0);
-
-                    if (sign)
-                    {
-                        dval = - dval;
-                    }
-                }
-                else
-                {
-                    dval = 0;
-                }
-            }
-
-            float r = img[pos]  + dval;
-            float g = img[pos + 1] + dval;
-            float b = img[pos + 2] + dval;
-
-            if (r < 0.0)
-            {
-                r = 0.0;
-            }
-
-            if (r > 1.0)
-            {
-                r = 1.0;
-            }
-
-            if (g < 0.0)
-            {
-                g = 0.0;
-            }
-
-            if (g > 1.0)
-            {
-                g = 1.0;
-            }
-
-            if (b < 0.0)
-            {
-                b = 0.0;
-            }
-
-            if (b > 1.0)
-            {
-                b = 1.0;
-            }
-
-            img[pos]     = r;
-            img[pos + 1] = g;
-            img[pos + 2] = b;
-
-            pos += 3;
-        }
-    }
-
-    postProgress(80);
 }
-
 
 void LocalContrastFilter::inplaceBlurYMultithreaded(const Args& prm)
 {
@@ -782,15 +689,6 @@ FilterAction LocalContrastFilter::filterAction()
         }
     }
 
-    action.addParameter("unsharpMask:enabled", d->par.unsharpMask.enabled);
-
-    if (d->par.unsharpMask.enabled)
-    {
-        action.addParameter("unsharpMask:blur",      d->par.unsharpMask.blur);
-        action.addParameter("unsharpMask:power",     d->par.unsharpMask.power);
-        action.addParameter("unsharpMask:threshold", d->par.unsharpMask.threshold);
-    }
-
     action.addParameter("randomSeed", d->generator.currentSeed());
 
     return action;
@@ -813,15 +711,6 @@ void LocalContrastFilter::readParameters(const FilterAction& action)
             d->par.stage[nstage].power = action.parameter(stage + "power").toFloat();
             d->par.stage[nstage].blur  = action.parameter(stage + "blur").toFloat();
         }
-    }
-
-    d->par.unsharpMask.enabled = action.parameter("unsharpMask:enabled").toBool();
-
-    if (d->par.unsharpMask.enabled)
-    {
-        d->par.unsharpMask.blur      = action.parameter("unsharpMask:blur").toFloat();
-        d->par.unsharpMask.power     = action.parameter("unsharpMask:power").toFloat();
-        d->par.unsharpMask.threshold = action.parameter("unsharpMask:threshold").toInt();
     }
 
     d->generator.seed(action.parameter("randomSeed").toUInt());
