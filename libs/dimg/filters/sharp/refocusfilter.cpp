@@ -210,13 +210,14 @@ void RefocusFilter::refocusImage(uchar* const data, int width, int height, bool 
     delete matrix;
 }
 
-void RefocusFilter::convolveImageMultithreaded(int start, int stop, int y1, const Args& prm)
+void RefocusFilter::convolveImageMultithreaded(uint start, uint stop, uint y1, const Args& prm)
 {
     unsigned short* orgData16  = (unsigned short*)prm.orgData;
     unsigned short* destData16 = (unsigned short*)prm.destData;
 
     double valRed, valGreen, valBlue;
-    int    x1, x2, y2, index1, index2;
+    uint   x1, x2, y2;
+    int    index1, index2;
 
     const int imageSize  = prm.width * prm.height;
     const int mat_offset = prm.mat_size / 2;
@@ -314,8 +315,8 @@ void RefocusFilter::convolveImage(const Args& prm)
 {
     int progress;
 
-    int nbCore = QThreadPool::globalInstance()->maxThreadCount();
-    int step   = prm.width / nbCore;
+    int   nbCore = QThreadPool::globalInstance()->maxThreadCount();
+    float step   = prm.width / nbCore;
 
     for (int y1 = 0; runningFlag() && (y1 < prm.height); ++y1)
     {
@@ -325,7 +326,7 @@ void RefocusFilter::convolveImage(const Args& prm)
         {
             tasks.append(QtConcurrent::run(this,
                                            &RefocusFilter::convolveImageMultithreaded,
-                                           j*step, (j+1)*step, y1, prm));
+                                           (uint)(j*step), (uint)((j+1)*step), y1, prm));
         }
 
         foreach(QFuture<void> t, tasks)

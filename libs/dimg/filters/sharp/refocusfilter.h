@@ -86,7 +86,7 @@ private:
         int     height;
         bool    sixteenBit;
         double* matrix;
-        int     mat_size;
+        uint    mat_size;
     };
 
 private:
@@ -99,7 +99,7 @@ private:
 
     void convolveImage(const Args& prm);
 
-    void convolveImageMultithreaded(int start, int stop, int y1, const Args& prm);
+    void convolveImageMultithreaded(uint start, uint stop, uint y1, const Args& prm);
 
 private:
 
