@@ -466,6 +466,58 @@ void LocalContrastFilter::processRgbImage(float* const img, int sizex, int sizey
     postProgress(80);
 }
 
+
+void LocalContrastFilter::inplaceBlurYMultithreaded(const Args& prm)
+{
+    for (int y = prm.start ; runningFlag() && (y < prm.stop) ; ++y)
+    {
+        int pos   = y * prm.sizex;
+        float old = prm.data[pos];
+        ++pos;
+
+        for (int x = 1 ; runningFlag() && (x < prm.sizex) ; ++x)
+        {
+            old           = (prm.data[pos] * (1 - prm.a) + old * prm.a) + prm.denormal_remove;
+            prm.data[pos] = old;
+            ++pos;
+        }
+
+        pos = y * prm.sizex + prm.sizex - 1;
+
+        for (int x = 1 ; runningFlag() && (x < prm.sizex) ; ++x)
+        {
+            old           = (prm.data[pos] * (1 - prm.a) + old * prm.a) + prm.denormal_remove;
+            prm.data[pos] = old;
+            pos--;
+        }
+    }
+}
+
+void LocalContrastFilter::inplaceBlurXMultithreaded(const Args& prm)
+{
+    for (int x = prm.start ; runningFlag() && (x < prm.stop) ; ++x)
+    {
+        int pos   = x;
+        float old = prm.data[pos];
+
+        for (int y = 1 ; runningFlag() && (y < prm.sizey) ; ++y)
+        {
+            old            = (prm.data[pos] * (1 - prm.a) + old * prm.a) + prm.denormal_remove;
+            prm.data[pos]  = old;
+            pos           += prm.sizex;
+        }
+
+        pos = x + prm.sizex * (prm.sizey - 1);
+
+        for (int y = 1 ; runningFlag() && (y < prm.sizey) ; ++y)
+        {
+            old            = (prm.data[pos] * (1 - prm.a) + old * prm.a) + prm.denormal_remove;
+            prm.data[pos]  = old;
+            pos           -= prm.sizex;
+        }
+    }
+}
+
 void LocalContrastFilter::inplaceBlur(float* const data, int sizex, int sizey, float blur)
 {
     if (blur < 0.3)
@@ -473,62 +525,55 @@ void LocalContrastFilter::inplaceBlur(float* const data, int sizex, int sizey, f
         return;
     }
 
-    float a = (float)(qExp(log(0.25) / blur));
+    Args prm;
 
-    if ((a <= 0.0) || (a >= 1.0))
+    prm.a = (float)(qExp(log(0.25) / blur));
+
+    if ((prm.a <= 0.0) || (prm.a >= 1.0))
     {
         return;
     }
 
-    a *= a;
-    float denormal_remove = (float)(1e-15);
+    prm.a *= prm.a;
+    prm.data            = data;
+    prm.sizex           = sizex;
+    prm.sizey           = sizey;
+    prm.blur            = blur;
+    prm.denormal_remove = (float)(1e-15);
+
+    int nbCore = QThreadPool::globalInstance()->maxThreadCount();
+    int stepy  = prm.sizey / nbCore;
+    int stepx  = prm.sizex / nbCore;
 
     for (int stage = 0 ; runningFlag() && (stage < 2) ; ++stage)
     {
-        for (int y = 0 ; runningFlag() && (y < sizey) ; ++y)
+        QList <QFuture<void> > tasks;
+
+        for (int j = 0 ; runningFlag() && (j < nbCore) ; ++j)
         {
-            int pos   = y * sizex;
-            float old = data[pos];
-            ++pos;
-
-            for (int x = 1 ; runningFlag() && (x < sizex) ; ++x)
-            {
-                old       = (data[pos] * (1 - a) + old * a) + denormal_remove;
-                data[pos] = old;
-                ++pos;
-            }
-
-            pos = y * sizex + sizex - 1;
-
-            for (int x = 1 ; runningFlag() && (x < sizex) ; ++x)
-            {
-                old       = (data[pos] * (1 - a) + old * a) + denormal_remove;
-                data[pos] = old;
-                pos--;
-            }
+            prm.start = j*stepy;
+            prm.stop  = (j+1)*stepy;
+            tasks.append(QtConcurrent::run(this,
+                                           &LocalContrastFilter::inplaceBlurYMultithreaded,
+                                           prm));
         }
 
-        for (int x = 0 ; runningFlag() && (x < sizex) ; ++x)
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
+
+        tasks.clear();
+
+        for (int j = 0 ; runningFlag() && (j < nbCore) ; ++j)
         {
-            int pos   = x;
-            float old = data[pos];
-
-            for (int y = 1 ; runningFlag() && (y < sizey) ; ++y)
-            {
-                old       = (data[pos] * (1 - a) + old * a) + denormal_remove;
-                data[pos] = old;
-                pos       += sizex;
-            }
-
-            pos = x + sizex * (sizey - 1);
-
-            for (int y = 1 ; runningFlag() && (y < sizey) ; ++y)
-            {
-                old       = (data[pos] * (1 - a) + old * a) + denormal_remove;
-                data[pos] = old;
-                pos       -= sizex;
-            }
+            prm.start = j*stepx;
+            prm.stop  = (j+1)*stepx;
+            tasks.append(QtConcurrent::run(this,
+                                           &LocalContrastFilter::inplaceBlurXMultithreaded,
+                                           prm));
         }
+
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
     }
 }
 

@@ -83,6 +83,20 @@ public:
 
 private:
 
+    struct Args
+    {
+        int    start;
+        int    stop;
+        float  a;
+        float* data;
+        int    sizex;
+        int    sizey;
+        float  blur;
+        float  denormal_remove;
+    };
+
+private:
+
     void filterImage();
 
     void  processRgbImage(float* const img, int sizex, int sizey);
@@ -99,6 +113,9 @@ private:
 
     void blurMultithreaded(int start, int stop, float* const img, float* const blurimage);
     void saturationMultithreaded(int start, int stop, float* const img, float* const srcimg);
+
+    void inplaceBlurYMultithreaded(const Args& prm);
+    void inplaceBlurXMultithreaded(const Args& prm);
 
 private:
 
