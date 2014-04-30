@@ -151,7 +151,7 @@ TagsManager::~TagsManager()
 
 TagsManager* TagsManager::instance()
 {
-    if(TagsManager::internalPtr.isNull())
+    if (TagsManager::internalPtr.isNull())
     {
         TagsManager::internalPtr = new TagsManager();
     }
@@ -215,10 +215,14 @@ void TagsManager::slotOpenProperties()
 {
     KMultiTabBarTab* const sender = (KMultiTabBarTab*)QObject::sender();
 
-    if(sender->isChecked())
+    if (sender->isChecked())
+    {
         d->tagPropWidget->show();
+    }
     else
+    {
         d->tagPropWidget->hide();
+    }
 }
 
 void TagsManager::slotSelectionChanged()
@@ -248,20 +252,20 @@ void TagsManager::slotAddAction()
 
 void TagsManager::slotDeleteAction()
 {
-    QModelIndexList selected = d->tagMngrView->selectionModel()->selectedIndexes();
+    const QModelIndexList selected = d->tagMngrView->selectionModel()->selectedIndexes();
 
-    QString tagWithChildrens;
+    QString tagWithChildren;
     QString tagWithImages;
     QMultiMap<int, TAlbum*> sortedTags;
 
     foreach(const QModelIndex& index, selected)
     {
-        if(!index.isValid())
+        if (!index.isValid())
+        {
             return;
+        }
 
         TAlbum* const t = static_cast<TAlbum*>(d->tagMngrView->albumForIndex(index));
-
-        int deph = 0;
 
         if (!t || t->isRoot())
         {
@@ -280,13 +284,16 @@ void TagsManager::slotDeleteAction()
             ++iter;
         }
 
-        if(children)
-            tagWithChildrens.append(tag->title() + QString(" "));
+        if (children)
+        {
+            tagWithChildren.append(tag->title() + QString(" "));
+        }
 
         QList<qlonglong> assignedItems = DatabaseAccess().db()->getItemIDsInTag(tag->id());
-
-        if(!assignedItems.isEmpty())
+        if (!assignedItems.isEmpty())
+        {
             tagWithImages.append(tag->title() + QString(" "));
+        }
 
         /**
          * Tags must be deleted from children to parents, if we don't want
@@ -294,26 +301,25 @@ void TagsManager::slotDeleteAction()
          * to root tag
          */
         Album* parent = t;
-
-        while(!parent->isRoot())
+        int depth = 0;
+        while (!parent->isRoot())
         {
             parent = parent->parent();
-            deph++;
+            depth++;
         }
 
-        sortedTags.insert(deph,tag);
+        sortedTags.insert(depth, tag);
     }
 
     // ask for deletion of children
-
-    if (!tagWithChildrens.isEmpty())
+    if (!tagWithChildren.isEmpty())
     {
-        int result = KMessageBox::warningContinueCancel(this,
+        const int result = KMessageBox::warningContinueCancel(this,
                                                         i18n("Tags '%1' have one or more subtags. "
                                                              "Deleting them will also delete "
                                                              "the subtags. "
                                                              "Do you want to continue?",
-                                                             tagWithChildrens));
+                                                             tagWithChildren));
 
         if (result != KMessageBox::Continue)
         {
@@ -331,10 +337,11 @@ void TagsManager::slotDeleteAction()
     }
     else
     {
+        /// @todo tagWithImages is an empty string...
         message = i18n("Delete '%1' tag(s)?", tagWithImages);
     }
 
-    int result = KMessageBox::warningContinueCancel(0, message,
+    const int result = KMessageBox::warningContinueCancel(0, message,
                                                     i18n("Delete Tag"),
                                                     KGuiItem(i18n("Delete"),
                                                             "edit-delete"));
@@ -347,7 +354,7 @@ void TagsManager::slotDeleteAction()
          * QMultimap doesn't provide reverse iterator, -1 is required
          * because end() points after the last element
          */
-        for(it = sortedTags.end()-1; it != sortedTags.begin()-1; --it)
+        for (it = sortedTags.end()-1; it != sortedTags.begin()-1; --it)
         {
             QString errMsg;
 
@@ -363,11 +370,9 @@ void TagsManager::slotResetTagIcon()
 {
     QString errMsg;
 
-    QList<Album*> selected = d->tagMngrView->selectedTags();
-    QString icon           = QString("tag");
-    QList<Album*>::iterator it;
-
-    for(it = selected.begin(); it != selected.end(); ++it )
+    const QList<Album*> selected = d->tagMngrView->selectedTags();
+    const QString icon = QString("tag");
+    for (QList<Album*>::const_iterator it = selected.constBegin(); it != selected.constEnd(); ++it )
     {
         TAlbum* const tag = dynamic_cast<TAlbum*>(*it);
 
