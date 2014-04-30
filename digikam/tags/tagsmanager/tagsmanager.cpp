@@ -570,8 +570,21 @@ void TagsManager::slotWipeAll()
 }
 
 void TagsManager::slotRemoveTagsFromImgs()
-{
+{    
     const QModelIndexList selList = d->tagMngrView->selectionModel()->selectedIndexes();
+    
+    const int result = KMessageBox::warningContinueCancel(
+            this,
+            i18np(
+                    "Do you really want to remove the selected tag from all images?",
+                    "Do you really want to remove the selected tags from all images?",
+                    selList.count()
+                )
+        );
+    if (result != KMessageBox::Continue)
+    {
+        return;
+    }
 
     foreach (const QModelIndex& index, selList)
     {
