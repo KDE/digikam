@@ -178,7 +178,7 @@ void LocalContrastFilter::process8bitRgbImage(unsigned char* const img, int size
     postProgress(80);
 }
 
-void LocalContrastFilter::process16bitRgbImage(unsigned short int* const img, int sizex, int sizey)
+void LocalContrastFilter::process16bitRgbImage(unsigned short* const img, int sizex, int sizey)
 {
     int size = sizex * sizey;
     QScopedArrayPointer<float> tmpimage(new float[size * 3]);

@@ -101,7 +101,7 @@ private:
 
     void  processRgbImage(float* const img, int sizex, int sizey);
     void  process8bitRgbImage(unsigned char* const img, int sizex, int sizey);
-    void  process16bitRgbImage(unsigned short int* const img, int sizex, int sizey);
+    void  process16bitRgbImage(unsigned short* const img, int sizex, int sizey);
 
     float func(float x1, float x2);
 
