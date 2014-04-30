@@ -513,10 +513,10 @@ void TagsManager::slotReadFromImg()
 
 void TagsManager::slotWipeAll()
 {
-    int result = KMessageBox::warningContinueCancel(this,
+    const int result = KMessageBox::warningContinueCancel(this,
                                                     i18n("This operation will wipe all tags from database only.\n"
-                                                         "To apply changes to files "
-                                                         "you must choose write metadata to file later\n"
+                                                         "To apply changes to files, "
+                                                         "you must choose write metadata to file later.\n"
                                                          "Do you want to continue?"
                                                     ));
 
@@ -525,14 +525,13 @@ void TagsManager::slotWipeAll()
         return;
     }
 
-
-    /** Disable writting tags to images **/
+    /** Disable writing tags to images **/
     MetadataSettings* metaSettings = MetadataSettings::instance();
     MetadataSettingsContainer backUpContainer = metaSettings->settings();
     MetadataSettingsContainer newContainer = backUpContainer;
     bool settingsChanged = false;
 
-    if(backUpContainer.saveTags == true || backUpContainer.saveFaceTags == true)
+    if (backUpContainer.saveTags == true || backUpContainer.saveFaceTags == true)
     {
         settingsChanged = true;
         newContainer.saveTags = false;
@@ -541,19 +540,19 @@ void TagsManager::slotWipeAll()
     }
 
     AlbumPointerList<TAlbum> tagList;
-    QModelIndex root  = d->tagMngrView->model()->index(0,0);
+    const QModelIndex root  = d->tagMngrView->model()->index(0,0);
     int iter          = 0;
-    QModelIndex child = root.child(iter++,0);
+    QModelIndex child = root.child(iter++, 0);
 
-    while(child.isValid())
+    while (child.isValid())
     {
         tagList <<  AlbumPointer<TAlbum>(d->tagMngrView->albumForIndex(child));
-        child = root.child(iter++,0);
+        child = root.child(iter++, 0);
     }
 
     AlbumPointerList<TAlbum>::iterator it;
 
-    for(it = tagList.begin(); it != tagList.end(); ++it)
+    for (it = tagList.begin(); it != tagList.end(); ++it)
     {
         QString errMsg;
 
@@ -564,25 +563,26 @@ void TagsManager::slotWipeAll()
     }
 
     /** Restore settings after tag deletion **/
-    if(settingsChanged)
+    if (settingsChanged)
     {
         metaSettings->setSettings(backUpContainer);
     }
-
 }
 
 void TagsManager::slotRemoveTagsFromImgs()
 {
-    QModelIndexList selList = d->tagMngrView->selectionModel()->selectedIndexes();
+    const QModelIndexList selList = d->tagMngrView->selectionModel()->selectedIndexes();
 
-    foreach(const QModelIndex& index, selList)
+    foreach (const QModelIndex& index, selList)
     {
         TAlbum* const t = static_cast<TAlbum*>(d->tagMngrView->albumForIndex(index));
 
         AlbumPointer<TAlbum> tag(t);
 
-        if(tag->isRoot())
+        if (tag->isRoot())
+        {
             continue;
+        }
 
         QList<qlonglong> assignedItems = DatabaseAccess().db()->getItemIDsInTag(tag->id());
         ImageInfoList imgList(assignedItems);
