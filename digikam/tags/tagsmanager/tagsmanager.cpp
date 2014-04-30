@@ -7,6 +7,7 @@
  * Description : Tag Manager main class
  *
  * Copyright (C) 2013 by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
+ * Copyright (C) 2014 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -250,12 +251,21 @@ void TagsManager::slotAddAction()
     TagEditDlg::showtagsListCreationError(kapp->activeWindow(), errMap);
 }
 
+namespace {
+QString JoinTagNamesToList(const QStringList& stringList)
+{
+    const QString joinedStringList = stringList.join(QString("', '"));
+    return QChar('\'') + joinedStringList + QChar('\'');
+}
+}
+
 void TagsManager::slotDeleteAction()
 {
     const QModelIndexList selected = d->tagMngrView->selectionModel()->selectedIndexes();
 
-    QString tagWithChildren;
-    QString tagWithImages;
+    QStringList tagNames;
+    QStringList tagsWithChildren;
+    QStringList tagsWithImages;
     QMultiMap<int, TAlbum*> sortedTags;
 
     foreach(const QModelIndex& index, selected)
@@ -266,13 +276,13 @@ void TagsManager::slotDeleteAction()
         }
 
         TAlbum* const t = static_cast<TAlbum*>(d->tagMngrView->albumForIndex(index));
-
         if (!t || t->isRoot())
         {
             return;
         }
 
         AlbumPointer<TAlbum> tag(t);
+        tagNames.append(tag->title());
 
         // find number of subtags
         int children = 0;
@@ -286,13 +296,13 @@ void TagsManager::slotDeleteAction()
 
         if (children)
         {
-            tagWithChildren.append(tag->title() + QString(" "));
+            tagsWithChildren.append(tag->title());
         }
 
         QList<qlonglong> assignedItems = DatabaseAccess().db()->getItemIDsInTag(tag->id());
         if (!assignedItems.isEmpty())
         {
-            tagWithImages.append(tag->title() + QString(" "));
+            tagsWithImages.append(tag->title());
         }
 
         /**
@@ -312,14 +322,23 @@ void TagsManager::slotDeleteAction()
     }
 
     // ask for deletion of children
-    if (!tagWithChildren.isEmpty())
+    if (!tagsWithChildren.isEmpty())
     {
-        const int result = KMessageBox::warningContinueCancel(this,
-                                                        i18n("Tags '%1' have one or more subtags. "
-                                                             "Deleting them will also delete "
-                                                             "the subtags. "
-                                                             "Do you want to continue?",
-                                                             tagWithChildren));
+        const int result = KMessageBox::warningContinueCancel(
+                this,
+                i18np(
+                        "Tag %2 has one or more subtags. "
+                        "Deleting it will also delete "
+                        "the subtags. "
+                        "Do you want to continue?",
+                        "Tags %2 have one or more subtags. "
+                        "Deleting them will also delete "
+                        "the subtags. "
+                        "Do you want to continue?",
+                        tagsWithChildren.count(),
+                        JoinTagNamesToList(tagsWithChildren)
+                    )
+            );
 
         if (result != KMessageBox::Continue)
         {
@@ -328,23 +347,34 @@ void TagsManager::slotDeleteAction()
     }
 
     QString message;
-
-    if (!tagWithImages.isEmpty())
+    if (!tagsWithImages.isEmpty())
     {
-        message = i18n("Tags '%1' are assigned to one or more items. "
-                        "Do you want to continue?",
-                        tagWithImages);
+        message = i18np(
+                "Tag %2 is assigned to one or more items. "
+                "Do you want to delete it?",
+                "Tags %2 are assigned to one or more items. "
+                "Do you want to delete them?",
+                tagsWithImages.count(),
+                JoinTagNamesToList(tagsWithImages)
+            );
     }
     else
     {
-        /// @todo tagWithImages is an empty string...
-        message = i18n("Delete '%1' tag(s)?", tagWithImages);
+        message = i18np(
+                "Delete tag %2?",
+                "Delete tags %2?",
+                tagNames.count(),
+                JoinTagNamesToList(tagNames)
+            );
     }
 
-    const int result = KMessageBox::warningContinueCancel(0, message,
-                                                    i18n("Delete Tag"),
-                                                    KGuiItem(i18n("Delete"),
-                                                            "edit-delete"));
+    const int result = KMessageBox::warningContinueCancel(
+            0,
+            message,
+            i18np("Delete tag", "Delete tags", tagNames.count()),
+            KGuiItem(i18n("Delete"),
+            "edit-delete")
+        );
 
     if (result == KMessageBox::Continue)
     {

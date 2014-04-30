@@ -180,6 +180,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 158 ==> 281785 - No prohibition warning while tagging thumbnail above preview.
 159 ==> 329313 - WISH: howto update installed version _stable_ without harming existing system?
 160 ==> 333299 - Crash segmentation fault at starts.
-161 ==> 
+161 ==> 333386 - Tags manager: '' shown in dialog box when removing a tag.
+162 ==>
 
 
