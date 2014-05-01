@@ -14,6 +14,7 @@ Metadata : Support for writing face rectangles in Windows Live Photo format.
 Editor   : Port of canvas to Qt Model/view.
 Editor   : LocalContrast tool support multicore CPU.
 Editor   : Sharpen tool support multicore CPU.
+Editor   : Blur tool support multicore CPU.
 
 Showfoto : Port of Thumbbar to Qt Model/view.
 
