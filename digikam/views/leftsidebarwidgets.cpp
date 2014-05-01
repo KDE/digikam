@@ -276,7 +276,7 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
 
     QTreeWidgetItem* labels = new QTreeWidgetItem(d->colorsAndLabelsTreeWidget);
     labels->setText(0, tr("Labels"));
-    labels->setIcon(0,KIcon("digikam"));
+    labels->setIcon(0,KIconLoader::global()->loadIcon("flag-green", KIconLoader::NoGroup, 25));
     labels->setSizeHint(0,d->rootSizeHint);
     labels->setFont(0,d->rootFont);
     labels->setFlags(Qt::ItemIsEnabled);
@@ -298,7 +298,9 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
 
     QTreeWidgetItem* colors = new QTreeWidgetItem(d->colorsAndLabelsTreeWidget);
     colors->setText(0, tr("Colors"));
-    colors->setIcon(0,KIcon("digikam"));
+    QPixmap rootColorIcon(25,25);
+    rootColorIcon.fill(QColor(254,128,128));
+    colors->setIcon(0,QIcon(rootColorIcon));
     colors->setSizeHint(0,d->rootSizeHint);
     colors->setFont(0,d->rootFont);
     colors->setFlags(Qt::ItemIsEnabled);
