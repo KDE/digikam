@@ -245,6 +245,8 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
     d->colorsAndLabelsTreeWidget->setUniformRowHeights(false);
     d->colorsAndLabelsTreeWidget->setIconSize(d->iconSize);
 
+    // --- Rating ---
+
     QTreeWidgetItem* rating = new QTreeWidgetItem(d->colorsAndLabelsTreeWidget);
     rating->setText(0, tr("Rating"));
     rating->setIcon(0,KIcon("digikam"));
@@ -252,21 +254,77 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
     rating->setFont(0,d->rootFont);
     rating->setFlags(Qt::ItemIsEnabled);
 
-    QTreeWidgetItem *labels = new QTreeWidgetItem(d->colorsAndLabelsTreeWidget);
+    QTreeWidgetItem* noRate = new QTreeWidgetItem(rating);
+    noRate->setText(0,tr("0"));
+
+    QTreeWidgetItem* rateOne = new QTreeWidgetItem(rating);
+    rateOne->setText(0,tr("1"));
+
+    QTreeWidgetItem* rateTwo = new QTreeWidgetItem(rating);
+    rateTwo->setText(0,tr("2"));
+
+    QTreeWidgetItem* rateThree = new QTreeWidgetItem(rating);
+    rateThree->setText(0,tr("3"));
+
+    QTreeWidgetItem* rateFour = new QTreeWidgetItem(rating);
+    rateFour->setText(0,tr("4"));
+
+    QTreeWidgetItem* rateFive = new QTreeWidgetItem(rating);
+    rateFive->setText(0,tr("5"));
+
+    // --- Pick Labels ---
+
+    QTreeWidgetItem* labels = new QTreeWidgetItem(d->colorsAndLabelsTreeWidget);
     labels->setText(0, tr("Labels"));
     labels->setIcon(0,KIcon("digikam"));
     labels->setSizeHint(0,d->rootSizeHint);
     labels->setFont(0,d->rootFont);
     labels->setFlags(Qt::ItemIsEnabled);
 
-    QTreeWidgetItem *colors = new QTreeWidgetItem(d->colorsAndLabelsTreeWidget);
+    QStringList labelSetNames;
+    labelSetNames << "No Label" << "Rejected Item" << "Pending Item" << "Accepted Item";
+
+    QStringList labelSetIcons;
+    labelSetIcons << "emblem-unmounted" << "flag-red" << "flag-yellow" << "flag-green";
+
+    foreach (QString label, labelSetNames) {
+        QTreeWidgetItem* labelWidgetItem = new QTreeWidgetItem(labels);
+        labelWidgetItem->setText(0,label);
+        labelWidgetItem->setFont(0,d->regularFont);
+        labelWidgetItem->setIcon(0,KIconLoader::global()->loadIcon(labelSetIcons.at(labelSetNames.indexOf(label)), KIconLoader::NoGroup, 20));
+    }
+
+    // --- Colors ---
+
+    QTreeWidgetItem* colors = new QTreeWidgetItem(d->colorsAndLabelsTreeWidget);
     colors->setText(0, tr("Colors"));
     colors->setIcon(0,KIcon("digikam"));
     colors->setSizeHint(0,d->rootSizeHint);
     colors->setFont(0,d->rootFont);
     colors->setFlags(Qt::ItemIsEnabled);
 
+    QTreeWidgetItem* noColor = new QTreeWidgetItem(colors);
+    noColor->setText(0,tr("No Color"));
+    noColor->setFont(0,d->regularFont);
+    noColor->setIcon(0,KIconLoader::global()->loadIcon("emblem-unmounted", KIconLoader::NoGroup, 16));
+
+    QStringList colorSet;
+    colorSet << "red" << "orange" << "yellow" << "darkgreen" << "darkblue" << "magenta" << "darkgray" << "black" << "lightgray";
+
+    QStringList colorSetNames;
+    colorSetNames << "Red"  << "Orange" << "Yellow" << "Green" << "Blue" << "Magenta" << "Gray" << "Black" << "White";
+
+    foreach (QString color, colorSet) {
+        QTreeWidgetItem* colorWidgetItem = new QTreeWidgetItem(colors);
+        colorWidgetItem->setText(0,colorSetNames.at(colorSet.indexOf(color)));
+        colorWidgetItem->setFont(0,d->regularFont);
+        QPixmap colorIcon(15,15);
+        colorIcon.fill(QColor(color));
+        colorWidgetItem->setIcon(0,QIcon(colorIcon));
+    }
+
     colorLabelLayout->addWidget(d->colorsAndLabelsTreeWidget);
+    d->colorsAndLabelsTreeWidget->expandAll();
 
     // ---------------------------------------------------------
 
