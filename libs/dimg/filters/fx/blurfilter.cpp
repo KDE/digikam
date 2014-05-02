@@ -6,7 +6,7 @@
  * Date        : 2005-17-07
  * Description : A Gaussian Blur threaded image filter.
  *
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -25,24 +25,14 @@
 
 #include "blurfilter.h"
 
-/** Don't use CImg interface (keyboard/mouse interaction) */
-#define cimg_display 0
-/** Only print debug information on the console */
-#define cimg_debug 1
-
-// CImg includes
-
-#include "CImg.h"
-
 // Qt includes
 
 #include <qmath.h>
+#include <QtConcurrentRun>
 
 // KDE includes
 
 #include <kdebug.h>
-
-using namespace cimg_library;
 
 namespace Digikam
 {
@@ -50,14 +40,16 @@ namespace Digikam
 BlurFilter::BlurFilter(QObject* const parent)
     : DImgThreadedFilter(parent)
 {
-    m_radius = 3;
+    m_globalProgress = 0;
+    m_radius         = 3;
     initFilter();
 }
 
 BlurFilter::BlurFilter(DImg* const orgImage, QObject* const parent, int radius)
     : DImgThreadedFilter(orgImage, parent, "GaussianBlur")
 {
-    m_radius = radius;
+    m_globalProgress = 0;
+    m_radius         = radius;
     initFilter();
 }
 
@@ -67,7 +59,8 @@ BlurFilter::BlurFilter(DImgThreadedFilter* const parentFilter,
     : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
                          parentFilter->filterName() + ": GaussianBlur")
 {
-    m_radius = radius;
+    m_globalProgress = 0;
+    m_radius         = radius;
     filterImage();
 }
 
@@ -76,390 +69,164 @@ BlurFilter::~BlurFilter()
     cancelFilter();
 }
 
+void BlurFilter::blurMultithreaded(uint start, uint stop)
+{
+    int  oldProgress=0, progress=0;
+    int  a, r, g, b;
+    int  mx;
+    int  my;
+    int  mw;
+    int  mh;
+    int  mt;
+    int* as = new int[m_orgImage.width()];
+    int* rs = new int[m_orgImage.width()];
+    int* gs = new int[m_orgImage.width()];
+    int* bs = new int[m_orgImage.width()];
+    
+    for (uint y = start ; runningFlag() && (y < stop) ; ++y)
+    {
+        my = y - m_radius;
+        mh = (m_radius << 1) + 1;
+
+        if (my < 0)
+        {
+            mh += my;
+            my = 0;
+        }
+
+        if ((my + mh) > (int)m_orgImage.height())
+            mh = m_orgImage.height() - my;
+
+        uchar* pDst8           = m_destImage.scanLine(y);
+        unsigned short* pDst16 = reinterpret_cast<unsigned short*>(m_destImage.scanLine(y));
+
+        memset(as, 0, m_orgImage.width() * sizeof(int));
+        memset(rs, 0, m_orgImage.width() * sizeof(int));
+        memset(gs, 0, m_orgImage.width() * sizeof(int));
+        memset(bs, 0, m_orgImage.width() * sizeof(int));
+
+        for (int yy = 0; yy < mh; yy++)
+        {
+            uchar* pSrc8           = m_orgImage.scanLine(yy + my);
+            unsigned short* pSrc16 = reinterpret_cast<unsigned short*>(m_orgImage.scanLine(yy + my));
+            
+            for (int x = 0; x < (int)m_orgImage.width(); x++)
+            {
+                if (m_orgImage.sixteenBit())
+                {  
+                    bs[x]  += pSrc16[0];
+                    gs[x]  += pSrc16[1];
+                    rs[x]  += pSrc16[2];
+                    as[x]  += pSrc16[3];
+                    pSrc16 += 4;
+                }
+                else
+                {  
+                    bs[x] += pSrc8[0];
+                    gs[x] += pSrc8[1];
+                    rs[x] += pSrc8[2];
+                    as[x] += pSrc8[3];
+                    pSrc8 += 4;
+                }
+            }
+        }
+
+        if ((int)m_orgImage.width() > ((m_radius << 1) + 1))
+        {
+            for (int x = 0; x < (int)m_orgImage.width(); x++)
+            {
+                a  = r = g = b = 0;
+                mx = x - m_radius;
+                mw = (m_radius << 1) + 1;
+
+                if (mx < 0)
+                {
+                    mw += mx;
+                    mx = 0;
+                }
+
+                if ((mx + mw) > (int)m_orgImage.width())
+                    mw = m_orgImage.width() - mx;
+
+                mt = mw * mh;
+
+                for (int xx = mx; xx < (mw + mx); xx++)
+                {
+                    a += as[xx];
+                    r += rs[xx];
+                    g += gs[xx];
+                    b += bs[xx];
+                }
+
+                a = a / mt;
+                r = r / mt;
+                g = g / mt;
+                b = b / mt;
+
+                if (m_orgImage.sixteenBit())
+                {
+                    pDst16[0] = b;
+                    pDst16[1] = g;
+                    pDst16[2] = r;
+                    pDst16[3] = a;
+                    pDst16   += 4;
+                }
+                else
+                {
+                    pDst8[0] = b;
+                    pDst8[1] = g;
+                    pDst8[2] = r;
+                    pDst8[3] = a;
+                    pDst8   += 4;
+                }
+            }
+        }
+        else
+        {
+            kDebug() << "Radius too small..."; 
+        }
+
+        progress = (int)( ( (double)y * (100.0 / QThreadPool::globalInstance()->maxThreadCount()) ) / (stop-start));
+
+        if ((progress % 5 == 0) && (progress > oldProgress))
+        {
+            m_lock.lock();
+            oldProgress       = progress;
+            m_globalProgress += 5;
+            postProgress(m_globalProgress);
+            m_lock.unlock();
+        }
+    }
+    
+    delete [] as;
+    delete [] rs;
+    delete [] gs;
+    delete [] bs;
+}
+
 void BlurFilter::filterImage()
 {
-#if defined(__MACOSX__) || defined(__APPLE__)
-    gaussianBlurImage(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(),
-                      m_orgImage.sixteenBit(), m_radius);
-#else
-    cimgBlurImage(m_orgImage.bits(), m_orgImage.width(), m_orgImage.height(),
-                  m_orgImage.sixteenBit(), m_radius / 10.0);
-#endif
-}
-
-void BlurFilter::cimgBlurImage(uchar* data, int width, int height, bool sixteenBit, double radius)
-{
-    if (!data || !width || !height)
+    if (m_radius < 1)
     {
-        kWarning() << ("no image data available!");
+        kDebug() << "Radius out of range..."; 
         return;
     }
 
-    if (radius > 100.0)
+    int   nbCore = QThreadPool::globalInstance()->maxThreadCount();
+    float step   = m_orgImage.height() / nbCore;
+
+    QList <QFuture<void> > tasks;
+
+    for (int j = 0 ; runningFlag() && (j < nbCore) ; ++j)
     {
-        radius = 100.0;
+        tasks.append(QtConcurrent::run(this,
+                                       &BlurFilter::blurMultithreaded,
+                                       (uint)(j*step),
+                                       (uint)((j+1)*step)));
     }
 
-    if (radius <= 0.0)
-    {
-        m_destImage = m_orgImage;
-        postProgress(100);
-        return;
-    }
-
-    kDebug() << "Radius: " << radius;
-
-    kDebug() << "BlurFilter::Process Computation...";
-
-    if (!sixteenBit)           // 8 bits image.
-    {
-        // convert DImg (interleaved RGBA) to CImg (planar RGBA)
-        CImg<uchar> img = CImg<uchar>(data, 4, width, height, 1, true).
-                          get_permute_axes("yzvx");
-        postProgress(25);
-
-        // blur the image
-        img.blur(radius);
-        postProgress(50);
-
-        // Copy CImg onto destination.
-        kDebug() << "BlurFilter::Finalization...";
-
-        uchar* ptr = m_destImage.bits();
-
-        for (int y = 0; y < height; ++y)
-        {
-            for (int x = 0; x < width; ++x)
-            {
-                // Overwrite RGB values to destination.
-                ptr[0] = img(x, y, 0);        // Blue
-                ptr[1] = img(x, y, 1);        // Green
-                ptr[2] = img(x, y, 2);        // Red
-                ptr[3] = img(x, y, 3);        // Alpha
-                ptr    += 4;
-            }
-        }
-
-        postProgress(75);
-    }
-    else                                // 16 bits image.
-    {
-        // convert DImg (interleaved RGBA) to CImg (planar RGBA)
-        CImg<unsigned short> img = CImg<unsigned short>(reinterpret_cast<unsigned short*>(data), 4, width, height, 1, true).
-                                   get_permute_axes("yzvx");
-        postProgress(25);
-
-        // blur the image
-        img.blur(radius);
-        postProgress(50);
-
-        // Copy CImg onto destination.
-        kDebug() << "BlurFilter::Finalization...";
-
-        unsigned short* ptr = reinterpret_cast<unsigned short*>(m_destImage.bits());
-
-        for (int y = 0; y < height; ++y)
-        {
-            for (int x = 0; x < width; ++x)
-            {
-                // Overwrite RGB values to destination.
-                ptr[0] = img(x, y, 0);        // Blue
-                ptr[1] = img(x, y, 1);        // Green
-                ptr[2] = img(x, y, 2);        // Red
-                ptr[3] = img(x, y, 3);        // Alpha
-                ptr    += 4;
-            }
-        }
-
-        postProgress(75);
-    }
-
-    postProgress(100);
-}
-
-void BlurFilter::gaussianBlurImage(uchar* data, int width, int height, bool sixteenBit, int radius)
-{
-    if (!data || !width || !height)
-    {
-        kWarning(50003) << ("DImgGaussianBlur::gaussianBlurImage: no image data available!") << endl;
-        return;
-    }
-
-    if (radius > 100)
-    {
-        radius = 100;
-    }
-
-    if (radius <= 0)
-    {
-        m_destImage = m_orgImage;
-        return;
-    }
-
-    kDebug() << "Radius: " << radius;
-
-    // Gaussian kernel computation using the Radius parameter.
-
-    int          nKSize, nCenter;
-    double       x, sd, factor, lnsd, lnfactor;
-    register int i, j, n, h, w;
-
-    nKSize   = 2 * radius + 1;
-    nCenter  = nKSize / 2;
-    QScopedArrayPointer<int> Kernel(new int[nKSize]);
-
-    lnfactor = (4.2485 - 2.7081) / 10 * nKSize + 2.7081;
-    lnsd     = (0.5878 + 0.5447) / 10 * nKSize - 0.5447;
-    factor   = qExp(lnfactor);
-    sd       = qExp(lnsd);
-
-    for (i = 0; runningFlag() && (i < nKSize); ++i)
-    {
-        x = qSqrt((i - nCenter) * (i - nCenter));
-        Kernel[i] = (int)(factor * qExp(-0.5 * qPow((x / sd), 2)) / (sd * qSqrt(2.0 * M_PI)));
-    }
-
-    // Now, we need to convolve the image descriptor.
-    // I've worked hard here, but I think this is a very smart
-    // way to convolve an array, its very hard to explain how I reach
-    // this, but the trick here its to store the sum used by the
-    // previous pixel, so we sum with the other pixels that wasn't get.
-
-    int nSumA, nSumR, nSumG, nSumB, nCount, progress;
-    int nKernelWidth = radius * 2 + 1;
-
-    // We need to alloc a 2d array to help us to store the values
-
-    int** arrMult = Alloc2DArray(nKernelWidth, sixteenBit ? 65536 : 256);
-
-    for (i = 0; runningFlag() && (i < nKernelWidth); ++i)
-        for (j = 0; runningFlag() && (j < (sixteenBit ? 65536 : 256)); ++j)
-        {
-            arrMult[i][j] = j * Kernel[i];
-        }
-
-    // We need to copy our bits to blur bits
-
-    uchar* pOutBits = m_destImage.bits();
-    QScopedArrayPointer<uchar> pBlur(new uchar[m_destImage.numBytes()]);
-
-    memcpy(pBlur.data(), data, m_destImage.numBytes());
-
-    // We need to initialize all the loop and iterator variables
-
-    nSumA = nSumR = nSumG = nSumB = nCount = i = j = 0;
-    unsigned short* data16     = reinterpret_cast<unsigned short*>(data);
-    unsigned short* pBlur16    = reinterpret_cast<unsigned short*>(pBlur.data());
-    unsigned short* pOutBits16 = reinterpret_cast<unsigned short*>(pOutBits);
-
-    // Now, we enter in the main loop
-
-    for (h = 0; runningFlag() && (h < height); ++h)
-    {
-        for (w = 0; runningFlag() && (w < width); ++w, i += 4)
-        {
-            if (!sixteenBit)        // 8 bits image.
-            {
-                uchar* org = 0;
-                uchar* dst = 0;
-
-                // first of all, we need to blur the horizontal lines
-
-                for (n = -radius; runningFlag() && (n <= radius); ++n)
-                {
-                    // if is inside...
-                    if (IsInside(width, height, w + n, h))
-                    {
-                        // we points to the pixel
-                        j = i + 4 * n;
-
-                        // finally, we sum the pixels using a method similar to assigntables
-
-                        org = &data[j];
-                        nSumA += arrMult[n + radius][org[3]];
-                        nSumR += arrMult[n + radius][org[2]];
-                        nSumG += arrMult[n + radius][org[1]];
-                        nSumB += arrMult[n + radius][org[0]];
-
-                        // we need to add to the counter, the kernel value
-                        nCount += Kernel[n + radius];
-                    }
-                }
-
-                if (nCount == 0)
-                {
-                    nCount = 1;
-                }
-
-                // now, we return to blur bits the horizontal blur values
-                dst    = &pBlur[i];
-                dst[3] = (uchar)CLAMP(nSumA / nCount, 0, 255);
-                dst[2] = (uchar)CLAMP(nSumR / nCount, 0, 255);
-                dst[1] = (uchar)CLAMP(nSumG / nCount, 0, 255);
-                dst[0] = (uchar)CLAMP(nSumB / nCount, 0, 255);
-
-                // ok, now we reinitialize the variables
-                nSumA = nSumR = nSumG = nSumB = nCount = 0;
-            }
-            else                 // 16 bits image.
-            {
-                unsigned short* org = 0;
-                unsigned short* dst = 0;
-
-                // first of all, we need to blur the horizontal lines
-
-                for (n = -radius; runningFlag() && (n <= radius); ++n)
-                {
-                    // if is inside...
-                    if (IsInside(width, height, w + n, h))
-                    {
-                        // we points to the pixel
-                        j = i + 4 * n;
-
-                        // finally, we sum the pixels using a method similar to assigntables
-
-                        org = &data16[j];
-                        nSumA += arrMult[n + radius][org[3]];
-                        nSumR += arrMult[n + radius][org[2]];
-                        nSumG += arrMult[n + radius][org[1]];
-                        nSumB += arrMult[n + radius][org[0]];
-
-                        // we need to add to the counter, the kernel value
-                        nCount += Kernel[n + radius];
-                    }
-                }
-
-                if (nCount == 0)
-                {
-                    nCount = 1;
-                }
-
-                // now, we return to blur bits the horizontal blur values
-                dst    = &pBlur16[i];
-                dst[3] = (unsigned short)CLAMP(nSumA / nCount, 0, 65535);
-                dst[2] = (unsigned short)CLAMP(nSumR / nCount, 0, 65535);
-                dst[1] = (unsigned short)CLAMP(nSumG / nCount, 0, 65535);
-                dst[0] = (unsigned short)CLAMP(nSumB / nCount, 0, 65535);
-
-                // ok, now we reinitialize the variables
-                nSumA = nSumR = nSumG = nSumB = nCount = 0;
-            }
-        }
-
-        progress = (int)(((double)h * 50.0) / height);
-
-        if (progress % 5 == 0)
-        {
-            postProgress(progress);
-        }
-    }
-
-    // getting the blur bits, we initialize position variables
-    i = j = 0;
-
-    // We enter in the second main loop
-    for (w = 0; runningFlag() && (w < width); ++w, i = w * 4)
-    {
-        for (h = 0; runningFlag() && (h < height); ++h, i += width * 4)
-        {
-            if (!sixteenBit)        // 8 bits image.
-            {
-                uchar* org, *dst;
-
-                // first of all, we need to blur the vertical lines
-                for (n = -radius; runningFlag() && (n <= radius); ++n)
-                {
-                    // if is inside...
-                    if (IsInside(width, height, w, h + n))
-                    {
-                        // we points to the pixel
-                        j = i + n * 4 * width;
-
-                        // finally, we sum the pixels using a method similar to assigntables
-                        org   = &pBlur[j];
-                        nSumA += arrMult[n + radius][org[3]];
-                        nSumR += arrMult[n + radius][org[2]];
-                        nSumG += arrMult[n + radius][org[1]];
-                        nSumB += arrMult[n + radius][org[0]];
-
-                        // we need to add to the counter, the kernel value
-                        nCount += Kernel[n + radius];
-                    }
-                }
-
-                if (nCount == 0)
-                {
-                    nCount = 1;
-                }
-
-                // To preserve Alpha channel.
-                memcpy(&pOutBits[i], &data[i], 4);
-
-                // now, we return to bits the vertical blur values
-                dst    = &pOutBits[i];
-                dst[3] = (uchar)CLAMP(nSumA / nCount, 0, 255);
-                dst[2] = (uchar)CLAMP(nSumR / nCount, 0, 255);
-                dst[1] = (uchar)CLAMP(nSumG / nCount, 0, 255);
-                dst[0] = (uchar)CLAMP(nSumB / nCount, 0, 255);
-
-                // ok, now we reinitialize the variables
-                nSumA = nSumR = nSumG = nSumB = nCount = 0;
-            }
-            else                 // 16 bits image.
-            {
-                unsigned short* org, *dst;
-
-                // first of all, we need to blur the vertical lines
-                for (n = -radius; runningFlag() && (n <= radius); ++n)
-                {
-                    // if is inside...
-                    if (IsInside(width, height, w, h + n))
-                    {
-                        // we points to the pixel
-                        j = i + n * 4 * width;
-
-                        // finally, we sum the pixels using a method similar to assigntables
-                        org = &pBlur16[j];
-                        nSumA += arrMult[n + radius][org[3]];
-                        nSumR += arrMult[n + radius][org[2]];
-                        nSumG += arrMult[n + radius][org[1]];
-                        nSumB += arrMult[n + radius][org[0]];
-
-                        // we need to add to the counter, the kernel value
-                        nCount += Kernel[n + radius];
-                    }
-                }
-
-                if (nCount == 0)
-                {
-                    nCount = 1;
-                }
-
-                // To preserve Alpha channel.
-                memcpy(&pOutBits16[i], &data16[i], 8);
-
-                // now, we return to bits the vertical blur values
-                dst    = &pOutBits16[i];
-                dst[3] = (unsigned short)CLAMP(nSumA / nCount, 0, 65535);
-                dst[2] = (unsigned short)CLAMP(nSumR / nCount, 0, 65535);
-                dst[1] = (unsigned short)CLAMP(nSumG / nCount, 0, 65535);
-                dst[0] = (unsigned short)CLAMP(nSumB / nCount, 0, 65535);
-
-                // ok, now we reinitialize the variables
-                nSumA = nSumR = nSumG = nSumB = nCount = 0;
-            }
-        }
-
-        progress = (int)(50.0 + ((double)w * 50.0) / width);
-
-        if (progress % 5 == 0)
-        {
-            postProgress(progress);
-        }
-    }
-
-    // now, we must free memory
-    Free2DArray(arrMult, nKernelWidth);
+    foreach(QFuture<void> t, tasks)
+        t.waitForFinished();
 }
 
 FilterAction BlurFilter::filterAction()

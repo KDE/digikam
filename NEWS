@@ -14,6 +14,7 @@ Metadata : Support for writing face rectangles in Windows Live Photo format.
 Editor   : Port of canvas to Qt Model/view.
 Editor   : LocalContrast tool support multicore CPU.
 Editor   : Sharpen tool support multicore CPU.
+Editor   : Blur tool support multicore CPU.
 
 Showfoto : Port of Thumbbar to Qt Model/view.
 
@@ -182,6 +183,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 160 ==> 333299 - Crash segmentation fault at starts.
 161 ==> 333386 - Tags manager: '' shown in dialog box when removing a tag.
 162 ==> 333388 - Tag manager: Tags removed from images without confirmation dialog.
-163 ==> 
+163 ==> 333385 - Selecting a month in the tree view shows a different month in calendar and icon view.
+164 ==> 
 
 
