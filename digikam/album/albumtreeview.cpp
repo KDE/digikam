@@ -9,6 +9,7 @@
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2014      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
+ * Copyright (C) 2014 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -541,12 +542,25 @@ void AbstractAlbumTreeView::setCurrentAlbums(QList<Album*> albums, bool selectIn
 
 void AbstractAlbumTreeView::slotCurrentChanged()
 {
-    QList<Album*> selected = selectedAlbums<Album>(selectionModel(),
-                                                   m_albumFilterModel);
+    // It seems that QItemSelectionModel::selectedIndexes() has not been updated at this point
+    // and returns the previously selected items. Therefore the line below did not work.
+//     QList<Album*> selected = selectedAlbums<Album>(selectionModel(),
+//                                                    m_albumFilterModel);
 
-    if(selected.isEmpty())
+    // Instead, we call QItemSelectionModel::currentIndex to get the current index.
+    const QModelIndex cIndex = selectionModel()->currentIndex();
+    if (!cIndex.isValid())
+    {
         return;
-    emit currentAlbumChanged(selected.first());
+    }
+
+    Album* const cAlbum = m_albumFilterModel->albumForIndex(cIndex);
+    if (!cAlbum)
+    {
+        return;
+    }
+    
+    emit currentAlbumChanged(cAlbum);
 }
 
 void AbstractAlbumTreeView::slotSelectionChanged()
