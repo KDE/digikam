@@ -29,6 +29,7 @@
 
 #include <qmath.h>
 #include <QtConcurrentRun>
+#include <QMutex>
 
 // KDE includes
 

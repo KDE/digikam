@@ -26,8 +26,6 @@
 #ifndef BLURFILTER_H
 #define BLURFILTER_H
 
-#include <QMutex>
-
 // Local includes
 
 #include "digikam_export.h"
