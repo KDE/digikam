@@ -37,19 +37,34 @@
 namespace Digikam
 {
 
-BlurFilter::BlurFilter(QObject* const parent)
-    : DImgThreadedFilter(parent)
+class BlurFilter::Private
 {
-    m_globalProgress = 0;
-    m_radius         = 3;
+public:
+
+    Private()
+    {
+        globalProgress = 0;
+        radius         = 3;
+    }
+
+    int    radius;
+    int    globalProgress;
+    
+    QMutex lock;
+};    
+    
+BlurFilter::BlurFilter(QObject* const parent)
+    : DImgThreadedFilter(parent),
+      d(new Private)
+{
     initFilter();
 }
 
 BlurFilter::BlurFilter(DImg* const orgImage, QObject* const parent, int radius)
-    : DImgThreadedFilter(orgImage, parent, "GaussianBlur")
+    : DImgThreadedFilter(orgImage, parent, "GaussianBlur"),
+      d(new Private)
 {
-    m_globalProgress = 0;
-    m_radius         = radius;
+    d->radius = radius;
     initFilter();
 }
 
@@ -57,16 +72,17 @@ BlurFilter::BlurFilter(DImgThreadedFilter* const parentFilter,
                        const DImg& orgImage, const DImg& destImage,
                        int progressBegin, int progressEnd, int radius)
     : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
-                         parentFilter->filterName() + ": GaussianBlur")
+                         parentFilter->filterName() + ": GaussianBlur"),
+      d(new Private)
 {
-    m_globalProgress = 0;
-    m_radius         = radius;
+    d->radius = radius;
     filterImage();
 }
 
 BlurFilter::~BlurFilter()
 {
     cancelFilter();
+    delete d;
 }
 
 void BlurFilter::blurMultithreaded(uint start, uint stop)
@@ -85,8 +101,8 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
     
     for (uint y = start ; runningFlag() && (y < stop) ; ++y)
     {
-        my = y - m_radius;
-        mh = (m_radius << 1) + 1;
+        my = y - d->radius;
+        mh = (d->radius << 1) + 1;
 
         if (my < 0)
         {
@@ -131,13 +147,13 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
             }
         }
 
-        if ((int)m_orgImage.width() > ((m_radius << 1) + 1))
+        if ((int)m_orgImage.width() > ((d->radius << 1) + 1))
         {
             for (int x = 0; x < (int)m_orgImage.width(); x++)
             {
                 a  = r = g = b = 0;
-                mx = x - m_radius;
-                mw = (m_radius << 1) + 1;
+                mx = x - d->radius;
+                mw = (d->radius << 1) + 1;
 
                 if (mx < 0)
                 {
@@ -190,11 +206,11 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
 
         if ((progress % 5 == 0) && (progress > oldProgress))
         {
-            m_lock.lock();
+            d->lock.lock();
             oldProgress       = progress;
-            m_globalProgress += 5;
-            postProgress(m_globalProgress);
-            m_lock.unlock();
+            d->globalProgress += 5;
+            postProgress(d->globalProgress);
+            d->lock.unlock();
         }
     }
     
@@ -206,7 +222,7 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
 
 void BlurFilter::filterImage()
 {
-    if (m_radius < 1)
+    if (d->radius < 1)
     {
         kDebug() << "Radius out of range..."; 
         return;
@@ -234,14 +250,14 @@ FilterAction BlurFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("radius", m_radius);
+    action.addParameter("radius", d->radius);
 
     return action;
 }
 
 void BlurFilter::readParameters(const FilterAction& action)
 {
-    m_radius = action.parameter("radius").toInt();
+    d->radius = action.parameter("radius").toInt();
 }
 
 }  // namespace Digikam

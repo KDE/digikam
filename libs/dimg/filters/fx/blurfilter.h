@@ -87,10 +87,8 @@ private:
 
 private:
 
-    int    m_radius;
-    int    m_globalProgress;
-    
-    QMutex m_lock;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam
