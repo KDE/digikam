@@ -16,6 +16,7 @@ Editor   : LocalContrast tool support multicore CPU.
 Editor   : Sharpen tool support multicore CPU.
 Editor   : Blur tool support multicore CPU.
 Editor   : Charcoal tool support multicore CPU.
+Editor   : OilPaint tool support multicore CPU.
 
 Showfoto : Port of Thumbbar to Qt Model/view.
 
