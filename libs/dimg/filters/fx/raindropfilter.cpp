@@ -247,16 +247,6 @@ void RainDropFilter::rainDropsImage(DImg* const orgImage, DImg* const destImage,
         foreach(QFuture<void> t, tasks)
             t.waitForFinished();
 
-/*
-        // Update the progress bar in dialog.
-        if (nCounter >= 10000)
-        {
-            i = Amount;
-
-            postProgress(progressMax);
-            break;
-        }
-*/
         postProgress((int)(progressMin + ((double)(i) *
                                           (double)(progressMax - progressMin)) / (double)Amount));
     }
