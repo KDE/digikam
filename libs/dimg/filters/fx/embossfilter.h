@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : Emboss threaded image filter.
  *
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -78,6 +78,7 @@ public:
 private:
 
     void filterImage();
+    void embossMultithreaded(uint start, uint stop, uint h, double Depth);
 
     inline int Lim_Max (int Now, int Up, int Max);
     inline int getOffset(int Width, int X, int Y, int bytesDepth);
