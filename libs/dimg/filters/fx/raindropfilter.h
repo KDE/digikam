@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : Raindrop threaded image filter.
  *
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -79,10 +79,27 @@ public:
 
 private:
 
+    struct Args
+    {
+        uint   start;
+        uint   stop;
+        DImg*  orgImage;
+        DImg*  destImage;
+        int    MinDropSize;
+        int    MaxDropSize;
+        int    Coeff;
+        bool   bLimitRange;
+        uchar* pStatusBits;
+    };
+
+private:
+
     void filterImage();
 
     void rainDropsImage(DImg* const orgImage, DImg* const destImage, int MinDropSize, int MaxDropSize,
                         int Amount, int Coeff, bool bLimitRange, int progressMin, int progressMax);
+
+    void rainDropsImageMultithreaded(const Args& prm);
 
     bool CreateRainDrop(uchar* const pBits, int Width, int Height, bool sixteenBit, int bytesDepth,
                         uchar* const pResBits, uchar* const pStatusBits,

@@ -18,6 +18,7 @@ Editor   : Blur tool support multicore CPU.
 Editor   : Charcoal tool support multicore CPU.
 Editor   : OilPaint tool support multicore CPU.
 Editor   : Emboss tool support multicore CPU.
+Editor   : Raindrop tool support multicore CPU.
 
 Showfoto : Port of Thumbbar to Qt Model/view.
 
