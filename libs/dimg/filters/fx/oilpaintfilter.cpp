@@ -38,6 +38,10 @@
 #include <QtConcurrentRun>
 #include <QMutex>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "dimg.h"
@@ -58,9 +62,9 @@ public:
 
     int    brushSize;
     int    smoothness;
-    
+
     int    globalProgress;
-    
+
     QMutex lock;
 };
 
@@ -99,7 +103,7 @@ void OilPaintFilter::oilPaintImageMultithreaded(uint start, uint stop)
     uint*  averageColorR  = new uint[d->smoothness + 1];
     uint*  averageColorG  = new uint[d->smoothness + 1];
     uint*  averageColorB  = new uint[d->smoothness + 1];
-    
+
     int    oldProgress=0, progress=0;
     DColor mostFrequentColor;
 
@@ -128,7 +132,7 @@ void OilPaintFilter::oilPaintImageMultithreaded(uint start, uint stop)
             d->lock.unlock();
         }
     }
-    
+
     delete [] intensityCount;
     delete [] averageColorR;
     delete [] averageColorG;
@@ -137,17 +141,24 @@ void OilPaintFilter::oilPaintImageMultithreaded(uint start, uint stop)
 
 void OilPaintFilter::filterImage()
 {
-    int   nbCore = QThreadPool::globalInstance()->maxThreadCount();
+    uint  nbCore = QThreadPool::globalInstance()->maxThreadCount();
     float step   = m_orgImage.height() / nbCore;
+    uint  vals[nbCore+1];
+
+    vals[0]      = 0;
+    vals[nbCore] = m_orgImage.height();
+
+    for (uint i = 1 ; i < nbCore ; ++i)
+        vals[i] = vals[i-1] + step;
 
     QList <QFuture<void> > tasks;
 
-    for (int j = 0 ; runningFlag() && (j < nbCore) ; ++j)
+    for (uint j = 0 ; runningFlag() && (j < nbCore) ; ++j)
     {
         tasks.append(QtConcurrent::run(this,
                                        &OilPaintFilter::oilPaintImageMultithreaded,
-                                       (uint)(j*step),
-                                       (uint)((j+1)*step)
+                                       vals[j],
+                                       vals[j+1]
                                       ));
     }
 

@@ -50,10 +50,10 @@ public:
 
     int    radius;
     int    globalProgress;
-    
+
     QMutex lock;
-};    
-    
+};
+
 BlurFilter::BlurFilter(QObject* const parent)
     : DImgThreadedFilter(parent),
       d(new Private)
@@ -126,7 +126,7 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
         {
             uchar* pSrc8           = m_orgImage.scanLine(yy + my);
             unsigned short* pSrc16 = reinterpret_cast<unsigned short*>(m_orgImage.scanLine(yy + my));
-            
+
             for (int x = 0; x < (int)m_orgImage.width(); x++)
             {
                 if (m_orgImage.sixteenBit())
@@ -214,7 +214,7 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
             d->lock.unlock();
         }
     }
-    
+
     delete [] as;
     delete [] rs;
     delete [] gs;
@@ -229,17 +229,25 @@ void BlurFilter::filterImage()
         return;
     }
 
-    int   nbCore = QThreadPool::globalInstance()->maxThreadCount();
+    uint  nbCore = QThreadPool::globalInstance()->maxThreadCount();
     float step   = m_orgImage.height() / nbCore;
+    uint  vals[nbCore+1];
+
+    vals[0]      = 0;
+    vals[nbCore] = m_orgImage.height();
+
+    for (uint i = 1 ; i < nbCore ; ++i)
+        vals[i] = vals[i-1] + step;
 
     QList <QFuture<void> > tasks;
 
-    for (int j = 0 ; runningFlag() && (j < nbCore) ; ++j)
+    for (uint j = 0 ; runningFlag() && (j < nbCore) ; ++j)
     {
         tasks.append(QtConcurrent::run(this,
                                        &BlurFilter::blurMultithreaded,
-                                       (uint)(j*step),
-                                       (uint)((j+1)*step)));
+                                       vals[j],
+                                       vals[j+1]
+                                      ));
     }
 
     foreach(QFuture<void> t, tasks)

@@ -162,18 +162,27 @@ void UnsharpMaskFilter::filterImage()
 
     BlurFilter(this, m_orgImage, m_destImage, 0, 10, (int)(m_radius));
 
-    int   nbCore = QThreadPool::globalInstance()->maxThreadCount();
+    uint  nbCore = QThreadPool::globalInstance()->maxThreadCount();
     float step   = m_destImage.width() / nbCore;
+    uint  vals[nbCore+1];
+
+    vals[0]      = 0;
+    vals[nbCore] = m_destImage.width();
+
+    for (uint i = 1 ; i < nbCore ; ++i)
+        vals[i] = vals[i-1] + step;
 
     for (uint y = 0 ; runningFlag() && (y < m_destImage.height()) ; ++y)
     {
         QList <QFuture<void> > tasks;
 
-        for (int j = 0 ; runningFlag() && (j < nbCore) ; ++j)
+        for (uint j = 0 ; runningFlag() && (j < nbCore) ; ++j)
         {
             tasks.append(QtConcurrent::run(this,
                                            &UnsharpMaskFilter::unsharpMaskMultithreaded,
-                                           (uint)(j*step), (uint)((j+1)*step), y));
+                                           vals[j],
+                                           vals[j+1],
+                                           y));
         }
 
         foreach(QFuture<void> t, tasks)

@@ -315,8 +315,15 @@ void RefocusFilter::convolveImage(const Args& prm)
 {
     int progress;
 
-    int   nbCore = QThreadPool::globalInstance()->maxThreadCount();
+    uint  nbCore = QThreadPool::globalInstance()->maxThreadCount();
     float step   = prm.width / nbCore;
+    uint  vals[nbCore+1];
+
+    vals[0]      = 0;
+    vals[nbCore] = prm.width;
+
+    for (uint i = 1 ; i < nbCore ; ++i)
+        vals[i] = vals[i-1] + step;
 
     for (int y1 = 0; runningFlag() && (y1 < prm.height); ++y1)
     {
@@ -326,7 +333,11 @@ void RefocusFilter::convolveImage(const Args& prm)
         {
             tasks.append(QtConcurrent::run(this,
                                            &RefocusFilter::convolveImageMultithreaded,
-                                           (uint)(j*step), (uint)((j+1)*step), y1, prm));
+                                           vals[j],
+                                           vals[j+1],
+                                           y1, 
+                                           prm
+                                          ));
         }
 
         foreach(QFuture<void> t, tasks)

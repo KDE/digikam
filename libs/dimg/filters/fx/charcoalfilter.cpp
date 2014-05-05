@@ -61,13 +61,13 @@ public:
         pencil         = 5.0;
         smooth         = 10.0;
     }
-    
+
     double pencil;
     double smooth;
     int    globalProgress;
-    
+
     QMutex lock;
-};  
+};
 
 CharcoalFilter::CharcoalFilter(QObject* const parent)
     : DImgThreadedFilter(parent),
@@ -192,7 +192,7 @@ void CharcoalFilter::convolveImageMultithreaded(uint start, uint stop, double* n
     int     mx, my, sx, sy, mcx, mcy, oldProgress=0, progress=0;
     double  red, green, blue, alpha;
     double* k = 0;
-    
+
     uint height     = m_destImage.height();
     uint width      = m_destImage.width();
     bool sixteenBit = m_destImage.sixteenBit();
@@ -293,25 +293,32 @@ bool CharcoalFilter::convolveImage(const unsigned int order, const double* kerne
 
     // --------------------------------------------------------
 
-    int   nbCore = QThreadPool::globalInstance()->maxThreadCount();
-    float step   = m_destImage.height() / nbCore;
+    uint  nbCore = QThreadPool::globalInstance()->maxThreadCount();
+    float step   = m_orgImage.height() / nbCore;
+    uint  vals[nbCore+1];
+
+    vals[0]      = 0;
+    vals[nbCore] = m_orgImage.height();
+
+    for (uint i = 1 ; i < nbCore ; ++i)
+        vals[i] = vals[i-1] + step;
 
     QList <QFuture<void> > tasks;
 
-    for (int j = 0 ; runningFlag() && (j < nbCore) ; ++j)
+    for (uint j = 0 ; runningFlag() && (j < nbCore) ; ++j)
     {
         tasks.append(QtConcurrent::run(this,
                                        &CharcoalFilter::convolveImageMultithreaded,
-                                       (uint)(j*step),
-                                       (uint)((j+1)*step),
+                                       vals[j],
+                                       vals[j+1],
                                        normal_kernel.data(),
                                        kernelWidth
                                       ));
     }
 
     foreach(QFuture<void> t, tasks)
-        t.waitForFinished();    
-    
+        t.waitForFinished();
+
     return true;
 }
 
