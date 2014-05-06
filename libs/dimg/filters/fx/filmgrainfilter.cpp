@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : filter to add Film Grain to image.
  *
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010      by Julien Narboux <julien at narboux dot fr>
  *
@@ -30,6 +30,11 @@
 #include <cstdlib>
 #include <cmath>
 
+// Qt includes
+
+#include <QtConcurrentRun>
+#include <QMutex>
+
 // KDE includes
 
 #include <kdebug.h>
@@ -51,7 +56,8 @@ public:
         div(0.0),
         leadLumaNoise(1.0),
         leadChromaBlueNoise(1.0),
-        leadChromaRedNoise(1.0)
+        leadChromaRedNoise(1.0),
+        globalProgress(0)
     {
     }
 
@@ -70,6 +76,11 @@ public:
     FilmGrainContainer    settings;
 
     RandomNumberGenerator generator;
+
+    int                   globalProgress;
+
+    QMutex                lock;
+    QMutex                lock2; // RandomNumberGenerator is not re-entrant (dixit Boost lib)
 };
 
 FilmGrainFilter::FilmGrainFilter(QObject* const parent)
@@ -105,23 +116,8 @@ FilmGrainFilter::~FilmGrainFilter()
     delete d;
 }
 
-/** This method have been implemented following this report in bugzilla :
-    https://bugs.kde.org/show_bug.cgi?id=148540
-    We use YCbCr color space to perform noise addition. Please follow this url for
-    details about this color space :
-    http://en.allexperts.com/e/y/yc/ycbcr.htm
- */
-void FilmGrainFilter::filterImage()
+void FilmGrainFilter::filmgrainMultithreaded(uint start, uint stop)
 {
-    if (d->settings.lumaIntensity <= 0       ||
-        d->settings.chromaBlueIntensity <= 0 ||
-        d->settings.chromaRedIntensity <= 0  ||
-        !d->settings.isDirty())
-    {
-        m_destImage = m_orgImage;
-        return;
-    }
-
     // To emulate grain size we use a matrix [grainSize x grainSize].
     // We will parse whole image using grainSize step. Color from a reference point located
     // on the top left corner of matrix will be used to apply noise on whole matrix.
@@ -131,7 +127,7 @@ void FilmGrainFilter::filterImage()
     // generated with Gaussian or Poisson noise generator.
 
     DColor refCol, matCol;
-    int    progress, posX, posY;
+    int    progress=0, oldProgress=0, posX, posY;
 
     // Reference point noise adjustements.
     double refLumaNoise = 0.0,       refLumaRange = 0.0;
@@ -143,18 +139,12 @@ void FilmGrainFilter::filterImage()
     double matChromaBlueNoise = 0.0, matChromaBlueRange = 0.0;
     double matChromaRedNoise = 0.0,  matChromaRedRange = 0.0;
 
-    int    width           = m_orgImage.width();
-    int    height          = m_orgImage.height();
-    d->div                 = m_orgImage.sixteenBit() ? 65535.0 : 255.0;
-    d->leadLumaNoise       = d->settings.lumaIntensity       * (m_orgImage.sixteenBit() ? 256.0 : 1.0);
-    d->leadChromaBlueNoise = d->settings.chromaBlueIntensity * (m_orgImage.sixteenBit() ? 256.0 : 1.0);
-    d->leadChromaRedNoise  = d->settings.chromaRedIntensity  * (m_orgImage.sixteenBit() ? 256.0 : 1.0);
+    int   width  = m_orgImage.width();
+    int   height = m_orgImage.height();
 
-    d->generator.seed(1); // noise will always be the same
-
-    for (int x = 0; runningFlag() && x < width; x += d->settings.grainSize)
+    for (uint x = start ; runningFlag() && (x < stop) ; x += d->settings.grainSize)
     {
-        for (int y = 0; runningFlag() && y < height; y += d->settings.grainSize)
+        for (uint y = 0; runningFlag() && y < height; y += d->settings.grainSize)
         {
             refCol = m_orgImage.getPixelColor(x, y);
             computeNoiseSettings(refCol,
@@ -222,14 +212,66 @@ void FilmGrainFilter::filterImage()
             }
         }
 
-        // Update progress bar in dialog.
-        progress = (int)(((double)x * 100.0) / width);
+        progress = (int)( ( (double)x * (100.0 / QThreadPool::globalInstance()->maxThreadCount()) ) / (stop-start));
 
-        if (progress % 5 == 0)
+        if ((progress % 5 == 0) && (progress > oldProgress))
         {
-            postProgress(progress);
+            d->lock.lock();
+            oldProgress       = progress;
+            d->globalProgress += 5;
+            postProgress(d->globalProgress);
+            d->lock.unlock();
         }
     }
+}
+
+/** This method have been implemented following this report in bugzilla :
+    https://bugs.kde.org/show_bug.cgi?id=148540
+    We use YCbCr color space to perform noise addition. Please follow this url for
+    details about this color space :
+    http://en.allexperts.com/e/y/yc/ycbcr.htm
+ */
+void FilmGrainFilter::filterImage()
+{
+    if (d->settings.lumaIntensity <= 0       ||
+        d->settings.chromaBlueIntensity <= 0 ||
+        d->settings.chromaRedIntensity <= 0  ||
+        !d->settings.isDirty())
+    {
+        m_destImage = m_orgImage;
+        return;
+    }
+
+    d->div                 = m_orgImage.sixteenBit() ? 65535.0 : 255.0;
+    d->leadLumaNoise       = d->settings.lumaIntensity       * (m_orgImage.sixteenBit() ? 256.0 : 1.0);
+    d->leadChromaBlueNoise = d->settings.chromaBlueIntensity * (m_orgImage.sixteenBit() ? 256.0 : 1.0);
+    d->leadChromaRedNoise  = d->settings.chromaRedIntensity  * (m_orgImage.sixteenBit() ? 256.0 : 1.0);
+
+    d->generator.seed(1); // noise will always be the same
+
+    uint  nbCore = QThreadPool::globalInstance()->maxThreadCount();
+    float step   = m_orgImage.width() / nbCore;
+    uint  vals[nbCore+1];
+
+    vals[0]      = 0;
+    vals[nbCore] = m_orgImage.width();
+
+    for (uint i = 1 ; i < nbCore ; ++i)
+        vals[i] = vals[i-1] + step;
+
+    QList <QFuture<void> > tasks;
+
+    for (uint j = 0 ; runningFlag() && (j < nbCore) ; ++j)
+    {
+        tasks.append(QtConcurrent::run(this,
+                                       &FilmGrainFilter::filmgrainMultithreaded,
+                                       vals[j],
+                                       vals[j+1]
+                                      ));
+    }
+
+    foreach(QFuture<void> t, tasks)
+        t.waitForFinished();
 }
 
 /** This method compute lead noise of reference matrix point used to similate graininess size
@@ -302,7 +344,10 @@ void FilmGrainFilter::adjustYCbCr(DColor& col, double range, double nRand, int c
  */
 double FilmGrainFilter::randomizeUniform(double range)
 {
-    return d->generator.number(- range / 2, range / 2);
+    d->lock2.lock();
+    double val = d->generator.number(- range / 2, range / 2);
+    d->lock2.unlock();
+    return val;
 }
 
 /** This method compute Guaussian noise value used to randomize all matrix points.
@@ -310,9 +355,11 @@ double FilmGrainFilter::randomizeUniform(double range)
  */
 double FilmGrainFilter::randomizeGauss(double sigma)
 {
+    d->lock2.lock();
     double u = - d->generator.number(-1.0, 0.0); // exclude 0
     double v = d->generator.number(0.0, 1.0);
-    return (sigma * sqrt(-2 * log(u)) * cos(2 * M_PI * v)) ;
+    d->lock2.unlock();
+    return (sigma * sqrt(-2 * log(u)) * cos(2 * M_PI * v));
 }
 
 /** This method compute Poisson noise value used to randomize all matrix points.

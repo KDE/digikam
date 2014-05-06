@@ -146,6 +146,8 @@ private:
 
     void filterImage();
 
+    void filmgrainMultithreaded(uint start, uint stop);
+
     inline void computeNoiseSettings(const DColor& col,
                                      double& luRange, double& luNoise,
                                      double& cbRange, double& cbNoise,
