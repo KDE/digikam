@@ -127,20 +127,20 @@ void FilmGrainFilter::filmgrainMultithreaded(uint start, uint stop)
     // generated with Gaussian or Poisson noise generator.
 
     DColor refCol, matCol;
-    int    progress=0, oldProgress=0, posX, posY;
+    uint    progress=0, oldProgress=0, posX, posY;
 
     // Reference point noise adjustements.
-    double refLumaNoise = 0.0,       refLumaRange = 0.0;
+    double refLumaNoise       = 0.0, refLumaRange       = 0.0;
     double refChromaBlueNoise = 0.0, refChromaBlueRange = 0.0;
-    double refChromaRedNoise = 0.0,  refChromaRedRange = 0.0;
+    double refChromaRedNoise  = 0.0, refChromaRedRange  = 0.0;
 
     // Current matrix point noise adjustements.
-    double matLumaNoise = 0.0,       matLumaRange = 0.0;
+    double matLumaNoise       = 0.0, matLumaRange       = 0.0;
     double matChromaBlueNoise = 0.0, matChromaBlueRange = 0.0;
-    double matChromaRedNoise = 0.0,  matChromaRedRange = 0.0;
+    double matChromaRedNoise  = 0.0, matChromaRedRange  = 0.0;
 
-    int   width  = m_orgImage.width();
-    int   height = m_orgImage.height();
+    uint   width  = m_orgImage.width();
+    uint   height = m_orgImage.height();
 
     for (uint x = start ; runningFlag() && (x < stop) ; x += d->settings.grainSize)
     {
