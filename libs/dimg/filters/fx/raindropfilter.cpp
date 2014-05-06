@@ -66,6 +66,8 @@ public:
     QRect                 selection;
 
     RandomNumberGenerator generator;
+
+    QMutex                lock; // RandomNumberGenerator is not re-entrant (dixit Boost lib)
 };
 
 RainDropFilter::RainDropFilter(QObject* const parent)
@@ -155,9 +157,11 @@ void RainDropFilter::rainDropsImageMultithreaded(const Args& prm)
 
     for (uint nCounter = prm.start ; runningFlag() && (bResp == false) && (nCounter < prm.stop) ; ++nCounter)
     {
+        d->lock.lock();
         nRandX    = d->generator.number(0, nWidth - 1);
         nRandY    = d->generator.number(0, nHeight - 1);
         nRandSize = d->generator.number(prm.MinDropSize, prm.MaxDropSize);
+        d->lock.unlock();
         bResp     = CreateRainDrop(data, nWidth, nHeight, sixteenBit, bytesDepth,
                                    pResBits, prm.pStatusBits,
                                    nRandX, nRandY, nRandSize, prm.Coeff, prm.bLimitRange);
