@@ -7,7 +7,7 @@
  * Description : Wavelets Noise Reduction threaded image filter.
  *               This filter work in YCrCb color space.
  *
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -83,21 +83,33 @@ public:
 
 private:
 
+    struct Args
+    {
+        uint    start;
+        uint    stop;
+        float*  thold;
+        uint*   lpass;
+        uint*   hpass;
+        double* stdev;
+        uint*   samples;
+        float** fimg;
+        float   threshold;
+        double  softness;
+    };
+
+private:
+
     void filterImage();
 
-    void waveletDenoise(float* const fimg[3], unsigned int width, unsigned int height,
+    void waveletDenoise(float* fimg[3], unsigned int width, unsigned int height,
                         float threshold, double softness);
     inline void hatTransform(float* const temp, float* const base, int st, int size, int sc);
 
     void ycbcr2srgb(float** const fimg, int size);
 
-    // Methods not used.
-/*
-    void srgb2lab(float** const fimg, int size);
-    void lab2srgb(float** const fimg, int size);
-    void srgb2xyz(float** const fimg, int size);
-    void xyz2srgb(float** const fimg, int size);
-*/
+    void calculteStdevMultithreaded(const Args& prm);
+    void thresholdingMultithreaded(const Args& prm);
+
 private:
 
     class Private;

@@ -20,6 +20,7 @@ Editor   : OilPaint tool support multicore CPU.
 Editor   : Emboss tool support multicore CPU.
 Editor   : Raindrop tool support multicore CPU.
 Editor   : FilmGrain tool support multicore CPU.
+Editor   : NoiseReduction tool support multicore CPU.
 
 Showfoto : Port of Thumbbar to Qt Model/view.
 

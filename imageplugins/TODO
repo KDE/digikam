@@ -33,7 +33,7 @@ filters
   /filmgrain                DONE          DONE             DONE                  DONE
 
 enhance
-  /noisereductiontool       DONE          TODO             DONE                  DONE
+  /noisereductiontool       DONE          DONE             DONE                  DONE
   /sharpentool              DONE          DONE             DONE                  DONE
   /restoration              DONE          TODO             DONE                  DONE
   /blurtool                 DONE          DONE             DONE                  DONE
