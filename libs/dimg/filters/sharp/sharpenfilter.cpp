@@ -247,7 +247,7 @@ bool SharpenFilter::convolveImage(const unsigned int order, const double* const 
     {
         QList <QFuture<void> > tasks;
 
-        for (int j = 0 ; runningFlag() && (j < nbCore) ; ++j)
+        for (uint j = 0 ; runningFlag() && (j < nbCore) ; ++j)
         {
             prm.start = vals[j];
             prm.stop  = vals[j+1];

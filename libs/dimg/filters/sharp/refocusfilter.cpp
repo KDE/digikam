@@ -329,7 +329,7 @@ void RefocusFilter::convolveImage(const Args& prm)
     {
         QList <QFuture<void> > tasks;
 
-        for (int j = 0 ; runningFlag() && (j < nbCore) ; ++j)
+        for (uint j = 0 ; runningFlag() && (j < nbCore) ; ++j)
         {
             tasks.append(QtConcurrent::run(this,
                                            &RefocusFilter::convolveImageMultithreaded,
