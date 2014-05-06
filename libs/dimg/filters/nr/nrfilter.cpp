@@ -283,32 +283,32 @@ void NRFilter::waveletDenoise(float* const fimg[3], unsigned int width, unsigned
                               float threshold, double softness)
 {
     float        thold;
-    unsigned int i, lev, lpass = 0, hpass = 0, size, col, row;
+    uint         lpass = 0, hpass = 0, size;
     double       stdev[5];
     unsigned int samples[5];
 
     size  = width * height;
     QScopedArrayPointer<float> temp(new float[qMax(width, height)]);
 
-    for (lev = 0; runningFlag() && (lev < 5); ++lev)
+    for (uint lev = 0; runningFlag() && (lev < 5); ++lev)
     {
         lpass = ((lev & 1) + 1);
 
-        for (row = 0; runningFlag() && (row < height); ++row)
+        for (uint row = 0; runningFlag() && (row < height); ++row)
         {
             hatTransform(temp.data(), fimg[hpass] + row * width, 1, width, 1 << lev);
 
-            for (col = 0; col < width; ++col)
+            for (uint col = 0; col < width; ++col)
             {
                 fimg[lpass][row * width + col] = temp[col] * 0.25;
             }
         }
 
-        for (col = 0; runningFlag() && (col < width); ++col)
+        for (uint col = 0; runningFlag() && (col < width); ++col)
         {
             hatTransform(temp.data(), fimg[lpass] + col, width, height, 1 << lev);
 
-            for (row = 0; row < height; ++row)
+            for (uint row = 0; row < height; ++row)
             {
                 fimg[lpass][row * width + col] = temp[row] * 0.25;
             }
@@ -323,7 +323,7 @@ void NRFilter::waveletDenoise(float* const fimg[3], unsigned int width, unsigned
 
         // calculate stdevs for all intensities
 
-        for (i = 0; runningFlag() && (i < size); ++i)
+        for (uint i = 0; runningFlag() && (i < size); ++i)
         {
             fimg[hpass][i] -= fimg[lpass][i];
 
@@ -365,7 +365,7 @@ void NRFilter::waveletDenoise(float* const fimg[3], unsigned int width, unsigned
 
         // do thresholding
 
-        for (i = 0; runningFlag() && (i < size); ++i)
+        for (uint i = 0; runningFlag() && (i < size); ++i)
         {
             if (fimg[lpass][i] > 0.8)
             {
@@ -410,7 +410,7 @@ void NRFilter::waveletDenoise(float* const fimg[3], unsigned int width, unsigned
         hpass = lpass;
     }
 
-    for (i = 0; runningFlag() && (i < size); ++i)
+    for (uint i = 0; runningFlag() && (i < size); ++i)
     {
         fimg[0][i] = fimg[0][i] + fimg[lpass][i];
     }
