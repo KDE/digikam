@@ -34,6 +34,7 @@
 #include <QTimer>
 #include <QToolButton>
 #include <QTreeWidget>
+#include <QPainter>
 
 // KDE includes
 
@@ -47,6 +48,7 @@
 #include <klocale.h>
 #include <ksqueezedtextlabel.h>
 #include <KTabWidget>
+#include <kapplication.h>
 
 // Local includes
 
@@ -236,7 +238,7 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
 
     d->rootFont = QFont("Times",18,-1,false);
     d->regularFont = QFont("Times",12,-1,false);
-    d->iconSize = QSize(25 ,25);
+    d->iconSize = QSize(30 ,30);
     d->rootSizeHint = QSize(1,40);
 
     d->colorsAndLabelsTreeWidget = new QTreeWidget(colorLabelWidget);
@@ -249,10 +251,34 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
 
     QTreeWidgetItem* rating = new QTreeWidgetItem(d->colorsAndLabelsTreeWidget);
     rating->setText(0, tr("Rating"));
-    rating->setIcon(0,KIcon("digikam"));
     rating->setSizeHint(0,d->rootSizeHint);
     rating->setFont(0,d->rootFont);
     rating->setFlags(Qt::ItemIsEnabled);
+
+    QPolygon   starPolygon;
+
+    starPolygon << QPoint(0,  12);
+    starPolygon << QPoint(10, 10);
+    starPolygon << QPoint(14,  0);
+    starPolygon << QPoint(18, 10);
+    starPolygon << QPoint(28, 12);
+    starPolygon << QPoint(20, 18);
+    starPolygon << QPoint(22, 28);
+    starPolygon << QPoint(14, 22);
+    starPolygon << QPoint(6,  28);
+    starPolygon << QPoint(8,  18);
+
+    QPixmap starPixmap = QPixmap(30, 30);
+    starPixmap.fill(Qt::transparent);
+
+    QPainter p(&starPixmap);
+    p.setRenderHint(QPainter::Antialiasing, true);
+    p.setBrush(QColor(0xff,0xd7,0x00));
+    p.setPen(palette().color(QPalette::Active, foregroundRole()));
+    p.drawPolygon(starPolygon, Qt::WindingFill);
+    p.end();
+
+    rating->setIcon(0,starPixmap);
 
     QTreeWidgetItem* noRate = new QTreeWidgetItem(rating);
     noRate->setText(0,tr("0"));
@@ -276,7 +302,7 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
 
     QTreeWidgetItem* labels = new QTreeWidgetItem(d->colorsAndLabelsTreeWidget);
     labels->setText(0, tr("Labels"));
-    labels->setIcon(0,KIconLoader::global()->loadIcon("flag-green", KIconLoader::NoGroup, 25));
+    labels->setIcon(0,KIconLoader::global()->loadIcon("flag-green", KIconLoader::NoGroup, 30));
     labels->setSizeHint(0,d->rootSizeHint);
     labels->setFont(0,d->rootFont);
     labels->setFlags(Qt::ItemIsEnabled);
@@ -298,7 +324,7 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
 
     QTreeWidgetItem* colors = new QTreeWidgetItem(d->colorsAndLabelsTreeWidget);
     colors->setText(0, tr("Colors"));
-    QPixmap rootColorIcon(25,25);
+    QPixmap rootColorIcon(30, 30);
     rootColorIcon.fill(QColor(254,128,128));
     colors->setIcon(0,QIcon(rootColorIcon));
     colors->setSizeHint(0,d->rootSizeHint);
@@ -308,7 +334,7 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
     QTreeWidgetItem* noColor = new QTreeWidgetItem(colors);
     noColor->setText(0,tr("No Color"));
     noColor->setFont(0,d->regularFont);
-    noColor->setIcon(0,KIconLoader::global()->loadIcon("emblem-unmounted", KIconLoader::NoGroup, 16));
+    noColor->setIcon(0,KIconLoader::global()->loadIcon("emblem-unmounted", KIconLoader::NoGroup, 20));
 
     QStringList colorSet;
     colorSet << "red" << "orange" << "yellow" << "darkgreen" << "darkblue" << "magenta" << "darkgray" << "black" << "lightgray";
@@ -320,9 +346,10 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
         QTreeWidgetItem* colorWidgetItem = new QTreeWidgetItem(colors);
         colorWidgetItem->setText(0,colorSetNames.at(colorSet.indexOf(color)));
         colorWidgetItem->setFont(0,d->regularFont);
-        QPixmap colorIcon(15,15);
+        QPixmap colorIcon(18,18);
         colorIcon.fill(QColor(color));
         colorWidgetItem->setIcon(0,QIcon(colorIcon));
+        colorWidgetItem->setSizeHint(0,QSize(1,20));
     }
 
     colorLabelLayout->addWidget(d->colorsAndLabelsTreeWidget);
