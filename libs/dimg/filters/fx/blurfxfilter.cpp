@@ -446,161 +446,6 @@ void BlurFXFilter::radialBlur(DImg* const orgImage, DImg* const destImage, int X
     }
 }
 
-/* Function to apply the focusBlur effect backported from ImageProcessing version 2
- *
- * data             => The image data in RGBA mode.
- * Width            => Width of image.
- * Height           => Height of image.
- * BlurRadius       => Radius of blurred image.
- * BlendRadius      => Radius of blending effect.
- * bInversed        => If true, invert focus effect.
- * pArea            => Preview area.
- *
- */
-void BlurFXFilter::focusBlur(DImg* const orgImage, DImg* const destImage,
-                             int X, int Y, int BlurRadius, int BlendRadius,
-                             bool bInversed, const QRect& pArea)
-{
-    int progress;
-
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-    uchar* data     = orgImage->bits();
-    bool sixteenBit = orgImage->sixteenBit();
-    int bytesDepth  = orgImage->bytesDepth();
-    uchar* pResBits = destImage->bits();
-
-    // We working on full image.
-    int xMin = 0;
-    int xMax = Width;
-    int yMin = 0;
-    int yMax = Height;
-
-    // If we working in preview mode, else we using the preview area.
-    if (pArea.isValid())
-    {
-        xMin = pArea.x();
-        xMax = pArea.x() + pArea.width();
-        yMin = pArea.y();
-        yMax = pArea.y() + pArea.height();
-    }
-
-    if (pArea.isValid())
-    {
-        //UNTESTED (unused)
-
-        // We do not have access to the loop of the Gaussian blur,
-        // so we have to cut the image that we run the effect on.
-        int xMinBlur = xMin - BlurRadius;
-        int xMaxBlur = xMax + BlurRadius;
-        int yMinBlur = yMin - BlurRadius;
-        int yMaxBlur = yMax + BlurRadius;
-        DImg areaImage = orgImage->copy(xMinBlur, yMaxBlur, xMaxBlur - xMinBlur, yMaxBlur - yMinBlur);
-
-        BlurFilter(this, *orgImage, *destImage, 10, 75, BlurRadius);
-
-        // I am unsure about differences of 1 pixel
-        destImage->bitBltImage(&areaImage, xMinBlur, yMinBlur);
-        destImage->bitBltImage(orgImage, 0, 0, Width, yMinBlur, 0, 0);
-        destImage->bitBltImage(orgImage, 0, yMinBlur, xMinBlur, yMaxBlur - yMinBlur, 0, yMinBlur);
-        destImage->bitBltImage(orgImage, xMaxBlur + 1, yMinBlur, Width - xMaxBlur - 1, yMaxBlur - yMinBlur, yMaxBlur, yMinBlur);
-        destImage->bitBltImage(orgImage, 0, yMaxBlur + 1, Width, Height - yMaxBlur - 1, 0, yMaxBlur);
-
-        postProgress(80);
-    }
-    else
-    {
-        // copy bits for blurring
-        memcpy(pResBits, data, orgImage->numBytes());
-
-        // Gaussian blur using the BlurRadius parameter.
-        BlurFilter(this, *orgImage, *destImage, 10, 80, BlurRadius);
-    }
-
-    // Blending results.
-
-    int nBlendFactor;
-    double lfRadius;
-    int offset;
-
-    DColor colorOrgImage, colorBlurredImage;
-    int alpha;
-    uchar* ptr = 0;
-
-    // get composer for default blending
-    DColorComposer* const composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
-
-    int nh = 0, nw = 0;
-
-    for (int h = yMin; runningFlag() && (h < yMax); ++h)
-    {
-        nh = Y - h;
-
-        for (int w = xMin; runningFlag() && (w < xMax); ++w)
-        {
-            nw = X - w;
-
-            lfRadius = qSqrt(nh * nh + nw * nw);
-
-            if (sixteenBit)
-            {
-                nBlendFactor = CLAMP065535((int)(65535.0 * lfRadius / (double)BlendRadius));
-            }
-            else
-            {
-                nBlendFactor = (uchar)CLAMP0255((int)(255.0 * lfRadius / (double)BlendRadius));
-            }
-
-            // Read color values
-            offset = GetOffset(Width, w, h, bytesDepth);
-            ptr    = pResBits + offset;
-            colorOrgImage.setColor(data + offset, sixteenBit);
-            colorBlurredImage.setColor(ptr, sixteenBit);
-
-            // Preserve alpha
-            alpha = colorOrgImage.alpha();
-
-            // In normal mode, the image is focused in the middle
-            // and less focused towards the border.
-            // In inversed mode, the image is more focused towards the edge
-            // and less focused in the middle.
-            // This is achieved by swapping src and dest while blending.
-            if (bInversed)
-            {
-                // set blending alpha value as src alpha. Original value is stored above.
-                colorOrgImage.setAlpha(nBlendFactor);
-                // compose colors, writing to dest - colorBlurredImage
-                composer->compose(colorBlurredImage, colorOrgImage);
-                // restore alpha
-                colorBlurredImage.setAlpha(alpha);
-                // write color to destination
-                colorBlurredImage.setPixel(ptr);
-            }
-            else
-            {
-                // set blending alpha value as src alpha. Original value is stored above.
-                colorBlurredImage.setAlpha(nBlendFactor);
-                // compose colors, writing to dest - colorOrgImage
-                composer->compose(colorOrgImage, colorBlurredImage);
-                // restore alpha
-                colorOrgImage.setAlpha(alpha);
-                // write color to destination
-                colorOrgImage.setPixel(ptr);
-            }
-        }
-
-        // Update the progress bar in dialog.
-        progress = (int)(80.0 + ((double)(h - yMin) * 20.0) / (yMax - yMin));
-
-        if (progress % 5 == 0)
-        {
-            postProgress(progress);
-        }
-    }
-
-    delete composer;
-}
-
 /* Function to apply the farBlur effect backported from ImageProcessing version 2
  *
  * data             => The image data in RGBA mode.
@@ -657,194 +502,6 @@ void BlurFXFilter::farBlur(DImg* const orgImage, DImg* const destImage, int Dist
 
     // now, we apply a convolution with kernel
     MakeConvolution(orgImage, destImage, Distance, nKern.data());
-}
-
-/* Function to apply the SmartBlur effect
- *
- * data             => The image data in RGBA mode.
- * Width            => Width of image.
- * Height           => Height of image.
- * Radius           => blur matrix radius.
- * Strength         => Color strength.
- *
- * Theory           => Similar to SmartBlur from Photoshop, this function has the
- *                     same engine as Blur function, but, in a matrix with n
- *                     dimensions, we take only colors that pass by sensibility filter
- *                     The result is a clean image, not totally blurred, but a image
- *                     with correction between pixels.
- */
-
-void BlurFXFilter::smartBlur(DImg* const orgImage, DImg* const destImage, int Radius, int Strength)
-{
-    if (Radius <= 0)
-    {
-        return;
-    }
-
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-    uchar* data     = orgImage->bits();
-    bool sixteenBit = orgImage->sixteenBit();
-    int bytesDepth  = orgImage->bytesDepth();
-    uchar* pResBits = destImage->bits();
-
-    int progress;
-    int sumR, sumG, sumB, nCount, w, h, a;
-
-    int StrengthRange = Strength;
-
-    if (sixteenBit)
-    {
-        StrengthRange = (StrengthRange + 1) * 256 - 1;
-    }
-
-    DColor color, radiusColor, radiusColorBlur;
-    int offset, loopOffset;
-
-    QScopedArrayPointer<uchar> pBlur(new uchar[orgImage->numBytes()]);
-
-    // We need to copy our bits to blur bits
-
-    memcpy(pBlur.data(), data, orgImage->numBytes());
-
-    // we have reached the main loop
-
-    for (h = 0; runningFlag() && (h < Height); ++h)
-    {
-        for (w = 0; runningFlag() && (w < Width); ++w)
-        {
-            // we initialize the variables
-            sumR = sumG = sumB = nCount = 0;
-
-            // read color
-            offset = GetOffset(Width, w, h, bytesDepth);
-            color.setColor(data + offset, sixteenBit);
-
-            // ...we enter this loop to sum the bits
-            for (a = -Radius; runningFlag() && (a <= Radius); ++a)
-            {
-                // verify if is inside the rect
-                if (IsInside(Width, Height, w + a, h))
-                {
-                    // read color
-                    loopOffset = GetOffset(Width, w + a, h, bytesDepth);
-                    radiusColor.setColor(data + loopOffset, sixteenBit);
-
-                    // now, we have to check if is inside the sensibility filter
-                    if (IsColorInsideTheRange(color.red(), color.green(), color.blue(),
-                                              radiusColor.red(), radiusColor.green(), radiusColor.blue(),
-                                              StrengthRange))
-                    {
-                        // finally we sum the bits
-                        sumR += radiusColor.red();
-                        sumG += radiusColor.green();
-                        sumB += radiusColor.blue();
-                    }
-                    else
-                    {
-                        // finally we sum the bits
-                        sumR += color.red();
-                        sumG += color.green();
-                        sumB += color.blue();
-                    }
-
-                    // increment counter
-                    ++nCount;
-                }
-            }
-
-            if (nCount == 0)
-            {
-                nCount = 1;
-            }
-
-            // now, we have to calc the arithmetic average
-            color.setRed(sumR   / nCount);
-            color.setGreen(sumG / nCount);
-            color.setBlue(sumB  / nCount);
-
-            // write color to destination
-            color.setPixel(pBlur.data() + offset);
-        }
-
-        // Update the progress bar in dialog.
-        progress = (int)(((double)h * 50.0) / Height);
-
-        if (progress % 5 == 0)
-        {
-            postProgress(progress);
-        }
-    }
-
-    // we have reached the second part of main loop
-
-    for (w = 0; runningFlag() && (w < Width); ++w)
-    {
-        for (h = 0; runningFlag() && (h < Height); ++h)
-        {
-            // we initialize the variables
-            sumR = sumG = sumB = nCount = 0;
-
-            // read color
-            offset = GetOffset(Width, w, h, bytesDepth);
-            color.setColor(data + offset, sixteenBit);
-
-            // ...we enter this loop to sum the bits
-            for (a = -Radius; runningFlag() && (a <= Radius); ++a)
-            {
-                // verify if is inside the rect
-                if (IsInside(Width, Height, w, h + a))
-                {
-                    // read color
-                    loopOffset = GetOffset(Width, w, h + a, bytesDepth);
-                    radiusColor.setColor(data + loopOffset, sixteenBit);
-
-                    // now, we have to check if is inside the sensibility filter
-                    if (IsColorInsideTheRange(color.red(), color.green(), color.blue(),
-                                              radiusColor.red(), radiusColor.green(), radiusColor.blue(),
-                                              StrengthRange))
-                    {
-                        radiusColorBlur.setColor(pBlur.data() + loopOffset, sixteenBit);
-                        // finally we sum the bits
-                        sumR += radiusColorBlur.red();
-                        sumG += radiusColorBlur.green();
-                        sumB += radiusColorBlur.blue();
-                    }
-                    else
-                    {
-                        // finally we sum the bits
-                        sumR += color.red();
-                        sumG += color.green();
-                        sumB += color.blue();
-                    }
-
-                    // increment counter
-                    ++nCount;
-                }
-            }
-
-            if (nCount == 0)
-            {
-                nCount = 1;
-            }
-
-            // now, we have to calc the arithmetic average
-            color.setRed(sumR   / nCount);
-            color.setGreen(sumG / nCount);
-            color.setBlue(sumB  / nCount);
-
-            // write color to destination
-            color.setPixel(pResBits + offset);
-        }
-
-        // Update the progress bar in dialog.
-        progress = (int)(50.0 + ((double)w * 50.0) / Width);
-
-        if (progress % 5 == 0)
-        {
-            postProgress(progress);
-        }
-    }
 }
 
 /* Function to apply the motionBlur effect backported from ImageProcessing version 2
@@ -1166,6 +823,349 @@ void BlurFXFilter::shakeBlur(DImg* const orgImage, DImg* const destImage, int Di
 
         // Update the progress bar in dialog.
         progress = (int)(50.0 + ((double)h * 50.0) / Height);
+
+        if (progress % 5 == 0)
+        {
+            postProgress(progress);
+        }
+    }
+}
+
+/* Function to apply the focusBlur effect backported from ImageProcessing version 2
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
+ * BlurRadius       => Radius of blurred image.
+ * BlendRadius      => Radius of blending effect.
+ * bInversed        => If true, invert focus effect.
+ * pArea            => Preview area.
+ *
+ */
+void BlurFXFilter::focusBlur(DImg* const orgImage, DImg* const destImage,
+                             int X, int Y, int BlurRadius, int BlendRadius,
+                             bool bInversed, const QRect& pArea)
+{
+    int progress;
+
+    int Width       = orgImage->width();
+    int Height      = orgImage->height();
+    uchar* data     = orgImage->bits();
+    bool sixteenBit = orgImage->sixteenBit();
+    int bytesDepth  = orgImage->bytesDepth();
+    uchar* pResBits = destImage->bits();
+
+    // We working on full image.
+    int xMin = 0;
+    int xMax = Width;
+    int yMin = 0;
+    int yMax = Height;
+
+    // If we working in preview mode, else we using the preview area.
+    if (pArea.isValid())
+    {
+        xMin = pArea.x();
+        xMax = pArea.x() + pArea.width();
+        yMin = pArea.y();
+        yMax = pArea.y() + pArea.height();
+    }
+
+    if (pArea.isValid())
+    {
+        //UNTESTED (unused)
+
+        // We do not have access to the loop of the Gaussian blur,
+        // so we have to cut the image that we run the effect on.
+        int xMinBlur = xMin - BlurRadius;
+        int xMaxBlur = xMax + BlurRadius;
+        int yMinBlur = yMin - BlurRadius;
+        int yMaxBlur = yMax + BlurRadius;
+        DImg areaImage = orgImage->copy(xMinBlur, yMaxBlur, xMaxBlur - xMinBlur, yMaxBlur - yMinBlur);
+
+        BlurFilter(this, *orgImage, *destImage, 10, 75, BlurRadius);
+
+        // I am unsure about differences of 1 pixel
+        destImage->bitBltImage(&areaImage, xMinBlur, yMinBlur);
+        destImage->bitBltImage(orgImage, 0, 0, Width, yMinBlur, 0, 0);
+        destImage->bitBltImage(orgImage, 0, yMinBlur, xMinBlur, yMaxBlur - yMinBlur, 0, yMinBlur);
+        destImage->bitBltImage(orgImage, xMaxBlur + 1, yMinBlur, Width - xMaxBlur - 1, yMaxBlur - yMinBlur, yMaxBlur, yMinBlur);
+        destImage->bitBltImage(orgImage, 0, yMaxBlur + 1, Width, Height - yMaxBlur - 1, 0, yMaxBlur);
+
+        postProgress(80);
+    }
+    else
+    {
+        // copy bits for blurring
+        memcpy(pResBits, data, orgImage->numBytes());
+
+        // Gaussian blur using the BlurRadius parameter.
+        BlurFilter(this, *orgImage, *destImage, 10, 80, BlurRadius);
+    }
+
+    // Blending results.
+
+    int nBlendFactor;
+    double lfRadius;
+    int offset;
+
+    DColor colorOrgImage, colorBlurredImage;
+    int alpha;
+    uchar* ptr = 0;
+
+    // get composer for default blending
+    DColorComposer* const composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
+
+    int nh = 0, nw = 0;
+
+    for (int h = yMin; runningFlag() && (h < yMax); ++h)
+    {
+        nh = Y - h;
+
+        for (int w = xMin; runningFlag() && (w < xMax); ++w)
+        {
+            nw = X - w;
+
+            lfRadius = qSqrt(nh * nh + nw * nw);
+
+            if (sixteenBit)
+            {
+                nBlendFactor = CLAMP065535((int)(65535.0 * lfRadius / (double)BlendRadius));
+            }
+            else
+            {
+                nBlendFactor = (uchar)CLAMP0255((int)(255.0 * lfRadius / (double)BlendRadius));
+            }
+
+            // Read color values
+            offset = GetOffset(Width, w, h, bytesDepth);
+            ptr    = pResBits + offset;
+            colorOrgImage.setColor(data + offset, sixteenBit);
+            colorBlurredImage.setColor(ptr, sixteenBit);
+
+            // Preserve alpha
+            alpha = colorOrgImage.alpha();
+
+            // In normal mode, the image is focused in the middle
+            // and less focused towards the border.
+            // In inversed mode, the image is more focused towards the edge
+            // and less focused in the middle.
+            // This is achieved by swapping src and dest while blending.
+            if (bInversed)
+            {
+                // set blending alpha value as src alpha. Original value is stored above.
+                colorOrgImage.setAlpha(nBlendFactor);
+                // compose colors, writing to dest - colorBlurredImage
+                composer->compose(colorBlurredImage, colorOrgImage);
+                // restore alpha
+                colorBlurredImage.setAlpha(alpha);
+                // write color to destination
+                colorBlurredImage.setPixel(ptr);
+            }
+            else
+            {
+                // set blending alpha value as src alpha. Original value is stored above.
+                colorBlurredImage.setAlpha(nBlendFactor);
+                // compose colors, writing to dest - colorOrgImage
+                composer->compose(colorOrgImage, colorBlurredImage);
+                // restore alpha
+                colorOrgImage.setAlpha(alpha);
+                // write color to destination
+                colorOrgImage.setPixel(ptr);
+            }
+        }
+
+        // Update the progress bar in dialog.
+        progress = (int)(80.0 + ((double)(h - yMin) * 20.0) / (yMax - yMin));
+
+        if (progress % 5 == 0)
+        {
+            postProgress(progress);
+        }
+    }
+
+    delete composer;
+}
+
+/* Function to apply the SmartBlur effect
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
+ * Radius           => blur matrix radius.
+ * Strength         => Color strength.
+ *
+ * Theory           => Similar to SmartBlur from Photoshop, this function has the
+ *                     same engine as Blur function, but, in a matrix with n
+ *                     dimensions, we take only colors that pass by sensibility filter
+ *                     The result is a clean image, not totally blurred, but a image
+ *                     with correction between pixels.
+ */
+
+void BlurFXFilter::smartBlur(DImg* const orgImage, DImg* const destImage, int Radius, int Strength)
+{
+    if (Radius <= 0)
+    {
+        return;
+    }
+
+    int Width       = orgImage->width();
+    int Height      = orgImage->height();
+    uchar* data     = orgImage->bits();
+    bool sixteenBit = orgImage->sixteenBit();
+    int bytesDepth  = orgImage->bytesDepth();
+    uchar* pResBits = destImage->bits();
+
+    int progress;
+    int sumR, sumG, sumB, nCount, w, h, a;
+
+    int StrengthRange = Strength;
+
+    if (sixteenBit)
+    {
+        StrengthRange = (StrengthRange + 1) * 256 - 1;
+    }
+
+    DColor color, radiusColor, radiusColorBlur;
+    int offset, loopOffset;
+
+    QScopedArrayPointer<uchar> pBlur(new uchar[orgImage->numBytes()]);
+
+    // We need to copy our bits to blur bits
+
+    memcpy(pBlur.data(), data, orgImage->numBytes());
+
+    // we have reached the main loop
+
+    for (h = 0; runningFlag() && (h < Height); ++h)
+    {
+        for (w = 0; runningFlag() && (w < Width); ++w)
+        {
+            // we initialize the variables
+            sumR = sumG = sumB = nCount = 0;
+
+            // read color
+            offset = GetOffset(Width, w, h, bytesDepth);
+            color.setColor(data + offset, sixteenBit);
+
+            // ...we enter this loop to sum the bits
+            for (a = -Radius; runningFlag() && (a <= Radius); ++a)
+            {
+                // verify if is inside the rect
+                if (IsInside(Width, Height, w + a, h))
+                {
+                    // read color
+                    loopOffset = GetOffset(Width, w + a, h, bytesDepth);
+                    radiusColor.setColor(data + loopOffset, sixteenBit);
+
+                    // now, we have to check if is inside the sensibility filter
+                    if (IsColorInsideTheRange(color.red(), color.green(), color.blue(),
+                                              radiusColor.red(), radiusColor.green(), radiusColor.blue(),
+                                              StrengthRange))
+                    {
+                        // finally we sum the bits
+                        sumR += radiusColor.red();
+                        sumG += radiusColor.green();
+                        sumB += radiusColor.blue();
+                    }
+                    else
+                    {
+                        // finally we sum the bits
+                        sumR += color.red();
+                        sumG += color.green();
+                        sumB += color.blue();
+                    }
+
+                    // increment counter
+                    ++nCount;
+                }
+            }
+
+            if (nCount == 0)
+            {
+                nCount = 1;
+            }
+
+            // now, we have to calc the arithmetic average
+            color.setRed(sumR   / nCount);
+            color.setGreen(sumG / nCount);
+            color.setBlue(sumB  / nCount);
+
+            // write color to destination
+            color.setPixel(pBlur.data() + offset);
+        }
+
+        // Update the progress bar in dialog.
+        progress = (int)(((double)h * 50.0) / Height);
+
+        if (progress % 5 == 0)
+        {
+            postProgress(progress);
+        }
+    }
+
+    // we have reached the second part of main loop
+
+    for (w = 0; runningFlag() && (w < Width); ++w)
+    {
+        for (h = 0; runningFlag() && (h < Height); ++h)
+        {
+            // we initialize the variables
+            sumR = sumG = sumB = nCount = 0;
+
+            // read color
+            offset = GetOffset(Width, w, h, bytesDepth);
+            color.setColor(data + offset, sixteenBit);
+
+            // ...we enter this loop to sum the bits
+            for (a = -Radius; runningFlag() && (a <= Radius); ++a)
+            {
+                // verify if is inside the rect
+                if (IsInside(Width, Height, w, h + a))
+                {
+                    // read color
+                    loopOffset = GetOffset(Width, w, h + a, bytesDepth);
+                    radiusColor.setColor(data + loopOffset, sixteenBit);
+
+                    // now, we have to check if is inside the sensibility filter
+                    if (IsColorInsideTheRange(color.red(), color.green(), color.blue(),
+                                              radiusColor.red(), radiusColor.green(), radiusColor.blue(),
+                                              StrengthRange))
+                    {
+                        radiusColorBlur.setColor(pBlur.data() + loopOffset, sixteenBit);
+                        // finally we sum the bits
+                        sumR += radiusColorBlur.red();
+                        sumG += radiusColorBlur.green();
+                        sumB += radiusColorBlur.blue();
+                    }
+                    else
+                    {
+                        // finally we sum the bits
+                        sumR += color.red();
+                        sumG += color.green();
+                        sumB += color.blue();
+                    }
+
+                    // increment counter
+                    ++nCount;
+                }
+            }
+
+            if (nCount == 0)
+            {
+                nCount = 1;
+            }
+
+            // now, we have to calc the arithmetic average
+            color.setRed(sumR   / nCount);
+            color.setGreen(sumG / nCount);
+            color.setBlue(sumB  / nCount);
+
+            // write color to destination
+            color.setPixel(pResBits + offset);
+        }
+
+        // Update the progress bar in dialog.
+        progress = (int)(50.0 + ((double)w * 50.0) / Width);
 
         if (progress % 5 == 0)
         {
