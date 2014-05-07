@@ -97,7 +97,7 @@ public:
 
 private:
 
-    struct Args1
+    struct Args
     {
         uint   start;
         uint   stop;
@@ -107,6 +107,9 @@ private:
         int    X;
         int    Y;
         int    Distance;
+
+        int    SizeW;
+        int    SizeH;
     };
 
 private:
@@ -120,10 +123,10 @@ private:
 
     // Backported from ImageProcessing version 2
     void zoomBlur(DImg* const orgImage, DImg* const destImage, int X, int Y, int Distance, const QRect& pArea=QRect());
-    void zoomBlurMultithreaded(const Args1& prm);
+    void zoomBlurMultithreaded(const Args& prm);
 
     void radialBlur(DImg* const orgImage, DImg* const destImage, int X, int Y, int Distance, const QRect& pArea=QRect());
-    void radialBlurMultithreaded(const Args1& prm);
+    void radialBlurMultithreaded(const Args& prm);
 
     void focusBlur(DImg* const orgImage, DImg* const destImage, int X, int Y, int BlurRadius, int BlendRadius,
                    bool bInversed=false, const QRect& pArea=QRect());
@@ -131,7 +134,9 @@ private:
     void farBlur(DImg* const orgImage, DImg* const destImage, int Distance);
     void motionBlur(DImg* const orgImage, DImg* const destImage, int Distance, double Angle=0.0);
     void smartBlur(DImg* const orgImage, DImg* const destImage, int Radius, int Strength);
+
     void mosaic(DImg* const orgImage, DImg* const destImage, int SizeW, int SizeH);
+    void mosaicMultithreaded(const Args& prm);
 
 private:
 

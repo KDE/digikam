@@ -140,7 +140,7 @@ void BlurFXFilter::filterImage()
     }
 }
 
-void BlurFXFilter::zoomBlurMultithreaded(const Args1& prm)
+void BlurFXFilter::zoomBlurMultithreaded(const Args& prm)
 {
     int nh, nw;
     int sumR, sumG, sumB, nCount=0;
@@ -255,7 +255,7 @@ void BlurFXFilter::zoomBlur(DImg* const orgImage, DImg* const destImage, int X, 
     QList<uint> vals = multithreadedSteps(xMax, xMin);
     QList <QFuture<void> > tasks;
 
-    Args1 prm;
+    Args prm;
     prm.orgImage  = orgImage;
     prm.destImage = destImage;
     prm.X         = X;
@@ -289,7 +289,7 @@ void BlurFXFilter::zoomBlur(DImg* const orgImage, DImg* const destImage, int X, 
     }
 }
 
-void BlurFXFilter::radialBlurMultithreaded(const Args1& prm)
+void BlurFXFilter::radialBlurMultithreaded(const Args& prm)
 {
     int Width       = prm.orgImage->width();
     int Height      = prm.orgImage->height();
@@ -411,7 +411,7 @@ void BlurFXFilter::radialBlur(DImg* const orgImage, DImg* const destImage, int X
     QList<uint> vals = multithreadedSteps(xMax, xMin);
     QList <QFuture<void> > tasks;
 
-    Args1 prm;
+    Args prm;
     prm.orgImage  = orgImage;
     prm.destImage = destImage;
     prm.X         = X;
@@ -1241,12 +1241,49 @@ void BlurFXFilter::frostGlass(DImg* const orgImage, DImg* const destImage, int F
     }
 }
 
+void BlurFXFilter::mosaicMultithreaded(const Args& prm)
+{
+    int Width       = prm.orgImage->width();
+    int Height      = prm.orgImage->height();
+    uchar* data     = prm.orgImage->bits();
+    bool sixteenBit = prm.orgImage->sixteenBit();
+    int bytesDepth  = prm.orgImage->bytesDepth();
+    uchar* pResBits = prm.destImage->bits();
+
+    DColor color;
+    int offsetCenter, offset;
+
+    for (uint w = prm.start; runningFlag() && (w < prm.stop); w += prm.SizeW)
+    {
+        // we have to find the center pixel for mosaic's rectangle
+
+        offsetCenter = GetOffsetAdjusted(Width, Height, w + (prm.SizeW / 2), prm.h + (prm.SizeH / 2), bytesDepth);
+        color.setColor(data + offsetCenter, sixteenBit);
+
+        // now, we fill the mosaic's rectangle with the center pixel color
+
+        for (uint subw = w; runningFlag() && (subw <= w + prm.SizeW); ++subw)
+        {
+            for (uint subh = prm.h; runningFlag() && (subh <= prm.h + prm.SizeH); ++subh)
+            {
+                // if is inside...
+                if (IsInside(Width, Height, subw, subh))
+                {
+                    // set color
+                    offset = GetOffset(Width, subw, subh, bytesDepth);
+                    color.setPixel(pResBits + offset);
+                }
+            }
+        }
+    }
+}
+
 /* Function to apply the mosaic effect backported from ImageProcessing version 2
  *
  * data             => The image data in RGBA mode.
  * Width            => Width of image.
  * Height           => Height of image.
- * Size             => Size of mosaic .
+ * Size             => Size of mosaic.
  *
  * Theory           => Ok, you can find some mosaic effects on PSC, but this one
  *                     has a great feature, if you see a mosaic in other code you will
@@ -1259,13 +1296,6 @@ void BlurFXFilter::frostGlass(DImg* const orgImage, DImg* const destImage, int F
 void BlurFXFilter::mosaic(DImg* const orgImage, DImg* const destImage, int SizeW, int SizeH)
 {
     int progress;
-
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-    uchar* data     = orgImage->bits();
-    bool sixteenBit = orgImage->sixteenBit();
-    int bytesDepth  = orgImage->bytesDepth();
-    uchar* pResBits = destImage->bits();
 
     // we need to check for valid values
     if (SizeW < 1)
@@ -1283,39 +1313,35 @@ void BlurFXFilter::mosaic(DImg* const orgImage, DImg* const destImage, int SizeW
         return;
     }
 
-    DColor color;
-    int offsetCenter, offset;
+    QList<uint> vals = multithreadedSteps(orgImage->width());
+    QList <QFuture<void> > tasks;
+
+    Args prm;
+    prm.orgImage  = orgImage;
+    prm.destImage = destImage;
+    prm.SizeW     = SizeW;
+    prm.SizeH     = SizeH;
 
     // this loop will never look for transparent colors
 
-    for (int h = 0; runningFlag() && (h < Height); h += SizeH)
+    for (uint h = 0; runningFlag() && (h < orgImage->height()); h += SizeH)
     {
-        for (int w = 0; runningFlag() && (w < Width); w += SizeW)
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
         {
-            // we have to find the center pixel for mosaic's rectangle
-
-            offsetCenter = GetOffsetAdjusted(Width, Height, w + (SizeW / 2), h + (SizeH / 2), bytesDepth);
-            color.setColor(data + offsetCenter, sixteenBit);
-
-            // now, we fill the mosaic's rectangle with the center pixel color
-
-            for (int subw = w; runningFlag() && (subw <= w + SizeW); ++subw)
-            {
-                for (int subh = h; runningFlag() && (subh <= h + SizeH); ++subh)
-                {
-                    // if is inside...
-                    if (IsInside(Width, Height, subw, subh))
-                    {
-                        // set color
-                        offset = GetOffset(Width, subw, subh, bytesDepth);
-                        color.setPixel(pResBits + offset);
-                    }
-                }
-            }
+            prm.start = vals[j];
+            prm.stop  = vals[j+1];
+            prm.h     = h;
+            tasks.append(QtConcurrent::run(this,
+                                           &BlurFXFilter::mosaicMultithreaded,
+                                           prm
+                                          ));
         }
 
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
+
         // Update the progress bar in dialog.
-        progress = (int)(((double)h * 100.0) / Height);
+        progress = (int)(((double)h * 100.0) / orgImage->height());
 
         if (progress % 5 == 0)
         {
