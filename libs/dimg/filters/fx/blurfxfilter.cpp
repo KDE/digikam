@@ -831,6 +831,85 @@ void BlurFXFilter::shakeBlur(DImg* const orgImage, DImg* const destImage, int Di
     }
 }
 
+
+void BlurFXFilter::focusBlurMultithreaded(const Args& prm)
+{
+    int    nBlendFactor;
+    double lfRadius;
+    int    offset;
+
+    DColor colorOrgImage, colorBlurredImage;
+    int    alpha;
+    uchar* ptr = 0;
+
+    // get composer for default blending
+    DColorComposer* const composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
+
+    int Width       = prm.orgImage->width();
+    uchar* data     = prm.orgImage->bits();
+    bool sixteenBit = prm.orgImage->sixteenBit();
+    int bytesDepth  = prm.orgImage->bytesDepth();
+    uchar* pResBits = prm.destImage->bits();
+
+    int nw = 0;
+    int nh = prm.Y - prm.h;
+
+    for (uint w = prm.start; runningFlag() && (w < prm.stop); ++w)
+    {
+        nw = prm.X - w;
+
+        lfRadius = qSqrt(nh * nh + nw * nw);
+
+        if (sixteenBit)
+        {
+            nBlendFactor = CLAMP065535((int)(65535.0 * lfRadius / (double)prm.BlendRadius));
+        }
+        else
+        {
+            nBlendFactor = (uchar)CLAMP0255((int)(255.0 * lfRadius / (double)prm.BlendRadius));
+        }
+
+        // Read color values
+        offset = GetOffset(Width, w, prm.h, bytesDepth);
+        ptr    = pResBits + offset;
+        colorOrgImage.setColor(data + offset, sixteenBit);
+        colorBlurredImage.setColor(ptr, sixteenBit);
+
+        // Preserve alpha
+        alpha = colorOrgImage.alpha();
+
+        // In normal mode, the image is focused in the middle
+        // and less focused towards the border.
+        // In inversed mode, the image is more focused towards the edge
+        // and less focused in the middle.
+        // This is achieved by swapping src and dest while blending.
+        if (prm.bInversed)
+        {
+            // set blending alpha value as src alpha. Original value is stored above.
+            colorOrgImage.setAlpha(nBlendFactor);
+            // compose colors, writing to dest - colorBlurredImage
+            composer->compose(colorBlurredImage, colorOrgImage);
+            // restore alpha
+            colorBlurredImage.setAlpha(alpha);
+            // write color to destination
+            colorBlurredImage.setPixel(ptr);
+        }
+        else
+        {
+            // set blending alpha value as src alpha. Original value is stored above.
+            colorBlurredImage.setAlpha(nBlendFactor);
+            // compose colors, writing to dest - colorOrgImage
+            composer->compose(colorOrgImage, colorBlurredImage);
+            // restore alpha
+            colorOrgImage.setAlpha(alpha);
+            // write color to destination
+            colorOrgImage.setPixel(ptr);
+        }
+    }
+
+    delete composer;
+}
+
 /* Function to apply the focusBlur effect backported from ImageProcessing version 2
  *
  * data             => The image data in RGBA mode.
@@ -848,18 +927,11 @@ void BlurFXFilter::focusBlur(DImg* const orgImage, DImg* const destImage,
 {
     int progress;
 
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-    uchar* data     = orgImage->bits();
-    bool sixteenBit = orgImage->sixteenBit();
-    int bytesDepth  = orgImage->bytesDepth();
-    uchar* pResBits = destImage->bits();
-
     // We working on full image.
     int xMin = 0;
-    int xMax = Width;
+    int xMax = orgImage->width();
     int yMin = 0;
-    int yMax = Height;
+    int yMax = orgImage->height();
 
     // If we working in preview mode, else we using the preview area.
     if (pArea.isValid())
@@ -886,17 +958,17 @@ void BlurFXFilter::focusBlur(DImg* const orgImage, DImg* const destImage,
 
         // I am unsure about differences of 1 pixel
         destImage->bitBltImage(&areaImage, xMinBlur, yMinBlur);
-        destImage->bitBltImage(orgImage, 0, 0, Width, yMinBlur, 0, 0);
+        destImage->bitBltImage(orgImage, 0, 0, orgImage->width(), yMinBlur, 0, 0);
         destImage->bitBltImage(orgImage, 0, yMinBlur, xMinBlur, yMaxBlur - yMinBlur, 0, yMinBlur);
-        destImage->bitBltImage(orgImage, xMaxBlur + 1, yMinBlur, Width - xMaxBlur - 1, yMaxBlur - yMinBlur, yMaxBlur, yMinBlur);
-        destImage->bitBltImage(orgImage, 0, yMaxBlur + 1, Width, Height - yMaxBlur - 1, 0, yMaxBlur);
+        destImage->bitBltImage(orgImage, xMaxBlur + 1, yMinBlur, orgImage->width() - xMaxBlur - 1, yMaxBlur - yMinBlur, yMaxBlur, yMinBlur);
+        destImage->bitBltImage(orgImage, 0, yMaxBlur + 1, orgImage->width(), orgImage->height() - yMaxBlur - 1, 0, yMaxBlur);
 
         postProgress(80);
     }
     else
     {
         // copy bits for blurring
-        memcpy(pResBits, data, orgImage->numBytes());
+        memcpy(destImage->bits(), orgImage->bits(), orgImage->numBytes());
 
         // Gaussian blur using the BlurRadius parameter.
         BlurFilter(this, *orgImage, *destImage, 10, 80, BlurRadius);
@@ -904,75 +976,34 @@ void BlurFXFilter::focusBlur(DImg* const orgImage, DImg* const destImage,
 
     // Blending results.
 
-    int nBlendFactor;
-    double lfRadius;
-    int offset;
+    QList<uint> vals = multithreadedSteps(xMax, xMin);
+    QList <QFuture<void> > tasks;
 
-    DColor colorOrgImage, colorBlurredImage;
-    int alpha;
-    uchar* ptr = 0;
+    Args prm;
+    prm.orgImage    = orgImage;
+    prm.destImage   = destImage;
+    prm.X           = X;
+    prm.Y           = Y;
+    prm.BlendRadius = BlendRadius;
+    prm.bInversed   = bInversed;
 
-    // get composer for default blending
-    DColorComposer* const composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
-
-    int nh = 0, nw = 0;
+    // we have reached the main loop
 
     for (int h = yMin; runningFlag() && (h < yMax); ++h)
     {
-        nh = Y - h;
-
-        for (int w = xMin; runningFlag() && (w < xMax); ++w)
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
         {
-            nw = X - w;
-
-            lfRadius = qSqrt(nh * nh + nw * nw);
-
-            if (sixteenBit)
-            {
-                nBlendFactor = CLAMP065535((int)(65535.0 * lfRadius / (double)BlendRadius));
-            }
-            else
-            {
-                nBlendFactor = (uchar)CLAMP0255((int)(255.0 * lfRadius / (double)BlendRadius));
-            }
-
-            // Read color values
-            offset = GetOffset(Width, w, h, bytesDepth);
-            ptr    = pResBits + offset;
-            colorOrgImage.setColor(data + offset, sixteenBit);
-            colorBlurredImage.setColor(ptr, sixteenBit);
-
-            // Preserve alpha
-            alpha = colorOrgImage.alpha();
-
-            // In normal mode, the image is focused in the middle
-            // and less focused towards the border.
-            // In inversed mode, the image is more focused towards the edge
-            // and less focused in the middle.
-            // This is achieved by swapping src and dest while blending.
-            if (bInversed)
-            {
-                // set blending alpha value as src alpha. Original value is stored above.
-                colorOrgImage.setAlpha(nBlendFactor);
-                // compose colors, writing to dest - colorBlurredImage
-                composer->compose(colorBlurredImage, colorOrgImage);
-                // restore alpha
-                colorBlurredImage.setAlpha(alpha);
-                // write color to destination
-                colorBlurredImage.setPixel(ptr);
-            }
-            else
-            {
-                // set blending alpha value as src alpha. Original value is stored above.
-                colorBlurredImage.setAlpha(nBlendFactor);
-                // compose colors, writing to dest - colorOrgImage
-                composer->compose(colorOrgImage, colorBlurredImage);
-                // restore alpha
-                colorOrgImage.setAlpha(alpha);
-                // write color to destination
-                colorOrgImage.setPixel(ptr);
-            }
+            prm.start = vals[j];
+            prm.stop  = vals[j+1];
+            prm.h     = h;
+            tasks.append(QtConcurrent::run(this,
+                                           &BlurFXFilter::focusBlurMultithreaded,
+                                           prm
+                                          ));
         }
+
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
 
         // Update the progress bar in dialog.
         progress = (int)(80.0 + ((double)(h - yMin) * 20.0) / (yMax - yMin));
@@ -982,8 +1013,6 @@ void BlurFXFilter::focusBlur(DImg* const orgImage, DImg* const destImage,
             postProgress(progress);
         }
     }
-
-    delete composer;
 }
 
 /* Function to apply the SmartBlur effect

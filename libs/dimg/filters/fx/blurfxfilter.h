@@ -108,6 +108,9 @@ private:
         int    Y;
         int    Distance;
 
+        int    BlendRadius;
+        bool   bInversed;
+
         int    SizeW;
         int    SizeH;
     };
@@ -130,6 +133,7 @@ private:
 
     void focusBlur(DImg* const orgImage, DImg* const destImage, int X, int Y, int BlurRadius, int BlendRadius,
                    bool bInversed=false, const QRect& pArea=QRect());
+    void focusBlurMultithreaded(const Args& prm);
 
     void farBlur(DImg* const orgImage, DImg* const destImage, int Distance);
     void motionBlur(DImg* const orgImage, DImg* const destImage, int Distance, double Angle=0.0);
