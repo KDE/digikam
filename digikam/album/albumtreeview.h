@@ -99,10 +99,10 @@ public:
     AlbumFilterModel* albumFilterModel()     const;
 
     /// Enable expanding of tree items on single click on the item (default: off)
-    void setExpandOnSingleClick(bool doThat);
+    void setExpandOnSingleClick(const bool doThat);
 
     /// Expand an item when making it the new current item
-    void setExpandNewCurrentItem(bool doThat);
+    void setExpandNewCurrentItem(const bool doThat);
 
     /**
      * Sets whether to select an album on click via the album manager or not.
@@ -110,7 +110,7 @@ public:
      * @param selectOnClick if true, a click on an item automatically sets this
      *                      item as the current album in the album manager
      */
-    void setSelectAlbumOnClick(bool selectOnClick);
+    void setSelectAlbumOnClick(const bool selectOnClick);
 
     /**
      * Determines the global decision to show a popup menu or not. More detailed
@@ -119,7 +119,7 @@ public:
      *
      * @param enable if true, a context menu can be shown
      */
-    void setEnableContextMenu(bool enable);
+    void setEnableContextMenu(const bool enable);
 
     /**
      * Sets whether to select the album under the mouse cursor on a context menu
@@ -129,7 +129,7 @@ public:
      *
      * @param select true if a context menu request shall select the album
      */
-    void setSelectOnContextMenu(bool select);
+    void setSelectOnContextMenu(const bool select);
 
     /**
      * Set the context menu title and icon.
@@ -178,7 +178,7 @@ public:
      * Other treeview are self-contained and shall not change the current album.
      * Default: false
      */
-    void setAlbumManagerCurrentAlbum(bool setCurrentAlbum);
+    void setAlbumManagerCurrentAlbum(const bool setCurrentAlbum);
 
     /**
      * Add a context menu element which can add actions to the context

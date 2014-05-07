@@ -9,6 +9,7 @@
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2014 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,6 +26,10 @@
 
 #ifndef DATEFOLDERVIEW_H
 #define DATEFOLDERVIEW_H
+
+// Qt includes
+
+#include <QScopedPointer>
 
 // KDE includes
 
@@ -57,7 +62,7 @@ public:
 
     void setImageModel(ImageFilterModel* const model);
 
-    void setActive(bool val);
+    void setActive(const bool val);
 
     void gotoDate(const QDate& dt);
 
@@ -78,7 +83,7 @@ private Q_SLOTS:
 private:
 
     class Private;
-    Private* const d;
+    const QScopedPointer<Private> d;
 };
 
 } // namespace Digikam
