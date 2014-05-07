@@ -124,24 +124,15 @@ void EmbossFilter::filterImage()
 
     double Depth = m_depth / 10.0;
 
-    int    progress;
+    int progress;
 
-    uint  nbCore = QThreadPool::globalInstance()->maxThreadCount();
-    float step   = m_orgImage.width() / nbCore;
-
-    uint  vals[nbCore+1];
-
-    vals[0]      = 0;
-    vals[nbCore] = m_orgImage.width();
-
-    for (uint i = 1 ; i < nbCore ; ++i)
-        vals[i] = vals[i-1] + step;
+    QList<uint> vals = multithreadedSteps(m_orgImage.width());
 
     for (uint h = 0 ; runningFlag() && (h < m_orgImage.height()) ; ++h)
     {
         QList <QFuture<void> > tasks;
 
-        for (uint j = 0 ; runningFlag() && (j < nbCore) ; ++j)
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
         {
             tasks.append(QtConcurrent::run(this,
                                            &EmbossFilter::embossMultithreaded,

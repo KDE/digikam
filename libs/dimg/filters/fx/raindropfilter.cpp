@@ -213,16 +213,7 @@ void RainDropFilter::rainDropsImage(DImg* const orgImage, DImg* const destImage,
 
     // Randomize.
 
-    uint  nbCore = QThreadPool::globalInstance()->maxThreadCount();
-    float step   = 10000 / nbCore;
-
-    uint  vals[nbCore+1];
-
-    vals[0]      = 0;
-    vals[nbCore] = 10000;
-
-    for (uint i = 1 ; i < nbCore ; ++i)
-        vals[i] = vals[i-1] + step;
+    QList<uint> vals = multithreadedSteps(10000);
 
     Args prm;
     prm.orgImage    = orgImage;
@@ -237,7 +228,7 @@ void RainDropFilter::rainDropsImage(DImg* const orgImage, DImg* const destImage,
     {
         QList <QFuture<void> > tasks;
 
-        for (uint j = 0 ; runningFlag() && (j < nbCore) ; ++j)
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
         {
             prm.start        = vals[j];
             prm.stop         = vals[j+1];

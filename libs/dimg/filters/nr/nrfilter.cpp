@@ -376,16 +376,7 @@ void NRFilter::waveletDenoise(float* fimg[3], unsigned int width, unsigned int h
 
     QScopedArrayPointer<float> temp(new float[qMax(width, height)]);
 
-    uint  nbCore = QThreadPool::globalInstance()->maxThreadCount();
-    float step   = size / nbCore;
-    uint  vals[nbCore+1];
-
-    vals[0]      = 0;
-    vals[nbCore] = size;
-
-    for (uint i = 1 ; i < nbCore ; ++i)
-        vals[i] = vals[i-1] + step;
-
+    QList<uint> vals = multithreadedSteps(size);
     QList <QFuture<void> > tasks;
 
     Args prm;
@@ -431,7 +422,7 @@ void NRFilter::waveletDenoise(float* fimg[3], unsigned int width, unsigned int h
 
         // calculate stdevs for all intensities
 
-        for (uint j = 0 ; runningFlag() && (j < nbCore) ; ++j)
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
         {
             prm.start = vals[j];
             prm.stop  = vals[j+1];
@@ -454,7 +445,7 @@ void NRFilter::waveletDenoise(float* fimg[3], unsigned int width, unsigned int h
 
         tasks.clear();
 
-        for (uint j = 0 ; runningFlag() && (j < nbCore) ; ++j)
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
         {
             prm.start = vals[j];
             prm.stop  = vals[j+1];

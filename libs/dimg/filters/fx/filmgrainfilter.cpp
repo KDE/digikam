@@ -249,19 +249,10 @@ void FilmGrainFilter::filterImage()
 
     d->generator.seed(1); // noise will always be the same
 
-    uint  nbCore = QThreadPool::globalInstance()->maxThreadCount();
-    float step   = m_orgImage.width() / nbCore;
-    uint  vals[nbCore+1];
-
-    vals[0]      = 0;
-    vals[nbCore] = m_orgImage.width();
-
-    for (uint i = 1 ; i < nbCore ; ++i)
-        vals[i] = vals[i-1] + step;
-
+    QList<uint> vals = multithreadedSteps(m_orgImage.width());
     QList <QFuture<void> > tasks;
 
-    for (uint j = 0 ; runningFlag() && (j < nbCore) ; ++j)
+    for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
     {
         tasks.append(QtConcurrent::run(this,
                                        &FilmGrainFilter::filmgrainMultithreaded,

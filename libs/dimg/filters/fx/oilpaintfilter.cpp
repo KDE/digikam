@@ -141,19 +141,10 @@ void OilPaintFilter::oilPaintImageMultithreaded(uint start, uint stop)
 
 void OilPaintFilter::filterImage()
 {
-    uint  nbCore = QThreadPool::globalInstance()->maxThreadCount();
-    float step   = m_orgImage.height() / nbCore;
-    uint  vals[nbCore+1];
-
-    vals[0]      = 0;
-    vals[nbCore] = m_orgImage.height();
-
-    for (uint i = 1 ; i < nbCore ; ++i)
-        vals[i] = vals[i-1] + step;
-
+    QList<uint> vals = multithreadedSteps(m_orgImage.height());
     QList <QFuture<void> > tasks;
 
-    for (uint j = 0 ; runningFlag() && (j < nbCore) ; ++j)
+    for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
     {
         tasks.append(QtConcurrent::run(this,
                                        &OilPaintFilter::oilPaintImageMultithreaded,
