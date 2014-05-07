@@ -97,7 +97,7 @@ public:
 
 private:
 
-    struct ArgsZoomBlur
+    struct Args1
     {
         uint   start;
         uint   stop;
@@ -120,9 +120,10 @@ private:
 
     // Backported from ImageProcessing version 2
     void zoomBlur(DImg* const orgImage, DImg* const destImage, int X, int Y, int Distance, const QRect& pArea=QRect());
-    void zoomBlurMultithreaded(const ArgsZoomBlur& prm);
+    void zoomBlurMultithreaded(const Args1& prm);
 
     void radialBlur(DImg* const orgImage, DImg* const destImage, int X, int Y, int Distance, const QRect& pArea=QRect());
+    void radialBlurMultithreaded(const Args1& prm);
 
     void focusBlur(DImg* const orgImage, DImg* const destImage, int X, int Y, int BlurRadius, int BlendRadius,
                    bool bInversed=false, const QRect& pArea=QRect());
