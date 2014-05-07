@@ -336,34 +336,52 @@ bool AlbumFilterModel::filterAcceptsRow(int source_row, const QModelIndex& sourc
 
 bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& right) const
 {
-    PAlbum* leftAlbum = AlbumManager::instance()->findPAlbum(albumForIndex(left)->id());
-    PAlbum* rightAlbum = AlbumManager::instance()->findPAlbum(albumForIndex(right)->id());
+    Album* leftAlbum = albumForIndex(left);
+    Album* rightAlbum = albumForIndex(right);
+    QVariant valLeft  = left.data(sortRole());
+    QVariant valRight = right.data(sortRole());
+
     AlbumSettings::AlbumSortOrder sortRole = AlbumSettings::instance()->getAlbumSortOrder();
 
     if (leftAlbum && rightAlbum)
     {
-        switch (sortRole)
+        if(leftAlbum->type() == 0 && rightAlbum->type()== 0)//checking for PAlbums
         {
-            case AlbumSettings::ByFolder:
+            switch (sortRole)
+            {
+                case AlbumSettings::ByFolder:
+                    switch (AlbumSettings::instance()->getStringComparisonType())
+                    {
+                        case AlbumSettings::Natural:
+                            return KStringHandler::naturalCompare(leftAlbum->title(), rightAlbum->title(), sortCaseSensitivity()) < 0;
+
+                        case AlbumSettings::Normal:
+                        default:
+                            return QString::compare(leftAlbum->title(), rightAlbum->title(), sortCaseSensitivity()) < 0;
+                    }
+                case AlbumSettings::ByDate:
+                    return compareByOrder(static_cast<PAlbum*>(leftAlbum)->date(),static_cast<PAlbum*>(rightAlbum)->date(),Qt::AscendingOrder) < 0;
+                default:
+                    return KStringHandler::naturalCompare(static_cast<PAlbum*>(leftAlbum)->category(),static_cast<PAlbum*>(rightAlbum)->category()) < 0;
+            }
+        }
+        else
+        {
+            if((valLeft.type() == QVariant::String) && (valRight.type() == QVariant::String))
+            {
                 switch (AlbumSettings::instance()->getStringComparisonType())
                 {
                     case AlbumSettings::Natural:
-                        return KStringHandler::naturalCompare(leftAlbum->title(), rightAlbum->title(), sortCaseSensitivity()) < 0;
-
+                        return KStringHandler::naturalCompare(valLeft.toString(), valRight.toString(), sortCaseSensitivity()) < 0;
                     case AlbumSettings::Normal:
                     default:
-                        return QString::compare(leftAlbum->title(), rightAlbum->title(), sortCaseSensitivity()) < 0;
+                        return QString::compare(valLeft.toString(), valRight.toString(), sortCaseSensitivity()) < 0;
                 }
-            case AlbumSettings::ByDate:
-                return compareByOrder(leftAlbum->date(),rightAlbum->date(),Qt::AscendingOrder) < 0;
-            default:
-                return KStringHandler::naturalCompare(leftAlbum->category(),rightAlbum->category()) < 0;
+            }
         }
     }
-    else
-    {
-        return QSortFilterProxyModel::lessThan(left, right);
-    }
+
+    return QSortFilterProxyModel::lessThan(left, right);
 }
 
 void AlbumFilterModel::slotAlbumRenamed(Album* album)
