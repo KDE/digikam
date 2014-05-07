@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : Blur FX threaded image filter.
  *
- * Copyright 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -179,37 +179,6 @@ private:
         bool bIsWOk = ((X < 0) ? false : (X >= Width ) ? false : true);
         bool bIsHOk = ((Y < 0) ? false : (Y >= Height) ? false : true);
         return (bIsWOk && bIsHOk);
-    };
-
-    inline uchar LimitValues8(int ColorValue)
-    {
-        if (ColorValue > 255)
-        {
-            ColorValue = 255;
-        }
-
-        if (ColorValue < 0)
-        {
-            ColorValue = 0;
-        }
-
-        return ((uchar) ColorValue);
-    };
-
-
-    inline int LimitValues16(int ColorValue)
-    {
-        if (ColorValue > 65535)
-        {
-            ColorValue = 65535;
-        }
-
-        if (ColorValue < 0)
-        {
-            ColorValue = 0;
-        }
-
-        return ColorValue;
     };
 
     inline int GetOffset(int Width, int X, int Y, int bytesDepth)

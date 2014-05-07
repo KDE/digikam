@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : Blur FX threaded image filter.
  *
- * Copyright 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Original Blur algorithms copyrighted 2004 by
@@ -492,11 +492,11 @@ void BlurFXFilter::focusBlur(DImg* const orgImage, DImg* const destImage,
 
             if (sixteenBit)
             {
-                nBlendFactor = LimitValues16((int)(65535.0 * lfRadius / (double)BlendRadius));
+                nBlendFactor = CLAMP065535((int)(65535.0 * lfRadius / (double)BlendRadius));
             }
             else
             {
-                nBlendFactor = LimitValues8((int)(255.0 * lfRadius / (double)BlendRadius));
+                nBlendFactor = (uchar)CLAMP0255((int)(255.0 * lfRadius / (double)BlendRadius));
             }
 
             // Read color values
@@ -1489,15 +1489,15 @@ void BlurFXFilter::MakeConvolution(DImg* const orgImage, DImg* const destImage, 
             // now, we have to calc the arithmetic average
             if (sixteenBit)
             {
-                color.setRed(LimitValues16(nSumR   / nCount));
-                color.setGreen(LimitValues16(nSumG / nCount));
-                color.setBlue(LimitValues16(nSumB  / nCount));
+                color.setRed(CLAMP065535(nSumR   / nCount));
+                color.setGreen(CLAMP065535(nSumG / nCount));
+                color.setBlue(CLAMP065535(nSumB  / nCount));
             }
             else
             {
-                color.setRed(LimitValues8(nSumR   / nCount));
-                color.setGreen(LimitValues8(nSumG / nCount));
-                color.setBlue(LimitValues8(nSumB  / nCount));
+                color.setRed((uchar)CLAMP0255(nSumR   / nCount));
+                color.setGreen((uchar)CLAMP0255(nSumG / nCount));
+                color.setBlue((uchar)CLAMP0255(nSumB  / nCount));
             }
 
             // write color to blur bits
@@ -1554,15 +1554,15 @@ void BlurFXFilter::MakeConvolution(DImg* const orgImage, DImg* const destImage, 
             // now, we have to calc the arithmetic average
             if (sixteenBit)
             {
-                color.setRed(LimitValues16(nSumR   / nCount));
-                color.setGreen(LimitValues16(nSumG / nCount));
-                color.setBlue(LimitValues16(nSumB  / nCount));
+                color.setRed(CLAMP065535(nSumR   / nCount));
+                color.setGreen(CLAMP065535(nSumG / nCount));
+                color.setBlue(CLAMP065535(nSumB  / nCount));
             }
             else
             {
-                color.setRed(LimitValues8(nSumR   / nCount));
-                color.setGreen(LimitValues8(nSumG / nCount));
-                color.setBlue(LimitValues8(nSumB  / nCount));
+                color.setRed((uchar)CLAMP0255(nSumR   / nCount));
+                color.setGreen((uchar)CLAMP0255(nSumG / nCount));
+                color.setBlue((uchar)CLAMP0255(nSumB  / nCount));
             }
 
             // write color to destination
