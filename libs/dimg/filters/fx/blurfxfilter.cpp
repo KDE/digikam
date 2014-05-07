@@ -37,6 +37,7 @@
 // Qt includes
 
 #include <QDateTime>
+#include <QtConcurrentRun>
 #include <qmath.h>
 
 // Local includes
@@ -139,6 +140,78 @@ void BlurFXFilter::filterImage()
     }
 }
 
+void BlurFXFilter::zoomBlurMultithreaded(const ArgsZoomBlur& prm)
+{
+    int nh, nw;
+    int sumR, sumG, sumB, nCount=0;
+    double lfRadius, lfNewRadius, lfAngle;
+
+    DColor color;
+    int offset;
+
+    int Width       = prm.orgImage->width();
+    int Height      = prm.orgImage->height();
+    uchar* data     = prm.orgImage->bits();
+    bool sixteenBit = prm.orgImage->sixteenBit();
+    int bytesDepth  = prm.orgImage->bytesDepth();
+    uchar* pResBits = prm.destImage->bits();
+
+    double lfRadMax = qSqrt(Height * Height + Width * Width);
+
+    for (uint w = prm.start; runningFlag() && (w < prm.stop); ++w)
+    {
+        // ...we enter this loop to sum the bits
+
+        // we initialize the variables
+        sumR = sumG = sumB = nCount = 0;
+
+        nw = prm.X - w;
+        nh = prm.Y - prm.h;
+
+        lfRadius    = qSqrt(nw * nw + nh * nh);
+        lfAngle     = qAtan2((double)nh, (double)nw);
+        lfNewRadius = (lfRadius * prm.Distance) / lfRadMax;
+
+        for (int r = 0; runningFlag() && (r <= lfNewRadius); ++r)
+        {
+            // we need to calc the positions
+            nw = (int)(prm.X - (lfRadius - r) * cos(lfAngle));
+            nh = (int)(prm.Y - (lfRadius - r) * sin(lfAngle));
+
+            if (IsInside(Width, Height, nw, nh))
+            {
+                // read color
+                offset = GetOffset(Width, nw, nh, bytesDepth);
+                color.setColor(data + offset, sixteenBit);
+
+                // we sum the bits
+                sumR += color.red();
+                sumG += color.green();
+                sumB += color.blue();
+                ++nCount;
+            }
+        }
+
+        if (nCount == 0)
+        {
+            nCount = 1;
+        }
+
+        // calculate pointer
+        offset = GetOffset(Width, w, prm.h, bytesDepth);
+        // read color to preserve alpha
+        color.setColor(data + offset, sixteenBit);
+
+        // now, we have to calc the arithmetic average
+        color.setRed(sumR   / nCount);
+        color.setGreen(sumG / nCount);
+        color.setBlue(sumB  / nCount);
+
+        // write color to destination
+        color.setPixel(pResBits + offset);
+    }
+}
+
 /* Function to apply the ZoomBlur effect backported from ImageProcessing version 2
  *
  * data             => The image data in RGBA mode.
@@ -164,18 +237,11 @@ void BlurFXFilter::zoomBlur(DImg* const orgImage, DImg* const destImage, int X, 
 
     int progress;
 
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-    uchar* data     = orgImage->bits();
-    bool sixteenBit = orgImage->sixteenBit();
-    int bytesDepth  = orgImage->bytesDepth();
-    uchar* pResBits = destImage->bits();
-
     // We working on full image.
     int xMin = 0;
-    int xMax = Width;
+    int xMax = orgImage->width();
     int yMin = 0;
-    int yMax = Height;
+    int yMax = orgImage->height();
 
     // If we working in preview mode, else we using the preview area.
     if (pArea.isValid())
@@ -186,73 +252,32 @@ void BlurFXFilter::zoomBlur(DImg* const orgImage, DImg* const destImage, int X, 
         yMax = pArea.y() + pArea.height();
     }
 
-    int h, w, nh, nw, r;
-    int sumR, sumG, sumB, nCount;
-    double lfRadius, lfNewRadius, lfRadMax, lfAngle;
+    QList<uint> vals = multithreadedSteps(xMax, xMin);
+    QList <QFuture<void> > tasks;
 
-    DColor color;
-    int offset;
-
-    lfRadMax = qSqrt(Height * Height + Width * Width);
-
-    // number of added pixels
-    nCount = 0;
+    ArgsZoomBlur prm;
+    prm.orgImage  = orgImage;
+    prm.destImage = destImage;
+    prm.X         = X;
+    prm.Y         = Y;
+    prm.Distance  = Distance;
 
     // we have reached the main loop
-    for (h = yMin; runningFlag() && (h < yMax); ++h)
+    for (int h = yMin; runningFlag() && (h < yMax); ++h)
     {
-        for (w = xMin; runningFlag() && (w < xMax); ++w)
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
         {
-            // ...we enter this loop to sum the bits
-
-            // we initialize the variables
-            sumR = sumG = sumB = nCount = 0;
-
-            nw = X - w;
-            nh = Y - h;
-
-            lfRadius    = qSqrt(nw * nw + nh * nh);
-            lfAngle     = qAtan2((double)nh, (double)nw);
-            lfNewRadius = (lfRadius * Distance) / lfRadMax;
-
-            for (r = 0; runningFlag() && (r <= lfNewRadius); ++r)
-            {
-                // we need to calc the positions
-                nw = (int)(X - (lfRadius - r) * cos(lfAngle));
-                nh = (int)(Y - (lfRadius - r) * sin(lfAngle));
-
-                if (IsInside(Width, Height, nw, nh))
-                {
-                    // read color
-                    offset = GetOffset(Width, nw, nh, bytesDepth);
-                    color.setColor(data + offset, sixteenBit);
-
-                    // we sum the bits
-                    sumR += color.red();
-                    sumG += color.green();
-                    sumB += color.blue();
-                    ++nCount;
-                }
-            }
-
-            if (nCount == 0)
-            {
-                nCount = 1;
-            }
-
-            // calculate pointer
-            offset = GetOffset(Width, w, h, bytesDepth);
-            // read color to preserve alpha
-            color.setColor(data + offset, sixteenBit);
-
-            // now, we have to calc the arithmetic average
-            color.setRed(sumR   / nCount);
-            color.setGreen(sumG / nCount);
-            color.setBlue(sumB  / nCount);
-
-            // write color to destination
-            color.setPixel(pResBits + offset);
+            prm.start = vals[j];
+            prm.stop  = vals[j+1];
+            prm.h     = h;
+            tasks.append(QtConcurrent::run(this,
+                                           &BlurFXFilter::zoomBlurMultithreaded,
+                                           prm
+                                          ));
         }
+
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
 
         // Update the progress bar in dialog.
         progress = (int)(((double)(h - yMin) * 100.0) / (yMax - yMin));
