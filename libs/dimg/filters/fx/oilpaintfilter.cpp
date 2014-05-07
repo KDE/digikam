@@ -99,10 +99,15 @@ OilPaintFilter::~OilPaintFilter()
  */
 void OilPaintFilter::oilPaintImageMultithreaded(uint start, uint stop)
 {
-    uchar* intensityCount = new uchar[d->smoothness + 1];
-    uint*  averageColorR  = new uint[d->smoothness + 1];
-    uint*  averageColorG  = new uint[d->smoothness + 1];
-    uint*  averageColorB  = new uint[d->smoothness + 1];
+    QScopedPointer<uchar> intensityCount(new uchar[d->smoothness + 1]);
+    QScopedPointer<uint>  averageColorR(new  uint[d->smoothness + 1]);
+    QScopedPointer<uint>  averageColorG(new  uint[d->smoothness + 1]);
+    QScopedPointer<uint>  averageColorB(new  uint[d->smoothness + 1]);
+
+    memset(intensityCount.data(), 0, sizeof(uchar)*(d->smoothness + 1));
+    memset(averageColorR.data(),  0, sizeof(uint)*(d->smoothness + 1));
+    memset(averageColorG.data(),  0, sizeof(uint)*(d->smoothness + 1));
+    memset(averageColorB.data(),  0, sizeof(uint)*(d->smoothness + 1));
 
     int    oldProgress=0, progress=0;
     DColor mostFrequentColor;
@@ -116,7 +121,7 @@ void OilPaintFilter::oilPaintImageMultithreaded(uint start, uint stop)
         for (uint w2 = 0; runningFlag() && (w2 < m_orgImage.width()); ++w2)
         {
             mostFrequentColor = MostFrequentColor(m_orgImage, w2, h2, d->brushSize, d->smoothness,
-                                                  intensityCount, averageColorR, averageColorG, averageColorB);
+                                                  intensityCount.data(), averageColorR.data(), averageColorG.data(), averageColorB.data());
             dptr              = dest + w2 * m_orgImage.bytesDepth() + (m_orgImage.width() * h2 * m_orgImage.bytesDepth());
             mostFrequentColor.setPixel(dptr);
         }
@@ -132,11 +137,6 @@ void OilPaintFilter::oilPaintImageMultithreaded(uint start, uint stop)
             d->lock.unlock();
         }
     }
-
-    delete [] intensityCount;
-    delete [] averageColorR;
-    delete [] averageColorG;
-    delete [] averageColorB;
 }
 
 void OilPaintFilter::filterImage()
