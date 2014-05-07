@@ -214,7 +214,7 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
             d->lock.unlock();
         }
     }
-    
+
     delete [] as;
     delete [] rs;
     delete [] gs;
