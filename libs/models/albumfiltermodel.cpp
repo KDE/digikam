@@ -342,15 +342,16 @@ bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& righ
     QVariant valRight = right.data(sortRole());
 
     AlbumSettings::AlbumSortOrder sortRole = AlbumSettings::instance()->getAlbumSortOrder();
+    AlbumSettings::StringComparisonType strComparisonType = AlbumSettings::instance()->getStringComparisonType();
 
     if (leftAlbum && rightAlbum)
     {
-        if(leftAlbum->type() == 0 && rightAlbum->type()== 0)//checking for PAlbums
+        if(leftAlbum->type() == Album::PHYSICAL && rightAlbum->type()== Album::PHYSICAL)
         {
             switch (sortRole)
             {
                 case AlbumSettings::ByFolder:
-                    switch (AlbumSettings::instance()->getStringComparisonType())
+                    switch (strComparisonType)
                     {
                         case AlbumSettings::Natural:
                             return KStringHandler::naturalCompare(leftAlbum->title(), rightAlbum->title(), sortCaseSensitivity()) < 0;
@@ -369,7 +370,7 @@ bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& righ
         {
             if((valLeft.type() == QVariant::String) && (valRight.type() == QVariant::String))
             {
-                switch (AlbumSettings::instance()->getStringComparisonType())
+                switch (strComparisonType)
                 {
                     case AlbumSettings::Natural:
                         return KStringHandler::naturalCompare(valLeft.toString(), valRight.toString(), sortCaseSensitivity()) < 0;
