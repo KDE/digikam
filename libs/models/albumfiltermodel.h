@@ -101,6 +101,7 @@ public:
     Album*      albumForIndex(const QModelIndex& index) const;
     QModelIndex indexForAlbum(Album* album) const;
     QModelIndex rootAlbumIndex() const;
+    QVariant    dataForCurrentSortRole(const QModelIndex& index) const;
 
     /**
      * Returns the settings currently used for filtering.
