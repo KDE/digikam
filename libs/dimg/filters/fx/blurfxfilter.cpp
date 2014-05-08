@@ -860,6 +860,8 @@ void BlurFXFilter::shakeBlur(DImg* const orgImage, DImg* const destImage, int Di
         }
     }
 
+    tasks.clear();
+
     for (uint h = 0; runningFlag() && (h < orgImage->height()); ++h)
     {
         for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
