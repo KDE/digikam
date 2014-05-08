@@ -190,6 +190,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 161 ==> 333386 - Tags manager: '' shown in dialog box when removing a tag.
 162 ==> 333388 - Tag manager: Tags removed from images without confirmation dialog.
 163 ==> 333385 - Selecting a month in the tree view shows a different month in calendar and icon view.
-164 ==> 
-
-
+164 ==> 329697 - digiKam crash when browsing albums.
+165 ==> 
