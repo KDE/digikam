@@ -108,6 +108,10 @@ private:
         int    Y;
         int    Distance;
 
+        int    nCount;
+        int*   lpXArray;
+        int*   lpYArray;
+
         int    BlendRadius;
         bool   bInversed;
 
@@ -145,7 +149,10 @@ private:
     void focusBlurMultithreaded(const Args& prm);
 
     void farBlur(DImg* const orgImage, DImg* const destImage, int Distance);
+
     void motionBlur(DImg* const orgImage, DImg* const destImage, int Distance, double Angle=0.0);
+    void motionBlurMultithreaded(const Args& prm);
+
     void smartBlur(DImg* const orgImage, DImg* const destImage, int Radius, int Strength);
 
     void mosaic(DImg* const orgImage, DImg* const destImage, int SizeW, int SizeH);

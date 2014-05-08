@@ -504,6 +504,60 @@ void BlurFXFilter::farBlur(DImg* const orgImage, DImg* const destImage, int Dist
     MakeConvolution(orgImage, destImage, Distance, nKern.data());
 }
 
+void BlurFXFilter::motionBlurMultithreaded(const Args& prm)
+{
+    int Width       = prm.orgImage->width();
+    int Height      = prm.orgImage->height();
+    uchar* data     = prm.orgImage->bits();
+    bool sixteenBit = prm.orgImage->sixteenBit();
+    int bytesDepth  = prm.orgImage->bytesDepth();
+    uchar* pResBits = prm.destImage->bits();
+    int nCount      = prm.nCount;
+
+    DColor color;
+    int offset, sumR, sumG, sumB, nw, nh;
+
+    for (uint w = prm.start; runningFlag() && (w < prm.stop); ++w)
+    {
+        // we initialize the variables
+        sumR = sumG = sumB = 0;
+
+        // ...we enter this loop to sum the bits
+        for (int a = -prm.Distance; runningFlag() && (a <= prm.Distance); ++a)
+        {
+            // we need to calc the positions
+            nw = w     + prm.lpXArray[a + prm.Distance];
+            nh = prm.h + prm.lpYArray[a + prm.Distance];
+
+            offset = GetOffsetAdjusted(Width, Height, nw, nh, bytesDepth);
+            color.setColor(data + offset, sixteenBit);
+
+            // we sum the bits
+            sumR += color.red();
+            sumG += color.green();
+            sumB += color.blue();
+        }
+
+        if (nCount == 0)
+        {
+            nCount = 1;
+        }
+
+        // calculate pointer
+        offset = GetOffset(Width, w, prm.h, bytesDepth);
+        // read color to preserve alpha
+        color.setColor(data + offset, sixteenBit);
+
+        // now, we have to calc the arithmetic average
+        color.setRed(sumR   / nCount);
+        color.setGreen(sumG / nCount);
+        color.setBlue(sumB  / nCount);
+
+        // write color to destination
+        color.setPixel(pResBits + offset);
+    }
+}
+
 /* Function to apply the motionBlur effect backported from ImageProcessing version 2
  *
  * data             => The image data in RGBA mode.
@@ -526,31 +580,18 @@ void BlurFXFilter::motionBlur(DImg* const orgImage, DImg* const destImage, int D
 
     int progress;
 
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-    uchar* data     = orgImage->bits();
-    bool sixteenBit = orgImage->sixteenBit();
-    int bytesDepth  = orgImage->bytesDepth();
-    uchar* pResBits = destImage->bits();
-
-    DColor color;
-    int offset;
-
     // we try to avoid division by 0 (zero)
     if (Angle == 0.0)
     {
         Angle = 360.0;
     }
 
-    int sumR, sumG, sumB, nCount, nw, nh;
-    double nAngX, nAngY;
-
     // we initialize cos and sin for a best performance
-    nAngX = cos((2.0 * M_PI) / (360.0 / Angle));
-    nAngY = sin((2.0 * M_PI) / (360.0 / Angle));
+    double nAngX = cos((2.0 * M_PI) / (360.0 / Angle));
+    double nAngY = sin((2.0 * M_PI) / (360.0 / Angle));
 
     // total of bits to be taken is given by this formula
-    nCount = Distance * 2 + 1;
+    int nCount = Distance * 2 + 1;
 
     // we will alloc size and calc the possible results
     QScopedArrayPointer<int> lpXArray(new int[nCount]);
@@ -562,52 +603,37 @@ void BlurFXFilter::motionBlur(DImg* const orgImage, DImg* const destImage, int D
         lpYArray[i] = lround((double)(i - Distance) * nAngY);
     }
 
+    QList<uint> vals = multithreadedSteps(orgImage->width());
+    QList <QFuture<void> > tasks;
+
+    Args prm;
+    prm.orgImage  = orgImage;
+    prm.destImage = destImage;
+    prm.Distance  = Distance;
+    prm.nCount    = nCount;
+    prm.lpXArray  = lpXArray.data();
+    prm.lpYArray  = lpYArray.data();
+
     // we have reached the main loop
 
-    for (int h = 0; runningFlag() && (h < Height); ++h)
+    for (uint h = 0; runningFlag() && (h < orgImage->height()); ++h)
     {
-        for (int w = 0; runningFlag() && (w < Width); ++w)
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
         {
-            // we initialize the variables
-            sumR = sumG = sumB = 0;
-
-            // ...we enter this loop to sum the bits
-            for (int a = -Distance; runningFlag() && (a <= Distance); ++a)
-            {
-                // we need to calc the positions
-                nw = w + lpXArray[a + Distance];
-                nh = h + lpYArray[a + Distance];
-
-                offset = GetOffsetAdjusted(Width, Height, nw, nh, bytesDepth);
-                color.setColor(data + offset, sixteenBit);
-
-                // we sum the bits
-                sumR += color.red();
-                sumG += color.green();
-                sumB += color.blue();
-            }
-
-            if (nCount == 0)
-            {
-                nCount = 1;
-            }
-
-            // calculate pointer
-            offset = GetOffset(Width, w, h, bytesDepth);
-            // read color to preserve alpha
-            color.setColor(data + offset, sixteenBit);
-
-            // now, we have to calc the arithmetic average
-            color.setRed(sumR   / nCount);
-            color.setGreen(sumG / nCount);
-            color.setBlue(sumB  / nCount);
-
-            // write color to destination
-            color.setPixel(pResBits + offset);
+            prm.start = vals[j];
+            prm.stop  = vals[j+1];
+            prm.h     = h;
+            tasks.append(QtConcurrent::run(this,
+                                           &BlurFXFilter::motionBlurMultithreaded,
+                                           prm
+                                          ));
         }
 
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
+
         // Update the progress bar in dialog.
-        progress = (int)(((double)h * 100.0) / Height);
+        progress = (int)(((double)h * 100.0) / orgImage->height());
 
         if (progress % 5 == 0)
         {
