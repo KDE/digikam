@@ -252,7 +252,7 @@ void BlurFXFilter::zoomBlur(DImg* const orgImage, DImg* const destImage, int X, 
         yMax = pArea.y() + pArea.height();
     }
 
-    QList<uint> vals = multithreadedSteps(xMax, xMin);
+    QList<int> vals = multithreadedSteps(xMax, xMin);
     QList <QFuture<void> > tasks;
 
     Args prm;
@@ -408,7 +408,7 @@ void BlurFXFilter::radialBlur(DImg* const orgImage, DImg* const destImage, int X
         yMax = pArea.y() + pArea.height();
     }
 
-    QList<uint> vals = multithreadedSteps(xMax, xMin);
+    QList<int> vals = multithreadedSteps(xMax, xMin);
     QList <QFuture<void> > tasks;
 
     Args prm;
@@ -603,7 +603,7 @@ void BlurFXFilter::motionBlur(DImg* const orgImage, DImg* const destImage, int D
         lpYArray[i] = lround((double)(i - Distance) * nAngY);
     }
 
-    QList<uint> vals = multithreadedSteps(orgImage->width());
+    QList<int> vals = multithreadedSteps(orgImage->width());
     QList <QFuture<void> > tasks;
 
     Args prm;
@@ -747,7 +747,7 @@ void BlurFXFilter::softenerBlur(DImg* const orgImage, DImg* const destImage)
 {
     int progress;
 
-    QList<uint> vals = multithreadedSteps(orgImage->width());
+    QList<int> vals = multithreadedSteps(orgImage->width());
     QList <QFuture<void> > tasks;
 
     Args prm;
@@ -873,7 +873,7 @@ void BlurFXFilter::shakeBlur(DImg* const orgImage, DImg* const destImage, int Di
     QScopedArrayPointer<uchar> layer3(new uchar[numBytes]);
     QScopedArrayPointer<uchar> layer4(new uchar[numBytes]);
 
-    QList<uint> vals = multithreadedSteps(orgImage->width());
+    QList<int> vals = multithreadedSteps(orgImage->width());
     QList <QFuture<void> > tasks;
 
     Args prm;
@@ -1084,7 +1084,7 @@ void BlurFXFilter::focusBlur(DImg* const orgImage, DImg* const destImage,
 
     // Blending results.
 
-    QList<uint> vals = multithreadedSteps(xMax, xMin);
+    QList<int> vals = multithreadedSteps(xMax, xMin);
     QList <QFuture<void> > tasks;
 
     Args prm;
@@ -1299,8 +1299,8 @@ void BlurFXFilter::smartBlur(DImg* const orgImage, DImg* const destImage, int Ra
 
     memcpy(pBlur.data(), orgImage->bits(), orgImage->numBytes());
 
-    QList<uint> valsw = multithreadedSteps(orgImage->width());
-    QList<uint> valsh = multithreadedSteps(orgImage->height());
+    QList<int> valsw = multithreadedSteps(orgImage->width());
+    QList<int> valsh = multithreadedSteps(orgImage->height());
     QList <QFuture<void> > tasks;
 
     Args prm;
@@ -1366,6 +1366,9 @@ void BlurFXFilter::smartBlur(DImg* const orgImage, DImg* const destImage, int Ra
         }
     }
 }
+
+// NOTE: there is no gain to parallelize this method due to non re-entrancy of RandomColor()
+//       (dixit RandomNumberGenerator which non re-entrant - Boost lib problem).
 
 /* Function to apply the frostGlass effect
  *
@@ -1506,7 +1509,7 @@ void BlurFXFilter::mosaic(DImg* const orgImage, DImg* const destImage, int SizeW
         return;
     }
 
-    QList<uint> vals = multithreadedSteps(orgImage->width());
+    QList<int> vals = multithreadedSteps(orgImage->width());
     QList <QFuture<void> > tasks;
 
     Args prm;
@@ -1844,8 +1847,8 @@ void BlurFXFilter::MakeConvolution(DImg* const orgImage, DImg* const destImage, 
         }
     }
 
-    QList<uint> valsw = multithreadedSteps(orgImage->width());
-    QList<uint> valsh = multithreadedSteps(orgImage->height());
+    QList<int> valsw = multithreadedSteps(orgImage->width());
+    QList<int> valsh = multithreadedSteps(orgImage->height());
     QList <QFuture<void> > tasks;
 
     Args prm;

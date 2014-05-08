@@ -229,7 +229,7 @@ void BlurFilter::filterImage()
         return;
     }
 
-    QList<uint> vals = multithreadedSteps(m_orgImage.height());
+    QList<int> vals = multithreadedSteps(m_orgImage.height());
     QList <QFuture<void> > tasks;
 
     for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)

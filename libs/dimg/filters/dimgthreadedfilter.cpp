@@ -273,11 +273,11 @@ QString DImgThreadedFilter::readParametersError(const FilterAction&) const
     return QString();
 }
 
-QList<uint> DImgThreadedFilter::multithreadedSteps(uint stop, uint start) const
+QList<int> DImgThreadedFilter::multithreadedSteps(int stop, int start) const
 {
     uint  nbCore = QThreadPool::globalInstance()->maxThreadCount();
     float step   = (stop - start) / nbCore;
-    QList<uint> vals;
+    QList<int> vals;
 
     vals << start;
 

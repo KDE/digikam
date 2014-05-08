@@ -162,7 +162,7 @@ void UnsharpMaskFilter::filterImage()
 
     BlurFilter(this, m_orgImage, m_destImage, 0, 10, (int)(m_radius));
 
-    QList<uint> vals = multithreadedSteps(m_destImage.width());
+    QList<int> vals = multithreadedSteps(m_destImage.width());
 
     for (uint y = 0 ; runningFlag() && (y < m_destImage.height()) ; ++y)
     {

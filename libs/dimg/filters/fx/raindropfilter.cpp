@@ -213,7 +213,7 @@ void RainDropFilter::rainDropsImage(DImg* const orgImage, DImg* const destImage,
 
     // Randomize.
 
-    QList<uint> vals = multithreadedSteps(10000);
+    QList<int> vals = multithreadedSteps(10000);
 
     Args prm;
     prm.orgImage    = orgImage;

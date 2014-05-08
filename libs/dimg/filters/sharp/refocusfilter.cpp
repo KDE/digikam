@@ -315,7 +315,7 @@ void RefocusFilter::convolveImage(const Args& prm)
 {
     int progress;
 
-    QList<uint> vals = multithreadedSteps(prm.width);
+    QList<int> vals = multithreadedSteps(prm.width);
 
     for (int y1 = 0; runningFlag() && (y1 < prm.height); ++y1)
     {

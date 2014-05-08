@@ -249,7 +249,7 @@ void FilmGrainFilter::filterImage()
 
     d->generator.seed(1); // noise will always be the same
 
-    QList<uint> vals = multithreadedSteps(m_orgImage.width());
+    QList<int> vals = multithreadedSteps(m_orgImage.width());
     QList <QFuture<void> > tasks;
 
     for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)

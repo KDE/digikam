@@ -321,7 +321,7 @@ void LocalContrastFilter::processRgbImage(float* const img, int sizex, int sizey
 
     postProgress(40);
 
-    QList<uint> vals = multithreadedSteps(size);
+    QList<int> vals = multithreadedSteps(size);
     int         pos  = 0;
 
     for (int nstage = 0 ; runningFlag() && (nstage < TONEMAPPING_MAX_STAGES) ; ++nstage)
@@ -463,8 +463,8 @@ void LocalContrastFilter::inplaceBlur(float* const data, int sizex, int sizey, f
     prm.blur            = blur;
     prm.denormal_remove = (float)(1e-15);
 
-    QList<uint> valsx = multithreadedSteps(prm.sizex);
-    QList<uint> valsy = multithreadedSteps(prm.sizey);
+    QList<int> valsx = multithreadedSteps(prm.sizex);
+    QList<int> valsy = multithreadedSteps(prm.sizey);
 
     for (uint stage = 0 ; runningFlag() && (stage < 2) ; ++stage)
     {
