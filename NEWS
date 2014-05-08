@@ -191,4 +191,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 162 ==> 333388 - Tag manager: Tags removed from images without confirmation dialog.
 163 ==> 333385 - Selecting a month in the tree view shows a different month in calendar and icon view.
 164 ==> 329697 - digiKam crash when browsing albums.
-165 ==> 
+165 ==> 331597 - Tags are not sorted in UI [patch].
+166 ==> 
+
