@@ -1607,6 +1607,144 @@ DColor BlurFXFilter::RandomColor(uchar* const Bits, int Width, int Height, bool 
     return color;
 }
 
+void BlurFXFilter::MakeConvolutionStage1Multithreaded(const Args& prm)
+{
+    int Width       = prm.orgImage->width();
+    int Height      = prm.orgImage->height();
+    uchar* data     = prm.orgImage->bits();
+    bool sixteenBit = prm.orgImage->sixteenBit();
+    int bytesDepth  = prm.orgImage->bytesDepth();
+
+    int n;
+
+    int nSumR, nSumG, nSumB, nCount;
+    DColor color;
+    int offset;
+
+    for (uint w = prm.start; runningFlag() && (w < prm.stop); ++w)
+    {
+        // initialize the variables
+        nSumR = nSumG = nSumB = nCount = 0;
+
+        // first of all, we need to blur the horizontal lines
+
+        for (n = -prm.Radius; runningFlag() && (n <= prm.Radius); ++n)
+        {
+            // if is inside...
+            if (IsInside(Width, Height, w + n, prm.h))
+            {
+                // read color from orgImage
+                offset = GetOffset(Width, w + n, prm.h, bytesDepth);
+                color.setColor(data + offset, sixteenBit);
+
+                // finally, we sum the pixels using a method similar to assigntables
+                nSumR += prm.arrMult[n + prm.Radius][color.red()];
+                nSumG += prm.arrMult[n + prm.Radius][color.green()];
+                nSumB += prm.arrMult[n + prm.Radius][color.blue()];
+
+                // we need to add the kernel value to the counter
+                nCount += prm.Kernel[n + prm.Radius];
+            }
+        }
+
+        if (nCount == 0)
+        {
+            nCount = 1;
+        }
+
+        // calculate pointer
+        offset = GetOffset(Width, w, prm.h, bytesDepth);
+        // read color from orgImage to preserve alpha
+        color.setColor(data + offset, sixteenBit);
+
+        // now, we have to calc the arithmetic average
+        if (sixteenBit)
+        {
+            color.setRed(CLAMP065535(nSumR   / nCount));
+            color.setGreen(CLAMP065535(nSumG / nCount));
+            color.setBlue(CLAMP065535(nSumB  / nCount));
+        }
+        else
+        {
+            color.setRed((uchar)CLAMP0255(nSumR   / nCount));
+            color.setGreen((uchar)CLAMP0255(nSumG / nCount));
+            color.setBlue((uchar)CLAMP0255(nSumB  / nCount));
+        }
+
+        // write color to blur bits
+        color.setPixel(prm.pBlur + offset);
+    }
+}
+
+void BlurFXFilter::MakeConvolutionStage2Multithreaded(const Args& prm)
+{
+    int Width       = prm.orgImage->width();
+    int Height      = prm.orgImage->height();
+    uchar* data     = prm.orgImage->bits();
+    bool sixteenBit = prm.orgImage->sixteenBit();
+    int bytesDepth  = prm.orgImage->bytesDepth();
+    uchar* pOutBits = prm.destImage->bits();
+
+    int n;
+
+    int nSumR, nSumG, nSumB, nCount;
+    DColor color;
+    int offset;
+
+    for (uint h = prm.start; runningFlag() && (h < prm.stop); ++h)
+    {
+        // initialize the variables
+        nSumR = nSumG = nSumB = nCount = 0;
+
+        // first of all, we need to blur the vertical lines
+        for (n = -prm.Radius; runningFlag() && (n <= prm.Radius); ++n)
+        {
+            // if is inside...
+            if (IsInside(Width, Height, prm.w, h + n))
+            {
+                // read color from blur bits
+                offset = GetOffset(Width, prm.w, h + n, bytesDepth);
+                color.setColor(prm.pBlur + offset, sixteenBit);
+
+                // finally, we sum the pixels using a method similar to assigntables
+                nSumR += prm.arrMult[n + prm.Radius][color.red()];
+                nSumG += prm.arrMult[n + prm.Radius][color.green()];
+                nSumB += prm.arrMult[n + prm.Radius][color.blue()];
+
+                // we need to add the kernel value to the counter
+                nCount += prm.Kernel[n + prm.Radius];
+            }
+        }
+
+        if (nCount == 0)
+        {
+            nCount = 1;
+        }
+
+        // calculate pointer
+        offset = GetOffset(Width, prm.w, h, bytesDepth);
+        // read color from orgImage to preserve alpha
+        color.setColor(data + offset, sixteenBit);
+
+        // now, we have to calc the arithmetic average
+        if (sixteenBit)
+        {
+            color.setRed(CLAMP065535(nSumR   / nCount));
+            color.setGreen(CLAMP065535(nSumG / nCount));
+            color.setBlue(CLAMP065535(nSumB  / nCount));
+        }
+        else
+        {
+            color.setRed((uchar)CLAMP0255(nSumR   / nCount));
+            color.setGreen((uchar)CLAMP0255(nSumG / nCount));
+            color.setBlue((uchar)CLAMP0255(nSumB  / nCount));
+        }
+
+        // write color to destination
+        color.setPixel(pOutBits + offset);
+    }
+}
+
 /* Function to simple convolve a unique pixel with a determined radius
  *
  * data             => The image data in RGBA mode.
@@ -1627,27 +1765,15 @@ void BlurFXFilter::MakeConvolution(DImg* const orgImage, DImg* const destImage, 
         return;
     }
 
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-    uchar* data     = orgImage->bits();
-    bool sixteenBit = orgImage->sixteenBit();
-    int bytesDepth  = orgImage->bytesDepth();
-    uchar* pOutBits = destImage->bits();
-
     int progress;
-    int n, h, w;
-
-    int nSumR, nSumG, nSumB, nCount;
     int nKernelWidth = Radius * 2 + 1;
-    int range = sixteenBit ? 65536 : 256;
-    DColor color;
-    int offset;
+    int range = orgImage->sixteenBit() ? 65536 : 256;
 
     QScopedArrayPointer<uchar> pBlur(new uchar[orgImage->numBytes()]);
 
     // We need to copy our bits to blur bits
 
-    memcpy(pBlur.data(), data, orgImage->numBytes());
+    memcpy(pBlur.data(), orgImage->bits(), orgImage->numBytes());
 
     // We need to alloc a 2d array to help us to store the values
 
@@ -1661,66 +1787,38 @@ void BlurFXFilter::MakeConvolution(DImg* const orgImage, DImg* const destImage, 
         }
     }
 
-    // Now, we enter in the main loop
+    QList<uint> valsw = multithreadedSteps(orgImage->width());
+    QList<uint> valsh = multithreadedSteps(orgImage->height());
+    QList <QFuture<void> > tasks;
 
-    for (h = 0; runningFlag() && (h < Height); ++h)
+    Args prm;
+    prm.orgImage  = orgImage;
+    prm.destImage = destImage;
+    prm.Radius    = Radius;
+    prm.Kernel    = Kernel;
+    prm.arrMult   = arrMult;
+    prm.pBlur     = pBlur.data();
+
+    // Now, we enter in the first loop
+
+    for (uint h = 0; runningFlag() && (h < orgImage->height()); ++h)
     {
-        for (w = 0; runningFlag() && (w < Width); ++w)
+        for (int j = 0 ; runningFlag() && (j < valsw.count()-1) ; ++j)
         {
-            // initialize the variables
-            nSumR = nSumG = nSumB = nCount = 0;
-
-            // first of all, we need to blur the horizontal lines
-
-            for (n = -Radius; runningFlag() && (n <= Radius); ++n)
-            {
-                // if is inside...
-                if (IsInside(Width, Height, w + n, h))
-                {
-                    // read color from orgImage
-                    offset = GetOffset(Width, w + n, h, bytesDepth);
-                    color.setColor(data + offset, sixteenBit);
-
-                    // finally, we sum the pixels using a method similar to assigntables
-                    nSumR += arrMult[n + Radius][color.red()];
-                    nSumG += arrMult[n + Radius][color.green()];
-                    nSumB += arrMult[n + Radius][color.blue()];
-
-                    // we need to add the kernel value to the counter
-                    nCount += Kernel[n + Radius];
-                }
-            }
-
-            if (nCount == 0)
-            {
-                nCount = 1;
-            }
-
-            // calculate pointer
-            offset = GetOffset(Width, w, h, bytesDepth);
-            // read color from orgImage to preserve alpha
-            color.setColor(data + offset, sixteenBit);
-
-            // now, we have to calc the arithmetic average
-            if (sixteenBit)
-            {
-                color.setRed(CLAMP065535(nSumR   / nCount));
-                color.setGreen(CLAMP065535(nSumG / nCount));
-                color.setBlue(CLAMP065535(nSumB  / nCount));
-            }
-            else
-            {
-                color.setRed((uchar)CLAMP0255(nSumR   / nCount));
-                color.setGreen((uchar)CLAMP0255(nSumG / nCount));
-                color.setBlue((uchar)CLAMP0255(nSumB  / nCount));
-            }
-
-            // write color to blur bits
-            color.setPixel(pBlur.data() + offset);
+            prm.start = valsw[j];
+            prm.stop  = valsw[j+1];
+            prm.h     = h;
+            tasks.append(QtConcurrent::run(this,
+                                           &BlurFXFilter::MakeConvolutionStage1Multithreaded,
+                                           prm
+                                          ));
         }
 
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
+
         // Update the progress bar in dialog.
-        progress = (int)(((double)h * 50.0) / Height);
+        progress = (int)(((double)h * 50.0) / orgImage->height());
 
         if (progress % 5 == 0)
         {
@@ -1729,63 +1827,27 @@ void BlurFXFilter::MakeConvolution(DImg* const orgImage, DImg* const destImage, 
     }
 
     // We enter in the second main loop
-    for (w = 0; runningFlag() && (w < Width); ++w)
+
+    tasks.clear();
+
+    for (uint w = 0; runningFlag() && (w < orgImage->width()); ++w)
     {
-        for (h = 0; runningFlag() && (h < Height); ++h)
+        for (int j = 0 ; runningFlag() && (j < valsh.count()-1) ; ++j)
         {
-            // initialize the variables
-            nSumR = nSumG = nSumB = nCount = 0;
-
-            // first of all, we need to blur the vertical lines
-            for (n = -Radius; runningFlag() && (n <= Radius); ++n)
-            {
-                // if is inside...
-                if (IsInside(Width, Height, w, h + n))
-                {
-                    // read color from blur bits
-                    offset = GetOffset(Width, w, h + n, bytesDepth);
-                    color.setColor(pBlur.data() + offset, sixteenBit);
-
-                    // finally, we sum the pixels using a method similar to assigntables
-                    nSumR += arrMult[n + Radius][color.red()];
-                    nSumG += arrMult[n + Radius][color.green()];
-                    nSumB += arrMult[n + Radius][color.blue()];
-
-                    // we need to add the kernel value to the counter
-                    nCount += Kernel[n + Radius];
-                }
-            }
-
-            if (nCount == 0)
-            {
-                nCount = 1;
-            }
-
-            // calculate pointer
-            offset = GetOffset(Width, w, h, bytesDepth);
-            // read color from orgImage to preserve alpha
-            color.setColor(data + offset, sixteenBit);
-
-            // now, we have to calc the arithmetic average
-            if (sixteenBit)
-            {
-                color.setRed(CLAMP065535(nSumR   / nCount));
-                color.setGreen(CLAMP065535(nSumG / nCount));
-                color.setBlue(CLAMP065535(nSumB  / nCount));
-            }
-            else
-            {
-                color.setRed((uchar)CLAMP0255(nSumR   / nCount));
-                color.setGreen((uchar)CLAMP0255(nSumG / nCount));
-                color.setBlue((uchar)CLAMP0255(nSumB  / nCount));
-            }
-
-            // write color to destination
-            color.setPixel(pOutBits + offset);
+            prm.start = valsh[j];
+            prm.stop  = valsh[j+1];
+            prm.w     = w;
+            tasks.append(QtConcurrent::run(this,
+                                           &BlurFXFilter::MakeConvolutionStage2Multithreaded,
+                                           prm
+                                          ));
         }
 
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
+
         // Update the progress bar in dialog.
-        progress = (int)(50.0 + ((double)w * 50.0) / Width);
+        progress = (int)(50.0 + ((double)w * 50.0) / orgImage->width());
 
         if (progress % 5 == 0)
         {

@@ -122,6 +122,12 @@ private:
 
         int    SizeW;
         int    SizeH;
+
+        uint   w;
+        int    Radius;
+        int*   Kernel;
+        int**  arrMult;
+        uchar* pBlur;
     };
 
 private:
@@ -162,6 +168,8 @@ private:
 private:
 
     void MakeConvolution(DImg* const orgImage, DImg* const destImage, int Radius, int Kernel[]);
+    void MakeConvolutionStage1Multithreaded(const Args& prm);
+    void MakeConvolutionStage2Multithreaded(const Args& prm);
 
     DColor RandomColor(uchar* const Bits, int Width, int Height, bool sixteenBit, int bytesDepth,
                        int X, int Y, int Radius,
