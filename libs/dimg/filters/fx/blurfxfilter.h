@@ -102,6 +102,7 @@ private:
         uint   start;
         uint   stop;
         uint   h;
+        uint   w;
         DImg*  orgImage;
         DImg*  destImage;
         int    X;
@@ -123,7 +124,7 @@ private:
         int    SizeW;
         int    SizeH;
 
-        uint   w;
+        int    StrengthRange;
         int    Radius;
         int*   Kernel;
         int**  arrMult;
@@ -161,6 +162,8 @@ private:
     void motionBlurMultithreaded(const Args& prm);
 
     void smartBlur(DImg* const orgImage, DImg* const destImage, int Radius, int Strength);
+    void smartBlurStage1Multithreaded(const Args& prm);
+    void smartBlurStage2Multithreaded(const Args& prm);
 
     void mosaic(DImg* const orgImage, DImg* const destImage, int SizeW, int SizeH);
     void mosaicMultithreaded(const Args& prm);

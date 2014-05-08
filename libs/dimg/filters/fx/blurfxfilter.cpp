@@ -1123,6 +1123,146 @@ void BlurFXFilter::focusBlur(DImg* const orgImage, DImg* const destImage,
     }
 }
 
+void BlurFXFilter::smartBlurStage1Multithreaded(const Args& prm)
+{
+    int Width       = prm.orgImage->width();
+    int Height      = prm.orgImage->height();
+    uchar* data     = prm.orgImage->bits();
+    bool sixteenBit = prm.orgImage->sixteenBit();
+    int bytesDepth  = prm.orgImage->bytesDepth();
+
+    int sumR, sumG, sumB, nCount;
+    DColor color, radiusColor, radiusColorBlur;
+    int offset, loopOffset;
+
+    for (uint w = prm.start; runningFlag() && (w < prm.stop); ++w)
+    {
+        // we initialize the variables
+        sumR = sumG = sumB = nCount = 0;
+
+        // read color
+        offset = GetOffset(Width, w, prm.h, bytesDepth);
+        color.setColor(data + offset, sixteenBit);
+
+        // ...we enter this loop to sum the bits
+        for (int a = -prm.Radius; runningFlag() && (a <= prm.Radius); ++a)
+        {
+            // verify if is inside the rect
+            if (IsInside(Width, Height, w + a, prm.h))
+            {
+                // read color
+                loopOffset = GetOffset(Width, w + a, prm.h, bytesDepth);
+                radiusColor.setColor(data + loopOffset, sixteenBit);
+
+                // now, we have to check if is inside the sensibility filter
+                if (IsColorInsideTheRange(color.red(), color.green(), color.blue(),
+                                          radiusColor.red(), radiusColor.green(), radiusColor.blue(),
+                                          prm.StrengthRange))
+                {
+                    // finally we sum the bits
+                    sumR += radiusColor.red();
+                    sumG += radiusColor.green();
+                    sumB += radiusColor.blue();
+                }
+                else
+                {
+                    // finally we sum the bits
+                    sumR += color.red();
+                    sumG += color.green();
+                    sumB += color.blue();
+                }
+
+                // increment counter
+                ++nCount;
+            }
+        }
+
+        if (nCount == 0)
+        {
+            nCount = 1;
+        }
+
+        // now, we have to calc the arithmetic average
+        color.setRed(sumR   / nCount);
+        color.setGreen(sumG / nCount);
+        color.setBlue(sumB  / nCount);
+
+        // write color to destination
+        color.setPixel(prm.pBlur + offset);
+    }
+}
+
+void BlurFXFilter::smartBlurStage2Multithreaded(const Args& prm)
+{
+    int Width       = prm.orgImage->width();
+    int Height      = prm.orgImage->height();
+    uchar* data     = prm.orgImage->bits();
+    bool sixteenBit = prm.orgImage->sixteenBit();
+    int bytesDepth  = prm.orgImage->bytesDepth();
+    uchar* pResBits = prm.destImage->bits();
+
+    int sumR, sumG, sumB, nCount;
+    DColor color, radiusColor, radiusColorBlur;
+    int offset, loopOffset;
+
+    for (uint h = prm.start; runningFlag() && (h < prm.stop); ++h)
+    {
+        // we initialize the variables
+        sumR = sumG = sumB = nCount = 0;
+
+        // read color
+        offset = GetOffset(Width, prm.w, h, bytesDepth);
+        color.setColor(data + offset, sixteenBit);
+
+        // ...we enter this loop to sum the bits
+        for (int a = -prm.Radius; runningFlag() && (a <= prm.Radius); ++a)
+        {
+            // verify if is inside the rect
+            if (IsInside(Width, Height, prm.w, h + a))
+            {
+                // read color
+                loopOffset = GetOffset(Width, prm.w, h + a, bytesDepth);
+                radiusColor.setColor(data + loopOffset, sixteenBit);
+
+                // now, we have to check if is inside the sensibility filter
+                if (IsColorInsideTheRange(color.red(), color.green(), color.blue(),
+                                          radiusColor.red(), radiusColor.green(), radiusColor.blue(),
+                                          prm.StrengthRange))
+                {
+                    radiusColorBlur.setColor(prm.pBlur + loopOffset, sixteenBit);
+                    // finally we sum the bits
+                    sumR += radiusColorBlur.red();
+                    sumG += radiusColorBlur.green();
+                    sumB += radiusColorBlur.blue();
+                }
+                else
+                {
+                    // finally we sum the bits
+                    sumR += color.red();
+                    sumG += color.green();
+                    sumB += color.blue();
+                }
+
+                // increment counter
+                ++nCount;
+            }
+        }
+
+        if (nCount == 0)
+        {
+            nCount = 1;
+        }
+
+        // now, we have to calc the arithmetic average
+        color.setRed(sumR   / nCount);
+        color.setGreen(sumG / nCount);
+        color.setBlue(sumB  / nCount);
+
+        // write color to destination
+        color.setPixel(pResBits + offset);
+    }
+}
+
 /* Function to apply the SmartBlur effect
  *
  * data             => The image data in RGBA mode.
@@ -1145,94 +1285,51 @@ void BlurFXFilter::smartBlur(DImg* const orgImage, DImg* const destImage, int Ra
         return;
     }
 
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-    uchar* data     = orgImage->bits();
-    bool sixteenBit = orgImage->sixteenBit();
-    int bytesDepth  = orgImage->bytesDepth();
-    uchar* pResBits = destImage->bits();
-
     int progress;
-    int sumR, sumG, sumB, nCount, w, h, a;
-
     int StrengthRange = Strength;
 
-    if (sixteenBit)
+    if (orgImage->sixteenBit())
     {
         StrengthRange = (StrengthRange + 1) * 256 - 1;
     }
-
-    DColor color, radiusColor, radiusColorBlur;
-    int offset, loopOffset;
 
     QScopedArrayPointer<uchar> pBlur(new uchar[orgImage->numBytes()]);
 
     // We need to copy our bits to blur bits
 
-    memcpy(pBlur.data(), data, orgImage->numBytes());
+    memcpy(pBlur.data(), orgImage->bits(), orgImage->numBytes());
+
+    QList<uint> valsw = multithreadedSteps(orgImage->width());
+    QList<uint> valsh = multithreadedSteps(orgImage->height());
+    QList <QFuture<void> > tasks;
+
+    Args prm;
+    prm.orgImage      = orgImage;
+    prm.destImage     = destImage;
+    prm.StrengthRange = StrengthRange;
+    prm.pBlur         = pBlur.data();
+    prm.Radius        = Radius;
 
     // we have reached the main loop
 
-    for (h = 0; runningFlag() && (h < Height); ++h)
+    for (uint h = 0; runningFlag() && (h < orgImage->height()); ++h)
     {
-        for (w = 0; runningFlag() && (w < Width); ++w)
+        for (int j = 0 ; runningFlag() && (j < valsw.count()-1) ; ++j)
         {
-            // we initialize the variables
-            sumR = sumG = sumB = nCount = 0;
-
-            // read color
-            offset = GetOffset(Width, w, h, bytesDepth);
-            color.setColor(data + offset, sixteenBit);
-
-            // ...we enter this loop to sum the bits
-            for (a = -Radius; runningFlag() && (a <= Radius); ++a)
-            {
-                // verify if is inside the rect
-                if (IsInside(Width, Height, w + a, h))
-                {
-                    // read color
-                    loopOffset = GetOffset(Width, w + a, h, bytesDepth);
-                    radiusColor.setColor(data + loopOffset, sixteenBit);
-
-                    // now, we have to check if is inside the sensibility filter
-                    if (IsColorInsideTheRange(color.red(), color.green(), color.blue(),
-                                              radiusColor.red(), radiusColor.green(), radiusColor.blue(),
-                                              StrengthRange))
-                    {
-                        // finally we sum the bits
-                        sumR += radiusColor.red();
-                        sumG += radiusColor.green();
-                        sumB += radiusColor.blue();
-                    }
-                    else
-                    {
-                        // finally we sum the bits
-                        sumR += color.red();
-                        sumG += color.green();
-                        sumB += color.blue();
-                    }
-
-                    // increment counter
-                    ++nCount;
-                }
-            }
-
-            if (nCount == 0)
-            {
-                nCount = 1;
-            }
-
-            // now, we have to calc the arithmetic average
-            color.setRed(sumR   / nCount);
-            color.setGreen(sumG / nCount);
-            color.setBlue(sumB  / nCount);
-
-            // write color to destination
-            color.setPixel(pBlur.data() + offset);
+            prm.start = valsw[j];
+            prm.stop  = valsw[j+1];
+            prm.h     = h;
+            tasks.append(QtConcurrent::run(this,
+                                           &BlurFXFilter::smartBlurStage1Multithreaded,
+                                           prm
+                                          ));
         }
 
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
+
         // Update the progress bar in dialog.
-        progress = (int)(((double)h * 50.0) / Height);
+        progress = (int)(((double)h * 50.0) / orgImage->height());
 
         if (progress % 5 == 0)
         {
@@ -1242,67 +1339,26 @@ void BlurFXFilter::smartBlur(DImg* const orgImage, DImg* const destImage, int Ra
 
     // we have reached the second part of main loop
 
-    for (w = 0; runningFlag() && (w < Width); ++w)
+    tasks.clear();
+
+    for (uint w = 0; runningFlag() && (w < orgImage->width()); ++w)
     {
-        for (h = 0; runningFlag() && (h < Height); ++h)
+        for (int j = 0 ; runningFlag() && (j < valsh.count()-1) ; ++j)
         {
-            // we initialize the variables
-            sumR = sumG = sumB = nCount = 0;
-
-            // read color
-            offset = GetOffset(Width, w, h, bytesDepth);
-            color.setColor(data + offset, sixteenBit);
-
-            // ...we enter this loop to sum the bits
-            for (a = -Radius; runningFlag() && (a <= Radius); ++a)
-            {
-                // verify if is inside the rect
-                if (IsInside(Width, Height, w, h + a))
-                {
-                    // read color
-                    loopOffset = GetOffset(Width, w, h + a, bytesDepth);
-                    radiusColor.setColor(data + loopOffset, sixteenBit);
-
-                    // now, we have to check if is inside the sensibility filter
-                    if (IsColorInsideTheRange(color.red(), color.green(), color.blue(),
-                                              radiusColor.red(), radiusColor.green(), radiusColor.blue(),
-                                              StrengthRange))
-                    {
-                        radiusColorBlur.setColor(pBlur.data() + loopOffset, sixteenBit);
-                        // finally we sum the bits
-                        sumR += radiusColorBlur.red();
-                        sumG += radiusColorBlur.green();
-                        sumB += radiusColorBlur.blue();
-                    }
-                    else
-                    {
-                        // finally we sum the bits
-                        sumR += color.red();
-                        sumG += color.green();
-                        sumB += color.blue();
-                    }
-
-                    // increment counter
-                    ++nCount;
-                }
-            }
-
-            if (nCount == 0)
-            {
-                nCount = 1;
-            }
-
-            // now, we have to calc the arithmetic average
-            color.setRed(sumR   / nCount);
-            color.setGreen(sumG / nCount);
-            color.setBlue(sumB  / nCount);
-
-            // write color to destination
-            color.setPixel(pResBits + offset);
+            prm.start = valsh[j];
+            prm.stop  = valsh[j+1];
+            prm.w     = w;
+            tasks.append(QtConcurrent::run(this,
+                                           &BlurFXFilter::smartBlurStage2Multithreaded,
+                                           prm
+                                          ));
         }
 
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
+
         // Update the progress bar in dialog.
-        progress = (int)(50.0 + ((double)w * 50.0) / Width);
+        progress = (int)(50.0 + ((double)w * 50.0) / orgImage->width());
 
         if (progress % 5 == 0)
         {
