@@ -130,6 +130,7 @@ private:
 
     // Backported from ImageProcessing version 1
     void softenerBlur(DImg* const orgImage, DImg* const destImage);
+    void softenerBlurMultithreaded(const Args& prm);
 
     void shakeBlur(DImg* const orgImage, DImg* const destImage, int Distance);
     void shakeBlurStage1Multithreaded(const Args& prm);

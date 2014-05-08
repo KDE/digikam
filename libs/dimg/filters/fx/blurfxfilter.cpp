@@ -642,6 +642,97 @@ void BlurFXFilter::motionBlur(DImg* const orgImage, DImg* const destImage, int D
     }
 }
 
+void BlurFXFilter::softenerBlurMultithreaded(const Args& prm)
+{
+    int Width       = prm.orgImage->width();
+    int Height      = prm.orgImage->height();
+    uchar* data     = prm.orgImage->bits();
+    bool sixteenBit = prm.orgImage->sixteenBit();
+    int bytesDepth  = prm.orgImage->bytesDepth();
+    uchar* pResBits = prm.destImage->bits();
+
+    int SomaR = 0, SomaG = 0, SomaB = 0;
+    int Gray;
+
+    DColor color, colorSoma;
+    int offset, offsetSoma;
+
+    int grayLimit = sixteenBit ? 32767 : 127;
+
+    for (uint w = prm.start; runningFlag() && (w < prm.stop); ++w)
+    {
+        SomaR = SomaG = SomaB = 0;
+
+        offset = GetOffset(Width, w, prm.h, bytesDepth);
+        color.setColor(data + offset, sixteenBit);
+
+        Gray = (color.red() + color.green() + color.blue()) / 3;
+
+        if (Gray > grayLimit)
+        {
+            // 7x7
+            for (int a = -3; runningFlag() && (a <= 3); ++a)
+            {
+                for (int b = -3; runningFlag() && (b <= 3); ++b)
+                {
+                    if ((((int)prm.h + a) < 0) || (((int)w + b) < 0))
+                    {
+                        offsetSoma = offset;
+                    }
+                    else
+                    {
+                        offsetSoma = GetOffset(Width, (w + Lim_Max(w, b, Width)),
+                                               (prm.h + Lim_Max(prm.h, a, Height)), bytesDepth);
+                    }
+
+                    colorSoma.setColor(data + offsetSoma, sixteenBit);
+
+                    SomaR += colorSoma.red();
+                    SomaG += colorSoma.green();
+                    SomaB += colorSoma.blue();
+                }
+            }
+
+            // 7*7 = 49
+            color.setRed(SomaR   / 49);
+            color.setGreen(SomaG / 49);
+            color.setBlue(SomaB  / 49);
+            color.setPixel(pResBits + offset);
+        }
+        else
+        {
+            // 3x3
+            for (int a = -1; runningFlag() && (a <= 1); ++a)
+            {
+                for (int b = -1; runningFlag() && (b <= 1); ++b)
+                {
+                    if ((((int)prm.h + a) < 0) || (((int)w + b) < 0))
+                    {
+                        offsetSoma = offset;
+                    }
+                    else
+                    {
+                        offsetSoma = GetOffset(Width, (w + Lim_Max(w, b, Width)),
+                                               (prm.h + Lim_Max(prm.h, a, Height)), bytesDepth);
+                    }
+
+                    colorSoma.setColor(data + offsetSoma, sixteenBit);
+
+                    SomaR += colorSoma.red();
+                    SomaG += colorSoma.green();
+                    SomaB += colorSoma.blue();
+                }
+            }
+
+            // 3*3 = 9
+            color.setRed(SomaR   / 9);
+            color.setGreen(SomaG / 9);
+            color.setBlue(SomaB  / 9);
+            color.setPixel(pResBits + offset);
+        }
+    }
+}
+
 /* Function to apply the softenerBlur effect
  *
  * data             => The image data in RGBA mode.
@@ -656,98 +747,33 @@ void BlurFXFilter::softenerBlur(DImg* const orgImage, DImg* const destImage)
 {
     int progress;
 
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-    uchar* data     = orgImage->bits();
-    bool sixteenBit = orgImage->sixteenBit();
-    int bytesDepth  = orgImage->bytesDepth();
-    uchar* pResBits = destImage->bits();
+    QList<uint> vals = multithreadedSteps(orgImage->width());
+    QList <QFuture<void> > tasks;
 
-    int SomaR = 0, SomaG = 0, SomaB = 0;
-    int Gray;
+    Args prm;
+    prm.orgImage  = orgImage;
+    prm.destImage = destImage;
 
-    DColor color, colorSoma;
-    int offset, offsetSoma;
+    // we have reached the main loop
 
-    int grayLimit = sixteenBit ? 32767 : 127;
-
-    for (int h = 0; runningFlag() && (h < Height); ++h)
+    for (uint h = 0; runningFlag() && (h < orgImage->height()); ++h)
     {
-        for (int w = 0; runningFlag() && (w < Width); ++w)
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
         {
-            SomaR = SomaG = SomaB = 0;
-
-            offset = GetOffset(Width, w, h, bytesDepth);
-            color.setColor(data + offset, sixteenBit);
-
-            Gray = (color.red() + color.green() + color.blue()) / 3;
-
-            if (Gray > grayLimit)
-            {
-                // 7x7
-                for (int a = -3; runningFlag() && (a <= 3); ++a)
-                {
-                    for (int b = -3; runningFlag() && (b <= 3); ++b)
-                    {
-                        if ((h + a < 0) || (w + b < 0))
-                        {
-                            offsetSoma = offset;
-                        }
-                        else
-                        {
-                            offsetSoma = GetOffset(Width, (w + Lim_Max(w, b, Width)),
-                                                   (h + Lim_Max(h, a, Height)), bytesDepth);
-                        }
-
-                        colorSoma.setColor(data + offsetSoma, sixteenBit);
-
-                        SomaR += colorSoma.red();
-                        SomaG += colorSoma.green();
-                        SomaB += colorSoma.blue();
-                    }
-                }
-
-                // 7*7 = 49
-                color.setRed(SomaR   / 49);
-                color.setGreen(SomaG / 49);
-                color.setBlue(SomaB  / 49);
-                color.setPixel(pResBits + offset);
-            }
-            else
-            {
-                // 3x3
-                for (int a = -1; runningFlag() && (a <= 1); ++a)
-                {
-                    for (int b = -1; runningFlag() && (b <= 1); ++b)
-                    {
-                        if ((h + a < 0) || (w + b < 0))
-                        {
-                            offsetSoma = offset;
-                        }
-                        else
-                        {
-                            offsetSoma = GetOffset(Width, (w + Lim_Max(w, b, Width)),
-                                                   (h + Lim_Max(h, a, Height)), bytesDepth);
-                        }
-
-                        colorSoma.setColor(data + offsetSoma, sixteenBit);
-
-                        SomaR += colorSoma.red();
-                        SomaG += colorSoma.green();
-                        SomaB += colorSoma.blue();
-                    }
-                }
-
-                // 3*3 = 9
-                color.setRed(SomaR   / 9);
-                color.setGreen(SomaG / 9);
-                color.setBlue(SomaB  / 9);
-                color.setPixel(pResBits + offset);
-            }
+            prm.start = vals[j];
+            prm.stop  = vals[j+1];
+            prm.h     = h;
+            tasks.append(QtConcurrent::run(this,
+                                           &BlurFXFilter::softenerBlurMultithreaded,
+                                           prm
+                                          ));
         }
 
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
+
         // Update the progress bar in dialog.
-        progress = (int)(((double)h * 100.0) / Height);
+        progress = (int)(((double)h * 100.0) / orgImage->height());
 
         if (progress % 5 == 0)
         {
