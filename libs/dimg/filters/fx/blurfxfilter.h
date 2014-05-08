@@ -111,6 +111,11 @@ private:
         int    BlendRadius;
         bool   bInversed;
 
+        uchar* layer1;
+        uchar* layer2;
+        uchar* layer3;
+        uchar* layer4;
+
         int    SizeW;
         int    SizeH;
     };
@@ -121,7 +126,11 @@ private:
 
     // Backported from ImageProcessing version 1
     void softenerBlur(DImg* const orgImage, DImg* const destImage);
+
     void shakeBlur(DImg* const orgImage, DImg* const destImage, int Distance);
+    void shakeBlurStage1Multithreaded(const Args& prm);
+    void shakeBlurStage2Multithreaded(const Args& prm);
+
     void frostGlass(DImg* const orgImage, DImg* const destImage, int Frost);
 
     // Backported from ImageProcessing version 2

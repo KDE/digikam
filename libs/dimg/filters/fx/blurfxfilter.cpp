@@ -730,6 +730,75 @@ void BlurFXFilter::softenerBlur(DImg* const orgImage, DImg* const destImage)
     }
 }
 
+void BlurFXFilter::shakeBlurStage1Multithreaded(const Args& prm)
+{
+    uint Width      = prm.orgImage->width();
+    uint Height     = prm.orgImage->height();
+    uchar* data     = prm.orgImage->bits();
+    bool sixteenBit = prm.orgImage->sixteenBit();
+    int bytesDepth  = prm.orgImage->bytesDepth();
+
+    DColor color;
+    int offset, offsetLayer;
+    int nw, nh;
+
+    for (uint w = prm.start; runningFlag() && (w < prm.stop); ++w)
+    {
+        offsetLayer = GetOffset(Width, w, prm.h, bytesDepth);
+
+        nh = ((prm.h + prm.Distance) >= Height) ? Height - 1 : prm.h + prm.Distance;
+        offset = GetOffset(Width, w, nh, bytesDepth);
+        color.setColor(data + offset, sixteenBit);
+        color.setPixel(prm.layer1 + offsetLayer);
+
+        nh = (((int)prm.h - prm.Distance) < 0) ? 0 : prm.h - prm.Distance;
+        offset = GetOffset(Width, w, nh, bytesDepth);
+        color.setColor(data + offset, sixteenBit);
+        color.setPixel(prm.layer2 + offsetLayer);
+
+        nw = ((w + prm.Distance) >= Width) ? Width - 1 : w + prm.Distance;
+        offset = GetOffset(Width, nw, prm.h, bytesDepth);
+        color.setColor(data + offset, sixteenBit);
+        color.setPixel(prm.layer3 + offsetLayer);
+
+        nw = (((int)w - prm.Distance) < 0) ? 0 : w - prm.Distance;
+        offset = GetOffset(Width, nw, prm.h, bytesDepth);
+        color.setColor(data + offset, sixteenBit);
+        color.setPixel(prm.layer4 + offsetLayer);
+    }
+}
+
+void BlurFXFilter::shakeBlurStage2Multithreaded(const Args& prm)
+{
+    int Width       = prm.orgImage->width();
+    uchar* data     = prm.orgImage->bits();
+    bool sixteenBit = prm.orgImage->sixteenBit();
+    int bytesDepth  = prm.orgImage->bytesDepth();
+    uchar* pResBits = prm.destImage->bits();
+
+    DColor color, color1, color2, color3, color4;
+    int offset;
+
+    for (uint w = prm.start; runningFlag() && (w < prm.stop); ++w)
+    {
+        offset = GetOffset(Width, w, prm.h, bytesDepth);
+        // read original data to preserve alpha
+        color.setColor(data + offset, sixteenBit);
+        // read colors from all four layers
+        color1.setColor(prm.layer1 + offset, sixteenBit);
+        color2.setColor(prm.layer2 + offset, sixteenBit);
+        color3.setColor(prm.layer3 + offset, sixteenBit);
+        color4.setColor(prm.layer4 + offset, sixteenBit);
+
+        // set color components of resulting color
+        color.setRed((color1.red()     + color2.red()   + color3.red()   + color4.red())   / 4);
+        color.setGreen((color1.green() + color2.green() + color3.green() + color4.green()) / 4);
+        color.setBlue((color1.blue()   + color2.blue()  + color3.blue()  + color4.blue())  / 4);
+
+        color.setPixel(pResBits + offset);
+    }
+}
+
 /* Function to apply the shake blur effect
  *
  * data             => The image data in RGBA mode.
@@ -746,53 +815,44 @@ void BlurFXFilter::shakeBlur(DImg* const orgImage, DImg* const destImage, int Di
 {
     int progress;
 
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-    uchar* data     = orgImage->bits();
-    bool sixteenBit = orgImage->sixteenBit();
-    int bytesDepth  = orgImage->bytesDepth();
-    uchar* pResBits = destImage->bits();
-
-    DColor color, colorLayer, color1, color2, color3, color4;
-    int offset, offsetLayer;
-
     int numBytes = orgImage->numBytes();
-    QScopedArrayPointer<uchar> Layer1(new uchar[numBytes]);
-    QScopedArrayPointer<uchar> Layer2(new uchar[numBytes]);
-    QScopedArrayPointer<uchar> Layer3(new uchar[numBytes]);
-    QScopedArrayPointer<uchar> Layer4(new uchar[numBytes]);
+    QScopedArrayPointer<uchar> layer1(new uchar[numBytes]);
+    QScopedArrayPointer<uchar> layer2(new uchar[numBytes]);
+    QScopedArrayPointer<uchar> layer3(new uchar[numBytes]);
+    QScopedArrayPointer<uchar> layer4(new uchar[numBytes]);
 
-    int h, w, nw, nh;
+    QList<uint> vals = multithreadedSteps(orgImage->width());
+    QList <QFuture<void> > tasks;
 
-    for (h = 0; runningFlag() && (h < Height); ++h)
+    Args prm;
+    prm.orgImage  = orgImage;
+    prm.destImage = destImage;
+    prm.Distance  = Distance;
+    prm.layer1    = layer1.data();
+    prm.layer2    = layer2.data();
+    prm.layer3    = layer3.data();
+    prm.layer4    = layer4.data();
+
+    // we have reached the main loop
+
+    for (uint h = 0; runningFlag() && (h < orgImage->height()); ++h)
     {
-        for (w = 0; runningFlag() && (w < Width); ++w)
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
         {
-            offsetLayer = GetOffset(Width, w, h, bytesDepth);
-
-            nh = (h + Distance >= Height) ? Height - 1 : h + Distance;
-            offset = GetOffset(Width, w, nh, bytesDepth);
-            color.setColor(data + offset, sixteenBit);
-            color.setPixel(Layer1.data() + offsetLayer);
-
-            nh = (h - Distance < 0) ? 0 : h - Distance;
-            offset = GetOffset(Width, w, nh, bytesDepth);
-            color.setColor(data + offset, sixteenBit);
-            color.setPixel(Layer2.data() + offsetLayer);
-
-            nw = (w + Distance >= Width) ? Width - 1 : w + Distance;
-            offset = GetOffset(Width, nw, h, bytesDepth);
-            color.setColor(data + offset, sixteenBit);
-            color.setPixel(Layer3.data() + offsetLayer);
-
-            nw = (w - Distance < 0) ? 0 : w - Distance;
-            offset = GetOffset(Width, nw, h, bytesDepth);
-            color.setColor(data + offset, sixteenBit);
-            color.setPixel(Layer4.data() + offsetLayer);
+            prm.start = vals[j];
+            prm.stop  = vals[j+1];
+            prm.h     = h;
+            tasks.append(QtConcurrent::run(this,
+                                           &BlurFXFilter::shakeBlurStage1Multithreaded,
+                                           prm
+                                          ));
         }
 
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
+
         // Update the progress bar in dialog.
-        progress = (int)(((double)h * 50.0) / Height);
+        progress = (int)(((double)h * 50.0) / orgImage->height());
 
         if (progress % 5 == 0)
         {
@@ -800,29 +860,24 @@ void BlurFXFilter::shakeBlur(DImg* const orgImage, DImg* const destImage, int Di
         }
     }
 
-    for (int h = 0; runningFlag() && (h < Height); ++h)
+    for (uint h = 0; runningFlag() && (h < orgImage->height()); ++h)
     {
-        for (int w = 0; runningFlag() && (w < Width); ++w)
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
         {
-            offset = GetOffset(Width, w, h, bytesDepth);
-            // read original data to preserve alpha
-            color.setColor(data + offset, sixteenBit);
-            // read colors from all four layers
-            color1.setColor(Layer1.data() + offset, sixteenBit);
-            color2.setColor(Layer2.data() + offset, sixteenBit);
-            color3.setColor(Layer3.data() + offset, sixteenBit);
-            color4.setColor(Layer4.data() + offset, sixteenBit);
-
-            // set color components of resulting color
-            color.setRed((color1.red()   + color2.red()   + color3.red()   + color4.red())   / 4);
-            color.setGreen((color1.green() + color2.green() + color3.green() + color4.green()) / 4);
-            color.setBlue((color1.blue()  + color2.blue()  + color3.blue()  + color4.blue())  / 4);
-
-            color.setPixel(pResBits + offset);
+            prm.start = vals[j];
+            prm.stop  = vals[j+1];
+            prm.h     = h;
+            tasks.append(QtConcurrent::run(this,
+                                           &BlurFXFilter::shakeBlurStage2Multithreaded,
+                                           prm
+                                          ));
         }
 
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
+
         // Update the progress bar in dialog.
-        progress = (int)(50.0 + ((double)h * 50.0) / Height);
+        progress = (int)(50.0 + ((double)h * 50.0) / orgImage->height());
 
         if (progress % 5 == 0)
         {
@@ -830,7 +885,6 @@ void BlurFXFilter::shakeBlur(DImg* const orgImage, DImg* const destImage, int Di
         }
     }
 }
-
 
 void BlurFXFilter::focusBlurMultithreaded(const Args& prm)
 {
