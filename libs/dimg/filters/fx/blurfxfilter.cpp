@@ -1636,6 +1636,7 @@ DColor BlurFXFilter::RandomColor(uchar* const Bits, int Width, int Height, bool 
 
     color.setSixteenBit(sixteenBit);
     color.setAlpha(alpha);
+    int clampMax = sixteenBit ? 655535 : 255;
 
     if (ErrorCount >= counter)
     {
@@ -1644,9 +1645,9 @@ DColor BlurFXFilter::RandomColor(uchar* const Bits, int Width, int Height, bool 
             counter = 1;
         }
 
-        color.setRed(AverageColorR[J]   / counter);
-        color.setGreen(AverageColorG[J] / counter);
-        color.setBlue(AverageColorB[J]  / counter);
+        color.setRed(CLAMP((int)(AverageColorR[J] / counter), 0, clampMax));
+        color.setGreen(CLAMP((int)(AverageColorG[J] / counter), 0, clampMax));
+        color.setBlue(CLAMP((int)(AverageColorB[J] / counter), 0, clampMax));
     }
     else
     {
@@ -1655,9 +1656,9 @@ DColor BlurFXFilter::RandomColor(uchar* const Bits, int Width, int Height, bool 
             IntensityCount[J] = 1;
         }
 
-        color.setRed(AverageColorR[J]   / IntensityCount[J]);
-        color.setGreen(AverageColorG[J] / IntensityCount[J]);
-        color.setBlue(AverageColorB[J]  / IntensityCount[J]);
+        color.setRed(CLAMP((int)(AverageColorR[J] / IntensityCount[J]), 0, clampMax));
+        color.setGreen(CLAMP((int)(AverageColorG[J] / IntensityCount[J]), 0, clampMax));
+        color.setBlue(CLAMP((int)(AverageColorB[J] / IntensityCount[J]), 0, clampMax));
     }
 
     return color;
