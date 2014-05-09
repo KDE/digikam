@@ -118,6 +118,8 @@ BlurFXTool::BlurFXTool(QObject* const parent)
                                 EditorToolSettings::Try);
 
     d->previewWidget = new ImageRegionWidget;
+    d->previewWidget->setWhatsThis(i18n("This is the preview of the blur effect "
+                                        "applied to the photograph."));
 
     // -------------------------------------------------------------
 
