@@ -119,6 +119,10 @@ private:
         int    Amplitude;
         int    Frequency;
         bool   Mode;
+        int    X;
+        int    Y;
+        double Phase;
+        bool   WavesType;
     };
 
 private:
@@ -140,8 +144,10 @@ private:
     void multipleCornersMultithreaded(const Args& prm);
 
     void polarCoordinates(DImg* orgImage, DImg* destImage, bool Type, bool AntiAlias=true);
+
     void circularWaves(DImg* orgImage, DImg* destImage, int X, int Y, double Amplitude,
                        double Frequency, double Phase, bool WavesType, bool AntiAlias=true);
+    void circularWavesMultithreaded(const Args& prm);
 
     // Backported from ImageProcessing version 1
     void waves(DImg* orgImage, DImg* destImage, int Amplitude, int Frequency,

@@ -845,6 +845,42 @@ void DistortionFXFilter::blockWaves(DImg* orgImage, DImg* destImage,
     }
 }
 
+void DistortionFXFilter::circularWavesMultithreaded(const Args& prm)
+{
+    int Width       = prm.orgImage->width();
+    int Height      = prm.orgImage->height();
+    uchar* data     = prm.orgImage->bits();
+    bool sixteenBit = prm.orgImage->sixteenBit();
+    int bytesDepth  = prm.orgImage->bytesDepth();
+    uchar* pResBits = prm.destImage->bits();
+
+    double nh, nw;
+
+    double lfRadius, lfRadMax;
+    double lfNewAmp     = prm.Amplitude;
+    double lfFreqAngle  = prm.Frequency * ANGLE_RATIO;
+    double phase        = prm.Phase     * ANGLE_RATIO;
+    lfRadMax            = qSqrt(Height * Height + Width * Width);
+
+    for (int w = prm.start; runningFlag() && (w < prm.stop); ++w)
+    {
+        nw = prm.X - w;
+        nh = prm.Y - prm.h;
+
+        lfRadius = qSqrt(nw * nw + nh * nh);
+
+        if (prm.WavesType)
+        {
+            lfNewAmp = prm.Amplitude * lfRadius / lfRadMax;
+        }
+
+        nw = (double)w     + lfNewAmp * qSin(lfFreqAngle * lfRadius + phase);
+        nh = (double)prm.h + lfNewAmp * qCos(lfFreqAngle * lfRadius + phase);
+
+        setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, prm.h, nw, nh, prm.AntiAlias);
+    }
+}
+
 /* Function to apply the circular waves effect backported from ImageProcesqSing version 2
  *
  * data             => The image data in RGBA mode.
@@ -873,46 +909,40 @@ void DistortionFXFilter::circularWaves(DImg* orgImage, DImg* destImage, int X, i
         Frequency = 0.0;
     }
 
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-    uchar* data     = orgImage->bits();
-    bool sixteenBit = orgImage->sixteenBit();
-    int bytesDepth  = orgImage->bytesDepth();
-    uchar* pResBits = destImage->bits();
-
-    int h, w;
-    double nh, nw;
     int progress;
 
-    double lfRadius, lfRadMax, lfNewAmp = Amplitude;
-    double lfFreqAngle = Frequency * ANGLE_RATIO;
+    QList<int> vals = multithreadedSteps(orgImage->width());
+    QList <QFuture<void> > tasks;
 
-    Phase *= ANGLE_RATIO;
+    Args prm;
+    prm.orgImage  = orgImage;
+    prm.destImage = destImage;
+    prm.Phase     = Phase;
+    prm.Frequency = Frequency;
+    prm.Amplitude = Amplitude;
+    prm.WavesType = WavesType;
+    prm.X         = X;
+    prm.Y         = Y;
+    prm.AntiAlias = AntiAlias;
 
-    lfRadMax = qSqrt(Height * Height + Width * Width);
-
-    for (h = 0; runningFlag() && (h < Height); ++h)
+    for (int h = 0; runningFlag() && (h < (int)orgImage->height()); ++h)
     {
-        for (w = 0; runningFlag() && (w < Width); ++w)
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
         {
-            nw = X - w;
-            nh = Y - h;
-
-            lfRadius = qSqrt(nw * nw + nh * nh);
-
-            if (WavesType)
-            {
-                lfNewAmp = Amplitude * lfRadius / lfRadMax;
-            }
-
-            nw = (double)w + lfNewAmp * qSin(lfFreqAngle * lfRadius + Phase);
-            nh = (double)h + lfNewAmp * qCos(lfFreqAngle * lfRadius + Phase);
-
-            setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, h, nw, nh, AntiAlias);
+            prm.start = vals[j];
+            prm.stop  = vals[j+1];
+            prm.h     = h;
+            tasks.append(QtConcurrent::run(this,
+                                           &DistortionFXFilter::circularWavesMultithreaded,
+                                           prm
+                                          ));
         }
 
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
+
         // Update the progress bar in dialog.
-        progress = (int)(((double)h * 100.0) / Height);
+        progress = (int)(((double)h * 100.0) / orgImage->height());
 
         if (progress % 5 == 0)
         {
