@@ -428,6 +428,70 @@ void DistortionFXFilter::twirl(DImg* orgImage, DImg* destImage, int dist, bool A
     }
 }
 
+void DistortionFXFilter::cilindricalMultithreaded(const Args& prm)
+{
+    int Width       = prm.orgImage->width();
+    int Height      = prm.orgImage->height();
+    uchar* data     = prm.orgImage->bits();
+    bool sixteenBit = prm.orgImage->sixteenBit();
+    int bytesDepth  = prm.orgImage->bytesDepth();
+    uchar* pResBits = prm.destImage->bits();
+
+    double nh, nw;
+
+    int    nHalfW      = Width / 2;
+    int    nHalfH      = Height / 2;
+    double lfCoeffX    = 1.0;
+    double lfCoeffY    = 1.0;
+    double lfCoeffStep = prm.Coeff / 1000.0;
+
+    if (prm.Horizontal)
+    {
+        lfCoeffX = (double)nHalfW / qLn(qFabs(lfCoeffStep) * nHalfW + 1.0);
+    }
+
+    if (prm.Vertical)
+    {
+        lfCoeffY = (double)nHalfH / qLn(qFabs(lfCoeffStep) * nHalfH + 1.0);
+    }
+
+    for (int w = prm.start; runningFlag() && (w < prm.stop); ++w)
+    {
+        // we find the distance from the center
+        nh = qFabs((double)(prm.h - nHalfH));
+        nw = qFabs((double)(w - nHalfW));
+
+        if (prm.Horizontal)
+        {
+            if (prm.Coeff > 0.0)
+            {
+                nw = (qExp(nw / lfCoeffX) - 1.0) / lfCoeffStep;
+            }
+            else
+            {
+                nw = lfCoeffX * qLn(1.0 + (-1.0 * lfCoeffStep) * nw);
+            }
+        }
+
+        if (prm.Vertical)
+        {
+            if (prm.Coeff > 0.0)
+            {
+                nh = (qExp(nh / lfCoeffY) - 1.0) / lfCoeffStep;
+            }
+            else
+            {
+                nh = lfCoeffY * qLn(1.0 + (-1.0 * lfCoeffStep) * nh);
+            }
+        }
+
+        nw = (double)nHalfW + ((w >= nHalfW)     ? nw : -nw);
+        nh = (double)nHalfH + ((prm.h >= nHalfH) ? nh : -nh);
+
+        setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, prm.h, nw, nh, prm.AntiAlias);
+    }
+}
+
 /* Function to apply the Cilindrical effect backported from ImageProcessing version 2
  *
  * data             => The image data in RGBA mode.
@@ -453,76 +517,42 @@ void DistortionFXFilter::cilindrical(DImg* orgImage, DImg* destImage, double Coe
         return;
     }
 
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-    uchar* data     = orgImage->bits();
-    bool sixteenBit = orgImage->sixteenBit();
-    int bytesDepth  = orgImage->bytesDepth();
-    uchar* pResBits = destImage->bits();
-
     int progress;
 
-    int h, w;
-    double nh, nw;
-
-    int nHalfW = Width / 2, nHalfH = Height / 2;
-    double lfCoeffX = 1.0, lfCoeffY = 1.0, lfCoeffStep = Coeff / 1000.0;
-
-    if (Horizontal)
-    {
-        lfCoeffX = (double)nHalfW / qLn(qFabs(lfCoeffStep) * nHalfW + 1.0);
-    }
-
-    if (Vertical)
-    {
-        lfCoeffY = (double)nHalfH / qLn(qFabs(lfCoeffStep) * nHalfH + 1.0);
-    }
-
     // initial copy
-    memcpy(pResBits, data, orgImage->numBytes());
+    memcpy(destImage->bits(), orgImage->bits(), orgImage->numBytes());
+
+    QList<int> vals = multithreadedSteps(orgImage->width());
+    QList <QFuture<void> > tasks;
+
+    Args prm;
+    prm.orgImage   = orgImage;
+    prm.destImage  = destImage;
+    prm.Coeff      = Coeff;
+    prm.Horizontal = Horizontal;
+    prm.Vertical   = Vertical;
+    prm.AntiAlias  = AntiAlias;
 
     // main loop
 
-    for (h = 0; runningFlag() && (h < Height); ++h)
+    for (int h = 0; runningFlag() && (h < (int)orgImage->height()); ++h)
     {
-        for (w = 0; runningFlag() && (w < Width); ++w)
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
         {
-            // we find the distance from the center
-            nh = qFabs((double)(h - nHalfH));
-            nw = qFabs((double)(w - nHalfW));
-
-            if (Horizontal)
-            {
-                if (Coeff > 0.0)
-                {
-                    nw = (qExp(nw / lfCoeffX) - 1.0) / lfCoeffStep;
-                }
-                else
-                {
-                    nw = lfCoeffX * qLn(1.0 + (-1.0 * lfCoeffStep) * nw);
-                }
-            }
-
-            if (Vertical)
-            {
-                if (Coeff > 0.0)
-                {
-                    nh = (qExp(nh / lfCoeffY) - 1.0) / lfCoeffStep;
-                }
-                else
-                {
-                    nh = lfCoeffY * qLn(1.0 + (-1.0 * lfCoeffStep) * nh);
-                }
-            }
-
-            nw = (double)nHalfW + ((w >= nHalfW) ? nw : -nw);
-            nh = (double)nHalfH + ((h >= nHalfH) ? nh : -nh);
-
-            setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, h, nw, nh, AntiAlias);
+            prm.start = vals[j];
+            prm.stop  = vals[j+1];
+            prm.h     = h;
+            tasks.append(QtConcurrent::run(this,
+                                           &DistortionFXFilter::cilindricalMultithreaded,
+                                           prm
+                                          ));
         }
 
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
+
         // Update the progress bar in dialog.
-        progress = (int)(((double)h * 100.0) / Height);
+        progress = (int)(((double)h * 100.0) / orgImage->height());
 
         if (progress % 5 == 0)
         {

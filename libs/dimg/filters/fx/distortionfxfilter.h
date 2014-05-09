@@ -112,6 +112,8 @@ private:
         double Coeff;
         bool   AntiAlias;
         int    dist;
+        bool   Horizontal;
+        bool   Vertical;
     };
 
 private:
@@ -127,6 +129,8 @@ private:
 
     void cilindrical(DImg* orgImage, DImg* destImage, double Coeff,
                      bool Horizontal, bool Vertical, bool AntiAlias=true);
+    void cilindricalMultithreaded(const Args& prm);
+
     void multipleCorners(DImg* orgImage, DImg* destImage, int Factor, bool AntiAlias=true);
     void polarCoordinates(DImg* orgImage, DImg* destImage, bool Type, bool AntiAlias=true);
     void circularWaves(DImg* orgImage, DImg* destImage, int X, int Y, double Amplitude,
