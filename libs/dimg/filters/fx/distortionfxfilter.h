@@ -102,10 +102,25 @@ public:
 
 private:
 
+    struct Args
+    {
+        uint   start;
+        uint   stop;
+        int    h;
+        DImg*  orgImage;
+        DImg*  destImage;
+        double Coeff;
+        bool   AntiAlias;
+    };
+
+private:
+
     void filterImage();
 
     // Backported from ImageProcessing version 2
     void fisheye(DImg* orgImage, DImg* destImage, double Coeff, bool AntiAlias=true);
+    void fisheyeMultithreaded(const Args& prm);
+
     void twirl(DImg* orgImage, DImg* destImage, int dist, bool AntiAlias=true);
     void cilindrical(DImg* orgImage, DImg* destImage, double Coeff,
                      bool Horizontal, bool Vertical, bool AntiAlias=true);

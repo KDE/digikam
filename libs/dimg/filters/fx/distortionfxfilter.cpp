@@ -192,6 +192,8 @@ void DistortionFXFilter::fisheye(DImg* orgImage, DImg* destImage, double Coeff, 
         return;
     }
 
+    int progress;
+
     int Width       = orgImage->width();
     int Height      = orgImage->height();
     uchar* data     = orgImage->bits();
@@ -199,17 +201,17 @@ void DistortionFXFilter::fisheye(DImg* orgImage, DImg* destImage, double Coeff, 
     int bytesDepth  = orgImage->bytesDepth();
     uchar* pResBits = destImage->bits();
 
-    int h, w;
     double nh, nw, th, tw;
-
-    int progress;
-    int nHalfW = Width / 2, nHalfH = Height / 2;
 
     DColor color;
     int offset;
 
-    double lfXScale = 1.0, lfYScale = 1.0;
-    double lfRadius, lfRadMax, lfAngle, lfCoeff, lfCoeffStep = Coeff / 1000.0;
+    int nHalfW         = Width  / 2;
+    int nHalfH         = Height / 2;
+    double lfXScale    = 1.0;
+    double lfYScale    = 1.0;
+    double lfCoeffStep = Coeff / 1000.0;
+    double lfRadius, lfAngle;
 
     if (Width > Height)
     {
@@ -220,16 +222,16 @@ void DistortionFXFilter::fisheye(DImg* orgImage, DImg* destImage, double Coeff, 
         lfXScale = (double)Height / (double)Width;
     }
 
-    lfRadMax = (double)qMax(Height, Width) / 2.0;
-    lfCoeff  = lfRadMax / qLn(qFabs(lfCoeffStep) * lfRadMax + 1.0);
+    double lfRadMax = (double)qMax(Height, Width) / 2.0;
+    double lfCoeff  = lfRadMax / qLn(qFabs(lfCoeffStep) * lfRadMax + 1.0);
 
     // main loop
 
-    for (h = 0; runningFlag() && (h < Height); ++h)
+    for (int h = 0; runningFlag() && (h < Height); ++h)
     {
         th = lfYScale * (double)(h - nHalfH);
 
-        for (w = 0; runningFlag() && (w < Width); ++w)
+        for (int w = 0; runningFlag() && (w < Width); ++w)
         {
             tw = lfXScale * (double)(w - nHalfW);
 
