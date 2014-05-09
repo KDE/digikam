@@ -658,166 +658,6 @@ void DistortionFXFilter::multipleCorners(DImg* orgImage, DImg* destImage, int Fa
     }
 }
 
-/* Function to apply the Polar Coordinates effect backported from ImageProcesqSing version 2
- *
- * data             => The image data in RGBA mode.
- * Width            => Width of image.
- * Height           => Height of image.
- * Type             => if true Polar Coordinate to Polar else inverse.
- * Antialias        => Smart blurring result.
- *
- * Theory           => Similar to PolarCoordinates from Photoshop. We apply the polar
- *                     transformation in a proportional (Height and Width) radius.
- */
-void DistortionFXFilter::polarCoordinates(DImg* orgImage, DImg* destImage, bool Type, bool AntiAlias)
-{
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-    uchar* data     = orgImage->bits();
-    bool sixteenBit = orgImage->sixteenBit();
-    int bytesDepth  = orgImage->bytesDepth();
-    uchar* pResBits = destImage->bits();
-
-    int h, w;
-    double nh, nw, th, tw;
-    int progress;
-
-    int nHalfW = Width / 2, nHalfH = Height / 2;
-    double lfXScale = 1.0, lfYScale = 1.0;
-    double lfAngle, lfRadius, lfRadMax;
-
-    if (Width > Height)
-    {
-        lfYScale = (double)Width / (double)Height;
-    }
-    else if (Height > Width)
-    {
-        lfXScale = (double)Height / (double)Width;
-    }
-
-    lfRadMax = (double)qMax(Height, Width) / 2.0;
-
-    // main loop
-
-    for (h = 0; runningFlag() && (h < Height); ++h)
-    {
-        th = lfYScale * (double)(h - nHalfH);
-
-        for (w = 0; runningFlag() && (w < Width); ++w)
-        {
-            tw = lfXScale * (double)(w - nHalfW);
-
-            if (Type)
-            {
-                // now, we get the distance
-                lfRadius = qSqrt(th * th + tw * tw);
-                // we find the angle from the center
-                lfAngle = qAtan2(tw, th);
-
-                // now we find the exact position's x and y
-                nh = lfRadius * (double) Height / lfRadMax;
-                nw =  lfAngle * (double)  Width / (2 * M_PI);
-
-                nw = (double)nHalfW + nw;
-            }
-            else
-            {
-                lfRadius = (double)(h) * lfRadMax / (double)Height;
-                lfAngle  = (double)(w) * (2 * M_PI) / (double) Width;
-
-                nw = (double)nHalfW - (lfRadius / lfXScale) * qSin(lfAngle);
-                nh = (double)nHalfH - (lfRadius / lfYScale) * qCos(lfAngle);
-            }
-
-            setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, h, nw, nh, AntiAlias);
-        }
-
-        // Update the progress bar in dialog.
-        progress = (int)(((double)h * 100.0) / Height);
-
-        if (progress % 5 == 0)
-        {
-            postProgress(progress);
-        }
-    }
-}
-
-/* Function to apply the circular waves effect backported from ImageProcesqSing version 2
- *
- * data             => The image data in RGBA mode.
- * Width            => Width of image.
- * Height           => Height of image.
- * X, Y             => Position of circle center on the image.
- * Amplitude        => Sinoidal maximum height
- * Frequency        => Frequency value.
- * Phase            => Phase value.
- * WavesType        => If true  the amplitude is proportional to radius.
- * Antialias        => Smart bluring result.
- *
- * Theory           => Similar to Waves effect, but here I apply a senoidal function
- *                     with the angle point.
- */
-void DistortionFXFilter::circularWaves(DImg* orgImage, DImg* destImage, int X, int Y, double Amplitude,
-                                       double Frequency, double Phase, bool WavesType, bool AntiAlias)
-{
-    if (Amplitude < 0.0)
-    {
-        Amplitude = 0.0;
-    }
-
-    if (Frequency < 0.0)
-    {
-        Frequency = 0.0;
-    }
-
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-    uchar* data     = orgImage->bits();
-    bool sixteenBit = orgImage->sixteenBit();
-    int bytesDepth  = orgImage->bytesDepth();
-    uchar* pResBits = destImage->bits();
-
-    int h, w;
-    double nh, nw;
-    int progress;
-
-    double lfRadius, lfRadMax, lfNewAmp = Amplitude;
-    double lfFreqAngle = Frequency * ANGLE_RATIO;
-
-    Phase *= ANGLE_RATIO;
-
-    lfRadMax = qSqrt(Height * Height + Width * Width);
-
-    for (h = 0; runningFlag() && (h < Height); ++h)
-    {
-        for (w = 0; runningFlag() && (w < Width); ++w)
-        {
-            nw = X - w;
-            nh = Y - h;
-
-            lfRadius = qSqrt(nw * nw + nh * nh);
-
-            if (WavesType)
-            {
-                lfNewAmp = Amplitude * lfRadius / lfRadMax;
-            }
-
-            nw = (double)w + lfNewAmp * qSin(lfFreqAngle * lfRadius + Phase);
-            nh = (double)h + lfNewAmp * qCos(lfFreqAngle * lfRadius + Phase);
-
-            setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, h, nw, nh, AntiAlias);
-        }
-
-        // Update the progress bar in dialog.
-        progress = (int)(((double)h * 100.0) / Height);
-
-        if (progress % 5 == 0)
-        {
-            postProgress(progress);
-        }
-    }
-}
-
 /* Function to apply the waves effect
  *
  * data             => The image data in RGBA mode.
@@ -970,6 +810,166 @@ void DistortionFXFilter::blockWaves(DImg* orgImage, DImg* destImage,
 
         // Update the progress bar in dialog.
         progress = (int)(((double)w * 100.0) / Width);
+
+        if (progress % 5 == 0)
+        {
+            postProgress(progress);
+        }
+    }
+}
+
+/* Function to apply the circular waves effect backported from ImageProcesqSing version 2
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
+ * X, Y             => Position of circle center on the image.
+ * Amplitude        => Sinoidal maximum height
+ * Frequency        => Frequency value.
+ * Phase            => Phase value.
+ * WavesType        => If true  the amplitude is proportional to radius.
+ * Antialias        => Smart bluring result.
+ *
+ * Theory           => Similar to Waves effect, but here I apply a senoidal function
+ *                     with the angle point.
+ */
+void DistortionFXFilter::circularWaves(DImg* orgImage, DImg* destImage, int X, int Y, double Amplitude,
+                                       double Frequency, double Phase, bool WavesType, bool AntiAlias)
+{
+    if (Amplitude < 0.0)
+    {
+        Amplitude = 0.0;
+    }
+
+    if (Frequency < 0.0)
+    {
+        Frequency = 0.0;
+    }
+
+    int Width       = orgImage->width();
+    int Height      = orgImage->height();
+    uchar* data     = orgImage->bits();
+    bool sixteenBit = orgImage->sixteenBit();
+    int bytesDepth  = orgImage->bytesDepth();
+    uchar* pResBits = destImage->bits();
+
+    int h, w;
+    double nh, nw;
+    int progress;
+
+    double lfRadius, lfRadMax, lfNewAmp = Amplitude;
+    double lfFreqAngle = Frequency * ANGLE_RATIO;
+
+    Phase *= ANGLE_RATIO;
+
+    lfRadMax = qSqrt(Height * Height + Width * Width);
+
+    for (h = 0; runningFlag() && (h < Height); ++h)
+    {
+        for (w = 0; runningFlag() && (w < Width); ++w)
+        {
+            nw = X - w;
+            nh = Y - h;
+
+            lfRadius = qSqrt(nw * nw + nh * nh);
+
+            if (WavesType)
+            {
+                lfNewAmp = Amplitude * lfRadius / lfRadMax;
+            }
+
+            nw = (double)w + lfNewAmp * qSin(lfFreqAngle * lfRadius + Phase);
+            nh = (double)h + lfNewAmp * qCos(lfFreqAngle * lfRadius + Phase);
+
+            setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, h, nw, nh, AntiAlias);
+        }
+
+        // Update the progress bar in dialog.
+        progress = (int)(((double)h * 100.0) / Height);
+
+        if (progress % 5 == 0)
+        {
+            postProgress(progress);
+        }
+    }
+}
+
+/* Function to apply the Polar Coordinates effect backported from ImageProcesqSing version 2
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
+ * Type             => if true Polar Coordinate to Polar else inverse.
+ * Antialias        => Smart blurring result.
+ *
+ * Theory           => Similar to PolarCoordinates from Photoshop. We apply the polar
+ *                     transformation in a proportional (Height and Width) radius.
+ */
+void DistortionFXFilter::polarCoordinates(DImg* orgImage, DImg* destImage, bool Type, bool AntiAlias)
+{
+    int Width       = orgImage->width();
+    int Height      = orgImage->height();
+    uchar* data     = orgImage->bits();
+    bool sixteenBit = orgImage->sixteenBit();
+    int bytesDepth  = orgImage->bytesDepth();
+    uchar* pResBits = destImage->bits();
+
+    int h, w;
+    double nh, nw, th, tw;
+    int progress;
+
+    int nHalfW = Width / 2, nHalfH = Height / 2;
+    double lfXScale = 1.0, lfYScale = 1.0;
+    double lfAngle, lfRadius, lfRadMax;
+
+    if (Width > Height)
+    {
+        lfYScale = (double)Width / (double)Height;
+    }
+    else if (Height > Width)
+    {
+        lfXScale = (double)Height / (double)Width;
+    }
+
+    lfRadMax = (double)qMax(Height, Width) / 2.0;
+
+    // main loop
+
+    for (h = 0; runningFlag() && (h < Height); ++h)
+    {
+        th = lfYScale * (double)(h - nHalfH);
+
+        for (w = 0; runningFlag() && (w < Width); ++w)
+        {
+            tw = lfXScale * (double)(w - nHalfW);
+
+            if (Type)
+            {
+                // now, we get the distance
+                lfRadius = qSqrt(th * th + tw * tw);
+                // we find the angle from the center
+                lfAngle = qAtan2(tw, th);
+
+                // now we find the exact position's x and y
+                nh = lfRadius * (double) Height / lfRadMax;
+                nw =  lfAngle * (double)  Width / (2 * M_PI);
+
+                nw = (double)nHalfW + nw;
+            }
+            else
+            {
+                lfRadius = (double)(h) * lfRadMax / (double)Height;
+                lfAngle  = (double)(w) * (2 * M_PI) / (double) Width;
+
+                nw = (double)nHalfW - (lfRadius / lfXScale) * qSin(lfAngle);
+                nh = (double)nHalfH - (lfRadius / lfYScale) * qCos(lfAngle);
+            }
+
+            setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, h, nw, nh, AntiAlias);
+        }
+
+        // Update the progress bar in dialog.
+        progress = (int)(((double)h * 100.0) / Height);
 
         if (progress % 5 == 0)
         {
