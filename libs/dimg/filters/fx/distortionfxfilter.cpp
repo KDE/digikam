@@ -321,6 +321,8 @@ void DistortionFXFilter::twirl(DImg* orgImage, DImg* destImage, int dist, bool A
         return;
     }
 
+    int progress;
+
     int Width       = orgImage->width();
     int Height      = orgImage->height();
     uchar* data     = orgImage->bits();
@@ -328,17 +330,15 @@ void DistortionFXFilter::twirl(DImg* orgImage, DImg* destImage, int dist, bool A
     int bytesDepth  = orgImage->bytesDepth();
     uchar* pResBits = destImage->bits();
 
-    int h, w;
-    double tw, th, nh, nw;
-
     DColor color;
     int offset;
 
-    int progress;
-    int nHalfW = Width / 2, nHalfH = Height / 2;
-
-    double lfXScale = 1.0, lfYScale = 1.0;
-    double lfAngle, lfNewAngle, lfAngleStep, lfAngleSum, lfCurrentRadius, lfRadMax;
+    int    nHalfW   = Width / 2;
+    int    nHalfH   = Height / 2;
+    double lfXScale = 1.0;
+    double lfYScale = 1.0;
+    double lfAngle, lfNewAngle, lfAngleSum, lfCurrentRadius;
+    double tw, th, nh, nw;
 
     if (Width > Height)
     {
@@ -350,17 +350,17 @@ void DistortionFXFilter::twirl(DImg* orgImage, DImg* destImage, int dist, bool A
     }
 
     // the angle step is dist divided by 10000
-    lfAngleStep = dist / 10000.0;
+    double lfAngleStep = dist / 10000.0;
     // now, we get the minimum radius
-    lfRadMax = (double)qMax(Width, Height) / 2.0;
+    double lfRadMax    = (double)qMax(Width, Height) / 2.0;
 
     // main loop
 
-    for (h = 0; runningFlag() && (h < Height); ++h)
+    for (int h = 0; runningFlag() && (h < Height); ++h)
     {
         th = lfYScale * (double)(h - nHalfH);
 
-        for (w = 0; runningFlag() && (w < Width); ++w)
+        for (int w = 0; runningFlag() && (w < Width); ++w)
         {
             tw = lfXScale * (double)(w - nHalfW);
 
