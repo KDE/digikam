@@ -209,8 +209,6 @@ DistortionFXTool::DistortionFXTool(QObject* const parent)
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
     setToolView(d->previewWidget);
     setToolSettings(d->gboxSettings);
-
-//    slotEffectTypeChanged(d->effectType->currentIndex());
 }
 
 DistortionFXTool::~DistortionFXTool()
@@ -317,8 +315,6 @@ void DistortionFXTool::slotEffectTypeChanged(int type)
     }
 
     blockWidgetSignals(false);
-
-//    slotPreview();
 }
 
 void DistortionFXTool::preparePreview()
@@ -332,9 +328,6 @@ void DistortionFXTool::preparePreview()
     ImageIface iface;
     DImg image = *iface.original();
 
-/*    ImageIface* const iface = d->previewWidget->imageIface();
-    DImg image              = iface->preview();
-*/
     setFilter(new DistortionFXFilter(&image, this, e, l, f));
 }
 
@@ -353,15 +346,9 @@ void DistortionFXTool::prepareFinal()
 
 void DistortionFXTool::setPreviewImage()
 {
-/*    ImageIface* const iface = d->previewWidget->imageIface();
-    DImg imDest             = filter()->getTargetImage().smoothScale(iface->previewSize());
-    iface->setPreview(imDest);
-*/
     QRect pRect  = d->previewWidget->getOriginalImageRegionToRender();
     DImg destImg = filter()->getTargetImage().copy(pRect);
     d->previewWidget->setPreviewImage(destImg);
-
-//    d->previewWidget->updatePreview();
 }
 
 void DistortionFXTool::setFinalImage()
