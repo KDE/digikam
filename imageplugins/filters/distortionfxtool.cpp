@@ -59,7 +59,7 @@
 #include "distortionfxfilter.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
-#include "imageguidewidget.h"
+#include "imageregionwidget.h"
 
 using namespace KDcrawIface;
 
@@ -95,7 +95,7 @@ public:
     RIntNumInput*        levelInput;
     RIntNumInput*        iterationInput;
 
-    ImageGuideWidget*    previewWidget;
+    ImageRegionWidget*   previewWidget;
     EditorToolSettings*  gboxSettings;
 };
 
@@ -114,14 +114,17 @@ DistortionFXTool::DistortionFXTool(QObject* const parent)
     setToolName(i18n("Distortion Effects"));
     setToolIcon(SmallIcon("distortionfx"));
 
-    d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
+    d->previewWidget = new ImageRegionWidget;
     d->previewWidget->setWhatsThis(i18n("This is the preview of the distortion effect "
                                         "applied to the photograph."));
 
     // -------------------------------------------------------------
 
     d->gboxSettings = new EditorToolSettings;
-    d->gboxSettings->setTools(EditorToolSettings::ColorGuide);
+    d->gboxSettings->setButtons(EditorToolSettings::Default|
+                                EditorToolSettings::Ok|
+                                EditorToolSettings::Cancel|
+                                EditorToolSettings::Try);
 
     // -------------------------------------------------------------
 
@@ -187,12 +190,6 @@ DistortionFXTool::DistortionFXTool(QObject* const parent)
     connect(d->effectType, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotEffectTypeChanged(int)));
 
-    connect(d->levelInput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotTimer()));
-
-    connect(d->iterationInput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotTimer()));
-
     // -------------------------------------------------------------
 
     QGridLayout* const mainLayout = new QGridLayout();
@@ -209,11 +206,11 @@ DistortionFXTool::DistortionFXTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    setToolSettings(d->gboxSettings);
-    setToolView(d->previewWidget);
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
+    setToolView(d->previewWidget);
+    setToolSettings(d->gboxSettings);
 
-    slotEffectTypeChanged(d->effectType->currentIndex());
+//    slotEffectTypeChanged(d->effectType->currentIndex());
 }
 
 DistortionFXTool::~DistortionFXTool()
@@ -321,7 +318,7 @@ void DistortionFXTool::slotEffectTypeChanged(int type)
 
     blockWidgetSignals(false);
 
-    slotPreview();
+//    slotPreview();
 }
 
 void DistortionFXTool::preparePreview()
@@ -332,9 +329,12 @@ void DistortionFXTool::preparePreview()
     int f                   = d->iterationInput->value();
     int e                   = d->effectType->currentIndex();
 
-    ImageIface* const iface = d->previewWidget->imageIface();
-    DImg image              = iface->preview();
+    ImageIface iface;
+    DImg image = *iface.original();
 
+/*    ImageIface* const iface = d->previewWidget->imageIface();
+    DImg image              = iface->preview();
+*/
     setFilter(new DistortionFXFilter(&image, this, e, l, f));
 }
 
@@ -353,11 +353,15 @@ void DistortionFXTool::prepareFinal()
 
 void DistortionFXTool::setPreviewImage()
 {
-    ImageIface* const iface = d->previewWidget->imageIface();
+/*    ImageIface* const iface = d->previewWidget->imageIface();
     DImg imDest             = filter()->getTargetImage().smoothScale(iface->previewSize());
     iface->setPreview(imDest);
+*/
+    QRect pRect  = d->previewWidget->getOriginalImageRegionToRender();
+    DImg destImg = filter()->getTargetImage().copy(pRect);
+    d->previewWidget->setPreviewImage(destImg);
 
-    d->previewWidget->updatePreview();
+//    d->previewWidget->updatePreview();
 }
 
 void DistortionFXTool::setFinalImage()
