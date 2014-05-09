@@ -104,8 +104,8 @@ private:
 
     struct Args
     {
-        uint   start;
-        uint   stop;
+        int    start;
+        int    stop;
         int    h;
         DImg*  orgImage;
         DImg*  destImage;
