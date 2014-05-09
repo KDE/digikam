@@ -561,6 +561,44 @@ void DistortionFXFilter::cilindrical(DImg* orgImage, DImg* destImage, double Coe
     }
 }
 
+void DistortionFXFilter::multipleCornersMultithreaded(const Args& prm)
+{
+    int Width       = prm.orgImage->width();
+    int Height      = prm.orgImage->height();
+    uchar* data     = prm.orgImage->bits();
+    bool sixteenBit = prm.orgImage->sixteenBit();
+    int bytesDepth  = prm.orgImage->bytesDepth();
+    uchar* pResBits = prm.destImage->bits();
+
+    double nh, nw;
+
+    int    nHalfW   = Width / 2;
+    int    nHalfH   = Height / 2;
+    double lfRadMax = qSqrt(Height * Height + Width * Width) / 2.0;
+    double lfAngle, lfNewRadius, lfCurrentRadius;
+
+    for (int w = prm.start; runningFlag() && (w < prm.stop); ++w)
+    {
+        // we find the distance from the center
+        nh = nHalfH - prm.h;
+        nw = nHalfW - w;
+
+        // now, we get the distance
+        lfCurrentRadius = qSqrt(nh * nh + nw * nw);
+        // we find the angle from the center
+        lfAngle = qAtan2(nh, nw) * (double)prm.Factor;
+
+        // ok, we sum angle with accumuled to find a new angle
+        lfNewRadius = lfCurrentRadius * lfCurrentRadius / lfRadMax;
+
+        // now we find the exact position's x and y
+        nw = (double)nHalfW - (qCos(lfAngle) * lfNewRadius);
+        nh = (double)nHalfH - (qSin(lfAngle) * lfNewRadius);
+
+        setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, prm.h, nw, nh, prm.AntiAlias);
+    }
+}
+
 /* Function to apply the Multiple Corners effect backported from ImageProcessing version 2
  *
  * data             => The image data in RGBA mode.
@@ -581,49 +619,37 @@ void DistortionFXFilter::multipleCorners(DImg* orgImage, DImg* destImage, int Fa
         return;
     }
 
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-    uchar* data     = orgImage->bits();
-    bool sixteenBit = orgImage->sixteenBit();
-    int bytesDepth  = orgImage->bytesDepth();
-    uchar* pResBits = destImage->bits();
-
-    int h, w;
-    double nh, nw;
     int progress;
 
-    int nHalfW = Width / 2, nHalfH = Height / 2;
-    double lfAngle, lfNewRadius, lfCurrentRadius, lfRadMax;
+    QList<int> vals = multithreadedSteps(orgImage->width());
+    QList <QFuture<void> > tasks;
 
-    lfRadMax = qSqrt(Height * Height + Width * Width) / 2.0;
+    Args prm;
+    prm.orgImage  = orgImage;
+    prm.destImage = destImage;
+    prm.Factor    = Factor;
+    prm.AntiAlias = AntiAlias;
 
     // main loop
 
-    for (h = 0; runningFlag() && (h < Height); ++h)
+    for (int h = 0; runningFlag() && (h < (int)orgImage->height()); ++h)
     {
-        for (w = 0; runningFlag() && (w < Width); ++w)
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
         {
-            // we find the distance from the center
-            nh = nHalfH - h;
-            nw = nHalfW - w;
-
-            // now, we get the distance
-            lfCurrentRadius = qSqrt(nh * nh + nw * nw);
-            // we find the angle from the center
-            lfAngle = qAtan2(nh, nw) * (double)Factor;
-
-            // ok, we sum angle with accumuled to find a new angle
-            lfNewRadius = lfCurrentRadius * lfCurrentRadius / lfRadMax;
-
-            // now we find the exact position's x and y
-            nw = (double)nHalfW - (qCos(lfAngle) * lfNewRadius);
-            nh = (double)nHalfH - (qSin(lfAngle) * lfNewRadius);
-
-            setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, h, nw, nh, AntiAlias);
+            prm.start = vals[j];
+            prm.stop  = vals[j+1];
+            prm.h     = h;
+            tasks.append(QtConcurrent::run(this,
+                                           &DistortionFXFilter::multipleCornersMultithreaded,
+                                           prm
+                                          ));
         }
 
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
+
         // Update the progress bar in dialog.
-        progress = (int)(((double)h * 100.0) / Height);
+        progress = (int)(((double)h * 100.0) / orgImage->height());
 
         if (progress % 5 == 0)
         {
