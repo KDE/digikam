@@ -196,6 +196,8 @@ BlurFXTool::BlurFXTool(QObject* const parent)
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
+
+    slotEffectTypeChanged(d->effectType->defaultIndex());
 }
 
 BlurFXTool::~BlurFXTool()

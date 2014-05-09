@@ -209,6 +209,8 @@ DistortionFXTool::DistortionFXTool(QObject* const parent)
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
     setToolView(d->previewWidget);
     setToolSettings(d->gboxSettings);
+
+    slotEffectTypeChanged(d->effectType->defaultIndex());
 }
 
 DistortionFXTool::~DistortionFXTool()
