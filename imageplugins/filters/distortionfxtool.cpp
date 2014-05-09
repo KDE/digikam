@@ -6,7 +6,7 @@
  * Date        : 2005-02-11
  * Description : a plugin to apply Distortion FX to an image.
  *
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Original Distortion algorithms copyrighted 2004-2005 by
@@ -117,8 +117,6 @@ DistortionFXTool::DistortionFXTool(QObject* const parent)
     d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
     d->previewWidget->setWhatsThis(i18n("This is the preview of the distortion effect "
                                         "applied to the photograph."));
-    setToolView(d->previewWidget);
-    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
 
     // -------------------------------------------------------------
 
@@ -186,9 +184,18 @@ DistortionFXTool::DistortionFXTool(QObject* const parent)
     d->iterationInput->setWhatsThis( i18n("This value controls the iterations to use for Waves, "
                                           "Tile, and Neon effects."));
 
+    connect(d->effectType, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(slotEffectTypeChanged(int)));
+
+    connect(d->levelInput, SIGNAL(valueChanged(int)),
+            this, SLOT(slotTimer()));
+
+    connect(d->iterationInput, SIGNAL(valueChanged(int)),
+            this, SLOT(slotTimer()));
+
     // -------------------------------------------------------------
 
-    QGridLayout* mainLayout = new QGridLayout();
+    QGridLayout* const mainLayout = new QGridLayout();
     mainLayout->addWidget(d->effectTypeLabel,  0, 0, 1, 3);
     mainLayout->addWidget(d->effectType,       1, 0, 1, 3);
     mainLayout->addWidget(d->levelLabel,       2, 0, 1, 3);
@@ -203,17 +210,10 @@ DistortionFXTool::DistortionFXTool(QObject* const parent)
     // -------------------------------------------------------------
 
     setToolSettings(d->gboxSettings);
+    setToolView(d->previewWidget);
+    setPreviewModeMask(PreviewToolBar::AllPreviewModes);
 
-    // -------------------------------------------------------------
-
-    connect(d->effectType, SIGNAL(activated(int)),
-            this, SLOT(slotEffectTypeChanged(int)));
-
-    connect(d->levelInput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotTimer()));
-
-    connect(d->iterationInput, SIGNAL(valueChanged(int)),
-            this, SLOT(slotTimer()));
+    slotEffectTypeChanged(d->effectType->currentIndex());
 }
 
 DistortionFXTool::~DistortionFXTool()
@@ -226,17 +226,13 @@ void DistortionFXTool::readSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    d->effectType->blockSignals(true);
-    d->iterationInput->blockSignals(true);
-    d->levelInput->blockSignals(true);
+    blockWidgetSignals(true);
 
     d->effectType->setCurrentIndex(group.readEntry(d->configEffectTypeEntry,       (int)DistortionFXFilter::FishEye));
     d->iterationInput->setValue(group.readEntry(d->configIterationAdjustmentEntry, 10));
     d->levelInput->setValue(group.readEntry(d->configLevelAdjustmentEntry,         50));
 
-    d->effectType->blockSignals(false);
-    d->iterationInput->blockSignals(false);
-    d->levelInput->blockSignals(false);
+    blockWidgetSignals(false);
 
     slotPreview();
 }
@@ -255,27 +251,25 @@ void DistortionFXTool::writeSettings()
 
 void DistortionFXTool::slotResetSettings()
 {
-    d->effectType->blockSignals(true);
-    d->iterationInput->blockSignals(true);
-    d->levelInput->blockSignals(true);
+    blockWidgetSignals(true);
 
     d->effectType->slotReset();
     d->iterationInput->slotReset();
     d->levelInput->slotReset();
     slotEffectTypeChanged(d->effectType->defaultIndex());
 
-    d->effectType->blockSignals(false);
-    d->iterationInput->blockSignals(false);
-    d->levelInput->blockSignals(false);
+    blockWidgetSignals(false);
 }
 
 void DistortionFXTool::slotEffectTypeChanged(int type)
 {
     d->levelInput->setEnabled(true);
     d->levelLabel->setEnabled(true);
+    d->iterationInput->setEnabled(false);
+    d->iterationLabel->setEnabled(false);
 
-    d->levelInput->blockSignals(true);
-    d->iterationInput->blockSignals(true);
+    blockWidgetSignals(true);
+
     d->levelInput->setRange(0, 100, 1);
     d->levelInput->setSliderEnabled(true);
     d->levelInput->setValue(25);
@@ -325,20 +319,14 @@ void DistortionFXTool::slotEffectTypeChanged(int type)
             break;
     }
 
-    d->levelInput->blockSignals(false);
-    d->iterationInput->blockSignals(false);
+    blockWidgetSignals(false);
 
     slotPreview();
 }
 
 void DistortionFXTool::preparePreview()
 {
-    d->effectTypeLabel->setEnabled(false);
-    d->effectType->setEnabled(false);
-    d->levelInput->setEnabled(false);
-    d->levelLabel->setEnabled(false);
-    d->iterationInput->setEnabled(false);
-    d->iterationLabel->setEnabled(false);
+    d->gboxSettings->setEnabled(false);
 
     int l                   = d->levelInput->value();
     int f                   = d->iterationInput->value();
@@ -352,12 +340,7 @@ void DistortionFXTool::preparePreview()
 
 void DistortionFXTool::prepareFinal()
 {
-    d->effectTypeLabel->setEnabled(false);
-    d->effectType->setEnabled(false);
-    d->levelInput->setEnabled(false);
-    d->levelLabel->setEnabled(false);
-    d->iterationInput->setEnabled(false);
-    d->iterationLabel->setEnabled(false);
+    d->gboxSettings->setEnabled(false);
 
     int l = d->levelInput->value();
     int f = d->iterationInput->value();
@@ -385,41 +368,14 @@ void DistortionFXTool::setFinalImage()
 
 void DistortionFXTool::renderingFinished()
 {
-    d->effectTypeLabel->setEnabled(true);
-    d->effectType->setEnabled(true);
-    d->levelInput->setEnabled(true);
-    d->levelLabel->setEnabled(true);
-    d->iterationInput->setEnabled(true);
-    d->iterationLabel->setEnabled(true);
+    d->gboxSettings->setEnabled(true);
+}
 
-    switch (d->effectType->currentIndex())
-    {
-        case DistortionFXFilter::FishEye:
-        case DistortionFXFilter::Twirl:
-        case DistortionFXFilter::CilindricalHor:
-        case DistortionFXFilter::CilindricalVert:
-        case DistortionFXFilter::CilindricalHV:
-        case DistortionFXFilter::Caricature:
-        case DistortionFXFilter::MultipleCorners:
-            break;
-
-        case DistortionFXFilter::PolarCoordinates:
-        case DistortionFXFilter::UnpolarCoordinates:
-            d->levelInput->setEnabled(false);
-            d->levelLabel->setEnabled(false);
-            break;
-
-        case DistortionFXFilter::WavesHorizontal:
-        case DistortionFXFilter::WavesVertical:
-        case DistortionFXFilter::BlockWaves1:
-        case DistortionFXFilter::BlockWaves2:
-        case DistortionFXFilter::CircularWaves1:
-        case DistortionFXFilter::CircularWaves2:
-        case DistortionFXFilter::Tile:
-            d->iterationInput->setEnabled(true);
-            d->iterationLabel->setEnabled(true);
-            break;
-    }
+void DistortionFXTool::blockWidgetSignals(bool b)
+{
+    d->effectType->blockSignals(b);
+    d->levelInput->blockSignals(b);
+    d->iterationInput->blockSignals(b);
 }
 
 }  // namespace DigikamFxFiltersImagePlugin
