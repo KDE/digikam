@@ -107,6 +107,7 @@ private:
         int    start;
         int    stop;
         int    h;
+        int    w;
         DImg*  orgImage;
         DImg*  destImage;
         double Coeff;
@@ -115,6 +116,9 @@ private:
         bool   Horizontal;
         bool   Vertical;
         int    Factor;
+        int    Amplitude;
+        int    Frequency;
+        bool   Mode;
     };
 
 private:
@@ -142,7 +146,10 @@ private:
     // Backported from ImageProcessing version 1
     void waves(DImg* orgImage, DImg* destImage, int Amplitude, int Frequency,
                bool FillSides, bool Direction);
+
     void blockWaves(DImg* orgImage, DImg* destImage, int Amplitude, int Frequency, bool Mode);
+    void blockWavesMultithreaded(const Args& prm);
+
     void tile(DImg* orgImage, DImg* destImage, int WSize, int HSize, int Random);
 
     void setPixelFromOther(int Width, int Height, bool sixteenBit, int bytesDepth,

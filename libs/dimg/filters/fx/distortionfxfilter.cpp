@@ -739,6 +739,49 @@ void DistortionFXFilter::waves(DImg* orgImage, DImg* destImage,
     }
 }
 
+void DistortionFXFilter::blockWavesMultithreaded(const Args& prm)
+{
+    int Width       = prm.orgImage->width();
+    int Height      = prm.orgImage->height();
+    uchar* data     = prm.orgImage->bits();
+    bool sixteenBit = prm.orgImage->sixteenBit();
+    int bytesDepth  = prm.orgImage->bytesDepth();
+    uchar* pResBits = prm.destImage->bits();
+
+    int nw, nh;
+
+    DColor color;
+    int offset, offsetOther;
+
+    int nHalfW = Width  / 2;
+    int nHalfH = Height / 2;
+
+    for (int h = prm.start; runningFlag() && (h < prm.stop); ++h)
+    {
+        nw = nHalfW - prm.w;
+        nh = nHalfH - h;
+
+        if (prm.Mode)
+        {
+            nw = (int)(prm.w + prm.Amplitude * qSin(prm.Frequency * nw * (M_PI / 180)));
+            nh = (int)(h     + prm.Amplitude * qCos(prm.Frequency * nh * (M_PI / 180)));
+        }
+        else
+        {
+            nw = (int)(prm.w + prm.Amplitude * qSin(prm.Frequency * prm.w * (M_PI / 180)));
+            nh = (int)(h     + prm.Amplitude * qCos(prm.Frequency * h     * (M_PI / 180)));
+        }
+
+        offset      = getOffset(Width, prm.w, h, bytesDepth);
+        offsetOther = getOffsetAdjusted(Width, Height, (int)nw, (int)nh, bytesDepth);
+
+        // read color
+        color.setColor(data + offsetOther, sixteenBit);
+        // write color to destination
+        color.setPixel(pResBits + offset);
+    }
+}
+
 /* Function to apply the block waves effect
  *
  * data             => The image data in RGBA mode.
@@ -764,52 +807,36 @@ void DistortionFXFilter::blockWaves(DImg* orgImage, DImg* destImage,
         Frequency = 0;
     }
 
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-    uchar* data     = orgImage->bits();
-    bool sixteenBit = orgImage->sixteenBit();
-    int bytesDepth  = orgImage->bytesDepth();
-    uchar* pResBits = destImage->bits();
+    int progress;
 
-    int nw, nh, progress;
-//    double Radius;
+    QList<int> vals = multithreadedSteps(orgImage->height());
+    QList <QFuture<void> > tasks;
 
-    DColor color;
-    int offset, offsetOther;
+    Args prm;
+    prm.orgImage  = orgImage;
+    prm.destImage = destImage;
+    prm.Mode      = Mode;
+    prm.Frequency = Frequency;
+    prm.Amplitude = Amplitude;
 
-    int nHalfW = Width / 2, nHalfH = Height / 2;
-
-    for (int w = 0; runningFlag() && (w < Width); ++w)
+    for (int w = 0; runningFlag() && (w < (int)orgImage->width()); ++w)
     {
-        for (int h = 0; runningFlag() && (h < Height); ++h)
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
         {
-            nw = nHalfW - w;
-            nh = nHalfH - h;
-
-//            Radius = qSqrt (nw * nw + nh * nh);
-
-            if (Mode)
-            {
-                nw = (int)(w + Amplitude * qSin(Frequency * nw * (M_PI / 180)));
-                nh = (int)(h + Amplitude * qCos(Frequency * nh * (M_PI / 180)));
-            }
-            else
-            {
-                nw = (int)(w + Amplitude * qSin(Frequency * w * (M_PI / 180)));
-                nh = (int)(h + Amplitude * qCos(Frequency * h * (M_PI / 180)));
-            }
-
-            offset      = getOffset(Width, w, h, bytesDepth);
-            offsetOther = getOffsetAdjusted(Width, Height, (int)nw, (int)nh, bytesDepth);
-
-            // read color
-            color.setColor(data + offsetOther, sixteenBit);
-            // write color to destination
-            color.setPixel(pResBits + offset);
+            prm.start = vals[j];
+            prm.stop  = vals[j+1];
+            prm.w     = w;
+            tasks.append(QtConcurrent::run(this,
+                                           &DistortionFXFilter::blockWavesMultithreaded,
+                                           prm
+                                          ));
         }
 
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
+
         // Update the progress bar in dialog.
-        progress = (int)(((double)w * 100.0) / Width);
+        progress = (int)(((double)w * 100.0) / orgImage->width());
 
         if (progress % 5 == 0)
         {
