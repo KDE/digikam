@@ -6,7 +6,7 @@
  * Date        : 2005-07-18
  * Description : Distortion FX threaded image filter.
  *
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -28,10 +28,6 @@
 
 #ifndef DISTORTION_FX_FILTER_H
 #define DISTORTION_FX_FILTER_H
-
-// Qt includes
-
-#include <QSize>
 
 // Local includes
 
@@ -162,12 +158,8 @@ private:
 
 private:
 
-    bool    m_antiAlias;
-
-    int     m_level;
-    int     m_iteration;
-    int     m_effectType;
-    quint32 m_randomSeed;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

@@ -6,7 +6,7 @@
  * Date        : 2005-07-18
  * Description : Distortion FX threaded image filter.
  *
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -37,6 +37,7 @@
 // Qt includes
 
 #include <QDateTime>
+#include <QSize>
 #include <qmath.h>
 
 // Local includes
@@ -48,27 +49,44 @@
 namespace Digikam
 {
 
-DistortionFXFilter::DistortionFXFilter(QObject* const parent)
-    : DImgThreadedFilter(parent)
+class DistortionFXFilter::Private
 {
-    m_antiAlias  = true;
-    m_level      = 0;
-    m_iteration  = 0;
-    m_effectType = 0;
-    m_randomSeed = 0;
+public:
 
+    Private()
+    {
+        antiAlias  = true;
+        level      = 0;
+        iteration  = 0;
+        effectType = 0;
+        randomSeed = 0;
+    }
+
+    bool    antiAlias;
+
+    int     level;
+    int     iteration;
+    int     effectType;
+    quint32 randomSeed;
+};
+
+DistortionFXFilter::DistortionFXFilter(QObject* const parent)
+    : DImgThreadedFilter(parent),
+      d(new Private)
+{
     initFilter();
 }
 
 DistortionFXFilter::DistortionFXFilter(DImg* const orgImage, QObject* const parent, int effectType,
                                        int level, int iteration, bool antialiaqSing)
-    : DImgThreadedFilter(orgImage, parent, "DistortionFX")
+    : DImgThreadedFilter(orgImage, parent, "DistortionFX"),
+      d(new Private)
 {
-    m_effectType = effectType;
-    m_level      = level;
-    m_iteration  = iteration;
-    m_antiAlias  = antialiaqSing;
-    m_randomSeed = RandomNumberGenerator::timeSeed();
+    d->effectType = effectType;
+    d->level      = level;
+    d->iteration  = iteration;
+    d->antiAlias  = antialiaqSing;
+    d->randomSeed = RandomNumberGenerator::timeSeed();
 
     initFilter();
 }
@@ -76,43 +94,44 @@ DistortionFXFilter::DistortionFXFilter(DImg* const orgImage, QObject* const pare
 DistortionFXFilter::~DistortionFXFilter()
 {
     cancelFilter();
+    delete d;
 }
 
 void DistortionFXFilter::filterImage()
 {
     int w = m_orgImage.width();
     int h = m_orgImage.height();
-    int l = m_level;
-    int f = m_iteration;
+    int l = d->level;
+    int f = d->iteration;
 
-    switch (m_effectType)
+    switch (d->effectType)
     {
         case FishEye:
-            fisheye(&m_orgImage, &m_destImage, (double)(l / 5.0), m_antiAlias);
+            fisheye(&m_orgImage, &m_destImage, (double)(l / 5.0), d->antiAlias);
             break;
 
         case Twirl:
-            twirl(&m_orgImage, &m_destImage, l, m_antiAlias);
+            twirl(&m_orgImage, &m_destImage, l, d->antiAlias);
             break;
 
         case CilindricalHor:
-            cilindrical(&m_orgImage, &m_destImage, (double)l, true, false, m_antiAlias);
+            cilindrical(&m_orgImage, &m_destImage, (double)l, true, false, d->antiAlias);
             break;
 
         case CilindricalVert:
-            cilindrical(&m_orgImage, &m_destImage, (double)l, false, true, m_antiAlias);
+            cilindrical(&m_orgImage, &m_destImage, (double)l, false, true, d->antiAlias);
             break;
 
         case CilindricalHV:
-            cilindrical(&m_orgImage, &m_destImage, (double)l, true, true, m_antiAlias);
+            cilindrical(&m_orgImage, &m_destImage, (double)l, true, true, d->antiAlias);
             break;
 
         case Caricature:
-            fisheye(&m_orgImage, &m_destImage, (double)(-l / 5.0), m_antiAlias);
+            fisheye(&m_orgImage, &m_destImage, (double)(-l / 5.0), d->antiAlias);
             break;
 
         case MultipleCorners:
-            multipleCorners(&m_orgImage, &m_destImage, l, m_antiAlias);
+            multipleCorners(&m_orgImage, &m_destImage, l, d->antiAlias);
             break;
 
         case WavesHorizontal:
@@ -132,63 +151,24 @@ void DistortionFXFilter::filterImage()
             break;
 
         case CircularWaves1:
-            circularWaves(&m_orgImage, &m_destImage, w / 2, h / 2, (double)l, (double)f, 0.0, false, m_antiAlias);
+            circularWaves(&m_orgImage, &m_destImage, w / 2, h / 2, (double)l, (double)f, 0.0, false, d->antiAlias);
             break;
 
         case CircularWaves2:
-            circularWaves(&m_orgImage, &m_destImage, w / 2, h / 2, (double)l, (double)f, 25.0, true, m_antiAlias);
+            circularWaves(&m_orgImage, &m_destImage, w / 2, h / 2, (double)l, (double)f, 25.0, true, d->antiAlias);
             break;
 
         case PolarCoordinates:
-            polarCoordinates(&m_orgImage, &m_destImage, true, m_antiAlias);
+            polarCoordinates(&m_orgImage, &m_destImage, true, d->antiAlias);
             break;
 
         case UnpolarCoordinates:
-            polarCoordinates(&m_orgImage, &m_destImage, false, m_antiAlias);
+            polarCoordinates(&m_orgImage, &m_destImage, false, d->antiAlias);
             break;
 
         case Tile:
             tile(&m_orgImage, &m_destImage, 200 - f, 200 - f, l);
             break;
-    }
-}
-
-/*
-    This code is shared by six methods.
-    Write value of pixel w|h in data to pixel nw|nh in pResBits.
-    Antialias if requested.
-*/
-void DistortionFXFilter::setPixelFromOther(int Width, int Height, bool sixteenBit, int bytesDepth,
-                                           uchar* data, uchar* pResBits,
-                                           int w, int h, double nw, double nh, bool AntiAlias)
-{
-    DColor color;
-    int offset = getOffset(Width, w, h, bytesDepth);
-
-    if (AntiAlias)
-    {
-        uchar* const ptr = pResBits + offset;
-
-        if (sixteenBit)
-        {
-            unsigned short* ptr16 = reinterpret_cast<unsigned short*>(ptr);
-            PixelsAliasFilter().pixelAntiAliasing16(reinterpret_cast<unsigned short*>(data), Width, Height, nw, nh,
-                                                    ptr16 + 3, ptr16 + 2, ptr16 + 1, ptr16);
-        }
-        else
-        {
-            PixelsAliasFilter().pixelAntiAliasing(data, Width, Height, nw, nh,
-                                                  ptr + 3, ptr + 2, ptr + 1, ptr);
-        }
-    }
-    else
-    {
-        // we get the position adjusted
-        int offsetOther = getOffsetAdjusted(Width, Height, (int)nw, (int)nh, bytesDepth);
-        // read color
-        color.setColor(data + offsetOther, sixteenBit);
-        // write color to destination
-        color.setPixel(pResBits + offset);
     }
 }
 
@@ -924,7 +904,7 @@ void DistortionFXFilter::tile(DImg* orgImage, DImg* destImage,
     int Height      = orgImage->height();
 
     RandomNumberGenerator generator;
-    generator.seed(m_randomSeed);
+    generator.seed(d->randomSeed);
 
     int tx, ty, h, w, progress;
 
@@ -947,19 +927,58 @@ void DistortionFXFilter::tile(DImg* orgImage, DImg* destImage,
     }
 }
 
+/*
+    This code is shared by six methods.
+    Write value of pixel w|h in data to pixel nw|nh in pResBits.
+    Antialias if requested.
+*/
+void DistortionFXFilter::setPixelFromOther(int Width, int Height, bool sixteenBit, int bytesDepth,
+                                           uchar* data, uchar* pResBits,
+                                           int w, int h, double nw, double nh, bool AntiAlias)
+{
+    DColor color;
+    int offset = getOffset(Width, w, h, bytesDepth);
+
+    if (AntiAlias)
+    {
+        uchar* const ptr = pResBits + offset;
+
+        if (sixteenBit)
+        {
+            unsigned short* ptr16 = reinterpret_cast<unsigned short*>(ptr);
+            PixelsAliasFilter().pixelAntiAliasing16(reinterpret_cast<unsigned short*>(data), Width, Height, nw, nh,
+                                                    ptr16 + 3, ptr16 + 2, ptr16 + 1, ptr16);
+        }
+        else
+        {
+            PixelsAliasFilter().pixelAntiAliasing(data, Width, Height, nw, nh,
+                                                  ptr + 3, ptr + 2, ptr + 1, ptr);
+        }
+    }
+    else
+    {
+        // we get the position adjusted
+        int offsetOther = getOffsetAdjusted(Width, Height, (int)nw, (int)nh, bytesDepth);
+        // read color
+        color.setColor(data + offsetOther, sixteenBit);
+        // write color to destination
+        color.setPixel(pResBits + offset);
+    }
+}
+
 FilterAction DistortionFXFilter::filterAction()
 {
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("antiAlias", m_antiAlias);
-    action.addParameter("type",      m_effectType);
-    action.addParameter("iteration", m_iteration);
-    action.addParameter("level",     m_level);
+    action.addParameter("antiAlias", d->antiAlias);
+    action.addParameter("type",      d->effectType);
+    action.addParameter("iteration", d->iteration);
+    action.addParameter("level",     d->level);
 
-    if (m_effectType == Tile)
+    if (d->effectType == Tile)
     {
-        action.addParameter("randomSeed", m_randomSeed);
+        action.addParameter("randomSeed", d->randomSeed);
     }
 
     return action;
@@ -967,14 +986,14 @@ FilterAction DistortionFXFilter::filterAction()
 
 void DistortionFXFilter::readParameters(const FilterAction& action)
 {
-    m_antiAlias  = action.parameter("antiAlias").toBool();
-    m_effectType = action.parameter("type").toInt();
-    m_iteration  = action.parameter("iteration").toInt();
-    m_level      = action.parameter("level").toInt();
+    d->antiAlias  = action.parameter("antiAlias").toBool();
+    d->effectType = action.parameter("type").toInt();
+    d->iteration  = action.parameter("iteration").toInt();
+    d->level      = action.parameter("level").toInt();
 
-    if (m_effectType == Tile)
+    if (d->effectType == Tile)
     {
-        m_randomSeed = action.parameter("randomSeed").toUInt();
+        d->randomSeed = action.parameter("randomSeed").toUInt();
     }
 }
 
