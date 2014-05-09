@@ -111,6 +111,7 @@ private:
         DImg*  destImage;
         double Coeff;
         bool   AntiAlias;
+        int    dist;
     };
 
 private:
@@ -122,6 +123,8 @@ private:
     void fisheyeMultithreaded(const Args& prm);
 
     void twirl(DImg* orgImage, DImg* destImage, int dist, bool AntiAlias=true);
+    void twirlMultithreaded(const Args& prm);
+
     void cilindrical(DImg* orgImage, DImg* destImage, double Coeff,
                      bool Horizontal, bool Vertical, bool AntiAlias=true);
     void multipleCorners(DImg* orgImage, DImg* destImage, int Factor, bool AntiAlias=true);

@@ -301,6 +301,74 @@ void DistortionFXFilter::fisheye(DImg* orgImage, DImg* destImage, double Coeff, 
     }
 }
 
+void DistortionFXFilter::twirlMultithreaded(const Args& prm)
+{
+    int Width       = prm.orgImage->width();
+    int Height      = prm.orgImage->height();
+    uchar* data     = prm.orgImage->bits();
+    bool sixteenBit = prm.orgImage->sixteenBit();
+    int bytesDepth  = prm.orgImage->bytesDepth();
+    uchar* pResBits = prm.destImage->bits();
+
+    DColor color;
+    int offset;
+
+    int    nHalfW   = Width / 2;
+    int    nHalfH   = Height / 2;
+    double lfXScale = 1.0;
+    double lfYScale = 1.0;
+    double lfAngle, lfNewAngle, lfAngleSum, lfCurrentRadius;
+    double tw, nh, nw;
+
+    if (Width > Height)
+    {
+        lfYScale = (double)Width / (double)Height;
+    }
+    else if (Height > Width)
+    {
+        lfXScale = (double)Height / (double)Width;
+    }
+
+    // the angle step is dist divided by 10000
+    double lfAngleStep = prm.dist / 10000.0;
+    // now, we get the minimum radius
+    double lfRadMax    = (double)qMax(Width, Height) / 2.0;
+
+    double th          = lfYScale * (double)(prm.h - nHalfH);
+
+    for (int w = prm.start; runningFlag() && (w < prm.stop); ++w)
+    {
+        tw = lfXScale * (double)(w - nHalfW);
+
+        // now, we get the distance
+        lfCurrentRadius = qSqrt(th * th + tw * tw);
+
+        // if distance is less than maximum radius...
+        if (lfCurrentRadius < lfRadMax)
+        {
+            // we find the angle from the center
+            lfAngle = qAtan2(th, tw);
+            // we get the accumuled angle
+            lfAngleSum = lfAngleStep * (-1.0 * (lfCurrentRadius - lfRadMax));
+            // ok, we sum angle with accumuled to find a new angle
+            lfNewAngle = lfAngle + lfAngleSum;
+
+            // now we find the exact position's x and y
+            nw = (double)nHalfW + qCos(lfNewAngle) * (lfCurrentRadius / lfXScale);
+            nh = (double)nHalfH + qSin(lfNewAngle) * (lfCurrentRadius / lfYScale);
+
+            setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, prm.h, nw, nh, prm.AntiAlias);
+        }
+        else
+        {
+            // copy pixel
+            offset = getOffset(Width, w, prm.h, bytesDepth);
+            color.setColor(data + offset, sixteenBit);
+            color.setPixel(pResBits + offset);
+        }
+    }
+}
+
 /* Function to apply the twirl effect backported from ImageProcesqSing version 2
  *
  * data             => The image data in RGBA mode.
@@ -323,77 +391,35 @@ void DistortionFXFilter::twirl(DImg* orgImage, DImg* destImage, int dist, bool A
 
     int progress;
 
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-    uchar* data     = orgImage->bits();
-    bool sixteenBit = orgImage->sixteenBit();
-    int bytesDepth  = orgImage->bytesDepth();
-    uchar* pResBits = destImage->bits();
+    QList<int> vals = multithreadedSteps(orgImage->width());
+    QList <QFuture<void> > tasks;
 
-    DColor color;
-    int offset;
-
-    int    nHalfW   = Width / 2;
-    int    nHalfH   = Height / 2;
-    double lfXScale = 1.0;
-    double lfYScale = 1.0;
-    double lfAngle, lfNewAngle, lfAngleSum, lfCurrentRadius;
-    double tw, th, nh, nw;
-
-    if (Width > Height)
-    {
-        lfYScale = (double)Width / (double)Height;
-    }
-    else if (Height > Width)
-    {
-        lfXScale = (double)Height / (double)Width;
-    }
-
-    // the angle step is dist divided by 10000
-    double lfAngleStep = dist / 10000.0;
-    // now, we get the minimum radius
-    double lfRadMax    = (double)qMax(Width, Height) / 2.0;
+    Args prm;
+    prm.orgImage  = orgImage;
+    prm.destImage = destImage;
+    prm.dist      = dist;
+    prm.AntiAlias = AntiAlias;
 
     // main loop
 
-    for (int h = 0; runningFlag() && (h < Height); ++h)
+    for (int h = 0; runningFlag() && (h < (int)orgImage->height()); ++h)
     {
-        th = lfYScale * (double)(h - nHalfH);
-
-        for (int w = 0; runningFlag() && (w < Width); ++w)
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
         {
-            tw = lfXScale * (double)(w - nHalfW);
-
-            // now, we get the distance
-            lfCurrentRadius = qSqrt(th * th + tw * tw);
-
-            // if distance is less than maximum radius...
-            if (lfCurrentRadius < lfRadMax)
-            {
-                // we find the angle from the center
-                lfAngle = qAtan2(th, tw);
-                // we get the accumuled angle
-                lfAngleSum = lfAngleStep * (-1.0 * (lfCurrentRadius - lfRadMax));
-                // ok, we sum angle with accumuled to find a new angle
-                lfNewAngle = lfAngle + lfAngleSum;
-
-                // now we find the exact position's x and y
-                nw = (double)nHalfW + qCos(lfNewAngle) * (lfCurrentRadius / lfXScale);
-                nh = (double)nHalfH + qSin(lfNewAngle) * (lfCurrentRadius / lfYScale);
-
-                setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, h, nw, nh, AntiAlias);
-            }
-            else
-            {
-                // copy pixel
-                offset = getOffset(Width, w, h, bytesDepth);
-                color.setColor(data + offset, sixteenBit);
-                color.setPixel(pResBits + offset);
-            }
+            prm.start = vals[j];
+            prm.stop  = vals[j+1];
+            prm.h     = h;
+            tasks.append(QtConcurrent::run(this,
+                                           &DistortionFXFilter::twirlMultithreaded,
+                                           prm
+                                          ));
         }
 
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
+
         // Update the progress bar in dialog.
-        progress = (int)(((double)h * 100.0) / Height);
+        progress = (int)(((double)h * 100.0) / orgImage->height());
 
         if (progress % 5 == 0)
         {
