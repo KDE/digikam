@@ -215,6 +215,7 @@ void BlurFXTool::readSettings()
     d->effectType->setCurrentIndex(group.readEntry(d->configEffectTypeEntry,     d->effectType->defaultIndex()));
     d->distanceInput->setValue(group.readEntry(d->configDistanceAdjustmentEntry, d->distanceInput->defaultValue()));
     d->levelInput->setValue(group.readEntry(d->configLevelAdjustmentEntry,       d->levelInput->defaultValue()));
+    slotEffectTypeChanged(d->effectType->defaultIndex());
 
     blockWidgetSignals(false);
 }

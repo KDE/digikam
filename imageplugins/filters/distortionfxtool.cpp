@@ -228,6 +228,7 @@ void DistortionFXTool::readSettings()
     d->effectType->setCurrentIndex(group.readEntry(d->configEffectTypeEntry,       (int)DistortionFXFilter::FishEye));
     d->iterationInput->setValue(group.readEntry(d->configIterationAdjustmentEntry, 10));
     d->levelInput->setValue(group.readEntry(d->configLevelAdjustmentEntry,         50));
+    slotEffectTypeChanged(d->effectType->defaultIndex());
 
     blockWidgetSignals(false);
 
