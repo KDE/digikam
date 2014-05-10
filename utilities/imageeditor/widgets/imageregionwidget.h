@@ -96,6 +96,10 @@ private:
 
     void emitCapturedPointFromOriginal(const QPointF&);
 
+private Q_SLOTS:
+
+    void slotOriginalImageRegionChangedDelayed();
+
 private:
 
     class Private;
