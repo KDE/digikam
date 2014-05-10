@@ -23,6 +23,7 @@
  * ============================================================ */
 
 #include "contextmenuhelper.moc"
+#include "config-digikam.h"
 
 // Qt includes
 
@@ -58,7 +59,6 @@
 
 // Local includes
 
-#include "config-digikam.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"
@@ -562,39 +562,42 @@ void ContextMenuHelper::addCreateTagFromAddressbookMenu()
 #endif // HAVE_KDEPIMLIBS
 }
 
-//void ContextMenuHelper::slotABCContextMenu()
-//{
-//#ifdef HAVE_KDEPIMLIBS
+// TODO: Port from KABC::AdressBook to to libakonadi-kontact. For instance using Akonadi::ContactSearchJob.
+// See http://techbase.kde.org/Development/AkonadiPorting/AddressBook
+
+// void ContextMenuHelper::slotABCContextMenu()
+// {
+// #ifdef HAVE_KDEPIMLIBS
 //    d->ABCmenu->clear();
-//
+// 
 //    KABC::AddressBook* ab = KABC::StdAddressBook::self();
 //    QStringList names;
-//
+// 
 //    for ( KABC::AddressBook::Iterator it = ab->begin(); it != ab->end(); ++it )
 //    {
 //        names.push_back(it->formattedName());
 //    }
-//
+// 
 //    qSort(names);
-//
+// 
 //    for ( QStringList::ConstIterator it = names.constBegin(); it != names.constEnd(); ++it )
 //    {
 //        QString name = *it;
-//
+// 
 //        if (!name.isNull() )
 //        {
 //            d->ABCmenu->addAction(name);
 //        }
 //    }
-//
+// 
 //    if (d->ABCmenu->isEmpty())
 //    {
 //        QAction* nothingFound = d->ABCmenu->addAction(i18n("No address book entries found"));
 //        nothingFound->setEnabled(false);
 //    }
-//
-//#endif // HAVE_KDEPIMLIBS
-//}
+// 
+// #endif // HAVE_KDEPIMLIBS
+// }
 
 void ContextMenuHelper::slotABCMenuTriggered(QAction* action)
 {
