@@ -65,15 +65,19 @@ public:
         globalProgress = 0;
     }
 
-    bool    antiAlias;
+    bool                   antiAlias;
 
-    int     level;
-    int     iteration;
-    int     effectType;
-    quint32 randomSeed;
+    int                    level;
+    int                    iteration;
+    int                    effectType;
+    quint32                randomSeed;
 
-    int    globalProgress;
-    QMutex lock;
+    RandomNumberGenerator generator;
+
+    int                   globalProgress;
+
+    QMutex                lock;
+    QMutex                lock2;   // RandomNumberGenerator is not re-entrant (dixit Boost lib)
 };
 
 DistortionFXFilter::DistortionFXFilter(QObject* const parent)
@@ -93,7 +97,6 @@ DistortionFXFilter::DistortionFXFilter(DImg* const orgImage, QObject* const pare
     d->iteration  = iteration;
     d->antiAlias  = antialiaqSing;
     d->randomSeed = RandomNumberGenerator::timeSeed();
-
     initFilter();
 }
 
@@ -173,7 +176,7 @@ void DistortionFXFilter::filterImage()
             break;
 
         case Tile:
-            tile(&m_orgImage, &m_destImage, 200 - f, 200 - f, l);
+            tile(&m_orgImage, &m_destImage, 210 - f, 210 - f, l);
             break;
     }
 }
@@ -1116,6 +1119,35 @@ void DistortionFXFilter::polarCoordinates(DImg* orgImage, DImg* destImage, bool 
     }
 }
 
+void DistortionFXFilter::tileMultithreaded(const Args& prm)
+{
+    int tx, ty, progress=0, oldProgress=0;
+
+    for (int h = prm.start; runningFlag() && (h < prm.stop); h += prm.HSize)
+    {
+        for (int w = 0; runningFlag() && (w < (int)prm.orgImage->width()); w += prm.WSize)
+        {
+            d->lock2.lock();
+            tx = d->generator.number(-prm.Random / 2, prm.Random / 2);
+            ty = d->generator.number(-prm.Random / 2, prm.Random / 2);
+            d->lock2.unlock();
+            prm.destImage->bitBltImage(prm.orgImage, w, h, prm.WSize, prm.HSize, w + tx, h + ty);
+        }
+
+        // Update the progress bar in dialog.
+        progress = (int)( ( (double)h * (100.0 / QThreadPool::globalInstance()->maxThreadCount()) ) / (prm.stop - prm.start));
+
+        if ((progress % 5 == 0) && (progress > oldProgress))
+        {
+            d->lock.lock();
+            oldProgress       = progress;
+            d->globalProgress += 5;
+            postProgress(d->globalProgress);
+            d->lock.unlock();
+        }
+    }
+}
+
 /* Function to apply the tile effect
  *
  * data             => The image data in RGBA mode.
@@ -1148,31 +1180,30 @@ void DistortionFXFilter::tile(DImg* orgImage, DImg* destImage,
         Random = 1;
     }
 
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
+    Args prm;
+    prm.orgImage  = orgImage;
+    prm.destImage = destImage;
+    prm.WSize     = WSize;
+    prm.HSize     = HSize;
+    prm.Random    = Random;
 
-    RandomNumberGenerator generator;
-    generator.seed(d->randomSeed);
+    d->generator.seed(d->randomSeed);
 
-    int tx, ty, h, w, progress;
+    QList<int> vals = multithreadedSteps(orgImage->height());
+    QList <QFuture<void> > tasks;
 
-    for (h = 0; runningFlag() && (h < Height); h += HSize)
+    for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
     {
-        for (w = 0; runningFlag() && (w < Width); w += WSize)
-        {
-            tx = generator.number(- Random / 2, Random / 2);
-            ty = generator.number(- Random / 2, Random / 2);
-            destImage->bitBltImage(orgImage, w, h,   WSize, HSize,   w + tx, h + ty);
-        }
-
-        // Update the progress bar in dialog.
-        progress = (int)(((double)h * 100.0) / Height);
-
-        if (progress % 5 == 0)
-        {
-            postProgress(progress);
-        }
+        prm.start = vals[j];
+        prm.stop  = vals[j+1];
+        tasks.append(QtConcurrent::run(this,
+                                       &DistortionFXFilter::tileMultithreaded,
+                                       prm
+                                      ));
     }
+
+    foreach(QFuture<void> t, tasks)
+        t.waitForFinished();
 }
 
 /*

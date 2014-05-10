@@ -22,6 +22,7 @@ Editor   : Raindrop tool support multicore CPU.
 Editor   : FilmGrain tool support multicore CPU.
 Editor   : NoiseReduction tool support multicore CPU.
 Editor   : BlurFx tool support multicore CPU.
+Editor   : DistortionFx tool support multicore CPU.
 Editor   : DistortionFx tool support zoomable preview.
 
 Showfoto : Port of Thumbbar to Qt Model/view.

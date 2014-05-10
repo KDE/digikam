@@ -125,6 +125,9 @@ private:
         bool   WavesType;
         bool   FillSides;
         bool   Type;
+        int    WSize;
+        int    HSize;
+        int    Random;
     };
 
 private:
@@ -162,6 +165,7 @@ private:
     void blockWavesMultithreaded(const Args& prm);
 
     void tile(DImg* orgImage, DImg* destImage, int WSize, int HSize, int Random);
+    void tileMultithreaded(const Args& prm);
 
     void setPixelFromOther(int Width, int Height, bool sixteenBit, int bytesDepth,
                            uchar* data, uchar* pResBits,
