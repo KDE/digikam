@@ -123,6 +123,7 @@ private:
         int    Y;
         double Phase;
         bool   WavesType;
+        bool   FillSides;
     };
 
 private:
@@ -152,6 +153,8 @@ private:
     // Backported from ImageProcessing version 1
     void waves(DImg* orgImage, DImg* destImage, int Amplitude, int Frequency,
                bool FillSides, bool Direction);
+    void wavesHorizontalMultithreaded(const Args& prm);
+    void wavesVerticalMultithreaded(const Args& prm);
 
     void blockWaves(DImg* orgImage, DImg* destImage, int Amplitude, int Frequency, bool Mode);
     void blockWavesMultithreaded(const Args& prm);

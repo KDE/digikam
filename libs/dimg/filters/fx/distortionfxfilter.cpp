@@ -38,6 +38,7 @@
 
 #include <QDateTime>
 #include <QSize>
+#include <QMutex>
 #include <QtConcurrentRun>
 #include <qmath.h>
 
@@ -56,11 +57,12 @@ public:
 
     Private()
     {
-        antiAlias  = true;
-        level      = 0;
-        iteration  = 0;
-        effectType = 0;
-        randomSeed = 0;
+        antiAlias      = true;
+        level          = 0;
+        iteration      = 0;
+        effectType     = 0;
+        randomSeed     = 0;
+        globalProgress = 0;
     }
 
     bool    antiAlias;
@@ -69,6 +71,9 @@ public:
     int     iteration;
     int     effectType;
     quint32 randomSeed;
+
+    int    globalProgress;
+    QMutex lock;
 };
 
 DistortionFXFilter::DistortionFXFilter(QObject* const parent)
@@ -658,6 +663,64 @@ void DistortionFXFilter::multipleCorners(DImg* orgImage, DImg* destImage, int Fa
     }
 }
 
+void DistortionFXFilter::wavesHorizontalMultithreaded(const Args& prm)
+{
+    int oldProgress=0, progress=0, tx;
+
+    for (int h = prm.start; runningFlag() && (h < prm.stop); ++h)
+    {
+        tx = lround(prm.Amplitude * qSin((prm.Frequency * 2) * h * (M_PI / 180)));
+        prm.destImage->bitBltImage(prm.orgImage, 0, h,  prm.orgImage->width(), 1,  tx, h);
+
+        if (prm.FillSides)
+        {
+            prm.destImage->bitBltImage(prm.orgImage, prm.orgImage->width() - tx, h,  tx, 1,  0, h);
+            prm.destImage->bitBltImage(prm.orgImage, 0, h, prm.orgImage->width() - (prm.orgImage->width() - 2 * prm.Amplitude + tx), 1,  prm.orgImage->width() + tx, h);
+        }
+
+        // Update the progress bar in dialog.
+        progress = (int)( ( (double)h * (100.0 / QThreadPool::globalInstance()->maxThreadCount()) ) / (prm.stop - prm.start));
+
+        if ((progress % 5 == 0) && (progress > oldProgress))
+        {
+            d->lock.lock();
+            oldProgress       = progress;
+            d->globalProgress += 5;
+            postProgress(d->globalProgress);
+            d->lock.unlock();
+        }
+    }
+}
+
+void DistortionFXFilter::wavesVerticalMultithreaded(const Args& prm)
+{
+    int oldProgress=0, progress=0, ty;
+
+    for (int w = prm.start; runningFlag() && (w < prm.stop); ++w)
+    {
+        ty = lround(prm.Amplitude * qSin((prm.Frequency * 2) * w * (M_PI / 180)));
+        prm.destImage->bitBltImage(prm.orgImage, w, 0, 1, prm.orgImage->height(), w, ty);
+
+        if (prm.FillSides)
+        {
+            prm.destImage->bitBltImage(prm.orgImage, w, prm.orgImage->height() - ty,  1, ty,  w, 0);
+            prm.destImage->bitBltImage(prm.orgImage, w, 0,  1, prm.orgImage->height() - (prm.orgImage->height() - 2 * prm.Amplitude + ty),  w, prm.orgImage->height() + ty);
+        }
+
+        // Update the progress bar in dialog.
+        progress = (int)( ( (double)w * (100.0 / QThreadPool::globalInstance()->maxThreadCount()) ) / (prm.stop - prm.start));
+
+        if ((progress % 5 == 0) && (progress > oldProgress))
+        {
+            d->lock.lock();
+            oldProgress       = progress;
+            d->globalProgress += 5;
+            postProgress(d->globalProgress);
+            d->lock.unlock();
+        }
+    }
+}
+
 /* Function to apply the waves effect
  *
  * data             => The image data in RGBA mode.
@@ -685,57 +748,48 @@ void DistortionFXFilter::waves(DImg* orgImage, DImg* destImage,
         Frequency = 0;
     }
 
-    int Width  = orgImage->width();
-    int Height = orgImage->height();
-    int progress;
+    Args prm;
+    prm.orgImage  = orgImage;
+    prm.destImage = destImage;
+    prm.Amplitude = Amplitude;
+    prm.Frequency = Frequency;
+    prm.FillSides = FillSides;
 
     if (Direction)        // Horizontal
     {
-        int tx;
+        QList<int> vals = multithreadedSteps(orgImage->height());
+        QList <QFuture<void> > tasks;
 
-        for (int h = 0; runningFlag() && (h < Height); ++h)
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
         {
-            tx = lround(Amplitude * qSin((Frequency * 2) * h * (M_PI / 180)));
-            destImage->bitBltImage(orgImage, 0, h,  Width, 1,  tx, h);
-
-            if (FillSides)
-            {
-                destImage->bitBltImage(orgImage, Width - tx, h,  tx, 1,  0, h);
-                destImage->bitBltImage(orgImage, 0, h,  Width - (Width - 2 * Amplitude + tx), 1,  Width + tx, h);
-            }
-
-            // Update the progress bar in dialog.
-            progress = (int)(((double)h * 100.0) / Height);
-
-            if (progress % 5 == 0)
-            {
-                postProgress(progress);
-            }
+            prm.start = vals[j];
+            prm.stop  = vals[j+1];
+            tasks.append(QtConcurrent::run(this,
+                                           &DistortionFXFilter::wavesHorizontalMultithreaded,
+                                           prm
+                                          ));
         }
+
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
     }
     else
     {
-        int ty;
+        QList<int> vals = multithreadedSteps(orgImage->width());
+        QList <QFuture<void> > tasks;
 
-        for (int w = 0; runningFlag() && (w < Width); ++w)
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
         {
-            ty = lround(Amplitude * qSin((Frequency * 2) * w * (M_PI / 180)));
-            destImage->bitBltImage(orgImage, w, 0, 1, Height, w, ty);
-
-            if (FillSides)
-            {
-                destImage->bitBltImage(orgImage, w, Height - ty,  1, ty,  w, 0);
-                destImage->bitBltImage(orgImage, w, 0,  1, Height - (Height - 2 * Amplitude + ty),  w, Height + ty);
-            }
-
-            // Update the progress bar in dialog.
-            progress = (int)(((double)w * 100.0) / Width);
-
-            if (progress % 5 == 0)
-            {
-                postProgress(progress);
-            }
+            prm.start = vals[j];
+            prm.stop  = vals[j+1];
+            tasks.append(QtConcurrent::run(this,
+                                           &DistortionFXFilter::wavesVerticalMultithreaded,
+                                           prm
+                                          ));
         }
+
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
     }
 }
 
