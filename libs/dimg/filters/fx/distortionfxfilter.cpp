@@ -1005,6 +1005,65 @@ void DistortionFXFilter::circularWaves(DImg* orgImage, DImg* destImage, int X, i
     }
 }
 
+void DistortionFXFilter::polarCoordinatesMultithreaded(const Args& prm)
+{
+    int Width       = prm.orgImage->width();
+    int Height      = prm.orgImage->height();
+    uchar* data     = prm.orgImage->bits();
+    bool sixteenBit = prm.orgImage->sixteenBit();
+    int bytesDepth  = prm.orgImage->bytesDepth();
+    uchar* pResBits = prm.destImage->bits();
+
+    int nHalfW      = Width / 2;
+    int nHalfH      = Height / 2;
+    double lfXScale = 1.0;
+    double lfYScale = 1.0;
+    double lfAngle, lfRadius, lfRadMax;
+    double nh, nw, tw;
+
+    if (Width > Height)
+    {
+        lfYScale = (double)Width / (double)Height;
+    }
+    else if (Height > Width)
+    {
+        lfXScale = (double)Height / (double)Width;
+    }
+
+    lfRadMax = (double)qMax(Height, Width) / 2.0;
+
+    double th = lfYScale * (double)(prm.h - nHalfH);
+
+    for (int w = prm.start; runningFlag() && (w < prm.stop); ++w)
+    {
+        tw = lfXScale * (double)(w - nHalfW);
+
+        if (prm.Type)
+        {
+            // now, we get the distance
+            lfRadius = qSqrt(th * th + tw * tw);
+            // we find the angle from the center
+            lfAngle = qAtan2(tw, th);
+
+            // now we find the exact position's x and y
+            nh = lfRadius * (double) Height / lfRadMax;
+            nw =  lfAngle * (double)  Width / (2 * M_PI);
+
+            nw = (double)nHalfW + nw;
+        }
+        else
+        {
+            lfRadius = (double)(prm.h) * lfRadMax   / (double)Height;
+            lfAngle  = (double)(w)     * (2 * M_PI) / (double) Width;
+
+            nw = (double)nHalfW - (lfRadius / lfXScale) * qSin(lfAngle);
+            nh = (double)nHalfH - (lfRadius / lfYScale) * qCos(lfAngle);
+        }
+
+        setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, prm.h, nw, nh, prm.AntiAlias);
+    }
+}
+
 /* Function to apply the Polar Coordinates effect backported from ImageProcesqSing version 2
  *
  * data             => The image data in RGBA mode.
@@ -1018,69 +1077,37 @@ void DistortionFXFilter::circularWaves(DImg* orgImage, DImg* destImage, int X, i
  */
 void DistortionFXFilter::polarCoordinates(DImg* orgImage, DImg* destImage, bool Type, bool AntiAlias)
 {
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-    uchar* data     = orgImage->bits();
-    bool sixteenBit = orgImage->sixteenBit();
-    int bytesDepth  = orgImage->bytesDepth();
-    uchar* pResBits = destImage->bits();
-
-    int h, w;
-    double nh, nw, th, tw;
     int progress;
 
-    int nHalfW = Width / 2, nHalfH = Height / 2;
-    double lfXScale = 1.0, lfYScale = 1.0;
-    double lfAngle, lfRadius, lfRadMax;
+    QList<int> vals = multithreadedSteps(orgImage->width());
+    QList <QFuture<void> > tasks;
 
-    if (Width > Height)
-    {
-        lfYScale = (double)Width / (double)Height;
-    }
-    else if (Height > Width)
-    {
-        lfXScale = (double)Height / (double)Width;
-    }
-
-    lfRadMax = (double)qMax(Height, Width) / 2.0;
+    Args prm;
+    prm.orgImage  = orgImage;
+    prm.destImage = destImage;
+    prm.Type      = Type;
+    prm.AntiAlias = AntiAlias;
 
     // main loop
 
-    for (h = 0; runningFlag() && (h < Height); ++h)
+    for (int h = 0; runningFlag() && (h < (int)orgImage->height()); ++h)
     {
-        th = lfYScale * (double)(h - nHalfH);
-
-        for (w = 0; runningFlag() && (w < Width); ++w)
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
         {
-            tw = lfXScale * (double)(w - nHalfW);
-
-            if (Type)
-            {
-                // now, we get the distance
-                lfRadius = qSqrt(th * th + tw * tw);
-                // we find the angle from the center
-                lfAngle = qAtan2(tw, th);
-
-                // now we find the exact position's x and y
-                nh = lfRadius * (double) Height / lfRadMax;
-                nw =  lfAngle * (double)  Width / (2 * M_PI);
-
-                nw = (double)nHalfW + nw;
-            }
-            else
-            {
-                lfRadius = (double)(h) * lfRadMax / (double)Height;
-                lfAngle  = (double)(w) * (2 * M_PI) / (double) Width;
-
-                nw = (double)nHalfW - (lfRadius / lfXScale) * qSin(lfAngle);
-                nh = (double)nHalfH - (lfRadius / lfYScale) * qCos(lfAngle);
-            }
-
-            setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, h, nw, nh, AntiAlias);
+            prm.start = vals[j];
+            prm.stop  = vals[j+1];
+            prm.h     = h;
+            tasks.append(QtConcurrent::run(this,
+                                           &DistortionFXFilter::polarCoordinatesMultithreaded,
+                                           prm
+                                          ));
         }
 
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
+
         // Update the progress bar in dialog.
-        progress = (int)(((double)h * 100.0) / Height);
+        progress = (int)(((double)h * 100.0) / orgImage->height());
 
         if (progress % 5 == 0)
         {

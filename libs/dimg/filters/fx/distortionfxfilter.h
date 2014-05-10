@@ -124,6 +124,7 @@ private:
         double Phase;
         bool   WavesType;
         bool   FillSides;
+        bool   Type;
     };
 
 private:
@@ -145,6 +146,7 @@ private:
     void multipleCornersMultithreaded(const Args& prm);
 
     void polarCoordinates(DImg* orgImage, DImg* destImage, bool Type, bool AntiAlias=true);
+    void polarCoordinatesMultithreaded(const Args& prm);
 
     void circularWaves(DImg* orgImage, DImg* destImage, int X, int Y, double Amplitude,
                        double Frequency, double Phase, bool WavesType, bool AntiAlias=true);
