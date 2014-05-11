@@ -195,5 +195,4 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 163 ==> 333385 - Selecting a month in the tree view shows a different month in calendar and icon view.
 164 ==> 329697 - digiKam crash when browsing albums.
 165 ==> 331597 - Tags are not sorted in UI [patch].
-166 ==> 
-
+166 ==> 334183 - Face recognition folder selection scans all available folders.
