@@ -372,6 +372,12 @@ bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& righ
     QVariant valRight = dataForCurrentSortRole(right);
 
     AlbumSettings::StringComparisonType strComparisonType = AlbumSettings::instance()->getStringComparisonType();
+    AlbumSettings::AlbumSortOrder role = AlbumSettings::instance()->getAlbumSortOrder();
+
+    if((role == AlbumSettings::ByDate || role == AlbumSettings::ByCategory)&&(valLeft == valRight))
+    {
+            return QSortFilterProxyModel::lessThan(left, right);
+    }
 
     if((valLeft.type() == QVariant::String) && (valRight.type() == QVariant::String))
     {
