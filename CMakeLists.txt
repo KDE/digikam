@@ -22,7 +22,7 @@ OPTION(DIGIKAM_ENABLE_MODELTEST "Enable ModelTest on some models for debugging (
 
 # digiKam version
 SET(DIGIKAM_MAJOR_VERSION "4")
-SET(DIGIKAM_MINOR_VERSION "0")
+SET(DIGIKAM_MINOR_VERSION "1")
 SET(DIGIKAM_PATCH_VERSION "0")
 
 #digiKam release date
