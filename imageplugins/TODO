@@ -25,10 +25,10 @@ decorate
 filters
   /colorfx                  DONE          TODO             DONE                  DONE
   /charcoal                 DONE          DONE             DONE                  TODO
-  /distortionfx             DONE          TODO             TODO                  TODO
+  /distortionfx             DONE          DONE             DONE                  TODO
   /emboss                   DONE          DONE             DONE                  TODO
   /oilpaint                 DONE          DONE             DONE                  TODO
-  /blurfx                   DONE          TODO             DONE                  TODO
+  /blurfx                   DONE          DONE             DONE                  TODO
   /raindrop                 DONE          DONE              NO                   TODO
   /filmgrain                DONE          DONE             DONE                  DONE
 

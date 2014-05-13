@@ -118,6 +118,8 @@ BlurFXTool::BlurFXTool(QObject* const parent)
                                 EditorToolSettings::Try);
 
     d->previewWidget = new ImageRegionWidget;
+    d->previewWidget->setWhatsThis(i18n("This is the preview of the blur effect "
+                                        "applied to the photograph."));
 
     // -------------------------------------------------------------
 
@@ -194,6 +196,8 @@ BlurFXTool::BlurFXTool(QObject* const parent)
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
+
+    slotEffectTypeChanged(d->effectType->defaultIndex());
 }
 
 BlurFXTool::~BlurFXTool()
@@ -211,6 +215,7 @@ void BlurFXTool::readSettings()
     d->effectType->setCurrentIndex(group.readEntry(d->configEffectTypeEntry,     d->effectType->defaultIndex()));
     d->distanceInput->setValue(group.readEntry(d->configDistanceAdjustmentEntry, d->distanceInput->defaultValue()));
     d->levelInput->setValue(group.readEntry(d->configLevelAdjustmentEntry,       d->levelInput->defaultValue()));
+    slotEffectTypeChanged(d->effectType->defaultIndex());
 
     blockWidgetSignals(false);
 }

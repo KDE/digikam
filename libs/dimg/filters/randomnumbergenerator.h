@@ -123,19 +123,22 @@ public:
 
     /**
      * Returns a random integer in the interval [min, max]
-     * (including min and max)
+     * (including min and max).
+     * Warning: this method is non re-entrant.
      */
     int number(int min, int max);
 
     /**
      * Returns a random double in the interval [min, max)
      * (including min, excluding max)
+     * Warning: this method is non re-entrant.
      */
     double number(double min, double max);
 
     /**
      * Returns true with a probability of p
      * (where p shall be in the interval [0, 1])
+     * Warning: this method is non re-entrant.
      */
     bool yesOrNo(double p);
 

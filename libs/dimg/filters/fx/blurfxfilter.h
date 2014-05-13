@@ -102,14 +102,33 @@ private:
         uint   start;
         uint   stop;
         uint   h;
+        uint   w;
         DImg*  orgImage;
         DImg*  destImage;
         int    X;
         int    Y;
         int    Distance;
 
+        int    nCount;
+        int*   lpXArray;
+        int*   lpYArray;
+
+        int    BlendRadius;
+        bool   bInversed;
+
+        uchar* layer1;
+        uchar* layer2;
+        uchar* layer3;
+        uchar* layer4;
+
         int    SizeW;
         int    SizeH;
+
+        int    StrengthRange;
+        int    Radius;
+        int*   Kernel;
+        int**  arrMult;
+        uchar* pBlur;
     };
 
 private:
@@ -118,7 +137,12 @@ private:
 
     // Backported from ImageProcessing version 1
     void softenerBlur(DImg* const orgImage, DImg* const destImage);
+    void softenerBlurMultithreaded(const Args& prm);
+
     void shakeBlur(DImg* const orgImage, DImg* const destImage, int Distance);
+    void shakeBlurStage1Multithreaded(const Args& prm);
+    void shakeBlurStage2Multithreaded(const Args& prm);
+
     void frostGlass(DImg* const orgImage, DImg* const destImage, int Frost);
 
     // Backported from ImageProcessing version 2
@@ -130,10 +154,16 @@ private:
 
     void focusBlur(DImg* const orgImage, DImg* const destImage, int X, int Y, int BlurRadius, int BlendRadius,
                    bool bInversed=false, const QRect& pArea=QRect());
+    void focusBlurMultithreaded(const Args& prm);
 
     void farBlur(DImg* const orgImage, DImg* const destImage, int Distance);
+
     void motionBlur(DImg* const orgImage, DImg* const destImage, int Distance, double Angle=0.0);
+    void motionBlurMultithreaded(const Args& prm);
+
     void smartBlur(DImg* const orgImage, DImg* const destImage, int Radius, int Strength);
+    void smartBlurStage1Multithreaded(const Args& prm);
+    void smartBlurStage2Multithreaded(const Args& prm);
 
     void mosaic(DImg* const orgImage, DImg* const destImage, int SizeW, int SizeH);
     void mosaicMultithreaded(const Args& prm);
@@ -141,6 +171,8 @@ private:
 private:
 
     void MakeConvolution(DImg* const orgImage, DImg* const destImage, int Radius, int Kernel[]);
+    void MakeConvolutionStage1Multithreaded(const Args& prm);
+    void MakeConvolutionStage2Multithreaded(const Args& prm);
 
     DColor RandomColor(uchar* const Bits, int Width, int Height, bool sixteenBit, int bytesDepth,
                        int X, int Y, int Radius,

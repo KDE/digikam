@@ -233,7 +233,7 @@ bool SharpenFilter::convolveImage(const unsigned int order, const double* const 
     }
 
     prm.normal_kernel = normal_kernel.data();
-    QList<uint> vals = multithreadedSteps(m_destImage.width());
+    QList<int> vals = multithreadedSteps(m_destImage.width());
 
     for (y = 0 ; runningFlag() && (y < m_destImage.height()) ; ++y)
     {

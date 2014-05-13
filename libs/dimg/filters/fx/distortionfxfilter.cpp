@@ -6,7 +6,7 @@
  * Date        : 2005-07-18
  * Description : Distortion FX threaded image filter.
  *
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -37,6 +37,9 @@
 // Qt includes
 
 #include <QDateTime>
+#include <QSize>
+#include <QMutex>
+#include <QtConcurrentRun>
 #include <qmath.h>
 
 // Local includes
@@ -48,71 +51,96 @@
 namespace Digikam
 {
 
-DistortionFXFilter::DistortionFXFilter(QObject* const parent)
-    : DImgThreadedFilter(parent)
+class DistortionFXFilter::Private
 {
-    m_antiAlias  = true;
-    m_level      = 0;
-    m_iteration  = 0;
-    m_effectType = 0;
-    m_randomSeed = 0;
+public:
 
+    Private()
+    {
+        antiAlias      = true;
+        level          = 0;
+        iteration      = 0;
+        effectType     = 0;
+        randomSeed     = 0;
+        globalProgress = 0;
+    }
+
+    bool                   antiAlias;
+
+    int                    level;
+    int                    iteration;
+    int                    effectType;
+    quint32                randomSeed;
+
+    RandomNumberGenerator generator;
+
+    int                   globalProgress;
+
+    QMutex                lock;
+    QMutex                lock2;   // RandomNumberGenerator is not re-entrant (dixit Boost lib)
+};
+
+DistortionFXFilter::DistortionFXFilter(QObject* const parent)
+    : DImgThreadedFilter(parent),
+      d(new Private)
+{
     initFilter();
 }
 
 DistortionFXFilter::DistortionFXFilter(DImg* const orgImage, QObject* const parent, int effectType,
                                        int level, int iteration, bool antialiaqSing)
-    : DImgThreadedFilter(orgImage, parent, "DistortionFX")
+    : DImgThreadedFilter(orgImage, parent, "DistortionFX"),
+      d(new Private)
 {
-    m_effectType = effectType;
-    m_level      = level;
-    m_iteration  = iteration;
-    m_antiAlias  = antialiaqSing;
-    m_randomSeed = RandomNumberGenerator::timeSeed();
-
+    d->effectType = effectType;
+    d->level      = level;
+    d->iteration  = iteration;
+    d->antiAlias  = antialiaqSing;
+    d->randomSeed = RandomNumberGenerator::timeSeed();
     initFilter();
 }
 
 DistortionFXFilter::~DistortionFXFilter()
 {
     cancelFilter();
+    delete d;
 }
 
 void DistortionFXFilter::filterImage()
 {
     int w = m_orgImage.width();
     int h = m_orgImage.height();
-    int l = m_level;
-    int f = m_iteration;
+    int l = d->level;
+    int f = d->iteration;
 
-    switch (m_effectType)
+    switch (d->effectType)
     {
         case FishEye:
-            fisheye(&m_orgImage, &m_destImage, (double)(l / 5.0), m_antiAlias);
+            fisheye(&m_orgImage, &m_destImage, (double)(l / 5.0), d->antiAlias);
             break;
 
         case Twirl:
-            twirl(&m_orgImage, &m_destImage, l, m_antiAlias);
+            twirl(&m_orgImage, &m_destImage, l, d->antiAlias);
             break;
 
         case CilindricalHor:
-            cilindrical(&m_orgImage, &m_destImage, (double)l, true, false, m_antiAlias);
+            cilindrical(&m_orgImage, &m_destImage, (double)l, true, false, d->antiAlias);
             break;
 
         case CilindricalVert:
-            cilindrical(&m_orgImage, &m_destImage, (double)l, false, true, m_antiAlias);
+            cilindrical(&m_orgImage, &m_destImage, (double)l, false, true, d->antiAlias);
             break;
 
         case CilindricalHV:
-            cilindrical(&m_orgImage, &m_destImage, (double)l, true, true, m_antiAlias);
+            cilindrical(&m_orgImage, &m_destImage, (double)l, true, true, d->antiAlias);
             break;
 
         case Caricature:
-            fisheye(&m_orgImage, &m_destImage, (double)(-l / 5.0), m_antiAlias);
+            fisheye(&m_orgImage, &m_destImage, (double)(-l / 5.0), d->antiAlias);
             break;
 
         case MultipleCorners:
-            multipleCorners(&m_orgImage, &m_destImage, l, m_antiAlias);
+            multipleCorners(&m_orgImage, &m_destImage, l, d->antiAlias);
             break;
 
         case WavesHorizontal:
@@ -132,25 +160,1050 @@ void DistortionFXFilter::filterImage()
             break;
 
         case CircularWaves1:
-            circularWaves(&m_orgImage, &m_destImage, w / 2, h / 2, (double)l, (double)f, 0.0, false, m_antiAlias);
+            circularWaves(&m_orgImage, &m_destImage, w / 2, h / 2, (double)l, (double)f, 0.0, false, d->antiAlias);
             break;
 
         case CircularWaves2:
-            circularWaves(&m_orgImage, &m_destImage, w / 2, h / 2, (double)l, (double)f, 25.0, true, m_antiAlias);
+            circularWaves(&m_orgImage, &m_destImage, w / 2, h / 2, (double)l, (double)f, 25.0, true, d->antiAlias);
             break;
 
         case PolarCoordinates:
-            polarCoordinates(&m_orgImage, &m_destImage, true, m_antiAlias);
+            polarCoordinates(&m_orgImage, &m_destImage, true, d->antiAlias);
             break;
 
         case UnpolarCoordinates:
-            polarCoordinates(&m_orgImage, &m_destImage, false, m_antiAlias);
+            polarCoordinates(&m_orgImage, &m_destImage, false, d->antiAlias);
             break;
 
         case Tile:
-            tile(&m_orgImage, &m_destImage, 200 - f, 200 - f, l);
+            tile(&m_orgImage, &m_destImage, 210 - f, 210 - f, l);
             break;
     }
+}
+
+void DistortionFXFilter::fisheyeMultithreaded(const Args& prm)
+{
+    int Width       = prm.orgImage->width();
+    int Height      = prm.orgImage->height();
+    uchar* data     = prm.orgImage->bits();
+    bool sixteenBit = prm.orgImage->sixteenBit();
+    int bytesDepth  = prm.orgImage->bytesDepth();
+    uchar* pResBits = prm.destImage->bits();
+
+    double nh, nw, tw;
+
+    DColor color;
+    int offset;
+
+    int nHalfW         = Width  / 2;
+    int nHalfH         = Height / 2;
+    double lfXScale    = 1.0;
+    double lfYScale    = 1.0;
+    double lfCoeffStep = prm.Coeff / 1000.0;
+    double lfRadius, lfAngle;
+
+    if (Width > Height)
+    {
+        lfYScale = (double)Width / (double)Height;
+    }
+    else if (Height > Width)
+    {
+        lfXScale = (double)Height / (double)Width;
+    }
+
+    double lfRadMax = (double)qMax(Height, Width) / 2.0;
+    double lfCoeff  = lfRadMax / qLn(qFabs(lfCoeffStep) * lfRadMax + 1.0);
+    double th       = lfYScale * (double)(prm.h - nHalfH);
+
+    for (int w = prm.start; runningFlag() && (w < prm.stop); ++w)
+    {
+        tw = lfXScale * (double)(w - nHalfW);
+
+        // we find the distance from the center
+        lfRadius = qSqrt(th * th + tw * tw);
+
+        if (lfRadius < lfRadMax)
+        {
+            lfAngle = qAtan2(th, tw);
+
+            if (prm.Coeff > 0.0)
+            {
+                lfRadius = (qExp(lfRadius / lfCoeff) - 1.0) / lfCoeffStep;
+            }
+            else
+            {
+                lfRadius = lfCoeff * qLn(1.0 + (-1.0 * lfCoeffStep) * lfRadius);
+            }
+
+            nw = (double)nHalfW + (lfRadius / lfXScale) * qCos(lfAngle);
+            nh = (double)nHalfH + (lfRadius / lfYScale) * qSin(lfAngle);
+
+            setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, prm.h, nw, nh, prm.AntiAlias);
+        }
+        else
+        {
+            // copy pixel
+            offset = getOffset(Width, w, prm.h, bytesDepth);
+            color.setColor(data + offset, sixteenBit);
+            color.setPixel(pResBits + offset);
+        }
+    }
+}
+
+/* Function to apply the fisheye effect backported from ImageProcesqSing version 2
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
+ * Coeff            => Distortion effect coeff. Positive value render 'Fish Eyes' effect,
+ *                     and negative values render 'Caricature' effect.
+ * Antialias        => Smart blurring result.
+ *
+ * Theory           => This is a great effect if you take employee photos
+ *                     Its pure trigonometry. I think if you study hard the code you
+ *                     understand very well.
+ */
+void DistortionFXFilter::fisheye(DImg* orgImage, DImg* destImage, double Coeff, bool AntiAlias)
+{
+    if (Coeff == 0.0)
+    {
+        return;
+    }
+
+    int progress;
+
+    QList<int> vals = multithreadedSteps(orgImage->width());
+    QList <QFuture<void> > tasks;
+
+    Args prm;
+    prm.orgImage  = orgImage;
+    prm.destImage = destImage;
+    prm.Coeff     = Coeff;
+    prm.AntiAlias = AntiAlias;
+
+    // main loop
+
+    for (int h = 0; runningFlag() && (h < (int)orgImage->height()); ++h)
+    {
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
+        {
+            prm.start = vals[j];
+            prm.stop  = vals[j+1];
+            prm.h     = h;
+            tasks.append(QtConcurrent::run(this,
+                                           &DistortionFXFilter::fisheyeMultithreaded,
+                                           prm
+                                          ));
+        }
+
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
+
+        // Update the progress bar in dialog.
+        progress = (int)(((double)(h) * 100.0) / orgImage->height());
+
+        if (progress % 5 == 0)
+        {
+            postProgress(progress);
+        }
+    }
+}
+
+void DistortionFXFilter::twirlMultithreaded(const Args& prm)
+{
+    int Width       = prm.orgImage->width();
+    int Height      = prm.orgImage->height();
+    uchar* data     = prm.orgImage->bits();
+    bool sixteenBit = prm.orgImage->sixteenBit();
+    int bytesDepth  = prm.orgImage->bytesDepth();
+    uchar* pResBits = prm.destImage->bits();
+
+    DColor color;
+    int offset;
+
+    int    nHalfW   = Width / 2;
+    int    nHalfH   = Height / 2;
+    double lfXScale = 1.0;
+    double lfYScale = 1.0;
+    double lfAngle, lfNewAngle, lfAngleSum, lfCurrentRadius;
+    double tw, nh, nw;
+
+    if (Width > Height)
+    {
+        lfYScale = (double)Width / (double)Height;
+    }
+    else if (Height > Width)
+    {
+        lfXScale = (double)Height / (double)Width;
+    }
+
+    // the angle step is dist divided by 10000
+    double lfAngleStep = prm.dist / 10000.0;
+    // now, we get the minimum radius
+    double lfRadMax    = (double)qMax(Width, Height) / 2.0;
+
+    double th          = lfYScale * (double)(prm.h - nHalfH);
+
+    for (int w = prm.start; runningFlag() && (w < prm.stop); ++w)
+    {
+        tw = lfXScale * (double)(w - nHalfW);
+
+        // now, we get the distance
+        lfCurrentRadius = qSqrt(th * th + tw * tw);
+
+        // if distance is less than maximum radius...
+        if (lfCurrentRadius < lfRadMax)
+        {
+            // we find the angle from the center
+            lfAngle = qAtan2(th, tw);
+            // we get the accumuled angle
+            lfAngleSum = lfAngleStep * (-1.0 * (lfCurrentRadius - lfRadMax));
+            // ok, we sum angle with accumuled to find a new angle
+            lfNewAngle = lfAngle + lfAngleSum;
+
+            // now we find the exact position's x and y
+            nw = (double)nHalfW + qCos(lfNewAngle) * (lfCurrentRadius / lfXScale);
+            nh = (double)nHalfH + qSin(lfNewAngle) * (lfCurrentRadius / lfYScale);
+
+            setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, prm.h, nw, nh, prm.AntiAlias);
+        }
+        else
+        {
+            // copy pixel
+            offset = getOffset(Width, w, prm.h, bytesDepth);
+            color.setColor(data + offset, sixteenBit);
+            color.setPixel(pResBits + offset);
+        }
+    }
+}
+
+/* Function to apply the twirl effect backported from ImageProcesqSing version 2
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
+ * dist             => Distance value.
+ * Antialias        => Smart blurring result.
+ *
+ * Theory           => Take spiral studies, you will understand better, I'm studying
+ *                     hard on this effect, because it is not too fast.
+ */
+void DistortionFXFilter::twirl(DImg* orgImage, DImg* destImage, int dist, bool AntiAlias)
+{
+    // if dist value is zero, we do nothing
+
+    if (dist == 0)
+    {
+        return;
+    }
+
+    int progress;
+
+    QList<int> vals = multithreadedSteps(orgImage->width());
+    QList <QFuture<void> > tasks;
+
+    Args prm;
+    prm.orgImage  = orgImage;
+    prm.destImage = destImage;
+    prm.dist      = dist;
+    prm.AntiAlias = AntiAlias;
+
+    // main loop
+
+    for (int h = 0; runningFlag() && (h < (int)orgImage->height()); ++h)
+    {
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
+        {
+            prm.start = vals[j];
+            prm.stop  = vals[j+1];
+            prm.h     = h;
+            tasks.append(QtConcurrent::run(this,
+                                           &DistortionFXFilter::twirlMultithreaded,
+                                           prm
+                                          ));
+        }
+
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
+
+        // Update the progress bar in dialog.
+        progress = (int)(((double)h * 100.0) / orgImage->height());
+
+        if (progress % 5 == 0)
+        {
+            postProgress(progress);
+        }
+    }
+}
+
+void DistortionFXFilter::cilindricalMultithreaded(const Args& prm)
+{
+    int Width       = prm.orgImage->width();
+    int Height      = prm.orgImage->height();
+    uchar* data     = prm.orgImage->bits();
+    bool sixteenBit = prm.orgImage->sixteenBit();
+    int bytesDepth  = prm.orgImage->bytesDepth();
+    uchar* pResBits = prm.destImage->bits();
+
+    double nh, nw;
+
+    int    nHalfW      = Width / 2;
+    int    nHalfH      = Height / 2;
+    double lfCoeffX    = 1.0;
+    double lfCoeffY    = 1.0;
+    double lfCoeffStep = prm.Coeff / 1000.0;
+
+    if (prm.Horizontal)
+    {
+        lfCoeffX = (double)nHalfW / qLn(qFabs(lfCoeffStep) * nHalfW + 1.0);
+    }
+
+    if (prm.Vertical)
+    {
+        lfCoeffY = (double)nHalfH / qLn(qFabs(lfCoeffStep) * nHalfH + 1.0);
+    }
+
+    for (int w = prm.start; runningFlag() && (w < prm.stop); ++w)
+    {
+        // we find the distance from the center
+        nh = qFabs((double)(prm.h - nHalfH));
+        nw = qFabs((double)(w - nHalfW));
+
+        if (prm.Horizontal)
+        {
+            if (prm.Coeff > 0.0)
+            {
+                nw = (qExp(nw / lfCoeffX) - 1.0) / lfCoeffStep;
+            }
+            else
+            {
+                nw = lfCoeffX * qLn(1.0 + (-1.0 * lfCoeffStep) * nw);
+            }
+        }
+
+        if (prm.Vertical)
+        {
+            if (prm.Coeff > 0.0)
+            {
+                nh = (qExp(nh / lfCoeffY) - 1.0) / lfCoeffStep;
+            }
+            else
+            {
+                nh = lfCoeffY * qLn(1.0 + (-1.0 * lfCoeffStep) * nh);
+            }
+        }
+
+        nw = (double)nHalfW + ((w >= nHalfW)     ? nw : -nw);
+        nh = (double)nHalfH + ((prm.h >= nHalfH) ? nh : -nh);
+
+        setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, prm.h, nw, nh, prm.AntiAlias);
+    }
+}
+
+/* Function to apply the Cilindrical effect backported from ImageProcessing version 2
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
+ * Coeff            => Cilindrical value.
+ * Horizontal       => Apply horizontally.
+ * Vertical         => Apply vertically.
+ * Antialias        => Smart blurring result.
+ *
+ * Theory           => This is a great effect, similar to Spherize (Photoshop).
+ *                     If you understand FishEye, you will understand Cilindrical
+ *                     FishEye apply a logarithm function using a sphere radius,
+ *                     Spherize use the same function but in a rectangular
+ *                     environment.
+ */
+void DistortionFXFilter::cilindrical(DImg* orgImage, DImg* destImage, double Coeff,
+                                     bool Horizontal, bool Vertical, bool AntiAlias)
+
+{
+    if ((Coeff == 0.0) || (!(Horizontal || Vertical)))
+    {
+        return;
+    }
+
+    int progress;
+
+    // initial copy
+    memcpy(destImage->bits(), orgImage->bits(), orgImage->numBytes());
+
+    QList<int> vals = multithreadedSteps(orgImage->width());
+    QList <QFuture<void> > tasks;
+
+    Args prm;
+    prm.orgImage   = orgImage;
+    prm.destImage  = destImage;
+    prm.Coeff      = Coeff;
+    prm.Horizontal = Horizontal;
+    prm.Vertical   = Vertical;
+    prm.AntiAlias  = AntiAlias;
+
+    // main loop
+
+    for (int h = 0; runningFlag() && (h < (int)orgImage->height()); ++h)
+    {
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
+        {
+            prm.start = vals[j];
+            prm.stop  = vals[j+1];
+            prm.h     = h;
+            tasks.append(QtConcurrent::run(this,
+                                           &DistortionFXFilter::cilindricalMultithreaded,
+                                           prm
+                                          ));
+        }
+
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
+
+        // Update the progress bar in dialog.
+        progress = (int)(((double)h * 100.0) / orgImage->height());
+
+        if (progress % 5 == 0)
+        {
+            postProgress(progress);
+        }
+    }
+}
+
+void DistortionFXFilter::multipleCornersMultithreaded(const Args& prm)
+{
+    int Width       = prm.orgImage->width();
+    int Height      = prm.orgImage->height();
+    uchar* data     = prm.orgImage->bits();
+    bool sixteenBit = prm.orgImage->sixteenBit();
+    int bytesDepth  = prm.orgImage->bytesDepth();
+    uchar* pResBits = prm.destImage->bits();
+
+    double nh, nw;
+
+    int    nHalfW   = Width / 2;
+    int    nHalfH   = Height / 2;
+    double lfRadMax = qSqrt(Height * Height + Width * Width) / 2.0;
+    double lfAngle, lfNewRadius, lfCurrentRadius;
+
+    for (int w = prm.start; runningFlag() && (w < prm.stop); ++w)
+    {
+        // we find the distance from the center
+        nh = nHalfH - prm.h;
+        nw = nHalfW - w;
+
+        // now, we get the distance
+        lfCurrentRadius = qSqrt(nh * nh + nw * nw);
+        // we find the angle from the center
+        lfAngle = qAtan2(nh, nw) * (double)prm.Factor;
+
+        // ok, we sum angle with accumuled to find a new angle
+        lfNewRadius = lfCurrentRadius * lfCurrentRadius / lfRadMax;
+
+        // now we find the exact position's x and y
+        nw = (double)nHalfW - (qCos(lfAngle) * lfNewRadius);
+        nh = (double)nHalfH - (qSin(lfAngle) * lfNewRadius);
+
+        setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, prm.h, nw, nh, prm.AntiAlias);
+    }
+}
+
+/* Function to apply the Multiple Corners effect backported from ImageProcessing version 2
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
+ * Factor           => nb corners.
+ * Antialias        => Smart blurring result.
+ *
+ * Theory           => This is an amazing function, you've never seen this before.
+ *                     I was testing some trigonometric functions, and I saw that if
+ *                     I multiply the angle by 2, the result is an image like this
+ *                     If we multiply by 3, we can create the SixCorners effect.
+ */
+void DistortionFXFilter::multipleCorners(DImg* orgImage, DImg* destImage, int Factor, bool AntiAlias)
+{
+    if (Factor == 0)
+    {
+        return;
+    }
+
+    int progress;
+
+    QList<int> vals = multithreadedSteps(orgImage->width());
+    QList <QFuture<void> > tasks;
+
+    Args prm;
+    prm.orgImage  = orgImage;
+    prm.destImage = destImage;
+    prm.Factor    = Factor;
+    prm.AntiAlias = AntiAlias;
+
+    // main loop
+
+    for (int h = 0; runningFlag() && (h < (int)orgImage->height()); ++h)
+    {
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
+        {
+            prm.start = vals[j];
+            prm.stop  = vals[j+1];
+            prm.h     = h;
+            tasks.append(QtConcurrent::run(this,
+                                           &DistortionFXFilter::multipleCornersMultithreaded,
+                                           prm
+                                          ));
+        }
+
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
+
+        // Update the progress bar in dialog.
+        progress = (int)(((double)h * 100.0) / orgImage->height());
+
+        if (progress % 5 == 0)
+        {
+            postProgress(progress);
+        }
+    }
+}
+
+void DistortionFXFilter::wavesHorizontalMultithreaded(const Args& prm)
+{
+    int oldProgress=0, progress=0, tx;
+
+    for (int h = prm.start; runningFlag() && (h < prm.stop); ++h)
+    {
+        tx = lround(prm.Amplitude * qSin((prm.Frequency * 2) * h * (M_PI / 180)));
+        prm.destImage->bitBltImage(prm.orgImage, 0, h,  prm.orgImage->width(), 1,  tx, h);
+
+        if (prm.FillSides)
+        {
+            prm.destImage->bitBltImage(prm.orgImage, prm.orgImage->width() - tx, h,  tx, 1,  0, h);
+            prm.destImage->bitBltImage(prm.orgImage, 0, h, prm.orgImage->width() - (prm.orgImage->width() - 2 * prm.Amplitude + tx), 1,  prm.orgImage->width() + tx, h);
+        }
+
+        // Update the progress bar in dialog.
+        progress = (int)( ( (double)h * (100.0 / QThreadPool::globalInstance()->maxThreadCount()) ) / (prm.stop - prm.start));
+
+        if ((progress % 5 == 0) && (progress > oldProgress))
+        {
+            d->lock.lock();
+            oldProgress       = progress;
+            d->globalProgress += 5;
+            postProgress(d->globalProgress);
+            d->lock.unlock();
+        }
+    }
+}
+
+void DistortionFXFilter::wavesVerticalMultithreaded(const Args& prm)
+{
+    int oldProgress=0, progress=0, ty;
+
+    for (int w = prm.start; runningFlag() && (w < prm.stop); ++w)
+    {
+        ty = lround(prm.Amplitude * qSin((prm.Frequency * 2) * w * (M_PI / 180)));
+        prm.destImage->bitBltImage(prm.orgImage, w, 0, 1, prm.orgImage->height(), w, ty);
+
+        if (prm.FillSides)
+        {
+            prm.destImage->bitBltImage(prm.orgImage, w, prm.orgImage->height() - ty,  1, ty,  w, 0);
+            prm.destImage->bitBltImage(prm.orgImage, w, 0,  1, prm.orgImage->height() - (prm.orgImage->height() - 2 * prm.Amplitude + ty),  w, prm.orgImage->height() + ty);
+        }
+
+        // Update the progress bar in dialog.
+        progress = (int)( ( (double)w * (100.0 / QThreadPool::globalInstance()->maxThreadCount()) ) / (prm.stop - prm.start));
+
+        if ((progress % 5 == 0) && (progress > oldProgress))
+        {
+            d->lock.lock();
+            oldProgress       = progress;
+            d->globalProgress += 5;
+            postProgress(d->globalProgress);
+            d->lock.unlock();
+        }
+    }
+}
+
+/* Function to apply the waves effect
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
+ * Amplitude        => Sinoidal maximum height.
+ * Frequency        => Frequency value.
+ * FillSides        => Like a boolean variable.
+ * Direction        => Vertical or horizontal flag.
+ *
+ * Theory           => This is an amazing effect, very funny, and very simple to
+ *                     understand. You just need understand how qSin and qCos works.
+ */
+void DistortionFXFilter::waves(DImg* orgImage, DImg* destImage,
+                               int Amplitude, int Frequency,
+                               bool FillSides, bool Direction)
+{
+    if (Amplitude < 0)
+    {
+        Amplitude = 0;
+    }
+
+    if (Frequency < 0)
+    {
+        Frequency = 0;
+    }
+
+    Args prm;
+    prm.orgImage  = orgImage;
+    prm.destImage = destImage;
+    prm.Amplitude = Amplitude;
+    prm.Frequency = Frequency;
+    prm.FillSides = FillSides;
+
+    if (Direction)        // Horizontal
+    {
+        QList<int> vals = multithreadedSteps(orgImage->height());
+        QList <QFuture<void> > tasks;
+
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
+        {
+            prm.start = vals[j];
+            prm.stop  = vals[j+1];
+            tasks.append(QtConcurrent::run(this,
+                                           &DistortionFXFilter::wavesHorizontalMultithreaded,
+                                           prm
+                                          ));
+        }
+
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
+    }
+    else
+    {
+        QList<int> vals = multithreadedSteps(orgImage->width());
+        QList <QFuture<void> > tasks;
+
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
+        {
+            prm.start = vals[j];
+            prm.stop  = vals[j+1];
+            tasks.append(QtConcurrent::run(this,
+                                           &DistortionFXFilter::wavesVerticalMultithreaded,
+                                           prm
+                                          ));
+        }
+
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
+    }
+}
+
+void DistortionFXFilter::blockWavesMultithreaded(const Args& prm)
+{
+    int Width       = prm.orgImage->width();
+    int Height      = prm.orgImage->height();
+    uchar* data     = prm.orgImage->bits();
+    bool sixteenBit = prm.orgImage->sixteenBit();
+    int bytesDepth  = prm.orgImage->bytesDepth();
+    uchar* pResBits = prm.destImage->bits();
+
+    int nw, nh;
+
+    DColor color;
+    int offset, offsetOther;
+
+    int nHalfW = Width  / 2;
+    int nHalfH = Height / 2;
+
+    for (int h = prm.start; runningFlag() && (h < prm.stop); ++h)
+    {
+        nw = nHalfW - prm.w;
+        nh = nHalfH - h;
+
+        if (prm.Mode)
+        {
+            nw = (int)(prm.w + prm.Amplitude * qSin(prm.Frequency * nw * (M_PI / 180)));
+            nh = (int)(h     + prm.Amplitude * qCos(prm.Frequency * nh * (M_PI / 180)));
+        }
+        else
+        {
+            nw = (int)(prm.w + prm.Amplitude * qSin(prm.Frequency * prm.w * (M_PI / 180)));
+            nh = (int)(h     + prm.Amplitude * qCos(prm.Frequency * h     * (M_PI / 180)));
+        }
+
+        offset      = getOffset(Width, prm.w, h, bytesDepth);
+        offsetOther = getOffsetAdjusted(Width, Height, (int)nw, (int)nh, bytesDepth);
+
+        // read color
+        color.setColor(data + offsetOther, sixteenBit);
+        // write color to destination
+        color.setPixel(pResBits + offset);
+    }
+}
+
+/* Function to apply the block waves effect
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
+ * Amplitude        => Sinoidal maximum height
+ * Frequency        => Frequency value
+ * Mode             => The mode to be applied.
+ *
+ * Theory           => This is an amazing effect, very funny when amplitude and
+ *                     frequency are small values.
+ */
+void DistortionFXFilter::blockWaves(DImg* orgImage, DImg* destImage,
+                                    int Amplitude, int Frequency, bool Mode)
+{
+    if (Amplitude < 0)
+    {
+        Amplitude = 0;
+    }
+
+    if (Frequency < 0)
+    {
+        Frequency = 0;
+    }
+
+    int progress;
+
+    QList<int> vals = multithreadedSteps(orgImage->height());
+    QList <QFuture<void> > tasks;
+
+    Args prm;
+    prm.orgImage  = orgImage;
+    prm.destImage = destImage;
+    prm.Mode      = Mode;
+    prm.Frequency = Frequency;
+    prm.Amplitude = Amplitude;
+
+    for (int w = 0; runningFlag() && (w < (int)orgImage->width()); ++w)
+    {
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
+        {
+            prm.start = vals[j];
+            prm.stop  = vals[j+1];
+            prm.w     = w;
+            tasks.append(QtConcurrent::run(this,
+                                           &DistortionFXFilter::blockWavesMultithreaded,
+                                           prm
+                                          ));
+        }
+
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
+
+        // Update the progress bar in dialog.
+        progress = (int)(((double)w * 100.0) / orgImage->width());
+
+        if (progress % 5 == 0)
+        {
+            postProgress(progress);
+        }
+    }
+}
+
+void DistortionFXFilter::circularWavesMultithreaded(const Args& prm)
+{
+    int Width       = prm.orgImage->width();
+    int Height      = prm.orgImage->height();
+    uchar* data     = prm.orgImage->bits();
+    bool sixteenBit = prm.orgImage->sixteenBit();
+    int bytesDepth  = prm.orgImage->bytesDepth();
+    uchar* pResBits = prm.destImage->bits();
+
+    double nh, nw;
+
+    double lfRadius, lfRadMax;
+    double lfNewAmp     = prm.Amplitude;
+    double lfFreqAngle  = prm.Frequency * ANGLE_RATIO;
+    double phase        = prm.Phase     * ANGLE_RATIO;
+    lfRadMax            = qSqrt(Height * Height + Width * Width);
+
+    for (int w = prm.start; runningFlag() && (w < prm.stop); ++w)
+    {
+        nw = prm.X - w;
+        nh = prm.Y - prm.h;
+
+        lfRadius = qSqrt(nw * nw + nh * nh);
+
+        if (prm.WavesType)
+        {
+            lfNewAmp = prm.Amplitude * lfRadius / lfRadMax;
+        }
+
+        nw = (double)w     + lfNewAmp * qSin(lfFreqAngle * lfRadius + phase);
+        nh = (double)prm.h + lfNewAmp * qCos(lfFreqAngle * lfRadius + phase);
+
+        setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, prm.h, nw, nh, prm.AntiAlias);
+    }
+}
+
+/* Function to apply the circular waves effect backported from ImageProcesqSing version 2
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
+ * X, Y             => Position of circle center on the image.
+ * Amplitude        => Sinoidal maximum height
+ * Frequency        => Frequency value.
+ * Phase            => Phase value.
+ * WavesType        => If true  the amplitude is proportional to radius.
+ * Antialias        => Smart bluring result.
+ *
+ * Theory           => Similar to Waves effect, but here I apply a senoidal function
+ *                     with the angle point.
+ */
+void DistortionFXFilter::circularWaves(DImg* orgImage, DImg* destImage, int X, int Y, double Amplitude,
+                                       double Frequency, double Phase, bool WavesType, bool AntiAlias)
+{
+    if (Amplitude < 0.0)
+    {
+        Amplitude = 0.0;
+    }
+
+    if (Frequency < 0.0)
+    {
+        Frequency = 0.0;
+    }
+
+    int progress;
+
+    QList<int> vals = multithreadedSteps(orgImage->width());
+    QList <QFuture<void> > tasks;
+
+    Args prm;
+    prm.orgImage  = orgImage;
+    prm.destImage = destImage;
+    prm.Phase     = Phase;
+    prm.Frequency = Frequency;
+    prm.Amplitude = Amplitude;
+    prm.WavesType = WavesType;
+    prm.X         = X;
+    prm.Y         = Y;
+    prm.AntiAlias = AntiAlias;
+
+    for (int h = 0; runningFlag() && (h < (int)orgImage->height()); ++h)
+    {
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
+        {
+            prm.start = vals[j];
+            prm.stop  = vals[j+1];
+            prm.h     = h;
+            tasks.append(QtConcurrent::run(this,
+                                           &DistortionFXFilter::circularWavesMultithreaded,
+                                           prm
+                                          ));
+        }
+
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
+
+        // Update the progress bar in dialog.
+        progress = (int)(((double)h * 100.0) / orgImage->height());
+
+        if (progress % 5 == 0)
+        {
+            postProgress(progress);
+        }
+    }
+}
+
+void DistortionFXFilter::polarCoordinatesMultithreaded(const Args& prm)
+{
+    int Width       = prm.orgImage->width();
+    int Height      = prm.orgImage->height();
+    uchar* data     = prm.orgImage->bits();
+    bool sixteenBit = prm.orgImage->sixteenBit();
+    int bytesDepth  = prm.orgImage->bytesDepth();
+    uchar* pResBits = prm.destImage->bits();
+
+    int nHalfW      = Width / 2;
+    int nHalfH      = Height / 2;
+    double lfXScale = 1.0;
+    double lfYScale = 1.0;
+    double lfAngle, lfRadius, lfRadMax;
+    double nh, nw, tw;
+
+    if (Width > Height)
+    {
+        lfYScale = (double)Width / (double)Height;
+    }
+    else if (Height > Width)
+    {
+        lfXScale = (double)Height / (double)Width;
+    }
+
+    lfRadMax = (double)qMax(Height, Width) / 2.0;
+
+    double th = lfYScale * (double)(prm.h - nHalfH);
+
+    for (int w = prm.start; runningFlag() && (w < prm.stop); ++w)
+    {
+        tw = lfXScale * (double)(w - nHalfW);
+
+        if (prm.Type)
+        {
+            // now, we get the distance
+            lfRadius = qSqrt(th * th + tw * tw);
+            // we find the angle from the center
+            lfAngle = qAtan2(tw, th);
+
+            // now we find the exact position's x and y
+            nh = lfRadius * (double) Height / lfRadMax;
+            nw =  lfAngle * (double)  Width / (2 * M_PI);
+
+            nw = (double)nHalfW + nw;
+        }
+        else
+        {
+            lfRadius = (double)(prm.h) * lfRadMax   / (double)Height;
+            lfAngle  = (double)(w)     * (2 * M_PI) / (double) Width;
+
+            nw = (double)nHalfW - (lfRadius / lfXScale) * qSin(lfAngle);
+            nh = (double)nHalfH - (lfRadius / lfYScale) * qCos(lfAngle);
+        }
+
+        setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, prm.h, nw, nh, prm.AntiAlias);
+    }
+}
+
+/* Function to apply the Polar Coordinates effect backported from ImageProcesqSing version 2
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
+ * Type             => if true Polar Coordinate to Polar else inverse.
+ * Antialias        => Smart blurring result.
+ *
+ * Theory           => Similar to PolarCoordinates from Photoshop. We apply the polar
+ *                     transformation in a proportional (Height and Width) radius.
+ */
+void DistortionFXFilter::polarCoordinates(DImg* orgImage, DImg* destImage, bool Type, bool AntiAlias)
+{
+    int progress;
+
+    QList<int> vals = multithreadedSteps(orgImage->width());
+    QList <QFuture<void> > tasks;
+
+    Args prm;
+    prm.orgImage  = orgImage;
+    prm.destImage = destImage;
+    prm.Type      = Type;
+    prm.AntiAlias = AntiAlias;
+
+    // main loop
+
+    for (int h = 0; runningFlag() && (h < (int)orgImage->height()); ++h)
+    {
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
+        {
+            prm.start = vals[j];
+            prm.stop  = vals[j+1];
+            prm.h     = h;
+            tasks.append(QtConcurrent::run(this,
+                                           &DistortionFXFilter::polarCoordinatesMultithreaded,
+                                           prm
+                                          ));
+        }
+
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
+
+        // Update the progress bar in dialog.
+        progress = (int)(((double)h * 100.0) / orgImage->height());
+
+        if (progress % 5 == 0)
+        {
+            postProgress(progress);
+        }
+    }
+}
+
+void DistortionFXFilter::tileMultithreaded(const Args& prm)
+{
+    int tx, ty, progress=0, oldProgress=0;
+
+    for (int h = prm.start; runningFlag() && (h < prm.stop); h += prm.HSize)
+    {
+        for (int w = 0; runningFlag() && (w < (int)prm.orgImage->width()); w += prm.WSize)
+        {
+            d->lock2.lock();
+            tx = d->generator.number(-prm.Random / 2, prm.Random / 2);
+            ty = d->generator.number(-prm.Random / 2, prm.Random / 2);
+            d->lock2.unlock();
+            prm.destImage->bitBltImage(prm.orgImage, w, h, prm.WSize, prm.HSize, w + tx, h + ty);
+        }
+
+        // Update the progress bar in dialog.
+        progress = (int)( ( (double)h * (100.0 / QThreadPool::globalInstance()->maxThreadCount()) ) / (prm.stop - prm.start));
+
+        if ((progress % 5 == 0) && (progress > oldProgress))
+        {
+            d->lock.lock();
+            oldProgress       = progress;
+            d->globalProgress += 5;
+            postProgress(d->globalProgress);
+            d->lock.unlock();
+        }
+    }
+}
+
+/* Function to apply the tile effect
+ *
+ * data             => The image data in RGBA mode.
+ * Width            => Width of image.
+ * Height           => Height of image.
+ * WSize            => Tile Width
+ * HSize            => Tile Height
+ * Random           => Maximum random value
+ *
+ * Theory           => Similar to Tile effect from Photoshop and very easy to
+ *                     understand. We get a rectangular area uqSing WSize and HSize and
+ *                     replace in a position with a random distance from the original
+ *                     position.
+ */
+void DistortionFXFilter::tile(DImg* orgImage, DImg* destImage,
+                              int WSize, int HSize, int Random)
+{
+    if (WSize < 1)
+    {
+        WSize = 1;
+    }
+
+    if (HSize < 1)
+    {
+        HSize = 1;
+    }
+
+    if (Random < 1)
+    {
+        Random = 1;
+    }
+
+    Args prm;
+    prm.orgImage  = orgImage;
+    prm.destImage = destImage;
+    prm.WSize     = WSize;
+    prm.HSize     = HSize;
+    prm.Random    = Random;
+
+    d->generator.seed(d->randomSeed);
+
+    QList<int> vals = multithreadedSteps(orgImage->height());
+    QList <QFuture<void> > tasks;
+
+    for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
+    {
+        prm.start = vals[j];
+        prm.stop  = vals[j+1];
+        tasks.append(QtConcurrent::run(this,
+                                       &DistortionFXFilter::tileMultithreaded,
+                                       prm
+                                      ));
+    }
+
+    foreach(QFuture<void> t, tasks)
+        t.waitForFinished();
 }
 
 /*
@@ -192,774 +1245,19 @@ void DistortionFXFilter::setPixelFromOther(int Width, int Height, bool sixteenBi
     }
 }
 
-/* Function to apply the fisheye effect backported from ImageProcesqSing version 2
- *
- * data             => The image data in RGBA mode.
- * Width            => Width of image.
- * Height           => Height of image.
- * Coeff            => Distortion effect coeff. Positive value render 'Fish Eyes' effect,
- *                     and negative values render 'Caricature' effect.
- * Antialias        => Smart blurring result.
- *
- * Theory           => This is a great effect if you take employee photos
- *                     Its pure trigonometry. I think if you study hard the code you
- *                     understand very well.
- */
-void DistortionFXFilter::fisheye(DImg* orgImage, DImg* destImage, double Coeff, bool AntiAlias)
-{
-    if (Coeff == 0.0)
-    {
-        return;
-    }
-
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-    uchar* data     = orgImage->bits();
-    bool sixteenBit = orgImage->sixteenBit();
-    int bytesDepth  = orgImage->bytesDepth();
-    uchar* pResBits = destImage->bits();
-
-    int h, w;
-    double nh, nw, th, tw;
-
-    int progress;
-    int nHalfW = Width / 2, nHalfH = Height / 2;
-
-    DColor color;
-    int offset;
-
-    double lfXScale = 1.0, lfYScale = 1.0;
-    double lfRadius, lfRadMax, lfAngle, lfCoeff, lfCoeffStep = Coeff / 1000.0;
-
-    if (Width > Height)
-    {
-        lfYScale = (double)Width / (double)Height;
-    }
-    else if (Height > Width)
-    {
-        lfXScale = (double)Height / (double)Width;
-    }
-
-    lfRadMax = (double)qMax(Height, Width) / 2.0;
-    lfCoeff  = lfRadMax / qLn(qFabs(lfCoeffStep) * lfRadMax + 1.0);
-
-    // main loop
-
-    for (h = 0; runningFlag() && (h < Height); ++h)
-    {
-        th = lfYScale * (double)(h - nHalfH);
-
-        for (w = 0; runningFlag() && (w < Width); ++w)
-        {
-            tw = lfXScale * (double)(w - nHalfW);
-
-            // we find the distance from the center
-            lfRadius = qSqrt(th * th + tw * tw);
-
-            if (lfRadius < lfRadMax)
-            {
-                lfAngle = qAtan2(th, tw);
-
-                if (Coeff > 0.0)
-                {
-                    lfRadius = (qExp(lfRadius / lfCoeff) - 1.0) / lfCoeffStep;
-                }
-                else
-                {
-                    lfRadius = lfCoeff * qLn(1.0 + (-1.0 * lfCoeffStep) * lfRadius);
-                }
-
-                nw = (double)nHalfW + (lfRadius / lfXScale) * qCos(lfAngle);
-                nh = (double)nHalfH + (lfRadius / lfYScale) * qSin(lfAngle);
-
-                setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, h, nw, nh, AntiAlias);
-            }
-            else
-            {
-                // copy pixel
-                offset = getOffset(Width, w, h, bytesDepth);
-                color.setColor(data + offset, sixteenBit);
-                color.setPixel(pResBits + offset);
-            }
-        }
-
-        // Update the progress bar in dialog.
-        progress = (int)(((double)(h) * 100.0) / Height);
-
-        if (progress % 5 == 0)
-        {
-            postProgress(progress);
-        }
-    }
-}
-
-/* Function to apply the twirl effect backported from ImageProcesqSing version 2
- *
- * data             => The image data in RGBA mode.
- * Width            => Width of image.
- * Height           => Height of image.
- * dist             => Distance value.
- * Antialias        => Smart blurring result.
- *
- * Theory           => Take spiral studies, you will understand better, I'm studying
- *                     hard on this effect, because it is not too fast.
- */
-void DistortionFXFilter::twirl(DImg* orgImage, DImg* destImage, int dist, bool AntiAlias)
-{
-    // if dist value is zero, we do nothing
-
-    if (dist == 0)
-    {
-        return;
-    }
-
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-    uchar* data     = orgImage->bits();
-    bool sixteenBit = orgImage->sixteenBit();
-    int bytesDepth  = orgImage->bytesDepth();
-    uchar* pResBits = destImage->bits();
-
-    int h, w;
-    double tw, th, nh, nw;
-
-    DColor color;
-    int offset;
-
-    int progress;
-    int nHalfW = Width / 2, nHalfH = Height / 2;
-
-    double lfXScale = 1.0, lfYScale = 1.0;
-    double lfAngle, lfNewAngle, lfAngleStep, lfAngleSum, lfCurrentRadius, lfRadMax;
-
-    if (Width > Height)
-    {
-        lfYScale = (double)Width / (double)Height;
-    }
-    else if (Height > Width)
-    {
-        lfXScale = (double)Height / (double)Width;
-    }
-
-    // the angle step is dist divided by 10000
-    lfAngleStep = dist / 10000.0;
-    // now, we get the minimum radius
-    lfRadMax = (double)qMax(Width, Height) / 2.0;
-
-    // main loop
-
-    for (h = 0; runningFlag() && (h < Height); ++h)
-    {
-        th = lfYScale * (double)(h - nHalfH);
-
-        for (w = 0; runningFlag() && (w < Width); ++w)
-        {
-            tw = lfXScale * (double)(w - nHalfW);
-
-            // now, we get the distance
-            lfCurrentRadius = qSqrt(th * th + tw * tw);
-
-            // if distance is less than maximum radius...
-            if (lfCurrentRadius < lfRadMax)
-            {
-                // we find the angle from the center
-                lfAngle = qAtan2(th, tw);
-                // we get the accumuled angle
-                lfAngleSum = lfAngleStep * (-1.0 * (lfCurrentRadius - lfRadMax));
-                // ok, we sum angle with accumuled to find a new angle
-                lfNewAngle = lfAngle + lfAngleSum;
-
-                // now we find the exact position's x and y
-                nw = (double)nHalfW + qCos(lfNewAngle) * (lfCurrentRadius / lfXScale);
-                nh = (double)nHalfH + qSin(lfNewAngle) * (lfCurrentRadius / lfYScale);
-
-                setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, h, nw, nh, AntiAlias);
-            }
-            else
-            {
-                // copy pixel
-                offset = getOffset(Width, w, h, bytesDepth);
-                color.setColor(data + offset, sixteenBit);
-                color.setPixel(pResBits + offset);
-            }
-        }
-
-        // Update the progress bar in dialog.
-        progress = (int)(((double)h * 100.0) / Height);
-
-        if (progress % 5 == 0)
-        {
-            postProgress(progress);
-        }
-    }
-}
-
-/* Function to apply the Cilindrical effect backported from ImageProcessing version 2
- *
- * data             => The image data in RGBA mode.
- * Width            => Width of image.
- * Height           => Height of image.
- * Coeff            => Cilindrical value.
- * Horizontal       => Apply horizontally.
- * Vertical         => Apply vertically.
- * Antialias        => Smart blurring result.
- *
- * Theory           => This is a great effect, similar to Spherize (Photoshop).
- *                     If you understand FishEye, you will understand Cilindrical
- *                     FishEye apply a logarithm function using a sphere radius,
- *                     Spherize use the same function but in a rectangular
- *                     environment.
- */
-void DistortionFXFilter::cilindrical(DImg* orgImage, DImg* destImage, double Coeff,
-                                     bool Horizontal, bool Vertical, bool AntiAlias)
-
-{
-    if ((Coeff == 0.0) || (!(Horizontal || Vertical)))
-    {
-        return;
-    }
-
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-    uchar* data     = orgImage->bits();
-    bool sixteenBit = orgImage->sixteenBit();
-    int bytesDepth  = orgImage->bytesDepth();
-    uchar* pResBits = destImage->bits();
-
-    int progress;
-
-    int h, w;
-    double nh, nw;
-
-    int nHalfW = Width / 2, nHalfH = Height / 2;
-    double lfCoeffX = 1.0, lfCoeffY = 1.0, lfCoeffStep = Coeff / 1000.0;
-
-    if (Horizontal)
-    {
-        lfCoeffX = (double)nHalfW / qLn(qFabs(lfCoeffStep) * nHalfW + 1.0);
-    }
-
-    if (Vertical)
-    {
-        lfCoeffY = (double)nHalfH / qLn(qFabs(lfCoeffStep) * nHalfH + 1.0);
-    }
-
-    // initial copy
-    memcpy(pResBits, data, orgImage->numBytes());
-
-    // main loop
-
-    for (h = 0; runningFlag() && (h < Height); ++h)
-    {
-        for (w = 0; runningFlag() && (w < Width); ++w)
-        {
-            // we find the distance from the center
-            nh = qFabs((double)(h - nHalfH));
-            nw = qFabs((double)(w - nHalfW));
-
-            if (Horizontal)
-            {
-                if (Coeff > 0.0)
-                {
-                    nw = (qExp(nw / lfCoeffX) - 1.0) / lfCoeffStep;
-                }
-                else
-                {
-                    nw = lfCoeffX * qLn(1.0 + (-1.0 * lfCoeffStep) * nw);
-                }
-            }
-
-            if (Vertical)
-            {
-                if (Coeff > 0.0)
-                {
-                    nh = (qExp(nh / lfCoeffY) - 1.0) / lfCoeffStep;
-                }
-                else
-                {
-                    nh = lfCoeffY * qLn(1.0 + (-1.0 * lfCoeffStep) * nh);
-                }
-            }
-
-            nw = (double)nHalfW + ((w >= nHalfW) ? nw : -nw);
-            nh = (double)nHalfH + ((h >= nHalfH) ? nh : -nh);
-
-            setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, h, nw, nh, AntiAlias);
-        }
-
-        // Update the progress bar in dialog.
-        progress = (int)(((double)h * 100.0) / Height);
-
-        if (progress % 5 == 0)
-        {
-            postProgress(progress);
-        }
-    }
-}
-
-/* Function to apply the Multiple Corners effect backported from ImageProcessing version 2
- *
- * data             => The image data in RGBA mode.
- * Width            => Width of image.
- * Height           => Height of image.
- * Factor           => nb corners.
- * Antialias        => Smart blurring result.
- *
- * Theory           => This is an amazing function, you've never seen this before.
- *                     I was testing some trigonometric functions, and I saw that if
- *                     I multiply the angle by 2, the result is an image like this
- *                     If we multiply by 3, we can create the SixCorners effect.
- */
-void DistortionFXFilter::multipleCorners(DImg* orgImage, DImg* destImage, int Factor, bool AntiAlias)
-{
-    if (Factor == 0)
-    {
-        return;
-    }
-
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-    uchar* data     = orgImage->bits();
-    bool sixteenBit = orgImage->sixteenBit();
-    int bytesDepth  = orgImage->bytesDepth();
-    uchar* pResBits = destImage->bits();
-
-    int h, w;
-    double nh, nw;
-    int progress;
-
-    int nHalfW = Width / 2, nHalfH = Height / 2;
-    double lfAngle, lfNewRadius, lfCurrentRadius, lfRadMax;
-
-    lfRadMax = qSqrt(Height * Height + Width * Width) / 2.0;
-
-    // main loop
-
-    for (h = 0; runningFlag() && (h < Height); ++h)
-    {
-        for (w = 0; runningFlag() && (w < Width); ++w)
-        {
-            // we find the distance from the center
-            nh = nHalfH - h;
-            nw = nHalfW - w;
-
-            // now, we get the distance
-            lfCurrentRadius = qSqrt(nh * nh + nw * nw);
-            // we find the angle from the center
-            lfAngle = qAtan2(nh, nw) * (double)Factor;
-
-            // ok, we sum angle with accumuled to find a new angle
-            lfNewRadius = lfCurrentRadius * lfCurrentRadius / lfRadMax;
-
-            // now we find the exact position's x and y
-            nw = (double)nHalfW - (qCos(lfAngle) * lfNewRadius);
-            nh = (double)nHalfH - (qSin(lfAngle) * lfNewRadius);
-
-            setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, h, nw, nh, AntiAlias);
-        }
-
-        // Update the progress bar in dialog.
-        progress = (int)(((double)h * 100.0) / Height);
-
-        if (progress % 5 == 0)
-        {
-            postProgress(progress);
-        }
-    }
-}
-
-/* Function to apply the Polar Coordinates effect backported from ImageProcesqSing version 2
- *
- * data             => The image data in RGBA mode.
- * Width            => Width of image.
- * Height           => Height of image.
- * Type             => if true Polar Coordinate to Polar else inverse.
- * Antialias        => Smart blurring result.
- *
- * Theory           => Similar to PolarCoordinates from Photoshop. We apply the polar
- *                     transformation in a proportional (Height and Width) radius.
- */
-void DistortionFXFilter::polarCoordinates(DImg* orgImage, DImg* destImage, bool Type, bool AntiAlias)
-{
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-    uchar* data     = orgImage->bits();
-    bool sixteenBit = orgImage->sixteenBit();
-    int bytesDepth  = orgImage->bytesDepth();
-    uchar* pResBits = destImage->bits();
-
-    int h, w;
-    double nh, nw, th, tw;
-    int progress;
-
-    int nHalfW = Width / 2, nHalfH = Height / 2;
-    double lfXScale = 1.0, lfYScale = 1.0;
-    double lfAngle, lfRadius, lfRadMax;
-
-    if (Width > Height)
-    {
-        lfYScale = (double)Width / (double)Height;
-    }
-    else if (Height > Width)
-    {
-        lfXScale = (double)Height / (double)Width;
-    }
-
-    lfRadMax = (double)qMax(Height, Width) / 2.0;
-
-    // main loop
-
-    for (h = 0; runningFlag() && (h < Height); ++h)
-    {
-        th = lfYScale * (double)(h - nHalfH);
-
-        for (w = 0; runningFlag() && (w < Width); ++w)
-        {
-            tw = lfXScale * (double)(w - nHalfW);
-
-            if (Type)
-            {
-                // now, we get the distance
-                lfRadius = qSqrt(th * th + tw * tw);
-                // we find the angle from the center
-                lfAngle = qAtan2(tw, th);
-
-                // now we find the exact position's x and y
-                nh = lfRadius * (double) Height / lfRadMax;
-                nw =  lfAngle * (double)  Width / (2 * M_PI);
-
-                nw = (double)nHalfW + nw;
-            }
-            else
-            {
-                lfRadius = (double)(h) * lfRadMax / (double)Height;
-                lfAngle  = (double)(w) * (2 * M_PI) / (double) Width;
-
-                nw = (double)nHalfW - (lfRadius / lfXScale) * qSin(lfAngle);
-                nh = (double)nHalfH - (lfRadius / lfYScale) * qCos(lfAngle);
-            }
-
-            setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, h, nw, nh, AntiAlias);
-        }
-
-        // Update the progress bar in dialog.
-        progress = (int)(((double)h * 100.0) / Height);
-
-        if (progress % 5 == 0)
-        {
-            postProgress(progress);
-        }
-    }
-}
-
-/* Function to apply the circular waves effect backported from ImageProcesqSing version 2
- *
- * data             => The image data in RGBA mode.
- * Width            => Width of image.
- * Height           => Height of image.
- * X, Y             => Position of circle center on the image.
- * Amplitude        => Sinoidal maximum height
- * Frequency        => Frequency value.
- * Phase            => Phase value.
- * WavesType        => If true  the amplitude is proportional to radius.
- * Antialias        => Smart bluring result.
- *
- * Theory           => Similar to Waves effect, but here I apply a senoidal function
- *                     with the angle point.
- */
-void DistortionFXFilter::circularWaves(DImg* orgImage, DImg* destImage, int X, int Y, double Amplitude,
-                                       double Frequency, double Phase, bool WavesType, bool AntiAlias)
-{
-    if (Amplitude < 0.0)
-    {
-        Amplitude = 0.0;
-    }
-
-    if (Frequency < 0.0)
-    {
-        Frequency = 0.0;
-    }
-
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-    uchar* data     = orgImage->bits();
-    bool sixteenBit = orgImage->sixteenBit();
-    int bytesDepth  = orgImage->bytesDepth();
-    uchar* pResBits = destImage->bits();
-
-    int h, w;
-    double nh, nw;
-    int progress;
-
-    double lfRadius, lfRadMax, lfNewAmp = Amplitude;
-    double lfFreqAngle = Frequency * ANGLE_RATIO;
-
-    Phase *= ANGLE_RATIO;
-
-    lfRadMax = qSqrt(Height * Height + Width * Width);
-
-    for (h = 0; runningFlag() && (h < Height); ++h)
-    {
-        for (w = 0; runningFlag() && (w < Width); ++w)
-        {
-            nw = X - w;
-            nh = Y - h;
-
-            lfRadius = qSqrt(nw * nw + nh * nh);
-
-            if (WavesType)
-            {
-                lfNewAmp = Amplitude * lfRadius / lfRadMax;
-            }
-
-            nw = (double)w + lfNewAmp * qSin(lfFreqAngle * lfRadius + Phase);
-            nh = (double)h + lfNewAmp * qCos(lfFreqAngle * lfRadius + Phase);
-
-            setPixelFromOther(Width, Height, sixteenBit, bytesDepth, data, pResBits, w, h, nw, nh, AntiAlias);
-        }
-
-        // Update the progress bar in dialog.
-        progress = (int)(((double)h * 100.0) / Height);
-
-        if (progress % 5 == 0)
-        {
-            postProgress(progress);
-        }
-    }
-}
-
-/* Function to apply the waves effect
- *
- * data             => The image data in RGBA mode.
- * Width            => Width of image.
- * Height           => Height of image.
- * Amplitude        => Sinoidal maximum height.
- * Frequency        => Frequency value.
- * FillSides        => Like a boolean variable.
- * Direction        => Vertical or horizontal flag.
- *
- * Theory           => This is an amazing effect, very funny, and very simple to
- *                     understand. You just need understand how qSin and qCos works.
- */
-void DistortionFXFilter::waves(DImg* orgImage, DImg* destImage,
-                               int Amplitude, int Frequency,
-                               bool FillSides, bool Direction)
-{
-    if (Amplitude < 0)
-    {
-        Amplitude = 0;
-    }
-
-    if (Frequency < 0)
-    {
-        Frequency = 0;
-    }
-
-    int Width  = orgImage->width();
-    int Height = orgImage->height();
-    int progress;
-
-    if (Direction)        // Horizontal
-    {
-        int tx;
-
-        for (int h = 0; runningFlag() && (h < Height); ++h)
-        {
-            tx = lround(Amplitude * qSin((Frequency * 2) * h * (M_PI / 180)));
-            destImage->bitBltImage(orgImage, 0, h,  Width, 1,  tx, h);
-
-            if (FillSides)
-            {
-                destImage->bitBltImage(orgImage, Width - tx, h,  tx, 1,  0, h);
-                destImage->bitBltImage(orgImage, 0, h,  Width - (Width - 2 * Amplitude + tx), 1,  Width + tx, h);
-            }
-
-            // Update the progress bar in dialog.
-            progress = (int)(((double)h * 100.0) / Height);
-
-            if (progress % 5 == 0)
-            {
-                postProgress(progress);
-            }
-        }
-    }
-    else
-    {
-        int ty;
-
-        for (int w = 0; runningFlag() && (w < Width); ++w)
-        {
-            ty = lround(Amplitude * qSin((Frequency * 2) * w * (M_PI / 180)));
-            destImage->bitBltImage(orgImage, w, 0, 1, Height, w, ty);
-
-            if (FillSides)
-            {
-                destImage->bitBltImage(orgImage, w, Height - ty,  1, ty,  w, 0);
-                destImage->bitBltImage(orgImage, w, 0,  1, Height - (Height - 2 * Amplitude + ty),  w, Height + ty);
-            }
-
-            // Update the progress bar in dialog.
-            progress = (int)(((double)w * 100.0) / Width);
-
-            if (progress % 5 == 0)
-            {
-                postProgress(progress);
-            }
-        }
-    }
-}
-
-/* Function to apply the block waves effect
- *
- * data             => The image data in RGBA mode.
- * Width            => Width of image.
- * Height           => Height of image.
- * Amplitude        => Sinoidal maximum height
- * Frequency        => Frequency value
- * Mode             => The mode to be applied.
- *
- * Theory           => This is an amazing effect, very funny when amplitude and
- *                     frequency are small values.
- */
-void DistortionFXFilter::blockWaves(DImg* orgImage, DImg* destImage,
-                                    int Amplitude, int Frequency, bool Mode)
-{
-    if (Amplitude < 0)
-    {
-        Amplitude = 0;
-    }
-
-    if (Frequency < 0)
-    {
-        Frequency = 0;
-    }
-
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-    uchar* data     = orgImage->bits();
-    bool sixteenBit = orgImage->sixteenBit();
-    int bytesDepth  = orgImage->bytesDepth();
-    uchar* pResBits = destImage->bits();
-
-    int nw, nh, progress;
-//    double Radius;
-
-    DColor color;
-    int offset, offsetOther;
-
-    int nHalfW = Width / 2, nHalfH = Height / 2;
-
-    for (int w = 0; runningFlag() && (w < Width); ++w)
-    {
-        for (int h = 0; runningFlag() && (h < Height); ++h)
-        {
-            nw = nHalfW - w;
-            nh = nHalfH - h;
-
-//            Radius = qSqrt (nw * nw + nh * nh);
-
-            if (Mode)
-            {
-                nw = (int)(w + Amplitude * qSin(Frequency * nw * (M_PI / 180)));
-                nh = (int)(h + Amplitude * qCos(Frequency * nh * (M_PI / 180)));
-            }
-            else
-            {
-                nw = (int)(w + Amplitude * qSin(Frequency * w * (M_PI / 180)));
-                nh = (int)(h + Amplitude * qCos(Frequency * h * (M_PI / 180)));
-            }
-
-            offset      = getOffset(Width, w, h, bytesDepth);
-            offsetOther = getOffsetAdjusted(Width, Height, (int)nw, (int)nh, bytesDepth);
-
-            // read color
-            color.setColor(data + offsetOther, sixteenBit);
-            // write color to destination
-            color.setPixel(pResBits + offset);
-        }
-
-        // Update the progress bar in dialog.
-        progress = (int)(((double)w * 100.0) / Width);
-
-        if (progress % 5 == 0)
-        {
-            postProgress(progress);
-        }
-    }
-}
-
-/* Function to apply the tile effect
- *
- * data             => The image data in RGBA mode.
- * Width            => Width of image.
- * Height           => Height of image.
- * WSize            => Tile Width
- * HSize            => Tile Height
- * Random           => Maximum random value
- *
- * Theory           => Similar to Tile effect from Photoshop and very easy to
- *                     understand. We get a rectangular area uqSing WSize and HSize and
- *                     replace in a position with a random distance from the original
- *                     position.
- */
-void DistortionFXFilter::tile(DImg* orgImage, DImg* destImage,
-                              int WSize, int HSize, int Random)
-{
-    if (WSize < 1)
-    {
-        WSize = 1;
-    }
-
-    if (HSize < 1)
-    {
-        HSize = 1;
-    }
-
-    if (Random < 1)
-    {
-        Random = 1;
-    }
-
-    int Width       = orgImage->width();
-    int Height      = orgImage->height();
-
-    RandomNumberGenerator generator;
-    generator.seed(m_randomSeed);
-
-    int tx, ty, h, w, progress;
-
-    for (h = 0; runningFlag() && (h < Height); h += HSize)
-    {
-        for (w = 0; runningFlag() && (w < Width); w += WSize)
-        {
-            tx = generator.number(- Random / 2, Random / 2);
-            ty = generator.number(- Random / 2, Random / 2);
-            destImage->bitBltImage(orgImage, w, h,   WSize, HSize,   w + tx, h + ty);
-        }
-
-        // Update the progress bar in dialog.
-        progress = (int)(((double)h * 100.0) / Height);
-
-        if (progress % 5 == 0)
-        {
-            postProgress(progress);
-        }
-    }
-}
-
 FilterAction DistortionFXFilter::filterAction()
 {
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("antiAlias", m_antiAlias);
-    action.addParameter("type",      m_effectType);
-    action.addParameter("iteration", m_iteration);
-    action.addParameter("level",     m_level);
+    action.addParameter("antiAlias", d->antiAlias);
+    action.addParameter("type",      d->effectType);
+    action.addParameter("iteration", d->iteration);
+    action.addParameter("level",     d->level);
 
-    if (m_effectType == Tile)
+    if (d->effectType == Tile)
     {
-        action.addParameter("randomSeed", m_randomSeed);
+        action.addParameter("randomSeed", d->randomSeed);
     }
 
     return action;
@@ -967,14 +1265,14 @@ FilterAction DistortionFXFilter::filterAction()
 
 void DistortionFXFilter::readParameters(const FilterAction& action)
 {
-    m_antiAlias  = action.parameter("antiAlias").toBool();
-    m_effectType = action.parameter("type").toInt();
-    m_iteration  = action.parameter("iteration").toInt();
-    m_level      = action.parameter("level").toInt();
+    d->antiAlias  = action.parameter("antiAlias").toBool();
+    d->effectType = action.parameter("type").toInt();
+    d->iteration  = action.parameter("iteration").toInt();
+    d->level      = action.parameter("level").toInt();
 
-    if (m_effectType == Tile)
+    if (d->effectType == Tile)
     {
-        m_randomSeed = action.parameter("randomSeed").toUInt();
+        d->randomSeed = action.parameter("randomSeed").toUInt();
     }
 }
 

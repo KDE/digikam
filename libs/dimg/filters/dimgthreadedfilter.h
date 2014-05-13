@@ -96,7 +96,7 @@ public:
      *  the difference.
      *  See Blur filter loop implementation for exemple to see how to use this method with QtConcurrents API.
      */
-    QList<uint> multithreadedSteps(uint stop, uint start=0) const;
+    QList<int> multithreadedSteps(int stop, int start=0) const;
 
     /** Start the threaded computation.
      */

@@ -126,7 +126,7 @@ void EmbossFilter::filterImage()
 
     int progress;
 
-    QList<uint> vals = multithreadedSteps(m_orgImage.width());
+    QList<int> vals = multithreadedSteps(m_orgImage.width());
 
     for (uint h = 0 ; runningFlag() && (h < m_orgImage.height()) ; ++h)
     {

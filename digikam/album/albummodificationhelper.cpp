@@ -7,6 +7,7 @@
  * Description : helper class used to modify physical albums in views
  *
  * Copyright (C) 2009-2011 by Johannes Wienke <languitar at semipol dot de>
+ * Copyright (C) 2014      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,6 +45,8 @@
 #include "collectionmanager.h"
 #include "deletedialog.h"
 #include "dio.h"
+#include "digikamview.h"
+#include "digikamapp.h"
 
 namespace Digikam
 {
@@ -56,7 +59,7 @@ public:
     {
     }
 
-    QWidget* dialogParent;
+    QWidget*     dialogParent;
 };
 
 AlbumModificationHelper::AlbumModificationHelper(QObject* const parent, QWidget* const dialogParent)
@@ -309,6 +312,8 @@ void AlbumModificationHelper::slotAlbumEdit(PAlbum* album)
                 KMessageBox::error(d->dialogParent, errMsg);
             }
         }
+        // Resorting the tree View after changing metadata
+        DigikamApp::instance()->view()->slotSortAlbums(AlbumSettings::instance()->getAlbumSortOrder());
     }
 }
 

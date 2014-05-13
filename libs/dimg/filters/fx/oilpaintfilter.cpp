@@ -141,7 +141,7 @@ void OilPaintFilter::oilPaintImageMultithreaded(uint start, uint stop)
 
 void OilPaintFilter::filterImage()
 {
-    QList<uint> vals = multithreadedSteps(m_orgImage.height());
+    QList<int> vals = multithreadedSteps(m_orgImage.height());
     QList <QFuture<void> > tasks;
 
     for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)

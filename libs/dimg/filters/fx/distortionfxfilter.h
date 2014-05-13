@@ -6,7 +6,7 @@
  * Date        : 2005-07-18
  * Description : Distortion FX threaded image filter.
  *
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -28,10 +28,6 @@
 
 #ifndef DISTORTION_FX_FILTER_H
 #define DISTORTION_FX_FILTER_H
-
-// Qt includes
-
-#include <QSize>
 
 // Local includes
 
@@ -106,23 +102,70 @@ public:
 
 private:
 
+    struct Args
+    {
+        int    start;
+        int    stop;
+        int    h;
+        int    w;
+        DImg*  orgImage;
+        DImg*  destImage;
+        double Coeff;
+        bool   AntiAlias;
+        int    dist;
+        bool   Horizontal;
+        bool   Vertical;
+        int    Factor;
+        int    Amplitude;
+        int    Frequency;
+        bool   Mode;
+        int    X;
+        int    Y;
+        double Phase;
+        bool   WavesType;
+        bool   FillSides;
+        bool   Type;
+        int    WSize;
+        int    HSize;
+        int    Random;
+    };
+
+private:
+
     void filterImage();
 
     // Backported from ImageProcessing version 2
     void fisheye(DImg* orgImage, DImg* destImage, double Coeff, bool AntiAlias=true);
+    void fisheyeMultithreaded(const Args& prm);
+
     void twirl(DImg* orgImage, DImg* destImage, int dist, bool AntiAlias=true);
+    void twirlMultithreaded(const Args& prm);
+
     void cilindrical(DImg* orgImage, DImg* destImage, double Coeff,
                      bool Horizontal, bool Vertical, bool AntiAlias=true);
+    void cilindricalMultithreaded(const Args& prm);
+
     void multipleCorners(DImg* orgImage, DImg* destImage, int Factor, bool AntiAlias=true);
+    void multipleCornersMultithreaded(const Args& prm);
+
     void polarCoordinates(DImg* orgImage, DImg* destImage, bool Type, bool AntiAlias=true);
+    void polarCoordinatesMultithreaded(const Args& prm);
+
     void circularWaves(DImg* orgImage, DImg* destImage, int X, int Y, double Amplitude,
                        double Frequency, double Phase, bool WavesType, bool AntiAlias=true);
+    void circularWavesMultithreaded(const Args& prm);
 
     // Backported from ImageProcessing version 1
     void waves(DImg* orgImage, DImg* destImage, int Amplitude, int Frequency,
                bool FillSides, bool Direction);
+    void wavesHorizontalMultithreaded(const Args& prm);
+    void wavesVerticalMultithreaded(const Args& prm);
+
     void blockWaves(DImg* orgImage, DImg* destImage, int Amplitude, int Frequency, bool Mode);
+    void blockWavesMultithreaded(const Args& prm);
+
     void tile(DImg* orgImage, DImg* destImage, int WSize, int HSize, int Random);
+    void tileMultithreaded(const Args& prm);
 
     void setPixelFromOther(int Width, int Height, bool sixteenBit, int bytesDepth,
                            uchar* data, uchar* pResBits,
@@ -162,12 +205,8 @@ private:
 
 private:
 
-    bool    m_antiAlias;
-
-    int     m_level;
-    int     m_iteration;
-    int     m_effectType;
-    quint32 m_randomSeed;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

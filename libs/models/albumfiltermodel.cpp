@@ -240,6 +240,38 @@ QModelIndex AlbumFilterModel::rootAlbumIndex() const
     return mapFromSourceAlbumModel(model->rootAlbumIndex());
 }
 
+QVariant AlbumFilterModel::dataForCurrentSortRole(const QModelIndex& index) const
+{
+    Album* album = albumForIndex(index);
+
+    if(album)
+    {
+        if(album->type() == Album::PHYSICAL)
+        {
+            AlbumSettings::AlbumSortOrder sortRole = AlbumSettings::instance()->getAlbumSortOrder();
+            switch (sortRole)
+            {
+                case AlbumSettings::ByFolder:
+                    return static_cast<PAlbum*>(album)->title();
+                case AlbumSettings::ByDate:
+                    return static_cast<PAlbum*>(album)->date();
+                default:
+                    return static_cast<PAlbum*>(album)->category();
+            }
+        }
+        else if(album->type() == Album::TAG)
+        {
+            return static_cast<TAlbum*>(album)->title();
+        }
+        else
+        {
+            return static_cast<DAlbum*>(album)->date();
+        }
+    }
+
+    return QVariant();
+}
+
 bool AlbumFilterModel::matches(Album* album) const
 {
     // We want to work on the visual representation, so we use model data with AlbumTitleRole,
@@ -336,49 +368,31 @@ bool AlbumFilterModel::filterAcceptsRow(int source_row, const QModelIndex& sourc
 
 bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& right) const
 {
-    Album* leftAlbum = albumForIndex(left);
-    Album* rightAlbum = albumForIndex(right);
-    QVariant valLeft  = left.data(sortRole());
-    QVariant valRight = right.data(sortRole());
+    QVariant valLeft  = dataForCurrentSortRole(left);
+    QVariant valRight = dataForCurrentSortRole(right);
 
-    AlbumSettings::AlbumSortOrder sortRole = AlbumSettings::instance()->getAlbumSortOrder();
+    AlbumSettings::StringComparisonType strComparisonType = AlbumSettings::instance()->getStringComparisonType();
+    AlbumSettings::AlbumSortOrder role = AlbumSettings::instance()->getAlbumSortOrder();
 
-    if (leftAlbum && rightAlbum)
+    if((role == AlbumSettings::ByDate || role == AlbumSettings::ByCategory)&&(valLeft == valRight))
     {
-        if(leftAlbum->type() == 0 && rightAlbum->type()== 0)//checking for PAlbums
-        {
-            switch (sortRole)
-            {
-                case AlbumSettings::ByFolder:
-                    switch (AlbumSettings::instance()->getStringComparisonType())
-                    {
-                        case AlbumSettings::Natural:
-                            return KStringHandler::naturalCompare(leftAlbum->title(), rightAlbum->title(), sortCaseSensitivity()) < 0;
+            return QSortFilterProxyModel::lessThan(left, right);
+    }
 
-                        case AlbumSettings::Normal:
-                        default:
-                            return QString::compare(leftAlbum->title(), rightAlbum->title(), sortCaseSensitivity()) < 0;
-                    }
-                case AlbumSettings::ByDate:
-                    return compareByOrder(static_cast<PAlbum*>(leftAlbum)->date(),static_cast<PAlbum*>(rightAlbum)->date(),Qt::AscendingOrder) < 0;
-                default:
-                    return KStringHandler::naturalCompare(static_cast<PAlbum*>(leftAlbum)->category(),static_cast<PAlbum*>(rightAlbum)->category()) < 0;
-            }
-        }
-        else
+    if((valLeft.type() == QVariant::String) && (valRight.type() == QVariant::String))
+    {
+        switch (strComparisonType)
         {
-            if((valLeft.type() == QVariant::String) && (valRight.type() == QVariant::String))
-            {
-                switch (AlbumSettings::instance()->getStringComparisonType())
-                {
-                    case AlbumSettings::Natural:
-                        return KStringHandler::naturalCompare(valLeft.toString(), valRight.toString(), sortCaseSensitivity()) < 0;
-                    case AlbumSettings::Normal:
-                    default:
-                        return QString::compare(valLeft.toString(), valRight.toString(), sortCaseSensitivity()) < 0;
-                }
-            }
+            case AlbumSettings::Natural:
+                return KStringHandler::naturalCompare(valLeft.toString(), valRight.toString(), sortCaseSensitivity()) < 0;
+            case AlbumSettings::Normal:
+            default:
+                return QString::compare(valLeft.toString(), valRight.toString(), sortCaseSensitivity()) < 0;
         }
+    }
+    else if((valLeft.type() == QVariant::Date) && (valRight.type() == QVariant::Date))
+    {
+        return compareByOrder(valLeft.toDate(),valRight.toDate(),Qt::AscendingOrder) < 0;
     }
 
     return QSortFilterProxyModel::lessThan(left, right);
