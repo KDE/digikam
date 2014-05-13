@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : Charcoal threaded image filter.
  *
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -31,6 +31,11 @@
 
 #include <cmath>
 
+// Qt includes
+
+#include <QtConcurrentRun>
+#include <QMutex>
+
 // KDE includes
 
 #include <kdebug.h>
@@ -46,19 +51,37 @@
 namespace Digikam
 {
 
-CharcoalFilter::CharcoalFilter(QObject* const parent)
-    : DImgThreadedFilter(parent)
+class CharcoalFilter::Private
 {
-    m_pencil = 5.0;
-    m_smooth = 10.0;
+public:
+
+    Private()
+    {
+        globalProgress = 0;
+        pencil         = 5.0;
+        smooth         = 10.0;
+    }
+
+    double pencil;
+    double smooth;
+    int    globalProgress;
+
+    QMutex lock;
+};
+
+CharcoalFilter::CharcoalFilter(QObject* const parent)
+    : DImgThreadedFilter(parent),
+      d(new Private)
+{
     initFilter();
 }
 
 CharcoalFilter::CharcoalFilter(DImg* const orgImage, QObject* const parent, double pencil, double smooth)
-    : DImgThreadedFilter(orgImage, parent, "Charcoal")
+    : DImgThreadedFilter(orgImage, parent, "Charcoal"),
+      d(new Private)
 {
-    m_pencil = pencil;
-    m_smooth = smooth;
+    d->pencil = pencil;
+    d->smooth = smooth;
 
     initFilter();
 }
@@ -66,6 +89,7 @@ CharcoalFilter::CharcoalFilter(DImg* const orgImage, QObject* const parent, doub
 CharcoalFilter::~CharcoalFilter()
 {
     cancelFilter();
+    delete d;
 }
 
 void CharcoalFilter::filterImage()
@@ -76,7 +100,7 @@ void CharcoalFilter::filterImage()
         return;
     }
 
-    if (m_pencil <= 0.0)
+    if (d->pencil <= 0.0)
     {
         m_destImage = m_orgImage;
         return;
@@ -85,7 +109,7 @@ void CharcoalFilter::filterImage()
     // -- Applying Edge effect -----------------------------------------------
 
     register long i = 0;
-    int kernelWidth = getOptimalKernelWidth(m_pencil, m_smooth);
+    int kernelWidth = getOptimalKernelWidth(d->pencil, d->smooth);
 
     if ((int)m_orgImage.width() < kernelWidth)
     {
@@ -111,7 +135,7 @@ void CharcoalFilter::filterImage()
 
     // -- Applying Gaussian blur effect ---------------------------------------
 
-    BlurFilter(this, m_destImage, m_destImage, 80, 85, (int)(m_smooth / 10.0));
+    BlurFilter(this, m_destImage, m_destImage, 80, 85, (int)(d->smooth / 10.0));
 
     if (!runningFlag())
     {
@@ -163,70 +187,28 @@ void CharcoalFilter::filterImage()
     }
 }
 
-bool CharcoalFilter::convolveImage(const unsigned int order, const double* kernel)
+void CharcoalFilter::convolveImageMultithreaded(uint start, uint stop, double* normal_kernel, double kernelWidth)
 {
-    long kernelWidth = order;
-
-    if ((kernelWidth % 2) == 0)
-    {
-        kWarning() << "Kernel width must be an odd number!";
-        return false;
-    }
-
-    uint    x, y;
-    long    i;
-    int     mx, my, sx, sy, mcx, mcy, progress;
-    double  red, green, blue, alpha, normalize = 0.0;
+    int     mx, my, sx, sy, mcx, mcy, oldProgress=0, progress=0;
+    double  red, green, blue, alpha;
     double* k = 0;
 
-    QScopedArrayPointer<double> normal_kernel(new double[kernelWidth * kernelWidth]);
-
-    if (!normal_kernel)
-    {
-        kWarning() << "Unable to allocate memory!";
-        return false;
-    }
-
-    for (i = 0; i < (kernelWidth * kernelWidth); ++i)
-    {
-        normalize += kernel[i];
-    }
-
-    if (fabs(normalize) <= Epsilon)
-    {
-        normalize = 1.0;
-    }
-
-    normalize = 1.0 / normalize;
-
-    for (i = 0; i < (kernelWidth * kernelWidth); ++i)
-    {
-        normal_kernel[i] = normalize * kernel[i];
-    }
-
-    // --------------------------------------------------------
-
-    // caching
     uint height     = m_destImage.height();
     uint width      = m_destImage.width();
     bool sixteenBit = m_destImage.sixteenBit();
     uchar* ddata    = m_destImage.bits();
     int ddepth      = m_destImage.bytesDepth();
-
     uchar* sdata    = m_orgImage.bits();
     int sdepth      = m_orgImage.bytesDepth();
-
     double maxClamp = m_destImage.sixteenBit() ? 16777215.0 : 65535.0;
 
-    // --------------------------------------------------------
-
-    for (y = 0; runningFlag() && (y < height); ++y)
+    for (uint y = start ; runningFlag() && (y < stop) ; ++y)
     {
         sy = y - (kernelWidth / 2);
 
-        for (x = 0; runningFlag() && (x < width); ++x)
+        for (uint x = 0; runningFlag() && (x < width); ++x)
         {
-            k   = normal_kernel.data();
+            k   = normal_kernel;
             red = green = blue = alpha = 0;
             sy  = y - (kernelWidth / 2);
 
@@ -257,13 +239,76 @@ bool CharcoalFilter::convolveImage(const unsigned int order, const double* kerne
             color.setPixel((ddata + x * ddepth + (width * y * ddepth)));
         }
 
-        progress = (int)(((double) y * 80.0) / height);
+        progress = (int)( ( (double)y * (80.0 / QThreadPool::globalInstance()->maxThreadCount()) ) / (stop-start));
 
-        if (progress % 5 == 0)
+        if ((progress % 5 == 0) && (progress > oldProgress))
         {
-            postProgress(progress);
+            d->lock.lock();
+            oldProgress       = progress;
+            d->globalProgress += 5;
+            postProgress(d->globalProgress);
+            d->lock.unlock();
         }
     }
+}
+
+
+bool CharcoalFilter::convolveImage(const unsigned int order, const double* kernel)
+{
+    long kernelWidth = order;
+
+    if ((kernelWidth % 2) == 0)
+    {
+        kWarning() << "Kernel width must be an odd number!";
+        return false;
+    }
+
+    long    i;
+    double  normalize = 0.0;
+
+    QScopedArrayPointer<double> normal_kernel(new double[kernelWidth * kernelWidth]);
+
+    if (!normal_kernel)
+    {
+        kWarning() << "Unable to allocate memory!";
+        return false;
+    }
+
+    for (i = 0; i < (kernelWidth * kernelWidth); ++i)
+    {
+        normalize += kernel[i];
+    }
+
+    if (fabs(normalize) <= Epsilon)
+    {
+        normalize = 1.0;
+    }
+
+    normalize = 1.0 / normalize;
+
+    for (i = 0; i < (kernelWidth * kernelWidth); ++i)
+    {
+        normal_kernel[i] = normalize * kernel[i];
+    }
+
+    // --------------------------------------------------------
+
+    QList<uint> vals = multithreadedSteps(m_orgImage.height());
+    QList <QFuture<void> > tasks;
+
+    for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
+    {
+        tasks.append(QtConcurrent::run(this,
+                                       &CharcoalFilter::convolveImageMultithreaded,
+                                       vals[j],
+                                       vals[j+1],
+                                       normal_kernel.data(),
+                                       kernelWidth
+                                      ));
+    }
+
+    foreach(QFuture<void> t, tasks)
+        t.waitForFinished();
 
     return true;
 }
@@ -307,16 +352,16 @@ FilterAction CharcoalFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("pencil", m_pencil);
-    action.addParameter("smooth", m_smooth);
+    action.addParameter("pencil", d->pencil);
+    action.addParameter("smooth", d->smooth);
 
     return action;
 }
 
 void CharcoalFilter::readParameters(const Digikam::FilterAction& action)
 {
-    m_pencil = action.parameter("pencil").toDouble();
-    m_smooth = action.parameter("smooth").toDouble();
+    d->pencil = action.parameter("pencil").toDouble();
+    d->smooth = action.parameter("smooth").toDouble();
 }
 
 }  // namespace Digikam

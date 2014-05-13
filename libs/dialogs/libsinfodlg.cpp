@@ -6,7 +6,7 @@
  * Date        : 2008-07-11
  * Description : shared libraries list dialog
  *
- * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,6 +28,7 @@
 #include <QStringList>
 #include <QString>
 #include <QTreeWidget>
+#include <QThreadPool>
 
 // KDE includes
 
@@ -154,6 +155,9 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
 #endif // USE_EXT_LIBPGF
 
     list.insert(i18n("Parallelized PGF codec"),      PGFUtils::libPGFUseOpenMP() ? i18n("Yes") : i18n("No"));
+
+    int nbcore = QThreadPool::globalInstance()->maxThreadCount();
+    list.insert(i18np("CPU core", "CPU cores", nbcore), QString("%1").arg(nbcore));
 
     listView()->setHeaderLabels(QStringList() << i18n("Component") << i18n("Info"));
     setInfoMap(list);

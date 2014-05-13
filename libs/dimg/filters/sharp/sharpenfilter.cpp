@@ -233,22 +233,22 @@ bool SharpenFilter::convolveImage(const unsigned int order, const double* const 
     }
 
     prm.normal_kernel = normal_kernel.data();
-    int   nbCore      = QThreadPool::globalInstance()->maxThreadCount();
-    float step        = m_destImage.width() / nbCore;
+    QList<uint> vals = multithreadedSteps(m_destImage.width());
 
     for (y = 0 ; runningFlag() && (y < m_destImage.height()) ; ++y)
     {
         QList <QFuture<void> > tasks;
 
-        for (int j = 0 ; runningFlag() && (j < nbCore) ; ++j)
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
         {
-            prm.start = (uint)(j*step);
-            prm.stop  = (uint)((j+1)*step);
+            prm.start = vals[j];
+            prm.stop  = vals[j+1];
             prm.y     = y;
 
             tasks.append(QtConcurrent::run(this,
                                            &SharpenFilter::convolveImageMultithreaded,
-                                           prm));
+                                           prm
+                                          ));
         }
 
         foreach(QFuture<void> t, tasks)

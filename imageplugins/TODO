@@ -24,16 +24,16 @@ decorate
 
 filters
   /colorfx                  DONE          TODO             DONE                  DONE
-  /charcoal                 DONE          TODO             DONE                  TODO
+  /charcoal                 DONE          DONE             DONE                  TODO
   /distortionfx             DONE          TODO             TODO                  TODO
-  /emboss                   DONE          TODO             DONE                  TODO
-  /oilpaint                 DONE          TODO             DONE                  TODO
+  /emboss                   DONE          DONE             DONE                  TODO
+  /oilpaint                 DONE          DONE             DONE                  TODO
   /blurfx                   DONE          TODO             DONE                  TODO
-  /raindrop                 DONE          TODO              NO                   TODO
-  /filmgrain                DONE          TODO             DONE                  DONE
+  /raindrop                 DONE          DONE              NO                   TODO
+  /filmgrain                DONE          DONE             DONE                  DONE
 
 enhance
-  /noisereductiontool       DONE          TODO             DONE                  DONE
+  /noisereductiontool       DONE          DONE             DONE                  DONE
   /sharpentool              DONE          DONE             DONE                  DONE
   /restoration              DONE          TODO             DONE                  DONE
   /blurtool                 DONE          DONE             DONE                  DONE

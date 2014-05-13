@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : Oil Painting threaded image filter.
  *
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -33,6 +33,15 @@
 #include <cmath>
 #include <cstdlib>
 
+// Qt includes
+
+#include <QtConcurrentRun>
+#include <QMutex>
+
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "dimg.h"
@@ -45,23 +54,18 @@ class OilPaintFilter::Private
 public:
 
     Private() :
-        intensityCount(0),
         brushSize(1),
         smoothness(30),
-        averageColorR(0),
-        averageColorG(0),
-        averageColorB(0)
+        globalProgress(0)
     {
     }
-
-    uchar* intensityCount;
 
     int    brushSize;
     int    smoothness;
 
-    uint*  averageColorR;
-    uint*  averageColorG;
-    uint*  averageColorB;
+    int    globalProgress;
+
+    QMutex lock;
 };
 
 OilPaintFilter::OilPaintFilter(QObject* const parent)
@@ -93,48 +97,64 @@ OilPaintFilter::~OilPaintFilter()
  *  Theory: Using MostFrequentColor function we take the main color in
  *          a matrix and simply write at the original position.
  */
-void OilPaintFilter::filterImage()
+void OilPaintFilter::oilPaintImageMultithreaded(uint start, uint stop)
 {
-    int    progress;
+    QScopedPointer<uchar> intensityCount(new uchar[d->smoothness + 1]);
+    QScopedPointer<uint>  averageColorR(new  uint[d->smoothness + 1]);
+    QScopedPointer<uint>  averageColorG(new  uint[d->smoothness + 1]);
+    QScopedPointer<uint>  averageColorB(new  uint[d->smoothness + 1]);
+
+    memset(intensityCount.data(), 0, sizeof(uchar)*(d->smoothness + 1));
+    memset(averageColorR.data(),  0, sizeof(uint)*(d->smoothness + 1));
+    memset(averageColorG.data(),  0, sizeof(uint)*(d->smoothness + 1));
+    memset(averageColorB.data(),  0, sizeof(uint)*(d->smoothness + 1));
+
+    int    oldProgress=0, progress=0;
     DColor mostFrequentColor;
-    int    w, h;
 
     mostFrequentColor.setSixteenBit(m_orgImage.sixteenBit());
-    w              = (int)m_orgImage.width();
-    h              = (int)m_orgImage.height();
     uchar* dest    = m_destImage.bits();
-    int bytesDepth = m_orgImage.bytesDepth();
     uchar* dptr    = 0;
 
-    // Allocate some arrays to be used.
-    // Do this here once for all to save a few million new / delete operations
-    d->intensityCount = new uchar[d->smoothness + 1];
-    d->averageColorR  = new uint[d->smoothness + 1];
-    d->averageColorG  = new uint[d->smoothness + 1];
-    d->averageColorB  = new uint[d->smoothness + 1];
-
-    for (int h2 = 0; runningFlag() && (h2 < h); ++h2)
+    for (uint h2 = start; runningFlag() && (h2 < stop); ++h2)
     {
-        for (int w2 = 0; runningFlag() && (w2 < w); ++w2)
+        for (uint w2 = 0; runningFlag() && (w2 < m_orgImage.width()); ++w2)
         {
-            mostFrequentColor = MostFrequentColor(m_orgImage, w2, h2, d->brushSize, d->smoothness);
-            dptr              = dest + w2 * bytesDepth + (w * h2 * bytesDepth);
+            mostFrequentColor = MostFrequentColor(m_orgImage, w2, h2, d->brushSize, d->smoothness,
+                                                  intensityCount.data(), averageColorR.data(), averageColorG.data(), averageColorB.data());
+            dptr              = dest + w2 * m_orgImage.bytesDepth() + (m_orgImage.width() * h2 * m_orgImage.bytesDepth());
             mostFrequentColor.setPixel(dptr);
         }
 
-        progress = (int)(((double)h2 * 100.0) / h);
+        progress = (int)( ( (double)h2 * (100.0 / QThreadPool::globalInstance()->maxThreadCount()) ) / (stop-start));
 
-        if (progress % 5 == 0)
+        if ((progress % 5 == 0) && (progress > oldProgress))
         {
-            postProgress(progress);
+            d->lock.lock();
+            oldProgress       = progress;
+            d->globalProgress += 5;
+            postProgress(d->globalProgress);
+            d->lock.unlock();
         }
     }
+}
 
-    // free all the arrays
-    delete [] d->intensityCount;
-    delete [] d->averageColorR;
-    delete [] d->averageColorG;
-    delete [] d->averageColorB;
+void OilPaintFilter::filterImage()
+{
+    QList<uint> vals = multithreadedSteps(m_orgImage.height());
+    QList <QFuture<void> > tasks;
+
+    for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
+    {
+        tasks.append(QtConcurrent::run(this,
+                                       &OilPaintFilter::oilPaintImageMultithreaded,
+                                       vals[j],
+                                       vals[j+1]
+                                      ));
+    }
+
+    foreach(QFuture<void> t, tasks)
+        t.waitForFinished();    
 }
 
 /** Function to determine the most frequent color in a matrix
@@ -150,7 +170,8 @@ void OilPaintFilter::filterImage()
  * Theory           => This function creates a matrix with the analyzed pixel in
  *                     the center of this matrix and find the most frequently color
  */
-DColor OilPaintFilter::MostFrequentColor(DImg& src, int X, int Y, int Radius, int Intensity)
+DColor OilPaintFilter::MostFrequentColor(DImg& src, int X, int Y, int Radius, int Intensity,
+                                         uchar* intensityCount, uint* averageColorR, uint* averageColorG, uint* averageColorB)
 {
     int  i, w, h, I, Width, Height;
     uint red, green, blue;
@@ -167,7 +188,7 @@ DColor OilPaintFilter::MostFrequentColor(DImg& src, int X, int Y, int Radius, in
     Height       = (int)src.height();
 
     // Erase the array
-    memset(d->intensityCount, 0, (Intensity + 1) * sizeof(uchar));
+    memset(intensityCount, 0, (Intensity + 1) * sizeof(uchar));
 
     for (w = X - Radius; w <= X + Radius; ++w)
     {
@@ -184,19 +205,19 @@ DColor OilPaintFilter::MostFrequentColor(DImg& src, int X, int Y, int Radius, in
                 blue          = (uint)color.blue();
 
                 I = lround(GetIntensity(red, green, blue) * Scale);
-                d->intensityCount[I]++;
+                intensityCount[I]++;
 
-                if (d->intensityCount[I] == 1)
+                if (intensityCount[I] == 1)
                 {
-                    d->averageColorR[I] = red;
-                    d->averageColorG[I] = green;
-                    d->averageColorB[I] = blue;
+                    averageColorR[I] = red;
+                    averageColorG[I] = green;
+                    averageColorB[I] = blue;
                 }
                 else
                 {
-                    d->averageColorR[I] += red;
-                    d->averageColorG[I] += green;
-                    d->averageColorB[I] += blue;
+                    averageColorR[I] += red;
+                    averageColorG[I] += green;
+                    averageColorB[I] += blue;
                 }
             }
         }
@@ -207,10 +228,10 @@ DColor OilPaintFilter::MostFrequentColor(DImg& src, int X, int Y, int Radius, in
 
     for (i = 0 ; i <= Intensity ; ++i)
     {
-        if (d->intensityCount[i] > MaxInstance)
+        if (intensityCount[i] > MaxInstance)
         {
             I = i;
-            MaxInstance = d->intensityCount[i];
+            MaxInstance = intensityCount[i];
         }
     }
 
@@ -218,9 +239,9 @@ DColor OilPaintFilter::MostFrequentColor(DImg& src, int X, int Y, int Radius, in
     mostFrequentColor = src.getPixelColor(X, Y);
 
     // Overwrite RGB values to destination.
-    mostFrequentColor.setRed(d->averageColorR[I]   / MaxInstance);
-    mostFrequentColor.setGreen(d->averageColorG[I] / MaxInstance);
-    mostFrequentColor.setBlue(d->averageColorB[I]  / MaxInstance);
+    mostFrequentColor.setRed(averageColorR[I]   / MaxInstance);
+    mostFrequentColor.setGreen(averageColorG[I] / MaxInstance);
+    mostFrequentColor.setBlue(averageColorB[I]  / MaxInstance);
 
     return mostFrequentColor;
 }

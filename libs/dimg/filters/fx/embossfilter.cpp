@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : Emboss threaded image filter.
  *
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -32,6 +32,11 @@
 
 #include <cmath>
 #include <cstdlib>
+
+// Qt includes
+
+#include <qmath.h>
+#include <QtConcurrentRun>
 
 // Local includes
 
@@ -67,60 +72,81 @@ EmbossFilter::~EmbossFilter()
  *                     understand. You get the difference between the colors and
  *                     increase it. After this, get the gray tone
  */
-void EmbossFilter::filterImage()
+void EmbossFilter::embossMultithreaded(uint start, uint stop, uint h, double Depth)
 {
     int Width         = m_orgImage.width();
     int Height        = m_orgImage.height();
-    uchar* data       = m_orgImage.bits();
     bool sixteenBit   = m_orgImage.sixteenBit();
     int bytesDepth    = m_orgImage.bytesDepth();
     uchar* const Bits = m_destImage.bits();
 
-    // Initial copy
-    memcpy(Bits, data, m_destImage.numBytes());
-
-    double Depth = m_depth / 10.0;
-
-    int    progress;
     int    red, green, blue, gray;
     DColor color, colorOther;
     int    offset, offsetOther;
 
-    for (int h = 0 ; runningFlag() && (h < Height) ; ++h)
+    for (uint w = start ; runningFlag() && (w < stop) ; ++w)
     {
-        for (int w = 0 ; runningFlag() && (w < Width) ; ++w)
+        offset      = getOffset(Width, w, h, bytesDepth);
+        offsetOther = getOffset(Width, w + Lim_Max(w, 1, Width), h + Lim_Max(h, 1, Height), bytesDepth);
+
+        color.setColor(Bits + offset, sixteenBit);
+        colorOther.setColor(Bits + offsetOther, sixteenBit);
+
+        if (sixteenBit)
         {
-            offset      = getOffset(Width, w, h, bytesDepth);
-            offsetOther = getOffset(Width, w + Lim_Max(w, 1, Width), h + Lim_Max(h, 1, Height), bytesDepth);
+            red   = abs((int)((color.red()   - colorOther.red())   * Depth + 32768));
+            green = abs((int)((color.green() - colorOther.green()) * Depth + 32768));
+            blue  = abs((int)((color.blue()  - colorOther.blue())  * Depth + 32768));
 
-            color.setColor(Bits + offset, sixteenBit);
-            colorOther.setColor(Bits + offsetOther, sixteenBit);
+            gray  = CLAMP065535((red + green + blue) / 3);
+        }
+        else
+        {
+            red   = abs((int)((color.red()   - colorOther.red())   * Depth + 128));
+            green = abs((int)((color.green() - colorOther.green()) * Depth + 128));
+            blue  = abs((int)((color.blue()  - colorOther.blue())  * Depth + 128));
 
-            if (sixteenBit)
-            {
-                red   = abs((int)((color.red()   - colorOther.red())   * Depth + 32768));
-                green = abs((int)((color.green() - colorOther.green()) * Depth + 32768));
-                blue  = abs((int)((color.blue()  - colorOther.blue())  * Depth + 32768));
-
-                gray  = CLAMP065535((red + green + blue) / 3);
-            }
-            else
-            {
-                red   = abs((int)((color.red()   - colorOther.red())   * Depth + 128));
-                green = abs((int)((color.green() - colorOther.green()) * Depth + 128));
-                blue  = abs((int)((color.blue()  - colorOther.blue())  * Depth + 128));
-
-                gray  = CLAMP0255((red + green + blue) / 3);
-            }
-
-            // Overwrite RGB values to destination. Alpha remains unchanged.
-            color.setRed(gray);
-            color.setGreen(gray);
-            color.setBlue(gray);
-            color.setPixel(Bits + offset);
+            gray  = CLAMP0255((red + green + blue) / 3);
         }
 
-        progress = (int)(((double)h * 100.0) / Height);
+        // Overwrite RGB values to destination. Alpha remains unchanged.
+        color.setRed(gray);
+        color.setGreen(gray);
+        color.setBlue(gray);
+        color.setPixel(Bits + offset);
+    }
+}
+
+void EmbossFilter::filterImage()
+{
+    // Initial copy
+    memcpy(m_destImage.bits(), m_orgImage.bits(), m_destImage.numBytes());
+
+    double Depth = m_depth / 10.0;
+
+    int progress;
+
+    QList<uint> vals = multithreadedSteps(m_orgImage.width());
+
+    for (uint h = 0 ; runningFlag() && (h < m_orgImage.height()) ; ++h)
+    {
+        QList <QFuture<void> > tasks;
+
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
+        {
+            tasks.append(QtConcurrent::run(this,
+                                           &EmbossFilter::embossMultithreaded,
+                                           vals[j],
+                                           vals[j+1],
+                                           h,
+                                           Depth
+                                          ));
+        }
+
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
+
+        progress = (int)(((double)h * 100.0) / m_orgImage.height());
 
         if (progress % 5 == 0)
         {

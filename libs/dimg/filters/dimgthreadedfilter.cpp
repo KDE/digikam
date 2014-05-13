@@ -28,6 +28,7 @@
 
 #include <QObject>
 #include <QDateTime>
+#include <QThreadPool>
 
 // KDE includes
 
@@ -270,6 +271,22 @@ bool DImgThreadedFilter::parametersSuccessfullyRead() const
 QString DImgThreadedFilter::readParametersError(const FilterAction&) const
 {
     return QString();
+}
+
+QList<uint> DImgThreadedFilter::multithreadedSteps(uint stop, uint start) const
+{
+    uint  nbCore = QThreadPool::globalInstance()->maxThreadCount();
+    float step   = (stop - start) / nbCore;
+    QList<uint> vals;
+
+    vals << start;
+
+    for (uint i = 1 ; i < nbCore ; ++i)
+        vals << vals.last() + step;
+
+    vals << stop;
+
+    return vals;
 }
 
 }  // namespace Digikam

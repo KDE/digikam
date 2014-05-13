@@ -321,9 +321,8 @@ void LocalContrastFilter::processRgbImage(float* const img, int sizex, int sizey
 
     postProgress(40);
 
-    int   nbCore = QThreadPool::globalInstance()->maxThreadCount();
-    float step   = size / nbCore;
-    int   pos    = 0;
+    QList<uint> vals = multithreadedSteps(size);
+    int         pos  = 0;
 
     for (int nstage = 0 ; runningFlag() && (nstage < TONEMAPPING_MAX_STAGES) ; ++nstage)
     {
@@ -347,13 +346,15 @@ void LocalContrastFilter::processRgbImage(float* const img, int sizex, int sizey
 
             QList <QFuture<void> > tasks;
 
-            for (int j = 0 ; runningFlag() && (j < nbCore) ; ++j)
+            for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
             {
                 tasks.append(QtConcurrent::run(this,
                                                &LocalContrastFilter::blurMultithreaded,
-                                               (uint)(j*step), (uint)((j+1)*step),
+                                               vals[j],
+                                               vals[j+1],
                                                img,
-                                               blurimage.data()));
+                                               blurimage.data()
+                                              ));
             }
 
             foreach(QFuture<void> t, tasks)
@@ -370,13 +371,15 @@ void LocalContrastFilter::processRgbImage(float* const img, int sizex, int sizey
 
         QList <QFuture<void> > tasks;
 
-        for (int j = 0 ; runningFlag() && (j < nbCore) ; ++j)
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
         {
             tasks.append(QtConcurrent::run(this,
                                            &LocalContrastFilter::saturationMultithreaded,
-                                           (uint)(j*step), (uint)((j+1)*step),
+                                           vals[j],
+                                           vals[j+1],
                                            img,
-                                           srcimg.data()));
+                                           srcimg.data()
+                                          ));
         }
 
         foreach(QFuture<void> t, tasks)
@@ -460,21 +463,21 @@ void LocalContrastFilter::inplaceBlur(float* const data, int sizex, int sizey, f
     prm.blur            = blur;
     prm.denormal_remove = (float)(1e-15);
 
-    int   nbCore = QThreadPool::globalInstance()->maxThreadCount();
-    float stepy  = prm.sizey / nbCore;
-    float stepx  = prm.sizex / nbCore;
+    QList<uint> valsx = multithreadedSteps(prm.sizex);
+    QList<uint> valsy = multithreadedSteps(prm.sizey);
 
-    for (int stage = 0 ; runningFlag() && (stage < 2) ; ++stage)
+    for (uint stage = 0 ; runningFlag() && (stage < 2) ; ++stage)
     {
         QList <QFuture<void> > tasks;
 
-        for (int j = 0 ; runningFlag() && (j < nbCore) ; ++j)
+        for (int j = 0 ; runningFlag() && (j < valsy.count()-1) ; ++j)
         {
-            prm.start = (uint)(j*stepy);
-            prm.stop  = (uint)((j+1)*stepy);
+            prm.start = valsy[j];
+            prm.stop  = valsy[j];
             tasks.append(QtConcurrent::run(this,
                                            &LocalContrastFilter::inplaceBlurYMultithreaded,
-                                           prm));
+                                           prm
+                                          ));
         }
 
         foreach(QFuture<void> t, tasks)
@@ -482,13 +485,14 @@ void LocalContrastFilter::inplaceBlur(float* const data, int sizex, int sizey, f
 
         tasks.clear();
 
-        for (int j = 0 ; runningFlag() && (j < nbCore) ; ++j)
+        for (int j = 0 ; runningFlag() && (j < valsx.count()-1) ; ++j)
         {
-            prm.start = (uint)(j*stepx);
-            prm.stop  = (uint)((j+1)*stepx);
+            prm.start = valsx[j];
+            prm.stop  = valsx[j];
             tasks.append(QtConcurrent::run(this,
                                            &LocalContrastFilter::inplaceBlurXMultithreaded,
-                                           prm));
+                                           prm
+                                          ));
         }
 
         foreach(QFuture<void> t, tasks)

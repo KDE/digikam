@@ -29,6 +29,7 @@
 
 #include <qmath.h>
 #include <QtConcurrentRun>
+#include <QMutex>
 
 // KDE includes
 
@@ -37,19 +38,34 @@
 namespace Digikam
 {
 
-BlurFilter::BlurFilter(QObject* const parent)
-    : DImgThreadedFilter(parent)
+class BlurFilter::Private
 {
-    m_globalProgress = 0;
-    m_radius         = 3;
+public:
+
+    Private()
+    {
+        globalProgress = 0;
+        radius         = 3;
+    }
+
+    int    radius;
+    int    globalProgress;
+
+    QMutex lock;
+};
+
+BlurFilter::BlurFilter(QObject* const parent)
+    : DImgThreadedFilter(parent),
+      d(new Private)
+{
     initFilter();
 }
 
 BlurFilter::BlurFilter(DImg* const orgImage, QObject* const parent, int radius)
-    : DImgThreadedFilter(orgImage, parent, "GaussianBlur")
+    : DImgThreadedFilter(orgImage, parent, "GaussianBlur"),
+      d(new Private)
 {
-    m_globalProgress = 0;
-    m_radius         = radius;
+    d->radius = radius;
     initFilter();
 }
 
@@ -57,16 +73,17 @@ BlurFilter::BlurFilter(DImgThreadedFilter* const parentFilter,
                        const DImg& orgImage, const DImg& destImage,
                        int progressBegin, int progressEnd, int radius)
     : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
-                         parentFilter->filterName() + ": GaussianBlur")
+                         parentFilter->filterName() + ": GaussianBlur"),
+      d(new Private)
 {
-    m_globalProgress = 0;
-    m_radius         = radius;
+    d->radius = radius;
     filterImage();
 }
 
 BlurFilter::~BlurFilter()
 {
     cancelFilter();
+    delete d;
 }
 
 void BlurFilter::blurMultithreaded(uint start, uint stop)
@@ -82,11 +99,11 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
     int* rs = new int[m_orgImage.width()];
     int* gs = new int[m_orgImage.width()];
     int* bs = new int[m_orgImage.width()];
-    
+
     for (uint y = start ; runningFlag() && (y < stop) ; ++y)
     {
-        my = y - m_radius;
-        mh = (m_radius << 1) + 1;
+        my = y - d->radius;
+        mh = (d->radius << 1) + 1;
 
         if (my < 0)
         {
@@ -109,7 +126,7 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
         {
             uchar* pSrc8           = m_orgImage.scanLine(yy + my);
             unsigned short* pSrc16 = reinterpret_cast<unsigned short*>(m_orgImage.scanLine(yy + my));
-            
+
             for (int x = 0; x < (int)m_orgImage.width(); x++)
             {
                 if (m_orgImage.sixteenBit())
@@ -131,13 +148,13 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
             }
         }
 
-        if ((int)m_orgImage.width() > ((m_radius << 1) + 1))
+        if ((int)m_orgImage.width() > ((d->radius << 1) + 1))
         {
             for (int x = 0; x < (int)m_orgImage.width(); x++)
             {
                 a  = r = g = b = 0;
-                mx = x - m_radius;
-                mw = (m_radius << 1) + 1;
+                mx = x - d->radius;
+                mw = (d->radius << 1) + 1;
 
                 if (mx < 0)
                 {
@@ -190,14 +207,14 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
 
         if ((progress % 5 == 0) && (progress > oldProgress))
         {
-            m_lock.lock();
+            d->lock.lock();
             oldProgress       = progress;
-            m_globalProgress += 5;
-            postProgress(m_globalProgress);
-            m_lock.unlock();
+            d->globalProgress += 5;
+            postProgress(d->globalProgress);
+            d->lock.unlock();
         }
     }
-    
+
     delete [] as;
     delete [] rs;
     delete [] gs;
@@ -206,23 +223,22 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
 
 void BlurFilter::filterImage()
 {
-    if (m_radius < 1)
+    if (d->radius < 1)
     {
         kDebug() << "Radius out of range..."; 
         return;
     }
 
-    int   nbCore = QThreadPool::globalInstance()->maxThreadCount();
-    float step   = m_orgImage.height() / nbCore;
-
+    QList<uint> vals = multithreadedSteps(m_orgImage.height());
     QList <QFuture<void> > tasks;
 
-    for (int j = 0 ; runningFlag() && (j < nbCore) ; ++j)
+    for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
     {
         tasks.append(QtConcurrent::run(this,
                                        &BlurFilter::blurMultithreaded,
-                                       (uint)(j*step),
-                                       (uint)((j+1)*step)));
+                                       vals[j],
+                                       vals[j+1]
+                                      ));
     }
 
     foreach(QFuture<void> t, tasks)
@@ -234,14 +250,14 @@ FilterAction BlurFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("radius", m_radius);
+    action.addParameter("radius", d->radius);
 
     return action;
 }
 
 void BlurFilter::readParameters(const FilterAction& action)
 {
-    m_radius = action.parameter("radius").toInt();
+    d->radius = action.parameter("radius").toInt();
 }
 
 }  // namespace Digikam
