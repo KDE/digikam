@@ -7,4 +7,5 @@ NEW FEATURES:
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 334633 - Album metadata sorted in non-deterministic way in some cases.
-002 ==> 
+002 ==> 334631 - After editing album metadata album list is not re-sorted.
+003 ==> 
