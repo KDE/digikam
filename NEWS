@@ -8,4 +8,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 334633 - Album metadata sorted in non-deterministic way in some cases.
 002 ==> 334631 - After editing album metadata album list is not re-sorted.
-003 ==> 
+003 ==> 330598 - using full screen mode and then quitting leads to a digikamrc which causes digiKam to hang when attempting to view an album.
+004 ==> 
