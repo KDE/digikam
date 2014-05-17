@@ -10,4 +10,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 002 ==> 334631 - After editing album metadata album list is not re-sorted.
 003 ==> 330598 - Using full screen mode and then quitting leads to a digikamrc which causes digiKam to hang when attempting to view an album.
 004 ==> 311280 - digiKam crash on exit.
-005 ==> 
+005 ==> 327013 - Digikam crashes frequently when saving tags with "page down"-key.
+006 ==> 
