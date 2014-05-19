@@ -1447,6 +1447,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumthumbnailloader.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumtreeview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumwatch.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumcolorsandlabelstreeview.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/databaseguierrorhandler.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/dbstatdlg.cpp

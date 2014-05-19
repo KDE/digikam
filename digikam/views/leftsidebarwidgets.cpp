@@ -33,8 +33,6 @@
 #include <QScrollBar>
 #include <QTimer>
 #include <QToolButton>
-#include <QTreeWidget>
-#include <QPainter>
 
 // KDE includes
 
@@ -48,7 +46,6 @@
 #include <klocale.h>
 #include <ksqueezedtextlabel.h>
 #include <KTabWidget>
-#include <kapplication.h>
 
 // Local includes
 
@@ -68,6 +65,7 @@
 #include "facescandialog.h"
 #include "facedetector.h"
 #include "tagsmanager.h"
+#include "albumcolorsandlabelstreeview.h"
 
 namespace Digikam
 {
@@ -192,15 +190,11 @@ public:
     {
     }
 
-    KPushButton*   openTagMngr;
-    SearchTextBar* tagSearchBar;
-    KTabWidget*    tabWidget;
-    TagFolderView* tagFolderView;
-    QTreeWidget*   colorsAndLabelsTreeWidget;
-    QFont          rootFont;
-    QFont          regularFont;
-    QSize          iconSize;
-    QSize          rootSizeHint;
+    KPushButton*               openTagMngr;
+    SearchTextBar*             tagSearchBar;
+    KTabWidget*                tabWidget;
+    TagFolderView*             tagFolderView;
+    ColorsAndLabelsTreeView*   colorsAndLabelsTreeWidget;
 };
 
 TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* const model)
@@ -211,8 +205,6 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
     QVBoxLayout* const layout = new QVBoxLayout(this);
     d->tabWidget = new KTabWidget(this);
     layout->addWidget(d->tabWidget);
-
-    // --------- Tags treeView ---------------------------------
 
     QWidget* const tagsWidget = new QWidget();
     QVBoxLayout* const tagsLayout = new QVBoxLayout(tagsWidget);
@@ -231,131 +223,10 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
     tagsLayout->addWidget(d->tagFolderView);
     tagsLayout->addWidget(d->tagSearchBar);
 
-    // --------- Colors and Lables treeView --------------------
-
     QWidget* const colorLabelWidget = new QWidget();
     QVBoxLayout* const colorLabelLayout = new QVBoxLayout(colorLabelWidget);
-
-    d->rootFont = QFont("Times",18,-1,false);
-    d->regularFont = QFont("Times",12,-1,false);
-    d->iconSize = QSize(30 ,30);
-    d->rootSizeHint = QSize(1,40);
-
-    d->colorsAndLabelsTreeWidget = new QTreeWidget(colorLabelWidget);
-    d->colorsAndLabelsTreeWidget->setHeaderLabel("Colors And Labels");
-    d->colorsAndLabelsTreeWidget->setSelectionMode(QAbstractItemView::MultiSelection);
-    d->colorsAndLabelsTreeWidget->setUniformRowHeights(false);
-    d->colorsAndLabelsTreeWidget->setIconSize(d->iconSize);
-
-    // --- Rating ---
-
-    QTreeWidgetItem* rating = new QTreeWidgetItem(d->colorsAndLabelsTreeWidget);
-    rating->setText(0, tr("Rating"));
-    rating->setSizeHint(0,d->rootSizeHint);
-    rating->setFont(0,d->rootFont);
-    rating->setFlags(Qt::ItemIsEnabled);
-
-    QPolygon   starPolygon;
-
-    starPolygon << QPoint(0,  12);
-    starPolygon << QPoint(10, 10);
-    starPolygon << QPoint(14,  0);
-    starPolygon << QPoint(18, 10);
-    starPolygon << QPoint(28, 12);
-    starPolygon << QPoint(20, 18);
-    starPolygon << QPoint(22, 28);
-    starPolygon << QPoint(14, 22);
-    starPolygon << QPoint(6,  28);
-    starPolygon << QPoint(8,  18);
-
-    QPixmap starPixmap = QPixmap(30, 30);
-    starPixmap.fill(Qt::transparent);
-
-    QPainter p(&starPixmap);
-    p.setRenderHint(QPainter::Antialiasing, true);
-    p.setBrush(QColor(0xff,0xd7,0x00));
-    p.setPen(palette().color(QPalette::Active, foregroundRole()));
-    p.drawPolygon(starPolygon, Qt::WindingFill);
-    p.end();
-
-    rating->setIcon(0,starPixmap);
-
-    QTreeWidgetItem* noRate = new QTreeWidgetItem(rating);
-    noRate->setText(0,tr("0"));
-
-    QTreeWidgetItem* rateOne = new QTreeWidgetItem(rating);
-    rateOne->setText(0,tr("1"));
-
-    QTreeWidgetItem* rateTwo = new QTreeWidgetItem(rating);
-    rateTwo->setText(0,tr("2"));
-
-    QTreeWidgetItem* rateThree = new QTreeWidgetItem(rating);
-    rateThree->setText(0,tr("3"));
-
-    QTreeWidgetItem* rateFour = new QTreeWidgetItem(rating);
-    rateFour->setText(0,tr("4"));
-
-    QTreeWidgetItem* rateFive = new QTreeWidgetItem(rating);
-    rateFive->setText(0,tr("5"));
-
-    // --- Pick Labels ---
-
-    QTreeWidgetItem* labels = new QTreeWidgetItem(d->colorsAndLabelsTreeWidget);
-    labels->setText(0, tr("Labels"));
-    labels->setIcon(0,KIconLoader::global()->loadIcon("flag-green", KIconLoader::NoGroup, 30));
-    labels->setSizeHint(0,d->rootSizeHint);
-    labels->setFont(0,d->rootFont);
-    labels->setFlags(Qt::ItemIsEnabled);
-
-    QStringList labelSetNames;
-    labelSetNames << "No Label" << "Rejected Item" << "Pending Item" << "Accepted Item";
-
-    QStringList labelSetIcons;
-    labelSetIcons << "emblem-unmounted" << "flag-red" << "flag-yellow" << "flag-green";
-
-    foreach (QString label, labelSetNames) {
-        QTreeWidgetItem* labelWidgetItem = new QTreeWidgetItem(labels);
-        labelWidgetItem->setText(0,label);
-        labelWidgetItem->setFont(0,d->regularFont);
-        labelWidgetItem->setIcon(0,KIconLoader::global()->loadIcon(labelSetIcons.at(labelSetNames.indexOf(label)), KIconLoader::NoGroup, 20));
-    }
-
-    // --- Colors ---
-
-    QTreeWidgetItem* colors = new QTreeWidgetItem(d->colorsAndLabelsTreeWidget);
-    colors->setText(0, tr("Colors"));
-    QPixmap rootColorIcon(30, 30);
-    rootColorIcon.fill(QColor(254,128,128));
-    colors->setIcon(0,QIcon(rootColorIcon));
-    colors->setSizeHint(0,d->rootSizeHint);
-    colors->setFont(0,d->rootFont);
-    colors->setFlags(Qt::ItemIsEnabled);
-
-    QTreeWidgetItem* noColor = new QTreeWidgetItem(colors);
-    noColor->setText(0,tr("No Color"));
-    noColor->setFont(0,d->regularFont);
-    noColor->setIcon(0,KIconLoader::global()->loadIcon("emblem-unmounted", KIconLoader::NoGroup, 20));
-
-    QStringList colorSet;
-    colorSet << "red" << "orange" << "yellow" << "darkgreen" << "darkblue" << "magenta" << "darkgray" << "black" << "lightgray";
-
-    QStringList colorSetNames;
-    colorSetNames << "Red"  << "Orange" << "Yellow" << "Green" << "Blue" << "Magenta" << "Gray" << "Black" << "White";
-
-    foreach (QString color, colorSet) {
-        QTreeWidgetItem* colorWidgetItem = new QTreeWidgetItem(colors);
-        colorWidgetItem->setText(0,colorSetNames.at(colorSet.indexOf(color)));
-        colorWidgetItem->setFont(0,d->regularFont);
-        QPixmap colorIcon(18,18);
-        colorIcon.fill(QColor(color));
-        colorWidgetItem->setIcon(0,QIcon(colorIcon));
-        colorWidgetItem->setSizeHint(0,QSize(1,20));
-    }
-
+    d->colorsAndLabelsTreeWidget = new ColorsAndLabelsTreeView(colorLabelWidget);
     colorLabelLayout->addWidget(d->colorsAndLabelsTreeWidget);
-    d->colorsAndLabelsTreeWidget->expandAll();
-
-    // ---------------------------------------------------------
 
     d->tabWidget->insertTab(Private::TAGS,tagsWidget,KIcon("tag"),"Tags");
     d->tabWidget->insertTab(Private::COLORSANDLABELS,colorLabelWidget,"Colors and Labels");
