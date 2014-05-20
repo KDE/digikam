@@ -13,4 +13,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 327013 - digiKam crashes frequently when saving tags with "page down"-key.
 006 ==> 276592 - Crash while browsing through album in enlarged view.
 007 ==> 321295 - Crash after face recognition run.
-008 ==> 
+008 ==> 335046 - digiKam crasch when starting.
+009 ==> 
