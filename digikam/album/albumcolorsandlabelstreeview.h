@@ -39,8 +39,11 @@ public:
 
 private:
     void initTreeView();
+    QList<int> selectedRatings();
+    QList<int> selectedLabels();
 
-Q_SIGNALS:
+private Q_SLOTS:
+    void prepareForSearch();
 
 private:
     class Private;

@@ -27,11 +27,19 @@
 
 #include <QTreeWidget>
 #include <QPainter>
+#include <QDebug>
 
 // KDE includes
 
 #include <kapplication.h>
 #include <KIconLoader>
+
+// Local includes
+
+#include "searchxml.h"
+#include "searchtabheader.h"
+#include "albummanager.h"
+#include "albumtreeview.h"
 
 namespace Digikam
 {
@@ -56,15 +64,17 @@ public:
         starPolygon << QPoint(8,  18);
     }
 
-    QFont            rootFont;
-    QFont            regularFont;
-    QSize            iconSize;
-    QSize            rootSizeHint;
-    QPolygon         starPolygon;
-    QTreeWidgetItem* rating;
-    QTreeWidgetItem* labels;
-    QTreeWidgetItem* colors;
-
+    QFont               rootFont;
+    QFont               regularFont;
+    QSize               iconSize;
+    QSize               rootSizeHint;
+    QPolygon            starPolygon;
+    QTreeWidgetItem*    rating;
+    QTreeWidgetItem*    labels;
+    QTreeWidgetItem*    colors;
+    SearchXml::Operator groupOp;
+    SearchXml::Operator fieldOp;
+    SearchXml::Relation fieldRel;
 };
 
 ColorsAndLabelsTreeView::ColorsAndLabelsTreeView(QWidget *parent) :
@@ -74,11 +84,18 @@ ColorsAndLabelsTreeView::ColorsAndLabelsTreeView(QWidget *parent) :
     d->regularFont   = QFont("Times",12,-1,false);
     d->iconSize      = QSize(30 ,30);
     d->rootSizeHint  = QSize(1,40);
+    d->groupOp       = SearchXml::Or;
+    d->fieldOp       = SearchXml::Or;
+    d->fieldRel      = SearchXml::InTree;
+
     setHeaderLabel("Colors And Labels");
     setSelectionMode(QAbstractItemView::MultiSelection);
     setUniformRowHeights(false);
     setIconSize(d->iconSize);
     initTreeView();
+
+    connect(this,SIGNAL(itemSelectionChanged()),
+            this,SLOT(prepareForSearch()));
 }
 
 ColorsAndLabelsTreeView::~ColorsAndLabelsTreeView()
@@ -190,6 +207,73 @@ void ColorsAndLabelsTreeView::initTreeView()
     }
 
     expandAll();
+}
+
+void ColorsAndLabelsTreeView::prepareForSearch()
+{
+    SearchXmlWriter writer;
+
+    writer.writeGroup();
+    writer.setGroupOperator(d->groupOp);
+
+    if(!selectedRatings().isEmpty())
+    {
+        // The Field Relation here is not "interval"
+        // it's "intree", because it's chosen from a list
+        writer.writeField("rating",d->fieldRel);
+        writer.writeValue(selectedRatings());
+        writer.finishField();
+    }
+
+    if(!selectedLabels().isEmpty())
+    {
+        writer.writeField("tagid",d->fieldRel);
+        writer.writeValue(selectedLabels());
+        writer.finishField();
+    }
+
+    writer.finishGroup();
+    writer.finish();
+
+    if(!writer.xml().isEmpty())
+    {
+        qDebug() << writer.xml();
+    }
+
+    //Testing The Result of the XML
+    //SAlbum* album = AlbumManager::instance()->createSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::KeywordSearch),
+    //                                               DatabaseSearch::AdvancedSearch, writer.xml());
+}
+
+QList<int> ColorsAndLabelsTreeView::selectedRatings()
+{
+    QList<int> selectedRatings;
+    foreach (QModelIndex index , selectedIndexes()) {
+        if(index.parent().data().toString() == "Rating")
+        {
+            selectedRatings << index.row();
+        }
+    }
+
+    return selectedRatings;
+}
+
+QList<int> ColorsAndLabelsTreeView::selectedLabels()
+{
+    QList<int> selectedLabels;
+    foreach (QModelIndex index , selectedIndexes()) {
+        if(index.parent().data().toString() == "Colors")
+        {
+            selectedLabels << index.row()+8;
+        }
+
+        if(index.parent().data().toString() == "Labels")
+        {
+            selectedLabels << index.row()+18;
+        }
+    }
+
+    return selectedLabels;
 }
 
 } // namespace Digikam
