@@ -40,6 +40,7 @@
 #include "searchtabheader.h"
 #include "albummanager.h"
 #include "albumtreeview.h"
+#include "databaseconstants.h"
 
 namespace Digikam
 {
@@ -64,17 +65,17 @@ public:
         starPolygon << QPoint(8,  18);
     }
 
-    QFont               rootFont;
-    QFont               regularFont;
-    QSize               iconSize;
-    QSize               rootSizeHint;
-    QPolygon            starPolygon;
-    QTreeWidgetItem*    rating;
-    QTreeWidgetItem*    labels;
-    QTreeWidgetItem*    colors;
-    SearchXml::Operator groupOp;
-    SearchXml::Operator fieldOp;
-    SearchXml::Relation fieldRel;
+    QFont                rootFont;
+    QFont                regularFont;
+    QSize                iconSize;
+    QSize                rootSizeHint;
+    QPolygon             starPolygon;
+    QTreeWidgetItem*     rating;
+    QTreeWidgetItem*     labels;
+    QTreeWidgetItem*     colors;
+    SearchXml::Operator  groupOp;
+    SearchXml::Relation  fieldRel;
+    DatabaseSearch::Type searchType;
 };
 
 ColorsAndLabelsTreeView::ColorsAndLabelsTreeView(QWidget *parent) :
@@ -85,8 +86,8 @@ ColorsAndLabelsTreeView::ColorsAndLabelsTreeView(QWidget *parent) :
     d->iconSize      = QSize(30 ,30);
     d->rootSizeHint  = QSize(1,40);
     d->groupOp       = SearchXml::Or;
-    d->fieldOp       = SearchXml::Or;
     d->fieldRel      = SearchXml::InTree;
+    d->searchType    = DatabaseSearch::AdvancedSearch;
 
     setHeaderLabel("Colors And Labels");
     setSelectionMode(QAbstractItemView::MultiSelection);
@@ -213,26 +214,45 @@ void ColorsAndLabelsTreeView::prepareForSearch()
 {
     SearchXmlWriter writer;
 
-    writer.writeGroup();
-    writer.setGroupOperator(d->groupOp);
+    // This Code Generates the right Search XML,
+    // But it needs polishing and supporting intervals
+    // for rating field.
 
     if(!selectedRatings().isEmpty())
     {
-        // The Field Relation here is not "interval"
-        // it's "intree", because it's chosen from a list
-        writer.writeField("rating",d->fieldRel);
-        writer.writeValue(selectedRatings());
-        writer.finishField();
-    }
+        foreach (int val, selectedRatings())
+        {
+            writer.writeGroup();
+            writer.setGroupOperator(d->groupOp);
+            writer.writeField("rating",SearchXml::Equal);
+            writer.writeValue(val);
+            writer.finishField();
 
-    if(!selectedLabels().isEmpty())
+            if(!selectedLabels().isEmpty())
+            {
+                writer.writeField("tagid",SearchXml::InTree);
+                writer.writeValue(selectedLabels());
+                writer.finishField();
+            }
+
+            writer.finishGroup();
+        }
+    }
+    else if(!selectedLabels().isEmpty())
     {
-        writer.writeField("tagid",d->fieldRel);
+        writer.writeGroup();
+        writer.setGroupOperator(d->groupOp);
+        writer.writeField("tagid",SearchXml::InTree);
         writer.writeValue(selectedLabels());
         writer.finishField();
+        writer.finishGroup();
+    }
+    else
+    {
+        writer.writeGroup();
+        writer.finishGroup();
     }
 
-    writer.finishGroup();
     writer.finish();
 
     if(!writer.xml().isEmpty())
@@ -240,9 +260,7 @@ void ColorsAndLabelsTreeView::prepareForSearch()
         qDebug() << writer.xml();
     }
 
-    //Testing The Result of the XML
-    //SAlbum* album = AlbumManager::instance()->createSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::KeywordSearch),
-    //                                               DatabaseSearch::AdvancedSearch, writer.xml());
+    search(writer.xml());
 }
 
 QList<int> ColorsAndLabelsTreeView::selectedRatings()
@@ -251,9 +269,16 @@ QList<int> ColorsAndLabelsTreeView::selectedRatings()
     foreach (QModelIndex index , selectedIndexes()) {
         if(index.parent().data().toString() == "Rating")
         {
-            selectedRatings << index.row();
+            if(index.row() == 0)
+                // to be similar to the one in the Advanced search
+                selectedRatings << index.row()-1;
+            else
+                selectedRatings << index.row();
         }
     }
+
+    // to support interval relation for rating field
+    // return a sorted int list
 
     return selectedRatings;
 }
@@ -274,6 +299,28 @@ QList<int> ColorsAndLabelsTreeView::selectedLabels()
     }
 
     return selectedLabels;
+}
+
+void ColorsAndLabelsTreeView::search(const QString& xml)
+{
+    SAlbum* album = AlbumManager::instance()->findSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::KeywordSearch));
+
+    if (album)
+    {
+        AlbumManager::instance()->updateSAlbum(album, xml,
+                                               SAlbum::getTemporaryTitle(DatabaseSearch::KeywordSearch),
+                                               DatabaseSearch::AdvancedSearch);
+    }
+    else
+    {
+        album = AlbumManager::instance()->createSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::KeywordSearch),
+                                                       DatabaseSearch::AdvancedSearch, xml);
+    }
+
+    if (album)
+    {
+        AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << album);
+    }
 }
 
 } // namespace Digikam

@@ -24,7 +24,14 @@
 #ifndef COLORSANDLABELSTREEVIEW_H
 #define COLORSANDLABELSTREEVIEW_H
 
+// Qt includes
+
 #include <QTreeWidget>
+
+// Local includes
+
+#include "databaseconstants.h"
+#include "album.h"
 
 namespace Digikam
 {
@@ -39,8 +46,14 @@ public:
 
 private:
     void initTreeView();
+
     QList<int> selectedRatings();
     QList<int> selectedLabels();
+
+    void search(const QString& xml);
+
+Q_SIGNALS:
+    void searchShallBeSelected(QList<Album*> albums);
 
 private Q_SLOTS:
     void prepareForSearch();
