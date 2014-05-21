@@ -743,14 +743,14 @@ void FaceGroup::slotAddItemMoving(const QRectF& rect)
         d->visibilityController->showItem(d->manuallyAddedItem);
     }
 
-    d->manuallyAddedItem->setRectInSceneCoordinates(rect);
+    d->manuallyAddedItem->setRectInSceneCoordinatesAdjusted(rect);
 }
 
 void FaceGroup::slotAddItemFinished(const QRectF& rect)
 {
     if (d->manuallyAddedItem)
     {
-        d->manuallyAddedItem->setRectInSceneCoordinates(rect);
+        d->manuallyAddedItem->setRectInSceneCoordinatesAdjusted(rect);
         DatabaseFace face    = d->editPipeline.addManually(d->info, d->view->previewItem()->image(),
                                                            TagRegion(d->manuallyAddedItem->originalRect()));
         FaceItem* const item = d->addItem(face);

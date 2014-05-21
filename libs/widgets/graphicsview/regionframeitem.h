@@ -79,6 +79,8 @@ public:
 
     void setFixedRatio(double ratio);
 
+    void setRectInSceneCoordinatesAdjusted(const QRectF& rect);
+
     virtual QRectF boundingRect() const;
 
 public Q_SLOTS:

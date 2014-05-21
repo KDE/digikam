@@ -208,6 +208,7 @@ CropHandle RegionFrameItem::Private::handleAt(const QPointF& pos) const
         }
     }
 
+
     return CH_None;
 }
 
@@ -264,20 +265,20 @@ QRectF RegionFrameItem::Private::keepRectInsideImage(const QRectF& rect) const
 
     if (r.right() > imageSize.width())
     {
-        r.moveRight(imageSize.width());
+        r.setRight(imageSize.width());
     }
     else if (r.left() < 0)
     {
-        r.moveLeft(0);
+        r.setLeft(0);
     }
 
     if (r.bottom() > imageSize.height())
     {
-        r.moveBottom(imageSize.height());
+        r.setBottom(imageSize.height());
     }
     else if (r.top() < 0)
     {
-        r.moveTop(0);
+        r.setTop(0);
     }
 
     return r;
@@ -754,6 +755,11 @@ void RegionFrameItem::moveHudWidget()
     }
 
     d->hudWidget->setPos(pos);
+}
+
+void RegionFrameItem::setRectInSceneCoordinatesAdjusted(const QRectF& rect)
+{
+    setRectInSceneCoordinates(d->keepRectInsideImage(rect));
 }
 
 } // namespace Digikam
