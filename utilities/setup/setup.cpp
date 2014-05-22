@@ -7,7 +7,7 @@
  * Description : digiKam setup dialog.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2003-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Album
@@ -547,12 +547,21 @@ void Setup::okClicked()
 
     kapp->restoreOverrideCursor();
 
+    if (d->albumViewPage->useLargeThumbsAsChanged())
+    {
+        QString msg = i18n("The max thumbnails size has been changed.\n"
+                           "You need to re-start digiKam to see this option to take effect.\n\n"
+                           "Note: after to restart digiKam, it's recommend to rebuild all "
+                           "albums' items' thumbnails, using \"Tools-Maintenance\" menu.");
+        KMessageBox::information(this, msg);
+    }
+
     if (d->metadataPage->exifAutoRotateAsChanged())
     {
         QString msg = i18n("The Exif auto-rotate thumbnails option has been changed.\n"
                            "Do you want to rebuild all albums' items' thumbnails now?\n\n"
                            "Note: thumbnail processing can take a while. You can start "
-                           "this job later from the \"Tools\" menu.");
+                           "this job later from the \"Tools-Maintenance\" menu.");
         int result = KMessageBox::warningYesNo(this, msg);
 
         if (result != KMessageBox::Yes)
@@ -746,7 +755,7 @@ KPageWidgetItem* Setup::Private::pageItem(Setup::Page page) const
 
         case Setup::ImageQualityPage:
             return page_imagequalitysorter;
-            
+
         case Setup::ICCPage:
             return page_icc;
 

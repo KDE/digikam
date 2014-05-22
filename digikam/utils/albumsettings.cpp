@@ -443,6 +443,9 @@ AlbumSettings::AlbumSettings()
     d->config = KGlobal::config();
     init();
     readSettings();
+
+    // Init Max Thumbnail Size at startup.
+    ThumbnailSize::readSettings(generalConfigGroup());
 }
 
 AlbumSettings::~AlbumSettings()

@@ -1362,9 +1362,9 @@ void DigikamView::setThumbSize(int size)
     else if (   (viewMode() == StackedView::IconViewMode)
              || (viewMode() == StackedView::TableViewMode) )
     {
-        if (size > ThumbnailSize::Huge)
+        if (size > ThumbnailSize::maxThumbsSize())
         {
-            d->thumbSize = ThumbnailSize::Huge;
+            d->thumbSize = ThumbnailSize::maxThumbsSize();
         }
         else if (size < ThumbnailSize::Small)
         {
@@ -1413,7 +1413,7 @@ void DigikamView::toggleZoomActions()
         d->parent->enableZoomMinusAction(true);
         d->parent->enableZoomPlusAction(true);
 
-        if (d->thumbSize >= ThumbnailSize::Huge)
+        if (d->thumbSize >= ThumbnailSize::maxThumbsSize())
         {
             d->parent->enableZoomPlusAction(false);
         }

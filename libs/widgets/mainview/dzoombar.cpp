@@ -103,7 +103,7 @@ DZoomBar::DZoomBar(QWidget* const parent)
 
     d->zoomSlider  = new QSlider(Qt::Horizontal, this);
     d->zoomTracker = new DTipTracker(QString(""), d->zoomSlider);
-    d->zoomSlider->setRange(ThumbnailSize::Small, ThumbnailSize::Huge);
+    d->zoomSlider->setRange(ThumbnailSize::Small, ThumbnailSize::maxThumbsSize());
     d->zoomSlider->setSingleStep(ThumbnailSize::Step);
     d->zoomSlider->setValue(ThumbnailSize::Medium);
     d->zoomSlider->setFixedWidth(120);
@@ -243,7 +243,7 @@ void DZoomBar::setThumbsSize(int size)
 
 int DZoomBar::sizeFromZoom(double zoom, double zmin, double zmax)
 {
-    double h = (double)ThumbnailSize::Huge;
+    double h = (double)ThumbnailSize::maxThumbsSize();
     double s = (double)ThumbnailSize::Small;
     double zoomN = log(zoom)/log(2);
     double zminN = log(zmin)/log(2);
@@ -254,7 +254,7 @@ int DZoomBar::sizeFromZoom(double zoom, double zmin, double zmax)
 
 double DZoomBar::zoomFromSize(int size, double zmin, double zmax)
 {
-    double h = (double)ThumbnailSize::Huge;
+    double h = (double)ThumbnailSize::maxThumbsSize();
     double s = (double)ThumbnailSize::Small;
     double zminN = log(zmin)/log(2);
     double zmaxN = log(zmax)/log(2);

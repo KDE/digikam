@@ -308,8 +308,8 @@ void LoadingCache::removeThumbnails()
 
 void LoadingCache::setThumbnailCacheSize(int numberOfQImages, int numberOfQPixmaps)
 {
-    d->thumbnailImageCache.setMaxCost(numberOfQImages * ThumbnailSize::Huge * ThumbnailSize::Huge * 4);
-    d->thumbnailPixmapCache.setMaxCost(numberOfQPixmaps * ThumbnailSize::Huge * ThumbnailSize::Huge * QPixmap::defaultDepth() / 8);
+    d->thumbnailImageCache.setMaxCost(numberOfQImages * ThumbnailSize::maxThumbsSize() * ThumbnailSize::maxThumbsSize() * 4);
+    d->thumbnailPixmapCache.setMaxCost(numberOfQPixmaps * ThumbnailSize::maxThumbsSize() * ThumbnailSize::maxThumbsSize() * QPixmap::defaultDepth() / 8);
 }
 
 void LoadingCache::setFileWatch(LoadingCacheFileWatch* watch)

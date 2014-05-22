@@ -6,7 +6,8 @@
  * Date        : 2004-09-07
  * Description : thumbnails size interface
  *
- * Copyright (C) 2004 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2004      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,10 +25,22 @@
 #ifndef THUMBNAILSIZE_H
 #define THUMBNAILSIZE_H
 
+// Qt includes
+
+#include <QString>
+
+// KDE includes
+
+#include <kconfiggroup.h>
+
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
-class ThumbnailSize
+class DIGIKAM_EXPORT ThumbnailSize
 {
 
 public:
@@ -40,52 +53,35 @@ public:
         Small     = 80,
         Medium    = 128,
         Large     = 160,
-        Huge      = 256
+        Huge      = 256,
+        HD        = 512
     };
 
-    ThumbnailSize()
-    {
-        m_Size = Medium;
-    }
+public:
 
-    ThumbnailSize(int size)
-    {
-        m_Size = size;
-    }
+    ThumbnailSize();
+    ThumbnailSize(int size);
+    ThumbnailSize(const ThumbnailSize& thumbsize);
 
-    ThumbnailSize(const ThumbnailSize& thumbsize)
-    {
-        m_Size = thumbsize.m_Size;
-    }
+    ~ThumbnailSize();
 
-    ~ThumbnailSize()
-    {
-    }
+    ThumbnailSize& operator=(const ThumbnailSize& thumbsize);
+    bool operator==(const ThumbnailSize& thumbsize) const;
+    bool operator!=(const ThumbnailSize& thumbsize) const;
 
-    ThumbnailSize& operator=(const ThumbnailSize& thumbsize)
-    {
-        m_Size = thumbsize.m_Size;
-        return *this;
-    }
+    int size() const;
 
-    bool operator==(const ThumbnailSize& thumbsize) const
-    {
-        return m_Size == thumbsize.m_Size;
-    }
+public:
 
-    bool operator!=(const ThumbnailSize& thumbsize) const
-    {
-        return m_Size != thumbsize.m_Size;
-    }
-
-    int size() const
-    {
-        return m_Size;
-    }
+    static void setUseLargeThumbs(bool val);
+    static bool getUseLargeThumbs();
+    static void readSettings(const KConfigGroup& group);
+    static void saveSettings(KConfigGroup& group, bool val);
+    static int  maxThumbsSize();
 
 private:
 
-    int m_Size;
+    int  m_Size;
 };
 
 }  // namespace Digikam

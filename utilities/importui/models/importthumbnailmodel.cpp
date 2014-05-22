@@ -302,9 +302,9 @@ void ImportThumbnailModel::startKdePreviewJob()
         if (url.isValid())
             items.append(KFileItem(KFileItem::Unknown, KFileItem::Unknown, url, true));
     }
-    d->kdeJob = KIO::filePreview(items, QSize(ThumbnailSize::Huge, ThumbnailSize::Huge));
+    d->kdeJob = KIO::filePreview(items, QSize(ThumbnailSize::maxThumbsSize(), ThumbnailSize::maxThumbsSize()));
 #else
-    d->kdeJob = KIO::filePreview(list, ThumbnailSize::Huge);
+    d->kdeJob = KIO::filePreview(list, ThumbnailSize::maxThumbsSize());
 #endif
 
     connect(d->kdeJob, SIGNAL(gotPreview(KFileItem,QPixmap)),
@@ -421,7 +421,7 @@ void ImportThumbnailModel::clearCache()
 
 void ImportThumbnailModel::setCacheSize(int numberOfItems)
 {
-    d->cache.setMaxCost((numberOfItems * ThumbnailSize::Huge * ThumbnailSize::Huge * QPixmap::defaultDepth() / 8) +
+    d->cache.setMaxCost((numberOfItems * ThumbnailSize::maxThumbsSize() * ThumbnailSize::maxThumbsSize() * QPixmap::defaultDepth() / 8) +
                         (numberOfItems * 1024 * 2));
 }
 

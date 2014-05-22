@@ -490,9 +490,9 @@ void ImportView::setThumbSize(int size)
     }
     else if (d->stackedView->viewMode() == ImportStackedView::PreviewCameraMode)
     {
-        if (size > ThumbnailSize::Huge)
+        if (size > ThumbnailSize::maxThumbsSize())
         {
-            d->thumbSize = ThumbnailSize::Huge;
+            d->thumbSize = ThumbnailSize::maxThumbsSize();
         }
         else if (size < ThumbnailSize::Small)
         {
@@ -544,7 +544,7 @@ void ImportView::toggleZoomActions()
         d->parent->enableZoomMinusAction(true);
         d->parent->enableZoomPlusAction(true);
 
-        if (d->thumbSize >= ThumbnailSize::Huge)
+        if (d->thumbSize >= ThumbnailSize::maxThumbsSize())
         {
             d->parent->enableZoomPlusAction(false);
         }

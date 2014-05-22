@@ -7,7 +7,7 @@
  * Description : album view configuration setup tab
  *
  * Copyright (C) 2003-2004 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,6 +43,7 @@
 
 // Local includes
 
+#include "thumbnailsize.h"
 #include "albumsettings.h"
 #include "dfontselect.h"
 #include "fullscreensettings.h"
@@ -56,6 +57,8 @@ class SetupAlbumView::Private
 public:
 
     Private() :
+        useLargeThumbsAsChanged(false),
+        useLargeThumbsOrg(false),
         iconTreeThumbLabel(0),
         iconShowNameBox(0),
         iconShowSizeBox(0),
@@ -72,6 +75,7 @@ public:
         previewLoadFullImageSize(0),
         previewShowIcons(0),
         showFolderTreeViewItemsCount(0),
+        largeThumbsBox(0),
         iconTreeThumbSize(0),
         leftClickActionComboBox(0),
         iconViewFontSelect(0),
@@ -79,6 +83,9 @@ public:
         fullScreenSettings(0)
     {
     }
+
+    bool                useLargeThumbsAsChanged;
+    bool                useLargeThumbsOrg;
 
     QLabel*             iconTreeThumbLabel;
 
@@ -97,6 +104,7 @@ public:
     QCheckBox*          previewLoadFullImageSize;
     QCheckBox*          previewShowIcons;
     QCheckBox*          showFolderTreeViewItemsCount;
+    QCheckBox*          largeThumbsBox;
 
     KComboBox*          iconTreeThumbSize;
     KComboBox*          leftClickActionComboBox;
@@ -175,6 +183,14 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     d->iconViewFontSelect = new DFontSelect(i18n("Icon View font:"), panel);
     d->iconViewFontSelect->setToolTip(i18n("Select here the font used to display text in Icon Views."));
 
+    d->largeThumbsBox = new QCheckBox(i18n("Use larges thumbnails size for high screen resolution"), iconViewGroup);
+    d->largeThumbsBox->setWhatsThis(i18n("Set this option to render icon-view with large thumbnails size, for example in case of 4K screens are used.\n"
+                                         "By default this option is turned off and max thumnails size is limited to 256x256 pixels. "
+                                         "When this option is enabled, thumbnails size can be extened to 512x512 pixels.\n"
+                                         "This option will store more data in thumbnails database and will use more system memory. "
+                                         "digiKam need to be restarted to take effect, and Rebuild Thumbnails option from Maintenance tool "
+                                         "need to be processed over whole collections."));
+
     grid->addWidget(d->iconShowNameBox,          0, 0, 1, 1);
     grid->addWidget(d->iconShowSizeBox,          1, 0, 1, 1);
     grid->addWidget(d->iconShowDateBox,          2, 0, 1, 1);
@@ -192,6 +208,7 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     grid->addWidget(leftClickLabel,              7, 0, 1, 1);
     grid->addWidget(d->leftClickActionComboBox,  7, 1, 1, 1);
     grid->addWidget(d->iconViewFontSelect,       8, 0, 1, 2);
+    grid->addWidget(d->largeThumbsBox,           9, 0, 1, 2);
     grid->setSpacing(KDialog::spacingHint());
     grid->setMargin(KDialog::spacingHint());
 
@@ -263,6 +280,11 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
 
     // --------------------------------------------------------
 
+    connect(d->largeThumbsBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotUseLargeThumbsToggled(bool)));
+
+    // --------------------------------------------------------
+
     setAutoFillBackground(false);
     viewport()->setAutoFillBackground(false);
     panel->setAutoFillBackground(false);
@@ -275,7 +297,7 @@ SetupAlbumView::~SetupAlbumView()
 
 void SetupAlbumView::applySettings()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* const settings = AlbumSettings::instance();
 
     if (!settings)
     {
@@ -308,11 +330,15 @@ void SetupAlbumView::applySettings()
 
     KConfigGroup group = settings->generalConfigGroup();
     d->fullScreenSettings->saveSettings(group);
+
+    // Method ThumbnailSize::setUseLargeThumbs() is not called here to prevent dysfunction between Thumbs DB and icon if
+    // thumb size is over 256 and when large thumbs size support is disabled. digiKam need to be restarted to take effect.
+    ThumbnailSize::saveSettings(group, d->largeThumbsBox->isChecked());
 }
 
 void SetupAlbumView::readSettings()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* const settings = AlbumSettings::instance();
 
     if (!settings)
     {
@@ -359,6 +385,27 @@ void SetupAlbumView::readSettings()
 
     KConfigGroup group = settings->generalConfigGroup();
     d->fullScreenSettings->readSettings(group);
+
+    ThumbnailSize::readSettings(group);
+    d->useLargeThumbsOrg = ThumbnailSize::getUseLargeThumbs();
+    d->largeThumbsBox->setChecked(d->useLargeThumbsOrg);
+}
+
+bool SetupAlbumView::useLargeThumbsAsChanged() const
+{
+    return d->useLargeThumbsAsChanged;
+}
+
+void SetupAlbumView::slotUseLargeThumbsToggled(bool b)
+{
+    if (b != d->useLargeThumbsOrg)
+    {
+        d->useLargeThumbsAsChanged = true;
+    }
+    else
+    {
+        d->useLargeThumbsAsChanged = false;
+    }
 }
 
 }  // namespace Digikam

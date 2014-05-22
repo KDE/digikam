@@ -139,7 +139,7 @@ bool ColumnThumbnail::paint(QPainter* const painter, const QStyleOptionViewItem&
         const int bestSize = qMax(size.width()/* + 2*/, size.height()/* + 2*/);
 
         // However, digiKam limits the thumbnail size, so we also do that here
-        const int maxSize = qMin(bestSize, (int)ThumbnailSize::Huge);
+        const int maxSize = qMin(bestSize, (int)ThumbnailSize::maxThumbsSize());
         const QString path = info.filePath();
         QPixmap thumbnail;
 

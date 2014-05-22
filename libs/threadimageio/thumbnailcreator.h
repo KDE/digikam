@@ -150,7 +150,8 @@ public:
     /**
      * If you plan to load thumbnail from the context of the threadimageio framework,
      * you can specify the relevant parameters. They will be passed if a thumbnail
-     * is created by loading with DImg.
+     * is created by loading with DImg.        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/thumbnailtask.cpp
+
      * Note that DImg is not used in most cases (Raw files, JPEG)
      */
     void setLoadingProperties(DImgLoaderObserver* const observer, const DRawDecoding& settings);

@@ -125,7 +125,7 @@ int ThumbnailCreator::Private::storageSize() const
     // for thumbnail db it's always max size
     if (onlyLargeThumbnails)
     {
-        return ThumbnailSize::Huge;
+        return ThumbnailSize::maxThumbsSize();
     }
     else
     {
