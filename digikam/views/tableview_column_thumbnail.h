@@ -47,22 +47,18 @@ class ColumnThumbnail : public TableViewColumn
 
 private:
 
-    explicit ColumnThumbnail(
-            TableViewShared* const tableViewShared,
-            const TableViewColumnConfiguration& pConfiguration,
-            QObject* const parent = 0
-        );
+    explicit ColumnThumbnail(TableViewShared* const tableViewShared,
+                             const TableViewColumnConfiguration& pConfiguration,
+                             QObject* const parent = 0);
 
 public:
 
     virtual ~ColumnThumbnail();
 
-    static bool CreateFromConfiguration(
-            TableViewShared* const tableViewShared,
-            const TableViewColumnConfiguration& pConfiguration,
-            TableViewColumn** const pNewColumn,
-            QObject* const parent = 0
-        );
+    static bool CreateFromConfiguration(TableViewShared* const tableViewShared,
+                                        const TableViewColumnConfiguration& pConfiguration,
+                                        TableViewColumn** const pNewColumn,
+                                        QObject* const parent = 0);
 
     static TableViewColumnDescription getDescription();
 

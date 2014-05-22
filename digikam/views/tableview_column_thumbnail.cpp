@@ -50,12 +50,11 @@ namespace Digikam
 namespace TableViewColumns
 {
 
-ColumnThumbnail::ColumnThumbnail(
-        TableViewShared* const tableViewShared,
-        const TableViewColumnConfiguration& pConfiguration,
-        QObject* const parent)
-  : TableViewColumn(tableViewShared, pConfiguration, parent),
-    m_thumbnailSize(s->tableView->getThumbnailSize().size())
+ColumnThumbnail::ColumnThumbnail(TableViewShared* const tableViewShared,
+                                 const TableViewColumnConfiguration& pConfiguration,
+                                 QObject* const parent)
+    : TableViewColumn(tableViewShared, pConfiguration, parent),
+        m_thumbnailSize(s->tableView->getThumbnailSize().size())
 {
     connect(s->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
             this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
@@ -66,12 +65,10 @@ ColumnThumbnail::~ColumnThumbnail()
 
 }
 
-bool ColumnThumbnail::CreateFromConfiguration(
-            TableViewShared* const tableViewShared,
-            const TableViewColumnConfiguration& pConfiguration,
-            TableViewColumn** const pNewColumn,
-            QObject* const parent
-        )
+bool ColumnThumbnail::CreateFromConfiguration(TableViewShared* const tableViewShared,
+                                              const TableViewColumnConfiguration& pConfiguration,
+                                              TableViewColumn** const pNewColumn,
+                                              QObject* const parent)
 {
     if (pConfiguration.columnId!=QLatin1String("thumbnail"))
     {
@@ -115,16 +112,18 @@ bool ColumnThumbnail::paint(QPainter* const painter, const QStyleOptionViewItem&
     }
 
     const ImageInfo info = s->tableViewModel->infoFromItem(item);
+
     if (!info.isNull())
     {
         const QSize imageSize = info.dimensions();
         const QSize availableSize = option.rect.size() - QSize(ThumbnailBorder, ThumbnailBorder);
-
         QSize size(m_thumbnailSize, m_thumbnailSize);
+
         if (imageSize.isValid() && (imageSize.width()>imageSize.height()) )
         {
             // for landscape pictures, try to use all available horizontal space
             qreal scaleFactor = qreal(availableSize.height()) / qreal(imageSize.height());
+
             if (qreal(imageSize.width())*scaleFactor > availableSize.width())
             {
                 scaleFactor = qreal(availableSize.width()) / qreal(imageSize.width());
@@ -138,10 +137,12 @@ bool ColumnThumbnail::paint(QPainter* const painter, const QStyleOptionViewItem&
         // to be as high as the row height as long as the width can stretch enough
         // because the column is wider than the thumbnail size.
         const int bestSize = qMax(size.width()/* + 2*/, size.height()/* + 2*/);
-        // However, digiKam limits the thumbnail size to 256, so we also do that here
-        const int maxSize = qMin(bestSize, 256);
+
+        // However, digiKam limits the thumbnail size, so we also do that here
+        const int maxSize = qMin(bestSize, (int)ThumbnailSize::Huge);
         const QString path = info.filePath();
         QPixmap thumbnail;
+
         if (s->thumbnailLoadThread->find(path, thumbnail, maxSize))
         {
             /// @todo Is slotThumbnailLoaded still called when the thumbnail is found right away?
@@ -149,7 +150,7 @@ bool ColumnThumbnail::paint(QPainter* const painter, const QStyleOptionViewItem&
             const QSize alignSize = option.rect.size();
 //                 thumbnail = thumbnail.copy(1, 1, thumbnail.size().width()-2, thumbnail.size().height()-2)
             const QSize pixmapSize    = thumbnail.size().boundedTo(availableSize);
-            QPoint startPoint((alignSize.width() - pixmapSize.width()) / 2,
+            QPoint startPoint((alignSize.width()  - pixmapSize.width())  / 2,
                               (alignSize.height() - pixmapSize.height()) / 2);
             startPoint += option.rect.topLeft();
             painter->drawPixmap(QRect(startPoint, pixmapSize), thumbnail, QRect(QPoint(0, 0), pixmapSize));
@@ -181,6 +182,7 @@ void ColumnThumbnail::slotThumbnailLoaded(const LoadingDescription& loadingDescr
 
     /// @todo Find a way to do this without the ImageFilterModel
     const QModelIndex imageModelIndex = s->imageModel->indexForPath(loadingDescription.filePath);
+
     if (!imageModelIndex.isValid())
     {
         return;
@@ -203,4 +205,3 @@ void ColumnThumbnail::updateThumbnailSize()
 } /* namespace TableViewColumns */
 
 } /* namespace Digikam */
-
