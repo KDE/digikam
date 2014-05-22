@@ -38,7 +38,7 @@ public:
         Tiny      = 32,
         VerySmall = 64,
         Small     = 80,
-        Medium    = 96,
+        Medium    = 128,
         Large     = 160,
         Huge      = 256
     };

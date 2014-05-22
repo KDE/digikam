@@ -7,7 +7,7 @@
  * Description : Loader for thumbnails
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2003-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -77,6 +77,7 @@
 #include "tagregion.h"
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnaildb.h"
+#include "thumbnailsize.h"
 
 using namespace KDcrawIface;
 
@@ -121,14 +122,14 @@ void ThumbnailCreator::initialize()
 int ThumbnailCreator::Private::storageSize() const
 {
     // on-disk thumbnail sizes according to freedesktop spec
-    // always 256 for thumbnail db
+    // for thumbnail db it's always max size
     if (onlyLargeThumbnails)
     {
-        return 256;
+        return ThumbnailSize::Huge;
     }
     else
     {
-        return (thumbnailSize <= 128) ? 128 : 256;
+        return (thumbnailSize <= ThumbnailSize::Medium) ? ThumbnailSize::Medium : ThumbnailSize::Huge;
     }
 }
 
@@ -484,8 +485,8 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
                 failedAtJPEGScaled = qimage.isNull();
             }
             else if (ext == QString("PNG")  ||
-                    ext == QString("TIFF") ||
-                    ext == QString("TIF"))
+                     ext == QString("TIFF") ||
+                     ext == QString("TIF"))
             {
                 qimage       = loadWithDImg(path, &profile);
                 failedAtDImg = qimage.isNull();
