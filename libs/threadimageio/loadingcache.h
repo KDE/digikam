@@ -305,8 +305,8 @@ private:
 
     static LoadingCache*    m_instance;
 
-    class LoadingCachePriv;
-    LoadingCachePriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }   // namespace Digikam
