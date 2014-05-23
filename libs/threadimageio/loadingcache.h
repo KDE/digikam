@@ -241,10 +241,10 @@ public:
 
     /**
      * Sets the size of the thumbnail cache
-     *  @param numberOfQImages  The maximum number of thumbnails of size 256 in QImage format
+     *  @param numberOfQImages  The maximum number of thumbnails of max possible size in QImage format
                                 that will be cached. If the size of the images is smaller, a larger
                                 number will be cached.
-     *  @param numberOfQPixmaps The maximum number of thumbnails of size 256 in QPixmap format
+     *  @param numberOfQPixmaps The maximum number of thumbnails of max possible size in QPixmap format
                                 that will be cached. If the size of the images is smaller, a larger
                                 number will be cached.
      * Note: The main cache is unaffected by this method,
@@ -305,8 +305,8 @@ private:
 
     static LoadingCache*    m_instance;
 
-    class LoadingCachePriv;
-    LoadingCachePriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }   // namespace Digikam

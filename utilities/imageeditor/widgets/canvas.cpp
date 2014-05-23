@@ -519,7 +519,7 @@ void Canvas::slotSelectAll()
         d->rubber->setCanvas(this);
     }
 
-    d->rubber->setRectInSceneCoordinates(d->canvasItem->boundingRect());
+    d->rubber->setRectInSceneCoordinatesAdjusted(d->canvasItem->boundingRect());
     viewport()->setMouseTracking(true);
     viewport()->update();
 
@@ -619,14 +619,14 @@ void Canvas::slotAddItemMoving(const QRectF& rect)
     }
     d->rubber = new RubberItem(d->canvasItem);
     d->rubber->setCanvas(this);
-    d->rubber->setRectInSceneCoordinates(rect);
+    d->rubber->setRectInSceneCoordinatesAdjusted(rect);
 }
 
 void Canvas::slotAddItemFinished(const QRectF& rect)
 {
     if (d->rubber)
     {
-        d->rubber->setRectInSceneCoordinates(rect);
+        d->rubber->setRectInSceneCoordinatesAdjusted(rect);
         //d->wrapItem->stackBefore(d->canvasItem);
     }
 

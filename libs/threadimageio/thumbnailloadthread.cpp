@@ -108,7 +108,7 @@ public:
 
     Private()
     {
-        size               = ThumbnailSize::Huge;
+        size               = ThumbnailSize::maxThumbsSize();
         wantPixmap         = true;
         highlight          = true;
         sendSurrogate      = true;
@@ -242,18 +242,18 @@ void ThumbnailLoadThread::setThumbnailSize(int size, bool forFace)
 
 int ThumbnailLoadThread::maximumThumbnailSize()
 {
-    return ThumbnailSize::Huge;
+    return ThumbnailSize::maxThumbsSize();
 }
 
 int ThumbnailLoadThread::maximumThumbnailPixmapSize(bool highlight)
 {
     if (highlight)
     {
-        return ThumbnailSize::Huge;
+        return ThumbnailSize::maxThumbsSize();
     }
     else
     {
-        return ThumbnailSize::Huge + 2;    // see slotThumbnailLoaded
+        return ThumbnailSize::maxThumbsSize() + 2;    // see slotThumbnailLoaded
     }
 }
 
@@ -669,10 +669,10 @@ bool ThumbnailLoadThread::checkSize(int size)
         kError() << "ThumbnailLoadThread::load: No thumbnail size specified. Refusing to load thumbnail.";
         return false;
     }
-    else if (size > ThumbnailSize::Huge)
+    else if (size > ThumbnailSize::maxThumbsSize())
     {
         kError() << "ThumbnailLoadThread::load: Thumbnail size " << size
-                 << " is larger than " << ThumbnailSize::Huge << ". Refusing to load.";
+                 << " is larger than " << ThumbnailSize::maxThumbsSize() << ". Refusing to load.";
         return false;
     }
 

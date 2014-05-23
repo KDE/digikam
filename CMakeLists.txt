@@ -966,6 +966,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/thumbnailcreator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/thumbnailloadthread.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/thumbnailtask.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/thumbnailsize.cpp
        )
 
     SET(libcommonwidgets_SRCS

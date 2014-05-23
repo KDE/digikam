@@ -542,7 +542,7 @@ int ImageDelegate::calculatethumbSizeToFit(int ws)
 
     double rs1 = fmod((double)ws, (double)gs);
 
-    for (ts1 = ts ; ts1 < ThumbnailSize::Huge ; ++ts1)
+    for (ts1 = ts ; ts1 < ThumbnailSize::maxThumbsSize() ; ++ts1)
     {
         ngs        = ts1 + 2*(d->margin + d->radius) + sp;
         double nrs = fmod((double)ws, (double)ngs);

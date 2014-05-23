@@ -3,6 +3,7 @@ digiKam 4.1.0 - Release date: 2014-06-22
 
 NEW FEATURES:
 
+AlbumGUI : Thumbnails from icon-view now support large resolution monitor (WQHD or 4K). Thumbs size can be set until 512x512 px instead 256x256 px.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -14,4 +15,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 006 ==> 276592 - Crash while browsing through album in enlarged view.
 007 ==> 321295 - Crash after face recognition run.
 008 ==> 335046 - digiKam crasch when starting.
-009 ==> 
+009 ==> 328430 - Maximum thumbnail size of 256px is too small for big screens.
+010 ==> 335073 - Entering the digiKam database path manually is broken.
+011 ==> 
