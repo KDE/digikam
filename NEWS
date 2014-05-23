@@ -16,4 +16,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 007 ==> 321295 - Crash after face recognition run.
 008 ==> 335046 - digiKam crasch when starting.
 009 ==> 328430 - Maximum thumbnail size of 256px is too small for big screens.
-010 ==> 
+010 ==> 335073 - Entering the digiKam database path manually is broken.
+011 ==> 
