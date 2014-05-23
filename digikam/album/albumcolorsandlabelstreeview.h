@@ -41,22 +41,23 @@ class ColorsAndLabelsTreeView : public QTreeWidget
     Q_OBJECT
 
 public:
-    ColorsAndLabelsTreeView(QWidget *parent = 0);
+    ColorsAndLabelsTreeView(QWidget *parent = 0, bool setCheckable = false);
     virtual ~ColorsAndLabelsTreeView();
 
 private:
     void initTreeView();
+    void initRatingsTree();
+    void initLabelsTree();
+    void initColorsTree();
 
     QList<int> selectedRatings();
     QList<int> selectedLabels();
 
-    void search(const QString& xml);
-
-Q_SIGNALS:
-    void searchShallBeSelected(QList<Album*> albums);
+    QString createXMLForCurrentSelection();
+    SAlbum* search(const QString& xml);
 
 private Q_SLOTS:
-    void prepareForSearch();
+    void slotSelectionChanged();
 
 private:
     class Private;

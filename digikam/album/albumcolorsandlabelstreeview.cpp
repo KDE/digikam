@@ -51,7 +51,8 @@ public:
     Private():
         rating(0),
         labels(0),
-        colors(0)
+        colors(0),
+        isCheckableTreeView(false)
     {
         starPolygon << QPoint(0,  12);
         starPolygon << QPoint(10, 10);
@@ -69,34 +70,49 @@ public:
     QFont                regularFont;
     QSize                iconSize;
     QSize                rootSizeHint;
+
     QPolygon             starPolygon;
+
     QTreeWidgetItem*     rating;
     QTreeWidgetItem*     labels;
     QTreeWidgetItem*     colors;
-    SearchXml::Operator  groupOp;
-    SearchXml::Relation  fieldRel;
-    DatabaseSearch::Type searchType;
+
+    bool                 isCheckableTreeView;
 };
 
-ColorsAndLabelsTreeView::ColorsAndLabelsTreeView(QWidget *parent) :
+ColorsAndLabelsTreeView::ColorsAndLabelsTreeView(QWidget *parent, bool setCheckable) :
     QTreeWidget(parent), d(new Private)
 {
-    d->rootFont      = QFont("Times",18,-1,false);
-    d->regularFont   = QFont("Times",12,-1,false);
-    d->iconSize      = QSize(30 ,30);
-    d->rootSizeHint  = QSize(1,40);
-    d->groupOp       = SearchXml::Or;
-    d->fieldRel      = SearchXml::InTree;
-    d->searchType    = DatabaseSearch::AdvancedSearch;
+    d->rootFont            = QFont("Times",18,-1,false);
+    d->regularFont         = QFont("Times",12,-1,false);
+    d->iconSize            = QSize(30 ,30);
+    d->rootSizeHint        = QSize(1,40);
+    d->isCheckableTreeView = setCheckable;
 
     setHeaderLabel("Colors And Labels");
-    setSelectionMode(QAbstractItemView::MultiSelection);
     setUniformRowHeights(false);
     setIconSize(d->iconSize);
     initTreeView();
 
-    connect(this,SIGNAL(itemSelectionChanged()),
-            this,SLOT(prepareForSearch()));
+    if(d->isCheckableTreeView)
+    {
+        QTreeWidgetItemIterator it(this);
+        while(*it)
+        {
+            if((*it)->parent())
+            {
+                (*it)->setFlags((*it)->flags()|Qt::ItemIsUserCheckable);
+                (*it)->setCheckState(0, Qt::Unchecked);
+            }
+            ++it;
+        }
+    }
+    else
+    {
+        setSelectionMode(QAbstractItemView::MultiSelection);
+        connect(this,SIGNAL(itemSelectionChanged()),
+                this,SLOT(slotSelectionChanged()));
+    }
 }
 
 ColorsAndLabelsTreeView::~ColorsAndLabelsTreeView()
@@ -106,8 +122,14 @@ ColorsAndLabelsTreeView::~ColorsAndLabelsTreeView()
 
 void ColorsAndLabelsTreeView::initTreeView()
 {
-    // --- Rating ---
+    initRatingsTree();
+    initLabelsTree();
+    initColorsTree();
+    expandAll();
+}
 
+void ColorsAndLabelsTreeView::initRatingsTree()
+{
     d->rating = new QTreeWidgetItem(this);
     d->rating->setText(0, tr("Rating"));
     d->rating->setSizeHint(0,d->rootSizeHint);
@@ -153,8 +175,10 @@ void ColorsAndLabelsTreeView::initTreeView()
         rateWidget->setSizeHint(0,QSize(1,20));
     }
 
-    // --- Pick Labels ---
+}
 
+void ColorsAndLabelsTreeView::initLabelsTree()
+{
     d->labels = new QTreeWidgetItem(this);
     d->labels->setText(0, tr("Labels"));
     d->labels->setIcon(0,KIconLoader::global()->loadIcon("flag-green", KIconLoader::NoGroup, 30));
@@ -174,9 +198,10 @@ void ColorsAndLabelsTreeView::initTreeView()
         labelWidgetItem->setFont(0,d->regularFont);
         labelWidgetItem->setIcon(0,KIconLoader::global()->loadIcon(labelSetIcons.at(labelSetNames.indexOf(label)), KIconLoader::NoGroup, 20));
     }
+}
 
-    // --- Colors ---
-
+void ColorsAndLabelsTreeView::initColorsTree()
+{
     d->colors = new QTreeWidgetItem(this);
     d->colors->setText(0, tr("Colors"));
     QPixmap rootColorIcon(30, 30);
@@ -206,24 +231,18 @@ void ColorsAndLabelsTreeView::initTreeView()
         colorWidgetItem->setIcon(0,QIcon(colorIcon));
         colorWidgetItem->setSizeHint(0,QSize(1,20));
     }
-
-    expandAll();
 }
 
-void ColorsAndLabelsTreeView::prepareForSearch()
+QString ColorsAndLabelsTreeView::createXMLForCurrentSelection()
 {
     SearchXmlWriter writer;
-
-    // This Code Generates the right Search XML,
-    // But it needs polishing and supporting intervals
-    // for rating field.
 
     if(!selectedRatings().isEmpty())
     {
         foreach (int val, selectedRatings())
         {
             writer.writeGroup();
-            writer.setGroupOperator(d->groupOp);
+            writer.setGroupOperator(SearchXml::Or);
             writer.writeField("rating",SearchXml::Equal);
             writer.writeValue(val);
             writer.finishField();
@@ -241,7 +260,7 @@ void ColorsAndLabelsTreeView::prepareForSearch()
     else if(!selectedLabels().isEmpty())
     {
         writer.writeGroup();
-        writer.setGroupOperator(d->groupOp);
+        writer.setGroupOperator(SearchXml::Or);
         writer.writeField("tagid",SearchXml::InTree);
         writer.writeValue(selectedLabels());
         writer.finishField();
@@ -255,12 +274,7 @@ void ColorsAndLabelsTreeView::prepareForSearch()
 
     writer.finish();
 
-    if(!writer.xml().isEmpty())
-    {
-        qDebug() << writer.xml();
-    }
-
-    search(writer.xml());
+    return writer.xml();
 }
 
 QList<int> ColorsAndLabelsTreeView::selectedRatings()
@@ -276,9 +290,6 @@ QList<int> ColorsAndLabelsTreeView::selectedRatings()
                 selectedRatings << index.row();
         }
     }
-
-    // to support interval relation for rating field
-    // return a sorted int list
 
     return selectedRatings;
 }
@@ -301,7 +312,7 @@ QList<int> ColorsAndLabelsTreeView::selectedLabels()
     return selectedLabels;
 }
 
-void ColorsAndLabelsTreeView::search(const QString& xml)
+SAlbum* ColorsAndLabelsTreeView::search(const QString& xml)
 {
     SAlbum* album = AlbumManager::instance()->findSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::KeywordSearch));
 
@@ -316,6 +327,14 @@ void ColorsAndLabelsTreeView::search(const QString& xml)
         album = AlbumManager::instance()->createSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::KeywordSearch),
                                                        DatabaseSearch::AdvancedSearch, xml);
     }
+
+    return album;
+}
+
+void ColorsAndLabelsTreeView::slotSelectionChanged()
+{
+    QString xml   = createXMLForCurrentSelection();
+    SAlbum* album = search(xml);
 
     if (album)
     {
