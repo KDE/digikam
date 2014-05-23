@@ -183,11 +183,11 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     d->iconViewFontSelect = new DFontSelect(i18n("Icon View font:"), panel);
     d->iconViewFontSelect->setToolTip(i18n("Select here the font used to display text in Icon Views."));
 
-    d->largeThumbsBox = new QCheckBox(i18n("Use larges thumbnails size for high screen resolution"), iconViewGroup);
-    d->largeThumbsBox->setWhatsThis(i18n("Set this option to render icon-view with large thumbnails size, for example in case of 4K monitor is used.\n"
-                                         "By default this option is turned off and max thumnails size is limited to 256x256 pixels. "
-                                         "When this option is enabled, thumbnails size can be extended to 512x512 pixels.\n"
-                                         "This option will store more data in thumbnails database and will use more system memory. "
+    d->largeThumbsBox = new QCheckBox(i18n("Use large thumbnail size for high screen resolution"), iconViewGroup);
+    d->largeThumbsBox->setWhatsThis(i18n("Set this option to render icon-view with large thumbnail size, for example in case of 4K monitor is used.\n"
+                                         "By default this option is turned off and max thumbnail size is limited to 256x256 pixels. "
+                                         "When this option is enabled, thumbnail size can be extended to 512x512 pixels.\n"
+                                         "This option will store more data in thumbnail database and will use more system memory. "
                                          "digiKam need to be restarted to take effect, and Rebuild Thumbnails option from Maintenance tool "
                                          "need to be processed over whole collections."));
 
