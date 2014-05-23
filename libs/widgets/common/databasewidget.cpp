@@ -33,6 +33,7 @@
 #include <QSqlError>
 #include <QLabel>
 #include <QGroupBox>
+#include <QTimer>
 
 // KDE includes
 
@@ -181,7 +182,7 @@ void DatabaseWidget::setupMainArea()
             this, SLOT(slotChangeDatabasePath(KUrl)));
 
     connect(databasePathEdit, SIGNAL(textChanged(QString)),
-            this, SLOT(slotDatabasePathEdited(QString)));
+            this, SLOT(slotDatabasePathEditedDelayed()));
 
     connect(databaseType, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotHandleDBTypeIndexChanged(int)));
@@ -222,8 +223,15 @@ void DatabaseWidget::slotChangeDatabasePath(const KUrl& result)
     checkDBPath();
 }
 
-void DatabaseWidget::slotDatabasePathEdited(const QString& newPath)
+void DatabaseWidget::slotDatabasePathEditedDelayed()
 {
+    QTimer::singleShot(300, this, SLOT(slotDatabasePathEdited()));
+}
+
+void DatabaseWidget::slotDatabasePathEdited()
+{
+    QString newPath = databasePathEdit->text();
+
 #ifndef _WIN32
 
     if (!newPath.isEmpty() && !QDir::isAbsolutePath(newPath))
@@ -233,7 +241,7 @@ void DatabaseWidget::slotDatabasePathEdited(const QString& newPath)
 
 #endif
 
-    databasePathEdit->setText(QDir::toNativeSeparators(databasePathEdit->text()));
+    databasePathEdit->setText(QDir::toNativeSeparators(newPath));
 
     checkDBPath();
 }
