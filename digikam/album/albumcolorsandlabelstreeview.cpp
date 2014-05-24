@@ -126,6 +126,7 @@ void ColorsAndLabelsTreeView::initTreeView()
     initLabelsTree();
     initColorsTree();
     expandAll();
+    setRootIsDecorated(false);
 }
 
 void ColorsAndLabelsTreeView::initRatingsTree()
