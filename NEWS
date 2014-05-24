@@ -19,4 +19,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 010 ==> 335073 - Entering the digiKam database path manually is broken.
 011 ==> 287646 - digiKam import dialog locks if main window closed. Needs to be killed.
 012 ==> 323014 - Import : download / delete all delete only one image.
-013 ==> 
+013 ==> 323111 - When images are deleted in the import view, some non-deleted thumbnails disappear from the view.
+014 ==> 
