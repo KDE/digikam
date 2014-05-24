@@ -1084,7 +1084,7 @@ void CameraController::listFiles(const QString& folder, bool useMetadata)
     addCommand(cmd);
 }
 
-void CameraController::getThumbsInfo(const CamItemInfoList& list, const ThumbnailSize& thumbSize)
+void CameraController::getThumbsInfo(const CamItemInfoList& list, int thumbSize)
 {
     d->canceled        = false;
     CameraCommand* cmd = new CameraCommand;
@@ -1097,8 +1097,8 @@ void CameraController::getThumbsInfo(const CamItemInfoList& list, const Thumbnai
         itemsList.append(QStringList() << info.folder << info.name);
     }
 
-    cmd->map.insert("list", QVariant(itemsList));
-    cmd->map.insert("thumbSize", QVariant(thumbSize.size()));
+    cmd->map.insert("list",      QVariant(itemsList));
+    cmd->map.insert("thumbSize", QVariant(thumbSize));
     addCommand(cmd);
 }
 

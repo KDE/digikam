@@ -90,7 +90,7 @@ public:
     bool hasItemFromCache(const KUrl& url) const;
     void putItemToCache(const KUrl& url, const CamItemInfo& info, const QPixmap& thumb);
     void removeItemFromCache(const KUrl& url);
-    void clearCache();
+    void clearCache() const;
     void setCacheSize(int numberOfItems);
 
 Q_SIGNALS:

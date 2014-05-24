@@ -44,8 +44,6 @@ public:
     Private() :
         controller(0),
         kdeJob(0),
-        thumbSize(0),
-        lastGlobalThumbSize(0),
         emitDataChanged(true)
     {
     }
@@ -170,9 +168,7 @@ bool ImportThumbnailModel::getThumbInfo(const CamItemInfo& info, CachedItem& ite
     // If thumbSize changed clear cache and reload thumbs for items.
     if(thumbChanged)
     {
-        // TODO unsafe to call cache clear probably? clearCache() doesn't work, as this is a const method..
-        // d->cache.clear();
-        //clearCache();
+        clearCache();
         d->pendingItems.clear();
     }
 
@@ -191,11 +187,11 @@ bool ImportThumbnailModel::getThumbInfo(const CamItemInfo& info, CachedItem& ite
     {
         d->pendingItems << info.url();
         // kDebug() << "Request thumbs from camera : " << info.url();
-        d->controller->getThumbsInfo(CamItemInfoList() << info, thumbSize);
+        d->controller->getThumbsInfo(CamItemInfoList() << info, thumbSize.size());
         // TODO set the thumb to indicate loading process?
     }
 
-    item = CachedItem(info, d->controller->mimeTypeThumbnail(info.name, d->thumbSize.size()));
+    item = CachedItem(info, d->controller->mimeTypeThumbnail(info.name, thumbSize.size()));
     return false;
 }
 
@@ -413,7 +409,7 @@ void ImportThumbnailModel::removeItemFromCache(const KUrl& url)
     d->cache.remove(url);
 }
 
-void ImportThumbnailModel::clearCache()
+void ImportThumbnailModel::clearCache() const
 {
     QWriteLocker locker(&d->cacheLock);
     d->cache.clear();
