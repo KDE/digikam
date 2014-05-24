@@ -1084,7 +1084,7 @@ void CameraController::listFiles(const QString& folder, bool useMetadata)
     addCommand(cmd);
 }
 
-void CameraController::getThumbsInfo(const CamItemInfoList& list, ThumbnailSize thumbSize)
+void CameraController::getThumbsInfo(const CamItemInfoList& list, const ThumbnailSize& thumbSize)
 {
     d->canceled        = false;
     CameraCommand* cmd = new CameraCommand;
