@@ -185,11 +185,11 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
 
     d->largeThumbsBox = new QCheckBox(i18n("Use large thumbnail size for high screen resolution"), iconViewGroup);
     d->largeThumbsBox->setWhatsThis(i18n("Set this option to render icon-view with large thumbnail size, for example in case of 4K monitor is used.\n"
-                                         "By default this option is turned off and max thumbnail size is limited to 256x256 pixels. "
+                                         "By default this option is turned off and the maximum thumbnail size is limited to 256x256 pixels. "
                                          "When this option is enabled, thumbnail size can be extended to 512x512 pixels.\n"
                                          "This option will store more data in thumbnail database and will use more system memory. "
-                                         "digiKam need to be restarted to take effect, and Rebuild Thumbnails option from Maintenance tool "
-                                         "need to be processed over whole collections."));
+                                         "digiKam needs to be restarted to take effect, and Rebuild Thumbnails option from Maintenance tool "
+                                         "needs to be processed over whole collections."));
 
     grid->addWidget(d->iconShowNameBox,          0, 0, 1, 1);
     grid->addWidget(d->iconShowSizeBox,          1, 0, 1, 1);
@@ -252,7 +252,7 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
                                                    "is used instead of the embedded JPEG preview.</p>"));
 
     d->previewShowIcons              = new QCheckBox(i18n("Show icons and text over preview"), interfaceOptionsGroup);
-    d->previewShowIcons->setWhatsThis(i18n("Uncheck this if you don't want to see icons and text in the image preview."));
+    d->previewShowIcons->setWhatsThis(i18n("Uncheck this if you do not want to see icons and text in the image preview."));
 
     grid3->setMargin(KDialog::spacingHint());
     grid3->setSpacing(KDialog::spacingHint());
