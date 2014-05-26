@@ -46,6 +46,7 @@
 
 //local includes
 
+#include "cameracontroller.h"
 #include "imageposition.h"
 #include "imageinfo.h"
 #include "imagemodel.h"

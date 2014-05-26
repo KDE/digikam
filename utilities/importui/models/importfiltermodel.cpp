@@ -342,10 +342,10 @@ void ImportFilterModel::setFilter(Digikam::Filter* filter)
     invalidateFilter();
 }
 
-void ImportFilterModel::setCameraController(Digikam::CameraController* controller)
+void ImportFilterModel::setCameraThumbsController(CameraThumbsCtrl* const thumbsCtrl)
 {
     Q_D(ImportFilterModel);
-    d->importImageModel->setCameraController(controller);
+    d->importImageModel->setCameraThumbsController(thumbsCtrl);
 }
 
 void ImportFilterModel::setSendCamItemInfoSignals(bool sendSignals)

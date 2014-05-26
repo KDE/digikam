@@ -73,10 +73,10 @@ void ImportStackedView::setModels(ImportImageModel* model, ImportFilterModel* fi
 {
     d->importIconView->setModels(model, filterModel);
     d->thumbBar->setModelsFiltered(model, filterModel);
-    
+
     // TODO this is currently here because the code structure, waiting for restructuring..
     d->importIconView->init();
-    
+
     // TODO refactor MapWidgetView not to require the models on startup?
     d->mapWidgetView   = new MapWidgetView(d->importIconView->getSelectionModel(),
                                            d->importIconView->importFilterModel(), this, false);
@@ -353,12 +353,15 @@ void ImportStackedView::setViewMode(const StackedViewMode mode)
 
 void ImportStackedView::syncSelection(ImportCategorizedView* const from, ImportCategorizedView* const to)
 {
-    ImportSortFilterModel* fromModel = from->importSortFilterModel();
-    ImportSortFilterModel* toModel   = to->importSortFilterModel();
-    if(!fromModel || !toModel) {
+    ImportSortFilterModel* const fromModel = from->importSortFilterModel();
+    ImportSortFilterModel* const toModel   = to->importSortFilterModel();
+
+    if(!fromModel || !toModel)
+    {
         kWarning() << "one or both of the models are null?! from:" << from << "to:" << to;
         return;
     }
+
     // set current info
     QModelIndex currentIndex         = toModel->indexForCamItemInfo(from->currentInfo());
     to->selectionModel()->setCurrentIndex(currentIndex, QItemSelectionModel::NoUpdate);

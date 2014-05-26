@@ -25,6 +25,10 @@
 #include "importdelegate.moc"
 #include "importdelegatepriv.h"
 
+// C++ includes
+
+#include <cmath>  
+
 // Qt includes
 
 #include <QCache>
