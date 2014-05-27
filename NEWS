@@ -23,4 +23,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 014 ==> 330063 - digiKam, when deleting photo no confirmation [patch].
 015 ==> 311522 - Better place for thumbnails in geolocation.
 016 ==> 254131 - Add geotagging symbol in album view.
-017 ==> 
+017 ==> 330282 - digiKam 3.4.0 crashes anytime face tags are used (manual or automatical naming, faces database re-building...).
+018 ==> 
