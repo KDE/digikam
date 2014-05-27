@@ -22,4 +22,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 013 ==> 323111 - When images are deleted in the import view, some non-deleted thumbnails disappear from the view.
 014 ==> 330063 - digiKam, when deleting photo no confirmation [patch].
 015 ==> 311522 - Better place for thumbnails in geolocation.
-016 ==> 
+016 ==> 254131 - Add geotagging symbol in album view.
+017 ==> 
