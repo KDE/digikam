@@ -293,6 +293,18 @@ void ItemViewShowfotoDelegate::drawImageFormat(QPainter* p, const QRect& r, cons
     }
 }
 
+void ItemViewShowfotoDelegate::drawGeolocationIndicator(QPainter* p, const QRect& r) const
+{
+    if (!r.isNull())
+    {
+        QIcon icon = KIconLoader::global()->loadIcon("applications-internet", KIconLoader::NoGroup, KIconLoader::SizeSmall);
+        qreal op   = p->opacity();
+        p->setOpacity(0.5);
+        icon.paint(p, r);
+        p->setOpacity(op);
+    }
+}
+
 void ItemViewShowfotoDelegate::drawImageSize(QPainter* p, const QRect& dimsRect, const QSize& dims) const
 {
     Q_D(const ItemViewShowfotoDelegate);
@@ -335,32 +347,6 @@ void ItemViewShowfotoDelegate::drawFocusRect(QPainter* p, const QStyleOptionView
                                   : kapp->palette().color(QPalette::Text),
                        1, Qt::DotLine));
         p->drawRect(1, 1, d->rect.width()-3, d->rect.height()-3);
-    }
-}
-
-void ItemViewShowfotoDelegate::drawGroupIndicator(QPainter* p, const QRect& r,
-                                                  int numberOfGroupedImages, bool open) const
-{
-    if (numberOfGroupedImages)
-    {
-        QIcon icon;
-
-        if (open)
-        {
-            icon = KIconLoader::global()->loadIcon("document-Showfoto", KIconLoader::NoGroup, r.width());
-        }
-        else
-        {
-            icon = KIconLoader::global()->loadIcon("document-multiple", KIconLoader::NoGroup, r.width());
-        }
-
-        qreal op = p->opacity();
-        p->setOpacity(0.5);
-        icon.paint(p, r);
-        p->setOpacity(op);
-
-        QString text = QString::number(numberOfGroupedImages);
-        p->drawText(r, Qt::AlignCenter, text);
     }
 }
 

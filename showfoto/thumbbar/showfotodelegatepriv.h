@@ -6,7 +6,8 @@
  * Date        : 2013-08-01
  * Description : Qt item view for images - the delegate Private
  *
- * Copyright (C) 2013 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
+ * Copyright (C) 2013      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
+ * Copyright (C) 2013-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,11 +44,11 @@ class ShowfotoDelegate::ShowfotoDelegatePrivate : public ItemViewShowfotoDelegat
 public:
 
     ShowfotoDelegatePrivate()
-    {      
+    {
         contentWidth        = 0;
         drawImageFormat     = true;
         drawMouseOverFrame  = true;
-        drawFocusFrame      = true;        
+        drawFocusFrame      = true;
         currentModel        = 0;
         currentView         = 0;
 
@@ -60,13 +61,14 @@ public:
     QRect                  pixmapRect;
     QRect                  nameRect;
     QRect                  resolutionRect;
-    QRect                  sizeRect;        
-    QRect                  imageInformationRect;    
+    QRect                  sizeRect;
+    QRect                  imageInformationRect;
     QRect                  groupRect;
+    QRect                  coordinatesRect;
 
     bool                   drawImageFormat;
     bool                   drawFocusFrame;
-    bool                   drawMouseOverFrame;    
+    bool                   drawMouseOverFrame;
 
     QCache<int, QRect>     actualPixmapRectCache;
 
@@ -90,7 +92,7 @@ public:
 
         // switch off drawing of frames
         drawMouseOverFrame  = false;
-        drawFocusFrame      = false;        
+        drawFocusFrame      = false;
     }
 
     void init(ShowfotoThumbnailDelegate* const q);

@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
- * Copyright (C) 2002-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -69,6 +69,7 @@ void ImageDelegate::ImageDelegatePrivate::clearRects()
     titleRect            = QRect(0, 0, 0, 0);
     commentsRect         = QRect(0, 0, 0, 0);
     resolutionRect       = QRect(0, 0, 0, 0);
+    coordinatesRect      = QRect(0, 0, 0, 0);
     arRect               = QRect(0, 0, 0, 0);
     sizeRect             = QRect(0, 0, 0, 0);
     tagRect              = QRect(0, 0, 0, 0);
@@ -203,6 +204,12 @@ QRect ImageDelegate::groupIndicatorRect() const
     return d->groupRect;
 }
 
+QRect ImageDelegate::coordinatesIndicatorRect() const
+{
+    Q_D(const ImageDelegate);
+    return d->coordinatesRect;
+}
+
 void ImageDelegate::prepareThumbnails(ImageThumbnailModel* thumbModel, const QList<QModelIndex>& indexes)
 {
     thumbModel->prepareThumbnails(indexes, thumbnailSize());
@@ -211,7 +218,7 @@ void ImageDelegate::prepareThumbnails(ImageThumbnailModel* thumbModel, const QLi
 QPixmap ImageDelegate::retrieveThumbnailPixmap(const QModelIndex& index, int thumbnailSize)
 {
     // work around constness
-    QAbstractItemModel* model = const_cast<QAbstractItemModel*>(index.model());
+    QAbstractItemModel* const model = const_cast<QAbstractItemModel*>(index.model());
     // set requested thumbnail size
     model->setData(index, thumbnailSize, ImageModel::ThumbnailRole);
     // get data from model
@@ -349,6 +356,11 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
         QString frm = info.format();
         if (frm.contains("-")) frm = frm.section('-', -1);   // For RAW format annoted as "RAW-xxx" => "xxx"
         drawImageFormat(p, actualPixmapRect, frm);
+    }
+
+    if (d->drawCoordinates && info.hasCoordinates())
+    {
+        drawGeolocationIndicator(p, d->coordinatesRect);
     }
 
     if (d->drawFocusFrame)

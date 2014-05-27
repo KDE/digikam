@@ -7,7 +7,7 @@
  * Description : albums settings interface
  *
  * Copyright (C) 2003-2004 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2003-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007      by Arnd Baecker <arnd dot baecker at web dot de>
  * Copyright (C) 2014      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
@@ -84,6 +84,7 @@ public:
         iconShowOverlays(false),
         iconShowRating(false),
         iconShowImageFormat(false),
+        iconShowCoordinates(false),
         iconShowAspectRatio(false),
         showToolTips(false),
         tooltipShowFileName(false),
@@ -171,6 +172,7 @@ public:
     static const QString                configIconShowOverlaysEntry;
     static const QString                configIconShowRatingEntry;
     static const QString                configIconShowImageFormatEntry;
+    static const QString                configIconShowCoordinatesEntry;
     static const QString                configIconShowAspectRatioEntry;
     static const QString                configIconViewFontEntry;
     static const QString                configToolTipsFontEntry;
@@ -242,6 +244,7 @@ public:
     bool                                iconShowOverlays;
     bool                                iconShowRating;
     bool                                iconShowImageFormat;
+    bool                                iconShowCoordinates;
     bool                                iconShowAspectRatio;
     QFont                               iconviewFont;
 
@@ -369,6 +372,7 @@ const QString AlbumSettings::Private::configIconShowCommentsEntry("Icon Show Com
 const QString AlbumSettings::Private::configIconShowTagsEntry("Icon Show Tags");
 const QString AlbumSettings::Private::configIconShowRatingEntry("Icon Show Rating");
 const QString AlbumSettings::Private::configIconShowImageFormatEntry("Icon Show Image Format");
+const QString AlbumSettings::Private::configIconShowCoordinatesEntry("Icon Show Coordinates");
 const QString AlbumSettings::Private::configIconShowAspectRatioEntry("Icon Show Aspect Ratio");
 const QString AlbumSettings::Private::configIconShowOverlaysEntry("Icon Show Overlays");
 const QString AlbumSettings::Private::configIconViewFontEntry("IconView Font");
@@ -497,6 +501,7 @@ void AlbumSettings::init()
     d->iconShowOverlays             = true;
     d->iconShowRating               = true;
     d->iconShowImageFormat          = false;
+    d->iconShowCoordinates          = false;
     d->iconviewFont                 = KGlobalSettings::generalFont();
     d->toolTipsFont                 = KGlobalSettings::generalFont();
     d->showToolTips                 = false;
@@ -549,7 +554,7 @@ void AlbumSettings::init()
     d->faceDetectionAccuracy        = 0.8;
 
     d->stringComparisonType         = AlbumSettings::Natural;
-    d->applicationStyle             = kapp->style()->objectName();    
+    d->applicationStyle             = kapp->style()->objectName();
 
     connect(this, SIGNAL(nepomukSettingsChanged()),
             this, SLOT(applyNepomukSettings()));
@@ -613,6 +618,7 @@ void AlbumSettings::readSettings()
     d->iconShowOverlays             = group.readEntry(d->configIconShowOverlaysEntry,             true);
     d->iconShowRating               = group.readEntry(d->configIconShowRatingEntry,               true);
     d->iconShowImageFormat          = group.readEntry(d->configIconShowImageFormatEntry,          false);
+    d->iconShowCoordinates          = group.readEntry(d->configIconShowCoordinatesEntry,          false);
     d->iconviewFont                 = group.readEntry(d->configIconViewFontEntry,                 KGlobalSettings::generalFont());
 
     d->toolTipsFont                 = group.readEntry(d->configToolTipsFontEntry,                 KGlobalSettings::generalFont());
@@ -731,6 +737,7 @@ void AlbumSettings::saveSettings()
     group.writeEntry(d->configIconShowOverlaysEntry,             d->iconShowOverlays);
     group.writeEntry(d->configIconShowRatingEntry,               d->iconShowRating);
     group.writeEntry(d->configIconShowImageFormatEntry,          d->iconShowImageFormat);
+    group.writeEntry(d->configIconShowCoordinatesEntry,          d->iconShowCoordinates);
     group.writeEntry(d->configIconViewFontEntry,                 d->iconviewFont);
 
     group.writeEntry(d->configToolTipsFontEntry,                 d->toolTipsFont);
@@ -992,18 +999,22 @@ QString AlbumSettings::getAllFileFilter() const
     QStringList imageFilter, audioFilter, videoFilter;
     DatabaseAccess().db()->getFilterSettings(&imageFilter, &audioFilter, &videoFilter);
     QStringList wildcards;
+
     foreach(const QString& suffix, imageFilter)
     {
         wildcards << "*." + suffix;
     }
+
     foreach(const QString& suffix, audioFilter)
     {
         wildcards << "*." + suffix;
     }
+
     foreach(const QString& suffix, videoFilter)
     {
         wildcards << "*." + suffix;
     }
+
     return wildcards.join(" ");
 }
 
@@ -1170,6 +1181,16 @@ void AlbumSettings::setIconShowImageFormat(bool val)
 bool AlbumSettings::getIconShowImageFormat() const
 {
     return d->iconShowImageFormat;
+}
+
+void AlbumSettings::setIconShowCoordinates(bool val)
+{
+    d->iconShowCoordinates = val;
+}
+
+bool AlbumSettings::getIconShowCoordinates() const
+{
+    return d->iconShowCoordinates;
 }
 
 void AlbumSettings::setIconShowOverlays(bool val)

@@ -526,6 +526,18 @@ void ItemViewImageDelegate::drawPanelSideIcon(QPainter* p, bool left, bool right
     }
 }
 
+void ItemViewImageDelegate::drawGeolocationIndicator(QPainter* p, const QRect& r) const
+{
+    if (!r.isNull())
+    {
+        QIcon icon = KIconLoader::global()->loadIcon("applications-internet", KIconLoader::NoGroup, KIconLoader::SizeSmall);
+        qreal op   = p->opacity();
+        p->setOpacity(0.5);
+        icon.paint(p, r);
+        p->setOpacity(op);
+    }
+}
+
 void ItemViewImageDelegate::drawGroupIndicator(QPainter* p, const QRect& r,
                                                int numberOfGroupedImages, bool open) const
 {

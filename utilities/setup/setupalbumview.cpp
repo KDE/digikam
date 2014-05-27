@@ -72,6 +72,7 @@ public:
         iconShowOverlaysBox(0),
         iconShowRatingBox(0),
         iconShowFormatBox(0),
+        iconShowCoordinatesBox(0),
         previewLoadFullImageSize(0),
         previewShowIcons(0),
         showFolderTreeViewItemsCount(0),
@@ -101,6 +102,7 @@ public:
     QCheckBox*          iconShowOverlaysBox;
     QCheckBox*          iconShowRatingBox;
     QCheckBox*          iconShowFormatBox;
+    QCheckBox*          iconShowCoordinatesBox;
     QCheckBox*          previewLoadFullImageSize;
     QCheckBox*          previewShowIcons;
     QCheckBox*          showFolderTreeViewItemsCount;
@@ -151,28 +153,31 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     d->iconShowAspectRatioBox->setWhatsThis(i18n("Set this option to show the image aspect ratio "
                                                 "below the image thumbnail."));
 
-    d->iconShowFormatBox     = new QCheckBox(i18n("Show image Format"), iconViewGroup);
+    d->iconShowFormatBox      = new QCheckBox(i18n("Show image Format"), iconViewGroup);
     d->iconShowFormatBox->setWhatsThis(i18n("Set this option to show image format over image thumbnail."));
 
-    d->iconShowTitleBox      = new QCheckBox(i18n("Show digiKam tit&le"), iconViewGroup);
+    d->iconShowTitleBox       = new QCheckBox(i18n("Show digiKam tit&le"), iconViewGroup);
     d->iconShowTitleBox->setWhatsThis(i18n("Set this option to show the digiKam title "
                                            "below the image thumbnail."));
 
-    d->iconShowCommentsBox   = new QCheckBox(i18n("Show digiKam &captions"), iconViewGroup);
+    d->iconShowCommentsBox    = new QCheckBox(i18n("Show digiKam &captions"), iconViewGroup);
     d->iconShowCommentsBox->setWhatsThis(i18n("Set this option to show the digiKam captions "
                                               "below the image thumbnail."));
 
-    d->iconShowTagsBox       = new QCheckBox(i18n("Show digiKam &tags"), iconViewGroup);
+    d->iconShowTagsBox        = new QCheckBox(i18n("Show digiKam &tags"), iconViewGroup);
     d->iconShowTagsBox->setWhatsThis(i18n("Set this option to show the digiKam tags "
                                           "below the image thumbnail."));
 
-    d->iconShowRatingBox     = new QCheckBox(i18n("Show digiKam &rating"), iconViewGroup);
+    d->iconShowRatingBox      = new QCheckBox(i18n("Show digiKam &rating"), iconViewGroup);
     d->iconShowRatingBox->setWhatsThis(i18n("Set this option to show the digiKam rating "
                                             "below the image thumbnail."));
 
-    d->iconShowOverlaysBox   = new QCheckBox(i18n("Show rotation overlay buttons"), iconViewGroup);
+    d->iconShowOverlaysBox    = new QCheckBox(i18n("Show rotation overlay buttons"), iconViewGroup);
     d->iconShowOverlaysBox->setWhatsThis(i18n("Set this option to show overlay buttons on "
                                               "the image thumbnail for image rotation."));
+
+    d->iconShowCoordinatesBox = new QCheckBox(i18n("Show Geolocation Indicator"), iconViewGroup);
+    d->iconShowCoordinatesBox->setWhatsThis(i18n("Set this option to indicate if image has geolocation information."));
 
     QLabel* leftClickLabel     = new QLabel(i18n("Thumbnail click action:"), iconViewGroup);
     d->leftClickActionComboBox = new KComboBox(iconViewGroup);
@@ -204,6 +209,7 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     grid->addWidget(d->iconShowTagsBox,          2, 1, 1, 1);
     grid->addWidget(d->iconShowRatingBox,        3, 1, 1, 1);
     grid->addWidget(d->iconShowOverlaysBox,      4, 1, 1, 1);
+    grid->addWidget(d->iconShowCoordinatesBox,   5, 1, 1, 1);
 
     grid->addWidget(leftClickLabel,              7, 0, 1, 1);
     grid->addWidget(d->leftClickActionComboBox,  7, 1, 1, 1);
@@ -316,6 +322,7 @@ void SetupAlbumView::applySettings()
     settings->setIconShowTitle(d->iconShowTitleBox->isChecked());
     settings->setIconShowComments(d->iconShowCommentsBox->isChecked());
     settings->setIconShowOverlays(d->iconShowOverlaysBox->isChecked());
+    settings->setIconShowCoordinates(d->iconShowCoordinatesBox->isChecked());
     settings->setIconShowRating(d->iconShowRatingBox->isChecked());
     settings->setIconShowImageFormat(d->iconShowFormatBox->isChecked());
     settings->setIconViewFont(d->iconViewFontSelect->font());
@@ -373,6 +380,7 @@ void SetupAlbumView::readSettings()
     d->iconShowTitleBox->setChecked(settings->getIconShowTitle());
     d->iconShowCommentsBox->setChecked(settings->getIconShowComments());
     d->iconShowOverlaysBox->setChecked(settings->getIconShowOverlays());
+    d->iconShowCoordinatesBox->setChecked(settings->getIconShowCoordinates());
     d->iconShowRatingBox->setChecked(settings->getIconShowRating());
     d->iconShowFormatBox->setChecked(settings->getIconShowImageFormat());
     d->iconViewFontSelect->setFont(settings->getIconViewFont());

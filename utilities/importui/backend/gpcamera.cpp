@@ -7,7 +7,7 @@
  * Description : Gphoto2 camera interface
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -652,9 +652,12 @@ bool GPCamera::getFolders(const QString& folder)
 
     QStringList subFolderList;
     int count = gp_list_count(clist);
-    if(count < 1) {
+
+    if(count < 1)
+    {
         return true;
     }
+
     for (int i = 0 ; i < count ; ++i)
     {
         const char* subFolder = 0;
@@ -674,7 +677,7 @@ bool GPCamera::getFolders(const QString& folder)
     gp_list_unref(clist);
 
     emit signalFolderList(subFolderList);
-    
+
     return true;
 #else
     Q_UNUSED(folder);
@@ -805,10 +808,11 @@ void GPCamera::getItemInfoInternal(const QString& folder, const QString& itemNam
                             QFile::encodeName(info.name).constData(), &cfinfo, d->status->context);
 
     // if preview has size field, it's a valid preview most likely, otherwise we'll skip it later on
-    if(cfinfo.preview.fields & GP_FILE_INFO_SIZE) {
+    if(cfinfo.preview.fields & GP_FILE_INFO_SIZE)
+    {
         info.previewPossible = true;
     }
-    
+
     if (cfinfo.file.fields & GP_FILE_INFO_STATUS)
     {
         if (cfinfo.file.status == GP_FILE_STATUS_DOWNLOADED)

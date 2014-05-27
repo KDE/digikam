@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2002-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -27,11 +27,10 @@
 #include "imagethumbnaildelegate.moc"
 #include "imagedelegatepriv.h"
 
-// Qt includes
-
 // KDE includes
 
 #include <kdebug.h>
+#include <kiconloader.h>
 
 // Local includes
 
@@ -119,9 +118,11 @@ void ImageThumbnailDelegate::updateRects()
 {
     Q_D(ImageThumbnailDelegate);
 
+    d->coordinatesRect = QRect(d->contentWidth - KIconLoader::SizeSmall+2, d->pixmapRect.top(), KIconLoader::SizeSmall, KIconLoader::SizeSmall);
     d->pixmapRect      = QRect(d->margin, d->margin, d->contentWidth, d->contentWidth);
     d->rect            = QRect(0, 0, d->contentWidth + 2*d->margin, d->contentWidth + 2*d->margin);
     d->drawImageFormat = AlbumSettings::instance()->getIconShowImageFormat();
+    d->drawCoordinates = AlbumSettings::instance()->getIconShowCoordinates();
 
     if (AlbumSettings::instance()->getIconShowRating())
     {
