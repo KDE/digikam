@@ -49,6 +49,76 @@ void ImportOverlayWidget::paintEvent(QPaintEvent*)
 {
 }
 
+// -- Coordinates Overlay ------------------------------------------------------------------
+
+ImportCoordinatesOverlay::ImportCoordinatesOverlay(QObject* const parent)
+    : AbstractWidgetDelegateOverlay(parent)
+{
+}
+
+ImportOverlayWidget* ImportCoordinatesOverlay::buttonWidget() const
+{
+    return static_cast<ImportOverlayWidget*>(m_widget);
+}
+
+QWidget* ImportCoordinatesOverlay::createWidget()
+{
+    QAbstractButton* const button = new ImportOverlayWidget(parentWidget());
+    //button->setCursor(Qt::PointingHandCursor);
+    return button;
+}
+
+void ImportCoordinatesOverlay::setActive(bool active)
+{
+    AbstractWidgetDelegateOverlay::setActive(active);
+}
+
+void ImportCoordinatesOverlay::visualChange()
+{
+    if (m_widget && m_widget->isVisible())
+    {
+        updatePosition();
+    }
+}
+
+void ImportCoordinatesOverlay::updatePosition()
+{
+    if (!m_index.isValid())
+    {
+        return;
+    }
+
+    QRect rect       = static_cast<ImportDelegate*>(delegate())->coordinatesIndicatorRect();
+    QRect visualRect = m_view->visualRect(m_index);
+    rect.translate(visualRect.topLeft());
+
+    m_widget->setFixedSize(rect.width() + 1, rect.height() + 1);
+    m_widget->move(rect.topLeft());
+}
+
+bool ImportCoordinatesOverlay::checkIndex(const QModelIndex& index) const
+{
+    CamItemInfo info = ImportImageModel::retrieveCamItemInfo(index);
+    QRect rect       = static_cast<ImportDelegate*>(delegate())->coordinatesIndicatorRect();
+
+    if (!rect.isNull() && info.photoInfo.hasCoordinates)
+    {
+        m_widget->setToolTip(i18nc("@info:tooltip", "This item has geolocation information."));
+        return true;
+    }
+
+    // If info.writePermissions = 1, no need to show a tooltip, because there is no icon over thumbnail.
+
+    return false;
+}
+
+void ImportCoordinatesOverlay::slotEntered(const QModelIndex& index)
+{
+    AbstractWidgetDelegateOverlay::slotEntered(index);
+    m_index = index;
+    updatePosition();
+}
+
 // -- Lock Overlay ------------------------------------------------------------------
 
 ImportLockOverlay::ImportLockOverlay(QObject* const parent)
@@ -106,11 +176,7 @@ bool ImportLockOverlay::checkIndex(const QModelIndex& index) const
         return true;
     }
 
-    if (info.writePermissions == 1)
-    {
-        m_widget->setToolTip(i18nc("@info:tooltip", "This item is not locked."));
-        return true;
-    }
+    // If info.writePermissions = 1, no need to show a tooltip, because there is no icon over thumbnail.
 
     return false;
 }
@@ -175,19 +241,19 @@ bool ImportDownloadOverlay::checkIndex(const QModelIndex& index) const
 
     if (info.downloaded == CamItemInfo::DownloadUnknown)
     {
-        m_widget->setToolTip(i18nc("@info:tooltip", "This item download status is unknown"));
+        m_widget->setToolTip(i18nc("@info:tooltip", "This item has an unknow download status"));
         return true;
     }
 
     if (info.downloaded == CamItemInfo::DownloadedNo) // TODO: CamItemInfo::NewPicture
     {
-        m_widget->setToolTip(i18nc("@info:tooltip", "This item download status is new"));
+        m_widget->setToolTip(i18nc("@info:tooltip", "This item has never been downloaded"));
         return true;
     }
 
     if (info.downloaded == CamItemInfo::DownloadedYes)
     {
-        m_widget->setToolTip(i18nc("@info:tooltip", "This item download status is downloaded"));
+        m_widget->setToolTip(i18nc("@info:tooltip", "This item has already been downloaded"));
         return true;
     }
 

@@ -55,6 +55,33 @@ protected:
 
 // --------------------------------------------------------------------
 
+class ImportCoordinatesOverlay : public AbstractWidgetDelegateOverlay
+{
+    Q_OBJECT
+    REQUIRE_DELEGATE(ItemViewImportDelegate)
+
+public:
+
+    explicit ImportCoordinatesOverlay(QObject* const parent);
+    ImportOverlayWidget* buttonWidget() const;
+
+protected:
+
+    void updatePosition();
+
+    virtual QWidget* createWidget();
+    virtual void setActive(bool active);
+    virtual void visualChange();
+    virtual bool checkIndex(const QModelIndex& index) const;
+    virtual void slotEntered(const QModelIndex& index);
+
+protected:
+
+    QPersistentModelIndex m_index;
+};
+
+// --------------------------------------------------------------------
+
 class ImportLockOverlay : public AbstractWidgetDelegateOverlay
 {
     Q_OBJECT

@@ -6,7 +6,8 @@
  * Date        : 2012-22-07
  * Description : Icon view for import tool items
  *
- * Copyright (C) 2012 by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2012-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,12 +59,12 @@ ImportIconView::ImportIconView(QWidget* const parent)
 
 void ImportIconView::init()
 {
-    d->normalDelegate = new ImportNormalDelegate(this);
+    d->normalDelegate              = new ImportNormalDelegate(this);
 
     setItemDelegate(d->normalDelegate);
     setSpacing(10);
 
-    ImportSettings* settings = ImportSettings::instance();
+    ImportSettings* const settings = ImportSettings::instance();
 
     setThumbnailSize((ThumbnailSize::Size)settings->getDefaultIconSize());
 
@@ -82,14 +83,14 @@ void ImportIconView::init()
     d->rotateLeftOverlay  = ImportRotateOverlay::left(this);
     d->rotateRightOverlay = ImportRotateOverlay::right(this);
 
-    // download overlays
-    d->downloadverlay     = new ImportDownloadOverlay(this);
-    addOverlay(d->downloadverlay);
+    addOverlay(new ImportDownloadOverlay(this));
+    addOverlay(new ImportLockOverlay(this));
+    addOverlay(new ImportCoordinatesOverlay(this));
 
     d->updateOverlays();
 
     // rating overlay
-    ImportRatingOverlay* ratingOverlay = new ImportRatingOverlay(this);
+    ImportRatingOverlay* const ratingOverlay = new ImportRatingOverlay(this);
     addOverlay(ratingOverlay);
 
     //TODO: GroupIndicatorOverlay* groupOverlay = new GroupIndicatorOverlay(this);
