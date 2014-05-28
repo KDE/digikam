@@ -100,9 +100,6 @@ bool ShowfotoCoordinatesOverlay::checkIndex(const QModelIndex& index) const
     ShowfotoItemInfo info = ShowfotoImageModel::retrieveShowfotoItemInfo(index);
     QRect rect            = static_cast<ShowfotoDelegate*>(delegate())->coordinatesIndicatorRect();
 
-    kDebug() << rect;
-    kDebug() << info;
-
     if (!rect.isNull() && info.photoInfo.hasCoordinates)
     {
         m_widget->setToolTip(i18nc("@info:tooltip", "This item has geolocation information."));
