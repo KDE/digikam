@@ -241,7 +241,7 @@ bool ImportDownloadOverlay::checkIndex(const QModelIndex& index) const
 
     if (info.downloaded == CamItemInfo::DownloadUnknown)
     {
-        m_widget->setToolTip(i18nc("@info:tooltip", "This item has an unknow download status"));
+        m_widget->setToolTip(i18nc("@info:tooltip", "This item has an unknown download status"));
         return true;
     }
 
