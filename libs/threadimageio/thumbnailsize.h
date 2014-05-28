@@ -47,14 +47,17 @@ public:
 
     enum Size
     {
-        Step      = 8,
-        Tiny      = 32,
-        VerySmall = 64,
-        Small     = 80,
-        Medium    = 128,
-        Large     = 160,
-        Huge      = 256,
-        HD        = 512
+        Step        = 8,
+        Tiny        = 32,
+        VerySmall   = 64,
+        MediumSmall = 80,
+        Small       = 118,  // Most usable small size of thumbnails to prevent overloaded
+                            // overlays show under thumbs (as Pick label and Group indicator)
+                            // See BKO #321337 for details.
+        Medium      = 128,
+        Large       = 160,
+        Huge        = 256,
+        HD          = 512
     };
 
 public:
