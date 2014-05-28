@@ -7,7 +7,7 @@
  * Description : digital camera controller
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -1084,7 +1084,7 @@ void CameraController::listFiles(const QString& folder, bool useMetadata)
     addCommand(cmd);
 }
 
-void CameraController::getThumbsInfo(const CamItemInfoList& list, ThumbnailSize thumbSize)
+void CameraController::getThumbsInfo(const CamItemInfoList& list, int thumbSize)
 {
     d->canceled        = false;
     CameraCommand* cmd = new CameraCommand;
@@ -1097,8 +1097,8 @@ void CameraController::getThumbsInfo(const CamItemInfoList& list, ThumbnailSize 
         itemsList.append(QStringList() << info.folder << info.name);
     }
 
-    cmd->map.insert("list", QVariant(itemsList));
-    cmd->map.insert("thumbSize", QVariant(thumbSize.size()));
+    cmd->map.insert("list",      QVariant(itemsList));
+    cmd->map.insert("thumbSize", QVariant(thumbSize));
     addCommand(cmd);
 }
 

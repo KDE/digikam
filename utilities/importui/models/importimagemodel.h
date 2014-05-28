@@ -35,7 +35,7 @@
 // Local includes
 
 #include "dragdropimplementations.h"
-#include "cameracontroller.h"
+#include "camerathumbsctrl.h"
 #include "camiteminfo.h"
 
 namespace Digikam
@@ -72,7 +72,7 @@ public:
     ~ImportImageModel();
 
     // Used to set the camera controller, and connect with it.
-    virtual void setCameraController(CameraController* const controller);
+    virtual void setCameraThumbsController(CameraThumbsCtrl* const controller);
 
     /** If a cache is kept, lookup by file path is fast,
      *  without a cache it is O(n). Default is false. */

@@ -3,6 +3,7 @@ SET(libimportui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/main/importsettings.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/backend/cameracontroller.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/backend/camerathumbsctrl.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backend/camerahistoryupdater.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backend/dkcamera.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backend/gpcamera.cpp
@@ -12,7 +13,7 @@ SET(libimportui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/camerafolderdialog.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/camerainfodialog.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/capturedlg.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/dialogs/cameramessagebox.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/cameramessagebox.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/capturewidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/freespacewidget.cpp

@@ -6,7 +6,7 @@
  * Date        : 2009-05-31
  * Description : rotate icon view item at mouse hover
  *
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,7 +47,7 @@ class ImageRotateOverlayButton : public ItemViewHoverButton
 {
 public:
 
-    ImageRotateOverlayButton(ImageRotateOverlayDirection dir, QAbstractItemView* parentView);
+    ImageRotateOverlayButton(ImageRotateOverlayDirection dir, QAbstractItemView* const parentView);
     virtual QSize sizeHint() const;
 
 protected:
@@ -68,14 +68,14 @@ class ImageRotateOverlay : public HoverButtonDelegateOverlay
 
 public:
 
-    ImageRotateOverlay(ImageRotateOverlayDirection dir, QObject* parent);
+    ImageRotateOverlay(ImageRotateOverlayDirection dir, QObject* const parent);
     virtual void setActive(bool active);
 
     ImageRotateOverlayDirection direction() const { return m_direction; }
-    bool isLeft() const { return m_direction  == ImageRotateOverlayLeft; }
+    bool isLeft() const  { return m_direction  == ImageRotateOverlayLeft; }
     bool isRight() const { return m_direction == ImageRotateOverlayRight; }
 
-    static ImageRotateOverlay* left(QObject* parent) { return new ImageRotateOverlay(ImageRotateOverlayLeft, parent); }
+    static ImageRotateOverlay* left(QObject* parent)  { return new ImageRotateOverlay(ImageRotateOverlayLeft, parent);  }
     static ImageRotateOverlay* right(QObject* parent) { return new ImageRotateOverlay(ImageRotateOverlayRight, parent); }
 
 Q_SIGNALS:

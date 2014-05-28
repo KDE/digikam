@@ -7,7 +7,7 @@
  * Description : Settings for the import tool
  *
  * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
- * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -53,6 +53,7 @@ public:
         iconShowOverlays(false),
         iconShowRating(false),
         iconShowImageFormat(false),
+        iconShowCoordinates(false),
         thumbnailSize(0),
         imageSortOrder(0),
         imageSortBy(0),
@@ -95,6 +96,7 @@ public:
     static const QString                configIconShowOverlaysEntry;
     static const QString                configIconShowRatingEntry;
     static const QString                configIconShowImageFormatEntry;
+    static const QString                configIconShowCoordinatesEntry;
     static const QString                configIconViewFontEntry;
     static const QString                configToolTipsFontEntry;
     static const QString                configShowToolTipsEntry;
@@ -127,6 +129,7 @@ public:
     bool                                iconShowOverlays;
     bool                                iconShowRating;
     bool                                iconShowImageFormat;
+    bool                                iconShowCoordinates;
 
     QFont                               iconviewFont;
 
@@ -178,6 +181,7 @@ const QString ImportSettings::Private::configIconShowTitleEntry("Icon Show Title
 const QString ImportSettings::Private::configIconShowTagsEntry("Icon Show Tags");
 const QString ImportSettings::Private::configIconShowRatingEntry("Icon Show Rating");
 const QString ImportSettings::Private::configIconShowImageFormatEntry("Icon Show Image Format");
+const QString ImportSettings::Private::configIconShowCoordinatesEntry("Icon Show Coordinates");
 const QString ImportSettings::Private::configIconShowOverlaysEntry("Icon Show Overlays");
 const QString ImportSettings::Private::configIconViewFontEntry("IconView Font");
 const QString ImportSettings::Private::configToolTipsFontEntry("ToolTips Font");
@@ -296,6 +300,7 @@ void ImportSettings::readSettings()
     d->iconShowOverlays             = group.readEntry(d->configIconShowOverlaysEntry,             true);
     d->iconShowRating               = group.readEntry(d->configIconShowRatingEntry,               true);
     d->iconShowImageFormat          = group.readEntry(d->configIconShowImageFormatEntry,          false);
+    d->iconShowCoordinates          = group.readEntry(d->configIconShowCoordinatesEntry,          false);
     d->iconviewFont                 = group.readEntry(d->configIconViewFontEntry,                 KGlobalSettings::generalFont());
 
     d->toolTipsFont                 = group.readEntry(d->configToolTipsFontEntry,                 KGlobalSettings::generalFont());
@@ -347,6 +352,7 @@ void ImportSettings::saveSettings()
     group.writeEntry(d->configIconShowOverlaysEntry,             d->iconShowOverlays);
     group.writeEntry(d->configIconShowRatingEntry,               d->iconShowRating);
     group.writeEntry(d->configIconShowImageFormatEntry,          d->iconShowImageFormat);
+    group.writeEntry(d->configIconShowCoordinatesEntry,          d->iconShowCoordinates);
     group.writeEntry(d->configIconViewFontEntry,                 d->iconviewFont);
 
     group.writeEntry(d->configToolTipsFontEntry,                 d->toolTipsFont);
@@ -721,6 +727,16 @@ void ImportSettings::setPreviewShowIcons(bool val)
 bool ImportSettings::getPreviewShowIcons() const
 {
     return d->previewShowIcons;
+}
+
+void ImportSettings::setIconShowCoordinates(bool val)
+{
+    d->iconShowCoordinates = val;
+}
+
+bool ImportSettings::getIconShowCoordinates() const
+{
+    return d->iconShowCoordinates;
 }
 
 } // namespace Digikam

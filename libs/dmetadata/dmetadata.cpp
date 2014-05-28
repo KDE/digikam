@@ -1133,6 +1133,11 @@ PhotoInfoContainer DMetadata::getPhotographInformation() const
         {
             photoInfo.whiteBalance = getXmpTagString("Xmp.exif.WhiteBalance");
         }
+
+        // -----------------------------------------------------------------------------------
+
+        double l, L, a;
+        photoInfo.hasCoordinates = getGPSInfo(a, l, L);
     }
 
     return photoInfo;

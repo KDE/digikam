@@ -7,7 +7,7 @@
 * Description : Import tool interface
 *
 * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
-* Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+* Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
 * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
 * Copyright (C) 2012      by Andi Clemens <andi dot clemens at gmail dot com>
 * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
@@ -101,6 +101,7 @@
 #include "albumselectdialog.h"
 #include "cameracontroller.h"
 #include "camerafolderdialog.h"
+#include "cameramessagebox.h"
 #include "camerainfodialog.h"
 #include "cameralist.h"
 #include "cameranamehelper.h"
@@ -163,9 +164,9 @@ ImportUI::ImportUI(QWidget* const parent, const QString& cameraTitle,
     d->cameraTitle = (title.isEmpty()) ? cameraTitle : title;
     setCaption(d->cameraTitle);
 
+    setupCameraController(model, port, path);
     setupUserArea();
     setInitialSorting();
-    setupCameraController(model, port, path);
     setupActions();
     setupStatusBar();
     setupAccelerators();
@@ -229,16 +230,17 @@ ImportUI* ImportUI::instance()
 
 void ImportUI::setupUserArea()
 {
-    ImportThumbnailModel* model = new ImportThumbnailModel(this);
-    ImportFilterModel* filterModel = new ImportFilterModel(this);
+    ImportThumbnailModel* const model    = new ImportThumbnailModel(this);
+    ImportFilterModel* const filterModel = new ImportFilterModel(this);
 
     filterModel->setSourceImportModel(model);
     filterModel->sort(0); // an initial sorting is necessary
-    
+
     KHBox* const widget = new KHBox(this);
     d->splitter         = new SidebarSplitter(widget);
     KVBox* const vbox   = new KVBox(d->splitter);
     d->view             = new ImportView(this, model, filterModel, vbox);
+    d->view->importFilterModel()->setCameraThumbsController(d->camThumbsCtrl);
     d->historyView      = new DHistoryView(vbox);
     d->rightSideBar     = new ImagePropertiesSideBarCamGui(widget, d->splitter, KMultiTabBar::Right, true);
     d->rightSideBar->setObjectName("CameraGui Sidebar Right");
@@ -257,7 +259,7 @@ void ImportUI::setupUserArea()
     d->errorWidget->setMessageType(KMessageWidget::Error);
     d->errorWidget->setCloseButtonVisible(false);
     d->errorWidget->hide();
-    
+
     // -------------------------------------------------------------------------
 
     d->advBox = new RExpanderBox(d->rightSideBar);
@@ -639,11 +641,11 @@ void ImportUI::setupActions()
 
     d->connectAction = new KAction(KIcon("view-refresh"), i18nc("@action Connection failed, try again?", "Retry"), this);
     connect(d->connectAction, SIGNAL(triggered()), d->controller, SLOT(slotConnect()));
-    
+
     createGUI(xmlFile());
 
     d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
-    
+
     // hide the unsupported actions
     d->uploadAction->setVisible(d->controller->cameraUploadSupport());
 
@@ -799,10 +801,11 @@ void ImportUI::setupCameraController(const QString& model, const QString& port, 
     connect(d->controller, SIGNAL(signalUploaded(CamItemInfo)),
             this, SLOT(slotUploaded(CamItemInfo)));
 
-    // TODO make this nicer...
-    d->view->importFilterModel()->setCameraController(d->controller);
-
     d->controller->start();
+
+    // Setup Thumbnails controller -------------------------------------------------------
+
+    d->camThumbsCtrl = new CameraThumbsCtrl(d->controller, this);
 }
 
 CameraController* ImportUI::getCameraController() const
@@ -1884,7 +1887,7 @@ void ImportUI::deleteItems(bool onlySelected, bool onlyDownloaded)
         QString infoMsg(i18nc("@info", "The items listed below are locked by camera (read-only). "
                              "These items will not be deleted. If you really want to delete these items, "
                              "please unlock them and try again."));
-        //CameraMessageBox::informationList(this, infoMsg, lockedList, i18n("Information"));
+        CameraMessageBox::informationList(d->camThumbsCtrl, this, infoMsg, lockedList, i18n("Information"));
     }
 
     if (folders.isEmpty())
@@ -1900,30 +1903,31 @@ void ImportUI::deleteItems(bool onlySelected, bool onlyDownloaded)
                           "Are you sure?",
                           deleteList.count()));
 
-    //    if (CameraMessageBox::warningContinueCancelList(this,
-    //                                                    warnMsg,
-    //                                                    deleteList,
-    //                                                    i18n("Warning"),
-    //                                                    KGuiItem(i18n("Delete")),
-    //                                                    KStandardGuiItem::cancel(),
-    //                                                    QString("DontAskAgainToDeleteItemsFromCamera"))
-    //        ==  KMessageBox::Continue)
-    //    {
-    QStringList::const_iterator itFolder = folders.constBegin();
-    QStringList::const_iterator itFile   = files.constBegin();
-
-    d->statusProgressBar->setProgressValue(0);
-    d->statusProgressBar->setProgressTotalSteps(deleteList.count());
-    d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
-
-    for (; itFolder != folders.constEnd(); ++itFolder, ++itFile)
+    if (CameraMessageBox::warningContinueCancelList(d->camThumbsCtrl, 
+                                                    this,
+                                                    warnMsg,
+                                                    deleteList,
+                                                    i18n("Warning"),
+                                                    KGuiItem(i18n("Delete")),
+                                                    KStandardGuiItem::cancel(),
+                                                    QString("DontAskAgainToDeleteItemsFromCamera"))
+        ==  KMessageBox::Continue)
     {
-        d->controller->deleteFile(*itFolder, *itFile);
-        // the currentlyDeleting list is used to prevent loading items which
-        // will immanently be deleted into the sidebar and wasting time
-        d->currentlyDeleting.append(*itFolder + *itFile);
+        QStringList::const_iterator itFolder = folders.constBegin();
+        QStringList::const_iterator itFile   = files.constBegin();
+
+        d->statusProgressBar->setProgressValue(0);
+        d->statusProgressBar->setProgressTotalSteps(deleteList.count());
+        d->statusProgressBar->progressBarMode(StatusProgressBar::ProgressBarMode);
+
+        for (; itFolder != folders.constEnd(); ++itFolder, ++itFile)
+        {
+            d->controller->deleteFile(*itFolder, *itFile);
+            // the currentlyDeleting list is used to prevent loading items which
+            // will immanently be deleted into the sidebar and wasting time
+            d->currentlyDeleting.append(*itFolder + *itFile);
+        }
     }
-    //    }
 }
 
 bool ImportUI::checkDiskSpace(PAlbum *pAlbum)

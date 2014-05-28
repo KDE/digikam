@@ -6,7 +6,8 @@
  * Date        : 2012-08-21
  * Description : Overlays for the import interface
  *
- * Copyright (C) 2012 by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2012-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,6 +51,33 @@ public:
 protected:
 
     virtual void paintEvent(QPaintEvent*);
+};
+
+// --------------------------------------------------------------------
+
+class ImportCoordinatesOverlay : public AbstractWidgetDelegateOverlay
+{
+    Q_OBJECT
+    REQUIRE_DELEGATE(ItemViewImportDelegate)
+
+public:
+
+    explicit ImportCoordinatesOverlay(QObject* const parent);
+    ImportOverlayWidget* buttonWidget() const;
+
+protected:
+
+    void updatePosition();
+
+    virtual QWidget* createWidget();
+    virtual void setActive(bool active);
+    virtual void visualChange();
+    virtual bool checkIndex(const QModelIndex& index) const;
+    virtual void slotEntered(const QModelIndex& index);
+
+protected:
+
+    QPersistentModelIndex m_index;
 };
 
 // --------------------------------------------------------------------

@@ -7,6 +7,7 @@
  * Description : Settings for Showfoto
  *
  * Copyright (C) 2013-2014 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
+ * Copyright (C) 2013-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,7 +52,8 @@ public:
 
     Private() :
         deleteItem2Trash(true),
-        drawFormatOverThumbnail(false),
+        showFormatOverThumbnail(false),
+        showCoordinates(false),
         showSplash(true),
         reverseSort(false),
         showToolTip(true),
@@ -79,7 +81,8 @@ public:
     static const QString configCurrentTheme;
     static const QString configRightSideBarStyle;
     static const QString configApplicationStyle;
-    static const QString configDrawFormatOverThumbnail;
+    static const QString configShowFormatOverThumbnail;
+    static const QString configShowCoordinates;
     static const QString configShowSplash;
     static const QString configSortOrder;
     static const QString configReverseSort;
@@ -103,7 +106,8 @@ public:
     static const QString configToolTipsFont;
 
     bool                 deleteItem2Trash;
-    bool                 drawFormatOverThumbnail;
+    bool                 showFormatOverThumbnail;
+    bool                 showCoordinates;
     bool                 showSplash;
     bool                 reverseSort;
 
@@ -145,7 +149,8 @@ const QString ShowfotoSettings::Private::configDeleteItem2Trash("DeleteItem2Tras
 const QString ShowfotoSettings::Private::configCurrentTheme("Theme");
 const QString ShowfotoSettings::Private::configRightSideBarStyle("Sidebar Title Style");
 const QString ShowfotoSettings::Private::configApplicationStyle("Application Style");
-const QString ShowfotoSettings::Private::configDrawFormatOverThumbnail("ShowMimeOverImage");
+const QString ShowfotoSettings::Private::configShowFormatOverThumbnail("ShowMimeOverImage");
+const QString ShowfotoSettings::Private::configShowCoordinates("Show Coordinates");
 const QString ShowfotoSettings::Private::configShowSplash("ShowSplash");
 const QString ShowfotoSettings::Private::configSortOrder("SortOrder");
 const QString ShowfotoSettings::Private::configReverseSort("ReverseSort");
@@ -212,7 +217,8 @@ void ShowfotoSettings::init()
     d->showSplash              = true;
     d->reverseSort             = false;
 
-    d->drawFormatOverThumbnail = false;
+    d->showFormatOverThumbnail = false;
+    d->showCoordinates         = false;
 
     d->showToolTip             = true;
 
@@ -229,7 +235,6 @@ void ShowfotoSettings::init()
     d->showPhotoWB             = false;
     d->showPhotoDate           = true;
     d->showPhotoMode           = true;
-
 }
 
 void ShowfotoSettings::readSettings()
@@ -244,23 +249,24 @@ void ShowfotoSettings::readSettings()
     d->showSplash              = group.readEntry(d->configShowSplash, true);
     d->sortOrder               = group.readEntry(d->configSortOrder, 0);
     d->reverseSort             = group.readEntry(d->configReverseSort, false);
-    d->drawFormatOverThumbnail = group.readEntry(d->configDrawFormatOverThumbnail, false);
+    d->showFormatOverThumbnail = group.readEntry(d->configShowFormatOverThumbnail, false);
+    d->showCoordinates         = group.readEntry(d->configShowCoordinates, false);
 
     d->showToolTip             = group.readEntry(d->configShowToolTip, true);
 
-    d->showFileName            = group.readEntry(d->configShowFileName,true);
-    d->showFileDate            = group.readEntry(d->configShowFileDate,false);
-    d->showFileSize            = group.readEntry(d->configShowFileSize,false);
-    d->showFileType            = group.readEntry(d->configShowFileType,false);
-    d->showFileDim             = group.readEntry(d->configShowFileDim, true);
+    d->showFileName            = group.readEntry(d->configShowFileName, true);
+    d->showFileDate            = group.readEntry(d->configShowFileDate, false);
+    d->showFileSize            = group.readEntry(d->configShowFileSize, false);
+    d->showFileType            = group.readEntry(d->configShowFileType, false);
+    d->showFileDim             = group.readEntry(d->configShowFileDim,  true);
 
-    d->showPhotoMake           = group.readEntry(d->configShowPhotoMake,true);
-    d->showPhotoFocal          = group.readEntry(d->configShowPhotoFocal,true);
-    d->showPhotoExpo           = group.readEntry(d->configShowPhotoExpo,true);
-    d->showPhotoFlash          = group.readEntry(d->configShowPhotoFlash,false);
-    d->showPhotoWB             = group.readEntry(d->configShowPhotoWB,false);
-    d->showPhotoDate           = group.readEntry(d->configShowPhotoDate,true);
-    d->showPhotoMode           = group.readEntry(d->configShowPhotoMode,true);
+    d->showPhotoMake           = group.readEntry(d->configShowPhotoMake,  true);
+    d->showPhotoFocal          = group.readEntry(d->configShowPhotoFocal, true);
+    d->showPhotoExpo           = group.readEntry(d->configShowPhotoExpo,  true);
+    d->showPhotoFlash          = group.readEntry(d->configShowPhotoFlash, false);
+    d->showPhotoWB             = group.readEntry(d->configShowPhotoWB,    false);
+    d->showPhotoDate           = group.readEntry(d->configShowPhotoDate,  true);
+    d->showPhotoMode           = group.readEntry(d->configShowPhotoMode,  true);
 
     d->toolTipsFont            = group.readEntry(d->configToolTipsFont,KGlobalSettings::generalFont());
 }
@@ -287,7 +293,12 @@ int ShowfotoSettings::getRightSideBarStyle() const
 
 bool ShowfotoSettings::getShowFormatOverThumbnail() const
 {
-    return d->drawFormatOverThumbnail;
+    return d->showFormatOverThumbnail;
+}
+
+bool ShowfotoSettings::getShowCoordinates() const
+{
+    return d->showCoordinates;
 }
 
 QString ShowfotoSettings::getApplicationStyle() const
@@ -477,7 +488,12 @@ void ShowfotoSettings::setApplicationStyle(const QString& style)
 
 void ShowfotoSettings::setShowFormatOverThumbnail(bool show)
 {
-    d->group.writeEntry(d->configDrawFormatOverThumbnail, show);
+    d->group.writeEntry(d->configShowFormatOverThumbnail, show);
+}
+
+void ShowfotoSettings::setShowCoordinates(bool show)
+{
+    d->group.writeEntry(d->configShowCoordinates, show);
 }
 
 void ShowfotoSettings::setShowSplash(bool show)

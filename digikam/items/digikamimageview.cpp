@@ -7,9 +7,9 @@
  * Description : Qt item view for images
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2011 by Andi Clemens <andi dot clemens at gmail dot com>
- * Copyright (C) 2013 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2009-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011      by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C) 2013      by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -71,6 +71,7 @@
 #include "imagealbummodel.h"
 #include "imagedragdrop.h"
 #include "imageratingoverlay.h"
+#include "imagecoordinatesoverlay.h"
 #include "tagslineeditoverlay.h"
 #include "imageviewutilities.h"
 #include "imagewindow.h"
@@ -83,7 +84,7 @@
 namespace Digikam
 {
 
-DigikamImageView::DigikamImageView(QWidget* parent)
+DigikamImageView::DigikamImageView(QWidget* const parent)
     : ImageCategorizedView(parent), d(new DigikamImageViewPriv(this))
 {
     installDefaultModels();
@@ -100,7 +101,7 @@ DigikamImageView::DigikamImageView(QWidget* parent)
     setItemDelegate(d->normalDelegate);
     setSpacing(10);
 
-    AlbumSettings* settings = AlbumSettings::instance();
+    AlbumSettings* const settings = AlbumSettings::instance();
 
     imageFilterModel()->setCategorizationMode(ImageSortSettings::CategoryByAlbum);
 
@@ -128,15 +129,17 @@ DigikamImageView::DigikamImageView(QWidget* parent)
     d->updateOverlays();
 
     // rating overlay
-    ImageRatingOverlay* ratingOverlay = new ImageRatingOverlay(this);
+    ImageRatingOverlay* const ratingOverlay = new ImageRatingOverlay(this);
     addOverlay(ratingOverlay);
 
     // face overlays
     addRejectionOverlay(d->faceDelegate);
     addAssignNameOverlay(d->faceDelegate);
 
-    GroupIndicatorOverlay* groupOverlay = new GroupIndicatorOverlay(this);
+    GroupIndicatorOverlay* const groupOverlay = new GroupIndicatorOverlay(this);
     addOverlay(groupOverlay);
+
+    addOverlay(new ImageCoordinatesOverlay(this));
 
     connect(ratingOverlay, SIGNAL(ratingEdited(QList<QModelIndex>,int)),
             this, SLOT(assignRating(QList<QModelIndex>,int)));
@@ -324,6 +327,7 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
 {
     QList<ImageInfo> selectedInfos = selectedImageInfosCurrentFirst();
     QList<qlonglong> selectedImageIDs;
+
     foreach(const ImageInfo& info, selectedInfos)
     {
         selectedImageIDs << info.id();
@@ -331,7 +335,7 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
 
     // Temporary actions --------------------------------------
 
-    QAction* viewAction = new QAction(SmallIcon("viewimage"), i18nc("View the selected image", "Preview"), this);
+    QAction* const viewAction = new QAction(SmallIcon("viewimage"), i18nc("View the selected image", "Preview"), this);
     viewAction->setEnabled(selectedImageIDs.count() == 1);
 
     // --------------------------------------------------------
@@ -370,6 +374,7 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
     cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addLabelsAction();
+
     if (!d->faceMode)
     {
         cmhelper.addGroupMenu(selectedImageIDs);
@@ -424,7 +429,7 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
 
     // --------------------------------------------------------
 
-    QAction* choice = cmhelper.exec(event->globalPos());
+    QAction* const choice = cmhelper.exec(event->globalPos());
 
     if (choice && (choice == viewAction))
     {
@@ -437,6 +442,7 @@ void DigikamImageView::showGroupContextMenu(const QModelIndex& index, QContextMe
     Q_UNUSED(index);
     QList<ImageInfo> selectedInfos = selectedImageInfosCurrentFirst();
     QList<qlonglong> selectedImageIDs;
+
     foreach(const ImageInfo& info, selectedInfos)
     {
         selectedImageIDs << info.id();
@@ -468,7 +474,7 @@ void DigikamImageView::showGroupContextMenu(const QModelIndex& index, QContextMe
 
 void DigikamImageView::showContextMenu(QContextMenuEvent* event)
 {
-    Album* album = currentAlbum();
+    Album* const album = currentAlbum();
 
     if (!album ||
         album->isRoot() ||
@@ -669,7 +675,7 @@ void DigikamImageView::slotInitProgressIndicator()
 {
     if (!ProgressManager::instance()->findItembyId("FaceActionProgress"))
     {
-        FileActionProgress* item = new FileActionProgress("FaceActionProgress");
+        FileActionProgress* const item = new FileActionProgress("FaceActionProgress");
 
         connect(&d->editPipeline, SIGNAL(started(QString)),
                 item, SLOT(slotProgressStatus(QString)));

@@ -7,7 +7,7 @@
  * Description : Qt item view for images - the delegate
  *
  * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
- * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -429,23 +429,15 @@ void ItemViewImportDelegate::drawColorLabelRect(QPainter* p, const QStyleOptionV
     }
 }
 
-void ItemViewImportDelegate::drawPanelSideIcon(QPainter* p, bool left, bool right) const
+void ItemViewImportDelegate::drawGeolocationIndicator(QPainter* p, const QRect& r) const
 {
-    Q_D(const ItemViewImportDelegate);
-    int iconSize = KIconLoader::SizeSmall;
-
-    if (left)
+    if (!r.isNull())
     {
-        QRect r(3, d->rect.height()/2 - iconSize/2, iconSize, iconSize);
-        QIcon icon = KIconLoader::global()->loadIcon("arrow-left", KIconLoader::NoGroup, iconSize);
+        QIcon icon = KIconLoader::global()->loadIcon("applications-internet", KIconLoader::NoGroup, KIconLoader::SizeSmall);
+        qreal op   = p->opacity();
+        p->setOpacity(0.5);
         icon.paint(p, r);
-    }
-
-    if (right)
-    {
-        QRect r(d->rect.width() - 3 - iconSize, d->rect.height()/2 - iconSize/2, iconSize, iconSize);
-        QIcon icon = KIconLoader::global()->loadIcon("arrow-right", KIconLoader::NoGroup, iconSize);
-        icon.paint(p, r);
+        p->setOpacity(op);
     }
 }
 
@@ -482,7 +474,7 @@ void ItemViewImportDelegate::drawLockIndicator(QPainter* p, const QRect& r, int 
         return; // draw lock only when image is locked
         //icon = KIconLoader::global()->loadIcon("object-unlocked", KIconLoader::NoGroup, KIconLoader::SizeSmall);
     }
-    
+
     if (lockStatus == 0)
     {
         icon = KIconLoader::global()->loadIcon("object-locked", KIconLoader::NoGroup, KIconLoader::SizeSmall);

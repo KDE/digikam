@@ -143,8 +143,8 @@ public Q_SLOTS:
     void setCategorizationMode(CamItemSortSettings::CategorizationMode mode);
     void setSortRole(CamItemSortSettings::SortRole role);
     void setSortOrder(CamItemSortSettings::SortOrder order);
-    void setFilter(Filter *);
-    void setCameraController(Digikam::CameraController* controller);
+    void setFilter(Filter*);
+    void setCameraThumbsController(CameraThumbsCtrl* const thumbsCtrl);
 
     //TODO: Implement grouping in import tool.
     //void setGroupOpen(qlonglong group, bool open);

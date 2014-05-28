@@ -24,9 +24,17 @@
 #include "importimagemodel.moc"
 
 // Qt includes
-#include "downloadhistory.h"
+
 #include <QHash>
-#include <KDebug>
+
+// KDE includes
+
+#include <kdebug.h>
+
+// Local includes
+
+#include "downloadhistory.h"
+#include "cameracontroller.h"
 
 namespace Digikam
 {
@@ -109,9 +117,10 @@ ImportImageModel::~ImportImageModel()
     delete d;
 }
 
-void ImportImageModel::setCameraController(CameraController* const controller)
+void ImportImageModel::setCameraThumbsController(CameraThumbsCtrl* const thumbsCtrl)
 {
-    d->controller = controller;
+    d->controller = thumbsCtrl->cameraController();
+
     connect(d->controller, SIGNAL(signalFileList(CamItemInfoList)),
             SLOT(addCamItemInfos(CamItemInfoList)));
 
@@ -619,7 +628,7 @@ void ImportImageModel::publiciseInfos(const CamItemInfoList& infos)
     for (int i = firstNewIndex; i <= lastNewIndex; ++i)
     {
         CamItemInfo& info = d->infos[i];
-            
+
         // TODO move this to a separate thread, see CameraHistoryUpdater
         // TODO this is ugly, using different enums to point the similar status..
         // TODO can we/do we want to differentiate at all between whether the status is unknown and not downloaded?

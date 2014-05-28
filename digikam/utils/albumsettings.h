@@ -7,7 +7,7 @@
  * Description : albums settings interface
  *
  * Copyright (C) 2003-2004 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2003-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007      by Arnd Baecker <arnd dot baecker at web dot de>
  * Copyright (C) 2014      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
@@ -194,6 +194,9 @@ public:
 
     void setIconShowImageFormat(bool val);
     bool getIconShowImageFormat() const;
+
+    void setIconShowCoordinates(bool val);
+    bool getIconShowCoordinates() const;
 
     /**
      * Sets the visibility of the overlay buttons on the image icons.

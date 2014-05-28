@@ -6,7 +6,8 @@
  * Date        : 02-08-2013
  * Description : Thumbnail bar for Showfoto
  *
- * Copyright (C) 2013 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
+ * Copyright (C) 2013      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
+ * Copyright (C) 2013-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -58,6 +59,8 @@ public:
     void setFlow(QListView::Flow newFlow);
 
     ShowfotoItemInfo findItemByUrl(const KUrl url);
+
+    void installOverlays();
 
 public Q_SLOTS:
 

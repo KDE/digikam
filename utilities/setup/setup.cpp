@@ -549,9 +549,9 @@ void Setup::okClicked()
 
     if (d->albumViewPage->useLargeThumbsAsChanged())
     {
-        QString msg = i18n("The max thumbnail size has been changed.\n"
+        QString msg = i18n("The maximum thumbnail size has been changed.\n"
                            "You need to restart digiKam to see this option to take effect.\n\n"
-                           "Note: after restarting digiKam, it's recommended to rebuild all "
+                           "Note: after restarting digiKam, it is recommended to rebuild all "
                            "album items' thumbnails, using the \"Tools-Maintenance\" menu.");
         KMessageBox::information(this, msg);
     }

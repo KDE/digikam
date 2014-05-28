@@ -417,6 +417,8 @@ void ShowFoto::setupUserArea()
 //  d->normalDelegate = new ShowfotoNormalDelegate(d->thumbBar);
 //  d->thumbBar->addSelectionOverlay(d->normalDelegate);
 
+    d->thumbBar->installOverlays();
+
     setCentralWidget(widget);
 }
 

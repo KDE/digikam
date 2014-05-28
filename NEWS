@@ -3,6 +3,7 @@ digiKam 4.1.0 - Release date: 2014-06-22
 
 NEW FEATURES:
 
+General  : Add Gelocation indicator over thumbnails when image has GPS coordinateds.
 AlbumGUI : Thumbnails from icon-view now support large resolution monitor (WQHD or 4K). Thumbs size can be set until 512x512 px instead 256x256 px.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
@@ -17,4 +18,12 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 008 ==> 335046 - digiKam crasch when starting.
 009 ==> 328430 - Maximum thumbnail size of 256px is too small for big screens.
 010 ==> 335073 - Entering the digiKam database path manually is broken.
-011 ==> 
+011 ==> 287646 - digiKam import dialog locks if main window closed. Needs to be killed.
+012 ==> 323014 - Import : download / delete all delete only one image.
+013 ==> 323111 - When images are deleted in the import view, some non-deleted thumbnails disappear from the view.
+014 ==> 330063 - digiKam, when deleting photo no confirmation [patch].
+015 ==> 311522 - Better place for thumbnails in geolocation.
+016 ==> 254131 - Add geotagging symbol in album view.
+017 ==> 330282 - digiKam 3.4.0 crashes anytime face tags are used (manual or automatical naming, faces database re-building...).
+018 ==> 321337 - Group Icon overlay blocks 4/5 star rating when thumbnails are small.
+019 ==> 

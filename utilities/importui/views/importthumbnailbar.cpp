@@ -6,7 +6,8 @@
  * Date        : 2012-20-07
  * Description : Thumbnail bar for import tool
  *
- * Copyright (C) 2012 by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2012-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -90,13 +91,17 @@ void ImportThumbnailBar::setModelsFiltered(ImportImageModel* model, ImportSortFi
     ImportCategorizedView::setModels(model, d->duplicatesFilter);
 }
 
-void ImportThumbnailBar::installRatingOverlay()
+void ImportThumbnailBar::installOverlays()
 {
-    ImportRatingOverlay* ratingOverlay = new ImportRatingOverlay(this);
+    ImportRatingOverlay* const ratingOverlay = new ImportRatingOverlay(this);
     addOverlay(ratingOverlay);
 
     connect(ratingOverlay, SIGNAL(ratingEdited(QList<QModelIndex>,int)),
             this, SLOT(assignRating(QList<QModelIndex>,int)));
+
+    addOverlay(new ImportLockOverlay(this));
+    addOverlay(new ImportDownloadOverlay(this));
+    addOverlay(new ImportCoordinatesOverlay(this));
 }
 
 void ImportThumbnailBar::slotDockLocationChanged(Qt::DockWidgetArea area)
