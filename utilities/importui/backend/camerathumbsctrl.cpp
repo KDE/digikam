@@ -49,7 +49,8 @@ class CameraThumbsCtrl::Private
 public:
 
     Private()
-        : controller(0)
+        : controller(0),
+          kdeJob(0)
     {
     }
 
