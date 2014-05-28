@@ -107,7 +107,7 @@ StackedView::StackedView(QWidget* parent)
     d->thumbBarDock     = new ThumbBarDock();
     d->thumbBar         = new ImageThumbnailBar(d->thumbBarDock);
     d->thumbBar->setModelsFiltered(d->imageIconView->imageModel(), d->imageIconView->imageFilterModel());
-    d->thumbBar->installRatingOverlay();
+    d->thumbBar->installOverlays();
     d->thumbBarDock->setWidget(d->thumbBar);
     d->thumbBarDock->setObjectName("mainwindow_thumbbar");
 

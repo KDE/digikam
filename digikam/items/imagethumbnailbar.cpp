@@ -7,7 +7,7 @@
  * Description : Thumbnail bar for images
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,6 +54,7 @@
 #include "imagealbummodel.h"
 #include "imagedragdrop.h"
 #include "imageratingoverlay.h"
+#include "imagecoordinatesoverlay.h"
 #include "imagethumbnaildelegate.h"
 #include "fileactionmngr.h"
 
@@ -112,13 +113,15 @@ void ImageThumbnailBar::setModelsFiltered(ImageModel* model, ImageSortFilterMode
     ImageCategorizedView::setModels(model, d->duplicatesFilter);
 }
 
-void ImageThumbnailBar::installRatingOverlay()
+void ImageThumbnailBar::installOverlays()
 {
-    ImageRatingOverlay* ratingOverlay = new ImageRatingOverlay(this);
+    ImageRatingOverlay* const ratingOverlay = new ImageRatingOverlay(this);
     addOverlay(ratingOverlay);
 
     connect(ratingOverlay, SIGNAL(ratingEdited(QList<QModelIndex>,int)),
             this, SLOT(assignRating(QList<QModelIndex>,int)));
+
+    addOverlay(new ImageCoordinatesOverlay(this));
 }
 
 void ImageThumbnailBar::slotDockLocationChanged(Qt::DockWidgetArea area)

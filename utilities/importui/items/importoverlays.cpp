@@ -107,7 +107,7 @@ bool ImportCoordinatesOverlay::checkIndex(const QModelIndex& index) const
         return true;
     }
 
-    // If info.writePermissions = 1, no need to show a tooltip, because there is no icon over thumbnail.
+    // If info.photoInfo.hasCoordinates = false, no need to show a tooltip, because there is no icon over thumbnail.
 
     return false;
 }
