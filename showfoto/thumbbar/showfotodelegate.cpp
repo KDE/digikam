@@ -158,7 +158,7 @@ QRect ShowfotoDelegate::groupIndicatorRect() const
     return d->groupRect;
 }
 
-QRect ShowfotoDelegate::coordinatesRect() const
+QRect ShowfotoDelegate::coordinatesIndicatorRect() const
 {
     Q_D(const ShowfotoDelegate);
     return d->coordinatesRect;

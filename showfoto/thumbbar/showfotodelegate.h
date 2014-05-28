@@ -55,7 +55,7 @@ public:
 
     QRect actualPixmapRect(const QModelIndex& index) const;
     QRect groupIndicatorRect() const;
-    QRect coordinatesRect() const;
+    QRect coordinatesIndicatorRect() const;
 
     int calculatethumbSizeToFit(int ws);
 
