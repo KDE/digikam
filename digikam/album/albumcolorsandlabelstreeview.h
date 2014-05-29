@@ -44,6 +44,8 @@ public:
     ColorsAndLabelsTreeView(QWidget *parent = 0, bool setCheckable = false);
     virtual ~ColorsAndLabelsTreeView();
 
+    Album* currentAlbumFromCheckedItems();
+
 private:
     void initTreeView();
     void initRatingsTree();
@@ -58,6 +60,10 @@ private:
 
 private Q_SLOTS:
     void slotSelectionChanged();
+    void slotItemClicked();
+
+Q_SIGNALS:
+    void checkStateChenged();
 
 private:
     class Private;

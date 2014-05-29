@@ -52,6 +52,7 @@ public:
         rating(0),
         labels(0),
         colors(0),
+        albumFromCheckedItems(0),
         isCheckableTreeView(false)
     {
         starPolygon << QPoint(0,  12);
@@ -76,6 +77,13 @@ public:
     QTreeWidgetItem*     rating;
     QTreeWidgetItem*     labels;
     QTreeWidgetItem*     colors;
+
+    QList<int>           selectedRatings;
+    QList<int>           selectedLabels;
+
+    QString              oldXML;
+
+    Album*               albumFromCheckedItems;
 
     bool                 isCheckableTreeView;
 };
@@ -106,6 +114,8 @@ ColorsAndLabelsTreeView::ColorsAndLabelsTreeView(QWidget *parent, bool setChecka
             }
             ++it;
         }
+        connect(this,SIGNAL(itemClicked(QTreeWidgetItem*,int)),
+                this,SLOT(slotItemClicked()));
     }
     else
     {
@@ -237,10 +247,12 @@ void ColorsAndLabelsTreeView::initColorsTree()
 QString ColorsAndLabelsTreeView::createXMLForCurrentSelection()
 {
     SearchXmlWriter writer;
+    d->selectedRatings = selectedRatings();
+    d->selectedLabels  = selectedLabels();
 
-    if(!selectedRatings().isEmpty())
+    if(!d->selectedRatings.isEmpty())
     {
-        foreach (int val, selectedRatings())
+        foreach (int val, d->selectedRatings)
         {
             writer.writeGroup();
             writer.setGroupOperator(SearchXml::Or);
@@ -248,22 +260,22 @@ QString ColorsAndLabelsTreeView::createXMLForCurrentSelection()
             writer.writeValue(val);
             writer.finishField();
 
-            if(!selectedLabels().isEmpty())
+            if(!d->selectedLabels.isEmpty())
             {
                 writer.writeField("tagid",SearchXml::InTree);
-                writer.writeValue(selectedLabels());
+                writer.writeValue(d->selectedLabels);
                 writer.finishField();
             }
 
             writer.finishGroup();
         }
     }
-    else if(!selectedLabels().isEmpty())
+    else if(!d->selectedLabels.isEmpty())
     {
         writer.writeGroup();
         writer.setGroupOperator(SearchXml::Or);
         writer.writeField("tagid",SearchXml::InTree);
-        writer.writeValue(selectedLabels());
+        writer.writeValue(d->selectedLabels);
         writer.finishField();
         writer.finishGroup();
     }
@@ -281,14 +293,35 @@ QString ColorsAndLabelsTreeView::createXMLForCurrentSelection()
 QList<int> ColorsAndLabelsTreeView::selectedRatings()
 {
     QList<int> selectedRatings;
-    foreach (QModelIndex index , selectedIndexes()) {
-        if(index.parent().data().toString() == "Rating")
+
+    if(!d->isCheckableTreeView)
+    {
+        foreach (QModelIndex index , selectedIndexes()) {
+            if(index.parent().data().toString() == "Rating")
+            {
+                if(index.row() == 0)
+                    // to be similar to the one in the Advanced search
+                    selectedRatings << index.row()-1;
+                else
+                    selectedRatings << index.row();
+            }
+        }
+    }
+    else
+    {
+        QTreeWidgetItemIterator it(this,QTreeWidgetItemIterator::Checked);
+        while(*it)
         {
-            if(index.row() == 0)
-                // to be similar to the one in the Advanced search
-                selectedRatings << index.row()-1;
-            else
-                selectedRatings << index.row();
+            QTreeWidgetItem* item = (*it);
+            if(item->parent()->text(0) == "Rating")
+            {
+                if(indexFromItem(item).row() == 0)
+                    selectedRatings << indexFromItem(item).row()-1;
+                else
+                    selectedRatings << indexFromItem(item).row();
+            }
+
+            ++it;
         }
     }
 
@@ -298,15 +331,38 @@ QList<int> ColorsAndLabelsTreeView::selectedRatings()
 QList<int> ColorsAndLabelsTreeView::selectedLabels()
 {
     QList<int> selectedLabels;
-    foreach (QModelIndex index , selectedIndexes()) {
-        if(index.parent().data().toString() == "Colors")
-        {
-            selectedLabels << index.row()+8;
-        }
 
-        if(index.parent().data().toString() == "Labels")
+    if(!d->isCheckableTreeView)
+    {
+        foreach (QModelIndex index , selectedIndexes())
         {
-            selectedLabels << index.row()+18;
+            if(index.parent().data().toString() == "Colors")
+            {
+                selectedLabels << index.row()+8;
+            }
+
+            if(index.parent().data().toString() == "Labels")
+            {
+                selectedLabels << index.row()+18;
+            }
+        }
+    }
+    else
+    {
+        QTreeWidgetItemIterator it(this,QTreeWidgetItemIterator::Checked);
+        while(*it)
+        {
+            QTreeWidgetItem* item = (*it);
+            if(item->parent()->text(0) == "Colors")
+            {
+                selectedLabels << (indexFromItem(item).row() + 8);
+            }
+            else if(item->parent()->text(0) == "Labels")
+            {
+                selectedLabels << (indexFromItem(item).row() + 18);
+            }
+
+            ++it;
         }
     }
 
@@ -315,6 +371,8 @@ QList<int> ColorsAndLabelsTreeView::selectedLabels()
 
 SAlbum* ColorsAndLabelsTreeView::search(const QString& xml)
 {
+    // TODO: Recreate this method body to return album only, not setting it too
+
     SAlbum* album = AlbumManager::instance()->findSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::KeywordSearch));
 
     if (album)
@@ -341,6 +399,26 @@ void ColorsAndLabelsTreeView::slotSelectionChanged()
     {
         AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << album);
     }
+}
+
+void ColorsAndLabelsTreeView::slotItemClicked()
+{
+    QString currentXML = createXMLForCurrentSelection();
+
+    if(currentXML == d->oldXML)
+    {
+        return;
+    }
+
+    emit checkStateChenged();
+    SAlbum* album = search(currentXML);
+    d->albumFromCheckedItems = album;
+    d->oldXML = currentXML;
+}
+
+Album* ColorsAndLabelsTreeView::currentAlbumFromCheckedItems()
+{
+    return d->albumFromCheckedItems;
 }
 
 } // namespace Digikam
