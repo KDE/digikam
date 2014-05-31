@@ -36,7 +36,8 @@
 
 // Local includes
 
-#include "camerathumbsctrl.h"
+#include "camiteminfo.h"
+#include "cameracontroller.h"
 
 namespace Digikam
 {
@@ -71,7 +72,7 @@ public:
     explicit CameraItemList(QWidget* const parent = 0);
     virtual ~CameraItemList();
 
-    void setThumbCtrl(CameraThumbsCtrl* const ctrl);
+    void setThumbCtrl(CameraController* const ctrl);
     void setItems(const CamItemInfoList& items);
 
 private :
@@ -80,7 +81,8 @@ private :
 
 private Q_SLOTS:
 
-    void slotThumbnailLoaded(const CamItemInfo&);
+    void slotThumbnailFailed(const QString&, const QString&, const CamItemInfo& info);
+    void slotThumbnailLoaded(const QString&, const QString&, const CamItemInfo& info, const QImage& thumb);
 
 private:
 
@@ -95,14 +97,14 @@ class CameraMessageBox
 
 public:
 
-    static void informationList(CameraThumbsCtrl* const ctrl,
+    static void informationList(CameraController* const ctrl,
                                 QWidget* const parent,
                                 const QString& text,
                                 const CamItemInfoList& items,
                                 const QString& caption = QString(),
                                 const QString& dontShowAgainName = QString());
 
-    static int warningContinueCancelList(CameraThumbsCtrl* const ctrl,
+    static int warningContinueCancelList(CameraController* const ctrl,
                                          QWidget* const parent,
                                          const QString& text,
                                          const CamItemInfoList& items,
@@ -113,7 +115,7 @@ public:
 
 private:
 
-    static int createMessageBox(CameraThumbsCtrl* const ctrl,
+    static int createMessageBox(CameraController* const ctrl,
                                 KDialog* const dialog,
                                 const QIcon& icon,
                                 const QString& text,

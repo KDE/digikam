@@ -122,7 +122,7 @@ public:
 
     const int         iconSize;
 
-    CameraThumbsCtrl* ctrl;
+    CameraController* ctrl;
 };
 
 CameraItemList::CameraItemList(QWidget* const parent)
@@ -152,19 +152,20 @@ void CameraItemList::setItems(const CamItemInfoList& items)
     }
 }
 
-void CameraItemList::setThumbCtrl(CameraThumbsCtrl* const ctrl)
+void CameraItemList::setThumbCtrl(CameraController* const ctrl)
 {
     d->ctrl = ctrl;
 
-    connect(d->ctrl, SIGNAL(signalThumbInfoReady(CamItemInfo)),
-            this, SLOT(slotThumbnailLoaded(CamItemInfo)));
+    connect(d->ctrl, SIGNAL(signalThumbInfoFailed(QString, QString, CamItemInfo)),
+            this, SLOT(slotThumbnailFailed(QString, QString, CamItemInfo)));
+    
+    connect(d->ctrl, SIGNAL(signalThumbInfo(QString, QString, CamItemInfo, QImage)),
+            this, SLOT(slotThumbnailLoaded(QString, QString, CamItemInfo, QImage)));
 }
 
-void CameraItemList::slotThumbnailLoaded(const CamItemInfo& info)
+void CameraItemList::slotThumbnailLoaded(const QString&, const QString&, const CamItemInfo& info, const QImage& thumb)
 {
     QTreeWidgetItemIterator it(this);
-    bool                    valid;
-    CachedItem              citem;
 
     while (*it)
     {
@@ -172,8 +173,25 @@ void CameraItemList::slotThumbnailLoaded(const CamItemInfo& info)
 
         if (item && item->info().url() == info.url())
         {
-            valid = d->ctrl->getThumbInfo(info, citem);
-            item->setThumb(citem.second.scaled(d->iconSize, d->iconSize, Qt::KeepAspectRatio), valid);
+            item->setThumb(thumb.scaled(d->iconSize, d->iconSize, Qt::KeepAspectRatio), valid);
+            return;
+        }
+
+        ++it;
+    }
+}
+
+void CameraItemList::slotThumbnailLoaded(const QString&, const QString&, const CamItemInfo& info)
+{
+    QTreeWidgetItemIterator it(this);
+
+    while (*it)
+    {
+        CameraItem* const item = dynamic_cast<CameraItem*>(*it);
+
+        if (item && item->info().url() == info.url())
+        {
+            item->setThumb(thumb.scaled(d->iconSize, d->iconSize, Qt::KeepAspectRatio), valid);
             return;
         }
 
@@ -200,7 +218,7 @@ void CameraItemList::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const
 /** These methods are simplified version from KMessageBox class implementation
  */
 
-void CameraMessageBox::informationList(CameraThumbsCtrl* const ctrl,
+void CameraMessageBox::informationList(CameraController* const ctrl,
                                        QWidget* const parent,
                                        const QString& text,
                                        const CamItemInfoList& items,
@@ -234,7 +252,7 @@ void CameraMessageBox::informationList(CameraThumbsCtrl* const ctrl,
     }
 }
 
-int CameraMessageBox::warningContinueCancelList(CameraThumbsCtrl* const ctrl,
+int CameraMessageBox::warningContinueCancelList(CameraController* const ctrl,
                                                 QWidget* const parent,
                                                 const QString& text,
                                                 const CamItemInfoList& items,
@@ -278,7 +296,7 @@ int CameraMessageBox::warningContinueCancelList(CameraThumbsCtrl* const ctrl,
     return KMessageBox::Continue;
 }
 
-int CameraMessageBox::createMessageBox(CameraThumbsCtrl* const ctrl,
+int CameraMessageBox::createMessageBox(CameraController* const ctrl,
                                        KDialog* const dialog,
                                        const QIcon& icon,
                                        const QString& text,
