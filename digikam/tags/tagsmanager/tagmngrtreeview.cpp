@@ -112,6 +112,8 @@ void TagMngrTreeView::setAlbumFilterModel(TagsManagerFilterModel* const filtered
 
 void TagMngrTreeView::setContexMenuItems(ContextMenuHelper& cmh, QList<TAlbum*> albums)
 {
+
+    bool isRoot = false;
     if(albums.size() == 1)
     {
         TAlbum* const tag = dynamic_cast<TAlbum*> (albums.first());
@@ -121,10 +123,23 @@ void TagMngrTreeView::setContexMenuItems(ContextMenuHelper& cmh, QList<TAlbum*> 
             return;
         }
 
+        if(tag->isRoot())
+            isRoot = true;
         cmh.addActionNewTag(tagModificationHelper(), tag);
     }
 
-    cmh.addActionDeleteTags(tagModificationHelper(),albums);
+    if(!isRoot)
+    {
+        cmh.addActionDeleteTags(tagModificationHelper(),albums);
+    }
+    else
+    {
+        /** This is a dummy action, delete is disable for root tag **/
+        KAction* deleteTagsAction = new KAction(KIcon("user-trash"),
+                                                i18n("Delete Tags"), this);
+        cmh.addAction(deleteTagsAction);
+        deleteTagsAction->setEnabled(false);
+    }
     cmh.addSeparator();
 
     KAction* const resetIcon     = new KAction(KIcon("view-refresh"),
@@ -147,6 +162,12 @@ void TagMngrTreeView::setContexMenuItems(ContextMenuHelper& cmh, QList<TAlbum*> 
     cmh.addAction(expandTree,    this,       SLOT(slotExpandTree()),         false);
     cmh.addAction(expandSel,     this ,      SLOT(slotExpandSelected()),     false);
     cmh.addAction(delTagFromImg, d->tagMngr, SLOT(slotRemoveTagsFromImgs()), false);
+
+    if(isRoot)
+    {
+        resetIcon->setEnabled(false);
+        delTagFromImg->setEnabled(false);
+    }
 }
 void TagMngrTreeView::slotExpandSelected()
 {
