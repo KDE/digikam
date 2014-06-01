@@ -151,6 +151,11 @@ protected:
 private:
 
     void setupActions();
+    /**
+     * @brief enableRootTagActions - enable or disable options when only root
+     *                               tag is selected
+     */
+    void enableRootTagActions(bool value);
 
 private:
 

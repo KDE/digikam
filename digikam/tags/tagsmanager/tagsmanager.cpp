@@ -110,6 +110,8 @@ public:
     KAction*         tagProperties;
     KAction*         addAction;
     KAction*         delAction;
+    /** Options unavailable for root tag **/
+    QList<KAction*>  rootDisabledOptions;
 
     TagList*         listView;
     TagPropWidget*   tagPropWidget;
@@ -228,7 +230,16 @@ void TagsManager::slotOpenProperties()
 
 void TagsManager::slotSelectionChanged()
 {
-    d->tagPropWidget->slotSelectionChanged(d->tagMngrView->selectedTags());
+    QList<Album*> selectedTags = d->tagMngrView->selectedTags();
+    if(selectedTags.size() == 1 && selectedTags.at(0)->isRoot())
+    {
+        enableRootTagActions(false);
+    }
+    else
+    {
+        enableRootTagActions(true);
+    }
+    d->tagPropWidget->slotSelectionChanged(selectedTags);
 }
 
 void TagsManager::slotItemChanged()
@@ -732,8 +743,6 @@ void TagsManager::setupActions()
     wipeAll->setHelpText(i18n("Delete all tags from database only. Will not sync with files. "
                              "Proceed with caution."));
 
-    /** BUG: Disabled temporary, will cause all tags from images to be lost **/
-    //wipeAll->setEnabled(false);
 
     connect(wrDbImg, SIGNAL(triggered()),
             this, SLOT(slotWriteToImg()));
@@ -789,8 +798,23 @@ void TagsManager::setupActions()
 
     connect(d->rightToolBar->tab(0),SIGNAL(clicked()),
             this, SLOT(slotOpenProperties()));
+
+    d->rootDisabledOptions.append(d->delAction);
+    d->rootDisabledOptions.append(resetIcon);
+    d->rootDisabledOptions.append(delTagFromImg);
 }
 
+
+void TagsManager::enableRootTagActions(bool value)
+{
+    Q_FOREACH(KAction* action, d->rootDisabledOptions)
+    {
+        if(value)
+            action->setEnabled(true);
+        else
+            action->setEnabled(false);
+    }
+}
 
 // Nepomuk is deprecated, marked to be deleted
 
