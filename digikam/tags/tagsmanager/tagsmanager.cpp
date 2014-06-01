@@ -231,13 +231,15 @@ void TagsManager::slotOpenProperties()
 void TagsManager::slotSelectionChanged()
 {
     QList<Album*> selectedTags = d->tagMngrView->selectedTags();
-    if(selectedTags.size() == 1 && selectedTags.at(0)->isRoot())
+    if(selectedTags.isEmpty() || (selectedTags.size() == 1 && selectedTags.at(0)->isRoot()))
     {
         enableRootTagActions(false);
+        d->listView->enableAddButton(false);
     }
     else
     {
         enableRootTagActions(true);
+        d->listView->enableAddButton(true);
     }
     d->tagPropWidget->slotSelectionChanged(selectedTags);
 }
@@ -593,9 +595,9 @@ void TagsManager::slotWipeAll()
 }
 
 void TagsManager::slotRemoveTagsFromImgs()
-{    
+{
     const QModelIndexList selList = d->tagMngrView->selectionModel()->selectedIndexes();
-    
+
     const int result = KMessageBox::warningContinueCancel(
             this,
             i18np(
