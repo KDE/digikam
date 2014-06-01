@@ -234,12 +234,16 @@ void TagPropWidget::slotSelectionChanged(QList<Album*> albums)
         d->iconButton->setIcon(SyncJob::getTagThumbnail(album));
         d->keySeqWidget->setKeySequence(Seq);
 
-        enableItems(TagPropWidget::EnabledAll);
+        if(album->isRoot())
+            enableItems(TagPropWidget::DisabledAll);
+        else
+            enableItems(TagPropWidget::EnabledAll);
     }
     else
     {
         d->selectedAlbums.clear();
         QList<Album*>::iterator it;
+        bool containsRoot = false;
 
         for(it = albums.begin(); it != albums.end(); ++it)
         {
@@ -247,13 +251,19 @@ void TagPropWidget::slotSelectionChanged(QList<Album*> albums)
 
             if (temp)
                 d->selectedAlbums.append(temp);
+
+            if(temp->isRoot())
+                containsRoot = true;
         }
 
         d->titleEdit->clear();
         d->icon.clear();
         d->iconButton->setIcon(KIcon());
         d->keySeqWidget->clearKeySequence();
-        enableItems(TagPropWidget::IconOnly);
+        if(containsRoot)
+            enableItems(TagPropWidget::DisabledAll);
+        else
+            enableItems(TagPropWidget::IconOnly);
     }
 
     d->changed = false;
