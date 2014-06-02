@@ -28,5 +28,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 018 ==> 321337 - Group Icon overlay blocks 4/5 star rating when thumbnails are small.
 019 ==> 333387 - Tags manager: Unavailable actions should be disabled when root item is selected
 020 ==> 335666 - Has unsharp allows for radius <= 1 and it ignores the decimal part.
-021 ==> 
+021 ==> 335652 - When using resize picture blurs out of focus.
+022 ==> 
 
