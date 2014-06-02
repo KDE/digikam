@@ -143,6 +143,10 @@ void TagMngrListView::contextMenuEvent(QContextMenuEvent* event)
     KAction* const delAction = new KAction(KIcon("user-trash"), i18n("Delete Selected from List"),this);
     cmhelper.addAction(delAction, tagList, SLOT(slotDeleteSelected()),false);
 
+    QModelIndexList sel = this->selectionModel()->selectedIndexes();
+    if(sel.size() == 1 && sel.first().row() == 0)
+        delAction->setDisabled(true);
+
     cmhelper.exec(QCursor::pos());
 }
 

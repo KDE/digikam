@@ -212,8 +212,8 @@ void RefocusFilter::refocusImage(uchar* const data, int width, int height, bool 
 
 void RefocusFilter::convolveImageMultithreaded(uint start, uint stop, uint y1, const Args& prm)
 {
-    unsigned short* orgData16  = (unsigned short*)prm.orgData;
-    unsigned short* destData16 = (unsigned short*)prm.destData;
+    ushort* orgData16  = reinterpret_cast<ushort*>(prm.orgData);
+    ushort* destData16 = reinterpret_cast<ushort*>(prm.destData);
 
     double valRed, valGreen, valBlue;
     uint   x1, x2, y2;
@@ -269,8 +269,8 @@ void RefocusFilter::convolveImageMultithreaded(uint start, uint stop, uint y1, c
         }
         else                 // 16 bits image.
         {
-            unsigned short red, green, blue;
-            unsigned short* ptr = 0;
+            ushort red, green, blue;
+            ushort* ptr = 0;
 
             for (y2 = 0; runningFlag() && (y2 < prm.mat_size); ++y2)
             {
@@ -303,9 +303,9 @@ void RefocusFilter::convolveImageMultithreaded(uint start, uint stop, uint y1, c
                 ptr = &destData16[index2 * 4];
 
                 // Overwrite RGB values to destination.
-                ptr[0] = (unsigned short) CLAMP(valBlue,  0.0, 65535.0);
-                ptr[1] = (unsigned short) CLAMP(valGreen, 0.0, 65535.0);
-                ptr[2] = (unsigned short) CLAMP(valRed,   0.0, 65535.0);
+                ptr[0] = (ushort) CLAMP(valBlue,  0.0, 65535.0);
+                ptr[1] = (ushort) CLAMP(valGreen, 0.0, 65535.0);
+                ptr[2] = (ushort) CLAMP(valRed,   0.0, 65535.0);
             }
         }
     }

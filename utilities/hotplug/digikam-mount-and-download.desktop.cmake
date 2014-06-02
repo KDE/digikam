@@ -30,6 +30,7 @@ Name[lt]=Atsisiųsti nuotraukas su digiKam
 Name[lv]=Ielādēt fotogrāfijas ar digiKam
 Name[mr]=डिजिकॅमने फोटो डाउनलोड करा
 Name[nb]=Last ned fotografier med digiKam
+Name[nds]=Fotos mit digiKam daalladen
 Name[nl]=Foto's met digiKam downloaden
 Name[nn]=Last ned foto med digiKam
 Name[pa]=ਡਿਜਿਕੈਮ ਨਾਲ ਫੋਟੋ ਡਾਊਨਲੋਡ ਕਰੋ

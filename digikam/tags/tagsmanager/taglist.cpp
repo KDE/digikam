@@ -257,4 +257,9 @@ void TagList::slotDeleteSelected()
     }
 }
 
+void TagList::enableAddButton(bool value)
+{
+    d->addButton->setEnabled(value);
+}
+
 } // namespace Digikam

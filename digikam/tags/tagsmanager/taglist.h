@@ -55,6 +55,12 @@ public:
      */
     void restoreSettings();
 
+    /**
+     * @brief enableAddButton - disable Add Button when selection is empty
+     *                           or only root tag is selected
+     */
+    void enableAddButton(bool value);
+
 private Q_SLOTS:
 
     void slotAddPressed();
