@@ -27,4 +27,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 017 ==> 330282 - digiKam 3.4.0 crashes anytime face tags are used (manual or automatical naming, faces database re-building...).
 018 ==> 321337 - Group Icon overlay blocks 4/5 star rating when thumbnails are small.
 019 ==> 333387 - Tags manager: Unavailable actions should be disabled when root item is selected
-020 ==>
+020 ==> 335666 - Has unsharp allows for radius <= 1 and it ignores the decimal part.
+021 ==> 
+

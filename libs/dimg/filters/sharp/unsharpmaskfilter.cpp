@@ -60,7 +60,7 @@ UnsharpMaskFilter::UnsharpMaskFilter(QObject* const parent)
     initFilter();
 }
 
-UnsharpMaskFilter::UnsharpMaskFilter(DImg* const orgImage, QObject* const parent, int radius,
+UnsharpMaskFilter::UnsharpMaskFilter(DImg* const orgImage, QObject* const parent, double radius,
                                      double amount, double threshold)
     : DImgThreadedFilter(orgImage, parent, "UnsharpMask")
 {
@@ -160,7 +160,7 @@ void UnsharpMaskFilter::filterImage()
         return;
     }
 
-    BlurFilter(this, m_orgImage, m_destImage, 0, 10, (int)(m_radius));
+    BlurFilter(this, m_orgImage, m_destImage, 0, 10, (int)(m_radius*10.0));
 
     QList<int> vals = multithreadedSteps(m_destImage.width());
 
@@ -194,8 +194,8 @@ FilterAction UnsharpMaskFilter::filterAction()
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-    action.addParameter("amount", m_amount);
-    action.addParameter("radius", m_radius);
+    action.addParameter("amount",    m_amount);
+    action.addParameter("radius",    m_radius);
     action.addParameter("threshold", m_threshold);
 
     return action;
