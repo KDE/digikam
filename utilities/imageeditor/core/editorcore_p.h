@@ -232,6 +232,8 @@ void EditorCore::Private::applyBuiltinFilter(const DImgBuiltinFilter& filter, Un
     // many operations change the image size
     origWidth  = image.width();
     origHeight = image.height();
+    width      = origWidth;
+    height     = origHeight;
 
     EditorCore::defaultInstance()->setModified();
 }
