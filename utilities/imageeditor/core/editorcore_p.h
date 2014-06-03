@@ -6,7 +6,7 @@
  * Date        : 2003-01-15
  * Description : DImg interface for image editor
  *
- * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,11 +23,6 @@
 
 #ifndef EDITORCORE_P_H
 #define EDITORCORE_P_H
-
-#define OPACITY  0.7
-#define RCOL     0xAA
-#define GCOL     0xAA
-#define BCOL     0xAA
 
 namespace Digikam
 {
@@ -69,9 +64,6 @@ public:
         selY(0),
         selW(0),
         selH(0),
-        gamma(0.0),
-        brightness(0.0),
-        contrast(0.0),
         zoom(1.0),
         displayingWidget(0),
         currentFileToSave(0),
@@ -109,10 +101,6 @@ public:
     int                        selY;
     int                        selW;
     int                        selH;
-
-    float                      gamma;
-    float                      brightness;
-    float                      contrast;
 
     double                     zoom;
 
@@ -178,9 +166,6 @@ void EditorCore::Private::resetValues()
     selY                   = 0;
     selW                   = 0;
     selH                   = 0;
-    gamma                  = 1.0f;
-    contrast               = 1.0f;
-    brightness             = 0.0f;
     resolvedInitialHistory = DImageHistory();
     undoMan->clear();
 }
@@ -212,7 +197,7 @@ void EditorCore::Private::saveNext()
 
     file.image.prepareMetadataToSave(file.intendedFilePath, file.mimeType, file.setExifOrientationTag);
     //kDebug() << "Adjusting image" << file.mimeType << file.fileName << file.setExifOrientationTag << file.ioAttributes
-    //       << "image:" << file.image.size() << file.image.isNull();
+    //         << "image:" << file.image.size() << file.image.isNull();
 
     thread->save(file.image, file.filePath, file.mimeType);
 }
