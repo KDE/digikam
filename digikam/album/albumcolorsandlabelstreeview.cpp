@@ -48,12 +48,21 @@ namespace Digikam
 class ColorsAndLabelsTreeView::Private
 {
 public:
+    enum TreeInitialValues
+    {
+        NoRating = -1,
+        NoColor = 8,
+        NoPickLabel = 18
+    };
+
+public:
     Private():
         rating(0),
         labels(0),
         colors(0),
-        albumFromCheckedItems(0),
-        isCheckableTreeView(false)
+        oldAlbum(0),
+        isCheckableTreeView(false),
+        currentXMLIsEmpty(false)
     {
         starPolygon << QPoint(0,  12);
         starPolygon << QPoint(10, 10);
@@ -83,9 +92,10 @@ public:
 
     QString              oldXML;
 
-    Album*               albumFromCheckedItems;
+    Album*               oldAlbum;
 
     bool                 isCheckableTreeView;
+    bool                 currentXMLIsEmpty;
 };
 
 ColorsAndLabelsTreeView::ColorsAndLabelsTreeView(QWidget *parent, bool setCheckable) :
@@ -250,6 +260,8 @@ QString ColorsAndLabelsTreeView::createXMLForCurrentSelection()
     d->selectedRatings = selectedRatings();
     d->selectedLabels  = selectedLabels();
 
+    d->currentXMLIsEmpty = (d->selectedRatings.isEmpty() && d->selectedLabels.isEmpty()) ? true : false;
+
     if(!d->selectedRatings.isEmpty())
     {
         foreach (int val, d->selectedRatings)
@@ -300,8 +312,7 @@ QList<int> ColorsAndLabelsTreeView::selectedRatings()
             if(index.parent().data().toString() == "Rating")
             {
                 if(index.row() == 0)
-                    // to be similar to the one in the Advanced search
-                    selectedRatings << index.row()-1;
+                    selectedRatings << (Private::NoRating);
                 else
                     selectedRatings << index.row();
             }
@@ -316,7 +327,7 @@ QList<int> ColorsAndLabelsTreeView::selectedRatings()
             if(item->parent()->text(0) == "Rating")
             {
                 if(indexFromItem(item).row() == 0)
-                    selectedRatings << indexFromItem(item).row()-1;
+                    selectedRatings << (Private::NoRating);
                 else
                     selectedRatings << indexFromItem(item).row();
             }
@@ -338,12 +349,12 @@ QList<int> ColorsAndLabelsTreeView::selectedLabels()
         {
             if(index.parent().data().toString() == "Colors")
             {
-                selectedLabels << index.row()+8;
+                selectedLabels << index.row() + (Private::NoColor);
             }
 
             if(index.parent().data().toString() == "Labels")
             {
-                selectedLabels << index.row()+18;
+                selectedLabels << index.row() + (Private::NoPickLabel);
             }
         }
     }
@@ -355,11 +366,11 @@ QList<int> ColorsAndLabelsTreeView::selectedLabels()
             QTreeWidgetItem* item = (*it);
             if(item->parent()->text(0) == "Colors")
             {
-                selectedLabels << (indexFromItem(item).row() + 8);
+                selectedLabels << (indexFromItem(item).row() + (Private::NoColor));
             }
             else if(item->parent()->text(0) == "Labels")
             {
-                selectedLabels << (indexFromItem(item).row() + 18);
+                selectedLabels << (indexFromItem(item).row() + (Private::NoPickLabel));
             }
 
             ++it;
@@ -371,30 +382,34 @@ QList<int> ColorsAndLabelsTreeView::selectedLabels()
 
 SAlbum* ColorsAndLabelsTreeView::search(const QString& xml)
 {
-    // TODO: Recreate this method body to return album only, not setting it too
-
-    SAlbum* album = AlbumManager::instance()->findSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::KeywordSearch));
-
-    if (album)
+    SAlbum* album = AlbumManager::instance()->findSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch));
+    if(!d->isCheckableTreeView)
     {
-        AlbumManager::instance()->updateSAlbum(album, xml,
-                                               SAlbum::getTemporaryTitle(DatabaseSearch::KeywordSearch),
-                                               DatabaseSearch::AdvancedSearch);
+        if (album)
+        {
+            AlbumManager::instance()->updateSAlbum(album, xml,
+                                                   SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch),
+                                                   DatabaseSearch::AdvancedSearch);
+        }
+        else
+        {
+            album = AlbumManager::instance()->createSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch),
+                                                           DatabaseSearch::AdvancedSearch, xml);
+        }
     }
     else
     {
-        album = AlbumManager::instance()->createSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::KeywordSearch),
-                                                       DatabaseSearch::AdvancedSearch, xml);
-    }
 
+         album = AlbumManager::instance()->createSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch),
+                                                           DatabaseSearch::AdvancedSearch, xml, false);
+    }
     return album;
 }
 
 void ColorsAndLabelsTreeView::slotSelectionChanged()
 {
-    QString xml   = createXMLForCurrentSelection();
+    QString xml = createXMLForCurrentSelection();
     SAlbum* album = search(xml);
-
     if (album)
     {
         AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << album);
@@ -410,15 +425,30 @@ void ColorsAndLabelsTreeView::slotItemClicked()
         return;
     }
 
-    emit checkStateChenged();
+    if(d->oldAlbum)
+    {
+        emit checkStateChanged(d->oldAlbum,Qt::Unchecked);
+    }
+
     SAlbum* album = search(currentXML);
-    d->albumFromCheckedItems = album;
-    d->oldXML = currentXML;
+
+    if(!d->currentXMLIsEmpty)
+    {
+        d->oldAlbum = album;
+    }
+    else
+    {
+        d->oldAlbum = 0;
+    }
+
+    emit checkStateChanged(album,Qt::Checked);
+
+    d->oldXML   = currentXML;
 }
 
 Album* ColorsAndLabelsTreeView::currentAlbumFromCheckedItems()
 {
-    return d->albumFromCheckedItems;
+    return d->oldAlbum;
 }
 
 } // namespace Digikam

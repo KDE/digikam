@@ -9,6 +9,7 @@
  * Copyright (C) 2004 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2014 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -2713,7 +2714,7 @@ QHash<int, QString> AlbumManager::albumTitles() const
     return hash;
 }
 
-SAlbum* AlbumManager::createSAlbum(const QString& name, DatabaseSearch::Type type, const QString& query)
+SAlbum* AlbumManager::createSAlbum(const QString& name, DatabaseSearch::Type type, const QString& query, bool updateCurrentAlbum)
 {
     // first iterate through all the search albums and see if there's an existing
     // SAlbum with same name. (Remember, SAlbums are arranged in a flat list)
@@ -2722,7 +2723,10 @@ SAlbum* AlbumManager::createSAlbum(const QString& name, DatabaseSearch::Type typ
 
     if (album)
     {
-        updateSAlbum(album, query, name, type);
+        if(updateCurrentAlbum)
+        {
+            updateSAlbum(album, query, name, type);
+        }
         return album;
     }
 

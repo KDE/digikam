@@ -46,6 +46,7 @@
 #include "albumtreeview.h"
 #include "kipiimagecollection.h"
 #include "kipiinterface.h"
+#include "albumcolorsandlabelstreeview.h"
 
 namespace Digikam
 {
@@ -62,6 +63,7 @@ public:
         tagTreeView(0),
         searchModel(0),
         searchTreeView(0),
+        labelsTreeView(0),
         iface(0),
         albumSearchBar(0),
         tagSearchBar(0),
@@ -99,6 +101,20 @@ public:
         }
     }
 
+    void fillCollectionsFromCheckedColorsAndLabels(QList<KIPI::ImageCollection>& collectionList,
+                                                   const QString& ext)
+    {
+        Album* const album = labelsTreeView->currentAlbumFromCheckedItems();
+
+        if (!album)
+        {
+            return;
+        }
+
+        KipiImageCollection* col = new KipiImageCollection(KipiImageCollection::AllItems, album, ext);
+        collectionList.append(col);
+    }
+
 public:
 
     KTabWidget*     tab;
@@ -111,6 +127,8 @@ public:
 
     SearchModel*    searchModel;
     SearchTreeView* searchTreeView;
+
+    ColorsAndLabelsTreeView* labelsTreeView;
 
     KipiInterface*  iface;
 
@@ -193,9 +211,19 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
 
     // -------------------------------------------------------------------------------
 
+    KVBox* labelsBox  = new KVBox(d->tab);
+    d->labelsTreeView = new ColorsAndLabelsTreeView(labelsBox,true);
+
+    labelsBox->setMargin(0);
+    labelsBox->setSpacing(KDialog::spacingHint());
+    labelsBox->setStretchFactor(d->labelsTreeView, 100);
+
+    // -------------------------------------------------------------------------------
+
     d->tab->addTab(albumBox, i18n("My Albums"));
     d->tab->addTab(tagBox, i18n("My Tags"));
     d->tab->addTab(searchBox, i18n("My Searches"));
+    d->tab->addTab(labelsBox, i18n("Colors And Labels"));
 
     QHBoxLayout* hlay = new QHBoxLayout(this);
     hlay->addWidget(d->tab);
@@ -211,6 +239,9 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
             this, SIGNAL(selectionChanged()));
 
     connect(d->searchModel, SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
+            this, SIGNAL(selectionChanged()));
+
+    connect(d->labelsTreeView, SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
             this, SIGNAL(selectionChanged()));
 
     // ------------------------------------------------------------------------------------
@@ -247,6 +278,7 @@ QList<KIPI::ImageCollection> KipiImageCollectionSelector::selectedImageCollectio
     d->fillCollectionsFromCheckedModel(list, d->albumModel, ext);
     d->fillCollectionsFromCheckedModel(list, d->tagModel, ext);
     d->fillCollectionsFromCheckedModel(list, d->searchModel, ext);
+    d->fillCollectionsFromCheckedColorsAndLabels(list, ext);
 
     kDebug() << list.count() << " collection items selected";
 

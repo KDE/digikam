@@ -63,7 +63,7 @@ private Q_SLOTS:
     void slotItemClicked();
 
 Q_SIGNALS:
-    void checkStateChenged();
+    void checkStateChanged(Album* album, Qt::CheckState checkState);
 
 private:
     class Private;
