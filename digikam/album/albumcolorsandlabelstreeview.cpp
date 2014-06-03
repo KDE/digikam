@@ -60,7 +60,7 @@ public:
         rating(0),
         labels(0),
         colors(0),
-        oldAlbum(0),
+        albumForCheckedItems(0),
         isCheckableTreeView(false),
         currentXMLIsEmpty(false)
     {
@@ -92,7 +92,7 @@ public:
 
     QString              oldXML;
 
-    Album*               oldAlbum;
+    Album*               albumForCheckedItems;
 
     bool                 isCheckableTreeView;
     bool                 currentXMLIsEmpty;
@@ -382,9 +382,10 @@ QList<int> ColorsAndLabelsTreeView::selectedLabels()
 
 SAlbum* ColorsAndLabelsTreeView::search(const QString& xml)
 {
-    SAlbum* album = AlbumManager::instance()->findSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch));
+    SAlbum* album;
     if(!d->isCheckableTreeView)
     {
+        album = AlbumManager::instance()->findSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch));
         if (album)
         {
             AlbumManager::instance()->updateSAlbum(album, xml,
@@ -400,7 +401,7 @@ SAlbum* ColorsAndLabelsTreeView::search(const QString& xml)
     else
     {
 
-         album = AlbumManager::instance()->createSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch),
+         album = AlbumManager::instance()->createSAlbum(generateAlbumNameForExporting(),
                                                            DatabaseSearch::AdvancedSearch, xml, false);
     }
     return album;
@@ -425,20 +426,20 @@ void ColorsAndLabelsTreeView::slotItemClicked()
         return;
     }
 
-    if(d->oldAlbum)
+    if(d->albumForCheckedItems)
     {
-        emit checkStateChanged(d->oldAlbum,Qt::Unchecked);
+        emit checkStateChanged(d->albumForCheckedItems,Qt::Unchecked);
     }
 
     SAlbum* album = search(currentXML);
 
     if(!d->currentXMLIsEmpty)
     {
-        d->oldAlbum = album;
+        d->albumForCheckedItems = album;
     }
     else
     {
-        d->oldAlbum = 0;
+        d->albumForCheckedItems = 0;
     }
 
     emit checkStateChanged(album,Qt::Checked);
@@ -448,7 +449,129 @@ void ColorsAndLabelsTreeView::slotItemClicked()
 
 Album* ColorsAndLabelsTreeView::currentAlbumFromCheckedItems()
 {
-    return d->oldAlbum;
+    return d->albumForCheckedItems;
+}
+
+QString ColorsAndLabelsTreeView::generateAlbumNameForExporting()
+{
+    QString name;
+    QString ratingsString;
+    QStringList labelsList;
+    QString labelsString;
+    QStringList colorsList;
+    QString colorsString;
+
+    if(!d->selectedRatings.isEmpty())
+    {
+        QList<int> list = d->selectedRatings;
+
+        ratingsString += "Rating: ";
+
+        QListIterator<int> it(list);
+
+        while (it.hasNext())
+        {
+            int rating = it.next();
+            if(rating == -1)
+            {
+                ratingsString += "No Rating";
+            }
+            else
+            {
+                ratingsString += QString::number(rating);
+            }
+
+            if(it.hasNext())
+            {
+                ratingsString +=", ";
+            }
+        }
+    }
+
+    if(!d->selectedLabels.isEmpty())
+    {
+        QTreeWidgetItemIterator it(this,QTreeWidgetItemIterator::Checked);
+        while(*it)
+        {
+            QTreeWidgetItem* item = (*it);
+            if(item->parent()->text(0) == "Colors")
+            {
+                colorsList << item->text(0);
+            }
+            else if(item->parent()->text(0) == "Labels")
+            {
+                labelsList << item->text(0);
+            }
+
+            ++it;
+        }
+
+        if(!colorsList.isEmpty())
+        {
+            colorsString += "Colors: ";
+            QListIterator<QString> it(colorsList);
+
+            while (it.hasNext())
+            {
+                colorsString += it.next();
+
+                if(it.hasNext())
+                {
+                    colorsString +=", ";
+                }
+            }
+        }
+
+        if(!labelsList.isEmpty())
+        {
+            labelsString += "Pick Labels: ";
+            QListIterator<QString> it(labelsList);
+
+            while (it.hasNext())
+            {
+
+                labelsString += it.next();
+
+                if(it.hasNext())
+                {
+                    labelsString +=", ";
+                }
+            }
+        }
+    }
+
+    if(ratingsString.isEmpty() && labelsString.isEmpty())
+    {
+        name = colorsString;
+    }
+    else if(ratingsString.isEmpty() && colorsString.isEmpty())
+    {
+        name = labelsString;
+    }
+    else if(colorsString.isEmpty() && labelsString.isEmpty())
+    {
+        name = ratingsString;
+    }
+    else if(ratingsString.isEmpty())
+    {
+        name = labelsString + " | " + colorsString;
+    }
+    else if(labelsString.isEmpty())
+    {
+        name = ratingsString + " | " + colorsString;
+    }
+    else if(colorsString.isEmpty())
+    {
+        name = ratingsString + " | " + labelsString;
+    }
+    else
+    {
+        name = ratingsString + " | " + labelsString + " | " + colorsString;
+    }
+
+
+    qDebug() << name;
+    return name;
 }
 
 } // namespace Digikam

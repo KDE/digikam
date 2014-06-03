@@ -58,6 +58,8 @@ private:
     QString createXMLForCurrentSelection();
     SAlbum* search(const QString& xml);
 
+    QString generateAlbumNameForExporting();
+
 private Q_SLOTS:
     void slotSelectionChanged();
     void slotItemClicked();
