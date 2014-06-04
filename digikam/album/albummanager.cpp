@@ -2713,7 +2713,7 @@ QHash<int, QString> AlbumManager::albumTitles() const
     return hash;
 }
 
-SAlbum* AlbumManager::createSAlbum(const QString& name, DatabaseSearch::Type type, const QString& query, bool updateCurrentAlbum)
+SAlbum* AlbumManager::createSAlbum(const QString& name, DatabaseSearch::Type type, const QString& query)
 {
     // first iterate through all the search albums and see if there's an existing
     // SAlbum with same name. (Remember, SAlbums are arranged in a flat list)
