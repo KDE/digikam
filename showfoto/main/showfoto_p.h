@@ -51,6 +51,7 @@ public:
     Private() :
         deleteItem2Trash(true),
         validIccPath(true),
+        imagePluginsLoaded(false),
         droppedUrls(0),
         itemsNb(0),
         vSplitter(0),
@@ -73,6 +74,7 @@ public:
     bool                             deleteItem2Trash;
     bool                             validIccPath;
     bool                             droppedUrls;
+    bool                             imagePluginsLoaded;
 
     int                              itemsNb;
 

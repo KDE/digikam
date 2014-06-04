@@ -201,7 +201,6 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     // Load image plugins to GUI
 
     m_imagePluginLoader = new Digikam::ImagePluginLoader(this, d->splash);
-    loadImagePlugins();
 
     // Create context menu.
 
@@ -225,7 +224,10 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
 
     // -- Load current items ---------------------------
     slotDroppedUrls(urlList);
-    slotOpenUrl(d->infoList.at(0));
+    if(!d->infoList.isEmpty())
+    {
+        slotOpenUrl(d->infoList.at(0));
+    }
 }
 
 ShowFoto::~ShowFoto()
@@ -591,10 +593,17 @@ void ShowFoto::slotOpenUrl(const ShowfotoItemInfo& info)
     QString localFile;
     KIO::NetAccess::download(info.url, localFile, this);
 
-    //TODO: Replace this to previewView
     m_canvas->load(localFile, m_IOFileSettings);
 
-   //TODO : add preload here like in ImageWindow::slotLoadCurrent() ???
+    //TODO : add preload here like in ImageWindow::slotLoadCurrent() ???
+
+    // By this condition we make sure that no crashes will happen
+    // if no images were loaded to the canvas before
+    if(!d->imagePluginsLoaded)
+    {
+        loadImagePlugins();
+        d->imagePluginsLoaded = true;
+    }
 }
 
 Digikam::ThumbBarDock* ShowFoto::thumbBar() const
