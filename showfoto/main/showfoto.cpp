@@ -201,7 +201,6 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     // Load image plugins to GUI
 
     m_imagePluginLoader = new Digikam::ImagePluginLoader(this, d->splash);
-    loadImagePlugins();
 
     // Create context menu.
 
@@ -224,8 +223,11 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     d->thumbBarDock->reInitialize();
 
     // -- Load current items ---------------------------
-
     slotDroppedUrls(urlList);
+    if(!d->infoList.isEmpty())
+    {
+        slotOpenUrl(d->infoList.at(0));
+    }
 }
 
 ShowFoto::~ShowFoto()
@@ -567,9 +569,9 @@ void ShowFoto::openUrls(const KUrl::List &urls)
             d->infoList = infos;
             d->model->clearShowfotoItemInfos();
             emit signalInfoList(d->infoList);
+            slotOpenUrl(d->infoList.first());
         }
 
-        slotOpenUrl(d->infoList.first());
     }
 }
 
@@ -591,10 +593,17 @@ void ShowFoto::slotOpenUrl(const ShowfotoItemInfo& info)
     QString localFile;
     KIO::NetAccess::download(info.url, localFile, this);
 
-    //TODO: Replace this to previewView
     m_canvas->load(localFile, m_IOFileSettings);
 
-   //TODO : add preload here like in ImageWindow::slotLoadCurrent() ???
+    //TODO : add preload here like in ImageWindow::slotLoadCurrent() ???
+
+    // By this condition we make sure that no crashes will happen
+    // if no images were loaded to the canvas before
+    if(!d->imagePluginsLoaded)
+    {
+        loadImagePlugins();
+        d->imagePluginsLoaded = true;
+    }
 }
 
 Digikam::ThumbBarDock* ShowFoto::thumbBar() const
@@ -1243,9 +1252,9 @@ void ShowFoto::openFolder(const KUrl& url)
         d->infoList = infos;
         d->model->clearShowfotoItemInfos();
         emit signalInfoList(d->infoList);
+        slotOpenUrl(d->infoList.at(0));
     }
 
-    slotOpenUrl(d->infoList.at(0));
     d->lastOpenedDirectory = d->infoList.at(0).url;
 }
 
@@ -1253,12 +1262,21 @@ void ShowFoto::slotDroppedUrls(const KUrl::List& droppedUrls)
 {
     if(!droppedUrls.isEmpty())
     {
+        KUrl::List validUrls;
+
+        foreach (KUrl url, droppedUrls) {
+            if(url.isValid())
+            {
+                validUrls << url;
+            }
+        }
+
         d->droppedUrls = true;
 
         KUrl::List imagesUrls;
         KUrl::List foldersUrls;
 
-        foreach (KUrl url, droppedUrls)
+        foreach (KUrl url, validUrls)
         {
             if(KMimeType::findByUrl(url)->name().startsWith("image", Qt::CaseInsensitive))
             {
@@ -1286,6 +1304,8 @@ void ShowFoto::slotDroppedUrls(const KUrl::List& droppedUrls)
 
         d->model->clearShowfotoItemInfos();
         emit signalInfoList(d->infoList);
+
+        slotOpenUrl(d->infoList.at(0));
 
         d->droppedUrls = false;
     }

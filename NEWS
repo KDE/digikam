@@ -29,5 +29,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 019 ==> 333387 - Tags manager: Unavailable actions should be disabled when root item is selected
 020 ==> 335666 - Has unsharp allows for radius <= 1 and it ignores the decimal part.
 021 ==> 335652 - When using resize picture blurs out of focus.
-022 ==> 
+022 ==> 330676 - Picture download.
+023 ==> 335292 - File association doesn't open showFoto correctly.
+024 ==> 
 

@@ -7,7 +7,7 @@
  * Description : DImg interface for image editor
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -754,9 +754,8 @@ void EditorCore::imageUndoChanged(const UndoMetadataContainer& c)
 {
     // called from UndoManager
     bool changesIcc = c.changesIccProfile(d->image);
-
-    d->origWidth  = d->image.width();
-    d->origHeight = d->image.height();
+    d->origWidth    = d->image.width();
+    d->origHeight   = d->image.height();
     c.toImage(d->image);
 
     if (changesIcc)
