@@ -383,27 +383,19 @@ QList<int> ColorsAndLabelsTreeView::selectedLabels()
 SAlbum* ColorsAndLabelsTreeView::search(const QString& xml)
 {
     SAlbum* album;
-    if(!d->isCheckableTreeView)
+    QString name = generateAlbumNameForExporting();
+
+    album = AlbumManager::instance()->findSAlbum(name);
+    if (album)
     {
-        album = AlbumManager::instance()->findSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch));
-        if (album)
-        {
-            AlbumManager::instance()->updateSAlbum(album, xml,
-                                                   SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch),
-                                                   DatabaseSearch::AdvancedSearch);
-        }
-        else
-        {
-            album = AlbumManager::instance()->createSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch),
-                                                           DatabaseSearch::AdvancedSearch, xml);
-        }
+        AlbumManager::instance()->updateSAlbum(album, xml,name,DatabaseSearch::AdvancedSearch);
     }
     else
     {
-
-         album = AlbumManager::instance()->createSAlbum(generateAlbumNameForExporting(),
-                                                           DatabaseSearch::AdvancedSearch, xml, false);
+        album = AlbumManager::instance()->createSAlbum(name,DatabaseSearch::AdvancedSearch, xml);
     }
+
+    qDebug() << album;
     return album;
 }
 

@@ -9,7 +9,6 @@
  * Copyright (C) 2004 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2014 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -2723,10 +2722,7 @@ SAlbum* AlbumManager::createSAlbum(const QString& name, DatabaseSearch::Type typ
 
     if (album)
     {
-        if(updateCurrentAlbum)
-        {
-            updateSAlbum(album, query, name, type);
-        }
+        updateSAlbum(album, query, name, type);
         return album;
     }
 
