@@ -383,7 +383,7 @@ QList<int> ColorsAndLabelsTreeView::selectedLabels()
 SAlbum* ColorsAndLabelsTreeView::search(const QString& xml)
 {
     SAlbum* album;
-    QString name = generateAlbumNameForExporting();
+    QString name = generateAlbumName();
 
     album = AlbumManager::instance()->findSAlbum(name);
     if (album)
@@ -444,7 +444,7 @@ Album* ColorsAndLabelsTreeView::currentAlbumFromCheckedItems()
     return d->albumForCheckedItems;
 }
 
-QString ColorsAndLabelsTreeView::generateAlbumNameForExporting()
+QString ColorsAndLabelsTreeView::generateAlbumName()
 {
     QString name;
     QString ratingsString;
