@@ -239,6 +239,7 @@ void TagList::slotTagDeleted(Album* album)
         {
             d->tagListModel->deleteItem(item);
             d->tagMap[delId].removeOne(item);
+            d->treeView->getFilterModel()->setQuickListTags(QList<int>());
         }
     }
 }
