@@ -51,8 +51,8 @@ public:
     Private() :
         deleteItem2Trash(true),
         validIccPath(true),
+        droppedUrls(false),
         imagePluginsLoaded(false),
-        droppedUrls(0),
         itemsNb(0),
         vSplitter(0),
         fileOpenAction(0),
