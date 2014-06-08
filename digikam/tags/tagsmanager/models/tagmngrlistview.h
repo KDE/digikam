@@ -41,7 +41,7 @@ class TagMngrListView : public QTreeView
 public:
 
     explicit TagMngrListView(QWidget* const parent = 0);
-
+    QModelIndexList mySelectedIndexes();
 protected:
 
     /**
@@ -57,6 +57,7 @@ protected:
      *                           to handle custom context menu
      */
     void contextMenuEvent(QContextMenuEvent* event);
+
 
 public slots:
 

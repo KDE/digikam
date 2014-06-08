@@ -88,7 +88,7 @@ TagList::TagList(TagMngrTreeView* const treeView, QWidget* const parent)
             this, SLOT(slotAddPressed()));
 
     connect(d->tagList->selectionModel(),
-            SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+            SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this,
             SLOT(slotSelectionChanged()));
 
@@ -213,11 +213,23 @@ void TagList::slotAddPressed()
 
 void TagList::slotSelectionChanged()
 {
-    QModelIndex index                         = d->tagList->currentIndex();
-    ListItem* const item                      = static_cast<ListItem*>(index.internalPointer());
+    QModelIndexList indexList= d->tagList->mySelectedIndexes();
+    QSet<int> mySet;
+    Q_FOREACH(QModelIndex index, indexList)
+    {
+        ListItem* const item                      = static_cast<ListItem*>(index.internalPointer());
+        if(item->getTagIds().isEmpty())
+        {
+            mySet.clear();
+            break;
+        }
+        Q_FOREACH(int tagId, item->getTagIds())
+        {
+            mySet.insert(tagId);
+        }
+    }
     TagsManagerFilterModel* const filterModel = d->treeView->getFilterModel();
-
-    filterModel->setQuickListTags(item->getTagIds());
+    filterModel->setQuickListTags(QList<int>::fromSet(mySet));
 }
 
 void TagList::slotTagDeleted(Album* album)

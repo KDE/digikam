@@ -80,6 +80,11 @@ void TagMngrListView::startDrag(Qt::DropActions supportedActions)
     drag->exec(supportedActions, Qt::IgnoreAction);
 }
 
+QModelIndexList TagMngrListView::mySelectedIndexes()
+{
+    return this->selectedIndexes();
+}
+
 void TagMngrListView::dropEvent(QDropEvent *e)
 {
     QModelIndex index                = indexVisuallyAt(e->pos());
