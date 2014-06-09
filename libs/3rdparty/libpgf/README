@@ -33,22 +33,13 @@
  
  =============================
  
-Version 6.12.24, (Thu, 14 June 2012) 
+Version 6.14.12, (Wed, 9 April 2014) 
  
 Release Notes
 -------------
  
-1. The new version is a replacement of version 6.11.42. 
-   In case you use the ROI encoding scheme, we strongly encourage using version 6.12.24 instead of version 6.11.42.
- 
-2. This version fixes some decoder bugs, sometimes seen in ROI decoding.
- 
-3. This version allows a simpler user-data handling, especially for uncached metadata. The following two methods
-   in the class PGFimage are designed for this purpose:
+1. The new version is a minor update of version 6.12.24. 
 
-	GetUserDataPos() returns in an opened PGF image the stream position of the user data area.								
+2. It mainly contains some fixes of memory leaks in the OpenMP part and some improvements suggested by cppcheck and Coverity.
 
-	WriteImage() encodes and writes the image at the current stream position. This method is called after
-	WriteHeader(). In case you want to write uncached metadata into the stream, then do that after WriteHeader() 
-	and just before WriteImage(). If you are not interested in writing uncached metadata, then you usually use
-	Write() instead of WriteImage(). WriteHeader() and WriteImage() are called inside of Write(). 
+3. The Visual Studio project files are in the VS 11 format.
