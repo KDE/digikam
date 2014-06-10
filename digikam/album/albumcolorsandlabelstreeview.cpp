@@ -382,20 +382,23 @@ QList<int> ColorsAndLabelsTreeView::selectedLabels()
 
 SAlbum* ColorsAndLabelsTreeView::search(const QString& xml)
 {
-    SAlbum* album;
-    QString name = generateAlbumName();
+    //generating an album name for currently checked Items
+    //QString name = generateAlbumName();
 
-    album = AlbumManager::instance()->findSAlbum(name);
+    SAlbum* album = AlbumManager::instance()->findSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch));
+
     if (album)
     {
-        AlbumManager::instance()->updateSAlbum(album, xml,name,DatabaseSearch::AdvancedSearch);
+        AlbumManager::instance()->updateSAlbum(album, xml,
+                                               SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch),
+                                               DatabaseSearch::AdvancedSearch);
     }
     else
     {
-        album = AlbumManager::instance()->createSAlbum(name,DatabaseSearch::AdvancedSearch, xml);
+        album = AlbumManager::instance()->createSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch),
+                                                       DatabaseSearch::AdvancedSearch, xml);
     }
 
-    qDebug() << album;
     return album;
 }
 
@@ -425,16 +428,20 @@ void ColorsAndLabelsTreeView::slotItemClicked()
 
     SAlbum* album = search(currentXML);
 
-    if(!d->currentXMLIsEmpty)
+    if (album)
     {
-        d->albumForCheckedItems = album;
-    }
-    else
-    {
-        d->albumForCheckedItems = 0;
-    }
+        if(!d->currentXMLIsEmpty)
+        {
+            d->albumForCheckedItems = album;
+        }
+        else
+        {
+            d->albumForCheckedItems = 0;
+        }
 
-    emit checkStateChanged(album,Qt::Checked);
+        AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << album);
+        emit checkStateChanged(album,Qt::Checked);
+    }
 
     d->oldXML   = currentXML;
 }
@@ -561,8 +568,6 @@ QString ColorsAndLabelsTreeView::generateAlbumName()
         name = ratingsString + " | " + labelsString + " | " + colorsString;
     }
 
-
-    qDebug() << name;
     return name;
 }
 
