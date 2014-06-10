@@ -36,7 +36,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 026 ==> 335927 - Crash on import from camera (acting as mass storage).
 027 ==> 335718 - Tag manager: Removing a tag turns entries in "Quick Access List" to "All tags"
 028 ==> 316882 - Digikam shows wrong date on some mp4 files and shows no exif data.
-029 ==> 
-
-
-
+029 ==> 336021 - DigiKam does not show translated messages for Marble.
+030 ==> 
