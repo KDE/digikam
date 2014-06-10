@@ -198,21 +198,28 @@ void TagMngrTreeView::slotExpandTree()
             continue;
         }
 
-        int it            = 0;
-        QModelIndex child = current.child(it++, 0);
-
-        while(child.isValid())
+        if(this->isExpanded(current))
         {
-            if(this->isExpanded(child))
-            {
-                greyNodes.enqueue(child);
-            }
-            else
-            {
-                expand(child);
-            }
+            int it            = 0;
+            QModelIndex child = current.child(it++, 0);
 
-            child = current.child(it++,0);
+            while(child.isValid())
+            {
+                if(this->isExpanded(child))
+                {
+                    greyNodes.enqueue(child);
+                }
+                else
+                {
+                    expand(child);
+                }
+
+                child = current.child(it++,0);
+            }
+        }
+        else
+        {
+            expand(current);
         }
     }
 }

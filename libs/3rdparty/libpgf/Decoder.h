@@ -53,16 +53,14 @@ class CDecoder {
 		//////////////////////////////////////////////////////////////////////
 		/// Constructor: Initializes new macro block.
 		/// @param decoder Pointer to outer class.
-		CMacroBlock(CDecoder *decoder)
+		CMacroBlock()
 		: m_header(0)								// makes sure that IsCompletelyRead() returns true for an empty macro block
 #pragma warning( suppress : 4351 )
 		, m_value()
 		, m_codeBuffer()
 		, m_valuePos(0)
-		, m_decoder(decoder)
 		, m_sigFlagVector()
 		{
-			ASSERT(m_decoder);
 		}
 
 		//////////////////////////////////////////////////////////////////////
@@ -88,7 +86,6 @@ class CDecoder {
 		void  SetBitAtPos(UINT32 pos, DataT planeMask)			{ (m_value[pos] >= 0) ? m_value[pos] |= planeMask : m_value[pos] -= planeMask; }
 		void  SetSign(UINT32 pos, bool sign)					{ m_value[pos] = -m_value[pos]*sign + m_value[pos]*(!sign); }
 
-		CDecoder *m_decoder;						// outer class
 		bool m_sigFlagVector[BufferSize+1];			// see paper from Malvar, Fast Progressive Wavelet Coder
 	};
 

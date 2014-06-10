@@ -740,7 +740,7 @@ bool TagsManagerFilterModel::matches(Album* album) const
         {
             continue;
         }
-        if(talbum->title().contains(album->title()))
+        if(talbum->title().compare(album->title()) == 0)
         {
             dirty = true;
         }

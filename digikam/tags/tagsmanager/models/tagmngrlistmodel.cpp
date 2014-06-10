@@ -107,10 +107,6 @@ void TagMngrListModel::deleteItem(ListItem* const item)
     if(!item)
         return;
 
-    /**  Do not delete "All Tags" item **/
-    if(item->data(Qt::DisplayRole) == i18n("All Tags"))
-        return;
-
     emit layoutAboutToBeChanged();
     d->rootItem->deleteChild(item);
     emit layoutChanged();

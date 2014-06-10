@@ -102,12 +102,12 @@ CDecoder::CDecoder(CPGFStream* stream, PGFPreHeader& preHeader, PGFHeader& heade
 		// create macro block array
 		m_macroBlocks = new(std::nothrow) CMacroBlock*[m_macroBlockLen];
 		if (!m_macroBlocks) ReturnWithError(InsufficientMemory);
-		for (int i=0; i < m_macroBlockLen; i++) m_macroBlocks[i] = new CMacroBlock(this);
+		for (int i=0; i < m_macroBlockLen; i++) m_macroBlocks[i] = new CMacroBlock();
 		m_currentBlock = m_macroBlocks[m_currentBlockIndex];
 	} else {
 		m_macroBlocks = 0;
 		m_macroBlockLen = 1; // there is only one macro block
-		m_currentBlock = new CMacroBlock(this); 
+		m_currentBlock = new CMacroBlock(); 
 	}
 
 	// store current stream position

@@ -45,9 +45,9 @@
 // Version 6:	modified data structure PGFPreHeader: hSize (header size) is now a UINT32 instead of a UINT16 (backward compatibility assured)
 //
 //-------------------------------------------------------------------------------
-#define PGFCodecVersion		"6.13.45"			///< Major number
+#define PGFCodecVersion		"6.14.12"			///< Major number
 												///< Minor number: Year (2) Week (2)
-#define PGFCodecVersionID   0x061345			///< Codec version ID to use for API check in client implementation
+#define PGFCodecVersionID   0x061412			///< Codec version ID to use for API check in client implementation
 
 //-------------------------------------------------------------------------------
 //	Image constants
