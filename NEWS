@@ -31,10 +31,11 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 021 ==> 335652 - When using resize picture blurs out of focus.
 022 ==> 330676 - Picture download.
 023 ==> 335292 - File association doesn't open showFoto correctly.
-024 ==> 335719 - Tag manager: "My Tags" entry is not properly expanded
-025 ==> 335721 - Tag manager: "Quick Access List" filtering seems to filter only by first letter
+024 ==> 335719 - Tag manager: "My Tags" entry is not properly expanded.
+025 ==> 335721 - Tag manager: "Quick Access List" filtering seems to filter only by first letter.
 026 ==> 335927 - Crash on import from camera (acting as mass storage).
-027 ==> 335718 - Tag manager: Removing a tag turns entries in "Quick Access List" to "All tags"
-028 ==> 316882 - Digikam shows wrong date on some mp4 files and shows no exif data.
-029 ==> 336021 - DigiKam does not show translated messages for Marble.
-030 ==> 
+027 ==> 335718 - Tag manager: Removing a tag turns entries in "Quick Access List" to "All tags".
+028 ==> 316882 - digiKam shows wrong date on some mp4 files and shows no exif data.
+029 ==> 336021 - digiKam does not show translated messages for Marble.
+030 ==> 336076 - Couldn't limit the fuzzy search to certain albums / directories.
+031 ==> 

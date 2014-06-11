@@ -6,7 +6,7 @@
  * Date        : 2008-05-19
  * Description : Find Duplicates View.
  *
- * Copyright (C) 2008-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at gmail dot com>
  *
@@ -109,7 +109,7 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
     // ---------------------------------------------------------------
 
     d->albumSelectors = new AlbumSelectors(i18nc("@label", "Search in:"), "Find Duplicates View");
-    
+
     // ---------------------------------------------------------------
 
     d->similarity = new QSpinBox();
@@ -189,7 +189,7 @@ void FindDuplicatesView::populateTreeView()
 
     d->listView->sortByColumn(1, Qt::DescendingOrder);
     d->listView->resizeColumnToContents(0);
-    
+
     d->albumSelectors->loadState();
 }
 
@@ -285,6 +285,7 @@ void FindDuplicatesView::enableControlWidgets(bool val)
 
 void FindDuplicatesView::slotFindDuplicates()
 {
+    d->albumSelectors->saveState();
     slotClear();
     enableControlWidgets(false);
 
@@ -308,8 +309,7 @@ void FindDuplicatesView::slotDuplicatesAlbumActived(QTreeWidgetItem* item, int)
 
     if (sitem)
     {
-        AlbumManager::instance()->setCurrentAlbums(QList<Album*>()
-                                                   << sitem->album());
+        AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << sitem->album());
     }
 }
 
