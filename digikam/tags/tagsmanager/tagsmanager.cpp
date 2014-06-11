@@ -45,6 +45,7 @@
 #include <kstandarddirs.h>
 #include <kaction.h>
 #include <ktoolbar.h>
+#include <kdialog.h>
 #include <kmainwindow.h>
 #include <kmultitabbar.h>
 #include <kactionmenu.h>
@@ -231,6 +232,7 @@ void TagsManager::slotOpenProperties()
 void TagsManager::slotSelectionChanged()
 {
     QList<Album*> selectedTags = d->tagMngrView->selectedTags();
+
     if(selectedTags.isEmpty() || (selectedTags.size() == 1 && selectedTags.at(0)->isRoot()))
     {
         enableRootTagActions(false);
@@ -241,6 +243,7 @@ void TagsManager::slotSelectionChanged()
         enableRootTagActions(true);
         d->listView->enableAddButton(true);
     }
+
     d->tagPropWidget->slotSelectionChanged(selectedTags);
 }
 
@@ -264,13 +267,16 @@ void TagsManager::slotAddAction()
     TagEditDlg::showtagsListCreationError(kapp->activeWindow(), errMap);
 }
 
-namespace {
+namespace
+{
+
 QString JoinTagNamesToList(const QStringList& stringList)
 {
     const QString joinedStringList = stringList.join(QString("', '"));
     return QChar('\'') + joinedStringList + QChar('\'');
 }
-}
+
+} // namespace
 
 void TagsManager::slotDeleteAction()
 {
@@ -325,6 +331,7 @@ void TagsManager::slotDeleteAction()
          */
         Album* parent = t;
         int depth = 0;
+
         while (!parent->isRoot())
         {
             parent = parent->parent();
@@ -361,6 +368,7 @@ void TagsManager::slotDeleteAction()
     }
 
     QString message;
+
     if (!tagsWithImages.isEmpty())
     {
         message = i18ncp(
@@ -418,6 +426,7 @@ void TagsManager::slotResetTagIcon()
 
     const QList<Album*> selected = d->tagMngrView->selectedTags();
     const QString icon = QString("tag");
+
     for (QList<Album*>::const_iterator it = selected.constBegin(); it != selected.constEnd(); ++it )
     {
         TAlbum* const tag = dynamic_cast<TAlbum*>(*it);
@@ -606,6 +615,7 @@ void TagsManager::slotRemoveTagsFromImgs()
                     selList.count()
                 )
         );
+
     if (result != KMessageBox::Continue)
     {
         return;
@@ -637,6 +647,7 @@ void TagsManager::closeEvent(QCloseEvent* event)
 void TagsManager::setupActions()
 {
     d->mainToolbar = new KToolBar(d->treeWindow, true);
+    d->mainToolbar->layout()->setContentsMargins(KDialog::marginHint(), KDialog::marginHint(), KDialog::marginHint(), KDialog::marginHint());
 
     QWidgetAction* const pixMapAction = new QWidgetAction(this);
     pixMapAction->setDefaultWidget(d->tagPixmap);
@@ -658,21 +669,21 @@ void TagsManager::setupActions()
                                              i18n("Organize"),this);
     d->organizeAction->setDelayed(false);
 
-    KAction* resetIcon     = new KAction(KIcon("view-refresh"),
+    KAction* const resetIcon     = new KAction(KIcon("view-refresh"),
                                          i18n("Reset tag Icon"), this);
 
-    KAction* createTagAddr = new KAction(KIcon("tag-addressbook"),
+    KAction* const createTagAddr = new KAction(KIcon("tag-addressbook"),
                                          i18n("Create Tag from Address Book"),
                                          this);
-    KAction* invSel        = new KAction(KIcon("tag-reset"),
+    KAction* const invSel        = new KAction(KIcon("tag-reset"),
                                          i18n("Invert Selection"), this);
 
-    KAction* expandTree    = new KAction(KIcon("format-indent-more"),
+    KAction* const expandTree    = new KAction(KIcon("format-indent-more"),
                                          i18n("Expand Tag Tree"), this);
 
-    KAction* expandSel     = new KAction(KIcon("format-indent-more"),
+    KAction* const expandSel     = new KAction(KIcon("format-indent-more"),
                                          i18n("Expand Selected Nodes"), this);
-    KAction* delTagFromImg = new KAction(KIcon("tag-delete"),
+    KAction* const delTagFromImg = new KAction(KIcon("tag-delete"),
                                          i18n("Remove Tag from Images"), this);
 
     /** Tool tips  **/
@@ -809,7 +820,7 @@ void TagsManager::setupActions()
 
 void TagsManager::enableRootTagActions(bool value)
 {
-    Q_FOREACH(KAction* action, d->rootDisabledOptions)
+    Q_FOREACH(KAction* const action, d->rootDisabledOptions)
     {
         if(value)
             action->setEnabled(true);
