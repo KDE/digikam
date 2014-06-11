@@ -38,4 +38,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 028 ==> 316882 - digiKam shows wrong date on some mp4 files and shows no exif data.
 029 ==> 336021 - digiKam does not show translated messages for Marble.
 030 ==> 336076 - Couldn't limit the fuzzy search to certain albums / directories.
-031 ==> 
+031 ==> 331679 - Crash on startup.
+032 ==> 
