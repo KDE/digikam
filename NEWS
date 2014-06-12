@@ -39,4 +39,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 029 ==> 336021 - digiKam does not show translated messages for Marble.
 030 ==> 336076 - Couldn't limit the fuzzy search to certain albums / directories.
 031 ==> 331679 - Crash on startup.
-032 ==> 
+032 ==> 324566 - Copied code is license-incompatible (OpenTLD is GPL-3, libkface is GPL-2).
+033 ==> 320772 - Unclear cvblobs licensing.
+034 ==> 
