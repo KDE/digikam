@@ -91,6 +91,7 @@ public:
     QList<int>           selectedLabels;
 
     QString              oldXML;
+    QString              generatedAlbumName;
 
     Album*               albumForCheckedItems;
 
@@ -440,6 +441,7 @@ void ColorsAndLabelsTreeView::slotItemClicked()
         }
 
         AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << album);
+        generateAlbumName();
         emit checkStateChanged(album,Qt::Checked);
     }
 
@@ -451,7 +453,7 @@ Album* ColorsAndLabelsTreeView::currentAlbumFromCheckedItems()
     return d->albumForCheckedItems;
 }
 
-QString ColorsAndLabelsTreeView::generateAlbumName()
+void ColorsAndLabelsTreeView::generateAlbumName()
 {
     QString name;
     QString ratingsString;
@@ -525,11 +527,14 @@ QString ColorsAndLabelsTreeView::generateAlbumName()
         {
             labelsString += "Pick Labels: ";
             QListIterator<QString> it(labelsList);
-
+            QString item;
             while (it.hasNext())
             {
-
-                labelsString += it.next();
+                item = it.next();
+                if(item.contains(" Item"))
+                    labelsString += item.remove(" Item");
+                else
+                    labelsString += item;
 
                 if(it.hasNext())
                 {
@@ -568,7 +573,12 @@ QString ColorsAndLabelsTreeView::generateAlbumName()
         name = ratingsString + " | " + labelsString + " | " + colorsString;
     }
 
-    return name;
+    d->generatedAlbumName = name;
+}
+
+QString ColorsAndLabelsTreeView::generatedAlbumName()
+{
+    return d->generatedAlbumName;
 }
 
 } // namespace Digikam

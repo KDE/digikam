@@ -45,6 +45,7 @@ public:
     virtual ~ColorsAndLabelsTreeView();
 
     Album* currentAlbumFromCheckedItems();
+    QString generatedAlbumName();
 
 private:
     void initTreeView();
@@ -58,7 +59,7 @@ private:
     QString createXMLForCurrentSelection();
     SAlbum* search(const QString& xml);
 
-    QString generateAlbumName();
+    void generateAlbumName();
 
 private Q_SLOTS:
     void slotSelectionChanged();
