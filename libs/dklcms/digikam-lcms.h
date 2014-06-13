@@ -75,7 +75,9 @@
 
 #define LCMS_DESC_MAX     512
 
-#define FAR
+#if !defined FAR 
+#  define FAR
+#endif
 
 #define LCMS_ERROR_SHOW     1
 #define cmsFLAGS_NOTPRECALC               0x0100
