@@ -7,7 +7,7 @@
  * Description : Dialog to choose options for face scanning
  *
  * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -304,9 +304,9 @@ void FaceScanDialog::setupUi()
 
     d->optionGroupBox               = new QGroupBox;
     QGridLayout* const optionLayout = new QGridLayout;
-    
+
     d->detectButton                                    = new QRadioButton(i18nc("@option:radio", "Detect faces"));
-    d->detectAndRecognizeButton                        = new QRadioButton(i18nc("@option:radio", "Detect and recognize faces"));
+    d->detectAndRecognizeButton                        = new QRadioButton(i18nc("@option:radio", "Detect and recognize faces (experimental)"));
     ButtonExtendedLabel* const detectAndRecognizeLabel = new ButtonExtendedLabel;
     ButtonExtendedLabel* const detectLabel             = new ButtonExtendedLabel;
     detectAndRecognizeLabel->setText(i18nc("@info",
@@ -331,8 +331,8 @@ void FaceScanDialog::setupUi()
     QGridLayout* const detectAndRecognizeLabelLayout   = new QGridLayout;
     detectAndRecognizeLabelLayout->addWidget(detectAndRecognizeLabel, 0, 0, 1, -1);
     detectAndRecognizeLabelLayout->setColumnMinimumWidth(0, 10);
-    
-    d->reRecognizeButton                        = new QRadioButton(i18nc("@option:radio", "Recognize faces"));
+
+    d->reRecognizeButton                        = new QRadioButton(i18nc("@option:radio", "Recognize faces (experimental)"));
     ButtonExtendedLabel* const reRecognizeLabel = new ButtonExtendedLabel;
     reRecognizeLabel->setText(i18nc("@info",
                                     "Try again to recognize the people depicted<nl/> on marked but yet unconfirmed faces."));
@@ -471,7 +471,7 @@ void FaceScanDialog::setupConnections()
 {
     connect(d->detectButton, SIGNAL(toggled(bool)),
             d->alreadyScannedBox, SLOT(setEnabled(bool)));
-    
+
     connect(d->detectAndRecognizeButton, SIGNAL(toggled(bool)),
             d->alreadyScannedBox, SLOT(setEnabled(bool)));
 
