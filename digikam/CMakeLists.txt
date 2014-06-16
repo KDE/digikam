@@ -16,6 +16,7 @@ SET_SOURCE_FILES_PROPERTIES(${liblensfun_SRCS} PROPERTIES COMPILE_FLAGS "-w")
 
 SET(digikamcore_LIB_SRCS
         # basic libs
+        ${libgmic_SRCS}
         ${libdimg_SRCS}
         ${libdimgloaders_SRCS}
         ${libdimgfilters_SRCS}

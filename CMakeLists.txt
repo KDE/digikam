@@ -299,6 +299,14 @@ IF(NOT APPLE AND NOT USE_EXT_LIBPGF)
     ENDIF(OPENMP_FOUND)
 ENDIF(NOT APPLE AND NOT USE_EXT_LIBPGF)
 
+    ADD_DEFINITIONS(-Dcimg_display=0)
+    ADD_DEFINITIONS(-Dcimg_debug=1)
+    ADD_DEFINITIONS(-Dgmic_minimal)
+    ADD_DEFINITIONS(-Dgmic_build)
+
+     SET(libgmic_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/gmic-1.5.9.2/src/gmic.cpp
+       )
 #-------------------------------------------------------------------------------------
 
 IF(NOT APPLE)

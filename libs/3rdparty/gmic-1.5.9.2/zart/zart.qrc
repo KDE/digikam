@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/camera.png</file>
+        <file>images/LogoGreyc.png</file>
+        <file>images/gmic_hat.png</file>
+        <file>images/application-exit.png</file>
+        <file>presets.xml</file>
+        <file>images/Logo_150.png</file>
+        <file>images/zoom-original.png</file>
+        <file>images/zoom-fit-best.png</file>
+        <file>images/media-playback-start.png</file>
+        <file>images/media-playback-stop.png</file>
+        <file>Licence_CeCILL_V2-en.html</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,364 @@
+<?xml version="1.0" ?>
+<document name="Presets">
+
+<!-- *********************
+
+         Artistic
+
+*********************** -->
+<preset_group name="Artistic">
+
+  <preset name="Cartoon">
+-cartoon ,
+  </preset>
+
+  <preset name="Hard sketch">
+--hardsketchbw 300,30,0.2,5 -blend hardlight
+  </preset>
+
+  <preset name="Old photograph">
+-r 60%,60% -old_photo
+  </preset>
+
+  <preset name="Psychedelic">
+-r 50%,50%,1,3 --mirror x --mirror y -+ -/ 4 -equalize 256
+  </preset>
+
+  <preset name="Stencil">
+-r 75%,75%,1,3 -stencilbw ,
+  </preset>
+
+  <preset name="Water">
+-r 75%,75%,1,3  -water 10
+  </preset>
+
+</preset_group>
+
+<!-- *******************
+
+           Colors
+
+*******************  -->
+<preset_group name="Colors">
+
+  <preset name="Black and White">
+-luminance (0,255) -index[-2] [-1],0.6,1 -rm[-1]
+  </preset>
+
+  <preset name="Histogram">
+time={@|%9}
+-if {$time&lt;3}
+  -equalize[-1] 256
+  1,1 -text[-1] "Equalized",2,2,24,1,255,255,255 -image[-2] [-1],10,10,0,0,0.3 -rm[-1]
+-elif {$time&lt;6}
+  -n[-1] 0,255
+  1,1 -text[-1] "Normalized",2,2,24,1,255,255,255 -image[-2] [-1],10,10,0,0,0.3 -rm[-1]
+-endif
+--s c -histogram[-3--1] 256
+-graph[-4] [-3],3,0,0,0,0.3,255,0,0
+-graph[-4] [-2],3,0,0,0,0.3,0,255,0
+-graph[-4] [-1],3,0,0,0,0.3,0,0,255
+-rm[-3--1]
+-grid[-1] 32,32,0,0,0.1,0xCCCCCCCC,255
+  </preset>
+
+  <preset name="Hue shift">
+-rgb2hsv -sh 0,0 -+[-1] {(@x-w/2)*360/w} -mod[-1] 360 -rm[-1] -hsv2rgb
+  </preset>
+
+  <preset name="Intensity profile">
+--rows @y -s[-1] c
+-graph[-4] [-3],1,0,255,0,1,255,200,200
+-graph[-4] [-2],1,0,255,0,1,200,255,200
+-graph[-4] [-1],1,0,255,0,1,200,200,255
+-rm[-3--1] -line[-1] 0,@y,100%,@y,0.3,255
+-axes[-1] 0,100,100,0,1,255
+-grid[-1] 32,32,0,0,0.1,0xCCCCCCCC,255
+  </preset>
+
+  <preset name="Local normalization">
+-rgb2lab -s c -normalize_local[0] 3 -a c -lab2rgb
+  </preset>
+
+  <preset name="RGB">
+-r 50%,50% --s c -channels[-2] -1,0
+-channels[-1] -2,0
+-append_tiles 2,2
+-line 0,50%,100%,50%,1,0
+-line 50%,0,50%,100%,1,0
+  </preset>
+
+</preset_group>
+
+<!-- *******************
+
+           Contours
+
+*******************  -->
+<preset_group name="Contours">
+
+  <preset name="Dilate">
+radius=15
+
+-dilate $radius
+  </preset>
+
+  <preset name="Erode">
+radius=15
+
+-erode $radius
+  </preset>
+
+  <preset name="Opening">
+radius=15
+
+-erode $radius -dilate $radius
+  </preset>
+
+  <preset name="Closing">
+radius=15
+
+-dilate $radius -erode $radius
+  </preset>
+
+  <preset name="Edges">
+-r 60%,60% -blur 1 --gradient_norm -n[-1] 0,8 -* -c 0,255
+  </preset>
+
+  <preset name="Gradient morpho (symmetric)">
+radius=15
+
+--erode[-1] $radius -dilate[-2] $radius --
+  </preset>
+
+  <preset name="Gradient morpho (internal)">
+radius=15
+
+--erode[-1] $radius --
+  </preset>
+
+  <preset name="Gradient morpho (external)">
+radius=15
+
+[-1] -dilate[-2] $radius --
+  </preset>
+
+  <preset name="Gradients">
+-r 25%,25% --gradient xy --a[-2,-1] c -norm[-1] -to_rgb[-1] -sqrt[-1] -mv[-1] 1 -n 0,255 -append_tiles 2,2
+  </preset>
+
+  <preset name="Segmentation">
+-luminance -equalize 256 -segment_watershed 0.005
+--gradient xy,1 -a[-2,-1] c -norm[-1] -le[-1] 1 -*
+  </preset>
+
+  <preset name="Hough transform">
+-r 50%,50% --hough {w},{h},1 -+[-1] 1 -pow[-1] 0.3 -r[-1] 100%,100%,1,3 -n[-1] 0,255
+-if @{!,b}
+  x={max(0,@{!,x}-w)}
+  y=@{!,y}
+  rhomax={sqrt(w^2+h^2)/2}
+  theta={$x*2*pi/w}
+  rho={$y*$rhomax/h}
+  x={@{-2,w}/2+$rho*cos($theta)}
+  y={@{-2,h}/2+$rho*sin($theta)}
+  x0={$x+1000*sin($theta)}
+  y0={$y-1000*cos($theta)}
+  x1={$x-1000*sin($theta)}
+  y1={$y+1000*cos($theta)}
+  -line[-2] $x0,$y0,$x1,$y1,1,0x0F0F0F0F,255
+  -line[-2] {$x0+1},$y0,$x1,$y1,1,0x0F0F0F0F,255
+  -line[-2] $x0,{$y0+1},$x1,$y1,1,0x0F0F0F0F,255
+  -line[-2] $x0,$y0,$x1,$y1,1,0xF0F0F0F0,0
+  -line[-2] {$x0+1},$y0,$x1,$y1,1,0xF0F0F0F0,0
+  -line[-2] $x0,{$y0+1},$x1,$y1,1,0xF0F0F0F0,0
+-endif
+-a x
+  </preset>
+
+
+</preset_group>
+
+
+<!-- **********************
+
+        Frequencies
+
+*********************** -->
+<preset_group name="Frequencies">
+
+  <preset name="Fourier transform">
+-r 50%,50%
+--fft -a[-2,-1] c -norm[-1] -+[-1] 1 -log[-1]
+-n[-1] 0,255 -shift[-1] 50%,50%,0,0,2 -r[-1] 100%,100%,1,3
+-a x
+  </preset>
+
+  <preset name="Fourier filtering">
+-r[0] 50%,50%
+-if {@#==1} 100%,100% _rmin=0 _rmax=200 _is_update=1 -endif
+-if $_is_update
+  -f[1] 0
+  _rmax={$_rmax+if($_rmin==$_rmax,1,0)}
+  -ellipse[1] 50%,50%,$_rmax,$_rmax,0,1,1
+  -ellipse[1] 50%,50%,$_rmin,$_rmin,0,1,0
+  _is_update=0
+-endif
+-if {@{!,b}&amp;1}
+  x={@{!,x}-3*w/2}
+  y={@{!,y}-h/2}
+  rmax={round((($x)^2+($y)^2)^0.5)}
+  _rmin={if($_rmin&gt;$rmax,$rmax,$_rmin)}
+  -if {$rmax!=$_rmax} _is_update=1 _rmax=$rmax -endif
+-elif {@{!,b}&amp;2}
+  x={@{!,x}-3*w/2}
+  y={@{!,y}-h/2}
+  rmin={round((($x)^2+($y)^2)^0.5)}
+  _rmax={if($rmin&gt;$_rmax,$rmin,$_rmax)}
+  -if {$rmin!=$_rmin} _is_update=1 _rmin=$rmin -endif
+-elif {@{!,b}&amp;4}
+  _rmin=0 _rmax=200 _is_update=1
+-endif
+-fft[0]
+-shift[0,1] 50%,50%,0,0,2
+--a[0,1] c -norm[-1] -+[-1] 1 -log[-1] -n[-1] 0,255
+-*[0,1] [2]
+-shift[0,1] -50%,-50%,0,0,2
+-ifft[0,1]
+-rm[1]
+-n[0] 0,255
+-*[2] [1] -text[-1] "Freq. min : "$_rmin"\nFreq. max : "$_rmax,5,5,13,1,255 -r[-1] 100%,100%,1,3 -a[0,-1] x
+  </preset>
+
+  <preset name="Saturate frequency">
+-r 50%,50% -fft -point {@x/2},{@y/2},0,1,{iM} -ifft -c 0,255 -rm[-1]
+  </preset>
+
+</preset_group>
+
+<!-- ***********************
+
+           Geometry
+
+************************ -->
+<preset_group name="Geometry">
+
+  <preset name="Mirror">
+-crop 0,0,50%,100% --mirror x -a x
+  </preset>
+
+  <preset name="Pixels">
+-crop 25%,25%,75%,75% -imagegrid 5,5
+  </preset>
+
+  <preset name="Tiles rotation">
+-r 50%,50% -to_rgba -rotate_tiles {@|*20},5,5 -drop_shadow 10,10,3 -r 320,200,1,4 -drgba
+  </preset>
+
+</preset_group>
+
+<!-- *********************
+
+          Rendering
+
+********************** -->
+<preset_group name="Rendering">
+
+  <preset name="3D Cube">
+-r 50%,50%,1,3,3 -imagecube3d[-1] -*3d 256
+-r3d 1,1,2,{@|*30} -r3d 2,1,3,{@|*50} -db3d 0 -m3d 3
+(64;128^0;255^128;255) -r[-1] 640,480,1,3,3
+-object3d[-1] [-2],@x,@y -rm[-2]
+  </preset>
+
+  <preset name="Surface">
+--r[-1] 128,128,1,3 -blur[-1] 1 -elevation3d[-1] 0.3 -c3d[-1] -*3d[-1] 3
+-r3d[-1] 0,0,1,{(@x/@{-2,w}-0.5)*360} -r3d[-1] 1,0,0,{(@y/@{-2,h}-0.5)*180} -m3d 2 -object3d[-2] [-1],50%,75%,0,1
+-rm[-1]
+  </preset>
+
+</preset_group>
+
+<!-- *******************
+
+           Smoothing
+
+*******************  -->
+<preset_group name="Smoothing">
+
+  <preset name="Gaussian blur">
+sigma=3
+
+-r 50%,50% -noise 20 -c 0,255 -s x,2
+-blur[-1] $sigma
+-i[-2] 2,100% -a x
+  </preset>
+
+  <preset name="Bilateral filtering">
+sigma_s=5
+sigma_r=15
+
+-r 50%,50% -noise 20 -c 0,255 -s x,2
+-repeat 2 -bilateral[-1] $sigma_s,$sigma_r -done
+-i[-2] 2,100% -a x
+  </preset>
+
+  <preset name="Median">
+radius=5
+
+-r 50%,50% -noise 20 -c 0,255 -s x,2
+-median[-1] $radius
+-i[-2] 2,100% -a x
+  </preset>
+
+  <preset name="NL-means">
+sigma_s=10
+sigma_r=5
+
+-r 50%,50% -noise 20 -c 0,255 -s x,2
+-repeat 2 -denoise[-1] $sigma_s,$sigma_r -done
+-i[-2] 2,100% -a x
+  </preset>
+
+  <preset name="Anisotropic diffusion">
+-r 50%,50% -noise 20 -c 0,255 -s x,2
+-repeat 2 -smooth[-1] 140,0.6,0.4 -done
+-i[-2] 2,100% -a x
+  </preset>
+
+
+</preset_group>
+
+
+<!-- ***********************
+
+          Various
+
+************************ -->
+<preset_group name="Various">
+
+
+  <preset name="Tracking">
+--rgb2hsv[-1] -channels[-1] 0 -t2[-1] 180,210 -erode[-1] 32 -dilate[-1] 32
+-i[-2] ({w-1},0;{w-1},0^0,{w-1};0,{w-1}^{h-1},{h-1};0,0^0,0;{h-1},{h-1}) -r[-2] [-1],[-1],1,4,3 -*[-2,-1]
+--shared[-1] 0,0 xmin={w-1-iM} -rm[-1]
+--shared[-1] 1,1 xmax={iM} -rm[-1]
+--shared[-1] 2,2 ymin={h-1-iM} -rm[-1]
+--shared[-1] 3,3 ymax={iM} -rm[-1]
+-rm[-1]
+-if {$xmin!=w-1" || "$xmax!=0" || "$ymin!=h-1" || "$ymax!=0}
+  -polygon[-1] 4,$xmin,$ymin,$xmax,$ymin,$xmax,$ymax,$xmin,$ymax,1,0xFFFFFFFF,255
+  -ellipse {($xmin+$xmax)/2},{($ymin+$ymax)/2},8,8,0,1,255,0,255
+-else
+  1,1 -text[-1] "Object not found",2,2,24,1,255,255,255 -image[-2] [-1],10,10,0,0,0.3 -rm[-1]
+-endif
+  </preset>
+
+  <preset name="Region growing">
+-flood @x,@y,0,20,1,255,0,255
+  </preset>
+
+</preset_group>
+
+</document>
+
