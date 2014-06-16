@@ -84,7 +84,6 @@ CameraThumbsCtrl::CameraThumbsCtrl(CameraController* const ctrl, QObject* const 
 CameraThumbsCtrl::~CameraThumbsCtrl()
 {
     clearCache();
-    delete d;
 }
 
 CameraController* CameraThumbsCtrl::cameraController() const

@@ -85,7 +85,7 @@ private Q_SLOTS:
 private:
 
     class Private;
-    Private* const d;
+    const QScopedPointer<Private> d;
 };
 
 // ------------------------------------------------------------------------------------------------------------
@@ -115,7 +115,7 @@ protected:
 private:
 
     class Private;
-    Private* const d;
+    const QScopedPointer<Private> d;
 };
 
 } // namespace Digikam

@@ -106,7 +106,9 @@ public:
  */
 MapWidgetView::MapWidgetView(QItemSelectionModel* const selectionModel,
                              KCategorizedSortFilterProxyModel* const imageFilterModel, QWidget* const parent, bool mode)
-    : QWidget(parent), StateSavingObject(this), d(new Private())
+    : QWidget(parent),
+      StateSavingObject(this),
+      d(new Private())
 {
     d->mode = mode;
     d->selectionModel = selectionModel;
@@ -142,7 +144,7 @@ MapWidgetView::MapWidgetView(QItemSelectionModel* const selectionModel,
  */
 MapWidgetView::~MapWidgetView()
 {
-    delete d;
+
 }
 
 void MapWidgetView::doLoadState()
@@ -210,6 +212,7 @@ public:
           thumbnailLoadThread(0),
           mode(false)
     {
+
     }
 
     ImageFilterModel*    model;
@@ -221,7 +224,8 @@ public:
 
 MapViewModelHelper::MapViewModelHelper(QItemSelectionModel* const selection,
                                        KCategorizedSortFilterProxyModel* const filterModel, QObject* const parent, bool mode)
-    : KGeoMap::ModelHelper(parent), d(new Private())
+    : KGeoMap::ModelHelper(parent),
+      d(new Private())
 {
     d->selectionModel = selection;
     d->mode           = mode;
@@ -254,7 +258,7 @@ MapViewModelHelper::MapViewModelHelper(QItemSelectionModel* const selection,
  */
 MapViewModelHelper::~MapViewModelHelper()
 {
-    delete d;
+
 }
 
 /**
@@ -308,18 +312,18 @@ bool MapViewModelHelper::itemCoordinates(const QModelIndex& index, KGeoMap::GeoC
             return false;
         }
 
-        double lat, lng;
         const DMetadata meta(info.url().toLocalFile());
+        double lat, lng;
         const bool haveCoordinates = meta.getGPSLatitudeNumber(&lat) && meta.getGPSLongitudeNumber(&lng);
 
         if (!haveCoordinates)
         {
             return false;
         }
-        double alt;
-        const bool haveAlt = meta.getGPSAltitude(&alt);
         KGeoMap::GeoCoordinates tmpCoordinates(lat, lng);
 
+        double alt;
+        const bool haveAlt = meta.getGPSAltitude(&alt);
         if (haveAlt)
         {
             tmpCoordinates.setAlt(alt);
@@ -367,6 +371,7 @@ QPixmap MapViewModelHelper::pixmapFromRepresentativeIndex(const QPersistentModel
     {
         return index.data(ImportImageModel::ThumbnailRole).value<QPixmap>();
     }
+
     return QPixmap();
 }
 
@@ -490,6 +495,7 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
             }
         }
     }
+
     // and return the index
     return QPersistentModelIndex(bestIndex);
 }
@@ -518,12 +524,14 @@ void MapViewModelHelper::slotThumbnailLoaded(const LoadingDescription& loadingDe
 
 /**
  * @brief Because of a call to pixmapFromRepresentativeIndex, some thumbnails are not yet loaded at the time of requesting.
- *        When each thumbnail loads, this slot is called and emits a signal that announces the map that the thumbnail is available.
+ *        When each thumbnail loads, this slot is called and emits a signal that announces to the map that the thumbnail is available.
  *
  * This slot is used in the ImportUI interface.
  */
-void MapViewModelHelper::slotThumbnailLoaded(const QString& folder, const QString& file, const CamItemInfo& /*info*/, const QImage& thumb)
+void MapViewModelHelper::slotThumbnailLoaded(const QString& folder, const QString& file, const CamItemInfo& info, const QImage& thumb)
 {
+    Q_UNUSED(info);
+
     if (thumb.isNull())
     {
         return;
