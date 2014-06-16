@@ -53,6 +53,42 @@ namespace Digikam
 class AlbumWidgetStack;
 class ImageChangeset;
 
+class MapWidgetView : public QWidget, public StateSavingObject
+{
+    Q_OBJECT
+
+public:
+
+    enum Application
+    {
+        ApplicationDigikam = 1,
+        ApplicationImportUI = 2
+    };
+
+    MapWidgetView(QItemSelectionModel* const selectionModel,
+                  KCategorizedSortFilterProxyModel* const imageFilterModel, QWidget* const parent, const Application application);
+    ~MapWidgetView();
+
+    void openAlbum(Album* const album);
+    void setActive(const bool state);
+    bool getActiveState() const;
+
+    ImageInfo   currentImageInfo()   const;
+    CamItemInfo currentCamItemInfo() const;
+
+protected:
+
+    void doLoadState();
+    void doSaveState();
+
+private:
+
+    class Private;
+    const QScopedPointer<Private> d;
+};
+
+// ------------------------------------------------------------------------------------------------------------
+
 class MapViewModelHelper : public KGeoMap::ModelHelper
 {
     Q_OBJECT
@@ -60,7 +96,7 @@ class MapViewModelHelper : public KGeoMap::ModelHelper
 public:
 
     MapViewModelHelper(QItemSelectionModel* const selection, KCategorizedSortFilterProxyModel* const filterModel,
-                       QObject* const parent = 0, bool mode = true);
+                       QObject* const parent, const MapWidgetView::Application application);
     virtual ~MapViewModelHelper();
 
     virtual QAbstractItemModel* model()                                                                const;
@@ -81,36 +117,6 @@ private Q_SLOTS:
     void slotThumbnailLoaded(const LoadingDescription&, const QPixmap&);
     void slotThumbnailLoaded(const QString& folder, const QString& file, const CamItemInfo& info, const QImage& thumb);
     void slotImageChange(const ImageChangeset& changeset);
-
-private:
-
-    class Private;
-    const QScopedPointer<Private> d;
-};
-
-// ------------------------------------------------------------------------------------------------------------
-
-class MapWidgetView : public QWidget, public StateSavingObject
-{
-    Q_OBJECT
-
-public:
-
-    MapWidgetView(QItemSelectionModel* const selectionModel,
-                  KCategorizedSortFilterProxyModel* const imageFilterModel, QWidget* const parent, bool mode = true);
-    ~MapWidgetView();
-
-    void openAlbum(Album* const album);
-    void setActive(const bool state);
-    bool getActiveState() const;
-
-    ImageInfo   currentImageInfo()   const;
-    CamItemInfo currentCamItemInfo() const;
-
-protected:
-
-    void doLoadState();
-    void doSaveState();
 
 private:
 
