@@ -144,7 +144,9 @@ SharpSettings::SharpSettings(QWidget* const parent)
     d->sharpMethod = new RComboBox(parent);
     d->sharpMethod->addItem(i18n("Simple sharp"));
     d->sharpMethod->addItem(i18n("Unsharp mask"));
+#ifdef HAVE_EIGEN3
     d->sharpMethod->addItem(i18n("Refocus"));
+#endif // HAVE_EIGEN3
     d->sharpMethod->setDefaultIndex(SharpContainer::SimpleSharp);
     d->sharpMethod->setWhatsThis(i18n("Select the sharpening method to apply to the image."));
 

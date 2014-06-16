@@ -114,7 +114,9 @@ StackedView::StackedView(QWidget* parent)
     d->welcomePageView = new WelcomePageView(this);
     d->mediaPlayerView = new MediaPlayerView(this);
     d->mapWidgetView   = new MapWidgetView(d->imageIconView->getSelectionModel(),
-                                           d->imageIconView->imageFilterModel(), this);
+                                           d->imageIconView->imageFilterModel(), this,
+                                           MapWidgetView::ApplicationDigikam
+                                          );
     d->mapWidgetView->setObjectName("mainwindow_mapwidgetview");
     d->tableView       = new TableView(
             d->imageIconView->getSelectionModel(),

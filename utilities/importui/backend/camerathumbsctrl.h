@@ -57,7 +57,7 @@ public:
 
     /** fill item with relevant information.
      *  if item is not in cache, return false and information will be dispatched later through signalThumbInfoReady(),
-     *  else return true and information are available imediatly.
+     *  else return true and information is available immediatly.
      */
     bool getThumbInfo(const CamItemInfo& info, CachedItem& item) const;
 
@@ -99,7 +99,7 @@ private:
 private:
 
     class Private;
-    Private* const d;
+    const QScopedPointer<Private> d;
 };
 
 }  // namespace Digikam
