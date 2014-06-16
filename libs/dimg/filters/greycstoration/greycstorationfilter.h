@@ -217,12 +217,12 @@ public:
 
 private:
 
-    void computeChildrenThreads();
+//     void computeChildrenThreads();
     void restoration();
     void inpainting();
     void resize();
     void simpleResize();
-    void iterationLoop(uint iter);
+//     void iterationLoop(uint iter);
 
     virtual void initFilter();
     virtual void filterImage();

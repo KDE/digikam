@@ -22,10 +22,11 @@
  *
  * ============================================================ */
 
+// NOTE: Veaceslav cherry pick
 /** Don't use CImg interface (keyboard/mouse interaction) */
-#define cimg_display 0
-/** Only print debug information on the console */
-#define cimg_debug 1
+// #define cimg_display 0
+// /** Only print debug information on the console */
+// #define cimg_debug 1
 
 #include "greycstorationfilter.h"
 
@@ -43,20 +44,23 @@
 #include <QWaitCondition>
 #include "dynamicthread.h"
 
-#define cimg_plugin "greycstoration.h"
+// #define cimg_plugin "greycstoration.h"
 
 /** Uncomment this line if you use future GreycStoration implementation with GFact parameter
  */
-#define GREYSTORATION_USING_GFACT 1
+// #define GREYSTORATION_USING_GFACT 1 // NOTE: Veaceslav cherry pick
 
 // CImg includes
 
 #include "CImg.h"
+#include "gmic.h"
 
-extern "C"
-{
-#include <unistd.h>
-}
+
+// NOTE: Veaceslav cherry pick
+// extern "C"
+// {
+// #include <unistd.h>
+// }
 
 using namespace cimg_library;
 
@@ -69,24 +73,25 @@ class GreycstorationFilter::Private
 public:
 
     Private() :
-        gfact(1.0),
-        computationThreads(2),
-        mode(GreycstorationFilter::Restore),
-        threadManager(new CImg<>::GreycstorationThreadManager)
+//         gfact(1.0),
+//         computationThreads(2),
+        mode(GreycstorationFilter::Restore)
+//         threadManager(new CImg<>::GreycstorationThreadManager)
     {
     }
 
     ~Private()
     {
-        delete threadManager;
+//         delete threadManager;
     }
 
 public:
 
-    float                                gfact;
+//     float                                gfact;
+    int mode;
 
-    int                                  computationThreads;  // Number of threads used by CImg during computation.
-    int                                  mode;                // The interface running mode.
+//     int                                  computationThreads;  // Number of threads used by CImg during computation.
+//     int                                  mode;                // The interface running mode.
 
     QSize                                newSize;
     QImage                               inPaintingMask;      // Mask for inpainting.
@@ -96,7 +101,7 @@ public:
     CImg<>                               img;                 // Main image.
     CImg<uchar>                          mask;                // The mask used with inpaint or resize mode
 
-    CImg<>::GreycstorationThreadManager* threadManager;
+//     CImg<>::GreycstorationThreadManager* threadManager;
 };
 
 GreycstorationFilter::GreycstorationFilter(QObject* const parent)
@@ -147,22 +152,23 @@ void GreycstorationFilter::setInPaintingMask(const QImage& inPaintingMask)
     d->inPaintingMask = inPaintingMask;
 }
 
-void GreycstorationFilter::computeChildrenThreads()
-{
-    const int numProcs    = qMax(QThread::idealThreadCount(), 1);
-    const int maxThreads  = 16;
-    d->computationThreads = qMin(maxThreads, 2 + ((numProcs - 1) * 2));
-    kDebug() << "GreycstorationFilter::Computation threads: " << d->computationThreads;
-}
+// NOTE: Veaceslav cherrypick
+// void GreycstorationFilter::computeChildrenThreads()
+// {
+//     const int numProcs    = qMax(QThread::idealThreadCount(), 1);
+//     const int maxThreads  = 16;
+//     d->computationThreads = qMin(maxThreads, 2 + ((numProcs - 1) * 2));
+//     kDebug() << "GreycstorationFilter::Computation threads: " << d->computationThreads;
+// }
 
 void GreycstorationFilter::setup()
 {
-    computeChildrenThreads();
-
-    if (m_orgImage.sixteenBit())   // 16 bits image.
-    {
-        d->gfact = 1.0 / 256.0;
-    }
+//     computeChildrenThreads();
+//
+//     if (m_orgImage.sixteenBit())   // 16 bits image.
+//     {
+//         d->gfact = 1.0 / 256.0;
+//     }
 
     if (d->mode == Resize || d->mode == SimpleResize)
     {
@@ -183,7 +189,7 @@ void GreycstorationFilter::setup()
 
 QString GreycstorationFilter::cimgVersionString()
 {
-    return QString::number(cimg_version);
+    return QString::number(gmic_version);
 }
 
 // We need to re-implement this method from DImgThreadedFilter class because
@@ -201,11 +207,13 @@ void GreycstorationFilter::initFilter()
 
 void GreycstorationFilter::cancelFilter()
 {
+    /* FIXME Veaceslav cherry pick
     // Because Greycstoration algorithm run in a child thread, we need
     // to stop it before to stop this thread.
     kDebug() << "Stop Greycstoration computation...";
     d->threadManager->stop();
 
+    */
     // And now when stop main loop and clean up all
     DImgThreadedFilter::cancelFilter();
 }
@@ -223,13 +231,44 @@ void GreycstorationFilter::filterImage()
     // convert DImg (interleaved RGBA) to CImg (planar RGBA)
     if (!m_orgImage.sixteenBit())           // 8 bits image.
     {
-        d->img = CImg<unsigned char>(data, 4, width, height, 1, false).
-                 get_permute_axes("yzvx");
+        // NOTE: Veaceslav cherrypick
+//         d->img = CImg<unsigned char>(data, 4, width, height, 1, false).
+//                  get_permute_axes("yzvx");
+        d->img     = CImg<uchar>(width, height, 1, 4);
+        uchar* ptr = data;
+
+        // FIXME: Test this one
+        for (y = 0; y < height; ++y)
+        {
+            for (x = 0; x < width; ++x)
+            {
+                d->img(x, y, 0) = ptr[0];        // Blue.
+                d->img(x, y, 1) = ptr[1];        // Green.
+                d->img(x, y, 2) = ptr[2];        // Red.
+                d->img(x, y, 3) = ptr[3];        // Alpha.
+                ptr += 4;
+            }
+        }
     }
     else                                    // 16 bits image.
     {
-        d->img = CImg<unsigned short>(reinterpret_cast<unsigned short*>(data), 4, width, height, 1, false).
-                 get_permute_axes("yzvx");
+//         d->img = CImg<unsigned short>(reinterpret_cast<unsigned short*>(data), 4, width, height, 1, false).
+//                  get_permute_axes("yzvx");
+
+        d->img              = CImg<unsigned short>(width, height, 1, 4);
+        unsigned short* ptr = (unsigned short*)data;
+
+        for (y = 0; y < height; ++y)
+        {
+            for (x = 0; x < width; ++x)
+            {
+                d->img(x, y, 0) = ptr[0];        // Blue.
+                d->img(x, y, 1) = ptr[1];        // Green.
+                d->img(x, y, 2) = ptr[2];        // Red.
+                d->img(x, y, 3) = ptr[3];        // Alpha.
+                ptr += 4;
+            }
+        }
     }
 
     kDebug() << "Process Computation...";
@@ -256,7 +295,7 @@ void GreycstorationFilter::filterImage()
         }
 
         // harvest
-        d->threadManager->finish();
+//         d->threadManager->finish();
     }
     catch (...)        // Everything went wrong.
     {
@@ -316,30 +355,65 @@ void GreycstorationFilter::filterImage()
 
 void GreycstorationFilter::restoration()
 {
-    for (uint iter = 0 ; runningFlag() && (iter < d->settings.nbIter) ; ++iter)
-    {
-        // This function will start a thread running one iteration of the GREYCstoration filter.
-        // It returns immediately, so you can do what you want after (update a progress bar for
-        // instance).
-        d->threadManager->start(d->img, d->settings.amplitude,
-                                d->settings.sharpness,
-                                d->settings.anisotropy,
-                                d->settings.alpha,
-                                d->settings.sigma,
-#ifdef GREYSTORATION_USING_GFACT
-                                d->gfact,
-#endif
-                                d->settings.dl,
-                                d->settings.da,
-                                d->settings.gaussPrec,
-                                d->settings.interp,
-                                d->settings.fastApprox,
-                                d->settings.tile,
-                                d->settings.btile,
-                                d->computationThreads);
+// NOTE: Veaceslav cherry pick
+//     for (uint iter = 0 ; runningFlag() && (iter < d->settings.nbIter) ; ++iter)
+//     {
+//         // This function will start a thread running one iteration of the GREYCstoration filter.
+//         // It returns immediately, so you can do what you want after (update a progress bar for
+//         // instance).
+//         d->threadManager->start(d->img, d->settings.amplitude,
+//                                 d->settings.sharpness,
+//                                 d->settings.anisotropy,
+//                                 d->settings.alpha,
+//                                 d->settings.sigma,
+// #ifdef GREYSTORATION_USING_GFACT
+//                                 d->gfact,
+// #endif
+//                                 d->settings.dl,
+//                                 d->settings.da,
+//                                 d->settings.gaussPrec,
+//                                 d->settings.interp,
+//                                 d->settings.fastApprox,
+//                                 d->settings.tile,
+//                                 d->settings.btile,
+//                                 d->computationThreads);
+//
+//         iterationLoop(iter);
+//     }
 
-        iterationLoop(iter);
+    int tile;
+    int btile;
+
+    try{
+        gmic_list<> image_list;
+        gmic_list<char> image_name;
+        image_list.assign(d->img);
+        image_name.assign("Dummy name");
+
+        QString command;
+        command.append(QString("-repeat %1 ").arg(d->settings.nbIter));       // Iterations
+        command.append(QString("-smooth "));
+        command.append(QString("%1,").arg(d->settings.amplitude));            // Amplitude
+        command.append(QString("%1,").arg(d->settings.sharpness));            // Sharpness
+        command.append(QString("%1,").arg(d->settings.anisotropy));           // Anisotropy
+        command.append(QString("%1,").arg(d->settings.alpha));                // Gradient Smoothness
+        command.append(QString("%1,").arg(d->settings.sigma));                // Tensor Smoothness
+        command.append(QString("%1,").arg(d->settings.dl));                   // Spatial Precision
+        command.append(QString("%1,").arg(d->settings.da));                   // Angular Precision
+        command.append(QString("%1,").arg(d->settings.gaussPrec));            // Value Precision
+        command.append(QString("%1,").arg(d->settings.interp));               // Interpolation
+        command.append(QString("%1 ").arg(d->settings.fastApprox));           // Fast Approximation
+        command.append(QString("-done"));
+
+        kDebug() << command;
+
+        gmic(command.toAscii().data(), image_list, image_name);
+     }
+    catch (gmic_exception& e)
+    {
+        kDebug() << "Error encountered when calling G'MIC: " << e.what();
     }
+
 }
 
 void GreycstorationFilter::inpainting()
@@ -371,31 +445,33 @@ void GreycstorationFilter::inpainting()
         return;
     }
 
-    for (uint iter = 0 ; runningFlag() && (iter < d->settings.nbIter) ; ++iter)
-    {
-        // This function will start a thread running one iteration of the GREYCstoration filter.
-        // It returns immediately, so you can do what you want after (update a progress bar for
-        // instance).
-        d->threadManager->start(d->img, &d->mask,
-                                d->settings.amplitude,
-                                d->settings.sharpness,
-                                d->settings.anisotropy,
-                                d->settings.alpha,
-                                d->settings.sigma,
-#ifdef GREYSTORATION_USING_GFACT
-                                d->gfact,
-#endif
-                                d->settings.dl,
-                                d->settings.da,
-                                d->settings.gaussPrec,
-                                d->settings.interp,
-                                d->settings.fastApprox,
-                                d->settings.tile,
-                                d->settings.btile,
-                                d->computationThreads);
-
-        iterationLoop(iter);
-    }
+// Veaceslav cherry pick
+//     for (uint iter = 0 ; runningFlag() && (iter < d->settings.nbIter) ; ++iter)
+//     {
+//         // This function will start a thread running one iteration of the GREYCstoration filter.
+//         // It returns immediately, so you can do what you want after (update a progress bar for
+//         // instance).
+//         d->threadManager->start(d->img, &d->mask,
+//                                 d->settings.amplitude,
+//                                 d->settings.sharpness,
+//                                 d->settings.anisotropy,
+//                                 d->settings.alpha,
+//                                 d->settings.sigma,
+// #ifdef GREYSTORATION_USING_GFACT
+//                                 d->gfact,
+// #endif
+//                                 d->settings.dl,
+//                                 d->settings.da,
+//                                 d->settings.gaussPrec,
+//                                 d->settings.interp,
+//                                 d->settings.fastApprox,
+//                                 d->settings.tile,
+//                                 d->settings.btile,
+//                                 d->computationThreads);
+//
+//         iterationLoop(iter);
+//     }
+// TODO: Implement this with g'mic
 }
 
 void GreycstorationFilter::resize()
@@ -405,88 +481,90 @@ void GreycstorationFilter::resize()
     int w                   = m_destImage.width();
     int h                   = m_destImage.height();
 
-    d->mask.assign(d->img.dimx(), d->img.dimy(), 1, 1, 255);
+//     d->mask.assign(d->img.dimx(), d->img.dimy(), 1, 1, 255);
+//
+//     if (!anchor)
+//     {
+//         d->mask.resize(w, h, 1, 1, 1);
+//     }
+//     else
+//     {
+//         d->mask = !d->mask.resize(w, h, 1, 1, 4);
+//     }
+//
+//     d->img.resize(w, h, 1, -100, init);
 
-    if (!anchor)
-    {
-        d->mask.resize(w, h, 1, 1, 1);
-    }
-    else
-    {
-        d->mask = !d->mask.resize(w, h, 1, 1, 4);
-    }
-
-    d->img.resize(w, h, 1, -100, init);
-
-    for (uint iter = 0 ; runningFlag() && (iter < d->settings.nbIter) ; ++iter)
-    {
-        // This function will start a thread running one iteration of the GREYCstoration filter.
-        // It returns immediately, so you can do what you want after (update a progress bar for
-        // instance).
-        d->threadManager->start(d->img, &d->mask,
-                                d->settings.amplitude,
-                                d->settings.sharpness,
-                                d->settings.anisotropy,
-                                d->settings.alpha,
-                                d->settings.sigma,
-#ifdef GREYSTORATION_USING_GFACT
-                                d->gfact,
-#endif
-                                d->settings.dl,
-                                d->settings.da,
-                                d->settings.gaussPrec,
-                                d->settings.interp,
-                                d->settings.fastApprox,
-                                d->settings.tile,
-                                d->settings.btile,
-                                d->computationThreads);
-
-        iterationLoop(iter);
-    }
+//     for (uint iter = 0 ; runningFlag() && (iter < d->settings.nbIter) ; ++iter)
+//     {
+//         // This function will start a thread running one iteration of the GREYCstoration filter.
+//         // It returns immediately, so you can do what you want after (update a progress bar for
+//         // instance).
+//         d->threadManager->start(d->img, &d->mask,
+//                                 d->settings.amplitude,
+//                                 d->settings.sharpness,
+//                                 d->settings.anisotropy,
+//                                 d->settings.alpha,
+//                                 d->settings.sigma,
+// #ifdef GREYSTORATION_USING_GFACT
+//                                 d->gfact,
+// #endif
+//                                 d->settings.dl,
+//                                 d->settings.da,
+//                                 d->settings.gaussPrec,
+//                                 d->settings.interp,
+//                                 d->settings.fastApprox,
+//                                 d->settings.tile,
+//                                 d->settings.btile,
+//                                 d->computationThreads);
+//
+//         iterationLoop(iter);
+//     }
+    // TODO: implement the above with g'mic
 }
 
 void GreycstorationFilter::simpleResize()
 {
-    const unsigned int method = 3;      // Initial estimate (0, none, 1=block, 3=linear, 4=grid, 5=bicubic).
-    int w                     = m_destImage.width();
-    int h                     = m_destImage.height();
-
-    while (d->img.dimx() > 2 * w && d->img.dimy() > 2 * h)
-    {
-        d->img.resize_halfXY();
-    }
-
-    d->img.resize(w, h, -100, -100, method);
+    //FIXME: code doesnt work
+//     const unsigned int method = 3;      // Initial estimate (0, none, 1=block, 3=linear, 4=grid, 5=bicubic).
+//     int w                     = m_destImage.width();
+//     int h                     = m_destImage.height();
+//
+//     while (d->img.dimx() > 2 * w && d->img.dimy() > 2 * h)
+//     {
+//         d->img.resize_halfXY();
+//     }
+//
+//     d->img.resize(w, h, -100, -100, method);
 }
 
-void GreycstorationFilter::iterationLoop(uint iter)
-{
-    uint mp  = 0;
-    uint p   = 0;
-
-    while (d->threadManager->isRunning())
-    {
-        if (!runningFlag())
-        {
-            d->threadManager->stop();
-            d->threadManager->wait();
-        }
-        else
-        {
-            float progress = d->threadManager->waitABit(50);
-
-            // Update the progress bar in dialog. We simply compute the global
-            // progression index (including all iterations).
-            p = (uint)((iter * 100 + progress) / d->settings.nbIter);
-
-            if (p > mp)
-            {
-                postProgress(p);
-                mp = p;
-            }
-        }
-    }
-}
+// void GreycstorationFilter::iterationLoop(uint iter)
+// {
+//     uint mp  = 0;
+//     uint p   = 0;
+//
+//     while (d->threadManager->isRunning())
+//     {
+//         if (!runningFlag())
+//         {
+//             d->threadManager->stop();
+//             d->threadManager->wait();
+//         }
+//         else
+//         {
+//             float progress = d->threadManager->waitABit(50);
+//
+//             // Update the progress bar in dialog. We simply compute the global
+//             // progression index (including all iterations).
+//             p = (uint)((iter * 100 + progress) / d->settings.nbIter);
+//
+//             if (p > mp)
+//             {
+//                 postProgress(p);
+//                 mp = p;
+//             }
+//         }
+//     }
+// }
 
 FilterAction GreycstorationFilter::filterAction()
 {

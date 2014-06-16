@@ -1614,7 +1614,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/kioslave
         ${CMAKE_CURRENT_SOURCE_DIR}/libs
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dklcms
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/cimg
+#         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/cimg
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/gmic-1.5.9.2/src
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kmemoryinfo
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kinotify
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database
