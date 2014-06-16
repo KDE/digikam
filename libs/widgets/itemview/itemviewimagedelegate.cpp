@@ -9,7 +9,7 @@
  * Copyright (C) 2002-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2002-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -384,10 +384,10 @@ void ItemViewImageDelegate::drawAspectRatio(QPainter* p, const QRect& dimsRect, 
     if (dims.isValid())
     {
         p->setFont(d->fontXtra);
-        double aratio2;
-        int gcd_divisor;
-        int ar_width;
-        int ar_height;
+        double  aratio2;
+        int     gcd_divisor;
+        int     ar_width;
+        int     ar_height;
         QString aratio, ar_width2, ar_height2, resolution;
 
         if (dims.width() == 0 || dims.height() == 0)
@@ -398,15 +398,17 @@ void ItemViewImageDelegate::drawAspectRatio(QPainter* p, const QRect& dimsRect, 
         {
             gcd_divisor = gcd(dims.width(), dims.height());
         }
-        ar_width = dims.width() / gcd_divisor;
-        ar_height = dims.height() / gcd_divisor;
-        aratio2 = double(dims.width()) / double(dims.height());
+
+        ar_width  = dims.width()         / gcd_divisor;
+        ar_height = dims.height()        / gcd_divisor;
+        aratio2   = double(dims.width()) / dims.height() == 0 ? 1.0 : double(dims.height());
 
         if ((ar_width == 8 && ar_height == 5) || (ar_height == 8 && ar_width == 5))
         {
-             ar_width = ar_width * 2;
+             ar_width  = ar_width * 2;
              ar_height = ar_height * 2;
         }
+
         aratio.setNum(aratio2, 'f', 2);
         ar_width2.setNum(ar_width);
         ar_height2.setNum(ar_height);
@@ -421,7 +423,7 @@ void ItemViewImageDelegate::drawAspectRatio(QPainter* p, const QRect& dimsRect, 
              resolution = i18nc("unknown image resolution", "Unknown");
         }
 
-        p->drawText(dimsRect, Qt::AlignCenter, resolution);//squeezedTextCached(p, dimsRect.width(), resolution));
+        p->drawText(dimsRect, Qt::AlignCenter, resolution); //squeezedTextCached(p, dimsRect.width(), resolution));
     }
 }
 
@@ -429,7 +431,7 @@ void ItemViewImageDelegate::drawFileSize(QPainter* p, const QRect& r, qlonglong 
 {
     Q_D(const ItemViewImageDelegate);
     p->setFont(d->fontXtra);
-    p->drawText(r, Qt::AlignCenter, KIO::convertSize(bytes));//squeezedTextCached(p, r.width(), KIO::convertSize(bytes)));
+    p->drawText(r, Qt::AlignCenter, KIO::convertSize(bytes)); //squeezedTextCached(p, r.width(), KIO::convertSize(bytes)));
 }
 
 void ItemViewImageDelegate::drawTags(QPainter* p, const QRect& r, const QString& tagsString,
