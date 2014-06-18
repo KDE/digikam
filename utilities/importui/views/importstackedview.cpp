@@ -80,7 +80,8 @@ void ImportStackedView::setModels(ImportImageModel* model, ImportFilterModel* fi
 
     // TODO refactor MapWidgetView not to require the models on startup?
     d->mapWidgetView   = new MapWidgetView(d->importIconView->getSelectionModel(),
-                                           d->importIconView->importFilterModel(), this, false);
+                                           d->importIconView->importFilterModel(), this,
+                                           MapWidgetView::ApplicationImportUI);
     d->mapWidgetView->setObjectName("import_mapwidgetview");
     insertWidget(MapWidgetMode,     d->mapWidgetView);
 }
