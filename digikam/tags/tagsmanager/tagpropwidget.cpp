@@ -250,10 +250,12 @@ void TagPropWidget::slotSelectionChanged(QList<Album*> albums)
             TAlbum* const temp = dynamic_cast<TAlbum*>(*it);
 
             if (temp)
+            {
                 d->selectedAlbums.append(temp);
 
-            if(temp->isRoot())
-                containsRoot = true;
+                if(temp->isRoot())
+                    containsRoot = true;
+            }
         }
 
         d->titleEdit->clear();
