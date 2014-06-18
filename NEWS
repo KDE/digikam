@@ -43,4 +43,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 033 ==> 320772 - Unclear cvblobs licensing.
 034 ==> 336037 - Wrong dates displayed in import window of digiKam.
 035 ==> 302131 - MySQL : Windows XP client, linux database server slow startup.
-036 ==> 
+036 ==> 336172 - Can't save to PNG.
+037 ==> 333565 - Tagging in Album View deletes picture (Rygel DLNA server relevant).
+038 ==> 
