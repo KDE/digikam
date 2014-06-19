@@ -176,21 +176,16 @@ class TagViewSideBarWidget::Private
 {
 
 public:
-    enum TagsTab
-    {
-        TAGS = 0,
-        COLORSANDLABELS
-    };
-
-public:
 
     Private() :
+        isColorsAndLabelsTabActive(0),
         openTagMngr(0),
         tagSearchBar(0),
         tagFolderView(0)
     {
     }
 
+    bool                       isColorsAndLabelsTabActive;
     KPushButton*               openTagMngr;
     SearchTextBar*             tagSearchBar;
     KTabWidget*                tabWidget;
@@ -229,14 +224,17 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
     d->colorsAndLabelsTreeWidget = new ColorsAndLabelsTreeView(colorLabelWidget);
     colorLabelLayout->addWidget(d->colorsAndLabelsTreeWidget);
 
-    d->tabWidget->insertTab(Private::TAGS,tagsWidget,KIcon("tag"),"Tags");
-    d->tabWidget->insertTab(Private::COLORSANDLABELS,colorLabelWidget,"Colors and Labels");
+    d->tabWidget->insertTab(TAGS,tagsWidget,KIcon("tag"),"Tags");
+    d->tabWidget->insertTab(COLORSANDLABELS,colorLabelWidget,"Colors and Labels");
 
     connect(d->openTagMngr, SIGNAL(clicked()),
             this,SLOT(slotOpenTagManager()));
 
     connect(d->tagFolderView, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
             this, SIGNAL(signalFindDuplicatesInAlbum(Album*)));
+
+    connect(d->tabWidget,SIGNAL(currentChanged(int)),
+            this,SLOT(slotCurrentTabChanged(int)));
 }
 
 TagViewSideBarWidget::~TagViewSideBarWidget()
@@ -297,6 +295,16 @@ void TagViewSideBarWidget::slotOpenTagManager()
     tagMngr->show();
     tagMngr->activateWindow();
     tagMngr->raise();
+}
+
+void TagViewSideBarWidget::slotCurrentTabChanged(int tabIndex)
+{
+    d->isColorsAndLabelsTabActive = ((tabIndex == COLORSANDLABELS) ? true : false);
+}
+
+bool TagViewSideBarWidget::colorsAndLabelsTabState()
+{
+    return d->isColorsAndLabelsTabActive;
 }
 
 // -----------------------------------------------------------------------------
