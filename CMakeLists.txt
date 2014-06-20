@@ -303,6 +303,8 @@ ENDIF(NOT APPLE AND NOT USE_EXT_LIBPGF)
     ADD_DEFINITIONS(-Dcimg_debug=1)
     ADD_DEFINITIONS(-Dgmic_minimal)
     ADD_DEFINITIONS(-Dgmic_build)
+    ADD_DEFINITIONS(-Dgmic_is_parallel)
+    ADD_DEFINITIONS(-lpthread)
 
      SET(libgmic_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/gmic-1.5.9.2/src/gmic.cpp
@@ -1614,7 +1616,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/kioslave
         ${CMAKE_CURRENT_SOURCE_DIR}/libs
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dklcms
-#         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/cimg
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/gmic-1.5.9.2/src
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kmemoryinfo
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kinotify

@@ -388,10 +388,11 @@ void GreycstorationFilter::restoration()
         gmic_list<> image_list;
         gmic_list<char> image_name;
         image_list.assign(d->img);
-        image_name.assign("Dummy name");
 
         QString command;
-        command.append(QString("-repeat %1 ").arg(d->settings.nbIter));       // Iterations
+
+        command.append(QString("-apply_parallel_channels "));
+        command.append(QString("\"-repeat %1 ").arg(d->settings.nbIter));       // Iterations
         command.append(QString("-smooth "));
         command.append(QString("%1,").arg(d->settings.amplitude));            // Amplitude
         command.append(QString("%1,").arg(d->settings.sharpness));            // Sharpness
@@ -403,11 +404,15 @@ void GreycstorationFilter::restoration()
         command.append(QString("%1,").arg(d->settings.gaussPrec));            // Value Precision
         command.append(QString("%1,").arg(d->settings.interp));               // Interpolation
         command.append(QString("%1 ").arg(d->settings.fastApprox));           // Fast Approximation
-        command.append(QString("-done"));
+        command.append(QString("-done\""));
 
         kDebug() << command;
 
         gmic(command.toAscii().data(), image_list, image_name);
+
+        kDebug() << "Gmic finished";
+
+        d->img = image_list[0];
      }
     catch (gmic_exception& e)
     {
