@@ -315,9 +315,7 @@ void FindDuplicatesView::slotDuplicatesAlbumActived(QTreeWidgetItem* item, int)
 
 void FindDuplicatesView::slotCheckForValidSettings()
 {
-    bool valid = false;
-    valid      = d->albumSelectors->selectedPAlbums().count() || d->albumSelectors->selectedTAlbums().count();
-
+    bool valid = d->albumSelectors->selectedPAlbums().count() || d->albumSelectors->selectedTAlbums().count();
     d->scanDuplicatesBtn->setEnabled(valid);
 }
 
