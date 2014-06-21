@@ -46,4 +46,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 036 ==> 336172 - Can't save to PNG.
 037 ==> 333565 - Tagging in Album View deletes picture (Rygel DLNA server relevant).
 038 ==> 330923 - Custom toolbar settings not loaded on start.
-039 ==> 
+039 ==> 326997 - Some DNG files seem not to be recognized as such.
+040 ==> 
