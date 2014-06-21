@@ -7,7 +7,7 @@
  * Description : a wrapper class for an ICC color profile
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj dot cruz at supercable dot es>
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -197,10 +197,12 @@ IccProfile IccProfile::proPhotoRGB()
 QList<IccProfile> IccProfile::defaultProfiles()
 {
     QList<IccProfile> profiles;
+
     profiles << sRGB()
              << adobeRGB()
              << proPhotoRGB()
              << wideGamutRGB();
+
     return profiles;
 }
 
@@ -487,10 +489,44 @@ QStringList IccProfile::defaultSearchPaths()
     paths << KGlobal::dirs()->findDirs("data", "color/icc");
 
 #ifdef Q_WS_WIN
-    //TODO
+
+    //TODO implement Windows ICC file path searches here.
+
 #elif defined (Q_WS_MAC)
-    //TODO
-#else
+    // RJVB 20140620: use a scheme highly identical to the Linux scheme, adapted for MacPorts in /opt/local and the OS X standard ColorSync directories
+
+    candidates << "/System/Library/ColorSync/Profiles";
+    candidates << "/Library/ColorSync/Profiles";
+    candidates << QDir::homePath() + "/Library/ColorSync/Profiles";
+
+    // MacPorts installs for KDE, so we include the XDG data dirs, including /usr/share/color/icc
+    QStringList dataDirs = QString::fromLocal8Bit(getenv("XDG_DATA_DIRS")).split(':', QString::SkipEmptyParts);
+
+    if (!dataDirs.contains(QLatin1String("/opt/local/share")))
+    {
+        dataDirs << "/opt/local/share";
+    }
+
+    foreach(const QString& dataDir, dataDirs)
+    {
+        candidates << dataDir + "/color/icc";
+    }
+
+    // XDG_DATA_HOME
+    QString dataHomeDir = QString::fromLocal8Bit(getenv("XDG_DATA_HOME"));
+
+    if (!dataHomeDir.isEmpty())
+    {
+        candidates << dataHomeDir + "/color/icc";
+        candidates << dataHomeDir + "/icc";
+    }
+
+    // home dir directories
+    candidates << QDir::homePath() + "/.local/share/color/icc/";
+    candidates << QDir::homePath() + "/.local/share/icc/";
+    candidates << QDir::homePath() + "/.color/icc/";
+
+#else // LINUX
 
     // XDG data dirs, including /usr/share/color/icc
     QStringList dataDirs = QString::fromLocal8Bit(getenv("XDG_DATA_DIRS")).split(':', QString::SkipEmptyParts);
