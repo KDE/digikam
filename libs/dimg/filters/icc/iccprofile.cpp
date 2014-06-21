@@ -493,7 +493,8 @@ QStringList IccProfile::defaultSearchPaths()
     //TODO implement Windows ICC file path searches here.
 
 #elif defined (Q_WS_MAC)
-    // RJVB 20140620: use a scheme highly identical to the Linux scheme, adapted for MacPorts in /opt/local and the OS X standard ColorSync directories
+
+    // Use a scheme highly identical to the Linux scheme, adapted for MacPorts in /opt/local and the OS X standard ColorSync directories
 
     candidates << "/System/Library/ColorSync/Profiles";
     candidates << "/Library/ColorSync/Profiles";
