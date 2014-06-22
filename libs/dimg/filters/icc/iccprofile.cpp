@@ -490,7 +490,8 @@ QStringList IccProfile::defaultSearchPaths()
 
 #ifdef Q_WS_WIN
 
-    //TODO implement Windows ICC file path searches here.
+    candidates << QDir::rootPath() + "/Windows/Spool/Drivers/Color/";   // For Win2K and WinXP
+    candidates << QDir::rootPath() + "/Windows/Color/";                 // For Win98 and WinMe
 
 #elif defined (Q_WS_MAC)
 

@@ -903,7 +903,18 @@ void SetupICC::slotShowDefaultSearchPaths()
 
 #ifdef Q_WS_WIN
 
-    //TODO implement Windows ICC file path searches here.
+    QString text = i18n("On Windows, the default search paths include "
+                        "<ul>"
+                        "<li>%1/Windows/Spool/Drivers/Color/</li>"   // For Win2K and WinXP
+                        "<li>%2/Windows/Color/</li>"                 // For For Win98 and WinMe
+                        "</ul>"
+                        "On your system, currently these paths exist and are scanned:"
+                        "<ul>"
+                        "<li>%3</li>"
+                        "</ul>",
+                        QDir::rootPath(),
+                        QDir::rootPath(),
+                        existingPaths);
 
 #elif defined (Q_WS_MAC)
     QString text = i18n("On Mac OS X, the default search paths include "
