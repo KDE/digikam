@@ -46,6 +46,7 @@ namespace Digikam
 void FileActionMngrFileWorker::writeOrientationToFiles(FileActionImageInfoList infos, int orientation)
 {
     QStringList failedItems;
+
     foreach(const ImageInfo& info, infos)
     {
         QString path                  = info.filePath();
@@ -82,6 +83,7 @@ void FileActionMngrFileWorker::writeMetadataToFiles(FileActionImageInfoList info
     MetadataHub hub;
 
     ScanController::instance()->suspendCollectionScan();
+
     foreach(const ImageInfo& info, infos)
     {
 
@@ -94,6 +96,7 @@ void FileActionMngrFileWorker::writeMetadataToFiles(FileActionImageInfoList info
 
         infos.writtenToOne();
     }
+
     ScanController::instance()->resumeCollectionScan();
 
     infos.finishedWriting();
@@ -106,6 +109,7 @@ void FileActionMngrFileWorker::writeMetadata(FileActionImageInfoList infos, Meta
     MetadataSettingsContainer writeSettings = MetadataSettings::instance()->settings();
 
     ScanController::instance()->suspendCollectionScan();
+
     foreach(const ImageInfo& info, infos)
     {
         QString filePath = info.filePath();
@@ -117,6 +121,7 @@ void FileActionMngrFileWorker::writeMetadata(FileActionImageInfoList infos, Meta
 
         infos.writtenToOne();
     }
+
     ScanController::instance()->resumeCollectionScan();
 
     delete hub;
@@ -140,12 +145,11 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
 
         bool rotateAsJpeg     = false;
         bool rotateLossy      = false;
-        bool rotateByMetadata = false;
 
         MetadataSettingsContainer::RotationBehaviorFlags behavior;
         behavior = MetadataSettings::instance()->settings().rotationBehavior;
 
-        rotateByMetadata = (behavior & MetadataSettingsContainer::RotateByMetadataFlag);
+        bool rotateByMetadata = (behavior & MetadataSettingsContainer::RotateByMetadataFlag);
 
         // Check if rotation by content, as desired, is feasible
         // We'll later check again if it was successful
@@ -159,6 +163,7 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
             if (behavior & MetadataSettingsContainer::RotateByLossyRotation)
             {
                 DImg::FORMAT format = DImg::fileFormat(path);
+
                 switch (format)
                 {
                     case DImg::JPEG:
@@ -172,6 +177,7 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
                 }
             }
         }
+
         ajustFaceRectangles(info,action);
 
         KExiv2Iface::RotationMatrix matrix;
@@ -180,10 +186,12 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
         KExiv2::ImageOrientation finalOrientation = matrix.exifOrientation();
 
         bool rotatedPixels = false;
+
         if (rotateAsJpeg)
         {
             JPEGUtils::JpegRotator rotator(path);
             rotator.setCurrentOrientation(currentOrientation);
+
             if (action == KExiv2Iface::RotationMatrix::NoTransformation)
             {
                 rotatedPixels = rotator.autoExifTransform();
@@ -192,6 +200,7 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
             {
                 rotatedPixels = rotator.exifTransform((KExiv2Iface::RotationMatrix::TransformationAction)action);
             }
+
             if (!rotatedPixels)
             {
                 failedItems.append(info.name());
@@ -220,6 +229,7 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
                 // TODO: Atomic operation!!
                 // prepare metadata, including to reset Exif tag
                 image.prepareMetadataToSave(path, image.format(), true);
+
                 if (image.save(path, image.detectedFormat()))
                 {
                     rotatedPixels = true;
@@ -264,13 +274,13 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
     {
         emit imageChangeFailed(i18n("Failed to transform these files:"), failedItems);
     }
+
     infos.finishedWriting();
 
     ScanController::instance()->resumeCollectionScan();
 }
 
-void FileActionMngrFileWorker::ajustFaceRectangles(const ImageInfo& info,
-                                                   int action)
+void FileActionMngrFileWorker::ajustFaceRectangles(const ImageInfo& info, int action)
 {
     /**
      *  Get all faces from database and rotate them
@@ -284,33 +294,38 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ImageInfo& info,
         QString name = FaceTags::faceNameForTag(dface.tagId());
 
         QRect oldrect = dface.region().toRect();
-        if(action == 5)
-        {
-            QRect newRect = TagRegion::ajustToRotatedImg(oldrect,info.dimensions(),0);
-            ajustedFaces[name] = newRect;
 
-        }
-        if(action == 7)
+        if(action == 5) // TODO: use enum
         {
-            QRect newRect = TagRegion::ajustToRotatedImg(oldrect,info.dimensions(),1);
+            QRect newRect      = TagRegion::ajustToRotatedImg(oldrect,info.dimensions(),0);
             ajustedFaces[name] = newRect;
 
         }
 
+        if(action == 7) // TODO: use enum
+        {
+            QRect newRect      = TagRegion::ajustToRotatedImg(oldrect,info.dimensions(),1);
+            ajustedFaces[name] = newRect;
+
+        }
     }
+
     /**
      *  Delete all old faces and add rotated ones
      */
     FaceTagsEditor().removeAllFaces(info.id());
 
     QMap<QString,QRect>::ConstIterator it = ajustedFaces.constBegin();
+
     for( ;it!=ajustedFaces.constEnd();++it)
     {
         int tagId = FaceTags::getOrCreateTagForPerson(it.key());
+
         if (!tagId)
         {
             kDebug() << "Failed to create a person tag for name" << it.key();
         }
+
         TagRegion region(it.value());
         FaceTagsEditor().add(info.id(), tagId, region, false);
     }
@@ -323,4 +338,5 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ImageInfo& info,
     hub.loadFaceTags (info,QSize(tempS.height (),tempS.width ()));
     hub.write (info.filePath (),MetadataHub::FullWrite);
 }
+
 } // namespace Digikam
