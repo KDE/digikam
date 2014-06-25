@@ -49,4 +49,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 039 ==> 326997 - Some DNG files seem not to be recognized as such.
 040 ==> 336553 - Patch that adds the OS X standard locations for ICC ("ColorSync") profiles.
 041 ==> 323361 - Crash While Navigating Photos under Face Management feature.
-042 ==> 
+042 ==> 336235 - digiKam stopped responding and crashed downloading photos from a smart phone.
+043 ==> 
