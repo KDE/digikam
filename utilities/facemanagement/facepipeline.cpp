@@ -656,11 +656,17 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
         for (int i=0; i<package->databaseFaces.size(); i++)
         {
             if (package->databaseFaces[i].roles & FacePipelineDatabaseFace::ForRecognition)
-                //&& !package->recognitionResults[i].isNull()) // comment out: Allow to overwrite existing recognition with new, possibly valid, "not recognized" status
             {
-                int tagId = FaceTags::getOrCreateTagForIdentity(package->recognitionResults[i].attributes);
-                package->databaseFaces[i] = utils.changeSuggestedName(package->databaseFaces[i], tagId);
+                // Allow to overwrite existing recognition with new, possibly valid, "not recognized" status
+                int tagId = FaceTags::unknownPersonTagId();
 
+                if (!package->recognitionResults[i].isNull())
+                {
+                    // Only perform this call if recognition as results, to prevent crash in QMap. See B.K.O #335624
+                    tagId = FaceTags::getOrCreateTagForIdentity(package->recognitionResults[i].attributes);
+                }
+
+                package->databaseFaces[i]        = utils.changeSuggestedName(package->databaseFaces[i], tagId);
                 package->databaseFaces[i].roles &= ~FacePipelineDatabaseFace::ForRecognition;
            }
         }

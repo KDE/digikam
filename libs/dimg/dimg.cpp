@@ -2948,11 +2948,10 @@ void DImg::prepareMetadataToSave(const QString& intendedDestPath, const QString&
 
     bool createNewPreview    = false;
     QSize previewSize;
-    bool skipPreviewCreation = false;
 
     // Refuse preview creation for images with transparency
     // as long as we have no format to support this. See bug 286127
-    skipPreviewCreation = hasTransparentPixels();
+    bool skipPreviewCreation = hasTransparentPixels();
 
     if (flags & CreateNewMetadataPreview && !skipPreviewCreation)
     {
