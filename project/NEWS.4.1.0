@@ -51,4 +51,3 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 041 ==> 323361 - Crash While Navigating Photos under Face Management feature.
 042 ==> 336235 - digiKam stopped responding and crashed downloading photos from a smart phone.
 043 ==> 297558 - Another crash when finding faces.
-044 ==> 
