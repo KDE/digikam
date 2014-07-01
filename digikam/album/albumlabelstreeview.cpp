@@ -518,17 +518,37 @@ QString AlbumLabelsSearchHandler::createXMLForCurrentSelection(QHash<QString, QL
 
 SAlbum* AlbumLabelsSearchHandler::search(const QString &xml)
 {
-    QString name = SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch);
-    int id = DatabaseAccess().db()->addSearch(DatabaseSearch::AdvancedSearch, name, xml);
-
     SAlbum* album;
 
     if(!d->treeWidget->isCheckable())
-        album = new SAlbum("Labels Album", id);
+    {
+        album = AlbumManager::instance()->findSAlbum("Labels Album");
+        if(album)
+        {
+            DatabaseAccess().db()->updateSearch(album->id(),DatabaseSearch::AdvancedSearch, "Labels Album", xml);
+        }
+        else
+        {
+            int id = DatabaseAccess().db()->addSearch(DatabaseSearch::AdvancedSearch, "Labels Album", xml);
+            album = new SAlbum("Labels Album", id);
+        }
+    }
     else
-        album = new SAlbum(d->generatedAlbumName, id);
+    {
+        album = AlbumManager::instance()->findSAlbum(d->generatedAlbumName);
+        if(album)
+        {
+            DatabaseAccess().db()->updateSearch(album->id(),DatabaseSearch::AdvancedSearch, d->generatedAlbumName, xml);
+        }
+        else
+        {
+            int id = DatabaseAccess().db()->addSearch(DatabaseSearch::AdvancedSearch, d->generatedAlbumName, xml);
+            album = new SAlbum(d->generatedAlbumName, id);
+        }
+    }
 
-    album->setUsedByLabelsTree(true);
+    if(!album->isUsedByLabelsTree())
+        album->setUsedByLabelsTree(true);
 
     return album;
 }
@@ -786,7 +806,6 @@ void AlbumLabelsSearchHandler::slotData(KIO::Job *job, QByteArray data)
     }
 
     d->urlListForSelectedAlbum = urlList;
-    qDebug() << urlList;
 }
 
 } // namespace Digikam
