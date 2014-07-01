@@ -587,6 +587,7 @@ DatabaseUrl DAlbum::databaseUrl() const
 
 SAlbum::SAlbum(const QString& title, int id, bool root)
     : Album(Album::SEARCH, id, root),
+      m_usedByLabelsTree(false),
       m_searchType(DatabaseSearch::UndefinedType)
 {
     setTitle(title);
@@ -600,6 +601,11 @@ void SAlbum::setSearch(DatabaseSearch::Type type, const QString& query)
 {
     m_searchType = type;
     m_query      = query;
+}
+
+void SAlbum::setUsedByLabelsTree(bool isUsed)
+{
+    m_usedByLabelsTree = isUsed;
 }
 
 DatabaseUrl SAlbum::databaseUrl() const
@@ -671,6 +677,11 @@ bool SAlbum::isTemporarySearch() const
     }
 
     return (title() == getTemporaryTitle(m_searchType));
+}
+
+bool SAlbum::isUsedByLabelsTree() const
+{
+    return m_usedByLabelsTree;
 }
 
 QString SAlbum::displayTitle() const

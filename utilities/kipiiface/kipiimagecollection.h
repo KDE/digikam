@@ -64,7 +64,7 @@ public:
 
 public:
 
-    KipiImageCollection(Type type, Album* const album, const QString& filter, const QString& generatedName = QString());
+    KipiImageCollection(Type type, Album* const album, const QString& filter, KUrl::List imagesUrlList = KUrl::List());
     ~KipiImageCollection();
 
     virtual QString    name();
@@ -79,6 +79,8 @@ public:
     virtual bool       isDirectory();
 
     virtual bool operator==(ImageCollectionShared&);
+
+
 
 private:
 

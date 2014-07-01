@@ -453,6 +453,7 @@ public:
     bool                 isHaarSearch() const;
     bool                 isMapSearch() const;
     bool                 isDuplicatesSearch() const;
+    bool                 isUsedByLabelsTree() const;
 
     /**
      * Indicates whether this album is a temporary search or not.
@@ -485,11 +486,21 @@ public:
      */
     static QString getTemporaryHaarTitle(DatabaseSearch::HaarSearchType haarType);
 
+    /**
+     * Sets the property m_usedByLabelsTree to true if the search album
+     * was created using the Colors and labels tree view
+     *
+     * @param isUsed => the status of the usage
+     */
+    void setUsedByLabelsTree(bool isUsed);
+
 private:
 
     void setSearch(DatabaseSearch::Type type, const QString& query);
 
 private:
+
+    bool                 m_usedByLabelsTree;
 
     QString              m_query;
     DatabaseSearch::Type m_searchType;

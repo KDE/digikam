@@ -39,6 +39,7 @@
 #include "searchmodificationhelper.h"
 #include "sidebarwidget.h"
 #include "imagefiltermodel.h"
+#include "albumlabelstreeview.h"
 
 namespace Digikam
 {
@@ -98,13 +99,6 @@ class TagViewSideBarWidget : public SidebarWidget
     Q_OBJECT
 
 public:
-    enum TagsTab
-    {
-        TAGS = 0,
-        COLORSANDLABELS
-    };
-
-public:
 
     TagViewSideBarWidget(QWidget* const parent, TagModel* const model);
     virtual ~TagViewSideBarWidget();
@@ -119,13 +113,10 @@ public:
 
     AlbumPointer<TAlbum> currentAlbum() const;
 
-    bool colorsAndLabelsTabState();
-
 public Q_SLOTS:
 
     void setCurrentAlbum(TAlbum* album);
     void slotOpenTagManager();
-    void slotCurrentTabChanged(int tabIndex);
 
 Q_SIGNALS:
 
@@ -138,6 +129,38 @@ public:
 
 private:
 
+    Private* const d;
+};
+
+// -----------------------------------------------------------------------------------------
+
+/**
+ * SideBarWidget for the Labels.
+ *
+ * @author Mohamed Anwer
+ */
+class LabelsSideBarWidget : public SidebarWidget
+{
+    Q_OBJECT
+
+public:
+
+    LabelsSideBarWidget(QWidget* const parent);
+    virtual ~LabelsSideBarWidget();
+
+    AlbumLabelsTreeView* labelsTree();
+
+    void setActive(bool active);
+    void applySettings();
+    void changeAlbumFromHistory(QList<Album *> album);
+    void doLoadState();
+    void doSaveState();
+    QPixmap getIcon();
+    QString getCaption();
+
+private:
+
+    class Private;
     Private* const d;
 };
 

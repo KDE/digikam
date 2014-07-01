@@ -66,7 +66,7 @@
 #include "facescandialog.h"
 #include "facedetector.h"
 #include "tagsmanager.h"
-#include "albumcolorsandlabelstreeview.h"
+#include "albumlabelstreeview.h"
 
 namespace Digikam
 {
@@ -174,23 +174,18 @@ QString AlbumFolderViewSideBarWidget::getCaption()
 
 class TagViewSideBarWidget::Private
 {
-
 public:
 
     Private() :
-        isColorsAndLabelsTabActive(0),
         openTagMngr(0),
         tagSearchBar(0),
         tagFolderView(0)
     {
     }
 
-    bool                       isColorsAndLabelsTabActive;
-    KPushButton*               openTagMngr;
-    SearchTextBar*             tagSearchBar;
-    KTabWidget*                tabWidget;
-    TagFolderView*             tagFolderView;
-    ColorsAndLabelsTreeView*   colorsAndLabelsTreeWidget;
+    KPushButton*   openTagMngr;
+    SearchTextBar* tagSearchBar;
+    TagFolderView* tagFolderView;
 };
 
 TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* const model)
@@ -199,14 +194,9 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
     setObjectName("TagView Sidebar");
 
     QVBoxLayout* const layout = new QVBoxLayout(this);
-    d->tabWidget = new KTabWidget(this);
-    layout->addWidget(d->tabWidget);
-
-    QWidget* const tagsWidget = new QWidget();
-    QVBoxLayout* const tagsLayout = new QVBoxLayout(tagsWidget);
 
     d->openTagMngr   = new KPushButton( i18n("Open Tag Manager"));
-    d->tagFolderView = new TagFolderView(tagsWidget,model);
+    d->tagFolderView = new TagFolderView(this, model);
     d->tagFolderView->setConfigGroup(getConfigGroup());
     d->tagFolderView->setExpandNewCurrentItem(true);
     d->tagFolderView->setAlbumManagerCurrentAlbum(true);
@@ -215,26 +205,15 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
     d->tagSearchBar->setModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->tagSearchBar->setFilterModel(d->tagFolderView->albumFilterModel());
 
-    tagsLayout->addWidget(d->openTagMngr);
-    tagsLayout->addWidget(d->tagFolderView);
-    tagsLayout->addWidget(d->tagSearchBar);
-
-    QWidget* const colorLabelWidget = new QWidget();
-    QVBoxLayout* const colorLabelLayout = new QVBoxLayout(colorLabelWidget);
-    d->colorsAndLabelsTreeWidget = new ColorsAndLabelsTreeView(colorLabelWidget);
-    colorLabelLayout->addWidget(d->colorsAndLabelsTreeWidget);
-
-    d->tabWidget->insertTab(TAGS,tagsWidget,KIcon("tag"),"Tags");
-    d->tabWidget->insertTab(COLORSANDLABELS,colorLabelWidget,"Colors and Labels");
+    layout->addWidget(d->openTagMngr);
+    layout->addWidget(d->tagFolderView);
+    layout->addWidget(d->tagSearchBar);
 
     connect(d->openTagMngr, SIGNAL(clicked()),
             this,SLOT(slotOpenTagManager()));
 
     connect(d->tagFolderView, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
             this, SIGNAL(signalFindDuplicatesInAlbum(Album*)));
-
-    connect(d->tabWidget,SIGNAL(currentChanged(int)),
-            this,SLOT(slotCurrentTabChanged(int)));
 }
 
 TagViewSideBarWidget::~TagViewSideBarWidget()
@@ -297,14 +276,78 @@ void TagViewSideBarWidget::slotOpenTagManager()
     tagMngr->raise();
 }
 
-void TagViewSideBarWidget::slotCurrentTabChanged(int tabIndex)
+// -----------------------------------------------------------------------------
+
+class LabelsSideBarWidget::Private
 {
-    d->isColorsAndLabelsTabActive = ((tabIndex == COLORSANDLABELS) ? true : false);
+
+public:
+
+    Private() :
+        labelsTree(0)
+    {}
+
+    AlbumLabelsTreeView* labelsTree;
+};
+
+LabelsSideBarWidget::LabelsSideBarWidget(QWidget* const parent) :
+    SidebarWidget(parent), d(new Private)
+{
+    setObjectName("Labels Sidebar");
+
+    QVBoxLayout* const layout = new QVBoxLayout(this);
+
+    d->labelsTree = new AlbumLabelsTreeView(this);
+    d->labelsTree->setConfigGroup(getConfigGroup());
+
+    layout->addWidget(d->labelsTree);
 }
 
-bool TagViewSideBarWidget::colorsAndLabelsTabState()
+LabelsSideBarWidget::~LabelsSideBarWidget()
 {
-    return d->isColorsAndLabelsTabActive;
+    delete d;
+}
+
+AlbumLabelsTreeView *LabelsSideBarWidget::labelsTree()
+{
+    return d->labelsTree;
+}
+
+void LabelsSideBarWidget::setActive(bool active)
+{
+    if(active)
+    {
+        d->labelsTree->setCurrentAlbum();
+    }
+}
+
+void LabelsSideBarWidget::applySettings()
+{
+}
+
+void LabelsSideBarWidget::changeAlbumFromHistory(QList<Album *> album)
+{
+    Q_UNUSED(album);
+}
+
+void LabelsSideBarWidget::doLoadState()
+{
+    d->labelsTree->doLoadState();
+}
+
+void LabelsSideBarWidget::doSaveState()
+{
+    d->labelsTree->doSaveState();
+}
+
+QPixmap LabelsSideBarWidget::getIcon()
+{
+    return d->labelsTree->goldenStarPixmap();
+}
+
+QString LabelsSideBarWidget::getCaption()
+{
+    return i18n("Labels");
 }
 
 // -----------------------------------------------------------------------------

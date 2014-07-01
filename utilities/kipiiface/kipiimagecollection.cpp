@@ -64,21 +64,21 @@ public:
 public:
 
     QString                   imgFilter;
-    QString                   generatedName;
     KipiImageCollection::Type type;
     Album*                    album;
+    KUrl::List                readyImageUrlList;
 };
 
-KipiImageCollection::KipiImageCollection(Type type, Album* const album, const QString& filter, const QString& generatedName)
+KipiImageCollection::KipiImageCollection(Type type, Album* const album, const QString& filter, KUrl::List imagesUrlList)
     : ImageCollectionShared(), d(new Private)
 {
     d->type      = type;
     d->album     = album;
     d->imgFilter = filter;
 
-    if(!generatedName.isEmpty())
+    if(!imagesUrlList.isEmpty())
     {
-        d->generatedName = generatedName;
+        d->readyImageUrlList = imagesUrlList;
     }
 
     if (!album)
@@ -94,11 +94,7 @@ KipiImageCollection::~KipiImageCollection()
 
 QString KipiImageCollection::name()
 {
-    if(!d->generatedName.isEmpty())
-    {
-        return d->generatedName;
-    }
-    else if (d->album->type() == Album::TAG)
+    if (d->album->type() == Album::TAG)
     {
         return i18n("Tag: %1", d->album->title());
     }
@@ -156,6 +152,11 @@ QString KipiImageCollection::comment()
 
 KUrl::List KipiImageCollection::images()
 {
+    if(!d->readyImageUrlList.isEmpty())
+    {
+        return d->readyImageUrlList;
+    }
+
     switch (d->type)
     {
         case AllItems:

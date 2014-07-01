@@ -47,7 +47,7 @@
 #include "albumtreeview.h"
 #include "kipiimagecollection.h"
 #include "kipiinterface.h"
-#include "albumcolorsandlabelstreeview.h"
+#include "albumlabelstreeview.h"
 
 namespace Digikam
 {
@@ -64,7 +64,6 @@ public:
         tagTreeView(0),
         searchModel(0),
         searchTreeView(0),
-        labelsTreeView(0),
         iface(0),
         albumSearchBar(0),
         tagSearchBar(0),
@@ -102,17 +101,17 @@ public:
         }
     }
 
-    void fillCollectionsFromCheckedColorsAndLabels(QList<KIPI::ImageCollection>& collectionList,
+    void fillCollectionsFromCheckedLabels(QList<KIPI::ImageCollection>& collectionList,
                                                    const QString& ext)
     {
-        Album* const album = labelsTreeView->currentAlbumFromCheckedItems();
+        Album* const album = labelsSearchHandler->albumForSelectedItems();
 
         if (!album)
         {
             return;
         }
 
-        KipiImageCollection* col = new KipiImageCollection(KipiImageCollection::AllItems, album, ext, labelsTreeView->generatedAlbumName());
+        KipiImageCollection* col = new KipiImageCollection(KipiImageCollection::AllItems, album, ext,labelsSearchHandler->imagesUrls());
         collectionList.append(col);
     }
 
@@ -129,7 +128,8 @@ public:
     SearchModel*    searchModel;
     SearchTreeView* searchTreeView;
 
-    ColorsAndLabelsTreeView* labelsTreeView;
+    AlbumLabelsTreeView*      labelsTree;
+    AlbumLabelsSearchHandler* labelsSearchHandler;
 
     KipiInterface*  iface;
 
@@ -213,18 +213,19 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
     // -------------------------------------------------------------------------------
 
     KVBox* labelsBox  = new KVBox(d->tab);
-    d->labelsTreeView = new ColorsAndLabelsTreeView(labelsBox,true);
+    d->labelsTree = new AlbumLabelsTreeView(labelsBox,true);
+    d->labelsSearchHandler = new AlbumLabelsSearchHandler(d->labelsTree);
 
     labelsBox->setMargin(0);
     labelsBox->setSpacing(KDialog::spacingHint());
-    labelsBox->setStretchFactor(d->labelsTreeView, 100);
+    labelsBox->setStretchFactor(d->labelsTree, 100);
 
     // -------------------------------------------------------------------------------
 
     d->tab->addTab(albumBox, i18n("My Albums"));
     d->tab->addTab(tagBox, i18n("My Tags"));
     d->tab->addTab(searchBox, i18n("My Searches"));
-    d->tab->addTab(labelsBox, i18n("Colors And Labels"));
+    d->tab->addTab(labelsBox, i18n("Labels"));
 
     QHBoxLayout* hlay = new QHBoxLayout(this);
     hlay->addWidget(d->tab);
@@ -242,7 +243,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
     connect(d->searchModel, SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
             this, SIGNAL(selectionChanged()));
 
-    connect(d->labelsTreeView, SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
+    connect(d->labelsSearchHandler, SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
             this, SIGNAL(selectionChanged()));
 
     // ------------------------------------------------------------------------------------
@@ -279,7 +280,7 @@ QList<KIPI::ImageCollection> KipiImageCollectionSelector::selectedImageCollectio
     d->fillCollectionsFromCheckedModel(list, d->albumModel, ext);
     d->fillCollectionsFromCheckedModel(list, d->tagModel, ext);
     d->fillCollectionsFromCheckedModel(list, d->searchModel, ext);
-    d->fillCollectionsFromCheckedColorsAndLabels(list, ext);
+    d->fillCollectionsFromCheckedLabels(list, ext);
 
     kDebug() << list.count() << " collection items selected";
 
