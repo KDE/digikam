@@ -68,8 +68,6 @@ private:
     void initPicksTree();
     void initColorsTree();
 
-    QPixmap starForRating(int rate);
-
 Q_SIGNALS:
     void signalSetCurrentAlbum();
 

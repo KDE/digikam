@@ -182,15 +182,6 @@ QPixmap AlbumLabelsTreeView::colorRectPixmap(QColor color)
     return pixmap;
 }
 
-QPixmap AlbumLabelsTreeView::starForRating(int rate)
-{
-    /// TODO Implement this function
-    /// to generate a tiled pixmap
-    Q_UNUSED(rate);
-
-    return goldenStarPixmap();
-}
-
 QHash<QString, QList<int> > AlbumLabelsTreeView::selectedLabels()
 {
     QHash<QString, QList<int> > selectedLabelsHash;
@@ -318,8 +309,6 @@ void AlbumLabelsTreeView::initRatingsTree()
     d->ratings->setFlags(Qt::ItemIsEnabled);
     setIconSize(QSize(100,20));
 
-    //QPixmap gStarPixmap = goldenStarPixmap();
-
     QTreeWidgetItem* noRate = new QTreeWidgetItem(d->ratings);
     noRate->setText(0,tr("No Rating"));
     noRate->setIcon(0,KIconLoader::global()->loadIcon("emblem-unmounted", KIconLoader::NoGroup, 20));
@@ -331,13 +320,20 @@ void AlbumLabelsTreeView::initRatingsTree()
     {
         QTreeWidgetItem* rateWidget = new QTreeWidgetItem(d->ratings);
 
-        if(rate == 1)
-            rateWidget->setText(0,QString::number(rate) + " Star");
-        else
-            rateWidget->setText(0,QString::number(rate) + " Stars");
+        QPixmap pix(goldenStarPixmap().width()*rate,goldenStarPixmap().height());
+        pix.fill(Qt::transparent);
+        QPainter p(&pix);
+        int offset = 0;
+        p.setRenderHint(QPainter::Antialiasing, true);
+        p.setPen(palette().color(QPalette::Active, foregroundRole()));
 
-        rateWidget->setFont(0,d->regularFont);
-        rateWidget->setIcon(0,starForRating(rate));
+        for(int i = 0 ; i < rate ; ++i)
+        {
+            p.drawPixmap(offset,0,goldenStarPixmap());
+            offset += goldenStarPixmap().width();
+        }
+
+        rateWidget->setIcon(0,QIcon(pix));
         rateWidget->setSizeHint(0,QSize(1,20));
     }
 }
