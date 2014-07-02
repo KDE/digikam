@@ -53,6 +53,7 @@ public:
 
     bool    isCheckable();
     QPixmap goldenStarPixmap();
+    QPixmap colorRectPixmap(QColor color);
 
     QHash<QString, QList<int> > selectedLabels();
 

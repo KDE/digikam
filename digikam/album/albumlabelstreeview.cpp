@@ -166,6 +166,22 @@ QPixmap AlbumLabelsTreeView::goldenStarPixmap()
     return pixmap;
 }
 
+QPixmap AlbumLabelsTreeView::colorRectPixmap(QColor color)
+{
+    QRect rect(4,4,24,24);
+    QPixmap pixmap = QPixmap(30, 30);
+    pixmap.fill(Qt::transparent);
+
+    QPainter p1(&pixmap);
+    p1.setRenderHint(QPainter::Antialiasing, true);
+    p1.setBrush(color);
+    p1.setPen(palette().color(QPalette::Active, foregroundRole()));
+    p1.drawRect(rect);
+    p1.end();
+
+    return pixmap;
+}
+
 QPixmap AlbumLabelsTreeView::starForRating(int rate)
 {
     /// TODO Implement this function
@@ -362,7 +378,7 @@ void AlbumLabelsTreeView::initColorsTree()
     noColor->setIcon(0,KIconLoader::global()->loadIcon("emblem-unmounted", KIconLoader::NoGroup, 20));
 
     QStringList colorSet;
-    colorSet << "red" << "orange" << "yellow" << "darkgreen" << "darkblue" << "magenta" << "darkgray" << "black" << "lightgray";
+    colorSet << "red" << "orange" << "yellow" << "darkgreen" << "darkblue" << "magenta" << "darkgray" << "black" << "white";
 
     QStringList colorSetNames;
     colorSetNames << "Red"  << "Orange" << "Yellow" << "Green" << "Blue" << "Magenta" << "Gray" << "Black" << "White";
@@ -371,8 +387,7 @@ void AlbumLabelsTreeView::initColorsTree()
         QTreeWidgetItem* colorWidgetItem = new QTreeWidgetItem(d->colors);
         colorWidgetItem->setText(0,colorSetNames.at(colorSet.indexOf(color)));
         colorWidgetItem->setFont(0,d->regularFont);
-        QPixmap colorIcon(18,18);
-        colorIcon.fill(QColor(color));
+        QPixmap colorIcon = colorRectPixmap(QColor(color));
         colorWidgetItem->setIcon(0,QIcon(colorIcon));
         colorWidgetItem->setSizeHint(0,QSize(1,20));
     }
