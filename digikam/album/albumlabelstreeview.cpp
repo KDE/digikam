@@ -128,7 +128,7 @@ AlbumLabelsTreeView::AlbumLabelsTreeView(QWidget *parent, bool setCheckable) :
     }
     else
     {
-        setSelectionMode(QAbstractItemView::MultiSelection);
+        setSelectionMode(QAbstractItemView::ExtendedSelection);
     }
 }
 
