@@ -147,7 +147,7 @@ public:
 
 class DIGIKAM_EXPORT GreycstorationFilter : public DImgThreadedFilter
 {
-
+    Q_OBJECT
 public:
 
     enum MODE
@@ -215,6 +215,13 @@ public:
     virtual FilterAction    filterAction();
     void                    readParameters(const FilterAction& action);
 
+private slots:
+    void setImageAfterProcessing(bool result);
+    void iterationLoop();
+
+signals:
+    void signalStartWork();
+
 private:
 
 //     void computeChildrenThreads();
@@ -222,9 +229,11 @@ private:
     void inpainting();
     void resize();
     void simpleResize();
-//     void iterationLoop(uint iter);
+    void initGmicInterface();
+
 
     virtual void initFilter();
+    virtual void startFilterDirectly();
     virtual void filterImage();
 
 private:

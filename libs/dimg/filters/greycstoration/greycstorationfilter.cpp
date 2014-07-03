@@ -42,6 +42,9 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QWaitCondition>
+#include <QTimer>
+#include <QCoreApplication>
+#include <QTime>
 #include "dynamicthread.h"
 
 // #define cimg_plugin "greycstoration.h"
@@ -54,6 +57,7 @@
 
 #include "CImg.h"
 #include "gmic.h"
+#include "gmicinterface.h"
 
 
 // NOTE: Veaceslav cherry pick
@@ -100,6 +104,10 @@ public:
 
     CImg<>                               img;                 // Main image.
     CImg<uchar>                          mask;                // The mask used with inpaint or resize mode
+    QThread*                             thread;
+    GMicInterface*                       gmicInterface;
+    QTimer*                               timer;
+
 
 //     CImg<>::GreycstorationThreadManager* threadManager;
 };
@@ -112,6 +120,7 @@ GreycstorationFilter::GreycstorationFilter(QObject* const parent)
     setSettings(GreycstorationContainer());
     setMode(Restore);
     setInPaintingMask(QImage());
+    initGmicInterface();
 }
 
 GreycstorationFilter::GreycstorationFilter(DImg* const orgImage,
@@ -128,6 +137,7 @@ GreycstorationFilter::GreycstorationFilter(DImg* const orgImage,
     setMode(mode, newWidth, newHeight);
     setInPaintingMask(inPaintingMask);
     setup();
+    initGmicInterface();
 }
 
 GreycstorationFilter::~GreycstorationFilter()
@@ -205,15 +215,140 @@ void GreycstorationFilter::initFilter()
     }
 }
 
+void GreycstorationFilter::startFilterDirectly()
+{
+    if (m_orgImage.width() && m_orgImage.height())
+    {
+        emit started();
+
+        m_wasCancelled = false;
+
+            QDateTime now = QDateTime::currentDateTime();
+            filterImage();
+            kDebug() << m_name << ":: excecution time : " << now.msecsTo(QDateTime::currentDateTime()) << " ms";
+//         }
+//         catch (std::bad_alloc& ex)
+//         {
+//             //TODO: User notification
+//             kError() << "Caught out-of-memory exception! Aborting operation" << ex.what();
+//             emit finished(false);
+//             return;
+//         }
+
+//         emit finished(!m_wasCancelled);
+    }
+    else  // No image data
+    {
+//         emit finished(false);
+        kDebug() << m_name << "::No valid image data !!! ...";
+    }
+}
+
+void GreycstorationFilter::initGmicInterface()
+{
+    d->thread = new QThread();
+    d->gmicInterface = new GMicInterface();
+    d->gmicInterface->moveToThread(d->thread);
+    connect(d->thread, SIGNAL(finished()),
+            d->gmicInterface, SLOT(deleteLater()));
+    connect(this, SIGNAL(signalStartWork()),
+            d->gmicInterface, SLOT(runGmic()),Qt::QueuedConnection);
+    connect(d->gmicInterface, SIGNAL(signalResultReady(bool)),
+            this, SLOT(setImageAfterProcessing(bool)));
+
+    d->thread->start();
+    d->timer = new QTimer();
+    connect(d->timer, SIGNAL(timeout()), this, SLOT(iterationLoop()));
+}
+
+void GreycstorationFilter::setImageAfterProcessing(bool result)
+{
+
+    d->timer->stop();
+
+    if(result)
+    {
+        register int x, y;
+        d->img = d->gmicInterface->getImg();
+
+            kDebug() << "Finalization...";
+
+        uchar* const newData = m_destImage.bits();
+        int newWidth         = m_destImage.width();
+        int newHeight        = m_destImage.height();
+
+        if (!m_orgImage.sixteenBit())           // 8 bits image.
+        {
+            uchar* ptr = newData;
+
+            for (y = 0; y < newHeight; ++y)
+            {
+                for (x = 0; x < newWidth; ++x)
+                {
+                    // Overwrite RGB values to destination.
+                    ptr[0] = static_cast<uchar>(d->img(x, y, 0));        // Blue
+                    ptr[1] = static_cast<uchar>(d->img(x, y, 1));        // Green
+                    ptr[2] = static_cast<uchar>(d->img(x, y, 2));        // Red
+                    ptr[3] = static_cast<uchar>(d->img(x, y, 3));        // Alpha
+                    ptr    += 4;
+                }
+            }
+        }
+        else                                     // 16 bits image.
+        {
+            unsigned short* ptr = reinterpret_cast<unsigned short*>(newData);
+
+            for (y = 0; y < newHeight; ++y)
+            {
+                for (x = 0; x < newWidth; ++x)
+                {
+                    // Overwrite RGB values to destination.
+                    ptr[0] = static_cast<unsigned short>(d->img(x, y, 0));        // Blue
+                    ptr[1] = static_cast<unsigned short>(d->img(x, y, 1));        // Green
+                    ptr[2] = static_cast<unsigned short>(d->img(x, y, 2));        // Red
+                    ptr[3] = static_cast<unsigned short>(d->img(x, y, 3));        // Alpha
+                    ptr    += 4;
+                }
+            }
+        }
+    }
+    emit finished(result);
+}
+
 void GreycstorationFilter::cancelFilter()
 {
-    /* FIXME Veaceslav cherry pick
-    // Because Greycstoration algorithm run in a child thread, we need
-    // to stop it before to stop this thread.
-    kDebug() << "Stop Greycstoration computation...";
-    d->threadManager->stop();
 
-    */
+    d->timer->stop();
+    d->gmicInterface->cancel();
+    d->thread->exit();
+
+
+    /**
+     * Wait 100 ms for thread to exit, if no, terminate him
+     */
+    QTime dieTime = QTime::currentTime().addMSecs(100);
+    while( QTime::currentTime() < dieTime )
+    {
+        QCoreApplication::processEvents( QEventLoop::AllEvents, 100 );
+    }
+
+    /** NOTE: Ugly solution, but gmic do not have a good support for cancel,
+     * and we are forced to kill the thread which run it.
+     */
+//     if(!d->thread->isFinished())
+//     {
+//         kDebug() << "Killing Thread: Note this one throws exception";
+//         d->thread->terminate();
+//     }
+
+    while(!d->thread->isFinished())
+    {
+        QTime dieTime = QTime::currentTime().addMSecs(100);
+        while( QTime::currentTime() < dieTime )
+        {
+            QCoreApplication::processEvents( QEventLoop::AllEvents, 100 );
+        }
+    }
     // And now when stop main loop and clean up all
     DImgThreadedFilter::cancelFilter();
 }
@@ -273,8 +408,8 @@ void GreycstorationFilter::filterImage()
 
     kDebug() << "Process Computation...";
 
-    try
-    {
+//     try
+//     {
         switch (d->mode)
         {
             case Restore:
@@ -296,61 +431,22 @@ void GreycstorationFilter::filterImage()
 
         // harvest
 //         d->threadManager->finish();
-    }
-    catch (...)        // Everything went wrong.
-    {
-        kDebug() << "Error during Greycstoration filter computation!";
+//     }
+//     catch (...)        // Everything went wrong.
+//     {
+//         kDebug() << "Error during Greycstoration filter computation!";
+//
+//         return;
+//     }
 
-        return;
-    }
-
-    if (!runningFlag())
-    {
-        return;
-    }
+//     if (!runningFlag())
+//     {
+//         return;
+//     }
 
     // Copy CImg onto destination.
 
-    kDebug() << "Finalization...";
 
-    uchar* const newData = m_destImage.bits();
-    int newWidth         = m_destImage.width();
-    int newHeight        = m_destImage.height();
-
-    if (!m_orgImage.sixteenBit())           // 8 bits image.
-    {
-        uchar* ptr = newData;
-
-        for (y = 0; y < newHeight; ++y)
-        {
-            for (x = 0; x < newWidth; ++x)
-            {
-                // Overwrite RGB values to destination.
-                ptr[0] = static_cast<uchar>(d->img(x, y, 0));        // Blue
-                ptr[1] = static_cast<uchar>(d->img(x, y, 1));        // Green
-                ptr[2] = static_cast<uchar>(d->img(x, y, 2));        // Red
-                ptr[3] = static_cast<uchar>(d->img(x, y, 3));        // Alpha
-                ptr    += 4;
-            }
-        }
-    }
-    else                                     // 16 bits image.
-    {
-        unsigned short* ptr = reinterpret_cast<unsigned short*>(newData);
-
-        for (y = 0; y < newHeight; ++y)
-        {
-            for (x = 0; x < newWidth; ++x)
-            {
-                // Overwrite RGB values to destination.
-                ptr[0] = static_cast<unsigned short>(d->img(x, y, 0));        // Blue
-                ptr[1] = static_cast<unsigned short>(d->img(x, y, 1));        // Green
-                ptr[2] = static_cast<unsigned short>(d->img(x, y, 2));        // Red
-                ptr[3] = static_cast<unsigned short>(d->img(x, y, 3));        // Alpha
-                ptr    += 4;
-            }
-        }
-    }
 }
 
 void GreycstorationFilter::restoration()
@@ -381,18 +477,17 @@ void GreycstorationFilter::restoration()
 //         iterationLoop(iter);
 //     }
 
-    int tile;
-    int btile;
+//     int tile;
+//     int btile;
 
-    try{
-        gmic_list<> image_list;
-        gmic_list<char> image_name;
-        image_list.assign(d->img);
+//     try{
+//         gmic_list<> image_list;
+//         gmic_list<char> image_name;
+//         image_list.assign(d->img);
 
         QString command;
 
-        command.append(QString("-apply_parallel_channels "));
-        command.append(QString("\"-repeat %1 ").arg(d->settings.nbIter));       // Iterations
+        command.append(QString("-repeat %1 ").arg(d->settings.nbIter));       // Iterations
         command.append(QString("-smooth "));
         command.append(QString("%1,").arg(d->settings.amplitude));            // Amplitude
         command.append(QString("%1,").arg(d->settings.sharpness));            // Sharpness
@@ -404,20 +499,26 @@ void GreycstorationFilter::restoration()
         command.append(QString("%1,").arg(d->settings.gaussPrec));            // Value Precision
         command.append(QString("%1,").arg(d->settings.interp));               // Interpolation
         command.append(QString("%1 ").arg(d->settings.fastApprox));           // Fast Approximation
-        command.append(QString("-done\""));
+        command.append(QString("-done"));
 
         kDebug() << command;
 
-        gmic(command.toAscii().data(), image_list, image_name);
+        d->gmicInterface->setImg(d->img);
+        d->gmicInterface->setCommand(command);
+//         d->gmicInterface->runGmic();
+//         kDebug() << " G Mic finished";
+        emit signalStartWork();
+        d->timer->start(1000);
+//         gmic(command.toAscii().data(), image_list, image_name);
 
-        kDebug() << "Gmic finished";
+//         kDebug() << "Gmic finished";
 
-        d->img = image_list[0];
-     }
-    catch (gmic_exception& e)
-    {
-        kDebug() << "Error encountered when calling G'MIC: " << e.what();
-    }
+//         d->img = image_list[0];
+//      }
+//     catch (gmic_exception& e)
+//     {
+//         kDebug() << "Error encountered when calling G'MIC: " << e.what();
+//     }
 
 }
 
@@ -481,10 +582,10 @@ void GreycstorationFilter::inpainting()
 
 void GreycstorationFilter::resize()
 {
-    const bool anchor       = true;   // Anchor original pixels.
-    const unsigned int init = 5;      // Initial estimate (1=block, 3=linear, 5=bicubic).
-    int w                   = m_destImage.width();
-    int h                   = m_destImage.height();
+//     const bool anchor       = true;   // Anchor original pixels.
+//     const unsigned int init = 5;      // Initial estimate (1=block, 3=linear, 5=bicubic).
+//     int w                   = m_destImage.width();
+//     int h                   = m_destImage.height();
 
 //     d->mask.assign(d->img.dimx(), d->img.dimy(), 1, 1, 255);
 //
@@ -542,10 +643,17 @@ void GreycstorationFilter::simpleResize()
 //     d->img.resize(w, h, -100, -100, method);
 }
 
-// void GreycstorationFilter::iterationLoop(uint iter)
-// {
-//     uint mp  = 0;
-//     uint p   = 0;
+void GreycstorationFilter::iterationLoop()
+{
+    uint p   = 0;
+    if(d->thread-isRunning())
+    {
+        float iter = d->gmicInterface->getProgress();
+        kDebug() << "Progress " << iter;
+        p = (uint)(iter * 100);
+        postProgress(p);
+    }
+}
 //
 //     while (d->threadManager->isRunning())
 //     {
