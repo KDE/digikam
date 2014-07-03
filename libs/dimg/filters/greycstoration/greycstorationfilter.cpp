@@ -317,20 +317,17 @@ void GreycstorationFilter::setImageAfterProcessing(bool result)
 
 void GreycstorationFilter::cancelFilter()
 {
-
+    if(d->thread->isRunning())
+    {
+        d->gmicInterface->cancel();
+    }
     d->timer->stop();
-    d->gmicInterface->cancel();
     d->thread->exit();
-
-
+    kDebug() << "Thread exited";
     /**
      * Wait 100 ms for thread to exit, if no, terminate him
      */
-    QTime dieTime = QTime::currentTime().addMSecs(100);
-    while( QTime::currentTime() < dieTime )
-    {
-        QCoreApplication::processEvents( QEventLoop::AllEvents, 100 );
-    }
+
 
     /** NOTE: Ugly solution, but gmic do not have a good support for cancel,
      * and we are forced to kill the thread which run it.
