@@ -530,32 +530,28 @@ QString AlbumLabelsSearchHandler::createXMLForCurrentSelection(QHash<QString, QL
 SAlbum* AlbumLabelsSearchHandler::search(const QString &xml)
 {
     SAlbum* album;
+    int id;
+    album = AlbumManager::instance()->findSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch));
 
-    if(!d->treeWidget->isCheckable())
+    if(album)
     {
-        album = AlbumManager::instance()->findSAlbum("Labels Album");
-        if(album)
-        {
-            DatabaseAccess().db()->updateSearch(album->id(),DatabaseSearch::AdvancedSearch, "Labels Album", xml);
-        }
-        else
-        {
-            int id = DatabaseAccess().db()->addSearch(DatabaseSearch::AdvancedSearch, "Labels Album", xml);
-            album = new SAlbum("Labels Album", id);
-        }
+        id = album->id();
+        DatabaseAccess().db()->updateSearch(id,DatabaseSearch::AdvancedSearch,
+                                            SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch), xml);
     }
     else
     {
-        album = AlbumManager::instance()->findSAlbum(d->generatedAlbumName);
-        if(album)
-        {
-            DatabaseAccess().db()->updateSearch(album->id(),DatabaseSearch::AdvancedSearch, d->generatedAlbumName, xml);
-        }
-        else
-        {
-            int id = DatabaseAccess().db()->addSearch(DatabaseSearch::AdvancedSearch, d->generatedAlbumName, xml);
-            album = new SAlbum(d->generatedAlbumName, id);
-        }
+        id = DatabaseAccess().db()->addSearch(DatabaseSearch::AdvancedSearch,
+                                              SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch), xml);
+    }
+
+    if(!d->treeWidget->isCheckable())
+    {
+        album = new SAlbum("Labels Album", id);
+    }
+    else
+    {
+        album = new SAlbum(d->generatedAlbumName, id);
     }
 
     if(!album->isUsedByLabelsTree())
