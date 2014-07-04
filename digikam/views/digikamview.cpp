@@ -992,6 +992,11 @@ void DigikamView::changeAlbumFromHistory(QList<Album*> album, QWidget* const wid
         {
             sideBarWidget->changeAlbumFromHistory(album);
             slotLeftSideBarActivate(sideBarWidget);
+
+            if(sideBarWidget == d->labelsSideBar)
+            {
+                d->labelsSearchHandler->restoreSelectionFromHistory(d->albumHistory->neededLabels());
+            }
         }
 
         d->parent->enableAlbumBackwardHistory(d->useAlbumHistory && !d->albumHistory->isBackwardEmpty());
@@ -1166,9 +1171,17 @@ void DigikamView::slotAlbumSelected(QList<Album*> albums)
         emit signalTagSelected(false);
     }
 
-    if (d->useAlbumHistory)
+    if (d->useAlbumHistory && !d->labelsSearchHandler->isRestoringSelectionFromHistory())
     {
-        d->albumHistory->addAlbums(albums, d->leftSideBar->getActiveTab());
+        if(!(d->leftSideBar->getActiveTab() == d->labelsSideBar))
+        {
+            d->albumHistory->addAlbums(albums, d->leftSideBar->getActiveTab());
+        }
+        else
+        {
+            d->albumHistory->
+                    addAlbums(albums, d->leftSideBar->getActiveTab(), d->labelsSideBar->selectedLabels());
+        }
     }
 
     d->parent->enableAlbumBackwardHistory(d->useAlbumHistory && !d->albumHistory->isBackwardEmpty());

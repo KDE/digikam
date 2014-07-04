@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2004      by Joern Ahrens <joern dot ahrens at kdemail dot net>
  * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2014      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -63,6 +64,7 @@ public:
     ~AlbumHistory();
 
     void            addAlbums(QList<Album*> const albums, QWidget* const widget = 0);
+    void            addAlbums(QList<Album*> const albums, QWidget* const widget, QHash<QString, QList<int> > selectedLabels);
     void            deleteAlbum(Album* const album);
     void            clearHistory();
     void            back(QList<Album*>& album, QWidget** const widget, unsigned int steps=1);
@@ -74,6 +76,8 @@ public:
 
     bool            isForwardEmpty() const;
     bool            isBackwardEmpty() const;
+
+    QHash<QString, QList<int> > neededLabels();
 
 Q_SIGNALS:
 

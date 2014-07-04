@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "albumlabelstreeview.h"
+#include "albumlabelstreeview.moc"
 
 // QT includes
 
@@ -389,6 +389,31 @@ void AlbumLabelsTreeView::initColorsTree()
     }
 }
 
+void AlbumLabelsTreeView::restoreSelectionFromHistory(QHash<QString, QList<int> > neededLabels)
+{
+    QTreeWidgetItemIterator it(this, QTreeWidgetItemIterator::Selected);
+    while(*it)
+    {
+        (*it)->setSelected(false);
+        ++it;
+    }
+
+    foreach (int rateItemIndex, neededLabels["ratings"])
+    {
+        d->ratings->child(rateItemIndex)->setSelected(true);
+    }
+
+    foreach (int pickItemIndex, neededLabels["picks"])
+    {
+        d->picks->child(pickItemIndex)->setSelected(true);
+    }
+
+    foreach (int colorItemIndex, neededLabels["colors"])
+    {
+        d->colors->child(colorItemIndex)->setSelected(true);
+    }
+}
+
 // -------------------------------------------------------------------------------
 
 class AlbumLabelsSearchHandler::Private
@@ -403,11 +428,13 @@ public:
 
     Private() :
         treeWidget(0),
+        restoringSelectionFromHistory(0),
         albumForSelectedItems(0)
     {}
 
 
     AlbumLabelsTreeView* treeWidget;
+    bool                 restoringSelectionFromHistory;
     bool                 currentXmlIsEmpty;
     QString              oldXml;
     Album*               albumForSelectedItems;
@@ -453,6 +480,19 @@ KUrl::List AlbumLabelsSearchHandler::imagesUrls()
 QString AlbumLabelsSearchHandler::generatedName()
 {
     return d->generatedAlbumName;
+}
+
+void AlbumLabelsSearchHandler::restoreSelectionFromHistory(QHash<QString, QList<int> > neededLabels)
+{
+    d->restoringSelectionFromHistory = true;
+    d->treeWidget->restoreSelectionFromHistory(neededLabels);
+    d->restoringSelectionFromHistory = false;
+    slotSelectionChanged();
+}
+
+bool AlbumLabelsSearchHandler::isRestoringSelectionFromHistory()
+{
+    return d->restoringSelectionFromHistory;
 }
 
 QString AlbumLabelsSearchHandler::createXMLForCurrentSelection(QHash<QString, QList<int> > selectedLabels)
@@ -732,7 +772,7 @@ void AlbumLabelsSearchHandler::imagesUrlsForCurrentAlbum()
 
 void AlbumLabelsSearchHandler::slotSelectionChanged()
 {
-    if(d->treeWidget->isCheckable())
+    if(d->treeWidget->isCheckable() || d->restoringSelectionFromHistory)
     {
         return;
     }

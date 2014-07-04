@@ -81,6 +81,13 @@ public:
         widget = w;
     };
 
+    HistoryItem(QList<Album*> const a, QWidget* const w, QHash<QString, QList<int> > selectedLabels)
+    {
+        albums.append(a);
+        widget = w;
+        labels = selectedLabels;
+    };
+
     bool operator==(const HistoryItem& item)
     {
         if(widget != item.widget)
@@ -91,8 +98,9 @@ public:
         return albums == item.albums;
     }
 
-    QList<Album*>   albums;
-    QWidget* widget;
+    QList<Album*>               albums;
+    QWidget*                    widget;
+    QHash<QString, QList<int> > labels;
 };
 
 // ---------------------------------------------------------------------
@@ -137,12 +145,13 @@ public:
 
 public:
 
-    bool                          moving;
-    bool                          blockSelection;
+    bool                                  moving;
+    bool                                  blockSelection;
 
-    QList<HistoryItem>            backwardStack;
-    QList<HistoryItem>            forwardStack;
+    QList<HistoryItem>                    backwardStack;
+    QList<HistoryItem>                    forwardStack;
     QHash<QList<Album*>, HistoryPosition> historyPos;
+    QHash<QString, QList<int> >           neededLabels;
 };
 
 void AlbumHistory::Private::forward(unsigned int steps)
@@ -198,6 +207,28 @@ void AlbumHistory::addAlbums(QList<Album*> const albums, QWidget* const widget)
     }
 
     d->backwardStack << HistoryItem(albums, widget);
+
+    // The forward stack has to be cleared, if backward stack was changed
+    d->forwardStack.clear();
+}
+
+void AlbumHistory::addAlbums(QList<Album*> const albums, QWidget* const widget, QHash<QString, QList<int> > selectedLabels)
+{
+
+    if (albums.isEmpty() || !widget || d->moving)
+    {
+        d->moving = false;
+        return;
+    }
+
+    if(albums.first()->isUsedByLabelsTree() && d->backwardStack.last().albums.first()->isUsedByLabelsTree())
+    {
+        d->backwardStack.last().widget = widget;
+        d->backwardStack.last().labels = selectedLabels;
+        return;
+    }
+
+    d->backwardStack << HistoryItem(albums, widget, selectedLabels);
 
     // The forward stack has to be cleared, if backward stack was changed
     d->forwardStack.clear();
@@ -382,6 +413,7 @@ void AlbumHistory::back(QList<Album*>& album, QWidget** const widget, unsigned i
 
     album.append(d->backwardStack.last().albums);
     *widget = d->backwardStack.last().widget;
+    d->neededLabels = d->backwardStack.last().labels;
 }
 
 void AlbumHistory::forward(QList<Album*>& album, QWidget** const widget, unsigned int steps)
@@ -403,6 +435,7 @@ void AlbumHistory::forward(QList<Album*>& album, QWidget** const widget, unsigne
 
     album.append(d->backwardStack.last().albums);
     *widget = d->backwardStack.last().widget;
+    d->neededLabels = d->backwardStack.last().labels;
 }
 
 void AlbumHistory::getCurrentAlbum(Album** const album, QWidget** const widget) const
@@ -432,6 +465,11 @@ bool AlbumHistory::isBackwardEmpty() const
     // the last album of the backwardStack is the currently shown
     // album, and therfore not really a previous album
     return (d->backwardStack.count() <= 1) ? true : false;
+}
+
+QHash<QString, QList<int> > AlbumHistory::neededLabels()
+{
+    return d->neededLabels;
 }
 
 void AlbumHistory::slotAlbumSelected()

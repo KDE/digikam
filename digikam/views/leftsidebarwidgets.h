@@ -158,6 +158,8 @@ public:
     QPixmap getIcon();
     QString getCaption();
 
+    QHash<QString, QList<int> > selectedLabels();
+
 private:
 
     class Private;

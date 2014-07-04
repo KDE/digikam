@@ -52,6 +52,7 @@ public:
     ~AlbumLabelsTreeView();
 
     bool    isCheckable();
+    bool    isLoadingState();
     QPixmap goldenStarPixmap();
     QPixmap colorRectPixmap(QColor color);
 
@@ -60,6 +61,7 @@ public:
     void doLoadState();
     void doSaveState();
 
+    void restoreSelectionFromHistory(QHash<QString, QList<int> > neededLabels);
     void setCurrentAlbum();
 
 private:
@@ -90,6 +92,8 @@ public:
     KUrl::List imagesUrls();
     QString    generatedName();
     void       setCurrentAlbum();
+    void       restoreSelectionFromHistory(QHash<QString, QList<int> > neededLabels);
+    bool       isRestoringSelectionFromHistory();
 
 private:
     QString createXMLForCurrentSelection(QHash<QString, QList<int> > selectedLabels);

@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2014      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -174,6 +175,12 @@ public:
     bool    isAncestorOf(Album* const album) const;
 
     /**
+     * @return true if the Album was created by Labels Tree
+     *
+     */
+    bool    isUsedByLabelsTree() const;
+
+    /**
      * This allows to associate some "extra" data to a Album. As one
      * Album can be used by several objects (often views) which all need
      * to add some data, you have to use a key to reference your extra data
@@ -221,6 +228,14 @@ public:
      * @see extraData
      */
     void*   extraData(const void* const key) const;
+
+    /**
+     * Sets the property m_usedByLabelsTree to true if the search album
+     * was created using the Colors and labels tree view
+     *
+     * @param isUsed => the status of the usage
+     */
+    void setUsedByLabelsTree(bool isUsed);
 
 protected:
 
@@ -290,6 +305,7 @@ private:
 
     bool                     m_root;
     bool                     m_clearing;
+    bool                     m_usedByLabelsTree;
 
     int                      m_id;
     QString                  m_name;
@@ -453,7 +469,6 @@ public:
     bool                 isHaarSearch() const;
     bool                 isMapSearch() const;
     bool                 isDuplicatesSearch() const;
-    bool                 isUsedByLabelsTree() const;
 
     /**
      * Indicates whether this album is a temporary search or not.
@@ -486,21 +501,11 @@ public:
      */
     static QString getTemporaryHaarTitle(DatabaseSearch::HaarSearchType haarType);
 
-    /**
-     * Sets the property m_usedByLabelsTree to true if the search album
-     * was created using the Colors and labels tree view
-     *
-     * @param isUsed => the status of the usage
-     */
-    void setUsedByLabelsTree(bool isUsed);
-
 private:
 
     void setSearch(DatabaseSearch::Type type, const QString& query);
 
 private:
-
-    bool                 m_usedByLabelsTree;
 
     QString              m_query;
     DatabaseSearch::Type m_searchType;

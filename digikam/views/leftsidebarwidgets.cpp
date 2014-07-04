@@ -350,6 +350,11 @@ QString LabelsSideBarWidget::getCaption()
     return i18n("Labels");
 }
 
+QHash<QString, QList<int> > LabelsSideBarWidget::selectedLabels()
+{
+    return d->labelsTree->selectedLabels();
+}
+
 // -----------------------------------------------------------------------------
 
 class DateFolderViewSideBarWidget::Private

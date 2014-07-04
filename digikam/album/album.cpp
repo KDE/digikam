@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2014      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,15 +44,16 @@ namespace Digikam
 
 Album::Album(Album::Type type, int id, bool root)
 {
-    m_parent     = 0;
-    m_next       = 0;
-    m_prev       = 0;
-    m_firstChild = 0;
-    m_lastChild  = 0;
-    m_clearing   = false;
-    m_type       = type;
-    m_id         = id;
-    m_root       = root;
+    m_parent           = 0;
+    m_next             = 0;
+    m_prev             = 0;
+    m_firstChild       = 0;
+    m_lastChild        = 0;
+    m_clearing         = false;
+    m_type             = type;
+    m_id               = id;
+    m_root             = root;
+    m_usedByLabelsTree = false;
 }
 
 Album::~Album()
@@ -313,6 +315,16 @@ bool Album::isAncestorOf(Album* const album) const
     }
 
     return val;
+}
+
+bool Album::isUsedByLabelsTree() const
+{
+    return m_usedByLabelsTree;
+}
+
+void Album::setUsedByLabelsTree(bool isUsed)
+{
+    m_usedByLabelsTree = isUsed;
 }
 
 // ------------------------------------------------------------------------------
@@ -587,7 +599,6 @@ DatabaseUrl DAlbum::databaseUrl() const
 
 SAlbum::SAlbum(const QString& title, int id, bool root)
     : Album(Album::SEARCH, id, root),
-      m_usedByLabelsTree(false),
       m_searchType(DatabaseSearch::UndefinedType)
 {
     setTitle(title);
@@ -601,11 +612,6 @@ void SAlbum::setSearch(DatabaseSearch::Type type, const QString& query)
 {
     m_searchType = type;
     m_query      = query;
-}
-
-void SAlbum::setUsedByLabelsTree(bool isUsed)
-{
-    m_usedByLabelsTree = isUsed;
 }
 
 DatabaseUrl SAlbum::databaseUrl() const
@@ -677,11 +683,6 @@ bool SAlbum::isTemporarySearch() const
     }
 
     return (title() == getTemporaryTitle(m_searchType));
-}
-
-bool SAlbum::isUsedByLabelsTree() const
-{
-    return m_usedByLabelsTree;
 }
 
 QString SAlbum::displayTitle() const
