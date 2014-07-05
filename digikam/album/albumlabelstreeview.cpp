@@ -46,6 +46,10 @@
 #include "statesavingobject.h"
 #include "databaseaccess.h"
 #include "albumdb.h"
+#include "colorlabelfilter.h"
+#include "picklabelfilter.h"
+#include "tagscache.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -419,12 +423,6 @@ void AlbumLabelsTreeView::restoreSelectionFromHistory(QHash<QString, QList<int> 
 class AlbumLabelsSearchHandler::Private
 {
 public:
-    enum TreeInitialValues
-    {
-        NoRating = -1,
-        NoColor = 8,
-        NoPick = 18
-    };
 
     Private() :
         treeWidget(0),
@@ -499,24 +497,25 @@ QString AlbumLabelsSearchHandler::createXMLForCurrentSelection(QHash<QString, QL
 {
     SearchXmlWriter writer;
     writer.setFieldOperator(SearchXml::standardFieldOperator());
-    QList<int> ratings, colorsAndPicks;
+    QList<int>        ratings;
+    QList<int>        colorsAndPicks;
 
     foreach (int rate, selectedLabels["ratings"])
     {
         if(rate == 0)
-            ratings << Private::NoRating;
+            ratings << -1;
         else
             ratings << rate;
     }
 
     foreach (int color, selectedLabels["colors"])
     {
-        colorsAndPicks << color + Private::NoColor;
+        colorsAndPicks << TagsCache::instance()->tagForColorLabel(color);
     }
 
     foreach (int pick, selectedLabels["picks"])
     {
-        colorsAndPicks << pick + Private::NoPick;
+        colorsAndPicks << TagsCache::instance()->tagForPickLabel(pick);
     }
 
     d->currentXmlIsEmpty = (ratings.isEmpty() && colorsAndPicks.isEmpty()) ? true : false;
@@ -563,7 +562,7 @@ QString AlbumLabelsSearchHandler::createXMLForCurrentSelection(QHash<QString, QL
 
     writer.finish();
 
-    generateAlbumNameForExporting(ratings, colorsAndPicks);
+    generateAlbumNameForExporting(ratings, selectedLabels["colors"], selectedLabels["picks"]);
     return writer.xml();
 }
 
@@ -571,26 +570,39 @@ SAlbum* AlbumLabelsSearchHandler::search(const QString &xml)
 {
     SAlbum* album;
     int id;
-    album = AlbumManager::instance()->findSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch));
-
-    if(album)
-    {
-        id = album->id();
-        DatabaseAccess().db()->updateSearch(id,DatabaseSearch::AdvancedSearch,
-                                            SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch), xml);
-    }
-    else
-    {
-        id = DatabaseAccess().db()->addSearch(DatabaseSearch::AdvancedSearch,
-                                              SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch), xml);
-    }
 
     if(!d->treeWidget->isCheckable())
     {
+        album = AlbumManager::instance()->findSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch));
+
+        if(album)
+        {
+            id = album->id();
+            DatabaseAccess().db()->updateSearch(id,DatabaseSearch::AdvancedSearch,
+                                                SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch), xml);
+        }
+        else
+        {
+            id = DatabaseAccess().db()->addSearch(DatabaseSearch::AdvancedSearch,
+                                                  SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch), xml);
+        }
         album = new SAlbum("Labels Album", id);
     }
     else
     {
+        album = AlbumManager::instance()->findSAlbum("Exporting Album");
+
+        if(album)
+        {
+            id = album->id();
+            DatabaseAccess().db()->updateSearch(id,DatabaseSearch::AdvancedSearch,
+                                                "Exporting Album", xml);
+        }
+        else
+        {
+            id = DatabaseAccess().db()->addSearch(DatabaseSearch::AdvancedSearch,
+                                                  "Exporting Album", xml);
+        }
         album = new SAlbum(d->generatedAlbumName, id);
     }
 
@@ -600,7 +612,7 @@ SAlbum* AlbumLabelsSearchHandler::search(const QString &xml)
     return album;
 }
 
-void AlbumLabelsSearchHandler::generateAlbumNameForExporting(QList<int> ratings, QList<int> colorsAndPicks)
+void AlbumLabelsSearchHandler::generateAlbumNameForExporting(QList<int> ratings, QList<int> colorsList, QList<int> picksList)
 {
     QString name;
     QString ratingsString;
@@ -632,100 +644,87 @@ void AlbumLabelsSearchHandler::generateAlbumNameForExporting(QList<int> ratings,
         }
     }
 
-    if(!colorsAndPicks.isEmpty())
+    if(!colorsList.isEmpty())
     {
-        QList<int> colorsList;
-        QList<int> picksList;
+        colorsString += "Colors: ";
 
-        foreach (int label, colorsAndPicks)
+        QListIterator<int> it(colorsList);
+
+        while (it.hasNext())
         {
-            if(label < 18)
-                colorsList << label;
-            else
-                picksList << label;
-        }
-
-        if(!colorsList.isEmpty())
-        {
-            colorsString += "Colors: ";
-
-            QListIterator<int> it(colorsList);
-
-            while (it.hasNext())
-            {
-                switch (it.next()) {
-                case Private::NoColor:
-                    colorsString += "No Color";
-                    break;
-                case Private::NoColor + 1:
-                    colorsString += "Red";
-                    break;
-                case Private::NoColor + 2:
-                    colorsString += "Orange";
-                    break;
-                case Private::NoColor + 3:
-                    colorsString += "Yellow";
-                    break;
-                case Private::NoColor + 4:
-                    colorsString += "Green";
-                    break;
-                case Private::NoColor + 5:
-                    colorsString += "Blue";
-                    break;
-                case Private::NoColor + 6:
-                    colorsString += "Magenta";
-                    break;
-                case Private::NoColor + 7:
-                    colorsString += "Gray";
-                    break;
-                case Private::NoColor + 8:
-                    colorsString += "Black";
-                    break;
-                case Private::NoColor + 9:
-                    colorsString += "White";
-                    break;
-                default:
-                    break;
-                }
-
-                if(it.hasNext())
-                {
-                    colorsString +=", ";
-                }
+            switch (it.next()) {
+            case NoColorLabel:
+                colorsString += "No Color";
+                break;
+            case RedLabel:
+                colorsString += "Red";
+                break;
+            case OrangeLabel:
+                colorsString += "Orange";
+                break;
+            case YellowLabel:
+                colorsString += "Yellow";
+                break;
+            case GreenLabel:
+                colorsString += "Green";
+                break;
+            case BlueLabel:
+                colorsString += "Blue";
+                break;
+            case MagentaLabel:
+                colorsString += "Magenta";
+                break;
+            case GrayLabel:
+                colorsString += "Gray";
+                break;
+            case BlackLabel:
+                colorsString += "Black";
+                break;
+            case WhiteLabel:
+                colorsString += "White";
+                break;
+            default:
+                break;
             }
-        }
 
-        if(!picksList.isEmpty())
-        {
-            picksString += "Picks: ";
-
-            QListIterator<int> it(picksList);
-            while (it.hasNext())
+            if(it.hasNext())
             {
-                switch (it.next()) {
-                case Private::NoPick:
-                    picksString += "No Pick";
-                    break;
-                case Private::NoPick + 1:
-                    picksString += "Rejected";
-                    break;
-                case Private::NoPick + 2:
-                    picksString += "Pending";
-                    break;
-                case Private::NoPick + 3:
-                    picksString += "Accepted";
-                    break;
-                default:
-                    break;
-                }
-
-                if(it.hasNext())
-                {
-                    picksString +=", ";
-                }
+                colorsString +=", ";
             }
         }
     }
+
+    if(!picksList.isEmpty())
+    {
+        picksString += "Picks: ";
+
+        QListIterator<int> it(picksList);
+        while (it.hasNext())
+        {
+            switch (it.next()) {
+            case NoPickLabel:
+                picksString += "No Pick";
+                break;
+            case RejectedLabel:
+                picksString += "Rejected";
+                break;
+            case PendingLabel:
+                picksString += "Pending";
+                break;
+            case AcceptedLabel:
+                picksString += "Accepted";
+                break;
+            default:
+                break;
+            }
+
+            if(it.hasNext())
+            {
+                picksString +=", ";
+            }
+        }
+    }
+
 
     if(ratingsString.isEmpty() && picksString.isEmpty())
     {

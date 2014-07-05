@@ -99,7 +99,7 @@ private:
     QString createXMLForCurrentSelection(QHash<QString, QList<int> > selectedLabels);
     SAlbum* search(const QString& xml);
 
-    void generateAlbumNameForExporting(QList<int> ratings, QList<int> colorsAndPicks);
+    void generateAlbumNameForExporting(QList<int> ratings, QList<int> colorsList, QList<int> picksList);
     void imagesUrlsForCurrentAlbum();
 
 private Q_SLOTS:
