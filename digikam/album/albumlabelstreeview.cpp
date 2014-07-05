@@ -846,10 +846,7 @@ void AlbumLabelsSearchHandler::slotCheckStateChanged()
 
 void AlbumLabelsSearchHandler::slotSetCurrentAlbum()
 {
-    if(d->albumForSelectedItems)
-        AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << d->albumForSelectedItems);
-    else
-        slotSelectionChanged();
+    slotSelectionChanged();
 }
 
 void AlbumLabelsSearchHandler::slotData(KIO::Job *job, QByteArray data)
