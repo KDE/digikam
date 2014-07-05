@@ -562,7 +562,7 @@ QString AlbumLabelsSearchHandler::createXMLForCurrentSelection(QHash<QString, QL
 
     writer.finish();
 
-    generateAlbumNameForExporting(ratings, selectedLabels["colors"], selectedLabels["picks"]);
+    generateAlbumNameForExporting(selectedLabels["ratings"], selectedLabels["colors"], selectedLabels["picks"]);
     return writer.xml();
 }
 
