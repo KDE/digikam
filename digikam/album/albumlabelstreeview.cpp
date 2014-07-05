@@ -62,6 +62,7 @@ public:
         picks(0),
         colors(0),
         isCheckableTreeView(false),
+        isLoadingState(false),
         searchHandler(0)
     {
         starPolygon << QPoint(0,  12);
@@ -88,6 +89,7 @@ public:
     QTreeWidgetItem*             colors;
 
     bool                         isCheckableTreeView;
+    bool                         isLoadingState;
 
     QHash<QString, QList<int> >  selectedLabels;
 
@@ -144,6 +146,11 @@ AlbumLabelsTreeView::~AlbumLabelsTreeView()
 bool AlbumLabelsTreeView::isCheckable()
 {
     return d->isCheckableTreeView;
+}
+
+bool AlbumLabelsTreeView::isLoadingState()
+{
+    return d->isLoadingState;
 }
 
 void AlbumLabelsTreeView::initTreeView()
@@ -232,6 +239,7 @@ QHash<QString, QList<int> > AlbumLabelsTreeView::selectedLabels()
 
 void AlbumLabelsTreeView::doLoadState()
 {
+    d->isLoadingState = true;
     KConfigGroup configGroup         = getConfigGroup();
     const QList<int> expansion       = configGroup.readEntry(entryName(d->configExpansionEntry), QList<int>());
     const QList<int> selectedRatings = configGroup.readEntry(entryName(d->configRatingSelectionEntry), QList<int>());
@@ -269,6 +277,8 @@ void AlbumLabelsTreeView::doLoadState()
     foreach (int color, selectedColors) {
         d->colors->child(color)->setSelected(true);
     }
+
+    d->isLoadingState = false;
 }
 
 void AlbumLabelsTreeView::doSaveState()
@@ -586,22 +596,22 @@ SAlbum* AlbumLabelsSearchHandler::search(const QString &xml)
             id = DatabaseAccess().db()->addSearch(DatabaseSearch::AdvancedSearch,
                                                   SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch), xml);
         }
-        album = new SAlbum("Labels Album", id);
+        album = new SAlbum(getDefaultTitle(false), id);
     }
     else
     {
-        album = AlbumManager::instance()->findSAlbum("Exporting Album");
+        album = AlbumManager::instance()->findSAlbum(getDefaultTitle());
 
         if(album)
         {
             id = album->id();
             DatabaseAccess().db()->updateSearch(id,DatabaseSearch::AdvancedSearch,
-                                                "Exporting Album", xml);
+                                                getDefaultTitle(true), xml);
         }
         else
         {
             id = DatabaseAccess().db()->addSearch(DatabaseSearch::AdvancedSearch,
-                                                  "Exporting Album", xml);
+                                                  getDefaultTitle(true), xml);
         }
         album = new SAlbum(d->generatedAlbumName, id);
     }
@@ -621,7 +631,7 @@ void AlbumLabelsSearchHandler::generateAlbumNameForExporting(QList<int> ratings,
 
     if(!ratings.isEmpty())
     {
-        ratingsString += "Rating: ";
+        ratingsString += i18n("Rating: ");
 
         QListIterator<int> it(ratings);
 
@@ -630,7 +640,7 @@ void AlbumLabelsSearchHandler::generateAlbumNameForExporting(QList<int> ratings,
             int rating = it.next();
             if(rating == -1)
             {
-                ratingsString += "No Rating";
+                ratingsString += i18n("No Rating");
             }
             else
             {
@@ -646,7 +656,7 @@ void AlbumLabelsSearchHandler::generateAlbumNameForExporting(QList<int> ratings,
 
     if(!colorsList.isEmpty())
     {
-        colorsString += "Colors: ";
+        colorsString += i18n("Colors: ");
 
         QListIterator<int> it(colorsList);
 
@@ -654,34 +664,34 @@ void AlbumLabelsSearchHandler::generateAlbumNameForExporting(QList<int> ratings,
         {
             switch (it.next()) {
             case NoColorLabel:
-                colorsString += "No Color";
+                colorsString += i18n("No Color");
                 break;
             case RedLabel:
-                colorsString += "Red";
+                colorsString += i18n("Red");
                 break;
             case OrangeLabel:
-                colorsString += "Orange";
+                colorsString += i18n("Orange");
                 break;
             case YellowLabel:
-                colorsString += "Yellow";
+                colorsString += i18n("Yellow");
                 break;
             case GreenLabel:
-                colorsString += "Green";
+                colorsString += i18n("Green");
                 break;
             case BlueLabel:
-                colorsString += "Blue";
+                colorsString += i18n("Blue");
                 break;
             case MagentaLabel:
-                colorsString += "Magenta";
+                colorsString += i18n("Magenta");
                 break;
             case GrayLabel:
-                colorsString += "Gray";
+                colorsString += i18n("Gray");
                 break;
             case BlackLabel:
-                colorsString += "Black";
+                colorsString += i18n("Black");
                 break;
             case WhiteLabel:
-                colorsString += "White";
+                colorsString += i18n("White");
                 break;
             default:
                 break;
@@ -696,23 +706,23 @@ void AlbumLabelsSearchHandler::generateAlbumNameForExporting(QList<int> ratings,
 
     if(!picksList.isEmpty())
     {
-        picksString += "Picks: ";
+        picksString += i18n("Picks: ");
 
         QListIterator<int> it(picksList);
         while (it.hasNext())
         {
             switch (it.next()) {
             case NoPickLabel:
-                picksString += "No Pick";
+                picksString += i18n("No Pick");
                 break;
             case RejectedLabel:
-                picksString += "Rejected";
+                picksString += i18n("Rejected");
                 break;
             case PendingLabel:
-                picksString += "Pending";
+                picksString += i18n("Pending");
                 break;
             case AcceptedLabel:
-                picksString += "Accepted";
+                picksString += i18n("Accepted");
                 break;
             default:
                 break;
@@ -769,9 +779,21 @@ void AlbumLabelsSearchHandler::imagesUrlsForCurrentAlbum()
             this, SLOT(slotData(KIO::Job*,QByteArray)));
 }
 
+QString AlbumLabelsSearchHandler::getDefaultTitle(bool isCheckable)
+{
+    if(isCheckable)
+    {
+        return i18n("Exporting Album");
+    }
+    else
+    {
+        return i18n("Labels Album");
+    }
+}
+
 void AlbumLabelsSearchHandler::slotSelectionChanged()
 {
-    if(d->treeWidget->isCheckable() || d->restoringSelectionFromHistory)
+    if(d->treeWidget->isLoadingState() || d->restoringSelectionFromHistory)
     {
         return;
     }

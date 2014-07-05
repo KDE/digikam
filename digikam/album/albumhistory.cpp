@@ -221,7 +221,7 @@ void AlbumHistory::addAlbums(QList<Album*> const albums, QWidget* const widget, 
         return;
     }
 
-    if(albums.first()->isUsedByLabelsTree() && d->backwardStack.last().albums.first()->isUsedByLabelsTree())
+    if(!d->backwardStack.isEmpty() && d->backwardStack.last().albums.first()->isUsedByLabelsTree())
     {
         d->backwardStack.last().widget = widget;
         d->backwardStack.last().labels = selectedLabels;

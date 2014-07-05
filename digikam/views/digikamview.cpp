@@ -1179,8 +1179,11 @@ void DigikamView::slotAlbumSelected(QList<Album*> albums)
         }
         else
         {
-            d->albumHistory->
-                    addAlbums(albums, d->leftSideBar->getActiveTab(), d->labelsSideBar->selectedLabels());
+            if(albums.first()->title() == AlbumLabelsSearchHandler::getDefaultTitle(false))
+            {
+                d->albumHistory->
+                     addAlbums(albums, d->leftSideBar->getActiveTab(), d->labelsSideBar->selectedLabels());
+            }
         }
     }
 

@@ -95,6 +95,8 @@ public:
     void       restoreSelectionFromHistory(QHash<QString, QList<int> > neededLabels);
     bool       isRestoringSelectionFromHistory();
 
+    static QString getDefaultTitle(bool isCheckable);
+
 private:
     QString createXMLForCurrentSelection(QHash<QString, QList<int> > selectedLabels);
     SAlbum* search(const QString& xml);
