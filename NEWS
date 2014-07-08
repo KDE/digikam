@@ -6,5 +6,7 @@ NEW FEATURES:
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 336851 - Untranslatable strings in Tags Manager.
-002 ==> 
+002 ==> 336650 - Face Detection always(!) crashes after first and only successful run (Digikam 3.4.0 on Windows 7).
+003 ==> 326019 - digiKam crashes while face tagging.
+004 ==> 
 
