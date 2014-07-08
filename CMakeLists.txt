@@ -465,7 +465,7 @@ MACRO_BOOL_TO_01(EIGEN3_FOUND HAVE_EIGEN3)
 
 # Set config files accordingly with optional dependencies
 
-CONFIGURE_FILE(digikam/utils/config-digikam.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/digikam/utils/config-digikam.h)
+CONFIGURE_FILE(digikam/utils/config-digikam.h.in_cmake ${CMAKE_CURRENT_BINARY_DIR}/digikam/utils/config-digikam.h)
 
 # ==================================================================================================
 # Log messages

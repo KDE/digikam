@@ -1,4 +1,4 @@
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/utils/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/utils/version.h)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/utils/version.h.in_cmake ${CMAKE_CURRENT_BINARY_DIR}/utils/version.h)
 
 # Shared libdigikamcore ################################################################
 
