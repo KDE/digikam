@@ -1179,7 +1179,7 @@ void DigikamView::slotAlbumSelected(QList<Album*> albums)
         }
         else
         {
-            if(albums.first()->title() == AlbumLabelsSearchHandler::getDefaultTitle(false))
+            if(albums.first()->isUsedByLabelsTree())
             {
                 d->albumHistory->
                      addAlbums(albums, d->leftSideBar->getActiveTab(), d->labelsSideBar->selectedLabels());

@@ -596,7 +596,7 @@ SAlbum* AlbumLabelsSearchHandler::search(const QString &xml)
             id = DatabaseAccess().db()->addSearch(DatabaseSearch::AdvancedSearch,
                                                   SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch), xml);
         }
-        album = new SAlbum(getDefaultTitle(false), id);
+        album = new SAlbum(getDefaultTitle(), id);
     }
     else
     {
@@ -606,12 +606,12 @@ SAlbum* AlbumLabelsSearchHandler::search(const QString &xml)
         {
             id = album->id();
             DatabaseAccess().db()->updateSearch(id,DatabaseSearch::AdvancedSearch,
-                                                getDefaultTitle(true), xml);
+                                                getDefaultTitle(), xml);
         }
         else
         {
             id = DatabaseAccess().db()->addSearch(DatabaseSearch::AdvancedSearch,
-                                                  getDefaultTitle(true), xml);
+                                                  getDefaultTitle(), xml);
         }
         album = new SAlbum(d->generatedAlbumName, id);
     }
@@ -779,9 +779,9 @@ void AlbumLabelsSearchHandler::imagesUrlsForCurrentAlbum()
             this, SLOT(slotData(KIO::Job*,QByteArray)));
 }
 
-QString AlbumLabelsSearchHandler::getDefaultTitle(bool isCheckable)
+QString AlbumLabelsSearchHandler::getDefaultTitle()
 {
-    if(isCheckable)
+    if(d->treeWidget->isCheckable())
     {
         return i18n("Exporting Album");
     }
