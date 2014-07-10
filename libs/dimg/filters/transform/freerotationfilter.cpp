@@ -120,11 +120,9 @@ double FreeRotationFilter::calculateAngle(const QPoint& p1, const QPoint& p2)
                    ((p1.x() > p2.x()) && (p2.y() < p1.y()));
 
     // calculate the angle
-    double angle = 0.0;
     double ly    = fabs((double)p2.y() - p1.y());
     double lx    = fabs((double)p2.x() - p1.x());
-
-    angle        = atan2(ly, lx) * 180.0 / M_PI;
+    double angle = atan2(ly, lx) * 180.0 / M_PI;
     angle        = ccw ? -angle : angle;
 
     return angle;

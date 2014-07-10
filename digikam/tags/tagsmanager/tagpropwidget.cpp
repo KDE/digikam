@@ -91,7 +91,7 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
 
     logo->setPixmap(KIcon("tag-properties").pixmap(30,30));
     d->topLabel = new QLabel(this);
-    d->topLabel->setText("Tag Properties");
+    d->topLabel->setText(i18n("Tag Properties"));
     d->topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->topLabel->setWordWrap(false);
 
@@ -143,8 +143,8 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     tipLabel2->setMargin(KDialog::marginHint() );
     tipLabel2->setIndent(KDialog::spacingHint());
 
-    d->saveButton = new QPushButton("Save");
-    d->discardButton = new QPushButton("Discard");
+    d->saveButton = new QPushButton(i18n("Save"));
+    d->discardButton = new QPushButton(i18n("Discard"));
 
     // --------------------------------------------------------
 
