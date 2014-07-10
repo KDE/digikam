@@ -304,6 +304,10 @@ ENDIF(NOT APPLE AND NOT USE_EXT_LIBPGF)
     ADD_DEFINITIONS(-Dgmic_minimal)
     ADD_DEFINITIONS(-Dgmic_build)
     ADD_DEFINITIONS(-Dgmic_is_parallel)
+    ADD_DEFINITIONS(-O2) # -fno-tree-pre # -ffast-math)
+    ADD_DEFINITIONS(-fno-ipa-sra)
+    ADD_DEFINITIONS(-mtune=generic)
+    ADD_DEFINITIONS(-ffast-math)
     ADD_DEFINITIONS(-lpthread)
 
      SET(libgmic_SRCS
