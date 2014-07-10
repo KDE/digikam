@@ -628,16 +628,16 @@ void GreycstorationFilter::resize()
 void GreycstorationFilter::simpleResize()
 {
     //FIXME: code doesnt work
-//     const unsigned int method = 3;      // Initial estimate (0, none, 1=block, 3=linear, 4=grid, 5=bicubic).
-//     int w                     = m_destImage.width();
-//     int h                     = m_destImage.height();
-//
-//     while (d->img.dimx() > 2 * w && d->img.dimy() > 2 * h)
-//     {
-//         d->img.resize_halfXY();
-//     }
-//
-//     d->img.resize(w, h, -100, -100, method);
+    const unsigned int method = 3;      // Initial estimate (0, none, 1=block, 3=linear, 4=grid, 5=bicubic).
+    int w                     = m_destImage.width();
+    int h                     = m_destImage.height();
+
+    while (d->img.width() > 2 * w && d->img.height() > 2 * h)
+    {
+        d->img.resize_halfXY();
+    }
+
+    d->img.resize(w, h, -100, -100, method);
 }
 
 void GreycstorationFilter::iterationLoop()
