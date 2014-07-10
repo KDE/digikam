@@ -15,5 +15,5 @@ ELSE (GITEXEC)
 ENDIF (GITEXEC)
 
 # Configure the revision header
-CONFIGURE_FILE("@CMAKE_CURRENT_SOURCE_DIR@/cmake/templates/gitversion.h.in_cmake"
+CONFIGURE_FILE("@CMAKE_CURRENT_SOURCE_DIR@/cmake/templates/gitversion.h.cmake.in"
                "@CMAKE_CURRENT_BINARY_DIR@/digikam/utils/gitversion.h")
