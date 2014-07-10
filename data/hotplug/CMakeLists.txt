@@ -1,10 +1,10 @@
 SET(digikamhelperdir ${DATA_INSTALL_DIR}/digikam/utils)
 
-#configure_file(digikam-download.desktop.in_cmake ${CMAKE_CURRENT_BINARY_DIR}/digikam-download.desktop @ONLY)
-#configure_file(digikam-gphoto2-camera.desktop.in_cmake ${CMAKE_CURRENT_BINARY_DIR}/digikam-gphoto2-camera.desktop @ONLY)
-#configure_file(digikam-mount-and-download.desktop.in_cmake ${CMAKE_CURRENT_BINARY_DIR}/digikam-mount-and-download.desktop @ONLY)
+#configure_file(digikam-download.desktop.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/digikam-download.desktop @ONLY)
+#configure_file(digikam-gphoto2-camera.desktop.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/digikam-gphoto2-camera.desktop @ONLY)
+#configure_file(digikam-mount-and-download.desktop.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/digikam-mount-and-download.desktop @ONLY)
 
-CONFIGURE_FILE(digikam-opencamera.desktop.in_cmake ${CMAKE_CURRENT_BINARY_DIR}/digikam-opencamera.desktop @ONLY)
+CONFIGURE_FILE(digikam-opencamera.desktop.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/digikam-opencamera.desktop @ONLY)
 
 #INSTALL(FILES
 #        ${CMAKE_CURRENT_BINARY_DIR}/digikam-download.desktop

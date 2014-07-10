@@ -1,5 +1,5 @@
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/utils/version.h.in_cmake ${CMAKE_CURRENT_BINARY_DIR}/utils/version.h)
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/database/dbconfigversion.h.in_cmake ${CMAKE_CURRENT_BINARY_DIR}/database/dbconfigversion.h)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/utils/version.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/utils/version.h)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/database/dbconfigversion.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/database/dbconfigversion.h)
 
 # Shared libdigikamcore ################################################################
 
@@ -277,7 +277,7 @@ KDE4_ADD_EXECUTABLE(digikam ${digikam_SRCS})
 SET(MACOSX_BUNDLE_LONG_VERSION_STRING ${DIGIKAM_VERSION_STRING})
 SET(MACOSX_BUNDLE_SHORT_VERSION_STRING ${DIGIKAM_VERSION_SHORT})
 SET(MACOSX_BUNDLE_BUNDLE_VERSION ${DIGIKAM_VERSION_STRING})
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/../cmake/templates/Info.plist.in_cmake ${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/../cmake/templates/Info.plist.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
 SET_TARGET_PROPERTIES(digikam PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
 
 
