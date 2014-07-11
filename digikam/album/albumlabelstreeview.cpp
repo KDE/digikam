@@ -324,7 +324,7 @@ void AlbumLabelsTreeView::initRatingsTree()
     setIconSize(QSize(100,20));
 
     QTreeWidgetItem* noRate = new QTreeWidgetItem(d->ratings);
-    noRate->setText(0,tr("No Rating"));
+    noRate->setText(0,i18n("No Rating"));
     noRate->setIcon(0,KIconLoader::global()->loadIcon("emblem-unmounted", KIconLoader::NoGroup, 20));
     noRate->setFont(0,d->regularFont);
 
@@ -361,7 +361,7 @@ void AlbumLabelsTreeView::initPicksTree()
     d->picks->setFlags(Qt::ItemIsEnabled);
 
     QStringList pickSetNames;
-    pickSetNames << "No Pick" << "Rejected Item" << "Pending Item" << "Accepted Item";
+    pickSetNames << i18n("No Pick") << i18n("Rejected Item") << i18n("Pending Item") << i18n("Accepted Item");
 
     QStringList pickSetIcons;
     pickSetIcons << "emblem-unmounted" << "flag-red" << "flag-yellow" << "flag-green";
@@ -383,7 +383,7 @@ void AlbumLabelsTreeView::initColorsTree()
     d->colors->setFlags(Qt::ItemIsEnabled);
 
     QTreeWidgetItem* noColor = new QTreeWidgetItem(d->colors);
-    noColor->setText(0,tr("No Color"));
+    noColor->setText(0,i18n("No Color"));
     noColor->setFont(0,d->regularFont);
     noColor->setIcon(0,KIconLoader::global()->loadIcon("emblem-unmounted", KIconLoader::NoGroup, 20));
 
@@ -391,7 +391,8 @@ void AlbumLabelsTreeView::initColorsTree()
     colorSet << "red" << "orange" << "yellow" << "darkgreen" << "darkblue" << "magenta" << "darkgray" << "black" << "white";
 
     QStringList colorSetNames;
-    colorSetNames << "Red"  << "Orange" << "Yellow" << "Green" << "Blue" << "Magenta" << "Gray" << "Black" << "White";
+    colorSetNames << i18n("Red") << i18n("Orange") << i18n("Yellow") << i18n("Green")
+                  << i18n("Blue") << i18n("Magenta") << i18n("Gray") << i18n("Black") << i18n("White");
 
     foreach (QString color, colorSet) {
         QTreeWidgetItem* colorWidgetItem = new QTreeWidgetItem(d->colors);

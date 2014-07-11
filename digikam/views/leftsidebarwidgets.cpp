@@ -34,6 +34,7 @@
 #include <QScrollBar>
 #include <QTimer>
 #include <QToolButton>
+#include <QRadioButton>
 
 // KDE includes
 
@@ -67,6 +68,7 @@
 #include "facedetector.h"
 #include "tagsmanager.h"
 #include "albumlabelstreeview.h"
+#include "albumdb.h"
 
 namespace Digikam
 {
@@ -176,16 +178,33 @@ class TagViewSideBarWidget::Private
 {
 public:
 
+    enum TagsSource
+    {
+        NoTags = 0,
+        ExistingTags
+    };
+
     Private() :
         openTagMngr(0),
         tagSearchBar(0),
-        tagFolderView(0)
+        tagFolderView(0),
+        btnGroup(0),
+        noTagsBtn(0),
+        tagsBtn(0),
+        noTagsWasChecked(false),
+        ExistingTagsWasChecked(true)
     {
     }
 
     KPushButton*   openTagMngr;
     SearchTextBar* tagSearchBar;
     TagFolderView* tagFolderView;
+    QButtonGroup*  btnGroup;
+    QRadioButton*  noTagsBtn;
+    QRadioButton*  tagsBtn;
+
+    bool           noTagsWasChecked;
+    bool           ExistingTagsWasChecked;
 };
 
 TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* const model)
@@ -196,16 +215,30 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
     QVBoxLayout* const layout = new QVBoxLayout(this);
 
     d->openTagMngr   = new KPushButton( i18n("Open Tag Manager"));
+
+    d->noTagsBtn = new QRadioButton(i18n("No Tags"), this);
+    d->tagsBtn   = new QRadioButton(i18n("Existing Tags"), this);
+    d->btnGroup  = new QButtonGroup(this);
+    d->btnGroup->addButton(d->noTagsBtn);
+    d->btnGroup->addButton(d->tagsBtn);
+    d->btnGroup->setId(d->noTagsBtn, 0);
+    d->btnGroup->setId(d->tagsBtn, 1);
+    d->btnGroup->setExclusive(true);
+    d->tagsBtn->setChecked(true);
+
     d->tagFolderView = new TagFolderView(this, model);
     d->tagFolderView->setConfigGroup(getConfigGroup());
     d->tagFolderView->setExpandNewCurrentItem(true);
     d->tagFolderView->setAlbumManagerCurrentAlbum(true);
+
     d->tagSearchBar  = new SearchTextBar(this, "DigikamViewTagSearchBar");
     d->tagSearchBar->setHighlightOnResult(true);
     d->tagSearchBar->setModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->tagSearchBar->setFilterModel(d->tagFolderView->albumFilterModel());
 
     layout->addWidget(d->openTagMngr);
+    layout->addWidget(d->noTagsBtn);
+    layout->addWidget(d->tagsBtn);
     layout->addWidget(d->tagFolderView);
     layout->addWidget(d->tagSearchBar);
 
@@ -214,6 +247,9 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
 
     connect(d->tagFolderView, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
             this, SIGNAL(signalFindDuplicatesInAlbum(Album*)));
+
+    connect(d->btnGroup, SIGNAL(buttonClicked(int)),
+            this, SLOT(slotToggleTagsSelection(int)));
 }
 
 TagViewSideBarWidget::~TagViewSideBarWidget()
@@ -253,6 +289,30 @@ AlbumPointer<TAlbum> TagViewSideBarWidget::currentAlbum() const
     return AlbumPointer<TAlbum> (d->tagFolderView->currentAlbum());
 }
 
+void TagViewSideBarWidget::setNoTagsAlbum()
+{
+    QString title = i18n("No Tags Album");
+    SAlbum* album = AlbumManager::instance()->findSAlbum(title);
+    if(album)
+    {
+        //AlbumManager::updateSAlbum(album,d->noTagsXml);
+        AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << album);
+    }
+    else
+    {
+        SearchXmlWriter writer;
+        writer.setFieldOperator((SearchXml::standardFieldOperator()));
+        writer.writeGroup();
+        writer.writeField("notag", SearchXml::Equal);
+        writer.finishField();
+        writer.finishGroup();
+        writer.finish();
+
+        album = AlbumManager::instance()->createSAlbum(title, DatabaseSearch::AdvancedSearch, writer.xml());
+        AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << album);
+    }
+}
+
 QPixmap TagViewSideBarWidget::getIcon()
 {
     return SmallIcon("tag");
@@ -274,6 +334,32 @@ void TagViewSideBarWidget::slotOpenTagManager()
     tagMngr->show();
     tagMngr->activateWindow();
     tagMngr->raise();
+}
+
+void TagViewSideBarWidget::slotToggleTagsSelection(int radioClicked)
+{
+    switch (Private::TagsSource(radioClicked))
+    {
+        case Private::NoTags:
+            if(!d->noTagsWasChecked)
+            {
+                setNoTagsAlbum();
+                d->tagFolderView->setDisabled(true);
+                d->noTagsWasChecked = d->noTagsBtn->isChecked();
+                d->ExistingTagsWasChecked = d->tagsBtn->isChecked();
+            }
+            break;
+
+        case Private::ExistingTags:
+            if(!d->ExistingTagsWasChecked)
+            {
+                d->tagFolderView->setEnabled(true);
+                setActive(true);
+                d->noTagsWasChecked = d->noTagsBtn->isChecked();
+                d->ExistingTagsWasChecked = d->tagsBtn->isChecked();
+            }
+            break;
+    }
 }
 
 // -----------------------------------------------------------------------------

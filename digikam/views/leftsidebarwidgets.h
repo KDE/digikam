@@ -113,10 +113,14 @@ public:
 
     AlbumPointer<TAlbum> currentAlbum() const;
 
+private:
+    void setNoTagsAlbum();
+
 public Q_SLOTS:
 
     void setCurrentAlbum(TAlbum* album);
     void slotOpenTagManager();
+    void slotToggleTagsSelection(int radioClicked);
 
 Q_SIGNALS:
 
