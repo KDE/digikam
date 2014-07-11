@@ -192,7 +192,7 @@ public:
         noTagsBtn(0),
         tagsBtn(0),
         noTagsWasChecked(false),
-        ExistingTagsWasChecked(true)
+        ExistingTagsWasChecked(false)
     {
     }
 
@@ -205,7 +205,11 @@ public:
 
     bool           noTagsWasChecked;
     bool           ExistingTagsWasChecked;
+
+    static const QString configTagsSourceEntry;
 };
+
+const QString TagViewSideBarWidget::Private::configTagsSourceEntry("TagsSource");
 
 TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* const model)
     : SidebarWidget(parent), d(new Private)
@@ -224,7 +228,6 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
     d->btnGroup->setId(d->noTagsBtn, 0);
     d->btnGroup->setId(d->tagsBtn, 1);
     d->btnGroup->setExclusive(true);
-    d->tagsBtn->setChecked(true);
 
     d->tagFolderView = new TagFolderView(this, model);
     d->tagFolderView->setConfigGroup(getConfigGroup());
@@ -267,12 +270,27 @@ void TagViewSideBarWidget::setActive(bool active)
 
 void TagViewSideBarWidget::doLoadState()
 {
+    KConfigGroup group = getConfigGroup();
+
+    bool noTagsBtnWasChecked = group.readEntry(d->configTagsSourceEntry, false);
+    d->noTagsBtn->setChecked(noTagsBtnWasChecked);
+    d->tagsBtn->setChecked(!noTagsBtnWasChecked);
+    d->noTagsWasChecked = noTagsBtnWasChecked;
+    d->ExistingTagsWasChecked = !noTagsBtnWasChecked;
+
     d->tagFolderView->loadState();
+    d->tagFolderView->setDisabled(noTagsBtnWasChecked);
 }
 
 void TagViewSideBarWidget::doSaveState()
 {
+    KConfigGroup group = getConfigGroup();
+
+    group.writeEntry(d->configTagsSourceEntry, d->noTagsBtn->isChecked());
+
     d->tagFolderView->saveState();
+
+    group.sync();
 }
 
 void TagViewSideBarWidget::applySettings()
