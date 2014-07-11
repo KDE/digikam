@@ -502,7 +502,7 @@ void GreycstorationFilter::restoration()
         kDebug() << command;
 
         d->gmicInterface->addImg(d->img);
-        d->gmicInterface->setCommand(command);
+        d->gmicInterface->setParallelCommand(command);
 //         d->gmicInterface->runGmic();
 //         kDebug() << " G Mic finished";
         emit signalStartWork();
