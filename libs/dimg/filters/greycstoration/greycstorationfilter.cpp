@@ -271,7 +271,8 @@ void GreycstorationFilter::setImageAfterProcessing(bool result)
         register int x, y;
         d->img = d->gmicInterface->getImg();
 
-            kDebug() << "Finalization...";
+
+            kDebug() << "Finalization..." << d->img.width() << " " << d->img.height();
 
         uchar* const newData = m_destImage.bits();
         int newWidth         = m_destImage.width();
@@ -500,7 +501,7 @@ void GreycstorationFilter::restoration()
 
         kDebug() << command;
 
-        d->gmicInterface->setImg(d->img);
+        d->gmicInterface->addImg(d->img);
         d->gmicInterface->setCommand(command);
 //         d->gmicInterface->runGmic();
 //         kDebug() << " G Mic finished";
@@ -548,6 +549,16 @@ void GreycstorationFilter::inpainting()
         return;
     }
 
+    QString command = "-print -inpaint[0] [1],0,3 ";
+
+        kDebug() << "Inpaint command +++++++++++++++++++++++++++++++" << command;
+
+        d->gmicInterface->addImg(d->img, d->mask);
+        d->gmicInterface->setCommand(command);
+        emit signalStartWork();
+        d->timer->start(1000);
+
+//         d->timer->start(1000);
 // Veaceslav cherry pick
 //     for (uint iter = 0 ; runningFlag() && (iter < d->settings.nbIter) ; ++iter)
 //     {

@@ -38,7 +38,7 @@ public:
         p_cancel = 0;
         p_progress = 0.0f;
     }
-    CImg<> image;
+    gmic_list<> images;
     QString command;
     int    p_cancel;
     float  p_progress;
@@ -54,12 +54,17 @@ GMicInterface::~GMicInterface()
     delete d;
 }
 
-void GMicInterface::setImg(CImg<> image)
+void GMicInterface::addImg(CImg<> image)
 {
-    d->image = image;
+    d->images.assign(image);
 }
 
-void GMicInterface::setCommand(QString command)
+void GMicInterface::addImg(CImg<> image, CImg<> mask)
+{
+   d->images.assign(image, mask, false);
+}
+
+void GMicInterface::setParallelCommand(QString command)
 {
     d->command = QString();
     d->command.append(QString("-apply_parallel_overlap \""));
@@ -67,29 +72,35 @@ void GMicInterface::setCommand(QString command)
     d->command.append(QString("\""));
 }
 
+void GMicInterface::setCommand(QString command)
+{
+    d->command = QString();
+    d->command.append(command);
+}
+
 void GMicInterface::runGmic()
 {
     kDebug() << "Command++++ " << d->command;
+
     try{
-        gmic_list<> image_list;
         gmic_list<char> image_name;
-        image_list.assign(d->image);
         char* extended_args = 0;
-        gmic(d->command.toAscii().data(), image_list, image_name, extended_args, true, &(d->p_progress), &(d->p_cancel));
+        gmic(d->command.toAscii().data(), d->images, image_name, extended_args, true, &(d->p_progress), &(d->p_cancel));
 
         kDebug() << "Progress" << d->p_progress;
-        d->image = image_list[0];
     }
     catch (gmic_exception& e)
     {
         kDebug() << "Error encountered when calling G'MIC: " << e.what();
+        emit signalResultReady(false);
+        return;
     }
     emit signalResultReady(d->p_cancel == 0);
 }
 
 CImg<  > GMicInterface::getImg()
 {
-    return d->image;
+    return d->images[0];
 }
 
 void GMicInterface::cancel()

@@ -37,18 +37,63 @@ public:
 
     ~GMicInterface();
 
-    void setImg(CImg<> image);
+    /**
+     * @brief addImg - set single image for processing
+     *
+     * @param image  - image to be processed
+     */
+    void addImg(CImg<> image);
 
+    /**
+     * @brief addImg - set 2 images for processing, for algorithms which apply
+     *                 mask
+     * @param image  - main image
+     * @param mask   - mask to be applied to main image
+     */
+    void addImg(CImg<> image, CImg<> mask);
+
+    /**
+     * @brief setCommand - set single threaded command to be applied to image.
+     *                     Use only if gmic command is not compatible with
+     *                     multi threads, for example algorithms that require
+     *                     a mask
+     * @param command    - command to be executed
+     */
     void setCommand(QString command);
 
+    /**
+     * @brief setParallelCommand - set command with parallel support
+     *
+     * @param command - command to be run in parallel, parallel arguments are
+     *                  added automatically
+     */
+    void setParallelCommand(QString command);
+
+    /**
+     * @brief getImg - method to retrieve image after processing
+     *
+     * @return - image processed
+     */
     CImg<> getImg();
 
+    /**
+     * @brief getProgress - return progress value reported by gmic
+     * @return -1 if no progress available and 0..1 if available
+     */
     float getProgress();
 
+    /**
+     * @brief cancel - tell gmic to cancel processing
+     */
     void cancel();
 
 public slots:
+
+    /**
+     * @brief runGmic - start gmic with loaded image and command
+     */
     void runGmic();
+
 signals:
     void signalResultReady(bool);
 
