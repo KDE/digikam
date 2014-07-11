@@ -205,29 +205,37 @@ void GraphicsDImgItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
     QRect   pixSourceRect;
     QPixmap pix;
 
-    if (d->cachedPixmaps.find(drawRect, &pix, &pixSourceRect))
+    QSize completeSize = boundingRect().size().toSize();
+
+    /* determine scale factor so that the pixmap has the aspect ratio of the bounding rect,
+       but not less than the pixel resolution of the (maybe full-sized) preview. This
+       is necessary for retina displays. */
+    double xratio = double(d->image.width()) / completeSize.width();
+    double yratio = double(d->image.height()) / completeSize.height();
+    double ratio = qMax(qMin(xratio, yratio), 1.0);
+
+    QRect  scaledDrawRect = QRect(int(ratio*drawRect.x()), int(ratio*drawRect.y()),
+                                  int(ratio*drawRect.width()), int(ratio*drawRect.height()));
+
+    if (d->cachedPixmaps.find(scaledDrawRect, &pix, &pixSourceRect))
     {
         if (pixSourceRect.isNull())
         {
-            painter->drawPixmap(drawRect.topLeft(), pix);
+            painter->drawPixmap(drawRect, pix);
         }
         else
         {
-            painter->drawPixmap(drawRect.topLeft(), pix, pixSourceRect);
+            painter->drawPixmap(drawRect, pix, pixSourceRect);
         }
     }
     else
     {
-        QSize completeSize = boundingRect().size().toSize();
-
         // scale "as if" scaling to whole image, but clip output to our exposed region
-        DImg scaledImage   = d->image.smoothScaleClipped(completeSize.width(), completeSize.height(),
-                             drawRect.x(), drawRect.y(), drawRect.width(), drawRect.height());
-
+        DImg scaledImage   = d->image.smoothScaleClipped(int(ratio*completeSize.width()), int(ratio*completeSize.height()),
+                               scaledDrawRect.x(), scaledDrawRect.y(), scaledDrawRect.width(), scaledDrawRect.height());
         pix                = scaledImage.convertToPixmap();
-        d->cachedPixmaps.insert(drawRect, pix);
-
-        painter->drawPixmap(drawRect.topLeft(), pix);
+        d->cachedPixmaps.insert(scaledDrawRect, pix);
+        painter->drawPixmap(drawRect, pix);
     }
 }
 
