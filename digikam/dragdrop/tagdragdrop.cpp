@@ -203,6 +203,13 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
             }
         }
 
+        //If nothing selected, use dropped on tag
+        if(tagIdList.isEmpty())
+        {
+            tagIdList << destAlbum->id();
+            tagNames << destAlbum->title();
+        }
+
         if (e->keyboardModifiers() == Qt::ControlModifier)
         {
             assign = true;
