@@ -6,8 +6,9 @@
  * Date        : 2010-10-14
  * Description : overlay for assigning names to faces
  *
- * Copyright (C) 2010 by Aditya Bhatt <caulier dot gilles at gmail dot com>
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010      by Aditya Bhatt <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,7 +50,7 @@ class AssignNameOverlay : public PersistentWidgetDelegateOverlay
 
 public:
 
-    explicit AssignNameOverlay(QObject* parent);
+    explicit AssignNameOverlay(QObject* const parent);
     ~AssignNameOverlay();
 
     AssignNameWidget* assignNameWidget() const;
@@ -67,24 +68,24 @@ protected Q_SLOTS:
 protected:
 
     virtual QWidget* createWidget();
-    virtual void setActive(bool);
-    virtual void visualChange();
-    virtual void showOnIndex(const QModelIndex& index);
-    virtual void hide();
-    virtual bool checkIndex(const QModelIndex& index) const;
-    virtual void viewportLeaveEvent(QObject* obj, QEvent* event);
-    virtual void widgetEnterEvent();
-    virtual void widgetLeaveEvent();
-    virtual void setFocusOnWidget();
-    virtual bool eventFilter(QObject* o, QEvent* e);
+    virtual void     setActive(bool);
+    virtual void     visualChange();
+    virtual void     showOnIndex(const QModelIndex& index);
+    virtual void     hide();
+    virtual bool     checkIndex(const QModelIndex& index) const;
+    virtual void     viewportLeaveEvent(QObject* obj, QEvent* event);
+    virtual void     widgetEnterEvent();
+    virtual void     widgetLeaveEvent();
+    virtual void     setFocusOnWidget();
+    virtual bool     eventFilter(QObject* o, QEvent* e);
 
     void updatePosition();
     void updateFace();
 
 private:
 
-    class AssignNameOverlayPriv;
-    AssignNameOverlayPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

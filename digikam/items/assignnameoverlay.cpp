@@ -6,10 +6,10 @@
 * Date        : 2010-10-14
 * Description : overlay for assigning names to faces
 *
-* Copyright (C) 2010 by Aditya Bhatt <caulier dot gilles at gmail dot com>
+* Copyright (C) 2010      by Aditya Bhatt <caulier dot gilles at gmail dot com>
 * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
-* Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
-* Copyright (C) 2008 by Peter Penz <peter.penz@gmx.at>
+* Copyright (C) 2009-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
+* Copyright (C) 2008      by Peter Penz <peter.penz@gmx.at>
 *
 * This program is free software; you can redistribute it
 * and/or modify it under the terms of the GNU General
@@ -32,6 +32,7 @@
 #include <QFocusEvent>
 #include <QMouseEvent>
 #include <QVBoxLayout>
+#include <QPushButton>
 
 // KDE includes
 
@@ -59,24 +60,17 @@
 namespace Digikam
 {
 
-class AssignNameOverlay::AssignNameOverlayPriv
+class AssignNameOverlay::Private
 {
 public:
 
-    AssignNameOverlayPriv()
+    Private()
         : tagModel(AbstractAlbumModel::IgnoreRootAlbum)
     {
         assignNameWidget = 0;
     }
 
-    TagModel                  tagModel;
-    CheckableAlbumFilterModel filterModel;
-    TagPropertiesFilterModel  filteredModel;
-
-    AssignNameWidget*         assignNameWidget;
-    QPersistentModelIndex     index;
-
-    bool isChildWidget(QWidget* widget, QWidget* parent)
+    bool isChildWidget(QWidget* widget, QWidget* parent) const
     {
         if (!parent)
         {
@@ -92,12 +86,22 @@ public:
 
             widget = widget->parentWidget();
         }
+
         return false;
     }
+    
+public:
+    
+    TagModel                  tagModel;
+    CheckableAlbumFilterModel filterModel;
+    TagPropertiesFilterModel  filteredModel;
+
+    AssignNameWidget*         assignNameWidget;
+    QPersistentModelIndex     index;
 };
 
-AssignNameOverlay::AssignNameOverlay(QObject* parent)
-    : PersistentWidgetDelegateOverlay(parent), d(new AssignNameOverlayPriv)
+AssignNameOverlay::AssignNameOverlay(QObject* const parent)
+    : PersistentWidgetDelegateOverlay(parent), d(new Private)
 {
     d->filteredModel.setSourceAlbumModel(&d->tagModel);
     d->filterModel.setSourceFilterModel(&d->filteredModel);
@@ -115,7 +119,7 @@ AssignNameWidget* AssignNameOverlay::assignNameWidget() const
 
 QWidget* AssignNameOverlay::createWidget()
 {
-    d->assignNameWidget = new AssignNameWidget;
+    d->assignNameWidget = new AssignNameWidget(parentWidget());
     d->assignNameWidget->setMode(AssignNameWidget::UnconfirmedEditMode);
     d->assignNameWidget->setVisualStyle(AssignNameWidget::TranslucentThemedFrameless);
     d->assignNameWidget->setTagEntryWidgetMode(AssignNameWidget::AddTagsLineEditMode);
@@ -125,13 +129,7 @@ QWidget* AssignNameOverlay::createWidget()
 
     //new StyleSheetDebugger(d->assignNameWidget);
 
-    QWidget* container = new QWidget(parentWidget());
-    QVBoxLayout* layout = new QVBoxLayout;
-    layout->addWidget(d->assignNameWidget);
-    container->setLayout(layout);
-    container->setFocusProxy(d->assignNameWidget);
-
-    return container;
+    return d->assignNameWidget;
 }
 
 void AssignNameOverlay::setActive(bool active)
@@ -162,20 +160,20 @@ void AssignNameOverlay::setActive(bool active)
         connect(assignNameWidget(), SIGNAL(rejected(ImageInfo,QVariant)),
                 this, SLOT(storeFocus()));
 
-        /*
-                if (view()->model())
-                    connect(view()->model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)),
-                            this, SLOT(slotDataChanged(QModelIndex,QModelIndex)));
-        */
+/*
+        if (view()->model())
+            connect(view()->model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+                    this, SLOT(slotDataChanged(QModelIndex,QModelIndex)));
+*/
     }
     else
     {
         // widget is deleted
 
-        /*
-                if (view() && view()->model())
-                    disconnect(view()->model(), 0, this, 0);
-        */
+/*
+        if (view() && view()->model())
+            disconnect(view()->model(), 0, this, 0);
+*/
     }
 }
 
@@ -250,12 +248,12 @@ void AssignNameOverlay::showOnIndex(const QModelIndex& index)
 {
     PersistentWidgetDelegateOverlay::showOnIndex(index);
 
-    /*
-        // TODO: add again when fading in
-        // see bug 228810, this is a small workaround
-        if (m_widget && m_widget->isVisible() && index().isValid() && index == index())
-            addTagsLineEdit()->setVisibleImmediately;
-    */
+/*
+    // TODO: add again when fading in
+    // see bug 228810, this is a small workaround
+    if (m_widget && m_widget->isVisible() && index().isValid() && index == index())
+        addTagsLineEdit()->setVisibleImmediately;
+*/
 
     updatePosition();
     updateFace();
@@ -281,6 +279,7 @@ void AssignNameOverlay::slotAssigned(const TaggingAction& action, const ImageInf
 {
     Q_UNUSED(info);
     DatabaseFace face = DatabaseFace::fromVariant(faceIdentifier);
+    
     //kDebug() << "Confirming" << face << action.shallAssignTag() << action.tagId();
 
     if (face.isConfirmedName() || !action.isValid())
@@ -340,8 +339,10 @@ bool AssignNameOverlay::eventFilter(QObject* o, QEvent* e)
     switch (e->type())
     {
         case QEvent::MouseButtonPress:
+        {
             enterPersistentMode();
             break;
+        }
         case QEvent::FocusOut:
         {
             if (!d->isChildWidget(QApplication::focusWidget(), assignNameWidget()))
@@ -350,7 +351,8 @@ bool AssignNameOverlay::eventFilter(QObject* o, QEvent* e)
             }
             break;
         }
-        default: break;
+        default:
+            break;
     }
 
     return PersistentWidgetDelegateOverlay::eventFilter(o, e);
