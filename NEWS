@@ -10,5 +10,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 003 ==> 326019 - digiKam crashes while face tagging.
 004 ==> 337231 - use high resolution pixmaps on retina displays [patch].
 005 ==> 337392 - Drag and drop tagging stopped working.
-006 ==> 
-
+006 ==> 262175 - The widget to select names is not large.
+007 ==> 262167 - When creating a new name the name is not displayed on the current picture.
+008 ==> 
