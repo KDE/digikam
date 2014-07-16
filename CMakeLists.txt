@@ -1483,19 +1483,21 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/digikamimageview_p.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/digikamimagedelegate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/digikamimagefacedelegate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/groupindicatoroverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imagecategorizedview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imagecategorydrawer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imagedelegate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imageratingoverlay.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imagerotationoverlay.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imagecoordinatesoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imagethumbnailbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imagethumbnaildelegate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imageselectionoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imageviewutilities.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/assignnameoverlay.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/facerejectionoverlay.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/overlays/groupindicatoroverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/overlays/imageratingoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/overlays/imagerotationoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/overlays/imagecoordinatesoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/overlays/imageselectionoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/overlays/assignnameoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/overlays/facerejectionoverlay.cpp
+
 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction/metadatahub.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction/fileactionprogress.cpp
@@ -1588,6 +1590,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dragdrop
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/overlays
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/main
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/models
