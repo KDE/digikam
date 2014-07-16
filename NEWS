@@ -9,6 +9,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 002 ==> 336650 - Face Detection always(!) crashes after first and only successful run (Digikam 3.4.0 on Windows 7).
 003 ==> 326019 - digiKam crashes while face tagging.
 004 ==> 337231 - use high resolution pixmaps on retina displays [patch].
-005 ==> 337392 - Dag and drop tagging stopped working.
-006 ==> 
-
+005 ==> 337392 - Drag and drop tagging stopped working.
+006 ==> 262175 - The widget to select names is not large.
+007 ==> 262167 - When creating a new name the name is not displayed on the current picture.
+008 ==> 286463 - Face detection does nothing in digiKam 2.3.0 windows 7 using the "official" installer.

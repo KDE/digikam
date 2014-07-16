@@ -408,14 +408,30 @@ void SlideShow::updatePixmap()
         {
             // Preview extraction is complete... Draw the image.
 
-            /* determine scale factor so that the pixmap has the aspect ratio of the screen,
-               but not less than the pixel resolution of the (maybe full-sized) preview. This
-               is necessary for retina displays. */
+            /* For high resolution ("retina") displays, Mac OS X / Qt
+               report only half of the physical resolution in terms of
+               pixels, i.e. every logical pixels corresponds to 2x2
+               physical pixels. However, UI elements and fonts are
+               nevertheless rendered at full resolution, and pixmaps
+               as well, provided their resolution is high enough (that
+               is, higher than the reported, logical resolution).
+
+               To work around this, we render the photos not a logical
+               resolution, but with the photo's full resolution, but
+               at the screen's aspect ratio. When we later draw this
+               high resolution bitmap, it is up to Qt to scale the
+               photo to the true physical resolution.  The ratio
+               computed below is the ratio between the photo and
+               screen resolutions, or equivalently the factor by which
+               we need to increase the pixel size of the rendered
+               pixmap.
+            */
             double xratio = double(d->preview.width()) / width();
             double yratio = double(d->preview.height()) / height();
             double ratio = qMax(qMin(xratio, yratio), 1.0);
 
-            d->pixmap = QPixmap(int(ratio*width()), int(ratio*height()));
+            QSize fullSize = QSizeF(ratio*width(), ratio*height()).toSize();
+            d->pixmap = QPixmap(fullSize);
             d->pixmap.fill(Qt::black);
             QPainter p(&(d->pixmap));
 
