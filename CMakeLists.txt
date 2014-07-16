@@ -1542,23 +1542,24 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/imagepreviewview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/mediaplayerview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/mapwidgetview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_treeview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_treeview_delegate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_column_configuration_dialog.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_model.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_columns.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_column_audiovideo.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_column_file.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_column_geo.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_column_digikam.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_column_item.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_column_photo.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_column_thumbnail.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_columnfactory.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_selection_model_syncer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/welcomepageview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/leftsidebarwidgets.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_treeview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_treeview_delegate.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_column_configuration_dialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_model.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_columns.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_column_audiovideo.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_column_file.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_column_geo.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_column_digikam.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_column_item.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_column_photo.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_column_thumbnail.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_columnfactory.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_selection_model_syncer.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/models/digikammodelcollection.cpp
        )
@@ -1599,6 +1600,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager/models
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/color
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/decorate
