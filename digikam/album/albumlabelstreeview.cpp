@@ -62,8 +62,7 @@ public:
         picks(0),
         colors(0),
         isCheckableTreeView(false),
-        isLoadingState(false),
-        searchHandler(0)
+        isLoadingState(false)
     {
         starPolygon << QPoint(0,  12);
         starPolygon << QPoint(10, 10);
@@ -93,8 +92,6 @@ public:
 
     QHash<QString, QList<int> >  selectedLabels;
 
-    AlbumLabelsSearchHandler*    searchHandler;
-
     static const QString         configRatingSelectionEntry;
     static const QString         configPickSelectionEntry;
     static const QString         configColorSelectionEntry;
@@ -115,7 +112,7 @@ AlbumLabelsTreeView::AlbumLabelsTreeView(QWidget *parent, bool setCheckable) :
     d->rootSizeHint        = QSize(1,40);
     d->isCheckableTreeView = setCheckable;
 
-    setHeaderLabel("Labels");
+    setHeaderLabel("My Labels");
     setUniformRowHeights(false);
     initTreeView();
 
