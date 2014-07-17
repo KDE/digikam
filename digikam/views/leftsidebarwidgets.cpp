@@ -299,6 +299,20 @@ void TagViewSideBarWidget::applySettings()
 
 void TagViewSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
 {
+    if(album.first()->type() == Album::TAG)
+    {
+        d->tagsBtn->setChecked(true);
+        d->tagFolderView->setEnabled(true);
+        d->ExistingTagsWasChecked = true;
+        d->noTagsWasChecked = false;
+    }
+    else
+    {
+        d->noTagsBtn->setChecked(true);
+        d->tagFolderView->setDisabled(true);
+        d->noTagsWasChecked = true;
+        d->ExistingTagsWasChecked = false;
+    }
     d->tagFolderView->setCurrentAlbums(album);
 }
 
