@@ -50,6 +50,7 @@
 #include "picklabelfilter.h"
 #include "tagscache.h"
 #include "globals.h"
+#include "albumsettings.h"
 
 namespace Digikam
 {
@@ -107,7 +108,7 @@ AlbumLabelsTreeView::AlbumLabelsTreeView(QWidget *parent, bool setCheckable) :
     QTreeWidget(parent), StateSavingObject(this), d(new Private)
 {
     d->rootFont            = QFont("Times",18,-1,false);
-    d->regularFont         = QFont("Times",12,-1,false);
+    d->regularFont         = AlbumSettings::instance()->getTreeViewFont();
     d->iconSize            = QSize(30 ,30);
     d->rootSizeHint        = QSize(1,40);
     d->isCheckableTreeView = setCheckable;

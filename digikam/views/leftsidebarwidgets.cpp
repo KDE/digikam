@@ -264,7 +264,14 @@ void TagViewSideBarWidget::setActive(bool active)
 {
     if (active)
     {
-        AlbumManager::instance()->setCurrentAlbums(d->tagFolderView->selectedTags());
+        if(d->noTagsBtn->isChecked())
+        {
+            setNoTagsAlbum();
+        }
+        else
+        {
+            AlbumManager::instance()->setCurrentAlbums(d->tagFolderView->selectedTags());
+        }
     }
 }
 
