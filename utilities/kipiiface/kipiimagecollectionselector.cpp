@@ -67,7 +67,9 @@ public:
         iface(0),
         albumSearchBar(0),
         tagSearchBar(0),
-        searchSearchBar(0)
+        searchSearchBar(0),
+        labelsTree(0),
+        labelsSearchHandler(0)
     {
     }
 
