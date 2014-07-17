@@ -227,7 +227,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
     d->tab->addTab(albumBox, i18n("My Albums"));
     d->tab->addTab(tagBox, i18n("My Tags"));
     d->tab->addTab(searchBox, i18n("My Searches"));
-    d->tab->addTab(labelsBox, i18n("Labels"));
+    d->tab->addTab(labelsBox, i18n("My Labels"));
 
     QHBoxLayout* hlay = new QHBoxLayout(this);
     hlay->addWidget(d->tab);
