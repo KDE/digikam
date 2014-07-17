@@ -130,14 +130,14 @@ public:
     SearchModel*    searchModel;
     SearchTreeView* searchTreeView;
 
-    AlbumLabelsTreeView*      labelsTree;
-    AlbumLabelsSearchHandler* labelsSearchHandler;
-
     KipiInterface*  iface;
 
     SearchTextBar*  albumSearchBar;
     SearchTextBar*  tagSearchBar;
     SearchTextBar*  searchSearchBar;
+
+    AlbumLabelsTreeView*      labelsTree;
+    AlbumLabelsSearchHandler* labelsSearchHandler;
 };
 
 KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const iface, QWidget* const parent)

@@ -435,6 +435,7 @@ public:
     Private() :
         treeWidget(0),
         restoringSelectionFromHistory(0),
+        currentXmlIsEmpty(0),
         albumForSelectedItems(0)
     {}
 
