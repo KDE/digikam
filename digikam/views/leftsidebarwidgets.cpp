@@ -312,6 +312,7 @@ void TagViewSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
         d->tagFolderView->setEnabled(true);
         d->ExistingTagsWasChecked = true;
         d->noTagsWasChecked = false;
+        d->tagFolderView->setCurrentAlbums(album);
     }
     else
     {
@@ -320,7 +321,6 @@ void TagViewSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
         d->noTagsWasChecked = true;
         d->ExistingTagsWasChecked = false;
     }
-    d->tagFolderView->setCurrentAlbums(album);
 }
 
 AlbumPointer<TAlbum> TagViewSideBarWidget::currentAlbum() const
