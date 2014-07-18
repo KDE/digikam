@@ -34,5 +34,10 @@
     <string>GPLv2</string>
     <key>NSPrincipalClass</key>
     <string>NSApplication</string>
+    <key>LSEnvironment</key>
+    <dict>
+        <key>RasterOff</key>
+        <string>yes</string>
+    </dict>
 </dict>
 </plist>
