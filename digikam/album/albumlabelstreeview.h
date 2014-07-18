@@ -117,6 +117,9 @@ private:
     void initPicksTree();
     void initColorsTree();
 
+private Q_SLOTS:
+    void slotSettingsChanged();
+
 Q_SIGNALS:
     void signalSetCurrentAlbum();
 

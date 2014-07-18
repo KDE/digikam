@@ -63,18 +63,19 @@ public:
         picks(0),
         colors(0),
         isCheckableTreeView(false),
-        isLoadingState(false)
+        isLoadingState(false),
+        iconSizeFromSetting(0)
     {
-        starPolygon << QPoint(0,  12);
-        starPolygon << QPoint(10, 10);
-        starPolygon << QPoint(14,  0);
-        starPolygon << QPoint(18, 10);
-        starPolygon << QPoint(28, 12);
-        starPolygon << QPoint(20, 18);
-        starPolygon << QPoint(22, 28);
-        starPolygon << QPoint(14, 22);
-        starPolygon << QPoint(6,  28);
-        starPolygon << QPoint(8,  18);
+        starPolygon << QPoint(0,  24);
+        starPolygon << QPoint(20, 20);
+        starPolygon << QPoint(28,  0);
+        starPolygon << QPoint(36, 20);
+        starPolygon << QPoint(56, 24);
+        starPolygon << QPoint(40, 36);
+        starPolygon << QPoint(44, 56);
+        starPolygon << QPoint(28, 44);
+        starPolygon << QPoint(12, 56);
+        starPolygon << QPoint(16, 36);
     }
 
     QFont                        rootFont;
@@ -90,6 +91,7 @@ public:
 
     bool                         isCheckableTreeView;
     bool                         isLoadingState;
+    int                          iconSizeFromSetting;
 
     QHash<QString, QList<int> >  selectedLabels;
 
@@ -109,7 +111,8 @@ AlbumLabelsTreeView::AlbumLabelsTreeView(QWidget *parent, bool setCheckable) :
 {
     d->rootFont            = QFont("Times",18,-1,false);
     d->regularFont         = AlbumSettings::instance()->getTreeViewFont();
-    d->iconSize            = QSize(30 ,30);
+    d->iconSizeFromSetting = AlbumSettings::instance()->getTreeViewIconSize();
+    d->iconSize            = QSize(d->iconSizeFromSetting,d->iconSizeFromSetting);
     d->rootSizeHint        = QSize(1,40);
     d->isCheckableTreeView = setCheckable;
 
@@ -134,6 +137,9 @@ AlbumLabelsTreeView::AlbumLabelsTreeView(QWidget *parent, bool setCheckable) :
     {
         setSelectionMode(QAbstractItemView::ExtendedSelection);
     }
+
+    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+            this, SLOT(slotSettingsChanged()));
 }
 
 AlbumLabelsTreeView::~AlbumLabelsTreeView()
@@ -153,6 +159,7 @@ bool AlbumLabelsTreeView::isLoadingState()
 
 void AlbumLabelsTreeView::initTreeView()
 {
+    setIconSize(QSize(d->iconSizeFromSetting*5,d->iconSizeFromSetting));
     initRatingsTree();
     initPicksTree();
     initColorsTree();
@@ -162,7 +169,7 @@ void AlbumLabelsTreeView::initTreeView()
 
 QPixmap AlbumLabelsTreeView::goldenStarPixmap()
 {
-    QPixmap pixmap = QPixmap(30, 30);
+    QPixmap pixmap = QPixmap(60, 60);
     pixmap.fill(Qt::transparent);
 
     QPainter p1(&pixmap);
@@ -177,8 +184,8 @@ QPixmap AlbumLabelsTreeView::goldenStarPixmap()
 
 QPixmap AlbumLabelsTreeView::colorRectPixmap(QColor color)
 {
-    QRect rect(4,4,24,24);
-    QPixmap pixmap = QPixmap(30, 30);
+    QRect rect(8,8,48,48);
+    QPixmap pixmap = QPixmap(60, 60);
     pixmap.fill(Qt::transparent);
 
     QPainter p1(&pixmap);
@@ -319,11 +326,10 @@ void AlbumLabelsTreeView::initRatingsTree()
     d->ratings->setSizeHint(0,d->rootSizeHint);
     d->ratings->setFont(0,d->rootFont);
     d->ratings->setFlags(Qt::ItemIsEnabled);
-    setIconSize(QSize(100,20));
 
     QTreeWidgetItem* noRate = new QTreeWidgetItem(d->ratings);
     noRate->setText(0,i18n("No Rating"));
-    noRate->setIcon(0,KIconLoader::global()->loadIcon("emblem-unmounted", KIconLoader::NoGroup, 20));
+    noRate->setIcon(0,KIconLoader::global()->loadIcon("emblem-unmounted", KIconLoader::NoGroup, 48));
     noRate->setFont(0,d->regularFont);
 
     QList<int> ratings;
@@ -346,7 +352,7 @@ void AlbumLabelsTreeView::initRatingsTree()
         }
 
         rateWidget->setIcon(0,QIcon(pix));
-        rateWidget->setSizeHint(0,QSize(1,20));
+        rateWidget->setSizeHint(0,d->iconSize);
     }
 }
 
@@ -368,7 +374,7 @@ void AlbumLabelsTreeView::initPicksTree()
         QTreeWidgetItem* pickWidgetItem = new QTreeWidgetItem(d->picks);
         pickWidgetItem->setText(0,pick);
         pickWidgetItem->setFont(0,d->regularFont);
-        pickWidgetItem->setIcon(0,KIconLoader::global()->loadIcon(pickSetIcons.at(pickSetNames.indexOf(pick)), KIconLoader::NoGroup, 20));
+        pickWidgetItem->setIcon(0,KIconLoader::global()->loadIcon(pickSetIcons.at(pickSetNames.indexOf(pick)), KIconLoader::NoGroup, 48));
     }
 }
 
@@ -383,7 +389,7 @@ void AlbumLabelsTreeView::initColorsTree()
     QTreeWidgetItem* noColor = new QTreeWidgetItem(d->colors);
     noColor->setText(0,i18n("No Color"));
     noColor->setFont(0,d->regularFont);
-    noColor->setIcon(0,KIconLoader::global()->loadIcon("emblem-unmounted", KIconLoader::NoGroup, 20));
+    noColor->setIcon(0,KIconLoader::global()->loadIcon("emblem-unmounted", KIconLoader::NoGroup, 48));
 
     QStringList colorSet;
     colorSet << "red" << "orange" << "yellow" << "darkgreen" << "darkblue" << "magenta" << "darkgray" << "black" << "white";
@@ -398,7 +404,26 @@ void AlbumLabelsTreeView::initColorsTree()
         colorWidgetItem->setFont(0,d->regularFont);
         QPixmap colorIcon = colorRectPixmap(QColor(color));
         colorWidgetItem->setIcon(0,QIcon(colorIcon));
-        colorWidgetItem->setSizeHint(0,QSize(1,20));
+        colorWidgetItem->setSizeHint(0,d->iconSize);
+    }
+}
+
+void AlbumLabelsTreeView::slotSettingsChanged()
+{
+    if(d->iconSizeFromSetting != AlbumSettings::instance()->getTreeViewIconSize())
+    {
+        d->iconSizeFromSetting = AlbumSettings::instance()->getTreeViewIconSize();
+        setIconSize(QSize(d->iconSizeFromSetting*5,d->iconSizeFromSetting));
+        d->iconSize = QSize(d->iconSizeFromSetting,d->iconSizeFromSetting);
+        QTreeWidgetItemIterator it(this);
+        while(*it)
+        {
+            if((*it)->parent())
+            {
+                (*it)->setSizeHint(0,d->iconSize);
+            }
+            ++it;
+        }
     }
 }
 
