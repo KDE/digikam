@@ -62,19 +62,46 @@ void ImagePreviewItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
     QPixmap pix;
     QSize   completeSize = boundingRect().size().toSize();
 
-    // scale "as if" scaling to whole image, but clip output to our exposed region
-    DImg scaledImage     = d->image.smoothScaleClipped(completeSize.width(), completeSize.height(),
-                                                       drawRect.x(), drawRect.y(), drawRect.width(), drawRect.height());
+    /* For high resolution ("retina") displays, Mac OS X / Qt
+       report only half of the physical resolution in terms of
+       pixels, i.e. every logical pixels corresponds to 2x2
+       physical pixels. However, UI elements and fonts are
+       nevertheless rendered at full resolution, and pixmaps
+       as well, provided their resolution is high enough (that
+       is, higher than the reported, logical resolution).
 
-    if (d->cachedPixmaps.find(drawRect, &pix, &pixSourceRect))
+       To work around this, we render the photos not a logical
+       resolution, but with the photo's full resolution, but
+       at the screen's aspect ratio. When we later draw this
+       high resolution bitmap, it is up to Qt to scale the
+       photo to the true physical resolution.  The ratio
+       computed below is the ratio between the photo and
+       screen resolutions, or equivalently the factor by which
+       we need to increase the pixel size of the rendered
+       pixmap.
+    */
+    double xratio = double(d->image.width()) / completeSize.width();
+    double yratio = double(d->image.height()) / completeSize.height();
+    double ratio = qMax(qMin(xratio, yratio), 1.0);
+
+    QRect  scaledDrawRect = QRectF(ratio*drawRect.x(), ratio*drawRect.y(),
+                                   ratio*drawRect.width(), ratio*drawRect.height()).toRect();
+
+    // scale "as if" scaling to whole image, but clip output to our exposed region
+    QSize scaledCompleteSize = QSizeF(ratio*completeSize.width(), ratio*completeSize.height()).toSize();
+    DImg scaledImage   = d->image.smoothScaleClipped(scaledCompleteSize.width(), scaledCompleteSize.height(),
+                                                     scaledDrawRect.x(), scaledDrawRect.y(),
+                                                     scaledDrawRect.width(), scaledDrawRect.height());
+
+    if (d->cachedPixmaps.find(scaledDrawRect, &pix, &pixSourceRect))
     {
         if (pixSourceRect.isNull())
         {
-            painter->drawPixmap(drawRect.topLeft(), pix);
+            painter->drawPixmap(drawRect, pix);
         }
         else
         {
-            painter->drawPixmap(drawRect.topLeft(), pix, pixSourceRect);
+            painter->drawPixmap(drawRect, pix, pixSourceRect);
         }
     }
     else
@@ -96,9 +123,9 @@ void ImagePreviewItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
             pix = scaledImage.convertToPixmap();
         }
 
-        d->cachedPixmaps.insert(drawRect, pix);
+        d->cachedPixmaps.insert(scaledDrawRect, pix);
 
-        painter->drawPixmap(drawRect.topLeft(), pix);
+        painter->drawPixmap(drawRect, pix);
     }
 
     // Show the Over/Under exposure pixels indicators
@@ -111,7 +138,7 @@ void ImagePreviewItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
         {
             QImage pureColorMask = scaledImage.pureColorMask(expoSettings);
             QPixmap pixMask      = QPixmap::fromImage(pureColorMask);
-            painter->drawPixmap(drawRect.topLeft(), pixMask);
+            painter->drawPixmap(drawRect, pixMask);
         }
     }
 }
