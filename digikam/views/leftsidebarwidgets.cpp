@@ -330,11 +330,16 @@ AlbumPointer<TAlbum> TagViewSideBarWidget::currentAlbum() const
 
 void TagViewSideBarWidget::setNoTagsAlbum()
 {
+    qDebug() << "Setting No Tags Album";
+    kDebug() << "Setting No Tags Album";
+
     QString title = i18n("No Tags Album");
     SAlbum* album = AlbumManager::instance()->findSAlbum(title);
     if(album)
     {
-        //AlbumManager::updateSAlbum(album,d->noTagsXml);
+        qDebug() << "Setting Album to the view";
+        kDebug() << "Setting Album to the view";
+
         AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << album);
     }
     else
@@ -346,6 +351,15 @@ void TagViewSideBarWidget::setNoTagsAlbum()
         writer.finishField();
         writer.finishGroup();
         writer.finish();
+
+        kDebug() << "First time to Use this feature, Generating XML";
+        qDebug() << "First time to Use this feature, Generating XML";
+
+        qDebug() << writer.xml();
+        kDebug() << writer.xml();
+
+        qDebug() << "Setting Album to the view";
+        kDebug() << "Setting Album to the view";
 
         album = AlbumManager::instance()->createSAlbum(title, DatabaseSearch::AdvancedSearch, writer.xml());
         AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << album);

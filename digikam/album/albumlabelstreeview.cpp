@@ -425,6 +425,20 @@ void AlbumLabelsTreeView::slotSettingsChanged()
             ++it;
         }
     }
+
+    if(d->regularFont != AlbumSettings::instance()->getTreeViewFont())
+    {
+        d->regularFont = AlbumSettings::instance()->getTreeViewFont();
+        QTreeWidgetItemIterator it(this);
+        while(*it)
+        {
+            if((*it)->parent())
+            {
+                (*it)->setFont(0,d->regularFont);
+            }
+            ++it;
+        }
+    }
 }
 
 void AlbumLabelsTreeView::restoreSelectionFromHistory(QHash<QString, QList<int> > neededLabels)
