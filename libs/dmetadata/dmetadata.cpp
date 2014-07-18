@@ -1284,7 +1284,7 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath) const
     return true;
 }
 
-bool DMetadata::getImageFacesMap(QMap<QString,QVariant>& faces) const
+bool DMetadata::getImageFacesMap(QMultiMap<QString,QVariant>& faces) const
 {
     faces.clear();
     // The example code for Exiv2 says:
@@ -1323,7 +1323,7 @@ bool DMetadata::getImageFacesMap(QMap<QString,QVariant>& faces) const
                     list.at(2).toFloat(),
                     list.at(3).toFloat());
 
-        faces[person] = rect;
+        faces.insertMulti(person, rect);
     }
     /** Read face tags only if libkexiv can write them, otherwise
      *  garbage tags will be generated on image transformation
@@ -1354,7 +1354,7 @@ bool DMetadata::getImageFacesMap(QMap<QString,QVariant>& faces) const
                     w,
                     h);
 
-        faces[person] = rect;
+        faces.insertMulti(person, rect);
         kDebug() << "Found new rect " << person << " "<< rect;
     }
 #endif
@@ -1362,7 +1362,7 @@ bool DMetadata::getImageFacesMap(QMap<QString,QVariant>& faces) const
     return !faces.isEmpty();
 }
 
-bool DMetadata::setImageFacesMap(QMap< QString, QVariant >& facesPath, bool write) const
+bool DMetadata::setImageFacesMap(QMultiMap< QString, QVariant >& facesPath, bool write) const
 {
 #if KEXIV2_VERSION >= 0x020301
     QString qxmpTagName("Xmp.mwg-rs.Regions/mwg-rs:RegionList");
@@ -2189,7 +2189,7 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
 
         case MetadataInfo::Faces:
         {
-            QMap<QString,QVariant> faceMap;
+            QMultiMap<QString,QVariant> faceMap;
             getImageFacesMap(faceMap);
             QVariant var(faceMap);
             return var;

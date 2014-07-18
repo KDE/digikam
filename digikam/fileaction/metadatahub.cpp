@@ -118,7 +118,7 @@ public:
 
     QStringList                       tagList;
 
-    QMap<QString, QVariant>           faceTagsList;
+    QMultiMap<QString, QVariant>           faceTagsList;
 
     MetadataHub::Status               dateTimeStatus;
     MetadataHub::Status               titlesStatus;
@@ -1378,7 +1378,7 @@ void Digikam::MetadataHub::loadFaceTags(const ImageInfo info, QSize size)
 
             QRect   temprect          = dface.region().toRect();
             QRectF  faceRect          = TagRegion::absoluteToRelative(temprect,size);
-            d->faceTagsList[faceName] = QVariant(faceRect);
+            d->faceTagsList.insertMulti(faceName, QVariant(faceRect));
         }
 
     }

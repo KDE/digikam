@@ -861,7 +861,7 @@ void ImageScanner::scanFaces()
         return;
     }
 
-    QMap<QString,QVariant> metadataFacesMap;
+    QMultiMap<QString,QVariant> metadataFacesMap;
 
     if (!d->metadata.getImageFacesMap(metadataFacesMap))
     {
