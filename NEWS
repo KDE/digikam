@@ -3,10 +3,11 @@ digiKam 4.2.0 - Release date: 2014-??-??
 
 NEW FEATURES:
 
-ALBUMGUI : New view on left sidebar to search quickly items with assigned Labels.
+AlbumGui : New view on left sidebar to search quickly items with assigned Labels.
            Details: http://mohamedanwer.wordpress.com/2014/07/17/the-great-merging-day/
-ALBUMGUI : Tags view: add a new option to show items with no tag.
+AlbumGui : Tags view: add a new option to show items with no tag.
            Details: http://mohamedanwer.wordpress.com/2014/07/11/tags-left-sidebar-supports-new-action-now/
+Geberal  : Add retina display support with preview and editor canvas.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
