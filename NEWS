@@ -22,4 +22,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 009 ==> 337417 - Allow duplicate names on face tags in the same image [patch].
 010 ==> 160363 - Use pictures Labels (Rating, Pick, Color) as selection criteria in Export methods.
 011 ==> 330976 - Crash after search for color label.
-012 ==> 
+012 ==> 337507 - Face Detection gives no results, no matter the accuracy setting.
+013 ==> 
