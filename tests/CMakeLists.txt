@@ -379,3 +379,27 @@ TARGET_LINK_LIBRARIES (testautocrop
                ${KDCRAW_LIBRARIES}
                ${OpenCV_LIBRARIES}
                )
+
+#------------------------------------------------------------------------
+
+SET (testdatabase_SRCS testdatabase.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/album/album.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/album/albumhistory.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/album/albummanager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/album/albumwatch.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/database/scancontroller.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/database/databaseguierrorhandler.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/utils/albumsettings.cpp
+)
+KDE4_ADD_EXECUTABLE(testdatabase ${testdatabase_SRCS})
+TARGET_LINK_LIBRARIES (testdatabase
+               digikamcore
+               digikamdatabase
+               ${QT_QTCORE_LIBRARY}
+               ${QT_QTGUI_LIBRARY}
+               ${QT_QTSQL_LIBRARY}
+               ${KDE4_KDECORE_LIBS}
+               ${KDE4_KIO_LIBS}
+               ${KEXIV2_LIBRARIES}
+               ${KDCRAW_LIBRARIES}
+               )

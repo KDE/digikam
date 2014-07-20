@@ -3,7 +3,7 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 20013-07-03
+ * Date        : 2013-07-03
  * Description : Tag Properties widget to display tag properties
  *               when a tag or multiple tags are selected
  *

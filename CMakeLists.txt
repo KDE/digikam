@@ -26,7 +26,7 @@ SET(DIGIKAM_MINOR_VERSION "2")
 SET(DIGIKAM_PATCH_VERSION "0")
 
 #digiKam release date
-SET(DIGIKAM_RELEASE_DATE "2014-??-??")
+SET(DIGIKAM_RELEASE_DATE "2014-08-31")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
@@ -479,7 +479,7 @@ MACRO_BOOL_TO_01(EIGEN3_FOUND HAVE_EIGEN3)
 
 # Set config files accordingly with optional dependencies
 
-CONFIGURE_FILE(digikam/utils/config-digikam.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/digikam/utils/config-digikam.h)
+CONFIGURE_FILE(digikam/utils/config-digikam.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/digikam/utils/config-digikam.h)
 
 # ==================================================================================================
 # Log messages
@@ -654,7 +654,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     # Add a custom command to drive the git script whenever the git entries
     # file changes.
-    CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/gitscript.cmake.in_cmake"
+    CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/gitscript.cmake.in"
                    "${CMAKE_CURRENT_BINARY_DIR}/gitscript.cmake"
                    @ONLY)
 
@@ -1754,7 +1754,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     ENDIF(KDE4_BUILD_TESTS)
 
     IF(NOT WIN32)
-        CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/digikam.lsm.cmake ${CMAKE_CURRENT_BINARY_DIR}/digikam.lsm)
+        CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/digikam.lsm.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/digikam.lsm)
     ENDIF(NOT WIN32)
 
 ENDIF(DIGIKAM_CAN_BE_COMPILED)
@@ -1769,7 +1769,7 @@ IF(DOXYGEN_FOUND)
     SET(DOXYFILE ${CMAKE_BINARY_DIR}/Doxyfile)
     SET(WARNFILE ${CMAKE_BINARY_DIR}/doxygen-warn.log)
 
-    CONFIGURE_FILE(Doxyfile.cmake ${DOXYFILE})
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/Doxyfile.cmake.in ${DOXYFILE})
 
     ADD_CUSTOM_TARGET(doc ${DOXYGEN_EXECUTABLE} ${DOXYFILE}
                       WORKING_DIRECTORY ${CMAKE_BINARY_DIR})

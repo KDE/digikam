@@ -152,7 +152,7 @@ struct uvmexp* sg_get_uvmexp()
     int                  mib[2];
     size_t               size = sizeof(struct uvmexp);
     static struct uvmexp uvm;
-    struct uvmexp*       new;
+//    struct uvmexp*       new;
 
     mib[0] = CTL_VM;
     mib[1] = VM_UVMEXP;

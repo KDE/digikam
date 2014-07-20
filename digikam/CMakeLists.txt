@@ -1,5 +1,5 @@
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/utils/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/utils/version.h)
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/../data/database/dbconfigversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/database/dbconfigversion.h)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/utils/version.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/utils/version.h)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/database/dbconfigversion.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/database/dbconfigversion.h)
 
 # Shared libdigikamcore ################################################################
 
@@ -272,6 +272,15 @@ QT4_ADD_DBUS_ADAPTOR(digikam_SRCS main/org.kde.digikam.xml main/digikamapp.h Dig
 KDE4_ADD_APP_ICON(digikam_SRCS "../data/icons/apps/hi*-app-digikam.png")
 
 KDE4_ADD_EXECUTABLE(digikam ${digikam_SRCS})
+
+# TO fill plist XML file for OSX #####################################################
+
+SET(MACOSX_BUNDLE_LONG_VERSION_STRING ${DIGIKAM_VERSION_STRING})
+SET(MACOSX_BUNDLE_SHORT_VERSION_STRING ${DIGIKAM_VERSION_SHORT})
+SET(MACOSX_BUNDLE_BUNDLE_VERSION ${DIGIKAM_VERSION_STRING})
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/../cmake/templates/Info.plist.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
+SET_TARGET_PROPERTIES(digikam PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
+
 
 TARGET_LINK_LIBRARIES(digikam
         ${QT_QTSQL_LIBRARY}
