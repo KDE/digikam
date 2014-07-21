@@ -53,18 +53,18 @@ public:
      * @return true if the tree widget is checkable
      *         and false if not
      */
-    bool    isCheckable();
+    bool isCheckable() const;
 
     /**
      * @return true if Loading state function is running
      */
-    bool    isLoadingState();
+    bool isLoadingState() const;
 
     /**
      * @return a Pixmap of a 30*30 pixels golden star used
      *         for rating and widget icon
      */
-    QPixmap goldenStarPixmap();
+    QPixmap goldenStarPixmap() const;
 
     /**
      * @brief Creates a 30*30 rectangular pixmap with
@@ -73,7 +73,7 @@ public:
      * @param color wanted to be set
      * @return pixmap has a rectangle filled with the color
      */
-    QPixmap colorRectPixmap(QColor color);
+    QPixmap colorRectPixmap(QColor color) const;
 
     /**
      * @brief Provide the current selection from the tree-view

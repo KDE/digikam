@@ -147,27 +147,17 @@ AlbumLabelsTreeView::~AlbumLabelsTreeView()
     delete d;
 }
 
-bool AlbumLabelsTreeView::isCheckable()
+bool AlbumLabelsTreeView::isCheckable() const
 {
     return d->isCheckableTreeView;
 }
 
-bool AlbumLabelsTreeView::isLoadingState()
+bool AlbumLabelsTreeView::isLoadingState() const
 {
     return d->isLoadingState;
 }
 
-void AlbumLabelsTreeView::initTreeView()
-{
-    setIconSize(QSize(d->iconSizeFromSetting*5,d->iconSizeFromSetting));
-    initRatingsTree();
-    initPicksTree();
-    initColorsTree();
-    expandAll();
-    setRootIsDecorated(false);
-}
-
-QPixmap AlbumLabelsTreeView::goldenStarPixmap()
+QPixmap AlbumLabelsTreeView::goldenStarPixmap() const
 {
     QPixmap pixmap = QPixmap(60, 60);
     pixmap.fill(Qt::transparent);
@@ -182,7 +172,7 @@ QPixmap AlbumLabelsTreeView::goldenStarPixmap()
     return pixmap;
 }
 
-QPixmap AlbumLabelsTreeView::colorRectPixmap(QColor color)
+QPixmap AlbumLabelsTreeView::colorRectPixmap(QColor color) const
 {
     QRect rect(8,8,48,48);
     QPixmap pixmap = QPixmap(60, 60);
@@ -319,6 +309,16 @@ void AlbumLabelsTreeView::setCurrentAlbum()
     emit signalSetCurrentAlbum();
 }
 
+void AlbumLabelsTreeView::initTreeView()
+{
+    setIconSize(QSize(d->iconSizeFromSetting*5,d->iconSizeFromSetting));
+    initRatingsTree();
+    initPicksTree();
+    initColorsTree();
+    expandAll();
+    setRootIsDecorated(false);
+}
+
 void AlbumLabelsTreeView::initRatingsTree()
 {
     d->ratings = new QTreeWidgetItem(this);
@@ -332,9 +332,7 @@ void AlbumLabelsTreeView::initRatingsTree()
     noRate->setIcon(0,KIconLoader::global()->loadIcon("emblem-unmounted", KIconLoader::NoGroup, 48));
     noRate->setFont(0,d->regularFont);
 
-    QList<int> ratings;
-    ratings << 1 << 2 << 3 << 4 << 5;
-    foreach(int rate, ratings)
+    for(int rate = 1 ; rate <= 5 ; rate++)
     {
         QTreeWidgetItem* rateWidget = new QTreeWidgetItem(d->ratings);
 
@@ -365,10 +363,16 @@ void AlbumLabelsTreeView::initPicksTree()
     d->picks->setFlags(Qt::ItemIsEnabled);
 
     QStringList pickSetNames;
-    pickSetNames << i18n("No Pick") << i18n("Rejected Item") << i18n("Pending Item") << i18n("Accepted Item");
+    pickSetNames << i18n("No Pick")
+                 << i18n("Rejected Item")
+                 << i18n("Pending Item")
+                 << i18n("Accepted Item");
 
     QStringList pickSetIcons;
-    pickSetIcons << "emblem-unmounted" << "flag-red" << "flag-yellow" << "flag-green";
+    pickSetIcons << "emblem-unmounted"
+                 << "flag-red"
+                 << "flag-yellow"
+                 << "flag-green";
 
     foreach (QString pick, pickSetNames) {
         QTreeWidgetItem* pickWidgetItem = new QTreeWidgetItem(d->picks);
@@ -392,11 +396,18 @@ void AlbumLabelsTreeView::initColorsTree()
     noColor->setIcon(0,KIconLoader::global()->loadIcon("emblem-unmounted", KIconLoader::NoGroup, 48));
 
     QStringList colorSet;
-    colorSet << "red" << "orange" << "yellow" << "darkgreen" << "darkblue" << "magenta" << "darkgray" << "black" << "white";
+    colorSet << "red"      << "orange"
+             << "yellow"   << "darkgreen"
+             << "darkblue" << "magenta"
+             << "darkgray" << "black"
+             << "white";
 
     QStringList colorSetNames;
-    colorSetNames << i18n("Red") << i18n("Orange") << i18n("Yellow") << i18n("Green")
-                  << i18n("Blue") << i18n("Magenta") << i18n("Gray") << i18n("Black") << i18n("White");
+    colorSetNames << i18n("Red")    << i18n("Orange")
+                  << i18n("Yellow") << i18n("Green")
+                  << i18n("Blue")   << i18n("Magenta")
+                  << i18n("Gray")   << i18n("Black")
+                  << i18n("White");
 
     foreach (QString color, colorSet) {
         QTreeWidgetItem* colorWidgetItem = new QTreeWidgetItem(d->colors);
