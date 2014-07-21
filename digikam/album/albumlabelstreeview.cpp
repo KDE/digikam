@@ -525,7 +525,7 @@ AlbumLabelsSearchHandler::~AlbumLabelsSearchHandler()
     delete d;
 }
 
-Album *AlbumLabelsSearchHandler::albumForSelectedItems()
+Album *AlbumLabelsSearchHandler::albumForSelectedItems() const
 {
     return d->albumForSelectedItems;
 }
@@ -535,7 +535,7 @@ KUrl::List AlbumLabelsSearchHandler::imagesUrls()
     return d->urlListForSelectedAlbum;
 }
 
-QString AlbumLabelsSearchHandler::generatedName()
+QString AlbumLabelsSearchHandler::generatedName() const
 {
     return d->generatedAlbumName;
 }
@@ -548,7 +548,7 @@ void AlbumLabelsSearchHandler::restoreSelectionFromHistory(QHash<QString, QList<
     slotSelectionChanged();
 }
 
-bool AlbumLabelsSearchHandler::isRestoringSelectionFromHistory()
+bool AlbumLabelsSearchHandler::isRestoringSelectionFromHistory() const
 {
     return d->restoringSelectionFromHistory;
 }
@@ -626,7 +626,7 @@ QString AlbumLabelsSearchHandler::createXMLForCurrentSelection(QHash<QString, QL
     return writer.xml();
 }
 
-SAlbum* AlbumLabelsSearchHandler::search(const QString &xml)
+SAlbum* AlbumLabelsSearchHandler::search(const QString &xml) const
 {
     SAlbum* album;
     int id;
@@ -829,7 +829,7 @@ void AlbumLabelsSearchHandler::imagesUrlsForCurrentAlbum()
             this, SLOT(slotData(KIO::Job*,QByteArray)));
 }
 
-QString AlbumLabelsSearchHandler::getDefaultTitle()
+QString AlbumLabelsSearchHandler::getDefaultTitle() const
 {
     if(d->treeWidget->isCheckable())
     {
