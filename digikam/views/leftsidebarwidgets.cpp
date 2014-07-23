@@ -7,7 +7,7 @@
  * Description : left sidebar widgets
  *
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
- * Copyright (C) 2010-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2012      by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2014      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
@@ -554,7 +554,7 @@ QPixmap DateFolderViewSideBarWidget::getIcon()
 
 QString DateFolderViewSideBarWidget::getCaption()
 {
-    return i18n("Calendar");
+    return i18n("Dates");
 }
 
 // -----------------------------------------------------------------------------
@@ -603,6 +603,7 @@ public:
 
     AlbumPointer<SAlbum>      currentTimelineSearch;
 };
+
 const QString TimelineSideBarWidget::Private::configHistogramTimeUnitEntry("Histogram TimeUnit");
 const QString TimelineSideBarWidget::Private::configHistogramScaleEntry("Histogram Scale");
 const QString TimelineSideBarWidget::Private::configCursorPositionEntry("Cursor Position");
@@ -1127,7 +1128,7 @@ QPixmap SearchSideBarWidget::getIcon()
 
 QString SearchSideBarWidget::getCaption()
 {
-    return i18nc("Search images, access stored searches", "Search");
+    return i18nc("Avanced search images, access stored searches", "Search");
 }
 
 void SearchSideBarWidget::newKeywordSearch()
@@ -1211,7 +1212,7 @@ QPixmap FuzzySearchSideBarWidget::getIcon()
 
 QString FuzzySearchSideBarWidget::getCaption()
 {
-    return i18n("Fuzzy Searches");
+    return i18nc("Fuzzy Search images, as dupplicates, sketch, similars searches", "Fuzzy");
 }
 
 void FuzzySearchSideBarWidget::newDuplicatesSearch(Album* album)
@@ -1299,7 +1300,7 @@ QPixmap GPSSearchSideBarWidget::getIcon()
 
 QString GPSSearchSideBarWidget::getCaption()
 {
-    return i18nc("Search images on a map", "Map Search");
+    return i18nc("Search images on a map", "Map");
 }
 
 // -----------------------------------------------------------------------------
@@ -1376,16 +1377,6 @@ PeopleSideBarWidget::~PeopleSideBarWidget()
     delete d;
 }
 
-QPixmap PeopleSideBarWidget::getIcon()
-{
-    return SmallIcon("edit-image-face-show");
-}
-
-QString PeopleSideBarWidget::getCaption()
-{
-    return i18nc("Browse images sorted by depicted people", "People");
-}
-
 void PeopleSideBarWidget::slotInit()
 {
     loadState();
@@ -1429,6 +1420,16 @@ void PeopleSideBarWidget::slotScanForFaces()
         FaceDetector* const tool = new FaceDetector(dialog.settings());
         tool->start();
     }
+}
+
+QPixmap PeopleSideBarWidget::getIcon()
+{
+    return SmallIcon("edit-image-face-show");
+}
+
+QString PeopleSideBarWidget::getCaption()
+{
+    return i18nc("Browse images sorted by depicted people", "People");
 }
 
 } // namespace Digikam
