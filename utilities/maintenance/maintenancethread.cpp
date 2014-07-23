@@ -68,13 +68,14 @@ void MaintenanceThread::setUseMultiCore(const bool b)
     }
 }
 
-void MaintenanceThread::syncMetadata(const ImageInfoList& items, MetadataSynchronizer::SyncDirection dir)
+void MaintenanceThread::syncMetadata(const ImageInfoList& items, MetadataSynchronizer::SyncDirection dir, bool tagsOnly)
 {
     JobCollection* const collection = new JobCollection();
 
     for(int i=0; i < items.size(); i++)
     {
         MetadataTask* const t = new MetadataTask();
+        t->setTagsOnly(tagsOnly);
         t->setItem(items.at(i), dir);
 
         connect(t, SIGNAL(signalFinished(QImage)),
