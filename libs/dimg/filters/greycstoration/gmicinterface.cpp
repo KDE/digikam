@@ -98,7 +98,7 @@ void GMicInterface::runGmic()
     emit signalResultReady(d->p_cancel == 0);
 }
 
-CImg<  > GMicInterface::getImg()
+CImg< > GMicInterface::getImg()
 {
     return d->images[0];
 }

@@ -183,7 +183,7 @@ void GreycstorationFilter::setup()
     if (d->mode == Resize || d->mode == SimpleResize)
     {
         m_destImage = DImg(d->newSize.width(), d->newSize.height(),
-                           m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
+                           m_orgImage.sixteenBit(), false);
 
         kDebug() << "GreycstorationFilter::Resize: new size: ("
                  << d->newSize.width() << ", " << d->newSize.height() << ")";
@@ -225,7 +225,7 @@ void GreycstorationFilter::startFilterDirectly()
 
             QDateTime now = QDateTime::currentDateTime();
             filterImage();
-            kDebug() << m_name << ":: excecution time : " << now.msecsTo(QDateTime::currentDateTime()) << " ms";
+//             kDebug() << m_name << ":: excecution time : " << now.msecsTo(QDateTime::currentDateTime()) << " ms";
 //         }
 //         catch (std::bad_alloc& ex)
 //         {
@@ -282,10 +282,12 @@ void GreycstorationFilter::setImageAfterProcessing(bool result)
         {
             uchar* ptr = newData;
 
+//             kDebug() << "New size " << newWidth << " " << newHeight;
             for (y = 0; y < newHeight; ++y)
             {
                 for (x = 0; x < newWidth; ++x)
                 {
+                    //kDebug() << "+++++++++++++++" << y << x << " "; // << static_cast<uchar>(d->img(x, y, 3));
                     // Overwrite RGB values to destination.
                     ptr[0] = static_cast<uchar>(d->img(x, y, 0));        // Blue
                     ptr[1] = static_cast<uchar>(d->img(x, y, 1));        // Green
@@ -293,6 +295,7 @@ void GreycstorationFilter::setImageAfterProcessing(bool result)
                     ptr[3] = static_cast<uchar>(d->img(x, y, 3));        // Alpha
                     ptr    += 4;
                 }
+                kDebug() << "+++++++++++++++" << y << " "; // << static_cast<uchar>(d->img(x, y, 3));
             }
         }
         else                                     // 16 bits image.
@@ -503,8 +506,6 @@ void GreycstorationFilter::restoration()
 
         d->gmicInterface->addImg(d->img);
         d->gmicInterface->setParallelCommand(command);
-//         d->gmicInterface->runGmic();
-//         kDebug() << " G Mic finished";
         emit signalStartWork();
         d->timer->start(1000);
 //         gmic(command.toAscii().data(), image_list, image_name);
@@ -591,9 +592,9 @@ void GreycstorationFilter::inpainting()
 void GreycstorationFilter::resize()
 {
 //     const bool anchor       = true;   // Anchor original pixels.
-//     const unsigned int init = 5;      // Initial estimate (1=block, 3=linear, 5=bicubic).
-//     int w                   = m_destImage.width();
-//     int h                   = m_destImage.height();
+    const unsigned int init = 5;      // Initial estimate (1=block, 3=linear, 5=bicubic).
+    int w                   = m_destImage.width();
+    int h                   = m_destImage.height();
 
 //     d->mask.assign(d->img.dimx(), d->img.dimy(), 1, 1, 255);
 //
@@ -634,6 +635,22 @@ void GreycstorationFilter::resize()
 //         iterationLoop(iter);
 //     }
     // TODO: implement the above with g'mic
+        QString command;
+        command.append(QString("-print -resize[0] "));
+        command.append(QString("%1,").arg(w));            // new width
+        command.append(QString("%1,").arg(h));            // new height
+        command.append(QString("%1,").arg(1));           // ??
+        command.append(QString("%1,").arg(3));                // ??
+        command.append(QString("%1,").arg(init));                // ??
+        command.append(QString("%1").arg(1));
+
+        d->gmicInterface->addImg(d->img);
+
+        // NOTE: Do not use parallel command, gmic will return a twice as big image(bug)
+        d->gmicInterface->setCommand(command);
+        emit signalStartWork();
+        d->timer->start(1000);
+
 }
 
 void GreycstorationFilter::simpleResize()
