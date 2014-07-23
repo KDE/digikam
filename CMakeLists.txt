@@ -174,13 +174,16 @@ FIND_PACKAGE(Boost) # 1.36.0)
 # Therefore, first try finding OpenCV using FIND_PACKAGE(OpenCV), and if that fails,
 # add our FindOpenCV.cmake to the search path and search again.
 
+# reset to avoid picking up extra libraries
+SET(OpenCV_LIBS)
+
 MESSAGE(STATUS "First try at finding OpenCV...")
-FIND_PACKAGE(OpenCV)
+FIND_PACKAGE(OpenCV COMPONENTS core highgui imgproc)
 
 IF (NOT OpenCV_LIBRARIES AND NOT OpenCV_LIBS)
   MESSAGE(STATUS "Could not find OpenCV normally, trying internal FindOpenCV.cmake")
    SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/modules_opencv)
-  FIND_PACKAGE(OpenCV REQUIRED)
+  FIND_PACKAGE(OpenCV REQUIRED COMPONENTS core highgui imgproc)
 ELSE (NOT OpenCV_LIBRARIES AND NOT OpenCV_LIBS)
   MESSAGE(STATUS "Great, found OpenCV on the first try.")
 ENDIF (NOT OpenCV_LIBRARIES AND NOT OpenCV_LIBS)

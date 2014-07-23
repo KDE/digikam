@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 project( DisplayImage )
-find_package( OpenCV REQUIRED )
+set( OpenCV_LIBS )
+find_package( OpenCV REQUIRED COMPONENTS core imgproc )
 add_executable( detectnoise detectnoise.cpp )
 target_link_libraries( detectblur ${OpenCV_LIBS} )
