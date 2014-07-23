@@ -796,11 +796,21 @@ void ImageScanner::scanTags()
 
     QVariant var         = d->metadata.getMetadataField(MetadataInfo::Keywords);
     QStringList keywords = var.toStringList();
+    QStringList filteredKeywords;
 
-    if (!keywords.isEmpty())
+    // Extra empty tags check, empty tag = root tag which is not asignable
+    for(int index = 0; index < keywords.size(); index++)
+    {
+        if(!keywords.at(index).isEmpty())
+        {
+            filteredKeywords.append(keywords.at(index));
+        }
+    }
+
+    if (!filteredKeywords.isEmpty())
     {
         // get tag ids, create if necessary
-        QList<int> tagIds = TagsCache::instance()->getOrCreateTags(keywords);
+        QList<int> tagIds = TagsCache::instance()->getOrCreateTags(filteredKeywords);
         d->commit.tagIds += tagIds;
     }
 
