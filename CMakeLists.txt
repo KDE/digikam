@@ -4,18 +4,21 @@ PROJECT(digikam)
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "Starting CMake configuration for: digiKam")
 
-OPTION(ENABLE_SCRIPTIFACE      "Build digiKam with experimental scripting support (default=OFF)"       OFF)
-OPTION(ENABLE_PRESENTATIONMODE "Build digiKam with presentation mode support (default=OFF)"            OFF)
-OPTION(ENABLE_THUMBS_DB        "Build digiKam with thumbnails database support (default=ON)"           ON)
-OPTION(ENABLE_INTERNALMYSQL    "Look for MySQL server executable at build time (default=ON)"           ON)
-OPTION(ENABLE_ADVANCEDDEBUGMSG "Build digiKam with more internal debug message (default=OFF)"          OFF)
-OPTION(ENABLE_NEPOMUKSUPPORT   "Build digiKam with Nepomuk support (default=ON)"                       OFF)
-OPTION(ENABLE_LCMS2            "Link digiKam to LCMS2 instead LCMS1 (default=OFF)"                     OFF)
+OPTION(ENABLE_SCRIPTIFACE       "Build digiKam with experimental scripting support (default=OFF)"       OFF)
+OPTION(ENABLE_PRESENTATIONMODE  "Build digiKam with presentation mode support (default=OFF)"            OFF)
+OPTION(ENABLE_THUMBS_DB         "Build digiKam with thumbnails database support (default=ON)"           ON)
+OPTION(ENABLE_INTERNALMYSQL     "Look for MySQL server executable at build time (default=ON)"           ON)
+OPTION(ENABLE_ADVANCEDDEBUGMSG  "Build digiKam with more internal debug message (default=OFF)"          OFF)
+OPTION(ENABLE_LCMS2             "Build digiKam with LCMS2 instead LCMS1 (default=OFF)"                  OFF)
+
+# Options to port to new KDE components (Ballo and Akonadi) 
+OPTION(ENABLE_NEPOMUKSUPPORT    "Build digiKam with Nepomuk support (default=OFF)"                      OFF)
+OPTION(ENABLE_KDEPIMLIBSSUPPORT "Build digiKam with Kdepimlibs support (default=OFF)"                   OFF)
 
 # NOTE: since 6.11.24, libpgf do not support very well OpenMP. We disable it temporally.
 # See B.K.O #273765 for details.
-OPTION(ENABLE_PGF_OPENMP       "Build digiKam with paralelized PGF codec (experimental) (default=OFF)" OFF)
-OPTION(DIGIKAM_ENABLE_MODELTEST "Enable ModelTest on some models for debugging (default=OFF)"          OFF)
+OPTION(ENABLE_PGF_OPENMP        "Build digiKam with paralelized PGF codec (experimental) (default=OFF)" OFF)
+OPTION(DIGIKAM_ENABLE_MODELTEST "Enable ModelTest on some models for debugging (default=OFF)"           OFF)
 
 # ==================================================================================================
 # Information to update before to release this package.
@@ -398,10 +401,13 @@ IF(GPHOTO2_FOUND)
     ENDIF(VERSION_GPHOTO25)
 ENDIF(GPHOTO2_FOUND)
 
+IF (ENABLE_KDEPIMLIBSSUPPORT)
 
-MACRO_OPTIONAL_FIND_PACKAGE(KdepimLibs)
-MACRO_BOOL_TO_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
+    MACRO_OPTIONAL_FIND_PACKAGE(KdepimLibs)
+    MACRO_BOOL_TO_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
 
+ENDIF()
+    
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH} )
 
 # Check LensFun library for Lens auto-correction tool.
