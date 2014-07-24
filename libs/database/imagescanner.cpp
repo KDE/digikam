@@ -807,9 +807,10 @@ void ImageScanner::scanTags()
 
             // _Digikam_root_tag_ is present in some photos tagged with older
             // version of digiKam, must be removed
-            if(keyword.contains(QString("_Digikam_root_tag_/")))
+            if(keyword.contains(QRegExp("(_Digikam_root_tag_/|/_Digikam_root_tag_|_Digikam_root_tag_)")))
             {
-                keyword = keyword.replace(QString("_Digikam_root_tag_/"), QString(""));
+                keyword = keyword.replace(QRegExp("(_Digikam_root_tag_/|/_Digikam_root_tag_|_Digikam_root_tag_)"),
+                                          QString(""));
             }
             filteredKeywords.append(keyword);
         }

@@ -851,23 +851,9 @@ bool MetadataHub::writeTags(DMetadata& metadata, bool saveTags)
         if(!oldKeywords.isEmpty() || !newKeywords.isEmpty())
         {
 
-            QSet<QString> deduplicator;
-            for(int index = 0; index < tagsPathList.size(); index++)
-            {
-                QString keyword = tagsPathList.at(index);
-                if(!keyword.isEmpty())
-                {
 
-                    // _Digikam_root_tag_ is present in some photos tagged with older
-                    // version of digiKam, must be removed
-                    if(keyword.contains(QString("_Digikam_root_tag_/")))
-                    {
-                        keyword = keyword.replace(QString("_Digikam_root_tag_/"), QString(""));
-                    }
-                    deduplicator.insert(keyword);
-                }
-            }
-            tagsPathList = deduplicator.toList();
+            tagsPathList = cleanupTags(tagsPathList);
+            newKeywords = cleanupTags(newKeywords);
             // NOTE: See B.K.O #175321 : we remove all old keyword from IPTC and XMP before to
             // synchronize metadata, else contents is not coherent.
 
@@ -891,6 +877,29 @@ bool MetadataHub::writeTags(DMetadata& metadata, bool saveTags)
     }
     return dirty;
 
+}
+
+QStringList MetadataHub::cleanupTags(QStringList toClean)
+{
+    QSet<QString> deduplicator;
+    for(int index = 0; index < toClean.size(); index++)
+    {
+        QString keyword = toClean.at(index);
+        if(!keyword.isEmpty())
+        {
+
+            // _Digikam_root_tag_ is present in some photos tagged with older
+            // version of digiKam, must be removed
+            if(keyword.contains(QRegExp("(_Digikam_root_tag_/|/_Digikam_root_tag_|_Digikam_root_tag_)")))
+            {
+                keyword = keyword.replace(QRegExp("(_Digikam_root_tag_/|/_Digikam_root_tag_|_Digikam_root_tag_)"),
+                                          QString(""));
+            }
+
+            deduplicator.insert(keyword);
+        }
+    }
+    return deduplicator.toList();
 }
 bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataSettingsContainer& settings) const
 {

@@ -228,6 +228,13 @@ public:
      * @return          - if tags were successfully set
      */
     bool writeTags(DMetadata &metadata, bool saveTags);
+
+    /**
+     * @brief cleanupTags - remove duplicates and obsolete tags before setting metadata
+     * @param toClean     - tag list to be cleared and de-duplicated
+     * @return            - clean tag list
+     */
+    QStringList cleanupTags(QStringList toClean);
     /**
         With the currently applied changes, the given writeMode and settings,
         returns if write(DMetadata), write(QString) or write(DImg) will actually
