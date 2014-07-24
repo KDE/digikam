@@ -801,9 +801,17 @@ void ImageScanner::scanTags()
     // Extra empty tags check, empty tag = root tag which is not asignable
     for(int index = 0; index < keywords.size(); index++)
     {
-        if(!keywords.at(index).isEmpty())
+        QString keyword = keywords.at(index);
+        if(!keyword.isEmpty())
         {
-            filteredKeywords.append(keywords.at(index));
+
+            if(keyword.contains(QString("_Digikam_root_tag_/")))
+            {
+                kDebug() << "Replacing====================";
+                keyword = keyword.replace(QString("_Digikam_root_tag_/"), QString(""));
+            }
+            kDebug() << "+++++++++++++++++++++++++++" << keyword;
+            filteredKeywords.append(keyword);
         }
     }
 
