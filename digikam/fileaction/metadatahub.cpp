@@ -587,6 +587,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
 {
     applyChangeNotifications();
 
+    kDebug() << "Write changes++++++++++++++++++++" ;
     bool dirty = false;
 
     metadata.setSettings(settings);
@@ -600,7 +601,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
     bool saveRating     = (settings.saveRating     && d->ratingStatus     == MetadataAvailable);
     bool saveTemplate   = (settings.saveTemplate   && d->templateStatus   == MetadataAvailable);
     bool saveFaces      =  settings.saveFaceTags;
-    bool saveTags       = false;
+    bool saveTags       = settings.saveTags;
 
     if (settings.saveTags)
     {
@@ -700,63 +701,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
     else
         metadata.setImageFacesMap(d->faceTagsList,false);
 
-    if (saveTags && (writeAllFields || d->tagsChanged))
-    {
-        // Store tag paths as Iptc keywords tags.
-
-        // DatabaseMode == ManagedTags is assumed.
-        // To fix this constraint (not needed currently), an oldKeywords parameter is needed
-
-        // create list of keywords to be added and to be removed
-        QStringList tagsPathList, oldKeywords, newKeywords;
-        //metadata.getImageTagsPath(tagsPathList);
-
-        for (QMap<int, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
-        {
-            if (!TagsCache::instance()->canBeWrittenToMetadata(it.key()))
-            {
-                continue;
-            }
-
-            // it is important that MetadataDisjoint keywords are not touched
-            if (it.value() == MetadataAvailable)
-            {
-                // This works for single and multiple selection.
-                // In both situations, tags which had originally been loaded
-                // have explicitly been removed with setTag.
-                QString tagName = TagsCache::instance()->tagName(it.key());
-                QString tagPath = TagsCache::instance()->tagPath(it.key(), TagsCache::NoLeadingSlash);
-
-                if (it.value().hasTag)
-                {
-                    if (!tagsPathList.contains(tagPath))
-                    {
-                        tagsPathList << tagPath;
-                    }
-
-                    newKeywords << tagName;
-                }
-                else
-                {
-                    tagsPathList.removeAll(tagPath);
-                    oldKeywords << tagName;
-                }
-            }
-        }
-
-        // NOTE: See B.K.O #175321 : we remove all old keyword from IPTC and XMP before to
-        // synchronize metadata, else contents is not coherent.
-
-        // We set Iptc keywords using tags name.
-        dirty |= metadata.setIptcKeywords(oldKeywords, newKeywords);
-
-        // We add Xmp keywords using tags name.
-        dirty |= metadata.removeXmpKeywords(oldKeywords);
-        dirty |= metadata.setXmpKeywords(newKeywords);
-
-        // We set Tags Path list in digiKam Xmp private namespace using tags path.
-        dirty |= metadata.setImageTagsPath(tagsPathList);
-    }
+    dirty = writeTags(metadata,saveTags && (writeAllFields || d->tagsChanged) );
 
     return dirty;
 }
@@ -815,9 +760,9 @@ bool MetadataHub::writeTags(const QString& filePath,
     }
 
     DMetadata metadata(filePath);
-    bool dirty     = false;
+    metadata.setSettings(settings);
     bool saveFaces = settings.saveFaceTags;
-    bool saveTags  = false;
+    bool saveTags  = settings.saveTags;
 
     if (settings.saveTags)
     {
@@ -841,6 +786,22 @@ bool MetadataHub::writeTags(const QString& filePath,
         metadata.setImageFacesMap(d->faceTagsList,false);
     }
 
+    if (writeTags(metadata, saveTags))
+    {
+        bool success = metadata.applyChanges();
+        ImageAttributesWatch::instance()->fileMetadataChanged(filePath);
+        return success;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool MetadataHub::writeTags(DMetadata& metadata, bool saveTags)
+{
+
+    bool dirty = false;
     if (saveTags)
     {
         // Store tag paths as Iptc keywords tags.
@@ -875,32 +836,62 @@ bool MetadataHub::writeTags(const QString& filePath,
                         tagsPathList << tagPath;
                     }
 
-                    newKeywords << tagName;
+                    if(!tagName.isEmpty())
+                        newKeywords << tagName;
                 }
                 else
                 {
                     tagsPathList.removeAll(tagPath);
-                    oldKeywords << tagName;
+                    if(!tagName.isEmpty())
+                        oldKeywords << tagName;
                 }
             }
         }
 
-        // NOTE: See B.K.O #175321 : we remove all old keyword from IPTC and XMP before to
-        // synchronize metadata, else contents is not coherent.
+        if(!oldKeywords.isEmpty() || !newKeywords.isEmpty())
+        {
 
-        // We set Iptc keywords using tags name.
-        dirty |= metadata.setIptcKeywords(oldKeywords, newKeywords);
+            QSet<QString> deduplicator;
+            for(int index = 0; index < tagsPathList.size(); index++)
+            {
+                QString keyword = tagsPathList.at(index);
+                if(!keyword.isEmpty())
+                {
 
-        // We add Xmp keywords using tags name.
-        dirty |= metadata.removeXmpKeywords(oldKeywords);
-        dirty |= metadata.setXmpKeywords(newKeywords);
+                    // _Digikam_root_tag_ is present in some photos tagged with older
+                    // version of digiKam, must be removed
+                    if(keyword.contains(QString("_Digikam_root_tag_/")))
+                    {
+                        keyword = keyword.replace(QString("_Digikam_root_tag_/"), QString(""));
+                    }
+                    deduplicator.insert(keyword);
+                }
+            }
+            tagsPathList = deduplicator.toList();
+            // NOTE: See B.K.O #175321 : we remove all old keyword from IPTC and XMP before to
+            // synchronize metadata, else contents is not coherent.
 
-        // We set Tags Path list in digiKam Xmp private namespace using tags path.
-        dirty |= metadata.setImageTagsPath(tagsPathList);
+            // We set Iptc keywords using tags name.
+            dirty |= metadata.setIptcKeywords(oldKeywords, newKeywords);
+
+            // We add Xmp keywords using tags name.
+            dirty |= metadata.removeXmpKeywords(oldKeywords);
+            dirty |= metadata.setXmpKeywords(newKeywords);
+
+            // We set Tags Path list in digiKam Xmp private namespace using tags path.
+            dirty |= metadata.setImageTagsPath(tagsPathList);
+        }
+        else
+        {
+            // Delete all IPTC and XMP keywords
+            dirty |= metadata.setIptcKeywords(metadata.getIptcKeywords(), newKeywords);
+            dirty |= metadata.removeXmpKeywords(metadata.getXmpKeywords());
+            dirty |= metadata.setImageTagsPath(oldKeywords);
+        }
     }
-        return dirty;
-}
+    return dirty;
 
+}
 bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataSettingsContainer& settings) const
 {
     // This is the same logic as in write(DMetadata) but without actually writing.
@@ -912,7 +903,7 @@ bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataSettingsC
     bool saveColorLabel = (settings.saveColorLabel && d->colorLabelStatus == MetadataAvailable);
     bool saveRating     = (settings.saveRating     && d->ratingStatus     == MetadataAvailable);
     bool saveTemplate   = (settings.saveTemplate   && d->templateStatus   == MetadataAvailable);
-    bool saveTags       = false;
+    bool saveTags       = settings.saveTags;
 
     if (settings.saveTags)
     {
