@@ -603,20 +603,6 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
     bool saveFaces      =  settings.saveFaceTags;
     bool saveTags       = settings.saveTags;
 
-    if (settings.saveTags)
-    {
-        saveTags = false;
-
-        // find at least one tag to write
-        for (QMap<int, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
-        {
-            if (it.value() == MetadataAvailable)
-            {
-                saveTags = true;
-                break;
-            }
-        }
-    }
 
     bool writeAllFields;
 
@@ -632,8 +618,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
                              (savePickLabel  && d->pickLabelChanged)  ||
                              (saveColorLabel && d->colorLabelChanged) ||
                              (saveRating     && d->ratingChanged)     ||
-                             (saveTemplate   && d->templateChanged)   ||
-                             (saveTags       && d->tagsChanged)
+                             (saveTemplate   && d->templateChanged)
                          );
     else // PartialWrite
     {
@@ -701,7 +686,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
     else
         metadata.setImageFacesMap(d->faceTagsList,false);
 
-    dirty = writeTags(metadata,saveTags && (writeAllFields || d->tagsChanged) );
+    dirty = writeTags(metadata,saveTags);
 
     return dirty;
 }
@@ -764,18 +749,6 @@ bool MetadataHub::writeTags(const QString& filePath,
     bool saveFaces = settings.saveFaceTags;
     bool saveTags  = settings.saveTags;
 
-    if (settings.saveTags)
-    {
-        // find at least one tag to write
-        for (QMap<int, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
-        {
-            if (it.value() == MetadataAvailable)
-            {
-                saveTags = true;
-                break;
-            }
-        }
-    }
 
     if(saveFaces)
     {
@@ -810,7 +783,7 @@ bool MetadataHub::writeTags(DMetadata& metadata, bool saveTags)
         // To fix this constraint (not needed currently), an oldKeywords parameter is needed
 
         // create list of keywords to be added and to be removed
-        QStringList tagsPathList, oldKeywords, newKeywords;
+        QStringList tagsPathList, newKeywords;
         metadata.getImageTagsPath(tagsPathList);
 
         for (QMap<int, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
@@ -842,18 +815,14 @@ bool MetadataHub::writeTags(DMetadata& metadata, bool saveTags)
                 else
                 {
                     tagsPathList.removeAll(tagPath);
-                    if(!tagName.isEmpty())
-                        oldKeywords << tagName;
                 }
             }
         }
 
-        if(!oldKeywords.isEmpty() || !newKeywords.isEmpty())
+        tagsPathList = cleanupTags(tagsPathList);
+        newKeywords = cleanupTags(newKeywords);
+        if(!newKeywords.isEmpty())
         {
-
-
-            tagsPathList = cleanupTags(tagsPathList);
-            newKeywords = cleanupTags(newKeywords);
             // NOTE: See B.K.O #175321 : we remove all old keyword from IPTC and XMP before to
             // synchronize metadata, else contents is not coherent.
 
@@ -870,9 +839,9 @@ bool MetadataHub::writeTags(DMetadata& metadata, bool saveTags)
         else
         {
             // Delete all IPTC and XMP keywords
-            dirty |= metadata.setIptcKeywords(metadata.getIptcKeywords(), newKeywords);
+            dirty |= metadata.setIptcKeywords(metadata.getIptcKeywords(), QStringList());
             dirty |= metadata.removeXmpKeywords(metadata.getXmpKeywords());
-            dirty |= metadata.setImageTagsPath(oldKeywords);
+            dirty |= metadata.setImageTagsPath(QStringList());
         }
     }
     return dirty;
@@ -914,20 +883,6 @@ bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataSettingsC
     bool saveTemplate   = (settings.saveTemplate   && d->templateStatus   == MetadataAvailable);
     bool saveTags       = settings.saveTags;
 
-    if (settings.saveTags)
-    {
-        saveTags = false;
-
-        // find at least one tag to write
-        for (QMap<int, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
-        {
-            if (it.value() == MetadataAvailable)
-            {
-                saveTags = true;
-                break;
-            }
-        }
-    }
 
     bool writeAllFields;
 
