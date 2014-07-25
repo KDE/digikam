@@ -170,42 +170,8 @@ FIND_PACKAGE(PGF)
 FIND_PACKAGE(Eigen3)
 FIND_PACKAGE(Boost) # 1.36.0)
 
-# BEGIN SPECIAL OPENCV HANDLING
-
-# On some systems, OpenCV can be found using FIND_PACKAGE(OpenCV), for other systems
-# we ship our own version of FindOpenCV.cmake. But that does not work on all systems.
-# Therefore, first try finding OpenCV using FIND_PACKAGE(OpenCV), and if that fails,
-# add our FindOpenCV.cmake to the search path and search again.
-
-# reset to avoid picking up extra libraries
-SET(OpenCV_LIBS)
-
-MESSAGE(STATUS "First try at finding OpenCV...")
-FIND_PACKAGE(OpenCV COMPONENTS core highgui imgproc)
-
-IF (NOT OpenCV_LIBRARIES AND NOT OpenCV_LIBS)
-  MESSAGE(STATUS "Could not find OpenCV normally, trying internal FindOpenCV.cmake")
-   SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/modules_opencv)
-  FIND_PACKAGE(OpenCV REQUIRED COMPONENTS core highgui imgproc)
-ELSE (NOT OpenCV_LIBRARIES AND NOT OpenCV_LIBS)
-  MESSAGE(STATUS "Great, found OpenCV on the first try.")
-ENDIF (NOT OpenCV_LIBRARIES AND NOT OpenCV_LIBS)
-
-MESSAGE(STATUS "OpenCV Root directory is ${OpenCV_DIR}")
-
-# there are two versions of FindOpenCV.cmake in the wild, one defining
-# OpenCV_LIBRARIES, the other defining OpenCV_LIBS. Make sure we handle
-# both cases.
-IF (NOT OpenCV_LIBRARIES)
-  SET(OpenCV_LIBRARIES ${OpenCV_LIBS})
-ENDIF (NOT OpenCV_LIBRARIES)
-
-# same story with OpenCV_INCLUDE_DIRS and OpenCV_INCLUDE_DIR:
-IF (NOT OpenCV_INCLUDE_DIRS)
-  SET(OpenCV_INCLUDE_DIRS ${OpenCV_INCLUDE_DIR})
-ENDIF (NOT OpenCV_INCLUDE_DIRS)
-
-# END SPECIAL OPENCV HANDLING
+INCLUDE(MacroOpenCV)
+DETECT_OPENCV(2.4.6 core highgui imgproc)
 
 # check the libkdcraw version
 
