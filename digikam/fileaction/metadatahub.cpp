@@ -858,10 +858,10 @@ bool MetadataHub::writeTags(DMetadata& metadata, bool saveTags)
             // synchronize metadata, else contents is not coherent.
 
             // We set Iptc keywords using tags name.
-            dirty |= metadata.setIptcKeywords(oldKeywords, newKeywords);
+            dirty |= metadata.setIptcKeywords(metadata.getIptcKeywords(), newKeywords);
 
             // We add Xmp keywords using tags name.
-            dirty |= metadata.removeXmpKeywords(oldKeywords);
+            dirty |= metadata.removeXmpKeywords(metadata.getXmpKeywords());
             dirty |= metadata.setXmpKeywords(newKeywords);
 
             // We set Tags Path list in digiKam Xmp private namespace using tags path.
