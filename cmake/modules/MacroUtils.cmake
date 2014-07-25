@@ -132,3 +132,22 @@ MACRO(PRINT_OPTIONAL_LIBRARY_STATUS NAME)
     ENDIF()
 
 ENDMACRO(PRINT_OPTIONAL_LIBRARY_STATUS)
+
+# -------------------------------------------------------------------------
+
+MACRO(PRINT_OPTIONAL_QTMODULE_STATUS NAME)
+
+    SET(LIB_MESSAGE "${NAME} module found")
+    FILL_WITH_DOTS(LIB_MESSAGE)
+
+    IF(${ARGN})
+
+        MESSAGE(STATUS " ${LIB_MESSAGE} YES (optional)")
+    
+    ELSE()
+    
+        MESSAGE(STATUS " ${LIB_MESSAGE} NO  (optional)")
+    
+    ENDIF()
+
+ENDMACRO(PRINT_OPTIONAL_QTMODULE_STATUS)
