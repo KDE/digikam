@@ -91,6 +91,44 @@ MACRO(PRINT_EXECUTABLE_STATUS NAME TECHNICAL_NAME PATH_VARIABLE)
         MESSAGE(STATUS " If you have this executable installed, please specify the folder containing it by ${PATH_VARIABLE}")
         MESSAGE(SEND_ERROR "")
     
-    ENDIF(${ARGN})
+    ENDIF()
 
 ENDMACRO(PRINT_EXECUTABLE_STATUS)
+
+# -------------------------------------------------------------------------
+
+MACRO(PRINT_COMPONENT_COMPILE_STATUS NAME)
+
+    SET(COMPILE_MESSAGE "${NAME} will be compiled")
+    FILL_WITH_DOTS(COMPILE_MESSAGE)
+
+    IF(${ARGN})
+    
+        MESSAGE(STATUS " ${COMPILE_MESSAGE} YES (optional)")
+    
+    ELSE()
+    
+        MESSAGE(STATUS " ${COMPILE_MESSAGE} NO  (optional - Look README file for more details about dependencies)")
+    
+    ENDIF()
+
+ENDMACRO(PRINT_PLUGIN_COMPILE_STATUS)
+
+# -------------------------------------------------------------------------
+
+MACRO(PRINT_OPTIONAL_LIBRARY_STATUS NAME)
+
+    SET(LIB_MESSAGE "${NAME} library found")
+    FILL_WITH_DOTS(LIB_MESSAGE)
+
+    IF(${ARGN})
+
+        MESSAGE(STATUS " ${LIB_MESSAGE} YES (optional)")
+
+    ELSE()
+    
+        MESSAGE(STATUS " ${LIB_MESSAGE} NO  (optional)")
+    
+    ENDIF()
+
+ENDMACRO(PRINT_OPTIONAL_LIBRARY_STATUS)
