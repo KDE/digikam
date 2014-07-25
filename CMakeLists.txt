@@ -73,75 +73,6 @@ MACRO(SET_DEBUG_AREA_CODE _areacode)
     ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${_areacode})
 ENDMACRO(SET_DEBUG_AREA_CODE)
 
-# =======================================================
-# some useful macros for printing status information
-
-SET(PRINT_COMPILE_LENGTH "40")
-MACRO(FILL_WITH_DOTS VAR)
-
-    STRING(LENGTH ${${VAR}} NAME_LENGTH)
-
-    MATH(EXPR DOT_LENGTH "${PRINT_COMPILE_LENGTH} - ${NAME_LENGTH}")
-    IF(${DOT_LENGTH} LESS 0)
-        SET(DOT_LENGTH 0)
-    ENDIF(${DOT_LENGTH} LESS 0)
-
-    FOREACH(COUNT RANGE ${DOT_LENGTH})
-        SET(${VAR} "${${VAR}}.")
-    ENDFOREACH(COUNT)
-
-ENDMACRO(FILL_WITH_DOTS)
-
-MACRO(PRINT_LIBRARY_STATUS NAME WEBSITE VERSIONHINT)
-
-    SET(LIB_MESSAGE "${NAME} library found")
-    FILL_WITH_DOTS(LIB_MESSAGE)
-
-    IF(${ARGN})
-        MESSAGE(STATUS " ${LIB_MESSAGE} YES")
-    ELSE(${ARGN})
-        MESSAGE(STATUS " ${LIB_MESSAGE} NO")
-        MESSAGE(STATUS "")
-        MESSAGE(SEND_ERROR " digiKam needs ${NAME}. You need to install the ${NAME}${VERSIONHINT} library development package.")
-        MESSAGE(STATUS " ${NAME} website is at ${WEBSITE}")
-        MESSAGE(STATUS "")
-    ENDIF(${ARGN})
-
-ENDMACRO(PRINT_LIBRARY_STATUS)
-
-MACRO(PRINT_QTMODULE_STATUS NAME)
-
-    SET(LIB_MESSAGE "${NAME} module found")
-    FILL_WITH_DOTS(LIB_MESSAGE)
-
-    IF(${ARGN})
-        MESSAGE(STATUS " ${LIB_MESSAGE} YES")
-    ELSE(${ARGN})
-        MESSAGE(STATUS " ${LIB_MESSAGE} NO")
-        MESSAGE(STATUS "")
-        MESSAGE(SEND_ERROR " digiKam needs ${NAME} module. You need to install a package containing the ${NAME} module.")
-        MESSAGE(STATUS "")
-    ENDIF(${ARGN})
-
-ENDMACRO(PRINT_QTMODULE_STATUS)
-
-MACRO(PRINT_EXECUTABLE_STATUS NAME TECHNICAL_NAME PATH_VARIABLE)
-
-    SET(LIB_MESSAGE "${NAME} found")
-    FILL_WITH_DOTS(LIB_MESSAGE)
-
-    IF(${ARGN})
-        MESSAGE(STATUS " ${LIB_MESSAGE} YES")
-    ELSE(${ARGN})
-        MESSAGE(STATUS " ${LIB_MESSAGE} NO")
-        MESSAGE(STATUS "")
-        MESSAGE(STATUS " digiKam needs ${NAME}. You need to install the package containing the \"${TECHNICAL_NAME}\" executable.")
-        MESSAGE(STATUS " If you have this executable installed, please specify the folder containing it by ${PATH_VARIABLE}")
-        MESSAGE(SEND_ERROR "")
-    ENDIF(${ARGN})
-
-ENDMACRO(PRINT_EXECUTABLE_STATUS)
-
 # ==================================================================================================
 # Dependencies
 
@@ -170,6 +101,7 @@ FIND_PACKAGE(PGF)
 FIND_PACKAGE(Eigen3)
 FIND_PACKAGE(Boost) # 1.36.0)
 
+INCLUDE(MacroUtils)
 INCLUDE(MacroOpenCV)
 DETECT_OPENCV(2.4.6 core highgui imgproc)
 
