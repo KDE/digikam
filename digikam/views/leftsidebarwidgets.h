@@ -154,15 +154,15 @@ public:
 
     AlbumLabelsTreeView* labelsTree();
 
-    void setActive(bool active);
-    void applySettings();
-    void changeAlbumFromHistory(QList<Album *> album);
-    void doLoadState();
-    void doSaveState();
+    void    setActive(bool active);
+    void    applySettings();
+    void    changeAlbumFromHistory(QList<Album *> album);
+    void    doLoadState();
+    void    doSaveState();
     QPixmap getIcon();
     QString getCaption();
 
-    QHash<QString, QList<int> > selectedLabels();
+    QHash<AlbumLabelsTreeView::Labels, QList<int> > selectedLabels();
 
 private:
 
