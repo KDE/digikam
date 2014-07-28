@@ -504,7 +504,7 @@ void TagsManager::slotWriteToImg()
             i18n(
                     "digiKam will clean up tag metadata before setting "
                     "tags from database.<br> You may <b>lose tags</b> if you did not "
-                    "read tags before(by calling Read Tags from Image).<br> "
+                    "read tags before (by calling Read Tags from Image).<br> "
                     "Do you want to continue?"
                 )
         );
