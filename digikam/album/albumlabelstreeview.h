@@ -46,6 +46,16 @@ class AlbumLabelsTreeView : public QTreeWidget, public StateSavingObject
     Q_OBJECT
 
 public:
+
+    enum Labels
+    {
+        Ratings = 0,
+        Picks,
+        Colors
+    };
+
+public:
+
     explicit AlbumLabelsTreeView(QWidget *parent = 0, bool setCheckable = false);
     ~AlbumLabelsTreeView();
 
@@ -79,11 +89,11 @@ public:
      * @brief Provide the current selection from the tree-view
      *        hierarchy
      *
-     * @return a QHash with three keys: "ratings", "picks", and
-     *         "colors", every key dedicated an int list which
+     * @return a QHash with three keys: "Ratings", "Picks", and
+     *         "Colors", every key dedicated to an int list which
      *         holds the rows selected
      */
-    QHash<QString, QList<int> > selectedLabels();
+    QHash<Labels, QList<int> > selectedLabels();
 
     /**
      * @brief Loading and saving state function inherited from
@@ -100,7 +110,7 @@ public:
      *        from it, the hash is formated just like the hash
      *        generated from @see selectedLabels()
      */
-    void restoreSelectionFromHistory(QHash<QString, QList<int> > neededLabels);
+    void restoreSelectionFromHistory(QHash<Labels, QList<int> > neededLabels);
 
     /**
      * @brief Emits a signal to the search handler to set the Current
@@ -161,7 +171,7 @@ public:
      *
      * @param neededLabels a hash to restore selection from it
      */
-    void restoreSelectionFromHistory(QHash<QString, QList<int> > neededLabels);
+    void restoreSelectionFromHistory(QHash<AlbumLabelsTreeView::Labels, QList<int> > neededLabels);
 
     /**
      * @return true if the tree-view is restoring the selection state
@@ -178,7 +188,7 @@ private:
      * @param selectedLabels to generate XML for it
      * @return XML generated
      */
-    QString createXMLForCurrentSelection(QHash<QString, QList<int> > selectedLabels);
+    QString createXMLForCurrentSelection(QHash<AlbumLabelsTreeView::Labels, QList<int> > selectedLabels);
 
     /**
      * @brief Passes the generated XML to AlbumDB class
@@ -204,7 +214,7 @@ private:
     void imagesUrlsForCurrentAlbum();
 
     /**
-     * @return "Labels Album" if the the tree-widget is not checkabel
+     * @return "Labels Album" if the the tree-widget is not checkable
      *         and returns "Exporting Album" if it was chackable
      */
     QString getDefaultTitle() const;

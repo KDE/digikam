@@ -39,6 +39,7 @@
 #include "album.h"
 #include "imageinfo.h"
 #include "albummanager.h"
+#include "albumlabelstreeview.h"
 
 uint qHash(QList<Digikam::Album*> key)
 {
@@ -81,7 +82,7 @@ public:
         widget = w;
     };
 
-    HistoryItem(QList<Album*> const a, QWidget* const w, QHash<QString, QList<int> > selectedLabels)
+    HistoryItem(QList<Album*> const a, QWidget* const w, QHash<AlbumLabelsTreeView::Labels, QList<int> > selectedLabels)
     {
         albums.append(a);
         widget = w;
@@ -98,9 +99,9 @@ public:
         return albums == item.albums;
     }
 
-    QList<Album*>               albums;
-    QWidget*                    widget;
-    QHash<QString, QList<int> > labels;
+    QList<Album*>                                   albums;
+    QWidget*                                        widget;
+    QHash<AlbumLabelsTreeView::Labels, QList<int> > labels;
 };
 
 // ---------------------------------------------------------------------
@@ -145,13 +146,13 @@ public:
 
 public:
 
-    bool                                  moving;
-    bool                                  blockSelection;
+    bool                                            moving;
+    bool                                            blockSelection;
 
-    QList<HistoryItem>                    backwardStack;
-    QList<HistoryItem>                    forwardStack;
-    QHash<QList<Album*>, HistoryPosition> historyPos;
-    QHash<QString, QList<int> >           neededLabels;
+    QList<HistoryItem>                              backwardStack;
+    QList<HistoryItem>                              forwardStack;
+    QHash<QList<Album*>, HistoryPosition>           historyPos;
+    QHash<AlbumLabelsTreeView::Labels, QList<int> > neededLabels;
 };
 
 void AlbumHistory::Private::forward(unsigned int steps)
@@ -212,7 +213,14 @@ void AlbumHistory::addAlbums(QList<Album*> const albums, QWidget* const widget)
     d->forwardStack.clear();
 }
 
-void AlbumHistory::addAlbums(QList<Album*> const albums, QWidget* const widget, QHash<QString, QList<int> > selectedLabels)
+/**
+ * @brief AlbumHistory::addAlbums
+ *        A special overloaded function for handling AlbumHistory
+ *        for the Labels tree-view
+ *
+ * @author Mohamed Anwer
+ */
+void AlbumHistory::addAlbums(QList<Album*> const albums, QWidget* const widget, QHash<AlbumLabelsTreeView::Labels, QList<int> > selectedLabels)
 {
 
     if (albums.isEmpty() || !widget || d->moving)
@@ -467,7 +475,7 @@ bool AlbumHistory::isBackwardEmpty() const
     return (d->backwardStack.count() <= 1) ? true : false;
 }
 
-QHash<QString, QList<int> > AlbumHistory::neededLabels()
+QHash<AlbumLabelsTreeView::Labels, QList<int> > AlbumHistory::neededLabels()
 {
     return d->neededLabels;
 }
