@@ -25,4 +25,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 012 ==> 337507 - Face Detection gives no results, no matter the accuracy setting.
 013 ==> 337688 - Reading/writing of keyword-tags to jpg and xmp corrupts tag hierarchy, duplicate root tag.
 014 ==> 160363 - Wish: use pictures Labels (Rating, Pick, Color) as selection criteria in Export methods.
-015 ==> 
+015 ==> 132827 - Create Tag from address-book entry.
+016 ==> 
