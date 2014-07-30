@@ -970,24 +970,25 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
 
     // -- ---------------------------------------------------------
 
-#ifdef HAVE_NEPOMUK
+    // NOTE: Delete all Nepomuk code
+//#ifdef HAVE_NEPOMUK
 
-    if (checkNepomukService())
-    {
-        QDBusInterface serviceInterface("org.kde.nepomuk.services.digikamnepomukservice",
-                                        "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
-        kDebug() << "nepomuk service available" << serviceInterface.isValid();
+//    if (checkNepomukService())
+//    {
+//        QDBusInterface serviceInterface("org.kde.nepomuk.services.digikamnepomukservice",
+//                                        "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
+//        kDebug() << "nepomuk service available" << serviceInterface.isValid();
 
-        if (serviceInterface.isValid())
-        {
-            DatabaseParameters parameters = DatabaseAccess::parameters();
-            KUrl url;
-            parameters.insertInUrl(url);
-            serviceInterface.call(QDBus::NoBlock, "setDatabase", url.url());
-        }
-    }
+//        if (serviceInterface.isValid())
+//        {
+//            DatabaseParameters parameters = DatabaseAccess::parameters();
+//            KUrl url;
+//            parameters.insertInUrl(url);
+//            serviceInterface.call(QDBus::NoBlock, "setDatabase", url.url());
+//        }
+//    }
 
-#endif // HAVE_NEPOMUK
+//#endif // HAVE_NEPOMUK
 
     return true;
 }
@@ -995,58 +996,58 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
 bool AlbumManager::checkNepomukService()
 {
     bool hasNepomuk = false;
+// NOTE: Delete all nepomuk code
+//#ifdef HAVE_NEPOMUK
+//    QDBusInterface serviceInterface("org.kde.nepomuk.services.digikamnepomukservice",
+//                                    "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
 
-#ifdef HAVE_NEPOMUK
-    QDBusInterface serviceInterface("org.kde.nepomuk.services.digikamnepomukservice",
-                                    "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
+//    // already running? (normal)
+//    if (serviceInterface.isValid())
+//    {
+//        return true;
+//    }
 
-    // already running? (normal)
-    if (serviceInterface.isValid())
-    {
-        return true;
-    }
+//    // start service
+//    QDBusInterface nepomukInterface("org.kde.NepomukServer",
+//                                    "/servicemanager", "org.kde.nepomuk.ServiceManager");
 
-    // start service
-    QDBusInterface nepomukInterface("org.kde.NepomukServer",
-                                    "/servicemanager", "org.kde.nepomuk.ServiceManager");
+//    if (!nepomukInterface.isValid())
+//    {
+//        kDebug() << "Nepomuk server is not reachable. Cannot start Digikam Nepomuk Service";
+//        return false;
+//    }
 
-    if (!nepomukInterface.isValid())
-    {
-        kDebug() << "Nepomuk server is not reachable. Cannot start Digikam Nepomuk Service";
-        return false;
-    }
+//    QDBusReply<QStringList> availableServicesReply = nepomukInterface.call("availableServices");
 
-    QDBusReply<QStringList> availableServicesReply = nepomukInterface.call("availableServices");
+//    if (!availableServicesReply.isValid() || !availableServicesReply.value().contains("digikamnepomukservice"))
+//    {
+//        kDebug() << "digikamnepomukservice is not available in NepomukServer";
+//        return false;
+//    }
 
-    if (!availableServicesReply.isValid() || !availableServicesReply.value().contains("digikamnepomukservice"))
-    {
-        kDebug() << "digikamnepomukservice is not available in NepomukServer";
-        return false;
-    }
+//    /*
+//        QEventLoop loop;
 
-    /*
-        QEventLoop loop;
+//        if (!connect(&nepomukInterface, SIGNAL(serviceInitialized(QString)),
+//                     &loop, SLOT(quit())))
+//        {
+//            kDebug() << "Could not connect to Nepomuk server signal";
+//            return false;
+//        }
 
-        if (!connect(&nepomukInterface, SIGNAL(serviceInitialized(QString)),
-                     &loop, SLOT(quit())))
-        {
-            kDebug() << "Could not connect to Nepomuk server signal";
-            return false;
-        }
+//        QTimer::singleShot(1000, &loop, SLOT(quit()));
+//    */
 
-        QTimer::singleShot(1000, &loop, SLOT(quit()));
-    */
+//    kDebug() << "Trying to start up digikamnepomukservice";
+//    nepomukInterface.call(QDBus::NoBlock, "startService", "digikamnepomukservice");
 
-    kDebug() << "Trying to start up digikamnepomukservice";
-    nepomukInterface.call(QDBus::NoBlock, "startService", "digikamnepomukservice");
+//    /*
+//        // wait (at most 1sec) for service to start up
+//        loop.exec();
+//    */
 
-    /*
-        // wait (at most 1sec) for service to start up
-        loop.exec();
-    */
-
-    hasNepomuk = true;
-#endif // HAVE_NEPOMUK
+//    hasNepomuk = true;
+//#endif // HAVE_NEPOMUK
 
     return hasNepomuk;
 }

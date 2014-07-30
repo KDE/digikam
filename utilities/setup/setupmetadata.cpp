@@ -463,84 +463,85 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 
     // --------------------------------------------------------
 
-#ifdef HAVE_NEPOMUK
+// NOTE: Replace with Baloo options
+//#ifdef HAVE_NEPOMUK
 
-    QWidget* const nepoPanel      = new QWidget(d->tab);
-    QVBoxLayout* const nepoLayout = new QVBoxLayout(nepoPanel);
+//    QWidget* const nepoPanel      = new QWidget(d->tab);
+//    QVBoxLayout* const nepoLayout = new QVBoxLayout(nepoPanel);
 
-    QGroupBox* const nepoGroup    = new QGroupBox(i18n("Nepomuk Semantic Desktop"), nepoPanel);
-    QVBoxLayout* const gLayout3   = new QVBoxLayout(nepoGroup);
+//    QGroupBox* const nepoGroup    = new QGroupBox(i18n("Nepomuk Semantic Desktop"), nepoPanel);
+//    QVBoxLayout* const gLayout3   = new QVBoxLayout(nepoGroup);
 
-    d->saveToNepomukBox           = new QCheckBox;
-    d->saveToNepomukBox->setText(i18n("Store metadata from digiKam in Nepomuk"));
-    d->saveToNepomukBox->setWhatsThis(i18n("Turn on this option to push rating, comments and tags "
-                                           "from digiKam into the Nepomuk storage"));
+//    d->saveToNepomukBox           = new QCheckBox;
+//    d->saveToNepomukBox->setText(i18n("Store metadata from digiKam in Nepomuk"));
+//    d->saveToNepomukBox->setWhatsThis(i18n("Turn on this option to push rating, comments and tags "
+//                                           "from digiKam into the Nepomuk storage"));
 
-    d->readFromNepomukBox         = new QCheckBox;
-    d->readFromNepomukBox->setText(i18n("Read metadata from Nepomuk"));
-    d->readFromNepomukBox->setWhatsThis(i18n("Turn on this option if you want to apply changes to "
-                                             "rating, comments and tags made in Nepomuk to digiKam's metadata storage. "
-                                             "Please note that image metadata will not be edited automatically."));
+//    d->readFromNepomukBox         = new QCheckBox;
+//    d->readFromNepomukBox->setText(i18n("Read metadata from Nepomuk"));
+//    d->readFromNepomukBox->setWhatsThis(i18n("Turn on this option if you want to apply changes to "
+//                                             "rating, comments and tags made in Nepomuk to digiKam's metadata storage. "
+//                                             "Please note that image metadata will not be edited automatically."));
 
-    gLayout3->addWidget(d->saveToNepomukBox);
-    gLayout3->addWidget(d->readFromNepomukBox);
+//    gLayout3->addWidget(d->saveToNepomukBox);
+//    gLayout3->addWidget(d->readFromNepomukBox);
 
-    d->resyncButton = new QToolButton;
-    d->resyncButton->setText(i18n("Fully Resynchronize again"));
-    d->resyncButton->setIcon(SmallIcon("edit-redo"));
-    d->resyncButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    d->resyncButton->setCheckable(true);
+//    d->resyncButton = new QToolButton;
+//    d->resyncButton->setText(i18n("Fully Resynchronize again"));
+//    d->resyncButton->setIcon(SmallIcon("edit-redo"));
+//    d->resyncButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+//    d->resyncButton->setCheckable(true);
 
-    connect(d->saveToNepomukBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotNepomukToggled()));
+//    connect(d->saveToNepomukBox, SIGNAL(toggled(bool)),
+//            this, SLOT(slotNepomukToggled()));
 
-    connect(d->readFromNepomukBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotNepomukToggled()));
+//    connect(d->readFromNepomukBox, SIGNAL(toggled(bool)),
+//            this, SLOT(slotNepomukToggled()));
 
-    d->tab->insertTab(Nepomuk, nepoPanel, i18nc("@title:tab", "Nepomuk"));
+//    d->tab->insertTab(Nepomuk, nepoPanel, i18nc("@title:tab", "Nepomuk"));
 
-    // --------------------------------------------------------
+//    // --------------------------------------------------------
 
-    QFrame* const nepoBox         = new QFrame(nepoPanel);
-    QGridLayout* const nepoGrid   = new QGridLayout(nepoBox);
-    nepoBox->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
+//    QFrame* const nepoBox         = new QFrame(nepoPanel);
+//    QGridLayout* const nepoGrid   = new QGridLayout(nepoBox);
+//    nepoBox->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
-    QLabel* const nepoLogoLabel   = new QLabel;
-    nepoLogoLabel->setPixmap(KIconLoader::global()->loadIcon("nepomuk", KIconLoader::NoGroup, KIconLoader::SizeLarge));
+//    QLabel* const nepoLogoLabel   = new QLabel;
+//    nepoLogoLabel->setPixmap(KIconLoader::global()->loadIcon("nepomuk", KIconLoader::NoGroup, KIconLoader::SizeLarge));
 
-    QLabel* const nepoExplanation = new QLabel(nepoBox);
-    nepoExplanation->setOpenExternalLinks(true);
-    nepoExplanation->setWordWrap(true);
-    QString nepotxt;
+//    QLabel* const nepoExplanation = new QLabel(nepoBox);
+//    nepoExplanation->setOpenExternalLinks(true);
+//    nepoExplanation->setWordWrap(true);
+//    QString nepotxt;
 
-    nepotxt.append(i18n("<p><a href='http://nepomuk.kde.org'>Nepomuk</a> "
-                        "provides the basis to handle all kinds of metadata on the KDE desktop in a generic fashion. "
-                        "It allows you to tag, rate and comment your files in KDE applications like Dolphin.</p> "
-                        "<p>Please set here if you want to synchronize the metadata stored by digiKam desktop-wide with the "
-                        "Nepomuk Semantic Desktop.</p> "
-                        "<p>If you have enabled writing of metadata to files, please note that changes done through Nepomuk "
-                        "are not automatically applied to the image's metadata when read into digiKam's database.</p> "));
+//    nepotxt.append(i18n("<p><a href='http://nepomuk.kde.org'>Nepomuk</a> "
+//                        "provides the basis to handle all kinds of metadata on the KDE desktop in a generic fashion. "
+//                        "It allows you to tag, rate and comment your files in KDE applications like Dolphin.</p> "
+//                        "<p>Please set here if you want to synchronize the metadata stored by digiKam desktop-wide with the "
+//                        "Nepomuk Semantic Desktop.</p> "
+//                        "<p>If you have enabled writing of metadata to files, please note that changes done through Nepomuk "
+//                        "are not automatically applied to the image's metadata when read into digiKam's database.</p> "));
 
-    nepoExplanation->setText(nepotxt);
+//    nepoExplanation->setText(nepotxt);
 
-    nepoGrid->addWidget(nepoLogoLabel,   0, 0, 1, 1);
-    nepoGrid->addWidget(nepoExplanation, 0, 1, 1, 2);
-    nepoGrid->setColumnStretch(1, 10);
-    nepoGrid->setRowStretch(1, 10);
-    nepoGrid->setMargin(KDialog::spacingHint());
-    nepoGrid->setSpacing(0);
+//    nepoGrid->addWidget(nepoLogoLabel,   0, 0, 1, 1);
+//    nepoGrid->addWidget(nepoExplanation, 0, 1, 1, 2);
+//    nepoGrid->setColumnStretch(1, 10);
+//    nepoGrid->setRowStretch(1, 10);
+//    nepoGrid->setMargin(KDialog::spacingHint());
+//    nepoGrid->setSpacing(0);
 
-    // --------------------------------------------------------
+//    // --------------------------------------------------------
 
-    nepoLayout->setMargin(0);
-    nepoLayout->setSpacing(KDialog::spacingHint());
-    nepoLayout->addWidget(nepoGroup);
-    nepoLayout->addSpacing(KDialog::spacingHint());
-    nepoLayout->addWidget(nepoBox);
-    nepoLayout->addWidget(d->resyncButton, 0, Qt::AlignRight);
-    nepoLayout->addStretch();
+//    nepoLayout->setMargin(0);
+//    nepoLayout->setSpacing(KDialog::spacingHint());
+//    nepoLayout->addWidget(nepoGroup);
+//    nepoLayout->addSpacing(KDialog::spacingHint());
+//    nepoLayout->addWidget(nepoBox);
+//    nepoLayout->addWidget(d->resyncButton, 0, Qt::AlignRight);
+//    nepoLayout->addStretch();
 
-#endif // HAVE_NEPOMUK
+//#endif // HAVE_NEPOMUK
 
     // --------------------------------------------------------
 
@@ -636,24 +637,25 @@ void SetupMetadata::applySettings()
 
     mSettings->setSettings(set);
 
-#ifdef HAVE_NEPOMUK
-    AlbumSettings* const aSettings = AlbumSettings::instance();
+// NOTE: Remove Nepomuk code
+//#ifdef HAVE_NEPOMUK
+//    AlbumSettings* const aSettings = AlbumSettings::instance();
 
-    if (!aSettings)
-    {
-        return;
-    }
+//    if (!aSettings)
+//    {
+//        return;
+//    }
 
-    aSettings->setSyncDigikamToNepomuk(d->saveToNepomukBox->isChecked());
-    aSettings->setSyncNepomukToDigikam(d->readFromNepomukBox->isChecked());
+//    aSettings->setSyncDigikamToNepomuk(d->saveToNepomukBox->isChecked());
+//    aSettings->setSyncNepomukToDigikam(d->readFromNepomukBox->isChecked());
 
-    if (d->resyncButton->isEnabled() && d->resyncButton->isChecked())
-    {
-        aSettings->triggerResyncWithNepomuk();
-    }
+//    if (d->resyncButton->isEnabled() && d->resyncButton->isChecked())
+//    {
+//        aSettings->triggerResyncWithNepomuk();
+//    }
 
-    aSettings->saveSettings();
-#endif
+//    aSettings->saveSettings();
+//#endif
 
     d->tagsCfgPanel->applySettings();
 }

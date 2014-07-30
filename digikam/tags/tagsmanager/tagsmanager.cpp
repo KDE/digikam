@@ -785,29 +785,29 @@ void TagsManager::setupActions()
     d->syncexportAction->addAction(readTags);
     d->syncexportAction->addAction(wipeAll);
 
-#ifdef HAVE_NEPOMUK
-    KAction* const DbToNepomuk = new KAction(KIcon("nepomuk"),
-                                             i18n("Sync Database with Nepomuk"),
-                                             this);
+//#ifdef HAVE_NEPOMUK
+//    KAction* const DbToNepomuk = new KAction(KIcon("nepomuk"),
+//                                             i18n("Sync Database with Nepomuk"),
+//                                             this);
 
-    KAction* const NepomukToDb = new KAction(KIcon("nepomuk"),
-                                             i18n("Sync Nepomuk to Database"), this);
-    DbToNepomuk->setHelpText(i18n("Export all tags from Database to Nepomuk. "
-                                 "digiKam with Nepomuk support is required."));
+//    KAction* const NepomukToDb = new KAction(KIcon("nepomuk"),
+//                                             i18n("Sync Nepomuk to Database"), this);
+//    DbToNepomuk->setHelpText(i18n("Export all tags from Database to Nepomuk. "
+//                                 "digiKam with Nepomuk support is required."));
 
-    NepomukToDb->setHelpText(i18n("Import tags from Nepomuk. "
-                                 "digiKam with Nepomuk support is required." ));
+//    NepomukToDb->setHelpText(i18n("Import tags from Nepomuk. "
+//                                 "digiKam with Nepomuk support is required." ));
 
-    connect(DbToNepomuk, SIGNAL(triggered()),
-            this, SLOT(slotDbToNepomuk()));
+//    connect(DbToNepomuk, SIGNAL(triggered()),
+//            this, SLOT(slotDbToNepomuk()));
 
-    connect(NepomukToDb, SIGNAL(triggered()),
-            this, SLOT(slotNepomukToDb()));
+//    connect(NepomukToDb, SIGNAL(triggered()),
+//            this, SLOT(slotNepomukToDb()));
 
-    d->syncexportAction->addAction(DbToNepomuk);
-    d->syncexportAction->addAction(NepomukToDb);
+//    d->syncexportAction->addAction(DbToNepomuk);
+//    d->syncexportAction->addAction(NepomukToDb);
 
-#endif
+//#endif
 
     d->mainToolbar->addAction(d->addAction);
     d->mainToolbar->addAction(d->delAction);
@@ -844,33 +844,33 @@ void TagsManager::enableRootTagActions(bool value)
     }
 }
 
-// Nepomuk is deprecated, marked to be deleted
+// NOTE: remove all code related to Nepomuk
 
-void TagsManager::slotNepomukToDb()
-{
-#ifdef HAVE_NEPOMUK
-    QDBusInterface interface("org.kde.nepomuk.services.digikamnepomukservice",
-                             "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
+//void TagsManager::slotNepomukToDb()
+//{
+//#ifdef HAVE_NEPOMUK
+//    QDBusInterface interface("org.kde.nepomuk.services.digikamnepomukservice",
+//                             "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
 
-    if (interface.isValid())
-    {
-        interface.call(QDBus::NoBlock, "triggerResync", true, false);
-    }
+//    if (interface.isValid())
+//    {
+//        interface.call(QDBus::NoBlock, "triggerResync", true, false);
+//    }
 
-#endif // HAVE_NEPOMUK
-}
+//#endif // HAVE_NEPOMUK
+//}
 
-void TagsManager::slotDbToNepomuk()
-{
-#ifdef HAVE_NEPOMUK
-    QDBusInterface interface("org.kde.nepomuk.services.digikamnepomukservice",
-                             "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
+//void TagsManager::slotDbToNepomuk()
+//{
+//#ifdef HAVE_NEPOMUK
+//    QDBusInterface interface("org.kde.nepomuk.services.digikamnepomukservice",
+//                             "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
 
-    if (interface.isValid())
-    {
-        interface.call(QDBus::NoBlock, "triggerResync", false, true);
-    }
+//    if (interface.isValid())
+//    {
+//        interface.call(QDBus::NoBlock, "triggerResync", false, true);
+//    }
 
-#endif // HAVE_NEPOMUK
-}
+//#endif // HAVE_NEPOMUK
+//}
 } // namespace Digikam

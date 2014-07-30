@@ -678,14 +678,14 @@ void AlbumSettings::readSettings()
 
     d->databaseParams.readFromConfig();
 
-#ifdef HAVE_NEPOMUK
+//#ifdef HAVE_NEPOMUK
 
-    group = config->group(d->configGroupNepomuk);
+//    group = config->group(d->configGroupNepomuk);
 
-    d->syncToDigikam         = group.readEntry(d->configSyncNepomuktoDigikamEntry, false);
-    d->syncToNepomuk         = group.readEntry(d->configSyncDigikamtoNepomukEntry, false);
+//    d->syncToDigikam         = group.readEntry(d->configSyncNepomuktoDigikamEntry, false);
+//    d->syncToNepomuk         = group.readEntry(d->configSyncDigikamtoNepomukEntry, false);
 
-#endif // HAVE_NEPOMUK
+//#endif // HAVE_NEPOMUK
 
     // ---------------------------------------------------------------------
 
@@ -797,14 +797,14 @@ void AlbumSettings::saveSettings()
 
     d->databaseParams.writeToConfig();
 
-#ifdef HAVE_NEPOMUK
+//#ifdef HAVE_NEPOMUK
 
-    group = config->group(d->configGroupNepomuk);
+//    group = config->group(d->configGroupNepomuk);
 
-    group.writeEntry(d->configSyncNepomuktoDigikamEntry, d->syncToDigikam);
-    group.writeEntry(d->configSyncDigikamtoNepomukEntry, d->syncToNepomuk);
+//    group.writeEntry(d->configSyncNepomuktoDigikamEntry, d->syncToDigikam);
+//    group.writeEntry(d->configSyncDigikamtoNepomukEntry, d->syncToNepomuk);
 
-#endif // HAVE_NEPOMUK
+//#endif // HAVE_NEPOMUK
 
     // ---------------------------------------------------------------------
 
@@ -1847,31 +1847,31 @@ void AlbumSettings::setFaceDetectionAccuracy(double value)
 
 void AlbumSettings::applyNepomukSettings() const
 {
-#ifdef HAVE_NEPOMUK
-    QDBusInterface interface("org.kde.nepomuk.services.digikamnepomukservice",
-                             "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
+//#ifdef HAVE_NEPOMUK
+//    QDBusInterface interface("org.kde.nepomuk.services.digikamnepomukservice",
+//                             "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
 
-    if (interface.isValid())
-    {
-        interface.call(QDBus::NoBlock, "enableSyncToDigikam", d->syncToDigikam);
-        interface.call(QDBus::NoBlock, "enableSyncToNepomuk", d->syncToNepomuk);
-    }
+//    if (interface.isValid())
+//    {
+//        interface.call(QDBus::NoBlock, "enableSyncToDigikam", d->syncToDigikam);
+//        interface.call(QDBus::NoBlock, "enableSyncToNepomuk", d->syncToNepomuk);
+//    }
 
-#endif // HAVE_NEPOMUK
+//#endif // HAVE_NEPOMUK
 }
 
 void AlbumSettings::triggerResyncWithNepomuk() const
 {
-#ifdef HAVE_NEPOMUK
-    QDBusInterface interface("org.kde.nepomuk.services.digikamnepomukservice",
-                             "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
+//#ifdef HAVE_NEPOMUK
+//    QDBusInterface interface("org.kde.nepomuk.services.digikamnepomukservice",
+//                             "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
 
-    if (interface.isValid())
-    {
-        interface.call(QDBus::NoBlock, "triggerResync", true, true);
-    }
+//    if (interface.isValid())
+//    {
+//        interface.call(QDBus::NoBlock, "triggerResync", true, true);
+//    }
 
-#endif // HAVE_NEPOMUK
+//#endif // HAVE_NEPOMUK
 }
 
 void AlbumSettings::setApplicationStyle(const QString& style)
