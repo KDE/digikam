@@ -53,7 +53,7 @@ public:
 
     void setUseMultiCore(const bool b);
 
-    void syncMetadata(const ImageInfoList& items, MetadataSynchronizer::SyncDirection dir);
+    void syncMetadata(const ImageInfoList& items, MetadataSynchronizer::SyncDirection dir, bool tagsOnly);
     void generateThumbs(const QStringList& paths);
     void generateFingerprints(const QStringList& paths);
     void sortByImageQuality(const QStringList& paths, const ImageQualitySettings& quality);

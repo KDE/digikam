@@ -80,6 +80,7 @@
 #include "versionmanagersettings.h"
 #include "tableview.h"
 #include "tagsmanager.h"
+#include "albumlabelstreeview.h"
 
 #ifdef USE_PRESENTATION_MODE
 #include "qmlshow.h"
@@ -103,6 +104,7 @@ public:
         thumbSizeTimer(0),
         albumFolderSideBar(0),
         tagViewSideBar(0),
+        labelsSideBar(0),
         dateViewSideBar(0),
         timelineSideBar(0),
         searchSideBar(0),
@@ -124,7 +126,8 @@ public:
         rightSideBar(0),
         filterWidget(0),
         optionAlbumViewPrefix("AlbumView"),
-        modelCollection(0)
+        modelCollection(0),
+        labelsSearchHandler(0)
     {
     }
 
@@ -149,6 +152,7 @@ public:
     // left side bar
     AlbumFolderViewSideBarWidget* albumFolderSideBar;
     TagViewSideBarWidget*         tagViewSideBar;
+    LabelsSideBarWidget*          labelsSideBar;
     DateFolderViewSideBarWidget*  dateViewSideBar;
     TimelineSideBarWidget*        timelineSideBar;
     SearchSideBarWidget*          searchSideBar;
@@ -182,6 +186,7 @@ public:
     QList<SidebarWidget*>         leftSideBarWidgets;
 
     DigikamModelCollection*       modelCollection;
+    AlbumLabelsSearchHandler*     labelsSearchHandler;
 };
 
 QString DigikamView::Private::userPresentableAlbumTitle(const QString& title) const
@@ -282,6 +287,11 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
 
     connect(d->tagViewSideBar, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
             this, SLOT(slotNewDuplicatesSearch(Album*)));
+
+    // Labels sidebar
+    d->labelsSideBar = new LabelsSideBarWidget(d->leftSideBar);
+    d->leftSideBarWidgets << d->labelsSideBar;
+    d->labelsSearchHandler = new AlbumLabelsSearchHandler(d->labelsSideBar->labelsTree());
 
     // date view
     d->dateViewSideBar = new DateFolderViewSideBarWidget(d->leftSideBar,
@@ -982,6 +992,11 @@ void DigikamView::changeAlbumFromHistory(QList<Album*> album, QWidget* const wid
         {
             sideBarWidget->changeAlbumFromHistory(album);
             slotLeftSideBarActivate(sideBarWidget);
+
+            if(sideBarWidget == d->labelsSideBar)
+            {
+                d->labelsSearchHandler->restoreSelectionFromHistory(d->albumHistory->neededLabels());
+            }
         }
 
         d->parent->enableAlbumBackwardHistory(d->useAlbumHistory && !d->albumHistory->isBackwardEmpty());
@@ -1156,9 +1171,20 @@ void DigikamView::slotAlbumSelected(QList<Album*> albums)
         emit signalTagSelected(false);
     }
 
-    if (d->useAlbumHistory)
+    if (d->useAlbumHistory && !d->labelsSearchHandler->isRestoringSelectionFromHistory())
     {
-        d->albumHistory->addAlbums(albums, d->leftSideBar->getActiveTab());
+        if(!(d->leftSideBar->getActiveTab() == d->labelsSideBar))
+        {
+            d->albumHistory->addAlbums(albums, d->leftSideBar->getActiveTab());
+        }
+        else
+        {
+            if(albums.first()->isUsedByLabelsTree())
+            {
+                d->albumHistory->
+                     addAlbums(albums, d->leftSideBar->getActiveTab(), d->labelsSideBar->selectedLabels());
+            }
+        }
     }
 
     d->parent->enableAlbumBackwardHistory(d->useAlbumHistory && !d->albumHistory->isBackwardEmpty());

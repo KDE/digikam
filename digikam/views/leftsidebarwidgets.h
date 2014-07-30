@@ -7,7 +7,8 @@
  * Description : left sidebar widgets
  *
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
- * Copyright (C) 2010-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2014      by Moahmed Anwer <mohammed dot ahmed anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,6 +39,7 @@
 #include "searchmodificationhelper.h"
 #include "sidebarwidget.h"
 #include "imagefiltermodel.h"
+#include "albumlabelstreeview.h"
 
 namespace Digikam
 {
@@ -111,10 +113,14 @@ public:
 
     AlbumPointer<TAlbum> currentAlbum() const;
 
+private:
+    void setNoTagsAlbum();
+
 public Q_SLOTS:
 
     void setCurrentAlbum(TAlbum* album);
     void slotOpenTagManager();
+    void slotToggleTagsSelection(int radioClicked);
 
 Q_SIGNALS:
 
@@ -127,6 +133,40 @@ public:
 
 private:
 
+    Private* const d;
+};
+
+// -----------------------------------------------------------------------------------------
+
+/**
+ * SideBarWidget for the Labels.
+ *
+ * @author Mohamed Anwer
+ */
+class LabelsSideBarWidget : public SidebarWidget
+{
+    Q_OBJECT
+
+public:
+
+    LabelsSideBarWidget(QWidget* const parent);
+    virtual ~LabelsSideBarWidget();
+
+    AlbumLabelsTreeView* labelsTree();
+
+    void setActive(bool active);
+    void applySettings();
+    void changeAlbumFromHistory(QList<Album *> album);
+    void doLoadState();
+    void doSaveState();
+    QPixmap getIcon();
+    QString getCaption();
+
+    QHash<QString, QList<int> > selectedLabels();
+
+private:
+
+    class Private;
     Private* const d;
 };
 

@@ -219,6 +219,22 @@ public:
     */
     bool writeTags(const QString& filePath, WriteMode writeMode = FullWrite,
                const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
+
+    /**
+     * @brief writeTags - used to deduplicate code from writeTags and usual write, all write to tags
+     *                    operations must be done here
+     * @param metadata  - DMetadata object that apply changes
+     * @param saveTags  - save switch
+     * @return          - if tags were successfully set
+     */
+    bool writeTags(DMetadata &metadata, bool saveTags);
+
+    /**
+     * @brief cleanupTags - remove duplicates and obsolete tags before setting metadata
+     * @param toClean     - tag list to be cleared and de-duplicated
+     * @return            - clean tag list
+     */
+    QStringList cleanupTags(QStringList toClean);
     /**
         With the currently applied changes, the given writeMode and settings,
         returns if write(DMetadata), write(QString) or write(DImg) will actually

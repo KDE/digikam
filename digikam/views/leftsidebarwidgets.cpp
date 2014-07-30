@@ -7,8 +7,9 @@
  * Description : left sidebar widgets
  *
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
- * Copyright (C) 2010-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2012      by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C) 2014      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,6 +34,7 @@
 #include <QScrollBar>
 #include <QTimer>
 #include <QToolButton>
+#include <QRadioButton>
 
 // KDE includes
 
@@ -45,6 +47,7 @@
 #include <kinputdialog.h>
 #include <klocale.h>
 #include <ksqueezedtextlabel.h>
+#include <KTabWidget>
 
 // Local includes
 
@@ -64,6 +67,8 @@
 #include "facescandialog.h"
 #include "facedetector.h"
 #include "tagsmanager.h"
+#include "albumlabelstreeview.h"
+#include "albumdb.h"
 
 namespace Digikam
 {
@@ -173,17 +178,38 @@ class TagViewSideBarWidget::Private
 {
 public:
 
+    enum TagsSource
+    {
+        NoTags = 0,
+        ExistingTags
+    };
+
     Private() :
         openTagMngr(0),
         tagSearchBar(0),
-        tagFolderView(0)
+        tagFolderView(0),
+        btnGroup(0),
+        noTagsBtn(0),
+        tagsBtn(0),
+        noTagsWasChecked(false),
+        ExistingTagsWasChecked(false)
     {
     }
 
     KPushButton*   openTagMngr;
     SearchTextBar* tagSearchBar;
     TagFolderView* tagFolderView;
+    QButtonGroup*  btnGroup;
+    QRadioButton*  noTagsBtn;
+    QRadioButton*  tagsBtn;
+
+    bool           noTagsWasChecked;
+    bool           ExistingTagsWasChecked;
+
+    static const QString configTagsSourceEntry;
 };
+
+const QString TagViewSideBarWidget::Private::configTagsSourceEntry("TagsSource");
 
 TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* const model)
     : SidebarWidget(parent), d(new Private)
@@ -193,16 +219,29 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
     QVBoxLayout* const layout = new QVBoxLayout(this);
 
     d->openTagMngr   = new KPushButton( i18n("Open Tag Manager"));
+
+    d->noTagsBtn = new QRadioButton(i18n("No Tags"), this);
+    d->tagsBtn   = new QRadioButton(i18n("Existing Tags"), this);
+    d->btnGroup  = new QButtonGroup(this);
+    d->btnGroup->addButton(d->noTagsBtn);
+    d->btnGroup->addButton(d->tagsBtn);
+    d->btnGroup->setId(d->noTagsBtn, 0);
+    d->btnGroup->setId(d->tagsBtn, 1);
+    d->btnGroup->setExclusive(true);
+
     d->tagFolderView = new TagFolderView(this, model);
     d->tagFolderView->setConfigGroup(getConfigGroup());
     d->tagFolderView->setExpandNewCurrentItem(true);
     d->tagFolderView->setAlbumManagerCurrentAlbum(true);
+
     d->tagSearchBar  = new SearchTextBar(this, "DigikamViewTagSearchBar");
     d->tagSearchBar->setHighlightOnResult(true);
     d->tagSearchBar->setModel(model, AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->tagSearchBar->setFilterModel(d->tagFolderView->albumFilterModel());
 
     layout->addWidget(d->openTagMngr);
+    layout->addWidget(d->noTagsBtn);
+    layout->addWidget(d->tagsBtn);
     layout->addWidget(d->tagFolderView);
     layout->addWidget(d->tagSearchBar);
 
@@ -211,6 +250,9 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
 
     connect(d->tagFolderView, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
             this, SIGNAL(signalFindDuplicatesInAlbum(Album*)));
+
+    connect(d->btnGroup, SIGNAL(buttonClicked(int)),
+            this, SLOT(slotToggleTagsSelection(int)));
 }
 
 TagViewSideBarWidget::~TagViewSideBarWidget()
@@ -222,18 +264,40 @@ void TagViewSideBarWidget::setActive(bool active)
 {
     if (active)
     {
-        AlbumManager::instance()->setCurrentAlbums(d->tagFolderView->selectedTags());
+        if(d->noTagsBtn->isChecked())
+        {
+            setNoTagsAlbum();
+        }
+        else
+        {
+            AlbumManager::instance()->setCurrentAlbums(d->tagFolderView->selectedTags());
+        }
     }
 }
 
 void TagViewSideBarWidget::doLoadState()
 {
+    KConfigGroup group = getConfigGroup();
+
+    bool noTagsBtnWasChecked = group.readEntry(d->configTagsSourceEntry, false);
+    d->noTagsBtn->setChecked(noTagsBtnWasChecked);
+    d->tagsBtn->setChecked(!noTagsBtnWasChecked);
+    d->noTagsWasChecked = noTagsBtnWasChecked;
+    d->ExistingTagsWasChecked = !noTagsBtnWasChecked;
+
     d->tagFolderView->loadState();
+    d->tagFolderView->setDisabled(noTagsBtnWasChecked);
 }
 
 void TagViewSideBarWidget::doSaveState()
 {
+    KConfigGroup group = getConfigGroup();
+
+    group.writeEntry(d->configTagsSourceEntry, d->noTagsBtn->isChecked());
+
     d->tagFolderView->saveState();
+
+    group.sync();
 }
 
 void TagViewSideBarWidget::applySettings()
@@ -242,12 +306,49 @@ void TagViewSideBarWidget::applySettings()
 
 void TagViewSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
 {
-    d->tagFolderView->setCurrentAlbums(album);
+    if(album.first()->type() == Album::TAG)
+    {
+        d->tagsBtn->setChecked(true);
+        d->tagFolderView->setEnabled(true);
+        d->ExistingTagsWasChecked = true;
+        d->noTagsWasChecked = false;
+        d->tagFolderView->setCurrentAlbums(album);
+    }
+    else
+    {
+        d->noTagsBtn->setChecked(true);
+        d->tagFolderView->setDisabled(true);
+        d->noTagsWasChecked = true;
+        d->ExistingTagsWasChecked = false;
+    }
 }
 
 AlbumPointer<TAlbum> TagViewSideBarWidget::currentAlbum() const
 {
     return AlbumPointer<TAlbum> (d->tagFolderView->currentAlbum());
+}
+
+void TagViewSideBarWidget::setNoTagsAlbum()
+{
+    QString title = i18n("No Tags Album");
+    SAlbum* album = AlbumManager::instance()->findSAlbum(title);
+    if(album)
+    {
+        AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << album);
+    }
+    else
+    {
+        SearchXmlWriter writer;
+        writer.setFieldOperator((SearchXml::standardFieldOperator()));
+        writer.writeGroup();
+        writer.writeField("notag", SearchXml::Equal);
+        writer.finishField();
+        writer.finishGroup();
+        writer.finish();
+
+        album = AlbumManager::instance()->createSAlbum(title, DatabaseSearch::AdvancedSearch, writer.xml());
+        AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << album);
+    }
 }
 
 QPixmap TagViewSideBarWidget::getIcon()
@@ -271,6 +372,111 @@ void TagViewSideBarWidget::slotOpenTagManager()
     tagMngr->show();
     tagMngr->activateWindow();
     tagMngr->raise();
+}
+
+void TagViewSideBarWidget::slotToggleTagsSelection(int radioClicked)
+{
+    switch (Private::TagsSource(radioClicked))
+    {
+        case Private::NoTags:
+            if(!d->noTagsWasChecked)
+            {
+                setNoTagsAlbum();
+                d->tagFolderView->setDisabled(true);
+                d->noTagsWasChecked = d->noTagsBtn->isChecked();
+                d->ExistingTagsWasChecked = d->tagsBtn->isChecked();
+            }
+            break;
+
+        case Private::ExistingTags:
+            if(!d->ExistingTagsWasChecked)
+            {
+                d->tagFolderView->setEnabled(true);
+                setActive(true);
+                d->noTagsWasChecked = d->noTagsBtn->isChecked();
+                d->ExistingTagsWasChecked = d->tagsBtn->isChecked();
+            }
+            break;
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+class LabelsSideBarWidget::Private
+{
+
+public:
+
+    Private() :
+        labelsTree(0)
+    {}
+
+    AlbumLabelsTreeView* labelsTree;
+};
+
+LabelsSideBarWidget::LabelsSideBarWidget(QWidget* const parent) :
+    SidebarWidget(parent), d(new Private)
+{
+    setObjectName("Labels Sidebar");
+
+    QVBoxLayout* const layout = new QVBoxLayout(this);
+
+    d->labelsTree = new AlbumLabelsTreeView(this);
+    d->labelsTree->setConfigGroup(getConfigGroup());
+
+    layout->addWidget(d->labelsTree);
+}
+
+LabelsSideBarWidget::~LabelsSideBarWidget()
+{
+    delete d;
+}
+
+AlbumLabelsTreeView *LabelsSideBarWidget::labelsTree()
+{
+    return d->labelsTree;
+}
+
+void LabelsSideBarWidget::setActive(bool active)
+{
+    if(active)
+    {
+        d->labelsTree->setCurrentAlbum();
+    }
+}
+
+void LabelsSideBarWidget::applySettings()
+{
+}
+
+void LabelsSideBarWidget::changeAlbumFromHistory(QList<Album *> album)
+{
+    Q_UNUSED(album);
+}
+
+void LabelsSideBarWidget::doLoadState()
+{
+    d->labelsTree->doLoadState();
+}
+
+void LabelsSideBarWidget::doSaveState()
+{
+    d->labelsTree->doSaveState();
+}
+
+QPixmap LabelsSideBarWidget::getIcon()
+{
+    return d->labelsTree->goldenStarPixmap();
+}
+
+QString LabelsSideBarWidget::getCaption()
+{
+    return i18n("Labels");
+}
+
+QHash<QString, QList<int> > LabelsSideBarWidget::selectedLabels()
+{
+    return d->labelsTree->selectedLabels();
 }
 
 // -----------------------------------------------------------------------------
@@ -348,7 +554,7 @@ QPixmap DateFolderViewSideBarWidget::getIcon()
 
 QString DateFolderViewSideBarWidget::getCaption()
 {
-    return i18n("Calendar");
+    return i18n("Dates");
 }
 
 // -----------------------------------------------------------------------------
@@ -397,6 +603,7 @@ public:
 
     AlbumPointer<SAlbum>      currentTimelineSearch;
 };
+
 const QString TimelineSideBarWidget::Private::configHistogramTimeUnitEntry("Histogram TimeUnit");
 const QString TimelineSideBarWidget::Private::configHistogramScaleEntry("Histogram Scale");
 const QString TimelineSideBarWidget::Private::configCursorPositionEntry("Cursor Position");
@@ -921,7 +1128,7 @@ QPixmap SearchSideBarWidget::getIcon()
 
 QString SearchSideBarWidget::getCaption()
 {
-    return i18nc("Search images, access stored searches", "Search");
+    return i18nc("Avanced search images, access stored searches", "Search");
 }
 
 void SearchSideBarWidget::newKeywordSearch()
@@ -1005,7 +1212,7 @@ QPixmap FuzzySearchSideBarWidget::getIcon()
 
 QString FuzzySearchSideBarWidget::getCaption()
 {
-    return i18n("Fuzzy Searches");
+    return i18nc("Fuzzy Search images, as dupplicates, sketch, similars searches", "Fuzzy");
 }
 
 void FuzzySearchSideBarWidget::newDuplicatesSearch(Album* album)
@@ -1093,7 +1300,7 @@ QPixmap GPSSearchSideBarWidget::getIcon()
 
 QString GPSSearchSideBarWidget::getCaption()
 {
-    return i18nc("Search images on a map", "Map Search");
+    return i18nc("Search images on a map", "Map");
 }
 
 // -----------------------------------------------------------------------------
@@ -1170,16 +1377,6 @@ PeopleSideBarWidget::~PeopleSideBarWidget()
     delete d;
 }
 
-QPixmap PeopleSideBarWidget::getIcon()
-{
-    return SmallIcon("edit-image-face-show");
-}
-
-QString PeopleSideBarWidget::getCaption()
-{
-    return i18nc("Browse images sorted by depicted people", "People");
-}
-
 void PeopleSideBarWidget::slotInit()
 {
     loadState();
@@ -1223,6 +1420,16 @@ void PeopleSideBarWidget::slotScanForFaces()
         FaceDetector* const tool = new FaceDetector(dialog.settings());
         tool->start();
     }
+}
+
+QPixmap PeopleSideBarWidget::getIcon()
+{
+    return SmallIcon("edit-image-face-show");
+}
+
+QString PeopleSideBarWidget::getCaption()
+{
+    return i18nc("Browse images sorted by depicted people", "People");
 }
 
 } // namespace Digikam

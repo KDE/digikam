@@ -796,11 +796,30 @@ void ImageScanner::scanTags()
 
     QVariant var         = d->metadata.getMetadataField(MetadataInfo::Keywords);
     QStringList keywords = var.toStringList();
+    QStringList filteredKeywords;
 
-    if (!keywords.isEmpty())
+    // Extra empty tags check, empty tag = root tag which is not asignable
+    for(int index = 0; index < keywords.size(); index++)
+    {
+        QString keyword = keywords.at(index);
+        if(!keyword.isEmpty())
+        {
+
+            // _Digikam_root_tag_ is present in some photos tagged with older
+            // version of digiKam, must be removed
+            if(keyword.contains(QRegExp("(_Digikam_root_tag_/|/_Digikam_root_tag_|_Digikam_root_tag_)")))
+            {
+                keyword = keyword.replace(QRegExp("(_Digikam_root_tag_/|/_Digikam_root_tag_|_Digikam_root_tag_)"),
+                                          QString(""));
+            }
+            filteredKeywords.append(keyword);
+        }
+    }
+
+    if (!filteredKeywords.isEmpty())
     {
         // get tag ids, create if necessary
-        QList<int> tagIds = TagsCache::instance()->getOrCreateTags(keywords);
+        QList<int> tagIds = TagsCache::instance()->getOrCreateTags(filteredKeywords);
         d->commit.tagIds += tagIds;
     }
 
@@ -861,7 +880,7 @@ void ImageScanner::scanFaces()
         return;
     }
 
-    QMap<QString,QVariant> metadataFacesMap;
+    QMultiMap<QString,QVariant> metadataFacesMap;
 
     if (!d->metadata.getImageFacesMap(metadataFacesMap))
     {

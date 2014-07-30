@@ -4,18 +4,21 @@ PROJECT(digikam)
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "Starting CMake configuration for: digiKam")
 
-OPTION(ENABLE_SCRIPTIFACE      "Build digiKam with experimental scripting support (default=OFF)"       OFF)
-OPTION(ENABLE_PRESENTATIONMODE "Build digiKam with presentation mode support (default=OFF)"            OFF)
-OPTION(ENABLE_THUMBS_DB        "Build digiKam with thumbnails database support (default=ON)"           ON)
-OPTION(ENABLE_INTERNALMYSQL    "Look for MySQL server executable at build time (default=ON)"           ON)
-OPTION(ENABLE_ADVANCEDDEBUGMSG "Build digiKam with more internal debug message (default=OFF)"          OFF)
-OPTION(ENABLE_NEPOMUKSUPPORT   "Build digiKam with Nepomuk support (default=ON)"                       OFF)
-OPTION(ENABLE_LCMS2            "Link digiKam to LCMS2 instead LCMS1 (default=OFF)"                     OFF)
+OPTION(ENABLE_SCRIPTIFACE       "Build digiKam with experimental scripting support (default=OFF)"       OFF)
+OPTION(ENABLE_PRESENTATIONMODE  "Build digiKam with presentation mode support (default=OFF)"            OFF)
+OPTION(ENABLE_THUMBS_DB         "Build digiKam with thumbnails database support (default=ON)"           ON)
+OPTION(ENABLE_INTERNALMYSQL     "Look for MySQL server executable at build time (default=ON)"           ON)
+OPTION(ENABLE_ADVANCEDDEBUGMSG  "Build digiKam with more internal debug message (default=OFF)"          OFF)
+OPTION(ENABLE_LCMS2             "Build digiKam with LCMS2 instead LCMS1 (default=OFF)"                  OFF)
+
+# Options to port to new KDE components (Ballo and Akonadi) 
+OPTION(ENABLE_NEPOMUKSUPPORT    "Build digiKam with Nepomuk support (default=OFF)"                      OFF)
+OPTION(ENABLE_KDEPIMLIBSSUPPORT "Build digiKam with Kdepimlibs support (default=OFF)"                   OFF)
 
 # NOTE: since 6.11.24, libpgf do not support very well OpenMP. We disable it temporally.
 # See B.K.O #273765 for details.
-OPTION(ENABLE_PGF_OPENMP       "Build digiKam with paralelized PGF codec (experimental) (default=OFF)" OFF)
-OPTION(DIGIKAM_ENABLE_MODELTEST "Enable ModelTest on some models for debugging (default=OFF)"          OFF)
+OPTION(ENABLE_PGF_OPENMP        "Build digiKam with paralelized PGF codec (experimental) (default=OFF)" OFF)
+OPTION(DIGIKAM_ENABLE_MODELTEST "Enable ModelTest on some models for debugging (default=OFF)"           OFF)
 
 # ==================================================================================================
 # Information to update before to release this package.
@@ -167,39 +170,8 @@ FIND_PACKAGE(PGF)
 FIND_PACKAGE(Eigen3)
 FIND_PACKAGE(Boost) # 1.36.0)
 
-# BEGIN SPECIAL OPENCV HANDLING
-
-# On some systems, OpenCV can be found using FIND_PACKAGE(OpenCV), for other systems
-# we ship our own version of FindOpenCV.cmake. But that does not work on all systems.
-# Therefore, first try finding OpenCV using FIND_PACKAGE(OpenCV), and if that fails,
-# add our FindOpenCV.cmake to the search path and search again.
-
-MESSAGE(STATUS "First try at finding OpenCV...")
-FIND_PACKAGE(OpenCV)
-
-IF (NOT OpenCV_LIBRARIES AND NOT OpenCV_LIBS)
-  MESSAGE(STATUS "Could not find OpenCV normally, trying internal FindOpenCV.cmake")
-   SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/modules_opencv)
-  FIND_PACKAGE(OpenCV REQUIRED)
-ELSE (NOT OpenCV_LIBRARIES AND NOT OpenCV_LIBS)
-  MESSAGE(STATUS "Great, found OpenCV on the first try.")
-ENDIF (NOT OpenCV_LIBRARIES AND NOT OpenCV_LIBS)
-
-MESSAGE(STATUS "OpenCV Root directory is ${OpenCV_DIR}")
-
-# there are two versions of FindOpenCV.cmake in the wild, one defining
-# OpenCV_LIBRARIES, the other defining OpenCV_LIBS. Make sure we handle
-# both cases.
-IF (NOT OpenCV_LIBRARIES)
-  SET(OpenCV_LIBRARIES ${OpenCV_LIBS})
-ENDIF (NOT OpenCV_LIBRARIES)
-
-# same story with OpenCV_INCLUDE_DIRS and OpenCV_INCLUDE_DIR:
-IF (NOT OpenCV_INCLUDE_DIRS)
-  SET(OpenCV_INCLUDE_DIRS ${OpenCV_INCLUDE_DIR})
-ENDIF (NOT OpenCV_INCLUDE_DIRS)
-
-# END SPECIAL OPENCV HANDLING
+INCLUDE(MacroOpenCV)
+DETECT_OPENCV(2.4.6 core highgui imgproc)
 
 # check the libkdcraw version
 
@@ -409,10 +381,13 @@ IF(GPHOTO2_FOUND)
     ENDIF(VERSION_GPHOTO25)
 ENDIF(GPHOTO2_FOUND)
 
+IF (ENABLE_KDEPIMLIBSSUPPORT)
 
-MACRO_OPTIONAL_FIND_PACKAGE(KdepimLibs)
-MACRO_BOOL_TO_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
+    MACRO_OPTIONAL_FIND_PACKAGE(KdepimLibs)
+    MACRO_BOOL_TO_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
 
+ENDIF()
+    
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH} )
 
 # Check LensFun library for Lens auto-correction tool.
@@ -1463,6 +1438,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumthumbnailloader.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumtreeview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumwatch.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumlabelstreeview.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/databaseguierrorhandler.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/dbstatdlg.cpp
@@ -1498,19 +1474,21 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/digikamimageview_p.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/digikamimagedelegate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/digikamimagefacedelegate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/groupindicatoroverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imagecategorizedview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imagecategorydrawer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imagedelegate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imageratingoverlay.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imagerotationoverlay.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imagecoordinatesoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imagethumbnailbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imagethumbnaildelegate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imageselectionoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imageviewutilities.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/assignnameoverlay.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/facerejectionoverlay.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/overlays/groupindicatoroverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/overlays/imageratingoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/overlays/imagerotationoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/overlays/imagecoordinatesoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/overlays/imageselectionoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/overlays/assignnameoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/overlays/facerejectionoverlay.cpp
+
 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction/metadatahub.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction/fileactionprogress.cpp
@@ -1555,23 +1533,24 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/imagepreviewview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/mediaplayerview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/mapwidgetview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_treeview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_treeview_delegate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_column_configuration_dialog.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_model.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_columns.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_column_audiovideo.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_column_file.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_column_geo.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_column_digikam.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_column_item.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_column_photo.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_column_thumbnail.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_columnfactory.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview_selection_model_syncer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/welcomepageview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/leftsidebarwidgets.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_treeview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_treeview_delegate.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_column_configuration_dialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_model.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_columns.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_column_audiovideo.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_column_file.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_column_geo.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_column_digikam.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_column_item.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_column_photo.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_column_thumbnail.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_columnfactory.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_selection_model_syncer.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/models/digikammodelcollection.cpp
        )
@@ -1603,6 +1582,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dragdrop
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/overlays
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/main
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/models
@@ -1611,6 +1591,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager/models
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/color
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/decorate

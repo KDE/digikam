@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 project( DetectCompression )
-find_package( OpenCV REQUIRED )
+set( OpenCV_LIBS )
+find_package( OpenCV REQUIRED COMPONENTS core imgproc )
 add_executable( detectcompression detectcompression.cpp )
 target_link_libraries( detectcompression ${OpenCV_LIBS} )

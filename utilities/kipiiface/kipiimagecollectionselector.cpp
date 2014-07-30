@@ -8,6 +8,7 @@
  *               digiKam album folder views
  *
  * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2014      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -46,6 +47,7 @@
 #include "albumtreeview.h"
 #include "kipiimagecollection.h"
 #include "kipiinterface.h"
+#include "albumlabelstreeview.h"
 
 namespace Digikam
 {
@@ -65,7 +67,9 @@ public:
         iface(0),
         albumSearchBar(0),
         tagSearchBar(0),
-        searchSearchBar(0)
+        searchSearchBar(0),
+        labelsTree(0),
+        labelsSearchHandler(0)
     {
     }
 
@@ -99,6 +103,20 @@ public:
         }
     }
 
+    void fillCollectionsFromCheckedLabels(QList<KIPI::ImageCollection>& collectionList,
+                                                   const QString& ext)
+    {
+        Album* const album = labelsSearchHandler->albumForSelectedItems();
+
+        if (!album)
+        {
+            return;
+        }
+
+        KipiImageCollection* col = new KipiImageCollection(KipiImageCollection::AllItems, album, ext,labelsSearchHandler->imagesUrls());
+        collectionList.append(col);
+    }
+
 public:
 
     KTabWidget*     tab;
@@ -117,6 +135,9 @@ public:
     SearchTextBar*  albumSearchBar;
     SearchTextBar*  tagSearchBar;
     SearchTextBar*  searchSearchBar;
+
+    AlbumLabelsTreeView*      labelsTree;
+    AlbumLabelsSearchHandler* labelsSearchHandler;
 };
 
 KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const iface, QWidget* const parent)
@@ -193,9 +214,20 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
 
     // -------------------------------------------------------------------------------
 
+    KVBox* labelsBox  = new KVBox(d->tab);
+    d->labelsTree = new AlbumLabelsTreeView(labelsBox,true);
+    d->labelsSearchHandler = new AlbumLabelsSearchHandler(d->labelsTree);
+
+    labelsBox->setMargin(0);
+    labelsBox->setSpacing(KDialog::spacingHint());
+    labelsBox->setStretchFactor(d->labelsTree, 100);
+
+    // -------------------------------------------------------------------------------
+
     d->tab->addTab(albumBox, i18n("My Albums"));
     d->tab->addTab(tagBox, i18n("My Tags"));
     d->tab->addTab(searchBox, i18n("My Searches"));
+    d->tab->addTab(labelsBox, i18n("My Labels"));
 
     QHBoxLayout* hlay = new QHBoxLayout(this);
     hlay->addWidget(d->tab);
@@ -211,6 +243,9 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
             this, SIGNAL(selectionChanged()));
 
     connect(d->searchModel, SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
+            this, SIGNAL(selectionChanged()));
+
+    connect(d->labelsSearchHandler, SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
             this, SIGNAL(selectionChanged()));
 
     // ------------------------------------------------------------------------------------
@@ -247,6 +282,7 @@ QList<KIPI::ImageCollection> KipiImageCollectionSelector::selectedImageCollectio
     d->fillCollectionsFromCheckedModel(list, d->albumModel, ext);
     d->fillCollectionsFromCheckedModel(list, d->tagModel, ext);
     d->fillCollectionsFromCheckedModel(list, d->searchModel, ext);
+    d->fillCollectionsFromCheckedLabels(list, ext);
 
     kDebug() << list.count() << " collection items selected";
 

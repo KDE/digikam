@@ -202,7 +202,7 @@ void MetadataSynchronizer::parseList()
 
     setTotalItems(d->imageInfoList.count());
 
-    d->thread->syncMetadata(d->imageInfoList, d->direction);
+    d->thread->syncMetadata(d->imageInfoList, d->direction, d->tagsOnly);
     d->thread->start();
 }
 
