@@ -189,49 +189,6 @@ SET_TARGET_PROPERTIES(digikamdatabase PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT
 INSTALL(TARGETS digikamdatabase ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 
-# digiKam nepomuk services #########################################################
-
-IF (NepomukCore_FOUND)
-
-    SET(digikamnepomukservices_SRCS ${libnepomukservices_SRCS} )
-
-    # Veaceslav Note: These lines fail when generating cmake if Nepomuk Support is disabled
-    #INCLUDE(SopranoAddOntology)
-    #SOPRANO_ADD_ONTOLOGY(digikamnepomukservices_SRCS "${SHAREDDESKTOPONTOLOGIES_ROOT_DIR}/nie/nie.trig" "NIE" "Nepomuk::Vocabulary" "trig")
-    #SOPRANO_ADD_ONTOLOGY(digikamnepomukservices_SRCS "${SHAREDDESKTOPONTOLOGIES_ROOT_DIR}/nie/nfo.trig" "NFO" "Nepomuk::Vocabulary" "trig")
-
-    KDE4_ADD_PLUGIN(digikamnepomukservice ${digikamnepomukservices_SRCS})
-
-    TARGET_LINK_LIBRARIES(digikamnepomukservice
-                          ${QT_QTSQL_LIBRARY}
-
-                          ${KDE4_KIO_LIBS}
-                          ${KDE4_SOLID_LIBS}
-                          ${KDE4_KDEUI_LIBS}
-
-                          ${KIPI_LIBRARIES}
-                          ${KEXIV2_LIBRARIES}
-                          ${KDCRAW_LIBRARIES}
-                          ${SOPRANO_CLIENT_LIBRARIES}
-                          ${SOPRANO_LIBRARIES}
-                          ${NEPOMUK_CORE_LIBRARY}
-
-                          digikamcore
-                          digikamdatabase
-                         )
-
-    IF(USE_SCRIPT_IFACE)
-        TARGET_LINK_LIBRARIES(digikamnepomukservice ${QT_QTSCRIPT_LIBRARY})
-    ENDIF(USE_SCRIPT_IFACE)
-
-    INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/nepomuk/digikamnepomukservice.desktop
-            DESTINATION ${SERVICES_INSTALL_DIR})
-
-    INSTALL(TARGETS digikamnepomukservice
-            DESTINATION ${PLUGIN_INSTALL_DIR})
-
-ENDIF (NepomukCore_FOUND)
-
 # digiKam binary progam #########################################################
 
 SET(digikam_SRCS ${libeditorgui_SRCS}
@@ -257,6 +214,10 @@ SET(digikam_SRCS ${libeditorgui_SRCS}
                  ${libimgqsort_SRCS}
                  main/main.cpp
 )
+
+IF(Baloo_FOUND)
+    SET(digikam_SRCS ${digikam_SRCS} ${libbaloowrap_SRCS})
+ENDIF(Baloo_FOUND)
 
 IF(USE_SCRIPT_IFACE)
     SET(digikam_SRCS ${digikam_SRCS} ${libscriptiface_SRCS})
@@ -314,6 +275,9 @@ TARGET_LINK_LIBRARIES(digikam
         # See B.K.O #258931: libgphoto2 library must be the last arg for linker.
         ${GPHOTO2_LIBRARIES}
 )
+IF(Baloo_FOUND)
+    TARGET_LINK_LIBRARIES(digikam ${BALOO_LIBRARIES})
+ENDIF(Baloo_FOUND)
 
 IF (NOT WIN32 AND GPHOTO2_FOUND)
     # See B.K.O #268267 : digiKam need to be linked to libusb to prevent crash at gphoto2 init if opencv is linked with libdc1394

@@ -11,8 +11,8 @@ OPTION(ENABLE_INTERNALMYSQL     "Look for MySQL server executable at build time 
 OPTION(ENABLE_ADVANCEDDEBUGMSG  "Build digiKam with more internal debug message (default=OFF)"          OFF)
 OPTION(ENABLE_LCMS2             "Build digiKam with LCMS2 instead LCMS1 (default=OFF)"                  OFF)
 
-# Options to port to new KDE components (Ballo and Akonadi) 
-OPTION(ENABLE_NEPOMUKSUPPORT    "Build digiKam with Nepomuk support (default=OFF)"                      OFF)
+# Options to port to new KDE components (Baloo and Akonadi)
+OPTION(ENABLE_BALOOSUPPORT      "Build digiKam with Baloo support (default=OFF)"                        ON)
 OPTION(ENABLE_KDEPIMLIBSSUPPORT "Build digiKam with Kdepimlibs support (default=OFF)"                   OFF)
 
 # NOTE: since 6.11.24, libpgf do not support very well OpenMP. We disable it temporally.
@@ -406,30 +406,18 @@ MACRO_BOOL_TO_01(ENABLE_PRESENTATIONMODE USE_PRESENTATION_MODE)
 MACRO_BOOL_TO_01(ENABLE_THUMBS_DB        USE_THUMBS_DB)
 MACRO_BOOL_TO_01(ENABLE_ADVANCEDDEBUGMSG USE_ADVANCEDDEBUGMSG)
 
-# Win32 compilation with Nepomuk is broken. It's temporally disabled.
-IF (ENABLE_NEPOMUKSUPPORT)
-    IF (${KDE_VERSION} VERSION_GREATER "4.3.99")
-        MACRO_OPTIONAL_FIND_PACKAGE(Soprano)
-        MACRO_LOG_FEATURE(Soprano_FOUND "Soprano" "C++/Qt4 framework for RDF data"
-                "http://soprano.sourceforge.net" TRUE "" "Storage of semantic data")
+# Win32 compilation with Baloo is not available
+IF (ENABLE_BALOOSUPPORT)
+    # Baloo support from 4.12
+    IF (${KDE_VERSION} VERSION_GREATER "4.11.99")
 
-        MACRO_OPTIONAL_FIND_PACKAGE(NepomukCore)
-        MACRO_LOG_FEATURE(NepomukCore_FOUND "NepomukCore" "The Nepomuk libraries"
-                "http://www.kde.org" TRUE "" "Nepomuk extends the search and tagging")
+        MACRO_OPTIONAL_FIND_PACKAGE(Baloo)
+        MACRO_LOG_FEATURE(Baloo_FOUND "Baloo" "Baloo"
+                "http://www.kde.org" TRUE "" "Baloo extends the search and tagging")
 
-        MACRO_OPTIONAL_FIND_PACKAGE(SharedDesktopOntologies 0.2)
-        MACRO_LOG_FEATURE(SHAREDDESKTOPONTOLOGIES_FOUND "Shared desktop ontologies" "Desktop ontologies"
-            "http://oscaf.sourceforge.net" TRUE "0.2" "Ontologies necessary for the Nepomuk semantic desktop.")
-
-        IF (Soprano_FOUND AND NepomukCore_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
-            SET(NepomukCore_FOUND TRUE)
-        ELSE (Soprano_FOUND AND NepomukCore_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
-            SET(NepomukCore_FOUND FALSE)
-        ENDIF (Soprano_FOUND AND NepomukCore_FOUND AND SHAREDDESKTOPONTOLOGIES_FOUND)
-
-       MACRO_BOOL_TO_01(NepomukCore_FOUND HAVE_NEPOMUK)
-    ENDIF (${KDE_VERSION} VERSION_GREATER "4.3.99")
-ENDIF (ENABLE_NEPOMUKSUPPORT)
+        MACRO_BOOL_TO_01(Baloo_FOUND HAVE_BALOO)
+    ENDIF (${KDE_VERSION} VERSION_GREATER "4.11.99")
+ENDIF (ENABLE_BALOOSUPPORT)
 
 MACRO_OPTIONAL_FIND_PACKAGE(Doxygen)
 
@@ -524,18 +512,18 @@ ENDIF(KDEPIMLIBS_FOUND)
 
 # ================================================================
 
-IF(NepomukCore_FOUND)
-    MESSAGE(STATUS " Nepomuk libraries found.................. YES (optional)")
-ELSE(NepomukCore_FOUND)
-    IF (${KDE_VERSION} VERSION_GREATER "4.4.0")
-        MESSAGE(STATUS " Nepomuk libraries found.................. NO  (optional)")
-    ELSE (${KDE_VERSION} VERSION_GREATER "4.4.0")
-        MESSAGE(STATUS " Nepomuk libraries found.................. NO  (at least KDE 4.4 and shared-desktop-ontologies required)")
-    ENDIF (${KDE_VERSION} VERSION_GREATER "4.4.0")
+IF(Baloo_FOUND)
+    MESSAGE(STATUS " Baloo libraries found.................. YES (optional)")
+ELSE(Baloo_FOUND)
+    IF (${KDE_VERSION} VERSION_GREATER "4.12.0")
+        MESSAGE(STATUS " Baloo libraries found.................. NO  (optional)")
+    ELSE (${KDE_VERSION} VERSION_GREATER "4.12.0")
+        MESSAGE(STATUS " Baloo libraries found.................. NO  (at least KDE 4.12 required)")
+    ENDIF (${KDE_VERSION} VERSION_GREATER "4.12.0")
     MESSAGE(STATUS "")
-    MESSAGE(STATUS " digiKam will be compiled without support for the Nepomuk semantic desktop services.")
+    MESSAGE(STATUS " digiKam will be compiled without support for Baloo.")
     MESSAGE(STATUS "")
-ENDIF(NepomukCore_FOUND)
+ENDIF(Baloo_FOUND)
 
 # ================================================================
 
@@ -691,9 +679,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/utilities/qmlshow)
     ENDIF(USE_PRESENTATION_MODE)
 
-    IF(NepomukCore_FOUND)
-        INCLUDE_DIRECTORIES(${SOPRANO_INCLUDE_DIR} ${NEPOMUK_CORE_INCLUDE_DIR})
-    ENDIF(NepomukCore_FOUND)
+    IF(Baloo_FOUND)
+        INCLUDE_DIRECTORIES(${BALOO_INCLUDE_DIR})
+    ENDIF(Baloo_FOUND)
 
     IF(PGF_FOUND)
        INCLUDE_DIRECTORIES(${PGF_INCLUDE_DIRS})
@@ -1184,11 +1172,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiinterface.cpp
        )
 
-    SET(libnepomukservices_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/nepomuk/digikamnepomukservice.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/nepomuk/dknepomukwrap.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/nepomuk/nepomukwatcher.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/nepomuk/nepomukquery.cpp
+    SET(libbaloowrap_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/baloo/baloowrap.cpp
        )
 
     SET(libfacemanagement_SRCS
@@ -1672,7 +1657,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/nepomuk
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/baloo
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/main
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/manager
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/views
