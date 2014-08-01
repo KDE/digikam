@@ -243,6 +243,13 @@ public:
     bool willWriteMetadata(WriteMode writeMode,
                            const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings()) const;
 
+    /**
+     * @brief writeToBaloo - write tags, comments and rating to KDE Nepomuk replacement: Baloo
+     * @param filePath     - path to file to add comments, tags and rating
+     * @param settings     - metadata settings to be set
+     */
+    void writeToBaloo(QString filePath, const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
+
     // --------------------------------------------------
 
     Status dateTimeStatus()   const;

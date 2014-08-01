@@ -29,6 +29,7 @@
 #include <QFileInfo>
 #include <QMutex>
 #include <QMutexLocker>
+#include <QPointer>
 
 // KDE includes
 
@@ -49,6 +50,7 @@
 #include "albumsettings.h"
 #include "imageattributeswatch.h"
 #include "tagscache.h"
+#include "baloowrap.h"
 
 #include "facetagseditor.h"
 
@@ -87,6 +89,7 @@ public:
         ratingChanged     = false;
         templateChanged   = false;
         tagsChanged       = false;
+        baloo             = new BalooWrap();
     }
 
     bool                              dateTimeChanged;
@@ -128,6 +131,8 @@ public:
     MetadataHub::Status               ratingStatus;
     MetadataHub::Status               templateStatus;
 
+    QPointer<BalooWrap>                        baloo;
+
     template <class T> void loadWithInterval(const T& data, T& storage, T& highestStorage, MetadataHub::Status& status);
     template <class T> void loadSingleValue(const T& data, T& storage, MetadataHub::Status& status);
 };
@@ -146,6 +151,10 @@ MetadataHub::MetadataHub(const MetadataHub& other)
 
 MetadataHub::~MetadataHub()
 {
+    if(!d->baloo.isNull())
+    {
+        delete d->baloo;
+    }
     delete d;
 }
 
@@ -603,7 +612,6 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
     bool saveFaces      =  settings.saveFaceTags;
     bool saveTags       = settings.saveTags;
 
-
     bool writeAllFields;
 
     if (writeMode == FullWrite)
@@ -702,7 +710,10 @@ bool MetadataHub::write(const QString& filePath, WriteMode writeMode, const Meta
         return false;
     }
 
+    writeToBaloo(filePath);
+
     DMetadata metadata(filePath);
+
 
     if (write(metadata, writeMode, settings))
     {
@@ -758,6 +769,8 @@ bool MetadataHub::writeTags(const QString& filePath,
     {
         metadata.setImageFacesMap(d->faceTagsList,false);
     }
+
+    writeToBaloo(filePath);
 
     if (writeTags(metadata, saveTags))
     {
@@ -870,6 +883,7 @@ QStringList MetadataHub::cleanupTags(QStringList toClean)
     }
     return deduplicator.toList();
 }
+
 bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataSettingsContainer& settings) const
 {
     // This is the same logic as in write(DMetadata) but without actually writing.
@@ -915,7 +929,54 @@ bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataSettingsC
                (saveRating     && (writeAllFields || d->ratingChanged))     ||
                (saveTags       && (writeAllFields || d->tagsChanged))       ||
                (saveTemplate   && (writeAllFields || d->templateChanged))
-           );
+                );
+}
+
+void MetadataHub::writeToBaloo(QString filePath, const MetadataSettingsContainer &settings)
+{
+    // NOTE: Veaceslav: use settings to trigger on/off this value
+    bool saveToBaloo = true;
+    int rating = -1;
+    QString* comment = 0;
+
+    if(!saveToBaloo)
+    {
+        return;
+    }
+    bool saveComment    = (settings.saveComments   && d->commentsStatus   == MetadataAvailable);
+    bool saveRating     = (settings.saveRating     && d->ratingStatus     == MetadataAvailable);
+
+    QStringList newKeywords;
+    for (QMap<int, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
+    {
+        if (!TagsCache::instance()->canBeWrittenToMetadata(it.key()))
+        {
+            continue;
+        }
+        // it is important that MetadataDisjoint keywords are not touched
+        if (it.value() == MetadataAvailable)
+        {
+            QString tagName = TagsCache::instance()->tagName(it.key());
+
+            if (it.value().hasTag)
+            {
+                if(!tagName.isEmpty())
+                    newKeywords << tagName;
+            }
+        }
+    }
+    if(saveComment)
+    {
+        comment = new QString(d->comments.value("x-default").caption);
+    }
+
+    if(saveRating)
+    {
+        rating = d->rating;
+    }
+    newKeywords = cleanupTags(newKeywords);
+    KUrl url(filePath);
+    d->baloo->setAllData(url,&newKeywords,comment,rating);
 }
 
 // ---------------------------------------------------------------------------------------------------------

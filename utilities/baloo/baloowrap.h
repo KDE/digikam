@@ -21,11 +21,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QObject>
 // KDE
-
+#include <kurl.h>
 // Local
 
 
 class KJob;
+class KUrl;
 
 namespace Digikam
 {
@@ -37,8 +38,22 @@ class  BalooWrap : public QObject
 {
     Q_OBJECT
 public:
-    BalooWrap(QObject* parent);
+    BalooWrap(QObject* parent = 0);
     ~BalooWrap();
+
+    QStringList getTags(KUrl& url);
+
+    QString getComment(KUrl& url);
+
+    int getRating(KUrl& url);
+
+    void setTags(KUrl& url, QStringList* tags);
+
+    void setComment(KUrl& url, QString* comment);
+
+    void setRating(KUrl& url, int rating);
+
+    void setAllData(KUrl& url, QStringList *tags, QString *comment, int rating);
 
 //    virtual TagSet allTags() const;
 

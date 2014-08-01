@@ -25,8 +25,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QStringList>
 
 // KDE
-#include <KDebug>
-#include <KUrl>
+#include <kdebug.h>
+#include <kurl.h>
 
 // Baloo
 #include <baloo/file.h>
@@ -52,6 +52,69 @@ BalooWrap::BalooWrap(QObject* parent)
 BalooWrap::~BalooWrap()
 {
     delete d;
+}
+
+QStringList BalooWrap::getTags(KUrl &url)
+{
+    Q_UNUSED(url);
+    return QStringList();
+}
+
+QString BalooWrap::getComment(KUrl &url)
+{
+    Q_UNUSED(url);
+    return QString();
+}
+
+int BalooWrap::getRating(KUrl &url)
+{
+    Q_UNUSED(url);
+    return 0;
+}
+
+void BalooWrap::setTags(KUrl &url, QStringList *tags)
+{
+    setAllData(url,tags, NULL, -1);
+}
+
+void BalooWrap::setComment(KUrl &url, QString *comment)
+{
+    setAllData(url, NULL, comment, -1);
+}
+
+void BalooWrap::setRating(KUrl &url, int rating)
+{
+    setAllData(url, NULL, NULL, rating);
+}
+
+void BalooWrap::setAllData(KUrl &url, QStringList* tags, QString* comment, int rating)
+{
+    bool write = false;
+    Baloo::File file(url.toLocalFile());
+
+    if(tags != NULL)
+    {
+        file.setTags(*tags);
+        write = true;
+    }
+    if(comment != NULL)
+    {
+        file.setUserComment(*comment);
+        write = true;
+    }
+    if(rating != -1)
+    {
+        // digiKam store rating as value form 0 to 5
+        // while baloo store it as value from 0 to 10
+        file.setRating(rating*2);
+        write = true;
+    }
+
+    if(write)
+    {
+        Baloo::FileModifyJob* job = new Baloo::FileModifyJob(file);
+        job->start();
+    }
 }
 
 //TagSet BalooWrap::allTags() const
