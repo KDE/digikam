@@ -1444,6 +1444,7 @@ void ImageDescEditTab::setFocusToTagsView()
 {
     d->lastSelectedWidget = qobject_cast<QWidget*>(d->tagCheckView);
     d->tagCheckView->setFocus();
+    d->tabWidget->setCurrentIndex(Private::TAGS);
 }
 
 void ImageDescEditTab::slotApplyChangesToAllVersions()
