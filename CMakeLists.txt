@@ -205,15 +205,6 @@ ENDIF(NOT APPLE AND NOT USE_EXT_LIBPGF)
 
 #-------------------------------------------------------------------------------------
 
-IF(NOT APPLE)
-    MACRO_BOOL_TO_01(CLAPACK_FOUND USE_EXT_LIBCLAPACK)
-ELSE(NOT APPLE)
-    # Under MACOS-X Clapack exist in standard, but it's not suitable as well. Need investiguation here.
-    SET(CLAPACK_FOUND FALSE)
-ENDIF(NOT APPLE)
-
-#-------------------------------------------------------------------------------------
-
 # check version of libjpeg so that we can use the appropriate dir
 # See bug #227313
 SET(_jpeglib_version_source "#include <stddef.h>\n#include<stdio.h>\n#include <jpeglib.h>\n int main()\n {\n #if (JPEG_LIB_VERSION >= 80) \n #error JPEG_LIB_VERSION >= 80 found \n #endif \n }\n")
@@ -305,7 +296,7 @@ IF (ENABLE_KDEPIMLIBSSUPPORT)
     MACRO_BOOL_TO_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
 
 ENDIF()
-    
+
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH} )
 
 # Check LensFun library for Lens auto-correction tool.
