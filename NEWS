@@ -7,4 +7,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 338048 - Separate Tags in Public and Private for Export.
 002 ==> 338055 - libkdepimlibs not found.
-003 ==> 
+003 ==> 317813 - SQLITE : digiKam do not accept previous DB Sqlite.
+004 ==> 
