@@ -103,7 +103,7 @@ FIND_PACKAGE(Boost) # 1.36.0)
 
 INCLUDE(MacroUtils)
 INCLUDE(MacroOpenCV)
-DETECT_OPENCV(2.4.6 core highgui imgproc)
+DETECT_OPENCV(2.4.9 core highgui objdetect contrib legacy imgproc)
 
 # check the libkdcraw version
 
