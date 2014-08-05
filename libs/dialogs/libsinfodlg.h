@@ -50,7 +50,7 @@ public:
 
 private:
 
-    QString checkTriState(int value);
+    QString checkTriState(int value) const;
 };
 
 }  // namespace Digikam

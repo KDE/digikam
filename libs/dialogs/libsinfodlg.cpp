@@ -136,7 +136,7 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
 #endif // HAVE_LENSFUN
 
 #ifndef HAVE_LIBLQR_1
-    list.insert(i18n("LibLqr"),                      i18n("external shared library"));
+    list.insert(i18n("LibLqr support"),              i18n("yes"));
 #endif // HAVE_LIBLQR_1
 
     list.insert(i18n("LibPNG"),                      QString(PNG_LIBPNG_VER_STRING));
@@ -167,7 +167,7 @@ LibsInfoDlg::~LibsInfoDlg()
 {
 }
 
-QString LibsInfoDlg::checkTriState(int value)
+QString LibsInfoDlg::checkTriState(int value) const
 {
     switch(value)
     {
