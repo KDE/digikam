@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C)      2006 by Tom Albers <tomalbers at kde dot nl>
- * Copyright (C) 2002-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2013      by Michael G. Hansen <mike at mghansen dot de>
  * Copyright (C) 2014      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
@@ -143,7 +143,6 @@
 #include "maintenancedlg.h"
 #include "maintenancemngr.h"
 #include "newitemsfinder.h"
-#include "thumbsgenerator.h"
 #include "kipipluginloader.h"
 #include "imagepluginloader.h"
 #include "tagsmanager.h"
@@ -768,13 +767,6 @@ void DigikamApp::setupActions()
     d->propsEditAction->setWhatsThis(i18n("Edit album properties and collection information."));
     connect(d->propsEditAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumPropsEdit()));
     actionCollection()->addAction("album_propsEdit", d->propsEditAction);
-
-    // -----------------------------------------------------------------
-
-    d->rebuildAlbumThumbsAction = new KAction(KIcon("view-process-all"), i18n("Rebuild Thumbnails In Current Album"), this);
-    d->rebuildAlbumThumbsAction->setWhatsThis(i18n("Rebuilds all thumbnails for the current selected album"));
-    connect(d->rebuildAlbumThumbsAction, SIGNAL(triggered()), this, SLOT(slotRebuildAlbumThumbnails()));
-    actionCollection()->addAction("album_rebuild_thumbs", d->rebuildAlbumThumbsAction);
 
     // -----------------------------------------------------------------
 
@@ -2533,20 +2525,6 @@ void DigikamApp::slotMaintenanceDone()
     {
         QueueMgrWindow::queueManagerWindow()->refreshView();
     }
-}
-
-void DigikamApp::slotRebuildAlbumThumbnails()
-{
-    QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
-    int id = 0;
-
-    if(!albumList.isEmpty())
-    {
-        id = albumList.first()->id();
-    }
-
-    ThumbsGenerator* tool = new ThumbsGenerator(true, id);
-    tool->start();
 }
 
 void DigikamApp::slotRecurseAlbums(bool checked)

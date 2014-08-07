@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="213" name="digikam" >
+<gui version="214" name="digikam" >
 
  <MenuBar>
 
@@ -16,7 +16,6 @@
    <Separator/>
      <Action name="album_back" />
      <Action name="album_forward" />
-     <Action name="album_refresh" />
    <Separator/>
      <Action name="app_exit" />
   </Menu>
@@ -30,7 +29,7 @@
      <Action name="album_remove" />
      <Action name="album_delete" />
    <Separator/>
-     <Action name="album_rebuild_thumbs" />
+     <Action name="album_refresh" />
      <Action name="album_write_metadata" />
      <Action name="album_read_metadata" />
   </Menu>

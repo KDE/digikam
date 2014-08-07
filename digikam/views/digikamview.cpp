@@ -7,7 +7,7 @@
  * Description : implementation of album view interface.
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2002-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2011-2013 by Michael G. Hansen <mike at mghansen dot de>
@@ -61,6 +61,7 @@
 #include "mapwidgetview.h"
 #include "mediaplayerview.h"
 #include "metadatasettings.h"
+#include "newitemsfinder.h"
 #include "globals.h"
 #include "metadatahub.h"
 #include "fileactionmngr.h"
@@ -80,6 +81,7 @@
 #include "versionmanagersettings.h"
 #include "tableview.h"
 #include "tagsmanager.h"
+#include "thumbsgenerator.h"
 #include "albumlabelstreeview.h"
 
 #ifdef USE_PRESENTATION_MODE
@@ -1134,6 +1136,7 @@ void DigikamView::slotAlbumSelected(QList<Album*> albums)
     }
 
     Album* album = albums.first();
+
     if (album->type() == Album::PHYSICAL)
     {
         emit signalAlbumSelected(true);
@@ -1277,12 +1280,24 @@ void DigikamView::slotAlbumRefresh()
     LoadingCacheInterface::cleanThumbnailCache();
     Album* const album = d->iconView->currentAlbum();
 
+    ThumbsGenerator* const tool = new ThumbsGenerator(true, album->id());
+    tool->start();
+    
     // if physical album, schedule a collection scan of current album's path
     if (album && album->type() == Album::PHYSICAL)
     {
-        ScanController::instance()->scheduleCollectionScan(static_cast<PAlbum*>(album)->folderPath());
+        NewItemsFinder* const tool = new NewItemsFinder(NewItemsFinder::ScheduleCollectionScan,
+                                                        QStringList() << static_cast<PAlbum*>(album)->folderPath());
+        
+        connect(tool, SIGNAL(signalComplete()),
+                this, SLOT(slotAlbumRefreshComplete()));
+            
+        tool->start();
     }
+}
 
+void DigikamView::slotAlbumRefreshComplete()
+{
     // force reload. Should normally not be necessary, but we may have bugs
     qlonglong currentId = currentInfo().id();
     d->iconView->imageAlbumModel()->refresh();
@@ -1298,14 +1313,15 @@ void DigikamView::slotImageSelected()
     // delay to slotDispatchImageSelected
     d->needDispatchSelection = true;
     d->selectionTimer->start();
+
     switch (viewMode())
     {
-    case StackedView::TableViewMode:
-        emit signalSelectionChanged(d->tableView->numberOfSelectedItems());
-        break;
+        case StackedView::TableViewMode:
+            emit signalSelectionChanged(d->tableView->numberOfSelectedItems());
+            break;
 
-    default:
-        emit signalSelectionChanged(d->iconView->numberOfSelectedIndexes());
+        default:
+            emit signalSelectionChanged(d->iconView->numberOfSelectedIndexes());
     }
 }
 

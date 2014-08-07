@@ -46,6 +46,7 @@
 #include "itemviewtooltip.h"
 #include "tooltipfiller.h"
 #include "thumbsgenerator.h"
+#include "newitemsfinder.h"
 
 namespace Digikam
 {
@@ -178,8 +179,8 @@ AlbumSelectionTreeView::AlbumSelectionTreeView(QWidget* const parent, AlbumModel
     setAlbumModel(model);
     d->albumModificationHelper = albumModificationHelper;
     d->toolTip                 = new AlbumViewToolTip(this);
-    d->findDuplAction          = new QAction(SmallIcon("tools-wizard"),     i18n("Find Duplicates..."),    this);
-    d->rebuildThumbsAction     = new QAction(SmallIcon("view-process-all"), i18n("Rebuild Thumbnails..."), this);
+    d->findDuplAction          = new QAction(SmallIcon("tools-wizard"), i18n("Find Duplicates..."), this);
+    d->rebuildThumbsAction     = new QAction(SmallIcon("view-refresh"), i18n("Refresh"),            this);
 
     connect(d->findDuplAction,      SIGNAL(triggered()),
             this, SLOT(slotFindDuplicates()));
@@ -223,6 +224,15 @@ void AlbumSelectionTreeView::slotRebuildThumbs()
 
     ThumbsGenerator* const tool = new ThumbsGenerator(true, album->id());
     tool->start();
+
+    // if physical album, schedule a collection scan of current album's path
+    if (album && album->type() == Album::PHYSICAL)
+    {
+        NewItemsFinder* const tool = new NewItemsFinder(NewItemsFinder::ScheduleCollectionScan,
+                                                        QStringList() << static_cast<PAlbum*>(album)->folderPath());
+            
+        tool->start();
+    }
 }
 
 bool AlbumSelectionTreeView::viewportEvent(QEvent* event)
