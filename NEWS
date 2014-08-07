@@ -12,5 +12,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 262720 - SCAN : 'scan for new images' should work on just current Album.
 006 ==> 317864 - Album rename problem.
 007 ==> 230602 - Do not display photos, after the removal of the tag.
-008 ==> 
+008 ==> 318201 - Assigned tags in IconView should be sorted.
+009 ==> 
 
