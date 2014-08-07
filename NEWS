@@ -1,26 +1,16 @@
 *****************************************************************************************************
-digiKam 4.2.0 - Release date: 2014-08-31
+digiKam 4.3.0 - Release date: 2014-09-07
 
 NEW FEATURES:
 
-AlbumGui : New view on left sidebar to search quickly items with assigned Labels.
-           Details: http://mohamedanwer.wordpress.com/2014/07/17/the-great-merging-day/
-AlbumGui : Tags view: add a new option to show items with no tag.
-           Details: http://mohamedanwer.wordpress.com/2014/07/11/tags-left-sidebar-supports-new-action-now/
-Geberal  : Add retina display support with preview and editor canvas under OSX.
-
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 336851 - Untranslatable strings in Tags Manager.
-002 ==> 336650 - Face Detection always(!) crashes after first and only successful run (Digikam 3.4.0 on Windows 7).
-003 ==> 326019 - digiKam crashes while face tagging.
-004 ==> 337231 - use high resolution pixmaps on retina displays [patch].
-005 ==> 337392 - Drag and drop tagging stopped working.
-006 ==> 262175 - The widget to select names is not large.
-007 ==> 262167 - When creating a new name the name is not displayed on the current picture.
-008 ==> 286463 - Face detection does nothing in digiKam 2.3.0 windows 7 using the "official" installer.
-009 ==> 337417 - Allow duplicate names on face tags in the same image [patch].
-010 ==> 160363 - Use pictures Labels (Rating, Pick, Color) as selection criteria in Export methods.
-011 ==> 330976 - Crash after search for color label.
-012 ==> 337507 - Face Detection gives no results, no matter the accuracy setting.
-013 ==> 
+001 ==> 338048 - Separate Tags in Public and Private for Export.
+002 ==> 338055 - libkdepimlibs not found.
+003 ==> 317813 - SQLITE : digiKam do not accept previous DB Sqlite.
+004 ==> 198063 - SCAN : digikam startup is extremely slow.
+005 ==> 262720 - SCAN : 'scan for new images' should work on just current Album.
+006 ==> 317864 - Album rename problem.
+007 ==> 230602 - Do not display photos, after the removal of the tag.
+008 ==> 
+

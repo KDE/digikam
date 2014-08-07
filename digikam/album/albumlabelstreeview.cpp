@@ -93,7 +93,7 @@ public:
     bool                         isLoadingState;
     int                          iconSizeFromSetting;
 
-    QHash<QString, QList<int> >  selectedLabels;
+    QHash<Labels, QList<int> >   selectedLabels;
 
     static const QString         configRatingSelectionEntry;
     static const QString         configPickSelectionEntry;
@@ -188,9 +188,9 @@ QPixmap AlbumLabelsTreeView::colorRectPixmap(QColor color) const
     return pixmap;
 }
 
-QHash<QString, QList<int> > AlbumLabelsTreeView::selectedLabels()
+QHash<AlbumLabelsTreeView::Labels, QList<int> > AlbumLabelsTreeView::selectedLabels()
 {
-    QHash<QString, QList<int> > selectedLabelsHash;
+    QHash<Labels, QList<int> > selectedLabelsHash;
     QList<int> selectedRatings;
     QList<int> selectedPicks;
     QList<int> selectedColors;
@@ -225,9 +225,9 @@ QHash<QString, QList<int> > AlbumLabelsTreeView::selectedLabels()
         }
     }
 
-    selectedLabelsHash["ratings"] = selectedRatings;
-    selectedLabelsHash["picks"]   = selectedPicks;
-    selectedLabelsHash["colors"]  = selectedColors;
+    selectedLabelsHash[Ratings] = selectedRatings;
+    selectedLabelsHash[Picks]   = selectedPicks;
+    selectedLabelsHash[Colors]  = selectedColors;
 
     return selectedLabelsHash;
 }
@@ -236,10 +236,10 @@ void AlbumLabelsTreeView::doLoadState()
 {
     d->isLoadingState = true;
     KConfigGroup configGroup         = getConfigGroup();
-    const QList<int> expansion       = configGroup.readEntry(entryName(d->configExpansionEntry), QList<int>());
+    const QList<int> expansion       = configGroup.readEntry(entryName(d->configExpansionEntry),       QList<int>());
     const QList<int> selectedRatings = configGroup.readEntry(entryName(d->configRatingSelectionEntry), QList<int>());
-    const QList<int> selectedPicks   = configGroup.readEntry(entryName(d->configPickSelectionEntry), QList<int>());
-    const QList<int> selectedColors  = configGroup.readEntry(entryName(d->configColorSelectionEntry), QList<int>());
+    const QList<int> selectedPicks   = configGroup.readEntry(entryName(d->configPickSelectionEntry),   QList<int>());
+    const QList<int> selectedColors  = configGroup.readEntry(entryName(d->configColorSelectionEntry),  QList<int>());
 
     d->ratings->setExpanded(true);
     d->picks->setExpanded(true);
@@ -296,12 +296,12 @@ void AlbumLabelsTreeView::doSaveState()
         expansion << 3;
     }
 
-    QHash<QString, QList<int> > labels =  selectedLabels();
+    QHash<Labels, QList<int> > labels =  selectedLabels();
 
     configGroup.writeEntry(entryName(d->configExpansionEntry), expansion);
-    configGroup.writeEntry(entryName(d->configRatingSelectionEntry), labels["ratings"]);
-    configGroup.writeEntry(entryName(d->configPickSelectionEntry), labels["picks"]);
-    configGroup.writeEntry(entryName(d->configColorSelectionEntry), labels["colors"]);
+    configGroup.writeEntry(entryName(d->configRatingSelectionEntry), labels[Ratings]);
+    configGroup.writeEntry(entryName(d->configPickSelectionEntry),   labels[Picks]);
+    configGroup.writeEntry(entryName(d->configColorSelectionEntry),  labels[Colors]);
 }
 
 void AlbumLabelsTreeView::setCurrentAlbum()
@@ -322,7 +322,7 @@ void AlbumLabelsTreeView::initTreeView()
 void AlbumLabelsTreeView::initRatingsTree()
 {
     d->ratings = new QTreeWidgetItem(this);
-    d->ratings->setText(0, tr("Rating"));
+    d->ratings->setText(0, i18n("Rating"));
     d->ratings->setSizeHint(0,d->rootSizeHint);
     d->ratings->setFont(0,d->rootFont);
     d->ratings->setFlags(Qt::ItemIsEnabled);
@@ -385,7 +385,7 @@ void AlbumLabelsTreeView::initPicksTree()
 void AlbumLabelsTreeView::initColorsTree()
 {
     d->colors = new QTreeWidgetItem(this);
-    d->colors->setText(0, tr("Colors"));
+    d->colors->setText(0, i18n("Color"));
     d->colors->setSizeHint(0,d->rootSizeHint);
     d->colors->setFont(0,d->rootFont);
     d->colors->setFlags(Qt::ItemIsEnabled);
@@ -452,7 +452,7 @@ void AlbumLabelsTreeView::slotSettingsChanged()
     }
 }
 
-void AlbumLabelsTreeView::restoreSelectionFromHistory(QHash<QString, QList<int> > neededLabels)
+void AlbumLabelsTreeView::restoreSelectionFromHistory(QHash<Labels, QList<int> > neededLabels)
 {
     QTreeWidgetItemIterator it(this, QTreeWidgetItemIterator::Selected);
     while(*it)
@@ -461,17 +461,17 @@ void AlbumLabelsTreeView::restoreSelectionFromHistory(QHash<QString, QList<int> 
         ++it;
     }
 
-    foreach (int rateItemIndex, neededLabels["ratings"])
+    foreach (int rateItemIndex, neededLabels[Ratings])
     {
         d->ratings->child(rateItemIndex)->setSelected(true);
     }
 
-    foreach (int pickItemIndex, neededLabels["picks"])
+    foreach (int pickItemIndex, neededLabels[Picks])
     {
         d->picks->child(pickItemIndex)->setSelected(true);
     }
 
-    foreach (int colorItemIndex, neededLabels["colors"])
+    foreach (int colorItemIndex, neededLabels[Colors])
     {
         d->colors->child(colorItemIndex)->setSelected(true);
     }
@@ -540,7 +540,7 @@ QString AlbumLabelsSearchHandler::generatedName() const
     return d->generatedAlbumName;
 }
 
-void AlbumLabelsSearchHandler::restoreSelectionFromHistory(QHash<QString, QList<int> > neededLabels)
+void AlbumLabelsSearchHandler::restoreSelectionFromHistory(QHash<AlbumLabelsTreeView::Labels, QList<int> > neededLabels)
 {
     d->restoringSelectionFromHistory = true;
     d->treeWidget->restoreSelectionFromHistory(neededLabels);
@@ -553,14 +553,14 @@ bool AlbumLabelsSearchHandler::isRestoringSelectionFromHistory() const
     return d->restoringSelectionFromHistory;
 }
 
-QString AlbumLabelsSearchHandler::createXMLForCurrentSelection(QHash<QString, QList<int> > selectedLabels)
+QString AlbumLabelsSearchHandler::createXMLForCurrentSelection(QHash<AlbumLabelsTreeView::Labels, QList<int> > selectedLabels)
 {
     SearchXmlWriter writer;
     writer.setFieldOperator(SearchXml::standardFieldOperator());
     QList<int>        ratings;
     QList<int>        colorsAndPicks;
 
-    foreach (int rate, selectedLabels["ratings"])
+    foreach (int rate, selectedLabels[AlbumLabelsTreeView::Ratings])
     {
         if(rate == 0)
             ratings << -1;
@@ -568,12 +568,12 @@ QString AlbumLabelsSearchHandler::createXMLForCurrentSelection(QHash<QString, QL
             ratings << rate;
     }
 
-    foreach (int color, selectedLabels["colors"])
+    foreach (int color, selectedLabels[AlbumLabelsTreeView::Colors])
     {
         colorsAndPicks << TagsCache::instance()->tagForColorLabel(color);
     }
 
-    foreach (int pick, selectedLabels["picks"])
+    foreach (int pick, selectedLabels[AlbumLabelsTreeView::Picks])
     {
         colorsAndPicks << TagsCache::instance()->tagForPickLabel(pick);
     }
@@ -622,7 +622,9 @@ QString AlbumLabelsSearchHandler::createXMLForCurrentSelection(QHash<QString, QL
 
     writer.finish();
 
-    generateAlbumNameForExporting(selectedLabels["ratings"], selectedLabels["colors"], selectedLabels["picks"]);
+    generateAlbumNameForExporting(selectedLabels[AlbumLabelsTreeView::Ratings],
+                                  selectedLabels[AlbumLabelsTreeView::Colors],
+                                  selectedLabels[AlbumLabelsTreeView::Picks]);
     return writer.xml();
 }
 

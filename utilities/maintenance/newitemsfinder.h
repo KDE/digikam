@@ -6,7 +6,7 @@
  * Date        : 2012-01-20
  * Description : new items finder.
  *
- * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,14 +43,15 @@ public:
 
     enum FinderMode
     {
-        CompleteCollectionScan,   // Scan whole collection imediatly.
-        ScanDeferredFiles,        // Defer whole collection scan.
-        ScheduleCollectionScan    // Scan imediatly folders list passed in contructor.
+        CompleteCollectionScan,   /** Scan whole collection imediatly.                  */
+        ScanDeferredFiles,        /** Defer whole collection scan.                      */
+        ScheduleCollectionScan    /** Scan imediatly folders list passed in contructor. */
     };
 
 public:
 
-    explicit NewItemsFinder(const FinderMode mode = CompleteCollectionScan, const QStringList& foldersToScan = QStringList(),
+    explicit NewItemsFinder(const FinderMode mode = CompleteCollectionScan,
+                            const QStringList& foldersToScan = QStringList(),
                             ProgressItem* const parent = 0);
     ~NewItemsFinder();
 

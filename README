@@ -99,6 +99,7 @@ libkexiv2       >= 2.0.0                      https://projects.kde.org/projects/
 libkdcraw       >= 2.2.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkdcraw
 libkface        >= 2.0.0                      https://projects.kde.org/projects/extragear/libs/libkface
 libkgeomap      >= 2.0.0                      https://projects.kde.org/projects/extragear/libs/libkgeomap
+libopencv       >= 2.4.9                      http://opencv.willowgarage.com
 
 Optional :
 

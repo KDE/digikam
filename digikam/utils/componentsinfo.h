@@ -6,7 +6,7 @@
  * Date        : 2008-07-30
  * Description : digiKam components info dialog.
  *
- * Copyright (C) 2008-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -73,6 +73,18 @@ static inline void showDigikamComponentsInfo()
 #ifdef HAVE_GPHOTO2
     list.insert(i18n("LibGphoto2"), QString(gp_library_version(GP_VERSION_SHORT)[0]));
 #endif /* HAVE_GPHOTO2 */
+
+#ifdef HAVE_SQLITE2
+    list.insert(i18n("Sqlite2 support"), i18n("Yes"));
+#endif /* HAVE_SQLITE2 */
+
+#ifdef HAVE_NEPOMUK
+    list.insert(i18n("Nepomuk support"), i18n("Yes"));
+#endif /* HAVE_NEPOMUK */
+
+#ifdef HAVE_KDEPIMLIBS
+    list.insert(i18n("Kdepimlibs support"), i18n("Yes"));
+#endif /* HAVE_KDEPIMLIBS */
 
     list.insert(i18n("LibOpenCV"),    KFaceIface::LibOpenCVVersion());
     list.insert(i18n("LibKface"),     KFaceIface::version());

@@ -25,11 +25,11 @@ OPTION(DIGIKAM_ENABLE_MODELTEST "Enable ModelTest on some models for debugging (
 
 # digiKam version
 SET(DIGIKAM_MAJOR_VERSION "4")
-SET(DIGIKAM_MINOR_VERSION "2")
+SET(DIGIKAM_MINOR_VERSION "3")
 SET(DIGIKAM_PATCH_VERSION "0")
 
 #digiKam release date
-SET(DIGIKAM_RELEASE_DATE "2014-08-31")
+SET(DIGIKAM_RELEASE_DATE "2014-09-07")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
@@ -73,75 +73,6 @@ MACRO(SET_DEBUG_AREA_CODE _areacode)
     ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${_areacode})
 ENDMACRO(SET_DEBUG_AREA_CODE)
 
-# =======================================================
-# some useful macros for printing status information
-
-SET(PRINT_COMPILE_LENGTH "40")
-MACRO(FILL_WITH_DOTS VAR)
-
-    STRING(LENGTH ${${VAR}} NAME_LENGTH)
-
-    MATH(EXPR DOT_LENGTH "${PRINT_COMPILE_LENGTH} - ${NAME_LENGTH}")
-    IF(${DOT_LENGTH} LESS 0)
-        SET(DOT_LENGTH 0)
-    ENDIF(${DOT_LENGTH} LESS 0)
-
-    FOREACH(COUNT RANGE ${DOT_LENGTH})
-        SET(${VAR} "${${VAR}}.")
-    ENDFOREACH(COUNT)
-
-ENDMACRO(FILL_WITH_DOTS)
-
-MACRO(PRINT_LIBRARY_STATUS NAME WEBSITE VERSIONHINT)
-
-    SET(LIB_MESSAGE "${NAME} library found")
-    FILL_WITH_DOTS(LIB_MESSAGE)
-
-    IF(${ARGN})
-        MESSAGE(STATUS " ${LIB_MESSAGE} YES")
-    ELSE(${ARGN})
-        MESSAGE(STATUS " ${LIB_MESSAGE} NO")
-        MESSAGE(STATUS "")
-        MESSAGE(SEND_ERROR " digiKam needs ${NAME}. You need to install the ${NAME}${VERSIONHINT} library development package.")
-        MESSAGE(STATUS " ${NAME} website is at ${WEBSITE}")
-        MESSAGE(STATUS "")
-    ENDIF(${ARGN})
-
-ENDMACRO(PRINT_LIBRARY_STATUS)
-
-MACRO(PRINT_QTMODULE_STATUS NAME)
-
-    SET(LIB_MESSAGE "${NAME} module found")
-    FILL_WITH_DOTS(LIB_MESSAGE)
-
-    IF(${ARGN})
-        MESSAGE(STATUS " ${LIB_MESSAGE} YES")
-    ELSE(${ARGN})
-        MESSAGE(STATUS " ${LIB_MESSAGE} NO")
-        MESSAGE(STATUS "")
-        MESSAGE(SEND_ERROR " digiKam needs ${NAME} module. You need to install a package containing the ${NAME} module.")
-        MESSAGE(STATUS "")
-    ENDIF(${ARGN})
-
-ENDMACRO(PRINT_QTMODULE_STATUS)
-
-MACRO(PRINT_EXECUTABLE_STATUS NAME TECHNICAL_NAME PATH_VARIABLE)
-
-    SET(LIB_MESSAGE "${NAME} found")
-    FILL_WITH_DOTS(LIB_MESSAGE)
-
-    IF(${ARGN})
-        MESSAGE(STATUS " ${LIB_MESSAGE} YES")
-    ELSE(${ARGN})
-        MESSAGE(STATUS " ${LIB_MESSAGE} NO")
-        MESSAGE(STATUS "")
-        MESSAGE(STATUS " digiKam needs ${NAME}. You need to install the package containing the \"${TECHNICAL_NAME}\" executable.")
-        MESSAGE(STATUS " If you have this executable installed, please specify the folder containing it by ${PATH_VARIABLE}")
-        MESSAGE(SEND_ERROR "")
-    ENDIF(${ARGN})
-
-ENDMACRO(PRINT_EXECUTABLE_STATUS)
-
 # ==================================================================================================
 # Dependencies
 
@@ -170,8 +101,9 @@ FIND_PACKAGE(PGF)
 FIND_PACKAGE(Eigen3)
 FIND_PACKAGE(Boost) # 1.36.0)
 
+INCLUDE(MacroUtils)
 INCLUDE(MacroOpenCV)
-DETECT_OPENCV(2.4.6 core highgui imgproc)
+DETECT_OPENCV(2.4.9 core highgui objdetect contrib legacy imgproc)
 
 # check the libkdcraw version
 
@@ -273,15 +205,6 @@ ENDIF(NOT APPLE AND NOT USE_EXT_LIBPGF)
 
 #-------------------------------------------------------------------------------------
 
-IF(NOT APPLE)
-    MACRO_BOOL_TO_01(CLAPACK_FOUND USE_EXT_LIBCLAPACK)
-ELSE(NOT APPLE)
-    # Under MACOS-X Clapack exist in standard, but it's not suitable as well. Need investiguation here.
-    SET(CLAPACK_FOUND FALSE)
-ENDIF(NOT APPLE)
-
-#-------------------------------------------------------------------------------------
-
 # check version of libjpeg so that we can use the appropriate dir
 # See bug #227313
 SET(_jpeglib_version_source "#include <stddef.h>\n#include<stdio.h>\n#include <jpeglib.h>\n int main()\n {\n #if (JPEG_LIB_VERSION >= 80) \n #error JPEG_LIB_VERSION >= 80 found \n #endif \n }\n")
@@ -373,7 +296,7 @@ IF (ENABLE_KDEPIMLIBSSUPPORT)
     MACRO_BOOL_TO_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
 
 ENDIF()
-    
+
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH} )
 
 # Check LensFun library for Lens auto-correction tool.
