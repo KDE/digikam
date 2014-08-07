@@ -11,5 +11,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 004 ==> 198063 - SCAN : digikam startup is extremely slow.
 005 ==> 262720 - SCAN : 'scan for new images' should work on just current Album.
 006 ==> 317864 - Album rename problem.
-007 ==> 
+007 ==> 230602 - Do not display photos, after the removal of the tag.
+008 ==> 
 
