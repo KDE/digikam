@@ -480,7 +480,11 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
         if (settings->getToolTipsShowTags())
         {
             QStringList tagPaths = AlbumManager::instance()->tagPaths(info.tagIds(), false);
+            tagPaths.sort();
+
             QStringList tagNames = AlbumManager::instance()->tagNames(info.tagIds());
+            tagNames.sort();
+
             QString tags(i18n("Tags:"));
 
             if (tagPaths.isEmpty())
