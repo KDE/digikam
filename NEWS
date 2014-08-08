@@ -14,5 +14,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 007 ==> 230602 - Do not display photos, after the removal of the tag.
 008 ==> 318201 - Assigned tags in IconView should be sorted.
 009 ==> 336328 - Tags Manager's Sync Export DB to metadata, mirrors XMP but it only appends IPTC keywords data.
-010 ==> 
+010 ==> 335624 - digiKam crash when I start face recognition.
+011 ==> 
 
