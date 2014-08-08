@@ -999,7 +999,7 @@
                 <statement mode="plain">CALL create_index_if_not_exists('Images','hash_index','uniqueHash');</statement>
                 <statement mode="plain">CALL create_index_if_not_exists('ImageTags','tag_index','tagid');</statement>
                 <statement mode="plain">CALL create_index_if_not_exists('ImageTags','tag_id_index','imageid');</statement>
-                <statement mode="plain">CALL create_index_if_not_exists('Images','image_name_index','name(996)');</statement>
+                <statement mode="plain">CALL create_index_if_not_exists('Images','image_name_index','name(255)');</statement>
                 <statement mode="plain">CALL create_index_if_not_exists('ImageInformation','creationdate_index','creationDate');</statement>
                 <statement mode="plain">CALL create_index_if_not_exists('ImageComments','comments_imageid_index','imageid');</statement>
                 <statement mode="plain">CALL create_index_if_not_exists('ImageCopyright','copyright_imageid_index','imageid');</statement>
@@ -1549,7 +1549,7 @@ ORDER BY inf.rating DESC, img.name ASC
                              property TEXT CHARACTER SET utf8,
                              value LONGTEXT CHARACTER SET utf8);</statement>
             <statement mode="plain">CALL create_index_if_not_exists('ImageTags','tag_id_index','imageid');</statement>
-            <statement mode="plain">CALL create_index_if_not_exists('Images','image_name_index','name(996)');</statement>
+            <statement mode="plain">CALL create_index_if_not_exists('Images','image_name_index','name(255)');</statement>
             <statement mode="plain">CALL create_index_if_not_exists('ImageInformation','creationdate_index','creationDate');</statement>
             <statement mode="plain">CALL create_index_if_not_exists('ImageComments','comments_imageid_index','imageid');</statement>
             <statement mode="plain">CALL create_index_if_not_exists('ImageCopyright','copyright_imageid_index','imageid');</statement>
