@@ -63,6 +63,8 @@ public:
 //    TagSet mAllTags;
 };
 
+QPointer<BalooWrap> BalooWrap::internalPtr = QPointer<BalooWrap>();
+
 BalooWrap::BalooWrap(QObject* parent)
 : QObject(parent), d(new BalooWrap::Private)
 {
@@ -71,6 +73,16 @@ BalooWrap::BalooWrap(QObject* parent)
 BalooWrap::~BalooWrap()
 {
     delete d;
+}
+
+BalooWrap* BalooWrap::instance()
+{
+    if (BalooWrap::internalPtr.isNull())
+    {
+        BalooWrap::internalPtr = new BalooWrap();
+    }
+
+    return BalooWrap::internalPtr;
 }
 
 QStringList BalooWrap::getTags(KUrl &url)
@@ -166,7 +178,7 @@ void BalooWrap::setAllData(KUrl &url, QStringList* tags, QString* comment, int r
 //    job->start();
 //}
 
-void BalooWrap::getSemanticInfo(const KUrl& url)
+BalooInfo BalooWrap::getSemanticInfo(const KUrl& url)
 {
     Baloo::FileFetchJob* job = new Baloo::FileFetchJob(url.toLocalFile());
     connect(job, SIGNAL(finished(KJob*)), this, SLOT(slotFetchFinished(KJob*)));
@@ -177,19 +189,21 @@ void BalooWrap::getSemanticInfo(const KUrl& url)
     Baloo::File file = job->file();
 
     BalooInfo bInfo;
-    bInfo.rating = file.rating();
+    // Baloo have rating from 0 to 10, while digikam have only from 0 to 5
+    bInfo.rating = file.rating()/2;
     bInfo.comment = file.userComment();
     bInfo.tags = file.tags().toSet().toList();
 
     kDebug() << "+++++++++++++++++++ Tags " << bInfo.tags;
 
 //    KUrl url = KUrl::fromLocalFile(file.url());
-    addInfoToDigikam(bInfo, url);
-    //    return bInfo;
+//    addInfoToDigikam(bInfo, url);
+    return bInfo;
 }
 
 void BalooWrap::slotFetchFinished(KJob* job)
 {
+    kDebug() << "Job finished";
     Baloo::FileFetchJob* fjob = static_cast<Baloo::FileFetchJob*>(job);
     Baloo::File file = fjob->file();
 
@@ -202,8 +216,6 @@ void BalooWrap::slotFetchFinished(KJob* job)
 
     KUrl url = KUrl::fromLocalFile(file.url());
     addInfoToDigikam(bInfo, url);
-
-//    emit semanticInfoRetrieved(KUrl::fromLocalFile(file.url()), si);
 }
 
 

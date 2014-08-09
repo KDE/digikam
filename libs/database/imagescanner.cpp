@@ -1809,9 +1809,36 @@ QString ImageScanner::iptcCorePropertyName(MetadataInfo::Field field)
 
 void ImageScanner::scanBalooInfo()
 {
-    BalooWrap baloo;
+    BalooWrap *baloo = BalooWrap::instance();
+    BalooInfo bInfo = baloo->getSemanticInfo(KUrl(d->fileInfo.absoluteFilePath()));
 
-    baloo.getSemanticInfo(KUrl(d->fileInfo.absoluteFilePath()));
+    if (!bInfo.tags.isEmpty())
+    {
+        // get tag ids, create if necessary
+        QList<int> tagIds = TagsCache::instance()->getOrCreateTags(bInfo.tags);
+        d->commit.tagIds += tagIds;
+    }
+
+    if(bInfo.rating != -1)
+    {
+        if(!d->commit.imageInformationFields.testFlag(DatabaseFields::Rating))
+        {
+            d->commit.imageInformationFields |= DatabaseFields::Rating;
+            d->commit.imageInformationInfos.insert(0, QVariant(bInfo.rating));
+        }
+    }
+
+    if(!bInfo.comment.isEmpty())
+    {
+        kDebug() << "+++++++++++++++++++++Comment " << bInfo.comment;
+        if(!d->commit.captions.contains("x-default"))
+        {
+            CaptionValues val;
+            val.caption = bInfo.comment;
+            d->commit.commitImageComments = true;
+            d->commit.captions.insert(QString("x-default"), val);
+        }
+    }
 
     kDebug() << "Get baloo Info+++++++++++" << KUrl(d->fileInfo.absoluteFilePath());
 }

@@ -146,6 +146,7 @@
 #include "kipipluginloader.h"
 #include "imagepluginloader.h"
 #include "tagsmanager.h"
+#include "baloowrap.h"
 
 #ifdef USE_SCRIPT_IFACE
 #include "scriptiface.h"
@@ -294,7 +295,15 @@ DigikamApp::DigikamApp()
     preloadWindows();
 
     readFullScreenSettings(group);
+
+#ifdef HAVE_BALOO
+    //Create BalooWrap object, because it need to register a listener
+    // to update digiKam data when changes in Baloo occur
+    BalooWrap* baloo = BalooWrap::instance();
+#endif //HAVE_BALOO
+
     setAutoSaveSettings(group, true);
+
 
     // Now, enable finished the collection scan as deferred process
     NewItemsFinder* const tool = new NewItemsFinder(NewItemsFinder::ScanDeferredFiles);
@@ -341,6 +350,14 @@ DigikamApp::~DigikamApp()
     {
         TagsManager::instance()->close();
     }
+
+#ifdef HAVE_BALOO
+    if(BalooWrap::isCreated())
+    {
+        delete BalooWrap::instance();
+    }
+#endif
+
     delete d->view;
 
     AlbumSettings::instance()->setRecurseAlbums(d->recurseAlbumsAction->isChecked());

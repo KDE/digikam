@@ -26,6 +26,7 @@
 // Qt
 #include <QObject>
 #include <QStringList>
+#include <QPointer>
 
 // KDE
 #include <kurl.h>
@@ -64,6 +65,11 @@ public:
     BalooWrap(QObject* parent = 0);
     ~BalooWrap();
 
+
+    static QPointer<BalooWrap> internalPtr;
+    static BalooWrap* instance();
+    static bool isCreated() { return !(internalPtr.isNull()); }
+
     QStringList getTags(KUrl& url);
 
     QString getComment(KUrl& url);
@@ -78,7 +84,7 @@ public:
 
     void setAllData(KUrl& url, QStringList *tags, QString *comment, int rating);
 
-    void getSemanticInfo(const KUrl&);
+    BalooInfo getSemanticInfo(const KUrl&);
 
     int bestDigikamTagForTagName(const ImageInfo& info, const QString& tagname) const;
 
@@ -96,7 +102,7 @@ public:
 
 //    virtual SemanticInfoTag tagForLabel(const QString&);
 
-private Q_SLOTS:
+public Q_SLOTS:
     void slotFetchFinished(KJob* job);
 
 private:
