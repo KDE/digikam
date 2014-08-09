@@ -52,6 +52,7 @@
 #include "tagregion.h"
 #include "tagscache.h"
 #include "iostream"
+#include "baloowrap.h"
 
 namespace Digikam
 {
@@ -459,6 +460,7 @@ void ImageScanner::scanFile(ScanMode mode)
                 scanTags();
                 scanFaces();
                 scanImageHistory();
+                scanBalooInfo();
             }
         }
         else if (d->scanInfo.category == DatabaseItem::Video)
@@ -1803,6 +1805,15 @@ QString ImageScanner::iptcCorePropertyName(MetadataInfo::Field field)
         default:
             return QString();
     }
+}
+
+void ImageScanner::scanBalooInfo()
+{
+    BalooWrap baloo;
+
+    baloo.getSemanticInfo(KUrl(d->fileInfo.absoluteFilePath()));
+
+    kDebug() << "Get baloo Info+++++++++++" << KUrl(d->fileInfo.absoluteFilePath());
 }
 
 void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* const container)

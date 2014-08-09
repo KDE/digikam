@@ -149,6 +149,10 @@ SET(digikamdatabase_LIB_SRCS
         ${pgfutils_SRCS}
 )
 
+IF(Baloo_FOUND)
+    SET(digikamdatabase_LIB_SRCS ${digikamdatabase_LIB_SRCS} ${libbaloowrap_SRCS})
+ENDIF(Baloo_FOUND)
+
 IF(SQLITE2_FOUND)
     SET(digikamdatabase_LIB_SRCS ${digikamdatabase_LIB_SRCS} ${libalbumsqlite2_SRCS})
 ENDIF(SQLITE2_FOUND)
@@ -171,6 +175,10 @@ TARGET_LINK_LIBRARIES(digikamdatabase
 
                       ${OPENMP_LDFLAGS}
                      )
+
+IF(Baloo_FOUND)
+    TARGET_LINK_LIBRARIES(digikamdatabase ${BALOO_LIBRARIES})
+ENDIF(Baloo_FOUND)
 
 IF(USE_SCRIPT_IFACE)
     TARGET_LINK_LIBRARIES(digikamdatabase ${QT_QTSCRIPT_LIBRARY})
@@ -214,10 +222,6 @@ SET(digikam_SRCS ${libeditorgui_SRCS}
                  ${libimgqsort_SRCS}
                  main/main.cpp
 )
-
-IF(Baloo_FOUND)
-    SET(digikam_SRCS ${digikam_SRCS} ${libbaloowrap_SRCS})
-ENDIF(Baloo_FOUND)
 
 IF(USE_SCRIPT_IFACE)
     SET(digikam_SRCS ${digikam_SRCS} ${libscriptiface_SRCS})
@@ -275,9 +279,6 @@ TARGET_LINK_LIBRARIES(digikam
         # See B.K.O #258931: libgphoto2 library must be the last arg for linker.
         ${GPHOTO2_LIBRARIES}
 )
-IF(Baloo_FOUND)
-    TARGET_LINK_LIBRARIES(digikam ${BALOO_LIBRARIES})
-ENDIF(Baloo_FOUND)
 
 IF (NOT WIN32 AND GPHOTO2_FOUND)
     # See B.K.O #268267 : digiKam need to be linked to libusb to prevent crash at gphoto2 init if opencv is linked with libdc1394

@@ -224,6 +224,11 @@ public:
      */
     static QString iptcCorePropertyName(MetadataInfo::Field field);
 
+    /**
+     * @brief scanBalooInfo - retrieve tags, comments and rating from Baloo
+     */
+    void scanBalooInfo();
+
 protected:
 
     bool scanFromIdenticalFile();
