@@ -89,7 +89,6 @@ public:
         ratingChanged     = false;
         templateChanged   = false;
         tagsChanged       = false;
-        baloo             = new BalooWrap();
     }
 
     bool                              dateTimeChanged;
@@ -131,8 +130,6 @@ public:
     MetadataHub::Status               ratingStatus;
     MetadataHub::Status               templateStatus;
 
-    QPointer<BalooWrap>                        baloo;
-
     template <class T> void loadWithInterval(const T& data, T& storage, T& highestStorage, MetadataHub::Status& status);
     template <class T> void loadSingleValue(const T& data, T& storage, MetadataHub::Status& status);
 };
@@ -151,10 +148,6 @@ MetadataHub::MetadataHub(const MetadataHub& other)
 
 MetadataHub::~MetadataHub()
 {
-    if(!d->baloo.isNull())
-    {
-        delete d->baloo;
-    }
     delete d;
 }
 
@@ -596,7 +589,6 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
 {
     applyChangeNotifications();
 
-    kDebug() << "Write changes++++++++++++++++++++" ;
     bool dirty = false;
 
     metadata.setSettings(settings);
@@ -738,6 +730,18 @@ bool MetadataHub::write(DImg& image, WriteMode writeMode, const MetadataSettings
     // See DImgLoader::readMetadata() and saveMetadata()
     DMetadata metadata;
     metadata.setData(image.getMetadata());
+
+    QString filePath = image.originalFilePath();
+
+    if(filePath.isEmpty())
+    {
+        filePath = image.lastSavedFilePath();
+    }
+
+    if(!filePath.isEmpty())
+    {
+        writeToBaloo(filePath);
+    }
 
     return write(metadata, writeMode, settings);
 }
@@ -976,7 +980,7 @@ void MetadataHub::writeToBaloo(QString filePath, const MetadataSettingsContainer
     }
     newKeywords = cleanupTags(newKeywords);
     KUrl url(filePath);
-    d->baloo->setAllData(url,&newKeywords,comment,rating);
+    BalooWrap::instance()->setAllData(url,&newKeywords,comment,rating);
 }
 
 // ---------------------------------------------------------------------------------------------------------

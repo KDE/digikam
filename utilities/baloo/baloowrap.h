@@ -55,8 +55,16 @@ public:
     QString comment;
     int rating;
 };
+
 /**
- * A real metadata backend using Baloo to store and retrieve metadata.
+ * @brief The BalooWrap class is a singleton class which offer
+ *        functionatity for reading and writing image
+ *        comment, tags and rating from Baloo to digiKam
+ *        and from digiKam to Baloo
+ *
+ *        The singleton functionality is required because
+ *        it also watches for changes in Baloo and notify
+ *        digiKam, so it could trigger a scan
  */
 class DIGIKAM_DATABASE_EXPORT BalooWrap : public QObject
 {
@@ -65,16 +73,12 @@ public:
     BalooWrap(QObject* parent = 0);
     ~BalooWrap();
 
-
+    /**
+     * @brief internalPtr - singleton inplementation
+     */
     static QPointer<BalooWrap> internalPtr;
     static BalooWrap* instance();
     static bool isCreated() { return !(internalPtr.isNull()); }
-
-    QStringList getTags(KUrl& url);
-
-    QString getComment(KUrl& url);
-
-    int getRating(KUrl& url);
 
     void setTags(KUrl& url, QStringList* tags);
 
@@ -82,27 +86,46 @@ public:
 
     void setRating(KUrl& url, int rating);
 
+    /**
+     * @brief setAllData - generic method to set all data from digiKam to Baloo
+     * @param url        - image filepath
+     * @param tags       - tags to set to image, pass NULL to ignore
+     * @param comment    - comment set to image, pass NULL to ignore
+     * @param rating     - rating to set to image, set to -1 to ignore
+     */
     void setAllData(KUrl& url, QStringList *tags, QString *comment, int rating);
 
-    BalooInfo getSemanticInfo(const KUrl&);
+    /**
+     * @brief getSemanticInfo - Used by ImageScanner to retrieve all information
+     *                          tags, comment, rating
+     * @param url  - image url
+     * @return  - container class for tags, comment, rating
+     */
+    BalooInfo getSemanticInfo(const KUrl& url);
 
+    /**
+     * @brief bestDigikamTagForTagName -used in previous Nepomuk implementation,
+     *                                  searches for the best match for tag name
+     * @param info
+     * @param tagname                  - tagname to be searched
+     * @return                         - tagId of the new or existing tag
+     */
     int bestDigikamTagForTagName(const ImageInfo& info, const QString& tagname) const;
 
+    /**
+     * @brief addInfoToDigikam  - alternative way to add info in digiKam, using
+     *                            Database acess, not used now.
+     * @param info
+     * @param url
+     */
     void addInfoToDigikam(BalooInfo& info, const KUrl &url);
 
-//    virtual TagSet allTags() const;
-
-//    virtual void refreshAllTags();
-
-//    virtual void storeSemanticInfo(const KUrl&, const SemanticInfo&);
-
-//    virtual void retrieveSemanticInfo(const KUrl&);
-
-//    virtual QString labelForTag(const SemanticInfoTag&) const;
-
-//    virtual SemanticInfoTag tagForLabel(const QString&);
-
 public Q_SLOTS:
+    /**
+     * @brief slotFetchFinished -used for asyncronous information retrieval
+     *                           does not work now
+     * @param job               - KJob for retrieving Baloo info
+     */
     void slotFetchFinished(KJob* job);
 
 private:

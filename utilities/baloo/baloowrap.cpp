@@ -85,23 +85,6 @@ BalooWrap* BalooWrap::instance()
     return BalooWrap::internalPtr;
 }
 
-QStringList BalooWrap::getTags(KUrl &url)
-{
-    Q_UNUSED(url);
-    return QStringList();
-}
-
-QString BalooWrap::getComment(KUrl &url)
-{
-    Q_UNUSED(url);
-    return QString();
-}
-
-int BalooWrap::getRating(KUrl &url)
-{
-    Q_UNUSED(url);
-    return 0;
-}
 
 void BalooWrap::setTags(KUrl &url, QStringList *tags)
 {
@@ -148,35 +131,7 @@ void BalooWrap::setAllData(KUrl &url, QStringList* tags, QString* comment, int r
     }
 }
 
-//TagSet BalooWrap::allTags() const
-//{
-//    if (d->mAllTags.empty()) {
-//        const_cast<BalooWrap*>(this)->refreshAllTags();
-//    }
-//    return d->mAllTags;
-//}
 
-//void BalooWrap::refreshAllTags()
-//{
-//    Baloo::TagListJob* job = new Baloo::TagListJob();
-//    job->exec();
-
-//    d->mAllTags.clear();
-//    Q_FOREACH(const QString& tag, job->tags()) {
-//        d->mAllTags << tag;
-//    }
-//}
-
-//void BalooWrap::storeSemanticInfo(const KUrl& url, const SemanticInfo& semanticInfo)
-//{
-//    Baloo::File file(url.toLocalFile());
-//    file.setRating(semanticInfo.mRating);
-//    file.setUserComment(semanticInfo.mDescription);
-//    file.setTags(semanticInfo.mTags.toList());
-
-//    Baloo::FileModifyJob* job = new Baloo::FileModifyJob(file);
-//    job->start();
-//}
 
 BalooInfo BalooWrap::getSemanticInfo(const KUrl& url)
 {
@@ -194,10 +149,6 @@ BalooInfo BalooWrap::getSemanticInfo(const KUrl& url)
     bInfo.comment = file.userComment();
     bInfo.tags = file.tags().toSet().toList();
 
-    kDebug() << "+++++++++++++++++++ Tags " << bInfo.tags;
-
-//    KUrl url = KUrl::fromLocalFile(file.url());
-//    addInfoToDigikam(bInfo, url);
     return bInfo;
 }
 
@@ -212,7 +163,6 @@ void BalooWrap::slotFetchFinished(KJob* job)
     bInfo.comment = file.userComment();
     bInfo.tags = file.tags().toSet().toList();
 
-    kDebug() << "+++++++++++++++++++ Tags " << bInfo.tags;
 
     KUrl url = KUrl::fromLocalFile(file.url());
     addInfoToDigikam(bInfo, url);
@@ -289,7 +239,7 @@ void BalooWrap::addInfoToDigikam(BalooInfo &bInfo, const KUrl &fileUrl)
 
     for (int i = 0; i < size; ++i)
     {
-        int tagId       = bestDigikamTagForTagName(info, tags.at(i));
+        int tagId = bestDigikamTagForTagName(info, tags.at(i));
 
         if (tagId)
         {
@@ -309,14 +259,25 @@ void BalooWrap::addInfoToDigikam(BalooInfo &bInfo, const KUrl &fileUrl)
         }
     }
 }
-//QString BalooWrap::labelForTag(const SemanticInfoTag& uriString) const
+
+// NOTE: useful code to extend functionality in the future
+//TagSet BalooWrap::allTags() const
 //{
-//    return uriString;
+//    if (d->mAllTags.empty()) {
+//        const_cast<BalooWrap*>(this)->refreshAllTags();
+//    }
+//    return d->mAllTags;
 //}
 
-//SemanticInfoTag BalooWrap::tagForLabel(const QString& label)
+//void BalooWrap::refreshAllTags()
 //{
-//    return label;
+//    Baloo::TagListJob* job = new Baloo::TagListJob();
+//    job->exec();
+
+//    d->mAllTags.clear();
+//    Q_FOREACH(const QString& tag, job->tags()) {
+//        d->mAllTags << tag;
+//    }
 //}
 
 } // namespace
