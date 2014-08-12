@@ -1809,6 +1809,7 @@ QString ImageScanner::iptcCorePropertyName(MetadataInfo::Field field)
 
 void ImageScanner::scanBalooInfo()
 {
+#ifdef HAVE_BALOO
     BalooWrap *baloo = BalooWrap::instance();
     BalooInfo bInfo = baloo->getSemanticInfo(KUrl(d->fileInfo.absoluteFilePath()));
 
@@ -1839,8 +1840,8 @@ void ImageScanner::scanBalooInfo()
             d->commit.captions.insert(QString("x-default"), val);
         }
     }
+#endif
 
-    kDebug() << "Get baloo Info+++++++++++" << KUrl(d->fileInfo.absoluteFilePath());
 }
 
 void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* const container)

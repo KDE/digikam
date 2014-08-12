@@ -939,6 +939,7 @@ bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataSettingsC
 void MetadataHub::writeToBaloo(QString filePath, const MetadataSettingsContainer &settings)
 {
     // NOTE: Veaceslav: use settings to trigger on/off this value
+#ifdef HAVE_BALOO
     bool saveToBaloo = true;
     int rating = -1;
     QString* comment = 0;
@@ -981,6 +982,10 @@ void MetadataHub::writeToBaloo(QString filePath, const MetadataSettingsContainer
     newKeywords = cleanupTags(newKeywords);
     KUrl url(filePath);
     BalooWrap::instance()->setAllData(url,&newKeywords,comment,rating);
+#else
+    Q_UNUSED(filePath);
+    Q_UNUSED(settings);
+#endif
 }
 
 // ---------------------------------------------------------------------------------------------------------
