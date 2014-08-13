@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<component type="desktop">
+  <id>digikam.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>digiKam</name>
+  <description>
+    <p>
+      digiKam is an advanced digital photo management application, which makes importing and organizing digital photos
+      a &quot;snap&quot;. The photos are organized in albums which can be sorted chronologically, by folder layout or by custom
+      collections.
+    </p>
+    <p>Features:</p>
+    <ul>
+      <li>Organization of photos in albums and sub-albums (with tags and comments support)</li>
+      <li>Support for Exif, Iptc, Xmp, Makernotes</li>
+      <li>SQLite powered storage for the albums and its metadata</li>
+      <li>Support for filtering and sorting albums</li>
+      <li>Import from more than 1100 digital camera devices</li>
+      <li>Support for 300 RAW format pictures</li>
+      <li>Light Table feature</li>
+      <li>Plugins architectures: using Kipi-plugins</li>
+      <li>Share your photos using HTML or publishing them to social web sites</li>
+      <li>Image editor included with advanced features</li>
+    </ul>
+  </description>
+  <url type="homepage">http://www.digikam.org/</url>
+  <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=digikam</url>
+  <url type="help">http://docs.kde.org/development/en/extragear-graphics/digikam/index.html</url>
+  <screenshots>
+    <screenshot type="default">
+      <image>http://kde.org/images/screenshots/digikam.png</image>
+    </screenshot>
+  </screenshots>
+  <developer_name>digiKam Project</developer_name>
+  <project_group>KDE</project_group>
+  <provides>
+    <binary>digikam</binary>
+  </provides>
+</component>

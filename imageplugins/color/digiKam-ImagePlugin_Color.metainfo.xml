@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="addon">
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <id>digiKam-ImagePlugin_Color</id>
+  <extends>digikam.desktop</extends>
+  <name>ImagePlugin-Color</name>
+  <summary>A tool to correct colors of image</summary>
+  <developer_name>digiKam Project</developer_name>
+  <url type="homepage">http://www.digikam.org/</url>
+</component>

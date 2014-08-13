@@ -35,4 +35,4 @@ TARGET_LINK_LIBRARIES(
 INSTALL(TARGETS digikamimageplugin_transform       DESTINATION ${PLUGIN_INSTALL_DIR})
 INSTALL(FILES digikamimageplugin_transform_ui.rc   DESTINATION ${DATA_INSTALL_DIR}/digikam)
 INSTALL(FILES digikamimageplugin_transform.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-
+INSTALL(FILES digiKam-ImagePlugin_Transform.metainfo.xml DESTINATION ${DATA_INSTALL_DIR}/appdata)

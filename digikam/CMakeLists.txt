@@ -336,6 +336,7 @@ INSTALL(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 # Others Files to install #######################################################
 
-INSTALL(PROGRAMS main/digikam.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
-INSTALL(FILES main/digikamui.rc       DESTINATION ${DATA_INSTALL_DIR}/digikam)
-INSTALL(FILES main/digikam.notifyrc   DESTINATION ${DATA_INSTALL_DIR}/digikam)
+INSTALL(PROGRAMS main/digikam.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+INSTALL(FILES main/digikam.appdata.xml DESTINATION ${DATA_INSTALL_DIR}/appdata)
+INSTALL(FILES main/digikamui.rc        DESTINATION ${DATA_INSTALL_DIR}/digikam)
+INSTALL(FILES main/digikam.notifyrc    DESTINATION ${DATA_INSTALL_DIR}/digikam)
