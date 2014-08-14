@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2003-2004 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2005      by Tom Albers <tomalbers@kde.nl>
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -74,7 +74,7 @@ class DDatePicker : public KDatePicker
 
 public:
 
-    explicit DDatePicker(QWidget* widget)
+    explicit DDatePicker(QWidget* const widget)
         : KDatePicker(widget)
     {
     }
@@ -125,13 +125,13 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
     setModal(true);
     setHelp("albumpropsedit.anchor", "digikam");
 
-    d->album         = album;
-    QWidget* page    = new QWidget(this);
-    QLabel* logo     = new QLabel(page);
+    d->album            = album;
+    QWidget* const page = new QWidget(this);
+    QLabel* const logo  = new QLabel(page);
     logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                     .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-    QLabel* topLabel = new QLabel(page);
+    QLabel* const topLabel = new QLabel(page);
 
     if (create)
     {
@@ -145,55 +145,54 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
     topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     topLabel->setWordWrap(false);
 
-    KSeparator* topLine = new KSeparator(Qt::Horizontal);
+    KSeparator* const topLine = new KSeparator(Qt::Horizontal);
 
     // --------------------------------------------------------
 
-    QLabel* titleLabel = new QLabel(page);
+    QLabel* const titleLabel = new QLabel(page);
     titleLabel->setText(i18n("&Title:"));
 
-    d->titleEdit       = new KLineEdit(page);
+    d->titleEdit = new KLineEdit(page);
     d->titleEdit->setClearButtonShown(true);
     titleLabel->setBuddy(d->titleEdit);
 
     QRegExp titleRx("[^/]+");
-    QValidator* titleValidator = new QRegExpValidator(titleRx, this);
+    QValidator* const titleValidator = new QRegExpValidator(titleRx, this);
     d->titleEdit->setValidator(titleValidator);
 
-    QLabel* categoryLabel      = new QLabel(page);
+    QLabel* const categoryLabel = new QLabel(page);
     categoryLabel->setText(i18n("Ca&tegory:"));
 
-    d->categoryCombo    = new KComboBox(page);
+    d->categoryCombo = new KComboBox(page);
     d->categoryCombo->setEditable(true);
     categoryLabel->setBuddy(d->categoryCombo);
 
-    QLabel* parentLabel = new QLabel(page);
+    QLabel* const parentLabel = new QLabel(page);
     parentLabel->setText(i18n("Ch&ild Of:"));
 
-    d->parentCombo      = new KComboBox(page);
+    d->parentCombo = new KComboBox(page);
     parentLabel->setBuddy(d->parentCombo);
 
-
-    QLabel* commentsLabel = new QLabel(page);
+    QLabel* const commentsLabel = new QLabel(page);
     commentsLabel->setText(i18n("Ca&ption:"));
 
-    d->commentsEdit       = new KTextEdit(page);
+    d->commentsEdit = new KTextEdit(page);
     commentsLabel->setBuddy(d->commentsEdit);
     d->commentsEdit->setCheckSpellingEnabled(true);
     d->commentsEdit->setWordWrapMode(QTextOption::WordWrap);
 
-    QLabel* dateLabel     = new QLabel(page);
+    QLabel* const dateLabel = new QLabel(page);
     dateLabel->setText(i18n("Album &date:"));
 
-    d->datePicker         = new DDatePicker(page);
+    d->datePicker = new DDatePicker(page);
     dateLabel->setBuddy(d->datePicker);
 
-    KHBox* buttonRow            = new KHBox(page);
-    QPushButton* dateLowButton  = new QPushButton(i18nc("Selects the date of the oldest image",
+    KHBox* const buttonRow            = new KHBox(page);
+    QPushButton* const dateLowButton  = new QPushButton(i18nc("Selects the date of the oldest image",
                                                         "&Oldest"), buttonRow);
-    QPushButton* dateAvgButton  = new QPushButton(i18nc("Calculates the average date",
+    QPushButton* const dateAvgButton  = new QPushButton(i18nc("Calculates the average date",
                                                         "&Average"), buttonRow);
-    QPushButton* dateHighButton = new QPushButton(i18nc("Selects the date of the newest image",
+    QPushButton* const dateHighButton = new QPushButton(i18nc("Selects the date of the newest image",
                                                         "Newest"), buttonRow);
 
     if (create)
@@ -213,12 +212,10 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
     }
 
     d->commentsEdit->setTabChangesFocus(true);
-    d->titleEdit->selectAll();
-    d->titleEdit->setFocus();
 
     // --------------------------------------------------------
 
-    QGridLayout* grid = new QGridLayout();
+    QGridLayout* const grid = new QGridLayout();
     grid->addWidget(logo,             0, 0, 1, 1);
     grid->addWidget(topLabel,         0, 1, 1, 1);
     grid->addWidget(topLine,          1, 0, 1, 2);
@@ -281,6 +278,9 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
         d->commentsEdit->setText(album->caption());
         d->datePicker->setDate(album->date());
     }
+    
+    d->titleEdit->selectAll();
+    d->titleEdit->setFocus();
 
     // -- slots connections -------------------------------------------
 
