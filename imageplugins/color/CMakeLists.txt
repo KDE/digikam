@@ -33,4 +33,4 @@ INSTALL(TARGETS digikamimageplugin_color       DESTINATION ${PLUGIN_INSTALL_DIR}
 INSTALL(FILES digikamimageplugin_color_ui.rc   DESTINATION ${DATA_INSTALL_DIR}/digikam)
 INSTALL(FILES digikamimageplugin_color.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 INSTALL(FILES adjustlevelstool.upd             DESTINATION ${DATA_INSTALL_DIR}/kconf_update)
-INSTALL(FILES digiKam-ImagePlugin_Color.metainfo.xml DESTINATION ${DATA_INSTALL_DIR}/appdata)
+INSTALL(FILES digiKam-ImagePlugin_Color.metainfo.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata)
