@@ -343,6 +343,10 @@ public:
     QPixmap getIcon();
     QString getCaption();
 
+private Q_SLOTS:
+
+    void showNonGeolocatedItems();
+
 Q_SIGNALS:
 
     void signalMapSoloItems(const QList<qlonglong>&, const QString&);

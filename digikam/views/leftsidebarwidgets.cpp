@@ -1241,6 +1241,7 @@ public:
     }
 
     GPSSearchView* gpsSearchView;
+    QPushButton*   nonGPSBtn;
 };
 
 GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
@@ -1253,15 +1254,22 @@ GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget* const parent, SearchMode
     d->gpsSearchView = new GPSSearchView(this, searchModel, searchModificationHelper, imageFilterModel, itemSelectionModel);
     d->gpsSearchView->setConfigGroup(getConfigGroup());
 
+    d->nonGPSBtn = new QPushButton(this);
+    d->nonGPSBtn->setText(i18n("View Non Geolocated Items"));
+
     QScrollArea* const scrollArea = new QScrollArea(this);
     QVBoxLayout* const layout     = new QVBoxLayout(this);
 
+    layout->addWidget(d->nonGPSBtn);
     layout->addWidget(scrollArea);
     scrollArea->setWidget(d->gpsSearchView);
     scrollArea->setWidgetResizable(true);
 
     connect(d->gpsSearchView, SIGNAL(signalMapSoloItems(QList<qlonglong>,QString)),
             this, SIGNAL(signalMapSoloItems(QList<qlonglong>,QString)));
+
+    connect(d->nonGPSBtn, SIGNAL(clicked()),
+            this, SLOT(showNonGeolocatedItems()));
 }
 
 GPSSearchSideBarWidget::~GPSSearchSideBarWidget()
@@ -1301,6 +1309,29 @@ QPixmap GPSSearchSideBarWidget::getIcon()
 QString GPSSearchSideBarWidget::getCaption()
 {
     return i18nc("Search images on a map", "Map");
+}
+
+void GPSSearchSideBarWidget::showNonGeolocatedItems()
+{
+    QString title = i18n("No GPS Info Items");
+    SAlbum* album = AlbumManager::instance()->findSAlbum(title);
+    if(album)
+    {
+        AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << album);
+    }
+    else
+    {
+        SearchXmlWriter writer;
+        writer.setFieldOperator((SearchXml::standardFieldOperator()));
+        writer.writeGroup();
+        writer.writeField("nogps", SearchXml::Equal);
+        writer.finishField();
+        writer.finishGroup();
+        writer.finish();
+
+        album = AlbumManager::instance()->createSAlbum(title, DatabaseSearch::AdvancedSearch, writer.xml());
+        AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << album);
+    }
 }
 
 // -----------------------------------------------------------------------------

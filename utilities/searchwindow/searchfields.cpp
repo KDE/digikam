@@ -506,6 +506,11 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     }
     else if (name == "nogps")
     {
+        SearchFieldCheckBox* const field = new SearchFieldCheckBox(parent);
+        field->setFieldName(name);
+        field->setText(i18n("GPS"), i18n("Image has no GPS info"));
+        field->setLabel(i18n("No GPS Info"));
+        return field;
     }
 
     else if (name == "comment")
