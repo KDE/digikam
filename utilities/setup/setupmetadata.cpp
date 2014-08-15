@@ -7,7 +7,7 @@
  * Description : setup Metadata tab.
  *
  * Copyright (C) 2003-2004 by Ralf Holzer <ralf at well dot com>
- * Copyright (C) 2003-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -72,7 +72,6 @@ namespace Digikam
 
 class SetupMetadata::Private
 {
-
 public:
 
     Private() :
@@ -215,7 +214,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
                                            "template in the XMP and the IPTC tags. "
                                            "You can set template values to Template setup page."));
     d->saveFaceTags = new QCheckBox;
-    d->saveFaceTags->setText(i18nc("@option:check", "Face Tags (including face rectangles)"));
+    d->saveFaceTags->setText(i18nc("@option:check", "Face Tags (including face areas)"));
     d->saveFaceTags->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store face tags "
                                            "with face rectangles in the XMP tags."));
 
@@ -653,7 +652,7 @@ void SetupMetadata::applySettings()
     }
 
     aSettings->saveSettings();
-#endif
+#endif // HAVE_NEPOMUK
 
     d->tagsCfgPanel->applySettings();
 }
@@ -719,7 +718,8 @@ void SetupMetadata::readSettings()
     d->saveToNepomukBox->setChecked(aSettings->getSyncDigikamToNepomuk());
     d->readFromNepomukBox->setChecked(aSettings->getSyncNepomukToDigikam());
     slotNepomukToggled();
-#endif
+#endif // HAVE_NEPOMUK
+
 }
 
 bool SetupMetadata::exifAutoRotateAsChanged() const
