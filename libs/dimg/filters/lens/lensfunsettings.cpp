@@ -98,7 +98,7 @@ LensFunSettings::LensFunSettings(QWidget* const parent)
     d->filterGEO->setWhatsThis(i18n("Four geometries are handled here: Rectilinear (99 percent of all lenses), "
                                     "Fisheye, Cylindrical, Equirectangular."));
     QLabel* const note = new QLabel(i18n("<b>Note: lens correction options depend of filters available in LensFun library. "
-                                         "See <a href='http://lensfun.berlios.de'>LensFun project web site</a> "
+                                         "See <a href='http://lensfun.sourceforge.net'>LensFun project web site</a> "
                                          "for more information.</b>"), this);
     note->setOpenExternalLinks(true);
     note->setWordWrap(true);
