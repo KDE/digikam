@@ -1,11 +1,31 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <component type="addon">
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <id>digiKam-ImagePlugin_Decorate</id>
   <extends>digikam.desktop</extends>
   <name>ImagePlugin-Decorate</name>
+  <name xml:lang="ca">Connector d'imatge per a decorar</name>
+  <name xml:lang="nl">ImagePlugin-Decorate</name>
+  <name xml:lang="pl">WtyczkaObrazu-dekoracja</name>
+  <name xml:lang="sv">Bildinsticksprogrammet Dekorera</name>
+  <name xml:lang="uk">ImagePlugin-Decorate</name>
+  <name xml:lang="x-test">xxImagePlugin-Decoratexx</name>
   <summary>A tool to decorate an image</summary>
+  <summary xml:lang="ca">Una eina per a decorar una imatge</summary>
+  <summary xml:lang="cs">Nástroj pro dekoraci obrázku</summary>
+  <summary xml:lang="nl">Een hulpmiddel voor het decoreren van een afbeelding</summary>
+  <summary xml:lang="pl">Narzędzie do dekorowania obrazu</summary>
+  <summary xml:lang="sv">Ett verktyg för att dekorera en bild</summary>
+  <summary xml:lang="uk">Інструмент для декорування зображення</summary>
+  <summary xml:lang="x-test">xxA tool to decorate an imagexx</summary>
   <developer_name>digiKam Project</developer_name>
+  <developer_name xml:lang="ca">Projecte digiKam</developer_name>
+  <developer_name xml:lang="cs">Projekt digiKam</developer_name>
+  <developer_name xml:lang="nl">digiKam-project</developer_name>
+  <developer_name xml:lang="pl">Projekt digiKam</developer_name>
+  <developer_name xml:lang="sv">Digikam-projektet</developer_name>
+  <developer_name xml:lang="uk">Проект digiKam</developer_name>
+  <developer_name xml:lang="x-test">xxdigiKam Projectxx</developer_name>
   <url type="homepage">http://www.digikam.org/</url>
 </component>

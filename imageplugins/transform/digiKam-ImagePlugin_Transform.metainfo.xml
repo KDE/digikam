@@ -1,11 +1,31 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <component type="addon">
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <id>digiKam-ImagePlugin_Transform</id>
   <extends>digikam.desktop</extends>
   <name>ImagePlugin-Transform</name>
+  <name xml:lang="ca">Connector d'imatge per a transformar</name>
+  <name xml:lang="nl">ImagePlugin-Transform</name>
+  <name xml:lang="pl">WtyczkaObrazu-przekształcanie</name>
+  <name xml:lang="sv">Bildinsticksprogrammet Transformera</name>
+  <name xml:lang="uk">ImagePlugin-Transform</name>
+  <name xml:lang="x-test">xxImagePlugin-Transformxx</name>
   <summary>A tool to transform image geometry</summary>
+  <summary xml:lang="ca">Una eina per a transformar la geometria d'una imatge</summary>
+  <summary xml:lang="cs">Nástroj pro transformaci geometrie obrázku</summary>
+  <summary xml:lang="nl">Een hulpmiddel voor het transformeren van de geometrie van een afbeelding</summary>
+  <summary xml:lang="pl">Narzędzie do przekształcenia geometrii obrazu</summary>
+  <summary xml:lang="sv">Ett verktyg för att transformera bildgeometri</summary>
+  <summary xml:lang="uk">Інструмент для геометричного перетворення зображення</summary>
+  <summary xml:lang="x-test">xxA tool to transform image geometryxx</summary>
   <developer_name>digiKam Project</developer_name>
+  <developer_name xml:lang="ca">Projecte digiKam</developer_name>
+  <developer_name xml:lang="cs">Projekt digiKam</developer_name>
+  <developer_name xml:lang="nl">digiKam-project</developer_name>
+  <developer_name xml:lang="pl">Projekt digiKam</developer_name>
+  <developer_name xml:lang="sv">Digikam-projektet</developer_name>
+  <developer_name xml:lang="uk">Проект digiKam</developer_name>
+  <developer_name xml:lang="x-test">xxdigiKam Projectxx</developer_name>
   <url type="homepage">http://www.digikam.org/</url>
 </component>
