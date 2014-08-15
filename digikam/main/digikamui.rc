@@ -7,6 +7,7 @@
    <text>&amp;Browse</text>
      <Action name="browse_album" />
      <Action name="browse_tag" />
+     <Action name="browse_labels" />
      <Action name="browse_date" />
      <Action name="browse_timeline" />
      <Action name="browse_search" />

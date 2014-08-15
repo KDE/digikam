@@ -491,6 +491,13 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     }
     else if (name == "altitude")
     {
+        SearchFieldRangeDouble* const field = new SearchFieldRangeDouble(parent);
+        field->setFieldName(name);
+        field->setText(i18n("GPS"), i18n("Altitude range"));
+        field->setBetweenText("-");
+        field->setNumberPrefixAndSuffix(QString(), "m");
+        field->setBoundary(0, 10000, 4, 1);
+        return field;
     }
     else if (name == "positionorientation")
     {
@@ -509,7 +516,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         SearchFieldCheckBox* const field = new SearchFieldCheckBox(parent);
         field->setFieldName(name);
         field->setText(i18n("GPS"), i18n("Image has no GPS info"));
-        field->setLabel(i18n("No GPS Info"));
+        field->setLabel(i18n("Not Geo-located"));
         return field;
     }
 

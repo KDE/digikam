@@ -211,7 +211,7 @@ void SearchGroup::setup(Type type)
 
     //group->addField(SearchField::createField("latitude", group));
     //group->addField(SearchField::createField("longitude", group));
-    //group->addField(SearchField::createField("altitude", group));
+    group->addField(SearchField::createField("altitude", group));
     group->addField(SearchField::createField("nogps", group));
 
     m_fieldLabels << label;
