@@ -1,27 +1,94 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component type="desktop">
   <id>digikam.desktop</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>digiKam</name>
+  <name xml:lang="ca">digiKam</name>
+  <name xml:lang="cs">digiKam</name>
+  <name xml:lang="pl">digiKam</name>
+  <name xml:lang="sv">Digikam</name>
+  <name xml:lang="uk">digiKam</name>
+  <name xml:lang="x-test">xxdigiKamxx</name>
   <description>
     <p>
       digiKam is an advanced digital photo management application, which makes importing and organizing digital photos
-      a &quot;snap&quot;. The photos are organized in albums which can be sorted chronologically, by folder layout or by custom
+      a "snap". The photos are organized in albums which can be sorted chronologically, by folder layout or by custom
       collections.
     </p>
+    <p xml:lang="ca">El digiKam és una avançada aplicació per a gestionar les fotografies digitals, la qual fa que la importació i organització de les fotografies digitals sigui una «tasca fàcil». Les fotografies s'organitzen en àlbums, els quals es poden ordenar cronològicament, per disposició de la carpeta o per col·leccions personalitzades.</p>
+    <p xml:lang="pl">digiKam jest zaawansowanym programem do zarządzania cyfrowymi zdjęciami, który czyni importowanie i zarządzanie cyfrowymi zdjęciami "drobnostką". Zdjęcia są urządzone w albumy, które można przechowywać chronologicznie, według układu katalogów lub według własnych zbiorów.</p>
+    <p xml:lang="sv">Digikam är ett avancerat program för hantering av digitala foton, som gör det enkelt att importera och organisera digitala foton. Fotona organiseras i album som kan sorteras kronologiskt, enligt katalogutläggning eller enligt egna samlingar.</p>
+    <p xml:lang="uk">digiKam — програма з розширеними можливостями щодо керування цифровими фотографіями, яка робить імпортування і впорядкування цифрових фотографій зовсім простою справою". Програма впорядковує фотографії за альбомами, які можна розташовувати у вікні програму у хронологічному порядку, за теками або за нетиповими збірками.</p>
+    <p xml:lang="x-test">xxdigiKam is an advanced digital photo management application, which makes importing and organizing digital photos a "snap". The photos are organized in albums which can be sorted chronologically, by folder layout or by custom collections.xx</p>
     <p>Features:</p>
+    <p xml:lang="ca">Característiques:</p>
+    <p xml:lang="cs">Vlastnosti:</p>
+    <p xml:lang="pl">Możliwości:</p>
+    <p xml:lang="sv">Funktioner:</p>
+    <p xml:lang="uk">Можливості:</p>
+    <p xml:lang="x-test">xxFeatures:xx</p>
     <ul>
       <li>Organization of photos in albums and sub-albums (with tags and comments support)</li>
+      <li xml:lang="ca">Organització de les fotografies en àlbums i sub-àlbums (amb implementació per a les etiquetes i comentaris)</li>
+      <li xml:lang="pl">Grupowanie zdjęć w albumy i podalbumów (z obsługą znaczników i komentarzy)</li>
+      <li xml:lang="sv">Organisation av foton i album och delalbum (med stöd för etiketter och kommentarer)</li>
+      <li xml:lang="uk">упорядковування фотографій за альбомами і підальбомами з підтримкою міток та коментарів;</li>
+      <li xml:lang="x-test">xxOrganization of photos in albums and sub-albums (with tags and comments support)xx</li>
       <li>Support for Exif, Iptc, Xmp, Makernotes</li>
+      <li xml:lang="ca">Implementació per a notes Exif, Iptc, Xmp i del fabricant</li>
+      <li xml:lang="pl">Obsługa Exif, Iptc, Xmp, notatek twórcy</li>
+      <li xml:lang="sv">Stöd för EXIF, IPTC, XMP, tillverkaranteckningar</li>
+      <li xml:lang="uk">підтримка Exif, Iptc, Xmp, Makernotes;</li>
+      <li xml:lang="x-test">xxSupport for Exif, Iptc, Xmp, Makernotesxx</li>
       <li>SQLite powered storage for the albums and its metadata</li>
+      <li xml:lang="ca">Emmagatzematge amb SQLite pels àlbums i les seves metadades</li>
+      <li xml:lang="pl">Przechowalnia dla albumów i ich metadanych napędzana SQLite</li>
+      <li xml:lang="sv">Lagring driven av SQLite för album och deras metadata</li>
+      <li xml:lang="uk">сховище даних на основі SQLite для альбомів та метаданих;</li>
+      <li xml:lang="x-test">xxSQLite powered storage for the albums and its metadataxx</li>
       <li>Support for filtering and sorting albums</li>
+      <li xml:lang="ca">Implementació pel filtratge i classificació dels àlbums</li>
+      <li xml:lang="pl">Obsługa filtrowania i sortowania albumów</li>
+      <li xml:lang="sv">Stöd för filtrering och sortering av album</li>
+      <li xml:lang="uk">підтримка фільтрування та упорядковування альбомів;</li>
+      <li xml:lang="x-test">xxSupport for filtering and sorting albumsxx</li>
       <li>Import from more than 1100 digital camera devices</li>
+      <li xml:lang="ca">Importa des de més de 1.100 dispositius de càmeres digitals</li>
+      <li xml:lang="pl">Importowanie z więcej niż 1100 aparatów cyfrowych</li>
+      <li xml:lang="sv">Import från mer än 1100 digitalkameror</li>
+      <li xml:lang="uk">можливість імпортування даних з понад 1100 цифрових фотоапаратів;</li>
+      <li xml:lang="x-test">xxImport from more than 1100 digital camera devicesxx</li>
       <li>Support for 300 RAW format pictures</li>
+      <li xml:lang="ca">Implementació per a 300 formats d'imatges RAW</li>
+      <li xml:lang="pl">Obsługa dla 300 postaci zdjęć RAW</li>
+      <li xml:lang="sv">Stöd för 300 obehandlade bildformat</li>
+      <li xml:lang="uk">підтримка понад 300 форматів цифрових негативів (RAW);</li>
+      <li xml:lang="x-test">xxSupport for 300 RAW format picturesxx</li>
       <li>Light Table feature</li>
+      <li xml:lang="ca">La característica taula de llum</li>
+      <li xml:lang="pl">Możliwość użycia podświetlarki</li>
+      <li xml:lang="sv">Ljusbordsfunktion</li>
+      <li xml:lang="uk">інструмент стола з підсвічуванням;</li>
+      <li xml:lang="x-test">xxLight Table featurexx</li>
       <li>Plugins architectures: using Kipi-plugins</li>
+      <li xml:lang="ca">Arquitectura de connectors: usant els connectors Kipi</li>
+      <li xml:lang="pl">Architektura wtyczek: przy użyciu wtyczek Kipi</li>
+      <li xml:lang="sv">Insticksprogramarkitektur: Använder KIPI-insticksprogram</li>
+      <li xml:lang="uk">архітектура на основі додатків, використовуються додатки KIPI;</li>
+      <li xml:lang="x-test">xxPlugins architectures: using Kipi-pluginsxx</li>
       <li>Share your photos using HTML or publishing them to social web sites</li>
+      <li xml:lang="ca">Compartiu les vostres fotografies usant HTML o publicant-les a llocs web socials</li>
+      <li xml:lang="pl">Współdzielenie zdjęć przy użyciu HTML, a także możliwość udostępniania ich na stronach społecznościowych</li>
+      <li xml:lang="sv">Dela foton genom att använda HTML eller publicera dem på sociala webbplatser</li>
+      <li xml:lang="uk">можливість оприлюднення фотографій за допомогою коду HTML або сайтів соціальних мереж;</li>
+      <li xml:lang="x-test">xxShare your photos using HTML or publishing them to social web sitesxx</li>
       <li>Image editor included with advanced features</li>
+      <li xml:lang="ca">Inclou un editor d'imatges amb característiques avançades</li>
+      <li xml:lang="pl">Dołączony edytor obrazów o zaawansowanych możliwościach</li>
+      <li xml:lang="sv">Bildeditor med avancerade funktioner ingår</li>
+      <li xml:lang="uk">редактор зображень із додатковими можливостями;</li>
+      <li xml:lang="x-test">xxImage editor included with advanced featuresxx</li>
     </ul>
   </description>
   <url type="homepage">http://www.digikam.org/</url>
@@ -33,6 +100,12 @@
     </screenshot>
   </screenshots>
   <developer_name>digiKam Project</developer_name>
+  <developer_name xml:lang="ca">Projecte digiKam</developer_name>
+  <developer_name xml:lang="cs">Projekt digiKam</developer_name>
+  <developer_name xml:lang="pl">Projekt digiKam</developer_name>
+  <developer_name xml:lang="sv">Digikam-projektet</developer_name>
+  <developer_name xml:lang="uk">Проект digiKam</developer_name>
+  <developer_name xml:lang="x-test">xxdigiKam Projectxx</developer_name>
   <project_group>KDE</project_group>
   <provides>
     <binary>digikam</binary>
