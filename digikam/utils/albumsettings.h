@@ -90,7 +90,7 @@ Q_SIGNALS:
     void setupChanged();
 
     void recurseSettingsChanged();
-    void nepomukSettingsChanged();
+    void balooSettingsChanged();
 
 public:
 
@@ -339,11 +339,11 @@ public:
     void setShowThumbbar(bool val);
     bool getShowThumbbar() const;
 
-    void setSyncNepomukToDigikam(bool val);
-    bool getSyncNepomukToDigikam() const;
+    void setSyncBalooToDigikam(bool val);
+    bool getSyncBalooToDigikam() const;
 
-    void setSyncDigikamToNepomuk(bool val);
-    bool getSyncDigikamToNepomuk() const;
+    void setSyncDigikamToBaloo(bool val);
+    bool getSyncDigikamToBaloo() const;
 
     /**
      * Defines the way in which string comparisons are performed.
@@ -401,8 +401,8 @@ public:
 
 public Q_SLOTS:
 
-    void applyNepomukSettings() const;
-    void triggerResyncWithNepomuk() const;
+//    void applyNepomukSettings() const;
+//    void triggerResyncWithNepomuk() const;
 
 private:
 

@@ -10,6 +10,7 @@
  * Copyright (C) 2003-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007      by Arnd Baecker <arnd dot baecker at web dot de>
  * Copyright (C) 2014      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
+ * Copyright (C) 2014      by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -134,7 +135,7 @@ public:
         imageGroupMode(0),
         itemLeftClickAction(AlbumSettings::ShowPreview),
         syncToDigikam(false),
-        syncToNepomuk(false),
+        syncToBaloo(false),
         faceDetectionAccuracy(0.8),
         stringComparisonType(AlbumSettings::Natural)
     {
@@ -327,7 +328,7 @@ public:
 
     // nepomuk settings
     bool                                syncToDigikam;
-    bool                                syncToNepomuk;
+    bool                                syncToBaloo;
 
     // versioning settings
 
@@ -548,7 +549,7 @@ void AlbumSettings::init()
     d->showFolderTreeViewItemsCount = false;
 
     d->syncToDigikam                = false;
-    d->syncToNepomuk                = false;
+    d->syncToBaloo                  = false;
     d->albumSortChanged             = false;
 
     d->faceDetectionAccuracy        = 0.8;
@@ -556,8 +557,8 @@ void AlbumSettings::init()
     d->stringComparisonType         = AlbumSettings::Natural;
     d->applicationStyle             = kapp->style()->objectName();
 
-    connect(this, SIGNAL(nepomukSettingsChanged()),
-            this, SLOT(applyNepomukSettings()));
+    connect(this, SIGNAL(balooSettingsChanged()),
+            this, SLOT(applyBalooSettings()));
 }
 
 KConfigGroup AlbumSettings::generalConfigGroup() const
@@ -678,14 +679,14 @@ void AlbumSettings::readSettings()
 
     d->databaseParams.readFromConfig();
 
-//#ifdef HAVE_NEPOMUK
+#ifdef HAVE_BALOO
 
-//    group = config->group(d->configGroupNepomuk);
+    group = config->group(d->configGroupBaloo);
 
-//    d->syncToDigikam         = group.readEntry(d->configSyncNepomuktoDigikamEntry, false);
-//    d->syncToNepomuk         = group.readEntry(d->configSyncDigikamtoNepomukEntry, false);
+    d->syncToDigikam         = group.readEntry(d->configSyncBAlootoDigikamEntry, false);
+    d->syncToBaloo         = group.readEntry(d->configSyncDigikamtoBalooEntry, false);
 
-//#endif // HAVE_NEPOMUK
+#endif // HAVE_BALOO
 
     // ---------------------------------------------------------------------
 
@@ -699,7 +700,7 @@ void AlbumSettings::readSettings()
 
     emit setupChanged();
     emit recurseSettingsChanged();
-    emit nepomukSettingsChanged();
+    emit balooSettingsChanged();
 }
 
 void AlbumSettings::saveSettings()
@@ -797,14 +798,14 @@ void AlbumSettings::saveSettings()
 
     d->databaseParams.writeToConfig();
 
-//#ifdef HAVE_NEPOMUK
+#ifdef HAVE_BALOO
 
-//    group = config->group(d->configGroupNepomuk);
+    group = config->group(d->configGroupBaloo);
 
-//    group.writeEntry(d->configSyncNepomuktoDigikamEntry, d->syncToDigikam);
-//    group.writeEntry(d->configSyncDigikamtoNepomukEntry, d->syncToNepomuk);
+    group.writeEntry(d->configSyncBalootoDigikamEntry, d->syncToDigikam);
+    group.writeEntry(d->configSyncDigikamtoBalooEntry, d->syncToBaloo);
 
-//#endif // HAVE_NEPOMUK
+#endif // HAVE_BALOO
 
     // ---------------------------------------------------------------------
 
@@ -1693,26 +1694,26 @@ bool AlbumSettings::getShowThumbbar() const
     return d->showThumbbar;
 }
 
-void AlbumSettings::setSyncNepomukToDigikam(bool val)
+void AlbumSettings::setSyncBalooToDigikam(bool val)
 {
     d->syncToDigikam = val;
-    emit nepomukSettingsChanged();
+    emit balooSettingsChanged();
 }
 
-bool AlbumSettings::getSyncNepomukToDigikam() const
+bool AlbumSettings::getSyncBalooToDigikam() const
 {
     return d->syncToDigikam;
 }
 
-void AlbumSettings::setSyncDigikamToNepomuk(bool val)
+void AlbumSettings::setSyncDigikamToBaloo(bool val)
 {
-    d->syncToNepomuk = val;
-    emit nepomukSettingsChanged();
+    d->syncToBaloo = val;
+    emit balooSettingsChanged();
 }
 
-bool AlbumSettings::getSyncDigikamToNepomuk() const
+bool AlbumSettings::getSyncDigikamToBaloo() const
 {
-    return d->syncToNepomuk;
+    return d->syncToBaloo;
 }
 
 DatabaseParameters AlbumSettings::getDatabaseParameters() const
@@ -1845,8 +1846,8 @@ void AlbumSettings::setFaceDetectionAccuracy(double value)
     d->faceDetectionAccuracy = value;
 }
 
-void AlbumSettings::applyNepomukSettings() const
-{
+//void AlbumSettings::applyNepomukSettings() const
+//{
 //#ifdef HAVE_NEPOMUK
 //    QDBusInterface interface("org.kde.nepomuk.services.digikamnepomukservice",
 //                             "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
@@ -1858,10 +1859,10 @@ void AlbumSettings::applyNepomukSettings() const
 //    }
 
 //#endif // HAVE_NEPOMUK
-}
+//}
 
-void AlbumSettings::triggerResyncWithNepomuk() const
-{
+//void AlbumSettings::triggerResyncWithNepomuk() const
+//{
 //#ifdef HAVE_NEPOMUK
 //    QDBusInterface interface("org.kde.nepomuk.services.digikamnepomukservice",
 //                             "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
@@ -1872,7 +1873,7 @@ void AlbumSettings::triggerResyncWithNepomuk() const
 //    }
 
 //#endif // HAVE_NEPOMUK
-}
+//}
 
 void AlbumSettings::setApplicationStyle(const QString& style)
 {
