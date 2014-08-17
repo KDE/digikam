@@ -57,6 +57,9 @@
 /* Define to 1 if presentation mode is enabled */
 #cmakedefine USE_PRESENTATION_MODE 1
 
+/* Define to 1 if you want Qt to scale the preview images */
+#cmakedefine USE_QT_SCALING 1
+
 /* Define to 1 if advanced debug messages are enabled */
 #cmakedefine USE_ADVANCEDDEBUGMSG 1
 

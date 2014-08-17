@@ -369,6 +369,13 @@ MACRO_BOOL_TO_01(SQLITE2_FOUND HAVE_SQLITE2)
 
 MACRO_BOOL_TO_01(EIGEN3_FOUND HAVE_EIGEN3)
 
+# Whether to use Qt's scaling to downscale previews. Under MacOSX, Qt
+# can make use of the higher physical resolution of Retina
+# displays. However, it seems that other Qt renderers perform badly at
+# this, so disable. If other renderers switch to coarser logical
+# pixels, one probably needs this feature on these platforms as well.
+MACRO_BOOL_TO_01(APPLE USE_QT_SCALING)
+
 # Set config files accordingly with optional dependencies
 
 CONFIGURE_FILE(digikam/utils/config-digikam.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/digikam/utils/config-digikam.h)
