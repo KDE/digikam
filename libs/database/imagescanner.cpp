@@ -1810,6 +1810,7 @@ QString ImageScanner::iptcCorePropertyName(MetadataInfo::Field field)
 void ImageScanner::scanBalooInfo()
 {
 #ifdef HAVE_BALOO
+
     BalooWrap *baloo = BalooWrap::instance();
     BalooInfo bInfo = baloo->getSemanticInfo(KUrl(d->fileInfo.absoluteFilePath()));
 

@@ -144,7 +144,7 @@ public:
     static const QString                configGroupDefault;
     static const QString                configGroupExif;
     static const QString                configGroupMetadata;
-    static const QString                configGroupNepomuk;
+    static const QString                configGroupBaloo;
     static const QString                configGroupGeneral;
     static const QString                configGroupVersioning;
     static const QString                configGroupFaceDetection;
@@ -218,8 +218,8 @@ public:
     static const QString                configShowPermanentDeleteDialogEntry;
     static const QString                configApplySidebarChangesDirectlyEntry;
     static const QString                configScanAtStartEntry;
-    static const QString                configSyncNepomuktoDigikamEntry;
-    static const QString                configSyncDigikamtoNepomukEntry;
+    static const QString                configSyncBalootoDigikamEntry;
+    static const QString                configSyncDigikamtoBalooEntry;
     static const QString                configStringComparisonTypeEntry;
     static const QString                configFaceDetectionAccuracyEntry;
     static const QString                configApplicationStyleEntry;
@@ -345,7 +345,7 @@ public:
 const QString AlbumSettings::Private::configGroupDefault("Album Settings");
 const QString AlbumSettings::Private::configGroupExif("EXIF Settings");
 const QString AlbumSettings::Private::configGroupMetadata("Metadata Settings");
-const QString AlbumSettings::Private::configGroupNepomuk("Nepomuk Settings");
+const QString AlbumSettings::Private::configGroupBaloo("Baloo Settings");
 const QString AlbumSettings::Private::configGroupGeneral("General Settings");
 const QString AlbumSettings::Private::configGroupVersioning("Versioning Settings");
 const QString AlbumSettings::Private::configGroupFaceDetection("Face Detection Settings");
@@ -418,8 +418,8 @@ const QString AlbumSettings::Private::configUseTrashEntry("Use Trash");
 const QString AlbumSettings::Private::configShowTrashDeleteDialogEntry("Show Trash Delete Dialog");
 const QString AlbumSettings::Private::configShowPermanentDeleteDialogEntry("Show Permanent Delete Dialog");
 const QString AlbumSettings::Private::configApplySidebarChangesDirectlyEntry("Apply Sidebar Changes Directly");
-const QString AlbumSettings::Private::configSyncNepomuktoDigikamEntry("Sync Nepomuk to Digikam");
-const QString AlbumSettings::Private::configSyncDigikamtoNepomukEntry("Sync Digikam to Nepomuk");
+const QString AlbumSettings::Private::configSyncBalootoDigikamEntry("Sync Nepomuk to Digikam");
+const QString AlbumSettings::Private::configSyncDigikamtoBalooEntry("Sync Digikam to Nepomuk");
 const QString AlbumSettings::Private::configStringComparisonTypeEntry("String Comparison Type");
 const QString AlbumSettings::Private::configFaceDetectionAccuracyEntry("Detection Accuracy");
 const QString AlbumSettings::Private::configApplicationStyleEntry("Application Style");
@@ -683,7 +683,7 @@ void AlbumSettings::readSettings()
 
     group = config->group(d->configGroupBaloo);
 
-    d->syncToDigikam         = group.readEntry(d->configSyncBAlootoDigikamEntry, false);
+    d->syncToDigikam         = group.readEntry(d->configSyncBalootoDigikamEntry, false);
     d->syncToBaloo         = group.readEntry(d->configSyncDigikamtoBalooEntry, false);
 
 #endif // HAVE_BALOO
@@ -1845,35 +1845,6 @@ void AlbumSettings::setFaceDetectionAccuracy(double value)
 {
     d->faceDetectionAccuracy = value;
 }
-
-//void AlbumSettings::applyNepomukSettings() const
-//{
-//#ifdef HAVE_NEPOMUK
-//    QDBusInterface interface("org.kde.nepomuk.services.digikamnepomukservice",
-//                             "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
-
-//    if (interface.isValid())
-//    {
-//        interface.call(QDBus::NoBlock, "enableSyncToDigikam", d->syncToDigikam);
-//        interface.call(QDBus::NoBlock, "enableSyncToNepomuk", d->syncToNepomuk);
-//    }
-
-//#endif // HAVE_NEPOMUK
-//}
-
-//void AlbumSettings::triggerResyncWithNepomuk() const
-//{
-//#ifdef HAVE_NEPOMUK
-//    QDBusInterface interface("org.kde.nepomuk.services.digikamnepomukservice",
-//                             "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
-
-//    if (interface.isValid())
-//    {
-//        interface.call(QDBus::NoBlock, "triggerResync", true, true);
-//    }
-
-//#endif // HAVE_NEPOMUK
-//}
 
 void AlbumSettings::setApplicationStyle(const QString& style)
 {

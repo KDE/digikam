@@ -399,10 +399,6 @@ public:
 
     KConfigGroup generalConfigGroup() const;
 
-public Q_SLOTS:
-
-//    void applyNepomukSettings() const;
-//    void triggerResyncWithNepomuk() const;
 
 private:
 

@@ -52,6 +52,7 @@
 #include "imageattributeswatch.h"
 #include "tagscache.h"
 #include "baloowrap.h"
+#include "albumsettings.h"
 
 #include "facetagseditor.h"
 
@@ -939,9 +940,15 @@ bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataSettingsC
 
 void MetadataHub::writeToBaloo(QString filePath, const MetadataSettingsContainer &settings)
 {
-    // NOTE: Veaceslav: use settings to trigger on/off this value
 #ifdef HAVE_BALOO
-    bool saveToBaloo = true;
+    AlbumSettings* const aSettings = AlbumSettings::instance();
+
+    if (!aSettings)
+    {
+        return;
+    }
+
+    bool saveToBaloo = aSettings->getSyncDigikamToBaloo();
     int rating = -1;
     QString* comment = 0;
 

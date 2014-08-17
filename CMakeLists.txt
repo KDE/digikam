@@ -12,7 +12,7 @@ OPTION(ENABLE_ADVANCEDDEBUGMSG  "Build digiKam with more internal debug message 
 OPTION(ENABLE_LCMS2             "Build digiKam with LCMS2 instead LCMS1 (default=OFF)"                  OFF)
 
 # Options to port to new KDE components (Baloo and Akonadi)
-OPTION(ENABLE_BALOOSUPPORT      "Build digiKam with Baloo support (default=OFF)"                        OFF)
+OPTION(ENABLE_BALOOSUPPORT      "Build digiKam with Baloo support (default=OFF)"                        ON)
 OPTION(ENABLE_KDEPIMLIBSSUPPORT "Build digiKam with Kdepimlibs support (default=OFF)"                   OFF)
 
 # NOTE: since 6.11.24, libpgf do not support very well OpenMP. We disable it temporally.

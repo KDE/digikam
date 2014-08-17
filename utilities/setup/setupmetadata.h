@@ -43,7 +43,7 @@ public:
         Behavior = 0,
         Rotation,
         Display,
-        Nepomuk
+        Baloo
     };
 
 public:
@@ -66,7 +66,6 @@ private Q_SLOTS:
 
     void slotProcessExiv2Url(const QString&);
     void slotExifAutoRotateToggled(bool);
-    void slotNepomukToggled();
 
 private:
 
@@ -76,4 +75,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // SETUPMETADATA_H 
+#endif // SETUPMETADATA_H

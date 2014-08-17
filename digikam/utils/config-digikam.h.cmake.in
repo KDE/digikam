@@ -60,8 +60,8 @@
 /* Define to 1 if advanced debug messages are enabled */
 #cmakedefine USE_ADVANCEDDEBUGMSG 1
 
-/* Define to 1 if you have Nepomuk shared libraries installed */
-#cmakedefine HAVE_NEPOMUK 1
+/* Define to 1 if you have Baloo shared libraries installed */
+#cmakedefine HAVE_BALOO 1
 
 /* Define to 1 if we know how to start mysqld */
 #cmakedefine HAVE_INTERNALMYSQL 1
