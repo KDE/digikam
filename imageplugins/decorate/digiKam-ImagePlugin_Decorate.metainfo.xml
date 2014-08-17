@@ -8,6 +8,8 @@
   <name xml:lang="ca">Connector d'imatge per a decorar</name>
   <name xml:lang="nl">ImagePlugin-Decorate</name>
   <name xml:lang="pl">WtyczkaObrazu-dekoracja</name>
+  <name xml:lang="pt-BR">ImagePlugin-Decorate</name>
+  <name xml:lang="sk">ImagePlugin-Decorate</name>
   <name xml:lang="sv">Bildinsticksprogrammet Dekorera</name>
   <name xml:lang="uk">ImagePlugin-Decorate</name>
   <name xml:lang="x-test">xxImagePlugin-Decoratexx</name>
@@ -16,6 +18,8 @@
   <summary xml:lang="cs">Nástroj pro dekoraci obrázku</summary>
   <summary xml:lang="nl">Een hulpmiddel voor het decoreren van een afbeelding</summary>
   <summary xml:lang="pl">Narzędzie do dekorowania obrazu</summary>
+  <summary xml:lang="pt-BR">Uma ferramenta para decoração de imagens</summary>
+  <summary xml:lang="sk">Nástroj na dekoráciu obrázku</summary>
   <summary xml:lang="sv">Ett verktyg för att dekorera en bild</summary>
   <summary xml:lang="uk">Інструмент для декорування зображення</summary>
   <summary xml:lang="x-test">xxA tool to decorate an imagexx</summary>
@@ -24,6 +28,8 @@
   <developer_name xml:lang="cs">Projekt digiKam</developer_name>
   <developer_name xml:lang="nl">digiKam-project</developer_name>
   <developer_name xml:lang="pl">Projekt digiKam</developer_name>
+  <developer_name xml:lang="pt-BR">Projeto digiKam</developer_name>
+  <developer_name xml:lang="sk">Projekt digiKamu</developer_name>
   <developer_name xml:lang="sv">Digikam-projektet</developer_name>
   <developer_name xml:lang="uk">Проект digiKam</developer_name>
   <developer_name xml:lang="x-test">xxdigiKam Projectxx</developer_name>

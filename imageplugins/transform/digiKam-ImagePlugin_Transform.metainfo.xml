@@ -8,6 +8,8 @@
   <name xml:lang="ca">Connector d'imatge per a transformar</name>
   <name xml:lang="nl">ImagePlugin-Transform</name>
   <name xml:lang="pl">WtyczkaObrazu-przekształcanie</name>
+  <name xml:lang="pt-BR">ImagePlugin-Transform</name>
+  <name xml:lang="sk">ImagePlugin-Transform</name>
   <name xml:lang="sv">Bildinsticksprogrammet Transformera</name>
   <name xml:lang="uk">ImagePlugin-Transform</name>
   <name xml:lang="x-test">xxImagePlugin-Transformxx</name>
@@ -16,6 +18,8 @@
   <summary xml:lang="cs">Nástroj pro transformaci geometrie obrázku</summary>
   <summary xml:lang="nl">Een hulpmiddel voor het transformeren van de geometrie van een afbeelding</summary>
   <summary xml:lang="pl">Narzędzie do przekształcenia geometrii obrazu</summary>
+  <summary xml:lang="pt-BR">Uma ferramenta para transformar a geometria das imagens</summary>
+  <summary xml:lang="sk">Nástroj na transformáciu geometrie obrázku</summary>
   <summary xml:lang="sv">Ett verktyg för att transformera bildgeometri</summary>
   <summary xml:lang="uk">Інструмент для геометричного перетворення зображення</summary>
   <summary xml:lang="x-test">xxA tool to transform image geometryxx</summary>
@@ -24,6 +28,8 @@
   <developer_name xml:lang="cs">Projekt digiKam</developer_name>
   <developer_name xml:lang="nl">digiKam-project</developer_name>
   <developer_name xml:lang="pl">Projekt digiKam</developer_name>
+  <developer_name xml:lang="pt-BR">Projeto digiKam</developer_name>
+  <developer_name xml:lang="sk">Projekt digiKamu</developer_name>
   <developer_name xml:lang="sv">Digikam-projektet</developer_name>
   <developer_name xml:lang="uk">Проект digiKam</developer_name>
   <developer_name xml:lang="x-test">xxdigiKam Projectxx</developer_name>

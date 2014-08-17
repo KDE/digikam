@@ -8,6 +8,8 @@
   <name xml:lang="ca">Connector d'imatge per a millores</name>
   <name xml:lang="nl">ImagePlugin-Enhance</name>
   <name xml:lang="pl">WtyczkaObrazu-polepszanie</name>
+  <name xml:lang="pt-BR">ImagePlugin-Enhance</name>
+  <name xml:lang="sk">ImagePlugin-Enhance</name>
   <name xml:lang="sv">Bildinsticksprogrammet Förbättra</name>
   <name xml:lang="uk">ImagePlugin-Enhance</name>
   <name xml:lang="x-test">xxImagePlugin-Enhancexx</name>
@@ -16,6 +18,8 @@
   <summary xml:lang="cs">Modul digiKamu pro vylepšování fotografií</summary>
   <summary xml:lang="nl">digiKam-plugin voor het verbeteren van foto's</summary>
   <summary xml:lang="pl">Wtyczka digiKam do polepszania fotografii</summary>
+  <summary xml:lang="pt-BR">Plugin do digiKam para melhorar as fotografias</summary>
+  <summary xml:lang="sk">Plugin digiKamu na rozšírenie fotografií</summary>
   <summary xml:lang="sv">Digikam-Insticksprogram för att förbättra fotografier</summary>
   <summary xml:lang="uk">Додаток до digiKam для покращення вигляду фотографій</summary>
   <summary xml:lang="x-test">xxdigiKam plugin to enhance photographsxx</summary>
@@ -24,6 +28,8 @@
   <developer_name xml:lang="cs">Projekt digiKam</developer_name>
   <developer_name xml:lang="nl">digiKam-project</developer_name>
   <developer_name xml:lang="pl">Projekt digiKam</developer_name>
+  <developer_name xml:lang="pt-BR">Projeto digiKam</developer_name>
+  <developer_name xml:lang="sk">Projekt digiKamu</developer_name>
   <developer_name xml:lang="sv">Digikam-projektet</developer_name>
   <developer_name xml:lang="uk">Проект digiKam</developer_name>
   <developer_name xml:lang="x-test">xxdigiKam Projectxx</developer_name>

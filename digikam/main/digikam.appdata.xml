@@ -8,6 +8,7 @@
   <name xml:lang="cs">digiKam</name>
   <name xml:lang="nl">digiKam</name>
   <name xml:lang="pl">digiKam</name>
+  <name xml:lang="sk">digiKam</name>
   <name xml:lang="sv">Digikam</name>
   <name xml:lang="uk">digiKam</name>
   <name xml:lang="x-test">xxdigiKamxx</name>
@@ -28,6 +29,7 @@
     <p xml:lang="cs">Vlastnosti:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
     <p xml:lang="pl">Możliwości:</p>
+    <p xml:lang="sk">Funkcie:</p>
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="x-test">xxFeatures:xx</p>
@@ -117,6 +119,7 @@
   <developer_name xml:lang="cs">Projekt digiKam</developer_name>
   <developer_name xml:lang="nl">digiKam-project</developer_name>
   <developer_name xml:lang="pl">Projekt digiKam</developer_name>
+  <developer_name xml:lang="sk">Projekt digiKamu</developer_name>
   <developer_name xml:lang="sv">Digikam-projektet</developer_name>
   <developer_name xml:lang="uk">Проект digiKam</developer_name>
   <developer_name xml:lang="x-test">xxdigiKam Projectxx</developer_name>
