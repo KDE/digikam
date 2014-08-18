@@ -338,7 +338,9 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
 
     if (!d->tagRect.isNull())
     {
-        QString tags = AlbumManager::instance()->tagNames(info.tagIds()).join(", ");
+        QStringList tagsList = AlbumManager::instance()->tagNames(info.tagIds());
+        tagsList.sort();
+        QString tags         = tagsList.join(", ");
         drawTags(p, d->tagRect, tags, isSelected);
     }
 

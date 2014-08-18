@@ -158,9 +158,9 @@ ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode)
 
     // ------------------------------------------------------------
 
-    d->escapePreviewAction = new QAction(SmallIcon("folder-image"),        i18n("Escape preview"),                 this);
     d->prevAction          = new QAction(SmallIcon("go-previous"),         i18nc("go to previous image", "Back"),  this);
     d->nextAction          = new QAction(SmallIcon("go-next"),             i18nc("go to next image", "Forward"),   this);
+    d->escapePreviewAction = new QAction(SmallIcon("view-list-icons"),     i18n("Escape preview"),                 this);
     d->rotLeftAction       = new QAction(SmallIcon("object-rotate-left"),  i18nc("@info:tooltip", "Rotate Left"),  this);
     d->rotRightAction      = new QAction(SmallIcon("object-rotate-right"), i18nc("@info:tooltip", "Rotate Right"), this);
     d->addPersonAction     = new QAction(SmallIcon("list-add-user"),       i18n("Add a Face Tag"),                 this);
@@ -551,13 +551,13 @@ void ImagePreviewView::dropEvent(QDropEvent* e)
         }
 
         KMenu popMenu(this);
-        QAction* assignToThisAction = popMenu.addAction(SmallIcon("tag"), i18n("Assign Tags to &This Item"));
+        QAction* const assignToThisAction = popMenu.addAction(SmallIcon("tag"), i18n("Assign Tags to &This Item"));
         popMenu.addSeparator();
         popMenu.addAction(SmallIcon("dialog-cancel"), i18n("&Cancel"));
         popMenu.setMouseTracking(true);
-        QAction* const choice = popMenu.exec(this->mapToGlobal(e->pos()));
+        QAction* const choice             = popMenu.exec(this->mapToGlobal(e->pos()));
 
-        if(choice==assignToThisAction)
+        if(choice == assignToThisAction)
         {
             FileActionMngr::instance()->assignTags(d->item->imageInfo(),tagIDs);
         }

@@ -12,5 +12,11 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 262720 - SCAN : 'scan for new images' should work on just current Album.
 006 ==> 317864 - Album rename problem.
 007 ==> 230602 - Do not display photos, after the removal of the tag.
-008 ==> 
+008 ==> 318201 - Assigned tags in IconView should be sorted.
+009 ==> 336328 - Tags Manager's Sync Export DB to metadata, mirrors XMP but it only appends IPTC keywords data.
+010 ==> 335624 - digiKam crash when I start face recognition.
+011 ==> 338085 - digiKam 4.2 fails to start on windows.
+012 ==> 327646 - MySQL : Failed to create tables in database" Error In digiKam [patch].
+013 ==> 195006 - SQLITE : UTF8 characters not accepted in database file path.
+014 ==> 
 

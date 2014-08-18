@@ -55,11 +55,19 @@ SET(DIGIKAM_VERSION_STRING
 # Path to find Extra CMake scripts
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
+# Databse Schema version
+# We must set this variable here at top level because it is used in both digikam/database and data/database
+# Version history:
+# 1 : Original database schema
+# 2 : 08-08-2014 : Fix Images.names field size (see B.K.O #327646)
+SET(DBCONFIG_XML_VERSION "2")
+
 # ==================================================================================================
 # Debug area codes
 # These codes will be set for every project specific path automatically, so
 # that you can use kDebug() without any usage of the area code throughout the
 # digiKam code base.
+
 SET(AREA_CODE_GENERAL        "50003")
 SET(AREA_CODE_KIOSLAVES      "50004")
 SET(AREA_CODE_SHOWFOTO       "50005")
@@ -348,6 +356,13 @@ MACRO_OPTIONAL_FIND_PACKAGE(Sqlite2)
 MACRO_BOOL_TO_01(SQLITE2_FOUND HAVE_SQLITE2)
 
 MACRO_BOOL_TO_01(EIGEN3_FOUND HAVE_EIGEN3)
+
+# Whether to use Qt's scaling to downscale previews. Under MacOSX, Qt
+# can make use of the higher physical resolution of Retina
+# displays. However, it seems that other Qt renderers perform badly at
+# this, so disable. If other renderers switch to coarser logical
+# pixels, one probably needs this feature on these platforms as well.
+MACRO_BOOL_TO_01(APPLE USE_QT_SCALING)
 
 # Set config files accordingly with optional dependencies
 
@@ -1180,9 +1195,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core/tagregion.cpp
        )
 
-    # We must set this variable here at top level because it is used in both
-    # digikam/database and data/database
-    SET(DBCONFIG_XML_VERSION "1")
 
     SET(libdatabase_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb.cpp

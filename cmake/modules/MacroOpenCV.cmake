@@ -30,7 +30,7 @@ MACRO(DETECT_OPENCV OPENCV_MIN_VERSION)
 
         MESSAGE(STATUS "Could not find OpenCV normally, trying internal FindOpenCV.cmake")
         SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/modules_opencv)
-        FIND_PACKAGE(OpenCV REQUIRED COMPONENTS core highgui objdetect contrib)
+        FIND_PACKAGE(OpenCV REQUIRED COMPONENTS ${OPENCV_REQUIRED_COMPONENTS})
 
     ELSE ()
 
@@ -50,7 +50,7 @@ MACRO(DETECT_OPENCV OPENCV_MIN_VERSION)
 
             MESSAGE(WARNING "OpenCV: Version is too old.")
             SET(OpenCV_FOUND FALSE)
-        
+
         ENDIF (${OpenCV_VERSION} VERSION_LESS ${OPENCV_MIN_VERSION})
 
     ELSE ()

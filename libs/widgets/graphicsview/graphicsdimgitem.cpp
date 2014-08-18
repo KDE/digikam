@@ -38,6 +38,7 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "dimg.h"
 #include "imagezoomsettings.h"
 
@@ -226,9 +227,13 @@ void GraphicsDImgItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
        we need to increase the pixel size of the rendered
        pixmap.
     */
+#ifdef USE_QT_SCALING
     double xratio = double(d->image.width()) / completeSize.width();
     double yratio = double(d->image.height()) / completeSize.height();
     double ratio = qMax(qMin(xratio, yratio), 1.0);
+#else
+    double ratio = 1.0;
+#endif
 
     QRect  scaledDrawRect = QRectF(ratio*drawRect.x(), ratio*drawRect.y(),
                                    ratio*drawRect.width(), ratio*drawRect.height()).toRect();

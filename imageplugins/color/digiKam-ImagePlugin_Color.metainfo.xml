@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="addon">
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <id>digiKam-ImagePlugin_Color</id>
+  <extends>digikam.desktop</extends>
+  <name>ImagePlugin-Color</name>
+  <name xml:lang="ca">Connector d'imatge pel color</name>
+  <name xml:lang="en-GB">ImagePlugin-Color</name>
+  <name xml:lang="nl">ImagePlugin-Color</name>
+  <name xml:lang="pl">WtyczkaObrazu-barwa</name>
+  <name xml:lang="pt-BR">ImagePlugin-Color</name>
+  <name xml:lang="sk">ImagePlugin-Color</name>
+  <name xml:lang="sv">Bildinsticksprogrammet Färg</name>
+  <name xml:lang="uk">ImagePlugin-Color</name>
+  <name xml:lang="x-test">xxImagePlugin-Colorxx</name>
+  <summary>A tool to correct colors of image</summary>
+  <summary xml:lang="ca">Una eina per a corregir els colors de la imatge</summary>
+  <summary xml:lang="cs">Nástroj pro opravu barev obrázku</summary>
+  <summary xml:lang="en-GB">A tool to correct colours of image</summary>
+  <summary xml:lang="nl">Een hulpmiddel voor het corrigeren van kleuren in een afbeelding</summary>
+  <summary xml:lang="pl">Narzędzie do poprawy barw na obrazie</summary>
+  <summary xml:lang="pt-BR">Uma ferramenta para corrigir as cores das imagens</summary>
+  <summary xml:lang="sk">Nástroj na opravu farieb obrázku</summary>
+  <summary xml:lang="sv">Ett verktyg för att korrigera en bilds färger</summary>
+  <summary xml:lang="uk">Інструмент для виправлення кольорів зображення</summary>
+  <summary xml:lang="x-test">xxA tool to correct colors of imagexx</summary>
+  <developer_name>digiKam Project</developer_name>
+  <developer_name xml:lang="ca">Projecte digiKam</developer_name>
+  <developer_name xml:lang="cs">Projekt digiKam</developer_name>
+  <developer_name xml:lang="en-GB">digiKam Project</developer_name>
+  <developer_name xml:lang="nl">digiKam-project</developer_name>
+  <developer_name xml:lang="pl">Projekt digiKam</developer_name>
+  <developer_name xml:lang="pt-BR">Projeto digiKam</developer_name>
+  <developer_name xml:lang="sk">Projekt digiKamu</developer_name>
+  <developer_name xml:lang="sv">Digikam-projektet</developer_name>
+  <developer_name xml:lang="uk">Проект digiKam</developer_name>
+  <developer_name xml:lang="x-test">xxdigiKam Projectxx</developer_name>
+  <url type="homepage">http://www.digikam.org/</url>
+</component>

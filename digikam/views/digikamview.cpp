@@ -1276,15 +1276,17 @@ void DigikamView::slotAlbumOpenInTerminal()
 
 void DigikamView::slotAlbumRefresh()
 {
+    Album* const album = d->iconView->currentAlbum();
+    if (!album) return;
+    
     // force reloading of thumbnails
     LoadingCacheInterface::cleanThumbnailCache();
-    Album* const album = d->iconView->currentAlbum();
-
+    
     ThumbsGenerator* const tool = new ThumbsGenerator(true, album->id());
     tool->start();
     
     // if physical album, schedule a collection scan of current album's path
-    if (album && album->type() == Album::PHYSICAL)
+    if (album->type() == Album::PHYSICAL)
     {
         NewItemsFinder* const tool = new NewItemsFinder(NewItemsFinder::ScheduleCollectionScan,
                                                         QStringList() << static_cast<PAlbum*>(album)->folderPath());

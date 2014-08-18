@@ -104,7 +104,7 @@ libopencv       >= 2.4.9                      http://opencv.willowgarage.com
 Optional :
 
 libkdepimlibs   >= 4.4.x                      http://pim.kde.org                                                To support KAddressBook entries.
-liblensfun      >= 0.2.6                      http://lensfun.berlios.de                                         To support LensCorrection tool.
+liblensfun      >= 0.2.6                      http://lensfun.sourceforge.net                                    To support LensCorrection tool.
 liblqr-1        >= 0.4.1                      http://liblqr.wikidot.com                                         To support Liquid Rescale tool.
 libeigen3       >= 3.x                        http://eigen.tuxfamily.org                                        To support Refocus tool.
 libgphoto2      >= 2.4.0                      http://www.gphoto.org                                             To support Gphoto2 Cameras.

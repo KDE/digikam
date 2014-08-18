@@ -21,3 +21,4 @@ TARGET_LINK_LIBRARIES(
 INSTALL(TARGETS digikamimageplugin_decorate       DESTINATION ${PLUGIN_INSTALL_DIR})
 INSTALL(FILES digikamimageplugin_decorate_ui.rc   DESTINATION ${DATA_INSTALL_DIR}/digikam)
 INSTALL(FILES digikamimageplugin_decorate.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+INSTALL(FILES digiKam-ImagePlugin_Decorate.metainfo.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata)

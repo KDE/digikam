@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="addon">
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <id>digiKam-ImagePlugin_FxFilters</id>
+  <extends>digikam.desktop</extends>
+  <name>ImagePlugin-FxFilters</name>
+  <name xml:lang="ca">Connector d'imatge pels filtres d'efectes especials</name>
+  <name xml:lang="en-GB">ImagePlugin-FxFilters</name>
+  <name xml:lang="nl">ImagePlugin-FxFilters</name>
+  <name xml:lang="pl">WtyczkaObrazu-FiltryEfektówSpecjalnych</name>
+  <name xml:lang="pt-BR">ImagePlugin-FxFilters</name>
+  <name xml:lang="sk">ImagePlugin-FxFilters</name>
+  <name xml:lang="sv">Bildinsticksprogrammet Filtereffekter</name>
+  <name xml:lang="uk">ImagePlugin-FxFilters</name>
+  <name xml:lang="x-test">xxImagePlugin-FxFiltersxx</name>
+  <summary>Special effect filters plugin for digiKam</summary>
+  <summary xml:lang="ca">Connector amb filtres d'efectes especials pel digiKam</summary>
+  <summary xml:lang="cs">Modul filtrů speciálních efektů digiKamu</summary>
+  <summary xml:lang="en-GB">Special effect filters plugin for digiKam</summary>
+  <summary xml:lang="nl">digiKam-plugin voor speciale effectfilters</summary>
+  <summary xml:lang="pl">Wtyczka filtrów efektów specjalnych dla digiKam</summary>
+  <summary xml:lang="pt-BR">Plugin de filtros de efeitos especiais para o digiKam</summary>
+  <summary xml:lang="sk">Plugin filtrov špeciálnych efektov pre digiKam</summary>
+  <summary xml:lang="sv">Insticksprogram för Digikam med specialeffektfilter</summary>
+  <summary xml:lang="uk">Додаток фільтрів спеціальних ефектів до digiKam</summary>
+  <summary xml:lang="x-test">xxSpecial effect filters plugin for digiKamxx</summary>
+  <developer_name>digiKam Project</developer_name>
+  <developer_name xml:lang="ca">Projecte digiKam</developer_name>
+  <developer_name xml:lang="cs">Projekt digiKam</developer_name>
+  <developer_name xml:lang="en-GB">digiKam Project</developer_name>
+  <developer_name xml:lang="nl">digiKam-project</developer_name>
+  <developer_name xml:lang="pl">Projekt digiKam</developer_name>
+  <developer_name xml:lang="pt-BR">Projeto digiKam</developer_name>
+  <developer_name xml:lang="sk">Projekt digiKamu</developer_name>
+  <developer_name xml:lang="sv">Digikam-projektet</developer_name>
+  <developer_name xml:lang="uk">Проект digiKam</developer_name>
+  <developer_name xml:lang="x-test">xxdigiKam Projectxx</developer_name>
+  <url type="homepage">http://www.digikam.org/</url>
+</component>

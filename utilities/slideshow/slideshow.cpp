@@ -58,6 +58,7 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "dimg.h"
 #include "globals.h"
 #include "previewloadthread.h"
@@ -426,10 +427,13 @@ void SlideShow::updatePixmap()
                we need to increase the pixel size of the rendered
                pixmap.
             */
+#ifdef USE_QT_SCALING
             double xratio = double(d->preview.width()) / width();
             double yratio = double(d->preview.height()) / height();
             double ratio = qMax(qMin(xratio, yratio), 1.0);
-
+#else
+            double ratio = 1.0;
+#endif
             QSize fullSize = QSizeF(ratio*width(), ratio*height()).toSize();
             d->pixmap = QPixmap(fullSize);
             d->pixmap.fill(Qt::black);

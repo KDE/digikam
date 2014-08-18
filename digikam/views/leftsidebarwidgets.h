@@ -114,6 +114,7 @@ public:
     AlbumPointer<TAlbum> currentAlbum() const;
 
 private:
+
     void setNoTagsAlbum();
 
 public Q_SLOTS:
@@ -342,6 +343,10 @@ public:
     void    changeAlbumFromHistory(QList<Album*> album);
     QPixmap getIcon();
     QString getCaption();
+
+private Q_SLOTS:
+
+    void showNonGeolocatedItems();
 
 Q_SIGNALS:
 
