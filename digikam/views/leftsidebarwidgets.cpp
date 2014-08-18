@@ -206,6 +206,8 @@ public:
     bool           noTagsWasChecked;
     bool           ExistingTagsWasChecked;
 
+    QString        noTagsSearchXml;
+
     static const QString configTagsSourceEntry;
 };
 
@@ -330,14 +332,17 @@ AlbumPointer<TAlbum> TagViewSideBarWidget::currentAlbum() const
 
 void TagViewSideBarWidget::setNoTagsAlbum()
 {
-    SearchXmlWriter writer;
-    writer.setFieldOperator((SearchXml::standardFieldOperator()));
-    writer.writeGroup();
-    writer.writeField("notag", SearchXml::Equal);
-    writer.finishField();
-    writer.finishGroup();
-    writer.finish();
-    QString xml = writer.xml();
+    if(d->noTagsSearchXml.isEmpty())
+    {
+        SearchXmlWriter writer;
+        writer.setFieldOperator((SearchXml::standardFieldOperator()));
+        writer.writeGroup();
+        writer.writeField("notag", SearchXml::Equal);
+        writer.finishField();
+        writer.finishGroup();
+        writer.finish();
+        d->noTagsSearchXml = writer.xml();
+    }
 
     QString title = SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch);
     SAlbum* album = AlbumManager::instance()->findSAlbum(title);
@@ -348,12 +353,12 @@ void TagViewSideBarWidget::setNoTagsAlbum()
     {
         id = album->id();
         DatabaseAccess().db()->updateSearch(id,DatabaseSearch::AdvancedSearch,
-                                            SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch), xml);
+                                            SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch), d->noTagsSearchXml);
     }
     else
     {
         id = DatabaseAccess().db()->addSearch(DatabaseSearch::AdvancedSearch,
-                                              SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch), xml);
+                                              SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch), d->noTagsSearchXml);
     }
 
     album = new SAlbum(i18n("No Tags Album"), id);
@@ -1249,13 +1254,11 @@ class GPSSearchSideBarWidget::Private
 {
 public:
     Private() :
-        gpsSearchView(0),
-        nonGPSBtn(0)
+        gpsSearchView(0)
     {
     }
 
     GPSSearchView* gpsSearchView;
-    QPushButton*   nonGPSBtn;
 };
 
 GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
@@ -1268,22 +1271,15 @@ GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget* const parent, SearchMode
     d->gpsSearchView = new GPSSearchView(this, searchModel, searchModificationHelper, imageFilterModel, itemSelectionModel);
     d->gpsSearchView->setConfigGroup(getConfigGroup());
 
-    d->nonGPSBtn = new QPushButton(this);
-    d->nonGPSBtn->setText(i18n("View Non Geolocated Items"));
-
     QScrollArea* const scrollArea = new QScrollArea(this);
     QVBoxLayout* const layout     = new QVBoxLayout(this);
 
-    layout->addWidget(d->nonGPSBtn);
     layout->addWidget(scrollArea);
     scrollArea->setWidget(d->gpsSearchView);
     scrollArea->setWidgetResizable(true);
 
     connect(d->gpsSearchView, SIGNAL(signalMapSoloItems(QList<qlonglong>,QString)),
             this, SIGNAL(signalMapSoloItems(QList<qlonglong>,QString)));
-
-    connect(d->nonGPSBtn, SIGNAL(clicked()),
-            this, SLOT(showNonGeolocatedItems()));
 }
 
 GPSSearchSideBarWidget::~GPSSearchSideBarWidget()
@@ -1323,42 +1319,6 @@ QPixmap GPSSearchSideBarWidget::getIcon()
 QString GPSSearchSideBarWidget::getCaption()
 {
     return i18nc("Search images on a map", "Map");
-}
-
-void GPSSearchSideBarWidget::showNonGeolocatedItems()
-{
-    SearchXmlWriter writer;
-    writer.setFieldOperator((SearchXml::standardFieldOperator()));
-    writer.writeGroup();
-    writer.writeField("nogps", SearchXml::Equal);
-    writer.finishField();
-    writer.finishGroup();
-    writer.finish();
-    QString xml = writer.xml();
-
-    QString title = SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch);
-    SAlbum* album = AlbumManager::instance()->findSAlbum(title);
-
-    int id;
-
-    if(album)
-    {
-        id = album->id();
-        DatabaseAccess().db()->updateSearch(id,DatabaseSearch::AdvancedSearch,
-                                            SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch), xml);
-    }
-    else
-    {
-        id = DatabaseAccess().db()->addSearch(DatabaseSearch::AdvancedSearch,
-                                              SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch), xml);
-    }
-
-    album = new SAlbum(i18n("Non Geo-located Items"), id);
-
-    if(album)
-    {
-        AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << album);
-    }
 }
 
 // -----------------------------------------------------------------------------
