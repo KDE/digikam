@@ -114,6 +114,7 @@ public:
     AlbumPointer<TAlbum> currentAlbum() const;
 
 private:
+
     void setNoTagsAlbum();
 
 public Q_SLOTS:

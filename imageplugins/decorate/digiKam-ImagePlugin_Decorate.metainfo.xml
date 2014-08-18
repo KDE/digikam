@@ -6,6 +6,7 @@
   <extends>digikam.desktop</extends>
   <name>ImagePlugin-Decorate</name>
   <name xml:lang="ca">Connector d'imatge per a decorar</name>
+  <name xml:lang="en-GB">ImagePlugin-Decorate</name>
   <name xml:lang="nl">ImagePlugin-Decorate</name>
   <name xml:lang="pl">WtyczkaObrazu-dekoracja</name>
   <name xml:lang="pt-BR">ImagePlugin-Decorate</name>
@@ -16,6 +17,7 @@
   <summary>A tool to decorate an image</summary>
   <summary xml:lang="ca">Una eina per a decorar una imatge</summary>
   <summary xml:lang="cs">Nástroj pro dekoraci obrázku</summary>
+  <summary xml:lang="en-GB">A tool to decorate an image</summary>
   <summary xml:lang="nl">Een hulpmiddel voor het decoreren van een afbeelding</summary>
   <summary xml:lang="pl">Narzędzie do dekorowania obrazu</summary>
   <summary xml:lang="pt-BR">Uma ferramenta para decoração de imagens</summary>
@@ -26,6 +28,7 @@
   <developer_name>digiKam Project</developer_name>
   <developer_name xml:lang="ca">Projecte digiKam</developer_name>
   <developer_name xml:lang="cs">Projekt digiKam</developer_name>
+  <developer_name xml:lang="en-GB">digiKam Project</developer_name>
   <developer_name xml:lang="nl">digiKam-project</developer_name>
   <developer_name xml:lang="pl">Projekt digiKam</developer_name>
   <developer_name xml:lang="pt-BR">Projeto digiKam</developer_name>

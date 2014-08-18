@@ -341,7 +341,7 @@ void TagViewSideBarWidget::setNoTagsAlbum()
 
     QString title = SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch);
     SAlbum* album = AlbumManager::instance()->findSAlbum(title);
-    album = AlbumManager::instance()->findSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch));
+
     int id;
 
     if(album)
@@ -1249,7 +1249,8 @@ class GPSSearchSideBarWidget::Private
 {
 public:
     Private() :
-        gpsSearchView(0)
+        gpsSearchView(0),
+        nonGPSBtn(0)
     {
     }
 
@@ -1337,7 +1338,7 @@ void GPSSearchSideBarWidget::showNonGeolocatedItems()
 
     QString title = SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch);
     SAlbum* album = AlbumManager::instance()->findSAlbum(title);
-    album = AlbumManager::instance()->findSAlbum(SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch));
+
     int id;
 
     if(album)
