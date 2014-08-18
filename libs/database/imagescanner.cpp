@@ -1812,6 +1812,11 @@ void ImageScanner::scanBalooInfo()
 #ifdef HAVE_BALOO
 
     BalooWrap *baloo = BalooWrap::instance();
+    if(!baloo->getSyncToDigikam())
+    {
+        return;
+    }
+
     BalooInfo bInfo = baloo->getSemanticInfo(KUrl(d->fileInfo.absoluteFilePath()));
 
     if (!bInfo.tags.isEmpty())

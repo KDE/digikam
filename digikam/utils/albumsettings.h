@@ -400,6 +400,8 @@ public:
     KConfigGroup generalConfigGroup() const;
 
 
+private slots:
+    void applyBalooSettings();
 private:
 
     AlbumSettings();

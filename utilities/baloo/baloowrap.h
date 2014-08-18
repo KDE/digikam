@@ -120,6 +120,14 @@ public:
      */
     void addInfoToDigikam(BalooInfo& info, const KUrl &url);
 
+    void setSyncToBaloo(bool value);
+
+    bool getSyncToBaloo();
+
+    void setSyncToDigikam(bool value);
+
+    bool getSyncToDigikam();
+
 public Q_SLOTS:
     /**
      * @brief slotFetchFinished -used for asyncronous information retrieval

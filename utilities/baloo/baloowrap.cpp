@@ -57,10 +57,11 @@ class BalooWrap::Private
 public:
     Private()
     {
-
+        syncFromBalooToDigikam = false;
+        syncFromDigikamToBaloo = false;
     }
-    int dummy;
-//    TagSet mAllTags;
+    bool syncFromDigikamToBaloo;
+    bool syncFromBalooToDigikam;
 };
 
 QPointer<BalooWrap> BalooWrap::internalPtr = QPointer<BalooWrap>();
@@ -103,6 +104,11 @@ void BalooWrap::setRating(KUrl &url, int rating)
 
 void BalooWrap::setAllData(KUrl &url, QStringList* tags, QString* comment, int rating)
 {
+    if(!d->syncFromDigikamToBaloo)
+    {
+        return;
+    }
+
     bool write = false;
     Baloo::File file(url.toLocalFile());
 
@@ -135,6 +141,10 @@ void BalooWrap::setAllData(KUrl &url, QStringList* tags, QString* comment, int r
 
 BalooInfo BalooWrap::getSemanticInfo(const KUrl& url)
 {
+    if(!d->syncFromBalooToDigikam)
+    {
+        return BalooInfo();
+    }
     Baloo::FileFetchJob* job = new Baloo::FileFetchJob(url.toLocalFile());
     connect(job, SIGNAL(finished(KJob*)), this, SLOT(slotFetchFinished(KJob*)));
 
@@ -258,6 +268,28 @@ void BalooWrap::addInfoToDigikam(BalooInfo &bInfo, const KUrl &fileUrl)
             info.setTag(tagIdsForInfo.at(i));
         }
     }
+}
+
+void BalooWrap::setSyncToBaloo(bool value)
+{
+    kDebug() << "Setting Sync to Baloo to ++++++++" << value;
+    d->syncFromDigikamToBaloo = value;
+}
+
+bool BalooWrap::getSyncToBaloo()
+{
+    return d->syncFromDigikamToBaloo;
+}
+
+bool BalooWrap::getSyncToDigikam()
+{
+    return d->syncFromBalooToDigikam;
+}
+
+void BalooWrap::setSyncToDigikam(bool value)
+{
+    kDebug() << "Setting Sync to Digikam to ++++++++++++++" << value;
+    d->syncFromBalooToDigikam = value;
 }
 
 // NOTE: useful code to extend functionality in the future

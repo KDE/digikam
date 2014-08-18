@@ -941,19 +941,14 @@ bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataSettingsC
 void MetadataHub::writeToBaloo(QString filePath, const MetadataSettingsContainer &settings)
 {
 #ifdef HAVE_BALOO
-    AlbumSettings* const aSettings = AlbumSettings::instance();
 
-    if (!aSettings)
-    {
-        return;
-    }
-
-    bool saveToBaloo = aSettings->getSyncDigikamToBaloo();
+    BalooWrap *baloo = BalooWrap::instance();
     int rating = -1;
     QString* comment = 0;
 
-    if(!saveToBaloo)
+    if(!baloo->getSyncToBaloo())
     {
+        kDebug() << "No write to baloo +++++++++++++++++++++++++++++++++++++";
         return;
     }
     bool saveComment    = (settings.saveComments   && d->commentsStatus   == MetadataAvailable);
@@ -989,7 +984,7 @@ void MetadataHub::writeToBaloo(QString filePath, const MetadataSettingsContainer
     }
     newKeywords = cleanupTags(newKeywords);
     KUrl url(filePath);
-    BalooWrap::instance()->setAllData(url,&newKeywords,comment,rating);
+    baloo->setAllData(url,&newKeywords,comment,rating);
 #else
     Q_UNUSED(filePath);
     Q_UNUSED(settings);

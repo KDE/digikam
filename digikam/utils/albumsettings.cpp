@@ -58,6 +58,7 @@
 #include "thumbnailsize.h"
 #include "versionmanager.h"
 #include "thememanager.h"
+#include "baloowrap.h"
 
 using namespace KDcrawIface;
 
@@ -326,7 +327,7 @@ public:
     int                                 imageGroupMode;
     AlbumSettings::ItemLeftClickAction  itemLeftClickAction;
 
-    // nepomuk settings
+    // Baloo settings
     bool                                syncToDigikam;
     bool                                syncToBaloo;
 
@@ -418,8 +419,8 @@ const QString AlbumSettings::Private::configUseTrashEntry("Use Trash");
 const QString AlbumSettings::Private::configShowTrashDeleteDialogEntry("Show Trash Delete Dialog");
 const QString AlbumSettings::Private::configShowPermanentDeleteDialogEntry("Show Permanent Delete Dialog");
 const QString AlbumSettings::Private::configApplySidebarChangesDirectlyEntry("Apply Sidebar Changes Directly");
-const QString AlbumSettings::Private::configSyncBalootoDigikamEntry("Sync Nepomuk to Digikam");
-const QString AlbumSettings::Private::configSyncDigikamtoBalooEntry("Sync Digikam to Nepomuk");
+const QString AlbumSettings::Private::configSyncBalootoDigikamEntry("Sync Baloo to Digikam");
+const QString AlbumSettings::Private::configSyncDigikamtoBalooEntry("Sync Digikam to Baloo");
 const QString AlbumSettings::Private::configStringComparisonTypeEntry("String Comparison Type");
 const QString AlbumSettings::Private::configFaceDetectionAccuracyEntry("Detection Accuracy");
 const QString AlbumSettings::Private::configApplicationStyleEntry("Application Style");
@@ -566,6 +567,12 @@ KConfigGroup AlbumSettings::generalConfigGroup() const
     return d->config->group(d->configGroupGeneral);
 }
 
+void AlbumSettings::applyBalooSettings()
+{
+    BalooWrap::instance()->setSyncToBaloo(d->syncToBaloo);
+    BalooWrap::instance()->setSyncToDigikam(d->syncToDigikam);
+}
+
 void AlbumSettings::readSettings()
 {
     KSharedConfigPtr config = d->config;
@@ -685,6 +692,8 @@ void AlbumSettings::readSettings()
 
     d->syncToDigikam         = group.readEntry(d->configSyncBalootoDigikamEntry, false);
     d->syncToBaloo         = group.readEntry(d->configSyncDigikamtoBalooEntry, false);
+
+    emit balooSettingsChanged();
 
 #endif // HAVE_BALOO
 
