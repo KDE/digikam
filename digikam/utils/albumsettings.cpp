@@ -569,8 +569,10 @@ KConfigGroup AlbumSettings::generalConfigGroup() const
 
 void AlbumSettings::applyBalooSettings()
 {
+#ifdef HAVE_BALOO
     BalooWrap::instance()->setSyncToBaloo(d->syncToBaloo);
     BalooWrap::instance()->setSyncToDigikam(d->syncToDigikam);
+#endif
 }
 
 void AlbumSettings::readSettings()
