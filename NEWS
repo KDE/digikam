@@ -3,6 +3,8 @@ digiKam 4.3.0 - Release date: 2014-09-07
 
 NEW FEATURES:
 
+Database : Nepomuk support have been replaced by Baloo support (https://community.kde.org/Baloo).
+
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 338048 - Separate Tags in Public and Private for Export.
@@ -18,5 +20,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 011 ==> 338085 - digiKam 4.2 fails to start on windows.
 012 ==> 327646 - MySQL : Failed to create tables in database" Error In digiKam [patch].
 013 ==> 195006 - SQLITE : UTF8 characters not accepted in database file path.
-014 ==> 
+014 ==> 308931 - digiKam Nepomuk integration (v2).
+015 ==> 
 
