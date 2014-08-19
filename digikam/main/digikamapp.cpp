@@ -743,15 +743,16 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    QSignalMapper* browseActionsMapper = new QSignalMapper(this);
+    QSignalMapper* const browseActionsMapper = new QSignalMapper(this);
     connect(browseActionsMapper, SIGNAL(mapped(QWidget*)),
             d->view, SLOT(slotLeftSideBarActivate(QWidget*)));
 
-    foreach(SidebarWidget* leftWidget, d->view->leftSidebarWidgets())
+    foreach(SidebarWidget* const leftWidget, d->view->leftSidebarWidgets())
     {
-        QString actionName = "browse_" +
-                             leftWidget->objectName().remove(' ').remove("Sidebar").remove("FolderView").remove("View").toLower();
-        KAction* action = new KAction(KIcon(leftWidget->getIcon()), leftWidget->getCaption(), this);
+        QString actionName = "browse_" + leftWidget->objectName().remove(' ').remove("Sidebar").remove("FolderView").remove("View").toLower();
+        kDebug() << actionName;
+
+        KAction* const action = new KAction(KIcon(leftWidget->getIcon()), leftWidget->getCaption(), this);
         actionCollection()->addAction(actionName, action);
         connect(action, SIGNAL(triggered()), browseActionsMapper, SLOT(map()));
         browseActionsMapper->setMapping(action, leftWidget);
