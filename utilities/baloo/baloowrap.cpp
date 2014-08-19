@@ -146,7 +146,6 @@ BalooInfo BalooWrap::getSemanticInfo(const KUrl& url)
         return BalooInfo();
     }
     Baloo::FileFetchJob* job = new Baloo::FileFetchJob(url.toLocalFile());
-    connect(job, SIGNAL(finished(KJob*)), this, SLOT(slotFetchFinished(KJob*)));
 
     job->exec();
 
@@ -272,7 +271,6 @@ void BalooWrap::addInfoToDigikam(BalooInfo &bInfo, const KUrl &fileUrl)
 
 void BalooWrap::setSyncToBaloo(bool value)
 {
-    kDebug() << "Setting Sync to Baloo to ++++++++" << value;
     d->syncFromDigikamToBaloo = value;
 }
 
@@ -288,7 +286,6 @@ bool BalooWrap::getSyncToDigikam()
 
 void BalooWrap::setSyncToDigikam(bool value)
 {
-    kDebug() << "Setting Sync to Digikam to ++++++++++++++" << value;
     d->syncFromBalooToDigikam = value;
 }
 
