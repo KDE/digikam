@@ -20,24 +20,26 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
 #ifndef BALOOWRAP_H
 #define BALOOWRAP_H
 
-// Qt
+// Qt includes
+
 #include <QObject>
 #include <QStringList>
 #include <QPointer>
 
-// KDE
+// KDE includes
+
 #include <kurl.h>
 
-// Local
-#include "digikam_export.h"
+// Local includes
 
+#include "digikam_export.h"
 
 class KJob;
 class KUrl;
-
 
 namespace Digikam
 {
@@ -47,13 +49,15 @@ class ImageInfo;
 class BalooInfo
 {
 public:
+
     BalooInfo()
     {
         rating = -1;
     }
+
     QStringList tags;
-    QString comment;
-    int rating;
+    QString     comment;
+    int         rating;
 };
 
 /**
@@ -69,8 +73,10 @@ public:
 class DIGIKAM_DATABASE_EXPORT BalooWrap : public QObject
 {
     Q_OBJECT
+
 public:
-    BalooWrap(QObject* parent = 0);
+
+    BalooWrap(QObject* const parent = 0);
     ~BalooWrap();
 
     /**
@@ -78,13 +84,13 @@ public:
      */
     static QPointer<BalooWrap> internalPtr;
     static BalooWrap* instance();
-    static bool isCreated() { return !(internalPtr.isNull()); }
+    static bool isCreated();
 
-    void setTags(KUrl& url, QStringList* tags);
+    void setTags(const KUrl& url, QStringList* const tags);
 
-    void setComment(KUrl& url, QString* comment);
+    void setComment(const KUrl& url, QString* const comment);
 
-    void setRating(KUrl& url, int rating);
+    void setRating(const KUrl& url, int rating);
 
     /**
      * @brief setAllData - generic method to set all data from digiKam to Baloo
@@ -93,19 +99,19 @@ public:
      * @param comment    - comment set to image, pass NULL to ignore
      * @param rating     - rating to set to image, set to -1 to ignore
      */
-    void setAllData(KUrl& url, QStringList *tags, QString *comment, int rating);
+    void setAllData(const KUrl& url, QStringList* const tags, QString* const comment, int rating);
 
     /**
      * @brief getSemanticInfo - Used by ImageScanner to retrieve all information
      *                          tags, comment, rating
      * @param url  - image url
-     * @return  - container class for tags, comment, rating
+     * @return     - container class for tags, comment, rating
      */
     BalooInfo getSemanticInfo(const KUrl& url);
 
     /**
-     * @brief bestDigikamTagForTagName -used in previous Nepomuk implementation,
-     *                                  searches for the best match for tag name
+     * @brief bestDigikamTagForTagName - used in previous Nepomuk implementation,
+     *                                   searches for the best match for tag name
      * @param info
      * @param tagname                  - tagname to be searched
      * @return                         - tagId of the new or existing tag
@@ -118,29 +124,31 @@ public:
      * @param info
      * @param url
      */
-    void addInfoToDigikam(BalooInfo& info, const KUrl &url);
+    void addInfoToDigikam(const BalooInfo& info, const KUrl& fileUrl);
 
     void setSyncToBaloo(bool value);
 
-    bool getSyncToBaloo();
+    bool getSyncToBaloo() const;
 
     void setSyncToDigikam(bool value);
 
-    bool getSyncToDigikam();
+    bool getSyncToDigikam() const;
 
 public Q_SLOTS:
+
     /**
-     * @brief slotFetchFinished -used for asyncronous information retrieval
-     *                           does not work now
+     * @brief slotFetchFinished - used for asyncronous information retrieval
+     *                            does not work now
      * @param job               - KJob for retrieving Baloo info
      */
     void slotFetchFinished(KJob* job);
 
 private:
+
     class Private;
     Private* const d;
 };
 
-} // namespace
+} // namespace Digikam
 
 #endif /* BALOOWRAP_H */

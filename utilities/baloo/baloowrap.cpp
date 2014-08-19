@@ -20,23 +20,22 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-// Self
-#include "baloowrap.h"
 
+#include "baloowrap.moc"
 
-// Qt
+// KDE includes
 
-
-// KDE
 #include <kdebug.h>
 #include <kurl.h>
 
-// Baloo
+// Baloo includes
+
 #include <baloo/file.h>
 #include <baloo/filefetchjob.h>
 #include <baloo/filemodifyjob.h>
 #include <baloo/taglistjob.h>
 
+// Local includes
 
 #include "tagscache.h"
 #include "albumdb.h"
@@ -49,31 +48,39 @@
 #include "imageinfo.h"
 #include "imagelister.h"
 #include "tagscache.h"
+
 namespace Digikam
 {
 
 class BalooWrap::Private
 {
 public:
+
     Private()
     {
         syncFromBalooToDigikam = false;
         syncFromDigikamToBaloo = false;
     }
+
     bool syncFromDigikamToBaloo;
     bool syncFromBalooToDigikam;
 };
 
 QPointer<BalooWrap> BalooWrap::internalPtr = QPointer<BalooWrap>();
 
-BalooWrap::BalooWrap(QObject* parent)
-: QObject(parent), d(new BalooWrap::Private)
+BalooWrap::BalooWrap(QObject* const parent)
+    : QObject(parent), d(new BalooWrap::Private)
 {
 }
 
 BalooWrap::~BalooWrap()
 {
     delete d;
+}
+
+bool BalooWrap::isCreated()
+{
+    return !(internalPtr.isNull());
 }
 
 BalooWrap* BalooWrap::instance()
@@ -87,22 +94,22 @@ BalooWrap* BalooWrap::instance()
 }
 
 
-void BalooWrap::setTags(KUrl &url, QStringList *tags)
+void BalooWrap::setTags(const KUrl& url, QStringList* const tags)
 {
     setAllData(url,tags, NULL, -1);
 }
 
-void BalooWrap::setComment(KUrl &url, QString *comment)
+void BalooWrap::setComment(const KUrl& url, QString* const comment)
 {
     setAllData(url, NULL, comment, -1);
 }
 
-void BalooWrap::setRating(KUrl &url, int rating)
+void BalooWrap::setRating(const KUrl& url, int rating)
 {
     setAllData(url, NULL, NULL, rating);
 }
 
-void BalooWrap::setAllData(KUrl &url, QStringList* tags, QString* comment, int rating)
+void BalooWrap::setAllData(const KUrl& url, QStringList* const tags, QString* const comment, int rating)
 {
     if(!d->syncFromDigikamToBaloo)
     {
@@ -117,11 +124,13 @@ void BalooWrap::setAllData(KUrl &url, QStringList* tags, QString* comment, int r
         file.setTags(*tags);
         write = true;
     }
+
     if(comment != NULL)
     {
         file.setUserComment(*comment);
         write = true;
     }
+
     if(rating != -1)
     {
         // digiKam store rating as value form 0 to 5
@@ -132,12 +141,10 @@ void BalooWrap::setAllData(KUrl &url, QStringList* tags, QString* comment, int r
 
     if(write)
     {
-        Baloo::FileModifyJob* job = new Baloo::FileModifyJob(file);
+        Baloo::FileModifyJob* const job = new Baloo::FileModifyJob(file);
         job->start();
     }
 }
-
-
 
 BalooInfo BalooWrap::getSemanticInfo(const KUrl& url)
 {
@@ -145,7 +152,8 @@ BalooInfo BalooWrap::getSemanticInfo(const KUrl& url)
     {
         return BalooInfo();
     }
-    Baloo::FileFetchJob* job = new Baloo::FileFetchJob(url.toLocalFile());
+
+    Baloo::FileFetchJob* const job = new Baloo::FileFetchJob(url.toLocalFile());
 
     job->exec();
 
@@ -154,9 +162,9 @@ BalooInfo BalooWrap::getSemanticInfo(const KUrl& url)
 
     BalooInfo bInfo;
     // Baloo have rating from 0 to 10, while digikam have only from 0 to 5
-    bInfo.rating = file.rating()/2;
-    bInfo.comment = file.userComment();
-    bInfo.tags = file.tags().toSet().toList();
+    bInfo.rating     = file.rating()/2;
+    bInfo.comment    = file.userComment();
+    bInfo.tags       = file.tags().toSet().toList();
 
     return bInfo;
 }
@@ -164,19 +172,17 @@ BalooInfo BalooWrap::getSemanticInfo(const KUrl& url)
 void BalooWrap::slotFetchFinished(KJob* job)
 {
     kDebug() << "Job finished";
-    Baloo::FileFetchJob* fjob = static_cast<Baloo::FileFetchJob*>(job);
-    Baloo::File file = fjob->file();
+    Baloo::FileFetchJob* const fjob = static_cast<Baloo::FileFetchJob*>(job);
+    Baloo::File file                = fjob->file();
 
     BalooInfo bInfo;
-    bInfo.rating = file.rating();
+    bInfo.rating  = file.rating();
     bInfo.comment = file.userComment();
-    bInfo.tags = file.tags().toSet().toList();
+    bInfo.tags    = file.tags().toSet().toList();
 
-
-    KUrl url = KUrl::fromLocalFile(file.url());
+    KUrl url      = KUrl::fromLocalFile(file.url());
     addInfoToDigikam(bInfo, url);
 }
-
 
 int BalooWrap::bestDigikamTagForTagName(const ImageInfo& info, const QString& tagname) const
 {
@@ -210,7 +216,7 @@ int BalooWrap::bestDigikamTagForTagName(const ImageInfo& info, const QString& ta
                 return 0;
             }
 
-            int id = tagId;
+            int id    = tagId;
             int score = 0;
 
             do
@@ -230,7 +236,7 @@ int BalooWrap::bestDigikamTagForTagName(const ImageInfo& info, const QString& ta
     }
 }
 
-void BalooWrap::addInfoToDigikam(BalooInfo &bInfo, const KUrl &fileUrl)
+void BalooWrap::addInfoToDigikam(const BalooInfo& bInfo, const KUrl& fileUrl)
 {
     QStringList tags = bInfo.tags;
     QList<int> tagIdsForInfo;
@@ -274,12 +280,12 @@ void BalooWrap::setSyncToBaloo(bool value)
     d->syncFromDigikamToBaloo = value;
 }
 
-bool BalooWrap::getSyncToBaloo()
+bool BalooWrap::getSyncToBaloo() const
 {
     return d->syncFromDigikamToBaloo;
 }
 
-bool BalooWrap::getSyncToDigikam()
+bool BalooWrap::getSyncToDigikam() const
 {
     return d->syncFromBalooToDigikam;
 }
@@ -309,4 +315,4 @@ void BalooWrap::setSyncToDigikam(bool value)
 //    }
 //}
 
-} // namespace
+} // namespace Digikam
