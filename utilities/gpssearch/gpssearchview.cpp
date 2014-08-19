@@ -230,18 +230,16 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     // Show Non Geolocated Items row
 
     QWidget* const nonGeolocatedActionRow = new QWidget();
-    QHBoxLayout* const thirdActionRowHBox = new QHBoxLayout();
-    thirdActionRowHBox->setMargin(0);
-    nonGeolocatedActionRow->setLayout(thirdActionRowHBox);
+    QVBoxLayout* const thirdActionRowVBox = new QVBoxLayout();
+    thirdActionRowVBox->setMargin(0);
+    nonGeolocatedActionRow->setLayout(thirdActionRowVBox);
 
-    QLabel* const thirdActionRowLabel = new QLabel(i18n("Show Non-Geolocated Items:"));
-    thirdActionRowHBox->addWidget(thirdActionRowLabel);
-
-    QToolButton* const nonGeolocatedBtn = new QToolButton(nonGeolocatedActionRow);
+    QPushButton* const nonGeolocatedBtn = new QPushButton(nonGeolocatedActionRow);
+    nonGeolocatedBtn->setText(i18n("Show Non-Geolocated Items"));
     nonGeolocatedBtn->setIcon(KIcon("emblem-unmounted"));
-    thirdActionRowHBox->addWidget(nonGeolocatedBtn);
+    thirdActionRowVBox->addWidget(nonGeolocatedBtn);
 
-    thirdActionRowHBox->addStretch(10);
+    thirdActionRowVBox->addStretch(10);
     vlayTop->addWidget(nonGeolocatedActionRow);
 
     // end of the third action row
@@ -286,6 +284,9 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
 
     connect(d->mapSearchWidget, SIGNAL(signalRemoveCurrentFilter()),
             this, SLOT(slotRemoveCurrentFilter()));
+
+    connect(nonGeolocatedBtn, SIGNAL(clicked()),
+            d->mapSearchWidget->getControlAction("mousemode-removecurrentregionselection"), SIGNAL(triggered()));
 
     connect(nonGeolocatedBtn, SIGNAL(clicked()),
             this, SLOT(showNonGeolocatedItems()));
