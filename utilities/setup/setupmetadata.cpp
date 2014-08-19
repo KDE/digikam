@@ -485,18 +485,6 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     gLayout3->addWidget(d->saveToBalooBox);
     gLayout3->addWidget(d->readFromBalooBox);
 
-    d->resyncButton = new QToolButton;
-    d->resyncButton->setText(i18n("Fully Resynchronize again"));
-    d->resyncButton->setIcon(SmallIcon("edit-redo"));
-    d->resyncButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    d->resyncButton->setCheckable(true);
-
-    connect(d->saveToBalooBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotBalooToggled()));
-
-    connect(d->readFromBalooBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotBalooToggled()));
-
     d->tab->insertTab(Baloo, balooPanel, i18nc("@title:tab", "Baloo"));
 
     // --------------------------------------------------------
