@@ -501,7 +501,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     balooExplanation->setWordWrap(true);
     QString balootxt;
 
-    balootxt.append(i18n("<p><a href='http://nepomuk.kde.org'>Baloo</a> "
+    balootxt.append(i18n("<p><a href='http://community.kde.org/Baloo'>Baloo</a> "
                         "provides the basis to handle all kinds of metadata on the KDE desktop in a generic fashion. "
                         "It allows you to tag, rate and comment your files in KDE applications like Dolphin.</p> "
                         "<p>Please set here if you want to synchronize the metadata stored by digiKam desktop-wide with the "

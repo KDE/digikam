@@ -78,9 +78,9 @@ static inline void showDigikamComponentsInfo()
     list.insert(i18n("Sqlite2 support"), i18n("Yes"));
 #endif /* HAVE_SQLITE2 */
 
-#ifdef HAVE_NEPOMUK
-    list.insert(i18n("Nepomuk support"), i18n("Yes"));
-#endif /* HAVE_NEPOMUK */
+#ifdef HAVE_BALOO
+    list.insert(i18n("Baloo support"), i18n("Yes"));
+#endif /* HAVE_BALOO */
 
 #ifdef HAVE_KDEPIMLIBS
     list.insert(i18n("Kdepimlibs support"), i18n("Yes"));
