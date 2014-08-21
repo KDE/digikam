@@ -1,4 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<!-- NOTE: don't forget to increase version ID when this file is modified -->
 <gui version="35" name="digikamimageplugin_color" >
 
  <MenuBar>
