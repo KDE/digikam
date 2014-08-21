@@ -155,7 +155,7 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     d->nameEdit = new KLineEdit(hbox);
     d->nameEdit->setClearButtonShown(true);
     d->nameEdit->setWhatsThis(i18n("Enter the name of the current map search to save in the "
-                                   "\"My Map Searches\" view."));
+                                   "\"Map Searches\" view."));
 
     d->saveBtn  = new QToolButton(hbox);
     d->saveBtn->setIcon(SmallIcon("document-save"));

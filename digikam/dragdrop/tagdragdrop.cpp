@@ -73,8 +73,6 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
             return false;
 
         KMenu popMenu(view);
-        popMenu.addTitle(SmallIcon("digikam"), i18n("My Tags"));
-
         QAction* const gotoAction = popMenu.addAction(SmallIcon("go-jump"), i18n("&Move Here"));
         popMenu.addSeparator();
         popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
@@ -156,7 +154,6 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
             else
             {
                 KMenu popMenu(view);
-                popMenu.addTitle(SmallIcon("digikam"), i18n("My Tags"));
                 QAction* setAction = 0;
 
                 if (imageIDs.count() == 1)
@@ -217,7 +214,6 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
         else
         {
             KMenu popMenu(view);
-            popMenu.addTitle(SmallIcon("digikam"), i18n("My Tags"));
             QAction* const assignAction = popMenu.addAction(SmallIcon("tag"),
                                                             i18n("Assign Tag(s) '%1' to Items", tagNames.join(", ")));
             popMenu.addSeparator();
@@ -320,14 +316,14 @@ QMimeData* TagDragDropHandler::createMimeData(const QList<Album*>& albums)
         return 0;
     }
 
-        QList<int> ids;
+    QList<int> ids;
 
-        foreach(Album* const album, albums)
-        {
-            ids << album->id();
-        }
+    foreach(Album* const album, albums)
+    {
+        ids << album->id();
+    }
 
-        return new DTagListDrag(ids);
+    return new DTagListDrag(ids);
 }
 
 } // namespace Digikam

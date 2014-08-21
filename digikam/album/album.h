@@ -7,7 +7,7 @@
  * Description : digiKam album types
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2014      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -50,8 +50,8 @@ namespace Digikam
 /** Album list type definition.
  */
 class Album;
-typedef QList<Album*> AlbumList;    
-    
+typedef QList<Album*> AlbumList;
+
 /**
  * \class Album
  * \brief Abstract base class for all album types
@@ -346,19 +346,18 @@ public:
     void setDate(const QDate& date);
 
     QString     albumRootPath() const;
-    int         albumRootId() const;
-    QString     caption() const;
-    QString     category() const;
-    QDate       date() const;
-    QString     albumPath() const;
-    QString     prettyUrl() const;
-    QString     folderPath() const;
-    DatabaseUrl databaseUrl() const;
-    KUrl        fileUrl() const;
-    QString     icon() const;
-    KUrl        iconKURL() const;
-
-    bool        isAlbumRoot() const;
+    int         albumRootId()   const;
+    QString     caption()       const;
+    QString     category()      const;
+    QDate       date()          const;
+    QString     albumPath()     const;
+    QString     prettyUrl()     const;
+    QString     folderPath()    const;
+    DatabaseUrl databaseUrl()   const;
+    KUrl        fileUrl()       const;
+    QString     icon()          const;
+    KUrl        iconKURL()      const;
+    bool        isAlbumRoot()   const;
 
 private:
 
@@ -432,16 +431,14 @@ public:
     explicit DAlbum(const QDate& date, bool root=false, Range range=Month);
     ~DAlbum();
 
-    QDate       date() const;
-    Range       range() const;
+    QDate       date()        const;
+    Range       range()       const;
     DatabaseUrl databaseUrl() const;
 
 private:
 
     static int m_uniqueID;
-
     QDate      m_date;
-
     Range      m_range;
 
     friend class AlbumManager;
@@ -459,15 +456,15 @@ public:
     SAlbum(const QString& title, int id, bool root=false);
     ~SAlbum();
 
-    DatabaseUrl          databaseUrl() const;
-    QString              query() const;
-    DatabaseSearch::Type searchType() const;
-    bool                 isNormalSearch() const;
-    bool                 isAdvancedSearch() const;
-    bool                 isKeywordSearch() const;
-    bool                 isTimelineSearch() const;
-    bool                 isHaarSearch() const;
-    bool                 isMapSearch() const;
+    DatabaseUrl          databaseUrl()        const;
+    QString              query()              const;
+    DatabaseSearch::Type searchType()         const;
+    bool                 isNormalSearch()     const;
+    bool                 isAdvancedSearch()   const;
+    bool                 isKeywordSearch()    const;
+    bool                 isTimelineSearch()   const;
+    bool                 isHaarSearch()       const;
+    bool                 isMapSearch()        const;
     bool                 isDuplicatesSearch() const;
 
     /**

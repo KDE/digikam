@@ -6,7 +6,7 @@
  * Date        : 2008-01-14
  * Description : Basic search tree view with editing functionality
  *
- * Copyright (C) 2008-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmail dot com>
  *
@@ -45,6 +45,7 @@ namespace Digikam
 class EditableSearchTreeView::Private
 {
 public:
+
     Private() :
         searchModificationHelper(0),
         renameSearchAction(0),
@@ -81,7 +82,7 @@ EditableSearchTreeView::~EditableSearchTreeView()
 
 QString EditableSearchTreeView::contextMenuTitle() const
 {
-    return i18n("My Searches");
+    return i18n("Searches");
 }
 
 void EditableSearchTreeView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* album)

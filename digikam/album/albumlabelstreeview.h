@@ -56,7 +56,7 @@ public:
 
 public:
 
-    explicit AlbumLabelsTreeView(QWidget *parent = 0, bool setCheckable = false);
+    explicit AlbumLabelsTreeView(QWidget* const parent = 0, bool setCheckable = false);
     ~AlbumLabelsTreeView();
 
     /**
@@ -119,6 +119,7 @@ public:
     void setCurrentAlbum();
 
 private:
+
     /**
      * @brief Initializing the tree-view hierarchy
      */
@@ -128,12 +129,15 @@ private:
     void initColorsTree();
 
 private Q_SLOTS:
+
     void slotSettingsChanged();
 
 Q_SIGNALS:
+
     void signalSetCurrentAlbum();
 
 private:
+
     class Private;
     Private* const d;
 };
@@ -145,7 +149,8 @@ class AlbumLabelsSearchHandler : public QObject
     Q_OBJECT
 
 public:
-    explicit AlbumLabelsSearchHandler(AlbumLabelsTreeView* treeWidget);
+
+    explicit AlbumLabelsSearchHandler(AlbumLabelsTreeView* const treeWidget);
     ~AlbumLabelsSearchHandler();
 
     /**
@@ -227,9 +232,11 @@ private Q_SLOTS:
     void slotData(KIO::Job* job, QByteArray data);
 
 Q_SIGNALS:
+
     void checkStateChanged(Album* album, Qt::CheckState checkState);
 
 private:
+
     class Private;
     Private* const d;
 };

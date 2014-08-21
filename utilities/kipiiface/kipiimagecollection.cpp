@@ -303,7 +303,7 @@ KUrl KipiImageCollection::uploadRoot()
 
 QString KipiImageCollection::uploadRootName()
 {
-    return i18n("My Albums");
+    return i18n("Albums");
 }
 
 bool KipiImageCollection::isDirectory()

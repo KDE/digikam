@@ -7,7 +7,7 @@
  * Description : Qt Model for Albums - drag and drop handling
  *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern dot ahrens at kdemail dot net>
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmail dot com>
  *
@@ -88,12 +88,11 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
 
         // TODO Copy?
         KMenu popMenu(view);
-        popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
-        QAction* moveAction = popMenu.addAction(SmallIcon("go-jump"), i18n("&Move Here"));
+        QAction* const moveAction = popMenu.addAction(SmallIcon("go-jump"), i18n("&Move Here"));
         popMenu.addSeparator();
         popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
         popMenu.setMouseTracking(true);
-        QAction* choice = popMenu.exec(QCursor::pos());
+        QAction* const choice = popMenu.exec(QCursor::pos());
 
         if (!droppedAlbum || !destAlbum)
         {
@@ -153,7 +152,6 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
             else
             {
                 KMenu popMenu(view);
-                popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
                 QAction* setAction = 0;
 
                 if (imageIDs.count() == 1)
@@ -196,7 +194,6 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
         else
         {
             KMenu popMenu(view);
-            popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
             QAction* const moveAction = popMenu.addAction(SmallIcon("go-jump"), i18n("&Move Here"));
             QAction* const copyAction = popMenu.addAction(SmallIcon("edit-copy"), i18n("&Copy Here"));
             QAction* thumbnailAction  = 0;
@@ -257,7 +254,6 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
         if (ui)
         {
             KMenu popMenu(view);
-            popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
             QAction* const downAction    = popMenu.addAction(SmallIcon("file-export"),
                                                              i18n("Download From Camera"));
             QAction* const downDelAction = popMenu.addAction(SmallIcon("file-export"),
@@ -302,7 +298,6 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
         else
         {
             KMenu popMenu(view);
-            popMenu.addTitle(SmallIcon("digikam"), i18n("My Albums"));
             QAction* const moveAction = popMenu.addAction(SmallIcon("go-jump"), i18n("&Move Here"));
             QAction* const copyAction = popMenu.addAction(SmallIcon("edit-copy"), i18n("&Copy Here"));
             popMenu.addSeparator();

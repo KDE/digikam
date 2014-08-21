@@ -720,7 +720,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
     d->nameEdit    = new KLineEdit(hbox2);
     d->nameEdit->setClearButtonShown(true);
     d->nameEdit->setWhatsThis(i18n("Enter the name of the current dates search to save in the "
-                                   "\"My Searches\" view"));
+                                   "\"Searches\" view"));
 
     d->saveButton  = new QToolButton(hbox2);
     d->saveButton->setIcon(SmallIcon("document-save"));

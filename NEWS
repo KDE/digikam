@@ -22,4 +22,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 013 ==> 195006 - SQLITE : UTF8 characters not accepted in database file path.
 014 ==> 308931 - digiKam Nepomuk integration (v2).
 015 ==> 225869 - Add option to found no geolocated images in database
-016 ==>
+016 ==> 338429 - Removal of preposition 'My' from UI wording.
+017 ==> 

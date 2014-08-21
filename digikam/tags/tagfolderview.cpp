@@ -7,7 +7,7 @@
  * Description : tags folder view.
  *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern dot ahrens at kdemail dot net>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2009-2011 by Johannes Wienke <languitar at semipol dot de>
  *
@@ -51,25 +51,25 @@
 namespace Digikam
 {
 
-class TagFolderView::TagFolderViewPriv
+class TagFolderView::Private
 {
 public:
 
-    TagFolderViewPriv() :
+    Private() :
         showFindDuplicateAction(true),
         resetIconAction(0),
         findDuplAction(0)
     {
     }
 
-    bool      showFindDuplicateAction;
+    bool     showFindDuplicateAction;
 
-    QAction*  resetIconAction;
-    QAction*  findDuplAction;
+    QAction* resetIconAction;
+    QAction* findDuplAction;
 };
 
-TagFolderView::TagFolderView(QWidget* parent, TagModel* model)
-    : TagTreeView(parent), d(new TagFolderViewPriv)
+TagFolderView::TagFolderView(QWidget* const parent, TagModel* const model)
+    : TagTreeView(parent), d(new Private)
 {
     setAlbumModel(model);
 
@@ -93,7 +93,7 @@ void TagFolderView::setShowFindDuplicateAction(bool show)
 
 QString TagFolderView::contextMenuTitle() const
 {
-    return i18n("My Tags");
+    return i18n("Tags");
 }
 
 void TagFolderView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* album)
@@ -110,13 +110,13 @@ void TagFolderView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* a
     cmh.addAction(d->resetIconAction);
     cmh.addSeparator();
 
-    KAction* const expandSel     = new KAction(KIcon("format-indent-more"),
-                                                i18n("Expand Selected Nodes"), this);
+    KAction* const expandSel   = new KAction(KIcon("format-indent-more"),
+                                             i18n("Expand Selected Nodes"), this);
 
     cmh.addAction(expandSel, this, SLOT(slotExpandNode()), false);
 
-    KAction* const collapseSel     = new KAction(KIcon("format-indent-more"),
-                                                i18n("Collapse Selected Recursively"), this);
+    KAction* const collapseSel = new KAction(KIcon("format-indent-more"),
+                                             i18n("Collapse Selected Recursively"), this);
 
     cmh.addAction(collapseSel, this, SLOT(slotCollapseNode()), false);
 
@@ -142,7 +142,7 @@ void TagFolderView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* a
 
 void TagFolderView::slotTagNewFromABCMenu(const QString& personName)
 {
-    TAlbum* parent = currentAlbum();
+    TAlbum* const parent = currentAlbum();
 
     if (!parent)
     {
@@ -223,8 +223,8 @@ void TagFolderView::slotCollapseNode()
 }
 void TagFolderView::handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album)
 {
-    Album* a    = album;
-    TAlbum* tag = dynamic_cast<TAlbum*> (a);
+    Album* const a    = album;
+    TAlbum* const tag = dynamic_cast<TAlbum*>(a);
 
     if (!tag)
     {
@@ -260,13 +260,14 @@ void TagFolderView::setContexMenuItems(ContextMenuHelper& cmh, QList< TAlbum* > 
     {
         cmh.addAction(d->findDuplAction);
     }
-    KAction* const expandSel     = new KAction(KIcon("format-indent-more"),
-                                                i18n("Expand Selected Recursively"), this);
+
+    KAction* const expandSel   = new KAction(KIcon("format-indent-more"),
+                                             i18n("Expand Selected Recursively"), this);
 
     cmh.addAction(expandSel, this, SLOT(slotExpandNode()), false);
 
-    KAction* const collapseSel     = new KAction(KIcon("format-indent-more"),
-                                                i18n("Collapse Selected Recursively"), this);
+    KAction* const collapseSel = new KAction(KIcon("format-indent-more"),
+                                             i18n("Collapse Selected Recursively"), this);
 
     cmh.addAction(collapseSel, this, SLOT(slotCollapseNode()), false);
     cmh.addSeparator();
@@ -278,27 +279,31 @@ void TagFolderView::setContexMenuItems(ContextMenuHelper& cmh, QList< TAlbum* > 
 
 void TagFolderView::contextMenuEvent(QContextMenuEvent* event)
 {
-    /**
+/*
     if (!d->enableContextMenu)
     {
         return;
     }
-    */
-    Album* album = albumFilterModel()->albumForIndex(indexAt(event->pos()));
+*/
 
+    Album* const album = albumFilterModel()->albumForIndex(indexAt(event->pos()));
 
     if (!showContextMenuAt(event, album))
     {
         return;
     }
+
     // switch to the selected album if need
-    /**
+
+/*
     if (d->selectOnContextMenu && album)
     {
         setCurrentAlbum(album);
     }
-    */
+*/
+
     // --------------------------------------------------------
+
     QModelIndexList selectedItems = selectionModel()->selectedIndexes();
 
     qSort(selectedItems.begin(),selectedItems.end());
@@ -306,7 +311,7 @@ void TagFolderView::contextMenuEvent(QContextMenuEvent* event)
 
     foreach(const QModelIndex& mIndex, selectedItems)
     {
-        TAlbum* temp = static_cast<TAlbum*>(albumForIndex(mIndex));
+        TAlbum* const temp = static_cast<TAlbum*>(albumForIndex(mIndex));
         items.push_back(temp);
     }
 
@@ -318,17 +323,20 @@ void TagFolderView::contextMenuEvent(QContextMenuEvent* event)
         QModelIndex root = this->model()->index(0,0);
         items.append(static_cast<TAlbum*>(albumForIndex(root)));
     }
+
     KMenu popmenu(this);
     popmenu.addTitle(contextMenuIcon(), contextMenuTitle());
     ContextMenuHelper cmhelper(&popmenu);
 
     setContexMenuItems(cmhelper, items);
-    /**
+
+/*
     foreach(ContextMenuElement* const element, d->contextMenuElements)
     {
         element->addActions(this, cmhelper, album);
     }
-     */
+*/
+
     AlbumPointer<Album> albumPointer(album);
     QAction* const choice = cmhelper.exec(QCursor::pos());
     handleCustomContextMenuAction(choice, albumPointer);

@@ -45,7 +45,7 @@ AlbumModel::AlbumModel(RootAlbumBehavior rootBehavior, QObject* const parent)
                                   AlbumManager::instance()->findPAlbum(0),
                                   rootBehavior, parent)
 {
-    m_columnHeader = i18n("My Albums");
+    m_columnHeader = i18n("Albums");
     setupThumbnailLoading();
 
     connect(AlbumManager::instance(), SIGNAL(signalPAlbumsDirty(QMap<int, int>)),
@@ -83,7 +83,7 @@ TagModel::TagModel(RootAlbumBehavior rootBehavior, QObject* const parent)
                                   AlbumManager::instance()->findTAlbum(0),
                                   rootBehavior, parent)
 {
-    m_columnHeader = i18n("My Tags");
+    m_columnHeader = i18n("Tags");
     setupThumbnailLoading();
 
     setTagCount(NormalTagCount);
@@ -142,7 +142,7 @@ SearchModel::SearchModel(QObject* const parent)
                                   AlbumManager::instance()->findSAlbum(0),
                                   IgnoreRootAlbum, parent)
 {
-    m_columnHeader = i18n("My Searches");
+    m_columnHeader = i18n("Searches");
 
     setShowCount(false);
 
@@ -247,7 +247,7 @@ DateAlbumModel::DateAlbumModel(QObject* const parent)
                                  AlbumManager::instance()->findDAlbum(0),
                                  IgnoreRootAlbum, parent)
 {
-    m_columnHeader = i18n("My Calendar");
+    m_columnHeader = i18n("Dates");
 
     connect(AlbumManager::instance(), SIGNAL(signalDAlbumsDirty(QMap<YearMonth,int>)),
             this, SLOT(setYearMonthMap(QMap<YearMonth,int>)));

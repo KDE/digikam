@@ -191,7 +191,7 @@ AlbumSelectionTreeView::AlbumSelectionTreeView(QWidget* const parent, AlbumModel
     setSortingEnabled(true);
     setSelectAlbumOnClick(true);
     setEnableContextMenu(true);
-    setContextMenuTitle(i18n("My Albums"));
+    setContextMenuTitle(i18n("Albums"));
 
     d->contextMenuElement = new Private::AlbumSelectionTreeViewContextMenuElement(d);
     addContextMenuElement(d->contextMenuElement);

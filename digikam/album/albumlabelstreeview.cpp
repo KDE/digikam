@@ -58,6 +58,7 @@ namespace Digikam
 class AlbumLabelsTreeView::Private
 {
 public:
+
     Private() :
         ratings(0),
         picks(0),
@@ -78,27 +79,27 @@ public:
         starPolygon << QPoint(16, 36);
     }
 
-    QFont                        rootFont;
-    QFont                        regularFont;
-    QSize                        iconSize;
-    QSize                        rootSizeHint;
+    QFont                      rootFont;
+    QFont                      regularFont;
+    QSize                      iconSize;
+    QSize                      rootSizeHint;
 
-    QPolygon                     starPolygon;
+    QPolygon                   starPolygon;
 
-    QTreeWidgetItem*             ratings;
-    QTreeWidgetItem*             picks;
-    QTreeWidgetItem*             colors;
+    QTreeWidgetItem*           ratings;
+    QTreeWidgetItem*           picks;
+    QTreeWidgetItem*           colors;
 
-    bool                         isCheckableTreeView;
-    bool                         isLoadingState;
-    int                          iconSizeFromSetting;
+    bool                       isCheckableTreeView;
+    bool                       isLoadingState;
+    int                        iconSizeFromSetting;
 
-    QHash<Labels, QList<int> >   selectedLabels;
+    QHash<Labels, QList<int> > selectedLabels;
 
-    static const QString         configRatingSelectionEntry;
-    static const QString         configPickSelectionEntry;
-    static const QString         configColorSelectionEntry;
-    static const QString         configExpansionEntry;
+    static const QString       configRatingSelectionEntry;
+    static const QString       configPickSelectionEntry;
+    static const QString       configColorSelectionEntry;
+    static const QString       configExpansionEntry;
 };
 
 const QString AlbumLabelsTreeView::Private::configRatingSelectionEntry("RatingSelection");
@@ -106,7 +107,7 @@ const QString AlbumLabelsTreeView::Private::configPickSelectionEntry("PickSelect
 const QString AlbumLabelsTreeView::Private::configColorSelectionEntry("ColorSelection");
 const QString AlbumLabelsTreeView::Private::configExpansionEntry("Expansion");
 
-AlbumLabelsTreeView::AlbumLabelsTreeView(QWidget *parent, bool setCheckable) :
+AlbumLabelsTreeView::AlbumLabelsTreeView(QWidget* const parent, bool setCheckable) :
     QTreeWidget(parent), StateSavingObject(this), d(new Private)
 {
     d->rootFont            = QFont("Times",18,-1,false);
@@ -116,13 +117,14 @@ AlbumLabelsTreeView::AlbumLabelsTreeView(QWidget *parent, bool setCheckable) :
     d->rootSizeHint        = QSize(1,40);
     d->isCheckableTreeView = setCheckable;
 
-    setHeaderLabel("My Labels");
+    setHeaderLabel("Labels");
     setUniformRowHeights(false);
     initTreeView();
 
     if(d->isCheckableTreeView)
     {
         QTreeWidgetItemIterator it(this);
+
         while(*it)
         {
             if((*it)->parent())
@@ -198,9 +200,10 @@ QHash<AlbumLabelsTreeView::Labels, QList<int> > AlbumLabelsTreeView::selectedLab
     if(d->isCheckableTreeView)
     {
         QTreeWidgetItemIterator it(this, QTreeWidgetItemIterator::Checked);
+
         while(*it)
         {
-            QTreeWidgetItem* item = (*it);
+            QTreeWidgetItem* const item = (*it);
 
             if(item->parent() == d->ratings)
                 selectedRatings << indexFromItem(item).row();
@@ -214,7 +217,7 @@ QHash<AlbumLabelsTreeView::Labels, QList<int> > AlbumLabelsTreeView::selectedLab
     }
     else
     {
-        foreach (QTreeWidgetItem* item, selectedItems())
+        foreach (QTreeWidgetItem* const item, selectedItems())
         {
             if(item->parent() == d->ratings)
                 selectedRatings << indexFromItem(item).row();
@@ -234,7 +237,7 @@ QHash<AlbumLabelsTreeView::Labels, QList<int> > AlbumLabelsTreeView::selectedLab
 
 void AlbumLabelsTreeView::doLoadState()
 {
-    d->isLoadingState = true;
+    d->isLoadingState                = true;
     KConfigGroup configGroup         = getConfigGroup();
     const QList<int> expansion       = configGroup.readEntry(entryName(d->configExpansionEntry),       QList<int>());
     const QList<int> selectedRatings = configGroup.readEntry(entryName(d->configRatingSelectionEntry), QList<int>());
@@ -247,29 +250,33 @@ void AlbumLabelsTreeView::doLoadState()
 
     foreach (int parent, expansion)
     {
-        switch (parent) {
-        case 1:
-            d->ratings->setExpanded(false);
-            break;
-        case 2:
-            d->picks->setExpanded(false);
-            break;
-        case 3:
-            d->colors->setExpanded(false);
-        default:
-            break;
+        switch (parent)
+        {
+            case 1:
+                d->ratings->setExpanded(false);
+                break;
+            case 2:
+                d->picks->setExpanded(false);
+                break;
+            case 3:
+                d->colors->setExpanded(false);
+            default:
+                break;
         }
     }
 
-    foreach (int rating, selectedRatings) {
+    foreach (int rating, selectedRatings)
+    {
         d->ratings->child(rating)->setSelected(true);
     }
 
-    foreach (int pick, selectedPicks) {
+    foreach (int pick, selectedPicks)
+    {
         d->picks->child(pick)->setSelected(true);
     }
 
-    foreach (int color, selectedColors) {
+    foreach (int color, selectedColors)
+    {
         d->colors->child(color)->setSelected(true);
     }
 
@@ -298,7 +305,7 @@ void AlbumLabelsTreeView::doSaveState()
 
     QHash<Labels, QList<int> > labels =  selectedLabels();
 
-    configGroup.writeEntry(entryName(d->configExpansionEntry), expansion);
+    configGroup.writeEntry(entryName(d->configExpansionEntry),       expansion);
     configGroup.writeEntry(entryName(d->configRatingSelectionEntry), labels[Ratings]);
     configGroup.writeEntry(entryName(d->configPickSelectionEntry),   labels[Picks]);
     configGroup.writeEntry(entryName(d->configColorSelectionEntry),  labels[Colors]);
@@ -334,7 +341,7 @@ void AlbumLabelsTreeView::initRatingsTree()
 
     for(int rate = 1 ; rate <= 5 ; rate++)
     {
-        QTreeWidgetItem* rateWidget = new QTreeWidgetItem(d->ratings);
+        QTreeWidgetItem* const rateWidget = new QTreeWidgetItem(d->ratings);
 
         QPixmap pix(goldenStarPixmap().width()*rate,goldenStarPixmap().height());
         pix.fill(Qt::transparent);
@@ -374,8 +381,9 @@ void AlbumLabelsTreeView::initPicksTree()
                  << "flag-yellow"
                  << "flag-green";
 
-    foreach (QString pick, pickSetNames) {
-        QTreeWidgetItem* pickWidgetItem = new QTreeWidgetItem(d->picks);
+    foreach (QString pick, pickSetNames)
+    {
+        QTreeWidgetItem* const pickWidgetItem = new QTreeWidgetItem(d->picks);
         pickWidgetItem->setText(0,pick);
         pickWidgetItem->setFont(0,d->regularFont);
         pickWidgetItem->setIcon(0,KIconLoader::global()->loadIcon(pickSetIcons.at(pickSetNames.indexOf(pick)), KIconLoader::NoGroup, 48));
@@ -409,8 +417,9 @@ void AlbumLabelsTreeView::initColorsTree()
                   << i18n("Gray")   << i18n("Black")
                   << i18n("White");
 
-    foreach (QString color, colorSet) {
-        QTreeWidgetItem* colorWidgetItem = new QTreeWidgetItem(d->colors);
+    foreach (QString color, colorSet)
+    {
+        QTreeWidgetItem* const colorWidgetItem = new QTreeWidgetItem(d->colors);
         colorWidgetItem->setText(0,colorSetNames.at(colorSet.indexOf(color)));
         colorWidgetItem->setFont(0,d->regularFont);
         QPixmap colorIcon = colorRectPixmap(QColor(color));
@@ -424,9 +433,10 @@ void AlbumLabelsTreeView::slotSettingsChanged()
     if(d->iconSizeFromSetting != AlbumSettings::instance()->getTreeViewIconSize())
     {
         d->iconSizeFromSetting = AlbumSettings::instance()->getTreeViewIconSize();
-        setIconSize(QSize(d->iconSizeFromSetting*5,d->iconSizeFromSetting));
-        d->iconSize = QSize(d->iconSizeFromSetting,d->iconSizeFromSetting);
+        setIconSize(QSize(d->iconSizeFromSetting*5, d->iconSizeFromSetting));
+        d->iconSize            = QSize(d->iconSizeFromSetting, d->iconSizeFromSetting);
         QTreeWidgetItemIterator it(this);
+
         while(*it)
         {
             if((*it)->parent())
@@ -441,6 +451,7 @@ void AlbumLabelsTreeView::slotSettingsChanged()
     {
         d->regularFont = AlbumSettings::instance()->getTreeViewFont();
         QTreeWidgetItemIterator it(this);
+
         while(*it)
         {
             if((*it)->parent())
@@ -455,6 +466,7 @@ void AlbumLabelsTreeView::slotSettingsChanged()
 void AlbumLabelsTreeView::restoreSelectionFromHistory(QHash<Labels, QList<int> > neededLabels)
 {
     QTreeWidgetItemIterator it(this, QTreeWidgetItemIterator::Selected);
+
     while(*it)
     {
         (*it)->setSelected(false);
@@ -500,7 +512,7 @@ public:
     KUrl::List           urlListForSelectedAlbum;
 };
 
-AlbumLabelsSearchHandler::AlbumLabelsSearchHandler(AlbumLabelsTreeView *treeWidget) :
+AlbumLabelsSearchHandler::AlbumLabelsSearchHandler(AlbumLabelsTreeView* const treeWidget) :
     d(new Private)
 {
     d->treeWidget = treeWidget;
@@ -598,7 +610,8 @@ QString AlbumLabelsSearchHandler::createXMLForCurrentSelection(QHash<AlbumLabels
     }
     else if(!ratings.isEmpty())
     {
-        foreach (int rate, ratings) {
+        foreach (int rate, ratings)
+        {
             writer.writeGroup();
             writer.writeField("rating", SearchXml::Equal);
             writer.writeValue(rate);
@@ -630,7 +643,7 @@ QString AlbumLabelsSearchHandler::createXMLForCurrentSelection(QHash<AlbumLabels
 
 SAlbum* AlbumLabelsSearchHandler::search(const QString &xml) const
 {
-    SAlbum* album;
+    SAlbum* album = 0;
     int id;
 
     if(!d->treeWidget->isCheckable())
@@ -648,6 +661,7 @@ SAlbum* AlbumLabelsSearchHandler::search(const QString &xml) const
             id = DatabaseAccess().db()->addSearch(DatabaseSearch::AdvancedSearch,
                                                   SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch), xml);
         }
+
         album = new SAlbum(getDefaultTitle(), id);
     }
     else
@@ -665,6 +679,7 @@ SAlbum* AlbumLabelsSearchHandler::search(const QString &xml) const
             id = DatabaseAccess().db()->addSearch(DatabaseSearch::AdvancedSearch,
                                                   getDefaultTitle(), xml);
         }
+
         album = new SAlbum(d->generatedAlbumName, id);
     }
 
@@ -714,39 +729,40 @@ void AlbumLabelsSearchHandler::generateAlbumNameForExporting(QList<int> ratings,
 
         while (it.hasNext())
         {
-            switch (it.next()) {
-            case NoColorLabel:
-                colorsString += i18n("No Color");
-                break;
-            case RedLabel:
-                colorsString += i18n("Red");
-                break;
-            case OrangeLabel:
-                colorsString += i18n("Orange");
-                break;
-            case YellowLabel:
-                colorsString += i18n("Yellow");
-                break;
-            case GreenLabel:
-                colorsString += i18n("Green");
-                break;
-            case BlueLabel:
-                colorsString += i18n("Blue");
-                break;
-            case MagentaLabel:
-                colorsString += i18n("Magenta");
-                break;
-            case GrayLabel:
-                colorsString += i18n("Gray");
-                break;
-            case BlackLabel:
-                colorsString += i18n("Black");
-                break;
-            case WhiteLabel:
-                colorsString += i18n("White");
-                break;
-            default:
-                break;
+            switch (it.next())
+            {
+                case NoColorLabel:
+                    colorsString += i18n("No Color");
+                    break;
+                case RedLabel:
+                    colorsString += i18n("Red");
+                    break;
+                case OrangeLabel:
+                    colorsString += i18n("Orange");
+                    break;
+                case YellowLabel:
+                    colorsString += i18n("Yellow");
+                    break;
+                case GreenLabel:
+                    colorsString += i18n("Green");
+                    break;
+                case BlueLabel:
+                    colorsString += i18n("Blue");
+                    break;
+                case MagentaLabel:
+                    colorsString += i18n("Magenta");
+                    break;
+                case GrayLabel:
+                    colorsString += i18n("Gray");
+                    break;
+                case BlackLabel:
+                    colorsString += i18n("Black");
+                    break;
+                case WhiteLabel:
+                    colorsString += i18n("White");
+                    break;
+                default:
+                    break;
             }
 
             if(it.hasNext())
@@ -761,23 +777,25 @@ void AlbumLabelsSearchHandler::generateAlbumNameForExporting(QList<int> ratings,
         picksString += i18n("Picks: ");
 
         QListIterator<int> it(picksList);
+
         while (it.hasNext())
         {
-            switch (it.next()) {
-            case NoPickLabel:
-                picksString += i18n("No Pick");
-                break;
-            case RejectedLabel:
-                picksString += i18n("Rejected");
-                break;
-            case PendingLabel:
-                picksString += i18n("Pending");
-                break;
-            case AcceptedLabel:
-                picksString += i18n("Accepted");
-                break;
-            default:
-                break;
+            switch (it.next())
+            {
+                case NoPickLabel:
+                    picksString += i18n("No Pick");
+                    break;
+                case RejectedLabel:
+                    picksString += i18n("Rejected");
+                    break;
+                case PendingLabel:
+                    picksString += i18n("Pending");
+                    break;
+                case AcceptedLabel:
+                    picksString += i18n("Accepted");
+                    break;
+                default:
+                    break;
             }
 
             if(it.hasNext())
@@ -823,8 +841,8 @@ void AlbumLabelsSearchHandler::generateAlbumNameForExporting(QList<int> ratings,
 
 void AlbumLabelsSearchHandler::imagesUrlsForCurrentAlbum()
 {
-    KUrl url = d->albumForSelectedItems->databaseUrl();
-    KIO::TransferJob* job = ImageLister::startListJob(url);
+    KUrl url                    = d->albumForSelectedItems->databaseUrl();
+    KIO::TransferJob* const job = ImageLister::startListJob(url);
     job->addMetaData("listAlbumsRecursively", "true");
 
     connect(job, SIGNAL(data(KIO::Job*,QByteArray)),
@@ -850,15 +868,15 @@ void AlbumLabelsSearchHandler::slotSelectionChanged()
         return;
     }
 
-    QString xml   = createXMLForCurrentSelection(d->treeWidget->selectedLabels());
-    SAlbum* album = search(xml);
+    QString xml         = createXMLForCurrentSelection(d->treeWidget->selectedLabels());
+    SAlbum* const album = search(xml);
 
 
     if(album)
     {
         AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << album);
         d->albumForSelectedItems = album;
-        d->oldXml = xml;
+        d->oldXml                = xml;
     }
 }
 
@@ -876,7 +894,7 @@ void AlbumLabelsSearchHandler::slotCheckStateChanged()
         emit checkStateChanged(d->albumForSelectedItems,Qt::Unchecked);
     }
 
-    SAlbum* album = search(currentXml);
+    SAlbum* const album = search(currentXml);
 
     if (album)
     {
@@ -890,7 +908,7 @@ void AlbumLabelsSearchHandler::slotCheckStateChanged()
             d->albumForSelectedItems = 0;
         }
 
-        emit checkStateChanged(album,Qt::Checked);
+        emit checkStateChanged(album, Qt::Checked);
     }
 
     d->oldXml   = currentXml;
@@ -901,9 +919,10 @@ void AlbumLabelsSearchHandler::slotSetCurrentAlbum()
     slotSelectionChanged();
 }
 
-void AlbumLabelsSearchHandler::slotData(KIO::Job *job, QByteArray data)
+void AlbumLabelsSearchHandler::slotData(KIO::Job* job, QByteArray data)
 {
     Q_UNUSED(job);
+
     if (data.isEmpty())
     {
         return;

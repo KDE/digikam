@@ -1062,13 +1062,13 @@ void AlbumManager::startScan()
     d->changed = false;
 
     // create root albums
-    d->rootPAlbum = new PAlbum(i18n("My Albums"));
+    d->rootPAlbum = new PAlbum(i18n("Albums"));
     insertPAlbum(d->rootPAlbum, 0);
 
-    d->rootTAlbum = new TAlbum(i18n("My Tags"), 0, true);
+    d->rootTAlbum = new TAlbum(i18n("Tags"), 0, true);
     insertTAlbum(d->rootTAlbum, 0);
 
-    d->rootSAlbum = new SAlbum(i18n("My Searches"), 0, true);
+    d->rootSAlbum = new SAlbum(i18n("Searches"), 0, true);
     emit signalAlbumAboutToBeAdded(d->rootSAlbum, 0, 0);
     d->allAlbumsIdHash[d->rootSAlbum->globalID()] = d->rootSAlbum;
     emit signalAlbumAdded(d->rootSAlbum);
