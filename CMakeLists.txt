@@ -1604,6 +1604,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/filters
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/metadata
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/kipi
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scriptiface
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scripts
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scripts/cleanup_digikamdb

@@ -38,6 +38,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmenu.h>
+#include <kdebug.h>
 
 namespace Digikam
 {
@@ -186,13 +187,17 @@ void ToolsListView::addTool(BatchTool* const tool)
 {
     if (!tool)
     {
+        kDebug()<<"Please not hereeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
         return;
     }
+    
+    kDebug()<<"Lets hope for the bestttttttttttttttttttttttttttttttttttttttt";
 
     ToolListViewGroup* const parent = findToolGroup(tool->toolGroup());
 
     if (parent)
     {
+        kDebug()<<"HEEREEEEEEEEsdfsdfsdfsfsdfsdfdsfdsfsdfdsfdsfsfsdfds";
         new ToolListViewItem(parent, tool);
     }
 }

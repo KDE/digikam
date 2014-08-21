@@ -26,6 +26,7 @@
 // KDE includes
 
 #include <kglobal.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -64,6 +65,7 @@
 #include "border.h"
 #include "removemetadata.h"
 #include "lensautofix.h"
+#include "dng.h"
 
 namespace Digikam
 {
@@ -150,6 +152,7 @@ BatchToolsManager::BatchToolsManager()
     // Filters
     registerTool(new FilmGrain(this));
     registerTool(new ColorFX(this));
+
 }
 
 BatchToolsManager::~BatchToolsManager()
@@ -179,6 +182,12 @@ void BatchToolsManager::registerTool(BatchTool* const tool)
     }
     tool->registerSettingsWidget();
     d->toolsList.append(tool);
+}
+
+void BatchToolsManager::addKipiTool(BatchTool* tool)
+{
+    registerTool(tool);
+    emit toolAdded(tool);
 }
 
 BatchTool* BatchToolsManager::findTool(const QString& name, BatchTool::BatchToolGroup group) const

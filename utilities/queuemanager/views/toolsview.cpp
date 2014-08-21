@@ -33,11 +33,13 @@
 #include <kdeversion.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "workflowmanager.h"
 #include "batchtool.h"
+#include "batchtoolsmanager.h"
 #include "toolslistview.h"
 #include "workflowlist.h"
 
@@ -82,6 +84,7 @@ ToolsView::ToolsView(QWidget* const parent)
     new ToolListViewGroup(d->baseTools, BatchTool::FiltersTool);
     new ToolListViewGroup(d->baseTools, BatchTool::ConvertTool);
     new ToolListViewGroup(d->baseTools, BatchTool::MetadataTool);
+    new ToolListViewGroup(d->baseTools, BatchTool::KipiTool);
     insertTab(TOOLS, d->baseTools, SmallIcon("digikam"), i18n("Base Tools"));
 
     // --------------------------------------------------------
@@ -135,6 +138,8 @@ void ToolsView::addTool(BatchTool* const tool)
     {
         return;
     }
+    
+    kDebug()<<tool->toolGroup();
 
     switch (tool->toolGroup())
     {
@@ -145,13 +150,9 @@ void ToolsView::addTool(BatchTool* const tool)
         case BatchTool::FiltersTool:
         case BatchTool::ConvertTool:
         case BatchTool::MetadataTool:
+	case BatchTool::KipiTool:
             d->baseTools->addTool(tool);
             break;
-
-        case BatchTool::KipiTool:
-            // TODO
-            break;
-
         default:
             break;
     }
@@ -172,13 +173,9 @@ bool ToolsView::removeTool(BatchTool* const tool)
             case BatchTool::FiltersTool:
             case BatchTool::ConvertTool:
             case BatchTool::MetadataTool:
+	    case BatchTool::KipiTool:
                 ret = d->baseTools->removeTool(tool);
                 break;
-
-            case BatchTool::KipiTool:
-                // TODO
-                break;
-
             default:
                 break;
         }
@@ -217,6 +214,11 @@ void ToolsView::slotHistoryEntryClicked(const QVariant& metadata)
 
         emit signalHistoryEntryClicked(queueId, itemId);
     }
+}
+
+void ToolsView::slotAddTool(BatchTool* tool)
+{
+    addTool(tool);  
 }
 
 }  // namespace Digikam

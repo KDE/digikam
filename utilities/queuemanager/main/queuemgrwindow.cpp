@@ -343,6 +343,11 @@ void QueueMgrWindow::setupConnections()
 
     connect(d->toolsView, SIGNAL(signalAssignQueueSettings(QString)),
             this, SLOT(slotAssignQueueSettings(QString)));
+    
+    // -------------
+    
+    connect(BatchToolsManager::instance(), SIGNAL(toolAdded(BatchTool* const)),
+            d->toolsView, SLOT(slotAddTool(BatchTool* const)));
 }
 
 void QueueMgrWindow::setupActions()

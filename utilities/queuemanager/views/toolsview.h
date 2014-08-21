@@ -68,6 +68,10 @@ Q_SIGNALS:
     void signalAssignQueueSettings(QString);
     void signalAssignTools(const QMap<int, QString>&);
     void signalHistoryEntryClicked(int, qlonglong);
+    
+public Q_SLOTS:
+
+      void slotAddTool(BatchTool* const tool);
 
 private Q_SLOTS:
 

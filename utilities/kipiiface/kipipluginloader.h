@@ -33,6 +33,7 @@
 // LibKIPI includes
 
 #include <libkipi/plugin.h>
+#include <libkipi/pluginloader.h>
 
 class QAction;
 
@@ -60,6 +61,9 @@ public:
      *  See Category enum for details.
      */
     QList<QAction*> kipiActionsByCategory(Category cat) const;
+    
+    PluginLoader::PluginList listPlugins();
+    void plugKipi();
 
     /** Return the instance of action collection for all KIPI plugins.
      */

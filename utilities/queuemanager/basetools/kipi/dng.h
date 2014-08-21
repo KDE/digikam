@@ -3,11 +3,12 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2008-11-24
- * Description : Batch Tools Manager.
+ * Date        : 2014-8-21
+ * Description : Plugged Kipi DNGConverter tool
  *
  * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
- *
+ * Copyright (C) 2014 by Shourya Singh Gupta <shouryasgupta@gmail.com>
+ * 
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -21,53 +22,43 @@
  *
  * ============================================================ */
 
-#ifndef BATCHTOOLSMANAGER_H
-#define BATCHTOOLSMANAGER_H
-
-// Qt includes
-
-#include <QObject>
+#ifndef DNG_H
+#define DNG_H
 
 // Local includes
 
 #include "batchtool.h"
-#include "batchtoolutils.h"
 
 namespace Digikam
 {
 
-class BatchToolsManager : public QObject
+class DNG : public BatchTool
 {
     Q_OBJECT
 
 public:
 
-    static BatchToolsManager* instance();
-
-public:
-
-    void           registerTool(BatchTool* const tool);
-    BatchTool*     findTool(const QString& name, BatchTool::BatchToolGroup group) const;
-    BatchToolsList toolsList() const;
-    void addKipiTool(BatchTool* tool);
+    explicit DNG(QObject* const parent = 0);
+    ~DNG();
     
-Q_SIGNALS:
+    QString outputSuffix() const;
+    BatchToolSettings defaultSettings();
 
-    void toolAdded(BatchTool* const tool);
+    BatchTool* clone(QObject* const parent=0) const { return new DNG(parent); };
+ 
+    void registerSettingsWidget();
+   
+private Q_SLOTS:
+
+    void slotSettingsChanged();
+    void slotAssignSettings2Widget();
 
 private:
 
-    BatchToolsManager();
-    ~BatchToolsManager();
-
-private:
-
-    class Private;
-    Private* const d;
-
-    friend class BatchToolsManagerCreator;
+    bool toolOperations();
+    
 };
 
 }  // namespace Digikam
 
-#endif /* BATCHTOOLSMANAGER_H */
+#endif /* DNG_H */
