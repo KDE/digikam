@@ -189,6 +189,10 @@ void ImageSelectionWidget::setup(int w, int h,
                                  int aspectRatio, int orient,
                                  int guideLinesType)
 {
+    setMinimumSize(w, h);
+    setMouseTracking(true);
+    setAttribute(Qt::WA_DeleteOnClose);
+
     d->currentAspectRatioType  = aspectRatio;
     d->currentWidthRatioValue  = widthRatioValue;
     d->currentHeightRatioValue = heightRatioValue;
@@ -199,10 +203,6 @@ void ImageSelectionWidget::setup(int w, int h,
     d->moving                  = true;
     reverseRatioValues();
 
-    setMinimumSize(w, h);
-    setMouseTracking(true);
-    setAttribute(Qt::WA_DeleteOnClose);
-
     d->iface   = new ImageIface(QSize(w, h));
     d->preview = d->iface->preview();
     d->preview.setIccProfile( d->iface->original()->getIccProfile() );
@@ -210,7 +210,8 @@ void ImageSelectionWidget::setup(int w, int h,
 
     d->pixmap  = new QPixmap(w, h);
     d->image   = QRect(0, 0, d->iface->originalSize().width(), d->iface->originalSize().height());
-    d->rect    = QRect(w/2-d->preview.width()/2, h/2-d->preview.height()/2,
+    d->rect    = QRect((w-d->preview.width()) /2,
+                       (h-d->preview.height())/2,
                        d->preview.width(), d->preview.height());
 
     updatePixmap();
@@ -233,7 +234,8 @@ void ImageSelectionWidget::resizeEvent(QResizeEvent* e)
     d->preview.convertToEightBit();
 
     d->pixmap  = new QPixmap(w, h);
-    d->rect    = QRect(w/2-d->preview.width()/2, h/2-d->preview.height()/2,
+    d->rect    = QRect((w-d->preview.width()) /2,
+                       (h-d->preview.height())/2,
                        d->preview.width(), d->preview.height());
 
     // Drawing the gray overlay
