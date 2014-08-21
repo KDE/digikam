@@ -62,7 +62,12 @@ public:
      */
     QList<QAction*> kipiActionsByCategory(Category cat) const;
     
+    /** Returns list of all kipi plugins
+    */
     PluginLoader::PluginList listPlugins();
+    
+    /** Maintains a list of kipi plugins that are ready to be plugged
+     */
     void plugKipi();
 
     /** Return the instance of action collection for all KIPI plugins.
