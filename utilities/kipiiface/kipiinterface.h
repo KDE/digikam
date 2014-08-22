@@ -106,6 +106,7 @@ public Q_SLOTS:
 
     void slotSelectionChanged(int count);
     void slotCurrentAlbumChanged(QList<Album*> albums);
+    void settingsChanged(QString,QMap<QString, QVariant>);
 
 private Q_SLOTS:
 

@@ -47,15 +47,19 @@ public:
     BatchTool* clone(QObject* const parent=0) const { return new DNG(parent); };
  
     void registerSettingsWidget();
+    
+    static DNG* instance();
    
-private Q_SLOTS:
+public Q_SLOTS:
 
-    void slotSettingsChanged();
     void slotAssignSettings2Widget();
-
+    void slotSettingsChanged();
+    
 private:
 
     bool toolOperations();
+    
+    static DNG* m_instance;
     
 };
 

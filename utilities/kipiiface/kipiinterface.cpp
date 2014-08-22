@@ -61,6 +61,8 @@
 #include "kipiimageinfo.h"
 #include "kipiimagecollection.h"
 #include "progressmanager.h"
+#include "dng.h"
+#include "batchtool.h"
 
 namespace Digikam
 {
@@ -281,6 +283,14 @@ void KipiInterface::slotSelectionChanged(int count)
 void KipiInterface::slotCurrentAlbumChanged(QList<Album*> albums)
 {
     emit currentAlbumChanged(!(albums.isEmpty()));
+}
+
+void KipiInterface::settingsChanged(QString pluginName,QMap<QString, QVariant> settings)
+{
+    if(pluginName == "DNGConverter")
+    {
+        DNG::instance()->BatchTool::slotSettingsChanged(settings);
+    }
 }
 
 void KipiInterface::thumbnail(const KUrl& url, int /*size*/)
