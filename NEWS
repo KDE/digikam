@@ -3,7 +3,8 @@ digiKam 4.3.0 - Release date: 2014-09-07
 
 NEW FEATURES:
 
-Database : Nepomuk support have been replaced by Baloo support (https://community.kde.org/Baloo).
+Database     : Nepomuk support have been replaced by Baloo support (https://community.kde.org/Baloo).
+Map Searches : New option to display all non geolocated images from collections.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -24,4 +25,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 015 ==> 225869 - Add option to found no geolocated images in database
 016 ==> 338429 - Removal of preposition 'My' from UI wording.
 017 ==> 289204 - General performance problems because of lacking multithreading / multicore support.
-018 ==> 
+018 ==> 332999 - Export shortcut.
+019 ==> 
