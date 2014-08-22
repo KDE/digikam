@@ -26,4 +26,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 016 ==> 338429 - Removal of preposition 'My' from UI wording.
 017 ==> 289204 - General performance problems because of lacking multithreading / multicore support.
 018 ==> 332999 - Export shortcut.
-019 ==> 
+019 ==> 333001 - JP2 compression has no effect.
+020 ==> 

@@ -6,7 +6,7 @@
  * Date        : 2006-06-14
  * Description : A JPEG2000 IO file for DImg framework
  *
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This implementation use Jasper API
  * library : http://www.ece.uvic.ca/~mdadams/jasper
@@ -64,7 +64,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 {
     readMetadata(filePath, DImg::JPEG);
 
-    FILE* file = fopen(QFile::encodeName(filePath), "rb");
+    FILE* const file = fopen(QFile::encodeName(filePath), "rb");
 
     if (!file)
     {
@@ -101,7 +101,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     {
         // libjasper will load the full image in memory already when calling jas_image_decode.
         // This is bad when scanning. See bugs 215458 and 195583.
-        //FIXME: Use Exiv2 or OpenJPEG to extract this info
+        // FIXME: Use Exiv2 to extract this info
         DMetadata metadata(filePath);
         QSize size = metadata.getImageDimensions();
 
@@ -560,7 +560,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
 bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* const observer)
 {
-    FILE* file = fopen(QFile::encodeName(filePath), "wb");
+    FILE* const file = fopen(QFile::encodeName(filePath), "wb");
 
     if (!file)
     {
@@ -787,20 +787,18 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* const observe
         quality = 100;
     }
 
-    QString     rate;
-    QTextStream ts(&rate, QIODevice::WriteOnly);
-
-    // NOTE: to have a lossless compression use quality=100.
-    // jp2_encode()::optstr:
+    // optstr:
     // - rate=#B => the resulting file size is about # bytes
     // - rate=0.0 .. 1.0 => the resulting file size is about the factor times
     //                      the uncompressed size
-    ts << "rate=" << (quality / 100.0F);
+    // use sprintf for locale-aware string
+    char rateBuffer[16];
+    sprintf(rateBuffer, "rate=%.2g\n", (quality / 100.0));
 
     kDebug() << "JPEG2000 quality: " << quality;
-    kDebug() << "JPEG2000 " << rate;
+    kDebug() << "JPEG2000 "          << rateBuffer;
 
-    int ret = jp2_encode(jp2_image, jp2_stream, rate.toUtf8().data());
+    int ret = jp2_encode(jp2_image, jp2_stream, rateBuffer);
 
     if (ret != 0)
     {
@@ -824,10 +822,6 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* const observe
         observer->progressInfo(m_image, 1.0);
     }
 
-    imageSetAttribute("savedformat", "JP2");
-
-    saveMetadata(filePath);
-
     jas_image_destroy(jp2_image);
     jas_stream_close(jp2_stream);
 
@@ -837,6 +831,9 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* const observe
     }
 
     jas_cleanup();
+
+    imageSetAttribute("savedformat", "JP2");
+    saveMetadata(filePath);
 
     return true;
 }
