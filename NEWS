@@ -11,7 +11,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 001 ==> 338048 - Separate Tags in Public and Private for Export.
 002 ==> 338055 - libkdepimlibs not found.
 003 ==> 317813 - SQLITE : digiKam do not accept previous DB Sqlite.
-004 ==> 198063 - SCAN : digikam startup is extremely slow.
+004 ==> 198063 - SCAN : digiKam startup is extremely slow.
 005 ==> 262720 - SCAN : 'scan for new images' should work on just current Album.
 006 ==> 317864 - Album rename problem.
 007 ==> 230602 - Do not display photos, after the removal of the tag.
@@ -22,7 +22,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 012 ==> 327646 - MySQL : Failed to create tables in database" Error In digiKam [patch].
 013 ==> 195006 - SQLITE : UTF8 characters not accepted in database file path.
 014 ==> 308931 - digiKam Nepomuk integration (v2).
-015 ==> 225869 - Add option to found no geolocated images in database
+015 ==> 225869 - Add option to found no geolocated images in database.
 016 ==> 338429 - Removal of preposition 'My' from UI wording.
 017 ==> 289204 - General performance problems because of lacking multithreading / multicore support.
 018 ==> 332999 - Export shortcut.
