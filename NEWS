@@ -32,7 +32,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 022 ==> 324323 - Hang on opening Geolocation pane on photos with XMP GPS tags.
 023 ==> 284126 - Documentation required for compilation but should be optional.
 024 ==> 258985 - digiKam does not store correct color profile in JPEG2000 or TIFF images.
-025 ==> 
+025 ==> 338172 - After changing the Properties of an album, the selector in the album list (left bar) jumps, a random album is selected.
+026 ==> 
 
 
 
