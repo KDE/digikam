@@ -29,5 +29,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 019 ==> 333001 - JP2 compression has no effect.
 020 ==> 327827 - Some pictures not visible in digiKam.
 021 ==> 338138 - Preview uses low quality interpolation.
-022 ==> 
+022 ==> 324323 - Hang on opening Geolocation pane on photos with XMP GPS tags.
+023 ==> 
 
