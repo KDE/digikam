@@ -34,4 +34,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 024 ==> 258985 - digiKam does not store correct color profile in JPEG2000 or TIFF images.
 025 ==> 338172 - After changing the Properties of an album, the selector in the album list (left bar) jumps, a random album is selected.
 026 ==> 322789 - Enabling "color managed view" in editor slows down tool startup.
-027 ==> 
+027 ==> 156186 - Sorting of albums other than alphabetically.
+028 ==> 
+
