@@ -39,5 +39,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 029 ==> 129132 - Hidden tags for archiving purposes.
 030 ==> 266671 - Option to detect faces on all pictures that had no faces detected on previous runs.
 031 ==> 265268 - Usability: Change Icon in Scanresults to mark as "not a face".
-032 ==> 
+032 ==> 287621 - Right Click Face Tagging in Preview not working.
+033 ==> 
 
