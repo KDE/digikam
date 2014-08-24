@@ -43,5 +43,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 033 ==> 262170 - The remove button for faces should be more explicit.
 034 ==> 286770 - Unknown face tag no longer shows any items, even though there are unlabelled face tags in images.
 035 ==> 263397 - Usability enhancement on changing confirmed faces.
-036 ==> 
+036 ==> 308642 - Faces assignement : user interface improvements.
+037 ==> 
 
