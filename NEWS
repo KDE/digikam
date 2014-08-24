@@ -45,5 +45,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 035 ==> 263397 - Usability enhancement on changing confirmed faces.
 036 ==> 308642 - Faces assignement : user interface improvements.
 037 ==> 279199 - Several UI suggestions for face-detection.
-038 ==> 
+038 ==> 271841 - SCAN : KDirwatch and database : digikam very slow when editing iptc data.
+039 ==> 
 
