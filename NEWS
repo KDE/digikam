@@ -35,5 +35,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 025 ==> 338172 - After changing the Properties of an album, the selector in the album list (left bar) jumps, a random album is selected.
 026 ==> 322789 - Enabling "color managed view" in editor slows down tool startup.
 027 ==> 156186 - Sorting of albums other than alphabetically.
-028 ==> 
+028 ==> 267511 - Export /print selection manager.
+029 ==> 
 
