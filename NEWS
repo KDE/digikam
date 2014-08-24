@@ -36,5 +36,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 026 ==> 322789 - Enabling "color managed view" in editor slows down tool startup.
 027 ==> 156186 - Sorting of albums other than alphabetically.
 028 ==> 267511 - Export /print selection manager.
-029 ==> 
+029 ==> 129132 - Hidden tags for archiving purposes.
+030 ==> 
 
