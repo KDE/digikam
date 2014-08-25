@@ -109,6 +109,11 @@ void KNotificationWrapper(const QString& eventId, const QString& message,
         NotificationPassivePopup* const popup = new NotificationPassivePopup(parent);
         popup->showNotification(windowTitle, message, logoPixmap);
     }
+#ifdef Q_OS_DARWIN    
+    
+    else if (MacShowMessageNative(windowTitle, message))
+        return;
+#endif    
     else
     {
         if (eventId.isEmpty())

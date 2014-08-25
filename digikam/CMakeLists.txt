@@ -114,6 +114,10 @@ IF(Q_WS_X11)
     TARGET_LINK_LIBRARIES(digikamcore ${X11_LIBRARIES})
 ENDIF(Q_WS_X11)
 
+IF(APPLE)
+    TARGET_LINK_LIBRARIES(digikamcore /System/Library/Frameworks/AppKit.framework)
+ENDIF(APPLE)                                      
+
 # For Contents Aware Resizer and Lens auto-correction tools.
 IF(GLIB2_FOUND)
     TARGET_LINK_LIBRARIES(digikamcore ${GLIB2_LIBRARIES})

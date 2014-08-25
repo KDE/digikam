@@ -51,8 +51,13 @@ namespace Digikam
 void DIGIKAM_EXPORT KNotificationWrapper(const QString& eventId, const QString& message,
                                          QWidget* const parent, const QString& windowTitle,
                                          const QPixmap& pixmap = QPixmap());
-
 } // namespace Digikam
+
+#ifdef Q_OS_DARWIN
+
+bool MacShowMessageNative(const QString& summary, const QString& message);
+
+#endif
 
 #endif /* KNOTIFICATIONWRAPPER_H */
 
