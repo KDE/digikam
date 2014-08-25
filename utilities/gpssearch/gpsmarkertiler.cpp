@@ -6,8 +6,8 @@
  * Date        : 2010-07-20
  * Description : GPS search marker tiler
  *
- * Copyright (C) 2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2010 by Gabriel Voicu <ping dot gabi at gmail dot com>
+ * Copyright (C) 2010       by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010       by Gabriel Voicu <ping dot gabi at gmail dot com>
  * Copyright (C) 2010, 2011 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
@@ -34,6 +34,8 @@
 // local includes
 
 #include "digikam2kgeomap_database.h"
+#include "knotificationwrapper.h"
+#include "digikamapp.h"
 
 /// @todo Actually use this definition!
 typedef QPair<KGeoMap::TileIndex, int> MapPair;
@@ -242,16 +244,14 @@ void GPSMarkerTiler::prepareTiles(const KGeoMap::GeoCoordinates& upperLeft, cons
 
     kDebug() << "Listing" << lat1 << lat2 << lng1 << lng2;
 
-    DatabaseUrl u = DatabaseUrl::fromAreaRange(lat1, lat2, lng1, lng2);
-
-    KIO::Job* currentJob = ImageLister::startListJob(u);
+    DatabaseUrl u              = DatabaseUrl::fromAreaRange(lat1, lat2, lng1, lng2);
+    KIO::Job* const currentJob = ImageLister::startListJob(u);
 
     currentJob->addMetaData("wantDirectQuery", "false");
 
     GPSMarkerTilerPrivate::InternalJobs currentJobInfo;
 
     currentJobInfo.kioJob = currentJob;
-
     currentJobInfo.level  = level;
 
     d->jobs.append(currentJobInfo);
@@ -586,6 +586,10 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
     if (job->error())
     {
         kWarning() << "Failed to list images in selected area:" << job->errorString();
+
+        // Pop-up a message about the error.
+        KNotificationWrapper(QString(), job->errorString(),
+                             DigikamApp::instance(), DigikamApp::instance()->windowTitle());
     }
 
     // get the results from the job:

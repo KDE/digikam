@@ -32,8 +32,9 @@
 // KDE includes
 
 #include <kapplication.h>
-#include <KIconLoader>
-#include <KUrl>
+#include <kiconloader.h>
+#include <kurl.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -51,6 +52,8 @@
 #include "tagscache.h"
 #include "globals.h"
 #include "albumsettings.h"
+#include "knotificationwrapper.h"
+#include "digikamapp.h"
 
 namespace Digikam
 {
@@ -845,6 +848,9 @@ void AlbumLabelsSearchHandler::imagesUrlsForCurrentAlbum()
     KIO::TransferJob* const job = ImageLister::startListJob(url);
     job->addMetaData("listAlbumsRecursively", "true");
 
+    connect(job, SIGNAL(result(KJob*)),
+            this, SLOT(slotResult(KJob*)));
+
     connect(job, SIGNAL(data(KIO::Job*,QByteArray)),
             this, SLOT(slotData(KIO::Job*,QByteArray)));
 }
@@ -917,6 +923,19 @@ void AlbumLabelsSearchHandler::slotCheckStateChanged()
 void AlbumLabelsSearchHandler::slotSetCurrentAlbum()
 {
     slotSelectionChanged();
+}
+
+void AlbumLabelsSearchHandler::slotResult(KJob* job)
+{
+    if (job->error())
+    {
+        kWarning() << "Failed to list url: " << job->errorString();
+
+        // Pop-up a message about the error.
+        KNotificationWrapper(QString(), job->errorString(),
+                             DigikamApp::instance(), DigikamApp::instance()->windowTitle());
+        return;
+    }
 }
 
 void AlbumLabelsSearchHandler::slotData(KIO::Job* job, QByteArray data)

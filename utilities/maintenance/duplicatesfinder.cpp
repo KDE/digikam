@@ -6,7 +6,7 @@
  * Date        : 2012-01-20
  * Description : Duplicates items finder.
  *
- * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2012      by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -34,12 +34,14 @@
 #include <kapplication.h>
 #include <klocale.h>
 #include <kicon.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "albummanager.h"
 #include "imagelister.h"
 #include "knotificationwrapper.h"
+#include "digikamapp.h"
 
 using namespace KIO;
 
@@ -108,7 +110,7 @@ void DuplicatesFinder::slotStart()
     d->job->addMetaData("threshold",  QString::number(thresh));
 
     connect(d->job, SIGNAL(result(KJob*)),
-            this, SLOT(slotDone()));
+            this, SLOT(slotDone(KJob*)));
 
     connect(d->job, SIGNAL(totalAmount(KJob*,KJob::Unit,qulonglong)),
             this, SLOT(slotDuplicatesSearchTotalAmount(KJob*,KJob::Unit,qulonglong)));
@@ -130,6 +132,16 @@ void DuplicatesFinder::slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qu
 
 void DuplicatesFinder::slotDone()
 {
+    if (d->job->error())
+    {
+        kWarning() << "Failed to list url: " << d->job->errorString();
+
+        // Pop-up a message about the error.
+        KNotificationWrapper(QString(), d->job->errorString(),
+                             DigikamApp::instance(), DigikamApp::instance()->windowTitle());
+        return;
+    }
+
     d->job = NULL;
     MaintenanceTool::slotDone();
 }

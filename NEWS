@@ -5,6 +5,7 @@ NEW FEATURES:
 
 Database     : Nepomuk support have been replaced by Baloo support (https://community.kde.org/Baloo).
 Map Searches : New option to display all non geolocated images from collections.
+General      : New notification event when kioslave cannot be started.
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
@@ -46,5 +47,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 036 ==> 308642 - Faces assignement : user interface improvements.
 037 ==> 279199 - Several UI suggestions for face-detection.
 038 ==> 271841 - SCAN : KDirwatch and database : digikam very slow when editing iptc data.
-039 ==> 
+039 ==> 290421 - digiKam should inform users when kio-slave fail to load.
+040 ==> 289872 - Database will not open.
+041 ==> 
 

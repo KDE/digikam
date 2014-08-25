@@ -7,7 +7,7 @@
  * Description : A wrapper around KNotification which uses
  *               KPassivePopup if KNotify is unavailable
  *
- * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
@@ -102,6 +102,7 @@ void KNotificationWrapper(const QString& eventId, const QString& message,
     {
         if (!parent)
         {
+            kWarning() << "parent is null";
             return;
         }
 

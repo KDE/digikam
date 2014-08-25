@@ -229,6 +229,7 @@ private Q_SLOTS:
     void slotSelectionChanged();
     void slotCheckStateChanged();
     void slotSetCurrentAlbum();
+    void slotResult(KJob* job);
     void slotData(KIO::Job* job, QByteArray data);
 
 Q_SIGNALS:

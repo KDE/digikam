@@ -6,7 +6,7 @@
  * Date        : 2006-22-01
  * Description : interface to get image info from database.
  *
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,6 +38,8 @@
 
 #include "album.h"
 #include "imagelister.h"
+#include "knotificationwrapper.h"
+#include "digikamapp.h"
 
 namespace Digikam
 {
@@ -108,13 +110,17 @@ bool ImageInfoJob::isRunning() const
 
 void ImageInfoJob::slotResult(KJob* job)
 {
-    d->job = 0;
-
     if (job->error())
     {
         kWarning() << "Failed to list url: " << job->errorString();
+
+        // Pop-up a message about the error.
+        KNotificationWrapper(QString(), d->job->errorString(),
+                             DigikamApp::instance(), DigikamApp::instance()->windowTitle());
         return;
     }
+
+    d->job = 0;
 
     emit signalCompleted();
 }
