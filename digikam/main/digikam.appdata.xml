@@ -6,6 +6,7 @@
   <name>digiKam</name>
   <name xml:lang="ca">digiKam</name>
   <name xml:lang="cs">digiKam</name>
+  <name xml:lang="da">digiKam</name>
   <name xml:lang="en-GB">digiKam</name>
   <name xml:lang="nl">digiKam</name>
   <name xml:lang="pl">digiKam</name>
@@ -33,6 +34,7 @@
     <p>Features:</p>
     <p xml:lang="ca">Característiques:</p>
     <p xml:lang="cs">Vlastnosti:</p>
+    <p xml:lang="da">Funktioner:</p>
     <p xml:lang="en-GB">Features:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
     <p xml:lang="pl">Możliwości:</p>
