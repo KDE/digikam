@@ -29,6 +29,9 @@
 
 #import <Foundation/Foundation.h>
 
+namespace Digikam
+{
+
 void MacSendNotificationCenterMessage(NSString* const summary, NSString* const message)
 {
     Class notifierClass     = NSClassFromString(@"NSUserNotificationCenter");
@@ -47,14 +50,16 @@ bool MacNotificationCenterSupported()
     return NSClassFromString(@"NSUserNotificationCenter");
 }
 
-bool MacShowMessageNative(const QString& summary, const QString& message)
+bool MacNativeDispatchNotify(const QString& summary, const QString& message)
 {
     if (!MacNotificationCenterSupported())
         return false;
-    
+
     NSString* const sum = [[NSString alloc] initWithUTF8String:summary.toUtf8().constData()];
     NSString* const mes = [[NSString alloc] initWithUTF8String:message.toUtf8().constData()];
     MacSendNotificationCenterMessage(sum, mes);
-    
+
     return true;
 }
+
+} // namespace Digikam

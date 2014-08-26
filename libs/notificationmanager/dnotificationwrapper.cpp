@@ -4,8 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-07-03
- * Description : A wrapper around KNotification which uses
- *               KPassivePopup if KNotify is unavailable
+ * Description : A wrapper send desktop notifications
  *
  * Copyright (C) 2009-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Michael G. Hansen <mike at mghansen dot de>
@@ -23,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "knotificationwrapper.h"
+#include "dnotificationwrapper.h"
 
 // Qt includes
 
@@ -73,6 +72,8 @@ private:
     QWidget* m_parent;
 };
 
+// ----------------------------------------------------------------------------------------------
+
 static inline bool detectKDEDesktopIsRunning()
 {
     const QByteArray xdgCurrentDesktop = qgetenv("XDG_CURRENT_DESKTOP");
@@ -90,7 +91,7 @@ static inline bool detectKDEDesktopIsRunning()
 
 // ----------------------------------------------------------------------------------------------
 
-void KNotificationWrapper(const QString& eventId, const QString& message,
+void DNotificationWrapper(const QString& eventId, const QString& message,
                           QWidget* const parent, const QString& windowTitle,
                           const QPixmap& pixmap)
 {

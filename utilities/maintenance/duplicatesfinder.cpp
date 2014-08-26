@@ -40,7 +40,7 @@
 
 #include "albummanager.h"
 #include "imagelister.h"
-#include "knotificationwrapper.h"
+#include "dnotificationwrapper.h"
 #include "digikamapp.h"
 
 using namespace KIO;
@@ -137,7 +137,7 @@ void DuplicatesFinder::slotDone()
         kWarning() << "Failed to list url: " << d->job->errorString();
 
         // Pop-up a message about the error.
-        KNotificationWrapper(QString(), d->job->errorString(),
+        DNotificationWrapper(QString(), d->job->errorString(),
                              DigikamApp::instance(), DigikamApp::instance()->windowTitle());
         return;
     }

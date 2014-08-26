@@ -89,7 +89,7 @@
 #include "thumbnailsize.h"
 #include "sidebar.h"
 #include "uifilevalidator.h"
-#include "knotificationwrapper.h"
+#include "dnotificationwrapper.h"
 #include "scancontroller.h"
 
 namespace Digikam
@@ -1009,7 +1009,7 @@ void QueueMgrWindow::slotQueueProcessed()
     if (d->currentQueueToProcess == d->queuePool->count())
     {
         // Pop-up a message to bring user when all is done.
-        KNotificationWrapper("batchqueuecompleted", i18n("Batch queue finished"),
+        DNotificationWrapper("batchqueuecompleted", i18n("Batch queue finished"),
                              this, windowTitle());
 
         processingAborted();

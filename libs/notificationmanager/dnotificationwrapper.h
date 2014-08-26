@@ -4,8 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-07-03
- * Description : A wrapper around KNotification which uses
- *               KPassivePopup if KNotify is unavailable
+ * Description : A wrapper send desktop notifications
  *
  * Copyright (C) 2009-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Michael G. Hansen <mike at mghansen dot de>
@@ -23,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef KNOTIFICATIONWRAPPER_H
-#define KNOTIFICATIONWRAPPER_H
+#ifndef DNOTIFICATIONWRAPPER_H
+#define DNOTIFICATIONWRAPPER_H
 
 #include <QString>
 #include <QPixmap>
@@ -48,16 +47,16 @@ namespace Digikam
  * @param windowTitle Title of the notification window (only used for KPassivePopup)
  * @param pixmap      Pixmap to show in the notification, in addition to the digikam logo.
  */
-void DIGIKAM_EXPORT KNotificationWrapper(const QString& eventId, const QString& message,
+void DIGIKAM_EXPORT DNotificationWrapper(const QString& eventId, const QString& message,
                                          QWidget* const parent, const QString& windowTitle,
                                          const QPixmap& pixmap = QPixmap());
 } // namespace Digikam
 
 #ifdef Q_OS_DARWIN
 
-bool MacShowMessageNative(const QString& summary, const QString& message);
+bool MacNativeDispatchNotify(const QString& summary, const QString& message);
 
 #endif
 
-#endif /* KNOTIFICATIONWRAPPER_H */
+#endif /* DNOTIFICATIONWRAPPER_H */
 

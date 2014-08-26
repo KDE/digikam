@@ -34,7 +34,7 @@
 // local includes
 
 #include "digikam2kgeomap_database.h"
-#include "knotificationwrapper.h"
+#include "dnotificationwrapper.h"
 #include "digikamapp.h"
 
 /// @todo Actually use this definition!
@@ -588,7 +588,7 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
         kWarning() << "Failed to list images in selected area:" << job->errorString();
 
         // Pop-up a message about the error.
-        KNotificationWrapper(QString(), job->errorString(),
+        DNotificationWrapper(QString(), job->errorString(),
                              DigikamApp::instance(), DigikamApp::instance()->windowTitle());
     }
 

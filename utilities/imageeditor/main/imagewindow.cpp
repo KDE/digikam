@@ -113,7 +113,7 @@
 #include "imagescanner.h"
 #include "imagethumbnailbar.h"
 #include "iofilesettings.h"
-#include "knotificationwrapper.h"
+#include "dnotificationwrapper.h"
 #include "loadingcacheinterface.h"
 #include "metadatahub.h"
 #include "metadatasettings.h"
@@ -964,7 +964,7 @@ void ImageWindow::saveIsComplete()
     d->currentImageInfo.setOrientation(meta.getImageOrientation());
 
     // Pop-up a message to bring user when save is done.
-    KNotificationWrapper("editorsavefilecompleted", i18n("Image saved successfully"),
+    DNotificationWrapper("editorsavefilecompleted", i18n("Image saved successfully"),
                          this, windowTitle());
 
     resetOrigin();
@@ -1062,7 +1062,7 @@ void ImageWindow::saveAsIsComplete()
     slotUpdateItemInfo();
 
     // Pop-up a message to bring user when save is done.
-    KNotificationWrapper("editorsavefilecompleted", i18n("Image saved successfully"),
+    DNotificationWrapper("editorsavefilecompleted", i18n("Image saved successfully"),
                          this, windowTitle());
 }
 

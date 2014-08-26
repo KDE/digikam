@@ -882,7 +882,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dragdropimplementations.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/filesaveoptionsbox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/fullscreensettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/knotificationwrapper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/modelcompletion.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/paniconwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/searchtextbar.cpp
@@ -894,10 +893,14 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/colorlabelwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/picklabelwidget.cpp
        )
-       
+
+    SET(libnotificationmanager_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/notificationmanager/dnotificationwrapper.cpp
+       )
+
     IF(APPLE)
-    SET(libcommonwidgets_SRCS
-            ${libcommonwidgets_SRCS}
+    SET(libnotificationmanager_SRCS
+            ${libnotificationmanager_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/macnotification.mm
            )
     ENDIF()
@@ -1557,6 +1560,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/versionmanager
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/notificationmanager
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview

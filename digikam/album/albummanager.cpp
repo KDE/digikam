@@ -101,7 +101,7 @@ extern "C"
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnailloadthread.h"
 #include "upgradedb_sqlite2tosqlite3.h"
-#include "knotificationwrapper.h"
+#include "dnotificationwrapper.h"
 
 namespace Digikam
 {
@@ -2967,7 +2967,7 @@ void AlbumManager::slotAlbumsJobResult(KJob* job)
         kWarning() << k_funcinfo << "Failed to list albums";
 
         // Pop-up a message about the error.
-        KNotificationWrapper(QString(), job->errorString(),
+        DNotificationWrapper(QString(), job->errorString(),
                              0, i18n("digiKam"));
         return;
     }
@@ -2998,7 +2998,7 @@ void AlbumManager::slotPeopleJobResult(KJob* job)
         kWarning() << k_funcinfo << "Failed to list face tags";
 
         // Pop-up a message about the error.
-        KNotificationWrapper(QString(), job->errorString(),
+        DNotificationWrapper(QString(), job->errorString(),
                              0, i18n("digiKam"));
         return;
     }
@@ -3042,7 +3042,7 @@ void AlbumManager::slotTagsJobResult(KJob* job)
         kWarning() << k_funcinfo << "Failed to list tags";
 
         // Pop-up a message about the error.
-        KNotificationWrapper(QString(), job->errorString(),
+        DNotificationWrapper(QString(), job->errorString(),
                              0, i18n("digiKam"));
         return;
     }
@@ -3073,7 +3073,7 @@ void AlbumManager::slotDatesJobResult(KJob* job)
         kWarning() << "Failed to list dates";
 
         // Pop-up a message about the error.
-        KNotificationWrapper(QString(), job->errorString(),
+        DNotificationWrapper(QString(), job->errorString(),
                              0, i18n("digiKam"));
         return;
     }

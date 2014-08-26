@@ -123,7 +123,7 @@ extern "C"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
 #include "uifilevalidator.h"
-#include "knotificationwrapper.h"
+#include "dnotificationwrapper.h"
 #include "showfotodelegate.h"
 #include "showfotocategorizedview.h"
 #include "showfotosettings.h"
@@ -886,7 +886,7 @@ void ShowFoto::saveIsComplete()
     //d->thumbBar->invalidateThumb(d->currentItem);
 
     // Pop-up a message to bring user when save is done.
-    Digikam::KNotificationWrapper("editorsavefilecompleted", i18n("Image saved successfully"),
+    Digikam::DNotificationWrapper("editorsavefilecompleted", i18n("Image saved successfully"),
                                   this, windowTitle());
 
     resetOrigin();
@@ -916,7 +916,7 @@ void ShowFoto::saveAsIsComplete()
     slotUpdateItemInfo();
 
     // Pop-up a message to bring user when save is done.
-    Digikam::KNotificationWrapper("editorsavefilecompleted", i18n("Image saved successfully"),
+    Digikam::DNotificationWrapper("editorsavefilecompleted", i18n("Image saved successfully"),
                                     this, windowTitle());
 */
 }

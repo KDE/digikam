@@ -34,6 +34,7 @@ SET(digikamcore_LIB_SRCS
 
         # widgets and dialogs
         ${libcommonwidgets_SRCS}
+        ${libnotificationmanager_SRCS}
         ${libmainview_SRCS}
         ${libitemview_SRCS}
         ${libeditorwidgets_SRCS}
@@ -116,7 +117,7 @@ ENDIF(Q_WS_X11)
 
 IF(APPLE)
     TARGET_LINK_LIBRARIES(digikamcore /System/Library/Frameworks/AppKit.framework)
-ENDIF(APPLE)                                      
+ENDIF(APPLE)
 
 # For Contents Aware Resizer and Lens auto-correction tools.
 IF(GLIB2_FOUND)

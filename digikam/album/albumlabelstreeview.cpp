@@ -52,7 +52,7 @@
 #include "tagscache.h"
 #include "globals.h"
 #include "albumsettings.h"
-#include "knotificationwrapper.h"
+#include "dnotificationwrapper.h"
 #include "digikamapp.h"
 
 namespace Digikam
@@ -932,7 +932,7 @@ void AlbumLabelsSearchHandler::slotResult(KJob* job)
         kWarning() << "Failed to list url: " << job->errorString();
 
         // Pop-up a message about the error.
-        KNotificationWrapper(QString(), job->errorString(),
+        DNotificationWrapper(QString(), job->errorString(),
                              DigikamApp::instance(), DigikamApp::instance()->windowTitle());
         return;
     }

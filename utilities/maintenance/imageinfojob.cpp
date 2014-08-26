@@ -38,7 +38,7 @@
 
 #include "album.h"
 #include "imagelister.h"
-#include "knotificationwrapper.h"
+#include "dnotificationwrapper.h"
 #include "digikamapp.h"
 
 namespace Digikam
@@ -115,7 +115,7 @@ void ImageInfoJob::slotResult(KJob* job)
         kWarning() << "Failed to list url: " << job->errorString();
 
         // Pop-up a message about the error.
-        KNotificationWrapper(QString(), d->job->errorString(),
+        DNotificationWrapper(QString(), d->job->errorString(),
                              DigikamApp::instance(), DigikamApp::instance()->windowTitle());
         return;
     }

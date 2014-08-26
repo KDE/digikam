@@ -45,7 +45,7 @@
 #include "imagequalitysorter.h"
 #include "metadatasynchronizer.h"
 #include "facedetector.h"
-#include "knotificationwrapper.h"
+#include "dnotificationwrapper.h"
 #include "progressmanager.h"
 
 namespace Digikam
@@ -327,7 +327,7 @@ void MaintenanceMngr::done()
     QTime now, t = now.addMSecs(d->duration.elapsed());
 
     // Pop-up a message to bring user when all is done.
-    KNotificationWrapper("digiKam Maintenance", // not i18n
+    DNotificationWrapper("digiKam Maintenance", // not i18n
                          i18n("All operations are done.\nDuration: %1", t.toString()),
                          kapp->activeWindow(), i18n("digiKam Maintenance"));
 

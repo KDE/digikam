@@ -119,7 +119,7 @@
 #include "imagepropertiessidebarcamgui.h"
 #include "importsettings.h"
 #include "importview.h"
-#include "knotificationwrapper.h"
+#include "dnotificationwrapper.h"
 #include "newitemsfinder.h"
 #include "parsesettings.h"
 #include "renamecustomizer.h"
@@ -1578,11 +1578,11 @@ void ImportUI::slotDownloaded(const QString& folder, const QString& file, int st
             // Pop-up a notification to inform user when all is done, and inform if auto-rotation will take place.
             if (autoRotate)
             {
-                KNotificationWrapper("cameradownloaded", i18nc("@info Popup notification", "Images download finished, you can now detach your camera while the images will be auto-rotated"), this, windowTitle());
+                DNotificationWrapper("cameradownloaded", i18nc("@info Popup notification", "Images download finished, you can now detach your camera while the images will be auto-rotated"), this, windowTitle());
             }
             else
             {
-                KNotificationWrapper("cameradownloaded", i18nc("@info Popup notification", "Images download finished"), this, windowTitle());
+                DNotificationWrapper("cameradownloaded", i18nc("@info Popup notification", "Images download finished"), this, windowTitle());
             }
         }
     }
