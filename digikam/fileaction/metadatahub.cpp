@@ -688,7 +688,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
     else
         metadata.setImageFacesMap(d->faceTagsList,false);
 
-    dirty = writeTags(metadata,saveTags);
+    dirty |= writeTags(metadata,saveTags);
 
     return dirty;
 }

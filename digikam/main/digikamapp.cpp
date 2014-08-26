@@ -300,6 +300,7 @@ DigikamApp::DigikamApp()
     //Create BalooWrap object, because it need to register a listener
     // to update digiKam data when changes in Baloo occur
     BalooWrap* baloo = BalooWrap::instance();
+    Q_UNUSED(baloo);
 #endif //HAVE_BALOO
 
     setAutoSaveSettings(group, true);
