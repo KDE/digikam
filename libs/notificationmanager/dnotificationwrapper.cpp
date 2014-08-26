@@ -129,7 +129,7 @@ void DNotificationWrapper(const QString& eventId, const QString& message,
     }
 
 #ifdef Q_OS_DARWIN
-    else if (MacShowMessageNative(windowTitle, message))
+    else if (MacNativeDispatchNotify(windowTitle, message))
     {
         kDebug() << "Event is dispatched to OSX desktop notifier";
         return;

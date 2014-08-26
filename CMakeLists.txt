@@ -901,7 +901,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     IF(APPLE)
     SET(libnotificationmanager_SRCS
             ${libnotificationmanager_SRCS}
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/macnotification.mm
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/notificationmanager/macnotification.mm
            )
     ENDIF()
 
