@@ -28,6 +28,7 @@
 
 #include <QDBusConnection>
 #include <QDBusConnectionInterface>
+#include <QProcess>
 
 // KDE includes
 
@@ -112,7 +113,8 @@ void DNotificationWrapper(const QString& eventId, const QString& message,
     }
 
     // NOTE: This detection of KDE desktop is not perfect because KNotify may never be started.
-    //       ButIn a regular KDE session, KNotify should be running already.
+    //       But in a regular KDE session, KNotify should be running already.
+
     if (detectKDEDesktopIsRunning() &&
         QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.knotify"))
     {
@@ -129,12 +131,29 @@ void DNotificationWrapper(const QString& eventId, const QString& message,
     }
 
 #ifdef Q_OS_DARWIN
+
+    // OSX support
+
     else if (MacNativeDispatchNotify(windowTitle, message))
     {
         kDebug() << "Event is dispatched to OSX desktop notifier";
         return;
     }
+
 #endif // Q_OS_DARWIN
+
+    // Other Linux Desktops
+
+    else if (QProcess::execute("notify-send",
+                               QStringList() << windowTitle
+                                             << message
+                                             << "-i"
+                                             << KGlobal::mainComponent().aboutData()->appName())
+             > -1)
+    {
+        kDebug() << "Event is dispatched to desktop notifier through DBUS";
+        return;
+    }
 
     else
     {
