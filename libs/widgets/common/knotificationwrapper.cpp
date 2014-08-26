@@ -73,6 +73,21 @@ private:
     QWidget* m_parent;
 };
 
+static inline bool detectKDEDesktopIsRunning()
+{
+    const QByteArray xdgCurrentDesktop = qgetenv("XDG_CURRENT_DESKTOP");
+
+    if (!xdgCurrentDesktop.isEmpty())
+        return (xdgCurrentDesktop.toUpper() == "KDE");
+
+    // Classic fallbacks
+
+    if (!qgetenv("KDE_FULL_SESSION").isEmpty())
+        return true;
+
+    return false;
+}
+
 // ----------------------------------------------------------------------------------------------
 
 void KNotificationWrapper(const QString& eventId, const QString& message,
@@ -95,27 +110,13 @@ void KNotificationWrapper(const QString& eventId, const QString& message,
         }
     }
 
-    // TODO: this detection is not perfect because KNotify may never be started
-    //       because we never try, but at least we get notifications in any case
-    //       In a regular KDE session, KNotify should be running already.
-    if (!QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.knotify"))
+    // NOTE: This detection of KDE desktop is not perfect because KNotify may never be started.
+    //       ButIn a regular KDE session, KNotify should be running already.
+    if (detectKDEDesktopIsRunning() &&
+        QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.knotify"))
     {
-        if (!parent)
-        {
-            kWarning() << "parent is null";
-            return;
-        }
+        kDebug() << "Event is dispatched to KDE desktop notifier";
 
-        NotificationPassivePopup* const popup = new NotificationPassivePopup(parent);
-        popup->showNotification(windowTitle, message, logoPixmap);
-    }
-#ifdef Q_OS_DARWIN    
-    
-    else if (MacShowMessageNative(windowTitle, message))
-        return;
-#endif    
-    else
-    {
         if (eventId.isEmpty())
         {
             KNotification::event(KNotification::Notification, message, logoPixmap, parent);
@@ -124,6 +125,28 @@ void KNotificationWrapper(const QString& eventId, const QString& message,
         {
             KNotification::event(eventId, message, logoPixmap, parent);
         }
+    }
+
+#ifdef Q_OS_DARWIN
+    else if (MacShowMessageNative(windowTitle, message))
+    {
+        kDebug() << "Event is dispatched to OSX desktop notifier";
+        return;
+    }
+#endif // Q_OS_DARWIN
+
+    else
+    {
+        if (!parent)
+        {
+            kWarning() << "parent is null";
+            return;
+        }
+
+        kDebug() << "Event is dispatched through a passive pop-up";
+
+        NotificationPassivePopup* const popup = new NotificationPassivePopup(parent);
+        popup->showNotification(windowTitle, message, logoPixmap);
     }
 }
 
