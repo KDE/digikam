@@ -7,6 +7,7 @@
  * Description : Filter values for use with ImageFilterModel
  *
  * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2014 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -104,6 +105,7 @@ void ImageSortSettings::setSortOrder(SortOrder order)
     else
     {
         currentSortOrder = (Qt::SortOrder)order;
+        setCategorizationSortOrder((SortOrder)order);
     }
 }
 
