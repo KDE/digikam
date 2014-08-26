@@ -50,5 +50,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 039 ==> 290421 - digiKam should inform users when kio-slave fail to load.
 040 ==> 289872 - Database will not open.
 041 ==> 306158 - GROUP : Sorting the image-groups by name in main image view, when the images are grouped in albums.
-042 ==>
+042 ==> 338522 - digiKam doesn't save metadata to images.
+043 ==> 
 
