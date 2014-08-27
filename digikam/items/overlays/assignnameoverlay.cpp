@@ -31,7 +31,6 @@
 #include <QApplication>
 #include <QFocusEvent>
 #include <QMouseEvent>
-#include <QVBoxLayout>
 #include <QPushButton>
 
 // KDE includes
@@ -39,6 +38,7 @@
 #include <klocale.h>
 #include <kglobalsettings.h>
 #include <kdebug.h>
+#include <kvbox.h>
 
 // Local includes
 
@@ -70,7 +70,7 @@ public:
         assignNameWidget = 0;
     }
 
-    bool isChildWidget(QWidget* widget, QWidget* parent) const
+    bool isChildWidget(QWidget* widget, QWidget* const parent) const
     {
         if (!parent)
         {
@@ -89,9 +89,9 @@ public:
 
         return false;
     }
-    
+
 public:
-    
+
     TagModel                  tagModel;
     CheckableAlbumFilterModel filterModel;
     TagPropertiesFilterModel  filteredModel;
@@ -119,7 +119,9 @@ AssignNameWidget* AssignNameOverlay::assignNameWidget() const
 
 QWidget* AssignNameOverlay::createWidget()
 {
-    d->assignNameWidget = new AssignNameWidget(parentWidget());
+    KVBox* const vbox    = new KVBox(parentWidget());
+    QWidget* const space = new QWidget(vbox);
+    d->assignNameWidget  = new AssignNameWidget(vbox);
     d->assignNameWidget->setMode(AssignNameWidget::UnconfirmedEditMode);
     d->assignNameWidget->setVisualStyle(AssignNameWidget::TranslucentThemedFrameless);
     d->assignNameWidget->setTagEntryWidgetMode(AssignNameWidget::AddTagsLineEditMode);
@@ -127,9 +129,11 @@ QWidget* AssignNameOverlay::createWidget()
     d->assignNameWidget->setModel(&d->tagModel, &d->filteredModel, &d->filterModel);
     d->assignNameWidget->lineEdit()->installEventFilter(this);
 
+    vbox->setStretchFactor(space, 4);
+
     //new StyleSheetDebugger(d->assignNameWidget);
 
-    return d->assignNameWidget;
+    return vbox;
 }
 
 void AssignNameOverlay::setActive(bool active)
@@ -197,7 +201,7 @@ void AssignNameOverlay::updatePosition()
         return;
     }
 
-    QRect rect = delegate()->imageInformationRect();
+    QRect rect = delegate()->pixmapRect();
 
     if (rect.width() < m_widget->minimumSizeHint().width())
     {
@@ -279,7 +283,7 @@ void AssignNameOverlay::slotAssigned(const TaggingAction& action, const ImageInf
 {
     Q_UNUSED(info);
     DatabaseFace face = DatabaseFace::fromVariant(faceIdentifier);
-    
+
     //kDebug() << "Confirming" << face << action.shallAssignTag() << action.tagId();
 
     if (face.isConfirmedName() || !action.isValid())

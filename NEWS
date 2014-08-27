@@ -51,5 +51,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 040 ==> 289872 - Database will not open.
 041 ==> 306158 - GROUP : Sorting the image-groups by name in main image view, when the images are grouped in albums.
 042 ==> 338522 - digiKam doesn't save metadata to images.
-043 ==> 
+043 ==> 307613 - Face tag input field does not show when no Icon View Options are enabled.
+044 ==> 
 
