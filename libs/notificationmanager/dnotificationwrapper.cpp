@@ -147,9 +147,9 @@ void DNotificationWrapper(const QString& eventId, const QString& message,
     else if (QProcess::execute("notify-send",
                                QStringList() << windowTitle
                                              << message
-                                             << "-i"
+                                             << "-a"
                                              << KGlobal::mainComponent().aboutData()->appName())
-             > -1)
+             == 0)
     {
         kDebug() << "Event is dispatched to desktop notifier through DBUS";
         return;
