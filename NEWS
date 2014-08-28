@@ -56,4 +56,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 045 ==> 327054 - Startup scan happens twice if splash screen turned off in settings->misc->splash screen.
 046 ==> 279835 - Rating Filter : checkbox for including or excluding not rated images.
 047 ==> 298158 - When working in digiKam, metadata erased whereas GIMP preserves metadata.
-048 ==> 
+048 ==> 141014 - Time and dates in digiKam.
+049 ==> 
+
