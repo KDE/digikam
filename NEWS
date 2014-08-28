@@ -58,5 +58,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 047 ==> 298158 - When working in digiKam, metadata erased whereas GIMP preserves metadata.
 048 ==> 141014 - Time and dates in digiKam.
 049 ==> 188925 - Write image metadata in background with user feedback.
-050 ==> 
+050 ==> 126821 - Handle existing read-only photo trees without copying (i.e. virtual albums).
+051 ==> 
 
