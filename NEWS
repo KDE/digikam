@@ -6,6 +6,8 @@ NEW FEATURES:
 Database     : Nepomuk support have been replaced by Baloo support (https://community.kde.org/Baloo).
 Map Searches : New option to display all non geolocated images from collections.
 General      : New notification event when kioslave cannot be started.
+AlbumGui     : New Action To Exclude Items Without Rating with items filter.
+               Details: http://mohamedanwer.wordpress.com/2014/08/28/new-action-to-exclude-items-without-rating/
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
