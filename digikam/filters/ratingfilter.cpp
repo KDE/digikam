@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007      by Arnd Baecker <arnd dot baecker at web dot de>
+ * Copyright (C) 2014      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,9 +57,10 @@ public:
 
     Private()
     {
-        dirty         = false;
-        ratingTracker = 0;
-        filterCond    = ImageFilterSettings::GreaterEqualCondition;
+        dirty          = false;
+        ratingTracker  = 0;
+        filterCond     = ImageFilterSettings::GreaterEqualCondition;
+        excludeUnrated = 0;
     }
 
     bool                                 dirty;
@@ -66,6 +68,7 @@ public:
     DTipTracker*                         ratingTracker;
 
     ImageFilterSettings::RatingCondition filterCond;
+    bool                                 excludeUnrated;
 };
 
 RatingFilterWidget::RatingFilterWidget(QWidget* const parent)
@@ -91,7 +94,7 @@ RatingFilterWidget::~RatingFilterWidget()
 
 void RatingFilterWidget::slotRatingChanged()
 {
-    emit signalRatingFilterChanged(rating(), d->filterCond);
+    emit signalRatingFilterChanged(rating(), d->filterCond, d->excludeUnrated);
 }
 
 void RatingFilterWidget::setRatingFilterCondition(ImageFilterSettings::RatingCondition cond)
@@ -104,6 +107,17 @@ void RatingFilterWidget::setRatingFilterCondition(ImageFilterSettings::RatingCon
 ImageFilterSettings::RatingCondition RatingFilterWidget::ratingFilterCondition()
 {
     return d->filterCond;
+}
+
+void RatingFilterWidget::setExcludeUnratedItems(bool excluded)
+{
+    d->excludeUnrated = excluded;
+    slotRatingChanged();
+}
+
+bool RatingFilterWidget::isUnratedItemsExcluded()
+{
+    return d->excludeUnrated;
 }
 
 void RatingFilterWidget::mouseMoveEvent(QMouseEvent* e)
@@ -188,12 +202,13 @@ public:
 
     Private()
     {
-        ratingWidget = 0;
-        optionsBtn   = 0;
-        optionsMenu  = 0;
-        geCondAction = 0;
-        eqCondAction = 0;
-        leCondAction = 0;
+        ratingWidget   = 0;
+        optionsBtn     = 0;
+        optionsMenu    = 0;
+        geCondAction   = 0;
+        eqCondAction   = 0;
+        leCondAction   = 0;
+        excludeUnrated = 0;
     }
 
     QToolButton*        optionsBtn;
@@ -201,6 +216,7 @@ public:
     QAction*            geCondAction;
     QAction*            eqCondAction;
     QAction*            leCondAction;
+    QAction*            excludeUnrated;
 
     KMenu*              optionsMenu;
 
@@ -224,6 +240,9 @@ RatingFilter::RatingFilter(QWidget* const parent)
     d->eqCondAction->setCheckable(true);
     d->leCondAction = d->optionsMenu->addAction(i18n("Less Than or Equals Condition"));
     d->leCondAction->setCheckable(true);
+    d->optionsMenu->addSeparator();
+    d->excludeUnrated = d->optionsMenu->addAction(i18n("Exclude Items Without Rating"));
+    d->excludeUnrated->setCheckable(true);
     d->optionsBtn->setMenu(d->optionsMenu);
 
     layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter|Qt::AlignRight);
@@ -236,8 +255,8 @@ RatingFilter::RatingFilter(QWidget* const parent)
     connect(d->optionsMenu, SIGNAL(aboutToShow()),
             this, SLOT(slotOptionsMenu()));
 
-    connect(d->ratingWidget, SIGNAL(signalRatingFilterChanged(int,ImageFilterSettings::RatingCondition)),
-            this, SIGNAL(signalRatingFilterChanged(int,ImageFilterSettings::RatingCondition)));
+    connect(d->ratingWidget, SIGNAL(signalRatingFilterChanged(int,ImageFilterSettings::RatingCondition,bool)),
+            this, SIGNAL(signalRatingFilterChanged(int,ImageFilterSettings::RatingCondition,bool)));
 }
 
 RatingFilter::~RatingFilter()
@@ -253,6 +272,17 @@ void RatingFilter::setRatingFilterCondition(ImageFilterSettings::RatingCondition
 ImageFilterSettings::RatingCondition RatingFilter::ratingFilterCondition()
 {
     return d->ratingWidget->ratingFilterCondition();
+}
+
+void RatingFilter::setExcludeUnratedItems(bool excluded)
+{
+    d->ratingWidget->setExcludeUnratedItems(excluded);
+    d->excludeUnrated->setChecked(excluded);
+}
+
+bool RatingFilter::isUnratedItemsExcluded()
+{
+    return d->ratingWidget->isUnratedItemsExcluded();
 }
 
 void RatingFilter::slotOptionsMenu()
@@ -290,6 +320,10 @@ void RatingFilter::slotOptionsTriggered(QAction* action)
         else if (action == d->leCondAction)
         {
             setRatingFilterCondition(ImageFilterSettings::LessEqualCondition);
+        }
+        else if(action == d->excludeUnrated)
+        {
+            setExcludeUnratedItems(d->excludeUnrated->isChecked());
         }
     }
 }

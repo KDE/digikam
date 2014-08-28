@@ -10,6 +10,7 @@
  * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2011-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C)      2011 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C)      2014 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -243,8 +244,8 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
     connect(d->tagOptionsMenu, SIGNAL(aboutToShow()),
             this, SLOT(slotTagOptionsMenu()));
 
-    connect(d->ratingFilter, SIGNAL(signalRatingFilterChanged(int,ImageFilterSettings::RatingCondition)),
-            this, SIGNAL(signalRatingFilterChanged(int,ImageFilterSettings::RatingCondition)));
+    connect(d->ratingFilter, SIGNAL(signalRatingFilterChanged(int,ImageFilterSettings::RatingCondition,bool)),
+            this, SIGNAL(signalRatingFilterChanged(int,ImageFilterSettings::RatingCondition,bool)));
 }
 
 FilterSideBarWidget::~FilterSideBarWidget()
@@ -297,6 +298,7 @@ void FilterSideBarWidget::slotResetFilters()
     d->pickLabelFilter->reset();
     d->ratingFilter->setRating(0);
     d->ratingFilter->setRatingFilterCondition(ImageFilterSettings::GreaterEqualCondition);
+    d->ratingFilter->setExcludeUnratedItems(false);
     d->tagMatchCond = ImageFilterSettings::OrCondition;
 }
 
