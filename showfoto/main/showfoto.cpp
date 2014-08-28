@@ -12,7 +12,7 @@
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers at kde dot nl>
  * Copyright (C) 2008      by Arnd Baecker <arnd dot baecker at web dot de>
- * Copyright (C) 2013      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
+ * Copyright (C) 2013-2014 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -406,18 +406,12 @@ void ShowFoto::setupUserArea()
     d->filterModel->setSourceShowfotoModel(d->model);
 
     d->filterModel->setCategorizationMode(ShowfotoItemSortSettings::NoCategories);
-    //d->filterModel->setSortRole((ShowfotoItemSortSettings::SortRole)ShowfotoSettings::instance()->getImageSortOrder());
     d->filterModel->sort(0);
 
     d->thumbBar->setModels(d->model, d->filterModel);
     d->thumbBar->setSelectionMode(QAbstractItemView::SingleSelection);
-    //d->thumbBar->setModelsFiltered(d->model,d->filterModel);
 
     viewContainer->setAutoSaveSettings("ImageViewer Thumbbar", true);
-
-//  TODO: Implement selection overlay
-//  d->normalDelegate = new ShowfotoNormalDelegate(d->thumbBar);
-//  d->thumbBar->addSelectionOverlay(d->normalDelegate);
 
     d->thumbBar->installOverlays();
 
