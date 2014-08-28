@@ -59,5 +59,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 048 ==> 141014 - Time and dates in digiKam.
 049 ==> 188925 - Write image metadata in background with user feedback.
 050 ==> 126821 - Handle existing read-only photo trees without copying (i.e. virtual albums).
-051 ==> 
+051 ==> 335256 - Add option to view custom GPS EXIF tags (IPTC).
+052 ==> 
 
