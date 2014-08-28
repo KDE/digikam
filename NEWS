@@ -54,5 +54,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 043 ==> 307613 - Face tag input field does not show when no Icon View Options are enabled.
 044 ==> 187651 - Improve wording and usability of first-run wizard.
 045 ==> 327054 - Startup scan happens twice if splash screen turned off in settings->misc->splash screen.
-046 ==> 
-
+046 ==> 279835 - Rating Filter : checkbox for including or excluding not rated images
+047 ==>
