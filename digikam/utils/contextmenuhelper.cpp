@@ -54,7 +54,8 @@
 #include <kstandardaction.h>
 
 #ifdef HAVE_KDEPIMLIBS
-#include <kabc/stdaddressbook.h>
+#include <Akonadi/Item>
+#include <Akonadi/Contact/ContactSearchJob>
 #endif // HAVE_KDEPIMLIBS
 
 // Local includes
@@ -571,12 +572,21 @@ void ContextMenuHelper::slotABCContextMenu()
 
     d->ABCmenu->clear();
 
-    KABC::AddressBook* const ab = KABC::StdAddressBook::self();
+    Akonadi::ContactSearchJob *job = new Akonadi::ContactSearchJob();
+
+    if(!job->exec())
+        kDebug() << "Akonadi search was not succesfull";
+
     QStringList names;
 
-    for ( KABC::AddressBook::Iterator it = ab->begin(); it != ab->end(); ++it )
+    const KABC::Addressee::List contacts = job->contacts();
+
+    if(contacts.isEmpty())
+        kDebug() << "No contacts in Akonadi";
+
+    Q_FOREACH(KABC::Addressee addr, contacts)
     {
-        names.push_back(it->formattedName());
+        names.push_back(addr.name());
     }
 
     qSort(names);
