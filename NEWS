@@ -78,5 +78,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 064 ==> 326112 - SCAN : Moving an album (directory) loses metadata for cr2 files.
 065 ==> 322079 - Mouse wheel short cut to move through my pictures.
 066 ==> 312741 - When scrolling through lots of pics, these apper too small.
-067 ==> 
+067 ==> 293957 - Preview image not updated after rotation or flip.
+068 ==> 
 
