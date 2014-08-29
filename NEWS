@@ -67,6 +67,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 053 ==> 275351 - User Icons won't show on digikam restart.
 054 ==> 278110 - Fuji X100 RAF RAW files doesn't show right under image editor.
 055 ==> 308821 - GoogleMaps : Impossible to open map view.
-056 ==> 
-
+056 ==> 338631 - Extending raw support.
+057 ==> 
 
