@@ -64,6 +64,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 051 ==> 335256 - Add option to view custom GPS EXIF tags (IPTC).
 052 ==> 213745 - Create date change when we modefy xmp metadata.
 053 ==> 275351 - User Icons won't show on digikam restart.
-054 ==> 
+054 ==> 278110 - Fuji X100 RAF RAW files doesn't show right under image editor.
+055 ==> 
 
 
