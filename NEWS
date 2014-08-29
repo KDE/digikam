@@ -77,5 +77,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 063 ==> 291972 - HEAD compiling issues under FreeBSD 8.2 [patch].
 064 ==> 326112 - SCAN : Moving an album (directory) loses metadata for cr2 files.
 065 ==> 322079 - Mouse wheel short cut to move through my pictures.
-066 ==> 
+066 ==> 312741 - When scrolling through lots of pics, these apper too small.
+067 ==> 
 
