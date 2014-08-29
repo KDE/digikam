@@ -71,4 +71,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 057 ==> 161619 - Smart zoom steps in Image Editor.
 058 ==> 284213 - Editing tools re-organized to sidepanel to save space with better usability.
 059 ==> 148238 - Fast switching between preview modes.
-060 ==> 
+060 ==> 155415 - PRINT : white lines in preview and output.
+061 ==> 
