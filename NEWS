@@ -84,5 +84,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 070 ==> 132047 - Faster display of images and/or prefetch wished for.
 071 ==> 261562 - Drop tags over preview canvas.
 072 ==> 292407 - Display image center when Zooming to 100%.
-073 ==> 
+073 ==> 314377 - Digikam should display images without interpolation when zoom is > 200%.
+074 ==> 
 
