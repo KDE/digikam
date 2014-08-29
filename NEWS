@@ -62,5 +62,8 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 049 ==> 188925 - Write image metadata in background with user feedback.
 050 ==> 126821 - Handle existing read-only photo trees without copying (i.e. virtual albums).
 051 ==> 335256 - Add option to view custom GPS EXIF tags (IPTC).
-052 ==> 
+052 ==> 213745 - Create date change when we modefy xmp metadata.
+053 ==> 275351 - User Icons won't show on digikam restart.
+054 ==> 
+
 
