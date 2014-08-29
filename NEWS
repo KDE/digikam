@@ -81,5 +81,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 067 ==> 293957 - Preview image not updated after rotation or flip.
 068 ==> 209343 - Mouse-wheel should jump to next/previous picture if used when viewing a picture.
 069 ==> 160591 - Forward / Back (Previous / Next) don't work in preview mode.
-070 ==> 
+070 ==> 132047 - Faster display of images and/or prefetch wished for.
+071 ==> 
 
