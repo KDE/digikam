@@ -86,6 +86,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 072 ==> 292407 - Display image center when Zooming to 100%.
 073 ==> 314377 - digiKam should display images without interpolation when zoom is > 200%.
 074 ==> 316863 - Zoom keyboard shortcuts not working in preview mode.
-075 ==> 154643 - slideshow from digikam could use some filter options.
+075 ==> 154643 - Slideshow from digiKam could use some filter options.
 076 ==> 
 
