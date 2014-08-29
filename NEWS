@@ -76,4 +76,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 062 ==> 267216 - Enable auto detection of libjpeg turbo under fedora 14 or later.
 063 ==> 291972 - HEAD compiling issues under FreeBSD 8.2 [patch].
 064 ==> 326112 - SCAN : Moving an album (directory) loses metadata for cr2 files.
-065 ==> 
+065 ==> 322079 - Mouse wheel short cut to move through my pictures.
+066 ==> 
+
