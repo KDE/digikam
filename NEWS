@@ -69,5 +69,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 055 ==> 308821 - GoogleMaps : Impossible to open map view.
 056 ==> 338631 - Extending raw support.
 057 ==> 161619 - Smart zoom steps in Image Editor.
-058 ==> 
+058 ==> 284213 - Editing tools re-organized to sidepanel to save space with better usability.
+059 ==> 
 
