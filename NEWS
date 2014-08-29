@@ -73,4 +73,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 059 ==> 148238 - Fast switching between preview modes.
 060 ==> 155415 - PRINT : white lines in preview and output.
 061 ==> 229670 - Curves Widget does not restore a "free curve" correctly (in BWSepia filter).
-062 ==> 
+062 ==> 267216 - Enable auto detection of libjpeg turbo under fedora 14 or later.
+063 ==> 
