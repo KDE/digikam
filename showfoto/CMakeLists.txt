@@ -58,6 +58,9 @@ TARGET_LINK_LIBRARIES(showfoto
 
                       # To link under Solaris (see B.K.O #274484)
                       ${MATH_LIBRARY}
+
+                      # To link under FreeBSD
+                      ${KVM_LIBRARY}
                      )
 
 INSTALL(TARGETS showfoto ${INSTALL_TARGETS_DEFAULT_ARGS})
