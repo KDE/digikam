@@ -73,7 +73,7 @@ public:
 };
 
 CollectionPage::CollectionPage(KAssistantDialog* const dlg)
-    : AssistantDlgPage(dlg, i18n("<b>Configure where do you keep your images and you will store database</b>")),
+    : AssistantDlgPage(dlg, i18n("<b>Configure where you keep your images and you will store database</b>")),
       d(new Private)
 {
     QWidget* const widget      = new QWidget(this);
@@ -100,7 +100,7 @@ CollectionPage::CollectionPage(KAssistantDialog* const dlg)
     QLabel* const textLabel1 = new QLabel(widget);
     textLabel1->setWordWrap(true);
 
-    QString message = i18n("<p>Please enter a location where dou you keep your images.</p> "
+    QString message = i18n("<p>Please enter a location where you keep your images.</p> "
                            "<p>You can choose any local folder, even one that already contains images."
                            "<br/> "
                            "More folders can be added later under the <i>Settings</i> menu. "
