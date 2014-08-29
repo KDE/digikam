@@ -83,5 +83,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 069 ==> 160591 - Forward / Back (Previous / Next) don't work in preview mode.
 070 ==> 132047 - Faster display of images and/or prefetch wished for.
 071 ==> 261562 - Drop tags over preview canvas.
-072 ==> 
+072 ==> 292407 - Display image center when Zooming to 100%.
+073 ==> 
 
