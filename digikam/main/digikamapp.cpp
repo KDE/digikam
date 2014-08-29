@@ -1156,7 +1156,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------------
 
     d->selectInvertAction = new KAction(i18n("Invert Selection"), this);
-    d->selectInvertAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_Asterisk));
+    d->selectInvertAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_I));
     connect(d->selectInvertAction, SIGNAL(triggered()), d->view, SLOT(slotSelectInvert()));
     actionCollection()->addAction("selectInvert", d->selectInvertAction);
 
@@ -1613,7 +1613,7 @@ void DigikamApp::loadCameras()
     // -----------------------------------------------------------------
 
     d->addImagesAction = new KAction(KIcon("albumfolder-importimages"), i18n("Add Images..."), this);
-    d->addImagesAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_I));
+    d->addImagesAction->setShortcut(KShortcut(Qt::CTRL+Qt::ALT+Qt::Key_I));
     d->addImagesAction->setWhatsThis(i18n("Adds new items to an Album."));
     connect(d->addImagesAction, SIGNAL(triggered()), this, SLOT(slotImportAddImages()));
     actionCollection()->addAction("import_addImages", d->addImagesAction);
