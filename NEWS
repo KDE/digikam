@@ -74,4 +74,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 060 ==> 155415 - PRINT : white lines in preview and output.
 061 ==> 229670 - Curves Widget does not restore a "free curve" correctly (in BWSepia filter).
 062 ==> 267216 - Enable auto detection of libjpeg turbo under fedora 14 or later.
-063 ==> 
+063 ==> 291972 - HEAD compiling issues under FreeBSD 8.2 [patch].
+064 ==> 
