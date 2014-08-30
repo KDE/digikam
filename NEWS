@@ -90,5 +90,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 076 ==> 255792 - Photo selection mode while browsing album with Slideshow.
 077 ==> 321737 - Image editor always opens small window.
 078 ==> 288614 - Tags filter and Taggin sidebar are too similar, easy to mistake.
-079 ==> 
+079 ==> 291542 - Mouse scroll by itself does NOT take one to the next or previous picture in Reduced Size Preview.
+080 ==> 
 
