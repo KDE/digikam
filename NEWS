@@ -88,5 +88,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 074 ==> 316863 - Zoom keyboard shortcuts not working in preview mode.
 075 ==> 154643 - Slideshow from digiKam could use some filter options.
 076 ==> 255792 - Photo selection mode while browsing album with Slideshow.
-077 ==> 
+077 ==> 321737 - Image editor always opens small window.
+078 ==> 
 
