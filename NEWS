@@ -94,5 +94,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 080 ==> 140743 - More flexible and consistent grouping of icons.
 081 ==> 248565 - Basic functionality not available via keyboard.
 082 ==> 246726 - Ask for confirmation when deleting many images.
-083 ==> 
+083 ==> 162552 - Compact image display in virtual folders.
+084 ==> 
 
