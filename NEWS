@@ -92,5 +92,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 078 ==> 288614 - Tags filter and Taggin sidebar are too similar, easy to mistake.
 079 ==> 291542 - Mouse scroll by itself does NOT take one to the next or previous picture in Reduced Size Preview.
 080 ==> 140743 - More flexible and consistent grouping of icons.
-081 ==> 
+081 ==> 248565 - Basic functionality not available via keyboard.
+082 ==> 
 

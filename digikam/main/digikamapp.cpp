@@ -754,6 +754,7 @@ void DigikamApp::setupActions()
         kDebug() << actionName;
 
         KAction* const action = new KAction(KIcon(leftWidget->getIcon()), leftWidget->getCaption(), this);
+        action->setShortcut(KShortcut(leftWidget->property("Shortcut").toInt()));
         actionCollection()->addAction(actionName, action);
         connect(action, SIGNAL(triggered()), browseActionsMapper, SLOT(map()));
         browseActionsMapper->setMapping(action, leftWidget);
