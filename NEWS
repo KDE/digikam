@@ -95,5 +95,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 081 ==> 248565 - Basic functionality not available via keyboard.
 082 ==> 246726 - Ask for confirmation when deleting many images.
 083 ==> 162552 - Compact image display in virtual folders.
-084 ==> 
+084 ==> 318700 - Preview mode not updated after importing or deleting pictures.
+085 ==> 
 
