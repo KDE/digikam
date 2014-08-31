@@ -100,4 +100,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 086 ==> 251664 - Allow to remove all duplicates except in one selected Album.
 087 ==> 324900 - Impossible to select collection subfolder in duplicates search.
 088 ==> 336327 - digiKam crashed when start to import pictures from usb-drive.
-089 ==> 
+089 ==> 300020 - Picture not showing in the thumbnails after edition.
+090 ==> 
