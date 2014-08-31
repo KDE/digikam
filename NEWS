@@ -103,4 +103,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 089 ==> 300020 - Picture not showing in the thumbnails after edition.
 090 ==> 329524 - Moving versioned pictures to a different album ungroups them.
 091 ==> 305359 - Advanced rename of lots of images is slow.
-092 ==> 
+092 ==> 333356 - Crash on attemp to change modified date to created date.
+093 ==> 
