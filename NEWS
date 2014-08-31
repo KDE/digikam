@@ -96,5 +96,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 082 ==> 246726 - Ask for confirmation when deleting many images.
 083 ==> 162552 - Compact image display in virtual folders.
 084 ==> 318700 - Preview mode not updated after importing or deleting pictures.
-085 ==> 
+085 ==> 333598 - Rebuild fingerprints crashes with large number (>40000) of images.
+086 ==> 
 
