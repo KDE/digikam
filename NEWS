@@ -99,4 +99,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 085 ==> 333598 - Rebuild fingerprints crashes with large number (>40000) of images.
 086 ==> 251664 - Allow to remove all duplicates except in one selected Album.
 087 ==> 324900 - Impossible to select collection subfolder in duplicates search.
-088 ==> 
+088 ==> 336327 - digiKam crashed when start to import pictures from usb-drive.
+089 ==> 
