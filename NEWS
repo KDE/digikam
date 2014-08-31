@@ -101,4 +101,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 087 ==> 324900 - Impossible to select collection subfolder in duplicates search.
 088 ==> 336327 - digiKam crashed when start to import pictures from usb-drive.
 089 ==> 300020 - Picture not showing in the thumbnails after edition.
-090 ==> 
+090 ==> 329524 - Moving versioned pictures to a different album ungroups them.
+091 ==> 
+
