@@ -94,7 +94,7 @@ AlbumFolderViewSideBarWidget::AlbumFolderViewSideBarWidget(QWidget* const parent
     : SidebarWidget(parent), d(new Private)
 {
     setObjectName("AlbumFolderView Sidebar");
-    setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_A);
+    setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F1);
     d->albumModificationHelper = albumModificationHelper;
 
     QVBoxLayout* const layout = new QVBoxLayout(this);
@@ -217,7 +217,7 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
     : SidebarWidget(parent), d(new Private)
 {
     setObjectName("TagView Sidebar");
-    setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_T);
+    setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F2);
 
     QVBoxLayout* const layout = new QVBoxLayout(this);
 
@@ -437,7 +437,7 @@ LabelsSideBarWidget::LabelsSideBarWidget(QWidget* const parent) :
     SidebarWidget(parent), d(new Private)
 {
     setObjectName("Labels Sidebar");
-    setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_L);
+    setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F3);
 
     QVBoxLayout* const layout = new QVBoxLayout(this);
 
@@ -518,7 +518,7 @@ DateFolderViewSideBarWidget::DateFolderViewSideBarWidget(QWidget* const parent, 
     : SidebarWidget(parent), d(new Private)
 {
     setObjectName("DateFolderView Sidebar");
-    setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_D);
+    setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F4);
 
     QVBoxLayout* const layout = new QVBoxLayout(this);
 
@@ -636,7 +636,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
     : SidebarWidget(parent), d(new Private)
 {
     setObjectName("TimeLine Sidebar");
-    setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_I);
+    setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F5);
 
     d->searchModificationHelper = searchModificationHelper;
     d->timer                    = new QTimer(this);
@@ -1079,7 +1079,7 @@ SearchSideBarWidget::SearchSideBarWidget(QWidget* const parent, SearchModel* con
     : SidebarWidget(parent), d(new Private)
 {
     setObjectName("Search Sidebar");
-    setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_S);
+    setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F6);
 
     QVBoxLayout* const layout = new QVBoxLayout(this);
 
@@ -1184,7 +1184,7 @@ FuzzySearchSideBarWidget::FuzzySearchSideBarWidget(QWidget* const parent, Search
     : SidebarWidget(parent), d(new Private)
 {
     setObjectName("Fuzzy Search Sidebar");
-    setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F);
+    setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F7);
 
     d->fuzzySearchView        = new FuzzySearchView(searchModel, searchModificationHelper, this);
     d->fuzzySearchView->setConfigGroup(getConfigGroup());
@@ -1273,7 +1273,7 @@ GPSSearchSideBarWidget::GPSSearchSideBarWidget(QWidget* const parent, SearchMode
     : SidebarWidget(parent), d(new Private)
 {
     setObjectName("GPS Search Sidebar");
-    setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_M);
+    setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F8);
 
     d->gpsSearchView = new GPSSearchView(this, searchModel, searchModificationHelper, imageFilterModel, itemSelectionModel);
     d->gpsSearchView->setConfigGroup(getConfigGroup());
@@ -1354,7 +1354,7 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* const parent, TagModel* const 
     : SidebarWidget(parent), d(new Private)
 {
     setObjectName("People Sidebar");
-    setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_P);
+    setProperty("Shortcut", Qt::META + Qt::CTRL + Qt::Key_F9);
 
     d->searchModificationHelper = searchModificationHelper;
     QVBoxLayout* const layout   = new QVBoxLayout;
