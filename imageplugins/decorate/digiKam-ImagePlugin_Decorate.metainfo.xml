@@ -21,6 +21,7 @@
   <summary xml:lang="cs">Nástroj pro dekoraci obrázku</summary>
   <summary xml:lang="da">Et værktøj til at dekorere et billede</summary>
   <summary xml:lang="en-GB">A tool to decorate an image</summary>
+  <summary xml:lang="es">Una herramienta para decorar una imagen</summary>
   <summary xml:lang="nl">Een hulpmiddel voor het decoreren van een afbeelding</summary>
   <summary xml:lang="pl">Narzędzie do dekorowania obrazu</summary>
   <summary xml:lang="pt">Uma ferramenta para decorar uma imagem</summary>
@@ -34,6 +35,7 @@
   <developer_name xml:lang="cs">Projekt digiKam</developer_name>
   <developer_name xml:lang="da">digiKam-projektet</developer_name>
   <developer_name xml:lang="en-GB">digiKam Project</developer_name>
+  <developer_name xml:lang="es">Proyecto digiKam</developer_name>
   <developer_name xml:lang="nl">digiKam-project</developer_name>
   <developer_name xml:lang="pl">Projekt digiKam</developer_name>
   <developer_name xml:lang="pt">Projecto digiKam</developer_name>

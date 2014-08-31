@@ -21,6 +21,7 @@
   <summary xml:lang="cs">Modul digiKamu pro vylepšování fotografií</summary>
   <summary xml:lang="da">digiKam-plugin til at forbedre fotos</summary>
   <summary xml:lang="en-GB">digiKam plugin to enhance photographs</summary>
+  <summary xml:lang="es">Complemento de digiKam para mejorar fotografías</summary>
   <summary xml:lang="nl">digiKam-plugin voor het verbeteren van foto's</summary>
   <summary xml:lang="pl">Wtyczka digiKam do polepszania fotografii</summary>
   <summary xml:lang="pt">'Plugin' do digiKam para realçar fotografias</summary>
@@ -34,6 +35,7 @@
   <developer_name xml:lang="cs">Projekt digiKam</developer_name>
   <developer_name xml:lang="da">digiKam-projektet</developer_name>
   <developer_name xml:lang="en-GB">digiKam Project</developer_name>
+  <developer_name xml:lang="es">Proyecto digiKam</developer_name>
   <developer_name xml:lang="nl">digiKam-project</developer_name>
   <developer_name xml:lang="pl">Projekt digiKam</developer_name>
   <developer_name xml:lang="pt">Projecto digiKam</developer_name>
