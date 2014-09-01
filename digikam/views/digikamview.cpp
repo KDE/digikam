@@ -537,8 +537,8 @@ void DigikamView::setupConnections()
             d->iconView->imageFilterModel(),
             SLOT(setTagFilter(QList<int>,QList<int>,ImageFilterSettings::MatchingCondition,bool,QList<int>,QList<int>)));
 
-    connect(d->filterWidget, SIGNAL(signalRatingFilterChanged(int,ImageFilterSettings::RatingCondition)),
-            model, SLOT(setRatingFilter(int,ImageFilterSettings::RatingCondition)));
+    connect(d->filterWidget, SIGNAL(signalRatingFilterChanged(int,ImageFilterSettings::RatingCondition,bool)),
+            model, SLOT(setRatingFilter(int,ImageFilterSettings::RatingCondition,bool)));
 
     connect(d->filterWidget, SIGNAL(signalSearchTextFilterChanged(SearchTextFilterSettings)),
             model, SLOT(setTextFilter(SearchTextFilterSettings)));
@@ -905,6 +905,11 @@ void DigikamView::slotNewAlbum()
 void DigikamView::slotDeleteAlbum()
 {
     d->albumModificationHelper->slotAlbumDelete(d->albumFolderSideBar->currentAlbum());
+}
+
+void DigikamView::slotRenameAlbum()
+{
+    d->albumModificationHelper->slotAlbumRename(d->albumFolderSideBar->currentAlbum());
 }
 
 void DigikamView::slotNewTag()

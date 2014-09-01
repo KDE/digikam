@@ -35,7 +35,7 @@ TARGET_LINK_LIBRARIES(renamecustomizertest
                       ${QT_QTTEST_LIBRARY}
                       digikamcore
                       digikamdatabase
-importui
+                      importui
                       advancedrename
                      )
 
@@ -347,6 +347,9 @@ IF(LENSFUN_FOUND)
 
                           # To link under Solaris (see B.K.O #274484)
                           ${MATH_LIBRARY}
+
+                          # To link under FreeBSD
+                          ${KVM_LIBRARY}
 
                           ${LENSFUN_LIBRARIES}
                      )

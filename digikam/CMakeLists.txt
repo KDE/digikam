@@ -283,6 +283,9 @@ TARGET_LINK_LIBRARIES(digikam
 
         # See B.K.O #258931: libgphoto2 library must be the last arg for linker.
         ${GPHOTO2_LIBRARIES}
+
+        # To link under FreeBSD
+        ${KVM_LIBRARY}
 )
 
 IF (NOT WIN32 AND GPHOTO2_FOUND)
