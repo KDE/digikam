@@ -791,6 +791,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------------
 
     d->propsEditAction = new KAction(KIcon("albumfolder-properties"), i18n("Properties"), this);
+    d->propsEditAction->setShortcut(KShortcut(Qt::ALT + Qt::Key_Return));
     d->propsEditAction->setWhatsThis(i18n("Edit album properties and collection information."));
     connect(d->propsEditAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumPropsEdit()));
     actionCollection()->addAction("album_propsEdit", d->propsEditAction);
