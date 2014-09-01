@@ -98,6 +98,7 @@ public:
         newAction(0),
         moveSelectionToAlbumAction(0),
         deleteAction(0),
+        renameAction(0),
         imageDeletePermanentlyAction(0),
         imageDeletePermanentlyDirectlyAction(0),
         imageTrashDirectlyAction(0),
@@ -212,6 +213,7 @@ public:
     KAction*                            newAction;
     KAction*                            moveSelectionToAlbumAction;
     KAction*                            deleteAction;
+    KAction*                            renameAction;
     KAction*                            imageDeletePermanentlyAction;
     KAction*                            imageDeletePermanentlyDirectlyAction;
     KAction*                            imageTrashDirectlyAction;

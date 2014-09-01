@@ -783,6 +783,13 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
+    d->renameAction = new KAction(KIcon("edit-rename"), i18n("Rename..."), this);
+    d->renameAction->setShortcut(KShortcut(Qt::SHIFT + Qt::Key_F2));
+    connect(d->renameAction, SIGNAL(triggered()), d->view, SLOT(slotRenameAlbum()));
+    actionCollection()->addAction("album_rename", d->renameAction);
+
+    // -----------------------------------------------------------------
+
     d->propsEditAction = new KAction(KIcon("albumfolder-properties"), i18n("Properties"), this);
     d->propsEditAction->setWhatsThis(i18n("Edit album properties and collection information."));
     connect(d->propsEditAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumPropsEdit()));
@@ -1327,6 +1334,7 @@ void DigikamApp::initGui()
     // Initialize Actions ---------------------------------------
 
     d->deleteAction->setEnabled(false);
+    d->renameAction->setEnabled(false);
     d->addImagesAction->setEnabled(false);
     d->propsEditAction->setEnabled(false);
     d->openInFileManagerAction->setEnabled(false);
@@ -1418,6 +1426,7 @@ void DigikamApp::slotAlbumSelected(bool val)
         {
             // Not a PAlbum is selected
             d->deleteAction->setEnabled(false);
+            d->renameAction->setEnabled(false);
             d->addImagesAction->setEnabled(false);
             d->propsEditAction->setEnabled(false);
             d->openInFileManagerAction->setEnabled(false);
@@ -1432,12 +1441,13 @@ void DigikamApp::slotAlbumSelected(bool val)
         {
             // We have either the abstract root album,
             // the album root album for collection base dirs, or normal albums.
-            PAlbum* palbum     = static_cast<PAlbum*>(album);
-            bool isRoot        = palbum->isRoot();
-            bool isAlbumRoot   = palbum->isAlbumRoot();
-            bool isNormalAlbum = !isRoot && !isAlbumRoot;
+            PAlbum* const palbum = static_cast<PAlbum*>(album);
+            bool isRoot          = palbum->isRoot();
+            bool isAlbumRoot     = palbum->isAlbumRoot();
+            bool isNormalAlbum   = !isRoot && !isAlbumRoot;
 
             d->deleteAction->setEnabled(isNormalAlbum);
+            d->renameAction->setEnabled(isNormalAlbum);
             d->addImagesAction->setEnabled(isNormalAlbum || isAlbumRoot);
             d->propsEditAction->setEnabled(isNormalAlbum);
             d->openInFileManagerAction->setEnabled(isNormalAlbum || isAlbumRoot);
@@ -1452,6 +1462,7 @@ void DigikamApp::slotAlbumSelected(bool val)
     else
     {
         d->deleteAction->setEnabled(false);
+        d->renameAction->setEnabled(false);
         d->addImagesAction->setEnabled(false);
         d->propsEditAction->setEnabled(false);
         d->openInFileManagerAction->setEnabled(false);

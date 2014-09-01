@@ -460,7 +460,7 @@ void ContextMenuHelper::addActionDeleteAlbum(AlbumModificationHelper* helper, PA
 
 void ContextMenuHelper::addActionEditAlbum(AlbumModificationHelper* helper, PAlbum* album)
 {
-    QAction* action = d->copyFromMainCollection("album_propsEdit");
+    QAction* const action = d->copyFromMainCollection("album_propsEdit");
     addAction(action, !album->isRoot());
     helper->bindAlbum(action, album);
     connect(action, SIGNAL(triggered()), helper, SLOT(slotAlbumEdit()));
@@ -468,7 +468,7 @@ void ContextMenuHelper::addActionEditAlbum(AlbumModificationHelper* helper, PAlb
 
 void ContextMenuHelper::addActionRenameAlbum(AlbumModificationHelper* helper, PAlbum* album)
 {
-    QAction* action = new QAction(SmallIcon("edit-rename"), i18n("Rename..."), this);
+    QAction* const action = d->copyFromMainCollection("album_rename");
     addAction(action, !(album->isRoot() || album->isAlbumRoot()));
     helper->bindAlbum(action, album);
     connect(action, SIGNAL(triggered()), helper, SLOT(slotAlbumRename()));

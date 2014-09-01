@@ -907,6 +907,11 @@ void DigikamView::slotDeleteAlbum()
     d->albumModificationHelper->slotAlbumDelete(d->albumFolderSideBar->currentAlbum());
 }
 
+void DigikamView::slotRenameAlbum()
+{
+    d->albumModificationHelper->slotAlbumRename(d->albumFolderSideBar->currentAlbum());
+}
+
 void DigikamView::slotNewTag()
 {
     d->tagModificationHelper->slotTagNew(d->tagViewSideBar->currentAlbum());

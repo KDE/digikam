@@ -138,6 +138,7 @@ public Q_SLOTS:
     void slotNewAlbum();
     void slotSortAlbums(int order);
     void slotDeleteAlbum();
+    void slotRenameAlbum();
     void slotAlbumPropsEdit();
     void slotAlbumOpenInFileManager();
     void slotAlbumOpenInTerminal();

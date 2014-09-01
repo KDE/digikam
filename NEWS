@@ -106,5 +106,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 092 ==> 333356 - Crash on attemp to change modified date to created date.
 093 ==> 134164 - Be able to use the settings from inside the .NEF file itself.
 094 ==> 338081 - Support HDR DNG images from HDRMerge.
-095 ==> 
-
+095 ==> 327628 - Add keyboard shortcut to rename album.
+096 ==> 287081 - F2 renames image, not Album in Thumbnails mode.
+097 ==> 
