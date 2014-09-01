@@ -499,9 +499,11 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
             }
         }
 
-        // Trying to load with dcraw: RAW files.
+        // Trying to load with libraw: RAW files.
         if (qimage.isNull())
         {
+            kDebug() << "Trying to load Embedded preview with libraw";
+            
             if (KDcraw::loadEmbeddedPreview(qimage, path))
             {
                 fromEmbeddedPreview = true;
@@ -511,10 +513,20 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
 
         if (qimage.isNull())
         {
+            kDebug() << "Trying to load half preview with libraw";
+
             //TODO: Use DImg based loader instead?
             KDcraw::loadHalfPreview(qimage, path);
         }
 
+        if (qimage.isNull())
+        {
+            kDebug() << "Trying to load Embedded preview with Exiv2";
+
+            KExiv2Iface::KExiv2Previews preview(path);
+            qimage = preview.image();
+        }
+            
         // DImg-dependent loading methods: TIFF, PNG, everything supported by QImage
         if (qimage.isNull() && !failedAtDImg)
         {
