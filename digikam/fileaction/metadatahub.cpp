@@ -803,7 +803,6 @@ bool MetadataHub::writeTags(DMetadata& metadata, bool saveTags)
 
         // create list of keywords to be added and to be removed
         QStringList tagsPathList, newKeywords;
-        metadata.getImageTagsPath(tagsPathList);
 
         for (QMap<int, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
         {

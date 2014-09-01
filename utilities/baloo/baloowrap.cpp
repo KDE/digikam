@@ -164,7 +164,11 @@ BalooInfo BalooWrap::getSemanticInfo(const KUrl& url)
     // Baloo have rating from 0 to 10, while digikam have only from 0 to 5
     bInfo.rating     = file.rating()/2;
     bInfo.comment    = file.userComment();
-    bInfo.tags       = file.tags().toSet().toList();
+
+    Q_FOREACH(QString tag, file.tags().toSet())
+    {
+        bInfo.tags.append(i18n("BalooTags/") + tag);
+    }
 
     return bInfo;
 }
