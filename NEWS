@@ -105,5 +105,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 091 ==> 305359 - Advanced rename of lots of images is slow.
 092 ==> 333356 - Crash on attemp to change modified date to created date.
 093 ==> 134164 - Be able to use the settings from inside the .NEF file itself.
-094 ==> 
+094 ==> 338081 - Support HDR DNG images from HDRMerge.
+095 ==> 
 
