@@ -109,4 +109,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 095 ==> 327628 - Add keyboard shortcut to rename album.
 096 ==> 287081 - F2 renames image, not Album in Thumbnails mode.
 097 ==> 314953 - Import window and digiKam window freeze when clicking "Download all".
-098 ==> 
+098 ==> 320295 - Bad Exif orientation interpretation while importing.
+099 ==> 
