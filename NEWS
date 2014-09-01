@@ -111,4 +111,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 097 ==> 320295 - Bad Exif orientation interpretation while importing.
 098 ==> 314952 - Import window should not lock the interface while reading photos.
 099 ==> 314953 - Import window and digiKam window freeze when clicking "Download all".
-100 ==> 
+100 ==> 161988 - Collapse of keyword tree.
+101 ==> 
