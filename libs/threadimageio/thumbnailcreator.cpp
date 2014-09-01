@@ -519,6 +519,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
             KDcraw::loadHalfPreview(qimage, path);
         }
 
+        // Special case with DNG file. See B.K.O #338081
         if (qimage.isNull())
         {
             kDebug() << "Trying to load Embedded preview with Exiv2";
