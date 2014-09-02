@@ -1019,6 +1019,13 @@ void ImageFilterModel::setCategorizationMode(ImageSortSettings::CategorizationMo
     setImageSortSettings(d->sorter);
 }
 
+void ImageFilterModel::setCategorizationSortOrder(ImageSortSettings::SortOrder order)
+{
+    Q_D(ImageFilterModel);
+    d->sorter.setCategorizationSortOrder(order);
+    setImageSortSettings(d->sorter);
+}
+
 void ImageFilterModel::setSortRole(ImageSortSettings::SortRole role)
 {
     Q_D(ImageFilterModel);

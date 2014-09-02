@@ -187,6 +187,7 @@ public Q_SLOTS:
     void setTextFilter(const SearchTextFilterSettings& settings);
 
     void setCategorizationMode(ImageSortSettings::CategorizationMode mode);
+    void setCategorizationSortOrder(ImageSortSettings::SortOrder order);
     void setSortRole(ImageSortSettings::SortRole role);
     void setSortOrder(ImageSortSettings::SortOrder order);
     void setUrlWhitelist(const KUrl::List urlList, const QString& id);

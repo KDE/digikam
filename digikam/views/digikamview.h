@@ -195,6 +195,7 @@ public Q_SLOTS:
     void slotSortImages(int order);
     void slotSortImagesOrder(int order);
     void slotGroupImages(int mode);
+    void slotSortImageGroupOrder(int order);
     void slotMoveSelectionToAlbum();
 
     void slotAssignPickLabel(int pickId);

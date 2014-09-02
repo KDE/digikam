@@ -105,7 +105,6 @@ void ImageSortSettings::setSortOrder(SortOrder order)
     else
     {
         currentSortOrder = (Qt::SortOrder)order;
-        setCategorizationSortOrder((SortOrder)order);
     }
 }
 

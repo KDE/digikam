@@ -1145,6 +1145,23 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
+    d->imageGroupSortOrderAction = new KSelectAction(i18n("Group Sorting Order"), this);
+    d->imageGroupSortOrderAction->setWhatsThis(i18n("The sort order of images groups"));
+    QSignalMapper* imageGroupSortOrderMapper = new QSignalMapper(this);
+    connect(imageGroupSortOrderMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImageGroupOrder(int)));
+    actionCollection()->addAction("image_group_sort_order", d->imageGroupSortOrderAction);
+
+    QAction* sortGroupsAscending  = d->imageGroupSortOrderAction->addAction(KIcon("view-sort-ascending"), i18n("Ascending"));
+    QAction* sortGroupsDescending = d->imageGroupSortOrderAction->addAction(KIcon("view-sort-descending"), i18n("Descending"));
+
+    connect(sortGroupsAscending, SIGNAL(triggered()), imageGroupSortOrderMapper, SLOT(map()));
+    connect(sortGroupsDescending, SIGNAL(triggered()), imageGroupSortOrderMapper, SLOT(map()));
+
+    imageGroupSortOrderMapper->setMapping(sortGroupsAscending, (int)ImageSortSettings::AscendingOrder);
+    imageGroupSortOrderMapper->setMapping(sortGroupsDescending, (int)ImageSortSettings::DescendingOrder);
+
+    // -----------------------------------------------------------------
+
     setupImageTransformActions();
     setupExifOrientationActions();
 
@@ -1355,6 +1372,7 @@ void DigikamApp::initGui()
     d->imageSortAction->setCurrentItem((int)AlbumSettings::instance()->getImageSortOrder());
     d->imageSortOrderAction->setCurrentItem((int)AlbumSettings::instance()->getImageSorting());
     d->imageGroupAction->setCurrentItem((int)AlbumSettings::instance()->getImageGroupMode()-1); // no action for enum 0
+    d->imageGroupSortOrderAction->setCurrentItem((int)AlbumSettings::instance()->getImageGroupSortOrder());
     d->recurseAlbumsAction->setChecked(AlbumSettings::instance()->getRecurseAlbums());
     d->recurseTagsAction->setChecked(AlbumSettings::instance()->getRecurseTags());
     d->showBarAction->setChecked(AlbumSettings::instance()->getShowThumbbar());

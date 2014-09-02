@@ -7,6 +7,7 @@
  * Description : main digiKam interface implementation
  *
  * Copyright (C) 2007-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2014      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -158,6 +159,7 @@ public:
         imageSortAction(0),
         imageSortOrderAction(0),
         imageGroupAction(0),
+        imageGroupSortOrderAction(0),
         albumSortAction(0),
         recurseAlbumsAction(0),
         recurseTagsAction(0),
@@ -282,6 +284,7 @@ public:
     KSelectAction*                      imageSortAction;
     KSelectAction*                      imageSortOrderAction;
     KSelectAction*                      imageGroupAction;
+    KSelectAction*                      imageGroupSortOrderAction;
     KSelectAction*                      albumSortAction;
     KToggleAction*                      recurseAlbumsAction;
     KToggleAction*                      recurseTagsAction;

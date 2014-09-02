@@ -1934,6 +1934,19 @@ void DigikamView::slotGroupImages(int categoryMode)
     d->iconView->imageFilterModel()->setCategorizationMode((ImageSortSettings::CategorizationMode) categoryMode);
 }
 
+void DigikamView::slotSortImageGroupOrder(int order)
+{
+    AlbumSettings* const settings = AlbumSettings::instance();
+
+    if (!settings)
+    {
+        return;
+    }
+
+    settings->setImageGroupSortOrder(order);
+    d->iconView->imageFilterModel()->setCategorizationSortOrder((ImageSortSettings::SortOrder) order);
+}
+
 void DigikamView::slotMoveSelectionToAlbum()
 {
     d->iconView->createNewAlbumForSelected();

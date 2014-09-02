@@ -132,6 +132,9 @@ public:
     void setImageGroupMode(int mode);
     int  getImageGroupMode() const;
 
+    void setImageGroupSortOrder(int order);
+    int  getImageGroupSortOrder() const;
+
     void setItemLeftClickAction(const ItemLeftClickAction action);
     ItemLeftClickAction getItemLeftClickAction() const;
 

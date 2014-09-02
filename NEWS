@@ -113,4 +113,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 099 ==> 314953 - Import window and digiKam window freeze when clicking "Download all".
 100 ==> 161988 - Collapse of keyword tree.
 101 ==> 318577 - Batch queue fails to process multiple files simultaneously (in parallel).
-102 ==> 
+102 ==> 323299 - Synchronize sort order of icon-view and album tree-view.
+103 ==>

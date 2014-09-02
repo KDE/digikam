@@ -134,6 +134,7 @@ public:
         imageSortOrder(0),
         imageSorting(0),
         imageGroupMode(0),
+        imageGroupSortOrder(0),
         itemLeftClickAction(AlbumSettings::ShowPreview),
         syncToDigikam(false),
         syncToBaloo(false),
@@ -154,6 +155,7 @@ public:
     static const QString                configImageSortOrderEntry;
     static const QString                configImageSortingEntry;
     static const QString                configImageGroupModeEntry;
+    static const QString                configImageGroupSortOrderEntry;
     static const QString                configItemLeftClickActionEntry;
     static const QString                configDefaultIconSizeEntry;
     static const QString                configDefaultTreeIconSizeEntry;
@@ -325,6 +327,7 @@ public:
     int                                 imageSortOrder;
     int                                 imageSorting;
     int                                 imageGroupMode;
+    int                                 imageGroupSortOrder;
     AlbumSettings::ItemLeftClickAction  itemLeftClickAction;
 
     // Baloo settings
@@ -355,6 +358,7 @@ const QString AlbumSettings::Private::configAlbumSortOrderEntry("Album Sort Orde
 const QString AlbumSettings::Private::configImageSortOrderEntry("Image Sort Order");
 const QString AlbumSettings::Private::configImageSortingEntry("Image Sorting");
 const QString AlbumSettings::Private::configImageGroupModeEntry("Image Group Mode");
+const QString AlbumSettings::Private::configImageGroupSortOrderEntry("Image Group Sort Order");
 const QString AlbumSettings::Private::configItemLeftClickActionEntry("Item Left Click Action");
 const QString AlbumSettings::Private::configDefaultIconSizeEntry("Default Icon Size");
 const QString AlbumSettings::Private::configDefaultTreeIconSizeEntry("Default Tree Icon Size");
@@ -476,6 +480,8 @@ void AlbumSettings::init()
     d->imageSortOrder               = ImageSortSettings::SortByFileName;
     d->imageSorting                 = ImageSortSettings::AscendingOrder;
     d->imageGroupMode               = ImageSortSettings::CategoryByAlbum;
+    d->imageGroupSortOrder          = ImageSortSettings::AscendingOrder;
+
     d->itemLeftClickAction          = AlbumSettings::ShowPreview;
 
     d->thumbnailSize                = ThumbnailSize::Medium;
@@ -498,7 +504,7 @@ void AlbumSettings::init()
     d->iconShowTitle                = true;
     d->iconShowComments             = true;
     d->iconShowResolution           = false;
-    d->iconShowAspectRatio           = false;
+    d->iconShowAspectRatio          = false;
     d->iconShowTags                 = true;
     d->iconShowOverlays             = true;
     d->iconShowRating               = true;
@@ -597,6 +603,7 @@ void AlbumSettings::readSettings()
     d->imageSortOrder               = group.readEntry(d->configImageSortOrderEntry, (int)ImageSortSettings::SortByFileName);
     d->imageSorting                 = group.readEntry(d->configImageSortingEntry,   (int)ImageSortSettings::AscendingOrder);
     d->imageGroupMode               = group.readEntry(d->configImageGroupModeEntry, (int)ImageSortSettings::CategoryByAlbum);
+    d->imageGroupSortOrder          = group.readEntry(d->configImageGroupSortOrderEntry, (int)ImageSortSettings::AscendingOrder);
 
     d->itemLeftClickAction          = AlbumSettings::ItemLeftClickAction(group.readEntry( d->configItemLeftClickActionEntry,
                                                                          (int)AlbumSettings::ShowPreview));
@@ -727,6 +734,8 @@ void AlbumSettings::saveSettings()
     group.writeEntry(d->configImageSortOrderEntry,               (int)d->imageSortOrder);
     group.writeEntry(d->configImageSortingEntry,                 (int)d->imageSorting);
     group.writeEntry(d->configImageGroupModeEntry,               (int)d->imageGroupMode);
+    group.writeEntry(d->configImageGroupSortOrderEntry,          (int)d->imageGroupSortOrder);
+
     group.writeEntry(d->configItemLeftClickActionEntry,          (int)d->itemLeftClickAction);
     group.writeEntry(d->configDefaultIconSizeEntry,              QString::number(d->thumbnailSize));
     group.writeEntry(d->configDefaultTreeIconSizeEntry,          QString::number(d->treeThumbnailSize));
@@ -923,6 +932,16 @@ void AlbumSettings::setImageGroupMode(int mode)
 int AlbumSettings::getImageGroupMode() const
 {
     return d->imageGroupMode;
+}
+
+void AlbumSettings::setImageGroupSortOrder(int order)
+{
+    d->imageGroupSortOrder = order;
+}
+
+int AlbumSettings::getImageGroupSortOrder() const
+{
+    return d->imageGroupSortOrder;
 }
 
 void AlbumSettings::setItemLeftClickAction(const ItemLeftClickAction action)
