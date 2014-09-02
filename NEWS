@@ -126,5 +126,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 112 ==> 225723 - Simple sharpen is awfully slow.
 113 ==> 290442 - Unsharp Mask with radius less than 1.0 burns images.
 114 ==> 127374 - Maximum Radius way too small in Unsharp Mask tool.
-115 ==> 
+115 ==> 331523 - digiKam don't compile with next Lensfun version where CCI correction have been removed.
+116 ==> 
 
