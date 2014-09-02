@@ -7,7 +7,7 @@
  * Description : Captions, Tags, and Rating properties editor
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2003-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2009-2011 by Johannes Wienke <languitar at semipol dot de>
@@ -299,10 +299,10 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     d->newTagEdit->setTagTreeView(d->tagCheckView);
     //, "ImageDescEditTabNewTagEdit",
     //d->newTagEdit->setCaseSensitive(false);
-    d->newTagEdit->setClickMessage(i18n("Enter new tag here..."));
-    //d->newTagEdit->setWhatsThis(i18n("Enter the text used to create new tags here. "
-    //                                 "'/' can be used to create a hierarchy of tags. "
-    //                                 "',' can be used to create more than one hierarchy at the same time."));
+    d->newTagEdit->setClickMessage(i18n("Enter tag here."));
+    d->newTagEdit->setWhatsThis(i18n("Enter the text used to create tags here. "
+                                     "'/' can be used to create a hierarchy of tags. "
+                                     "',' can be used to create more than one hierarchy at the same time."));
 
     KHBox* tagsSearch  = new KHBox(tagsArea);
     tagsSearch->setSpacing(KDialog::spacingHint());
@@ -849,7 +849,7 @@ bool ImageDescEditTab::eventFilter(QObject* o, QEvent* e)
 {
     if ( e->type() == QEvent::KeyPress )
     {
-        QKeyEvent* k = static_cast<QKeyEvent*>(e);
+        QKeyEvent* const k = static_cast<QKeyEvent*>(e);
 
         if (k->key() == Qt::Key_Enter || k->key() == Qt::Key_Return)
         {
@@ -880,7 +880,7 @@ void ImageDescEditTab::populateTags()
 
 void ImageDescEditTab::slotTagStateChanged(Album* album, Qt::CheckState checkState)
 {
-    TAlbum* tag = dynamic_cast<TAlbum*> (album);
+    TAlbum* const tag = dynamic_cast<TAlbum*>(album);
 
     if (!tag || d->ignoreTagChanges)
     {
@@ -1231,7 +1231,7 @@ void ImageDescEditTab::slotImageTagsChanged(qlonglong imageId)
 
 void ImageDescEditTab::slotOpenTagsManager()
 {
-    TagsManager* tagMngr = TagsManager::instance();
+    TagsManager* const tagMngr = TagsManager::instance();
     tagMngr->show();
     tagMngr->activateWindow();
     tagMngr->raise();
