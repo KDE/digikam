@@ -121,5 +121,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 107 ==> 337688 - Reading/writing of keyword-tags to jpg and xmp corrupts tag hierarchy, duplicate root tag.
 108 ==> 335723 - MANAGER : "Quick Access List" can not be resized
 109 ==> 329975 - Metadata tag is never (re-)read from image.
-110 ==> 
+110 ==> 326935 - Cannot open tiff-files.
+111 ==> 
 
