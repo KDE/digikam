@@ -127,16 +127,6 @@ private Q_SLOTS:
      */
     void slotWipeAll();
 
-//    /** NOTE: delete all related to Nepomuk
-//     * @brief slotNepomukToDb     - coonected to syncNepomuk action and
-//     *                               will sync all Database tags with nepomuk
-//     *                               interface
-//     * @deprecated                - Nepomuk support will be dropped soon
-//     */
-//    void slotNepomukToDb();
-
-//    void slotDbToNepomuk();
-
     /**
      * @brief slotRemoveTagsFromImg - will remove selected tags from all
      *                                images that have them.
