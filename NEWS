@@ -119,5 +119,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 105 ==> 115170 - MANAGER : add 'remove all tags' to menu hierarchy.
 106 ==> 331695 - MANAGER : misleading menu entry may lead to unintentionall purging of all tags.
 107 ==> 337688 - Reading/writing of keyword-tags to jpg and xmp corrupts tag hierarchy, duplicate root tag.
-108 ==> 
+108 ==> 335723 - MANAGER : "Quick Access List" can not be resized
+109 ==>
 

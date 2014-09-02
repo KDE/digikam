@@ -36,6 +36,7 @@
 #include <QHBoxLayout>
 #include <QDesktopWidget>
 #include <QDBusInterface>
+#include <QSplitter>
 
 // KDE includes
 
@@ -82,7 +83,7 @@ public:
     {
         tagPixmap        = 0;
         searchBar        = 0;
-        treeWinLayout    = 0;
+        splitter         = 0;
         treeWindow       = 0;
         mainToolbar      = 0;
         rightToolBar     = 0;
@@ -102,7 +103,7 @@ public:
     SearchTextBar*   searchBar;
 
 
-    QHBoxLayout*     treeWinLayout;
+    QSplitter*       splitter;
     KMainWindow*     treeWindow;
     KToolBar*        mainToolbar;
     KMultiTabBar*    rightToolBar;
@@ -190,24 +191,23 @@ void TagsManager::setupUi(KMainWindow* const Dialog)
      d->treeWindow    = new KMainWindow(this);
      setupActions();
 
-     d->treeWinLayout = new QHBoxLayout();
-
-     d->treeWinLayout->addWidget(d->tagMngrView,9);
-
-     d->tagPropWidget = new TagPropWidget(d->treeWindow);
-     d->tagPropWidget->setMaximumWidth(350);
-     d->treeWinLayout->addWidget(d->tagPropWidget,3);
-     d->tagPropWidget->hide();
+     d->splitter = new QSplitter();
 
      d->listView      = new TagList(d->tagMngrView,Dialog);
-     d->listView->setMaximumWidth(300);
 
-     QWidget* const treeCentralW = new QWidget(this);
-     treeCentralW->setLayout(d->treeWinLayout);
-     d->treeWindow->setCentralWidget(treeCentralW);
+     d->splitter->addWidget(d->listView);
+     d->splitter->addWidget(d->tagMngrView);
 
-     mainLayout->addWidget(d->listView,2);
-     mainLayout->addWidget(d->treeWindow,9);
+     d->tagPropWidget = new TagPropWidget(d->treeWindow);
+     d->splitter->addWidget(d->tagPropWidget);
+     d->tagPropWidget->hide();
+
+     d->splitter->setStretchFactor(0,0);
+     d->splitter->setStretchFactor(1,1);
+     d->splitter->setStretchFactor(2,0);
+     d->treeWindow->setCentralWidget(d->splitter);
+
+     mainLayout->addWidget(d->treeWindow);
      mainLayout->addWidget(d->rightToolBar);
 
      QWidget* const centraW = new QWidget(this);
@@ -662,7 +662,10 @@ void TagsManager::closeEvent(QCloseEvent* event)
 void TagsManager::setupActions()
 {
     d->mainToolbar = new KToolBar(d->treeWindow, true);
-    d->mainToolbar->layout()->setContentsMargins(KDialog::marginHint(), KDialog::marginHint(), KDialog::marginHint(), KDialog::marginHint());
+    d->mainToolbar->layout()->setContentsMargins(KDialog::marginHint(),
+                                                 KDialog::marginHint(),
+                                                 KDialog::marginHint(),
+                                                 KDialog::marginHint());
 
     QWidgetAction* const pixMapAction = new QWidgetAction(this);
     pixMapAction->setDefaultWidget(d->tagPixmap);
