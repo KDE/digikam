@@ -117,4 +117,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 103 ==> 128333 - digiKam automatic photographic Labels.
 104 ==> 291903 - Minor tweaks to input-field "Enter new tag here...".
 105 ==> 115170 - MANAGER : add 'remove all tags' to menu hierarchy.
-106 ==> 
+106 ==> 331695 - MANAGER : misleading menu entry may lead to unintentionall purging of all tags.
+107 ==> 
+
