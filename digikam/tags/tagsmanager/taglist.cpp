@@ -268,6 +268,10 @@ void TagList::slotDeleteSelected()
         ListItem* const item = static_cast<ListItem*>(index.internalPointer());
         d->tagListModel->deleteItem(item);
     }
+
+    d->tagList->selectionModel()->select(d->tagList->model()->index(0,0),
+                                         QItemSelectionModel::SelectCurrent);
+
 }
 
 void TagList::enableAddButton(bool value)

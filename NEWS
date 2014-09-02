@@ -122,5 +122,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 108 ==> 335723 - MANAGER : "Quick Access List" can not be resized
 109 ==> 329975 - Metadata tag is never (re-)read from image.
 110 ==> 326935 - Cannot open tiff-files.
-111 ==> 
+111 ==> 335718 - MANAGER : removing a tag turns entries in "Quick Access List" to "All tags"
+112 ==>
 
