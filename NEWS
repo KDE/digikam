@@ -124,6 +124,7 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 110 ==> 326935 - Cannot open tiff-files.
 111 ==> 335718 - MANAGER : removing a tag turns entries in "Quick Access List" to "All tags".
 112 ==> 225723 - Simple sharpen is awfully slow.
-113 ==> 290442 - Unsharp mask with radius less than 1.0 burns images.
-114 ==> 
+113 ==> 290442 - Unsharp Mask with radius less than 1.0 burns images.
+114 ==> 127374 - Maximum Radius way too small in Unsharp Mask tool.
+115 ==> 
 
