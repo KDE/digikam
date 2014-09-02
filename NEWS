@@ -129,5 +129,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 115 ==> 331523 - digiKam don't compile with next Lensfun version where CCI correction have been removed.
 116 ==> 315025 - 0Byte sized files after using 2 actions in Batch Queue Manager.
 117 ==> 314822 - BQM creates empty PNG output from PNG input.
-118 ==> 
-
+118 ==> 330118 - Downloading back the same image with "download and deleted", import tool says "image already exists".
+119 ==> 
