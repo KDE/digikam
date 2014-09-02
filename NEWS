@@ -128,4 +128,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 114 ==> 127374 - Maximum Radius way too small in Unsharp Mask tool.
 115 ==> 331523 - digiKam don't compile with next Lensfun version where CCI correction have been removed.
 116 ==> 315025 - 0Byte sized files after using 2 actions in Batch Queue Manager.
-117 ==> 
+117 ==> 314822 - BQM creates empty PNG output from PNG input.
+118 ==> 
+
