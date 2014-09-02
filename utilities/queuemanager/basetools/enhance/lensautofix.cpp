@@ -6,7 +6,7 @@
  * Date        : 2010-09-18
  * Description : lens auto-fix batch tool.
  *
- * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -75,19 +75,19 @@ LensAutoFix::~LensAutoFix()
 
 void LensAutoFix::registerSettingsWidget()
 {
-    m_settingsWidget  = new QWidget;
-    QLabel* note      = new QLabel(i18n("<b>Use Metadata</b> option will parse images' information at "
-                                        "queue run-time to find relevant lens features."));
+    m_settingsWidget   = new QWidget;
+    QLabel* const note = new QLabel(i18n("<b>Use Metadata</b> option will parse images' information at "
+                                         "queue run-time to find relevant lens features."));
     note->setWordWrap(true);
     note->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
-    d->cameraSelector = new LensFunCameraSelector();
-    KSeparator* line  = new KSeparator(Qt::Horizontal);
-    d->settingsView   = new LensFunSettings();
+    d->cameraSelector      = new LensFunCameraSelector();
+    KSeparator* const line = new KSeparator(Qt::Horizontal);
+    d->settingsView        = new LensFunSettings();
     d->cameraSelector->setPassiveMetadataUsage(true);
     d->cameraSelector->setEnabledUseMetadata(true);
 
-    QGridLayout* grid = new QGridLayout(m_settingsWidget);
+    QGridLayout* const grid = new QGridLayout(m_settingsWidget);
     grid->addWidget(note,              0, 0, 1, 2);
     grid->addWidget(d->cameraSelector, 1, 0, 1, 2);
     grid->addWidget(line,              2, 0, 1, 2);
@@ -112,7 +112,6 @@ BatchToolSettings LensAutoFix::defaultSettings()
     prm.insert("UseMetadata",     true);
     prm.insert("filterCCA",       true);
     prm.insert("filterVIG",       true);
-    prm.insert("filterCCI",       true);
     prm.insert("filterDST",       true);
     prm.insert("filterGEO",       true);
 
@@ -134,7 +133,6 @@ void LensAutoFix::slotAssignSettings2Widget()
     LensFunContainer lfPrm;
     lfPrm.filterCCA       = settings()["filterCCA"].toBool();
     lfPrm.filterVIG       = settings()["filterVIG"].toBool();
-    lfPrm.filterCCI       = settings()["filterCCI"].toBool();
     lfPrm.filterDST       = settings()["filterDST"].toBool();
     lfPrm.filterGEO       = settings()["filterGEO"].toBool();
 
@@ -155,7 +153,6 @@ void LensAutoFix::slotSettingsChanged()
     // Update checkbox options about Lens corrections available.
     d->settingsView->setEnabledCCA(d->cameraSelector->useMetadata()  ? true : d->cameraSelector->iface()->supportsCCA());
     d->settingsView->setEnabledVig(d->cameraSelector->useMetadata()  ? true : d->cameraSelector->iface()->supportsVig());
-    d->settingsView->setEnabledCCI(d->cameraSelector->useMetadata()  ? true : d->cameraSelector->iface()->supportsVig());
     d->settingsView->setEnabledDist(d->cameraSelector->useMetadata() ? true : d->cameraSelector->iface()->supportsDistortion());
     d->settingsView->setEnabledGeom(d->cameraSelector->useMetadata() ? true : d->cameraSelector->iface()->supportsDistortion());
 
@@ -166,7 +163,6 @@ void LensAutoFix::slotSettingsChanged()
 
     prm.insert("filterCCA", (bool)settings.filterCCA);
     prm.insert("filterVIG", (bool)settings.filterVIG);
-    prm.insert("filterCCI", (bool)settings.filterCCI);
     prm.insert("filterDST", (bool)settings.filterDST);
     prm.insert("filterGEO", (bool)settings.filterGEO);
 
@@ -210,7 +206,6 @@ bool LensAutoFix::toolOperations()
     {
         prm.filterCCA       = settings()["filterCCA"].toBool();
         prm.filterVIG       = settings()["filterVIG"].toBool();
-        prm.filterCCI       = settings()["filterCCI"].toBool();
         prm.filterDST       = settings()["filterDST"].toBool();
         prm.filterGEO       = settings()["filterGEO"].toBool();
 

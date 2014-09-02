@@ -82,7 +82,6 @@ public:
     bool supportsCCA()        const;
     bool supportsVig()        const;
     bool supportsGeometry()   const;
-    bool supportsCCI()        const;
 
     /** Return Camera maker string description found in metadata
     */

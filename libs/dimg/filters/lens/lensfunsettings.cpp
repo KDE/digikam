@@ -4,7 +4,7 @@
  * Description : a tool to fix automatically camera lens aberrations
  *
  * Copyright (C) 2008      by Adrian Schroeter <adrian at suse dot de>
- * Copyright (C) 2008-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -45,27 +45,23 @@ public:
     Private() :
         filterCCA(0),
         filterVIG(0),
-        filterCCI(0),
         filterDST(0),
         filterGEO(0)
     {}
 
     static const QString configCCAEntry;
     static const QString configVignettingEntry;
-    static const QString configCCIEntry;
     static const QString configDistortionEntry;
     static const QString configGeometryEntry;
 
     QCheckBox*           filterCCA;
     QCheckBox*           filterVIG;
-    QCheckBox*           filterCCI;
     QCheckBox*           filterDST;
     QCheckBox*           filterGEO;
 };
 
 const QString LensFunSettings::Private::configCCAEntry("CCA");
 const QString LensFunSettings::Private::configVignettingEntry("Vignetting");
-const QString LensFunSettings::Private::configCCIEntry("CCI");
 const QString LensFunSettings::Private::configDistortionEntry("Distortion");
 const QString LensFunSettings::Private::configGeometryEntry("Geometry");
 
@@ -86,10 +82,6 @@ LensFunSettings::LensFunSettings(QWidget* const parent)
     d->filterVIG->setWhatsThis(i18n("Vignetting refers to an image darkening, mostly in the corners. "
                                     "Optical and natural vignetting can be canceled out with this option, "
                                     "whereas mechanical vignetting will not be cured."));
-    d->filterCCI  = new QCheckBox(i18n("Color"));
-    d->filterCCI->setWhatsThis(i18n("All lenses have a slight color tinge to them, "
-                                    "mostly due to the anti-reflective coating. "
-                                    "The tinge can be canceled when the respective data is known for the lens."));
     d->filterDST = new QCheckBox(i18n("Distortion"));
     d->filterDST->setWhatsThis(i18n("Distortion refers to an image deformation, which is most pronounced "
                                     "towards the corners. These Seidel aberrations are known as pincushion "
@@ -107,7 +99,6 @@ LensFunSettings::LensFunSettings(QWidget* const parent)
     grid->addWidget(title,        0, 0, 1, 2);
     grid->addWidget(d->filterCCA, 1, 0, 1, 2);
     grid->addWidget(d->filterVIG, 2, 0, 1, 2);
-    grid->addWidget(d->filterCCI, 3, 0, 1, 2);
     grid->addWidget(d->filterDST, 4, 0, 1, 2);
     grid->addWidget(d->filterGEO, 5, 0, 1, 2);
     grid->addWidget(note,         6, 0, 1, 2);
@@ -119,9 +110,6 @@ LensFunSettings::LensFunSettings(QWidget* const parent)
             this, SIGNAL(signalSettingsChanged()));
 
     connect(d->filterVIG, SIGNAL(toggled(bool)),
-            this, SIGNAL(signalSettingsChanged()));
-
-    connect(d->filterCCI, SIGNAL(toggled(bool)),
             this, SIGNAL(signalSettingsChanged()));
 
     connect(d->filterDST, SIGNAL(toggled(bool)),
@@ -146,11 +134,6 @@ void LensFunSettings::setEnabledVig(bool b)
     d->filterVIG->setEnabled(b);
 }
 
-void LensFunSettings::setEnabledCCI(bool b)
-{
-    d->filterCCI->setEnabled(b);
-}
-
 void LensFunSettings::setEnabledDist(bool b)
 {
     d->filterDST->setEnabled(b);
@@ -165,7 +148,6 @@ void LensFunSettings::assignFilterSettings(LensFunContainer& prm)
 {
     prm.filterCCA = (d->filterCCA->isChecked() && d->filterCCA->isEnabled());
     prm.filterVIG = (d->filterVIG->isChecked() && d->filterVIG->isEnabled());
-    prm.filterCCI = (d->filterCCI->isChecked() && d->filterCCI->isEnabled());
     prm.filterDST = (d->filterDST->isChecked() && d->filterDST->isEnabled());
     prm.filterGEO = (d->filterGEO->isChecked() && d->filterGEO->isEnabled());
 }
@@ -175,7 +157,6 @@ void LensFunSettings::setFilterSettings(const LensFunContainer& settings)
     blockSignals(true);
     d->filterCCA->setChecked(settings.filterCCA);
     d->filterVIG->setChecked(settings.filterVIG);
-    d->filterCCI->setChecked(settings.filterCCI);
     d->filterDST->setChecked(settings.filterDST);
     d->filterGEO->setChecked(settings.filterGEO);
     blockSignals(false);
@@ -198,7 +179,6 @@ void LensFunSettings::readSettings(KConfigGroup& group)
     LensFunContainer defaultPrm = defaultSettings();
     prm.filterCCA = group.readEntry(d->configCCAEntry,        defaultPrm.filterCCA);
     prm.filterVIG = group.readEntry(d->configVignettingEntry, defaultPrm.filterVIG);
-    prm.filterCCI = group.readEntry(d->configCCIEntry,        defaultPrm.filterCCI);
     prm.filterDST = group.readEntry(d->configDistortionEntry, defaultPrm.filterDST);
     prm.filterGEO = group.readEntry(d->configGeometryEntry,   defaultPrm.filterGEO);
     setFilterSettings(prm);
@@ -217,11 +197,6 @@ void LensFunSettings::writeSettings(KConfigGroup& group)
     if (d->filterVIG->isEnabled())
     {
         group.writeEntry(d->configVignettingEntry, (prm.filterVIG));
-    }
-
-    if (d->filterCCI->isEnabled())
-    {
-        group.writeEntry(d->configCCIEntry, (prm.filterCCI));
     }
 
     if (d->filterDST->isEnabled())

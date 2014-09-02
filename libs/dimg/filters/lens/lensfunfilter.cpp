@@ -4,7 +4,7 @@
  * Description : a tool to fix automatically camera lens aberrations
  *
  * Copyright (C) 2008      by Adrian Schroeter <adrian at suse dot de>
- * Copyright (C) 2008-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -123,11 +123,6 @@ void LensFunFilter::filterImage()
         modifyFlags |= LF_MODIFY_VIGNETTING;
     }
 
-    if (d->iface->settings().filterCCI)
-    {
-        modifyFlags |= LF_MODIFY_CCI;
-    }
-
     // Init lensfun lib, we are working on the full image.
 
     lfPixelFormat colorDepth = m_orgImage.bytesDepth() == 4 ? LF_PF_U8 : LF_PF_U16;
@@ -156,7 +151,7 @@ void LensFunFilter::filterImage()
     // Calc necessary steps for progress bar
 
     int steps = ((d->iface->settings().filterCCA)                                   ? 1 : 0) +
-                ((d->iface->settings().filterVIG || d->iface->settings().filterCCI) ? 1 : 0) +
+                ((d->iface->settings().filterVIG)                                   ? 1 : 0) +
                 ((d->iface->settings().filterDST || d->iface->settings().filterGEO) ? 1 : 0);
 
     kDebug() << "LensFun Modifier Flags: " << modflags << "  Steps:" << steps;
@@ -216,7 +211,7 @@ void LensFunFilter::filterImage()
 
     // Stage 2: Color Corrections: Vignetting and Color Contribution Index
 
-    if (d->iface->settings().filterVIG || d->iface->settings().filterCCI)
+    if (d->iface->settings().filterVIG)
     {
         uchar* data   = m_destImage.bits();
         loop          = 0;
@@ -318,8 +313,6 @@ bool LensFunFilter::registerSettingsToXmp(KExiv2Data& data) const
     str.append("\n");
     str.append(i18n("VIG Correction: %1",   prm.filterVIG  && d->iface->supportsVig()       ? i18n("enabled") : i18n("disabled")));
     str.append("\n");
-    str.append(i18n("CCI Correction: %1",   prm.filterCCI  && d->iface->supportsCCI()       ? i18n("enabled") : i18n("disabled")));
-    str.append("\n");
     str.append(i18n("DST Correction: %1",   prm.filterDST && d->iface->supportsDistortion() ? i18n("enabled") : i18n("disabled")));
     str.append("\n");
     str.append(i18n("GEO Correction: %1",   prm.filterGEO && d->iface->supportsGeometry()   ? i18n("enabled") : i18n("disabled")));
@@ -340,7 +333,6 @@ FilterAction LensFunFilter::filterAction()
     LensFunContainer prm = d->iface->settings();
     action.addParameter("ccaCorrection",   prm.filterCCA);
     action.addParameter("vigCorrection",   prm.filterVIG);
-    action.addParameter("cciCorrection",   prm.filterCCI);
     action.addParameter("dstCorrection",   prm.filterDST);
     action.addParameter("geoCorrection",   prm.filterGEO);
     action.addParameter("cropFactor",      prm.cropFactor);
@@ -359,7 +351,6 @@ void LensFunFilter::readParameters(const Digikam::FilterAction& action)
     LensFunContainer prm = d->iface->settings();
     prm.filterCCA        = action.parameter("ccaCorrection").toBool();
     prm.filterVIG        = action.parameter("vigCorrection").toBool();
-    prm.filterCCI        = action.parameter("cciCorrection").toBool();
     prm.filterDST        = action.parameter("dstCorrection").toBool();
     prm.filterGEO        = action.parameter("geoCorrection").toBool();
     prm.cropFactor       = action.parameter("cropFactor").toDouble();
