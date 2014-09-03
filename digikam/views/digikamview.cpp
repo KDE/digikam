@@ -1269,7 +1269,7 @@ void DigikamView::slotAlbumOpenInFileManager()
 
     if (album->isRoot())
     {
-        KMessageBox::error(this, i18n("Cannot open the root. It is not a physical location."));
+        KMessageBox::error(this, i18n("Cannot open the root album. It is not a physical location."));
         return;
     }
 
