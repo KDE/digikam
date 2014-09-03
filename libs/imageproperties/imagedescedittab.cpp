@@ -196,12 +196,12 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
 
     // Captions/Date/Rating view -----------------------------------
 
-    QScrollArea* sv        = new QScrollArea(d->tabWidget);
+    QScrollArea* const sv          = new QScrollArea(d->tabWidget);
     sv->setFrameStyle(QFrame::NoFrame);
     sv->setWidgetResizable(true);
 
-    QWidget* captionTagsArea = new QWidget(sv->viewport());
-    QGridLayout* grid1       = new QGridLayout(captionTagsArea);
+    QWidget* const captionTagsArea = new QWidget(sv->viewport());
+    QGridLayout* const grid1       = new QGridLayout(captionTagsArea);
     sv->setWidget(captionTagsArea);
     sv->viewport()->setAutoFillBackground(false);
     captionTagsArea->setAutoFillBackground(false);
@@ -212,28 +212,28 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
 
     d->captionsEdit = new CaptionEdit(captionTagsArea);
 
-    KHBox* dateBox  = new KHBox(captionTagsArea);
+    KHBox* const dateBox  = new KHBox(captionTagsArea);
     new QLabel(i18n("Date:"), dateBox);
     d->dateTimeEdit = new DDateTimeEdit(dateBox, "datepicker");
 
-    KHBox* pickBox       = new KHBox(captionTagsArea);
+    KHBox* const pickBox       = new KHBox(captionTagsArea);
     new QLabel(i18n("Pick Label:"), pickBox);
     d->pickLabelSelector = new PickLabelSelector(pickBox);
     pickBox->layout()->setAlignment(d->pickLabelSelector, Qt::AlignVCenter|Qt::AlignRight);
 
-    KHBox* colorBox       = new KHBox(captionTagsArea);
+    KHBox* const colorBox       = new KHBox(captionTagsArea);
     new QLabel(i18n("Color Label:"), colorBox);
     d->colorLabelSelector = new ColorLabelSelector(colorBox);
     colorBox->layout()->setAlignment(d->colorLabelSelector, Qt::AlignVCenter|Qt::AlignRight);
 
-    KHBox* rateBox  = new KHBox(captionTagsArea);
+    KHBox* const rateBox  = new KHBox(captionTagsArea);
     new QLabel(i18n("Rating:"), rateBox);
     d->ratingWidget = new RatingWidget(rateBox);
     rateBox->layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter|Qt::AlignRight);
 
     // Buttons -----------------------------------------
 
-    KHBox* applyButtonBox = new KHBox(this);
+    KHBox* const applyButtonBox = new KHBox(this);
     applyButtonBox->setSpacing(KDialog::spacingHint());
 
     d->applyBtn           = new QPushButton(i18n("Apply"), applyButtonBox);
@@ -242,7 +242,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     d->applyBtn->setToolTip( i18n("Apply all changes to images"));
     //buttonsBox->setStretchFactor(d->applyBtn, 10);
 
-    KHBox* buttonsBox     = new KHBox(this);
+    KHBox* const buttonsBox     = new KHBox(this);
     buttonsBox->setSpacing(KDialog::spacingHint());
 
     d->revertBtn          = new QToolButton(buttonsBox);
@@ -275,12 +275,12 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
 
     // Tags view ---------------------------------------------------
 
-    QScrollArea* sv3    = new QScrollArea(d->tabWidget);
+    QScrollArea* const sv3    = new QScrollArea(d->tabWidget);
     sv3->setFrameStyle(QFrame::NoFrame);
     sv3->setWidgetResizable(true);
 
-    QWidget* tagsArea   = new QWidget(sv3->viewport());
-    QGridLayout* grid3  = new QGridLayout(tagsArea);
+    QWidget* const tagsArea   = new QWidget(sv3->viewport());
+    QGridLayout* const grid3  = new QGridLayout(tagsArea);
     sv3->setWidget(tagsArea);
     sv3->viewport()->setAutoFillBackground(false);
     tagsArea->setAutoFillBackground(false);
@@ -292,7 +292,6 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     d->tagCheckView->setCheckNewTags(true);
 
     d->openTagMngr = new KPushButton( i18n("Open Tag Manager"));
-    connect(d->openTagMngr,SIGNAL(clicked()),this, SLOT(slotOpenTagsManager()));
 
     d->newTagEdit   = new AddTagsLineEdit(tagsArea);
     d->newTagEdit->setModel(d->tagModel);
@@ -304,7 +303,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
                                      "'/' can be used to create a hierarchy of tags. "
                                      "',' can be used to create more than one hierarchy at the same time."));
 
-    KHBox* tagsSearch  = new KHBox(tagsArea);
+    KHBox* const tagsSearch = new KHBox(tagsArea);
     tagsSearch->setSpacing(KDialog::spacingHint());
 
     d->tagsSearchBar   = new SearchTextBar(tagsSearch, "ImageDescEditTabTagsSearchBar");
@@ -318,15 +317,15 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
                                 KIconLoader::NoGroup, KIconLoader::SizeSmall));
     d->assignedTagsBtn->setCheckable(true);
 
-    d->recentTagsBtn      = new QToolButton(tagsSearch);
-    KMenu* recentTagsMenu = new KMenu(d->recentTagsBtn);
+    d->recentTagsBtn            = new QToolButton(tagsSearch);
+    KMenu* const recentTagsMenu = new KMenu(d->recentTagsBtn);
     d->recentTagsBtn->setToolTip( i18n("Recent Tags"));
     d->recentTagsBtn->setIcon(KIconLoader::global()->loadIcon("tag-recents",
                               KIconLoader::NoGroup, KIconLoader::SizeSmall));
     d->recentTagsBtn->setIconSize(QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall));
     d->recentTagsBtn->setMenu(recentTagsMenu);
     d->recentTagsBtn->setPopupMode(QToolButton::InstantPopup);
-    d->recentTagsMapper   = new QSignalMapper(this);
+    d->recentTagsMapper = new QSignalMapper(this);
 
     grid3->addWidget(d->openTagMngr,    0, 0, 1, 2);
     grid3->addWidget(d->newTagEdit,     1, 0, 1, 2);
@@ -338,12 +337,12 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
 
     // Information Managament View --------------------------------------
 
-    QScrollArea* sv2    = new QScrollArea(d->tabWidget);
+    QScrollArea* const sv2    = new QScrollArea(d->tabWidget);
     sv2->setFrameStyle(QFrame::NoFrame);
     sv2->setWidgetResizable(true);
 
-    QWidget* infoArea   = new QWidget(sv2->viewport());
-    QGridLayout* grid2  = new QGridLayout(infoArea);
+    QWidget* const infoArea   = new QWidget(sv2->viewport());
+    QGridLayout* const grid2  = new QGridLayout(infoArea);
     sv2->setWidget(infoArea);
     sv2->viewport()->setAutoFillBackground(false);
     infoArea->setAutoFillBackground(false);
@@ -361,6 +360,9 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     d->tabWidget->insertTab(Private::INFOS, sv2, i18n("Information"));
 
     // --------------------------------------------------
+
+    connect(d->openTagMngr, SIGNAL(clicked()),
+            this, SLOT(slotOpenTagsManager()));
 
     connect(d->tagCheckView->checkableModel(), SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
             this, SLOT(slotTagStateChanged(Album*,Qt::CheckState)));
@@ -626,7 +628,10 @@ void ImageDescEditTab::slotAskToApplyChanges(const QList<ImageInfo>& infos, Meta
                     infos.count());
 
         if (hub->titlesChanged())
+        {
             text += i18n("<li>title</li>");
+        }
+
         if (hub->commentsChanged())
         {
             text += i18n("<li>caption</li>");
@@ -677,6 +682,7 @@ void ImageDescEditTab::slotAskToApplyChanges(const QList<ImageInfo>& infos, Meta
         delete hub;
         return;
     }
+
     // otherwise apply:
     FileActionMngr::instance()->applyMetadata(infos, hub);
 }
@@ -978,8 +984,8 @@ void ImageDescEditTab::slotCreateNewTag()
         return;
     }
 
-    TAlbum* created = d->tagCheckView->tagModificationHelper()->
-                      slotTagNew(d->tagCheckView->currentAlbum(), d->newTagEdit->text());
+    TAlbum* const created = d->tagCheckView->tagModificationHelper()->
+                            slotTagNew(d->tagCheckView->currentAlbum(), d->newTagEdit->text());
 
     if (created)
     {
@@ -1236,10 +1242,12 @@ void ImageDescEditTab::slotOpenTagsManager()
     tagMngr->activateWindow();
     tagMngr->raise();
 }
+
 void ImageDescEditTab::slotImagesChanged(int albumId)
 {
     if (d->ignoreImageAttributesWatch || d->modified)
     {
+        kDebug() << "Image changes ignored";
         return;
     }
 
@@ -1259,6 +1267,7 @@ void ImageDescEditTab::slotImageRatingChanged(qlonglong imageId)
     {
         return;
     }
+
     metadataChange(imageId);
 }
 
