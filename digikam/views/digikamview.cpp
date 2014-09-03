@@ -795,6 +795,18 @@ void DigikamView::hideSideBars()
     d->rightSideBar->backup();
 }
 
+void DigikamView::toggleLeftSidebar()
+{
+    d->leftSideBar->isExpanded() ? d->leftSideBar->shrink()
+                                 : d->leftSideBar->expand();
+}
+
+void DigikamView::toggleRightSidebar()
+{
+    d->rightSideBar->isExpanded() ? d->rightSideBar->shrink()
+                                  : d->rightSideBar->expand();
+}
+
 void DigikamView::slotFirstItem()
 {
     switch (viewMode())

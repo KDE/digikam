@@ -6,7 +6,7 @@
  * Date        : 2013-04-29
  * Description : digiKam XML GUI window
  *
- * Copyright (C) 2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,6 +33,7 @@
 
 #include <kxmlguiwindow.h>
 #include <kconfiggroup.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -105,6 +106,8 @@ public:
 
     QAction* statusBarMenuAction() const;
 
+    void createSidebarActions();
+
 protected:
 
     DLogoAction* m_animLogo;
@@ -138,8 +141,11 @@ private Q_SLOTS:
     void slotToggleFullScreen(bool);
 
     // Slots for common Help Actions
-    virtual void slotComponentsInfo() {};
-    virtual void slotDBStat()         {};
+    virtual void slotComponentsInfo()     {};
+    virtual void slotDBStat()             {};
+
+    virtual void slotToggleLeftSideBar()  {};
+    virtual void slotToggleRightSideBar() {};
 
 private:
 

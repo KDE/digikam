@@ -186,6 +186,8 @@ private Q_SLOTS:
     void downloadImages(const QString& folder);
     void cameraAutoDetect();
 
+    void slotToggleLeftSideBar();
+    void slotToggleRightSideBar();
     void slotToggleShowBar();
     void slotShowMenuBar();
     void slotEditKeys();

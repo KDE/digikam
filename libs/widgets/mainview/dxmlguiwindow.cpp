@@ -6,7 +6,7 @@
  * Date        : 2013-04-29
  * Description : digiKam XML GUI window
  *
- * Copyright (C) 2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,7 +39,6 @@
 #include <kxmlguiwindow.h>
 #include <ktogglefullscreenaction.h>
 #include <kglobalsettings.h>
-#include <kdebug.h>
 #include <kmenubar.h>
 #include <kstatusbar.h>
 #include <ktoolbar.h>
@@ -166,6 +165,23 @@ void DXmlGuiWindow::createHelpActions(bool coreOptions)
 void DXmlGuiWindow::setFullScreenOptions(int options)
 {
     d->fsOptions = options;
+}
+
+void DXmlGuiWindow::createSidebarActions()
+{
+    KAction* const tlsb = new KAction(i18n("Toggle Left Side-bar"), this);
+    tlsb->setShortcut(KShortcut(Qt::CTRL + Qt::META + Qt::Key_Left));
+    tlsb->setShortcutConfigurable(true);
+
+    connect(tlsb, SIGNAL(triggered()), this, SLOT(slotToggleLeftSideBar()));
+    actionCollection()->addAction("toggle-left-sidebar", tlsb);
+
+    KAction* const trsb = new KAction(i18n("Toggle Right Side-bar"), this);
+    trsb->setShortcut(KShortcut(Qt::CTRL + Qt::META + Qt::Key_Right));
+    trsb->setShortcutConfigurable(true);
+
+    connect(trsb, SIGNAL(triggered()), this, SLOT(slotToggleRightSideBar()));
+    actionCollection()->addAction("toggle-right-sidebar", trsb);
 }
 
 void DXmlGuiWindow::createFullScreenAction(const QString& name)

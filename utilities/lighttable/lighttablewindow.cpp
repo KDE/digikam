@@ -546,6 +546,7 @@ void LightTableWindow::setupActions()
     actionCollection()->addAction("lighttable_showthumbbar", d->showBarAction);
 
     createFullScreenAction("lighttable_fullscreen");
+    createSidebarActions();
 
     d->slideShowAction = new KAction(KIcon("view-presentation"), i18n("Slideshow"), this);
     d->slideShowAction->setShortcut(KShortcut(Qt::Key_F9));
@@ -1617,6 +1618,18 @@ void LightTableWindow::showSideBars(bool visible)
         d->leftSideBar->backup();
         d->rightSideBar->backup();
     }
+}
+
+void LightTableWindow::slotToggleLeftSideBar()
+{
+    d->leftSideBar->isExpanded() ? d->leftSideBar->shrink()
+                                 : d->leftSideBar->expand();
+}
+
+void LightTableWindow::slotToggleRightSideBar()
+{
+    d->rightSideBar->isExpanded() ? d->rightSideBar->shrink()
+                                  : d->rightSideBar->expand();
 }
 
 void LightTableWindow::customizedFullScreenMode(bool set)

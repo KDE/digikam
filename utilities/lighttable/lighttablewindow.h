@@ -158,6 +158,9 @@ private Q_SLOTS:
 
     void slotRefreshStatusBar();
 
+    void slotToggleLeftSideBar();
+    void slotToggleRightSideBar();
+
 private:
 
     class Private;

@@ -78,6 +78,8 @@ public:
     void getBackwardHistory(QStringList& titles);
     void showSideBars();
     void hideSideBars();
+    void toggleLeftSidebar();
+    void toggleRightSidebar();
     void setThumbSize(int size);
     void toggleShowBar(bool);
     void setRecurseAlbums(bool recursive);

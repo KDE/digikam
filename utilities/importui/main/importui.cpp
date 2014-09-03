@@ -595,6 +595,7 @@ void ImportUI::setupActions()
     // ------------------------------------------------------------------------------------------------
 
     createFullScreenAction("importui_fullscreen");
+    createSidebarActions();
 
     d->showLogAction = new KToggleAction(KIcon("view-history"), i18nc("@option:check", "Show History"), this);
     d->showLogAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_H));
@@ -2574,6 +2575,12 @@ void ImportUI::showSideBars(bool visible)
 {
     visible ? d->rightSideBar->restore()
             : d->rightSideBar->backup();
+}
+
+void ImportUI::slotToggleRightSideBar()
+{
+    d->rightSideBar->isExpanded() ? d->rightSideBar->shrink()
+                                  : d->rightSideBar->expand();
 }
 
 void ImportUI::showThumbBar(bool visible)

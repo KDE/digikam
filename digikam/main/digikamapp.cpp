@@ -1239,6 +1239,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
     createFullScreenAction("full_screen");
+    createSidebarActions();
 
     // -----------------------------------------------------------
 
@@ -3023,6 +3024,16 @@ void DigikamApp::showSideBars(bool visible)
 {
     visible ? d->view->showSideBars()
             : d->view->hideSideBars();
+}
+
+void DigikamApp::slotToggleLeftSideBar()
+{
+    d->view->toggleLeftSidebar();
+}
+
+void DigikamApp::slotToggleRightSideBar()
+{
+    d->view->toggleRightSidebar();
 }
 
 void DigikamApp::showThumbBar(bool visible)

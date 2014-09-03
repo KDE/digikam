@@ -511,6 +511,7 @@ void EditorWindow::setupStandardActions()
     // --------------------------------------------------------
 
     createFullScreenAction("editorwindow_fullscreen");
+    createSidebarActions();
 
     d->slideShowAction = new KAction(KIcon("view-presentation"), i18n("Slideshow"), this);
     d->slideShowAction->setShortcut(KShortcut(Qt::Key_F9));
@@ -2964,6 +2965,12 @@ void EditorWindow::showSideBars(bool visible)
         // in horizontal mode thumbbar wont be member of the splitter, it is just ignored then
         rightSideBar()->backup(QList<QWidget*>() << thumbBar(), &d->fullscreenSizeBackup);
     }
+}
+
+void EditorWindow::slotToggleRightSideBar()
+{
+    rightSideBar()->isExpanded() ? rightSideBar()->shrink()
+                                 : rightSideBar()->expand();
 }
 
 void EditorWindow::showThumbBar(bool visible)
