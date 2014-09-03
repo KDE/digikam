@@ -333,6 +333,7 @@ void ImagePreviewView::slotShowContextMenu(QGraphicsSceneContextMenuEvent* event
     ContextMenuHelper cmhelper(&popmenu);
 
     cmhelper.addAction("full_screen");
+    cmhelper.addAction("options_show_menubar");
     cmhelper.addSeparator();
 
     // --------------------------------------------------------

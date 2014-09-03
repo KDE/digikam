@@ -313,6 +313,7 @@ void ImportIconView::showContextMenuOnInfo(QContextMenuEvent* event, const CamIt
     ImportContextMenuHelper cmhelper(&popmenu);
 
     cmhelper.addAction("importui_fullscreen");
+    cmhelper.addAction("options_show_menubar");
     cmhelper.addAction("import_zoomfit2window");
     cmhelper.addSeparator();
     // --------------------------------------------------------
@@ -388,8 +389,10 @@ void ImportIconView::showContextMenu(QContextMenuEvent* event)
     ImportContextMenuHelper cmhelper(&popmenu);
 
     cmhelper.addAction("importui_fullscreen");
+    cmhelper.addAction("options_show_menubar");
     cmhelper.addSeparator();
     cmhelper.addAction("importui_close");
+
     // --------------------------------------------------------
 
     cmhelper.exec(event->globalPos());

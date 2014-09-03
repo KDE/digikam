@@ -347,6 +347,7 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
     cmhelper.setImageFilterModel(imageFilterModel());
 
     cmhelper.addAction("full_screen");
+    cmhelper.addAction("options_show_menubar");
     cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addAction("move_selection_to_album");
@@ -490,6 +491,7 @@ void DigikamImageView::showContextMenu(QContextMenuEvent* event)
     cmhelper.setImageFilterModel(imageFilterModel());
 
     cmhelper.addAction("full_screen");
+    cmhelper.addAction("options_show_menubar");
     cmhelper.addSeparator();
     // --------------------------------------------------------
     cmhelper.addStandardActionPaste(this, SLOT(paste()));

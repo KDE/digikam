@@ -210,6 +210,7 @@ void TableView::showTreeViewContextMenuOnEmptyArea(QContextMenuEvent* const even
     ContextMenuHelper cmHelper(&menu);
 
     cmHelper.addAction("full_screen");
+    cmHelper.addAction("options_show_menubar");
     cmHelper.addSeparator();
     cmHelper.addStandardActionPaste(this, SLOT(slotPaste()));
     cmHelper.addSeparator();
@@ -234,6 +235,7 @@ void TableView::showTreeViewContextMenuOnItem(QContextMenuEvent* const event, co
     ContextMenuHelper cmHelper(&menu);
 
     cmHelper.addAction("full_screen");
+    cmHelper.addAction("options_show_menubar");
     cmHelper.addSeparator();
     // ---
     cmHelper.addAction("move_selection_to_album");

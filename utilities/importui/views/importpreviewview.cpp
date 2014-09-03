@@ -363,6 +363,7 @@ void ImportPreviewView::showContextMenu(const CamItemInfo& info, QGraphicsSceneC
     ImportContextMenuHelper cmhelper(&popmenu);
 
     cmhelper.addAction("importui_fullscreen");
+    cmhelper.addAction("options_show_menubar");
     cmhelper.addSeparator();
 
     // --------------------------------------------------------

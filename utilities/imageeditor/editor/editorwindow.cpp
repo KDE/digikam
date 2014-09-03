@@ -231,18 +231,25 @@ void EditorWindow::setupContextMenu()
     m_contextMenu = new KMenu(this);
 
     addAction2ContextMenu("editorwindow_fullscreen", true);
+    addAction2ContextMenu("options_show_menubar", true);
     m_contextMenu->addSeparator();
+
     // --------------------------------------------------------
+
     addAction2ContextMenu("editorwindow_backward", true);
     addAction2ContextMenu("editorwindow_forward", true);
     m_contextMenu->addSeparator();
+
     // --------------------------------------------------------
+
     addAction2ContextMenu("editorwindow_slideshow", true);
     addAction2ContextMenu("editorwindow_rotate_left", true);
     addAction2ContextMenu("editorwindow_rotate_right", true);
     addAction2ContextMenu("editorwindow_crop", true);
     m_contextMenu->addSeparator();
+
     // --------------------------------------------------------
+
     addAction2ContextMenu("editorwindow_delete", true);
 }
 
