@@ -299,6 +299,7 @@ QueueListView::QueueListView(QWidget* const parent)
     viewport()->setMouseTracking(true);
 
     setSortingEnabled(true);
+    sortByColumn(1,Qt::AscendingOrder);
     setAllColumnsShowFocus(true);
     setRootIsDecorated(false);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
