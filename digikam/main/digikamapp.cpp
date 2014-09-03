@@ -3036,6 +3036,26 @@ void DigikamApp::slotToggleRightSideBar()
     d->view->toggleRightSidebar();
 }
 
+void DigikamApp::slotPreviousLeftSideBarTab()
+{
+    d->view->previousLeftSideBarTab();
+}
+
+void DigikamApp::slotNextLeftSideBarTab()
+{
+    d->view->nextLeftSideBarTab();
+}
+
+void DigikamApp::slotNextRightSideBarTab()
+{
+    d->view->nextRightSideBarTab();
+}
+
+void DigikamApp::slotPreviousRightSideBarTab()
+{
+    d->view->previousRightSideBarTab();
+}
+
 void DigikamApp::showThumbBar(bool visible)
 {
     view()->toggleShowBar(visible);

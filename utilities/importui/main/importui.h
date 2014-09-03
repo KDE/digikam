@@ -228,6 +228,8 @@ private Q_SLOTS:
     void slotComponentsInfo();
     void slotDBStat();
     void slotToggleRightSideBar();
+    void slotPreviousRightSideBarTab();
+    void slotNextRightSideBarTab();
 
     void slotSidebarTabTitleStyleChanged();
 

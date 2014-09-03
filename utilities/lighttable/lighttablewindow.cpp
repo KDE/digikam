@@ -1632,6 +1632,26 @@ void LightTableWindow::slotToggleRightSideBar()
                                   : d->rightSideBar->expand();
 }
 
+void LightTableWindow::slotPreviousLeftSideBarTab()
+{
+    d->leftSideBar->activePreviousTab();
+}
+
+void LightTableWindow::slotNextLeftSideBarTab()
+{
+    d->leftSideBar->activeNextTab();
+}
+
+void LightTableWindow::slotPreviousRightSideBarTab()
+{
+    d->rightSideBar->activePreviousTab();
+}
+
+void LightTableWindow::slotNextRightSideBarTab()
+{
+    d->rightSideBar->activeNextTab();
+}
+
 void LightTableWindow::customizedFullScreenMode(bool set)
 {
     statusBarMenuAction()->setEnabled(!set);

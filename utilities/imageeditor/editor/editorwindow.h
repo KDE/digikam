@@ -322,6 +322,8 @@ private Q_SLOTS:
     void slotSelectToolsMenuAboutToShow();
     void slotThemeChanged();
     void slotToggleRightSideBar();
+    void slotPreviousRightSideBarTab();
+    void slotNextRightSideBarTab();
 
 private:
 

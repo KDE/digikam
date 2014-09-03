@@ -807,6 +807,26 @@ void DigikamView::toggleRightSidebar()
                                   : d->rightSideBar->expand();
 }
 
+void DigikamView::previousLeftSideBarTab()
+{
+    d->leftSideBar->activePreviousTab();
+}
+
+void DigikamView::nextLeftSideBarTab()
+{
+    d->leftSideBar->activeNextTab();
+}
+
+void DigikamView::previousRightSideBarTab()
+{
+    d->rightSideBar->activePreviousTab();
+}
+
+void DigikamView::nextRightSideBarTab()
+{
+    d->rightSideBar->activeNextTab();
+}
+
 void DigikamView::slotFirstItem()
 {
     switch (viewMode())

@@ -2973,6 +2973,16 @@ void EditorWindow::slotToggleRightSideBar()
                                  : rightSideBar()->expand();
 }
 
+void EditorWindow::slotPreviousRightSideBarTab()
+{
+    rightSideBar()->activePreviousTab();
+}
+
+void EditorWindow::slotNextRightSideBarTab()
+{
+    rightSideBar()->activeNextTab();
+}
+
 void EditorWindow::showThumbBar(bool visible)
 {
     visible ? thumbBar()->restoreVisibility()

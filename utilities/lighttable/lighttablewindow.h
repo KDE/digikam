@@ -160,6 +160,10 @@ private Q_SLOTS:
 
     void slotToggleLeftSideBar();
     void slotToggleRightSideBar();
+    void slotPreviousLeftSideBarTab();
+    void slotNextLeftSideBarTab();
+    void slotPreviousRightSideBarTab();
+    void slotNextRightSideBarTab();
 
 private:
 

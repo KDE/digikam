@@ -141,11 +141,16 @@ private Q_SLOTS:
     void slotToggleFullScreen(bool);
 
     // Slots for common Help Actions
-    virtual void slotComponentsInfo()     {};
-    virtual void slotDBStat()             {};
+    virtual void slotComponentsInfo()          {};
+    virtual void slotDBStat()                  {};
 
-    virtual void slotToggleLeftSideBar()  {};
-    virtual void slotToggleRightSideBar() {};
+    // Slots for common Sidebar Actions
+    virtual void slotToggleLeftSideBar()       {};
+    virtual void slotToggleRightSideBar()      {};
+    virtual void slotPreviousLeftSideBarTab()  {};
+    virtual void slotNextLeftSideBarTab()      {};
+    virtual void slotPreviousRightSideBarTab() {};
+    virtual void slotNextRightSideBarTab()     {};
 
 private:
 

@@ -172,16 +172,38 @@ void DXmlGuiWindow::createSidebarActions()
     KAction* const tlsb = new KAction(i18n("Toggle Left Side-bar"), this);
     tlsb->setShortcut(KShortcut(Qt::CTRL + Qt::META + Qt::Key_Left));
     tlsb->setShortcutConfigurable(true);
-
     connect(tlsb, SIGNAL(triggered()), this, SLOT(slotToggleLeftSideBar()));
     actionCollection()->addAction("toggle-left-sidebar", tlsb);
 
     KAction* const trsb = new KAction(i18n("Toggle Right Side-bar"), this);
     trsb->setShortcut(KShortcut(Qt::CTRL + Qt::META + Qt::Key_Right));
     trsb->setShortcutConfigurable(true);
-
     connect(trsb, SIGNAL(triggered()), this, SLOT(slotToggleRightSideBar()));
     actionCollection()->addAction("toggle-right-sidebar", trsb);
+
+    KAction* const plsb = new KAction(i18n("Previous Left Side-bar Tab"), this);
+    plsb->setShortcut(KShortcut(Qt::CTRL + Qt::META + Qt::Key_Home));
+    plsb->setShortcutConfigurable(true);
+    connect(plsb, SIGNAL(triggered()), this, SLOT(slotPreviousLeftSideBarTab()));
+    actionCollection()->addAction("previous-left-sidebar-tab", plsb);
+
+    KAction* const nlsb = new KAction(i18n("Next Left Side-bar Tab"), this);
+    nlsb->setShortcut(KShortcut(Qt::CTRL + Qt::META + Qt::Key_End));
+    nlsb->setShortcutConfigurable(true);
+    connect(nlsb, SIGNAL(triggered()), this, SLOT(slotNextLeftSideBarTab()));
+    actionCollection()->addAction("next-left-sidebar-tab", nlsb);
+
+    KAction* const prsb = new KAction(i18n("Previous Right Side-bar Tab"), this);
+    prsb->setShortcut(KShortcut(Qt::CTRL + Qt::META + Qt::Key_PageUp));
+    prsb->setShortcutConfigurable(true);
+    connect(prsb, SIGNAL(triggered()), this, SLOT(slotPreviousRightSideBarTab()));
+    actionCollection()->addAction("previous-right-sidebar-tab", prsb);
+
+    KAction* const nrsb = new KAction(i18n("Next Right Side-bar Tab"), this);
+    nrsb->setShortcut(KShortcut(Qt::CTRL + Qt::META + Qt::Key_PageDown));
+    nrsb->setShortcutConfigurable(true);
+    connect(nrsb, SIGNAL(triggered()), this, SLOT(slotNextRightSideBarTab()));
+    actionCollection()->addAction("next-right-sidebar-tab", nrsb);
 }
 
 void DXmlGuiWindow::createFullScreenAction(const QString& name)

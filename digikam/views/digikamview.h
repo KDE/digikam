@@ -76,10 +76,16 @@ public:
     void clearHistory();
     void getForwardHistory(QStringList& titles);
     void getBackwardHistory(QStringList& titles);
+
     void showSideBars();
     void hideSideBars();
     void toggleLeftSidebar();
     void toggleRightSidebar();
+    void previousLeftSideBarTab();
+    void nextLeftSideBarTab();
+    void previousRightSideBarTab();
+    void nextRightSideBarTab();
+
     void setThumbSize(int size);
     void toggleShowBar(bool);
     void setRecurseAlbums(bool recursive);

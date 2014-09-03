@@ -2583,6 +2583,16 @@ void ImportUI::slotToggleRightSideBar()
                                   : d->rightSideBar->expand();
 }
 
+void ImportUI::slotPreviousRightSideBarTab()
+{
+    d->rightSideBar->activePreviousTab();
+}
+
+void ImportUI::slotNextRightSideBarTab()
+{
+    d->rightSideBar->activeNextTab();
+}
+
 void ImportUI::showThumbBar(bool visible)
 {
     d->view->toggleShowBar(visible);
