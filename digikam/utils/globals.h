@@ -7,7 +7,7 @@
  * Description : global macros, variables and flags
  *
  * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmail dot com>
- * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,7 +38,7 @@
 namespace Digikam
 {
 
-// Field value limits for all Digikam-specific fields (not EXIF/IPTC fields)
+// Field value limits for all digiKam-specific fields (not EXIF/IPTC fields)
 
 static const int RatingMin          = 0;
 static const int RatingMax          = 5;
@@ -50,7 +50,13 @@ static const int NoRating           = -1;
 static const int NUM_SEGMENTS_16BIT = 65536;
 static const int NUM_SEGMENTS_8BIT  = 256;
 static const int MAX_SEGMENT_16BIT  = NUM_SEGMENTS_16BIT - 1;
-static const int MAX_SEGMENT_8BIT   = NUM_SEGMENTS_8BIT - 1;
+static const int MAX_SEGMENT_8BIT   = NUM_SEGMENTS_8BIT  - 1;
+
+// --------------------------------------------------------
+
+// Delay in milliseconds to automatically expands album tree-view with D&D
+// See B.K.O #286263 for details.
+static const int AUTOEXPANDDELAY    = 800;
 
 // --------------------------------------------------------
 

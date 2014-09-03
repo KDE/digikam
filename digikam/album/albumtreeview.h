@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C) 2009-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -559,7 +560,7 @@ public:
     QList<Album*> selectedTags();
 
     TAlbum* albumForIndex(const QModelIndex& index) const;
-    TagModificationHelper* tagModificationHelper() const;
+    TagModificationHelper* tagModificationHelper()  const;
 
     void setAlbumFilterModel(TagPropertiesFilterModel* const filteredModel, CheckableAlbumFilterModel* const filterModel);
     void setAlbumModel(TagModel* const model);
@@ -591,7 +592,7 @@ public:
     ~SearchTreeView();
 
     /// Note: not filtered by search type
-    SearchModel* albumModel() const;
+    SearchModel* albumModel()          const;
 
     /// Contains only the searches with appropriate type - prefer to albumModel()
     SearchFilterModel* filteredModel() const;

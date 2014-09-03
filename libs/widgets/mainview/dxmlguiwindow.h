@@ -33,7 +33,6 @@
 
 #include <kxmlguiwindow.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
 
 // Local includes
 
@@ -77,9 +76,13 @@ public:
     explicit DXmlGuiWindow(QWidget* const parent=0, Qt::WindowFlags f=KDE_DEFAULT_WINDOWFLAGS);
     virtual ~DXmlGuiWindow();
 
-    /** Create common actions from Help menu for all digiKam main windows
+    /** Create common actions from Help menu for all digiKam main windows.
      */
     void createHelpActions(bool coreOptions=true);
+
+    /** Create common actions to handle side-bar through keyboard shortcuts.
+     */
+    void createSidebarActions();
 
     /** Set full-screen options to managed window
      */
@@ -100,13 +103,11 @@ public:
      */
     void switchWindowToFullScreen(bool set);
 
-    /** Return true if managed window is currently in Full Screen Mode
+    /** Return true if managed window is currently in Full Screen Mode.
      */
     bool fullScreenIsActive() const;
 
     QAction* statusBarMenuAction() const;
-
-    void createSidebarActions();
 
 protected:
 

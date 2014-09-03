@@ -132,4 +132,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 118 ==> 330118 - Downloading back the same image with "download and deleted", import tool says "image already exists".
 119 ==> 308836 - Add keyboard shortcuts to toggle display of left and right sidebar.
 120 ==> 144651 - Add Keyboard shortcuts to navigate between tabs from left and right sidebar.*
-121 ==> 
+121 ==> 286263 - digiKam automatically expands albums tree-view item while dragging over 
+122 ==> 307231 - Moving a tag from "my tag" collapse the tag under.
+123 ==> 

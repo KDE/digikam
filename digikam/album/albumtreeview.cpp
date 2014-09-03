@@ -9,7 +9,8 @@
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2014      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
- * Copyright (C) 2014 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2014      by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2009-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,6 +44,7 @@
 
 // Local includes
 
+#include "globals.h"
 #include "albumdragdrop.h"
 #include "albummanager.h"
 #include "albummodeldragdrophandler.h"
@@ -198,8 +200,12 @@ const QString AbstractAlbumTreeView::Private::configSortOrderEntry("SortOrder");
 
 AbstractAlbumTreeView::AbstractAlbumTreeView(QWidget* const parent, Flags flags)
     : QTreeView(parent), StateSavingObject(this),
-      m_albumModel(0), m_albumFilterModel(0), m_dragDropHandler(0),
-      m_checkOnMiddleClick(false), m_restoreCheckState(false), m_flags(flags),
+      m_albumModel(0),
+      m_albumFilterModel(0),
+      m_dragDropHandler(0),
+      m_checkOnMiddleClick(false),
+      m_restoreCheckState(false),
+      m_flags(flags),
       d(new Private)
 {
     if (flags & CreateDefaultDelegate)
@@ -395,6 +401,7 @@ QList<A*> AbstractAlbumTreeView::currentAlbums()
 
     return albums;
 }
+
 void AbstractAlbumTreeView::slotSearchTextSettingsAboutToChange(bool searched, bool willSearch)
 {
     // backup before we begin searching
@@ -532,6 +539,7 @@ void AbstractAlbumTreeView::setCurrentAlbums(QList<Album*> albums, bool selectIn
     {
         return;
     }
+
     if (selectInAlbumManager && d->setInAlbumManager)
     {
         AlbumManager::instance()->setCurrentAlbums(albums);
@@ -541,12 +549,12 @@ void AbstractAlbumTreeView::setCurrentAlbums(QList<Album*> albums, bool selectIn
 
     QItemSelectionModel* const model = selectionModel();
     model->clearSelection();
+
     for (int it = 0; it < albums.size(); ++ it)
     {
         model->select(albumFilterModel()->indexForAlbum(albums.at(it)),
                       model->Select);
     }
-
 }
 
 void AbstractAlbumTreeView::slotCurrentChanged()
@@ -558,17 +566,19 @@ void AbstractAlbumTreeView::slotCurrentChanged()
 
     // Instead, we call QItemSelectionModel::currentIndex to get the current index.
     const QModelIndex cIndex = selectionModel()->currentIndex();
+
     if (!cIndex.isValid())
     {
         return;
     }
 
     Album* const cAlbum = m_albumFilterModel->albumForIndex(cIndex);
+
     if (!cAlbum)
     {
         return;
     }
-    
+
     emit currentAlbumChanged(cAlbum);
 }
 
@@ -579,7 +589,7 @@ void AbstractAlbumTreeView::slotSelectionChanged()
     if (d->selectAlbumOnClick)
     {
         AlbumManager::instance()->setCurrentAlbums(selectedAlbums<Album>(selectionModel(),
-                                                                     m_albumFilterModel));
+                                                                         m_albumFilterModel));
     }
 }
 
@@ -632,6 +642,7 @@ void AbstractAlbumTreeView::middleButtonPressed(Album*)
 void AbstractAlbumTreeView::startDrag(Qt::DropActions supportedActions)
 {
     const QModelIndexList indexes = selectedIndexes();
+
     if (indexes.count() > 0)
     {
         QMimeData* data = m_albumFilterModel->mimeData(indexes);
@@ -640,10 +651,11 @@ void AbstractAlbumTreeView::startDrag(Qt::DropActions supportedActions)
         {
             return;
         }
+
         QStyleOptionViewItem option = viewOptions();
-        option.rect = viewport()->rect();
-        const QPixmap pixmap = /*m_delegate->*/pixmapForDrag(option, indexes);
-        QDrag* const drag = new QDrag(this);
+        option.rect                 = viewport()->rect();
+        const QPixmap pixmap        = /*m_delegate->*/pixmapForDrag(option, indexes);
+        QDrag* const drag           = new QDrag(this);
         drag->setPixmap(pixmap);
         drag->setMimeData(data);
         drag->exec(supportedActions, Qt::IgnoreAction);
@@ -666,6 +678,7 @@ QPixmap AbstractAlbumTreeView::pixmapForDrag(const QStyleOptionViewItem&, QList<
 void AbstractAlbumTreeView::dragEnterEvent(QDragEnterEvent* e)
 {
     AlbumModelDragDropHandler* const handler = m_albumModel->dragDropHandler();
+
     if (handler && handler->acceptsMimeData(e->mimeData()))
     {
         setState(DraggingState);
@@ -729,6 +742,7 @@ QList<Album*> AbstractAlbumTreeView::selectedItems()
 {
     return selectedAlbums<Album>(selectionModel(), m_albumFilterModel);
 }
+
 void AbstractAlbumTreeView::doLoadState()
 {
     KConfigGroup configGroup = getConfigGroup();
@@ -776,7 +790,7 @@ void AbstractAlbumTreeView::doLoadState()
         d->statesByAlbumId[id].currentIndex = true;
     }
 
-    /*
+/*
     for (QMap<int, Digikam::State>::iterator it = d->statesByAlbumId.begin(); it
         != d->statesByAlbumId.end(); ++it)
     {
@@ -785,7 +799,7 @@ void AbstractAlbumTreeView::doLoadState()
         << it.value().expanded << ", currentIndex = "
         << it.value().currentIndex << ")";
     }
-    */
+*/
 
     // initial restore run, for everything already loaded
     //kDebug() << "initial restore run with " << model()->rowCount() << " rows";
@@ -825,20 +839,19 @@ void AbstractAlbumTreeView::restoreState(const QModelIndex& index, QMap<int, Dig
 
         Digikam::State state = stateStore.value(album->id());
 
-        /*
+/*
         kDebug() << "Trying to restore state of album " << album->title() << "(" <<album->id() << ")"
                  << ": state(selected = " << state.selected
                  << ", expanded = " << state.expanded
                  << ", currentIndex = " << state.currentIndex << ")" << this;
-        */
+*/
         if (state.selected)
         {
             //kDebug() << "Selecting" << album->title();
             selectionModel()->select(index, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
         }
 
-        // restore expansion state but ensure that the root album is always
-        // expanded
+        // Restore expansion state but ensure that the root album is always expanded
         if (!album->isRoot())
         {
             setExpanded(index, state.expanded);
@@ -977,7 +990,9 @@ void AbstractAlbumTreeView::doSaveState()
     configGroup.writeEntry(entryName(d->configExpansionEntry), expansion);
     configGroup.writeEntry(entryName(d->configCurrentIndexEntry), currentIndex);
     configGroup.writeEntry(entryName(d->configSortColumnEntry), albumFilterModel()->sortColumn());
-    //A dummy way to force the tree view to resort if the album sort role changed
+
+    // A dummy way to force the tree view to resort if the album sort role changed
+
     if (AlbumSettings::instance()->getAlbumSortChanged())
     {
         if ( int(albumFilterModel()->sortOrder()) == 0 )
@@ -1463,7 +1478,7 @@ AlbumTreeView::AlbumTreeView(QWidget* const parent, Flags flags)
     setDragEnabled(true);
     setAcceptDrops(true);
     setDropIndicatorShown(false);
-    setAutoExpandDelay(300);
+    setAutoExpandDelay(AUTOEXPANDDELAY);
 
     if (flags & CreateDefaultModel)
     {
@@ -1536,7 +1551,7 @@ TagTreeView::TagTreeView(QWidget* const parent, Flags flags)
     setDragEnabled(true);
     setAcceptDrops(true);
     setDropIndicatorShown(false);
-    setAutoExpandDelay(300);
+    setAutoExpandDelay(AUTOEXPANDDELAY);
     setSelectionMode(QAbstractItemView::ExtendedSelection);
 
     if (flags & CreateDefaultModel)
@@ -1614,7 +1629,7 @@ TAlbum* TagTreeView::currentAlbum() const
     return dynamic_cast<TAlbum*> (m_albumFilterModel->albumForIndex(currentIndex()));
 }
 
-QList< Album* > TagTreeView::selectedTags()
+QList<Album*> TagTreeView::selectedTags()
 {
     return selectedAlbums<Album>(selectionModel(),m_filteredModel);
 }
