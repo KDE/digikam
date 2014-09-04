@@ -51,7 +51,11 @@
 #include "albumsettings.h"
 #include "imageattributeswatch.h"
 #include "tagscache.h"
+
+#ifdef HAVE_BALOO
 #include "baloowrap.h"
+#endif
+
 #include "albumsettings.h"
 
 #include "facetagseditor.h"

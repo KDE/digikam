@@ -52,7 +52,10 @@
 #include "tagregion.h"
 #include "tagscache.h"
 #include "iostream"
+
+#ifdef HAVE_BALOO
 #include "baloowrap.h"
+#endif
 
 namespace Digikam
 {

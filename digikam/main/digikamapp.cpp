@@ -146,7 +146,9 @@
 #include "kipipluginloader.h"
 #include "imagepluginloader.h"
 #include "tagsmanager.h"
+#ifdef HAVE_BALOO
 #include "baloowrap.h"
+#endif
 
 #ifdef USE_SCRIPT_IFACE
 #include "scriptiface.h"
