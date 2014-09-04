@@ -2524,21 +2524,22 @@ bool EditorWindow::checkOverwrite(const KUrl& url)
     return result == KMessageBox::Yes;
 }
 
-bool EditorWindow::moveLocalFile(const QString& src, const QString& dst)
+bool EditorWindow::moveLocalFile(const QString& org, const QString& dst)
 {
-    QString sidecarSrc = DMetadata::sidecarFilePathForFile(src);
+    QString sidecarOrg = DMetadata::sidecarFilePathForFile(org);
+    QString source     = m_savingContext.srcURL.toLocalFile();
 
-    if (QFileInfo(sidecarSrc).exists())
+    if (QFileInfo(sidecarOrg).exists())
     {
         QString sidecarDst = DMetadata::sidecarFilePathForFile(dst);
 
-        if (!localFileRename(sidecarSrc, sidecarDst))
+        if (!localFileRename(source, sidecarOrg, sidecarDst))
         {
             kError() << "Failed to move sidecar file";
         }
     }
 
-    if (!localFileRename(src, dst))
+    if (!localFileRename(source, org, dst))
     {
         KMessageBox::error(this,
                            i18n("Failed to overwrite original file"),
@@ -2549,7 +2550,7 @@ bool EditorWindow::moveLocalFile(const QString& src, const QString& dst)
     return true;
 }
 
-bool EditorWindow::localFileRename(const QString& src, const QString& destPath)
+bool EditorWindow::localFileRename(const QString& source, const QString& orgPath, const QString& destPath)
 {
     QString dest = destPath;
     // check that we're not replacing a symlink
@@ -2585,7 +2586,7 @@ bool EditorWindow::localFileRename(const QString& src, const QString& destPath)
 
     struct stat st;
 
-    if (::stat(QFile::encodeName(m_savingContext.srcURL.toLocalFile()), &st) == 0)
+    if (::stat(QFile::encodeName(source), &st) == 0)
     {
         // See B.K.O #329608: Restore file modification time from original file only if updateFileTimeStamp for Setup/Metadata is turned off.
 
@@ -2595,7 +2596,7 @@ bool EditorWindow::localFileRename(const QString& src, const QString& destPath)
             ut.modtime = st.st_mtime;
             ut.actime  = st.st_atime;
 
-            if (::utime(QFile::encodeName(src), &ut) != 0)
+            if (::utime(QFile::encodeName(orgPath), &ut) != 0)
             {
                 kWarning() << "Failed to restore modification time for file " << dest;
             }
@@ -2604,7 +2605,7 @@ bool EditorWindow::localFileRename(const QString& src, const QString& destPath)
 
     // rename tmp file to dest
     // KDE::rename() takes care of QString -> bytestring encoding
-    if (KDE::rename(src, dest) != 0)
+    if (KDE::rename(orgPath, dest) != 0)
     {
         return false;
     }

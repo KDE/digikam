@@ -86,6 +86,12 @@ public:
 
     const static QString CONFIG_GROUP_NAME;
 
+    /** This method rename a local file 'orgPath' to 'destPath' with all ACL properties
+     *  restoration taken from 'source' file.
+     */
+    // NOTE: this method is shared as static with BQM core.
+    static bool localFileRename(const QString& source, const QString& orgPath, const QString& destPath);
+
 public Q_SLOTS:
 
     virtual bool setup() = 0;
@@ -398,7 +404,6 @@ private:
                                     const KUrl& targetUrl,
                                     const QString& autoFilter);
 
-    bool localFileRename(const QString& src, const QString& destPath);
     void movingSaveFileFinished(bool successful);
 
     void addAction2ContextMenu(const QString& actionName, bool addDisabled = false);

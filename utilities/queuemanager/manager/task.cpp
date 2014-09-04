@@ -50,6 +50,7 @@ extern "C"
 #include "dmetadata.h"
 #include "imageinfo.h"
 #include "fileactionmngr.h"
+#include "editorwindow.h"           // For localFileRename() static function
 #include "batchtool.h"
 #include "batchtoolsmanager.h"
 
@@ -234,14 +235,17 @@ void Task::run()
     {
         if (DMetadata::hasSidecar(outUrl.toLocalFile()))
         {
-            if (KDE::rename(DMetadata::sidecarPath(outUrl.toLocalFile()),
-                            DMetadata::sidecarPath(dest.toLocalFile())) != 0)
+            if (!EditorWindow::localFileRename(d->tools.m_itemUrl.toLocalFile(),
+                                               DMetadata::sidecarPath(outUrl.toLocalFile()),
+                                               DMetadata::sidecarPath(dest.toLocalFile())))
             {
                 emitActionData(ActionData::BatchFailed, i18n("Failed to create sidecar file..."), dest);
             }
         }
 
-        if (KDE::rename(outUrl.toLocalFile(), dest.toLocalFile()) != 0)
+        if (!EditorWindow::localFileRename(d->tools.m_itemUrl.toLocalFile(), 
+                                           outUrl.toLocalFile(),
+                                           dest.toLocalFile()))
         {
             emitActionData(ActionData::BatchFailed, i18n("Failed to create file..."), dest);
         }
