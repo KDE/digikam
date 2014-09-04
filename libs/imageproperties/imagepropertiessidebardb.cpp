@@ -553,8 +553,9 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
             // -- Photograph information ------------------------------------------
 
             m_propertiesTab->setPhotoInfoDisable(photoInfo.allFieldsNull);
-
-            m_propertiesTab->setPhotoMake(photoInfo.make.isEmpty() ? unavailable : photoInfo.make);
+            ImagePropertiesTab::shortenedMakeInfo(photoInfo.make);
+            ImagePropertiesTab::shortenedModelInfo(photoInfo.model);
+            m_propertiesTab->setPhotoMake(photoInfo.make.isEmpty()   ? unavailable : photoInfo.make);
             m_propertiesTab->setPhotoModel(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
 
             if (commonInfo.creationDate.isValid())
@@ -576,7 +577,7 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
             }
             else
             {
-                str = i18n("%1 (35mm: %2)", photoInfo.focalLength, photoInfo.focalLength35);
+                str = i18n("%1 (%2)", photoInfo.focalLength, photoInfo.focalLength35);
                 m_propertiesTab->setPhotoFocalLength(str);
             }
 

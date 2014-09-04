@@ -7,7 +7,7 @@
  * Description : simple image properties side bar (without support
  *               of digiKam database).
  *
- * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -253,7 +253,8 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
     PhotoInfoContainer photoInfo = metaData.getPhotographInformation();
 
     m_propertiesTab->setPhotoInfoDisable(photoInfo.isEmpty());
-
+    ImagePropertiesTab::shortenedMakeInfo(photoInfo.make);
+    ImagePropertiesTab::shortenedModelInfo(photoInfo.model);
     m_propertiesTab->setPhotoMake(photoInfo.make.isEmpty()   ? unavailable : photoInfo.make);
     m_propertiesTab->setPhotoModel(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
 
@@ -276,7 +277,7 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
     }
     else
     {
-        str = i18n("%1 (35mm: %2)", photoInfo.focalLength, photoInfo.focalLength35mm);
+        str = i18n("%1 (%2)", photoInfo.focalLength, photoInfo.focalLength35mm);
         m_propertiesTab->setPhotoFocalLength(str);
     }
 

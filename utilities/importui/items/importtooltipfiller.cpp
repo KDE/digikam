@@ -7,7 +7,7 @@
  * Description : Import icon view tool tip
  *
  * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
- * Copyright (C) 2008-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,6 +38,7 @@
 // Local includes
 
 #include "importsettings.h"
+#include "imagepropertiestab.h"
 #include "ditemtooltip.h"
 #include "camiteminfo.h"
 
@@ -127,6 +128,9 @@ QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
 
             if (settings->getToolTipsShowPhotoMake())
             {
+                ImagePropertiesTab::shortenedMakeInfo(photoInfo.make);
+                ImagePropertiesTab::shortenedModelInfo(photoInfo.model);
+
                 str = QString("%1 / %2").arg(photoInfo.make.isEmpty() ? cnt.unavailable : photoInfo.make)
                       .arg(photoInfo.model.isEmpty() ? cnt.unavailable : photoInfo.model);
 
@@ -148,7 +152,7 @@ QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
                 }
                 else
                 {
-                    str += QString(" / %1").arg(i18n("%1 (35mm: %2)",photoInfo.focalLength, photoInfo.focalLength35mm));
+                    str += QString(" / %1").arg(i18n("%1 (%2)",photoInfo.focalLength, photoInfo.focalLength35mm));
                 }
 
                 if (str.length() > cnt.maxStringLength)

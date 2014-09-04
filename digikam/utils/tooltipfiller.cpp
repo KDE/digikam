@@ -6,7 +6,7 @@
  * Date        : 2008-12-10
  * Description : album icon view tool tip
  *
- * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2013      by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
@@ -46,28 +46,26 @@
 #include "ditemtooltip.h"
 #include "filteraction.h"
 #include "imageinfo.h"
+#include "imagepropertiestab.h"
 #include "colorlabelwidget.h"
 #include "picklabelwidget.h"
 
-namespace
-{
-
-int gcd(int a, int b)
-{
-  int c = a % b;
-  while(c != 0)
-  {
-    a = b;
-    b = c;
-    c = a % b;
-  }
-  return b;
-}
-
-} /* anonymous namespace */
-
 namespace Digikam
 {
+
+inline int gcd(int a, int b)
+{
+    int c = a % b;
+
+    while(c != 0)
+    {
+        a = b;
+        b = c;
+        c = a % b;
+    }
+
+    return b;
+}
 
 bool ToolTipFiller::aspectRatioToString(const int width, const int height, QString* const arString)
 {
@@ -77,31 +75,31 @@ bool ToolTipFiller::aspectRatioToString(const int width, const int height, QStri
     }
 
     const int gcd_divisor = gcd(width, height);
-    int ar_width = width / gcd_divisor;
-    int ar_height = height / gcd_divisor;
-    const double aratio2 = double(width) / double(height);
+    int ar_width          = width / gcd_divisor;
+    int ar_height         = height / gcd_divisor;
+    const double aratio2  = double(width) / double(height);
 
     if ((ar_width == 8 && ar_height == 5) || (ar_height == 8 && ar_width == 5))
     {
-            ar_width = ar_width * 2;
+            ar_width  = ar_width  * 2;
             ar_height = ar_height * 2;
     }
 
-    const QString aratio = KGlobal::locale()->formatNumber(aratio2, 2);
-    const QString ar_width2 = QString::number(ar_width);
+    const QString aratio     = KGlobal::locale()->formatNumber(aratio2, 2);
+    const QString ar_width2  = QString::number(ar_width);
     const QString ar_height2 = QString::number(ar_height);
 
     *arString = i18nc("width : height (Aspect Ratio)", "%1:%2 (%3)",
-                ar_width2, ar_height2, aratio);
+                      ar_width2, ar_height2, aratio);
 
     return true;
 }
 
 QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 {
-    QString            str;
-    AlbumSettings*     settings = AlbumSettings::instance();
-    DToolTipStyleSheet cnt(settings->getToolTipsFont());
+    QString              str;
+    AlbumSettings* const settings    = AlbumSettings::instance();
+    DToolTipStyleSheet   cnt(settings->getToolTipsFont());
 
     ImageCommonContainer commonInfo  = info.imageCommonContainer();
     ImageMetadataContainer photoInfo = info.imageMetadataContainer();
@@ -130,16 +128,16 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
         if (settings->getToolTipsShowFileDate())
         {
             QDateTime modifiedDate = commonInfo.fileModificationDate;
-            str = KGlobal::locale()->formatDateTime(modifiedDate, KLocale::ShortDate, true);
-            tip += cnt.cellBeg + i18n("Date:") + cnt.cellMid + str + cnt.cellEnd;
+            str                    = KGlobal::locale()->formatDateTime(modifiedDate, KLocale::ShortDate, true);
+            tip                   += cnt.cellBeg + i18n("Date:") + cnt.cellMid + str + cnt.cellEnd;
         }
 
         if (settings->getToolTipsShowFileSize())
         {
-            tip += cnt.cellBeg + i18n("Size:") + cnt.cellMid;
+            tip                   += cnt.cellBeg + i18n("Size:") + cnt.cellMid;
             QString localeFileSize = KGlobal::locale()->formatNumber(commonInfo.fileSize, 0);
-            str = i18n("%1 (%2)", KIO::convertSize(commonInfo.fileSize), localeFileSize);
-            tip += str + cnt.cellEnd;
+            str                    = i18n("%1 (%2)", KIO::convertSize(commonInfo.fileSize), localeFileSize);
+            tip                   += str + cnt.cellEnd;
         }
 
         QSize dims;
@@ -197,6 +195,9 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
             if (settings->getToolTipsShowPhotoMake())
             {
+                ImagePropertiesTab::shortenedMakeInfo(photoInfo.make);
+                ImagePropertiesTab::shortenedModelInfo(photoInfo.model);
+
                 str = QString("%1 / %2").arg(photoInfo.make.isEmpty() ? cnt.unavailable : photoInfo.make)
                       .arg(photoInfo.model.isEmpty() ? cnt.unavailable : photoInfo.model);
 
@@ -239,7 +240,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                 }
                 else
                 {
-                    str += QString(" / %1").arg(i18n("%1 (35mm: %2)",photoInfo.focalLength,photoInfo.focalLength35));
+                    str += QString(" / %1").arg(i18n("%1 (%2)",photoInfo.focalLength,photoInfo.focalLength35));
                 }
 
                 if (str.length() > cnt.maxStringLength)
@@ -351,11 +352,13 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                 QString durationString;
                 bool ok;
                 const double durationDouble = videoInfo.duration.toDouble(&ok);
+
                 if (ok)
                 {
                     const QTime durationTime = QTime().addMSecs(durationDouble);
                     durationString = KGlobal::locale()->formatTime(durationTime, true, true);
                 }
+
                 str = videoInfo.duration.isEmpty() ? cnt.unavailable : durationString;
 
                 if (str.length() > cnt.maxStringLength)
@@ -371,10 +374,12 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                 QString frameRateString;
                 bool ok;
                 const double frameRateDouble = videoInfo.frameRate.toDouble(&ok);
+
                 if (ok)
                 {
                     frameRateString = KGlobal::locale()->formatNumber(frameRateDouble);
                 }
+
                 str = videoInfo.frameRate.isEmpty() ? cnt.unavailable : frameRateString;
 
                 if (str.length() > cnt.maxStringLength)
@@ -401,11 +406,13 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
             {
                 QString audioBitRateString = str;
                 bool ok;
-                const int audioBitRateInt = videoInfo.audioBitRate.toInt(&ok);
+                const int audioBitRateInt  = videoInfo.audioBitRate.toInt(&ok);
+
                 if (ok)
                 {
                     audioBitRateString = KGlobal::locale()->formatNumber(audioBitRateInt, 0);
                 }
+
                 str = videoInfo.audioBitRate.isEmpty() ? cnt.unavailable : audioBitRateString;
 
                 if (str.length() > cnt.maxStringLength)
@@ -455,7 +462,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
         if (settings->getToolTipsShowAlbumName())
         {
-            PAlbum* album = AlbumManager::instance()->findPAlbum(info.albumId());
+            PAlbum* const album = AlbumManager::instance()->findPAlbum(info.albumId());
 
             if (album)
             {
@@ -664,11 +671,14 @@ QString ToolTipFiller::filterActionTipContents(const FilterAction& action)
          + reproducible + cnt.cellEnd;
 
     // Description
+
     str = action.description();
+
     if (str.isEmpty())
     {
         str = QString("---");
     }
+
     tip += cnt.cellSpecBeg + i18nc("Image filter description", "Description:") + cnt.cellSpecMid
         + cnt.breakString(str) + cnt.cellSpecEnd;
 
@@ -683,6 +693,7 @@ QString ToolTipFiller::filterActionTipContents(const FilterAction& action)
         const QHash<QString, QVariant>& params = action.parameters();
         QList<QString> keys = params.keys();
         qSort(keys);
+
         foreach(const QString& key, keys)
         {
             QHash<QString, QVariant>::const_iterator it;
@@ -710,6 +721,7 @@ QString ToolTipFiller::filterActionTipContents(const FilterAction& action)
 
                 QString key = it.key();
                 QChar first = key.at(0);
+
                 if (first.isLower())
                 {
                     key.replace(0, 1, first.toUpper());

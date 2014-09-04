@@ -818,4 +818,22 @@ QStringList ImagePropertiesTab::shortenedTagPaths(const QStringList& tagPaths, Q
     return tagsShortened;
 }
 
+void ImagePropertiesTab::shortenedMakeInfo(QString& make)
+{
+    make.remove(" CORPORATION",      Qt::CaseInsensitive);        // from Nikon, Pentax, and Olympus
+    make.remove("EASTMAN ",          Qt::CaseInsensitive);        // from Kodak
+    make.remove(" COMPANY",          Qt::CaseInsensitive);        // from Kodak
+    make.remove(" OPTICAL CO.,LTD",  Qt::CaseInsensitive);        // from Olympus
+    make.remove(" Techwin co.,Ltd.", Qt::CaseInsensitive);        // from Samsung
+    make.remove("  Co.,Ltd.",        Qt::CaseInsensitive);        // from Minolta
+}
+
+void ImagePropertiesTab::shortenedModelInfo(QString& model)
+{
+    model.remove("Canon ",           Qt::CaseInsensitive);
+    model.remove("NIKON ",           Qt::CaseInsensitive);
+    model.remove("PENTAX ",          Qt::CaseInsensitive);
+    model.remove(" DIGITAL",         Qt::CaseInsensitive);        // from Canon
+}
+
 }  // namespace Digikam

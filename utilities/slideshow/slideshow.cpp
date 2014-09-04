@@ -6,8 +6,8 @@
  * Date        : 2005-04-21
  * Description : slide show tool using preview of pictures.
  *
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2004      by Enrico Ros <eros.kde@email.it>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004      by Enrico Ros <eros dot kde at email dot it>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -62,6 +62,7 @@
 #include "dimg.h"
 #include "globals.h"
 #include "previewloadthread.h"
+#include "imagepropertiestab.h"
 #include "toolbar.h"
 #include "ratingwidget.h"
 #include "colorlabelwidget.h"
@@ -516,6 +517,7 @@ void SlideShow::updatePixmap()
 
                 if (!photoInfo.make.isEmpty())
                 {
+                    ImagePropertiesTab::shortenedMakeInfo(photoInfo.make);
                     str = photoInfo.make;
                 }
 
@@ -526,6 +528,7 @@ void SlideShow::updatePixmap()
                         str += QString(" / ");
                     }
 
+                    ImagePropertiesTab::shortenedModelInfo(photoInfo.model);
                     str += photoInfo.model;
                 }
 
@@ -588,11 +591,11 @@ void SlideShow::updatePixmap()
 
                     if (!photoInfo.focalLength.isEmpty())
                     {
-                        str += QString("%1 (35mm: %2)").arg(photoInfo.focalLength).arg(photoInfo.focalLength35mm);
+                        str += QString("%1 (%2)").arg(photoInfo.focalLength).arg(photoInfo.focalLength35mm);
                     }
                     else
                     {
-                        str += QString("35mm: %1)").arg(photoInfo.focalLength35mm);
+                        str += QString("%1").arg(photoInfo.focalLength35mm);
                     }
                 }
 

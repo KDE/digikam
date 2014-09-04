@@ -104,6 +104,12 @@ public:
      */
     static QStringList shortenedTagPaths(const QStringList& tagPaths, QList<QVariant>* identifiers = 0);
 
+    /** This methods shortens make an model camera info to prevent bloating GUI
+     *  See B.K.O #265231 for details.
+     */
+    static void shortenedMakeInfo(QString& make);
+    static void shortenedModelInfo(QString& model);
+
 private:
 
     class Private;

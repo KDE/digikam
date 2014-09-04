@@ -6,7 +6,7 @@
  * Date        : 2006-02-08
  * Description : A tab to display camera item information
  *
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,6 +42,7 @@
 // Local includes
 
 #include "imagepropertiestxtlabel.h"
+#include "imagepropertiestab.h"
 
 namespace Digikam
 {
@@ -514,7 +515,9 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
         widget(1)->show();
     }
 
-    d->labelPhotoMake->setText(photoInfo.make.isEmpty() ? unavailable : photoInfo.make);
+    ImagePropertiesTab::shortenedMakeInfo(photoInfo.make);
+    ImagePropertiesTab::shortenedModelInfo(photoInfo.model);
+    d->labelPhotoMake->setText(photoInfo.make.isEmpty()   ? unavailable : photoInfo.make);
     d->labelPhotoModel->setText(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
 
     if (photoInfo.dateTime.isValid())
@@ -536,7 +539,7 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
     }
     else
     {
-        str = i18n("%1 (35mm: %2)", photoInfo.focalLength, photoInfo.focalLength35mm);
+        str = i18n("%1 (%2)", photoInfo.focalLength, photoInfo.focalLength35mm);
         d->labelPhotoFocalLength->setText(str);
     }
 
