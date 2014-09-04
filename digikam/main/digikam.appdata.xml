@@ -9,6 +9,7 @@
   <name xml:lang="da">digiKam</name>
   <name xml:lang="en-GB">digiKam</name>
   <name xml:lang="es">digiKam</name>
+  <name xml:lang="fr">digiKam</name>
   <name xml:lang="nl">digiKam</name>
   <name xml:lang="pl">digiKam</name>
   <name xml:lang="pt">digiKam</name>
@@ -25,6 +26,7 @@
     </p>
     <p xml:lang="ca">El digiKam és una avançada aplicació per a gestionar les fotografies digitals, la qual fa que la importació i organització de les fotografies digitals sigui una «tasca fàcil». Les fotografies s'organitzen en àlbums, els quals es poden ordenar cronològicament, per disposició de la carpeta o per col·leccions personalitzades.</p>
     <p xml:lang="en-GB">digiKam is an advanced digital photo management application, which makes importing and organizing digital photos a "snap". The photos are organized in albums which can be sorted chronologically, by folder layout or by custom collections.</p>
+    <p xml:lang="fr">digiKam est une application de gestion de photos avancée, qui rend l'import et l'organisation des photos comme un jeu d'enfant. Les photos sont organisées dans des albums qui peuvent être triés de manière chronologique, selon l'organisation des dossiers, ou par collections personnalisées.</p>
     <p xml:lang="nl">digiKam is een geavanceerde toepassing voor beheer van digitale foto's, die importeren en organiseren van digitale foto's een "fluitje van een cent" maakt. De foto's zijn georganiseerd in albums die chronologisch, op indeling van mappen of op eigen verzamelingen gesorteerd kunnen zijn.</p>
     <p xml:lang="pl">digiKam jest zaawansowanym programem do zarządzania cyfrowymi zdjęciami, który czyni importowanie i zarządzanie cyfrowymi zdjęciami "drobnostką". Zdjęcia są urządzone w albumy, które można przechowywać chronologicznie, według układu katalogów lub według własnych zbiorów.</p>
     <p xml:lang="pt">O digiKam é uma aplicação de gestão de fotografias digitais, o que torna a importação e a organização de fotografias digitais extremamente simples. As fotos são organizadas em álbuns, os quais podem ser ordenados de forma cronológica, por disposição das pastas ou com colecções personalizadas.</p>
@@ -38,6 +40,7 @@
     <p xml:lang="da">Funktioner:</p>
     <p xml:lang="en-GB">Features:</p>
     <p xml:lang="es">Funciones:</p>
+    <p xml:lang="fr">Fonctionnalités :</p>
     <p xml:lang="nl">Mogelijkheden:</p>
     <p xml:lang="pl">Możliwości:</p>
     <p xml:lang="pt">Características:</p>
@@ -50,6 +53,7 @@
       <li>Organization of photos in albums and sub-albums (with tags and comments support)</li>
       <li xml:lang="ca">Organització de les fotografies en àlbums i sub-àlbums (amb implementació per a les etiquetes i comentaris)</li>
       <li xml:lang="en-GB">Organisation of photos in albums and sub-albums (with tags and comments support)</li>
+      <li xml:lang="fr">Organisation de photos en albums et sous-albums (avec prise en charge des étiquettes et des commentaires)</li>
       <li xml:lang="nl">Organiseren van foto's in albums en sub-albums (met tags en ondersteuning van commentaar)</li>
       <li xml:lang="pl">Grupowanie zdjęć w albumy i podalbumów (z obsługą znaczników i komentarzy)</li>
       <li xml:lang="pt">Organização das fotografias por álbuns e sub-álbuns (com o suporte para marcas e comentários)</li>
@@ -60,6 +64,7 @@
       <li>Support for Exif, Iptc, Xmp, Makernotes</li>
       <li xml:lang="ca">Implementació per a notes Exif, Iptc, Xmp i del fabricant</li>
       <li xml:lang="en-GB">Support for Exif, Iptc, Xmp, Makernotes</li>
+      <li xml:lang="fr">Prise en charge des données EXIF, IPTC, XMP, MakerNotes</li>
       <li xml:lang="nl">Ondersteuning voor Exif, Iptc, Xmp, Makernotes</li>
       <li xml:lang="pl">Obsługa Exif, Iptc, Xmp, notatek twórcy</li>
       <li xml:lang="pt">Suporte para o EXIF, IPTC, XMP e notas do fabricante</li>
@@ -70,6 +75,7 @@
       <li>SQLite powered storage for the albums and its metadata</li>
       <li xml:lang="ca">Emmagatzematge amb SQLite pels àlbums i les seves metadades</li>
       <li xml:lang="en-GB">SQLite powered storage for the albums and its metadata</li>
+      <li xml:lang="fr">Stockage des albums et des métadonnées fonctionnant avec SQLite</li>
       <li xml:lang="nl">Op SQLite gebaseerde opslag voor de albums en zijn metagegevens</li>
       <li xml:lang="pl">Przechowalnia dla albumów i ich metadanych napędzana SQLite</li>
       <li xml:lang="pt">Armazenamento baseado em SQLite para os álbuns e os seus meta-dados</li>
@@ -80,6 +86,7 @@
       <li>Support for filtering and sorting albums</li>
       <li xml:lang="ca">Implementació pel filtratge i classificació dels àlbums</li>
       <li xml:lang="en-GB">Support for filtering and sorting albums</li>
+      <li xml:lang="fr">Prise en charge du filtrage et du tri des albums</li>
       <li xml:lang="nl">Ondersteuning voor filtering en sorteren van albums</li>
       <li xml:lang="pl">Obsługa filtrowania i sortowania albumów</li>
       <li xml:lang="pt">Suporte para filtrar e ordenar os álbuns</li>
@@ -90,6 +97,7 @@
       <li>Import from more than 1100 digital camera devices</li>
       <li xml:lang="ca">Importa des de més de 1.100 dispositius de càmeres digitals</li>
       <li xml:lang="en-GB">Import from more than 1100 digital camera devices</li>
+      <li xml:lang="fr">Importe à partir de plus de 1100 appareils photos numériques</li>
       <li xml:lang="nl">Importeren uit meer dan 1100 digitale camera's</li>
       <li xml:lang="pl">Importowanie z więcej niż 1100 aparatów cyfrowych</li>
       <li xml:lang="pt">Importar a partir de mais de 1100 máquinas digitais</li>
@@ -100,6 +108,7 @@
       <li>Support for 300 RAW format pictures</li>
       <li xml:lang="ca">Implementació per a 300 formats d'imatges RAW</li>
       <li xml:lang="en-GB">Support for 300 RAW format pictures</li>
+      <li xml:lang="fr">Prise en charge de 300 formats d'image RAW</li>
       <li xml:lang="nl">Ondersteuning voor 300 RAW-format afbeeldingen</li>
       <li xml:lang="pl">Obsługa dla 300 postaci zdjęć RAW</li>
       <li xml:lang="pt">Suporte para 300 formatos de imagens RAW</li>
@@ -110,6 +119,7 @@
       <li>Light Table feature</li>
       <li xml:lang="ca">La característica taula de llum</li>
       <li xml:lang="en-GB">Light Table feature</li>
+      <li xml:lang="fr">Fonction table lumineuse</li>
       <li xml:lang="nl">Functie met lichttafel</li>
       <li xml:lang="pl">Możliwość użycia podświetlarki</li>
       <li xml:lang="pt">Funcionalidade da Mesa de Luz</li>
@@ -120,6 +130,7 @@
       <li>Plugins architectures: using Kipi-plugins</li>
       <li xml:lang="ca">Arquitectura de connectors: usant els connectors Kipi</li>
       <li xml:lang="en-GB">Plugins architectures: using Kipi-plugins</li>
+      <li xml:lang="fr">Architectures de modules externes : utilise les modules KIPI</li>
       <li xml:lang="nl">Architectuur met plug-ins: met gebruik van Kipi-plug-ins</li>
       <li xml:lang="pl">Architektura wtyczek: przy użyciu wtyczek Kipi</li>
       <li xml:lang="pt">Arquitectura por 'plugins', usando os 'plugins' do Kipi</li>
@@ -130,6 +141,7 @@
       <li>Share your photos using HTML or publishing them to social web sites</li>
       <li xml:lang="ca">Compartiu les vostres fotografies usant HTML o publicant-les a llocs web socials</li>
       <li xml:lang="en-GB">Share your photos using HTML or publishing them to social web sites</li>
+      <li xml:lang="fr">Permet de partager vos photos avec des pages HTML ou publiez les sur des réseaux sociaux</li>
       <li xml:lang="nl">Uw foto's delen met HTML of ze publiceren op sociale websites</li>
       <li xml:lang="pl">Współdzielenie zdjęć przy użyciu HTML, a także możliwość udostępniania ich na stronach społecznościowych</li>
       <li xml:lang="pt">Partilhar as suas fotos por HTML ou publicá-las para as páginas Web sociais</li>
@@ -140,6 +152,7 @@
       <li>Image editor included with advanced features</li>
       <li xml:lang="ca">Inclou un editor d'imatges amb característiques avançades</li>
       <li xml:lang="en-GB">Image editor included with advanced features</li>
+      <li xml:lang="fr">Éditeur d'images inclus, avec des fonctionnalités avancées</li>
       <li xml:lang="nl">Bewerker van afbeeldingen met geavanceerde functies</li>
       <li xml:lang="pl">Dołączony edytor obrazów o zaawansowanych możliwościach</li>
       <li xml:lang="pt">Editor de imagens que inclui funcionalidades avançadas</li>
@@ -162,6 +175,7 @@
   <developer_name xml:lang="cs">Projekt digiKam</developer_name>
   <developer_name xml:lang="en-GB">digiKam Project</developer_name>
   <developer_name xml:lang="es">Proyecto digiKam</developer_name>
+  <developer_name xml:lang="fr">Projet digiKam</developer_name>
   <developer_name xml:lang="nl">digiKam-project</developer_name>
   <developer_name xml:lang="pl">Projekt digiKam</developer_name>
   <developer_name xml:lang="pt">Projecto digiKam</developer_name>
