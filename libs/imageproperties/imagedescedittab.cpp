@@ -1061,7 +1061,7 @@ void ImageDescEditTab::setTagState(TAlbum* const tag, MetadataHub::TagStatus sta
 
 void ImageDescEditTab::initializeTags(QModelIndex& parent)
 {
-    TAlbum* tag = d->tagModel->albumForIndex(parent);
+    TAlbum* const tag = d->tagModel->albumForIndex(parent);
 
     if (!tag)
     {
@@ -1224,17 +1224,6 @@ void ImageDescEditTab::slotMoreMenu()
     }
 }
 
-void ImageDescEditTab::slotImageTagsChanged(qlonglong imageId)
-{
-    // don't lose modifications
-    if (d->ignoreImageAttributesWatch || d->modified)
-    {
-        return;
-    }
-
-    metadataChange(imageId);
-}
-
 void ImageDescEditTab::slotOpenTagsManager()
 {
     TagsManager* const tagMngr = TagsManager::instance();
@@ -1247,7 +1236,6 @@ void ImageDescEditTab::slotImagesChanged(int albumId)
 {
     if (d->ignoreImageAttributesWatch || d->modified)
     {
-        kDebug() << "Image changes ignored";
         return;
     }
 
@@ -1261,39 +1249,35 @@ void ImageDescEditTab::slotImagesChanged(int albumId)
     setInfos(d->currInfos);
 }
 
+void ImageDescEditTab::slotImageTagsChanged(qlonglong imageId)
+{
+    metadataChange(imageId);
+}
+
 void ImageDescEditTab::slotImageRatingChanged(qlonglong imageId)
 {
-    if (d->ignoreImageAttributesWatch || d->modified)
-    {
-        return;
-    }
-
     metadataChange(imageId);
 }
 
 void ImageDescEditTab::slotImageCaptionChanged(qlonglong imageId)
 {
-    if (d->ignoreImageAttributesWatch || d->modified)
-    {
-        return;
-    }
-
     metadataChange(imageId);
 }
 
 void ImageDescEditTab::slotImageDateChanged(qlonglong imageId)
 {
-    if (d->ignoreImageAttributesWatch || d->modified)
-    {
-        return;
-    }
-
     metadataChange(imageId);
 }
 
 // private common code for above methods
 void ImageDescEditTab::metadataChange(qlonglong imageId)
 {
+    if (d->ignoreImageAttributesWatch || d->modified)
+    {
+        // Don't lose modifications
+        return;
+    }
+
     d->metadataChangeIds << imageId;
     d->metadataChangeTimer->start();
 }
@@ -1510,7 +1494,7 @@ void ImageDescEditTab::initProgressIndicator()
     }
 }
 
-AddTagsLineEdit* ImageDescEditTab::getNewTagEdit()
+AddTagsLineEdit* ImageDescEditTab::getNewTagEdit() const
 {
     return d->newTagEdit;
 }
