@@ -6,7 +6,7 @@
  * Date        : 2009-02-06
  * Description : Thread actions task.
  *
- * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2012      by Pankaj Kumar <me at panks dot me>
  *
  * This program is free software; you can redistribute it
@@ -50,9 +50,9 @@ extern "C"
 #include "dmetadata.h"
 #include "imageinfo.h"
 #include "fileactionmngr.h"
-#include "editorwindow.h"           // For localFileRename() static function
 #include "batchtool.h"
 #include "batchtoolsmanager.h"
+#include "filemanagement.h"
 
 namespace Digikam
 {
@@ -235,7 +235,7 @@ void Task::run()
     {
         if (DMetadata::hasSidecar(outUrl.toLocalFile()))
         {
-            if (!EditorWindow::localFileRename(d->tools.m_itemUrl.toLocalFile(),
+            if (!FileManagement::localFileRename(d->tools.m_itemUrl.toLocalFile(),
                                                DMetadata::sidecarPath(outUrl.toLocalFile()),
                                                DMetadata::sidecarPath(dest.toLocalFile())))
             {
@@ -243,7 +243,7 @@ void Task::run()
             }
         }
 
-        if (!EditorWindow::localFileRename(d->tools.m_itemUrl.toLocalFile(), 
+        if (!FileManagement::localFileRename(d->tools.m_itemUrl.toLocalFile(), 
                                            outUrl.toLocalFile(),
                                            dest.toLocalFile()))
         {

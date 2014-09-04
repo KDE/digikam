@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2008-12-10
- * Description : album icon view tool tip
+ * Description : file input output management
  *
- * Copyright (C) 2008-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,30 +21,31 @@
  *
  * ============================================================ */
 
-#ifndef TOOLTIPFILLER_H
-#define TOOLTIPFILLER_H
+#ifndef FILEMANAGEMENT_H
+#define FILEMANAGEMENT_H
 
 // Qt includes
 
 #include <QString>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
-class FilterAction;
-class ImageInfo;
-class PAlbum;
-
-namespace ToolTipFiller
+namespace FileManagement
 {
 
-    bool aspectRatioToString(const int width, const int height, QString* const arString);
-    QString imageInfoTipContents(const ImageInfo& info);
-    QString albumTipContents(PAlbum* const album, int count);
-    QString filterActionTipContents(const FilterAction& action);
+    /** This method rename a local file 'orgPath' to 'destPath' with all ACL properties
+     *  restoration taken from 'source' file. Renaming include side-car file.
+     *  Return true if operation is completed.
+     */
+    DIGIKAM_EXPORT bool localFileRename(const QString& source, const QString& orgPath, const QString& destPath);
 
-} // namespace ToolTipFiller
+} // namespace FileManagement
 
 } // namespace Digikam
 
-#endif /* TOOLTIPFILLER_H */
+#endif /* FILEMANAGEMENT_H */

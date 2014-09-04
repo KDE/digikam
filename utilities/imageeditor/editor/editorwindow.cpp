@@ -128,6 +128,7 @@
 #include "editortoolsettings.h"
 #include "editortooliface.h"
 #include "exposurecontainer.h"
+#include "filemanagement.h"
 #include "filereadwritelock.h"
 #include "filesaveoptionsbox.h"
 #include "filesaveoptionsdlg.h"
@@ -2533,90 +2534,19 @@ bool EditorWindow::moveLocalFile(const QString& org, const QString& dst)
     {
         QString sidecarDst = DMetadata::sidecarFilePathForFile(dst);
 
-        if (!localFileRename(source, sidecarOrg, sidecarDst))
+        if (!FileManagement::localFileRename(source, sidecarOrg, sidecarDst))
         {
             kError() << "Failed to move sidecar file";
         }
     }
 
-    if (!localFileRename(source, org, dst))
+    if (!FileManagement::localFileRename(source, org, dst))
     {
         KMessageBox::error(this,
                            i18n("Failed to overwrite original file"),
                            i18n("Error Saving File"));
         return false;
     }
-
-    return true;
-}
-
-bool EditorWindow::localFileRename(const QString& source, const QString& orgPath, const QString& destPath)
-{
-    QString dest = destPath;
-    // check that we're not replacing a symlink
-    QFileInfo info(dest);
-
-    if (info.isSymLink())
-    {
-        dest = info.symLinkTarget();
-        kDebug() << "Target filePath" << QDir::toNativeSeparators(dest) << "is a symlink pointing to"
-                 << QDir::toNativeSeparators(dest) << ". Storing image there.";
-    }
-
-#ifndef Q_OS_WIN
-    QByteArray dstFileName = QFile::encodeName(dest);
-
-    // Store old permissions:
-    // Just get the current umask.
-    mode_t curr_umask = umask(S_IREAD | S_IWRITE);
-    // Restore the umask.
-    umask(curr_umask);
-
-    // For new files respect the umask setting.
-    mode_t filePermissions = (S_IREAD | S_IWRITE | S_IROTH | S_IWOTH | S_IRGRP | S_IWGRP) & ~curr_umask;
-
-    // For existing files, use the mode of the original file.
-    struct stat stbuf;
-
-    if (::stat(dstFileName, &stbuf) == 0)
-    {
-        filePermissions = stbuf.st_mode;
-    }
-#endif
-
-    struct stat st;
-
-    if (::stat(QFile::encodeName(source), &st) == 0)
-    {
-        // See B.K.O #329608: Restore file modification time from original file only if updateFileTimeStamp for Setup/Metadata is turned off.
-
-        if (!MetadataSettings::instance()->settings().updateFileTimeStamp)
-        {
-            struct utimbuf ut;
-            ut.modtime = st.st_mtime;
-            ut.actime  = st.st_atime;
-
-            if (::utime(QFile::encodeName(orgPath), &ut) != 0)
-            {
-                kWarning() << "Failed to restore modification time for file " << dest;
-            }
-        }
-    }
-
-    // rename tmp file to dest
-    // KDE::rename() takes care of QString -> bytestring encoding
-    if (KDE::rename(orgPath, dest) != 0)
-    {
-        return false;
-    }
-
-#ifndef Q_OS_WIN
-    // restore permissions
-    if (::chmod(dstFileName, filePermissions) != 0)
-    {
-        kWarning() << "Failed to restore file permissions for file " << dstFileName;
-    }
-#endif
 
     return true;
 }
