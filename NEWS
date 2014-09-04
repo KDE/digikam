@@ -137,4 +137,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 123 ==> 240231 - Add an option to context menu to restore menu visibility when it have been hidden.
 124 ==> 201592 - Sorting images in queue from Batch Queue Manager.
 125 ==> 265231 - Tooltip do not show whole camera information.
-126 ==> 
+126 ==> 309471 - EXIF orientation is not determined for some JPEG files.
+127 ==> 
