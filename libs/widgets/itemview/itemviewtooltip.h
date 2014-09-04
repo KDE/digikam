@@ -43,9 +43,9 @@ public:
     explicit ItemViewToolTip(QAbstractItemView* view);
     ~ItemViewToolTip();
 
-    QAbstractItemView* view() const;
+    QAbstractItemView* view()   const;
     QAbstractItemModel* model() const;
-    QModelIndex currentIndex() const;
+    QModelIndex currentIndex()  const;
 
     /**
      * Show the tooltip for the given item.
@@ -72,8 +72,8 @@ protected:
 
 private:
 
-    class ItemViewToolTipPriv;
-    ItemViewToolTipPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
