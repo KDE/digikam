@@ -39,7 +39,7 @@ namespace FileManagement
 {
 
     /** This method rename a local file 'orgPath' to 'destPath' with all ACL properties
-     *  restoration taken from 'source' file. Renaming include side-car file.
+     *  restoration taken from 'source' file.
      *  Return true if operation is completed.
      */
     DIGIKAM_EXPORT bool localFileRename(const QString& source, const QString& orgPath, const QString& destPath);
