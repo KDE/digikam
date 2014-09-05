@@ -138,4 +138,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 124 ==> 201592 - Sorting images in queue from Batch Queue Manager.
 125 ==> 265231 - Tooltip do not show whole camera information.
 126 ==> 309471 - EXIF orientation is not determined for some JPEG files.
-127 ==> 
+127 ==> 307357 - Metadata from DNG files generated Lightroom 3 and 4 are not displayed in Image Editor right side-bar tab.
+128 ==> 
+
