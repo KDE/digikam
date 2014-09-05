@@ -86,7 +86,7 @@ namespace Digikam
 {
 
 DigikamImageView::DigikamImageView(QWidget* const parent)
-    : ImageCategorizedView(parent), d(new DigikamImageViewPriv(this))
+    : ImageCategorizedView(parent), d(new Private(this))
 {
     installDefaultModels();
 
@@ -126,7 +126,7 @@ DigikamImageView::DigikamImageView(QWidget* const parent)
     addSelectionOverlay(d->faceDelegate);
 
     // rotation overlays
-    d->rotateLeftOverlay = ImageRotateOverlay::left(this);
+    d->rotateLeftOverlay  = ImageRotateOverlay::left(this);
     d->rotateRightOverlay = ImageRotateOverlay::right(this);
     d->updateOverlays();
 
@@ -135,8 +135,9 @@ DigikamImageView::DigikamImageView(QWidget* const parent)
     addOverlay(ratingOverlay);
 
     // face overlays
-    addRejectionOverlay(d->faceDelegate);
+    // NOTE: order to plug this overlay is important, else rejection can be suitable (see B.K.O #324759).
     addAssignNameOverlay(d->faceDelegate);
+    addRejectionOverlay(d->faceDelegate);
 
     GroupIndicatorOverlay* const groupOverlay = new GroupIndicatorOverlay(this);
     addOverlay(groupOverlay);
@@ -222,7 +223,7 @@ void DigikamImageView::setFaceMode(bool on)
 
 void DigikamImageView::addRejectionOverlay(ImageDelegate* delegate)
 {
-    FaceRejectionOverlay* rejectionOverlay = new FaceRejectionOverlay(this);
+    FaceRejectionOverlay* const rejectionOverlay = new FaceRejectionOverlay(this);
 
     connect(rejectionOverlay, SIGNAL(rejectFaces(QList<QModelIndex>)),
             this, SLOT(removeFaces(QList<QModelIndex>)));
@@ -244,7 +245,7 @@ void DigikamImageView::addTagEditOverlay(ImageDelegate* delegate)
 
 void DigikamImageView::addAssignNameOverlay(ImageDelegate* delegate)
 {
-    AssignNameOverlay* nameOverlay = new AssignNameOverlay(this);
+    AssignNameOverlay* const nameOverlay = new AssignNameOverlay(this);
     addOverlay(nameOverlay, delegate);
 
     connect(nameOverlay, SIGNAL(confirmFaces(QList<QModelIndex>,int)),
@@ -263,6 +264,7 @@ void DigikamImageView::confirmFaces(const QList<QModelIndex>& indexes, int tagId
     // fast-remove in the "unknown person" view
 
     bool needFastRemove = false;
+
     if(imageAlbumModel()->currentAlbums().size() == 1)
     {
         needFastRemove = d->faceMode
@@ -273,6 +275,7 @@ void DigikamImageView::confirmFaces(const QList<QModelIndex>& indexes, int tagId
     {
         infos << ImageModel::retrieveImageInfo(index);
         faces << d->faceDelegate->face(index);
+
         if (needFastRemove)
         {
             sourceIndexes << imageSortFilterModel()->mapToSourceImageModel(index);
@@ -454,7 +457,6 @@ void DigikamImageView::showGroupContextMenu(const QModelIndex& index, QContextMe
     KMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
     cmhelper.setImageFilterModel(imageFilterModel());
-
     cmhelper.addGroupActions(selectedImageIDs);
 
     // special action handling --------------------------------

@@ -114,8 +114,8 @@ private Q_SLOTS:
 
 private:
 
-    class DigikamImageViewPriv;
-    DigikamImageViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
