@@ -241,7 +241,7 @@ ImportPreviewView::ImportPreviewView(QWidget* const parent, Mode mode)
     connect(this, SIGNAL(toPreviousImage()),
             this, SIGNAL(signalPrevItem()));
 
-    connect(this, SIGNAL(activated()),
+    connect(this, SIGNAL(leftButtonDoubleClicked()),
             this, SIGNAL(signalEscapePreview()));
 
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
