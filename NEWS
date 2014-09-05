@@ -143,5 +143,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 129 ==> 193485 - Sort images by Caption, Headline, Comments, etc.
 130 ==> 228394 - Sort images by EXIF tag.
 131 ==> 124890 - Sort images by camera.
-132 ==> 
+132 ==> 216634 - "Move" as default operation.
+133 ==> 
 
