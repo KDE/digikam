@@ -140,5 +140,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 126 ==> 309471 - EXIF orientation is not determined for some JPEG files.
 127 ==> 307357 - Metadata from DNG files generated Lightroom 3 and 4 are not displayed in Image Editor right side-bar tab.
 128 ==> 324759 - When digiKam searches faces, it sets frames automatically. I can _NOT_ erase the "frames" any more.
-129 ==> 
+129 ==> 193485 - Sort images by Caption, Headline, Comments, etc.
+130 ==> 
 
