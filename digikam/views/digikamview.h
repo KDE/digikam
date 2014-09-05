@@ -107,6 +107,7 @@ public:
     double zoomMax()          const;
 
     void toggleTag(int tagID);
+    void toggleFullScreen(bool set);
     QList<SidebarWidget*> leftSidebarWidgets() const;
     StackedView::StackedViewMode viewMode()    const;
 

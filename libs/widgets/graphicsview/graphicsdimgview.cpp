@@ -7,7 +7,7 @@
  * Description : Graphics View for DImg preview
  *
  * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2011-2013 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2014 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -502,6 +502,20 @@ void GraphicsDImgView::toggleFitToWindow()
 {
     layout()->toggleFitToWindow();
     update();
+}
+
+void GraphicsDImgView::toggleFullScreen(bool set)
+{
+    if (set)
+    {
+        d->scene->setBackgroundBrush(Qt::black);
+        setFrameShape(QFrame::NoFrame);
+    }
+    else
+    {
+        d->scene->setBackgroundBrush(Qt::NoBrush);
+        setFrameShape(QFrame::StyledPanel);
+    }
 }
 
 } // namespace Digikam

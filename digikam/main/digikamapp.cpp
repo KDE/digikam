@@ -3104,6 +3104,8 @@ void DigikamApp::customizedFullScreenMode(bool set)
     d->showMenuBarAction->setEnabled(!set);
     set ? d->showBarAction->setEnabled(false)
         : toogleShowBar();
+
+    d->view->toggleFullScreen(set);
 }
 
 void DigikamApp::toogleShowBar()

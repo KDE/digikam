@@ -145,5 +145,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 131 ==> 124890 - Sort images by camera.
 132 ==> 216634 - "Move" as default operation.
 133 ==> 284585 - Preserve RSync compatibility when changing Exif orientation and not Modification time.
-134 ==> 
+134 ==> 281574 - Black background for preview in fullscreen [patch].
+135 ==> 
 

@@ -2325,6 +2325,11 @@ void DigikamView::slotSetupMetadataFilters(int tab)
     Setup::execMetadataFilters(this, tab);
 }
 
+void DigikamView::toggleFullScreen(bool set)
+{
+    d->stackedview->imagePreviewView()->toggleFullScreen(set);
+}
+
 #ifdef USE_PRESENTATION_MODE
 
 void DigikamView::slotSlideShowQml()

@@ -1658,6 +1658,7 @@ void LightTableWindow::customizedFullScreenMode(bool set)
     toolBarMenuAction()->setEnabled(!set);
     d->showMenuBarAction->setEnabled(!set);
     d->showBarAction->setEnabled(!set);
+    d->previewView->toggleFullScreen(set);
 }
 
 }  // namespace Digikam

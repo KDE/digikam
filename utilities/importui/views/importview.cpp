@@ -833,4 +833,9 @@ ImportStackedView::StackedViewMode ImportView::viewMode() const
     return d->stackedView->viewMode();
 }
 
+void ImportView::toggleFullScreen(bool set)
+{
+    d->stackedView->importPreviewView()->toggleFullScreen(set);
+}
+
 } // namespace Digikam

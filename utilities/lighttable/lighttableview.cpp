@@ -456,4 +456,10 @@ bool LightTableView::rightPreviewLoading() const
     return (d->rightPreview->previewItem()->state() == DImgPreviewItem::Loading);
 }
 
+void LightTableView::toggleFullScreen(bool set)
+{
+    d->leftPreview->toggleFullScreen(set);
+    d->rightPreview->toggleFullScreen(set);
+}
+
 }  // namespace Digikam

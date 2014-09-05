@@ -58,6 +58,7 @@ public:
     void hideSideBars();
     void setThumbSize(int size);
     void toggleShowBar(bool b);
+    void toggleFullScreen(bool set);
 
     void scrollTo(const QString& folder, const QString& file);
 

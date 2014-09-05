@@ -174,7 +174,7 @@ ImportUI::ImportUI(QWidget* const parent, const QString& cameraTitle,
     // -- Make signals/slots connections ---------------------------------
 
     setupConnections();
-    slotSidebarTabTitleStyleChanged();
+    sidebarTabTitleStyleChanged();
 
     // -- Read settings --------------------------------------------------
 
@@ -701,7 +701,7 @@ void ImportUI::setupConnections()
             this, SLOT(slotCollectionLocationStatusChanged(CollectionLocation,int)));
 
     connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
-            this, SLOT(slotSidebarTabTitleStyleChanged()));
+            this, SLOT(slotSetupChanged()));
 
     connect(d->renameCustomizer, SIGNAL(signalChanged()),
             this, SLOT(slotDownloadNameChanged()));
@@ -2543,12 +2543,6 @@ void ImportUI::slotShowMenuBar()
     menuBar()->setVisible(d->showMenuBarAction->isChecked());
 }
 
-void ImportUI::slotSidebarTabTitleStyleChanged()
-{
-    d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
-    d->rightSideBar->applySettings();
-}
-
 void ImportUI::slotLogMsg(const QString& msg, DHistoryView::EntryType type,
                           const QString& folder, const QString& file)
 {
@@ -2631,6 +2625,8 @@ void ImportUI::customizedFullScreenMode(bool set)
     d->showMenuBarAction->setEnabled(!set);
     set ? d->showBarAction->setEnabled(false)
         : toogleShowBar();
+
+    d->view->toggleFullScreen(set);
 }
 
 void ImportUI::toogleShowBar()
@@ -2646,6 +2642,22 @@ void ImportUI::toogleShowBar()
             d->showBarAction->setEnabled(false);
             break;
     }
+}
+
+void ImportUI::slotSetupChanged()
+{
+    // Load full-screen options
+    KConfigGroup group = AlbumSettings::instance()->generalConfigGroup();
+    readFullScreenSettings(group);
+
+    d->view->applySettings();
+    sidebarTabTitleStyleChanged();
+}
+
+void ImportUI::sidebarTabTitleStyleChanged()
+{
+    d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
+    d->rightSideBar->applySettings();
 }
 
 }  // namespace Digikam

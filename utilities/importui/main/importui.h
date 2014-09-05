@@ -148,6 +148,7 @@ private:
     void customizedFullScreenMode(bool set);
     void toogleShowBar();
     void setInitialSorting();
+    void sidebarTabTitleStyleChanged();
 
 private Q_SLOTS:
 
@@ -231,7 +232,7 @@ private Q_SLOTS:
     void slotPreviousRightSideBarTab();
     void slotNextRightSideBarTab();
 
-    void slotSidebarTabTitleStyleChanged();
+    void slotSetupChanged();
 
 private:
 
