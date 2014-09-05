@@ -144,5 +144,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 130 ==> 228394 - Sort images by EXIF tag.
 131 ==> 124890 - Sort images by camera.
 132 ==> 216634 - "Move" as default operation.
-133 ==> 
+133 ==> 284585 - Preserve RSync compatibility when changing Exif orientation and not Modification time.
+134 ==> 
 
