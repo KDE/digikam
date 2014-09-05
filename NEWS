@@ -142,5 +142,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 128 ==> 324759 - When digiKam searches faces, it sets frames automatically. I can _NOT_ erase the "frames" any more.
 129 ==> 193485 - Sort images by Caption, Headline, Comments, etc.
 130 ==> 228394 - Sort images by EXIF tag.
-131 ==> 
+131 ==> 124890 - Sort images by camera.
+132 ==> 
 
