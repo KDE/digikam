@@ -110,7 +110,7 @@ public:
         addFoldersAction(0),
         openInFileManagerAction(0),
         openInTerminalAction(0),
-        refreshAlbumAction(0),
+        refreshAction(0),
         writeAlbumMetadataAction(0),
         readAlbumMetadataAction(0),
         browseTagsAction(0),
@@ -227,7 +227,7 @@ public:
     KAction*                            addFoldersAction;
     KAction*                            openInFileManagerAction;
     KAction*                            openInTerminalAction;
-    KAction*                            refreshAlbumAction;
+    KAction*                            refreshAction;
     KAction*                            writeAlbumMetadataAction;
     KAction*                            readAlbumMetadataAction;
 

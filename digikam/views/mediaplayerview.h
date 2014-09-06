@@ -70,6 +70,7 @@ public:
                         bool  hasPrevious = false,
                         bool  hasNext     = false);
     void escapePreview();
+    void reload();
 
 Q_SIGNALS:
 

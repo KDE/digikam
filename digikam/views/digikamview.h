@@ -144,6 +144,7 @@ public Q_SLOTS:
     void slotSlideShowRecursive();
 
     // Album action slots
+    void slotRefresh();
     void slotNewAlbum();
     void slotSortAlbums(int order);
     void slotDeleteAlbum();
@@ -151,7 +152,6 @@ public Q_SLOTS:
     void slotAlbumPropsEdit();
     void slotAlbumOpenInFileManager();
     void slotAlbumOpenInTerminal();
-    void slotAlbumRefresh();
     void slotAlbumHistoryBack(int steps=1);
     void slotAlbumHistoryForward(int steps=1);
     void slotAlbumWriteMetadata();

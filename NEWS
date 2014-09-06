@@ -147,5 +147,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 133 ==> 284585 - Preserve RSync compatibility when changing Exif orientation and not Modification time.
 134 ==> 281574 - Black background for preview in fullscreen [patch].
 135 ==> 313855 - Double click over the preview canvas to leave preview mode.
-136 ==> 
+136 ==> 300647 - F5 in preview mode jumps to top of album instead to refresh canvas.
+137 ==> 
 

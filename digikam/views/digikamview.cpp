@@ -1318,27 +1318,38 @@ void DigikamView::slotAlbumOpenInTerminal()
     KToolInvocation::invokeTerminal(QString(), dir);
 }
 
-void DigikamView::slotAlbumRefresh()
+void DigikamView::slotRefresh()
 {
-    Album* const album = d->iconView->currentAlbum();
-    if (!album) return;
-    
-    // force reloading of thumbnails
-    LoadingCacheInterface::cleanThumbnailCache();
-    
-    ThumbsGenerator* const tool = new ThumbsGenerator(true, album->id());
-    tool->start();
-    
-    // if physical album, schedule a collection scan of current album's path
-    if (album->type() == Album::PHYSICAL)
+    switch (viewMode())
     {
-        NewItemsFinder* const tool = new NewItemsFinder(NewItemsFinder::ScheduleCollectionScan,
-                                                        QStringList() << static_cast<PAlbum*>(album)->folderPath());
-        
-        connect(tool, SIGNAL(signalComplete()),
-                this, SLOT(slotAlbumRefreshComplete()));
-            
-        tool->start();
+        case StackedView::PreviewImageMode:
+            d->stackedview->imagePreviewView()->reload();
+            break;
+        case StackedView::MediaPlayerMode:
+            d->stackedview->mediaPlayerView()->reload();
+            break;
+        default:
+            Album* const album = d->iconView->currentAlbum();
+            if (!album) return;
+
+            // force reloading of thumbnails
+            LoadingCacheInterface::cleanThumbnailCache();
+
+            ThumbsGenerator* const tool = new ThumbsGenerator(true, album->id());
+            tool->start();
+
+            // if physical album, schedule a collection scan of current album's path
+            if (album->type() == Album::PHYSICAL)
+            {
+                NewItemsFinder* const tool = new NewItemsFinder(NewItemsFinder::ScheduleCollectionScan,
+                                                                QStringList() << static_cast<PAlbum*>(album)->folderPath());
+
+                connect(tool, SIGNAL(signalComplete()),
+                        this, SLOT(slotAlbumRefreshComplete()));
+
+                tool->start();
+            }
+            break;
     }
 }
 

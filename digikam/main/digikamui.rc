@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="217" name="digikam" >
+<gui version="218" name="digikam" >
 
  <MenuBar>
 
@@ -32,7 +32,6 @@
      <Action name="album_remove" />
      <Action name="album_delete" />
    <Separator/>
-     <Action name="album_refresh" />
      <Action name="album_write_metadata" />
      <Action name="album_read_metadata" />
   </Menu>
@@ -92,6 +91,7 @@
      <Action name="slideshow" />
      <DefineGroup name="kipi_tool_group" append="kipi_tool_group" />
      <Action name="full_screen" />
+     <Action name="view_refresh" />
      <Separator/>
      <Action name="album_zoomin" />
      <Action name="album_zoomout" />

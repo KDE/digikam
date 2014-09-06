@@ -737,11 +737,11 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->refreshAlbumAction = new KAction(KIcon("view-refresh"), i18n("Refresh"), this);
-    d->refreshAlbumAction->setShortcut(KShortcut(Qt::Key_F5));
-    d->refreshAlbumAction->setWhatsThis(i18n("Refresh the contents of the current album."));
-    connect(d->refreshAlbumAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumRefresh()));
-    actionCollection()->addAction("album_refresh", d->refreshAlbumAction);
+    d->refreshAction = new KAction(KIcon("view-refresh"), i18n("Refresh"), this);
+    d->refreshAction->setShortcut(KShortcut(Qt::Key_F5));
+    d->refreshAction->setWhatsThis(i18n("Refresh the current contents."));
+    connect(d->refreshAction, SIGNAL(triggered()), d->view, SLOT(slotRefresh()));
+    actionCollection()->addAction("view_refresh", d->refreshAction);
 
     // -----------------------------------------------------------------
 
