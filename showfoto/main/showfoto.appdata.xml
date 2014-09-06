@@ -7,6 +7,7 @@
   <name xml:lang="ca">showFoto</name>
   <name xml:lang="cs">Showfoto</name>
   <name xml:lang="da">showFoto</name>
+  <name xml:lang="de">Showfoto</name>
   <name xml:lang="en-GB">Showfoto</name>
   <name xml:lang="es">Showfoto</name>
   <name xml:lang="nl">Showfoto</name>
@@ -48,6 +49,7 @@
   <developer_name xml:lang="ca">Projecte digiKam</developer_name>
   <developer_name xml:lang="cs">Projekt digiKam</developer_name>
   <developer_name xml:lang="da">digiKam-projektet</developer_name>
+  <developer_name xml:lang="de">digiKam-Projekt</developer_name>
   <developer_name xml:lang="en-GB">digiKam Project</developer_name>
   <developer_name xml:lang="es">Proyecto digiKam</developer_name>
   <developer_name xml:lang="nl">digiKam-project</developer_name>
