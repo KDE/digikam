@@ -77,7 +77,7 @@ public Q_SLOTS:
 
     void notifyFileContentChanged(const KUrl::List& urls);
 
-    void openInEditor(const ImageInfo& info, const QList<ImageInfo>& allInfosToOpen, Album* currentAlbum);
+    void openFile(const ImageInfo& info, const QList<ImageInfo>& allInfosToOpen, Album* currentAlbum);
     void rename(const KUrl& imageUrl, const QString& newName);
     void setAsAlbumThumbnail(Album* album, const ImageInfo& imageInfo);
 

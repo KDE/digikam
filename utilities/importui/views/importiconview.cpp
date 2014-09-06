@@ -293,7 +293,7 @@ void ImportIconView::activated(const CamItemInfo& info)
     }
     else
     {
-        //TODO: openInEditor(info);
+        //TODO: openFile(info);
     }
 }
 

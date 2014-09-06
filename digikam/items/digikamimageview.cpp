@@ -324,7 +324,7 @@ void DigikamImageView::activated(const ImageInfo& info)
     }
     else
     {
-        openInEditor(info);
+        openFile(info);
     }
 }
 
@@ -502,9 +502,9 @@ void DigikamImageView::showContextMenu(QContextMenuEvent* event)
     cmhelper.exec(event->globalPos());
 }
 
-void DigikamImageView::openInEditor(const ImageInfo& info)
+void DigikamImageView::openFile(const ImageInfo& info)
 {
-    d->utilities->openInEditor(info, imageInfos(), currentAlbum());
+    d->utilities->openFile(info, imageInfos(), currentAlbum());
 }
 
 void DigikamImageView::insertSelectedToCurrentQueue()

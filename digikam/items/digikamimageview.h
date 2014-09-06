@@ -52,7 +52,7 @@ public:
 
 public Q_SLOTS:
 
-    void openInEditor(const ImageInfo& info);
+    void openFile(const ImageInfo& info);
 
     void insertSelectedToCurrentQueue();
     void insertSelectedToNewQueue();

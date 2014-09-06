@@ -1762,7 +1762,7 @@ void DigikamView::slotEditor()
 
     // the current album is the same for all views
     Album* const currentAlbum = d->iconView->currentAlbum();
-    d->iconView->utilities()->openInEditor(singleInfo, imageInfoList, currentAlbum);
+    d->iconView->utilities()->openFile(singleInfo, imageInfoList, currentAlbum);
 }
 
 void DigikamView::slotLightTable()

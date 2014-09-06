@@ -259,7 +259,7 @@ void ImageViewUtilities::insertSilentToQueueManager(const QList<ImageInfo>& list
     bqmview->loadImageInfos(list, queueid);
 }
 
-void ImageViewUtilities::openInEditor(const ImageInfo& info, const QList<ImageInfo>& allInfosToOpen, Album* currentAlbum)
+void ImageViewUtilities::openFile(const ImageInfo& info, const QList<ImageInfo>& allInfosToOpen, Album* currentAlbum)
 {
     if (info.isNull())
     {
