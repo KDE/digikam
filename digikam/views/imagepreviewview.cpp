@@ -90,7 +90,6 @@ public:
         isValid             = false;
         rotationLock        = false;
         toolBar             = 0;
-        escapePreviewAction = 0;
         prevAction          = 0;
         nextAction          = 0;
         rotLeftAction       = 0;
@@ -112,7 +111,6 @@ public:
 
     ImagePreviewViewItem*  item;
 
-    QAction*               escapePreviewAction;
     QAction*               prevAction;
     QAction*               nextAction;
     QAction*               rotLeftAction;
@@ -160,7 +158,6 @@ ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode)
 
     d->prevAction          = new QAction(SmallIcon("go-previous"),         i18nc("go to previous image", "Back"),  this);
     d->nextAction          = new QAction(SmallIcon("go-next"),             i18nc("go to next image", "Forward"),   this);
-    d->escapePreviewAction = new QAction(SmallIcon("view-list-icons"),     i18n("Escape preview"),                 this);
     d->rotLeftAction       = new QAction(SmallIcon("object-rotate-left"),  i18nc("@info:tooltip", "Rotate Left"),  this);
     d->rotRightAction      = new QAction(SmallIcon("object-rotate-right"), i18nc("@info:tooltip", "Rotate Right"), this);
     d->addPersonAction     = new QAction(SmallIcon("list-add-user"),       i18n("Add a Face Tag"),                 this);
@@ -174,7 +171,6 @@ ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode)
     {
         d->toolBar->addAction(d->prevAction);
         d->toolBar->addAction(d->nextAction);
-        d->toolBar->addAction(d->escapePreviewAction);
     }
 
     d->toolBar->addAction(d->rotLeftAction);
@@ -187,9 +183,6 @@ ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode)
 
     connect(d->nextAction, SIGNAL(triggered()),
             this, SIGNAL(toNextImage()));
-
-    connect(d->escapePreviewAction, SIGNAL(triggered()),
-            this, SIGNAL(signalEscapePreview()));
 
     connect(d->rotLeftAction, SIGNAL(triggered()),
             this, SLOT(slotRotateLeft()));
@@ -342,7 +335,6 @@ void ImagePreviewView::slotShowContextMenu(QGraphicsSceneContextMenuEvent* event
     {
         cmhelper.addAction(d->prevAction, true);
         cmhelper.addAction(d->nextAction, true);
-        cmhelper.addAction(d->escapePreviewAction);
         cmhelper.addGotoMenu(idList);
         cmhelper.addSeparator();
     }
@@ -350,8 +342,8 @@ void ImagePreviewView::slotShowContextMenu(QGraphicsSceneContextMenuEvent* event
     // --------------------------------------------------------
 
     cmhelper.addAction(d->peopleToggleAction, true);
-    cmhelper.addAction(d->addPersonAction, true);
-    cmhelper.addAction(d->forgetFacesAction, true);
+    cmhelper.addAction(d->addPersonAction,    true);
+    cmhelper.addAction(d->forgetFacesAction,  true);
     cmhelper.addSeparator();
 
     // --------------------------------------------------------

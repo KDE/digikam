@@ -59,7 +59,7 @@ MediaPlayerMouseClickFilter::MediaPlayerMouseClickFilter(QObject* const parent)
 
 bool MediaPlayerMouseClickFilter::eventFilter(QObject* obj, QEvent* event)
 {
-    if (event->type() == QEvent::MouseButtonPress)
+    if (event->type() == QEvent::MouseButtonDblClick)
     {
         QMouseEvent* const mouseEvent = dynamic_cast<QMouseEvent*>(event);
 
@@ -106,7 +106,6 @@ public:
     Private() :
         errorView(0),
         playerView(0),
-        escapePreviewAction(0),
         prevAction(0),
         nextAction(0),
         toolBar(0),
@@ -119,7 +118,6 @@ public:
     QFrame*              errorView;
     QFrame*              playerView;
 
-    QAction*             escapePreviewAction;
     QAction*             prevAction;
     QAction*             nextAction;
 
@@ -138,7 +136,6 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
-    d->escapePreviewAction = new QAction(SmallIcon("folder-image"), i18n("Escape preview"),                this);
     d->prevAction          = new QAction(SmallIcon("go-previous"),  i18nc("go to previous image", "Back"), this);
     d->nextAction          = new QAction(SmallIcon("go-next"),      i18nc("go to next image", "Forward"),  this);
 
@@ -188,7 +185,6 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     d->toolBar = new QToolBar(this);
     d->toolBar->addAction(d->prevAction);
     d->toolBar->addAction(d->nextAction);
-    d->toolBar->addAction(d->escapePreviewAction);
 
     setPreviewMode(Private::PlayerView);
 
@@ -211,9 +207,6 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
 
     connect(d->nextAction, SIGNAL(triggered()),
             this, SIGNAL(signalNextItem()));
-
-    connect(d->escapePreviewAction, SIGNAL(triggered()),
-            this, SIGNAL(signalEscapePreview()));
 }
 
 MediaPlayerView::~MediaPlayerView()
