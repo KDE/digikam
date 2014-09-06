@@ -301,12 +301,11 @@ DigikamApp::DigikamApp()
 #ifdef HAVE_BALOO
     //Create BalooWrap object, because it need to register a listener
     // to update digiKam data when changes in Baloo occur
-    BalooWrap* baloo = BalooWrap::instance();
+    BalooWrap* const baloo = BalooWrap::instance();
     Q_UNUSED(baloo);
 #endif //HAVE_BALOO
 
     setAutoSaveSettings(group, true);
-
 
     // Now, enable finished the collection scan as deferred process
     NewItemsFinder* const tool = new NewItemsFinder(NewItemsFinder::ScanDeferredFiles);
@@ -632,34 +631,34 @@ void DigikamApp::setupStatusBar()
 void DigikamApp::setupAccelerators()
 {
     // Action are added by <MainWindow> tag in ui.rc XML file
-    KAction* escapeAction = new KAction(i18n("Exit Preview Mode"), this);
+    KAction* const escapeAction = new KAction(i18n("Exit Preview Mode"), this);
     actionCollection()->addAction("exit_preview_mode", escapeAction);
     escapeAction->setShortcut( KShortcut(Qt::Key_Escape) );
     connect(escapeAction, SIGNAL(triggered()), this, SIGNAL(signalEscapePressed()));
 
-    KAction* nextImageAction = new KAction(i18n("Next Image"), this);
+    KAction* const nextImageAction = new KAction(i18n("Next Image"), this);
     nextImageAction->setIcon(SmallIcon("go-next"));
     actionCollection()->addAction("next_image", nextImageAction);
     nextImageAction->setShortcut(KShortcut(Qt::Key_Space));
     connect(nextImageAction, SIGNAL(triggered()), this, SIGNAL(signalNextItem()));
 
-    KAction* previousImageAction = new KAction(i18n("Previous Image"), this);
+    KAction* const previousImageAction = new KAction(i18n("Previous Image"), this);
     previousImageAction->setIcon(SmallIcon("go-previous"));
     actionCollection()->addAction("previous_image", previousImageAction);
     previousImageAction->setShortcut(KShortcut(Qt::Key_Backspace));
     connect(previousImageAction, SIGNAL(triggered()), this, SIGNAL(signalPrevItem()));
 
-    KAction* altpreviousImageAction = new KAction(i18n("Previous Image"), this);
+    KAction* const altpreviousImageAction = new KAction(i18n("Previous Image"), this);
     actionCollection()->addAction("alt_previous_image_shift_space", altpreviousImageAction);
     altpreviousImageAction->setShortcut( KShortcut(Qt::SHIFT+Qt::Key_Space) );
     connect(altpreviousImageAction, SIGNAL(triggered()), this, SIGNAL(signalPrevItem()));
 
-    KAction* firstImageAction = new KAction(i18n("First Image"), this);
+    KAction* const firstImageAction = new KAction(i18n("First Image"), this);
     actionCollection()->addAction("first_image", firstImageAction);
     firstImageAction->setShortcut(KShortcut(Qt::Key_Home) );
     connect(firstImageAction, SIGNAL(triggered()), this, SIGNAL(signalFirstItem()));
 
-    KAction* lastImageAction = new KAction(i18n("Last Image"), this);
+    KAction* const lastImageAction = new KAction(i18n("Last Image"), this);
     actionCollection()->addAction("last_image", lastImageAction);
     lastImageAction->setShortcut(KShortcut(Qt::Key_End) );
     connect(lastImageAction, SIGNAL(triggered()), this, SIGNAL(signalLastItem()));
@@ -920,7 +919,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    KAction* ltAction = new KAction(KIcon("lighttable"), i18n("Light Table"), this);
+    KAction* const ltAction = new KAction(KIcon("lighttable"), i18n("Light Table"), this);
     ltAction->setShortcut(KShortcut(Qt::Key_L));
     connect(ltAction, SIGNAL(triggered()), d->view, SLOT(slotLightTable()));
     actionCollection()->addAction("light_table", ltAction);
@@ -1078,25 +1077,25 @@ void DigikamApp::setupActions()
 
     d->imageSortAction = new KSelectAction(i18n("&Sort Images"), this);
     d->imageSortAction->setWhatsThis(i18n("The value by which the images in one album are sorted in the thumbnail view"));
-    QSignalMapper* imageSortMapper = new QSignalMapper(this);
+    QSignalMapper* const imageSortMapper = new QSignalMapper(this);
     connect(imageSortMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImages(int)));
     actionCollection()->addAction("image_sort", d->imageSortAction);
 
     // map to ImageSortSettings enum
-    QAction* sortByNameAction = d->imageSortAction->addAction(i18n("By Name"));
-    QAction* sortByPathAction = d->imageSortAction->addAction(i18n("By Path"));
-    QAction* sortByDateAction = d->imageSortAction->addAction(i18n("By Date"));
-    QAction* sortByFileSizeAction = d->imageSortAction->addAction(i18n("By File Size"));
-    QAction* sortByRatingAction = d->imageSortAction->addAction(i18n("By Rating"));
-    QAction* sortByImageSizeAction = d->imageSortAction->addAction(i18n("By Image Size"));
-    QAction* sortByAspectRatioAction = d->imageSortAction->addAction(i18n("By Aspect Ratio"));
+    QAction* const sortByNameAction = d->imageSortAction->addAction(i18n("By Name"));
+    QAction* const sortByPathAction = d->imageSortAction->addAction(i18n("By Path"));
+    QAction* const sortByDateAction = d->imageSortAction->addAction(i18n("By Date"));
+    QAction* const sortByFileSizeAction = d->imageSortAction->addAction(i18n("By File Size"));
+    QAction* const sortByRatingAction = d->imageSortAction->addAction(i18n("By Rating"));
+    QAction* const sortByImageSizeAction = d->imageSortAction->addAction(i18n("By Image Size"));
+    QAction* const sortByAspectRatioAction = d->imageSortAction->addAction(i18n("By Aspect Ratio"));
 
-    connect(sortByNameAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByPathAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByDateAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByFileSizeAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByRatingAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
-    connect(sortByImageSizeAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByNameAction,        SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByPathAction,        SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByDateAction,        SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByFileSizeAction,    SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByRatingAction,      SIGNAL(triggered()), imageSortMapper, SLOT(map()));
+    connect(sortByImageSizeAction,   SIGNAL(triggered()), imageSortMapper, SLOT(map()));
     connect(sortByAspectRatioAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
 
     imageSortMapper->setMapping(sortByNameAction, (int)ImageSortSettings::SortByFileName);
@@ -1111,14 +1110,14 @@ void DigikamApp::setupActions()
 
     d->imageSortOrderAction = new KSelectAction(i18n("Image Sorting &Order"), this);
     d->imageSortOrderAction->setWhatsThis(i18n("Defines whether images are sorted in ascending or descending manner."));
-    QSignalMapper* imageSortOrderMapper = new QSignalMapper(this);
+    QSignalMapper* const imageSortOrderMapper = new QSignalMapper(this);
     connect(imageSortOrderMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImagesOrder(int)));
     actionCollection()->addAction("image_sort_order", d->imageSortOrderAction);
 
-    QAction* sortAscendingAction = d->imageSortOrderAction->addAction(KIcon("view-sort-ascending"), i18n("Ascending"));
-    QAction* sortDescendingAction = d->imageSortOrderAction->addAction(KIcon("view-sort-descending"), i18n("Descending"));
+    QAction* const sortAscendingAction = d->imageSortOrderAction->addAction(KIcon("view-sort-ascending"), i18n("Ascending"));
+    QAction* const sortDescendingAction = d->imageSortOrderAction->addAction(KIcon("view-sort-descending"), i18n("Descending"));
 
-    connect(sortAscendingAction, SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
+    connect(sortAscendingAction,  SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
     connect(sortDescendingAction, SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
 
     imageSortOrderMapper->setMapping(sortAscendingAction, (int)ImageSortSettings::AscendingOrder);
@@ -1128,17 +1127,17 @@ void DigikamApp::setupActions()
 
     d->imageGroupAction = new KSelectAction(i18n("&Group Images"), this);
     d->imageGroupAction->setWhatsThis(i18n("The categories in which the images in the thumbnail view are displayed"));
-    QSignalMapper* imageGroupMapper = new QSignalMapper(this);
+    QSignalMapper* const imageGroupMapper = new QSignalMapper(this);
     connect(imageGroupMapper, SIGNAL(mapped(int)), d->view, SLOT(slotGroupImages(int)));
     actionCollection()->addAction("image_group", d->imageGroupAction);
 
     // map to ImageSortSettings enum
-    QAction* noCategoriesAction  = d->imageGroupAction->addAction(i18n("Flat List"));
-    QAction* groupByAlbumAction  = d->imageGroupAction->addAction(i18n("By Album"));
-    QAction* groupByFormatAction = d->imageGroupAction->addAction(i18n("By Format"));
+    QAction* const noCategoriesAction  = d->imageGroupAction->addAction(i18n("Flat List"));
+    QAction* const groupByAlbumAction  = d->imageGroupAction->addAction(i18n("By Album"));
+    QAction* const groupByFormatAction = d->imageGroupAction->addAction(i18n("By Format"));
 
-    connect(noCategoriesAction, SIGNAL(triggered()), imageGroupMapper, SLOT(map()));
-    connect(groupByAlbumAction, SIGNAL(triggered()), imageGroupMapper, SLOT(map()));
+    connect(noCategoriesAction,  SIGNAL(triggered()), imageGroupMapper, SLOT(map()));
+    connect(groupByAlbumAction,  SIGNAL(triggered()), imageGroupMapper, SLOT(map()));
     connect(groupByFormatAction, SIGNAL(triggered()), imageGroupMapper, SLOT(map()));
 
     imageGroupMapper->setMapping(noCategoriesAction,  (int)ImageSortSettings::OneCategory);
@@ -1149,14 +1148,14 @@ void DigikamApp::setupActions()
 
     d->imageGroupSortOrderAction = new KSelectAction(i18n("Group Sorting Order"), this);
     d->imageGroupSortOrderAction->setWhatsThis(i18n("The sort order of images groups"));
-    QSignalMapper* imageGroupSortOrderMapper = new QSignalMapper(this);
+    QSignalMapper* const imageGroupSortOrderMapper = new QSignalMapper(this);
     connect(imageGroupSortOrderMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImageGroupOrder(int)));
     actionCollection()->addAction("image_group_sort_order", d->imageGroupSortOrderAction);
 
-    QAction* sortGroupsAscending  = d->imageGroupSortOrderAction->addAction(KIcon("view-sort-ascending"), i18n("Ascending"));
-    QAction* sortGroupsDescending = d->imageGroupSortOrderAction->addAction(KIcon("view-sort-descending"), i18n("Descending"));
+    QAction* const sortGroupsAscending  = d->imageGroupSortOrderAction->addAction(KIcon("view-sort-ascending"), i18n("Ascending"));
+    QAction* const sortGroupsDescending = d->imageGroupSortOrderAction->addAction(KIcon("view-sort-descending"), i18n("Descending"));
 
-    connect(sortGroupsAscending, SIGNAL(triggered()), imageGroupSortOrderMapper, SLOT(map()));
+    connect(sortGroupsAscending,  SIGNAL(triggered()), imageGroupSortOrderMapper, SLOT(map()));
     connect(sortGroupsDescending, SIGNAL(triggered()), imageGroupSortOrderMapper, SLOT(map()));
 
     imageGroupSortOrderMapper->setMapping(sortGroupsAscending, (int)ImageSortSettings::AscendingOrder);
@@ -1297,28 +1296,28 @@ void DigikamApp::setupActions()
 
     //------------------------------------------------------------
 
-    KAction* findAction = new KAction(KIcon("system-search"), i18n("Search..."), this);
+    KAction* const findAction = new KAction(KIcon("system-search"), i18n("Search..."), this);
     findAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_F));
     connect(findAction, SIGNAL(triggered()), d->view, SLOT(slotNewKeywordSearch()));
     actionCollection()->addAction("search_quick", findAction);
 
     // -----------------------------------------------------------
 
-    KAction* advFindAction = new KAction(KIcon("system-search"), i18n("Advanced Search..."), this);
+    KAction* const advFindAction = new KAction(KIcon("system-search"), i18n("Advanced Search..."), this);
     advFindAction->setShortcut(KShortcut(Qt::CTRL+Qt::ALT+Qt::Key_F));
     connect(advFindAction, SIGNAL(triggered()), d->view, SLOT(slotNewAdvancedSearch()));
     actionCollection()->addAction("search_advanced", advFindAction);
 
     // -----------------------------------------------------------
 
-    KAction* duplicatesAction = new KAction(KIcon("tools-wizard"), i18n("Find Duplicates..."), this);
+    KAction* const duplicatesAction = new KAction(KIcon("tools-wizard"), i18n("Find Duplicates..."), this);
     duplicatesAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_D));
     connect(duplicatesAction, SIGNAL(triggered()), d->view, SLOT(slotNewDuplicatesSearch()));
     actionCollection()->addAction("find_duplicates", duplicatesAction);
 
     // -----------------------------------------------------------
 
-    KAction* databaseMigrationAction = new KAction(KIcon("server-database"), i18n("Database Migration..."), this);
+    KAction* const databaseMigrationAction = new KAction(KIcon("server-database"), i18n("Database Migration..."), this);
     connect(databaseMigrationAction, SIGNAL(triggered()), this, SLOT(slotDatabaseMigration()));
     actionCollection()->addAction("database_migration", databaseMigrationAction);
 
@@ -1330,7 +1329,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    KAction* cameraAction = new KAction(i18n("Add Camera Manually..."), this);
+    KAction* const cameraAction = new KAction(i18n("Add Camera Manually..."), this);
     connect(cameraAction, SIGNAL(triggered()), this, SLOT(slotSetupCamera()));
     actionCollection()->addAction("camera_add", cameraAction);
 
@@ -1342,9 +1341,11 @@ void DigikamApp::setupActions()
     {
         d->splashScreen->message(i18n("Loading cameras..."));
     }
+
     loadCameras();
 
     // Load Themes
+
     populateThemes();
 
     createGUI(xmlFile());
@@ -1412,7 +1413,7 @@ void DigikamApp::slotAboutToShowBackwardMenu()
 
     for (int i = 0; i < titles.size(); ++i)
     {
-        QAction* action = d->backwardActionMenu->menu()->addAction(titles.at(i), d->backwardSignalMapper, SLOT(map()));
+        QAction* const action = d->backwardActionMenu->menu()->addAction(titles.at(i), d->backwardSignalMapper, SLOT(map()));
         d->backwardSignalMapper->setMapping(action, i + 1);
     }
 }
@@ -1425,7 +1426,7 @@ void DigikamApp::slotAboutToShowForwardMenu()
 
     for (int i = 0; i < titles.size(); ++i)
     {
-        QAction* action = d->forwardActionMenu->menu()->addAction(titles.at(i), d->forwardSignalMapper, SLOT(map()));
+        QAction* const action = d->forwardActionMenu->menu()->addAction(titles.at(i), d->forwardSignalMapper, SLOT(map()));
         d->forwardSignalMapper->setMapping(action, i + 1);
     }
 }
@@ -1691,7 +1692,7 @@ void DigikamApp::slotCameraAdded(CameraType* ctype)
         return;
     }
 
-    KAction* cAction = new KAction(KIcon("camera-photo"), ctype->title(), d->manualCameraActionGroup);
+    KAction* const cAction = new KAction(KIcon("camera-photo"), ctype->title(), d->manualCameraActionGroup);
     cAction->setData(ctype->title());
     actionCollection()->addAction(ctype->title().toUtf8(), cAction);
 
@@ -1715,7 +1716,7 @@ void DigikamApp::slotCameraAutoDetect()
 {
     bool retry = false;
 
-    CameraType* ctype = d->cameraList->autoDetect(retry);
+    CameraType* const ctype = d->cameraList->autoDetect(retry);
 
     if (!ctype && retry)
     {
@@ -1737,8 +1738,8 @@ void DigikamApp::slotOpenCameraUiFromPath(const QString& path)
     }
 
     // the ImportUI will delete itself when it has finished
-    ImportUI* cgui = new ImportUI(this, i18n("Images found in %1", path),
-                                  "directory browse", "Fixed", path, 1);
+    ImportUI* const cgui = new ImportUI(this, i18n("Images found in %1", path),
+                                                   "directory browse", "Fixed", path, 1);
     cgui->show();
 
     connect(cgui, SIGNAL(signalLastDestination(KUrl)),
@@ -1747,7 +1748,7 @@ void DigikamApp::slotOpenCameraUiFromPath(const QString& path)
 
 void DigikamApp::slotOpenManualCamera(QAction* action)
 {
-    CameraType* ctype = d->cameraList->find(action->data().toString());
+    CameraType* const ctype = d->cameraList->find(action->data().toString());
 
     if (ctype)
     {
@@ -1765,8 +1766,8 @@ void DigikamApp::slotOpenManualCamera(QAction* action)
         else
         {
             // the ImportUI will delete itself when it has finished
-            ImportUI* cgui = new ImportUI(this, ctype->title(), ctype->model(),
-                                          ctype->port(), ctype->path(), ctype->startingNumber());
+            ImportUI* const cgui = new ImportUI(this, ctype->title(), ctype->model(),
+                                                ctype->port(), ctype->path(), ctype->startingNumber());
 
             ctype->setCurrentImportUI(cgui);
 
@@ -1817,7 +1818,7 @@ void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
     // if there is already an open ImportUI for the device, show and raise it, and be done
     if (d->cameraUIMap.contains(udi))
     {
-        ImportUI* ui = d->cameraUIMap.value(udi);
+        ImportUI* const ui = d->cameraUIMap.value(udi);
 
         if (ui && !ui->isClosed())
         {
@@ -1841,7 +1842,7 @@ void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
             QString label = labelForSolidCamera(device);
         }
 
-        Solid::Camera* camera = device.as<Solid::Camera>();
+        Solid::Camera* const camera = device.as<Solid::Camera>();
         QList<QVariant> list = camera->driverHandle("gphoto").toList();
 
         // all sanity checks have already been done when creating the action
@@ -1868,8 +1869,8 @@ void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
                      << " camera is: " << model << " at " << port;
 
             // the ImportUI will delete itself when it has finished
-            ImportUI* cgui      = new ImportUI(this, cameraLabel, model, port, "/", 1);
-            d->cameraUIMap[udi] = cgui;
+            ImportUI* const cgui = new ImportUI(this, cameraLabel, model, port, "/", 1);
+            d->cameraUIMap[udi]  = cgui;
 
             cgui->show();
 
@@ -1896,7 +1897,7 @@ void DigikamApp::openSolidUsmDevice(const QString& udi, const QString& givenLabe
     // if there is already an open ImportUI for the device, show and raise it
     if (d->cameraUIMap.contains(udi))
     {
-        ImportUI* ui = d->cameraUIMap.value(udi);
+        ImportUI* const ui = d->cameraUIMap.value(udi);
 
         if (ui && !ui->isClosed())
         {
@@ -1915,7 +1916,7 @@ void DigikamApp::openSolidUsmDevice(const QString& udi, const QString& givenLabe
 
     if ( device.isValid() )
     {
-        Solid::StorageAccess* access = device.as<Solid::StorageAccess>();
+        Solid::StorageAccess* const access = device.as<Solid::StorageAccess>();
 
         if (!access)
         {
@@ -1932,6 +1933,7 @@ void DigikamApp::openSolidUsmDevice(const QString& udi, const QString& givenLabe
             }
 
             d->eventLoop = new QEventLoop(this);
+
             connect(access, SIGNAL(setupDone(Solid::ErrorType,QVariant,QString)),
                     this, SLOT(slotSolidSetupDone(Solid::ErrorType,QVariant,QString)));
 
@@ -1958,9 +1960,9 @@ void DigikamApp::openSolidUsmDevice(const QString& udi, const QString& givenLabe
         }
 
         // the ImportUI will delete itself when it has finished
-        ImportUI* cgui      = new ImportUI(this, i18n("Images on %1", mediaLabel),
-                                           "directory browse", "Fixed", path, 1);
-        d->cameraUIMap[udi] = cgui;
+        ImportUI* const cgui = new ImportUI(this, i18n("Images on %1", mediaLabel),
+                                                      "directory browse", "Fixed", path, 1);
+        d->cameraUIMap[udi]  = cgui;
 
         cgui->show();
 
@@ -1996,7 +1998,7 @@ void DigikamApp::slotSolidDeviceChanged(const QString& udi)
 
 bool DigikamApp::checkSolidCamera(const Solid::Device& cameraDevice)
 {
-    const Solid::Camera* camera = cameraDevice.as<Solid::Camera>();
+    const Solid::Camera* const camera = cameraDevice.as<Solid::Camera>();
 
     if (!camera)
     {
@@ -2037,7 +2039,7 @@ bool DigikamApp::checkSolidCamera(const Solid::Device& cameraDevice)
 
 QString DigikamApp::labelForSolidCamera(const Solid::Device& cameraDevice)
 {
-    QString vendor = cameraDevice.vendor();
+    QString vendor  = cameraDevice.vendor();
     QString product = cameraDevice.product();
 
     if (product == "USB Imaging Interface" || product == "USB Vendor Specific Interface")
@@ -2046,7 +2048,7 @@ QString DigikamApp::labelForSolidCamera(const Solid::Device& cameraDevice)
 
         if (parentUsbDevice.isValid())
         {
-            vendor = parentUsbDevice.vendor();
+            vendor  = parentUsbDevice.vendor();
             product = parentUsbDevice.product();
 
             if (!vendor.isEmpty() && !product.isEmpty())
@@ -2134,7 +2136,7 @@ void DigikamApp::fillSolidMenus()
             iconName = "camera-photo";
         }
 
-        KAction* action = new KAction(label, d->solidCameraActionGroup);
+        KAction* const action = new KAction(label, d->solidCameraActionGroup);
 
         action->setIcon(KIcon(iconName));
         // set data to identify device in action slot slotSolidSetupDevice
@@ -2172,7 +2174,7 @@ void DigikamApp::fillSolidMenus()
             continue;
         }
 
-        const Solid::StorageDrive* drive = driveDevice.as<Solid::StorageDrive>();
+        const Solid::StorageDrive* const drive = driveDevice.as<Solid::StorageDrive>();
 
         QString driveType;
 
@@ -2244,9 +2246,9 @@ void DigikamApp::fillSolidMenus()
             continue;
         }
 
-        bool isCamera                      = accessDevice.is<Solid::Camera>();
-        const Solid::StorageAccess* access = accessDevice.as<Solid::StorageAccess>();
-        const Solid::StorageVolume* volume = volumeDevice.as<Solid::StorageVolume>();
+        bool isCamera                            = accessDevice.is<Solid::Camera>();
+        const Solid::StorageAccess* const access = accessDevice.as<Solid::StorageAccess>();
+        const Solid::StorageVolume* const volume = volumeDevice.as<Solid::StorageVolume>();
 
         if (volume->isIgnored())
         {
@@ -2320,7 +2322,7 @@ void DigikamApp::fillSolidMenus()
             iconName = volumeDevice.icon();
         }
 
-        KAction* action = new KAction(label, d->solidUsmActionGroup);
+        KAction* const action = new KAction(label, d->solidUsmActionGroup);
 
         if (!iconName.isEmpty())
         {
@@ -2347,31 +2349,31 @@ void DigikamApp::fillSolidMenus()
         }
     }
 
+/*
     //TODO: Find best usable solution when no devices are connected: One entry, hide, or disable?
-    /*
+
     // Add one entry telling that no device is available
     if (d->cameraSolidMenu->isEmpty())
     {
-        QAction *action = d->cameraSolidMenu->addAction(i18n("No Camera Connected"));
+        QAction* const action = d->cameraSolidMenu->addAction(i18n("No Camera Connected"));
         action->setEnabled(false);
     }
     if (d->usbMediaMenu->isEmpty())
     {
-        QAction *action = d->usbMediaMenu->addAction(i18n("No Storage Devices Found"));
+        QAction* const action = d->usbMediaMenu->addAction(i18n("No Storage Devices Found"));
         action->setEnabled(false);
     }
     if (d->cardReaderMenu->isEmpty())
     {
-        QAction *action = d->cardReaderMenu->addAction(i18n("No Card Readers Available"));
+        QAction* const action = d->cardReaderMenu->addAction(i18n("No Card Readers Available"));
         action->setEnabled(false);
     }
-    */
-    /*
+
     // hide empty menus
     d->cameraSolidMenu->menuAction()->setVisible(!d->cameraSolidMenu->isEmpty());
     d->usbMediaMenu->menuAction()->setVisible(!d->usbMediaMenu->isEmpty());
     d->cardReaderMenu->menuAction()->setVisible(!d->cardReaderMenu->isEmpty());
-    */
+*/
 
     d->cameraAppearanceTimes = newAppearanceTimes;
 
@@ -2514,6 +2516,7 @@ void DigikamApp::populateThemes()
     {
         d->splashScreen->message(i18n("Loading themes..."));
     }
+
     ThemeManager::instance()->setThemeMenuAction(new KActionMenu(i18n("&Themes"), this));
     ThemeManager::instance()->registerThemeActions(this);
     ThemeManager::instance()->setCurrentTheme(AlbumSettings::instance()->getCurrentTheme());
@@ -2680,7 +2683,7 @@ void DigikamApp::slotImportAddFolders()
         return;
     }
 
-    PAlbum* pAlbum = dynamic_cast<PAlbum*>(album);
+    PAlbum* const pAlbum = dynamic_cast<PAlbum*>(album);
 
     if (!pAlbum)
     {
@@ -2709,16 +2712,17 @@ void DigikamApp::updateCameraMenu()
 {
     d->cameraMenu->menu()->clear();
 
-    foreach(QAction* action, d->solidCameraActionGroup->actions())
+    foreach(QAction* const action, d->solidCameraActionGroup->actions())
     {
         d->cameraMenu->addAction(action);
     }
+
     d->cameraMenu->addSeparator();
 
-    foreach(QAction* action, d->manualCameraActionGroup->actions())
+    foreach(QAction* const action, d->manualCameraActionGroup->actions())
     {
         // remove duplicate entries, prefer manually added cameras
-        foreach(QAction* actionSolid, d->solidCameraActionGroup->actions())
+        foreach(QAction* const actionSolid, d->solidCameraActionGroup->actions())
         {
             if (CameraNameHelper::sameDevices(actionSolid->iconText(), action->iconText()))
             {
@@ -2726,25 +2730,29 @@ void DigikamApp::updateCameraMenu()
                 d->solidCameraActionGroup->removeAction(actionSolid);
             }
         }
+
         d->cameraMenu->addAction(action);
     }
-    d->cameraMenu->addSeparator();
 
+    d->cameraMenu->addSeparator();
     d->cameraMenu->addAction(actionCollection()->action("camera_add"));
 }
 
 void DigikamApp::updateQuickImportAction()
 {
     d->quickImportMenu->menu()->clear();
-    foreach(QAction* action, d->solidCameraActionGroup->actions())
+
+    foreach(QAction* const action, d->solidCameraActionGroup->actions())
     {
         d->quickImportMenu->addAction(action);
     }
-    foreach(QAction* action, d->solidUsmActionGroup->actions())
+
+    foreach(QAction* const action, d->solidUsmActionGroup->actions())
     {
         d->quickImportMenu->addAction(action);
     }
-    foreach(QAction* action, d->manualCameraActionGroup->actions())
+
+    foreach(QAction* const action, d->manualCameraActionGroup->actions())
     {
         d->quickImportMenu->addAction(action);
     }
@@ -2759,14 +2767,15 @@ void DigikamApp::updateQuickImportAction()
 
         QAction* primaryAction = 0;
         QDateTime latest;
-        foreach(QAction* action, d->quickImportMenu->menu()->actions())
+
+        foreach(QAction* const action, d->quickImportMenu->menu()->actions())
         {
             QDateTime appearanceTime = d->cameraAppearanceTimes.value(action->data().toString());
 
             if (latest.isNull() || appearanceTime > latest)
             {
                 primaryAction = action;
-                latest = appearanceTime;
+                latest        = appearanceTime;
             }
         }
 
@@ -2777,13 +2786,14 @@ void DigikamApp::updateQuickImportAction()
 
         connect(d->quickImportMenu, SIGNAL(triggered()),
                 primaryAction, SLOT(trigger()));
+
         d->quickImportMenu->setDelayed(d->quickImportMenu->menu()->actions().size() > 1);
     }
 }
 
 void DigikamApp::setupExifOrientationActions()
 {
-    QSignalMapper* exifOrientationMapper = new QSignalMapper(d->view);
+    QSignalMapper* const exifOrientationMapper = new QSignalMapper(d->view);
 
     connect(exifOrientationMapper, SIGNAL(mapped(int)),
             d->view, SLOT(slotImageExifOrientation(int)));
@@ -2927,14 +2937,14 @@ void DigikamApp::setupImageTransformActions()
     d->imageRotateActionMenu = new KActionMenu(KIcon("object-rotate-right"), i18n("Rotate"), actionCollection());
     d->imageRotateActionMenu->setDelayed(false);
 
-    KAction* left = actionCollection()->addAction("rotate_ccw");
+    KAction* const left = actionCollection()->addAction("rotate_ccw");
     left->setText(i18nc("rotate image left", "Left"));
     left->setShortcut(KShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_Left));
     connect(left, SIGNAL(triggered(bool)),
             this, SLOT(slotTransformAction()));
     d->imageRotateActionMenu->addAction(left);
 
-    KAction* right = actionCollection()->addAction("rotate_cw");
+    KAction* const right = actionCollection()->addAction("rotate_cw");
     right->setText(i18nc("rotate image right", "Right"));
     right->setShortcut(KShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_Right));
     connect(right, SIGNAL(triggered(bool)),
@@ -2948,14 +2958,14 @@ void DigikamApp::setupImageTransformActions()
     d->imageFlipActionMenu = new KActionMenu(KIcon("flip-horizontal"), i18n("Flip"), actionCollection());
     d->imageFlipActionMenu->setDelayed(false);
 
-    KAction* hori = actionCollection()->addAction("flip_horizontal");
+    KAction* const hori = actionCollection()->addAction("flip_horizontal");
     hori->setText(i18n("Horizontally"));
     hori->setShortcut(KShortcut(Qt::CTRL+Qt::Key_Asterisk));
     connect(hori, SIGNAL(triggered(bool)),
             this, SLOT(slotTransformAction()));
     d->imageFlipActionMenu->addAction(hori);
 
-    KAction* verti = actionCollection()->addAction("flip_vertical");
+    KAction* const verti = actionCollection()->addAction("flip_vertical");
     verti->setText(i18n("Vertically"));
     verti->setShortcut(KShortcut(Qt::CTRL+Qt::Key_Slash));
     connect(verti, SIGNAL(triggered(bool)),
@@ -3002,14 +3012,6 @@ KActionMenu* DigikamApp::slideShowMenu() const
 {
     return d->slideShowAction;
 }
-
-#ifdef USE_SCRIPT_IFACE
-void DigikamApp::slotScriptConsole()
-{
-    ScriptIface* w = new ScriptIface();
-    w->show();
-}
-#endif
 
 void DigikamApp::rebuild()
 {
@@ -3127,5 +3129,13 @@ void DigikamApp::slotComponentsInfo()
 {
     showDigikamComponentsInfo();
 }
+
+#ifdef USE_SCRIPT_IFACE
+void DigikamApp::slotScriptConsole()
+{
+    ScriptIface* const w = new ScriptIface();
+    w->show();
+}
+#endif
 
 }  // namespace Digikam

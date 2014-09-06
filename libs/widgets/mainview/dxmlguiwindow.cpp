@@ -146,7 +146,7 @@ void DXmlGuiWindow::createHelpActions(bool coreOptions)
 {
     d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
     connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
-    actionCollection()->addAction("help_librariesinfo", d->libsInfoAction);   
+    actionCollection()->addAction("help_librariesinfo", d->libsInfoAction);
 
     d->about = new DAboutData(this);
     d->about->registerHelpActions();
