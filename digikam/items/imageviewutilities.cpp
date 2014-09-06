@@ -7,7 +7,7 @@
  * Description : Various operations on images
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2002-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmail dot com>
  *
@@ -37,7 +37,7 @@
 #include <kmimetype.h>
 #include <krun.h>
 #include <kservice.h>
-#include <kservicetypetrader.h>
+#include <kmimetypetrader.h>
 #include <kurl.h>
 #include <kwindowsystem.h>
 #include <kdebug.h>
@@ -61,7 +61,7 @@
 namespace Digikam
 {
 
-ImageViewUtilities::ImageViewUtilities(QWidget* parentWidget)
+ImageViewUtilities::ImageViewUtilities(QWidget* const parentWidget)
     : QObject(parentWidget)
 {
     m_widget = parentWidget;
@@ -76,14 +76,14 @@ void ImageViewUtilities::setAsAlbumThumbnail(Album* album, const ImageInfo& imag
 
     if (album->type() == Album::PHYSICAL)
     {
-        PAlbum* palbum = static_cast<PAlbum*>(album);
+        PAlbum* const palbum = static_cast<PAlbum*>(album);
 
         QString err;
         AlbumManager::instance()->updatePAlbumIcon(palbum, imageInfo.id(), err);
     }
     else if (album->type() == Album::TAG)
     {
-        TAlbum* talbum = static_cast<TAlbum*>(album);
+        TAlbum* const talbum = static_cast<TAlbum*>(album);
 
         QString err;
         AlbumManager::instance()->updateTAlbumIcon(talbum, QString(), imageInfo.id(), err);
@@ -109,6 +109,7 @@ bool ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, const Delet
     }
 
     KUrl::List urlList;
+
     foreach(const ImageInfo& info, infos)
     {
         urlList << info.fileUrl();
@@ -117,15 +118,13 @@ bool ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, const Delet
     DeleteDialog dialog(m_widget);
 
     DeleteDialogMode::DeleteMode deleteDialogMode = DeleteDialogMode::NoChoiceTrash;
-    if (deleteMode==ImageViewUtilities::DeletePermanently)
+
+    if (deleteMode == ImageViewUtilities::DeletePermanently)
     {
         deleteDialogMode = DeleteDialogMode::NoChoiceDeletePermanently;
     }
-    if (!dialog.confirmDeleteList(
-                urlList,
-                DeleteDialogMode::Files,
-                deleteDialogMode
-            ))
+
+    if (!dialog.confirmDeleteList(urlList, DeleteDialogMode::Files, deleteDialogMode))
     {
         return false;
     }
@@ -145,6 +144,7 @@ void ImageViewUtilities::deleteImagesDirectly(const QList<ImageInfo>& infos, con
     {
         return;
     }
+
     const bool useTrash = (deleteMode==ImageViewUtilities::DeleteUseTrash);
     DIO::del(infos, useTrash);
 }
@@ -175,7 +175,7 @@ void ImageViewUtilities::createNewAlbumForInfos(const QList<ImageInfo>& infos, A
     QString header(i18n("<p>Please select the destination album from the digiKam library to "
                         "move the selected images into.</p>"));
 
-    Album* album = AlbumSelectDialog::selectAlbum(m_widget, static_cast<PAlbum*>(currentAlbum), header);
+    Album* const album = AlbumSelectDialog::selectAlbum(m_widget, static_cast<PAlbum*>(currentAlbum), header);
 
     if (!album)
     {
@@ -187,22 +187,25 @@ void ImageViewUtilities::createNewAlbumForInfos(const QList<ImageInfo>& infos, A
 
 void ImageViewUtilities::insertToLightTableAuto(const QList<ImageInfo>& all, const QList<ImageInfo>& selected, const ImageInfo& current)
 {
-    ImageInfoList list          = selected;
-    ImageInfo     singleInfo    = current;
+    ImageInfoList list   = selected;
+    ImageInfo singleInfo = current;
+
     if (list.isEmpty() || (list.size() == 1 && LightTableWindow::lightTableWindow()->isEmpty()))
     {
         list = all;
     }
+
     if (singleInfo.isNull() && !list.isEmpty())
     {
         singleInfo = list.first();
     }
+
     insertToLightTable(list, current, list.size() <= 1);
 }
 
 void ImageViewUtilities::insertToLightTable(const QList<ImageInfo>& list, const ImageInfo& current, bool addTo)
 {
-    LightTableWindow* ltview = LightTableWindow::lightTableWindow();
+    LightTableWindow* const ltview = LightTableWindow::lightTableWindow();
 
     // If addTo is false, the light table will be emptied before adding
     // the images.
@@ -226,7 +229,7 @@ void ImageViewUtilities::insertToQueueManager(const QList<ImageInfo>& list, cons
 {
     Q_UNUSED(current);
 
-    QueueMgrWindow* bqmview = QueueMgrWindow::queueManagerWindow();
+    QueueMgrWindow* const bqmview = QueueMgrWindow::queueManagerWindow();
 
     if (bqmview->isHidden())
     {
@@ -252,7 +255,7 @@ void ImageViewUtilities::insertToQueueManager(const QList<ImageInfo>& list, cons
 
 void ImageViewUtilities::insertSilentToQueueManager(const QList<ImageInfo>& list, const ImageInfo& /*current*/, int queueid)
 {
-    QueueMgrWindow* bqmview = QueueMgrWindow::queueManagerWindow();
+    QueueMgrWindow* const bqmview = QueueMgrWindow::queueManagerWindow();
     bqmview->loadImageInfos(list, queueid);
 }
 
@@ -265,13 +268,13 @@ void ImageViewUtilities::openInEditor(const ImageInfo& info, const QList<ImageIn
 
     QFileInfo fi(info.filePath());
     QString imagefilter = AlbumSettings::instance()->getImageFileFilter();
-    imagefilter         += AlbumSettings::instance()->getRawFileFilter();
+    imagefilter        += AlbumSettings::instance()->getRawFileFilter();
 
     // If the current item is not an image file.
     if ( !imagefilter.contains(fi.suffix().toLower()) )
     {
-        KMimeType::Ptr mimePtr      = KMimeType::findByUrl(info.fileUrl(), 0, true, true);
-        const KService::List offers = KServiceTypeTrader::self()->query(mimePtr->name(), "Type == 'Application'");
+        const QString mimeType = KMimeType::findByUrl(info.fileUrl(), 0, true, true)->name();
+        KService::List offers  = KMimeTypeTrader::self()->query(mimeType, "Application");
 
         if (offers.isEmpty())
         {
@@ -286,9 +289,10 @@ void ImageViewUtilities::openInEditor(const ImageInfo& info, const QList<ImageIn
 
     // Run digiKam ImageEditor with all image from current Album.
 
-    ImageWindow* imview = ImageWindow::imageWindow();
+    ImageWindow* const imview = ImageWindow::imageWindow();
 
     imview->disconnect(this);
+
     connect(imview, SIGNAL(signalURLChanged(KUrl)),
             this, SIGNAL(editorCurrentUrlChanged(KUrl)));
 
@@ -310,11 +314,13 @@ void ImageViewUtilities::openInEditor(const ImageInfo& info, const QList<ImageIn
 
 namespace
 {
-bool lessThanByTimeForImageInfo(const ImageInfo& a, const ImageInfo& b)
+
+    bool lessThanByTimeForImageInfo(const ImageInfo& a, const ImageInfo& b)
 {
     return a.dateTime() < b.dateTime();
 }
-}
+
+} // namespace
 
 void ImageViewUtilities::createGroupByTimeFromInfoList(const ImageInfoList& imageInfoList)
 {
@@ -323,11 +329,13 @@ void ImageViewUtilities::createGroupByTimeFromInfoList(const ImageInfoList& imag
     qStableSort(groupingList.begin(), groupingList.end(), lessThanByTimeForImageInfo);
 
     QList<ImageInfo>::iterator it, it2;
+
     for (it = groupingList.begin(); it != groupingList.end(); )
     {
         const ImageInfo& leader = *it;
         QList<ImageInfo> group;
-        QDateTime time = it->dateTime();
+        QDateTime time          = it->dateTime();
+
         for (it2 = it + 1; it2 != groupingList.end(); ++it2)
         {
             if (abs(time.secsTo(it2->dateTime())) < 2)
@@ -339,6 +347,7 @@ void ImageViewUtilities::createGroupByTimeFromInfoList(const ImageInfoList& imag
                 break;
             }
         }
+
         // increment to next item not put in the group
         it = it2;
 
