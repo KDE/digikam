@@ -265,6 +265,7 @@ void ImageWindow::closeEvent(QCloseEvent* e)
     d->rightSideBar->setConfigGroup(KConfigGroup(&group, "Right Sidebar"));
     d->rightSideBar->saveState();
 
+    DXmlGuiWindow::closeEvent(e);
     e->accept();
 }
 

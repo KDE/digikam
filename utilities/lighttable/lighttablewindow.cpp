@@ -245,6 +245,7 @@ void LightTableWindow::closeEvent(QCloseEvent* e)
 
     writeSettings();
 
+    DXmlGuiWindow::closeEvent(e);
     e->accept();
 }
 

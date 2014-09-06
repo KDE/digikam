@@ -101,7 +101,7 @@ public:
     /** Show only if toolbar is hidden */
     QToolButton*             fullScreenBtn;
 
-    /** Used by switchWindowToFullScreen() to manage state of full-screen button on managed window
+    /** Used by slotToggleFullScreen() to manage state of full-screen button on managed window
      */
     bool                     dirtyMainToolBar;
 
@@ -140,6 +140,14 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
 DXmlGuiWindow::~DXmlGuiWindow()
 {
     delete d;
+}
+
+void DXmlGuiWindow::closeEvent(QCloseEvent* e)
+{
+    if(fullScreenIsActive())
+        slotToggleFullScreen(false);
+
+    KXmlGuiWindow::closeEvent(e);
 }
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)

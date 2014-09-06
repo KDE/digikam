@@ -98,11 +98,6 @@ public:
      */
     void readFullScreenSettings(const KConfigGroup& group);
 
-    /** Switch Window 'win' to full screen mode.
-     *  'set' argument will set or reset the fullscreen state of window.
-     */
-    void switchWindowToFullScreen(bool set);
-
     /** Return true if managed window is currently in Full Screen Mode.
      */
     bool fullScreenIsActive() const;
@@ -115,8 +110,9 @@ protected:
 
 protected:
 
-    bool eventFilter(QObject* obj, QEvent* ev);
+    void closeEvent(QCloseEvent* e);
     void keyPressEvent(QKeyEvent* e);
+    bool eventFilter(QObject* obj, QEvent* ev);
 
     /** Re-implement this method if you want to manage sidebars visibility in full-screen mode.
      *  By default this method do nothing.

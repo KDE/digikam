@@ -470,7 +470,8 @@ void DigikamApp::closeEvent(QCloseEvent* e)
     // may show a progress dialog to finish actions
     FileActionMngr::instance()->requestShutDown();
 
-    KXmlGuiWindow::closeEvent(e);
+    DXmlGuiWindow::closeEvent(e);
+    e->accept();
 }
 
 void DigikamApp::autoDetect()
