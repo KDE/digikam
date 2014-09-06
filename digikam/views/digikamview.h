@@ -215,6 +215,7 @@ public Q_SLOTS:
     void slotEditor();
     void slotLightTable();
     void slotQueueMgr();
+    void slotFileWithDefaultApplication();
 
     void slotLeftSideBarActivate(QWidget* widget);
     void slotLeftSideBarActivate(SidebarWidget* widget);

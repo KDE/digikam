@@ -349,6 +349,7 @@ void ImagePreviewView::slotShowContextMenu(QGraphicsSceneContextMenuEvent* event
     // --------------------------------------------------------
 
     cmhelper.addAction("image_edit");
+    cmhelper.addAction("open_with_default_application");
     cmhelper.addServicesMenu(selectedItems);
     cmhelper.addAction("image_rotate");
     cmhelper.addSeparator();

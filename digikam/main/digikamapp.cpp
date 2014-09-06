@@ -907,13 +907,19 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->imageViewAction = new KAction(KIcon("editimage"), i18n("Edit..."), this);
+    d->imageViewAction = new KAction(KIcon("quickopen-file"), i18n("Open..."), this);
     d->imageViewAction->setShortcut(KShortcut(Qt::Key_F4));
-    d->imageViewAction->setWhatsThis(i18n("Open the selected item in the image editor."));
+    d->imageViewAction->setWhatsThis(i18n("Open the selected item."));
     connect(d->imageViewAction, SIGNAL(triggered()), d->view, SLOT(slotImageEdit()));
     actionCollection()->addAction("image_edit", d->imageViewAction);
 
-    KAction* ieAction = new KAction(KIcon("editimage"), i18n("Image Editor"), this);
+    KAction* const openWithAction = new KAction(KIcon("editimage"), i18n("Open With Default Application"), this);
+    openWithAction->setShortcut(KShortcut(Qt::META + Qt::Key_F4));
+    openWithAction->setWhatsThis(i18n("Open the selected item with default assigned application."));
+    connect(openWithAction, SIGNAL(triggered()), d->view, SLOT(slotFileWithDefaultApplication()));
+    actionCollection()->addAction("open_with_default_application", openWithAction);
+
+    KAction* const ieAction = new KAction(KIcon("editimage"), i18n("Image Editor"), this);
     ieAction->setWhatsThis(i18n("Open the image editor."));
     connect(ieAction, SIGNAL(triggered()), d->view, SLOT(slotEditor()));
     actionCollection()->addAction("imageeditor", ieAction);
@@ -1538,12 +1544,6 @@ void DigikamApp::slotImageSelected(const ImageInfoList& selection, const ImageIn
         }
         case 1:
         {
-            // check if the selected item is really an image, if not, disable the edit action
-            if (selection.first().category() != DatabaseItem::Image)
-            {
-                d->imageViewAction->setEnabled(false);
-            }
-
             slotSetCheckedExifOrientationAction(selection.first());
 
             int index = listAll.indexOf(selection.first()) + 1;

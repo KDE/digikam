@@ -273,17 +273,8 @@ void ImageViewUtilities::openFile(const ImageInfo& info, const QList<ImageInfo>&
     // If the current item is not an image file.
     if ( !imagefilter.contains(fi.suffix().toLower()) )
     {
-        const QString mimeType = KMimeType::findByUrl(info.fileUrl(), 0, true, true)->name();
-        KService::List offers  = KMimeTypeTrader::self()->query(mimeType, "Application");
-
-        if (offers.isEmpty())
-        {
-            return;
-        }
-
-        KService::Ptr ptr = offers.first();
-        // Run the dedicated app to show the item.
-        KRun::run(*ptr, info.fileUrl(), m_widget);
+        // Openonly the first one from the list.
+        openFilesWithDefaultApplication(QList<ImageInfo>() << info);
         return;
     }
 
@@ -310,6 +301,29 @@ void ImageViewUtilities::openFile(const ImageInfo& info, const QList<ImageInfo>&
     }
 
     KWindowSystem::activateWindow(imview->winId());
+}
+
+void ImageViewUtilities::openFilesWithDefaultApplication(const QList<ImageInfo>& infos)
+{
+    if (infos.isEmpty())
+    {
+        return;
+    }
+
+    foreach (ImageInfo inf, infos)
+    {
+        const QString mimeType = KMimeType::findByUrl(inf.fileUrl(), 0, true, true)->name();
+        KService::List offers  = KMimeTypeTrader::self()->query(mimeType, "Application");
+
+        if (offers.isEmpty())
+        {
+            return;
+        }
+
+        KService::Ptr ptr = offers.first();
+        // Run the dedicated app to open the item.
+        KRun::run(*ptr, inf.fileUrl(), m_widget);
+    }
 }
 
 namespace

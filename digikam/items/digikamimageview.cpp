@@ -356,6 +356,7 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
     cmhelper.addAction("move_selection_to_album");
     cmhelper.addAction(viewAction);
     cmhelper.addAction("image_edit");
+    cmhelper.addAction("open_with_default_application");
     cmhelper.addServicesMenu(selectedUrls());
     cmhelper.addGotoMenu(selectedImageIDs);
     cmhelper.addAction("image_rotate");

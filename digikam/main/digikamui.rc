@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="218" name="digikam" >
+<gui version="219" name="digikam" >
 
  <MenuBar>
 
@@ -49,6 +49,7 @@
   <Menu name="Image" >
    <text>&amp;Image</text>
      <Action name="image_edit" />
+     <Action name="open_with_default_application" />
    <Separator />
      <Action name="image_rename" />
      <Action name="image_delete" />

@@ -242,6 +242,7 @@ void TableView::showTreeViewContextMenuOnItem(QContextMenuEvent* const event, co
     cmHelper.addAction(viewAction);
     /// @todo image_edit is grayed out on first invocation of the menu for some reason
     cmHelper.addAction("image_edit");
+    cmHelper.addAction("open_with_default_application");
     cmHelper.addServicesMenu(s->tableViewModel->selectedUrls());
     cmHelper.addGotoMenu(selectedImageIds);
     cmHelper.addAction("image_rotate");

@@ -1754,7 +1754,8 @@ void DigikamView::slotImageFindSimilar()
 void DigikamView::slotEditor()
 {
     const ImageInfoList imageInfoList = selectedInfoList();
-    ImageInfo singleInfo = currentInfo();
+    ImageInfo singleInfo              = currentInfo();
+
     if (singleInfo.isNull() && !imageInfoList.isEmpty())
     {
         singleInfo = imageInfoList.first();
@@ -1763,6 +1764,11 @@ void DigikamView::slotEditor()
     // the current album is the same for all views
     Album* const currentAlbum = d->iconView->currentAlbum();
     d->iconView->utilities()->openFile(singleInfo, imageInfoList, currentAlbum);
+}
+
+void DigikamView::slotFileWithDefaultApplication()
+{
+    d->iconView->utilities()->openFilesWithDefaultApplication(selectedInfoList());
 }
 
 void DigikamView::slotLightTable()
@@ -1778,18 +1784,22 @@ void DigikamView::slotQueueMgr()
 {
     ImageInfoList imageInfoList = selectedInfoList();
     ImageInfo     singleInfo    = currentInfo();
+
     if (singleInfo.isNull() && !imageInfoList.isEmpty())
     {
         singleInfo = imageInfoList.first();
     }
+
     if (singleInfo.isNull())
     {
         const ImageInfoList allItems = allInfo();
+
         if (!allItems.isEmpty())
         {
             singleInfo = allItems.first();
         }
     }
+
     d->iconView->utilities()->insertToQueueManager(imageInfoList, singleInfo, true);
 }
 

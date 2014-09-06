@@ -150,4 +150,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 136 ==> 300647 - F5 in preview mode jumps to top of album instead to refresh canvas.
 137 ==> 324028 - Menu bar is missing after closing digiKam in fullscreen mode.
 138 ==> 318831 - Double-clicking on video thumbnail has no effect.
-139 ==> 
+139 ==> 275080 - Add keyboard shortcut for "Open With" default application.
+140 ==> 
