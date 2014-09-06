@@ -42,7 +42,7 @@ class KJob;
 
 namespace KIO
 {
-class Job;
+    class Job;
 }
 
 namespace Digikam
@@ -60,6 +60,8 @@ public:
         DeletePermanently = 1,
         DeleteUseTrash    = 2
     };
+
+public:
 
     explicit ImageViewUtilities(QWidget* const parentWidget);
 

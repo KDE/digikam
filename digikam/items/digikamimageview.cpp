@@ -267,8 +267,7 @@ void DigikamImageView::confirmFaces(const QList<QModelIndex>& indexes, int tagId
 
     if(imageAlbumModel()->currentAlbums().size() == 1)
     {
-        needFastRemove = d->faceMode
-                         && (tagId != imageAlbumModel()->currentAlbums().first()->id());
+        needFastRemove = d->faceMode && (tagId != imageAlbumModel()->currentAlbums().first()->id());
     }
 
     foreach(const QModelIndex& index, indexes)

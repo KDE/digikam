@@ -145,7 +145,7 @@ void ImageViewUtilities::deleteImagesDirectly(const QList<ImageInfo>& infos, con
         return;
     }
 
-    const bool useTrash = (deleteMode==ImageViewUtilities::DeleteUseTrash);
+    const bool useTrash = (deleteMode == ImageViewUtilities::DeleteUseTrash);
     DIO::del(infos, useTrash);
 }
 
@@ -310,7 +310,7 @@ void ImageViewUtilities::openFilesWithDefaultApplication(const QList<ImageInfo>&
         return;
     }
 
-    foreach (ImageInfo inf, infos)
+    foreach (const ImageInfo& inf, infos)
     {
         const QString mimeType = KMimeType::findByUrl(inf.fileUrl(), 0, true, true)->name();
         KService::List offers  = KMimeTypeTrader::self()->query(mimeType, "Application");
@@ -329,7 +329,7 @@ void ImageViewUtilities::openFilesWithDefaultApplication(const QList<ImageInfo>&
 namespace
 {
 
-    bool lessThanByTimeForImageInfo(const ImageInfo& a, const ImageInfo& b)
+bool lessThanByTimeForImageInfo(const ImageInfo& a, const ImageInfo& b)
 {
     return a.dateTime() < b.dateTime();
 }
