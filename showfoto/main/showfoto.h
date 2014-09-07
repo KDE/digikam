@@ -76,6 +76,7 @@ private:
     void applySettings();
 
     void toggleActions(bool val);
+    void addServicesMenu();
 
     void toggleNavigation(int index);
 
@@ -108,6 +109,7 @@ private Q_SLOTS:
     void slotFirst();
     void slotFilePrint();
     void slotFileWithDefaultApplication();
+    void slotOpenWith(QAction* action=0);
 
     void slotOpenFile();
     void slotOpenUrl(const ShowfotoItemInfo& info);

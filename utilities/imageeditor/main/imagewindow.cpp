@@ -673,6 +673,10 @@ void ImageWindow::slotContextMenu()
 {
     if (m_contextMenu)
     {
+        m_contextMenu->addSeparator();
+        addServicesMenu();
+        m_contextMenu->addSeparator();
+
         TagsPopupMenu* assignTagsMenu = 0;
         TagsPopupMenu* removeTagsMenu = 0;
 
@@ -709,10 +713,10 @@ void ImageWindow::slotContextMenu()
 
         // Assign Labels -------------------------------------------
 
-        KMenu* menuLabels           = new KMenu(i18n("Assign Labels"), m_contextMenu);
-        PickLabelMenuAction* pmenu  = new PickLabelMenuAction(m_contextMenu);
-        ColorLabelMenuAction* cmenu = new ColorLabelMenuAction(m_contextMenu);
-        RatingMenuAction* rmenu     = new RatingMenuAction(m_contextMenu);
+        KMenu* const menuLabels           = new KMenu(i18n("Assign Labels"), m_contextMenu);
+        PickLabelMenuAction* const pmenu  = new PickLabelMenuAction(m_contextMenu);
+        ColorLabelMenuAction* const cmenu = new ColorLabelMenuAction(m_contextMenu);
+        RatingMenuAction* const rmenu     = new RatingMenuAction(m_contextMenu);
         menuLabels->addAction(pmenu);
         menuLabels->addAction(cmenu);
         menuLabels->addAction(rmenu);
@@ -1358,7 +1362,8 @@ void ImageWindow::slideShow(SlideShowSettings& settings)
                                      i18n("Preparing slideshow. Please wait..."));
 
         float cnt = (float)d->imageInfoModel->rowCount();
-        int i = 0;
+        int     i = 0;
+
         foreach(const ImageInfo& info, d->imageInfoModel->imageInfos())
         {
             SlidePictureInfo pictInfo;
@@ -1404,7 +1409,7 @@ void ImageWindow::slideShow(SlideShowSettings& settings)
 
     if (!m_cancelSlideShow)
     {
-        SlideShow* slide = new SlideShow(settings);
+        SlideShow* const slide = new SlideShow(settings);
 
         if (settings.startWithCurrent)
         {
@@ -1462,8 +1467,8 @@ void ImageWindow::dropEvent(QDropEvent* e)
         }
 
         QString ATitle;
-        AlbumManager* man  = AlbumManager::instance();
-        PAlbum* palbum     = man->findPAlbum(albumIDs.first());
+        AlbumManager* const man = AlbumManager::instance();
+        PAlbum* const palbum    = man->findPAlbum(albumIDs.first());
 
         if (palbum)
         {
@@ -1476,7 +1481,7 @@ void ImageWindow::dropEvent(QDropEvent* e)
     }
     else if (DAlbumDrag::decode(e->mimeData(), urls, albumID))
     {
-        AlbumManager* man        = AlbumManager::instance();
+        AlbumManager* const man  = AlbumManager::instance();
         QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
         ImageInfoList imageInfoList(itemIDs);
 
@@ -1487,7 +1492,7 @@ void ImageWindow::dropEvent(QDropEvent* e)
         }
 
         QString ATitle;
-        PAlbum* palbum     = man->findPAlbum(albumIDs.first());
+        PAlbum* const palbum = man->findPAlbum(albumIDs.first());
 
         if (palbum)
         {
@@ -1507,7 +1512,7 @@ void ImageWindow::dropEvent(QDropEvent* e)
             return;
         }
 
-        AlbumManager* man        = AlbumManager::instance();
+        AlbumManager* const man  = AlbumManager::instance();
         QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagIDs.first(), true);
         ImageInfoList imageInfoList(itemIDs);
 
@@ -1518,7 +1523,7 @@ void ImageWindow::dropEvent(QDropEvent* e)
         }
 
         QString ATitle;
-        TAlbum* talbum     = man->findTAlbum(tagIDs.first());
+        TAlbum* const talbum = man->findTAlbum(tagIDs.first());
 
         if (talbum)
         {
@@ -1669,6 +1674,16 @@ void ImageWindow::slotAddedDropedItems(QDropEvent* e)
 void ImageWindow::slotFileWithDefaultApplication()
 {
     FileOperation::openFilesWithDefaultApplication(KUrl::List() << d->currentUrl(), this);
+}
+
+void ImageWindow::addServicesMenu()
+{
+    addServicesMenuForUrl(d->currentUrl());
+}
+
+void ImageWindow::slotOpenWith(QAction* action)
+{
+    openWith(d->currentUrl(), action);
 }
 
 }  // namespace Digikam

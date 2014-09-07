@@ -151,4 +151,4 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 137 ==> 324028 - Menu bar is missing after closing digiKam in fullscreen mode.
 138 ==> 318831 - Double-clicking on video thumbnail has no effect.
 139 ==> 275080 - Add keyboard shortcut for "Open With" default application.
-140 ==> 
+140 ==> 115597 - Add "Open With..." option in image editor.

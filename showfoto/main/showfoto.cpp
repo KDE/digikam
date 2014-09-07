@@ -1022,7 +1022,12 @@ void ShowFoto::slotDeleteCurrentItemResult(KJob* job)
 
 void ShowFoto::slotContextMenu()
 {
-    m_contextMenu->exec(QCursor::pos());
+    if (m_contextMenu)
+    {
+        m_contextMenu->addSeparator();
+        addServicesMenu();
+        m_contextMenu->exec(QCursor::pos());
+    }
 }
 
 void ShowFoto::slideShow(Digikam::SlideShowSettings& settings)
@@ -1259,7 +1264,8 @@ void ShowFoto::slotDroppedUrls(const KUrl::List& droppedUrls)
     {
         KUrl::List validUrls;
 
-        foreach (KUrl url, droppedUrls) {
+        foreach (KUrl url, droppedUrls)
+        {
             if(url.isValid())
             {
                 validUrls << url;
@@ -1337,6 +1343,16 @@ void ShowFoto::slotAddedDropedItems(QDropEvent* e)
 void ShowFoto::slotFileWithDefaultApplication()
 {
     Digikam::FileOperation::openFilesWithDefaultApplication(KUrl::List() << d->thumbBar->currentUrl(), this);
+}
+
+void ShowFoto::addServicesMenu()
+{
+    addServicesMenuForUrl(d->thumbBar->currentUrl());
+}
+
+void ShowFoto::slotOpenWith(QAction* action)
+{
+    openWith(d->thumbBar->currentUrl(), action);
 }
 
 }   // namespace ShowFoto

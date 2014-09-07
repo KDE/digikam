@@ -411,8 +411,8 @@ private:
 
 private:
 
-    class ContextMenuHelperPriv;
-    ContextMenuHelperPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

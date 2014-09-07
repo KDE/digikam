@@ -105,6 +105,8 @@ private:
     bool saveNewVersionAs();
     bool saveNewVersionInFormat(const QString& format);
 
+    void addServicesMenu();
+
     KUrl saveDestinationUrl();
     bool hasOriginalToRestore();
     DImageHistory resolvedImageHistory(const DImageHistory& history);
@@ -178,6 +180,7 @@ private Q_SLOTS:
     void slotSetupChanged();
 
     void slotAddedDropedItems(QDropEvent*);
+    void slotOpenWith(QAction* action=0);
 
 private:
 

@@ -67,6 +67,7 @@
 #include "abstractalbummodel.h"
 #include "databaseaccess.h"
 #include "digikamapp.h"
+#include "fileoperation.h"
 #include "imageinfo.h"
 #include "imagefiltermodel.h"
 #include "lighttablewindow.h"
@@ -83,11 +84,11 @@
 namespace Digikam
 {
 
-class ContextMenuHelper::ContextMenuHelperPriv
+class ContextMenuHelper::Private
 {
 public:
 
-    explicit ContextMenuHelperPriv(ContextMenuHelper* const q) :
+    explicit Private(ContextMenuHelper* const q) :
         gotoAlbumAction(0),
         gotoDateAction(0),
         setThumbnailAction(0),
@@ -150,7 +151,8 @@ public:
 };
 
 ContextMenuHelper::ContextMenuHelper(QMenu* const parent, KActionCollection* const actionCollection)
-    : QObject(parent), d(new ContextMenuHelperPriv(this))
+    : QObject(parent),
+      d(new Private(this))
 {
     d->parent = parent;
 
@@ -258,54 +260,7 @@ void ContextMenuHelper::addServicesMenu(const KUrl::List& selectedItems)
 {
     setSelectedItems(selectedItems);
 
-    // This code is inspired by KonqMenuActions:
-    // kdebase/apps/lib/konq/konq_menuactions.cpp
-
-    QStringList    mimeTypes;
-    KService::List offers;
-
-    foreach(const KUrl& item, d->selectedItems)
-    {
-        const QString mimeType = KMimeType::findByUrl(item, 0, true, true)->name();
-
-        if (!mimeTypes.contains(mimeType))
-        {
-            mimeTypes << mimeType;
-        }
-    }
-
-    if (!mimeTypes.isEmpty())
-    {
-        // Query trader
-        const QString firstMimeType      = mimeTypes.takeFirst();
-        const QString constraintTemplate = "'%1' in ServiceTypes";
-        QStringList constraints;
-
-        foreach(const QString& mimeType, mimeTypes)
-        {
-            constraints << constraintTemplate.arg(mimeType);
-        }
-
-        offers = KMimeTypeTrader::self()->query(firstMimeType, "Application", constraints.join(" and "));
-
-        // remove duplicate service entries
-        QSet<QString> seenApps;
-
-        for (KService::List::iterator it = offers.begin(); it != offers.end();)
-        {
-            const QString appName((*it)->name());
-
-            if (!seenApps.contains(appName))
-            {
-                seenApps.insert(appName);
-                ++it;
-            }
-            else
-            {
-                it = offers.erase(it);
-            }
-        }
-    }
+    KService::List offers = FileOperation::servicesForOpenWith(selectedItems);
 
     if (!offers.isEmpty())
     {
@@ -315,7 +270,7 @@ void ContextMenuHelper::addServicesMenu(const KUrl::List& selectedItems)
         QAction* const serviceAction = servicesMenu->menuAction();
         serviceAction->setText(i18n("Open With"));
 
-        foreach(KService::Ptr service, offers)
+        foreach(const KService::Ptr& service, offers)
         {
             QString name          = service->name().replace('&', "&&");
             QAction* const action = servicesMenu->addAction(name);

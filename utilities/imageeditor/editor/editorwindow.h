@@ -206,6 +206,9 @@ protected:
     void resetOrigin();
     void resetOriginSwitchFile();
 
+    void addServicesMenuForUrl(const KUrl& url);
+    void openWith(const KUrl& url, QAction* action);
+
     EditorStackView*           editorStackView()  const;
     ExposureSettingsContainer* exposureSettings() const;
     KCategorizedView*          createToolSelectionView();
@@ -232,6 +235,8 @@ protected:
     virtual void setupConnections() = 0;
     virtual void setupActions() = 0;
     virtual void setupUserArea() = 0;
+
+    virtual void addServicesMenu() = 0;
 
     virtual VersionManager* versionManager() const;
 
@@ -296,6 +301,7 @@ protected Q_SLOTS:
     virtual void slotContextMenu() = 0;
     virtual void slotRevert() = 0;
     virtual void slotAddedDropedItems(QDropEvent* e) = 0;
+    virtual void slotOpenWith(QAction* action=0) = 0;
 
 private Q_SLOTS:
 

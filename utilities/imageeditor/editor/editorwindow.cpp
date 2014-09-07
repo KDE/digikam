@@ -79,6 +79,7 @@
 #include <klocale.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
+#include <kopenwithdialog.h>
 #include <knotifyconfigwidget.h>
 #include <kprotocolinfo.h>
 #include <kpushbutton.h>
@@ -97,6 +98,7 @@
 #include <ktoolbar.h>
 #include <ktoolbarpopupaction.h>
 #include <ktoolinvocation.h>
+#include <krun.h>
 #include <kurlcombobox.h>
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
@@ -2947,6 +2949,86 @@ void EditorWindow::customizedFullScreenMode(bool set)
     toolBarMenuAction()->setEnabled(!set);
     d->showMenuBarAction->setEnabled(!set);
     m_showBarAction->setEnabled(!set);
+}
+
+void EditorWindow::addServicesMenuForUrl(const KUrl& url)
+{
+    KService::List offers = FileOperation::servicesForOpenWith(url);
+
+    kDebug() << offers.count() << " services found to open " << url;
+
+    if (!offers.isEmpty())
+    {
+        KMenu* const servicesMenu = new KMenu(this);
+        qDeleteAll(servicesMenu->actions());
+
+        QAction* const serviceAction = servicesMenu->menuAction();
+        serviceAction->setText(i18n("Open With"));
+
+        foreach(const KService::Ptr& service, offers)
+        {
+            QString name          = service->name().replace('&', "&&");
+            QAction* const action = servicesMenu->addAction(name);
+            action->setIcon(KIcon(service->icon()));
+            action->setData(service->name());
+            d->servicesMap[name]  = service;
+        }
+
+        servicesMenu->addSeparator();
+        servicesMenu->addAction(i18n("Other..."));
+
+        m_contextMenu->addAction(serviceAction);
+
+        connect(servicesMenu, SIGNAL(triggered(QAction*)),
+                this, SLOT(slotOpenWith(QAction*)));
+    }
+    else
+    {
+        QAction* const serviceAction = new QAction(i18n("Open With..."), this);
+        m_contextMenu->addAction(serviceAction);
+
+        connect(serviceAction, SIGNAL(triggered()),
+                this, SLOT(slotOpenWith()));
+    }
+}
+
+void EditorWindow::openWith(const KUrl& url, QAction* action)
+{
+    KService::Ptr service;
+    QString name = action ? action->data().toString() : QString();
+
+    if (name.isEmpty())
+    {
+        QPointer<KOpenWithDialog> dlg = new KOpenWithDialog(url);
+
+        if (dlg->exec() != KOpenWithDialog::Accepted)
+        {
+            delete dlg;
+            return;
+        }
+
+        service = dlg->service();
+
+        if (!service)
+        {
+            // User entered a custom command
+            if (!dlg->text().isEmpty())
+            {
+                KRun::run(dlg->text(), url, this);
+            }
+
+            delete dlg;
+            return;
+        }
+
+        delete dlg;
+    }
+    else
+    {
+        service = d->servicesMap[name];
+    }
+
+    KRun::run(*service, url, this);
 }
 
 }  // namespace Digikam

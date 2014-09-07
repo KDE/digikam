@@ -31,6 +31,7 @@
 // KDE includes
 
 #include <kurl.h>
+#include <kservice.h>
 
 // Local includes
 
@@ -53,6 +54,10 @@ namespace FileOperation
     /** Open file urls to default application relevant of file type-mimes desktop configration.
      */
     DIGIKAM_EXPORT void openFilesWithDefaultApplication(const KUrl::List& urls, QWidget* const parentWidget);
+
+    /** Return list of service available on desktop to open files.
+     */
+    DIGIKAM_EXPORT KService::List servicesForOpenWith(const KUrl::List& urls);
 
 } // namespace FileOperation
 

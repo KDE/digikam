@@ -43,7 +43,6 @@
 #include <kde_file.h>
 #include <kmimetype.h>
 #include <krun.h>
-#include <kservice.h>
 #include <kmimetypetrader.h>
 
 // Local includes
@@ -164,6 +163,60 @@ void FileOperation::openFilesWithDefaultApplication(const KUrl::List& urls, QWid
         // Run the dedicated app to open the item.
         KRun::run(*it.key(), it.value(), parentWidget);
     }
+}
+
+KService::List FileOperation::servicesForOpenWith(const KUrl::List& urls)
+{
+    // This code is inspired by KonqMenuActions:
+    // kdebase/apps/lib/konq/konq_menuactions.cpp
+
+    QStringList    mimeTypes;
+    KService::List offers;
+
+    foreach(const KUrl& item, urls)
+    {
+        const QString mimeType = KMimeType::findByUrl(item, 0, true, true)->name();
+
+        if (!mimeTypes.contains(mimeType))
+        {
+            mimeTypes << mimeType;
+        }
+    }
+
+    if (!mimeTypes.isEmpty())
+    {
+        // Query trader
+        const QString firstMimeType      = mimeTypes.takeFirst();
+        const QString constraintTemplate = "'%1' in ServiceTypes";
+        QStringList constraints;
+
+        foreach(const QString& mimeType, mimeTypes)
+        {
+            constraints << constraintTemplate.arg(mimeType);
+        }
+
+        offers = KMimeTypeTrader::self()->query(firstMimeType, "Application", constraints.join(" and "));
+
+        // remove duplicate service entries
+        QSet<QString> seenApps;
+
+        for (KService::List::iterator it = offers.begin(); it != offers.end();)
+        {
+            const QString appName((*it)->name());
+
+            if (!seenApps.contains(appName))
+            {
+                seenApps.insert(appName);
+                ++it;
+            }
+            else
+            {
+                it = offers.erase(it);
+            }
+        }
+    }
+
+    return offers;
 }
 
 }  // namespace Digikam
