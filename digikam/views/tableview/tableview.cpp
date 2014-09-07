@@ -80,23 +80,23 @@ TableView::TableView(
     d(new Private()),
     s(new TableViewShared())
 {
-    s->isActive = false;
-    s->tableView = this;
-    s->thumbnailLoadThread = new ThumbnailLoadThread(this);
-    s->imageFilterModel = dynamic_cast<ImageFilterModel*>(imageFilterModel);
-    s->imageModel = dynamic_cast<ImageModel*>(imageFilterModel->sourceModel());
+    s->isActive                  = false;
+    s->tableView                 = this;
+    s->thumbnailLoadThread       = new ThumbnailLoadThread(this);
+    s->imageFilterModel          = dynamic_cast<ImageFilterModel*>(imageFilterModel);
+    s->imageModel                = dynamic_cast<ImageModel*>(imageFilterModel->sourceModel());
     s->imageFilterSelectionModel = selectionModel;
-    s->columnFactory = new TableViewColumnFactory(s.data(), this);
+    s->columnFactory             = new TableViewColumnFactory(s.data(), this);
 
     QVBoxLayout* const vbox1 = new QVBoxLayout();
 
-    s->tableViewModel = new TableViewModel(s.data(), this);
-    s->tableViewSelectionModel = new QItemSelectionModel(s->tableViewModel);
-    s->tableViewSelectionModelSyncer= new TableViewSelectionModelSyncer(s.data(), this);
-    s->treeView = new TableViewTreeView(s.data(), this);
+    s->tableViewModel                = new TableViewModel(s.data(), this);
+    s->tableViewSelectionModel       = new QItemSelectionModel(s->tableViewModel);
+    s->tableViewSelectionModelSyncer = new TableViewSelectionModelSyncer(s.data(), this);
+    s->treeView                      = new TableViewTreeView(s.data(), this);
     s->treeView->installEventFilter(this);
 
-    d->imageViewUtilities = new ImageViewUtilities(this);
+    d->imageViewUtilities            = new ImageViewUtilities(this);
 
     connect(s->treeView, SIGNAL(activated(QModelIndex)),
             this, SLOT(slotItemActivated(QModelIndex)));
@@ -134,15 +134,15 @@ TableView::~TableView()
 
 void TableView::doLoadState()
 {
-    const KConfigGroup group = getConfigGroup();
+    const KConfigGroup group                        = getConfigGroup();
 
     TableViewColumnProfile profile;
-    const KConfigGroup groupCurrentProfile = group.group("Current Profile");
+    const KConfigGroup groupCurrentProfile          = group.group("Current Profile");
     profile.loadSettings(groupCurrentProfile);
     s->tableViewModel->loadColumnProfile(profile);
 
-    const TableViewModel::GroupingMode groupingMode =
-        TableViewModel::GroupingMode(group.readEntry<int>("Grouping mode", int(TableViewModel::GroupingShowSubItems)));
+    const TableViewModel::GroupingMode groupingMode = TableViewModel::GroupingMode(group.readEntry<int>("Grouping mode",
+                                                      int(TableViewModel::GroupingShowSubItems)));
     s->tableViewModel->setGroupingMode(groupingMode);
 
     if (!profile.headerState.isEmpty())
@@ -155,8 +155,8 @@ void TableView::doSaveState()
 {
     KConfigGroup group = getConfigGroup();
 
-    TableViewColumnProfile profile = s->tableViewModel->getColumnProfile();
-    profile.headerState = s->treeView->header()->saveState();
+    TableViewColumnProfile profile   = s->tableViewModel->getColumnProfile();
+    profile.headerState              = s->treeView->header()->saveState();
     KConfigGroup groupCurrentProfile = group.group("Current Profile");
     profile.saveSettings(groupCurrentProfile);
     group.writeEntry("Grouping mode", int(s->tableViewModel->groupingMode()));
@@ -173,12 +173,13 @@ void TableView::slotItemActivated(const QModelIndex& tableViewIndex)
 bool TableView::eventFilter(QObject* watched, QEvent* event)
 {
     // we are looking for context menu events for the table view
-    if ((watched==s->treeView)&&(event->type()==QEvent::ContextMenu))
+    if ((watched == s->treeView) && (event->type() == QEvent::ContextMenu))
     {
         QContextMenuEvent* const e = static_cast<QContextMenuEvent*>(event);
         e->accept();
 
         const QModelIndex contextMenuIndex = s->treeView->indexAt(e->pos());
+
         if (contextMenuIndex.isValid())
         {
             showTreeViewContextMenuOnItem(e, contextMenuIndex);
@@ -242,7 +243,6 @@ void TableView::showTreeViewContextMenuOnItem(QContextMenuEvent* const event, co
     cmHelper.addAction(viewAction);
     /// @todo image_edit is grayed out on first invocation of the menu for some reason
     cmHelper.addAction("image_edit");
-    cmHelper.addAction("open_with_default_application");
     cmHelper.addServicesMenu(s->tableViewModel->selectedUrls());
     cmHelper.addGotoMenu(selectedImageIds);
     cmHelper.addAction("image_rotate");
@@ -272,35 +272,48 @@ void TableView::showTreeViewContextMenuOnItem(QContextMenuEvent* const event, co
 
     connect(&cmHelper, SIGNAL(signalAssignColorLabel(int)),
             this, SLOT(slotAssignColorLabelToSelected(int)));
+
     connect(&cmHelper, SIGNAL(signalAssignPickLabel(int)),
             this, SLOT(slotAssignPickLabelToSelected(int)));
+
     connect(&cmHelper, SIGNAL(signalAssignRating(int)),
             this, SLOT(slotAssignRatingToSelected(int)));
+
     connect(&cmHelper, SIGNAL(signalAssignTag(int)),
             this, SLOT(slotAssignTagToSelected(int)));
+
     connect(&cmHelper, SIGNAL(signalRemoveTag(int)),
             this, SLOT(slotRemoveTagFromSelected(int)));
+
     connect(&cmHelper, SIGNAL(signalAddToExistingQueue(int)),
             this, SLOT(slotInsertSelectedToExistingQueue(int)));
+
     connect(&cmHelper, SIGNAL(signalPopupTagsView()),
             this, SIGNAL(signalPopupTagsView()));
+
     connect(&cmHelper, SIGNAL(signalGotoTag(int)),
             this, SIGNAL(signalGotoTagAndImageRequested(int)));
+
     connect(&cmHelper, SIGNAL(signalGotoAlbum(ImageInfo)),
             this, SIGNAL(signalGotoAlbumAndImageRequested(ImageInfo)));
+
     connect(&cmHelper, SIGNAL(signalGotoDate(ImageInfo)),
             this, SIGNAL(signalGotoDateAndImageRequested(ImageInfo)));
+
     connect(&cmHelper, SIGNAL(signalSetThumbnail(ImageInfo)),
             this, SLOT(slotSetAsAlbumThumbnail(ImageInfo)));
+
     connect(&cmHelper, SIGNAL(signalCreateGroup()),
             this, SLOT(slotCreateGroupFromSelection()));
+
     connect(&cmHelper, SIGNAL(signalRemoveFromGroup()),
             this, SLOT(slotRemoveSelectedFromGroup()));
+
     connect(&cmHelper, SIGNAL(signalUngroup()),
             this, SLOT(slotUngroupSelected()));
+
     connect(&cmHelper, SIGNAL(signalCreateGroupByTime()),
             this, SLOT(slotCreateGroupByTimeFromSelection()));
-
 
     QAction* const choice = cmHelper.exec(event->globalPos());
 
@@ -320,7 +333,8 @@ QList<ImageInfo> TableView::selectedImageInfos() const
 QList<ImageInfo> TableView::selectedImageInfosCurrentFirst() const
 {
     QModelIndexList selectedIndexes = s->tableViewSelectionModel->selectedRows();
-    const QModelIndex cIndex = s->tableViewSelectionModel->currentIndex();
+    const QModelIndex cIndex        = s->tableViewSelectionModel->currentIndex();
+
     if (!selectedIndexes.isEmpty())
     {
         if (selectedIndexes.first()!=cIndex)
@@ -360,9 +374,9 @@ void TableView::slotRemoveTagFromSelected(const int tagID)
 
 void TableView::setThumbnailSize(const ThumbnailSize& size)
 {
-    d->thumbnailSize = size;
-
+    d->thumbnailSize                            = size;
     const QList<TableViewColumn*> columnObjects = s->tableViewModel->getColumnObjects();
+
     Q_FOREACH(TableViewColumn* const iColumn, columnObjects)
     {
         iColumn->updateThumbnailSize();
@@ -377,10 +391,10 @@ ThumbnailSize TableView::getThumbnailSize() const
 QList<qlonglong> TableView::selectedImageIdsCurrentFirst() const
 {
     const QModelIndexList selectedIndexes = s->tableViewSelectionModel->selectedRows();
-    QList<qlonglong> selectedImageIds =  s->tableViewModel->imageIds(selectedIndexes);
+    QList<qlonglong> selectedImageIds     =  s->tableViewModel->imageIds(selectedIndexes);
+    const QModelIndex currentIndex        = s->tableViewSelectionModel->currentIndex();
+    qlonglong currentId                   = s->tableViewModel->imageId(currentIndex);
 
-    const QModelIndex currentIndex = s->tableViewSelectionModel->currentIndex();
-    qlonglong currentId = s->tableViewModel->imageId(currentIndex);
     if (currentId>=0)
     {
         if (selectedImageIds.first()!=currentId)
@@ -395,7 +409,6 @@ QList<qlonglong> TableView::selectedImageIdsCurrentFirst() const
 
 void TableView::slotInsertSelectedToExistingQueue(const int queueId)
 {
-    kDebug()<<"_________________________"<<queueId;
     const ImageInfoList imageInfoList = selectedImageInfos();
 
     if (!imageInfoList.isEmpty())
@@ -407,6 +420,7 @@ void TableView::slotInsertSelectedToExistingQueue(const int queueId)
 void TableView::slotSetAsAlbumThumbnail(const ImageInfo& info)
 {
     Album* const theCurrentAlbum = currentAlbum();
+
     if (!theCurrentAlbum)
     {
         return;
@@ -423,6 +437,7 @@ Album* TableView::currentAlbum()
     {
         return 0;
     }
+
     if(albumModel->currentAlbums().isEmpty())
     {
         return 0;
@@ -479,7 +494,7 @@ void TableView::slotUngroupSelected()
 void TableView::slotCreateGroupFromSelection()
 {
     const QList<ImageInfo> selectedInfos = selectedImageInfos();
-    const ImageInfo groupLeader = currentInfo();
+    const ImageInfo groupLeader          = currentInfo();
     FileActionMngr::instance()->addToGroup(groupLeader, selectedInfos);
 }
 
@@ -497,32 +512,32 @@ QList<QAction*> TableView::getExtraGroupingActions(QObject* const parentObject) 
 
     KAction* const actionHideGrouped = new KAction(i18n("Hide grouped items"), parentObject);
     actionHideGrouped->setCheckable(true);
-    actionHideGrouped->setChecked(currentGroupingMode==TableViewModel::GroupingHideGrouped);
-    actionHideGrouped->setData(
-            QVariant::fromValue<TableViewModel::GroupingMode>(TableViewModel::GroupingHideGrouped)
-        );
+    actionHideGrouped->setChecked(currentGroupingMode == TableViewModel::GroupingHideGrouped);
+    actionHideGrouped->setData(QVariant::fromValue<TableViewModel::GroupingMode>(TableViewModel::GroupingHideGrouped));
+
     connect(actionHideGrouped, SIGNAL(triggered(bool)),
             this, SLOT(slotGroupingModeActionTriggered()));
+
     actionList << actionHideGrouped;
 
     KAction* const actionIgnoreGrouping = new KAction(i18n("Ignore grouping"), parentObject);
     actionIgnoreGrouping->setCheckable(true);
-    actionIgnoreGrouping->setChecked(currentGroupingMode==TableViewModel::GroupingIgnoreGrouping);
-    actionIgnoreGrouping->setData(
-            QVariant::fromValue<TableViewModel::GroupingMode>(TableViewModel::GroupingIgnoreGrouping)
-        );
+    actionIgnoreGrouping->setChecked(currentGroupingMode == TableViewModel::GroupingIgnoreGrouping);
+    actionIgnoreGrouping->setData(QVariant::fromValue<TableViewModel::GroupingMode>(TableViewModel::GroupingIgnoreGrouping));
+
     connect(actionIgnoreGrouping, SIGNAL(triggered(bool)),
             this, SLOT(slotGroupingModeActionTriggered()));
+
     actionList << actionIgnoreGrouping;
 
     KAction* const actionShowSubItems = new KAction(i18n("Show grouping in tree"), parentObject);
     actionShowSubItems->setCheckable(true);
-    actionShowSubItems->setChecked(currentGroupingMode==TableViewModel::GroupingShowSubItems);
-    actionShowSubItems->setData(
-            QVariant::fromValue<TableViewModel::GroupingMode>(TableViewModel::GroupingShowSubItems)
-        );
+    actionShowSubItems->setChecked(currentGroupingMode == TableViewModel::GroupingShowSubItems);
+    actionShowSubItems->setData(QVariant::fromValue<TableViewModel::GroupingMode>(TableViewModel::GroupingShowSubItems));
+
     connect(actionShowSubItems, SIGNAL(triggered(bool)),
             this, SLOT(slotGroupingModeActionTriggered()));
+
     actionList << actionShowSubItems;
 
     return actionList;
@@ -531,6 +546,7 @@ QList<QAction*> TableView::getExtraGroupingActions(QObject* const parentObject) 
 void TableView::slotGroupingModeActionTriggered()
 {
     const QAction* const senderAction = qobject_cast<QAction*>(sender());
+
     if (!senderAction)
     {
         return;
@@ -544,6 +560,7 @@ KUrl::List TableView::allUrls() const
 {
     const ImageInfoList allInfo = s->tableViewModel->allImageInfo();
     KUrl::List resultList;
+
     Q_FOREACH(const ImageInfo& info, allInfo)
     {
         resultList << info.fileUrl();
@@ -565,15 +582,16 @@ int TableView::numberOfSelectedItems() const
 void TableView::slotGoToRow(const int rowNumber, const bool relativeMove)
 {
     int nextDeepRowNumber = rowNumber;
+
     if (relativeMove)
     {
         const QModelIndex currentTableViewIndex = s->tableViewSelectionModel->currentIndex();
-        const int currentDeepRowNumber = s->tableViewModel->indexToDeepRowNumber(currentTableViewIndex);
-
-        nextDeepRowNumber+= currentDeepRowNumber;
+        const int currentDeepRowNumber          = s->tableViewModel->indexToDeepRowNumber(currentTableViewIndex);
+        nextDeepRowNumber                      += currentDeepRowNumber;
     }
 
     const QModelIndex nextIndex = s->tableViewModel->deepRowIndex(nextDeepRowNumber);
+
     if (nextIndex.isValid())
     {
         const QItemSelection rowSelection = s->tableViewSelectionModelSyncer->targetIndexToRowItemSelection(nextIndex);
@@ -585,15 +603,18 @@ void TableView::slotGoToRow(const int rowNumber, const bool relativeMove)
 ImageInfo TableView::deepRowImageInfo(const int rowNumber, const bool relative) const
 {
     int targetRowNumber = rowNumber;
+
     if (relative)
     {
         const QModelIndex& currentTableViewIndex = s->tableViewSelectionModel->currentIndex();
+
         if (!currentTableViewIndex.isValid())
         {
             return ImageInfo();
         }
+
         const int currentDeepRowNumber = s->tableViewModel->indexToDeepRowNumber(currentTableViewIndex);
-        targetRowNumber+= currentDeepRowNumber;
+        targetRowNumber               += currentDeepRowNumber;
     }
 
     const QModelIndex targetIndex = s->tableViewModel->deepRowIndex(targetRowNumber);
@@ -602,9 +623,9 @@ ImageInfo TableView::deepRowImageInfo(const int rowNumber, const bool relative) 
 
 ImageInfo TableView::nextInfo() const
 {
-    const QModelIndex cIndex = s->tableViewSelectionModel->currentIndex();
+    const QModelIndex cIndex       = s->tableViewSelectionModel->currentIndex();
     const int currentDeepRowNumber = s->tableViewModel->indexToDeepRowNumber(cIndex);
-    const int nextDeepRowNumber = currentDeepRowNumber + 1;
+    const int nextDeepRowNumber    = currentDeepRowNumber + 1;
 
     if (nextDeepRowNumber>=s->tableViewModel->deepRowCount())
     {
@@ -617,8 +638,8 @@ ImageInfo TableView::nextInfo() const
 
 ImageInfo TableView::previousInfo() const
 {
-    const QModelIndex cIndex = s->tableViewSelectionModel->currentIndex();
-    const int currentDeepRowNumber = s->tableViewModel->indexToDeepRowNumber(cIndex);
+    const QModelIndex cIndex        = s->tableViewSelectionModel->currentIndex();
+    const int currentDeepRowNumber  = s->tableViewModel->indexToDeepRowNumber(cIndex);
     const int previousDeepRowNumber = currentDeepRowNumber - 1;
 
     if (previousDeepRowNumber<0)
@@ -633,6 +654,7 @@ ImageInfo TableView::previousInfo() const
 void TableView::slotSetCurrentWhenAvailable(const qlonglong id)
 {
     const QModelIndex idx = s->tableViewModel->indexFromImageId(id, 0);
+
     if (!idx.isValid())
     {
         /// @todo Actually buffer this request until the model is fully populated
@@ -650,19 +672,20 @@ void TableView::slotSetCurrentWhenAvailable(const qlonglong id)
 void TableView::slotAwayFromSelection()
 {
     QModelIndexList selection = s->tableViewSelectionModel->selectedRows(0);
+
     if (selection.isEmpty())
     {
         return;
     }
 
     const QModelIndex firstIndex = s->tableViewModel->deepRowIndex(0);
-    const QModelIndex lastIndex = s->tableViewModel->deepRowIndex(-1);
+    const QModelIndex lastIndex  = s->tableViewModel->deepRowIndex(-1);
 
     if (selection.contains(firstIndex) && selection.contains(lastIndex))
     {
         // both the first and the last index are selected, we have to
         // select an index inbetween
-        const int nextFreeDeepRow= s->tableViewModel->firstDeepRowNotInList(selection);
+        const int nextFreeDeepRow = s->tableViewModel->firstDeepRowNotInList(selection);
 
         if (nextFreeDeepRow<0)
         {
@@ -671,29 +694,26 @@ void TableView::slotAwayFromSelection()
         }
         else
         {
-            const QModelIndex nextFreeIndex = s->tableViewModel->deepRowIndex(nextFreeDeepRow);
+            const QModelIndex nextFreeIndex         = s->tableViewModel->deepRowIndex(nextFreeDeepRow);
             s->tableViewSelectionModel->setCurrentIndex(nextFreeIndex, QItemSelectionModel::ClearAndSelect);
-            const QItemSelection nextFreeIndexAsRow =
-                    s->tableViewSelectionModelSyncer->targetIndexToRowItemSelection(nextFreeIndex);
+            const QItemSelection nextFreeIndexAsRow = s->tableViewSelectionModelSyncer->targetIndexToRowItemSelection(nextFreeIndex);
             s->tableViewSelectionModel->select(nextFreeIndexAsRow, QItemSelectionModel::ClearAndSelect);
         }
     }
     else if (selection.contains(lastIndex))
     {
-        const int firstSelectedRowNumber = s->tableViewModel->indexToDeepRowNumber(selection.first());
-        const QModelIndex newIndex = s->tableViewModel->deepRowIndex(firstSelectedRowNumber-1);
+        const int firstSelectedRowNumber   = s->tableViewModel->indexToDeepRowNumber(selection.first());
+        const QModelIndex newIndex         = s->tableViewModel->deepRowIndex(firstSelectedRowNumber-1);
         s->tableViewSelectionModel->setCurrentIndex(newIndex, QItemSelectionModel::ClearAndSelect);
-        const QItemSelection newIndexAsRow =
-                s->tableViewSelectionModelSyncer->targetIndexToRowItemSelection(newIndex);
+        const QItemSelection newIndexAsRow = s->tableViewSelectionModelSyncer->targetIndexToRowItemSelection(newIndex);
         s->tableViewSelectionModel->select(newIndexAsRow, QItemSelectionModel::ClearAndSelect);
     }
     else
     {
-        const int lastSelectedRowNumber = s->tableViewModel->indexToDeepRowNumber(selection.last());
-        const QModelIndex newIndex = s->tableViewModel->deepRowIndex(lastSelectedRowNumber+1);
+        const int lastSelectedRowNumber    = s->tableViewModel->indexToDeepRowNumber(selection.last());
+        const QModelIndex newIndex         = s->tableViewModel->deepRowIndex(lastSelectedRowNumber+1);
         s->tableViewSelectionModel->setCurrentIndex(newIndex, QItemSelectionModel::ClearAndSelect);
-        const QItemSelection newIndexAsRow =
-                s->tableViewSelectionModelSyncer->targetIndexToRowItemSelection(newIndex);
+        const QItemSelection newIndexAsRow = s->tableViewSelectionModelSyncer->targetIndexToRowItemSelection(newIndex);
         s->tableViewSelectionModel->select(newIndexAsRow, QItemSelectionModel::ClearAndSelect);
     }
 }
@@ -707,11 +727,14 @@ void TableView::invertSelection()
 {
     const int deepRowCount = s->tableViewModel->deepRowCount();
     QList<int> rowsToSelect;
-    int lastSelectedRow = -1;
+    int lastSelectedRow    = -1;
+
     /// @todo Create a DeepRowIterator because there is a lot of overhead here
+
     for (int i = 0; i<deepRowCount; ++i)
     {
         const QModelIndex iIndex = s->tableViewModel->deepRowIndex(i);
+
         if (s->tableViewSelectionModel->isSelected(iIndex))
         {
             if (i-1>lastSelectedRow)
@@ -721,9 +744,11 @@ void TableView::invertSelection()
                     rowsToSelect << j;
                 }
             }
+
             lastSelectedRow = i;
         }
     }
+
     if (lastSelectedRow+1<deepRowCount)
     {
         for (int j=lastSelectedRow+1; j<deepRowCount; ++j)
@@ -733,10 +758,11 @@ void TableView::invertSelection()
     }
 
     s->tableViewSelectionModel->clearSelection();
+
     Q_FOREACH(const int i, rowsToSelect)
     {
         const QModelIndex iIndex = s->tableViewModel->deepRowIndex(i);
-        const QItemSelection is = s->tableViewSelectionModelSyncer->targetIndexToRowItemSelection(iIndex);
+        const QItemSelection is  = s->tableViewSelectionModelSyncer->targetIndexToRowItemSelection(iIndex);
         s->tableViewSelectionModel->select(is, QItemSelectionModel::Select);
     }
 }
@@ -757,4 +783,4 @@ void TableView::slotSetActive(const bool isActive)
     }
 }
 
-} /* namespace Digikam */
+} // namespace Digikam

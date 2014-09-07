@@ -59,26 +59,25 @@ class TableView : public QWidget, public StateSavingObject
 
 public:
 
-    explicit TableView(
-            QItemSelectionModel* const selectionModel,
-            KCategorizedSortFilterProxyModel* const imageFilterModel,
-            QWidget* const parent
-        );
+    explicit TableView(QItemSelectionModel* const selectionModel,
+                       KCategorizedSortFilterProxyModel* const imageFilterModel,
+                       QWidget* const parent);
+
     virtual ~TableView();
 
     void setThumbnailSize(const ThumbnailSize& size);
-    ThumbnailSize getThumbnailSize() const;
-    QList<qlonglong> selectedImageIdsCurrentFirst() const;
-    QList<ImageInfo> selectedImageInfos() const;
+    ThumbnailSize getThumbnailSize()                  const;
+    QList<qlonglong> selectedImageIdsCurrentFirst()   const;
+    QList<ImageInfo> selectedImageInfos()             const;
     QList<ImageInfo> selectedImageInfosCurrentFirst() const;
     ImageInfo currentInfo();
-    ImageInfoList allInfo() const;
-    KUrl::List allUrls() const;
-    KUrl::List selectedUrls() const;
+    ImageInfoList allInfo()     const;
+    KUrl::List allUrls()        const;
+    KUrl::List selectedUrls()   const;
     int numberOfSelectedItems() const;
+    ImageInfo nextInfo()        const;
+    ImageInfo previousInfo()    const;
     ImageInfo deepRowImageInfo(const int rowNumber, const bool relative) const;
-    ImageInfo nextInfo() const;
-    ImageInfo previousInfo() const;
     void selectAll();
     void clearSelection();
     void invertSelection();
@@ -138,6 +137,6 @@ private:
     const QScopedPointer<TableViewShared> s;
 };
 
-} /* namespace Digikam */
+} // namespace Digikam
 
 #endif // TABLEVIEW_H
