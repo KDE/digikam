@@ -35,10 +35,10 @@
 
 // local includes
 
-#include <databaseinfocontainers.h>
+#include "databaseinfocontainers.h"
 #include "imagepropertiestab.h"
-#include <dmetadata.h>
-#include <imageinfo.h>
+#include "dmetadata.h"
+#include "imageinfo.h"
 
 namespace Digikam
 {

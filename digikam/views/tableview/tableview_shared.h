@@ -43,23 +43,23 @@ class TableViewShared
 {
 public:
 
-    ImageModel* imageModel;
-    ImageFilterModel* imageFilterModel;
-    QItemSelectionModel* imageFilterSelectionModel;
-    ThumbnailLoadThread* thumbnailLoadThread;
+    ImageModel*                    imageModel;
+    ImageFilterModel*              imageFilterModel;
+    QItemSelectionModel*           imageFilterSelectionModel;
+    ThumbnailLoadThread*           thumbnailLoadThread;
 
-    TableView* tableView;
-    TableViewTreeView* treeView;
-    TableViewModel* tableViewModel;
-    QItemSelectionModel* tableViewSelectionModel;
+    TableView*                     tableView;
+    TableViewTreeView*             treeView;
+    TableViewModel*                tableViewModel;
+    QItemSelectionModel*           tableViewSelectionModel;
 
     TableViewSelectionModelSyncer* tableViewSelectionModelSyncer;
-    TableViewColumnFactory* columnFactory;
-    TableViewItemDelegate* itemDelegate;
+    TableViewColumnFactory*        columnFactory;
+    TableViewItemDelegate*         itemDelegate;
 
-    bool isActive;
+    bool                           isActive;
 };
 
-} /* namespace Digikam */
+} // namespace Digikam
 
 #endif // TABLEVIEW_SHARED_H

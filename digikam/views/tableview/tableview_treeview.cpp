@@ -64,9 +64,9 @@ public:
     {
     }
 
-    int headerContextMenuActiveColumn;
-    KAction* actionHeaderContextMenuRemoveColumn;
-    KAction* actionHeaderContextMenuConfigureColumn;
+    int           headerContextMenuActiveColumn;
+    KAction*      actionHeaderContextMenuRemoveColumn;
+    KAction*      actionHeaderContextMenuConfigureColumn;
     ThumbnailSize dragDropThumbnailSize;
 };
 

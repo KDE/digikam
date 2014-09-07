@@ -34,6 +34,6 @@ namespace Digikam
 namespace TableViewColumns
 {
 
-} /* namespace TableViewColumns */
+} // namespace TableViewColumns
 
-} /* namespace Digikam */
+} // namespace Digikam

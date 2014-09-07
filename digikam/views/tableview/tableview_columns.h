@@ -34,4 +34,3 @@
 #include "tableview_column_thumbnail.h"
 
 #endif // TABLEVIEW_COLUMNS_H
-

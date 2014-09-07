@@ -34,7 +34,6 @@
 #include <kaction.h>
 #include <kmenu.h>
 #include <klinkitemselectionmodel.h>
-#include <boost/concept_check.hpp>
 
 // local includes
 

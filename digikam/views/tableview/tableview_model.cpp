@@ -45,11 +45,12 @@
 #include "imagefiltermodel.h"
 #include "imagefiltersettings.h"
 #include "imageinfo.h"
-#ifdef DIGIKAM_ENABLE_MODELTEST
-#include "modeltest/modeltest.h"
-#endif // DIGIKAM_ENABLE_MODELTEST
 #include "tableview_columnfactory.h"
 #include "tableview_selection_model_syncer.h"
+
+#ifdef DIGIKAM_ENABLE_MODELTEST
+#   include "modeltest/modeltest.h"
+#endif // DIGIKAM_ENABLE_MODELTEST
 
 #define ASSERT_MODEL(index, modelPointer) if (index.isValid()) { Q_ASSERT(index.model()==modelPointer); }
 
@@ -61,7 +62,6 @@ TableViewModel::Item::Item()
     parent(0),
     children()
 {
-
 }
 
 TableViewModel::Item::~Item()
@@ -1580,4 +1580,3 @@ int TableViewModel::findChildSortedPosition(TableViewModel::Item* const parentIt
 }
 
 } /* namespace Digikam */
-

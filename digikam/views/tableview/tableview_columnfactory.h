@@ -29,7 +29,6 @@
 #include <QHash>
 #include <QStringList>
 #include <QWidget>
-// #include <QModelIndex>
 
 // KDE includes
 
@@ -37,7 +36,6 @@
 
 // local includes
 
-// #include "imagefiltermodel.h"
 #include "tableview_model.h"
 #include "tableview_shared.h"
 

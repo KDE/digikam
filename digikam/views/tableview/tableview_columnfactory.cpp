@@ -51,12 +51,10 @@ TableViewColumn::TableViewColumn(
     s(tableViewShared),
     configuration(pConfiguration)
 {
-
 }
 
 TableViewColumn::~TableViewColumn()
 {
-
 }
 
 TableViewColumnFactory::TableViewColumnFactory(TableViewShared* const tableViewShared, QObject* parent)

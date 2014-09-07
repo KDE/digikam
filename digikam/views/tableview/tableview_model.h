@@ -27,9 +27,10 @@
 
 #include <QAbstractItemModel>
 #include <QSortFilterProxyModel>
-#include <kurl.h>
 
 // KDE includes
+
+#include <kurl.h>
 
 // local includes
 
@@ -199,4 +200,3 @@ private:
 Q_DECLARE_METATYPE(Digikam::TableViewModel::GroupingMode)
 
 #endif // TABLEVIEW_MODEL_H
-

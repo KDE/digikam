@@ -30,7 +30,6 @@
 // KDE includes
 
 #include <klocale.h>
-#include <boost/graph/graph_concepts.hpp>
 
 // local includes
 

@@ -63,12 +63,10 @@ TableViewItemDelegate::TableViewItemDelegate(TableViewShared* const tableViewSha
   : QItemDelegate(parent),
     s(tableViewShared)
 {
-
 }
 
 TableViewItemDelegate::~TableViewItemDelegate()
 {
-
 }
 
 void TableViewItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& tableViewModelIndex) const
