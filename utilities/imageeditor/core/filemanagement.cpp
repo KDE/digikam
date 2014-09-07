@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-12-10
- * Description : file input output management
+ * Description : misc file operation methods
  *
  * Copyright (C) 2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -39,6 +39,10 @@
 
 #include <kdebug.h>
 #include <kde_file.h>
+#include <kmimetype.h>
+#include <krun.h>
+#include <kservice.h>
+#include <kmimetypetrader.h>
 
 // Local includes
 
@@ -116,6 +120,29 @@ bool FileManagement::localFileRename(const QString& source, const QString& orgPa
 #endif // Q_OS_WIN
 
     return true;
+}
+
+void FileManagement::openFilesWithDefaultApplication(const KUrl::List& urls, QWidget* const parentWidget)
+{
+    if (urls.isEmpty())
+    {
+        return;
+    }
+
+    foreach (const KUrl& url, urls)
+    {
+        const QString mimeType = KMimeType::findByUrl(url, 0, true, true)->name();
+        KService::List offers  = KMimeTypeTrader::self()->query(mimeType, "Application");
+
+        if (offers.isEmpty())
+        {
+            return;
+        }
+
+        KService::Ptr ptr = offers.first();
+        // Run the dedicated app to open the item.
+        KRun::run(*ptr, url, parentWidget);
+    }
 }
 
 }  // namespace Digikam

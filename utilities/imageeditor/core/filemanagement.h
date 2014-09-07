@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2008-12-10
- * Description : file input output management
+ * Description : misc file operation methods
  *
  * Copyright (C) 2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -27,6 +27,11 @@
 // Qt includes
 
 #include <QString>
+#include <QWidget>
+
+// KDE includes
+
+#include <kurl.h>
 
 // Local includes
 
@@ -43,6 +48,10 @@ namespace FileManagement
      *  Return true if operation is completed.
      */
     DIGIKAM_EXPORT bool localFileRename(const QString& source, const QString& orgPath, const QString& destPath);
+
+    /** Open file urls to default application relevant of file type-mimes.
+     */
+    DIGIKAM_EXPORT void openFilesWithDefaultApplication(const KUrl::List& urls, QWidget* const parentWidget);
 
 } // namespace FileManagement
 

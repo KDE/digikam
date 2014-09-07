@@ -503,7 +503,7 @@ void DigikamImageView::showContextMenu(QContextMenuEvent* event)
 
 void DigikamImageView::openFile(const ImageInfo& info)
 {
-    d->utilities->openFile(info, imageInfos(), currentAlbum());
+    d->utilities->openInfos(info, imageInfos(), currentAlbum());
 }
 
 void DigikamImageView::insertSelectedToCurrentQueue()

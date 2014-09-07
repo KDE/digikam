@@ -57,6 +57,7 @@
 #include "queuemgrwindow.h"
 #include "thumbnailloadthread.h"
 #include "fileactionmngr.h"
+#include "filemanagement.h"
 
 namespace Digikam
 {
@@ -259,7 +260,7 @@ void ImageViewUtilities::insertSilentToQueueManager(const QList<ImageInfo>& list
     bqmview->loadImageInfos(list, queueid);
 }
 
-void ImageViewUtilities::openFile(const ImageInfo& info, const QList<ImageInfo>& allInfosToOpen, Album* currentAlbum)
+void ImageViewUtilities::openInfos(const ImageInfo& info, const QList<ImageInfo>& allInfosToOpen, Album* currentAlbum)
 {
     if (info.isNull())
     {
@@ -274,7 +275,7 @@ void ImageViewUtilities::openFile(const ImageInfo& info, const QList<ImageInfo>&
     if ( !imagefilter.contains(fi.suffix().toLower()) )
     {
         // Openonly the first one from the list.
-        openFilesWithDefaultApplication(QList<ImageInfo>() << info);
+        openInfosWithDefaultApplication(QList<ImageInfo>() << info);
         return;
     }
 
@@ -303,27 +304,21 @@ void ImageViewUtilities::openFile(const ImageInfo& info, const QList<ImageInfo>&
     KWindowSystem::activateWindow(imview->winId());
 }
 
-void ImageViewUtilities::openFilesWithDefaultApplication(const QList<ImageInfo>& infos)
+void ImageViewUtilities::openInfosWithDefaultApplication(const QList<ImageInfo>& infos)
 {
     if (infos.isEmpty())
     {
         return;
     }
 
+    KUrl::List urls;
+
     foreach (const ImageInfo& inf, infos)
     {
-        const QString mimeType = KMimeType::findByUrl(inf.fileUrl(), 0, true, true)->name();
-        KService::List offers  = KMimeTypeTrader::self()->query(mimeType, "Application");
-
-        if (offers.isEmpty())
-        {
-            return;
-        }
-
-        KService::Ptr ptr = offers.first();
-        // Run the dedicated app to open the item.
-        KRun::run(*ptr, inf.fileUrl(), m_widget);
+        urls << inf.fileUrl();
     }
+
+    FileManagement::openFilesWithDefaultApplication(urls, m_widget);
 }
 
 namespace

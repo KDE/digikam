@@ -1763,17 +1763,17 @@ void DigikamView::slotEditor()
 
     // the current album is the same for all views
     Album* const currentAlbum = d->iconView->currentAlbum();
-    d->iconView->utilities()->openFile(singleInfo, imageInfoList, currentAlbum);
+    d->iconView->utilities()->openInfos(singleInfo, imageInfoList, currentAlbum);
 }
 
 void DigikamView::slotFileWithDefaultApplication()
 {
-    d->iconView->utilities()->openFilesWithDefaultApplication(selectedInfoList());
+    d->iconView->utilities()->openInfosWithDefaultApplication(selectedInfoList());
 }
 
 void DigikamView::slotLightTable()
 {
-    const ImageInfoList allInfoList = allInfo();
+    const ImageInfoList allInfoList  = allInfo();
     const ImageInfoList selectedList = selectedInfoList();
     const ImageInfo currentImageInfo = currentInfo();
 
