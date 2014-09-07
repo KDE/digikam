@@ -50,7 +50,7 @@ namespace FileManagement
      */
     DIGIKAM_EXPORT bool localFileRename(const QString& source, const QString& orgPath, const QString& destPath);
 
-    /** Open file urls to default application relevant of file type-mimes.
+    /** Open file urls to default application relevant of file type-mimes desktop configration.
      */
     DIGIKAM_EXPORT void openFilesWithDefaultApplication(const KUrl::List& urls, QWidget* const parentWidget);
 
