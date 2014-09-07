@@ -27,7 +27,6 @@
 // Qt includes
 
 #include <QString>
-#include <QWidget>
 
 // KDE includes
 
@@ -36,6 +35,8 @@
 // Local includes
 
 #include "digikam_export.h"
+
+class QWidget;
 
 namespace Digikam
 {

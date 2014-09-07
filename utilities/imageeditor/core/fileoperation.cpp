@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "filemanagement.h"
+#include "fileoperation.h"
 
 // C ANSI includes
 
@@ -34,6 +34,7 @@
 #include <QFileInfo>
 #include <QByteArray>
 #include <QDir>
+#include <QWidget>
 
 // KDE includes
 

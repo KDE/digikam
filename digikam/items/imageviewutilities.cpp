@@ -57,7 +57,7 @@
 #include "queuemgrwindow.h"
 #include "thumbnailloadthread.h"
 #include "fileactionmngr.h"
-#include "filemanagement.h"
+#include "fileoperation.h"
 
 namespace Digikam
 {

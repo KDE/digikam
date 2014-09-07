@@ -52,7 +52,7 @@ extern "C"
 #include "fileactionmngr.h"
 #include "batchtool.h"
 #include "batchtoolsmanager.h"
-#include "filemanagement.h"
+#include "fileoperation.h"
 
 namespace Digikam
 {
