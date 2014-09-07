@@ -274,10 +274,11 @@ void LightTableThumbBar::showContextMenuOnInfo(QContextMenuEvent* e, const Image
     cmhelper.addAction(rightPanelAction, true);
     cmhelper.addSeparator();
     cmhelper.addAction(editAction);
-    cmhelper.addAction(removeAction);
+    cmhelper.addServicesMenu(info.fileUrl());
     cmhelper.addSeparator();
     cmhelper.addLabelsAction();
     cmhelper.addSeparator();
+    cmhelper.addAction(removeAction);
     cmhelper.addAction(clearAllAction, true);
 
     // special action handling --------------------------------
@@ -291,7 +292,7 @@ void LightTableThumbBar::showContextMenuOnInfo(QContextMenuEvent* e, const Image
     connect(&cmhelper, SIGNAL(signalAssignRating(int)),
             this, SLOT(slotAssignRating(int)));
 
-    QAction* choice = cmhelper.exec(e->globalPos());
+    QAction* const choice = cmhelper.exec(e->globalPos());
 
     if (choice)
     {

@@ -49,14 +49,13 @@ public:
     void setOnRightPanel(const ImageInfo& info);
     void setNavigateByPair(bool b);
 
-    bool isOnLeftPanel(const ImageInfo& info)  const;
-    bool isOnRightPanel(const ImageInfo& info) const;
-    int  countItems()                          const;
-
     void removeItemByInfo(const ImageInfo& info);
     void toggleTag(int tagID);
 
-    QModelIndex findItemByInfo(const ImageInfo& info) const;
+    bool isOnLeftPanel(const ImageInfo& info)             const;
+    bool isOnRightPanel(const ImageInfo& info)            const;
+    int  countItems()                                     const;
+    QModelIndex findItemByInfo(const ImageInfo& info)     const;
     ImageInfo   findItemByIndex(const QModelIndex& index) const;
 
 Q_SIGNALS:
