@@ -235,7 +235,7 @@ void Task::run()
     {
         if (DMetadata::hasSidecar(outUrl.toLocalFile()))
         {
-            if (!FileManagement::localFileRename(d->tools.m_itemUrl.toLocalFile(),
+            if (!FileOperation::localFileRename(d->tools.m_itemUrl.toLocalFile(),
                                                DMetadata::sidecarPath(outUrl.toLocalFile()),
                                                DMetadata::sidecarPath(dest.toLocalFile())))
             {
@@ -243,7 +243,7 @@ void Task::run()
             }
         }
 
-        if (!FileManagement::localFileRename(d->tools.m_itemUrl.toLocalFile(), 
+        if (!FileOperation::localFileRename(d->tools.m_itemUrl.toLocalFile(), 
                                            outUrl.toLocalFile(),
                                            dest.toLocalFile()))
         {

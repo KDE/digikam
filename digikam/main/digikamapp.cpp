@@ -913,7 +913,7 @@ void DigikamApp::setupActions()
     connect(d->imageViewAction, SIGNAL(triggered()), d->view, SLOT(slotImageEdit()));
     actionCollection()->addAction("image_edit", d->imageViewAction);
 
-    KAction* const openWithAction = new KAction(KIcon("editimage"), i18n("Open With Default Application"), this);
+    KAction* const openWithAction = new KAction(KIcon("preferences-desktop-filetype-association"), i18n("Open With Default Application"), this);
     openWithAction->setShortcut(KShortcut(Qt::META + Qt::Key_F4));
     openWithAction->setWhatsThis(i18n("Open the selected item with default assigned application."));
     connect(openWithAction, SIGNAL(triggered()), d->view, SLOT(slotFileWithDefaultApplication()));

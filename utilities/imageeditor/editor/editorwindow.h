@@ -285,6 +285,7 @@ protected Q_SLOTS:
     virtual bool saveNewVersionAs() = 0;
     virtual bool saveNewVersionInFormat(const QString&) = 0;
     virtual void slotFilePrint() = 0;
+    virtual void slotFileWithDefaultApplication() = 0;
     virtual void slotDeleteCurrentItem() = 0;
     virtual void slotBackward() = 0;
     virtual void slotForward() = 0;

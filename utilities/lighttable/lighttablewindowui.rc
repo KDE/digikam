@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="205" name="lighttablewindow" >
+<gui version="400" name="lighttablewindow" >
 
 <MenuBar>
 
@@ -13,6 +13,7 @@
         <Action name="lighttable_setitemleft" />
         <Action name="lighttable_setitemright" />
         <Action name="lighttable_edititem" />
+        <Action name="open_with_default_application" />
         <Separator/>
         <Action name="lighttable_removeitem" />
         <Action name="lighttable_clearlist" />

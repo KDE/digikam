@@ -425,6 +425,12 @@ void EditorWindow::setupStandardActions()
     connect(d->filePrintAction, SIGNAL(triggered()), this, SLOT(slotFilePrint()));
     actionCollection()->addAction("editorwindow_print", d->filePrintAction);
 
+    KAction* const openWithAction = new KAction(KIcon("preferences-desktop-filetype-association"), i18n("Open With Default Application"), this);
+    openWithAction->setShortcut(KShortcut(Qt::META + Qt::Key_F4));
+    openWithAction->setWhatsThis(i18n("Open the item with default assigned application."));
+    connect(openWithAction, SIGNAL(triggered()), this, SLOT(slotFileWithDefaultApplication()));
+    actionCollection()->addAction("open_with_default_application", openWithAction);
+
     m_fileDeleteAction = new KAction(KIcon("user-trash"), i18nc("Non-pluralized", "Move to Trash"), this);
     m_fileDeleteAction->setShortcut(KShortcut(Qt::Key_Delete));
     connect(m_fileDeleteAction, SIGNAL(triggered()), this, SLOT(slotDeleteCurrentItem()));
@@ -2534,13 +2540,13 @@ bool EditorWindow::moveLocalFile(const QString& org, const QString& dst)
     {
         QString sidecarDst = DMetadata::sidecarFilePathForFile(dst);
 
-        if (!FileManagement::localFileRename(source, sidecarOrg, sidecarDst))
+        if (!FileOperation::localFileRename(source, sidecarOrg, sidecarDst))
         {
             kError() << "Failed to move sidecar file";
         }
     }
 
-    if (!FileManagement::localFileRename(source, org, dst))
+    if (!FileOperation::localFileRename(source, org, dst))
     {
         KMessageBox::error(this,
                            i18n("Failed to overwrite original file"),

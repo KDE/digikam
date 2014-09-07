@@ -107,6 +107,7 @@ private Q_SLOTS:
     void slotLast();
     void slotFirst();
     void slotFilePrint();
+    void slotFileWithDefaultApplication();
 
     void slotOpenFile();
     void slotOpenUrl(const ShowfotoItemInfo& info);

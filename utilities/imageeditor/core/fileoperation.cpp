@@ -53,7 +53,7 @@
 namespace Digikam
 {
 
-bool FileManagement::localFileRename(const QString& source, const QString& orgPath, const QString& destPath)
+bool FileOperation::localFileRename(const QString& source, const QString& orgPath, const QString& destPath)
 {
     QString dest = destPath;
     // check that we're not replacing a symlink
@@ -124,7 +124,7 @@ bool FileManagement::localFileRename(const QString& source, const QString& orgPa
     return true;
 }
 
-void FileManagement::openFilesWithDefaultApplication(const KUrl::List& urls, QWidget* const parentWidget)
+void FileOperation::openFilesWithDefaultApplication(const KUrl::List& urls, QWidget* const parentWidget)
 {
     if (urls.isEmpty())
     {

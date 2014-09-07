@@ -41,7 +41,7 @@ class QWidget;
 namespace Digikam
 {
 
-namespace FileManagement
+namespace FileOperation
 {
 
     /** This method rename a local file 'orgPath' to 'destPath' with all ACL properties
@@ -54,7 +54,7 @@ namespace FileManagement
      */
     DIGIKAM_EXPORT void openFilesWithDefaultApplication(const KUrl::List& urls, QWidget* const parentWidget);
 
-} // namespace FileManagement
+} // namespace FileOperation
 
 } // namespace Digikam
 

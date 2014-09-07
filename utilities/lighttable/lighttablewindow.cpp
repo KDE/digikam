@@ -67,6 +67,7 @@
 #include "thememanager.h"
 #include "dimg.h"
 #include "dmetadata.h"
+#include "fileoperation.h"
 #include "metadatasettings.h"
 #include "albumsettings.h"
 #include "albummanager.h"
@@ -492,6 +493,12 @@ void LightTableWindow::setupActions()
     d->editItemAction->setEnabled(false);
     connect(d->editItemAction, SIGNAL(triggered()), this, SLOT(slotEditItem()));
     actionCollection()->addAction("lighttable_edititem", d->editItemAction);
+
+    KAction* const openWithAction = new KAction(KIcon("preferences-desktop-filetype-association"), i18n("Open With Default Application"), this);
+    openWithAction->setShortcut(KShortcut(Qt::META + Qt::Key_F4));
+    openWithAction->setWhatsThis(i18n("Open the item with default assigned application."));
+    connect(openWithAction, SIGNAL(triggered()), this, SLOT(slotFileWithDefaultApplication()));
+    actionCollection()->addAction("open_with_default_application", openWithAction);
 
     d->removeItemAction = new KAction(KIcon("list-remove"), i18n("Remove item from LightTable"), this);
     d->removeItemAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_K));
@@ -1660,6 +1667,14 @@ void LightTableWindow::customizedFullScreenMode(bool set)
     d->showMenuBarAction->setEnabled(!set);
     d->showBarAction->setEnabled(!set);
     d->previewView->toggleFullScreen(set);
+}
+
+void LightTableWindow::slotFileWithDefaultApplication()
+{
+    if (!d->thumbView->currentInfo().isNull())
+    {
+        FileOperation::openFilesWithDefaultApplication(KUrl::List() << d->thumbView->currentInfo().fileUrl(), this);
+    }
 }
 
 }  // namespace Digikam

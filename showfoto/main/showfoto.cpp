@@ -103,6 +103,7 @@ extern "C"
 #include "editorcore.h"
 #include "dmetadata.h"
 #include "editorstackview.h"
+#include "fileoperation.h"
 #include "iccsettingscontainer.h"
 #include "imagedialog.h"
 #include "imageplugin.h"
@@ -1331,6 +1332,11 @@ void ShowFoto::slotAddedDropedItems(QDropEvent* e)
     {
         slotDroppedUrls(urls);
     }
+}
+
+void ShowFoto::slotFileWithDefaultApplication()
+{
+    Digikam::FileOperation::openFilesWithDefaultApplication(KUrl::List() << d->thumbBar->currentUrl(), this);
 }
 
 }   // namespace ShowFoto

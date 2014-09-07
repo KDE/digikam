@@ -99,6 +99,7 @@
 #include "dmetadata.h"
 #include "editorstackview.h"
 #include "fileactionmngr.h"
+#include "fileoperation.h"
 #include "globals.h"
 #include "iccsettingscontainer.h"
 #include "imageattributeswatch.h"
@@ -1663,6 +1664,11 @@ void ImageWindow::slotAddedDropedItems(QDropEvent* e)
     {
         loadImageInfos(imgList, imgList.first(), QString());
     }
+}
+
+void ImageWindow::slotFileWithDefaultApplication()
+{
+    FileOperation::openFilesWithDefaultApplication(KUrl::List() << d->currentUrl(), this);
 }
 
 }  // namespace Digikam

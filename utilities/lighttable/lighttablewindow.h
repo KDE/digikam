@@ -153,6 +153,7 @@ private Q_SLOTS:
     void slotComponentsInfo();
     void slotDBStat();
 
+    void slotFileWithDefaultApplication();
     void slotSidebarTabTitleStyleChanged();
     void slotThemeChanged();
 

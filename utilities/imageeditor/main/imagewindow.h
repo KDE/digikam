@@ -141,6 +141,7 @@ private Q_SLOTS:
     void slotFirst();
     void slotLast();
     void slotFilePrint();
+    void slotFileWithDefaultApplication();
 
     void slotToMainWindow();
 
