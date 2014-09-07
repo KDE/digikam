@@ -129,6 +129,10 @@ void FileManagement::openFilesWithDefaultApplication(const KUrl::List& urls, QWi
         return;
     }
 
+    // Create a map of service depending of type mimes to route and start only one instance of relevant application with all same type mime files.
+
+    QMap<KService::Ptr, KUrl::List> servicesMap;
+
     foreach (const KUrl& url, urls)
     {
         const QString mimeType = KMimeType::findByUrl(url, 0, true, true)->name();
@@ -139,9 +143,24 @@ void FileManagement::openFilesWithDefaultApplication(const KUrl::List& urls, QWi
             return;
         }
 
-        KService::Ptr ptr = offers.first();
+        KService::Ptr ptr                                  = offers.first();
+        QMap<KService::Ptr, KUrl::List>::const_iterator it = servicesMap.find(ptr);
+
+        if (it != servicesMap.end())
+        {
+            servicesMap[ptr] << url;
+        }
+        else
+        {
+            servicesMap.insert(ptr, KUrl::List() << url);
+        }
+    }
+
+    for (QMap<KService::Ptr, KUrl::List>::const_iterator it = servicesMap.constBegin();
+         it != servicesMap.constEnd(); ++it)
+    {
         // Run the dedicated app to open the item.
-        KRun::run(*ptr, url, parentWidget);
+        KRun::run(*it.key(), it.value(), parentWidget);
     }
 }
 
