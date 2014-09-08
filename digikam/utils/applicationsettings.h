@@ -147,7 +147,7 @@ public:
 
     QString getRawFileFilter() const;
 
-    bool    addImageFileExtension(const QString& ext);
+    bool addImageFileExtension(const QString& ext);
     QString getAllFileFilter() const;
 
     void setDefaultIconSize(int val);
@@ -306,23 +306,23 @@ public:
     void setToolTipsShowVideoVideoCodec(bool val);
     bool getToolTipsShowVideoVideoCodec() const;
 
-    void    setCurrentTheme(const QString& theme);
+    void setCurrentTheme(const QString& theme);
     QString getCurrentTheme() const;
 
     void setSidebarTitleStyle(KMultiTabBar::KMultiTabBarStyle style);
     KMultiTabBar::KMultiTabBarStyle getSidebarTitleStyle() const;
 
-    void    setUseTrash(bool val);
-    bool    getUseTrash() const;
+    void setUseTrash(bool val);
+    bool getUseTrash() const;
 
-    void    setShowTrashDeleteDialog(bool val);
-    bool    getShowTrashDeleteDialog() const;
+    void setShowTrashDeleteDialog(bool val);
+    bool getShowTrashDeleteDialog() const;
 
-    void    setShowPermanentDeleteDialog(bool val);
-    bool    getShowPermanentDeleteDialog() const;
+    void setShowPermanentDeleteDialog(bool val);
+    bool getShowPermanentDeleteDialog() const;
 
-    void    setApplySidebarChangesDirectly(bool val);
-    bool    getApplySidebarChangesDirectly() const;
+    void setApplySidebarChangesDirectly(bool val);
+    bool getApplySidebarChangesDirectly() const;
 
     void setPreviewLoadFullImageSize(bool val);
     bool getPreviewLoadFullImageSize() const;
@@ -403,8 +403,10 @@ public:
     KConfigGroup generalConfigGroup() const;
 
 
-private slots:
+private Q_SLOTS:
+
     void applyBalooSettings();
+
 private:
 
     ApplicationSettings();
