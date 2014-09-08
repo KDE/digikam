@@ -5,4 +5,11 @@ NEW FEATURES:
 
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
-001 ==> 
+001 ==> 147175 - CANVAS : fit only large images to window.
+002 ==> 282900 - Control click on thumb to deselect resets focus to first photo.
+003 ==> 303179 - Customize status bar.
+004 ==> 229930 - Delete photos with the mouse action not an action icon.
+005 ==> 322053 - Filtered Icon-View and change rating changes all items from non filtered Icon-View.
+006 ==> 137320 - Thumbnails generation process should continue for images that are off-screen [patch].
+007 ==> 110658 - Thumbnails generation process should have low priority.
+008 ==> 
