@@ -36,7 +36,7 @@
 #include "digikamimagedelegate.h"
 #include "facepipeline.h"
 #include "imagerotationoverlay.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 
 namespace Digikam
 {

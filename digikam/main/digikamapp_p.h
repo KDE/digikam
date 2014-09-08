@@ -51,7 +51,7 @@
 
 #include "config-digikam.h"
 #include "albummanager.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "cameralist.h"
 #include "splashscreen.h"
 #include "dzoombar.h"

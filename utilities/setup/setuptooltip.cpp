@@ -40,7 +40,7 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "importsettings.h"
 #include "setupcamera.h"
 #include "dfontselect.h"
@@ -485,7 +485,7 @@ SetupToolTip::~SetupToolTip()
 
 void SetupToolTip::applySettings()
 {
-    AlbumSettings* const settings = AlbumSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
 
     if (!settings)
     {
@@ -558,7 +558,7 @@ void SetupToolTip::applySettings()
 
 void SetupToolTip::readSettings()
 {
-    AlbumSettings* const settings = AlbumSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
 
     if (!settings)
     {

@@ -63,7 +63,7 @@
 #include "albumdb.h"
 #include "album.h"
 #include "albummanager.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "databaseaccess.h"
 
 namespace Digikam
@@ -249,7 +249,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
 
     // Initialize ---------------------------------------------
 
-    AlbumSettings* const settings = AlbumSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
 
     if (settings)
     {
@@ -344,7 +344,7 @@ QString AlbumPropsEdit::category() const
 QStringList AlbumPropsEdit::albumCategories() const
 {
     QStringList Categories;
-    AlbumSettings* const settings = AlbumSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
 
     if (settings)
     {

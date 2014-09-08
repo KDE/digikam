@@ -38,7 +38,7 @@
 
 #include "albummanager.h"
 #include "albummodel.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 
 namespace Digikam
 {
@@ -52,7 +52,7 @@ AlbumFilterModel::AlbumFilterModel(QObject* parent)
     setSortCaseSensitivity(Qt::CaseInsensitive);
 
     // sorting may have changed when the string comparison is different
-    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+    connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(invalidate()));
 
     // dynamicSortFilter does not work well for us: a dataChange may, because of our way of filtering,
@@ -248,12 +248,12 @@ QVariant AlbumFilterModel::dataForCurrentSortRole(const QModelIndex& index) cons
     {
         if(album->type() == Album::PHYSICAL)
         {
-            AlbumSettings::AlbumSortOrder sortRole = AlbumSettings::instance()->getAlbumSortOrder();
+            ApplicationSettings::AlbumSortOrder sortRole = ApplicationSettings::instance()->getAlbumSortOrder();
             switch (sortRole)
             {
-                case AlbumSettings::ByFolder:
+                case ApplicationSettings::ByFolder:
                     return static_cast<PAlbum*>(album)->title();
-                case AlbumSettings::ByDate:
+                case ApplicationSettings::ByDate:
                     return static_cast<PAlbum*>(album)->date();
                 default:
                     return static_cast<PAlbum*>(album)->category();
@@ -371,10 +371,10 @@ bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& righ
     QVariant valLeft  = dataForCurrentSortRole(left);
     QVariant valRight = dataForCurrentSortRole(right);
 
-    AlbumSettings::StringComparisonType strComparisonType = AlbumSettings::instance()->getStringComparisonType();
-    AlbumSettings::AlbumSortOrder role = AlbumSettings::instance()->getAlbumSortOrder();
+    ApplicationSettings::StringComparisonType strComparisonType = ApplicationSettings::instance()->getStringComparisonType();
+    ApplicationSettings::AlbumSortOrder role = ApplicationSettings::instance()->getAlbumSortOrder();
 
-    if((role == AlbumSettings::ByDate || role == AlbumSettings::ByCategory)&&(valLeft == valRight))
+    if((role == ApplicationSettings::ByDate || role == ApplicationSettings::ByCategory)&&(valLeft == valRight))
     {
             return QSortFilterProxyModel::lessThan(left, right);
     }
@@ -383,9 +383,9 @@ bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& righ
     {
         switch (strComparisonType)
         {
-            case AlbumSettings::Natural:
+            case ApplicationSettings::Natural:
                 return KStringHandler::naturalCompare(valLeft.toString(), valRight.toString(), sortCaseSensitivity()) < 0;
-            case AlbumSettings::Normal:
+            case ApplicationSettings::Normal:
             default:
                 return QString::compare(valLeft.toString(), valRight.toString(), sortCaseSensitivity()) < 0;
         }

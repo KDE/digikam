@@ -79,7 +79,7 @@ extern "C"
 
 #include "albumdb.h"
 #include "album.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "albumwatch.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
@@ -1429,7 +1429,7 @@ void AlbumManager::getAlbumItemsCount()
 {
     d->albumItemCountTimer->stop();
 
-    if (!AlbumSettings::instance()->getShowFolderTreeViewItemsCount())
+    if (!ApplicationSettings::instance()->getShowFolderTreeViewItemsCount())
     {
         return;
     }
@@ -1606,7 +1606,7 @@ void AlbumManager::getTagItemsCount()
 {
     d->tagItemCountTimer->stop();
 
-    if (!AlbumSettings::instance()->getShowFolderTreeViewItemsCount())
+    if (!ApplicationSettings::instance()->getShowFolderTreeViewItemsCount())
     {
         return;
     }

@@ -33,7 +33,7 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "databaseface.h"
 #include "faceutils.h"
 #include "imagemodel.h"

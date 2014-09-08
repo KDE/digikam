@@ -64,7 +64,7 @@ public:
 
 private Q_SLOTS:
 
-    void slotAlbumSettingsChanged();
+    void slotApplicationSettingsChanged();
 
 private:
 

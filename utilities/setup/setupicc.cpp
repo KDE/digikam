@@ -67,7 +67,7 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "iccprofileinfodlg.h"
 #include "iccprofilescombobox.h"
 #include "iccsettings.h"

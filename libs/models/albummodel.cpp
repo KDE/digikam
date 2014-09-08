@@ -34,7 +34,7 @@
 // Local includes
 
 #include "albummanager.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "albumthumbnailloader.h"
 
 namespace Digikam
@@ -148,7 +148,7 @@ SearchModel::SearchModel(QObject* const parent)
 
     // handle search icons
     albumSettingsChanged();
-    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+    connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(albumSettingsChanged()));
 }
 
@@ -234,10 +234,10 @@ Album* SearchModel::albumForId(int id) const
 
 void SearchModel::albumSettingsChanged()
 {
-    setPixmapForMapSearches(SmallIcon("applications-internet", AlbumSettings::instance()->getTreeViewIconSize()));
-    setPixmapForHaarSearches(SmallIcon("tools-wizard",         AlbumSettings::instance()->getTreeViewIconSize()));
-    setPixmapForNormalSearches(SmallIcon("edit-find",          AlbumSettings::instance()->getTreeViewIconSize()));
-    setPixmapForTimelineSearches(SmallIcon("chronometer",      AlbumSettings::instance()->getTreeViewIconSize()));
+    setPixmapForMapSearches(SmallIcon("applications-internet", ApplicationSettings::instance()->getTreeViewIconSize()));
+    setPixmapForHaarSearches(SmallIcon("tools-wizard",         ApplicationSettings::instance()->getTreeViewIconSize()));
+    setPixmapForNormalSearches(SmallIcon("edit-find",          ApplicationSettings::instance()->getTreeViewIconSize()));
+    setPixmapForTimelineSearches(SmallIcon("chronometer",      ApplicationSettings::instance()->getTreeViewIconSize()));
 }
 
 // ------------------------------------------------------------------

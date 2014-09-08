@@ -41,7 +41,7 @@
 
 #include "albummanager.h"
 #include "albumpropsedit.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "collectionmanager.h"
 #include "deletedialog.h"
 #include "dio.h"
@@ -103,7 +103,7 @@ PAlbum* AlbumModificationHelper::slotAlbumNew(PAlbum* parent)
         return 0;
     }
 
-    AlbumSettings* settings = AlbumSettings::instance();
+    ApplicationSettings* settings = ApplicationSettings::instance();
 
     if (!settings)
     {
@@ -143,11 +143,11 @@ PAlbum* AlbumModificationHelper::slotAlbumNew(PAlbum* parent)
         return 0;
     }
 
-    QStringList oldAlbumCategories(AlbumSettings::instance()->getAlbumCategoryNames());
+    QStringList oldAlbumCategories(ApplicationSettings::instance()->getAlbumCategoryNames());
 
     if (albumCategories != oldAlbumCategories)
     {
-        AlbumSettings::instance()->setAlbumCategoryNames(albumCategories);
+        ApplicationSettings::instance()->setAlbumCategoryNames(albumCategories);
     }
 
     QString errMsg;
@@ -274,7 +274,7 @@ void AlbumModificationHelper::slotAlbumEdit(PAlbum* album)
     QString     oldComments(album->caption());
     QString     oldCategory(album->category());
     QDate       oldDate(album->date());
-    QStringList oldAlbumCategories(AlbumSettings::instance()->getAlbumCategoryNames());
+    QStringList oldAlbumCategories(ApplicationSettings::instance()->getAlbumCategoryNames());
 
     QString     title, comments, category;
     QDate       date;
@@ -298,7 +298,7 @@ void AlbumModificationHelper::slotAlbumEdit(PAlbum* album)
             album->setCategory(category);
         }
 
-        AlbumSettings::instance()->setAlbumCategoryNames(albumCategories);
+        ApplicationSettings::instance()->setAlbumCategoryNames(albumCategories);
 
         // Do this last : so that if anything else changed we can
         // successfuly save to the db with the old name
@@ -313,7 +313,7 @@ void AlbumModificationHelper::slotAlbumEdit(PAlbum* album)
             }
         }
         // Resorting the tree View after changing metadata
-        DigikamApp::instance()->view()->slotSortAlbums(AlbumSettings::instance()->getAlbumSortOrder());
+        DigikamApp::instance()->view()->slotSortAlbums(ApplicationSettings::instance()->getAlbumSortOrder());
     }
 }
 

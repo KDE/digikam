@@ -44,7 +44,7 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "digikamimageview.h"
 #include "digikamview.h"
 #include "imagealbummodel.h"
@@ -213,7 +213,7 @@ StackedView::~StackedView()
 
 void StackedView::readSettings()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    ApplicationSettings* settings = ApplicationSettings::instance();
     bool showThumbbar       = settings->getShowThumbbar();
     d->thumbBarDock->setShouldBeVisible(showThumbbar);
 }

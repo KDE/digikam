@@ -49,7 +49,7 @@
 // Local includes
 
 #include "freespacetooltip.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 
 namespace Digikam
 {
@@ -333,7 +333,7 @@ void FreeSpaceWidget::updateToolTip()
             header = i18n("Album Library");
         }
 
-        DToolTipStyleSheet cnt(AlbumSettings::instance()->getToolTipsFont());
+        DToolTipStyleSheet cnt(ApplicationSettings::instance()->getToolTipsFont());
         QString tip = cnt.tipHeader;
 
         tip += cnt.headBeg + header + cnt.headEnd;

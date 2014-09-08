@@ -47,7 +47,7 @@
 #include "album.h"
 #include "albummanager.h"
 #include "albumselectdialog.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "deletedialog.h"
 #include "dio.h"
 #include "imageinfo.h"
@@ -268,8 +268,8 @@ void ImageViewUtilities::openInfos(const ImageInfo& info, const QList<ImageInfo>
     }
 
     QFileInfo fi(info.filePath());
-    QString imagefilter = AlbumSettings::instance()->getImageFileFilter();
-    imagefilter        += AlbumSettings::instance()->getRawFileFilter();
+    QString imagefilter = ApplicationSettings::instance()->getImageFileFilter();
+    imagefilter        += ApplicationSettings::instance()->getRawFileFilter();
 
     // If the current item is not an image file.
     if ( !imagefilter.contains(fi.suffix().toLower()) )

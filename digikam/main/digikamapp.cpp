@@ -193,7 +193,7 @@ DigikamApp::DigikamApp()
 
     setObjectName("Digikam");
 
-    KConfigGroup group = AlbumSettings::instance()->generalConfigGroup();
+    KConfigGroup group = ApplicationSettings::instance()->generalConfigGroup();
 
     if (group.readEntry("Show Splash", true) &&
         !kapp->isSessionRestored())
@@ -238,7 +238,7 @@ DigikamApp::DigikamApp()
     QFontMetrics fm(font());
     fm.width("a");
 
-    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+    connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
 
     d->cameraMenu      = new KActionMenu(this);
@@ -362,10 +362,10 @@ DigikamApp::~DigikamApp()
 
     delete d->view;
 
-    AlbumSettings::instance()->setRecurseAlbums(d->recurseAlbumsAction->isChecked());
-    AlbumSettings::instance()->setRecurseTags(d->recurseTagsAction->isChecked());
-    AlbumSettings::instance()->setShowThumbbar(d->showBarAction->isChecked());
-    AlbumSettings::instance()->saveSettings();
+    ApplicationSettings::instance()->setRecurseAlbums(d->recurseAlbumsAction->isChecked());
+    ApplicationSettings::instance()->setRecurseTags(d->recurseTagsAction->isChecked());
+    ApplicationSettings::instance()->setShowThumbbar(d->showBarAction->isChecked());
+    ApplicationSettings::instance()->saveSettings();
 
     ScanController::instance()->shutDown();
     AlbumManager::instance()->cleanUp();
@@ -376,7 +376,7 @@ DigikamApp::~DigikamApp()
     DIO::cleanUp();
 
     // close database server
-    if (AlbumSettings::instance()->getInternalDatabaseServer())
+    if (ApplicationSettings::instance()->getInternalDatabaseServer())
     {
         DatabaseServerStarter::cleanUp();
     }
@@ -438,8 +438,8 @@ void DigikamApp::show()
     }
 
     // Init album icon view zoom factor.
-    slotThumbSizeChanged(AlbumSettings::instance()->getDefaultIconSize());
-    slotZoomSliderChanged(AlbumSettings::instance()->getDefaultIconSize());
+    slotThumbSizeChanged(ApplicationSettings::instance()->getDefaultIconSize());
+    slotZoomSliderChanged(ApplicationSettings::instance()->getDefaultIconSize());
     d->autoShowZoomToolTip = true;
 }
 
@@ -1059,7 +1059,7 @@ void DigikamApp::setupActions()
     connect(d->albumSortAction, SIGNAL(triggered(int)), d->view, SLOT(slotSortAlbums(int)));
     actionCollection()->addAction("album_sort", d->albumSortAction);
 
-    // Use same list order as in albumsettings enum
+    // Use same list order as in applicationsettings enum
     QStringList sortActionList;
     sortActionList.append(i18n("By Folder"));
     sortActionList.append(i18n("By Category"));
@@ -1379,14 +1379,14 @@ void DigikamApp::initGui()
     d->imageExifOrientationActionMenu->setEnabled(false);
     d->slideShowSelectionAction->setEnabled(false);
 
-    d->albumSortAction->setCurrentItem((int)AlbumSettings::instance()->getAlbumSortOrder());
-    d->imageSortAction->setCurrentItem((int)AlbumSettings::instance()->getImageSortOrder());
-    d->imageSortOrderAction->setCurrentItem((int)AlbumSettings::instance()->getImageSorting());
-    d->imageGroupAction->setCurrentItem((int)AlbumSettings::instance()->getImageGroupMode()-1); // no action for enum 0
-    d->imageGroupSortOrderAction->setCurrentItem((int)AlbumSettings::instance()->getImageGroupSortOrder());
-    d->recurseAlbumsAction->setChecked(AlbumSettings::instance()->getRecurseAlbums());
-    d->recurseTagsAction->setChecked(AlbumSettings::instance()->getRecurseTags());
-    d->showBarAction->setChecked(AlbumSettings::instance()->getShowThumbbar());
+    d->albumSortAction->setCurrentItem((int)ApplicationSettings::instance()->getAlbumSortOrder());
+    d->imageSortAction->setCurrentItem((int)ApplicationSettings::instance()->getImageSortOrder());
+    d->imageSortOrderAction->setCurrentItem((int)ApplicationSettings::instance()->getImageSorting());
+    d->imageGroupAction->setCurrentItem((int)ApplicationSettings::instance()->getImageGroupMode()-1); // no action for enum 0
+    d->imageGroupSortOrderAction->setCurrentItem((int)ApplicationSettings::instance()->getImageGroupSortOrder());
+    d->recurseAlbumsAction->setChecked(ApplicationSettings::instance()->getRecurseAlbums());
+    d->recurseTagsAction->setChecked(ApplicationSettings::instance()->getRecurseTags());
+    d->showBarAction->setChecked(ApplicationSettings::instance()->getShowThumbbar());
     d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
 
     slotSwitchedToIconView();
@@ -2412,28 +2412,28 @@ void DigikamApp::slotSetupChanged()
     LoadingCacheInterface::cleanCache();
 
     // TODO: clear history when location changed
-    //if(AlbumSettings::instance()->getAlbumLibraryPath() != AlbumManager::instance()->getLibraryPath())
+    //if(ApplicationSettings::instance()->getAlbumLibraryPath() != AlbumManager::instance()->getLibraryPath())
     //  d->view->clearHistory();
 
-    if (!AlbumManager::instance()->databaseEqual(AlbumSettings::instance()->getDatabaseType(),
-                                                 AlbumSettings::instance()->getDatabaseName(), AlbumSettings::instance()->getDatabaseHostName(),
-                                                 AlbumSettings::instance()->getDatabasePort(), AlbumSettings::instance()->getInternalDatabaseServer()))
+    if (!AlbumManager::instance()->databaseEqual(ApplicationSettings::instance()->getDatabaseType(),
+                                                 ApplicationSettings::instance()->getDatabaseName(), ApplicationSettings::instance()->getDatabaseHostName(),
+                                                 ApplicationSettings::instance()->getDatabasePort(), ApplicationSettings::instance()->getInternalDatabaseServer()))
     {
-        AlbumManager::instance()->changeDatabase(AlbumSettings::instance()->getDatabaseParameters());
+        AlbumManager::instance()->changeDatabase(ApplicationSettings::instance()->getDatabaseParameters());
     }
 
-    if (AlbumSettings::instance()->getShowFolderTreeViewItemsCount())
+    if (ApplicationSettings::instance()->getShowFolderTreeViewItemsCount())
     {
         AlbumManager::instance()->prepareItemCounts();
     }
 
     // Load full-screen options
-    KConfigGroup group = AlbumSettings::instance()->generalConfigGroup();
+    KConfigGroup group = ApplicationSettings::instance()->generalConfigGroup();
     readFullScreenSettings(group);
 
     d->view->applySettings();
 
-    AlbumThumbnailLoader::instance()->setThumbnailSize(AlbumSettings::instance()->getTreeViewIconSize());
+    AlbumThumbnailLoader::instance()->setThumbnailSize(ApplicationSettings::instance()->getTreeViewIconSize());
 
     if (LightTableWindow::lightTableWindowCreated())
     {
@@ -2460,7 +2460,7 @@ void DigikamApp::slotEditKeys()
 
 void DigikamApp::slotConfToolbars()
 {
-    saveMainWindowSettings(AlbumSettings::instance()->generalConfigGroup());
+    saveMainWindowSettings(ApplicationSettings::instance()->generalConfigGroup());
     KEditToolBar dlg(factory(), this);
 
     connect(&dlg, SIGNAL(newToolBarConfig()),
@@ -2471,7 +2471,7 @@ void DigikamApp::slotConfToolbars()
 
 void DigikamApp::slotNewToolbarConfig()
 {
-    applyMainWindowSettings(AlbumSettings::instance()->generalConfigGroup());
+    applyMainWindowSettings(ApplicationSettings::instance()->generalConfigGroup());
 }
 
 void DigikamApp::slotConfNotifications()
@@ -2520,7 +2520,7 @@ void DigikamApp::populateThemes()
 
     ThemeManager::instance()->setThemeMenuAction(new KActionMenu(i18n("&Themes"), this));
     ThemeManager::instance()->registerThemeActions(this);
-    ThemeManager::instance()->setCurrentTheme(AlbumSettings::instance()->getCurrentTheme());
+    ThemeManager::instance()->setCurrentTheme(ApplicationSettings::instance()->getCurrentTheme());
 
     connect (ThemeManager::instance(), SIGNAL(signalThemeChanged()),
              this, SLOT(slotThemeChanged()));
@@ -2528,7 +2528,7 @@ void DigikamApp::populateThemes()
 
 void DigikamApp::slotThemeChanged()
 {
-    AlbumSettings::instance()->setCurrentTheme(ThemeManager::instance()->currentThemeName());
+    ApplicationSettings::instance()->setCurrentTheme(ThemeManager::instance()->currentThemeName());
 }
 
 void DigikamApp::preloadWindows()

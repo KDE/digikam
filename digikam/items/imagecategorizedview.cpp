@@ -39,7 +39,7 @@
 
 #include "album.h"
 #include "albummanager.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "databasefields.h"
 #include "imagealbummodel.h"
 #include "imagealbumfiltermodel.h"

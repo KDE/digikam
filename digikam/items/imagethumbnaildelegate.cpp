@@ -34,7 +34,7 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "imagecategorizedview.h"
 #include "imagedelegateoverlay.h"
 #include "imagemodel.h"
@@ -47,7 +47,7 @@ namespace Digikam
 
 void ImageThumbnailDelegatePrivate::init(ImageThumbnailDelegate* q)
 {
-    QObject::connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+    QObject::connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
                      q, SLOT(slotSetupChanged()));
 }
 
@@ -121,10 +121,10 @@ void ImageThumbnailDelegate::updateRects()
     d->coordinatesRect = QRect(d->contentWidth - KIconLoader::SizeSmall+2, d->pixmapRect.top(), KIconLoader::SizeSmall, KIconLoader::SizeSmall);
     d->pixmapRect      = QRect(d->margin, d->margin, d->contentWidth, d->contentWidth);
     d->rect            = QRect(0, 0, d->contentWidth + 2*d->margin, d->contentWidth + 2*d->margin);
-    d->drawImageFormat = AlbumSettings::instance()->getIconShowImageFormat();
-    d->drawCoordinates = AlbumSettings::instance()->getIconShowCoordinates();
+    d->drawImageFormat = ApplicationSettings::instance()->getIconShowImageFormat();
+    d->drawCoordinates = ApplicationSettings::instance()->getIconShowCoordinates();
 
-    if (AlbumSettings::instance()->getIconShowRating())
+    if (ApplicationSettings::instance()->getIconShowRating())
     {
         int top       = d->rect.bottom() - d->margin - d->starPolygonSize.height() - 2;
         d->ratingRect = QRect(d->margin, top, d->contentWidth, d->starPolygonSize.height());

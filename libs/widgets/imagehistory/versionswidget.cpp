@@ -43,7 +43,7 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "dimagehistory.h"
 #include "imagehistorygraphmodel.h"
 #include "imageinfo.h"
@@ -145,7 +145,7 @@ VersionsWidget::VersionsWidget(QWidget* const parent)
     connect(d->viewButtonGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(slotViewModeChanged(int)));
 
-    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+    connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
 
     slotSetupChanged();
@@ -197,7 +197,7 @@ ActionVersionsOverlay* VersionsWidget::addActionOverlay(const KGuiItem& item)
 ShowHideVersionsOverlay* VersionsWidget::addShowHideOverlay()
 {
     d->showHideOverlay = new ShowHideVersionsOverlay(this);
-    d->showHideOverlay->setSettings(AlbumSettings::instance()->getVersionManagerSettings());
+    d->showHideOverlay->setSettings(ApplicationSettings::instance()->getVersionManagerSettings());
     d->view->addOverlay(d->showHideOverlay);
     return d->showHideOverlay;
 }
@@ -268,11 +268,11 @@ void VersionsWidget::applyViewMode()
 
 void VersionsWidget::slotSetupChanged()
 {
-    d->view->setToolTipEnabled(AlbumSettings::instance()->showToolTipsIsValid());
+    d->view->setToolTipEnabled(ApplicationSettings::instance()->showToolTipsIsValid());
 
     if (d->showHideOverlay)
     {
-        d->showHideOverlay->setSettings(AlbumSettings::instance()->getVersionManagerSettings());
+        d->showHideOverlay->setSettings(ApplicationSettings::instance()->getVersionManagerSettings());
     }
 }
 

@@ -69,7 +69,7 @@
 #include "dmetadata.h"
 #include "fileoperation.h"
 #include "metadatasettings.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "albummanager.h"
 #include "loadingcacheinterface.h"
 #include "deletedialog.h"
@@ -348,7 +348,7 @@ void LightTableWindow::setupConnections()
     connect(d->statusProgressBar, SIGNAL(signalCancelButtonPressed()),
             this, SLOT(slotProgressBarCancelButtonPressed()));
 
-    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+    connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSidebarTabTitleStyleChanged()));
 
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
@@ -1575,8 +1575,8 @@ void LightTableWindow::slotShowMenuBar()
 
 void LightTableWindow::slotSidebarTabTitleStyleChanged()
 {
-    d->leftSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
-    d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
+    d->leftSideBar->setStyle(ApplicationSettings::instance()->getSidebarTitleStyle());
+    d->rightSideBar->setStyle(ApplicationSettings::instance()->getSidebarTitleStyle());
 
     /// @todo Which part of the settings has to be reloaded?
     //     d->rightSideBar->applySettings();

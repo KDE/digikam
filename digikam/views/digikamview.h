@@ -56,7 +56,7 @@ using namespace KExiv2Iface;
 namespace Digikam
 {
 class AlbumIconItem;
-class AlbumSettings;
+class ApplicationSettings;
 class Album;
 class BatchSyncMetadata;
 class FilterStatusBar;

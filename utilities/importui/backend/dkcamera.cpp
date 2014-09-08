@@ -26,7 +26,7 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "dmetadata.h"
 
 namespace Digikam
@@ -46,7 +46,7 @@ DKCamera::DKCamera(const QString& title, const QString& model, const QString& po
     m_captureImageSupport         = false;
     m_captureImagePreviewSupport  = false;
 
-    AlbumSettings* const settings = AlbumSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
     m_imageFilter                 = settings->getImageFileFilter();
     m_movieFilter                 = settings->getMovieFileFilter();
     m_audioFilter                 = settings->getAudioFileFilter();

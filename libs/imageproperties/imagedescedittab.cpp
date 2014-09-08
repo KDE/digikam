@@ -63,7 +63,7 @@
 #include "captionedit.h"
 #include "ddatetimeedit.h"
 #include "addtagslineedit.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "albumthumbnailloader.h"
 #include "collectionscanner.h"
 #include "databasetransaction.h"
@@ -525,7 +525,7 @@ void ImageDescEditTab::slotChangingItems()
         return;
     }
 
-    if (!AlbumSettings::instance()->getApplySidebarChangesDirectly())
+    if (!ApplicationSettings::instance()->getApplySidebarChangesDirectly())
     {
         // Open dialog via queued connection out-of-scope, see bug 302311
         emit askToApplyChanges(d->currInfos, new MetadataHubOnTheRoad(d->hub));
@@ -674,7 +674,7 @@ void ImageDescEditTab::slotAskToApplyChanges(const QList<ImageInfo>& infos, Meta
 
     if (alwaysApply)
     {
-        AlbumSettings::instance()->setApplySidebarChangesDirectly(true);
+        ApplicationSettings::instance()->setApplySidebarChangesDirectly(true);
     }
 
     if (returnCode == KDialog::No)

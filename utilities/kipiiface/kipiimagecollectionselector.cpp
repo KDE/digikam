@@ -43,7 +43,7 @@
 // Local includes
 
 #include "album.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "albumtreeview.h"
 #include "kipiimagecollection.h"
 #include "kipiinterface.h"

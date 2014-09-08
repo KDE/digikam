@@ -39,7 +39,7 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "imageinfotasksplitter.h"
 #include "loadingcacheinterface.h"
 #include "metadatahub.h"

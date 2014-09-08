@@ -50,7 +50,7 @@
 #include "imageinfolist.h"
 #include "versionswidget.h"
 #include "filtershistorywidget.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "versionsoverlays.h"
 
 namespace Digikam

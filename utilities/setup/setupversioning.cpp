@@ -46,7 +46,7 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "versionmanager.h"
 
 namespace Digikam
@@ -485,13 +485,13 @@ void SetupVersioning::applySettings()
 */
     settings.format = d->formatBox->itemData(d->formatBox->currentIndex()).toString();
 
-    AlbumSettings::instance()->setVersionManagerSettings(settings);
-    AlbumSettings::instance()->saveSettings();
+    ApplicationSettings::instance()->setVersionManagerSettings(settings);
+    ApplicationSettings::instance()->saveSettings();
 }
 
 void SetupVersioning::readSettings()
 {
-    VersionManagerSettings settings = AlbumSettings::instance()->getVersionManagerSettings();
+    VersionManagerSettings settings = ApplicationSettings::instance()->getVersionManagerSettings();
 
     d->enableNonDestructive->setChecked(settings.enabled);
     d->snapshotSession->setChecked(settings.saveIntermediateVersions & VersionManagerSettings::AfterEachSession);

@@ -48,7 +48,7 @@
 #include "imagecomments.h"
 #include "template.h"
 #include "templatemanager.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "imageattributeswatch.h"
 #include "tagscache.h"
 
@@ -56,7 +56,7 @@
 #include "baloowrap.h"
 #endif
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 
 #include "facetagseditor.h"
 

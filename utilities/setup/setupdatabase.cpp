@@ -59,7 +59,7 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "databasewidget.h"
 #include "databaseparameters.h"
 #include "scancontroller.h"
@@ -147,7 +147,7 @@ SetupDatabase::~SetupDatabase()
 
 void SetupDatabase::applySettings()
 {
-    AlbumSettings* const settings = AlbumSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
 
     if (!settings)
     {
@@ -204,7 +204,7 @@ void SetupDatabase::applySettings()
 
 void SetupDatabase::readSettings()
 {
-    AlbumSettings* const settings = AlbumSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
 
     if (!settings)
     {

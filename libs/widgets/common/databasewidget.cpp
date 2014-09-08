@@ -334,7 +334,7 @@ void DatabaseWidget::checkDBPath()
     //d->mainDialog->enableButtonOk(dbOk);
 }
 
-void DatabaseWidget::setParametersFromSettings(const AlbumSettings* const settings)
+void DatabaseWidget::setParametersFromSettings(const ApplicationSettings* const settings)
 {
     originalDbPath = settings->getDatabaseFilePath();
     originalDbType = settings->getDatabaseType();

@@ -61,7 +61,7 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "config-digikam.h"
 #include "metadatapanel.h"
 #include "metadatasettings.h"
@@ -624,7 +624,7 @@ void SetupMetadata::applySettings()
 
 
 #ifdef HAVE_BALOO
-    AlbumSettings* const aSettings = AlbumSettings::instance();
+    ApplicationSettings* const aSettings = ApplicationSettings::instance();
 
     if (!aSettings)
     {
@@ -691,7 +691,7 @@ void SetupMetadata::readSettings()
     }
 
 #ifdef HAVE_BALOO
-    AlbumSettings* const aSettings = AlbumSettings::instance();
+    ApplicationSettings* const aSettings = ApplicationSettings::instance();
 
     if (!aSettings)
     {

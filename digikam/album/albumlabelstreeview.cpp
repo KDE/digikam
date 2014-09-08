@@ -51,7 +51,7 @@
 #include "picklabelfilter.h"
 #include "tagscache.h"
 #include "globals.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "dnotificationwrapper.h"
 #include "digikamapp.h"
 
@@ -114,8 +114,8 @@ AlbumLabelsTreeView::AlbumLabelsTreeView(QWidget* const parent, bool setCheckabl
     QTreeWidget(parent), StateSavingObject(this), d(new Private)
 {
     d->rootFont            = QFont("Times",18,-1,false);
-    d->regularFont         = AlbumSettings::instance()->getTreeViewFont();
-    d->iconSizeFromSetting = AlbumSettings::instance()->getTreeViewIconSize();
+    d->regularFont         = ApplicationSettings::instance()->getTreeViewFont();
+    d->iconSizeFromSetting = ApplicationSettings::instance()->getTreeViewIconSize();
     d->iconSize            = QSize(d->iconSizeFromSetting,d->iconSizeFromSetting);
     d->rootSizeHint        = QSize(1,40);
     d->isCheckableTreeView = setCheckable;
@@ -143,7 +143,7 @@ AlbumLabelsTreeView::AlbumLabelsTreeView(QWidget* const parent, bool setCheckabl
         setSelectionMode(QAbstractItemView::ExtendedSelection);
     }
 
-    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+    connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSettingsChanged()));
 }
 
@@ -433,9 +433,9 @@ void AlbumLabelsTreeView::initColorsTree()
 
 void AlbumLabelsTreeView::slotSettingsChanged()
 {
-    if(d->iconSizeFromSetting != AlbumSettings::instance()->getTreeViewIconSize())
+    if(d->iconSizeFromSetting != ApplicationSettings::instance()->getTreeViewIconSize())
     {
-        d->iconSizeFromSetting = AlbumSettings::instance()->getTreeViewIconSize();
+        d->iconSizeFromSetting = ApplicationSettings::instance()->getTreeViewIconSize();
         setIconSize(QSize(d->iconSizeFromSetting*5, d->iconSizeFromSetting));
         d->iconSize            = QSize(d->iconSizeFromSetting, d->iconSizeFromSetting);
         QTreeWidgetItemIterator it(this);
@@ -450,9 +450,9 @@ void AlbumLabelsTreeView::slotSettingsChanged()
         }
     }
 
-    if(d->regularFont != AlbumSettings::instance()->getTreeViewFont())
+    if(d->regularFont != ApplicationSettings::instance()->getTreeViewFont())
     {
-        d->regularFont = AlbumSettings::instance()->getTreeViewFont();
+        d->regularFont = ApplicationSettings::instance()->getTreeViewFont();
         QTreeWidgetItemIterator it(this);
 
         while(*it)

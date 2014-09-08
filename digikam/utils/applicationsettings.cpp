@@ -25,7 +25,7 @@
  *
  * ============================================================ */
 
-#include "albumsettings.moc"
+#include "applicationsettings.moc"
 
 // Qt includes
 
@@ -65,7 +65,7 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-class AlbumSettings::Private
+class ApplicationSettings::Private
 {
 
 public:
@@ -129,17 +129,17 @@ public:
         recursiveAlbums(false),
         recursiveTags(false),
         sidebarTitleStyle(KMultiTabBar::VSNET),
-        albumSortOrder(AlbumSettings::ByFolder),
+        albumSortOrder(ApplicationSettings::ByFolder),
         albumSortChanged(false),
         imageSortOrder(0),
         imageSorting(0),
         imageGroupMode(0),
         imageGroupSortOrder(0),
-        itemLeftClickAction(AlbumSettings::ShowPreview),
+        itemLeftClickAction(ApplicationSettings::ShowPreview),
         syncToDigikam(false),
         syncToBaloo(false),
         faceDetectionAccuracy(0.8),
-        stringComparisonType(AlbumSettings::Natural)
+        stringComparisonType(ApplicationSettings::Natural)
     {
     }
 
@@ -320,7 +320,7 @@ public:
     KMultiTabBar::KMultiTabBarStyle     sidebarTitleStyle;
 
     // album view settings
-    AlbumSettings::AlbumSortOrder       albumSortOrder;
+    ApplicationSettings::AlbumSortOrder       albumSortOrder;
     bool                                albumSortChanged;
 
     // icon view settings
@@ -328,7 +328,7 @@ public:
     int                                 imageSorting;
     int                                 imageGroupMode;
     int                                 imageGroupSortOrder;
-    AlbumSettings::ItemLeftClickAction  itemLeftClickAction;
+    ApplicationSettings::ItemLeftClickAction  itemLeftClickAction;
 
     // Baloo settings
     bool                                syncToDigikam;
@@ -342,112 +342,112 @@ public:
     double                              faceDetectionAccuracy;
 
     //misc
-    AlbumSettings::StringComparisonType stringComparisonType;
+    ApplicationSettings::StringComparisonType stringComparisonType;
     QString                             applicationStyle;
 };
 
-const QString AlbumSettings::Private::configGroupDefault("Album Settings");
-const QString AlbumSettings::Private::configGroupExif("EXIF Settings");
-const QString AlbumSettings::Private::configGroupMetadata("Metadata Settings");
-const QString AlbumSettings::Private::configGroupBaloo("Baloo Settings");
-const QString AlbumSettings::Private::configGroupGeneral("General Settings");
-const QString AlbumSettings::Private::configGroupVersioning("Versioning Settings");
-const QString AlbumSettings::Private::configGroupFaceDetection("Face Detection Settings");
-const QString AlbumSettings::Private::configAlbumCollectionsEntry("Album Collections");
-const QString AlbumSettings::Private::configAlbumSortOrderEntry("Album Sort Order");
-const QString AlbumSettings::Private::configImageSortOrderEntry("Image Sort Order");
-const QString AlbumSettings::Private::configImageSortingEntry("Image Sorting");
-const QString AlbumSettings::Private::configImageGroupModeEntry("Image Group Mode");
-const QString AlbumSettings::Private::configImageGroupSortOrderEntry("Image Group Sort Order");
-const QString AlbumSettings::Private::configItemLeftClickActionEntry("Item Left Click Action");
-const QString AlbumSettings::Private::configDefaultIconSizeEntry("Default Icon Size");
-const QString AlbumSettings::Private::configDefaultTreeIconSizeEntry("Default Tree Icon Size");
-const QString AlbumSettings::Private::configTreeViewFontEntry("TreeView Font");
-const QString AlbumSettings::Private::configThemeEntry("Theme");
-const QString AlbumSettings::Private::configSidebarTitleStyleEntry("Sidebar Title Style");
-const QString AlbumSettings::Private::configRatingFilterConditionEntry("Rating Filter Condition");
-const QString AlbumSettings::Private::configRecursiveAlbumsEntry("Recursive Albums");
-const QString AlbumSettings::Private::configRecursiveTagsEntry("Recursive Tags");
-const QString AlbumSettings::Private::configIconShowNameEntry("Icon Show Name");
-const QString AlbumSettings::Private::configIconShowResolutionEntry("Icon Show Resolution");
-const QString AlbumSettings::Private::configIconShowSizeEntry("Icon Show Size");
-const QString AlbumSettings::Private::configIconShowDateEntry("Icon Show Date");
-const QString AlbumSettings::Private::configIconShowModificationDateEntry("Icon Show Modification Date");
-const QString AlbumSettings::Private::configIconShowTitleEntry("Icon Show Title");
-const QString AlbumSettings::Private::configIconShowCommentsEntry("Icon Show Comments");
-const QString AlbumSettings::Private::configIconShowTagsEntry("Icon Show Tags");
-const QString AlbumSettings::Private::configIconShowRatingEntry("Icon Show Rating");
-const QString AlbumSettings::Private::configIconShowImageFormatEntry("Icon Show Image Format");
-const QString AlbumSettings::Private::configIconShowCoordinatesEntry("Icon Show Coordinates");
-const QString AlbumSettings::Private::configIconShowAspectRatioEntry("Icon Show Aspect Ratio");
-const QString AlbumSettings::Private::configIconShowOverlaysEntry("Icon Show Overlays");
-const QString AlbumSettings::Private::configIconViewFontEntry("IconView Font");
-const QString AlbumSettings::Private::configToolTipsFontEntry("ToolTips Font");
-const QString AlbumSettings::Private::configShowToolTipsEntry("Show ToolTips");
-const QString AlbumSettings::Private::configToolTipsShowFileNameEntry("ToolTips Show File Name");
-const QString AlbumSettings::Private::configToolTipsShowFileDateEntry("ToolTips Show File Date");
-const QString AlbumSettings::Private::configToolTipsShowFileSizeEntry("ToolTips Show File Size");
-const QString AlbumSettings::Private::configToolTipsShowImageTypeEntry("ToolTips Show Image Type");
-const QString AlbumSettings::Private::configToolTipsShowImageDimEntry("ToolTips Show Image Dim");
-const QString AlbumSettings::Private::configToolTipsShowImageAREntry("ToolTips Show Image AR");
-const QString AlbumSettings::Private::configToolTipsShowPhotoMakeEntry("ToolTips Show Photo Make");
-const QString AlbumSettings::Private::configToolTipsShowPhotoDateEntry("ToolTips Show Photo Date");
-const QString AlbumSettings::Private::configToolTipsShowPhotoFocalEntry("ToolTips Show Photo Focal");
-const QString AlbumSettings::Private::configToolTipsShowPhotoExpoEntry("ToolTips Show Photo Expo");
-const QString AlbumSettings::Private::configToolTipsShowPhotoModeEntry("ToolTips Show Photo Mode");
-const QString AlbumSettings::Private::configToolTipsShowPhotoFlashEntry("ToolTips Show Photo Flash");
-const QString AlbumSettings::Private::configToolTipsShowPhotoWBEntry("ToolTips Show Photo WB");
-const QString AlbumSettings::Private::configToolTipsShowAlbumNameEntry("ToolTips Show Album Name");
-const QString AlbumSettings::Private::configToolTipsShowCommentsEntry("ToolTips Show Comments");
-const QString AlbumSettings::Private::configToolTipsShowTagsEntry("ToolTips Show Tags");
-const QString AlbumSettings::Private::configToolTipsShowLabelRatingEntry("ToolTips Show Label Rating");
-const QString AlbumSettings::Private::configToolTipsShowVideoAspectRatioEntry("ToolTips Show Video Aspect Ratio");
-const QString AlbumSettings::Private::configToolTipsShowVideoAudioBitRateEntry("ToolTips Show Audio Bit Rate");
-const QString AlbumSettings::Private::configToolTipsShowVideoAudioChannelTypeEntry("ToolTips Show Audio Channel Type");
-const QString AlbumSettings::Private::configToolTipsShowVideoAudioCompressorEntry("ToolTips Show Audio Compressor");
-const QString AlbumSettings::Private::configToolTipsShowVideoDurationEntry("ToolTips Show Video Duration");
-const QString AlbumSettings::Private::configToolTipsShowVideoFrameRateEntry("ToolTips Show Video Frame Rate");
-const QString AlbumSettings::Private::configToolTipsShowVideoVideoCodecEntry("ToolTips Show Video Codec");
-const QString AlbumSettings::Private::configShowAlbumToolTipsEntry("Show Album ToolTips");
-const QString AlbumSettings::Private::configToolTipsShowAlbumTitleEntry("ToolTips Show Album Title");
-const QString AlbumSettings::Private::configToolTipsShowAlbumDateEntry("ToolTips Show Album Date");
-const QString AlbumSettings::Private::configToolTipsShowAlbumCollectionEntry("ToolTips Show Album Collection");
-const QString AlbumSettings::Private::configToolTipsShowAlbumCategoryEntry("ToolTips Show Album Category");
-const QString AlbumSettings::Private::configToolTipsShowAlbumCaptionEntry("ToolTips Show Album Caption");
-const QString AlbumSettings::Private::configPreviewLoadFullImageSizeEntry("Preview Load Full Image Size");
-const QString AlbumSettings::Private::configPreviewShowIconsEntry("Preview Show Icons");
-const QString AlbumSettings::Private::configShowThumbbarEntry("Show Thumbbar");
-const QString AlbumSettings::Private::configShowFolderTreeViewItemsCountEntry("Show Folder Tree View Items Count");
-const QString AlbumSettings::Private::configShowSplashEntry("Show Splash");
-const QString AlbumSettings::Private::configUseTrashEntry("Use Trash");
-const QString AlbumSettings::Private::configShowTrashDeleteDialogEntry("Show Trash Delete Dialog");
-const QString AlbumSettings::Private::configShowPermanentDeleteDialogEntry("Show Permanent Delete Dialog");
-const QString AlbumSettings::Private::configApplySidebarChangesDirectlyEntry("Apply Sidebar Changes Directly");
-const QString AlbumSettings::Private::configSyncBalootoDigikamEntry("Sync Baloo to Digikam");
-const QString AlbumSettings::Private::configSyncDigikamtoBalooEntry("Sync Digikam to Baloo");
-const QString AlbumSettings::Private::configStringComparisonTypeEntry("String Comparison Type");
-const QString AlbumSettings::Private::configFaceDetectionAccuracyEntry("Detection Accuracy");
-const QString AlbumSettings::Private::configApplicationStyleEntry("Application Style");
+const QString ApplicationSettings::Private::configGroupDefault("Album Settings");
+const QString ApplicationSettings::Private::configGroupExif("EXIF Settings");
+const QString ApplicationSettings::Private::configGroupMetadata("Metadata Settings");
+const QString ApplicationSettings::Private::configGroupBaloo("Baloo Settings");
+const QString ApplicationSettings::Private::configGroupGeneral("General Settings");
+const QString ApplicationSettings::Private::configGroupVersioning("Versioning Settings");
+const QString ApplicationSettings::Private::configGroupFaceDetection("Face Detection Settings");
+const QString ApplicationSettings::Private::configAlbumCollectionsEntry("Album Collections");
+const QString ApplicationSettings::Private::configAlbumSortOrderEntry("Album Sort Order");
+const QString ApplicationSettings::Private::configImageSortOrderEntry("Image Sort Order");
+const QString ApplicationSettings::Private::configImageSortingEntry("Image Sorting");
+const QString ApplicationSettings::Private::configImageGroupModeEntry("Image Group Mode");
+const QString ApplicationSettings::Private::configImageGroupSortOrderEntry("Image Group Sort Order");
+const QString ApplicationSettings::Private::configItemLeftClickActionEntry("Item Left Click Action");
+const QString ApplicationSettings::Private::configDefaultIconSizeEntry("Default Icon Size");
+const QString ApplicationSettings::Private::configDefaultTreeIconSizeEntry("Default Tree Icon Size");
+const QString ApplicationSettings::Private::configTreeViewFontEntry("TreeView Font");
+const QString ApplicationSettings::Private::configThemeEntry("Theme");
+const QString ApplicationSettings::Private::configSidebarTitleStyleEntry("Sidebar Title Style");
+const QString ApplicationSettings::Private::configRatingFilterConditionEntry("Rating Filter Condition");
+const QString ApplicationSettings::Private::configRecursiveAlbumsEntry("Recursive Albums");
+const QString ApplicationSettings::Private::configRecursiveTagsEntry("Recursive Tags");
+const QString ApplicationSettings::Private::configIconShowNameEntry("Icon Show Name");
+const QString ApplicationSettings::Private::configIconShowResolutionEntry("Icon Show Resolution");
+const QString ApplicationSettings::Private::configIconShowSizeEntry("Icon Show Size");
+const QString ApplicationSettings::Private::configIconShowDateEntry("Icon Show Date");
+const QString ApplicationSettings::Private::configIconShowModificationDateEntry("Icon Show Modification Date");
+const QString ApplicationSettings::Private::configIconShowTitleEntry("Icon Show Title");
+const QString ApplicationSettings::Private::configIconShowCommentsEntry("Icon Show Comments");
+const QString ApplicationSettings::Private::configIconShowTagsEntry("Icon Show Tags");
+const QString ApplicationSettings::Private::configIconShowRatingEntry("Icon Show Rating");
+const QString ApplicationSettings::Private::configIconShowImageFormatEntry("Icon Show Image Format");
+const QString ApplicationSettings::Private::configIconShowCoordinatesEntry("Icon Show Coordinates");
+const QString ApplicationSettings::Private::configIconShowAspectRatioEntry("Icon Show Aspect Ratio");
+const QString ApplicationSettings::Private::configIconShowOverlaysEntry("Icon Show Overlays");
+const QString ApplicationSettings::Private::configIconViewFontEntry("IconView Font");
+const QString ApplicationSettings::Private::configToolTipsFontEntry("ToolTips Font");
+const QString ApplicationSettings::Private::configShowToolTipsEntry("Show ToolTips");
+const QString ApplicationSettings::Private::configToolTipsShowFileNameEntry("ToolTips Show File Name");
+const QString ApplicationSettings::Private::configToolTipsShowFileDateEntry("ToolTips Show File Date");
+const QString ApplicationSettings::Private::configToolTipsShowFileSizeEntry("ToolTips Show File Size");
+const QString ApplicationSettings::Private::configToolTipsShowImageTypeEntry("ToolTips Show Image Type");
+const QString ApplicationSettings::Private::configToolTipsShowImageDimEntry("ToolTips Show Image Dim");
+const QString ApplicationSettings::Private::configToolTipsShowImageAREntry("ToolTips Show Image AR");
+const QString ApplicationSettings::Private::configToolTipsShowPhotoMakeEntry("ToolTips Show Photo Make");
+const QString ApplicationSettings::Private::configToolTipsShowPhotoDateEntry("ToolTips Show Photo Date");
+const QString ApplicationSettings::Private::configToolTipsShowPhotoFocalEntry("ToolTips Show Photo Focal");
+const QString ApplicationSettings::Private::configToolTipsShowPhotoExpoEntry("ToolTips Show Photo Expo");
+const QString ApplicationSettings::Private::configToolTipsShowPhotoModeEntry("ToolTips Show Photo Mode");
+const QString ApplicationSettings::Private::configToolTipsShowPhotoFlashEntry("ToolTips Show Photo Flash");
+const QString ApplicationSettings::Private::configToolTipsShowPhotoWBEntry("ToolTips Show Photo WB");
+const QString ApplicationSettings::Private::configToolTipsShowAlbumNameEntry("ToolTips Show Album Name");
+const QString ApplicationSettings::Private::configToolTipsShowCommentsEntry("ToolTips Show Comments");
+const QString ApplicationSettings::Private::configToolTipsShowTagsEntry("ToolTips Show Tags");
+const QString ApplicationSettings::Private::configToolTipsShowLabelRatingEntry("ToolTips Show Label Rating");
+const QString ApplicationSettings::Private::configToolTipsShowVideoAspectRatioEntry("ToolTips Show Video Aspect Ratio");
+const QString ApplicationSettings::Private::configToolTipsShowVideoAudioBitRateEntry("ToolTips Show Audio Bit Rate");
+const QString ApplicationSettings::Private::configToolTipsShowVideoAudioChannelTypeEntry("ToolTips Show Audio Channel Type");
+const QString ApplicationSettings::Private::configToolTipsShowVideoAudioCompressorEntry("ToolTips Show Audio Compressor");
+const QString ApplicationSettings::Private::configToolTipsShowVideoDurationEntry("ToolTips Show Video Duration");
+const QString ApplicationSettings::Private::configToolTipsShowVideoFrameRateEntry("ToolTips Show Video Frame Rate");
+const QString ApplicationSettings::Private::configToolTipsShowVideoVideoCodecEntry("ToolTips Show Video Codec");
+const QString ApplicationSettings::Private::configShowAlbumToolTipsEntry("Show Album ToolTips");
+const QString ApplicationSettings::Private::configToolTipsShowAlbumTitleEntry("ToolTips Show Album Title");
+const QString ApplicationSettings::Private::configToolTipsShowAlbumDateEntry("ToolTips Show Album Date");
+const QString ApplicationSettings::Private::configToolTipsShowAlbumCollectionEntry("ToolTips Show Album Collection");
+const QString ApplicationSettings::Private::configToolTipsShowAlbumCategoryEntry("ToolTips Show Album Category");
+const QString ApplicationSettings::Private::configToolTipsShowAlbumCaptionEntry("ToolTips Show Album Caption");
+const QString ApplicationSettings::Private::configPreviewLoadFullImageSizeEntry("Preview Load Full Image Size");
+const QString ApplicationSettings::Private::configPreviewShowIconsEntry("Preview Show Icons");
+const QString ApplicationSettings::Private::configShowThumbbarEntry("Show Thumbbar");
+const QString ApplicationSettings::Private::configShowFolderTreeViewItemsCountEntry("Show Folder Tree View Items Count");
+const QString ApplicationSettings::Private::configShowSplashEntry("Show Splash");
+const QString ApplicationSettings::Private::configUseTrashEntry("Use Trash");
+const QString ApplicationSettings::Private::configShowTrashDeleteDialogEntry("Show Trash Delete Dialog");
+const QString ApplicationSettings::Private::configShowPermanentDeleteDialogEntry("Show Permanent Delete Dialog");
+const QString ApplicationSettings::Private::configApplySidebarChangesDirectlyEntry("Apply Sidebar Changes Directly");
+const QString ApplicationSettings::Private::configSyncBalootoDigikamEntry("Sync Baloo to Digikam");
+const QString ApplicationSettings::Private::configSyncDigikamtoBalooEntry("Sync Digikam to Baloo");
+const QString ApplicationSettings::Private::configStringComparisonTypeEntry("String Comparison Type");
+const QString ApplicationSettings::Private::configFaceDetectionAccuracyEntry("Detection Accuracy");
+const QString ApplicationSettings::Private::configApplicationStyleEntry("Application Style");
 
 // -------------------------------------------------------------------------------------------------
 
-class AlbumSettingsCreator
+class ApplicationSettingsCreator
 {
 public:
 
-    AlbumSettings object;
+    ApplicationSettings object;
 };
 
-K_GLOBAL_STATIC(AlbumSettingsCreator, creator)
+K_GLOBAL_STATIC(ApplicationSettingsCreator, creator)
 
 // -------------------------------------------------------------------------------------------------
 
-AlbumSettings* AlbumSettings::instance()
+ApplicationSettings* ApplicationSettings::instance()
 {
     return &creator->object;
 }
 
-AlbumSettings::AlbumSettings()
+ApplicationSettings::ApplicationSettings()
     : QObject(), d(new Private)
 {
     d->config = KGlobal::config();
@@ -458,12 +458,12 @@ AlbumSettings::AlbumSettings()
     ThumbnailSize::readSettings(generalConfigGroup());
 }
 
-AlbumSettings::~AlbumSettings()
+ApplicationSettings::~ApplicationSettings()
 {
     delete d;
 }
 
-void AlbumSettings::init()
+void ApplicationSettings::init()
 {
     d->albumCategoryNames.clear();
     d->albumCategoryNames.append(i18n("Category"));
@@ -476,13 +476,13 @@ void AlbumSettings::init()
     d->albumCategoryNames.append(i18n("Miscellaneous"));
     d->albumCategoryNames.sort();
 
-    d->albumSortOrder               = AlbumSettings::ByFolder;
+    d->albumSortOrder               = ApplicationSettings::ByFolder;
     d->imageSortOrder               = ImageSortSettings::SortByFileName;
     d->imageSorting                 = ImageSortSettings::AscendingOrder;
     d->imageGroupMode               = ImageSortSettings::CategoryByAlbum;
     d->imageGroupSortOrder          = ImageSortSettings::AscendingOrder;
 
-    d->itemLeftClickAction          = AlbumSettings::ShowPreview;
+    d->itemLeftClickAction          = ApplicationSettings::ShowPreview;
 
     d->thumbnailSize                = ThumbnailSize::Medium;
     d->treeThumbnailSize            = 22;
@@ -561,19 +561,19 @@ void AlbumSettings::init()
 
     d->faceDetectionAccuracy        = 0.8;
 
-    d->stringComparisonType         = AlbumSettings::Natural;
+    d->stringComparisonType         = ApplicationSettings::Natural;
     d->applicationStyle             = kapp->style()->objectName();
 
     connect(this, SIGNAL(balooSettingsChanged()),
             this, SLOT(applyBalooSettings()));
 }
 
-KConfigGroup AlbumSettings::generalConfigGroup() const
+KConfigGroup ApplicationSettings::generalConfigGroup() const
 {
     return d->config->group(d->configGroupGeneral);
 }
 
-void AlbumSettings::applyBalooSettings()
+void ApplicationSettings::applyBalooSettings()
 {
 #ifdef HAVE_BALOO
     BalooWrap::instance()->setSyncToBaloo(d->syncToBaloo);
@@ -581,7 +581,7 @@ void AlbumSettings::applyBalooSettings()
 #endif
 }
 
-void AlbumSettings::readSettings()
+void ApplicationSettings::readSettings()
 {
     KSharedConfigPtr config = d->config;
 
@@ -597,16 +597,16 @@ void AlbumSettings::readSettings()
         d->albumCategoryNames = collectionList;
     }
 
-    d->albumSortOrder = AlbumSettings::AlbumSortOrder(group.readEntry(d->configAlbumSortOrderEntry,
-                                                                      (int)AlbumSettings::ByFolder));
+    d->albumSortOrder = ApplicationSettings::AlbumSortOrder(group.readEntry(d->configAlbumSortOrderEntry,
+                                                                      (int)ApplicationSettings::ByFolder));
 
     d->imageSortOrder               = group.readEntry(d->configImageSortOrderEntry, (int)ImageSortSettings::SortByFileName);
     d->imageSorting                 = group.readEntry(d->configImageSortingEntry,   (int)ImageSortSettings::AscendingOrder);
     d->imageGroupMode               = group.readEntry(d->configImageGroupModeEntry, (int)ImageSortSettings::CategoryByAlbum);
     d->imageGroupSortOrder          = group.readEntry(d->configImageGroupSortOrderEntry, (int)ImageSortSettings::AscendingOrder);
 
-    d->itemLeftClickAction          = AlbumSettings::ItemLeftClickAction(group.readEntry( d->configItemLeftClickActionEntry,
-                                                                         (int)AlbumSettings::ShowPreview));
+    d->itemLeftClickAction          = ApplicationSettings::ItemLeftClickAction(group.readEntry( d->configItemLeftClickActionEntry,
+                                                                         (int)ApplicationSettings::ShowPreview));
 
     d->thumbnailSize                = group.readEntry(d->configDefaultIconSizeEntry,              (int)ThumbnailSize::Medium);
     d->treeThumbnailSize            = group.readEntry(d->configDefaultTreeIconSizeEntry,          22);
@@ -721,7 +721,7 @@ void AlbumSettings::readSettings()
     emit balooSettingsChanged();
 }
 
-void AlbumSettings::saveSettings()
+void ApplicationSettings::saveSettings()
 {
     KSharedConfigPtr config = d->config;
 
@@ -841,43 +841,43 @@ void AlbumSettings::saveSettings()
     config->sync();
 }
 
-void AlbumSettings::emitSetupChanged()
+void ApplicationSettings::emitSetupChanged()
 {
     emit setupChanged();
 }
 
-QString AlbumSettings::getDatabaseFilePath() const
+QString ApplicationSettings::getDatabaseFilePath() const
 {
     return d->databaseParams.getDatabaseNameOrDir();
 }
 
-void AlbumSettings::setDatabaseFilePath(const QString& path)
+void ApplicationSettings::setDatabaseFilePath(const QString& path)
 {
     d->databaseParams.setDatabasePath(path);
     d->databaseParams.setThumbsDatabasePath(path);
 }
 
-void AlbumSettings::setShowSplashScreen(bool val)
+void ApplicationSettings::setShowSplashScreen(bool val)
 {
     d->showSplash = val;
 }
 
-bool AlbumSettings::getShowSplashScreen() const
+bool ApplicationSettings::getShowSplashScreen() const
 {
     return d->showSplash;
 }
 
-void AlbumSettings::setAlbumCategoryNames(const QStringList& list)
+void ApplicationSettings::setAlbumCategoryNames(const QStringList& list)
 {
     d->albumCategoryNames = list;
 }
 
-QStringList AlbumSettings::getAlbumCategoryNames() const
+QStringList ApplicationSettings::getAlbumCategoryNames() const
 {
     return d->albumCategoryNames;
 }
 
-bool AlbumSettings::addAlbumCategoryName(const QString& name)
+bool ApplicationSettings::addAlbumCategoryName(const QString& name)
 {
     if (d->albumCategoryNames.contains(name))
     {
@@ -888,73 +888,73 @@ bool AlbumSettings::addAlbumCategoryName(const QString& name)
     return true;
 }
 
-bool AlbumSettings::delAlbumCategoryName(const QString& name)
+bool ApplicationSettings::delAlbumCategoryName(const QString& name)
 {
     uint count = d->albumCategoryNames.removeAll(name);
     return (count > 0) ? true : false;
 }
 
-void AlbumSettings::setAlbumSortOrder(const AlbumSettings::AlbumSortOrder order)
+void ApplicationSettings::setAlbumSortOrder(const ApplicationSettings::AlbumSortOrder order)
 {
     d->albumSortOrder = order;
 }
 
-AlbumSettings::AlbumSortOrder AlbumSettings::getAlbumSortOrder() const
+ApplicationSettings::AlbumSortOrder ApplicationSettings::getAlbumSortOrder() const
 {
     return d->albumSortOrder;
 }
 
-void AlbumSettings::setImageSortOrder(int order)
+void ApplicationSettings::setImageSortOrder(int order)
 {
     d->imageSortOrder = order;
 }
 
-int AlbumSettings::getImageSortOrder() const
+int ApplicationSettings::getImageSortOrder() const
 {
     return d->imageSortOrder;
 }
 
-void AlbumSettings::setImageSorting(int sorting)
+void ApplicationSettings::setImageSorting(int sorting)
 {
     d->imageSorting = sorting;
 }
 
-int AlbumSettings::getImageSorting() const
+int ApplicationSettings::getImageSorting() const
 {
     return d->imageSorting;
 }
 
-void AlbumSettings::setImageGroupMode(int mode)
+void ApplicationSettings::setImageGroupMode(int mode)
 {
     d->imageGroupMode = mode;
 }
 
-int AlbumSettings::getImageGroupMode() const
+int ApplicationSettings::getImageGroupMode() const
 {
     return d->imageGroupMode;
 }
 
-void AlbumSettings::setImageGroupSortOrder(int order)
+void ApplicationSettings::setImageGroupSortOrder(int order)
 {
     d->imageGroupSortOrder = order;
 }
 
-int AlbumSettings::getImageGroupSortOrder() const
+int ApplicationSettings::getImageGroupSortOrder() const
 {
     return d->imageGroupSortOrder;
 }
 
-void AlbumSettings::setItemLeftClickAction(const ItemLeftClickAction action)
+void ApplicationSettings::setItemLeftClickAction(const ItemLeftClickAction action)
 {
     d->itemLeftClickAction = action;
 }
 
-AlbumSettings::ItemLeftClickAction AlbumSettings::getItemLeftClickAction() const
+ApplicationSettings::ItemLeftClickAction ApplicationSettings::getItemLeftClickAction() const
 {
     return d->itemLeftClickAction;
 }
 
-QString AlbumSettings::getImageFileFilter() const
+QString ApplicationSettings::getImageFileFilter() const
 {
     QStringList imageSettings;
     DatabaseAccess().db()->getFilterSettings(&imageSettings, 0, 0);
@@ -968,7 +968,7 @@ QString AlbumSettings::getImageFileFilter() const
     return wildcards.join(" ");
 }
 
-QString AlbumSettings::getMovieFileFilter() const
+QString ApplicationSettings::getMovieFileFilter() const
 {
     QStringList movieSettings;
     DatabaseAccess().db()->getFilterSettings(0, &movieSettings, 0);
@@ -982,7 +982,7 @@ QString AlbumSettings::getMovieFileFilter() const
     return wildcards.join(" ");
 }
 
-QString AlbumSettings::getAudioFileFilter() const
+QString ApplicationSettings::getAudioFileFilter() const
 {
     QStringList audioSettings;
     DatabaseAccess().db()->getFilterSettings(0, 0, &audioSettings);
@@ -996,7 +996,7 @@ QString AlbumSettings::getAudioFileFilter() const
     return wildcards.join(" ");
 }
 
-QString AlbumSettings::getRawFileFilter() const
+QString ApplicationSettings::getRawFileFilter() const
 {
     QStringList supportedRaws = KDcraw::rawFilesList();
     QStringList imageSettings;
@@ -1025,7 +1025,7 @@ QString AlbumSettings::getRawFileFilter() const
     return wildcards.join(" ");
 }
 
-QString AlbumSettings::getAllFileFilter() const
+QString ApplicationSettings::getAllFileFilter() const
 {
     QStringList imageFilter, audioFilter, videoFilter;
     DatabaseAccess().db()->getFilterSettings(&imageFilter, &audioFilter, &videoFilter);
@@ -1049,572 +1049,572 @@ QString AlbumSettings::getAllFileFilter() const
     return wildcards.join(" ");
 }
 
-void AlbumSettings::addToImageFileFilter(const QString& extensions)
+void ApplicationSettings::addToImageFileFilter(const QString& extensions)
 {
     DatabaseAccess().db()->addToUserImageFilterSettings(extensions);
 }
 
-void AlbumSettings::setDefaultIconSize(int val)
+void ApplicationSettings::setDefaultIconSize(int val)
 {
     d->thumbnailSize = val;
 }
 
-int AlbumSettings::getDefaultIconSize() const
+int ApplicationSettings::getDefaultIconSize() const
 {
     return d->thumbnailSize;
 }
 
-void AlbumSettings::setTreeViewIconSize(int val)
+void ApplicationSettings::setTreeViewIconSize(int val)
 {
     d->treeThumbnailSize = val;
 }
 
-int AlbumSettings::getTreeViewIconSize() const
+int ApplicationSettings::getTreeViewIconSize() const
 {
     return ((d->treeThumbnailSize < 8) || (d->treeThumbnailSize > 48)) ? 48 : d->treeThumbnailSize;
 }
 
-void AlbumSettings::setTreeViewFont(const QFont& font)
+void ApplicationSettings::setTreeViewFont(const QFont& font)
 {
     d->treeviewFont = font;
 }
 
-QFont AlbumSettings::getTreeViewFont() const
+QFont ApplicationSettings::getTreeViewFont() const
 {
     return d->treeviewFont;
 }
 
-void AlbumSettings::setIconViewFont(const QFont& font)
+void ApplicationSettings::setIconViewFont(const QFont& font)
 {
     d->iconviewFont = font;
 }
 
-QFont AlbumSettings::getIconViewFont() const
+QFont ApplicationSettings::getIconViewFont() const
 {
     return d->iconviewFont;
 }
 
-void AlbumSettings::setRatingFilterCond(int val)
+void ApplicationSettings::setRatingFilterCond(int val)
 {
     d->ratingFilterCond = val;
 }
 
-int AlbumSettings::getRatingFilterCond() const
+int ApplicationSettings::getRatingFilterCond() const
 {
     return d->ratingFilterCond;
 }
 
-void AlbumSettings::setIconShowName(bool val)
+void ApplicationSettings::setIconShowName(bool val)
 {
     d->iconShowName = val;
 }
 
-bool AlbumSettings::getIconShowName() const
+bool ApplicationSettings::getIconShowName() const
 {
     return d->iconShowName;
 }
 
-void AlbumSettings::setIconShowSize(bool val)
+void ApplicationSettings::setIconShowSize(bool val)
 {
     d->iconShowSize = val;
 }
 
-bool AlbumSettings::getIconShowSize() const
+bool ApplicationSettings::getIconShowSize() const
 {
     return d->iconShowSize;
 }
 
-void AlbumSettings::setIconShowTitle(bool val)
+void ApplicationSettings::setIconShowTitle(bool val)
 {
     d->iconShowTitle = val;
 }
 
-bool AlbumSettings::getIconShowTitle() const
+bool ApplicationSettings::getIconShowTitle() const
 {
     return d->iconShowTitle;
 }
 
-void AlbumSettings::setIconShowComments(bool val)
+void ApplicationSettings::setIconShowComments(bool val)
 {
     d->iconShowComments = val;
 }
 
-bool AlbumSettings::getIconShowComments() const
+bool ApplicationSettings::getIconShowComments() const
 {
     return d->iconShowComments;
 }
 
-void AlbumSettings::setIconShowResolution(bool val)
+void ApplicationSettings::setIconShowResolution(bool val)
 {
     d->iconShowResolution = val;
 }
 
-bool AlbumSettings::getIconShowResolution() const
+bool ApplicationSettings::getIconShowResolution() const
 {
     return d->iconShowResolution;
 }
 
-void AlbumSettings::setIconShowAspectRatio(bool val)
+void ApplicationSettings::setIconShowAspectRatio(bool val)
 {
     d->iconShowAspectRatio = val;
 }
 
-bool AlbumSettings::getIconShowAspectRatio() const
+bool ApplicationSettings::getIconShowAspectRatio() const
 {
     return d->iconShowAspectRatio;
 }
 
-void AlbumSettings::setIconShowTags(bool val)
+void ApplicationSettings::setIconShowTags(bool val)
 {
     d->iconShowTags = val;
 }
 
-bool AlbumSettings::getIconShowTags() const
+bool ApplicationSettings::getIconShowTags() const
 {
     return d->iconShowTags;
 }
 
-void AlbumSettings::setIconShowDate(bool val)
+void ApplicationSettings::setIconShowDate(bool val)
 {
     d->iconShowDate = val;
 }
 
-bool AlbumSettings::getIconShowDate() const
+bool ApplicationSettings::getIconShowDate() const
 {
     return d->iconShowDate;
 }
 
-void AlbumSettings::setIconShowModDate(bool val)
+void ApplicationSettings::setIconShowModDate(bool val)
 {
     d->iconShowModDate = val;
 }
 
-bool AlbumSettings::getIconShowModDate() const
+bool ApplicationSettings::getIconShowModDate() const
 {
     return d->iconShowModDate;
 }
 
-void AlbumSettings::setIconShowRating(bool val)
+void ApplicationSettings::setIconShowRating(bool val)
 {
     d->iconShowRating = val;
 }
 
-bool AlbumSettings::getIconShowRating() const
+bool ApplicationSettings::getIconShowRating() const
 {
     return d->iconShowRating;
 }
 
-void AlbumSettings::setIconShowImageFormat(bool val)
+void ApplicationSettings::setIconShowImageFormat(bool val)
 {
     d->iconShowImageFormat = val;
 }
 
-bool AlbumSettings::getIconShowImageFormat() const
+bool ApplicationSettings::getIconShowImageFormat() const
 {
     return d->iconShowImageFormat;
 }
 
-void AlbumSettings::setIconShowCoordinates(bool val)
+void ApplicationSettings::setIconShowCoordinates(bool val)
 {
     d->iconShowCoordinates = val;
 }
 
-bool AlbumSettings::getIconShowCoordinates() const
+bool ApplicationSettings::getIconShowCoordinates() const
 {
     return d->iconShowCoordinates;
 }
 
-void AlbumSettings::setIconShowOverlays(bool val)
+void ApplicationSettings::setIconShowOverlays(bool val)
 {
     d->iconShowOverlays = val;
 }
 
-bool AlbumSettings::getIconShowOverlays() const
+bool ApplicationSettings::getIconShowOverlays() const
 {
     return d->iconShowOverlays;
 }
 
-void AlbumSettings::setToolTipsFont(const QFont& font)
+void ApplicationSettings::setToolTipsFont(const QFont& font)
 {
     d->toolTipsFont = font;
 }
 
-QFont AlbumSettings::getToolTipsFont() const
+QFont ApplicationSettings::getToolTipsFont() const
 {
     return d->toolTipsFont;
 }
 
-void AlbumSettings::setShowToolTips(bool val)
+void ApplicationSettings::setShowToolTips(bool val)
 {
     d->showToolTips = val;
 }
 
-bool AlbumSettings::getShowToolTips() const
+bool ApplicationSettings::getShowToolTips() const
 {
     return d->showToolTips;
 }
 
-void AlbumSettings::setToolTipsShowFileName(bool val)
+void ApplicationSettings::setToolTipsShowFileName(bool val)
 {
     d->tooltipShowFileName = val;
 }
 
-bool AlbumSettings::getToolTipsShowFileName() const
+bool ApplicationSettings::getToolTipsShowFileName() const
 {
     return d->tooltipShowFileName;
 }
 
-void AlbumSettings::setToolTipsShowFileDate(bool val)
+void ApplicationSettings::setToolTipsShowFileDate(bool val)
 {
     d->tooltipShowFileDate = val;
 }
 
-bool AlbumSettings::getToolTipsShowFileDate() const
+bool ApplicationSettings::getToolTipsShowFileDate() const
 {
     return d->tooltipShowFileDate;
 }
 
-void AlbumSettings::setToolTipsShowFileSize(bool val)
+void ApplicationSettings::setToolTipsShowFileSize(bool val)
 {
     d->tooltipShowFileSize = val;
 }
 
-bool AlbumSettings::getToolTipsShowFileSize() const
+bool ApplicationSettings::getToolTipsShowFileSize() const
 {
     return d->tooltipShowFileSize;
 }
 
-void AlbumSettings::setToolTipsShowImageType(bool val)
+void ApplicationSettings::setToolTipsShowImageType(bool val)
 {
     d->tooltipShowImageType = val;
 }
 
-bool AlbumSettings::getToolTipsShowImageType() const
+bool ApplicationSettings::getToolTipsShowImageType() const
 {
     return d->tooltipShowImageType;
 }
 
-void AlbumSettings::setToolTipsShowImageDim(bool val)
+void ApplicationSettings::setToolTipsShowImageDim(bool val)
 {
     d->tooltipShowImageDim = val;
 }
 
-bool AlbumSettings::getToolTipsShowImageDim() const
+bool ApplicationSettings::getToolTipsShowImageDim() const
 {
     return d->tooltipShowImageDim;
 }
 
-void AlbumSettings::setToolTipsShowImageAR(bool val)
+void ApplicationSettings::setToolTipsShowImageAR(bool val)
 {
     d->tooltipShowImageAR = val;
 }
 
-bool AlbumSettings::getToolTipsShowImageAR() const
+bool ApplicationSettings::getToolTipsShowImageAR() const
 {
     return d->tooltipShowImageAR;
 }
 
-void AlbumSettings::setToolTipsShowPhotoMake(bool val)
+void ApplicationSettings::setToolTipsShowPhotoMake(bool val)
 {
     d->tooltipShowPhotoMake = val;
 }
 
-bool AlbumSettings::getToolTipsShowPhotoMake() const
+bool ApplicationSettings::getToolTipsShowPhotoMake() const
 {
     return d->tooltipShowPhotoMake;
 }
 
-void AlbumSettings::setToolTipsShowPhotoDate(bool val)
+void ApplicationSettings::setToolTipsShowPhotoDate(bool val)
 {
     d->tooltipShowPhotoDate = val;
 }
 
-bool AlbumSettings::getToolTipsShowPhotoDate() const
+bool ApplicationSettings::getToolTipsShowPhotoDate() const
 {
     return d->tooltipShowPhotoDate;
 }
 
-void AlbumSettings::setToolTipsShowPhotoFocal(bool val)
+void ApplicationSettings::setToolTipsShowPhotoFocal(bool val)
 {
     d->tooltipShowPhotoFocal = val;
 }
 
-bool AlbumSettings::getToolTipsShowPhotoFocal() const
+bool ApplicationSettings::getToolTipsShowPhotoFocal() const
 {
     return d->tooltipShowPhotoFocal;
 }
 
-void AlbumSettings::setToolTipsShowPhotoExpo(bool val)
+void ApplicationSettings::setToolTipsShowPhotoExpo(bool val)
 {
     d->tooltipShowPhotoExpo = val;
 }
 
-bool AlbumSettings::getToolTipsShowPhotoExpo() const
+bool ApplicationSettings::getToolTipsShowPhotoExpo() const
 {
     return d->tooltipShowPhotoExpo;
 }
 
-void AlbumSettings::setToolTipsShowPhotoMode(bool val)
+void ApplicationSettings::setToolTipsShowPhotoMode(bool val)
 {
     d->tooltipShowPhotoMode = val;
 }
 
-bool AlbumSettings::getToolTipsShowPhotoMode() const
+bool ApplicationSettings::getToolTipsShowPhotoMode() const
 {
     return d->tooltipShowPhotoMode;
 }
 
-void AlbumSettings::setToolTipsShowPhotoFlash(bool val)
+void ApplicationSettings::setToolTipsShowPhotoFlash(bool val)
 {
     d->tooltipShowPhotoFlash = val;
 }
 
-bool AlbumSettings::getToolTipsShowPhotoFlash() const
+bool ApplicationSettings::getToolTipsShowPhotoFlash() const
 {
     return d->tooltipShowPhotoFlash;
 }
 
-void AlbumSettings::setToolTipsShowPhotoWB(bool val)
+void ApplicationSettings::setToolTipsShowPhotoWB(bool val)
 {
     d->tooltipShowPhotoWb = val;
 }
 
-bool AlbumSettings::getToolTipsShowPhotoWB() const
+bool ApplicationSettings::getToolTipsShowPhotoWB() const
 {
     return d->tooltipShowPhotoWb;
 }
 
-void AlbumSettings::setToolTipsShowAlbumName(bool val)
+void ApplicationSettings::setToolTipsShowAlbumName(bool val)
 {
     d->tooltipShowAlbumName = val;
 }
 
-bool AlbumSettings::getToolTipsShowAlbumName() const
+bool ApplicationSettings::getToolTipsShowAlbumName() const
 {
     return d->tooltipShowAlbumName;
 }
 
-void AlbumSettings::setToolTipsShowComments(bool val)
+void ApplicationSettings::setToolTipsShowComments(bool val)
 {
     d->tooltipShowComments = val;
 }
 
-bool AlbumSettings::getToolTipsShowComments() const
+bool ApplicationSettings::getToolTipsShowComments() const
 {
     return d->tooltipShowComments;
 }
 
-void AlbumSettings::setToolTipsShowTags(bool val)
+void ApplicationSettings::setToolTipsShowTags(bool val)
 {
     d->tooltipShowTags = val;
 }
 
-bool AlbumSettings::getToolTipsShowTags() const
+bool ApplicationSettings::getToolTipsShowTags() const
 {
     return d->tooltipShowTags;
 }
 
-void AlbumSettings::setToolTipsShowLabelRating(bool val)
+void ApplicationSettings::setToolTipsShowLabelRating(bool val)
 {
     d->tooltipShowLabelRating = val;
 }
 
-bool AlbumSettings::getToolTipsShowLabelRating() const
+bool ApplicationSettings::getToolTipsShowLabelRating() const
 {
     return d->tooltipShowLabelRating;
 }
 
-void AlbumSettings::setShowAlbumToolTips(bool val)
+void ApplicationSettings::setShowAlbumToolTips(bool val)
 {
     d->showAlbumToolTips = val;
 }
 
-bool AlbumSettings::getShowAlbumToolTips() const
+bool ApplicationSettings::getShowAlbumToolTips() const
 {
     return d->showAlbumToolTips;
 }
 
-void AlbumSettings::setToolTipsShowAlbumTitle(bool val)
+void ApplicationSettings::setToolTipsShowAlbumTitle(bool val)
 {
     d->tooltipShowAlbumTitle = val;
 }
 
-bool AlbumSettings::getToolTipsShowAlbumTitle() const
+bool ApplicationSettings::getToolTipsShowAlbumTitle() const
 {
     return d->tooltipShowAlbumTitle;
 }
 
-void AlbumSettings::setToolTipsShowAlbumDate(bool val)
+void ApplicationSettings::setToolTipsShowAlbumDate(bool val)
 {
     d->tooltipShowAlbumDate = val;
 }
 
-bool AlbumSettings::getToolTipsShowAlbumDate() const
+bool ApplicationSettings::getToolTipsShowAlbumDate() const
 {
     return d->tooltipShowAlbumDate;
 }
 
-void AlbumSettings::setToolTipsShowAlbumCollection(bool val)
+void ApplicationSettings::setToolTipsShowAlbumCollection(bool val)
 {
     d->tooltipShowAlbumCollection = val;
 }
 
-bool AlbumSettings::getToolTipsShowAlbumCollection() const
+bool ApplicationSettings::getToolTipsShowAlbumCollection() const
 {
     return d->tooltipShowAlbumCollection;
 }
 
-void AlbumSettings::setToolTipsShowAlbumCategory(bool val)
+void ApplicationSettings::setToolTipsShowAlbumCategory(bool val)
 {
     d->tooltipShowAlbumCategory = val;
 }
 
-bool AlbumSettings::getToolTipsShowAlbumCategory() const
+bool ApplicationSettings::getToolTipsShowAlbumCategory() const
 {
     return d->tooltipShowAlbumCategory;
 }
 
-void AlbumSettings::setToolTipsShowAlbumCaption(bool val)
+void ApplicationSettings::setToolTipsShowAlbumCaption(bool val)
 {
     d->tooltipShowAlbumCaption = val;
 }
 
-bool AlbumSettings::getToolTipsShowAlbumCaption() const
+bool ApplicationSettings::getToolTipsShowAlbumCaption() const
 {
     return d->tooltipShowAlbumCaption;
 }
 
-void AlbumSettings::setToolTipsShowVideoAspectRatio(bool val)
+void ApplicationSettings::setToolTipsShowVideoAspectRatio(bool val)
 {
     d->tooltipShowVideoAspectRatio = val;
 }
 
-bool AlbumSettings::getToolTipsShowVideoAspectRatio() const
+bool ApplicationSettings::getToolTipsShowVideoAspectRatio() const
 {
     return d->tooltipShowVideoAspectRatio;
 }
 
-void AlbumSettings::setToolTipsShowVideoAudioBitRate(bool val)
+void ApplicationSettings::setToolTipsShowVideoAudioBitRate(bool val)
 {
     d->tooltipShowVideoAudioBitRate = val;
 }
 
-bool AlbumSettings::getToolTipsShowVideoAudioBitRate() const
+bool ApplicationSettings::getToolTipsShowVideoAudioBitRate() const
 {
     return d->tooltipShowVideoAudioBitRate;
 }
 
-void AlbumSettings::setToolTipsShowVideoAudioChannelType(bool val)
+void ApplicationSettings::setToolTipsShowVideoAudioChannelType(bool val)
 {
     d->tooltipShowVideoAudioChannelType = val;
 }
 
-bool AlbumSettings::getToolTipsShowVideoAudioChannelType() const
+bool ApplicationSettings::getToolTipsShowVideoAudioChannelType() const
 {
     return d->tooltipShowVideoAudioChannelType;
 }
 
-void AlbumSettings::setToolTipsShowVideoAudioCompressor(bool val)
+void ApplicationSettings::setToolTipsShowVideoAudioCompressor(bool val)
 {
     d->tooltipShowVideoAudioCompressor = val;
 }
 
-bool AlbumSettings::getToolTipsShowVideoAudioCompressor() const
+bool ApplicationSettings::getToolTipsShowVideoAudioCompressor() const
 {
     return d->tooltipShowVideoAudioCompressor;
 }
 
-void AlbumSettings::setToolTipsShowVideoDuration(bool val)
+void ApplicationSettings::setToolTipsShowVideoDuration(bool val)
 {
     d->tooltipShowVideoDuration = val;
 }
 
-bool AlbumSettings::getToolTipsShowVideoDuration() const
+bool ApplicationSettings::getToolTipsShowVideoDuration() const
 {
     return d->tooltipShowVideoDuration;
 }
 
-void AlbumSettings::setToolTipsShowVideoFrameRate(bool val)
+void ApplicationSettings::setToolTipsShowVideoFrameRate(bool val)
 {
     d->tooltipShowVideoFrameRate = val;
 }
 
-bool AlbumSettings::getToolTipsShowVideoFrameRate() const
+bool ApplicationSettings::getToolTipsShowVideoFrameRate() const
 {
     return d->tooltipShowVideoFrameRate;
 }
 
-void AlbumSettings::setToolTipsShowVideoVideoCodec(bool val)
+void ApplicationSettings::setToolTipsShowVideoVideoCodec(bool val)
 {
     d->tooltipShowVideoVideoCodec = val;
 }
 
-bool AlbumSettings::getToolTipsShowVideoVideoCodec() const
+bool ApplicationSettings::getToolTipsShowVideoVideoCodec() const
 {
     return d->tooltipShowVideoVideoCodec;
 }
 
-void AlbumSettings::setCurrentTheme(const QString& theme)
+void ApplicationSettings::setCurrentTheme(const QString& theme)
 {
     d->currentTheme = theme;
 }
 
-QString AlbumSettings::getCurrentTheme() const
+QString ApplicationSettings::getCurrentTheme() const
 {
     return d->currentTheme;
 }
 
-void AlbumSettings::setSidebarTitleStyle(KMultiTabBar::KMultiTabBarStyle style)
+void ApplicationSettings::setSidebarTitleStyle(KMultiTabBar::KMultiTabBarStyle style)
 {
     d->sidebarTitleStyle = style;
 }
 
-KMultiTabBar::KMultiTabBarStyle AlbumSettings::getSidebarTitleStyle() const
+KMultiTabBar::KMultiTabBarStyle ApplicationSettings::getSidebarTitleStyle() const
 {
     return d->sidebarTitleStyle;
 }
 
-void AlbumSettings::setUseTrash(bool val)
+void ApplicationSettings::setUseTrash(bool val)
 {
     d->useTrash = val;
 }
 
-bool AlbumSettings::getUseTrash() const
+bool ApplicationSettings::getUseTrash() const
 {
     return d->useTrash;
 }
 
-void AlbumSettings::setShowTrashDeleteDialog(bool val)
+void ApplicationSettings::setShowTrashDeleteDialog(bool val)
 {
     d->showTrashDeleteDialog = val;
 }
 
-bool AlbumSettings::getShowTrashDeleteDialog() const
+bool ApplicationSettings::getShowTrashDeleteDialog() const
 {
     return d->showTrashDeleteDialog;
 }
 
-void AlbumSettings::setShowPermanentDeleteDialog(bool val)
+void ApplicationSettings::setShowPermanentDeleteDialog(bool val)
 {
     d->showPermanentDeleteDialog = val;
 }
 
-bool AlbumSettings::getShowPermanentDeleteDialog() const
+bool ApplicationSettings::getShowPermanentDeleteDialog() const
 {
     return d->showPermanentDeleteDialog;
 }
 
-void AlbumSettings::setApplySidebarChangesDirectly(bool val)
+void ApplicationSettings::setApplySidebarChangesDirectly(bool val)
 {
     d->sidebarApplyDirectly= val;
 }
 
-bool AlbumSettings::getApplySidebarChangesDirectly() const
+bool ApplicationSettings::getApplySidebarChangesDirectly() const
 {
     return d->sidebarApplyDirectly;
 }
 
-bool AlbumSettings::showToolTipsIsValid() const
+bool ApplicationSettings::showToolTipsIsValid() const
 {
     if (d->showToolTips)
     {
@@ -1643,7 +1643,7 @@ bool AlbumSettings::showToolTipsIsValid() const
     return false;
 }
 
-bool AlbumSettings::showAlbumToolTipsIsValid() const
+bool ApplicationSettings::showAlbumToolTipsIsValid() const
 {
     if (d->showAlbumToolTips)
     {
@@ -1662,221 +1662,221 @@ bool AlbumSettings::showAlbumToolTipsIsValid() const
     return false;
 }
 
-void AlbumSettings::setPreviewLoadFullImageSize(bool val)
+void ApplicationSettings::setPreviewLoadFullImageSize(bool val)
 {
     d->previewLoadFullImageSize = val;
 }
 
-bool AlbumSettings::getPreviewLoadFullImageSize() const
+bool ApplicationSettings::getPreviewLoadFullImageSize() const
 {
     return d->previewLoadFullImageSize;
 }
 
-void AlbumSettings::setPreviewShowIcons(bool val)
+void ApplicationSettings::setPreviewShowIcons(bool val)
 {
     d->previewShowIcons = val;
 }
 
-bool AlbumSettings::getPreviewShowIcons() const
+bool ApplicationSettings::getPreviewShowIcons() const
 {
     return d->previewShowIcons;
 }
 
-void AlbumSettings::setRecurseAlbums(bool val)
+void ApplicationSettings::setRecurseAlbums(bool val)
 {
     d->recursiveAlbums = val;
     emit recurseSettingsChanged();
 }
 
-bool AlbumSettings::getRecurseAlbums() const
+bool ApplicationSettings::getRecurseAlbums() const
 {
     return d->recursiveAlbums;
 }
 
-void AlbumSettings::setRecurseTags(bool val)
+void ApplicationSettings::setRecurseTags(bool val)
 {
     d->recursiveTags = val;
     emit recurseSettingsChanged();
 }
 
-bool AlbumSettings::getRecurseTags() const
+bool ApplicationSettings::getRecurseTags() const
 {
     return d->recursiveTags;
 }
 
-void AlbumSettings::setShowFolderTreeViewItemsCount(bool val)
+void ApplicationSettings::setShowFolderTreeViewItemsCount(bool val)
 {
     d->showFolderTreeViewItemsCount = val;
 }
 
-bool AlbumSettings::getShowFolderTreeViewItemsCount() const
+bool ApplicationSettings::getShowFolderTreeViewItemsCount() const
 {
     return d->showFolderTreeViewItemsCount;
 }
 
-void AlbumSettings::setShowThumbbar(bool val)
+void ApplicationSettings::setShowThumbbar(bool val)
 {
     d->showThumbbar = val;
 }
 
-bool AlbumSettings::getShowThumbbar() const
+bool ApplicationSettings::getShowThumbbar() const
 {
     return d->showThumbbar;
 }
 
-void AlbumSettings::setSyncBalooToDigikam(bool val)
+void ApplicationSettings::setSyncBalooToDigikam(bool val)
 {
     d->syncToDigikam = val;
     emit balooSettingsChanged();
 }
 
-bool AlbumSettings::getSyncBalooToDigikam() const
+bool ApplicationSettings::getSyncBalooToDigikam() const
 {
     return d->syncToDigikam;
 }
 
-void AlbumSettings::setSyncDigikamToBaloo(bool val)
+void ApplicationSettings::setSyncDigikamToBaloo(bool val)
 {
     d->syncToBaloo = val;
     emit balooSettingsChanged();
 }
 
-bool AlbumSettings::getSyncDigikamToBaloo() const
+bool ApplicationSettings::getSyncDigikamToBaloo() const
 {
     return d->syncToBaloo;
 }
 
-DatabaseParameters AlbumSettings::getDatabaseParameters() const
+DatabaseParameters ApplicationSettings::getDatabaseParameters() const
 {
     return d->databaseParams;
 }
 
-void AlbumSettings::setDatabaseParameters(const DatabaseParameters& params)
+void ApplicationSettings::setDatabaseParameters(const DatabaseParameters& params)
 {
     d->databaseParams = params;
 }
 
-QString AlbumSettings::getDatabaseType() const
+QString ApplicationSettings::getDatabaseType() const
 {
     return d->databaseParams.databaseType;
 }
 
-void AlbumSettings::setDatabaseType(const QString& databaseType)
+void ApplicationSettings::setDatabaseType(const QString& databaseType)
 {
     d->databaseParams.databaseType = databaseType;
 }
 
-QString AlbumSettings::getDatabaseConnectoptions() const
+QString ApplicationSettings::getDatabaseConnectoptions() const
 {
     return d->databaseParams.connectOptions;
 }
 
-QString AlbumSettings::getDatabaseName() const
+QString ApplicationSettings::getDatabaseName() const
 {
     return d->databaseParams.databaseName;
 }
 
-QString AlbumSettings::getDatabaseNameThumbnails() const
+QString ApplicationSettings::getDatabaseNameThumbnails() const
 {
     return d->databaseParams.databaseNameThumbnails;
 }
 
-QString AlbumSettings::getDatabaseHostName() const
+QString ApplicationSettings::getDatabaseHostName() const
 {
     return d->databaseParams.hostName;
 }
 
-QString AlbumSettings::getDatabasePassword() const
+QString ApplicationSettings::getDatabasePassword() const
 {
     return d->databaseParams.password;
 }
 
-int AlbumSettings::getDatabasePort() const
+int ApplicationSettings::getDatabasePort() const
 {
     return d->databaseParams.port;
 }
 
-QString AlbumSettings::getDatabaseUserName() const
+QString ApplicationSettings::getDatabaseUserName() const
 {
     return d->databaseParams.userName;
 }
 
-bool AlbumSettings::getInternalDatabaseServer() const
+bool ApplicationSettings::getInternalDatabaseServer() const
 {
     return d->databaseParams.internalServer;
 }
 
-void AlbumSettings::setDatabaseConnectoptions(const QString& connectoptions)
+void ApplicationSettings::setDatabaseConnectoptions(const QString& connectoptions)
 {
     d->databaseParams.connectOptions = connectoptions;
 }
 
-void AlbumSettings::setDatabaseName(const QString& databaseName)
+void ApplicationSettings::setDatabaseName(const QString& databaseName)
 {
     d->databaseParams.databaseName = databaseName;
 }
 
-void AlbumSettings::setDatabaseNameThumbnails(const QString& databaseNameThumbnails)
+void ApplicationSettings::setDatabaseNameThumbnails(const QString& databaseNameThumbnails)
 {
     d->databaseParams.databaseNameThumbnails = databaseNameThumbnails;
 }
 
-void AlbumSettings::setDatabaseHostName(const QString& hostName)
+void ApplicationSettings::setDatabaseHostName(const QString& hostName)
 {
     d->databaseParams.hostName = hostName;
 }
 
-void AlbumSettings::setDatabasePassword(const QString& password)
+void ApplicationSettings::setDatabasePassword(const QString& password)
 {
     d->databaseParams.password = password;
 }
 
-void AlbumSettings::setDatabasePort(int port)
+void ApplicationSettings::setDatabasePort(int port)
 {
     d->databaseParams.port = port;
 }
 
-void AlbumSettings::setDatabaseUserName(const QString& userName)
+void ApplicationSettings::setDatabaseUserName(const QString& userName)
 {
     d->databaseParams.userName = userName;
 }
 
-void AlbumSettings::setInternalDatabaseServer(const bool useInternalDBServer)
+void ApplicationSettings::setInternalDatabaseServer(const bool useInternalDBServer)
 {
     d->databaseParams.internalServer = useInternalDBServer;
 }
 
-void AlbumSettings::setStringComparisonType(AlbumSettings::StringComparisonType val)
+void ApplicationSettings::setStringComparisonType(ApplicationSettings::StringComparisonType val)
 {
     d->stringComparisonType = val;
 }
 
-AlbumSettings::StringComparisonType AlbumSettings::getStringComparisonType() const
+ApplicationSettings::StringComparisonType ApplicationSettings::getStringComparisonType() const
 {
     return d->stringComparisonType;
 }
 
-void AlbumSettings::setVersionManagerSettings(const VersionManagerSettings& settings)
+void ApplicationSettings::setVersionManagerSettings(const VersionManagerSettings& settings)
 {
     d->versionSettings = settings;
 }
 
-VersionManagerSettings AlbumSettings::getVersionManagerSettings() const
+VersionManagerSettings ApplicationSettings::getVersionManagerSettings() const
 {
     return d->versionSettings;
 }
 
-double AlbumSettings::getFaceDetectionAccuracy() const
+double ApplicationSettings::getFaceDetectionAccuracy() const
 {
     return d->faceDetectionAccuracy;
 }
 
-void AlbumSettings::setFaceDetectionAccuracy(double value)
+void ApplicationSettings::setFaceDetectionAccuracy(double value)
 {
     d->faceDetectionAccuracy = value;
 }
 
-void AlbumSettings::setApplicationStyle(const QString& style)
+void ApplicationSettings::setApplicationStyle(const QString& style)
 {
     if (d->applicationStyle != style)
     {
@@ -1885,17 +1885,17 @@ void AlbumSettings::setApplicationStyle(const QString& style)
     }
 }
 
-QString AlbumSettings::getApplicationStyle() const
+QString ApplicationSettings::getApplicationStyle() const
 {
     return d->applicationStyle;
 }
 
-void AlbumSettings::setAlbumSortChanged(bool val)
+void ApplicationSettings::setAlbumSortChanged(bool val)
 {
     d->albumSortChanged = val;
 }
 
-bool AlbumSettings::getAlbumSortChanged() const
+bool ApplicationSettings::getAlbumSortChanged() const
 {
     return d->albumSortChanged;
 }

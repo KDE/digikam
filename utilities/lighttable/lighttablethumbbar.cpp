@@ -42,7 +42,7 @@
 // Local includes
 
 #include "albumdb.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "contextmenuhelper.h"
 #include "imagefiltermodel.h"
 #include "imagedragdrop.h"
@@ -190,8 +190,8 @@ LightTableThumbBar::LightTableThumbBar(QWidget* const parent)
     d->imageInfoModel->setThumbnailLoadThread(ThumbnailLoadThread::defaultIconViewThread());
 
     d->imageFilterModel->setCategorizationMode(ImageSortSettings::NoCategories);
-    d->imageFilterModel->setSortRole((ImageSortSettings::SortRole)AlbumSettings::instance()->getImageSortOrder());
-    d->imageFilterModel->setSortOrder((ImageSortSettings::SortOrder)AlbumSettings::instance()->getImageSorting());
+    d->imageFilterModel->setSortRole((ImageSortSettings::SortRole)ApplicationSettings::instance()->getImageSortOrder());
+    d->imageFilterModel->setSortOrder((ImageSortSettings::SortOrder)ApplicationSettings::instance()->getImageSorting());
     d->imageFilterModel->setAllGroupsOpen(true); // disable filtering out by group, see bug #308948
     d->imageFilterModel->sort(0); // an initial sorting is necessary
 

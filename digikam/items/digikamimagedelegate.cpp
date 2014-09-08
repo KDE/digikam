@@ -36,7 +36,7 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "imagecategorydrawer.h"
 #include "imagecategorizedview.h"
 #include "imagedelegateoverlay.h"
@@ -51,7 +51,7 @@ void DigikamImageDelegatePrivate::init(DigikamImageDelegate* q, ImageCategorized
 {
     categoryDrawer = new ImageCategoryDrawer(parent);
 
-    QObject::connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+    QObject::connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
                      q, SLOT(slotSetupChanged()));
 }
 
@@ -88,9 +88,9 @@ void DigikamImageDelegate::updateRects()
     d->pixmapRect                      = QRect(d->margin, y, d->contentWidth, d->contentWidth);
     y                                  = d->pixmapRect.bottom();
     d->imageInformationRect            = QRect(d->margin, y, d->contentWidth, 0);
-    const AlbumSettings* albumSettings = AlbumSettings::instance();
+    const ApplicationSettings* albumSettings = ApplicationSettings::instance();
     d->drawImageFormat                 = albumSettings->getIconShowImageFormat();
-    d->drawCoordinates                 = AlbumSettings::instance()->getIconShowCoordinates();
+    d->drawCoordinates                 = ApplicationSettings::instance()->getIconShowCoordinates();
 
     const int iconSize = KIconLoader::SizeSmallMedium;
     d->pickLabelRect   = QRect(d->margin, y, iconSize, iconSize);

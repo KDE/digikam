@@ -49,7 +49,7 @@ namespace Digikam
 class DatabaseParameters;
 class VersionManagerSettings;
 
-class AlbumSettings : public QObject
+class ApplicationSettings : public QObject
 {
     Q_OBJECT
 
@@ -94,7 +94,7 @@ Q_SIGNALS:
 
 public:
 
-    static AlbumSettings* instance();
+    static ApplicationSettings* instance();
 
     void readSettings();
     void saveSettings();
@@ -353,7 +353,7 @@ public:
      *
      * @param val new way to compare strings
      */
-    void setStringComparisonType(AlbumSettings::StringComparisonType val);
+    void setStringComparisonType(ApplicationSettings::StringComparisonType val);
     /**
      * Tells in which way strings are compared at the moment.
      *
@@ -407,14 +407,14 @@ private slots:
     void applyBalooSettings();
 private:
 
-    AlbumSettings();
-    ~AlbumSettings();
+    ApplicationSettings();
+    ~ApplicationSettings();
 
     void init();
 
 private:
 
-    friend class AlbumSettingsCreator;
+    friend class ApplicationSettingsCreator;
 
     class Private;
     Private* const d;

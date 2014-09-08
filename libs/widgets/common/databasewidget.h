@@ -41,7 +41,7 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "databaseparameters.h"
 
 namespace Digikam
@@ -75,7 +75,7 @@ public:
 
 public:
 
-    void setParametersFromSettings(const AlbumSettings* const settings);
+    void setParametersFromSettings(const ApplicationSettings* const settings);
     DatabaseParameters getDatabaseParameters();
 
     QString currentDatabaseType() const;

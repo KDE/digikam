@@ -30,7 +30,7 @@
 
 // Local settings
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 
 namespace Digikam
 {
@@ -75,10 +75,10 @@ DigikamModelCollection::DigikamModelCollection() :
     d->imageVersionModel = new ImageVersionsModel();
 
     // set icons initially
-    slotAlbumSettingsChanged();
+    slotApplicationSettingsChanged();
 
-    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
-            this, SLOT(slotAlbumSettingsChanged()));
+    connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
+            this, SLOT(slotApplicationSettingsChanged()));
 }
 
 DigikamModelCollection::~DigikamModelCollection()
@@ -127,10 +127,10 @@ ImageVersionsModel* DigikamModelCollection::getImageVersionsModel() const
     return d->imageVersionModel;
 }
 
-void DigikamModelCollection::slotAlbumSettingsChanged()
+void DigikamModelCollection::slotApplicationSettingsChanged()
 {
-    d->dateAlbumModel->setPixmaps(SmallIcon("view-calendar-list",  AlbumSettings::instance()->getTreeViewIconSize()),
-                                  SmallIcon("view-calendar-month", AlbumSettings::instance()->getTreeViewIconSize()));
+    d->dateAlbumModel->setPixmaps(SmallIcon("view-calendar-list",  ApplicationSettings::instance()->getTreeViewIconSize()),
+                                  SmallIcon("view-calendar-month", ApplicationSettings::instance()->getTreeViewIconSize()));
 }
 
 } // namespace Digikam

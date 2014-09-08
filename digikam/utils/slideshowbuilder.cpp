@@ -37,7 +37,7 @@
 
 #include "album.h"
 #include "imageinfoalbumsjob.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 
 namespace Digikam
 {
@@ -124,7 +124,7 @@ void SlideShowBuilder::slotParseImageInfoList(const ImageInfoList& list)
     int               i = 0;
     SlideShowSettings settings;
     settings.readFromConfig();
-    settings.useFullSizePreviews = AlbumSettings::instance()->getPreviewLoadFullImageSize();
+    settings.useFullSizePreviews = ApplicationSettings::instance()->getPreviewLoadFullImageSize();
 
     for (ImageInfoList::const_iterator it = list.constBegin();
          !d->cancel && (it != list.constEnd()) ; ++it)

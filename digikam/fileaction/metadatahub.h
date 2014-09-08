@@ -46,7 +46,7 @@
 namespace Digikam
 {
 
-class AlbumSettings;
+class ApplicationSettings;
 class ImageInfo;
 class Template;
 

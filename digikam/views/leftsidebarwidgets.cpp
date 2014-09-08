@@ -54,7 +54,7 @@
 #include "albummanager.h"
 #include "albummodificationhelper.h"
 #include "albumselectiontreeview.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "datefolderview.h"
 #include "editablesearchtreeview.h"
 #include "fuzzysearchview.h"
@@ -142,7 +142,7 @@ void AlbumFolderViewSideBarWidget::doSaveState()
 
 void AlbumFolderViewSideBarWidget::applySettings()
 {
-    AlbumSettings* const settings = AlbumSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
     d->albumFolderView->setEnableToolTips(settings->getShowAlbumToolTips());
 }
 

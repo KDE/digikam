@@ -49,7 +49,7 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "imagealbumfiltermodel.h"
 #include "imagealbummodel.h"
 #include "imagedragdrop.h"
@@ -88,9 +88,9 @@ ImageThumbnailBar::ImageThumbnailBar(QWidget* parent)
     setAcceptDrops(true);
     setDropIndicatorShown(false);
 
-    setToolTipEnabled(AlbumSettings::instance()->showToolTipsIsValid());
+    setToolTipEnabled(ApplicationSettings::instance()->showToolTipsIsValid());
 
-    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+    connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
 
     slotSetupChanged();
@@ -192,8 +192,8 @@ void ImageThumbnailBar::setFlow(QListView::Flow flow)
 
 void ImageThumbnailBar::slotSetupChanged()
 {
-    setToolTipEnabled(AlbumSettings::instance()->showToolTipsIsValid());
-    setFont(AlbumSettings::instance()->getIconViewFont());
+    setToolTipEnabled(ApplicationSettings::instance()->showToolTipsIsValid());
+    setFont(ApplicationSettings::instance()->getIconViewFont());
 
     ImageCategorizedView::slotSetupChanged();
 }

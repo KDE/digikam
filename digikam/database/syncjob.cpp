@@ -50,7 +50,7 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "thumbnailsize.h"
 #include "albumthumbnailloader.h"
 #include "album.h"

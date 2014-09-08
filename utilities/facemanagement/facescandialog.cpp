@@ -54,7 +54,7 @@
 
 #include "albummodel.h"
 #include "albumselectors.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 
 namespace Digikam
 {
@@ -224,7 +224,7 @@ void FaceScanDialog::doLoadState()
 
     d->alreadyScannedBox->setCurrentIndex(d->alreadyScannedBox->findData(handling));
 
-    d->accuracyInput->setValue(AlbumSettings::instance()->getFaceDetectionAccuracy() * 100);
+    d->accuracyInput->setValue(ApplicationSettings::instance()->getFaceDetectionAccuracy() * 100);
 
     d->albumSelectors->loadState();
 
@@ -273,7 +273,7 @@ void FaceScanDialog::doSaveState()
 
     group.writeEntry(entryName(d->configAlreadyScannedHandling), handling);
 
-    AlbumSettings::instance()->setFaceDetectionAccuracy(double(d->accuracyInput->value()) / 100);
+    ApplicationSettings::instance()->setFaceDetectionAccuracy(double(d->accuracyInput->value()) / 100);
 
     d->albumSelectors->saveState();
 

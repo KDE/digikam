@@ -57,7 +57,7 @@ void DigikamImageView::Private::updateOverlays()
 {
     Q_Q(DigikamImageView);
 
-    AlbumSettings* const settings = AlbumSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
 
     if (overlaysActive)
     {

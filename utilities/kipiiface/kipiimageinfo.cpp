@@ -46,7 +46,7 @@
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "databaseaccess.h"
 #include "fileactionmngr.h"
 #include "imageattributeswatch.h"

@@ -48,7 +48,7 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "colorlabelfilter.h"
 #include "geolocationfilter.h"
 #include "picklabelfilter.h"
@@ -413,7 +413,7 @@ void FilterSideBarWidget::doLoadState()
 
 
     d->ratingFilter->setRatingFilterCondition((ImageFilterSettings::RatingCondition)
-                                              (AlbumSettings::instance()->getRatingFilterCond()));
+                                              (ApplicationSettings::instance()->getRatingFilterCond()));
 
     d->tagMatchCond = (ImageFilterSettings::MatchingCondition)
                       (group.readEntry(entryName(d->configMatchingConditionEntry),
@@ -441,7 +441,7 @@ void FilterSideBarWidget::doSaveState()
 
     group.writeEntry(entryName(d->configSearchTextFilterFieldsEntry), (int)d->textFilter->searchTextFields());
 
-    AlbumSettings::instance()->setRatingFilterCond(d->ratingFilter->ratingFilterCondition());
+    ApplicationSettings::instance()->setRatingFilterCond(d->ratingFilter->ratingFilterCondition());
 
     group.writeEntry(entryName(d->configMatchingConditionEntry), (int)d->tagMatchCond);
 

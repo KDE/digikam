@@ -48,7 +48,7 @@
 #include "albumdragdrop.h"
 #include "albummanager.h"
 #include "albummodeldragdrophandler.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "albumthumbnailloader.h"
 #include "contextmenuhelper.h"
 #include "fileactionmngr.h"
@@ -225,7 +225,7 @@ AbstractAlbumTreeView::AbstractAlbumTreeView(QWidget* const parent, Flags flags)
     connect(d->resizeColumnsTimer, SIGNAL(timeout()),
             this, SLOT(adaptColumnsToContent()));
 
-    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+    connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(albumSettingsChanged()));
 
     connect(this, SIGNAL(currentAlbumChanged(Album*)),
@@ -993,7 +993,7 @@ void AbstractAlbumTreeView::doSaveState()
 
     // A dummy way to force the tree view to resort if the album sort role changed
 
-    if (AlbumSettings::instance()->getAlbumSortChanged())
+    if (ApplicationSettings::instance()->getAlbumSortChanged())
     {
         if ( int(albumFilterModel()->sortOrder()) == 0 )
         {
@@ -1163,7 +1163,7 @@ AbstractCountingAlbumTreeView::AbstractCountingAlbumTreeView(QWidget* const pare
 
     if (flags & ShowCountAccordingToSettings)
     {
-        connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+        connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
                 this, SLOT(setShowCountFromSettings()));
     }
 }
@@ -1220,7 +1220,7 @@ void AbstractCountingAlbumTreeView::slotExpanded(const QModelIndex& index)
 
 void AbstractCountingAlbumTreeView::setShowCountFromSettings()
 {
-    static_cast<AbstractCountingAlbumModel*>(m_albumModel)->setShowCount(AlbumSettings::instance()->getShowFolderTreeViewItemsCount());
+    static_cast<AbstractCountingAlbumModel*>(m_albumModel)->setShowCount(ApplicationSettings::instance()->getShowFolderTreeViewItemsCount());
 }
 
 void AbstractCountingAlbumTreeView::rowsInserted(const QModelIndex& parent, int start, int end)

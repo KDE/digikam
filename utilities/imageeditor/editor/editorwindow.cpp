@@ -115,7 +115,7 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "actioncategorizedview.h"
 #include "buttonicondisabler.h"
 #include "canvas.h"

@@ -62,7 +62,7 @@
 #include "imageinfo.h"
 #include "dprogressdlg.h"
 #include "dmetadata.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "albumdb.h"
 #include "albummanager.h"
 #include "album.h"

@@ -44,7 +44,7 @@
 // Local includes
 
 #include "albumhistory.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "metadatasynchronizer.h"
 #include "digikamapp.h"
 #include "digikamimageview.h"
@@ -390,7 +390,7 @@ void DigikamView::applySettings()
         sidebarWidget->applySettings();
     }
 
-    d->iconView->imageFilterModel()->setVersionImageFilterSettings(VersionImageFilterSettings(AlbumSettings::instance()->getVersionManagerSettings()));
+    d->iconView->imageFilterModel()->setVersionImageFilterSettings(VersionImageFilterSettings(ApplicationSettings::instance()->getVersionManagerSettings()));
 
     refreshView();
 }
@@ -614,7 +614,7 @@ void DigikamView::setupConnections()
 
     // -- Album Settings ----------------
 
-    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+    connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSidebarTabTitleStyleChanged()));
 
     // -- Album History -----------------
@@ -908,14 +908,14 @@ void DigikamView::slotAllAlbumsLoaded()
 
 void DigikamView::slotSortAlbums(int order)
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    ApplicationSettings* settings = ApplicationSettings::instance();
 
     if (!settings)
     {
         return;
     }
 
-    settings->setAlbumSortOrder((AlbumSettings::AlbumSortOrder) order);
+    settings->setAlbumSortOrder((ApplicationSettings::AlbumSortOrder) order);
     settings->saveSettings();
     //A dummy way to force the tree view to resort if the album sort role changed
 
@@ -1486,7 +1486,7 @@ void DigikamView::slotThumbSizeEffect()
     d->tableView->setThumbnailSize(d->thumbSize);
     toggleZoomActions();
 
-    AlbumSettings::instance()->setDefaultIconSize(d->thumbSize);
+    ApplicationSettings::instance()->setDefaultIconSize(d->thumbSize);
 }
 
 void DigikamView::toggleZoomActions()
@@ -1955,7 +1955,7 @@ void DigikamView::slotSelectInvert()
 
 void DigikamView::slotSortImages(int sortRole)
 {
-    AlbumSettings* const settings = AlbumSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
 
     if (!settings)
     {
@@ -1968,7 +1968,7 @@ void DigikamView::slotSortImages(int sortRole)
 
 void DigikamView::slotSortImagesOrder(int order)
 {
-    AlbumSettings* const settings = AlbumSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
 
     if (!settings)
     {
@@ -1981,7 +1981,7 @@ void DigikamView::slotSortImagesOrder(int order)
 
 void DigikamView::slotGroupImages(int categoryMode)
 {
-    AlbumSettings* const settings = AlbumSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
 
     if (!settings)
     {
@@ -1994,7 +1994,7 @@ void DigikamView::slotGroupImages(int categoryMode)
 
 void DigikamView::slotSortImageGroupOrder(int order)
 {
-    AlbumSettings* const settings = AlbumSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
 
     if (!settings)
     {
@@ -2132,8 +2132,8 @@ void DigikamView::setRecurseTags(bool recursive)
 
 void DigikamView::slotSidebarTabTitleStyleChanged()
 {
-    d->leftSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
-    d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
+    d->leftSideBar->setStyle(ApplicationSettings::instance()->getSidebarTitleStyle());
+    d->rightSideBar->setStyle(ApplicationSettings::instance()->getSidebarTitleStyle());
 
     /// @todo Which settings actually have to be reloaded?
     //     d->rightSideBar->applySettings();

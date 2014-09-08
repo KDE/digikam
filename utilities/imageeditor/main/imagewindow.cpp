@@ -82,7 +82,7 @@
 #include "albumdb.h"
 #include "albummanager.h"
 #include "albummodel.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "canvas.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
@@ -350,8 +350,8 @@ void ImageWindow::setupUserArea()
     d->imageInfoModel->setThumbnailLoadThread(ThumbnailLoadThread::defaultIconViewThread());
 
     d->imageFilterModel->setCategorizationMode(ImageSortSettings::NoCategories);
-    d->imageFilterModel->setSortRole((ImageSortSettings::SortRole)AlbumSettings::instance()->getImageSortOrder());
-    d->imageFilterModel->setSortOrder((ImageSortSettings::SortOrder)AlbumSettings::instance()->getImageSorting());
+    d->imageFilterModel->setSortRole((ImageSortSettings::SortRole)ApplicationSettings::instance()->getImageSortOrder());
+    d->imageFilterModel->setSortOrder((ImageSortSettings::SortOrder)ApplicationSettings::instance()->getImageSorting());
     d->imageFilterModel->setAllGroupsOpen(true); // disable filtering out by group, see bug #283847
     d->imageFilterModel->sort(0); // an initial sorting is necessary
 
@@ -422,7 +422,7 @@ void ImageWindow::setupConnections()
     connect(d->imageInfoModel, SIGNAL(allRefreshingFinished()),
             this, SLOT(slotThumbBarModelReady()));
 
-    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+    connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
 }
 
@@ -473,12 +473,12 @@ void ImageWindow::slotSetupChanged()
 {
     applyStandardSettings();
 
-    VersionManagerSettings versionSettings = AlbumSettings::instance()->getVersionManagerSettings();
+    VersionManagerSettings versionSettings = ApplicationSettings::instance()->getVersionManagerSettings();
     d->versionManager.setSettings(versionSettings);
     m_nonDestructive                       = versionSettings.enabled;
     toggleNonDestructiveActions();
 
-    d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
+    d->rightSideBar->setStyle(ApplicationSettings::instance()->getSidebarTitleStyle());
 }
 
 void ImageWindow::loadImageInfos(const ImageInfoList& imageInfoList, const ImageInfo& imageInfoCurrent,

@@ -41,7 +41,7 @@
 
 // Local settings.
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 
 namespace Digikam
 {
@@ -116,7 +116,7 @@ void OpenFilePage::saveSettings()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Album Settings");
     group.writeEntry("Item Left Click Action", (int)(d->openInEditor->isChecked() ?
-                                                     AlbumSettings::StartEditor : AlbumSettings::ShowPreview));
+                                                     ApplicationSettings::StartEditor : ApplicationSettings::ShowPreview));
 
     config->sync();
 }

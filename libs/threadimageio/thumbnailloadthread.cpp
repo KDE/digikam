@@ -871,10 +871,10 @@ QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription& descripti
     }
 
 /*
-    No dependency on AlbumSettings here please...
+    No dependency on ApplicationSettings here please...
     QString ext = QFileInfo(url.toLocalFile()).suffix();
 
-    AlbumSettings* const settings = AlbumSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
     if (settings)
     {
         if (settings->getImageFileFilter().toUpper().contains(ext.toUpper()) ||

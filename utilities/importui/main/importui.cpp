@@ -97,7 +97,7 @@
 #include "advancedrenamemanager.h"
 #include "album.h"
 #include "albummanager.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "albumselectdialog.h"
 #include "cameracontroller.h"
 #include "camerafolderdialog.h"
@@ -700,7 +700,7 @@ void ImportUI::setupConnections()
     connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(CollectionLocation,int)),
             this, SLOT(slotCollectionLocationStatusChanged(CollectionLocation,int)));
 
-    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+    connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
 
     connect(d->renameCustomizer, SIGNAL(signalChanged()),
@@ -2649,7 +2649,7 @@ void ImportUI::toogleShowBar()
 void ImportUI::slotSetupChanged()
 {
     // Load full-screen options
-    KConfigGroup group = AlbumSettings::instance()->generalConfigGroup();
+    KConfigGroup group = ApplicationSettings::instance()->generalConfigGroup();
     readFullScreenSettings(group);
 
     d->view->applySettings();
@@ -2658,7 +2658,7 @@ void ImportUI::slotSetupChanged()
 
 void ImportUI::sidebarTabTitleStyleChanged()
 {
-    d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
+    d->rightSideBar->setStyle(ApplicationSettings::instance()->getSidebarTitleStyle());
     d->rightSideBar->applySettings();
 }
 

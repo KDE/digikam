@@ -37,7 +37,7 @@
 
 #include "album.h"
 #include "albumdb.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "collectionmanager.h"
 #include "databaseaccess.h"
 #include "digikamapp.h"
@@ -205,7 +205,7 @@ KUrl::List KipiImageCollection::Private::imagesFromPAlbum(PAlbum* const album) c
 
     AlbumDB::ItemSortOrder sortOrder = AlbumDB::NoItemSorting;
 
-    switch (AlbumSettings::instance()->getImageSortOrder())
+    switch (ApplicationSettings::instance()->getImageSortOrder())
     {
         default:
         case ImageSortSettings::SortByFileName:

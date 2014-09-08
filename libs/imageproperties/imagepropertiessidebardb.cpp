@@ -46,7 +46,7 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "databaseinfocontainers.h"
 #include "databasewatch.h"
 #include "digikam2kgeomap_database.h"
@@ -123,7 +123,7 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* const parent, Sideba
     connect(ImageAttributesWatch::instance(), SIGNAL(signalFileMetadataChanged(KUrl)),
             this, SLOT(slotFileMetadataChanged(KUrl)));
 
-    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+    connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotLoadMetadataFilters()));
 }
 

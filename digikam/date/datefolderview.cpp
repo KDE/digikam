@@ -50,7 +50,7 @@
 
 #include "album.h"
 #include "albumdb.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "albumtreeview.h"
 #include "monthwidget.h"
 

@@ -45,7 +45,7 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "thumbsgenerator.h"
 #include "setupalbumview.h"
 #include "setupcamera.h"
@@ -542,7 +542,7 @@ void Setup::okClicked()
     d->scriptManagerPage->applySettings();
 #endif
 
-    AlbumSettings::instance()->emitSetupChanged();
+    ApplicationSettings::instance()->emitSetupChanged();
     ImportSettings::instance()->emitSetupChanged();
 
     kapp->restoreOverrideCursor();

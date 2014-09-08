@@ -43,7 +43,7 @@
 
 #include "daboutdata.h"
 #include "albumdb.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "databaseaccess.h"
 #include "config-digikam.h"
 
@@ -78,12 +78,12 @@ DBStatDlg::DBStatDlg(QWidget* const parent)
     new QTreeWidgetItem(listView(), QStringList() << i18n("Tags") << QString::number(tags));
 
     // Database Backend information
-    QString dbBe = AlbumSettings::instance()->getDatabaseType();
+    QString dbBe = ApplicationSettings::instance()->getDatabaseType();
     new QTreeWidgetItem(listView(), QStringList() << i18n("Database backend") << dbBe);
 
     if (dbBe != QString("QSQLITE"))
     {
-        QString internal = AlbumSettings::instance()->getInternalDatabaseServer() ? i18n("Yes") : i18n("No");
+        QString internal = ApplicationSettings::instance()->getInternalDatabaseServer() ? i18n("Yes") : i18n("No");
         new QTreeWidgetItem(listView(), QStringList() << i18n("Database internal server") << internal);
     }
 

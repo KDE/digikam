@@ -39,7 +39,7 @@
 // Local includes
 
 #include "albummanager.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "album.h"
 #include "databaseinfocontainers.h"
 #include "dimgfiltermanager.h"
@@ -98,7 +98,7 @@ bool ToolTipFiller::aspectRatioToString(const int width, const int height, QStri
 QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 {
     QString              str;
-    AlbumSettings* const settings    = AlbumSettings::instance();
+    ApplicationSettings* const settings    = ApplicationSettings::instance();
     DToolTipStyleSheet   cnt(settings->getToolTipsFont());
 
     ImageCommonContainer commonInfo  = info.imageCommonContainer();
@@ -563,7 +563,7 @@ QString ToolTipFiller::albumTipContents(PAlbum* const album, int count)
     }
 
     QString            str;
-    AlbumSettings*     settings = AlbumSettings::instance();
+    ApplicationSettings*     settings = ApplicationSettings::instance();
     DToolTipStyleSheet cnt(settings->getToolTipsFont());
     QString            tip      = cnt.tipHeader;
 
@@ -641,7 +641,7 @@ QString ToolTipFiller::filterActionTipContents(const FilterAction& action)
     }
 
     QString            str;
-    DToolTipStyleSheet cnt(AlbumSettings::instance()->getToolTipsFont());
+    DToolTipStyleSheet cnt(ApplicationSettings::instance()->getToolTipsFont());
     QString            tip = cnt.tipHeader;
 
     tip += cnt.headBeg + i18n("Filter") + cnt.headEnd;

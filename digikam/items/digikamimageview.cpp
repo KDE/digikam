@@ -57,7 +57,7 @@
 #include "albumdb.h"
 #include "advancedrenamedialog.h"
 #include "advancedrenameprocessdialog.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "assignnameoverlay.h"
 #include "contextmenuhelper.h"
 #include "databaseaccess.h"
@@ -102,7 +102,7 @@ DigikamImageView::DigikamImageView(QWidget* const parent)
     setItemDelegate(d->normalDelegate);
     setSpacing(10);
 
-    AlbumSettings* const settings = AlbumSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
 
     imageFilterModel()->setCategorizationMode(ImageSortSettings::CategoryByAlbum);
 
@@ -193,8 +193,8 @@ int DigikamImageView::fitToWidthIcons()
 
 void DigikamImageView::slotSetupChanged()
 {
-    setToolTipEnabled(AlbumSettings::instance()->showToolTipsIsValid());
-    setFont(AlbumSettings::instance()->getIconViewFont());
+    setToolTipEnabled(ApplicationSettings::instance()->showToolTipsIsValid());
+    setFont(ApplicationSettings::instance()->getIconViewFont());
 
     d->updateOverlays();
 
@@ -317,7 +317,7 @@ void DigikamImageView::activated(const ImageInfo& info)
         return;
     }
 
-    if (AlbumSettings::instance()->getItemLeftClickAction() == AlbumSettings::ShowPreview)
+    if (ApplicationSettings::instance()->getItemLeftClickAction() == ApplicationSettings::ShowPreview)
     {
         emit previewRequested(info);
     }

@@ -44,7 +44,7 @@
 
 #include "album.h"
 #include "albummanager.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "metadatasettings.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
@@ -61,7 +61,7 @@ public:
 
     Private()
     {
-        iconSize             = AlbumSettings::instance()->getTreeViewIconSize();
+        iconSize             = ApplicationSettings::instance()->getTreeViewIconSize();
         minBlendSize         = 20;
         iconAlbumThumbThread = 0;
         iconTagThumbThread   = 0;

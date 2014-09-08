@@ -56,7 +56,7 @@
 // Local includes
 
 #include "imagepreviewviewitem.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "contextmenuhelper.h"
 #include "ddragobjects.h"
 #include "digikamapp.h"
@@ -213,7 +213,7 @@ ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode)
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
-    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+    connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
 
     slotSetupChanged();
@@ -449,10 +449,10 @@ void ImagePreviewView::slotThemeChanged()
 
 void ImagePreviewView::slotSetupChanged()
 {
-    previewItem()->setLoadFullImageSize(AlbumSettings::instance()->getPreviewLoadFullImageSize());
+    previewItem()->setLoadFullImageSize(ApplicationSettings::instance()->getPreviewLoadFullImageSize());
 
-    d->toolBar->setVisible(AlbumSettings::instance()->getPreviewShowIcons());
-    setShowText(AlbumSettings::instance()->getPreviewShowIcons());
+    d->toolBar->setVisible(ApplicationSettings::instance()->getPreviewShowIcons());
+    setShowText(ApplicationSettings::instance()->getPreviewShowIcons());
 
     // pass auto-suggest?
 }

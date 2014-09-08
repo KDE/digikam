@@ -44,7 +44,7 @@
 // Local includes
 
 #include "thumbnailsize.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "dfontselect.h"
 #include "fullscreensettings.h"
 #include "dxmlguiwindow.h"
@@ -181,8 +181,8 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
 
     QLabel* leftClickLabel     = new QLabel(i18n("Thumbnail click action:"), iconViewGroup);
     d->leftClickActionComboBox = new KComboBox(iconViewGroup);
-    d->leftClickActionComboBox->addItem(i18n("Show embedded preview"), AlbumSettings::ShowPreview);
-    d->leftClickActionComboBox->addItem(i18n("Start image editor"), AlbumSettings::StartEditor);
+    d->leftClickActionComboBox->addItem(i18n("Show embedded preview"), ApplicationSettings::ShowPreview);
+    d->leftClickActionComboBox->addItem(i18n("Start image editor"), ApplicationSettings::StartEditor);
     d->leftClickActionComboBox->setToolTip(i18n("Choose what should happen when you click on a thumbnail."));
 
     d->iconViewFontSelect = new DFontSelect(i18n("Icon View font:"), panel);
@@ -303,7 +303,7 @@ SetupAlbumView::~SetupAlbumView()
 
 void SetupAlbumView::applySettings()
 {
-    AlbumSettings* const settings = AlbumSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
 
     if (!settings)
     {
@@ -327,7 +327,7 @@ void SetupAlbumView::applySettings()
     settings->setIconShowImageFormat(d->iconShowFormatBox->isChecked());
     settings->setIconViewFont(d->iconViewFontSelect->font());
 
-    settings->setItemLeftClickAction((AlbumSettings::ItemLeftClickAction)
+    settings->setItemLeftClickAction((ApplicationSettings::ItemLeftClickAction)
                                      d->leftClickActionComboBox->currentIndex());
 
     settings->setPreviewLoadFullImageSize(d->previewLoadFullImageSize->isChecked());
@@ -345,7 +345,7 @@ void SetupAlbumView::applySettings()
 
 void SetupAlbumView::readSettings()
 {
-    AlbumSettings* const settings = AlbumSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
 
     if (!settings)
     {
