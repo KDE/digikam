@@ -6,7 +6,7 @@
  * Date        : 2009-05-26
  * Description : History view.
  *
- * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,7 +31,6 @@
 #include <QMouseEvent>
 #include <QMimeData>
 #include <QClipboard>
-#include <QApplication>
 #include <QTime>
 
 // KDE includes
@@ -39,6 +38,7 @@
 #include <kaction.h>
 #include <kmenu.h>
 #include <klocale.h>
+#include <kapplication.h>
 #include <kiconloader.h>
 
 namespace Digikam
@@ -163,6 +163,8 @@ void DHistoryView::slotCopy2ClipBoard()
 void DHistoryView::addedEntry(const QString& msg, EntryType type, const QVariant& metadata)
 {
     DHistoryViewItem* const item = new DHistoryViewItem(this, msg, type, metadata);
+    // Dispatch events to Qt loop in case of bombarding of messages. See B.K.O #338629
+    kapp->processEvents();
     setCurrentItem(item);
 }
 
