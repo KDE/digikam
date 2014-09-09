@@ -621,13 +621,13 @@ void ImageCategorizedView::slotFileChanged(const QString& filePath)
     }
 }
 
-void ImageCategorizedView::indexActivated(const QModelIndex& index)
+void ImageCategorizedView::indexActivated(const QModelIndex& index, Qt::KeyboardModifiers modifiers)
 {
     ImageInfo info = d->filterModel->imageInfo(index);
 
     if (!info.isNull())
     {
-        activated(info);
+        activated(info, modifiers);
         emit imageActivated(info);
     }
 }
@@ -670,7 +670,7 @@ Album* ImageCategorizedView::albumAt(const QPoint& pos) const
     return currentAlbum();
 }
 
-void ImageCategorizedView::activated(const ImageInfo&)
+void ImageCategorizedView::activated(const ImageInfo&, Qt::KeyboardModifiers)
 {
     // implemented in subclass
 }

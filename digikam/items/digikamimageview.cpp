@@ -310,20 +310,27 @@ void DigikamImageView::removeFaces(const QList<QModelIndex>& indexes)
     }
 }
 
-void DigikamImageView::activated(const ImageInfo& info)
+void DigikamImageView::activated(const ImageInfo& info, Qt::KeyboardModifiers modifiers)
 {
     if (info.isNull())
     {
         return;
     }
 
-    if (ApplicationSettings::instance()->getItemLeftClickAction() == ApplicationSettings::ShowPreview)
+    if (modifiers != Qt::MetaModifier)
     {
-        emit previewRequested(info);
+        if (ApplicationSettings::instance()->getItemLeftClickAction() == ApplicationSettings::ShowPreview)
+        {
+            emit previewRequested(info);
+        }
+        else
+        {
+            openFile(info);
+        }
     }
     else
     {
-        openFile(info);
+        d->utilities->openInfosWithDefaultApplication(QList<ImageInfo>() << info);
     }
 }
 

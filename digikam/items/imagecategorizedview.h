@@ -186,14 +186,14 @@ protected:
     QModelIndex                  nextIndexHint(const QModelIndex& indexToAnchor, const QItemSelectionRange& removed) const;
 
     void setItemDelegate(ImageDelegate* delegate);
-    void indexActivated(const QModelIndex& index);
+    void indexActivated(const QModelIndex& index, Qt::KeyboardModifiers modifiers);
     void currentChanged(const QModelIndex& index, const QModelIndex& previous);
     void paintEvent(QPaintEvent* e);
     void selectionChanged(const QItemSelection&, const QItemSelection&);
     void updateGeometries();
 
     /// Reimplement these in a subclass
-    virtual void activated(const ImageInfo& info);
+    virtual void activated(const ImageInfo& info, Qt::KeyboardModifiers modifiers);
     virtual void showContextMenuOnInfo(QContextMenuEvent* event, const ImageInfo& info);
     virtual void showContextMenuOnIndex(QContextMenuEvent* event, const QModelIndex& index);
 

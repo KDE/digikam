@@ -280,7 +280,7 @@ void ImportIconView::slotRotateRight(const QList<QModelIndex>& indexes)
     FileActionMngr::instance()->transform(imageInfos, KExiv2Iface::RotationMatrix::Rotate90);
 }
 
-void ImportIconView::activated(const CamItemInfo& info)
+void ImportIconView::activated(const CamItemInfo& info, Qt::KeyboardModifiers)
 {
     if (info.isNull())
     {

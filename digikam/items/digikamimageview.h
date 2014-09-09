@@ -101,7 +101,7 @@ protected:
     void addRejectionOverlay(ImageDelegate* delegate = 0);
     void addAssignNameOverlay(ImageDelegate* delegate = 0);
 
-    virtual void activated(const ImageInfo& info);
+    virtual void activated(const ImageInfo& info, Qt::KeyboardModifiers modifiers);
     virtual void showContextMenuOnInfo(QContextMenuEvent* event, const ImageInfo& info);
     virtual void showContextMenu(QContextMenuEvent* event);
     virtual void slotSetupChanged();

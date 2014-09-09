@@ -12,4 +12,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 005 ==> 322053 - Filtered Icon-View and change rating changes all items from non filtered Icon-View.
 006 ==> 137320 - Thumbnails generation process should continue for images that are off-screen [patch].
 007 ==> 110658 - Thumbnails generation process should have low priority.
-008 ==> 
+008 ==> 224806 - ICONVIEW : use keyboard modifier with right mouse click to run default "Open With..." action
+009 ==> 
