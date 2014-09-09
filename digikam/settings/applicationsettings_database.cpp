@@ -44,7 +44,6 @@ void ApplicationSettings::setDatabaseFilePath(const QString& path)
     d->databaseParams.setThumbsDatabasePath(path);
 }
 
-
 DatabaseParameters ApplicationSettings::getDatabaseParameters() const
 {
     return d->databaseParams;

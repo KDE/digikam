@@ -372,15 +372,6 @@ void ApplicationSettings::saveSettings()
     config->sync();
 }
 
-void ApplicationSettings::setShowSplashScreen(bool val)
-{
-    d->showSplash = val;
-}
-
-bool ApplicationSettings::getShowSplashScreen() const
-{
-    return d->showSplash;
-}
 
 void ApplicationSettings::setAlbumCategoryNames(const QStringList& list)
 {
@@ -759,56 +750,6 @@ QString ApplicationSettings::getCurrentTheme() const
     return d->currentTheme;
 }
 
-void ApplicationSettings::setSidebarTitleStyle(KMultiTabBar::KMultiTabBarStyle style)
-{
-    d->sidebarTitleStyle = style;
-}
-
-KMultiTabBar::KMultiTabBarStyle ApplicationSettings::getSidebarTitleStyle() const
-{
-    return d->sidebarTitleStyle;
-}
-
-void ApplicationSettings::setUseTrash(bool val)
-{
-    d->useTrash = val;
-}
-
-bool ApplicationSettings::getUseTrash() const
-{
-    return d->useTrash;
-}
-
-void ApplicationSettings::setShowTrashDeleteDialog(bool val)
-{
-    d->showTrashDeleteDialog = val;
-}
-
-bool ApplicationSettings::getShowTrashDeleteDialog() const
-{
-    return d->showTrashDeleteDialog;
-}
-
-void ApplicationSettings::setShowPermanentDeleteDialog(bool val)
-{
-    d->showPermanentDeleteDialog = val;
-}
-
-bool ApplicationSettings::getShowPermanentDeleteDialog() const
-{
-    return d->showPermanentDeleteDialog;
-}
-
-void ApplicationSettings::setApplySidebarChangesDirectly(bool val)
-{
-    d->sidebarApplyDirectly= val;
-}
-
-bool ApplicationSettings::getApplySidebarChangesDirectly() const
-{
-    return d->sidebarApplyDirectly;
-}
-
 void ApplicationSettings::setPreviewLoadFullImageSize(bool val)
 {
     d->previewLoadFullImageSize = val;
@@ -869,16 +810,6 @@ void ApplicationSettings::setShowThumbbar(bool val)
 bool ApplicationSettings::getShowThumbbar() const
 {
     return d->showThumbbar;
-}
-
-void ApplicationSettings::setStringComparisonType(ApplicationSettings::StringComparisonType val)
-{
-    d->stringComparisonType = val;
-}
-
-ApplicationSettings::StringComparisonType ApplicationSettings::getStringComparisonType() const
-{
-    return d->stringComparisonType;
 }
 
 void ApplicationSettings::setVersionManagerSettings(const VersionManagerSettings& settings)
