@@ -98,6 +98,7 @@ const QString ApplicationSettings::Private::configToolTipsShowPhotoModeEntry("To
 const QString ApplicationSettings::Private::configToolTipsShowPhotoFlashEntry("ToolTips Show Photo Flash");
 const QString ApplicationSettings::Private::configToolTipsShowPhotoWBEntry("ToolTips Show Photo WB");
 const QString ApplicationSettings::Private::configToolTipsShowAlbumNameEntry("ToolTips Show Album Name");
+const QString ApplicationSettings::Private::configToolTipsShowTitlesEntry("ToolTips Show Titles");
 const QString ApplicationSettings::Private::configToolTipsShowCommentsEntry("ToolTips Show Comments");
 const QString ApplicationSettings::Private::configToolTipsShowTagsEntry("ToolTips Show Tags");
 const QString ApplicationSettings::Private::configToolTipsShowLabelRatingEntry("ToolTips Show Label Rating");
@@ -163,6 +164,7 @@ ApplicationSettings::Private::Private(ApplicationSettings* const q)
       tooltipShowPhotoFlash(false),
       tooltipShowPhotoWb(false),
       tooltipShowAlbumName(false),
+      tooltipShowTitles(false),
       tooltipShowComments(false),
       tooltipShowTags(false),
       tooltipShowLabelRating(false),
@@ -272,6 +274,7 @@ void ApplicationSettings::Private::init()
     tooltipShowPhotoFlash               = false;
     tooltipShowPhotoWb                  = false;
     tooltipShowAlbumName                = false;
+    tooltipShowTitles                   = false;
     tooltipShowComments                 = true;
     tooltipShowTags                     = true;
     tooltipShowLabelRating              = true;

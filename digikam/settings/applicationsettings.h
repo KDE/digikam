@@ -311,6 +311,9 @@ public:
     void setToolTipsShowAlbumName(bool val);
     bool getToolTipsShowAlbumName() const;
 
+    void setToolTipsShowTitles(bool val);
+    bool getToolTipsShowTitles() const;
+
     void setToolTipsShowComments(bool val);
     bool getToolTipsShowComments() const;
 

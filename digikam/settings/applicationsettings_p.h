@@ -99,6 +99,7 @@ public:
     static const QString                      configToolTipsShowVideoFrameRateEntry;
     static const QString                      configToolTipsShowVideoVideoCodecEntry;
     static const QString                      configToolTipsShowAlbumNameEntry;
+    static const QString                      configToolTipsShowTitlesEntry;
     static const QString                      configToolTipsShowCommentsEntry;
     static const QString                      configToolTipsShowTagsEntry;
     static const QString                      configToolTipsShowLabelRatingEntry;
@@ -165,6 +166,7 @@ public:
     bool                                      tooltipShowPhotoFlash;
     bool                                      tooltipShowPhotoWb;
     bool                                      tooltipShowAlbumName;
+    bool                                      tooltipShowTitles;
     bool                                      tooltipShowComments;
     bool                                      tooltipShowTags;
     bool                                      tooltipShowLabelRating;

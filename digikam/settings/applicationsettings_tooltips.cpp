@@ -193,6 +193,16 @@ bool ApplicationSettings::getToolTipsShowAlbumName() const
     return d->tooltipShowAlbumName;
 }
 
+void ApplicationSettings::setToolTipsShowTitles(bool val)
+{
+    d->tooltipShowTitles = val;
+}
+
+bool ApplicationSettings::getToolTipsShowTitles() const
+{
+    return d->tooltipShowTitles;
+}
+
 void ApplicationSettings::setToolTipsShowComments(bool val)
 {
     d->tooltipShowComments = val;

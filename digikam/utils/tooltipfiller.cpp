@@ -75,8 +75,8 @@ bool ToolTipFiller::aspectRatioToString(const int width, const int height, QStri
     }
 
     const int gcd_divisor = gcd(width, height);
-    int ar_width          = width / gcd_divisor;
-    int ar_height         = height / gcd_divisor;
+    int ar_width          = width         / gcd_divisor;
+    int ar_height         = height        / gcd_divisor;
     const double aratio2  = double(width) / double(height);
 
     if ((ar_width == 8 && ar_height == 5) || (ar_height == 8 && ar_width == 5))
@@ -98,13 +98,13 @@ bool ToolTipFiller::aspectRatioToString(const int width, const int height, QStri
 QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 {
     QString              str;
-    ApplicationSettings* const settings    = ApplicationSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
     DToolTipStyleSheet   cnt(settings->getToolTipsFont());
 
-    ImageCommonContainer commonInfo  = info.imageCommonContainer();
-    ImageMetadataContainer photoInfo = info.imageMetadataContainer();
-    VideoMetadataContainer videoInfo = info.videoMetadataContainer();
-    QString tip                      = cnt.tipHeader;
+    ImageCommonContainer commonInfo     = info.imageCommonContainer();
+    ImageMetadataContainer photoInfo    = info.imageMetadataContainer();
+    VideoMetadataContainer videoInfo    = info.videoMetadataContainer();
+    QString tip                         = cnt.tipHeader;
 
     // -- File properties ----------------------------------------------
 
@@ -453,9 +453,10 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
     // -- digiKam properties  ------------------------------------------
 
-    if (settings->getToolTipsShowAlbumName() ||
-        settings->getToolTipsShowComments()  ||
-        settings->getToolTipsShowTags()      ||
+    if (settings->getToolTipsShowAlbumName()    ||
+        settings->getToolTipsShowTitles()       ||
+        settings->getToolTipsShowComments()     ||
+        settings->getToolTipsShowTags()         ||
         settings->getToolTipsShowLabelRating())
     {
         tip += cnt.headBeg + i18n("digiKam Properties") + cnt.headEnd;
@@ -468,6 +469,20 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
             {
                 tip += cnt.cellSpecBeg + i18n("Album:") + cnt.cellSpecMid + album->albumPath().remove(0, 1) + cnt.cellSpecEnd;
             }
+        }
+
+        if (settings->getToolTipsShowTitles())
+        {
+            str = info.title();
+
+            if (str.isEmpty())
+            {
+                str = QString("---");
+            }
+
+            tip += cnt.cellSpecBeg + i18nc("title of the file",
+                                           "Title:") + cnt.cellSpecMid +
+                   cnt.breakString(str) + cnt.cellSpecEnd;
         }
 
         if (settings->getToolTipsShowComments())
