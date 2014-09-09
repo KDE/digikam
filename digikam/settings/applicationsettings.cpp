@@ -35,9 +35,9 @@
 // KDE includes
 
 #include <kconfig.h>
-#include <kapplication.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
+#include <kapplication.h>
 #include <kstandarddirs.h>
 
 // Local includes
@@ -491,16 +491,6 @@ QFont ApplicationSettings::getIconViewFont() const
     return d->iconviewFont;
 }
 
-void ApplicationSettings::setRatingFilterCond(int val)
-{
-    d->ratingFilterCond = val;
-}
-
-int ApplicationSettings::getRatingFilterCond() const
-{
-    return d->ratingFilterCond;
-}
-
 void ApplicationSettings::setIconShowName(bool val)
 {
     d->iconShowName = val;
@@ -691,50 +681,6 @@ void ApplicationSettings::setShowFolderTreeViewItemsCount(bool val)
 bool ApplicationSettings::getShowFolderTreeViewItemsCount() const
 {
     return d->showFolderTreeViewItemsCount;
-}
-
-void ApplicationSettings::setShowThumbbar(bool val)
-{
-    d->showThumbbar = val;
-}
-
-bool ApplicationSettings::getShowThumbbar() const
-{
-    return d->showThumbbar;
-}
-
-void ApplicationSettings::setVersionManagerSettings(const VersionManagerSettings& settings)
-{
-    d->versionSettings = settings;
-}
-
-VersionManagerSettings ApplicationSettings::getVersionManagerSettings() const
-{
-    return d->versionSettings;
-}
-
-double ApplicationSettings::getFaceDetectionAccuracy() const
-{
-    return d->faceDetectionAccuracy;
-}
-
-void ApplicationSettings::setFaceDetectionAccuracy(double value)
-{
-    d->faceDetectionAccuracy = value;
-}
-
-void ApplicationSettings::setApplicationStyle(const QString& style)
-{
-    if (d->applicationStyle != style)
-    {
-        d->applicationStyle = style;
-        kapp->setStyle(d->applicationStyle);
-    }
-}
-
-QString ApplicationSettings::getApplicationStyle() const
-{
-    return d->applicationStyle;
 }
 
 void ApplicationSettings::setAlbumSortChanged(bool val)

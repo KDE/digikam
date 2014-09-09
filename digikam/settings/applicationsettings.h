@@ -143,13 +143,7 @@ public:
     void setSyncDigikamToBaloo(bool val);
     bool getSyncDigikamToBaloo() const;
 
-    // -- Album View Settings -------------------------------------------------------
-
-    void setAlbumSortOrder(const AlbumSortOrder order);
-    AlbumSortOrder getAlbumSortOrder() const;
-
-    void setDefaultIconSize(int val);
-    int  getDefaultIconSize() const;
+    // -- Albums Settings -------------------------------------------------------
 
     void setTreeViewIconSize(int val);
     int  getTreeViewIconSize() const;
@@ -157,11 +151,34 @@ public:
     void setTreeViewFont(const QFont& font);
     QFont getTreeViewFont() const;
 
-    void setIconViewFont(const QFont& font);
-    QFont getIconViewFont() const;
+    void setAlbumSortOrder(const AlbumSortOrder order);
+    AlbumSortOrder getAlbumSortOrder() const;
 
     void setAlbumSortChanged(bool val);
     bool getAlbumSortChanged() const;
+
+    void setShowFolderTreeViewItemsCount(bool val);
+    bool getShowFolderTreeViewItemsCount() const;
+
+    void setRecurseAlbums(bool val);
+    bool getRecurseAlbums() const;
+
+    void setRecurseTags(bool val);
+    bool getRecurseTags() const;
+
+    void setAlbumCategoryNames(const QStringList& list);
+    QStringList getAlbumCategoryNames() const;
+
+    bool addAlbumCategoryName(const QString& name);
+    bool delAlbumCategoryName(const QString& name);
+
+    // -- Icon-View Settings -------------------------------------------------------
+
+    void setDefaultIconSize(int val);
+    int  getDefaultIconSize() const;
+
+    void setIconViewFont(const QFont& font);
+    QFont getIconViewFont() const;
 
     void setImageSortOrder(int order);
     int  getImageSortOrder() const;
@@ -178,9 +195,6 @@ public:
 
     void setItemLeftClickAction(const ItemLeftClickAction action);
     ItemLeftClickAction getItemLeftClickAction() const;
-
-    void setRatingFilterCond(int val);
-    int  getRatingFilterCond() const;
 
     void setIconShowName(bool val);
     bool getIconShowName() const;
@@ -233,26 +247,6 @@ public:
 
     void setPreviewShowIcons(bool val);
     bool getPreviewShowIcons() const;
-
-    void setShowFolderTreeViewItemsCount(bool val);
-    bool getShowFolderTreeViewItemsCount() const;
-
-    void setRecurseAlbums(bool val);
-    bool getRecurseAlbums() const;
-
-    void setRecurseTags(bool val);
-    bool getRecurseTags() const;
-
-    void setShowThumbbar(bool val);
-    bool getShowThumbbar() const;
-
-    // -- Category Settings -------------------------------------------------------
-
-    void setAlbumCategoryNames(const QStringList& list);
-    QStringList getAlbumCategoryNames() const;
-
-    bool addAlbumCategoryName(const QString& name);
-    bool delAlbumCategoryName(const QString& name);
 
     // -- Mime-Types Settings -------------------------------------------------------
 
@@ -405,13 +399,17 @@ public:
     void setSidebarTitleStyle(KMultiTabBar::KMultiTabBarStyle style);
     KMultiTabBar::KMultiTabBarStyle getSidebarTitleStyle() const;
 
-    // -- Others Settings -------------------------------------------------------
-
     void setVersionManagerSettings(const VersionManagerSettings& settings);
     VersionManagerSettings getVersionManagerSettings() const;
 
     double getFaceDetectionAccuracy() const;
     void setFaceDetectionAccuracy(double value);
+
+    void setShowThumbbar(bool val);
+    bool getShowThumbbar() const;
+
+    void setRatingFilterCond(int val);
+    int  getRatingFilterCond() const;
 
 private Q_SLOTS:
 
