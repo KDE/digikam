@@ -40,16 +40,9 @@
 #include <kglobalsettings.h>
 #include <kstandarddirs.h>
 
-// LibKDcraw includes
-
-#include <libkdcraw/version.h>
-#include <libkdcraw/kdcraw.h>
-
 // Local includes
 
 #include "config-digikam.h"
-#include "albumdb.h"
-#include "databaseaccess.h"
 #include "imagefiltersettings.h"
 #include "imagesortsettings.h"
 #include "mimefilter.h"
@@ -57,8 +50,6 @@
 #include "thememanager.h"
 #include "baloowrap.h"
 #include "applicationsettings_p.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -458,106 +449,6 @@ void ApplicationSettings::setItemLeftClickAction(const ItemLeftClickAction actio
 ApplicationSettings::ItemLeftClickAction ApplicationSettings::getItemLeftClickAction() const
 {
     return d->itemLeftClickAction;
-}
-
-QString ApplicationSettings::getImageFileFilter() const
-{
-    QStringList imageSettings;
-    DatabaseAccess().db()->getFilterSettings(&imageSettings, 0, 0);
-    QStringList wildcards;
-
-    foreach(const QString& suffix, imageSettings)
-    {
-        wildcards << "*." + suffix;
-    }
-
-    return wildcards.join(" ");
-}
-
-QString ApplicationSettings::getMovieFileFilter() const
-{
-    QStringList movieSettings;
-    DatabaseAccess().db()->getFilterSettings(0, &movieSettings, 0);
-    QStringList wildcards;
-
-    foreach(const QString& suffix, movieSettings)
-    {
-        wildcards << "*." + suffix;
-    }
-
-    return wildcards.join(" ");
-}
-
-QString ApplicationSettings::getAudioFileFilter() const
-{
-    QStringList audioSettings;
-    DatabaseAccess().db()->getFilterSettings(0, 0, &audioSettings);
-    QStringList wildcards;
-
-    foreach(const QString& suffix, audioSettings)
-    {
-        wildcards << "*." + suffix;
-    }
-
-    return wildcards.join(" ");
-}
-
-QString ApplicationSettings::getRawFileFilter() const
-{
-    QStringList supportedRaws = KDcraw::rawFilesList();
-    QStringList imageSettings;
-    DatabaseAccess().db()->getFilterSettings(&imageSettings, 0, 0);
-
-    // form intersection: those extensions that are supported as RAW as well in the list of allowed extensions
-    for (QStringList::iterator it = supportedRaws.begin(); it != supportedRaws.end(); )
-    {
-        if (imageSettings.contains(*it))
-        {
-            ++it;
-        }
-        else
-        {
-            it = supportedRaws.erase(it);
-        }
-    }
-
-    QStringList wildcards;
-
-    foreach(const QString& suffix, supportedRaws)
-    {
-        wildcards << "*." + suffix;
-    }
-
-    return wildcards.join(" ");
-}
-
-QString ApplicationSettings::getAllFileFilter() const
-{
-    QStringList imageFilter, audioFilter, videoFilter;
-    DatabaseAccess().db()->getFilterSettings(&imageFilter, &audioFilter, &videoFilter);
-    QStringList wildcards;
-
-    foreach(const QString& suffix, imageFilter)
-    {
-        wildcards << "*." + suffix;
-    }
-
-    foreach(const QString& suffix, audioFilter)
-    {
-        wildcards << "*." + suffix;
-    }
-
-    foreach(const QString& suffix, videoFilter)
-    {
-        wildcards << "*." + suffix;
-    }
-
-    return wildcards.join(" ");
-}
-
-void ApplicationSettings::addToImageFileFilter(const QString& extensions)
-{
-    DatabaseAccess().db()->addToUserImageFilterSettings(extensions);
 }
 
 void ApplicationSettings::setDefaultIconSize(int val)

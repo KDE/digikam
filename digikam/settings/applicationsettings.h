@@ -257,17 +257,12 @@ public:
     // -- Mime-Types Settings -------------------------------------------------------
 
     QString getImageFileFilter() const;
-    void addToImageFileFilter(const QString& extensions);
-
     QString getMovieFileFilter() const;
-
     QString getAudioFileFilter() const;
+    QString getRawFileFilter()   const;
+    QString getAllFileFilter()   const;
 
-    QString getRawFileFilter() const;
-
-    bool addImageFileExtension(const QString& ext);
-    QString getAllFileFilter() const;
-
+    void addToImageFileFilter(const QString& extensions);
 
     // -- Tool-Tips Settings -------------------------------------------------------
 
