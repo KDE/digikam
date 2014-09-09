@@ -47,14 +47,14 @@ SET(cameranamehelper_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/importui/backend/gpcamera.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/importui/backend/camiteminfo.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/importui/backend/dkcamera.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/settings/applicationsettings.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/settings/applicationsettings_p.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/settings/applicationsettings_albums.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/settings/applicationsettings_database.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/settings/applicationsettings_iconview.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/settings/applicationsettings_mime.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/settings/applicationsettings_miscs.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/settings/applicationsettings_tooltips.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_p.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_albums.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_database.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_iconview.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_mime.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_miscs.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_tooltips.cpp
    )
 
 KDE4_ADD_UNIT_TEST(cameranamehelpertest ${cameranamehelper_SRCS})
@@ -152,13 +152,13 @@ TARGET_LINK_LIBRARIES(filesaveoptionsboxtest
 #SET(albummodeltest_SRCS
 #    albummodeltest.cpp
 #    modeltest/modeltest.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/album/album.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/album/albummanager.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/album/albumsettings.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/album/albumthumbnailloader.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/database/databaseguierrorhandler.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../app/album/album.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../app/album/albummanager.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../app/album/albumsettings.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../app/album/albumthumbnailloader.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../app/database/databaseguierrorhandler.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/widgets/common/databasewidget.cpp
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/database/scancontroller.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../app/database/scancontroller.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/importui/dkcamera.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/importui/gpcamera.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/cameralist.cpp
@@ -393,20 +393,20 @@ TARGET_LINK_LIBRARIES (testautocrop
 #------------------------------------------------------------------------
 
 SET (testdatabase_SRCS testdatabase.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/album/album.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/album/albumhistory.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/album/albummanager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/album/albumwatch.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/database/scancontroller.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/database/databaseguierrorhandler.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/settings/applicationsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/settings/applicationsettings_p.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/settings/applicationsettings_albums.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/settings/applicationsettings_database.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/settings/applicationsettings_iconview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/settings/applicationsettings_miscs.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/settings/applicationsettings_mime.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/settings/applicationsettings_tooltips.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/../app/album/album.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/../app/album/albumhistory.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/../app/album/albummanager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/../app/album/albumwatch.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/../app/database/scancontroller.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/../app/database/databaseguierrorhandler.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_p.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_albums.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_database.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_iconview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_miscs.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_mime.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_tooltips.cpp
 )
 KDE4_ADD_EXECUTABLE(testdatabase ${testdatabase_SRCS})
 TARGET_LINK_LIBRARIES (testdatabase

@@ -370,7 +370,7 @@ MACRO_BOOL_TO_01(APPLE USE_QT_SCALING)
 
 # Set config files accordingly with optional dependencies
 
-CONFIGURE_FILE(digikam/utils/config-digikam.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/digikam/utils/config-digikam.h)
+CONFIGURE_FILE(app/utils/config-digikam.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/app/utils/config-digikam.h)
 
 # ==================================================================================================
 # Log messages
@@ -609,8 +609,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                         ${KDE4_INCLUDES}
                         ${QT_INCLUDES}
                         ${GPHOTO2_INCLUDE_DIRS}
-                        ${CMAKE_CURRENT_SOURCE_DIR}/digikam
-                        ${CMAKE_CURRENT_BINARY_DIR}/digikam
+                        ${CMAKE_CURRENT_SOURCE_DIR}/app
+                        ${CMAKE_CURRENT_BINARY_DIR}/app
     )
 
     IF(USE_SCRIPT_IFACE)
@@ -1343,156 +1343,156 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     SET(libdigikamgui_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/main/digikamapp.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/main/digikamapp.cpp
 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/album.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumhistory.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albummanager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albummodificationhelper.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumpropsedit.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumselectors.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumselectcombobox.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumselectdialog.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumselectiontreeview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumselectwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumthumbnailloader.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumtreeview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumwatch.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album/albumlabelstreeview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/album/album.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/album/albumhistory.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/album/albummanager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/album/albummodificationhelper.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/album/albumpropsedit.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/album/albumselectors.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/album/albumselectcombobox.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/album/albumselectdialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/album/albumselectiontreeview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/album/albumselectwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/album/albumthumbnailloader.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/album/albumtreeview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/album/albumwatch.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/album/albumlabelstreeview.cpp
 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/databaseguierrorhandler.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/dbstatdlg.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/scancontroller.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/dio.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/syncjob.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database/imageattributeswatch.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/database/databaseguierrorhandler.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/database/dbstatdlg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/database/scancontroller.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/database/dio.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/database/syncjob.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/database/imageattributeswatch.cpp
 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/ddateedit.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/ddatetimeedit.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/ddatepickerpopup.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/datefolderview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/monthwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date/timelinewidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/date/ddateedit.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/date/ddatetimeedit.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/date/ddatepickerpopup.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/date/datefolderview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/date/monthwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/date/timelinewidget.cpp
 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dragdrop/importdragdrop.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dragdrop/albumdragdrop.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dragdrop/ddragobjects.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dragdrop/imagedragdrop.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dragdrop/tagdragdrop.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/dragdrop/importdragdrop.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/dragdrop/albumdragdrop.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/dragdrop/ddragobjects.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/dragdrop/imagedragdrop.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/dragdrop/tagdragdrop.cpp
 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/filterstatusbar.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/filtersidebarwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/geolocationfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/textfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/mimefilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/colorlabelfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/picklabelfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/ratingfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters/tagfilterview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/filters/filterstatusbar.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/filters/filtersidebarwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/filters/geolocationfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/filters/textfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/filters/mimefilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/filters/colorlabelfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/filters/picklabelfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/filters/ratingfilter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/filters/tagfilterview.cpp
 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/digikamimageview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/digikamimageview_p.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/digikamimagedelegate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/digikamimagefacedelegate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imagecategorizedview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imagecategorydrawer.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imagedelegate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imagethumbnailbar.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imagethumbnaildelegate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/imageviewutilities.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/items/digikamimageview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/items/digikamimageview_p.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/items/digikamimagedelegate.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/items/digikamimagefacedelegate.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/items/imagecategorizedview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/items/imagecategorydrawer.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/items/imagedelegate.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/items/imagethumbnailbar.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/items/imagethumbnaildelegate.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/items/imageviewutilities.cpp
 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/overlays/groupindicatoroverlay.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/overlays/imageratingoverlay.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/overlays/imagerotationoverlay.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/overlays/imagecoordinatesoverlay.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/overlays/imageselectionoverlay.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/overlays/assignnameoverlay.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/overlays/facerejectionoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/items/overlays/groupindicatoroverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/items/overlays/imageratingoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/items/overlays/imagerotationoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/items/overlays/imagecoordinatesoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/items/overlays/imageselectionoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/items/overlays/assignnameoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/items/overlays/facerejectionoverlay.cpp
 
 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction/metadatahub.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction/fileactionprogress.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction/fileactionmngr.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction/fileactionmngr_p.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction/imageinfotasksplitter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction/databaseworkeriface.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction/fileworkeriface.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction/fileactionimageinfolist.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/fileaction/metadatahub.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/fileaction/fileactionprogress.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/fileaction/fileactionmngr.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/fileaction/fileactionmngr_p.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/fileaction/imageinfotasksplitter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/fileaction/databaseworkeriface.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/fileaction/fileworkeriface.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/fileaction/fileactionimageinfolist.cpp
 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/addtagscombobox.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/addtagscompletionbox.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/addtagslineedit.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagcheckview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagfolderview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/taggingaction.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagslineeditoverlay.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagspopupmenu.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsactionmngr.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tageditdlg.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagmodificationhelper.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/addtagscombobox.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/addtagscompletionbox.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/addtagslineedit.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagcheckview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagfolderview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/taggingaction.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagslineeditoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagspopupmenu.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsactionmngr.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tageditdlg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagmodificationhelper.cpp
 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager/tagsmanager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager/tagpropwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager/taglist.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager/tagmngrtreeview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager/models/tagmngrlistview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager/models/tagmngrlistmodel.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager/models/tagmngrlistitem.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsmanager/tagsmanager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsmanager/tagpropwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsmanager/taglist.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsmanager/tagmngrtreeview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsmanager/models/tagmngrlistview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsmanager/models/tagmngrlistmodel.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsmanager/models/tagmngrlistitem.cpp
 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/settings/applicationsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/settings/applicationsettings_p.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/settings/applicationsettings_albums.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/settings/applicationsettings_database.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/settings/applicationsettings_iconview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/settings/applicationsettings_mime.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/settings/applicationsettings_miscs.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/settings/applicationsettings_tooltips.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/settings/applicationsettings.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/settings/applicationsettings_p.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/settings/applicationsettings_albums.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/settings/applicationsettings_database.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/settings/applicationsettings_iconview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/settings/applicationsettings_mime.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/settings/applicationsettings_miscs.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/settings/applicationsettings_tooltips.cpp
 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/contextmenuhelper.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/tooltipfiller.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/searchmodificationhelper.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/editablesearchtreeview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/sidebarwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/slideshowbuilder.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/digikammodelcollection.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/utils/contextmenuhelper.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/utils/tooltipfiller.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/utils/searchmodificationhelper.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/utils/editablesearchtreeview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/utils/sidebarwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/utils/slideshowbuilder.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/utils/digikammodelcollection.cpp
 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/stackedview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/digikamview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/imagepreviewviewitem.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/imagepreviewview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/mediaplayerview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/mapwidgetview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/welcomepageview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/leftsidebarwidgets.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/stackedview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/digikamview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/imagepreviewviewitem.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/imagepreviewview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/mediaplayerview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/mapwidgetview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/welcomepageview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/leftsidebarwidgets.cpp
 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_treeview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_treeview_delegate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_column_configuration_dialog.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_model.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_columns.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_column_audiovideo.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_column_file.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_column_geo.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_column_digikam.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_column_item.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_column_photo.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_column_thumbnail.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_columnfactory.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_selection_model_syncer.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/tableview/tableview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/tableview/tableview_treeview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/tableview/tableview_treeview_delegate.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/tableview/tableview_column_configuration_dialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/tableview/tableview_model.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/tableview/tableview_columns.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/tableview/tableview_column_audiovideo.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/tableview/tableview_column_file.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/tableview/tableview_column_geo.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/tableview/tableview_column_digikam.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/tableview/tableview_column_item.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/tableview/tableview_column_photo.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/tableview/tableview_column_thumbnail.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/tableview/tableview_columnfactory.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/tableview/tableview_selection_model_syncer.cpp
        )
 
     IF(DIGIKAM_ENABLE_MODELTEST)
         # TODO move modeltest code to a more central location
         MESSAGE(STATUS "Modeltest enabled")
         SET(libdigikamgui_SRCS ${libdigikamgui_SRCS}
-            ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/modeltest/modeltest.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/app/views/modeltest/modeltest.cpp
             )
         ADD_DEFINITIONS(-DDIGIKAM_ENABLE_MODELTEST)
     ENDIF(DIGIKAM_ENABLE_MODELTEST)
 
     SET(libdigikamhelpers_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/uifilevalidator.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/utils/uifilevalidator.cpp
        )
 
     SET(libalbumsqlite2_SRCS
@@ -1502,23 +1502,23 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     INCLUDE_DIRECTORIES(
         ${DATABASESERVERDIR}
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/album
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/database
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/date
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/dragdrop
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/filters
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/overlays
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/main
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager/models
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/settings
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview
+        ${CMAKE_CURRENT_SOURCE_DIR}/app
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/album
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/database
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/date
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/dragdrop
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/filters
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/items
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/items/overlays
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/main
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/fileaction
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsmanager
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsmanager/models
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/utils
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/settings
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/tableview
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/color
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins/decorate
@@ -1636,10 +1636,10 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow
 
         # version.h, gitversion.h config-digikam.h
-        ${CMAKE_CURRENT_BINARY_DIR}/digikam/utils
+        ${CMAKE_CURRENT_BINARY_DIR}/app/utils
 
         # dbconfigversion.h
-        ${CMAKE_CURRENT_BINARY_DIR}/digikam/database
+        ${CMAKE_CURRENT_BINARY_DIR}/app/database
 
         # external library paths
         ${JPEG_INCLUDE_DIR}
@@ -1650,7 +1650,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     ADD_SUBDIRECTORY(data)
     ADD_SUBDIRECTORY(utilities)
-    ADD_SUBDIRECTORY(digikam)
+    ADD_SUBDIRECTORY(app)
     ADD_SUBDIRECTORY(kioslave)
     ADD_SUBDIRECTORY(showfoto)
     ADD_SUBDIRECTORY(imageplugins)
