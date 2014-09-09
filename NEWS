@@ -3,6 +3,8 @@ digiKam 4.4.0 - Release date: 2014-10-12
 
 NEW FEATURES:
 
+General : Naviguate between pictures using PageUp/PageDown is now possible while editing properties through captions/tags sidebar.
+
 BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 
 001 ==> 147175 - CANVAS : fit only large images to window.
@@ -14,4 +16,6 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 007 ==> 110658 - Thumbnails generation process should have low priority.
 008 ==> 224806 - ICONVIEW : use keyboard modifier with right mouse click to run default "Open With..." action
 009 ==> 309557 - Add a new option to show image Title information in tooltips.
-010 ==> 
+010 ==> 201698 - Add keyboard shortcut for album navigation when using Captions/Tags sidebar.
+011 ==> 211622 - Pressing PageDown should show the next image when focus is in Captions/Tags side bar.
+012 ==> 

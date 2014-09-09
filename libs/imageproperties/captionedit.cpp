@@ -34,6 +34,7 @@
 
 #include <libkexiv2/version.h>
 #include <libkexiv2/altlangstredit.h>
+#include <libkexiv2/msgtextedit.h>
 
 using namespace KExiv2Iface;
 
@@ -197,6 +198,15 @@ void CaptionEdit::slotAuthorChanged(const QString& text)
     {
         d->altLangStrEdit->addCurrent();
     }
+}
+
+MsgTextEdit* CaptionEdit::textEdit() const
+{
+#if KEXIV2_VERSION >= 0x020302
+    return d->altLangStrEdit->textEdit();
+#else
+    return 0;
+#endif
 }
 
 }  // namespace Digikam

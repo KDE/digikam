@@ -53,6 +53,7 @@
 
 #include <libkexiv2/version.h>
 #include <libkexiv2/altlangstredit.h>
+#include <libkexiv2/msgtextedit.h>
 
 // Libkdcraw includes
 
@@ -428,8 +429,11 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
 
     // Initialize ---------------------------------------------
 
-    d->titleEdit->installEventFilter(this);
-    d->captionsEdit->installEventFilter(this);
+#if KEXIV2_VERSION >= 0x020302
+    d->titleEdit->textEdit()->installEventFilter(this);
+    d->captionsEdit->textEdit()->installEventFilter(this);
+#endif
+
     d->dateTimeEdit->installEventFilter(this);
     d->pickLabelSelector->installEventFilter(this);
     d->colorLabelSelector->installEventFilter(this);
@@ -871,6 +875,20 @@ bool ImageDescEditTab::eventFilter(QObject* o, QEvent* e)
                 emit signalPrevItem();
                 return true;
             }
+        }
+
+        if (k->key() == Qt::Key_PageUp)
+        {
+            d->lastSelectedWidget = qobject_cast<QWidget*>(o);
+            emit signalPrevItem();
+            return true;
+        }
+
+        if (k->key() == Qt::Key_PageDown)
+        {
+            d->lastSelectedWidget = qobject_cast<QWidget*>(o);
+            emit signalNextItem();
+            return true;
         }
     }
 

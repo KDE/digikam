@@ -38,6 +38,11 @@
 
 #include "captionvalues.h"
 
+namespace KExiv2Iface
+{
+    class MsgTextEdit;
+}
+
 namespace Digikam
 {
 
@@ -57,6 +62,8 @@ public:
     QString currentLanguageCode() const;
 
     void reset();
+
+    KExiv2Iface::MsgTextEdit* textEdit() const;
 
 Q_SIGNALS:
 
