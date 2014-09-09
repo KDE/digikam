@@ -37,6 +37,16 @@
 namespace Digikam
 {
 
+void ApplicationSettings::setCurrentTheme(const QString& theme)
+{
+    d->currentTheme = theme;
+}
+
+QString ApplicationSettings::getCurrentTheme() const
+{
+    return d->currentTheme;
+}
+
 void ApplicationSettings::setShowSplashScreen(bool val)
 {
     d->showSplash = val;

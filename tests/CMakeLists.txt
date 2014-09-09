@@ -49,6 +49,7 @@ SET(cameranamehelper_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/importui/backend/dkcamera.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/settings/applicationsettings.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/settings/applicationsettings_p.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/settings/applicationsettings_albums.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/settings/applicationsettings_database.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/settings/applicationsettings_mime.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/settings/applicationsettings_miscs.cpp
@@ -399,6 +400,7 @@ SET (testdatabase_SRCS testdatabase.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/database/databaseguierrorhandler.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/settings/applicationsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/settings/applicationsettings_p.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/settings/applicationsettings_albums.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/settings/applicationsettings_database.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/settings/applicationsettings_miscs.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/settings/applicationsettings_mime.cpp

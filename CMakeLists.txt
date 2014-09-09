@@ -1441,6 +1441,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/settings/applicationsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/settings/applicationsettings_p.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/settings/applicationsettings_albums.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/settings/applicationsettings_database.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/settings/applicationsettings_mime.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/settings/applicationsettings_miscs.cpp

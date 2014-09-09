@@ -169,8 +169,8 @@ public:
     void setAlbumCategoryNames(const QStringList& list);
     QStringList getAlbumCategoryNames() const;
 
-    bool addAlbumCategoryName(const QString& name);
-    bool delAlbumCategoryName(const QString& name);
+    bool addAlbumCategoryName(const QString& name) const;
+    bool delAlbumCategoryName(const QString& name) const;
 
     // -- Icon-View Settings -------------------------------------------------------
 

@@ -363,44 +363,6 @@ void ApplicationSettings::saveSettings()
     config->sync();
 }
 
-
-void ApplicationSettings::setAlbumCategoryNames(const QStringList& list)
-{
-    d->albumCategoryNames = list;
-}
-
-QStringList ApplicationSettings::getAlbumCategoryNames() const
-{
-    return d->albumCategoryNames;
-}
-
-bool ApplicationSettings::addAlbumCategoryName(const QString& name)
-{
-    if (d->albumCategoryNames.contains(name))
-    {
-        return false;
-    }
-
-    d->albumCategoryNames.append(name);
-    return true;
-}
-
-bool ApplicationSettings::delAlbumCategoryName(const QString& name)
-{
-    uint count = d->albumCategoryNames.removeAll(name);
-    return (count > 0) ? true : false;
-}
-
-void ApplicationSettings::setAlbumSortOrder(const ApplicationSettings::AlbumSortOrder order)
-{
-    d->albumSortOrder = order;
-}
-
-ApplicationSettings::AlbumSortOrder ApplicationSettings::getAlbumSortOrder() const
-{
-    return d->albumSortOrder;
-}
-
 void ApplicationSettings::setImageSortOrder(int order)
 {
     d->imageSortOrder = order;
@@ -459,26 +421,6 @@ void ApplicationSettings::setDefaultIconSize(int val)
 int ApplicationSettings::getDefaultIconSize() const
 {
     return d->thumbnailSize;
-}
-
-void ApplicationSettings::setTreeViewIconSize(int val)
-{
-    d->treeThumbnailSize = val;
-}
-
-int ApplicationSettings::getTreeViewIconSize() const
-{
-    return ((d->treeThumbnailSize < 8) || (d->treeThumbnailSize > 48)) ? 48 : d->treeThumbnailSize;
-}
-
-void ApplicationSettings::setTreeViewFont(const QFont& font)
-{
-    d->treeviewFont = font;
-}
-
-QFont ApplicationSettings::getTreeViewFont() const
-{
-    return d->treeviewFont;
 }
 
 void ApplicationSettings::setIconViewFont(const QFont& font)
@@ -621,16 +563,6 @@ bool ApplicationSettings::getIconShowOverlays() const
     return d->iconShowOverlays;
 }
 
-void ApplicationSettings::setCurrentTheme(const QString& theme)
-{
-    d->currentTheme = theme;
-}
-
-QString ApplicationSettings::getCurrentTheme() const
-{
-    return d->currentTheme;
-}
-
 void ApplicationSettings::setPreviewLoadFullImageSize(bool val)
 {
     d->previewLoadFullImageSize = val;
@@ -649,48 +581,6 @@ void ApplicationSettings::setPreviewShowIcons(bool val)
 bool ApplicationSettings::getPreviewShowIcons() const
 {
     return d->previewShowIcons;
-}
-
-void ApplicationSettings::setRecurseAlbums(bool val)
-{
-    d->recursiveAlbums = val;
-    emit recurseSettingsChanged();
-}
-
-bool ApplicationSettings::getRecurseAlbums() const
-{
-    return d->recursiveAlbums;
-}
-
-void ApplicationSettings::setRecurseTags(bool val)
-{
-    d->recursiveTags = val;
-    emit recurseSettingsChanged();
-}
-
-bool ApplicationSettings::getRecurseTags() const
-{
-    return d->recursiveTags;
-}
-
-void ApplicationSettings::setShowFolderTreeViewItemsCount(bool val)
-{
-    d->showFolderTreeViewItemsCount = val;
-}
-
-bool ApplicationSettings::getShowFolderTreeViewItemsCount() const
-{
-    return d->showFolderTreeViewItemsCount;
-}
-
-void ApplicationSettings::setAlbumSortChanged(bool val)
-{
-    d->albumSortChanged = val;
-}
-
-bool ApplicationSettings::getAlbumSortChanged() const
-{
-    return d->albumSortChanged;
 }
 
 }  // namespace Digikam
