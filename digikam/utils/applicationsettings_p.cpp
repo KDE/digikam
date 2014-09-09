@@ -29,9 +29,15 @@
 // KDE includes
 
 #include <kconfig.h>
+#include <klocale.h>
+#include <kglobalsettings.h>
+#include <kapplication.h>
 
 // Local includes
 
+#include "imagefiltersettings.h"
+#include "imagesortsettings.h"
+#include "thumbnailsize.h"
 #include "databaseparameters.h"
 #include "versionmanager.h"
 #include "applicationsettings.h"
@@ -123,7 +129,7 @@ const QString ApplicationSettings::Private::configStringComparisonTypeEntry("Str
 const QString ApplicationSettings::Private::configFaceDetectionAccuracyEntry("Detection Accuracy");
 const QString ApplicationSettings::Private::configApplicationStyleEntry("Application Style");
 
-ApplicationSettings::Private::Private()
+ApplicationSettings::Private::Private(ApplicationSettings* const q)
     : showSplash(false),
       useTrash(false),
       showTrashDeleteDialog(false),
@@ -193,12 +199,118 @@ ApplicationSettings::Private::Private()
       syncToDigikam(false),
       syncToBaloo(false),
       faceDetectionAccuracy(0.8),
-      stringComparisonType(ApplicationSettings::Natural)
+      stringComparisonType(ApplicationSettings::Natural),
+      parent(q)
 {
 }
 
 ApplicationSettings::Private::~Private()
 {
+}
+
+void ApplicationSettings::Private::init()
+{
+    albumCategoryNames.clear();
+    albumCategoryNames.append(i18n("Category"));
+    albumCategoryNames.append(i18n("Travel"));
+    albumCategoryNames.append(i18n("Holidays"));
+    albumCategoryNames.append(i18n("Friends"));
+    albumCategoryNames.append(i18n("Nature"));
+    albumCategoryNames.append(i18n("Party"));
+    albumCategoryNames.append(i18n("Todo"));
+    albumCategoryNames.append(i18n("Miscellaneous"));
+    albumCategoryNames.sort();
+
+    albumSortOrder                      = ApplicationSettings::ByFolder;
+    imageSortOrder                      = ImageSortSettings::SortByFileName;
+    imageSorting                        = ImageSortSettings::AscendingOrder;
+    imageGroupMode                      = ImageSortSettings::CategoryByAlbum;
+    imageGroupSortOrder                 = ImageSortSettings::AscendingOrder;
+
+    itemLeftClickAction                 = ApplicationSettings::ShowPreview;
+
+    thumbnailSize                       = ThumbnailSize::Medium;
+    treeThumbnailSize                   = 22;
+    treeviewFont                        = KGlobalSettings::generalFont();
+    sidebarTitleStyle                   = KMultiTabBar::VSNET;
+
+    ratingFilterCond                    = ImageFilterSettings::GreaterEqualCondition;
+
+    showSplash                          = true;
+    useTrash                            = true;
+    showTrashDeleteDialog               = true;
+    showPermanentDeleteDialog           = true;
+    sidebarApplyDirectly                = false;
+
+    iconShowName                        = false;
+    iconShowSize                        = false;
+    iconShowDate                        = true;
+    iconShowModDate                     = true;
+    iconShowTitle                       = true;
+    iconShowComments                    = true;
+    iconShowResolution                  = false;
+    iconShowAspectRatio                 = false;
+    iconShowTags                        = true;
+    iconShowOverlays                    = true;
+    iconShowRating                      = true;
+    iconShowImageFormat                 = false;
+    iconShowCoordinates                 = false;
+    iconviewFont                        = KGlobalSettings::generalFont();
+    toolTipsFont                        = KGlobalSettings::generalFont();
+    showToolTips                        = false;
+    tooltipShowFileName                 = true;
+    tooltipShowFileDate                 = false;
+    tooltipShowFileSize                 = false;
+    tooltipShowImageType                = false;
+    tooltipShowImageDim                 = true;
+    tooltipShowImageAR                  = true;
+    tooltipShowPhotoMake                = true;
+    tooltipShowPhotoDate                = true;
+    tooltipShowPhotoFocal               = true;
+    tooltipShowPhotoExpo                = true;
+    tooltipShowPhotoMode                = true;
+    tooltipShowPhotoFlash               = false;
+    tooltipShowPhotoWb                  = false;
+    tooltipShowAlbumName                = false;
+    tooltipShowComments                 = true;
+    tooltipShowTags                     = true;
+    tooltipShowLabelRating              = true;
+
+    tooltipShowVideoAspectRatio         = true;
+    tooltipShowVideoAudioBitRate        = true;
+    tooltipShowVideoAudioChannelType    = true;
+    tooltipShowVideoAudioCompressor     = true;
+    tooltipShowVideoDuration            = true;
+    tooltipShowVideoFrameRate           = true;
+    tooltipShowVideoVideoCodec          = true;
+
+    showAlbumToolTips                   = false;
+    tooltipShowAlbumTitle               = true;
+    tooltipShowAlbumDate                = true;
+    tooltipShowAlbumCollection          = true;
+    tooltipShowAlbumCategory            = true;
+    tooltipShowAlbumCaption             = true;
+
+    previewLoadFullImageSize            = false;
+    previewShowIcons                    = true;
+    showThumbbar                        = true;
+
+    recursiveAlbums                     = false;
+    recursiveTags                       = true;
+
+    showFolderTreeViewItemsCount        = false;
+
+    syncToDigikam                       = false;
+    syncToBaloo                         = false;
+    albumSortChanged                    = false;
+
+    faceDetectionAccuracy               = 0.8;
+
+    stringComparisonType                = ApplicationSettings::Natural;
+    applicationStyle                    = kapp->style()->objectName();
+
+    parent->connect(parent, SIGNAL(balooSettingsChanged()),
+                    parent, SLOT(applyBalooSettings()));
 }
 
 }  // namespace Digikam

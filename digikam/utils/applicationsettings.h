@@ -411,8 +411,6 @@ private:
     ApplicationSettings();
     ~ApplicationSettings();
 
-    void init();
-
 private:
 
     friend class ApplicationSettingsCreator;

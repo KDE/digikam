@@ -27,12 +27,16 @@
 namespace Digikam
 {
 
+class ApplicationSettings;
+
 class ApplicationSettings::Private
 {
 public:
 
-    Private();
+    Private(ApplicationSettings* const q);
     ~Private();
+
+    void init();
 
 public:
 
@@ -237,6 +241,10 @@ public:
     //misc
     ApplicationSettings::StringComparisonType stringComparisonType;
     QString                                   applicationStyle;
+
+private :
+
+    ApplicationSettings*                      parent;
 };
 
 }  // namespace Digikam

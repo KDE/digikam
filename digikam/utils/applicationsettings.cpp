@@ -35,7 +35,6 @@
 // KDE includes
 
 #include <kconfig.h>
-#include <klocale.h>
 #include <kapplication.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
@@ -83,10 +82,10 @@ ApplicationSettings* ApplicationSettings::instance()
 }
 
 ApplicationSettings::ApplicationSettings()
-    : QObject(), d(new Private)
+    : QObject(), d(new Private(this))
 {
     d->config = KGlobal::config();
-    init();
+    d->init();
     readSettings();
 
     // Init Max Thumbnail Size at startup.
@@ -96,111 +95,6 @@ ApplicationSettings::ApplicationSettings()
 ApplicationSettings::~ApplicationSettings()
 {
     delete d;
-}
-
-void ApplicationSettings::init()
-{
-    d->albumCategoryNames.clear();
-    d->albumCategoryNames.append(i18n("Category"));
-    d->albumCategoryNames.append(i18n("Travel"));
-    d->albumCategoryNames.append(i18n("Holidays"));
-    d->albumCategoryNames.append(i18n("Friends"));
-    d->albumCategoryNames.append(i18n("Nature"));
-    d->albumCategoryNames.append(i18n("Party"));
-    d->albumCategoryNames.append(i18n("Todo"));
-    d->albumCategoryNames.append(i18n("Miscellaneous"));
-    d->albumCategoryNames.sort();
-
-    d->albumSortOrder                      = ApplicationSettings::ByFolder;
-    d->imageSortOrder                      = ImageSortSettings::SortByFileName;
-    d->imageSorting                        = ImageSortSettings::AscendingOrder;
-    d->imageGroupMode                      = ImageSortSettings::CategoryByAlbum;
-    d->imageGroupSortOrder                 = ImageSortSettings::AscendingOrder;
-
-    d->itemLeftClickAction                 = ApplicationSettings::ShowPreview;
-
-    d->thumbnailSize                       = ThumbnailSize::Medium;
-    d->treeThumbnailSize                   = 22;
-    d->treeviewFont                        = KGlobalSettings::generalFont();
-    d->sidebarTitleStyle                   = KMultiTabBar::VSNET;
-
-    d->ratingFilterCond                    = ImageFilterSettings::GreaterEqualCondition;
-
-    d->showSplash                          = true;
-    d->useTrash                            = true;
-    d->showTrashDeleteDialog               = true;
-    d->showPermanentDeleteDialog           = true;
-    d->sidebarApplyDirectly                = false;
-
-    d->iconShowName                        = false;
-    d->iconShowSize                        = false;
-    d->iconShowDate                        = true;
-    d->iconShowModDate                     = true;
-    d->iconShowTitle                       = true;
-    d->iconShowComments                    = true;
-    d->iconShowResolution                  = false;
-    d->iconShowAspectRatio                 = false;
-    d->iconShowTags                        = true;
-    d->iconShowOverlays                    = true;
-    d->iconShowRating                      = true;
-    d->iconShowImageFormat                 = false;
-    d->iconShowCoordinates                 = false;
-    d->iconviewFont                        = KGlobalSettings::generalFont();
-    d->toolTipsFont                        = KGlobalSettings::generalFont();
-    d->showToolTips                        = false;
-    d->tooltipShowFileName                 = true;
-    d->tooltipShowFileDate                 = false;
-    d->tooltipShowFileSize                 = false;
-    d->tooltipShowImageType                = false;
-    d->tooltipShowImageDim                 = true;
-    d->tooltipShowImageAR                  = true;
-    d->tooltipShowPhotoMake                = true;
-    d->tooltipShowPhotoDate                = true;
-    d->tooltipShowPhotoFocal               = true;
-    d->tooltipShowPhotoExpo                = true;
-    d->tooltipShowPhotoMode                = true;
-    d->tooltipShowPhotoFlash               = false;
-    d->tooltipShowPhotoWb                  = false;
-    d->tooltipShowAlbumName                = false;
-    d->tooltipShowComments                 = true;
-    d->tooltipShowTags                     = true;
-    d->tooltipShowLabelRating              = true;
-
-    d->tooltipShowVideoAspectRatio         = true;
-    d->tooltipShowVideoAudioBitRate        = true;
-    d->tooltipShowVideoAudioChannelType    = true;
-    d->tooltipShowVideoAudioCompressor     = true;
-    d->tooltipShowVideoDuration            = true;
-    d->tooltipShowVideoFrameRate           = true;
-    d->tooltipShowVideoVideoCodec          = true;
-
-    d->showAlbumToolTips                   = false;
-    d->tooltipShowAlbumTitle               = true;
-    d->tooltipShowAlbumDate                = true;
-    d->tooltipShowAlbumCollection          = true;
-    d->tooltipShowAlbumCategory            = true;
-    d->tooltipShowAlbumCaption             = true;
-
-    d->previewLoadFullImageSize            = false;
-    d->previewShowIcons                    = true;
-    d->showThumbbar                        = true;
-
-    d->recursiveAlbums                     = false;
-    d->recursiveTags                       = true;
-
-    d->showFolderTreeViewItemsCount        = false;
-
-    d->syncToDigikam                       = false;
-    d->syncToBaloo                         = false;
-    d->albumSortChanged                    = false;
-
-    d->faceDetectionAccuracy               = 0.8;
-
-    d->stringComparisonType                = ApplicationSettings::Natural;
-    d->applicationStyle                    = kapp->style()->objectName();
-
-    connect(this, SIGNAL(balooSettingsChanged()),
-            this, SLOT(applyBalooSettings()));
 }
 
 KConfigGroup ApplicationSettings::generalConfigGroup() const
