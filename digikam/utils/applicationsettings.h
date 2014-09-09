@@ -96,26 +96,61 @@ public:
 
     void readSettings();
     void saveSettings();
-
     void emitSetupChanged();
 
-    bool showToolTipsIsValid()      const;
-    bool showAlbumToolTipsIsValid() const;
+    KConfigGroup generalConfigGroup() const;
+
+    // -- Database Settings ---------------------------------------------------------
 
     void setDatabaseFilePath(const QString& path);
     QString getDatabaseFilePath() const;
 
-    void setShowSplashScreen(bool val);
-    bool getShowSplashScreen() const;
+    DatabaseParameters getDatabaseParameters() const;
+    void setDatabaseParameters(const DatabaseParameters& params);
 
-    void setAlbumCategoryNames(const QStringList& list);
-    QStringList getAlbumCategoryNames() const;
+    QString getDatabaseType() const;
+    void setDatabaseType(const QString& databaseType);
 
-    bool addAlbumCategoryName(const QString& name);
-    bool delAlbumCategoryName(const QString& name);
+    QString getDatabaseConnectoptions() const;
+    void setDatabaseConnectoptions(const QString& connectoptions);
+
+    QString getDatabaseName() const;
+    void setDatabaseName(const QString& databaseName);
+
+    QString getDatabaseNameThumbnails() const;
+    void setDatabaseNameThumbnails(const QString& databaseNameThumbnails);
+
+    QString getDatabaseHostName() const;
+    void setDatabaseHostName(const QString& hostName);
+
+    QString getDatabasePassword() const;
+    void setDatabasePassword(const QString& password);
+
+    int getDatabasePort() const;
+    void setDatabasePort(int port);
+
+    QString getDatabaseUserName() const;
+    void setDatabaseUserName(const QString& userName);
+
+    bool getInternalDatabaseServer() const;
+    void setInternalDatabaseServer(const bool useInternalDBServer);
+
+    // -- Album View Settings -------------------------------------------------------
 
     void setAlbumSortOrder(const AlbumSortOrder order);
     AlbumSortOrder getAlbumSortOrder() const;
+
+    void setDefaultIconSize(int val);
+    int  getDefaultIconSize() const;
+
+    void setTreeViewIconSize(int val);
+    int  getTreeViewIconSize() const;
+
+    void setTreeViewFont(const QFont& font);
+    QFont getTreeViewFont() const;
+
+    void setIconViewFont(const QFont& font);
+    QFont getIconViewFont() const;
 
     void setAlbumSortChanged(bool val);
     bool getAlbumSortChanged() const;
@@ -135,30 +170,6 @@ public:
 
     void setItemLeftClickAction(const ItemLeftClickAction action);
     ItemLeftClickAction getItemLeftClickAction() const;
-
-    QString getImageFileFilter() const;
-    void addToImageFileFilter(const QString& extensions);
-
-    QString getMovieFileFilter() const;
-
-    QString getAudioFileFilter() const;
-
-    QString getRawFileFilter() const;
-
-    bool addImageFileExtension(const QString& ext);
-    QString getAllFileFilter() const;
-
-    void setDefaultIconSize(int val);
-    int  getDefaultIconSize() const;
-
-    void setTreeViewIconSize(int val);
-    int  getTreeViewIconSize() const;
-
-    void setTreeViewFont(const QFont& font);
-    QFont getTreeViewFont() const;
-
-    void setIconViewFont(const QFont& font);
-    QFont getIconViewFont() const;
 
     void setRatingFilterCond(int val);
     int  getRatingFilterCond() const;
@@ -203,10 +214,57 @@ public:
      * Sets the visibility of the overlay buttons on the image icons.
      */
     void setIconShowOverlays(bool val);
+
     /**
      * Determines whether the overlay buttons should be displayed on the icons.
      */
     bool getIconShowOverlays() const;
+
+    void setPreviewLoadFullImageSize(bool val);
+    bool getPreviewLoadFullImageSize() const;
+
+    void setPreviewShowIcons(bool val);
+    bool getPreviewShowIcons() const;
+
+    void setShowFolderTreeViewItemsCount(bool val);
+    bool getShowFolderTreeViewItemsCount() const;
+
+    void setRecurseAlbums(bool val);
+    bool getRecurseAlbums() const;
+
+    void setRecurseTags(bool val);
+    bool getRecurseTags() const;
+
+    void setShowThumbbar(bool val);
+    bool getShowThumbbar() const;
+
+    // -- Category Settings -------------------------------------------------------
+
+    void setAlbumCategoryNames(const QStringList& list);
+    QStringList getAlbumCategoryNames() const;
+
+    bool addAlbumCategoryName(const QString& name);
+    bool delAlbumCategoryName(const QString& name);
+
+    // -- Mime-Types Settings -------------------------------------------------------
+
+    QString getImageFileFilter() const;
+    void addToImageFileFilter(const QString& extensions);
+
+    QString getMovieFileFilter() const;
+
+    QString getAudioFileFilter() const;
+
+    QString getRawFileFilter() const;
+
+    bool addImageFileExtension(const QString& ext);
+    QString getAllFileFilter() const;
+
+
+    // -- Tool-Tips Settings -------------------------------------------------------
+
+    bool showToolTipsIsValid()      const;
+    bool showAlbumToolTipsIsValid() const;
 
     void setToolTipsFont(const QFont& font);
     QFont getToolTipsFont() const;
@@ -304,11 +362,7 @@ public:
     void setToolTipsShowVideoVideoCodec(bool val);
     bool getToolTipsShowVideoVideoCodec() const;
 
-    void setCurrentTheme(const QString& theme);
-    QString getCurrentTheme() const;
-
-    void setSidebarTitleStyle(KMultiTabBar::KMultiTabBarStyle style);
-    KMultiTabBar::KMultiTabBarStyle getSidebarTitleStyle() const;
+    // -- Miscs Settings -------------------------------------------------------
 
     void setUseTrash(bool val);
     bool getUseTrash() const;
@@ -322,36 +376,13 @@ public:
     void setApplySidebarChangesDirectly(bool val);
     bool getApplySidebarChangesDirectly() const;
 
-    void setPreviewLoadFullImageSize(bool val);
-    bool getPreviewLoadFullImageSize() const;
-
-    void setPreviewShowIcons(bool val);
-    bool getPreviewShowIcons() const;
-
-    void setShowFolderTreeViewItemsCount(bool val);
-    bool getShowFolderTreeViewItemsCount() const;
-
-    void setRecurseAlbums(bool val);
-    bool getRecurseAlbums() const;
-
-    void setRecurseTags(bool val);
-    bool getRecurseTags() const;
-
-    void setShowThumbbar(bool val);
-    bool getShowThumbbar() const;
-
-    void setSyncBalooToDigikam(bool val);
-    bool getSyncBalooToDigikam() const;
-
-    void setSyncDigikamToBaloo(bool val);
-    bool getSyncDigikamToBaloo() const;
-
     /**
      * Defines the way in which string comparisons are performed.
      *
      * @param val new way to compare strings
      */
     void setStringComparisonType(ApplicationSettings::StringComparisonType val);
+
     /**
      * Tells in which way strings are compared at the moment.
      *
@@ -359,46 +390,31 @@ public:
      */
     StringComparisonType getStringComparisonType() const;
 
-    DatabaseParameters getDatabaseParameters() const;
-    void setDatabaseParameters(const DatabaseParameters& params);
+    void setApplicationStyle(const QString& style);
+    QString getApplicationStyle() const;
 
-    QString getDatabaseType() const;
-    void setDatabaseType(const QString& databaseType);
+    void setShowSplashScreen(bool val);
+    bool getShowSplashScreen() const;
 
-    QString getDatabaseConnectoptions() const;
-    void setDatabaseConnectoptions(const QString& connectoptions);
+    void setCurrentTheme(const QString& theme);
+    QString getCurrentTheme() const;
 
-    QString getDatabaseName() const;
-    void setDatabaseName(const QString& databaseName);
+    void setSidebarTitleStyle(KMultiTabBar::KMultiTabBarStyle style);
+    KMultiTabBar::KMultiTabBarStyle getSidebarTitleStyle() const;
 
-    QString getDatabaseNameThumbnails() const;
-    void setDatabaseNameThumbnails(const QString& databaseNameThumbnails);
+    // -- Others Settings -------------------------------------------------------
 
-    QString getDatabaseHostName() const;
-    void setDatabaseHostName(const QString& hostName);
+    void setSyncBalooToDigikam(bool val);
+    bool getSyncBalooToDigikam() const;
 
-    QString getDatabasePassword() const;
-    void setDatabasePassword(const QString& password);
-
-    int getDatabasePort() const;
-    void setDatabasePort(int port);
-
-    QString getDatabaseUserName() const;
-    void setDatabaseUserName(const QString& userName);
-
-    bool getInternalDatabaseServer() const;
-    void setInternalDatabaseServer(const bool useInternalDBServer);
+    void setSyncDigikamToBaloo(bool val);
+    bool getSyncDigikamToBaloo() const;
 
     void setVersionManagerSettings(const VersionManagerSettings& settings);
     VersionManagerSettings getVersionManagerSettings() const;
 
     double getFaceDetectionAccuracy() const;
     void setFaceDetectionAccuracy(double value);
-
-    void setApplicationStyle(const QString& style);
-    QString getApplicationStyle() const;
-
-    KConfigGroup generalConfigGroup() const;
 
 private Q_SLOTS:
 
