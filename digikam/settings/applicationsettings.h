@@ -137,6 +137,12 @@ public:
     bool getInternalDatabaseServer() const;
     void setInternalDatabaseServer(const bool useInternalDBServer);
 
+    void setSyncBalooToDigikam(bool val);
+    bool getSyncBalooToDigikam() const;
+
+    void setSyncDigikamToBaloo(bool val);
+    bool getSyncDigikamToBaloo() const;
+
     // -- Album View Settings -------------------------------------------------------
 
     void setAlbumSortOrder(const AlbumSortOrder order);
@@ -405,12 +411,6 @@ public:
     KMultiTabBar::KMultiTabBarStyle getSidebarTitleStyle() const;
 
     // -- Others Settings -------------------------------------------------------
-
-    void setSyncBalooToDigikam(bool val);
-    bool getSyncBalooToDigikam() const;
-
-    void setSyncDigikamToBaloo(bool val);
-    bool getSyncDigikamToBaloo() const;
 
     void setVersionManagerSettings(const VersionManagerSettings& settings);
     VersionManagerSettings getVersionManagerSettings() const;
