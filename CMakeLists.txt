@@ -1439,14 +1439,16 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager/models/tagmngrlistmodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager/models/tagmngrlistitem.cpp
 
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/applicationsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/applicationsettings_p.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/settings/applicationsettings.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/settings/applicationsettings_p.cpp
+
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/contextmenuhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/tooltipfiller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/searchmodificationhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/editablesearchtreeview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/sidebarwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/slideshowbuilder.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils/digikammodelcollection.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/stackedview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/digikamview.cpp
@@ -1472,8 +1474,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_column_thumbnail.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_columnfactory.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview/tableview_selection_model_syncer.cpp
-
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/models/digikammodelcollection.cpp
        )
 
     IF(DIGIKAM_ENABLE_MODELTEST)
@@ -1506,11 +1506,11 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/items/overlays
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/main
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/fileaction
-        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/models
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/tags/tagsmanager/models
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/utils
+        ${CMAKE_CURRENT_SOURCE_DIR}/digikam/settings
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views
         ${CMAKE_CURRENT_SOURCE_DIR}/digikam/views/tableview
         ${CMAKE_CURRENT_SOURCE_DIR}/imageplugins
