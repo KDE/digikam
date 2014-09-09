@@ -42,6 +42,8 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "databaseparameters.h"
+#include "versionmanager.h"
 
 namespace Digikam
 {
