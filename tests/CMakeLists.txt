@@ -48,6 +48,7 @@ SET(cameranamehelper_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/importui/backend/camiteminfo.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/importui/backend/dkcamera.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/utils/applicationsettings.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/utils/applicationsettings_p.cpp
    )
 
 KDE4_ADD_UNIT_TEST(cameranamehelpertest ${cameranamehelper_SRCS})
@@ -393,6 +394,7 @@ SET (testdatabase_SRCS testdatabase.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/database/scancontroller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/database/databaseguierrorhandler.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/utils/applicationsettings.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/../digikam/utils/applicationsettings_p.cpp
 )
 KDE4_ADD_EXECUTABLE(testdatabase ${testdatabase_SRCS})
 TARGET_LINK_LIBRARIES (testdatabase

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2003-16-10
- * Description : albums settings interface
+ * Description : application settings interface
  *
  * Copyright (C) 2003-2004 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2003-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef ALBUMSETTINGS_H
-#define ALBUMSETTINGS_H
+#ifndef APPLICATIONSETTINGS_H
+#define APPLICATIONSETTINGS_H
 
 // Qt includes
 
@@ -402,7 +402,6 @@ public:
 
     KConfigGroup generalConfigGroup() const;
 
-
 private Q_SLOTS:
 
     void applyBalooSettings();
@@ -424,4 +423,4 @@ private:
 
 }  // namespace Digikam
 
-#endif  // ALBUMSETTINGS_H
+#endif  // APPLICATIONSETTINGS_H
