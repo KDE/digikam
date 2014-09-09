@@ -73,7 +73,6 @@ public:
      */
     enum StringComparisonType
     {
-
         /**
          * Natural compare using KStringHandler::naturalCompare.
          */
@@ -88,7 +87,6 @@ public:
 Q_SIGNALS:
 
     void setupChanged();
-
     void recurseSettingsChanged();
     void balooSettingsChanged();
 
