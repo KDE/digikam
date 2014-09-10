@@ -847,17 +847,12 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->browseTagsAction = new KAction(KIcon("tag"), i18n("Browse Tags..."), this);
-    connect(d->browseTagsAction, SIGNAL(triggered()), d->view, SLOT(slotLeftSideBarActivateTags()));
-    actionCollection()->addAction("browse_tag_long", d->browseTagsAction);
-
-    // -----------------------------------------------------------
-
     d->openTagMngrAction = new KAction(KIcon("tag"), i18n("Open Tag Manager"), this);
     connect(d->openTagMngrAction, SIGNAL(triggered()), d->view, SLOT(slotOpenTagsManager()));
     actionCollection()->addAction("open_tag_mngr", d->openTagMngrAction);
 
     // -----------------------------------------------------------
+
     d->newTagAction = new KAction(KIcon("tag-new"), i18nc("new tag", "N&ew..."), this);
     connect(d->newTagAction, SIGNAL(triggered()), d->view, SLOT(slotNewTag()));
     actionCollection()->addAction("tag_new", d->newTagAction);
@@ -1523,7 +1518,7 @@ void DigikamApp::slotAlbumSelected(bool val)
 void DigikamApp::slotTagSelected(bool val)
 {
     QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
-    Album* album = 0;
+    Album* album            = 0;
 
     if(!albumList.isEmpty())
     {
@@ -1536,7 +1531,6 @@ void DigikamApp::slotTagSelected(bool val)
     }
 
     bool enabled = val && album && !album->isRoot();
-    d->browseTagsAction->setEnabled(!val);
     d->newTagAction->setEnabled(enabled);
     d->deleteTagAction->setEnabled(enabled);
     d->editTagAction->setEnabled(enabled);
