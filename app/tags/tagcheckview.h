@@ -6,8 +6,8 @@
  * Date        : 2005-05-05
  * Description : tags filter view
  *
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  *
@@ -49,16 +49,14 @@ public:
         ChildrenAndParents
     };
 
-    TagCheckView(QWidget* parent, TagModel* tagModel);
-    virtual ~TagCheckView();
+public:
 
-    virtual void doLoadState();
-    virtual void doSaveState();
+    TagCheckView(QWidget* const parent, TagModel* const tagModel);
 
-    QList<TAlbum*> getCheckedTags() const;
+    QList<TAlbum*> getCheckedTags()          const;
     QList<TAlbum*> getPartiallyCheckedTags() const;
 
-    ToggleAutoTags getToggleAutoTags() const;
+    ToggleAutoTags getToggleAutoTags()       const;
     void setToggleAutoTags(ToggleAutoTags toggle);
 
     /** If this is switched on, a tag that is created
@@ -67,6 +65,11 @@ public:
      */
     void setCheckNewTags(bool checkNewTags);
     bool checkNewTags() const;
+
+    virtual ~TagCheckView();
+
+    virtual void doLoadState();
+    virtual void doSaveState();
 
 Q_SIGNALS:
 
@@ -101,8 +104,8 @@ private Q_SLOTS:
 
 private:
 
-    class TagCheckViewPriv;
-    TagCheckViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

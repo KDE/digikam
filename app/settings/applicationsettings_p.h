@@ -246,7 +246,7 @@ public:
 
 private :
 
-    ApplicationSettings*                      parent;
+    ApplicationSettings*                      q;
 };
 
 }  // namespace Digikam

@@ -202,7 +202,7 @@ ApplicationSettings::Private::Private(ApplicationSettings* const q)
       syncToBaloo(false),
       faceDetectionAccuracy(0.8),
       stringComparisonType(ApplicationSettings::Natural),
-      parent(q)
+      q(q)
 {
 }
 
@@ -312,8 +312,8 @@ void ApplicationSettings::Private::init()
     stringComparisonType                = ApplicationSettings::Natural;
     applicationStyle                    = kapp->style()->objectName();
 
-    parent->connect(parent, SIGNAL(balooSettingsChanged()),
-                    parent, SLOT(applyBalooSettings()));
+    q->connect(q, SIGNAL(balooSettingsChanged()),
+               q, SLOT(applyBalooSettings()));
 }
 
 }  // namespace Digikam

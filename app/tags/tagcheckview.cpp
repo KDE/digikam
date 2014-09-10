@@ -6,8 +6,8 @@
  * Date        : 2005-05-05
  * Description : tags filter view
  *
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  *
@@ -44,11 +44,11 @@
 namespace Digikam
 {
 
-class TagCheckView::TagCheckViewPriv
+class TagCheckView::Private
 {
 public:
 
-    TagCheckViewPriv() :
+    Private() :
         toggleAutoTags(TagCheckView::NoToggleAuto),
         checkNewTags(false),
         toggleAutoAction(0),
@@ -71,13 +71,13 @@ public:
     QAction*                     toggleBothAction;
 };
 
-const QString TagCheckView::TagCheckViewPriv::configToggleAutoTagsEntry("Toggle Auto Tags");
+const QString TagCheckView::Private::configToggleAutoTagsEntry("Toggle Auto Tags");
 
 // --------------------------------------------------------
 
-TagCheckView::TagCheckView(QWidget* parent, TagModel* tagModel)
+TagCheckView::TagCheckView(QWidget* const parent, TagModel* const tagModel)
     : TagFolderView(parent, tagModel),
-      d(new TagCheckViewPriv)
+      d(new Private)
 {
     setSelectAlbumOnClick(false);
     setExpandOnSingleClick(false);
@@ -100,8 +100,8 @@ TagCheckView::TagCheckView(QWidget* parent, TagModel* tagModel)
     connect(d->toggleAutoAction, SIGNAL(triggered(QAction*)),
             this, SLOT(toggleAutoActionSelected(QAction*)));
 
-    connect(albumModel(), SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
-            this, SLOT(slotCheckStateChange(Album*,Qt::CheckState)));
+    connect(albumModel(), SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+            this, SLOT(slotCheckStateChange(Album*, Qt::CheckState)));
 }
 
 TagCheckView::~TagCheckView()
@@ -120,8 +120,8 @@ void TagCheckView::slotCheckStateChange(Album* album, Qt::CheckState state)
     Q_UNUSED(state);
 
     // handle custom toggle modes
-    disconnect(albumModel(), SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
-               this, SLOT(slotCheckStateChange(Album*,Qt::CheckState)));
+    disconnect(albumModel(), SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+               this, SLOT(slotCheckStateChange(Album*, Qt::CheckState)));
 
     // avoid signal recursion here
     switch (d->toggleAutoTags)
@@ -140,8 +140,8 @@ void TagCheckView::slotCheckStateChange(Album* album, Qt::CheckState state)
             break;
     }
 
-    connect(albumModel(), SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
-            this, SLOT(slotCheckStateChange(Album*,Qt::CheckState)));
+    connect(albumModel(), SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+            this, SLOT(slotCheckStateChange(Album*, Qt::CheckState)));
 
     emit checkedTagsChanged(getCheckedTags(), getPartiallyCheckedTags());
 }
@@ -167,30 +167,34 @@ void TagCheckView::doSaveState()
 QList<TAlbum*> TagCheckView::getCheckedTags() const
 {
     QList<TAlbum*> tags;
-    foreach(Album* album, albumModel()->checkedAlbums())
+
+    foreach(Album* const album, albumModel()->checkedAlbums())
     {
-        TAlbum* tag = dynamic_cast<TAlbum*> (album);
+        TAlbum* const tag = dynamic_cast<TAlbum*> (album);
 
         if (tag)
         {
             tags << tag;
         }
     }
+
     return tags;
 }
 
 QList<TAlbum*> TagCheckView::getPartiallyCheckedTags() const
 {
     QList<TAlbum*> tags;
-    foreach(Album* album, albumModel()->partiallyCheckedAlbums())
+
+    foreach(Album* const album, albumModel()->partiallyCheckedAlbums())
     {
-        TAlbum* tag = dynamic_cast<TAlbum*> (album);
+        TAlbum* const tag = dynamic_cast<TAlbum*> (album);
 
         if (tag)
         {
             tags << tag;
         }
     }
+
     return tags;
 }
 
@@ -250,7 +254,8 @@ void TagCheckView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* al
     // automatic toggle
 
     cmh.addAction(d->toggleAutoAction);
-    foreach(QAction* action, d->toggleAutoAction->actions())
+
+    foreach(QAction* const action, d->toggleAutoAction->actions())
     {
         if (action->data().toInt() == d->toggleAutoTags)
         {
