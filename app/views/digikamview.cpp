@@ -951,17 +951,23 @@ void DigikamView::slotRenameAlbum()
 
 void DigikamView::slotNewTag()
 {
-    d->tagModificationHelper->slotTagNew(d->tagViewSideBar->currentAlbum());
+    QList<TAlbum*> talbums = AlbumManager::instance()->currentTAlbums();
+    if (!talbums.isEmpty())
+        d->tagModificationHelper->slotTagNew(talbums.first());
 }
 
 void DigikamView::slotDeleteTag()
 {
-    d->tagModificationHelper->slotTagDelete(d->tagViewSideBar->currentAlbum());
+    QList<TAlbum*> talbums = AlbumManager::instance()->currentTAlbums();
+    if (!talbums.isEmpty())
+        d->tagModificationHelper->slotTagDelete(talbums.first());
 }
 
 void DigikamView::slotEditTag()
 {
-    d->tagModificationHelper->slotTagEdit(d->tagViewSideBar->currentAlbum());
+    QList<TAlbum*> talbums = AlbumManager::instance()->currentTAlbums();
+    if (!talbums.isEmpty())
+        d->tagModificationHelper->slotTagEdit(talbums.first());
 }
 
 void DigikamView::slotOpenTagsManager()
