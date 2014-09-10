@@ -505,6 +505,23 @@ void ImageDescEditTab::writeSettings(KConfigGroup& group)
     d->tagsSearchBar->saveState();
 }
 
+void ImageDescEditTab::setFocusToLastSelectedWidget()
+{
+    if (d->lastSelectedWidget)
+    {
+        d->lastSelectedWidget->setFocus();
+    }
+
+    d->lastSelectedWidget = 0;
+}
+
+void ImageDescEditTab::setFocusToTagsView()
+{
+    d->lastSelectedWidget = qobject_cast<QWidget*>(d->tagCheckView);
+    d->tagCheckView->setFocus();
+    d->tabWidget->setCurrentIndex(Private::TAGS);
+}
+
 void ImageDescEditTab::setFocusToNewTagEdit()
 {
     //select "Tags" tab and focus the NewTagLineEdit widget
@@ -526,6 +543,12 @@ void ImageDescEditTab::setFocusToCommentsEdit()
 #if KEXIV2_VERSION >= 0x020302
     d->captionsEdit->textEdit()->setFocus();
 #endif
+}
+
+void ImageDescEditTab::activateAssignedTagsButton()
+{
+    d->tabWidget->setCurrentIndex(Private::TAGS);
+    d->assignedTagsBtn->click();
 }
 
 bool ImageDescEditTab::singleSelection() const
@@ -1455,23 +1478,6 @@ void ImageDescEditTab::slotAssignedTagsToggled(bool t)
         // Only after above change, do this
         d->tagCheckView->expandMatches(d->tagCheckView->rootIndex());
    }
-}
-
-void ImageDescEditTab::setFocusToLastSelectedWidget()
-{
-    if (d->lastSelectedWidget)
-    {
-        d->lastSelectedWidget->setFocus();
-    }
-
-    d->lastSelectedWidget = 0;
-}
-
-void ImageDescEditTab::setFocusToTagsView()
-{
-    d->lastSelectedWidget = qobject_cast<QWidget*>(d->tagCheckView);
-    d->tagCheckView->setFocus();
-    d->tabWidget->setCurrentIndex(Private::TAGS);
 }
 
 void ImageDescEditTab::slotApplyChangesToAllVersions()

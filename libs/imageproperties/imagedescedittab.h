@@ -70,6 +70,7 @@ public:
     void setFocusToNewTagEdit();
     void setFocusToTitlesEdit();
     void setFocusToCommentsEdit();
+    void activateAssignedTagsButton();
 
     AddTagsLineEdit* getNewTagEdit() const;
 

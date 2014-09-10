@@ -168,8 +168,10 @@ private Q_SLOTS:
 
     void slotRightSideBarActivateTitles();
     void slotRightSideBarActivateComments();
+    void slotRightSideBarActivateAssignedTags();
     void slotLeftSideBarActivateTitles();
     void slotLeftSideBarActivateComments();
+    void slotLeftSideBarActivateAssignedTags();
 
 private:
 

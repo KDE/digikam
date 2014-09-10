@@ -690,6 +690,11 @@ void DigikamApp::setupAccelerators()
     editComments->setShortcut( KShortcut(Qt::META + Qt::Key_C) );
     actionCollection()->addAction("edit_comments", editComments);
     connect(editComments, SIGNAL(triggered()), d->view, SLOT(slotRightSideBarActivateComments()));
+
+    KAction* const assignedTags = new KAction(i18n("Show Assigned Tags"), this);
+    assignedTags->setShortcut( KShortcut(Qt::META + Qt::Key_A) );
+    actionCollection()->addAction("assigned _tags", assignedTags);
+    connect(assignedTags, SIGNAL(triggered()), d->view, SLOT(slotRightSideBarActivateAssignedTags()));
 }
 
 void DigikamApp::setupActions()

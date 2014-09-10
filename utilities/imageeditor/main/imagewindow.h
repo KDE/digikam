@@ -184,6 +184,7 @@ private Q_SLOTS:
 
     void slotRightSideBarActivateTitles();
     void slotRightSideBarActivateComments();
+    void slotRightSideBarActivateAssignedTags();
 
 private:
 

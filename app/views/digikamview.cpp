@@ -2176,6 +2176,12 @@ void DigikamView::slotRightSideBarActivateComments()
     d->rightSideBar->imageDescEditTab()->setFocusToCommentsEdit();
 }
 
+void DigikamView::slotRightSideBarActivateAssignedTags()
+{
+    d->rightSideBar->setActiveTab(d->rightSideBar->imageDescEditTab());
+    d->rightSideBar->imageDescEditTab()->activateAssignedTagsButton();
+}
+
 void DigikamView::slotRatingChanged(const KUrl& url, int rating)
 {
     rating = qMin(RatingMax, qMax(RatingMin, rating));

@@ -224,6 +224,7 @@ public Q_SLOTS:
 
     void slotRightSideBarActivateTitles();
     void slotRightSideBarActivateComments();
+    void slotRightSideBarActivateAssignedTags();
 
     void slotFocusAndNextImage();
 

@@ -404,12 +404,14 @@ void ImageWindow::setupConnections()
     connect(watch, SIGNAL(signalFileMetadataChanged(KUrl)),
             this, SLOT(slotFileMetadataChanged(KUrl)));
 
-    /*connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(CollectionImageChangeset)),
+/*
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(CollectionImageChangeset)),
             this, SLOT(slotCollectionImageChange(CollectionImageChangeset)),
-            Qt::QueuedConnection);*/
+            Qt::QueuedConnection);
 
-    /*connect(d->imageFilterModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
-            this, SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)));*/
+    connect(d->imageFilterModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
+            this, SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)));
+*/
 
     connect(d->thumbBar, SIGNAL(currentChanged(ImageInfo)),
             this, SLOT(slotThumbBarImageSelected(ImageInfo)));
@@ -478,6 +480,11 @@ void ImageWindow::setupActions()
     editComments->setShortcut( KShortcut(Qt::META + Qt::Key_C) );
     actionCollection()->addAction("edit_comments", editComments);
     connect(editComments, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateComments()));
+
+    KAction* const assignedTags = new KAction(i18n("Show Assigned Tags"), this);
+    assignedTags->setShortcut( KShortcut(Qt::META + Qt::Key_A) );
+    actionCollection()->addAction("assigned _tags", assignedTags);
+    connect(assignedTags, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateAssignedTags()));
 }
 
 void ImageWindow::slotSetupChanged()
@@ -1707,6 +1714,13 @@ void ImageWindow::slotRightSideBarActivateComments()
 {
     d->rightSideBar->setActiveTab(d->rightSideBar->imageDescEditTab());
     d->rightSideBar->imageDescEditTab()->setFocusToCommentsEdit();
+}
+
+
+void ImageWindow::slotRightSideBarActivateAssignedTags()
+{
+    d->rightSideBar->setActiveTab(d->rightSideBar->imageDescEditTab());
+    d->rightSideBar->imageDescEditTab()->activateAssignedTagsButton();
 }
 
 }  // namespace Digikam

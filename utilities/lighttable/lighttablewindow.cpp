@@ -669,6 +669,16 @@ void LightTableWindow::setupActions()
     actionCollection()->addAction("edit_comments_left", editCommentsLeft);
     connect(editCommentsLeft, SIGNAL(triggered()), this, SLOT(slotLeftSideBarActivateComments()));
 
+    KAction* const assignedTagsRight = new KAction(i18n("Show Assigned Tags ont the Right"), this);
+    assignedTagsRight->setShortcut( KShortcut(Qt::META + Qt::Key_A) );
+    actionCollection()->addAction("assigned _tags_right", assignedTagsRight);
+    connect(assignedTagsRight, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateAssignedTags()));
+
+    KAction* const assignedTagsLeft = new KAction(i18n("Show Assigned Tags ont the Left"), this);
+    assignedTagsLeft->setShortcut( KShortcut(Qt::SHIFT + Qt::META + Qt::Key_A) );
+    actionCollection()->addAction("assigned _tags_left", assignedTagsLeft);
+    connect(assignedTagsLeft, SIGNAL(triggered()), this, SLOT(slotLeftSideBarActivateAssignedTags()));
+
     // ---------------------------------------------------------------------------------
 
     createGUI(xmlFile());
@@ -1710,6 +1720,12 @@ void LightTableWindow::slotRightSideBarActivateComments()
     d->rightSideBar->imageDescEditTab()->setFocusToCommentsEdit();
 }
 
+void LightTableWindow::slotRightSideBarActivateAssignedTags()
+{
+    d->rightSideBar->setActiveTab(d->rightSideBar->imageDescEditTab());
+    d->rightSideBar->imageDescEditTab()->activateAssignedTagsButton();
+}
+
 void LightTableWindow::slotLeftSideBarActivateTitles()
 {
     d->leftSideBar->setActiveTab(d->leftSideBar->imageDescEditTab());
@@ -1720,6 +1736,12 @@ void LightTableWindow::slotLeftSideBarActivateComments()
 {
     d->leftSideBar->setActiveTab(d->leftSideBar->imageDescEditTab());
     d->leftSideBar->imageDescEditTab()->setFocusToCommentsEdit();
+}
+
+void LightTableWindow::slotLeftSideBarActivateAssignedTags()
+{
+    d->leftSideBar->setActiveTab(d->leftSideBar->imageDescEditTab());
+    d->leftSideBar->imageDescEditTab()->activateAssignedTagsButton();
 }
 
 }  // namespace Digikam
