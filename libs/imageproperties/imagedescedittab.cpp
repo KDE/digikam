@@ -512,6 +512,22 @@ void ImageDescEditTab::setFocusToNewTagEdit()
     d->newTagEdit->setFocus();
 }
 
+void ImageDescEditTab::setFocusToTitlesEdit()
+{
+    d->tabWidget->setCurrentIndex(Private::DESCRIPTIONS);
+#if KEXIV2_VERSION >= 0x020302
+    d->titleEdit->textEdit()->setFocus();
+#endif
+}
+
+void ImageDescEditTab::setFocusToCommentsEdit()
+{
+    d->tabWidget->setCurrentIndex(Private::DESCRIPTIONS);
+#if KEXIV2_VERSION >= 0x020302
+    d->captionsEdit->textEdit()->setFocus();
+#endif
+}
+
 bool ImageDescEditTab::singleSelection() const
 {
     return (d->currInfos.count() == 1);

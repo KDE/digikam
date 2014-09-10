@@ -105,6 +105,7 @@
 #include "imageattributeswatch.h"
 #include "imagefiltermodel.h"
 #include "imagedragdrop.h"
+#include "imagedescedittab.h"
 #include "imageinfo.h"
 #include "imagelistmodel.h"
 #include "imageplugin.h"
@@ -295,19 +296,19 @@ void ImageWindow::setupUserArea()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
 
-    QWidget* widget   = new QWidget(this);
-    QHBoxLayout* hlay = new QHBoxLayout(widget);
-    m_splitter        = new SidebarSplitter(widget);
+    QWidget* const widget   = new QWidget(this);
+    QHBoxLayout* const hlay = new QHBoxLayout(widget);
+    m_splitter              = new SidebarSplitter(widget);
 
-    d->viewContainer  = new KMainWindow(widget, Qt::Widget);
+    d->viewContainer        = new KMainWindow(widget, Qt::Widget);
     m_splitter->addWidget(d->viewContainer);
-    m_stackView       = new EditorStackView(d->viewContainer);
-    m_canvas          = new Canvas(m_stackView);
+    m_stackView             = new EditorStackView(d->viewContainer);
+    m_canvas                = new Canvas(m_stackView);
     d->viewContainer->setCentralWidget(m_stackView);
 
     m_splitter->setStretchFactor(0, 10);      // set Canvas default size to max.
 
-    d->rightSideBar   = new ImagePropertiesSideBarDB(widget, m_splitter, KMultiTabBar::Right, true);
+    d->rightSideBar = new ImagePropertiesSideBarDB(widget, m_splitter, KMultiTabBar::Right, true);
     d->rightSideBar->setObjectName("ImageEditor Right Sidebar");
     d->rightSideBar->getFiltersHistoryTab()->addOpenImageAction();
 
@@ -467,6 +468,16 @@ void ImageWindow::setupActions()
 
     // Labels shortcuts must be registered here to be saved in XML GUI files if user customize it.
     TagsActionMngr::defaultManager()->registerLabelsActions(actionCollection());
+
+    KAction* const editTitles = new KAction(i18n("Edit Titles"), this);
+    editTitles->setShortcut( KShortcut(Qt::META + Qt::Key_T) );
+    actionCollection()->addAction("edit_titles", editTitles);
+    connect(editTitles, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateTitles()));
+
+    KAction* const editComments = new KAction(i18n("Edit Comments"), this);
+    editComments->setShortcut( KShortcut(Qt::META + Qt::Key_C) );
+    actionCollection()->addAction("edit_comments", editComments);
+    connect(editComments, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateComments()));
 }
 
 void ImageWindow::slotSetupChanged()
@@ -760,7 +771,7 @@ void ImageWindow::slotChanged()
     }
 
 
-    DImg* img = m_canvas->interface()->getImg();
+    DImg* const img = m_canvas->interface()->getImg();
 
     DImageHistory history     = m_canvas->interface()->getImageHistory();
     DImageHistory redoHistory = m_canvas->interface()->getImageHistoryOfFullRedo();
@@ -1684,6 +1695,18 @@ void ImageWindow::addServicesMenu()
 void ImageWindow::slotOpenWith(QAction* action)
 {
     openWith(d->currentUrl(), action);
+}
+
+void ImageWindow::slotRightSideBarActivateTitles()
+{
+    d->rightSideBar->setActiveTab(d->rightSideBar->imageDescEditTab());
+    d->rightSideBar->imageDescEditTab()->setFocusToTitlesEdit();
+}
+
+void ImageWindow::slotRightSideBarActivateComments()
+{
+    d->rightSideBar->setActiveTab(d->rightSideBar->imageDescEditTab());
+    d->rightSideBar->imageDescEditTab()->setFocusToCommentsEdit();
 }
 
 }  // namespace Digikam

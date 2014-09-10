@@ -680,6 +680,16 @@ void DigikamApp::setupAccelerators()
 
     // Labels shortcuts must be registered here to be saved in XML GUI files if user customize it.
     d->tagsActionManager->registerLabelsActions(actionCollection());
+
+    KAction* const editTitles = new KAction(i18n("Edit Titles"), this);
+    editTitles->setShortcut( KShortcut(Qt::META + Qt::Key_T) );
+    actionCollection()->addAction("edit_titles", editTitles);
+    connect(editTitles, SIGNAL(triggered()), d->view, SLOT(slotRightSideBarActivateTitles()));
+
+    KAction* const editComments = new KAction(i18n("Edit Comments"), this);
+    editComments->setShortcut( KShortcut(Qt::META + Qt::Key_C) );
+    actionCollection()->addAction("edit_comments", editComments);
+    connect(editComments, SIGNAL(triggered()), d->view, SLOT(slotRightSideBarActivateComments()));
 }
 
 void DigikamApp::setupActions()

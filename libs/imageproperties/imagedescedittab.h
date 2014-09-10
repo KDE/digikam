@@ -68,6 +68,8 @@ public:
     void populateTags();
     void setFocusToTagsView();
     void setFocusToNewTagEdit();
+    void setFocusToTitlesEdit();
+    void setFocusToCommentsEdit();
 
     AddTagsLineEdit* getNewTagEdit() const;
 

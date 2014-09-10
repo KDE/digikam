@@ -74,6 +74,7 @@
 #include "loadingcacheinterface.h"
 #include "deletedialog.h"
 #include "imagewindow.h"
+#include "imagedescedittab.h"
 #include "slideshow.h"
 #include "setup.h"
 #include "syncjob.h"
@@ -647,6 +648,26 @@ void LightTableWindow::setupActions()
 
     // Labels shortcuts must be registered here to be saved in XML GUI files if user customize it.
     TagsActionMngr::defaultManager()->registerLabelsActions(actionCollection());
+
+    KAction* const editTitlesRight = new KAction(i18n("Edit Titles on the Right"), this);
+    editTitlesRight->setShortcut( KShortcut(Qt::META + Qt::Key_T) );
+    actionCollection()->addAction("edit_titles_right", editTitlesRight);
+    connect(editTitlesRight, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateTitles()));
+
+    KAction* const editCommentsRight = new KAction(i18n("Edit Comments on the Right"), this);
+    editCommentsRight->setShortcut( KShortcut(Qt::META + Qt::Key_C) );
+    actionCollection()->addAction("edit_comments_right", editCommentsRight);
+    connect(editCommentsRight, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateComments()));
+
+    KAction* const editTitlesLeft = new KAction(i18n("Edit Titles on the Left"), this);
+    editTitlesLeft->setShortcut( KShortcut(Qt::SHIFT + Qt::META + Qt::Key_T) );
+    actionCollection()->addAction("edit_titles_left", editTitlesLeft);
+    connect(editTitlesLeft, SIGNAL(triggered()), this, SLOT(slotLeftSideBarActivateTitles()));
+
+    KAction* const editCommentsLeft = new KAction(i18n("Edit Comments on the Left"), this);
+    editCommentsLeft->setShortcut( KShortcut(Qt::SHIFT + Qt::META + Qt::Key_C) );
+    actionCollection()->addAction("edit_comments_left", editCommentsLeft);
+    connect(editCommentsLeft, SIGNAL(triggered()), this, SLOT(slotLeftSideBarActivateComments()));
 
     // ---------------------------------------------------------------------------------
 
@@ -1675,6 +1696,30 @@ void LightTableWindow::slotFileWithDefaultApplication()
     {
         FileOperation::openFilesWithDefaultApplication(KUrl::List() << d->thumbView->currentInfo().fileUrl(), this);
     }
+}
+
+void LightTableWindow::slotRightSideBarActivateTitles()
+{
+    d->rightSideBar->setActiveTab(d->rightSideBar->imageDescEditTab());
+    d->rightSideBar->imageDescEditTab()->setFocusToTitlesEdit();
+}
+
+void LightTableWindow::slotRightSideBarActivateComments()
+{
+    d->rightSideBar->setActiveTab(d->rightSideBar->imageDescEditTab());
+    d->rightSideBar->imageDescEditTab()->setFocusToCommentsEdit();
+}
+
+void LightTableWindow::slotLeftSideBarActivateTitles()
+{
+    d->leftSideBar->setActiveTab(d->leftSideBar->imageDescEditTab());
+    d->leftSideBar->imageDescEditTab()->setFocusToTitlesEdit();
+}
+
+void LightTableWindow::slotLeftSideBarActivateComments()
+{
+    d->leftSideBar->setActiveTab(d->leftSideBar->imageDescEditTab());
+    d->leftSideBar->imageDescEditTab()->setFocusToCommentsEdit();
 }
 
 }  // namespace Digikam

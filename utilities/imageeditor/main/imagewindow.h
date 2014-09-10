@@ -182,6 +182,9 @@ private Q_SLOTS:
     void slotAddedDropedItems(QDropEvent*);
     void slotOpenWith(QAction* action=0);
 
+    void slotRightSideBarActivateTitles();
+    void slotRightSideBarActivateComments();
+
 private:
 
     static ImageWindow* m_instance;

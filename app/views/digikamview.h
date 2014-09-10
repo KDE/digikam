@@ -222,6 +222,9 @@ public Q_SLOTS:
     void slotLeftSideBarActivateAlbums();
     void slotLeftSideBarActivateTags();
 
+    void slotRightSideBarActivateTitles();
+    void slotRightSideBarActivateComments();
+
     void slotFocusAndNextImage();
 
 #ifdef USE_PRESENTATION_MODE

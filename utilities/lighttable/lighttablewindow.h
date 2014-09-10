@@ -166,6 +166,11 @@ private Q_SLOTS:
     void slotPreviousRightSideBarTab();
     void slotNextRightSideBarTab();
 
+    void slotRightSideBarActivateTitles();
+    void slotRightSideBarActivateComments();
+    void slotLeftSideBarActivateTitles();
+    void slotLeftSideBarActivateComments();
+
 private:
 
     class Private;

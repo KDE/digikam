@@ -966,7 +966,7 @@ void DigikamView::slotEditTag()
 
 void DigikamView::slotOpenTagsManager()
 {
-    TagsManager* tagMngr = TagsManager::instance();
+    TagsManager* const tagMngr = TagsManager::instance();
     tagMngr->show();
     tagMngr->activateWindow();
     tagMngr->raise();
@@ -974,13 +974,8 @@ void DigikamView::slotOpenTagsManager()
 
 void DigikamView::slotAssignTag()
 {
-    ImageDescEditTab* imageDescEditTab = d->rightSideBar->imageDescEditTab();
-
-    //activate image properties tab
-    d->rightSideBar->setActiveTab(imageDescEditTab);
-
-    //activate tags tab on properties tab
-    imageDescEditTab->setFocusToNewTagEdit();
+    d->rightSideBar->setActiveTab(d->rightSideBar->imageDescEditTab());
+    d->rightSideBar->imageDescEditTab()->setFocusToNewTagEdit();
 }
 
 void DigikamView::slotNewKeywordSearch()
@@ -2167,6 +2162,18 @@ void DigikamView::slotLeftSideBarActivate(SidebarWidget* widget)
 void DigikamView::slotLeftSideBarActivate(QWidget* widget)
 {
     slotLeftSideBarActivate(static_cast<SidebarWidget*>(widget));
+}
+
+void DigikamView::slotRightSideBarActivateTitles()
+{
+    d->rightSideBar->setActiveTab(d->rightSideBar->imageDescEditTab());
+    d->rightSideBar->imageDescEditTab()->setFocusToTitlesEdit();
+}
+
+void DigikamView::slotRightSideBarActivateComments()
+{
+    d->rightSideBar->setActiveTab(d->rightSideBar->imageDescEditTab());
+    d->rightSideBar->imageDescEditTab()->setFocusToCommentsEdit();
 }
 
 void DigikamView::slotRatingChanged(const KUrl& url, int rating)

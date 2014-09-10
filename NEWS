@@ -18,4 +18,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 009 ==> 309557 - Add a new option to show image Title information in tooltips.
 010 ==> 201698 - Add keyboard shortcut for album navigation when using Captions/Tags sidebar.
 011 ==> 211622 - Pressing PageDown should show the next image when focus is in Captions/Tags side bar.
-012 ==> 
+012 ==> 131632 - Add keyboard shortcut for better captioning workflow.
+013 ==> 
