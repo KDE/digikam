@@ -428,6 +428,8 @@ public:
         Year
     };
 
+public:
+
     explicit DAlbum(const QDate& date, bool root=false, Range range=Month);
     ~DAlbum();
 

@@ -349,7 +349,7 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
     d->addPageUpDownActions(this, d->rightSideBar->imageDescEditTab());
 
     // Tags Filter sidebar tab contents.
-    d->filterWidget = new FilterSideBarWidget(d->rightSideBar, d->modelCollection->getTagFilterModel());
+    d->filterWidget   = new FilterSideBarWidget(d->rightSideBar, d->modelCollection->getTagFilterModel());
     d->rightSideBar->appendTab(d->filterWidget, SmallIcon("view-filter"), i18n("Filters"));
 
     // Versions sidebar overlays
@@ -619,7 +619,7 @@ void DigikamView::setupConnections()
 
     // -- Album History -----------------
 
-    connect(this, SIGNAL(signalAlbumSelected(bool)),
+    connect(this, SIGNAL(signalAlbumSelected(Album*)),
             d->albumHistory, SLOT(slotAlbumSelected()));
 
     connect(this, SIGNAL(signalImageSelected(ImageInfoList,ImageInfoList)),
@@ -731,7 +731,7 @@ void DigikamView::saveViewState()
     group.writeEntry("ThumbbarState", d->dockArea->saveState().toBase64());
 
     QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
-    Album* album = 0;
+    Album* album            = 0;
 
     if(!albumList.isEmpty())
     {
@@ -908,7 +908,7 @@ void DigikamView::slotAllAlbumsLoaded()
 
 void DigikamView::slotSortAlbums(int order)
 {
-    ApplicationSettings* settings = ApplicationSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
 
     if (!settings)
     {
@@ -919,18 +919,18 @@ void DigikamView::slotSortAlbums(int order)
     settings->saveSettings();
     //A dummy way to force the tree view to resort if the album sort role changed
 
-    PAlbum* albumBeforeSorting = d->albumFolderSideBar->currentAlbum();
+    PAlbum* const albumBeforeSorting = d->albumFolderSideBar->currentAlbum();
     settings->setAlbumSortChanged(true);
     d->albumFolderSideBar->doSaveState();
     d->albumFolderSideBar->doLoadState();
     d->albumFolderSideBar->doSaveState();
     d->albumFolderSideBar->doLoadState();
     settings->setAlbumSortChanged(false);
+
     if (d->leftSideBar->getActiveTab() == d->albumFolderSideBar)
     {
         d->albumFolderSideBar->setCurrentAlbum(albumBeforeSorting);
     }
-
 }
 
 void DigikamView::slotNewAlbum()
@@ -998,7 +998,7 @@ void DigikamView::slotNewDuplicatesSearch(Album* album)
 
 void DigikamView::slotAlbumsCleared()
 {
-    emit signalAlbumSelected(false);
+    emit signalAlbumSelected(0);
 }
 
 void DigikamView::slotAlbumHistoryBack(int steps)
@@ -1034,7 +1034,7 @@ void DigikamView::changeAlbumFromHistory(QList<Album*> album, QWidget* const wid
             sideBarWidget->changeAlbumFromHistory(album);
             slotLeftSideBarActivate(sideBarWidget);
 
-            if(sideBarWidget == d->labelsSideBar)
+            if (sideBarWidget == d->labelsSideBar)
             {
                 d->labelsSearchHandler->restoreSelectionFromHistory(d->albumHistory->neededLabels());
             }
@@ -1074,7 +1074,6 @@ void DigikamView::getForwardHistory(QStringList& titles)
 
 void DigikamView::slotGotoAlbumAndItem(const ImageInfo& imageInfo)
 {
-
     kDebug() << "going to " << imageInfo;
 
     emit signalNoCurrentItem();
@@ -1091,7 +1090,6 @@ void DigikamView::slotGotoAlbumAndItem(const ImageInfo& imageInfo)
     // And finally toggle album manager to handle album history and
     // reload all items.
     d->albumManager->setCurrentAlbums(QList<Album*>() << album);
-
 }
 
 void DigikamView::slotGotoDateAndItem(const ImageInfo& imageInfo)
@@ -1163,68 +1161,30 @@ void DigikamView::slotSelectAlbum(const KUrl& url)
 void DigikamView::slotAlbumSelected(QList<Album*> albums)
 {
     emit signalNoCurrentItem();
+    emit signalAlbumSelected(0);
 
-    if (albums.isEmpty() || !(albums.first()))
+    if (albums.isEmpty() || !albums.first())
     {
         d->iconView->openAlbum(QList<Album*>());
         d->mapView->openAlbum(0);
-        emit signalAlbumSelected(false);
-        emit signalTagSelected(false);
         slotTogglePreviewMode(ImageInfo());
         return;
     }
 
-    Album* album = albums.first();
-
-    if (album->type() == Album::PHYSICAL)
-    {
-        emit signalAlbumSelected(true);
-        emit signalTagSelected(false);
-    }
-    else if (album->type() == Album::TAG)
-    {
-        emit signalAlbumSelected(false);
-/*
-        kDebug()<<"Album "<<album->title()<<" selected." ;
-
-        // Now loop through children of the people album and check if this album is a child.
-        Album* peopleAlbum = AlbumManager::instance()->findTAlbum(TagsCache::instance()->tagForPath("/People"));
-        int thisAlbumId = album->id();
-
-        QList<int> children =  peopleAlbum->childAlbumIds(true);
-
-        foreach(int id, children)
-        {
-            if(id == thisAlbumId)
-            {
-                kDebug()<<"Is a people tag";
-
-                showFaceAlbum(thisAlbumId);
-                emit signalTagSelected(true);
-                return;
-            }
-        }
-*/
-        emit signalTagSelected(true);
-    }
-    else
-    {
-        emit signalAlbumSelected(false);
-        emit signalTagSelected(false);
-    }
+    Album* const album = albums.first();
+    emit signalAlbumSelected(album);
 
     if (d->useAlbumHistory && !d->labelsSearchHandler->isRestoringSelectionFromHistory())
     {
-        if(!(d->leftSideBar->getActiveTab() == d->labelsSideBar))
+        if (!(d->leftSideBar->getActiveTab() == d->labelsSideBar))
         {
             d->albumHistory->addAlbums(albums, d->leftSideBar->getActiveTab());
         }
         else
         {
-            if(albums.first()->isUsedByLabelsTree())
+            if (albums.first()->isUsedByLabelsTree())
             {
-                d->albumHistory->
-                     addAlbums(albums, d->leftSideBar->getActiveTab(), d->labelsSideBar->selectedLabels());
+                d->albumHistory->addAlbums(albums, d->leftSideBar->getActiveTab(), d->labelsSideBar->selectedLabels());
             }
         }
     }

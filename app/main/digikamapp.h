@@ -58,6 +58,7 @@ class Device;
 namespace Digikam
 {
 
+class Album;
 class DigikamView;
 class FaceScanSettings;
 class FilterStatusBar;
@@ -150,8 +151,7 @@ private:
 
 private Q_SLOTS:
 
-    void slotAlbumSelected(bool val);
-    void slotTagSelected(bool val);
+    void slotAlbumSelected(Album*);
     void slotImageSelected(const ImageInfoList&, const ImageInfoList&);
     void slotSelectionChanged(int selectionCount);
     void slotExit();

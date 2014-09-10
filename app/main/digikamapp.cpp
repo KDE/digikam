@@ -555,11 +555,8 @@ void DigikamApp::setupView()
 
 void DigikamApp::setupViewConnections()
 {
-    connect(d->view, SIGNAL(signalAlbumSelected(bool)),
-            this, SLOT(slotAlbumSelected(bool)));
-
-    connect(d->view, SIGNAL(signalTagSelected(bool)),
-            this, SLOT(slotTagSelected(bool)));
+    connect(d->view, SIGNAL(signalAlbumSelected(Album*)),
+            this, SLOT(slotAlbumSelected(Album*)));
 
     connect(d->view, SIGNAL(signalSelectionChanged(int)),
             this, SLOT(slotSelectionChanged(int)));
@@ -1448,23 +1445,14 @@ void DigikamApp::slotAboutToShowForwardMenu()
     }
 }
 
-void DigikamApp::slotAlbumSelected(bool val)
+void DigikamApp::slotAlbumSelected(Album* album)
 {
-    // NOTE: val is true when a PAlbum is selected.
-
-    QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
-    Album* album = 0;
-
-    if(!albumList.isEmpty())
-    {
-        album = albumList.first();
-    }
-
     if (album)
     {
-        if (!val)
+        if (album->type() != Album::PHYSICAL)
         {
-            // Not a PAlbum is selected
+            // Rules if not Physical album.
+
             d->deleteAction->setEnabled(false);
             d->renameAction->setEnabled(false);
             d->addImagesAction->setEnabled(false);
@@ -1476,12 +1464,21 @@ void DigikamApp::slotAlbumSelected(bool val)
             d->writeAlbumMetadataAction->setEnabled(true);
             d->readAlbumMetadataAction->setEnabled(true);
             d->pasteItemsAction->setEnabled(!album->isRoot());
+
+            // Special case if Tag album.
+
+            bool enabled = (album->type() == Album::TAG) && !album->isRoot();
+            d->newTagAction->setEnabled(enabled);
+            d->deleteTagAction->setEnabled(enabled);
+            d->editTagAction->setEnabled(enabled);
         }
         else
         {
+            // Rules if Physical album.
+
             // We have either the abstract root album,
             // the album root album for collection base dirs, or normal albums.
-            PAlbum* const palbum = static_cast<PAlbum*>(album);
+            PAlbum* const palbum = dynamic_cast<PAlbum*>(album);
             bool isRoot          = palbum->isRoot();
             bool isAlbumRoot     = palbum->isAlbumRoot();
             bool isNormalAlbum   = !isRoot && !isAlbumRoot;
@@ -1501,6 +1498,8 @@ void DigikamApp::slotAlbumSelected(bool val)
     }
     else
     {
+        // Rules if no current album.
+
         d->deleteAction->setEnabled(false);
         d->renameAction->setEnabled(false);
         d->addImagesAction->setEnabled(false);
@@ -1512,28 +1511,11 @@ void DigikamApp::slotAlbumSelected(bool val)
         d->writeAlbumMetadataAction->setEnabled(false);
         d->readAlbumMetadataAction->setEnabled(false);
         d->pasteItemsAction->setEnabled(false);
+
+        d->newTagAction->setEnabled(false);
+        d->deleteTagAction->setEnabled(false);
+        d->editTagAction->setEnabled(false);
     }
-}
-
-void DigikamApp::slotTagSelected(bool val)
-{
-    QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
-    Album* album            = 0;
-
-    if(!albumList.isEmpty())
-    {
-        album = albumList.first();
-    }
-
-    if (!album)
-    {
-        return;
-    }
-
-    bool enabled = val && album && !album->isRoot();
-    d->newTagAction->setEnabled(enabled);
-    d->deleteTagAction->setEnabled(enabled);
-    d->editTagAction->setEnabled(enabled);
 }
 
 void DigikamApp::slotImageSelected(const ImageInfoList& selection, const ImageInfoList& listAll)

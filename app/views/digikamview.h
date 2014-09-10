@@ -113,8 +113,7 @@ public:
 
 Q_SIGNALS:
 
-    void signalAlbumSelected(bool val);
-    void signalTagSelected(bool val);
+    void signalAlbumSelected(Album*);
     void signalImageSelected(const ImageInfoList& selectedImage, const ImageInfoList& allImages);
     void signalNoCurrentItem();
     void signalSelectionChanged(int numberOfSelectedItems);
