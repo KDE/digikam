@@ -48,6 +48,7 @@
 
 // Local includes
 
+#include "imagepropertiestab.h"
 #include "imagedelegateoverlay.h"
 #include "thememanager.h"
 #include "colorlabelwidget.h"
@@ -381,50 +382,19 @@ void ItemViewImageDelegate::drawAspectRatio(QPainter* p, const QRect& dimsRect, 
 {
     Q_D(const ItemViewImageDelegate);
 
+    p->setFont(d->fontXtra);
+    QString resolution;
+
     if (dims.isValid())
     {
-        p->setFont(d->fontXtra);
-        double  aratio2;
-        int     gcd_divisor;
-        int     ar_width;
-        int     ar_height;
-        QString aratio, ar_width2, ar_height2, resolution;
-
-        if (dims.width() == 0 || dims.height() == 0)
-        {
-            gcd_divisor = 1;
-        }
-        else
-        {
-            gcd_divisor = gcd(dims.width(), dims.height());
-        }
-
-        ar_width  = dims.width()         / gcd_divisor;
-        ar_height = dims.height()        / gcd_divisor;
-        aratio2   = double(dims.width()) / dims.height() == 0 ? 1.0 : double(dims.height());
-
-        if ((ar_width == 8 && ar_height == 5) || (ar_height == 8 && ar_width == 5))
-        {
-             ar_width  = ar_width * 2;
-             ar_height = ar_height * 2;
-        }
-
-        aratio.setNum(aratio2, 'f', 2);
-        ar_width2.setNum(ar_width);
-        ar_height2.setNum(ar_height);
-
-        if (dims.isValid())
-        {
-            resolution = i18nc("%1 width : %2 height (%3 Aspect Ratio)", "%1:%2 (%3)",
-                               ar_width2, ar_height2, aratio);
-        }
-        else
-        {
-             resolution = i18nc("unknown image resolution", "Unknown");
-        }
-
-        p->drawText(dimsRect, Qt::AlignCenter, resolution); //squeezedTextCached(p, dimsRect.width(), resolution));
+        ImagePropertiesTab::aspectRatioToString(dims.width(), dims.height(), &resolution);
     }
+    else
+    {
+        resolution = i18nc("unknown image resolution", "Unknown");
+    }
+
+    p->drawText(dimsRect, Qt::AlignCenter, resolution); //squeezedTextCached(p, dimsRect.width(), resolution));
 }
 
 void ItemViewImageDelegate::drawFileSize(QPainter* p, const QRect& r, qlonglong bytes) const

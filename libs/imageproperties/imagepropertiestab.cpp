@@ -836,4 +836,46 @@ void ImagePropertiesTab::shortenedModelInfo(QString& model)
     model.remove(" DIGITAL",         Qt::CaseInsensitive);        // from Canon
 }
 
+int ImagePropertiesTab::gcd(int a, int b)
+{
+    int c = a % b;
+
+    while(c != 0)
+    {
+        a = b;
+        b = c;
+        c = a % b;
+    }
+
+    return b;
+}
+
+bool ImagePropertiesTab::aspectRatioToString(const int width, const int height, QString* const arString)
+{
+    if ( (width==0) || (height==0) )
+    {
+        return false;
+    }
+
+    const int gcd_divisor = gcd(width, height);
+    int ar_width          = width         / gcd_divisor;
+    int ar_height         = height        / gcd_divisor;
+    const double aratio2  = double(width) / double(height);
+
+    if ((ar_width == 8 && ar_height == 5) || (ar_height == 8 && ar_width == 5))
+    {
+            ar_width  = ar_width  * 2;
+            ar_height = ar_height * 2;
+    }
+
+    const QString aratio     = KGlobal::locale()->formatNumber(aratio2, 2);
+    const QString ar_width2  = QString::number(ar_width);
+    const QString ar_height2 = QString::number(ar_height);
+
+    *arString = i18nc("width : height (Aspect Ratio)", "%1:%2 (%3)",
+                      ar_width2, ar_height2, aratio);
+
+    return true;
+}
+
 }  // namespace Digikam

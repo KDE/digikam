@@ -35,7 +35,7 @@
 
 #include "imageinfo.h"
 #include "databaseinfocontainers.h"
-#include "tooltipfiller.h"
+#include "imagepropertiestab.h"
 
 namespace Digikam
 {
@@ -215,8 +215,9 @@ QVariant ColumnItemProperties::data(TableViewModel::Item* const item, const int 
 
     case SubColumnPixelCount:
         {
-            const QSize imgSize = info.dimensions();
+            const QSize imgSize  = info.dimensions();
             const int pixelCount = imgSize.height() * imgSize.width();
+
             if (pixelCount==0)
             {
                 return QString();
@@ -230,7 +231,8 @@ QVariant ColumnItemProperties::data(TableViewModel::Item* const item, const int 
         {
             const QSize imgSize = info.dimensions();
             QString aspectRatioString;
-            if (!ToolTipFiller::aspectRatioToString(imgSize.width(), imgSize.height(), &aspectRatioString))
+
+            if (!ImagePropertiesTab::aspectRatioToString(imgSize.width(), imgSize.height(), &aspectRatioString))
             {
                 return QString();
             }

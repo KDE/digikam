@@ -110,6 +110,14 @@ public:
     static void shortenedMakeInfo(QString& make);
     static void shortenedModelInfo(QString& model);
 
+    /** Write a string with apect ratio information formated
+     */
+    static bool aspectRatioToString(const int width, const int height, QString* const arString);
+
+private:
+
+    static inline int gcd(int a, int b);
+
 private:
 
     class Private;
