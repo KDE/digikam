@@ -416,10 +416,10 @@ void ImagePropertiesSideBarDB::slotImageChangeDatabase(const ImageChangeset& cha
                 // trigger an update, if changes touch the tab's information
                 DatabaseFields::Set set = changeset.changes();
 
-                if ( (set & DatabaseFields::ImagesAll) ||
+                if ( (set & DatabaseFields::ImagesAll)           ||
                      (set & DatabaseFields::ImageInformationAll) ||
-                     (set & DatabaseFields::ImageMetadataAll) ||
-                     (set & DatabaseFields::VideoMetadataAll) ||
+                     (set & DatabaseFields::ImageMetadataAll)    ||
+                     (set & DatabaseFields::VideoMetadataAll)    ||
                      (set & DatabaseFields::ImageCommentsAll) )
                 {
                     m_dirtyPropertiesTab = false;

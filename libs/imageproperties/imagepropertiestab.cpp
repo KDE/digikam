@@ -458,6 +458,7 @@ void ImagePropertiesTab::setCurrentURL(const KUrl& url)
 
         d->labelImageMime->clear();
         d->labelImageDimensions->clear();
+        d->labelImageRatio->clear();
         d->labelImageBitDepth->clear();
         d->labelImageColorMode->clear();
 
