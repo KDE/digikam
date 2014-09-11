@@ -79,7 +79,7 @@ public:
     {
         storageMethod      = ThumbnailCreator::FreeDesktopStandard;
         provider           = 0;
-        profile		   = IccProfile::sRGB();
+        profile            = IccProfile::sRGB();
         firstThreadCreated = false;
     }
 
