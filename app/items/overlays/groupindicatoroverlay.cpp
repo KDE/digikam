@@ -40,7 +40,6 @@
 #include "imagedelegate.h"
 #include "imagemodel.h"
 #include "imagecategorizedview.h"
-#include "ratingwidget.h"
 
 namespace Digikam
 {
