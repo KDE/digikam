@@ -73,7 +73,7 @@ GroupIndicatorOverlayWidget* GroupIndicatorOverlay::buttonWidget() const
 
 QWidget* GroupIndicatorOverlay::createWidget()
 {
-    QAbstractButton* button = new GroupIndicatorOverlayWidget(parentWidget());
+    QAbstractButton* const button = new GroupIndicatorOverlayWidget(parentWidget());
     button->setCursor(Qt::PointingHandCursor);
     return button;
 }
@@ -122,7 +122,15 @@ void GroupIndicatorOverlay::updatePosition()
 bool GroupIndicatorOverlay::checkIndex(const QModelIndex& index) const
 {
     ImageInfo info = ImageModel::retrieveImageInfo(index);
-    return info.hasGroupedImages();
+    QRect rect     = static_cast<ImageDelegate*>(delegate())->groupIndicatorRect();
+
+    if (!rect.isNull() && info.hasGroupedImages())
+    {
+        m_widget->setToolTip(i18nc("@info:tooltip", "This item is grouped."));
+        return true;
+    }
+
+    return false;
 }
 
 void GroupIndicatorOverlay::slotButtonClicked()
