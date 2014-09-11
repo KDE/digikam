@@ -1092,19 +1092,19 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->imageSortAction = new KSelectAction(i18n("&Sort Images"), this);
+    d->imageSortAction                   = new KSelectAction(i18n("&Sort Images"), this);
     d->imageSortAction->setWhatsThis(i18n("The value by which the images in one album are sorted in the thumbnail view"));
     QSignalMapper* const imageSortMapper = new QSignalMapper(this);
     connect(imageSortMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImages(int)));
     actionCollection()->addAction("image_sort", d->imageSortAction);
 
     // map to ImageSortSettings enum
-    QAction* const sortByNameAction = d->imageSortAction->addAction(i18n("By Name"));
-    QAction* const sortByPathAction = d->imageSortAction->addAction(i18n("By Path"));
-    QAction* const sortByDateAction = d->imageSortAction->addAction(i18n("By Date"));
-    QAction* const sortByFileSizeAction = d->imageSortAction->addAction(i18n("By File Size"));
-    QAction* const sortByRatingAction = d->imageSortAction->addAction(i18n("By Rating"));
-    QAction* const sortByImageSizeAction = d->imageSortAction->addAction(i18n("By Image Size"));
+    QAction* const sortByNameAction        = d->imageSortAction->addAction(i18n("By Name"));
+    QAction* const sortByPathAction        = d->imageSortAction->addAction(i18n("By Path"));
+    QAction* const sortByDateAction        = d->imageSortAction->addAction(i18n("By Date"));
+    QAction* const sortByFileSizeAction    = d->imageSortAction->addAction(i18n("By File Size"));
+    QAction* const sortByRatingAction      = d->imageSortAction->addAction(i18n("By Rating"));
+    QAction* const sortByImageSizeAction   = d->imageSortAction->addAction(i18n("By Image Size"));
     QAction* const sortByAspectRatioAction = d->imageSortAction->addAction(i18n("By Aspect Ratio"));
 
     connect(sortByNameAction,        SIGNAL(triggered()), imageSortMapper, SLOT(map()));
@@ -1115,34 +1115,34 @@ void DigikamApp::setupActions()
     connect(sortByImageSizeAction,   SIGNAL(triggered()), imageSortMapper, SLOT(map()));
     connect(sortByAspectRatioAction, SIGNAL(triggered()), imageSortMapper, SLOT(map()));
 
-    imageSortMapper->setMapping(sortByNameAction, (int)ImageSortSettings::SortByFileName);
-    imageSortMapper->setMapping(sortByPathAction, (int)ImageSortSettings::SortByFilePath);
-    imageSortMapper->setMapping(sortByDateAction, (int)ImageSortSettings::SortByCreationDate);
-    imageSortMapper->setMapping(sortByFileSizeAction, (int)ImageSortSettings::SortByFileSize);
-    imageSortMapper->setMapping(sortByRatingAction, (int)ImageSortSettings::SortByRating);
-    imageSortMapper->setMapping(sortByImageSizeAction, (int)ImageSortSettings::SortByImageSize);
+    imageSortMapper->setMapping(sortByNameAction,        (int)ImageSortSettings::SortByFileName);
+    imageSortMapper->setMapping(sortByPathAction,        (int)ImageSortSettings::SortByFilePath);
+    imageSortMapper->setMapping(sortByDateAction,        (int)ImageSortSettings::SortByCreationDate);
+    imageSortMapper->setMapping(sortByFileSizeAction,    (int)ImageSortSettings::SortByFileSize);
+    imageSortMapper->setMapping(sortByRatingAction,      (int)ImageSortSettings::SortByRating);
+    imageSortMapper->setMapping(sortByImageSizeAction,   (int)ImageSortSettings::SortByImageSize);
     imageSortMapper->setMapping(sortByAspectRatioAction, (int)ImageSortSettings::SortByAspectRatio);
 
     // -----------------------------------------------------------
 
-    d->imageSortOrderAction = new KSelectAction(i18n("Image Sorting &Order"), this);
+    d->imageSortOrderAction                   = new KSelectAction(i18n("Image Sorting &Order"), this);
     d->imageSortOrderAction->setWhatsThis(i18n("Defines whether images are sorted in ascending or descending manner."));
     QSignalMapper* const imageSortOrderMapper = new QSignalMapper(this);
     connect(imageSortOrderMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImagesOrder(int)));
     actionCollection()->addAction("image_sort_order", d->imageSortOrderAction);
 
-    QAction* const sortAscendingAction = d->imageSortOrderAction->addAction(KIcon("view-sort-ascending"), i18n("Ascending"));
+    QAction* const sortAscendingAction  = d->imageSortOrderAction->addAction(KIcon("view-sort-ascending"), i18n("Ascending"));
     QAction* const sortDescendingAction = d->imageSortOrderAction->addAction(KIcon("view-sort-descending"), i18n("Descending"));
 
     connect(sortAscendingAction,  SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
     connect(sortDescendingAction, SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
 
-    imageSortOrderMapper->setMapping(sortAscendingAction, (int)ImageSortSettings::AscendingOrder);
+    imageSortOrderMapper->setMapping(sortAscendingAction,  (int)ImageSortSettings::AscendingOrder);
     imageSortOrderMapper->setMapping(sortDescendingAction, (int)ImageSortSettings::DescendingOrder);
 
     // -----------------------------------------------------------
 
-    d->imageGroupAction = new KSelectAction(i18n("&Group Images"), this);
+    d->imageGroupAction                   = new KSelectAction(i18n("&Group Images"), this);
     d->imageGroupAction->setWhatsThis(i18n("The categories in which the images in the thumbnail view are displayed"));
     QSignalMapper* const imageGroupMapper = new QSignalMapper(this);
     connect(imageGroupMapper, SIGNAL(mapped(int)), d->view, SLOT(slotGroupImages(int)));
@@ -1163,7 +1163,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->imageGroupSortOrderAction = new KSelectAction(i18n("Group Sorting Order"), this);
+    d->imageGroupSortOrderAction                   = new KSelectAction(i18n("Group Sorting Order"), this);
     d->imageGroupSortOrderAction->setWhatsThis(i18n("The sort order of images groups"));
     QSignalMapper* const imageGroupSortOrderMapper = new QSignalMapper(this);
     connect(imageGroupSortOrderMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImageGroupOrder(int)));
