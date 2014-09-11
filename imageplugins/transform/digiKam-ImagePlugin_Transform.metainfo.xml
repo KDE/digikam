@@ -20,6 +20,7 @@
   <summary xml:lang="ca">Una eina per a transformar la geometria d'una imatge</summary>
   <summary xml:lang="cs">Nástroj pro transformaci geometrie obrázku</summary>
   <summary xml:lang="da">Et værktøj til at transformere billeders geometri</summary>
+  <summary xml:lang="de">Geometrische Transformation von Bildern</summary>
   <summary xml:lang="en-GB">A tool to transform image geometry</summary>
   <summary xml:lang="es">Una herramienta para transformar la geometría de una imagen</summary>
   <summary xml:lang="nl">Een hulpmiddel voor het transformeren van de geometrie van een afbeelding</summary>
@@ -34,6 +35,7 @@
   <developer_name xml:lang="ca">Projecte digiKam</developer_name>
   <developer_name xml:lang="cs">Projekt digiKam</developer_name>
   <developer_name xml:lang="da">digiKam-projektet</developer_name>
+  <developer_name xml:lang="de">digiKam-Projekt</developer_name>
   <developer_name xml:lang="en-GB">digiKam Project</developer_name>
   <developer_name xml:lang="es">Proyecto digiKam</developer_name>
   <developer_name xml:lang="nl">digiKam-project</developer_name>

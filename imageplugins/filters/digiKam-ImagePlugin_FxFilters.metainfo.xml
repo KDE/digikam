@@ -20,6 +20,7 @@
   <summary xml:lang="ca">Connector amb filtres d'efectes especials pel digiKam</summary>
   <summary xml:lang="cs">Modul filtrů speciálních efektů digiKamu</summary>
   <summary xml:lang="da">digiKam-plugin til specialeffekt-filtre</summary>
+  <summary xml:lang="de">digiKam-Modul für Spezialeffekte</summary>
   <summary xml:lang="en-GB">Special effect filters plugin for digiKam</summary>
   <summary xml:lang="es">Complemento de filtros de efectos especiales para digiKam</summary>
   <summary xml:lang="nl">digiKam-plugin voor speciale effectfilters</summary>
@@ -34,6 +35,7 @@
   <developer_name xml:lang="ca">Projecte digiKam</developer_name>
   <developer_name xml:lang="cs">Projekt digiKam</developer_name>
   <developer_name xml:lang="da">digiKam-projektet</developer_name>
+  <developer_name xml:lang="de">digiKam-Projekt</developer_name>
   <developer_name xml:lang="en-GB">digiKam Project</developer_name>
   <developer_name xml:lang="es">Proyecto digiKam</developer_name>
   <developer_name xml:lang="nl">digiKam-project</developer_name>

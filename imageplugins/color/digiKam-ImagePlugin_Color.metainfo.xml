@@ -20,6 +20,7 @@
   <summary xml:lang="ca">Una eina per a corregir els colors de la imatge</summary>
   <summary xml:lang="cs">Nástroj pro opravu barev obrázku</summary>
   <summary xml:lang="da">Et værktøj til at korrigere et billedes farver</summary>
+  <summary xml:lang="de">Korrigiert Farben von Bildern</summary>
   <summary xml:lang="en-GB">A tool to correct colours of image</summary>
   <summary xml:lang="es">Una herramienta para corregir los colores de una imagen</summary>
   <summary xml:lang="nl">Een hulpmiddel voor het corrigeren van kleuren in een afbeelding</summary>
@@ -34,6 +35,7 @@
   <developer_name xml:lang="ca">Projecte digiKam</developer_name>
   <developer_name xml:lang="cs">Projekt digiKam</developer_name>
   <developer_name xml:lang="da">digiKam-projektet</developer_name>
+  <developer_name xml:lang="de">digiKam-Projekt</developer_name>
   <developer_name xml:lang="en-GB">digiKam Project</developer_name>
   <developer_name xml:lang="es">Proyecto digiKam</developer_name>
   <developer_name xml:lang="nl">digiKam-project</developer_name>

@@ -20,6 +20,7 @@
   <summary xml:lang="ca">Connector d'imatge per a millorar les fotografies</summary>
   <summary xml:lang="cs">Modul digiKamu pro vylepšování fotografií</summary>
   <summary xml:lang="da">digiKam-plugin til at forbedre fotos</summary>
+  <summary xml:lang="de">digiKam-Modul zur Bildverbesserung</summary>
   <summary xml:lang="en-GB">digiKam plugin to enhance photographs</summary>
   <summary xml:lang="es">Complemento de digiKam para mejorar fotografías</summary>
   <summary xml:lang="nl">digiKam-plugin voor het verbeteren van foto's</summary>
@@ -34,6 +35,7 @@
   <developer_name xml:lang="ca">Projecte digiKam</developer_name>
   <developer_name xml:lang="cs">Projekt digiKam</developer_name>
   <developer_name xml:lang="da">digiKam-projektet</developer_name>
+  <developer_name xml:lang="de">digiKam-Projekt</developer_name>
   <developer_name xml:lang="en-GB">digiKam Project</developer_name>
   <developer_name xml:lang="es">Proyecto digiKam</developer_name>
   <developer_name xml:lang="nl">digiKam-project</developer_name>
