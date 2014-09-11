@@ -125,7 +125,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
        if (settings->getToolTipsShowImageAR())
         {
-            if (!ImagePropertiesTab::aspectRatioToString(commonInfo.width, commonInfo.height, &str))
+            if (!ImagePropertiesTab::aspectRatioToString(commonInfo.width, commonInfo.height, str))
             {
                 str = i18nc("unknown / invalid image aspect ratio",
                             "Unknown");

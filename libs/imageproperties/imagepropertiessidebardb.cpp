@@ -546,6 +546,17 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
             }
 
             m_propertiesTab->setImageDimensions(str);
+
+            if (commonInfo.width == 0 || commonInfo.height == 0)
+            {
+                str = i18n("Unknown");
+            }
+            else
+            {
+                m_propertiesTab->aspectRatioToString(commonInfo.width, commonInfo.height, str);
+            }
+
+            m_propertiesTab->setImageRatio(str);
             m_propertiesTab->setImageBitDepth(i18n("%1 bpp", commonInfo.colorDepth));
             m_propertiesTab->setImageColorMode(commonInfo.colorModel.isEmpty() ? unavailable : commonInfo.colorModel);
             m_propertiesTab->setImageMime(commonInfo.format);

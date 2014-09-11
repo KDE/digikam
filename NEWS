@@ -23,4 +23,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 012 ==> 131632 - Add keyboard shortcut for better captioning workflow.
 013 ==> 291695 - Add Keyboard shortcut to "Tags already assigned" button from Captions/Tags sidebar.
 014 ==> 290928 - Add keyboard shortcut to switch "Color managed view" from Preview mode.
-015 ==> 
+015 ==> 320304 - Aspect ratio not rounded and displays useless.
+016 ==> 

@@ -245,6 +245,11 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
     str = (!dims.isValid()) ? i18n("Unknown") : i18n("%1x%2 (%3Mpx)",
             dims.width(), dims.height(), mpixels);
     m_propertiesTab->setImageDimensions(str);
+
+    if (!dims.isValid()) str = i18n("Unknown");
+    else m_propertiesTab->aspectRatioToString(dims.width(), dims.height(), str);
+
+    m_propertiesTab->setImageRatio(str);
     m_propertiesTab->setImageBitDepth(bitDepth.isEmpty()   ? unavailable : i18n("%1 bpp", bitDepth));
     m_propertiesTab->setImageColorMode(colorMode.isEmpty() ? unavailable : colorMode);
 

@@ -387,7 +387,7 @@ void ItemViewImageDelegate::drawAspectRatio(QPainter* p, const QRect& dimsRect, 
 
     if (dims.isValid())
     {
-        ImagePropertiesTab::aspectRatioToString(dims.width(), dims.height(), &resolution);
+        ImagePropertiesTab::aspectRatioToString(dims.width(), dims.height(), resolution);
     }
     else
     {

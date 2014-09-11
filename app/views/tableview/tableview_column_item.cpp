@@ -123,26 +123,26 @@ QString ColumnItemProperties::getTitle() const
 {
     switch (subColumn)
     {
-    case SubColumnWidth:
-        return i18n("Width");
-    case SubColumnHeight:
-        return i18n("Height");
-    case SubColumnDimensions:
-        return i18n("Dimensions");
-    case SubColumnPixelCount:
-        return i18n("Pixel count");
-    case SubColumnBitDepth:
-        return i18n("Bit depth");
-    case SubColumnColorMode:
-        return i18n("Color mode");
-    case SubColumnType:
-        return i18n("Type");
-    case SubColumnCreationDateTime:
-        return i18n("Creation date/time");
-    case SubColumnDigitizationDateTime:
-        return i18n("Digitization date/time");
-    case SubColumnAspectRatio:
-        return i18n("Aspect ratio");
+        case SubColumnWidth:
+            return i18n("Width");
+        case SubColumnHeight:
+            return i18n("Height");
+        case SubColumnDimensions:
+            return i18n("Dimensions");
+        case SubColumnPixelCount:
+            return i18n("Pixel count");
+        case SubColumnBitDepth:
+            return i18n("Bit depth");
+        case SubColumnColorMode:
+            return i18n("Color mode");
+        case SubColumnType:
+            return i18n("Type");
+        case SubColumnCreationDateTime:
+            return i18n("Creation date/time");
+        case SubColumnDigitizationDateTime:
+            return i18n("Digitization date/time");
+        case SubColumnAspectRatio:
+            return i18n("Aspect ratio");
     }
 
     return QString();
@@ -193,13 +193,13 @@ QVariant ColumnItemProperties::data(TableViewModel::Item* const item, const int 
 
     switch (subColumn)
     {
-    case SubColumnWidth:
-        return KGlobal::locale()->formatNumber(info.dimensions().width(), 0);
+        case SubColumnWidth:
+            return KGlobal::locale()->formatNumber(info.dimensions().width(), 0);
 
-    case SubColumnHeight:
-        return KGlobal::locale()->formatNumber(info.dimensions().height(), 0);
+        case SubColumnHeight:
+            return KGlobal::locale()->formatNumber(info.dimensions().height(), 0);
 
-    case SubColumnDimensions:
+        case SubColumnDimensions:
         {
             const QSize imgSize = info.dimensions();
 
@@ -208,12 +208,13 @@ QVariant ColumnItemProperties::data(TableViewModel::Item* const item, const int 
                 return QString();
             }
 
-            const QString widthString = KGlobal::locale()->formatNumber(imgSize.width(), 0);
+            const QString widthString  = KGlobal::locale()->formatNumber(imgSize.width(),  0);
             const QString heightString = KGlobal::locale()->formatNumber(imgSize.height(), 0);
+
             return QString("%1x%2").arg(widthString).arg(heightString);
         }
 
-    case SubColumnPixelCount:
+        case SubColumnPixelCount:
         {
             const QSize imgSize  = info.dimensions();
             const int pixelCount = imgSize.height() * imgSize.width();
@@ -227,12 +228,12 @@ QVariant ColumnItemProperties::data(TableViewModel::Item* const item, const int 
             return KGlobal::locale()->formatNumber(pixelCount, 0);
         }
 
-    case SubColumnAspectRatio:
+        case SubColumnAspectRatio:
         {
             const QSize imgSize = info.dimensions();
             QString aspectRatioString;
 
-            if (!ImagePropertiesTab::aspectRatioToString(imgSize.width(), imgSize.height(), &aspectRatioString))
+            if (!ImagePropertiesTab::aspectRatioToString(imgSize.width(), imgSize.height(), aspectRatioString))
             {
                 return QString();
             }
@@ -240,7 +241,7 @@ QVariant ColumnItemProperties::data(TableViewModel::Item* const item, const int 
             return aspectRatioString;
         }
 
-    case SubColumnBitDepth:
+        case SubColumnBitDepth:
         {
             const ImageCommonContainer commonInfo = info.imageCommonContainer();
             const int bitDepth = commonInfo.colorDepth;
@@ -248,27 +249,28 @@ QVariant ColumnItemProperties::data(TableViewModel::Item* const item, const int 
             return QString("%1 bpp").arg(bitDepth);
         }
 
-    case SubColumnColorMode:
+        case SubColumnColorMode:
         {
             const ImageCommonContainer commonInfo = info.imageCommonContainer();
 
             return commonInfo.colorModel;
         }
 
-    case SubColumnType:
+        case SubColumnType:
         {
             const ImageCommonContainer commonInfo = info.imageCommonContainer();
 
             return commonInfo.format;
         }
 
-    case SubColumnCreationDateTime:
+        case SubColumnCreationDateTime:
         {
             const QDateTime creationDateTime = info.dateTime();
 
             return KGlobal::locale()->formatDateTime(creationDateTime, KLocale::ShortDate, true);
         }
-    case SubColumnDigitizationDateTime:
+
+        case SubColumnDigitizationDateTime:
         {
             const ImageCommonContainer commonInfo = info.imageCommonContainer();
             const QDateTime digitizationDateTime = commonInfo.digitizationDate;
@@ -288,22 +290,23 @@ TableViewColumn::ColumnCompareResult ColumnItemProperties::compare(
 
     switch (subColumn)
     {
-    case SubColumnHeight:
+        case SubColumnHeight:
         {
-        const int heightA = infoA.dimensions().height();
-        const int heightB = infoB.dimensions().height();
+            const int heightA = infoA.dimensions().height();
+            const int heightB = infoB.dimensions().height();
 
-        return compareHelper<int>(heightA, heightB);
-        }
-    case SubColumnWidth:
-        {
-        const int widthA = infoA.dimensions().width();
-        const int widthB = infoB.dimensions().width();
-
-        return compareHelper<int>(widthA, widthB);
+            return compareHelper<int>(heightA, heightB);
         }
 
-    case SubColumnDimensions:
+        case SubColumnWidth:
+        {
+            const int widthA = infoA.dimensions().width();
+            const int widthB = infoB.dimensions().width();
+
+            return compareHelper<int>(widthA, widthB);
+        }
+
+        case SubColumnDimensions:
         {
             const int widthA = infoA.dimensions().width();
             const int widthB = infoB.dimensions().width();
@@ -320,7 +323,7 @@ TableViewColumn::ColumnCompareResult ColumnItemProperties::compare(
             return compareHelper<int>(heightA, heightB);
         }
 
-    case SubColumnPixelCount:
+        case SubColumnPixelCount:
         {
             const int widthA = infoA.dimensions().width();
             const int widthB = infoB.dimensions().width();
@@ -333,7 +336,7 @@ TableViewColumn::ColumnCompareResult ColumnItemProperties::compare(
             return compareHelper<int>(pixelCountA, pixelCountB);
         }
 
-    case SubColumnAspectRatio:
+        case SubColumnAspectRatio:
         {
             const int widthA = infoA.dimensions().width();
             const int widthB = infoB.dimensions().width();
@@ -354,7 +357,7 @@ TableViewColumn::ColumnCompareResult ColumnItemProperties::compare(
             return compareHelper<qreal>(aspectRatioA, aspectRatioB);
         }
 
-    case SubColumnBitDepth:
+        case SubColumnBitDepth:
         {
             const ImageCommonContainer commonInfoA = infoA.imageCommonContainer();
             const int bitDepthA = commonInfoA.colorDepth;
@@ -364,7 +367,7 @@ TableViewColumn::ColumnCompareResult ColumnItemProperties::compare(
             return compareHelper<int>(bitDepthA, bitDepthB);
         }
 
-    case SubColumnCreationDateTime:
+        case SubColumnCreationDateTime:
         {
             const QDateTime dtA = infoA.dateTime();
             const QDateTime dtB = infoB.dateTime();
@@ -372,7 +375,7 @@ TableViewColumn::ColumnCompareResult ColumnItemProperties::compare(
             return compareHelper<QDateTime>(dtA, dtB);
         }
 
-    case SubColumnDigitizationDateTime:
+        case SubColumnDigitizationDateTime:
         {
             const ImageCommonContainer commonInfoA = infoA.imageCommonContainer();
             const ImageCommonContainer commonInfoB = infoB.imageCommonContainer();
@@ -382,9 +385,9 @@ TableViewColumn::ColumnCompareResult ColumnItemProperties::compare(
             return compareHelper<QDateTime>(dtA, dtB);
         }
 
-    default:
-        kWarning() << "item: unimplemented comparison, subColumn=" << subColumn;
-        return CmpEqual;
+        default:
+            kWarning() << "item: unimplemented comparison, subColumn=" << subColumn;
+            return CmpEqual;
     }
 }
 
