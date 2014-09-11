@@ -76,6 +76,7 @@ public:
         firstAction(0),
         lastAction(0),
         showBarAction(0),
+        viewCMViewAction(0),
         syncPreviewAction(0),
         navigateByPairAction(0),
         showMenuBarAction(0),
@@ -121,6 +122,7 @@ public:
     KAction*                  lastAction;
 
     KToggleAction*            showBarAction;
+    KToggleAction*            viewCMViewAction;
     KToggleAction*            syncPreviewAction;
     KToggleAction*            navigateByPairAction;
     KToggleAction*            showMenuBarAction;

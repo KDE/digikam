@@ -7,7 +7,7 @@
  * Description : central place for ICC settings
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj dot cruz at supercable dot es>
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -28,11 +28,11 @@
 // X11 includes
 
 #ifdef Q_WS_X11
-#include <climits>
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
-#include <fixx11h.h>
-#include <QX11Info>
+#   include <climits>
+#   include <X11/Xlib.h>
+#   include <X11/Xatom.h>
+#   include <fixx11h.h>
+#   include <QX11Info>
 #endif /* Q_WS_X11 */
 
 // Qt includes
@@ -74,9 +74,10 @@ public:
 
     IccProfile           profileFromWindowSystem(QWidget* const widget);
 
-    ICCSettingsContainer readFromConfig()           const;
-    void                 writeToConfig()            const;
-    void                 writeManagedViewToConfig() const;
+    ICCSettingsContainer readFromConfig()               const;
+    void                 writeToConfig()                const;
+    void                 writeManagedViewToConfig()     const;
+    void                 writeManagedPreviewsToConfig() const;
 
 public:
 
@@ -150,7 +151,7 @@ IccProfile IccSettings::monitorProfile(QWidget* const widget)
     }
 }
 
-bool IccSettings::monitorProfileFromSystem()
+bool IccSettings::monitorProfileFromSystem() const
 {
     // First, look into cache
     {
@@ -282,9 +283,14 @@ IccProfile IccSettings::Private::profileFromWindowSystem(QWidget* const widget)
     return IccProfile();
 }
 
-bool IccSettings::isEnabled()
+bool IccSettings::isEnabled() const
 {
     return d->settings.enableCM;
+}
+
+bool IccSettings::useManagedPreviews() const
+{
+    return (isEnabled() && d->settings.useManagedPreviews);
 }
 
 ICCSettingsContainer IccSettings::Private::readFromConfig() const
@@ -308,6 +314,13 @@ void IccSettings::Private::writeManagedViewToConfig() const
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(configGroup);
     settings.writeManagedViewToConfig(group);
+}
+
+void IccSettings::Private::writeManagedPreviewsToConfig() const
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(configGroup);
+    settings.writeManagedPreviewsToConfig(group);
 }
 
 void IccSettings::readFromConfig()
@@ -355,6 +368,22 @@ void IccSettings::setUseManagedView(bool useManagedView)
     }
 
     d->writeManagedViewToConfig();
+
+    emit settingsChanged();
+    emit settingsChanged(current, old);
+}
+
+void IccSettings::setUseManagedPreviews(bool useManagedPreviews)
+{
+    ICCSettingsContainer old, current;
+    {
+        QMutexLocker lock(&d->mutex);
+        old                            = d->settings;
+        d->settings.useManagedPreviews = useManagedPreviews;
+        current                        = d->settings;
+    }
+
+    d->writeManagedPreviewsToConfig();
 
     emit settingsChanged();
     emit settingsChanged(current, old);

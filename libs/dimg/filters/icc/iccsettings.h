@@ -7,7 +7,7 @@
  * Description : central place for ICC settings
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj dot cruz at supercable dot es>
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -53,8 +53,11 @@ public:
     /// Returns the current ICC settings.
     ICCSettingsContainer settings();
 
-    /// Returns if color management is enabled
-    bool isEnabled();
+    /// Returns if color management is enabled.
+    bool isEnabled() const;
+
+    /// Returns if color management for previews is enabled.
+    bool useManagedPreviews() const;
 
     /**
      * Returns the monitor profile (for color managed view).
@@ -69,7 +72,7 @@ public:
      * is set system-wide, so that the monitorProfile field of the current settings
      * need not be set and will not be used by monitorProfile().
      */
-    bool monitorProfileFromSystem();
+    bool monitorProfileFromSystem() const;
 
     /**
      * Sets the current ICC settings and writes them to config.
@@ -78,6 +81,7 @@ public:
 
     /// Set single parts of the settings
     void setUseManagedView(bool useManagedView);
+    void setUseManagedPreviews(bool useManagedPreviews);
     void setIccPath(const QString& path);
 
     QList<IccProfile> allProfiles();

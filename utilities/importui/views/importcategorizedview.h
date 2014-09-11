@@ -37,6 +37,7 @@ namespace Digikam
 {
 
 class ImportDelegate;
+class ICCSettingsContainer;
 
 class ImportCategorizedView : public DCategorizedView
 {
@@ -169,6 +170,7 @@ private Q_SLOTS:
 
     void slotFileChanged(const QString& filePath);
     void slotDelayedEnter();
+    void slotIccSettingsChanged(const ICCSettingsContainer&, const ICCSettingsContainer&);
 
 private:
 

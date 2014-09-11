@@ -1050,12 +1050,10 @@ void EditorWindow::applyColorManagementSettings()
     d->viewCMViewAction->blockSignals(true);
     d->viewCMViewAction->setEnabled(settings.enableCM);
     d->viewCMViewAction->setChecked(settings.useManagedView);
-    d->viewCMViewAction->blockSignals(false);
     setColorManagedViewIndicatorToolTip(settings.enableCM, settings.useManagedView);
     d->viewCMViewAction->blockSignals(false);
 
-    d->viewSoftProofAction->setEnabled(settings.enableCM &&
-                                       !settings.defaultProofProfile.isEmpty());
+    d->viewSoftProofAction->setEnabled(settings.enableCM && !settings.defaultProofProfile.isEmpty());
     d->softProofOptionsAction->setEnabled(settings.enableCM);
 }
 

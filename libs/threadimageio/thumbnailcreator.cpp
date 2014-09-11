@@ -448,12 +448,12 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
     // -- Get the image preview --------------------------------
 
     IccProfile profile;
-    bool colorManage = IccSettings::instance()->isEnabled();
+    bool colorManage = IccSettings::instance()->useManagedPreviews();
 
     if (!detailRect.isNull())
     {
         // when taking a detail, we have to load the image full size
-        qimage = loadImageDetail(info, metadata, detailRect, &profile);
+        qimage     = loadImageDetail(info, metadata, detailRect, &profile);
         fromDetail = !qimage.isNull();
     }
     else
@@ -503,7 +503,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
         if (qimage.isNull())
         {
             kDebug() << "Trying to load Embedded preview with libraw";
-            
+
             if (KDcraw::loadEmbeddedPreview(qimage, path))
             {
                 fromEmbeddedPreview = true;
@@ -527,7 +527,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
             KExiv2Iface::KExiv2Previews preview(path);
             qimage = preview.image();
         }
-            
+
         // DImg-dependent loading methods: TIFF, PNG, everything supported by QImage
         if (qimage.isNull() && !failedAtDImg)
         {

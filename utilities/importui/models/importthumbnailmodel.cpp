@@ -137,7 +137,7 @@ bool ImportThumbnailModel::setData(const QModelIndex& index, const QVariant& val
                 else
                 {
                     d->lastGlobalThumbSize = d->thumbSize;
-                    d->thumbSize = value.toInt();
+                    d->thumbSize           = value.toInt();
                 }
                 break;
 

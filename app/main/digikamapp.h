@@ -169,6 +169,8 @@ private Q_SLOTS:
     void slotSetup();
     void slotSetupCamera();
     void slotSetupChanged();
+    void slotColorManagementOptionsChanged();
+    void slotToggleColorManagedView();
     void slotSetCheckedExifOrientationAction(const ImageInfo& info);
     void slotResetExifOrientationActions();
     void slotTransformAction();

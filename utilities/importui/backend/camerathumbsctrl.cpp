@@ -39,9 +39,30 @@
 
 #include "cameracontroller.h"
 #include "thumbnailsize.h"
+#include "iccsettings.h"
+#include "iccmanager.h"
+#include "iccprofile.h"
 
 namespace Digikam
 {
+
+class CameraThumbsCtrlStaticPriv
+{
+public:
+
+    CameraThumbsCtrlStaticPriv()
+    {
+        profile = IccProfile::sRGB();
+    }
+
+public:
+
+    IccProfile profile;
+};
+
+K_GLOBAL_STATIC(CameraThumbsCtrlStaticPriv, static_d)
+
+// ------------------------------------------------------------------------------------------
 
 class CameraThumbsCtrl::Private
 {
@@ -67,10 +88,11 @@ public:
 
 // --------------------------------------------------------
 
-CameraThumbsCtrl::CameraThumbsCtrl(CameraController* const ctrl, QObject* const parent)
+CameraThumbsCtrl::CameraThumbsCtrl(CameraController* const ctrl, QWidget* const parent)
     : QObject(parent), d(new Private)
 {
-    d->controller = ctrl;
+    d->controller     = ctrl;
+    static_d->profile = IccManager::displayProfile(parent);
 
     connect(d->controller, SIGNAL(signalThumbInfo(QString,QString,CamItemInfo,QImage)),
             this, SLOT(slotThumbInfo(QString,QString,CamItemInfo,QImage)));
@@ -93,25 +115,33 @@ CameraController* CameraThumbsCtrl::cameraController() const
 
 bool CameraThumbsCtrl::getThumbInfo(const CamItemInfo& info, CachedItem& item) const
 {
-    // We look if items are not in cache.
-
     if (hasItemFromCache(info.url()))
     {
+        // We look if items are not in cache.
+
         item = *retrieveItemFromCache(info.url());
+
+        // Color Managed view rules.
+
+        if (IccSettings::instance()->useManagedPreviews())
+        {
+            QImage img  = item.second.toImage();
+            IccManager::transformForDisplay(img, static_d->profile);
+            item.second = QPixmap::fromImage(img);
+        }
+
         return true;
-        // kDebug() << "Found in cache: " << info.url();
     }
-
-    // We look if items are not in pending list.
-
     else if (!d->pendingItems.contains(info.url()))
     {
+        // We look if items are not in pending list.
+
         d->pendingItems << info.url();
-        // kDebug() << "Request thumbs from camera : " << info.url();
         d->controller->getThumbsInfo(CamItemInfoList() << info, ThumbnailSize::maxThumbsSize());
     }
 
     item = CachedItem(info, d->controller->mimeTypeThumbnail(info.name, ThumbnailSize::maxThumbsSize()));
+
     return false;
 }
 

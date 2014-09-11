@@ -164,6 +164,7 @@ public:
         recurseTagsAction(0),
         showBarAction(0),
         showMenuBarAction(0),
+        viewCMViewAction(0),
         slideShowAction(0),
         slideShowAllAction(0),
         slideShowSelectionAction(0),
@@ -289,6 +290,7 @@ public:
     KToggleAction*                      recurseTagsAction;
     KToggleAction*                      showBarAction;
     KToggleAction*                      showMenuBarAction;
+    KToggleAction*                      viewCMViewAction;
 
     // Tools Actions
     KActionMenu*                        slideShowAction;

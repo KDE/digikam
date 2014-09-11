@@ -221,8 +221,7 @@ QPixmap ImportDelegate::retrieveThumbnailPixmap(const QModelIndex& index, int th
     model->setData(index, thumbnailSize, ImportImageModel::ThumbnailRole);
     // get data from model
     QVariant thumbData              = index.data(ImportImageModel::ThumbnailRole);
-
-    return thumbData.value<QPixmap>();
+    return (thumbData.value<QPixmap>());
 }
 
 QPixmap ImportDelegate::thumbnailPixmap(const QModelIndex& index) const

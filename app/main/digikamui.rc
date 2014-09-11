@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="400" name="digikam" >
+<gui version="401" name="digikam" >
 
  <MenuBar>
 
@@ -106,6 +106,8 @@
      <Action name="image_group_sort_order" />
      <Action name="albums_recursive" />
      <Action name="tags_recursive" />
+     <Separator />
+     <Action name="color_managed_view" />
   </Menu>
 
   <Menu name="Tools"><text>&amp;Tools</text>

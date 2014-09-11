@@ -29,6 +29,7 @@
 #include "imageinfo.h"
 #include "dcategorizedview.h"
 #include "thumbnailsize.h"
+#include "iccsettingscontainer.h"
 
 namespace Digikam
 {
@@ -199,6 +200,7 @@ protected:
 
 private Q_SLOTS:
 
+    void slotIccSettingsChanged(const ICCSettingsContainer&, const ICCSettingsContainer&);
     void slotFileChanged(const QString& filePath);
     void slotDelayedEnter();
 

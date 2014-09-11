@@ -116,6 +116,7 @@
 #include "dzoombar.h"
 #include "fileactionmngr.h"
 #include "freespacewidget.h"
+#include "iccsettings.h"
 #include "imagepropertiessidebarcamgui.h"
 #include "importsettings.h"
 #include "importview.h"
@@ -175,6 +176,7 @@ ImportUI::ImportUI(QWidget* const parent, const QString& cameraTitle,
 
     setupConnections();
     sidebarTabTitleStyleChanged();
+    slotColorManagementOptionsChanged();
 
     // -- Read settings --------------------------------------------------
 
@@ -301,6 +303,7 @@ void ImportUI::setupUserArea()
 void ImportUI::setupActions()
 {
     d->cameraActions = new QActionGroup(this);
+
     // -- File menu ----------------------------------------------------
 
     d->cameraCancelAction = new KAction(KIcon("process-stop"), i18nc("@action Cancel process", "Cancel"), this);
@@ -594,6 +597,13 @@ void ImportUI::setupActions()
 
     // ------------------------------------------------------------------------------------------------
 
+    d->viewCMViewAction = new KToggleAction(KIcon("video-display"), i18n("Color-Managed View"), this);
+    d->viewCMViewAction->setShortcut(KShortcut(Qt::Key_F12));
+    connect(d->viewCMViewAction, SIGNAL(triggered()), this, SLOT(slotToggleColorManagedView()));
+    actionCollection()->addAction("color_managed_view", d->viewCMViewAction);
+
+    // ------------------------------------------------------------------------------------------------
+
     createFullScreenAction("importui_fullscreen");
     createSidebarActions();
 
@@ -660,6 +670,9 @@ void ImportUI::setupConnections()
 
     connect(d->historyView, SIGNAL(signalEntryClicked(QVariant)),
             this, SLOT(slotHistoryEntryClicked(QVariant)));
+
+    connect(IccSettings::instance(), SIGNAL(settingsChanged()),
+            this, SLOT(slotColorManagementOptionsChanged()));
 
     // -------------------------------------------------------------------------
 
@@ -2660,6 +2673,27 @@ void ImportUI::sidebarTabTitleStyleChanged()
 {
     d->rightSideBar->setStyle(ApplicationSettings::instance()->getSidebarTitleStyle());
     d->rightSideBar->applySettings();
+}
+
+void ImportUI::slotToggleColorManagedView()
+{
+    if (!IccSettings::instance()->isEnabled())
+    {
+        return;
+    }
+
+    bool cmv = !IccSettings::instance()->settings().useManagedPreviews;
+    IccSettings::instance()->setUseManagedPreviews(cmv);
+}
+
+void ImportUI::slotColorManagementOptionsChanged()
+{
+    ICCSettingsContainer settings = IccSettings::instance()->settings();
+
+    d->viewCMViewAction->blockSignals(true);
+    d->viewCMViewAction->setEnabled(settings.enableCM);
+    d->viewCMViewAction->setChecked(settings.useManagedPreviews);
+    d->viewCMViewAction->blockSignals(false);
 }
 
 }  // namespace Digikam

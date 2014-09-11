@@ -73,6 +73,7 @@
 #include "albummanager.h"
 #include "loadingcacheinterface.h"
 #include "deletedialog.h"
+#include "iccsettings.h"
 #include "imagewindow.h"
 #include "imagedescedittab.h"
 #include "slideshow.h"
@@ -137,13 +138,11 @@ LightTableWindow::LightTableWindow()
     setupActions();
     setupStatusBar();
 
-    // Make signals/slots connections
+    // ------------------------------------------------
 
     setupConnections();
-
-    //-------------------------------------------------------------
-
     slotSidebarTabTitleStyleChanged();
+    slotColorManagementOptionsChanged();
 
     readSettings();
 
@@ -354,6 +353,9 @@ void LightTableWindow::setupConnections()
 
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
+
+    connect(IccSettings::instance(), SIGNAL(settingsChanged()),
+            this, SLOT(slotColorManagementOptionsChanged()));
 
     // Thumbs bar connections ---------------------------------------
 
@@ -615,6 +617,13 @@ void LightTableWindow::setupActions()
     d->rightZoomFitToWindowAction->setShortcut(KShortcut(Qt::SHIFT + Qt::CTRL + Qt::Key_E));
     connect(d->rightZoomFitToWindowAction, SIGNAL(triggered()), d->previewView, SLOT(slotRightFitToWindow()));
     actionCollection()->addAction("lighttable_zoomfit2window_right", d->rightZoomFitToWindowAction);
+
+    // -----------------------------------------------------------
+
+    d->viewCMViewAction = new KToggleAction(KIcon("video-display"), i18n("Color-Managed View"), this);
+    d->viewCMViewAction->setShortcut(KShortcut(Qt::Key_F12));
+    connect(d->viewCMViewAction, SIGNAL(triggered()), this, SLOT(slotToggleColorManagedView()));
+    actionCollection()->addAction("color_managed_view", d->viewCMViewAction);
 
     // -- Standard 'Configure' menu actions ----------------------------------------
 
@@ -1742,6 +1751,27 @@ void LightTableWindow::slotLeftSideBarActivateAssignedTags()
 {
     d->leftSideBar->setActiveTab(d->leftSideBar->imageDescEditTab());
     d->leftSideBar->imageDescEditTab()->activateAssignedTagsButton();
+}
+
+void LightTableWindow::slotToggleColorManagedView()
+{
+    if (!IccSettings::instance()->isEnabled())
+    {
+        return;
+    }
+
+    bool cmv = !IccSettings::instance()->settings().useManagedPreviews;
+    IccSettings::instance()->setUseManagedPreviews(cmv);
+}
+
+void LightTableWindow::slotColorManagementOptionsChanged()
+{
+    ICCSettingsContainer settings = IccSettings::instance()->settings();
+
+    d->viewCMViewAction->blockSignals(true);
+    d->viewCMViewAction->setEnabled(settings.enableCM);
+    d->viewCMViewAction->setChecked(settings.useManagedPreviews);
+    d->viewCMViewAction->blockSignals(false);
 }
 
 }  // namespace Digikam

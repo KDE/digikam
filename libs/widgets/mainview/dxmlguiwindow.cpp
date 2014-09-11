@@ -150,6 +150,11 @@ void DXmlGuiWindow::closeEvent(QCloseEvent* e)
     KXmlGuiWindow::closeEvent(e);
 }
 
+void DXmlGuiWindow::setFullScreenOptions(int options)
+{
+    d->fsOptions = options;
+}
+
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
 {
     d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
@@ -169,11 +174,6 @@ void DXmlGuiWindow::createHelpActions(bool coreOptions)
         connect(d->dbStatAction, SIGNAL(triggered()), this, SLOT(slotDBStat()));
         actionCollection()->addAction("help_dbstat", d->dbStatAction);
     }
-}
-
-void DXmlGuiWindow::setFullScreenOptions(int options)
-{
-    d->fsOptions = options;
 }
 
 void DXmlGuiWindow::createSidebarActions()

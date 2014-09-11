@@ -334,7 +334,7 @@ LoadingDescription ThumbnailLoadThread::Private::createLoadingDescription(const 
                                    LoadingDescription::NoColorConversion,
                                    LoadingDescription::PreviewParameters::Thumbnail);
 
-    if (IccSettings::instance()->isEnabled())
+    if (IccSettings::instance()->useManagedPreviews())
     {
         description.postProcessingParameters.colorManagement = LoadingDescription::ConvertForDisplay;
         description.postProcessingParameters.setProfile(static_d->profile);
@@ -360,7 +360,7 @@ LoadingDescription ThumbnailLoadThread::Private::createLoadingDescription(const 
 
     description.previewParameters.extraParameter = detailRect;
 
-    if (IccSettings::instance()->isEnabled())
+    if (IccSettings::instance()->useManagedPreviews())
     {
         description.postProcessingParameters.colorManagement = LoadingDescription::ConvertForDisplay;
         description.postProcessingParameters.setProfile(static_d->profile);

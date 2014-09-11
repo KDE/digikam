@@ -241,6 +241,9 @@ DigikamApp::DigikamApp()
     connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
 
+    connect(IccSettings::instance(), SIGNAL(settingsChanged()),
+            this, SLOT(slotColorManagementOptionsChanged()));
+
     d->cameraMenu      = new KActionMenu(this);
     d->usbMediaMenu    = new KActionMenu(this);
     d->cardReaderMenu  = new KActionMenu(this);
@@ -270,8 +273,8 @@ DigikamApp::DigikamApp()
     initGui();
 
     setupViewConnections();
-
     applyMainWindowSettings(group);
+    slotColorManagementOptionsChanged();
 
     // Check ICC profiles repository availability
 
@@ -1287,6 +1290,13 @@ void DigikamApp::setupActions()
     actionCollection()->addAction("slideshow_qml", d->slideShowQmlAction);
     d->slideShowAction->addAction(d->slideShowQmlAction);
 #endif // USE_PRESENTATION_MODE
+
+    // -----------------------------------------------------------
+
+    d->viewCMViewAction = new KToggleAction(KIcon("video-display"), i18n("Color-Managed View"), this);
+    d->viewCMViewAction->setShortcut(KShortcut(Qt::Key_F12));
+    connect(d->viewCMViewAction, SIGNAL(triggered()), this, SLOT(slotToggleColorManagedView()));
+    actionCollection()->addAction("color_managed_view", d->viewCMViewAction);
 
     // -----------------------------------------------------------
 
@@ -3120,6 +3130,27 @@ void DigikamApp::toogleShowBar()
 void DigikamApp::slotComponentsInfo()
 {
     showDigikamComponentsInfo();
+}
+
+void DigikamApp::slotToggleColorManagedView()
+{
+    if (!IccSettings::instance()->isEnabled())
+    {
+        return;
+    }
+
+    bool cmv = !IccSettings::instance()->settings().useManagedPreviews;
+    IccSettings::instance()->setUseManagedPreviews(cmv);
+}
+
+void DigikamApp::slotColorManagementOptionsChanged()
+{
+    ICCSettingsContainer settings = IccSettings::instance()->settings();
+
+    d->viewCMViewAction->blockSignals(true);
+    d->viewCMViewAction->setEnabled(settings.enableCM);
+    d->viewCMViewAction->setChecked(settings.useManagedPreviews);
+    d->viewCMViewAction->blockSignals(false);
 }
 
 #ifdef USE_SCRIPT_IFACE

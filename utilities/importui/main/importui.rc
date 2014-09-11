@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="305" name="importui" >
+<gui version="400" name="importui" >
 
 <MenuBar>
 
@@ -57,6 +57,8 @@
         <Action name="item_sort" />
         <Action name="item_sort_order" />
         <Action name="item_group" />
+        <Separator />
+        <Action name="color_managed_view" />
     </Menu>
 
     <Menu name="help" ><text>&amp;Help</text>

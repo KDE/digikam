@@ -41,6 +41,7 @@
 #include "albummanager.h"
 #include "applicationsettings.h"
 #include "databasefields.h"
+#include "iccsettings.h"
 #include "imagealbummodel.h"
 #include "imagealbumfiltermodel.h"
 #include "imagecategorydrawer.h"
@@ -119,6 +120,9 @@ ImageCategorizedView::ImageCategorizedView(QWidget* const parent)
 
     LoadingCacheInterface::connectToSignalFileChanged(this,
             SLOT(slotFileChanged(QString)));
+
+    connect(IccSettings::instance(), SIGNAL(settingsChanged(ICCSettingsContainer, ICCSettingsContainer)),
+            this, SLOT(slotIccSettingsChanged(ICCSettingsContainer, ICCSettingsContainer)));
 
     d->delayedEnterTimer = new QTimer(this);
     d->delayedEnterTimer->setInterval(10);
@@ -402,7 +406,7 @@ QModelIndex ImageCategorizedView::nextIndexHint(const QModelIndex& anchor, const
                 if (distance < minDiff)
                 {
                     minDiff = distance;
-                    hint = index;
+                    hint    = index;
                     //kDebug() << "Chose index" << hint << "at distance" << minDiff << "to" << anchor;
                 }
             }
@@ -414,7 +418,7 @@ QModelIndex ImageCategorizedView::nextIndexHint(const QModelIndex& anchor, const
 
 void ImageCategorizedView::openAlbum(QList<Album*> albums)
 {
-    ImageAlbumModel* albumModel = imageAlbumModel();
+    ImageAlbumModel* const albumModel = imageAlbumModel();
 
     if (albumModel)
     {
@@ -425,7 +429,7 @@ void ImageCategorizedView::openAlbum(QList<Album*> albums)
 ThumbnailSize ImageCategorizedView::thumbnailSize() const
 {
 /*
-    ImageThumbnailModel *thumbModel = imageThumbnailModel();
+    ImageThumbnailModel* const thumbModel = imageThumbnailModel();
     if (thumbModel)
         return thumbModel->thumbnailSize();
 */
@@ -689,7 +693,7 @@ void ImageCategorizedView::showContextMenuOnInfo(QContextMenuEvent*, const Image
 void ImageCategorizedView::paintEvent(QPaintEvent* e)
 {
     // We want the thumbnails to be loaded in order.
-    ImageThumbnailModel* thumbModel = imageThumbnailModel();
+    ImageThumbnailModel* const thumbModel = imageThumbnailModel();
 
     if (thumbModel)
     {
@@ -708,6 +712,11 @@ QItemSelectionModel* ImageCategorizedView::getSelectionModel() const
 AbstractItemDragDropHandler* ImageCategorizedView::dragDropHandler() const
 {
     return d->model->dragDropHandler();
+}
+
+void ImageCategorizedView::slotIccSettingsChanged(const ICCSettingsContainer&, const ICCSettingsContainer&)
+{
+    viewport()->update();
 }
 
 } // namespace Digikam
