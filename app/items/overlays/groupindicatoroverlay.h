@@ -6,8 +6,8 @@
  * Date        : 2011-02-28
  * Description : overlay for extra functionality of the group indicator
  *
- * Copyright (C) 2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011      by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,7 +44,7 @@ class GroupIndicatorOverlayWidget : public QAbstractButton
 
 public:
 
-    explicit GroupIndicatorOverlayWidget(QWidget* parent = 0);
+    explicit GroupIndicatorOverlayWidget(QWidget* const parent = 0);
     virtual void contextMenuEvent(QContextMenuEvent* event);
 
 protected:
@@ -65,7 +65,7 @@ class GroupIndicatorOverlay : public AbstractWidgetDelegateOverlay
 
 public:
 
-    explicit GroupIndicatorOverlay(QObject* parent);
+    explicit GroupIndicatorOverlay(QObject* const parent);
 
     GroupIndicatorOverlayWidget* buttonWidget() const;
 
