@@ -2969,7 +2969,6 @@ void AlbumManager::slotAlbumsJobResult(KJob* job)
         // Pop-up a message about the error.
         DNotificationWrapper(QString(), job->errorString(),
                              0, i18n("digiKam"));
-        return;
     }
 }
 
@@ -3000,7 +2999,6 @@ void AlbumManager::slotPeopleJobResult(KJob* job)
         // Pop-up a message about the error.
         DNotificationWrapper(QString(), job->errorString(),
                              0, i18n("digiKam"));
-        return;
     }
 }
 
@@ -3044,7 +3042,6 @@ void AlbumManager::slotTagsJobResult(KJob* job)
         // Pop-up a message about the error.
         DNotificationWrapper(QString(), job->errorString(),
                              0, i18n("digiKam"));
-        return;
     }
 }
 
@@ -3075,7 +3072,6 @@ void AlbumManager::slotDatesJobResult(KJob* job)
         // Pop-up a message about the error.
         DNotificationWrapper(QString(), job->errorString(),
                              0, i18n("digiKam"));
-        return;
     }
 
     emit signalAllDAlbumsLoaded();

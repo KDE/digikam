@@ -110,6 +110,8 @@ bool ImageInfoJob::isRunning() const
 
 void ImageInfoJob::slotResult(KJob* job)
 {
+    d->job = 0;
+
     if (job->error())
     {
         kWarning() << "Failed to list url: " << job->errorString();
@@ -117,10 +119,7 @@ void ImageInfoJob::slotResult(KJob* job)
         // Pop-up a message about the error.
         DNotificationWrapper(QString(), d->job->errorString(),
                              DigikamApp::instance(), DigikamApp::instance()->windowTitle());
-        return;
     }
-
-    d->job = 0;
 
     emit signalCompleted();
 }

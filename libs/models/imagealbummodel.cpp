@@ -346,7 +346,6 @@ void ImageAlbumModel::slotResult(KJob* job)
         // Pop-up a message about the error.
         DNotificationWrapper(QString(), job->errorString(),
                              DigikamApp::instance(), DigikamApp::instance()->windowTitle());
-        return;
     }
 }
 

@@ -912,7 +912,7 @@ void ShowFoto::saveAsIsComplete()
 
     // Pop-up a message to bring user when save is done.
     Digikam::DNotificationWrapper("editorsavefilecompleted", i18n("Image saved successfully"),
-                                    this, windowTitle());
+                                  this, windowTitle());
 */
 }
 

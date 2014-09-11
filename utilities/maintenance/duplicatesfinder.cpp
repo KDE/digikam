@@ -110,7 +110,7 @@ void DuplicatesFinder::slotStart()
     d->job->addMetaData("threshold",  QString::number(thresh));
 
     connect(d->job, SIGNAL(result(KJob*)),
-            this, SLOT(slotDone(KJob*)));
+            this, SLOT(slotDone()));
 
     connect(d->job, SIGNAL(totalAmount(KJob*,KJob::Unit,qulonglong)),
             this, SLOT(slotDuplicatesSearchTotalAmount(KJob*,KJob::Unit,qulonglong)));
@@ -139,10 +139,9 @@ void DuplicatesFinder::slotDone()
         // Pop-up a message about the error.
         DNotificationWrapper(QString(), d->job->errorString(),
                              DigikamApp::instance(), DigikamApp::instance()->windowTitle());
-        return;
     }
 
-    d->job = NULL;
+    d->job = 0;
     MaintenanceTool::slotDone();
 }
 
@@ -151,7 +150,7 @@ void DuplicatesFinder::slotCancel()
     if (d->job)
     {
         d->job->kill();
-        d->job = NULL;
+        d->job = 0;
     }
 
     MaintenanceTool::slotCancel();
