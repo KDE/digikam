@@ -498,11 +498,11 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
         if (settings->getToolTipsShowLabelRating())
         {
-            str = PickLabelWidget::labelPickName((PickLabel)info.pickLabel());
-            str += QString(" / ");
+            str        = PickLabelWidget::labelPickName((PickLabel)info.pickLabel());
+            str       += QString(" / ");
 
-            str += ColorLabelWidget::labelColorName((ColorLabel)info.colorLabel());
-            str += QString(" / ");
+            str       += ColorLabelWidget::labelColorName((ColorLabel)info.colorLabel());
+            str       += QString(" / ");
 
             int rating = info.rating();
 
@@ -535,10 +535,10 @@ QString ToolTipFiller::albumTipContents(PAlbum* const album, int count)
         return QString();
     }
 
-    QString            str;
-    ApplicationSettings*     settings = ApplicationSettings::instance();
-    DToolTipStyleSheet cnt(settings->getToolTipsFont());
-    QString            tip      = cnt.tipHeader;
+    QString                    str;
+    ApplicationSettings* const settings = ApplicationSettings::instance();
+    DToolTipStyleSheet         cnt(settings->getToolTipsFont());
+    QString                    tip      = cnt.tipHeader;
 
     if (settings->getToolTipsShowAlbumTitle()      ||
         settings->getToolTipsShowAlbumDate()       ||
@@ -625,6 +625,7 @@ QString ToolTipFiller::filterActionTipContents(const FilterAction& action)
 
     // Category
     QString reproducible("---");
+
     switch (action.category())
     {
         case FilterAction::ReproducibleFilter:
@@ -664,7 +665,7 @@ QString ToolTipFiller::filterActionTipContents(const FilterAction& action)
         tip += cnt.headBeg + i18n("Technical Parameters") + cnt.headEnd;
 
         const QHash<QString, QVariant>& params = action.parameters();
-        QList<QString> keys = params.keys();
+        QList<QString> keys                    = params.keys();
         qSort(keys);
 
         foreach(const QString& key, keys)
