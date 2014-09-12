@@ -476,6 +476,7 @@ void ItemViewImageDelegate::drawPickLabelIcon(QPainter* p, const QRect& r, int p
         {
             icon = KIconLoader::global()->loadIcon("flag-green", KIconLoader::NoGroup, r.width());
         }
+
         icon.paint(p, r);
     }
 }
@@ -484,12 +485,14 @@ void ItemViewImageDelegate::drawPanelSideIcon(QPainter* p, bool left, bool right
 {
     Q_D(const ItemViewImageDelegate);
     int iconSize = KIconLoader::SizeSmall;
+
     if (left)
     {
         QRect r(3, d->rect.height()/2 - iconSize/2, iconSize, iconSize);
         QIcon icon = KIconLoader::global()->loadIcon("arrow-left", KIconLoader::NoGroup, iconSize);
         icon.paint(p, r);
     }
+
     if (right)
     {
         QRect r(d->rect.width() - 3 - iconSize, d->rect.height()/2 - iconSize/2, iconSize, iconSize);
@@ -516,28 +519,22 @@ void ItemViewImageDelegate::drawGroupIndicator(QPainter* p, const QRect& r,
     if (numberOfGroupedImages)
     {
         QIcon icon;
+
         if (open)
         {
-            icon = KIconLoader::global()->loadIcon("document-import", KIconLoader::NoGroup, r.width());
+            icon = KIconLoader::global()->loadIcon("wallet-open", KIconLoader::NoGroup, r.width());
         }
         else
         {
-            icon = KIconLoader::global()->loadIcon("document-multiple", KIconLoader::NoGroup, r.width());
+            icon = KIconLoader::global()->loadIcon("wallet-closed", KIconLoader::NoGroup, r.width());
         }
-        qreal op = p->opacity();
+
+        qreal op     = p->opacity();
         p->setOpacity(0.5);
         icon.paint(p, r);
         p->setOpacity(op);
 
         QString text = QString::number(numberOfGroupedImages);
-/*
-        QRect br       = p->boundingRect(r, Qt::AlignLeft|Qt::AlignTop, text).adjusted(0,0,1,1);
-        int rectSize   = qMax(br.width(), br.height());
-        QRect textRect = QRect(0, 0, rectSize, rectSize);
-        textRect.moveLeft((r.width() - textRect.width()) / 2);
-        textRect.moveTop((r.height() - textRect.height()) * 4 / 5);
-        p->fillRect(textRect.translated(r.topLeft(), QColor(0, 0, 0, 128));
-*/
         p->drawText(r, Qt::AlignCenter, text);
     }
 }
@@ -730,18 +727,6 @@ QPixmap ItemViewImageDelegate::ratingPixmap(int rating, bool selected) const
     {
         return d->ratingPixmaps.at(rating);
     }
-}
-
-int gcd(int a, int b)
-{
-  int c = a % b;
-  while(c != 0)
-  {
-    a = b;
-    b = c;
-    c = a % b;
-  }
-  return b;
 }
 
 } // namespace Digikam

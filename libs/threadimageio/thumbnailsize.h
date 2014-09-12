@@ -51,10 +51,10 @@ public:
         Tiny        = 32,
         VerySmall   = 64,
         MediumSmall = 80,
-        Small       = 118,  // Most usable small size of thumbnails to prevent overloaded
+        Small       = 128,  // Most usable small size of thumbnails to prevent overloaded
                             // overlays show under thumbs (as Pick label and Group indicator)
-                            // See BKO #321337 for details.
-        Medium      = 128,
+                            // See bugs #321337 and #275381 for details.
+        Medium      = 142,
         Large       = 160,
         Huge        = 256,
         HD          = 512

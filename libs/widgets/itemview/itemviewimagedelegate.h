@@ -67,7 +67,8 @@ public:
                                    const QModelIndex& index, QRect* activationRect = 0) const;
 
     /** Returns the area where the pixmap is drawn,
-     *  or null if not supported */
+     *  or null if not supported.
+     */
     virtual QRect pixmapRect() const;
 
     /** Returns the area where the image information is drawn,
@@ -79,11 +80,13 @@ public:
     virtual QRect imageInformationRect() const;
 
     /** Can be used to temporarily disable drawing of the rating.
-     *  Call with QModelIndex() afterwards. */
+     *  Call with QModelIndex() afterwards.
+     */
     void setRatingEdited(const QModelIndex& index);
 
     /** Returns the rectangle where the rating is drawn,
-     *  or a null rectangle if not supported. */
+     *  or a null rectangle if not supported.
+     */
     virtual QRect ratingRect() const;
 
     virtual void mouseMoved(QMouseEvent* e, const QRect& visualRect, const QModelIndex& index);
@@ -127,7 +130,8 @@ protected:
     void prepareBackground();
     void prepareRatingPixmaps(bool composeOverBackground = true);
 
-    /// Returns the relevant pixmap from the cached rating pixmaps
+    /** Returns the relevant pixmap from the cached rating pixmaps.
+     */
     QPixmap ratingPixmap(int rating, bool selected) const;
 
     virtual QAbstractItemDelegate* asDelegate();
@@ -145,8 +149,6 @@ private:
 
     Q_DECLARE_PRIVATE(ItemViewImageDelegate)
 };
-
-int gcd(int a, int b);
 
 } // namespace Digikam
 
