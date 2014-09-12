@@ -78,7 +78,7 @@ void ImageDelegate::ImageDelegatePrivate::clearRects()
     groupRect            = QRect(0, 0, 0, 0);
 }
 
-ImageDelegate::ImageDelegate(QObject* parent)
+ImageDelegate::ImageDelegate(QObject* const parent)
     : ItemViewImageDelegate(*new ImageDelegatePrivate, parent)
 {
 }
