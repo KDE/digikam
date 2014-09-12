@@ -6,7 +6,7 @@
  * Date        : 2007-10-09
  * Description : a widget to filter album contents by rating
  *
- * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007      by Arnd Baecker <arnd dot baecker at web dot de>
  * Copyright (C) 2014      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
@@ -65,7 +65,7 @@ public:
 
     bool                                 dirty;
 
-    DTipTracker*                         ratingTracker;
+    DCursorTracker*                      ratingTracker;
 
     ImageFilterSettings::RatingCondition filterCond;
     bool                                 excludeUnrated;
@@ -74,7 +74,7 @@ public:
 RatingFilterWidget::RatingFilterWidget(QWidget* const parent)
     : RatingWidget(parent), d(new Private)
 {
-    d->ratingTracker = new DTipTracker("", this);
+    d->ratingTracker = new DCursorTracker("", this);
     updateRatingTooltip();
     setMouseTracking(true);
 

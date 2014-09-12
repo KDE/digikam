@@ -7,7 +7,7 @@
  * Description : A tool tip widget which follows cursor movements.
  *               Tool tip content is displayed without delay.
  *
- * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -27,6 +27,9 @@
 
 // Qt includes
 
+#include <QStyle>
+#include <QStylePainter>
+#include <QStyleOptionFrame>
 #include <QEvent>
 #include <QFrame>
 #include <QLabel>
@@ -63,9 +66,18 @@ public:
 };
 
 DCursorTracker::DCursorTracker(const QString& txt, QWidget* const parent, Qt::Alignment align)
-    : QLabel(txt, parent), d(new Private)
+    : QLabel(txt, parent, Qt::ToolTip | Qt::BypassGraphicsProxyWidget), 
+      d(new Private)
 {
-    setWindowFlags(Qt::ToolTip);
+    setForegroundRole(QPalette::ToolTipText);
+    setBackgroundRole(QPalette::ToolTipBase);
+    setPalette(QToolTip::palette());
+    ensurePolished();
+    setMargin(1 + style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, 0, this));
+    setFrameStyle(QFrame::NoFrame);
+    setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    setIndent(1);
+    setWindowOpacity(style()->styleHint(QStyle::SH_ToolTipLabel_Opacity, 0, this) / 255.0);
 
     d->alignment = align;
     d->parent    = parent;
@@ -205,19 +217,20 @@ void DCursorTracker::moveToParent(QWidget* const parent)
     }
 }
 
+void DCursorTracker::paintEvent(QPaintEvent* e)
+{
+    QStylePainter p(this);
+    QStyleOptionFrame opt;
+    opt.init(this);
+    p.drawPrimitive(QStyle::PE_PanelTipLabel, opt);
+    p.end();
+
+    QLabel::paintEvent(e);
+}
+
 bool DCursorTracker::canBeDisplayed()
 {
     return d->enable && d->parent->isVisible();
-}
-
-
-DTipTracker::DTipTracker(const QString& txt, QWidget* const parent, Qt::Alignment align)
-    : DCursorTracker(txt, parent, align)
-{
-    setPalette(QToolTip::palette());
-    setFrameStyle(QFrame::Plain | QFrame::Box);
-    setLineWidth(1);
-    setAlignment(Qt::AlignLeft | Qt::AlignTop);
 }
 
 } // namespace Digikam
