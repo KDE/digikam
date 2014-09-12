@@ -46,18 +46,18 @@ class ImageDelegate : public ItemViewImageDelegate
 
 public:
 
-    explicit ImageDelegate(QObject* parent = 0);
+    explicit ImageDelegate(QObject* const parent = 0);
     ~ImageDelegate();
 
     void setView(ImageCategorizedView* view);
 
     ImageCategoryDrawer* categoryDrawer() const;
 
-    QRect commentsRect() const;
-    QRect tagsRect() const;
+    QRect commentsRect()                             const;
+    QRect tagsRect()                                 const;
     QRect actualPixmapRect(const QModelIndex& index) const;
-    QRect groupIndicatorRect() const;
-    QRect coordinatesIndicatorRect() const;
+    QRect groupIndicatorRect()                       const;
+    QRect coordinatesIndicatorRect()                 const;
 
     int calculatethumbSizeToFit(int ws);
 
@@ -68,14 +68,15 @@ public:
     virtual bool acceptsActivation(const QPoint& pos, const QRect& visualRect,
                                    const QModelIndex& index, QRect* activationRect = 0) const;
 
-    virtual QRect pixmapRect() const;
+    virtual QRect pixmapRect()           const;
     virtual QRect imageInformationRect() const;
 
-    virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index)  const;
     virtual QPixmap pixmapForDrag(const QStyleOptionViewItem& option, const QList<QModelIndex>& indexes) const;
 
     /** Call this from a paint event, with all indexes expected to be painted immediately,
-     *  so that thumbnails become available in order. */
+     *  so that thumbnails become available in order.
+     */
     virtual void prepareThumbnails(ImageThumbnailModel* thumbModel, const QList<QModelIndex>& indexes);
 
     /**
@@ -92,15 +93,20 @@ public:
 protected:
 
     /** Reimplement this to set contentWidth. This is the maximum width of all
-     *  content rectangles, typically excluding margins on both sides. */
+     *  content rectangles, typically excluding margins on both sides.
+     */
     virtual void updateContentWidth();
+
     /** In a subclass, you need to implement this method to set up the rects
-     *  for drawing. The paint() method operates depending on these rects. */
+     *  for drawing. The paint() method operates depending on these rects.
+     */
     virtual void updateRects() = 0;
 
     virtual void clearCaches();
+
     /** Reimplement to clear caches based on model indexes (hash on row number etc.)
-     *  Change signals are listened to this is called whenever such properties become invalid. */
+     *  Change signals are listened to this is called whenever such properties become invalid.
+     */
     virtual void clearModelDataCaches();
 
     virtual QPixmap thumbnailPixmap(const QModelIndex& index) const;

@@ -222,7 +222,7 @@ QPixmap ImageDelegate::retrieveThumbnailPixmap(const QModelIndex& index, int thu
     // set requested thumbnail size
     model->setData(index, thumbnailSize, ImageModel::ThumbnailRole);
     // get data from model
-    QVariant thumbData = index.data(ImageModel::ThumbnailRole);
+    QVariant thumbData              = index.data(ImageModel::ThumbnailRole);
     // reset to default thumbnail size
     model->setData(index, QVariant(), ImageModel::ThumbnailRole);
 
@@ -310,7 +310,7 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
         drawCreationDate(p, d->dateRect, info.dateTime());
     }
 
-    if (!d->modDateRect.isNull())
+    if (!d->modDateRect.isNull() && info.modDateTime() != info.dateTime())
     {
         drawModificationDate(p, d->modDateRect, info.modDateTime());
     }
@@ -532,7 +532,7 @@ QRect ImageDelegate::actualPixmapRect(const QModelIndex& index) const
 void ImageDelegate::updateActualPixmapRect(const QModelIndex& index, const QRect& rect)
 {
     Q_D(ImageDelegate);
-    QRect* old = d->actualPixmapRectCache.object(index.row());
+    QRect* const old = d->actualPixmapRectCache.object(index.row());
 
     if (!old || *old != rect)
     {
@@ -590,7 +590,9 @@ int ImageDelegate::calculatethumbSizeToFit(int ws)
     }
 
     if (rs1 > rs2)
+    {
         return (ts2);
+    }
 
     return (ts1);
 }

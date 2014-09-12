@@ -320,7 +320,7 @@ void ItemViewImageDelegate::drawName(QPainter* p,const QRect& nameRect, const QS
     Q_D(const ItemViewImageDelegate);
     p->setFont(d->fontReg);
     // NOTE: in case of file name are long, use squeezedTextCached to adjust string elide mode.
-    // See B.K.O #278664 fro details
+    // See bug #278664 for details
     p->drawText(nameRect, Qt::AlignCenter, squeezedTextCached(p, nameRect.width(), name));
 }
 
@@ -352,7 +352,7 @@ void ItemViewImageDelegate::drawModificationDate(QPainter* p, const QRect& dateR
     Q_D(const ItemViewImageDelegate);
     p->setFont(d->fontXtra);
     QString str = dateToString(date);
-    str         = i18nc("date of last image modification", "modified: %1",str);
+    str         = i18nc("date of last image modification", "Mod.: %1",str);
     p->drawText(dateRect, Qt::AlignCenter, str);//squeezedTextCached(p, dateRect.width(), str));
 }
 
@@ -705,7 +705,7 @@ QPixmap ItemViewImageDelegate::ratingPixmap(int rating, bool selected) const
 
     if (rating < 1 || rating > 5)
     {
-        /*
+/*
         QPixmap pix;
         if (selected)
             pix = d->selPixmap.copy(d->ratingRect);
@@ -713,7 +713,7 @@ QPixmap ItemViewImageDelegate::ratingPixmap(int rating, bool selected) const
             pix = d->regPixmap.copy(d->ratingRect);
 
         return pix;
-        */
+*/
         return QPixmap();
     }
 
