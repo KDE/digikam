@@ -660,6 +660,7 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
                 // Allow to overwrite existing recognition with new, possibly valid, "not recognized" status
                 int tagId = FaceTags::unknownPersonTagId();
 
+                // NOTE: See bug #338485 : check if index is not outside of containe size.
                 if (i < package->recognitionResults.size() &&
                     !package->recognitionResults[i].isNull())
                 {

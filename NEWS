@@ -25,4 +25,5 @@ BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
 014 ==> 290928 - Add keyboard shortcut to switch "Color managed view" from Preview mode.
 015 ==> 320304 - Aspect ratio not rounded and displays useless.
 016 ==> 325580 - digiKam crash running maintenance tool.
-017 ==> 
+017 ==> 338485 - Crash during Face recognition and detection about KFaceIface::Identity::isNull().
+018 ==> 
