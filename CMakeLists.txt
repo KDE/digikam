@@ -892,9 +892,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statesavingobject.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/visibilitycontroller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/workingwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/ratingwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/colorlabelwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/picklabelwidget.cpp
        )
 
     SET(libnotificationmanager_SRCS
@@ -960,6 +957,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/exifwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/makernotewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/xmpwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/ratingwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/colorlabelwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/picklabelwidget.cpp
        )
 
     IF(USE_SCRIPT_IFACE)
