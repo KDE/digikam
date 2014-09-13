@@ -261,7 +261,7 @@ QIcon PickLabelWidget::buildIcon(PickLabel label) const
     }
 
     // default : NoPickLabel
-    return KIconLoader::global()->loadIcon("emblem-unmounted", KIconLoader::NoGroup, 12);
+    return KIconLoader::global()->loadIcon("flag-black", KIconLoader::NoGroup, 12);
 }
 
 QString PickLabelWidget::labelPickName(PickLabel label)

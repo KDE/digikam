@@ -169,7 +169,7 @@ QPixmap AlbumLabelsTreeView::goldenStarPixmap() const
 
     QPainter p1(&pixmap);
     p1.setRenderHint(QPainter::Antialiasing, true);
-    p1.setBrush(QColor(0xff,0xd7,0x00));
+    p1.setBrush(kapp->palette().color(QPalette::Link));
     p1.setPen(palette().color(QPalette::Active, foregroundRole()));
     p1.drawPolygon(d->starPolygon, Qt::WindingFill);
     p1.end();
@@ -337,16 +337,16 @@ void AlbumLabelsTreeView::initRatingsTree()
     d->ratings->setFont(0,d->rootFont);
     d->ratings->setFlags(Qt::ItemIsEnabled);
 
-    QTreeWidgetItem* noRate = new QTreeWidgetItem(d->ratings);
-    noRate->setText(0,i18n("No Rating"));
-    noRate->setIcon(0,KIconLoader::global()->loadIcon("emblem-unmounted", KIconLoader::NoGroup, 48));
-    noRate->setFont(0,d->regularFont);
+    QTreeWidgetItem* const noRate = new QTreeWidgetItem(d->ratings);
+    noRate->setText(0, i18n("No Rating"));
+    noRate->setIcon(0, KIconLoader::global()->loadIcon("emblem-unmounted", KIconLoader::NoGroup, 48));
+    noRate->setFont(0, d->regularFont);
 
     for(int rate = 1 ; rate <= 5 ; rate++)
     {
         QTreeWidgetItem* const rateWidget = new QTreeWidgetItem(d->ratings);
 
-        QPixmap pix(goldenStarPixmap().width()*rate,goldenStarPixmap().height());
+        QPixmap pix(goldenStarPixmap().width()*rate, goldenStarPixmap().height());
         pix.fill(Qt::transparent);
         QPainter p(&pix);
         int offset = 0;
@@ -355,12 +355,12 @@ void AlbumLabelsTreeView::initRatingsTree()
 
         for(int i = 0 ; i < rate ; ++i)
         {
-            p.drawPixmap(offset,0,goldenStarPixmap());
+            p.drawPixmap(offset, 0, goldenStarPixmap());
             offset += goldenStarPixmap().width();
         }
 
-        rateWidget->setIcon(0,QIcon(pix));
-        rateWidget->setSizeHint(0,d->iconSize);
+        rateWidget->setIcon(0, QIcon(pix));
+        rateWidget->setSizeHint(0, d->iconSize);
     }
 }
 
@@ -379,7 +379,7 @@ void AlbumLabelsTreeView::initPicksTree()
                  << i18n("Accepted Item");
 
     QStringList pickSetIcons;
-    pickSetIcons << "emblem-unmounted"
+    pickSetIcons << "flag-black"
                  << "flag-red"
                  << "flag-yellow"
                  << "flag-green";
