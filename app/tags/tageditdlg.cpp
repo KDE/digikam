@@ -7,7 +7,7 @@
  * Description : dialog to edit and create digiKam Tags
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -195,12 +195,19 @@ TagEditDlg::TagEditDlg(QWidget* const parent, TAlbum* const album, bool create)
     QLabel* const kscTextLabel = new QLabel(page);
     kscTextLabel->setText(i18n("&Shortcut:"));
 
-    d->keySeqWidget      = new KKeySequenceWidget(page);
+    d->keySeqWidget = new KKeySequenceWidget(page);
     kscTextLabel->setBuddy(d->keySeqWidget);
-    // Do not inherit tag shortcut, only creates a conflict shortcut, see bug 309558.
-    //KShortcut ksc(album->property(TagPropertyName::tagKeyboardShortcut()));
-    //d->keySeqWidget->setKeySequence(ksc.primary(), KKeySequenceWidget::NoValidate);
-    d->keySeqWidget->setCheckActionCollections(TagsActionMngr::defaultManager()->actionCollections());
+
+    if (!create)
+    {
+        QString Seq = album->property(TagPropertyName::tagKeyboardShortcut());
+        d->keySeqWidget->setKeySequence(Seq);
+    }
+    else
+    {
+        // Do not inherit tag shortcut, it creates a conflict shortcut, see bug 309558.
+        d->keySeqWidget->setCheckActionCollections(TagsActionMngr::defaultManager()->actionCollections());
+    }
 
     QLabel* const tipLabel2 = new QLabel(page);
     tipLabel2->setTextFormat(Qt::RichText);
