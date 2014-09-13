@@ -31,4 +31,5 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 020 ==> 268284 - ZoomSlider from statubar tooltip looks inconsistent.
 021 ==> 152948 - Confirmation dialog is not needed if Captions/Tags take focus and no changes is performed.
 022 ==> 313947 - Add new toolbar button to change Labels, at new digiKam session button do not appear until make another change in toolbar.
-023 ==> 
+023 ==> 282506 - Keyboard shortcut tagging functionality is lost.
+024 ==> 
