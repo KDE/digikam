@@ -222,6 +222,7 @@ bool TagsActionMngr::createColorLabelActionShortcut(KActionCollection* const ac,
         action->setShortcut(KShortcut(QString("ALT+CTRL+%1").arg(colorId)));
         action->setShortcutConfigurable(true);
         action->forgetGlobalShortcut();
+        action->setIcon(ColorLabelWidget::buildIcon((ColorLabel)colorId, KIconLoader::SizeSmallMedium));
         action->setData(colorId);
 
         connect(action, SIGNAL(triggered()),

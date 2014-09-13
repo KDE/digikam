@@ -6,7 +6,7 @@
  * Date        : 2011-01-28
  * Description : color label widget
  *
- * Copyright (C) 2011-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -80,7 +80,7 @@ public:
     static QColor  labelColor(ColorLabel label);
     static QString labelColorName(ColorLabel label);
 
-    QIcon buildIcon(ColorLabel label) const;
+    static QIcon buildIcon(ColorLabel label, int size=12);
 
 Q_SIGNALS:
 

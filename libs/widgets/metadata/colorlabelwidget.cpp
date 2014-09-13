@@ -6,7 +6,7 @@
  * Date        : 2011-01-28
  * Description : color label widget
  *
- * Copyright (C) 2011-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -100,7 +100,7 @@ ColorLabelWidget::ColorLabelWidget(QWidget* const parent)
     setAttribute(Qt::WA_DeleteOnClose);
     setFocusPolicy(Qt::NoFocus);
 
-    KHBox* hbox = new KHBox(this);
+    KHBox* const hbox = new KHBox(this);
     hbox->setMargin(0);
     hbox->setSpacing(0);
 
@@ -207,6 +207,7 @@ ColorLabelWidget::~ColorLabelWidget()
 void ColorLabelWidget::setDescriptionBoxVisible(bool b)
 {
     d->descBox->setVisible(b);
+
     if (!b)
     {
         foreach(QAbstractButton* const btn, d->colorBtns->buttons())
@@ -247,6 +248,7 @@ bool ColorLabelWidget::eventFilter(QObject* obj, QEvent* ev)
             return false;
         }
     }
+
     if ( obj == d->btnRed)
     {
         if ( ev->type() == QEvent::Enter)
@@ -255,6 +257,7 @@ bool ColorLabelWidget::eventFilter(QObject* obj, QEvent* ev)
             return false;
         }
     }
+
     if ( obj == d->btnOrange)
     {
         if ( ev->type() == QEvent::Enter)
@@ -263,6 +266,7 @@ bool ColorLabelWidget::eventFilter(QObject* obj, QEvent* ev)
             return false;
         }
     }
+
     if ( obj == d->btnYellow)
     {
         if ( ev->type() == QEvent::Enter)
@@ -271,6 +275,7 @@ bool ColorLabelWidget::eventFilter(QObject* obj, QEvent* ev)
             return false;
         }
     }
+
     if ( obj == d->btnGreen)
     {
         if ( ev->type() == QEvent::Enter)
@@ -279,6 +284,7 @@ bool ColorLabelWidget::eventFilter(QObject* obj, QEvent* ev)
             return false;
         }
     }
+
     if ( obj == d->btnBlue)
     {
         if ( ev->type() == QEvent::Enter)
@@ -287,6 +293,7 @@ bool ColorLabelWidget::eventFilter(QObject* obj, QEvent* ev)
             return false;
         }
     }
+
     if ( obj == d->btnMagenta)
     {
         if ( ev->type() == QEvent::Enter)
@@ -295,6 +302,7 @@ bool ColorLabelWidget::eventFilter(QObject* obj, QEvent* ev)
             return false;
         }
     }
+
     if ( obj == d->btnGray)
     {
         if ( ev->type() == QEvent::Enter)
@@ -303,6 +311,7 @@ bool ColorLabelWidget::eventFilter(QObject* obj, QEvent* ev)
             return false;
         }
     }
+
     if ( obj == d->btnBlack)
     {
         if ( ev->type() == QEvent::Enter)
@@ -311,6 +320,7 @@ bool ColorLabelWidget::eventFilter(QObject* obj, QEvent* ev)
             return false;
         }
     }
+
     if ( obj == d->btnWhite)
     {
         if ( ev->type() == QEvent::Enter)
@@ -347,19 +357,19 @@ QList<ColorLabel> ColorLabelWidget::colorLabels() const
     return list;
 }
 
-QIcon ColorLabelWidget::buildIcon(ColorLabel label) const
+QIcon ColorLabelWidget::buildIcon(ColorLabel label, int size)
 {
     if (label != NoColorLabel)
     {
-        QPixmap pix(12, 12);
+        QPixmap pix(size, size);
         QPainter p(&pix);
-        p.setPen(palette().color(QPalette::Active, QPalette::ButtonText));
+        p.setPen(kapp->palette().color(QPalette::Active, QPalette::ButtonText));
         p.fillRect(0, 0, pix.width()-1, pix.height()-1, labelColor(label));
         p.drawRect(0, 0, pix.width()-1, pix.height()-1);
         return QIcon(pix);
     }
 
-    return KIconLoader::global()->loadIcon("emblem-unmounted", KIconLoader::NoGroup, 12);
+    return KIconLoader::global()->loadIcon("emblem-unmounted", KIconLoader::NoGroup, size);
 }
 
 QColor ColorLabelWidget::labelColor(ColorLabel label)
