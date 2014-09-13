@@ -7,7 +7,7 @@
  * Description : a widget to draw stars rating
  *
  * Copyright (C) 2005      by Owen Hirst <n8rider@sbcglobal.net>
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -324,7 +324,7 @@ void RatingWidget::mouseMoveEvent(QMouseEvent* e)
 
     if (d->rating != pos)
     {
-        if (pos > RatingMax)       // NOTE: bug. # 151357
+        if (pos > RatingMax)       // NOTE: bug. #151357
         {
             pos = RatingMax;
         }
@@ -467,7 +467,7 @@ public:
     RatingWidget*       ratingWidget;
 };
 
-RatingBox::RatingBox(QWidget* parent)
+RatingBox::RatingBox(QWidget* const parent)
     : KVBox(parent), d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
@@ -507,6 +507,7 @@ void RatingBox::slotUpdateDescription(int rating)
     if (app)
     {
         QAction* const ac = app->actionCollection()->action(QString("rateshortcut-%1").arg(rating));
+
         if (ac)
             d->shortcut->setText(ac->shortcut().toString());
     }
