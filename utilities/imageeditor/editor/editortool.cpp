@@ -606,7 +606,7 @@ void EditorToolThreaded::slotOk()
     // Computation already in process.
     if (d->currentRenderingMode != EditorToolThreaded::PreviewRendering)
     {
-        // See B.K.O #305916 : cancel preview before.
+        // See bug #305916 : cancel preview before.
         slotAbort();
     }
 

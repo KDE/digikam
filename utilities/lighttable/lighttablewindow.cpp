@@ -692,7 +692,7 @@ void LightTableWindow::setupActions()
 
     createGUI(xmlFile());
 
-    d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
+    d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for bug #171080
 }
 
 // Deal with items dropped onto the thumbbar (e.g. from the Album view)

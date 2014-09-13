@@ -603,7 +603,7 @@ void AbstractAlbumTreeView::mousePressEvent(QMouseEvent* e)
         {
             if (d->expandOnSingleClick)
             {
-                // See B.K.O #126871: collapse/expand treeview using left mouse button single click.
+                // See bug #126871: collapse/expand treeview using left mouse button single click.
                 // Exception: If a newly selected item is already expanded, do not collapse on selection.
                 const bool expanded = isExpanded(index);
 

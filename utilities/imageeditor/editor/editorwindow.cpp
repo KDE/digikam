@@ -613,7 +613,7 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addAction("editorwindow_showthumbs", m_showBarAction);
 
     d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
-    d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
+    d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for bug #171080
 
     KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          actionCollection());
     KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      actionCollection());

@@ -654,7 +654,7 @@ void ImportUI::setupActions()
 
     createGUI(xmlFile());
 
-    d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
+    d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for bug #171080
 
     // hide the unsupported actions
     d->uploadAction->setVisible(d->controller->cameraUploadSupport());
@@ -1276,7 +1276,7 @@ void ImportUI::slotUpload()
 
     // Added RAW file formats supported by dcraw program like a type mime.
     // Note: we cannot use here "image/x-raw" type mime from KDE because it incomplete
-    // or unavailable(dcraw_0)(see file #121242 in B.K.O).
+    // or unavailable(dcraw_0)(see file #121242 in bug).
     patternList.append(QString("\n%1|Camera RAW files").arg(QString(KDcrawIface::KDcraw::rawFiles())));
     fileformats = patternList.join("\n");
 
@@ -1441,7 +1441,7 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
     // enable cancel action.
     d->cameraCancelAction->setEnabled(true);
 
-    // See B.K.O #143934: force to select all items to prevent problem
+    // See bug #143934: force to select all items to prevent problem
     // when !renameCustomizer->useDefault() ==> iconItem->getDownloadName()
     // can return an empty string in this case because it depends on selection.
     if (!onlySelected)
@@ -1526,7 +1526,7 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
     }
 
     // -- Check disk space ------------------------
-    // See B.K.O #139519: Always check free space available before to
+    // See bug #139519: Always check free space available before to
     // download items selection from camera.
 
     if (!checkDiskSpace(pAlbum))
@@ -2164,7 +2164,7 @@ bool ImportUI::createDateBasedSubAlbum(KUrl& downloadUrl, const CamItemInfo& inf
             break;
     }
 
-    // See B.K.O #136927 : we need to support file system which do not
+    // See bug #136927 : we need to support file system which do not
     // handle upper case properly.
     dirName = dirName.toLower();
 
@@ -2199,7 +2199,7 @@ bool ImportUI::createExtBasedSubAlbum(KUrl& downloadUrl, const CamItemInfo& info
         subAlbum = QString("MPG");
     }
 
-    // See B.K.O #136927 : we need to support file system which do not
+    // See bug #136927 : we need to support file system which do not
     // handle upper case properly.
     subAlbum = subAlbum.toLower();
 

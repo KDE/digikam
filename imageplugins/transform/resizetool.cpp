@@ -486,7 +486,7 @@ void ResizeTool::preparePreview()
     }
     else
     {
-        // See B.K.O #152192: CImg resize() sound like defective or unadapted
+        // See bug #152192: CImg resize() sound like defective or unadapted
         // to resize image without good quality.
         DImgBuiltinFilter resize(DImgBuiltinFilter::Resize, QSize(d->wInput->value(), d->hInput->value()));
         setFilter(resize.createThreadedFilter(imTemp, this));
@@ -517,7 +517,7 @@ void ResizeTool::prepareFinal()
     }
     else
     {
-        // See B.K.O #152192: CImg resize() sound like defective or unadapted
+        // See bug #152192: CImg resize() sound like defective or unadapted
         // to resize image without good quality.
         DImgBuiltinFilter resize(DImgBuiltinFilter::Resize, QSize(d->wInput->value(), d->hInput->value()));
         setFilter(resize.createThreadedFilter(iface.original(), this));

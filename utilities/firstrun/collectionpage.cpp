@@ -255,7 +255,7 @@ bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
     QFileInfo path(rootAlbumFolder);
 
 #ifdef _WIN32
-    // Work around B.K.O #189168
+    // Work around bug #189168
     KTemporaryFile temp;
     temp.setPrefix(rootAlbumFolder);
 
@@ -332,7 +332,7 @@ bool CollectionPage::checkDatabase(QString& dbFolder)
     QFileInfo path(dbFolder);
 
 #ifdef _WIN32
-    // Work around B.K.O #189168
+    // Work around bug #189168
     KTemporaryFile temp;
     temp.setPrefix(dbFolder);
 

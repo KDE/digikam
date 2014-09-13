@@ -524,7 +524,7 @@ void SetupCollectionModel::addCollection(int category)
         return;
     }
 
-    // Get path properlly under Windows. See B.K.O #204480 for details.
+    // Get path properlly under Windows. See bug #204480 for details.
 #ifdef _WIN32
     QString picturesPath;
 

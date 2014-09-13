@@ -233,7 +233,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
     }
     else
     {
-        // NOTE: see B.K.O #184156:
+        // NOTE: see bug #184156:
         // Some rules to wrap unknown camera device from Lensfun database, which have equivalent in fact.
         if (d->makeDescription == QString("Canon"))
         {

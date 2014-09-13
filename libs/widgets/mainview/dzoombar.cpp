@@ -108,7 +108,7 @@ DZoomBar::DZoomBar(QWidget* const parent)
     d->zoomSlider->setValue(ThumbnailSize::Medium);
     d->zoomSlider->setFixedWidth(120);
     d->zoomSlider->setFocusPolicy(Qt::NoFocus);
-    d->zoomSlider->setInvertedControls(true);       // See B.K.O #161087
+    d->zoomSlider->setInvertedControls(true);       // See bug #161087
 
     d->zoomPlusButton = new QToolButton(this);
     d->zoomPlusButton->setAutoRaise(true);

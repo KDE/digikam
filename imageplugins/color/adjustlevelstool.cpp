@@ -410,7 +410,7 @@ AdjustLevelsTool::~AdjustLevelsTool()
     delete d;
 }
 
-// See B.K.O #146636: use event filter with all level slider to display a
+// See bug #146636: use event filter with all level slider to display a
 // guide over level histogram.
 bool AdjustLevelsTool::eventFilter(QObject* obj, QEvent* ev)
 {

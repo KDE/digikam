@@ -845,7 +845,7 @@ bool MetadataHub::writeTags(DMetadata& metadata, bool saveTags)
         newKeywords = cleanupTags(newKeywords);
         if(!newKeywords.isEmpty())
         {
-            // NOTE: See B.K.O #175321 : we remove all old keyword from IPTC and XMP before to
+            // NOTE: See bug #175321 : we remove all old keyword from IPTC and XMP before to
             // synchronize metadata, else contents is not coherent.
 
             // We set Iptc keywords using tags name.

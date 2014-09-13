@@ -206,7 +206,7 @@ QString DatabaseWidget::currentDatabaseType() const
 void DatabaseWidget::slotChangeDatabasePath(const KUrl& result)
 {
 #ifdef _WIN32
-    // Work around B.K.O #189168
+    // Work around bug #189168
     KTemporaryFile temp;
     temp.setPrefix(result.toLocalFile(KUrl::AddTrailingSlash));
     temp.open();

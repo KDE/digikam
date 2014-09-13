@@ -365,7 +365,7 @@ ImageDialog::ImageDialog(QWidget* const parent, const KUrl& url, bool singleSele
     patternList.removeAll(patternList[0]);
     // Added RAW file formats supported by dcraw program like a type mime.
     // Note: we cannot use here "image/x-raw" type mime from KDE because it is incomplete
-    // or unavailable(see file #121242 in B.K.O).
+    // or unavailable(see file #121242 in bug).
     patternList.prepend(i18n("%1|Camera RAW files", QString(KDcrawIface::KDcraw::rawFiles())));
     patternList.prepend(allPictures);
     patternList.append(i18n("*.pgf|Progressive Graphics file"));

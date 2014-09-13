@@ -163,7 +163,7 @@ void DHistoryView::slotCopy2ClipBoard()
 void DHistoryView::addedEntry(const QString& msg, EntryType type, const QVariant& metadata)
 {
     DHistoryViewItem* const item = new DHistoryViewItem(this, msg, type, metadata);
-    // Dispatch events to Qt loop in case of bombarding of messages. See B.K.O #338629
+    // Dispatch events to Qt loop in case of bombarding of messages. See bug #338629
     kapp->processEvents();
     setCurrentItem(item);
 }

@@ -483,7 +483,7 @@ QWidget* BatchTool::settingsWidget() const
 
 void BatchTool::registerSettingsWidget()
 {
-    // NOTE: see B.K.O #209225 : signal/slot connection used internally to prevent crash when settings
+    // NOTE: see bug #209225 : signal/slot connection used internally to prevent crash when settings
     // are assigned to settings widget by main thread to tool thread.
 
     connect(this, SIGNAL(signalAssignSettings2Widget()),

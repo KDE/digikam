@@ -324,7 +324,7 @@ void RatingWidget::mouseMoveEvent(QMouseEvent* e)
 
     if (d->rating != pos)
     {
-        if (pos > RatingMax)       // NOTE: B.K.O. # 151357
+        if (pos > RatingMax)       // NOTE: bug. # 151357
         {
             pos = RatingMax;
         }

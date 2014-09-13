@@ -972,7 +972,7 @@ void DigikamApp::setupActions()
     connect(d->imageAddNewQueueAction, SIGNAL(triggered()), d->view, SLOT(slotImageAddToNewQueue()));
     actionCollection()->addAction("image_add_to_new_queue", d->imageAddNewQueueAction);
 
-    // NOTE: see B.K.O #252130 and #283281 : we need to disable these actions when BQM is running.
+    // NOTE: see bug #252130 and #283281 : we need to disable these actions when BQM is running.
 
     connect(QueueMgrWindow::queueManagerWindow(), SIGNAL(signalBqmIsBusy(bool)),
             d->bqmAction, SLOT(setDisabled(bool)));
@@ -1404,7 +1404,7 @@ void DigikamApp::initGui()
     d->recurseAlbumsAction->setChecked(ApplicationSettings::instance()->getRecurseAlbums());
     d->recurseTagsAction->setChecked(ApplicationSettings::instance()->getRecurseTags());
     d->showBarAction->setChecked(ApplicationSettings::instance()->getShowThumbbar());
-    d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
+    d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for bug #171080
 
     slotSwitchedToIconView();
 }
@@ -1853,7 +1853,7 @@ void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
             return;
         }
 
-        // NOTE: See B.K.O #262296: With KDE 4.6, Solid API return device vendor id
+        // NOTE: See bug #262296: With KDE 4.6, Solid API return device vendor id
         // and product id in hexadecimal strings.
 #if KDE_IS_VERSION(4,5,90)
         bool ok;

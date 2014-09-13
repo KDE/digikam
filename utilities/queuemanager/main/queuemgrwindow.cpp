@@ -443,7 +443,7 @@ void QueueMgrWindow::setupActions()
 
     createGUI(xmlFile());
 
-    d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
+    d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for bug #171080
 }
 
 void QueueMgrWindow::refreshView()

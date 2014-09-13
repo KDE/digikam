@@ -166,7 +166,7 @@ void DKCamera::fillItemInfoFromMetadata(CamItemInfo& info, const DMetadata& meta
 {
     QSize dims     = meta.getImageDimensions();
     info.ctime     = meta.getImageDateTime();
-    //NOTE: see B.K.O #246401 to sort based on milliseconds for items  taken quickly.
+    //NOTE: see bug #246401 to sort based on milliseconds for items  taken quickly.
     info.ctime.setTime(info.ctime.time().addMSecs(meta.getMSecsInfo()));
     info.width     = dims.width();
     info.height    = dims.height();

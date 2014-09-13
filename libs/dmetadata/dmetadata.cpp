@@ -352,7 +352,7 @@ CaptionsMap DMetadata::getImageComments() const
 
 bool DMetadata::setImageComments(const CaptionsMap& comments) const
 {
-    //See B.K.O #139313: An empty string is also a valid value
+    //See bug #139313: An empty string is also a valid value
     /*
     if (comments.isEmpty())
           return false;
@@ -1198,7 +1198,7 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
         return true;
     }
 
-    // See B.K.O #269418 : try to get Tags Path list from M$ Windows Live Photo Gallery.
+    // See bug #269418 : try to get Tags Path list from M$ Windows Live Photo Gallery.
     tagsPath = getXmpTagStringBag("Xmp.MicrosoftPhoto.LastKeywordXMP", false);
     if (!tagsPath.isEmpty())
     {
@@ -1208,7 +1208,7 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
     // Try to get Tags Path list from XMP in first.
     tagsPath = getXmpTagStringBag("Xmp.lr.hierarchicalSubject", false);
 
-    // See B.K.O #221460: there is another LR tag for hierarchical subjects.
+    // See bug #221460: there is another LR tag for hierarchical subjects.
     if (tagsPath.isEmpty())
     {
         tagsPath = getXmpTagStringSeq("Xmp.lr.HierarchicalSubject", false);
@@ -1216,7 +1216,7 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
 
     if (!tagsPath.isEmpty())
     {
-        // See B.K.O #197285: LightRoom use '|' as separator.
+        // See bug #197285: LightRoom use '|' as separator.
         tagsPath = tagsPath.replaceInStrings("|", "/");
         kDebug() << "Tags Path imported from LightRoom: " << tagsPath;
         return true;
@@ -1266,7 +1266,7 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath) const
             return false;
         }
 
-        // See B.K.O #269418 : register Tags path list for Windows Live Photo Gallery.
+        // See bug #269418 : register Tags path list for Windows Live Photo Gallery.
         if (!setXmpTagStringBag("Xmp.MicrosoftPhoto.LastKeywordXMP", tagsPath))
         {
             return false;

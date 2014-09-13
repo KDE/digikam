@@ -348,7 +348,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
                 // tiff data is read as BGR or ABGR or Greyscale
 
-                if (samples_per_pixel == 1)   // See B.K.O #148400: Greyscale pictures only have _one_ sample per pixel
+                if (samples_per_pixel == 1)   // See bug #148400: Greyscale pictures only have _one_ sample per pixel
                 {
                     for (int i = 0; i < bytesRead / 2; ++i)
                     {

@@ -519,7 +519,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
             KDcraw::loadHalfPreview(qimage, path);
         }
 
-        // Special case with DNG file. See B.K.O #338081
+        // Special case with DNG file. See bug #338081
         if (qimage.isNull())
         {
             kDebug() << "Trying to load Embedded preview with Exiv2";
@@ -704,7 +704,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
 
     if (dbInfo.type == DatabaseThumbnail::PGF)
     {
-        // NOTE: see B.K.O #233094: using PGF compression level 4 there. Do not use a value > 4,
+        // NOTE: see bug #233094: using PGF compression level 4 there. Do not use a value > 4,
         // else image is blurred due to down-sampling.
         if (!PGFUtils::writePGFImageData(image.qimage, dbInfo.data, 4))
         {

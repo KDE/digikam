@@ -476,7 +476,7 @@ void JpegRotator::updateMetadata(const QString& fileName, const RotationMatrix &
 
     if (::stat(QFile::encodeName(m_file), &st) == 0)
     {
-        // See B.K.O #329608: Restore file modification time from original file only if updateFileTimeStamp for Setup/Metadata is turned off.
+        // See bug #329608: Restore file modification time from original file only if updateFileTimeStamp for Setup/Metadata is turned off.
 
         if (!MetadataSettings::instance()->settings().updateFileTimeStamp)
         {
@@ -646,7 +646,7 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
         // Update IPTC preview.
         QImage preview = image.smoothScale(1280, 1024, Qt::KeepAspectRatio).copyQImage();
 
-        // TODO: see B.K.O #130525. a JPEG segment is limited to 64K. If the IPTC byte array is
+        // TODO: see bug #130525. a JPEG segment is limited to 64K. If the IPTC byte array is
         // bigger than 64K duing of image preview tag size, the target JPEG image will be
         // broken. Note that IPTC image preview tag is limited to 256K!!!
         // Temp. solution to disable IPTC preview record in JPEG file until a right solution
@@ -705,7 +705,7 @@ bool isJpegImage(const QString& file)
 
     // Check if the file is an JPEG image
     QString format = QString(QImageReader::imageFormat(file)).toUpper();
-    // Check if its not MPO format (See B.K.O #307277).
+    // Check if its not MPO format (See bug #307277).
     QString ext    = fileInfo.suffix().toUpper();
 
     kDebug() << "mimetype = " << format << " ext = " << ext;

@@ -90,7 +90,7 @@ bool FileOperation::localFileRename(const QString& source, const QString& orgPat
 
     if (::stat(QFile::encodeName(source), &st) == 0)
     {
-        // See B.K.O #329608: Restore file modification time from original file only if updateFileTimeStamp for Setup/Metadata is turned off.
+        // See bug #329608: Restore file modification time from original file only if updateFileTimeStamp for Setup/Metadata is turned off.
 
         if (!MetadataSettings::instance()->settings().updateFileTimeStamp)
         {

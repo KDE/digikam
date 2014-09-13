@@ -791,7 +791,7 @@ void ContextMenuHelper::addQueueManagerMenu()
 
     d->parent->addMenu(bqmMenu);
 
-    // NOTE: see B.K.O #252130 : we need to disable new items to add on BQM is this one is running.
+    // NOTE: see bug #252130 : we need to disable new items to add on BQM is this one is running.
     bqmMenu->setDisabled(QueueMgrWindow::queueManagerWindow()->isBusy());
 }
 

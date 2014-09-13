@@ -3005,7 +3005,7 @@ void DImg::prepareMetadataToSave(const QString& intendedDestPath, const QString&
         }
 
         // Update IPTC preview.
-        // see B.K.O #130525. a JPEG segment is limited to 64K. If the IPTC byte array is
+        // see bug #130525. a JPEG segment is limited to 64K. If the IPTC byte array is
         // bigger than 64K during of image preview tag size, the target JPEG image will be
         // broken. Note that IPTC image preview tag is limited to 256K!!!
         // There is no limitation with TIFF and PNG about IPTC byte array size.

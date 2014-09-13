@@ -318,7 +318,7 @@ QString AlbumPropsEdit::comments() const
 
 QDate AlbumPropsEdit::date() const
 {
-    // See B.K.O #267944 : update calendar view if user enter a date in text field.
+    // See bug #267944 : update calendar view if user enter a date in text field.
     d->datePicker->dateLineEnterPressed();
 
     return d->datePicker->date();
