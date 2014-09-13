@@ -144,7 +144,7 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     d->iconShowModDateBox    = new QCheckBox(i18n("Show file &modification date (if different than creation date)"), iconViewGroup);
     d->iconShowModDateBox->setWhatsThis(i18n("Set this option to show the file modification date "
                                              "below the image thumbnail if it's different than camera creation date. "
-                                             "This option is usefull to identify quickly which items have been modified."));
+                                             "This option is useful to identify quickly which items have been modified."));
 
     d->iconShowResolutionBox = new QCheckBox(i18n("Show ima&ge dimensions"), iconViewGroup);
     d->iconShowResolutionBox->setWhatsThis(i18n("Set this option to show the image size in pixels "
