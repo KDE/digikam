@@ -28,7 +28,7 @@ Editor   : DistortionFx tool support zoomable preview.
 Showfoto : Port of Thumbbar to Qt Model/view.
 
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 325702 - digiKam crashes when deleting photos.
 002 ==> 307146 - Build against shared LibRaw.

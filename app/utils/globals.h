@@ -55,7 +55,7 @@ static const int MAX_SEGMENT_8BIT   = NUM_SEGMENTS_8BIT  - 1;
 // --------------------------------------------------------
 
 // Delay in milliseconds to automatically expands album tree-view with D&D
-// See B.K.O #286263 for details.
+// See bug #286263 for details.
 static const int AUTOEXPANDDELAY    = 800;
 
 // --------------------------------------------------------

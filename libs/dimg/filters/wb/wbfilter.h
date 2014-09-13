@@ -105,7 +105,7 @@ private:
 
     static void setRGBmult(double& temperature, double& green, float& mr, float& mg, float& mb);
 
-    /** This method have been introduced with B.K.O #259223
+    /** This method have been introduced with bug #259223
      */
     void preventAutoExposure(int maxr, int maxg, int maxb);
 

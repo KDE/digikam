@@ -37,7 +37,7 @@ BatchQueueManager : Add the capability to put target file processed from queue t
 BatchQueueManager : Add concept of Workflow dedicated to save and restore between sessions Queue Settings including Assigned Batch Tools list.
 BatchQueueManager : Add new tool to crop image.
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 126149 - Camera stores both jpeg and raw (nef), handle both as one
 002 ==> 122454 - Make kipiplugins available for toolbar.

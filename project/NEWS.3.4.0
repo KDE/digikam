@@ -8,7 +8,7 @@ MaintenanceTool : add new options to select Albums and Tags to process.
 MaintenanceTool : add multi-threading and multi-core CPU support for Metadata Synchronizer, Thumbs Generator,
                   and Fingerprint Generator tools.
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 276092 - Change defaults for noise reduction.
 002 ==> 323271 - Face Recognition doesn't work.

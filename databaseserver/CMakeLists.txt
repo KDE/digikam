@@ -17,7 +17,7 @@ TARGET_LINK_LIBRARIES(digikamdatabaseserver
                       ${KDE4_KDECORE_LIBS}
                       ${QT_QTSQL_LIBRARY}
 
-                      # To link under Solaris (see B.K.O #274484)
+                      # To link under Solaris (see bug #274484)
                       ${MATH_LIBRARY}
                      )
 

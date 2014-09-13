@@ -7,7 +7,7 @@ General : Naviguate between pictures using PageUp/PageDown is now possible while
 General : New keyboard shortcuts to improve usability while photo review (as to switch focus on text edit widget, or to toogle tags view).
 General : New keyboard shortcut to switch on/off color managed view for thumbnails and preview.
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 147175 - CANVAS : fit only large images to window.
 002 ==> 282900 - Control click on thumb to deselect resets focus to first photo.

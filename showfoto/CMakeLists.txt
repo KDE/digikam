@@ -56,7 +56,7 @@ TARGET_LINK_LIBRARIES(showfoto
                       ${KDE4_KIO_LIBS}
                       ${LCMS_LIBRARIES}
 
-                      # To link under Solaris (see B.K.O #274484)
+                      # To link under Solaris (see bug #274484)
                       ${MATH_LIBRARY}
 
                       # To link under FreeBSD

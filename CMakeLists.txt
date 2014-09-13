@@ -16,7 +16,7 @@ OPTION(ENABLE_BALOOSUPPORT      "Build digiKam with Baloo support (default=ON)" 
 OPTION(ENABLE_KDEPIMLIBSSUPPORT "Build digiKam with Kdepimlibs support (default=OFF)"                   OFF)
 
 # NOTE: since 6.11.24, libpgf do not support very well OpenMP. We disable it temporally.
-# See B.K.O #273765 for details.
+# See bug #273765 for details.
 OPTION(ENABLE_PGF_OPENMP        "Build digiKam with paralelized PGF codec (experimental) (default=OFF)" OFF)
 OPTION(DIGIKAM_ENABLE_MODELTEST "Enable ModelTest on some models for debugging (default=OFF)"           OFF)
 
@@ -59,7 +59,7 @@ SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/mo
 # We must set this variable here at top level because it is used in both digikam/database and data/database
 # Version history:
 # 1 : Original database schema
-# 2 : 08-08-2014 : Fix Images.names field size (see B.K.O #327646)
+# 2 : 08-08-2014 : Fix Images.names field size (see bug #327646)
 SET(DBCONFIG_XML_VERSION "2")
 
 # ==================================================================================================
@@ -132,7 +132,7 @@ ELSE (KDCRAW_VERSION)
 ENDIF (KDCRAW_VERSION)
 
 # LCMS version 1 and 2 library handling
-# See B.K.O #294105
+# See bug #294105
 # At the moment (2.6) we still DEFAULT to LCMS1 because porting to LCMS2 still experimental.
 # It's possible to force to use LCMS2 by switch on ENABLE_LCMS2 option
 # Future plans:
@@ -169,7 +169,7 @@ ELSE (ENABLE_LCMS2)
     ENDIF (LCMS_FOUND)
 ENDIF (ENABLE_LCMS2)
 
-# To link under Solaris (see B.K.O #274484)
+# To link under Solaris (see bug #274484)
 IF(NOT WIN32)
     FIND_LIBRARY(MATH_LIBRARY m)
 ENDIF(NOT WIN32)
@@ -187,7 +187,7 @@ ENDIF(Boost_FOUND)
 MACRO_BOOL_TO_01(PGF_FOUND USE_EXT_LIBPGF)
 
 # NOTE: currently libpgf 6.11.24 do not support very well OpenMP. We disable it temporally.
-# See B.K.O #273765 for details.
+# See bug #273765 for details.
 IF(NOT ENABLE_PGF_OPENMP)
     ADD_DEFINITIONS(-DLIBPGF_DISABLE_OPENMP)
     MESSAGE(STATUS "Paralelized PGF codec disabled...")
@@ -281,7 +281,7 @@ MACRO_OPTIONAL_FIND_PACKAGE(Gphoto2)
 MACRO_BOOL_TO_01(GPHOTO2_FOUND HAVE_GPHOTO2)
 
 IF (NOT WIN32 AND HAVE_GPHOTO2)
-    # See B.K.O #268267 : digiKam need to be linked to libusb to prevent crash at gphoto2 init if opencv is linked with libdc1394
+    # See bug #268267 : digiKam need to be linked to libusb to prevent crash at gphoto2 init if opencv is linked with libdc1394
     MACRO_OPTIONAL_FIND_PACKAGE(USB)
 ENDIF (NOT WIN32 AND HAVE_GPHOTO2)
 
@@ -556,7 +556,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     # get the gcc version
 
     # CImg.h version 1.2.8 do not compile fine with gcc 4.3.x
-    # See B.K.O #163118: digikam-0.9.4_beta5 compilation hangs with gcc 4.3
+    # See bug #163118: digikam-0.9.4_beta5 compilation hangs with gcc 4.3
     # Using -fno-tree-pre is work around this problem.
 
     IF(CMAKE_COMPILER_IS_GNUCXX)

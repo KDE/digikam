@@ -15,7 +15,7 @@ ImageEditor    : New options to adjust the levels of over/under exposed pixels f
 ImageEditor    : Aspect ratio crop tool is now able to deal with the aspect ratio of the current loaded image
                  in editor. You can keep the original proportions of the image after cropping.
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 148434 : Cannot change rating in slideshow.
 002 ==> 253911 : libkdcraw access beyond array bounds (cameraXYZMatrix).

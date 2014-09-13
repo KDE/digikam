@@ -6,7 +6,7 @@ NEW FEATURES:
 General        : My Tags section from Captions/Tags sidebar have been moved to a dedicated sub-tab for
                  better usability with small screen.
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 262077 : Crash while trying to select a range of dates in timeline view.
 002 ==> 283304 : digiKam from git crashes after splash screen.

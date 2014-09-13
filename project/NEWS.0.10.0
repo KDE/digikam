@@ -6,7 +6,7 @@ NEW FEATURES:
 General        : Internal CImg library updated to 1.3.0.
 General        : New "DarkRoom" colors theme.
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 168916 : Please put anti-aliasing in the perspective adjustment tool.
 002 ==> 152528 : Nikon D80 icc profile not recognized as input profile in Showfoto.
@@ -52,7 +52,7 @@ NEW FEATURES:
 General        : Sidebar type is configurable: title is visible for only active tab, or for all tabs.
 ImageEditor    : Ported print management to KDE4/Qt4.
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 176140 : Redeye plugin is not working fine.
 002 ==> 181610 : Discard button not working in "Apply changes?".
@@ -131,7 +131,7 @@ ImageEditor    : New ratio crop composition guide based on Diagonal Rules.
 
 AlbumGUI       : Icon view item can be rated on the fly.
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 179712 : Open image in embeded editor lead to digiKam crash.
 002 ==> 179031 : Exposure times shown for Panasonic RAW pictures do not make sense.
@@ -196,7 +196,7 @@ CameraGUI      : Add Icon-View items Tooltip.
 CameraGUI      : List camera item in more suitable order: more recent items on the top, older one on the bottom.
 CameraGUI      : Animation over camera icon view during camera download.
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 141087 : Showing info about the image in a tooltip in the camera import view.
 002 ==> 157636 : Problem when creating album.
@@ -263,7 +263,7 @@ NEW FEATURES:
 
 General        : digiKamlinktree script updated to support new Database schema.
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 172680 : digiKam crashes when I try to download the photos from my camera.
 002 ==> 166578 : Default Keyboard zoom requires three fingers.
@@ -398,7 +398,7 @@ General        : Usability improvements to be able to run digiKam on small scree
 General        : New option to enable RAW metadata writing.
 General        : libkexiv2 dependency updated to 0.5.0.
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 173645 : digiKam crashes after start dialog.
 002 ==> 173691 : digiKam doesn't show pictures.
@@ -433,7 +433,7 @@ General        : libkdcraw dependency updated to 0.4.0
 General        : libgphoto2 dependency is now optional to be able to compile digiKam under operating systems 
                  not supported by GPhoto2
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 171953 : Using create "Date-based sub-albums" makes import fail.
 002 ==> 118318 : Make (lib)gphoto support a configure flag.
@@ -462,7 +462,7 @@ digiKam 0.10.0-beta4 - Release date: 2008-10-02
 
 NEW FEATURES:
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 169814 : Compilation error: no exp2().
 002 ==> 165345 : Selecting images from bottom right to top left does not work.
@@ -491,7 +491,7 @@ Image Editor   : All image plugin tool settings provide default buttons to reset
 Image Editor   : New Raw import tool to handle Raw pictures with customized decoding settings.
 Image Editor   : All image plugin dialogs are removed. All tools are embedded in editor window.
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 166310 : Preview not working in image effect dialogs.
 002 ==> 167571 : Unnatural order when removing images from light table.
@@ -516,7 +516,7 @@ NEW FEATURES:
 
 General        : New option in Help menu to list all main components/libraries used by digiKam.
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 166472 : Thumbnail bar gone in image editor when switching back from fullscreen.
 002 ==> 166663 : Tags not showing pictures without "Include Tag Subtree".
@@ -581,7 +581,7 @@ ImageEditor    : New plugin based on LensFun library (http://lensfun.berlios.de)
 ImageEditor    : LensDistortion and AntiVignetting are now merged with LensFun plugin 
 
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 146864 : Lesser XMP support in digiKam.
 002 ==> 145096 : Request: acquire mass storage from printer as from camera. Change menu "Camera" to "Acquire".

@@ -13,11 +13,11 @@ Note: Most of these goals are full-filed from GSoC 2012 project, the remaining p
 Relevant files from KDE bugzilla:
 =================================
 
-B.K.O: #121310
-B.K.O: #126149
-B.K.O: #158437
-B.K.O: #161783
-B.K.O: #216491
+bug: #121310
+bug: #126149
+bug: #158437
+bug: #161783
+bug: #216491
 
 ...and certainly more files...
 
