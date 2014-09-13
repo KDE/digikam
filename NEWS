@@ -30,4 +30,5 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 019 ==> 144168 - ICONVIEW : show only modification date if modification date is different than creation date.
 020 ==> 268284 - ZoomSlider from statubar tooltip looks inconsistent.
 021 ==> 152948 - Confirmation dialog is not needed if Captions/Tags take focus and no changes is performed.
-022 ==> 
+022 ==> 313947 - Add new toolbar button to change Labels, at new digiKam session button do not appear until make another change in toolbar.
+023 ==> 
