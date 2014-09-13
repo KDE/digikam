@@ -201,6 +201,7 @@ bool TagsActionMngr::createPickLabelActionShortcut(KActionCollection* const ac, 
         action->setShortcut(KShortcut(QString("ALT+%1").arg(pickId)));
         action->setShortcutConfigurable(true);
         action->forgetGlobalShortcut();
+        action->setIcon(PickLabelWidget::buildIcon((PickLabel)pickId, KIconLoader::SizeSmallMedium));
         action->setData(pickId);
 
         connect(action, SIGNAL(triggered()),

@@ -6,7 +6,7 @@
  * Date        : 2011-02-14
  * Description : pick label widget
  *
- * Copyright (C) 2011-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -154,6 +154,7 @@ PickLabelWidget::~PickLabelWidget()
 void PickLabelWidget::setDescriptionBoxVisible(bool b)
 {
     d->descBox->setVisible(b);
+
     if (!b)
     {
         foreach(QAbstractButton* const btn, d->pickBtns->buttons())
@@ -174,9 +175,11 @@ void PickLabelWidget::updateDescription(PickLabel label)
     d->desc->setText(labelPickName(label));
 
     KXmlGuiWindow* const app = dynamic_cast<KXmlGuiWindow*>(kapp->activeWindow());
+
     if (app)
     {
         QAction* const ac = app->actionCollection()->action(QString("pickshortcut-%1").arg(label));
+
         if (ac)
             d->shortcut->setText(ac->shortcut().toString());
     }
@@ -192,6 +195,7 @@ bool PickLabelWidget::eventFilter(QObject* obj, QEvent* ev)
             return false;
         }
     }
+
     if ( obj == d->btnRej)
     {
         if ( ev->type() == QEvent::Enter)
@@ -200,6 +204,7 @@ bool PickLabelWidget::eventFilter(QObject* obj, QEvent* ev)
             return false;
         }
     }
+
     if ( obj == d->btnPndg)
     {
         if ( ev->type() == QEvent::Enter)
@@ -208,6 +213,7 @@ bool PickLabelWidget::eventFilter(QObject* obj, QEvent* ev)
             return false;
         }
     }
+
     if ( obj == d->btnAccpt)
     {
         if ( ev->type() == QEvent::Enter)
@@ -234,6 +240,7 @@ void PickLabelWidget::setPickLabels(const QList<PickLabel>& list)
 QList<PickLabel> PickLabelWidget::colorLabels() const
 {
     QList<PickLabel> list;
+
     foreach(QAbstractButton* const btn, d->pickBtns->buttons())
     {
         if (btn && btn->isChecked())
@@ -243,25 +250,25 @@ QList<PickLabel> PickLabelWidget::colorLabels() const
     return list;
 }
 
-QIcon PickLabelWidget::buildIcon(PickLabel label) const
+QIcon PickLabelWidget::buildIcon(PickLabel label, int size)
 {
     switch(label)
     {
         case RejectedLabel:
-            return KIconLoader::global()->loadIcon("flag-red", KIconLoader::NoGroup, 12);
+            return KIconLoader::global()->loadIcon("flag-red", KIconLoader::NoGroup, size);
             break;
         case PendingLabel:
-            return KIconLoader::global()->loadIcon("flag-yellow", KIconLoader::NoGroup, 12);
+            return KIconLoader::global()->loadIcon("flag-yellow", KIconLoader::NoGroup, size);
             break;
         case AcceptedLabel:
-            return KIconLoader::global()->loadIcon("flag-green", KIconLoader::NoGroup, 12);
+            return KIconLoader::global()->loadIcon("flag-green", KIconLoader::NoGroup, size);
             break;
         default:
             break;
     }
 
     // default : NoPickLabel
-    return KIconLoader::global()->loadIcon("flag-black", KIconLoader::NoGroup, 12);
+    return KIconLoader::global()->loadIcon("flag-black", KIconLoader::NoGroup, size);
 }
 
 QString PickLabelWidget::labelPickName(PickLabel label)
@@ -337,6 +344,7 @@ void PickLabelSelector::setPickLabel(PickLabel label)
 PickLabel PickLabelSelector::colorLabel()
 {
     QList<PickLabel> list = d->plw->colorLabels();
+
     if (!list.isEmpty())
         return list.first();
 
