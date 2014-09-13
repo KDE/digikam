@@ -74,7 +74,7 @@ public:
      * @return a Pixmap of a 30*30 pixels golden star used
      *         for rating and widget icon
      */
-    QPixmap goldenStarPixmap() const;
+    QPixmap goldenStarPixmap(bool fillin=true) const;
 
     /**
      * @brief Creates a 30*30 rectangular pixmap with

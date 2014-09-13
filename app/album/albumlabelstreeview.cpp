@@ -162,15 +162,17 @@ bool AlbumLabelsTreeView::isLoadingState() const
     return d->isLoadingState;
 }
 
-QPixmap AlbumLabelsTreeView::goldenStarPixmap() const
+QPixmap AlbumLabelsTreeView::goldenStarPixmap(bool fillin) const
 {
     QPixmap pixmap = QPixmap(60, 60);
     pixmap.fill(Qt::transparent);
 
     QPainter p1(&pixmap);
     p1.setRenderHint(QPainter::Antialiasing, true);
-    p1.setBrush(kapp->palette().color(QPalette::Link));
-    p1.setPen(palette().color(QPalette::Active, foregroundRole()));
+    if (fillin) p1.setBrush(kapp->palette().color(QPalette::Link));
+    QPen pen(palette().color(QPalette::Active, foregroundRole()));
+    pen.setWidth(3);
+    p1.setPen(pen);
     p1.drawPolygon(d->starPolygon, Qt::WindingFill);
     p1.end();
 
@@ -179,7 +181,7 @@ QPixmap AlbumLabelsTreeView::goldenStarPixmap() const
 
 QPixmap AlbumLabelsTreeView::colorRectPixmap(QColor color) const
 {
-    QRect rect(8,8,48,48);
+    QRect rect(8, 8, 48, 48);
     QPixmap pixmap = QPixmap(60, 60);
     pixmap.fill(Qt::transparent);
 
@@ -339,8 +341,16 @@ void AlbumLabelsTreeView::initRatingsTree()
 
     QTreeWidgetItem* const noRate = new QTreeWidgetItem(d->ratings);
     noRate->setText(0, i18n("No Rating"));
-    noRate->setIcon(0, KIconLoader::global()->loadIcon("emblem-unmounted", KIconLoader::NoGroup, 48));
     noRate->setFont(0, d->regularFont);
+    QPixmap pix(goldenStarPixmap().size());
+    pix.fill(Qt::transparent);
+    QPainter p(&pix);
+    p.setRenderHint(QPainter::Antialiasing, true);
+    p.setPen(palette().color(QPalette::Active, foregroundRole()));
+    p.drawPixmap(0, 0, goldenStarPixmap(false));
+    noRate->setIcon(0, QIcon(pix));
+    noRate->setSizeHint(0, d->iconSize);
+
 
     for(int rate = 1 ; rate <= 5 ; rate++)
     {
