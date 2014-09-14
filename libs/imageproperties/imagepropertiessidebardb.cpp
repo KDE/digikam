@@ -7,7 +7,7 @@
  * Description : image properties side bar using data from
  *               digiKam database.
  *
- * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2011 by Martin Klapetek <martin dot klapetek at gmail dot com>
  * Copyright (C)      2011 by Michael G. Hansen <mike at mghansen dot de>
@@ -100,7 +100,7 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* const parent, Sideba
     d->desceditTab        = new ImageDescEditTab(parent);
     d->versionsHistoryTab = new ImagePropertiesVersionsTab(parent);
 
-    appendTab(d->desceditTab,        SmallIcon("imagecomment"), i18n("Caption/Tags"));
+    appendTab(d->desceditTab,        SmallIcon("imagecomment"), i18n("Captions/Tags"));
     appendTab(d->versionsHistoryTab, SmallIcon("view-catalog"), i18n("Versioning"));
 
     // ----------------------------------------------------------
@@ -301,6 +301,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         else if (tab == m_gpsTab && !m_dirtyGpsTab)
         {
             GPSImageInfo info;
+
             if (!GPSImageInfo::fromImageInfo(d->currentInfos.first(), &info))
             {
                 m_gpsTab->setCurrentURL();
@@ -351,6 +352,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
                  it != d->currentInfos.constEnd(); ++it)
             {
                 GPSImageInfo info;
+
                 if (GPSImageInfo::fromImageInfo(*it, &info))
                 {
                     list << info;
@@ -400,7 +402,7 @@ void ImagePropertiesSideBarDB::slotImageChangeDatabase(const ImageChangeset& cha
 {
     if (!d->currentInfos.isEmpty())
     {
-        QWidget* tab = getActiveTab();
+        QWidget* const tab = getActiveTab();
 
         if (!tab)
         {
@@ -443,7 +445,7 @@ void ImagePropertiesSideBarDB::slotImageTagChanged(const ImageTagChangeset& chan
 {
     if (!d->currentInfos.isEmpty())
     {
-        QWidget* tab = getActiveTab();
+        QWidget* const tab = getActiveTab();
 
         if (!tab)
         {
@@ -658,9 +660,8 @@ void ImagePropertiesSideBarDB::doLoadState()
 {
     ImagePropertiesSideBar::doLoadState();
 
-    KConfigGroup group = getConfigGroup();
-
-    KConfigGroup groupVersionTab = KConfigGroup(&group, entryName("Version Properties Tab"));
+    KConfigGroup group                = getConfigGroup();
+    KConfigGroup groupVersionTab      = KConfigGroup(&group, entryName("Version Properties Tab"));
     d->versionsHistoryTab->readSettings(groupVersionTab);
 
     KConfigGroup groupCaptionsTagsTab = KConfigGroup(&group, entryName("Captions Tags Properties Tab"));
@@ -671,8 +672,7 @@ void ImagePropertiesSideBarDB::doSaveState()
 {
     ImagePropertiesSideBar::doSaveState();
 
-    KConfigGroup group = getConfigGroup();
-
+    KConfigGroup group           = getConfigGroup();
     KConfigGroup groupVersionTab = KConfigGroup(&group, entryName("Version Properties Tab"));
     d->versionsHistoryTab->writeSettings(groupVersionTab);
 
