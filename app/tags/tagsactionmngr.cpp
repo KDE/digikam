@@ -50,6 +50,7 @@
 #include "colorlabelwidget.h"
 #include "tagscache.h"
 #include "tagproperties.h"
+#include "ratingwidget.h"
 #include "syncjob.h"
 
 namespace Digikam
@@ -181,6 +182,7 @@ bool TagsActionMngr::createRatingActionShortcut(KActionCollection* const ac, int
         action->setShortcut(KShortcut(QString("CTRL+%1").arg(rating)));
         action->setShortcutConfigurable(true);
         action->forgetGlobalShortcut();
+        action->setIcon(RatingWidget::buildIcon(rating, KIconLoader::SizeSmallMedium));
         action->setData(rating);
 
         connect(action, SIGNAL(triggered()),

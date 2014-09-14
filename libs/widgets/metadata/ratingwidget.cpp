@@ -34,7 +34,6 @@
 #include <QPalette>
 #include <QPixmap>
 #include <QTimeLine>
-#include <QPolygon>
 #include <QFont>
 #include <QAction>
 
@@ -72,18 +71,6 @@ public:
         fadingValue    = 0;
         offset         = 0;
         duration       = 600;   // ms
-
-        // Pre-computed star polygon for a 15x15 pixmap.
-        starPolygon << QPoint(0,  6);
-        starPolygon << QPoint(5,  5);
-        starPolygon << QPoint(7,  0);
-        starPolygon << QPoint(9,  5);
-        starPolygon << QPoint(14, 6);
-        starPolygon << QPoint(10, 9);
-        starPolygon << QPoint(11, 14);
-        starPolygon << QPoint(7,  11);
-        starPolygon << QPoint(3,  14);
-        starPolygon << QPoint(4,  9);
     }
 
     bool       tracking;
@@ -96,8 +83,6 @@ public:
     int        offset;
 
     QTimeLine* fadingTimeLine;
-
-    QPolygon   starPolygon;
 
     QPixmap    selPixmap;      // Selected star.
     QPixmap    regPixmap;      // Regular star.
@@ -374,25 +359,60 @@ void RatingWidget::slotThemeChanged()
     p1.setRenderHint(QPainter::Antialiasing, true);
     p1.setBrush(palette().color(QPalette::Active, backgroundRole()));
     p1.setPen(palette().color(QPalette::Active, foregroundRole()));
-    p1.drawPolygon(d->starPolygon, Qt::WindingFill);
+    p1.drawPolygon(starPolygon(), Qt::WindingFill);
     p1.end();
 
     QPainter p2(&d->selPixmap);
     p2.setRenderHint(QPainter::Antialiasing, true);
     p2.setBrush(kapp->palette().color(QPalette::Link));
     p2.setPen(palette().color(QPalette::Active, foregroundRole()));
-    p2.drawPolygon(d->starPolygon, Qt::WindingFill);
+    p2.drawPolygon(starPolygon(), Qt::WindingFill);
     p2.end();
 
     QPainter p3(&d->disPixmap);
     p3.setRenderHint(QPainter::Antialiasing, true);
     p3.setBrush(palette().color(QPalette::Disabled, backgroundRole()));
     p3.setPen(palette().color(QPalette::Disabled, foregroundRole()));
-    p3.drawPolygon(d->starPolygon, Qt::WindingFill);
+    p3.drawPolygon(starPolygon(), Qt::WindingFill);
     p3.end();
 
     setMinimumSize(QSize((d->regPixmap.width()+1)*RatingMax, d->regPixmap.height()));
     update();
+}
+
+QPolygon RatingWidget::starPolygon()
+{
+    QPolygon star;
+    star << QPoint(0,  6);
+    star << QPoint(5,  5);
+    star << QPoint(7,  0);
+    star << QPoint(9,  5);
+    star << QPoint(14, 6);
+    star << QPoint(10, 9);
+    star << QPoint(11, 14);
+    star << QPoint(7,  11);
+    star << QPoint(3,  14);
+    star << QPoint(4,  9);
+    return star;
+}
+
+QIcon RatingWidget::buildIcon(int rate, int size)
+{
+    QPixmap pix(size, size);
+    pix.fill(Qt::transparent);
+    QPainter p(&pix);
+    QMatrix matrix;
+    matrix.scale(size/15.0, size/15.0);
+    p.setMatrix(matrix);
+    p.setRenderHint(QPainter::Antialiasing, true);
+    p.setPen(kapp->palette().color(QPalette::Active, QPalette::ButtonText));
+
+    if (rate > 0) p.setBrush(kapp->palette().color(QPalette::Link));
+
+    p.drawPolygon(starPolygon(), Qt::WindingFill);
+    p.end();
+
+    return QIcon(pix);
 }
 
 void RatingWidget::paintEvent(QPaintEvent*)

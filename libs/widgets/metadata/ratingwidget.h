@@ -30,6 +30,8 @@
 #include <QWidget>
 #include <QPaintEvent>
 #include <QMouseEvent>
+#include <QPolygon>
+#include <QIcon>
 
 // KDE includes
 
@@ -68,7 +70,12 @@ public:
     void setVisibleImmediately();
 
     void setVisible(bool visible);
-    int maximumVisibleWidth() const;
+    int  maximumVisibleWidth() const;
+
+    /** Pre-computed star polygon for a 15x15 pixmap.
+     */
+    static QPolygon starPolygon();
+    static QIcon buildIcon(int rate, int size);
 
 Q_SIGNALS:
 

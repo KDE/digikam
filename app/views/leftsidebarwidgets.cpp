@@ -350,7 +350,7 @@ void TagViewSideBarWidget::setNoTagsAlbum()
 
     int id;
 
-    if(album)
+    if (album)
     {
         id = album->id();
         DatabaseAccess().db()->updateSearch(id,DatabaseSearch::AdvancedSearch,
@@ -364,7 +364,7 @@ void TagViewSideBarWidget::setNoTagsAlbum()
 
     album = new SAlbum(i18n("No Tags Album"), id);
 
-    if(album)
+    if (album)
     {
         AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << album);
     }
@@ -398,7 +398,8 @@ void TagViewSideBarWidget::slotToggleTagsSelection(int radioClicked)
     switch (Private::TagsSource(radioClicked))
     {
         case Private::NoTags:
-            if(!d->noTagsWasChecked)
+        {
+            if (!d->noTagsWasChecked)
             {
                 setNoTagsAlbum();
                 d->tagFolderView->setDisabled(true);
@@ -406,9 +407,10 @@ void TagViewSideBarWidget::slotToggleTagsSelection(int radioClicked)
                 d->ExistingTagsWasChecked = d->tagsBtn->isChecked();
             }
             break;
-
+        }
         case Private::ExistingTags:
-            if(!d->ExistingTagsWasChecked)
+        {
+            if (!d->ExistingTagsWasChecked)
             {
                 d->tagFolderView->setEnabled(true);
                 setActive(true);
@@ -416,6 +418,7 @@ void TagViewSideBarWidget::slotToggleTagsSelection(int radioClicked)
                 d->ExistingTagsWasChecked = d->tagsBtn->isChecked();
             }
             break;
+        }
     }
 }
 
@@ -459,7 +462,7 @@ AlbumLabelsTreeView *LabelsSideBarWidget::labelsTree()
 
 void LabelsSideBarWidget::setActive(bool active)
 {
-    if(active)
+    if (active)
     {
         d->labelsTree->setCurrentAlbum();
     }
@@ -486,7 +489,7 @@ void LabelsSideBarWidget::doSaveState()
 
 QPixmap LabelsSideBarWidget::getIcon()
 {
-    return d->labelsTree->goldenStarPixmap();
+    return SmallIcon("favorites");
 }
 
 QString LabelsSideBarWidget::getCaption()

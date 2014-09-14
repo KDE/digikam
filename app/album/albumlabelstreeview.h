@@ -83,7 +83,7 @@ public:
      * @param color wanted to be set
      * @return pixmap has a rectangle filled with the color
      */
-    QPixmap colorRectPixmap(QColor color) const;
+    QPixmap colorRectPixmap(const QColor& color) const;
 
     /**
      * @brief Provide the current selection from the tree-view

@@ -54,6 +54,7 @@
 #include "applicationsettings.h"
 #include "dnotificationwrapper.h"
 #include "digikamapp.h"
+#include "ratingwidget.h"
 
 namespace Digikam
 {
@@ -70,24 +71,12 @@ public:
         isLoadingState(false),
         iconSizeFromSetting(0)
     {
-        starPolygon << QPoint(0,  24);
-        starPolygon << QPoint(20, 20);
-        starPolygon << QPoint(28,  0);
-        starPolygon << QPoint(36, 20);
-        starPolygon << QPoint(56, 24);
-        starPolygon << QPoint(40, 36);
-        starPolygon << QPoint(44, 56);
-        starPolygon << QPoint(28, 44);
-        starPolygon << QPoint(12, 56);
-        starPolygon << QPoint(16, 36);
     }
 
     QFont                      rootFont;
     QFont                      regularFont;
     QSize                      iconSize;
     QSize                      rootSizeHint;
-
-    QPolygon                   starPolygon;
 
     QTreeWidgetItem*           ratings;
     QTreeWidgetItem*           picks;
@@ -171,15 +160,19 @@ QPixmap AlbumLabelsTreeView::goldenStarPixmap(bool fillin) const
     p1.setRenderHint(QPainter::Antialiasing, true);
     if (fillin) p1.setBrush(kapp->palette().color(QPalette::Link));
     QPen pen(palette().color(QPalette::Active, foregroundRole()));
-    pen.setWidth(3);
     p1.setPen(pen);
-    p1.drawPolygon(d->starPolygon, Qt::WindingFill);
+
+    QMatrix matrix;
+    matrix.scale(4, 4);     // 60px/15px (RatingWidget::starPolygon() size is 15*15px)
+    p1.setMatrix(matrix);
+
+    p1.drawPolygon(RatingWidget::starPolygon(), Qt::WindingFill);
     p1.end();
 
     return pixmap;
 }
 
-QPixmap AlbumLabelsTreeView::colorRectPixmap(QColor color) const
+QPixmap AlbumLabelsTreeView::colorRectPixmap(const QColor& color) const
 {
     QRect rect(8, 8, 48, 48);
     QPixmap pixmap = QPixmap(60, 60);
