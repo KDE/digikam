@@ -34,4 +34,5 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 023 ==> 282506 - Keyboard shortcut tagging functionality is lost.
 024 ==> 309558 - Bad inheritance of keyboard shortcut when creating sub-tag.
 025 ==> 338509 - Tag-Shortcut not visible in Tag properties.
-026 ==> 
+026 ==> 275077 - Add Tags and Labels keyboard shortcuts in application configuration dialog.
+027 ==> 
