@@ -340,6 +340,9 @@ public:
     void setToolTipsShowAlbumCaption(bool val);
     bool getToolTipsShowAlbumCaption() const;
 
+    void setToolTipsShowAlbumPreview(bool val);
+    bool getToolTipsShowAlbumPreview() const;
+
     void setToolTipsShowVideoAspectRatio(bool val);
     bool getToolTipsShowVideoAspectRatio() const;
 

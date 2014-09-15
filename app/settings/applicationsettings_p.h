@@ -109,6 +109,7 @@ public:
     static const QString                      configToolTipsShowAlbumCollectionEntry;
     static const QString                      configToolTipsShowAlbumCategoryEntry;
     static const QString                      configToolTipsShowAlbumCaptionEntry;
+    static const QString                      configToolTipsShowAlbumPreviewEntry;
     static const QString                      configPreviewLoadFullImageSizeEntry;
     static const QString                      configPreviewShowIconsEntry;
     static const QString                      configShowThumbbarEntry;
@@ -187,6 +188,7 @@ public:
     bool                                      tooltipShowAlbumCollection;
     bool                                      tooltipShowAlbumCategory;
     bool                                      tooltipShowAlbumCaption;
+    bool                                      tooltipShowAlbumPreview;
 
     // preview settings
     bool                                      previewLoadFullImageSize;

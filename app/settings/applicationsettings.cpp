@@ -194,6 +194,7 @@ void ApplicationSettings::readSettings()
     d->tooltipShowAlbumCollection       = group.readEntry(d->configToolTipsShowAlbumCollectionEntry,  true);
     d->tooltipShowAlbumCategory         = group.readEntry(d->configToolTipsShowAlbumCategoryEntry,    true);
     d->tooltipShowAlbumCaption          = group.readEntry(d->configToolTipsShowAlbumCaptionEntry,     true);
+    d->tooltipShowAlbumPreview          = group.readEntry(d->configToolTipsShowAlbumPreviewEntry,     false);
 
     d->previewLoadFullImageSize         = group.readEntry(d->configPreviewLoadFullImageSizeEntry,     false);
     d->previewShowIcons                 = group.readEntry(d->configPreviewShowIconsEntry,             true);
@@ -317,6 +318,7 @@ void ApplicationSettings::saveSettings()
     group.writeEntry(d->configToolTipsShowAlbumCollectionEntry,        d->tooltipShowAlbumCollection);
     group.writeEntry(d->configToolTipsShowAlbumCategoryEntry,          d->tooltipShowAlbumCategory);
     group.writeEntry(d->configToolTipsShowAlbumCaptionEntry,           d->tooltipShowAlbumCaption);
+    group.writeEntry(d->configToolTipsShowAlbumPreviewEntry,           d->tooltipShowAlbumPreview);
 
     group.writeEntry(d->configPreviewLoadFullImageSizeEntry,           d->previewLoadFullImageSize);
     group.writeEntry(d->configPreviewShowIconsEntry,                   d->previewShowIcons);

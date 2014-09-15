@@ -6,7 +6,7 @@
  * Date        : 2008-12-10
  * Description : tool tip widget for iconview, thumbbar, and folderview items
  *
- * Copyright (C) 2008-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,12 +26,13 @@
 
 // Qt includes
 
-#include <QtGui/QFont>
-#include <QtGui/QLabel>
-#include <QtCore/QString>
-#include <QtCore/QEvent>
-#include <QtGui/QResizeEvent>
-#include <QtGui/QTextDocument>
+#include <QFont>
+#include <QLabel>
+#include <QResizeEvent>
+#include <QTextDocument>
+#include <QString>
+#include <QImage>
+#include <QEvent>
 
 // KDE includes
 
@@ -51,8 +52,12 @@ class DIGIKAM_EXPORT DToolTipStyleSheet
 public:
 
     explicit DToolTipStyleSheet(const QFont& font = KGlobalSettings::generalFont());
-    QString breakString(const QString& input);
-    QString elidedText(const QString& input, Qt::TextElideMode mode);
+
+    QString breakString(const QString& input)                        const;
+    QString elidedText(const QString& input, Qt::TextElideMode mode) const;
+    QString imageAsBase64(const QImage& img)                         const;
+
+public:
 
     const int maxStringLength;
 

@@ -293,6 +293,16 @@ bool ApplicationSettings::getToolTipsShowAlbumCaption() const
     return d->tooltipShowAlbumCaption;
 }
 
+void ApplicationSettings::setToolTipsShowAlbumPreview(bool val)
+{
+    d->tooltipShowAlbumPreview = val;
+}
+
+bool ApplicationSettings::getToolTipsShowAlbumPreview() const
+{
+    return d->tooltipShowAlbumPreview;
+}
+
 void ApplicationSettings::setToolTipsShowVideoAspectRatio(bool val)
 {
     d->tooltipShowVideoAspectRatio = val;

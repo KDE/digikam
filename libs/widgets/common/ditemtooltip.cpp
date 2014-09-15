@@ -37,6 +37,8 @@
 #include <QToolTip>
 #include <QVBoxLayout>
 #include <QTextDocument>
+#include <QByteArray>
+#include <QBuffer>
 
 // KDE includes
 
@@ -81,7 +83,7 @@ DToolTipStyleSheet::DToolTipStyleSheet(const QFont& font)
     cellSpecEnd = QString("</i></font></nobr></td></tr>");
 }
 
-QString DToolTipStyleSheet::breakString(const QString& input)
+QString DToolTipStyleSheet::breakString(const QString& input) const
 {
     QString str = input.simplified();
     str         = Qt::escape(str);
@@ -115,7 +117,7 @@ QString DToolTipStyleSheet::breakString(const QString& input)
     return br;
 }
 
-QString DToolTipStyleSheet::elidedText(const QString& str, Qt::TextElideMode elideMode)
+QString DToolTipStyleSheet::elidedText(const QString& str, Qt::TextElideMode elideMode) const
 {
     if (str.length() <= maxStringLength)
     {
@@ -135,6 +137,15 @@ QString DToolTipStyleSheet::elidedText(const QString& str, Qt::TextElideMode eli
         default:
             return str;
     }
+}
+
+QString DToolTipStyleSheet::imageAsBase64(const QImage& img) const
+{
+    QByteArray byteArray;
+    QBuffer    buffer(&byteArray);
+    img.save(&buffer, "PNG");
+    QString    iconBase64 = QString::fromLatin1(byteArray.toBase64().data());
+    return QString("<img src=\"data:image/png;base64,%1\">").arg(iconBase64);
 }
 
 // --------------------------------------------------------------------------------------------------

@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QDateTime>
+#include <QBuffer>
 
 // KDE includes
 
@@ -49,6 +50,8 @@
 #include "imagepropertiestab.h"
 #include "colorlabelwidget.h"
 #include "picklabelwidget.h"
+#include "albumthumbnailloader.h"
+#include "thumbnailsize.h"
 
 namespace Digikam
 {
@@ -598,6 +601,14 @@ QString ToolTipFiller::albumTipContents(PAlbum* const album, int count)
 
             tip += cnt.cellSpecBeg + i18n("Caption:") + cnt.cellSpecMid +
                    cnt.breakString(str) + cnt.cellSpecEnd;
+        }
+
+
+        if (settings->getToolTipsShowAlbumPreview())
+        {
+            tip += cnt.cellSpecBeg + i18n("Preview:") + cnt.cellSpecMid +
+            cnt.imageAsBase64(AlbumThumbnailLoader::instance()->getAlbumPreviewDirectly(album, ThumbnailSize::Medium)) +
+            cnt.cellSpecEnd;
         }
     }
 

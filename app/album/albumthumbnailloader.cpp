@@ -460,4 +460,28 @@ void AlbumThumbnailLoader::slotIconChanged(Album* album)
     d->thumbnailMap.remove(album->globalID());
 }
 
+QImage AlbumThumbnailLoader::getAlbumPreviewDirectly(PAlbum* const album, int size)
+{
+    if (!album->iconKURL().toLocalFile().isEmpty())
+    {
+        ThumbnailLoadThread* const thread    = new ThumbnailLoadThread;
+        thread->setPixmapRequested(false);
+        thread->setThumbnailSize(size);
+        ThumbnailImageCatcher* const catcher = new ThumbnailImageCatcher(thread);
+        catcher->thread()->deleteThumbnail(album->iconKURL().toLocalFile());
+        catcher->setActive(true);
+        catcher->thread()->find(album->iconKURL().toLocalFile());
+        catcher->enqueue();
+        QList<QImage> images                 = catcher->waitForThumbnails();
+        catcher->setActive(false);
+        delete thread;
+        delete catcher;
+
+        if (!images.isEmpty())
+            return images[0];
+    }
+
+    return loadIcon("folder", size).toImage();
+}
+
 } // namespace Digikam

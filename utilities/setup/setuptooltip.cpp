@@ -86,6 +86,7 @@ public:
         showAlbumCollectionBox(0),
         showAlbumCategoryBox(0),
         showAlbumCaptionBox(0),
+        showAlbumPreviewBox(0),
         showImportToolTipsBox(0),
         showItemTitleBox(0),
         showItemDateBox(0),
@@ -147,6 +148,7 @@ public:
     QCheckBox*   showAlbumCollectionBox;
     QCheckBox*   showAlbumCategoryBox;
     QCheckBox*   showAlbumCaptionBox;
+    QCheckBox*   showAlbumPreviewBox;
 
     QCheckBox*   showImportToolTipsBox;
     QCheckBox*   showItemTitleBox;
@@ -360,12 +362,16 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->showAlbumCaptionBox    = new QCheckBox(i18n("Show album caption"));
     d->showAlbumCaptionBox->setWhatsThis(i18n("Set this option to display the album caption."));
 
+    d->showAlbumPreviewBox    = new QCheckBox(i18n("Show album preview"));
+    d->showAlbumPreviewBox->setWhatsThis(i18n("Set this option to display the album preview."));
+
     QVBoxLayout* const albumSettingBoxLayout = new QVBoxLayout;
     albumSettingBoxLayout->addWidget(d->showAlbumTitleBox);
     albumSettingBoxLayout->addWidget(d->showAlbumDateBox);
     albumSettingBoxLayout->addWidget(d->showAlbumCollectionBox);
     albumSettingBoxLayout->addWidget(d->showAlbumCategoryBox);
     albumSettingBoxLayout->addWidget(d->showAlbumCaptionBox);
+    albumSettingBoxLayout->addWidget(d->showAlbumPreviewBox);
     d->albumSettingBox->setLayout(albumSettingBoxLayout);
 
     QWidget* const space2 = new QWidget(vbox2);
@@ -536,6 +542,7 @@ void SetupToolTip::applySettings()
     settings->setToolTipsShowAlbumCollection(d->showAlbumCollectionBox->isChecked());
     settings->setToolTipsShowAlbumCategory(d->showAlbumCategoryBox->isChecked());
     settings->setToolTipsShowAlbumCaption(d->showAlbumCaptionBox->isChecked());
+    settings->setToolTipsShowAlbumPreview(d->showAlbumPreviewBox->isChecked());
 
     settings->saveSettings();
 
@@ -617,6 +624,7 @@ void SetupToolTip::readSettings()
     d->showAlbumCollectionBox->setChecked(settings->getToolTipsShowAlbumCollection());
     d->showAlbumCategoryBox->setChecked(settings->getToolTipsShowAlbumCategory());
     d->showAlbumCaptionBox->setChecked(settings->getToolTipsShowAlbumCaption());
+    d->showAlbumPreviewBox->setChecked(settings->getToolTipsShowAlbumPreview());
 
     // -- Import Settings ------------------------------------------------------------------------
 
