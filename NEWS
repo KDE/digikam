@@ -6,6 +6,7 @@ NEW FEATURES:
 General : Naviguate between pictures using PageUp/PageDown is now possible while editing properties through captions/tags sidebar.
 General : New keyboard shortcuts to improve usability while photo review (as to switch focus on text edit widget, or to toogle tags view).
 General : New keyboard shortcut to switch on/off color managed view for thumbnails and preview.
+AlbumGUI: Album preview can be displayed in tooltip.
 
 BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
@@ -35,4 +36,5 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 024 ==> 309558 - Bad inheritance of keyboard shortcut when creating sub-tag.
 025 ==> 338509 - Tag-Shortcut not visible in Tag properties.
 026 ==> 275077 - Add Tags and Labels keyboard shortcuts in application configuration dialog.
-027 ==> 
+027 ==> 229680 - Add album thumbnail in album tooltip.
+028 ==> 
