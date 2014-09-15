@@ -66,6 +66,7 @@
 #include "digikamapp.h"
 #include "thememanager.h"
 #include "dimg.h"
+#include "dio.h"
 #include "dmetadata.h"
 #include "fileoperation.h"
 #include "metadatasettings.h"
@@ -1101,10 +1102,6 @@ void LightTableWindow::deleteItem(const ImageInfo& info, bool permanently)
 
     kDebug() << "Item to delete: " << u;
 
-    // Provide a digikamalbums:// URL to KIO
-    KUrl kioURL  = info.databaseUrl();
-    KUrl fileURL = u;
-
     bool useTrash;
     bool preselectDeletePermanently = permanently;
 
@@ -1121,23 +1118,7 @@ void LightTableWindow::deleteItem(const ImageInfo& info, bool permanently)
 
     useTrash = !dialog.shouldDelete();
 
-    // trash does not like non-local URLs, put is not implemented
-    if (useTrash)
-    {
-        kioURL = fileURL;
-    }
-
-    SyncJobResult deleteResult = SyncJob::del(kioURL, useTrash);
-
-    if (!deleteResult)
-    {
-        KMessageBox::error(this, deleteResult.errorString);
-        return;
-    }
-
-    emit signalFileDeleted(u);
-
-    slotRemoveItem(info);
+    DIO::del(info, useTrash);
 }
 
 void LightTableWindow::slotRemoveItem()

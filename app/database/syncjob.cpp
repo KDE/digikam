@@ -6,15 +6,8 @@
  * Date        : 2004-10-04
  * Description : synchronize Input/Output jobs.
  *
- * Copyright (C) 2004      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2006-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
- *
- * Concept copied from kdelibs/kio/kio/netaccess.h/cpp
- *   This file is part of the KDE libraries
- *   Copyright (C) 1997 Torben Weis (weis@kde.org)
- *   Copyright (C) 1998 Matthias Ettrich (ettrich@kde.org)
- *   Copyright (C) 1999 David Faure (faure@kde.org)
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,11 +32,6 @@
 
 // KDE includes
 
-#include <kjob.h>
-#include <kio/job.h>
-#include <kio/deletejob.h>
-#include <kio/copyjob.h>
-#include <kprotocolinfo.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <kapplication.h>
@@ -67,15 +55,12 @@ public:
         thumbnail(0),
         album(0)
     {
-        result.success = false;
     }
 
-    QEventLoop*   waitingLoop;
+    QEventLoop* waitingLoop;
+    QPixmap*    thumbnail;
 
-    QPixmap*      thumbnail;
-
-    SyncJobResult result;
-    Album*        album;
+    Album*      album;
 };
 
 SyncJob::SyncJob()
@@ -102,56 +87,6 @@ void SyncJob::quitWaitingLoop() const
     d->waitingLoop->quit();
 }
 
-SyncJobResult SyncJob::del(const KUrl::List& urls, bool useTrash)
-{
-    SyncJob sj;
-
-    if (useTrash)
-    {
-        sj.trashPriv(urls);
-    }
-    else
-    {
-        sj.delPriv(urls);
-    }
-
-    return sj.d->result;
-}
-
-bool SyncJob::delPriv(const KUrl::List& urls) const
-{
-    KIO::Job* const job = KIO::del(urls);
-
-    connect( job, SIGNAL(result(KJob*)),
-             this, SLOT(slotResult(KJob*)) );
-
-    enterWaitingLoop();
-    return d->result;
-}
-
-bool SyncJob::trashPriv(const KUrl::List& urls) const
-{
-    KIO::Job* const job = KIO::trash(urls);
-
-    connect( job, SIGNAL(result(KJob*)),
-             this, SLOT(slotResult(KJob*)) );
-
-    enterWaitingLoop();
-    return d->result;
-}
-
-void SyncJob::slotResult(KJob* job)
-{
-    d->result.success = !(job->error());
-
-    if ( !d->result )
-    {
-        d->result.errorString = job->errorString();
-    }
-
-    quitWaitingLoop();
-}
-
 // ---------------------------------------------------------------
 
 QPixmap SyncJob::getTagThumbnail(TAlbum* const album)
@@ -160,7 +95,7 @@ QPixmap SyncJob::getTagThumbnail(TAlbum* const album)
     return sj.getTagThumbnailPriv(album);
 }
 
-QPixmap SyncJob::getTagThumbnailPriv(TAlbum* const album)
+QPixmap SyncJob::getTagThumbnailPriv(TAlbum* const album) const
 {
     delete d->thumbnail;
 
