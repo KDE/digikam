@@ -28,7 +28,6 @@
 
 #include <QFont>
 #include <QPainter>
-#include <QPolygon>
 #include <QModelIndex>
 
 // KDE includes

@@ -52,6 +52,7 @@
 #include "imagedelegateoverlay.h"
 #include "thememanager.h"
 #include "colorlabelwidget.h"
+#include "ratingwidget.h"
 
 namespace Digikam
 {
@@ -89,17 +90,7 @@ void ItemViewImageDelegatePrivate::clearRects()
 void ItemViewImageDelegatePrivate::makeStarPolygon()
 {
     // Pre-computed star polygon for a 15x15 pixmap.
-    starPolygon << QPoint(0,  6);
-    starPolygon << QPoint(5,  5);
-    starPolygon << QPoint(7,  0);
-    starPolygon << QPoint(9,  5);
-    starPolygon << QPoint(14, 6);
-    starPolygon << QPoint(10, 9);
-    starPolygon << QPoint(11, 14);
-    starPolygon << QPoint(7,  11);
-    starPolygon << QPoint(3,  14);
-    starPolygon << QPoint(4,  9);
-
+    starPolygon     = RatingWidget::starPolygon();
     starPolygonSize = QSize(15, 15);
 }
 
@@ -118,6 +109,7 @@ ItemViewImageDelegate::ItemViewImageDelegate(ItemViewImageDelegatePrivate& dd, Q
 ItemViewImageDelegate::~ItemViewImageDelegate()
 {
     Q_D(ItemViewImageDelegate);
+
     removeAllOverlays();
     delete d;
 }
@@ -125,6 +117,7 @@ ItemViewImageDelegate::~ItemViewImageDelegate()
 ThumbnailSize ItemViewImageDelegate::thumbnailSize() const
 {
     Q_D(const ItemViewImageDelegate);
+
     return d->thumbSize;
 }
 
@@ -155,12 +148,14 @@ void ItemViewImageDelegate::setSpacing(int spacing)
 int ItemViewImageDelegate::spacing() const
 {
     Q_D(const ItemViewImageDelegate);
+
     return d->spacing;
 }
 
 QRect ItemViewImageDelegate::rect() const
 {
     Q_D(const ItemViewImageDelegate);
+
     return d->rect;
 }
 
@@ -177,24 +172,28 @@ QRect ItemViewImageDelegate::imageInformationRect() const
 QRect ItemViewImageDelegate::ratingRect() const
 {
     Q_D(const ItemViewImageDelegate);
+
     return d->ratingRect;
 }
 
 void ItemViewImageDelegate::setRatingEdited(const QModelIndex& index)
 {
     Q_D(ItemViewImageDelegate);
+
     d->editingRating = index;
 }
 
 QSize ItemViewImageDelegate::sizeHint(const QStyleOptionViewItem& /*option*/, const QModelIndex& /*index*/) const
 {
     Q_D(const ItemViewImageDelegate);
+
     return d->rect.size();
 }
 
 QSize ItemViewImageDelegate::gridSize() const
 {
     Q_D(const ItemViewImageDelegate);
+
     return d->gridSize;
 }
 
@@ -237,6 +236,7 @@ void ItemViewImageDelegate::mouseMoved(QMouseEvent* e, const QRect& visualRect, 
 void ItemViewImageDelegate::setDefaultViewOptions(const QStyleOptionViewItem& option)
 {
     Q_D(ItemViewImageDelegate);
+
     d->font = option.font;
     invalidatePaintingCache();
 }
@@ -254,6 +254,7 @@ void ItemViewImageDelegate::slotSetupChanged()
 void ItemViewImageDelegate::invalidatePaintingCache()
 {
     Q_D(ItemViewImageDelegate);
+
     QSize oldGridSize = d->gridSize;
     updateSizeRectsAndPixmaps();
 
@@ -277,19 +278,22 @@ QRect ItemViewImageDelegate::drawThumbnail(QPainter* p, const QRect& thumbRect, 
     }
 
     QRect r = thumbRect;
-    /*p->drawPixmap(r.x() + (r.width()-thumbnail.width())/2,
+/*
+    p->drawPixmap(r.x() + (r.width()-thumbnail.width())/2,
                     r.y() + (r.height()-thumbnail.height())/2,
-                    thumbnail);*/
+                    thumbnail);
+*/
 
     QRect actualPixmapRect(r.x() + (r.width()-thumbnail.width())/2,
                            r.y() + (r.height()-thumbnail.height())/2,
                            thumbnail.width(), thumbnail.height());
-
-    /*p->save();
+/*
+    p->save();
     QRegion pixmapClipRegion = QRegion(d->rect) - QRegion(actualPixmapRect);
-    p->setClipRegion(pixmapClipRegion);*/
-    //p->drawPixmap(0, 0, background);
+    p->setClipRegion(pixmapClipRegion);
 
+    p->drawPixmap(0, 0, background);
+*/
     QPixmap borderPix = thumbnailBorderPixmap(actualPixmapRect.size());
     p->drawPixmap(actualPixmapRect.x()-3, actualPixmapRect.y()-3, borderPix);
 
@@ -309,15 +313,12 @@ void ItemViewImageDelegate::drawRating(QPainter* p, const QModelIndex& index, co
     {
         p->drawPixmap(ratingRect, ratingPixmap(rating, isSelected));
     }
-/*
-    else
-        p->drawPixmap(r, ratingPixmap(-1, isSelected));
-*/
 }
 
 void ItemViewImageDelegate::drawName(QPainter* p,const QRect& nameRect, const QString& name) const
 {
     Q_D(const ItemViewImageDelegate);
+
     p->setFont(d->fontReg);
     // NOTE: in case of file name are long, use squeezedTextCached to adjust string elide mode.
     // See bug #278664 for details
@@ -327,6 +328,7 @@ void ItemViewImageDelegate::drawName(QPainter* p,const QRect& nameRect, const QS
 void ItemViewImageDelegate::drawTitle(QPainter *p, const QRect& titleRect, const QString& title) const
 {
     Q_D(const ItemViewImageDelegate);
+
     p->setFont(d->fontReg);
     p->drawText(titleRect, Qt::AlignCenter, squeezedTextCached(p, titleRect.width(), title));
 }
@@ -334,6 +336,7 @@ void ItemViewImageDelegate::drawTitle(QPainter *p, const QRect& titleRect, const
 void ItemViewImageDelegate::drawComments(QPainter* p, const QRect& commentsRect, const QString& comments) const
 {
     Q_D(const ItemViewImageDelegate);
+
     p->setFont(d->fontCom);
     p->drawText(commentsRect, Qt::AlignCenter, squeezedTextCached(p, commentsRect.width(), comments));
 }
@@ -341,6 +344,7 @@ void ItemViewImageDelegate::drawComments(QPainter* p, const QRect& commentsRect,
 void ItemViewImageDelegate::drawCreationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const
 {
     Q_D(const ItemViewImageDelegate);
+
     p->setFont(d->fontXtra);
     QString str = dateToString(date);
     //str         = i18nc("date of image creation", "created: %1", str);
@@ -350,6 +354,7 @@ void ItemViewImageDelegate::drawCreationDate(QPainter* p, const QRect& dateRect,
 void ItemViewImageDelegate::drawModificationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const
 {
     Q_D(const ItemViewImageDelegate);
+
     p->setFont(d->fontXtra);
     QString str = dateToString(date);
     str         = i18nc("date of last image modification", "Mod.: %1",str);
@@ -400,6 +405,7 @@ void ItemViewImageDelegate::drawAspectRatio(QPainter* p, const QRect& dimsRect, 
 void ItemViewImageDelegate::drawFileSize(QPainter* p, const QRect& r, qlonglong bytes) const
 {
     Q_D(const ItemViewImageDelegate);
+
     p->setFont(d->fontXtra);
     p->drawText(r, Qt::AlignCenter, KIO::convertSize(bytes)); //squeezedTextCached(p, r.width(), KIO::convertSize(bytes)));
 }
@@ -408,6 +414,7 @@ void ItemViewImageDelegate::drawTags(QPainter* p, const QRect& r, const QString&
                                      bool isSelected) const
 {
     Q_D(const ItemViewImageDelegate);
+
     p->setFont(d->fontCom);
     p->setPen(isSelected ? kapp->palette().color(QPalette::HighlightedText)
                          : kapp->palette().color(QPalette::Link));
@@ -484,6 +491,7 @@ void ItemViewImageDelegate::drawPickLabelIcon(QPainter* p, const QRect& r, int p
 void ItemViewImageDelegate::drawPanelSideIcon(QPainter* p, bool left, bool right) const
 {
     Q_D(const ItemViewImageDelegate);
+
     int iconSize = KIconLoader::SizeSmall;
 
     if (left)
@@ -647,6 +655,7 @@ void ItemViewImageDelegate::prepareRatingPixmaps(bool composeOverBackground)
     // So we need the background at the time of painting,
     // and the background may be a gradient, and will be different for selected items.
     // This makes 5*2 (small) pixmaps.
+
     for (int sel=0; sel<2; ++sel)
     {
         QPixmap basePix;
@@ -688,7 +697,7 @@ void ItemViewImageDelegate::prepareRatingPixmaps(bool composeOverBackground)
             painter.setPen(pen);
 
             // move painter while drawing polygons
-            painter.translate( lround((d->ratingRect.width() - d->margin - rating*(d->starPolygonSize.width()+1))/2.0) + 2, 1 );
+            painter.translate( lround((d->ratingRect.width() - d->margin - rating*(d->starPolygonSize.width()+1))/2.0) + 2, 0);
 
             for (int s=0; s<rating; ++s)
             {
@@ -705,15 +714,6 @@ QPixmap ItemViewImageDelegate::ratingPixmap(int rating, bool selected) const
 
     if (rating < 1 || rating > 5)
     {
-/*
-        QPixmap pix;
-        if (selected)
-            pix = d->selPixmap.copy(d->ratingRect);
-        else
-            pix = d->regPixmap.copy(d->ratingRect);
-
-        return pix;
-*/
         return QPixmap();
     }
 

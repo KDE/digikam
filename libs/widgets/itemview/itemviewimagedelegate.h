@@ -54,17 +54,20 @@ public:
     int spacing()                 const;
     QRect rect()                  const;
 
+    /** Can be used to temporarily disable drawing of the rating.
+     *  Call with QModelIndex() afterwards.
+     */
+    void setRatingEdited(const QModelIndex& index);
+
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
-    virtual QSize gridSize() const;
+    virtual QSize gridSize()                                                             const;
 
     // reimplemented from DItemDelegate
     virtual void setThumbnailSize(const ThumbnailSize& thumbSize);
     virtual void setSpacing(int spacing);
     virtual void setDefaultViewOptions(const QStyleOptionViewItem& option);
-    virtual bool acceptsToolTip(const QPoint& pos, const QRect& visualRect,
-                                const QModelIndex& index, QRect* tooltipRect = 0) const;
-    virtual bool acceptsActivation(const QPoint& pos, const QRect& visualRect,
-                                   const QModelIndex& index, QRect* activationRect = 0) const;
+    virtual bool acceptsToolTip(const QPoint& pos, const QRect& visualRect, const QModelIndex& index, QRect* tooltipRect = 0)       const;
+    virtual bool acceptsActivation(const QPoint& pos, const QRect& visualRect, const QModelIndex& index, QRect* activationRect = 0) const;
 
     /** Returns the area where the pixmap is drawn,
      *  or null if not supported.
@@ -78,11 +81,6 @@ public:
      *  be contained in this area.
      */
     virtual QRect imageInformationRect() const;
-
-    /** Can be used to temporarily disable drawing of the rating.
-     *  Call with QModelIndex() afterwards.
-     */
-    void setRatingEdited(const QModelIndex& index);
 
     /** Returns the rectangle where the rating is drawn,
      *  or a null rectangle if not supported.
@@ -107,24 +105,24 @@ protected:
 
     /// Use the tool methods for painting in subclasses
     QRect drawThumbnail(QPainter* p, const QRect& thumbRect, const QPixmap& background, const QPixmap& thumbnail) const;
-    void drawRating(QPainter* p, const QModelIndex& index, const QRect& ratingRect, int rating, bool isSelected) const;
-    void drawName(QPainter* p,const QRect& nameRect, const QString& name) const;
-    void drawTitle(QPainter *p, const QRect& titleRect, const QString& title) const;
-    void drawComments(QPainter* p, const QRect& commentsRect, const QString& comments) const;
-    void drawCreationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const;
-    void drawModificationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const;
-    void drawImageSize(QPainter* p, const QRect& dimsRect, const QSize& dims) const;
-    void drawAspectRatio(QPainter* p, const QRect& dimsRect, const QSize& dims) const;
-    void drawFileSize(QPainter* p, const QRect& r, qlonglong bytes) const;
-    void drawTags(QPainter* p, const QRect& r, const QString& tagsString, bool isSelected) const;
-    void drawImageFormat(QPainter* p, const QRect& r, const QString& f) const;
-    void drawColorLabelRect(QPainter* p, const QStyleOptionViewItem& option, bool isSelected, int colorId) const;
-    void drawPickLabelIcon(QPainter* p, const QRect& r, int pickLabel) const;
-    void drawGroupIndicator(QPainter* p, const QRect& r, int numberOfGroupedImages, bool open) const;
-    void drawGeolocationIndicator(QPainter* p, const QRect& r) const;
-    void drawPanelSideIcon(QPainter* p, bool left, bool right) const;
-    void drawFocusRect(QPainter* p, const QStyleOptionViewItem& option, bool isSelected) const;
-    void drawMouseOverRect(QPainter* p, const QStyleOptionViewItem& option) const;
+    void drawRating(QPainter* p, const QModelIndex& index, const QRect& ratingRect, int rating, bool isSelected)  const;
+    void drawName(QPainter* p,const QRect& nameRect, const QString& name)                                         const;
+    void drawTitle(QPainter *p, const QRect& titleRect, const QString& title)                                     const;
+    void drawComments(QPainter* p, const QRect& commentsRect, const QString& comments)                            const;
+    void drawCreationDate(QPainter* p, const QRect& dateRect, const QDateTime& date)                              const;
+    void drawModificationDate(QPainter* p, const QRect& dateRect, const QDateTime& date)                          const;
+    void drawImageSize(QPainter* p, const QRect& dimsRect, const QSize& dims)                                     const;
+    void drawAspectRatio(QPainter* p, const QRect& dimsRect, const QSize& dims)                                   const;
+    void drawFileSize(QPainter* p, const QRect& r, qlonglong bytes)                                               const;
+    void drawTags(QPainter* p, const QRect& r, const QString& tagsString, bool isSelected)                        const;
+    void drawImageFormat(QPainter* p, const QRect& r, const QString& f)                                           const;
+    void drawColorLabelRect(QPainter* p, const QStyleOptionViewItem& option, bool isSelected, int colorId)        const;
+    void drawPickLabelIcon(QPainter* p, const QRect& r, int pickLabel)                                            const;
+    void drawGroupIndicator(QPainter* p, const QRect& r, int numberOfGroupedImages, bool open)                    const;
+    void drawGeolocationIndicator(QPainter* p, const QRect& r)                                                    const;
+    void drawPanelSideIcon(QPainter* p, bool left, bool right)                                                    const;
+    void drawFocusRect(QPainter* p, const QStyleOptionViewItem& option, bool isSelected)                          const;
+    void drawMouseOverRect(QPainter* p, const QStyleOptionViewItem& option)                                       const;
     void prepareFonts();
     void prepareMetrics(int maxWidth);
     void prepareBackground();
