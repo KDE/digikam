@@ -8,7 +8,7 @@
  *
  * Copyright (C)      2004 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2006-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Concept copied from kdelibs/kio/kio/netaccess.h/cpp
  *   This file is part of the KDE libraries
@@ -77,10 +77,12 @@ class SyncJob : public QObject
 
 public:
 
-    /* this will delete the urls. */
+    /** This will delete the urls.
+     */
     static SyncJobResult del(const KUrl::List& urls, bool useTrash);
 
-    /* Load the image or icon for the tag thumbnail */
+    /** Load the image or icon for the tag thumbnail.
+     */
     static QPixmap getTagThumbnail(TAlbum* const album);
     static QPixmap getTagThumbnail(const QString& name, int size);
 
@@ -89,11 +91,11 @@ private:
     SyncJob();
     ~SyncJob();
 
-    void enterWaitingLoop();
-    void quitWaitingLoop();
+    void enterWaitingLoop() const;
+    void quitWaitingLoop()  const;
 
-    bool delPriv(const KUrl::List& urls);
-    bool trashPriv(const KUrl::List& urls);
+    bool delPriv(const KUrl::List& urls)   const;
+    bool trashPriv(const KUrl::List& urls) const;
 
     QPixmap getTagThumbnailPriv(TAlbum* const album);
 

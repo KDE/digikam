@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2004      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2006-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Concept copied from kdelibs/kio/kio/netaccess.h/cpp
  *   This file is part of the KDE libraries
@@ -63,21 +63,18 @@ class SyncJob::Private
 public:
 
     Private() :
-        thumbnailSize(0),
-        thumbnail(0),
         waitingLoop(0),
+        thumbnail(0),
         album(0)
     {
         result.success = false;
     }
 
-    SyncJobResult result;
-
-    int           thumbnailSize;
-
-    QPixmap*      thumbnail;
     QEventLoop*   waitingLoop;
 
+    QPixmap*      thumbnail;
+
+    SyncJobResult result;
     Album*        album;
 };
 
@@ -92,6 +89,17 @@ SyncJob::~SyncJob()
     delete d->thumbnail;
     d->thumbnail = 0;
     delete d;
+}
+
+
+void SyncJob::enterWaitingLoop() const
+{
+    d->waitingLoop->exec(QEventLoop::ExcludeUserInputEvents);
+}
+
+void SyncJob::quitWaitingLoop() const
+{
+    d->waitingLoop->quit();
 }
 
 SyncJobResult SyncJob::del(const KUrl::List& urls, bool useTrash)
@@ -110,13 +118,7 @@ SyncJobResult SyncJob::del(const KUrl::List& urls, bool useTrash)
     return sj.d->result;
 }
 
-QPixmap SyncJob::getTagThumbnail(TAlbum* const album)
-{
-    SyncJob sj;
-    return sj.getTagThumbnailPriv(album);
-}
-
-bool SyncJob::delPriv(const KUrl::List& urls)
+bool SyncJob::delPriv(const KUrl::List& urls) const
 {
     KIO::Job* const job = KIO::del(urls);
 
@@ -127,7 +129,7 @@ bool SyncJob::delPriv(const KUrl::List& urls)
     return d->result;
 }
 
-bool SyncJob::trashPriv(const KUrl::List& urls)
+bool SyncJob::trashPriv(const KUrl::List& urls) const
 {
     KIO::Job* const job = KIO::trash(urls);
 
@@ -148,6 +150,14 @@ void SyncJob::slotResult(KJob* job)
     }
 
     quitWaitingLoop();
+}
+
+// ---------------------------------------------------------------
+
+QPixmap SyncJob::getTagThumbnail(TAlbum* const album)
+{
+    SyncJob sj;
+    return sj.getTagThumbnailPriv(album);
 }
 
 QPixmap SyncJob::getTagThumbnailPriv(TAlbum* const album)
@@ -196,16 +206,6 @@ void SyncJob::slotGotThumbnailFromIcon(Album* album, const QPixmap& pix)
         *d->thumbnail = pix;
         quitWaitingLoop();
     }
-}
-
-void SyncJob::enterWaitingLoop()
-{
-    d->waitingLoop->exec(QEventLoop::ExcludeUserInputEvents);
-}
-
-void SyncJob::quitWaitingLoop()
-{
-    d->waitingLoop->quit();
 }
 
 }  // namespace Digikam
