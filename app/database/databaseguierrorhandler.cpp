@@ -7,7 +7,7 @@
  * Description : gui database error handler
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
- * Copyright (C) 2010-2013 by Gilles Caulier<caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2014 by Gilles Caulier<caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -81,40 +81,42 @@ DatabaseConnectionChecker::~DatabaseConnectionChecker()
 void DatabaseConnectionChecker::run()
 {
     QString databaseID("ConnectionTest");
-    QSqlDatabase databaseHandler = QSqlDatabase::addDatabase(d->parameters.databaseType, databaseID);
-    databaseHandler.setHostName(d->parameters.hostName);
-    databaseHandler.setPort(d->parameters.port);
 
-    databaseHandler.setDatabaseName(d->parameters.databaseName);
-
-    databaseHandler.setUserName(d->parameters.userName);
-    databaseHandler.setPassword(d->parameters.password);
-
-    databaseHandler.setConnectOptions(d->parameters.connectOptions);
-
-    int iteration = 1;
-
-    while (!d->stop)
+    // NOTE: wrap this code into bracket to prevent QtQSL plugin warning. See bug #339074 for details.
     {
-        if (databaseHandler.open())
-        {
-            d->stop    = true;
-            d->success = true;
-            databaseHandler.close();
-            break;
-        }
-        else
-        {
-            emit failedAttempt();
-            d->success = false;
-            kError() << "Error while opening the database. Error details ["
-                     << databaseHandler.lastError() << "]";
-            QMutexLocker lock(&d->mutex);
+        QSqlDatabase databaseHandler = QSqlDatabase::addDatabase(d->parameters.databaseType, databaseID);
 
-            if (!d->stop)
+        databaseHandler.setHostName(d->parameters.hostName);
+        databaseHandler.setPort(d->parameters.port);
+        databaseHandler.setDatabaseName(d->parameters.databaseName);
+        databaseHandler.setUserName(d->parameters.userName);
+        databaseHandler.setPassword(d->parameters.password);
+        databaseHandler.setConnectOptions(d->parameters.connectOptions);
+
+        int iteration = 1;
+
+        while (!d->stop)
+        {
+            if (databaseHandler.open())
             {
-                int waitingTime = qMin(2000, iteration++*200);
-                d->condVar.wait(&d->mutex, waitingTime);
+                d->stop    = true;
+                d->success = true;
+                databaseHandler.close();
+                break;
+            }
+            else
+            {
+                emit failedAttempt();
+                d->success = false;
+                kError() << "Error while opening the database. Error details ["
+                         << databaseHandler.lastError() << "]";
+                QMutexLocker lock(&d->mutex);
+
+                if (!d->stop)
+                {
+                    int waitingTime = qMin(2000, iteration++*200);
+                    d->condVar.wait(&d->mutex, waitingTime);
+                }
             }
         }
     }
