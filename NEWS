@@ -37,4 +37,5 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 025 ==> 338509 - Tag-Shortcut not visible in Tag properties.
 026 ==> 275077 - Add Tags and Labels keyboard shortcuts in application configuration dialog.
 027 ==> 229680 - Add album thumbnail in album tooltip.
-028 ==> 
+028 ==> 206546 - Save or print mosaic from light table.
+029 ==> 
