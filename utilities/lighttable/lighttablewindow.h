@@ -65,7 +65,6 @@ public:
 
 Q_SIGNALS:
 
-    //void signalFileDeleted(const KUrl&);
     void signalWindowHasMoved();
 
 public Q_SLOTS:

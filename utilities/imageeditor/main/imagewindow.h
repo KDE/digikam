@@ -79,7 +79,6 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
-    void signalFileDeleted(const KUrl& url);
     void signalURLChanged(const KUrl& url);
     void signalSavingDialogProgress(float value);
 
