@@ -83,6 +83,7 @@
 #include "tagsmanager.h"
 #include "thumbsgenerator.h"
 #include "albumlabelstreeview.h"
+#include "tagsactionmngr.h"
 
 #ifdef USE_PRESENTATION_MODE
 #include "qmlshow.h"
@@ -2055,6 +2056,7 @@ void DigikamView::slideShow(const ImageInfoList& infoList)
 void DigikamView::slotSlideShowBuilderComplete(const SlideShowSettings& settings)
 {
     SlideShow* const slide = new SlideShow(settings);
+    TagsActionMngr::defaultManager()->registerActionsToWidget(slide);
 
     if (settings.startWithCurrent)
     {

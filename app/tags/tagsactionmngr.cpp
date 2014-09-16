@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QList>
+#include <QShortcut>
 
 // KDE includes
 
@@ -43,6 +44,7 @@
 #include "databaseaccess.h"
 #include "databaseconstants.h"
 #include "digikamapp.h"
+#include "dxmlguiwindow.h"
 #include "digikamview.h"
 #include "imagewindow.h"
 #include "lighttablewindow.h"
@@ -51,6 +53,7 @@
 #include "tagscache.h"
 #include "tagproperties.h"
 #include "ratingwidget.h"
+#include "slideshow.h"
 #include "syncjob.h"
 
 namespace Digikam
@@ -170,6 +173,25 @@ void TagsActionMngr::registerLabelsActions(KActionCollection* const ac)
     for (int i = NoPickLabel ; i <= AcceptedLabel ; ++i)
     {
         createPickLabelActionShortcut(ac, i);
+    }
+}
+
+void TagsActionMngr::registerActionsToWidget(QWidget* const wdg)
+{
+    DXmlGuiWindow* const win = dynamic_cast<DXmlGuiWindow*>(kapp->activeWindow());
+
+    if (win)
+    {
+        foreach(QAction* const ac, win->actionCollection()->actions())
+        {
+            if (ac->objectName().startsWith(d->ratingShortcutPrefix) ||
+                ac->objectName().startsWith(d->tagShortcutPrefix)    ||
+                ac->objectName().startsWith(d->pickShortcutPrefix)   ||
+                ac->objectName().startsWith(d->colorShortcutPrefix))
+            {
+                wdg->addAction(ac);
+            }
+        }
     }
 }
 
@@ -382,7 +404,7 @@ void TagsActionMngr::slotAssignFromShortcut()
     }
 
     int val = action->data().toInt();
-    //kDebug() << "Shortcut value: " << val;
+    kDebug() << "Shortcut value: " << val;
 
     QWidget* const w      = kapp->activeWindow();
     DigikamApp* const dkw = dynamic_cast<DigikamApp*>(w);
@@ -395,10 +417,6 @@ void TagsActionMngr::slotAssignFromShortcut()
         {
             dkw->view()->slotAssignRating(val);
         }
-        else if (action->objectName().startsWith(d->tagShortcutPrefix))
-        {
-            dkw->view()->toggleTag(val);
-        }
         else if (action->objectName().startsWith(d->pickShortcutPrefix))
         {
             dkw->view()->slotAssignPickLabel(val);
@@ -406,6 +424,10 @@ void TagsActionMngr::slotAssignFromShortcut()
         else if (action->objectName().startsWith(d->colorShortcutPrefix))
         {
             dkw->view()->slotAssignColorLabel(val);
+        }
+        else if (action->objectName().startsWith(d->tagShortcutPrefix))
+        {
+            dkw->view()->toggleTag(val);
         }
 
         return;
@@ -421,10 +443,6 @@ void TagsActionMngr::slotAssignFromShortcut()
         {
             imw->slotAssignRating(val);
         }
-        else if (action->objectName().startsWith(d->tagShortcutPrefix))
-        {
-            imw->toggleTag(val);
-        }
         else if (action->objectName().startsWith(d->pickShortcutPrefix))
         {
             imw->slotAssignPickLabel(val);
@@ -432,6 +450,10 @@ void TagsActionMngr::slotAssignFromShortcut()
         else if (action->objectName().startsWith(d->colorShortcutPrefix))
         {
             imw->slotAssignColorLabel(val);
+        }
+        else if (action->objectName().startsWith(d->tagShortcutPrefix))
+        {
+            imw->toggleTag(val);
         }
 
         return;
@@ -447,10 +469,6 @@ void TagsActionMngr::slotAssignFromShortcut()
         {
             ltw->slotAssignRating(val);
         }
-        else if (action->objectName().startsWith(d->tagShortcutPrefix))
-        {
-            ltw->toggleTag(val);
-        }
         else if (action->objectName().startsWith(d->pickShortcutPrefix))
         {
             ltw->slotAssignPickLabel(val);
@@ -459,6 +477,36 @@ void TagsActionMngr::slotAssignFromShortcut()
         {
             ltw->slotAssignColorLabel(val);
         }
+        else if (action->objectName().startsWith(d->tagShortcutPrefix))
+        {
+            ltw->toggleTag(val);
+        }
+
+        return;
+    }
+
+    SlideShow* const sld = dynamic_cast<SlideShow*>(w);
+
+    if (sld)
+    {
+        //kDebug() << "Handling by SlideShow";
+
+        if (action->objectName().startsWith(d->ratingShortcutPrefix))
+        {
+            sld->slotAssignRating(val);
+        }
+        else if (action->objectName().startsWith(d->pickShortcutPrefix))
+        {
+            sld->slotAssignPickLabel(val);
+        }
+        else if (action->objectName().startsWith(d->colorShortcutPrefix))
+        {
+            sld->slotAssignColorLabel(val);
+        }
+        /*else if (action->objectName().startsWith(d->tagShortcutPrefix))
+        {
+            ltw->toggleTag(val);
+        }*/
 
         return;
     }

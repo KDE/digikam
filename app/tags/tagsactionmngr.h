@@ -66,6 +66,8 @@ public:
      */
     void registerLabelsActions(KActionCollection* const ac);
 
+    void registerActionsToWidget(QWidget* const wdg);
+
     /** Return the list of whole action collections managed.
       */
     QList<KActionCollection*> actionCollections() const;

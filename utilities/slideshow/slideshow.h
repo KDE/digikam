@@ -60,6 +60,12 @@ Q_SIGNALS:
     void signalColorLabelChanged(const KUrl&, int);
     void signalPickLabelChanged(const KUrl&, int);
 
+public Q_SLOTS:
+
+    void slotAssignRating(int);
+    void slotAssignColorLabel(int);
+    void slotAssignPickLabel(int);
+
 protected:
 
     void paintEvent(QPaintEvent*);
@@ -74,9 +80,6 @@ private Q_SLOTS:
     void slotTimeOut();
     void slotMouseMoveTimeOut();
     void slotGotImagePreview(const LoadingDescription&, const DImg&);
-    void slotRatingChanged(int);
-    void slotColorLabelChanged(int);
-    void slotPickLabelChanged(int);
 
     void slotPause();
     void slotPlay();

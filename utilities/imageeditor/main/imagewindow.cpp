@@ -1398,7 +1398,8 @@ void ImageWindow::slideShow(SlideShowSettings& settings)
         }
     }
 
-    /*else
+/*
+    else
     {
         // We have started image editor from Camera GUI. we get picture comments from metadata.
 
@@ -1421,13 +1422,15 @@ void ImageWindow::slideShow(SlideShowSettings& settings)
             m_nameLabel->setProgressValue((int)((i++/cnt)*100.0));
             kapp->processEvents();
         }
-    }*/
+    }
+*/
 
     m_nameLabel->progressBarMode(StatusProgressBar::TextMode, QString());
 
     if (!m_cancelSlideShow)
     {
         SlideShow* const slide = new SlideShow(settings);
+        TagsActionMngr::defaultManager()->registerActionsToWidget(slide);
 
         if (settings.startWithCurrent)
         {

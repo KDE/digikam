@@ -1452,6 +1452,7 @@ void LightTableWindow::slideShow(SlideShowSettings& settings)
     if (!d->cancelSlideShow)
     {
         SlideShow* const slide = new SlideShow(settings);
+        TagsActionMngr::defaultManager()->registerActionsToWidget(slide);
 
         if (settings.startWithCurrent)
         {

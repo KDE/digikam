@@ -201,13 +201,13 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
     d->labelsBox->layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter | Qt::AlignLeft);
 
     connect(d->ratingWidget, SIGNAL(signalRatingChanged(int)),
-            this, SLOT(slotRatingChanged(int)));
+            this, SLOT(slotAssignRating(int)));
 
     connect(d->clWidget, SIGNAL(signalColorLabelChanged(int)),
-            this, SLOT(slotColorLabelChanged(int)));
+            this, SLOT(slotAssignColorLabel(int)));
 
     connect(d->plWidget, SIGNAL(signalPickLabelChanged(int)),
-            this, SLOT(slotPickLabelChanged(int)));
+            this, SLOT(slotAssignPickLabel(int)));
 
     // ---------------------------------------------------------------
 
@@ -405,7 +405,6 @@ void SlideShow::updatePixmap()
 {
     if (!d->currentImage.toLocalFile().isEmpty())
     {
-    
         if (!d->preview.isNull())
         {
             // Preview extraction is complete... Draw the image.
@@ -429,14 +428,14 @@ void SlideShow::updatePixmap()
                pixmap.
             */
 #ifdef USE_QT_SCALING
-            double xratio = double(d->preview.width()) / width();
-            double yratio = double(d->preview.height()) / height();
-            double ratio = qMax(qMin(xratio, yratio), 1.0);
+            double xratio  = double(d->preview.width()) / width();
+            double yratio  = double(d->preview.height()) / height();
+            double ratio   = qMax(qMin(xratio, yratio), 1.0);
 #else
-            double ratio = 1.0;
+            double ratio   = 1.0;
 #endif
             QSize fullSize = QSizeF(ratio*width(), ratio*height()).toSize();
-            d->pixmap = QPixmap(fullSize);
+            d->pixmap      = QPixmap(fullSize);
             d->pixmap.fill(Qt::black);
             QPainter p(&(d->pixmap));
 
@@ -446,7 +445,7 @@ void SlideShow::updatePixmap()
             p.setFont(fn);
 
             QPixmap pix(d->preview.smoothScale(d->pixmap.width(), d->pixmap.height(), Qt::KeepAspectRatio).convertToPixmap());
-            p.drawPixmap((d->pixmap.width() - pix.width()) / 2,
+            p.drawPixmap((d->pixmap.width()  - pix.width())  / 2,
                          (d->pixmap.height() - pix.height()) / 2, pix,
                          0, 0, pix.width(), pix.height());
 
@@ -685,10 +684,12 @@ void SlideShow::printInfoText(QPainter& p, int& offset, const QString& str)
         p.setPen(Qt::black);
 
         for (int x = 19; x <= 21; ++x)
+        {
             for (int y = offset + 1; y >= offset - 1; --y)
             {
                 p.drawText(x, p.window().height() - y, str);
             }
+        }
 
         p.setPen(Qt::white);
         p.drawText(20, p.window().height() - offset, str);
@@ -864,15 +865,15 @@ void SlideShow::makeCornerRectangles(const QRect& desktopRect, const QSize& size
                                      QRect* topLeftLarger, QRect* topRightLarger)
 {
     QRect sizeRect(QPoint(0, 0), size);
-    *topLeft     = sizeRect;
-    *topRight    = sizeRect;
+    *topLeft          = sizeRect;
+    *topRight         = sizeRect;
 
     topLeft->moveTo(desktopRect.x(), desktopRect.y());
     topRight->moveTo(desktopRect.x() + desktopRect.width() - sizeRect.width() - 1, topLeft->y());
 
-    const int marginX  = 25, marginY = 10;
-    *topLeftLarger     = topLeft->adjusted(0, 0, marginX, marginY);
-    *topRightLarger    = topRight->adjusted(-marginX, 0, 0, marginY);
+    const int marginX = 25, marginY = 10;
+    *topLeftLarger    = topLeft->adjusted(0, 0, marginX, marginY);
+    *topRightLarger   = topRight->adjusted(-marginX, 0, 0, marginY);
 }
 
 void SlideShow::mouseMoveEvent(QMouseEvent* e)
@@ -923,7 +924,7 @@ void SlideShow::slotMouseMoveTimeOut()
     makeCornerRectangles(QRect(d->deskY, d->deskY, d->deskWidth, d->deskHeight), d->toolBar->size(),
                          &topLeft, &topRight, &topLeftLarger, &topRightLarger);
 
-    if (topLeftLarger.contains(pos)    || topRightLarger.contains(pos))
+    if (topLeftLarger.contains(pos) || topRightLarger.contains(pos))
     {
         return;
     }
@@ -937,7 +938,7 @@ void SlideShow::inhibitScreenSaver()
     QDBusMessage message = QDBusMessage::createMethodCall("org.freedesktop.ScreenSaver", "/ScreenSaver",
                                                           "org.freedesktop.ScreenSaver", "Inhibit");
     message << QString("digiKam");
-    message << i18nc("Reason for inhibiting the screensaver activation, when the presentation mode is active", "Giving a presentation");
+    message << i18nc("Reason for inhibiting the screensaver activation, when the presentation mode is active", "Giving a slideshow");
 
     QDBusReply<uint> reply = QDBusConnection::sessionBus().call(message);
 
@@ -958,28 +959,39 @@ void SlideShow::allowScreenSaver()
     }
 }
 
-void SlideShow::slotRatingChanged(int rating)
+void SlideShow::slotAssignRating(int rating)
 {
     d->settings.pictInfoMap[d->currentImage].rating = rating;
+    d->ratingWidget->blockSignals(true);
+    d->ratingWidget->setRating(rating);
+    d->ratingWidget->blockSignals(false);
     emit signalRatingChanged(d->currentImage, rating);
 }
 
-void SlideShow::slotColorLabelChanged(int color)
+void SlideShow::slotAssignColorLabel(int color)
 {
     d->settings.pictInfoMap[d->currentImage].colorLabel = color;
+    d->clWidget->blockSignals(true);
+    d->clWidget->setColorLabel((ColorLabel)color);
+    d->clWidget->blockSignals(false);
     emit signalColorLabelChanged(d->currentImage, color);
 }
 
-void SlideShow::slotPickLabelChanged(int pick)
+void SlideShow::slotAssignPickLabel(int pick)
 {
     d->settings.pictInfoMap[d->currentImage].pickLabel = pick;
+    d->plWidget->blockSignals(true);
+    d->plWidget->setPickLabel((PickLabel)pick);
+    d->plWidget->blockSignals(false);
     emit signalPickLabelChanged(d->currentImage, pick);
 }
 
 bool SlideShow::eventFilter(QObject* obj, QEvent* ev)
 {
-    if (obj == d->ratingWidget || obj == d->clWidget || obj == d->plWidget ||
-        obj == d->clWidget->colorLabelWidget()       ||
+    if (obj == d->ratingWidget                 ||
+        obj == d->clWidget                     ||
+        obj == d->plWidget                     ||
+        obj == d->clWidget->colorLabelWidget() ||
         obj == d->plWidget->pickLabelWidget())
     {
         if (ev->type() == QEvent::Enter)
