@@ -503,10 +503,14 @@ void TagsActionMngr::slotAssignFromShortcut()
         {
             sld->slotAssignColorLabel(val);
         }
-        /*else if (action->objectName().startsWith(d->tagShortcutPrefix))
+
+/* TODO : support tags assignment while slideshow
+
+         else if (action->objectName().startsWith(d->tagShortcutPrefix))
         {
-            ltw->toggleTag(val);
-        }*/
+            sld->toggleTag(val);
+        }
+*/
 
         return;
     }
