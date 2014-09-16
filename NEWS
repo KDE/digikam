@@ -43,4 +43,5 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 030 ==> 324287 - SCAN : frequent image scans slow.
 031 ==> 313857 - Add keyboard shorcut to apply Labels while Slideshow.
 032 ==> 312043 - Show image Title in Slideshow.
-033 ==> 
+033 ==> 242119 - Interactive Slideshow (presentation mode).
+034 ==> 
