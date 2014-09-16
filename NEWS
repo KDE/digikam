@@ -39,4 +39,5 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 027 ==> 229680 - Add album thumbnail in album tooltip.
 028 ==> 206546 - Save or print mosaic from light table.
 029 ==> 339074 - CORE : warning from Qt when in database connection checker [patch].
-030 ==> 
+030 ==> 324287 - SCAN : frequent image scans slow.
+031 ==> 
