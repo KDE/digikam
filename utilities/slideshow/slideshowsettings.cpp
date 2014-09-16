@@ -6,7 +6,7 @@
  * Date        : 2007-02-13
  * Description : slide show settings container.
  *
- * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,6 +49,7 @@ const QString SlideShowSettings::configSlideShowPrintDateEntry("SlideShowPrintDa
 const QString SlideShowSettings::configSlideShowPrintExpoSensitivityEntry("SlideShowPrintExpoSensitivity");
 const QString SlideShowSettings::configSlideShowPrintMakeModelEntry("SlideShowPrintMakeModel");
 const QString SlideShowSettings::configSlideShowPrintNameEntry("SlideShowPrintName");
+const QString SlideShowSettings::configSlideShowPrintTagsEntry("SlideShowPrintTags");
 const QString SlideShowSettings::configSlideShowPrintLabelsEntry("SlideShowPrintLabels");
 
 SlideShowSettings::SlideShowSettings()
@@ -66,7 +67,7 @@ SlideShowSettings::SlideShowSettings()
     printApertureFocal   = false;
     printMakeModel       = false;
     printExpoSensitivity = false;
-    printColorLabel      = false;
+    printTags            = false;
     useFullSizePreviews  = true;
 }
 
@@ -78,18 +79,19 @@ void SlideShowSettings::readFromConfig()
 {
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(configGroupName);
-    startWithCurrent          = group.readEntry(configSlideShowStartCurrentEntry, false);
-    delay                     = group.readEntry(configSlideShowDelayEntry, 5);
-    loop                      = group.readEntry(configSlideShowLoopEntry, false);
-    printName                 = group.readEntry(configSlideShowPrintNameEntry, true);
-    printDate                 = group.readEntry(configSlideShowPrintDateEntry, false);
-    printApertureFocal        = group.readEntry(configSlideShowPrintApertureFocalEntry, false);
+    startWithCurrent          = group.readEntry(configSlideShowStartCurrentEntry,         false);
+    delay                     = group.readEntry(configSlideShowDelayEntry,                5);
+    loop                      = group.readEntry(configSlideShowLoopEntry,                 false);
+    printName                 = group.readEntry(configSlideShowPrintNameEntry,            true);
+    printDate                 = group.readEntry(configSlideShowPrintDateEntry,            false);
+    printApertureFocal        = group.readEntry(configSlideShowPrintApertureFocalEntry,   false);
     printExpoSensitivity      = group.readEntry(configSlideShowPrintExpoSensitivityEntry, false);
-    printMakeModel            = group.readEntry(configSlideShowPrintMakeModelEntry, false);
-    printComment              = group.readEntry(configSlideShowPrintCommentEntry, false);
-    printTitle                = group.readEntry(configSlideShowPrintTitleEntry, false);
-    printCapIfNoTitle         = group.readEntry(configSlideShowPrintCapIfNoTitleEntry, false);
-    printLabels               = group.readEntry(configSlideShowPrintLabelsEntry, false);
+    printMakeModel            = group.readEntry(configSlideShowPrintMakeModelEntry,       false);
+    printComment              = group.readEntry(configSlideShowPrintCommentEntry,         false);
+    printTitle                = group.readEntry(configSlideShowPrintTitleEntry,           false);
+    printCapIfNoTitle         = group.readEntry(configSlideShowPrintCapIfNoTitleEntry,    false);
+    printTags                 = group.readEntry(configSlideShowPrintTagsEntry,            false);
+    printLabels               = group.readEntry(configSlideShowPrintLabelsEntry,          false);
     exifRotate                = MetadataSettings::instance()->settings().exifRotate;
 }
 
@@ -108,6 +110,7 @@ void SlideShowSettings::writeToConfig()
     group.writeEntry(configSlideShowPrintCommentEntry,         printComment);
     group.writeEntry(configSlideShowPrintTitleEntry,           printTitle);
     group.writeEntry(configSlideShowPrintCapIfNoTitleEntry,    printCapIfNoTitle);
+    group.writeEntry(configSlideShowPrintTagsEntry,            printTags);
     group.writeEntry(configSlideShowPrintLabelsEntry,          printLabels);
     group.sync();
 }

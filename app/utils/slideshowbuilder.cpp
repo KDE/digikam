@@ -36,6 +36,7 @@
 // Local includes
 
 #include "album.h"
+#include "albummanager.h"
 #include "imageinfoalbumsjob.h"
 #include "applicationsettings.h"
 
@@ -56,7 +57,7 @@ public:
     ImageInfoList infoList;
     Album*        album;
 };
-    
+
 SlideShowBuilder::SlideShowBuilder(const ImageInfoList& infoList)
     : ProgressItem(0, "SlideShowBuilder", QString(), QString(), true, true),
       d(new Private)
@@ -129,15 +130,18 @@ void SlideShowBuilder::slotParseImageInfoList(const ImageInfoList& list)
     for (ImageInfoList::const_iterator it = list.constBegin();
          !d->cancel && (it != list.constEnd()) ; ++it)
     {
-        ImageInfo info      = *it;
+        ImageInfo info       = *it;
         settings.fileList.append(info.fileUrl());
         SlidePictureInfo pictInfo;
-        pictInfo.comment    = info.comment();
-        pictInfo.title      = info.title();
-        pictInfo.rating     = info.rating();
-        pictInfo.colorLabel = info.colorLabel();
-        pictInfo.pickLabel  = info.pickLabel();
-        pictInfo.photoInfo  = info.photoInfoContainer();
+        pictInfo.comment     = info.comment();
+        pictInfo.title       = info.title();
+        pictInfo.rating      = info.rating();
+        pictInfo.colorLabel  = info.colorLabel();
+        pictInfo.pickLabel   = info.pickLabel();
+        pictInfo.photoInfo   = info.photoInfoContainer();
+        pictInfo.tags        = AlbumManager::instance()->tagNames(info.tagIds());
+        pictInfo.tags.sort();
+
         settings.pictInfoMap.insert(info.fileUrl(), pictInfo);
 
         advance(i++);

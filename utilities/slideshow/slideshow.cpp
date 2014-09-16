@@ -453,6 +453,7 @@ void SlideShow::updatePixmap()
             PhotoInfoContainer photoInfo = d->settings.pictInfoMap[d->currentImage].photoInfo;
             QString            comment   = d->settings.pictInfoMap[d->currentImage].comment;
             QString            title     = d->settings.pictInfoMap[d->currentImage].title;
+            QStringList        tags      = d->settings.pictInfoMap[d->currentImage].tags;
             int offset                   = d->settings.printLabels ? 30 : 0;
 
             // Display Labels.
@@ -473,6 +474,20 @@ void SlideShow::updatePixmap()
 
             // convert offset to pixmap units
             offset = int(ratio*offset);
+
+            // Display tag names.
+
+            if (d->settings.printTags)
+            {
+                str.clear();
+
+                if (!tags.isEmpty())
+                {
+                    tags.sort();
+                    str += tags.join(", ");;
+                    printInfoText(p, offset, str);
+                }
+            }
 
             // Display Titles.
 

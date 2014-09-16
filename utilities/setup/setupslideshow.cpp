@@ -6,7 +6,7 @@
  * Date        : 2005-05-21
  * Description : setup tab for slideshow options.
  *
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,6 +61,7 @@ public:
         showLabels(0),
         showComment(0),
         showTitle(0),
+        showTags(0),
         showCapIfNoTitle(0),
         delayInput(0)
     {}
@@ -75,6 +76,7 @@ public:
     QCheckBox*    showLabels;
     QCheckBox*    showComment;
     QCheckBox*    showTitle;
+    QCheckBox*    showTags;
     QCheckBox*    showCapIfNoTitle;
 
     KIntNumInput* delayInput;
@@ -128,6 +130,9 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
     d->showCapIfNoTitle = new QCheckBox(i18n("Show image caption if it hasn't title"), panel);
     d->showCapIfNoTitle->setWhatsThis(i18n("Show the image caption at the bottom of the screen if no titles existed."));
 
+    d->showTags = new QCheckBox(i18n("Show image tags"), panel);
+    d->showTags->setWhatsThis(i18n("Show the digiKam image tag names at the bottom of the screen."));
+
     d->showLabels = new QCheckBox(i18n("Show image labels"), panel);
     d->showLabels->setWhatsThis(i18n("Show the digiKam image color label, pick label, and rating at the bottom of the screen."));
 
@@ -144,6 +149,7 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
         d->showTitle->hide();
         d->showCapIfNoTitle->hide();
         d->showLabels->hide();
+        d->showTags->hide();
     }
 
     layout->addWidget(d->delayInput);
@@ -157,6 +163,7 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
     layout->addWidget(d->showComment);
     layout->addWidget(d->showTitle);
     layout->addWidget(d->showCapIfNoTitle);
+    layout->addWidget(d->showTags);
     layout->addWidget(d->showLabels);
     layout->addStretch();
     layout->setMargin(KDialog::spacingHint());
@@ -195,6 +202,7 @@ void SetupSlideShow::applySettings()
     settings.printComment         = d->showComment->isChecked();
     settings.printTitle           = d->showTitle->isChecked();
     settings.printCapIfNoTitle    = d->showCapIfNoTitle->isChecked();
+    settings.printTags            = d->showTags->isChecked();
     settings.printLabels          = d->showLabels->isChecked();
     settings.writeToConfig();
 }
@@ -214,6 +222,7 @@ void SetupSlideShow::readSettings()
     d->showComment->setChecked(settings.printComment);
     d->showTitle->setChecked(settings.printTitle);
     d->showCapIfNoTitle->setChecked(settings.printCapIfNoTitle);
+    d->showTags->setChecked(settings.printTags);
     d->showLabels->setChecked(settings.printLabels);
 }
 
