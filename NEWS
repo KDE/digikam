@@ -42,4 +42,5 @@ BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 029 ==> 339074 - CORE : warning from Qt when in database connection checker [patch].
 030 ==> 324287 - SCAN : frequent image scans slow.
 031 ==> 313857 - Add keyboard shorcut to apply Labels while Slideshow.
-032 ==> 
+032 ==> 312043 - Show image Title in Slideshow.
+033 ==> 
