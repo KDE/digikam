@@ -1468,6 +1468,9 @@ void LightTableWindow::slideShow(SlideShowSettings& settings)
         connect(slide, SIGNAL(signalPickLabelChanged(KUrl,int)),
                 d->thumbView, SLOT(slotPickLabelChanged(KUrl,int)));
 
+        connect(slide, SIGNAL(signalToggleTag(KUrl,int)),
+                d->thumbView, SLOT(slotToggleTag(KUrl,int)));
+
         slide->show();
     }
 }

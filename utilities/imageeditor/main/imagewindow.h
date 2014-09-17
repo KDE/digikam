@@ -124,6 +124,7 @@ private:
     void assignPickLabel(const ImageInfo& info, int pickId);
     void assignColorLabel(const ImageInfo& info, int colorId);
     void assignRating(const ImageInfo& info, int rating);
+    void toggleTag(const ImageInfo& info, int tagID);
 
     ThumbBarDock* thumbBar()     const;
     Sidebar*      rightSideBar() const;
@@ -167,6 +168,7 @@ private Q_SLOTS:
     void slotRatingChanged(const KUrl&, int);
     void slotColorLabelChanged(const KUrl&, int);
     void slotPickLabelChanged(const KUrl&, int);
+    void slotToggleTag(const KUrl&, int);
 
     void slotFileMetadataChanged(const KUrl&);
     //void slotCollectionImageChange(const CollectionImageChangeset&);

@@ -778,8 +778,7 @@ void ImageWindow::slotChanged()
     }
 
 
-    DImg* const img = m_canvas->interface()->getImg();
-
+    DImg* const img           = m_canvas->interface()->getImg();
     DImageHistory history     = m_canvas->interface()->getImageHistory();
     DImageHistory redoHistory = m_canvas->interface()->getImageHistoryOfFullRedo();
 
@@ -788,27 +787,38 @@ void ImageWindow::slotChanged()
     // Filters for redo will be greyed out
     d->rightSideBar->getFiltersHistoryTab()->setEnabledHistorySteps(history.actionCount());
 
-    /*if (!d->currentImageInfo.isNull())
-        {
-        }
-        else
-        {
-            d->rightSideBar->itemChanged(d->currentUrl(), m_canvas->getSelectedArea(), img);
-        }
-    }*/
+/*
+    if (!d->currentImageInfo.isNull())
+    {
+    }
+    else
+    {
+        d->rightSideBar->itemChanged(d->currentUrl(), m_canvas->getSelectedArea(), img);
+    }
+*/
+}
+
+void ImageWindow::slotToggleTag(const KUrl& url, int tagID)
+{
+    toggleTag(ImageInfo(url), tagID);
 }
 
 void ImageWindow::toggleTag(int tagID)
 {
-    if (!d->currentImageInfo.isNull())
+    toggleTag(d->currentImageInfo, tagID);
+}
+
+void ImageWindow::toggleTag(const ImageInfo& info, int tagID)
+{
+    if (!info.isNull())
     {
-        if (d->currentImageInfo.tagIds().contains(tagID))
+        if (info.tagIds().contains(tagID))
         {
-            slotRemoveTag(tagID);
+            FileActionMngr::instance()->removeTag(info, tagID);
         }
         else
         {
-            slotAssignTag(tagID);
+            FileActionMngr::instance()->assignTag(info, tagID);
         }
     }
 }
@@ -1425,6 +1435,9 @@ void ImageWindow::slideShow(SlideShowSettings& settings)
 
         connect(slide, SIGNAL(signalPickLabelChanged(KUrl,int)),
                 this, SLOT(slotPickLabelChanged(KUrl,int)));
+
+        connect(slide, SIGNAL(signalToggleTag(KUrl,int)),
+                this, SLOT(slotToggleTag(KUrl,int)));
 
         slide->show();
     }

@@ -319,6 +319,16 @@ void LightTableThumbBar::showContextMenuOnInfo(QContextMenuEvent* e, const Image
     }
 }
 
+void LightTableThumbBar::slotColorLabelChanged(const KUrl& url, int color)
+{
+    assignColorLabel(ImageInfo(url), color);
+}
+
+void LightTableThumbBar::slotPickLabelChanged(const KUrl& url, int pick)
+{
+    assignPickLabel(ImageInfo(url), pick);
+}
+
 void LightTableThumbBar::slotAssignPickLabel(int pickId)
 {
     assignPickLabel(currentInfo(), pickId);
@@ -355,10 +365,18 @@ void LightTableThumbBar::assignColorLabel(const ImageInfo& info, int colorId)
     FileActionMngr::instance()->assignColorLabel(info, colorId);
 }
 
+void LightTableThumbBar::slotToggleTag(const KUrl& url, int tagID)
+{
+    toggleTag(ImageInfo(url), tagID);
+}
+
 void LightTableThumbBar::toggleTag(int tagID)
 {
-    ImageInfo info = currentInfo();
+    toggleTag(currentInfo(), tagID);
+}
 
+void LightTableThumbBar::toggleTag(const ImageInfo& info, int tagID)
+{
     if (!info.isNull())
     {
         if (!info.tagIds().contains(tagID))

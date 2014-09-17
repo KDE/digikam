@@ -74,6 +74,9 @@ public Q_SLOTS:
     void slotAssignColorLabel(int);
     void slotAssignRating(int);
     void slotRatingChanged(const KUrl&, int);
+    void slotColorLabelChanged(const KUrl&, int);
+    void slotPickLabelChanged(const KUrl&, int);
+    void slotToggleTag(const KUrl&, int);
     void slotDockLocationChanged(Qt::DockWidgetArea area);
 
 private:
@@ -83,6 +86,7 @@ private:
     void assignPickLabel(const ImageInfo& info, int pickId);
     void assignColorLabel(const ImageInfo& info, int colorId);
     void assignRating(const ImageInfo& info, int rating);
+    void toggleTag(const ImageInfo& info, int tagID);
 
 private:
 

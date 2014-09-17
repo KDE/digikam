@@ -519,7 +519,7 @@ void TagsActionMngr::slotAssignFromShortcut()
 
 // Special case with Slideshow which do not depand of database.
 
-void TagsActionMngr::slotImageTagChanged(const ImageTagChangeset& changeset)
+void TagsActionMngr::slotImageTagChanged(const ImageTagChangeset&)
 {
     QWidget* const w     = kapp->activeWindow();
     SlideShow* const sld = dynamic_cast<SlideShow*>(w);
