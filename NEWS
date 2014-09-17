@@ -9,7 +9,7 @@ General   : New keyboard shortcut to switch on/off color managed view for thumbn
 AlbumGUI  : Album preview can be displayed in tooltip.
 SlideShow : Labels keyboard shortcuts can be used while slideshow.
 
-BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 
 001 ==> 147175 - CANVAS : fit only large images to window.
 002 ==> 282900 - Control click on thumb to deselect resets focus to first photo.
