@@ -1456,7 +1456,7 @@ void LightTableWindow::slideShow(SlideShowSettings& settings)
 
         if (settings.startWithCurrent)
         {
-            slide->setCurrent(d->thumbView->currentInfo().fileUrl());
+            slide->setCurrentUrl(d->thumbView->currentInfo().fileUrl());
         }
 
         connect(slide, SIGNAL(signalRatingChanged(KUrl,int)),

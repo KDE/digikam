@@ -55,6 +55,8 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
+#include <khbox.h>
+#include <ksqueezedtextlabel.h>
 
 // Local includes
 
@@ -88,6 +90,7 @@ public:
           mouseMoveTimer(0),
           timer(0),
           labelsBox(0),
+          tagsWidget(0),
           previewThread(0),
           previewPreloadThread(0),
           toolBar(0),
@@ -119,6 +122,8 @@ public:
     KUrl                currentImage;
 
     KHBox*              labelsBox;
+
+    KSqueezedTextLabel* tagsWidget;
 
     PreviewLoadThread*  previewThread;
     PreviewLoadThread*  previewPreloadThread;
@@ -211,6 +216,16 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
     // ---------------------------------------------------------------
 
+    d->tagsWidget = new KSqueezedTextLabel(this);
+    d->tagsWidget->setVisible(false);
+    d->tagsWidget->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    d->tagsWidget->setWordWrap(false);
+    d->tagsWidget->setTextElideMode(Qt::ElideRight);
+    d->tagsWidget->setFixedWidth(width()/3);
+    d->tagsWidget->setTextFormat(Qt::RichText);
+
+    // ---------------------------------------------------------------
+
     d->previewThread        = new PreviewLoadThread();
     d->previewPreloadThread = new PreviewLoadThread();
     d->timer                = new QTimer(this);
@@ -218,6 +233,7 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
     d->previewThread->setDisplayingWidget(this);
     d->previewPreloadThread->setDisplayingWidget(this);
+
     connect(d->previewThread, SIGNAL(signalImageLoaded(LoadingDescription,DImg)),
             this, SLOT(slotGotImagePreview(LoadingDescription,DImg)));
 
@@ -252,7 +268,7 @@ SlideShow::~SlideShow()
     delete d;
 }
 
-void SlideShow::setCurrent(const KUrl& url)
+void SlideShow::setCurrentUrl(const KUrl& url)
 {
     int index = d->settings.fileList.indexOf(url);
 
@@ -261,6 +277,11 @@ void SlideShow::setCurrent(const KUrl& url)
         d->currentImage = url;
         d->fileIndex    = index - 1;
     }
+}
+
+KUrl SlideShow::currentUrl() const
+{
+    return d->currentImage;
 }
 
 void SlideShow::slotTimeOut()
@@ -454,7 +475,21 @@ void SlideShow::updatePixmap()
             QString            comment   = d->settings.pictInfoMap[d->currentImage].comment;
             QString            title     = d->settings.pictInfoMap[d->currentImage].title;
             QStringList        tags      = d->settings.pictInfoMap[d->currentImage].tags;
-            int offset                   = d->settings.printLabels ? 30 : 0;
+            int offset                   = d->settings.printTags ? 30 : 0;
+
+            // Display tag names.
+
+            d->tagsWidget->setVisible(d->settings.printTags);
+
+            if (d->settings.printTags)
+            {
+                d->tagsWidget->move(10, height() - offset - d->tagsWidget->minimumHeight());
+                printTags(tags);
+                offset += d->tagsWidget->minimumHeight();
+            }
+
+            // Convert offset to pixmap units
+            offset = int(ratio*offset);
 
             // Display Labels.
 
@@ -462,6 +497,7 @@ void SlideShow::updatePixmap()
             int color  = d->settings.pictInfoMap[d->currentImage].colorLabel;
             int pick   = d->settings.pictInfoMap[d->currentImage].pickLabel;
             d->labelsBox->setVisible(d->settings.printLabels);
+            offset += d->settings.printLabels ? 30 : 0;
 
             if (d->settings.printLabels)
             {
@@ -474,20 +510,6 @@ void SlideShow::updatePixmap()
 
             // convert offset to pixmap units
             offset = int(ratio*offset);
-
-            // Display tag names.
-
-            if (d->settings.printTags)
-            {
-                str.clear();
-
-                if (!tags.isEmpty())
-                {
-                    tags.sort();
-                    str += tags.join(", ");;
-                    printInfoText(p, offset, str);
-                }
-            }
 
             // Display Titles.
 
@@ -698,7 +720,7 @@ void SlideShow::printInfoText(QPainter& p, int& offset, const QString& str)
         offset += QFontMetrics(p.font()).lineSpacing();
         p.setPen(Qt::black);
 
-        for (int x = 19; x <= 21; ++x)
+        for (int x = 9; x <= 11; ++x)
         {
             for (int y = offset + 1; y >= offset - 1; --y)
             {
@@ -707,7 +729,7 @@ void SlideShow::printInfoText(QPainter& p, int& offset, const QString& str)
         }
 
         p.setPen(Qt::white);
-        p.drawText(20, p.window().height() - offset, str);
+        p.drawText(10, p.window().height() - offset, str);
     }
 }
 
@@ -948,6 +970,7 @@ void SlideShow::slotMouseMoveTimeOut()
 }
 
 // from Okular's presentation widget
+// TODO: Add OSX and Windows support
 void SlideShow::inhibitScreenSaver()
 {
     QDBusMessage message = QDBusMessage::createMethodCall("org.freedesktop.ScreenSaver", "/ScreenSaver",
@@ -999,6 +1022,28 @@ void SlideShow::slotAssignPickLabel(int pick)
     d->plWidget->setPickLabel((PickLabel)pick);
     d->plWidget->blockSignals(false);
     emit signalPickLabelChanged(d->currentImage, pick);
+}
+
+void SlideShow::toggleTag(int tag)
+{
+    emit signalToggleTag(d->currentImage, tag);
+}
+
+
+void SlideShow::updateTags(const KUrl& url, const QStringList& tags)
+{
+    d->settings.pictInfoMap[url].tags = tags;
+
+    if (d->currentImage == url)
+        printTags(d->settings.pictInfoMap[url].tags);
+}
+
+void SlideShow::printTags(QStringList& tags)
+{
+    tags.sort();
+    d->tagsWidget->setText(QString("<qt><font color=%1>%2</font></qt>")
+                            .arg(kapp->palette().color(QPalette::Link).name())
+                            .arg(tags.join(", ")));
 }
 
 bool SlideShow::eventFilter(QObject* obj, QEvent* ev)

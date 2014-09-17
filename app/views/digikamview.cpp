@@ -1987,8 +1987,8 @@ void DigikamView::slotLeftSidebarChangedTab(QWidget* w)
 void DigikamView::toggleTag(int tagID)
 {
     ImageInfoList tagToRemove, tagToAssign;
-
     const ImageInfoList selectedList = selectedInfoList();
+
     foreach(ImageInfo info, selectedList)
     {
         if (info.tagIds().contains(tagID))
@@ -1997,8 +1997,8 @@ void DigikamView::toggleTag(int tagID)
             tagToAssign.append(info);
     }
 
-    FileActionMngr::instance()->assignTags(tagToAssign, QList<int>() << tagID);
-    FileActionMngr::instance()->removeTags(tagToRemove, QList<int>() << tagID);
+    FileActionMngr::instance()->assignTag(tagToAssign, tagID);
+    FileActionMngr::instance()->removeTag(tagToRemove, tagID);
 }
 
 void DigikamView::slotAssignPickLabel(int pickId)
@@ -2060,7 +2060,7 @@ void DigikamView::slotSlideShowBuilderComplete(const SlideShowSettings& settings
 
     if (settings.startWithCurrent)
     {
-        slide->setCurrent(currentUrl());
+        slide->setCurrentUrl(currentUrl());
     }
 
     connect(slide, SIGNAL(signalRatingChanged(KUrl,int)),
@@ -2071,6 +2071,9 @@ void DigikamView::slotSlideShowBuilderComplete(const SlideShowSettings& settings
 
     connect(slide, SIGNAL(signalPickLabelChanged(KUrl,int)),
             this, SLOT(slotPickLabelChanged(KUrl,int)));
+
+    connect(slide, SIGNAL(signalToggleTag(KUrl,int)),
+            this, SLOT(slotToggleTag(KUrl,int)));
 
     slide->show();
 }
@@ -2157,11 +2160,7 @@ void DigikamView::slotRatingChanged(const KUrl& url, int rating)
 
     if (!info.isNull())
     {
-        MetadataHub hub;
-        hub.load(info);
-        hub.setRating(rating);
-        hub.write(info, MetadataHub::PartialWrite);
-        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
+        FileActionMngr::instance()->assignRating(info, rating);
     }
 }
 
@@ -2171,11 +2170,7 @@ void DigikamView::slotColorLabelChanged(const KUrl& url, int color)
 
     if (!info.isNull())
     {
-        MetadataHub hub;
-        hub.load(info);
-        hub.setColorLabel(color);
-        hub.write(info, MetadataHub::PartialWrite);
-        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
+        FileActionMngr::instance()->assignColorLabel(info, color);
     }
 }
 
@@ -2185,11 +2180,20 @@ void DigikamView::slotPickLabelChanged(const KUrl& url, int pick)
 
     if (!info.isNull())
     {
-        MetadataHub hub;
-        hub.load(info);
-        hub.setPickLabel(pick);
-        hub.write(info, MetadataHub::PartialWrite);
-        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
+        FileActionMngr::instance()->assignPickLabel(info, pick);
+    }
+}
+
+void DigikamView::slotToggleTag(const KUrl& url, int tagID)
+{
+    ImageInfo info(url);
+
+    if (!info.isNull())
+    {
+        if (info.tagIds().contains(tagID))
+            FileActionMngr::instance()->removeTag(info, tagID);
+        else
+            FileActionMngr::instance()->assignTag(info, tagID);
     }
 }
 

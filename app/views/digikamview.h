@@ -274,10 +274,11 @@ private Q_SLOTS:
     void slotRatingChanged(const KUrl&, int);
     void slotColorLabelChanged(const KUrl&, int);
     void slotPickLabelChanged(const KUrl&, int);
+    void slotToggleTag(const KUrl&, int);
 
     void slotPopupFiltersView();
     void slotSetupMetadataFilters(int);
-    
+
     void slotAlbumRefreshComplete();
 
 private:

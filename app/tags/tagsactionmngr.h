@@ -42,6 +42,7 @@ namespace Digikam
 {
 
 class Album;
+class ImageTagChangeset;
 
 class TagsActionMngr : public QObject
 {
@@ -101,6 +102,8 @@ private Q_SLOTS:
       * Called by KDE config shortcuts dialog, when user change action properties.
       */
     void slotTagActionChanged();
+
+    void slotImageTagChanged(const ImageTagChangeset& changeset);
 
 private:
 

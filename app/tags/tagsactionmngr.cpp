@@ -43,6 +43,8 @@
 #include "albummanager.h"
 #include "databaseaccess.h"
 #include "databaseconstants.h"
+#include "databasewatch.h"
+#include "databaseinfocontainers.h"
 #include "digikamapp.h"
 #include "dxmlguiwindow.h"
 #include "digikamview.h"
@@ -99,6 +101,9 @@ TagsActionMngr::TagsActionMngr(QWidget* const parent)
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumDeleted(Album*)),
             this, SLOT(slotAlbumDeleted(Album*)));
+
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(ImageTagChangeset)),
+            this, SLOT(slotImageTagChanged(ImageTagChangeset)));
 }
 
 TagsActionMngr::~TagsActionMngr()
@@ -503,16 +508,27 @@ void TagsActionMngr::slotAssignFromShortcut()
         {
             sld->slotAssignColorLabel(val);
         }
-
-/* TODO : support tags assignment while slideshow
-
-         else if (action->objectName().startsWith(d->tagShortcutPrefix))
+        else if (action->objectName().startsWith(d->tagShortcutPrefix))
         {
             sld->toggleTag(val);
         }
-*/
 
         return;
+    }
+}
+
+// Special case with Slideshow which do not depand of database.
+
+void TagsActionMngr::slotImageTagChanged(const ImageTagChangeset& changeset)
+{
+    QWidget* const w     = kapp->activeWindow();
+    SlideShow* const sld = dynamic_cast<SlideShow*>(w);
+
+    if (sld)
+    {
+        KUrl url = sld->currentUrl();
+        ImageInfo info(url);
+        sld->updateTags(url, AlbumManager::instance()->tagNames(info.tagIds()));
     }
 }
 

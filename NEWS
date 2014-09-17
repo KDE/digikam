@@ -7,7 +7,7 @@ General   : Naviguate between pictures using PageUp/PageDown is now possible whi
 General   : New keyboard shortcuts to improve usability while photo review (as to switch focus on text edit widget, or to toogle tags view).
 General   : New keyboard shortcut to switch on/off color managed view for thumbnails and preview.
 AlbumGUI  : Album preview can be displayed in tooltip.
-SlideShow : Labels keyboard shortcuts can be used while slideshow.
+SlideShow : Labels and Tags keyboard shortcuts can be used while slideshow.
 
 BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 
@@ -45,4 +45,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 032 ==> 312043 - Show image Title in Slideshow.
 033 ==> 242119 - Interactive Slideshow (presentation mode).
 034 ==> 339051 - Allow the usage of arrows to move in the photo sequence when in slideshow [patch].
-035 ==> 
+035 ==> 163941 - Show and assign Tags while Slideshow.
+036 ==> 

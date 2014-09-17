@@ -346,6 +346,7 @@ void LightTableThumbBar::assignPickLabel(const ImageInfo& info, int pickId)
 
 void LightTableThumbBar::assignRating(const ImageInfo& info, int rating)
 {
+    rating = qMin(RatingMax, qMax(RatingMin, rating));
     FileActionMngr::instance()->assignRating(info, rating);
 }
 

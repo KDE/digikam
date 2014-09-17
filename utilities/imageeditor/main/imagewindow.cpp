@@ -817,11 +817,7 @@ void ImageWindow::slotAssignTag(int tagID)
 {
     if (!d->currentImageInfo.isNull())
     {
-        MetadataHub hub;
-        hub.load(d->currentImageInfo);
-        hub.setTag(tagID, true);
-        hub.write(d->currentImageInfo, MetadataHub::PartialWrite);
-        hub.write(d->currentImageInfo.filePath(), MetadataHub::FullWriteIfChanged);
+        FileActionMngr::instance()->assignTag(d->currentImageInfo, tagID);
     }
 }
 
@@ -829,11 +825,7 @@ void ImageWindow::slotRemoveTag(int tagID)
 {
     if (!d->currentImageInfo.isNull())
     {
-        MetadataHub hub;
-        hub.load(d->currentImageInfo);
-        hub.setTag(tagID, false);
-        hub.write(d->currentImageInfo, MetadataHub::PartialWrite);
-        hub.write(d->currentImageInfo.filePath(), MetadataHub::FullWriteIfChanged);
+        FileActionMngr::instance()->removeTag(d->currentImageInfo, tagID);
     }
 }
 
@@ -851,11 +843,7 @@ void ImageWindow::assignPickLabel(const ImageInfo& info, int pickId)
 {
     if (!info.isNull())
     {
-        MetadataHub hub;
-        hub.load(info);
-        hub.setPickLabel(pickId);
-        hub.write(info, MetadataHub::PartialWrite);
-        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
+        FileActionMngr::instance()->assignPickLabel(info, pickId);
     }
 }
 
@@ -863,11 +851,7 @@ void ImageWindow::assignColorLabel(const ImageInfo& info, int colorId)
 {
     if (!info.isNull())
     {
-        MetadataHub hub;
-        hub.load(info);
-        hub.setColorLabel(colorId);
-        hub.write(info, MetadataHub::PartialWrite);
-        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
+        FileActionMngr::instance()->assignColorLabel(info, colorId);
     }
 }
 
@@ -882,11 +866,7 @@ void ImageWindow::assignRating(const ImageInfo& info, int rating)
 
     if (!info.isNull())
     {
-        MetadataHub hub;
-        hub.load(info);
-        hub.setRating(rating);
-        hub.write(info, MetadataHub::PartialWrite);
-        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
+        FileActionMngr::instance()->assignRating(info, rating);
     }
 }
 
@@ -1434,7 +1414,7 @@ void ImageWindow::slideShow(SlideShowSettings& settings)
 
         if (settings.startWithCurrent)
         {
-            slide->setCurrent(d->currentUrl());
+            slide->setCurrentUrl(d->currentUrl());
         }
 
         connect(slide, SIGNAL(signalRatingChanged(KUrl,int)),
