@@ -46,4 +46,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 033 ==> 242119 - Interactive Slideshow (presentation mode).
 034 ==> 339051 - Allow the usage of arrows to move in the photo sequence when in slideshow [patch].
 035 ==> 163941 - Show and assign Tags while Slideshow.
-036 ==> 
+036 ==> 339140 - Labels Search: Inconsistent font used for headings, does not follow theme.
+037 ==> 

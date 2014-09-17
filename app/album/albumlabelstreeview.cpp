@@ -73,10 +73,8 @@ public:
     {
     }
 
-    QFont                      rootFont;
     QFont                      regularFont;
     QSize                      iconSize;
-    QSize                      rootSizeHint;
 
     QTreeWidgetItem*           ratings;
     QTreeWidgetItem*           picks;
@@ -102,11 +100,9 @@ const QString AlbumLabelsTreeView::Private::configExpansionEntry("Expansion");
 AlbumLabelsTreeView::AlbumLabelsTreeView(QWidget* const parent, bool setCheckable) :
     QTreeWidget(parent), StateSavingObject(this), d(new Private)
 {
-    d->rootFont            = QFont("Times",18,-1,false);
     d->regularFont         = ApplicationSettings::instance()->getTreeViewFont();
     d->iconSizeFromSetting = ApplicationSettings::instance()->getTreeViewIconSize();
-    d->iconSize            = QSize(d->iconSizeFromSetting,d->iconSizeFromSetting);
-    d->rootSizeHint        = QSize(1,40);
+    d->iconSize            = QSize(d->iconSizeFromSetting, d->iconSizeFromSetting);
     d->isCheckableTreeView = setCheckable;
 
     setHeaderLabel("Labels");
@@ -328,8 +324,7 @@ void AlbumLabelsTreeView::initRatingsTree()
 {
     d->ratings = new QTreeWidgetItem(this);
     d->ratings->setText(0, i18n("Rating"));
-    d->ratings->setSizeHint(0,d->rootSizeHint);
-    d->ratings->setFont(0,d->rootFont);
+    d->ratings->setFont(0, d->regularFont);
     d->ratings->setFlags(Qt::ItemIsEnabled);
 
     QTreeWidgetItem* const noRate = new QTreeWidgetItem(d->ratings);
@@ -371,8 +366,7 @@ void AlbumLabelsTreeView::initPicksTree()
 {
     d->picks = new QTreeWidgetItem(this);
     d->picks->setText(0, i18n("Pick"));
-    d->picks->setSizeHint(0,d->rootSizeHint);
-    d->picks->setFont(0,d->rootFont);
+    d->picks->setFont(0, d->regularFont);
     d->picks->setFlags(Qt::ItemIsEnabled);
 
     QStringList pickSetNames;
@@ -400,8 +394,7 @@ void AlbumLabelsTreeView::initColorsTree()
 {
     d->colors = new QTreeWidgetItem(this);
     d->colors->setText(0, i18n("Color"));
-    d->colors->setSizeHint(0,d->rootSizeHint);
-    d->colors->setFont(0,d->rootFont);
+    d->colors->setFont(0, d->regularFont);
     d->colors->setFlags(Qt::ItemIsEnabled);
 
     QTreeWidgetItem* noColor = new QTreeWidgetItem(d->colors);
@@ -426,17 +419,17 @@ void AlbumLabelsTreeView::initColorsTree()
     foreach (QString color, colorSet)
     {
         QTreeWidgetItem* const colorWidgetItem = new QTreeWidgetItem(d->colors);
-        colorWidgetItem->setText(0,colorSetNames.at(colorSet.indexOf(color)));
-        colorWidgetItem->setFont(0,d->regularFont);
+        colorWidgetItem->setText(0, colorSetNames.at(colorSet.indexOf(color)));
+        colorWidgetItem->setFont(0, d->regularFont);
         QPixmap colorIcon = colorRectPixmap(QColor(color));
-        colorWidgetItem->setIcon(0,QIcon(colorIcon));
-        colorWidgetItem->setSizeHint(0,d->iconSize);
+        colorWidgetItem->setIcon(0, QIcon(colorIcon));
+        colorWidgetItem->setSizeHint(0, d->iconSize);
     }
 }
 
 void AlbumLabelsTreeView::slotSettingsChanged()
 {
-    if(d->iconSizeFromSetting != ApplicationSettings::instance()->getTreeViewIconSize())
+    if (d->iconSizeFromSetting != ApplicationSettings::instance()->getTreeViewIconSize())
     {
         d->iconSizeFromSetting = ApplicationSettings::instance()->getTreeViewIconSize();
         setIconSize(QSize(d->iconSizeFromSetting*5, d->iconSizeFromSetting));
@@ -445,25 +438,27 @@ void AlbumLabelsTreeView::slotSettingsChanged()
 
         while(*it)
         {
-            if((*it)->parent())
+            if(*it)
             {
-                (*it)->setSizeHint(0,d->iconSize);
+                (*it)->setSizeHint(0, d->iconSize);
             }
+
             ++it;
         }
     }
 
-    if(d->regularFont != ApplicationSettings::instance()->getTreeViewFont())
+    if (d->regularFont != ApplicationSettings::instance()->getTreeViewFont())
     {
         d->regularFont = ApplicationSettings::instance()->getTreeViewFont();
         QTreeWidgetItemIterator it(this);
 
         while(*it)
         {
-            if((*it)->parent())
+            if(*it)
             {
-                (*it)->setFont(0,d->regularFont);
+                (*it)->setFont(0, d->regularFont);
             }
+
             ++it;
         }
     }

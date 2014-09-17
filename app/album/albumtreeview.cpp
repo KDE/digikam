@@ -1139,6 +1139,8 @@ void AbstractAlbumTreeView::handleCustomContextMenuAction(QAction* action, Album
 
 void AbstractAlbumTreeView::albumSettingsChanged()
 {
+    setFont(ApplicationSettings::instance()->getTreeViewFont());
+
     if (d->delegate)
     {
         d->delegate->updateHeight();
