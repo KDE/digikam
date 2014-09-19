@@ -48,4 +48,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 035 ==> 163941 - Show and assign Tags while Slideshow.
 036 ==> 339140 - Labels Search: Inconsistent font used for headings, does not follow theme.
 037 ==> 339144 - digiKam crashes in libkexiv2 metadata handling.
-038 ==> 
+038 ==> 339210 - digiKam crashes when trying to stop find duplicates.
+039 ==> 
