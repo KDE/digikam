@@ -135,25 +135,18 @@ int ImageAlbumFilterModel::compareInfosCategories(const ImageInfo& left, const I
                 QDate leftDate  = leftAlbum->date();
                 QDate rightDate = rightAlbum->date();
 
-                if (leftDate != rightDate)
+                int result = 1;  // case (leftDate > rightDate)
+
+                if (leftDate == rightDate)
                 {
-                    int result;
-
-                    if (leftDate == rightDate)
-                    {
-                        result = 0;
-                    }
-                    else if (leftDate < rightDate)
-                    {
-                        result = -1;
-                    }
-                    else
-                    {
-                        result = 1;
-                    }
-
-                    return ImageSortSettings::compareByOrder(result, d->sorter.currentSortOrder);
+                    result = 0;
                 }
+                else if (leftDate < rightDate)
+                {
+                    result = -1;
+                }
+
+                return ImageSortSettings::compareByOrder(result, d->sorter.currentSortOrder);
             }
 
             return ImageSortSettings::naturalCompare(leftAlbum->albumPath(), rightAlbum->albumPath(),
