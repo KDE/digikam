@@ -116,20 +116,17 @@ public:
     static void init_c_mat(CMat* const mat, const int radius);
     static void finish_c_mat(CMat* const mat);
 
-private:
+    static double mat_elt(const Mat* const mat, const int r, const int c);
+    static inline double c_mat_elt(const CMat* const mat, const int col, const int row);
 
-    // Debug methods.
-    static void print_c_mat(const CMat* const mat);
-    static void print_matrix(Mat* const matrix);
+private:
 
     static Mat*  allocate_matrix(int nrows, int ncols);
     static CMat* allocate_c_mat(const int radius);
 
     static double* mat_eltptr(Mat* const mat, const int r, const int c);
-    static double  mat_elt(const Mat* const mat, const int r, const int c);
 
     static inline double* c_mat_eltptr(CMat* const mat, const int col, const int row);
-    static inline double  c_mat_elt(const CMat* const mat, const int col, const int row);
 
     static void convolve_mat(CMat* const result, const CMat* const mata, const CMat* const matb);
 
