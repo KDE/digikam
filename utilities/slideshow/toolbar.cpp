@@ -44,20 +44,25 @@ class ToolBar::Private
 public:
 
     Private() :
+        iconSize(KIconLoader::SizeMedium),
         canHide(true),
         playBtn(0),
         stopBtn(0),
         nextBtn(0),
-        prevBtn(0)
+        prevBtn(0),
+        loader(KIconLoader::global())
     {
     }
 
+    const int    iconSize;
     bool         canHide;
 
     QToolButton* playBtn;
     QToolButton* stopBtn;
     QToolButton* nextBtn;
     QToolButton* prevBtn;
+
+    KIconLoader* loader;
 };
 
 ToolBar::ToolBar(QWidget* const parent)
@@ -71,11 +76,10 @@ ToolBar::ToolBar(QWidget* const parent)
     d->stopBtn = new QToolButton(this);
     d->playBtn->setCheckable(true);
 
-    KIconLoader* const loader = KIconLoader::global();
-    d->playBtn->setIcon(loader->loadIcon("media-playback-pause", KIconLoader::NoGroup, 22));
-    d->prevBtn->setIcon(loader->loadIcon("media-skip-backward",  KIconLoader::NoGroup, 22));
-    d->nextBtn->setIcon(loader->loadIcon("media-skip-forward",   KIconLoader::NoGroup, 22));
-    d->stopBtn->setIcon(loader->loadIcon("media-playback-stop",  KIconLoader::NoGroup, 22));
+    d->playBtn->setIcon(d->loader->loadIcon("media-playback-pause", KIconLoader::Toolbar, d->iconSize));
+    d->prevBtn->setIcon(d->loader->loadIcon("media-skip-backward",  KIconLoader::Toolbar, d->iconSize));
+    d->nextBtn->setIcon(d->loader->loadIcon("media-skip-forward",   KIconLoader::Toolbar, d->iconSize));
+    d->stopBtn->setIcon(d->loader->loadIcon("media-playback-stop",  KIconLoader::Toolbar, d->iconSize));
 
     lay->addWidget(d->playBtn);
     lay->addWidget(d->prevBtn);
@@ -147,18 +151,16 @@ void ToolBar::setEnabledPrev(bool val)
 
 void ToolBar::slotPlayBtnToggled()
 {
-    KIconLoader* const loader = KIconLoader::global();
-
     if (d->playBtn->isChecked())
     {
         d->canHide = false;
-        d->playBtn->setIcon(loader->loadIcon("media-playback-start", KIconLoader::NoGroup, 22));
+        d->playBtn->setIcon(d->loader->loadIcon("media-playback-start", KIconLoader::Toolbar, d->iconSize));
         emit signalPause();
     }
     else
     {
         d->canHide = true;
-        d->playBtn->setIcon(loader->loadIcon("media-playback-pause", KIconLoader::NoGroup, 22));
+        d->playBtn->setIcon(d->loader->loadIcon("media-playback-pause", KIconLoader::Toolbar, d->iconSize));
         emit signalPlay();
     }
 }
@@ -169,8 +171,7 @@ void ToolBar::slotNexPrevClicked()
     {
         d->playBtn->setChecked(true);
         d->canHide                = false;
-        KIconLoader* const loader = KIconLoader::global();
-        d->playBtn->setIcon(loader->loadIcon("media-playback-start", KIconLoader::NoGroup, 22));
+        d->playBtn->setIcon(d->loader->loadIcon("media-playback-start", KIconLoader::Toolbar, d->iconSize));
         emit signalPause();
     }
 }
