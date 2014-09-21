@@ -41,7 +41,7 @@ class ImageAlbumFilterModel : public ImageFilterModel
 
 public:
 
-    explicit ImageAlbumFilterModel(QObject* parent = 0);
+    explicit ImageAlbumFilterModel(QObject* const parent = 0);
     ~ImageAlbumFilterModel();
 
     void             setSourceImageModel(ImageAlbumModel* model);
