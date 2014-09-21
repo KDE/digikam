@@ -1405,7 +1405,7 @@ protected:
 
             typedef typename boost::graph_traits<IncidenceGraph>::edge_descriptor edge_descriptor;
             QList<edge_descriptor> outEdges;
-            std::vector<VertexInfo> stack;
+            //std::vector<VertexInfo> stack;
 
             boost::put(color, u, boost::gray_color);
             vis.discover_vertex(u, g);
