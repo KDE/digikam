@@ -6,7 +6,7 @@
  * Date        : 2005-04-29
  * Description : refocus deconvolution matrix implementation.
  *
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * Original implementation from Refocus Gimp plug-in
  * Copyright (C) 1999-2003 Ernst Lippe
@@ -176,29 +176,6 @@ void RefocusMatrix::convolve_star_mat(CMat* const result, const CMat* const mata
                 for (xa = xa_low; xa <= xa_high; ++xa)
                 {
                     val += c_mat_elt(mata, xa, ya) * c_mat_elt(matb, xr + xa, yr + ya);
-                }
-            }
-
-            *c_mat_eltptr(result, xr, yr) = val;
-        }
-    }
-}
-
-void RefocusMatrix::convolve_mat_fun(CMat* const result, const CMat* const mata, double(f)(int, int))
-{
-    register int xr, yr, xa, ya;
-
-    for (yr = -result->radius; yr <= result->radius; ++yr)
-    {
-        for (xr = -result->radius; xr <= result->radius; ++xr)
-        {
-            register double val = 0.0;
-
-            for (ya = -mata->radius; ya <= mata->radius; ++ya)
-            {
-                for (xa = -mata->radius; xa <= mata->radius; ++xa)
-                {
-                    val += c_mat_elt(mata, xa, ya) * f(xr - xa, yr - ya);
                 }
             }
 
