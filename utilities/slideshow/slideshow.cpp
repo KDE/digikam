@@ -62,7 +62,7 @@
 #include "globals.h"
 #include "previewloadthread.h"
 #include "imagepropertiestab.h"
-#include "toolbar.h"
+#include "slidetoolbar.h"
 #include "slideosd.h"
 
 namespace Digikam
@@ -112,7 +112,7 @@ public:
     PreviewLoadThread*  previewThread;
     PreviewLoadThread*  previewPreloadThread;
 
-    ToolBar*            toolBar;
+    SlideToolBar*       toolBar;
 
     SlideOSD*           osd;
 
@@ -148,7 +148,7 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
     // ---------------------------------------------------------------
 
-    d->toolBar = new ToolBar(this);
+    d->toolBar = new SlideToolBar(this);
     d->toolBar->hide();
 
     if (!d->settings.loop)

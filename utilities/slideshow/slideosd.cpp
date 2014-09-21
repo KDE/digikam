@@ -38,7 +38,7 @@
 // Local includes
 
 #include "slideshow.h"
-#include "slideinfo.h"
+#include "slideinfowidget.h"
 #include "ratingwidget.h"
 #include "colorlabelwidget.h"
 #include "picklabelwidget.h"
@@ -65,7 +65,7 @@ public:
     KHBox*              labelsBox;
 
     SlideShow*          parent;
-    SlideInfo*          slideInfo;
+    SlideInfoWidget*    slideInfo;
     RatingWidget*       ratingWidget;
     ColorLabelSelector* clWidget;
     PickLabelSelector*  plWidget;
@@ -77,7 +77,7 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
       d(new Private)
 {
     QGridLayout* const grid = new QGridLayout(this);
-    d->slideInfo            = new SlideInfo(settings, this);
+    d->slideInfo            = new SlideInfoWidget(settings, this);
     d->settings             = settings;
     d->parent               = parent;
 

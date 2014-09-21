@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SLIDEINFO_H
-#define SLIDEINFO_H
+#ifndef SLIDEINFOWIDGET_H
+#define SLIDEINFOWIDGET_H
 
 #include <QWidget>
 #include <QPainter>
@@ -40,12 +40,12 @@
 namespace Digikam
 {
 
-class SlideInfo : public QWidget
+class SlideInfoWidget : public QWidget
 {
 public:
 
-    explicit SlideInfo(const SlideShowSettings& settings, QWidget* const parent);
-    ~SlideInfo();
+    explicit SlideInfoWidget(const SlideShowSettings& settings, QWidget* const parent);
+    ~SlideInfoWidget();
 
     void setCurrentInfo(const SlidePictureInfo& info, const KUrl& url);
 
@@ -65,4 +65,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* SLIDEINFO_H */
+#endif /* SLIDEINFOWIDGET_H */

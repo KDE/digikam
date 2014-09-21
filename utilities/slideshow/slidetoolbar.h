@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TOOL_BAR_H
-#define TOOL_BAR_H
+#ifndef SLIDE_TOOL_BAR_H
+#define SLIDE_TOOL_BAR_H
 
 // Qt includes
 
@@ -38,14 +38,14 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ToolBar : public QWidget
+class DIGIKAM_EXPORT SlideToolBar : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    explicit ToolBar(QWidget* const parent);
-    ~ToolBar();
+    explicit SlideToolBar(QWidget* const parent);
+    ~SlideToolBar();
 
     bool canHide()  const;
     bool isPaused() const;
@@ -83,4 +83,4 @@ private:
 
 }   // namespace Digikam
 
-#endif /* TOOL_BAR_H */
+#endif /* SLIDE_TOOL_BAR_H */

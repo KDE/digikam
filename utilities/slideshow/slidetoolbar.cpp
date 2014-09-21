@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "toolbar.moc"
+#include "slidetoolbar.moc"
 
 // Qt includes
 
@@ -39,7 +39,7 @@
 namespace Digikam
 {
 
-class ToolBar::Private
+class SlideToolBar::Private
 {
 public:
 
@@ -65,7 +65,7 @@ public:
     KIconLoader* loader;
 };
 
-ToolBar::ToolBar(QWidget* const parent)
+SlideToolBar::SlideToolBar(QWidget* const parent)
     : QWidget(parent), d(new Private)
 {
     QHBoxLayout* const lay = new QHBoxLayout();
@@ -108,22 +108,22 @@ ToolBar::ToolBar(QWidget* const parent)
             this, SIGNAL(signalClose()));
 }
 
-ToolBar::~ToolBar()
+SlideToolBar::~SlideToolBar()
 {
     delete d;
 }
 
-bool ToolBar::canHide() const
+bool SlideToolBar::canHide() const
 {
     return d->canHide;
 }
 
-bool ToolBar::isPaused() const
+bool SlideToolBar::isPaused() const
 {
     return d->playBtn->isChecked();
 }
 
-void ToolBar::setPaused(bool val)
+void SlideToolBar::setPaused(bool val)
 {
     if (val == isPaused())
     {
@@ -134,22 +134,22 @@ void ToolBar::setPaused(bool val)
     slotPlayBtnToggled();
 }
 
-void ToolBar::setEnabledPlay(bool val)
+void SlideToolBar::setEnabledPlay(bool val)
 {
     d->playBtn->setEnabled(val);
 }
 
-void ToolBar::setEnabledNext(bool val)
+void SlideToolBar::setEnabledNext(bool val)
 {
     d->nextBtn->setEnabled(val);
 }
 
-void ToolBar::setEnabledPrev(bool val)
+void SlideToolBar::setEnabledPrev(bool val)
 {
     d->prevBtn->setEnabled(val);
 }
 
-void ToolBar::slotPlayBtnToggled()
+void SlideToolBar::slotPlayBtnToggled()
 {
     if (d->playBtn->isChecked())
     {
@@ -165,7 +165,7 @@ void ToolBar::slotPlayBtnToggled()
     }
 }
 
-void ToolBar::slotNexPrevClicked()
+void SlideToolBar::slotNexPrevClicked()
 {
     if (!d->playBtn->isChecked())
     {
@@ -176,7 +176,7 @@ void ToolBar::slotNexPrevClicked()
     }
 }
 
-void ToolBar::keyPressEvent(QKeyEvent* e)
+void SlideToolBar::keyPressEvent(QKeyEvent* e)
 {
     switch (e->key())
     {

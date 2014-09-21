@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "slideinfo.h"
+#include "slideinfowidget.h"
 
 // Qt includes
 
@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-class SlideInfo::Private
+class SlideInfoWidget::Private
 {
 public:
 
@@ -62,26 +62,26 @@ public:
     SlidePictureInfo  info;
 };
 
-SlideInfo::SlideInfo(const SlideShowSettings& settings, QWidget* const parent)
+SlideInfoWidget::SlideInfoWidget(const SlideShowSettings& settings, QWidget* const parent)
     : QWidget(parent), d(new Private)
 {
     d->settings = settings;
     setFixedSize(QApplication::desktop()->availableGeometry(parentWidget()).size()/2);
 }
 
-SlideInfo::~SlideInfo()
+SlideInfoWidget::~SlideInfoWidget()
 {
     delete d;
 }
 
-void SlideInfo::setCurrentInfo(const SlidePictureInfo& info, const KUrl& url)
+void SlideInfoWidget::setCurrentInfo(const SlidePictureInfo& info, const KUrl& url)
 {
     d->info = info;
     d->url  = url;
     update();
 }
 
-void SlideInfo::paintEvent(QPaintEvent*)
+void SlideInfoWidget::paintEvent(QPaintEvent*)
 {
     QPainter p(this);
 
@@ -251,7 +251,7 @@ void SlideInfo::paintEvent(QPaintEvent*)
 
 }
 
-void SlideInfo::printInfoText(QPainter& p, int& offset, const QString& str, const QColor& pcol)
+void SlideInfoWidget::printInfoText(QPainter& p, int& offset, const QString& str, const QColor& pcol)
 {
     if (!str.isEmpty())
     {
@@ -271,7 +271,7 @@ void SlideInfo::printInfoText(QPainter& p, int& offset, const QString& str, cons
     }
 }
 
-void SlideInfo::printComments(QPainter& p, int& offset, const QString& comments)
+void SlideInfoWidget::printComments(QPainter& p, int& offset, const QString& comments)
 {
     QStringList commentsByLines;
 
@@ -340,7 +340,7 @@ void SlideInfo::printComments(QPainter& p, int& offset, const QString& comments)
     }
 }
 
-void SlideInfo::printTags(QPainter& p, int& offset, QStringList& tags)
+void SlideInfoWidget::printTags(QPainter& p, int& offset, QStringList& tags)
 {
     tags.sort();
 
