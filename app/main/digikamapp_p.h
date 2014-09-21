@@ -113,6 +113,7 @@ public:
         refreshAction(0),
         writeAlbumMetadataAction(0),
         readAlbumMetadataAction(0),
+        browseTagsAction(0),
         openTagMngrAction(0),
         newTagAction(0),
         deleteTagAction(0),
