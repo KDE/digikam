@@ -48,7 +48,7 @@ public:
     QHash<int, QString> albumNamesHash;
 };
 
-ImageAlbumFilterModel::ImageAlbumFilterModel(QObject* parent)
+ImageAlbumFilterModel::ImageAlbumFilterModel(QObject* const parent)
     : ImageFilterModel(*new ImageAlbumFilterModelPrivate, parent)
 {
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
@@ -63,12 +63,12 @@ ImageAlbumFilterModel::ImageAlbumFilterModel(QObject* parent)
     connect(AlbumManager::instance(), SIGNAL(signalAlbumRenamed(Album*)),
             this, SLOT(slotAlbumRenamed(Album*)));
 
-    foreach(Album* a, AlbumManager::instance()->allPAlbums())
+    foreach(Album* const a, AlbumManager::instance()->allPAlbums())
     {
         albumChange(a);
     }
 
-    foreach(Album* a, AlbumManager::instance()->allTAlbums())
+    foreach(Album* const a, AlbumManager::instance()->allTAlbums())
     {
         albumChange(a);
     }
@@ -86,6 +86,7 @@ void ImageAlbumFilterModel::setSourceImageModel(ImageAlbumModel* model)
 ImageAlbumModel* ImageAlbumFilterModel::sourceModel() const
 {
     Q_D(const ImageAlbumFilterModel);
+
     return static_cast<ImageAlbumModel*>(d->imageModel);
 }
 
@@ -97,6 +98,7 @@ void ImageAlbumFilterModel::prepareThumbnails(const QList<QModelIndex>& indexesT
 void ImageAlbumFilterModel::setImageFilterSettings(const ImageFilterSettings& s)
 {
     Q_D(ImageAlbumFilterModel);
+
     ImageFilterSettings settings(s);
     settings.setAlbumNames(d->albumNamesHash);
     settings.setTagNames(d->tagNamesHash);
@@ -114,8 +116,8 @@ int ImageAlbumFilterModel::compareInfosCategories(const ImageInfo& left, const I
             int leftAlbumId    = left.albumId();
             int rightAlbumId   = right.albumId();
 
-            PAlbum* leftAlbum  = AlbumManager::instance()->findPAlbum(leftAlbumId);
-            PAlbum* rightAlbum = AlbumManager::instance()->findPAlbum(rightAlbumId);
+            PAlbum* const leftAlbum  = AlbumManager::instance()->findPAlbum(leftAlbumId);
+            PAlbum* const rightAlbum = AlbumManager::instance()->findPAlbum(rightAlbumId);
 
             if (!leftAlbum || !rightAlbum)
             {
