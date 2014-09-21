@@ -55,6 +55,8 @@ public:
     void setCurrentUrl(const KUrl& url);
     KUrl currentUrl() const;
 
+    void setPaused(bool paused);
+
     void toggleTag(int tag);
     void updateTags(const KUrl& url, const QStringList& tags);
 
@@ -78,7 +80,6 @@ protected:
     void mouseMoveEvent(QMouseEvent*);
     void keyPressEvent(QKeyEvent*);
     void wheelEvent(QWheelEvent*);
-    bool eventFilter(QObject* obj, QEvent* ev);
 
 private Q_SLOTS:
 
@@ -98,11 +99,9 @@ private:
     void loadPrevImage();
     void preloadNextImage();
     void updatePixmap();
-    void printInfoText(QPainter& p, int& offset, const QString& str);
-    void printComments(QPainter& p, int& offset, const QString& comments);
-    void printTags(QStringList& tags);
     void inhibitScreenSaver();
     void allowScreenSaver();
+    void dispatchCurrentInfoChange(const KUrl& url);
     void makeCornerRectangles(const QRect& desktopRect, const QSize& size,
                               QRect* const topLeft, QRect* const topRight,
                               QRect* const topLeftLarger, QRect* const topRightLarger);

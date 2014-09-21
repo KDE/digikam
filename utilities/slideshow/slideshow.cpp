@@ -30,7 +30,6 @@
 #include <QMenu>
 #include <QCursor>
 #include <QDesktopWidget>
-#include <QEvent>
 #include <QFont>
 #include <QLayout>
 #include <QKeyEvent>
@@ -55,8 +54,6 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
-#include <khbox.h>
-#include <ksqueezedtextlabel.h>
 
 // Local includes
 
@@ -66,9 +63,7 @@
 #include "previewloadthread.h"
 #include "imagepropertiestab.h"
 #include "toolbar.h"
-#include "ratingwidget.h"
-#include "colorlabelwidget.h"
-#include "picklabelwidget.h"
+#include "slideosd.h"
 
 namespace Digikam
 {
@@ -80,7 +75,6 @@ public:
     Private()
         : endOfShow(false),
           pause(false),
-          maxStringLen(80),
           deskX(0),
           deskY(0),
           deskWidth(0),
@@ -89,21 +83,15 @@ public:
           screenSaverCookie(-1),
           mouseMoveTimer(0),
           timer(0),
-          labelsBox(0),
-          tagsWidget(0),
           previewThread(0),
           previewPreloadThread(0),
           toolBar(0),
-          ratingWidget(0),
-          clWidget(0),
-          plWidget(0)
+          osd(0)
     {
     }
 
     bool                endOfShow;
     bool                pause;
-
-    const int           maxStringLen;
 
     int                 deskX;
     int                 deskY;
@@ -121,18 +109,12 @@ public:
 
     KUrl                currentImage;
 
-    KHBox*              labelsBox;
-
-    KSqueezedTextLabel* tagsWidget;
-
     PreviewLoadThread*  previewThread;
     PreviewLoadThread*  previewPreloadThread;
 
     ToolBar*            toolBar;
 
-    RatingWidget*       ratingWidget;
-    ColorLabelSelector* clWidget;
-    PickLabelSelector*  plWidget;
+    SlideOSD*           osd;
 
     SlideShowSettings   settings;
 };
@@ -191,38 +173,7 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
     // ---------------------------------------------------------------
 
-    d->labelsBox    = new KHBox(this);
-    d->clWidget     = new ColorLabelSelector(d->labelsBox);
-    d->clWidget->installEventFilter(this);
-    d->clWidget->colorLabelWidget()->installEventFilter(this);
-    d->plWidget     = new PickLabelSelector(d->labelsBox);
-    d->plWidget->installEventFilter(this);
-    d->plWidget->pickLabelWidget()->installEventFilter(this);
-    d->ratingWidget = new RatingWidget(d->labelsBox);
-    d->ratingWidget->setTracking(false);
-    d->ratingWidget->setFading(false);
-    d->ratingWidget->installEventFilter(this);
-    d->labelsBox->setVisible(false);
-    d->labelsBox->layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter | Qt::AlignLeft);
-
-    connect(d->ratingWidget, SIGNAL(signalRatingChanged(int)),
-            this, SLOT(slotAssignRating(int)));
-
-    connect(d->clWidget, SIGNAL(signalColorLabelChanged(int)),
-            this, SLOT(slotAssignColorLabel(int)));
-
-    connect(d->plWidget, SIGNAL(signalPickLabelChanged(int)),
-            this, SLOT(slotAssignPickLabel(int)));
-
-    // ---------------------------------------------------------------
-
-    d->tagsWidget = new KSqueezedTextLabel(this);
-    d->tagsWidget->setVisible(false);
-    d->tagsWidget->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    d->tagsWidget->setWordWrap(false);
-    d->tagsWidget->setTextElideMode(Qt::ElideRight);
-    d->tagsWidget->setFixedWidth(width()/3);
-    d->tagsWidget->setTextFormat(Qt::RichText);
+    d->osd = new SlideOSD(d->settings, this);
 
     // ---------------------------------------------------------------
 
@@ -470,195 +421,7 @@ void SlideShow::updatePixmap()
                          (d->pixmap.height() - pix.height()) / 2, pix,
                          0, 0, pix.width(), pix.height());
 
-            QString str;
-            PhotoInfoContainer photoInfo = d->settings.pictInfoMap[d->currentImage].photoInfo;
-            QString            comment   = d->settings.pictInfoMap[d->currentImage].comment;
-            QString            title     = d->settings.pictInfoMap[d->currentImage].title;
-            QStringList        tags      = d->settings.pictInfoMap[d->currentImage].tags;
-            int offset                   = d->settings.printTags ? 30 : 0;
-
-            // Display tag names.
-
-            d->tagsWidget->setVisible(d->settings.printTags);
-
-            if (d->settings.printTags)
-            {
-                d->tagsWidget->move(10, height() - offset - d->tagsWidget->minimumHeight());
-                printTags(tags);
-                offset += d->tagsWidget->minimumHeight();
-            }
-
-            // Convert offset to pixmap units
-            offset = int(ratio*offset);
-
-            // Display Labels.
-
-            int rating = d->settings.pictInfoMap[d->currentImage].rating;
-            int color  = d->settings.pictInfoMap[d->currentImage].colorLabel;
-            int pick   = d->settings.pictInfoMap[d->currentImage].pickLabel;
-            d->labelsBox->setVisible(d->settings.printLabels);
-            offset += d->settings.printLabels ? 30 : 0;
-
-            if (d->settings.printLabels)
-            {
-                d->ratingWidget->setRating(rating);
-                d->clWidget->setColorLabel((ColorLabel)color);
-                d->plWidget->setPickLabel((PickLabel)pick);
-                d->labelsBox->move(10, height() - offset - d->clWidget->minimumHeight());
-                offset += d->clWidget->minimumHeight();
-            }
-
-            // convert offset to pixmap units
-            offset = int(ratio*offset);
-
-            // Display Titles.
-
-            if (d->settings.printTitle)
-            {
-                str.clear();
-
-                if (!title.isEmpty())
-                {
-                    str += title;
-                    printInfoText(p, offset, str);
-                }
-            }
-
-            // Display Captions if no Titles.
-
-            if (d->settings.printCapIfNoTitle)
-            {
-                str.clear();
-
-                if (title.isEmpty())
-                {
-                    str += comment;
-                    printComments(p, offset, str);
-                }
-            }
-
-            // Display Comments.
-
-            if (d->settings.printComment)
-            {
-                str = comment;
-                printComments(p, offset, str);
-            }
-
-            // Display Make and Model.
-
-            if (d->settings.printMakeModel)
-            {
-                str.clear();
-
-                if (!photoInfo.make.isEmpty())
-                {
-                    ImagePropertiesTab::shortenedMakeInfo(photoInfo.make);
-                    str = photoInfo.make;
-                }
-
-                if (!photoInfo.model.isEmpty())
-                {
-                    if (!photoInfo.make.isEmpty())
-                    {
-                        str += QString(" / ");
-                    }
-
-                    ImagePropertiesTab::shortenedModelInfo(photoInfo.model);
-                    str += photoInfo.model;
-                }
-
-                printInfoText(p, offset, str);
-            }
-
-            // Display Exposure and Sensitivity.
-
-            if (d->settings.printExpoSensitivity)
-            {
-                str.clear();
-
-                if (!photoInfo.exposureTime.isEmpty())
-                {
-                    str = photoInfo.exposureTime;
-                }
-
-                if (!photoInfo.sensitivity.isEmpty())
-                {
-                    if (!photoInfo.exposureTime.isEmpty())
-                    {
-                        str += QString(" / ");
-                    }
-
-                    str += i18n("%1 ISO", photoInfo.sensitivity);
-                }
-
-                printInfoText(p, offset, str);
-            }
-
-            // Display Aperture and Focal.
-
-            if (d->settings.printApertureFocal)
-            {
-                str.clear();
-
-                if (!photoInfo.aperture.isEmpty())
-                {
-                    str = photoInfo.aperture;
-                }
-
-                if (photoInfo.focalLength35mm.isEmpty())
-                {
-                    if (!photoInfo.focalLength.isEmpty())
-                    {
-                        if (!photoInfo.aperture.isEmpty())
-                        {
-                            str += QString(" / ");
-                        }
-
-                        str += photoInfo.focalLength;
-                    }
-                }
-                else
-                {
-                    if (!photoInfo.aperture.isEmpty())
-                    {
-                        str += QString(" / ");
-                    }
-
-                    if (!photoInfo.focalLength.isEmpty())
-                    {
-                        str += QString("%1 (%2)").arg(photoInfo.focalLength).arg(photoInfo.focalLength35mm);
-                    }
-                    else
-                    {
-                        str += QString("%1").arg(photoInfo.focalLength35mm);
-                    }
-                }
-
-                printInfoText(p, offset, str);
-            }
-
-            // Display Creation Date.
-
-            if (d->settings.printDate)
-            {
-                if (photoInfo.dateTime.isValid())
-                {
-                    str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, KLocale::ShortDate, true);
-                    printInfoText(p, offset, str);
-                }
-            }
-
-            // Display image File Name.
-
-            if (d->settings.printName)
-            {
-                str = QString("%1 (%2/%3)").arg(d->currentImage.fileName())
-                      .arg(QString::number(d->fileIndex + 1))
-                      .arg(QString::number(d->settings.fileList.count()));
-
-                printInfoText(p, offset, str);
-            }
+            d->osd->setCurrentInfo(d->settings.pictInfoMap[d->currentImage], d->currentImage);
         }
         else
         {
@@ -703,102 +466,13 @@ void SlideShow::updatePixmap()
         p.setFont(fn);
         p.setPen(Qt::white);
         p.drawPixmap(50, 100, logo);
-        p.drawText(60 + logo.width(), 100 + logo.height() / 3,   i18n("Slideshow Completed."));
+        p.drawText(60 + logo.width(), 100 +     logo.height() / 3, i18n("Slideshow Completed."));
         p.drawText(60 + logo.width(), 100 + 2 * logo.height() / 3, i18n("Click To Exit..."));
 
         d->endOfShow = true;
         d->toolBar->setEnabledPlay(false);
         d->toolBar->setEnabledNext(false);
         d->toolBar->setEnabledPrev(false);
-    }
-}
-
-void SlideShow::printInfoText(QPainter& p, int& offset, const QString& str)
-{
-    if (!str.isEmpty())
-    {
-        offset += QFontMetrics(p.font()).lineSpacing();
-        p.setPen(Qt::black);
-
-        for (int x = 9; x <= 11; ++x)
-        {
-            for (int y = offset + 1; y >= offset - 1; --y)
-            {
-                p.drawText(x, p.window().height() - y, str);
-            }
-        }
-
-        p.setPen(Qt::white);
-        p.drawText(10, p.window().height() - offset, str);
-    }
-}
-
-void SlideShow::printComments(QPainter& p, int& offset, const QString& comments)
-{
-    QStringList commentsByLines;
-
-    uint commentsIndex = 0;     // Comments QString index
-
-    while (commentsIndex < (uint)comments.length())
-    {
-        QString newLine;
-        bool breakLine = false; // End Of Line found
-        uint currIndex;         // Comments QString current index
-
-        // Check minimal lines dimension
-
-        uint commentsLinesLengthLocal = d->maxStringLen;
-
-        for (currIndex = commentsIndex ;
-             currIndex < (uint)comments.length() && !breakLine ; ++currIndex)
-        {
-            if (comments.at(currIndex) == QChar('\n') || comments.at(currIndex).isSpace())
-            {
-                breakLine = true;
-            }
-        }
-
-        if (commentsLinesLengthLocal <= (currIndex - commentsIndex))
-        {
-            commentsLinesLengthLocal = (currIndex - commentsIndex);
-        }
-
-        breakLine = false;
-
-        for (currIndex = commentsIndex ;
-             currIndex <= commentsIndex + commentsLinesLengthLocal &&
-             currIndex < (uint)comments.length() && !breakLine ;
-             ++currIndex)
-        {
-            breakLine = (comments.at(currIndex) == QChar('\n')) ? true : false;
-
-            if (breakLine)
-            {
-                newLine.append(QString(" "));
-            }
-            else
-            {
-                newLine.append(comments.at(currIndex));
-            }
-        }
-
-        commentsIndex = currIndex; // The line is ended
-
-        if (commentsIndex != (uint)comments.length())
-        {
-            while (!newLine.endsWith(' '))
-            {
-                newLine.truncate(newLine.length() - 1);
-                --commentsIndex;
-            }
-        }
-
-        commentsByLines.prepend(newLine.trimmed());
-    }
-
-    for (int i = 0 ; i < (int)commentsByLines.count() ; ++i)
-    {
-        printInfoText(p, offset, commentsByLines.at(i));
     }
 }
 
@@ -1000,28 +674,28 @@ void SlideShow::allowScreenSaver()
 void SlideShow::slotAssignRating(int rating)
 {
     d->settings.pictInfoMap[d->currentImage].rating = rating;
-    d->ratingWidget->blockSignals(true);
-    d->ratingWidget->setRating(rating);
-    d->ratingWidget->blockSignals(false);
+    dispatchCurrentInfoChange(d->currentImage);
     emit signalRatingChanged(d->currentImage, rating);
 }
 
 void SlideShow::slotAssignColorLabel(int color)
 {
     d->settings.pictInfoMap[d->currentImage].colorLabel = color;
-    d->clWidget->blockSignals(true);
-    d->clWidget->setColorLabel((ColorLabel)color);
-    d->clWidget->blockSignals(false);
+    dispatchCurrentInfoChange(d->currentImage);
     emit signalColorLabelChanged(d->currentImage, color);
 }
 
 void SlideShow::slotAssignPickLabel(int pick)
 {
     d->settings.pictInfoMap[d->currentImage].pickLabel = pick;
-    d->plWidget->blockSignals(true);
-    d->plWidget->setPickLabel((PickLabel)pick);
-    d->plWidget->blockSignals(false);
+    dispatchCurrentInfoChange(d->currentImage);
     emit signalPickLabelChanged(d->currentImage, pick);
+}
+
+void SlideShow::updateTags(const KUrl& url, const QStringList& tags)
+{
+    d->settings.pictInfoMap[url].tags = tags;
+    dispatchCurrentInfoChange(url);
 }
 
 void SlideShow::toggleTag(int tag)
@@ -1029,48 +703,16 @@ void SlideShow::toggleTag(int tag)
     emit signalToggleTag(d->currentImage, tag);
 }
 
-
-void SlideShow::updateTags(const KUrl& url, const QStringList& tags)
+void SlideShow::dispatchCurrentInfoChange(const KUrl& url)
 {
-    d->settings.pictInfoMap[url].tags = tags;
-
     if (d->currentImage == url)
-        printTags(d->settings.pictInfoMap[url].tags);
+        d->osd->setCurrentInfo(d->settings.pictInfoMap[d->currentImage], d->currentImage);
 }
 
-void SlideShow::printTags(QStringList& tags)
+void SlideShow::setPaused(bool paused)
 {
-    tags.sort();
-    d->tagsWidget->setText(QString("<qt><font color=%1>%2</font></qt>")
-                            .arg(kapp->palette().color(QPalette::Link).name())
-                            .arg(tags.join(", ")));
-}
-
-bool SlideShow::eventFilter(QObject* obj, QEvent* ev)
-{
-    if (obj == d->ratingWidget                 ||
-        obj == d->clWidget                     ||
-        obj == d->plWidget                     ||
-        obj == d->clWidget->colorLabelWidget() ||
-        obj == d->plWidget->pickLabelWidget())
-    {
-        if (ev->type() == QEvent::Enter)
-        {
-            d->pause = true;
-            d->toolBar->setPaused(true);
-            return false;
-        }
-
-        if (ev->type() == QEvent::Leave)
-        {
-            d->pause = false;
-            d->toolBar->setPaused(false);
-            return false;
-        }
-    }
-
-    // pass the event on to the parent class
-    return QWidget::eventFilter(obj, ev);
+    d->pause = paused;
+    d->toolBar->setPaused(paused);
 }
 
 }  // namespace Digikam
