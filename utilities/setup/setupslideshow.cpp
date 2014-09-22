@@ -63,6 +63,7 @@ public:
         showTitle(0),
         showTags(0),
         showCapIfNoTitle(0),
+        showProgress(0),
         delayInput(0)
     {}
 
@@ -78,6 +79,7 @@ public:
     QCheckBox*    showTitle;
     QCheckBox*    showTags;
     QCheckBox*    showCapIfNoTitle;
+    QCheckBox*    showProgress;
 
     KIntNumInput* delayInput;
 };
@@ -105,6 +107,9 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
 
     d->loopMode = new QCheckBox(i18n("Slideshow runs in a loop"), panel);
     d->loopMode->setWhatsThis(i18n("Run the slideshow in a loop."));
+
+    d->showProgress = new QCheckBox(i18n("Show progress indicator"), panel);
+    d->showProgress->setWhatsThis(i18n("Show a progress indicator with pending items to show and time progression."));
 
     d->showName = new QCheckBox(i18n("Show image file name"), panel);
     d->showName->setWhatsThis(i18n("Show the image file name at the bottom of the screen."));
@@ -155,6 +160,7 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
     layout->addWidget(d->delayInput);
     layout->addWidget(d->startWithCurrent);
     layout->addWidget(d->loopMode);
+    layout->addWidget(d->showProgress);
     layout->addWidget(d->showName);
     layout->addWidget(d->showDate);
     layout->addWidget(d->showApertureFocal);
@@ -191,19 +197,20 @@ void SetupSlideShow::slotSetUnchecked(int)
 void SetupSlideShow::applySettings()
 {
     SlideShowSettings settings;
-    settings.delay                = d->delayInput->value();
-    settings.startWithCurrent     = d->startWithCurrent->isChecked();
-    settings.loop                 = d->loopMode->isChecked();
-    settings.printName            = d->showName->isChecked();
-    settings.printDate            = d->showDate->isChecked();
-    settings.printApertureFocal   = d->showApertureFocal->isChecked();
-    settings.printExpoSensitivity = d->showExpoSensitivity->isChecked();
-    settings.printMakeModel       = d->showMakeModel->isChecked();
-    settings.printComment         = d->showComment->isChecked();
-    settings.printTitle           = d->showTitle->isChecked();
-    settings.printCapIfNoTitle    = d->showCapIfNoTitle->isChecked();
-    settings.printTags            = d->showTags->isChecked();
-    settings.printLabels          = d->showLabels->isChecked();
+    settings.delay                 = d->delayInput->value();
+    settings.startWithCurrent      = d->startWithCurrent->isChecked();
+    settings.loop                  = d->loopMode->isChecked();
+    settings.printName             = d->showName->isChecked();
+    settings.printDate             = d->showDate->isChecked();
+    settings.printApertureFocal    = d->showApertureFocal->isChecked();
+    settings.printExpoSensitivity  = d->showExpoSensitivity->isChecked();
+    settings.printMakeModel        = d->showMakeModel->isChecked();
+    settings.printComment          = d->showComment->isChecked();
+    settings.printTitle            = d->showTitle->isChecked();
+    settings.printCapIfNoTitle     = d->showCapIfNoTitle->isChecked();
+    settings.printTags             = d->showTags->isChecked();
+    settings.printLabels           = d->showLabels->isChecked();
+    settings.showProgressIndicator = d->showProgress->isChecked();
     settings.writeToConfig();
 }
 
@@ -224,6 +231,7 @@ void SetupSlideShow::readSettings()
     d->showCapIfNoTitle->setChecked(settings.printCapIfNoTitle);
     d->showTags->setChecked(settings.printTags);
     d->showLabels->setChecked(settings.printLabels);
+    d->showProgress->setChecked(settings.showProgressIndicator);
 }
 
 }   // namespace Digikam

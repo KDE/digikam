@@ -159,6 +159,10 @@ public:
      */
     int                          delay;
 
+    /** Show progress indicator
+     */
+    bool                         showProgressIndicator;
+
     /** Load images (previews) in full size, not reduced version
      */
     bool                         useFullSizePreviews;
@@ -187,6 +191,7 @@ private:
     static const QString         configSlideShowPrintNameEntry;
     static const QString         configSlideShowPrintTagsEntry;
     static const QString         configSlideShowPrintLabelsEntry;
+    static const QString         configSlideShowProgressIndicatorEntry;
 };
 
 }  // namespace Digikam

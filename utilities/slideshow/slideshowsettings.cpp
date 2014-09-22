@@ -51,24 +51,26 @@ const QString SlideShowSettings::configSlideShowPrintMakeModelEntry("SlideShowPr
 const QString SlideShowSettings::configSlideShowPrintNameEntry("SlideShowPrintName");
 const QString SlideShowSettings::configSlideShowPrintTagsEntry("SlideShowPrintTags");
 const QString SlideShowSettings::configSlideShowPrintLabelsEntry("SlideShowPrintLabels");
+const QString SlideShowSettings::configSlideShowProgressIndicatorEntry("SlideShowProgressIndicator");
 
 SlideShowSettings::SlideShowSettings()
 {
-    startWithCurrent     = false;
-    exifRotate           = true;
-    loop                 = false;
-    delay                = 5;
-    printName            = true;
-    printDate            = false;
-    printComment         = false;
-    printTitle           = false;
-    printCapIfNoTitle    = false;
-    printLabels          = false;
-    printApertureFocal   = false;
-    printMakeModel       = false;
-    printExpoSensitivity = false;
-    printTags            = false;
-    useFullSizePreviews  = true;
+    startWithCurrent      = false;
+    exifRotate            = true;
+    loop                  = false;
+    delay                 = 5;
+    printName             = true;
+    printDate             = false;
+    printComment          = false;
+    printTitle            = false;
+    printCapIfNoTitle     = false;
+    printLabels           = false;
+    printApertureFocal    = false;
+    printMakeModel        = false;
+    printExpoSensitivity  = false;
+    printTags             = false;
+    useFullSizePreviews   = true;
+    showProgressIndicator = true;
 }
 
 SlideShowSettings::~SlideShowSettings()
@@ -92,6 +94,7 @@ void SlideShowSettings::readFromConfig()
     printCapIfNoTitle         = group.readEntry(configSlideShowPrintCapIfNoTitleEntry,    false);
     printTags                 = group.readEntry(configSlideShowPrintTagsEntry,            false);
     printLabels               = group.readEntry(configSlideShowPrintLabelsEntry,          false);
+    showProgressIndicator     = group.readEntry(configSlideShowProgressIndicatorEntry,    true);
     exifRotate                = MetadataSettings::instance()->settings().exifRotate;
 }
 
@@ -112,6 +115,7 @@ void SlideShowSettings::writeToConfig()
     group.writeEntry(configSlideShowPrintCapIfNoTitleEntry,    printCapIfNoTitle);
     group.writeEntry(configSlideShowPrintTagsEntry,            printTags);
     group.writeEntry(configSlideShowPrintLabelsEntry,          printLabels);
+    group.writeEntry(configSlideShowProgressIndicatorEntry,    showProgressIndicator);
     group.sync();
 }
 

@@ -44,7 +44,7 @@ class SlideToolBar::Private
 public:
 
     Private() :
-        iconSize(KIconLoader::SizeMedium),
+        iconSize(32),//KIconLoader::SizeMedium),
         canHide(true),
         playBtn(0),
         stopBtn(0),

@@ -52,9 +52,14 @@ public:
     SlideOSD(const SlideShowSettings& settings, SlideShow* const parent = 0);
     ~SlideOSD();
 
-public:
-
     void setCurrentInfo(const SlidePictureInfo& info, const KUrl& url);
+
+    void pause();
+    void play();
+
+private Q_SLOTS:
+
+    void slotTimer();
 
 private:
 

@@ -25,15 +25,18 @@
 
 // Qt includes
 
+#include <QTimer>
 #include <QLayout>
 #include <QDesktopWidget>
 #include <QEvent>
+#include <QProgressBar>
 
 // KDE includes
 
 #include <kdebug.h>
 #include <kapplication.h>
 #include <khbox.h>
+#include <kdialog.h>
 
 // Local includes
 
@@ -52,6 +55,9 @@ class SlideOSD::Private
 public:
 
     Private() :
+        delay(500),         // ms
+        progress(0),
+        progressTimer(0),
         labelsBox(0),
         parent(0),
         slideInfo(0),
@@ -62,7 +68,13 @@ public:
     {
     }
 
+    int const           delay;
+
+    QProgressBar*       progress;
+    QTimer*             progressTimer;
+
     KHBox*              labelsBox;
+    KUrl                url;
 
     SlideShow*          parent;
     SlideInfoWidget*    slideInfo;
@@ -92,7 +104,6 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
     SetWindowLong(winId(), GWL_EXSTYLE, ex_style);
 #endif
 
-    QGridLayout* const grid = new QGridLayout(this);
     d->slideInfo            = new SlideInfoWidget(settings, this);
     d->settings             = settings;
     d->parent               = parent;
@@ -103,17 +114,21 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
     d->clWidget     = new ColorLabelSelector(d->labelsBox);
     d->clWidget->installEventFilter(this);
     d->clWidget->colorLabelWidget()->installEventFilter(this);
+    d->clWidget->setFocusPolicy(Qt::NoFocus);
     d->plWidget     = new PickLabelSelector(d->labelsBox);
     d->plWidget->installEventFilter(this);
+    d->plWidget->setFocusPolicy(Qt::NoFocus);
     d->plWidget->pickLabelWidget()->installEventFilter(this);
     d->ratingWidget = new RatingWidget(d->labelsBox);
     d->ratingWidget->setTracking(false);
     d->ratingWidget->setFading(false);
     d->ratingWidget->installEventFilter(this);
+    d->ratingWidget->setFocusPolicy(Qt::NoFocus);
     QWidget* const space = new QWidget(d->labelsBox);
     d->labelsBox->setVisible(false);
     d->labelsBox->layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter | Qt::AlignLeft);
     d->labelsBox->setStretchFactor(space, 10);
+    d->labelsBox->setVisible(d->settings.printLabels);
 
     connect(d->ratingWidget, SIGNAL(signalRatingChanged(int)),
             parent, SLOT(slotAssignRating(int)));
@@ -126,15 +141,33 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
 
     // ---------------------------------------------------------------
 
-    grid->addWidget(d->slideInfo, 1, 0, 1, 1);
+    d->progress = new QProgressBar(this);
+    d->progress->setMinimum(0);
+    d->progress->setMaximum(d->settings.delay*(1000/d->delay));
+    d->progress->setVisible(d->settings.showProgressIndicator);
+
+    d->progressTimer = new QTimer(this);
+    d->progressTimer->setSingleShot(false);
+
+    connect(d->progressTimer, SIGNAL(timeout()),
+            this, SLOT(slotTimer()));
+
+    // ---------------------------------------------------------------
+
+    QGridLayout* const grid = new QGridLayout(this);
+    grid->addWidget(d->slideInfo, 1, 0, 1, 2);
     grid->addWidget(d->labelsBox, 2, 0, 1, 1);
+    grid->addWidget(d->progress,  3, 0, 1, 1);
     grid->setRowStretch(0, 10);
-    grid->setColumnStretch(0, 10);
+    grid->setColumnStretch(1, 10);
+    grid->setSpacing(KDialog::spacingHint());
     grid->setMargin(0);
 }
 
 SlideOSD::~SlideOSD()
 {
+    d->progressTimer->stop();
+    delete d->progressTimer;
     delete d;
 }
 
@@ -144,9 +177,17 @@ void SlideOSD::setCurrentInfo(const SlidePictureInfo& info, const KUrl& url)
 
     d->slideInfo->setCurrentInfo(info, url);
 
-    // Display Labels.
+    if (url != d->url)
+    {
+        QString str = QString("(%1/%2)")
+                    .arg(QString::number(d->settings.fileList.indexOf(url) + 1))
+                    .arg(QString::number(d->settings.fileList.count()));
+        d->progress->setFormat(str);
+        d->url = url;
+        play();
+    }
 
-    d->labelsBox->setVisible(d->settings.printLabels);
+    // Display Labels.
 
     if (d->settings.printLabels)
     {
@@ -200,6 +241,22 @@ bool SlideOSD::eventFilter(QObject* obj, QEvent* ev)
 
     // pass the event on to the parent class
     return QWidget::eventFilter(obj, ev);
+}
+
+void SlideOSD::slotTimer()
+{
+    d->progress->setValue(d->progress->value()-1);
+}
+
+void SlideOSD::pause()
+{
+    d->progressTimer->stop();
+}
+
+void SlideOSD::play()
+{
+    d->progress->setValue(d->settings.delay*(1000/d->delay));
+    d->progressTimer->start(d->delay);
 }
 
 }  // namespace Digikam

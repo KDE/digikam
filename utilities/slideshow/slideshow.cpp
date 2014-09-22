@@ -371,6 +371,7 @@ void SlideShow::preloadNextImage()
 void SlideShow::slotPause()
 {
     d->timer->stop();
+    d->osd->pause();
     d->pause = true;
 
     if (d->toolBar->isHidden())
@@ -384,6 +385,7 @@ void SlideShow::slotPause()
 void SlideShow::slotPlay()
 {
     d->timer->start();
+    d->osd->play();
     d->toolBar->hide();
     d->pause = false;
 }
