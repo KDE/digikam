@@ -27,16 +27,12 @@
 // Qt includes
 
 #include <QColor>
-#include <QMenu>
 #include <QCursor>
 #include <QDesktopWidget>
 #include <QFont>
-#include <QLayout>
 #include <QKeyEvent>
 #include <QMouseEvent>
 #include <QPaintEvent>
-#include <QPainter>
-#include <QPixmap>
 #include <QTimer>
 #include <QWheelEvent>
 #include <QtDBus/QDBusConnection>
@@ -45,31 +41,39 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kapplication.h>
 #include <kdeversion.h>
 #include <kdialog.h>
-#include <kglobalsettings.h>
 #include <kiconloader.h>
+#include <kglobalsettings.h>
 #include <klocale.h>
-#include <kstandarddirs.h>
 #include <kdebug.h>
 
 // Local includes
 
 #include "config-digikam.h"
-#include "dimg.h"
 #include "globals.h"
-#include "previewloadthread.h"
 #include "imagepropertiestab.h"
 #include "slidetoolbar.h"
 #include "slideosd.h"
+#include "slideview.h"
+#include "slideerror.h"
+#include "slideend.h"
 
 namespace Digikam
 {
 
 class SlideShow::Private
 {
+public:
+
+    enum SlideShowViewMode
+    {
+        ErrorView=0,
+        ImageView,
+        EndView
+    };
+
 public:
 
     Private()
@@ -83,8 +87,6 @@ public:
           screenSaverCookie(-1),
           mouseMoveTimer(0),
           timer(0),
-          previewThread(0),
-          previewPreloadThread(0),
           toolBar(0),
           osd(0)
     {
@@ -103,16 +105,12 @@ public:
     QTimer*             mouseMoveTimer;  // To hide cursor when not moved.
     QTimer*             timer;
 
-    QPixmap             pixmap;
-
-    DImg                preview;
-
     KUrl                currentImage;
 
-    PreviewLoadThread*  previewThread;
-    PreviewLoadThread*  previewPreloadThread;
-
     SlideToolBar*       toolBar;
+    SlideView*          imageView;
+    SlideError*         errorView;
+    SlideEnd*           endView;
 
     SlideOSD*           osd;
 
@@ -120,16 +118,18 @@ public:
 };
 
 SlideShow::SlideShow(const SlideShowSettings& settings)
-    : QWidget(0, Qt::FramelessWindowHint), d(new Private)
+    : QStackedWidget(0),
+      d(new Private)
 {
+    setWindowFlags(Qt::FramelessWindowHint);
     d->settings = settings;
 
     setAttribute(Qt::WA_DeleteOnClose);
-    setAttribute(Qt::WA_OpaquePaintEvent);
     setWindowState(windowState() | Qt::WindowFullScreen);
 
     setWindowTitle(KDialog::makeStandardCaption(i18n("Slideshow")));
     setContextMenuPolicy(Qt::PreventContextMenu);
+    setMouseTracking(true);
 
     // ---------------------------------------------------------------
 
@@ -141,10 +141,6 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
     move(d->deskX, d->deskY);
     resize(d->deskWidth, d->deskHeight);
-
-    QPalette palette;
-    palette.setColor(backgroundRole(), Qt::black);
-    setPalette(palette);
 
     // ---------------------------------------------------------------
 
@@ -173,20 +169,36 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
     // ---------------------------------------------------------------
 
+    d->errorView = new SlideError(this);
+    d->errorView->installEventFilter(this);
+
+    insertWidget(Private::ErrorView, d->errorView);
+
+    // ---------------------------------------------------------------
+
+    d->imageView = new SlideView(this);
+    d->imageView->setLoadFullImageSize(d->settings.useFullSizePreviews);
+    d->imageView->installEventFilter(this);
+
+    connect(d->imageView, SIGNAL(signalImageLoaded(bool)),
+            this, SLOT(slotImageLoaded(bool)));
+
+    insertWidget(Private::ImageView, d->imageView);
+
+    // ---------------------------------------------------------------
+
+    d->endView = new SlideEnd(this);
+
+    insertWidget(Private::EndView, d->endView);
+
+    // ---------------------------------------------------------------
+
     d->osd = new SlideOSD(d->settings, this);
 
     // ---------------------------------------------------------------
 
-    d->previewThread        = new PreviewLoadThread();
-    d->previewPreloadThread = new PreviewLoadThread();
     d->timer                = new QTimer(this);
     d->mouseMoveTimer       = new QTimer(this);
-
-    d->previewThread->setDisplayingWidget(this);
-    d->previewPreloadThread->setDisplayingWidget(this);
-
-    connect(d->previewThread, SIGNAL(signalImageLoaded(LoadingDescription,DImg)),
-            this, SLOT(slotGotImagePreview(LoadingDescription,DImg)));
 
     connect(d->mouseMoveTimer, SIGNAL(timeout()),
             this, SLOT(slotMouseMoveTimeOut()));
@@ -199,6 +211,7 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
     // ---------------------------------------------------------------
 
+    setCurrentIndex(Private::ImageView);
     inhibitScreenSaver();
 
     setMouseTracking(true);
@@ -214,8 +227,6 @@ SlideShow::~SlideShow()
 
     delete d->timer;
     delete d->mouseMoveTimer;
-    delete d->previewThread;
-    delete d->previewPreloadThread;
     delete d;
 }
 
@@ -262,22 +273,11 @@ void SlideShow::loadNextImage()
     if (d->fileIndex < num)
     {
         d->currentImage = d->settings.fileList[d->fileIndex];
-        if (d->settings.useFullSizePreviews)
-        {
-            d->previewThread->loadHighQuality(d->currentImage.toLocalFile());
-        }
-        else
-        {
-            d->previewThread->load(d->currentImage.toLocalFile(),
-                                   qMax(d->deskWidth, d->deskHeight));
-        }
-   }
+        d->imageView->setLoadUrl(d->currentImage.toLocalFile());
+    }
     else
     {
-        d->currentImage = KUrl();
-        d->preview      = DImg();
-        updatePixmap();
-        update();
+        endOfSlide();
     }
 }
 
@@ -303,36 +303,28 @@ void SlideShow::loadPrevImage()
     if (d->fileIndex >= 0 && d->fileIndex < num)
     {
         d->currentImage = d->settings.fileList[d->fileIndex];
-        if (d->settings.useFullSizePreviews)
-        {
-            d->previewThread->loadHighQuality(d->currentImage.toLocalFile());
-        }
-        else
-        {
-            d->previewThread->load(d->currentImage.toLocalFile(),
-                                   qMax(d->deskWidth, d->deskHeight));
-        }
+        d->imageView->setLoadUrl(d->currentImage.toLocalFile());
     }
     else
     {
-        d->currentImage = KUrl();
-        d->preview      = DImg();
-        updatePixmap();
-        update();
+        endOfSlide();
     }
 }
 
-void SlideShow::slotGotImagePreview(const LoadingDescription& desc, const DImg& preview)
+void SlideShow::slotImageLoaded(bool loaded)
 {
-    if (desc.filePath != d->currentImage.toLocalFile() || desc.isThumbnail())
+    if (loaded)
     {
-        return;
+        setCurrentIndex(Private::ImageView);
+    }
+    else
+    {
+        d->errorView->setCurrentUrl(d->currentImage);
+        setCurrentIndex(Private::ErrorView);
     }
 
-    d->preview = preview;
-
-    updatePixmap();
-    update();
+    d->osd->setCurrentInfo(d->settings.pictInfoMap[d->currentImage], d->currentImage);
+    d->osd->raise();
 
     if (!d->endOfShow)
     {
@@ -344,6 +336,16 @@ void SlideShow::slotGotImagePreview(const LoadingDescription& desc, const DImg& 
 
         preloadNextImage();
     }
+}
+
+void SlideShow::endOfSlide()
+{
+    setCurrentIndex(Private::EndView);
+    d->currentImage = KUrl();
+    d->endOfShow    = true;
+    d->toolBar->setEnabledPlay(false);
+    d->toolBar->setEnabledNext(false);
+    d->toolBar->setEnabledPrev(false);
 }
 
 void SlideShow::preloadNextImage()
@@ -361,127 +363,9 @@ void SlideShow::preloadNextImage()
 
     if (index < num)
     {
-        if (d->settings.useFullSizePreviews)
-        {
-            d->previewPreloadThread->loadHighQuality(d->settings.fileList[index].toLocalFile());
-        }
-        else
-        {
-            d->previewPreloadThread->load(d->settings.fileList[index].toLocalFile(),
-                                          qMax(d->deskWidth, d->deskHeight));
-        }
+
+        d->imageView->setPreloadUrl(d->currentImage.toLocalFile());
     }
-}
-
-void SlideShow::updatePixmap()
-{
-    if (!d->currentImage.toLocalFile().isEmpty())
-    {
-        if (!d->preview.isNull())
-        {
-            // Preview extraction is complete... Draw the image.
-
-            /* For high resolution ("retina") displays, Mac OS X / Qt
-               report only half of the physical resolution in terms of
-               pixels, i.e. every logical pixels corresponds to 2x2
-               physical pixels. However, UI elements and fonts are
-               nevertheless rendered at full resolution, and pixmaps
-               as well, provided their resolution is high enough (that
-               is, higher than the reported, logical resolution).
-
-               To work around this, we render the photos not a logical
-               resolution, but with the photo's full resolution, but
-               at the screen's aspect ratio. When we later draw this
-               high resolution bitmap, it is up to Qt to scale the
-               photo to the true physical resolution.  The ratio
-               computed below is the ratio between the photo and
-               screen resolutions, or equivalently the factor by which
-               we need to increase the pixel size of the rendered
-               pixmap.
-            */
-#ifdef USE_QT_SCALING
-            double xratio  = double(d->preview.width()) / width();
-            double yratio  = double(d->preview.height()) / height();
-            double ratio   = qMax(qMin(xratio, yratio), 1.0);
-#else
-            double ratio   = 1.0;
-#endif
-            QSize fullSize = QSizeF(ratio*width(), ratio*height()).toSize();
-            d->pixmap      = QPixmap(fullSize);
-            d->pixmap.fill(Qt::black);
-            QPainter p(&(d->pixmap));
-
-            // scale font for the pixmap
-            QFont fn(font());
-            fn.setPointSize(int(ratio*fn.pointSize()));
-            p.setFont(fn);
-
-            QPixmap pix(d->preview.smoothScale(d->pixmap.width(), d->pixmap.height(), Qt::KeepAspectRatio).convertToPixmap());
-            p.drawPixmap((d->pixmap.width()  - pix.width())  / 2,
-                         (d->pixmap.height() - pix.height()) / 2, pix,
-                         0, 0, pix.width(), pix.height());
-
-            d->osd->setCurrentInfo(d->settings.pictInfoMap[d->currentImage], d->currentImage);
-        }
-        else
-        {
-            // ...or preview extraction is failed.
-
-            d->pixmap = QPixmap(size());
-            d->pixmap.fill(Qt::black);
-            QPainter p(&(d->pixmap));
-
-            p.setPen(Qt::white);
-            p.drawText(0, 0, d->pixmap.width(), d->pixmap.height(),
-                       Qt::AlignCenter | Qt::TextWordWrap,
-                       i18n("Cannot display image\n\"%1\"",
-                            d->currentImage.fileName()));
-        }
-    }
-    else
-    {
-        // End of Slide Show.
-
-        d->pixmap = QPixmap(size());
-        d->pixmap.fill(Qt::black);
-        QPainter p(&(d->pixmap));
-
-        QPixmap logo;
-
-        if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
-        {
-            logo = QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
-                   .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        }
-        else
-        {
-            logo = QPixmap(KStandardDirs::locate("data", "showfoto/data/logo-showfoto.png"))
-                   .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        }
-
-        QFont fn(font());
-        fn.setPointSize(fn.pointSize() + 10);
-        fn.setBold(true);
-
-        p.setFont(fn);
-        p.setPen(Qt::white);
-        p.drawPixmap(50, 100, logo);
-        p.drawText(60 + logo.width(), 100 +     logo.height() / 3, i18n("Slideshow Completed."));
-        p.drawText(60 + logo.width(), 100 + 2 * logo.height() / 3, i18n("Click To Exit..."));
-
-        d->endOfShow = true;
-        d->toolBar->setEnabledPlay(false);
-        d->toolBar->setEnabledNext(false);
-        d->toolBar->setEnabledPrev(false);
-    }
-}
-
-void SlideShow::paintEvent(QPaintEvent*)
-{
-    QPainter p(this);
-    p.drawPixmap(0, 0, width(), height(), d->pixmap,
-                 0, 0, d->pixmap.width(), d->pixmap.height());
-    p.end();
 }
 
 void SlideShow::slotPause()
@@ -587,7 +471,23 @@ void SlideShow::makeCornerRectangles(const QRect& desktopRect, const QSize& size
     *topRightLarger   = topRight->adjusted(-marginX, 0, 0, marginY);
 }
 
-void SlideShow::mouseMoveEvent(QMouseEvent* e)
+bool SlideShow::eventFilter(QObject* obj, QEvent* ev)
+{
+    if (obj == d->imageView ||
+        obj == d->errorView)
+    {
+        if (ev->type() == QEvent::MouseMove)
+        {
+            onMouseMoveEvent(dynamic_cast<QMouseEvent*>(ev));
+            return false;
+        }
+    }
+
+    // pass the event on to the parent class
+    return QWidget::eventFilter(obj, ev);
+}
+
+void SlideShow::onMouseMoveEvent(QMouseEvent* const e)
 {
     setCursor(QCursor(Qt::ArrowCursor));
     d->mouseMoveTimer->setSingleShot(true);
@@ -610,11 +510,13 @@ void SlideShow::mouseMoveEvent(QMouseEvent* e)
     {
         d->toolBar->move(topLeft.topLeft());
         d->toolBar->show();
+        d->toolBar->raise();
     }
     else if (topRightLarger.contains(pos))
     {
         d->toolBar->move(topRight.topLeft());
         d->toolBar->show();
+        d->toolBar->raise();
     }
     else
     {

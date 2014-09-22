@@ -76,6 +76,22 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
     : QWidget(parent),
       d(new Private)
 {
+    Qt::WindowFlags flags = Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint |
+                            Qt::X11BypassWindowManagerHint;
+
+    setWindowFlags(flags);
+    setAttribute(Qt::WA_TranslucentBackground, true);
+    setAttribute(Qt::WA_X11NetWmWindowTypeNotification, true);
+    setAttribute(Qt::WA_ShowWithoutActivating, true);
+
+#ifdef Q_OS_WIN32
+    // Don't show the window in the taskbar.  Qt::ToolTip does this too, but it
+    // adds an extra ugly shadow.
+    int ex_style = GetWindowLong(winId(), GWL_EXSTYLE);
+    ex_style |= WS_EX_NOACTIVATE;
+    SetWindowLong(winId(), GWL_EXSTYLE, ex_style);
+#endif
+
     QGridLayout* const grid = new QGridLayout(this);
     d->slideInfo            = new SlideInfoWidget(settings, this);
     d->settings             = settings;

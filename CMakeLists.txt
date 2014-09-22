@@ -984,6 +984,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slidetoolbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideosd.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideinfowidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideerror.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideend.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideshow.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideshowsettings.cpp
        )

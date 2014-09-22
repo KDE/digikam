@@ -30,7 +30,7 @@
 #include <QMouseEvent>
 #include <QPaintEvent>
 #include <QWheelEvent>
-#include <QWidget>
+#include <QStackedWidget>
 
 // Local includes
 
@@ -43,7 +43,7 @@ namespace Digikam
 
 class DImg;
 
-class DIGIKAM_EXPORT SlideShow : public QWidget
+class DIGIKAM_EXPORT SlideShow : public QStackedWidget
 {
     Q_OBJECT
 
@@ -75,9 +75,7 @@ public Q_SLOTS:
 
 protected:
 
-    void paintEvent(QPaintEvent*);
     void mousePressEvent(QMouseEvent*);
-    void mouseMoveEvent(QMouseEvent*);
     void keyPressEvent(QKeyEvent*);
     void wheelEvent(QWheelEvent*);
 
@@ -85,7 +83,7 @@ private Q_SLOTS:
 
     void slotTimeOut();
     void slotMouseMoveTimeOut();
-    void slotGotImagePreview(const LoadingDescription&, const DImg&);
+    void slotImageLoaded(bool);
 
     void slotPause();
     void slotPlay();
@@ -95,10 +93,12 @@ private Q_SLOTS:
 
 private:
 
+    bool eventFilter(QObject* obj, QEvent* ev);
+    void onMouseMoveEvent(QMouseEvent* const e);
     void loadNextImage();
     void loadPrevImage();
     void preloadNextImage();
-    void updatePixmap();
+    void endOfSlide();
     void inhibitScreenSaver();
     void allowScreenSaver();
     void dispatchCurrentInfoChange(const KUrl& url);
