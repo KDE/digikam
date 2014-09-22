@@ -247,8 +247,6 @@ void SlideInfoWidget::paintEvent(QPaintEvent*)
 
         printInfoText(p, offset, str);
     }
-
-
 }
 
 void SlideInfoWidget::printInfoText(QPainter& p, int& offset, const QString& str, const QColor& pcol)

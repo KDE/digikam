@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2014-09-18
- * Description : slideshow canvas image widget.
+ * Description : slideshow image widget
  *
  * Copyright (C) 2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
