@@ -241,11 +241,11 @@ void SlideInfoWidget::paintEvent(QPaintEvent*)
 
     if (d->settings.printName)
     {
-/*        str = QString("%1 (%2/%3)").arg(d->url.fileName())
-                .arg(QString::number(d->fileIndex + 1))
-                .arg(QString::number(d->settings.fileList.count()));*/
+        str = QString("%1 (%2/%3)").arg(d->url.fileName())
+                .arg(QString::number(d->settings.fileList.indexOf(d->url) + 1))
+                .arg(QString::number(d->settings.fileList.count()));
 
-        printInfoText(p, offset, d->url.fileName());
+        printInfoText(p, offset, str);
     }
 
 
