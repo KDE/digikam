@@ -55,6 +55,8 @@ class SlideOSD::Private
 public:
 
     Private() :
+        paused(false),
+        blink(false),
         delay(500),         // ms
         progress(0),
         progressTimer(0),
@@ -68,6 +70,8 @@ public:
     {
     }
 
+    bool                paused;
+    bool                blink;
     int const           delay;
 
     QProgressBar*       progress;
@@ -124,10 +128,10 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
     d->ratingWidget->setFading(false);
     d->ratingWidget->installEventFilter(this);
     d->ratingWidget->setFocusPolicy(Qt::NoFocus);
+
     QWidget* const space = new QWidget(d->labelsBox);
-    d->labelsBox->setVisible(false);
-    d->labelsBox->layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter | Qt::AlignLeft);
     d->labelsBox->setStretchFactor(space, 10);
+    d->labelsBox->layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter | Qt::AlignLeft);
     d->labelsBox->setVisible(d->settings.printLabels);
 
     connect(d->ratingWidget, SIGNAL(signalRatingChanged(int)),
@@ -179,10 +183,6 @@ void SlideOSD::setCurrentInfo(const SlidePictureInfo& info, const KUrl& url)
 
     if (url != d->url)
     {
-        QString str = QString("(%1/%2)")
-                    .arg(QString::number(d->settings.fileList.indexOf(url) + 1))
-                    .arg(QString::number(d->settings.fileList.count()));
-        d->progress->setFormat(str);
         d->url = url;
         play();
     }
@@ -245,16 +245,34 @@ bool SlideOSD::eventFilter(QObject* obj, QEvent* ev)
 
 void SlideOSD::slotTimer()
 {
-    d->progress->setValue(d->progress->value()-1);
+    QString str = QString("(%1/%2)")
+                    .arg(QString::number(d->settings.fileList.indexOf(d->url) + 1))
+                    .arg(QString::number(d->settings.fileList.count()));
+
+    if (d->paused)
+    {
+        d->blink = !d->blink;
+
+        if (d->blink)
+            str = QString();
+
+        d->progress->setFormat(str);
+    }
+    else
+    {
+        d->progress->setFormat(str);
+        d->progress->setValue(d->progress->value()-1);
+    }
 }
 
 void SlideOSD::pause()
 {
-    d->progressTimer->stop();
+    d->paused = true;
 }
 
 void SlideOSD::play()
 {
+    d->paused = false;
     d->progress->setValue(d->settings.delay*(1000/d->delay));
     d->progressTimer->start(d->delay);
 }
