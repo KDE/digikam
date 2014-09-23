@@ -55,8 +55,6 @@ public:
     void setCurrentUrl(const KUrl& url);
     KUrl currentUrl() const;
 
-    void setPaused(bool paused);
-
     void toggleTag(int tag);
     void updateTags(const KUrl& url, const QStringList& tags);
 

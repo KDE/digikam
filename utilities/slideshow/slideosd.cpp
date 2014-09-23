@@ -261,7 +261,8 @@ void SlideOSD::reposition()
 
 bool SlideOSD::eventFilter(QObject* obj, QEvent* ev)
 {
-    if (obj == d->ratingWidget                 ||
+    if (obj == d->labelsBox                    ||
+        obj == d->ratingWidget                 ||
         obj == d->clWidget                     ||
         obj == d->plWidget                     ||
         obj == d->clWidget->colorLabelWidget() ||
@@ -269,13 +270,13 @@ bool SlideOSD::eventFilter(QObject* obj, QEvent* ev)
     {
         if (ev->type() == QEvent::Enter)
         {
-            d->parent->setPaused(true);
+            pause(true);
             return false;
         }
 
         if (ev->type() == QEvent::Leave)
         {
-            d->parent->setPaused(false);
+            pause(false);
             return false;
         }
     }

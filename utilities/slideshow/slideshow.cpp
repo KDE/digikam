@@ -382,7 +382,8 @@ void SlideShow::keyPressEvent(QKeyEvent* e)
 
 bool SlideShow::eventFilter(QObject* obj, QEvent* ev)
 {
-    if (obj == d->imageView ||
+    if (obj == d->osd       ||
+        obj == d->imageView ||
         obj == d->endView   ||
         obj == d->errorView)
     {
@@ -473,11 +474,6 @@ void SlideShow::dispatchCurrentInfoChange(const KUrl& url)
 {
     if (d->currentImage == url)
         d->osd->setCurrentInfo(d->settings.pictInfoMap[d->currentImage], d->currentImage);
-}
-
-void SlideShow::setPaused(bool paused)
-{
-    d->osd->pause(paused);
 }
 
 }  // namespace Digikam
