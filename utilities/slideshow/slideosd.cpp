@@ -160,8 +160,8 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
 
     QGridLayout* const grid = new QGridLayout(this);
     grid->addWidget(d->slideProps, 1, 0, 1, 2);
-    grid->addWidget(d->labelsBox, 2, 0, 1, 1);
-    grid->addWidget(d->progress,  3, 0, 1, 1);
+    grid->addWidget(d->labelsBox,  2, 0, 1, 1);
+    grid->addWidget(d->progress,   3, 0, 1, 1);
     grid->setRowStretch(0, 10);
     grid->setColumnStretch(1, 10);
     grid->setSpacing(KDialog::spacingHint());
