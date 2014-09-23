@@ -62,6 +62,7 @@
 
 #include <libkexiv2/kexiv2previews.h>
 #include <libkexiv2/rotationmatrix.h>
+#include <libkexiv2/version.h>
 
 // Local includes
 
@@ -519,6 +520,9 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
             KDcraw::loadHalfPreview(qimage, path);
         }
 
+        // See bug #339144 : only handle preview if right libkexiv2 version is used.
+#if KEXIV2_VERSION >= 0x020302
+
         // Special case with DNG file. See bug #338081
         if (qimage.isNull())
         {
@@ -527,6 +531,8 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
             KExiv2Iface::KExiv2Previews preview(path);
             qimage = preview.image();
         }
+
+#endif
 
         // DImg-dependent loading methods: TIFF, PNG, everything supported by QImage
         if (qimage.isNull() && !failedAtDImg)
