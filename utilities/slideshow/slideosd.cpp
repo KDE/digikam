@@ -81,7 +81,6 @@ public:
 
     KHBox*              labelsBox;
     KHBox*              progressBox;
-    KUrl                url;
 
     SlideShow*          parent;
     SlideProperties*    slideProps;
@@ -222,12 +221,6 @@ void SlideOSD::setCurrentInfo(const SlidePictureInfo& info, const KUrl& url)
 
     d->slideProps->setCurrentInfo(info, url);
 
-    if (url != d->url)
-    {
-        d->url = url;
-        //pause(false);
-    }
-
     // Display Labels.
 
     if (d->settings.printLabels)
@@ -288,7 +281,7 @@ bool SlideOSD::eventFilter(QObject* obj, QEvent* ev)
 void SlideOSD::slotTimer()
 {
     QString str = QString("(%1/%2)")
-                    .arg(QString::number(d->settings.fileList.indexOf(d->url) + 1))
+                    .arg(QString::number(d->settings.fileList.indexOf(d->parent->currentItem()) + 1))
                     .arg(QString::number(d->settings.fileList.count()));
 
     if (d->toolBar->isPaused())
