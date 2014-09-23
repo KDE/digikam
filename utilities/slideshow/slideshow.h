@@ -69,9 +69,17 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
+    void slotLoadNextImage();
+
     void slotAssignRating(int);
     void slotAssignColorLabel(int);
     void slotAssignPickLabel(int);
+
+    void slotPause();
+    void slotPlay();
+    void slotPrev();
+    void slotNext();
+    void slotClose();
 
 protected:
 
@@ -81,21 +89,13 @@ protected:
 
 private Q_SLOTS:
 
-    void slotTimeOut();
     void slotMouseMoveTimeOut();
     void slotImageLoaded(bool);
-
-    void slotPause();
-    void slotPlay();
-    void slotPrev();
-    void slotNext();
-    void slotClose();
 
 private:
 
     bool eventFilter(QObject* obj, QEvent* ev);
     void onMouseMoveEvent(QMouseEvent* const e);
-    void loadNextImage();
     void loadPrevImage();
     void preloadNextImage();
     void endOfSlide();

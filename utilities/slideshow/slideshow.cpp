@@ -44,7 +44,6 @@
 #include <kapplication.h>
 #include <kdeversion.h>
 #include <kdialog.h>
-#include <kiconloader.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -52,8 +51,6 @@
 // Local includes
 
 #include "config-digikam.h"
-#include "globals.h"
-#include "imagepropertiestab.h"
 #include "slidetoolbar.h"
 #include "slideosd.h"
 #include "slideimage.h"
@@ -78,7 +75,6 @@ public:
 
     Private()
         : endOfShow(false),
-          pause(false),
           deskX(0),
           deskY(0),
           deskWidth(0),
@@ -86,8 +82,6 @@ public:
           fileIndex(-1),
           screenSaverCookie(-1),
           mouseMoveTimer(0),
-          timer(0),
-          toolBar(0),
           imageView(0),
           errorView(0),
           endView(0),
@@ -96,7 +90,6 @@ public:
     }
 
     bool                endOfShow;
-    bool                pause;
 
     int                 deskX;
     int                 deskY;
@@ -106,15 +99,12 @@ public:
     int                 screenSaverCookie;
 
     QTimer*             mouseMoveTimer;  // To hide cursor when not moved.
-    QTimer*             timer;
 
     KUrl                currentImage;
 
-    SlideToolBar*       toolBar;
     SlideImage*         imageView;
     SlideError*         errorView;
     SlideEnd*           endView;
-
     SlideOSD*           osd;
 
     SlideShowSettings   settings;
@@ -125,16 +115,15 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
       d(new Private)
 {
     setWindowFlags(Qt::FramelessWindowHint);
-    d->settings = settings;
-
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowState(windowState() | Qt::WindowFullScreen);
-
     setWindowTitle(KDialog::makeStandardCaption(i18n("Slideshow")));
     setContextMenuPolicy(Qt::PreventContextMenu);
     setMouseTracking(true);
 
     // ---------------------------------------------------------------
+
+    d->settings    = settings;
 
     QRect deskRect = KGlobalSettings::desktopGeometry(kapp->activeWindow());
     d->deskX       = deskRect.x();
@@ -144,31 +133,6 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
     move(d->deskX, d->deskY);
     resize(d->deskWidth, d->deskHeight);
-
-    // ---------------------------------------------------------------
-
-    d->toolBar = new SlideToolBar(this);
-    d->toolBar->hide();
-
-    if (!d->settings.loop)
-    {
-        d->toolBar->setEnabledPrev(false);
-    }
-
-    connect(d->toolBar, SIGNAL(signalPause()),
-            this, SLOT(slotPause()));
-
-    connect(d->toolBar, SIGNAL(signalPlay()),
-            this, SLOT(slotPlay()));
-
-    connect(d->toolBar, SIGNAL(signalNext()),
-            this, SLOT(slotNext()));
-
-    connect(d->toolBar, SIGNAL(signalPrev()),
-            this, SLOT(slotPrev()));
-
-    connect(d->toolBar, SIGNAL(signalClose()),
-            this, SLOT(slotClose()));
 
     // ---------------------------------------------------------------
 
@@ -191,6 +155,7 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
     // ---------------------------------------------------------------
 
     d->endView = new SlideEnd(this);
+    d->endView->installEventFilter(this);
 
     insertWidget(Private::EndView, d->endView);
 
@@ -200,17 +165,10 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
     // ---------------------------------------------------------------
 
-    d->timer                = new QTimer(this);
-    d->mouseMoveTimer       = new QTimer(this);
+    d->mouseMoveTimer = new QTimer(this);
 
     connect(d->mouseMoveTimer, SIGNAL(timeout()),
             this, SLOT(slotMouseMoveTimeOut()));
-
-    connect(d->timer, SIGNAL(timeout()),
-            this, SLOT(slotTimeOut()));
-
-    d->timer->setSingleShot(true);
-    d->timer->start(10);
 
     // ---------------------------------------------------------------
 
@@ -225,10 +183,8 @@ SlideShow::~SlideShow()
 {
     allowScreenSaver();
 
-    d->timer->stop();
     d->mouseMoveTimer->stop();
 
-    delete d->timer;
     delete d->mouseMoveTimer;
     delete d;
 }
@@ -249,12 +205,7 @@ KUrl SlideShow::currentUrl() const
     return d->currentImage;
 }
 
-void SlideShow::slotTimeOut()
-{
-    loadNextImage();
-}
-
-void SlideShow::loadNextImage()
+void SlideShow::slotLoadNextImage()
 {
     d->fileIndex++;
     int num = d->settings.fileList.count();
@@ -269,8 +220,8 @@ void SlideShow::loadNextImage()
 
     if (!d->settings.loop)
     {
-        d->toolBar->setEnabledPrev(d->fileIndex > 0);
-        d->toolBar->setEnabledNext(d->fileIndex < num - 1);
+        d->osd->toolBar()->setEnabledPrev(d->fileIndex > 0);
+        d->osd->toolBar()->setEnabledNext(d->fileIndex < num - 1);
     }
 
     if (d->fileIndex < num)
@@ -299,8 +250,8 @@ void SlideShow::loadPrevImage()
 
     if (!d->settings.loop)
     {
-        d->toolBar->setEnabledPrev(d->fileIndex > 0);
-        d->toolBar->setEnabledNext(d->fileIndex < num - 1);
+        d->osd->toolBar()->setEnabledPrev(d->fileIndex > 0);
+        d->osd->toolBar()->setEnabledNext(d->fileIndex < num - 1);
     }
 
     if (d->fileIndex >= 0 && d->fileIndex < num)
@@ -331,10 +282,9 @@ void SlideShow::slotImageLoaded(bool loaded)
 
     if (!d->endOfShow)
     {
-        if (!d->pause)
+        if (!d->osd->isPaused())
         {
-            d->timer->setSingleShot(true);
-            d->timer->start(d->settings.delay * 1000);
+            d->osd->pause(false);
         }
 
         preloadNextImage();
@@ -346,9 +296,9 @@ void SlideShow::endOfSlide()
     setCurrentIndex(Private::EndView);
     d->currentImage = KUrl();
     d->endOfShow    = true;
-    d->toolBar->setEnabledPlay(false);
-    d->toolBar->setEnabledNext(false);
-    d->toolBar->setEnabledPrev(false);
+    d->osd->toolBar()->setEnabledPlay(false);
+    d->osd->toolBar()->setEnabledNext(false);
+    d->osd->toolBar()->setEnabledPrev(false);
 }
 
 void SlideShow::preloadNextImage()
@@ -373,24 +323,12 @@ void SlideShow::preloadNextImage()
 
 void SlideShow::slotPause()
 {
-    d->timer->stop();
-    d->osd->pause();
-    d->pause = true;
-
-    if (d->toolBar->isHidden())
-    {
-        int w = d->toolBar->width();
-        d->toolBar->move(d->deskWidth - w - 1, 0);
-        d->toolBar->show();
-    }
+    d->osd->pause(true);
 }
 
 void SlideShow::slotPlay()
 {
-    d->timer->start();
-    d->osd->play();
-    d->toolBar->hide();
-    d->pause = false;
+    d->osd->pause(false);
 }
 
 void SlideShow::slotPrev()
@@ -400,7 +338,7 @@ void SlideShow::slotPrev()
 
 void SlideShow::slotNext()
 {
-    loadNextImage();
+    slotLoadNextImage();
 }
 
 void SlideShow::slotClose()
@@ -412,17 +350,13 @@ void SlideShow::wheelEvent(QWheelEvent* e)
 {
     if (e->delta() < 0)
     {
-        d->timer->stop();
-        d->pause = true;
-        d->toolBar->setPaused(true);
+        d->osd->pause(true);
         slotNext();
     }
 
     if (e->delta() > 0 && d->fileIndex - 1 >= 0)
     {
-        d->timer->stop();
-        d->pause = true;
-        d->toolBar->setPaused(true);
+        d->osd->pause(true);
         slotPrev();
     }
 }
@@ -436,16 +370,12 @@ void SlideShow::mousePressEvent(QMouseEvent* e)
 
     if (e->button() == Qt::LeftButton)
     {
-        d->timer->stop();
-        d->pause = true;
-        d->toolBar->setPaused(true);
+        d->osd->pause(true);
         slotNext();
     }
     else if (e->button() == Qt::RightButton && d->fileIndex - 1 >= 0)
     {
-        d->timer->stop();
-        d->pause = true;
-        d->toolBar->setPaused(true);
+        d->osd->pause(true);
         slotPrev();
     }
 }
@@ -457,28 +387,13 @@ void SlideShow::keyPressEvent(QKeyEvent* e)
         return;
     }
 
-    d->toolBar->keyPressEvent(e);
-}
-
-void SlideShow::makeCornerRectangles(const QRect& desktopRect, const QSize& size,
-                                     QRect* topLeft, QRect* topRight,
-                                     QRect* topLeftLarger, QRect* topRightLarger)
-{
-    QRect sizeRect(QPoint(0, 0), size);
-    *topLeft          = sizeRect;
-    *topRight         = sizeRect;
-
-    topLeft->moveTo(desktopRect.x(), desktopRect.y());
-    topRight->moveTo(desktopRect.x() + desktopRect.width() - sizeRect.width() - 1, topLeft->y());
-
-    const int marginX = 25, marginY = 10;
-    *topLeftLarger    = topLeft->adjusted(0, 0, marginX, marginY);
-    *topRightLarger   = topRight->adjusted(-marginX, 0, 0, marginY);
+    d->osd->toolBar()->keyPressEvent(e);
 }
 
 bool SlideShow::eventFilter(QObject* obj, QEvent* ev)
 {
     if (obj == d->imageView ||
+        obj == d->endView   ||
         obj == d->errorView)
     {
         if (ev->type() == QEvent::MouseMove)
@@ -492,65 +407,19 @@ bool SlideShow::eventFilter(QObject* obj, QEvent* ev)
     return QWidget::eventFilter(obj, ev);
 }
 
-void SlideShow::onMouseMoveEvent(QMouseEvent* const e)
+void SlideShow::onMouseMoveEvent(QMouseEvent*)
 {
     setCursor(QCursor(Qt::ArrowCursor));
     d->mouseMoveTimer->setSingleShot(true);
     d->mouseMoveTimer->start(1000);
-
-    if (!d->toolBar->canHide())
-    {
-        return;
-    }
-
-    QPoint pos(e->pos());
-
-    QRect sizeRect(QPoint(0, 0), d->toolBar->size());
-    QRect topLeft, topRight;
-    QRect topLeftLarger, topRightLarger;
-    makeCornerRectangles(QRect(d->deskY, d->deskY, d->deskWidth, d->deskHeight), d->toolBar->size(),
-                               &topLeft, &topRight, &topLeftLarger, &topRightLarger);
-
-    if (topLeftLarger.contains(pos))
-    {
-        d->toolBar->move(topLeft.topLeft());
-        d->toolBar->show();
-        d->toolBar->raise();
-    }
-    else if (topRightLarger.contains(pos))
-    {
-        d->toolBar->move(topRight.topLeft());
-        d->toolBar->show();
-        d->toolBar->raise();
-    }
-    else
-    {
-        if (!d->toolBar->isHidden())
-        {
-            d->toolBar->hide();
-        }
-    }
 }
 
 void SlideShow::slotMouseMoveTimeOut()
 {
-    QPoint pos(QCursor::pos());
-
-    QRect sizeRect(QPoint(0, 0), d->toolBar->size());
-    QRect topLeft, topRight;
-    QRect topLeftLarger, topRightLarger;
-    makeCornerRectangles(QRect(d->deskY, d->deskY, d->deskWidth, d->deskHeight), d->toolBar->size(),
-                         &topLeft, &topRight, &topLeftLarger, &topRightLarger);
-
-    if (topLeftLarger.contains(pos) || topRightLarger.contains(pos))
-    {
-        return;
-    }
-
     setCursor(QCursor(Qt::BlankCursor));
 }
 
-// from Okular's presentation widget
+// From Okular's presentation widget
 // TODO: Add OSX and Windows support
 void SlideShow::inhibitScreenSaver()
 {
@@ -618,8 +487,7 @@ void SlideShow::dispatchCurrentInfoChange(const KUrl& url)
 
 void SlideShow::setPaused(bool paused)
 {
-    d->pause = paused;
-    d->toolBar->setPaused(paused);
+    d->osd->pause(paused);
 }
 
 }  // namespace Digikam

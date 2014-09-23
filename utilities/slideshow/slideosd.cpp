@@ -41,6 +41,7 @@
 // Local includes
 
 #include "slideshow.h"
+#include "slidetoolbar.h"
 #include "slideproperties.h"
 #include "ratingwidget.h"
 #include "colorlabelwidget.h"
@@ -55,14 +56,15 @@ class SlideOSD::Private
 public:
 
     Private() :
-        paused(false),
         blink(false),
-        delay(500),         // ms
-        progress(0),
+        delay(500),         // Progress bar refresh timer in ms
+        progressBar(0),
         progressTimer(0),
+        timer(0),           // Slide timer
         labelsBox(0),
         parent(0),
         slideProps(0),
+        toolBar(0),
         ratingWidget(0),
         clWidget(0),
         plWidget(0)
@@ -70,18 +72,20 @@ public:
     {
     }
 
-    bool                paused;
     bool                blink;
     int const           delay;
 
-    QProgressBar*       progress;
+    QProgressBar*       progressBar;
     QTimer*             progressTimer;
+    QTimer*             timer;
 
     KHBox*              labelsBox;
+    KHBox*              progressBox;
     KUrl                url;
 
     SlideShow*          parent;
     SlideProperties*    slideProps;
+    SlideToolBar*       toolBar;
     RatingWidget*       ratingWidget;
     ColorLabelSelector* clWidget;
     PickLabelSelector*  plWidget;
@@ -128,9 +132,6 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
     d->ratingWidget->setFading(false);
     d->ratingWidget->installEventFilter(this);
     d->ratingWidget->setFocusPolicy(Qt::NoFocus);
-
-    QWidget* const space = new QWidget(d->labelsBox);
-    d->labelsBox->setStretchFactor(space, 10);
     d->labelsBox->layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter | Qt::AlignLeft);
     d->labelsBox->setVisible(d->settings.printLabels);
 
@@ -145,10 +146,44 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
 
     // ---------------------------------------------------------------
 
-    d->progress = new QProgressBar(this);
-    d->progress->setMinimum(0);
-    d->progress->setMaximum(d->settings.delay*(1000/d->delay));
-    d->progress->setVisible(d->settings.showProgressIndicator);
+    d->progressBox   = new KHBox(this);
+    d->progressBox->setVisible(d->settings.showProgressIndicator);
+
+    d->progressBar   = new QProgressBar(d->progressBox);
+    d->progressBar->setMinimum(0);
+    d->progressBar->setMaximum(d->settings.delay*(1000/d->delay));
+    d->progressBar->setFocusPolicy(Qt::NoFocus);
+
+    d->toolBar       = new SlideToolBar(d->progressBox);
+    d->toolBar->setEnabledPrev(!d->settings.loop);
+
+    connect(d->toolBar, SIGNAL(signalPause()),
+            d->parent, SLOT(slotPause()));
+
+    connect(d->toolBar, SIGNAL(signalPlay()),
+            d->parent, SLOT(slotPlay()));
+
+    connect(d->toolBar, SIGNAL(signalNext()),
+            d->parent, SLOT(slotNext()));
+
+    connect(d->toolBar, SIGNAL(signalPrev()),
+            d->parent, SLOT(slotPrev()));
+
+    connect(d->toolBar, SIGNAL(signalClose()),
+            d->parent, SLOT(slotClose()));
+
+    // ---------------------------------------------------------------
+
+    QGridLayout* const grid = new QGridLayout(this);
+    grid->addWidget(d->slideProps,  1, 0, 1, 2);
+    grid->addWidget(d->labelsBox,   2, 0, 1, 1);
+    grid->addWidget(d->progressBox, 3, 0, 1, 1);
+    grid->setRowStretch(0, 10);
+    grid->setColumnStretch(1, 10);
+    grid->setSpacing(KDialog::spacingHint());
+    grid->setMargin(0);
+
+    // ---------------------------------------------------------------
 
     d->progressTimer = new QTimer(this);
     d->progressTimer->setSingleShot(false);
@@ -156,23 +191,29 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
     connect(d->progressTimer, SIGNAL(timeout()),
             this, SLOT(slotTimer()));
 
-    // ---------------------------------------------------------------
+    d->timer         = new QTimer(this);
 
-    QGridLayout* const grid = new QGridLayout(this);
-    grid->addWidget(d->slideProps, 1, 0, 1, 2);
-    grid->addWidget(d->labelsBox,  2, 0, 1, 1);
-    grid->addWidget(d->progress,   3, 0, 1, 1);
-    grid->setRowStretch(0, 10);
-    grid->setColumnStretch(1, 10);
-    grid->setSpacing(KDialog::spacingHint());
-    grid->setMargin(0);
+    connect(d->timer, SIGNAL(timeout()),
+            d->parent, SLOT(slotLoadNextImage()));
+
+    d->timer->setSingleShot(true);
+    d->timer->start(10);
 }
 
 SlideOSD::~SlideOSD()
 {
+    d->timer->stop();
     d->progressTimer->stop();
+
+    delete d->timer;
     delete d->progressTimer;
+
     delete d;
+}
+
+SlideToolBar* SlideOSD::toolBar() const
+{
+    return d->toolBar;
 }
 
 void SlideOSD::setCurrentInfo(const SlidePictureInfo& info, const KUrl& url)
@@ -184,7 +225,7 @@ void SlideOSD::setCurrentInfo(const SlidePictureInfo& info, const KUrl& url)
     if (url != d->url)
     {
         d->url = url;
-        play();
+        //pause(false);
     }
 
     // Display Labels.
@@ -249,32 +290,42 @@ void SlideOSD::slotTimer()
                     .arg(QString::number(d->settings.fileList.indexOf(d->url) + 1))
                     .arg(QString::number(d->settings.fileList.count()));
 
-    if (d->paused)
+    if (d->toolBar->isPaused())
     {
         d->blink = !d->blink;
 
         if (d->blink)
             str = QString();
 
-        d->progress->setFormat(str);
+        d->progressBar->setFormat(str);
     }
     else
     {
-        d->progress->setFormat(str);
-        d->progress->setValue(d->progress->value()-1);
+        d->progressBar->setFormat(str);
+        d->progressBar->setValue(d->progressBar->value()-1);
     }
 }
 
-void SlideOSD::pause()
+void SlideOSD::pause(bool b)
 {
-    d->paused = true;
+    d->toolBar->pause(b);
+
+    if (b)
+    {
+        d->timer->stop();
+    }
+    else
+    {
+        d->progressBar->setValue(d->settings.delay*(1000/d->delay));
+        d->progressTimer->start(d->delay);
+        d->timer->setSingleShot(true);
+        d->timer->start(d->settings.delay * 1000);
+    }
 }
 
-void SlideOSD::play()
+bool SlideOSD::isPaused() const
 {
-    d->paused = false;
-    d->progress->setValue(d->settings.delay*(1000/d->delay));
-    d->progressTimer->start(d->delay);
+    return d->toolBar->isPaused();
 }
 
 }  // namespace Digikam

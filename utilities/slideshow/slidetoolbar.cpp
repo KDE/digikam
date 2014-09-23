@@ -26,7 +26,6 @@
 
 // Qt includes
 
-#include <QHBoxLayout>
 #include <QPixmap>
 #include <QToolButton>
 
@@ -44,8 +43,7 @@ class SlideToolBar::Private
 public:
 
     Private() :
-        iconSize(32),//KIconLoader::SizeMedium),
-        canHide(true),
+        iconSize(KIconLoader::SizeMedium),
         playBtn(0),
         stopBtn(0),
         nextBtn(0),
@@ -55,7 +53,6 @@ public:
     }
 
     const int    iconSize;
-    bool         canHide;
 
     QToolButton* playBtn;
     QToolButton* stopBtn;
@@ -66,28 +63,22 @@ public:
 };
 
 SlideToolBar::SlideToolBar(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : KHBox(parent), d(new Private)
 {
-    QHBoxLayout* const lay = new QHBoxLayout();
-    setLayout(lay);
     d->playBtn = new QToolButton(this);
     d->prevBtn = new QToolButton(this);
     d->nextBtn = new QToolButton(this);
     d->stopBtn = new QToolButton(this);
     d->playBtn->setCheckable(true);
+    d->playBtn->setFocusPolicy(Qt::NoFocus);
+    d->prevBtn->setFocusPolicy(Qt::NoFocus);
+    d->nextBtn->setFocusPolicy(Qt::NoFocus);
+    d->stopBtn->setFocusPolicy(Qt::NoFocus);
 
     d->playBtn->setIcon(d->loader->loadIcon("media-playback-pause", KIconLoader::Toolbar, d->iconSize));
     d->prevBtn->setIcon(d->loader->loadIcon("media-skip-backward",  KIconLoader::Toolbar, d->iconSize));
     d->nextBtn->setIcon(d->loader->loadIcon("media-skip-forward",   KIconLoader::Toolbar, d->iconSize));
     d->stopBtn->setIcon(d->loader->loadIcon("media-playback-stop",  KIconLoader::Toolbar, d->iconSize));
-
-    lay->addWidget(d->playBtn);
-    lay->addWidget(d->prevBtn);
-    lay->addWidget(d->nextBtn);
-    lay->addWidget(d->stopBtn);
-
-    adjustSize();
-    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     connect(d->playBtn, SIGNAL(toggled(bool)),
             this, SLOT(slotPlayBtnToggled()));
@@ -113,17 +104,12 @@ SlideToolBar::~SlideToolBar()
     delete d;
 }
 
-bool SlideToolBar::canHide() const
-{
-    return d->canHide;
-}
-
 bool SlideToolBar::isPaused() const
 {
     return d->playBtn->isChecked();
 }
 
-void SlideToolBar::setPaused(bool val)
+void SlideToolBar::pause(bool val)
 {
     if (val == isPaused())
     {
@@ -153,13 +139,11 @@ void SlideToolBar::slotPlayBtnToggled()
 {
     if (d->playBtn->isChecked())
     {
-        d->canHide = false;
         d->playBtn->setIcon(d->loader->loadIcon("media-playback-start", KIconLoader::Toolbar, d->iconSize));
         emit signalPause();
     }
     else
     {
-        d->canHide = true;
         d->playBtn->setIcon(d->loader->loadIcon("media-playback-pause", KIconLoader::Toolbar, d->iconSize));
         emit signalPlay();
     }
@@ -170,7 +154,6 @@ void SlideToolBar::slotNexPrevClicked()
     if (!d->playBtn->isChecked())
     {
         d->playBtn->setChecked(true);
-        d->canHide                = false;
         d->playBtn->setIcon(d->loader->loadIcon("media-playback-start", KIconLoader::Toolbar, d->iconSize));
         emit signalPause();
     }

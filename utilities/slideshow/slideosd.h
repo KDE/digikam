@@ -42,6 +42,7 @@ namespace Digikam
 {
 
 class SlideShow;
+class SlideToolBar;
 
 class SlideOSD : public QWidget
 {
@@ -54,8 +55,10 @@ public:
 
     void setCurrentInfo(const SlidePictureInfo& info, const KUrl& url);
 
-    void pause();
-    void play();
+    void pause(bool b);
+    bool isPaused() const;
+
+    SlideToolBar* toolBar() const;
 
 private Q_SLOTS:
 

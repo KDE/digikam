@@ -30,6 +30,10 @@
 #include <QWidget>
 #include <QKeyEvent>
 
+// KDE includes
+
+#include <khbox.h>
+
 // Local includes
 
 #include "digikam_export.h"
@@ -38,7 +42,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT SlideToolBar : public QWidget
+class DIGIKAM_EXPORT SlideToolBar : public KHBox
 {
     Q_OBJECT
 
@@ -47,9 +51,8 @@ public:
     explicit SlideToolBar(QWidget* const parent);
     ~SlideToolBar();
 
-    bool canHide()  const;
     bool isPaused() const;
-    void setPaused(bool val);
+    void pause(bool val);
 
     void setEnabledPlay(bool val);
     void setEnabledNext(bool val);
