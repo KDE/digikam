@@ -74,8 +74,7 @@ public:
 public:
 
     Private()
-        : endOfShow(false),
-          deskX(0),
+        : deskX(0),
           deskY(0),
           deskWidth(0),
           deskHeight(0),
@@ -88,8 +87,6 @@ public:
           osd(0)
     {
     }
-
-    bool                endOfShow;
 
     int                 deskX;
     int                 deskY;
@@ -196,7 +193,7 @@ void SlideShow::setCurrentItem(const KUrl& url)
     if (index != -1)
     {
         d->currentItem = url;
-        d->fileIndex    = index - 1;
+        d->fileIndex   = index - 1;
     }
 }
 
@@ -280,7 +277,7 @@ void SlideShow::slotImageLoaded(bool loaded)
     d->osd->setCurrentInfo(d->settings.pictInfoMap[d->currentItem], d->currentItem);
     d->osd->raise();
 
-    if (!d->endOfShow)
+    if (d->fileIndex != -1)
     {
         if (!d->osd->isPaused())
         {
@@ -295,7 +292,7 @@ void SlideShow::endOfSlide()
 {
     setCurrentIndex(Private::EndView);
     d->currentItem = KUrl();
-    d->endOfShow    = true;
+    d->fileIndex   = -1;
     d->osd->toolBar()->setEnabledPlay(false);
     d->osd->toolBar()->setEnabledNext(false);
     d->osd->toolBar()->setEnabledPrev(false);
@@ -338,7 +335,7 @@ void SlideShow::wheelEvent(QWheelEvent* e)
 
 void SlideShow::mousePressEvent(QMouseEvent* e)
 {
-    if (d->endOfShow)
+    if (d->fileIndex == -1)
     {
         close();
     }
