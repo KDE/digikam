@@ -164,10 +164,10 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
             d->parent, SLOT(slotPlay()));
 
     connect(d->toolBar, SIGNAL(signalNext()),
-            d->parent, SLOT(slotNext()));
+            d->parent, SLOT(slotLoadNextImage()));
 
     connect(d->toolBar, SIGNAL(signalPrev()),
-            d->parent, SLOT(slotPrev()));
+            d->parent, SLOT(slotLoadPrevImage()));
 
     connect(d->toolBar, SIGNAL(signalClose()),
             d->parent, SLOT(slotClose()));

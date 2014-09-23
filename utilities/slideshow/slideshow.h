@@ -70,6 +70,7 @@ Q_SIGNALS:
 public Q_SLOTS:
 
     void slotLoadNextImage();
+    void slotLoadPrevImage();
 
     void slotAssignRating(int);
     void slotAssignColorLabel(int);
@@ -77,8 +78,6 @@ public Q_SLOTS:
 
     void slotPause();
     void slotPlay();
-    void slotPrev();
-    void slotNext();
     void slotClose();
 
 protected:
@@ -96,7 +95,6 @@ private:
 
     bool eventFilter(QObject* obj, QEvent* ev);
     void onMouseMoveEvent(QMouseEvent* const e);
-    void loadPrevImage();
     void preloadNextImage();
     void endOfSlide();
     void inhibitScreenSaver();

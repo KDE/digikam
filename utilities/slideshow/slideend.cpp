@@ -76,7 +76,7 @@ SlideEnd::SlideEnd(QWidget* const parent)
 
     logoLabel->setPixmap(logo);
 
-    QLabel* const textLabel = new QLabel(i18n("Slideshow Completed.\nClick To Exit..."), this);
+    QLabel* const textLabel = new QLabel(i18n("Slideshow Completed.\nClick To Exit\nor press ESC..."), this);
 
     QGridLayout* const grid = new QGridLayout(this);
     grid->addWidget(logoLabel, 1, 1, 1, 1);

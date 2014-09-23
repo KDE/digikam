@@ -235,7 +235,7 @@ void SlideShow::slotLoadNextImage()
     }
 }
 
-void SlideShow::loadPrevImage()
+void SlideShow::slotLoadPrevImage()
 {
     d->fileIndex--;
     int num = d->settings.fileList.count();
@@ -331,16 +331,6 @@ void SlideShow::slotPlay()
     d->osd->pause(false);
 }
 
-void SlideShow::slotPrev()
-{
-    loadPrevImage();
-}
-
-void SlideShow::slotNext()
-{
-    slotLoadNextImage();
-}
-
 void SlideShow::slotClose()
 {
     close();
@@ -351,13 +341,13 @@ void SlideShow::wheelEvent(QWheelEvent* e)
     if (e->delta() < 0)
     {
         d->osd->pause(true);
-        slotNext();
+        slotLoadNextImage();
     }
 
     if (e->delta() > 0 && d->fileIndex - 1 >= 0)
     {
         d->osd->pause(true);
-        slotPrev();
+        slotLoadPrevImage();
     }
 }
 
@@ -371,12 +361,12 @@ void SlideShow::mousePressEvent(QMouseEvent* e)
     if (e->button() == Qt::LeftButton)
     {
         d->osd->pause(true);
-        slotNext();
+        slotLoadNextImage();
     }
     else if (e->button() == Qt::RightButton && d->fileIndex - 1 >= 0)
     {
         d->osd->pause(true);
-        slotPrev();
+        slotLoadPrevImage();
     }
 }
 
