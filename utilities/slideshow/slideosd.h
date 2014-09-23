@@ -63,6 +63,8 @@ public:
 private Q_SLOTS:
 
     void slotTimer();
+    void slotPause();
+    void slotPlay();
 
 private:
 

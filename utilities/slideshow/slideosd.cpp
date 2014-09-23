@@ -158,19 +158,19 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
     d->toolBar->setEnabledPrev(!d->settings.loop);
 
     connect(d->toolBar, SIGNAL(signalPause()),
-            d->parent, SLOT(slotPause()));
+            this, SLOT(slotPause()));
 
     connect(d->toolBar, SIGNAL(signalPlay()),
-            d->parent, SLOT(slotPlay()));
+            this, SLOT(slotPlay()));
 
     connect(d->toolBar, SIGNAL(signalNext()),
-            d->parent, SLOT(slotLoadNextImage()));
+            d->parent, SLOT(slotLoadNextItem()));
 
     connect(d->toolBar, SIGNAL(signalPrev()),
-            d->parent, SLOT(slotLoadPrevImage()));
+            d->parent, SLOT(slotLoadPrevItem()));
 
     connect(d->toolBar, SIGNAL(signalClose()),
-            d->parent, SLOT(slotClose()));
+            d->parent, SLOT(close()));
 
     // ---------------------------------------------------------------
 
@@ -194,7 +194,7 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
     d->timer         = new QTimer(this);
 
     connect(d->timer, SIGNAL(timeout()),
-            d->parent, SLOT(slotLoadNextImage()));
+            d->parent, SLOT(slotLoadNextItem()));
 
     d->timer->setSingleShot(true);
     d->timer->start(10);
@@ -329,4 +329,13 @@ bool SlideOSD::isPaused() const
     return d->toolBar->isPaused();
 }
 
+void SlideOSD::slotPause()
+{
+    pause(true);
+}
+
+void SlideOSD::slotPlay()
+{
+    pause(false);
+}
 }  // namespace Digikam

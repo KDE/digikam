@@ -100,7 +100,7 @@ public:
 
     QTimer*             mouseMoveTimer;  // To hide cursor when not moved.
 
-    KUrl                currentImage;
+    KUrl                currentItem;
 
     SlideImage*         imageView;
     SlideError*         errorView;
@@ -195,17 +195,17 @@ void SlideShow::setCurrentUrl(const KUrl& url)
 
     if (index != -1)
     {
-        d->currentImage = url;
+        d->currentItem = url;
         d->fileIndex    = index - 1;
     }
 }
 
 KUrl SlideShow::currentUrl() const
 {
-    return d->currentImage;
+    return d->currentItem;
 }
 
-void SlideShow::slotLoadNextImage()
+void SlideShow::slotLoadNextItem()
 {
     d->fileIndex++;
     int num = d->settings.fileList.count();
@@ -226,8 +226,8 @@ void SlideShow::slotLoadNextImage()
 
     if (d->fileIndex < num)
     {
-        d->currentImage = d->settings.fileList[d->fileIndex];
-        d->imageView->setLoadUrl(d->currentImage.toLocalFile());
+        d->currentItem = d->settings.fileList[d->fileIndex];
+        d->imageView->setLoadUrl(d->currentItem.toLocalFile());
     }
     else
     {
@@ -235,7 +235,7 @@ void SlideShow::slotLoadNextImage()
     }
 }
 
-void SlideShow::slotLoadPrevImage()
+void SlideShow::slotLoadPrevItem()
 {
     d->fileIndex--;
     int num = d->settings.fileList.count();
@@ -256,8 +256,8 @@ void SlideShow::slotLoadPrevImage()
 
     if (d->fileIndex >= 0 && d->fileIndex < num)
     {
-        d->currentImage = d->settings.fileList[d->fileIndex];
-        d->imageView->setLoadUrl(d->currentImage.toLocalFile());
+        d->currentItem = d->settings.fileList[d->fileIndex];
+        d->imageView->setLoadUrl(d->currentItem.toLocalFile());
     }
     else
     {
@@ -273,11 +273,11 @@ void SlideShow::slotImageLoaded(bool loaded)
     }
     else
     {
-        d->errorView->setCurrentUrl(d->currentImage);
+        d->errorView->setCurrentUrl(d->currentItem);
         setCurrentIndex(Private::ErrorView);
     }
 
-    d->osd->setCurrentInfo(d->settings.pictInfoMap[d->currentImage], d->currentImage);
+    d->osd->setCurrentInfo(d->settings.pictInfoMap[d->currentItem], d->currentItem);
     d->osd->raise();
 
     if (!d->endOfShow)
@@ -287,21 +287,21 @@ void SlideShow::slotImageLoaded(bool loaded)
             d->osd->pause(false);
         }
 
-        preloadNextImage();
+        preloadNextItem();
     }
 }
 
 void SlideShow::endOfSlide()
 {
     setCurrentIndex(Private::EndView);
-    d->currentImage = KUrl();
+    d->currentItem = KUrl();
     d->endOfShow    = true;
     d->osd->toolBar()->setEnabledPlay(false);
     d->osd->toolBar()->setEnabledNext(false);
     d->osd->toolBar()->setEnabledPrev(false);
 }
 
-void SlideShow::preloadNextImage()
+void SlideShow::preloadNextItem()
 {
     int index = d->fileIndex + 1;
     int num   = d->settings.fileList.count();
@@ -317,23 +317,8 @@ void SlideShow::preloadNextImage()
     if (index < num)
     {
 
-        d->imageView->setPreloadUrl(d->currentImage.toLocalFile());
+        d->imageView->setPreloadUrl(d->currentItem.toLocalFile());
     }
-}
-
-void SlideShow::slotPause()
-{
-    d->osd->pause(true);
-}
-
-void SlideShow::slotPlay()
-{
-    d->osd->pause(false);
-}
-
-void SlideShow::slotClose()
-{
-    close();
 }
 
 void SlideShow::wheelEvent(QWheelEvent* e)
@@ -341,13 +326,13 @@ void SlideShow::wheelEvent(QWheelEvent* e)
     if (e->delta() < 0)
     {
         d->osd->pause(true);
-        slotLoadNextImage();
+        slotLoadNextItem();
     }
 
     if (e->delta() > 0 && d->fileIndex - 1 >= 0)
     {
         d->osd->pause(true);
-        slotLoadPrevImage();
+        slotLoadPrevItem();
     }
 }
 
@@ -361,12 +346,12 @@ void SlideShow::mousePressEvent(QMouseEvent* e)
     if (e->button() == Qt::LeftButton)
     {
         d->osd->pause(true);
-        slotLoadNextImage();
+        slotLoadNextItem();
     }
     else if (e->button() == Qt::RightButton && d->fileIndex - 1 >= 0)
     {
         d->osd->pause(true);
-        slotLoadPrevImage();
+        slotLoadPrevItem();
     }
 }
 
@@ -440,23 +425,23 @@ void SlideShow::allowScreenSaver()
 
 void SlideShow::slotAssignRating(int rating)
 {
-    d->settings.pictInfoMap[d->currentImage].rating = rating;
-    dispatchCurrentInfoChange(d->currentImage);
-    emit signalRatingChanged(d->currentImage, rating);
+    d->settings.pictInfoMap[d->currentItem].rating = rating;
+    dispatchCurrentInfoChange(d->currentItem);
+    emit signalRatingChanged(d->currentItem, rating);
 }
 
 void SlideShow::slotAssignColorLabel(int color)
 {
-    d->settings.pictInfoMap[d->currentImage].colorLabel = color;
-    dispatchCurrentInfoChange(d->currentImage);
-    emit signalColorLabelChanged(d->currentImage, color);
+    d->settings.pictInfoMap[d->currentItem].colorLabel = color;
+    dispatchCurrentInfoChange(d->currentItem);
+    emit signalColorLabelChanged(d->currentItem, color);
 }
 
 void SlideShow::slotAssignPickLabel(int pick)
 {
-    d->settings.pictInfoMap[d->currentImage].pickLabel = pick;
-    dispatchCurrentInfoChange(d->currentImage);
-    emit signalPickLabelChanged(d->currentImage, pick);
+    d->settings.pictInfoMap[d->currentItem].pickLabel = pick;
+    dispatchCurrentInfoChange(d->currentItem);
+    emit signalPickLabelChanged(d->currentItem, pick);
 }
 
 void SlideShow::updateTags(const KUrl& url, const QStringList& tags)
@@ -467,13 +452,13 @@ void SlideShow::updateTags(const KUrl& url, const QStringList& tags)
 
 void SlideShow::toggleTag(int tag)
 {
-    emit signalToggleTag(d->currentImage, tag);
+    emit signalToggleTag(d->currentItem, tag);
 }
 
 void SlideShow::dispatchCurrentInfoChange(const KUrl& url)
 {
-    if (d->currentImage == url)
-        d->osd->setCurrentInfo(d->settings.pictInfoMap[d->currentImage], d->currentImage);
+    if (d->currentItem == url)
+        d->osd->setCurrentInfo(d->settings.pictInfoMap[d->currentItem], d->currentItem);
 }
 
 }  // namespace Digikam
