@@ -189,7 +189,7 @@ SlideShow::~SlideShow()
     delete d;
 }
 
-void SlideShow::setCurrentUrl(const KUrl& url)
+void SlideShow::setCurrentItem(const KUrl& url)
 {
     int index = d->settings.fileList.indexOf(url);
 
@@ -200,7 +200,7 @@ void SlideShow::setCurrentUrl(const KUrl& url)
     }
 }
 
-KUrl SlideShow::currentUrl() const
+KUrl SlideShow::currentItem() const
 {
     return d->currentItem;
 }

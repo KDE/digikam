@@ -52,8 +52,8 @@ public:
     explicit SlideShow(const SlideShowSettings& settings);
     ~SlideShow();
 
-    void setCurrentUrl(const KUrl& url);
-    KUrl currentUrl() const;
+    void setCurrentItem(const KUrl& url);
+    KUrl currentItem() const;
 
     void toggleTag(int tag);
     void updateTags(const KUrl& url, const QStringList& tags);

@@ -1424,7 +1424,7 @@ void ImageWindow::slideShow(SlideShowSettings& settings)
 
         if (settings.startWithCurrent)
         {
-            slide->setCurrentUrl(d->currentUrl());
+            slide->setCurrentItem(d->currentUrl());
         }
 
         connect(slide, SIGNAL(signalRatingChanged(KUrl,int)),
@@ -1452,7 +1452,7 @@ void ImageWindow::dragMoveEvent(QDragMoveEvent* e)
     KUrl::List kioURLs;
 
     if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs) ||
-        DAlbumDrag::decode(e->mimeData(), urls, albumID) ||
+        DAlbumDrag::decode(e->mimeData(), urls, albumID)                    ||
         DTagListDrag::canDecode(e->mimeData()))
     {
         e->accept();

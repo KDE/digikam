@@ -2060,7 +2060,7 @@ void DigikamView::slotSlideShowBuilderComplete(const SlideShowSettings& settings
 
     if (settings.startWithCurrent)
     {
-        slide->setCurrentUrl(currentUrl());
+        slide->setCurrentItem(currentUrl());
     }
 
     connect(slide, SIGNAL(signalRatingChanged(KUrl,int)),

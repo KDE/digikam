@@ -1068,7 +1068,7 @@ void ShowFoto::slideShow(Digikam::SlideShowSettings& settings)
 
         if (settings.startWithCurrent)
         {
-            slide->setCurrentUrl(d->thumbBar->currentUrl());
+            slide->setCurrentItem(d->thumbBar->currentUrl());
         }
 
         slide->show();
