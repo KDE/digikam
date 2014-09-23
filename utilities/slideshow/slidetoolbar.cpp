@@ -65,6 +65,8 @@ public:
 SlideToolBar::SlideToolBar(QWidget* const parent)
     : KHBox(parent), d(new Private)
 {
+    setMouseTracking(true);
+
     d->playBtn = new QToolButton(this);
     d->prevBtn = new QToolButton(this);
     d->nextBtn = new QToolButton(this);

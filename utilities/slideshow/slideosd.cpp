@@ -102,6 +102,7 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
     setAttribute(Qt::WA_TranslucentBackground, true);
     setAttribute(Qt::WA_X11NetWmWindowTypeNotification, true);
     setAttribute(Qt::WA_ShowWithoutActivating, true);
+    setMouseTracking(true);
 
 #ifdef Q_OS_WIN32
     // Don't show the window in the taskbar.  Qt::ToolTip does this too, but it
@@ -111,28 +112,41 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
     SetWindowLong(winId(), GWL_EXSTYLE, ex_style);
 #endif
 
-    d->slideProps = new SlideProperties(settings, this);
     d->settings   = settings;
     d->parent     = parent;
+    d->slideProps = new SlideProperties(d->settings, this);
+    d->slideProps->installEventFilter(d->parent);
 
     // ---------------------------------------------------------------
 
     d->labelsBox    = new KHBox(this);
+
     d->clWidget     = new ColorLabelSelector(d->labelsBox);
     d->clWidget->installEventFilter(this);
+    d->clWidget->installEventFilter(d->parent);
     d->clWidget->colorLabelWidget()->installEventFilter(this);
     d->clWidget->setFocusPolicy(Qt::NoFocus);
+    d->clWidget->setMouseTracking(true);
+
     d->plWidget     = new PickLabelSelector(d->labelsBox);
     d->plWidget->installEventFilter(this);
+    d->plWidget->installEventFilter(d->parent);
     d->plWidget->setFocusPolicy(Qt::NoFocus);
     d->plWidget->pickLabelWidget()->installEventFilter(this);
+    d->plWidget->setMouseTracking(true);
+
     d->ratingWidget = new RatingWidget(d->labelsBox);
     d->ratingWidget->setTracking(false);
     d->ratingWidget->setFading(false);
     d->ratingWidget->installEventFilter(this);
+    d->ratingWidget->installEventFilter(d->parent);
     d->ratingWidget->setFocusPolicy(Qt::NoFocus);
+    d->ratingWidget->setMouseTracking(true);
+
     d->labelsBox->layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter | Qt::AlignLeft);
     d->labelsBox->setVisible(d->settings.printLabels);
+    d->labelsBox->installEventFilter(d->parent);
+    d->labelsBox->setMouseTracking(true);
 
     connect(d->ratingWidget, SIGNAL(signalRatingChanged(int)),
             parent, SLOT(slotAssignRating(int)));
@@ -147,14 +161,19 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
 
     d->progressBox   = new KHBox(this);
     d->progressBox->setVisible(d->settings.showProgressIndicator);
+    d->progressBox->installEventFilter(d->parent);
+    d->progressBox->setMouseTracking(true);
 
     d->progressBar   = new QProgressBar(d->progressBox);
     d->progressBar->setMinimum(0);
     d->progressBar->setMaximum(d->settings.delay*(1000/d->delay));
     d->progressBar->setFocusPolicy(Qt::NoFocus);
+    d->progressBar->installEventFilter(d->parent);
+    d->progressBar->setMouseTracking(true);
 
     d->toolBar       = new SlideToolBar(d->progressBox);
-    d->toolBar->setEnabledPrev(!d->settings.loop);
+    d->toolBar->installEventFilter(this);
+    d->toolBar->installEventFilter(d->parent);
 
     connect(d->toolBar, SIGNAL(signalPause()),
             this, SLOT(slotPause()));
@@ -255,6 +274,7 @@ void SlideOSD::reposition()
 bool SlideOSD::eventFilter(QObject* obj, QEvent* ev)
 {
     if (obj == d->labelsBox                    ||
+        obj == d->toolBar                      ||
         obj == d->ratingWidget                 ||
         obj == d->clWidget                     ||
         obj == d->plWidget                     ||
