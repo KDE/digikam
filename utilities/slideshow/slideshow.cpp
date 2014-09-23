@@ -56,7 +56,7 @@
 #include "imagepropertiestab.h"
 #include "slidetoolbar.h"
 #include "slideosd.h"
-#include "slideview.h"
+#include "slideimage.h"
 #include "slideerror.h"
 #include "slideend.h"
 
@@ -88,6 +88,9 @@ public:
           mouseMoveTimer(0),
           timer(0),
           toolBar(0),
+          imageView(0),
+          errorView(0),
+          endView(0),
           osd(0)
     {
     }
@@ -108,7 +111,7 @@ public:
     KUrl                currentImage;
 
     SlideToolBar*       toolBar;
-    SlideView*          imageView;
+    SlideImage*         imageView;
     SlideError*         errorView;
     SlideEnd*           endView;
 
@@ -176,7 +179,7 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
     // ---------------------------------------------------------------
 
-    d->imageView = new SlideView(this);
+    d->imageView = new SlideImage(this);
     d->imageView->setLoadFullImageSize(d->settings.useFullSizePreviews);
     d->imageView->installEventFilter(this);
 

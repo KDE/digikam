@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2014-09-19
- * Description : slide info widget
+ * Description : slide properties widget
  *
  * Copyright (C) 2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "slideinfowidget.h"
+#include "slideproperties.h"
 
 // Qt includes
 
@@ -45,7 +45,7 @@
 namespace Digikam
 {
 
-class SlideInfoWidget::Private
+class SlideProperties::Private
 {
 public:
 
@@ -62,26 +62,26 @@ public:
     SlidePictureInfo  info;
 };
 
-SlideInfoWidget::SlideInfoWidget(const SlideShowSettings& settings, QWidget* const parent)
+SlideProperties::SlideProperties(const SlideShowSettings& settings, QWidget* const parent)
     : QWidget(parent), d(new Private)
 {
     d->settings = settings;
     setFixedSize(QApplication::desktop()->availableGeometry(parentWidget()).size()/2);
 }
 
-SlideInfoWidget::~SlideInfoWidget()
+SlideProperties::~SlideProperties()
 {
     delete d;
 }
 
-void SlideInfoWidget::setCurrentInfo(const SlidePictureInfo& info, const KUrl& url)
+void SlideProperties::setCurrentInfo(const SlidePictureInfo& info, const KUrl& url)
 {
     d->info = info;
     d->url  = url;
     update();
 }
 
-void SlideInfoWidget::paintEvent(QPaintEvent*)
+void SlideProperties::paintEvent(QPaintEvent*)
 {
     QPainter p(this);
 
@@ -245,7 +245,7 @@ void SlideInfoWidget::paintEvent(QPaintEvent*)
     }
 }
 
-void SlideInfoWidget::printInfoText(QPainter& p, int& offset, const QString& str, const QColor& pcol)
+void SlideProperties::printInfoText(QPainter& p, int& offset, const QString& str, const QColor& pcol)
 {
     if (!str.isEmpty())
     {
@@ -265,7 +265,7 @@ void SlideInfoWidget::printInfoText(QPainter& p, int& offset, const QString& str
     }
 }
 
-void SlideInfoWidget::printComments(QPainter& p, int& offset, const QString& comments)
+void SlideProperties::printComments(QPainter& p, int& offset, const QString& comments)
 {
     QStringList commentsByLines;
 
@@ -334,7 +334,7 @@ void SlideInfoWidget::printComments(QPainter& p, int& offset, const QString& com
     }
 }
 
-void SlideInfoWidget::printTags(QPainter& p, int& offset, QStringList& tags)
+void SlideProperties::printTags(QPainter& p, int& offset, QStringList& tags)
 {
     tags.sort();
 

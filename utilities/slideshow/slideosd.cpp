@@ -41,7 +41,7 @@
 // Local includes
 
 #include "slideshow.h"
-#include "slideinfowidget.h"
+#include "slideproperties.h"
 #include "ratingwidget.h"
 #include "colorlabelwidget.h"
 #include "picklabelwidget.h"
@@ -62,7 +62,7 @@ public:
         progressTimer(0),
         labelsBox(0),
         parent(0),
-        slideInfo(0),
+        slideProps(0),
         ratingWidget(0),
         clWidget(0),
         plWidget(0)
@@ -81,7 +81,7 @@ public:
     KUrl                url;
 
     SlideShow*          parent;
-    SlideInfoWidget*    slideInfo;
+    SlideProperties*    slideProps;
     RatingWidget*       ratingWidget;
     ColorLabelSelector* clWidget;
     PickLabelSelector*  plWidget;
@@ -104,13 +104,13 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
     // Don't show the window in the taskbar.  Qt::ToolTip does this too, but it
     // adds an extra ugly shadow.
     int ex_style = GetWindowLong(winId(), GWL_EXSTYLE);
-    ex_style |= WS_EX_NOACTIVATE;
+    ex_style    |= WS_EX_NOACTIVATE;
     SetWindowLong(winId(), GWL_EXSTYLE, ex_style);
 #endif
 
-    d->slideInfo            = new SlideInfoWidget(settings, this);
-    d->settings             = settings;
-    d->parent               = parent;
+    d->slideProps = new SlideProperties(settings, this);
+    d->settings   = settings;
+    d->parent     = parent;
 
     // ---------------------------------------------------------------
 
@@ -159,7 +159,7 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
     // ---------------------------------------------------------------
 
     QGridLayout* const grid = new QGridLayout(this);
-    grid->addWidget(d->slideInfo, 1, 0, 1, 2);
+    grid->addWidget(d->slideProps, 1, 0, 1, 2);
     grid->addWidget(d->labelsBox, 2, 0, 1, 1);
     grid->addWidget(d->progress,  3, 0, 1, 1);
     grid->setRowStretch(0, 10);
@@ -179,7 +179,7 @@ void SlideOSD::setCurrentInfo(const SlidePictureInfo& info, const KUrl& url)
 {
     // Update info text.
 
-    d->slideInfo->setCurrentInfo(info, url);
+    d->slideProps->setCurrentInfo(info, url);
 
     if (url != d->url)
     {

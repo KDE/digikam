@@ -983,8 +983,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     SET(libslideshow_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slidetoolbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideosd.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideinfowidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideproperties.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideimage.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideerror.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideend.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideshow.cpp

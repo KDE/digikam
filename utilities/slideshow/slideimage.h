@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SLIDEVIEW_H
-#define SLIDEVIEW_H
+#ifndef SLIDEIMAGE_H
+#define SLIDEIMAGE_H
 
 // Qt includes
 
@@ -40,14 +40,14 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT SlideView : public QWidget
+class DIGIKAM_EXPORT SlideImage : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    explicit SlideView(QWidget* const parent = 0);
-    ~SlideView();
+    explicit SlideImage(QWidget* const parent = 0);
+    ~SlideImage();
 
     void setLoadFullImageSize(bool b);
     void setLoadUrl(const KUrl& url);
@@ -74,4 +74,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* SLIDEVIEW_H */
+#endif /* SLIDEIMAGE_H */

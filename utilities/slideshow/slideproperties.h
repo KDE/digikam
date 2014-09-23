@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2014-09-19
- * Description : slide info widget
+ * Description : slide properties widget
  *
  * Copyright (C) 2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SLIDEINFOWIDGET_H
-#define SLIDEINFOWIDGET_H
+#ifndef SLIDEPROPERTIES_H
+#define SLIDEPROPERTIES_H
 
 #include <QWidget>
 #include <QPainter>
@@ -40,12 +40,12 @@
 namespace Digikam
 {
 
-class SlideInfoWidget : public QWidget
+class SlideProperties : public QWidget
 {
 public:
 
-    explicit SlideInfoWidget(const SlideShowSettings& settings, QWidget* const parent);
-    ~SlideInfoWidget();
+    explicit SlideProperties(const SlideShowSettings& settings, QWidget* const parent);
+    ~SlideProperties();
 
     void setCurrentInfo(const SlidePictureInfo& info, const KUrl& url);
 
@@ -65,4 +65,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* SLIDEINFOWIDGET_H */
+#endif /* SLIDEPROPERTIES_H */

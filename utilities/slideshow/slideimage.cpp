@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "slideview.moc"
+#include "slideimage.moc"
 
 // Qt includes
 
@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class SlideView::Private
+class SlideImage::Private
 {
 
 public:
@@ -65,7 +65,7 @@ public:
     PreviewLoadThread*  previewPreloadThread;
 };
 
-SlideView::SlideView(QWidget* const parent)
+SlideImage::SlideImage(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
@@ -82,19 +82,19 @@ SlideView::SlideView(QWidget* const parent)
             this, SLOT(slotGotImagePreview(LoadingDescription, DImg)));
 }
 
-SlideView::~SlideView()
+SlideImage::~SlideImage()
 {
     delete d->previewThread;
     delete d->previewPreloadThread;
     delete d;
 }
 
-void SlideView::setLoadFullImageSize(bool b)
+void SlideImage::setLoadFullImageSize(bool b)
 {
     d->useFullSizePreviews = b;
 }
 
-void SlideView::setLoadUrl(const KUrl& url)
+void SlideImage::setLoadUrl(const KUrl& url)
 {
     d->currentImage = url;
 
@@ -108,7 +108,7 @@ void SlideView::setLoadUrl(const KUrl& url)
     }
 }
 
-void SlideView::setPreloadUrl(const KUrl& url)
+void SlideImage::setPreloadUrl(const KUrl& url)
 {
     if (d->useFullSizePreviews)
     {
@@ -120,7 +120,7 @@ void SlideView::setPreloadUrl(const KUrl& url)
     }
 }
 
-void SlideView::paintEvent(QPaintEvent*)
+void SlideImage::paintEvent(QPaintEvent*)
 {
     QPainter p(this);
     p.drawPixmap(0, 0, width(), height(), d->pixmap,
@@ -128,7 +128,7 @@ void SlideView::paintEvent(QPaintEvent*)
     p.end();
 }
 
-void SlideView::slotGotImagePreview(const LoadingDescription& desc, const DImg& preview)
+void SlideImage::slotGotImagePreview(const LoadingDescription& desc, const DImg& preview)
 {
     if (desc.filePath != d->currentImage.toLocalFile() || desc.isThumbnail())
     {
@@ -150,7 +150,7 @@ void SlideView::slotGotImagePreview(const LoadingDescription& desc, const DImg& 
     emit signalImageLoaded(false);
 }
 
-void SlideView::updatePixmap()
+void SlideImage::updatePixmap()
 {
     /* For high resolution ("retina") displays, Mac OS X / Qt
         report only half of the physical resolution in terms of
