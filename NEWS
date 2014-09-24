@@ -49,4 +49,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 036 ==> 339140 - Labels Search: Inconsistent font used for headings, does not follow theme.
 037 ==> 339144 - digiKam crashes in libkexiv2 metadata handling.
 038 ==> 339210 - digiKam crashes when trying to stop find duplicates.
-039 ==> 
+039 ==> 339341 - SCAN : digiKam not showing format label for .KRA or .ORA files.
+040 ==> 
