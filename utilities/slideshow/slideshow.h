@@ -49,6 +49,15 @@ class DIGIKAM_EXPORT SlideShow : public QStackedWidget
 
 public:
 
+    enum SlideShowViewMode
+    {
+        ErrorView=0,
+        ImageView,
+        EndView
+    };
+
+public:
+
     explicit SlideShow(const SlideShowSettings& settings);
     ~SlideShow();
 
@@ -69,6 +78,8 @@ public Q_SLOTS:
 
     void slotLoadNextItem();
     void slotLoadPrevItem();
+    void slotPause();
+    void slotPlay();
 
     void slotAssignRating(int);
     void slotAssignColorLabel(int);

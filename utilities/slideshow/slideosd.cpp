@@ -57,10 +57,10 @@ public:
 
     Private() :
         blink(false),
-        delay(500),         // Progress bar refresh timer in ms
+        delay(500),         // Progress bar refresh slideTimer in ms
         progressBar(0),
         progressTimer(0),
-        timer(0),           // Slide timer
+        slideTimer(0),
         labelsBox(0),
         parent(0),
         slideProps(0),
@@ -77,7 +77,7 @@ public:
 
     QProgressBar*       progressBar;
     QTimer*             progressTimer;
-    QTimer*             timer;
+    QTimer*             slideTimer;
 
     KHBox*              labelsBox;
     KHBox*              progressBox;
@@ -176,10 +176,10 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
     d->toolBar->installEventFilter(d->parent);
 
     connect(d->toolBar, SIGNAL(signalPause()),
-            this, SLOT(slotPause()));
+            d->parent, SLOT(slotPause()));
 
     connect(d->toolBar, SIGNAL(signalPlay()),
-            this, SLOT(slotPlay()));
+            d->parent, SLOT(slotPlay()));
 
     connect(d->toolBar, SIGNAL(signalNext()),
             d->parent, SLOT(slotLoadNextItem()));
@@ -207,25 +207,24 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
     d->progressTimer->setSingleShot(false);
 
     connect(d->progressTimer, SIGNAL(timeout()),
-            this, SLOT(slotTimer()));
+            this, SLOT(slotProgressTimer()));
 
-    d->timer         = new QTimer(this);
+    d->slideTimer    = new QTimer(this);
 
-    connect(d->timer, SIGNAL(timeout()),
-            d->parent, SLOT(slotLoadNextItem()));
+    connect(d->slideTimer, SIGNAL(timeout()),
+            this, SLOT(slotSlideTimer()));
 
-    d->timer->setSingleShot(true);
-    d->timer->start(10);
+    d->slideTimer->setSingleShot(true);
+    d->slideTimer->start(10);
 }
 
 SlideOSD::~SlideOSD()
 {
-    d->timer->stop();
+    d->slideTimer->stop();
     d->progressTimer->stop();
 
-    delete d->timer;
+    delete d->slideTimer;
     delete d->progressTimer;
-
     delete d;
 }
 
@@ -255,19 +254,12 @@ void SlideOSD::setCurrentInfo(const SlidePictureInfo& info, const KUrl& url)
         d->plWidget->blockSignals(false);
     }
 
-    reposition();
-}
-
-void SlideOSD::reposition()
-{
     // Make the OSD the proper size
     layout()->activate();
     resize(sizeHint());
 
     QRect geometry(QApplication::desktop()->availableGeometry(parentWidget()));
-
     move(10, geometry.bottom() - height());
-
     show();
 }
 
@@ -283,13 +275,13 @@ bool SlideOSD::eventFilter(QObject* obj, QEvent* ev)
     {
         if (ev->type() == QEvent::Enter)
         {
-            pause(true);
+            d->parent->slotPause();
             return false;
         }
 
         if (ev->type() == QEvent::Leave)
         {
-            pause(false);
+            d->parent->slotPlay();
             return false;
         }
     }
@@ -298,7 +290,13 @@ bool SlideOSD::eventFilter(QObject* obj, QEvent* ev)
     return QWidget::eventFilter(obj, ev);
 }
 
-void SlideOSD::slotTimer()
+void SlideOSD::slotSlideTimer()
+{
+    // NOTE: prepare to video slide support.
+    d->parent->slotLoadNextItem();
+}
+
+void SlideOSD::slotProgressTimer()
 {
     QString str = QString("(%1/%2)")
                     .arg(QString::number(d->settings.fileList.indexOf(d->parent->currentItem()) + 1))
@@ -309,7 +307,9 @@ void SlideOSD::slotTimer()
         d->blink = !d->blink;
 
         if (d->blink)
+        {
             str = QString();
+        }
 
         d->progressBar->setFormat(str);
     }
@@ -326,14 +326,14 @@ void SlideOSD::pause(bool b)
 
     if (b)
     {
-        d->timer->stop();
+        d->slideTimer->stop();
     }
     else
     {
         d->progressBar->setValue(d->settings.delay*(1000/d->delay));
         d->progressTimer->start(d->delay);
-        d->timer->setSingleShot(true);
-        d->timer->start(d->settings.delay * 1000);
+        d->slideTimer->setSingleShot(true);
+        d->slideTimer->start(d->settings.delay * 1000);
     }
 }
 
@@ -342,13 +342,4 @@ bool SlideOSD::isPaused() const
     return d->toolBar->isPaused();
 }
 
-void SlideOSD::slotPause()
-{
-    pause(true);
-}
-
-void SlideOSD::slotPlay()
-{
-    pause(false);
-}
 }  // namespace Digikam

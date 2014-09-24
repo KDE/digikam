@@ -62,14 +62,6 @@ namespace Digikam
 
 class SlideShow::Private
 {
-public:
-
-    enum SlideShowViewMode
-    {
-        ErrorView=0,
-        ImageView,
-        EndView
-    };
 
 public:
 
@@ -134,7 +126,7 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
     d->errorView = new SlideError(this);
     d->errorView->installEventFilter(this);
 
-    insertWidget(Private::ErrorView, d->errorView);
+    insertWidget(ErrorView, d->errorView);
 
     // ---------------------------------------------------------------
 
@@ -145,14 +137,14 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
     connect(d->imageView, SIGNAL(signalImageLoaded(bool)),
             this, SLOT(slotImageLoaded(bool)));
 
-    insertWidget(Private::ImageView, d->imageView);
+    insertWidget(ImageView, d->imageView);
 
     // ---------------------------------------------------------------
 
     d->endView = new SlideEnd(this);
     d->endView->installEventFilter(this);
 
-    insertWidget(Private::EndView, d->endView);
+    insertWidget(EndView, d->endView);
 
     // ---------------------------------------------------------------
 
@@ -168,7 +160,7 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
     // ---------------------------------------------------------------
 
-    setCurrentIndex(Private::ImageView);
+    setCurrentIndex(ImageView);
     inhibitScreenSaver();
 
     setMouseTracking(true);
@@ -262,12 +254,12 @@ void SlideShow::slotImageLoaded(bool loaded)
 {
     if (loaded)
     {
-        setCurrentIndex(Private::ImageView);
+        setCurrentIndex(ImageView);
     }
     else
     {
         d->errorView->setCurrentUrl(currentItem());
-        setCurrentIndex(Private::ErrorView);
+        setCurrentIndex(ErrorView);
     }
 
     d->osd->setCurrentInfo(d->settings.pictInfoMap[currentItem()], currentItem());
@@ -286,8 +278,8 @@ void SlideShow::slotImageLoaded(bool loaded)
 
 void SlideShow::endOfSlide()
 {
-    setCurrentIndex(Private::EndView);
-    d->fileIndex   = -1;
+    setCurrentIndex(EndView);
+    d->fileIndex = -1;
     d->osd->toolBar()->setEnabledPlay(false);
     d->osd->toolBar()->setEnabledNext(false);
     d->osd->toolBar()->setEnabledPrev(false);
@@ -445,6 +437,18 @@ void SlideShow::dispatchCurrentInfoChange(const KUrl& url)
 {
     if (currentItem() == url)
         d->osd->setCurrentInfo(d->settings.pictInfoMap[currentItem()], currentItem());
+}
+
+void SlideShow::slotPause()
+{
+    // NOTE: prepare to video slide support.
+    d->osd->pause(true);
+}
+
+void SlideShow::slotPlay()
+{
+    // NOTE: prepare to video slide support.
+    d->osd->pause(false);
 }
 
 }  // namespace Digikam

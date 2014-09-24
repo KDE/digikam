@@ -62,13 +62,11 @@ public:
 
 private Q_SLOTS:
 
-    void slotTimer();
-    void slotPause();
-    void slotPlay();
+    void slotProgressTimer();
+    void slotSlideTimer();
 
 private:
 
-    void reposition();
     bool eventFilter(QObject* obj, QEvent* ev);
 
 private:

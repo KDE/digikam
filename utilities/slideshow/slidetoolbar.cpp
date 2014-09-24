@@ -43,7 +43,7 @@ class SlideToolBar::Private
 public:
 
     Private() :
-        iconSize(KIconLoader::SizeMedium),
+        iconSize(KIconLoader::SizeSmall),
         playBtn(0),
         stopBtn(0),
         nextBtn(0),
@@ -66,11 +66,13 @@ SlideToolBar::SlideToolBar(QWidget* const parent)
     : KHBox(parent), d(new Private)
 {
     setMouseTracking(true);
+    setMargin(0);
 
     d->playBtn = new QToolButton(this);
     d->prevBtn = new QToolButton(this);
     d->nextBtn = new QToolButton(this);
     d->stopBtn = new QToolButton(this);
+
     d->playBtn->setCheckable(true);
     d->playBtn->setFocusPolicy(Qt::NoFocus);
     d->prevBtn->setFocusPolicy(Qt::NoFocus);
@@ -81,6 +83,11 @@ SlideToolBar::SlideToolBar(QWidget* const parent)
     d->prevBtn->setIcon(d->loader->loadIcon("media-skip-backward",  KIconLoader::Toolbar, d->iconSize));
     d->nextBtn->setIcon(d->loader->loadIcon("media-skip-forward",   KIconLoader::Toolbar, d->iconSize));
     d->stopBtn->setIcon(d->loader->loadIcon("media-playback-stop",  KIconLoader::Toolbar, d->iconSize));
+
+    d->playBtn->setIconSize(QSize(d->iconSize, d->iconSize));
+    d->prevBtn->setIconSize(QSize(d->iconSize, d->iconSize));
+    d->nextBtn->setIconSize(QSize(d->iconSize, d->iconSize));
+    d->stopBtn->setIconSize(QSize(d->iconSize, d->iconSize));
 
     connect(d->playBtn, SIGNAL(toggled(bool)),
             this, SLOT(slotPlayBtnToggled()));
