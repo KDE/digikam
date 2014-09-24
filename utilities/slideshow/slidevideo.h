@@ -48,8 +48,7 @@ public:
     ~SlideVideo();
 
     void setCurrentUrl(const KUrl& url);
-    void pause();
-    void play();
+    void pause(bool);
     void stop();
 
 Q_SIGNALS:
@@ -61,6 +60,7 @@ private Q_SLOTS:
 
     void slotPlayerFinished();
     void slotPlayerstateChanged(Phonon::State newState, Phonon::State oldState);
+    void slotVideoLoaded(bool loaded);
 
 private:
 

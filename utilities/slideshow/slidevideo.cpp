@@ -58,8 +58,6 @@ public:
 
     Phonon::VideoPlayer* player;
     Phonon::SeekSlider*  slider;
-
-    KUrl                 url;
 };
 
 SlideVideo::SlideVideo(QWidget* const parent)
@@ -95,10 +93,16 @@ SlideVideo::SlideVideo(QWidget* const parent)
             this, SLOT(slotPlayerFinished()));
 
     connect(d->player->mediaObject(), SIGNAL(hasVideoChanged(bool)),
-            this, SIGNAL(signalVideoLoaded(bool)));
+            this, SLOT(slotVideoLoaded(bool)));
 
     connect(d->player->mediaObject(), SIGNAL(stateChanged(Phonon::State, Phonon::State)),
             this, SLOT(slotPlayerstateChanged(Phonon::State, Phonon::State)));
+
+    // --------------------------------------------------------------------------
+
+    layout()->activate();
+    resize(sizeHint());
+    show();
 }
 
 SlideVideo::~SlideVideo()
@@ -110,8 +114,31 @@ SlideVideo::~SlideVideo()
 
 void SlideVideo::setCurrentUrl(const KUrl& url)
 {
-    d->url = url;
-    d->player->play(d->url);
+    d->player->load(url);
+
+    if (d->player->mediaObject()->state() == Phonon::LoadingState ||
+        d->player->mediaObject()->state() == Phonon::StoppedState)
+    {
+        d->player->play();
+        return;
+    }
+
+    emit signalVideoLoaded(false);
+}
+
+void SlideVideo::slotVideoLoaded(bool loaded)
+{
+    kDebug() << "source     : " << d->player->mediaObject()->currentSource().fileName();
+    kDebug() << "type       : " << d->player->mediaObject()->currentSource().type();
+    kDebug() << "has video  : " << d->player->mediaObject()->hasVideo();
+    kDebug() << "state      : " << d->player->mediaObject()->state();
+    kDebug() << "error      : " << d->player->mediaObject()->errorType();
+    kDebug() << "is seekable: " << d->player->mediaObject()->isSeekable();
+
+    emit signalVideoLoaded(loaded                                                      &&
+                           d->player->mediaObject()->hasVideo()                        &&
+                           d->player->mediaObject()->state()     != Phonon::ErrorState &&
+                           d->player->mediaObject()->errorType() == Phonon::NoError);
 }
 
 void SlideVideo::slotPlayerFinished()
@@ -122,12 +149,18 @@ void SlideVideo::slotPlayerFinished()
     }
     else
     {
+        kDebug() << "error: " << d->player->mediaObject()->errorType();
         emit signalVideoLoaded(false);
     }
 }
 
 void SlideVideo::slotPlayerstateChanged(Phonon::State newState, Phonon::State oldState)
 {
+    kDebug() << "source     : " << d->player->mediaObject()->currentSource().fileName();
+    kDebug() << "type       : " << d->player->mediaObject()->currentSource().type();
+    kDebug() << "old state  : " << oldState;
+    kDebug() << "new state  : " << newState;
+
     if (oldState == Phonon::LoadingState && newState == Phonon::PlayingState)
     {
         emit signalVideoLoaded(true);
@@ -138,14 +171,16 @@ void SlideVideo::slotPlayerstateChanged(Phonon::State newState, Phonon::State ol
     }
 }
 
-void SlideVideo::pause()
+void SlideVideo::pause(bool b)
 {
-    d->player->pause();
-}
-
-void SlideVideo::play()
-{
-    d->player->play();
+    if (b)
+    {
+        d->player->pause();
+    }
+    else
+    {
+        d->player->play();
+    }
 }
 
 void SlideVideo::stop()
