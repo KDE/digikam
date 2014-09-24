@@ -353,19 +353,14 @@ bool SlideShow::eventFilter(QObject* obj, QEvent* ev)
 {
     if (ev->type() == QEvent::MouseMove)
     {
-        onMouseMoveEvent(dynamic_cast<QMouseEvent*>(ev));
+        setCursor(QCursor(Qt::ArrowCursor));
+        d->mouseMoveTimer->setSingleShot(true);
+        d->mouseMoveTimer->start(1000);
         return false;
     }
 
     // pass the event on to the parent class
     return QWidget::eventFilter(obj, ev);
-}
-
-void SlideShow::onMouseMoveEvent(QMouseEvent*)
-{
-    setCursor(QCursor(Qt::ArrowCursor));
-    d->mouseMoveTimer->setSingleShot(true);
-    d->mouseMoveTimer->start(1000);
 }
 
 void SlideShow::slotMouseMoveTimeOut()

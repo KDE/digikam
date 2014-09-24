@@ -99,7 +99,6 @@ private Q_SLOTS:
 private:
 
     bool eventFilter(QObject* obj, QEvent* ev);
-    void onMouseMoveEvent(QMouseEvent* const e);
     void preloadNextItem();
     void endOfSlide();
     void inhibitScreenSaver();
