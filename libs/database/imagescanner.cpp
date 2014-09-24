@@ -7,7 +7,7 @@
  * Description : Scanning of a single image
  *
  * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C)      2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -62,6 +62,16 @@ namespace Digikam
 
 class ImageScannerCommit
 {
+
+public:
+
+    enum Operation
+    {
+        NoOp,
+        AddItem,
+        UpdateItem
+    };
+
 public:
 
     ImageScannerCommit()
@@ -78,45 +88,42 @@ public:
     {
     }
 
-    enum Operation
-    {
-        NoOp,
-        AddItem,
-        UpdateItem
-    };
+public:
 
-    Operation operation;
+    Operation                        operation;
 
-    qlonglong copyImageAttributesId;
+    qlonglong                        copyImageAttributesId;
 
-    bool commitImageInformation;
-    bool commitImageMetadata;
-    bool commitVideoMetadata;
-    bool commitImagePosition;
-    bool commitImageComments;
-    bool commitImageCopyright;
-    bool commitFaces;
-    bool commitIPTCCore;
+    bool                             commitImageInformation;
+    bool                             commitImageMetadata;
+    bool                             commitVideoMetadata;
+    bool                             commitImagePosition;
+    bool                             commitImageComments;
+    bool                             commitImageCopyright;
+    bool                             commitFaces;
+    bool                             commitIPTCCore;
 
     DatabaseFields::ImageInformation imageInformationFields;
-    QVariantList imageInformationInfos;
+    QVariantList                     imageInformationInfos;
 
-    QVariantList imageMetadataInfos;
-    QVariantList imagePositionInfos;
+    QVariantList                     imageMetadataInfos;
+    QVariantList                     imagePositionInfos;
 
-    CaptionsMap  captions;
-    QString      headline;
-    QString      title;
+    CaptionsMap                      captions;
+    QString                          headline;
+    QString                          title;
 
-    Template     copyrightTemplate;
-    QMap<QString,QVariant> metadataFacesMap;
+    Template                         copyrightTemplate;
+    QMap<QString,QVariant>           metadataFacesMap;
 
-    QVariantList iptcCoreMetadataInfos;
+    QVariantList                     iptcCoreMetadataInfos;
 
-    QList<int> tagIds;
-    QString    historyXml;
-    QString    uuid;
+    QList<int>                       tagIds;
+    QString                          historyXml;
+    QString                          uuid;
 };
+
+// ---------------------------------------------------------------------------
 
 class ImageScanner::Private
 {
@@ -131,6 +138,8 @@ public:
     {
         time.start();
     }
+
+public:
 
     bool                   hasImage;
     bool                   hasMetadata;
@@ -235,26 +244,32 @@ void ImageScanner::commit()
     {
         commitImagePosition();
     }
+
     if (d->commit.commitImageComments)
     {
         commitImageComments();
     }
+
     if (d->commit.commitImageCopyright)
     {
         commitImageCopyright();
     }
+
     if (d->commit.commitIPTCCore)
     {
         commitIPTCCore();
     }
+
     if (!d->commit.tagIds.isEmpty())
     {
         commitTags();
     }
+
     if (d->commit.commitFaces)
     {
         commitFaces();
     }
+
     commitImageHistory();
 }
 
@@ -302,10 +317,11 @@ void ImageScanner::copiedFrom(int albumId, qlonglong srcId)
         if (!scanFromIdenticalFile())
         {
             // scan newly
-    if (d->commit.commitImagePosition)
-    {
-        commitImagePosition();
-    }
+            if (d->commit.commitImagePosition)
+            {
+                commitImagePosition();
+            }
+
             scanFile(NewScan);
         }
     }
@@ -360,6 +376,7 @@ bool ImageScanner::scanFromIdenticalFile()
         // Copy attributes.
         // Todo for the future is to worry about syncing identical files.
         d->commit.copyImageAttributesId = candidates.first().id;
+
         return true;
     }
 
@@ -390,6 +407,7 @@ bool ImageScanner::copyFromSource(qlonglong srcId)
 
     kDebug() << "Recognized" << d->fileInfo.filePath() << "as copied from" << srcId;
     d->commit.copyImageAttributesId = srcId;
+
     return true;
 }
 
@@ -562,7 +580,7 @@ void ImageScanner::scanImageInformation()
     d->commit.imageInformationInfos
           << size.width()
           << size.height()
-          << detectFormat()
+          << detectImageFormat()
           << d->img.originalBitDepth()
           << d->img.originalColorModel();
 }
@@ -683,11 +701,13 @@ void ImageScanner::scanImageComments()
 
     d->commit.commitImageComments  = true;
     d->commit.captions             = captions;
+
     // Headline
     if (!metadataInfos.at(0).isNull())
     {
         d->commit.headline = metadataInfos.at(0).toString();
     }
+
     // Title
     if (!metadataInfos.at(1).isNull())
     {
@@ -807,6 +827,7 @@ void ImageScanner::scanTags()
     for(int index = 0; index < keywords.size(); index++)
     {
         QString keyword = keywords.at(index);
+
         if(!keyword.isEmpty())
         {
 
@@ -817,6 +838,7 @@ void ImageScanner::scanTags()
                 keyword = keyword.replace(QRegExp("(_Digikam_root_tag_/|/_Digikam_root_tag_|_Digikam_root_tag_)"),
                                           QString(""));
             }
+
             filteredKeywords.append(keyword);
         }
     }
@@ -899,7 +921,7 @@ void ImageScanner::scanFaces()
 void ImageScanner::commitFaces()
 {
     QSize size = d->img.size();
-    QMap<QString,QVariant>::const_iterator it;
+    QMap<QString, QVariant>::const_iterator it;
 
     for (it = d->commit.metadataFacesMap.constBegin(); it != d->commit.metadataFacesMap.constEnd(); ++it)
     {
@@ -931,7 +953,7 @@ void ImageScanner::scanImageHistory()
     /** Stage 1 of history scanning */
 
     d->commit.historyXml = d->metadata.getImageHistory();
-    d->commit.uuid = d->metadata.getImageUniqueId();
+    d->commit.uuid       = d->metadata.getImageUniqueId();
 }
 
 void ImageScanner::commitImageHistory()
@@ -1044,7 +1066,7 @@ void ImageScanner::tagImageHistoryGraph(qlonglong id)
 
     // Remove all relevant tags
     DatabaseAccess().db()->removeTagsFromItems(graph.allImageIds(), QList<int>() << originalVersionTag
-            << currentVersionTag << intermediateVersionTag << needTaggingTag);
+        << currentVersionTag << intermediateVersionTag << needTaggingTag);
 
     if (!graph.hasEdges())
     {
@@ -1065,10 +1087,12 @@ void ImageScanner::tagImageHistoryGraph(qlonglong id)
         {
             originals << it.key().id();
         }
+
         if (types & HistoryImageId::Intermediate)
         {
             intermediates << it.key().id();
         }
+
         if (types & HistoryImageId::Current)
         {
             currents << it.key().id();
@@ -1156,23 +1180,23 @@ bool ImageScanner::sameReferredImage(const HistoryImageId& id1, const HistoryIma
         return id1.m_uuid == id2.m_uuid;
     }
 
-    if (id1.hasUniqueHashIdentifier()
-        && id1.m_uniqueHash == id2.m_uniqueHash
-        && id1.m_fileSize == id2.m_fileSize)
+    if (id1.hasUniqueHashIdentifier()        &&
+        id1.m_uniqueHash == id2.m_uniqueHash &&
+        id1.m_fileSize   == id2.m_fileSize)
     {
         return true;
     }
 
-    if (id1.hasFileName() && id1.hasCreationDate()
-        && id1.m_fileName == id2.m_fileName
-        && id1.m_creationDate == id2.m_creationDate)
+    if (id1.hasFileName() && id1.hasCreationDate() &&
+        id1.m_fileName     == id2.m_fileName       &&
+        id1.m_creationDate == id2.m_creationDate)
     {
         return true;
     }
 
-    if (id1.hasFileOnDisk()
-        && id1.m_filePath == id2.m_filePath
-        && id1.m_fileName == id2.m_fileName)
+    if (id1.hasFileOnDisk()              &&
+        id1.m_filePath == id2.m_filePath &&
+        id1.m_fileName == id2.m_fileName)
     {
         return true;
     }
@@ -1375,7 +1399,7 @@ public:
         }
 
         // last resort
-        return a.id() < b.id();
+        return (a.id() < b.id());
     }
 
 public:
@@ -1495,10 +1519,10 @@ void ImageScanner::loadFromDisk()
     {
         return;
     }
-    d->loadedFromDisk = true;
 
+    d->loadedFromDisk = true;
     d->metadata.registerMetadataSettings();
-    d->hasMetadata = d->metadata.load(d->fileInfo.filePath());
+    d->hasMetadata    = d->metadata.load(d->fileInfo.filePath());
 
     if (d->scanInfo.category == DatabaseItem::Image)
     {
@@ -1523,7 +1547,7 @@ void ImageScanner::loadFromDisk()
     }
 }
 
-QString ImageScanner::uniqueHash()
+QString ImageScanner::uniqueHash() const
 {
     // the QByteArray is an ASCII hex string
     if (d->scanInfo.category == DatabaseItem::Image)
@@ -1542,7 +1566,7 @@ QString ImageScanner::uniqueHash()
     }
 }
 
-QString ImageScanner::detectFormat()
+QString ImageScanner::detectImageFormat() const
 {
     DImg::FORMAT dimgFormat = d->img.detectedFormat();
 
@@ -1575,38 +1599,15 @@ QString ImageScanner::detectFormat()
             {
                 return QString(format).toUpper();
             }
-
-            KMimeType::Ptr mimetype = KMimeType::findByPath(d->fileInfo.filePath());
-
-            if (mimetype)
-            {
-                QString name = mimetype->name();
-
-                if (name.startsWith(QLatin1String("image/")))
-                {
-                    QString imageTypeName = name.mid(6).toUpper();
-
-                    // cut off the "X-" from some mimetypes
-                    if (imageTypeName.startsWith(QLatin1String("X-")))
-                    {
-                        imageTypeName = imageTypeName.mid(2);
-                    }
-
-                    return imageTypeName;
-                }
-            }
-
-            kWarning() << "Detecting file format failed: KMimeType for" << d->fileInfo.filePath()
-                       << "is null";
-
             break;
         }
     }
 
-    return QString();
+    // See BUG #339341: KMimeType can return garbage. Take file name suffix instead.
+    return d->fileInfo.suffix().toUpper();
 }
 
-QString ImageScanner::detectVideoFormat()
+QString ImageScanner::detectVideoFormat() const
 {
     QString suffix = d->fileInfo.suffix().toUpper();
 
@@ -1630,12 +1631,12 @@ QString ImageScanner::detectVideoFormat()
         return "MKV";
     }
 
-    if(suffix == "M4V" || suffix == "MOV" || suffix == "M2V" )
+    if (suffix == "M4V" || suffix == "MOV" || suffix == "M2V" )
     {
         return "MOV";
     }
 
-    if(suffix == "3GP" || suffix == "3G2" )
+    if (suffix == "3GP" || suffix == "3G2" )
     {
         return "3GP";
     }
@@ -1643,10 +1644,9 @@ QString ImageScanner::detectVideoFormat()
     return suffix;
 }
 
-QString ImageScanner::detectAudioFormat()
+QString ImageScanner::detectAudioFormat() const
 {
-    QString suffix = d->fileInfo.suffix().toUpper();
-    return suffix;
+    return d->fileInfo.suffix().toUpper();
 }
 
 QDateTime ImageScanner::creationDateFromFilesystem(const QFileInfo& info)
@@ -1814,7 +1814,8 @@ void ImageScanner::scanBalooInfo()
 {
 #ifdef HAVE_BALOO
 
-    BalooWrap *baloo = BalooWrap::instance();
+    BalooWrap* const baloo = BalooWrap::instance();
+
     if(!baloo->getSyncToDigikam())
     {
         return;
@@ -1841,16 +1842,17 @@ void ImageScanner::scanBalooInfo()
     if(!bInfo.comment.isEmpty())
     {
         kDebug() << "+++++++++++++++++++++Comment " << bInfo.comment;
+
         if(!d->commit.captions.contains("x-default"))
         {
             CaptionValues val;
-            val.caption = bInfo.comment;
+            val.caption                   = bInfo.comment;
             d->commit.commitImageComments = true;
             d->commit.captions.insert(QString("x-default"), val);
         }
     }
-#endif
 
+#endif // HAVE_BALOO
 }
 
 void ImageScanner::fillCommonContainer(qlonglong imageid, ImageCommonContainer* const container)
