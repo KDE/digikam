@@ -58,6 +58,7 @@ class Album;
 class CollectionLocation;
 class CameraHistoryUpdater;
 class ImportIconView;
+class CameraThumbsCtrl;
 
 class ImportUI : public DXmlGuiWindow
 {
@@ -87,7 +88,7 @@ public:
 
     DownloadSettings downloadSettings() const;
 
-    CameraController* getCameraController() const;
+    CameraThumbsCtrl* getCameraThumbsCtrl() const;
 
 Q_SIGNALS:
 

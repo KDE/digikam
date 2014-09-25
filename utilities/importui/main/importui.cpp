@@ -821,9 +821,9 @@ void ImportUI::setupCameraController(const QString& model, const QString& port, 
     d->camThumbsCtrl = new CameraThumbsCtrl(d->controller, this);
 }
 
-CameraController* ImportUI::getCameraController() const
+CameraThumbsCtrl* ImportUI::getCameraThumbsCtrl() const
 {
-    return d->controller;
+    return d->camThumbsCtrl;
 }
 
 void ImportUI::setupAccelerators()
