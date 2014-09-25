@@ -7,7 +7,7 @@
  * Description : Metadata handling
  *
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -66,6 +66,8 @@ public:
         MetadataDisjoint   /// No common value is available. For rating and dates, the interval is available.
     };
 
+public:
+
     /**
         Describes the complete status of a Tag: The metadata status, and the fact if it has the tag or not.
     */
@@ -93,11 +95,14 @@ public:
             return otherstatus.status == status &&
                    otherstatus.hasTag == hasTag;
         }
+
         bool operator==(const Status& otherstatus) const
         {
             return otherstatus == status;
         }
     };
+
+public:
 
     enum WriteMode
     {
@@ -122,6 +127,8 @@ public:
         */
         PartialWrite
     };
+
+public:
 
     /**
         Constructs a MetadataHub.
@@ -218,7 +225,7 @@ public:
         @return if tags were successfully written.
     */
     bool writeTags(const QString& filePath, WriteMode writeMode = FullWrite,
-               const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
+                   const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
 
     /**
      * @brief writeTags - used to deduplicate code from writeTags and usual write, all write to tags
@@ -227,14 +234,14 @@ public:
      * @param saveTags  - save switch
      * @return          - if tags were successfully set
      */
-    bool writeTags(DMetadata &metadata, bool saveTags);
+    bool writeTags(DMetadata& metadata, bool saveTags);
 
     /**
      * @brief cleanupTags - remove duplicates and obsolete tags before setting metadata
      * @param toClean     - tag list to be cleared and de-duplicated
      * @return            - clean tag list
      */
-    QStringList cleanupTags(QStringList toClean);
+    QStringList cleanupTags(const QStringList& toClean);
     /**
         With the currently applied changes, the given writeMode and settings,
         returns if write(DMetadata), write(QString) or write(DImg) will actually
@@ -248,7 +255,7 @@ public:
      * @param filePath     - path to file to add comments, tags and rating
      * @param settings     - metadata settings to be set
      */
-    void writeToBaloo(QString filePath, const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
+    void writeToBaloo(const QString& filePath, const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
 
     // --------------------------------------------------
 
@@ -409,9 +416,10 @@ public:
         method dimension() can return wrong values, QSize must be specified
         manually
      */
-    void loadFaceTags(const ImageInfo info, QSize size);
+    void loadFaceTags(const ImageInfo& info, const QSize& size);
 
 protected:
+
     void load(const QDateTime& dateTime,
               const CaptionsMap& titles, const CaptionsMap& comment,
               int colorLabel, int pickLabel,
@@ -419,12 +427,13 @@ protected:
     void loadTags(const QList<int>& loadedTagIds);
     void loadTags(const QStringList& loadedTagPaths);
     void notifyTagDeleted(int id);
+
     virtual void applyChangeNotifications();
 
 private:
 
-    class MetadataHubPriv;
-    MetadataHubPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // ----------------------------------------------------------------------------------------------------
@@ -458,8 +467,8 @@ private:
 
 private:
 
-    class MetadataHubOnTheRoadPriv;
-    MetadataHubOnTheRoadPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

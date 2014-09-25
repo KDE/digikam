@@ -7,8 +7,8 @@
  * Description : Metadata handling
  *
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2014 by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
+ * Copyright (C) 2007-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2014      by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
  *
  * This program is free software you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -63,11 +63,11 @@
 namespace Digikam
 {
 
-class MetadataHub::MetadataHubPriv
+class MetadataHub::Private
 {
 public:
 
-    MetadataHubPriv()
+    Private()
     {
         dateTimeStatus    = MetadataHub::MetadataInvalid;
         pickLabelStatus   = MetadataHub::MetadataInvalid;
@@ -96,6 +96,8 @@ public:
         templateChanged   = false;
         tagsChanged       = false;
     }
+
+public:
 
     bool                              dateTimeChanged;
     bool                              titlesChanged;
@@ -136,6 +138,8 @@ public:
     MetadataHub::Status               ratingStatus;
     MetadataHub::Status               templateStatus;
 
+public:
+
     template <class T> void loadWithInterval(const T& data, T& storage, T& highestStorage, MetadataHub::Status& status);
     template <class T> void loadSingleValue(const T& data, T& storage, MetadataHub::Status& status);
 };
@@ -143,12 +147,12 @@ public:
 // ------------------------------------------------------------------------------------------
 
 MetadataHub::MetadataHub()
-    : d(new MetadataHubPriv)
+    : d(new Private)
 {
 }
 
 MetadataHub::MetadataHub(const MetadataHub& other)
-    : d(new MetadataHubPriv(*other.d))
+    : d(new Private(*other.d))
 {
 }
 
@@ -170,7 +174,7 @@ MetadataHub* MetadataHub::clone() const
 
 void MetadataHub::reset()
 {
-    (*d) = MetadataHubPriv();
+    (*d) = Private();
 }
 
 // --------------------------------------------------
@@ -179,8 +183,10 @@ void MetadataHub::load(const ImageInfo& info)
 {
     d->count++;
     //kDebug() << "---------------------------------Load from ImageInfo ----------------";
+
     CaptionsMap commentMap;
     CaptionsMap titleMap;
+
     {
         DatabaseAccess access;
         ImageComments comments = info.imageComments(access);
@@ -209,6 +215,7 @@ void MetadataHub::load(const ImageInfo& info)
 void MetadataHub::load(const DMetadata& metadata)
 {
     d->count++;
+
     CaptionsMap comments;
     CaptionsMap titles;
     QStringList keywords;
@@ -383,10 +390,8 @@ void MetadataHub::load(const QDateTime& dateTime,
 }
 
 // template method to share code for dateTime, colorLabel, pickLabel, and rating
-template <class T> void MetadataHub::MetadataHubPriv::loadWithInterval(const T& data,
-                                                                       T& storage,
-                                                                       T& highestStorage,
-                                                                       MetadataHub::Status& status)
+template <class T> void MetadataHub::Private::loadWithInterval(const T& data, T& storage, T& highestStorage,
+                                                               MetadataHub::Status& status)
 {
     switch (status)
     {
@@ -433,9 +438,8 @@ template <class T> void MetadataHub::MetadataHubPriv::loadWithInterval(const T& 
 }
 
 // template method used by comment and template
-template <class T> void MetadataHub::MetadataHubPriv::loadSingleValue(const T& data,
-                                                                      T& storage,
-                                                                      MetadataHub::Status& status)
+template <class T> void MetadataHub::Private::loadSingleValue(const T& data, T& storage,
+                                                              MetadataHub::Status& status)
 {
     switch (status)
     {
@@ -493,6 +497,7 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
         writeAllFields = true;
     }
     else if (writeMode == FullWriteIfChanged)
+    {
         writeAllFields = (
                              (saveTitle      && d->titlesChanged)     ||
                              (saveComment    && d->commentsChanged)   ||
@@ -503,6 +508,7 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
                              (saveTemplate   && d->templateChanged)   ||
                              (saveTags       && d->tagsChanged)
                          );
+    }
     else // PartialWrite
     {
         writeAllFields = false;
@@ -513,14 +519,15 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
         DatabaseAccess access;
         ImageComments comments = info.imageComments(access);
         comments.replaceComments(d->titles, DatabaseComment::Title);
-        changed = true;
+        changed                = true;
     }
+
     if (saveComment && (writeAllFields || d->commentsChanged))
     {
         DatabaseAccess access;
         ImageComments comments = info.imageComments(access);
         comments.replaceComments(d->comments);
-        changed = true;
+        changed                = true;
     }
 
     if (saveDateTime && (writeAllFields || d->dateTimeChanged))
@@ -617,6 +624,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
         writeAllFields = true;
     }
     else if (writeMode == FullWriteIfChanged)
+    {
         writeAllFields = (
                              (saveTitle      && d->titlesChanged)     ||
                              (saveComment    && d->commentsChanged)   ||
@@ -626,6 +634,7 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
                              (saveRating     && d->ratingChanged)     ||
                              (saveTemplate   && d->templateChanged)
                          );
+    }
     else // PartialWrite
     {
         writeAllFields = false;
@@ -688,9 +697,13 @@ bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const Metadata
     }
 
     if(saveFaces)
+    {
         metadata.setImageFacesMap(d->faceTagsList,true);
+    }
     else
+    {
         metadata.setImageFacesMap(d->faceTagsList,false);
+    }
 
     dirty |= writeTags(metadata,saveTags);
 
@@ -711,7 +724,6 @@ bool MetadataHub::write(const QString& filePath, WriteMode writeMode, const Meta
     writeToBaloo(filePath);
 
     DMetadata metadata(filePath);
-
 
     if (write(metadata, writeMode, settings))
     {
@@ -739,12 +751,12 @@ bool MetadataHub::write(DImg& image, WriteMode writeMode, const MetadataSettings
 
     QString filePath = image.originalFilePath();
 
-    if(filePath.isEmpty())
+    if (filePath.isEmpty())
     {
         filePath = image.lastSavedFilePath();
     }
 
-    if(!filePath.isEmpty())
+    if (!filePath.isEmpty())
     {
         writeToBaloo(filePath);
     }
@@ -752,8 +764,7 @@ bool MetadataHub::write(DImg& image, WriteMode writeMode, const MetadataSettings
     return write(metadata, writeMode, settings);
 }
 
-bool MetadataHub::writeTags(const QString& filePath,
-                            MetadataHub::WriteMode writeMode,
+bool MetadataHub::writeTags(const QString& filePath, MetadataHub::WriteMode writeMode,
                             const MetadataSettingsContainer& settings)
 {
     applyChangeNotifications();
@@ -796,8 +807,8 @@ bool MetadataHub::writeTags(const QString& filePath,
 
 bool MetadataHub::writeTags(DMetadata& metadata, bool saveTags)
 {
-
     bool dirty = false;
+
     if (saveTags)
     {
         // Store tag paths as Iptc keywords tags.
@@ -832,7 +843,9 @@ bool MetadataHub::writeTags(DMetadata& metadata, bool saveTags)
                     }
 
                     if(!tagName.isEmpty())
+                    {
                         newKeywords << tagName;
+                    }
                 }
                 else
                 {
@@ -843,6 +856,7 @@ bool MetadataHub::writeTags(DMetadata& metadata, bool saveTags)
 
         tagsPathList = cleanupTags(tagsPathList);
         newKeywords = cleanupTags(newKeywords);
+
         if(!newKeywords.isEmpty())
         {
             // NOTE: See bug #175321 : we remove all old keyword from IPTC and XMP before to
@@ -866,22 +880,24 @@ bool MetadataHub::writeTags(DMetadata& metadata, bool saveTags)
             dirty |= metadata.setImageTagsPath(QStringList());
         }
     }
-    return dirty;
 
+    return dirty;
 }
 
-QStringList MetadataHub::cleanupTags(QStringList toClean)
+QStringList MetadataHub::cleanupTags(const QStringList& toClean)
 {
     QSet<QString> deduplicator;
+
     for(int index = 0; index < toClean.size(); index++)
     {
         QString keyword = toClean.at(index);
-        if(!keyword.isEmpty())
+
+        if (!keyword.isEmpty())
         {
 
             // _Digikam_root_tag_ is present in some photos tagged with older
             // version of digiKam, must be removed
-            if(keyword.contains(QRegExp("(_Digikam_root_tag_/|/_Digikam_root_tag_|_Digikam_root_tag_)")))
+            if (keyword.contains(QRegExp("(_Digikam_root_tag_/|/_Digikam_root_tag_|_Digikam_root_tag_)")))
             {
                 keyword = keyword.replace(QRegExp("(_Digikam_root_tag_/|/_Digikam_root_tag_|_Digikam_root_tag_)"),
                                           QString(""));
@@ -890,6 +906,7 @@ QStringList MetadataHub::cleanupTags(QStringList toClean)
             deduplicator.insert(keyword);
         }
     }
+
     return deduplicator.toList();
 }
 
@@ -914,6 +931,7 @@ bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataSettingsC
         writeAllFields = true;
     }
     else if (writeMode == FullWriteIfChanged)
+    {
         writeAllFields = (
                              (saveTitle      && d->titlesChanged)     ||
                              (saveComment    && d->commentsChanged)   ||
@@ -924,6 +942,7 @@ bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataSettingsC
                              (saveTemplate   && d->templateChanged)   ||
                              (saveTags       && d->tagsChanged)
                          );
+    }
     else // PartialWrite
     {
         writeAllFields = false;
@@ -938,44 +957,51 @@ bool MetadataHub::willWriteMetadata(WriteMode writeMode, const MetadataSettingsC
                (saveRating     && (writeAllFields || d->ratingChanged))     ||
                (saveTags       && (writeAllFields || d->tagsChanged))       ||
                (saveTemplate   && (writeAllFields || d->templateChanged))
-                );
+           );
 }
 
-void MetadataHub::writeToBaloo(QString filePath, const MetadataSettingsContainer &settings)
+void MetadataHub::writeToBaloo(const QString& filePath, const MetadataSettingsContainer& settings)
 {
 #ifdef HAVE_BALOO
 
-    BalooWrap *baloo = BalooWrap::instance();
-    int rating = -1;
-    QString* comment = 0;
+    BalooWrap* const baloo = BalooWrap::instance();
+    int rating             = -1;
+    QString* comment       = 0;
 
-    if(!baloo->getSyncToBaloo())
+    if (!baloo->getSyncToBaloo())
     {
         kDebug() << "No write to baloo +++++++++++++++++++++++++++++++++++++";
         return;
     }
-    bool saveComment    = (settings.saveComments   && d->commentsStatus   == MetadataAvailable);
-    bool saveRating     = (settings.saveRating     && d->ratingStatus     == MetadataAvailable);
+
+    bool saveComment = (settings.saveComments   && d->commentsStatus   == MetadataAvailable);
+    bool saveRating  = (settings.saveRating     && d->ratingStatus     == MetadataAvailable);
 
     QStringList newKeywords;
+
     for (QMap<int, TagStatus>::iterator it = d->tags.begin(); it != d->tags.end(); ++it)
     {
         if (!TagsCache::instance()->canBeWrittenToMetadata(it.key()))
         {
             continue;
         }
+
         // it is important that MetadataDisjoint keywords are not touched
+
         if (it.value() == MetadataAvailable)
         {
             QString tagName = TagsCache::instance()->tagName(it.key());
 
             if (it.value().hasTag)
             {
-                if(!tagName.isEmpty())
+                if (!tagName.isEmpty())
+                {
                     newKeywords << tagName;
+                }
             }
         }
     }
+
     if(saveComment)
     {
         comment = new QString(d->comments.value("x-default").caption);
@@ -985,6 +1011,7 @@ void MetadataHub::writeToBaloo(QString filePath, const MetadataSettingsContainer
     {
         rating = d->rating;
     }
+
     newKeywords = cleanupTags(newKeywords);
     KUrl url(filePath);
     baloo->setAllData(url,&newKeywords,comment,rating);
@@ -1306,11 +1333,11 @@ void MetadataHub::applyChangeNotifications()
 
 // -------------------------------------------------------------------------------------------------------------
 
-class MetadataHubOnTheRoad::MetadataHubOnTheRoadPriv
+class MetadataHubOnTheRoad::Private
 {
 public:
 
-    MetadataHubOnTheRoadPriv()
+    Private()
     {
         invalid = false;
     }
@@ -1321,7 +1348,8 @@ public:
 };
 
 MetadataHubOnTheRoad::MetadataHubOnTheRoad(QObject* const parent)
-    : QObject(parent), d(new MetadataHubOnTheRoadPriv)
+    : QObject(parent),
+      d(new Private)
 {
     connect(TagsCache::instance(), SIGNAL(tagDeleted(int)),
             this, SLOT(slotTagDeleted(int)),
@@ -1343,12 +1371,16 @@ MetadataHubOnTheRoad& MetadataHubOnTheRoad::operator=(const MetadataHub& other)
 }
 
 MetadataHubOnTheRoad::MetadataHubOnTheRoad(const MetadataHub& other)
-    : QObject(0), MetadataHub(other), d(new MetadataHubOnTheRoadPriv)
+    : QObject(0),
+      MetadataHub(other),
+      d(new Private)
 {
 }
 
 MetadataHubOnTheRoad::MetadataHubOnTheRoad(const MetadataHubOnTheRoad& other, QObject* const parent)
-    : QObject(parent), MetadataHub(other), d(new MetadataHubOnTheRoadPriv)
+    : QObject(parent),
+      MetadataHub(other),
+      d(new Private)
 {
     applyChangeNotifications();
 }
@@ -1390,7 +1422,7 @@ void MetadataHubOnTheRoad::slotInvalidate()
     d->invalid = true;
 }
 
-void Digikam::MetadataHub::loadFaceTags(const ImageInfo info, QSize size)
+void Digikam::MetadataHub::loadFaceTags(const ImageInfo& info, const QSize& size)
 {
     FaceTagsEditor editor;
     //kDebug() << "Image Dimensions ----------------" << info.dimensions();
@@ -1398,17 +1430,17 @@ void Digikam::MetadataHub::loadFaceTags(const ImageInfo info, QSize size)
     QList<DatabaseFace> facesList = editor.confirmedDatabaseFaces(info.id());
     d->faceTagsList.clear();
 
-    if(!facesList.isEmpty())
+    if (!facesList.isEmpty())
     {
         foreach(const DatabaseFace& dface, facesList)
         {
             QString faceName = FaceTags::faceNameForTag(dface.tagId());
 
-            if(faceName.isEmpty())
+            if (faceName.isEmpty())
                 continue;
 
-            QRect   temprect          = dface.region().toRect();
-            QRectF  faceRect          = TagRegion::absoluteToRelative(temprect,size);
+            QRect  temprect  = dface.region().toRect();
+            QRectF faceRect  = TagRegion::absoluteToRelative(temprect,size);
             d->faceTagsList.insertMulti(faceName, QVariant(faceRect));
         }
 

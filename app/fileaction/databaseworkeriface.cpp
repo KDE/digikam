@@ -58,6 +58,7 @@ void FileActionMngrDatabaseWorker::changeTags(FileActionImageInfoList infos,
         //ScanController::instance()->suspendCollectionScan();
         DatabaseOperationGroup group;
         group.setMaximumTime(200);
+
         foreach(const ImageInfo& info, infos)
         {
 
@@ -86,6 +87,7 @@ void FileActionMngrDatabaseWorker::changeTags(FileActionImageInfoList infos,
     {
         FileActionImageInfoList forWritingTaskList = FileActionImageInfoList::continueTask(forWriting, infos.progress());
         forWritingTaskList.schedulingForWrite(i18n("Writing metadata to files"), d->fileProgressCreator());
+
         for (ImageInfoTaskSplitter splitter(forWritingTaskList); splitter.hasNext(); )
             emit writeMetadataToFiles(splitter.next());
     }
@@ -102,6 +104,7 @@ void FileActionMngrDatabaseWorker::assignPickLabel(FileActionImageInfoList infos
         //ScanController::instance()->suspendCollectionScan();
         DatabaseOperationGroup group;
         group.setMaximumTime(200);
+
         foreach(const ImageInfo& info, infos)
         {
             hub.load(info);
@@ -124,6 +127,7 @@ void FileActionMngrDatabaseWorker::assignPickLabel(FileActionImageInfoList infos
     {
         FileActionImageInfoList forWritingTaskList = FileActionImageInfoList::continueTask(forWriting, infos.progress());
         forWritingTaskList.schedulingForWrite(i18n("Writing metadata to files"), d->fileProgressCreator());
+
         for (ImageInfoTaskSplitter splitter(forWritingTaskList); splitter.hasNext(); )
             emit writeMetadataToFiles(splitter.next());
     }
@@ -140,6 +144,7 @@ void FileActionMngrDatabaseWorker::assignColorLabel(FileActionImageInfoList info
         //ScanController::instance()->suspendCollectionScan();
         DatabaseOperationGroup group;
         group.setMaximumTime(200);
+
         foreach(const ImageInfo& info, infos)
         {
             hub.load(info);
@@ -162,6 +167,7 @@ void FileActionMngrDatabaseWorker::assignColorLabel(FileActionImageInfoList info
     {
         FileActionImageInfoList forWritingTaskList = FileActionImageInfoList::continueTask(forWriting, infos.progress());
         forWritingTaskList.schedulingForWrite(i18n("Writing metadata to files"), d->fileProgressCreator());
+
         for (ImageInfoTaskSplitter splitter(forWritingTaskList); splitter.hasNext(); )
             emit writeMetadataToFiles(splitter.next());
     }
