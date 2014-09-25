@@ -62,6 +62,7 @@ public:
         progressTimer(0),
         slideTimer(0),
         labelsBox(0),
+        progressBox(0),
         parent(0),
         slideProps(0),
         toolBar(0),
