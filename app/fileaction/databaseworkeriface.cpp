@@ -185,6 +185,7 @@ void FileActionMngrDatabaseWorker::assignRating(FileActionImageInfoList infos, i
         //ScanController::instance()->suspendCollectionScan();
         DatabaseOperationGroup group;
         group.setMaximumTime(200);
+
         foreach(const ImageInfo& info, infos)
         {
             hub.load(info);
@@ -207,6 +208,7 @@ void FileActionMngrDatabaseWorker::assignRating(FileActionImageInfoList infos, i
     {
         FileActionImageInfoList forWritingTaskList = FileActionImageInfoList::continueTask(forWriting, infos.progress());
         forWritingTaskList.schedulingForWrite(i18n("Writing metadata to files"), d->fileProgressCreator());
+
         for (ImageInfoTaskSplitter splitter(forWritingTaskList); splitter.hasNext(); )
             emit writeMetadataToFiles(splitter.next());
     }
@@ -219,6 +221,7 @@ void FileActionMngrDatabaseWorker::editGroup(int groupAction, const ImageInfo& p
     {
         DatabaseOperationGroup group;
         group.setMaximumTime(200);
+
         foreach(const ImageInfo& constInfo, infos)
         {
             ImageInfo info(constInfo);
@@ -240,6 +243,7 @@ void FileActionMngrDatabaseWorker::editGroup(int groupAction, const ImageInfo& p
             group.allowLift();
         }
     }
+
     infos.dbFinished();
 }
 
@@ -248,15 +252,19 @@ void FileActionMngrDatabaseWorker::setExifOrientation(FileActionImageInfoList in
     {
         DatabaseOperationGroup group;
         group.setMaximumTime(200);
+
         foreach (ImageInfo info, infos)
         {
             info.setOrientation(orientation);
         }
     }
+
     infos.dbProcessed(infos.count());
     infos.schedulingForWrite(infos.count(), i18n("Revising Exif Orientation tags"), d->fileProgressCreator());
+
     for (ImageInfoTaskSplitter splitter(infos); splitter.hasNext(); )
         emit writeOrientationToFiles(splitter.next(), orientation);
+
     infos.dbFinished();
 }
 
@@ -281,6 +289,7 @@ void FileActionMngrDatabaseWorker::applyMetadata(FileActionImageInfoList infos, 
     {
         // dont filter by shallSendForWriting here; we write from the hub, not from freshly loaded data
         infos.schedulingForWrite(infos.size(), i18n("Writing metadata to files"), d->fileProgressCreator());
+
         for (ImageInfoTaskSplitter splitter(infos); splitter.hasNext(); )
             emit writeMetadata(splitter.next(), hub->clone());
     }
@@ -298,8 +307,10 @@ void FileActionMngrDatabaseWorker::copyAttributes(FileActionImageInfoList infos,
             ImageInfo dest = ScanController::instance()->scannedInfo(path);
             CollectionScanner::copyFileProperties(infos.first(), dest);
         }
+
         infos.dbProcessedOne();
     }
+
     infos.dbFinished();
 }
 

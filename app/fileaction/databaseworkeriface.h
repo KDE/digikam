@@ -46,14 +46,14 @@ class DatabaseWorkerInterface : public WorkerObject
 
 public Q_SLOTS:
 
-    virtual void assignTags(FileActionImageInfoList, const QList<int>&)    {};
-    virtual void removeTags(FileActionImageInfoList, const QList<int>&)    {};
-    virtual void assignPickLabel(FileActionImageInfoList, int)             {};
-    virtual void assignColorLabel(FileActionImageInfoList, int)            {};
-    virtual void assignRating(FileActionImageInfoList, int)                {};
-    virtual void editGroup(int, const ImageInfo&, FileActionImageInfoList) {};
-    virtual void setExifOrientation(FileActionImageInfoList, int)          {};
-    virtual void applyMetadata(FileActionImageInfoList, MetadataHub*)      {};
+    virtual void assignTags(FileActionImageInfoList, const QList<int>&)      {};
+    virtual void removeTags(FileActionImageInfoList, const QList<int>&)      {};
+    virtual void assignPickLabel(FileActionImageInfoList, int)               {};
+    virtual void assignColorLabel(FileActionImageInfoList, int)              {};
+    virtual void assignRating(FileActionImageInfoList, int)                  {};
+    virtual void editGroup(int, const ImageInfo&, FileActionImageInfoList)   {};
+    virtual void setExifOrientation(FileActionImageInfoList, int)            {};
+    virtual void applyMetadata(FileActionImageInfoList, MetadataHub*)        {};
     virtual void copyAttributes(FileActionImageInfoList, const QStringList&) {};
 
 Q_SIGNALS:
@@ -70,7 +70,9 @@ class FileActionMngrDatabaseWorker : public DatabaseWorkerInterface
 public:
 
     explicit FileActionMngrDatabaseWorker(FileActionMngr::FileActionMngrPriv* const d)
-        : d(d) {}
+        : d(d)
+    {
+    }
 
 public:
 
