@@ -98,7 +98,7 @@ QString TagFolderView::contextMenuTitle() const
 
 void TagFolderView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* album)
 {
-    TAlbum* tag = dynamic_cast<TAlbum*> (album);
+    TAlbum* const tag = dynamic_cast<TAlbum*> (album);
 
     if (!tag)
     {
@@ -341,4 +341,5 @@ void TagFolderView::contextMenuEvent(QContextMenuEvent* event)
     QAction* const choice = cmhelper.exec(QCursor::pos());
     handleCustomContextMenuAction(choice, albumPointer);
 }
+
 } // namespace Digikam
