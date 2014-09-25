@@ -8,7 +8,7 @@
  *               hierarchical view of digiKam tags.
  *
  * Copyright (C) 2004      by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Parts of the drawing code are inspired by qmenu.cpp and qitemdelegate.cpp.
@@ -130,7 +130,7 @@ QSize TagToggleMenuWidget::sizeHint() const
     const int margin = style()->pixelMetric(QStyle::PM_FocusFrameHMargin, 0, this) + 1;
 
     // return widget size
-    int width = margin + checkRect.width() + menuSize.width() + margin;
+    int width        = margin + checkRect.width() + menuSize.width() + margin;
     QSize size(width, qMax(checkRect.height(), menuSize.height()));
     return size;
 }
@@ -157,15 +157,15 @@ void TagToggleMenuWidget::paintEvent(QPaintEvent*)
     if (menuOpt.direction == Qt::RightToLeft)
     {
         // right-to-left untested
-        viewOpt.rect.translate( - margin, 0);
-        menuOpt.rect.translate( - margin, 0);
-        menuOpt.menuRect.adjust( margin, 0, 0, 0);
+        viewOpt.rect.translate(-margin, 0);
+        menuOpt.rect.translate(-margin, 0);
+        menuOpt.menuRect.adjust(margin, 0, 0, 0);
     }
     else
     {
-        viewOpt.rect.translate( margin, 0);
-        menuOpt.rect.translate( margin, 0);
-        menuOpt.menuRect.adjust(0, 0, - margin, 0);
+        viewOpt.rect.translate(margin, 0);
+        menuOpt.rect.translate(margin, 0);
+        menuOpt.menuRect.adjust(0, 0, -margin, 0);
     }
 
     // clear the background of the check indicator
@@ -204,7 +204,7 @@ void TagToggleMenuWidget::paintEvent(QPaintEvent*)
     if (frameMargin)
     {
         QRegion borderReg;
-        borderReg += QRect( width() - frameMargin, 0, frameMargin, height() ); // right
+        borderReg         += QRect( width() - frameMargin, 0, frameMargin, height() ); // right
         p.setClipRegion(borderReg);
         QStyleOptionFrame frame;
         frame.rect         = rect();
@@ -222,7 +222,7 @@ void TagToggleMenuWidget::initMenuStyleOption(QStyleOptionMenuItem* option) cons
     option->initFrom(this);
 
     // set menu item state
-    option->state = QStyle::State_None;
+    option->state  = QStyle::State_None;
     option->state |= QStyle::State_Enabled;
 
     if (m_menu->activeAction() == m_action) // if hovered etc.
@@ -242,9 +242,9 @@ void TagToggleMenuWidget::initMenuStyleOption(QStyleOptionMenuItem* option) cons
     }
 
     // set options from m_action
-    option->font = m_action->font();
-    option->icon = m_action->icon();
-    option->text = m_action->text();
+    option->font                  = m_action->font();
+    option->icon                  = m_action->icon();
+    option->text                  = m_action->text();
 
     // we do the check mark ourselves
     option->checked               = false;
@@ -460,7 +460,7 @@ void TagsPopupMenu::slotAboutToShow()
 {
     clearPopup();
 
-    AlbumManager* man = AlbumManager::instance();
+    AlbumManager* const man = AlbumManager::instance();
 
     if (d->mode == REMOVE || d->mode == DISPLAY)
     {
@@ -483,15 +483,15 @@ void TagsPopupMenu::slotAboutToShow()
         bool hasValidTag = false;
         for (QSet<int>::const_iterator it = d->assignedTags.constBegin(); it != d->assignedTags.constEnd(); ++it)
         {
-            TAlbum* album = man->findTAlbum(*it);
+            TAlbum* const album = man->findTAlbum(*it);
 
             if (!album || album->isInternalTag())
             {
                 continue;
             }
-            hasValidTag = true;
 
-            Album* a = album->parent();
+            hasValidTag = true;
+            Album* a    = album->parent();
 
             while (a)
             {
@@ -532,11 +532,11 @@ void TagsPopupMenu::slotAboutToShow()
 
                 if (album)
                 {
-                    TAlbum* parent = dynamic_cast<TAlbum*> (album->parent());
+                    TAlbum* const parent = dynamic_cast<TAlbum*> (album->parent());
 
                     if (parent)
                     {
-                        QString t = album->title() + " (" + parent->prettyUrl() + ')';
+                        QString t               = album->title() + " (" + parent->prettyUrl() + ')';
                         t.replace('&', "&&");
                         TagToggleAction* action = new TagToggleAction(t, d->toggleTagActions);
                         action->setData(album->id());
@@ -560,7 +560,7 @@ void TagsPopupMenu::slotAboutToShow()
     else
     {
 
-        TAlbum* album = man->findTAlbum(0);
+        TAlbum* const album = man->findTAlbum(0);
 
         if (!album)
         {
@@ -572,13 +572,13 @@ void TagsPopupMenu::slotAboutToShow()
         if (d->mode == ASSIGN || d->mode == RECENTLYASSIGNED)
         {
             addSeparator();
-            TagToggleAction* addTag = new TagToggleAction(KIcon(d->addTagPix), i18n("Add New Tag..."), d->addTagActions);
+            TagToggleAction* const addTag = new TagToggleAction(KIcon(d->addTagPix), i18n("Add New Tag..."), d->addTagActions);
             addTag->setData(0);   // root id
             addTag->setCheckBoxHidden(true);
             addAction(addTag);
 
             addSeparator();
-            TagToggleAction* moreTag = new TagToggleAction(KIcon(d->tagViewPix), i18n("More Tags..."), d->addTagActions);
+            TagToggleAction* const moreTag = new TagToggleAction(KIcon(d->tagViewPix), i18n("More Tags..."), d->addTagActions);
             moreTag->setData(-1); // special id to query tag view
             moreTag->setCheckBoxHidden(true);
             addAction(moreTag);
@@ -605,7 +605,7 @@ void TagsPopupMenu::iterateAndBuildMenu(KMenu* menu, TAlbum* album)
 
     for (QList<Album*>::const_iterator it = sortedTags.constBegin(); it != sortedTags.constEnd(); ++it)
     {
-        TAlbum* a = (TAlbum*)*it;
+        TAlbum* const a = (TAlbum*)(*it);
 
         if (a->isInternalTag())
         {
@@ -652,8 +652,8 @@ void TagsPopupMenu::iterateAndBuildMenu(KMenu* menu, TAlbum* album)
 
         if (a->firstChild())
         {
-            if ( (d->mode != REMOVE && d->mode != DISPLAY)
-                || d->parentAssignedTags.contains(a->id()))
+            if ((d->mode != REMOVE && d->mode != DISPLAY) ||
+                d->parentAssignedTags.contains(a->id()))
             {
                 action->setMenu(buildSubMenu(a->id()));
             }
@@ -676,7 +676,7 @@ KMenu* TagsPopupMenu::buildSubMenu(int tagid)
 
     if (d->mode == ASSIGN && !d->assignedTags.contains(album->id()))
     {
-        TagToggleAction* action = new TagToggleAction(i18n("Assign this Tag"), d->toggleTagActions);
+        TagToggleAction* const action = new TagToggleAction(i18n("Assign this Tag"), d->toggleTagActions);
         action->setData(album->id());
         action->setCheckBoxHidden(true);
         setAlbumIcon(action, album);
@@ -685,7 +685,7 @@ KMenu* TagsPopupMenu::buildSubMenu(int tagid)
     }
     else if (d->mode == REMOVE && d->assignedTags.contains(tagid))
     {
-        TagToggleAction* action = new TagToggleAction(i18n("Remove this Tag"), d->toggleTagActions);
+        TagToggleAction* const action = new TagToggleAction(i18n("Remove this Tag"), d->toggleTagActions);
         action->setData(album->id());
         action->setCheckBoxHidden(true);
         setAlbumIcon(action, album);
@@ -695,7 +695,7 @@ KMenu* TagsPopupMenu::buildSubMenu(int tagid)
     }
     else if (d->mode == DISPLAY)
     {
-        TagToggleAction* action = new TagToggleAction(i18n("Go to this Tag"), d->toggleTagActions);
+        TagToggleAction* const action = new TagToggleAction(i18n("Go to this Tag"), d->toggleTagActions);
         action->setData(album->id());
         action->setCheckBoxHidden(true);
         setAlbumIcon(action, album);
@@ -710,7 +710,7 @@ KMenu* TagsPopupMenu::buildSubMenu(int tagid)
     {
         popup->addSeparator();
 
-        TagToggleAction* action = new TagToggleAction(KIcon(d->addTagPix), i18n("Add New Tag..."), d->addTagActions);
+        TagToggleAction* const action = new TagToggleAction(KIcon(d->addTagPix), i18n("Add New Tag..."), d->addTagActions);
         action->setData(album->id());
         action->setCheckBoxHidden(true);
         popup->addAction(action);
