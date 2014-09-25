@@ -7,11 +7,11 @@
  * Description : Special line edit for adding or creatingtags
  *
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 1997 Sven Radej (sven.radej@iname.com)
- * Copyright (c) 1999 Patrick Ward <PAT_WARD@HP-USA-om5.om.hp.com>
- * Copyright (c) 1999 Preston Brown <pbrown@kde.org>
- * Copyright (c) 2000, 2001 Dawit Alemayehu <adawit@kde.org>
- * Copyright (c) 2000, 2001 Carsten Pfeiffer <pfeiffer@kde.org>
+ * Copyright (C) 1997      Sven Radej (sven.radej@iname.com)
+ * Copyright (c) 1999      Patrick Ward <PAT_WARD@HP-USA-om5.om.hp.com>
+ * Copyright (c) 1999      Preston Brown <pbrown@kde.org>
+ * Copyright (c) 2000-2001 Dawit Alemayehu <adawit@kde.org>
+ * Copyright (c) 2000-2001 Carsten Pfeiffer <pfeiffer@kde.org>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,11 +48,11 @@
 namespace Digikam
 {
 
-class AddTagsLineEdit::AddTagsLineEditPriv
+class AddTagsLineEdit::Private
 {
 public:
 
-    AddTagsLineEditPriv()
+    Private()
     {
         completion    = 0;
         completionBox = 0;
@@ -71,8 +71,8 @@ public:
 
 // ---------------------------------------------------------------------------------------
 
-AddTagsLineEdit::AddTagsLineEdit(QWidget* parent)
-    : KLineEdit(parent), d(new AddTagsLineEditPriv)
+AddTagsLineEdit::AddTagsLineEdit(QWidget* const parent)
+    : KLineEdit(parent), d(new Private)
 {
     setEnableSignals(true);
     setHandleSignals(false);
@@ -151,8 +151,10 @@ void AddTagsLineEdit::setModel(TagModel* model, TagPropertiesFilterModel* filter
 void AddTagsLineEdit::setTagTreeView(TagTreeView* view)
 {
     if (d->tagView)
+    {
         disconnect(d->tagView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
                    d->completionBox, SLOT(setParentTag(QModelIndex)));
+    }
 
     d->tagView = view;
 
@@ -205,12 +207,16 @@ TaggingAction AddTagsLineEdit::currentTaggingAction() const
 void AddTagsLineEdit::setCompletionObject(KCompletion* comp, bool)
 {
     if (compObj())
+    {
         disconnect(compObj(), SIGNAL(matches(QStringList)),
                    this, SLOT(setCompletedItems(QStringList)));
+    }
 
     if (comp)
+    {
         connect(comp, SIGNAL(matches(QStringList)),
                 this, SLOT(setCompletedItems(QStringList)));
+    }
 
     KCompletionBase::setCompletionObject(comp, false);
 }
@@ -228,7 +234,7 @@ void AddTagsLineEdit::makeSubstringCompletion(const QString&)
 void AddTagsLineEdit::makeCompletion(const QString& text)
 {
     // Need to reimplement already because setCompletedItems is not virtual
-    KCompletion* comp                = compObj();
+    KCompletion* const comp          = compObj();
     KGlobalSettings::Completion mode = completionMode();
     d->currentTaggingAction          = TaggingAction();
 
@@ -249,7 +255,7 @@ void AddTagsLineEdit::makeCompletion(const QString& text)
     {
         if ( text.isEmpty() )
         {
-            if ( d->completionBox )
+            if (d->completionBox)
             {
                 d->completionBox->hide();
                 d->completionBox->clear();
@@ -258,9 +264,8 @@ void AddTagsLineEdit::makeCompletion(const QString& text)
         else
         {
 
-            TagsCache * tc = TagsCache::instance();
-
-            QStringList allMatches = comp->allMatches();
+            TagsCache* const tc     = TagsCache::instance();
+            QStringList allMatches  = comp->allMatches();
 
             //get previously entered tags
             QList<int> recentTagIDs = DatabaseAccess().db()->getRecentlyAssignedTags();
@@ -268,11 +273,13 @@ void AddTagsLineEdit::makeCompletion(const QString& text)
             //reorder matches according to previously entered tags
             QListIterator<int> id(recentTagIDs);
             id.toBack();
+
             while (id.hasPrevious())
             {
                 QString tagName = tc->tagName(id.previous());
-                int pos = allMatches.indexOf(tagName);
-                if(pos>0)
+                int pos         = allMatches.indexOf(tagName);
+
+                if (pos>0)
                 {
                     allMatches.move(pos,0);
                 }
@@ -351,7 +358,7 @@ void AddTagsLineEdit::setCompletedItems(const QStringList& items, bool doAutoSug
 
         if ( autoSuggest() && doAutoSuggest && !items.isEmpty())
         {
-            const int index = items.first().indexOf( txt );
+            const int index       = items.first().indexOf( txt );
             const QString newText = items.first().mid( index );
             setUserSelection(false); // can be removed? setCompletedText sets it anyway
             setCompletedText(newText,true);
@@ -406,6 +413,7 @@ void AddTagsLineEdit::slotTextChanged(const QString& text)
     {
         setCurrentTaggingAction(TaggingAction());
     }
+
     // for cases like copy+paste where autocompletion does not activate
     else if (!d->currentTaggingAction.isValid())
     {
@@ -413,10 +421,10 @@ void AddTagsLineEdit::slotTextChanged(const QString& text)
     }
 }
 
-TaggingAction AddTagsLineEdit::AddTagsLineEditPriv::makeTaggingAction(const QString& text)
+TaggingAction AddTagsLineEdit::Private::makeTaggingAction(const QString& text)
 {
-    TAlbum* parentTag = completionBox->parentTag();
-    int parentTagId   = parentTag ? parentTag->id() : 0;
+    TAlbum* const parentTag = completionBox->parentTag();
+    int parentTagId         = parentTag ? parentTag->id() : 0;
     return AddTagsCompletionBox::makeDefaultTaggingAction(text, parentTagId);
 }
 

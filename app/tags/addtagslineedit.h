@@ -50,7 +50,7 @@ class AddTagsLineEdit : public KLineEdit
 
 public:
 
-    explicit AddTagsLineEdit(QWidget* parent = 0);
+    explicit AddTagsLineEdit(QWidget* const parent = 0);
     ~AddTagsLineEdit();
 
     /** Set the tag model to use for completion.
@@ -108,8 +108,8 @@ protected:
 
 private:
 
-    class AddTagsLineEditPriv;
-    AddTagsLineEditPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
