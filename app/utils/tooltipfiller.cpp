@@ -40,6 +40,8 @@
 // Local includes
 
 #include "albummanager.h"
+#include "collectionlocation.h"
+#include "collectionmanager.h"
 #include "applicationsettings.h"
 #include "album.h"
 #include "databaseinfocontainers.h"
@@ -566,8 +568,8 @@ QString ToolTipFiller::albumTipContents(PAlbum* const album, int count)
         if (settings->getToolTipsShowAlbumCollection())
         {
             tip += cnt.cellBeg + i18n("Collection:") + cnt.cellMid;
-            Album* col = AlbumManager::instance()->findAlbum(album->albumRootId());
-            tip += col ? col->title() : QString() + cnt.cellEnd;
+            CollectionLocation col = CollectionManager::instance()->locationForAlbumRootId(album->albumRootId());
+            tip += !col.isNull() ? col.label() : QString() + cnt.cellEnd;
         }
 
         if (settings->getToolTipsShowAlbumDate())
