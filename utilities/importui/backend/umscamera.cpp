@@ -150,7 +150,7 @@ bool UMSCamera::getFolders(const QString& folder)
 
     if (list.isEmpty())
     {
-        return false;
+        return true;
     }
 
     QFileInfoList::const_iterator fi;
@@ -168,9 +168,9 @@ bool UMSCamera::getFolders(const QString& folder)
 
     }
 
-    if(subFolderList.isEmpty())
+    if (subFolderList.isEmpty())
     {
-        return false;
+        return true;
     }
 
     emit signalFolderList(subFolderList);
@@ -210,8 +210,8 @@ bool UMSCamera::getItemsInfoList(const QString& folder, bool useMetadata, CamIte
 
 void UMSCamera::getItemInfo(const QString& folder, const QString& itemName, CamItemInfo& info, bool useMetadata)
 {
-    info.folder = !folder.endsWith('/') ? folder + QString('/') : folder;
-    info.name   = itemName;
+    info.folder           = !folder.endsWith('/') ? folder + QString('/') : folder;
+    info.name             = itemName;
 
     QFileInfo fi(info.folder + info.name);
     info.size             = fi.size();
@@ -318,6 +318,7 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
     DImg dimgThumb;
     // skip loading the data we don't need to speed it up.
     dimgThumb.load(path, false /*loadMetadata*/, false /*loadICCData*/, false /*loadUniqueHash*/, false /*loadHistory*/);
+
     if (!dimgThumb.isNull())
     {
         thumbnail = dimgThumb.copyQImage();
@@ -332,7 +333,7 @@ bool UMSCamera::getMetadata(const QString& folder, const QString& itemName, DMet
     QFileInfo fi, thmlo, thmup;
     bool ret = false;
 
-    fi.setFile(folder + QString("/") + itemName);
+    fi.setFile(folder    + QString("/") + itemName);
     thmlo.setFile(folder + QString("/") + fi.baseName() + QString(".thm"));
     thmup.setFile(folder + QString("/") + fi.baseName() + QString(".THM"));
 
@@ -373,7 +374,7 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
     if (!dFile.open(QIODevice::WriteOnly))
     {
         sFile.close();
-        kWarning() << "Failed to open dest file for writing: " << dest;
+        kWarning() << "Failed to open destination file for writing: " << dest;
         return false;
     }
 
@@ -478,7 +479,7 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
     if (!dFile.open(QIODevice::WriteOnly))
     {
         sFile.close();
-        kWarning() << "Failed to open dest file for writing: " << dest;
+        kWarning() << "Failed to open destination file for writing: " << dest;
         return false;
     }
 
@@ -561,30 +562,30 @@ bool UMSCamera::cameraSummary(QString& summary)
     // we do not expect titel/model/etc. to contain newlines,
     // so we just escape HTML characters
     summary += i18nc("@info List of device properties",
-                    "Title: <b>%1</b><br/>"
-                    "Model: <b>%2</b><br/>"
-                    "Port: <b>%3</b><br/>"
-                    "Path: <b>%4</b><br/>"
-                    "UUID: <b>%5</b><br/><br/>",
-                    Qt::escape(title()),
-                    Qt::escape(model()),
-                    Qt::escape(port()),
-                    Qt::escape(path()),
-                    Qt::escape(uuid()));
+                     "Title: <b>%1</b><br/>"
+                     "Model: <b>%2</b><br/>"
+                     "Port: <b>%3</b><br/>"
+                     "Path: <b>%4</b><br/>"
+                     "UUID: <b>%5</b><br/><br/>",
+                     Qt::escape(title()),
+                     Qt::escape(model()),
+                     Qt::escape(port()),
+                     Qt::escape(path()),
+                     Qt::escape(uuid()));
 
     summary += i18nc("@info List of supported device operations",
-                    "Thumbnails: <b>%1</b><br/>"
-                    "Capture image: <b>%2</b><br/>"
-                    "Delete items: <b>%3</b><br/>"
-                    "Upload items: <b>%4</b><br/>"
-                    "Create directories: <b>%5</b><br/>"
-                    "Delete directories: <b>%6</b><br/><br/>",
-                    thumbnailSupport()    ? i18n("yes") : i18n("no"),
-                    captureImageSupport() ? i18n("yes") : i18n("no"),
-                    deleteSupport()       ? i18n("yes") : i18n("no"),
-                    uploadSupport()       ? i18n("yes") : i18n("no"),
-                    mkDirSupport()        ? i18n("yes") : i18n("no"),
-                    delDirSupport()       ? i18n("yes") : i18n("no"));
+                     "Thumbnails: <b>%1</b><br/>"
+                     "Capture image: <b>%2</b><br/>"
+                     "Delete items: <b>%3</b><br/>"
+                     "Upload items: <b>%4</b><br/>"
+                     "Create directories: <b>%5</b><br/>"
+                     "Delete directories: <b>%6</b><br/><br/>",
+                     thumbnailSupport()    ? i18n("yes") : i18n("no"),
+                     captureImageSupport() ? i18n("yes") : i18n("no"),
+                     deleteSupport()       ? i18n("yes") : i18n("no"),
+                     uploadSupport()       ? i18n("yes") : i18n("no"),
+                     mkDirSupport()        ? i18n("yes") : i18n("no"),
+                     delDirSupport()       ? i18n("yes") : i18n("no"));
     return true;
 }
 
