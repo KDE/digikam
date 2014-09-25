@@ -127,22 +127,22 @@ TagEditDlg::TagEditDlg(QWidget* const parent, TAlbum* const album, bool create)
     logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                     .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-    d->topLabel = new QLabel(page);
+    d->topLabel             = new QLabel(page);
     d->topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->topLabel->setWordWrap(false);
 
-    KSeparator* const line = new KSeparator(Qt::Horizontal, page);
+    KSeparator* const line  = new KSeparator(Qt::Horizontal, page);
 
     // --------------------------------------------------------
 
     QLabel* const titleLabel = new QLabel(page);
     titleLabel->setText(i18n("&Title:"));
 
-    d->titleEdit = new SearchTextBar(page, "TagEditDlgTitleEdit", i18n("Enter tag name here..."));
+    d->titleEdit             = new SearchTextBar(page, "TagEditDlgTitleEdit", i18n("Enter tag name here..."));
     d->titleEdit->setCaseSensitive(false);
     titleLabel->setBuddy(d->titleEdit);
 
-    QLabel* const tipLabel = new QLabel(page);
+    QLabel* const tipLabel   = new QLabel(page);
     tipLabel->setTextFormat(Qt::RichText);
     tipLabel->setWordWrap(true);
     tipLabel->setText(i18n("<p>To create new tags, you can use the following rules:</p>"
@@ -420,7 +420,7 @@ AlbumList TagEditDlg::createTAlbum(TAlbum* const mainRootAlbum, const QString& t
                     if (!tag.isEmpty())
                     {
                         // Tag already exist ?
-                        TAlbum* album = AlbumManager::instance()->findTAlbum(tagPath);
+                        TAlbum* const album = AlbumManager::instance()->findTAlbum(tagPath);
 
                         if (!album)
                         {

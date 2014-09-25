@@ -51,8 +51,8 @@ public:
     TagEditDlg(QWidget* const parent, TAlbum* const album, bool create=false);
     ~TagEditDlg();
 
-    QString      title() const;
-    QString      icon() const;
+    QString      title()    const;
+    QString      icon()     const;
     QKeySequence shortcut() const;
 
     static bool tagEdit(QWidget* const parent, TAlbum* const album, QString& title, QString& icon, QKeySequence& ks);
