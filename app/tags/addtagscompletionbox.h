@@ -138,9 +138,10 @@ Q_SIGNALS:
 protected:
 
     // Reimplemented
-    virtual QRect calculateGeometry() const;
     void sizeAndPosition();
     void sizeAndPosition(bool wasVisible);
+
+    virtual QRect calculateGeometry() const;
 
 protected Q_SLOTS:
 

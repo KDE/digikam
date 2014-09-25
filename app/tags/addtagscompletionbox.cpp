@@ -97,12 +97,12 @@ public:
     {
         m_action = action;
     }
-    
+
     TaggingAction& action()
     {
         return m_action;
     }
-    
+
     const TaggingAction action() const
     {
         return m_action;
@@ -127,10 +127,10 @@ public:
 
     Private()
     {
-        upwardBox         = false;
-        model             = 0;
-        filterModel       = 0;
-        allowExceedBounds = false;
+        upwardBox          = false;
+        model              = 0;
+        filterModel        = 0;
+        allowExceedBounds  = false;
     }
 
     AddTagsCompletionBoxItem* createItemForExistingTag(TAlbum* talbum, bool uniqueName);
@@ -252,25 +252,25 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
 {
     clear();
 
-    int parentTagId                                 = d->parentTag ? d->parentTag->id() : 0;
+    int parentTagId                                    = d->parentTag ? d->parentTag->id() : 0;
     // We use this action to find the right entry to select
-    TaggingAction defaultAction                     = makeDefaultTaggingAction(currentText, parentTagId);
+    TaggingAction defaultAction                        = makeDefaultTaggingAction(currentText, parentTagId);
 
-    AddTagsCompletionBoxItem* createItemUnderParent = 0;
+    AddTagsCompletionBoxItem* createItemUnderParent    = 0;
 
     if (d->parentTag)
     {
         createItemUnderParent = d->createItemForNewTag(currentText, d->parentTag);
     }
 
-    AddTagsCompletionBoxItem* const createItemTopLevel    = d->createItemForNewTag(currentText, 0);
+    AddTagsCompletionBoxItem* const createItemTopLevel = d->createItemForNewTag(currentText, 0);
 
     QList<AddTagsCompletionBoxItem*> assignItems;
 
     foreach(const QString& tagName, completionEntries)
     {
         QList<int> tagIds = TagsCache::instance()->tagsForName(tagName);
-        bool uniqueName   = tagIds.count() == 1;
+        bool uniqueName   = (tagIds.count() == 1);
 
         foreach(int tagId, tagIds)
         {
@@ -293,15 +293,14 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
             //Case A
             //a tag is currently selected in the listbox, we have the choice of toplevel and underparent for a new tag
             //the entire text currently written by the user doesn't exist as a tag. However, it might be a part of a tag
-            
+
             foreach(AddTagsCompletionBoxItem* const item, assignItems)
             {
                 addItem(item);
             }
-            
+
             addItem(createItemUnderParent);
             addItem(createItemTopLevel);
-
             setCurrentRow(0);
         }
         else // if (createItemTopLevel && createItemTopLevel->action() == defaultAction)
@@ -309,13 +308,13 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
             //Case B
             //no tag is currently selected in the listbox, only toplevel choice for a new tag
             //the entire text currently written by the user doesn't exist as a tag. However, it might be a part of a tag
-	    
+
             foreach(AddTagsCompletionBoxItem* const item, assignItems)
             {
                 addItem(item);
             }
-            addItem(createItemTopLevel);
 
+            addItem(createItemTopLevel);
             setCurrentRow(0);
         }
     }
@@ -323,7 +322,7 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
     {
         //Case C
         //the entire text currently written by the user exists as a tag
-        
+
         foreach(AddTagsCompletionBoxItem* const item, assignItems)
         {
             addItem(item);
@@ -333,7 +332,7 @@ void AddTagsCompletionBox::setItems(const QString& currentText, const QStringLis
                 setCurrentItem(item);
             }
         }
-        
+
         addItem(createItemUnderParent);
         addItem(createItemTopLevel);
     }
@@ -439,8 +438,8 @@ void AddTagsCompletionBox::sizeAndPosition(bool wasVisible)
     QRect geom        = calculateGeometry();
     resize( geom.size() );
 
-    int x = currentPos.x();
-    int y = currentPos.y();
+    int x             = currentPos.x();
+    int y             = currentPos.y();
 
     if ( parentWidget() )
     {
@@ -449,8 +448,8 @@ void AddTagsCompletionBox::sizeAndPosition(bool wasVisible)
             QPoint orig      = globalPositionHint();
             QRect screenSize = QApplication::desktop()->availableGeometry(orig);
 
-            x = orig.x() + geom.x();
-            y = orig.y() + geom.y();
+            x                = orig.x() + geom.x();
+            y                = orig.y() + geom.y();
 
             //kDebug() << orig << screenSize << y << height() << screenSize.bottom() << (y + height() > screenSize.bottom());
 
@@ -521,21 +520,19 @@ QRect AddTagsCompletionBox::calculateGeometry() const
     }
 
     const int frameHeight = 2*frameWidth();
-
     const QSize maxSize   = d->maximumAvailableScreenSize(globalPositionHint());
-
     int suggestedHeight   = qMin(suggestedShownItems, count()) * itemSizeHint.height();
 
     //kDebug() << itemSizeHint << maxHeight << suggestedHeight;
-    int h                 = qMin(maxSize.height(), suggestedHeight + frameHeight);
 
+    int h                 = qMin(maxSize.height(), suggestedHeight + frameHeight);
     int w                 = KListWidget::minimumSizeHint().width();
 
     if (d->allowExceedBounds)
     {
         const int scrollBarMargin = (count() > suggestedShownItems && verticalScrollBar()) ?
                                     verticalScrollBar()->sizeHint().width() : 0;
-        w = qMin(itemSizeHint.width() + scrollBarMargin, maxSize.width());
+        w                         = qMin(itemSizeHint.width() + scrollBarMargin, maxSize.width());
     }
     else
     {
@@ -594,6 +591,7 @@ QSize AddTagsCompletionBox::sizeHint() const
 QSize AddTagsCompletionBox::Private::maximumAvailableScreenSize(const QPoint& orig)
 {
     QRect screenGeom = QApplication::desktop()->availableGeometry(orig);
+
     //kDebug() << screenSize << orig << qMax(orig.y() - screenSize.top(), screenSize.bottom() - orig.y());
 
     if (!screenGeom.contains(orig))
