@@ -64,7 +64,7 @@ FileActionMngr* FileActionMngr::instance()
 }
 
 FileActionMngr::FileActionMngr()
-    : d(new FileActionMngrPriv(this))
+    : d(new Private(this))
 {
     qRegisterMetaType<MetadataHub*>("MetadataHub*");
     qRegisterMetaType<FileActionImageInfoList>("FileActionImageInfoList");

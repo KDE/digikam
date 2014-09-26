@@ -98,7 +98,8 @@ public Q_SLOTS:
     // ownership of the hub is passed, hub must be created without QObject parent
     void applyMetadata(const QList<ImageInfo>& infos, MetadataHubOnTheRoad* hub);
 
-    /** Flip or rotate. Note: The NoTransformation action is interpreted as Exif auto-rotate */
+    /** Flip or rotate. Note: The NoTransformation action is interpreted as Exif auto-rotate
+     */
     void transform(const QList<ImageInfo>& infos, KExiv2Iface::RotationMatrix::TransformationAction action);
 
     void copyAttributes(const ImageInfo& source, const QStringList& derivedPaths);
@@ -107,14 +108,14 @@ public Q_SLOTS:
 public:
 
     // Declared public due to use by FileActionMngrWorker, FileActionMngrDatabaseWorker, and FileActionMngrFileWorker
-    class FileActionMngrPriv;
+    class Private;
 
 private:
 
     FileActionMngr();
     ~FileActionMngr();
 
-    FileActionMngrPriv* const d;
+    Private* const d;
 
     friend class FileActionMngrCreator;
 };

@@ -7,7 +7,7 @@
  * Description : file action manager
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2011-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,7 +50,7 @@ enum GroupAction
     Ungroup
 };
 
-class FileActionMngrPrivProgressItemCreator : public QObject, public FileActionProgressItemCreator
+class PrivateProgressItemCreator : public QObject, public FileActionProgressItemCreator
 {
     Q_OBJECT
 
@@ -72,20 +72,20 @@ public Q_SLOTS:
 
 // -----------------------------------------------------------------------------------------------------------
 
-class FileActionMngr::FileActionMngrPriv : public QObject
+class FileActionMngr::Private : public QObject
 {
     Q_OBJECT
 
 public:
 
-    explicit FileActionMngrPriv(FileActionMngr* const q);
-    ~FileActionMngrPriv();
+    explicit Private(FileActionMngr* const q);
+    ~Private();
 
 Q_SIGNALS:
 
     void signalTasksFinished();
 
-    // inter-thread signals: connected to database worker slots
+    // Inter-thread signals: connected to database worker slots
     void signalAddTags(const FileActionImageInfoList& infos, const QList<int>& tagIDs);
     void signalRemoveTags(const FileActionImageInfoList& infos, const QList<int>& tagIDs);
     void signalAssignPickLabel(const FileActionImageInfoList& infos, int pickId);
@@ -168,8 +168,8 @@ public:
     void connectToDatabaseWorker();
     void connectDatabaseToFileWorker();
 
-    FileActionMngrPrivProgressItemCreator* dbProgressCreator();
-    FileActionMngrPrivProgressItemCreator* fileProgressCreator();
+    PrivateProgressItemCreator* dbProgressCreator();
+    PrivateProgressItemCreator* fileProgressCreator();
 
 public Q_SLOTS:
 
@@ -191,8 +191,8 @@ public:
 
     QTimer*                               sleepTimer;
 
-    FileActionMngrPrivProgressItemCreator dbProgress;
-    FileActionMngrPrivProgressItemCreator fileProgress;
+    PrivateProgressItemCreator            dbProgress;
+    PrivateProgressItemCreator            fileProgress;
 };
 
 } // namespace Digikam

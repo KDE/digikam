@@ -64,7 +64,7 @@ class FileActionMngrFileWorker : public FileWorkerInterface
 
 public:
 
-    explicit FileActionMngrFileWorker(FileActionMngr::FileActionMngrPriv* const d)
+    explicit FileActionMngrFileWorker(FileActionMngr::Private* const d)
         : d(d) {}
 
 public:
@@ -77,7 +77,7 @@ public:
 
 private:
 
-    FileActionMngr::FileActionMngrPriv* const d;
+    FileActionMngr::Private* const d;
 };
 
 } // namespace Digikam

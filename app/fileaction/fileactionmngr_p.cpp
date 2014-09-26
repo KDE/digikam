@@ -7,7 +7,7 @@
  * Description : file action manager
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2011-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-FileActionMngr::FileActionMngrPriv::FileActionMngrPriv(FileActionMngr* const q)
+FileActionMngr::Private::Private(FileActionMngr* const q)
     : q(q)
 {
     dbWorker   = new FileActionMngrDatabaseWorker(this);
@@ -75,7 +75,7 @@ FileActionMngr::FileActionMngrPriv::FileActionMngrPriv(FileActionMngr* const q)
             this, SLOT(slotSleepTimer()));
 }
 
-void FileActionMngr::FileActionMngrPriv::connectToDatabaseWorker()
+void FileActionMngr::Private::connectToDatabaseWorker()
 {
 
     WorkerObject::connectAndSchedule(this, SIGNAL(signalAddTags(FileActionImageInfoList,QList<int>)),
@@ -106,7 +106,7 @@ void FileActionMngr::FileActionMngrPriv::connectToDatabaseWorker()
                                      dbWorker, SLOT(copyAttributes(FileActionImageInfoList,QStringList)));
 }
 
-void FileActionMngr::FileActionMngrPriv::connectDatabaseToFileWorker()
+void FileActionMngr::Private::connectDatabaseToFileWorker()
 {
     connect(dbWorker, SIGNAL(writeMetadataToFiles(FileActionImageInfoList)),
             fileWorker, SLOT(writeMetadataToFiles(FileActionImageInfoList)), Qt::DirectConnection);
@@ -118,18 +118,18 @@ void FileActionMngr::FileActionMngrPriv::connectDatabaseToFileWorker()
             fileWorker, SLOT(writeMetadata(FileActionImageInfoList,MetadataHub*)), Qt::DirectConnection);
 }
 
-FileActionMngr::FileActionMngrPriv::~FileActionMngrPriv()
+FileActionMngr::Private::~Private()
 {
     delete dbWorker;
     delete fileWorker;
 }
 
-bool FileActionMngr::FileActionMngrPriv::isActive() const
+bool FileActionMngr::Private::isActive() const
 {
     return dbProgress.activeProgressItems || fileProgress.activeProgressItems;
 }
 
-bool FileActionMngr::FileActionMngrPriv::shallSendForWriting(qlonglong id)
+bool FileActionMngr::Private::shallSendForWriting(qlonglong id)
 {
     QMutexLocker lock(&mutex);
 
@@ -142,16 +142,17 @@ bool FileActionMngr::FileActionMngrPriv::shallSendForWriting(qlonglong id)
     return true;
 }
 
-void FileActionMngr::FileActionMngrPriv::startingToWrite(const QList<ImageInfo>& infos)
+void FileActionMngr::Private::startingToWrite(const QList<ImageInfo>& infos)
 {
     QMutexLocker lock(&mutex);
+
     foreach(const ImageInfo& info, infos)
     {
         scheduledToWrite.remove(info.id());
     }
 }
 
-void FileActionMngr::FileActionMngrPriv::slotSleepTimer()
+void FileActionMngr::Private::slotSleepTimer()
 {
     if (!dbProgress.activeProgressItems)
     {
@@ -164,7 +165,7 @@ void FileActionMngr::FileActionMngrPriv::slotSleepTimer()
     }
 }
 
-void FileActionMngr::FileActionMngrPriv::slotLastProgressItemCompleted()
+void FileActionMngr::Private::slotLastProgressItemCompleted()
 {
     if (!isActive())
     {
@@ -173,7 +174,7 @@ void FileActionMngr::FileActionMngrPriv::slotLastProgressItemCompleted()
     sleepTimer->start();
 }
 
-void FileActionMngr::FileActionMngrPriv::slotImageDataChanged(const QString& path, bool removeThumbnails, bool notifyCache)
+void FileActionMngr::Private::slotImageDataChanged(const QString& path, bool removeThumbnails, bool notifyCache)
 {
     // must be done from the UI thread, touches pixmaps
     if (removeThumbnails)
@@ -187,36 +188,36 @@ void FileActionMngr::FileActionMngrPriv::slotImageDataChanged(const QString& pat
     }
 }
 
-FileActionMngrPrivProgressItemCreator* FileActionMngr::FileActionMngrPriv::dbProgressCreator()
+PrivateProgressItemCreator* FileActionMngr::Private::dbProgressCreator()
 {
     return &dbProgress;
 }
 
-FileActionMngrPrivProgressItemCreator* FileActionMngr::FileActionMngrPriv::fileProgressCreator()
+PrivateProgressItemCreator* FileActionMngr::Private::fileProgressCreator()
 {
     return &fileProgress;
 }
 
-ProgressItem* FileActionMngrPrivProgressItemCreator::createProgressItem(const QString& action) const
+ProgressItem* PrivateProgressItemCreator::createProgressItem(const QString& action) const
 {
     return new ProgressItem(0, ProgressManager::instance()->getUniqueID(), action, QString(), true, true);
-    /*
+/*
     if (!parentProgressItems.first())
     {
         parentProgressItems.createFirstItem(i18n("Editing Database"));
     }
     return parentProgressItems.first();
-    */
-    /*
+*/
+/*
     if (!parentProgressItems.second())
     {
         parentProgressItems.createSecondItem(i18n("Writing to Files"));
     }
     return parentProgressItems.second();
-    */
+*/
 }
 
-void FileActionMngrPrivProgressItemCreator::addProgressItem(ProgressItem* const item)
+void PrivateProgressItemCreator::addProgressItem(ProgressItem* const item)
 {
     activeProgressItems.ref();
 
@@ -228,25 +229,25 @@ void FileActionMngrPrivProgressItemCreator::addProgressItem(ProgressItem* const 
     ProgressManager::addProgressItem(item);
 }
 
-void FileActionMngrPrivProgressItemCreator::slotProgressItemCompleted()
+void PrivateProgressItemCreator::slotProgressItemCompleted()
 {
     activeProgressItems.deref();
 }
 
 /*
-void FileActionMngr::FileActionMngrPriv::setDBAction(const QString& action)
+void FileActionMngr::Private::setDBAction(const QString& action)
 {
     dbMessage = action;
     updateProgressMessage();
 }
 
-void FileActionMngr::FileActionMngrPriv::schedulingForDB(int numberOfInfos)
+void FileActionMngr::Private::schedulingForDB(int numberOfInfos)
 {
     dbTodo += numberOfInfos;
     updateProgress();
 }
 
-void FileActionMngr::FileActionMngrPriv::dbProcessedOne()
+void FileActionMngr::Private::dbProcessedOne()
 {
     if ( (dbDone++ % 10) == 0)
     {
@@ -254,50 +255,50 @@ void FileActionMngr::FileActionMngrPriv::dbProcessedOne()
     }
 }
 
-void FileActionMngr::FileActionMngrPriv::dbProcessed(int numberOfInfos)
+void FileActionMngr::Private::dbProcessed(int numberOfInfos)
 {
     dbDone += numberOfInfos;
     updateProgress();
 }
 
-void FileActionMngr::FileActionMngrPriv::dbFinished(int numberOfInfos)
+void FileActionMngr::Private::dbFinished(int numberOfInfos)
 {
     dbTodo -= numberOfInfos;
     dbDone -= numberOfInfos;
     updateProgress();
 }
 
-void FileActionMngr::FileActionMngrPriv::schedulingForWrite(int numberOfInfos)
+void FileActionMngr::Private::schedulingForWrite(int numberOfInfos)
 {
     writerTodo += numberOfInfos;
     updateProgress();
 }
 
-void FileActionMngr::FileActionMngrPriv::schedulingForOrientationWrite(int numberOfInfos)
+void FileActionMngr::Private::schedulingForOrientationWrite(int numberOfInfos)
 {
     schedulingForWrite(numberOfInfos);
 }
 
-void FileActionMngr::FileActionMngrPriv::setWriterAction(const QString& action)
+void FileActionMngr::Private::setWriterAction(const QString& action)
 {
     writerMessage = action;
     updateProgressMessage();
 }
 
-void FileActionMngr::FileActionMngrPriv::writtenToOne()
+void FileActionMngr::Private::writtenToOne()
 {
     writerDone++;
     updateProgress();
 }
 
-void FileActionMngr::FileActionMngrPriv::finishedWriting(int numberOfInfos)
+void FileActionMngr::Private::finishedWriting(int numberOfInfos)
 {
     writerTodo -= numberOfInfos;
     writerDone -= numberOfInfos;
     updateProgress();
 }
 
-void FileActionMngr::FileActionMngrPriv::updateProgressMessage()
+void FileActionMngr::Private::updateProgressMessage()
 {
     QString message;
 
@@ -317,7 +318,7 @@ void FileActionMngr::FileActionMngrPriv::updateProgressMessage()
     emit signalProgressMessageChanged(message);
 }
 
-void FileActionMngr::FileActionMngrPriv::updateProgress()
+void FileActionMngr::Private::updateProgress()
 {
     if (!q->isActive())
     {

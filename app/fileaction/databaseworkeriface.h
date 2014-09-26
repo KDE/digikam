@@ -69,7 +69,7 @@ class FileActionMngrDatabaseWorker : public DatabaseWorkerInterface
 {
 public:
 
-    explicit FileActionMngrDatabaseWorker(FileActionMngr::FileActionMngrPriv* const d)
+    explicit FileActionMngrDatabaseWorker(FileActionMngr::Private* const d)
         : d(d)
     {
     }
@@ -92,7 +92,7 @@ private:
 
 private:
 
-    FileActionMngr::FileActionMngrPriv* const d;
+    FileActionMngr::Private* const d;
 };
 
 } // namespace Digikam
