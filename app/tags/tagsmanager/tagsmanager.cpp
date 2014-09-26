@@ -122,8 +122,9 @@ public:
 };
 
 TagsManager::TagsManager()
-    : KMainWindow(0), d(new Private())
+    : KMainWindow(0), StateSavingObject(this), d(new Private())
 {
+    setObjectName("Tags Manager");
     d->tagModel = new TagModel(AbstractAlbumModel::IncludeRootAlbum, this);;
     d->tagModel->setCheckable(false);
     setupUi(this);
@@ -142,12 +143,15 @@ TagsManager::TagsManager()
 
     d->tagMngrView->setCurrentIndex(d->tagMngrView->model()->index(0,0));
 
+    StateSavingObject::loadState();
+
     /** Set KMainWindow in center of the screen **/
     this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
 }
 
 TagsManager::~TagsManager()
 {
+    StateSavingObject::saveState();
     delete d->listView;
     delete d->tagMngrView;
     delete d->tagModel;
@@ -177,6 +181,7 @@ void TagsManager::setupUi(KMainWindow* const Dialog)
      d->tagPixmap->setPixmap(KIcon("tag").pixmap(30,30));
 
      d->tagMngrView = new TagMngrTreeView(this,d->tagModel);
+     d->tagMngrView->setConfigGroup(getConfigGroup());
 
      d->searchBar  = new SearchTextBar(this, "DigikamViewTagSearchBar");
      d->searchBar->setHighlightOnResult(true);
@@ -821,6 +826,20 @@ void TagsManager::enableRootTagActions(bool value)
         else
             action->setEnabled(false);
     }
+}
+
+void TagsManager::doLoadState()
+{
+    KConfigGroup group = getConfigGroup();
+    d->tagMngrView->doLoadState();
+    group.sync();
+}
+
+void TagsManager::doSaveState()
+{
+    KConfigGroup group = getConfigGroup();
+    d->tagMngrView->doSaveState();
+    group.sync();
 }
 
 } // namespace Digikam

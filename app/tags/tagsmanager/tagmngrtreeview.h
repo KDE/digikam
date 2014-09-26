@@ -52,7 +52,7 @@ public:
 
     TagsManagerFilterModel* getFilterModel() const
     {
-        return m_tfilteredModel; 
+        return m_tfilteredModel;
     }
 
 protected:

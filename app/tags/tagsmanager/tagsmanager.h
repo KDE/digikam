@@ -31,6 +31,7 @@
 // KDE includes
 
 #include <kmainwindow.h>
+#include "statesavingobject.h"
 
 namespace Digikam
 {
@@ -38,7 +39,7 @@ namespace Digikam
 class TagModel;
 class TAlbum;
 
-class TagsManager : public KMainWindow
+class TagsManager : public KMainWindow, public StateSavingObject
 {
     Q_OBJECT
 
@@ -137,6 +138,10 @@ private Q_SLOTS:
 protected:
 
     void closeEvent(QCloseEvent* event);
+
+    virtual void doLoadState();
+
+    virtual void doSaveState();
 
 private:
 
