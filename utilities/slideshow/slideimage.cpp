@@ -74,7 +74,6 @@ SlideImage::SlideImage(QWidget* const parent)
     setWindowFlags(Qt::FramelessWindowHint);
     setMouseTracking(true);
 
-    d->deskSize             = KGlobalSettings::desktopGeometry(kapp->activeWindow()).size();
     d->previewThread        = new PreviewLoadThread();
     d->previewPreloadThread = new PreviewLoadThread();
 
@@ -104,7 +103,8 @@ void SlideImage::setLoadUrl(const KUrl& url)
     }
     else
     {
-        d->previewThread->load(url.toLocalFile(), qMax(d->deskSize.width(), d->deskSize.height()));
+        QSize deskSize = KGlobalSettings::desktopGeometry(parentWidget()).size();
+        d->previewThread->load(url.toLocalFile(), qMax(deskSize.width(), deskSize.height()));
     }
 }
 
@@ -116,7 +116,8 @@ void SlideImage::setPreloadUrl(const KUrl& url)
     }
     else
     {
-        d->previewPreloadThread->load(url.toLocalFile(), qMax(d->deskSize.width(), d->deskSize.height()));
+        QSize deskSize = KGlobalSettings::desktopGeometry(parentWidget()).size();
+        d->previewPreloadThread->load(url.toLocalFile(), qMax(deskSize.width(), deskSize.height()));
     }
 }
 

@@ -44,7 +44,6 @@
 #include <kapplication.h>
 #include <kdeversion.h>
 #include <kdialog.h>
-#include <kglobalsettings.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -66,11 +65,7 @@ class SlideShow::Private
 public:
 
     Private()
-        : deskX(0),
-          deskY(0),
-          deskWidth(0),
-          deskHeight(0),
-          fileIndex(-1),
+        : fileIndex(-1),
           screenSaverCookie(-1),
           mouseMoveTimer(0),
           imageView(0),
@@ -80,21 +75,17 @@ public:
     {
     }
 
-    int                 deskX;
-    int                 deskY;
-    int                 deskWidth;
-    int                 deskHeight;
-    int                 fileIndex;
-    int                 screenSaverCookie;
+    int               fileIndex;
+    int               screenSaverCookie;
 
-    QTimer*             mouseMoveTimer;  // To hide cursor when not moved.
+    QTimer*           mouseMoveTimer;  // To hide cursor when not moved.
 
-    SlideImage*         imageView;
-    SlideError*         errorView;
-    SlideEnd*           endView;
-    SlideOSD*           osd;
+    SlideImage*       imageView;
+    SlideError*       errorView;
+    SlideEnd*         endView;
+    SlideOSD*         osd;
 
-    SlideShowSettings   settings;
+    SlideShowSettings settings;
 };
 
 SlideShow::SlideShow(const SlideShowSettings& settings)
@@ -110,16 +101,7 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
     // ---------------------------------------------------------------
 
-    d->settings    = settings;
-
-    QRect deskRect = KGlobalSettings::desktopGeometry(kapp->activeWindow());
-    d->deskX       = deskRect.x();
-    d->deskY       = deskRect.y();
-    d->deskWidth   = deskRect.width();
-    d->deskHeight  = deskRect.height();
-
-    move(d->deskX, d->deskY);
-    resize(d->deskWidth, d->deskHeight);
+    d->settings = settings;
 
     // ---------------------------------------------------------------
 
@@ -160,10 +142,35 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
     // ---------------------------------------------------------------
 
+    QDesktopWidget const* desktop = kapp->desktop();
+    const int preferenceScreen    = d->settings.slideScreen;
+    int screen                    = 0;
+
+    if (preferenceScreen == -2)
+    {
+        screen = desktop->screenNumber(kapp->activeWindow());
+    }
+    else if (preferenceScreen == -1)
+    {
+        screen = desktop->primaryScreen();
+    }
+    else if ((preferenceScreen >= 0) && (preferenceScreen < desktop->numScreens()))
+    {
+        screen = preferenceScreen;
+    }
+    else
+    {
+        screen                  = desktop->screenNumber(kapp->activeWindow());
+        d->settings.slideScreen = -2;
+        d->settings.writeToConfig();
+    }
+
+    slotScreenSelected(screen);
+
+    // ---------------------------------------------------------------
+
     setCurrentIndex(ImageView);
     inhibitScreenSaver();
-
-    setMouseTracking(true);
     slotMouseMoveTimeOut();
 }
 
@@ -444,6 +451,16 @@ void SlideShow::slotPlay()
 {
     // NOTE: prepare to video slide support.
     d->osd->pause(false);
+}
+
+void SlideShow::slotScreenSelected(int screen)
+{
+    kDebug() << "move to screen: " << screen;
+
+    QRect deskRect = kapp->desktop()->screenGeometry(screen);
+
+    move(deskRect.x(), deskRect.y());
+    resize(deskRect.width(), deskRect.height());
 }
 
 }  // namespace Digikam

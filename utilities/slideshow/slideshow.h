@@ -95,6 +95,7 @@ private Q_SLOTS:
 
     void slotMouseMoveTimeOut();
     void slotImageLoaded(bool);
+    void slotScreenSelected(int);
 
 private:
 

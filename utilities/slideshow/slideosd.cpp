@@ -172,7 +172,7 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
     d->progressBar->installEventFilter(d->parent);
     d->progressBar->setMouseTracking(true);
 
-    d->toolBar       = new SlideToolBar(d->progressBox);
+    d->toolBar       = new SlideToolBar(d->settings, d->progressBox);
     d->toolBar->installEventFilter(this);
     d->toolBar->installEventFilter(d->parent);
 
@@ -190,6 +190,9 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
 
     connect(d->toolBar, SIGNAL(signalClose()),
             d->parent, SLOT(close()));
+
+    connect(d->toolBar, SIGNAL(signalScreenSelected(int)),
+            d->parent, SLOT(slotScreenSelected(int)));
 
     // ---------------------------------------------------------------
 

@@ -37,7 +37,9 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "slideshowsettings.h"
 
+class QAction;
 
 namespace Digikam
 {
@@ -48,7 +50,7 @@ class DIGIKAM_EXPORT SlideToolBar : public KHBox
 
 public:
 
-    explicit SlideToolBar(QWidget* const parent);
+    explicit SlideToolBar(const SlideShowSettings& settings, QWidget* const parent);
     ~SlideToolBar();
 
     bool isPaused() const;
@@ -70,11 +72,13 @@ Q_SIGNALS:
     void signalPlay();
     void signalPause();
 
+    void signalScreenSelected(int);
+
 private Q_SLOTS:
 
     void slotPlayBtnToggled();
     void slotNexPrevClicked();
-
+    void slotScreenSelected(QAction*);
 private:
 
 

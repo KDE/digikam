@@ -8,6 +8,7 @@ General   : New keyboard shortcuts to improve usability while photo review (as t
 General   : New keyboard shortcut to switch on/off color managed view for thumbnails and preview.
 AlbumGUI  : Album preview can be displayed in tooltip.
 SlideShow : Labels and Tags keyboard shortcuts can be used while slideshow.
+SlideShow : Support multi-monitors computer.
 
 BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 
@@ -55,4 +56,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 042 ==> 339173 - Album Tool-Tips: Incorrect parent collection shown.
 043 ==> 339052 - MANAGER: Sort order (ascending/descending) not saved when window is closed.
 044 ==> 171199 - Single-click behavior on tree-view do not respect settings from KDE control panel.
-045 ==> 
+045 ==> 257313 - Slideshow on different display (presentation mode).
+046 ==> 

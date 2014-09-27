@@ -159,6 +159,10 @@ public:
      */
     int                          delay;
 
+    /** Screen to use in case of multi-monitor computer.
+     */
+    int                          slideScreen;
+
     /** Show progress indicator
      */
     bool                         showProgressIndicator;
@@ -192,6 +196,7 @@ private:
     static const QString         configSlideShowPrintTagsEntry;
     static const QString         configSlideShowPrintLabelsEntry;
     static const QString         configSlideShowProgressIndicatorEntry;
+    static const QString         configSlideScreenEntry;
 };
 
 }  // namespace Digikam

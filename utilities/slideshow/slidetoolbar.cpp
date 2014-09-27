@@ -28,12 +28,17 @@
 
 #include <QPixmap>
 #include <QToolButton>
+#include <QDesktopWidget>
+#include <QActionGroup>
 
 // KDE includes
 
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kselectaction.h>
+#include <kdebug.h>
+#include <kmenu.h>
 
 namespace Digikam
 {
@@ -48,21 +53,26 @@ public:
         stopBtn(0),
         nextBtn(0),
         prevBtn(0),
+        screenSelectBtn(0),
+        desktop(kapp->desktop()),
         loader(KIconLoader::global())
     {
     }
 
-    const int    iconSize;
+    const int       iconSize;
 
-    QToolButton* playBtn;
-    QToolButton* stopBtn;
-    QToolButton* nextBtn;
-    QToolButton* prevBtn;
+    QToolButton*    playBtn;
+    QToolButton*    stopBtn;
+    QToolButton*    nextBtn;
+    QToolButton*    prevBtn;
+    QToolButton*    screenSelectBtn;
 
-    KIconLoader* loader;
+    QDesktopWidget* desktop;
+
+    KIconLoader*    loader;
 };
 
-SlideToolBar::SlideToolBar(QWidget* const parent)
+SlideToolBar::SlideToolBar(const SlideShowSettings& settings, QWidget* const parent)
     : KHBox(parent), d(new Private)
 {
     setMouseTracking(true);
@@ -88,6 +98,37 @@ SlideToolBar::SlideToolBar(QWidget* const parent)
     d->prevBtn->setIconSize(QSize(d->iconSize, d->iconSize));
     d->nextBtn->setIconSize(QSize(d->iconSize, d->iconSize));
     d->stopBtn->setIconSize(QSize(d->iconSize, d->iconSize));
+
+    int num = d->desktop->numScreens();
+
+    if (num > 1)
+    {
+        d->screenSelectBtn      = new QToolButton(this);
+        KMenu* const screenMenu = new KMenu(d->screenSelectBtn);
+        d->screenSelectBtn->setToolTip( i18n("Switch Screen"));
+        d->screenSelectBtn->setIcon(d->loader->loadIcon("video-display", KIconLoader::Toolbar, d->iconSize));
+        d->screenSelectBtn->setIconSize(QSize(d->iconSize, d->iconSize));
+        d->screenSelectBtn->setMenu(screenMenu);
+        d->screenSelectBtn->setPopupMode(QToolButton::InstantPopup);
+        d->screenSelectBtn->setFocusPolicy(Qt::NoFocus);
+
+        QActionGroup* const group = new QActionGroup(screenMenu);
+        group->setExclusive(true);
+
+        for (int i = 0 ; i < num ; ++i)
+        {
+            QAction* const act = screenMenu->addAction(i18nc("%1 is the screen number (0, 1, ...)", "Screen %1", i));
+            act->setData(qVariantFromValue(i));
+            act->setCheckable(true);
+            group->addAction(act);
+
+            if (i == settings.slideScreen)
+                act->setChecked(true);
+        }
+
+        connect(screenMenu, SIGNAL(triggered(QAction*)),
+                this, SLOT(slotScreenSelected(QAction*)));
+    }
 
     connect(d->playBtn, SIGNAL(toggled(bool)),
             this, SLOT(slotPlayBtnToggled()));
@@ -221,6 +262,14 @@ void SlideToolBar::keyPressEvent(QKeyEvent* e)
     }
 
     e->accept();
+}
+
+void SlideToolBar::slotScreenSelected(QAction* act)
+{
+    if (!act || act->data().type() != QVariant::Int)
+        return;
+
+    emit signalScreenSelected(act->data().toInt());
 }
 
 }   // namespace Digikam

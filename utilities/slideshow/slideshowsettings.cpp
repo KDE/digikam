@@ -52,6 +52,7 @@ const QString SlideShowSettings::configSlideShowPrintNameEntry("SlideShowPrintNa
 const QString SlideShowSettings::configSlideShowPrintTagsEntry("SlideShowPrintTags");
 const QString SlideShowSettings::configSlideShowPrintLabelsEntry("SlideShowPrintLabels");
 const QString SlideShowSettings::configSlideShowProgressIndicatorEntry("SlideShowProgressIndicator");
+const QString SlideShowSettings::configSlideScreenEntry("SlideScreen");
 
 SlideShowSettings::SlideShowSettings()
 {
@@ -71,6 +72,7 @@ SlideShowSettings::SlideShowSettings()
     printTags             = false;
     useFullSizePreviews   = true;
     showProgressIndicator = true;
+    slideScreen           = -2;
 }
 
 SlideShowSettings::~SlideShowSettings()
@@ -95,6 +97,7 @@ void SlideShowSettings::readFromConfig()
     printTags                 = group.readEntry(configSlideShowPrintTagsEntry,            false);
     printLabels               = group.readEntry(configSlideShowPrintLabelsEntry,          false);
     showProgressIndicator     = group.readEntry(configSlideShowProgressIndicatorEntry,    true);
+    slideScreen               = group.readEntry(configSlideScreenEntry,                   -2);
     exifRotate                = MetadataSettings::instance()->settings().exifRotate;
 }
 
@@ -116,6 +119,7 @@ void SlideShowSettings::writeToConfig()
     group.writeEntry(configSlideShowPrintTagsEntry,            printTags);
     group.writeEntry(configSlideShowPrintLabelsEntry,          printLabels);
     group.writeEntry(configSlideShowProgressIndicatorEntry,    showProgressIndicator);
+    group.writeEntry(configSlideScreenEntry,                   slideScreen);
     group.sync();
 }
 
