@@ -57,4 +57,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 043 ==> 339052 - MANAGER: Sort order (ascending/descending) not saved when window is closed.
 044 ==> 171199 - Single-click behavior on tree-view do not respect settings from KDE control panel.
 045 ==> 257313 - Slideshow on different display (presentation mode).
-046 ==> 
+046 ==> 338783 - No EXIF/XMP info in "Metadata" right side-bar tabs.
+047 ==> 
