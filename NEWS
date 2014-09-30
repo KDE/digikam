@@ -59,4 +59,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 045 ==> 257313 - Slideshow on different display (presentation mode).
 046 ==> 338783 - No EXIF/XMP info in "Metadata" right side-bar tabs.
 047 ==> 337507 - Face Detection gives no results, no matter the accuracy setting.
-048 ==<w 
+048 ==> 339440 - digikam crashes when opening geolocation from sidebar or toolbar.
+049 ==> 
