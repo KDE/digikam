@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C)      2009 by Andi Clemens <andi dot clemens at gmail dot com>
- * Copyright (C) 2002-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -60,8 +60,8 @@ public:
     {
     }
 
-    QCache<QString, QPixmap>  thumbnailBorderCache;
-    QCache<QString, QString>  squeezedTextCache;
+    QCache<QString, QPixmap> thumbnailBorderCache;
+    QCache<QString, QString> squeezedTextCache;
 };
 
 DItemDelegate::DItemDelegate(QObject* const parent)
@@ -83,16 +83,15 @@ void DItemDelegate::clearCaches()
 QPixmap DItemDelegate::thumbnailBorderPixmap(const QSize& pixSize) const
 {
     const QColor borderColor = QColor(0, 0, 0, 128);
-
-    QString cacheKey  = QString::number(pixSize.width()) + '-' + QString::number(pixSize.height());
-    QPixmap* cachePix = d->thumbnailBorderCache.object(cacheKey);
+    QString cacheKey         = QString::number(pixSize.width()) + '-' + QString::number(pixSize.height());
+    QPixmap* const cachePix  = d->thumbnailBorderCache.object(cacheKey);
 
     if (!cachePix)
     {
         const int radius = 3;
-        QPixmap pix = ThumbBarDock::generateFuzzyRect(QSize(pixSize.width()  + 2*radius,
-                      pixSize.height() + 2*radius),
-                      borderColor, radius);
+        QPixmap pix      = ThumbBarDock::generateFuzzyRect(QSize(pixSize.width()  + 2*radius,
+                           pixSize.height() + 2*radius),
+                           borderColor, radius);
         const_cast<DItemDelegate*>(this)->d->thumbnailBorderCache.insert(cacheKey, new QPixmap(pix));
         return pix;
     }
@@ -126,10 +125,13 @@ QPixmap DItemDelegate::makeDragPixmap(const QStyleOptionViewItem& option,
 
     QPixmap pix(rect.size());
     QPainter p(&pix);
+
+/* 
     // border
-    /*p.fillRect(0, 0, pix.width()-1, pix.height()-1, QColor(Qt::white));
+    p.fillRect(0, 0, pix.width()-1, pix.height()-1, QColor(Qt::white));
     p.setPen(QPen(Qt::black, 1));
-    p.drawRect(0, 0, pix.width()-1, pix.height()-1);*/
+    p.drawRect(0, 0, pix.width()-1, pix.height()-1);
+*/
 
     QStyleOption opt(option);
     opt.rect = rect;
@@ -153,7 +155,7 @@ QPixmap DItemDelegate::makeDragPixmap(const QStyleOptionViewItem& option,
 
         if (r2.width() > pixmapRect.width() || r2.height() > pixmapRect.height())
         {
-            textRect     = r1;
+//            textRect     = r1;
             text         = text1;
             int rectSize = qMax(r1.width(), r1.height());
             textRect     = QRect(0, 0, rectSize, rectSize);
@@ -181,10 +183,10 @@ QString DItemDelegate::dateToString(const QDateTime& datetime)
 
 QString DItemDelegate::squeezedTextCached(QPainter* const p, int width, const QString& text) const
 {
-    QCache<QString, QString>* cache = &const_cast<DItemDelegate*>(this)->d->squeezedTextCache;
+    QCache<QString, QString>* const cache = &const_cast<DItemDelegate*>(this)->d->squeezedTextCache;
     // We do not need to include the font into cache key, the cache is cleared on font change
-    QString cacheKey                = QString::number(width) + QString::number(qHash(text));
-    QString* cachedString           = cache->object(cacheKey);
+    QString cacheKey                      = QString::number(width) + QString::number(qHash(text));
+    QString* cachedString                 = cache->object(cacheKey);
 
     if (cachedString)
     {
@@ -203,8 +205,9 @@ QString DItemDelegate::squeezedText(const QFontMetrics& fm, int width, const QSt
     fullText.replace('\n',' ');
     return fm.elidedText(text, Qt::ElideRight, width);
 
-    /*
-     * Home-brewn implementation
+/*
+    // Home-brewn implementation
+
     int textWidth  = fm.width(fullText);
     QString result = fullText;
 
@@ -261,7 +264,7 @@ QString DItemDelegate::squeezedText(const QFontMetrics& fm, int width, const QSt
     }
 
     return result;
-    */
+*/
 }
 
 } // namespace Digikam
