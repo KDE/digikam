@@ -97,7 +97,7 @@ int TableViewSelectionModelSyncer::targetModelColumnCount() const
     return s->tableViewModel->columnCount(QModelIndex());
 }
 
-QItemSelection TableViewSelectionModelSyncer::targetIndexToRowItemSelection(const QModelIndex targetIndex) const
+QItemSelection TableViewSelectionModelSyncer::targetIndexToRowItemSelection(const QModelIndex& targetIndex) const
 {
     const int row = targetIndex.row();
 

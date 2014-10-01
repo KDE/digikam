@@ -47,7 +47,7 @@ public:
     QItemSelection itemSelectionToSource(const QItemSelection& selection) const;
     QItemSelection itemSelectionToTarget(const QItemSelection& selection) const;
     int targetModelColumnCount() const;
-    QItemSelection targetIndexToRowItemSelection(const QModelIndex targetIndex) const;
+    QItemSelection targetIndexToRowItemSelection(const QModelIndex& targetIndex) const;
 
 private Q_SLOTS:
 
