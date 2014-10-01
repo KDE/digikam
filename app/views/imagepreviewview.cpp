@@ -207,7 +207,8 @@ ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode)
     connect(this, SIGNAL(toPreviousImage()),
             this, SIGNAL(signalPrevItem()));
 
-    connect(this, SIGNAL(leftButtonDoubleClicked()),
+    //connect(this, SIGNAL(leftButtonDoubleClicked()),
+    connect(this, SIGNAL(activated()),
             this, SIGNAL(signalEscapePreview()));
 
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),

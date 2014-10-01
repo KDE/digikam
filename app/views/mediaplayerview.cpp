@@ -40,6 +40,7 @@
 #include <kaction.h>
 #include <kdialog.h>
 #include <klocale.h>
+#include <kglobalsettings.h>
 #include <phonon/seekslider.h>
 #include <phonon/videoplayer.h>
 #include <phonon/videowidget.h>
@@ -59,7 +60,8 @@ MediaPlayerMouseClickFilter::MediaPlayerMouseClickFilter(QObject* const parent)
 
 bool MediaPlayerMouseClickFilter::eventFilter(QObject* obj, QEvent* event)
 {
-    if (event->type() == QEvent::MouseButtonDblClick)
+    if ((KGlobalSettings::singleClick()  && event->type() == QEvent::MouseButtonRelease) ||
+        (!KGlobalSettings::singleClick() && event->type() == QEvent::MouseButtonDblClick))
     {
         QMouseEvent* const mouseEvent = dynamic_cast<QMouseEvent*>(event);
 
