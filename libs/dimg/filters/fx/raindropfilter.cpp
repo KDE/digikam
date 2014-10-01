@@ -52,11 +52,11 @@ class RainDropFilter::Private
 public:
 
     Private()
+      : drop(80),
+        amount(150),
+        coeff(30),
+        selection(QRect(0, 0, 0, 0))
     {
-        drop      = 80;
-        amount    = 150;
-        coeff     = 30;
-        selection = QRect(0, 0, 0, 0);
     }
 
     int                   drop;
