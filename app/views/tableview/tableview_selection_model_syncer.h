@@ -72,8 +72,9 @@ public Q_SLOTS:
 private:
 
     class Private;
+
     const QScopedPointer<Private> d;
-    TableViewShared* const s;
+    TableViewShared* const        s;
 };
 
 } /* namespace Digikam */

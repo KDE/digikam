@@ -22,10 +22,13 @@
 
 #include "tableview_selection_model_syncer.moc"
 
+// Qt includes
+
+#include <QTimer>
+
 // KDE includes
 
 #include <kdebug.h>
-#include <QTimer>
 
 // local includes
 
@@ -39,6 +42,7 @@ namespace Digikam
 class TableViewSelectionModelSyncer::Private
 {
 public:
+
     Private()
       : syncing(false)
     {
@@ -54,16 +58,22 @@ TableViewSelectionModelSyncer::TableViewSelectionModelSyncer(TableViewShared* co
 {
     connect(s->imageFilterSelectionModel, SIGNAL(currentChanged(QModelIndex,QModelIndex)),
             this, SLOT(slotSourceCurrentChanged(QModelIndex,QModelIndex)));
+
     connect(s->imageFilterSelectionModel, SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(slotSourceSelectionChanged(QItemSelection,QItemSelection)));
+
     connect(s->tableViewSelectionModel, SIGNAL(currentChanged(QModelIndex,QModelIndex)),
             this, SLOT(slotTargetCurrentChanged(QModelIndex,QModelIndex)));
+
     connect(s->tableViewSelectionModel, SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(slotTargetSelectionChanged(QItemSelection,QItemSelection)));
+
     connect(s->tableViewModel, SIGNAL(columnsInserted(QModelIndex,int,int)),
             this, SLOT(slotTargetColumnsInserted(QModelIndex,int,int)));
+
     connect(s->tableViewModel, SIGNAL(modelReset()),
             this, SLOT(slotTargetModelReset()));
+
     connect(s->tableViewModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
             this, SLOT(slotTargetModelRowsInserted(QModelIndex,int,int)));
 
@@ -71,6 +81,7 @@ TableViewSelectionModelSyncer::TableViewSelectionModelSyncer(TableViewShared* co
     ///       Check whether both are necessary or whether we need more.
     connect(s->imageFilterModel, SIGNAL(layoutChanged()),
             this, SLOT(slotSourceModelReset()));
+
     connect(s->imageFilterModel, SIGNAL(modelReset()),
             this, SLOT(slotSourceModelReset()));
 
@@ -79,7 +90,6 @@ TableViewSelectionModelSyncer::TableViewSelectionModelSyncer(TableViewShared* co
 
 TableViewSelectionModelSyncer::~TableViewSelectionModelSyncer()
 {
-
 }
 
 QModelIndex TableViewSelectionModelSyncer::toSource(const QModelIndex& tableViewIndex) const
@@ -99,9 +109,8 @@ int TableViewSelectionModelSyncer::targetModelColumnCount() const
 
 QItemSelection TableViewSelectionModelSyncer::targetIndexToRowItemSelection(const QModelIndex& targetIndex) const
 {
-    const int row = targetIndex.row();
-
-    const QModelIndex topLeft = s->tableViewModel->index(row, 0, targetIndex.parent());
+    const int row                 = targetIndex.row();
+    const QModelIndex topLeft     = s->tableViewModel->index(row, 0, targetIndex.parent());
     const QModelIndex bottomRight = s->tableViewModel->index(row, targetModelColumnCount()-1, targetIndex.parent());
     const QItemSelection mySelection(topLeft, bottomRight);
 
@@ -142,6 +151,7 @@ void TableViewSelectionModelSyncer::slotSourceCurrentChanged(const QModelIndex& 
     {
         return;
     }
+
     d->syncing = true;
 
     // we have to select the whole row of the target index
@@ -155,16 +165,17 @@ void TableViewSelectionModelSyncer::slotSourceCurrentChanged(const QModelIndex& 
 QItemSelection TableViewSelectionModelSyncer::itemSelectionToSource(const QItemSelection& selection) const
 {
     QItemSelection sourceSelection;
+
     Q_FOREACH(const QItemSelectionRange& range, selection)
     {
         const int firstRow = range.top();
-        const int lastRow = range.bottom();
-        
+        const int lastRow  = range.bottom();
+
         for (int row = firstRow; row<=lastRow; ++row)
         {
             const QModelIndex tableViewIndex = s->tableViewModel->index(row, 0, range.parent());
-            const QModelIndex sourceIndex = s->tableViewModel->toImageFilterModelIndex(tableViewIndex);
-            
+            const QModelIndex sourceIndex    = s->tableViewModel->toImageFilterModelIndex(tableViewIndex);
+
             if (sourceIndex.isValid())
             {
                 sourceSelection.select(sourceIndex, sourceIndex);
@@ -177,19 +188,18 @@ QItemSelection TableViewSelectionModelSyncer::itemSelectionToSource(const QItemS
 
 QItemSelection TableViewSelectionModelSyncer::itemSelectionToTarget(const QItemSelection& selection) const
 {
-    const int targetColumnCount = targetModelColumnCount();
-
+    const int      targetColumnCount = targetModelColumnCount();
     QItemSelection targetSelection;
+
     Q_FOREACH(const QItemSelectionRange& range, selection)
     {
         const int firstRow = range.top();
-        const int lastRow = range.bottom();
+        const int lastRow  = range.bottom();
 
         for (int row = firstRow; row<=lastRow; ++row)
         {
-            
-            const QModelIndex sourceIndex = s->imageFilterModel->index(row, 0, range.parent());
-            const QModelIndex tableViewIndexTopLeft = s->tableViewModel->fromImageFilterModelIndex(sourceIndex);
+            const QModelIndex sourceIndex               = s->imageFilterModel->index(row, 0, range.parent());
+            const QModelIndex tableViewIndexTopLeft     = s->tableViewModel->fromImageFilterModelIndex(sourceIndex);
             const QModelIndex tableViewIndexBottomRight = s->tableViewModel->index(
                     tableViewIndexTopLeft.row(),
                     targetColumnCount-1,
@@ -203,7 +213,6 @@ QItemSelection TableViewSelectionModelSyncer::itemSelectionToTarget(const QItemS
     return targetSelection;
 }
 
-
 void TableViewSelectionModelSyncer::slotSourceSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
 {
     if (!s->isActive)
@@ -215,6 +224,7 @@ void TableViewSelectionModelSyncer::slotSourceSelectionChanged(const QItemSelect
     {
         return;
     }
+
     d->syncing = true;
 
     const QItemSelection targetSelection = itemSelectionToTarget(selected);
@@ -239,6 +249,7 @@ void TableViewSelectionModelSyncer::slotTargetCurrentChanged(const QModelIndex& 
     {
         return;
     }
+
     d->syncing = true;
 
     const QModelIndex sourceIndexCurrent = toSource(current);
@@ -258,6 +269,7 @@ void TableViewSelectionModelSyncer::slotTargetSelectionChanged(const QItemSelect
     {
         return;
     }
+
     d->syncing = true;
 
     const QItemSelection sourceSelection = itemSelectionToSource(selected);
@@ -319,19 +331,22 @@ void Digikam::TableViewSelectionModelSyncer::slotTargetModelRowsInserted(const Q
     }
 
     // look up the state of the source indexes and transfer them here
-    for (int i=start; i<=end; ++i)
+    for (int i = start; i <= end; ++i)
     {
         const QModelIndex iTarget = s->tableViewModel->index(i, 0, parent);
+
         if (!iTarget.isValid())
         {
             continue;
         }
 
         const QModelIndex iSource = toSource(iTarget);
+
         if (!iSource.isValid())
         {
             continue;
         }
+
         if (s->imageFilterSelectionModel->isSelected(iSource))
         {
             const QItemSelection targetSelection = targetIndexToRowItemSelection(iTarget);
@@ -345,5 +360,4 @@ void Digikam::TableViewSelectionModelSyncer::slotTargetModelRowsInserted(const Q
     s->tableViewSelectionModel->setCurrentIndex(targetIndexCurrent, QItemSelectionModel::NoUpdate);
 }
 
-} /* namespace Digikam */
-
+} // namespace Digikam
