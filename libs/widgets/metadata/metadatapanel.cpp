@@ -195,6 +195,8 @@ public:
         }
     };
 
+public:
+
     KTabWidget*           tab;
 
     QStringList           defaultExifFilter;
@@ -299,7 +301,8 @@ void MetadataPanel::applySettings()
     }
 
     config->sync();
-#endif
+
+#endif // KEXIV2_VERSION >= 0x010000
 }
 
 void MetadataPanel::slotTabChanged(int)
@@ -310,8 +313,9 @@ void MetadataPanel::slotTabChanged(int)
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Image Properties SideBar");
 
-    QWidget* const tab = d->tab->currentWidget();
 #if KEXIV2_VERSION >= 0x010000
+
+    QWidget* const tab = d->tab->currentWidget();
 
     if (tab == d->exifViewerConfig)
     {
@@ -346,7 +350,8 @@ void MetadataPanel::slotTabChanged(int)
         }
     }
 
-#endif
+#endif // KEXIV2_VERSION >= 0x010000
+
     kapp->restoreOverrideCursor();
 }
 
