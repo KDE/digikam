@@ -120,11 +120,11 @@ Qt::SortOrder ShowfotoItemSortSettings::defaultSortOrderForSortRole(SortRole rol
 {
     switch (role)
     {
-        case SortByFileName:        
+        case SortByFileName:
         case SortByFileSize:
             return Qt::DescendingOrder;
         case SortByCreationDate:
-            return Qt::AscendingOrder;        
+            return Qt::AscendingOrder;
         default:
             return Qt::AscendingOrder;
     }
@@ -167,6 +167,7 @@ bool ShowfotoItemSortSettings::lessThan(const ShowfotoItemInfo& left, const Show
     {
         return result < 0;
     }
+
     return false;
 }
 
