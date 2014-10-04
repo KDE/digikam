@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 
- * Description :
+ * Date        : 28-07-2013
+ * Description : Detects blur test program
  *
  * Copyright (C) 2013-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2013-2014 by Gowtham Ashok <gwty93 at gmail dot com>
@@ -24,6 +24,7 @@
 
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
@@ -35,12 +36,12 @@ using namespace std;
 Mat src, src_gray;
 Mat dst, detected_edges;
 
-int edgeThresh = 1;
-int lowThreshold=0.4;   //given in research paper
+int edgeThresh             = 1;
+int lowThreshold           = 0.4;   //given in research paper
 int const max_lowThreshold = 100;
-int ratio = 3;
-int kernel_size = 3;
-char* window_name = "Edge Map";
+int ratio                  = 3;
+int kernel_size            = 3;
+char window_name[]         = "Edge Map";
 
 /*
  * @function CannyThreshold
@@ -62,7 +63,7 @@ void CannyThreshold(int, void*)
 }
 
 /* @function main */
-int main( int argc, char** argv )
+int main( int /*argc*/, char** argv )
 {
     // Load an image
     src = imread( argv[1] );
@@ -78,19 +79,20 @@ int main( int argc, char** argv )
     // Convert the image to grayscale
     cvtColor( src, src_gray, CV_BGR2GRAY );
 
-
     CannyThreshold(0, 0);
 
-    double average=mean(detected_edges)[0];
     double maxval;
-    int* maxIdx=(int* )malloc(sizeof(detected_edges));
+    double average = mean(detected_edges)[0];
+    int* maxIdx    = (int* )malloc(sizeof(detected_edges));
+
     minMaxIdx(detected_edges, 0, &maxval, 0, maxIdx);
 
-    double blurresult=average/maxval;
-    cout<<"The average of the edge intensity is "<<average<<std::endl;
-    cout<<"The maximum of the edge intensity is "<<maxval<<std::endl;
-    cout<<"The result of the edge intensity is "<<blurresult<<std::endl;
-    // Wait until user exit program by pressing a key
+    double blurresult = average/maxval;
+
+    cout << "The average of the edge intensity is " << average    << std::endl;
+    cout << "The maximum of the edge intensity is " << maxval     << std::endl;
+    cout << "The result of the edge intensity is "  << blurresult << std::endl;
+
     // Wait until user exit program by pressing a key
     waitKey(0);
 
