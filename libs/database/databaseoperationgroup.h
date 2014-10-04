@@ -37,17 +37,16 @@ namespace Digikam
 
 class DatabaseAccess;
 
+/**
+ * When you intend to execute a number of write operations to the database,
+ * group them while holding a DatabaseOperationGroup.
+ * For some database systems (SQLite), keeping a transaction across write operations
+ * occurring in short time results in enormous speedup (800x).
+ * For system that do not need this optimization, this class is a no-op.
+ */
 class DIGIKAM_DATABASE_EXPORT DatabaseOperationGroup
 {
 public:
-
-    /**
-     * When you intend to execute a number of write operations to the database,
-     * group them while holding a DatabaseOperationGroup.
-     * For some database systems (SQLite), keeping a transaction across write operations
-     * occurring in short time results in enormous speedup (800x).
-     * For system that do not need this optimization, this class is a no-op.
-     */
 
     /**
      * Retrieve a DatabaseAccess object each time when constructing and destructing.
