@@ -112,11 +112,9 @@ void FileActionMngrFileWorker::writeMetadata(FileActionImageInfoList infos, Meta
 
     foreach(const ImageInfo& info, infos)
     {
-        QString filePath = info.filePath();
-
         // apply to file metadata
         ScanController::FileMetadataWrite writeScope(info);
-        writeScope.changed(hub->write(filePath, MetadataHub::FullWrite, writeSettings));
+        writeScope.changed(hub->writeToMetadata(info, MetadataHub::FullWrite, writeSettings));
         // hub emits fileMetadataChanged
 
         infos.writtenToOne();

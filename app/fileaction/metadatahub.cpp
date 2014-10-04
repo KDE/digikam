@@ -598,6 +598,40 @@ bool MetadataHub::write(ImageInfo info, WriteMode writeMode)
     return changed;
 }
 
+bool MetadataHub::writeToMetadata(ImageInfo info, MetadataHub::WriteMode writeMode, const MetadataSettingsContainer &settings)
+{
+    applyChangeNotifications();
+
+    // if no DMetadata object is needed at all, don't construct one -
+    // important optimization if writing to file is turned off in setup!
+    if (!willWriteMetadata(writeMode, settings))
+    {
+        return false;
+    }
+
+    // Reload all tags from image info
+    // Ugly hack to allow metadatahub to write disjoit tags when multiple images are loaded
+    d->tags.clear();
+    QList<int> tags = info.tagIds();
+
+    Q_FOREACH(int tag, tags){
+        d->tags[tag] = TagStatus(MetadataAvailable,true);
+    }
+
+    writeToBaloo(info.filePath());
+
+    DMetadata metadata(info.filePath());
+
+    if (write(metadata, writeMode, settings))
+    {
+        bool success = metadata.applyChanges();
+        ImageAttributesWatch::instance()->fileMetadataChanged(info.filePath());
+        return success;
+    }
+
+    return false;
+}
+
 bool MetadataHub::write(DMetadata& metadata, WriteMode writeMode, const MetadataSettingsContainer& settings)
 {
     applyChangeNotifications();
@@ -827,6 +861,8 @@ bool MetadataHub::writeTags(DMetadata& metadata, bool saveTags)
             }
 
             // it is important that MetadataDisjoint keywords are not touched
+            // WARNING: Do not use write(QFilePath ...) when multiple image info are loaded
+            // otherwise disjoint tags will not be used, use writeToMetadata(ImageInfo...)
             if (it.value() == MetadataAvailable)
             {
                 // This works for single and multiple selection.
