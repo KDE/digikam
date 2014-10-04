@@ -53,10 +53,11 @@ public:
      * Retrieve a DatabaseAccess object each time when constructing and destructing.
      */
     DatabaseOperationGroup();
+
     /**
      * Use an existing DatabaseAccess object, which must live as long as this object exists.
      */
-    explicit DatabaseOperationGroup(DatabaseAccess* access);
+    explicit DatabaseOperationGroup(DatabaseAccess* const access);
     ~DatabaseOperationGroup();
 
     /**
@@ -67,8 +68,11 @@ public:
 
     void setMaximumTime(int msecs);
 
-    /** Resets to 0 the time used by allowLift() */
+    /**
+     * Resets to 0 the time used by allowLift()
+     */
     void resetTime();
+
     /**
      * Allows to lift(). The transaction will be lifted if the time set by setMaximumTime()
      * has expired.
@@ -77,8 +81,8 @@ public:
 
 private:
 
-    class DatabaseOperationGroupPriv;
-    DatabaseOperationGroupPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam
