@@ -988,6 +988,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideerror.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideend.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideshow.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slidehelp.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideshowsettings.cpp
        )
 

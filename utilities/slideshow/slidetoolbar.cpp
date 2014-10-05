@@ -40,6 +40,10 @@
 #include <kdebug.h>
 #include <kmenu.h>
 
+// Local includes
+
+#include "slidehelp.h"
+
 namespace Digikam
 {
 
@@ -213,6 +217,15 @@ void SlideToolBar::keyPressEvent(QKeyEvent* e)
 {
     switch (e->key())
     {
+        case (Qt::Key_F1):
+        {
+            d->playBtn->animateClick();
+            SlideHelp* const help = new SlideHelp();
+            help->exec();
+            d->playBtn->animateClick();
+            break;
+        }
+
         case (Qt::Key_Space):
         {
             if (d->playBtn->isEnabled())
