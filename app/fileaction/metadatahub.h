@@ -181,6 +181,16 @@ public:
     bool write(ImageInfo info, WriteMode writeMode = FullWrite);
 
     /**
+     * @brief writeToMetadata - write to metadata using image info to retrieve tags and filepath
+     *                          use this method when multiple image infos are loaded in hub
+     * @param info - image info to retrieve current tags
+     * @param writeMode
+     * @param settings
+     * @return true           - if everything is succesfull
+     */
+    bool writeToMetadata(ImageInfo info, WriteMode writeMode = FullWrite,
+               const MetadataSettingsContainer& settings = MetadataSettings::instance()->settings());
+    /**
         Applies the set of metadata contained in this MetadataHub
         to the given DMetadata object.
         The MetadataSettingsContainer determine whether data is actually
@@ -206,6 +216,9 @@ public:
         Constructs a DMetadata object for given filePath,
         calls the above method, writes the changes out to the file,
         and notifies the ImageAttributesWatch.
+        WARNING: Do not use this method when multiple image infos are loaded
+                 It will result in disjoint tags not being written
+                 Use writeToMetadata(Image info ...) instead
         @return Returns if the file has been touched
     */
     bool write(const QString& filePath, WriteMode writeMode = FullWrite,
