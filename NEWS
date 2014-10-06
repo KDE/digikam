@@ -3,7 +3,7 @@ digiKam 4.4.0 - Release date: 2014-10-12
 
 NEW FEATURES:
 
-General   : Naviguate between pictures using PageUp/PageDown is now possible while editing properties through captions/tags sidebar.
+General   : Navigate between pictures using PageUp/PageDown is now possible while editing properties through captions/tags sidebar.
 General   : New keyboard shortcuts to improve usability while photo review (as to switch focus on text edit widget, or to toogle tags view).
 General   : New keyboard shortcut to switch on/off color managed view for thumbnails and preview.
 AlbumGUI  : Album preview can be displayed in tooltip.
