@@ -86,6 +86,7 @@
       <li xml:lang="x-test">xxSQLite powered storage for the albums and its metadataxx</li>
       <li>Support for filtering and sorting albums</li>
       <li xml:lang="ca">Implementació pel filtratge i classificació dels àlbums</li>
+      <li xml:lang="de">Unterstützung für das Filtern und Sortieren von Alben</li>
       <li xml:lang="en-GB">Support for filtering and sorting albums</li>
       <li xml:lang="fr">Prise en charge du filtrage et du tri des albums</li>
       <li xml:lang="nl">Ondersteuning voor filtering en sorteren van albums</li>
