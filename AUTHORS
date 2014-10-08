@@ -66,130 +66,131 @@ Anna Sawicka <ania at kajak dot org dot pl>                               : Poli
 DIGIKAM SPLASHSCREENS CREDITS :
 -----------------------------
 
-4.3.0          : Asa Sourdiffe         <asourdiffe at gmail dot com>
-4.3.0          : Isabelle Myja         <inm dot photographe at gmail dot com>
-4.2.0          : Marie-Noelle Augendre <mnaugendre at gmail dot com>
-4.1.0          : Caulier Gilles        <caulier dot gilles at gmail dot com>
-4.0.0          : Marie-Noelle Augendre <mnaugendre at gmail dot com>
-4.0.0-beta1    : Bogdan Hlevca         <bogdan at hlevca dot com>
-3.5.0          : Marie-Noelle Augendre <mnaugendre at gmail dot com>
-3.4.0          : Donagh Horgan         <donagh dot horganat gmail dot com>
-3.3.0          : Cyril Bosselut        <bossone0013 at gmail dot com>
-3.2.0          : Dmitri Popov          <dmpop at linux dot com>
-3.1.0          : Martin Lubich         <martin dot lubich at gmx dot at>
-3.0.0          : Thomas Caswell        <tcaswell at gmail dot com>
-3.0.0-RC       : Andreas K. Huettel    <dilfridge at gentoo dot org>
-3.0.0-beta3    : Theodor Fruendt       <frundt at gmail dot com>
-3.0.0-beta1    : Thomas Jacquin        <jacquin dot thomas at gmail dot com>
-2.9.0          : Dmitri Popov          <dmpop at linux dot com>
-2.8.0          : Alberto Garcia        <info at trebol-a dot com>
-2.7.0          : Rinus Bakker          <sleeplessregulus at gmail dot com>
-2.6.0          : Hervé Le Roy          <hleroy at hleroy dot com>
-2.6.0-rc       : Thomas Jacquin        <jacquin dot thomas at gmail dot com>
-2.6.0-beta3    : Daniel Isenmann       <daniel dot isenmann at gmx dot de>
-2.6.0-beta2    : Dmitri Popov          <dmpop at linux dot com>
-2.6.0-beta1    : Rinus Bakker          <sleeplessregulus at gmail dot com>
-2.5.0          : Caulier Gilles        <caulier dot gilles at gmail dot com>
-2.4.0          : Rinus Bakker          <sleeplessregulus at gmail dot com>
-2.3.0          : Axel Krebs            <info at axel-krebs dot de>
-2.2.0          : Chris Mason           <chris dot mason at oracle dot com>
-2.1.0          : Caulier Gilles        <caulier dot gilles at gmail dot com>
-2.0.0          : Rinus Bakker          <sleeplessregulus at hetnet dot nl>
-2.0.0-beta6    : Mohamed Malik         <i at mohamedmalik dot com>
-2.0.0-beta5    : Michael Thaler        <michael dot thaler at physik dot tu-muenchen dot de>
-2.0.0-beta4    : Michael Thaler        <michael dot thaler at physik dot tu-muenchen dot de>
-2.0.0-beta3    : Michael Thaler        <michael dot thaler at physik dot tu-muenchen dot de>
-2.0.0-beta2    : Martin Klapetek       <martin dot klapetek at gmail dot com>
-2.0.0-beta1    : Petr Sigut            <sigut at sigut dot net>
-1.9.0          : Alexander Heinlein    <alex at die-heinleins dot de>
-1.8.0          : Caulier Gilles        <caulier dot gilles at gmail dot com>
-1.7.0          : Ondrej Sury           <ondrej at sury dot org>
-1.6.0          : Dmitri Popov          <dmpop at openoffice dot org>
-1.5.0          : Johannes Wienke       <languitar at semipol dot de>
-1.4.0          : Kalyan Varma          <kalyan at rtns dot org>
-1.3.0          : Santoro Domenico      <Domenico dot Santoro at m-dis dot it>
-1.2.0          : Johannes Wienke       <languitar at semipol dot de>
-1.1.0          : Kanwar Plaha          <kanwar dot plaha at gmail dot com>
-1.0.0          : Arturo Mann           <arturo dot mann at gmail dot com>
-0.10.0         : Fernando Batista      <ferbatista at mail dot telepac dot pt>
-0.9.6          : Andr Geszti Monteiro  <agm2112 at gmail dot com>
-0.9.5          : Michel Pottier        <Michel dot Pottier at free dot fr>
-0.9.4          : Michel Pottier        <Michel dot Pottier at free dot fr>
-0.9.3          : Laurenz Gamper        <lgamper at gmx dot ch>
-0.9.2          : Juergen Flosbach      <juergen dot flosbach at bigfoot dot com>
-0.9.1          : Gilles Caulier        <caulier dot gilles at gmail dot com>
-0.9.0          : Dennis Gnad           <bluedrago at web dot de>
-0.8.2          : Andrea Gagliardi      <andrea at euronia dot it>
-0.8.1          : Andrea Gagliardi      <andrea at euronia dot it>
-0.8.0          : Tom Albers            <tomalbers at kde dot nl>
+4.5.0          : Leandro Conca De Luccia <lluccia at gmail dot com>
+4.4.0          : Asa Sourdiffe           <asourdiffe at gmail dot com>
+4.3.0          : Isabelle Myja           <inm dot photographe at gmail dot com>
+4.2.0          : Marie-Noelle Augendre   <mnaugendre at gmail dot com>
+4.1.0          : Caulier Gilles          <caulier dot gilles at gmail dot com>
+4.0.0          : Marie-Noelle Augendre   <mnaugendre at gmail dot com>
+4.0.0-beta1    : Bogdan Hlevca           <bogdan at hlevca dot com>
+3.5.0          : Marie-Noelle Augendre   <mnaugendre at gmail dot com>
+3.4.0          : Donagh Horgan           <donagh dot horganat gmail dot com>
+3.3.0          : Cyril Bosselut          <bossone0013 at gmail dot com>
+3.2.0          : Dmitri Popov            <dmpop at linux dot com>
+3.1.0          : Martin Lubich           <martin dot lubich at gmx dot at>
+3.0.0          : Thomas Caswell          <tcaswell at gmail dot com>
+3.0.0-RC       : Andreas K. Huettel      <dilfridge at gentoo dot org>
+3.0.0-beta3    : Theodor Fruendt         <frundt at gmail dot com>
+3.0.0-beta1    : Thomas Jacquin          <jacquin dot thomas at gmail dot com>
+2.9.0          : Dmitri Popov            <dmpop at linux dot com>
+2.8.0          : Alberto Garcia          <info at trebol-a dot com>
+2.7.0          : Rinus Bakker            <sleeplessregulus at gmail dot com>
+2.6.0          : Hervé Le Roy            <hleroy at hleroy dot com>
+2.6.0-rc       : Thomas Jacquin          <jacquin dot thomas at gmail dot com>
+2.6.0-beta3    : Daniel Isenmann         <daniel dot isenmann at gmx dot de>
+2.6.0-beta2    : Dmitri Popov            <dmpop at linux dot com>
+2.6.0-beta1    : Rinus Bakker            <sleeplessregulus at gmail dot com>
+2.5.0          : Caulier Gilles          <caulier dot gilles at gmail dot com>
+2.4.0          : Rinus Bakker            <sleeplessregulus at gmail dot com>
+2.3.0          : Axel Krebs              <info at axel-krebs dot de>
+2.2.0          : Chris Mason             <chris dot mason at oracle dot com>
+2.1.0          : Caulier Gilles          <caulier dot gilles at gmail dot com>
+2.0.0          : Rinus Bakker            <sleeplessregulus at hetnet dot nl>
+2.0.0-beta6    : Mohamed Malik           <i at mohamedmalik dot com>
+2.0.0-beta5    : Michael Thaler          <michael dot thaler at physik dot tu-muenchen dot de>
+2.0.0-beta4    : Michael Thaler          <michael dot thaler at physik dot tu-muenchen dot de>
+2.0.0-beta3    : Michael Thaler          <michael dot thaler at physik dot tu-muenchen dot de>
+2.0.0-beta2    : Martin Klapetek         <martin dot klapetek at gmail dot com>
+2.0.0-beta1    : Petr Sigut              <sigut at sigut dot net>
+1.9.0          : Alexander Heinlein      <alex at die-heinleins dot de>
+1.8.0          : Caulier Gilles          <caulier dot gilles at gmail dot com>
+1.7.0          : Ondrej Sury             <ondrej at sury dot org>
+1.6.0          : Dmitri Popov            <dmpop at openoffice dot org>
+1.5.0          : Johannes Wienke         <languitar at semipol dot de>
+1.4.0          : Kalyan Varma            <kalyan at rtns dot org>
+1.3.0          : Santoro Domenico        <Domenico dot Santoro at m-dis dot it>
+1.2.0          : Johannes Wienke         <languitar at semipol dot de>
+1.1.0          : Kanwar Plaha            <kanwar dot plaha at gmail dot com>
+1.0.0          : Arturo Mann             <arturo dot mann at gmail dot com>
+0.10.0         : Fernando Batista        <ferbatista at mail dot telepac dot pt>
+0.9.6          : Andr Geszti Monteiro    <agm2112 at gmail dot com>
+0.9.5          : Michel Pottier          <Michel dot Pottier at free dot fr>
+0.9.4          : Michel Pottier          <Michel dot Pottier at free dot fr>
+0.9.3          : Laurenz Gamper          <lgamper at gmx dot ch>
+0.9.2          : Juergen Flosbach        <juergen dot flosbach at bigfoot dot com>
+0.9.1          : Gilles Caulier          <caulier dot gilles at gmail dot com>
+0.9.0          : Dennis Gnad             <bluedrago at web dot de>
+0.8.2          : Andrea Gagliardi        <andrea at euronia dot it>
+0.8.1          : Andrea Gagliardi        <andrea at euronia dot it>
+0.8.0          : Tom Albers              <tomalbers at kde dot nl>
 0.7.3          : Andreas Fischer
-0.7.2          : Caulier Gilles        <caulier dot gilles at gmail dot com>
+0.7.2          : Caulier Gilles          <caulier dot gilles at gmail dot com>
 0.7.1          : Yemu
-0.7.0          : Yves Chaufour         <yves dot chaufour at wanadoo dot fr>
-0.6.2          : Yves Chaufour         <yves dot chaufour at wanadoo dot fr>
-0.6.1          : Jens Gassmann         <jens dot gassmann at atomix dot de>
-0.6.0          : Renchi Raju           <renchi dot raju at gmail dot com>
-0.5.0          : Renchi Raju           <renchi dot raju at gmail dot com>
+0.7.0          : Yves Chaufour           <yves dot chaufour at wanadoo dot fr>
+0.6.2          : Yves Chaufour           <yves dot chaufour at wanadoo dot fr>
+0.6.1          : Jens Gassmann           <jens dot gassmann at atomix dot de>
+0.6.0          : Renchi Raju             <renchi dot raju at gmail dot com>
+0.5.0          : Renchi Raju             <renchi dot raju at gmail dot com>
 0.4.0          : NONE
 
 SHOWFOTO SPLASHSCREENS CREDITS :
 ------------------------------
 
-4.4.0          : Asa Sourdiffe         <asourdiffe at gmail dot com>
-4.3.0          : Asa Sourdiffe         <asourdiffe at gmail dot com>
-4.2.0          : Marie-Noelle Augendre <mnaugendre at gmail dot com>
-4.1.0          : Caulier Gilles        <caulier dot gilles at gmail dot com>
-4.0.0          : Marie-Noelle Augendre <mnaugendre at gmail dot com>
-4.0.0-beta1    : Cristiano Dri         <cristiano dot dri at gmail dot com>
-3.5.0          : Marie-Noelle Augendre <mnaugendre at gmail dot com>
-3.4.0          : Caulier Gilles        <caulier dot gilles at gmail dot com>
-3.3.0          : Cyril Bosselut        <bossone0013 at gmail dot com>
-3.2.0          : Mohamed Malik         <i at mohamedmalik dot com>
-3.1.0          : Dmitri Popov          <dmpop at linux dot com>
-3.0.0          : Asa Sourdiffe         <asourdiffe at gmail dot com>
-3.0.0-RC       : Mohamed Malik         <i at mohamedmalik dot com>
-3.0.0-beta3    : Matthew Fulgo         <matthew dot fulgo at gmail dot com>
-3.0.0-beta1    : Thomas Jacquin        <jacquin dot thomas at gmail dot com>
-2.9.0          : Thomas Jacquin        <jacquin dot thomas at gmail dot com>
-2.8.0          : Thomas Rees           <tomrees at columbus dot rr dot com>
-2.7.0          : Rinus Bakker          <sleeplessregulus at gmail dot com>
-2.6.0          : Hervé Le Roy          <hleroy at hleroy dot com>
-2.6.0-rc       : Thomas Jacquin        <jacquin dot thomas at gmail dot com>
-2.6.0-beta3    : Daniel Isenmann       <daniel dot isenmann at gmx dot de>
-2.6.0-beta2    : Dmitri Popov          <dmpop at linux dot com>
-2.6.0-beta1    : Rinus Bakker          <sleeplessregulus at gmail dot com>
-2.5.0          : Caulier Gilles        <caulier dot gilles at gmail dot com>
-2.4.0          : Rinus Bakker          <sleeplessregulus at gmail dot com>
-2.3.0          : Mihael Simonic        <smihael at gmail dot com>
-2.2.0          : Sankar Nair           <snair dot snair at gmail dot com>
-2.1.0          : Caulier Gilles        <caulier dot gilles at gmail dot com>
-2.0.0          : Mohamed Malik         <i at mohamedmalik dot com>
-2.0.0-beta6    : Rinus Bakker          <sleeplessregulus at hetnet dot nl>
-2.0.0-beta5    : Axel Krebs            <info at axel-krebs dot de>
-2.0.0-beta4    : Susan Voitel          <gfx at spacepenguin dot de>
-2.0.0-beta3    : Ruben Marquez         <rmcorrespond at gmail dot com>
-2.0.0-beta2    : Mohamed Malik         <i at mohamedmalik dot com>
-2.0.0-beta1    : Jan Wachsmann         <jan dot wachsmann at gmx dot de>
-1.9.0          : Frank Steinmetzger    <warp_7 at gmx dot de>
-1.8.0          : Mathias Ball          <meb at leitstern dot de>
-1.7.0          : Wolfgang Ruth         <rutwo011 at arcor dot de>
-1.6.0          : Santoro Domenico      <Domenico dot Santoro at m-dis dot it>
-1.5.0          : Johannes Wienke       <languitar at semipol dot de>
-1.4.0          : Dmitri Popov          <dmpop at openoffice dot org>
-1.3.0          : Kalyan Varma          <kalyan at rtns dot org>
-1.2.0          : Petr Sigut            <sigut at sigut dot net>
-1.1.0          : Elisa Mattos          <agm2112 at gmail dot com>
-1.0.0          : Arturo Mann           <arturo dot mann at gmail dot com>
-0.10.0         : Udo Lembke            <ulembke at polarzone dot de>
-0.9.6          : Paul Waldo            <paul at waldoware dot com>
-0.9.0          : Paul Radford          <paul at radfordnz dot net>
-0.8.0          : Frederic Martinot     <fmartinot at gmail dot com>
-0.7.0          : Joel Koop             <joel at tuxable dot com> 
-0.6.0          : Juergen Flosbach      <juergen dot flosbach at bigfoot dot com>
-0.5.0          : Rainer Krienke        <rainer at krienke dot org>
-0.4.0          : Dudas Gabor           <dudasg at freemail dot hu>
-0.3.2          : Julien Narboux        <julien dot narboux at inria dot fr>
-0.3.1          : Maxime Delorme        <maxime dot delorme at tiscali dot fr>
-0.3.0          : Caulier Gilles        <caulier dot gilles at gmail dot com>
-0.2.0          : Joern Ahrens          <kde at jokele dot de>
+4.4.0          : Asa Sourdiffe           <asourdiffe at gmail dot com>
+4.3.0          : Asa Sourdiffe           <asourdiffe at gmail dot com>
+4.2.0          : Marie-Noelle Augendre   <mnaugendre at gmail dot com>
+4.1.0          : Caulier Gilles          <caulier dot gilles at gmail dot com>
+4.0.0          : Marie-Noelle Augendre   <mnaugendre at gmail dot com>
+4.0.0-beta1    : Cristiano Dri           <cristiano dot dri at gmail dot com>
+3.5.0          : Marie-Noelle Augendre   <mnaugendre at gmail dot com>
+3.4.0          : Caulier Gilles          <caulier dot gilles at gmail dot com>
+3.3.0          : Cyril Bosselut          <bossone0013 at gmail dot com>
+3.2.0          : Mohamed Malik           <i at mohamedmalik dot com>
+3.1.0          : Dmitri Popov            <dmpop at linux dot com>
+3.0.0          : Asa Sourdiffe           <asourdiffe at gmail dot com>
+3.0.0-RC       : Mohamed Malik           <i at mohamedmalik dot com>
+3.0.0-beta3    : Matthew Fulgo           <matthew dot fulgo at gmail dot com>
+3.0.0-beta1    : Thomas Jacquin          <jacquin dot thomas at gmail dot com>
+2.9.0          : Thomas Jacquin          <jacquin dot thomas at gmail dot com>
+2.8.0          : Thomas Rees             <tomrees at columbus dot rr dot com>
+2.7.0          : Rinus Bakker            <sleeplessregulus at gmail dot com>
+2.6.0          : Hervé Le Roy            <hleroy at hleroy dot com>
+2.6.0-rc       : Thomas Jacquin          <jacquin dot thomas at gmail dot com>
+2.6.0-beta3    : Daniel Isenmann         <daniel dot isenmann at gmx dot de>
+2.6.0-beta2    : Dmitri Popov            <dmpop at linux dot com>
+2.6.0-beta1    : Rinus Bakker            <sleeplessregulus at gmail dot com>
+2.5.0          : Caulier Gilles          <caulier dot gilles at gmail dot com>
+2.4.0          : Rinus Bakker            <sleeplessregulus at gmail dot com>
+2.3.0          : Mihael Simonic          <smihael at gmail dot com>
+2.2.0          : Sankar Nair             <snair dot snair at gmail dot com>
+2.1.0          : Caulier Gilles          <caulier dot gilles at gmail dot com>
+2.0.0          : Mohamed Malik           <i at mohamedmalik dot com>
+2.0.0-beta6    : Rinus Bakker            <sleeplessregulus at hetnet dot nl>
+2.0.0-beta5    : Axel Krebs              <info at axel-krebs dot de>
+2.0.0-beta4    : Susan Voitel            <gfx at spacepenguin dot de>
+2.0.0-beta3    : Ruben Marquez           <rmcorrespond at gmail dot com>
+2.0.0-beta2    : Mohamed Malik           <i at mohamedmalik dot com>
+2.0.0-beta1    : Jan Wachsmann           <jan dot wachsmann at gmx dot de>
+1.9.0          : Frank Steinmetzger      <warp_7 at gmx dot de>
+1.8.0          : Mathias Ball            <meb at leitstern dot de>
+1.7.0          : Wolfgang Ruth           <rutwo011 at arcor dot de>
+1.6.0          : Santoro Domenico        <Domenico dot Santoro at m-dis dot it>
+1.5.0          : Johannes Wienke         <languitar at semipol dot de>
+1.4.0          : Dmitri Popov            <dmpop at openoffice dot org>
+1.3.0          : Kalyan Varma            <kalyan at rtns dot org>
+1.2.0          : Petr Sigut              <sigut at sigut dot net>
+1.1.0          : Elisa Mattos            <agm2112 at gmail dot com>
+1.0.0          : Arturo Mann             <arturo dot mann at gmail dot com>
+0.10.0         : Udo Lembke              <ulembke at polarzone dot de>
+0.9.6          : Paul Waldo              <paul at waldoware dot com>
+0.9.0          : Paul Radford            <paul at radfordnz dot net>
+0.8.0          : Frederic Martinot       <fmartinot at gmail dot com>
+0.7.0          : Joel Koop               <joel at tuxable dot com> 
+0.6.0          : Juergen Flosbach        <juergen dot flosbach at bigfoot dot com>
+0.5.0          : Rainer Krienke          <rainer at krienke dot org>
+0.4.0          : Dudas Gabor             <dudasg at freemail dot hu>
+0.3.2          : Julien Narboux          <julien dot narboux at inria dot fr>
+0.3.1          : Maxime Delorme          <maxime dot delorme at tiscali dot fr>
+0.3.0          : Caulier Gilles          <caulier dot gilles at gmail dot com>
+0.2.0          : Joern Ahrens            <kde at jokele dot de>
 0.1.0          : NONE
