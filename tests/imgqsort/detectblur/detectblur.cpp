@@ -22,8 +22,12 @@
  *
  * ============================================================ */
 
+// OpenCV includes
+
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
+
+// C++ includes
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -36,11 +40,11 @@ using namespace std;
 Mat src, src_gray;
 Mat dst, detected_edges;
 
-int edgeThresh             = 1;
-int lowThreshold           = 0.4;   //given in research paper
+int  edgeThresh            = 1;
+int  lowThreshold          = 0.4;   //given in research paper
 int const max_lowThreshold = 100;
-int ratio                  = 3;
-int kernel_size            = 3;
+int  ratio_value           = 3;
+int  kernel_size           = 3;
 char window_name[]         = "Edge Map";
 
 /*
@@ -53,7 +57,7 @@ void CannyThreshold(int, void*)
     blur( src_gray, detected_edges, Size(3,3) );
 
     // Canny detector
-    Canny( detected_edges, detected_edges, lowThreshold, lowThreshold*ratio, kernel_size );
+    Canny( detected_edges, detected_edges, lowThreshold, lowThreshold*ratio_value, kernel_size );
 
     // Using Canny's output as a mask, we display our result
     dst = Scalar::all(0);
@@ -82,8 +86,8 @@ int main( int /*argc*/, char** argv )
     CannyThreshold(0, 0);
 
     double maxval;
-    double average = mean(detected_edges)[0];
-    int* maxIdx    = (int* )malloc(sizeof(detected_edges));
+    double average    = mean(detected_edges)[0];
+    int* const maxIdx = (int* )malloc(sizeof(detected_edges));
 
     minMaxIdx(detected_edges, 0, &maxval, 0, maxIdx);
 
