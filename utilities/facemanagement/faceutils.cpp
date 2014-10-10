@@ -109,7 +109,7 @@ QList<DatabaseFace> FaceUtils::toDatabaseFaces(qlonglong imageid,
         }
 
         // We'll get the unknownPersonTagId if the identity is null
-        int tagId               = FaceTags::getOrCreateTagForIdentity(identity.attributes);
+        int tagId               = FaceTags::getOrCreateTagForIdentity(identity.attributesMap());
         QRect fullSizeRect      = TagRegion::relativeToAbsolute(detectedFaces[i], fullSize);
         DatabaseFace::Type type = identity.isNull() ? DatabaseFace::UnknownName : DatabaseFace::UnconfirmedName;
 
@@ -267,20 +267,20 @@ KFaceIface::Identity FaceUtils::identityForTag(int tagId, KFaceIface::Recognitio
 
     if (!identity.isNull())
     {
-        kDebug() << "Found kface identity" << identity.id << "for tag" << tagId;
+        kDebug() << "Found kface identity" << identity.id() << "for tag" << tagId;
         return identity;
     }
 
     kDebug() << "Adding new kface identity with attributes" << attributes;
     identity = db.addIdentity(attributes);
-    FaceTags::applyTagIdentityMapping(tagId, identity.attributes);
+    FaceTags::applyTagIdentityMapping(tagId, identity.attributesMap());
 
     return identity;
 }
 
 int FaceUtils::tagForIdentity(const KFaceIface::Identity& identity) const
 {
-    return FaceTags::getOrCreateTagForIdentity(identity.attributes);
+    return FaceTags::getOrCreateTagForIdentity(identity.attributesMap());
 }
 
 // --- Editing normal tags, reimplemented with FileActionMngr ---

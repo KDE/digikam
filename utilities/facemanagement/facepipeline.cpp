@@ -665,7 +665,7 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
                     !package->recognitionResults[i].isNull())
                 {
                     // Only perform this call if recognition as results, to prevent crash in QMap. See bug #335624
-                    tagId = FaceTags::getOrCreateTagForIdentity(package->recognitionResults[i].attributes);
+                    tagId = FaceTags::getOrCreateTagForIdentity(package->recognitionResults[i].attributesMap());
                 }
 
                 package->databaseFaces[i]        = utils.changeSuggestedName(package->databaseFaces[i], tagId);
@@ -958,9 +958,9 @@ public:
 
     KFaceIface::ImageListProvider* newImages(const KFaceIface::Identity& identity)
     {
-        if (imagesToTrain.contains(identity.id))
+        if (imagesToTrain.contains(identity.id()))
         {
-            KFaceIface::QListImageListProvider& provider = imagesToTrain[identity.id];
+            KFaceIface::QListImageListProvider& provider = imagesToTrain[identity.id()];
             provider.reset();
             return &provider;
         }
@@ -1005,7 +1005,7 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
             toTrain << dbFace;
 
             KFaceIface::Identity identity = utils.identityForTag(dbFace.tagId(), database);
-            identities  << identity.id;
+            identities  << identity.id();
 
             if (!identitySet.contains(identity))
             {
