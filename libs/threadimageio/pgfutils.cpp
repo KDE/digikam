@@ -76,11 +76,12 @@ bool readPGFImageData(const QByteArray& data, QImage& img, bool verbose)
         CPGFMemoryStream stream((UINT8*)data.data(), (size_t)data.size());
         if (verbose) kDebug() << "image data stream size is : " << stream.GetSize();
 
-        CPGFImage        pgfImg;
+        CPGFImage pgfImg;
         // NOTE: see bug #273765 : Loading PGF thumbs with OpenMP support through a separated thread do not work properlly with libppgf 6.11.24
-        pgfImg.ConfigureDecoder(libPGFUseOpenMP());
+        pgfImg.ConfigureDecoder(false);
 
         pgfImg.Open(&stream);
+
         if (verbose) kDebug() << "PGF image is open";
 
         if (pgfImg.Channels() != 4)
@@ -91,6 +92,7 @@ bool readPGFImageData(const QByteArray& data, QImage& img, bool verbose)
 
         img = QImage(pgfImg.Width(), pgfImg.Height(), QImage::Format_ARGB32);
         pgfImg.Read();
+
         if (verbose) kDebug() << "PGF image is read";
 
         if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
@@ -270,7 +272,7 @@ bool writePGFImageDataToStream(const QImage& image, CPGFStream& stream, int qual
         pgfImg.SetHeader(header);
 
         // NOTE: see bug #273765 : Loading PGF thumbs with OpenMP support through a separated thread do not work properlly with libppgf 6.11.24
-        pgfImg.ConfigureEncoder(libPGFUseOpenMP());
+        pgfImg.ConfigureEncoder(false);
 
         if (verbose)
         {
@@ -327,7 +329,7 @@ bool writePGFImageDataToStream(const QImage& image, CPGFStream& stream, int qual
 
 bool loadPGFScaled(QImage& img, const QString& path, int maximumSize)
 {
-    FILE* file = fopen(QFile::encodeName(path), "rb");
+    FILE* const file = fopen(QFile::encodeName(path), "rb");
 
     if (!file)
     {
@@ -452,15 +454,6 @@ bool loadPGFScaled(QImage& img, const QString& path, int maximumSize)
 QString libPGFVersion()
 {
     return (QString(PGFCodecVersion));
-}
-
-bool libPGFUseOpenMP()
-{
-#if defined LIBPGF_USE_OPENMP
-    return true;
-#else
-    return false;
-#endif
 }
 
 } // namespace PGFUtils

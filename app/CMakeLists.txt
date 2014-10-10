@@ -3,11 +3,6 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/database/dbconfigversion.h.cmake.in $
 
 # Shared libdigikamcore ################################################################
 
-IF(NOT PGF_FOUND)
-   # Disable libpgf warnings.
-   SET_SOURCE_FILES_PROPERTIES(${libpgf_SRCS} PROPERTIES COMPILE_FLAGS "-w")
-ENDIF(NOT PGF_FOUND)
-
 # Disable liblqr C code warnings.
 SET_SOURCE_FILES_PROPERTIES(${liblqr_SRCS} PROPERTIES COMPILE_FLAGS "-w")
 
@@ -24,7 +19,6 @@ SET(digikamcore_LIB_SRCS
         ${libprogressmanager_SRCS}
         ${libdatabasecore_SRCS}
         ${libthreadimageio_SRCS}
-        ${libpgf_SRCS}
         ${pgfutils_SRCS}
         ${libdigikamhelpers_SRCS}
         ${libtthread_SRCS}
@@ -85,8 +79,8 @@ TARGET_LINK_LIBRARIES(digikamcore
         ${PNG_LIBRARIES}
         ${LCMS_LIBRARIES}
         ${JASPER_LIBRARIES}
-        ${OPENMP_LDFLAGS}
         ${OpenCV_LIBRARIES}
+        ${PGF_LIBRARIES}
 
         # Required by CImg library which is using pthread internally.
         ${CMAKE_THREAD_LIBS_INIT}
@@ -106,10 +100,6 @@ ENDIF(USE_SCRIPT_IFACE)
 IF(USE_PRESENTATION_MODE)
     TARGET_LINK_LIBRARIES(digikamcore ${QT_QTDECLARATIVE_LIBRARY})
 ENDIF(USE_PRESENTATION_MODE)
-
-IF(PGF_FOUND)
-    TARGET_LINK_LIBRARIES(digikamcore ${PGF_LIBRARIES})
-ENDIF(PGF_FOUND)
 
 IF(Q_WS_X11)
     TARGET_LINK_LIBRARIES(digikamcore ${X11_LIBRARIES})
@@ -143,14 +133,10 @@ INSTALL(TARGETS digikamcore ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 # Shared libdigikamdatabase ########################################################
 
-## Disable libpgf warnings.
-#SET_SOURCE_FILES_PROPERTIES(${libpgf_SRCS} PROPERTIES COMPILE_FLAGS "-w")
-
 SET(digikamdatabase_LIB_SRCS
         ${libdatabase_SRCS}
         ${libdatabasemodels_SRCS}
         ${libhaar_SRCS}
-        ${libpgf_SRCS}
         ${pgfutils_SRCS}
 )
 
@@ -178,7 +164,7 @@ TARGET_LINK_LIBRARIES(digikamdatabase
                       ${KFACE_LIBRARIES}
                       ${KGEOMAP_LIBRARIES}
 
-                      ${OPENMP_LDFLAGS}
+                      ${PGF_LIBRARIES}
                      )
 
 IF(Baloo_FOUND)
@@ -188,10 +174,6 @@ ENDIF(Baloo_FOUND)
 IF(USE_SCRIPT_IFACE)
     TARGET_LINK_LIBRARIES(digikamdatabase ${QT_QTSCRIPT_LIBRARY})
 ENDIF(USE_SCRIPT_IFACE)
-
-IF(PGF_FOUND)
-    TARGET_LINK_LIBRARIES(digikamdatabase ${PGF_LIBRARIES})
-ENDIF(PGF_FOUND)
 
 IF(SQLITE2_FOUND)
     TARGET_LINK_LIBRARIES(digikamdatabase ${SQLITE2_LIBRARIES})

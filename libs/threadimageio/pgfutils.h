@@ -69,10 +69,6 @@ bool loadPGFScaled(QImage& img, const QString& path, int maximumSize);
  */
 QString libPGFVersion();
 
-/** Return true if libpgf is compiled with OpenMP support
- */
-bool libPGFUseOpenMP();
-
 } // namespace PGFUtils
 
 } // namespace Digikam

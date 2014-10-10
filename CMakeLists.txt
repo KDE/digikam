@@ -15,9 +15,6 @@ OPTION(ENABLE_LCMS2             "Build digiKam with LCMS2 instead LCMS1 (default
 OPTION(ENABLE_BALOOSUPPORT      "Build digiKam with Baloo support (default=ON)"                         ON)
 OPTION(ENABLE_KDEPIMLIBSSUPPORT "Build digiKam with Kdepimlibs support (default=OFF)"                   OFF)
 
-# NOTE: since 6.11.24, libpgf do not support very well OpenMP. We disable it temporally.
-# See bug #273765 for details.
-OPTION(ENABLE_PGF_OPENMP        "Build digiKam with paralelized PGF codec (experimental) (default=OFF)" OFF)
 OPTION(DIGIKAM_ENABLE_MODELTEST "Enable ModelTest on some models for debugging (default=OFF)"           OFF)
 
 # ==================================================================================================
@@ -93,6 +90,7 @@ INCLUDE(FindPkgConfig)
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH} )
 
 SET(KIPI_MIN_VERSION "2.0.0")
+SET(PGF_MIN_VERSION  "6.12.24")
 
 FIND_PACKAGE(Kipi ${KIPI_MIN_VERSION} REQUIRED)
 FIND_PACKAGE(Kexiv2                   REQUIRED)
@@ -100,12 +98,12 @@ FIND_PACKAGE(Kdcraw                   REQUIRED)
 FIND_PACKAGE(JPEG                     REQUIRED)
 FIND_PACKAGE(PNG                      REQUIRED)
 FIND_PACKAGE(TIFF                     REQUIRED)
+FIND_PACKAGE(PGF ${PGF_MIN_VERSION}   REQUIRED)
 
 FIND_PACKAGE(PkgConfig)
 FIND_PACKAGE(Jasper)
 FIND_PACKAGE(Kface)
 FIND_PACKAGE(KGeoMap)
-FIND_PACKAGE(PGF)
 FIND_PACKAGE(Eigen3)
 FIND_PACKAGE(Boost) # 1.36.0)
 
@@ -181,39 +179,6 @@ ENDIF(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
 IF(Boost_FOUND)
     INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 ENDIF(Boost_FOUND)
-
-#-------------------------------------------------------------------------------------
-
-MACRO_BOOL_TO_01(PGF_FOUND USE_EXT_LIBPGF)
-
-# NOTE: currently libpgf 6.11.24 do not support very well OpenMP. We disable it temporally.
-# See bug #273765 for details.
-IF(NOT ENABLE_PGF_OPENMP)
-    ADD_DEFINITIONS(-DLIBPGF_DISABLE_OPENMP)
-    MESSAGE(STATUS "Paralelized PGF codec disabled...")
-ELSE(NOT ENABLE_PGF_OPENMP)
-    MESSAGE(STATUS "Paralelized PGF codec enabled...")
-ENDIF(NOT ENABLE_PGF_OPENMP)
-
-# LibPGF need to be linked to OpenMP if necessary.
-# OpenMP detection (requires CMake >= 2.6.3)
-# NOTE: OpenMP under MacOSX do not support multithreading.
-
-IF(NOT APPLE AND NOT USE_EXT_LIBPGF)
-    MACRO_OPTIONAL_FIND_PACKAGE(OpenMP)
-
-    IF(OPENMP_FOUND)
-        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-
-        # OpenMP definitions ${OpenMP_CXX_FLAGS} is set on right digiKam components through sub-cmake scripts.
-        IF("${OpenMP_CXX_FLAGS}" STREQUAL "-fopenmp" )
-            SET(OPENMP_LDFLAGS "-lgomp")
-        ENDIF("${OpenMP_CXX_FLAGS}" STREQUAL "-fopenmp" )
-        IF("${OpenMP_CXX_FLAGS}" STREQUAL "-xopenmp" )
-            SET(OPENMP_LDFLAGS "-xopenmp")
-        ENDIF("${OpenMP_CXX_FLAGS}" STREQUAL "-xopenmp" )
-    ENDIF(OPENMP_FOUND)
-ENDIF(NOT APPLE AND NOT USE_EXT_LIBPGF)
 
 #-------------------------------------------------------------------------------------
 
@@ -406,14 +371,7 @@ PRINT_LIBRARY_STATUS("libkexiv2"   "http://www.digikam.org/sharedlibs"          
 PRINT_LIBRARY_STATUS("libkdcraw"   "http://www.digikam.org/sharedlibs"                              " (version >= ${KDCRAW_MIN_VERSION})" KDCRAW_FOUND)
 PRINT_LIBRARY_STATUS("libkface"    "http://www.digikam.org/sharedlibs"                              " (version >= 0.1.0)"                 KFACE_FOUND)
 PRINT_LIBRARY_STATUS("libkgeomap"  "http://www.digikam.org/sharedlibs"                              " (version >= 0.1.0)"                 KGEOMAP_FOUND)
-
-# ================================================================
-
-IF(PGF_FOUND)
-    MESSAGE(STATUS " libpgf library found..................... YES (optional)")
-ELSE(PGF_FOUND)
-    MESSAGE(STATUS " libpgf library found..................... NO  (optional - internal version used instead)")
-ENDIF(PGF_FOUND)
+PRINT_LIBRARY_STATUS("libpgf"      "http://www.libpgf.org"                                          " (version >= ${PGF_MIN_VERSION})"    PGF_FOUND)
 
 # ================================================================
 
@@ -609,6 +567,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                         ${KDE4_INCLUDES}
                         ${QT_INCLUDES}
                         ${GPHOTO2_INCLUDE_DIRS}
+                        ${PGF_INCLUDE_DIRS}
                         ${CMAKE_CURRENT_SOURCE_DIR}/app
                         ${CMAKE_CURRENT_BINARY_DIR}/app
     )
@@ -624,20 +583,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     IF(Baloo_FOUND)
         INCLUDE_DIRECTORIES(${BALOO_INCLUDE_DIR})
     ENDIF(Baloo_FOUND)
-
-    IF(PGF_FOUND)
-       INCLUDE_DIRECTORIES(${PGF_INCLUDE_DIRS})
-    ELSE(PGF_FOUND)
-       INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf)
-       SET(libpgf_SRCS
-          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Decoder.cpp
-          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Encoder.cpp
-          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/PGFimage.cpp
-          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/PGFstream.cpp
-          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/Subband.cpp
-          ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/libpgf/WaveletTransform.cpp
-       )
-    ENDIF(PGF_FOUND)
 
     # Lensfun and LibLqr-1 library rules
 

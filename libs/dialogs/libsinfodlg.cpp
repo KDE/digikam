@@ -147,14 +147,7 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
     list.insert(i18n("LibLCMS"),                     QString::number(LCMS_VERSION));
     list.insert(i18n("LibKGeoMap"),                  KGeoMapWidget::version());
     list.insert(i18n("Marble Widget"),               KGeoMapWidget::MarbleWidgetVersion());
-
-#ifdef USE_EXT_LIBPGF
-    list.insert(i18n("LibPGF"),                      QString("%1 - %2").arg(PGFUtils::libPGFVersion()).arg(i18n("external shared library")));
-#else
-    list.insert(i18n("LibPGF"),                      QString("%1 - %2").arg(PGFUtils::libPGFVersion()).arg(i18n("internal library")));
-#endif // USE_EXT_LIBPGF
-
-    list.insert(i18n("Parallelized PGF codec"),      PGFUtils::libPGFUseOpenMP() ? i18n("Yes") : i18n("No"));
+    list.insert(i18n("LibPGF"),                      PGFUtils::libPGFVersion());
 
     int nbcore = QThreadPool::globalInstance()->maxThreadCount();
     list.insert(i18np("CPU core", "CPU cores", nbcore), QString("%1").arg(nbcore));

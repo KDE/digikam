@@ -100,6 +100,7 @@ libkdcraw       >= 2.2.0                      https://projects.kde.org/projects/
 libkface        >= 2.0.0                      https://projects.kde.org/projects/extragear/libs/libkface
 libkgeomap      >= 2.0.0                      https://projects.kde.org/projects/extragear/libs/libkgeomap
 libopencv       >= 2.4.9                      http://opencv.willowgarage.com
+libpgf          >= 6.11.24                    http://www.libpgf.org
 
 Optional :
 
@@ -109,7 +110,6 @@ liblqr-1        >= 0.4.1                      http://liblqr.wikidot.com         
 libeigen3       >= 3.x                        http://eigen.tuxfamily.org                                        To support Refocus tool.
 libgphoto2      >= 2.4.0                      http://www.gphoto.org                                             To support Gphoto2 Cameras.
 libusb          >= 1.0.0                      http://www.libusb.org                                             Required by Gphoto2 as linking dependency. See details in bug #268267
-libpgf          >= 6.11.24                    http://www.libpgf.org                                             If no external libray is found, internal version is used instead.
 libsqlite2      >= 2.x                        http://www.sqlite.org/                                            Only used to import old database version <= 0.7.
 
 Note : all library dependencies require development and binary packages installed on your
@@ -126,7 +126,6 @@ Use CMake "-DENABLE_NEPOMUKSUPPORT=on"    flag to compile digiKam with Nepomuk s
 Use CMake "-DENABLE_KDEPIMLIBSSUPPORT=on" flag to compile digiKam with KdePimLibs support                                        (disabled by default).
 Use CMake "-DKDE4_BUILD_TESTS=on"         flag to compile digiKam source code unit tests                                         (disabled by default).
 Use CMake "-DENABLE_LCMS2=on"             flag to compile digiKam source code against lcms2 instead lcms1                        (disabled by default).
-Use CMake "-ENABLE_PGF_OPENMP"            flag to compile digiKam with paralelized PGF codec                                     (disabled by default).
 
 digiKam do not have any video thumbnailer. Video support is delegate to KDE. To support Video thumbnails, 
 please install "ffmpegthumbs" package, which is the kdemultimedia Video thumbnail generator for KDE4 file managers.
