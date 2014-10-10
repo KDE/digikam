@@ -64,6 +64,7 @@
       <li xml:lang="x-test">xxOrganization of photos in albums and sub-albums (with tags and comments support)xx</li>
       <li>Support for Exif, Iptc, Xmp, Makernotes</li>
       <li xml:lang="ca">Implementació per a notes Exif, Iptc, Xmp i del fabricant</li>
+      <li xml:lang="de">Unterstützung für Exif, Iptc, Xmp und Herstellerbemerkungen</li>
       <li xml:lang="en-GB">Support for Exif, Iptc, Xmp, Makernotes</li>
       <li xml:lang="fr">Prise en charge des données EXIF, IPTC, XMP, MakerNotes</li>
       <li xml:lang="nl">Ondersteuning voor Exif, Iptc, Xmp, Makernotes</li>
@@ -75,6 +76,7 @@
       <li xml:lang="x-test">xxSupport for Exif, Iptc, Xmp, Makernotesxx</li>
       <li>SQLite powered storage for the albums and its metadata</li>
       <li xml:lang="ca">Emmagatzematge amb SQLite pels àlbums i les seves metadades</li>
+      <li xml:lang="de">Speicherung der Alben und Metadaten in einer SQLite-Datenbank</li>
       <li xml:lang="en-GB">SQLite powered storage for the albums and its metadata</li>
       <li xml:lang="fr">Stockage des albums et des métadonnées fonctionnant avec SQLite</li>
       <li xml:lang="nl">Op SQLite gebaseerde opslag voor de albums en zijn metagegevens</li>
@@ -110,6 +112,7 @@
       <li xml:lang="x-test">xxImport from more than 1100 digital camera devicesxx</li>
       <li>Support for 300 RAW format pictures</li>
       <li xml:lang="ca">Implementació per a 300 formats d'imatges RAW</li>
+      <li xml:lang="de">Unterstützung für 300 Bild-Rohformate</li>
       <li xml:lang="en-GB">Support for 300 RAW format pictures</li>
       <li xml:lang="fr">Prise en charge de 300 formats d'image RAW</li>
       <li xml:lang="nl">Ondersteuning voor 300 RAW-format afbeeldingen</li>
@@ -121,6 +124,7 @@
       <li xml:lang="x-test">xxSupport for 300 RAW format picturesxx</li>
       <li>Light Table feature</li>
       <li xml:lang="ca">La característica taula de llum</li>
+      <li xml:lang="de">Leuchttischfunktion</li>
       <li xml:lang="en-GB">Light Table feature</li>
       <li xml:lang="fr">Fonction table lumineuse</li>
       <li xml:lang="nl">Functie met lichttafel</li>
@@ -132,6 +136,7 @@
       <li xml:lang="x-test">xxLight Table featurexx</li>
       <li>Plugins architectures: using Kipi-plugins</li>
       <li xml:lang="ca">Arquitectura de connectors: usant els connectors Kipi</li>
+      <li xml:lang="de">Modul-Architektur: Erweiterung durch KIPI-Module</li>
       <li xml:lang="en-GB">Plugins architectures: using Kipi-plugins</li>
       <li xml:lang="fr">Architectures de modules externes : utilise les modules KIPI</li>
       <li xml:lang="nl">Architectuur met plug-ins: met gebruik van Kipi-plug-ins</li>
