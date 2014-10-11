@@ -16,6 +16,7 @@ TARGET_LINK_LIBRARIES(advancedrenametest
                       ${KDCRAW_LIBRARIES}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
+                      ${OpenCV_LIBRARIES}
                       digikamcore
                       digikamdatabase
                       advancedrename
