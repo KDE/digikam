@@ -311,9 +311,17 @@ IF (ENABLE_BALOOSUPPORT)
     # Baloo support from 4.12
     IF (${KDE_VERSION} VERSION_GREATER "4.11.99")
 
+        MACRO_OPTIONAL_FIND_PACKAGE(KFileMetaData CONFIG)
+        MACRO_LOG_FEATURE(KFileMetaData_FOUND "KFileMetaData Library"
+                "A library for extracting file metadata" "https://projects.kde.org/kfilemetadata" TRUE)
+
         MACRO_OPTIONAL_FIND_PACKAGE(Baloo)
         MACRO_LOG_FEATURE(Baloo_FOUND "Baloo" "Baloo"
                 "http://www.kde.org" TRUE "" "Baloo extends the search and tagging")
+
+        IF (NOT KFileMetaData_FOUND)
+            SET(Baloo_FOUND FALSE)
+        ENDIF (NOT KFileMetaData_FOUND)
 
         MACRO_BOOL_TO_01(Baloo_FOUND HAVE_BALOO)
     ENDIF (${KDE_VERSION} VERSION_GREATER "4.11.99")
@@ -581,7 +589,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     ENDIF(USE_PRESENTATION_MODE)
 
     IF(Baloo_FOUND)
-        INCLUDE_DIRECTORIES(${BALOO_INCLUDE_DIR})
+        INCLUDE_DIRECTORIES(${BALOO_INCLUDE_DIR} ${KFILEMETADATA_INCLUDE_DIR})
     ENDIF(Baloo_FOUND)
 
     # Lensfun and LibLqr-1 library rules
