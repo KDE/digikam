@@ -1445,7 +1445,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         # TODO move modeltest code to a more central location
         MESSAGE(STATUS "Modeltest enabled")
         SET(libdigikamgui_SRCS ${libdigikamgui_SRCS}
-            ${CMAKE_CURRENT_SOURCE_DIR}/app/views/modeltest/modeltest.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/modeltest/modeltest.cpp
             )
         ADD_DEFINITIONS(-DDIGIKAM_ENABLE_MODELTEST)
     ENDIF(DIGIKAM_ENABLE_MODELTEST)
