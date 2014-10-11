@@ -36,6 +36,7 @@ TARGET_LINK_LIBRARIES(renamecustomizertest
                       ${KDCRAW_LIBRARIES}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
+                      ${OpenCV_LIBRARIES}
                       digikamcore
                       digikamdatabase
                       importui
@@ -69,6 +70,7 @@ TARGET_LINK_LIBRARIES(cameranamehelpertest
                       ${GPHOTO2_LIBRARIES}
                       ${KDCRAW_LIBRARIES}
                       ${KEXIV2_LIBRARIES}
+                      ${OpenCV_LIBRARIES}
                       digikamcore
                       digikamdatabase
                      )
@@ -86,6 +88,7 @@ TARGET_LINK_LIBRARIES(uifilevalidatortest
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
                       ${GPHOTO2_LIBRARIES}
+                      ${OpenCV_LIBRARIES}
                       digikamcore
                       digikamdatabase
                      )
@@ -103,6 +106,7 @@ TARGET_LINK_LIBRARIES(statesavingobjecttest
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
                       ${GPHOTO2_LIBRARIES}
+                      ${OpenCV_LIBRARIES}
                       digikamcore
                      )
 
@@ -117,6 +121,7 @@ TARGET_LINK_LIBRARIES(freerotationtest
                       ${KDE4_KDECORE_LIBS}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
+                      ${OpenCV_LIBRARIES}
                       digikamcore
                      )
 
@@ -132,6 +137,7 @@ TARGET_LINK_LIBRARIES(searchtextbartest
                       ${KDE4_KDEUI_LIBS}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
+                      ${OpenCV_LIBRARIES}
                       digikamcore
                      )
 
@@ -147,6 +153,7 @@ TARGET_LINK_LIBRARIES(filesaveoptionsboxtest
                       ${KDE4_KDECORE_LIBS}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
+                      ${OpenCV_LIBRARIES}
                       digikamcore
                      )
 
@@ -233,6 +240,7 @@ TARGET_LINK_LIBRARIES(dimagehistorytest
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
                       ${KEXIV2_LIBRARIES}
+                      ${OpenCV_LIBRARIES}
                       digikamcore
                      )
 
@@ -252,6 +260,7 @@ TARGET_LINK_LIBRARIES(dimagehistorygraphtest
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
                       ${KEXIV2_LIBRARIES}
+                      ${OpenCV_LIBRARIES}
                       digikamdatabase
                       digikamcore
                      )
@@ -334,6 +343,7 @@ TARGET_LINK_LIBRARIES(testdimgloader
                       ${KDE4_KDECORE_LIBS}
                       ${KEXIV2_LIBRARIES}
                       ${KDCRAW_LIBRARIES}
+                      ${OpenCV_LIBRARIES}
                      )
 
 SET(loadsavethreadtest_SRCS loadsavethreadtest.cpp)
@@ -345,6 +355,7 @@ TARGET_LINK_LIBRARIES(loadsavethreadtest
                       ${KDE4_KDECORE_LIBS}
                       ${KEXIV2_LIBRARIES}
                       ${KDCRAW_LIBRARIES}
+                      ${OpenCV_LIBRARIES}
                      )
 
 IF(LENSFUN_FOUND)
@@ -363,6 +374,7 @@ IF(LENSFUN_FOUND)
                           ${KVM_LIBRARY}
 
                           ${LENSFUN_LIBRARIES}
+                          ${OpenCV_LIBRARIES}
                      )
 ENDIF()
 
@@ -423,4 +435,5 @@ TARGET_LINK_LIBRARIES (testdatabase
                ${KDE4_KIO_LIBS}
                ${KEXIV2_LIBRARIES}
                ${KDCRAW_LIBRARIES}
+               ${OpenCV_LIBRARIES}
                )
