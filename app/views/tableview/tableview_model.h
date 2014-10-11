@@ -60,12 +60,14 @@ public:
 
     enum GroupingMode
     {
-        GroupingHideGrouped = 0,
+        GroupingHideGrouped    = 0,
         GroupingIgnoreGrouping = 1,
-        GroupingShowSubItems = 2
+        GroupingShowSubItems   = 2
     };
 
     typedef DatabaseFields::Hash<QVariant> DatabaseFieldsHashRaw;
+
+public:
 
     class Item
     {
@@ -86,6 +88,8 @@ public:
         Item* findChildWithImageId(const qlonglong searchImageId);
 
     };
+
+public:
 
     explicit TableViewModel(TableViewShared* const sharedObject, QObject* parent = 0);
     virtual ~TableViewModel();
@@ -189,6 +193,8 @@ private:
 
     Item* createItemFromSourceIndex(const QModelIndex& imageFilterModelIndex);
     void addSourceModelIndex(const QModelIndex& imageModelIndex, const bool sendNotifications);
+
+private:
 
     TableViewShared* const s;
     class Private;
