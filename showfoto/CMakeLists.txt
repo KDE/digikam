@@ -55,6 +55,7 @@ TARGET_LINK_LIBRARIES(showfoto
                       ${KGEOMAP_LIBRARIES}
                       ${KDE4_KIO_LIBS}
                       ${LCMS_LIBRARIES}
+                      ${OpenCV_LIBRARIES}
 
                       # To link under Solaris (see bug #274484)
                       ${MATH_LIBRARY}

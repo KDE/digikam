@@ -268,6 +268,7 @@ TARGET_LINK_LIBRARIES(dimagefilteractiontest
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
                       ${KEXIV2_LIBRARIES}
+                      ${OpenCV_LIBRARIES}
                       digikamcore
                      )
 
