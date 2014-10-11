@@ -112,7 +112,7 @@ MACRO(PRINT_COMPONENT_COMPILE_STATUS NAME)
     
     ENDIF()
 
-ENDMACRO(PRINT_PLUGIN_COMPILE_STATUS)
+ENDMACRO(PRINT_COMPONENT_COMPILE_STATUS)
 
 # -------------------------------------------------------------------------
 
