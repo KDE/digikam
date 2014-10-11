@@ -40,11 +40,11 @@ using namespace std;
 Mat src, src_gray;
 Mat dst, detected_edges;
 
-int  edgeThresh    = 1;
-int  lowThreshold  = 0.035;   // given in research paper
-int  ratio_value   = 3;
-int  kernel_size   = 3;
-char window_name[] = "Edge Map";
+int     edgeThresh    = 1;
+double  lowThreshold  = 0.035;   // given in research paper
+int     ratio_value   = 3;
+int     kernel_size   = 3;
+char    window_name[] = "Edge Map";
 
 void CannyThreshold(int, void*)
 {
