@@ -33,8 +33,6 @@
 
 #include <kurl.h>
 
-class QEvent;
-
 namespace Digikam
 {
 
@@ -66,8 +64,6 @@ public:
 
 public:
 
-    static AlbumThumbnailLoader* instance();
-
     void cleanUp();
 
     /**
@@ -76,6 +72,7 @@ public:
      * signalReloadThumbnails will be emitted.
      */
     void setThumbnailSize(int size);
+
     /**
      * Get the current default icon size
      */
@@ -151,6 +148,10 @@ public:
      */
     QImage getAlbumPreviewDirectly(PAlbum* const album, int size);
 
+public:
+
+    static AlbumThumbnailLoader* instance();
+
 Q_SIGNALS:
 
     /**
@@ -186,8 +187,8 @@ private:
     ~AlbumThumbnailLoader();
 
     void    addUrl(Album* const album, const KUrl& url);
-    QPixmap loadIcon(const QString& name, int size = 0);
-    int     computeIconSize(RelativeSize size);
+    QPixmap loadIcon(const QString& name, int size = 0) const;
+    int     computeIconSize(RelativeSize size)          const;
 
 private:
 

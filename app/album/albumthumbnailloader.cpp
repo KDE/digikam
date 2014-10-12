@@ -33,7 +33,8 @@
 #include <QList>
 #include <QMap>
 #include <QPainter>
-#include <QPixmap>
+#include <QCache>
+#include <QPair>
 
 // KDE includes
 
@@ -53,7 +54,7 @@ namespace Digikam
 {
 
 typedef QMap<QString, QList<int> > PathAlbumMap;
-typedef QMap<int, QPixmap> AlbumThumbnailMap;
+typedef QMap<int, QPixmap>         AlbumThumbnailMap;
 
 class AlbumThumbnailLoader::Private
 {
@@ -67,15 +68,17 @@ public:
         iconTagThumbThread   = 0;
     }
 
-    int                  iconSize;
-    int                  minBlendSize;
+    int                                  iconSize;
+    int                                  minBlendSize;
 
-    ThumbnailLoadThread* iconTagThumbThread;
-    ThumbnailLoadThread* iconAlbumThumbThread;
+    ThumbnailLoadThread*                 iconTagThumbThread;
+    ThumbnailLoadThread*                 iconAlbumThumbThread;
 
-    PathAlbumMap         pathAlbumMap;
+    PathAlbumMap                         pathAlbumMap;
 
-    AlbumThumbnailMap    thumbnailMap;
+    AlbumThumbnailMap                    thumbnailMap;
+
+    QCache<QPair<QString, int>, QPixmap> iconCache;
 };
 
 class AlbumThumbnailLoaderCreator
@@ -117,7 +120,8 @@ AlbumThumbnailLoader::~AlbumThumbnailLoader()
 void AlbumThumbnailLoader::cleanUp()
 {
     delete d->iconTagThumbThread;
-    d->iconTagThumbThread = 0;
+    d->iconTagThumbThread   = 0;
+
     delete d->iconAlbumThumbThread;
     d->iconAlbumThumbThread = 0;
 }
@@ -171,7 +175,7 @@ QPixmap AlbumThumbnailLoader::getStandardAlbumIcon(PAlbum* const album, Relative
     }
 }
 
-int AlbumThumbnailLoader::computeIconSize(RelativeSize relativeSize)
+int AlbumThumbnailLoader::computeIconSize(RelativeSize relativeSize) const
 {
     if (relativeSize == SmallerSize)
     {
@@ -182,10 +186,18 @@ int AlbumThumbnailLoader::computeIconSize(RelativeSize relativeSize)
     return d->iconSize;
 }
 
-QPixmap AlbumThumbnailLoader::loadIcon(const QString& name, int size)
+QPixmap AlbumThumbnailLoader::loadIcon(const QString& name, int size) const
 {
-    KIconLoader* const iconLoader = KIconLoader::global();
-    return iconLoader->loadIcon(name, KIconLoader::NoGroup, size);
+    QPixmap* pix = d->iconCache[qMakePair(name, size)];
+
+    if (!pix)
+    {
+        KIconLoader* const iconLoader = KIconLoader::global();
+        pix                           = new QPixmap(iconLoader->loadIcon(name, KIconLoader::NoGroup, size));
+        d->iconCache.insert(qMakePair(name, size), pix);
+    }
+
+    return *pix; // ownership of the pointer is kept by the icon cache
 }
 
 bool AlbumThumbnailLoader::getTagThumbnail(TAlbum* const album, QPixmap& icon)
@@ -276,11 +288,12 @@ QPixmap AlbumThumbnailLoader::getAlbumThumbnailDirectly(PAlbum* const album)
 
 void AlbumThumbnailLoader::addUrl(Album* const album, const KUrl& url)
 {
-    /*
-    QPixmap* pix = d->cache->find(album->iconKURL().toLocalFile());
+/*
+    QPixmap* const pix = d->cache->find(album->iconKURL().toLocalFile());
+
     if (pix)
-    return pix;
-    */
+        return pix;
+*/
 
     // First check cached thumbnails.
     // We use a private cache which is actually a map to be sure to cache _all_ album thumbnails.
