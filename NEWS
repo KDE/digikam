@@ -10,4 +10,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 001 ==> 339806 - Compiler error: ambiguous reference to ratio variable.
 002 ==> 326945 - When build digikam from git and package libpgf is installed, no way to use internal digikam libpgf.
 003 ==> 339524 - Identity class miss d private container to improve binary compatibility [patch].
-004 ==> 
+004 ==> 315574 - CORE : bad performance when Tag-related Sidebars (Tag management / Filter) are open [patch].
+005 ==> 
