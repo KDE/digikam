@@ -202,7 +202,7 @@ void CaptionEdit::slotAuthorChanged(const QString& text)
 
 MsgTextEdit* CaptionEdit::textEdit() const
 {
-#if KEXIV2_VERSION >= 0x020302
+#if KEXIV2_VERSION >= 0x020400
     return d->altLangStrEdit->textEdit();
 #else
     return 0;
