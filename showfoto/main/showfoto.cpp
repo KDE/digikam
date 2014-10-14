@@ -91,7 +91,6 @@ extern "C"
 #include <ksqueezedtextlabel.h>
 #include <KVBox>
 
-
 // LibKDcraw includes
 
 #include <libkdcraw/kdcraw.h>
@@ -225,6 +224,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
 
     // -- Load current items ---------------------------
     slotDroppedUrls(urlList);
+
     if(!d->infoList.isEmpty())
     {
         slotOpenUrl(d->infoList.at(0));
@@ -398,9 +398,9 @@ void ShowFoto::setupUserArea()
     d->thumbBarDock->setFloating(false);
 
 
-    d->model = new ShowfotoThumbnailModel(d->thumbBar);
+    d->model       = new ShowfotoThumbnailModel(d->thumbBar);
     d->model->setThumbnailLoadThread(d->thumbLoadThread);
-    d->dDHandler = new ShowfotoDragDropHandler(d->model);
+    d->dDHandler   = new ShowfotoDragDropHandler(d->model);
     d->model->setDragDropHandler(d->dDHandler);
 
     d->filterModel = new ShowfotoFilterModel(d->thumbBar);
@@ -446,11 +446,11 @@ void ShowFoto::setupActions()
 
 void ShowFoto::readSettings()
 {
-    d->settings = ShowfotoSettings::instance();
+    d->settings        = ShowfotoSettings::instance();
 
     readStandardSettings();
 
-    QString defaultDir        = d->settings->getLastOpenedDir();
+    QString defaultDir = d->settings->getLastOpenedDir();
 
     if (defaultDir.isNull())
     {
@@ -494,7 +494,9 @@ void ShowFoto::applySettings()
     QString newStyle     = d->settings->getApplicationStyle();
 
     if (newStyle != currentStyle)
+    {
         kapp->setStyle(newStyle);
+    }
 
     // Current image deleted go to trash ?
     d->deleteItem2Trash = d->settings->getDeleteItem2Trash();
@@ -594,7 +596,7 @@ void ShowFoto::slotOpenUrl(const ShowfotoItemInfo& info)
 
     // By this condition we make sure that no crashes will happen
     // if no images were loaded to the canvas before
-    if(!d->imagePluginsLoaded)
+    if (!d->imagePluginsLoaded)
     {
         loadImagePlugins();
         d->imagePluginsLoaded = true;
@@ -617,8 +619,8 @@ void ShowFoto::slotChanged()
     QSize dims(m_canvas->imageWidth(), m_canvas->imageHeight());
     mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
     QString str = (!dims.isValid()) ? i18nc("unknown image dimensions", "Unknown")
-                  : i18nc("%1 width, %2 height, %3 mpixels", "%1x%2 (%3Mpx)",
-                          dims.width(),dims.height(),mpixels);
+                                    : i18nc("%1 width, %2 height, %3 mpixels", "%1x%2 (%3Mpx)",
+                                            dims.width(),dims.height(),mpixels);
     m_resLabel->setText(str);
 
     if (!d->thumbBar->currentInfo().isNull())
@@ -1260,13 +1262,13 @@ void ShowFoto::openFolder(const KUrl& url)
 
 void ShowFoto::slotDroppedUrls(const KUrl::List& droppedUrls)
 {
-    if(!droppedUrls.isEmpty())
+    if (!droppedUrls.isEmpty())
     {
         KUrl::List validUrls;
 
-        foreach (KUrl url, droppedUrls)
+        foreach (const KUrl& url, droppedUrls)
         {
-            if(url.isValid())
+            if (url.isValid())
             {
                 validUrls << url;
             }
@@ -1277,27 +1279,27 @@ void ShowFoto::slotDroppedUrls(const KUrl::List& droppedUrls)
         KUrl::List imagesUrls;
         KUrl::List foldersUrls;
 
-        foreach (KUrl url, validUrls)
+        foreach (const KUrl& url, validUrls)
         {
-            if(KMimeType::findByUrl(url)->name().startsWith("image", Qt::CaseInsensitive))
+            if (KMimeType::findByUrl(url)->name().startsWith("image", Qt::CaseInsensitive))
             {
                 imagesUrls << url;
             }
 
-            if(KMimeType::findByUrl(url)->name() == "inode/directory")
+            if (KMimeType::findByUrl(url)->name() == "inode/directory")
             {
                 foldersUrls << url;
             }
         }
 
-        if(!imagesUrls.isEmpty())
+        if (!imagesUrls.isEmpty())
         {
             openUrls(imagesUrls);
         }
 
-        if(!foldersUrls.isEmpty())
+        if (!foldersUrls.isEmpty())
         {
-            foreach (KUrl fUrl, foldersUrls)
+            foreach (const KUrl& fUrl, foldersUrls)
             {
                 openFolder(fUrl);
             }

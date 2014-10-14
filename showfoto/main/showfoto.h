@@ -39,11 +39,6 @@
 
 class KJob;
 
-namespace Digikam
-{
-    class ThumbBarView;
-}
-
 namespace ShowFoto
 {
 

@@ -28,7 +28,7 @@
 
 // Qt includes
 
-#include "QDir"
+#include <QDir>
 
 // Local includes
 
