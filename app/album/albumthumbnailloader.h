@@ -84,49 +84,48 @@ public:
      * and returned asynchronously by the signals.
      * If no thumbnail is associated with given album,
      * no action will be taken, and false is returned.
-     *
-    */
+     */
     bool getAlbumThumbnail(PAlbum* const album);
 
     /**
-      * Request thumbnail for given album,
-      * with slightly different behavior than the above method:
-      * If the thumbnail is already available in the cache,
-      * it is returned.
-      * If the icon is not yet loaded, it will be returned asynchronously
-      * by the signals, and a default icon is returned here.
-      * If no icon is associated, the default icon is returned.
-    */
+     * Request thumbnail for given album,
+     * with slightly different behavior than the above method:
+     * If the thumbnail is already available in the cache,
+     * it is returned.
+     * If the icon is not yet loaded, it will be returned asynchronously
+     * by the signals, and a default icon is returned here.
+     * If no icon is associated, the default icon is returned.
+     */
     QPixmap getAlbumThumbnailDirectly(PAlbum* const album);
 
     /**
-      * Behaves similar to the above method.
-      * Tag thumbnails will be processed as appropriate.
-      * Tags may have associated an icon that is loaded
-      * synchronously by the system icon loader.
-      * In this case, icon is set to this icon, and false is returned.
-      * If no icon is associated with the tag, icon is set to null,
-      * and false is returned.
-      * If a custom icon is associated with the tag,
-      * it is loaded asynchronously, icon is set to null,
-      * and true is returned.
-      * Tag thumbnails are always smaller than album thumbnails -
-      * as small as an album thumbnail with SmallerSize.
-      * They are supposed to be blended into the standard tag icon
-      * obtained below, or used as is when SmallerSize is requested anyway.
-      * @return Returns true if icon is loaded asynchronously.
-      */
+     * Behaves similar to the above method.
+     * Tag thumbnails will be processed as appropriate.
+     * Tags may have associated an icon that is loaded
+     * synchronously by the system icon loader.
+     * In this case, icon is set to this icon, and false is returned.
+     * If no icon is associated with the tag, icon is set to null,
+     * and false is returned.
+     * If a custom icon is associated with the tag,
+     * it is loaded asynchronously, icon is set to null,
+     * and true is returned.
+     * Tag thumbnails are always smaller than album thumbnails -
+     * as small as an album thumbnail with SmallerSize.
+     * They are supposed to be blended into the standard tag icon
+     * obtained below, or used as is when SmallerSize is requested anyway.
+     * @return Returns true if icon is loaded asynchronously.
+     */
     bool getTagThumbnail(TAlbum* const album, QPixmap& icon);
 
     /**
-      * Loads tag thumbnail,
-      * with slightly different behavior than the above method:
-      * If the thumbnail is already available in the cache,
-      * it is returned, already blended with the standard icon, if requested.
-      * If the icon is not yet loaded, it will be returned asynchronously
-      * by the signals (unblended), and a default icon is returned here.
-      * If no icon is associated, the default icon is returned.
-      */
+     * Loads tag thumbnail,
+     * with slightly different behavior than the above method:
+     * If the thumbnail is already available in the cache,
+     * it is returned, already blended with the standard icon, if requested.
+     * If the icon is not yet loaded, it will be returned asynchronously
+     * by the signals (unblended), and a default icon is returned here.
+     * If no icon is associated, the default icon is returned.
+     */
     QPixmap getTagThumbnailDirectly(TAlbum* const album);
 
     /**
@@ -173,6 +172,9 @@ Q_SIGNALS:
      */
     void signalReloadThumbnails();
 
+    /**
+     * Internal signal to dispatch Album thumbnail change.
+     */
     void signalDispatchThumbnailInternal(int albumID, const QPixmap& thumbnail);
 
 protected Q_SLOTS:

@@ -56,6 +56,17 @@ namespace Digikam
 typedef QMap<QString, QList<int> > PathAlbumMap;
 typedef QMap<int, QPixmap>         AlbumThumbnailMap;
 
+class AlbumThumbnailLoaderCreator
+{
+public:
+
+    AlbumThumbnailLoader object;
+};
+
+K_GLOBAL_STATIC(AlbumThumbnailLoaderCreator, creator)
+
+// ---------------------------------------------------------------------------------------------
+
 class AlbumThumbnailLoader::Private
 {
 public:
@@ -80,17 +91,6 @@ public:
 
     QCache<QPair<QString, int>, QPixmap> iconCache;
 };
-
-class AlbumThumbnailLoaderCreator
-{
-public:
-
-    AlbumThumbnailLoader object;
-};
-
-K_GLOBAL_STATIC(AlbumThumbnailLoaderCreator, creator)
-
-// ---------------------------------------------------------------------------------------------
 
 AlbumThumbnailLoader* AlbumThumbnailLoader::instance()
 {
@@ -193,11 +193,12 @@ QPixmap AlbumThumbnailLoader::loadIcon(const QString& name, int size) const
     if (!pix)
     {
         KIconLoader* const iconLoader = KIconLoader::global();
-        pix                           = new QPixmap(iconLoader->loadIcon(name, KIconLoader::NoGroup, size));
-        d->iconCache.insert(qMakePair(name, size), pix);
+        d->iconCache.insert(qMakePair(name, size),
+                            new QPixmap(iconLoader->loadIcon(name, KIconLoader::NoGroup, size)));
+        pix = d->iconCache[qMakePair(name, size)];
     }
 
-    return *pix; // ownership of the pointer is kept by the icon cache
+    return (*pix); // ownership of the pointer is kept by the icon cache.
 }
 
 bool AlbumThumbnailLoader::getTagThumbnail(TAlbum* const album, QPixmap& icon)
@@ -311,7 +312,7 @@ void AlbumThumbnailLoader::addUrl(Album* const album, const KUrl& url)
     }
 
     // Check if the URL has already been added
-    PathAlbumMap::iterator it = d->pathAlbumMap.find(url.toLocalFile());
+    PathAlbumMap::iterator it             = d->pathAlbumMap.find(url.toLocalFile());
 
     if (it == d->pathAlbumMap.end())
     {
