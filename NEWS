@@ -13,4 +13,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 004 ==> 315574 - CORE : bad performance when Tag-related Sidebars (Tag management / Filter) are open [patch].
 005 ==> 339903 - Select 'recent' albums containing MOV or .xcf(Gimp) files. Immediate crash occurs.
 006 ==> 340030 - KIPI-plugins can not be deactivated on non-English locales.
-007 ==> 
+007 ==> 340141 - White Balance: Unable to specify exposure compensation > x.5.
+008 ==> 

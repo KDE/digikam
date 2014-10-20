@@ -8,7 +8,7 @@
  *               image white balance
  *
  * Copyright (C) 2008-2009 by Guillaume Castagnino <casta at xwing dot info>
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -179,9 +179,9 @@ void WhiteBalanceTool::slotAutoAdjustExposure()
     kapp->activeWindow()->setCursor(Qt::WaitCursor);
 
     ImageIface iface;
-    DImg* img            = iface.original();
+    DImg* const img      = iface.original();
     WBContainer settings = d->settingsView->settings();
-    WBFilter::autoExposureAdjustement(img, settings.black, settings.exposition);
+    WBFilter::autoExposureAdjustement(img, settings.black, settings.expositionMain);
     d->settingsView->setSettings(settings);
 
     kapp->activeWindow()->unsetCursor();
@@ -191,7 +191,7 @@ void WhiteBalanceTool::slotAutoAdjustExposure()
 void WhiteBalanceTool::preparePreview()
 {
     ImageIface iface;
-    DImg* img            = iface.original();
+    DImg* const img      = iface.original();
     WBContainer settings = d->settingsView->settings();
     WBFilter::findChanelsMax(img, settings.maxr, settings.maxg, settings.maxb);
 
