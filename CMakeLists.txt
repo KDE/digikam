@@ -834,7 +834,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/comboboxutilities.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dfontselect.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dgradientslider.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/ditemtooltip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dragdropimplementations.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/filesaveoptionsbox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/fullscreensettings.cpp
@@ -858,15 +857,16 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     ENDIF()
 
     SET(libmainview_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/sidebar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/dxmlguiwindow.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/daboutdata.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/dzoombar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/dlogoaction.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/thumbbardock.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/ditemtooltip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/dhistoryview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/thememanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/dcursortracker.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/thumbbardock.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/thememanager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/sidebar.cpp
        )
 
     SET(libitemview_SRCS
