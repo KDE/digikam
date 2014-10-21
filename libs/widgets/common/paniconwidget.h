@@ -7,7 +7,7 @@
  * Description : a generic widget to display a panel to choose
  *               a rectangular image area.
  *
- * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,7 +52,7 @@ class DIGIKAM_EXPORT PanIconWidget : public QWidget
 
 public:
 
-    explicit PanIconWidget(QWidget* const parent=0, Qt::WidgetAttribute attribute=Qt::WA_DeleteOnClose);
+    explicit PanIconWidget(QWidget* const parent=0);
     ~PanIconWidget();
 
     static QToolButton* button();
@@ -70,9 +70,10 @@ public:
 
 Q_SIGNALS:
 
-    // Used with ImagePreview widget.
-    // Emit when selection have been moved with mouse.
-    // 'targetDone' boolean value is used for indicate if the mouse have been released.
+    /**
+     * Emitted when selection have been moved with mouse.
+     * 'targetDone' boolean value is used for indicate if the mouse have been released.
+     */
     void signalSelectionMoved(const QRect& rect, bool targetDone);
 
     void signalSelectionTakeFocus();
@@ -92,7 +93,8 @@ protected:
     void mouseReleaseEvent(QMouseEvent*);
     void mouseMoveEvent(QMouseEvent*);
 
-    /** Recalculate the target selection position and emit 'signalSelectionMoved'.
+    /**
+     * Recalculate the target selection position and emit 'signalSelectionMoved'.
      */
     void regionSelectionMoved(bool targetDone);
 
@@ -106,6 +108,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif /* PANICONWIDGET_H */

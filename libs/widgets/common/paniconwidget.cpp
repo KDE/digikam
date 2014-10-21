@@ -7,7 +7,7 @@
  * Description : a generic widget to display a panel to choose
  *               a rectangular image area.
  *
- * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -92,14 +92,14 @@ public:
     QPixmap pixmap;
 };
 
-PanIconWidget::PanIconWidget(QWidget* const parent, Qt::WidgetAttribute attribute)
+PanIconWidget::PanIconWidget(QWidget* const parent)
     : QWidget(parent), d(new Private)
 {
     d->timer = new QTimer(this);
     d->timer->setInterval(800);
 
     setMouseTracking(true);
-    setAttribute(attribute);
+    setAttribute(Qt::WA_DeleteOnClose);
 
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotFlickerTimer()));
@@ -117,6 +117,7 @@ QToolButton* PanIconWidget::button()
     btn->setIcon(SmallIcon("transform-move"));
     btn->hide();
     btn->setToolTip( i18n("Pan the image to a region"));
+
     return btn;
 }
 
@@ -124,7 +125,8 @@ void PanIconWidget::setImage(int previewWidth, int previewHeight, const QImage& 
 {
     QSize sz(image.width(), image.height());
     sz.scale(previewWidth, previewHeight, Qt::KeepAspectRatio);
-    QImage scaledImg = image.scaled(sz.width(), sz.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    QImage scaledImg = image.scaled(sz.width(), sz.height(),
+                                    Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
     setImage(scaledImg, image.size());
 }
@@ -137,7 +139,6 @@ void PanIconWidget::setImage(const QImage& scaledPreviewImage, const QSize& full
     d->orgHeight       = fullImageSize.height();
     d->zoomedOrgWidth  = fullImageSize.width();
     d->zoomedOrgHeight = fullImageSize.height();
-
     d->pixmap          = QPixmap(d->width, d->height);
     d->pixmap.fill(palette().color(QPalette::Background));
     QPainter p(&d->pixmap);
