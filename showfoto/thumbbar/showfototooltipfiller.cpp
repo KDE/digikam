@@ -6,7 +6,7 @@
  * Date        : 09-08-2013
  * Description : Showfoto tool tip filler
  *
- *Copyright (C) 2013 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
+ * Copyright (C) 2013 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,12 +26,14 @@
 // Qt includes
 
 #include <QDateTime>
+#include <QTextDocument>
 
 // KDE includes
 
 #include <kfileitem.h>
 #include <kglobalsettings.h>
 #include <kconfiggroup.h>
+#include <klocale.h>
 
 // Local includes
 
@@ -113,7 +115,6 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
     }
 
     // -- Photograph Info -----------------------------------------------------------------------
-    // NOTE: these info require \"Use File Metadata\" option from Camera Setup Behavior page.
 
     if (settings->getShowPhotoMake()  ||
         settings->getShowPhotoFocal() ||
@@ -121,7 +122,7 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
         settings->getShowPhotoFlash() ||
         settings->getShowPhotoWB()    ||
         settings->getShowPhotoDate()  ||
-        settings->getShowPhotoMode()    )
+        settings->getShowPhotoMode())
     {
         if (!photoInfo.isNull())
         {

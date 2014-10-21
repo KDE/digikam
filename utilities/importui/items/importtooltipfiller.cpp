@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QDateTime>
+#include <QTextDocument>
 
 // KDE includes
 
@@ -74,16 +75,16 @@ QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
         if (settings->getToolTipsShowFileDate())
         {
             QDateTime createdDate  = info.ctime;
-            str                     = KGlobal::locale()->formatDateTime(createdDate, KLocale::ShortDate, true);
-            tip                    += cnt.cellBeg + i18n("Date:") + cnt.cellMid + str + cnt.cellEnd;
+            str                    = KGlobal::locale()->formatDateTime(createdDate, KLocale::ShortDate, true);
+            tip                   += cnt.cellBeg + i18n("Date:") + cnt.cellMid + str + cnt.cellEnd;
         }
 
         if (settings->getToolTipsShowFileSize())
         {
-            tip += cnt.cellBeg + i18n("Size:") + cnt.cellMid;
+            tip                   += cnt.cellBeg + i18n("Size:") + cnt.cellMid;
             QString localeFileSize = KGlobal::locale()->formatNumber(info.size, 0);
-            str = i18n("%1 (%2)", KIO::convertSize(info.size), localeFileSize);
-            tip += str + cnt.cellEnd;
+            str                    = i18n("%1 (%2)", KIO::convertSize(info.size), localeFileSize);
+            tip                   += str + cnt.cellEnd;
         }
 
         QSize dims;

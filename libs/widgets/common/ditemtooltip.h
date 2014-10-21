@@ -29,14 +29,12 @@
 #include <QFont>
 #include <QLabel>
 #include <QResizeEvent>
-#include <QTextDocument>
 #include <QString>
 #include <QImage>
 #include <QEvent>
 
 // KDE includes
 
-#include <klocale.h>
 #include <kglobalsettings.h>
 
 // Local includes
@@ -93,6 +91,8 @@ protected:
     bool    toolTipIsEmpty() const;
     void    reposition();
     void    renderArrows();
+
+protected:
 
     virtual QRect   repositionRect()=0;
     virtual QString tipContents()=0;
