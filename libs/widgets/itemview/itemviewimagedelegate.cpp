@@ -530,11 +530,11 @@ void ItemViewImageDelegate::drawGroupIndicator(QPainter* p, const QRect& r,
 
         if (open)
         {
-            icon = KIconLoader::global()->loadIcon("wallet-open", KIconLoader::NoGroup, r.width());
+            icon = KIconLoader::global()->loadIcon("image-stack-open", KIconLoader::NoGroup, r.width());
         }
         else
         {
-            icon = KIconLoader::global()->loadIcon("wallet-closed", KIconLoader::NoGroup, r.width());
+            icon = KIconLoader::global()->loadIcon("image-stack", KIconLoader::NoGroup, r.width());
         }
 
         qreal op     = p->opacity();

@@ -40,6 +40,7 @@
 #include "imagedelegate.h"
 #include "imagemodel.h"
 #include "imagecategorizedview.h"
+#include "imagefiltermodel.h"
 
 namespace Digikam
 {
@@ -125,7 +126,22 @@ bool GroupIndicatorOverlay::checkIndex(const QModelIndex& index) const
 
     if (!rect.isNull() && info.hasGroupedImages())
     {
-        m_widget->setToolTip(i18nc("@info:tooltip", "This item is grouped."));
+        QString tip = i18ncp("@info:tooltip",
+                             "1 grouped item.\n",
+                             "%1 grouped items.\n",
+                             info.numberOfGroupedImages());
+
+        if (index.data(ImageFilterModel::GroupIsOpenRole).toBool())
+        {
+            tip += i18n("Group is open.");
+        }
+        else
+        {
+            tip += i18n("Group is closed.");
+        }
+
+        m_widget->setToolTip(tip);
+        
         return true;
     }
 
