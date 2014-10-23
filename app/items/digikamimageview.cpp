@@ -86,7 +86,8 @@ namespace Digikam
 {
 
 DigikamImageView::DigikamImageView(QWidget* const parent)
-    : ImageCategorizedView(parent), d(new Private(this))
+    : ImageCategorizedView(parent),
+      d(new Private(this))
 {
     installDefaultModels();
 
@@ -265,12 +266,12 @@ void DigikamImageView::confirmFaces(const QList<QModelIndex>& indexes, int tagId
 
     bool needFastRemove = false;
 
-    if(imageAlbumModel()->currentAlbums().size() == 1)
+    if (imageAlbumModel()->currentAlbums().size() == 1)
     {
         needFastRemove = d->faceMode && (tagId != imageAlbumModel()->currentAlbums().first()->id());
     }
 
-    foreach(const QModelIndex& index, indexes)
+    foreach (const QModelIndex& index, indexes)
     {
         infos << ImageModel::retrieveImageInfo(index);
         faces << d->faceDelegate->face(index);
@@ -295,7 +296,7 @@ void DigikamImageView::removeFaces(const QList<QModelIndex>& indexes)
     QList<DatabaseFace> faces;
     QList<QModelIndex> sourceIndexes;
 
-    foreach(const QModelIndex& index, indexes)
+    foreach (const QModelIndex& index, indexes)
     {
         infos << ImageModel::retrieveImageInfo(index);
         faces << d->faceDelegate->face(index);
@@ -339,7 +340,7 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
     QList<ImageInfo> selectedInfos = selectedImageInfosCurrentFirst();
     QList<qlonglong> selectedImageIDs;
 
-    foreach(const ImageInfo& info, selectedInfos)
+    foreach (const ImageInfo& info, selectedInfos)
     {
         selectedImageIDs << info.id();
     }
@@ -455,7 +456,7 @@ void DigikamImageView::showGroupContextMenu(const QModelIndex& index, QContextMe
     QList<ImageInfo> selectedInfos = selectedImageInfosCurrentFirst();
     QList<qlonglong> selectedImageIDs;
 
-    foreach(const ImageInfo& info, selectedInfos)
+    foreach (const ImageInfo& info, selectedInfos)
     {
         selectedImageIDs << info.id();
     }
@@ -487,7 +488,7 @@ void DigikamImageView::showContextMenu(QContextMenuEvent* event)
 {
     Album* const album = currentAlbum();
 
-    if (!album ||
+    if (!album          ||
         album->isRoot() ||
         (album->type() != Album::PHYSICAL && album->type() != Album::TAG) )
     {
@@ -650,7 +651,7 @@ void DigikamImageView::removeSelectedFromGroup()
 
 void DigikamImageView::rename()
 {
-    KUrl::List urls = selectedUrls();
+    KUrl::List   urls = selectedUrls();
     NewNamesList newNamesList;
 
     QPointer<AdvancedRenameDialog> dlg = new AdvancedRenameDialog(this);
@@ -659,6 +660,9 @@ void DigikamImageView::rename()
     if (dlg->exec() == KDialog::Accepted)
     {
         newNamesList = dlg->newNames();
+
+        KUrl nextUrl = nextInOrder(selectedImageInfos().last(),1).fileUrl();
+        setCurrentUrl(nextUrl);
     }
 
     delete dlg;

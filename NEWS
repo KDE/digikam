@@ -15,4 +15,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 006 ==> 340030 - KIPI-plugins can not be deactivated on non-English locales.
 007 ==> 340141 - White Balance: Unable to specify exposure compensation > x.5.
 008 ==> 340186 - GROUP : Wallet icon for grouped photos is conceptually confusing.
-009 ==> 
+009 ==> 306767 - ICONVIEW : thumb focus is lost after renaming.
+010 ==> 
