@@ -16,4 +16,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 007 ==> 340141 - White Balance: Unable to specify exposure compensation > x.5.
 008 ==> 340186 - GROUP : Wallet icon for grouped photos is conceptually confusing.
 009 ==> 306767 - ICONVIEW : thumb focus is lost after renaming.
-010 ==> 
+010 ==> 340295 - Make fails on imagedescedittab.cpp has no member named 'textEdit'.
+011 ==> 
