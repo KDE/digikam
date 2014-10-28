@@ -18,4 +18,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 009 ==> 306767 - ICONVIEW : thumb focus is lost after renaming.
 010 ==> 340295 - Make fails on imagedescedittab.cpp has no member named 'textEdit'.
 011 ==> 337737 - MYSQL : settings and installation windows freeze when valid mariadb/mysql db connection is available [patch].
-012 ==> 
+012 ==> 340439 - No auto-rotation/flip Images after download [patch].
+
