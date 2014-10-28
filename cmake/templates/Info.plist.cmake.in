@@ -5,19 +5,19 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>English</string>
     <key>CFBundleExecutable</key>
-    <string>digiKam</string>
+    <string>${MACOSX_APP_NAME_STRING}</string>
     <key>CFBundleGetInfoString</key>
-    <string>digiKam is an advanced digital photo management application for Linux, Windows, and Mac-OSX</string>
+    <string>${MACOSX_APP_DESCRIPTION}</string>
     <key>CFBundleIconFile</key>
     <string>${MACOSX_BUNDLE_ICON_FILE}</string>
     <key>CFBundleIdentifier</key>
-    <string>digiKam</string>
+    <string>${MACOSX_APP_NAME_STRING}</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleLongVersionString</key>
     <string>${MACOSX_BUNDLE_LONG_VERSION_STRING}</string>
     <key>CFBundleName</key>
-    <string>digiKam</string>
+    <string>${MACOSX_APP_NAME_STRING}</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
