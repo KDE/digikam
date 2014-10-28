@@ -159,10 +159,10 @@ public:
 
     QString                       cameraTitle;
 
+    QStringList                   autoRotateItemsList;
     QStringList                   currentlyDeleting;
     QSet<QString>                 foldersToScan;
     CamItemInfoList               filesToBeAdded;
-    CamItemInfoList               autoRotateItemsList;
 
     KMenu*                        downloadMenu;
     KMenu*                        deleteMenu;
@@ -248,7 +248,7 @@ public:
     FilterComboBox*               filterComboBox;
 
     CHUpdateItemMap               map;
-    
+
     KMessageWidget*               errorWidget;
 };
 

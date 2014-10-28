@@ -1567,11 +1567,6 @@ void ImportUI::slotDownloaded(const QString& folder, const QString& file, int st
             int curr = d->statusProgressBar->progressValue();
             d->statusProgressBar->setProgressValue(curr + 1);
 
-            if (autoRotate)
-            {
-                d->autoRotateItemsList << info;
-            }
-
             d->renameCustomizer->setStartIndex(d->renameCustomizer->startIndex() + 1);
 
             DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
@@ -2085,6 +2080,11 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
         settings.dest = downloadUrl.toLocalFile();
         allItems.append(settings);
 
+        if (settings.autoRotate)
+        {
+            d->autoRotateItemsList << downloadUrl.toLocalFile();
+        }
+
         ++downloadedItems;
     }
 
@@ -2411,15 +2411,25 @@ void ImportUI::autoRotateItems()
         return;
     }
 
-    ImageInfoList list;
+    qlonglong         id;
+    ImageInfoList     list;
+    CollectionScanner scanner;
 
-    foreach (CamItemInfo info, d->autoRotateItemsList)
+    ScanController::instance()->suspendCollectionScan();
+
+    foreach (const QString& downloadUrl, d->autoRotateItemsList)
     {
         //TODO: Needs test for Gphoto items.
-        list << ImageInfo(info.url());
+        // make ImageInfo up to date
+        id = scanner.scanFile(downloadUrl, CollectionScanner::Rescan);
+        list << ImageInfo(id);
     }
 
     FileActionMngr::instance()->transform(list, KExiv2Iface::RotationMatrix::NoTransformation);
+
+    ScanController::instance()->resumeCollectionScan();
+
+    d->autoRotateItemsList.clear();
 }
 
 bool ImportUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
