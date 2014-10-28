@@ -226,7 +226,7 @@ KDE4_ADD_EXECUTABLE(digikam ${digikam_SRCS})
 
 # TO fill plist XML file for OSX #####################################################
 
-SET(MACOSX_APP_NAME_STRING             "digiKam")
+SET(MACOSX_APP_NAME_STRING             "digikam")
 SET(MACOSX_APP_DESCRIPTION             "Advanced digital photo management application")
 SET(MACOSX_BUNDLE_LONG_VERSION_STRING  ${DIGIKAM_VERSION_STRING})
 SET(MACOSX_BUNDLE_SHORT_VERSION_STRING ${DIGIKAM_VERSION_SHORT})

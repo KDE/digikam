@@ -42,7 +42,7 @@ KDE4_ADD_EXECUTABLE(showfoto ${showfoto_SRCS})
 
 # To fill plist XML file for OSX #####################################################
 
-SET(MACOSX_APP_NAME_STRING             "Showfoto")
+SET(MACOSX_APP_NAME_STRING             "showfoto")
 SET(MACOSX_APP_DESCRIPTION             "Stand alone Photo Editor based on digiKam Image Editor")
 SET(MACOSX_BUNDLE_LONG_VERSION_STRING  ${DIGIKAM_VERSION_STRING})
 SET(MACOSX_BUNDLE_SHORT_VERSION_STRING ${DIGIKAM_VERSION_SHORT})
