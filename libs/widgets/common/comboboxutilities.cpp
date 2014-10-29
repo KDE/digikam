@@ -78,23 +78,25 @@ void ProxyLineEdit::setClearButtonShown(bool show)
     m_layout->setContentsMargins(0, 0, rightMargin, 0);
 }
 
-/**
- * We just re-implement all relevant QWidget event handlers and call
- * the QWidget implementation, not the KLineEdit one.
- */
+// NOTE: see bug #326718: We need to use KLineEdit parent class with these methods
+// to have clear button working fine.
 void ProxyLineEdit::mousePressEvent(QMouseEvent* event)
 {
-    QWidget::mousePressEvent(event);
-}
-
-void ProxyLineEdit::mouseMoveEvent(QMouseEvent* event)
-{
-    QWidget::mouseMoveEvent(event);
+    KLineEdit::mousePressEvent(event);
 }
 
 void ProxyLineEdit::mouseReleaseEvent(QMouseEvent* event)
 {
-    QWidget::mouseReleaseEvent(event);
+    KLineEdit::mouseReleaseEvent(event);
+}
+
+/**
+ * We just re-implement all relevant QWidget event handlers and call
+ * the QWidget implementation, not the KLineEdit one.
+ */
+void ProxyLineEdit::mouseMoveEvent(QMouseEvent* event)
+{
+    QWidget::mouseMoveEvent(event);
 }
 
 void ProxyLineEdit::mouseDoubleClickEvent(QMouseEvent* event)
