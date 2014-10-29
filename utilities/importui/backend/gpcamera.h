@@ -49,7 +49,8 @@ public:
              const QString& port, const QString& path);
     ~GPCamera();
 
-    QByteArray cameraMD5ID();
+    QByteArray                 cameraMD5ID();
+    DKCamera::CameraDriverType cameraDriverType();
 
     bool doConnect();
 
@@ -76,11 +77,6 @@ public:
     bool cameraSummary(QString& summary);
     bool cameraManual(QString& manual);
     bool cameraAbout(QString& about);
-
-    DKCamera::CameraDriverType cameraDriverType()
-    {
-        return DKCamera::GPhotoDriver;
-    };
 
     bool getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail);
     bool getPreview(QImage& preview);

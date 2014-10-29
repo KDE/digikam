@@ -82,6 +82,23 @@ UMSCamera::~UMSCamera()
 {
 }
 
+// Method not supported by UMS camera.
+bool UMSCamera::getPreview(QImage& /*preview*/)
+{
+    return false;
+};
+
+// Method not supported by UMS camera.
+bool UMSCamera::capture(CamItemInfo& /*itemInfo*/)
+{
+    return false;
+};
+
+DKCamera::CameraDriverType UMSCamera::cameraDriverType()
+{
+    return DKCamera::UMSDriver;
+};
+
 QByteArray UMSCamera::cameraMD5ID()
 {
     QString camData;

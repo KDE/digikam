@@ -144,6 +144,8 @@ public:
 
 bool GPStatus::cancel = false;
 
+// ---------------------------------------------------------------------------
+
 class GPCamera::Private
 {
 
@@ -168,6 +170,8 @@ public:
     GPStatus*       status;
 #endif /* HAVE_GPHOTO2 */
 };
+
+// ---------------------------------------------------------------------------
 
 GPCamera::GPCamera(const QString& title, const QString& model,
                    const QString& port, const QString& path)
@@ -195,6 +199,11 @@ GPCamera::~GPCamera()
 
     delete d;
 }
+
+DKCamera::CameraDriverType GPCamera::cameraDriverType()
+{
+    return DKCamera::GPhotoDriver;
+};
 
 QByteArray GPCamera::cameraMD5ID()
 {
@@ -377,8 +386,10 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
 
     for (int i = 0 ; i < nrofsinfos ; ++i)
     {
-        if (sinfos[i].fields & GP_STORAGEINFO_FILESYSTEMTYPE) {
-            switch(sinfos[i].fstype) {
+        if (sinfos[i].fields & GP_STORAGEINFO_FILESYSTEMTYPE)
+        {
+            switch(sinfos[i].fstype)
+            {
                 case GP_STORAGEINFO_FST_UNDEFINED:
                     kDebug() << "Storage fstype: undefined";
                     break;
@@ -393,6 +404,7 @@ bool GPCamera::getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail)
                     break;
             }
         }
+
         if (sinfos[i].fields & GP_STORAGEINFO_LABEL)
         {
             kDebug() << "Storage label: " << QString(sinfos[i].label);
@@ -643,7 +655,7 @@ bool GPCamera::getFolders(const QString& folder)
     gp_list_new(&clist);
 
     d->status->cancel = false;
-    errorCode = gp_camera_folder_list_folders(d->camera, QFile::encodeName(folder).constData(), clist, d->status->context);
+    errorCode         = gp_camera_folder_list_folders(d->camera, QFile::encodeName(folder).constData(), clist, d->status->context);
 
     if (errorCode != GP_OK)
     {
@@ -656,7 +668,7 @@ bool GPCamera::getFolders(const QString& folder)
     QStringList subFolderList;
     int count = gp_list_count(clist);
 
-    if(count < 1)
+    if (count < 1)
     {
         return true;
     }
@@ -802,16 +814,17 @@ void GPCamera::getItemInfo(const QString& folder, const QString& itemName, CamIt
 void GPCamera::getItemInfoInternal(const QString& folder, const QString& itemName, CamItemInfo& info, bool useMetadata)
 {
 #ifdef HAVE_GPHOTO2
-    info.folder       = folder;
-    info.name         = itemName;
+    info.folder          = folder;
+    info.name            = itemName;
+    d->status->cancel    = false;
+    info.previewPossible = m_captureImagePreviewSupport;
 
-    d->status->cancel = false;
     CameraFileInfo cfinfo;
     gp_camera_file_get_info(d->camera, QFile::encodeName(info.folder).constData(),
                             QFile::encodeName(info.name).constData(), &cfinfo, d->status->context);
 
     // if preview has size field, it's a valid preview most likely, otherwise we'll skip it later on
-    if(cfinfo.preview.fields & GP_FILE_INFO_SIZE)
+    if (cfinfo.preview.fields & GP_FILE_INFO_SIZE)
     {
         info.previewPossible = true;
     }
