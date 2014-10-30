@@ -4,18 +4,19 @@ PROJECT(digikam)
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "Starting CMake configuration for: digiKam")
 
-OPTION(ENABLE_SCRIPTIFACE       "Build digiKam with experimental scripting support (default=OFF)"       OFF)
-OPTION(ENABLE_PRESENTATIONMODE  "Build digiKam with presentation mode support (default=OFF)"            OFF)
 OPTION(ENABLE_THUMBS_DB         "Build digiKam with thumbnails database support (default=ON)"           ON)
-OPTION(ENABLE_INTERNALMYSQL     "Look for MySQL server executable at build time (default=ON)"           ON)
-OPTION(ENABLE_ADVANCEDDEBUGMSG  "Build digiKam with more internal debug message (default=OFF)"          OFF)
+OPTION(ENABLE_INTERNALMYSQL     "Build digiKam with insternal MySQL server executable (default=ON)"     ON)
 OPTION(ENABLE_LCMS2             "Build digiKam with LCMS2 instead LCMS1 (default=OFF)"                  OFF)
-
-# Options to port to new KDE components (Baloo and Akonadi)
 OPTION(ENABLE_BALOOSUPPORT      "Build digiKam with Baloo support (default=ON)"                         ON)
 OPTION(ENABLE_KDEPIMLIBSSUPPORT "Build digiKam with Kdepimlibs support (default=OFF)"                   OFF)
 
+# Debug options:
 OPTION(DIGIKAM_ENABLE_MODELTEST "Enable ModelTest on some models for debugging (default=OFF)"           OFF)
+OPTION(ENABLE_ADVANCEDDEBUGMSG  "Build digiKam with more internal debug message (default=OFF)"          OFF)
+
+#experimental options:
+OPTION(ENABLE_SCRIPTIFACE       "Build digiKam with experimental scripting support (default=OFF)"       OFF)
+OPTION(ENABLE_PRESENTATIONMODE  "Build digiKam with presentation mode support (default=OFF)"            OFF)
 
 # ==================================================================================================
 # Information to update before to release this package.
