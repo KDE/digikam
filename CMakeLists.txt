@@ -90,8 +90,8 @@ INCLUDE(FindPackageHandleStandardArgs)
 INCLUDE(FindPkgConfig)
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH} )
 
-SET(KIPI_MIN_VERSION "2.0.0")
-SET(PGF_MIN_VERSION  "6.12.24")
+SET(KIPI_MIN_VERSION  "2.0.0")
+SET(PGF_MIN_VERSION   "6.12.24")
 
 FIND_PACKAGE(Kexiv2                   REQUIRED)
 FIND_PACKAGE(Kdcraw                   REQUIRED)
@@ -100,11 +100,11 @@ FIND_PACKAGE(PNG                      REQUIRED)
 FIND_PACKAGE(TIFF                     REQUIRED)
 FIND_PACKAGE(PGF ${PGF_MIN_VERSION}   REQUIRED)
 
-FIND_PACKAGE(Kipi ${KIPI_MIN_VERSION})
-FIND_PACKAGE(PkgConfig)
-FIND_PACKAGE(Jasper)
+FIND_PACKAGE(Kipi  ${KIPI_MIN_VERSION})
 FIND_PACKAGE(Kface)
 FIND_PACKAGE(KGeoMap)
+FIND_PACKAGE(PkgConfig)
+FIND_PACKAGE(Jasper)
 FIND_PACKAGE(Eigen3)
 FIND_PACKAGE(Boost)
 
@@ -310,7 +310,7 @@ IF (ENABLE_BALOOSUPPORT)
 
         MACRO_OPTIONAL_FIND_PACKAGE(Baloo)
         MACRO_LOG_FEATURE(Baloo_FOUND "Baloo" "Baloo"
-                "http://www.kde.org" TRUE "" "Baloo extends the search and tagging")
+                          "http://www.kde.org" TRUE "" "Baloo extends the search and tagging")
 
         IF (NOT KFileMetaData_FOUND)
             SET(Baloo_FOUND FALSE)
@@ -326,6 +326,8 @@ MACRO_OPTIONAL_FIND_PACKAGE(Sqlite2)
 MACRO_BOOL_TO_01(SQLITE2_FOUND HAVE_SQLITE2)
 
 MACRO_BOOL_TO_01(EIGEN3_FOUND HAVE_EIGEN3)
+
+MACRO_BOOL_TO_01(KIPI_FOUND HAVE_KIPI)
 
 # Whether to use Qt's scaling to downscale previews. Under MacOSX, Qt
 # can make use of the higher physical resolution of Retina
@@ -376,9 +378,9 @@ PRINT_LIBRARY_STATUS("libpgf"      "http://www.libpgf.org"                      
 # ================================================================
 
 IF(KIPI_FOUND)
-    MESSAGE(STATUS " Kipi library found....................... YES (optional)")
+    MESSAGE(STATUS " libkipi library found.................... YES (optional)")
 ELSE(KIPI_FOUND)
-    MESSAGE(STATUS " Kipi library found....................... NO  (optional)")
+    MESSAGE(STATUS " libkipi library found.................... NO  (optional)")
     MESSAGE(STATUS "")
     MESSAGE(STATUS " digiKam will be compiled without Kipi-plugins support.")
     MESSAGE(STATUS "")
@@ -1078,7 +1080,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameralist.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameratype.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupdatabase.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupfacetags.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupversioning.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/importfilters.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupimagequalitysorter.cpp

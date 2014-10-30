@@ -39,6 +39,9 @@
 /* Define to 1 if an external Kipi shared library have been found */
 #cmakedefine HAVE_KIPI
 
+/* Define to 1 if an external Kipi shared library have been found */
+#cmakedefine HAVE_KFACE
+
 /* Define to 1 if an external Eigen3 shared library have been found */
 #cmakedefine HAVE_EIGEN3
 

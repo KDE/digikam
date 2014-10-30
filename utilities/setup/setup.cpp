@@ -69,7 +69,6 @@ using namespace KIPI;
 #include "setupimagequalitysorter.h"
 #include "setuptooltip.h"
 #include "setupdatabase.h"
-#include "setupfacetags.h"
 #include "setupversioning.h"
 #include "importsettings.h"
 
@@ -110,7 +109,6 @@ public:
 #ifdef USE_SCRIPT_IFACE
         page_scriptmanager(0),
 #endif
-        page_facetags(0),
         page_versioning(0),
         databasePage(0),
         collectionsPage(0),
@@ -128,7 +126,6 @@ public:
         imageQualitySorterPage(0),
         iccPage(0),
         cameraPage(0),
-        //faceTagsPage(0),
         miscPage(0),
 
 #ifdef HAVE_KIPI
@@ -168,7 +165,6 @@ public:
 #ifdef USE_SCRIPT_IFACE
     KPageWidgetItem*         page_scriptmanager;
 #endif
-    KPageWidgetItem*         page_facetags;
     KPageWidgetItem*         page_versioning;
 
     SetupDatabase*           databasePage;
@@ -245,14 +241,6 @@ Setup::Setup(QWidget* const parent)
     d->page_tooltip->setHeader(i18n("<qt>Album Items Tool-Tip Settings<br/>"
                                     "<i>Customize information in tool-tips</i></qt>"));
     d->page_tooltip->setIcon(KIcon("dialog-information"));
-
-    /*
-        d->faceTagsPage  = new SetupFaceTags();
-        d->page_facetags = addPage(d->faceTagsPage, i18n("People Tags"));
-        d->page_facetags->setHeader(i18n("<qt>People Tags<br/>"
-                                         "<i>Configure digiKam's face detection and recognition</i></qt>"));
-        d->page_facetags->setIcon(KIcon("face-smile"));
-    */
 
     d->metadataPage  = new SetupMetadata();
     d->page_metadata = addPage(d->metadataPage, i18n("Metadata"));
@@ -703,21 +691,9 @@ Setup::Page Setup::activePageIndex() const
         return ICCPage;
     }
 
-#ifdef HAVE_KIPI
-    if (cur == d->page_plugins)
-    {
-        return KipiPluginsPage;
-    }
-#endif /* HAVE_KIPI */
-
     if (cur == d->page_camera)
     {
         return CameraPage;
-    }
-
-    if (cur == d->page_facetags)
-    {
-        return FaceTagsPage;
     }
 
     if (cur == d->page_misc)
@@ -729,6 +705,13 @@ Setup::Page Setup::activePageIndex() const
     {
         return VersioningPage;
     }
+
+#ifdef HAVE_KIPI
+    if (cur == d->page_plugins)
+    {
+        return KipiPluginsPage;
+    }
+#endif /* HAVE_KIPI */
 
 #ifdef USE_SCRIPT_IFACE
 
@@ -791,22 +774,19 @@ KPageWidgetItem* Setup::Private::pageItem(Setup::Page page) const
         case Setup::ICCPage:
             return page_icc;
 
-#ifdef HAVE_KIPI
-        case Setup::KipiPluginsPage:
-            return page_plugins;
-#endif /* HAVE_KIPI */
-
         case Setup::CameraPage:
             return page_camera;
-
-        case Setup::FaceTagsPage:
-            return page_facetags;
 
         case Setup::MiscellaneousPage:
             return page_misc;
 
         case Setup::VersioningPage:
             return page_versioning;
+
+#ifdef HAVE_KIPI
+        case Setup::KipiPluginsPage:
+            return page_plugins;
+#endif /* HAVE_KIPI */
 
 #ifdef USE_SCRIPT_IFACE
 

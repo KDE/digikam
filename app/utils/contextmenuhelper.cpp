@@ -597,7 +597,7 @@ void ContextMenuHelper::slotDeselectAllAlbumItems()
 void ContextMenuHelper::addImportMenu()
 {
     KMenu* const menuImport = new KMenu(i18n("Import"), d->parent);
-    const QList<QAction*> importActions;
+    QList<QAction*> importActions;
 
 #ifdef HAVE_KIPI
     importActions = KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::ImportPlugin);
@@ -620,7 +620,7 @@ void ContextMenuHelper::addImportMenu()
 void ContextMenuHelper::addExportMenu()
 {
     KMenu* const menuExport = new KMenu(i18n("Export"), d->parent);
-    const QList<QAction*> exportActions;
+    QList<QAction*> exportActions;
 
 #ifdef HAVE_KIPI
     exportActions = KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::ExportPlugin);
@@ -648,7 +648,7 @@ void ContextMenuHelper::addExportMenu()
 void ContextMenuHelper::addBatchMenu()
 {
     KMenu* const menuKIPIBatch = new KMenu(i18n("Batch Process"), d->parent);
-    const QList<QAction*> batchActions;
+    QList<QAction*> batchActions;
 
 #ifdef HAVE_KIPI
     batchActions = KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::BatchPlugin);
@@ -675,7 +675,7 @@ void ContextMenuHelper::addBatchMenu()
 
 void ContextMenuHelper::addAlbumActions()
 {
-    const QList<QAction*> albumActions;
+    QList<QAction*> albumActions;
 
 #ifdef HAVE_KIPI
     albumActions = KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::CollectionsPlugin);
