@@ -37,6 +37,7 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "maintenancesettings.h"
 #include "newitemsfinder.h"
 #include "thumbsgenerator.h"
@@ -44,9 +45,12 @@
 #include "duplicatesfinder.h"
 #include "imagequalitysorter.h"
 #include "metadatasynchronizer.h"
-#include "facedetector.h"
 #include "dnotificationwrapper.h"
 #include "progressmanager.h"
+
+#ifdef HAVE_KFACE
+#include "facedetector.h"
+#endif /* HAVE_KFACE */
 
 namespace Digikam
 {
@@ -62,9 +66,12 @@ public:
         thumbsGenerator       = 0;
         fingerPrintsGenerator = 0;
         duplicatesFinder      = 0;
-        faceDetector          = 0;
         metadataSynchronizer  = 0;
         imageQualitySorter    = 0;
+
+#ifdef HAVE_KFACE
+        faceDetector          = 0;
+#endif /* HAVE_KFACE */
     }
 
     bool                   running;
@@ -77,9 +84,12 @@ public:
     ThumbsGenerator*       thumbsGenerator;
     FingerPrintsGenerator* fingerPrintsGenerator;
     DuplicatesFinder*      duplicatesFinder;
-    FaceDetector*          faceDetector;
     MetadataSynchronizer*  metadataSynchronizer;
     ImageQualitySorter*    imageQualitySorter;
+
+#ifdef HAVE_KFACE
+    FaceDetector*          faceDetector;
+#endif /* HAVE_KFACE */
 };
 
 MaintenanceMngr::MaintenanceMngr(QObject* const parent)
@@ -137,11 +147,13 @@ void MaintenanceMngr::slotToolCompleted(ProgressItem* tool)
         d->duplicatesFinder = 0;
         stage5();
     }
+#ifdef HAVE_KFACE
     else if (tool == dynamic_cast<ProgressItem*>(d->faceDetector))
     {
         d->faceDetector = 0;
         stage6();
     }
+#endif /* HAVE_KFACE */
    else if (tool == dynamic_cast<ProgressItem*>(d->imageQualitySorter))
     {
         d->imageQualitySorter = 0;
@@ -160,7 +172,9 @@ void MaintenanceMngr::slotToolCanceled(ProgressItem* tool)
         tool == dynamic_cast<ProgressItem*>(d->thumbsGenerator)       ||
         tool == dynamic_cast<ProgressItem*>(d->fingerPrintsGenerator) ||
         tool == dynamic_cast<ProgressItem*>(d->duplicatesFinder)      ||
+#ifdef HAVE_KFACE
         tool == dynamic_cast<ProgressItem*>(d->faceDetector)          ||
+#endif /* HAVE_KFACE */
         tool == dynamic_cast<ProgressItem*>(d->imageQualitySorter)    ||
         tool == dynamic_cast<ProgressItem*>(d->metadataSynchronizer))
     {
@@ -265,6 +279,7 @@ void MaintenanceMngr::stage5()
 {
     kDebug() << "stage5";
 
+#ifdef HAVE_KFACE
     if (d->settings.faceManagement)
     {
         // NOTE : Use multi-core CPU option is passed through FaceScanSettings
@@ -274,6 +289,7 @@ void MaintenanceMngr::stage5()
         d->faceDetector->start();
     }
     else
+#endif /* HAVE_KFACE */
     {
         stage6();
     }

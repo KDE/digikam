@@ -45,9 +45,13 @@
 
 #endif /* HAVE_KIPI */
 
+#ifdef HAVE_KFACE
+
 // LibKface includes
 
 #include <libkface/recognitiondatabase.h>
+
+#endif /* HAVE_KFACE */
 
 // Local includes
 
@@ -96,8 +100,11 @@ static inline void showDigikamComponentsInfo()
     list.insert(i18n("Kipi-Plugins"), KIPI::PluginLoader::instance()->kipiPluginsVersion());
 #endif /* HAVE_KIPI */
 
-    list.insert(i18n("LibOpenCV"),    KFaceIface::LibOpenCVVersion());
+#ifdef HAVE_KFACE
     list.insert(i18n("LibKface"),     KFaceIface::version());
+    list.insert(i18n("LibOpenCV"),    KFaceIface::LibOpenCVVersion());
+#endif /* HAVE_KFACE */
+
 
     // Database Backend information
 

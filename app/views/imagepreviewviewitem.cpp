@@ -32,8 +32,11 @@
 
 // Local includes
 
-#include "facegroup.h"
 #include "imagepreviewview.h"
+
+#ifdef HAVE_KFACE
+#include "facegroup.h"
+#endif /* HAVE_KFACE */
 
 namespace Digikam
 {
@@ -44,10 +47,15 @@ public:
 
     Private()
     {
+#ifdef HAVE_KFACE
         group = 0;
+#endif /* HAVE_KFACE */
     }
 
+#ifdef HAVE_KFACE
     FaceGroup*        group;
+#endif /* HAVE_KFACE */
+
     ImageInfo         info;
 };
 
@@ -62,10 +70,12 @@ ImagePreviewViewItem::~ImagePreviewViewItem()
     delete d;
 }
 
+#ifdef HAVE_KFACE
 void ImagePreviewViewItem::setFaceGroup(FaceGroup* const group)
 {
     d->group = group;
 }
+#endif /* HAVE_KFACE */
 
 void ImagePreviewViewItem::setImageInfo(const ImageInfo& info)
 {
@@ -80,17 +90,29 @@ ImageInfo ImagePreviewViewItem::imageInfo() const
 
 void ImagePreviewViewItem::hoverEnterEvent(QGraphicsSceneHoverEvent* e)
 {
+#ifdef HAVE_KFACE
     d->group->itemHoverEnterEvent(e);
+#else
+    Q_UNUSED(e);
+#endif /* HAVE_KFACE */
 }
 
 void ImagePreviewViewItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* e)
 {
+#ifdef HAVE_KFACE
     d->group->itemHoverLeaveEvent(e);
+#else
+    Q_UNUSED(e);
+#endif /* HAVE_KFACE */
 }
 
 void ImagePreviewViewItem::hoverMoveEvent(QGraphicsSceneHoverEvent* e)
 {
+#ifdef HAVE_KFACE
     d->group->itemHoverMoveEvent(e);
+#else
+    Q_UNUSED(e);
+#endif /* HAVE_KFACE */
 }
 
 }  // namespace Digikam

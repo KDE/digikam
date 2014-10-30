@@ -35,10 +35,10 @@
 
 #include "applicationsettings.h"
 #include "databaseface.h"
-#include "faceutils.h"
 #include "imagemodel.h"
 #include "tagregion.h"
 #include "digikamimagedelegatepriv.h"
+#include "faceutils.h"
 
 namespace Digikam
 {

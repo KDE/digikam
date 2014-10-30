@@ -28,6 +28,7 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "dimgpreviewitem.h"
 #include "imageinfo.h"
 
@@ -37,7 +38,9 @@ class QGraphicsSceneHoverEvent;
 namespace Digikam
 {
 
+#ifdef HAVE_KFACE
 class FaceGroup;
+#endif /* HAVE_KFACE */
 
 class ImagePreviewViewItem : public DImgPreviewItem
 {
@@ -49,7 +52,9 @@ public:
     void setImageInfo(const ImageInfo& info);
     ImageInfo imageInfo() const;
 
+#ifdef HAVE_KFACE
     void setFaceGroup(FaceGroup* const group);
+#endif /* HAVE_KFACE */
 
 protected:
 

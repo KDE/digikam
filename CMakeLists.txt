@@ -328,6 +328,7 @@ MACRO_BOOL_TO_01(SQLITE2_FOUND HAVE_SQLITE2)
 MACRO_BOOL_TO_01(EIGEN3_FOUND HAVE_EIGEN3)
 
 MACRO_BOOL_TO_01(KIPI_FOUND HAVE_KIPI)
+MACRO_BOOL_TO_01(KFACE_FOUND HAVE_KFACE)
 
 # Whether to use Qt's scaling to downscale previews. Under MacOSX, Qt
 # can make use of the higher physical resolution of Retina
@@ -371,7 +372,6 @@ PRINT_LIBRARY_STATUS("liblcms"     "http://www.littlecms.com"                   
 PRINT_LIBRARY_STATUS("Boost Graph" "http://www.boost.org/doc/libs/1_43_0/libs/graph/doc/index.html" " (headers only)"                     Boost_FOUND)
 PRINT_LIBRARY_STATUS("libkexiv2"   "http://www.digikam.org/sharedlibs"                              " (version >= 1.2.0)"                 KEXIV2_FOUND)
 PRINT_LIBRARY_STATUS("libkdcraw"   "http://www.digikam.org/sharedlibs"                              " (version >= ${KDCRAW_MIN_VERSION})" KDCRAW_FOUND)
-PRINT_LIBRARY_STATUS("libkface"    "http://www.digikam.org/sharedlibs"                              " (version >= 2.0.0)"                 KFACE_FOUND)
 PRINT_LIBRARY_STATUS("libkgeomap"  "http://www.digikam.org/sharedlibs"                              " (version >= 2.0.0)"                 KGEOMAP_FOUND)
 PRINT_LIBRARY_STATUS("libpgf"      "http://www.libpgf.org"                                          " (version >= ${PGF_MIN_VERSION})"    PGF_FOUND)
 
@@ -385,6 +385,17 @@ ELSE(KIPI_FOUND)
     MESSAGE(STATUS " digiKam will be compiled without Kipi-plugins support.")
     MESSAGE(STATUS "")
 ENDIF(KIPI_FOUND)
+
+# ================================================================
+
+IF(KFACE_FOUND)
+    MESSAGE(STATUS " libkface library found................... YES (optional)")
+ELSE(KFACE_FOUND)
+    MESSAGE(STATUS " libkface library found................... NO  (optional)")
+    MESSAGE(STATUS "")
+    MESSAGE(STATUS " digiKam will be compiled without faces detection and recognition support.")
+    MESSAGE(STATUS "")
+ENDIF(KFACE_FOUND)
 
 # ================================================================
 
@@ -485,13 +496,13 @@ ENDIF(DOXYGEN_FOUND)
 
 # ================================================================
 
-IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KFACE_FOUND AND KGEOMAP_FOUND)
+IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KGEOMAP_FOUND)
     MESSAGE(STATUS " digiKam can be compiled.................. YES")
     SET(DIGIKAM_CAN_BE_COMPILED true)
-ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KFACE_FOUND AND KGEOMAP_FOUND)
+ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KGEOMAP_FOUND)
     MESSAGE(FATAL_ERROR " digiKam will be compiled................. NO  (Look README file for more details about dependencies)")
     SET(DIGIKAM_CAN_BE_COMPILED false)
-ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KFACE_FOUND AND KGEOMAP_FOUND)
+ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KGEOMAP_FOUND)
 
 IF(DIGIKAM_CAN_BE_COMPILED AND FORCED_UNBUNDLE AND ((NOT PGF_FOUND) OR (NOT EIGEN3_FOUND)))
     MESSAGE(STATUS "")
@@ -627,6 +638,14 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         INCLUDE_DIRECTORIES(${KIPI_INCLUDE_DIR})
 
     ENDIF(KIPI_FOUND)
+
+    # Faces detection and recognition support
+
+    IF(KFACE_FOUND)
+
+        INCLUDE_DIRECTORIES(${KFACE_INCLUDE_DIR})
+
+    ENDIF(KFACE_FOUND)
 
     # ==================================================================================================
     # Common targets parts
@@ -814,10 +833,10 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     IF(MSVC)
-    SET(libjpegutils_SRCS
-            ${libjpegutils_SRCS}
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/jpegwin.cpp
-           )
+        SET(libjpegutils_SRCS
+                ${libjpegutils_SRCS}
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/jpegwin.cpp
+            )
     ENDIF(MSVC)
 
     SET(libthreadimageio_SRCS
@@ -861,10 +880,10 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     IF(APPLE)
-    SET(libnotificationmanager_SRCS
-            ${libnotificationmanager_SRCS}
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/notificationmanager/macnotification.mm
-           )
+        SET(libnotificationmanager_SRCS
+                ${libnotificationmanager_SRCS}
+                ${CMAKE_CURRENT_SOURCE_DIR}/libs/notificationmanager/macnotification.mm
+            )
     ENDIF()
 
     SET(libmainview_SRCS
@@ -1100,13 +1119,15 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/baloo/baloowrap.cpp
        )
 
-    SET(libfacemanagement_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/faceutils.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/facegroup.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/facepipeline.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/facescandialog.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/assignnamewidget.cpp
-       )
+    IF(KFACE_FOUND)
+        SET(libfacemanagement_SRCS
+            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/faceutils.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/facegroup.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/facepipeline.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/facescandialog.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/assignnamewidget.cpp
+           )
+    ENDIF(KFACE_FOUND)
 
     SET(libimgqsort_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imgqsort/imgqsort.cpp
@@ -1153,7 +1174,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/metadatasynchronizer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/duplicatesfinder.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/newitemsfinder.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/facedetector.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/thumbsgenerator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/thumbstask.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/fingerprintsgenerator.cpp
@@ -1167,6 +1187,13 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancesettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancethread.cpp
        )
+
+    IF(KFACE_FOUND)
+        SET(libmaintenance_SRCS
+                ${libmaintenance_SRCS}
+                ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/facedetector.cpp
+           )
+    ENDIF(KFACE_FOUND)
 
     SET(libdatabasecore_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core/databasecorebackend.cpp
@@ -1364,7 +1391,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/app/items/digikamimageview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/app/items/digikamimageview_p.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/app/items/digikamimagedelegate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/items/digikamimagefacedelegate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/app/items/imagecategorizedview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/app/items/imagecategorydrawer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/app/items/imagedelegate.cpp
@@ -1377,9 +1403,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/app/items/overlays/imagerotationoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/app/items/overlays/imagecoordinatesoverlay.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/app/items/overlays/imageselectionoverlay.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/items/overlays/assignnameoverlay.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/items/overlays/facerejectionoverlay.cpp
-
 
         ${CMAKE_CURRENT_SOURCE_DIR}/app/fileaction/metadatahub.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/app/fileaction/fileactionprogress.cpp
@@ -1452,6 +1475,15 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/app/views/tableview/tableview_columnfactory.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/app/views/tableview/tableview_selection_model_syncer.cpp
        )
+
+    IF(KFACE_FOUND)
+        SET(libdigikamgui_SRCS
+                ${libdigikamgui_SRCS}
+                ${CMAKE_CURRENT_SOURCE_DIR}/app/items/digikamimagefacedelegate.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/app/items/overlays/assignnameoverlay.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/app/items/overlays/facerejectionoverlay.cpp
+           )
+    ENDIF(KFACE_FOUND)
 
     IF(DIGIKAM_ENABLE_MODELTEST)
         MESSAGE(STATUS "Modeltest enabled")

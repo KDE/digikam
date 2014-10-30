@@ -66,7 +66,6 @@
 #include "digikamimagedelegate.h"
 #include "digikamimagefacedelegate.h"
 #include "dio.h"
-#include "facerejectionoverlay.h"
 #include "groupindicatoroverlay.h"
 #include "imagealbumfiltermodel.h"
 #include "imagealbummodel.h"
@@ -81,6 +80,8 @@
 #include "thumbnailloadthread.h"
 #include "tagregion.h"
 #include "addtagslineedit.h"
+#include "facerejectionoverlay.h"
+#include "databaseface.h"
 
 namespace Digikam
 {
@@ -91,15 +92,21 @@ DigikamImageView::DigikamImageView(QWidget* const parent)
 {
     installDefaultModels();
 
+#ifdef HAVE_KFACE
     d->editPipeline.plugDatabaseEditor();
     d->editPipeline.plugTrainer();
     d->editPipeline.construct();
 
     connect(&d->editPipeline, SIGNAL(scheduled()),
             this, SLOT(slotInitProgressIndicator()));
+#endif /* HAVE_KFACE */
 
     d->normalDelegate = new DigikamImageDelegate(this);
+
+#ifdef HAVE_KFACE
     d->faceDelegate   = new DigikamImageFaceDelegate(this);
+#endif /* HAVE_KFACE */
+
     setItemDelegate(d->normalDelegate);
     setSpacing(10);
 
@@ -208,11 +215,13 @@ void DigikamImageView::setFaceMode(bool on)
 
     if (on)
     {
+#ifdef HAVE_KFACE
         // See ImageLister, which creates a search the implements listing tag in the ioslave
         imageAlbumModel()->setSpecialTagListing("faces");
         setItemDelegate(d->faceDelegate);
         // grouping is not very much compatible with faces
         imageFilterModel()->setAllGroupsOpen(true);
+#endif /* HAVE_KFACE */
     }
     else
     {
@@ -224,12 +233,16 @@ void DigikamImageView::setFaceMode(bool on)
 
 void DigikamImageView::addRejectionOverlay(ImageDelegate* delegate)
 {
+#ifdef HAVE_KFACE
     FaceRejectionOverlay* const rejectionOverlay = new FaceRejectionOverlay(this);
 
     connect(rejectionOverlay, SIGNAL(rejectFaces(QList<QModelIndex>)),
             this, SLOT(removeFaces(QList<QModelIndex>)));
 
     addOverlay(rejectionOverlay, delegate);
+#else
+    Q_UNUSED(delegate);
+#endif /* HAVE_KFACE */
 }
 
 /*
@@ -246,6 +259,7 @@ void DigikamImageView::addTagEditOverlay(ImageDelegate* delegate)
 
 void DigikamImageView::addAssignNameOverlay(ImageDelegate* delegate)
 {
+#ifdef HAVE_KFACE
     AssignNameOverlay* const nameOverlay = new AssignNameOverlay(this);
     addOverlay(nameOverlay, delegate);
 
@@ -254,13 +268,17 @@ void DigikamImageView::addAssignNameOverlay(ImageDelegate* delegate)
 
     connect(nameOverlay, SIGNAL(removeFaces(QList<QModelIndex>)),
             this, SLOT(removeFaces(QList<QModelIndex>)));
+#else
+    Q_UNUSED(delegate);
+#endif /* HAVE_KFACE */
 }
 
 void DigikamImageView::confirmFaces(const QList<QModelIndex>& indexes, int tagId)
 {
-    QList<ImageInfo> infos;
+#ifdef HAVE_KFACE
+    QList<ImageInfo>    infos;
     QList<DatabaseFace> faces;
-    QList<QModelIndex> sourceIndexes;
+    QList<QModelIndex>  sourceIndexes;
 
     // fast-remove in the "unknown person" view
 
@@ -288,10 +306,15 @@ void DigikamImageView::confirmFaces(const QList<QModelIndex>& indexes, int tagId
     {
         d->editPipeline.confirm(infos[i], faces[i], tagId);
     }
+#else
+    Q_UNUSED(indexes);
+    Q_UNUSED(tagId);
+#endif /* HAVE_KFACE */
 }
 
 void DigikamImageView::removeFaces(const QList<QModelIndex>& indexes)
 {
+#ifdef HAVE_KFACE
     QList<ImageInfo> infos;
     QList<DatabaseFace> faces;
     QList<QModelIndex> sourceIndexes;
@@ -309,6 +332,9 @@ void DigikamImageView::removeFaces(const QList<QModelIndex>& indexes)
     {
         d->editPipeline.remove(infos[i], faces[i]);
     }
+#else
+    Q_UNUSED(indexes);
+#endif /* HAVE_KFACE */
 }
 
 void DigikamImageView::activated(const ImageInfo& info, Qt::KeyboardModifiers modifiers)
@@ -689,6 +715,7 @@ void DigikamImageView::slotRotateRight(const QList<QModelIndex>& indexes)
 
 void DigikamImageView::slotInitProgressIndicator()
 {
+#ifdef HAVE_KFACE
     if (!ProgressManager::instance()->findItembyId("FaceActionProgress"))
     {
         FileActionProgress* const item = new FileActionProgress("FaceActionProgress");
@@ -702,6 +729,7 @@ void DigikamImageView::slotInitProgressIndicator()
         connect(&d->editPipeline, SIGNAL(finished()),
                 item, SLOT(slotCompleted()));
     }
+#endif /* HAVE_KFACE */
 }
 
 } // namespace Digikam

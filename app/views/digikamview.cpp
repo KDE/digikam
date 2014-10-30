@@ -43,6 +43,7 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "albumhistory.h"
 #include "applicationsettings.h"
 #include "metadatasynchronizer.h"
@@ -113,7 +114,11 @@ public:
         searchSideBar(0),
         fuzzySearchSideBar(0),
         gpsSearchSideBar(0),
+
+#ifdef HAVE_KFACE
         peopleSideBar(0),
+#endif /* HAVE_KFACE */
+
         parent(0),
         iconView(0),
         mapView(0),
@@ -163,7 +168,9 @@ public:
 
     GPSSearchSideBarWidget*       gpsSearchSideBar;
 
+#ifdef HAVE_KFACE
     PeopleSideBarWidget*          peopleSideBar;
+#endif /* HAVE_KFACE */
 
     DigikamApp*                   parent;
 
@@ -327,6 +334,8 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
 
     d->leftSideBarWidgets << d->gpsSearchSideBar;
 
+#ifdef HAVE_KFACE
+
     // People Sidebar
     d->peopleSideBar = new PeopleSideBarWidget(d->leftSideBar,
                                                d->modelCollection->getTagFacesModel(),
@@ -336,6 +345,8 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
             d->iconView, SLOT(setFaceMode(bool)));
 
     d->leftSideBarWidgets << d->peopleSideBar;
+
+#endif /* HAVE_KFACE */
 
     foreach(SidebarWidget* const leftWidget, d->leftSideBarWidgets)
     {

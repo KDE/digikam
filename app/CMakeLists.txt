@@ -87,7 +87,6 @@ TARGET_LINK_LIBRARIES(digikamcore
 
         ${KDCRAW_LIBRARIES}
         ${KEXIV2_LIBRARIES}
-        ${KFACE_LIBRARIES}
         ${KGEOMAP_LIBRARIES}
         ${LCMS_LIBRARIES}
 )
@@ -124,6 +123,10 @@ ENDIF(LQR-1_FOUND)
 IF(KIPI_FOUND)
    TARGET_LINK_LIBRARIES(digikamcore ${KIPI_LIBRARIES})
 ENDIF(KIPI_FOUND)
+
+IF(KFACE_FOUND)
+   TARGET_LINK_LIBRARIES(digikamcore ${KFACE_LIBRARIES})
+ENDIF(KFACE_FOUND)
 
 SET_TARGET_PROPERTIES(digikamcore PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
 
@@ -207,7 +210,6 @@ SET(digikam_SRCS ${libeditorgui_SRCS}
                  ${libfirstrun_SRCS}
                  ${libtemplate_SRCS}
                  ${libdatabaseui_SRCS}
-                 ${libfacemanagement_SRCS}
                  ${libimgqsort_SRCS}
                  main/main.cpp
 )
@@ -223,6 +225,10 @@ ENDIF(USE_PRESENTATION_MODE)
 IF(KIPI_FOUND)
     SET(digikam_SRCS ${digikam_SRCS} ${libkipiiface_SRCS})
 ENDIF(KIPI_FOUND)
+
+IF(KFACE_FOUND)
+    SET(digikam_SRCS ${digikam_SRCS} ${libfacemanagement_SRCS})
+ENDIF(KFACE_FOUND)
 
 QT4_ADD_DBUS_ADAPTOR(digikam_SRCS main/org.kde.digikam.xml main/digikamapp.h Digikam::DigikamApp)
 
@@ -297,6 +303,10 @@ ENDIF(KDEPIMLIBS_FOUND)
 IF(KIPI_FOUND)
    TARGET_LINK_LIBRARIES(digikam ${KIPI_LIBRARIES})
 ENDIF(KIPI_FOUND)
+
+IF(KFACE_FOUND)
+   TARGET_LINK_LIBRARIES(digikam ${KFACE_LIBRARIES})
+ENDIF(KFACE_FOUND)
 
 INSTALL(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS})
 

@@ -32,6 +32,7 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "albummodel.h"
 #include "albummodificationhelper.h"
 #include "gpssearchview.h"
@@ -356,6 +357,8 @@ private:
 
 // -----------------------------------------------------------------------------------------
 
+#ifdef HAVE_KFACE
+
 /**
  * SideBarWidget for People
  *
@@ -395,6 +398,8 @@ private:
     class Private;
     Private* const d;
 };
+
+#endif /* HAVE_KFACE */
 
 } // namespace Digikam
 
