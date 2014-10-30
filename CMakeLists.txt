@@ -232,14 +232,6 @@ ENDIF (ENABLE_INTERNALMYSQL)
 
 MACRO_BOOL_TO_01(ENABLE_INTERNALMYSQL HAVE_INTERNALMYSQL)
 
-# check the libkgeomap version
-# note that old versions don't specify version information, so for now
-# just inform the user if version information was found
-IF (KGEOMAP_VERSION)
-  MESSAGE(STATUS "libkgeomap: Found version ${KGEOMAP_VERSION}")
-  # TODO: fail if the version is too low
-ENDIF (KGEOMAP_VERSION)
-
 # ==================================================================================================
 # Optional dependencies
 
@@ -377,8 +369,8 @@ PRINT_LIBRARY_STATUS("liblcms"     "http://www.littlecms.com"                   
 PRINT_LIBRARY_STATUS("Boost Graph" "http://www.boost.org/doc/libs/1_43_0/libs/graph/doc/index.html" " (headers only)"                     Boost_FOUND)
 PRINT_LIBRARY_STATUS("libkexiv2"   "http://www.digikam.org/sharedlibs"                              " (version >= 1.2.0)"                 KEXIV2_FOUND)
 PRINT_LIBRARY_STATUS("libkdcraw"   "http://www.digikam.org/sharedlibs"                              " (version >= ${KDCRAW_MIN_VERSION})" KDCRAW_FOUND)
-PRINT_LIBRARY_STATUS("libkface"    "http://www.digikam.org/sharedlibs"                              " (version >= 0.1.0)"                 KFACE_FOUND)
-PRINT_LIBRARY_STATUS("libkgeomap"  "http://www.digikam.org/sharedlibs"                              " (version >= 0.1.0)"                 KGEOMAP_FOUND)
+PRINT_LIBRARY_STATUS("libkface"    "http://www.digikam.org/sharedlibs"                              " (version >= 2.0.0)"                 KFACE_FOUND)
+PRINT_LIBRARY_STATUS("libkgeomap"  "http://www.digikam.org/sharedlibs"                              " (version >= 2.0.0)"                 KGEOMAP_FOUND)
 PRINT_LIBRARY_STATUS("libpgf"      "http://www.libpgf.org"                                          " (version >= ${PGF_MIN_VERSION})"    PGF_FOUND)
 
 # ================================================================
