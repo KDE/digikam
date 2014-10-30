@@ -2,10 +2,10 @@
  * @file
  *
  * This file is a part of digiKam project
- * <a href="http://www.digikam.org">http://www.digikam.org</a>
+ * http://www.digikam.org
  *
  * @date   2010-06-21
- * @brief  CLI test program for trainign DB
+ * @brief  CLI test program for digiKam DB init
  *
  * @author Copyright (C) 2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
