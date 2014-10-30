@@ -143,9 +143,13 @@
 #include "maintenancedlg.h"
 #include "maintenancemngr.h"
 #include "newitemsfinder.h"
-#include "kipipluginloader.h"
 #include "imagepluginloader.h"
 #include "tagsmanager.h"
+
+#ifdef HAVE_KIPI
+#include "kipipluginloader.h"
+#endif
+
 #ifdef HAVE_BALOO
 #include "baloowrap.h"
 #endif
@@ -2454,8 +2458,12 @@ void DigikamApp::slotEditKeys()
     KShortcutsDialog dialog(KShortcutsEditor::AllActions,
                             KShortcutsEditor::LetterShortcutsAllowed, this);
     dialog.addCollection(actionCollection(), i18nc("general keyboard shortcuts", "General"));
+
+#ifdef HAVE_KIPI
     dialog.addCollection(KipiPluginLoader::instance()->pluginsActionCollection(),
                          i18nc("KIPI-Plugins keyboard shortcuts", "KIPI-Plugins"));
+#endif /* HAVE_KIPI */
+
     dialog.configure();
 }
 
@@ -2500,8 +2508,10 @@ void DigikamApp::slotDBStat()
 
 void DigikamApp::loadPlugins()
 {
+#ifdef HAVE_KIPI
     // Load KIPI plugins
     new KipiPluginLoader(this, d->splashScreen);
+#endif /* HAVE_KIPI */
 
     // Setting the initial menu options after all plugins have been loaded
     QList<Album*> albumList = AlbumManager::instance()->currentAlbums();

@@ -78,8 +78,11 @@
 #include "tagmodificationhelper.h"
 #include "tagspopupmenu.h"
 #include "fileactionmngr.h"
-#include "kipipluginloader.h"
 #include "dimg.h"
+
+#ifdef HAVE_KIPI
+#include "kipipluginloader.h"
+#endif /* HAVE_KIPI */
 
 namespace Digikam
 {
@@ -593,8 +596,12 @@ void ContextMenuHelper::slotDeselectAllAlbumItems()
 
 void ContextMenuHelper::addImportMenu()
 {
-    KMenu* const menuImport             = new KMenu(i18n("Import"), d->parent);
-    const QList<QAction*> importActions = KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::ImportPlugin);
+    KMenu* const menuImport = new KMenu(i18n("Import"), d->parent);
+    const QList<QAction*> importActions;
+
+#ifdef HAVE_KIPI
+    importActions = KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::ImportPlugin);
+#endif /* HAVE_KIPI */
 
     if (!importActions.isEmpty())
     {
@@ -612,8 +619,13 @@ void ContextMenuHelper::addImportMenu()
 
 void ContextMenuHelper::addExportMenu()
 {
-    KMenu* const menuExport             = new KMenu(i18n("Export"), d->parent);
-    const QList<QAction*> exportActions = KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::ExportPlugin);
+    KMenu* const menuExport = new KMenu(i18n("Export"), d->parent);
+    const QList<QAction*> exportActions;
+
+#ifdef HAVE_KIPI
+    exportActions = KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::ExportPlugin);
+#endif /* HAVE_KIPI */
+
 #if 0
     QAction* selectAllAction = 0;
     selectAllAction = d->stdActionCollection->action("selectAll");
@@ -635,8 +647,13 @@ void ContextMenuHelper::addExportMenu()
 
 void ContextMenuHelper::addBatchMenu()
 {
-    KMenu* const menuKIPIBatch         = new KMenu(i18n("Batch Process"), d->parent);
-    const QList<QAction*> batchActions = KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::BatchPlugin);
+    KMenu* const menuKIPIBatch = new KMenu(i18n("Batch Process"), d->parent);
+    const QList<QAction*> batchActions;
+
+#ifdef HAVE_KIPI
+    batchActions = KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::BatchPlugin);
+#endif /* HAVE_KIPI */
+
 #if 0
     QAction* selectAllAction = 0;
     selectAllAction = d->stdActionCollection->action("selectAll");
@@ -658,7 +675,11 @@ void ContextMenuHelper::addBatchMenu()
 
 void ContextMenuHelper::addAlbumActions()
 {
-    const QList<QAction*>& albumActions = KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::CollectionsPlugin);
+    const QList<QAction*> albumActions;
+
+#ifdef HAVE_KIPI
+    albumActions = KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::CollectionsPlugin);
+#endif /* HAVE_KIPI */
 
     if (!albumActions.isEmpty())
     {

@@ -39,9 +39,15 @@
 #include <kvbox.h>
 #include <kdebug.h>
 
+#ifdef HAVE_KIPI
+
 // Libkipi includes
 
 #include <libkipi/configwidget.h>
+
+using namespace KIPI;
+
+#endif /* HAVE_KIPI */
 
 // Local includes
 
@@ -71,8 +77,6 @@
 #include "setupscriptmanager.h"
 #endif
 
-using namespace KIPI;
-
 namespace Digikam
 {
 
@@ -98,7 +102,11 @@ public:
         page_icc(0),
         page_camera(0),
         page_misc(0),
+
+#ifdef HAVE_KIPI
         page_plugins(0),
+#endif /* HAVE_KIPI */
+
 #ifdef USE_SCRIPT_IFACE
         page_scriptmanager(0),
 #endif
@@ -122,7 +130,11 @@ public:
         cameraPage(0),
         //faceTagsPage(0),
         miscPage(0),
+
+#ifdef HAVE_KIPI
         pluginsPage(0),
+#endif /* HAVE_KIPI */
+
 #ifdef USE_SCRIPT_IFACE
         scriptManagerPage(0),
 #endif
@@ -148,7 +160,11 @@ public:
     KPageWidgetItem*         page_icc;
     KPageWidgetItem*         page_camera;
     KPageWidgetItem*         page_misc;
+
+#ifdef HAVE_KIPI
     KPageWidgetItem*         page_plugins;
+#endif /* HAVE_KIPI */
+
 #ifdef USE_SCRIPT_IFACE
     KPageWidgetItem*         page_scriptmanager;
 #endif
@@ -172,7 +188,11 @@ public:
     SetupICC*                iccPage;
     SetupCamera*             cameraPage;
     SetupMisc*               miscPage;
+
+#ifdef HAVE_KIPI
     ConfigWidget*            pluginsPage;
+#endif /* HAVE_KIPI */
+
 #ifdef USE_SCRIPT_IFACE
     SetupScriptManager*      scriptManagerPage;
 #endif
@@ -308,6 +328,7 @@ Setup::Setup(QWidget* const parent)
     connect(d->cameraPage, SIGNAL(signalUseFileMetadataChanged(bool)),
             d->tooltipPage, SLOT(slotUseFileMetadataChanged(bool)));
 
+#ifdef HAVE_KIPI
     d->pluginsPage  = new ConfigWidget();
     d->pluginFilter = new SearchTextBar(d->pluginsPage, "PluginsSearchBar");
     d->pluginsPage->setFilterWidget(d->pluginFilter);
@@ -321,6 +342,7 @@ Setup::Setup(QWidget* const parent)
 
     connect(d->pluginsPage, SIGNAL(signalSearchResult(bool)),
             d->pluginFilter, SLOT(slotSearchResult(bool)));
+#endif /* HAVE_KIPI */
 
 #ifdef USE_SCRIPT_IFACE
     d->scriptManagerPage  = new SetupScriptManager();
@@ -402,7 +424,7 @@ QSize Setup::sizeHint() const
             page == RawPage         ||
             page == MiscellaneousPage)
         {
-            KPageWidgetItem* item   = d->pageItem((Page)page);
+            KPageWidgetItem* const item   = d->pageItem((Page)page);
 
             if (!item)
             {
@@ -492,7 +514,11 @@ bool Setup::execMetadataFilters(QWidget* const parent, int tab)
 
 void Setup::slotSearchTextChanged(const SearchTextSettings& settings)
 {
+#ifdef HAVE_KIPI
     d->pluginsPage->slotSetFilter(settings.text, settings.caseSensitive);
+#else
+    Q_UNUSED(settings);
+#endif /* HAVE_KIPI */
 }
 
 void Setup::slotButtonClicked(int button)
@@ -534,7 +560,11 @@ void Setup::okClicked()
     d->imageQualitySorterPage->applySettings();
     d->iccPage->applySettings();
     d->miscPage->applySettings();
+
+#ifdef HAVE_KIPI
     d->pluginsPage->apply();
+#endif /* HAVE_KIPI */
+
     //d->faceTagsPage->applySettings();
     d->versioningPage->applySettings();
 
@@ -673,10 +703,12 @@ Setup::Page Setup::activePageIndex() const
         return ICCPage;
     }
 
+#ifdef HAVE_KIPI
     if (cur == d->page_plugins)
     {
         return KipiPluginsPage;
     }
+#endif /* HAVE_KIPI */
 
     if (cur == d->page_camera)
     {
@@ -759,8 +791,10 @@ KPageWidgetItem* Setup::Private::pageItem(Setup::Page page) const
         case Setup::ICCPage:
             return page_icc;
 
+#ifdef HAVE_KIPI
         case Setup::KipiPluginsPage:
             return page_plugins;
+#endif /* HAVE_KIPI */
 
         case Setup::CameraPage:
             return page_camera;

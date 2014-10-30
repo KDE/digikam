@@ -24,6 +24,8 @@
 #ifndef COMPONENTS_INFO_H
 #define COMPONENTS_INFO_H
 
+#include "config-digikam.h"
+
 // Qt includes
 
 #include <QString>
@@ -34,10 +36,14 @@
 #include <klocale.h>
 #include <kapplication.h>
 
+#ifdef HAVE_KIPI
+
 // LibKIPI includes
 
 #include <libkipi/interface.h>
 #include <libkipi/pluginloader.h>
+
+#endif /* HAVE_KIPI */
 
 // LibKface includes
 
@@ -45,7 +51,6 @@
 
 // Local includes
 
-#include "config-digikam.h"
 #include "libsinfodlg.h"
 #include "rawcameradlg.h"
 #include "dbstatdlg.h"
@@ -86,10 +91,13 @@ static inline void showDigikamComponentsInfo()
     list.insert(i18n("Kdepimlibs support"), i18n("Yes"));
 #endif /* HAVE_KDEPIMLIBS */
 
-    list.insert(i18n("LibOpenCV"),    KFaceIface::LibOpenCVVersion());
-    list.insert(i18n("LibKface"),     KFaceIface::version());
+#ifdef HAVE_KIPI
     list.insert(i18n("LibKipi"),      KIPI::Interface::version());
     list.insert(i18n("Kipi-Plugins"), KIPI::PluginLoader::instance()->kipiPluginsVersion());
+#endif /* HAVE_KIPI */
+
+    list.insert(i18n("LibOpenCV"),    KFaceIface::LibOpenCVVersion());
+    list.insert(i18n("LibKface"),     KFaceIface::version());
 
     // Database Backend information
 

@@ -93,7 +93,6 @@ SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_P
 SET(KIPI_MIN_VERSION "2.0.0")
 SET(PGF_MIN_VERSION  "6.12.24")
 
-FIND_PACKAGE(Kipi ${KIPI_MIN_VERSION} REQUIRED)
 FIND_PACKAGE(Kexiv2                   REQUIRED)
 FIND_PACKAGE(Kdcraw                   REQUIRED)
 FIND_PACKAGE(JPEG                     REQUIRED)
@@ -101,12 +100,13 @@ FIND_PACKAGE(PNG                      REQUIRED)
 FIND_PACKAGE(TIFF                     REQUIRED)
 FIND_PACKAGE(PGF ${PGF_MIN_VERSION}   REQUIRED)
 
+FIND_PACKAGE(Kipi ${KIPI_MIN_VERSION})
 FIND_PACKAGE(PkgConfig)
 FIND_PACKAGE(Jasper)
 FIND_PACKAGE(Kface)
 FIND_PACKAGE(KGeoMap)
 FIND_PACKAGE(Eigen3)
-FIND_PACKAGE(Boost) # 1.36.0)
+FIND_PACKAGE(Boost)
 
 INCLUDE(MacroUtils)
 INCLUDE(MacroOpenCV)
@@ -375,12 +375,22 @@ PRINT_LIBRARY_STATUS("libpng"      "http://www.libpng.org/pub/png/libpng.html"  
 PRINT_LIBRARY_STATUS("libjasper"   "http://www.ece.uvic.ca/~mdadams/jasper"                         ""                                    JASPER_FOUND)
 PRINT_LIBRARY_STATUS("liblcms"     "http://www.littlecms.com"                                       ""                                    LCMS_FOUND)
 PRINT_LIBRARY_STATUS("Boost Graph" "http://www.boost.org/doc/libs/1_43_0/libs/graph/doc/index.html" " (headers only)"                     Boost_FOUND)
-PRINT_LIBRARY_STATUS("libkipi"     "http://www.digikam.org/sharedlibs"                              " (version >= ${KIPI_MIN_VERSION})"   KIPI_FOUND)
 PRINT_LIBRARY_STATUS("libkexiv2"   "http://www.digikam.org/sharedlibs"                              " (version >= 1.2.0)"                 KEXIV2_FOUND)
 PRINT_LIBRARY_STATUS("libkdcraw"   "http://www.digikam.org/sharedlibs"                              " (version >= ${KDCRAW_MIN_VERSION})" KDCRAW_FOUND)
 PRINT_LIBRARY_STATUS("libkface"    "http://www.digikam.org/sharedlibs"                              " (version >= 0.1.0)"                 KFACE_FOUND)
 PRINT_LIBRARY_STATUS("libkgeomap"  "http://www.digikam.org/sharedlibs"                              " (version >= 0.1.0)"                 KGEOMAP_FOUND)
 PRINT_LIBRARY_STATUS("libpgf"      "http://www.libpgf.org"                                          " (version >= ${PGF_MIN_VERSION})"    PGF_FOUND)
+
+# ================================================================
+
+IF(KIPI_FOUND)
+    MESSAGE(STATUS " Kipi library found....................... YES (optional)")
+ELSE(KIPI_FOUND)
+    MESSAGE(STATUS " Kipi library found....................... NO  (optional)")
+    MESSAGE(STATUS "")
+    MESSAGE(STATUS " digiKam will be compiled without Kipi-plugins support.")
+    MESSAGE(STATUS "")
+ENDIF(KIPI_FOUND)
 
 # ================================================================
 
@@ -481,13 +491,13 @@ ENDIF(DOXYGEN_FOUND)
 
 # ================================================================
 
-IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND AND KFACE_FOUND AND KGEOMAP_FOUND)
+IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KFACE_FOUND AND KGEOMAP_FOUND)
     MESSAGE(STATUS " digiKam can be compiled.................. YES")
     SET(DIGIKAM_CAN_BE_COMPILED true)
-ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND AND KFACE_FOUND AND KGEOMAP_FOUND)
+ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KFACE_FOUND AND KGEOMAP_FOUND)
     MESSAGE(FATAL_ERROR " digiKam will be compiled................. NO  (Look README file for more details about dependencies)")
     SET(DIGIKAM_CAN_BE_COMPILED false)
-ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KIPI_FOUND AND KFACE_FOUND AND KGEOMAP_FOUND)
+ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KFACE_FOUND AND KGEOMAP_FOUND)
 
 IF(DIGIKAM_CAN_BE_COMPILED AND FORCED_UNBUNDLE AND ((NOT PGF_FOUND) OR (NOT EIGEN3_FOUND)))
     MESSAGE(STATUS "")
@@ -568,8 +578,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
     ENDIF(NOT MSVC)
 
-    INCLUDE_DIRECTORIES(${KIPI_INCLUDE_DIR}
-                        ${KEXIV2_INCLUDE_DIR}
+    INCLUDE_DIRECTORIES(${KEXIV2_INCLUDE_DIR}
                         ${KDCRAW_INCLUDE_DIR}
                         ${KFACE_INCLUDE_DIR}
                         ${KGEOMAP_INCLUDE_DIR}
@@ -609,7 +618,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     ENDIF(LENSFUN_FOUND)
 
-
     # Refocus tool dependency
 
     IF(EIGEN3_FOUND)
@@ -617,6 +625,14 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         INCLUDE_DIRECTORIES(${EIGEN3_INCLUDE_DIR})
 
     ENDIF(EIGEN3_FOUND)
+
+    # Kipi-plugins support
+
+    IF(KIPI_FOUND)
+
+        INCLUDE_DIRECTORIES(${KIPI_INCLUDE_DIR})
+
+    ENDIF(KIPI_FOUND)
 
     # ==================================================================================================
     # Common targets parts
@@ -1076,14 +1092,16 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupimagequalitysorter.cpp
        )
 
-    SET(libkipiiface_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipipluginloader.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiimageinfo.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiimagecollection.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiimagecollectionselector.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiuploadwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiinterface.cpp
-       )
+    IF(KIPI_FOUND)
+        SET(libkipiiface_SRCS
+            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipipluginloader.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiimageinfo.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiimagecollection.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiimagecollectionselector.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiuploadwidget.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiinterface.cpp
+        )
+    ENDIF(KIPI_FOUND)
 
     SET(libbaloowrap_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/baloo/baloowrap.cpp
@@ -1443,7 +1461,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     IF(DIGIKAM_ENABLE_MODELTEST)
-        # TODO move modeltest code to a more central location
         MESSAGE(STATUS "Modeltest enabled")
         SET(libdigikamgui_SRCS ${libdigikamgui_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/tests/modeltest/modeltest.cpp
@@ -1614,6 +1631,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     ADD_SUBDIRECTORY(kioslave)
     ADD_SUBDIRECTORY(showfoto)
     ADD_SUBDIRECTORY(imageplugins)
+
     IF (ENABLE_INTERNALMYSQL)
         ADD_SUBDIRECTORY(databaseserver)
     ENDIF (ENABLE_INTERNALMYSQL)

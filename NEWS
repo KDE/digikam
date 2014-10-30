@@ -4,6 +4,7 @@ digiKam 4.5.0 - Release date: 2014-11-09
 NEW FEATURES:
 
 General : Remove internal libpgf. Add external and mandatory dependency to libpgf >= 6.12.24.
+General : libkipi is now an optional dependency to support kipi-plugins.
 
 BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 

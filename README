@@ -94,7 +94,6 @@ libtiff         >= 3.8.2                      http://www.remotesensing.org/libti
 libpng          >= 1.2.x                      http://www.libpng.org/pub/png/libpng.html
 libjpeg         >= 6b                         http://www.ijg.org
 libjasper       >= 1.7.x                      http://www.ece.uvic.ca/~mdadams/jasper
-libkipi         >= 2.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkipi
 libkexiv2       >= 2.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkexiv2
 libkdcraw       >= 2.2.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkdcraw
 libkface        >= 2.0.0                      https://projects.kde.org/projects/extragear/libs/libkface
@@ -104,6 +103,7 @@ libpgf          >= 6.11.24                    http://www.libpgf.org
 
 Optional :
 
+libkipi         >= 2.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkipi    To support Kipi-plugins.
 libkdepimlibs   >= 4.4.x                      http://pim.kde.org                                                To support KAddressBook entries.
 liblensfun      >= 0.2.6                      http://lensfun.sourceforge.net                                    To support LensCorrection tool.
 liblqr-1        >= 0.4.1                      http://liblqr.wikidot.com                                         To support Liquid Rescale tool.
