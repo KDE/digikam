@@ -60,12 +60,6 @@
 /* Define to 1 if thumbnails database is used */
 #cmakedefine USE_THUMBS_DB 1
 
-/* Define to 1 if script interface is enabled */
-#cmakedefine USE_SCRIPT_IFACE 1
-
-/* Define to 1 if presentation mode is enabled */
-#cmakedefine USE_PRESENTATION_MODE 1
-
 /* Define to 1 if you want Qt to scale the preview images */
 #cmakedefine USE_QT_SCALING 1
 

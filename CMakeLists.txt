@@ -14,9 +14,6 @@ OPTION(ENABLE_KDEPIMLIBSSUPPORT "Build digiKam with Kdepimlibs support (default=
 OPTION(DIGIKAM_ENABLE_MODELTEST "Enable ModelTest on some models for debugging (default=OFF)"           OFF)
 OPTION(ENABLE_ADVANCEDDEBUGMSG  "Build digiKam with more internal debug message (default=OFF)"          OFF)
 
-#experimental options:
-OPTION(ENABLE_PRESENTATIONMODE  "Build digiKam with presentation mode support (default=OFF)"            OFF)
-
 # ==================================================================================================
 # Information to update before to release this package.
 
@@ -280,7 +277,6 @@ MACRO_BOOL_TO_01(LENSFUN_FOUND HAVE_LENSFUN)
 MACRO_OPTIONAL_FIND_PACKAGE(Lqr-1)
 MACRO_BOOL_TO_01(LQR-1_FOUND HAVE_LIBLQR_1)
 
-MACRO_BOOL_TO_01(ENABLE_PRESENTATIONMODE USE_PRESENTATION_MODE)
 MACRO_BOOL_TO_01(ENABLE_THUMBS_DB        USE_THUMBS_DB)
 MACRO_BOOL_TO_01(ENABLE_ADVANCEDDEBUGMSG USE_ADVANCEDDEBUGMSG)
 
@@ -600,10 +596,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     IF(USE_SCRIPT_IFACE)
         INCLUDE_DIRECTORIES(${QT_QTSCRIPT_INCLUDE_DIR})
     ENDIF(USE_SCRIPT_IFACE)
-
-    IF(USE_PRESENTATION_MODE)
-        INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/utilities/qmlshow)
-    ENDIF(USE_PRESENTATION_MODE)
 
     IF(Baloo_FOUND)
         INCLUDE_DIRECTORIES(${BALOO_INCLUDE_DIR} ${KFILEMETADATA_INCLUDE_DIR})
@@ -949,12 +941,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/colorlabelwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/picklabelwidget.cpp
        )
-
-    IF(USE_PRESENTATION_MODE)
-        SET(libpresentationview_SRCS
-            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/qmlshow/qmlshow.cpp
-           )
-    ENDIF(USE_PRESENTATION_MODE)
 
     SET(libslideshow_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slidetoolbar.cpp

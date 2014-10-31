@@ -89,10 +89,6 @@
 #include "mapwidgetview.h"
 #endif // HAVE_KGEOMAP
 
-#ifdef USE_PRESENTATION_MODE
-#include "qmlshow.h"
-#endif // USE_PRESENTATION_MODE
-
 namespace Digikam
 {
 
@@ -2373,25 +2369,5 @@ void DigikamView::toggleFullScreen(bool set)
 {
     d->stackedview->imagePreviewView()->toggleFullScreen(set);
 }
-
-#ifdef USE_PRESENTATION_MODE
-
-void DigikamView::slotSlideShowQml()
-{
-/*
-    QStringList list;
-    foreach (const ImageInfo& info, d->iconView->imageInfos())
-    {
-        list << info.filePath();
-    }
-*/
-    SlideShowSettings settings;
-    settings.readFromConfig();
-    QmlShow* const qmlShow = new QmlShow(allInfo(), settings);
-    qmlShow->setWindowState(Qt::WindowFullScreen);
-    qmlShow->show();
-}
-
-#endif // USE_PRESENTATION_MODE
 
 }  // namespace Digikam

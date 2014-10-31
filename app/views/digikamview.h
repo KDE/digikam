@@ -227,10 +227,6 @@ public Q_SLOTS:
 
     void slotFocusAndNextImage();
 
-#ifdef USE_PRESENTATION_MODE
-    void slotSlideShowQml();
-#endif // USE_PRESENTATION_MODE
-
 private:
 
     void toggleZoomActions();
