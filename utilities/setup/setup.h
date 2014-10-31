@@ -73,11 +73,6 @@ public:
 #endif /* HAVE_KIPI */
 
         MiscellaneousPage,
-
-#ifdef USE_SCRIPT_IFACE
-        ScriptManagerPage,
-#endif
-
         SetupPageEnumLast
     };
 

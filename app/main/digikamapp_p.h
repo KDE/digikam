@@ -176,9 +176,6 @@ public:
         maintenanceAction(0),
         slideShowQmlAction(0),
         qualityAction(0),
-#ifdef USE_SCRIPT_IFACE
-        scriptConsoleAction(0),
-#endif
         kipiHelpAction(0),
         addCameraSeparatorAction(0),
         quitAction(0),
@@ -306,10 +303,6 @@ public:
     KAction*                            maintenanceAction;
     KAction*                            slideShowQmlAction;
     KAction*                            qualityAction;
-
-#ifdef USE_SCRIPT_IFACE
-    KAction*                            scriptConsoleAction;
-#endif
 
     // Application Actions
     KAction*                            kipiHelpAction;

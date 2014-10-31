@@ -220,10 +220,6 @@ private Q_SLOTS:
     void slotImportAddFolders();
     void slotThemeChanged();
 
-#ifdef USE_SCRIPT_IFACE
-    void slotScriptConsole();
-#endif
-
 private:
 
     class Private;

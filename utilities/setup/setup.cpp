@@ -72,10 +72,6 @@ using namespace KIPI;
 #include "setupversioning.h"
 #include "importsettings.h"
 
-#ifdef USE_SCRIPT_IFACE
-#include "setupscriptmanager.h"
-#endif
-
 namespace Digikam
 {
 
@@ -106,9 +102,6 @@ public:
         page_plugins(0),
 #endif /* HAVE_KIPI */
 
-#ifdef USE_SCRIPT_IFACE
-        page_scriptmanager(0),
-#endif
         page_versioning(0),
         databasePage(0),
         collectionsPage(0),
@@ -132,9 +125,6 @@ public:
         pluginsPage(0),
 #endif /* HAVE_KIPI */
 
-#ifdef USE_SCRIPT_IFACE
-        scriptManagerPage(0),
-#endif
         versioningPage(0),
         pluginFilter(0)
     {
@@ -162,9 +152,6 @@ public:
     KPageWidgetItem*         page_plugins;
 #endif /* HAVE_KIPI */
 
-#ifdef USE_SCRIPT_IFACE
-    KPageWidgetItem*         page_scriptmanager;
-#endif
     KPageWidgetItem*         page_versioning;
 
     SetupDatabase*           databasePage;
@@ -189,10 +176,6 @@ public:
     ConfigWidget*            pluginsPage;
 #endif /* HAVE_KIPI */
 
-#ifdef USE_SCRIPT_IFACE
-    SetupScriptManager*      scriptManagerPage;
-#endif
-    //SetupFaceTags*      faceTagsPage;
     SetupVersioning*         versioningPage;
 
     SearchTextBar*           pluginFilter;
@@ -331,14 +314,6 @@ Setup::Setup(QWidget* const parent)
     connect(d->pluginsPage, SIGNAL(signalSearchResult(bool)),
             d->pluginFilter, SLOT(slotSearchResult(bool)));
 #endif /* HAVE_KIPI */
-
-#ifdef USE_SCRIPT_IFACE
-    d->scriptManagerPage  = new SetupScriptManager();
-    d->page_scriptmanager = addPage(d->scriptManagerPage , i18n("Script Manager"));
-    d->page_scriptmanager->setHeader(i18n("<qt>Script Manager<br/>"
-                                          "<i>Add/Remove and Manage Digikam Scripts</i></qt>"));
-    d->page_scriptmanager->setIcon(KIcon("application-x-shellscript"));
-#endif
 
     d->miscPage  = new SetupMisc();
     d->page_misc = addPage(d->miscPage, i18n("Miscellaneous"));
@@ -556,10 +531,6 @@ void Setup::okClicked()
     //d->faceTagsPage->applySettings();
     d->versioningPage->applySettings();
 
-#ifdef USE_SCRIPT_IFACE
-    d->scriptManagerPage->applySettings();
-#endif
-
     ApplicationSettings::instance()->emitSetupChanged();
     ImportSettings::instance()->emitSetupChanged();
 
@@ -713,15 +684,6 @@ Setup::Page Setup::activePageIndex() const
     }
 #endif /* HAVE_KIPI */
 
-#ifdef USE_SCRIPT_IFACE
-
-    if (cur == d->page_scriptmanager)
-    {
-        return ScriptManagerPage;
-    }
-
-#endif
-
     return DatabasePage;
 }
 
@@ -787,12 +749,6 @@ KPageWidgetItem* Setup::Private::pageItem(Setup::Page page) const
         case Setup::KipiPluginsPage:
             return page_plugins;
 #endif /* HAVE_KIPI */
-
-#ifdef USE_SCRIPT_IFACE
-
-        case Setup::ScriptManagerPage:
-            return page_scriptmanager;
-#endif
 
         default:
             return 0;

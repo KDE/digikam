@@ -128,7 +128,6 @@ Use CMake "-DENABLE_ADVANCEDDEBUGMSG=on"  flag to compile digiKam with more inte
 Use CMake "-DKDE4_BUILD_TESTS=on"         flag to compile digiKam source code unit tests                                         (disabled by default).
 
 Experimental options:
-Use CMake "-DENABLE_SCRIPTIFACE=on"       flag to compile digiKam with experimental scripting interface                          (disabled by default).
 Use CMake "-DENABLE_PRESENTATIONMODE=on"  flag to compile digiKam with presentation mode                                         (disabled by default).
 
 digiKam do not have any video thumbnailer. Video support is delegate to KDE. To support Video thumbnails, 

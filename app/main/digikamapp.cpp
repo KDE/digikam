@@ -155,10 +155,6 @@
 #include "baloowrap.h"
 #endif
 
-#ifdef USE_SCRIPT_IFACE
-#include "scriptiface.h"
-#endif
-
 using KIO::Job;
 using KIO::UDSEntryList;
 using KIO::UDSEntry;
@@ -912,15 +908,6 @@ void DigikamApp::setupActions()
     actionCollection()->addAction("table_view", d->imageTableViewAction);
     connect(d->imageTableViewAction, SIGNAL(triggered()), d->view, SLOT(slotTableView()));
     d->imageViewSelectionAction->addAction(d->imageTableViewAction);
-
-    // -----------------------------------------------------------
-
-#ifdef USE_SCRIPT_IFACE
-    d->scriptConsoleAction = new KAction(KIcon("application-x-shellscript"), i18n("Script Console"), this);
-    d->scriptConsoleAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_S));
-    connect(d->scriptConsoleAction, SIGNAL(triggered()), this, SLOT(slotScriptConsole()));
-    actionCollection()->addAction("script_console", d->scriptConsoleAction);
-#endif
 
     // -----------------------------------------------------------
 
@@ -3167,13 +3154,5 @@ void DigikamApp::slotColorManagementOptionsChanged()
     d->viewCMViewAction->setChecked(settings.useManagedPreviews);
     d->viewCMViewAction->blockSignals(false);
 }
-
-#ifdef USE_SCRIPT_IFACE
-void DigikamApp::slotScriptConsole()
-{
-    ScriptIface* const w = new ScriptIface();
-    w->show();
-}
-#endif
 
 }  // namespace Digikam

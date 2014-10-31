@@ -15,7 +15,6 @@ OPTION(DIGIKAM_ENABLE_MODELTEST "Enable ModelTest on some models for debugging (
 OPTION(ENABLE_ADVANCEDDEBUGMSG  "Build digiKam with more internal debug message (default=OFF)"          OFF)
 
 #experimental options:
-OPTION(ENABLE_SCRIPTIFACE       "Build digiKam with experimental scripting support (default=OFF)"       OFF)
 OPTION(ENABLE_PRESENTATIONMODE  "Build digiKam with presentation mode support (default=OFF)"            OFF)
 
 # ==================================================================================================
@@ -281,7 +280,6 @@ MACRO_BOOL_TO_01(LENSFUN_FOUND HAVE_LENSFUN)
 MACRO_OPTIONAL_FIND_PACKAGE(Lqr-1)
 MACRO_BOOL_TO_01(LQR-1_FOUND HAVE_LIBLQR_1)
 
-MACRO_BOOL_TO_01(ENABLE_SCRIPTIFACE      USE_SCRIPT_IFACE)
 MACRO_BOOL_TO_01(ENABLE_PRESENTATIONMODE USE_PRESENTATION_MODE)
 MACRO_BOOL_TO_01(ENABLE_THUMBS_DB        USE_THUMBS_DB)
 MACRO_BOOL_TO_01(ENABLE_ADVANCEDDEBUGMSG USE_ADVANCEDDEBUGMSG)
@@ -951,14 +949,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/colorlabelwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/picklabelwidget.cpp
        )
-
-    IF(USE_SCRIPT_IFACE)
-        SET(libscriptiface_SRCS
-            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scriptiface/scriptiface.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scriptiface/scriptplugintype.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scriptiface/setupscriptmanager.cpp
-           )
-    ENDIF(USE_SCRIPT_IFACE)
 
     IF(USE_PRESENTATION_MODE)
         SET(libpresentationview_SRCS
@@ -1640,10 +1630,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/filters
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/metadata
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/queuemanager/basetools/transform
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scriptiface
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scripts
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scripts/cleanup_digikamdb
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scripts/digitaglinktree
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow
