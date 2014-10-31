@@ -29,8 +29,7 @@ See AUTHORS file for details.
 
 -- RELATED URLS -------------------------------------------------------
 
-digiKam      : http://www.digikam.org
-kipi-plugins : http://www.digikam.org
+http://www.digikam.org
 
 -- CONTACT ------------------------------------------------------------
 
@@ -52,8 +51,7 @@ A mail will automatically be sent to the digiKam development mailing list.
 There is no need to contact directly the digiKam mailing list for a bug report
 or a devel wish.
 
-The current bugs and devel wishes reported to the bugzilla servers can be seen
-at these urls :
+The current bugs and devel wishes reported to the bugzilla servers can be seen at these urls :
 
 * digiKam (KDE bugzilla):
 
@@ -98,7 +96,7 @@ libkdcraw       >= 2.2.0                      https://projects.kde.org/projects/
 libopencv       >= 2.4.9                      http://opencv.willowgarage.com
 libpgf          >= 6.11.24                    http://www.libpgf.org
 
-Optional :
+Optional:
 
 libjasper       >= 1.7.x                      http://www.ece.uvic.ca/~mdadams/jasper                            To support JPEG2000.
 libkipi         >= 2.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkipi    To support Kipi-plugins.
@@ -112,8 +110,7 @@ libgphoto2      >= 2.4.0                      http://www.gphoto.org             
 libusb          >= 1.0.0                      http://www.libusb.org                                             Required by Gphoto2 as linking dependency. See details in bug #268267
 libsqlite2      >= 2.x                        http://www.sqlite.org/                                            Only used to import old database version <= 0.7.
 
-Note : all library dependencies require development and binary packages installed on your
-computer to compile digiKam.
+Note: all library dependencies require development and binary packages installed on your computer to compile digiKam.
 
 CMake compilation options to custom digiKam:
 
@@ -132,8 +129,7 @@ please install "ffmpegthumbs" package, which is the kdemultimedia Video thumbnai
 
 -- INSTALLATION --------------------------------------------------------
 
-In order to compile, especially when QT3/Qt4 are installed at the same time,
-just use something like that:
+In order to compile, just use something like that:
 
 # export VERBOSE=1
 # export QTDIR=/usr/lib/qt4
@@ -152,7 +148,7 @@ Usual CMake options :
                          "relwithdebinfo" : default. use gcc -O2 -g options.
                          "release"        : generate stripped and optimized bin files. For packaging.
 
-Compared to old KDE3 autoconf options:
+Compared to old autoconf options:
 
 "cmake . -DCMAKE_BUILD_TYPE=debugfull" is equivalent to "./configure --enable-debug=full"
 "cmake . -DCMAKE_INSTALL_PREFIX=/usr"  is equivalent to "./configure --prefix=/usr"
