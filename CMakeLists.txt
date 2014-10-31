@@ -130,14 +130,7 @@ ELSE (KDCRAW_VERSION)
 
 ENDIF (KDCRAW_VERSION)
 
-# LCMS version 1 and 2 library handling
-# See bug #294105
-# At the moment (2.6) we still DEFAULT to LCMS1 because porting to LCMS2 still experimental.
-# It's possible to force to use LCMS2 by switch on ENABLE_LCMS2 option
-# Future plans:
-#   2.7 will compile against lcms2 by default but lcms1 will stay as a fallback
-#   2.8 will support lcms2 only, probably ENABLE_LCMS2 will be removed too
-#       unless we decide to support another color management library
+# LCMS version 1 and 2 library handling (See bug #294105)
 # Note: if ENABLE_LCMS2 is on and no LCMS2 is available, build will fail, even if LCMS1 is present
 IF (ENABLE_LCMS2)
     MESSAGE(STATUS "Check for LCMS2 availability...")
