@@ -59,6 +59,7 @@
 #include "rawcameradlg.h"
 #include "dbstatdlg.h"
 #include "applicationsettings.h"
+#include "libopencv.h"
 
 #ifdef HAVE_GPHOTO2
 
@@ -112,11 +113,11 @@ static inline void showDigikamComponentsInfo()
 
 #ifdef HAVE_KFACE
     list.insert(i18n("LibKface"),     KFaceIface::version());
-    list.insert(i18n("LibOpenCV"),    KFaceIface::LibOpenCVVersion());
 #else
     list.insert(i18n("LibKface support"), i18n("no"));
 #endif /* HAVE_KFACE */
 
+    list.insert(i18n("LibOpenCV"),    QString("%1").arg(CV_VERSION));
 
     // Database Backend information
 
