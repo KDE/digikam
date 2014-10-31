@@ -35,6 +35,7 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "importui.h"
 #include "importiconview.h"
 #include "thumbnailsize.h"
@@ -43,7 +44,10 @@
 #include "sidebar.h"
 #include "dzoombar.h"
 #include "camitemsortsettings.h"
+
+#ifdef HAVE_KGEOMAP
 #include "mapwidgetview.h"
+#endif // HAVE_KGEOMAP
 
 namespace Digikam
 {
@@ -61,7 +65,9 @@ public:
         thumbSizeTimer(0),
         parent(0),
         iconView(0),
+#ifdef HAVE_KGEOMAP
         mapView(0),
+#endif // HAVE_KGEOMAP
         stackedView(0),
         lastViewMode(ImportStackedView::PreviewCameraMode),
         model(0),
@@ -88,7 +94,9 @@ public:
     ImportUI*                          parent;
 
     ImportIconView*                    iconView;
+#ifdef HAVE_KGEOMAP
     MapWidgetView*                     mapView;
+#endif // HAVE_KGEOMAP
     ImportStackedView*                 stackedView;
     ImportStackedView::StackedViewMode lastViewMode;
 
@@ -142,7 +150,10 @@ ImportView::ImportView(ImportUI* const ui, ImportImageModel* const model, Import
     d->stackedView->setDockArea(d->dockArea);
 
     d->iconView = d->stackedView->importIconView();
+
+#ifdef HAVE_KGEOMAP
     d->mapView  = d->stackedView->mapWidgetView();
+#endif // HAVE_KGEOMAP
 
     d->addPageUpDownActions(this, d->stackedView->importPreviewView());
     d->addPageUpDownActions(this, d->stackedView->thumbBar());
@@ -290,7 +301,9 @@ void ImportView::loadViewState()
     thumbbarState = group.readEntry("ThumbbarState", thumbbarState);
     d->dockArea->restoreState(QByteArray::fromBase64(thumbbarState));
 
+#ifdef HAVE_KGEOMAP
     d->mapView->loadState();
+#endif // HAVE_KGEOMAP
 }
 
 void ImportView::saveViewState()
@@ -310,7 +323,9 @@ void ImportView::saveViewState()
     d->stackedView->thumbBarDock()->close();
     group.writeEntry("ThumbbarState", d->dockArea->saveState().toBase64());
 
+#ifdef HAVE_KGEOMAP
     d->mapView->saveState();
+#endif // HAVE_KGEOMAP
 }
 
 CamItemInfo ImportView::camItemInfo(const QString& folder, const QString& file) const
@@ -653,11 +668,13 @@ void ImportView::slotImagePreview()
     {
         currentInfo = d->iconView->currentInfo();
     }
+#ifdef HAVE_KGEOMAP
     //TODO: Implement MapWidget
     else if (currentPreviewMode == ImportStackedView::MapWidgetMode)
     {
         currentInfo = d->mapView->currentCamItemInfo();
     }
+#endif // HAVE_KGEOMAP
 
     slotTogglePreviewMode(currentInfo, false);
 }

@@ -38,7 +38,6 @@
 // local includes
 
 #include "contextmenuhelper.h"
-#include "digikam2kgeomap_database.h"
 #include "fileactionmngr.h"
 #include "album.h"
 #include "imageviewutilities.h"

@@ -487,11 +487,13 @@ void ImportUI::setupActions()
     connect(d->camItemPreviewAction, SIGNAL(triggered()), d->view, SLOT(slotImagePreview()));
     d->imageViewSelectionAction->addAction(d->camItemPreviewAction);
 
+#ifdef HAVE_KGEOMAP
     d->mapViewAction = new KToggleAction(KIcon("applications-internet"),
                                          i18nc("@action Switch to map view", "Map"), this);
     actionCollection()->addAction("importui_map_view", d->mapViewAction);
     connect(d->mapViewAction, SIGNAL(triggered()), d->view, SLOT(slotMapWidgetView()));
     d->imageViewSelectionAction->addAction(d->mapViewAction);
+#endif // HAVE_KGEOMAP
 
     /// @todo Add table view stuff here
 
@@ -2639,7 +2641,9 @@ void ImportUI::slotSwitchedToIconView()
 void ImportUI::slotSwitchedToMapView()
 {
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
+#ifdef HAVE_KGEOMAP
     d->imageViewSelectionAction->setCurrentAction(d->mapViewAction);
+#endif // HAVE_KGEOMAP
     toogleShowBar();
 }
 

@@ -35,6 +35,7 @@
 #include <kaction.h>
 #include <klinkitemselectionmodel.h>
 #include <kmenu.h>
+#include <kdebug.h>
 
 // local includes
 
@@ -42,7 +43,6 @@
 #include "contextmenuhelper.h"
 #include "databasefields.h"
 #include "databasewatch.h"
-#include "digikam2kgeomap_database.h"
 #include "fileactionmngr.h"
 #include "imageinfo.h"
 #include "imagemodel.h"
@@ -71,10 +71,9 @@ TableViewItemDelegate::~TableViewItemDelegate()
 
 void TableViewItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& tableViewModelIndex) const
 {
-    const int columnIndex = tableViewModelIndex.column();
+    const int columnIndex               = tableViewModelIndex.column();
     TableViewColumn* const columnObject = s->tableViewModel->getColumnObject(columnIndex);
-
-    bool useDefaultPainter = !columnObject->getColumnFlags().testFlag(TableViewColumn::ColumnCustomPainting);
+    bool useDefaultPainter              = !columnObject->getColumnFlags().testFlag(TableViewColumn::ColumnCustomPainting);
 
     if (!useDefaultPainter)
     {
@@ -92,25 +91,29 @@ void TableViewItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem&
 QSize TableViewItemDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& tableViewModelIndex) const
 {
     const int columnIndex = tableViewModelIndex.column();
+
     /// @todo Debug output to find OSX crash
     if (columnIndex>=s->tableViewModel->columnCount(QModelIndex()))
     {
-        kDebug()<<"------ CRASH AHEAD: tableViewModelIndex = "<<tableViewModelIndex;
-        kDebug()<<"------ CRASH AHEAD: s->tableViewModel->columnCount(QModelIndex()) = "<<s->tableViewModel->columnCount(QModelIndex());
-        kDebug()<<"------ CRASH AHEAD: columnIndex: "<<columnIndex;
+        kDebug()<<"------ CRASH AHEAD: tableViewModelIndex = " << tableViewModelIndex;
+        kDebug()<<"------ CRASH AHEAD: s->tableViewModel->columnCount(QModelIndex()) = " << s->tableViewModel->columnCount(QModelIndex());
+        kDebug()<<"------ CRASH AHEAD: columnIndex: " << columnIndex;
     }
+
     TableViewColumn* const columnObject = s->tableViewModel->getColumnObject(columnIndex);
-    TableViewModel::Item* const item = s->tableViewModel->itemFromIndex(tableViewModelIndex);
+    TableViewModel::Item* const item    = s->tableViewModel->itemFromIndex(tableViewModelIndex);
 
     /// we have to take the maximum of all columns for the height
     /// @todo somehow cache this calculation
     /// @todo check column flags
     const int columnCount = s->tableViewModel->columnCount(QModelIndex());
-    int maxHeight = 0;
+    int maxHeight         = 0;
+
     for (int i=0; i<columnCount; ++i)
     {
         TableViewColumn* const iColumnObject = s->tableViewModel->getColumnObject(i);
-        const QSize iColumnSize = iColumnObject->sizeHint(option, item);
+        const QSize iColumnSize              = iColumnObject->sizeHint(option, item);
+
         if (iColumnSize.isValid())
         {
             maxHeight = qMax(maxHeight, iColumnSize.height());
@@ -118,11 +121,12 @@ QSize TableViewItemDelegate::sizeHint(const QStyleOptionViewItem& option, const 
     }
 
     QSize columnSize = columnObject->sizeHint(option, item);
+
     if (!columnSize.isValid())
     {
         columnSize = QItemDelegate::sizeHint(option, tableViewModelIndex);
         /// @todo we have to incorporate the height given by QItemDelegate for the other columns, too
-        maxHeight = qMax(maxHeight, columnSize.height());
+        maxHeight  = qMax(maxHeight, columnSize.height());
     }
 
     return QSize(columnSize.width(), maxHeight);

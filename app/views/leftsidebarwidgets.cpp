@@ -1259,6 +1259,8 @@ void FuzzySearchSideBarWidget::newSimilarSearch(const ImageInfo& imageInfo)
 
 // -----------------------------------------------------------------------------
 
+#ifdef HAVE_KGEOMAP
+
 class GPSSearchSideBarWidget::Private
 {
 public:
@@ -1330,6 +1332,8 @@ QString GPSSearchSideBarWidget::getCaption()
 {
     return i18nc("Search images on a map", "Map");
 }
+
+#endif // HAVE_KGEOMAP
 
 // -----------------------------------------------------------------------------
 

@@ -35,12 +35,15 @@
 #include "config-digikam.h"
 #include "albummodel.h"
 #include "albummodificationhelper.h"
-#include "gpssearchview.h"
 #include "imagealbumfiltermodel.h"
 #include "searchmodificationhelper.h"
 #include "sidebarwidget.h"
 #include "imagefiltermodel.h"
 #include "albumlabelstreeview.h"
+
+#ifdef HAVE_KGEOMAP
+#include "gpssearchview.h"
+#endif // HAVE_KGEOMAP
 
 namespace Digikam
 {
@@ -321,6 +324,8 @@ private:
 
 // -----------------------------------------------------------------------------------------
 
+#ifdef HAVE_KGEOMAP
+
 /**
  * SideBarWidget for the gps search.
  *
@@ -354,6 +359,8 @@ private:
     class Private;
     Private* const d;
 };
+
+#endif // HAVE_KGEOMAP
 
 // -----------------------------------------------------------------------------------------
 

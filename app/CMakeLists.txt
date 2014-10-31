@@ -23,7 +23,6 @@ SET(digikamcore_LIB_SRCS
         ${libdigikamhelpers_SRCS}
         ${libtthread_SRCS}
         ${libversionmanager_SRCS}
-        ${libkgeomaphelper_SRCS}
         ${libkde3rdparty_SRCS}
 
         # widgets and dialogs
@@ -48,6 +47,12 @@ SET(digikamcore_LIB_SRCS
         ${libeditoriface_SRCS}
         ${libeditorplugin_SRCS}
 )
+
+IF(KGEOMAP_FOUND)
+    SET(digikamcore_LIB_SRCS ${digikamcore_LIB_SRCS}
+                             ${libkgeomaphelper_SRCS}
+       )
+ENDIF(KGEOMAP_FOUND)
 
 KDE4_ADD_UI_FILES(digikamcore_LIB_SRCS
                   ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/printiface/printoptionspage.ui
@@ -87,7 +92,6 @@ TARGET_LINK_LIBRARIES(digikamcore
 
         ${KDCRAW_LIBRARIES}
         ${KEXIV2_LIBRARIES}
-        ${KGEOMAP_LIBRARIES}
         ${LCMS_LIBRARIES}
 )
 
@@ -127,6 +131,10 @@ ENDIF(KIPI_FOUND)
 IF(KFACE_FOUND)
    TARGET_LINK_LIBRARIES(digikamcore ${KFACE_LIBRARIES})
 ENDIF(KFACE_FOUND)
+
+IF(KGEOMAP_FOUND)
+   TARGET_LINK_LIBRARIES(digikamcore ${KGEOMAP_LIBRARIES})
+ENDIF(KGEOMAP_FOUND)
 
 SET_TARGET_PROPERTIES(digikamcore PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
 
@@ -202,8 +210,6 @@ SET(digikam_SRCS ${libeditorgui_SRCS}
                  ${libmaintenance_SRCS}
                  ${libsearchwindow_SRCS}
                  ${libfuzzysearch_SRCS}
-                 ${libgpssearch_SRCS}
-                 ${libkgeomaphelper_SRCS}
                  ${libqueuemanager_SRCS}
                  ${libalbummodels_SRCS}
                  ${libdigikamgui_SRCS}
@@ -229,6 +235,10 @@ ENDIF(KIPI_FOUND)
 IF(KFACE_FOUND)
     SET(digikam_SRCS ${digikam_SRCS} ${libfacemanagement_SRCS})
 ENDIF(KFACE_FOUND)
+
+IF(KGEOMAP_FOUND)
+    SET(digikam_SRCS ${digikam_SRCS} ${libkgeomaphelper_SRCS} ${libgpssearch_SRCS})
+ENDIF(KGEOMAP_FOUND)
 
 QT4_ADD_DBUS_ADAPTOR(digikam_SRCS main/org.kde.digikam.xml main/digikamapp.h Digikam::DigikamApp)
 
@@ -259,8 +269,6 @@ TARGET_LINK_LIBRARIES(digikam
         ${KDE4_SOLID_LIBS}
         ${KDE4_THREADWEAVER_LIBRARIES}
 
-        ${KFACE_LIBRARIES}
-        ${KGEOMAP_LIBRARIES}
         ${KEXIV2_LIBRARIES}
         ${KDCRAW_LIBRARIES}
 
@@ -307,6 +315,10 @@ ENDIF(KIPI_FOUND)
 IF(KFACE_FOUND)
    TARGET_LINK_LIBRARIES(digikam ${KFACE_LIBRARIES})
 ENDIF(KFACE_FOUND)
+
+IF(KGEOMAP_FOUND)
+   TARGET_LINK_LIBRARIES(digikam ${KGEOMAP_LIBRARIES})
+ENDIF(KGEOMAP_FOUND)
 
 INSTALL(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS})
 

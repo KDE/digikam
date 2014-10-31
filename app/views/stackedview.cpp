@@ -7,8 +7,8 @@
  * Description : A widget stack to embedded album content view
  *               or the current image preview.
  *
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2013 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013      by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -56,18 +56,21 @@
 #include "welcomepageview.h"
 #include "mediaplayerview.h"
 #include "thumbbardock.h"
-#include "mapwidgetview.h"
 #include "tableview.h"
+
+#ifdef HAVE_KGEOMAP
+#include "mapwidgetview.h"
+#endif // HAVE_KGEOMAP
 
 namespace Digikam
 {
 
-class StackedView::StackedViewPriv
+class StackedView::Private
 {
 
 public:
 
-    StackedViewPriv()
+    Private()
     {
         dockArea           = 0;
         splitter           = 0;
@@ -77,10 +80,12 @@ public:
         imagePreviewView   = 0;
         welcomePageView    = 0;
         mediaPlayerView    = 0;
-        mapWidgetView      = 0;
         needUpdateBar      = false;
         syncingSelection   = false;
         tableView          = 0;
+#ifdef HAVE_KGEOMAP
+        mapWidgetView      = 0;
+#endif // HAVE_KGEOMAP
     }
 
     bool               needUpdateBar;
@@ -95,12 +100,14 @@ public:
     MediaPlayerView*   mediaPlayerView;
     ThumbBarDock*      thumbBarDock;
     WelcomePageView*   welcomePageView;
-    MapWidgetView*     mapWidgetView;
     TableView*         tableView;
+#ifdef HAVE_KGEOMAP
+    MapWidgetView*     mapWidgetView;
+#endif // HAVE_KGEOMAP
 };
 
-StackedView::StackedView(QWidget* parent)
-    : QStackedWidget(parent), d(new StackedViewPriv)
+StackedView::StackedView(QWidget* const parent)
+    : QStackedWidget(parent), d(new Private)
 {
     d->imageIconView    = new DigikamImageView(this);
     d->imagePreviewView = new ImagePreviewView(this);
@@ -113,24 +120,28 @@ StackedView::StackedView(QWidget* parent)
 
     d->welcomePageView = new WelcomePageView(this);
     d->mediaPlayerView = new MediaPlayerView(this);
+    d->tableView       = new TableView(d->imageIconView->getSelectionModel(),
+                                       d->imageIconView->imageFilterModel(),
+                                       this);
+    d->tableView->setObjectName("mainwindow_tableview");
+
+#ifdef HAVE_KGEOMAP
     d->mapWidgetView   = new MapWidgetView(d->imageIconView->getSelectionModel(),
                                            d->imageIconView->imageFilterModel(), this,
                                            MapWidgetView::ApplicationDigikam
                                           );
     d->mapWidgetView->setObjectName("mainwindow_mapwidgetview");
-    d->tableView       = new TableView(
-            d->imageIconView->getSelectionModel(),
-            d->imageIconView->imageFilterModel(),
-            this
-        );
-    d->tableView->setObjectName("mainwindow_tableview");
+#endif // HAVE_KGEOMAP
 
     insertWidget(IconViewMode,     d->imageIconView);
     insertWidget(PreviewImageMode, d->imagePreviewView);
     insertWidget(WelcomePageMode,  d->welcomePageView->view());
     insertWidget(MediaPlayerMode,  d->mediaPlayerView);
-    insertWidget(MapWidgetMode,    d->mapWidgetView);
     insertWidget(TableViewMode,    d->tableView);
+
+#ifdef HAVE_KGEOMAP
+    insertWidget(MapWidgetMode,    d->mapWidgetView);
+#endif // HAVE_KGEOMAP
 
     setViewMode(IconViewMode);
     setAttribute(Qt::WA_DeleteOnClose);
@@ -255,10 +266,12 @@ ImagePreviewView* StackedView::imagePreviewView() const
     return d->imagePreviewView;
 }
 
+#ifdef HAVE_KGEOMAP
 MapWidgetView* StackedView::mapWidgetView() const
 {
     return d->mapWidgetView;
 }
+#endif // HAVE_KGEOMAP
 
 TableView* StackedView::tableView() const
 {
@@ -366,17 +379,22 @@ void StackedView::setViewMode(const StackedViewMode mode)
         setCurrentIndex(mode);
     }
 
+#ifdef HAVE_KGEOMAP
     d->mapWidgetView->setActive(mode == MapWidgetMode);
+#endif // HAVE_KGEOMAP
+
     d->tableView->slotSetActive(mode == TableViewMode);
 
     if (mode == IconViewMode)
     {
         d->imageIconView->setFocus();
     }
+#ifdef HAVE_KGEOMAP
     else if (mode == MapWidgetMode)
     {
         d->mapWidgetView->setFocus();
     }
+#endif // HAVE_KGEOMAP
     else if (mode == TableViewMode)
     {
         d->tableView->setFocus();
@@ -387,18 +405,19 @@ void StackedView::setViewMode(const StackedViewMode mode)
 
 void StackedView::syncSelection(ImageCategorizedView* from, ImageCategorizedView* to)
 {
-    ImageSortFilterModel* fromModel = from->imageSortFilterModel();
-    ImageSortFilterModel* toModel = to->imageSortFilterModel();
+    ImageSortFilterModel* const fromModel = from->imageSortFilterModel();
+    ImageSortFilterModel* const toModel   = to->imageSortFilterModel();
     // set current info
-    QModelIndex currentIndex = toModel->indexForImageInfo(from->currentInfo());
+    QModelIndex currentIndex              = toModel->indexForImageInfo(from->currentInfo());
     to->selectionModel()->setCurrentIndex(currentIndex, QItemSelectionModel::NoUpdate);
 
     // sync selection
-    QItemSelection selection = from->selectionModel()->selection();
+    QItemSelection selection              = from->selectionModel()->selection();
     QItemSelection newSelection;
+
     foreach(const QItemSelectionRange& range, selection)
     {
-        QModelIndex topLeft = toModel->indexForImageInfo(fromModel->imageInfo(range.topLeft()));
+        QModelIndex topLeft     = toModel->indexForImageInfo(fromModel->imageInfo(range.topLeft()));
         QModelIndex bottomRight = toModel->indexForImageInfo(fromModel->imageInfo(range.bottomRight()));
         newSelection.select(topLeft, bottomRight);
     }

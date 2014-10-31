@@ -325,10 +325,10 @@ MACRO_OPTIONAL_FIND_PACKAGE(Doxygen)
 MACRO_OPTIONAL_FIND_PACKAGE(Sqlite2)
 MACRO_BOOL_TO_01(SQLITE2_FOUND HAVE_SQLITE2)
 
-MACRO_BOOL_TO_01(EIGEN3_FOUND HAVE_EIGEN3)
-
-MACRO_BOOL_TO_01(KIPI_FOUND HAVE_KIPI)
-MACRO_BOOL_TO_01(KFACE_FOUND HAVE_KFACE)
+MACRO_BOOL_TO_01(EIGEN3_FOUND  HAVE_EIGEN3)
+MACRO_BOOL_TO_01(KIPI_FOUND    HAVE_KIPI)
+MACRO_BOOL_TO_01(KFACE_FOUND   HAVE_KFACE)
+MACRO_BOOL_TO_01(KGEOMAP_FOUND HAVE_KGEOMAP)
 
 # Whether to use Qt's scaling to downscale previews. Under MacOSX, Qt
 # can make use of the higher physical resolution of Retina
@@ -372,7 +372,6 @@ PRINT_LIBRARY_STATUS("liblcms"     "http://www.littlecms.com"                   
 PRINT_LIBRARY_STATUS("Boost Graph" "http://www.boost.org/doc/libs/1_43_0/libs/graph/doc/index.html" " (headers only)"                     Boost_FOUND)
 PRINT_LIBRARY_STATUS("libkexiv2"   "http://www.digikam.org/sharedlibs"                              " (version >= 1.2.0)"                 KEXIV2_FOUND)
 PRINT_LIBRARY_STATUS("libkdcraw"   "http://www.digikam.org/sharedlibs"                              " (version >= ${KDCRAW_MIN_VERSION})" KDCRAW_FOUND)
-PRINT_LIBRARY_STATUS("libkgeomap"  "http://www.digikam.org/sharedlibs"                              " (version >= 2.0.0)"                 KGEOMAP_FOUND)
 PRINT_LIBRARY_STATUS("libpgf"      "http://www.libpgf.org"                                          " (version >= ${PGF_MIN_VERSION})"    PGF_FOUND)
 
 # ================================================================
@@ -396,6 +395,17 @@ ELSE(KFACE_FOUND)
     MESSAGE(STATUS " digiKam will be compiled without faces detection and recognition support.")
     MESSAGE(STATUS "")
 ENDIF(KFACE_FOUND)
+
+# ================================================================
+
+IF(KGEOMAP_FOUND)
+    MESSAGE(STATUS " libkgeomap library found................. YES (optional)")
+ELSE(KGEOMAP_FOUND)
+    MESSAGE(STATUS " libkgeomap library found................. NO  (optional)")
+    MESSAGE(STATUS "")
+    MESSAGE(STATUS " digiKam will be compiled without geolocation maps support.")
+    MESSAGE(STATUS "")
+ENDIF(KGEOMAP_FOUND)
 
 # ================================================================
 
@@ -496,13 +506,13 @@ ENDIF(DOXYGEN_FOUND)
 
 # ================================================================
 
-IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KGEOMAP_FOUND)
+IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND)
     MESSAGE(STATUS " digiKam can be compiled.................. YES")
     SET(DIGIKAM_CAN_BE_COMPILED true)
-ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KGEOMAP_FOUND)
+ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND)
     MESSAGE(FATAL_ERROR " digiKam will be compiled................. NO  (Look README file for more details about dependencies)")
     SET(DIGIKAM_CAN_BE_COMPILED false)
-ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND KGEOMAP_FOUND)
+ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND)
 
 IF(DIGIKAM_CAN_BE_COMPILED AND FORCED_UNBUNDLE AND ((NOT PGF_FOUND) OR (NOT EIGEN3_FOUND)))
     MESSAGE(STATUS "")
@@ -574,8 +584,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                     ${KDE4_DEFINITIONS}
                     ${KDCRAW_DEFINITIONS}
                     ${KEXIV2_DEFINITIONS}
-                    ${KFACE_DEFINITIONS}
-                    ${KGEOMAP_DEFINITIONS}
                    )
 
     # Enable C++ Exceptions support, require by Greycstoration algorithm (CImg.h)
@@ -585,8 +593,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     INCLUDE_DIRECTORIES(${KEXIV2_INCLUDE_DIR}
                         ${KDCRAW_INCLUDE_DIR}
-                        ${KFACE_INCLUDE_DIR}
-                        ${KGEOMAP_INCLUDE_DIR}
                         ${KDE4_INCLUDES}
                         ${QT_INCLUDES}
                         ${GPHOTO2_INCLUDE_DIRS}
@@ -636,6 +642,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     IF(KIPI_FOUND)
 
         INCLUDE_DIRECTORIES(${KIPI_INCLUDE_DIR})
+        ADD_DEFINITIONS(${KIPI_DEFINITIONS})
 
     ENDIF(KIPI_FOUND)
 
@@ -644,8 +651,18 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     IF(KFACE_FOUND)
 
         INCLUDE_DIRECTORIES(${KFACE_INCLUDE_DIR})
+        ADD_DEFINITIONS(${KFACE_DEFINITIONS})
 
     ENDIF(KFACE_FOUND)
+
+    # Faces detection and recognition support
+
+    IF(KGEOMAP_FOUND)
+
+        INCLUDE_DIRECTORIES(${KGEOMAP_INCLUDE_DIR})
+        ADD_DEFINITIONS(${KGEOMAP_DEFINITIONS})
+
+    ENDIF(KGEOMAP_FOUND)
 
     # ==================================================================================================
     # Common targets parts
@@ -815,13 +832,18 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiestab.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesmetadatatab.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiescolorstab.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesgpstab.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagegpsmodelhelper.cpp
        )
 
-    SET(libkgeomaphelper_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/kgeomaphelper/digikam2kgeomap.cpp
-       )
+    IF(KGEOMAP_FOUND)
+        SET(libkgeomaphelper_SRCS
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/kgeomaphelper/digikam2kgeomap.cpp
+           )
+
+        SET(libimageproperties_SRCS ${libimageproperties_SRCS}
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesgpstab.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagegpsmodelhelper.cpp
+           )
+    ENDIF(KGEOMAP_FOUND)
 
     # --enable-final triggers: http://bugs.kde.org/show_bug.cgi?id=126326
     # digikam: camera download: auto-rotated images lose EXIF info ...
@@ -1322,10 +1344,12 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch/sketchwidget.cpp
        )
 
-    SET(libgpssearch_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpssearchview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpsmarkertiler.cpp
-       )
+    IF(KGEOMAP_FOUND)
+        SET(libgpssearch_SRCS
+            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpssearchview.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpsmarkertiler.cpp
+           )
+    ENDIF(KGEOMAP_FOUND)
 
     SET(libimageversionssidebar_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imageversionsmodel.cpp
@@ -1455,7 +1479,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/app/views/imagepreviewviewitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/app/views/imagepreviewview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/app/views/mediaplayerview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/mapwidgetview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/app/views/welcomepageview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/app/views/leftsidebarwidgets.cpp
 
@@ -1484,6 +1507,13 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                 ${CMAKE_CURRENT_SOURCE_DIR}/app/items/overlays/facerejectionoverlay.cpp
            )
     ENDIF(KFACE_FOUND)
+
+    IF(KGEOMAP_FOUND)
+        SET(libdigikamgui_SRCS
+                ${libdigikamgui_SRCS}
+                ${CMAKE_CURRENT_SOURCE_DIR}/app/views/mapwidgetview.cpp
+           )
+    ENDIF(KGEOMAP_FOUND)
 
     IF(DIGIKAM_ENABLE_MODELTEST)
         MESSAGE(STATUS "Modeltest enabled")

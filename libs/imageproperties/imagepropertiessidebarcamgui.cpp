@@ -7,7 +7,7 @@
  * Description : simple image properties side bar used by
  *               camera GUI.
  *
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2013      by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
@@ -40,11 +40,15 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "dmetadata.h"
 #include "camiteminfo.h"
 #include "cameraitempropertiestab.h"
-#include "imagepropertiesgpstab.h"
 #include "imagepropertiesmetadatatab.h"
+
+#ifdef HAVE_KGEOMAP
+#include "imagepropertiesgpstab.h"
+#endif // HAVE_KGEOMAP
 
 namespace Digikam
 {
@@ -57,8 +61,10 @@ public:
         dirtyMetadataTab(false),
         dirtyCameraItemTab(false),
         dirtyGpsTab(false),
-        metadataTab(0),
+#ifdef HAVE_KGEOMAP
         gpsTab(0),
+#endif // HAVE_KGEOMAP
+        metadataTab(0),
         cameraItemTab(0)
     {
     }
@@ -71,9 +77,11 @@ public:
 
     CamItemInfo                 itemInfo;
 
-    ImagePropertiesMetaDataTab* metadataTab;
+#ifdef HAVE_KGEOMAP
     ImagePropertiesGPSTab*      gpsTab;
+#endif // HAVE_KGEOMAP
 
+    ImagePropertiesMetaDataTab* metadataTab;
     CameraItemPropertiesTab*    cameraItemTab;
 };
 
@@ -86,11 +94,14 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget* const parent
 {
     d->cameraItemTab = new CameraItemPropertiesTab(parent);
     d->metadataTab   = new ImagePropertiesMetaDataTab(parent);
-    d->gpsTab        = new ImagePropertiesGPSTab(parent);
 
     appendTab(d->cameraItemTab, SmallIcon("document-properties"),   i18n("Properties"));
     appendTab(d->metadataTab,   SmallIcon("exifinfo"),              i18n("Metadata")); // krazy:exclude=iconnames
+
+#ifdef HAVE_KGEOMAP
+    d->gpsTab        = new ImagePropertiesGPSTab(parent);
     appendTab(d->gpsTab,        SmallIcon("applications-internet"), i18n("Geolocation"));
+#endif // HAVE_KGEOMAP
 
     // ----------------------------------------------------------
 
@@ -141,7 +152,10 @@ void ImagePropertiesSideBarCamGui::slotNoCurrentItem()
 
     d->cameraItemTab->setCurrentItem();
     d->metadataTab->setCurrentURL();
+
+#ifdef HAVE_KGEOMAP
     d->gpsTab->setCurrentURL();
+#endif // HAVE_KGEOMAP
 }
 
 void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
@@ -164,6 +178,7 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
         d->metadataTab->setCurrentData(d->metaData, d->itemInfo.name);
         d->dirtyMetadataTab = true;
     }
+#ifdef HAVE_KGEOMAP
     else if (tab == d->gpsTab && !d->dirtyGpsTab)
     {
         d->gpsTab->setMetadata(d->metaData, d->itemInfo.url());
@@ -171,6 +186,7 @@ void ImagePropertiesSideBarCamGui::slotChangedTab(QWidget* tab)
     }
 
     d->gpsTab->setActive(tab == d->gpsTab);
+#endif // HAVE_KGEOMAP
 
     unsetCursor();
 }
@@ -187,8 +203,10 @@ void ImagePropertiesSideBarCamGui::doLoadState()
     KConfigGroup groupCameraItemTab    = KConfigGroup(&group, entryName("Camera Item Properties Tab"));
     d->cameraItemTab->readSettings(groupCameraItemTab);
 
-    KConfigGroup groupGPSTab      = KConfigGroup(&group, entryName("GPS Properties Tab"));
+#ifdef HAVE_KGEOMAP
+    KConfigGroup groupGPSTab            = KConfigGroup(&group, entryName("GPS Properties Tab"));
     d->gpsTab->readSettings(groupGPSTab);
+#endif // HAVE_KGEOMAP
 
     const KConfigGroup groupMetadataTab = KConfigGroup(&group, entryName("Metadata Properties Tab"));
     d->metadataTab->readSettings(groupMetadataTab);
@@ -204,13 +222,15 @@ void ImagePropertiesSideBarCamGui::doSaveState()
 
     KConfigGroup group = getConfigGroup();
 
-    KConfigGroup groupCameraItemTab    = KConfigGroup(&group, entryName("Camera Item Properties Tab"));
+    KConfigGroup groupCameraItemTab = KConfigGroup(&group, entryName("Camera Item Properties Tab"));
     d->cameraItemTab->writeSettings(groupCameraItemTab);
 
-    KConfigGroup groupGPSTab      = KConfigGroup(&group, entryName("GPS Properties Tab"));
+#ifdef HAVE_KGEOMAP
+    KConfigGroup groupGPSTab        = KConfigGroup(&group, entryName("GPS Properties Tab"));
     d->gpsTab->writeSettings(groupGPSTab);
+#endif // HAVE_KGEOMAP
 
-    KConfigGroup groupMetadataTab = KConfigGroup(&group, entryName("Metadata Properties Tab"));
+    KConfigGroup groupMetadataTab   = KConfigGroup(&group, entryName("Metadata Properties Tab"));
     d->metadataTab->writeSettings(groupMetadataTab);
 }
 

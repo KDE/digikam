@@ -59,7 +59,6 @@
 #include "filterstatusbar.h"
 #include "leftsidebarwidgets.h"
 #include "loadingcacheinterface.h"
-#include "mapwidgetview.h"
 #include "mediaplayerview.h"
 #include "metadatasettings.h"
 #include "newitemsfinder.h"
@@ -85,6 +84,10 @@
 #include "thumbsgenerator.h"
 #include "albumlabelstreeview.h"
 #include "tagsactionmngr.h"
+
+#ifdef HAVE_KGEOMAP
+#include "mapwidgetview.h"
+#endif // HAVE_KGEOMAP
 
 #ifdef USE_PRESENTATION_MODE
 #include "qmlshow.h"
@@ -113,7 +116,11 @@ public:
         timelineSideBar(0),
         searchSideBar(0),
         fuzzySearchSideBar(0),
+
+#ifdef HAVE_KGEOMAP
         gpsSearchSideBar(0),
+        mapView(0),
+#endif // HAVE_KGEOMAP
 
 #ifdef HAVE_KFACE
         peopleSideBar(0),
@@ -121,7 +128,6 @@ public:
 
         parent(0),
         iconView(0),
-        mapView(0),
         tableView(0),
         albumManager(0),
         albumHistory(0),
@@ -166,16 +172,17 @@ public:
     SearchSideBarWidget*          searchSideBar;
     FuzzySearchSideBarWidget*     fuzzySearchSideBar;
 
+#ifdef HAVE_KGEOMAP
     GPSSearchSideBarWidget*       gpsSearchSideBar;
+    MapWidgetView*                mapView;
+#endif // HAVE_KGEOMAP
 
 #ifdef HAVE_KFACE
     PeopleSideBarWidget*          peopleSideBar;
 #endif /* HAVE_KFACE */
 
     DigikamApp*                   parent;
-
     DigikamImageView*             iconView;
-    MapWidgetView*                mapView;
     TableView*                    tableView;
     AlbumManager*                 albumManager;
     AlbumHistory*                 albumHistory;
@@ -272,7 +279,11 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
     d->stackedview->setDockArea(d->dockArea);
 
     d->iconView  = d->stackedview->imageIconView();
+
+#ifdef HAVE_KGEOMAP
     d->mapView   = d->stackedview->mapWidgetView();
+#endif // HAVE_KGEOMAP
+
     d->tableView = d->stackedview->tableView();
 
     d->addPageUpDownActions(this, d->stackedview->imagePreviewView());
@@ -327,12 +338,14 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
                                                          d->searchModificationHelper);
     d->leftSideBarWidgets << d->fuzzySearchSideBar;
 
+#ifdef HAVE_KGEOMAP
     d->gpsSearchSideBar = new GPSSearchSideBarWidget(d->leftSideBar,
                                                      d->modelCollection->getSearchModel(),
                                                      d->searchModificationHelper,
                                                      d->iconView->imageFilterModel(),d->iconView->getSelectionModel());
 
     d->leftSideBarWidgets << d->gpsSearchSideBar;
+#endif // HAVE_KGEOMAP
 
 #ifdef HAVE_KFACE
 
@@ -537,8 +550,10 @@ void DigikamView::setupConnections()
     connect(this, SIGNAL(signalNoCurrentItem()),
             d->rightSideBar, SLOT(slotNoCurrentItem()));
 
+#ifdef HAVE_KGEOMAP
     connect(d->gpsSearchSideBar, SIGNAL(signalMapSoloItems(QList<qlonglong>,QString)),
             d->iconView->imageFilterModel(), SLOT(setIdWhitelist(QList<qlonglong>,QString)));
+#endif // HAVE_KGEOMAP
 
     // -- Filter Bars Connections ---------------------------------
 
@@ -715,7 +730,10 @@ void DigikamView::loadViewState()
 
     d->initialAlbumID = group.readEntry("InitialAlbumID", 0);
 
+#ifdef HAVE_KGEOMAP
     d->mapView->loadState();
+#endif // HAVE_KGEOMAP
+
     d->tableView->loadState();
     d->rightSideBar->loadState();
 }
@@ -759,7 +777,10 @@ void DigikamView::saveViewState()
         group.writeEntry("InitialAlbumID", 0);
     }
 
+#ifdef HAVE_KGEOMAP
     d->mapView->saveState();
+#endif // HAVE_KGEOMAP
+
     d->tableView->saveState();
     d->rightSideBar->saveState();
 }
@@ -1184,7 +1205,11 @@ void DigikamView::slotAlbumSelected(QList<Album*> albums)
     if (albums.isEmpty() || !albums.first())
     {
         d->iconView->openAlbum(QList<Album*>());
+
+#ifdef HAVE_KGEOMAP
         d->mapView->openAlbum(0);
+#endif // HAVE_KGEOMAP
+
         slotTogglePreviewMode(ImageInfo());
         return;
     }
@@ -2239,8 +2264,10 @@ ImageInfo DigikamView::currentInfo() const
         case StackedView::TableViewMode:
             return d->tableView->currentInfo();
 
+#ifdef HAVE_KGEOMAP
         case StackedView::MapWidgetMode:
             return d->mapView->currentImageInfo();
+#endif // HAVE_KGEOMAP
 
         case StackedView::MediaPlayerMode:
         case StackedView::PreviewImageMode:

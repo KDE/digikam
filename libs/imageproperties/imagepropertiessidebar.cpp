@@ -53,11 +53,14 @@
 
 #include "dimg.h"
 #include "dmetadata.h"
-#include "imagepropertiesgpstab.h"
 #include "imagepropertiestab.h"
 #include "imagepropertiesmetadatatab.h"
 #include "imagepropertiescolorstab.h"
 #include "imagepropertiesversionstab.h"
+
+#ifdef HAVE_KGEOMAP
+#include "imagepropertiesgpstab.h"
+#endif // HAVE_KGEOMAP
 
 namespace Digikam
 {
@@ -79,7 +82,6 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget* const parent,
     m_propertiesTab      = new ImagePropertiesTab(parent);
     m_metadataTab        = new ImagePropertiesMetaDataTab(parent);
     m_colorTab           = new ImagePropertiesColorsTab(parent);
-    m_gpsTab             = new ImagePropertiesGPSTab(parent);
 
     // NOTE: Special case with Showfoto which will only be able to load image, not video.
     if (KGlobal::mainComponent().aboutData()->appName() != QString("digikam"))
@@ -88,7 +90,11 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget* const parent,
     appendTab(m_propertiesTab, SmallIcon("document-properties"),   i18n("Properties"));
     appendTab(m_metadataTab,   SmallIcon("exifinfo"),              i18n("Metadata")); // krazy:exclude=iconnames
     appendTab(m_colorTab,      SmallIcon("format-fill-color"),     i18n("Colors"));
+
+#ifdef HAVE_KGEOMAP
+    m_gpsTab = new ImagePropertiesGPSTab(parent);
     appendTab(m_gpsTab,        SmallIcon("applications-internet"), i18n("Geolocation"));
+#endif // HAVE_KGEOMAP
 
     connect(this, SIGNAL(signalChangedTab(QWidget*)),
             this, SLOT(slotChangedTab(QWidget*)));
@@ -127,7 +133,10 @@ void ImagePropertiesSideBar::slotNoCurrentItem()
     m_propertiesTab->setCurrentURL();
     m_metadataTab->setCurrentURL();
     m_colorTab->setData();
+
+#ifdef HAVE_KGEOMAP
     m_gpsTab->setCurrentURL();
+#endif // HAVE_KGEOMAP
 
     m_dirtyPropertiesTab = false;
     m_dirtyMetadataTab   = false;
@@ -154,8 +163,9 @@ void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
 {
     if (!m_currentURL.isValid())
     {
+#ifdef HAVE_KGEOMAP
         m_gpsTab->setActive(tab == m_gpsTab);
-
+#endif // HAVE_KGEOMAP
         return;
     }
 
@@ -177,13 +187,15 @@ void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
         m_colorTab->setData(m_currentURL, m_currentRect, m_image);
         m_dirtyColorTab = true;
     }
+#ifdef HAVE_KGEOMAP
     else if (tab == m_gpsTab && !m_dirtyGpsTab)
     {
         m_gpsTab->setCurrentURL(m_currentURL);
         m_dirtyGpsTab = true;
     }
 
-    m_gpsTab->setActive(tab==m_gpsTab);
+    m_gpsTab->setActive(tab == m_gpsTab);
+#endif // HAVE_KGEOMAP
 
     unsetCursor();
 }
@@ -359,8 +371,10 @@ void ImagePropertiesSideBar::doLoadState()
     m_propertiesTab->readSettings();
 #endif
 
+#ifdef HAVE_KGEOMAP
     const KConfigGroup groupGPSTab      = KConfigGroup(&group, entryName("GPS Properties Tab"));
     m_gpsTab->readSettings(groupGPSTab);
+#endif // HAVE_KGEOMAP
 
     const KConfigGroup groupColorTab    = KConfigGroup(&group, entryName("Color Properties Tab"));
     m_colorTab->readSettings(groupColorTab);
@@ -381,8 +395,10 @@ void ImagePropertiesSideBar::doSaveState()
     m_propertiesTab->writeSettings();
 #endif
 
+#ifdef HAVE_KGEOMAP
     KConfigGroup groupGPSTab      = KConfigGroup(&group, entryName("GPS Properties Tab"));
     m_gpsTab->writeSettings(groupGPSTab);
+#endif // HAVE_KGEOMAP
 
     KConfigGroup groupColorTab    = KConfigGroup(&group, entryName("Color Properties Tab"));
     m_colorTab->writeSettings(groupColorTab);

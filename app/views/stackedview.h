@@ -7,7 +7,7 @@
  * Description : A widget stack to embedded album content view
  *               or the current image preview.
  *
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2013      by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
@@ -39,10 +39,10 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "digikam_export.h"
 #include "imageinfo.h"
 #include "thumbbardock.h"
-//#include "mapwidgetview.h"
 
 namespace Digikam
 {
@@ -50,10 +50,13 @@ namespace Digikam
 class DigikamImageView;
 class ImageCategorizedView;
 class ImagePreviewView;
-class MapWidgetView;
 class TableView;
 class MediaPlayerView;
 class ImageThumbnailBar;
+
+#ifdef HAVE_KGEOMAP
+class MapWidgetView;
+#endif // HAVE_KGEOMAP
 
 class StackedView : public QStackedWidget
 {
@@ -68,14 +71,14 @@ public:
         PreviewImageMode     = 1,
         WelcomePageMode      = 2,
         MediaPlayerMode      = 3,
-        MapWidgetMode        = 4,
-        TableViewMode        = 5,
+        TableViewMode        = 4,
+        MapWidgetMode        = 5,
         StackedViewModeLast  = 5
     };
 
 public:
 
-    explicit StackedView(QWidget* parent=0);
+    explicit StackedView(QWidget* const parent=0);
     ~StackedView();
 
     /* Attach the thumbnail dock widget to the specified QMainWindow. */
@@ -85,9 +88,12 @@ public:
     ImageThumbnailBar* thumbBar()         const;
     DigikamImageView*  imageIconView()    const;
     ImagePreviewView*  imagePreviewView() const;
-    MapWidgetView*     mapWidgetView()    const;
     TableView*         tableView()        const;
     MediaPlayerView*   mediaPlayerView()  const;
+
+#ifdef HAVE_KGEOMAP
+    MapWidgetView*     mapWidgetView()    const;
+#endif // HAVE_KGEOMAP
 
     /**
      * Single-file mode is image preview or media player,
@@ -155,8 +161,8 @@ private:
 
 private:
 
-    class StackedViewPriv;
-    StackedViewPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

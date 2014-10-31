@@ -31,6 +31,7 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "sidebar.h"
 #include "digikam_export.h"
 #include "searchtextbar.h"
@@ -43,10 +44,13 @@ namespace Digikam
 
 class DImg;
 class SidebarSplitter;
-class ImagePropertiesGPSTab;
 class ImagePropertiesTab;
 class ImagePropertiesMetaDataTab;
 class ImagePropertiesColorsTab;
+
+#ifdef HAVE_KGEOMAP
+class ImagePropertiesGPSTab;
+#endif // HAVE_KGEOMAP
 
 class DIGIKAM_EXPORT ImagePropertiesSideBar : public Sidebar
 {
@@ -102,10 +106,13 @@ protected:
 
     DImg*                       m_image;
 
-    ImagePropertiesGPSTab*      m_gpsTab;
     ImagePropertiesTab*         m_propertiesTab;
     ImagePropertiesMetaDataTab* m_metadataTab;
     ImagePropertiesColorsTab*   m_colorTab;
+
+#ifdef HAVE_KGEOMAP
+    ImagePropertiesGPSTab*      m_gpsTab;
+#endif // HAVE_KGEOMAP
 };
 
 }  // namespace Digikam

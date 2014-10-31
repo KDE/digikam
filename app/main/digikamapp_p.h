@@ -121,7 +121,9 @@ public:
         assignTagAction(0),
         imageViewSelectionAction(0),
         imagePreviewAction(0),
+#ifdef HAVE_KGEOMAP
         imageMapViewAction(0),
+#endif // HAVE_KGEOMAP
         imageTableViewAction(0),
         imageIconViewAction(0),
         imageLightTableAction(0),
@@ -243,7 +245,9 @@ public:
     // Image Actions
     KSelectAction*                      imageViewSelectionAction;
     KToggleAction*                      imagePreviewAction;
+#ifdef HAVE_KGEOMAP
     KToggleAction*                      imageMapViewAction;
+#endif // HAVE_KGEOMAP
     KToggleAction*                      imageTableViewAction;
     KToggleAction*                      imageIconViewAction;
     KAction*                            imageLightTableAction;

@@ -145,6 +145,7 @@
 #include "newitemsfinder.h"
 #include "imagepluginloader.h"
 #include "tagsmanager.h"
+#include "imagesortsettings.h"
 
 #ifdef HAVE_KIPI
 #include "kipipluginloader.h"
@@ -898,11 +899,13 @@ void DigikamApp::setupActions()
     connect(d->imagePreviewAction, SIGNAL(triggered()), d->view, SLOT(slotImagePreview()));
     d->imageViewSelectionAction->addAction(d->imagePreviewAction);
 
+#ifdef HAVE_KGEOMAP
     d->imageMapViewAction = new KToggleAction(KIcon("applications-internet"),
                                               i18nc("@action Switch to map view", "Map"), this);
     actionCollection()->addAction("map_view", d->imageMapViewAction);
     connect(d->imageMapViewAction, SIGNAL(triggered()), d->view, SLOT(slotMapWidgetView()));
     d->imageViewSelectionAction->addAction(d->imageMapViewAction);
+#endif // HAVE_KGEOMAP
 
     d->imageTableViewAction = new KToggleAction(KIcon("view-list-details"),
                                                 i18nc("@action Switch to table view", "Table"), this);
@@ -3100,7 +3103,9 @@ void DigikamApp::slotSwitchedToMapView()
 {
     //TODO: Link to map view's zoom actions
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
+#ifdef HAVE_KGEOMAP
     d->imageMapViewAction->setChecked(true);
+#endif // HAVE_KGEOMAP
     toogleShowBar();
 }
 

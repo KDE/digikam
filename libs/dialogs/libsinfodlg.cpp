@@ -22,6 +22,7 @@
  * ============================================================ */
 
 #include "libsinfodlg.h"
+#include "config-digikam.h"
 
 // Qt includes
 
@@ -45,9 +46,13 @@
 #include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
 
+#ifdef HAVE_KGEOMAP
 // Libkgeomap includes
 
 #include <libkgeomap/kgeomap_widget.h>
+
+using namespace KGeoMap;
+#endif // HAVE_KGEOMAP
 
 // C ANSI includes
 
@@ -73,7 +78,6 @@ extern "C"
 #include "greycstorationfilter.h"
 #include "pgfutils.h"
 #include "digikam-lcms.h"
-#include "config-digikam.h"
 
 #ifdef HAVE_LENSFUN
 #       include "lensfuniface.h"
@@ -81,7 +85,6 @@ extern "C"
 
 using namespace KExiv2Iface;
 using namespace KDcrawIface;
-using namespace KGeoMap;
 
 namespace Digikam
 {
@@ -145,9 +148,12 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
     list.insert(i18n("LibJasper"),                   QString(jas_getversion()));
     list.insert(i18n("LibCImg"),                     GreycstorationFilter::cimgVersionString());
     list.insert(i18n("LibLCMS"),                     QString::number(LCMS_VERSION));
+    list.insert(i18n("LibPGF"),                      PGFUtils::libPGFVersion());
+
+#ifdef HAVE_KGEOMAP
     list.insert(i18n("LibKGeoMap"),                  KGeoMapWidget::version());
     list.insert(i18n("Marble Widget"),               KGeoMapWidget::MarbleWidgetVersion());
-    list.insert(i18n("LibPGF"),                      PGFUtils::libPGFVersion());
+#endif // HAVE_KGEOMAP
 
     int nbcore = QThreadPool::globalInstance()->maxThreadCount();
     list.insert(i18np("CPU core", "CPU cores", nbcore), QString("%1").arg(nbcore));

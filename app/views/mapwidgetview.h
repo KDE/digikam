@@ -62,7 +62,7 @@ public:
 
     enum Application
     {
-        ApplicationDigikam = 1,
+        ApplicationDigikam  = 1,
         ApplicationImportUI = 2
     };
 
