@@ -117,6 +117,8 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
 
 #ifdef HAVE_EIGEN3
     list.insert(i18n("LibEigen"),                    QString(EIGEN3_VERSION_STRING));
+#else
+    list.insert(i18n("LibEigen support"),            i18n("no"));
 #endif // HAVE_EIGEN3
 
     list.insert(i18n("LibKExiv2"),                   KExiv2::version());
@@ -136,10 +138,14 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
 
 #ifdef HAVE_LENSFUN
     list.insert(i18n("LibLensFun"),                  LensFunIface::lensFunVersion());
+#else
+    list.insert(i18n("LibLensFun support"),          i18n("no"));
 #endif // HAVE_LENSFUN
 
 #ifndef HAVE_LIBLQR_1
     list.insert(i18n("LibLqr support"),              i18n("yes"));
+#else
+    list.insert(i18n("LibLqr support"),              i18n("no"));
 #endif // HAVE_LIBLQR_1
 
     list.insert(i18n("LibPNG"),                      QString(PNG_LIBPNG_VER_STRING));
@@ -153,6 +159,8 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
 #ifdef HAVE_KGEOMAP
     list.insert(i18n("LibKGeoMap"),                  KGeoMapWidget::version());
     list.insert(i18n("Marble Widget"),               KGeoMapWidget::MarbleWidgetVersion());
+#else
+    list.insert(i18n("LibKGeoMap support"),          i18n("no"));
 #endif // HAVE_KGEOMAP
 
     int nbcore = QThreadPool::globalInstance()->maxThreadCount();

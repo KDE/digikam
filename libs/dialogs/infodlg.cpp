@@ -6,7 +6,7 @@
  * Date        : 2008-07-11
  * Description : general info list dialog
  *
- * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -73,13 +73,13 @@ InfoDlg::InfoDlg(QWidget* const parent)
     setCaption(i18n("Shared Libraries and Components Information"));
     setButtonText(User1, i18n("Copy to Clipboard"));
 
-    QWidget* page     = new QWidget(this);
+    QWidget* const page     = new QWidget(this);
     setMainWidget(page);
-    QGridLayout* grid = new QGridLayout(page);
+    QGridLayout* const grid = new QGridLayout(page);
 
     // --------------------------------------------------------
 
-    QLabel* logo      = new QLabel(page);
+    QLabel* const logo      = new QLabel(page);
 
     if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
     {
@@ -94,7 +94,7 @@ InfoDlg::InfoDlg(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QLabel* header    = new QLabel(page);
+    QLabel* const header    = new QLabel(page);
     header->setWordWrap(true);
     header->setText(i18n("<font size=\"5\">%1</font><br/><b>Version %2</b>"
                          "<p>%3</p>",
@@ -170,7 +170,7 @@ void InfoDlg::slotCopy2ClipBoard()
         ++it;
     }
 
-    QMimeData* mimeData = new QMimeData();
+    QMimeData* const mimeData = new QMimeData();
     mimeData->setText(textInfo);
     QApplication::clipboard()->setMimeData(mimeData, QClipboard::Clipboard);
 }
