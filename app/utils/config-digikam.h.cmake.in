@@ -30,9 +30,6 @@
 /* Define to 1 if an external liblqr-1 shared library have been found */
 #cmakedefine HAVE_LIBLQR_1 1
 
-/* Define to 1 if an external libpgf shared library have been found */
-#cmakedefine USE_EXT_LIBPGF 1
-
 /* Define to 1 if an external lensfun shared library have been found */
 #cmakedefine HAVE_LENSFUN 1
 
@@ -53,6 +50,9 @@
 
 /* Define to 1 if GPhoto2 shared library is installed */
 #cmakedefine HAVE_GPHOTO2 1
+
+/* Define to 1 if Jasper shared library is installed */
+#cmakedefine HAVE_JASPER 1
 
 /* Define to 1 if libgphoto2 2.5 shared library is installed */
 #cmakedefine HAVE_GPHOTO25 1

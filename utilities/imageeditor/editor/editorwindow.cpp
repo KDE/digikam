@@ -115,6 +115,7 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "applicationsettings.h"
 #include "actioncategorizedview.h"
 #include "buttonicondisabler.h"
@@ -386,8 +387,9 @@ void EditorWindow::setupStandardActions()
     d->plugNewVersionInFormatAction(this, m_saveNewVersionInFormatAction, i18nc("@action:inmenu", "TIFF"),      "TIFF");
     d->plugNewVersionInFormatAction(this, m_saveNewVersionInFormatAction, i18nc("@action:inmenu", "PNG"),       "PNG");
     d->plugNewVersionInFormatAction(this, m_saveNewVersionInFormatAction, i18nc("@action:inmenu", "PGF"),       "PGF");
+#ifdef HAVE_JASPER
     d->plugNewVersionInFormatAction(this, m_saveNewVersionInFormatAction, i18nc("@action:inmenu", "JPEG 2000"), "JP2");
-
+#endif // HAVE_JASPER
     m_saveNewVersionAction->menu()->addAction(m_saveNewVersionAsAction);
     m_saveNewVersionAction->menu()->addAction(m_saveNewVersionInFormatAction);
 
@@ -2089,10 +2091,13 @@ QStringList EditorWindow::getWritingFilters()
     kDebug() << "KImageIO offered pattern: " << writablePattern;
 
     // append custom file types
+
+#ifdef HAVE_JASPER
     if (!pattern.contains("*.jp2"))
     {
         writablePattern.append(QString("*.jp2|") + i18n("JPEG 2000 image"));
     }
+#endif // HAVE_JASPER
 
     if (!pattern.contains("*.pgf"))
     {
@@ -2176,10 +2181,11 @@ QString EditorWindow::selectValidSavingFormat(const QString& filter,
     validTypes << "JPG";
     validTypes << "JPEG";
     validTypes << "JPE";
+    validTypes << "PGF";
+#ifdef HAVE_JASPER
     validTypes << "J2K";
     validTypes << "JP2";
-    validTypes << "PGF";
-
+#endif // HAVE_JASPER
     kDebug() << "Writable formats: " << validTypes;
 
     // if the auto filter is used, use the format provided in the filename

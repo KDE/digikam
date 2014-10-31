@@ -11,7 +11,6 @@ SET(libqueuemanager_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/basetools/color/iccconvert.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/basetools/color/invert.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/basetools/color/whitebalance.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/basetools/convert/convert2jp2.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/basetools/convert/convert2jpeg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/basetools/convert/convert2pgf.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/basetools/convert/convert2png.cpp
@@ -51,10 +50,16 @@ SET(libqueuemanager_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/main/queuemgrwindow.cpp
 )
 
+IF(JASPER_FOUND)
+    SET(libqueuemanager_SRCS ${libqueuemanager_SRCS}
+        ${CMAKE_CURRENT_SOURCE_DIR}/basetools/convert/convert2jp2.cpp
+       )
+ENDIF(JASPER_FOUND)
+
 IF(LENSFUN_FOUND)
     SET(libqueuemanager_SRCS ${libqueuemanager_SRCS}
-            ${CMAKE_CURRENT_SOURCE_DIR}/basetools/enhance/lensautofix.cpp
-    )
+        ${CMAKE_CURRENT_SOURCE_DIR}/basetools/enhance/lensautofix.cpp
+       )
 ENDIF()
 
 KDE4_ADD_LIBRARY(queuemanager STATIC ${libqueuemanager_SRCS})

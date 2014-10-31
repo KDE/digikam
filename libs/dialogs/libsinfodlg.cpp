@@ -60,11 +60,15 @@ using namespace KGeoMap;
 extern "C"
 {
 #endif
+
+#ifdef HAVE_JASPER
 #include <jasper/jas_version.h>
+#endif // HAVE_JASPER
+
 #include <png.h>
 #include <tiffvers.h>
 
-    // Avoid Warnings under Win32
+// Avoid Warnings under Win32
 #undef HAVE_STDLIB_H
 #undef HAVE_STDDEF_H
 #include <jpeglib.h>
@@ -80,7 +84,7 @@ extern "C"
 #include "digikam-lcms.h"
 
 #ifdef HAVE_LENSFUN
-#       include "lensfuniface.h"
+#include "lensfuniface.h"
 #endif // HAVE_LENSFUN
 
 using namespace KExiv2Iface;
@@ -151,10 +155,15 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
     list.insert(i18n("LibPNG"),                      QString(PNG_LIBPNG_VER_STRING));
     list.insert(i18n("LibTIFF"),                     QString(TIFFLIB_VERSION_STR).replace('\n', ' '));
     list.insert(i18n("LibJPEG"),                     QString::number(JPEG_LIB_VERSION));
-    list.insert(i18n("LibJasper"),                   QString(jas_getversion()));
     list.insert(i18n("LibCImg"),                     GreycstorationFilter::cimgVersionString());
     list.insert(i18n("LibLCMS"),                     QString::number(LCMS_VERSION));
     list.insert(i18n("LibPGF"),                      PGFUtils::libPGFVersion());
+
+#ifdef HAVE_JASPER
+    list.insert(i18n("LibJasper"),                   QString(jas_getversion()));
+#else
+    list.insert(i18n("LibJasper support"),           i18n("no"));
+#endif // HAVE_JASPER
 
 #ifdef HAVE_KGEOMAP
     list.insert(i18n("LibKGeoMap"),                  KGeoMapWidget::version());

@@ -254,10 +254,8 @@ IF(GPHOTO2_FOUND)
 ENDIF(GPHOTO2_FOUND)
 
 IF (ENABLE_KDEPIMLIBSSUPPORT)
-
     MACRO_OPTIONAL_FIND_PACKAGE(KdepimLibs)
     MACRO_BOOL_TO_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
-
 ENDIF()
 
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH} )
@@ -268,17 +266,13 @@ MACRO_OPTIONAL_FIND_PACKAGE(LensFun)
 SET(LENSFUN_MIN_VERSION "0.2.6.0")
 
 IF(LENSFUN_VERSION)
-
     MESSAGE(STATUS "liblensfun: Found version ${LENSFUN_VERSION} (required: ${LENSFUN_MIN_VERSION})")
     IF (${LENSFUN_VERSION} VERSION_LESS ${LENSFUN_MIN_VERSION})
         SET(LENSFUN_FOUND FALSE)
     ENDIF()
-
 ELSE()
-
     MESSAGE(WARNING "liblensfun: Version information not found, your version is probably too old.")
     SET(LENSFUN_FOUND FALSE)
-
 ENDIF()
 
 MACRO_BOOL_TO_01(LENSFUN_FOUND HAVE_LENSFUN)
@@ -318,6 +312,7 @@ MACRO_OPTIONAL_FIND_PACKAGE(Doxygen)
 MACRO_OPTIONAL_FIND_PACKAGE(Sqlite2)
 MACRO_BOOL_TO_01(SQLITE2_FOUND HAVE_SQLITE2)
 
+MACRO_BOOL_TO_01(JASPER_FOUND  HAVE_JASPER)
 MACRO_BOOL_TO_01(EIGEN3_FOUND  HAVE_EIGEN3)
 MACRO_BOOL_TO_01(KIPI_FOUND    HAVE_KIPI)
 MACRO_BOOL_TO_01(KFACE_FOUND   HAVE_KFACE)
@@ -360,7 +355,6 @@ ENDIF (ENABLE_INTERNALMYSQL)
 
 PRINT_LIBRARY_STATUS("libtiff"     "http://www.remotesensing.org/libtiff"                           ""                                    TIFF_FOUND)
 PRINT_LIBRARY_STATUS("libpng"      "http://www.libpng.org/pub/png/libpng.html"                      " (version >= 1.2.7)"                 PNG_FOUND)
-PRINT_LIBRARY_STATUS("libjasper"   "http://www.ece.uvic.ca/~mdadams/jasper"                         ""                                    JASPER_FOUND)
 PRINT_LIBRARY_STATUS("liblcms"     "http://www.littlecms.com"                                       ""                                    LCMS_FOUND)
 PRINT_LIBRARY_STATUS("Boost Graph" "http://www.boost.org/doc/libs/1_43_0/libs/graph/doc/index.html" " (headers only)"                     Boost_FOUND)
 PRINT_LIBRARY_STATUS("libkexiv2"   "http://www.digikam.org/sharedlibs"                              " (version >= 1.2.0)"                 KEXIV2_FOUND)
@@ -399,6 +393,17 @@ ELSE(KGEOMAP_FOUND)
     MESSAGE(STATUS " digiKam will be compiled without geolocation maps support.")
     MESSAGE(STATUS "")
 ENDIF(KGEOMAP_FOUND)
+
+# ================================================================
+
+IF(JASPER_FOUND)
+    MESSAGE(STATUS " Japser library found..................... YES (optional)")
+ELSE(JASPER_FOUND)
+    MESSAGE(STATUS " Japser library found..................... NO  (optional)")
+    MESSAGE(STATUS "")
+    MESSAGE(STATUS " digiKam will be compiled without JPEG2000 support.")
+    MESSAGE(STATUS "")
+ENDIF(JASPER_FOUND)
 
 # ================================================================
 
@@ -499,13 +504,13 @@ ENDIF(DOXYGEN_FOUND)
 
 # ================================================================
 
-IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND)
+IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND)
     MESSAGE(STATUS " digiKam can be compiled.................. YES")
     SET(DIGIKAM_CAN_BE_COMPILED true)
-ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND)
+ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND)
     MESSAGE(FATAL_ERROR " digiKam will be compiled................. NO  (Look README file for more details about dependencies)")
     SET(DIGIKAM_CAN_BE_COMPILED false)
-ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND JASPER_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND)
+ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND)
 
 IF(DIGIKAM_CAN_BE_COMPILED AND FORCED_UNBUNDLE AND ((NOT PGF_FOUND) OR (NOT EIGEN3_FOUND)))
     MESSAGE(STATUS "")
@@ -609,52 +614,40 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     # Lensfun and LibLqr-1 library rules
 
     IF(LQR-1_FOUND)
-
         INCLUDE_DIRECTORIES(${LQR-1_INCLUDE_DIRS})
         SET(liblqr_LIBS ${LQR-1_LIBRARIES})
-
     ENDIF(LQR-1_FOUND)
 
     IF(LENSFUN_FOUND)
-
         INCLUDE_DIRECTORIES(${LENSFUN_INCLUDE_DIRS})
         SET(liblensfun_LIBS ${LENSFUN_LIBRARIES})
-
     ENDIF(LENSFUN_FOUND)
 
     # Refocus tool dependency
 
     IF(EIGEN3_FOUND)
-
         INCLUDE_DIRECTORIES(${EIGEN3_INCLUDE_DIR})
-
     ENDIF(EIGEN3_FOUND)
 
     # Kipi-plugins support
 
     IF(KIPI_FOUND)
-
         INCLUDE_DIRECTORIES(${KIPI_INCLUDE_DIR})
         ADD_DEFINITIONS(${KIPI_DEFINITIONS})
-
     ENDIF(KIPI_FOUND)
 
     # Faces detection and recognition support
 
     IF(KFACE_FOUND)
-
         INCLUDE_DIRECTORIES(${KFACE_INCLUDE_DIR})
         ADD_DEFINITIONS(${KFACE_DEFINITIONS})
-
     ENDIF(KFACE_FOUND)
 
     # Faces detection and recognition support
 
     IF(KGEOMAP_FOUND)
-
         INCLUDE_DIRECTORIES(${KGEOMAP_INCLUDE_DIR})
         ADD_DEFINITIONS(${KGEOMAP_DEFINITIONS})
-
     ENDIF(KGEOMAP_FOUND)
 
     # ==================================================================================================
@@ -680,14 +673,19 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/ppmloader.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/qimageloader.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/iccjpeg.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/jp2kloader.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/pgfloader.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/jpegsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/pngsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/tiffsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/jp2ksettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/pgfsettings.cpp
        )
+
+    IF(JASPER_FOUND)
+        SET(libdimgloaders_SRCS ${libdimgloaders_SRCS}
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/jp2kloader.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/jp2ksettings.cpp
+           )
+    ENDIF(JASPER_FOUND)
 
     SET(libdimgfilters_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dklcms/digikam-lcms.cpp
@@ -778,31 +776,25 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     IF(LQR-1_FOUND)
-
         SET(libdimgfilters_SRCS ${libdimgfilters_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/contentawarefilter.cpp
            )
-
     ENDIF(LQR-1_FOUND)
 
     IF(LENSFUN_FOUND)
-
         SET(libdimgfilters_SRCS ${libdimgfilters_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfunfilter.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfuncameraselector.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfuniface.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfunsettings.cpp
            )
-
     ENDIF(LENSFUN_FOUND)
 
     IF(EIGEN3_FOUND)
-
         SET(libdimgfilters_SRCS ${libdimgfilters_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/refocusfilter.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/matrix.cpp
            )
-
     ENDIF(EIGEN3_FOUND)
 
     SET(libdmetadata_SRCS
@@ -851,7 +843,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         SET(libjpegutils_SRCS
                 ${libjpegutils_SRCS}
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/jpegwin.cpp
-            )
+           )
     ENDIF(MSVC)
 
     SET(libthreadimageio_SRCS
@@ -898,7 +890,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         SET(libnotificationmanager_SRCS
                 ${libnotificationmanager_SRCS}
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/notificationmanager/macnotification.mm
-            )
+           )
     ENDIF()
 
     SET(libmainview_SRCS
@@ -961,21 +953,17 @@ IF(DIGIKAM_CAN_BE_COMPILED)
        )
 
     IF(USE_SCRIPT_IFACE)
-
         SET(libscriptiface_SRCS
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scriptiface/scriptiface.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scriptiface/scriptplugintype.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/scriptiface/setupscriptmanager.cpp
            )
-
     ENDIF(USE_SCRIPT_IFACE)
 
     IF(USE_PRESENTATION_MODE)
-
         SET(libpresentationview_SRCS
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/qmlshow/qmlshow.cpp
            )
-
     ENDIF(USE_PRESENTATION_MODE)
 
     SET(libslideshow_SRCS
