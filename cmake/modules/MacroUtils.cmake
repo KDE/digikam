@@ -14,9 +14,9 @@ MACRO(FILL_WITH_DOTS VAR)
     MATH(EXPR DOT_LENGTH "${PRINT_COMPILE_LENGTH} - ${NAME_LENGTH}")
 
     IF(${DOT_LENGTH} LESS 0)
-    
+
         SET(DOT_LENGTH 0)
-    
+
     ENDIF()
 
     FOREACH(COUNT RANGE ${DOT_LENGTH})
@@ -58,16 +58,16 @@ MACRO(PRINT_QTMODULE_STATUS NAME)
     FILL_WITH_DOTS(LIB_MESSAGE)
 
     IF(${ARGN})
-    
+
         MESSAGE(STATUS " ${LIB_MESSAGE} YES")
-    
+
     ELSE()
-    
+
         MESSAGE(STATUS " ${LIB_MESSAGE} NO")
         MESSAGE(STATUS "")
         MESSAGE(SEND_ERROR " ${NAME} module is needs. You need to install a package containing the ${NAME} module.")
         MESSAGE(STATUS "")
-    
+
     ENDIF()
 
 ENDMACRO(PRINT_QTMODULE_STATUS)
@@ -80,17 +80,17 @@ MACRO(PRINT_EXECUTABLE_STATUS NAME TECHNICAL_NAME PATH_VARIABLE)
     FILL_WITH_DOTS(LIB_MESSAGE)
 
     IF(${ARGN})
-    
+
         MESSAGE(STATUS " ${LIB_MESSAGE} YES")
-    
+
     ELSE()
-    
+
         MESSAGE(STATUS " ${LIB_MESSAGE} NO")
         MESSAGE(STATUS "")
         MESSAGE(STATUS " ${NAME} is needs. You need to install the package containing the \"${TECHNICAL_NAME}\" executable.")
         MESSAGE(STATUS " If you have this executable installed, please specify the folder containing it by ${PATH_VARIABLE}")
         MESSAGE(SEND_ERROR "")
-    
+
     ENDIF()
 
 ENDMACRO(PRINT_EXECUTABLE_STATUS)
@@ -103,13 +103,13 @@ MACRO(PRINT_COMPONENT_COMPILE_STATUS NAME)
     FILL_WITH_DOTS(COMPILE_MESSAGE)
 
     IF(${ARGN})
-    
+
         MESSAGE(STATUS " ${COMPILE_MESSAGE} YES (optional)")
-    
+
     ELSE()
-    
+
         MESSAGE(STATUS " ${COMPILE_MESSAGE} NO  (optional - Look README file for more details about dependencies)")
-    
+
     ENDIF()
 
 ENDMACRO(PRINT_COMPONENT_COMPILE_STATUS)
@@ -126,9 +126,9 @@ MACRO(PRINT_OPTIONAL_LIBRARY_STATUS NAME)
         MESSAGE(STATUS " ${LIB_MESSAGE} YES (optional)")
 
     ELSE()
-    
+
         MESSAGE(STATUS " ${LIB_MESSAGE} NO  (optional)")
-    
+
     ENDIF()
 
 ENDMACRO(PRINT_OPTIONAL_LIBRARY_STATUS)
@@ -143,11 +143,11 @@ MACRO(PRINT_OPTIONAL_QTMODULE_STATUS NAME)
     IF(${ARGN})
 
         MESSAGE(STATUS " ${LIB_MESSAGE} YES (optional)")
-    
+
     ELSE()
-    
+
         MESSAGE(STATUS " ${LIB_MESSAGE} NO  (optional)")
-    
+
     ENDIF()
 
 ENDMACRO(PRINT_OPTIONAL_QTMODULE_STATUS)
