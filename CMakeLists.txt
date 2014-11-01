@@ -46,9 +46,6 @@ SET(DIGIKAM_VERSION_STRING
     "${DIGIKAM_VERSION_SHORT}${DIGIKAM_SUFFIX_VERSION}"
    )
 
-# Path to find Extra CMake scripts
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
-
 # Databse Schema version
 # We must set this variable here at top level because it is used in both digikam/database and data/database
 # Version history:
@@ -84,7 +81,7 @@ INCLUDE(MacroLibrary)
 
 INCLUDE(FindPackageHandleStandardArgs)
 INCLUDE(FindPkgConfig)
-SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH} )
+SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
 
 SET(KIPI_MIN_VERSION  "2.0.0")
 SET(PGF_MIN_VERSION   "6.12.24")
@@ -108,7 +105,7 @@ INCLUDE(MacroUtils)
 INCLUDE(MacroOpenCV)
 DETECT_OPENCV(2.4.9 core highgui objdetect contrib legacy imgproc)
 
-# check the libkdcraw version
+# -- check the libkdcraw version -----------------------------------------------------------------
 
 SET(KDCRAW_MIN_VERSION "2.2.0")
 
@@ -126,8 +123,9 @@ ELSE (KDCRAW_VERSION)
 
 ENDIF (KDCRAW_VERSION)
 
-# LCMS version 1 and 2 library handling (See bug #294105)
+# -- LCMS version 1 and 2 library handling (See bug #294105) -------------------------------------
 # Note: if ENABLE_LCMS2 is on and no LCMS2 is available, build will fail, even if LCMS1 is present
+
 IF (ENABLE_LCMS2)
     MESSAGE(STATUS "Check for LCMS2 availability...")
     FIND_PACKAGE(LCMS2)
@@ -157,7 +155,8 @@ ELSE (ENABLE_LCMS2)
     ENDIF (LCMS_FOUND)
 ENDIF (ENABLE_LCMS2)
 
-# To link under Solaris (see bug #274484)
+# -- To link under Solaris (see bug #274484) ------------------------------------------------------
+
 IF(NOT WIN32)
     FIND_LIBRARY(MATH_LIBRARY m)
 ENDIF(NOT WIN32)
@@ -166,11 +165,7 @@ IF(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
     FIND_LIBRARY(KVM_LIBRARY kvm)
 ENDIF(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
 
-IF(Boost_FOUND)
-    INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
-ENDIF(Boost_FOUND)
-
-#-------------------------------------------------------------------------------------
+# -- Libjpeg rules --------------------------------------------------------------------------------
 
 # check version of libjpeg so that we can use the appropriate dir
 # See bug #227313
@@ -191,7 +186,7 @@ ELSE(_jpeglib_version_compile_result)
     SET(DIGIKAM_LIBJPEG_DIR libjpeg-80)
 ENDIF(_jpeglib_version_compile_result)
 
-#-------------------------------------------------------------------------------------
+# -- Mysql rules ----------------------------------------------------------------------------------
 
 IF (ENABLE_INTERNALMYSQL)
 
@@ -219,29 +214,35 @@ ELSE (ENABLE_INTERNALMYSQL)
 
 ENDIF (ENABLE_INTERNALMYSQL)
 
-MACRO_BOOL_TO_01(ENABLE_INTERNALMYSQL HAVE_INTERNALMYSQL)
-
 # ==================================================================================================
 # Optional dependencies
 
-MACRO_OPTIONAL_FIND_PACKAGE(Gphoto2)
-MACRO_BOOL_TO_01(GPHOTO2_FOUND HAVE_GPHOTO2)
+MACRO_OPTIONAL_FIND_PACKAGE(Doxygen)
+MACRO_OPTIONAL_FIND_PACKAGE(Sqlite2)
+MACRO_OPTIONAL_FIND_PACKAGE(Lqr-1)
 
-IF (NOT WIN32 AND HAVE_GPHOTO2)
+# -- libgphoto2 rules --------------------------------------------------------------------------
+
+MACRO_OPTIONAL_FIND_PACKAGE(Gphoto2)
+
+IF (NOT WIN32 AND GPHOTO2_FOUND)
     # See bug #268267 : digiKam need to be linked to libusb to prevent crash at gphoto2 init if opencv is linked with libdc1394
     MACRO_OPTIONAL_FIND_PACKAGE(USB)
-ENDIF (NOT WIN32 AND HAVE_GPHOTO2)
+ENDIF (NOT WIN32 AND GPHOTO2_FOUND)
 
 IF(GPHOTO2_FOUND)
     EXEC_PROGRAM(gphoto2-config ARGS --version RETURN_VALUE _return_VALUE OUTPUT_VARIABLE GPHOTO2_VERSION)
     STRING(REPLACE "libgphoto2" "" GPHOTO2_VERSION "${GPHOTO2_VERSION}")
     MACRO_ENSURE_VERSION("2.4.0" "${GPHOTO2_VERSION}" VERSION_GPHOTO2)
+
     IF(VERSION_GPHOTO2 AND LIBUSB_FOUND)
         SET(GPHOTO2_FOUND true)
     ELSE(VERSION_GPHOTO2 AND LIBUSB_FOUND)
         SET(GPHOTO2_FOUND false)
     ENDIF(VERSION_GPHOTO2 AND LIBUSB_FOUND)
+
     MACRO_ENSURE_VERSION("2.5.0" "${GPHOTO2_VERSION}" VERSION_GPHOTO25)
+
     IF(VERSION_GPHOTO25)
         SET(HAVE_GPHOTO25 1)
     ELSE(VERSION_GPHOTO25)
@@ -249,14 +250,14 @@ IF(GPHOTO2_FOUND)
     ENDIF(VERSION_GPHOTO25)
 ENDIF(GPHOTO2_FOUND)
 
+# -- KDEPim libraries rules -------------------------------------------------------------------
+
 IF (ENABLE_KDEPIMLIBSSUPPORT)
     MACRO_OPTIONAL_FIND_PACKAGE(KdepimLibs)
-    MACRO_BOOL_TO_01(KDEPIMLIBS_FOUND HAVE_KDEPIMLIBS)
 ENDIF()
 
-SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH} )
+# -- Check LensFun library for Lens auto-correction tool --------------------------------------
 
-# Check LensFun library for Lens auto-correction tool.
 MACRO_OPTIONAL_FIND_PACKAGE(LensFun)
 
 SET(LENSFUN_MIN_VERSION "0.2.6.0")
@@ -271,16 +272,8 @@ ELSE()
     SET(LENSFUN_FOUND FALSE)
 ENDIF()
 
-MACRO_BOOL_TO_01(LENSFUN_FOUND HAVE_LENSFUN)
+# -- Baloo rules -----------------------------------------------------------------------------
 
-# Check Lqr-1 library for Contents Aware Resizer tool.
-MACRO_OPTIONAL_FIND_PACKAGE(Lqr-1)
-MACRO_BOOL_TO_01(LQR-1_FOUND HAVE_LIBLQR_1)
-
-MACRO_BOOL_TO_01(ENABLE_THUMBS_DB         USE_THUMBS_DB)
-MACRO_BOOL_TO_01(ENABLE_IMGLOADERDEBUGMSG USE_IMGLOADERDEBUGMSG)
-
-# Win32 compilation with Baloo is not available
 IF (ENABLE_BALOOSUPPORT)
     # Baloo support from 4.12
     IF (${KDE_VERSION} VERSION_GREATER "4.11.99")
@@ -297,27 +290,33 @@ IF (ENABLE_BALOOSUPPORT)
             SET(Baloo_FOUND FALSE)
         ENDIF (NOT KFileMetaData_FOUND)
 
-        MACRO_BOOL_TO_01(Baloo_FOUND HAVE_BALOO)
     ENDIF (${KDE_VERSION} VERSION_GREATER "4.11.99")
 ENDIF (ENABLE_BALOOSUPPORT)
 
-MACRO_OPTIONAL_FIND_PACKAGE(Doxygen)
+# -- compilation options definitions --------------------------------------------------------
 
-MACRO_OPTIONAL_FIND_PACKAGE(Sqlite2)
-MACRO_BOOL_TO_01(SQLITE2_FOUND HAVE_SQLITE2)
-
-MACRO_BOOL_TO_01(JASPER_FOUND  HAVE_JASPER)
-MACRO_BOOL_TO_01(EIGEN3_FOUND  HAVE_EIGEN3)
-MACRO_BOOL_TO_01(KIPI_FOUND    HAVE_KIPI)
-MACRO_BOOL_TO_01(KFACE_FOUND   HAVE_KFACE)
-MACRO_BOOL_TO_01(KGEOMAP_FOUND HAVE_KGEOMAP)
+MACRO_BOOL_TO_01(GPHOTO2_FOUND            HAVE_GPHOTO2)
+MACRO_BOOL_TO_01(KDEPIMLIBS_FOUND         HAVE_KDEPIMLIBS)
+MACRO_BOOL_TO_01(LENSFUN_FOUND            HAVE_LENSFUN)
+MACRO_BOOL_TO_01(Baloo_FOUND              HAVE_BALOO)
+MACRO_BOOL_TO_01(SQLITE2_FOUND            HAVE_SQLITE2)
+MACRO_BOOL_TO_01(LQR-1_FOUND              HAVE_LIBLQR_1)
+MACRO_BOOL_TO_01(ENABLE_INTERNALMYSQL     HAVE_INTERNALMYSQL)
+MACRO_BOOL_TO_01(JASPER_FOUND             HAVE_JASPER)
+MACRO_BOOL_TO_01(EIGEN3_FOUND             HAVE_EIGEN3)
+MACRO_BOOL_TO_01(KIPI_FOUND               HAVE_KIPI)
+MACRO_BOOL_TO_01(KFACE_FOUND              HAVE_KFACE)
+MACRO_BOOL_TO_01(KGEOMAP_FOUND            HAVE_KGEOMAP)
 
 # Whether to use Qt's scaling to downscale previews. Under MacOSX, Qt
 # can make use of the higher physical resolution of Retina
 # displays. However, it seems that other Qt renderers perform badly at
 # this, so disable. If other renderers switch to coarser logical
 # pixels, one probably needs this feature on these platforms as well.
-MACRO_BOOL_TO_01(APPLE USE_QT_SCALING)
+MACRO_BOOL_TO_01(APPLE                    USE_QT_SCALING)
+
+MACRO_BOOL_TO_01(ENABLE_THUMBS_DB         USE_THUMBS_DB)
+MACRO_BOOL_TO_01(ENABLE_IMGLOADERDEBUGMSG USE_IMGLOADERDEBUGMSG)
 
 # Set config files accordingly with optional dependencies
 
@@ -593,13 +592,13 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                         ${CMAKE_CURRENT_BINARY_DIR}/app
     )
 
-    IF(USE_SCRIPT_IFACE)
-        INCLUDE_DIRECTORIES(${QT_QTSCRIPT_INCLUDE_DIR})
-    ENDIF(USE_SCRIPT_IFACE)
-
     IF(Baloo_FOUND)
         INCLUDE_DIRECTORIES(${BALOO_INCLUDE_DIR} ${KFILEMETADATA_INCLUDE_DIR})
     ENDIF(Baloo_FOUND)
+
+    IF(Boost_FOUND)
+        INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
+    ENDIF(Boost_FOUND)
 
     # Lensfun and LibLqr-1 library rules
 
