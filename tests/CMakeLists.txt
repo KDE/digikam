@@ -67,13 +67,16 @@ TARGET_LINK_LIBRARIES(cameranamehelpertest
                       ${KDE4_KDEUI_LIBS}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
-                      ${GPHOTO2_LIBRARIES}
                       ${KDCRAW_LIBRARIES}
                       ${KEXIV2_LIBRARIES}
                       ${OpenCV_LIBRARIES}
                       digikamcore
                       digikamdatabase
                      )
+
+IF(GPHOTO2_FOUND)
+    TARGET_LINK_LIBRARIES(cameranamehelpertest ${GPHOTO2_LIBRARIES})
+ENDIF(GPHOTO2_FOUND)
 
 #------------------------------------------------------------------------
 
@@ -87,11 +90,14 @@ TARGET_LINK_LIBRARIES(uifilevalidatortest
                       ${KDE4_KDECORE_LIBS}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
-                      ${GPHOTO2_LIBRARIES}
                       ${OpenCV_LIBRARIES}
                       digikamcore
                       digikamdatabase
                      )
+
+IF(GPHOTO2_FOUND)
+    TARGET_LINK_LIBRARIES(uifilevalidatortest ${GPHOTO2_LIBRARIES})
+ENDIF(GPHOTO2_FOUND)
 
 #------------------------------------------------------------------------
 
@@ -105,10 +111,13 @@ TARGET_LINK_LIBRARIES(statesavingobjecttest
                       ${KDE4_KDECORE_LIBS}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
-                      ${GPHOTO2_LIBRARIES}
                       ${OpenCV_LIBRARIES}
                       digikamcore
                      )
+
+IF(GPHOTO2_FOUND)
+    TARGET_LINK_LIBRARIES(statesavingobjecttest ${GPHOTO2_LIBRARIES})
+ENDIF(GPHOTO2_FOUND)
 
 #------------------------------------------------------------------------
 
@@ -215,14 +224,19 @@ TARGET_LINK_LIBRARIES(filesaveoptionsboxtest
 #                      ${QT_QTTEST_LIBRARY}
 #                      ${QT_QTXML_LIBRARY}
 #                      ${QT_QTSQL_LIBRARY}
-#                      ${GPHOTO2_LIBRARIES}
-#                      ${KIPI_LIBRARIES}
 #                      ${KDCRAW_LIBRARIES}
 #                      ${KEXIV2_LIBRARIES}
 #                      digikamdatabase
 #                      digikamcore
 #                     )
-
+#
+#IF(KIPI_FOUND)
+#    TARGET_LINK_LIBRARIES(albummodeltest ${KIPI_LIBRARIES})
+#ENDIF(KIPI_FOUND)
+#
+#IF(GPHOTO2_FOUND)
+#     TARGET_LINK_LIBRARIES(albummodeltest ${GPHOTO2_LIBRARIES})
+#ENDIF(GPHOTO2_FOUND)
 
 #------------------------------------------------------------------------
 
@@ -300,35 +314,19 @@ SET(databasefieldstest_SRCS
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libs/threadimageio)
 
-IF(PGF_FOUND)
-    INCLUDE_DIRECTORIES(${PGF_INCLUDE_DIRS})
-ELSE(PGF_FOUND)
-    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libs/3rdparty/libpgf)
-ENDIF(PGF_FOUND)
+INCLUDE_DIRECTORIES(${PGF_INCLUDE_DIRS})
 
-# Disable libpgf warnings.
-SET_SOURCE_FILES_PROPERTIES(${libpgf_SRCS} PROPERTIES COMPILE_FLAGS "-w")
-
-SET(qtpgftest_SRCS qtpgftest.cpp ${libpgf_SRCS} ${pgfutils_SRCS})
+SET(qtpgftest_SRCS qtpgftest.cpp ${pgfutils_SRCS})
 KDE4_ADD_EXECUTABLE(qtpgftest NOGUI ${qtpgftest_SRCS})
-TARGET_LINK_LIBRARIES(qtpgftest ${OPENMP_LDFLAGS} ${KDE4_KIO_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
-IF(PGF_FOUND)
-    TARGET_LINK_LIBRARIES(qtpgftest ${PGF_LIBRARIES})
-ENDIF(PGF_FOUND)
+TARGET_LINK_LIBRARIES(qtpgftest ${KDE4_KIO_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${PGF_LIBRARIES})
 
-SET(pgfscaled_SRCS pgfscaled.cpp ${libpgf_SRCS} ${pgfutils_SRCS})
+SET(pgfscaled_SRCS pgfscaled.cpp ${pgfutils_SRCS})
 KDE4_ADD_EXECUTABLE(pgfscaled NOGUI ${pgfscaled_SRCS})
-TARGET_LINK_LIBRARIES(pgfscaled ${OPENMP_LDFLAGS} ${KDE4_KIO_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
-IF(PGF_FOUND)
-    TARGET_LINK_LIBRARIES(pgfscaled ${PGF_LIBRARIES})
-ENDIF(PGF_FOUND)
+TARGET_LINK_LIBRARIES(pgfscaled ${KDE4_KIO_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${PGF_LIBRARIES})
 
-SET(loadpgfdata_SRCS loadpgfdata.cpp ${libpgf_SRCS} ${pgfutils_SRCS})
+SET(loadpgfdata_SRCS loadpgfdata.cpp ${pgfutils_SRCS})
 KDE4_ADD_EXECUTABLE(loadpgfdata NOGUI ${loadpgfdata_SRCS})
-TARGET_LINK_LIBRARIES(loadpgfdata ${OPENMP_LDFLAGS} ${KDE4_KIO_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
-IF(PGF_FOUND)
-    TARGET_LINK_LIBRARIES(loadpgfdata ${PGF_LIBRARIES})
-ENDIF(PGF_FOUND)
+TARGET_LINK_LIBRARIES(loadpgfdata ${KDE4_KIO_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${PGF_LIBRARIES})
 
 #------------------------------------------------------------------------
 
@@ -357,6 +355,7 @@ TARGET_LINK_LIBRARIES(loadsavethreadtest
                      )
 
 IF(LENSFUN_FOUND)
+
     SET(testlensfuniface_SRCS testlensfuniface.cpp)
     KDE4_ADD_EXECUTABLE(testlensfuniface NOGUI ${testlensfuniface_SRCS})
     TARGET_LINK_LIBRARIES(testlensfuniface
@@ -365,73 +364,78 @@ IF(LENSFUN_FOUND)
                           ${KDE4_KDECORE_LIBS}
                           ${KEXIV2_LIBRARIES}
 
-                          # To link under Solaris (see bug #274484)
-                          ${MATH_LIBRARY}
-
-                          # To link under FreeBSD
-                          ${KVM_LIBRARY}
-
                           ${LENSFUN_LIBRARIES}
                           ${OpenCV_LIBRARIES}
-                     )
+                         )
+
+    IF(NOT WIN32)
+        # To link under Solaris (see bug #274484)
+        TARGET_LINK_LIBRARIES(testlensfuniface ${MATH_LIBRARY})
+    ENDIF(NOT WIN32)
+
+    IF(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
+        TARGET_LINK_LIBRARIES(testlensfuniface ${KVM_LIBRARY})
+    ENDIF(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
+
 ENDIF()
 
 #------------------------------------------------------------------------
 
 SET (testnrestimate_SRCS testnrestimate.cpp)
 KDE4_ADD_EXECUTABLE (testnrestimate NOGUI ${testnrestimate_SRCS})
-TARGET_LINK_LIBRARIES (testnrestimate
-               digikamcore
-               ${QT_QTCORE_LIBRARY}
-               ${QT_QTGUI_LIBRARY}
-               ${KDE4_KDECORE_LIBS}
-               ${KEXIV2_LIBRARIES}
-               ${KDCRAW_LIBRARIES}
-               ${OpenCV_LIBRARIES}
-               )
+TARGET_LINK_LIBRARIES(testnrestimate
+                      digikamcore
+                      ${QT_QTCORE_LIBRARY}
+                      ${QT_QTGUI_LIBRARY}
+                      ${KDE4_KDECORE_LIBS}
+                      ${KEXIV2_LIBRARIES}
+                      ${KDCRAW_LIBRARIES}
+                      ${OpenCV_LIBRARIES}
+                     )
 
 #------------------------------------------------------------------------
 
-SET (testautocrop_SRCS testautocrop.cpp)
+SET(testautocrop_SRCS testautocrop.cpp)
 KDE4_ADD_EXECUTABLE(testautocrop NOGUI ${testautocrop_SRCS})
-TARGET_LINK_LIBRARIES (testautocrop
-               digikamcore
-               ${QT_QTCORE_LIBRARY}
-               ${QT_QTGUI_LIBRARY}
-               ${KDE4_KDECORE_LIBS}
-               ${KEXIV2_LIBRARIES}
-               ${KDCRAW_LIBRARIES}
-               ${OpenCV_LIBRARIES}
-               )
+TARGET_LINK_LIBRARIES(testautocrop
+                      digikamcore
+                      ${QT_QTCORE_LIBRARY}
+                      ${QT_QTGUI_LIBRARY}
+                      ${KDE4_KDECORE_LIBS}
+                      ${KEXIV2_LIBRARIES}
+                      ${KDCRAW_LIBRARIES}
+                      ${OpenCV_LIBRARIES}
+                     )
 
 #------------------------------------------------------------------------
 
-SET (testdatabase_SRCS testdatabase.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../app/album/album.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../app/album/albumhistory.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../app/album/albummanager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../app/album/albumwatch.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../app/database/scancontroller.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../app/database/databaseguierrorhandler.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_p.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_albums.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_database.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_iconview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_miscs.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_mime.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_tooltips.cpp
-)
+SET(testdatabase_SRCS testdatabase.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../app/album/album.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../app/album/albumhistory.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../app/album/albummanager.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../app/album/albumwatch.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../app/database/scancontroller.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../app/database/databaseguierrorhandler.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_p.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_albums.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_database.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_iconview.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_miscs.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_mime.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_tooltips.cpp
+   )
+
 KDE4_ADD_EXECUTABLE(testdatabase ${testdatabase_SRCS})
-TARGET_LINK_LIBRARIES (testdatabase
-               digikamcore
-               digikamdatabase
-               ${QT_QTCORE_LIBRARY}
-               ${QT_QTGUI_LIBRARY}
-               ${QT_QTSQL_LIBRARY}
-               ${KDE4_KDECORE_LIBS}
-               ${KDE4_KIO_LIBS}
-               ${KEXIV2_LIBRARIES}
-               ${KDCRAW_LIBRARIES}
-               ${OpenCV_LIBRARIES}
-               )
+TARGET_LINK_LIBRARIES(testdatabase
+                      digikamcore
+                      digikamdatabase
+                      ${QT_QTCORE_LIBRARY}
+                      ${QT_QTGUI_LIBRARY}
+                      ${QT_QTSQL_LIBRARY}
+                      ${KDE4_KDECORE_LIBS}
+                      ${KDE4_KIO_LIBS}
+                      ${KEXIV2_LIBRARIES}
+                      ${KDCRAW_LIBRARIES}
+                      ${OpenCV_LIBRARIES}
+                     )

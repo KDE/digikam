@@ -52,23 +52,27 @@ SET_TARGET_PROPERTIES(showfoto PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRE
 
 TARGET_LINK_LIBRARIES(showfoto
                       digikamcore
+
                       ${KEXIV2_LIBRARIES}
                       ${KDCRAW_LIBRARIES}
                       ${KGEOMAP_LIBRARIES}
                       ${KDE4_KIO_LIBS}
                       ${LCMS_LIBRARIES}
                       ${OpenCV_LIBRARIES}
-
-                      # To link under Solaris (see bug #274484)
-                      ${MATH_LIBRARY}
-
-                      # To link under FreeBSD
-                      ${KVM_LIBRARY}
                      )
 
 IF(KGEOMAP_FOUND)
    TARGET_LINK_LIBRARIES(showfoto ${KGEOMAP_LIBRARIES})
 ENDIF(KGEOMAP_FOUND)
+
+IF(NOT WIN32)
+    # To link under Solaris (see bug #274484)
+    TARGET_LINK_LIBRARIES(showfoto ${MATH_LIBRARY})
+ENDIF(NOT WIN32)
+
+IF(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
+    TARGET_LINK_LIBRARIES(showfoto ${KVM_LIBRARY})
+ENDIF(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
 
 INSTALL(TARGETS showfoto ${INSTALL_TARGETS_DEFAULT_ARGS})
 
