@@ -505,12 +505,6 @@ ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND 
     SET(DIGIKAM_CAN_BE_COMPILED false)
 ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND)
 
-IF(DIGIKAM_CAN_BE_COMPILED AND FORCED_UNBUNDLE AND ((NOT PGF_FOUND) OR (NOT EIGEN3_FOUND)))
-    MESSAGE(STATUS "")
-    MESSAGE(FATAL_ERROR " BUNDLED LIBRARIES HAVE BEEN FORCE-DISABLED IN THIS BUILD. Aborting.")
-    SET(DIGIKAM_CAN_BE_COMPILED false)
-ENDIF(DIGIKAM_CAN_BE_COMPILED AND FORCED_UNBUNDLE AND ((NOT PGF_FOUND) OR (NOT EIGEN3_FOUND)))
-
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "")
 
@@ -586,26 +580,43 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                         ${KDCRAW_INCLUDE_DIR}
                         ${KDE4_INCLUDES}
                         ${QT_INCLUDES}
-                        ${GPHOTO2_INCLUDE_DIRS}
                         ${PGF_INCLUDE_DIRS}
                         ${CMAKE_CURRENT_SOURCE_DIR}/app
                         ${CMAKE_CURRENT_BINARY_DIR}/app
-    )
+                       )
+
+    # JPEG2000 support
+
+    IF(JASPER_FOUND)
+        INCLUDE_DIRECTORIES(${JASPER_INCLUDE_DIR})
+    ENDIF(JASPER_FOUND)
+
+    # libgphoto2 library rules
+
+    IF(GPHOTO2_FOUND)
+        INCLUDE_DIRECTORIES(${GPHOTO2_INCLUDE_DIRS})
+    ENDIF(GPHOTO2_FOUND)
+
+    # Baloo library rules
 
     IF(Baloo_FOUND)
         INCLUDE_DIRECTORIES(${BALOO_INCLUDE_DIR} ${KFILEMETADATA_INCLUDE_DIR})
     ENDIF(Baloo_FOUND)
 
+    # Boost library rules
+
     IF(Boost_FOUND)
         INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
     ENDIF(Boost_FOUND)
 
-    # Lensfun and LibLqr-1 library rules
+    # LibLqr-1 library rules
 
     IF(LQR-1_FOUND)
         INCLUDE_DIRECTORIES(${LQR-1_INCLUDE_DIRS})
         SET(liblqr_LIBS ${LQR-1_LIBRARIES})
     ENDIF(LQR-1_FOUND)
+
+    # Lensfun library rules
 
     IF(LENSFUN_FOUND)
         INCLUDE_DIRECTORIES(${LENSFUN_INCLUDE_DIRS})
@@ -632,7 +643,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ADD_DEFINITIONS(${KFACE_DEFINITIONS})
     ENDIF(KFACE_FOUND)
 
-    # Faces detection and recognition support
+    # Geolocation maps support
 
     IF(KGEOMAP_FOUND)
         INCLUDE_DIRECTORIES(${KGEOMAP_INCLUDE_DIR})
