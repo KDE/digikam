@@ -73,7 +73,7 @@ namespace Digikam
 
 void TIFFLoader::dimg_tiff_warning(const char* module, const char* format, va_list warnings)
 {
-#ifdef USE_ADVANCEDDEBUGMSG
+#ifdef USE_IMGLOADERDEBUGMSG
     char message[4096];
     vsnprintf(message, 4096, format, warnings);
     kDebug() << module <<  "::" <<  message;
@@ -86,7 +86,7 @@ void TIFFLoader::dimg_tiff_warning(const char* module, const char* format, va_li
 
 void TIFFLoader::dimg_tiff_error(const char* module, const char* format, va_list errors)
 {
-#ifdef USE_ADVANCEDDEBUGMSG
+#ifdef USE_IMGLOADERDEBUGMSG
     char message[4096];
     vsnprintf(message, 4096, format, errors);
     kDebug() << module << "::" << message;
@@ -127,7 +127,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         return false;
     }
 
-#ifdef USE_ADVANCEDDEBUGMSG
+#ifdef USE_IMGLOADERDEBUGMSG
     TIFFPrintDirectory(tif, stdout, 0);
 #endif
 

@@ -4,15 +4,15 @@ PROJECT(digikam)
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "Starting CMake configuration for: digiKam")
 
-OPTION(ENABLE_THUMBS_DB         "Build digiKam with thumbnails database support (default=ON)"           ON)
-OPTION(ENABLE_INTERNALMYSQL     "Build digiKam with insternal MySQL server executable (default=ON)"     ON)
-OPTION(ENABLE_LCMS2             "Build digiKam with LCMS2 instead LCMS1 (default=OFF)"                  OFF)
-OPTION(ENABLE_BALOOSUPPORT      "Build digiKam with Baloo support (default=ON)"                         ON)
-OPTION(ENABLE_KDEPIMLIBSSUPPORT "Build digiKam with Kdepimlibs support (default=OFF)"                   OFF)
+OPTION(ENABLE_THUMBS_DB         "Build digiKam with thumbnails database support (default=ON)"                    ON)
+OPTION(ENABLE_INTERNALMYSQL     "Build digiKam with insternal MySQL server executable (default=ON)"              ON)
+OPTION(ENABLE_LCMS2             "Build digiKam with LCMS2 instead LCMS1 (default=OFF)"                           OFF)
+OPTION(ENABLE_BALOOSUPPORT      "Build digiKam with Baloo support (default=ON)"                                  ON)
+OPTION(ENABLE_KDEPIMLIBSSUPPORT "Build digiKam with Kdepimlibs support (default=OFF)"                            OFF)
 
 # Debug options:
-OPTION(DIGIKAM_ENABLE_MODELTEST "Enable ModelTest on some models for debugging (default=OFF)"           OFF)
-OPTION(ENABLE_ADVANCEDDEBUGMSG  "Build digiKam with more internal debug message (default=OFF)"          OFF)
+OPTION(ENABLE_DIGIKAM_MODELTEST "Enable ModelTest on some models for debugging (default=OFF)"                    OFF)
+OPTION(ENABLE_IMGLOADERDEBUGMSG "Build digiKam with more internal debug message into image loader (default=OFF)" OFF)
 
 # ==================================================================================================
 # Information to update before to release this package.
@@ -277,8 +277,8 @@ MACRO_BOOL_TO_01(LENSFUN_FOUND HAVE_LENSFUN)
 MACRO_OPTIONAL_FIND_PACKAGE(Lqr-1)
 MACRO_BOOL_TO_01(LQR-1_FOUND HAVE_LIBLQR_1)
 
-MACRO_BOOL_TO_01(ENABLE_THUMBS_DB        USE_THUMBS_DB)
-MACRO_BOOL_TO_01(ENABLE_ADVANCEDDEBUGMSG USE_ADVANCEDDEBUGMSG)
+MACRO_BOOL_TO_01(ENABLE_THUMBS_DB         USE_THUMBS_DB)
+MACRO_BOOL_TO_01(ENABLE_IMGLOADERDEBUGMSG USE_IMGLOADERDEBUGMSG)
 
 # Win32 compilation with Baloo is not available
 IF (ENABLE_BALOOSUPPORT)
@@ -415,8 +415,8 @@ ENDIF(EIGEN3_FOUND)
 IF(GPHOTO2_FOUND)
     MESSAGE(STATUS " libgphoto2 and libusb libraries found.... YES (optional)")
     IF(HAVE_GPHOTO25)
-    MESSAGE(STATUS " libgphoto2 2.5 library found............. YES (optional)")
-    endIF(HAVE_GPHOTO25)
+        MESSAGE(STATUS " libgphoto2 2.5 library found............. YES (optional)")
+    ENDIF(HAVE_GPHOTO25)
 ELSE(GPHOTO2_FOUND)
     MESSAGE(STATUS " libgphoto2 and libusb libraries found.... NO  (optional)")
     MESSAGE(STATUS "")
@@ -1472,14 +1472,6 @@ IF(DIGIKAM_CAN_BE_COMPILED)
            )
     ENDIF(KGEOMAP_FOUND)
 
-    IF(DIGIKAM_ENABLE_MODELTEST)
-        MESSAGE(STATUS "Modeltest enabled")
-        SET(libdigikamgui_SRCS ${libdigikamgui_SRCS}
-            ${CMAKE_CURRENT_SOURCE_DIR}/tests/modeltest/modeltest.cpp
-            )
-        ADD_DEFINITIONS(-DDIGIKAM_ENABLE_MODELTEST)
-    ENDIF(DIGIKAM_ENABLE_MODELTEST)
-
     SET(libdigikamhelpers_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/app/utils/uifilevalidator.cpp
        )
@@ -1488,6 +1480,15 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb_sqlite2.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/upgradedb_sqlite2tosqlite3.cpp
        )
+
+
+    IF(ENABLE_DIGIKAM_MODELTEST)
+        MESSAGE(STATUS "Modeltest enabled")
+        SET(libdigikamgui_SRCS ${libdigikamgui_SRCS}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/modeltest/modeltest.cpp
+            )
+        ADD_DEFINITIONS(-DENABLE_DIGIKAM_MODELTEST)
+    ENDIF(ENABLE_DIGIKAM_MODELTEST)
 
     INCLUDE_DIRECTORIES(
         ${DATABASESERVERDIR}
@@ -1659,10 +1660,10 @@ ENDIF(DIGIKAM_CAN_BE_COMPILED)
 
 IF(DOXYGEN_FOUND)
 
-    SET(API_DIR ${CMAKE_BINARY_DIR}/api)
+    SET(API_DIR    ${CMAKE_BINARY_DIR}/api)
     SET(SOURCE_DIR ${CMAKE_SOURCE_DIR})
-    SET(DOXYFILE ${CMAKE_BINARY_DIR}/Doxyfile)
-    SET(WARNFILE ${CMAKE_BINARY_DIR}/doxygen-warn.log)
+    SET(DOXYFILE   ${CMAKE_BINARY_DIR}/Doxyfile)
+    SET(WARNFILE   ${CMAKE_BINARY_DIR}/doxygen-warn.log)
 
     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/Doxyfile.cmake.in ${DOXYFILE})
 

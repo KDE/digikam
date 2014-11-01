@@ -57,27 +57,27 @@
 /* Define to 1 if libgphoto2 2.5 shared library is installed */
 #cmakedefine HAVE_GPHOTO25 1
 
+/* Define to 1 if you have Baloo shared libraries installed */
+#cmakedefine HAVE_BALOO 1
+
+/* Define to 1 if an external SQLite v2 is installed */
+#cmakedefine HAVE_SQLITE2 1
+
+/* Define to 1 if we know how to start mysqld */
+#cmakedefine HAVE_INTERNALMYSQL 1
+
 /* Define to 1 if thumbnails database is used */
 #cmakedefine USE_THUMBS_DB 1
 
 /* Define to 1 if you want Qt to scale the preview images */
 #cmakedefine USE_QT_SCALING 1
 
-/* Define to 1 if advanced debug messages are enabled */
-#cmakedefine USE_ADVANCEDDEBUGMSG 1
-
-/* Define to 1 if you have Baloo shared libraries installed */
-#cmakedefine HAVE_BALOO 1
-
-/* Define to 1 if we know how to start mysqld */
-#cmakedefine HAVE_INTERNALMYSQL 1
+/* Define to 1 if advanced image loader debug messages are enabled */
+#cmakedefine USE_IMGLOADERDEBUGMSG 1
 
 /* remember the lcms library version to use */
 #cmakedefine USE_LCMS_VERSION_1000 1
 #cmakedefine USE_LCMS_VERSION_2000 1
-
-/* Define to 1 if an external SQLite v2 is installed */
-#cmakedefine HAVE_SQLITE2 1
 
 #define LIBEXEC_INSTALL_DIR "${LIBEXEC_INSTALL_DIR}"
 

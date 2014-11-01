@@ -227,7 +227,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer
                 break;
         }
 
-#ifdef USE_ADVANCEDDEBUGMSG
+#ifdef USE_IMGLOADERDEBUGMSG
         const PGFHeader* header = pgf.GetHeader();
         kDebug() << "PGF width    = " << header->width;
         kDebug() << "PGF height   = " << header->height;
@@ -471,7 +471,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* const observer
         pgf.Write(&stream, 0, CallbackForLibPGF, &nWrittenBytes, this);
 #endif
 
-#ifdef USE_ADVANCEDDEBUGMSG
+#ifdef USE_IMGLOADERDEBUGMSG
         kDebug() << "PGF width     = " << header.width;
         kDebug() << "PGF height    = " << header.height;
         kDebug() << "PGF bbp       = " << header.bpp;
