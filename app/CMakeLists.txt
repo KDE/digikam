@@ -170,11 +170,17 @@ TARGET_LINK_LIBRARIES(digikamdatabase
 
                       ${KEXIV2_LIBRARIES}
                       ${KDCRAW_LIBRARIES}
-                      ${KFACE_LIBRARIES}
-                      ${KGEOMAP_LIBRARIES}
 
                       ${PGF_LIBRARIES}
                      )
+
+IF(KFACE_FOUND)
+   TARGET_LINK_LIBRARIES(digikamdatabase ${KFACE_LIBRARIES})
+ENDIF(KFACE_FOUND)
+
+IF(KGEOMAP_FOUND)
+   TARGET_LINK_LIBRARIES(digikamdatabase ${KGEOMAP_LIBRARIES})
+ENDIF(KGEOMAP_FOUND)
 
 IF(Baloo_FOUND)
     TARGET_LINK_LIBRARIES(digikamdatabase ${BALOO_LIBRARIES})
@@ -266,18 +272,7 @@ TARGET_LINK_LIBRARIES(digikam
         importui
 
         ${OpenCV_LIBRARIES}
-
-        # See bug #258931: libgphoto2 library must be the last arg for linker.
-        ${GPHOTO2_LIBRARIES}
-
-        # To link under FreeBSD
-        ${KVM_LIBRARY}
 )
-
-IF (NOT WIN32 AND GPHOTO2_FOUND)
-    # See bug #268267 : digiKam need to be linked to libusb to prevent crash at gphoto2 init if opencv is linked with libdc1394
-    TARGET_LINK_LIBRARIES(digikam ${LIBUSB_LIBRARIES})
-ENDIF (NOT WIN32 AND GPHOTO2_FOUND)
 
 IF(KDEPIMLIBS_FOUND)
   TARGET_LINK_LIBRARIES(digikam ${KDE4_KABC_LIBS} ${KDEPIMLIBS_AKONADI_LIBS} ${KDEPIMLIBS_AKONADI_CONTACT_LIBS})
@@ -294,6 +289,21 @@ ENDIF(KFACE_FOUND)
 IF(KGEOMAP_FOUND)
    TARGET_LINK_LIBRARIES(digikam ${KGEOMAP_LIBRARIES})
 ENDIF(KGEOMAP_FOUND)
+
+IF(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
+    TARGET_LINK_LIBRARIES(digikam ${KVM_LIBRARY})
+ENDIF(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
+
+# See bug #258931: libgphoto2 library must be the last arg for linker.
+
+IF(GPHOTO2_FOUND)
+    TARGET_LINK_LIBRARIES(digikam ${GPHOTO2_LIBRARIES})
+ENDIF(GPHOTO2_FOUND)
+
+IF(NOT WIN32 AND GPHOTO2_FOUND)
+    # See bug #268267 : digiKam need to be linked to libusb to prevent crash at gphoto2 init if opencv is linked with libdc1394
+    TARGET_LINK_LIBRARIES(digikam ${LIBUSB_LIBRARIES})
+ENDIF(NOT WIN32 AND GPHOTO2_FOUND)
 
 INSTALL(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS})
 
