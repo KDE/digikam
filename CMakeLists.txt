@@ -91,9 +91,9 @@ FIND_PACKAGE(Kdcraw                   REQUIRED)
 FIND_PACKAGE(JPEG                     REQUIRED)
 FIND_PACKAGE(PNG                      REQUIRED)
 FIND_PACKAGE(TIFF                     REQUIRED)
-FIND_PACKAGE(PGF ${PGF_MIN_VERSION}   REQUIRED)
+FIND_PACKAGE(PGF  ${PGF_MIN_VERSION}  REQUIRED)
 
-FIND_PACKAGE(Kipi  ${KIPI_MIN_VERSION})
+FIND_PACKAGE(Kipi ${KIPI_MIN_VERSION})
 FIND_PACKAGE(Kface)
 FIND_PACKAGE(KGeoMap)
 FIND_PACKAGE(PkgConfig)
@@ -103,7 +103,8 @@ FIND_PACKAGE(Boost)
 
 INCLUDE(MacroUtils)
 INCLUDE(MacroOpenCV)
-DETECT_OPENCV(2.4.9 core highgui objdetect contrib legacy imgproc)
+SET(OPENCV_MIN_VERSION "2.4.9")
+DETECT_OPENCV(${OPENCV_MIN_VERSION}  core highgui objdetect contrib legacy imgproc)
 
 # -- check the libkdcraw version -----------------------------------------------------------------
 
@@ -355,6 +356,7 @@ PRINT_LIBRARY_STATUS("libboostgraph"          "http://www.boost.org/doc/libs"   
 PRINT_LIBRARY_STATUS("libkexiv2"              "http://www.digikam.org/sharedlibs"                   "(version >= 1.2.0)"                 KEXIV2_FOUND)
 PRINT_LIBRARY_STATUS("libkdcraw"              "http://www.digikam.org/sharedlibs"                   "(version >= ${KDCRAW_MIN_VERSION})" KDCRAW_FOUND)
 PRINT_LIBRARY_STATUS("libpgf"                 "http://www.libpgf.org"                               "(version >= ${PGF_MIN_VERSION})"    PGF_FOUND)
+PRINT_LIBRARY_STATUS("libopencv"              "http://opencv.willowgarage.com"                      "(version >= ${OPENCV_MIN_VERSION})" OpenCV_FOUND)
 
 # ================================================================
 
@@ -373,13 +375,13 @@ PRINT_OPTIONAL_LIBRARY_STATUS("Doxygen"       "http://www.doxygen.org"          
 
 # ================================================================
 
-IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND)
+IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND OpenCV_FOUND)
     MESSAGE(STATUS " digiKam can be compiled.................. YES")
     SET(DIGIKAM_CAN_BE_COMPILED true)
-ELSE(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND)
+ELSE()
     MESSAGE(FATAL_ERROR " digiKam will be compiled................. NO  (Look README file for more details about dependencies)")
     SET(DIGIKAM_CAN_BE_COMPILED false)
-ENDIF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND)
+ENDIF()
 
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "")
