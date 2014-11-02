@@ -299,9 +299,8 @@ IF(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
     TARGET_LINK_LIBRARIES(digikam ${KVM_LIBRARY})
 ENDIF(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
 
-# See bug #258931: libgphoto2 library must be the last arg for linker.
-
 IF(GPHOTO2_FOUND)
+    # See bug #258931: libgphoto2 library must be the last arg for linker.
     TARGET_LINK_LIBRARIES(digikam ${GPHOTO2_LIBRARIES})
 ENDIF(GPHOTO2_FOUND)
 
