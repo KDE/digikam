@@ -31,7 +31,7 @@ ENDMACRO(FILL_WITH_DOTS)
 
 MACRO(PRINT_LIBRARY_STATUS NAME WEBSITE VERSIONHINT)
 
-    SET(LIB_MESSAGE "${NAME} library found")
+    SET(LIB_MESSAGE "${NAME} found")
     FILL_WITH_DOTS(LIB_MESSAGE)
 
     IF(${ARGN})
@@ -41,8 +41,7 @@ MACRO(PRINT_LIBRARY_STATUS NAME WEBSITE VERSIONHINT)
     ELSE()
 
         MESSAGE(STATUS " ${LIB_MESSAGE} NO")
-        MESSAGE(STATUS "")
-        MESSAGE(SEND_ERROR " ${NAME} is needs. You need to install the ${NAME} ${VERSIONHINT} library development package.")
+        MESSAGE(SEND_ERROR " ${NAME} is needs. You need to install the ${NAME} ${VERSIONHINT} development package.")
         MESSAGE(STATUS " ${NAME} website is at ${WEBSITE}")
         MESSAGE(STATUS "")
 
@@ -54,7 +53,7 @@ ENDMACRO(PRINT_LIBRARY_STATUS)
 
 MACRO(PRINT_OPTIONAL_LIBRARY_STATUS NAME WEBSITE VERSIONHINT FEATUREMISSING)
 
-    SET(LIB_MESSAGE "${NAME} library found")
+    SET(LIB_MESSAGE "${NAME} found")
     FILL_WITH_DOTS(LIB_MESSAGE)
 
     IF(${ARGN})
@@ -64,11 +63,11 @@ MACRO(PRINT_OPTIONAL_LIBRARY_STATUS NAME WEBSITE VERSIONHINT FEATUREMISSING)
     ELSE()
 
         MESSAGE(STATUS " ${LIB_MESSAGE} NO  (optional)")
-        MESSAGE(STATUS "")
         MESSAGE(STATUS " ${FEATUREMISSING}")
-        MESSAGE(STATUS "")
-        MESSAGE(STATUS " If you need this feature, please install the ${NAME} ${VERSIONHINT} library development package.")
-        MESSAGE(STATUS " ${NAME} website is at ${WEBSITE}")
+        MESSAGE(STATUS " If you need this feature, please install the ${NAME} ${VERSIONHINT} development package.")
+        IF(${WEBSITE})
+            MESSAGE(STATUS " ${NAME} website is at ${WEBSITE}")
+        ENDIF()
         MESSAGE(STATUS "")
 
     ENDIF()
