@@ -70,7 +70,7 @@ ADD_DEFINITIONS(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 MACRO(SET_DEBUG_AREA_CODE _areacode)
     REMOVE_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${AREA_CODE_GENERAL})
     ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${_areacode})
-ENDMACRO(SET_DEBUG_AREA_CODE)
+ENDMACRO(SET_DEBUG_AREA_CODE _areacode)
 
 # ==================================================================================================
 # Dependencies
@@ -86,12 +86,14 @@ SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_P
 SET(KIPI_MIN_VERSION  "2.0.0")
 SET(PGF_MIN_VERSION   "6.12.24")
 
+FIND_PACKAGE(JPEG                     REQUIRED)
+FIND_PACKAGE(TIFF                     REQUIRED)
+FIND_PACKAGE(PNG                      REQUIRED)
+FIND_PACKAGE(PGF  ${PGF_MIN_VERSION}  REQUIRED)
 FIND_PACKAGE(Kexiv2                   REQUIRED)
 FIND_PACKAGE(Kdcraw                   REQUIRED)
-FIND_PACKAGE(JPEG                     REQUIRED)
-FIND_PACKAGE(PNG                      REQUIRED)
-FIND_PACKAGE(TIFF                     REQUIRED)
-FIND_PACKAGE(PGF  ${PGF_MIN_VERSION}  REQUIRED)
+
+# optional
 
 FIND_PACKAGE(Kipi ${KIPI_MIN_VERSION})
 FIND_PACKAGE(Kface)
@@ -110,61 +112,73 @@ DETECT_OPENCV(${OPENCV_MIN_VERSION}  core highgui objdetect contrib legacy imgpr
 
 SET(KDCRAW_MIN_VERSION "2.2.0")
 
-IF (KDCRAW_VERSION)
+IF(KDCRAW_VERSION)
 
     MESSAGE(STATUS "libkdcraw: Found version ${KDCRAW_VERSION} (required: ${KDCRAW_MIN_VERSION})")
-    IF (${KDCRAW_VERSION} VERSION_LESS ${KDCRAW_MIN_VERSION})
+    IF(${KDCRAW_VERSION} VERSION_LESS ${KDCRAW_MIN_VERSION})
         SET(KDCRAW_FOUND FALSE)
-    ENDIF (${KDCRAW_VERSION} VERSION_LESS ${KDCRAW_MIN_VERSION})
+    ENDIF()
 
-ELSE (KDCRAW_VERSION)
+ELSE()
 
     MESSAGE(WARNING "libkdcraw: Version information not found, your version is probably too old.")
     SET(KDCRAW_FOUND FALSE)
 
-ENDIF (KDCRAW_VERSION)
+ENDIF()
 
 # -- LCMS version 1 and 2 library handling (See bug #294105) -------------------------------------
 # Note: if ENABLE_LCMS2 is on and no LCMS2 is available, build will fail, even if LCMS1 is present
 
-IF (ENABLE_LCMS2)
+IF(ENABLE_LCMS2)
+
     MESSAGE(STATUS "Check for LCMS2 availability...")
     FIND_PACKAGE(LCMS2)
-    IF (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION VERSION_GREATER 2.1))
+
+    IF(LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION VERSION_GREATER 2.1))
+
         MESSAGE(STATUS "Found LCMS2: ${LCMS2_LIBRARIES} ${LCMS2_INCLUDE_DIR}")
         SET(LCMS_FOUND ${LCMS2_FOUND})
         SET(LCMS_LIBRARIES ${LCMS2_LIBRARIES})
         SET(LCMS_INCLUDE_DIR ${LCMS2_INCLUDE_DIR})
         SET(USE_LCMS_VERSION_2000 1)
-    ENDIF (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION VERSION_GREATER 2.1))
-ELSE (ENABLE_LCMS2)
+
+    ENDIF()
+ELSE()
+
     MESSAGE(STATUS "Check for LCMS1 availability...")
     FIND_PACKAGE(LCMS)
+
     IF (LCMS_FOUND)
+
         MESSAGE(STATUS "Found LCMS1: ${LCMS_LIBRARIES} ${LCMS_INCLUDE_DIR}")
         SET(USE_LCMS_VERSION_1000 1)
-    ELSE (LCMS_FOUND)
+
+    ELSE()
+
         MESSAGE(STATUS "Check for LCMS2 availability instead LCMS1...")
         FIND_PACKAGE(LCMS2)
+
         IF (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION VERSION_GREATER 2.1))
             MESSAGE(STATUS "Found LCMS2 instead LCMS1: ${LCMS2_LIBRARIES} ${LCMS2_INCLUDE_DIR}")
             SET(LCMS_FOUND ${LCMS2_FOUND})
             SET(LCMS_LIBRARIES ${LCMS2_LIBRARIES})
             SET(LCMS_INCLUDE_DIR ${LCMS2_INCLUDE_DIR})
             SET(USE_LCMS_VERSION_2000 1)
-        ENDIF (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION VERSION_GREATER 2.1))
-    ENDIF (LCMS_FOUND)
-ENDIF (ENABLE_LCMS2)
+        ENDIF()
+
+    ENDIF()
+
+ENDIF()
 
 # -- To link under Solaris (see bug #274484) ------------------------------------------------------
 
 IF(NOT WIN32)
     FIND_LIBRARY(MATH_LIBRARY m)
-ENDIF(NOT WIN32)
+ENDIF()
 
 IF(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
     FIND_LIBRARY(KVM_LIBRARY kvm)
-ENDIF(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
+ENDIF()
 
 # -- Libjpeg rules --------------------------------------------------------------------------------
 
@@ -182,38 +196,38 @@ TRY_COMPILE(_jpeglib_version_compile_result ${CMAKE_BINARY_DIR} ${_jpeglib_versi
 IF(_jpeglib_version_compile_result)
     MESSAGE(STATUS "Identified libjpeg version: 62")
     SET(DIGIKAM_LIBJPEG_DIR libjpeg-62)
-ELSE(_jpeglib_version_compile_result)
+ELSE()
     MESSAGE(STATUS "Identified libjpeg version: 80+")
     SET(DIGIKAM_LIBJPEG_DIR libjpeg-80)
-ENDIF(_jpeglib_version_compile_result)
+ENDIF()
 
 # -- Mysql rules ----------------------------------------------------------------------------------
 
-IF (ENABLE_INTERNALMYSQL)
+IF(ENABLE_INTERNALMYSQL)
 
     # Check MySQL executables
 
-    FIND_PROGRAM( SERVERCMD_MYSQL mysqld
-                  PATHS /usr/sbin /usr/local/sbin /usr/libexec /usr/local/libexec /opt/local/libexec
-                        /opt/mysql/libexec /usr/mysql/bin /opt/mysql/sbin ${MYSQLD_PATH}
-                        ENV MYSQLD_PATH )
+    FIND_PROGRAM(SERVERCMD_MYSQL mysqld
+                 PATHS /usr/sbin /usr/local/sbin /usr/libexec /usr/local/libexec /opt/local/libexec
+                       /opt/mysql/libexec /usr/mysql/bin /opt/mysql/sbin ${MYSQLD_PATH}
+                 ENV MYSQLD_PATH )
     MESSAGE(STATUS "Found MySQL server executable at: ${SERVERCMD_MYSQL}")
 
     # NOTE: under windows, mysql_install_db PERL script is named "mysql_install_db.pl"
     #       under MACOS-X, through macports project, mysql_install_db PERL script is named "mysql_install_db5"
 
-    FIND_PROGRAM( INITCMD_MYSQL mysql_install_db mysql_install_db5 mysql_install_db.pl
-                  PATHS /usr/sbin /usr/local/sbin /usr/libexec /usr/local/libexec
-                        /opt/mysql/libexec /usr/mysql/bin /opt/mysql/bin /usr/share/mysql/scripts ${MYSQL_TOOLS_PATH}
-                       ENV MYSQL_TOOLS_PATH )
+    FIND_PROGRAM(INITCMD_MYSQL mysql_install_db mysql_install_db5 mysql_install_db.pl
+                 PATHS /usr/sbin /usr/local/sbin /usr/libexec /usr/local/libexec
+                       /opt/mysql/libexec /usr/mysql/bin /opt/mysql/bin /usr/share/mysql/scripts ${MYSQL_TOOLS_PATH}
+                 ENV MYSQL_TOOLS_PATH)
     MESSAGE(STATUS "Found MySQL install_db executable at: ${INITCMD_MYSQL}")
     SET(DATABASESERVERDIR "${CMAKE_CURRENT_SOURCE_DIR}/databaseserver")
 
-ELSE (ENABLE_INTERNALMYSQL)
+ELSE()
 
     SET(DATABASESERVERDIR "")
 
-ENDIF (ENABLE_INTERNALMYSQL)
+ENDIF()
 
 # ==================================================================================================
 # Optional dependencies
@@ -226,10 +240,10 @@ MACRO_OPTIONAL_FIND_PACKAGE(Lqr-1)
 
 MACRO_OPTIONAL_FIND_PACKAGE(Gphoto2)
 
-IF (NOT WIN32 AND GPHOTO2_FOUND)
+IF(NOT WIN32 AND GPHOTO2_FOUND)
     # See bug #268267 : digiKam need to be linked to libusb to prevent crash at gphoto2 init if opencv is linked with libdc1394
     MACRO_OPTIONAL_FIND_PACKAGE(USB)
-ENDIF (NOT WIN32 AND GPHOTO2_FOUND)
+ENDIF()
 
 IF(GPHOTO2_FOUND)
     EXEC_PROGRAM(gphoto2-config ARGS --version RETURN_VALUE _return_VALUE OUTPUT_VARIABLE GPHOTO2_VERSION)
@@ -238,22 +252,22 @@ IF(GPHOTO2_FOUND)
 
     IF(VERSION_GPHOTO2 AND LIBUSB_FOUND)
         SET(GPHOTO2_FOUND true)
-    ELSE(VERSION_GPHOTO2 AND LIBUSB_FOUND)
+    ELSE()
         SET(GPHOTO2_FOUND false)
-    ENDIF(VERSION_GPHOTO2 AND LIBUSB_FOUND)
+    ENDIF()
 
     MACRO_ENSURE_VERSION("2.5.0" "${GPHOTO2_VERSION}" VERSION_GPHOTO25)
 
     IF(VERSION_GPHOTO25)
         SET(HAVE_GPHOTO25 1)
-    ELSE(VERSION_GPHOTO25)
+    ELSE()
         SET(HAVE_GPHOTO25 0)
-    ENDIF(VERSION_GPHOTO25)
-ENDIF(GPHOTO2_FOUND)
+    ENDIF()
+ENDIF()
 
 # -- KDEPim libraries rules -------------------------------------------------------------------
 
-IF (ENABLE_KDEPIMLIBSSUPPORT)
+IF(ENABLE_KDEPIMLIBSSUPPORT)
     MACRO_OPTIONAL_FIND_PACKAGE(KdepimLibs)
 ENDIF()
 
@@ -277,22 +291,22 @@ ENDIF()
 
 IF (ENABLE_BALOOSUPPORT)
     # Baloo support from 4.12
-    IF (${KDE_VERSION} VERSION_GREATER "4.11.99")
+    IF(${KDE_VERSION} VERSION_GREATER "4.11.99")
 
         MACRO_OPTIONAL_FIND_PACKAGE(KFileMetaData CONFIG)
         MACRO_LOG_FEATURE(KFileMetaData_FOUND "KFileMetaData Library"
-                "A library for extracting file metadata" "https://projects.kde.org/kfilemetadata" TRUE)
+                          "A library for extracting file metadata" "https://projects.kde.org/kfilemetadata" TRUE)
 
         MACRO_OPTIONAL_FIND_PACKAGE(Baloo)
         MACRO_LOG_FEATURE(Baloo_FOUND "Baloo" "Baloo"
                           "http://www.kde.org" TRUE "" "Baloo extends the search and tagging")
 
-        IF (NOT KFileMetaData_FOUND)
+        IF(NOT KFileMetaData_FOUND)
             SET(Baloo_FOUND FALSE)
-        ENDIF (NOT KFileMetaData_FOUND)
+        ENDIF()
 
-    ENDIF (${KDE_VERSION} VERSION_GREATER "4.11.99")
-ENDIF (ENABLE_BALOOSUPPORT)
+    ENDIF()
+ENDIF()
 
 # -- compilation options definitions --------------------------------------------------------
 
@@ -333,22 +347,18 @@ MESSAGE(STATUS "")
 
 PRINT_QTMODULE_STATUS("Qt4 SQL" QT_QTSQL_FOUND)
 
-IF(USE_SCRIPT_IFACE)
-    PRINT_QTMODULE_STATUS("Qt4 SCRIPT" QT_QTSCRIPT_FOUND)
-    PRINT_QTMODULE_STATUS("Qt4 SCRIPTTOOLS" QT_QTSCRIPTTOOLS_FOUND)
-ENDIF(USE_SCRIPT_IFACE)
-
-IF (ENABLE_INTERNALMYSQL)
+IF(ENABLE_INTERNALMYSQL)
     PRINT_EXECUTABLE_STATUS("MySQL Server" mysqld MYSQLD_PATH SERVERCMD_MYSQL)
     IF (NOT WIN32)
         PRINT_EXECUTABLE_STATUS("MySQL install_db tool" mysql_install_db MYSQL_TOOLS_PATH INITCMD_MYSQL)
     ENDIF (NOT WIN32)
-ELSE (ENABLE_INTERNALMYSQL)
+ELSE()
     MESSAGE(STATUS " mysql server found....................... NO  (optional - disabled by user)")
-ENDIF (ENABLE_INTERNALMYSQL)
+ENDIF()
 
 # ================================================================
 
+PRINT_LIBRARY_STATUS("libjpeg"                "http://www.ijg.org"                                  "(version >= 6b)"                    JPEG_FOUND)
 PRINT_LIBRARY_STATUS("libtiff"                "http://www.remotesensing.org/libtiff"                "(version >= 3.8.2)"                 TIFF_FOUND)
 PRINT_LIBRARY_STATUS("libpng"                 "http://www.libpng.org/pub/png/libpng.html"           "(version >= 1.2.7)"                 PNG_FOUND)
 PRINT_LIBRARY_STATUS("liblcms"                "http://www.littlecms.com"                            "(version >= 1.0.0)"                 LCMS_FOUND)
@@ -363,19 +373,19 @@ PRINT_LIBRARY_STATUS("libopencv"              "http://opencv.willowgarage.com"  
 PRINT_OPTIONAL_LIBRARY_STATUS("libkipi"       "http://www.digikam.org/sharedlibs"                   "(version >= ${KIPI_MIN_VERSION})" "digiKam will be compiled without Kipi-plugins support."                      KIPI_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libkface"      "http://www.digikam.org/sharedlibs"                   "(version >= 2.0.0)"               "digiKam will be compiled without faces detection and recognition support."   KFACE_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libkgeomap"    "http://www.digikam.org/sharedlibs"                   "(version >= 2.0.0)"               "digiKam will be compiled without geolocation maps support."                  KGEOMAP_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libjasper"     "http://www.ece.uvic.ca/~mdadams/jasper"              "(version >= 1.7.0)"               "digiKam will be compiled without JPEG2000 support."                          JASPER_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libeigen3"     "http://eigen.tuxfamily.org"                          "(version >= 3.0.0)"               "digiKam will be compiled without Refocus tool support."                      EIGEN3_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libgphoto"     "http://www.gphoto.org"                               "(version >= 2.4.0)"               "digiKam will be compiled without GPhoto2 camera drivers support."            GPHOTO2_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libkdepimlibs" "http://pim.kde.org"                                  "(version >= 4.4.0)"               "digiKam will be compiled without KDE address book support."                  KDEPIMLIBS_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libbaloo"      "https://projects.kde.org/projects/kde/kdelibs/baloo" "(version >= 4.12.0)"              "digiKam will be compiled without KDE files indexing support."                Baloo_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("liblqr-1"      "http://liblqr.wikidot.com"                           "(version >= 0.4.1)"               "digiKam will be compiled without Contents Aware Resizer tool support."       LQR-1_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libjasper"     "http://www.ece.uvic.ca/~mdadams/jasper"              "(version >= 1.7.0)"               "digiKam will be compiled without JPEG2000 support."                          JASPER_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("liblensfun"    "http://lensfun.sourceforge.net"                      "(version >= 0.2.6)"               "digiKam will be compiled without Lens Auto Correction tool support."         LENSFUN_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("Libsqlite2"    "http://www.sqlite.org"                               "(version >= 2.0.0)"               "digiKam will be compiled without database version <= 0.7 importing support." SQLITE2_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("Doxygen"       "http://www.doxygen.org"                              "(version >= 1.8.0)"               "digiKam will be compiled without API documentation building support."        DOXYGEN_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("liblqr-1"      "http://liblqr.wikidot.com"                           "(version >= 0.4.1)"               "digiKam will be compiled without Contents Aware Resizer tool support."       LQR-1_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libeigen3"     "http://eigen.tuxfamily.org"                          "(version >= 3.0.0)"               "digiKam will be compiled without Refocus tool support."                      EIGEN3_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libgphoto2"    "http://www.gphoto.org"                               "(version >= 2.4.0)"               "digiKam will be compiled without GPhoto2 camera drivers support."            GPHOTO2_FOUND AND LIBUSB_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libbaloo"      "https://projects.kde.org/projects/kde/kdelibs/baloo" "(version >= 4.12.0)"              "digiKam will be compiled without KDE files indexing support."                Baloo_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libsqlite2"    "http://www.sqlite.org"                               "(version >= 2.0.0)"               "digiKam will be compiled without database version <= 0.7 importing support." SQLITE2_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("doxygen"       "http://www.doxygen.org"                              "(version >= 1.8.0)"               "digiKam will be compiled without API documentation building support."        DOXYGEN_FOUND)
 
 # ================================================================
 
-IF(LCMS_FOUND AND JPEG_FOUND AND PNG_FOUND AND TIFF_FOUND AND Boost_FOUND AND KDCRAW_FOUND AND KEXIV2_FOUND AND OpenCV_FOUND)
+IF(JPEG_FOUND AND TIFF_FOUND AND PNG_FOUND AND LCMS_FOUND AND Boost_FOUND AND KEXIV2_FOUND AND KDCRAW_FOUND AND PGF_FOUND AND OpenCV_FOUND)
     MESSAGE(STATUS " digiKam can be compiled.................. YES")
     SET(DIGIKAM_CAN_BE_COMPILED true)
 ELSE()
@@ -395,8 +405,8 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     FIND_FILE(GIT_MARKER entries PATHS ${CMAKE_SOURCE_DIR}/.git)
 
     IF(NOT GIT_MARKER)
-        SET (GIT_MARKER ${CMAKE_SOURCE_DIR}/CMakeLists.txt)  # Dummy file
-    ENDIF(NOT GIT_MARKER)
+        SET(GIT_MARKER ${CMAKE_SOURCE_DIR}/CMakeLists.txt)  # Dummy file
+    ENDIF()
 
     # Add a custom command to drive the git script whenever the git entries
     # file changes.
@@ -421,15 +431,15 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         # gcc on mac just reports: "gcc (GCC) 3.3 20030304 ..." without the patch level, handle this here:
         IF(NOT GCC_VERSION)
             STRING(REGEX REPLACE ".*\\(GCC\\).* ([34]\\.[0-9]) .*" "\\1.0" GCC_VERSION "${VERSION_GCC_INFO}")
-        ENDIF (NOT GCC_VERSION)
+        ENDIF()
 
         MACRO_ENSURE_VERSION("4.3.0" "${GCC_VERSION}" GCC_VERSION_BAD)
 
         IF(GCC_VERSION_BAD)
             MESSAGE(STATUS "Adjusting compilation flags for GCC version (${GCC_VERSION} )")
             ADD_DEFINITIONS(-fno-tree-pre)
-        ENDIF(GCC_VERSION_BAD)
-    ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+        ENDIF()
+    ENDIF()
 
     # ==================================================================================================
     # To prevent warnings from M$ compiler
@@ -438,7 +448,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
         ADD_DEFINITIONS(-D_ATL_SECURE_NO_WARNINGS)
         ADD_DEFINITIONS(-D_AFX_SECURE_NO_WARNINGS)
-    ENDIF(WIN32 AND MSVC)
+    ENDIF()
 
     # ==================================================================================================
     # Definitions and includes rules
@@ -452,7 +462,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     # Enable C++ Exceptions support, require by Greycstoration algorithm (CImg.h)
     IF(NOT MSVC)
         ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
-    ENDIF(NOT MSVC)
+    ENDIF()
 
     INCLUDE_DIRECTORIES(${KEXIV2_INCLUDE_DIR}
                         ${KDCRAW_INCLUDE_DIR}
@@ -467,66 +477,66 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     IF(JASPER_FOUND)
         INCLUDE_DIRECTORIES(${JASPER_INCLUDE_DIR})
-    ENDIF(JASPER_FOUND)
+    ENDIF()
 
     # libgphoto2 library rules
 
     IF(GPHOTO2_FOUND)
         INCLUDE_DIRECTORIES(${GPHOTO2_INCLUDE_DIRS})
-    ENDIF(GPHOTO2_FOUND)
+    ENDIF()
 
     # Baloo library rules
 
     IF(Baloo_FOUND)
         INCLUDE_DIRECTORIES(${BALOO_INCLUDE_DIR} ${KFILEMETADATA_INCLUDE_DIR})
-    ENDIF(Baloo_FOUND)
+    ENDIF()
 
     # Boost library rules
 
     IF(Boost_FOUND)
         INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
-    ENDIF(Boost_FOUND)
+    ENDIF()
 
     # LibLqr-1 library rules
 
     IF(LQR-1_FOUND)
         INCLUDE_DIRECTORIES(${LQR-1_INCLUDE_DIRS})
         SET(liblqr_LIBS ${LQR-1_LIBRARIES})
-    ENDIF(LQR-1_FOUND)
+    ENDIF()
 
     # Lensfun library rules
 
     IF(LENSFUN_FOUND)
         INCLUDE_DIRECTORIES(${LENSFUN_INCLUDE_DIRS})
         SET(liblensfun_LIBS ${LENSFUN_LIBRARIES})
-    ENDIF(LENSFUN_FOUND)
+    ENDIF()
 
     # Refocus tool dependency
 
     IF(EIGEN3_FOUND)
         INCLUDE_DIRECTORIES(${EIGEN3_INCLUDE_DIR})
-    ENDIF(EIGEN3_FOUND)
+    ENDIF()
 
     # Kipi-plugins support
 
     IF(KIPI_FOUND)
         INCLUDE_DIRECTORIES(${KIPI_INCLUDE_DIR})
         ADD_DEFINITIONS(${KIPI_DEFINITIONS})
-    ENDIF(KIPI_FOUND)
+    ENDIF()
 
     # Faces detection and recognition support
 
     IF(KFACE_FOUND)
         INCLUDE_DIRECTORIES(${KFACE_INCLUDE_DIR})
         ADD_DEFINITIONS(${KFACE_DEFINITIONS})
-    ENDIF(KFACE_FOUND)
+    ENDIF()
 
     # Geolocation maps support
 
     IF(KGEOMAP_FOUND)
         INCLUDE_DIRECTORIES(${KGEOMAP_INCLUDE_DIR})
         ADD_DEFINITIONS(${KGEOMAP_DEFINITIONS})
-    ENDIF(KGEOMAP_FOUND)
+    ENDIF()
 
     # ==================================================================================================
     # Common targets parts
@@ -563,7 +573,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/jp2kloader.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/jp2ksettings.cpp
            )
-    ENDIF(JASPER_FOUND)
+    ENDIF()
 
     SET(libdimgfilters_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dklcms/digikam-lcms.cpp
@@ -657,7 +667,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         SET(libdimgfilters_SRCS ${libdimgfilters_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/contentawarefilter.cpp
            )
-    ENDIF(LQR-1_FOUND)
+    ENDIF()
 
     IF(LENSFUN_FOUND)
         SET(libdimgfilters_SRCS ${libdimgfilters_SRCS}
@@ -666,14 +676,14 @@ IF(DIGIKAM_CAN_BE_COMPILED)
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfuniface.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfunsettings.cpp
            )
-    ENDIF(LENSFUN_FOUND)
+    ENDIF()
 
     IF(EIGEN3_FOUND)
         SET(libdimgfilters_SRCS ${libdimgfilters_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/refocusfilter.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/matrix.cpp
            )
-    ENDIF(EIGEN3_FOUND)
+    ENDIF()
 
     SET(libdmetadata_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/metadatasettings.cpp
@@ -706,7 +716,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesgpstab.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagegpsmodelhelper.cpp
            )
-    ENDIF(KGEOMAP_FOUND)
+    ENDIF()
 
     # --enable-final triggers: http://bugs.kde.org/show_bug.cgi?id=126326
     # digikam: camera download: auto-rotated images lose EXIF info ...
@@ -722,7 +732,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                 ${libjpegutils_SRCS}
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/jpegwin.cpp
            )
-    ENDIF(MSVC)
+    ENDIF()
 
     SET(libthreadimageio_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/filereadwritelock.cpp
@@ -980,7 +990,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiuploadwidget.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiinterface.cpp
         )
-    ENDIF(KIPI_FOUND)
+    ENDIF()
 
     SET(libbaloowrap_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/baloo/baloowrap.cpp
@@ -994,7 +1004,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/facescandialog.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/assignnamewidget.cpp
            )
-    ENDIF(KFACE_FOUND)
+    ENDIF()
 
     SET(libimgqsort_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imgqsort/imgqsort.cpp
@@ -1060,7 +1070,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                 ${libmaintenance_SRCS}
                 ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/facedetector.cpp
            )
-    ENDIF(KFACE_FOUND)
+    ENDIF()
 
     SET(libdatabasecore_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core/databasecorebackend.cpp
@@ -1194,7 +1204,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpssearchview.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpsmarkertiler.cpp
            )
-    ENDIF(KGEOMAP_FOUND)
+    ENDIF()
 
     SET(libimageversionssidebar_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imageversionsmodel.cpp
@@ -1351,14 +1361,14 @@ IF(DIGIKAM_CAN_BE_COMPILED)
                 ${CMAKE_CURRENT_SOURCE_DIR}/app/items/overlays/assignnameoverlay.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/app/items/overlays/facerejectionoverlay.cpp
            )
-    ENDIF(KFACE_FOUND)
+    ENDIF()
 
     IF(KGEOMAP_FOUND)
         SET(libdigikamgui_SRCS
                 ${libdigikamgui_SRCS}
                 ${CMAKE_CURRENT_SOURCE_DIR}/app/views/mapwidgetview.cpp
            )
-    ENDIF(KGEOMAP_FOUND)
+    ENDIF()
 
     SET(libdigikamhelpers_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/app/utils/uifilevalidator.cpp
@@ -1374,9 +1384,9 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         MESSAGE(STATUS "Modeltest enabled")
         SET(libdigikamgui_SRCS ${libdigikamgui_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/tests/modeltest/modeltest.cpp
-            )
+           )
         ADD_DEFINITIONS(-DENABLE_DIGIKAM_MODELTEST)
-    ENDIF(ENABLE_DIGIKAM_MODELTEST)
+    ENDIF()
 
     INCLUDE_DIRECTORIES(
         ${DATABASESERVERDIR}
@@ -1529,19 +1539,19 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     ADD_SUBDIRECTORY(showfoto)
     ADD_SUBDIRECTORY(imageplugins)
 
-    IF (ENABLE_INTERNALMYSQL)
+    IF(ENABLE_INTERNALMYSQL)
         ADD_SUBDIRECTORY(databaseserver)
-    ENDIF (ENABLE_INTERNALMYSQL)
+    ENDIF()
 
     IF(KDE4_BUILD_TESTS)
         MACRO_OPTIONAL_ADD_SUBDIRECTORY(tests)
-    ENDIF(KDE4_BUILD_TESTS)
+    ENDIF()
 
     IF(NOT WIN32)
         CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/digikam.lsm.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/digikam.lsm)
-    ENDIF(NOT WIN32)
+    ENDIF()
 
-ENDIF(DIGIKAM_CAN_BE_COMPILED)
+ENDIF()
 
 # ==================================================================================================
 # API documentation generation
@@ -1557,4 +1567,4 @@ IF(DOXYGEN_FOUND)
 
     ADD_CUSTOM_TARGET(doc ${DOXYGEN_EXECUTABLE} ${DOXYFILE}
                       WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
-ENDIF(DOXYGEN_FOUND)
+ENDIF()
