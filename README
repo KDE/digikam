@@ -84,31 +84,34 @@ http://dev.robotbattle.com/bugs/main_page.php
 
 Name            Version                       URL                                                               Remarks
 
-CMake           >= 2.8.x                      http://www.cmake.org
-libqt           >= 4.6.x                      http://www.qtsoftware.com                                         Including run-time SQLite3 and Mysql database plugin.
-kdelibs         >= 4.4.x                      http://www.kde.org                                                Nepomuk support introduced with KDE 4.3.x.
-liblcms         >= 1.x                        http://www.littlecms.com                                          liblcms >= 2.x compatible too.
+CMake           >= 2.8.0                      http://www.cmake.org
+libqt           >= 4.6.0                      http://www.qtsoftware.com                                         Including run-time SQLite3 and Mysql database plugin.
+kdelibs         >= 4.4.0                      http://www.kde.org                                                Nepomuk support introduced with KDE 4.3.x.
+liblcms         >= 1.0.0                      http://www.littlecms.com                                          liblcms >= 2.x compatible too.
 libtiff         >= 3.8.2                      http://www.remotesensing.org/libtiff
-libpng          >= 1.2.x                      http://www.libpng.org/pub/png/libpng.html
+libpng          >= 1.2.0                      http://www.libpng.org/pub/png/libpng.html
 libjpeg         >= 6b                         http://www.ijg.org
 libkexiv2       >= 2.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkexiv2
 libkdcraw       >= 2.2.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkdcraw
 libopencv       >= 2.4.9                      http://opencv.willowgarage.com
 libpgf          >= 6.11.24                    http://www.libpgf.org
+libboostgraph   >= 1.43.0                     http://www.boost.org/doc/libs
 
 Optional:
 
-libjasper       >= 1.7.x                      http://www.ece.uvic.ca/~mdadams/jasper                            To support JPEG2000.
+libjasper       >= 1.7.0                      http://www.ece.uvic.ca/~mdadams/jasper                            To support JPEG2000.
 libkipi         >= 2.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkipi    To support Kipi-plugins.
 libkface        >= 2.0.0                      https://projects.kde.org/projects/extragear/libs/libkface         To support faces detection and recognition.
 libkgeomap      >= 2.0.0                      https://projects.kde.org/projects/extragear/libs/libkgeomap       To support geolocation maps.
-libkdepimlibs   >= 4.4.x                      http://pim.kde.org                                                To support KAddressBook entries.
+libkdepimlibs   >= 4.4.0                      http://pim.kde.org                                                To support KAddressBook entries.
 liblensfun      >= 0.2.6                      http://lensfun.sourceforge.net                                    To support LensCorrection tool.
 liblqr-1        >= 0.4.1                      http://liblqr.wikidot.com                                         To support Liquid Rescale tool.
-libeigen3       >= 3.x                        http://eigen.tuxfamily.org                                        To support Refocus tool.
-libgphoto2      >= 2.4.0                      http://www.gphoto.org                                             To support Gphoto2 Cameras.
+libeigen3       >= 3.0.0                      http://eigen.tuxfamily.org                                        To support Refocus tool.
+libgphoto       >= 2.4.0                      http://www.gphoto.org                                             To support Gphoto2 Cameras drivers.
 libusb          >= 1.0.0                      http://www.libusb.org                                             Required by Gphoto2 as linking dependency. See details in bug #268267
-libsqlite2      >= 2.x                        http://www.sqlite.org/                                            Only used to import old database version <= 0.7.
+libsqlite2      >= 2.0.0                      http://www.sqlite.org                                             To support database version <= 0.7 importing.
+libbaloo        >= 4.12.0                     https://projects.kde.org/projects/kde/kdelibs/baloo               To support KDE files indexing support.
+Doxygen         >= 1.8.0                      http://www.doxygen.org                                            To support API documentation building (This does not affect building digiKam in any way).
 
 Note: all library dependencies require development and binary packages installed on your computer to compile digiKam.
 

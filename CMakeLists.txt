@@ -346,154 +346,30 @@ ELSE (ENABLE_INTERNALMYSQL)
     MESSAGE(STATUS " mysql server found....................... NO  (optional - disabled by user)")
 ENDIF (ENABLE_INTERNALMYSQL)
 
-PRINT_LIBRARY_STATUS("libtiff"     "http://www.remotesensing.org/libtiff"                           ""                                    TIFF_FOUND)
-PRINT_LIBRARY_STATUS("libpng"      "http://www.libpng.org/pub/png/libpng.html"                      " (version >= 1.2.7)"                 PNG_FOUND)
-PRINT_LIBRARY_STATUS("liblcms"     "http://www.littlecms.com"                                       ""                                    LCMS_FOUND)
-PRINT_LIBRARY_STATUS("Boost Graph" "http://www.boost.org/doc/libs/1_43_0/libs/graph/doc/index.html" " (headers only)"                     Boost_FOUND)
-PRINT_LIBRARY_STATUS("libkexiv2"   "http://www.digikam.org/sharedlibs"                              " (version >= 1.2.0)"                 KEXIV2_FOUND)
-PRINT_LIBRARY_STATUS("libkdcraw"   "http://www.digikam.org/sharedlibs"                              " (version >= ${KDCRAW_MIN_VERSION})" KDCRAW_FOUND)
-PRINT_LIBRARY_STATUS("libpgf"      "http://www.libpgf.org"                                          " (version >= ${PGF_MIN_VERSION})"    PGF_FOUND)
+# ================================================================
+
+PRINT_LIBRARY_STATUS("libtiff"                "http://www.remotesensing.org/libtiff"                "(version >= 3.8.2)"                 TIFF_FOUND)
+PRINT_LIBRARY_STATUS("libpng"                 "http://www.libpng.org/pub/png/libpng.html"           "(version >= 1.2.7)"                 PNG_FOUND)
+PRINT_LIBRARY_STATUS("liblcms"                "http://www.littlecms.com"                            "(version >= 1.0.0)"                 LCMS_FOUND)
+PRINT_LIBRARY_STATUS("libboostgraph"          "http://www.boost.org/doc/libs"                       "(version >= 1.43.0)"                Boost_FOUND)
+PRINT_LIBRARY_STATUS("libkexiv2"              "http://www.digikam.org/sharedlibs"                   "(version >= 1.2.0)"                 KEXIV2_FOUND)
+PRINT_LIBRARY_STATUS("libkdcraw"              "http://www.digikam.org/sharedlibs"                   "(version >= ${KDCRAW_MIN_VERSION})" KDCRAW_FOUND)
+PRINT_LIBRARY_STATUS("libpgf"                 "http://www.libpgf.org"                               "(version >= ${PGF_MIN_VERSION})"    PGF_FOUND)
 
 # ================================================================
 
-IF(KIPI_FOUND)
-    MESSAGE(STATUS " libkipi library found.................... YES (optional)")
-ELSE(KIPI_FOUND)
-    MESSAGE(STATUS " libkipi library found.................... NO  (optional)")
-    MESSAGE(STATUS "")
-    MESSAGE(STATUS " digiKam will be compiled without Kipi-plugins support.")
-    MESSAGE(STATUS "")
-ENDIF(KIPI_FOUND)
-
-# ================================================================
-
-IF(KFACE_FOUND)
-    MESSAGE(STATUS " libkface library found................... YES (optional)")
-ELSE(KFACE_FOUND)
-    MESSAGE(STATUS " libkface library found................... NO  (optional)")
-    MESSAGE(STATUS "")
-    MESSAGE(STATUS " digiKam will be compiled without faces detection and recognition support.")
-    MESSAGE(STATUS "")
-ENDIF(KFACE_FOUND)
-
-# ================================================================
-
-IF(KGEOMAP_FOUND)
-    MESSAGE(STATUS " libkgeomap library found................. YES (optional)")
-ELSE(KGEOMAP_FOUND)
-    MESSAGE(STATUS " libkgeomap library found................. NO  (optional)")
-    MESSAGE(STATUS "")
-    MESSAGE(STATUS " digiKam will be compiled without geolocation maps support.")
-    MESSAGE(STATUS "")
-ENDIF(KGEOMAP_FOUND)
-
-# ================================================================
-
-IF(JASPER_FOUND)
-    MESSAGE(STATUS " Japser library found..................... YES (optional)")
-ELSE(JASPER_FOUND)
-    MESSAGE(STATUS " Japser library found..................... NO  (optional)")
-    MESSAGE(STATUS "")
-    MESSAGE(STATUS " digiKam will be compiled without JPEG2000 support.")
-    MESSAGE(STATUS "")
-ENDIF(JASPER_FOUND)
-
-# ================================================================
-
-IF(EIGEN3_FOUND)
-    MESSAGE(STATUS " Eigen3 library found..................... YES (optional)")
-ELSE(EIGEN3_FOUND)
-    MESSAGE(STATUS " Eigen3 library found..................... NO  (optional)")
-    MESSAGE(STATUS "")
-    MESSAGE(STATUS " digiKam will be compiled without Refocus tool support.")
-    MESSAGE(STATUS "")
-ENDIF(EIGEN3_FOUND)
-
-# ================================================================
-
-IF(GPHOTO2_FOUND)
-    MESSAGE(STATUS " libgphoto2 and libusb libraries found.... YES (optional)")
-    IF(HAVE_GPHOTO25)
-        MESSAGE(STATUS " libgphoto2 2.5 library found............. YES (optional)")
-    ENDIF(HAVE_GPHOTO25)
-ELSE(GPHOTO2_FOUND)
-    MESSAGE(STATUS " libgphoto2 and libusb libraries found.... NO  (optional)")
-    MESSAGE(STATUS "")
-    MESSAGE(STATUS " digiKam will be compiled without GPhoto2 support.")
-    MESSAGE(STATUS "")
-ENDIF(GPHOTO2_FOUND)
-
-# ================================================================
-
-IF(KDEPIMLIBS_FOUND)
-    MESSAGE(STATUS " libkdepimlibs library found.............. YES (optional)")
-    INCLUDE_DIRECTORIES(${KDEPIMLIBS_INCLUDE_DIR})
-ELSE(KDEPIMLIBS_FOUND)
-    MESSAGE(STATUS " libkdepimlibs library found.............. NO  (optional)")
-    MESSAGE(STATUS "")
-    MESSAGE(STATUS " digiKam will be compiled without KDE address book support.")
-    MESSAGE(STATUS "")
-ENDIF(KDEPIMLIBS_FOUND)
-
-# ================================================================
-
-IF(Baloo_FOUND)
-    MESSAGE(STATUS " Baloo libraries found.................... YES (optional)")
-ELSE(Baloo_FOUND)
-    IF (${KDE_VERSION} VERSION_GREATER "4.12.0")
-        MESSAGE(STATUS " Baloo libraries found.................... NO  (optional)")
-    ELSE (${KDE_VERSION} VERSION_GREATER "4.12.0")
-        MESSAGE(STATUS " Baloo libraries found.................... NO  (at least KDE 4.12 required)")
-    ENDIF (${KDE_VERSION} VERSION_GREATER "4.12.0")
-    MESSAGE(STATUS "")
-    MESSAGE(STATUS " digiKam will be compiled without Baloo support.")
-    MESSAGE(STATUS "")
-ENDIF(Baloo_FOUND)
-
-# ================================================================
-
-IF(LQR-1_FOUND)
-    MESSAGE(STATUS " Liblqr-1 found........................... YES (optional)")
-ELSE(LQR-1_FOUND)
-    MESSAGE(STATUS " Liblqr-1 found........................... NO  (optional)")
-    MESSAGE(STATUS "")
-    MESSAGE(STATUS " digiKam will be compiled without Contents Aware Resizer tool support.")
-    MESSAGE(STATUS "")
-ENDIF(LQR-1_FOUND)
-
-# ================================================================
-
-IF(LENSFUN_FOUND)
-    MESSAGE(STATUS " Liblensfun found......................... YES (optional)")
-ELSE(LENSFUN_FOUND)
-    MESSAGE(STATUS " Liblensfun found......................... NO  (optional)")
-    MESSAGE(STATUS "")
-    MESSAGE(STATUS " digiKam will be compiled without Lens Auto Correction tool support.")
-    MESSAGE(STATUS "")
-ENDIF(LENSFUN_FOUND)
-
-# ================================================================
-
-IF(SQLITE2_FOUND)
-    MESSAGE(STATUS " Libsqlite v2 found....................... YES (optional)")
-ELSE(SQLITE2_FOUND)
-    MESSAGE(STATUS " Libsqlite v2 found....................... NO  (optional)")
-    MESSAGE(STATUS "")
-    MESSAGE(STATUS " digiKam will be compiled without importing databases of digiKam 0.7 support.")
-    MESSAGE(STATUS "")
-ENDIF(SQLITE2_FOUND)
-
-# ================================================================
-
-IF(DOXYGEN_FOUND)
-    MESSAGE(STATUS " Doxygen found............................ YES (optional)")
-ELSE(DOXYGEN_FOUND)
-    MESSAGE(STATUS " Doxygen found............................ NO  (optional)")
-    MESSAGE(STATUS "")
-    MESSAGE(STATUS " You will not be able to to generate the API documentation.")
-    MESSAGE(STATUS " This does not affect building digiKam in any way.")
-    MESSAGE(STATUS "")
-ENDIF(DOXYGEN_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libkipi"       "http://www.digikam.org/sharedlibs"                   "(version >= ${KIPI_MIN_VERSION})" "digiKam will be compiled without Kipi-plugins support."                      KIPI_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libkface"      "http://www.digikam.org/sharedlibs"                   "(version >= 2.0.0)"               "digiKam will be compiled without faces detection and recognition support."   KFACE_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libkgeomap"    "http://www.digikam.org/sharedlibs"                   "(version >= 2.0.0)"               "digiKam will be compiled without geolocation maps support."                  KGEOMAP_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libjasper"     "http://www.ece.uvic.ca/~mdadams/jasper"              "(version >= 1.7.0)"               "digiKam will be compiled without JPEG2000 support."                          JASPER_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libeigen3"     "http://eigen.tuxfamily.org"                          "(version >= 3.0.0)"               "digiKam will be compiled without Refocus tool support."                      EIGEN3_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libgphoto"     "http://www.gphoto.org"                               "(version >= 2.4.0)"               "digiKam will be compiled without GPhoto2 camera drivers support."            GPHOTO2_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libkdepimlibs" "http://pim.kde.org"                                  "(version >= 4.4.0)"               "digiKam will be compiled without KDE address book support."                  KDEPIMLIBS_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libbaloo"      "https://projects.kde.org/projects/kde/kdelibs/baloo" "(version >= 4.12.0)"              "digiKam will be compiled without KDE files indexing support."                Baloo_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("liblqr-1"      "http://liblqr.wikidot.com"                           "(version >= 0.4.1)"               "digiKam will be compiled without Contents Aware Resizer tool support."       LQR-1_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("liblensfun"    "http://lensfun.sourceforge.net"                      "(version >= 0.2.6)"               "digiKam will be compiled without Lens Auto Correction tool support."         LENSFUN_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("Libsqlite2"    "http://www.sqlite.org"                               "(version >= 2.0.0)"               "digiKam will be compiled without database version <= 0.7 importing support." SQLITE2_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("Doxygen"       "http://www.doxygen.org"                              "(version >= 1.8.0)"               "digiKam will be compiled without API documentation building support."        DOXYGEN_FOUND)
 
 # ================================================================
 
