@@ -27,4 +27,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 014 ==> 326718 - Clear text button on file rename does nothing [patch].
 015 ==> 267789 - Make face detection (kface) and geo tagging (kmap) optional features [patch].
 016 ==> 172295 - digiKam has a hard dependency on Jasper library.
-017 ==> 
+017 ==> 339180 - Cmake and/or compiler pick up libkgeomap header files from previous version.
+018 ==> 
