@@ -103,7 +103,7 @@ Optional:
 
 libkipi         >= 2.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkipi    To support Kipi-plugins.
 libkface        >= 2.0.0                      https://projects.kde.org/projects/extragear/libs/libkface         To support faces detection and recognition.
-libkgeomap      >= 2.0.0                      https://projects.kde.org/projects/extragear/libs/libkgeomap       To support geolocation maps.
+libkgeomap      >= 3.0.0                      https://projects.kde.org/projects/extragear/libs/libkgeomap       To support geolocation maps.
 libkdepimlibs   >= 4.4.0                      http://pim.kde.org                                                To support KAddressBook entries.
 libjasper       >= 1.7.0                      http://www.ece.uvic.ca/~mdadams/jasper                            To support JPEG2000.
 liblensfun      >= 0.2.6                      http://lensfun.sourceforge.net                                    To support LensCorrection tool.

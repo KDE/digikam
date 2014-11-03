@@ -126,6 +126,25 @@ ELSE()
 
 ENDIF()
 
+
+# -- check the libkgeomap version -----------------------------------------------------------------
+
+SET(KGEOMAP_MIN_VERSION "3.0.0")
+
+IF(KGEOMAP_VERSION)
+
+    MESSAGE(STATUS "libkgeomap: Found version ${KGEOMAP_VERSION} (required: ${KGEOMAP_MIN_VERSION})")
+    IF(${KGEOMAP_VERSION} VERSION_LESS ${KGEOMAP_MIN_VERSION})
+        SET(KGEOMAP_FOUND FALSE)
+    ENDIF()
+
+ELSE()
+
+    MESSAGE(WARNING "libkgeomap: Version information not found, your version is probably too old.")
+    SET(KGEOMAP_FOUND FALSE)
+
+ENDIF()
+
 # -- LCMS version 1 and 2 library handling (See bug #294105) -------------------------------------
 # Note: if ENABLE_LCMS2 is on and no LCMS2 is available, build will fail, even if LCMS1 is present
 
@@ -358,30 +377,30 @@ ENDIF()
 
 # ================================================================
 
-PRINT_LIBRARY_STATUS("libjpeg"                "http://www.ijg.org"                                  "(version >= 6b)"                    JPEG_FOUND)
-PRINT_LIBRARY_STATUS("libtiff"                "http://www.remotesensing.org/libtiff"                "(version >= 3.8.2)"                 TIFF_FOUND)
-PRINT_LIBRARY_STATUS("libpng"                 "http://www.libpng.org/pub/png/libpng.html"           "(version >= 1.2.7)"                 PNG_FOUND)
-PRINT_LIBRARY_STATUS("liblcms"                "http://www.littlecms.com"                            "(version >= 1.0.0)"                 LCMS_FOUND)
-PRINT_LIBRARY_STATUS("libboostgraph"          "http://www.boost.org/doc/libs"                       "(version >= 1.43.0)"                Boost_FOUND)
-PRINT_LIBRARY_STATUS("libkexiv2"              "http://www.digikam.org/sharedlibs"                   "(version >= 1.2.0)"                 KEXIV2_FOUND)
-PRINT_LIBRARY_STATUS("libkdcraw"              "http://www.digikam.org/sharedlibs"                   "(version >= ${KDCRAW_MIN_VERSION})" KDCRAW_FOUND)
-PRINT_LIBRARY_STATUS("libpgf"                 "http://www.libpgf.org"                               "(version >= ${PGF_MIN_VERSION})"    PGF_FOUND)
-PRINT_LIBRARY_STATUS("libopencv"              "http://opencv.willowgarage.com"                      "(version >= ${OPENCV_MIN_VERSION})" OpenCV_FOUND)
+PRINT_LIBRARY_STATUS("libjpeg"                "http://www.ijg.org"                                               "(version >= 6b)"                    JPEG_FOUND)
+PRINT_LIBRARY_STATUS("libtiff"                "http://www.remotesensing.org/libtiff"                             "(version >= 3.8.2)"                 TIFF_FOUND)
+PRINT_LIBRARY_STATUS("libpng"                 "http://www.libpng.org/pub/png/libpng.html"                        "(version >= 1.2.7)"                 PNG_FOUND)
+PRINT_LIBRARY_STATUS("liblcms"                "http://www.littlecms.com"                                         "(version >= 1.0.0)"                 LCMS_FOUND)
+PRINT_LIBRARY_STATUS("libboostgraph"          "http://www.boost.org/doc/libs"                                    "(version >= 1.43.0)"                Boost_FOUND)
+PRINT_LIBRARY_STATUS("libkexiv2"              "https://projects.kde.org/projects/kde/kdegraphics/libs/libkexiv2" "(version >= 1.2.0)"                 KEXIV2_FOUND)
+PRINT_LIBRARY_STATUS("libkdcraw"              "https://projects.kde.org/projects/kde/kdegraphics/libs/libkdcraw" "(version >= ${KDCRAW_MIN_VERSION})" KDCRAW_FOUND)
+PRINT_LIBRARY_STATUS("libpgf"                 "http://www.libpgf.org"                                            "(version >= ${PGF_MIN_VERSION})"    PGF_FOUND)
+PRINT_LIBRARY_STATUS("libopencv"              "http://opencv.willowgarage.com"                                   "(version >= ${OPENCV_MIN_VERSION})" OpenCV_FOUND)
 
 # ================================================================
 
-PRINT_OPTIONAL_LIBRARY_STATUS("libkipi"       "http://www.digikam.org/sharedlibs"                   "(version >= ${KIPI_MIN_VERSION})" "digiKam will be compiled without Kipi-plugins support."                      KIPI_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libkface"      "http://www.digikam.org/sharedlibs"                   "(version >= 2.0.0)"               "digiKam will be compiled without faces detection and recognition support."   KFACE_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libkgeomap"    "http://www.digikam.org/sharedlibs"                   "(version >= 2.0.0)"               "digiKam will be compiled without geolocation maps support."                  KGEOMAP_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libkdepimlibs" "http://pim.kde.org"                                  "(version >= 4.4.0)"               "digiKam will be compiled without KDE address book support."                  KDEPIMLIBS_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libjasper"     "http://www.ece.uvic.ca/~mdadams/jasper"              "(version >= 1.7.0)"               "digiKam will be compiled without JPEG2000 support."                          JASPER_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("liblensfun"    "http://lensfun.sourceforge.net"                      "(version >= 0.2.6)"               "digiKam will be compiled without Lens Auto Correction tool support."         LENSFUN_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("liblqr-1"      "http://liblqr.wikidot.com"                           "(version >= 0.4.1)"               "digiKam will be compiled without Contents Aware Resizer tool support."       LQR-1_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libeigen3"     "http://eigen.tuxfamily.org"                          "(version >= 3.0.0)"               "digiKam will be compiled without Refocus tool support."                      EIGEN3_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libgphoto2"    "http://www.gphoto.org"                               "(version >= 2.4.0)"               "digiKam will be compiled without GPhoto2 camera drivers support."            GPHOTO2_FOUND AND LIBUSB_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libbaloo"      "https://projects.kde.org/projects/kde/kdelibs/baloo" "(version >= 4.12.0)"              "digiKam will be compiled without KDE files indexing support."                Baloo_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libsqlite2"    "http://www.sqlite.org"                               "(version >= 2.0.0)"               "digiKam will be compiled without database version <= 0.7 importing support." SQLITE2_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("doxygen"       "http://www.doxygen.org"                              "(version >= 1.8.0)"               "digiKam will be compiled without API documentation building support."        DOXYGEN_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libkipi"       "https://projects.kde.org/projects/kde/kdegraphics/libs/libkipi" "(version >= ${KIPI_MIN_VERSION})"   "digiKam will be compiled without Kipi-plugins support."                      KIPI_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libkface"      "https://projects.kde.org/projects/extragear/libs/libkface"      "(version >= 2.0.0)"                 "digiKam will be compiled without faces detection and recognition support."   KFACE_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libkgeomap"    "https://projects.kde.org/projects/extragear/libs/libkgeomap"    "(version >= ${KGEOMAP_MIN_VERSION}" "digiKam will be compiled without geolocation maps support."                  KGEOMAP_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libkdepimlibs" "http://pim.kde.org"                                             "(version >= 4.4.0)"                 "digiKam will be compiled without KDE address book support."                  KDEPIMLIBS_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libjasper"     "http://www.ece.uvic.ca/~mdadams/jasper"                         "(version >= 1.7.0)"                 "digiKam will be compiled without JPEG2000 support."                          JASPER_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("liblensfun"    "http://lensfun.sourceforge.net"                                 "(version >= 0.2.6)"                 "digiKam will be compiled without Lens Auto Correction tool support."         LENSFUN_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("liblqr-1"      "http://liblqr.wikidot.com"                                      "(version >= 0.4.1)"                 "digiKam will be compiled without Contents Aware Resizer tool support."       LQR-1_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libeigen3"     "http://eigen.tuxfamily.org"                                     "(version >= 3.0.0)"                 "digiKam will be compiled without Refocus tool support."                      EIGEN3_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libgphoto2"    "http://www.gphoto.org"                                          "(version >= 2.4.0)"                 "digiKam will be compiled without GPhoto2 camera drivers support."            GPHOTO2_FOUND AND LIBUSB_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libbaloo"      "https://projects.kde.org/projects/kde/kdelibs/baloo"            "(version >= 4.12.0)"                "digiKam will be compiled without KDE files indexing support."                Baloo_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libsqlite2"    "http://www.sqlite.org"                                          "(version >= 2.0.0)"                 "digiKam will be compiled without database version <= 0.7 importing support." SQLITE2_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("doxygen"       "http://www.doxygen.org"                                         "(version >= 1.8.0)"                 "digiKam will be compiled without API documentation building support."        DOXYGEN_FOUND)
 
 # ================================================================
 
