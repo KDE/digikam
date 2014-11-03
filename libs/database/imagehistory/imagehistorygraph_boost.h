@@ -27,6 +27,11 @@
 // To include pragma directives for MSVC
 #include "config-digikam.h"
 
+// GCC pragma directive to reduce warnings from Boost header files.
+#ifdef Q_CC_GNU
+#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
+#endif
+
 // boost includes
 
 // prohibit boost using deprecated header files
@@ -56,12 +61,12 @@
 
 /** Install custom property ids, out-of-namespace */
 enum vertex_properties_t { vertex_properties };
-enum edge_properties_t { edge_properties };
+enum edge_properties_t   { edge_properties   };
 
 namespace boost
 {
 BOOST_INSTALL_PROPERTY(vertex, properties);
-BOOST_INSTALL_PROPERTY(edge, properties);
+BOOST_INSTALL_PROPERTY(edge,   properties);
 }
 
 namespace Digikam
@@ -225,6 +230,7 @@ public:
         }
 
     protected:
+
         edge_t e;
         // there is not null_edge, we must emulate it
         bool   null;
