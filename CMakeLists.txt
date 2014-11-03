@@ -75,26 +75,30 @@ ENDMACRO(SET_DEBUG_AREA_CODE _areacode)
 # ==================================================================================================
 # Dependencies
 
-FIND_PACKAGE(KDE4 REQUIRED)
+SET(QT_MIN_VERSION   "4.6.0")
+SET(KDE_MIN_VERSION  "4.4.0")
+FIND_PACKAGE(Qt4  ${QT_MIN_VERSION}  REQUIRED)
+FIND_PACKAGE(KDE4 ${KDE_MIN_VERSION} REQUIRED)
+
 INCLUDE(KDE4Defaults)
 INCLUDE(MacroLibrary)
-
 INCLUDE(FindPackageHandleStandardArgs)
 INCLUDE(FindPkgConfig)
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
 
-SET(KIPI_MIN_VERSION  "2.0.0")
-SET(PGF_MIN_VERSION   "6.12.24")
+# mandatory
 
-FIND_PACKAGE(JPEG                     REQUIRED)
-FIND_PACKAGE(TIFF                     REQUIRED)
-FIND_PACKAGE(PNG                      REQUIRED)
-FIND_PACKAGE(PGF  ${PGF_MIN_VERSION}  REQUIRED)
-FIND_PACKAGE(Kexiv2                   REQUIRED)
-FIND_PACKAGE(Kdcraw                   REQUIRED)
+SET(PGF_MIN_VERSION   "6.12.24")
+FIND_PACKAGE(JPEG                    REQUIRED)
+FIND_PACKAGE(TIFF                    REQUIRED)
+FIND_PACKAGE(PNG                     REQUIRED)
+FIND_PACKAGE(PGF ${PGF_MIN_VERSION}  REQUIRED)
+FIND_PACKAGE(Kexiv2                  REQUIRED)
+FIND_PACKAGE(Kdcraw                  REQUIRED)
 
 # optional
 
+SET(KIPI_MIN_VERSION  "2.0.0")
 FIND_PACKAGE(Kipi ${KIPI_MIN_VERSION})
 FIND_PACKAGE(Kface)
 FIND_PACKAGE(KGeoMap)
@@ -102,6 +106,8 @@ FIND_PACKAGE(PkgConfig)
 FIND_PACKAGE(Jasper)
 FIND_PACKAGE(Eigen3)
 FIND_PACKAGE(Boost)
+
+# -- check OpenCV --------------------------------------------------------------------------------
 
 INCLUDE(MacroUtils)
 INCLUDE(MacroOpenCV)
@@ -377,6 +383,8 @@ ENDIF()
 
 # ================================================================
 
+PRINT_LIBRARY_STATUS("libqt"                  "http://www.qtsoftware.com"                                        "(version >= ${QT_MIN_VERSION})"     QT_FOUND)
+PRINT_LIBRARY_STATUS("libkde"                 "http://www.kde.org"                                               "(version >= ${KDE_MIN_VERSION})"    KDE4_FOUND)
 PRINT_LIBRARY_STATUS("libjpeg"                "http://www.ijg.org"                                               "(version >= 6b)"                    JPEG_FOUND)
 PRINT_LIBRARY_STATUS("libtiff"                "http://www.remotesensing.org/libtiff"                             "(version >= 3.8.2)"                 TIFF_FOUND)
 PRINT_LIBRARY_STATUS("libpng"                 "http://www.libpng.org/pub/png/libpng.html"                        "(version >= 1.2.7)"                 PNG_FOUND)
@@ -404,7 +412,7 @@ PRINT_OPTIONAL_LIBRARY_STATUS("doxygen"       "http://www.doxygen.org"          
 
 # ================================================================
 
-IF(JPEG_FOUND AND TIFF_FOUND AND PNG_FOUND AND LCMS_FOUND AND Boost_FOUND AND KEXIV2_FOUND AND KDCRAW_FOUND AND PGF_FOUND AND OpenCV_FOUND)
+IF(QT_FOUND AND KDE4_FOUND AND JPEG_FOUND AND TIFF_FOUND AND PNG_FOUND AND LCMS_FOUND AND Boost_FOUND AND KEXIV2_FOUND AND KDCRAW_FOUND AND PGF_FOUND AND OpenCV_FOUND)
     MESSAGE(STATUS " digiKam can be compiled.................. YES")
     SET(DIGIKAM_CAN_BE_COMPILED true)
 ELSE()
