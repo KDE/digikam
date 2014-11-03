@@ -76,7 +76,7 @@ TARGET_LINK_LIBRARIES(cameranamehelpertest
 
 IF(GPHOTO2_FOUND)
     TARGET_LINK_LIBRARIES(cameranamehelpertest ${GPHOTO2_LIBRARIES})
-ENDIF(GPHOTO2_FOUND)
+ENDIF()
 
 #------------------------------------------------------------------------
 
@@ -97,7 +97,7 @@ TARGET_LINK_LIBRARIES(uifilevalidatortest
 
 IF(GPHOTO2_FOUND)
     TARGET_LINK_LIBRARIES(uifilevalidatortest ${GPHOTO2_LIBRARIES})
-ENDIF(GPHOTO2_FOUND)
+ENDIF()
 
 #------------------------------------------------------------------------
 
@@ -117,7 +117,7 @@ TARGET_LINK_LIBRARIES(statesavingobjecttest
 
 IF(GPHOTO2_FOUND)
     TARGET_LINK_LIBRARIES(statesavingobjecttest ${GPHOTO2_LIBRARIES})
-ENDIF(GPHOTO2_FOUND)
+ENDIF()
 
 #------------------------------------------------------------------------
 
@@ -232,11 +232,11 @@ TARGET_LINK_LIBRARIES(filesaveoptionsboxtest
 #
 #IF(KIPI_FOUND)
 #    TARGET_LINK_LIBRARIES(albummodeltest ${KIPI_LIBRARIES})
-#ENDIF(KIPI_FOUND)
+#ENDIF()
 #
 #IF(GPHOTO2_FOUND)
 #     TARGET_LINK_LIBRARIES(albummodeltest ${GPHOTO2_LIBRARIES})
-#ENDIF(GPHOTO2_FOUND)
+#ENDIF()
 
 #------------------------------------------------------------------------
 
@@ -371,11 +371,11 @@ IF(LENSFUN_FOUND)
     IF(NOT WIN32)
         # To link under Solaris (see bug #274484)
         TARGET_LINK_LIBRARIES(testlensfuniface ${MATH_LIBRARY})
-    ENDIF(NOT WIN32)
+    ENDIF()
 
     IF(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
         TARGET_LINK_LIBRARIES(testlensfuniface ${KVM_LIBRARY})
-    ENDIF(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
+    ENDIF()
 
 ENDIF()
 

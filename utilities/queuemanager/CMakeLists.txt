@@ -54,7 +54,7 @@ IF(JASPER_FOUND)
     SET(libqueuemanager_SRCS ${libqueuemanager_SRCS}
         ${CMAKE_CURRENT_SOURCE_DIR}/basetools/convert/convert2jp2.cpp
        )
-ENDIF(JASPER_FOUND)
+ENDIF()
 
 IF(LENSFUN_FOUND)
     SET(libqueuemanager_SRCS ${libqueuemanager_SRCS}

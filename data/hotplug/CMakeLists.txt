@@ -16,4 +16,4 @@ INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/digikam-opencamera.desktop DESTINATION
 
 IF(NOT WIN32)
     INSTALL(PROGRAMS digikam-camera DESTINATION ${digikamhelperdir})
-ENDIF(NOT WIN32)
+ENDIF()

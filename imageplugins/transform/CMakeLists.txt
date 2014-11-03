@@ -16,7 +16,7 @@ IF(GLIB2_FOUND)
     SET(digikamimageplugin_transform_PART_SRCS ${digikamimageplugin_transform_PART_SRCS}
         contentawareresizetool.cpp
        )
-ENDIF(GLIB2_FOUND)
+ENDIF()
 
 KDE4_ADD_PLUGIN(digikamimageplugin_transform ${digikamimageplugin_transform_PART_SRCS})
 
@@ -32,7 +32,7 @@ TARGET_LINK_LIBRARIES(
     ${KDCRAW_LIBRARIES}
     )
 
-INSTALL(TARGETS digikamimageplugin_transform       DESTINATION ${PLUGIN_INSTALL_DIR})
-INSTALL(FILES digikamimageplugin_transform_ui.rc   DESTINATION ${DATA_INSTALL_DIR}/digikam)
-INSTALL(FILES digikamimageplugin_transform.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+INSTALL(TARGETS digikamimageplugin_transform             DESTINATION ${PLUGIN_INSTALL_DIR})
+INSTALL(FILES digikamimageplugin_transform_ui.rc         DESTINATION ${DATA_INSTALL_DIR}/digikam)
+INSTALL(FILES digikamimageplugin_transform.desktop       DESTINATION ${SERVICES_INSTALL_DIR})
 INSTALL(FILES digiKam-ImagePlugin_Transform.metainfo.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata)
