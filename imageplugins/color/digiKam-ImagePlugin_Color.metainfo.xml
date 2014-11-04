@@ -14,6 +14,7 @@
   <name xml:lang="pt">ImagePlugin-Color</name>
   <name xml:lang="pt-BR">ImagePlugin-Color</name>
   <name xml:lang="sk">ImagePlugin-Color</name>
+  <name xml:lang="sl">Vstavek za slike - barva</name>
   <name xml:lang="sv">Bildinsticksprogrammet Färg</name>
   <name xml:lang="uk">ImagePlugin-Color</name>
   <name xml:lang="x-test">xxImagePlugin-Colorxx</name>
@@ -30,6 +31,7 @@
   <summary xml:lang="pt">Uma ferramenta para corrigir as cores das imagens</summary>
   <summary xml:lang="pt-BR">Uma ferramenta para corrigir as cores das imagens</summary>
   <summary xml:lang="sk">Nástroj na opravu farieb obrázku</summary>
+  <summary xml:lang="sl">Orodje za popravilo barv slike</summary>
   <summary xml:lang="sv">Ett verktyg för att korrigera en bilds färger</summary>
   <summary xml:lang="uk">Інструмент для виправлення кольорів зображення</summary>
   <summary xml:lang="x-test">xxA tool to correct colors of imagexx</summary>
@@ -46,6 +48,7 @@
   <developer_name xml:lang="pt">Projecto digiKam</developer_name>
   <developer_name xml:lang="pt-BR">Projeto digiKam</developer_name>
   <developer_name xml:lang="sk">Projekt digiKamu</developer_name>
+  <developer_name xml:lang="sl">Projekt digiKam</developer_name>
   <developer_name xml:lang="sv">Digikam-projektet</developer_name>
   <developer_name xml:lang="uk">Проект digiKam</developer_name>
   <developer_name xml:lang="x-test">xxdigiKam Projectxx</developer_name>
