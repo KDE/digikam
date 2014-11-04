@@ -1,9 +1,9 @@
-ADD_SUBDIRECTORY(borderpatterns)
-ADD_SUBDIRECTORY(texturepatterns)
+add_subdirectory(borderpatterns)
+add_subdirectory(texturepatterns)
 
 # digiKam files ######################################################
 
-INSTALL(FILES tag-new.png
+install(FILES tag-new.png
               tag-properties.png
               tag-delete.png
               tag-reset.png
@@ -23,11 +23,11 @@ INSTALL(FILES tag-new.png
         DESTINATION ${DATA_INSTALL_DIR}/digikam/icons/hicolor/32x32/actions
        )
 
-INSTALL(FILES tag.png
+install(FILES tag.png
         DESTINATION ${DATA_INSTALL_DIR}/digikam/icons/hicolor/128x128/actions
        )
 
-INSTALL(FILES splash-digikam.png
+install(FILES splash-digikam.png
               banner-digikam.png
               logo-digikam.png
               logo-gphoto.png
@@ -59,7 +59,7 @@ INSTALL(FILES splash-digikam.png
 
 # Showfoto files ######################################################
 
-INSTALL(FILES logo-showfoto.png
+install(FILES logo-showfoto.png
               banner-showfoto.png
               splash-showfoto.png
         DESTINATION ${DATA_INSTALL_DIR}/showfoto/data

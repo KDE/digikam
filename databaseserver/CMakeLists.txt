@@ -1,6 +1,6 @@
 SET_DEBUG_AREA_CODE(${AREA_CODE_DATABASESERVER})
 
-SET(digikamdatabaseserver_SRCS ${lib..._SRCS}
+set(digikamdatabaseserver_SRCS ${lib..._SRCS}
                                databaseserver.cpp
                                pollthread.cpp
                                main.cpp
@@ -11,7 +11,7 @@ QT4_ADD_DBUS_ADAPTOR(digikamdatabaseserver_SRCS org.kde.digikam.DatabaseServer.x
 
 KDE4_ADD_EXECUTABLE(digikamdatabaseserver ${digikamdatabaseserver_SRCS})
 
-TARGET_LINK_LIBRARIES(digikamdatabaseserver
+target_link_libraries(digikamdatabaseserver
                       digikamdatabase
                       digikamcore
 
@@ -19,13 +19,13 @@ TARGET_LINK_LIBRARIES(digikamdatabaseserver
                       ${QT_QTSQL_LIBRARY}
                      )
 
-IF(NOT WIN32)
+if(NOT WIN32)
     # To link under Solaris (see bug #274484)
-    TARGET_LINK_LIBRARIES(digikamdatabaseserver ${MATH_LIBRARY})
-ENDIF()
+    target_link_libraries(digikamdatabaseserver ${MATH_LIBRARY})
+endif()
 
-IF(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
-    TARGET_LINK_LIBRARIES(digikamdatabaseserver ${KVM_LIBRARY})
-ENDIF()
+if(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
+    target_link_libraries(digikamdatabaseserver ${KVM_LIBRARY})
+endif()
 
-INSTALL(TARGETS digikamdatabaseserver DESTINATION ${LIBEXEC_INSTALL_DIR})
+install(TARGETS digikamdatabaseserver DESTINATION ${LIBEXEC_INSTALL_DIR})

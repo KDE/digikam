@@ -1,5 +1,5 @@
 
-INSTALL(FILES bricks2-texture.png
+install(FILES bricks2-texture.png
               bricks-texture.png
               burlap-texture.png
               canvas-texture.png

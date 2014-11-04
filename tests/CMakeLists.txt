@@ -1,16 +1,16 @@
-ADD_SUBDIRECTORY(imgqsort)
+add_subdirectory(imgqsort)
 
-SET( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
+set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
 #------------------------------------------------------------------------
 
-SET(advancedrenametest_SRCS
+set(advancedrenametest_SRCS
     advancedrenametest.cpp
    )
 
 KDE4_ADD_UNIT_TEST(advancedrenametest ${advancedrenametest_SRCS})
 
-TARGET_LINK_LIBRARIES(advancedrenametest
+target_link_libraries(advancedrenametest
                       ${KDE4_KDEUI_LIBS}
                       ${KEXIV2_LIBRARIES}
                       ${KDCRAW_LIBRARIES}
@@ -24,13 +24,13 @@ TARGET_LINK_LIBRARIES(advancedrenametest
 
 #------------------------------------------------------------------------
 
-SET(renamecustomizertest_SRCS
+set(renamecustomizertest_SRCS
     renamecustomizertest.cpp
    )
 
 KDE4_ADD_UNIT_TEST(renamecustomizertest ${renamecustomizertest_SRCS})
 
-TARGET_LINK_LIBRARIES(renamecustomizertest
+target_link_libraries(renamecustomizertest
                       ${KDE4_KDEUI_LIBS}
                       ${KEXIV2_LIBRARIES}
                       ${KDCRAW_LIBRARIES}
@@ -45,7 +45,7 @@ TARGET_LINK_LIBRARIES(renamecustomizertest
 
 #------------------------------------------------------------------------
 
-SET(cameranamehelper_SRCS
+set(cameranamehelper_SRCS
     cameranamehelpertest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/importui/views/cameranamehelper.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/importui/backend/gpcamera.cpp
@@ -63,7 +63,7 @@ SET(cameranamehelper_SRCS
 
 KDE4_ADD_UNIT_TEST(cameranamehelpertest ${cameranamehelper_SRCS})
 
-TARGET_LINK_LIBRARIES(cameranamehelpertest
+target_link_libraries(cameranamehelpertest
                       ${KDE4_KDEUI_LIBS}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
@@ -74,19 +74,19 @@ TARGET_LINK_LIBRARIES(cameranamehelpertest
                       digikamdatabase
                      )
 
-IF(GPHOTO2_FOUND)
-    TARGET_LINK_LIBRARIES(cameranamehelpertest ${GPHOTO2_LIBRARIES})
-ENDIF()
+if(GPHOTO2_FOUND)
+    target_link_libraries(cameranamehelpertest ${GPHOTO2_LIBRARIES})
+endif()
 
 #------------------------------------------------------------------------
 
-SET(uifilevalidator_SRCS
+set(uifilevalidator_SRCS
     uifilevalidatortest.cpp
    )
 
 KDE4_ADD_UNIT_TEST(uifilevalidatortest ${uifilevalidator_SRCS})
 
-TARGET_LINK_LIBRARIES(uifilevalidatortest
+target_link_libraries(uifilevalidatortest
                       ${KDE4_KDECORE_LIBS}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
@@ -95,19 +95,19 @@ TARGET_LINK_LIBRARIES(uifilevalidatortest
                       digikamdatabase
                      )
 
-IF(GPHOTO2_FOUND)
-    TARGET_LINK_LIBRARIES(uifilevalidatortest ${GPHOTO2_LIBRARIES})
-ENDIF()
+if(GPHOTO2_FOUND)
+    target_link_libraries(uifilevalidatortest ${GPHOTO2_LIBRARIES})
+endif()
 
 #------------------------------------------------------------------------
 
-SET(statesavingobject_SRCS
+set(statesavingobject_SRCS
     statesavingobjecttest.cpp
    )
 
 KDE4_ADD_UNIT_TEST(statesavingobjecttest ${statesavingobject_SRCS})
 
-TARGET_LINK_LIBRARIES(statesavingobjecttest
+target_link_libraries(statesavingobjecttest
                       ${KDE4_KDECORE_LIBS}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
@@ -115,18 +115,19 @@ TARGET_LINK_LIBRARIES(statesavingobjecttest
                       digikamcore
                      )
 
-IF(GPHOTO2_FOUND)
-    TARGET_LINK_LIBRARIES(statesavingobjecttest ${GPHOTO2_LIBRARIES})
-ENDIF()
+if(GPHOTO2_FOUND)
+    target_link_libraries(statesavingobjecttest ${GPHOTO2_LIBRARIES})
+endif()
 
 #------------------------------------------------------------------------
 
-SET(freerotationtest_SRCS
+set(freerotationtest_SRCS
     freerotationtest.cpp
    )
+
 KDE4_ADD_UNIT_TEST(freerotationtest ${freerotationtest_SRCS})
 
-TARGET_LINK_LIBRARIES(freerotationtest
+target_link_libraries(freerotationtest
                       ${KDE4_KDECORE_LIBS}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
@@ -136,13 +137,13 @@ TARGET_LINK_LIBRARIES(freerotationtest
 
 #------------------------------------------------------------------------
 
-SET(searchtextbartest_SRCS
+set(searchtextbartest_SRCS
     searchtextbartest.cpp
    )
 
 KDE4_ADD_UNIT_TEST(searchtextbartest ${searchtextbartest_SRCS})
 
-TARGET_LINK_LIBRARIES(searchtextbartest
+target_link_libraries(searchtextbartest
                       ${KDE4_KDEUI_LIBS}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
@@ -152,13 +153,13 @@ TARGET_LINK_LIBRARIES(searchtextbartest
 
 #------------------------------------------------------------------------
 
-SET(filesaveoptionsboxtest_SRCS
+set(filesaveoptionsboxtest_SRCS
     filesaveoptionsboxtest.cpp
    )
 
 KDE4_ADD_UNIT_TEST(filesaveoptionsboxtest ${filesaveoptionsboxtest_SRCS})
 
-TARGET_LINK_LIBRARIES(filesaveoptionsboxtest
+target_link_libraries(filesaveoptionsboxtest
                       ${KDE4_KDECORE_LIBS}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
@@ -168,7 +169,7 @@ TARGET_LINK_LIBRARIES(filesaveoptionsboxtest
 
 #------------------------------------------------------------------------
 
-#SET(albummodeltest_SRCS
+#set(albummodeltest_SRCS
 #    albummodeltest.cpp
 #    modeltest/modeltest.cpp
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../app/album/album.cpp
@@ -218,7 +219,7 @@ TARGET_LINK_LIBRARIES(filesaveoptionsboxtest
 #
 #KDE4_ADD_UNIT_TEST(albummodeltest ${albummodeltest_SRCS})
 #
-#TARGET_LINK_LIBRARIES(albummodeltest
+#target_link_libraries(albummodeltest
 #                      ${KDE4_KIO_LIBS}
 #                      ${QT_QTGUI_LIBRARY}
 #                      ${QT_QTTEST_LIBRARY}
@@ -230,24 +231,24 @@ TARGET_LINK_LIBRARIES(filesaveoptionsboxtest
 #                      digikamcore
 #                     )
 #
-#IF(KIPI_FOUND)
-#    TARGET_LINK_LIBRARIES(albummodeltest ${KIPI_LIBRARIES})
-#ENDIF()
+#if(KIPI_FOUND)
+#    target_link_libraries(albummodeltest ${KIPI_LIBRARIES})
+#endif()
 #
-#IF(GPHOTO2_FOUND)
-#     TARGET_LINK_LIBRARIES(albummodeltest ${GPHOTO2_LIBRARIES})
-#ENDIF()
+#if(GPHOTO2_FOUND)
+#     target_link_libraries(albummodeltest ${GPHOTO2_LIBRARIES})
+#endif()
 
 #------------------------------------------------------------------------
 
-SET(dimagehistorytest_SRCS
+set(dimagehistorytest_SRCS
     abstractdimagehistorytest.cpp
     dimagehistorytest.cpp
    )
 
 KDE4_ADD_UNIT_TEST(dimagehistorytest ${dimagehistorytest_SRCS})
 
-TARGET_LINK_LIBRARIES(dimagehistorytest
+target_link_libraries(dimagehistorytest
                       ${KDE4_KDECORE_LIBS}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
@@ -258,7 +259,7 @@ TARGET_LINK_LIBRARIES(dimagehistorytest
 
 #------------------------------------------------------------------------
 
-SET(dimagehistorygraphtest_SRCS
+set(dimagehistorygraphtest_SRCS
     abstractdimagehistorytest.cpp
     dimagehistorygraphtest.cpp
     modeltest/modeltest.cpp
@@ -266,7 +267,7 @@ SET(dimagehistorygraphtest_SRCS
 
 KDE4_ADD_UNIT_TEST(dimagehistorygraphtest ${dimagehistorygraphtest_SRCS})
 
-TARGET_LINK_LIBRARIES(dimagehistorygraphtest
+target_link_libraries(dimagehistorygraphtest
                       ${KDE4_KDECORE_LIBS}
                       ${KDE4_KIO_LIBS}
                       ${QT_QTGUI_LIBRARY}
@@ -279,13 +280,13 @@ TARGET_LINK_LIBRARIES(dimagehistorygraphtest
 
 #------------------------------------------------------------------------
 
-SET(dimagefilteractiontest_SRCS
+set(dimagefilteractiontest_SRCS
     dimagefilteractiontest.cpp
    )
 
 KDE4_ADD_UNIT_TEST(dimagefilteractiontest ${dimagefilteractiontest_SRCS})
 
-TARGET_LINK_LIBRARIES(dimagefilteractiontest
+target_link_libraries(dimagefilteractiontest
                       ${KDE4_KDECORE_LIBS}
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTTEST_LIBRARY}
@@ -296,13 +297,13 @@ TARGET_LINK_LIBRARIES(dimagefilteractiontest
 
 #------------------------------------------------------------------------
 
-SET(databasefieldstest_SRCS
+set(databasefieldstest_SRCS
     databasefieldstest.cpp
    )
 
 #KDE4_ADD_UNIT_TEST(databasefieldstest ${databasefieldstest_SRCS})
 
-#TARGET_LINK_LIBRARIES(databasefieldstest
+#target_link_libraries(databasefieldstest
 #                      ${KDE4_KDECORE_LIBS}
 #                      ${QT_QTGUI_LIBRARY}
 #                      ${QT_QTTEST_LIBRARY}
@@ -312,27 +313,27 @@ SET(databasefieldstest_SRCS
 
 #------------------------------------------------------------------------
 
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libs/threadimageio)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../libs/threadimageio
+                    ${PGF_INCLUDE_DIRS}
+                   )
 
-INCLUDE_DIRECTORIES(${PGF_INCLUDE_DIRS})
-
-SET(qtpgftest_SRCS qtpgftest.cpp ${pgfutils_SRCS})
+set(qtpgftest_SRCS qtpgftest.cpp ${pgfutils_SRCS})
 KDE4_ADD_EXECUTABLE(qtpgftest NOGUI ${qtpgftest_SRCS})
-TARGET_LINK_LIBRARIES(qtpgftest ${KDE4_KIO_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${PGF_LIBRARIES})
+target_link_libraries(qtpgftest ${KDE4_KIO_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${PGF_LIBRARIES})
 
-SET(pgfscaled_SRCS pgfscaled.cpp ${pgfutils_SRCS})
+set(pgfscaled_SRCS pgfscaled.cpp ${pgfutils_SRCS})
 KDE4_ADD_EXECUTABLE(pgfscaled NOGUI ${pgfscaled_SRCS})
-TARGET_LINK_LIBRARIES(pgfscaled ${KDE4_KIO_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${PGF_LIBRARIES})
+target_link_libraries(pgfscaled ${KDE4_KIO_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${PGF_LIBRARIES})
 
-SET(loadpgfdata_SRCS loadpgfdata.cpp ${pgfutils_SRCS})
+set(loadpgfdata_SRCS loadpgfdata.cpp ${pgfutils_SRCS})
 KDE4_ADD_EXECUTABLE(loadpgfdata NOGUI ${loadpgfdata_SRCS})
-TARGET_LINK_LIBRARIES(loadpgfdata ${KDE4_KIO_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${PGF_LIBRARIES})
+target_link_libraries(loadpgfdata ${KDE4_KIO_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${PGF_LIBRARIES})
 
 #------------------------------------------------------------------------
 
-SET(testdimgloader_SRCS testdimgloader.cpp)
+set(testdimgloader_SRCS testdimgloader.cpp)
 KDE4_ADD_EXECUTABLE(testdimgloader NOGUI ${testdimgloader_SRCS})
-TARGET_LINK_LIBRARIES(testdimgloader
+target_link_libraries(testdimgloader
                       digikamcore
                       ${QT_QTCORE_LIBRARY}
                       ${QT_QTGUI_LIBRARY}
@@ -342,9 +343,9 @@ TARGET_LINK_LIBRARIES(testdimgloader
                       ${OpenCV_LIBRARIES}
                      )
 
-SET(loadsavethreadtest_SRCS loadsavethreadtest.cpp)
+set(loadsavethreadtest_SRCS loadsavethreadtest.cpp)
 KDE4_ADD_EXECUTABLE(loadsavethreadtest NOGUI ${loadsavethreadtest_SRCS})
-TARGET_LINK_LIBRARIES(loadsavethreadtest
+target_link_libraries(loadsavethreadtest
                       digikamcore
                       ${QT_QTCORE_LIBRARY}
                       ${QT_QTGUI_LIBRARY}
@@ -354,11 +355,11 @@ TARGET_LINK_LIBRARIES(loadsavethreadtest
                       ${OpenCV_LIBRARIES}
                      )
 
-IF(LENSFUN_FOUND)
+if(LENSFUN_FOUND)
 
-    SET(testlensfuniface_SRCS testlensfuniface.cpp)
+    set(testlensfuniface_SRCS testlensfuniface.cpp)
     KDE4_ADD_EXECUTABLE(testlensfuniface NOGUI ${testlensfuniface_SRCS})
-    TARGET_LINK_LIBRARIES(testlensfuniface
+    target_link_libraries(testlensfuniface
                           digikamcore
                           ${QT_QTCORE_LIBRARY}
                           ${KDE4_KDECORE_LIBS}
@@ -368,22 +369,22 @@ IF(LENSFUN_FOUND)
                           ${OpenCV_LIBRARIES}
                          )
 
-    IF(NOT WIN32)
+    if(NOT WIN32)
         # To link under Solaris (see bug #274484)
-        TARGET_LINK_LIBRARIES(testlensfuniface ${MATH_LIBRARY})
-    ENDIF()
+        target_link_libraries(testlensfuniface ${MATH_LIBRARY})
+    endif()
 
-    IF(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
-        TARGET_LINK_LIBRARIES(testlensfuniface ${KVM_LIBRARY})
-    ENDIF()
+    if(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
+        target_link_libraries(testlensfuniface ${KVM_LIBRARY})
+    endif()
 
-ENDIF()
+endif()
 
 #------------------------------------------------------------------------
 
-SET (testnrestimate_SRCS testnrestimate.cpp)
+set (testnrestimate_SRCS testnrestimate.cpp)
 KDE4_ADD_EXECUTABLE (testnrestimate NOGUI ${testnrestimate_SRCS})
-TARGET_LINK_LIBRARIES(testnrestimate
+target_link_libraries(testnrestimate
                       digikamcore
                       ${QT_QTCORE_LIBRARY}
                       ${QT_QTGUI_LIBRARY}
@@ -395,9 +396,9 @@ TARGET_LINK_LIBRARIES(testnrestimate
 
 #------------------------------------------------------------------------
 
-SET(testautocrop_SRCS testautocrop.cpp)
+set(testautocrop_SRCS testautocrop.cpp)
 KDE4_ADD_EXECUTABLE(testautocrop NOGUI ${testautocrop_SRCS})
-TARGET_LINK_LIBRARIES(testautocrop
+target_link_libraries(testautocrop
                       digikamcore
                       ${QT_QTCORE_LIBRARY}
                       ${QT_QTGUI_LIBRARY}
@@ -409,7 +410,7 @@ TARGET_LINK_LIBRARIES(testautocrop
 
 #------------------------------------------------------------------------
 
-SET(testdatabase_SRCS testdatabase.cpp
+set(testdatabase_SRCS testdatabase.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../app/album/album.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../app/album/albumhistory.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../app/album/albummanager.cpp
@@ -427,7 +428,7 @@ SET(testdatabase_SRCS testdatabase.cpp
    )
 
 KDE4_ADD_EXECUTABLE(testdatabase ${testdatabase_SRCS})
-TARGET_LINK_LIBRARIES(testdatabase
+target_link_libraries(testdatabase
                       digikamcore
                       digikamdatabase
                       ${QT_QTCORE_LIBRARY}

@@ -1,5 +1,5 @@
 
-INSTALL(FILES main.html
+install(FILES main.html
               top-left-digikam.png
               digikam.css
 

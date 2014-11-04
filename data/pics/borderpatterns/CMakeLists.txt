@@ -1,5 +1,5 @@
 
-INSTALL(FILES pine-pattern.png 
+install(FILES pine-pattern.png 
               wood-pattern.png
               paper-pattern.png 
               parque-pattern.png

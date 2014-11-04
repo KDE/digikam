@@ -1,2 +1,2 @@
 
-INSTALL( FILES digikamimageplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR} )
+install(FILES digikamimageplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
