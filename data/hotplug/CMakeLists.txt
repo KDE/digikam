@@ -1,3 +1,9 @@
+#
+# Copyright (c) 2010-2014, Gilles Caulier, <caulier dot gilles at gmail dot com>
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+
 set(digikamhelperdir ${DATA_INSTALL_DIR}/digikam/utils)
 
 #configure_file(digikam-download.desktop.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/digikam-download.desktop @ONLY)
