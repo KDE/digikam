@@ -576,9 +576,10 @@ QString AlbumLabelsSearchHandler::createXMLForCurrentSelection(QHash<AlbumLabels
     foreach (int rate, selectedLabels[AlbumLabelsTreeView::Ratings])
     {
         if(rate == 0)
+        {
             ratings << -1;
-        else
-            ratings << rate;
+        }
+        ratings << rate;
     }
 
     foreach (int color, selectedLabels[AlbumLabelsTreeView::Colors])
