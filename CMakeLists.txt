@@ -1,29 +1,29 @@
 
-PROJECT(digikam)
+project(digikam)
 
-MESSAGE(STATUS "----------------------------------------------------------------------------------")
-MESSAGE(STATUS "Starting CMake configuration for: digiKam")
+message(STATUS "----------------------------------------------------------------------------------")
+message(STATUS "Starting CMake configuration for: digiKam")
 
-OPTION(ENABLE_THUMBS_DB         "Build digiKam with thumbnails database support (default=ON)"                    ON)
-OPTION(ENABLE_INTERNALMYSQL     "Build digiKam with insternal MySQL server executable (default=ON)"              ON)
-OPTION(ENABLE_LCMS2             "Build digiKam with LCMS2 instead LCMS1 (default=OFF)"                           OFF)
-OPTION(ENABLE_BALOOSUPPORT      "Build digiKam with Baloo support (default=ON)"                                  ON)
-OPTION(ENABLE_KDEPIMLIBSSUPPORT "Build digiKam with Kdepimlibs support (default=OFF)"                            OFF)
+option(ENABLE_THUMBS_DB         "Build digiKam with thumbnails database support (default=ON)"                    ON)
+option(ENABLE_INTERNALMYSQL     "Build digiKam with insternal MySQL server executable (default=ON)"              ON)
+option(ENABLE_LCMS2             "Build digiKam with LCMS2 instead LCMS1 (default=OFF)"                           OFF)
+option(ENABLE_BALOOSUPPORT      "Build digiKam with Baloo support (default=ON)"                                  ON)
+option(ENABLE_KDEPIMLIBSSUPPORT "Build digiKam with Kdepimlibs support (default=OFF)"                            OFF)
 
 # Debug options:
-OPTION(ENABLE_DIGIKAM_MODELTEST "Enable ModelTest on some models for debugging (default=OFF)"                    OFF)
-OPTION(ENABLE_IMGLOADERDEBUGMSG "Build digiKam with more internal debug message into image loader (default=OFF)" OFF)
+option(ENABLE_DIGIKAM_MODELTEST "Enable ModelTest on some models for debugging (default=OFF)"                    OFF)
+option(ENABLE_IMGLOADERDEBUGMSG "Build digiKam with more internal debug message into image loader (default=OFF)" OFF)
 
 # ==================================================================================================
 # Information to update before to release this package.
 
 # digiKam version
-SET(DIGIKAM_MAJOR_VERSION "4")
-SET(DIGIKAM_MINOR_VERSION "5")
-SET(DIGIKAM_PATCH_VERSION "0")
+set(DIGIKAM_MAJOR_VERSION "4")
+set(DIGIKAM_MINOR_VERSION "5")
+set(DIGIKAM_PATCH_VERSION "0")
 
 #digiKam release date
-SET(DIGIKAM_RELEASE_DATE "2014-11-09")
+set(DIGIKAM_RELEASE_DATE "2014-11-09")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
@@ -32,17 +32,17 @@ SET(DIGIKAM_RELEASE_DATE "2014-11-09")
 # "-beta3" : beta3 release.
 # "-rc"    : release candidate.
 # ""       : final release. Can be used in production.
-SET(DIGIKAM_SUFFIX_VERSION "")
+set(DIGIKAM_SUFFIX_VERSION "")
 
 # ==================================================================================================
 # Set env. variables accordingly.
 
 # NOTE: This string is used to set libdigikamcore and libdigikamdatabase SO version ID
-SET(DIGIKAM_VERSION_SHORT
+set(DIGIKAM_VERSION_SHORT
     "${DIGIKAM_MAJOR_VERSION}.${DIGIKAM_MINOR_VERSION}.${DIGIKAM_PATCH_VERSION}"
    )
 
-SET(DIGIKAM_VERSION_STRING
+set(DIGIKAM_VERSION_STRING
     "${DIGIKAM_VERSION_SHORT}${DIGIKAM_SUFFIX_VERSION}"
    )
 
@@ -51,7 +51,7 @@ SET(DIGIKAM_VERSION_STRING
 # Version history:
 # 1 : Original database schema
 # 2 : 08-08-2014 : Fix Images.names field size (see bug #327646)
-SET(DBCONFIG_XML_VERSION "2")
+set(DBCONFIG_XML_VERSION "2")
 
 # ==================================================================================================
 # Debug area codes
@@ -59,200 +59,213 @@ SET(DBCONFIG_XML_VERSION "2")
 # that you can use kDebug() without any usage of the area code throughout the
 # digiKam code base.
 
-SET(AREA_CODE_GENERAL        "50003")
-SET(AREA_CODE_KIOSLAVES      "50004")
-SET(AREA_CODE_SHOWFOTO       "50005")
-SET(AREA_CODE_IMAGEPLUGINS   "50006")
-SET(AREA_CODE_DATABASESERVER "50007")
-ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${AREA_CODE_GENERAL})
-ADD_DEFINITIONS(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
+set(AREA_CODE_GENERAL        "50003")
+set(AREA_CODE_KIOSLAVES      "50004")
+set(AREA_CODE_SHOWFOTO       "50005")
+set(AREA_CODE_IMAGEPLUGINS   "50006")
+set(AREA_CODE_DATABASESERVER "50007")
+add_definitions(-DKDE_DEFAULT_DEBUG_AREA=${AREA_CODE_GENERAL})
+add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 
-MACRO(SET_DEBUG_AREA_CODE _areacode)
-    REMOVE_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${AREA_CODE_GENERAL})
-    ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${_areacode})
-ENDMACRO(SET_DEBUG_AREA_CODE _areacode)
+macro(SET_DEBUG_AREA_CODE _areacode)
+    remove_definitions(-DKDE_DEFAULT_DEBUG_AREA=${AREA_CODE_GENERAL})
+    add_definitions(-DKDE_DEFAULT_DEBUG_AREA=${_areacode})
+endmacro(SET_DEBUG_AREA_CODE _areacode)
 
 # ==================================================================================================
 # Dependencies
 
-SET(QT_MIN_VERSION   "4.6.0")
-SET(KDE_MIN_VERSION  "4.4.0")
-FIND_PACKAGE(Qt4  ${QT_MIN_VERSION}  REQUIRED)
-FIND_PACKAGE(KDE4 ${KDE_MIN_VERSION} REQUIRED)
+set(QT_MIN_VERSION   "4.6.0")
+set(KDE_MIN_VERSION  "4.4.0")
+find_package(Qt4  ${QT_MIN_VERSION}  REQUIRED)
+find_package(KDE4 ${KDE_MIN_VERSION} REQUIRED)
 
-INCLUDE(KDE4Defaults)
-INCLUDE(MacroLibrary)
-INCLUDE(FindPackageHandleStandardArgs)
-INCLUDE(FindPkgConfig)
-SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
+include(KDE4Defaults)
+include(MacroLibrary)
+include(FindPackageHandleStandardArgs)
+include(FindPkgConfig)
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
 
 # mandatory
 
-SET(PGF_MIN_VERSION   "6.12.24")
-FIND_PACKAGE(JPEG                    REQUIRED)
-FIND_PACKAGE(TIFF                    REQUIRED)
-FIND_PACKAGE(PNG                     REQUIRED)
-FIND_PACKAGE(PGF ${PGF_MIN_VERSION}  REQUIRED)
-FIND_PACKAGE(Kexiv2                  REQUIRED)
-FIND_PACKAGE(Kdcraw                  REQUIRED)
+set(PGF_MIN_VERSION   "6.12.24")
+find_package(JPEG                    REQUIRED)
+find_package(TIFF                    REQUIRED)
+find_package(PNG                     REQUIRED)
+find_package(PGF ${PGF_MIN_VERSION}  REQUIRED)
+find_package(Kexiv2                  REQUIRED)
+find_package(Kdcraw                  REQUIRED)
 
 # optional
 
-SET(KIPI_MIN_VERSION  "2.0.0")
-FIND_PACKAGE(Kipi ${KIPI_MIN_VERSION})
-FIND_PACKAGE(Kface)
-FIND_PACKAGE(KGeoMap)
-FIND_PACKAGE(PkgConfig)
-FIND_PACKAGE(Jasper)
-FIND_PACKAGE(Eigen3)
-FIND_PACKAGE(Boost)
+set(KIPI_MIN_VERSION  "2.0.0")
+find_package(Kipi ${KIPI_MIN_VERSION})
+find_package(Kface)
+find_package(KGeoMap)
+find_package(PkgConfig)
+find_package(Jasper)
+find_package(Eigen3)
+find_package(Boost)
 
 # -- check OpenCV --------------------------------------------------------------------------------
 
-INCLUDE(MacroUtils)
-INCLUDE(MacroOpenCV)
-SET(OPENCV_MIN_VERSION "2.4.9")
+include(MacroUtils)
+include(MacroOpenCV)
+set(OPENCV_MIN_VERSION "2.4.9")
 DETECT_OPENCV(${OPENCV_MIN_VERSION}  core highgui objdetect contrib legacy imgproc)
 
 # -- check the libkdcraw version -----------------------------------------------------------------
 
-SET(KDCRAW_MIN_VERSION "2.2.0")
+set(KDCRAW_MIN_VERSION "2.2.0")
 
-IF(KDCRAW_VERSION)
+if(KDCRAW_VERSION)
 
-    MESSAGE(STATUS "libkdcraw: Found version ${KDCRAW_VERSION} (required: ${KDCRAW_MIN_VERSION})")
-    IF(${KDCRAW_VERSION} VERSION_LESS ${KDCRAW_MIN_VERSION})
-        SET(KDCRAW_FOUND FALSE)
-    ENDIF()
+    message(STATUS "libkdcraw: Found version ${KDCRAW_VERSION} (required: ${KDCRAW_MIN_VERSION})")
+    if(${KDCRAW_VERSION} VERSION_LESS ${KDCRAW_MIN_VERSION})
+        set(KDCRAW_FOUND FALSE)
+    endif()
 
-ELSE()
+else()
 
-    MESSAGE(WARNING "libkdcraw: Version information not found, your version is probably too old.")
-    SET(KDCRAW_FOUND FALSE)
+    message(WARNING "libkdcraw: Version information not found, your version is probably too old.")
+    set(KDCRAW_FOUND FALSE)
 
-ENDIF()
-
+endif()
 
 # -- check the libkgeomap version -----------------------------------------------------------------
 
-SET(KGEOMAP_MIN_VERSION "3.0.0")
+set(KGEOMAP_MIN_VERSION "3.0.0")
 
-IF(KGEOMAP_VERSION)
+if(KGEOMAP_VERSION)
 
-    MESSAGE(STATUS "libkgeomap: Found version ${KGEOMAP_VERSION} (required: ${KGEOMAP_MIN_VERSION})")
-    IF(${KGEOMAP_VERSION} VERSION_LESS ${KGEOMAP_MIN_VERSION})
+    message(STATUS "libkgeomap: Found version ${KGEOMAP_VERSION} (required: ${KGEOMAP_MIN_VERSION})")
+    if(${KGEOMAP_VERSION} VERSION_LESS ${KGEOMAP_MIN_VERSION})
         SET(KGEOMAP_FOUND FALSE)
-    ENDIF()
+    endif()
 
-ELSE()
+else()
 
-    MESSAGE(WARNING "libkgeomap: Version information not found, your version is probably too old.")
-    SET(KGEOMAP_FOUND FALSE)
+    message(WARNING "libkgeomap: Version information not found, your version is probably too old.")
+    set(KGEOMAP_FOUND FALSE)
 
-ENDIF()
+endif()
 
 # -- LCMS version 1 and 2 library handling (See bug #294105) -------------------------------------
 # Note: if ENABLE_LCMS2 is on and no LCMS2 is available, build will fail, even if LCMS1 is present
 
-IF(ENABLE_LCMS2)
+if(ENABLE_LCMS2)
 
-    MESSAGE(STATUS "Check for LCMS2 availability...")
-    FIND_PACKAGE(LCMS2)
+    message(STATUS "Check for LCMS2 availability...")
+    find_package(LCMS2)
 
-    IF(LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION VERSION_GREATER 2.1))
+    if(LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION VERSION_GREATER 2.1))
 
-        MESSAGE(STATUS "Found LCMS2: ${LCMS2_LIBRARIES} ${LCMS2_INCLUDE_DIR}")
-        SET(LCMS_FOUND ${LCMS2_FOUND})
-        SET(LCMS_LIBRARIES ${LCMS2_LIBRARIES})
-        SET(LCMS_INCLUDE_DIR ${LCMS2_INCLUDE_DIR})
-        SET(USE_LCMS_VERSION_2000 1)
+        message(STATUS "Found LCMS2: ${LCMS2_LIBRARIES} ${LCMS2_INCLUDE_DIR}")
+        set(LCMS_FOUND ${LCMS2_FOUND})
+        set(LCMS_LIBRARIES ${LCMS2_LIBRARIES})
+        set(LCMS_INCLUDE_DIR ${LCMS2_INCLUDE_DIR})
+        set(USE_LCMS_VERSION_2000 1)
 
-    ENDIF()
-ELSE()
+    endif()
+else()
 
-    MESSAGE(STATUS "Check for LCMS1 availability...")
-    FIND_PACKAGE(LCMS)
+    message(STATUS "Check for LCMS1 availability...")
+    find_package(LCMS)
 
-    IF (LCMS_FOUND)
+    if(LCMS_FOUND)
 
-        MESSAGE(STATUS "Found LCMS1: ${LCMS_LIBRARIES} ${LCMS_INCLUDE_DIR}")
-        SET(USE_LCMS_VERSION_1000 1)
+        message(STATUS "Found LCMS1: ${LCMS_LIBRARIES} ${LCMS_INCLUDE_DIR}")
+        set(USE_LCMS_VERSION_1000 1)
 
-    ELSE()
+    else()
 
-        MESSAGE(STATUS "Check for LCMS2 availability instead LCMS1...")
-        FIND_PACKAGE(LCMS2)
+        message(STATUS "Check for LCMS2 availability instead LCMS1...")
+        find_package(LCMS2)
 
-        IF (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION VERSION_GREATER 2.1))
-            MESSAGE(STATUS "Found LCMS2 instead LCMS1: ${LCMS2_LIBRARIES} ${LCMS2_INCLUDE_DIR}")
-            SET(LCMS_FOUND ${LCMS2_FOUND})
-            SET(LCMS_LIBRARIES ${LCMS2_LIBRARIES})
-            SET(LCMS_INCLUDE_DIR ${LCMS2_INCLUDE_DIR})
-            SET(USE_LCMS_VERSION_2000 1)
-        ENDIF()
+        if(LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION VERSION_GREATER 2.1))
+            message(STATUS "Found LCMS2 instead LCMS1: ${LCMS2_LIBRARIES} ${LCMS2_INCLUDE_DIR}")
+            set(LCMS_FOUND ${LCMS2_FOUND})
+            set(LCMS_LIBRARIES ${LCMS2_LIBRARIES})
+            set(LCMS_INCLUDE_DIR ${LCMS2_INCLUDE_DIR})
+            set(USE_LCMS_VERSION_2000 1)
+        endif()
 
-    ENDIF()
+    endif()
 
-ENDIF()
+endif()
 
 # -- To link under Solaris (see bug #274484) ------------------------------------------------------
 
-IF(NOT WIN32)
-    FIND_LIBRARY(MATH_LIBRARY m)
-ENDIF()
+if(NOT WIN32)
+    find_library(MATH_LIBRARY m)
+endif()
 
-IF(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
-    FIND_LIBRARY(KVM_LIBRARY kvm)
-ENDIF()
+if(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
+    find_library(KVM_LIBRARY kvm)
+endif()
 
 # -- Libjpeg rules --------------------------------------------------------------------------------
 
 # check version of libjpeg so that we can use the appropriate dir
 # See bug #227313
-SET(_jpeglib_version_source "#include <stddef.h>\n#include<stdio.h>\n#include <jpeglib.h>\n int main()\n {\n #if (JPEG_LIB_VERSION >= 80) \n #error JPEG_LIB_VERSION >= 80 found \n #endif \n }\n")
-SET(_jpeglib_version_source_file ${CMAKE_BINARY_DIR}/CMakeTmp/cmake_jpeglib_version_check.cpp)
-FILE(WRITE "${_jpeglib_version_source_file}" "${_jpeglib_version_source}")
-SET(_jpeglib_version_include_dirs "-DINCLUDE_DIRECTORIES:STRING=${JPEG_INCLUDE_DIR}")
+set(_jpeglib_version_source "#include <stddef.h>\n#include<stdio.h>\n#include <jpeglib.h>\n int main()\n {\n #if (JPEG_LIB_VERSION >= 80) \n #error JPEG_LIB_VERSION >= 80 found \n #endif \n }\n")
+set(_jpeglib_version_source_file ${CMAKE_BINARY_DIR}/CMakeTmp/cmake_jpeglib_version_check.cpp)
+file(WRITE "${_jpeglib_version_source_file}" "${_jpeglib_version_source}")
+set(_jpeglib_version_include_dirs "-DINCLUDE_DIRECTORIES:STRING=${JPEG_INCLUDE_DIR}")
 
-TRY_COMPILE(_jpeglib_version_compile_result ${CMAKE_BINARY_DIR} ${_jpeglib_version_source_file}
+try_compile(_jpeglib_version_compile_result ${CMAKE_BINARY_DIR} ${_jpeglib_version_source_file}
             CMAKE_FLAGS "${_jpeglib_version_include_dirs}"
             COMPILE_OUTPUT_VARIABLE _jpeglib_version_compile_output_var)
 
-IF(_jpeglib_version_compile_result)
-    MESSAGE(STATUS "Identified libjpeg version: 62")
-    SET(DIGIKAM_LIBJPEG_DIR libjpeg-62)
-ELSE()
-    MESSAGE(STATUS "Identified libjpeg version: 80+")
-    SET(DIGIKAM_LIBJPEG_DIR libjpeg-80)
-ENDIF()
+if(_jpeglib_version_compile_result)
+    message(STATUS "Identified libjpeg version: 62")
+    set(DIGIKAM_LIBJPEG_DIR libjpeg-62)
+else()
+    message(STATUS "Identified libjpeg version: 80+")
+    set(DIGIKAM_LIBJPEG_DIR libjpeg-80)
+endif()
 
 # -- Mysql rules ----------------------------------------------------------------------------------
 
-IF(ENABLE_INTERNALMYSQL)
+if(ENABLE_INTERNALMYSQL)
 
     # Check MySQL executables
 
-    FIND_PROGRAM(SERVERCMD_MYSQL mysqld
-                 PATHS /usr/sbin /usr/local/sbin /usr/libexec /usr/local/libexec /opt/local/libexec
-                       /opt/mysql/libexec /usr/mysql/bin /opt/mysql/sbin ${MYSQLD_PATH}
+    find_program(SERVERCMD_MYSQL mysqld
+                 PATHS /usr/sbin
+                       /usr/local/sbin
+                       /usr/libexec
+                       /usr/local/libexec
+                       /opt/local/libexec
+                       /opt/mysql/libexec
+                       /usr/mysql/bin
+                       /opt/mysql/sbin
+                       ${MYSQLD_PATH}
                  ENV MYSQLD_PATH )
-    MESSAGE(STATUS "Found MySQL server executable at: ${SERVERCMD_MYSQL}")
+    message(STATUS "Found MySQL server executable at: ${SERVERCMD_MYSQL}")
 
     # NOTE: under windows, mysql_install_db PERL script is named "mysql_install_db.pl"
     #       under MACOS-X, through macports project, mysql_install_db PERL script is named "mysql_install_db5"
 
-    FIND_PROGRAM(INITCMD_MYSQL mysql_install_db mysql_install_db5 mysql_install_db.pl
-                 PATHS /usr/sbin /usr/local/sbin /usr/libexec /usr/local/libexec
-                       /opt/mysql/libexec /usr/mysql/bin /opt/mysql/bin /usr/share/mysql/scripts ${MYSQL_TOOLS_PATH}
+    find_program(INITCMD_MYSQL mysql_install_db mysql_install_db5 mysql_install_db.pl
+                 PATHS /usr/sbin
+                       /usr/local/sbin
+                       /usr/libexec
+                       /usr/local/libexec
+                       /opt/mysql/libexec
+                       /usr/mysql/bin
+                       /opt/mysql/bin
+                       /usr/share/mysql/scripts
+                       ${MYSQL_TOOLS_PATH}
                  ENV MYSQL_TOOLS_PATH)
-    MESSAGE(STATUS "Found MySQL install_db executable at: ${INITCMD_MYSQL}")
-    SET(DATABASESERVERDIR "${CMAKE_CURRENT_SOURCE_DIR}/databaseserver")
+    message(STATUS "Found MySQL install_db executable at: ${INITCMD_MYSQL}")
+    set(DATABASESERVERDIR "${CMAKE_CURRENT_SOURCE_DIR}/databaseserver")
 
-ELSE()
+else()
 
-    SET(DATABASESERVERDIR "")
+    set(DATABASESERVERDIR "")
 
-ENDIF()
+endif()
 
 # ==================================================================================================
 # Optional dependencies
@@ -265,58 +278,58 @@ MACRO_OPTIONAL_FIND_PACKAGE(Lqr-1)
 
 MACRO_OPTIONAL_FIND_PACKAGE(Gphoto2)
 
-IF(NOT WIN32 AND GPHOTO2_FOUND)
+if(NOT WIN32 AND GPHOTO2_FOUND)
     # See bug #268267 : digiKam need to be linked to libusb to prevent crash at gphoto2 init if opencv is linked with libdc1394
     MACRO_OPTIONAL_FIND_PACKAGE(USB)
-ENDIF()
+endif()
 
-IF(GPHOTO2_FOUND)
-    EXEC_PROGRAM(gphoto2-config ARGS --version RETURN_VALUE _return_VALUE OUTPUT_VARIABLE GPHOTO2_VERSION)
-    STRING(REPLACE "libgphoto2" "" GPHOTO2_VERSION "${GPHOTO2_VERSION}")
+if(GPHOTO2_FOUND)
+    exec_program(gphoto2-config ARGS --version RETURN_VALUE _return_VALUE OUTPUT_VARIABLE GPHOTO2_VERSION)
+    string(REPLACE "libgphoto2" "" GPHOTO2_VERSION "${GPHOTO2_VERSION}")
     MACRO_ENSURE_VERSION("2.4.0" "${GPHOTO2_VERSION}" VERSION_GPHOTO2)
 
-    IF(VERSION_GPHOTO2 AND LIBUSB_FOUND)
-        SET(GPHOTO2_FOUND true)
-    ELSE()
-        SET(GPHOTO2_FOUND false)
-    ENDIF()
+    if(VERSION_GPHOTO2 AND LIBUSB_FOUND)
+        set(GPHOTO2_FOUND true)
+    else()
+        set(GPHOTO2_FOUND false)
+    endif()
 
     MACRO_ENSURE_VERSION("2.5.0" "${GPHOTO2_VERSION}" VERSION_GPHOTO25)
 
-    IF(VERSION_GPHOTO25)
-        SET(HAVE_GPHOTO25 1)
-    ELSE()
-        SET(HAVE_GPHOTO25 0)
-    ENDIF()
-ENDIF()
+    if(VERSION_GPHOTO25)
+        set(HAVE_GPHOTO25 1)
+    else()
+        set(HAVE_GPHOTO25 0)
+    endif()
+endif()
 
 # -- KDEPim libraries rules -------------------------------------------------------------------
 
-IF(ENABLE_KDEPIMLIBSSUPPORT)
+if(ENABLE_KDEPIMLIBSSUPPORT)
     MACRO_OPTIONAL_FIND_PACKAGE(KdepimLibs)
-ENDIF()
+endif()
 
 # -- Check LensFun library for Lens auto-correction tool --------------------------------------
 
 MACRO_OPTIONAL_FIND_PACKAGE(LensFun)
 
-SET(LENSFUN_MIN_VERSION "0.2.6.0")
+set(LENSFUN_MIN_VERSION "0.2.6.0")
 
-IF(LENSFUN_VERSION)
-    MESSAGE(STATUS "liblensfun: Found version ${LENSFUN_VERSION} (required: ${LENSFUN_MIN_VERSION})")
-    IF (${LENSFUN_VERSION} VERSION_LESS ${LENSFUN_MIN_VERSION})
-        SET(LENSFUN_FOUND FALSE)
-    ENDIF()
-ELSE()
-    MESSAGE(WARNING "liblensfun: Version information not found, your version is probably too old.")
-    SET(LENSFUN_FOUND FALSE)
-ENDIF()
+if(LENSFUN_VERSION)
+    message(STATUS "liblensfun: Found version ${LENSFUN_VERSION} (required: ${LENSFUN_MIN_VERSION})")
+    if(${LENSFUN_VERSION} VERSION_LESS ${LENSFUN_MIN_VERSION})
+        set(LENSFUN_FOUND FALSE)
+    endif()
+else()
+    message(WARNING "liblensfun: Version information not found, your version is probably too old.")
+    set(LENSFUN_FOUND FALSE)
+endif()
 
 # -- Baloo rules -----------------------------------------------------------------------------
 
-IF (ENABLE_BALOOSUPPORT)
+if(ENABLE_BALOOSUPPORT)
     # Baloo support from 4.12
-    IF(${KDE_VERSION} VERSION_GREATER "4.11.99")
+    if(${KDE_VERSION} VERSION_GREATER "4.11.99")
 
         MACRO_OPTIONAL_FIND_PACKAGE(KFileMetaData CONFIG)
         MACRO_LOG_FEATURE(KFileMetaData_FOUND "KFileMetaData Library"
@@ -326,12 +339,12 @@ IF (ENABLE_BALOOSUPPORT)
         MACRO_LOG_FEATURE(Baloo_FOUND "Baloo" "Baloo"
                           "http://www.kde.org" TRUE "" "Baloo extends the search and tagging")
 
-        IF(NOT KFileMetaData_FOUND)
-            SET(Baloo_FOUND FALSE)
-        ENDIF()
+        if(NOT KFileMetaData_FOUND)
+            set(Baloo_FOUND FALSE)
+        endif()
 
-    ENDIF()
-ENDIF()
+    endif()
+endif()
 
 # -- compilation options definitions --------------------------------------------------------
 
@@ -360,26 +373,26 @@ MACRO_BOOL_TO_01(ENABLE_IMGLOADERDEBUGMSG USE_IMGLOADERDEBUGMSG)
 
 # Set config files accordingly with optional dependencies
 
-CONFIGURE_FILE(app/utils/config-digikam.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/app/utils/config-digikam.h)
+configure_file(app/utils/config-digikam.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/app/utils/config-digikam.h)
 
 # ==================================================================================================
 # Log messages
 
-MESSAGE(STATUS "")
-MESSAGE(STATUS "----------------------------------------------------------------------------------")
-MESSAGE(STATUS " digiKam ${DIGIKAM_VERSION_STRING} dependencies results   <http://www.digikam.org>")
-MESSAGE(STATUS "")
+message(STATUS "")
+message(STATUS "----------------------------------------------------------------------------------")
+message(STATUS " digiKam ${DIGIKAM_VERSION_STRING} dependencies results   <http://www.digikam.org>")
+message(STATUS "")
 
 PRINT_QTMODULE_STATUS("Qt4 SQL" QT_QTSQL_FOUND)
 
-IF(ENABLE_INTERNALMYSQL)
+if(ENABLE_INTERNALMYSQL)
     PRINT_EXECUTABLE_STATUS("MySQL Server" mysqld MYSQLD_PATH SERVERCMD_MYSQL)
-    IF (NOT WIN32)
+    if (NOT WIN32)
         PRINT_EXECUTABLE_STATUS("MySQL install_db tool" mysql_install_db MYSQL_TOOLS_PATH INITCMD_MYSQL)
-    ENDIF (NOT WIN32)
-ELSE()
-    MESSAGE(STATUS " mysql server found....................... NO  (optional - disabled by user)")
-ENDIF()
+    endif (NOT WIN32)
+else()
+    message(STATUS " mysql server found....................... NO  (optional - disabled by user)")
+endif()
 
 # ================================================================
 
@@ -412,37 +425,37 @@ PRINT_OPTIONAL_LIBRARY_STATUS("doxygen"       "http://www.doxygen.org"          
 
 # ================================================================
 
-IF(QT_FOUND AND KDE4_FOUND AND JPEG_FOUND AND TIFF_FOUND AND PNG_FOUND AND LCMS_FOUND AND Boost_FOUND AND KEXIV2_FOUND AND KDCRAW_FOUND AND PGF_FOUND AND OpenCV_FOUND)
-    MESSAGE(STATUS " digiKam can be compiled.................. YES")
-    SET(DIGIKAM_CAN_BE_COMPILED true)
-ELSE()
-    MESSAGE(FATAL_ERROR " digiKam will be compiled................. NO  (Look README file for more details about dependencies)")
-    SET(DIGIKAM_CAN_BE_COMPILED false)
-ENDIF()
+if(QT_FOUND AND KDE4_FOUND AND JPEG_FOUND AND TIFF_FOUND AND PNG_FOUND AND LCMS_FOUND AND Boost_FOUND AND KEXIV2_FOUND AND KDCRAW_FOUND AND PGF_FOUND AND OpenCV_FOUND)
+    message(STATUS " digiKam can be compiled.................. YES")
+    set(DIGIKAM_CAN_BE_COMPILED true)
+else()
+    message(FATAL_ERROR " digiKam will be compiled................. NO  (Look README file for more details about dependencies)")
+    set(DIGIKAM_CAN_BE_COMPILED false)
+endif()
 
-MESSAGE(STATUS "----------------------------------------------------------------------------------")
-MESSAGE(STATUS "")
+message(STATUS "----------------------------------------------------------------------------------")
+message(STATUS "")
 
-IF(DIGIKAM_CAN_BE_COMPILED)
+if(DIGIKAM_CAN_BE_COMPILED)
 
     # ==================================================================================================
     # Create git version header
 
     # We only do this IF we are in a .git dir
-    FIND_FILE(GIT_MARKER entries PATHS ${CMAKE_SOURCE_DIR}/.git)
+    find_file(GIT_MARKER entries PATHS ${CMAKE_SOURCE_DIR}/.git)
 
-    IF(NOT GIT_MARKER)
-        SET(GIT_MARKER ${CMAKE_SOURCE_DIR}/CMakeLists.txt)  # Dummy file
-    ENDIF()
+    if(NOT GIT_MARKER)
+        set(GIT_MARKER ${CMAKE_SOURCE_DIR}/CMakeLists.txt)  # Dummy file
+    endif()
 
     # Add a custom command to drive the git script whenever the git entries
     # file changes.
-    CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/gitscript.cmake.in"
+    configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/gitscript.cmake.in"
                    "${CMAKE_CURRENT_BINARY_DIR}/gitscript.cmake"
                    @ONLY)
 
     # Add a custom target to drive the custom command.
-    ADD_CUSTOM_TARGET(digikam-gitversion ALL COMMAND ${CMAKE_COMMAND} -P "${CMAKE_CURRENT_BINARY_DIR}/gitscript.cmake")
+    add_custom_target(digikam-gitversion ALL COMMAND ${CMAKE_COMMAND} -P "${CMAKE_CURRENT_BINARY_DIR}/gitscript.cmake")
 
     # ==================================================================================================
     # get the gcc version
@@ -451,47 +464,47 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     # See bug #163118: digikam-0.9.4_beta5 compilation hangs with gcc 4.3
     # Using -fno-tree-pre is work around this problem.
 
-    IF(CMAKE_COMPILER_IS_GNUCXX)
-        EXEC_PROGRAM(${CMAKE_CXX_COMPILER} ARGS ${CMAKE_CXX_COMPILER_ARG1} --version OUTPUT_VARIABLE VERSION_GCC_INFO)
-        STRING(REGEX MATCH " [34]\\.[0-9]\\.[0-9]" GCC_VERSION "${VERSION_GCC_INFO}")
+    if(CMAKE_COMPILER_IS_GNUCXX)
+        exec_program(${CMAKE_CXX_COMPILER} ARGS ${CMAKE_CXX_COMPILER_ARG1} --version OUTPUT_VARIABLE VERSION_GCC_INFO)
+        string(REGEX MATCH " [34]\\.[0-9]\\.[0-9]" GCC_VERSION "${VERSION_GCC_INFO}")
 
         # gcc on mac just reports: "gcc (GCC) 3.3 20030304 ..." without the patch level, handle this here:
-        IF(NOT GCC_VERSION)
-            STRING(REGEX REPLACE ".*\\(GCC\\).* ([34]\\.[0-9]) .*" "\\1.0" GCC_VERSION "${VERSION_GCC_INFO}")
-        ENDIF()
+        if(NOT GCC_VERSION)
+            string(REGEX REPLACE ".*\\(GCC\\).* ([34]\\.[0-9]) .*" "\\1.0" GCC_VERSION "${VERSION_GCC_INFO}")
+        endif()
 
         MACRO_ENSURE_VERSION("4.3.0" "${GCC_VERSION}" GCC_VERSION_BAD)
 
-        IF(GCC_VERSION_BAD)
-            MESSAGE(STATUS "Adjusting compilation flags for GCC version (${GCC_VERSION} )")
-            ADD_DEFINITIONS(-fno-tree-pre)
-        ENDIF()
-    ENDIF()
+        if(GCC_VERSION_BAD)
+            message(STATUS "Adjusting compilation flags for GCC version (${GCC_VERSION} )")
+            add_definitions(-fno-tree-pre)
+        endif()
+    endif()
 
     # ==================================================================================================
     # To prevent warnings from M$ compiler
 
-    IF(WIN32 AND MSVC)
-        ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
-        ADD_DEFINITIONS(-D_ATL_SECURE_NO_WARNINGS)
-        ADD_DEFINITIONS(-D_AFX_SECURE_NO_WARNINGS)
-    ENDIF()
+    if(WIN32 AND MSVC)
+        add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+        add_definitions(-D_ATL_SECURE_NO_WARNINGS)
+        add_definitions(-D_AFX_SECURE_NO_WARNINGS)
+    endif()
 
     # ==================================================================================================
     # Definitions and includes rules
 
-    ADD_DEFINITIONS(${QT_DEFINITIONS}
+    add_definitions(${QT_DEFINITIONS}
                     ${KDE4_DEFINITIONS}
                     ${KDCRAW_DEFINITIONS}
                     ${KEXIV2_DEFINITIONS}
                    )
 
     # Enable C++ Exceptions support, require by Greycstoration algorithm (CImg.h)
-    IF(NOT MSVC)
-        ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
-    ENDIF()
+    if(NOT MSVC)
+        add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+    endif()
 
-    INCLUDE_DIRECTORIES(${KEXIV2_INCLUDE_DIR}
+    include_directories(${KEXIV2_INCLUDE_DIR}
                         ${KDCRAW_INCLUDE_DIR}
                         ${KDE4_INCLUDES}
                         ${QT_INCLUDES}
@@ -502,21 +515,21 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     # JPEG2000 support
 
-    IF(JASPER_FOUND)
-        INCLUDE_DIRECTORIES(${JASPER_INCLUDE_DIR})
-    ENDIF()
+    if(JASPER_FOUND)
+        include_directories(${JASPER_INCLUDE_DIR})
+    endif()
 
     # libgphoto2 library rules
 
-    IF(GPHOTO2_FOUND)
-        INCLUDE_DIRECTORIES(${GPHOTO2_INCLUDE_DIRS})
-    ENDIF()
+    if(GPHOTO2_FOUND)
+        include_directories(${GPHOTO2_INCLUDE_DIRS})
+    endif()
 
     # Baloo library rules
 
-    IF(Baloo_FOUND)
-        INCLUDE_DIRECTORIES(${BALOO_INCLUDE_DIR} ${KFILEMETADATA_INCLUDE_DIR})
-    ENDIF()
+    if(Baloo_FOUND)
+        include_directories(${BALOO_INCLUDE_DIR} ${KFILEMETADATA_INCLUDE_DIR})
+    endif()
 
     # Boost library rules
 
@@ -526,49 +539,49 @@ IF(DIGIKAM_CAN_BE_COMPILED)
 
     # LibLqr-1 library rules
 
-    IF(LQR-1_FOUND)
-        INCLUDE_DIRECTORIES(${LQR-1_INCLUDE_DIRS})
-        SET(liblqr_LIBS ${LQR-1_LIBRARIES})
-    ENDIF()
+    if(LQR-1_FOUND)
+        include_directories(${LQR-1_INCLUDE_DIRS})
+        set(liblqr_LIBS ${LQR-1_LIBRARIES})
+    endif()
 
     # Lensfun library rules
 
-    IF(LENSFUN_FOUND)
-        INCLUDE_DIRECTORIES(${LENSFUN_INCLUDE_DIRS})
-        SET(liblensfun_LIBS ${LENSFUN_LIBRARIES})
-    ENDIF()
+    if(LENSFUN_FOUND)
+        include_directories(${LENSFUN_INCLUDE_DIRS})
+        set(liblensfun_LIBS ${LENSFUN_LIBRARIES})
+    endif()
 
     # Refocus tool dependency
 
-    IF(EIGEN3_FOUND)
-        INCLUDE_DIRECTORIES(${EIGEN3_INCLUDE_DIR})
-    ENDIF()
+    if(EIGEN3_FOUND)
+        include_directories(${EIGEN3_INCLUDE_DIR})
+    endif()
 
     # Kipi-plugins support
 
-    IF(KIPI_FOUND)
-        INCLUDE_DIRECTORIES(${KIPI_INCLUDE_DIR})
-        ADD_DEFINITIONS(${KIPI_DEFINITIONS})
-    ENDIF()
+    if(KIPI_FOUND)
+        include_directories(${KIPI_INCLUDE_DIR})
+        add_definitions(${KIPI_DEFINITIONS})
+    endif()
 
     # Faces detection and recognition support
 
-    IF(KFACE_FOUND)
-        INCLUDE_DIRECTORIES(${KFACE_INCLUDE_DIR})
-        ADD_DEFINITIONS(${KFACE_DEFINITIONS})
-    ENDIF()
+    if(KFACE_FOUND)
+        include_directories(${KFACE_INCLUDE_DIR})
+        add_definitions(${KFACE_DEFINITIONS})
+    endif()
 
     # Geolocation maps support
 
-    IF(KGEOMAP_FOUND)
-        INCLUDE_DIRECTORIES(${KGEOMAP_INCLUDE_DIR})
-        ADD_DEFINITIONS(${KGEOMAP_DEFINITIONS})
-    ENDIF()
+    if(KGEOMAP_FOUND)
+        include_directories(${KGEOMAP_INCLUDE_DIR})
+        add_definitions(${KGEOMAP_DEFINITIONS})
+    endif()
 
     # ==================================================================================================
     # Common targets parts
 
-    SET(libdimg_SRCS
+    set(libdimg_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/dimg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/drawdecoding.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/dimgscale.cpp
@@ -579,7 +592,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/imagehistory/historyimageid.cpp
        )
 
-    SET(libdimgloaders_SRCS
+    set(libdimgloaders_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/dimgloader.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/pngloader.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/jpegloader.cpp
@@ -595,14 +608,14 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/pgfsettings.cpp
        )
 
-    IF(JASPER_FOUND)
-        SET(libdimgloaders_SRCS ${libdimgloaders_SRCS}
+    if(JASPER_FOUND)
+        set(libdimgloaders_SRCS ${libdimgloaders_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/jp2kloader.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/jp2ksettings.cpp
            )
-    ENDIF()
+    endif()
 
-    SET(libdimgfilters_SRCS
+    set(libdimgfilters_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dklcms/digikam-lcms.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgbuiltinfilter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgthreadedfilter.cpp
@@ -690,29 +703,29 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/pixelaccess.cpp
        )
 
-    IF(LQR-1_FOUND)
-        SET(libdimgfilters_SRCS ${libdimgfilters_SRCS}
+    if(LQR-1_FOUND)
+        set(libdimgfilters_SRCS ${libdimgfilters_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/contentawarefilter.cpp
            )
-    ENDIF()
+    endif()
 
-    IF(LENSFUN_FOUND)
-        SET(libdimgfilters_SRCS ${libdimgfilters_SRCS}
+    if(LENSFUN_FOUND)
+        set(libdimgfilters_SRCS ${libdimgfilters_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfunfilter.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfuncameraselector.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfuniface.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfunsettings.cpp
            )
-    ENDIF()
+    endif()
 
-    IF(EIGEN3_FOUND)
-        SET(libdimgfilters_SRCS ${libdimgfilters_SRCS}
+    if(EIGEN3_FOUND)
+        set(libdimgfilters_SRCS ${libdimgfilters_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/refocusfilter.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/matrix.cpp
            )
-    ENDIF()
+    endif()
 
-    SET(libdmetadata_SRCS
+    set(libdmetadata_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/metadatasettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/metadatasettingscontainer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/metadatainfo.cpp
@@ -723,45 +736,45 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/captionvalues.cpp
        )
 
-    SET(libversionmanager_SRCS
+    set(libversionmanager_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/versionmanager/versionmanager.cpp
        )
 
-    SET(libimageproperties_SRCS
+    set(libimageproperties_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiessidebar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiestab.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesmetadatatab.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiescolorstab.cpp
        )
 
-    IF(KGEOMAP_FOUND)
-        SET(libkgeomaphelper_SRCS
+    if(KGEOMAP_FOUND)
+        set(libkgeomaphelper_SRCS
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/kgeomaphelper/digikam2kgeomap.cpp
            )
 
-        SET(libimageproperties_SRCS ${libimageproperties_SRCS}
+        set(libimageproperties_SRCS ${libimageproperties_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesgpstab.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagegpsmodelhelper.cpp
            )
-    ENDIF()
+    endif()
 
     # --enable-final triggers: http://bugs.kde.org/show_bug.cgi?id=126326
     # digikam: camera download: auto-rotated images lose EXIF info ...
     # So make sure nofinal is always used here!
     KDE4_NO_ENABLE_FINAL(libjpegutils)
-    SET(libjpegutils_SRCS
+    set(libjpegutils_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/jpegutils.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/${DIGIKAM_LIBJPEG_DIR}/transupp.cpp
        )
 
-    IF(MSVC)
-        SET(libjpegutils_SRCS
+    if(MSVC)
+        set(libjpegutils_SRCS
                 ${libjpegutils_SRCS}
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/jpegwin.cpp
            )
-    ENDIF()
+    endif()
 
-    SET(libthreadimageio_SRCS
+    set(libthreadimageio_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/filereadwritelock.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/loadsavethread.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/managedloadsavethread.cpp
@@ -779,7 +792,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/thumbnailsize.cpp
        )
 
-    SET(libcommonwidgets_SRCS
+    set(libcommonwidgets_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/abstractitemdragdrophandler.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/buttonicondisabler.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/colorgradientwidget.cpp
@@ -797,18 +810,18 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/workingwidget.cpp
        )
 
-    SET(libnotificationmanager_SRCS
+    set(libnotificationmanager_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/notificationmanager/dnotificationwrapper.cpp
        )
 
-    IF(APPLE)
-        SET(libnotificationmanager_SRCS
+    if(APPLE)
+        set(libnotificationmanager_SRCS
                 ${libnotificationmanager_SRCS}
                 ${CMAKE_CURRENT_SOURCE_DIR}/libs/notificationmanager/macnotification.mm
            )
-    ENDIF()
+    endif()
 
-    SET(libmainview_SRCS
+    set(libmainview_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/dxmlguiwindow.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/daboutdata.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/dzoombar.cpp
@@ -821,7 +834,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/sidebar.cpp
        )
 
-    SET(libitemview_SRCS
+    set(libitemview_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/digikamkcategorizedview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/dcategorizedview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/ditemdelegate.cpp
@@ -831,7 +844,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/itemviewtooltip.cpp
        )
 
-    SET(libgraphicsviewwidgets_SRCS
+    set(libgraphicsviewwidgets_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/clickdragreleaseitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/dimgchilditem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/dimgpreviewitem.cpp
@@ -844,14 +857,14 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/itemvisibilitycontroller.cpp
        )
 
-    SET(libiccprofileswidgets_SRCS
+    set(libiccprofileswidgets_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles/iccpreviewwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles/iccprofilewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles/cietonguewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles/iccprofilescombobox.cpp
        )
 
-    SET(libmetadatawidgets_SRCS
+    set(libmetadatawidgets_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/mdkeylistviewitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/metadatalistview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/metadatalistviewitem.cpp
@@ -867,7 +880,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/picklabelwidget.cpp
        )
 
-    SET(libslideshow_SRCS
+    set(libslideshow_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slidetoolbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideosd.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideproperties.cpp
@@ -879,7 +892,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideshowsettings.cpp
        )
 
-    SET(libsetupshowfoto_SRCS
+    set(libsetupshowfoto_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupeditor.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupiofiles.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupraw.cpp
@@ -887,7 +900,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupslideshow.cpp
        )
 
-    SET(libeditorwidgets_SRCS
+    set(libeditorwidgets_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imageguidewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imagepreviewitem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/previewtoolbar.cpp
@@ -898,18 +911,18 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/canvas.cpp
        )
 
-    SET(libeditordlg_SRCS
+    set(libeditordlg_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/dialogs/colorcorrectiondlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/dialogs/softproofdialog.cpp
        )
 
-    SET(libeditorplugin_SRCS
+    set(libeditorplugin_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/plugin/imageiface.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/plugin/imageplugin.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/plugin/imagepluginloader.cpp
        )
 
-    SET(libeditorcore_SRCS
+    set(libeditorcore_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core/undocache.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core/undoaction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core/undomanager.cpp
@@ -918,25 +931,26 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core/iccpostloadingmanager.cpp
        )
 
-    SET(libeditorprintiface_SRCS
+    set(libeditorprintiface_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/printiface/printhelper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/printiface/printoptionspage.cpp
        )
 
-    SET(libeditorrawimport_SRCS
+    set(libeditorrawimport_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport/rawimport.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport/rawpreview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport/rawsettingsbox.cpp
        )
 
-    SET(libprogressmanager_SRCS
+    set(libprogressmanager_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/overlaywidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/progressview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/progressmanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/statusbarprogresswidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/statusprogressbar.cpp
        )
-    SET(libtthread_SRCS
+
+    set(libtthread_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/threadmanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/workerobject.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/dynamicthread.cpp
@@ -946,7 +960,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     # ==================================================================================================
     # Showfoto target parts
 
-    SET(libshowfotosetup_SRCS
+    set(libshowfotosetup_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setuptooltip.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setupmisc.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setupmetadata.cpp
@@ -956,7 +970,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
     # ==================================================================================================
     # digiKam target parts
 
-    SET(libtemplate_SRCS
+    set(libtemplate_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templatemanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templatelist.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templateselector.cpp
@@ -965,7 +979,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/subjectedit.cpp
        )
 
-    SET(libdialogs_SRCS
+    set(libdialogs_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/dprogressdlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/dbusydlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/filesaveoptionsdlg.cpp
@@ -977,11 +991,11 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/triplechoicedialog.cpp
        )
 
-    SET(libdeletedialog_SRCS
+    set(libdeletedialog_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/deletedialog.cpp
        )
 
-    SET(libsetup_SRCS
+    set(libsetup_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupicc.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupcollections.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupcollectionview.cpp
@@ -1008,36 +1022,36 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupimagequalitysorter.cpp
        )
 
-    IF(KIPI_FOUND)
-        SET(libkipiiface_SRCS
+    if(KIPI_FOUND)
+        set(libkipiiface_SRCS
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipipluginloader.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiimageinfo.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiimagecollection.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiimagecollectionselector.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiuploadwidget.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiinterface.cpp
-        )
-    ENDIF()
+           )
+    endif()
 
-    SET(libbaloowrap_SRCS
+    set(libbaloowrap_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/baloo/baloowrap.cpp
        )
 
-    IF(KFACE_FOUND)
-        SET(libfacemanagement_SRCS
+    if(KFACE_FOUND)
+        set(libfacemanagement_SRCS
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/faceutils.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/facegroup.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/facepipeline.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/facescandialog.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/assignnamewidget.cpp
            )
-    ENDIF()
+    endif()
 
-    SET(libimgqsort_SRCS
+    set(libimgqsort_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imgqsort/imgqsort.cpp
        )
 
-    SET(libfirstrun_SRCS
+    set(libfirstrun_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/assistantdlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/assistantdlgpage.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/welcomepage.cpp
@@ -1050,7 +1064,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/startscanpage.cpp
        )
 
-    SET(libimagepropertiesdigikam_SRCS
+    set(libimagepropertiesdigikam_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiessidebarcamgui.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiessidebardb.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/cameraitempropertiestab.cpp
@@ -1058,7 +1072,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/captionedit.cpp
        )
 
-    SET(libeditoriface_SRCS
+    set(libeditoriface_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editortool.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editortooliface.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorstackview.cpp
@@ -1067,11 +1081,11 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/actioncategorizedview.cpp
        )
 
-    SET(libeditorgui_SRCS
+    set(libeditorgui_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/main/imagewindow.cpp
        )
 
-    SET(libmaintenance_SRCS
+    set(libmaintenance_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/imageinfojob.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/imageinfoalbumsjob.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/metadatatask.cpp
@@ -1092,14 +1106,14 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancethread.cpp
        )
 
-    IF(KFACE_FOUND)
-        SET(libmaintenance_SRCS
+    if(KFACE_FOUND)
+        set(libmaintenance_SRCS
                 ${libmaintenance_SRCS}
                 ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/facedetector.cpp
            )
-    ENDIF()
+    endif()
 
-    SET(libdatabasecore_SRCS
+    set(libdatabasecore_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core/databasecorebackend.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core/databaseparameters.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core/databaseerrorhandler.cpp
@@ -1112,8 +1126,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core/tagregion.cpp
        )
 
-
-    SET(libdatabase_SRCS
+    set(libdatabase_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionscanner.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionmanager.cpp
@@ -1157,30 +1170,30 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/faces/facetagseditor.cpp
        )
 
-    SET(libdatabaseui_SRCS
+    set(libdatabaseui_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/databasewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/migrationdlg.cpp
        )
 
-    SET(pgfutils_SRCS
+    set(pgfutils_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/pgfutils.cpp
        )
 
-    SET(libkde3rdparty_SRCS
+    set(libkde3rdparty_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kmemoryinfo/kmemoryinfo.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kinotify/kinotify.cpp
-      )
+       )
 
-    SET(libhaar_SRCS
+    set(libhaar_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/haar/haar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/haar/haariface.cpp
        )
 
-    SET(libgenericmodels_SRCS
+    set(libgenericmodels_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/categorizeditemmodel.cpp
        )
 
-    SET(libdatabasemodels_SRCS
+    set(libdatabasemodels_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagemodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagefiltermodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagefiltersettings.cpp
@@ -1189,7 +1202,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagethumbnailmodel.cpp
        )
 
-    SET(libalbummodels_SRCS
+    set(libalbummodels_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagealbummodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagealbumfiltermodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/abstractalbummodel.cpp
@@ -1198,14 +1211,14 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/albummodeldragdrophandler.cpp
        )
 
-    SET(liblighttable_SRCS
+    set(liblighttable_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablepreview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttableview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablethumbbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablewindow.cpp
        )
 
-    SET(libsearchwindow_SRCS
+    set(libsearchwindow_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/searchwindow.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/searchview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/searchgroup.cpp
@@ -1218,7 +1231,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/searchtabheader.cpp
        )
 
-    SET(libfuzzysearch_SRCS
+    set(libfuzzysearch_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch/fuzzysearchview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch/findduplicatesview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch/findduplicatesalbum.cpp
@@ -1226,14 +1239,14 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch/sketchwidget.cpp
        )
 
-    IF(KGEOMAP_FOUND)
-        SET(libgpssearch_SRCS
+    if(KGEOMAP_FOUND)
+        set(libgpssearch_SRCS
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpssearchview.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpsmarkertiler.cpp
            )
-    ENDIF()
+    endif()
 
-    SET(libimageversionssidebar_SRCS
+    set(libimageversionssidebar_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imageversionsmodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesversionstab.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/versionsdelegate.cpp
@@ -1246,7 +1259,7 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/imagehistory/imagefiltershistoryitemdelegate.cpp
        )
 
-    SET(libdigikamgui_SRCS
+    set(libdigikamgui_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/app/main/digikamapp.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/app/album/album.cpp
@@ -1381,41 +1394,41 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/app/views/tableview/tableview_selection_model_syncer.cpp
        )
 
-    IF(KFACE_FOUND)
-        SET(libdigikamgui_SRCS
+    if(KFACE_FOUND)
+        set(libdigikamgui_SRCS
                 ${libdigikamgui_SRCS}
                 ${CMAKE_CURRENT_SOURCE_DIR}/app/items/digikamimagefacedelegate.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/app/items/overlays/assignnameoverlay.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/app/items/overlays/facerejectionoverlay.cpp
            )
-    ENDIF()
+    endif()
 
-    IF(KGEOMAP_FOUND)
-        SET(libdigikamgui_SRCS
+    if(KGEOMAP_FOUND)
+        set(libdigikamgui_SRCS
                 ${libdigikamgui_SRCS}
                 ${CMAKE_CURRENT_SOURCE_DIR}/app/views/mapwidgetview.cpp
            )
-    ENDIF()
+    endif()
 
-    SET(libdigikamhelpers_SRCS
+    set(libdigikamhelpers_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/app/utils/uifilevalidator.cpp
        )
 
-    SET(libalbumsqlite2_SRCS
+    set(libalbumsqlite2_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/albumdb_sqlite2.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/upgradedb_sqlite2tosqlite3.cpp
        )
 
 
-    IF(ENABLE_DIGIKAM_MODELTEST)
-        MESSAGE(STATUS "Modeltest enabled")
-        SET(libdigikamgui_SRCS ${libdigikamgui_SRCS}
+    if(ENABLE_DIGIKAM_MODELTEST)
+        message(STATUS "Modeltest enabled")
+        set(libdigikamgui_SRCS ${libdigikamgui_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/tests/modeltest/modeltest.cpp
            )
-        ADD_DEFINITIONS(-DENABLE_DIGIKAM_MODELTEST)
-    ENDIF()
+        add_definitions(-DENABLE_DIGIKAM_MODELTEST)
+    endif()
 
-    INCLUDE_DIRECTORIES(
+    include_directories(
         ${DATABASESERVERDIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/app
         ${CMAKE_CURRENT_SOURCE_DIR}/app/album
@@ -1559,39 +1572,39 @@ IF(DIGIKAM_CAN_BE_COMPILED)
         ${LCMS_INCLUDE_DIR}
     )
 
-    ADD_SUBDIRECTORY(data)
-    ADD_SUBDIRECTORY(utilities)
-    ADD_SUBDIRECTORY(app)
-    ADD_SUBDIRECTORY(kioslave)
-    ADD_SUBDIRECTORY(showfoto)
-    ADD_SUBDIRECTORY(imageplugins)
+    add_subdirectory(data)
+    add_subdirectory(utilities)
+    add_subdirectory(app)
+    add_subdirectory(kioslave)
+    add_subdirectory(showfoto)
+    add_subdirectory(imageplugins)
 
-    IF(ENABLE_INTERNALMYSQL)
-        ADD_SUBDIRECTORY(databaseserver)
-    ENDIF()
+    if(ENABLE_INTERNALMYSQL)
+        add_subdirectory(databaseserver)
+    endif()
 
-    IF(KDE4_BUILD_TESTS)
+    if(KDE4_BUILD_TESTS)
         MACRO_OPTIONAL_ADD_SUBDIRECTORY(tests)
-    ENDIF()
+    endif()
 
-    IF(NOT WIN32)
-        CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/digikam.lsm.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/digikam.lsm)
-    ENDIF()
+    if(NOT WIN32)
+        configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/digikam.lsm.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/digikam.lsm)
+    endif()
 
-ENDIF()
+endif()
 
 # ==================================================================================================
 # API documentation generation
 
-IF(DOXYGEN_FOUND)
+if(DOXYGEN_FOUND)
 
-    SET(API_DIR    ${CMAKE_BINARY_DIR}/api)
-    SET(SOURCE_DIR ${CMAKE_SOURCE_DIR})
-    SET(DOXYFILE   ${CMAKE_BINARY_DIR}/Doxyfile)
-    SET(WARNFILE   ${CMAKE_BINARY_DIR}/doxygen-warn.log)
+    set(API_DIR    ${CMAKE_BINARY_DIR}/api)
+    set(SOURCE_DIR ${CMAKE_SOURCE_DIR})
+    set(DOXYFILE   ${CMAKE_BINARY_DIR}/Doxyfile)
+    set(WARNFILE   ${CMAKE_BINARY_DIR}/doxygen-warn.log)
 
-    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/Doxyfile.cmake.in ${DOXYFILE})
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/Doxyfile.cmake.in ${DOXYFILE})
 
-    ADD_CUSTOM_TARGET(doc ${DOXYGEN_EXECUTABLE} ${DOXYFILE}
+    add_custom_target(doc ${DOXYGEN_EXECUTABLE} ${DOXYFILE}
                       WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
-ENDIF()
+endif()
