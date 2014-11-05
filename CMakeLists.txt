@@ -75,7 +75,7 @@ add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 macro(SET_DEBUG_AREA_CODE _areacode)
     remove_definitions(-DKDE_DEFAULT_DEBUG_AREA=${AREA_CODE_GENERAL})
     add_definitions(-DKDE_DEFAULT_DEBUG_AREA=${_areacode})
-endmacro(SET_DEBUG_AREA_CODE _areacode)
+endmacro()
 
 # ==================================================================================================
 # Dependencies
