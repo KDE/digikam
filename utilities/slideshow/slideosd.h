@@ -32,6 +32,12 @@
 
 #include <kurl.h>
 
+// Windows includes
+
+#ifdef Q_OS_WIN32
+#include <windows.h>
+#endif
+
 // Local includes
 
 #include "slideshowsettings.h"
