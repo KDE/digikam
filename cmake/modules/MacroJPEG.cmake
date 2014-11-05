@@ -11,7 +11,19 @@
 # check version of libjpeg so that we can use the appropriate dir
 # See bug #227313 for details
 
-function(CompileToCheckVersion Code Ret)
+function(CompileToCheckVersion LibId Ret)
+
+    set(_jpeglib_version_source "
+    #include <stddef.h>
+    #include <stdio.h>
+    #include <jpeglib.h>
+    int main()
+    {
+    #if (JPEG_LIB_VERSION >= ${LibId})
+    #error JPEG_LIB_VERSION >= ${LibId}
+    #endif
+    }
+    ")
 
     set(_jpeglib_version_source_file ${CMAKE_BINARY_DIR}/CMakeTmp/cmake_jpeglib_version_check.cpp)
     file(WRITE "${_jpeglib_version_source_file}" "${_jpeglib_version_source}")
@@ -31,55 +43,19 @@ macro(DETECT_JPEG)
 
     if(JPEG_FOUND)
 
-        set(_jpeglib_version_source "
-        #include <stddef.h>
-        #include <stdio.h>
-        #include <jpeglib.h>
-        int main()
-        {
-        #if (JPEG_LIB_VERSION >= 90)
-        #error JPEG_LIB_VERSION >= 90
-        #endif
-        }
-        ")
-
-        CompileToCheckVersion(_jpeglib_version_source, _CompileResult)
+        CompileToCheckVersion(90 _CompileResult)
 
         if(_CompileResult)
 
             # Compile sucessfuly. It's not libjpeg 90. We check previous version.
 
-            set(_jpeglib_version_source "
-            #include <stddef.h>
-            #include <stdio.h>
-            #include <jpeglib.h>
-            int main()
-            {
-            #if (JPEG_LIB_VERSION >= 80)
-            #error JPEG_LIB_VERSION >= 80
-            #endif
-            }
-            ")
-
-            CompileToCheckVersion(_jpeglib_version_source, _CompileResult)
+            CompileToCheckVersion(80 _CompileResult)
 
             if(_CompileResult)
 
                 # Compile sucessfuly. It's not libjpeg 90. We check previous version.
 
-                set(_jpeglib_version_source "
-                #include <stddef.h>
-                #include <stdio.h>
-                #include <jpeglib.h>
-                int main()
-                {
-                #if (JPEG_LIB_VERSION >= 70)
-                #error JPEG_LIB_VERSION >= 70
-                #endif
-                }
-                ")
-
-                CompileToCheckVersion(_jpeglib_version_source, _CompileResult)
+                CompileToCheckVersion(70 _CompileResult)
 
                 if(_CompileResult)
 
