@@ -135,7 +135,7 @@ set_target_properties(digikamcore PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SO
 
 if(WIN32)
     set_target_properties(digikamcore PROPERTIES COMPILE_FLAGS -DJPEG_STATIC)
-    set_target_properties(digikamcore PROPERTIES OUTPUT_NAME digikamlib)
+    set_target_properties(digikamcore PROPERTIES OUTPUT_NAME   digikamlib)
 endif()
 
 install(TARGETS digikamcore ${INSTALL_TARGETS_DEFAULT_ARGS})
@@ -292,7 +292,7 @@ if(NOT WIN32)
     target_link_libraries(digikam ${MATH_LIBRARY})
 endif()
 
-IF(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
+if(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
     target_link_libraries(digikam ${KVM_LIBRARY})
 endif()
 

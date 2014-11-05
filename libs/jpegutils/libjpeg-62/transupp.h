@@ -17,12 +17,6 @@
  * jpegtran.c for an example of correct usage.
  */
 
-#ifndef TRANSUPP_H
-#define TRANSUPP_H
-
-namespace Digikam
-{
-
 /* If you happen not to want the image transform support, disable it here */
 #ifndef TRANSFORMS_SUPPORTED
 #define TRANSFORMS_SUPPORTED 1		/* 0 disables transform code */
@@ -139,8 +133,3 @@ EXTERN(void) jcopy_markers_setup
 EXTERN(void) jcopy_markers_execute
 	JPP((j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	     JCOPY_OPTION option));
-
-#endif
-
-} // namespace Digikam
-

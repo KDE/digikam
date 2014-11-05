@@ -37,8 +37,8 @@ macro(DETECT_JPEG)
         #include <jpeglib.h>
         int main()
         {
-        #if (JPEG_LIB_VERSION >= 80)
-        #error JPEG_LIB_VERSION >= 80
+        #if (JPEG_LIB_VERSION >= 90)
+        #error JPEG_LIB_VERSION >= 90
         #endif
         }
         ")
@@ -47,7 +47,7 @@ macro(DETECT_JPEG)
 
         if(_CompileResult)
 
-            # Compile sucessfuly. It's not libjpeg 80. We check previous version.
+            # Compile sucessfuly. It's not libjpeg 90. We check previous version.
 
             set(_jpeglib_version_source "
             #include <stddef.h>
@@ -55,8 +55,8 @@ macro(DETECT_JPEG)
             #include <jpeglib.h>
             int main()
             {
-            #if (JPEG_LIB_VERSION >= 70)
-            #error JPEG_LIB_VERSION >= 70
+            #if (JPEG_LIB_VERSION >= 80)
+            #error JPEG_LIB_VERSION >= 80
             #endif
             }
             ")
@@ -65,18 +65,42 @@ macro(DETECT_JPEG)
 
             if(_CompileResult)
 
-                # Compile sucessfuly. It's not libjpeg 70.
-                set(JPEG_LIB_VERSION 62)
+                # Compile sucessfuly. It's not libjpeg 90. We check previous version.
+
+                set(_jpeglib_version_source "
+                #include <stddef.h>
+                #include <stdio.h>
+                #include <jpeglib.h>
+                int main()
+                {
+                #if (JPEG_LIB_VERSION >= 70)
+                #error JPEG_LIB_VERSION >= 70
+                #endif
+                }
+                ")
+
+                CompileToCheckVersion(_jpeglib_version_source, _CompileResult)
+
+                if(_CompileResult)
+
+                    # Compile sucessfuly. It's not libjpeg 70.
+                    set(JPEG_LIB_VERSION 62)
+
+                else()
+
+                    set(JPEG_LIB_VERSION 70)
+
+                endif()
 
             else()
 
-                set(JPEG_LIB_VERSION 70)
+                set(JPEG_LIB_VERSION 84)
 
             endif()
 
         else()
 
-                set(JPEG_LIB_VERSION 80)
+            set(JPEG_LIB_VERSION 91)
 
         endif()
 
