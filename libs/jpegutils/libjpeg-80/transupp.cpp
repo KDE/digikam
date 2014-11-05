@@ -1,7 +1,7 @@
 /*
  * transupp.c
  *
- * Copyright (C) 1997-2009, Thomas G. Lane, Guido Vollbeding.
+ * Copyright (C) 1997-2011, Thomas G. Lane, Guido Vollbeding.
  * This file is part of the Independent JPEG Group's software.
  * For conditions of distribution and use, see the accompanying README file.
  *
@@ -12,30 +12,16 @@
  * interfaces.
  */
 
-/*
- * Define libjpeg_EXPORTS: kde-win emerged jpeg lib uses this define to 
- * decide wether to make dllimport (by default) or dllexport. We need to 
- * export. 
- */
-
-#define libjpeg_EXPORTS
-
 /* Although this file really shouldn't have access to the library internals,
  * it's helpful to let it call jround_up() and jcopy_block_row().
  */
 #define JPEG_INTERNALS
 
-extern "C"
-{
 #include "jinclude.h"
 #include "jpeglib.h"
-}
-
 #include "transupp.h"		/* My own external interface */
 #include <ctype.h>		/* to declare isdigit() */
 
-namespace Digikam
-{
 
 #if TRANSFORMS_SUPPORTED
 
@@ -112,11 +98,11 @@ do_crop (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	 dst_blk_y += compptr->v_samp_factor) {
       dst_buffer = (*srcinfo->mem->access_virt_barray)
 	((j_common_ptr) srcinfo, dst_coef_arrays[ci], dst_blk_y,
-	 (JDIMENSION) compptr->v_samp_factor, true);
+	 (JDIMENSION) compptr->v_samp_factor, TRUE);
       src_buffer = (*srcinfo->mem->access_virt_barray)
 	((j_common_ptr) srcinfo, src_coef_arrays[ci],
 	 dst_blk_y + y_crop_blocks,
-	 (JDIMENSION) compptr->v_samp_factor, false);
+	 (JDIMENSION) compptr->v_samp_factor, FALSE);
       for (offset_y = 0; offset_y < compptr->v_samp_factor; offset_y++) {
 	jcopy_block_row(src_buffer[offset_y] + x_crop_blocks,
 			dst_buffer[offset_y],
@@ -158,7 +144,7 @@ do_flip_h_no_crop (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	 blk_y += compptr->v_samp_factor) {
       buffer = (*srcinfo->mem->access_virt_barray)
 	((j_common_ptr) srcinfo, src_coef_arrays[ci], blk_y,
-	 (JDIMENSION) compptr->v_samp_factor, true);
+	 (JDIMENSION) compptr->v_samp_factor, TRUE);
       for (offset_y = 0; offset_y < compptr->v_samp_factor; offset_y++) {
 	/* Do the mirroring */
 	for (blk_x = 0; blk_x * 2 < comp_width; blk_x++) {
@@ -225,11 +211,11 @@ do_flip_h (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	 dst_blk_y += compptr->v_samp_factor) {
       dst_buffer = (*srcinfo->mem->access_virt_barray)
 	((j_common_ptr) srcinfo, dst_coef_arrays[ci], dst_blk_y,
-	 (JDIMENSION) compptr->v_samp_factor, true);
+	 (JDIMENSION) compptr->v_samp_factor, TRUE);
       src_buffer = (*srcinfo->mem->access_virt_barray)
 	((j_common_ptr) srcinfo, src_coef_arrays[ci],
 	 dst_blk_y + y_crop_blocks,
-	 (JDIMENSION) compptr->v_samp_factor, false);
+	 (JDIMENSION) compptr->v_samp_factor, FALSE);
       for (offset_y = 0; offset_y < compptr->v_samp_factor; offset_y++) {
 	dst_row_ptr = dst_buffer[offset_y];
 	src_row_ptr = src_buffer[offset_y];
@@ -290,20 +276,20 @@ do_flip_v (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	 dst_blk_y += compptr->v_samp_factor) {
       dst_buffer = (*srcinfo->mem->access_virt_barray)
 	((j_common_ptr) srcinfo, dst_coef_arrays[ci], dst_blk_y,
-	 (JDIMENSION) compptr->v_samp_factor, true);
+	 (JDIMENSION) compptr->v_samp_factor, TRUE);
       if (y_crop_blocks + dst_blk_y < comp_height) {
 	/* Row is within the mirrorable area. */
 	src_buffer = (*srcinfo->mem->access_virt_barray)
 	  ((j_common_ptr) srcinfo, src_coef_arrays[ci],
 	   comp_height - y_crop_blocks - dst_blk_y -
 	   (JDIMENSION) compptr->v_samp_factor,
-	   (JDIMENSION) compptr->v_samp_factor, false);
+	   (JDIMENSION) compptr->v_samp_factor, FALSE);
       } else {
 	/* Bottom-edge blocks will be copied verbatim. */
 	src_buffer = (*srcinfo->mem->access_virt_barray)
 	  ((j_common_ptr) srcinfo, src_coef_arrays[ci],
 	   dst_blk_y + y_crop_blocks,
-	   (JDIMENSION) compptr->v_samp_factor, false);
+	   (JDIMENSION) compptr->v_samp_factor, FALSE);
       }
       for (offset_y = 0; offset_y < compptr->v_samp_factor; offset_y++) {
 	if (y_crop_blocks + dst_blk_y < comp_height) {
@@ -362,14 +348,14 @@ do_transpose (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	 dst_blk_y += compptr->v_samp_factor) {
       dst_buffer = (*srcinfo->mem->access_virt_barray)
 	((j_common_ptr) srcinfo, dst_coef_arrays[ci], dst_blk_y,
-	 (JDIMENSION) compptr->v_samp_factor, true);
+	 (JDIMENSION) compptr->v_samp_factor, TRUE);
       for (offset_y = 0; offset_y < compptr->v_samp_factor; offset_y++) {
 	for (dst_blk_x = 0; dst_blk_x < compptr->width_in_blocks;
 	     dst_blk_x += compptr->h_samp_factor) {
 	  src_buffer = (*srcinfo->mem->access_virt_barray)
 	    ((j_common_ptr) srcinfo, src_coef_arrays[ci],
 	     dst_blk_x + x_crop_blocks,
-	     (JDIMENSION) compptr->h_samp_factor, false);
+	     (JDIMENSION) compptr->h_samp_factor, FALSE);
 	  for (offset_x = 0; offset_x < compptr->h_samp_factor; offset_x++) {
 	    dst_ptr = dst_buffer[offset_y][dst_blk_x + offset_x];
 	    src_ptr = src_buffer[offset_x][dst_blk_y + offset_y + y_crop_blocks];
@@ -418,7 +404,7 @@ do_rot_90 (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	 dst_blk_y += compptr->v_samp_factor) {
       dst_buffer = (*srcinfo->mem->access_virt_barray)
 	((j_common_ptr) srcinfo, dst_coef_arrays[ci], dst_blk_y,
-	 (JDIMENSION) compptr->v_samp_factor, true);
+	 (JDIMENSION) compptr->v_samp_factor, TRUE);
       for (offset_y = 0; offset_y < compptr->v_samp_factor; offset_y++) {
 	for (dst_blk_x = 0; dst_blk_x < compptr->width_in_blocks;
 	     dst_blk_x += compptr->h_samp_factor) {
@@ -428,13 +414,13 @@ do_rot_90 (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	      ((j_common_ptr) srcinfo, src_coef_arrays[ci],
 	       comp_width - x_crop_blocks - dst_blk_x -
 	       (JDIMENSION) compptr->h_samp_factor,
-	       (JDIMENSION) compptr->h_samp_factor, false);
+	       (JDIMENSION) compptr->h_samp_factor, FALSE);
 	  } else {
 	    /* Edge blocks are transposed but not mirrored. */
 	    src_buffer = (*srcinfo->mem->access_virt_barray)
 	      ((j_common_ptr) srcinfo, src_coef_arrays[ci],
 	       dst_blk_x + x_crop_blocks,
-	       (JDIMENSION) compptr->h_samp_factor, false);
+	       (JDIMENSION) compptr->h_samp_factor, FALSE);
 	  }
 	  for (offset_x = 0; offset_x < compptr->h_samp_factor; offset_x++) {
 	    dst_ptr = dst_buffer[offset_y][dst_blk_x + offset_x];
@@ -499,14 +485,14 @@ do_rot_270 (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	 dst_blk_y += compptr->v_samp_factor) {
       dst_buffer = (*srcinfo->mem->access_virt_barray)
 	((j_common_ptr) srcinfo, dst_coef_arrays[ci], dst_blk_y,
-	 (JDIMENSION) compptr->v_samp_factor, true);
+	 (JDIMENSION) compptr->v_samp_factor, TRUE);
       for (offset_y = 0; offset_y < compptr->v_samp_factor; offset_y++) {
 	for (dst_blk_x = 0; dst_blk_x < compptr->width_in_blocks;
 	     dst_blk_x += compptr->h_samp_factor) {
 	  src_buffer = (*srcinfo->mem->access_virt_barray)
 	    ((j_common_ptr) srcinfo, src_coef_arrays[ci],
 	     dst_blk_x + x_crop_blocks,
-	     (JDIMENSION) compptr->h_samp_factor, false);
+	     (JDIMENSION) compptr->h_samp_factor, FALSE);
 	  for (offset_x = 0; offset_x < compptr->h_samp_factor; offset_x++) {
 	    dst_ptr = dst_buffer[offset_y][dst_blk_x + offset_x];
 	    if (y_crop_blocks + dst_blk_y < comp_height) {
@@ -570,20 +556,20 @@ do_rot_180 (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	 dst_blk_y += compptr->v_samp_factor) {
       dst_buffer = (*srcinfo->mem->access_virt_barray)
 	((j_common_ptr) srcinfo, dst_coef_arrays[ci], dst_blk_y,
-	 (JDIMENSION) compptr->v_samp_factor, true);
+	 (JDIMENSION) compptr->v_samp_factor, TRUE);
       if (y_crop_blocks + dst_blk_y < comp_height) {
 	/* Row is within the vertically mirrorable area. */
 	src_buffer = (*srcinfo->mem->access_virt_barray)
 	  ((j_common_ptr) srcinfo, src_coef_arrays[ci],
 	   comp_height - y_crop_blocks - dst_blk_y -
 	   (JDIMENSION) compptr->v_samp_factor,
-	   (JDIMENSION) compptr->v_samp_factor, false);
+	   (JDIMENSION) compptr->v_samp_factor, FALSE);
       } else {
 	/* Bottom-edge rows are only mirrored horizontally. */
 	src_buffer = (*srcinfo->mem->access_virt_barray)
 	  ((j_common_ptr) srcinfo, src_coef_arrays[ci],
 	   dst_blk_y + y_crop_blocks,
-	   (JDIMENSION) compptr->v_samp_factor, false);
+	   (JDIMENSION) compptr->v_samp_factor, FALSE);
       }
       for (offset_y = 0; offset_y < compptr->v_samp_factor; offset_y++) {
 	dst_row_ptr = dst_buffer[offset_y];
@@ -681,7 +667,7 @@ do_transverse (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	 dst_blk_y += compptr->v_samp_factor) {
       dst_buffer = (*srcinfo->mem->access_virt_barray)
 	((j_common_ptr) srcinfo, dst_coef_arrays[ci], dst_blk_y,
-	 (JDIMENSION) compptr->v_samp_factor, true);
+	 (JDIMENSION) compptr->v_samp_factor, TRUE);
       for (offset_y = 0; offset_y < compptr->v_samp_factor; offset_y++) {
 	for (dst_blk_x = 0; dst_blk_x < compptr->width_in_blocks;
 	     dst_blk_x += compptr->h_samp_factor) {
@@ -691,12 +677,12 @@ do_transverse (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 	      ((j_common_ptr) srcinfo, src_coef_arrays[ci],
 	       comp_width - x_crop_blocks - dst_blk_x -
 	       (JDIMENSION) compptr->h_samp_factor,
-	       (JDIMENSION) compptr->h_samp_factor, false);
+	       (JDIMENSION) compptr->h_samp_factor, FALSE);
 	  } else {
 	    src_buffer = (*srcinfo->mem->access_virt_barray)
 	      ((j_common_ptr) srcinfo, src_coef_arrays[ci],
 	       dst_blk_x + x_crop_blocks,
-	       (JDIMENSION) compptr->h_samp_factor, false);
+	       (JDIMENSION) compptr->h_samp_factor, FALSE);
 	  }
 	  for (offset_x = 0; offset_x < compptr->h_samp_factor; offset_x++) {
 	    dst_ptr = dst_buffer[offset_y][dst_blk_x + offset_x];
@@ -760,7 +746,7 @@ do_transverse (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 
 
 /* Parse an unsigned integer: subroutine for jtransform_parse_crop_spec.
- * Returns true if valid integer found, false if not.
+ * Returns TRUE if valid integer found, FALSE if not.
  * *strptr is advanced over the digit string, and *result is set to its value.
  */
 
@@ -775,17 +761,17 @@ jt_read_integer (const char ** strptr, JDIMENSION * result)
   }
   *result = val;
   if (ptr == *strptr)
-    return false;		/* oops, no digits */
+    return FALSE;		/* oops, no digits */
   *strptr = ptr;
-  return true;
+  return TRUE;
 }
 
 
 /* Parse a crop specification (written in X11 geometry style).
- * The routine returns true if the spec string is valid, false if not.
+ * The routine returns TRUE if the spec string is valid, FALSE if not.
  *
  * The crop spec string should have the format
- *	<width>x<height>{+-}<xoffset>{+-}<yoffset>
+ *	<width>[f]x<height>[f]{+-}<xoffset>{+-}<yoffset>
  * where width, height, xoffset, and yoffset are unsigned integers.
  * Each of the elements can be omitted to indicate a default value.
  * (A weakness of this style is that it is not possible to omit xoffset
@@ -797,7 +783,7 @@ jt_read_integer (const char ** strptr, JDIMENSION * result)
 GLOBAL(boolean)
 jtransform_parse_crop_spec (jpeg_transform_info *info, const char *spec)
 {
-  info->crop = false;
+  info->crop = FALSE;
   info->crop_width_set = JCROP_UNSET;
   info->crop_height_set = JCROP_UNSET;
   info->crop_xoffset_set = JCROP_UNSET;
@@ -806,35 +792,43 @@ jtransform_parse_crop_spec (jpeg_transform_info *info, const char *spec)
   if (isdigit(*spec)) {
     /* fetch width */
     if (! jt_read_integer(&spec, &info->crop_width))
-      return false;
-    info->crop_width_set = JCROP_POS;
+      return FALSE;
+    if (*spec == 'f' || *spec == 'F') {
+      spec++;
+      info->crop_width_set = JCROP_FORCE;
+    } else
+      info->crop_width_set = JCROP_POS;
   }
-  if (*spec == 'x' || *spec == 'X') {	
+  if (*spec == 'x' || *spec == 'X') {
     /* fetch height */
     spec++;
     if (! jt_read_integer(&spec, &info->crop_height))
-      return false;
-    info->crop_height_set = JCROP_POS;
+      return FALSE;
+    if (*spec == 'f' || *spec == 'F') {
+      spec++;
+      info->crop_height_set = JCROP_FORCE;
+    } else
+      info->crop_height_set = JCROP_POS;
   }
   if (*spec == '+' || *spec == '-') {
     /* fetch xoffset */
     info->crop_xoffset_set = (*spec == '-') ? JCROP_NEG : JCROP_POS;
     spec++;
     if (! jt_read_integer(&spec, &info->crop_xoffset))
-      return false;
+      return FALSE;
   }
   if (*spec == '+' || *spec == '-') {
     /* fetch yoffset */
     info->crop_yoffset_set = (*spec == '-') ? JCROP_NEG : JCROP_POS;
     spec++;
     if (! jt_read_integer(&spec, &info->crop_yoffset))
-      return false;
+      return FALSE;
   }
   /* We had better have gotten to the end of the string. */
   if (*spec != '\0')
-    return false;
-  info->crop = true;
-  return true;
+    return FALSE;
+  info->crop = TRUE;
+  return TRUE;
 }
 
 
@@ -876,8 +870,8 @@ trim_bottom_edge (jpeg_transform_info *info, JDIMENSION full_height)
  * the image dimensions) and before jpeg_read_coefficients (which realizes
  * the source's virtual arrays).
  *
- * This function returns false right away if -perfect is given
- * and transformation is not perfect.  Otherwise returns true.
+ * This function returns FALSE right away if -perfect is given
+ * and transformation is not perfect.  Otherwise returns TRUE.
  */
 
 GLOBAL(boolean)
@@ -914,14 +908,14 @@ jtransform_request_workspace (j_decompress_ptr srcinfo,
 	  srcinfo->min_DCT_h_scaled_size,
 	  srcinfo->min_DCT_v_scaled_size,
 	  info->transform))
-	return false;
+	return FALSE;
     } else {
       if (!jtransform_perfect_transform(srcinfo->output_width,
 	  srcinfo->output_height,
 	  srcinfo->max_h_samp_factor * srcinfo->min_DCT_h_scaled_size,
 	  srcinfo->max_v_samp_factor * srcinfo->min_DCT_v_scaled_size,
 	  info->transform))
-	return false;
+	return FALSE;
     }
   }
 
@@ -994,10 +988,16 @@ jtransform_request_workspace (j_decompress_ptr srcinfo,
     else
       yoffset = info->crop_yoffset;
     /* Now adjust so that upper left corner falls at an iMCU boundary */
-    info->output_width =
-      info->crop_width + (xoffset % info->iMCU_sample_width);
-    info->output_height =
-      info->crop_height + (yoffset % info->iMCU_sample_height);
+    if (info->crop_width_set == JCROP_FORCE)
+      info->output_width = info->crop_width;
+    else
+      info->output_width =
+        info->crop_width + (xoffset % info->iMCU_sample_width);
+    if (info->crop_height_set == JCROP_FORCE)
+      info->output_height = info->crop_height;
+    else
+      info->output_height =
+        info->crop_height + (yoffset % info->iMCU_sample_height);
     /* Save x/y offsets measured in iMCUs */
     info->x_crop_offset = xoffset / info->iMCU_sample_width;
     info->y_crop_offset = yoffset / info->iMCU_sample_height;
@@ -1009,32 +1009,32 @@ jtransform_request_workspace (j_decompress_ptr srcinfo,
   /* Figure out whether we need workspace arrays,
    * and if so whether they are transposed relative to the source.
    */
-  need_workspace = false;
-  transpose_it = false;
+  need_workspace = FALSE;
+  transpose_it = FALSE;
   switch (info->transform) {
   case JXFORM_NONE:
     if (info->x_crop_offset != 0 || info->y_crop_offset != 0)
-      need_workspace = true;
+      need_workspace = TRUE;
     /* No workspace needed if neither cropping nor transforming */
     break;
   case JXFORM_FLIP_H:
     if (info->trim)
       trim_right_edge(info, srcinfo->output_width);
     if (info->y_crop_offset != 0)
-      need_workspace = true;
+      need_workspace = TRUE;
     /* do_flip_h_no_crop doesn't need a workspace array */
     break;
   case JXFORM_FLIP_V:
     if (info->trim)
       trim_bottom_edge(info, srcinfo->output_height);
     /* Need workspace arrays having same dimensions as source image. */
-    need_workspace = true;
+    need_workspace = TRUE;
     break;
   case JXFORM_TRANSPOSE:
     /* transpose does NOT have to trim anything */
     /* Need workspace arrays having transposed dimensions. */
-    need_workspace = true;
-    transpose_it = true;
+    need_workspace = TRUE;
+    transpose_it = TRUE;
     break;
   case JXFORM_TRANSVERSE:
     if (info->trim) {
@@ -1042,15 +1042,15 @@ jtransform_request_workspace (j_decompress_ptr srcinfo,
       trim_bottom_edge(info, srcinfo->output_width);
     }
     /* Need workspace arrays having transposed dimensions. */
-    need_workspace = true;
-    transpose_it = true;
+    need_workspace = TRUE;
+    transpose_it = TRUE;
     break;
   case JXFORM_ROT_90:
     if (info->trim)
       trim_right_edge(info, srcinfo->output_height);
     /* Need workspace arrays having transposed dimensions. */
-    need_workspace = true;
-    transpose_it = true;
+    need_workspace = TRUE;
+    transpose_it = TRUE;
     break;
   case JXFORM_ROT_180:
     if (info->trim) {
@@ -1058,14 +1058,14 @@ jtransform_request_workspace (j_decompress_ptr srcinfo,
       trim_bottom_edge(info, srcinfo->output_height);
     }
     /* Need workspace arrays having same dimensions as source image. */
-    need_workspace = true;
+    need_workspace = TRUE;
     break;
   case JXFORM_ROT_270:
     if (info->trim)
       trim_bottom_edge(info, srcinfo->output_width);
     /* Need workspace arrays having transposed dimensions. */
-    need_workspace = true;
-    transpose_it = true;
+    need_workspace = TRUE;
+    transpose_it = TRUE;
     break;
   }
 
@@ -1098,14 +1098,14 @@ jtransform_request_workspace (j_decompress_ptr srcinfo,
       width_in_blocks = width_in_iMCUs * h_samp_factor;
       height_in_blocks = height_in_iMCUs * v_samp_factor;
       coef_arrays[ci] = (*srcinfo->mem->request_virt_barray)
-	((j_common_ptr) srcinfo, JPOOL_IMAGE, false,
+	((j_common_ptr) srcinfo, JPOOL_IMAGE, FALSE,
 	 width_in_blocks, height_in_blocks, (JDIMENSION) v_samp_factor);
     }
     info->workspace_coef_arrays = coef_arrays;
   } else
     info->workspace_coef_arrays = NULL;
 
-  return true;
+  return TRUE;
 }
 
 
@@ -1170,9 +1170,9 @@ adjust_exif_parameters (JOCTET FAR * data, unsigned int length,
 
   /* Discover byte order */
   if (GETJOCTET(data[0]) == 0x49 && GETJOCTET(data[1]) == 0x49)
-    is_motorola = false;
+    is_motorola = FALSE;
   else if (GETJOCTET(data[0]) == 0x4D && GETJOCTET(data[1]) == 0x4D)
-    is_motorola = true;
+    is_motorola = TRUE;
   else
     return;
 
@@ -1388,7 +1388,7 @@ jtransform_adjust_parameters (j_decompress_ptr srcinfo,
       GETJOCTET(srcinfo->marker_list->data[4]) == 0 &&
       GETJOCTET(srcinfo->marker_list->data[5]) == 0) {
     /* Suppress output of JFIF marker */
-    dstinfo->write_JFIF_header = false;
+    dstinfo->write_JFIF_header = FALSE;
     /* Adjust Exif image parameters */
     if (dstinfo->jpeg_width != srcinfo->image_width ||
 	dstinfo->jpeg_height != srcinfo->image_height)
@@ -1482,8 +1482,8 @@ jtransform_execute_transform (j_decompress_ptr srcinfo,
  *   MCU_width = cinfo.max_h_samp_factor * cinfo.block_size
  *   MCU_height = cinfo.max_v_samp_factor * cinfo.block_size
  * Result:
- *   true = perfect transformation possible
- *   false = perfect transformation not possible
+ *   TRUE = perfect transformation possible
+ *   FALSE = perfect transformation not possible
  *           (may use custom action then)
  */
 
@@ -1492,25 +1492,25 @@ jtransform_perfect_transform(JDIMENSION image_width, JDIMENSION image_height,
 			     int MCU_width, int MCU_height,
 			     JXFORM_CODE transform)
 {
-  boolean result = true; /* initialize true */
+  boolean result = TRUE; /* initialize TRUE */
 
   switch (transform) {
   case JXFORM_FLIP_H:
   case JXFORM_ROT_270:
     if (image_width % (JDIMENSION) MCU_width)
-      result = false;
+      result = FALSE;
     break;
   case JXFORM_FLIP_V:
   case JXFORM_ROT_90:
     if (image_height % (JDIMENSION) MCU_height)
-      result = false;
+      result = FALSE;
     break;
   case JXFORM_TRANSVERSE:
   case JXFORM_ROT_180:
     if (image_width % (JDIMENSION) MCU_width)
-      result = false;
+      result = FALSE;
     if (image_height % (JDIMENSION) MCU_height)
-      result = false;
+      result = FALSE;
     break;
   default:
     break;
@@ -1553,7 +1553,7 @@ jcopy_markers_setup (j_decompress_ptr srcinfo, JCOPY_OPTION option)
 
 GLOBAL(void)
 jcopy_markers_execute (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
-		       JCOPY_OPTION /*option*/)
+		       JCOPY_OPTION option)
 {
   jpeg_saved_marker_ptr marker;
 
@@ -1595,5 +1595,3 @@ jcopy_markers_execute (j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
 #endif
   }
 }
-
-} // namespace Digikam
