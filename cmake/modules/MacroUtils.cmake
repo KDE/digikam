@@ -23,9 +23,9 @@ macro(FILL_WITH_DOTS VAR)
 
         set(${VAR} "${${VAR}}.")
 
-    endforeach(COUNT)
+    endforeach()
 
-endmacro(FILL_WITH_DOTS)
+endmacro()
 
 # -------------------------------------------------------------------------
 
@@ -47,7 +47,7 @@ macro(PRINT_LIBRARY_STATUS NAME WEBSITE VERSIONHINT)
 
     endif()
 
-endmacro(PRINT_LIBRARY_STATUS)
+endmacro()
 
 # -------------------------------------------------------------------------
 
@@ -72,7 +72,7 @@ macro(PRINT_OPTIONAL_LIBRARY_STATUS NAME WEBSITE VERSIONHINT FEATUREMISSING)
 
     endif()
 
-endmacro(PRINT_OPTIONAL_LIBRARY_STATUS)
+endmacro()
 
 # -------------------------------------------------------------------------
 
@@ -94,7 +94,7 @@ macro(PRINT_QTMODULE_STATUS NAME)
 
     endif()
 
-endmacro(PRINT_QTMODULE_STATUS)
+endmacro()
 
 # -------------------------------------------------------------------------
 
@@ -117,7 +117,7 @@ macro(PRINT_EXECUTABLE_STATUS NAME TECHNICAL_NAME PATH_VARIABLE)
 
     endif()
 
-endmacro(PRINT_EXECUTABLE_STATUS)
+endmacro()
 
 # -------------------------------------------------------------------------
 
@@ -136,7 +136,7 @@ macro(PRINT_COMPONENT_COMPILE_STATUS NAME)
 
     endif()
 
-endmacro(PRINT_COMPONENT_COMPILE_STATUS)
+endmacro()
 
 # -------------------------------------------------------------------------
 
@@ -155,4 +155,4 @@ macro(PRINT_OPTIONAL_QTMODULE_STATUS NAME)
 
     endif()
 
-endmacro(PRINT_OPTIONAL_QTMODULE_STATUS)
+endmacro()

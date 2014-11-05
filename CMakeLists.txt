@@ -89,12 +89,16 @@ include(KDE4Defaults)
 include(MacroLibrary)
 include(FindPackageHandleStandardArgs)
 include(FindPkgConfig)
+
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
+
+include(MacroUtils)
+include(MacroOpenCV)
+include(MacroJPEG)
 
 # mandatory
 
 set(PGF_MIN_VERSION   "6.12.24")
-find_package(JPEG                    REQUIRED)
 find_package(TIFF                    REQUIRED)
 find_package(PNG                     REQUIRED)
 find_package(PGF ${PGF_MIN_VERSION}  REQUIRED)
@@ -114,8 +118,6 @@ find_package(Boost)
 
 # -- check OpenCV --------------------------------------------------------------------------------
 
-include(MacroUtils)
-include(MacroOpenCV)
 set(OPENCV_MIN_VERSION "2.4.9")
 DETECT_OPENCV(${OPENCV_MIN_VERSION}  core highgui objdetect contrib legacy imgproc)
 
@@ -211,24 +213,8 @@ endif()
 
 # -- Libjpeg rules --------------------------------------------------------------------------------
 
-# check version of libjpeg so that we can use the appropriate dir
-# See bug #227313
-set(_jpeglib_version_source "#include <stddef.h>\n#include<stdio.h>\n#include <jpeglib.h>\n int main()\n {\n #if (JPEG_LIB_VERSION >= 80) \n #error JPEG_LIB_VERSION >= 80 found \n #endif \n }\n")
-set(_jpeglib_version_source_file ${CMAKE_BINARY_DIR}/CMakeTmp/cmake_jpeglib_version_check.cpp)
-file(WRITE "${_jpeglib_version_source_file}" "${_jpeglib_version_source}")
-set(_jpeglib_version_include_dirs "-DINCLUDE_DIRECTORIES:STRING=${JPEG_INCLUDE_DIR}")
-
-try_compile(_jpeglib_version_compile_result ${CMAKE_BINARY_DIR} ${_jpeglib_version_source_file}
-            CMAKE_FLAGS "${_jpeglib_version_include_dirs}"
-            COMPILE_OUTPUT_VARIABLE _jpeglib_version_compile_output_var)
-
-if(_jpeglib_version_compile_result)
-    message(STATUS "Identified libjpeg version: 62")
-    set(DIGIKAM_LIBJPEG_DIR libjpeg-62)
-else()
-    message(STATUS "Identified libjpeg version: 80+")
-    set(DIGIKAM_LIBJPEG_DIR libjpeg-80)
-endif()
+DETECT_JPEG()
+set(DIGIKAM_LIBJPEG_DIR libjpeg-${JPEG_LIB_VERSION})
 
 # -- Mysql rules ----------------------------------------------------------------------------------
 

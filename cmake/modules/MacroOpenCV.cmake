@@ -81,4 +81,4 @@ macro(DETECT_OPENCV OPENCV_MIN_VERSION)
     message(STATUS "OpenCV headers: ${OpenCV_INCLUDE_DIRS}")
     message(STATUS "OpenCV libs   : ${OpenCV_LIBRARIES}")
 
-endmacro(DETECT_OPENCV)
+endmacro()
