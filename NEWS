@@ -29,4 +29,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 016 ==> 172295 - digiKam has a hard dependency on Jasper library.
 017 ==> 339180 - Cmake and/or compiler pick up libkgeomap header files from previous version.
 018 ==> 340581 - Ratings with rating == 0 cannot be selected on the left sidebar [patch].
-019 ==> 
+019 ==> 339154 - digiKam goes into infinite loop when working with tags/captions information tab templates.
+020 ==> 
