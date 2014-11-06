@@ -174,6 +174,7 @@ if(ENABLE_LCMS2)
         set(USE_LCMS_VERSION_2000 1)
 
     endif()
+
 else()
 
     message(STATUS "Check for LCMS1 availability...")
@@ -600,7 +601,8 @@ if(DIGIKAM_CAN_BE_COMPILED)
        )
 
     if(JASPER_FOUND)
-        set(libdimgloaders_SRCS ${libdimgloaders_SRCS}
+        set(libdimgloaders_SRCS
+            ${libdimgloaders_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/jp2kloader.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/jp2ksettings.cpp
            )
@@ -695,13 +697,15 @@ if(DIGIKAM_CAN_BE_COMPILED)
        )
 
     if(LQR-1_FOUND)
-        set(libdimgfilters_SRCS ${libdimgfilters_SRCS}
+        set(libdimgfilters_SRCS
+            ${libdimgfilters_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/contentawarefilter.cpp
            )
     endif()
 
     if(LENSFUN_FOUND)
-        set(libdimgfilters_SRCS ${libdimgfilters_SRCS}
+        set(libdimgfilters_SRCS
+            ${libdimgfilters_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfunfilter.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfuncameraselector.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfuniface.cpp
@@ -710,7 +714,8 @@ if(DIGIKAM_CAN_BE_COMPILED)
     endif()
 
     if(EIGEN3_FOUND)
-        set(libdimgfilters_SRCS ${libdimgfilters_SRCS}
+        set(libdimgfilters_SRCS
+            ${libdimgfilters_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/refocusfilter.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/matrix.cpp
            )
@@ -743,7 +748,8 @@ if(DIGIKAM_CAN_BE_COMPILED)
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/kgeomaphelper/digikam2kgeomap.cpp
            )
 
-        set(libimageproperties_SRCS ${libimageproperties_SRCS}
+        set(libimageproperties_SRCS
+            ${libimageproperties_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesgpstab.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagegpsmodelhelper.cpp
            )
@@ -755,16 +761,13 @@ if(DIGIKAM_CAN_BE_COMPILED)
     KDE4_NO_ENABLE_FINAL(libjpegutils)
     set(libjpegutils_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/jpegutils.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/${DIGIKAM_LIBJPEG_DIR}/transupp.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/${DIGIKAM_LIBJPEG_DIR}/transupp.c
        )
-
-    SET_SOURCE_FILES_PROPERTIES(${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/${DIGIKAM_LIBJPEG_DIR}/transupp.cpp
-                                PROPERTIES COMPILE_FLAGS "-w")
 
     if(MSVC)
         set(libjpegutils_SRCS
-                ${libjpegutils_SRCS}
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/jpegwin.cpp
+            ${libjpegutils_SRCS}
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/jpegwin.cpp
            )
     endif()
 
@@ -810,8 +813,8 @@ if(DIGIKAM_CAN_BE_COMPILED)
 
     if(APPLE)
         set(libnotificationmanager_SRCS
-                ${libnotificationmanager_SRCS}
-                ${CMAKE_CURRENT_SOURCE_DIR}/libs/notificationmanager/macnotification.mm
+            ${libnotificationmanager_SRCS}
+            ${CMAKE_CURRENT_SOURCE_DIR}/libs/notificationmanager/macnotification.mm
            )
     endif()
 
@@ -1102,8 +1105,8 @@ if(DIGIKAM_CAN_BE_COMPILED)
 
     if(KFACE_FOUND)
         set(libmaintenance_SRCS
-                ${libmaintenance_SRCS}
-                ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/facedetector.cpp
+            ${libmaintenance_SRCS}
+            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/facedetector.cpp
            )
     endif()
 
@@ -1390,17 +1393,17 @@ if(DIGIKAM_CAN_BE_COMPILED)
 
     if(KFACE_FOUND)
         set(libdigikamgui_SRCS
-                ${libdigikamgui_SRCS}
-                ${CMAKE_CURRENT_SOURCE_DIR}/app/items/digikamimagefacedelegate.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/app/items/overlays/assignnameoverlay.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/app/items/overlays/facerejectionoverlay.cpp
+            ${libdigikamgui_SRCS}
+            ${CMAKE_CURRENT_SOURCE_DIR}/app/items/digikamimagefacedelegate.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/app/items/overlays/assignnameoverlay.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/app/items/overlays/facerejectionoverlay.cpp
            )
     endif()
 
     if(KGEOMAP_FOUND)
         set(libdigikamgui_SRCS
-                ${libdigikamgui_SRCS}
-                ${CMAKE_CURRENT_SOURCE_DIR}/app/views/mapwidgetview.cpp
+            ${libdigikamgui_SRCS}
+            ${CMAKE_CURRENT_SOURCE_DIR}/app/views/mapwidgetview.cpp
            )
     endif()
 
