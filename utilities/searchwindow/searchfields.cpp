@@ -73,6 +73,7 @@
 #include "tagscache.h"
 #include "colorlabelfilter.h"
 #include "picklabelfilter.h"
+#include "applicationsettings.h"
 
 using namespace KDcrawIface;
 
@@ -104,9 +105,21 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     }
     else if (name == "albumcollection")
     {
-        SearchFieldText* const field = new SearchFieldText(parent);
+        SearchFieldChoice* const field = new SearchFieldChoice(parent);
         field->setFieldName(name);
-        field->setText(i18n("Album"), i18n("The album collection contains"));
+        field->setText(i18n("Album"), i18n("The album category is"));
+        ApplicationSettings* const settings = ApplicationSettings::instance();
+        if (settings)
+        {
+            QStringList Categories = settings->getAlbumCategoryNames();
+            int size = Categories.size();
+            QStringList categorychoices;
+            for(int i=0; i<size; i++)
+            {
+                categorychoices << Categories.at(i) << Categories.at(i);
+            }
+            field->setChoice(categorychoices);
+        }
         return field;
     }
     else if (name == "tagid")

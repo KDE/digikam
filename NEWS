@@ -30,4 +30,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 017 ==> 339180 - Cmake and/or compiler pick up libkgeomap header files from previous version.
 018 ==> 340581 - Ratings with rating == 0 cannot be selected on the left sidebar [patch].
 019 ==> 339154 - digiKam goes into infinite loop when working with tags/captions information tab templates.
-020 ==> 
+020 ==> 340487 - Add Album Category as a search criteria [patch].
+021 ==> 

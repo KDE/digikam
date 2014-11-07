@@ -97,6 +97,7 @@ void SearchGroup::setup(Type type)
 
     group->addField(SearchField::createField("albumid", group));
     group->addField(SearchField::createField("albumname", group));
+    group->addField(SearchField::createField("albumcollection", group));
     group->addField(SearchField::createField("tagid", group));
     group->addField(SearchField::createField("tagname", group));
     group->addField(SearchField::createField("notag", group));
