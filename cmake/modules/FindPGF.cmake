@@ -33,7 +33,7 @@ FIND_PATH(PGF_INCLUDE_DIRS PGFtypes.h
         PATH_SUFFIXES libpgf
         )
 
-FIND_LIBRARY(PGF_LIBRARIES NAMES pgf
+FIND_LIBRARY(PGF_LIBRARIES NAMES pgf libpgf
             HINTS
             ${PC_PGF_LIBDIR}
             ${PC_PGF_LIBRARY_DIRS}
