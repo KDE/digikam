@@ -91,7 +91,6 @@ target_link_libraries(digikamcore
 
                       ${KDCRAW_LIBRARIES}
                       ${KEXIV2_LIBRARIES}
-                      ${LCMS_LIBRARIES}
                      )
 
 if(Q_WS_X11)
