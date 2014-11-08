@@ -53,8 +53,22 @@ extern "C"
 #include <utime.h>
 #include <setjmp.h>
 #include <jpeglib.h>
+}
+
+// GCC pragma directives to reduce warnings from OpenCV header files.
+#ifdef Q_CC_GNU
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif
+
+extern "C"
+{
 #include "transupp.h"
 }
+
+// Restore GCC warnings
+#ifdef Q_CC_GNU
+#pragma GCC diagnostic warning "-Wunused-parameter"
+#endif
 
 // KDE includes
 
