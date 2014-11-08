@@ -22,6 +22,12 @@
  *
  * ============================================================ */
 
+// GCC pragma directives to reduce warnings from OpenCV header files.
+#ifdef Q_CC_GNU
+#pragma GCC diagnostic ignored "-Wnon-virtual-dtor"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#endif
+
 // OpenCv includes
 
 #include "opencv2/imgproc/imgproc.hpp"
