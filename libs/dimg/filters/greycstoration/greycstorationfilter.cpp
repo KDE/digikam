@@ -54,20 +54,30 @@
  */
 #define GREYSTORATION_USING_GFACT 1
 
-// GCC pragma directives to reduce warnings from CImg header files.
-#ifdef Q_CC_GNU
+// Pragma directives to reduce warnings from CImg header files.
+#ifdef __GNUC__
+#pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#endif
+
+#ifdef __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-local-typedefs"
+#pragma clang diagnostic ignored "-Wunused-but-set-variable"
 #endif
 
 // CImg includes
 
 #include "CImg.h"
 
-// Restore GCC warnings
-#ifdef Q_CC_GNU
-#pragma GCC diagnostic warning "-Wunused-local-typedefs"
-#pragma GCC diagnostic warning "-Wunused-but-set-variable"
+// Restore warnings
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
+
+#ifdef __clang__
+#pragma clang diagnostic pop
 #endif
 
 extern "C"
