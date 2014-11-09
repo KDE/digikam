@@ -28,14 +28,6 @@
 
 #define XMD_H
 
-/*
- * Define libjpeg_EXPORTS: kde-win emerged jpeg lib uses this define to
- * decide wether to make dllimport (by default) or dllexport. We need to
- * export.
- */
-
-#define libjpeg_EXPORTS
-
 #include "jpegutils.h"
 
 // C++ includes
