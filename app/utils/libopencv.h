@@ -27,13 +27,13 @@
 #define LIB_OPEN_CV_H
 
 // Pragma directives to reduce warnings from OpenCV header files.
-#ifdef __GNUC__
+#if not defined(__APPLE__) && defined(__GNUC__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wnon-virtual-dtor"
 #pragma GCC diagnostic ignored "-Woverloaded-virtual"
 #endif
 
-#ifdef __clang__
+#if defined(__APPLE__) && defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wnon-virtual-dtor"
 #pragma clang diagnostic ignored "-Woverloaded-virtual"
@@ -60,11 +60,11 @@
 #endif
 
 // Restore warnings
-#ifdef __GNUC__
+#if not defined(__APPLE__) && defined(__GNUC__)
 #pragma GCC diagnostic pop
 #endif
 
-#ifdef __clang__
+#if defined(__APPLE__) && defined(__clang__)
 #pragma clang diagnostic pop
 #endif
 

@@ -26,13 +26,13 @@
 // Boost includes
 
 // Pragma directives to reduce warnings from Boost header files.
-#ifdef __GNUC__
+#if not defined(__APPLE__) && defined(__GNUC__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wundef"
 #pragma GCC diagnostic ignored "-Wunnamed-type-template-args"
 #endif
 
-#ifdef __clang__
+#if defined(__APPLE__) && defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundef"
 #pragma clang diagnostic ignored "-Wunnamed-type-template-args"
@@ -46,11 +46,11 @@
 #include <boost/random/variate_generator.hpp>
 
 // Restore warnings
-#ifdef __GNUC__
+#if not defined(__APPLE__) && defined(__GNUC__)
 #pragma GCC diagnostic pop
 #endif
 
-#ifdef __clang__
+#if defined(__APPLE__) && defined(__clang__)
 #pragma clang diagnostic pop
 #endif
 
