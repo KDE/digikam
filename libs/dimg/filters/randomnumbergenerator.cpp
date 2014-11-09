@@ -29,7 +29,6 @@
 #if not defined(__APPLE__) && defined(__GNUC__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wundef"
-#pragma GCC diagnostic ignored "-Wunnamed-type-template-args"
 #endif
 
 #if defined(__APPLE__) && defined(__clang__)
