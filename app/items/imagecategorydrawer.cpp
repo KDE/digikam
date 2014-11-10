@@ -50,11 +50,11 @@
 namespace Digikam
 {
 
-class ImageCategoryDrawer::ImageCategoryDrawerPriv
+class ImageCategoryDrawer::Private
 {
 public:
 
-    ImageCategoryDrawerPriv()
+    Private()
     {
         lowerSpacing = 0;
         view         = 0;
@@ -67,11 +67,11 @@ public:
     ImageCategorizedView* view;
 };
 
-ImageCategoryDrawer::ImageCategoryDrawer(ImageCategorizedView* parent)
+ImageCategoryDrawer::ImageCategoryDrawer(ImageCategorizedView* const parent)
 #if KDE_IS_VERSION(4,5,0)
-    : KCategoryDrawerV3(0), d(new ImageCategoryDrawerPriv)
+    : KCategoryDrawerV3(0), d(new Private)
 #else
-    : d(new ImageCategoryDrawerPriv)
+    : d(new Private)
 #endif
 {
     d->view = parent;
@@ -129,8 +129,7 @@ void ImageCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole*
 
     p->translate(option.rect.topLeft());
 
-    ImageSortSettings::CategorizationMode mode =
-        (ImageSortSettings::CategorizationMode)index.data(ImageFilterModel::CategorizationModeRole).toInt();
+    ImageSortSettings::CategorizationMode mode = (ImageSortSettings::CategorizationMode)index.data(ImageFilterModel::CategorizationModeRole).toInt();
 
     p->drawPixmap(0, 0, d->pixmap);
 
@@ -139,17 +138,14 @@ void ImageCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole*
     fontBold.setBold(true);
     int fnSize = fontBold.pointSize();
 
-    //    bool usePointSize;
     if (fnSize > 0)
     {
         fontBold.setPointSize(fnSize+2);
-        //        usePointSize = true;
     }
     else
     {
         fnSize = fontBold.pixelSize();
         fontBold.setPixelSize(fnSize+2);
-        //        usePointSize = false;
     }
 
     QString header;
@@ -176,21 +172,22 @@ void ImageCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole*
     QRect tr;
     p->drawText(5, 5, d->rect.width(), d->rect.height(),
                 Qt::AlignLeft | Qt::AlignTop,
-                header, &tr);
+                p->fontMetrics().elidedText(header, Qt::ElideRight, d->rect.width() - 10), &tr);
 
     int y = tr.height() + 2;
 
     p->setFont(fontNormal);
 
     p->drawText(5, y, d->rect.width(), d->rect.height() - y,
-                Qt::AlignLeft | Qt::AlignVCenter, subLine);
+                Qt::AlignLeft | Qt::AlignVCenter,
+                p->fontMetrics().elidedText(subLine, Qt::ElideRight, d->rect.width() - 10));
 
     p->restore();
 }
 
 void ImageCategoryDrawer::viewHeaderText(const QModelIndex& index, QString* header, QString* subLine) const
 {
-    ImageModel* sourceModel = index.data(ImageModel::ImageModelPointerRole).value<ImageModel*>();
+    ImageModel* const sourceModel = index.data(ImageModel::ImageModelPointerRole).value<ImageModel*>();
 
     if (!sourceModel)
     {
@@ -201,12 +198,12 @@ void ImageCategoryDrawer::viewHeaderText(const QModelIndex& index, QString* head
 
     // Add here further model subclasses in use with ImageCategoryDrawer.
     // Note you need a Q_OBJECT in the class's header for this to work.
-    ImageAlbumModel* albumModel = qobject_cast<ImageAlbumModel*>(sourceModel);
+    ImageAlbumModel* const albumModel = qobject_cast<ImageAlbumModel*>(sourceModel);
 
     if (albumModel)
     {
         QList<Album*> albums = albumModel->currentAlbums();
-        Album* album;
+        Album* album         = 0;
 
         if (albums.isEmpty())
         {
@@ -215,7 +212,7 @@ void ImageCategoryDrawer::viewHeaderText(const QModelIndex& index, QString* head
 
         album = albums.first();
 
-        if(!album)
+        if (!album)
         {
             return;
         }
@@ -243,9 +240,9 @@ void ImageCategoryDrawer::viewHeaderText(const QModelIndex& index, QString* head
 
 void ImageCategoryDrawer::textForAlbum(const QModelIndex& index, QString* header, QString* subLine) const
 {
-    int albumId   = index.data(ImageFilterModel::CategoryAlbumIdRole).toInt();
-    PAlbum* album = AlbumManager::instance()->findPAlbum(albumId);
-    int count     = d->view->categoryRange(index).height();
+    int albumId         = index.data(ImageFilterModel::CategoryAlbumIdRole).toInt();
+    PAlbum* const album = AlbumManager::instance()->findPAlbum(albumId);
+    int count           = d->view->categoryRange(index).height();
     textForPAlbum(album, false, count, header, subLine);
 }
 
@@ -287,7 +284,7 @@ void ImageCategoryDrawer::textForPAlbum(PAlbum* album, bool recursive, int count
     if (!album->caption().isEmpty())
     {
         QString caption = album->caption();
-        *subLine        += " - " + caption.replace('\n', ' ');
+        *subLine       += " - " + caption.replace('\n', ' ');
     }
 
     *header = album->prettyUrl();

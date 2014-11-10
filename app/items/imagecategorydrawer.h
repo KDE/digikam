@@ -43,7 +43,7 @@ class TAlbum;
 class SAlbum;
 class DAlbum;
 
-class ImageCategoryDrawer : 
+class ImageCategoryDrawer :
 #if KDE_IS_VERSION(4,5,0)
     public KCategoryDrawerV3
 #else
@@ -52,7 +52,7 @@ class ImageCategoryDrawer :
 {
 public:
 
-    explicit ImageCategoryDrawer(ImageCategorizedView* parent);
+    explicit ImageCategoryDrawer(ImageCategorizedView* const parent);
     ~ImageCategoryDrawer();
 
     virtual int categoryHeight(const QModelIndex& index, const QStyleOption& option) const;
@@ -76,8 +76,8 @@ private:
 
 private:
 
-    class ImageCategoryDrawerPriv;
-    ImageCategoryDrawerPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
