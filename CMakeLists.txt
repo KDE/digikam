@@ -776,10 +776,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
            )
     endif()
 
-    foreach(_currentfile ${libjpegutils_SRCS})
-        set_source_files_properties(${_currentfile} PROPERTIES COMPILE_FLAGS "-w")
-    endforeach()
-
     set(libthreadimageio_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/filereadwritelock.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/loadsavethread.cpp
