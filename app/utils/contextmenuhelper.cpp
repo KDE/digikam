@@ -54,8 +54,19 @@
 #include <kstandardaction.h>
 
 #ifdef HAVE_KDEPIMLIBS
+
+#if defined(__APPLE__) && defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundef"
+#endif
+
 #include <Akonadi/Item>
 #include <Akonadi/Contact/ContactSearchJob>
+
+#if defined(__APPLE__) && defined(__clang__)
+#pragma clang diagnostic pop
+#endif
+
 #endif // HAVE_KDEPIMLIBS
 
 // Local includes

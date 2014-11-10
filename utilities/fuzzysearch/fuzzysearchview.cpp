@@ -55,7 +55,6 @@
 #include <kstandarddirs.h>
 #include <ktabwidget.h>
 #include <kvbox.h>
-#include <boost/concept_check.hpp>
 
 // Local includes
 

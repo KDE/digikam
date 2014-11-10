@@ -65,7 +65,7 @@ Mat dst, detected_edges;
 
 int  edgeThresh            = 1;
 double    lowThreshold     = 0.4;   //given in research paper
-int const max_lowThreshold = 100;
+//int const max_lowThreshold = 100;
 int  ratio_value           = 3;
 int  kernel_size           = 3;
 char window_name[]         = "Edge Map";
