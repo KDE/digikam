@@ -61,11 +61,11 @@
 namespace Digikam
 {
 
-class ImageThumbnailBar::ImageThumbnailBarPriv
+class ImageThumbnailBar::Private
 {
 public:
 
-    ImageThumbnailBarPriv()
+    Private()
     {
         scrollPolicy     = Qt::ScrollBarAlwaysOn;
         duplicatesFilter = 0;
@@ -75,8 +75,8 @@ public:
     NoDuplicatesImageFilterModel* duplicatesFilter;
 };
 
-ImageThumbnailBar::ImageThumbnailBar(QWidget* parent)
-    : ImageCategorizedView(parent), d(new ImageThumbnailBarPriv())
+ImageThumbnailBar::ImageThumbnailBar(QWidget* const parent)
+    : ImageCategorizedView(parent), d(new Private())
 {
     setItemDelegate(new ImageThumbnailDelegate(this));
     setSpacing(3);
@@ -128,11 +128,11 @@ void ImageThumbnailBar::slotDockLocationChanged(Qt::DockWidgetArea area)
 {
     if (area == Qt::LeftDockWidgetArea || area == Qt::RightDockWidgetArea)
     {
-        setFlow(TopToBottom);        
+        setFlow(TopToBottom);
     }
     else
     {
-        setFlow(LeftToRight);        
+        setFlow(LeftToRight);
     }
 
     scrollTo(currentIndex());
@@ -166,7 +166,7 @@ void ImageThumbnailBar::setFlow(QListView::Flow flow)
 
     ImageCategorizedView::setFlow(flow);
 
-    ImageThumbnailDelegate* del = static_cast<ImageThumbnailDelegate*>(delegate());
+    ImageThumbnailDelegate* const del = static_cast<ImageThumbnailDelegate*>(delegate());
     del->setFlow(flow);
 
     // Reset the minimum and maximum sizes.

@@ -38,7 +38,7 @@ class ImageThumbnailBar : public ImageCategorizedView
 
 public:
 
-    explicit ImageThumbnailBar(QWidget* parent = 0);
+    explicit ImageThumbnailBar(QWidget* const parent = 0);
     ~ImageThumbnailBar();
 
     /// Sets the policy always for the one scroll bar which is relevant, depending on orientation
@@ -70,8 +70,8 @@ protected:
 
 private:
 
-    class ImageThumbnailBarPriv;
-    ImageThumbnailBarPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
