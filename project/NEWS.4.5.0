@@ -1,0 +1,33 @@
+*****************************************************************************************************
+digiKam 4.5.0 - Release date: 2014-11-09
+
+NEW FEATURES:
+
+General : Remove internal libpgf. Add external and mandatory dependency to libpgf >= 6.12.24.
+General : libkipi is now an optional dependency to support kipi-plugins.
+General : libkgeomap is now an optional dependency to support geolocation maps.
+General : libkface is now an optional dependency to support faces detection and recocognition.
+General : libjasper is now an optional dependency to support JPEG200.
+
+BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
+
+001 ==> 339806 - Compiler error: ambiguous reference to ratio variable.
+002 ==> 326945 - When build digikam from git and package libpgf is installed, no way to use internal digikam libpgf.
+003 ==> 339524 - Identity class miss d private container to improve binary compatibility [patch].
+004 ==> 315574 - CORE : bad performance when Tag-related Sidebars (Tag management / Filter) are open [patch].
+005 ==> 339903 - Select 'recent' albums containing MOV or .xcf(Gimp) files. Immediate crash occurs.
+006 ==> 340030 - KIPI-plugins can not be deactivated on non-English locales.
+007 ==> 340141 - White Balance: Unable to specify exposure compensation > x.5.
+008 ==> 340186 - GROUP : Wallet icon for grouped photos is conceptually confusing.
+009 ==> 306767 - ICONVIEW : thumb focus is lost after renaming.
+010 ==> 340295 - Make fails on imagedescedittab.cpp has no member named 'textEdit'.
+011 ==> 337737 - MYSQL : settings and installation windows freeze when valid mariadb/mysql db connection is available [patch].
+012 ==> 340439 - No auto-rotation/flip Images after download [patch].
+013 ==> 338407 - Import not showing image thumbnails for certain Canon cameras [patch].
+014 ==> 326718 - Clear text button on file rename does nothing [patch].
+015 ==> 267789 - Make face detection (kface) and geo tagging (kmap) optional features [patch].
+016 ==> 172295 - digiKam has a hard dependency on Jasper library.
+017 ==> 339180 - Cmake and/or compiler pick up libkgeomap header files from previous version.
+018 ==> 340581 - Ratings with rating == 0 cannot be selected on the left sidebar [patch].
+019 ==> 339154 - digiKam goes into infinite loop when working with tags/captions information tab templates.
+020 ==> 340487 - Add Album Category as a search criteria [patch].
