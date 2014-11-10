@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C)      2013 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
@@ -1703,7 +1703,7 @@ ImageInfo ImageInfo::copyItem(int dstAlbumID, const QString& dstFileName)
     return ImageInfo(id);
 }
 
-QDebug& operator<<(QDebug& stream, const ImageInfo& info)
+QDebug operator<<(QDebug stream, const ImageInfo& info)
 {
     return stream << "ImageInfo [id = " << info.id() << ", databaseurl = "
                   << info.databaseUrl() << "]";
@@ -1711,24 +1711,32 @@ QDebug& operator<<(QDebug& stream, const ImageInfo& info)
 
 ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseFields::Set& requestedSet) const
 {
-    if (!m_data)
+    if (!m_data || (!m_data->hasVideoMetadata && !m_data->hasImageMetadata))
     {
         return DatabaseFieldsHashRaw();
     }
 
-    // keep the system locked to make sure all fields are taken from the same cache state
-    /// @todo Actually we need a read-write-lock, but we only have a write lock.
-    ImageInfoWriteLocker writeLocker;
+    DatabaseFields::VideoMetadataMinSizeType cachedVideoMetadata;
+    DatabaseFields::ImageMetadataMinSizeType cachedImageMetadata;
+    ImageInfo::DatabaseFieldsHashRaw cachedHash;
+    // consolidate to one ReadLocker. In particular, the shallow copy of the QHash must be done under protection
+    {
+        ImageInfoReadLocker lock;
+        cachedVideoMetadata = m_data->videoMetadataCached;
+        cachedImageMetadata = m_data->imageMetadataCached;
+        cachedHash = m_data->databaseFieldsHashRaw;
+    }
+
     if (requestedSet.hasFieldsFromVideoMetadata() && m_data->hasVideoMetadata)
     {
         const DatabaseFields::VideoMetadata requestedVideoMetadata = requestedSet.getVideoMetadata();
+        const DatabaseFields::VideoMetadata missingVideoMetadata = requestedVideoMetadata & ~cachedVideoMetadata;
 
-        const DatabaseFields::VideoMetadata missingVideoMetadata = requestedVideoMetadata & ~m_data->videoMetadataCached;
-//         kDebug()<<QString("videometadata: requested: %1 missing: %3").arg(requestedVideoMetadata, 0, 16).arg(missingVideoMetadata, 0, 16);
         if (missingVideoMetadata)
         {
             const QVariantList fieldValues = DatabaseAccess().db()->getVideoMetadata(m_data->id, missingVideoMetadata);
 
+            ImageInfoWriteLocker lock;
             if (fieldValues.isEmpty())
             {
                 m_data.constCastData()->hasVideoMetadata = false;
@@ -1746,21 +1754,23 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
                     m_data.constCastData()->databaseFieldsHashRaw.insertField(*it, fieldValue);
                 }
 
-                m_data.constCastData()->videoMetadataCached|=missingVideoMetadata;
+                m_data.constCastData()->videoMetadataCached |= missingVideoMetadata;
             }
+            // update for return value
+            cachedHash = m_data->databaseFieldsHashRaw;
         }
     }
 
     if (requestedSet.hasFieldsFromImageMetadata() && m_data->hasImageMetadata)
     {
         const DatabaseFields::ImageMetadata requestedImageMetadata = requestedSet.getImageMetadata();
+        const DatabaseFields::ImageMetadata missingImageMetadata   = requestedImageMetadata & ~cachedImageMetadata;
 
-        const DatabaseFields::ImageMetadata missingImageMetadata = requestedImageMetadata & ~m_data->imageMetadataCached;
-//         kDebug()<<QString("imagemetadata: requested: %1 missing: %3").arg(requestedImageMetadata, 0, 16).arg(missingImageMetadata, 0, 16);
         if (missingImageMetadata)
         {
             const QVariantList fieldValues = DatabaseAccess().db()->getImageMetadata(m_data->id, missingImageMetadata);
 
+            ImageInfoWriteLocker lock;
             if (fieldValues.isEmpty())
             {
                 m_data.constCastData()->hasImageMetadata = false;
@@ -1778,13 +1788,14 @@ ImageInfo::DatabaseFieldsHashRaw ImageInfo::getDatabaseFieldsRaw(const DatabaseF
                     m_data.constCastData()->databaseFieldsHashRaw.insertField(*it, fieldValue);
                 }
 
-                m_data.constCastData()->imageMetadataCached|=missingImageMetadata;
+                m_data.constCastData()->imageMetadataCached |= missingImageMetadata;
             }
+            cachedHash = m_data->databaseFieldsHashRaw;
         }
     }
 
     // We always return all fields, the caller can just retrieve the ones he needs.
-    return m_data->databaseFieldsHashRaw;
+    return cachedHash;
 }
 
 QVariant ImageInfo::getDatabaseFieldRaw(const DatabaseFields::Set& requestedField) const

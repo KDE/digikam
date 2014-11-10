@@ -42,7 +42,7 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 
 namespace Digikam
 {
@@ -108,8 +108,8 @@ SetupMisc::SetupMisc(QWidget* const parent)
     KHBox* const stringComparisonHbox = new KHBox(panel);
     d->stringComparisonTypeLabel      = new QLabel(i18n("String comparison type:"), stringComparisonHbox);
     d->stringComparisonType           = new KComboBox(stringComparisonHbox);
-    d->stringComparisonType->addItem(i18nc("method to compare strings", "Natural"), AlbumSettings::Natural);
-    d->stringComparisonType->addItem(i18nc("method to compare strings", "Normal"),  AlbumSettings::Normal);
+    d->stringComparisonType->addItem(i18nc("method to compare strings", "Natural"), ApplicationSettings::Natural);
+    d->stringComparisonType->addItem(i18nc("method to compare strings", "Normal"),  ApplicationSettings::Normal);
     d->stringComparisonType->setToolTip(i18n("<qt>Sets the way in which strings are compared inside digiKam. "
                                              "This eg. influences the sorting of the tree views.<br/>"
                                              "<b>Natural</b> tries to compare strings in a way that regards some normal conventions "
@@ -162,21 +162,21 @@ SetupMisc::~SetupMisc()
 
 void SetupMisc::applySettings()
 {
-    AlbumSettings* const settings = AlbumSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
 
     settings->setShowSplashScreen(d->showSplashCheck->isChecked());
     settings->setShowTrashDeleteDialog(d->showTrashDeleteDialogCheck->isChecked());
     settings->setShowPermanentDeleteDialog(d->showPermanentDeleteDialogCheck->isChecked());
     settings->setApplySidebarChangesDirectly(d->sidebarApplyDirectlyCheck->isChecked());
     settings->setSidebarTitleStyle(d->sidebarType->currentIndex() == 0 ? KMultiTabBar::VSNET : KMultiTabBar::KDEV3ICON);
-    settings->setStringComparisonType((AlbumSettings::StringComparisonType)d->stringComparisonType->itemData(d->stringComparisonType->currentIndex()).toInt());
+    settings->setStringComparisonType((ApplicationSettings::StringComparisonType)d->stringComparisonType->itemData(d->stringComparisonType->currentIndex()).toInt());
     settings->setApplicationStyle(d->applicationStyle->currentText());
     settings->saveSettings();
 }
 
 void SetupMisc::readSettings()
 {
-    AlbumSettings* const settings = AlbumSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
 
     d->showSplashCheck->setChecked(settings->getShowSplashScreen());
     d->showTrashDeleteDialogCheck->setChecked(settings->getShowTrashDeleteDialog());

@@ -22,6 +22,7 @@
  *
  * ============================================================ */
 
+#include "libopencv.h"
 #include "imgqsort.h"
 
 // C++ includes
@@ -41,10 +42,9 @@
 
 // Local includes
 
-#include "libopencv.h"
-#include "nrestimate.h"
 #include "mixerfilter.h"
 #include "nrfilter.h"
+#include "nrestimate.h"
 
 // To switch on/off log trace file.
 #define TRACE 1
@@ -318,16 +318,14 @@ double ImgQSort::blurdetector() const
 {
     d->lowThreshold   = 0.4;
     d->ratio          = 3;
-    double average    = 0.0;
     double maxval     = 0.0;
-    double blurresult = 0.0;
     ImgQSort::CannyThreshold(0, 0);
 
-    average           = mean(d->detected_edges)[0];
+    double average    = mean(d->detected_edges)[0];
     int* const maxIdx = new int[sizeof(d->detected_edges)];  // FIXME: never free ==> memory leak ?
     minMaxIdx(d->detected_edges, 0, &maxval, 0, maxIdx);
 
-    blurresult        = average / maxval;
+    double blurresult = average / maxval;
 
     kDebug() << "The average of the edge intensity is " << average;
     kDebug() << "The maximum of the edge intensity is " << maxval;

@@ -7,7 +7,7 @@
  * Description : digiKam setup dialog.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2003-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU Album
@@ -39,13 +39,19 @@
 #include <kvbox.h>
 #include <kdebug.h>
 
+#ifdef HAVE_KIPI
+
 // Libkipi includes
 
 #include <libkipi/configwidget.h>
 
+using namespace KIPI;
+
+#endif /* HAVE_KIPI */
+
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "thumbsgenerator.h"
 #include "setupalbumview.h"
 #include "setupcamera.h"
@@ -63,15 +69,8 @@
 #include "setupimagequalitysorter.h"
 #include "setuptooltip.h"
 #include "setupdatabase.h"
-#include "setupfacetags.h"
 #include "setupversioning.h"
 #include "importsettings.h"
-
-#ifdef USE_SCRIPT_IFACE
-#include "setupscriptmanager.h"
-#endif
-
-using namespace KIPI;
 
 namespace Digikam
 {
@@ -98,11 +97,11 @@ public:
         page_icc(0),
         page_camera(0),
         page_misc(0),
+
+#ifdef HAVE_KIPI
         page_plugins(0),
-#ifdef USE_SCRIPT_IFACE
-        page_scriptmanager(0),
-#endif
-        page_facetags(0),
+#endif /* HAVE_KIPI */
+
         page_versioning(0),
         databasePage(0),
         collectionsPage(0),
@@ -120,12 +119,12 @@ public:
         imageQualitySorterPage(0),
         iccPage(0),
         cameraPage(0),
-        //faceTagsPage(0),
         miscPage(0),
+
+#ifdef HAVE_KIPI
         pluginsPage(0),
-#ifdef USE_SCRIPT_IFACE
-        scriptManagerPage(0),
-#endif
+#endif /* HAVE_KIPI */
+
         versioningPage(0),
         pluginFilter(0)
     {
@@ -148,11 +147,11 @@ public:
     KPageWidgetItem*         page_icc;
     KPageWidgetItem*         page_camera;
     KPageWidgetItem*         page_misc;
+
+#ifdef HAVE_KIPI
     KPageWidgetItem*         page_plugins;
-#ifdef USE_SCRIPT_IFACE
-    KPageWidgetItem*         page_scriptmanager;
-#endif
-    KPageWidgetItem*         page_facetags;
+#endif /* HAVE_KIPI */
+
     KPageWidgetItem*         page_versioning;
 
     SetupDatabase*           databasePage;
@@ -172,11 +171,11 @@ public:
     SetupICC*                iccPage;
     SetupCamera*             cameraPage;
     SetupMisc*               miscPage;
+
+#ifdef HAVE_KIPI
     ConfigWidget*            pluginsPage;
-#ifdef USE_SCRIPT_IFACE
-    SetupScriptManager*      scriptManagerPage;
-#endif
-    //SetupFaceTags*      faceTagsPage;
+#endif /* HAVE_KIPI */
+
     SetupVersioning*         versioningPage;
 
     SearchTextBar*           pluginFilter;
@@ -225,14 +224,6 @@ Setup::Setup(QWidget* const parent)
     d->page_tooltip->setHeader(i18n("<qt>Album Items Tool-Tip Settings<br/>"
                                     "<i>Customize information in tool-tips</i></qt>"));
     d->page_tooltip->setIcon(KIcon("dialog-information"));
-
-    /*
-        d->faceTagsPage  = new SetupFaceTags();
-        d->page_facetags = addPage(d->faceTagsPage, i18n("People Tags"));
-        d->page_facetags->setHeader(i18n("<qt>People Tags<br/>"
-                                         "<i>Configure digiKam's face detection and recognition</i></qt>"));
-        d->page_facetags->setIcon(KIcon("face-smile"));
-    */
 
     d->metadataPage  = new SetupMetadata();
     d->page_metadata = addPage(d->metadataPage, i18n("Metadata"));
@@ -308,6 +299,7 @@ Setup::Setup(QWidget* const parent)
     connect(d->cameraPage, SIGNAL(signalUseFileMetadataChanged(bool)),
             d->tooltipPage, SLOT(slotUseFileMetadataChanged(bool)));
 
+#ifdef HAVE_KIPI
     d->pluginsPage  = new ConfigWidget();
     d->pluginFilter = new SearchTextBar(d->pluginsPage, "PluginsSearchBar");
     d->pluginsPage->setFilterWidget(d->pluginFilter);
@@ -321,14 +313,7 @@ Setup::Setup(QWidget* const parent)
 
     connect(d->pluginsPage, SIGNAL(signalSearchResult(bool)),
             d->pluginFilter, SLOT(slotSearchResult(bool)));
-
-#ifdef USE_SCRIPT_IFACE
-    d->scriptManagerPage  = new SetupScriptManager();
-    d->page_scriptmanager = addPage(d->scriptManagerPage , i18n("Script Manager"));
-    d->page_scriptmanager->setHeader(i18n("<qt>Script Manager<br/>"
-                                          "<i>Add/Remove and Manage Digikam Scripts</i></qt>"));
-    d->page_scriptmanager->setIcon(KIcon("application-x-shellscript"));
-#endif
+#endif /* HAVE_KIPI */
 
     d->miscPage  = new SetupMisc();
     d->page_misc = addPage(d->miscPage, i18n("Miscellaneous"));
@@ -402,7 +387,7 @@ QSize Setup::sizeHint() const
             page == RawPage         ||
             page == MiscellaneousPage)
         {
-            KPageWidgetItem* item   = d->pageItem((Page)page);
+            KPageWidgetItem* const item   = d->pageItem((Page)page);
 
             if (!item)
             {
@@ -492,7 +477,11 @@ bool Setup::execMetadataFilters(QWidget* const parent, int tab)
 
 void Setup::slotSearchTextChanged(const SearchTextSettings& settings)
 {
+#ifdef HAVE_KIPI
     d->pluginsPage->slotSetFilter(settings.text, settings.caseSensitive);
+#else
+    Q_UNUSED(settings);
+#endif /* HAVE_KIPI */
 }
 
 void Setup::slotButtonClicked(int button)
@@ -534,25 +523,34 @@ void Setup::okClicked()
     d->imageQualitySorterPage->applySettings();
     d->iccPage->applySettings();
     d->miscPage->applySettings();
+
+#ifdef HAVE_KIPI
     d->pluginsPage->apply();
+#endif /* HAVE_KIPI */
+
     //d->faceTagsPage->applySettings();
     d->versioningPage->applySettings();
 
-#ifdef USE_SCRIPT_IFACE
-    d->scriptManagerPage->applySettings();
-#endif
-
-    AlbumSettings::instance()->emitSetupChanged();
+    ApplicationSettings::instance()->emitSetupChanged();
     ImportSettings::instance()->emitSetupChanged();
 
     kapp->restoreOverrideCursor();
+
+    if (d->albumViewPage->useLargeThumbsAsChanged())
+    {
+        QString msg = i18n("The maximum thumbnail size has been changed.\n"
+                           "You need to restart digiKam to see this option to take effect.\n\n"
+                           "Note: after restarting digiKam, it is recommended to rebuild all "
+                           "album items' thumbnails, using the \"Tools-Maintenance\" menu.");
+        KMessageBox::information(this, msg);
+    }
 
     if (d->metadataPage->exifAutoRotateAsChanged())
     {
         QString msg = i18n("The Exif auto-rotate thumbnails option has been changed.\n"
                            "Do you want to rebuild all albums' items' thumbnails now?\n\n"
                            "Note: thumbnail processing can take a while. You can start "
-                           "this job later from the \"Tools\" menu.");
+                           "this job later from the \"Tools-Maintenance\" menu.");
         int result = KMessageBox::warningYesNo(this, msg);
 
         if (result != KMessageBox::Yes)
@@ -664,19 +662,9 @@ Setup::Page Setup::activePageIndex() const
         return ICCPage;
     }
 
-    if (cur == d->page_plugins)
-    {
-        return KipiPluginsPage;
-    }
-
     if (cur == d->page_camera)
     {
         return CameraPage;
-    }
-
-    if (cur == d->page_facetags)
-    {
-        return FaceTagsPage;
     }
 
     if (cur == d->page_misc)
@@ -689,14 +677,12 @@ Setup::Page Setup::activePageIndex() const
         return VersioningPage;
     }
 
-#ifdef USE_SCRIPT_IFACE
-
-    if (cur == d->page_scriptmanager)
+#ifdef HAVE_KIPI
+    if (cur == d->page_plugins)
     {
-        return ScriptManagerPage;
+        return KipiPluginsPage;
     }
-
-#endif
+#endif /* HAVE_KIPI */
 
     return DatabasePage;
 }
@@ -746,18 +732,12 @@ KPageWidgetItem* Setup::Private::pageItem(Setup::Page page) const
 
         case Setup::ImageQualityPage:
             return page_imagequalitysorter;
-            
+
         case Setup::ICCPage:
             return page_icc;
 
-        case Setup::KipiPluginsPage:
-            return page_plugins;
-
         case Setup::CameraPage:
             return page_camera;
-
-        case Setup::FaceTagsPage:
-            return page_facetags;
 
         case Setup::MiscellaneousPage:
             return page_misc;
@@ -765,11 +745,10 @@ KPageWidgetItem* Setup::Private::pageItem(Setup::Page page) const
         case Setup::VersioningPage:
             return page_versioning;
 
-#ifdef USE_SCRIPT_IFACE
-
-        case Setup::ScriptManagerPage:
-            return page_scriptmanager;
-#endif
+#ifdef HAVE_KIPI
+        case Setup::KipiPluginsPage:
+            return page_plugins;
+#endif /* HAVE_KIPI */
 
         default:
             return 0;

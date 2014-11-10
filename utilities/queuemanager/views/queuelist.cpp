@@ -7,6 +7,7 @@
  * Description : Batch Queue Manager items list.
  *
  * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C)      2014 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -297,7 +298,8 @@ QueueListView::QueueListView(QWidget* const parent)
     setDragEnabled(true);
     viewport()->setMouseTracking(true);
 
-    setSortingEnabled(false);
+    setSortingEnabled(true);
+    sortByColumn(1,Qt::AscendingOrder);
     setAllColumnsShowFocus(true);
     setRootIsDecorated(false);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);

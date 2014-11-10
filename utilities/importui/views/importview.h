@@ -33,7 +33,6 @@
 #include "camiteminfo.h"
 #include "sidebarwidget.h"
 #include "importui.h"
-#include "importmodel.h"
 #include "importstackedview.h"
 
 namespace Digikam
@@ -59,6 +58,7 @@ public:
     void hideSideBars();
     void setThumbSize(int size);
     void toggleShowBar(bool b);
+    void toggleFullScreen(bool set);
 
     void scrollTo(const QString& folder, const QString& file);
 

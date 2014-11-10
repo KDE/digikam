@@ -64,7 +64,7 @@ void AutoExpoFilter::filterImage()
         return;
     }
 
-    autoExposureAdjustement(&m_refImage, m_settings.black, m_settings.exposition);
+    autoExposureAdjustement(&m_refImage, m_settings.black, m_settings.expositionMain);
     WBFilter::filterImage();
 }
 

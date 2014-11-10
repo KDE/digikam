@@ -7,7 +7,7 @@
  * Description : Thumbnail loading
  *
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -76,11 +76,11 @@ class ThumbnailLoadThreadStaticPriv
 public:
 
     ThumbnailLoadThreadStaticPriv()
+      : firstThreadCreated(false),
+        storageMethod(ThumbnailCreator::FreeDesktopStandard),
+        provider(0),
+        profile(IccProfile::sRGB())
     {
-        storageMethod      = ThumbnailCreator::FreeDesktopStandard;
-        provider           = 0;
-        profile		   = IccProfile::sRGB();
-        firstThreadCreated = false;
     }
 
     ~ThumbnailLoadThreadStaticPriv()
@@ -90,11 +90,11 @@ public:
 
 public:
 
+    bool                            firstThreadCreated;
+
     ThumbnailCreator::StorageMethod storageMethod;
     ThumbnailInfoProvider*          provider;
     IccProfile                      profile;
-
-    bool                            firstThreadCreated;
 };
 
 K_GLOBAL_STATIC(ThumbnailLoadThreadStaticPriv, static_d)
@@ -108,7 +108,7 @@ public:
 
     Private()
     {
-        size               = ThumbnailSize::Huge;
+        size               = ThumbnailSize::maxThumbsSize();
         wantPixmap         = true;
         highlight          = true;
         sendSurrogate      = true;
@@ -242,18 +242,18 @@ void ThumbnailLoadThread::setThumbnailSize(int size, bool forFace)
 
 int ThumbnailLoadThread::maximumThumbnailSize()
 {
-    return ThumbnailSize::Huge;
+    return ThumbnailSize::maxThumbsSize();
 }
 
 int ThumbnailLoadThread::maximumThumbnailPixmapSize(bool highlight)
 {
     if (highlight)
     {
-        return ThumbnailSize::Huge;
+        return ThumbnailSize::maxThumbsSize();
     }
     else
     {
-        return ThumbnailSize::Huge + 2;    // see slotThumbnailLoaded
+        return ThumbnailSize::maxThumbsSize() + 2;    // see slotThumbnailLoaded
     }
 }
 
@@ -277,12 +277,12 @@ ThumbnailCreator* ThumbnailLoadThread::thumbnailCreator() const
     return d->creator;
 }
 
-int ThumbnailLoadThread::thumbnailPixmapSize(int size) const
+int ThumbnailLoadThread::thumbnailToPixmapSize(int size) const
 {
     return d->pixmapSizeForThumbnailSize(size);
 }
 
-int ThumbnailLoadThread::thumbnailPixmapSize(bool withHighlight, int size)
+int ThumbnailLoadThread::thumbnailToPixmapSize(bool withHighlight, int size)
 {
     if (withHighlight && size >= 10)
     {
@@ -290,6 +290,11 @@ int ThumbnailLoadThread::thumbnailPixmapSize(bool withHighlight, int size)
     }
 
     return size;
+}
+
+int ThumbnailLoadThread::pixmapToThumbnailSize(int size) const
+{
+    return d->thumbnailSizeForPixmapSize(size);
 }
 
 bool ThumbnailLoadThread::Private::hasHighlightingBorder() const
@@ -329,7 +334,7 @@ LoadingDescription ThumbnailLoadThread::Private::createLoadingDescription(const 
                                    LoadingDescription::NoColorConversion,
                                    LoadingDescription::PreviewParameters::Thumbnail);
 
-    if (IccSettings::instance()->isEnabled())
+    if (IccSettings::instance()->useManagedPreviews())
     {
         description.postProcessingParameters.colorManagement = LoadingDescription::ConvertForDisplay;
         description.postProcessingParameters.setProfile(static_d->profile);
@@ -355,7 +360,7 @@ LoadingDescription ThumbnailLoadThread::Private::createLoadingDescription(const 
 
     description.previewParameters.extraParameter = detailRect;
 
-    if (IccSettings::instance()->isEnabled())
+    if (IccSettings::instance()->useManagedPreviews())
     {
         description.postProcessingParameters.colorManagement = LoadingDescription::ConvertForDisplay;
         description.postProcessingParameters.setProfile(static_d->profile);
@@ -416,6 +421,7 @@ QList<LoadingDescription> ThumbnailLoadThread::Private::makeDescriptions(const Q
     }
 
     lastDescriptions = descriptions;
+
     return descriptions;
 }
 
@@ -441,6 +447,7 @@ QList<LoadingDescription> ThumbnailLoadThread::Private::makeDescriptions(const Q
     }
 
     lastDescriptions = descriptions;
+
     return descriptions;
 }
 
@@ -492,6 +499,7 @@ bool ThumbnailLoadThread::find(const QString& filePath, int size, QPixmap* retPi
     }
 
     load(description);
+
     return false;
 }
 
@@ -664,10 +672,10 @@ bool ThumbnailLoadThread::checkSize(int size)
         kError() << "ThumbnailLoadThread::load: No thumbnail size specified. Refusing to load thumbnail.";
         return false;
     }
-    else if (size > ThumbnailSize::Huge)
+    else if (size > ThumbnailSize::maxThumbsSize())
     {
         kError() << "ThumbnailLoadThread::load: Thumbnail size " << size
-                 << " is larger than " << ThumbnailSize::Huge << ". Refusing to load.";
+                 << " is larger than " << ThumbnailSize::maxThumbsSize() << ". Refusing to load.";
         return false;
     }
 
@@ -798,7 +806,7 @@ void ThumbnailLoadThread::startKdePreviewJob()
 
     d->kdeJob = KIO::filePreview(items, QSize(d->creator->storedSize(), d->creator->storedSize()), &d->previewPlugins); // FIXME: do not know if size 0 is allowed
 #else
-    d->kdeJob = KIO::filePreview(list, d->creator->storedSize());                                   // FIXME: do not know if size 0 is allowed
+    d->kdeJob = KIO::filePreview(list, d->creator->storedSize());                                                       // FIXME: do not know if size 0 is allowed
 #endif
 
     connect(d->kdeJob, SIGNAL(gotPreview(KFileItem,QPixmap)),
@@ -866,10 +874,10 @@ QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription& descripti
     }
 
 /*
-    No dependency on AlbumSettings here please...
+    No dependency on ApplicationSettings here please...
     QString ext = QFileInfo(url.toLocalFile()).suffix();
 
-    AlbumSettings* const settings = AlbumSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
     if (settings)
     {
         if (settings->getImageFileFilter().toUpper().contains(ext.toUpper()) ||
@@ -972,10 +980,14 @@ public:
     public:
 
         CatcherResult(const LoadingDescription& d)
-            : description(d), received(false) {}
+            : description(d), received(false)
+        {
+        }
 
         CatcherResult(const LoadingDescription& d, const QImage& image)
-            : image(image), description(d), received(true){}
+            : image(image), description(d), received(true)
+        {
+        }
 
     public:
 
@@ -1029,7 +1041,7 @@ void ThumbnailImageCatcher::Private::harvest(const LoadingDescription& descripti
     // called under lock
     bool finished = true;
 
-    for (int i=0; i<tasks.size(); ++i)
+    for (int i=0 ; i < tasks.size() ; ++i)
     {
         Private::CatcherResult& task = tasks[i];
 

@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : Refocus threaded image filter.
  *
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009      by Matthias Welwarsky <matze at welwarsky dot de>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -78,14 +78,28 @@ public:
 
 private:
 
+    struct Args
+    {
+        uchar*  orgData;
+        uchar*  destData;
+        int     width;
+        int     height;
+        bool    sixteenBit;
+        double* matrix;
+        uint    mat_size;
+    };
+
+private:
+
     void filterImage();
 
     void refocusImage(uchar* const data, int width, int height, bool sixteenBit,
                       int matrixSize, double radius, double gauss,
                       double correlation, double noise);
 
-    void convolveImage(uchar* const orgData, uchar* const destData, int width, int height,
-                       bool sixteenBit, const double* const matrix, int mat_size);
+    void convolveImage(const Args& prm);
+
+    void convolveImageMultithreaded(uint start, uint stop, uint y1, const Args& prm);
 
 private:
 

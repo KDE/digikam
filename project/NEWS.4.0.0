@@ -1,0 +1,198 @@
+*****************************************************************************************************
+digiKam 4.0.0 - Release date: 2014-05-12
+
+NEW FEATURES:
+
+General  : New Tags Manager window for easy tags management.
+General  : New images quality sorter tool, based on blur, noise, and compression analysis.
+General  : Multiple selection and multiple drag-n-drop capabilities on Tags Manager and Tags View from sidebars.
+General  : Drop of Qt3Support classes. Now digiKam is pure Qt4 implementation.
+
+Metadata : Nepomuk Service fixed to use current Api. Enable it from digikam metadata settings.
+Metadata : Support for writing face rectangles in Windows Live Photo format.
+
+Editor   : Port of canvas to Qt Model/view.
+Editor   : LocalContrast tool support multicore CPU.
+Editor   : Sharpen tool support multicore CPU.
+Editor   : Blur tool support multicore CPU.
+Editor   : Charcoal tool support multicore CPU.
+Editor   : OilPaint tool support multicore CPU.
+Editor   : Emboss tool support multicore CPU.
+Editor   : Raindrop tool support multicore CPU.
+Editor   : FilmGrain tool support multicore CPU.
+Editor   : NoiseReduction tool support multicore CPU.
+Editor   : BlurFx tool support multicore CPU.
+Editor   : DistortionFx tool support multicore CPU.
+Editor   : DistortionFx tool support zoomable preview.
+
+Showfoto : Port of Thumbbar to Qt Model/view.
+
+
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+
+001 ==> 325702 - digiKam crashes when deleting photos.
+002 ==> 307146 - Build against shared LibRaw.
+003 ==> 326368 - Can't make digiKam from git with test enable : error with libraw 5 ubuntu precise.
+004 ==> 302810 - Crash when closing digiKam during face recognition.
+005 ==> 289931 - digiKam crashed after trying to open the geolocation sidebar.
+006 ==> 285250 - digiKam crashed after saving changed file.
+007 ==> 256050 - digiKam crashed after modifying tag name.
+008 ==> 324425 - How to switch off (get rid of) thumbnail preview?
+009 ==> 326953 - Add loadEmbeddedPreview reading from QBuffer.
+010 ==> 309061 - digiKam crash when moving tag.
+011 ==> 327124 - Add loadHalfPreview reading from QBuffer.
+012 ==> 326959 - digiKam crash while scanning pictures for thumnails maintenance.
+013 ==> 318873 - digiKam crashes when clicking on image in thumbnails [patch].
+014 ==> 263299 - Need a Tags Manager.
+015 ==> 312373 - Deleting all the tags known to digiKam at once.
+016 ==> 326542 - Tagging some face then go to tag manager and test tag manager UI.
+017 ==> 158791 - Multi-select tags (i.e. to delete more than one at a time).
+018 ==> 256252 - Assign Tag with Drag and Drop doesnt work since Version 1.2.0.
+019 ==> 196927 - No easy way to expand or collapse deep tag hierarchies [patch].
+020 ==> 317943 - Auto-rotate/flip using EXIF Information destroys pictures.
+021 ==> 327242 - EXIF tags sorted in the reverse order (not alphabetically).
+022 ==> 199975 - Issues in Album view on Windows.
+023 ==> 327143 - TableView: Crash on image metadata change.
+024 ==> 326525 - Severe memory leak during maintainance scan for rebuild thumbnails.
+025 ==> 321403 - digiKam Crashes When Trying to Start.
+026 ==> 327707 - Custom list of metadata cannot be customized.
+027 ==> 180322 - Compute 35mm equivalent focal length.
+028 ==> 320185 - Compatibility issue with hierarchical tags between Digikam and WLPG (and perhaps other software).
+029 ==> 327957 - Text Filter Returns All Videos Regardless of String.
+030 ==> 277928 - Database upgrade v4 to v5 failed : digiKam fails to start properly, lost albums.
+031 ==> 325112 - Hang when opening folder of images to view thumbs.
+032 ==> 314774 - When staring, error message "" occurs.
+033 ==> 140175 - Mishandling of symbolic links [patch].
+034 ==> 301284 - Crashed at exit of digiKam.
+035 ==> 261526 - Other applications to edit the photos cannot be added in the "open , "others" - error: path is not correct.
+036 ==> 306782 - Rotating several times quickly corrupts images.
+037 ==> 323891 - Tooltips are blank (while using gnome).
+038 ==> 255523 - digiKam shows html in notification after moving pictures.
+039 ==> 230060 - Delete Album is an absolutely terrifying procedure.
+040 ==> 181727 - digitaglinktree does not work if albumdir is not on root-partition.
+041 ==> 275687 - Artifacts when scrolling in album GUI.
+042 ==> 293297 - Digitaglinktree does not process any photos even if tags exists under People category + new option for year subdirectory [patch].
+043 ==> 240048 - Open images with double instead of single click.
+044 ==> 278664 - Image Names are not displayed completely in the AlbumUI.
+045 ==> 187654 - Photos should be in reverse chronological order in default view.
+046 ==> 317731 - digikam crashed while adding tags to images.
+047 ==> 320455 - Tip of the Day dialog don't show digiKam icon.
+048 ==> 328018 - Face-related XMP metadata not displayed.
+049 ==> 142813 - No clock while processing display with color management.
+050 ==> 138446 - Add "Assign ICC profile" entry to 'Image' menu.
+051 ==> 293832 - Digitaglinktree - Multi tag level combination - find any image though directory browsing [patch].
+052 ==> 309393 - Modify date and time changes the previous changes picture too.
+053 ==> 236850 - Export iptc to file.
+054 ==> 103201 - Wish: easy transport of albums, including tags, comments, etc.
+055 ==> 228376 - Tags filter should tick checkbox on 'enter'.
+056 ==> 289184 - "Toggle auto" in Tag panel does not remember settings between restarts of digiKam.
+057 ==> 218824 - Allow state of the tag tree to be saved.
+058 ==> 261566 - Cannot right-click below tree in tag sidebars.
+059 ==> 278908 - Create new tags in category not possible.
+060 ==> 117810 - Dates view sidebar does not take into account tag filters.
+061 ==> 307848 - digiKam import mtp, failure.
+062 ==> 306454 - Rotated images gets wrong permission.
+063 ==> 270159 - Tag replaced instead of added.
+064 ==> 273180 - Enable Fingerprints Rebuilding For Specific Albums....The Same As Reloading Thumbnails.
+065 ==> 328294 - bootstrap.local invokes wrong shell [patch].
+066 ==> 315881 - Cmake misplaces local KDE graphics components.
+067 ==> 224038 - Thumbnails not shown on launch of digiKam.
+068 ==> 294835 - Albums are listed with (0) photos, but Database Statistics shows correct numbers of photos.
+069 ==> 186672 - Zoom slider should change amount of pictures, not picture size directly.
+070 ==> 305104 - digiKam does not show some jpg images in files.
+071 ==> 317669 - Two alert windows on overwrite alert.
+072 ==> 320249 - Table view crashes when adressing tags.
+073 ==> 309578 - crash importing images from an android usb storage.
+074 ==> 322360 - Camera found as PTP Device, but if importing Images abort with "connection error".
+075 ==> 328362 - Crash on start (macports install on OSX 10.9) - Exception Type: EXC_GUARD.
+076 ==> 301371 - Exiv2 mix library strangeness.
+077 ==> 328500 - Less unused space in Configure dialog.
+078 ==> 328124 - digiKam extremely unresponsive and slow (probably related to tags).
+079 ==> 273519 - When adding rating portrait images are rotated to landscape.
+080 ==> 315156 - CR2 files from Canon PowerShot G1 X the colours are messed up.
+081 ==> 228239 - Raw import tool: meaning of the Esc.
+082 ==> 287102 - digiKam does not show selected album at startup.
+083 ==> 307330 - digiKam does not connect to the album folder automatically unless it has been preselected in my folders.
+084 ==> 163293 - Only generate thumbnail when needed [patch].
+085 ==> 328632 - "Save change" create a new file with filename_v1.jpg.
+086 ==> 233657 - Thumbnails are created for thumbnails.
+087 ==> 328034 - Preload the next photo in the folder in a memory cache to speed up transitions.
+088 ==> 196649 - Very poor usability when browsing JPEG and RAW files.
+089 ==> 308343 - Tag FolderView Icons are blurry when using 48px setting.
+090 ==> 328578 - Crash when opening settings.
+091 ==> 307281 - digiKam crashes while scrolling list of photos previews.
+092 ==> 146318 - Usability: goto next item/ forward buttons are inconsistent between edit and view mode.
+093 ==> 293194 - Disable versioning side panel if versioning disabled in preferences.
+094 ==> 328818 - 4.0.0-beta1 - Build Errors (kevix2.h).
+095 ==> 328830 - digiKam compile error because of commit f3e488b56e4d56be0bb1022e32258add72c3c68a.
+096 ==> 292120 - Batch rename returns 'file does not exist' during rename.
+097 ==> 198100 - ACDSee XMP sidecar from Raw pictures is not loaded.
+098 ==> 303194 - Filemanagement xml-files.
+099 ==> 313856 - Re-enable the possibility to set up the shortcuts for rating and labeling (color and pick).
+100 ==> 294580 - Unclear status of jpg-pics: how to check for hidden or even malicious data in jpg?
+101 ==> 322652 - Crashes on camera import.
+102 ==> 312285 - Crash in image editor when moving to the next image.
+103 ==> 299755 - After latest X upgrades the Level Tools upgrade is a solid color (black, white, gray).
+104 ==> 328835 - Crash when opening "Configure Digikam" settings.
+105 ==> 329127 - Remove Tag menu entry is enabled if a picture has no Tags.
+106 ==> 297804 - Saving an image loses portait orientation.
+107 ==> 279996 - Crash while running face detection.
+108 ==> 278049 - Crash during tagging while scanning run in background (Digikam::ImageModel::removeRowPairs).
+109 ==> 262596 - Crash when finding faces (Digikam::ImageModel::removeRowPairs).
+110 ==> 329323 - Compile time error: flandmark_detector.cpp: No such file or directory.
+111 ==> 308734 - digiKam/kioslave: a lot of "KIO::Slave::timeout: Houston, we lost our slave" and "slave died".
+112 ==> 304207 - Progress manager: more control on appearance/disappearance.
+113 ==> 313678 - digiKam fails to know which images in my camera is new.
+114 ==> 314952 - Import window should not lock the interface while reading photos.
+115 ==> 282728 - Importing photos with "Date based subalbums". The folder name "date" is wrong.
+116 ==> 320398 - Select Album window should remember last used destination.
+117 ==> 313880 - "Sort items" choice not respected in the import Dialog box.
+118 ==> 323937 - Sorting of several camera types is missing or wrong.
+119 ==> 329652 - import (ctrl+n) does not import.
+120 ==> 329608 - Thumbnail of picture in dolphin never updated after picture manipulation.
+121 ==> 307844 - digiKam import, ignore the user selection, replaces it by "all selected".
+122 ==> 292318 - digiKam marble maps does not work.
+123 ==> 198406 - Xmp not synchronized, uncomplete.
+124 ==> 147921 - Gps widget in French please.
+125 ==> 330230 - Memory leak in Image Quality Sorter.
+126 ==> 227530 - Album-sorting gone from menus [patch].
+127 ==> 218023 - Albums tree does not remember sorting order (ascending/descending).
+128 ==> 126116 - Keep directory hierarchy when albums are view by category.
+129 ==> 225786 - Proposed digiKam Menu Changes.
+130 ==> 246903 - Editor Canvas : not updated when zoom level changes in plugins.
+131 ==> 129941 - Editor Canvas : Ability to Drag and Drop an image.
+132 ==> 224246 - Editor Canvas : displays useless scroll bars.
+133 ==> 233773 - Editor Canvas : ctrl + shift + e doesn't enable scrolling.
+134 ==> 170364 - Editor Canvas : Expand selection rectangle by dragging sides in image editor [patch].
+135 ==> 288761 - Cached image corrupted after modifying metadata.
+136 ==> 326018 - Freezes when I attempt to use the sharpen/refocus tool.
+137 ==> 330947 - Icons for protected/unprotected pictures too similar on import.
+138 ==> 305079 - Please allow nepomuk digikam service being installable separately.
+139 ==> 323284 - Compile 3.3.0 failed - lensfuniface.cpp undefined reference.
+140 ==> 302422 - Slideshow info is displayed too high.
+141 ==> 292114 - Showfoto not capable for drag-and-drop?
+142 ==> 159220 - Non printable characters in IPTC keyword set by digiKam (UTF-8 support with IPTC metadata) [patch].
+143 ==> 331700 - Some metadata are written with corrupted encoding of non-latin characters.
+144 ==> 331578 - digiKam deadlocks on batch renaming/moving images.
+145 ==> 257933 - digiKam zoom slider resets to minimum when returning from image preview [patch].
+146 ==> 311936 - FindKdcraw.cmake is outdated and causes digikam to fail building against KDE 4.10.
+147 ==> 331714 - Showfoto crash when opening RAW.
+148 ==> 332280 - freerotationfilter.cpp:92: (style) Same expression on both sides of '||'.
+149 ==> 332346 - Cannot delete (or Download & Delete) from the import dialog.
+150 ==> 327676 - Automated picture cutting produces _quadratic_ pics.
+151 ==> 306283 - Browsing large pic collections and select subsequent subsets of these: workflow?
+152 ==> 250213 - Wish for automatic area selection from irregular contours.
+153 ==> 279544 - Tag image for unsharp pictures.
+154 ==> 279543 - Filter pictures by "average" brightness.
+155 ==> 249023 - Running the batch queue twice on same target directory fails with "Failed to save item...".
+156 ==> 332663 - Wrong location of documentation translations.
+157 ==> 332287 - digiKam crashes repeatedly while tagging faces with names.
+158 ==> 281785 - No prohibition warning while tagging thumbnail above preview.
+159 ==> 329313 - WISH: howto update installed version _stable_ without harming existing system?
+160 ==> 333299 - Crash segmentation fault at starts.
+161 ==> 333386 - Tags manager: '' shown in dialog box when removing a tag.
+162 ==> 333388 - Tag manager: Tags removed from images without confirmation dialog.
+163 ==> 333385 - Selecting a month in the tree view shows a different month in calendar and icon view.
+164 ==> 329697 - digiKam crash when browsing albums (qt-sqlite plugin broken due to BC issue with libsqlite).
+165 ==> 331597 - Tags are not sorted in UI [patch].
+166 ==> 334183 - Face recognition folder selection scans all available folders.

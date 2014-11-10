@@ -54,11 +54,6 @@ LocalContrastContainer::LocalContrastContainer()
         stage[i].power   = 30.0;
         stage[i].blur    = 80.0;
     }
-
-    unsharpMask.enabled   = false;
-    unsharpMask.power     = 30.0;
-    unsharpMask.blur      = 4.0;
-    unsharpMask.threshold = 0;
 }
 
 LocalContrastContainer::~LocalContrastContainer()
@@ -75,18 +70,6 @@ float LocalContrastContainer::getPower(int nstage) const
 float LocalContrastContainer::getBlur(int nstage) const
 {
     return stage[nstage].blur;
-}
-
-float LocalContrastContainer::getUnsharpMaskPower() const
-{
-    float power = unsharpMask.power;
-    power       = (float)(qPow(power / 100.0, 3.0) * 10.0);
-    return power;
-}
-
-float LocalContrastContainer::getUnsharpMaskBlur() const
-{
-    return unsharpMask.blur;
 }
 
 } // namespace Digikam

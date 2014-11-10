@@ -5,7 +5,7 @@ NEW FEATURES:
 
 General : new RAW cameras supported : Richon GR, Panasonic LF1, Canon EOS 70D, Sony RX100II, Sony RX1R, Olympus E-P5.
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 324349 : Removing tags limited to 250 selected pictures.
 002 ==> 323648 : Kipi-plugins cannot be deselected or digiKam not reading digikamrc.

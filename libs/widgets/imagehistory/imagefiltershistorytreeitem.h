@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEFILTERSRHISTORYTREEITEM_H
-#define IMAGEFILTERSRHISTORYTREEITEM_H
+#ifndef IMAGEFILTERSHISTORYTREEITEM_H
+#define IMAGEFILTERSHISTORYTREEITEM_H
 
 // Qt includes
 
@@ -58,10 +58,15 @@ public:
 
 private:
 
+    // To prevent cppcheck warnings.
+    ImageFiltersHistoryTreeItem(const ImageFiltersHistoryTreeItem&);
+
+private:
+
     class Private;
     Private* const d;
 };
 
 } // namespace Digikam
 
-#endif // IMAGEFILTERSRHISTORYTREEITEM_H
+#endif // IMAGEFILTERSHISTORYTREEITEM_H

@@ -6,7 +6,7 @@
  * Date        : 2007-16-01
  * Description : white balance color correction.
  *
- * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008      by Guillaume Castagnino <casta at xwing dot info>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -129,7 +129,7 @@ void WBFilter::filterImage()
     setLUTv();
     setRGBmult();
 
-    // See B.K.O #259223 : scaling down the rgb multipiers just enough to prevent clipping
+    // See bug #259223 : scaling down the rgb multipiers just enough to prevent clipping
     if (m_settings.maxr == -1 && m_settings.maxg == -1 && m_settings.maxb == -1)
     {
         findChanelsMax((const DImg*) &m_orgImage,
@@ -149,8 +149,7 @@ void WBFilter::autoWBAdjustementFromColor(const QColor& tc, double& temperature,
 {
     // Calculate Temperature and Green component from color picked.
 
-    double tmin, tmax, mBR;
-    float  mr, mg, mb;
+    float mr=0.0, mg=0.0, mb=0.0;
 
     kDebug() << "Sums:  R:" << tc.red() << " G:" << tc.green() << " B:" << tc.blue();
 
@@ -158,10 +157,10 @@ void WBFilter::autoWBAdjustementFromColor(const QColor& tc, double& temperature,
        to find the matching temperature
        adapted from ufraw (0.12.1) RGB_to_Temperature
     */
-    tmin  = 2000.0;
-    tmax  = 12000.0;
-    mBR   = (double)tc.blue() / (double)tc.red();
-    green = 1.0;
+    double tmin  = 2000.0;
+    double tmax  = 12000.0;
+    double mBR   = (double)tc.blue() / (double)tc.red();
+    green        = 1.0;
 
     for (temperature = (tmin + tmax) / 2; tmax - tmin > 10; temperature = (tmin + tmax) / 2)
     {
@@ -307,10 +306,10 @@ void WBFilter::findChanelsMax(const DImg* const img, int& maxr, int& maxg, int& 
     int height        = img->height();
     bool sixteenBit   = img->sixteenBit();
 
-    maxr      = 0;
-    maxg      = 0;
-    maxb      = 0;
-    uint size = (uint)(width * height);
+    maxr              = 0;
+    maxg              = 0;
+    maxb              = 0;
+    uint size         = (uint)(width * height);
 
     // Look for the maximum r, g, b values in the given image.
 
@@ -382,7 +381,7 @@ void WBFilter::preventAutoExposure(int maxr, int maxg, int maxb)
 
 void WBFilter::setLUTv()
 {
-    double b = d->mg * pow(2, m_settings.exposition);
+    double b = d->mg * pow(2, m_settings.expositionMain + m_settings.expositionFine);
     d->BP    = (uint)(d->rgbMax * m_settings.black);
     d->WP    = (uint)(d->rgbMax / b);
 

@@ -36,12 +36,12 @@
 // KDE includes
 
 #include <kdialog.h>
-#include <kurlrequester.h>
 #include <kurl.h>
+#include <kurlrequester.h>
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "databaseparameters.h"
 
 namespace Digikam
@@ -75,7 +75,7 @@ public:
 
 public:
 
-    void setParametersFromSettings(const AlbumSettings* const settings);
+    void setParametersFromSettings(const ApplicationSettings* const settings);
     DatabaseParameters getDatabaseParameters();
 
     QString currentDatabaseType() const;
@@ -83,16 +83,20 @@ public:
 
 public Q_SLOTS:
 
-    void slotChangeDatabasePath(const KUrl&);
-    void slotDatabasePathEdited(const QString&);
-    void slotHandleDBTypeIndexChanged(int index);
-    void slotHandleInternalServerCheckbox(int enableFields);
     void checkDatabaseConnection();
 
 private:
 
     void checkDBPath();
     void setupMainArea();
+
+private Q_SLOTS:
+
+    void slotHandleInternalServerCheckbox(int enableFields);
+    void slotHandleDBTypeIndexChanged(int index);
+    void slotChangeDatabasePath(const KUrl&);
+    void slotDatabasePathEditedDelayed();
+    void slotDatabasePathEdited();
 
 private:
 

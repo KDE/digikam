@@ -6,7 +6,7 @@
  * Date        : 2012-01-20
  * Description : Duplicates items finder.
  *
- * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2012      by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -34,12 +34,14 @@
 #include <kapplication.h>
 #include <klocale.h>
 #include <kicon.h>
+#include <kdebug.h>
 
 // Local includes
 
 #include "albummanager.h"
 #include "imagelister.h"
-#include "knotificationwrapper.h"
+#include "dnotificationwrapper.h"
+#include "digikamapp.h"
 
 using namespace KIO;
 
@@ -130,7 +132,16 @@ void DuplicatesFinder::slotDuplicatesSearchProcessedAmount(KJob*, KJob::Unit, qu
 
 void DuplicatesFinder::slotDone()
 {
-    d->job = NULL;
+    if (d->job->error())
+    {
+        kWarning() << "Failed to list url: " << d->job->errorString();
+
+        // Pop-up a message about the error.
+        DNotificationWrapper(QString(), d->job->errorString(),
+                             DigikamApp::instance(), DigikamApp::instance()->windowTitle());
+    }
+
+    d->job = 0;
     MaintenanceTool::slotDone();
 }
 
@@ -139,7 +150,7 @@ void DuplicatesFinder::slotCancel()
     if (d->job)
     {
         d->job->kill();
-        d->job = NULL;
+        d->job = 0;
     }
 
     MaintenanceTool::slotCancel();

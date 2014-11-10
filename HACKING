@@ -262,7 +262,8 @@ $> make install/fast
 
 To make a backtrace with GDB use following command:
 
-$> gdb digikam
+$ gdb digikam
+> catch throw
 > run
 > ...
 > _crash here_

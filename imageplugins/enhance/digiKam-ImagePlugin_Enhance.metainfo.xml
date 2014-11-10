@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="addon">
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <id>digiKam-ImagePlugin_Enhance</id>
+  <extends>digikam.desktop</extends>
+  <name>ImagePlugin-Enhance</name>
+  <name xml:lang="ca">Connector d'imatge per a millores</name>
+  <name xml:lang="da">ImagePlugin-Enhance</name>
+  <name xml:lang="en-GB">ImagePlugin-Enhance</name>
+  <name xml:lang="ko">그림 플러그인-향상</name>
+  <name xml:lang="nl">ImagePlugin-Enhance</name>
+  <name xml:lang="pl">WtyczkaObrazu-polepszanie</name>
+  <name xml:lang="pt">ImagePlugin-Enhance</name>
+  <name xml:lang="pt-BR">ImagePlugin-Enhance</name>
+  <name xml:lang="sk">ImagePlugin-Enhance</name>
+  <name xml:lang="sl">Vstavek za slike - izboljšaj</name>
+  <name xml:lang="sv">Bildinsticksprogrammet Förbättra</name>
+  <name xml:lang="uk">ImagePlugin-Enhance</name>
+  <name xml:lang="x-test">xxImagePlugin-Enhancexx</name>
+  <summary>digiKam plugin to enhance photographs</summary>
+  <summary xml:lang="ca">Connector d'imatge per a millorar les fotografies</summary>
+  <summary xml:lang="cs">Modul digiKamu pro vylepšování fotografií</summary>
+  <summary xml:lang="da">digiKam-plugin til at forbedre fotos</summary>
+  <summary xml:lang="de">digiKam-Modul zur Bildverbesserung</summary>
+  <summary xml:lang="en-GB">digiKam plugin to enhance photographs</summary>
+  <summary xml:lang="es">Complemento de digiKam para mejorar fotografías</summary>
+  <summary xml:lang="ko">사진을 보기 좋게 변경하는 도구</summary>
+  <summary xml:lang="nl">digiKam-plugin voor het verbeteren van foto's</summary>
+  <summary xml:lang="pl">Wtyczka digiKam do polepszania fotografii</summary>
+  <summary xml:lang="pt">'Plugin' do digiKam para realçar fotografias</summary>
+  <summary xml:lang="pt-BR">Plugin do digiKam para melhorar as fotografias</summary>
+  <summary xml:lang="sk">Plugin digiKamu na rozšírenie fotografií</summary>
+  <summary xml:lang="sl">Vstavek za digiKam za izboljšavo fotografij</summary>
+  <summary xml:lang="sv">Digikam-Insticksprogram för att förbättra fotografier</summary>
+  <summary xml:lang="uk">Додаток до digiKam для покращення вигляду фотографій</summary>
+  <summary xml:lang="x-test">xxdigiKam plugin to enhance photographsxx</summary>
+  <developer_name>digiKam Project</developer_name>
+  <developer_name xml:lang="ca">Projecte digiKam</developer_name>
+  <developer_name xml:lang="cs">Projekt digiKam</developer_name>
+  <developer_name xml:lang="da">digiKam-projektet</developer_name>
+  <developer_name xml:lang="de">digiKam-Projekt</developer_name>
+  <developer_name xml:lang="en-GB">digiKam Project</developer_name>
+  <developer_name xml:lang="es">Proyecto digiKam</developer_name>
+  <developer_name xml:lang="ko">digiKam 프로젝트</developer_name>
+  <developer_name xml:lang="nl">digiKam-project</developer_name>
+  <developer_name xml:lang="pl">Projekt digiKam</developer_name>
+  <developer_name xml:lang="pt">Projecto digiKam</developer_name>
+  <developer_name xml:lang="pt-BR">Projeto digiKam</developer_name>
+  <developer_name xml:lang="sk">Projekt digiKamu</developer_name>
+  <developer_name xml:lang="sl">Projekt digiKam</developer_name>
+  <developer_name xml:lang="sv">Digikam-projektet</developer_name>
+  <developer_name xml:lang="uk">Проект digiKam</developer_name>
+  <developer_name xml:lang="x-test">xxdigiKam Projectxx</developer_name>
+  <url type="homepage">http://www.digikam.org/</url>
+</component>

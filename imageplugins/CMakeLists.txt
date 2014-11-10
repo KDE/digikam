@@ -1,7 +1,7 @@
 SET_DEBUG_AREA_CODE(${AREA_CODE_IMAGEPLUGINS})
 
-ADD_SUBDIRECTORY( color )
-ADD_SUBDIRECTORY( decorate )
-ADD_SUBDIRECTORY( enhance )
-ADD_SUBDIRECTORY( filters )
-ADD_SUBDIRECTORY( transform )
+add_subdirectory(color)
+add_subdirectory(decorate)
+add_subdirectory(enhance)
+add_subdirectory(filters)
+add_subdirectory(transform)

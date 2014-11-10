@@ -9,7 +9,7 @@
  * Copyright (C) 2002-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2002-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,9 +48,11 @@
 
 // Local includes
 
+#include "imagepropertiestab.h"
 #include "imagedelegateoverlay.h"
 #include "thememanager.h"
 #include "colorlabelwidget.h"
+#include "ratingwidget.h"
 
 namespace Digikam
 {
@@ -88,17 +90,7 @@ void ItemViewImageDelegatePrivate::clearRects()
 void ItemViewImageDelegatePrivate::makeStarPolygon()
 {
     // Pre-computed star polygon for a 15x15 pixmap.
-    starPolygon << QPoint(0,  6);
-    starPolygon << QPoint(5,  5);
-    starPolygon << QPoint(7,  0);
-    starPolygon << QPoint(9,  5);
-    starPolygon << QPoint(14, 6);
-    starPolygon << QPoint(10, 9);
-    starPolygon << QPoint(11, 14);
-    starPolygon << QPoint(7,  11);
-    starPolygon << QPoint(3,  14);
-    starPolygon << QPoint(4,  9);
-
+    starPolygon     = RatingWidget::starPolygon();
     starPolygonSize = QSize(15, 15);
 }
 
@@ -117,6 +109,7 @@ ItemViewImageDelegate::ItemViewImageDelegate(ItemViewImageDelegatePrivate& dd, Q
 ItemViewImageDelegate::~ItemViewImageDelegate()
 {
     Q_D(ItemViewImageDelegate);
+
     removeAllOverlays();
     delete d;
 }
@@ -124,6 +117,7 @@ ItemViewImageDelegate::~ItemViewImageDelegate()
 ThumbnailSize ItemViewImageDelegate::thumbnailSize() const
 {
     Q_D(const ItemViewImageDelegate);
+
     return d->thumbSize;
 }
 
@@ -154,12 +148,14 @@ void ItemViewImageDelegate::setSpacing(int spacing)
 int ItemViewImageDelegate::spacing() const
 {
     Q_D(const ItemViewImageDelegate);
+
     return d->spacing;
 }
 
 QRect ItemViewImageDelegate::rect() const
 {
     Q_D(const ItemViewImageDelegate);
+
     return d->rect;
 }
 
@@ -176,24 +172,28 @@ QRect ItemViewImageDelegate::imageInformationRect() const
 QRect ItemViewImageDelegate::ratingRect() const
 {
     Q_D(const ItemViewImageDelegate);
+
     return d->ratingRect;
 }
 
 void ItemViewImageDelegate::setRatingEdited(const QModelIndex& index)
 {
     Q_D(ItemViewImageDelegate);
+
     d->editingRating = index;
 }
 
 QSize ItemViewImageDelegate::sizeHint(const QStyleOptionViewItem& /*option*/, const QModelIndex& /*index*/) const
 {
     Q_D(const ItemViewImageDelegate);
+
     return d->rect.size();
 }
 
 QSize ItemViewImageDelegate::gridSize() const
 {
     Q_D(const ItemViewImageDelegate);
+
     return d->gridSize;
 }
 
@@ -236,6 +236,7 @@ void ItemViewImageDelegate::mouseMoved(QMouseEvent* e, const QRect& visualRect, 
 void ItemViewImageDelegate::setDefaultViewOptions(const QStyleOptionViewItem& option)
 {
     Q_D(ItemViewImageDelegate);
+
     d->font = option.font;
     invalidatePaintingCache();
 }
@@ -253,6 +254,7 @@ void ItemViewImageDelegate::slotSetupChanged()
 void ItemViewImageDelegate::invalidatePaintingCache()
 {
     Q_D(ItemViewImageDelegate);
+
     QSize oldGridSize = d->gridSize;
     updateSizeRectsAndPixmaps();
 
@@ -276,19 +278,22 @@ QRect ItemViewImageDelegate::drawThumbnail(QPainter* p, const QRect& thumbRect, 
     }
 
     QRect r = thumbRect;
-    /*p->drawPixmap(r.x() + (r.width()-thumbnail.width())/2,
+/*
+    p->drawPixmap(r.x() + (r.width()-thumbnail.width())/2,
                     r.y() + (r.height()-thumbnail.height())/2,
-                    thumbnail);*/
+                    thumbnail);
+*/
 
     QRect actualPixmapRect(r.x() + (r.width()-thumbnail.width())/2,
                            r.y() + (r.height()-thumbnail.height())/2,
                            thumbnail.width(), thumbnail.height());
-
-    /*p->save();
+/*
+    p->save();
     QRegion pixmapClipRegion = QRegion(d->rect) - QRegion(actualPixmapRect);
-    p->setClipRegion(pixmapClipRegion);*/
-    //p->drawPixmap(0, 0, background);
+    p->setClipRegion(pixmapClipRegion);
 
+    p->drawPixmap(0, 0, background);
+*/
     QPixmap borderPix = thumbnailBorderPixmap(actualPixmapRect.size());
     p->drawPixmap(actualPixmapRect.x()-3, actualPixmapRect.y()-3, borderPix);
 
@@ -308,24 +313,22 @@ void ItemViewImageDelegate::drawRating(QPainter* p, const QModelIndex& index, co
     {
         p->drawPixmap(ratingRect, ratingPixmap(rating, isSelected));
     }
-/*
-    else
-        p->drawPixmap(r, ratingPixmap(-1, isSelected));
-*/
 }
 
 void ItemViewImageDelegate::drawName(QPainter* p,const QRect& nameRect, const QString& name) const
 {
     Q_D(const ItemViewImageDelegate);
+
     p->setFont(d->fontReg);
     // NOTE: in case of file name are long, use squeezedTextCached to adjust string elide mode.
-    // See B.K.O #278664 fro details
+    // See bug #278664 for details
     p->drawText(nameRect, Qt::AlignCenter, squeezedTextCached(p, nameRect.width(), name));
 }
 
 void ItemViewImageDelegate::drawTitle(QPainter *p, const QRect& titleRect, const QString& title) const
 {
     Q_D(const ItemViewImageDelegate);
+
     p->setFont(d->fontReg);
     p->drawText(titleRect, Qt::AlignCenter, squeezedTextCached(p, titleRect.width(), title));
 }
@@ -333,6 +336,7 @@ void ItemViewImageDelegate::drawTitle(QPainter *p, const QRect& titleRect, const
 void ItemViewImageDelegate::drawComments(QPainter* p, const QRect& commentsRect, const QString& comments) const
 {
     Q_D(const ItemViewImageDelegate);
+
     p->setFont(d->fontCom);
     p->drawText(commentsRect, Qt::AlignCenter, squeezedTextCached(p, commentsRect.width(), comments));
 }
@@ -340,6 +344,7 @@ void ItemViewImageDelegate::drawComments(QPainter* p, const QRect& commentsRect,
 void ItemViewImageDelegate::drawCreationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const
 {
     Q_D(const ItemViewImageDelegate);
+
     p->setFont(d->fontXtra);
     QString str = dateToString(date);
     //str         = i18nc("date of image creation", "created: %1", str);
@@ -349,9 +354,10 @@ void ItemViewImageDelegate::drawCreationDate(QPainter* p, const QRect& dateRect,
 void ItemViewImageDelegate::drawModificationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const
 {
     Q_D(const ItemViewImageDelegate);
+
     p->setFont(d->fontXtra);
     QString str = dateToString(date);
-    str         = i18nc("date of last image modification", "modified: %1",str);
+    str         = i18nc("date of last image modification", "Mod.: %1",str);
     p->drawText(dateRect, Qt::AlignCenter, str);//squeezedTextCached(p, dateRect.width(), str));
 }
 
@@ -381,61 +387,34 @@ void ItemViewImageDelegate::drawAspectRatio(QPainter* p, const QRect& dimsRect, 
 {
     Q_D(const ItemViewImageDelegate);
 
+    p->setFont(d->fontXtra);
+    QString resolution;
+
     if (dims.isValid())
     {
-        p->setFont(d->fontXtra);
-        double aratio2;
-        int gcd_divisor;
-        int ar_width;
-        int ar_height;
-        QString aratio, ar_width2, ar_height2, resolution;
-
-        if (dims.width() == 0 || dims.height() == 0)
-        {
-            gcd_divisor = 1;
-        }
-        else
-        {
-            gcd_divisor = gcd(dims.width(), dims.height());
-        }
-        ar_width = dims.width() / gcd_divisor;
-        ar_height = dims.height() / gcd_divisor;
-        aratio2 = double(dims.width()) / double(dims.height());
-
-        if ((ar_width == 8 && ar_height == 5) || (ar_height == 8 && ar_width == 5))
-        {
-             ar_width = ar_width * 2;
-             ar_height = ar_height * 2;
-        }
-        aratio.setNum(aratio2, 'f', 2);
-        ar_width2.setNum(ar_width);
-        ar_height2.setNum(ar_height);
-
-        if (dims.isValid())
-        {
-            resolution = i18nc("%1 width : %2 height (%3 Aspect Ratio)", "%1:%2 (%3)",
-                               ar_width2, ar_height2, aratio);
-        }
-        else
-        {
-             resolution = i18nc("unknown image resolution", "Unknown");
-        }
-
-        p->drawText(dimsRect, Qt::AlignCenter, resolution);//squeezedTextCached(p, dimsRect.width(), resolution));
+        ImagePropertiesTab::aspectRatioToString(dims.width(), dims.height(), resolution);
     }
+    else
+    {
+        resolution = i18nc("unknown image resolution", "Unknown");
+    }
+
+    p->drawText(dimsRect, Qt::AlignCenter, resolution); //squeezedTextCached(p, dimsRect.width(), resolution));
 }
 
 void ItemViewImageDelegate::drawFileSize(QPainter* p, const QRect& r, qlonglong bytes) const
 {
     Q_D(const ItemViewImageDelegate);
+
     p->setFont(d->fontXtra);
-    p->drawText(r, Qt::AlignCenter, KIO::convertSize(bytes));//squeezedTextCached(p, r.width(), KIO::convertSize(bytes)));
+    p->drawText(r, Qt::AlignCenter, KIO::convertSize(bytes)); //squeezedTextCached(p, r.width(), KIO::convertSize(bytes)));
 }
 
 void ItemViewImageDelegate::drawTags(QPainter* p, const QRect& r, const QString& tagsString,
                                      bool isSelected) const
 {
     Q_D(const ItemViewImageDelegate);
+
     p->setFont(d->fontCom);
     p->setPen(isSelected ? kapp->palette().color(QPalette::HighlightedText)
                          : kapp->palette().color(QPalette::Link));
@@ -504,6 +483,7 @@ void ItemViewImageDelegate::drawPickLabelIcon(QPainter* p, const QRect& r, int p
         {
             icon = KIconLoader::global()->loadIcon("flag-green", KIconLoader::NoGroup, r.width());
         }
+
         icon.paint(p, r);
     }
 }
@@ -511,18 +491,33 @@ void ItemViewImageDelegate::drawPickLabelIcon(QPainter* p, const QRect& r, int p
 void ItemViewImageDelegate::drawPanelSideIcon(QPainter* p, bool left, bool right) const
 {
     Q_D(const ItemViewImageDelegate);
+
     int iconSize = KIconLoader::SizeSmall;
+
     if (left)
     {
         QRect r(3, d->rect.height()/2 - iconSize/2, iconSize, iconSize);
         QIcon icon = KIconLoader::global()->loadIcon("arrow-left", KIconLoader::NoGroup, iconSize);
         icon.paint(p, r);
     }
+
     if (right)
     {
         QRect r(d->rect.width() - 3 - iconSize, d->rect.height()/2 - iconSize/2, iconSize, iconSize);
         QIcon icon = KIconLoader::global()->loadIcon("arrow-right", KIconLoader::NoGroup, iconSize);
         icon.paint(p, r);
+    }
+}
+
+void ItemViewImageDelegate::drawGeolocationIndicator(QPainter* p, const QRect& r) const
+{
+    if (!r.isNull())
+    {
+        QIcon icon = KIconLoader::global()->loadIcon("applications-internet", KIconLoader::NoGroup, KIconLoader::SizeSmall);
+        qreal op   = p->opacity();
+        p->setOpacity(0.5);
+        icon.paint(p, r);
+        p->setOpacity(op);
     }
 }
 
@@ -532,28 +527,22 @@ void ItemViewImageDelegate::drawGroupIndicator(QPainter* p, const QRect& r,
     if (numberOfGroupedImages)
     {
         QIcon icon;
+
         if (open)
         {
-            icon = KIconLoader::global()->loadIcon("document-import", KIconLoader::NoGroup, r.width());
+            icon = KIconLoader::global()->loadIcon("image-stack-open", KIconLoader::NoGroup, r.width());
         }
         else
         {
-            icon = KIconLoader::global()->loadIcon("document-multiple", KIconLoader::NoGroup, r.width());
+            icon = KIconLoader::global()->loadIcon("image-stack", KIconLoader::NoGroup, r.width());
         }
-        qreal op = p->opacity();
+
+        qreal op     = p->opacity();
         p->setOpacity(0.5);
         icon.paint(p, r);
         p->setOpacity(op);
 
         QString text = QString::number(numberOfGroupedImages);
-/*
-        QRect br       = p->boundingRect(r, Qt::AlignLeft|Qt::AlignTop, text).adjusted(0,0,1,1);
-        int rectSize   = qMax(br.width(), br.height());
-        QRect textRect = QRect(0, 0, rectSize, rectSize);
-        textRect.moveLeft((r.width() - textRect.width()) / 2);
-        textRect.moveTop((r.height() - textRect.height()) * 4 / 5);
-        p->fillRect(textRect.translated(r.topLeft(), QColor(0, 0, 0, 128));
-*/
         p->drawText(r, Qt::AlignCenter, text);
     }
 }
@@ -666,6 +655,7 @@ void ItemViewImageDelegate::prepareRatingPixmaps(bool composeOverBackground)
     // So we need the background at the time of painting,
     // and the background may be a gradient, and will be different for selected items.
     // This makes 5*2 (small) pixmaps.
+
     for (int sel=0; sel<2; ++sel)
     {
         QPixmap basePix;
@@ -707,7 +697,7 @@ void ItemViewImageDelegate::prepareRatingPixmaps(bool composeOverBackground)
             painter.setPen(pen);
 
             // move painter while drawing polygons
-            painter.translate( lround((d->ratingRect.width() - d->margin - rating*(d->starPolygonSize.width()+1))/2.0) + 2, 1 );
+            painter.translate( lround((d->ratingRect.width() - d->margin - rating*(d->starPolygonSize.width()+1))/2.0) + 2, 0);
 
             for (int s=0; s<rating; ++s)
             {
@@ -724,15 +714,6 @@ QPixmap ItemViewImageDelegate::ratingPixmap(int rating, bool selected) const
 
     if (rating < 1 || rating > 5)
     {
-        /*
-        QPixmap pix;
-        if (selected)
-            pix = d->selPixmap.copy(d->ratingRect);
-        else
-            pix = d->regPixmap.copy(d->ratingRect);
-
-        return pix;
-        */
         return QPixmap();
     }
 
@@ -746,18 +727,6 @@ QPixmap ItemViewImageDelegate::ratingPixmap(int rating, bool selected) const
     {
         return d->ratingPixmaps.at(rating);
     }
-}
-
-int gcd(int a, int b)
-{
-  int c = a % b;
-  while(c != 0)
-  {
-    a = b;
-    b = c;
-    c = a % b;
-  }
-  return b;
 }
 
 } // namespace Digikam

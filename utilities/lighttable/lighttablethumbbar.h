@@ -49,14 +49,13 @@ public:
     void setOnRightPanel(const ImageInfo& info);
     void setNavigateByPair(bool b);
 
-    bool isOnLeftPanel(const ImageInfo& info)  const;
-    bool isOnRightPanel(const ImageInfo& info) const;
-    int  countItems()                          const;
-
     void removeItemByInfo(const ImageInfo& info);
     void toggleTag(int tagID);
 
-    QModelIndex findItemByInfo(const ImageInfo& info) const;
+    bool isOnLeftPanel(const ImageInfo& info)             const;
+    bool isOnRightPanel(const ImageInfo& info)            const;
+    int  countItems()                                     const;
+    QModelIndex findItemByInfo(const ImageInfo& info)     const;
     ImageInfo   findItemByIndex(const QModelIndex& index) const;
 
 Q_SIGNALS:
@@ -75,6 +74,9 @@ public Q_SLOTS:
     void slotAssignColorLabel(int);
     void slotAssignRating(int);
     void slotRatingChanged(const KUrl&, int);
+    void slotColorLabelChanged(const KUrl&, int);
+    void slotPickLabelChanged(const KUrl&, int);
+    void slotToggleTag(const KUrl&, int);
     void slotDockLocationChanged(Qt::DockWidgetArea area);
 
 private:
@@ -84,6 +86,7 @@ private:
     void assignPickLabel(const ImageInfo& info, int pickId);
     void assignColorLabel(const ImageInfo& info, int colorId);
     void assignRating(const ImageInfo& info, int rating);
+    void toggleTag(const ImageInfo& info, int tagID);
 
 private:
 

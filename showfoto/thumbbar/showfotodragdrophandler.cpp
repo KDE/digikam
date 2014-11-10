@@ -40,7 +40,6 @@
 #include "ddragobjects.h"
 #include "showfotocategorizedview.h"
 #include "showfotoiteminfo.h"
-#include "ddragobjects.h"
 
 namespace ShowFoto
 {
@@ -104,7 +103,7 @@ QMimeData* ShowfotoDragDropHandler::createMimeData(const QList<QModelIndex>& ind
 
     foreach(const ShowfotoItemInfo& info, infos)
     {
-        qDebug() << info.url.toLocalFile();
+        kDebug() << info.url.toLocalFile();
         urls.append(info.url);
     }
 

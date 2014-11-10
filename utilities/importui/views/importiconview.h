@@ -6,7 +6,8 @@
  * Date        : 2012-22-07
  * Description : Icon view for import tool items
  *
- * Copyright (C) 2012 by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2012-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -89,7 +90,7 @@ private Q_SLOTS:
 
 protected:
 
-    virtual void activated(const CamItemInfo& info);
+    virtual void activated(const CamItemInfo& info, Qt::KeyboardModifiers modifiers);
     virtual void showContextMenuOnInfo(QContextMenuEvent* event, const CamItemInfo& info);
     virtual void showContextMenu(QContextMenuEvent* event);
     virtual void slotSetupChanged();

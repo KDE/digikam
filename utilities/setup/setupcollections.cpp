@@ -53,7 +53,7 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "setupcollectionview.h"
 
 namespace Digikam

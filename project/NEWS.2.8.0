@@ -5,7 +5,7 @@ NEW FEATURES:
 
 CameraGUI : Add option to execute script during items to download from camera.
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 296786 - Zoom to 100% pans to the top-left corner.
 002 ==> 299942 - Root Album Folders selection list does not expand to fill available space.

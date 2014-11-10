@@ -6,7 +6,7 @@
  * Date        : 2005-17-07
  * Description : A Sharpen threaded image filter.
  *
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * Original Sharpen algorithm copyright 2002
@@ -34,6 +34,10 @@
 
 #include <cmath>
 #include <cstdlib>
+
+// Qt includes
+
+#include <QtConcurrentRun>
 
 // KDE includes
 
@@ -144,25 +148,66 @@ void SharpenFilter::sharpenImage(double radius, double sigma)
     convolveImage(kernelWidth, kernel.data());
 }
 
-bool SharpenFilter::convolveImage(const unsigned int order, const double* const kernel)
+void SharpenFilter::convolveImageMultithreaded(const Args& prm)
 {
-    uint    x, y;
-    int     mx, my, sx, sy, mcx, mcy, progress;
-    long    kernelWidth, i;
-    double  red, green, blue, alpha, normalize = 0.0;
-    double* k = 0;
+    double  maxClamp = m_destImage.sixteenBit() ? 16777215.0 : 65535.0;
+    double* k        = 0;
+    double  red, green, blue, alpha;
+    int     mx, my, sx, sy, mcx, mcy;
     DColor  color;
 
-    kernelWidth          = order;
-    long halfKernelWidth = kernelWidth / 2;
+    for (uint x = prm.start ; runningFlag() && (x < prm.stop) ; ++x)
+    {
+        k   = prm.normal_kernel;
+        red = green = blue = alpha = 0;
+        sy  = prm.y - prm.halfKernelWidth;
 
-    if ((kernelWidth % 2) == 0)
+        for (mcy = 0 ; runningFlag() && (mcy < prm.kernelWidth) ; ++mcy, ++sy)
+        {
+            my = sy < 0 ? 0 : sy > (int)m_destImage.height() - 1 ? m_destImage.height() - 1 : sy;
+            sx = x + (-prm.halfKernelWidth);
+
+            for (mcx = 0 ; runningFlag() && (mcx < prm.kernelWidth) ; ++mcx, ++sx)
+            {
+                mx     = sx < 0 ? 0 : sx > (int)m_destImage.width() - 1 ? m_destImage.width() - 1 : sx;
+                color  = m_orgImage.getPixelColor(mx, my);
+                red   += (*k) * (color.red()   * 257.0);
+                green += (*k) * (color.green() * 257.0);
+                blue  += (*k) * (color.blue()  * 257.0);
+                alpha += (*k) * (color.alpha() * 257.0);
+                ++k;
+            }
+        }
+
+        red   =   red < 0.0 ? 0.0 :   red > maxClamp ? maxClamp :   red + 0.5;
+        green = green < 0.0 ? 0.0 : green > maxClamp ? maxClamp : green + 0.5;
+        blue  =  blue < 0.0 ? 0.0 :  blue > maxClamp ? maxClamp :  blue + 0.5;
+        alpha = alpha < 0.0 ? 0.0 : alpha > maxClamp ? maxClamp : alpha + 0.5;
+
+        m_destImage.setPixelColor(x, prm.y, DColor((int)(red  / 257UL), (int)(green / 257UL),
+                                                   (int)(blue / 257UL), (int)(alpha / 257UL),
+                                                   m_destImage.sixteenBit()));
+    }
+}
+
+bool SharpenFilter::convolveImage(const unsigned int order, const double* const kernel)
+{
+    uint    y;
+    int     progress;
+    long    i;
+    double  normalize = 0.0;
+
+    Args prm;
+    prm.kernelWidth     = order;
+    prm.halfKernelWidth = prm.kernelWidth / 2;;
+
+    if ((prm.kernelWidth % 2) == 0)
     {
         kWarning() << "Kernel width must be an odd number!";
         return false;
     }
 
-    QScopedArrayPointer<double> normal_kernel(new double[kernelWidth * kernelWidth]);
+    QScopedArrayPointer<double> normal_kernel(new double[prm.kernelWidth * prm.kernelWidth]);
 
     if (normal_kernel.isNull())
     {
@@ -170,7 +215,7 @@ bool SharpenFilter::convolveImage(const unsigned int order, const double* const 
         return false;
     }
 
-    for (i = 0 ; i < (kernelWidth * kernelWidth) ; ++i)
+    for (i = 0 ; i < (prm.kernelWidth * prm.kernelWidth) ; ++i)
     {
         normalize += kernel[i];
     }
@@ -182,52 +227,32 @@ bool SharpenFilter::convolveImage(const unsigned int order, const double* const 
 
     normalize = 1.0 / normalize;
 
-    for (i = 0 ; i < (kernelWidth * kernelWidth) ; ++i)
+    for (i = 0 ; i < (prm.kernelWidth * prm.kernelWidth) ; ++i)
     {
         normal_kernel[i] = normalize * kernel[i];
     }
 
-    double maxClamp = m_destImage.sixteenBit() ? 16777215.0 : 65535.0;
+    prm.normal_kernel = normal_kernel.data();
+    QList<int> vals = multithreadedSteps(m_destImage.width());
 
     for (y = 0 ; runningFlag() && (y < m_destImage.height()) ; ++y)
     {
-        // FIXME: this calculation seems to be useless, since we already do it in the following loop
-        //        sy = y-halfKernelWidth;
+        QList <QFuture<void> > tasks;
 
-        for (x = 0 ; runningFlag() && (x < m_destImage.width()) ; ++x)
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
         {
-            k   = normal_kernel.data();
-            red = green = blue = alpha = 0;
-            sy  = y - halfKernelWidth;
+            prm.start = vals[j];
+            prm.stop  = vals[j+1];
+            prm.y     = y;
 
-            for (mcy = 0 ; runningFlag() && (mcy < kernelWidth) ; ++mcy, ++sy)
-            {
-                // FIXME: ugly!!!
-                my = sy < 0 ? 0 : sy > (int)m_destImage.height() - 1 ? m_destImage.height() - 1 : sy;
-                // FIXME: ugly!!!
-                sx = x + (-halfKernelWidth);
-
-                for (mcx = 0 ; runningFlag() && (mcx < kernelWidth) ; ++mcx, ++sx)
-                {
-                    mx     = sx < 0 ? 0 : sx > (int)m_destImage.width() - 1 ? m_destImage.width() - 1 : sx;
-                    color  = m_orgImage.getPixelColor(mx, my);
-                    red   += (*k) * (color.red()   * 257.0);
-                    green += (*k) * (color.green() * 257.0);
-                    blue  += (*k) * (color.blue()  * 257.0);
-                    alpha += (*k) * (color.alpha() * 257.0);
-                    ++k;
-                }
-            }
-
-            red   =   red < 0.0 ? 0.0 :   red > maxClamp ? maxClamp :   red + 0.5;
-            green = green < 0.0 ? 0.0 : green > maxClamp ? maxClamp : green + 0.5;
-            blue  =  blue < 0.0 ? 0.0 :  blue > maxClamp ? maxClamp :  blue + 0.5;
-            alpha = alpha < 0.0 ? 0.0 : alpha > maxClamp ? maxClamp : alpha + 0.5;
-
-            m_destImage.setPixelColor(x, y, DColor((int)(red / 257UL), (int)(green / 257UL),
-                                                   (int)(blue / 257UL), (int)(alpha / 257UL),
-                                                   m_destImage.sixteenBit()));
+            tasks.append(QtConcurrent::run(this,
+                                           &SharpenFilter::convolveImageMultithreaded,
+                                           prm
+                                          ));
         }
+
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
 
         progress = (int)(((double)y * 100.0) / m_destImage.height());
 
@@ -271,7 +296,7 @@ int SharpenFilter::getOptimalKernelWidth(double radius, double sigma)
         kernelWidth += 2;
     }
 
-    return((int)kernelWidth - 2);
+    return ((int)kernelWidth - 2);
 }
 
 FilterAction SharpenFilter::filterAction()

@@ -105,7 +105,7 @@ public:
     QRectF handleRect(CropHandle handle) const;
     CropHandle handleAt(const QPointF& pos) const;
     void updateCursor(CropHandle handle, bool buttonDown);
-    QRectF keepRectInsideImage(const QRectF& rect) const;
+    QRectF keepRectInsideImage(const QRectF& rect, bool moving=true) const;
     OptimalPosition computeOptimalHudWidgetPosition() const;
     void updateHudWidgetPosition();
 
@@ -208,6 +208,7 @@ CropHandle RegionFrameItem::Private::handleAt(const QPointF& pos) const
         }
     }
 
+
     return CH_None;
 }
 
@@ -249,7 +250,7 @@ void RegionFrameItem::Private::updateCursor(CropHandle handle, bool buttonDown)
     q->setCursor(shape);
 }
 
-QRectF RegionFrameItem::Private::keepRectInsideImage(const QRectF& rect) const
+QRectF RegionFrameItem::Private::keepRectInsideImage(const QRectF& rect, bool moving) const
 {
     QRectF r(rect);
     const QSizeF imageSize = q->parentDImgItem()->boundingRect().size();
@@ -264,20 +265,20 @@ QRectF RegionFrameItem::Private::keepRectInsideImage(const QRectF& rect) const
 
     if (r.right() > imageSize.width())
     {
-        r.moveRight(imageSize.width());
+        moving ? r.moveRight(imageSize.width()) : r.setRight(imageSize.width());
     }
     else if (r.left() < 0)
     {
-        r.moveLeft(0);
+        moving ? r.moveLeft(0) : r.setLeft(0);
     }
 
     if (r.bottom() > imageSize.height())
     {
-        r.moveBottom(imageSize.height());
+        moving ? r.moveBottom(imageSize.height()) : r.setBottom(imageSize.height());
     }
     else if (r.top() < 0)
     {
-        r.moveTop(0);
+        moving ? r.moveTop(0) : r.setTop(0);
     }
 
     return r;
@@ -754,6 +755,11 @@ void RegionFrameItem::moveHudWidget()
     }
 
     d->hudWidget->setPos(pos);
+}
+
+void RegionFrameItem::setRectInSceneCoordinatesAdjusted(const QRectF& rect)
+{
+    setRectInSceneCoordinates(d->keepRectInsideImage(rect, false));
 }
 
 } // namespace Digikam

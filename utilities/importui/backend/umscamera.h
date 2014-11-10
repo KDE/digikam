@@ -7,7 +7,7 @@
  * Description : USB Mass Storage camera interface
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,7 +47,8 @@ public:
     UMSCamera(const QString& title, const QString& model, const QString& port, const QString& path);
     ~UMSCamera();
 
-    QByteArray cameraMD5ID();
+    QByteArray                 cameraMD5ID();
+    DKCamera::CameraDriverType cameraDriverType();
 
     bool doConnect();
     void cancel();
@@ -71,21 +72,8 @@ public:
 
     bool getFreeSpace(unsigned long& kBSize, unsigned long& kBAvail);
 
-    // Methods not supported by UMS camera.
-    bool getPreview(QImage& /*preview*/)
-    {
-        return false;
-    };
-
-    bool capture(CamItemInfo& /*itemInfo*/)
-    {
-        return false;
-    };
-
-    DKCamera::CameraDriverType cameraDriverType()
-    {
-        return DKCamera::UMSDriver;
-    };
+    bool getPreview(QImage& preview);
+    bool capture(CamItemInfo& itemInfo);
 
 private:
 

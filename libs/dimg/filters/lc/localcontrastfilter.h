@@ -8,7 +8,7 @@
  *               LDR ToneMapper <http://zynaddsubfx.sourceforge.net/other/tonemapping>
  *
  * Copyright (C) 2009      by Julien Pontabry <julien dot pontabry at gmail dot com>
- * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -64,12 +64,12 @@ public:
 
     static QList<int>       SupportedVersions()
     {
-        return QList<int>() << 1;
+        return QList<int>() << 2;
     }
 
     static int              CurrentVersion()
     {
-        return 1;
+        return 2;
     }
 
     virtual QString         filterIdentifier() const
@@ -83,11 +83,25 @@ public:
 
 private:
 
+    struct Args
+    {
+        uint   start;
+        uint   stop;
+        float  a;
+        float* data;
+        int    sizex;
+        int    sizey;
+        float  blur;
+        float  denormal_remove;
+    };
+
+private:
+
     void filterImage();
 
     void  processRgbImage(float* const img, int sizex, int sizey);
     void  process8bitRgbImage(unsigned char* const img, int sizex, int sizey);
-    void  process16bitRgbImage(unsigned short int* const img, int sizex, int sizey);
+    void  process16bitRgbImage(unsigned short* const img, int sizex, int sizey);
 
     float func(float x1, float x2);
 
@@ -96,6 +110,12 @@ private:
 
     inline void rgb2hsv(const float& r, const float& g, const float& b, float& h, float& s, float& v);
     inline void hsv2rgb(const float& h, const float& s, const float& v, float& r, float& g, float& b);
+
+    void blurMultithreaded(uint start, uint stop, float* const img, float* const blurimage);
+    void saturationMultithreaded(uint start, uint stop, float* const img, float* const srcimg);
+
+    void inplaceBlurYMultithreaded(const Args& prm);
+    void inplaceBlurXMultithreaded(const Args& prm);
 
 private:
 

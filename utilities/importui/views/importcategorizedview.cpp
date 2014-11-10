@@ -25,7 +25,7 @@
 
 // Qt includes
 
-#include "QTimer"
+#include <QTimer>
 
 // KDE includes
 
@@ -33,14 +33,15 @@
 
 // Local includes
 
-#include "loadingcacheinterface.h"
-#include "imageselectionoverlay.h"
 #include "camitemsortsettings.h"
-#include "itemviewtooltip.h"
+#include "iccsettings.h"
+#include "imageselectionoverlay.h"
 #include "importdelegate.h"
 #include "importtooltipfiller.h"
-#include "thumbnailloadthread.h"
 #include "importsettings.h"
+#include "itemviewtooltip.h"
+#include "loadingcacheinterface.h"
+#include "thumbnailloadthread.h"
 
 namespace Digikam
 {
@@ -110,6 +111,9 @@ ImportCategorizedView::ImportCategorizedView(QWidget* const parent)
 
     connect(d->delayedEnterTimer, SIGNAL(timeout()),
             this, SLOT(slotDelayedEnter()));
+
+    connect(IccSettings::instance(), SIGNAL(settingsChanged(ICCSettingsContainer, ICCSettingsContainer)),
+            this, SLOT(slotIccSettingsChanged(ICCSettingsContainer, ICCSettingsContainer)));
 }
 
 ImportCategorizedView::~ImportCategorizedView()
@@ -557,13 +561,13 @@ void ImportCategorizedView::slotFileChanged(const QString& filePath)
     }
 }
 
-void ImportCategorizedView::indexActivated(const QModelIndex& index)
+void ImportCategorizedView::indexActivated(const QModelIndex& index, Qt::KeyboardModifiers modifiers)
 {
     CamItemInfo info = d->filterModel->camItemInfo(index);
 
     if (!info.isNull())
     {
-        activated(info);
+        activated(info, modifiers);
         emit camItemInfoActivated(info);
     }
 }
@@ -590,7 +594,7 @@ void ImportCategorizedView::selectionChanged(const QItemSelection& selectedItems
     }
 }
 
-void ImportCategorizedView::activated(const CamItemInfo&)
+void ImportCategorizedView::activated(const CamItemInfo&, Qt::KeyboardModifiers)
 {
     // implemented in subclass
 }
@@ -619,6 +623,11 @@ QItemSelectionModel* ImportCategorizedView::getSelectionModel() const
 AbstractItemDragDropHandler* ImportCategorizedView::dragDropHandler() const
 {
     return d->model->dragDropHandler();
+}
+
+void ImportCategorizedView::slotIccSettingsChanged(const ICCSettingsContainer&, const ICCSettingsContainer&)
+{
+    viewport()->update();
 }
 
 } // namespace Digikam

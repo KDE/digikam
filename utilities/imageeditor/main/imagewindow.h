@@ -79,7 +79,6 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
-    void signalFileDeleted(const KUrl& url);
     void signalURLChanged(const KUrl& url);
     void signalSavingDialogProgress(float value);
 
@@ -105,6 +104,8 @@ private:
     bool saveNewVersionAs();
     bool saveNewVersionInFormat(const QString& format);
 
+    void addServicesMenu();
+
     KUrl saveDestinationUrl();
     bool hasOriginalToRestore();
     DImageHistory resolvedImageHistory(const DImageHistory& history);
@@ -123,6 +124,7 @@ private:
     void assignPickLabel(const ImageInfo& info, int pickId);
     void assignColorLabel(const ImageInfo& info, int colorId);
     void assignRating(const ImageInfo& info, int rating);
+    void toggleTag(const ImageInfo& info, int tagID);
 
     ThumbBarDock* thumbBar()     const;
     Sidebar*      rightSideBar() const;
@@ -141,6 +143,7 @@ private Q_SLOTS:
     void slotFirst();
     void slotLast();
     void slotFilePrint();
+    void slotFileWithDefaultApplication();
 
     void slotToMainWindow();
 
@@ -165,6 +168,7 @@ private Q_SLOTS:
     void slotRatingChanged(const KUrl&, int);
     void slotColorLabelChanged(const KUrl&, int);
     void slotPickLabelChanged(const KUrl&, int);
+    void slotToggleTag(const KUrl&, int);
 
     void slotFileMetadataChanged(const KUrl&);
     //void slotCollectionImageChange(const CollectionImageChangeset&);
@@ -177,6 +181,11 @@ private Q_SLOTS:
     void slotSetupChanged();
 
     void slotAddedDropedItems(QDropEvent*);
+    void slotOpenWith(QAction* action=0);
+
+    void slotRightSideBarActivateTitles();
+    void slotRightSideBarActivateComments();
+    void slotRightSideBarActivateAssignedTags();
 
 private:
 

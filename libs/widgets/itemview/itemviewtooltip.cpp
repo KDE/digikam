@@ -36,11 +36,11 @@
 namespace Digikam
 {
 
-class ItemViewToolTip::ItemViewToolTipPriv
+class ItemViewToolTip::Private
 {
 public:
 
-    ItemViewToolTipPriv()
+    Private()
     {
         view            = 0;
         filterInstalled = false;
@@ -54,7 +54,7 @@ public:
 };
 
 ItemViewToolTip::ItemViewToolTip(QAbstractItemView* view)
-    : DItemToolTip(view), d(new ItemViewToolTipPriv)
+    : DItemToolTip(view), d(new Private)
 {
     d->view = view;
 
@@ -136,23 +136,27 @@ bool ItemViewToolTip::eventFilter(QObject* o, QEvent* e)
 {
     switch (e->type())
     {
+
 #ifdef Q_WS_MAC
         case QEvent::KeyPress:
         case QEvent::KeyRelease:
         {
-            int key = static_cast<QKeyEvent*>(e)->key();
+            int key                    = static_cast<QKeyEvent*>(e)->key();
             Qt::KeyboardModifiers mody = static_cast<QKeyEvent*>(e)->modifiers();
 
-            if (!(mody & Qt::KeyboardModifierMask)
-                && key != Qt::Key_Shift && key != Qt::Key_Control
-                && key != Qt::Key_Alt && key != Qt::Key_Meta)
+            if (!(mody & Qt::KeyboardModifierMask) &&
+                key != Qt::Key_Shift               &&
+                key != Qt::Key_Control             &&
+                key != Qt::Key_Alt                 &&
+                key != Qt::Key_Meta)
             {
                 hide();
             }
 
             break;
         }
-#endif
+#endif // Q_WS_MAC
+
         case QEvent::Leave:
             hide(); // could add a 300ms timer here, like Qt
             break;
@@ -169,7 +173,9 @@ bool ItemViewToolTip::eventFilter(QObject* o, QEvent* e)
         case QEvent::MouseMove:
         {
             // needs mouse tracking, obviously
-            if (o == d->view->viewport() && !d->rect.isNull() && !d->rect.contains(static_cast<QMouseEvent*>(e)->globalPos()))
+            if (o == d->view->viewport() &&
+                !d->rect.isNull()        &&
+                !d->rect.contains(static_cast<QMouseEvent*>(e)->globalPos()))
             {
                 hide();
             }
@@ -190,7 +196,7 @@ void ItemViewToolTip::mouseMoveEvent(QMouseEvent* e)
     }
 
     QPoint pos = e->globalPos();
-    pos = d->view->viewport()->mapFromGlobal(pos);
+    pos        = d->view->viewport()->mapFromGlobal(pos);
 
     if (!d->rect.contains(pos))
     {

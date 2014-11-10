@@ -82,7 +82,7 @@
 #include "albumdb.h"
 #include "albummanager.h"
 #include "albummodel.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "canvas.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
@@ -99,11 +99,13 @@
 #include "dmetadata.h"
 #include "editorstackview.h"
 #include "fileactionmngr.h"
+#include "fileoperation.h"
 #include "globals.h"
 #include "iccsettingscontainer.h"
 #include "imageattributeswatch.h"
 #include "imagefiltermodel.h"
 #include "imagedragdrop.h"
+#include "imagedescedittab.h"
 #include "imageinfo.h"
 #include "imagelistmodel.h"
 #include "imageplugin.h"
@@ -113,7 +115,7 @@
 #include "imagescanner.h"
 #include "imagethumbnailbar.h"
 #include "iofilesettings.h"
-#include "knotificationwrapper.h"
+#include "dnotificationwrapper.h"
 #include "loadingcacheinterface.h"
 #include "metadatahub.h"
 #include "metadatasettings.h"
@@ -265,6 +267,7 @@ void ImageWindow::closeEvent(QCloseEvent* e)
     d->rightSideBar->setConfigGroup(KConfigGroup(&group, "Right Sidebar"));
     d->rightSideBar->saveState();
 
+    DXmlGuiWindow::closeEvent(e);
     e->accept();
 }
 
@@ -293,19 +296,19 @@ void ImageWindow::setupUserArea()
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
 
-    QWidget* widget   = new QWidget(this);
-    QHBoxLayout* hlay = new QHBoxLayout(widget);
-    m_splitter        = new SidebarSplitter(widget);
+    QWidget* const widget   = new QWidget(this);
+    QHBoxLayout* const hlay = new QHBoxLayout(widget);
+    m_splitter              = new SidebarSplitter(widget);
 
-    d->viewContainer  = new KMainWindow(widget, Qt::Widget);
+    d->viewContainer        = new KMainWindow(widget, Qt::Widget);
     m_splitter->addWidget(d->viewContainer);
-    m_stackView       = new EditorStackView(d->viewContainer);
-    m_canvas          = new Canvas(m_stackView);
+    m_stackView             = new EditorStackView(d->viewContainer);
+    m_canvas                = new Canvas(m_stackView);
     d->viewContainer->setCentralWidget(m_stackView);
 
     m_splitter->setStretchFactor(0, 10);      // set Canvas default size to max.
 
-    d->rightSideBar   = new ImagePropertiesSideBarDB(widget, m_splitter, KMultiTabBar::Right, true);
+    d->rightSideBar = new ImagePropertiesSideBarDB(widget, m_splitter, KMultiTabBar::Right, true);
     d->rightSideBar->setObjectName("ImageEditor Right Sidebar");
     d->rightSideBar->getFiltersHistoryTab()->addOpenImageAction();
 
@@ -348,8 +351,8 @@ void ImageWindow::setupUserArea()
     d->imageInfoModel->setThumbnailLoadThread(ThumbnailLoadThread::defaultIconViewThread());
 
     d->imageFilterModel->setCategorizationMode(ImageSortSettings::NoCategories);
-    d->imageFilterModel->setSortRole((ImageSortSettings::SortRole)AlbumSettings::instance()->getImageSortOrder());
-    d->imageFilterModel->setSortOrder((ImageSortSettings::SortOrder)AlbumSettings::instance()->getImageSorting());
+    d->imageFilterModel->setSortRole((ImageSortSettings::SortRole)ApplicationSettings::instance()->getImageSortOrder());
+    d->imageFilterModel->setSortOrder((ImageSortSettings::SortOrder)ApplicationSettings::instance()->getImageSorting());
     d->imageFilterModel->setAllGroupsOpen(true); // disable filtering out by group, see bug #283847
     d->imageFilterModel->sort(0); // an initial sorting is necessary
 
@@ -401,12 +404,14 @@ void ImageWindow::setupConnections()
     connect(watch, SIGNAL(signalFileMetadataChanged(KUrl)),
             this, SLOT(slotFileMetadataChanged(KUrl)));
 
-    /*connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(CollectionImageChangeset)),
+/*
+    connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(CollectionImageChangeset)),
             this, SLOT(slotCollectionImageChange(CollectionImageChangeset)),
-            Qt::QueuedConnection);*/
+            Qt::QueuedConnection);
 
-    /*connect(d->imageFilterModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
-            this, SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)));*/
+    connect(d->imageFilterModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
+            this, SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)));
+*/
 
     connect(d->thumbBar, SIGNAL(currentChanged(ImageInfo)),
             this, SLOT(slotThumbBarImageSelected(ImageInfo)));
@@ -420,7 +425,7 @@ void ImageWindow::setupConnections()
     connect(d->imageInfoModel, SIGNAL(allRefreshingFinished()),
             this, SLOT(slotThumbBarModelReady()));
 
-    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+    connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSetupChanged()));
 }
 
@@ -465,18 +470,33 @@ void ImageWindow::setupActions()
 
     // Labels shortcuts must be registered here to be saved in XML GUI files if user customize it.
     TagsActionMngr::defaultManager()->registerLabelsActions(actionCollection());
+
+    KAction* const editTitles = new KAction(i18n("Edit Titles"), this);
+    editTitles->setShortcut( KShortcut(Qt::META + Qt::Key_T) );
+    actionCollection()->addAction("edit_titles", editTitles);
+    connect(editTitles, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateTitles()));
+
+    KAction* const editComments = new KAction(i18n("Edit Comments"), this);
+    editComments->setShortcut( KShortcut(Qt::META + Qt::Key_C) );
+    actionCollection()->addAction("edit_comments", editComments);
+    connect(editComments, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateComments()));
+
+    KAction* const assignedTags = new KAction(i18n("Show Assigned Tags"), this);
+    assignedTags->setShortcut( KShortcut(Qt::META + Qt::Key_A) );
+    actionCollection()->addAction("assigned _tags", assignedTags);
+    connect(assignedTags, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateAssignedTags()));
 }
 
 void ImageWindow::slotSetupChanged()
 {
     applyStandardSettings();
 
-    VersionManagerSettings versionSettings = AlbumSettings::instance()->getVersionManagerSettings();
+    VersionManagerSettings versionSettings = ApplicationSettings::instance()->getVersionManagerSettings();
     d->versionManager.setSettings(versionSettings);
     m_nonDestructive                       = versionSettings.enabled;
     toggleNonDestructiveActions();
 
-    d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
+    d->rightSideBar->setStyle(ApplicationSettings::instance()->getSidebarTitleStyle());
 }
 
 void ImageWindow::loadImageInfos(const ImageInfoList& imageInfoList, const ImageInfo& imageInfoCurrent,
@@ -671,6 +691,10 @@ void ImageWindow::slotContextMenu()
 {
     if (m_contextMenu)
     {
+        m_contextMenu->addSeparator();
+        addServicesMenu();
+        m_contextMenu->addSeparator();
+
         TagsPopupMenu* assignTagsMenu = 0;
         TagsPopupMenu* removeTagsMenu = 0;
 
@@ -707,10 +731,10 @@ void ImageWindow::slotContextMenu()
 
         // Assign Labels -------------------------------------------
 
-        KMenu* menuLabels           = new KMenu(i18n("Assign Labels"), m_contextMenu);
-        PickLabelMenuAction* pmenu  = new PickLabelMenuAction(m_contextMenu);
-        ColorLabelMenuAction* cmenu = new ColorLabelMenuAction(m_contextMenu);
-        RatingMenuAction* rmenu     = new RatingMenuAction(m_contextMenu);
+        KMenu* const menuLabels           = new KMenu(i18n("Assign Labels"), m_contextMenu);
+        PickLabelMenuAction* const pmenu  = new PickLabelMenuAction(m_contextMenu);
+        ColorLabelMenuAction* const cmenu = new ColorLabelMenuAction(m_contextMenu);
+        RatingMenuAction* const rmenu     = new RatingMenuAction(m_contextMenu);
         menuLabels->addAction(pmenu);
         menuLabels->addAction(cmenu);
         menuLabels->addAction(rmenu);
@@ -754,8 +778,7 @@ void ImageWindow::slotChanged()
     }
 
 
-    DImg* img = m_canvas->interface()->getImg();
-
+    DImg* const img           = m_canvas->interface()->getImg();
     DImageHistory history     = m_canvas->interface()->getImageHistory();
     DImageHistory redoHistory = m_canvas->interface()->getImageHistoryOfFullRedo();
 
@@ -764,27 +787,38 @@ void ImageWindow::slotChanged()
     // Filters for redo will be greyed out
     d->rightSideBar->getFiltersHistoryTab()->setEnabledHistorySteps(history.actionCount());
 
-    /*if (!d->currentImageInfo.isNull())
-        {
-        }
-        else
-        {
-            d->rightSideBar->itemChanged(d->currentUrl(), m_canvas->getSelectedArea(), img);
-        }
-    }*/
+/*
+    if (!d->currentImageInfo.isNull())
+    {
+    }
+    else
+    {
+        d->rightSideBar->itemChanged(d->currentUrl(), m_canvas->getSelectedArea(), img);
+    }
+*/
+}
+
+void ImageWindow::slotToggleTag(const KUrl& url, int tagID)
+{
+    toggleTag(ImageInfo(url), tagID);
 }
 
 void ImageWindow::toggleTag(int tagID)
 {
-    if (!d->currentImageInfo.isNull())
+    toggleTag(d->currentImageInfo, tagID);
+}
+
+void ImageWindow::toggleTag(const ImageInfo& info, int tagID)
+{
+    if (!info.isNull())
     {
-        if (d->currentImageInfo.tagIds().contains(tagID))
+        if (info.tagIds().contains(tagID))
         {
-            slotRemoveTag(tagID);
+            FileActionMngr::instance()->removeTag(info, tagID);
         }
         else
         {
-            slotAssignTag(tagID);
+            FileActionMngr::instance()->assignTag(info, tagID);
         }
     }
 }
@@ -793,11 +827,7 @@ void ImageWindow::slotAssignTag(int tagID)
 {
     if (!d->currentImageInfo.isNull())
     {
-        MetadataHub hub;
-        hub.load(d->currentImageInfo);
-        hub.setTag(tagID, true);
-        hub.write(d->currentImageInfo, MetadataHub::PartialWrite);
-        hub.write(d->currentImageInfo.filePath(), MetadataHub::FullWriteIfChanged);
+        FileActionMngr::instance()->assignTag(d->currentImageInfo, tagID);
     }
 }
 
@@ -805,11 +835,7 @@ void ImageWindow::slotRemoveTag(int tagID)
 {
     if (!d->currentImageInfo.isNull())
     {
-        MetadataHub hub;
-        hub.load(d->currentImageInfo);
-        hub.setTag(tagID, false);
-        hub.write(d->currentImageInfo, MetadataHub::PartialWrite);
-        hub.write(d->currentImageInfo.filePath(), MetadataHub::FullWriteIfChanged);
+        FileActionMngr::instance()->removeTag(d->currentImageInfo, tagID);
     }
 }
 
@@ -827,11 +853,7 @@ void ImageWindow::assignPickLabel(const ImageInfo& info, int pickId)
 {
     if (!info.isNull())
     {
-        MetadataHub hub;
-        hub.load(info);
-        hub.setPickLabel(pickId);
-        hub.write(info, MetadataHub::PartialWrite);
-        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
+        FileActionMngr::instance()->assignPickLabel(info, pickId);
     }
 }
 
@@ -839,11 +861,7 @@ void ImageWindow::assignColorLabel(const ImageInfo& info, int colorId)
 {
     if (!info.isNull())
     {
-        MetadataHub hub;
-        hub.load(info);
-        hub.setColorLabel(colorId);
-        hub.write(info, MetadataHub::PartialWrite);
-        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
+        FileActionMngr::instance()->assignColorLabel(info, colorId);
     }
 }
 
@@ -858,11 +876,7 @@ void ImageWindow::assignRating(const ImageInfo& info, int rating)
 
     if (!info.isNull())
     {
-        MetadataHub hub;
-        hub.load(info);
-        hub.setRating(rating);
-        hub.write(info, MetadataHub::PartialWrite);
-        hub.write(info.filePath(), MetadataHub::FullWriteIfChanged);
+        FileActionMngr::instance()->assignRating(info, rating);
     }
 }
 
@@ -964,7 +978,7 @@ void ImageWindow::saveIsComplete()
     d->currentImageInfo.setOrientation(meta.getImageOrientation());
 
     // Pop-up a message to bring user when save is done.
-    KNotificationWrapper("editorsavefilecompleted", i18n("Image saved successfully"),
+    DNotificationWrapper("editorsavefilecompleted", i18n("Image saved successfully"),
                          this, windowTitle());
 
     resetOrigin();
@@ -1062,7 +1076,7 @@ void ImageWindow::saveAsIsComplete()
     slotUpdateItemInfo();
 
     // Pop-up a message to bring user when save is done.
-    KNotificationWrapper("editorsavefilecompleted", i18n("Image saved successfully"),
+    DNotificationWrapper("editorsavefilecompleted", i18n("Image saved successfully"),
                          this, windowTitle());
 }
 
@@ -1356,7 +1370,8 @@ void ImageWindow::slideShow(SlideShowSettings& settings)
                                      i18n("Preparing slideshow. Please wait..."));
 
         float cnt = (float)d->imageInfoModel->rowCount();
-        int i = 0;
+        int     i = 0;
+
         foreach(const ImageInfo& info, d->imageInfoModel->imageInfos())
         {
             SlidePictureInfo pictInfo;
@@ -1373,7 +1388,8 @@ void ImageWindow::slideShow(SlideShowSettings& settings)
         }
     }
 
-    /*else
+/*
+    else
     {
         // We have started image editor from Camera GUI. we get picture comments from metadata.
 
@@ -1396,17 +1412,19 @@ void ImageWindow::slideShow(SlideShowSettings& settings)
             m_nameLabel->setProgressValue((int)((i++/cnt)*100.0));
             kapp->processEvents();
         }
-    }*/
+    }
+*/
 
     m_nameLabel->progressBarMode(StatusProgressBar::TextMode, QString());
 
     if (!m_cancelSlideShow)
     {
-        SlideShow* slide = new SlideShow(settings);
+        SlideShow* const slide = new SlideShow(settings);
+        TagsActionMngr::defaultManager()->registerActionsToWidget(slide);
 
         if (settings.startWithCurrent)
         {
-            slide->setCurrent(d->currentUrl());
+            slide->setCurrentItem(d->currentUrl());
         }
 
         connect(slide, SIGNAL(signalRatingChanged(KUrl,int)),
@@ -1417,6 +1435,9 @@ void ImageWindow::slideShow(SlideShowSettings& settings)
 
         connect(slide, SIGNAL(signalPickLabelChanged(KUrl,int)),
                 this, SLOT(slotPickLabelChanged(KUrl,int)));
+
+        connect(slide, SIGNAL(signalToggleTag(KUrl,int)),
+                this, SLOT(slotToggleTag(KUrl,int)));
 
         slide->show();
     }
@@ -1431,7 +1452,7 @@ void ImageWindow::dragMoveEvent(QDragMoveEvent* e)
     KUrl::List kioURLs;
 
     if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs) ||
-        DAlbumDrag::decode(e->mimeData(), urls, albumID) ||
+        DAlbumDrag::decode(e->mimeData(), urls, albumID)                    ||
         DTagListDrag::canDecode(e->mimeData()))
     {
         e->accept();
@@ -1460,8 +1481,8 @@ void ImageWindow::dropEvent(QDropEvent* e)
         }
 
         QString ATitle;
-        AlbumManager* man  = AlbumManager::instance();
-        PAlbum* palbum     = man->findPAlbum(albumIDs.first());
+        AlbumManager* const man = AlbumManager::instance();
+        PAlbum* const palbum    = man->findPAlbum(albumIDs.first());
 
         if (palbum)
         {
@@ -1474,7 +1495,7 @@ void ImageWindow::dropEvent(QDropEvent* e)
     }
     else if (DAlbumDrag::decode(e->mimeData(), urls, albumID))
     {
-        AlbumManager* man        = AlbumManager::instance();
+        AlbumManager* const man  = AlbumManager::instance();
         QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInAlbum(albumID);
         ImageInfoList imageInfoList(itemIDs);
 
@@ -1485,7 +1506,7 @@ void ImageWindow::dropEvent(QDropEvent* e)
         }
 
         QString ATitle;
-        PAlbum* palbum     = man->findPAlbum(albumIDs.first());
+        PAlbum* const palbum = man->findPAlbum(albumIDs.first());
 
         if (palbum)
         {
@@ -1505,7 +1526,7 @@ void ImageWindow::dropEvent(QDropEvent* e)
             return;
         }
 
-        AlbumManager* man        = AlbumManager::instance();
+        AlbumManager* const man  = AlbumManager::instance();
         QList<qlonglong> itemIDs = DatabaseAccess().db()->getItemIDsInTag(tagIDs.first(), true);
         ImageInfoList imageInfoList(itemIDs);
 
@@ -1516,7 +1537,7 @@ void ImageWindow::dropEvent(QDropEvent* e)
         }
 
         QString ATitle;
-        TAlbum* talbum     = man->findTAlbum(tagIDs.first());
+        TAlbum* const talbum = man->findTAlbum(tagIDs.first());
 
         if (talbum)
         {
@@ -1662,6 +1683,40 @@ void ImageWindow::slotAddedDropedItems(QDropEvent* e)
     {
         loadImageInfos(imgList, imgList.first(), QString());
     }
+}
+
+void ImageWindow::slotFileWithDefaultApplication()
+{
+    FileOperation::openFilesWithDefaultApplication(KUrl::List() << d->currentUrl(), this);
+}
+
+void ImageWindow::addServicesMenu()
+{
+    addServicesMenuForUrl(d->currentUrl());
+}
+
+void ImageWindow::slotOpenWith(QAction* action)
+{
+    openWith(d->currentUrl(), action);
+}
+
+void ImageWindow::slotRightSideBarActivateTitles()
+{
+    d->rightSideBar->setActiveTab(d->rightSideBar->imageDescEditTab());
+    d->rightSideBar->imageDescEditTab()->setFocusToTitlesEdit();
+}
+
+void ImageWindow::slotRightSideBarActivateComments()
+{
+    d->rightSideBar->setActiveTab(d->rightSideBar->imageDescEditTab());
+    d->rightSideBar->imageDescEditTab()->setFocusToCommentsEdit();
+}
+
+
+void ImageWindow::slotRightSideBarActivateAssignedTags()
+{
+    d->rightSideBar->setActiveTab(d->rightSideBar->imageDescEditTab());
+    d->rightSideBar->imageDescEditTab()->activateAssignedTagsButton();
 }
 
 }  // namespace Digikam

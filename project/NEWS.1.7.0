@@ -4,7 +4,7 @@ digiKam 1.7.0 - Release date: 2010-12-19
 NEW FEATURES:
 
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 180224 : Memory leakage in image editor?
 002 ==> 257676 : Crash when I renane files.

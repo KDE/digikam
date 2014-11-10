@@ -4,7 +4,7 @@
  * Description : a tool to fix automatically camera lens aberrations
  *
  * Copyright (C) 2008      by Adrian Schroeter <adrian at suse dot de>
- * Copyright (C) 2008-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -133,7 +133,6 @@ void LensFunIface::setFilterSettings(const LensFunContainer& other)
 {
     d->settings.filterCCA = other.filterCCA;
     d->settings.filterVIG = other.filterVIG;
-    d->settings.filterCCI = other.filterCCI;
     d->settings.filterDST = other.filterDST;
     d->settings.filterGEO = other.filterGEO;
 }
@@ -234,13 +233,18 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
     }
     else
     {
-        // NOTE: see B.K.O #184156:
+        // NOTE: see bug #184156:
         // Some rules to wrap unknown camera device from Lensfun database, which have equivalent in fact.
         if (d->makeDescription == QString("Canon"))
         {
             if (d->modelDescription == QString("Canon EOS Kiss Digital X"))
             {
                 d->modelDescription = QString("Canon EOS 400D DIGITAL");
+            }
+
+            if (d->modelDescription == QString("G1 X"))
+            {
+                d->modelDescription = QString("G1X");
             }
         }
 
@@ -473,6 +477,7 @@ bool LensFunIface::supportsDistortion() const
     }
 
     lfLensCalibDistortion res;
+
     return d->usedLens->InterpolateDistortion(d->settings.focalLength, res);
 }
 
@@ -484,6 +489,7 @@ bool LensFunIface::supportsCCA() const
     }
 
     lfLensCalibTCA res;
+
     return d->usedLens->InterpolateTCA(d->settings.focalLength, res);
 }
 
@@ -495,6 +501,7 @@ bool LensFunIface::supportsVig() const
     }
 
     lfLensCalibVignetting res;
+
     return d->usedLens->InterpolateVignetting(d->settings.focalLength,
                                               d->settings.aperture,
                                               d->settings.subjectDistance, res);
@@ -503,11 +510,6 @@ bool LensFunIface::supportsVig() const
 bool LensFunIface::supportsGeometry() const
 {
     return supportsDistortion();
-}
-
-bool LensFunIface::supportsCCI() const
-{
-    return supportsVig();
 }
 
 QString LensFunIface::lensFunVersion()

@@ -7,7 +7,7 @@
  * Description : Loader for thumbnails
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2003-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -62,6 +62,7 @@
 
 #include <libkexiv2/kexiv2previews.h>
 #include <libkexiv2/rotationmatrix.h>
+#include <libkexiv2/version.h>
 
 // Local includes
 
@@ -77,6 +78,7 @@
 #include "tagregion.h"
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnaildb.h"
+#include "thumbnailsize.h"
 
 using namespace KDcrawIface;
 
@@ -121,14 +123,14 @@ void ThumbnailCreator::initialize()
 int ThumbnailCreator::Private::storageSize() const
 {
     // on-disk thumbnail sizes according to freedesktop spec
-    // always 256 for thumbnail db
+    // for thumbnail db it's always max size
     if (onlyLargeThumbnails)
     {
-        return 256;
+        return ThumbnailSize::maxThumbsSize();
     }
     else
     {
-        return (thumbnailSize <= 128) ? 128 : 256;
+        return (thumbnailSize <= ThumbnailSize::Medium) ? ThumbnailSize::Medium : ThumbnailSize::Huge;
     }
 }
 
@@ -447,12 +449,12 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
     // -- Get the image preview --------------------------------
 
     IccProfile profile;
-    bool colorManage = IccSettings::instance()->isEnabled();
+    bool colorManage = IccSettings::instance()->useManagedPreviews();
 
     if (!detailRect.isNull())
     {
         // when taking a detail, we have to load the image full size
-        qimage = loadImageDetail(info, metadata, detailRect, &profile);
+        qimage     = loadImageDetail(info, metadata, detailRect, &profile);
         fromDetail = !qimage.isNull();
     }
     else
@@ -484,8 +486,8 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
                 failedAtJPEGScaled = qimage.isNull();
             }
             else if (ext == QString("PNG")  ||
-                    ext == QString("TIFF") ||
-                    ext == QString("TIF"))
+                     ext == QString("TIFF") ||
+                     ext == QString("TIF"))
             {
                 qimage       = loadWithDImg(path, &profile);
                 failedAtDImg = qimage.isNull();
@@ -498,9 +500,11 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
             }
         }
 
-        // Trying to load with dcraw: RAW files.
+        // Trying to load with libraw: RAW files.
         if (qimage.isNull())
         {
+            kDebug() << "Trying to load Embedded preview with libraw";
+
             if (KDcraw::loadEmbeddedPreview(qimage, path))
             {
                 fromEmbeddedPreview = true;
@@ -510,9 +514,25 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
 
         if (qimage.isNull())
         {
+            kDebug() << "Trying to load half preview with libraw";
+
             //TODO: Use DImg based loader instead?
             KDcraw::loadHalfPreview(qimage, path);
         }
+
+        // See bug #339144 : only handle preview if right libkexiv2 version is used.
+#if KEXIV2_VERSION >= 0x020302
+
+        // Special case with DNG file. See bug #338081
+        if (qimage.isNull())
+        {
+            kDebug() << "Trying to load Embedded preview with Exiv2";
+
+            KExiv2Iface::KExiv2Previews preview(path);
+            qimage = preview.image();
+        }
+
+#endif
 
         // DImg-dependent loading methods: TIFF, PNG, everything supported by QImage
         if (qimage.isNull() && !failedAtDImg)
@@ -690,7 +710,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
 
     if (dbInfo.type == DatabaseThumbnail::PGF)
     {
-        // NOTE: see B.K.O #233094: using PGF compression level 4 there. Do not use a value > 4,
+        // NOTE: see bug #233094: using PGF compression level 4 there. Do not use a value > 4,
         // else image is blurred due to down-sampling.
         if (!PGFUtils::writePGFImageData(image.qimage, dbInfo.data, 4))
         {

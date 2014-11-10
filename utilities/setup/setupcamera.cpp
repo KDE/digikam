@@ -7,7 +7,7 @@
  * Description : camera setup tab.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -185,6 +185,7 @@ public:
         iconShowOverlaysBox(0),
         iconShowRatingBox(0),
         iconShowFormatBox(0),
+        iconShowCoordinatesBox(0),
         previewLoadFullImageSize(0),
         previewItemsWhileDownload(0),
         previewShowIcons(0),
@@ -227,6 +228,7 @@ public:
     QCheckBox*           iconShowOverlaysBox;
     QCheckBox*           iconShowRatingBox;
     QCheckBox*           iconShowFormatBox;
+    QCheckBox*           iconShowCoordinatesBox;
     QCheckBox*           previewLoadFullImageSize;
     QCheckBox*           previewItemsWhileDownload;
     QCheckBox*           previewShowIcons;
@@ -437,18 +439,21 @@ SetupCamera::SetupCamera(QWidget* const parent)
                                                 "below the image thumbnail."));
 */
 
-    d->iconShowFormatBox     = new QCheckBox(i18n("Show image Format"), iconViewGroup);
+    d->iconShowFormatBox      = new QCheckBox(i18n("Show image Format"), iconViewGroup);
     d->iconShowFormatBox->setWhatsThis(i18n("Set this option to show image format over image thumbnail."));
 
-    d->iconShowTagsBox       = new QCheckBox(i18n("Show digiKam &tags"), iconViewGroup);
+    d->iconShowCoordinatesBox = new QCheckBox(i18n("Show Geolocation Indicator"), iconViewGroup);
+    d->iconShowCoordinatesBox->setWhatsThis(i18n("Set this option to indicate if image has geolocation information."));
+
+    d->iconShowTagsBox        = new QCheckBox(i18n("Show digiKam &tags"), iconViewGroup);
     d->iconShowTagsBox->setWhatsThis(i18n("Set this option to show the digiKam tags "
                                           "below the image thumbnail."));
 
-    d->iconShowRatingBox     = new QCheckBox(i18n("Show item &rating"), iconViewGroup);
+    d->iconShowRatingBox      = new QCheckBox(i18n("Show item &rating"), iconViewGroup);
     d->iconShowRatingBox->setWhatsThis(i18n("Set this option to show the item rating "
                                             "below the image thumbnail."));
 
-    d->iconShowOverlaysBox   = new QCheckBox(i18n("Show rotation overlay buttons"), iconViewGroup);
+    d->iconShowOverlaysBox    = new QCheckBox(i18n("Show rotation overlay buttons"), iconViewGroup);
     d->iconShowOverlaysBox->setWhatsThis(i18n("Set this option to show overlay buttons on "
                                               "the image thumbnail for image rotation."));
 
@@ -464,12 +469,13 @@ SetupCamera::SetupCamera(QWidget* const parent)
     grid2->addWidget(d->iconShowNameBox,          0, 0, 1, 1);
     grid2->addWidget(d->iconShowSizeBox,          1, 0, 1, 1);
     grid2->addWidget(d->iconShowDateBox,          2, 0, 1, 1);
-//  grid2->addWidget(d->iconShowResolutionBox,    3, 0, 1, 1);              TODO
     grid2->addWidget(d->iconShowFormatBox,        3, 0, 1, 1);
+//  grid2->addWidget(d->iconShowResolutionBox,    4, 0, 1, 1);              TODO
 
     grid2->addWidget(d->iconShowTagsBox,          0, 1, 1, 1);
     grid2->addWidget(d->iconShowRatingBox,        1, 1, 1, 1);
     grid2->addWidget(d->iconShowOverlaysBox,      2, 1, 1, 1);
+    grid2->addWidget(d->iconShowCoordinatesBox,   3, 1, 1, 1);
     grid2->addWidget(leftClickLabel,              5, 0, 1, 1);
     grid2->addWidget(d->leftClickActionComboBox,  5, 1, 1, 1);
     grid2->addWidget(d->iconViewFontSelect,       6, 0, 1, 2);
@@ -660,6 +666,7 @@ void SetupCamera::readSettings()
     d->iconShowOverlaysBox->setChecked(settings->getIconShowOverlays());
     d->iconShowRatingBox->setChecked(settings->getIconShowRating());
     d->iconShowFormatBox->setChecked(settings->getIconShowImageFormat());
+    d->iconShowCoordinatesBox->setChecked(settings->getIconShowCoordinates());
     d->iconViewFontSelect->setFont(settings->getIconViewFont());
 
     d->leftClickActionComboBox->setCurrentIndex((int)settings->getItemLeftClickAction());
@@ -746,6 +753,7 @@ void SetupCamera::applySettings()
     settings->setIconShowOverlays(d->iconShowOverlaysBox->isChecked());
     settings->setIconShowRating(d->iconShowRatingBox->isChecked());
     settings->setIconShowImageFormat(d->iconShowFormatBox->isChecked());
+    settings->setIconShowCoordinates(d->iconShowCoordinatesBox->isChecked());
     settings->setIconViewFont(d->iconViewFontSelect->font());
 
     settings->setItemLeftClickAction((ImportSettings::ItemLeftClickAction)
@@ -794,8 +802,8 @@ void SetupCamera::slotAddCamera()
 {
     CameraSelection* const select = new CameraSelection;
 
-    connect(select, SIGNAL(signalOkClicked(QString,QString,QString,QString)),
-            this,   SLOT(slotAddedCamera(QString,QString,QString,QString)));
+    connect(select, SIGNAL(signalOkClicked(QString, QString, QString, QString)),
+            this,   SLOT(slotAddedCamera(QString, QString, QString, QString)));
 
     select->show();
 }
@@ -823,7 +831,7 @@ void SetupCamera::slotEditCamera()
         return;
     }
 
-    CameraType* ctype = item->cameraType();
+    CameraType* const ctype = item->cameraType();
 
     if (!ctype)
     {
@@ -925,7 +933,7 @@ void SetupCamera::slotRemoveFilter()
 
 void SetupCamera::slotEditFilter()
 {
-    int i = d->importListView->currentRow();
+    int i         = d->importListView->currentRow();
     Filter filter = *d->filters.at(i);
     ImportFilters dlg(this);
     dlg.setData(filter);

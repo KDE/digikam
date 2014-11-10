@@ -7,7 +7,7 @@
  * Description : a wrapper class for an ICC color profile
  *
  * Copyright (C) 2005-2006 by F.J. Cruz <fj dot cruz at supercable dot es>
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -78,7 +78,9 @@ public:
      */
     IccProfile(const QString& filePath);
 
-    /// Returns the profiles available with libkdcraw. You still need to call open() on them.
+    /**
+     * Returns the profiles available with libkdcraw. You still need to call open() on them.
+     */
     static IccProfile sRGB();
     static IccProfile adobeRGB();
     static IccProfile wideGamutRGB();
@@ -188,7 +190,9 @@ class DIGIKAM_EXPORT LcmsLock
 {
 public:
 
-    /** Obtain an LcmsLock if you access not clearly thread-safe LittleCMS methods */
+    /**
+     * Obtain an LcmsLock if you access not clearly thread-safe LittleCMS methods
+     */
     LcmsLock();
     ~LcmsLock();
 };

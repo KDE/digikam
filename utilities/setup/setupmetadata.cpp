@@ -7,7 +7,7 @@
  * Description : setup Metadata tab.
  *
  * Copyright (C) 2003-2004 by Ralf Holzer <ralf at well dot com>
- * Copyright (C) 2003-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -52,6 +52,7 @@
 #include <kvbox.h>
 #include <khbox.h>
 #include <kcombobox.h>
+#include <kdebug.h>
 
 // LibKExiv2 includes
 
@@ -60,7 +61,7 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "config-digikam.h"
 #include "metadatapanel.h"
 #include "metadatasettings.h"
@@ -72,7 +73,6 @@ namespace Digikam
 
 class SetupMetadata::Private
 {
-
 public:
 
     Private() :
@@ -101,8 +101,8 @@ public:
         allowLossyRotate(0),
         exifRotateBox(0),
         exifSetOrientationBox(0),
-        saveToNepomukBox(0),
-        readFromNepomukBox(0),
+        saveToBalooBox(0),
+        readFromBalooBox(0),
         resyncButton(0),
         tab(0),
         displaySubTab(0),
@@ -140,8 +140,8 @@ public:
     QCheckBox*     exifRotateBox;
     QCheckBox*     exifSetOrientationBox;
 
-    QCheckBox*     saveToNepomukBox;
-    QCheckBox*     readFromNepomukBox;
+    QCheckBox*     saveToBalooBox;
+    QCheckBox*     readFromBalooBox;
     QToolButton*   resyncButton;
 
     KTabWidget*    tab;
@@ -215,7 +215,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
                                            "template in the XMP and the IPTC tags. "
                                            "You can set template values to Template setup page."));
     d->saveFaceTags = new QCheckBox;
-    d->saveFaceTags->setText(i18nc("@option:check", "Face Tags (including face rectangles)"));
+    d->saveFaceTags->setText(i18nc("@option:check", "Face Tags (including face areas)"));
     d->saveFaceTags->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to store face tags "
                                            "with face rectangles in the XMP tags."));
 
@@ -463,84 +463,70 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 
     // --------------------------------------------------------
 
-#ifdef HAVE_NEPOMUK
+#ifdef HAVE_BALOO
 
-    QWidget* const nepoPanel      = new QWidget(d->tab);
-    QVBoxLayout* const nepoLayout = new QVBoxLayout(nepoPanel);
+    QWidget* const balooPanel      = new QWidget(d->tab);
+    QVBoxLayout* const balooLayout = new QVBoxLayout(balooPanel);
 
-    QGroupBox* const nepoGroup    = new QGroupBox(i18n("Nepomuk Semantic Desktop"), nepoPanel);
-    QVBoxLayout* const gLayout3   = new QVBoxLayout(nepoGroup);
+    QGroupBox* const balooGroup    = new QGroupBox(i18n("Baloo Desktop Search"), balooPanel);
+    QVBoxLayout* const gLayout3   = new QVBoxLayout(balooGroup);
 
-    d->saveToNepomukBox           = new QCheckBox;
-    d->saveToNepomukBox->setText(i18n("Store metadata from digiKam in Nepomuk"));
-    d->saveToNepomukBox->setWhatsThis(i18n("Turn on this option to push rating, comments and tags "
-                                           "from digiKam into the Nepomuk storage"));
+    d->saveToBalooBox           = new QCheckBox;
+    d->saveToBalooBox->setText(i18n("Store metadata from digiKam in Baloo"));
+    d->saveToBalooBox->setWhatsThis(i18n("Turn on this option to push rating, comments and tags "
+                                           "from digiKam into the Baloo storage"));
 
-    d->readFromNepomukBox         = new QCheckBox;
-    d->readFromNepomukBox->setText(i18n("Read metadata from Nepomuk"));
-    d->readFromNepomukBox->setWhatsThis(i18n("Turn on this option if you want to apply changes to "
-                                             "rating, comments and tags made in Nepomuk to digiKam's metadata storage. "
+    d->readFromBalooBox         = new QCheckBox;
+    d->readFromBalooBox->setText(i18n("Read metadata from Baloo"));
+    d->readFromBalooBox->setWhatsThis(i18n("Turn on this option if you want to apply changes to "
+                                             "rating, comments and tags made in Baloo to digiKam's metadata storage. "
                                              "Please note that image metadata will not be edited automatically."));
 
-    gLayout3->addWidget(d->saveToNepomukBox);
-    gLayout3->addWidget(d->readFromNepomukBox);
+    gLayout3->addWidget(d->saveToBalooBox);
+    gLayout3->addWidget(d->readFromBalooBox);
 
-    d->resyncButton = new QToolButton;
-    d->resyncButton->setText(i18n("Fully Resynchronize again"));
-    d->resyncButton->setIcon(SmallIcon("edit-redo"));
-    d->resyncButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    d->resyncButton->setCheckable(true);
-
-    connect(d->saveToNepomukBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotNepomukToggled()));
-
-    connect(d->readFromNepomukBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotNepomukToggled()));
-
-    d->tab->insertTab(Nepomuk, nepoPanel, i18nc("@title:tab", "Nepomuk"));
+    d->tab->insertTab(Baloo, balooPanel, i18nc("@title:tab", "Baloo"));
 
     // --------------------------------------------------------
 
-    QFrame* const nepoBox         = new QFrame(nepoPanel);
-    QGridLayout* const nepoGrid   = new QGridLayout(nepoBox);
-    nepoBox->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
+    QFrame* const balooBox         = new QFrame(balooPanel);
+    QGridLayout* const balooGrid   = new QGridLayout(balooBox);
+    balooBox->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
-    QLabel* const nepoLogoLabel   = new QLabel;
-    nepoLogoLabel->setPixmap(KIconLoader::global()->loadIcon("nepomuk", KIconLoader::NoGroup, KIconLoader::SizeLarge));
+    QLabel* const balooLogoLabel   = new QLabel;
+    balooLogoLabel->setPixmap(KIconLoader::global()->loadIcon("baloo", KIconLoader::NoGroup, KIconLoader::SizeLarge));
 
-    QLabel* const nepoExplanation = new QLabel(nepoBox);
-    nepoExplanation->setOpenExternalLinks(true);
-    nepoExplanation->setWordWrap(true);
-    QString nepotxt;
+    QLabel* const balooExplanation = new QLabel(balooBox);
+    balooExplanation->setOpenExternalLinks(true);
+    balooExplanation->setWordWrap(true);
+    QString balootxt;
 
-    nepotxt.append(i18n("<p><a href='http://nepomuk.kde.org'>Nepomuk</a> "
+    balootxt.append(i18n("<p><a href='http://community.kde.org/Baloo'>Baloo</a> "
                         "provides the basis to handle all kinds of metadata on the KDE desktop in a generic fashion. "
                         "It allows you to tag, rate and comment your files in KDE applications like Dolphin.</p> "
                         "<p>Please set here if you want to synchronize the metadata stored by digiKam desktop-wide with the "
-                        "Nepomuk Semantic Desktop.</p> "
-                        "<p>If you have enabled writing of metadata to files, please note that changes done through Nepomuk "
-                        "are not automatically applied to the image's metadata when read into digiKam's database.</p> "));
+                        "Baloo Desktop Search.</p> "));
 
-    nepoExplanation->setText(nepotxt);
+    balooExplanation->setText(balootxt);
 
-    nepoGrid->addWidget(nepoLogoLabel,   0, 0, 1, 1);
-    nepoGrid->addWidget(nepoExplanation, 0, 1, 1, 2);
-    nepoGrid->setColumnStretch(1, 10);
-    nepoGrid->setRowStretch(1, 10);
-    nepoGrid->setMargin(KDialog::spacingHint());
-    nepoGrid->setSpacing(0);
+    balooGrid->addWidget(balooLogoLabel,   0, 0, 1, 1);
+    balooGrid->addWidget(balooExplanation, 0, 1, 1, 2);
+    balooGrid->setColumnStretch(1, 10);
+    balooGrid->setRowStretch(1, 10);
+    balooGrid->setMargin(KDialog::spacingHint());
+    balooGrid->setSpacing(0);
 
     // --------------------------------------------------------
 
-    nepoLayout->setMargin(0);
-    nepoLayout->setSpacing(KDialog::spacingHint());
-    nepoLayout->addWidget(nepoGroup);
-    nepoLayout->addSpacing(KDialog::spacingHint());
-    nepoLayout->addWidget(nepoBox);
-    nepoLayout->addWidget(d->resyncButton, 0, Qt::AlignRight);
-    nepoLayout->addStretch();
+    balooLayout->setMargin(0);
+    balooLayout->setSpacing(KDialog::spacingHint());
+    balooLayout->addWidget(balooGroup);
+    balooLayout->addSpacing(KDialog::spacingHint());
+    balooLayout->addWidget(balooBox);
+    balooLayout->addWidget(d->resyncButton, 0, Qt::AlignRight);
+    balooLayout->addStretch();
 
-#endif // HAVE_NEPOMUK
+#endif // HAVE_BALOO
 
     // --------------------------------------------------------
 
@@ -636,24 +622,20 @@ void SetupMetadata::applySettings()
 
     mSettings->setSettings(set);
 
-#ifdef HAVE_NEPOMUK
-    AlbumSettings* const aSettings = AlbumSettings::instance();
+
+#ifdef HAVE_BALOO
+    ApplicationSettings* const aSettings = ApplicationSettings::instance();
 
     if (!aSettings)
     {
         return;
     }
 
-    aSettings->setSyncDigikamToNepomuk(d->saveToNepomukBox->isChecked());
-    aSettings->setSyncNepomukToDigikam(d->readFromNepomukBox->isChecked());
-
-    if (d->resyncButton->isEnabled() && d->resyncButton->isChecked())
-    {
-        aSettings->triggerResyncWithNepomuk();
-    }
+    aSettings->setSyncDigikamToBaloo(d->saveToBalooBox->isChecked());
+    aSettings->setSyncBalooToDigikam(d->readFromBalooBox->isChecked());
 
     aSettings->saveSettings();
-#endif
+#endif // HAVE_NEPOMUK
 
     d->tagsCfgPanel->applySettings();
 }
@@ -708,18 +690,18 @@ void SetupMetadata::readSettings()
         d->writingModeCombo->setCurrentIndex(d->writingModeCombo->findData(set.metadataWritingMode));
     }
 
-#ifdef HAVE_NEPOMUK
-    AlbumSettings* const aSettings = AlbumSettings::instance();
+#ifdef HAVE_BALOO
+    ApplicationSettings* const aSettings = ApplicationSettings::instance();
 
     if (!aSettings)
     {
         return;
     }
 
-    d->saveToNepomukBox->setChecked(aSettings->getSyncDigikamToNepomuk());
-    d->readFromNepomukBox->setChecked(aSettings->getSyncNepomukToDigikam());
-    slotNepomukToggled();
+    d->saveToBalooBox->setChecked(aSettings->getSyncDigikamToBaloo());
+    d->readFromBalooBox->setChecked(aSettings->getSyncBalooToDigikam());
 #endif
+
 }
 
 bool SetupMetadata::exifAutoRotateAsChanged() const
@@ -737,11 +719,6 @@ void SetupMetadata::slotExifAutoRotateToggled(bool b)
     {
         d->exifAutoRotateAsChanged = false;
     }
-}
-
-void SetupMetadata::slotNepomukToggled()
-{
-    d->resyncButton->setEnabled(d->saveToNepomukBox->isChecked() || d->readFromNepomukBox->isChecked());
 }
 
 }  // namespace Digikam

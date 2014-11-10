@@ -45,8 +45,6 @@
 #include "dfontselect.h"
 #include "showfotosettings.h"
 
-using namespace Digikam;
-
 namespace ShowFoto
 {
 
@@ -74,25 +72,25 @@ public:
         settings(0)
     {}
 
-    QCheckBox*           showFileDateBox;
-    QCheckBox*           showFileNameBox;
-    QCheckBox*           showFileSizeBox;
-    QCheckBox*           showImageDimBox;
-    QCheckBox*           showImageTypeBox;
-    QCheckBox*           showPhotoDateBox;
-    QCheckBox*           showPhotoExpoBox;
-    QCheckBox*           showPhotoFlashBox;
-    QCheckBox*           showPhotoFocalBox;
-    QCheckBox*           showPhotoMakeBox;
-    QCheckBox*           showPhotoModeBox;
-    QCheckBox*           showPhotoWbBox;
-    QCheckBox*           showToolTipsBox;
+    QCheckBox*            showFileDateBox;
+    QCheckBox*            showFileNameBox;
+    QCheckBox*            showFileSizeBox;
+    QCheckBox*            showImageDimBox;
+    QCheckBox*            showImageTypeBox;
+    QCheckBox*            showPhotoDateBox;
+    QCheckBox*            showPhotoExpoBox;
+    QCheckBox*            showPhotoFlashBox;
+    QCheckBox*            showPhotoFocalBox;
+    QCheckBox*            showPhotoMakeBox;
+    QCheckBox*            showPhotoModeBox;
+    QCheckBox*            showPhotoWbBox;
+    QCheckBox*            showToolTipsBox;
 
-    QGroupBox*           fileSettingBox;
-    QGroupBox*           photoSettingBox;
+    QGroupBox*            fileSettingBox;
+    QGroupBox*            photoSettingBox;
 
-    DFontSelect*         fontSelect;
-    ShowfotoSettings*    settings;
+    Digikam::DFontSelect* fontSelect;
+    ShowfotoSettings*     settings;
 };
 
 // --------------------------------------------------------
@@ -100,22 +98,22 @@ public:
 SetupToolTip::SetupToolTip(QWidget* const parent)
     : QScrollArea(parent), d(new Private)
 {
-    QWidget* panel      = new QWidget(viewport());
+    QWidget* const panel      = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
-    QVBoxLayout* layout = new QVBoxLayout(panel);
-    d->showToolTipsBox  = new QCheckBox(i18n("Show Thumbbar items' toolti&ps"), panel);
+    QVBoxLayout* const layout = new QVBoxLayout(panel);
+    d->showToolTipsBox        = new QCheckBox(i18n("Show Thumbbar items' toolti&ps"), panel);
     d->showToolTipsBox->setWhatsThis(i18n("Set this option to display the image information when "
                                           "the mouse hovers over a thumbbar item."));
 
-    d->fontSelect       = new DFontSelect(i18n("Font:"), panel);
+    d->fontSelect             = new Digikam::DFontSelect(i18n("Font:"), panel);
     d->fontSelect->setToolTip(i18n("Select here the font used to display text in tooltips."));
 
     // --------------------------------------------------------
 
-    d->fileSettingBox     = new QGroupBox(i18n("File/Image Information"), panel);
-    QVBoxLayout* gLayout1 = new QVBoxLayout(d->fileSettingBox);
+    d->fileSettingBox           = new QGroupBox(i18n("File/Image Information"), panel);
+    QVBoxLayout* const gLayout1 = new QVBoxLayout(d->fileSettingBox);
 
     d->showFileNameBox = new QCheckBox(i18n("Show file name"), d->fileSettingBox);
     d->showFileNameBox->setWhatsThis( i18n("Set this option to display the image file name."));

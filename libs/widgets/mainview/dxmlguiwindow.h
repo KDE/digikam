@@ -6,7 +6,7 @@
  * Date        : 2013-04-29
  * Description : digiKam XML GUI window
  *
- * Copyright (C) 2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -76,9 +76,13 @@ public:
     explicit DXmlGuiWindow(QWidget* const parent=0, Qt::WindowFlags f=KDE_DEFAULT_WINDOWFLAGS);
     virtual ~DXmlGuiWindow();
 
-    /** Create common actions from Help menu for all digiKam main windows
+    /** Create common actions from Help menu for all digiKam main windows.
      */
     void createHelpActions(bool coreOptions=true);
+
+    /** Create common actions to handle side-bar through keyboard shortcuts.
+     */
+    void createSidebarActions();
 
     /** Set full-screen options to managed window
      */
@@ -94,12 +98,7 @@ public:
      */
     void readFullScreenSettings(const KConfigGroup& group);
 
-    /** Switch Window 'win' to full screen mode.
-     *  'set' argument will set or reset the fullscreen state of window.
-     */
-    void switchWindowToFullScreen(bool set);
-
-    /** Return true if managed window is currently in Full Screen Mode
+    /** Return true if managed window is currently in Full Screen Mode.
      */
     bool fullScreenIsActive() const;
 
@@ -111,8 +110,9 @@ protected:
 
 protected:
 
-    bool eventFilter(QObject* obj, QEvent* ev);
+    void closeEvent(QCloseEvent* e);
     void keyPressEvent(QKeyEvent* e);
+    bool eventFilter(QObject* obj, QEvent* ev);
 
     /** Re-implement this method if you want to manage sidebars visibility in full-screen mode.
      *  By default this method do nothing.
@@ -138,8 +138,16 @@ private Q_SLOTS:
     void slotToggleFullScreen(bool);
 
     // Slots for common Help Actions
-    virtual void slotComponentsInfo() {};
-    virtual void slotDBStat()         {};
+    virtual void slotComponentsInfo()          {};
+    virtual void slotDBStat()                  {};
+
+    // Slots for common Sidebar Actions
+    virtual void slotToggleLeftSideBar()       {};
+    virtual void slotToggleRightSideBar()      {};
+    virtual void slotPreviousLeftSideBarTab()  {};
+    virtual void slotNextLeftSideBarTab()      {};
+    virtual void slotPreviousRightSideBarTab() {};
+    virtual void slotNextRightSideBarTab()     {};
 
 private:
 

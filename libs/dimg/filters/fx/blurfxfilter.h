@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : Blur FX threaded image filter.
  *
- * Copyright 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -97,28 +97,82 @@ public:
 
 private:
 
+    struct Args
+    {
+        uint   start;
+        uint   stop;
+        uint   h;
+        uint   w;
+        DImg*  orgImage;
+        DImg*  destImage;
+        int    X;
+        int    Y;
+        int    Distance;
+
+        int    nCount;
+        int*   lpXArray;
+        int*   lpYArray;
+
+        int    BlendRadius;
+        bool   bInversed;
+
+        uchar* layer1;
+        uchar* layer2;
+        uchar* layer3;
+        uchar* layer4;
+
+        int    SizeW;
+        int    SizeH;
+
+        int    StrengthRange;
+        int    Radius;
+        int*   Kernel;
+        int**  arrMult;
+        uchar* pBlur;
+    };
+
+private:
+
     void filterImage();
 
     // Backported from ImageProcessing version 1
     void softenerBlur(DImg* const orgImage, DImg* const destImage);
+    void softenerBlurMultithreaded(const Args& prm);
+
     void shakeBlur(DImg* const orgImage, DImg* const destImage, int Distance);
+    void shakeBlurStage1Multithreaded(const Args& prm);
+    void shakeBlurStage2Multithreaded(const Args& prm);
+
     void frostGlass(DImg* const orgImage, DImg* const destImage, int Frost);
 
     // Backported from ImageProcessing version 2
     void zoomBlur(DImg* const orgImage, DImg* const destImage, int X, int Y, int Distance, const QRect& pArea=QRect());
+    void zoomBlurMultithreaded(const Args& prm);
+
     void radialBlur(DImg* const orgImage, DImg* const destImage, int X, int Y, int Distance, const QRect& pArea=QRect());
+    void radialBlurMultithreaded(const Args& prm);
 
     void focusBlur(DImg* const orgImage, DImg* const destImage, int X, int Y, int BlurRadius, int BlendRadius,
                    bool bInversed=false, const QRect& pArea=QRect());
+    void focusBlurMultithreaded(const Args& prm);
 
     void farBlur(DImg* const orgImage, DImg* const destImage, int Distance);
+
     void motionBlur(DImg* const orgImage, DImg* const destImage, int Distance, double Angle=0.0);
+    void motionBlurMultithreaded(const Args& prm);
+
     void smartBlur(DImg* const orgImage, DImg* const destImage, int Radius, int Strength);
+    void smartBlurStage1Multithreaded(const Args& prm);
+    void smartBlurStage2Multithreaded(const Args& prm);
+
     void mosaic(DImg* const orgImage, DImg* const destImage, int SizeW, int SizeH);
+    void mosaicMultithreaded(const Args& prm);
 
 private:
 
     void MakeConvolution(DImg* const orgImage, DImg* const destImage, int Radius, int Kernel[]);
+    void MakeConvolutionStage1Multithreaded(const Args& prm);
+    void MakeConvolutionStage2Multithreaded(const Args& prm);
 
     DColor RandomColor(uchar* const Bits, int Width, int Height, bool sixteenBit, int bytesDepth,
                        int X, int Y, int Radius,
@@ -179,37 +233,6 @@ private:
         bool bIsWOk = ((X < 0) ? false : (X >= Width ) ? false : true);
         bool bIsHOk = ((Y < 0) ? false : (Y >= Height) ? false : true);
         return (bIsWOk && bIsHOk);
-    };
-
-    inline uchar LimitValues8(int ColorValue)
-    {
-        if (ColorValue > 255)
-        {
-            ColorValue = 255;
-        }
-
-        if (ColorValue < 0)
-        {
-            ColorValue = 0;
-        }
-
-        return ((uchar) ColorValue);
-    };
-
-
-    inline int LimitValues16(int ColorValue)
-    {
-        if (ColorValue > 65535)
-        {
-            ColorValue = 65535;
-        }
-
-        if (ColorValue < 0)
-        {
-            ColorValue = 0;
-        }
-
-        return ColorValue;
     };
 
     inline int GetOffset(int Width, int X, int Y, int bytesDepth)

@@ -63,6 +63,9 @@ static int fillMemoryInfo(Digikam::KMemoryInfo::KMemoryInfoData* const data)
 #include <sys/types.h>
 #include <sys/sysctl.h>
 #include <unistd.h>
+#include <fcntl.h>
+#include <kvm.h>
+#include <paths.h>
 #endif
 #if defined(Q_OS_NETBSD)
 #include <sys/param.h>
@@ -152,7 +155,7 @@ struct uvmexp* sg_get_uvmexp()
     int                  mib[2];
     size_t               size = sizeof(struct uvmexp);
     static struct uvmexp uvm;
-    struct uvmexp*       new;
+//    struct uvmexp*       new;
 
     mib[0] = CTL_VM;
     mib[1] = VM_UVMEXP;

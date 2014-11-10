@@ -101,7 +101,7 @@ protected:
     void drawImageSize(QPainter* p, const QRect& dimsRect, const QSize& dims) const;
     void drawImageFormat(QPainter* p, const QRect& dimsRect, const QString& mime) const;
     void drawFileSize(QPainter* p, const QRect& r, qlonglong bytes) const;
-    void drawGroupIndicator(QPainter* p, const QRect& r, int numberOfGroupedImages, bool open) const;
+    void drawGeolocationIndicator(QPainter* p, const QRect& r) const;
     void drawFocusRect(QPainter* p, const QStyleOptionViewItem& option, bool isSelected) const;
     void drawMouseOverRect(QPainter* p, const QStyleOptionViewItem& option) const;
     void prepareFonts();

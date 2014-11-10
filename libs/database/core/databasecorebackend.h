@@ -46,6 +46,8 @@ class ThumbnailSchemaUpdater;
 class DatabaseErrorHandler;
 class DatabaseCoreBackendPrivate;
 
+// ------------------------------------------------------------------------------------------------------------
+
 class DIGIKAM_EXPORT DatabaseLocking
 {
 
@@ -64,6 +66,55 @@ public:
 class DIGIKAM_EXPORT DatabaseCoreBackend : public QObject
 {
     Q_OBJECT
+
+public:
+
+    enum QueryStateEnum
+    {
+        /**
+         * No errors occurred while executing the query.
+         */
+        NoErrors,
+
+        /**
+         * An SQLError has occurred while executing the query.
+         */
+        SQLError,
+
+        /**
+         * An connection error has occurred while executing the query.
+         */
+        ConnectionError
+    };
+
+    enum Status
+    {
+        /**
+         * The database is not available, because it has not been
+         * opened yet or because of an error condition.
+         */
+        Unavailable,
+        /**
+         * The database is open. It has not been verified that
+         * the schema is up to date.
+         * This status is sufficient for use in a context where it
+         * can be assumed that the necessary schema check has been carried out
+         * by a master process.
+         */
+        Open,
+        /**
+         * The database is open, and it has been verified that the schema is up to
+         * date, or the schema has been updated.
+         */
+        OpenSchemaChecked
+    };
+
+    enum QueryOperationStatus
+    {
+        ExecuteNormal,
+        Wait,
+        AbortQueries
+    };
 
 public:
 
@@ -99,23 +150,7 @@ public:
      */
     void close();
 
-    enum QueryStateEnum
-    {
-        /**
-         * No errors occurred while executing the query.
-         */
-        NoErrors,
-
-        /**
-         * An SQLError has occurred while executing the query.
-         */
-        SQLError,
-
-        /**
-         * An connection error has occurred while executing the query.
-         */
-        ConnectionError
-    };
+public:
 
     class QueryState
     {
@@ -146,27 +181,7 @@ public:
         QueryStateEnum value;
     };
 
-    enum Status
-    {
-        /**
-         * The database is not available, because it has not been
-         * opened yet or because of an error condition.
-         */
-        Unavailable,
-        /**
-         * The database is open. It has not been verified that
-         * the schema is up to date.
-         * This status is sufficient for use in a context where it
-         * can be assumed that the necessary schema check has been carried out
-         * by a master process.
-         */
-        Open,
-        /**
-         * The database is open, and it has been verified that the schema is up to
-         * date, or the schema has been updated.
-         */
-        OpenSchemaChecked
-    };
+public:
 
     /**
      * Returns the current status of the database backend
@@ -188,13 +203,6 @@ public:
      * If a database error occurs, this object can handle problem solving and user interaction.
      */
     void setDatabaseErrorHandler(DatabaseErrorHandler* handler);
-
-    enum QueryOperationStatus
-    {
-        ExecuteNormal,
-        Wait,
-        AbortQueries
-    };
 
     /**
       * Return config read from XML,

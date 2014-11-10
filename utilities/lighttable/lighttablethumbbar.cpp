@@ -42,7 +42,7 @@
 // Local includes
 
 #include "albumdb.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "contextmenuhelper.h"
 #include "imagefiltermodel.h"
 #include "imagedragdrop.h"
@@ -190,8 +190,8 @@ LightTableThumbBar::LightTableThumbBar(QWidget* const parent)
     d->imageInfoModel->setThumbnailLoadThread(ThumbnailLoadThread::defaultIconViewThread());
 
     d->imageFilterModel->setCategorizationMode(ImageSortSettings::NoCategories);
-    d->imageFilterModel->setSortRole((ImageSortSettings::SortRole)AlbumSettings::instance()->getImageSortOrder());
-    d->imageFilterModel->setSortOrder((ImageSortSettings::SortOrder)AlbumSettings::instance()->getImageSorting());
+    d->imageFilterModel->setSortRole((ImageSortSettings::SortRole)ApplicationSettings::instance()->getImageSortOrder());
+    d->imageFilterModel->setSortOrder((ImageSortSettings::SortOrder)ApplicationSettings::instance()->getImageSorting());
     d->imageFilterModel->setAllGroupsOpen(true); // disable filtering out by group, see bug #308948
     d->imageFilterModel->sort(0); // an initial sorting is necessary
 
@@ -274,10 +274,11 @@ void LightTableThumbBar::showContextMenuOnInfo(QContextMenuEvent* e, const Image
     cmhelper.addAction(rightPanelAction, true);
     cmhelper.addSeparator();
     cmhelper.addAction(editAction);
-    cmhelper.addAction(removeAction);
+    cmhelper.addServicesMenu(info.fileUrl());
     cmhelper.addSeparator();
     cmhelper.addLabelsAction();
     cmhelper.addSeparator();
+    cmhelper.addAction(removeAction);
     cmhelper.addAction(clearAllAction, true);
 
     // special action handling --------------------------------
@@ -291,7 +292,7 @@ void LightTableThumbBar::showContextMenuOnInfo(QContextMenuEvent* e, const Image
     connect(&cmhelper, SIGNAL(signalAssignRating(int)),
             this, SLOT(slotAssignRating(int)));
 
-    QAction* choice = cmhelper.exec(e->globalPos());
+    QAction* const choice = cmhelper.exec(e->globalPos());
 
     if (choice)
     {
@@ -316,6 +317,16 @@ void LightTableThumbBar::showContextMenuOnInfo(QContextMenuEvent* e, const Image
             emit signalClearAll();
         }
     }
+}
+
+void LightTableThumbBar::slotColorLabelChanged(const KUrl& url, int color)
+{
+    assignColorLabel(ImageInfo(url), color);
+}
+
+void LightTableThumbBar::slotPickLabelChanged(const KUrl& url, int pick)
+{
+    assignPickLabel(ImageInfo(url), pick);
 }
 
 void LightTableThumbBar::slotAssignPickLabel(int pickId)
@@ -345,6 +356,7 @@ void LightTableThumbBar::assignPickLabel(const ImageInfo& info, int pickId)
 
 void LightTableThumbBar::assignRating(const ImageInfo& info, int rating)
 {
+    rating = qMin(RatingMax, qMax(RatingMin, rating));
     FileActionMngr::instance()->assignRating(info, rating);
 }
 
@@ -353,10 +365,18 @@ void LightTableThumbBar::assignColorLabel(const ImageInfo& info, int colorId)
     FileActionMngr::instance()->assignColorLabel(info, colorId);
 }
 
+void LightTableThumbBar::slotToggleTag(const KUrl& url, int tagID)
+{
+    toggleTag(ImageInfo(url), tagID);
+}
+
 void LightTableThumbBar::toggleTag(int tagID)
 {
-    ImageInfo info = currentInfo();
+    toggleTag(currentInfo(), tagID);
+}
 
+void LightTableThumbBar::toggleTag(const ImageInfo& info, int tagID)
+{
     if (!info.isNull())
     {
         if (!info.tagIds().contains(tagID))

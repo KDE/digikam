@@ -352,7 +352,7 @@ CaptionsMap DMetadata::getImageComments() const
 
 bool DMetadata::setImageComments(const CaptionsMap& comments) const
 {
-    //See B.K.O #139313: An empty string is also a valid value
+    //See bug #139313: An empty string is also a valid value
     /*
     if (comments.isEmpty())
           return false;
@@ -1133,6 +1133,11 @@ PhotoInfoContainer DMetadata::getPhotographInformation() const
         {
             photoInfo.whiteBalance = getXmpTagString("Xmp.exif.WhiteBalance");
         }
+
+        // -----------------------------------------------------------------------------------
+
+        double l, L, a;
+        photoInfo.hasCoordinates = getGPSInfo(a, l, L);
     }
 
     return photoInfo;
@@ -1193,7 +1198,7 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
         return true;
     }
 
-    // See B.K.O #269418 : try to get Tags Path list from M$ Windows Live Photo Gallery.
+    // See bug #269418 : try to get Tags Path list from M$ Windows Live Photo Gallery.
     tagsPath = getXmpTagStringBag("Xmp.MicrosoftPhoto.LastKeywordXMP", false);
     if (!tagsPath.isEmpty())
     {
@@ -1203,7 +1208,7 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
     // Try to get Tags Path list from XMP in first.
     tagsPath = getXmpTagStringBag("Xmp.lr.hierarchicalSubject", false);
 
-    // See B.K.O #221460: there is another LR tag for hierarchical subjects.
+    // See bug #221460: there is another LR tag for hierarchical subjects.
     if (tagsPath.isEmpty())
     {
         tagsPath = getXmpTagStringSeq("Xmp.lr.HierarchicalSubject", false);
@@ -1211,7 +1216,7 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
 
     if (!tagsPath.isEmpty())
     {
-        // See B.K.O #197285: LightRoom use '|' as separator.
+        // See bug #197285: LightRoom use '|' as separator.
         tagsPath = tagsPath.replaceInStrings("|", "/");
         kDebug() << "Tags Path imported from LightRoom: " << tagsPath;
         return true;
@@ -1261,7 +1266,7 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath) const
             return false;
         }
 
-        // See B.K.O #269418 : register Tags path list for Windows Live Photo Gallery.
+        // See bug #269418 : register Tags path list for Windows Live Photo Gallery.
         if (!setXmpTagStringBag("Xmp.MicrosoftPhoto.LastKeywordXMP", tagsPath))
         {
             return false;
@@ -1279,7 +1284,7 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath) const
     return true;
 }
 
-bool DMetadata::getImageFacesMap(QMap<QString,QVariant>& faces) const
+bool DMetadata::getImageFacesMap(QMultiMap<QString,QVariant>& faces) const
 {
     faces.clear();
     // The example code for Exiv2 says:
@@ -1318,7 +1323,7 @@ bool DMetadata::getImageFacesMap(QMap<QString,QVariant>& faces) const
                     list.at(2).toFloat(),
                     list.at(3).toFloat());
 
-        faces[person] = rect;
+        faces.insertMulti(person, rect);
     }
     /** Read face tags only if libkexiv can write them, otherwise
      *  garbage tags will be generated on image transformation
@@ -1349,15 +1354,15 @@ bool DMetadata::getImageFacesMap(QMap<QString,QVariant>& faces) const
                     w,
                     h);
 
-        faces[person] = rect;
-        qDebug() << "Found new rect " << person << " "<< rect;
+        faces.insertMulti(person, rect);
+        kDebug() << "Found new rect " << person << " "<< rect;
     }
 #endif
 
     return !faces.isEmpty();
 }
 
-bool DMetadata::setImageFacesMap(QMap< QString, QVariant >& facesPath, bool write) const
+bool DMetadata::setImageFacesMap(QMultiMap< QString, QVariant >& facesPath, bool write) const
 {
 #if KEXIV2_VERSION >= 0x020301
     QString qxmpTagName("Xmp.mwg-rs.Regions/mwg-rs:RegionList");
@@ -2184,7 +2189,7 @@ QVariant DMetadata::getMetadataField(MetadataInfo::Field field) const
 
         case MetadataInfo::Faces:
         {
-            QMap<QString,QVariant> faceMap;
+            QMultiMap<QString,QVariant> faceMap;
             getImageFacesMap(faceMap);
             QVariant var(faceMap);
             return var;

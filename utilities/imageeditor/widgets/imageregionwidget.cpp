@@ -29,6 +29,10 @@
 
 #include <cmath>
 
+// Qt includes
+
+#include <QTimer>
+
 // KDE includes
 
 #include <kiconloader.h>
@@ -54,6 +58,7 @@ public:
         capturePtMode(false),
         renderingPreviewMode(PreviewToolBar::PreviewBothImagesVertCont),
         oldRenderingPreviewMode(PreviewToolBar::PreviewBothImagesVertCont),
+        delay(0),
         item(0)
     {
     }
@@ -64,6 +69,8 @@ public:
     int              oldRenderingPreviewMode;
 
     QPolygon         hightlightPoints;
+
+    QTimer*          delay;
 
     ImageRegionItem* item;
 };
@@ -82,14 +89,15 @@ ImageRegionWidget::ImageRegionWidget(QWidget* const parent)
                       "<p>Click and drag the mouse cursor in the "
                       "image to change the clip focus.</p>"));
 
-    connect(layout(), SIGNAL(zoomFactorChanged(double)),
+    d_ptr->delay = new QTimer(this);
+    d_ptr->delay->setInterval(500);
+    d_ptr->delay->setSingleShot(true);
+
+    connect(d_ptr->delay, SIGNAL(timeout()),
             this, SLOT(slotOriginalImageRegionChanged()));
 
-    connect(this, SIGNAL(resized()),
-            this, SLOT(slotOriginalImageRegionChanged()));
-
-    connect(this, SIGNAL(contentsMoved(bool)),
-            this, SLOT(slotOriginalImageRegionChanged(bool)));
+    connect(this, SIGNAL(viewportRectChanged(const QRectF&)),
+            this, SLOT(slotOriginalImageRegionChangedDelayed()));
 
     layout()->fitToWindow();
     installPanIcon();
@@ -174,6 +182,12 @@ DImg ImageRegionWidget::getOriginalRegionImage(bool useDownscaledImage) const
     }
 
     return (image);
+}
+
+void ImageRegionWidget::slotOriginalImageRegionChangedDelayed()
+{
+    viewport()->update();
+    d_ptr->delay->start();
 }
 
 void ImageRegionWidget::slotOriginalImageRegionChanged(bool targetDone)

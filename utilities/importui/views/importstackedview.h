@@ -7,7 +7,8 @@
  * Description : QStackedWidget to handle different types of views
  *               (icon view, items preview, media view)
  *
- * Copyright (C) 2012 by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2012-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,13 +32,17 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "importthumbnailbar.h"
 #include "importpreviewview.h"
 #include "thumbbardock.h"
 #include "camiteminfo.h"
 #include "importiconview.h"
 #include "mediaplayerview.h"
+
+#ifdef HAVE_KGEOMAP
 #include "mapwidgetview.h"
+#endif // HAVE_KGEOMAP
 
 namespace Digikam
 {
@@ -67,8 +72,11 @@ public:
     ImportThumbnailBar* thumbBar()          const;
     ImportIconView*     importIconView()    const;
     ImportPreviewView*  importPreviewView() const;
-    MapWidgetView*      mapWidgetView()     const;
     MediaPlayerView*    mediaPlayerView()   const;
+
+#ifdef HAVE_KGEOMAP
+    MapWidgetView*      mapWidgetView()     const;
+#endif // HAVE_KGEOMAP
 
     bool isInSingleFileMode()   const;
     bool isInMultipleFileMode() const;

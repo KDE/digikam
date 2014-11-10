@@ -25,6 +25,7 @@
 #include "camiteminfo.h"
 #include "filtercombo.h"
 #include "filter.h"
+#include "importimagemodel.h"
 #include <KDebug>
 
 namespace Digikam
@@ -341,6 +342,11 @@ void ImportFilterModel::setFilter(Digikam::Filter* filter)
     invalidateFilter();
 }
 
+void ImportFilterModel::setCameraThumbsController(CameraThumbsCtrl* const thumbsCtrl)
+{
+    Q_D(ImportFilterModel);
+    d->importImageModel->setCameraThumbsController(thumbsCtrl);
+}
 
 void ImportFilterModel::setSendCamItemInfoSignals(bool sendSignals)
 {
@@ -416,11 +422,10 @@ void ImportFilterModel::setDirectSourceImportModel(ImportImageModel* const sourc
     setSourceModel(d->importImageModel);
 }
 
-void ImportFilterModel::slotProcessAdded(const QList< CamItemInfo >&)
+void ImportFilterModel::slotProcessAdded(const QList<CamItemInfo>&)
 {
     invalidate();
 }
-
 
 int ImportFilterModel::compareCategories(const QModelIndex& left, const QModelIndex& right) const
 {

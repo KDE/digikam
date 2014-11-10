@@ -6,7 +6,7 @@
  * Date        : 2005-04-07
  * Description : a tool to resize an image
  *
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -202,9 +202,9 @@ ResizeTool::ResizeTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->mainTab                = new KTabWidget();
-    QWidget* firstPage        = new QWidget(d->mainTab);
-    QGridLayout* grid         = new QGridLayout(firstPage);
+    d->mainTab               = new KTabWidget();
+    QWidget* const firstPage = new QWidget(d->mainTab);
+    QGridLayout* const grid  = new QGridLayout(firstPage);
 
     d->mainTab->addTab(firstPage, i18n("New Size"));
 
@@ -212,31 +212,31 @@ ResizeTool::ResizeTool(QObject* const parent)
     d->preserveRatioBox->setWhatsThis( i18n("Enable this option to maintain aspect "
                                             "ratio with new image sizes."));
 
-    QLabel* label1 = new QLabel(i18n("Width:"), firstPage);
-    d->wInput      = new RIntNumInput(firstPage);
+    QLabel* const label1 = new QLabel(i18n("Width:"), firstPage);
+    d->wInput            = new RIntNumInput(firstPage);
     d->wInput->setRange(1, qMax(d->orgWidth * 10, 9999), 1);
     d->wInput->setDefaultValue(d->orgWidth);
     d->wInput->setSliderEnabled(true);
     d->wInput->setObjectName("wInput");
     d->wInput->setWhatsThis( i18n("Set here the new image width in pixels."));
 
-    QLabel* label2 = new QLabel(i18n("Height:"), firstPage);
-    d->hInput      = new RIntNumInput(firstPage);
+    QLabel* const label2 = new QLabel(i18n("Height:"), firstPage);
+    d->hInput            = new RIntNumInput(firstPage);
     d->hInput->setRange(1, qMax(d->orgHeight * 10, 9999), 1);
     d->hInput->setDefaultValue(d->orgHeight);
     d->hInput->setSliderEnabled(true);
     d->hInput->setObjectName("hInput");
     d->hInput->setWhatsThis( i18n("New image height in pixels (px)."));
 
-    QLabel* label3 = new QLabel(i18n("Width (%):"), firstPage);
-    d->wpInput     = new RDoubleNumInput(firstPage);
+    QLabel* const label3 = new QLabel(i18n("Width (%):"), firstPage);
+    d->wpInput           = new RDoubleNumInput(firstPage);
     d->wpInput->input()->setRange(1.0, 999.0, 1.0, true);
     d->wpInput->setDefaultValue(100.0);
     d->wpInput->setObjectName("wpInput");
     d->wpInput->setWhatsThis( i18n("New image width in percent (%)."));
 
-    QLabel* label4 = new QLabel(i18n("Height (%):"), firstPage);
-    d->hpInput     = new RDoubleNumInput(firstPage);
+    QLabel* const label4 = new QLabel(i18n("Height (%):"), firstPage);
+    d->hpInput           = new RDoubleNumInput(firstPage);
     d->hpInput->input()->setRange(1.0, 999.0, 1.0, true);
     d->hpInput->setDefaultValue(100.0);
     d->hpInput->setObjectName("hpInput");
@@ -473,27 +473,23 @@ void ResizeTool::preparePreview()
     }
 
     ImageIface* const iface = d->previewWidget->imageIface();
-    int w                   = iface->previewSize().width();
-    int h                   = iface->previewSize().height();
-    DImg imTemp             = iface->original()->smoothScale(w, h, Qt::KeepAspectRatio);
-    int new_w               = (int)(w*d->wpInput->value()/100.0);
-    int new_h               = (int)(h*d->hpInput->value()/100.0);
+    DImg* imTemp             = iface->original();
 
     if (d->useGreycstorationBox->isChecked())
     {
-        setFilter(new GreycstorationFilter(&imTemp,
+        setFilter(new GreycstorationFilter(imTemp,
                                            d->settingsWidget->settings(),
                                            GreycstorationFilter::Resize,
-                                           new_w, new_h,
+                                           d->wInput->value(), d->hInput->value(),
                                            QImage(),
                                            this));
     }
     else
     {
-        // See B.K.O #152192: CImg resize() sound like defective or unadapted
+        // See bug #152192: CImg resize() sound like defective or unadapted
         // to resize image without good quality.
-        DImgBuiltinFilter resize(DImgBuiltinFilter::Resize, QSize(new_w, new_h));
-        setFilter(resize.createThreadedFilter(&imTemp, this));
+        DImgBuiltinFilter resize(DImgBuiltinFilter::Resize, QSize(d->wInput->value(), d->hInput->value()));
+        setFilter(resize.createThreadedFilter(imTemp, this));
     }
 }
 
@@ -521,7 +517,7 @@ void ResizeTool::prepareFinal()
     }
     else
     {
-        // See B.K.O #152192: CImg resize() sound like defective or unadapted
+        // See bug #152192: CImg resize() sound like defective or unadapted
         // to resize image without good quality.
         DImgBuiltinFilter resize(DImgBuiltinFilter::Resize, QSize(d->wInput->value(), d->hInput->value()));
         setFilter(resize.createThreadedFilter(iface.original(), this));

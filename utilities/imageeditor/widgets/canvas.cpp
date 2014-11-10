@@ -69,7 +69,7 @@ public:
         rubber     = 0;
         wrapItem   = 0;
         canvasItem = 0;
-        im         = 0;
+        core       = 0;
     }
 
     QString               errorMessage;
@@ -78,13 +78,13 @@ public:
 
     RubberItem*           rubber;
     ClickDragReleaseItem* wrapItem;
-    EditorCore*           im;
+    EditorCore*           core;
 };
 
 Canvas::Canvas(QWidget* const parent)
     : GraphicsDImgView(parent), d(new Private)
 {
-    d->im         = new EditorCore();
+    d->core       = new EditorCore();
     d->canvasItem = new ImagePreviewItem;
     setItem(d->canvasItem);
 
@@ -98,25 +98,25 @@ Canvas::Canvas(QWidget* const parent)
 
     // ------------------------------------------------------------
 
-    connect(d->im, SIGNAL(signalModified()),
+    connect(d->core, SIGNAL(signalModified()),
             this, SLOT(slotModified()));
 
-    connect(d->im, SIGNAL(signalLoadingStarted(QString)),
+    connect(d->core, SIGNAL(signalLoadingStarted(QString)),
             this, SIGNAL(signalLoadingStarted(QString)));
 
-    connect(d->im, SIGNAL(signalImageLoaded(QString,bool)),
+    connect(d->core, SIGNAL(signalImageLoaded(QString,bool)),
             this, SLOT(slotImageLoaded(QString,bool)));
 
-    connect(d->im, SIGNAL(signalImageSaved(QString,bool)),
+    connect(d->core, SIGNAL(signalImageSaved(QString,bool)),
             this, SLOT(slotImageSaved(QString,bool)));
 
-    connect(d->im, SIGNAL(signalLoadingProgress(QString,float)),
+    connect(d->core, SIGNAL(signalLoadingProgress(QString,float)),
             this, SIGNAL(signalLoadingProgress(QString,float)));
 
-    connect(d->im, SIGNAL(signalSavingStarted(QString)),
+    connect(d->core, SIGNAL(signalSavingStarted(QString)),
             this, SIGNAL(signalSavingStarted(QString)));
 
-    connect(d->im, SIGNAL(signalSavingProgress(QString,float)),
+    connect(d->core, SIGNAL(signalSavingProgress(QString,float)),
             this, SIGNAL(signalSavingProgress(QString,float)));
 
     connect(this, SIGNAL(signalSelected(bool)),
@@ -131,7 +131,7 @@ Canvas::Canvas(QWidget* const parent)
 
 Canvas::~Canvas()
 {
-    delete d->im;
+    delete d->core;
     delete d->canvasItem;
     delete d;
 }
@@ -139,7 +139,7 @@ Canvas::~Canvas()
 void Canvas::resetImage()
 {
     reset();
-    d->im->resetImage();
+    d->core->resetImage();
 }
 
 void Canvas::reset()
@@ -148,7 +148,7 @@ void Canvas::reset()
     {
         d->rubber->setVisible(false);
 
-        if (d->im->imageValid())
+        if (d->core->isValid())
         {
             emit signalSelected(false);
         }
@@ -162,12 +162,13 @@ void Canvas::load(const QString& filename, IOFileSettings* const IOFileSettings)
 {
     reset();
     emit signalPrepareToLoad();
-    d->im->load(filename, IOFileSettings);
+    d->core->load(filename, IOFileSettings);
 }
 
 void Canvas::slotImageLoaded(const QString& filePath, bool success)
 {
-    d->canvasItem->setImage(*d->im->getImg());
+    if(d->core->getImg())
+        d->canvasItem->setImage(*d->core->getImg());
 
     // Note: in showFoto, we using a null filename to clear canvas.
     if (!success && !filePath.isEmpty())
@@ -187,7 +188,7 @@ void Canvas::slotImageLoaded(const QString& filePath, bool success)
 
 void Canvas::fitToSelect()
 {
-    QRect sel = d->im->getSelectedArea();
+    QRect sel = d->core->getSelectedArea();
 
     if (!sel.size().isNull())
     {
@@ -216,18 +217,18 @@ void Canvas::applyTransform(const IccTransform& t)
 
     if (transform.willHaveEffect())
     {
-        d->im->applyTransform(transform);
+        d->core->applyTransform(transform);
     }
     else
     {
-        d->im->updateColorManagement();
+        d->core->updateColorManagement();
         viewport()->update();
     }
 }
 
 void Canvas::preload(const QString& /*filename*/)
 {
-    //    d->im->preload(filename);
+    //    d->core->preload(filename);
 }
 
 void Canvas::slotImageSaved(const QString& filePath, bool success)
@@ -237,22 +238,22 @@ void Canvas::slotImageSaved(const QString& filePath, bool success)
 
 void Canvas::abortSaving()
 {
-    d->im->abortSaving();
+    d->core->abortSaving();
 }
 
 void Canvas::setModified()
 {
-    d->im->setModified();
+    d->core->setModified();
 }
 
 QString Canvas::ensureHasCurrentUuid() const
 {
-    return d->im->ensureHasCurrentUuid();
+    return d->core->ensureHasCurrentUuid();
 }
 
 DImg Canvas::currentImage() const
 {
-    DImg* const image = d->im->getImg();
+    DImg* const image = d->core->getImg();
 
     if (image)
     {
@@ -264,77 +265,77 @@ DImg Canvas::currentImage() const
 
 QString Canvas::currentImageFileFormat() const
 {
-    return d->im->getImageFormat();
+    return d->core->getImageFormat();
 }
 
 QString Canvas::currentImageFilePath() const
 {
-    return d->im->getImageFilePath();
+    return d->core->getImageFilePath();
 }
 
 int Canvas::imageWidth() const
 {
-    return d->im->origWidth();
+    return d->core->origWidth();
 }
 
 int Canvas::imageHeight() const
 {
-    return d->im->origHeight();
+    return d->core->origHeight();
 }
 
 bool Canvas::isReadOnly() const
 {
-    return d->im->isReadOnly();
+    return d->core->isReadOnly();
 }
 
 QRect Canvas::getSelectedArea() const
 {
-    return d->im->getSelectedArea();
+    return d->core->getSelectedArea();
 }
 
 EditorCore* Canvas::interface() const
 {
-    return d->im;
+    return d->core;
 }
 
 void Canvas::makeDefaultEditingCanvas()
 {
-    EditorCore::setDefaultInstance(d->im);
+    EditorCore::setDefaultInstance(d->core);
 }
 
 bool Canvas::exifRotated() const
 {
-    return d->im->exifRotated();
+    return d->core->exifRotated();
 }
 
 void Canvas::slotRotate90()
 {
     d->canvasItem->clearCache();
-    d->im->rotate90();
+    d->core->rotate90();
 }
 
 void Canvas::slotRotate180()
 {
     d->canvasItem->clearCache();
-    d->im->rotate180();
+    d->core->rotate180();
 }
 
 void Canvas::slotRotate270()
 {
     d->canvasItem->clearCache();
-    d->im->rotate270();
+    d->core->rotate270();
 }
 
 void Canvas::slotFlipHoriz()
 {
     d->canvasItem->clearCache();
-    d->im->flipHoriz();
+    d->core->flipHoriz();
 }
 
 void Canvas::slotFlipVert()
 {
     d->canvasItem->clearCache();
-    d->im->flipVert();
+    d->core->flipVert();
 }
 
 void Canvas::slotAutoCrop()
@@ -342,10 +343,10 @@ void Canvas::slotAutoCrop()
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
     d->canvasItem->clearCache();
-    AutoCrop ac(d->im->getImg());
+    AutoCrop ac(d->core->getImg());
     ac.startFilterDirectly();
     QRect rect = ac.autoInnerCrop();
-    d->im->crop(rect);
+    d->core->crop(rect);
     QApplication::restoreOverrideCursor();
 
     if (d->rubber && d->rubber->isVisible())
@@ -357,14 +358,14 @@ void Canvas::slotAutoCrop()
 void Canvas::slotCrop()
 {
     d->canvasItem->clearCache();
-    QRect sel = d->im->getSelectedArea();
+    QRect sel = d->core->getSelectedArea();
 
     if (sel.size().isNull())   // No current selection.
     {
         return;
     }
 
-    d->im->crop(sel);
+    d->core->crop(sel);
 
     if (d->rubber && d->rubber->isVisible())
     {
@@ -375,34 +376,34 @@ void Canvas::slotCrop()
 void Canvas::setICCSettings(const ICCSettingsContainer& cmSettings)
 {
     d->canvasItem->clearCache();
-    d->im->setICCSettings(cmSettings);
+    d->core->setICCSettings(cmSettings);
     viewport()->update();
 }
 
 void Canvas::setSoftProofingEnabled(bool enable)
 {
     d->canvasItem->clearCache();
-    d->im->setSoftProofingEnabled(enable);
+    d->core->setSoftProofingEnabled(enable);
     viewport()->update();
 }
 
 void Canvas::setExposureSettings(ExposureSettingsContainer* const expoSettings)
 {
     d->canvasItem->clearCache();
-    d->im->setExposureSettings(expoSettings);
+    d->core->setExposureSettings(expoSettings);
     viewport()->update();
 }
 
 void Canvas::setExifOrient(bool exifOrient)
 {
     d->canvasItem->clearCache();
-    d->im->setExifOrient(exifOrient);
+    d->core->setExifOrient(exifOrient);
     viewport()->update();
 }
 
 void Canvas::slotRestore()
 {
-    d->im->restore();
+    d->core->restore();
     viewport()->update();
 }
 
@@ -414,7 +415,7 @@ void Canvas::slotUndo(int steps)
 
     while (steps > 0)
     {
-        d->im->undo();
+        d->core->undo();
         --steps;
     }
 }
@@ -427,14 +428,14 @@ void Canvas::slotRedo(int steps)
 
     while (steps > 0)
     {
-        d->im->redo();
+        d->core->redo();
         --steps;
     }
 }
 
 void Canvas::slotCopy()
 {
-    QRect sel = d->im->getSelectedArea();
+    QRect sel = d->core->getSelectedArea();
 
     if (sel.size().isNull())   // No current selection.
     {
@@ -443,7 +444,7 @@ void Canvas::slotCopy()
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    DImg selDImg              = d->im->getImgSelection();
+    DImg selDImg              = d->core->getImgSelection();
     QImage selImg             = selDImg.copyQImage();
     QMimeData* const mimeData = new QMimeData();
     mimeData->setImageData(selImg);
@@ -461,7 +462,7 @@ void Canvas::slotSelected()
         sel = calcSelectedArea();
     }
 
-    d->im->setSelectedArea(sel);
+    d->core->setSelectedArea(sel);
 }
 
 QRect Canvas::calcSelectedArea() const
@@ -517,11 +518,12 @@ void Canvas::slotSelectAll()
         d->rubber = new RubberItem(d->canvasItem);
         d->rubber->setCanvas(this);
     }
-    d->rubber->setRectInSceneCoordinates(d->canvasItem->boundingRect());
+
+    d->rubber->setRectInSceneCoordinatesAdjusted(d->canvasItem->boundingRect());
     viewport()->setMouseTracking(true);
     viewport()->update();
 
-    if (d->im->imageValid())
+    if (d->core->isValid())
     {
         emit signalSelected(true);
     }
@@ -617,14 +619,14 @@ void Canvas::slotAddItemMoving(const QRectF& rect)
     }
     d->rubber = new RubberItem(d->canvasItem);
     d->rubber->setCanvas(this);
-    d->rubber->setRectInSceneCoordinates(rect);
+    d->rubber->setRectInSceneCoordinatesAdjusted(rect);
 }
 
 void Canvas::slotAddItemFinished(const QRectF& rect)
 {
     if (d->rubber)
     {
-        d->rubber->setRectInSceneCoordinates(rect);
+        d->rubber->setRectInSceneCoordinatesAdjusted(rect);
         //d->wrapItem->stackBefore(d->canvasItem);
     }
 

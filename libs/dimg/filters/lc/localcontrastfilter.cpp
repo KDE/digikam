@@ -9,7 +9,7 @@
  *
  * Copyright (C) 2009      by Nasca Octavian Paul <zynaddsubfx at yahoo dot com>
  * Copyright (C) 2009      by Julien Pontabry <julien dot pontabry at gmail dot com>
- * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -30,6 +30,7 @@
 // Qt includes
 
 #include <qmath.h>
+#include <QtConcurrentRun>
 
 // KDE includes
 
@@ -59,14 +60,14 @@ public:
     RandomNumberGenerator  generator;
 };
 
-LocalContrastFilter::LocalContrastFilter(QObject* parent)
+LocalContrastFilter::LocalContrastFilter(QObject* const parent)
     : DImgThreadedFilter(parent),
       d(new Private)
 {
     initFilter();
 }
 
-LocalContrastFilter::LocalContrastFilter(DImg* image, QObject* parent, const LocalContrastContainer& par)
+LocalContrastFilter::LocalContrastFilter(DImg* const image, QObject* const parent, const LocalContrastContainer& par)
     : DImgThreadedFilter(image, parent, "LocalContrast"),
       d(new Private)
 {
@@ -98,7 +99,7 @@ void LocalContrastFilter::filterImage()
 
             for (i = 0, j = 0; runningFlag() && (i < size); i += 3, j += 4)
             {
-                data[i]   = dataImg[j];
+                data[i]     = dataImg[j];
                 data[i + 1] = dataImg[j + 1];
                 data[i + 2] = dataImg[j + 2];
             }
@@ -118,6 +119,8 @@ void LocalContrastFilter::filterImage()
                                                            65535, true));
                 }
             }
+
+            postProgress(90);
         }
         else
         {
@@ -126,7 +129,7 @@ void LocalContrastFilter::filterImage()
 
             for (i = 0, j = 0; runningFlag() && (i < size); i += 3, j += 4)
             {
-                data[i]   = m_orgImage.bits()[j];
+                data[i]     = m_orgImage.bits()[j];
                 data[i + 1] = m_orgImage.bits()[j + 1];
                 data[i + 2] = m_orgImage.bits()[j + 2];
             }
@@ -143,6 +146,8 @@ void LocalContrastFilter::filterImage()
                     m_destImage.setPixelColor(x, y, DColor(data[i + 2], data[i + 1], data[i], 255, false));
                 }
             }
+
+            postProgress(90);
         }
     }
 
@@ -160,6 +165,8 @@ void LocalContrastFilter::process8bitRgbImage(unsigned char* const img, int size
         tmpimage[i] = (float)(img[i] / 255.0);
     }
 
+    postProgress(20);
+
     processRgbImage(tmpimage.data(), sizex, sizey);
 
     // convert back to 8 bits (with dithering)
@@ -168,16 +175,16 @@ void LocalContrastFilter::process8bitRgbImage(unsigned char* const img, int size
     for (int i = 0 ; runningFlag() && (i < size) ; ++i)
     {
         float dither = d->generator.number(0.0, 1.0);
-        img[pos]     = (int)(tmpimage[pos]  * 255.0 + dither);
-        img[pos + 1]   = (int)(tmpimage[pos + 1] * 255.0 + dither);
-        img[pos + 2]   = (int)(tmpimage[pos + 2] * 255.0 + dither);
+        img[pos]     = (int)(tmpimage[pos]     * 255.0 + dither);
+        img[pos + 1] = (int)(tmpimage[pos + 1] * 255.0 + dither);
+        img[pos + 2] = (int)(tmpimage[pos + 2] * 255.0 + dither);
         pos += 3;
     }
 
-    postProgress(90);
+    postProgress(80);
 }
 
-void LocalContrastFilter::process16bitRgbImage(unsigned short int* const img, int sizex, int sizey)
+void LocalContrastFilter::process16bitRgbImage(unsigned short* const img, int sizex, int sizey)
 {
     int size = sizex * sizey;
     QScopedArrayPointer<float> tmpimage(new float[size * 3]);
@@ -188,6 +195,8 @@ void LocalContrastFilter::process16bitRgbImage(unsigned short int* const img, in
         tmpimage[i] = (float)(img[i] / 65535.0);
     }
 
+    postProgress(20);
+
     processRgbImage(tmpimage.data(), sizex, sizey);
 
     // convert back to 16 bits (with dithering)
@@ -196,13 +205,13 @@ void LocalContrastFilter::process16bitRgbImage(unsigned short int* const img, in
     for (int i = 0 ; runningFlag() && (i < size) ; ++i)
     {
         float dither = d->generator.number(0.0, 1.0);
-        img[pos]     = (int)(tmpimage[pos]  * 65535.0 + dither);
-        img[pos + 1]   = (int)(tmpimage[pos + 1] * 65535.0 + dither);
-        img[pos + 2]   = (int)(tmpimage[pos + 2] * 65535.0 + dither);
+        img[pos]     = (int)(tmpimage[pos]     * 65535.0 + dither);
+        img[pos + 1] = (int)(tmpimage[pos + 1] * 65535.0 + dither);
+        img[pos + 2] = (int)(tmpimage[pos + 2] * 65535.0 + dither);
         pos += 3;
     }
 
-    postProgress(90);
+    postProgress(80);
 }
 
 float LocalContrastFilter::func(float x1, float x2)
@@ -210,31 +219,9 @@ float LocalContrastFilter::func(float x1, float x2)
     float result = 0.5;
     float p;
 
-/*
-    //test function
-    if (d->par.functionId==1)
-    {
-        p=qPow(0.1,qFabs((x2*2.0-1.0))*d->current_process_power_value*0.02);
-        if (x2<0.5) result=qPow(x1,p);
-        else result=1.0-qPow(1.0-x1,p);
-        return result;
-    };
-    //test function
-    if (functionId==1)
-    {
-        p=d->current_process_power_value*0.3+1e-4;
-        x2=1.0/(1.0+qExp(-(x2*2.0-1.0)*p*0.5));
-        float f=1.0/(1.0+qExp((1.0-(x1-x2+0.5)*2.0)*p));
-        float m0=1.0/(1.0+qExp((1.0-(-x2+0.5)*2.0)*p));
-        float m1=1.0/(1.0+qExp((1.0-(-x2+1.5)*2.0)*p));
-        result=(f-m0)/(m1-m0);
-        return result;
-    };
-*/
-
     switch (d->par.functionId)
     {
-        case 0:  //power function
+        case 0:  // power function
         {
             p = (float)(qPow((double)10.0, (double)qFabs((x2 * 2.0 - 1.0)) * d->current_process_power_value * 0.02));
 
@@ -250,7 +237,7 @@ float LocalContrastFilter::func(float x1, float x2)
             break;
         }
 
-        case 1:  //linear function
+        case 1:  // linear function
         {
             p      = (float)(1.0 / (1 + qExp(-(x2 * 2.0 - 1.0) * d->current_process_power_value * 0.04)));
             result = (x1 < p) ? (float)(x1 * (1.0 - p) / p) : (float)((1.0 - p) + (x1 - p) * p / (1.0 - p));
@@ -259,6 +246,59 @@ float LocalContrastFilter::func(float x1, float x2)
     }
 
     return result;
+}
+
+void LocalContrastFilter::blurMultithreaded(uint start, uint stop, float* const img, float* const blurimage)
+{
+    uint pos = start * 3;
+
+    for (uint i = start ; runningFlag() && (i < stop) ; ++i)
+    {
+        float src_r  = img[pos];
+        float src_g  = img[pos + 1];
+        float src_b  = img[pos + 2];
+
+        float blur   = blurimage[i];
+
+        float dest_r = func(src_r, blur);
+        float dest_g = func(src_g, blur);
+        float dest_b = func(src_b, blur);
+
+        img[pos]     = dest_r;
+        img[pos + 1] = dest_g;
+        img[pos + 2] = dest_b;
+
+        pos += 3;
+    }
+}
+
+void LocalContrastFilter::saturationMultithreaded(uint start, uint stop, float* const img, float* const srcimg)
+{
+    float src_h,  src_s,  src_v;
+    float dest_h, dest_s, dest_v;
+    float destSaturation, s1;
+
+    uint pos                 = start * 3;
+    int  highSaturationValue = 100 - d->par.highSaturation;
+    int  lowSaturationValue  = 100 - d->par.lowSaturation;
+
+    for (uint i = start ; runningFlag() && (i < stop) ; ++i)
+    {
+        rgb2hsv(srcimg[pos], srcimg[pos + 1], srcimg[pos + 2], src_h, src_s, src_v);
+        rgb2hsv(img[pos], img[pos + 1], img[pos + 2], dest_h, dest_s, dest_v);
+
+        destSaturation = (float)((src_s * highSaturationValue + dest_s * (100.0 - highSaturationValue)) * 0.01);
+
+        if (dest_v > src_v)
+        {
+            s1             = (float)(destSaturation * src_v / (dest_v + 1.0 / 255.0));
+            destSaturation = (float)((lowSaturationValue * s1 + d->par.lowSaturation * destSaturation) * 0.01);
+        }
+
+        hsv2rgb(dest_h, destSaturation, dest_v, img[pos], img[pos + 1], img[pos + 2]);
+
+        pos += 3;
+    }
 }
 
 void LocalContrastFilter::processRgbImage(float* const img, int sizex, int sizey)
@@ -272,12 +312,17 @@ void LocalContrastFilter::processRgbImage(float* const img, int sizex, int sizey
         srcimg[i] = img[i];
     }
 
+    postProgress(30);
+
     if (d->par.stretchContrast)
     {
         stretchContrast(img, size * 3);
     }
 
-    int pos = 0;
+    postProgress(40);
+
+    QList<int> vals = multithreadedSteps(size);
+    int         pos  = 0;
 
     for (int nstage = 0 ; runningFlag() && (nstage < TONEMAPPING_MAX_STAGES) ; ++nstage)
     {
@@ -299,156 +344,100 @@ void LocalContrastFilter::processRgbImage(float* const img, int sizex, int sizey
 
             inplaceBlur(blurimage.data(), sizex, sizey, d->par.getBlur(nstage));
 
-            pos = 0;
+            QList <QFuture<void> > tasks;
 
-            for (int i = 0 ; runningFlag() && (i < size) ; ++i)
+            for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
             {
-                float src_r  = img[pos];
-                float src_g  = img[pos + 1];
-                float src_b  = img[pos + 2];
-
-                float blur   = blurimage[i];
-
-                float dest_r = func(src_r, blur);
-                float dest_g = func(src_g, blur);
-                float dest_b = func(src_b, blur);
-
-                img[pos]     = dest_r;
-                img[pos + 1] = dest_g;
-                img[pos + 2] = dest_b;
-
-                pos += 3;
+                tasks.append(QtConcurrent::run(this,
+                                               &LocalContrastFilter::blurMultithreaded,
+                                               vals[j],
+                                               vals[j+1],
+                                               img,
+                                               blurimage.data()
+                                              ));
             }
+
+            foreach(QFuture<void> t, tasks)
+                t.waitForFinished();
         }
 
-        postProgress(30 + nstage * 10);
+        postProgress(50 + nstage * 5);
     }
-
-    int highSaturationValue = 100 - d->par.highSaturation;
-    int lowSaturationValue  = 100 - d->par.lowSaturation;
 
     if ((d->par.highSaturation != 100) || (d->par.lowSaturation != 100))
     {
         kDebug() << "highSaturation : " << d->par.highSaturation;
-        kDebug() << "lowSaturation : " << d->par.lowSaturation;
+        kDebug() << "lowSaturation : "  << d->par.lowSaturation;
 
-        float src_h,  src_s,  src_v;
-        float dest_h, dest_s, dest_v;
-        float destSaturation, s1;
-        int   pos = 0;
+        QList <QFuture<void> > tasks;
 
-        for (int i = 0 ; runningFlag() && (i < size) ; ++i)
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
         {
-            rgb2hsv(srcimg[pos], srcimg[pos + 1], srcimg[pos + 2], src_h, src_s, src_v);
-            rgb2hsv(img[pos], img[pos + 1], img[pos + 2], dest_h, dest_s, dest_v);
-
-            destSaturation = (float)((src_s * highSaturationValue + dest_s * (100.0 - highSaturationValue)) * 0.01);
-
-            if (dest_v > src_v)
-            {
-                s1             = (float)(destSaturation * src_v / (dest_v + 1.0 / 255.0));
-                destSaturation = (float)((lowSaturationValue * s1 + d->par.lowSaturation * destSaturation) * 0.01);
-            }
-
-            hsv2rgb(dest_h, destSaturation, dest_v, img[pos], img[pos + 1], img[pos + 2]);
-
-            pos += 3;
+            tasks.append(QtConcurrent::run(this,
+                                           &LocalContrastFilter::saturationMultithreaded,
+                                           vals[j],
+                                           vals[j+1],
+                                           img,
+                                           srcimg.data()
+                                          ));
         }
+
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
     }
 
     postProgress(70);
+}
 
-    // Unsharp Mask filter
-
-    if (d->par.unsharpMask.enabled)
+void LocalContrastFilter::inplaceBlurYMultithreaded(const Args& prm)
+{
+    for (uint y = prm.start ; runningFlag() && (y < prm.stop) ; ++y)
     {
-        QScopedArrayPointer<float> val(new float[size]);
+        uint pos  = y * prm.sizex;
+        float old = prm.data[pos];
+        ++pos;
 
-        // compute the desatured image
-
-        int pos = 0;
-
-        for (int i = 0 ; runningFlag() && (i < size) ; ++i)
+        for (int x = 1 ; runningFlag() && (x < prm.sizex) ; ++x)
         {
-            val[i] = blurimage[i] = (float)((img[pos] + img[pos + 1] + img[pos + 2]) / 3.0);
-            //val[i] = blurimage[i] = (float)(max3(img[pos],img[pos+1],img[pos+2]));
-            pos += 3;
+            old           = (prm.data[pos] * (1 - prm.a) + old * prm.a) + prm.denormal_remove;
+            prm.data[pos] = old;
+            ++pos;
         }
 
-        float blur_value = d->par.getUnsharpMaskBlur();
-        inplaceBlur(blurimage.data(), sizex, sizey, blur_value);
+        pos = y * prm.sizex + prm.sizex - 1;
 
-        pos              = 0;
-        float pw         = (float)(2.5 * d->par.getUnsharpMaskPower());
-        float threshold  = (float)(d->par.unsharpMask.threshold * pw / 250.0);
-        float threshold2 = threshold / 2;
-
-        for (int i = 0 ; runningFlag() && (i < size) ; ++i)
+        for (int x = 1 ; runningFlag() && (x < prm.sizex) ; ++x)
         {
-            float dval     = (val[i] - blurimage[i]) * pw;
-            float abs_dval = qFabs(dval);
-
-            if (abs_dval < threshold)
-            {
-                if (abs_dval > threshold2)
-                {
-                    bool sign = (dval < 0.0);
-                    dval      = (float)((abs_dval - threshold2) * 2.0);
-
-                    if (sign)
-                    {
-                        dval = - dval;
-                    }
-                }
-                else
-                {
-                    dval = 0;
-                }
-            }
-
-            float r = img[pos]  + dval;
-            float g = img[pos + 1] + dval;
-            float b = img[pos + 2] + dval;
-
-            if (r < 0.0)
-            {
-                r = 0.0;
-            }
-
-            if (r > 1.0)
-            {
-                r = 1.0;
-            }
-
-            if (g < 0.0)
-            {
-                g = 0.0;
-            }
-
-            if (g > 1.0)
-            {
-                g = 1.0;
-            }
-
-            if (b < 0.0)
-            {
-                b = 0.0;
-            }
-
-            if (b > 1.0)
-            {
-                b = 1.0;
-            }
-
-            img[pos]     = r;
-            img[pos + 1] = g;
-            img[pos + 2] = b;
-
-            pos += 3;
+            old           = (prm.data[pos] * (1 - prm.a) + old * prm.a) + prm.denormal_remove;
+            prm.data[pos] = old;
+            pos--;
         }
     }
+}
 
-    postProgress(80);
+void LocalContrastFilter::inplaceBlurXMultithreaded(const Args& prm)
+{
+    for (uint x = prm.start ; runningFlag() && (x < prm.stop) ; ++x)
+    {
+        uint pos  = x;
+        float old = prm.data[pos];
+
+        for (int y = 1 ; runningFlag() && (y < prm.sizey) ; ++y)
+        {
+            old            = (prm.data[pos] * (1 - prm.a) + old * prm.a) + prm.denormal_remove;
+            prm.data[pos]  = old;
+            pos           += prm.sizex;
+        }
+
+        pos = x + prm.sizex * (prm.sizey - 1);
+
+        for (int y = 1 ; runningFlag() && (y < prm.sizey) ; ++y)
+        {
+            old            = (prm.data[pos] * (1 - prm.a) + old * prm.a) + prm.denormal_remove;
+            prm.data[pos]  = old;
+            pos           -= prm.sizex;
+        }
+    }
 }
 
 void LocalContrastFilter::inplaceBlur(float* const data, int sizex, int sizey, float blur)
@@ -458,70 +447,64 @@ void LocalContrastFilter::inplaceBlur(float* const data, int sizex, int sizey, f
         return;
     }
 
-    float a = (float)(qExp(log(0.25) / blur));
+    Args prm;
 
-    if ((a <= 0.0) || (a >= 1.0))
+    prm.a = (float)(qExp(log(0.25) / blur));
+
+    if ((prm.a <= 0.0) || (prm.a >= 1.0))
     {
         return;
     }
 
-    a *= a;
-    float denormal_remove = (float)(1e-15);
+    prm.a *= prm.a;
+    prm.data            = data;
+    prm.sizex           = sizex;
+    prm.sizey           = sizey;
+    prm.blur            = blur;
+    prm.denormal_remove = (float)(1e-15);
 
-    for (int stage = 0 ; runningFlag() && (stage < 2) ; ++stage)
+    QList<int> valsx = multithreadedSteps(prm.sizex);
+    QList<int> valsy = multithreadedSteps(prm.sizey);
+
+    for (uint stage = 0 ; runningFlag() && (stage < 2) ; ++stage)
     {
-        for (int y = 0 ; runningFlag() && (y < sizey) ; ++y)
+        QList <QFuture<void> > tasks;
+
+        for (int j = 0 ; runningFlag() && (j < valsy.count()-1) ; ++j)
         {
-            int pos   = y * sizex;
-            float old = data[pos];
-            ++pos;
-
-            for (int x = 1 ; runningFlag() && (x < sizex) ; ++x)
-            {
-                old       = (data[pos] * (1 - a) + old * a) + denormal_remove;
-                data[pos] = old;
-                ++pos;
-            }
-
-            pos = y * sizex + sizex - 1;
-
-            for (int x = 1 ; runningFlag() && (x < sizex) ; ++x)
-            {
-                old       = (data[pos] * (1 - a) + old * a) + denormal_remove;
-                data[pos] = old;
-                pos--;
-            }
+            prm.start = valsy[j];
+            prm.stop  = valsy[j];
+            tasks.append(QtConcurrent::run(this,
+                                           &LocalContrastFilter::inplaceBlurYMultithreaded,
+                                           prm
+                                          ));
         }
 
-        for (int x = 0 ; runningFlag() && (x < sizex) ; ++x)
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
+
+        tasks.clear();
+
+        for (int j = 0 ; runningFlag() && (j < valsx.count()-1) ; ++j)
         {
-            int pos   = x;
-            float old = data[pos];
-
-            for (int y = 1 ; runningFlag() && (y < sizey) ; ++y)
-            {
-                old       = (data[pos] * (1 - a) + old * a) + denormal_remove;
-                data[pos] = old;
-                pos       += sizex;
-            }
-
-            pos = x + sizex * (sizey - 1);
-
-            for (int y = 1 ; runningFlag() && (y < sizey) ; ++y)
-            {
-                old       = (data[pos] * (1 - a) + old * a) + denormal_remove;
-                data[pos] = old;
-                pos       -= sizex;
-            }
+            prm.start = valsx[j];
+            prm.stop  = valsx[j];
+            tasks.append(QtConcurrent::run(this,
+                                           &LocalContrastFilter::inplaceBlurXMultithreaded,
+                                           prm
+                                          ));
         }
+
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
     }
 }
 
 void LocalContrastFilter::stretchContrast(float* const data, int datasize)
 {
-    //stretch the contrast
+    // stretch the contrast
     const unsigned int histogram_size = 256;
-    //first, we compute the histogram
+    // first, we compute the histogram
     unsigned int histogram[histogram_size];
 
     for (unsigned int i = 0 ; i < histogram_size ; ++i)
@@ -546,7 +529,7 @@ void LocalContrastFilter::stretchContrast(float* const data, int datasize)
         histogram[m]++;
     }
 
-    //I want to strip the lowest and upper 0.1 procents (in the histogram) of the pixels
+    // I want to strip the lowest and upper 0.1 procents (in the histogram) of the pixels
     int          min         = 0;
     int          max         = 255;
     unsigned int desired_sum = datasize / 1000;
@@ -586,7 +569,7 @@ void LocalContrastFilter::stretchContrast(float* const data, int datasize)
 
     for (int i = 0 ; runningFlag() && (i < datasize) ; ++i)
     {
-        //stretch the contrast
+        // stretch the contrast
         float x = data[i];
         x       = (x - min_src_val) / (max_src_val - min_src_val);
 
@@ -722,15 +705,6 @@ FilterAction LocalContrastFilter::filterAction()
         }
     }
 
-    action.addParameter("unsharpMask:enabled", d->par.unsharpMask.enabled);
-
-    if (d->par.unsharpMask.enabled)
-    {
-        action.addParameter("unsharpMask:blur",      d->par.unsharpMask.blur);
-        action.addParameter("unsharpMask:power",     d->par.unsharpMask.power);
-        action.addParameter("unsharpMask:threshold", d->par.unsharpMask.threshold);
-    }
-
     action.addParameter("randomSeed", d->generator.currentSeed());
 
     return action;
@@ -753,15 +727,6 @@ void LocalContrastFilter::readParameters(const FilterAction& action)
             d->par.stage[nstage].power = action.parameter(stage + "power").toFloat();
             d->par.stage[nstage].blur  = action.parameter(stage + "blur").toFloat();
         }
-    }
-
-    d->par.unsharpMask.enabled = action.parameter("unsharpMask:enabled").toBool();
-
-    if (d->par.unsharpMask.enabled)
-    {
-        d->par.unsharpMask.blur      = action.parameter("unsharpMask:blur").toFloat();
-        d->par.unsharpMask.power     = action.parameter("unsharpMask:power").toFloat();
-        d->par.unsharpMask.threshold = action.parameter("unsharpMask:threshold").toInt();
     }
 
     d->generator.seed(action.parameter("randomSeed").toUInt());

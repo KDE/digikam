@@ -154,6 +154,16 @@ MdKeyListViewItem::MdKeyListViewItem(QTreeWidget* const parent, const QString& k
         m_decryptedKey = i18n("Paged-Text");
     }
 
+    // Additional XMP key descriptions.
+    else if (key == "mwg-rs")
+    {
+        m_decryptedKey = i18n("Metadata Working Group Regions");
+    }
+    else if (key == "dwc")
+    {
+        m_decryptedKey = i18n("Darwin Core");
+    }
+
     // Reset all item flags: item is not selectable.
     setFlags(Qt::ItemIsEnabled);
 

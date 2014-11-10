@@ -33,6 +33,7 @@
 #include <QSqlError>
 #include <QLabel>
 #include <QGroupBox>
+#include <QTimer>
 
 // KDE includes
 
@@ -101,7 +102,9 @@ void DatabaseWidget::setupMainArea()
 
     QLabel* const databaseTypeLabel                  = new QLabel(i18n("Type"));
     databaseType                                     = new QComboBox();
+#ifdef HAVE_INTERNALMYSQL
     QLabel* const internalServerLabel                = new QLabel(i18n("Internal Server"));
+#endif // HAVE_INTERNALMYSQL
     internalServer                                   = new QCheckBox();
     QLabel* const databaseNameLabel                  = new QLabel(i18n("Schema Name"));
     databaseName                                     = new QLineEdit();
@@ -169,30 +172,21 @@ void DatabaseWidget::setupMainArea()
                                   "<p><b>MySQL</b> backend is a more robust solution especially for remote and shared database storage. "
                                   "It is also more efficient to manage huge collection sizes. "
                                   "Be careful: this one it is still in experimental stage.</p>"));
+
     setDatabaseInputFields(DatabaseParameters::SQLiteDatabaseType());
 
     // --------------------------------------------------------
 
-    adjustSize();
-
-    // --------------------------------------------------------
-
-    connect(databasePathEdit, SIGNAL(urlSelected(KUrl)),
-            this, SLOT(slotChangeDatabasePath(KUrl)));
-
-    connect(databasePathEdit, SIGNAL(textChanged(QString)),
-            this, SLOT(slotDatabasePathEdited(QString)));
-
     connect(databaseType, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotHandleDBTypeIndexChanged(int)));
 
+    connect(checkDatabaseConnectionButton, SIGNAL(clicked()),
+            this, SLOT(checkDatabaseConnection()));
+    
 #ifdef HAVE_INTERNALMYSQL
     connect(internalServer, SIGNAL(stateChanged(int)),
             this, SLOT(slotHandleInternalServerCheckbox(int)));
 #endif // HAVE_INTERNALMYSQL
-
-    connect(checkDatabaseConnectionButton, SIGNAL(clicked()),
-            this, SLOT(checkDatabaseConnection()));
 }
 
 QString DatabaseWidget::currentDatabaseType() const
@@ -203,7 +197,7 @@ QString DatabaseWidget::currentDatabaseType() const
 void DatabaseWidget::slotChangeDatabasePath(const KUrl& result)
 {
 #ifdef _WIN32
-    // Work around B.K.O #189168
+    // Work around bug #189168
     KTemporaryFile temp;
     temp.setPrefix(result.toLocalFile(KUrl::AddTrailingSlash));
     temp.open();
@@ -222,8 +216,15 @@ void DatabaseWidget::slotChangeDatabasePath(const KUrl& result)
     checkDBPath();
 }
 
-void DatabaseWidget::slotDatabasePathEdited(const QString& newPath)
+void DatabaseWidget::slotDatabasePathEditedDelayed()
 {
+    QTimer::singleShot(300, this, SLOT(slotDatabasePathEdited()));
+}
+
+void DatabaseWidget::slotDatabasePathEdited()
+{
+    QString newPath = databasePathEdit->text();
+
 #ifndef _WIN32
 
     if (!newPath.isEmpty() && !QDir::isAbsolutePath(newPath))
@@ -233,7 +234,7 @@ void DatabaseWidget::slotDatabasePathEdited(const QString& newPath)
 
 #endif
 
-    databasePathEdit->setText(QDir::toNativeSeparators(databasePathEdit->text()));
+    databasePathEdit->setText(QDir::toNativeSeparators(newPath));
 
     checkDBPath();
 }
@@ -251,12 +252,24 @@ void DatabaseWidget::setDatabaseInputFields(const QString& currentIndexStr)
         d->databasePathLabel->setVisible(true);
         databasePathEdit->setVisible(true);
         d->expertSettings->setVisible(false);
+
+        connect(databasePathEdit, SIGNAL(urlSelected(KUrl)),
+                this, SLOT(slotChangeDatabasePath(KUrl)));
+
+        connect(databasePathEdit, SIGNAL(textChanged(QString)),
+                this, SLOT(slotDatabasePathEditedDelayed()));
     }
     else
     {
         d->databasePathLabel->setVisible(false);
         databasePathEdit->setVisible(false);
         d->expertSettings->setVisible(true);
+        
+        disconnect(databasePathEdit, SIGNAL(urlSelected(KUrl)),
+                   this, SLOT(slotChangeDatabasePath(KUrl)));
+
+        disconnect(databasePathEdit, SIGNAL(textChanged(QString)),
+                   this, SLOT(slotDatabasePathEditedDelayed()));
     }
 
     adjustSize();
@@ -275,7 +288,7 @@ void DatabaseWidget::slotHandleInternalServerCheckbox(int enableFields)
 
 void DatabaseWidget::checkDatabaseConnection()
 {
-    // TODO : if chek DB connection operations can be threaded, use DBusyDlg dialog there...
+    // TODO : if check DB connection operations can be threaded, use DBusyDlg dialog there...
 
     kapp->setOverrideCursor(Qt::WaitCursor);
 
@@ -324,7 +337,7 @@ void DatabaseWidget::checkDBPath()
     //d->mainDialog->enableButtonOk(dbOk);
 }
 
-void DatabaseWidget::setParametersFromSettings(const AlbumSettings* const settings)
+void DatabaseWidget::setParametersFromSettings(const ApplicationSettings* const settings)
 {
     originalDbPath = settings->getDatabaseFilePath();
     originalDbType = settings->getDatabaseType();
@@ -345,13 +358,13 @@ void DatabaseWidget::setParametersFromSettings(const AlbumSettings* const settin
 
     password->setText(settings->getDatabasePassword());
 
-    /* Now set the type according the database type from the settings.
-     * If no item is found, ignore the setting.
-     */
+    // Now set the type according the database type from the settings.
+    // If no item is found, ignore the setting.
+
     for (int i=0; i<databaseType->count(); ++i)
     {
         //kDebug(50003) << "Comparing comboboxentry on index ["<< i <<"] [" << databaseType->itemData(i)
-        //            << "] with ["<< settings->getDatabaseType() << "]";
+        //              << "] with ["<< settings->getDatabaseType() << "]";
         if (databaseType->itemData(i).toString() == settings->getDatabaseType())
         {
             databaseType->setCurrentIndex(i);

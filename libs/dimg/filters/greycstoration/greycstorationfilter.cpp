@@ -6,7 +6,7 @@
  * Date        : 2007-12-03
  * Description : Greycstoration interface.
  *
- * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -22,6 +22,7 @@
  *
  * ============================================================ */
 
+
 /** Don't use CImg interface (keyboard/mouse interaction) */
 #define cimg_display 0
 /** Only print debug information on the console */
@@ -33,14 +34,18 @@
 
 #include <cassert>
 
+// Qt includes
+
+#include <QMutex>
+#include <QMutexLocker>
+#include <QWaitCondition>
+
 // KDE includes
 
 #include <kdebug.h>
 
-// includes for GreycStoration
-#include <QMutex>
-#include <QMutexLocker>
-#include <QWaitCondition>
+// Local includes
+
 #include "dynamicthread.h"
 
 #define cimg_plugin "greycstoration.h"
@@ -49,9 +54,31 @@
  */
 #define GREYSTORATION_USING_GFACT 1
 
+// Pragma directives to reduce warnings from CImg header files.
+#if not defined(__APPLE__) && defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#endif
+
+#if defined(__APPLE__) && defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-parameter"
+#pragma clang diagnostic ignored "-Wcast-align"
+#endif
+
 // CImg includes
 
 #include "CImg.h"
+
+// Restore warnings
+#if not defined(__APPLE__) && defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+
+#if defined(__APPLE__) && defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 extern "C"
 {

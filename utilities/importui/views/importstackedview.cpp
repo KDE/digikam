@@ -7,7 +7,8 @@
  * Description : QStackedWidget to handle different types of views
  *               (icon view, image preview, media view)
  *
- * Copyright (C) 2012 by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2012-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,6 +28,10 @@
 // Qt includes
 
 #include <QSplitter>
+
+// KDE includes
+
+#include <kdebug.h>
 
 // Local includes
 
@@ -52,8 +57,10 @@ public:
         importIconView      = 0;
         importPreviewView   = 0;
         mediaPlayerView     = 0;
-        mapWidgetView       = 0;
         syncingSelection    = false;
+#ifdef HAVE_KGEOMAP
+        mapWidgetView       = 0;
+#endif // HAVE_KGEOMAP
     }
 
     bool                syncingSelection;
@@ -66,24 +73,29 @@ public:
     ImportPreviewView*  importPreviewView;
     ThumbBarDock*       thumbBarDock;
     MediaPlayerView*    mediaPlayerView; // Reuse of albumgui mediaplayer view.
+
+#ifdef HAVE_KGEOMAP
     MapWidgetView*      mapWidgetView;
+#endif // HAVE_KGEOMAP
 };
 
 void ImportStackedView::setModels(ImportImageModel* model, ImportFilterModel* filterModel)
 {
     d->importIconView->setModels(model, filterModel);
     d->thumbBar->setModelsFiltered(model, filterModel);
-    
+
     // TODO this is currently here because the code structure, waiting for restructuring..
     d->importIconView->init();
-    
+
+#ifdef HAVE_KGEOMAP
     // TODO refactor MapWidgetView not to require the models on startup?
     d->mapWidgetView   = new MapWidgetView(d->importIconView->getSelectionModel(),
-                                           d->importIconView->importFilterModel(), this, false);
+                                           d->importIconView->importFilterModel(), this,
+                                           MapWidgetView::ApplicationImportUI);
     d->mapWidgetView->setObjectName("import_mapwidgetview");
     insertWidget(MapWidgetMode,     d->mapWidgetView);
+#endif // HAVE_KGEOMAP
 }
-
 
 ImportStackedView::ImportStackedView(QWidget* const parent)
     : QStackedWidget(parent), d(new Private)
@@ -93,11 +105,11 @@ ImportStackedView::ImportStackedView(QWidget* const parent)
     d->thumbBarDock      = new ThumbBarDock();
     d->thumbBar          = new ImportThumbnailBar(d->thumbBarDock);
 
-    d->thumbBar->installRatingOverlay();
+    d->thumbBar->installOverlays();
     d->thumbBarDock->setWidget(d->thumbBar);
     d->thumbBarDock->setObjectName("import_thumbbar");
 
-    d->mediaPlayerView = new MediaPlayerView(this);
+    d->mediaPlayerView   = new MediaPlayerView(this);
 
     insertWidget(PreviewCameraMode, d->importIconView);
     insertWidget(PreviewImageMode,  d->importPreviewView);
@@ -232,10 +244,12 @@ ImportPreviewView* ImportStackedView::importPreviewView() const
     return d->importPreviewView;
 }
 
+#ifdef HAVE_KGEOMAP
 MapWidgetView* ImportStackedView::mapWidgetView() const
 {
     return d->mapWidgetView;
 }
+#endif // HAVE_KGEOMAP
 
 MediaPlayerView* ImportStackedView::mediaPlayerView() const
 {
@@ -337,28 +351,35 @@ void ImportStackedView::setViewMode(const StackedViewMode mode)
         setCurrentIndex(mode);
     }
 
+#ifdef HAVE_KGEOMAP
     d->mapWidgetView->setActive(mode == MapWidgetMode);
+#endif // HAVE_KGEOMAP
 
     if (mode == PreviewCameraMode)
     {
         d->importIconView->setFocus();
     }
+#ifdef HAVE_KGEOMAP
     else if (mode == MapWidgetMode)
     {
         d->mapWidgetView->setFocus();
     }
+#endif // HAVE_KGEOMAP
 
     emit signalViewModeChanged();
 }
 
 void ImportStackedView::syncSelection(ImportCategorizedView* const from, ImportCategorizedView* const to)
 {
-    ImportSortFilterModel* fromModel = from->importSortFilterModel();
-    ImportSortFilterModel* toModel   = to->importSortFilterModel();
-    if(!fromModel || !toModel) {
+    ImportSortFilterModel* const fromModel = from->importSortFilterModel();
+    ImportSortFilterModel* const toModel   = to->importSortFilterModel();
+
+    if(!fromModel || !toModel)
+    {
         kWarning() << "one or both of the models are null?! from:" << from << "to:" << to;
         return;
     }
+
     // set current info
     QModelIndex currentIndex         = toModel->indexForCamItemInfo(from->currentInfo());
     to->selectionModel()->setCurrentIndex(currentIndex, QItemSelectionModel::NoUpdate);

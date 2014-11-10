@@ -39,6 +39,30 @@ class ShowfotoItemSortSettings
 {
 public:
 
+    enum SortOrder
+    {
+        AscendingOrder  = Qt::AscendingOrder,
+        DescendingOrder = Qt::DescendingOrder,
+        DefaultOrder /// sort order depends on the chosen sort role
+    };
+
+    enum CategorizationMode
+    {
+        NoCategories,
+        CategoryByFolder,
+        CategoryByFormat
+    };
+
+
+    enum SortRole
+    {
+        SortByCreationDate,
+        SortByFileName,
+        SortByFileSize
+    };
+
+public:
+
     ShowfotoItemSortSettings();
     ~ShowfotoItemSortSettings();
 
@@ -69,53 +93,22 @@ public:
      */
     int compare(const ShowfotoItemInfo& left, const ShowfotoItemInfo& right) const;
 
-    enum SortOrder
-    {
-        AscendingOrder  = Qt::AscendingOrder,
-        DescendingOrder = Qt::DescendingOrder,
-        DefaultOrder /// sort order depends on the chosen sort role
-    };
-
     /// --- Categories ---------------
-
-    enum CategorizationMode
-    {
-        NoCategories,
-        CategoryByFolder,
-        CategoryByFormat
-    };
-
-    CategorizationMode  categorizationMode;
-    SortOrder           categorizationSortOrder;
 
     void setCategorizationMode(CategorizationMode mode);
     void setCategorizationSortOrder(SortOrder order);
 
-    /// Only Ascending or Descending, never be DefaultOrder
-    Qt::SortOrder        currentCategorizationSortOrder;
-    Qt::CaseSensitivity  categorizationCaseSensitivity;
-
-    bool isCategorized() const { return categorizationMode >= CategoryByFolder; }
+    bool isCategorized() const
+    {
+        return (categorizationMode >= CategoryByFolder);
+    }
 
     /// --- Showfoto Items Sorting ---------------
-
-    enum SortRole
-    {
-        SortByCreationDate,
-        SortByFileName,               
-        SortByFileSize
-    };
-
-    SortOrder   sortOrder;
-    SortRole    sortRole;
 
     void setSortRole(SortRole role);
     void setSortOrder(SortOrder order);
 
-    Qt::SortOrder       currentSortOrder;
-    Qt::CaseSensitivity sortCaseSensitivity;
-
-    int compare(const ShowfotoItemInfo& left, const ShowfotoItemInfo& right, SortRole sortRole) const;
+    int  compare(const ShowfotoItemInfo& left, const ShowfotoItemInfo& right, SortRole sortRole) const;
 
     static Qt::SortOrder defaultSortOrderForCategorizationMode(CategorizationMode mode);
     static Qt::SortOrder defaultSortOrderForSortRole(SortRole role);
@@ -169,6 +162,21 @@ public:
     {
         return compareByOrder(KStringHandler::naturalCompare(a, b, caseSensitive), sortOrder);
     }
+
+public:
+
+    CategorizationMode   categorizationMode;
+    SortOrder            categorizationSortOrder;
+
+    /// Only Ascending or Descending, never be DefaultOrder
+    Qt::SortOrder        currentCategorizationSortOrder;
+    Qt::CaseSensitivity  categorizationCaseSensitivity;
+
+    SortOrder            sortOrder;
+    SortRole             sortRole;
+
+    Qt::SortOrder        currentSortOrder;
+    Qt::CaseSensitivity  sortCaseSensitivity;
 };
 
 } // namespace ShowFoto

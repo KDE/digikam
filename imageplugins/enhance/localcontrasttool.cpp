@@ -149,7 +149,7 @@ void LocalContrastTool::slotResetSettings()
 
 void LocalContrastTool::preparePreview()
 {
-    // See B.K.O #235601 : we cannot use downscaled image to render preview. It will differs than final rendering.
+    // See bug #235601 : we cannot use downscaled image to render preview. It will differs than final rendering.
     DImg image = d->previewWidget->getOriginalRegionImage(false);
     setFilter(new LocalContrastFilter(&image, this, d->settingsView->settings()));
 }

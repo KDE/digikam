@@ -6,7 +6,7 @@
  * Date        : 2006-01-20
  * Description : core image editor GUI implementation private data.
  *
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,6 +36,7 @@
 #include <kactionmenu.h>
 #include <kmenu.h>
 #include <kdebug.h>
+#include <kservice.h>
 
 // Local includes
 
@@ -119,85 +120,84 @@ public:
 
 public:
 
-    static const QString       configAutoZoomEntry;
-    static const QString       configBackgroundColorEntry;
-    static const QString       configJpeg2000CompressionEntry;
-    static const QString       configJpeg2000LossLessEntry;
-    static const QString       configJpegCompressionEntry;
-    static const QString       configJpegSubSamplingEntry;
-    static const QString       configPgfCompressionEntry;
-    static const QString       configPgfLossLessEntry;
-    static const QString       configPngCompressionEntry;
-    static const QString       configSplitterStateEntry;
-    static const QString       configTiffCompressionEntry;
-    static const QString       configUnderExposureColorEntry;
-    static const QString       configUnderExposureIndicatorEntry;
-    static const QString       configUnderExposurePercentsEntry;
-    static const QString       configOverExposureColorEntry;
-    static const QString       configOverExposureIndicatorEntry;
-    static const QString       configOverExposurePercentsEntry;
-    static const QString       configExpoIndicatorModeEntry;
-    static const QString       configUseRawImportToolEntry;
-    static const QString       configUseThemeBackgroundColorEntry;
-    static const QString       configVerticalSplitterSizesEntry;
-    static const QString       configVerticalSplitterStateEntry;
+    static const QString         configAutoZoomEntry;
+    static const QString         configBackgroundColorEntry;
+    static const QString         configJpeg2000CompressionEntry;
+    static const QString         configJpeg2000LossLessEntry;
+    static const QString         configJpegCompressionEntry;
+    static const QString         configJpegSubSamplingEntry;
+    static const QString         configPgfCompressionEntry;
+    static const QString         configPgfLossLessEntry;
+    static const QString         configPngCompressionEntry;
+    static const QString         configSplitterStateEntry;
+    static const QString         configTiffCompressionEntry;
+    static const QString         configUnderExposureColorEntry;
+    static const QString         configUnderExposureIndicatorEntry;
+    static const QString         configUnderExposurePercentsEntry;
+    static const QString         configOverExposureColorEntry;
+    static const QString         configOverExposureIndicatorEntry;
+    static const QString         configOverExposurePercentsEntry;
+    static const QString         configExpoIndicatorModeEntry;
+    static const QString         configUseRawImportToolEntry;
+    static const QString         configUseThemeBackgroundColorEntry;
+    static const QString         configVerticalSplitterSizesEntry;
+    static const QString         configVerticalSplitterStateEntry;
 
-    QToolButton*               cmViewIndicator;
-    QToolButton*               underExposureIndicator;
-    QToolButton*               overExposureIndicator;
+    QToolButton*                 cmViewIndicator;
+    QToolButton*                 underExposureIndicator;
+    QToolButton*                 overExposureIndicator;
 
-    KSqueezedTextLabel*        infoLabel;
+    KSqueezedTextLabel*          infoLabel;
 
-    KActionCollection*         imagepluginsActionCollection;
+    KActionCollection*           imagepluginsActionCollection;
 
-    KAction*                   contributeAction;
-    KAction*                   copyAction;
-    KAction*                   cropAction;
-    KAction*                   autoCropAction;
-    KAction*                   donateMoneyAction;
-    KAction*                   filePrintAction;
-    KAction*                   flipHorizAction;
-    KAction*                   flipVertAction;
-    KAction*                   rawCameraListAction;
-    KAction*                   rotateLeftAction;
-    KAction*                   rotateRightAction;
-    KAction*                   selectAllAction;
-    KAction*                   selectNoneAction;
-    KAction*                   slideShowAction;
-    KAction*                   softProofOptionsAction;
-    KAction*                   zoomFitToSelectAction;
-    KAction*                   zoomMinusAction;
-    KAction*                   zoomPlusAction;
-    KAction*                   zoomTo100percents;
+    KAction*                     copyAction;
+    KAction*                     cropAction;
+    KAction*                     autoCropAction;
+    KAction*                     filePrintAction;
+    KAction*                     flipHorizAction;
+    KAction*                     flipVertAction;
+    KAction*                     rotateLeftAction;
+    KAction*                     rotateRightAction;
+    KAction*                     selectAllAction;
+    KAction*                     selectNoneAction;
+    KAction*                     slideShowAction;
+    KAction*                     softProofOptionsAction;
+    KAction*                     zoomFitToSelectAction;
+    KAction*                     zoomMinusAction;
+    KAction*                     zoomPlusAction;
+    KAction*                     zoomTo100percents;
 
-    QSignalMapper*             undoSignalMapper;
-    QSignalMapper*             redoSignalMapper;
-    QSignalMapper*             formatMenuActionMapper;
+    QSignalMapper*               undoSignalMapper;
+    QSignalMapper*               redoSignalMapper;
+    QSignalMapper*               formatMenuActionMapper;
 
-    QEventLoop*                waitingLoop;
-    QDialog*                   currentWindowModalDialog;
+    QEventLoop*                  waitingLoop;
+    QDialog*                     currentWindowModalDialog;
 
-    KToggleAction*             zoomFitToWindowAction;
-    KToggleAction*             viewCMViewAction;
-    KToggleAction*             viewSoftProofAction;
-    KToggleAction*             viewUnderExpoAction;
-    KToggleAction*             viewOverExpoAction;
-    KToggleAction*             showMenuBarAction;
+    KToggleAction*               zoomFitToWindowAction;
+    KToggleAction*               viewCMViewAction;
+    KToggleAction*               viewSoftProofAction;
+    KToggleAction*               viewUnderExpoAction;
+    KToggleAction*               viewOverExpoAction;
+    KToggleAction*               showMenuBarAction;
 
-    ActionCategorizedView*     selectToolsActionView;
+    ActionCategorizedView*       selectToolsActionView;
 
-    ICCSettingsContainer*      ICCSettings;
+    ICCSettingsContainer*        ICCSettings;
 
-    DZoomBar*                  zoomBar;
-    PreviewToolBar*            previewToolBar;
+    DZoomBar*                    zoomBar;
+    PreviewToolBar*              previewToolBar;
 
-    ExposureSettingsContainer* exposureSettings;
+    ExposureSettingsContainer*   exposureSettings;
 
-    EditorToolIface*           toolIface;
+    EditorToolIface*             toolIface;
 
-    VersionManager             defaultVersionManager;
+    VersionManager               defaultVersionManager;
 
-    QList<int>                 fullscreenSizeBackup;
+    QList<int>                   fullscreenSizeBackup;
+
+    QMap<QString, KService::Ptr> servicesMap;
 };
 
 const QString EditorWindow::Private::configAutoZoomEntry("AutoZoom");

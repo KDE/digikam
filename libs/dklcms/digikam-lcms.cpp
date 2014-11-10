@@ -89,62 +89,6 @@ void _l2cmsMAT3tol1LPMAT3(cmsMAT3* const l2, LPMAT3 l1)
 
 #define MATRIX_DET_TOLERANCE    0.0001
 
-// Initiate a vector
-void CMSEXPORT _cmsVEC3init(cmsVEC3* const r, cmsFloat64Number x, cmsFloat64Number y, cmsFloat64Number z)
-{
-    r -> n[VX] = x;
-    r -> n[VY] = y;
-    r -> n[VZ] = z;
-}
-
-// Multiply two matrices
-void CMSEXPORT _cmsMAT3per(cmsMAT3* const r, const cmsMAT3* const a, const cmsMAT3* const b)
-{
-#define ROWCOL(i, j) \
-    a->v[i].n[0]*b->v[0].n[j] + a->v[i].n[1]*b->v[1].n[j] + a->v[i].n[2]*b->v[2].n[j]
-
-    _cmsVEC3init(&r-> v[0], ROWCOL(0,0), ROWCOL(0,1), ROWCOL(0,2));
-    _cmsVEC3init(&r-> v[1], ROWCOL(1,0), ROWCOL(1,1), ROWCOL(1,2));
-    _cmsVEC3init(&r-> v[2], ROWCOL(2,0), ROWCOL(2,1), ROWCOL(2,2));
-
-#undef ROWCOL //(i, j)
-}
-
-
-// Inverse of a matrix b = a^(-1)
-cmsBool CMSEXPORT _cmsMAT3inverse(const cmsMAT3* const a, cmsMAT3* const b)
-{
-   cmsFloat64Number det, c0, c1, c2;
-
-   c0 =  a -> v[1].n[1]*a -> v[2].n[2] - a -> v[1].n[2]*a -> v[2].n[1];
-   c1 = -a -> v[1].n[0]*a -> v[2].n[2] + a -> v[1].n[2]*a -> v[2].n[0];
-   c2 =  a -> v[1].n[0]*a -> v[2].n[1] - a -> v[1].n[1]*a -> v[2].n[0];
-
-   det = a -> v[0].n[0]*c0 + a -> v[0].n[1]*c1 + a -> v[0].n[2]*c2;
-
-   if (fabs(det) < MATRIX_DET_TOLERANCE) return FALSE;  // singular matrix; can't invert
-
-   b -> v[0].n[0] = c0/det;
-   b -> v[0].n[1] = (a -> v[0].n[2]*a -> v[2].n[1] - a -> v[0].n[1]*a -> v[2].n[2])/det;
-   b -> v[0].n[2] = (a -> v[0].n[1]*a -> v[1].n[2] - a -> v[0].n[2]*a -> v[1].n[1])/det;
-   b -> v[1].n[0] = c1/det;
-   b -> v[1].n[1] = (a -> v[0].n[0]*a -> v[2].n[2] - a -> v[0].n[2]*a -> v[2].n[0])/det;
-   b -> v[1].n[2] = (a -> v[0].n[2]*a -> v[1].n[0] - a -> v[0].n[0]*a -> v[1].n[2])/det;
-   b -> v[2].n[0] = c2/det;
-   b -> v[2].n[1] = (a -> v[0].n[1]*a -> v[2].n[0] - a -> v[0].n[0]*a -> v[2].n[1])/det;
-   b -> v[2].n[2] = (a -> v[0].n[0]*a -> v[1].n[1] - a -> v[0].n[1]*a -> v[1].n[0])/det;
-
-   return TRUE;
-}
-
-/// Evaluate a vector across a matrix
-void CMSEXPORT _cmsMAT3eval(cmsVEC3* const r, const cmsMAT3* const a, const cmsVEC3* const v)
-{
-    r->n[VX] = a->v[0].n[VX]*v->n[VX] + a->v[0].n[VY]*v->n[VY] + a->v[0].n[VZ]*v->n[VZ];
-    r->n[VY] = a->v[1].n[VX]*v->n[VX] + a->v[1].n[VY]*v->n[VY] + a->v[1].n[VZ]*v->n[VZ];
-    r->n[VZ] = a->v[2].n[VX]*v->n[VX] + a->v[2].n[VY]*v->n[VY] + a->v[2].n[VZ]*v->n[VZ];
-}
-
 /// Compute chromatic adaptation matrix using Chad as cone matrix
 static cmsBool ComputeChromaticAdaptation(cmsMAT3* const Conversion,
                                           const cmsCIEXYZ* const SourceWhitePoint,
@@ -157,7 +101,9 @@ static cmsBool ComputeChromaticAdaptation(cmsMAT3* const Conversion,
     cmsMAT3 Cone, Tmp;
 
     Tmp = *Chad;
-    if (!_cmsMAT3inverse(&Tmp, &Chad_Inv)) return FALSE;
+
+    if (!_cmsMAT3inverse(&Tmp, &Chad_Inv))
+        return FALSE;
 
     _cmsVEC3init(&ConeSourceXYZ, SourceWhitePoint -> X,
                                  SourceWhitePoint -> Y,
@@ -182,9 +128,9 @@ static cmsBool ComputeChromaticAdaptation(cmsMAT3* const Conversion,
     return TRUE;
 }
 
-/** Returns the final chrmatic adaptation from illuminant FromIll to Illuminant ToIll
-    The cone matrix can be specified in ConeMatrix. If NULL, Bradford is assumed
-*/
+/** Returns the final chromatic adaptation from illuminant FromIll to Illuminant ToIll
+ *  The cone matrix can be specified in ConeMatrix. If NULL, Bradford is assumed
+ */
 cmsBool _cmsAdaptationMatrix(cmsMAT3* const r, const cmsMAT3* ConeMatrix, const cmsCIEXYZ* const FromIll, const cmsCIEXYZ* const ToIll)
 {
     // Bradford matrix
@@ -272,9 +218,7 @@ cmsBool _cmsBuildRGB2XYZtransferMatrix(cmsMAT3* const r, const cmsCIExyY* const 
     return _cmsAdaptMatrixToD50(r, WhitePt);
 }
 
-
 ///////////////////////////////////////////////////////////////////////
-
 
 /// WAS: Same as anterior, but assuming D50 source. White point is given in xyY
 static cmsBool cmsAdaptMatrixFromD50(cmsMAT3* const r, const cmsCIExyY* const DestWhitePt)
@@ -296,7 +240,7 @@ static cmsBool cmsAdaptMatrixFromD50(cmsMAT3* const r, const cmsCIExyY* const De
 
 ////////////////////////////////////////////////////
 
-LCMSAPI int LCMSEXPORT dkCmsErrorAction(int nAction)
+int dkCmsErrorAction(int nAction)
 {
     Q_UNUSED(nAction);
 
@@ -304,12 +248,12 @@ LCMSAPI int LCMSEXPORT dkCmsErrorAction(int nAction)
     return 0;
 }
 
-LCMSAPI DWORD LCMSEXPORT dkCmsGetProfileICCversion(cmsHPROFILE hProfile)
+DWORD dkCmsGetProfileICCversion(cmsHPROFILE hProfile)
 {
     return (DWORD) cmsGetEncodedICCversion(hProfile);
 }
 
-void LCMSEXPORT dkCmsSetAlarmCodes(int r, int g, int b)
+void dkCmsSetAlarmCodes(int r, int g, int b)
 {
     cmsUInt16Number NewAlarm[cmsMAXCHANNELS];
     NewAlarm[0] = (cmsUInt16Number)r;
@@ -318,7 +262,7 @@ void LCMSEXPORT dkCmsSetAlarmCodes(int r, int g, int b)
     cmsSetAlarmCodes(NewAlarm);
 }
 
-LCMSAPI QString LCMSEXPORT dkCmsTakeProductName(cmsHPROFILE hProfile)
+QString dkCmsTakeProductName(cmsHPROFILE hProfile)
 {
     static char Name[1024*2+4];
     char Manufacturer[1024], Model[1024];
@@ -366,7 +310,7 @@ LCMSAPI QString LCMSEXPORT dkCmsTakeProductName(cmsHPROFILE hProfile)
     return QString::fromLatin1(Name);
 }
 
-LCMSAPI QString LCMSEXPORT dkCmsTakeProductDesc(cmsHPROFILE hProfile)
+QString dkCmsTakeProductDesc(cmsHPROFILE hProfile)
 {
     static char Name[2048];
 
@@ -388,7 +332,7 @@ LCMSAPI QString LCMSEXPORT dkCmsTakeProductDesc(cmsHPROFILE hProfile)
     return QString::fromLatin1(Name);
 }
 
-LCMSAPI QString LCMSEXPORT dkCmsTakeProductInfo(cmsHPROFILE hProfile)
+QString dkCmsTakeProductInfo(cmsHPROFILE hProfile)
 {
     static char Info[4096];
     cmsMLU*     mlu = 0;
@@ -446,7 +390,7 @@ LCMSAPI QString LCMSEXPORT dkCmsTakeProductInfo(cmsHPROFILE hProfile)
     return QString::fromLatin1(Info);
 }
 
-LCMSAPI QString LCMSEXPORT dkCmsTakeManufacturer(cmsHPROFILE hProfile)
+QString dkCmsTakeManufacturer(cmsHPROFILE hProfile)
 {
     char buffer[1024];
     buffer[0] = '\0';
@@ -454,7 +398,7 @@ LCMSAPI QString LCMSEXPORT dkCmsTakeManufacturer(cmsHPROFILE hProfile)
     return QString::fromLatin1(buffer);
 }
 
-LCMSAPI LCMSBOOL LCMSEXPORT dkCmsTakeMediaWhitePoint(LPcmsCIEXYZ Dest, cmsHPROFILE hProfile)
+LCMSBOOL dkCmsTakeMediaWhitePoint(LPcmsCIEXYZ Dest, cmsHPROFILE hProfile)
 {
     LPcmsCIEXYZ tag = static_cast<LPcmsCIEXYZ>( cmsReadTag(hProfile, cmsSigMediaWhitePointTag) );
 
@@ -465,11 +409,11 @@ LCMSAPI LCMSBOOL LCMSEXPORT dkCmsTakeMediaWhitePoint(LPcmsCIEXYZ Dest, cmsHPROFI
     return TRUE;
 }
 
-LCMSAPI QString LCMSEXPORT dkCmsTakeModel(cmsHPROFILE hProfile)
+QString dkCmsTakeModel(cmsHPROFILE hProfile)
 {
     char buffer[1024];
     const cmsMLU* const mlu = (const cmsMLU* const)cmsReadTag(hProfile, cmsSigDeviceModelDescTag);
-    buffer[0]         = '\0';
+    buffer[0]               = '\0';
 
     if (mlu == NULL)
         return QString();
@@ -478,7 +422,7 @@ LCMSAPI QString LCMSEXPORT dkCmsTakeModel(cmsHPROFILE hProfile)
     return QString::fromLatin1(buffer);
 }
 
-LCMSAPI QString LCMSEXPORT dkCmsTakeCopyright(cmsHPROFILE hProfile)
+QString dkCmsTakeCopyright(cmsHPROFILE hProfile)
 {
     char buffer[1024];
     const cmsMLU* const mlu = (const cmsMLU* const)cmsReadTag(hProfile, cmsSigCopyrightTag);
@@ -491,19 +435,19 @@ LCMSAPI QString LCMSEXPORT dkCmsTakeCopyright(cmsHPROFILE hProfile)
     return QString::fromLatin1(buffer);
 }
 
-LCMSAPI DWORD LCMSEXPORT dkCmsTakeHeaderFlags(cmsHPROFILE hProfile)
+DWORD dkCmsTakeHeaderFlags(cmsHPROFILE hProfile)
 {
     return static_cast<DWORD>( cmsGetHeaderFlags(hProfile) );
 }
 
-LCMSAPI const BYTE* LCMSEXPORT dkCmsTakeProfileID(cmsHPROFILE hProfile)
+const BYTE* dkCmsTakeProfileID(cmsHPROFILE hProfile)
 {
     cmsUInt8Number* const ProfileID = new cmsUInt8Number[16];
     cmsGetHeaderProfileID(hProfile, ProfileID);
     return static_cast<BYTE*>( ProfileID );
 }
 
-LCMSAPI int LCMSEXPORT dkCmsTakeRenderingIntent(cmsHPROFILE hProfile)
+int dkCmsTakeRenderingIntent(cmsHPROFILE hProfile)
 {
     return static_cast<int>( cmsGetHeaderRenderingIntent(hProfile) );
 }
@@ -597,29 +541,29 @@ LCMSBOOL dkCmsReadICCMatrixRGB2XYZ(LPMAT3 r, cmsHPROFILE hProfile)
     return ret;
 }
 
-LCMSAPI cmsHPROFILE LCMSEXPORT dkCmsOpenProfileFromMem(LPVOID MemPtr, DWORD dwSize)
+cmsHPROFILE dkCmsOpenProfileFromMem(LPVOID MemPtr, DWORD dwSize)
 {
     return cmsOpenProfileFromMem(MemPtr, static_cast<cmsUInt32Number>( dwSize ));
 }
 
-LCMSAPI icProfileClassSignature LCMSEXPORT dkCmsGetDeviceClass(cmsHPROFILE hProfile)
+icProfileClassSignature dkCmsGetDeviceClass(cmsHPROFILE hProfile)
 {
     return static_cast<icProfileClassSignature>( cmsGetDeviceClass(hProfile) );
 }
 
-LCMSAPI LCMSBOOL LCMSEXPORT dkCmsCloseProfile(cmsHPROFILE hProfile)
+LCMSBOOL dkCmsCloseProfile(cmsHPROFILE hProfile)
 {
     return static_cast<LCMSBOOL>( cmsCloseProfile(hProfile) );
 }
 
-LCMSAPI cmsHTRANSFORM LCMSEXPORT dkCmsCreateProofingTransform(cmsHPROFILE Input,
-                                                              DWORD InputFormat,
-                                                              cmsHPROFILE Output,
-                                                              DWORD OutputFormat,
-                                                              cmsHPROFILE Proofing,
-                                                              int Intent,
-                                                              int ProofingIntent,
-                                                              DWORD dwFlags)
+cmsHTRANSFORM dkCmsCreateProofingTransform(cmsHPROFILE Input,
+                                           DWORD InputFormat,
+                                           cmsHPROFILE Output,
+                                           DWORD OutputFormat,
+                                           cmsHPROFILE Proofing,
+                                           int Intent,
+                                           int ProofingIntent,
+                                           DWORD dwFlags)
 {
     return cmsCreateProofingTransform(Input,
                                       static_cast<cmsUInt32Number>( InputFormat ),
@@ -631,12 +575,12 @@ LCMSAPI cmsHTRANSFORM LCMSEXPORT dkCmsCreateProofingTransform(cmsHPROFILE Input,
                                       static_cast<cmsUInt32Number>( dwFlags ));
 }
 
-LCMSAPI cmsHTRANSFORM LCMSEXPORT dkCmsCreateTransform(cmsHPROFILE Input,
-                                                      DWORD InputFormat,
-                                                      cmsHPROFILE Output,
-                                                      DWORD OutputFormat,
-                                                      int Intent,
-                                                      DWORD dwFlags)
+cmsHTRANSFORM dkCmsCreateTransform(cmsHPROFILE Input,
+                                   DWORD InputFormat,
+                                   cmsHPROFILE Output,
+                                   DWORD OutputFormat,
+                                   int Intent,
+                                   DWORD dwFlags)
 {
     return cmsCreateTransform(Input,
                               static_cast<cmsUInt32Number>( InputFormat ),
@@ -646,30 +590,30 @@ LCMSAPI cmsHTRANSFORM LCMSEXPORT dkCmsCreateTransform(cmsHPROFILE Input,
                               static_cast<cmsUInt32Number>( dwFlags ));
 }
 
-LCMSAPI cmsHPROFILE LCMSEXPORT dkCmsCreateXYZProfile()
+cmsHPROFILE dkCmsCreateXYZProfile()
 {
     return cmsCreateXYZProfile();
 }
 
-LCMSAPI cmsHPROFILE LCMSEXPORT dkCmsCreate_sRGBProfile()
+cmsHPROFILE dkCmsCreate_sRGBProfile()
 {
     return cmsCreate_sRGBProfile();
 }
 
-LCMSAPI void LCMSEXPORT dkCmsDeleteTransform(cmsHTRANSFORM hTransform)
+void dkCmsDeleteTransform(cmsHTRANSFORM hTransform)
 {
     cmsDeleteTransform(hTransform);
 }
 
-LCMSAPI double LCMSEXPORT dkCmsDeltaE(LPcmsCIELab Lab1, LPcmsCIELab Lab2)
+double dkCmsDeltaE(LPcmsCIELab Lab1, LPcmsCIELab Lab2)
 {
     return static_cast<double>( cmsDeltaE(static_cast<cmsCIELab*>( Lab1 ), static_cast<cmsCIELab*>( Lab2 )) );
 }
 
-LCMSAPI void LCMSEXPORT dkCmsDoTransform(cmsHTRANSFORM Transform,
-                                         LPVOID InputBuffer,
-                                         LPVOID OutputBuffer,
-                                         unsigned int Size)
+void dkCmsDoTransform(cmsHTRANSFORM Transform,
+                      LPVOID InputBuffer,
+                      LPVOID OutputBuffer,
+                      unsigned int Size)
 {
     cmsDoTransform(Transform,
                    static_cast<const void*>( InputBuffer ),
@@ -677,32 +621,32 @@ LCMSAPI void LCMSEXPORT dkCmsDoTransform(cmsHTRANSFORM Transform,
                    static_cast<cmsUInt32Number>( Size ));
 }
 
-LCMSAPI void LCMSEXPORT dkCmsFloat2XYZEncoded(WORD XYZ[3], const cmsCIEXYZ* const fXYZ)
+void dkCmsFloat2XYZEncoded(WORD XYZ[3], const cmsCIEXYZ* const fXYZ)
 {
     cmsFloat2XYZEncoded(XYZ, fXYZ);
 }
 
-LCMSAPI icColorSpaceSignature LCMSEXPORT dkCmsGetColorSpace(cmsHPROFILE hProfile)
+icColorSpaceSignature dkCmsGetColorSpace(cmsHPROFILE hProfile)
 {
     return static_cast<icColorSpaceSignature>( cmsGetColorSpace(hProfile) );
 }
 
-LCMSAPI icColorSpaceSignature LCMSEXPORT dkCmsGetPCS(cmsHPROFILE hProfile)
+icColorSpaceSignature dkCmsGetPCS(cmsHPROFILE hProfile)
 {
     return static_cast<icColorSpaceSignature>( cmsGetPCS(hProfile) );
 }
 
-LCMSAPI LCMSBOOL LCMSEXPORT dkCmsIsTag(cmsHPROFILE hProfile, icTagSignature sig)
+LCMSBOOL dkCmsIsTag(cmsHPROFILE hProfile, icTagSignature sig)
 {
     return static_cast<LCMSBOOL>( cmsIsTag(hProfile, static_cast<cmsTagSignature>( sig )) );
 }
 
-LCMSAPI cmsHPROFILE LCMSEXPORT dkCmsOpenProfileFromFile(const char* const ICCProfile, const char* const sAccess)
+cmsHPROFILE dkCmsOpenProfileFromFile(const char* const ICCProfile, const char* const sAccess)
 {
     return cmsOpenProfileFromFile(ICCProfile, sAccess);
 }
 
-LCMSAPI void LCMSEXPORT dkCmsXYZ2xyY(LPcmsCIExyY Dest, const cmsCIEXYZ* const Source)
+void dkCmsXYZ2xyY(LPcmsCIExyY Dest, const cmsCIEXYZ* const Source)
 {
     cmsXYZ2xyY(static_cast<cmsCIExyY*>(Dest), Source);
 }

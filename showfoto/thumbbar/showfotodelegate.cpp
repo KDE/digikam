@@ -6,7 +6,8 @@
  * Date        : 2013-08-01
  * Description : Qt item view for images - the delegate
  *
- * Copyright (C) 2013 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
+ * Copyright (C) 2013      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
+ * Copyright (C) 2013-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,7 +55,8 @@ void ShowfotoDelegate::ShowfotoDelegatePrivate::clearRects()
     nameRect             = QRect(0, 0, 0, 0);
     resolutionRect       = QRect(0, 0, 0, 0);
     sizeRect             = QRect(0, 0, 0, 0);
-    imageInformationRect = QRect(0, 0, 0, 0);    
+    imageInformationRect = QRect(0, 0, 0, 0);
+    coordinatesRect      = QRect(0, 0, 0, 0);
 }
 
 ShowfotoDelegate::ShowfotoDelegate(QObject* const parent)
@@ -156,6 +158,12 @@ QRect ShowfotoDelegate::groupIndicatorRect() const
     return d->groupRect;
 }
 
+QRect ShowfotoDelegate::coordinatesIndicatorRect() const
+{
+    Q_D(const ShowfotoDelegate);
+    return d->coordinatesRect;
+}
+
 QPixmap ShowfotoDelegate::retrieveThumbnailPixmap(const QModelIndex& index, int thumbnailSize)
 {
     // work around constness
@@ -177,7 +185,7 @@ QPixmap ShowfotoDelegate::thumbnailPixmap(const QModelIndex& index) const
 void ShowfotoDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     Q_D(const ShowfotoDelegate);
-    ShowfotoItemInfo info = ShowfotoImageModel::retrieveShowfotoItemInfo(index);
+    ShowfotoItemInfo info     = ShowfotoImageModel::retrieveShowfotoItemInfo(index);
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("ImageViewer Settings");
 
@@ -234,6 +242,11 @@ void ShowfotoDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, co
     {
         QString frm = info.mime;
         drawImageFormat(p, actualPixmapRect, frm);
+    }
+
+    if (ShowfotoSettings::instance()->getShowCoordinates() && info.photoInfo.hasCoordinates)
+    {
+        drawGeolocationIndicator(p, d->coordinatesRect);
     }
 
     if (d->drawFocusFrame)
@@ -536,6 +549,7 @@ void ShowfotoThumbnailDelegate::updateRects()
 
     d->pixmapRect      = QRect(d->margin, d->margin, d->contentWidth, d->contentWidth);
     d->rect            = QRect(0, 0, d->contentWidth + 2*d->margin, d->contentWidth + 2*d->margin);
+    d->coordinatesRect = QRect(d->contentWidth - KIconLoader::SizeSmall+2, d->pixmapRect.top(), KIconLoader::SizeSmall, KIconLoader::SizeSmall);
 
     if (d->flow == QListView::LeftToRight)
     {

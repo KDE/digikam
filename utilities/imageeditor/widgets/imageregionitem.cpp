@@ -32,6 +32,7 @@
 // KDE includes
 
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -118,7 +119,7 @@ void ImageRegionItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* o
 
     // scale "as if" scaling to whole image, but clip output to our exposed region
     DImg scaledImage     = d->image.smoothScaleClipped(completeSize.width(),    completeSize.height(),
-                                                       d_ptr->drawRect.x(),     d_ptr->drawRect.y(), 
+                                                       d_ptr->drawRect.x(),     d_ptr->drawRect.y(),
                                                        d_ptr->drawRect.width(), d_ptr->drawRect.height());
 
     if (d->cachedPixmaps.find(d_ptr->drawRect, &pix, &pixSourceRect))
@@ -251,18 +252,21 @@ void ImageRegionItem::paintExtraData(QPainter* const p)
         QPoint pt;
         QRectF hpArea;
 
+
         for (int i = 0 ; i < d_ptr->hightlightPoints.count() ; ++i)
         {
             pt             = d_ptr->hightlightPoints.point(i);
-            int zoomFactor = zoomSettings()->zoomFactor();
+            double zoomFactor = zoomSettings()->zoomFactor();
+            int x = (int)((double)pt.x() * zoomFactor);
+            int y = (int)((double)pt.y() * zoomFactor);
 
-            if (d_ptr->drawRect.contains(pt))
+            // Check if zoomed point is inside, not actual point
+            if (d_ptr->drawRect.contains(QPoint(x,y)))
             {
-                int x = (int)((double)pt.x() / zoomFactor);
-                int y = (int)((double)pt.y() / zoomFactor);
 
                 //QPoint hp(contentsToViewport(QPointF(x, y)));
                 QPointF hp(mapToScene(QPointF(x, y)));
+
                 hpArea.setSize(QSize((int)(16 * zoomFactor), (int)(16 * zoomFactor)));
                 hpArea.moveCenter(hp);
 

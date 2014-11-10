@@ -73,7 +73,7 @@ namespace Digikam
 
 void TIFFLoader::dimg_tiff_warning(const char* module, const char* format, va_list warnings)
 {
-#ifdef USE_ADVANCEDDEBUGMSG
+#ifdef USE_IMGLOADERDEBUGMSG
     char message[4096];
     vsnprintf(message, 4096, format, warnings);
     kDebug() << module <<  "::" <<  message;
@@ -86,7 +86,7 @@ void TIFFLoader::dimg_tiff_warning(const char* module, const char* format, va_li
 
 void TIFFLoader::dimg_tiff_error(const char* module, const char* format, va_list errors)
 {
-#ifdef USE_ADVANCEDDEBUGMSG
+#ifdef USE_IMGLOADERDEBUGMSG
     char message[4096];
     vsnprintf(message, 4096, format, errors);
     kDebug() << module << "::" << message;
@@ -127,7 +127,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         return false;
     }
 
-#ifdef USE_ADVANCEDDEBUGMSG
+#ifdef USE_IMGLOADERDEBUGMSG
     TIFFPrintDirectory(tif, stdout, 0);
 #endif
 
@@ -348,7 +348,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
                 // tiff data is read as BGR or ABGR or Greyscale
 
-                if (samples_per_pixel == 1)   // See B.K.O #148400: Greyscale pictures only have _one_ sample per pixel
+                if (samples_per_pixel == 1)   // See bug #148400: Greyscale pictures only have _one_ sample per pixel
                 {
                     for (int i = 0; i < bytesRead / 2; ++i)
                     {

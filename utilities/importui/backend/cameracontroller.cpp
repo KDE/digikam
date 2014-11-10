@@ -7,7 +7,7 @@
  * Description : digital camera controller
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -214,7 +214,6 @@ CameraController::CameraController(QWidget* const parent,
             Qt::BlockingQueuedConnection);
 
     d->running = true;
-    start();
 }
 
 CameraController::~CameraController()
@@ -450,8 +449,6 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
         case (CameraCommand::cam_cameraInformation):
         {
-            sendLogMsg(i18n("Getting camera information..."));
-
             QString summary, manual, about;
 
             d->camera->cameraSummary(summary);
@@ -464,28 +461,40 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
         case (CameraCommand::cam_freeSpace):
         {
-            sendLogMsg(i18n("Getting available free space on camera..."));
             unsigned long kBSize  = 0;
             unsigned long kBAvail = 0;
-            d->camera->getFreeSpace(kBSize, kBAvail);
+
+            if (!d->camera->getFreeSpace(kBSize, kBAvail))
+            {
+                sendLogMsg(i18n("Failed to get free space from camera"), DHistoryView::ErrorEntry);
+            }
+
             emit signalFreeSpace(kBSize, kBAvail);
             break;
         }
 
         case (CameraCommand::cam_preview):
         {
-            sendLogMsg(i18n("Getting preview..."));
             QImage preview;
-            d->camera->getPreview(preview);
+
+            if (!d->camera->getPreview(preview))
+            {
+                sendLogMsg(i18n("Failed to get preview from camera"), DHistoryView::ErrorEntry);
+            }
+
             emit signalPreview(preview);
             break;
         }
 
         case (CameraCommand::cam_capture):
         {
-            sendLogMsg(i18n("Capture image..."));
             CamItemInfo itemInfo;
-            d->camera->capture(itemInfo);
+
+            if (!d->camera->capture(itemInfo))
+            {
+                sendLogMsg(i18n("Failed to process capture from camera"), DHistoryView::ErrorEntry);
+            }
+
             emit signalUploaded(itemInfo);
             break;
         }
@@ -493,11 +502,12 @@ void CameraController::executeCommand(CameraCommand* const cmd)
         case (CameraCommand::cam_listfolders):
         {
             QString folder = cmd->map["folder"].toString();
-            sendLogMsg(i18n("Listing folders in %1...", folder));
 
-            d->camera->getFolders(folder);
+            if (!d->camera->getFolders(folder))
+            {
+                sendLogMsg(i18n("Failed to list folder <filename>%1</filename>", folder), DHistoryView::ErrorEntry);
+            }
 
-            sendLogMsg(i18n("The folders in %1 have been listed.", folder));
             break;
         }
 
@@ -505,38 +515,37 @@ void CameraController::executeCommand(CameraCommand* const cmd)
         {
             QString folder   = cmd->map["folder"].toString();
             bool useMetadata = cmd->map["useMetadata"].toBool();
-            sendLogMsg(i18n("Listing files in %1...", folder));
 
             CamItemInfoList itemsList;
 
             if (!d->camera->getItemsInfoList(folder, useMetadata, itemsList))
             {
-                sendLogMsg(i18n("Failed to list files in %1.", folder), DHistoryView::ErrorEntry);
+                sendLogMsg(i18n("Failed to list files in <filename>%1</filename>", folder), DHistoryView::ErrorEntry);
             }
 
             // TODO would it be okay to pass this to the ImportImageModel and let it filter it for us?
-            for(CamItemInfoList::iterator it = itemsList.begin(); it!=itemsList.end();) 
+            for (CamItemInfoList::iterator it = itemsList.begin() ; it != itemsList.end() ; ) 
             {
                 CamItemInfo &info = (*it);
+
                 if (info.mime.isEmpty())
                 {
                     it = itemsList.erase(it);
                     continue;
                 }
-                it++;
+
+                ++it;
             }
 
             emit signalFileList(itemsList);
-
-            sendLogMsg(i18n("The files in %1 have been listed.", folder));
 
             break;
         }
 
         case (CameraCommand::cam_thumbsinfo):
         {
-            QList<QVariant> list    = cmd->map["list"].toList();
-            int thumbSize = cmd->map["thumbSize"].toInt();
+            QList<QVariant> list = cmd->map["list"].toList();
+            int thumbSize        = cmd->map["thumbSize"].toInt();
 
             for (QList<QVariant>::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
             {
@@ -548,7 +557,6 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                 QString folder = (*it).toStringList().at(0);
                 QString file   = (*it).toStringList().at(1);
 
-                sendLogMsg(i18n("Getting thumbnail for <filename>%1</filename>...", file), DHistoryView::StartingEntry, folder, file);
                 CamItemInfo info;
                 info.folder = folder;
                 info.name = file;
@@ -561,6 +569,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                 }
                 else
                 {
+                    sendLogMsg(i18n("Failed to get thumbnail for <filename>%1</filename>", file), DHistoryView::ErrorEntry, folder, file);
                     emit signalThumbInfoFailed(folder, file, info);
                 }
             }
@@ -573,10 +582,11 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             QString folder = cmd->map["folder"].toString();
             QString file   = cmd->map["file"].toString();
 
-            sendLogMsg(i18n("Getting Metadata for %1...", file), DHistoryView::StartingEntry, folder, file);
-
             DMetadata meta;
-            d->camera->getMetadata(folder, file, meta);
+
+            if (!d->camera->getMetadata(folder, file, meta))
+                sendLogMsg(i18n("Failed to get Metadata for <filename>%1</filename>", file), DHistoryView::ErrorEntry, folder, file);
+
             emit signalMetadata(folder, file, meta);
 
             break;
@@ -596,7 +606,6 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             int       pickLabel      = cmd->map["pickLabel"].toInt();
             int       colorLabel     = cmd->map["colorLabel"].toInt();
             int       rating         = cmd->map["rating"].toInt();
-            sendLogMsg(i18n("Downloading file %1...", file), DHistoryView::StartingEntry, folder, file);
 
             // download to a temp file
 
@@ -613,8 +622,8 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             if (!result)
             {
                 unlink(QFile::encodeName(tempURL.toLocalFile()));
+                sendLogMsg(i18n("Failed to download <filename>%1</filename>", file), DHistoryView::ErrorEntry, folder, file);
                 emit signalDownloaded(folder, file, CamItemInfo::DownloadFailed);
-                sendLogMsg(i18n("Failed to download %1...", file), DHistoryView::ErrorEntry, folder, file);
                 break;
             }
             else if (JPEGUtils::isJpegImage(tempURL.toLocalFile()))
@@ -628,7 +637,6 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
                     if (fixDateTime)
                     {
-                        sendLogMsg(i18n("Fix Internal date to file %1...", file), DHistoryView::StartingEntry, folder, file);
                         metadata.setImageDateTime(newDateTime, true);
                     }
 
@@ -653,7 +661,6 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                         }
                         else
                         {
-                            sendLogMsg(i18n("Apply Metadata template to file %1...", file), DHistoryView::StartingEntry, folder, file);
                             metadata.removeMetadataTemplate();
                             metadata.setMetadataTemplate(tm->findByTitle(templateTitle));
                         }
@@ -668,7 +675,6 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                 if (convertJpeg)
                 {
                     kDebug() << "Convert to LossLess: " << file << " using (" << tempURL << ")";
-                    sendLogMsg(i18n("Converting %1 to lossless file format...", file), DHistoryView::StartingEntry, folder, file);
 
                     KUrl tempURL2(dest);
                     tempURL2 = tempURL2.upUrl();
@@ -680,8 +686,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                         // convert failed. delete the temp file
                         unlink(QFile::encodeName(tempURL.toLocalFile()));
                         unlink(QFile::encodeName(tempURL2.toLocalFile()));
-                        // TODO error reporting?
-                        //result = false;
+                        sendLogMsg(i18n("Failed to convert file <filename>%1</filename> to JPEG", file), DHistoryView::ErrorEntry, folder, file);
                     }
                     else
                     {
@@ -708,8 +713,6 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             // The source file path to download in camera.
             QString src    = cmd->map["srcFilePath"].toString();
 
-            sendLogMsg(i18n("Uploading file %1 to camera...", file), DHistoryView::StartingEntry, folder, file);
-
             CamItemInfo itemsInfo;
 
             bool result = d->camera->uploadItem(folder, file, src, itemsInfo);
@@ -730,10 +733,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
         {
             QString folder = cmd->map["folder"].toString();
             QString file   = cmd->map["file"].toString();
-
-            sendLogMsg(i18n("Deleting file %1...", file), DHistoryView::StartingEntry, folder, file);
-
-            bool result = d->camera->deleteItem(folder, file);
+            bool result    = d->camera->deleteItem(folder, file);
 
             if (result)
             {
@@ -752,10 +752,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             QString folder = cmd->map["folder"].toString();
             QString file   = cmd->map["file"].toString();
             bool    lock   = cmd->map["lock"].toBool();
-
-            sendLogMsg(i18n("Toggle lock file %1...", file), DHistoryView::StartingEntry, folder, file);
-
-            bool result = d->camera->setLockItem(folder, file, lock);
+            bool result    = d->camera->setLockItem(folder, file, lock);
 
             if (result)
             {
@@ -878,7 +875,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
     else if (skip)
     {
         unlink(QFile::encodeName(temp));
-        sendLogMsg(i18n("Skipped file %1", file), DHistoryView::WarningEntry, folder, file);
+        sendLogMsg(i18n("Skipped file <filename>%1</filename>", file), DHistoryView::WarningEntry, folder, file);
         emit signalSkipped(folder, file);
         return;
     }
@@ -888,7 +885,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
     {
         if (KDE::rename(DMetadata::sidecarPath(temp), DMetadata::sidecarPath(dest)) != 0)
         {
-            sendLogMsg(i18n("Failed to save sidecar file for %1...", file), DHistoryView::ErrorEntry,  folder, file);
+            sendLogMsg(i18n("Failed to save sidecar file for <filename>%1</filename>", file), DHistoryView::ErrorEntry,  folder, file);
         }
     }
 
@@ -897,14 +894,13 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
         // rename failed. delete the temp file
         unlink(QFile::encodeName(temp));
         emit signalDownloaded(folder, file, CamItemInfo::DownloadFailed);
-        sendLogMsg(i18n("Failed to download %1...", file), DHistoryView::ErrorEntry,  folder, file);
+        sendLogMsg(i18n("Failed to download <filename>%1</filename>", file), DHistoryView::ErrorEntry,  folder, file);
     }
     else
     {
         // TODO why two signals??
         emit signalDownloaded(folder, file, CamItemInfo::DownloadedYes);
         emit signalDownloadComplete(folder, file, info.path(), info.fileName());
-        sendLogMsg(i18n("Download successfully %1...", file), DHistoryView::StartingEntry, folder, file);
 
         // Run script
         if (!script.isEmpty())
@@ -913,6 +909,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
 
             process.setOutputChannelMode(KProcess::SeparateChannels);
             QString s;
+
             if (script.indexOf('%') > -1)
             {
                 QHash<QString, QString> map;
@@ -927,14 +924,16 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
             {
                 s = script + " \"" + dest + "\"";
             }
+
             process.setShellCommand(s);
             kDebug() << "Running: " << s;
             int ret = process.execute();
 
             if (ret != 0)
             {
-                kDebug() << "Script FAILED! " << ret;
+                sendLogMsg(i18n("Failed to run script for <filename>%1</filename>", file), DHistoryView::ErrorEntry,  folder, file);
             }
+
             kDebug() << "stdout" << process.readAllStandardOutput();
             kDebug() << "stderr" << process.readAllStandardError();
         }
@@ -943,7 +942,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
 
 void CameraController::slotDownloadFailed(const QString& folder, const QString& file)
 {
-    sendLogMsg(i18n("Failed to download %1...", file), DHistoryView::ErrorEntry, folder, file);
+    sendLogMsg(i18n("Failed to download <filename>%1</filename>", file), DHistoryView::ErrorEntry, folder, file);
 
     if (!d->canceled)
     {
@@ -954,7 +953,7 @@ void CameraController::slotDownloadFailed(const QString& folder, const QString& 
         else
         {
             const QString msg = i18n("Failed to download file <filename>%1</filename>. Do you want to continue?", file);
-            int result = KMessageBox::warningContinueCancel(d->parent, msg);
+            int result        = KMessageBox::warningContinueCancel(d->parent, msg);
 
             if (result != KMessageBox::Continue)
             {
@@ -969,7 +968,7 @@ void CameraController::slotUploadFailed(const QString& folder, const QString& fi
     Q_UNUSED(folder);
     Q_UNUSED(src);
 
-    sendLogMsg(i18n("Failed to upload %1...", file), DHistoryView::ErrorEntry);
+    sendLogMsg(i18n("Failed to upload <filename>%1</filename>", file), DHistoryView::ErrorEntry);
 
     if (!d->canceled)
     {
@@ -980,7 +979,7 @@ void CameraController::slotUploadFailed(const QString& folder, const QString& fi
         else
         {
             const QString msg = i18n("Failed to upload file <filename>%1</filename>. Do you want to continue?", file);
-            int result = KMessageBox::warningContinueCancel(d->parent, msg);
+            int result        = KMessageBox::warningContinueCancel(d->parent, msg);
 
             if (result != KMessageBox::Continue)
             {
@@ -993,7 +992,7 @@ void CameraController::slotUploadFailed(const QString& folder, const QString& fi
 void CameraController::slotDeleteFailed(const QString& folder, const QString& file)
 {
     emit signalDeleted(folder, file, false);
-    sendLogMsg(i18n("Failed to delete <filename>%1</filename>...", file), DHistoryView::ErrorEntry, folder, file);
+    sendLogMsg(i18n("Failed to delete <filename>%1</filename>", file), DHistoryView::ErrorEntry, folder, file);
 
     if (!d->canceled)
     {
@@ -1004,7 +1003,7 @@ void CameraController::slotDeleteFailed(const QString& folder, const QString& fi
         else
         {
             const QString msg = i18n("Failed to delete file <filename>%1</filename>. Do you want to continue?", file);
-            int result = KMessageBox::warningContinueCancel(d->parent, msg);
+            int result        = KMessageBox::warningContinueCancel(d->parent, msg);
 
             if (result != KMessageBox::Continue)
             {
@@ -1017,7 +1016,7 @@ void CameraController::slotDeleteFailed(const QString& folder, const QString& fi
 void CameraController::slotLockFailed(const QString& folder, const QString& file)
 {
     emit signalLocked(folder, file, false);
-    sendLogMsg(i18n("Failed to lock <filename>%1</filename>...", file), DHistoryView::ErrorEntry, folder, file);
+    sendLogMsg(i18n("Failed to lock <filename>%1</filename>", file), DHistoryView::ErrorEntry, folder, file);
 
     if (!d->canceled)
     {
@@ -1028,7 +1027,7 @@ void CameraController::slotLockFailed(const QString& folder, const QString& file
         else
         {
             const QString msg = i18n("Failed to toggle lock file <filename>%1</filename>. Do you want to continue?", file);
-            int result = KMessageBox::warningContinueCancel(d->parent, msg);
+            int result        = KMessageBox::warningContinueCancel(d->parent, msg);
 
             if (result != KMessageBox::Continue)
             {
@@ -1085,7 +1084,7 @@ void CameraController::listFiles(const QString& folder, bool useMetadata)
     addCommand(cmd);
 }
 
-void CameraController::getThumbsInfo(const CamItemInfoList& list, ThumbnailSize thumbSize)
+void CameraController::getThumbsInfo(const CamItemInfoList& list, int thumbSize)
 {
     d->canceled        = false;
     CameraCommand* cmd = new CameraCommand;
@@ -1098,8 +1097,8 @@ void CameraController::getThumbsInfo(const CamItemInfoList& list, ThumbnailSize 
         itemsList.append(QStringList() << info.folder << info.name);
     }
 
-    cmd->map.insert("list", QVariant(itemsList));
-    cmd->map.insert("thumbSize", QVariant(thumbSize.size()));
+    cmd->map.insert("list",      QVariant(itemsList));
+    cmd->map.insert("thumbSize", QVariant(thumbSize));
     addCommand(cmd);
 }
 

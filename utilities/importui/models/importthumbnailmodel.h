@@ -28,11 +28,7 @@
 
 #include "importimagemodel.h"
 #include "thumbnailsize.h"
-#include "cameracontroller.h"
-
-class KFileItem;
-class KJob;
-class KUrl;
+#include "camerathumbsctrl.h"
 
 namespace Digikam
 {
@@ -53,13 +49,11 @@ public:
     explicit ImportThumbnailModel(QObject* const parent);
     ~ImportThumbnailModel();
 
-    /// Sets the camera controller which is used to get the thumbnails for item infos.
-    virtual void setCameraController(CameraController* const controller);
+    /// Sets the camera thumbs controller which is used to get the thumbnails for item infos.
+    void setCameraThumbsController(CameraThumbsCtrl* const thumbsCtrl);
 
     /// Get the thumbnail size
     ThumbnailSize thumbnailSize() const;
-
-    void setExifRotate(bool rotate);
 
     /**
      *  Enable emitting dataChanged() when a thumbnail becomes available.
@@ -83,34 +77,14 @@ public:
      */
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::DisplayRole);
 
-    bool getThumbInfo(const CamItemInfo& info, CachedItem& item, ThumbnailSize thumbSize, bool thumbChanged) const;
-
-    // -- Cache management methods ------------------------------------------------------------
-    const CachedItem* retrieveItemFromCache(const KUrl& url) const;
-    bool hasItemFromCache(const KUrl& url) const;
-    void putItemToCache(const KUrl& url, const CamItemInfo& info, const QPixmap& thumb);
-    void removeItemFromCache(const KUrl& url);
-    void clearCache();
-    void setCacheSize(int numberOfItems);
-
 Q_SIGNALS:
 
     void thumbnailAvailable(const QModelIndex& index, int requestedSize);
     void thumbnailFailed(const QModelIndex& index, int requestedSize);
 
-public Q_SLOTS:
+private Q_SLOTS:
 
-    void slotThumbInfoLoaded(const QString& folder, const QString& file, const CamItemInfo& info, const QImage& thumb);
-    void slotThumbInfoFailed(const QString& folder, const QString& file, const CamItemInfo& info);
-    void slotGotKDEPreview(const KFileItem&, const QPixmap&);
-    void slotFailedKDEPreview(const KFileItem&);
-    void slotKdePreviewFinished(KJob*);
-
-private:
-
-    void loadWithKDE(const CamItemInfo& info);
-    void startKdePreviewJob();
-    void procressKDEPreview(const KFileItem& item, const QPixmap& pix);
+    void slotThumbInfoReady(const CamItemInfo&);
 
 private:
 

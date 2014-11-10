@@ -6,7 +6,7 @@
  * Date        : 2005-02-09
  * Description : a plugin to apply Blur FX to images
  *
- * Copyright 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -118,6 +118,8 @@ BlurFXTool::BlurFXTool(QObject* const parent)
                                 EditorToolSettings::Try);
 
     d->previewWidget = new ImageRegionWidget;
+    d->previewWidget->setWhatsThis(i18n("This is the preview of the blur effect "
+                                        "applied to the photograph."));
 
     // -------------------------------------------------------------
 
@@ -172,9 +174,12 @@ BlurFXTool::BlurFXTool(QObject* const parent)
     d->levelInput->setDefaultValue(128);
     d->levelInput->setWhatsThis( i18n("This value controls the level to use with the current effect."));
 
+    connect(d->effectType, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(slotEffectTypeChanged(int)));
+
     // -------------------------------------------------------------
 
-    QGridLayout* mainLayout = new QGridLayout;
+    QGridLayout* const mainLayout = new QGridLayout;
     mainLayout->addWidget(d->effectTypeLabel, 0, 0, 1, 2);
     mainLayout->addWidget(d->effectType,      1, 0, 1, 2);
     mainLayout->addWidget(d->distanceLabel,   2, 0, 1, 2);
@@ -191,6 +196,8 @@ BlurFXTool::BlurFXTool(QObject* const parent)
     setPreviewModeMask(PreviewToolBar::AllPreviewModes);
     setToolSettings(d->gboxSettings);
     setToolView(d->previewWidget);
+
+    slotEffectTypeChanged(d->effectType->defaultIndex());
 }
 
 BlurFXTool::~BlurFXTool()
@@ -208,6 +215,7 @@ void BlurFXTool::readSettings()
     d->effectType->setCurrentIndex(group.readEntry(d->configEffectTypeEntry,     d->effectType->defaultIndex()));
     d->distanceInput->setValue(group.readEntry(d->configDistanceAdjustmentEntry, d->distanceInput->defaultValue()));
     d->levelInput->setValue(group.readEntry(d->configLevelAdjustmentEntry,       d->levelInput->defaultValue()));
+    slotEffectTypeChanged(d->effectType->defaultIndex());
 
     blockWidgetSignals(false);
 }
@@ -311,18 +319,11 @@ void BlurFXTool::slotEffectTypeChanged(int type)
     }
 
     blockWidgetSignals(false);
-
-    slotPreview();
 }
 
 void BlurFXTool::preparePreview()
 {
-    d->effectTypeLabel->setEnabled(false);
-    d->effectType->setEnabled(false);
-    d->distanceInput->setEnabled(false);
-    d->distanceLabel->setEnabled(false);
-    d->levelInput->setEnabled(false);
-    d->levelLabel->setEnabled(false);
+    d->gboxSettings->setEnabled(false);
 
     DImg image;
 
@@ -357,12 +358,7 @@ void BlurFXTool::preparePreview()
 
 void BlurFXTool::prepareFinal()
 {
-    d->effectTypeLabel->setEnabled(false);
-    d->effectType->setEnabled(false);
-    d->distanceInput->setEnabled(false);
-    d->distanceLabel->setEnabled(false);
-    d->levelInput->setEnabled(false);
-    d->levelLabel->setEnabled(false);
+    d->gboxSettings->setEnabled(false);
 
     int type  = d->effectType->currentIndex();
     int dist  = d->distanceInput->value();
@@ -405,33 +401,7 @@ void BlurFXTool::setFinalImage()
 
 void BlurFXTool::renderingFinished()
 {
-    d->effectTypeLabel->setEnabled(true);
-    d->effectType->setEnabled(true);
-    d->distanceInput->setEnabled(true);
-    d->distanceLabel->setEnabled(true);
-
-    switch (d->effectType->currentIndex())
-    {
-        case BlurFXFilter::ZoomBlur:
-        case BlurFXFilter::RadialBlur:
-        case BlurFXFilter::FarBlur:
-        case BlurFXFilter::ShakeBlur:
-        case BlurFXFilter::FrostGlass:
-        case BlurFXFilter::Mosaic:
-            break;
-
-        case BlurFXFilter::MotionBlur:
-        case BlurFXFilter::FocusBlur:
-        case BlurFXFilter::SmartBlur:
-            d->levelInput->setEnabled(true);
-            d->levelLabel->setEnabled(true);
-            break;
-
-        case BlurFXFilter::SoftenerBlur:
-            d->distanceInput->setEnabled(false);
-            d->distanceLabel->setEnabled(false);
-            break;
-    }
+    d->gboxSettings->setEnabled(true);
 }
 
 void BlurFXTool::blockWidgetSignals(bool b)

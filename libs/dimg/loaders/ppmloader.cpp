@@ -148,7 +148,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* const observer
         float fac = 65535.0 / rgbmax;
         int checkpoint = 0;
 
-#ifdef USE_ADVANCEDDEBUGMSG
+#ifdef USE_IMGLOADERDEBUGMSG
         kDebug() << "rgbmax=" << rgbmax << "  fac=" << fac;
 #endif
 

@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : Antivignetting threaded image filter.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Julien Narboux <julien at narboux dot fr>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -46,13 +46,13 @@
 namespace Digikam
 {
 
-AntiVignettingFilter::AntiVignettingFilter(QObject* parent)
+AntiVignettingFilter::AntiVignettingFilter(QObject* const parent)
     : DImgThreadedFilter(parent)
 {
     initFilter();
 }
 
-AntiVignettingFilter::AntiVignettingFilter(DImg* orgImage, QObject* parent,
+AntiVignettingFilter::AntiVignettingFilter(DImg* const orgImage, QObject* const parent,
                                            const AntiVignettingContainer& settings)
     : DImgThreadedFilter(orgImage, parent, "AntiVignettingFilter")
 {
@@ -73,18 +73,18 @@ void AntiVignettingFilter::filterImage()
     int    col, row, xd, td, yd, p;
     int    xsize, ysize, /*diagonal,*/ erad, irad, xctr, yctr;
 
-    uchar* NewBits = m_destImage.bits();
-    uchar* data    = m_orgImage.bits();
+    uchar* NewBits            = m_destImage.bits();
+    uchar* data               = m_orgImage.bits();
 
     unsigned short* NewBits16 = reinterpret_cast<unsigned short*>(m_destImage.bits());
     unsigned short* data16    = reinterpret_cast<unsigned short*>(m_orgImage.bits());
 
-    int Width  = m_orgImage.width();
-    int Height = m_orgImage.height();
+    int Width                 = m_orgImage.width();
+    int Height                = m_orgImage.height();
 
     // Determine the shift in pixels from the shift in percentage.
-    m_settings.yshift   = m_settings.yshift * Height / 200.0;
-    m_settings.xshift   = m_settings.xshift * Width / 200.0;
+    m_settings.yshift         = m_settings.yshift * Height / 200.0;
+    m_settings.xshift         = m_settings.xshift * Width / 200.0;
 
     // Determine the outer radius of the filter.  This is the half diagonal
     // measure of the image multiplied by the radius factor.
@@ -93,12 +93,12 @@ void AntiVignettingFilter::filterImage()
     ysize    = (Width  + 1) / 2;
     erad     = qRound(hypothenuse(xsize, ysize) * m_settings.outerradius);
     irad     = qRound(hypothenuse(xsize, ysize) * m_settings.outerradius * m_settings.innerradius);
-
+/*
     xsize    = qRound(Width  / 2.0 + fabs(m_settings.xshift));
     ysize    = qRound(Height / 2.0 + fabs(m_settings.yshift));
 
-//    diagonal = qRound(hypothenuse(xsize,ysize)) +  1;
-
+    diagonal = qRound(hypothenuse(xsize, ysize)) +  1;
+*/
     xctr     = qRound(Width  / 2.0 + m_settings.xshift);
     yctr     = qRound(Height / 2.0 + m_settings.yshift);
 

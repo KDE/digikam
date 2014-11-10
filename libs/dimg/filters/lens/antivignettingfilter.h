@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : Antivignetting threaded image filter.
  *
- * Copyright (C) 2005-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -70,39 +70,45 @@ class DIGIKAM_EXPORT AntiVignettingFilter : public DImgThreadedFilter
 
 public:
 
-    explicit AntiVignettingFilter(QObject* parent = 0);
-    explicit AntiVignettingFilter(DImg* orgImage, QObject* parent=0,
+    explicit AntiVignettingFilter(QObject* const parent = 0);
+    explicit AntiVignettingFilter(DImg* const orgImage, QObject* const parent=0,
                                   const AntiVignettingContainer& settings=AntiVignettingContainer());
 
     ~AntiVignettingFilter();
 
-    static QString          FilterIdentifier()
-    {
-        return "digikam:AntiVignettingFilter";
-    }
-    static QString          DisplayableName()
-    {
-        return I18N_NOOP("Anti-Vignetting Tool");
-    }
-    static QList<int>       SupportedVersions()
-    {
-        return QList<int>() << 1;
-    }
-    static int              CurrentVersion()
-    {
-        return 1;
-    }
+    void                    readParameters(const FilterAction& action);
 
     virtual QString         filterIdentifier() const
     {
         return FilterIdentifier();
     }
+
     virtual FilterAction    filterAction();
-    void                    readParameters(const FilterAction& action);
+
+
+    static QString          FilterIdentifier()
+    {
+        return "digikam:AntiVignettingFilter";
+    }
+
+    static QString          DisplayableName()
+    {
+        return I18N_NOOP("Anti-Vignetting Tool");
+    }
+
+    static QList<int>       SupportedVersions()
+    {
+        return QList<int>() << 1;
+    }
+
+    static int              CurrentVersion()
+    {
+        return 1;
+    }
 
 private:
 
-    void filterImage();
+    void           filterImage();
 
     double         hypothenuse(double x, double y);
     uchar          clamp8bits(double x);

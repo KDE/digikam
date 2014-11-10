@@ -7,7 +7,7 @@
  * Description : a widget to manage sidebar in GUI.
  *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern dot ahrens at kdemail dot net>
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -187,7 +187,7 @@ void Sidebar::backup()
 {
     // backup preview state of sidebar view (shrink or not)
     d->isMinimized = d->minimized;
-    
+
     // In all case, shrink sidebar view 
     shrink();
 
@@ -357,6 +357,30 @@ void Sidebar::setActiveTab(QWidget* const w)
     emit signalChangedTab(d->stack->currentWidget());
 }
 
+void Sidebar::activePreviousTab()
+{
+    int tab = d->stack->indexOf(d->stack->currentWidget());
+
+    if (tab == 0)
+        tab = d->tabs-1;
+    else
+        tab--;
+
+    setActiveTab(d->stack->widget(tab));
+}
+
+void Sidebar::activeNextTab()
+{
+    int tab = d->stack->indexOf(d->stack->currentWidget());
+
+    if (tab== d->tabs-1)
+        tab = 0;
+    else
+        tab++;
+
+    setActiveTab(d->stack->widget(tab));
+}
+
 void Sidebar::switchTabAndStackToTab(int tab)
 {
     if (d->activeTab >= 0)
@@ -426,7 +450,7 @@ bool Sidebar::eventFilter(QObject* obj, QEvent* ev)
         {
             if ( ev->type() == QEvent::DragEnter)
             {
-                QDragEnterEvent* e = static_cast<QDragEnterEvent*>(ev);
+                QDragEnterEvent* const e = static_cast<QDragEnterEvent*>(ev);
                 enterEvent(e);
                 e->accept();
                 return false;
@@ -445,14 +469,14 @@ bool Sidebar::eventFilter(QObject* obj, QEvent* ev)
             else if (ev->type() == QEvent::DragLeave)
             {
                 d->dragSwitchTimer->stop();
-                QDragLeaveEvent* e = static_cast<QDragLeaveEvent*>(ev);
+                QDragLeaveEvent* const e = static_cast<QDragLeaveEvent*>(ev);
                 leaveEvent(e);
                 return false;
             }
             else if (ev->type() == QEvent::Drop)
             {
                 d->dragSwitchTimer->stop();
-                QDropEvent* e = static_cast<QDropEvent*>(ev);
+                QDropEvent* const e = static_cast<QDropEvent*>(ev);
                 leaveEvent(e);
                 return false;
             }
@@ -597,12 +621,13 @@ void SidebarSplitter::slotSplitterMoved(int pos, int index)
 
     QList<int> sizeList = sizes();
 
-    // Is there a sidebar with size 0 before index
+    // Is there a sidebar with size 0 before index ?
+
     if (index > 0 && sizeList.at(index-1) == 0)
     {
         QWidget* const w = widget(index-1);
 
-        foreach(Sidebar* sidebar, d->sidebars)
+        foreach(Sidebar* const sidebar, d->sidebars)
         {
             if (w == sidebar->d->stack)
             {
@@ -617,7 +642,8 @@ void SidebarSplitter::slotSplitterMoved(int pos, int index)
         }
     }
 
-    // Is there a sidebar with size 0 after index?
+    // Is there a sidebar with size 0 after index ?
+
     if (sizeList.at(index) == 0)
     {
         QWidget* const w = widget(index);

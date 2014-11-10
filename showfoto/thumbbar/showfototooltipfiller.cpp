@@ -6,7 +6,7 @@
  * Date        : 09-08-2013
  * Description : Showfoto tool tip filler
  *
- *Copyright (C) 2013 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
+ * Copyright (C) 2013 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,16 +26,19 @@
 // Qt includes
 
 #include <QDateTime>
+#include <QTextDocument>
 
 // KDE includes
 
 #include <kfileitem.h>
 #include <kglobalsettings.h>
 #include <kconfiggroup.h>
+#include <klocale.h>
 
 // Local includes
 
 #include "ditemtooltip.h"
+#include "imagepropertiestab.h"
 #include "showfotoiteminfo.h"
 #include "showfotosettings.h"
 
@@ -48,12 +51,12 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
 {
     QString str;
 
-    ShowfotoSettings* const settings      = ShowfotoSettings::instance();
+    ShowfotoSettings* const settings = ShowfotoSettings::instance();
 
     DToolTipStyleSheet cnt(settings->getToolTipFont());
 
-    PhotoInfoContainer photoInfo   = info.photoInfo;
-    QString tip                    = cnt.tipHeader;
+    PhotoInfoContainer photoInfo     = info.photoInfo;
+    QString tip                      = cnt.tipHeader;
 
     // -- File properties ----------------------------------------------
 
@@ -75,16 +78,16 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
         if (settings->getShowFileDate())
         {
             QDateTime createdDate  = info.dtime;
-            str                     = KGlobal::locale()->formatDateTime(createdDate, KLocale::ShortDate, true);
-            tip                    += cnt.cellBeg + i18n("Date:") + cnt.cellMid + str + cnt.cellEnd;
+            str                    = KGlobal::locale()->formatDateTime(createdDate, KLocale::ShortDate, true);
+            tip                   += cnt.cellBeg + i18n("Date:") + cnt.cellMid + str + cnt.cellEnd;
         }
 
         if (settings->getShowFileSize())
         {
-            tip += cnt.cellBeg + i18n("Size:") + cnt.cellMid;
+            tip                   += cnt.cellBeg + i18n("Size:") + cnt.cellMid;
             QString localeFileSize = KGlobal::locale()->formatNumber(info.size, 0);
-            str = i18n("%1 (%2)", KIO::convertSize(info.size), localeFileSize);
-            tip += str + cnt.cellEnd;
+            str                    = i18n("%1 (%2)", KIO::convertSize(info.size), localeFileSize);
+            tip                   += str + cnt.cellEnd;
         }
 
         if(settings->getShowFileType())
@@ -112,7 +115,6 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
     }
 
     // -- Photograph Info -----------------------------------------------------------------------
-    // NOTE: these info require \"Use File Metadata\" option from Camera Setup Behavior page.
 
     if (settings->getShowPhotoMake()  ||
         settings->getShowPhotoFocal() ||
@@ -120,7 +122,7 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
         settings->getShowPhotoFlash() ||
         settings->getShowPhotoWB()    ||
         settings->getShowPhotoDate()  ||
-        settings->getShowPhotoMode()    )
+        settings->getShowPhotoMode())
     {
         if (!photoInfo.isNull())
         {
@@ -129,6 +131,9 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
 
             if (settings->getShowPhotoMake())
             {
+                ImagePropertiesTab::shortenedMakeInfo(photoInfo.make);
+                ImagePropertiesTab::shortenedModelInfo(photoInfo.model);
+
                 str = QString("%1 / %2").arg(photoInfo.make.isEmpty() ? cnt.unavailable : photoInfo.make)
                       .arg(photoInfo.model.isEmpty() ? cnt.unavailable : photoInfo.model);
 
@@ -165,7 +170,7 @@ QString ShowfotoToolTipFiller::ShowfotoItemInfoTipContents(const ShowfotoItemInf
                 }
                 else
                 {
-                    str += QString(" / %1").arg(i18n("%1 (35mm: %2)",photoInfo.focalLength, photoInfo.focalLength35mm));
+                    str += QString(" / %1").arg(i18n("%1 (%2)",photoInfo.focalLength, photoInfo.focalLength35mm));
                 }
 
                 if (str.length() > cnt.maxStringLength)

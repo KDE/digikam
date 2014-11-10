@@ -7,7 +7,7 @@
  * Description : Thumbnail loading
  *
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2008-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -194,8 +194,13 @@ public:
      * Computes the pixmap size for the give thumbnail size.
      * These can differ when highlighting is turned on.
      */
-    int thumbnailPixmapSize(int size) const;
-    static int thumbnailPixmapSize(bool withHighlight, int size);
+    int        thumbnailToPixmapSize(int size) const;
+    static int thumbnailToPixmapSize(bool withHighlight, int size);
+
+    /**
+     * Computes the thumbnail size for the give pixmap size.
+     */
+    int pixmapToThumbnailSize(int size) const;
 
     /**
      * If you enable this, the thread will try hard to send a pixmap if thumbnail loading failed.
@@ -214,7 +219,7 @@ public:
      * The image should at least have storedSize().
      */
     void storeDetailThumbnail(const QString& filePath, const QRect& detailRect, const QImage& image, bool isFace = false);
-    int storedSize() const;
+    int  storedSize() const;
 
     /**
      * This is a tool to force regeneration of thumbnails.
@@ -245,8 +250,8 @@ private:
     void load(const LoadingDescription& description, bool pregenerate);
     void loadWithKDE(const LoadingDescription& description);
     void startKdePreviewJob();
-    QPixmap surrogatePixmap(const LoadingDescription& loadingDescription);
     bool checkSize(int size);
+    QPixmap surrogatePixmap(const LoadingDescription& loadingDescription);
 
 Q_SIGNALS:
 
@@ -302,7 +307,7 @@ public:
      * to enqueue, one entry per expected result, in order.
      * If stopped prematurely or loading failed, the respective entries will be null.
      */
-    int enqueue();
+    int           enqueue();
     QList<QImage> waitForThumbnails();
 
 public Q_SLOTS:

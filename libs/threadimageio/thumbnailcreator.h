@@ -7,7 +7,7 @@
  * Description : Loader for thumbnails
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2003-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -150,7 +150,8 @@ public:
     /**
      * If you plan to load thumbnail from the context of the threadimageio framework,
      * you can specify the relevant parameters. They will be passed if a thumbnail
-     * is created by loading with DImg.
+     * is created by loading with DImg.        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/thumbnailtask.cpp
+
      * Note that DImg is not used in most cases (Raw files, JPEG)
      */
     void setLoadingProperties(DImgLoaderObserver* const observer, const DRawDecoding& settings);

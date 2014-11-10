@@ -7,7 +7,7 @@
  * Description : User interface for searches
  *
  * Copyright (C) 2008-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2011-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -73,6 +73,7 @@
 #include "tagscache.h"
 #include "colorlabelfilter.h"
 #include "picklabelfilter.h"
+#include "applicationsettings.h"
 
 using namespace KDcrawIface;
 
@@ -104,9 +105,21 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     }
     else if (name == "albumcollection")
     {
-        SearchFieldText* const field = new SearchFieldText(parent);
+        SearchFieldChoice* const field = new SearchFieldChoice(parent);
         field->setFieldName(name);
-        field->setText(i18n("Album"), i18n("The album collection contains"));
+        field->setText(i18n("Album"), i18n("The album category is"));
+        ApplicationSettings* const settings = ApplicationSettings::instance();
+        if (settings)
+        {
+            QStringList Categories = settings->getAlbumCategoryNames();
+            int size = Categories.size();
+            QStringList categorychoices;
+            for(int i=0; i<size; i++)
+            {
+                categorychoices << Categories.at(i) << Categories.at(i);
+            }
+            field->setChoice(categorychoices);
+        }
         return field;
     }
     else if (name == "tagid")
@@ -491,6 +504,13 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     }
     else if (name == "altitude")
     {
+        SearchFieldRangeDouble* const field = new SearchFieldRangeDouble(parent);
+        field->setFieldName(name);
+        field->setText(i18n("GPS"), i18n("Altitude range"));
+        field->setBetweenText("-");
+        field->setNumberPrefixAndSuffix(QString(), "m");
+        field->setBoundary(0, 10000, 4, 1);
+        return field;
     }
     else if (name == "positionorientation")
     {
@@ -506,6 +526,11 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
     }
     else if (name == "nogps")
     {
+        SearchFieldCheckBox* const field = new SearchFieldCheckBox(parent);
+        field->setFieldName(name);
+        field->setText(i18n("GPS"), i18n("Image has no GPS info"));
+        field->setLabel(i18n("Not Geo-located"));
+        return field;
     }
 
     else if (name == "comment")
@@ -2551,20 +2576,20 @@ SearchFieldCheckBox::SearchFieldCheckBox(QObject* const parent)
 
 void SearchFieldCheckBox::setupValueWidgets(QGridLayout* layout, int row, int column)
 {
-    m_checkBox = new QCheckBox(m_label);
+    m_checkBox = new QCheckBox(m_text);
     layout->addWidget(m_checkBox, row, column, 1, 3);
 
     connect(m_checkBox, SIGNAL(toggled(bool)),
             this, SLOT(slotToggled(bool)));
 }
 
-void SearchFieldCheckBox::setLabel(const QString& label)
+void SearchFieldCheckBox::setLabel(const QString& text)
 {
-    m_label = label;
+    m_text = text;
 
     if (m_checkBox)
     {
-        m_checkBox->setText(label);
+        m_checkBox->setText(m_text);
     }
 }
 

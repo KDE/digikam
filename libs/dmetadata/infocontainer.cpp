@@ -6,7 +6,7 @@
  * Date        : 2006-04-21
  * Description : main photograph information container
  *
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,6 +32,7 @@ namespace Digikam
 
 PhotoInfoContainer::PhotoInfoContainer()
 {
+    hasCoordinates = false;
 }
 
 PhotoInfoContainer::~PhotoInfoContainer()
@@ -53,8 +54,9 @@ bool PhotoInfoContainer::operator==(const PhotoInfoContainer& t) const
     bool b11 = flash           == t.flash;
     bool b12 = whiteBalance    == t.whiteBalance;
     bool b13 = dateTime        == t.dateTime;
+    bool b14 = hasCoordinates  == t.hasCoordinates;
 
-    return b1 && b2 && b3 && b4 && b5 && b6 && b7 && b8 && b9 && b10 && b11 && b12 && b13;
+    return (b1 && b2 && b3 && b4 && b5 && b6 && b7 && b8 && b9 && b10 && b11 && b12 && b13 && b14);
 }
 
 bool PhotoInfoContainer::isEmpty() const
@@ -71,7 +73,8 @@ bool PhotoInfoContainer::isEmpty() const
         sensitivity.isEmpty()     &&
         flash.isEmpty()           &&
         whiteBalance.isEmpty()    &&
-        !dateTime.isValid() )
+        !dateTime.isValid()       &&
+        !hasCoordinates)
     {
         return true;
     }
@@ -113,6 +116,7 @@ QDataStream& operator<<(QDataStream& ds, const PhotoInfoContainer& info)
     ds << info.flash;
     ds << info.whiteBalance;
     ds << info.dateTime;
+    ds << info.hasCoordinates;
 
     return ds;
 }
@@ -132,6 +136,7 @@ QDataStream& operator>>(QDataStream& ds, PhotoInfoContainer& info)
     ds >> info.flash;
     ds >> info.whiteBalance;
     ds >> info.dateTime;
+    ds >> info.hasCoordinates;
 
     return ds;
 }

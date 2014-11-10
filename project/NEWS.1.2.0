@@ -37,7 +37,7 @@ BatchQueueManager : New tool to add border around images.
 BatchQueueManager : Rotate tool support Free Rotation adjustments.
 BatchQueueManager : It's now possible to Stop and restart a processed queue.
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 223936 : Moving photos between albums is slow.
 002 ==> 224698 : digiKam fails to rotate pefs via orientation tag.

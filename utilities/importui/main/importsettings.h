@@ -7,7 +7,7 @@
  * Description : Settings for the import tool
  *
  * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
- * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -73,21 +73,21 @@ public:
     bool getPreviewShowIcons() const;
 
     void setImageSortOrder(int order);
-    int getImageSortOrder() const;
+    int  getImageSortOrder() const;
 
     void setImageSortBy(int sortBy);
-    int getImageSortBy() const;
+    int  getImageSortBy() const;
 
     void setImageGroupMode(int mode);
-    int getImageGroupMode() const;
+    int  getImageGroupMode() const;
 
     void setItemLeftClickAction(const ItemLeftClickAction action);
     ItemLeftClickAction getItemLeftClickAction() const;
 
     void setDefaultIconSize(int val);
-    int getDefaultIconSize() const;
+    int  getDefaultIconSize() const;
 
-    void setIconViewFont(const QFont& font);
+    void  setIconViewFont(const QFont& font);
     QFont getIconViewFont() const;
 
     void setIconShowName(bool val);
@@ -111,10 +111,13 @@ public:
     void setIconShowImageFormat(bool val);
     bool getIconShowImageFormat() const;
 
+    void setIconShowCoordinates(bool val);
+    bool getIconShowCoordinates() const;
+
     void setIconShowOverlays(bool val);
     bool getIconShowOverlays() const;
 
-    void setToolTipsFont(const QFont& font);
+    void  setToolTipsFont(const QFont& font);
     QFont getToolTipsFont() const;
 
     void setShowToolTips(bool val);

@@ -9,7 +9,7 @@ Libkdcraw : use internal libraw 0.14.3 to support new RAW camera :
 General   : Colors tab from right sidebar : display RGB histograms in 3 separate diagrams
             for better comparison, channel by channel.
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 285884 : Shortcut changes aren't saved.
 002 ==> 286034 : digiKam icons conflicts with oxygen-icon-theme

@@ -40,11 +40,11 @@
 namespace Digikam
 {
 
-class DatabaseOperationGroup::DatabaseOperationGroupPriv
+class DatabaseOperationGroup::Private
 {
 public:
 
-    DatabaseOperationGroupPriv()
+    Private()
     {
         access   = 0;
         acquired = false;
@@ -98,7 +98,7 @@ public:
 };
 
 DatabaseOperationGroup::DatabaseOperationGroup()
-    : d(new DatabaseOperationGroupPriv)
+    : d(new Private)
 {
     if (d->needsTransaction())
     {
@@ -106,8 +106,8 @@ DatabaseOperationGroup::DatabaseOperationGroup()
     }
 }
 
-DatabaseOperationGroup::DatabaseOperationGroup(DatabaseAccess* access)
-    : d(new DatabaseOperationGroupPriv)
+DatabaseOperationGroup::DatabaseOperationGroup(DatabaseAccess* const access)
+    : d(new Private)
 {
     d->access = access;
 

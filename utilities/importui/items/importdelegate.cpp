@@ -7,7 +7,7 @@
  * Description : Qt item view for images - the delegate
  *
  * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
- * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,6 +24,10 @@
 
 #include "importdelegate.moc"
 #include "importdelegatepriv.h"
+
+// C++ includes
+
+#include <cmath>  
 
 // Qt includes
 
@@ -59,6 +63,7 @@ void ImportDelegate::ImportDelegatePrivate::clearRects()
     sizeRect             = QRect(0, 0, 0, 0);
     downloadRect         = QRect(0, 0, 0, 0);
     lockRect             = QRect(0, 0, 0, 0);
+    coordinatesRect      = QRect(0, 0, 0, 0);
     tagRect              = QRect(0, 0, 0, 0);
     ratingRect           = QRect(0, 0, 0, 0);
     imageInformationRect = QRect(0, 0, 0, 0);
@@ -202,16 +207,21 @@ QRect ImportDelegate::lockIndicatorRect() const
     return d->lockRect;
 }
 
+QRect ImportDelegate::coordinatesIndicatorRect() const
+{
+    Q_D(const ImportDelegate);
+    return d->coordinatesRect;
+}
+
 QPixmap ImportDelegate::retrieveThumbnailPixmap(const QModelIndex& index, int thumbnailSize)
 {
     // work around constness
-    QAbstractItemModel* model = const_cast<QAbstractItemModel*>(index.model());
+    QAbstractItemModel* const model = const_cast<QAbstractItemModel*>(index.model());
     // set requested thumbnail size
     model->setData(index, thumbnailSize, ImportImageModel::ThumbnailRole);
     // get data from model
-    QVariant thumbData        = index.data(ImportImageModel::ThumbnailRole);
-
-    return thumbData.value<QPixmap>();
+    QVariant thumbData              = index.data(ImportImageModel::ThumbnailRole);
+    return (thumbData.value<QPixmap>());
 }
 
 QPixmap ImportDelegate::thumbnailPixmap(const QModelIndex& index) const
@@ -315,7 +325,9 @@ void ImportDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, cons
 
     if (!d->tagRect.isNull())
     {
-        QString tags = AlbumManager::instance()->tagNames(info.tagIds).join(", ");
+        QStringList tagsList = AlbumManager::instance()->tagNames(info.tagIds);
+        tagsList.sort();
+        QString tags         = tagsList.join(", ");
         drawTags(p, d->tagRect, tags, isSelected);
     }
 
@@ -328,6 +340,11 @@ void ImportDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, cons
     {
         QString frm = info.mime;
         drawImageFormat(p, actualPixmapRect, frm);
+    }
+
+    if (d->drawCoordinates && info.photoInfo.hasCoordinates)
+    {
+        drawGeolocationIndicator(p, d->coordinatesRect);
     }
 
     if (d->drawFocusFrame)
@@ -521,7 +538,7 @@ int ImportDelegate::calculatethumbSizeToFit(int ws)
 
     double rs1 = fmod((double)ws, (double)gs);
 
-    for (ts1 = ts ; ts1 < ThumbnailSize::Huge ; ++ts1)
+    for (ts1 = ts ; ts1 < ThumbnailSize::maxThumbsSize() ; ++ts1)
     {
         ngs        = ts1 + 2*(d->margin + d->radius) + sp;
         double nrs = fmod((double)ws, (double)ngs);
@@ -599,7 +616,7 @@ int ImportThumbnailDelegate::maximumSize() const
 {
     Q_D(const ImportThumbnailDelegate);
 
-    return ThumbnailSize::Huge + (2*d->radius + 2*d->margin);
+    return ThumbnailSize::maxThumbsSize() + (2*d->radius + 2*d->margin);
 }
 
 int ImportThumbnailDelegate::minimumSize() const
@@ -651,6 +668,15 @@ void ImportThumbnailDelegate::updateRects()
     d->pixmapRect      = QRect(d->margin, d->margin, d->contentWidth, d->contentWidth);
     d->rect            = QRect(0, 0, d->contentWidth + 2*d->margin, d->contentWidth + 2*d->margin);
     d->drawImageFormat = ImportSettings::instance()->getIconShowImageFormat();
+    d->drawCoordinates = ImportSettings::instance()->getIconShowCoordinates();
+
+    const int iconSize = KIconLoader::SizeSmall;
+    int pos            = iconSize + 2;
+    d->downloadRect    = QRect(d->contentWidth - pos, d->pixmapRect.top(), iconSize, iconSize);
+    pos += iconSize;
+    d->lockRect        = QRect(d->contentWidth - pos, d->pixmapRect.top(), iconSize, iconSize);
+    pos += iconSize;
+    d->coordinatesRect = QRect(d->contentWidth - pos, d->pixmapRect.top(), iconSize, iconSize);
 
     if (ImportSettings::instance()->getIconShowRating())
     {
@@ -676,6 +702,11 @@ void ImportNormalDelegatePrivate::init(ImportNormalDelegate* const q, ImportCate
 
     QObject::connect(ImportSettings::instance(), SIGNAL(setupChanged()),
                      q, SLOT(slotSetupChanged()));
+}
+
+ImportNormalDelegatePrivate::~ImportNormalDelegatePrivate()
+{
+    delete categoryDrawer;
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -709,12 +740,18 @@ void ImportNormalDelegate::updateRects()
     d->imageInformationRect                    = QRect(d->margin, y, d->contentWidth, 0);
     const ImportSettings* const importSettings = ImportSettings::instance();
     d->drawImageFormat                         = importSettings->getIconShowImageFormat();
+    d->drawCoordinates                         = ImportSettings::instance()->getIconShowCoordinates();
     const int iconSize                         = KIconLoader::SizeSmall;
 
     d->pickLabelRect   = QRect(d->margin, y, iconSize, iconSize);
 //  d->groupRect       = QRect(d->contentWidth - iconSize, y, iconSize, iconSize); // TODO
-    d->lockRect        =  QRect(d->contentWidth - iconSize - 14, d->pixmapRect.top(), iconSize, iconSize);
-    d->downloadRect    =  QRect(d->contentWidth - iconSize + 2, d->pixmapRect.top(), iconSize, iconSize);
+
+    int pos            = iconSize + 2;
+    d->downloadRect    = QRect(d->contentWidth - pos, d->pixmapRect.top(), iconSize, iconSize);
+    pos += iconSize;
+    d->lockRect        = QRect(d->contentWidth - pos, d->pixmapRect.top(), iconSize, iconSize);
+    pos += iconSize;
+    d->coordinatesRect = QRect(d->contentWidth - pos, d->pixmapRect.top(), iconSize, iconSize);
 
     if (importSettings->getIconShowRating())
     {

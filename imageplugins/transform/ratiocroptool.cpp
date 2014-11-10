@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2007      by Jaromir Malenko <malenko at email dot cz>
  * Copyright (C) 2008      by Roberto Castagnola <roberto dot castagnola at gmail dot com>
- * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -434,7 +434,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     QWidget* const compositionGuide = new QWidget(d->expbox);
     QGridLayout* const grid2        = new QGridLayout(compositionGuide);
 
-    QLabel* const labelGuideLines = new QLabel(i18n("Geometric form:"), compositionGuide);
+    QLabel* const labelGuideLines = new QLabel(i18n("Form:"), compositionGuide);
     d->guideLinesCB               = new RComboBox(compositionGuide);
     d->guideLinesCB->addItem(i18n("Rules of Thirds"));
     d->guideLinesCB->addItem(i18n("Diagonal Method"));

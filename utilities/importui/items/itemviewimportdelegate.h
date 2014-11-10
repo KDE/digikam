@@ -7,7 +7,7 @@
  * Description : Item delegate for import interface items.
  *
  * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
- * Copyright (C) 2012-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,7 +41,8 @@ class ImportFilterModel;
 class ImportImageModel;
 class ItemViewImportDelegatePrivate;
 
-class ItemViewImportDelegate : public DItemDelegate, public ImageDelegateOverlayContainer // Some reuse of the existing model-view classes.
+// Some reuse of the existing model-view classes.
+class ItemViewImportDelegate : public DItemDelegate, public ImageDelegateOverlayContainer
 {
     Q_OBJECT
 
@@ -67,7 +68,8 @@ public:
                                    const QModelIndex& index, QRect* activationRect = 0) const;
 
     /** Returns the area where the pixmap is drawn,
-     *  or null if not supported */
+     *  or null if not supported
+     */
     virtual QRect pixmapRect() const;
 
     /** Returns the area where the image information is drawn,
@@ -79,11 +81,13 @@ public:
     virtual QRect imageInformationRect() const;
 
     /** Can be used to temporarily disable drawing of the rating.
-     *  Call with QModelIndex() afterwards. */
+     *  Call with QModelIndex() afterwards.
+     */
     void setRatingEdited(const QModelIndex& index);
 
     /** Returns the rectangle where the rating is drawn,
-     *  or a null rectangle if not supported. */
+     *  or a null rectangle if not supported.
+     */
     virtual QRect ratingRect() const;
 
     virtual void mouseMoved(QMouseEvent* e, const QRect& visualRect, const QModelIndex& index);
@@ -104,21 +108,21 @@ protected:
 
     /// Use the tool methods for painting in subclasses
     QRect drawThumbnail(QPainter* p, const QRect& thumbRect, const QPixmap& background, const QPixmap& thumbnail) const;
-    void drawRating(QPainter* p, const QModelIndex& index, const QRect& ratingRect, int rating, bool isSelected) const;
-    void drawName(QPainter* p,const QRect& nameRect, const QString& name) const;
-    void drawCreationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const;
-    void drawImageSize(QPainter* p, const QRect& dimsRect, const QSize& dims) const;
-    void drawImageFormat(QPainter* p, const QRect& dimsRect, const QString& mime) const;
-    void drawFileSize(QPainter* p, const QRect& r, qlonglong bytes) const;
-    void drawTags(QPainter* p, const QRect& r, const QString& tagsString, bool isSelected) const;
-    void drawGroupIndicator(QPainter* p, const QRect& r, int numberOfGroupedImages, bool open) const;
-    void drawPickLabelIcon(QPainter* p, const QRect& r, int pickLabel) const;
-    void drawColorLabelRect(QPainter* p, const QStyleOptionViewItem& option,bool isSelected, int colorId) const;
-    void drawPanelSideIcon(QPainter* p, bool left, bool right) const;
-    void drawDownloadIndicator(QPainter* p, const QRect& r, int itemType) const;
-    void drawLockIndicator(QPainter* p, const QRect& r, int lockStatus) const;
-    void drawFocusRect(QPainter* p, const QStyleOptionViewItem& option, bool isSelected) const;
-    void drawMouseOverRect(QPainter* p, const QStyleOptionViewItem& option) const;
+    void drawRating(QPainter* p, const QModelIndex& index, const QRect& ratingRect, int rating, bool isSelected)  const;
+    void drawName(QPainter* p,const QRect& nameRect, const QString& name)                                         const;
+    void drawCreationDate(QPainter* p, const QRect& dateRect, const QDateTime& date)                              const;
+    void drawImageSize(QPainter* p, const QRect& dimsRect, const QSize& dims)                                     const;
+    void drawImageFormat(QPainter* p, const QRect& dimsRect, const QString& mime)                                 const;
+    void drawFileSize(QPainter* p, const QRect& r, qlonglong bytes)                                               const;
+    void drawTags(QPainter* p, const QRect& r, const QString& tagsString, bool isSelected)                        const;
+    void drawGroupIndicator(QPainter* p, const QRect& r, int numberOfGroupedImages, bool open)                    const;
+    void drawPickLabelIcon(QPainter* p, const QRect& r, int pickLabel)                                            const;
+    void drawColorLabelRect(QPainter* p, const QStyleOptionViewItem& option,bool isSelected, int colorId)         const;
+    void drawGeolocationIndicator(QPainter* p, const QRect& r)                                                    const;
+    void drawDownloadIndicator(QPainter* p, const QRect& r, int itemType)                                         const;
+    void drawLockIndicator(QPainter* p, const QRect& r, int lockStatus)                                           const;
+    void drawFocusRect(QPainter* p, const QStyleOptionViewItem& option, bool isSelected)                          const;
+    void drawMouseOverRect(QPainter* p, const QStyleOptionViewItem& option)                                       const;
     void prepareFonts();
     void prepareMetrics(int maxWidth);
     void prepareBackground();

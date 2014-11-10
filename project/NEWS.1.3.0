@@ -10,7 +10,7 @@ General        : libkexiv2 dependency set to 1.1.0 version.
 AdvancedRename : New option: database. Allows to rename files according to database values.
 QueueManager   : Add capability to apply an image waterwark over a photo.
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 232632 : Tar will not compile DRawDecoding? has no member named DontStretchPixels.
 002 ==> 232628 : Crash on startup in RatingWidget.

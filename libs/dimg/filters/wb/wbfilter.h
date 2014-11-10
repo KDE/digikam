@@ -6,7 +6,7 @@
  * Date        : 2007-16-01
  * Description : white balance color correction.
  *
- * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008      by Guillaume Castagnino <casta at xwing dot info>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -73,12 +73,12 @@ public:
 
     static QList<int>       SupportedVersions()
     {
-        return QList<int>() << 1;
+        return QList<int>() << 2;
     }
 
     static int              CurrentVersion()
     {
-        return 1;
+        return 2;
     }
 
     virtual QString         filterIdentifier() const
@@ -105,7 +105,7 @@ private:
 
     static void setRGBmult(double& temperature, double& green, float& mr, float& mg, float& mb);
 
-    /** This method have been introduced with B.K.O #259223
+    /** This method have been introduced with bug #259223
      */
     void preventAutoExposure(int maxr, int maxg, int maxb);
 

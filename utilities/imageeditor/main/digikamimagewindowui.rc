@@ -1,5 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui version="400" name="digikamimagewindow" >
+<!-- NOTE: don't forget to increase version ID when this file is modified -->
+<gui version="401" name="digikamimagewindow" >
 
 <MenuBar>
 
@@ -11,6 +12,7 @@
         <Action name="editorwindow_last" />
         <Separator/>
         <Action name="editorwindow_print" />
+        <Action name="open_with_default_application" />
         <Separator/>
         <Action name="editorwindow_save" />
         <Action name="editorwindow_saveas" />

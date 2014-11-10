@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : threaded image filter class.
  *
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -88,6 +88,16 @@ public:
         return m_name;
     };
 
+    /** This method return a list of steps to process parallelized operation in filter using QtConcurrents API.
+     *  Ususally, start and stop are rows or columns from image to process. By defaut whole image will be processed
+     *  and start value is 0. In this case stop will be last row or colum to process.
+     *  Between range [start,stop], this method will divide by egal steps depending of number of CPU cores available.
+     *  To be sure that all vlaues will be processed, in case of CPU core division give rest, the last step compensate 
+     *  the difference.
+     *  See Blur filter loop implementation for exemple to see how to use this method with QtConcurrents API.
+     */
+    QList<int> multithreadedSteps(int stop, int start=0) const;
+
     /** Start the threaded computation.
      */
     virtual void startFilter();
@@ -103,12 +113,13 @@ public:
     /** Returns the action description corresponding to currently set options.
      */
     virtual FilterAction filterAction() = 0;
-    
+
     virtual void readParameters(const FilterAction&) = 0;
-    
-    /** Return the identifier for this filter in the image history.*/
+
+    /** Return the identifier for this filter in the image history.
+     */
     virtual QString filterIdentifier() const = 0;
-    
+
     virtual QList<int> supportedVersions() const;
 
     /**
@@ -145,7 +156,7 @@ Q_SIGNALS:
     /** Emitted when progress info from the calculation is available.
      */
     void progress(int progress);
-    
+
     /** Emitted when the computation has completed.
         @param success True if computation finished without interruption on valid data
                        False if the thread was canceled, or no data is available.
@@ -193,7 +204,7 @@ protected:
       that the slave filter uses in the parent filter's progress.
       Any derived filter class that is publicly available to other filters
       should implement an additional constructor using this constructor.
-      */
+     */
     DImgThreadedFilter(DImgThreadedFilter* const master, const DImg& orgImage, const DImg& destImage,
                        int progressBegin=0, int progressEnd=100, const QString& name=QString());
 
@@ -218,7 +229,7 @@ protected:
      * Convenience class to spare the few repeating lines of code
      */
     template <class Filter>
-    
+
     class DefaultFilterAction : public FilterAction
     {
     public:

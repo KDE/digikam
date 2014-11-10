@@ -1,48 +1,3 @@
-Note : see also KDE4PORT TODO list
-
-------------------------------------------------------------------------------------
-post 1.0.0 mvc merge
-------------------------------------------------------------------------------------
-
- * model for the image view in cameraui
- * port thumbbar
-
-Is this really needed?
- * sorting albums by something else than name (date, category)
-   http://steveire.wordpress.com/2010/01/06/testing-proxy-models-gets-easier-again/
- 
-Later:
- * decide which additional sidebar handling code currently placed in digikamview
-   should be moved to the sidebar class directly
- * DEFINITELY clean up the project structure. It's absolutely not obvious which
-   file depends on which atm
- * There are a few derived album tree views mainly to provide only another
-   context menu. It would be better to have strategy objects for handling
-   the context menu. These strategies could be used as decorators to allow
-   a more flexible sorting mechanism for menu entries.
-
-------------------------------------------------------------------------------------
-1.0.0 TODO LIST
-------------------------------------------------------------------------------------
-
-* right hand side sidebar (allee):
-	o Select an album 
-        o click on some empty space in the thumbnail view (-> selected image changes from blue selection
-          background to dotted line (aka still has keyboard focus, right?)
-        o Now select tabs in right hand side:
-		+ Properties, metadata..: everyhing is disabled
-		+ comments/tags tab on the other hand  shows info about the image with keyboard focus
-        Shouldn't every tab show now it's info in this case? (alternatively disable comments/tags too)
-
-* ImageEditor:
-
-   - Polish keyboard focus in sidebar when navigate between album pictures.
-
-
-* B.K.O files to fix :
-
-==> 113797 : Main interface : Little thumbnail refresh problem. 
-
 * Media support:
 
     o Testing 3 plug cases with GPhoto camera
@@ -60,17 +15,9 @@ Later:
                 to start download dialog
                 ditto for unmounting in usm case 
 
-------------------------------------------------------------------------------------
-LATER 1.0.0 TODO LIST
-------------------------------------------------------------------------------------
-
 * New CD/DVD album folders+database backup/restore tool :
    - Take a look of music database backup in amarok.
    - Take a look of image database backup in showimg.
-
-* Showfoto improvements :
-   - Add DBUS interface.
-   - Add Support KUrl for better konqueror interactions.
 
 * General:
    - Custom ordering of images in icon view.

@@ -58,7 +58,7 @@ public:
         preloadThumbSize(0),
         emitDataChanged(true)
     {
-            maxThumbSize = 256;
+            maxThumbSize = ThumbnailSize::Huge;
     }
 
     ThumbnailLoadThread*   thread;

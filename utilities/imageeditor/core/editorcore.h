@@ -7,7 +7,7 @@
  * Description : DImg interface for image editor
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -68,10 +68,10 @@ public:
     EditorCore();
     ~EditorCore();
 
-    void   load(const QString& filename, IOFileSettings* const iofileSettings);
-    void   applyTransform(const IccTransform& transform);
-    void   updateColorManagement();
-    void   setSoftProofingEnabled(bool enabled);
+    void    load(const QString& filename, IOFileSettings* const iofileSettings);
+    void    applyTransform(const IccTransform& transform);
+    void    updateColorManagement();
+    void    setSoftProofingEnabled(bool enabled);
 
     void                 setICCSettings(const ICCSettingsContainer& cmSettings);
     ICCSettingsContainer getICCSettings() const;
@@ -79,21 +79,21 @@ public:
     void                       setExposureSettings(ExposureSettingsContainer* const expoSettings);
     ExposureSettingsContainer* getExposureSettings() const;
 
-    void   setExifOrient(bool exifOrient);
-    void   setDisplayingWidget(QWidget* const widget);
+    void    setExifOrient(bool exifOrient);
+    void    setDisplayingWidget(QWidget* const widget);
 
-    void   undo();
-    void   redo();
-    void   restore();
-    void   rollbackToOrigin();
+    void    undo();
+    void    redo();
+    void    restore();
+    void    rollbackToOrigin();
 
-    void   saveAs(const QString& file, IOFileSettings* const iofileSettings,
-                  bool setExifOrientationTag, const QString& givenMimeType,
-                  const QString& intendedFilePath);
+    void    saveAs(const QString& file, IOFileSettings* const iofileSettings,
+                   bool setExifOrientationTag, const QString& givenMimeType,
+                   const QString& intendedFilePath);
 
-    void   saveAs(const QString& file, IOFileSettings* const iofileSettings,
-                  bool setExifOrientationTag, const QString& givenMimeType,
-                  const VersionFileOperation& operation);
+    void    saveAs(const QString& file, IOFileSettings* const iofileSettings,
+                   bool setExifOrientationTag, const QString& givenMimeType,
+                   const VersionFileOperation& operation);
 
     void    setHistoryIsBranch(bool isBranching);
     void    setLastSaved(const QString& filePath);
@@ -110,26 +110,28 @@ public:
 
     void    zoom(double val);
 
+    /** Image properties
+     */
     DImg    getImgSelection() const;
     DImg*   getImg()          const;
-    bool    imageValid()      const;
+    bool    isValid()         const;
+    bool    isReadOnly()      const;
+    bool    hasAlpha()        const;
+    bool    sixteenBit()      const;
+    bool    exifRotated()     const;
     int     width()           const;
     int     height()          const;
     int     origWidth()       const;
     int     origHeight()      const;
     int     bytesDepth()      const;
-    bool    hasAlpha()        const;
-    bool    sixteenBit()      const;
-    bool    exifRotated()     const;
-    bool    isReadOnly()      const;
 
+    /** Image transforms
+     */
     void    rotate90();
     void    rotate180();
     void    rotate270();
-
     void    flipHoriz();
     void    flipVert();
-
     void    convertDepth(int depth);
     void    crop(const QRect& rect);
 
@@ -141,10 +143,10 @@ public:
     void    putImg(const QString& caller, const FilterAction& action, const DImg& img);
 
     /// For internal usage by UndoManager
-    void   setUndoImg(const UndoMetadataContainer& c, const DImg& img);
+    void    setUndoImg(const UndoMetadataContainer& c, const DImg& img);
 
-    void   imageUndoChanged(const UndoMetadataContainer& c);
-    void   setFileOriginData(const QVariant& data);
+    void    imageUndoChanged(const UndoMetadataContainer& c);
+    void    setFileOriginData(const QVariant& data);
 
     /** Convert a DImg image to a pixmap for screen using color
      *  managed view if necessary.

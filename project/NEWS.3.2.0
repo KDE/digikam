@@ -11,7 +11,7 @@ AlbumGUI    : New filter based on Aspect-Ratio information.
 Searches    : New search tool to find images based on Aspect-Ratio Information.
 Searches    : New search tool to find videos based on shot properties.
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 315098 - DNG Converter and DigiKam crashes when opening a .dng file.
 002 ==> 316556 - DIGIKAMSC_USE_PRIVATE_KDEGRAPHICS is set to ON.

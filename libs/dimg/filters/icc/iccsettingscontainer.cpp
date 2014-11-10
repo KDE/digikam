@@ -137,4 +137,12 @@ void ICCSettingsContainer::writeManagedViewToConfig(KConfigGroup& group) const
     group.writeEntry("ManagedView", useManagedView);
 }
 
+void ICCSettingsContainer::writeManagedPreviewsToConfig(KConfigGroup& group) const
+{
+    // Save Color Managed Previews setting in config file. For performance
+    // reason, no need to flush file, it cached in memory and will be flushed
+    // to disk at end of session.
+    group.writeEntry("ManagedPreviews", useManagedView);
+}
+
 }  // namespace Digikam

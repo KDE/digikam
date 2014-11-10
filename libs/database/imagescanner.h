@@ -7,7 +7,7 @@
  * Description : Scanning of a single image
  *
  * Copyright (C) 2007-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C)      2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -224,6 +224,11 @@ public:
      */
     static QString iptcCorePropertyName(MetadataInfo::Field field);
 
+    /**
+     * @brief scanBalooInfo - retrieve tags, comments and rating from Baloo
+     */
+    void scanBalooInfo();
+
 protected:
 
     bool scanFromIdenticalFile();
@@ -261,12 +266,12 @@ protected:
     void commitVideoMetadata();
     void scanAudioFile();
 
-    QString uniqueHash();
-    QString detectFormat();
-    QString detectVideoFormat();
-    QString detectAudioFormat();
+    QString uniqueHash()        const;
+    QString detectImageFormat() const;
+    QString detectVideoFormat() const;
+    QString detectAudioFormat() const;
 
-    void checkCreationDateFromMetadata(QVariant& dateFromMetadata) const;
+    void checkCreationDateFromMetadata(QVariant& dateFromMetadata)   const;
     bool checkRatingFromMetadata(const QVariant& ratingFromMetadata) const;
 
 protected:

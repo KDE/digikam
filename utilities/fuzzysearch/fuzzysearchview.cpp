@@ -55,7 +55,6 @@
 #include <kstandarddirs.h>
 #include <ktabwidget.h>
 #include <kvbox.h>
-#include <boost/concept_check.hpp>
 
 // Local includes
 
@@ -312,7 +311,7 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
     d->nameEditImage = new KLineEdit(saveBox);
     d->nameEditImage->setClearButtonShown(true);
     d->nameEditImage->setWhatsThis(i18n("Enter the name of the current similar image search to save in the "
-                                        "\"My Fuzzy Searches\" view."));
+                                        "\"Fuzzy Searches\" view."));
 
     d->saveBtnImage  = new QToolButton(saveBox);
     d->saveBtnImage->setIcon(SmallIcon("document-save"));
@@ -422,7 +421,7 @@ QWidget* FuzzySearchView::setupSketchPanel() const
     d->nameEditSketch = new KLineEdit(saveBox);
     d->nameEditSketch->setClearButtonShown(true);
     d->nameEditSketch->setWhatsThis(i18n("Enter the name of the current sketch search to save in the "
-                                         "\"My Fuzzy Searches\" view."));
+                                         "\"Fuzzy Searches\" view."));
 
     d->saveBtnSketch = new QToolButton(saveBox);
     d->saveBtnSketch->setIcon(SmallIcon("document-save"));

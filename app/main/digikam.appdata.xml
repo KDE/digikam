@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>digikam.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>digiKam</name>
+  <name xml:lang="ca">digiKam</name>
+  <name xml:lang="cs">digiKam</name>
+  <name xml:lang="da">digiKam</name>
+  <name xml:lang="de">digiKam</name>
+  <name xml:lang="en-GB">digiKam</name>
+  <name xml:lang="es">digiKam</name>
+  <name xml:lang="fr">digiKam</name>
+  <name xml:lang="ko">digiKam</name>
+  <name xml:lang="nl">digiKam</name>
+  <name xml:lang="pl">digiKam</name>
+  <name xml:lang="pt">digiKam</name>
+  <name xml:lang="pt-BR">digiKam</name>
+  <name xml:lang="sk">digiKam</name>
+  <name xml:lang="sl">digiKam</name>
+  <name xml:lang="sv">Digikam</name>
+  <name xml:lang="uk">digiKam</name>
+  <name xml:lang="x-test">xxdigiKamxx</name>
+  <description>
+    <p>
+      digiKam is an advanced digital photo management application, which makes importing and organizing digital photos
+      a "snap". The photos are organized in albums which can be sorted chronologically, by folder layout or by custom
+      collections.
+    </p>
+    <p xml:lang="ca">El digiKam és una avançada aplicació per a gestionar les fotografies digitals, la qual fa que la importació i organització de les fotografies digitals sigui una «tasca fàcil». Les fotografies s'organitzen en àlbums, els quals es poden ordenar cronològicament, per disposició de la carpeta o per col·leccions personalitzades.</p>
+    <p xml:lang="en-GB">digiKam is an advanced digital photo management application, which makes importing and organizing digital photos a "snap". The photos are organized in albums which can be sorted chronologically, by folder layout or by custom collections.</p>
+    <p xml:lang="fr">digiKam est une application de gestion de photos avancée, qui rend l'import et l'organisation des photos comme un jeu d'enfant. Les photos sont organisées dans des albums qui peuvent être triés de manière chronologique, selon l'organisation des dossiers, ou par collections personnalisées.</p>
+    <p xml:lang="ko">digiKam은 디지털 사진을 가져오고 관리하는 고급 디지털 사진 관리 프로그램입니다. 사진은 시간순, 폴더별 등 다양한 방법으로 정리할 수 있습니다.</p>
+    <p xml:lang="nl">digiKam is een geavanceerde toepassing voor beheer van digitale foto's, die importeren en organiseren van digitale foto's een "fluitje van een cent" maakt. De foto's zijn georganiseerd in albums die chronologisch, op indeling van mappen of op eigen verzamelingen gesorteerd kunnen zijn.</p>
+    <p xml:lang="pl">digiKam jest zaawansowanym programem do zarządzania cyfrowymi zdjęciami, który czyni importowanie i zarządzanie cyfrowymi zdjęciami "drobnostką". Zdjęcia są urządzone w albumy, które można przechowywać chronologicznie, według układu katalogów lub według własnych zbiorów.</p>
+    <p xml:lang="pt">O digiKam é uma aplicação de gestão de fotografias digitais, o que torna a importação e a organização de fotografias digitais extremamente simples. As fotos são organizadas em álbuns, os quais podem ser ordenados de forma cronológica, por disposição das pastas ou com colecções personalizadas.</p>
+    <p xml:lang="pt-BR">DigiKam é um aplicativo para gerenciamento de fotos digitais avançado, que torna muito fácil a importação e organização das suas fotos digitais. As fotos são organizadas em álbuns e ordenadas de forma cronológica, por leiaute de pastas ou por coleções personalizadas.</p>
+    <p xml:lang="sk">digiKam je pokročilá aplikácia na správu digitálnych fotografií, ktorá zjednodušuje import a správu digitálnych fotografií. Fotografie sú organizované v albumoch, ktoré sa dajú triediť chronologicky, podľa rozloženia priečinkov alebo podľa vlastných zbierok.</p>
+    <p xml:lang="sl">digiKam je napreden program za upravljanje digitalnih fotografij, ki močno poenostavi uvažanje in organiziranje digitalnih fotografij. Fotografije so organizirane v albumih, ki jih lahko razvrstite po času, razporedu map ali zbirkah po meri.</p>
+    <p xml:lang="sv">Digikam är ett avancerat program för hantering av digitala foton, som gör det enkelt att importera och organisera digitala foton. Fotona organiseras i album som kan sorteras kronologiskt, enligt katalogutläggning eller enligt egna samlingar.</p>
+    <p xml:lang="uk">digiKam — програма з розширеними можливостями щодо керування цифровими фотографіями, яка робить імпортування і впорядкування цифрових фотографій зовсім простою справою". Програма впорядковує фотографії за альбомами, які можна розташовувати у вікні програму у хронологічному порядку, за теками або за нетиповими збірками.</p>
+    <p xml:lang="x-test">xxdigiKam is an advanced digital photo management application, which makes importing and organizing digital photos a "snap". The photos are organized in albums which can be sorted chronologically, by folder layout or by custom collections.xx</p>
+    <p>Features:</p>
+    <p xml:lang="ca">Característiques:</p>
+    <p xml:lang="cs">Vlastnosti:</p>
+    <p xml:lang="da">Funktioner:</p>
+    <p xml:lang="de">Funktionen:</p>
+    <p xml:lang="en-GB">Features:</p>
+    <p xml:lang="es">Funciones:</p>
+    <p xml:lang="fr">Fonctionnalités :</p>
+    <p xml:lang="ko">기능:</p>
+    <p xml:lang="nl">Mogelijkheden:</p>
+    <p xml:lang="pl">Możliwości:</p>
+    <p xml:lang="pt">Características:</p>
+    <p xml:lang="pt-BR">Funcionalidades:</p>
+    <p xml:lang="sk">Funkcie:</p>
+    <p xml:lang="sl">Zmožnosti:</p>
+    <p xml:lang="sv">Funktioner:</p>
+    <p xml:lang="uk">Можливості:</p>
+    <p xml:lang="x-test">xxFeatures:xx</p>
+    <ul>
+      <li>Organization of photos in albums and sub-albums (with tags and comments support)</li>
+      <li xml:lang="ca">Organització de les fotografies en àlbums i sub-àlbums (amb implementació per a les etiquetes i comentaris)</li>
+      <li xml:lang="en-GB">Organisation of photos in albums and sub-albums (with tags and comments support)</li>
+      <li xml:lang="fr">Organisation de photos en albums et sous-albums (avec prise en charge des étiquettes et des commentaires)</li>
+      <li xml:lang="ko">앨범 및 하위 앨범으로 사진 정렬(태그와 주석 지원)</li>
+      <li xml:lang="nl">Organiseren van foto's in albums en sub-albums (met tags en ondersteuning van commentaar)</li>
+      <li xml:lang="pl">Grupowanie zdjęć w albumy i podalbumów (z obsługą znaczników i komentarzy)</li>
+      <li xml:lang="pt">Organização das fotografias por álbuns e sub-álbuns (com o suporte para marcas e comentários)</li>
+      <li xml:lang="pt-BR">Organização de fotos em álbuns e subálbuns (com suporte a etiquetas e comentários)</li>
+      <li xml:lang="sk">Organizácia fotiek v albumoch a podalbumoch (so značkami a komentármi)</li>
+      <li xml:lang="sl">Organizacija fotografij v albumih in pod-albumih (s podporo oznakam in opombam)</li>
+      <li xml:lang="sv">Organisation av foton i album och delalbum (med stöd för etiketter och kommentarer)</li>
+      <li xml:lang="uk">упорядковування фотографій за альбомами і підальбомами з підтримкою міток та коментарів;</li>
+      <li xml:lang="x-test">xxOrganization of photos in albums and sub-albums (with tags and comments support)xx</li>
+      <li>Support for Exif, Iptc, Xmp, Makernotes</li>
+      <li xml:lang="ca">Implementació per a notes Exif, Iptc, Xmp i del fabricant</li>
+      <li xml:lang="de">Unterstützung für Exif, Iptc, Xmp und Herstellerbemerkungen</li>
+      <li xml:lang="en-GB">Support for Exif, Iptc, Xmp, Makernotes</li>
+      <li xml:lang="fr">Prise en charge des données EXIF, IPTC, XMP, MakerNotes</li>
+      <li xml:lang="ko">EXIF, IPTC, XMP, 메이커 노트 지원</li>
+      <li xml:lang="nl">Ondersteuning voor Exif, Iptc, Xmp, Makernotes</li>
+      <li xml:lang="pl">Obsługa Exif, Iptc, Xmp, notatek twórcy</li>
+      <li xml:lang="pt">Suporte para o EXIF, IPTC, XMP e notas do fabricante</li>
+      <li xml:lang="pt-BR">Suporte a EXIF, IPTC, XMP e Notas do Fabricante</li>
+      <li xml:lang="sk">Podpora pre Exif, Iptc, Xmp, Makernotes</li>
+      <li xml:lang="sl">Podpora Exif, Iptc, Xmp, Makernotes</li>
+      <li xml:lang="sv">Stöd för EXIF, IPTC, XMP, tillverkaranteckningar</li>
+      <li xml:lang="uk">підтримка Exif, Iptc, Xmp, Makernotes;</li>
+      <li xml:lang="x-test">xxSupport for Exif, Iptc, Xmp, Makernotesxx</li>
+      <li>SQLite powered storage for the albums and its metadata</li>
+      <li xml:lang="ca">Emmagatzematge amb SQLite pels àlbums i les seves metadades</li>
+      <li xml:lang="de">Speicherung der Alben und Metadaten in einer SQLite-Datenbank</li>
+      <li xml:lang="en-GB">SQLite powered storage for the albums and its metadata</li>
+      <li xml:lang="fr">Stockage des albums et des métadonnées fonctionnant avec SQLite</li>
+      <li xml:lang="ko">SQLite 기반 앨범과 메타데이터 저장소</li>
+      <li xml:lang="nl">Op SQLite gebaseerde opslag voor de albums en zijn metagegevens</li>
+      <li xml:lang="pl">Przechowalnia dla albumów i ich metadanych napędzana SQLite</li>
+      <li xml:lang="pt">Armazenamento baseado em SQLite para os álbuns e os seus meta-dados</li>
+      <li xml:lang="pt-BR">Armazenamento dos álbuns e seus metadados em banco de dados SQLite</li>
+      <li xml:lang="sk">Ukladanie albumov a ich metadát založené na SQLite</li>
+      <li xml:lang="sl">Shramba SQLite za albume in metapodatke</li>
+      <li xml:lang="sv">Lagring driven av SQLite för album och deras metadata</li>
+      <li xml:lang="uk">сховище даних на основі SQLite для альбомів та метаданих;</li>
+      <li xml:lang="x-test">xxSQLite powered storage for the albums and its metadataxx</li>
+      <li>Support for filtering and sorting albums</li>
+      <li xml:lang="ca">Implementació pel filtratge i classificació dels àlbums</li>
+      <li xml:lang="de">Unterstützung für das Filtern und Sortieren von Alben</li>
+      <li xml:lang="en-GB">Support for filtering and sorting albums</li>
+      <li xml:lang="fr">Prise en charge du filtrage et du tri des albums</li>
+      <li xml:lang="ko">앨범 필터링 및 정렬</li>
+      <li xml:lang="nl">Ondersteuning voor filtering en sorteren van albums</li>
+      <li xml:lang="pl">Obsługa filtrowania i sortowania albumów</li>
+      <li xml:lang="pt">Suporte para filtrar e ordenar os álbuns</li>
+      <li xml:lang="pt-BR">Suporte a filtragem e ordenação de álbuns</li>
+      <li xml:lang="sk">Podpora pre filtrovanie a triedenie albumov</li>
+      <li xml:lang="sl">Podpora filtriranju in razvrščanju albumov</li>
+      <li xml:lang="sv">Stöd för filtrering och sortering av album</li>
+      <li xml:lang="uk">підтримка фільтрування та упорядковування альбомів;</li>
+      <li xml:lang="x-test">xxSupport for filtering and sorting albumsxx</li>
+      <li>Import from more than 1100 digital camera devices</li>
+      <li xml:lang="ca">Importa des de més de 1.100 dispositius de càmeres digitals</li>
+      <li xml:lang="de">Import von mehr als 1100 digitalen Kameras</li>
+      <li xml:lang="en-GB">Import from more than 1100 digital camera devices</li>
+      <li xml:lang="fr">Importe à partir de plus de 1100 appareils photos numériques</li>
+      <li xml:lang="ko">1100종 이상의 디지털 카메라에서 사진 가져오기</li>
+      <li xml:lang="nl">Importeren uit meer dan 1100 digitale camera's</li>
+      <li xml:lang="pl">Importowanie z więcej niż 1100 aparatów cyfrowych</li>
+      <li xml:lang="pt">Importar a partir de mais de 1100 máquinas digitais</li>
+      <li xml:lang="pt-BR">Importação de mais de 1.100 câmeras digitais</li>
+      <li xml:lang="sk">Import z viac ako 1100 digitálnych fotoaparátov</li>
+      <li xml:lang="sl">Uvažanje iz več kot 1100 digitalnih fotoaparatov</li>
+      <li xml:lang="sv">Import från mer än 1100 digitalkameror</li>
+      <li xml:lang="uk">можливість імпортування даних з понад 1100 цифрових фотоапаратів;</li>
+      <li xml:lang="x-test">xxImport from more than 1100 digital camera devicesxx</li>
+      <li>Support for 300 RAW format pictures</li>
+      <li xml:lang="ca">Implementació per a 300 formats d'imatges RAW</li>
+      <li xml:lang="de">Unterstützung für 300 Bild-Rohformate</li>
+      <li xml:lang="en-GB">Support for 300 RAW format pictures</li>
+      <li xml:lang="fr">Prise en charge de 300 formats d'image RAW</li>
+      <li xml:lang="ko">300종 이상의 RAW 사진 형식 지원</li>
+      <li xml:lang="nl">Ondersteuning voor 300 RAW-format afbeeldingen</li>
+      <li xml:lang="pl">Obsługa dla 300 postaci zdjęć RAW</li>
+      <li xml:lang="pt">Suporte para 300 formatos de imagens RAW</li>
+      <li xml:lang="pt-BR">Suporte a 300 formatos de imagem RAW</li>
+      <li xml:lang="sk">Podpora pre 300 formátov RAW obrázkov</li>
+      <li xml:lang="sl">Podpora 300 vrstam surovih slik (RAW)</li>
+      <li xml:lang="sv">Stöd för 300 obehandlade bildformat</li>
+      <li xml:lang="uk">підтримка понад 300 форматів цифрових негативів (RAW);</li>
+      <li xml:lang="x-test">xxSupport for 300 RAW format picturesxx</li>
+      <li>Light Table feature</li>
+      <li xml:lang="ca">La característica taula de llum</li>
+      <li xml:lang="de">Leuchttischfunktion</li>
+      <li xml:lang="en-GB">Light Table feature</li>
+      <li xml:lang="fr">Fonction table lumineuse</li>
+      <li xml:lang="ko">조명 테이블 기능</li>
+      <li xml:lang="nl">Functie met lichttafel</li>
+      <li xml:lang="pl">Możliwość użycia podświetlarki</li>
+      <li xml:lang="pt">Funcionalidade da Mesa de Luz</li>
+      <li xml:lang="pt-BR">Funcionalidade Mesa de Luz</li>
+      <li xml:lang="sk">Funkcia ľahkého stola</li>
+      <li xml:lang="sl">Osvetlitvena miza</li>
+      <li xml:lang="sv">Ljusbordsfunktion</li>
+      <li xml:lang="uk">інструмент стола з підсвічуванням;</li>
+      <li xml:lang="x-test">xxLight Table featurexx</li>
+      <li>Plugins architectures: using Kipi-plugins</li>
+      <li xml:lang="ca">Arquitectura de connectors: usant els connectors Kipi</li>
+      <li xml:lang="de">Modul-Architektur: Erweiterung durch KIPI-Module</li>
+      <li xml:lang="en-GB">Plugins architectures: using Kipi-plugins</li>
+      <li xml:lang="fr">Architectures de modules externes : utilise les modules KIPI</li>
+      <li xml:lang="ko">플러그인 아키텍처: Kipi 플러그인 지원</li>
+      <li xml:lang="nl">Architectuur met plug-ins: met gebruik van Kipi-plug-ins</li>
+      <li xml:lang="pl">Architektura wtyczek: przy użyciu wtyczek Kipi</li>
+      <li xml:lang="pt">Arquitectura por 'plugins', usando os 'plugins' do Kipi</li>
+      <li xml:lang="pt-BR">Plugins arquiteturas: Usando Kipi-plugins</li>
+      <li xml:lang="sk">Architektúry pluginov: používa Kipi-pluginy</li>
+      <li xml:lang="sl">Podpora vstavkom: uporablja vstavke KIPI</li>
+      <li xml:lang="sv">Insticksprogramarkitektur: Använder KIPI-insticksprogram</li>
+      <li xml:lang="uk">архітектура на основі додатків, використовуються додатки KIPI;</li>
+      <li xml:lang="x-test">xxPlugins architectures: using Kipi-pluginsxx</li>
+      <li>Share your photos using HTML or publishing them to social web sites</li>
+      <li xml:lang="ca">Compartiu les vostres fotografies usant HTML o publicant-les a llocs web socials</li>
+      <li xml:lang="en-GB">Share your photos using HTML or publishing them to social web sites</li>
+      <li xml:lang="fr">Permet de partager vos photos avec des pages HTML ou publiez les sur des réseaux sociaux</li>
+      <li xml:lang="ko">HTML 및 소셜 웹 사이트를 통한 사진 지원</li>
+      <li xml:lang="nl">Uw foto's delen met HTML of ze publiceren op sociale websites</li>
+      <li xml:lang="pl">Współdzielenie zdjęć przy użyciu HTML, a także możliwość udostępniania ich na stronach społecznościowych</li>
+      <li xml:lang="pt">Partilhar as suas fotos por HTML ou publicá-las para as páginas Web sociais</li>
+      <li xml:lang="pt-BR">Compartilhamento de fotos usando HTML ou publicação em sites sociais</li>
+      <li xml:lang="sk">Zdieľanie vašich fotiek pomocou HTML alebo publikovanie ich na sociálnych sieťach</li>
+      <li xml:lang="sl">Delite vaše fotografije s pomočjo HTML ali pa jih objavite na družabnih omrežjih</li>
+      <li xml:lang="sv">Dela foton genom att använda HTML eller publicera dem på sociala webbplatser</li>
+      <li xml:lang="uk">можливість оприлюднення фотографій за допомогою коду HTML або сайтів соціальних мереж;</li>
+      <li xml:lang="x-test">xxShare your photos using HTML or publishing them to social web sitesxx</li>
+      <li>Image editor included with advanced features</li>
+      <li xml:lang="ca">Inclou un editor d'imatges amb característiques avançades</li>
+      <li xml:lang="en-GB">Image editor included with advanced features</li>
+      <li xml:lang="fr">Éditeur d'images inclus, avec des fonctionnalités avancées</li>
+      <li xml:lang="ko">고급 기능이 있는 그림 편집기</li>
+      <li xml:lang="nl">Bewerker van afbeeldingen met geavanceerde functies</li>
+      <li xml:lang="pl">Dołączony edytor obrazów o zaawansowanych możliwościach</li>
+      <li xml:lang="pt">Editor de imagens que inclui funcionalidades avançadas</li>
+      <li xml:lang="pt-BR">Editor de imagens com funcionalidades avançadas</li>
+      <li xml:lang="sk">Obsahuje editor obrázkov s pokročilými funkciami</li>
+      <li xml:lang="sl">Vgrajen urejevalnik slik z naprednimi zmožnostmi</li>
+      <li xml:lang="sv">Bildeditor med avancerade funktioner ingår</li>
+      <li xml:lang="uk">редактор зображень із додатковими можливостями;</li>
+      <li xml:lang="x-test">xxImage editor included with advanced featuresxx</li>
+    </ul>
+  </description>
+  <url type="homepage">http://www.digikam.org/</url>
+  <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=digikam</url>
+  <url type="help">http://docs.kde.org/development/en/extragear-graphics/digikam/index.html</url>
+  <screenshots>
+    <screenshot type="default">
+      <image>http://kde.org/images/screenshots/digikam.png</image>
+    </screenshot>
+  </screenshots>
+  <developer_name>digiKam Project</developer_name>
+  <developer_name xml:lang="ca">Projecte digiKam</developer_name>
+  <developer_name xml:lang="cs">Projekt digiKam</developer_name>
+  <developer_name xml:lang="de">digiKam-Projekt</developer_name>
+  <developer_name xml:lang="en-GB">digiKam Project</developer_name>
+  <developer_name xml:lang="es">Proyecto digiKam</developer_name>
+  <developer_name xml:lang="fr">Projet digiKam</developer_name>
+  <developer_name xml:lang="ko">digiKam 프로젝트</developer_name>
+  <developer_name xml:lang="nl">digiKam-project</developer_name>
+  <developer_name xml:lang="pl">Projekt digiKam</developer_name>
+  <developer_name xml:lang="pt">Projecto digiKam</developer_name>
+  <developer_name xml:lang="pt-BR">Projeto digiKam</developer_name>
+  <developer_name xml:lang="sk">Projekt digiKamu</developer_name>
+  <developer_name xml:lang="sl">Projekt digiKam</developer_name>
+  <developer_name xml:lang="sv">Digikam-projektet</developer_name>
+  <developer_name xml:lang="uk">Проект digiKam</developer_name>
+  <developer_name xml:lang="x-test">xxdigiKam Projectxx</developer_name>
+  <project_group>KDE</project_group>
+  <provides>
+    <binary>digikam</binary>
+  </provides>
+</component>

@@ -1,0 +1,29 @@
+*****************************************************************************************************
+digiKam 4.2.0 - Release date: 2014-08-03
+
+NEW FEATURES:
+
+AlbumGui : New view on left sidebar to search quickly items with assigned Labels.
+           Details: http://mohamedanwer.wordpress.com/2014/07/17/the-great-merging-day/
+AlbumGui : Tags view: add a new option to show items with no tag.
+           Details: http://mohamedanwer.wordpress.com/2014/07/11/tags-left-sidebar-supports-new-action-now/
+General  : Add retina display support with preview and editor canvas under OSX.
+
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+
+001 ==> 336851 - Untranslatable strings in Tags Manager.
+002 ==> 336650 - Face Detection always(!) crashes after first and only successful run (Digikam 3.4.0 on Windows 7).
+003 ==> 326019 - digiKam crashes while face tagging.
+004 ==> 337231 - use high resolution pixmaps on retina displays [patch].
+005 ==> 337392 - Drag and drop tagging stopped working.
+006 ==> 262175 - The widget to select names is not large.
+007 ==> 262167 - When creating a new name the name is not displayed on the current picture.
+008 ==> 286463 - Face detection does nothing in digiKam 2.3.0 windows 7 using the "official" installer.
+009 ==> 337417 - Allow duplicate names on face tags in the same image [patch].
+010 ==> 160363 - Use pictures Labels (Rating, Pick, Color) as selection criteria in Export methods.
+011 ==> 330976 - Crash after search for color label.
+012 ==> 337507 - Face Detection gives no results, no matter the accuracy setting.
+013 ==> 337688 - Reading/writing of keyword-tags to jpg and xmp corrupts tag hierarchy, duplicate root tag.
+014 ==> 160363 - Wish: use pictures Labels (Rating, Pick, Color) as selection criteria in Export methods.
+015 ==> 132827 - Create Tag from address-book entry.
+016 ==> 337993 - Switching to "tags" tab.

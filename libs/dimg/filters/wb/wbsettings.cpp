@@ -6,7 +6,7 @@
  * Date        : 2010-02-26
  * Description : White Balance settings view.
  *
- * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -188,8 +188,8 @@ WBSettings::WBSettings(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
-    QGridLayout* grid      = new QGridLayout(parent);
-    d->temperatureLabel    = new QLabel(i18n("<a href='http://en.wikipedia.org/wiki/Color_temperature'>"
+    QGridLayout* const grid = new QGridLayout(parent);
+    d->temperatureLabel     = new QLabel(i18n("<a href='http://en.wikipedia.org/wiki/Color_temperature'>"
                                           "Color Temperature</a> (K): "));
     d->temperatureLabel->setOpenExternalLinks(true);
 
@@ -244,7 +244,7 @@ WBSettings::WBSettings(QWidget* const parent)
                                           "image used to set the white color balance temperature and "
                                           "green component."));
 
-    KSeparator* line = new KSeparator(Qt::Horizontal);
+    KSeparator* const line = new KSeparator(Qt::Horizontal);
 
     // -------------------------------------------------------------
 
@@ -284,7 +284,7 @@ WBSettings::WBSettings(QWidget* const parent)
     d->greenInput->setWhatsThis(i18n("Set here the green component to control the magenta color "
                                      "cast removal level."));
 
-    KSeparator* line2 = new KSeparator(Qt::Horizontal);
+    KSeparator* const line2 = new KSeparator(Qt::Horizontal);
 
     // -------------------------------------------------------------
 
@@ -435,13 +435,14 @@ WBContainer WBSettings::settings() const
 {
     WBContainer prm;
 
-    prm.black       = d->blackInput->value();
-    prm.exposition  = d->mainExposureInput->value() + d->fineExposureInput->value();
-    prm.temperature = d->temperatureInput->value();
-    prm.green       = d->greenInput->value();
-    prm.dark        = d->darkInput->value();
-    prm.gamma       = d->gammaInput->value();
-    prm.saturation  = d->saturationInput->value();
+    prm.black          = d->blackInput->value();
+    prm.expositionMain = d->mainExposureInput->value();
+    prm.expositionFine = d->fineExposureInput->value();
+    prm.temperature    = d->temperatureInput->value();
+    prm.green          = d->greenInput->value();
+    prm.dark           = d->darkInput->value();
+    prm.gamma          = d->gammaInput->value();
+    prm.saturation     = d->saturationInput->value();
 
     return prm;
 }
@@ -451,8 +452,8 @@ void WBSettings::setSettings(const WBContainer& settings)
     blockSignals(true);
 
     d->blackInput->setValue(settings.black);
-    d->mainExposureInput->setValue(double(int(settings.exposition)));
-    d->fineExposureInput->setValue(settings.exposition - d->mainExposureInput->value());
+    d->mainExposureInput->setValue(settings.expositionMain);
+    d->fineExposureInput->setValue(settings.expositionFine);
     d->temperatureInput->setValue(settings.temperature);
     d->greenInput->setValue(settings.green);
     d->darkInput->setValue(settings.dark);
@@ -470,10 +471,10 @@ void WBSettings::resetToDefault()
     // Neutral color temperature settings is D65.
     d->blackInput->slotReset();
     d->darkInput->slotReset();
-    d->fineExposureInput->slotReset();
     d->gammaInput->slotReset();
     d->greenInput->slotReset();
     d->mainExposureInput->slotReset();
+    d->fineExposureInput->slotReset();
     d->saturationInput->slotReset();
     d->temperatureInput->slotReset();
     d->temperaturePresetCB->slotReset();
@@ -486,13 +487,14 @@ WBContainer WBSettings::defaultSettings() const
 {
     WBContainer prm;
 
-    prm.black       = d->blackInput->defaultValue();
-    prm.exposition  = d->mainExposureInput->defaultValue() + d->fineExposureInput->defaultValue();
-    prm.temperature = d->temperatureInput->defaultValue();
-    prm.green       = d->greenInput->defaultValue();
-    prm.dark        = d->darkInput->defaultValue();
-    prm.gamma       = d->gammaInput->defaultValue();
-    prm.saturation  = d->saturationInput->defaultValue();
+    prm.black          = d->blackInput->defaultValue();
+    prm.expositionMain = d->mainExposureInput->defaultValue();
+    prm.expositionFine = d->fineExposureInput->defaultValue();
+    prm.temperature    = d->temperatureInput->defaultValue();
+    prm.green          = d->greenInput->defaultValue();
+    prm.dark           = d->darkInput->defaultValue();
+    prm.gamma          = d->gammaInput->defaultValue();
+    prm.saturation     = d->saturationInput->defaultValue();
 
     return prm;
 }
@@ -500,24 +502,20 @@ WBContainer WBSettings::defaultSettings() const
 void WBSettings::readSettings(KConfigGroup& group)
 {
     WBContainer prm;
-//    WBContainer defaultPrm = defaultSettings();
-
-    prm.black       = group.readEntry(d->configBlackInputEntry,       d->blackInput->defaultValue());
-    prm.temperature = group.readEntry(d->configTemperatureInputEntry, d->temperatureInput->defaultValue());
-    prm.green       = group.readEntry(d->configGreenInputEntry,       d->greenInput->defaultValue());
-    prm.dark        = group.readEntry(d->configDarkInputEntry,        d->darkInput->defaultValue());
-    prm.gamma       = group.readEntry(d->configGammaInputEntry,       d->gammaInput->defaultValue());
-    prm.saturation  = group.readEntry(d->configSaturationInputEntry,  d->saturationInput->defaultValue());
-    double fineExpo = group.readEntry(d->configFineExposureEntry,     d->fineExposureInput->defaultValue());
-    prm.exposition  = group.readEntry(d->configMainExposureEntry,     d->mainExposureInput->defaultValue()) + fineExpo;
+    prm.black          = group.readEntry(d->configBlackInputEntry,       d->blackInput->defaultValue());
+    prm.temperature    = group.readEntry(d->configTemperatureInputEntry, d->temperatureInput->defaultValue());
+    prm.green          = group.readEntry(d->configGreenInputEntry,       d->greenInput->defaultValue());
+    prm.dark           = group.readEntry(d->configDarkInputEntry,        d->darkInput->defaultValue());
+    prm.gamma          = group.readEntry(d->configGammaInputEntry,       d->gammaInput->defaultValue());
+    prm.saturation     = group.readEntry(d->configSaturationInputEntry,  d->saturationInput->defaultValue());
+    prm.expositionMain = group.readEntry(d->configMainExposureEntry,     d->mainExposureInput->defaultValue());
+    prm.expositionFine = group.readEntry(d->configFineExposureEntry,     d->fineExposureInput->defaultValue());
 
     setSettings(prm);
 }
 
 void WBSettings::writeSettings(KConfigGroup& group)
 {
-//    WBContainer prm = settings();
-
     group.writeEntry(d->configDarkInputEntry,        d->darkInput->value());
     group.writeEntry(d->configBlackInputEntry,       d->blackInput->value());
     group.writeEntry(d->configMainExposureEntry,     d->mainExposureInput->value());

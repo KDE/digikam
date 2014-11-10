@@ -850,7 +850,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     }
     else if (name == "albumcollection")
     {
-        fieldQuery.addStringField("Albums.collection");
+        fieldQuery.addChoiceStringField("Albums.collection");
     }
     else if (name == "tagid")
     {

@@ -1,7 +1,5 @@
 ADD_SUBDIRECTORY(advancedrename)
 ADD_SUBDIRECTORY(importui)
-ADD_SUBDIRECTORY(hotplug)
 ADD_SUBDIRECTORY(imageeditor)
 ADD_SUBDIRECTORY(lighttable)
 ADD_SUBDIRECTORY(queuemanager)
-ADD_SUBDIRECTORY(scripts)

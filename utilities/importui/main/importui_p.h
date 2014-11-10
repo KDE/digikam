@@ -7,7 +7,7 @@
  * Description : Camera interface
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -46,6 +46,8 @@
 
 // Local includes
 
+#include "config-digikam.h"
+#include "camerathumbsctrl.h"
 #include "cameracontroller.h"
 #include "filtercombo.h"
 #include "dzoombar.h"
@@ -61,6 +63,8 @@
 #include "importview.h"
 
 using namespace KDcrawIface;
+
+class KMessageWidget;
 
 namespace Digikam
 {
@@ -104,19 +108,26 @@ public:
         markAsDownloadedAction(0),
         resumeAction(0),
         pauseAction(0),
+        connectAction(0),
         itemSortAction(0),
         itemSortOrderAction(0),
         itemsGroupAction(0),
         showMenuBarAction(0),
+        showPreferencesAction(0),
         showLogAction(0),
         showBarAction(0),
         imageViewSelectionAction(0),
         iconViewAction(0),
         camItemPreviewAction(0),
+#ifdef HAVE_KGEOMAP
         mapViewAction(0),
+#endif // HAVE_KGEOMAP
+        viewCMViewAction(0),
+        cameraActions(0),
         helpMenu(0),
         advBox(0),
         splitter(0),
+        camThumbsCtrl(0),
         controller(0),
         historyUpdater(0),
         view(0),
@@ -133,7 +144,8 @@ public:
         progressTimer(0),
         progressValue(0),
         historyView(0),
-        filterComboBox(0)
+        filterComboBox(0),
+        errorWidget(0)
     {
     }
 
@@ -150,10 +162,10 @@ public:
 
     QString                       cameraTitle;
 
+    QStringList                   autoRotateItemsList;
     QStringList                   currentlyDeleting;
     QSet<QString>                 foldersToScan;
     CamItemInfoList               filesToBeAdded;
-    CamItemInfoList               autoRotateItemsList;
 
     KMenu*                        downloadMenu;
     KMenu*                        deleteMenu;
@@ -187,16 +199,23 @@ public:
     KAction*                      markAsDownloadedAction;
     KAction*                      resumeAction;
     KAction*                      pauseAction;
+    KAction*                      connectAction;
     KSelectAction*                itemSortAction;
     KSelectAction*                itemSortOrderAction;
     KSelectAction*                itemsGroupAction;
     KToggleAction*                showMenuBarAction;
+    KAction*                      showPreferencesAction;
     KToggleAction*                showLogAction;
     KToggleAction*                showBarAction;
     KSelectAction*                imageViewSelectionAction;
     KToggleAction*                iconViewAction;
     KToggleAction*                camItemPreviewAction;
+#ifdef HAVE_KGEOMAP
     KToggleAction*                mapViewAction;
+#endif // HAVE_KGEOMAP
+    KToggleAction*                viewCMViewAction;
+
+    QActionGroup*                 cameraActions;
 
     KUrl                          lastDestURL;
 
@@ -206,6 +225,7 @@ public:
 
     SidebarSplitter*              splitter;
 
+    CameraThumbsCtrl*             camThumbsCtrl;
     CameraController*             controller;
     CameraHistoryUpdater*         historyUpdater;
 
@@ -233,6 +253,8 @@ public:
     FilterComboBox*               filterComboBox;
 
     CHUpdateItemMap               map;
+
+    KMessageWidget*               errorWidget;
 };
 
 const QString ImportUI::Private::configGroupName("Camera Settings");

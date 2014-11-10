@@ -38,7 +38,7 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "iccsettings.h"
 #include "metadatasettings.h"
 #include "ddragobjects.h"
@@ -481,7 +481,7 @@ void QueuePool::applySettings()
         if (queue)
         {
             // Show/hide tool-tips settings.
-            queue->setEnableToolTips(AlbumSettings::instance()->getShowToolTips());
+            queue->setEnableToolTips(ApplicationSettings::instance()->getShowToolTips());
 
             // Reset Exif Orientation settings.
             QueueSettings prm = queue->settings();

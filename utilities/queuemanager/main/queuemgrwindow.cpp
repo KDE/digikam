@@ -89,7 +89,7 @@
 #include "thumbnailsize.h"
 #include "sidebar.h"
 #include "uifilevalidator.h"
-#include "knotificationwrapper.h"
+#include "dnotificationwrapper.h"
 #include "scancontroller.h"
 
 namespace Digikam
@@ -192,6 +192,7 @@ void QueueMgrWindow::closeEvent(QCloseEvent* e)
     }
 
     writeSettings();
+    DXmlGuiWindow::closeEvent(e);
     e->accept();
 }
 
@@ -442,7 +443,7 @@ void QueueMgrWindow::setupActions()
 
     createGUI(xmlFile());
 
-    d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
+    d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for bug #171080
 }
 
 void QueueMgrWindow::refreshView()
@@ -1009,7 +1010,7 @@ void QueueMgrWindow::slotQueueProcessed()
     if (d->currentQueueToProcess == d->queuePool->count())
     {
         // Pop-up a message to bring user when all is done.
-        KNotificationWrapper("batchqueuecompleted", i18n("Batch queue finished"),
+        DNotificationWrapper("batchqueuecompleted", i18n("Batch queue finished"),
                              this, windowTitle());
 
         processingAborted();

@@ -93,6 +93,7 @@ public:
     void readFromConfig(KConfigGroup& group);
     void writeToConfig(KConfigGroup& group) const;
     void writeManagedViewToConfig(KConfigGroup& group) const;
+    void writeManagedPreviewsToConfig(KConfigGroup& group) const;
 
 public:
 

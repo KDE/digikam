@@ -44,7 +44,7 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "databaseaccess.h"
 #include "databasewidget.h"
 #include "databasebackend.h"
@@ -201,8 +201,8 @@ void MigrationDlg::performCopy()
 
 void MigrationDlg::dataInit()
 {
-    d->fromDatabaseWidget->setParametersFromSettings(AlbumSettings::instance());
-    d->toDatabaseWidget->setParametersFromSettings(AlbumSettings::instance());
+    d->fromDatabaseWidget->setParametersFromSettings(ApplicationSettings::instance());
+    d->toDatabaseWidget->setParametersFromSettings(ApplicationSettings::instance());
 }
 
 void MigrationDlg::unlockInputFields()

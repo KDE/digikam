@@ -3,7 +3,7 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        :
+ * Date        : 28-07-2013
  * Description : Detects compression by analyzing the intensity of blocks
  *
  * Copyright (C) 2013-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,8 +22,36 @@
  *
  * ============================================================ */
 
+// Pragma directives to reduce warnings from OpenCV header files.
+#if not defined(__APPLE__) && defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnon-virtual-dtor"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#endif
+
+#if defined(__APPLE__) && defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnon-virtual-dtor"
+#pragma clang diagnostic ignored "-Woverloaded-virtual"
+#pragma clang diagnostic ignored "-Wcast-align"
+#endif
+
+// OpenCV includes
+
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
+
+// Restore warnings
+#if not defined(__APPLE__) && defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+
+#if defined(__APPLE__) && defined(__clang__)
+#pragma clang diagnostic pop
+#endif
+
+// C++ includes
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
@@ -38,16 +66,14 @@ Mat src, src_gray;
 //TODO: should calibrate the THRESHOLD value
 #define THRESHOLD 147
 
-
 /* @function main */
-int main( int argc, char** argv )
+int main( int /*argc*/, char** argv )
 {
-    int i;
-    int count=8;
-    int countblocks=0;
-    int number_of_blocks=0;
-    int sum=0;
-    vector<int> average_bottom,average_middle,average_top;
+    int countblocks      = 0;
+    int number_of_blocks = 0;
+    int sum              = 0;
+    vector<int> average_bottom, average_middle, average_top;
+
     // Load an image
     src = imread( argv[1] );
 
@@ -81,7 +107,7 @@ int main( int argc, char** argv )
         {
             sum=0;
 
-            for (int k=j; k<block_size; k++)
+            for (int k = j; k < block_size; k++)
             {
                 sum += (int)src_gray.at<uchar>(i+1, j);
             }
@@ -96,23 +122,23 @@ int main( int argc, char** argv )
         {
             sum=0;
 
-            for (int k=j; k<block_size; k++)
+            for (int k = j; k < block_size; k++)
             {
                 sum += (int)src_gray.at<uchar>(i+2, j);
             }
+
             average_bottom.push_back(sum/8);
             countblocks++;
         }
 
         //check if the average intensity of 8 blocks in the top, middle and bottom rows are equal. If so increment number_of_blocks
-        for (int j=0; j<countblocks; j++)
+        for (int j = 0; j < countblocks; j++)
         {
-            if ((average_middle[j]==(average_top[j]+average_bottom[j])/2) && average_middle[j]>THRESHOLD)
+            if ((average_middle[j] == (average_top[j]+average_bottom[j])/2) && average_middle[j] > THRESHOLD)
             {
                 number_of_blocks++;
             }
         }
-
     }
 
     average_bottom.clear();
@@ -124,7 +150,7 @@ int main( int argc, char** argv )
     for (int j= 0; j < src_gray.cols; j++)
     {
         //calculating intensity of top row
-        for (int i = 0; i< src_gray.rows; i+=8)
+        for (int i = 0; i < src_gray.rows; i+=8)
         {
             sum=0;
 
@@ -137,11 +163,11 @@ int main( int argc, char** argv )
         }
 
         //calculating intensity of middle row
-        for (int i= 0; i< src_gray.rows; i+=8)
+        for (int i = 0; i < src_gray.rows; i+=8)
         {
             sum=0;
 
-            for (int k=i; k<block_size; k++)
+            for (int k = i; k < block_size; k++)
             {
                 sum += (int)src_gray.at<uchar>(i, j+1);
             }
@@ -166,18 +192,18 @@ int main( int argc, char** argv )
         }
 
         //check if the average intensity of 8 blocks in the top, middle and bottom rows are equal. If so increment number_of_blocks
-        for (int i=0; i<countblocks; i++)
+        for (int i = 0; i < countblocks; i++)
         {
-            if ((average_middle[i]==(average_top[i]+average_bottom[i])/2) && average_middle[i]>THRESHOLD)
+            if ((average_middle[i] == (average_top[i]+average_bottom[i])/2) && average_middle[i] > THRESHOLD)
             {
                 number_of_blocks++;
             }
         }
-
     }
 
-    std::cout<<"Number of blocks: "<<number_of_blocks<<"\t\t";
-    //we can set the threshold value, after testing, as to how many blocks make a picture blocky[ be affected by JPEG Compression]
+    std::cout << "Number of blocks: " << number_of_blocks << "\t\t";
+
+    //we can set the threshold value, after testing, as to how many blocks make a picture blocky [be affected by JPEG Compression]
     waitKey(0);
 
     return 0;

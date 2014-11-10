@@ -1,0 +1,25 @@
+#
+# Copyright (c) 2010-2014, Gilles Caulier, <caulier dot gilles at gmail dot com>
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+
+set(CMAKE_BACKWARDS_COMPATIBILITY "2.4")
+
+# See if we have git installed
+find_program(GITEXEC git)
+
+# Read the version if installed, else set to "unknown"
+if(GITEXEC)
+    execute_process(COMMAND ${GITEXEC} --git-dir=@CMAKE_CURRENT_SOURCE_DIR@/.git rev-parse HEAD OUTPUT_VARIABLE MYVERSION)
+    if(MYVERSION)
+        # Remove the newline that git returns
+        string(STRIP ${MYVERSION} MYVERSION)
+    endif()
+else()
+    set(MYVERSION unknown)
+endif()
+
+# Configure the revision header
+configure_file("@CMAKE_CURRENT_SOURCE_DIR@/cmake/templates/gitversion.h.cmake.in"
+               "@CMAKE_CURRENT_BINARY_DIR@/app/utils/gitversion.h")

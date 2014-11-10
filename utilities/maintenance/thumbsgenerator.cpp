@@ -6,7 +6,7 @@
  * Date        : 2006-30-08
  * Description : batch thumbnails generator
  *
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2012      by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -42,7 +42,7 @@
 #include "albumdb.h"
 #include "albuminfo.h"
 #include "albummanager.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "databaseaccess.h"
 #include "imageinfo.h"
 #include "thumbnaildatabaseaccess.h"
@@ -144,8 +144,7 @@ void ThumbsGenerator::slotStart()
     if (!d->rebuildAll)
     {
         QHash<QString, int> filePaths = ThumbnailDatabaseAccess().db()->getFilePathsWithThumbnail();
-
-        QStringList::iterator it = d->allPicturesPath.begin();
+        QStringList::iterator it      = d->allPicturesPath.begin();
 
         while (it != d->allPicturesPath.end())
         {

@@ -6,7 +6,7 @@
  * Date        : 2013-08-14
  * Description : Thread actions task for thumbs generator.
  *
- * Copyright (C) 2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -69,6 +69,7 @@ ThumbsTask::~ThumbsTask()
 void ThumbsTask::setItem(const QString& path)
 {
     d->path = path;
+    d->catcher->thread()->deleteThumbnail(d->path);
 }
 
 void ThumbsTask::slotCancel()
@@ -81,7 +82,6 @@ void ThumbsTask::run()
 {
     d->catcher->setActive(true);
 
-    d->catcher->thread()->deleteThumbnail(d->path);
     d->catcher->thread()->find(d->path);
     d->catcher->enqueue();
     QList<QImage> images = d->catcher->waitForThumbnails();

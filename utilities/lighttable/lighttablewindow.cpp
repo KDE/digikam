@@ -66,13 +66,17 @@
 #include "digikamapp.h"
 #include "thememanager.h"
 #include "dimg.h"
+#include "dio.h"
 #include "dmetadata.h"
+#include "fileoperation.h"
 #include "metadatasettings.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "albummanager.h"
 #include "loadingcacheinterface.h"
 #include "deletedialog.h"
+#include "iccsettings.h"
 #include "imagewindow.h"
+#include "imagedescedittab.h"
 #include "slideshow.h"
 #include "setup.h"
 #include "syncjob.h"
@@ -135,13 +139,11 @@ LightTableWindow::LightTableWindow()
     setupActions();
     setupStatusBar();
 
-    // Make signals/slots connections
+    // ------------------------------------------------
 
     setupConnections();
-
-    //-------------------------------------------------------------
-
     slotSidebarTabTitleStyleChanged();
+    slotColorManagementOptionsChanged();
 
     readSettings();
 
@@ -245,6 +247,7 @@ void LightTableWindow::closeEvent(QCloseEvent* e)
 
     writeSettings();
 
+    DXmlGuiWindow::closeEvent(e);
     e->accept();
 }
 
@@ -346,11 +349,14 @@ void LightTableWindow::setupConnections()
     connect(d->statusProgressBar, SIGNAL(signalCancelButtonPressed()),
             this, SLOT(slotProgressBarCancelButtonPressed()));
 
-    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+    connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotSidebarTabTitleStyleChanged()));
 
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
+
+    connect(IccSettings::instance(), SIGNAL(settingsChanged()),
+            this, SLOT(slotColorManagementOptionsChanged()));
 
     // Thumbs bar connections ---------------------------------------
 
@@ -492,6 +498,12 @@ void LightTableWindow::setupActions()
     connect(d->editItemAction, SIGNAL(triggered()), this, SLOT(slotEditItem()));
     actionCollection()->addAction("lighttable_edititem", d->editItemAction);
 
+    KAction* const openWithAction = new KAction(KIcon("preferences-desktop-filetype-association"), i18n("Open With Default Application"), this);
+    openWithAction->setShortcut(KShortcut(Qt::META + Qt::Key_F4));
+    openWithAction->setWhatsThis(i18n("Open the item with default assigned application."));
+    connect(openWithAction, SIGNAL(triggered()), this, SLOT(slotFileWithDefaultApplication()));
+    actionCollection()->addAction("open_with_default_application", openWithAction);
+
     d->removeItemAction = new KAction(KIcon("list-remove"), i18n("Remove item from LightTable"), this);
     d->removeItemAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_K));
     d->removeItemAction->setEnabled(false);
@@ -546,6 +558,7 @@ void LightTableWindow::setupActions()
     actionCollection()->addAction("lighttable_showthumbbar", d->showBarAction);
 
     createFullScreenAction("lighttable_fullscreen");
+    createSidebarActions();
 
     d->slideShowAction = new KAction(KIcon("view-presentation"), i18n("Slideshow"), this);
     d->slideShowAction->setShortcut(KShortcut(Qt::Key_F9));
@@ -606,6 +619,13 @@ void LightTableWindow::setupActions()
     connect(d->rightZoomFitToWindowAction, SIGNAL(triggered()), d->previewView, SLOT(slotRightFitToWindow()));
     actionCollection()->addAction("lighttable_zoomfit2window_right", d->rightZoomFitToWindowAction);
 
+    // -----------------------------------------------------------
+
+    d->viewCMViewAction = new KToggleAction(KIcon("video-display"), i18n("Color-Managed View"), this);
+    d->viewCMViewAction->setShortcut(KShortcut(Qt::Key_F12));
+    connect(d->viewCMViewAction, SIGNAL(triggered()), this, SLOT(slotToggleColorManagedView()));
+    actionCollection()->addAction("color_managed_view", d->viewCMViewAction);
+
     // -- Standard 'Configure' menu actions ----------------------------------------
 
     d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
@@ -639,11 +659,41 @@ void LightTableWindow::setupActions()
     // Labels shortcuts must be registered here to be saved in XML GUI files if user customize it.
     TagsActionMngr::defaultManager()->registerLabelsActions(actionCollection());
 
+    KAction* const editTitlesRight = new KAction(i18n("Edit Titles on the Right"), this);
+    editTitlesRight->setShortcut( KShortcut(Qt::META + Qt::Key_T) );
+    actionCollection()->addAction("edit_titles_right", editTitlesRight);
+    connect(editTitlesRight, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateTitles()));
+
+    KAction* const editCommentsRight = new KAction(i18n("Edit Comments on the Right"), this);
+    editCommentsRight->setShortcut( KShortcut(Qt::META + Qt::Key_C) );
+    actionCollection()->addAction("edit_comments_right", editCommentsRight);
+    connect(editCommentsRight, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateComments()));
+
+    KAction* const editTitlesLeft = new KAction(i18n("Edit Titles on the Left"), this);
+    editTitlesLeft->setShortcut( KShortcut(Qt::SHIFT + Qt::META + Qt::Key_T) );
+    actionCollection()->addAction("edit_titles_left", editTitlesLeft);
+    connect(editTitlesLeft, SIGNAL(triggered()), this, SLOT(slotLeftSideBarActivateTitles()));
+
+    KAction* const editCommentsLeft = new KAction(i18n("Edit Comments on the Left"), this);
+    editCommentsLeft->setShortcut( KShortcut(Qt::SHIFT + Qt::META + Qt::Key_C) );
+    actionCollection()->addAction("edit_comments_left", editCommentsLeft);
+    connect(editCommentsLeft, SIGNAL(triggered()), this, SLOT(slotLeftSideBarActivateComments()));
+
+    KAction* const assignedTagsRight = new KAction(i18n("Show Assigned Tags on the Right"), this);
+    assignedTagsRight->setShortcut( KShortcut(Qt::META + Qt::Key_A) );
+    actionCollection()->addAction("assigned _tags_right", assignedTagsRight);
+    connect(assignedTagsRight, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateAssignedTags()));
+
+    KAction* const assignedTagsLeft = new KAction(i18n("Show Assigned Tags on the Left"), this);
+    assignedTagsLeft->setShortcut( KShortcut(Qt::SHIFT + Qt::META + Qt::Key_A) );
+    actionCollection()->addAction("assigned _tags_left", assignedTagsLeft);
+    connect(assignedTagsLeft, SIGNAL(triggered()), this, SLOT(slotLeftSideBarActivateAssignedTags()));
+
     // ---------------------------------------------------------------------------------
 
     createGUI(xmlFile());
 
-    d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
+    d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for bug #171080
 }
 
 // Deal with items dropped onto the thumbbar (e.g. from the Album view)
@@ -1052,10 +1102,6 @@ void LightTableWindow::deleteItem(const ImageInfo& info, bool permanently)
 
     kDebug() << "Item to delete: " << u;
 
-    // Provide a digikamalbums:// URL to KIO
-    KUrl kioURL  = info.databaseUrl();
-    KUrl fileURL = u;
-
     bool useTrash;
     bool preselectDeletePermanently = permanently;
 
@@ -1072,23 +1118,7 @@ void LightTableWindow::deleteItem(const ImageInfo& info, bool permanently)
 
     useTrash = !dialog.shouldDelete();
 
-    // trash does not like non-local URLs, put is not implemented
-    if (useTrash)
-    {
-        kioURL = fileURL;
-    }
-
-    SyncJobResult deleteResult = SyncJob::del(kioURL, useTrash);
-
-    if (!deleteResult)
-    {
-        KMessageBox::error(this, deleteResult.errorString);
-        return;
-    }
-
-    emit signalFileDeleted(u);
-
-    slotRemoveItem(info);
+    DIO::del(info, useTrash);
 }
 
 void LightTableWindow::slotRemoveItem()
@@ -1422,10 +1452,11 @@ void LightTableWindow::slideShow(SlideShowSettings& settings)
     if (!d->cancelSlideShow)
     {
         SlideShow* const slide = new SlideShow(settings);
+        TagsActionMngr::defaultManager()->registerActionsToWidget(slide);
 
         if (settings.startWithCurrent)
         {
-            slide->setCurrent(d->thumbView->currentInfo().fileUrl());
+            slide->setCurrentItem(d->thumbView->currentInfo().fileUrl());
         }
 
         connect(slide, SIGNAL(signalRatingChanged(KUrl,int)),
@@ -1436,6 +1467,9 @@ void LightTableWindow::slideShow(SlideShowSettings& settings)
 
         connect(slide, SIGNAL(signalPickLabelChanged(KUrl,int)),
                 d->thumbView, SLOT(slotPickLabelChanged(KUrl,int)));
+
+        connect(slide, SIGNAL(signalToggleTag(KUrl,int)),
+                d->thumbView, SLOT(slotToggleTag(KUrl,int)));
 
         slide->show();
     }
@@ -1566,8 +1600,8 @@ void LightTableWindow::slotShowMenuBar()
 
 void LightTableWindow::slotSidebarTabTitleStyleChanged()
 {
-    d->leftSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
-    d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
+    d->leftSideBar->setStyle(ApplicationSettings::instance()->getSidebarTitleStyle());
+    d->rightSideBar->setStyle(ApplicationSettings::instance()->getSidebarTitleStyle());
 
     /// @todo Which part of the settings has to be reloaded?
     //     d->rightSideBar->applySettings();
@@ -1619,12 +1653,110 @@ void LightTableWindow::showSideBars(bool visible)
     }
 }
 
+void LightTableWindow::slotToggleLeftSideBar()
+{
+    d->leftSideBar->isExpanded() ? d->leftSideBar->shrink()
+                                 : d->leftSideBar->expand();
+}
+
+void LightTableWindow::slotToggleRightSideBar()
+{
+    d->rightSideBar->isExpanded() ? d->rightSideBar->shrink()
+                                  : d->rightSideBar->expand();
+}
+
+void LightTableWindow::slotPreviousLeftSideBarTab()
+{
+    d->leftSideBar->activePreviousTab();
+}
+
+void LightTableWindow::slotNextLeftSideBarTab()
+{
+    d->leftSideBar->activeNextTab();
+}
+
+void LightTableWindow::slotPreviousRightSideBarTab()
+{
+    d->rightSideBar->activePreviousTab();
+}
+
+void LightTableWindow::slotNextRightSideBarTab()
+{
+    d->rightSideBar->activeNextTab();
+}
+
 void LightTableWindow::customizedFullScreenMode(bool set)
 {
     statusBarMenuAction()->setEnabled(!set);
     toolBarMenuAction()->setEnabled(!set);
     d->showMenuBarAction->setEnabled(!set);
     d->showBarAction->setEnabled(!set);
+    d->previewView->toggleFullScreen(set);
+}
+
+void LightTableWindow::slotFileWithDefaultApplication()
+{
+    if (!d->thumbView->currentInfo().isNull())
+    {
+        FileOperation::openFilesWithDefaultApplication(KUrl::List() << d->thumbView->currentInfo().fileUrl(), this);
+    }
+}
+
+void LightTableWindow::slotRightSideBarActivateTitles()
+{
+    d->rightSideBar->setActiveTab(d->rightSideBar->imageDescEditTab());
+    d->rightSideBar->imageDescEditTab()->setFocusToTitlesEdit();
+}
+
+void LightTableWindow::slotRightSideBarActivateComments()
+{
+    d->rightSideBar->setActiveTab(d->rightSideBar->imageDescEditTab());
+    d->rightSideBar->imageDescEditTab()->setFocusToCommentsEdit();
+}
+
+void LightTableWindow::slotRightSideBarActivateAssignedTags()
+{
+    d->rightSideBar->setActiveTab(d->rightSideBar->imageDescEditTab());
+    d->rightSideBar->imageDescEditTab()->activateAssignedTagsButton();
+}
+
+void LightTableWindow::slotLeftSideBarActivateTitles()
+{
+    d->leftSideBar->setActiveTab(d->leftSideBar->imageDescEditTab());
+    d->leftSideBar->imageDescEditTab()->setFocusToTitlesEdit();
+}
+
+void LightTableWindow::slotLeftSideBarActivateComments()
+{
+    d->leftSideBar->setActiveTab(d->leftSideBar->imageDescEditTab());
+    d->leftSideBar->imageDescEditTab()->setFocusToCommentsEdit();
+}
+
+void LightTableWindow::slotLeftSideBarActivateAssignedTags()
+{
+    d->leftSideBar->setActiveTab(d->leftSideBar->imageDescEditTab());
+    d->leftSideBar->imageDescEditTab()->activateAssignedTagsButton();
+}
+
+void LightTableWindow::slotToggleColorManagedView()
+{
+    if (!IccSettings::instance()->isEnabled())
+    {
+        return;
+    }
+
+    bool cmv = !IccSettings::instance()->settings().useManagedPreviews;
+    IccSettings::instance()->setUseManagedPreviews(cmv);
+}
+
+void LightTableWindow::slotColorManagementOptionsChanged()
+{
+    ICCSettingsContainer settings = IccSettings::instance()->settings();
+
+    d->viewCMViewAction->blockSignals(true);
+    d->viewCMViewAction->setEnabled(settings.enableCM);
+    d->viewCMViewAction->setChecked(settings.useManagedPreviews);
+    d->viewCMViewAction->blockSignals(false);
 }
 
 }  // namespace Digikam

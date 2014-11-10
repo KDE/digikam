@@ -26,7 +26,7 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "dmetadata.h"
 
 namespace Digikam
@@ -46,7 +46,7 @@ DKCamera::DKCamera(const QString& title, const QString& model, const QString& po
     m_captureImageSupport         = false;
     m_captureImagePreviewSupport  = false;
 
-    AlbumSettings* const settings = AlbumSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
     m_imageFilter                 = settings->getImageFileFilter();
     m_movieFilter                 = settings->getMovieFileFilter();
     m_audioFilter                 = settings->getAudioFileFilter();
@@ -166,7 +166,7 @@ void DKCamera::fillItemInfoFromMetadata(CamItemInfo& info, const DMetadata& meta
 {
     QSize dims     = meta.getImageDimensions();
     info.ctime     = meta.getImageDateTime();
-    //NOTE: see B.K.O #246401 to sort based on milliseconds for items  taken quickly.
+    //NOTE: see bug #246401 to sort based on milliseconds for items  taken quickly.
     info.ctime.setTime(info.ctime.time().addMSecs(meta.getMSecsInfo()));
     info.width     = dims.width();
     info.height    = dims.height();

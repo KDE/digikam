@@ -6,7 +6,7 @@
  * Date        : 2005-17-07
  * Description : A Sharpen threaded image filter.
  *
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -78,11 +78,25 @@ public:
 
 private:
 
+    struct Args
+    {
+        uint    start;
+        uint    stop;
+        uint    y;
+        long    kernelWidth;
+        double* normal_kernel;
+        long    halfKernelWidth;
+    };
+
+private:
+
     void filterImage();
 
     void sharpenImage(double radius, double sigma);
 
     bool convolveImage(const unsigned int order, const double* const kernel);
+
+    void convolveImageMultithreaded(const Args& prm);
 
     int  getOptimalKernelWidth(double radius, double sigma);
 

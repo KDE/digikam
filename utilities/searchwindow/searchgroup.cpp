@@ -97,6 +97,7 @@ void SearchGroup::setup(Type type)
 
     group->addField(SearchField::createField("albumid", group));
     group->addField(SearchField::createField("albumname", group));
+    group->addField(SearchField::createField("albumcollection", group));
     group->addField(SearchField::createField("tagid", group));
     group->addField(SearchField::createField("tagname", group));
     group->addField(SearchField::createField("notag", group));
@@ -203,14 +204,14 @@ void SearchGroup::setup(Type type)
 
     // ----- //
 
-    /*
+
     label = new SearchFieldGroupLabel(this);
-    label->setTitle(i18n("Geographic position");
+    label->setTitle(i18n("Geographic position"));
     group = new SearchFieldGroup(this);
     group->setLabel(label);
 
-    group->addField(SearchField::createField("latitude", group));
-    group->addField(SearchField::createField("longitude", group));
+    //group->addField(SearchField::createField("latitude", group));
+    //group->addField(SearchField::createField("longitude", group));
     group->addField(SearchField::createField("altitude", group));
     group->addField(SearchField::createField("nogps", group));
 
@@ -218,7 +219,7 @@ void SearchGroup::setup(Type type)
     m_fieldGroups << group;
     m_layout->addWidget(label);
     m_layout->addWidget(group);
-    */
+
 
     // ----- //
 

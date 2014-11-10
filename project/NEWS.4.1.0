@@ -1,0 +1,53 @@
+*****************************************************************************************************
+digiKam 4.1.0 - Release date: 2014-06-22
+
+NEW FEATURES:
+
+General  : Add Gelocation indicator over thumbnails when image has GPS coordinateds.
+AlbumGUI : Thumbnails from icon-view now support large resolution monitor (WQHD or 4K). Thumbs size can be set until 512x512 px instead 256x256 px.
+
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+
+001 ==> 334633 - Album metadata sorted in non-deterministic way in some cases.
+002 ==> 334631 - After editing album metadata album list is not re-sorted.
+003 ==> 330598 - Using full screen mode and then quitting leads to a digikamrc which causes digiKam to hang when attempting to view an album.
+004 ==> 311280 - digiKam crash on exit.
+005 ==> 327013 - digiKam crashes frequently when saving tags with "page down"-key.
+006 ==> 276592 - Crash while browsing through album in enlarged view.
+007 ==> 321295 - Crash after face recognition run.
+008 ==> 335046 - digiKam crasch when starting.
+009 ==> 328430 - Maximum thumbnail size of 256px is too small for big screens.
+010 ==> 335073 - Entering the digiKam database path manually is broken.
+011 ==> 287646 - digiKam import dialog locks if main window closed. Needs to be killed.
+012 ==> 323014 - Import : download / delete all delete only one image.
+013 ==> 323111 - When images are deleted in the import view, some non-deleted thumbnails disappear from the view.
+014 ==> 330063 - digiKam, when deleting photo no confirmation [patch].
+015 ==> 311522 - Better place for thumbnails in geolocation.
+016 ==> 254131 - Add geotagging symbol in album view.
+017 ==> 330282 - digiKam 3.4.0 crashes anytime face tags are used (manual or automatical naming, faces database re-building...).
+018 ==> 321337 - Group Icon overlay blocks 4/5 star rating when thumbnails are small.
+019 ==> 333387 - Tags manager: Unavailable actions should be disabled when root item is selected
+020 ==> 335666 - Has unsharp allows for radius <= 1 and it ignores the decimal part.
+021 ==> 335652 - When using resize picture blurs out of focus.
+022 ==> 330676 - Picture download.
+023 ==> 335292 - File association doesn't open showFoto correctly.
+024 ==> 335719 - Tag manager: "My Tags" entry is not properly expanded.
+025 ==> 335721 - Tag manager: "Quick Access List" filtering seems to filter only by first letter.
+026 ==> 335927 - Crash on import from camera (acting as mass storage).
+027 ==> 335718 - Tag manager: Removing a tag turns entries in "Quick Access List" to "All tags".
+028 ==> 316882 - digiKam shows wrong date on some mp4 files and shows no exif data.
+029 ==> 336021 - digiKam does not show translated messages for Marble.
+030 ==> 336076 - Couldn't limit the fuzzy search to certain albums / directories.
+031 ==> 331679 - Crash on startup.
+032 ==> 324566 - Copied code is license-incompatible (OpenTLD is GPL-3, libkface is GPL-2).
+033 ==> 320772 - Unclear cvblobs licensing.
+034 ==> 336037 - Wrong dates displayed in import window of digiKam.
+035 ==> 302131 - MySQL : Windows XP client, linux database server slow startup.
+036 ==> 336172 - Can't save to PNG.
+037 ==> 333565 - Tagging in Album View deletes picture (Rygel DLNA server relevant).
+038 ==> 330923 - Custom toolbar settings not loaded on start.
+039 ==> 326997 - Some DNG files seem not to be recognized as such.
+040 ==> 336553 - Patch that adds the OS X standard locations for ICC ("ColorSync") profiles.
+041 ==> 323361 - Crash While Navigating Photos under Face Management feature.
+042 ==> 336235 - digiKam stopped responding and crashed downloading photos from a smart phone.
+043 ==> 297558 - Another crash when finding faces.

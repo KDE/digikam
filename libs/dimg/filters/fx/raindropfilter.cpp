@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : Raindrop threaded image filter.
  *
- * Copyright (C) 2005-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -37,6 +37,7 @@
 #include <QDateTime>
 #include <QRect>
 #include <qmath.h>
+#include <QtConcurrentRun>
 
 // Local includes
 
@@ -51,11 +52,11 @@ class RainDropFilter::Private
 public:
 
     Private()
+      : drop(80),
+        amount(150),
+        coeff(30),
+        selection(QRect(0, 0, 0, 0))
     {
-        drop      = 80;
-        amount    = 150;
-        coeff     = 30;
-        selection = QRect(0, 0, 0, 0);
     }
 
     int                   drop;
@@ -65,6 +66,8 @@ public:
     QRect                 selection;
 
     RandomNumberGenerator generator;
+
+    QMutex                lock; // RandomNumberGenerator is not re-entrant (dixit Boost lib)
 };
 
 RainDropFilter::RainDropFilter(QObject* const parent)
@@ -109,7 +112,7 @@ void RainDropFilter::filterImage()
 
         // Cut the original image in 4 areas without clipping region.
 
-        DImg zone1       = m_orgImage.copy(0,                                      0,                                         d->selection.x(),                        h);
+        DImg zone1       = m_orgImage.copy(0,                                       0,                                        d->selection.x(),                        h);
         DImg zone2       = m_orgImage.copy(d->selection.x(),                        0,                                        d->selection.x() + d->selection.width(), d->selection.y());
         DImg zone3       = m_orgImage.copy(d->selection.x(),                        d->selection.y() + d->selection.height(), d->selection.x() + d->selection.width(), h);
         DImg zone4       = m_orgImage.copy(d->selection.x() + d->selection.width(), 0,                                        w,                                       h);
@@ -140,6 +143,31 @@ void RainDropFilter::filterImage()
     }
 }
 
+void RainDropFilter::rainDropsImageMultithreaded(const Args& prm)
+{
+    int  nRandSize;
+    int  nRandX, nRandY;
+    bool bResp      = false;
+    int  nWidth     = prm.orgImage->width();
+    int  nHeight    = prm.orgImage->height();
+    bool sixteenBit = prm.orgImage->sixteenBit();
+    int  bytesDepth = prm.orgImage->bytesDepth();
+    uchar* data     = prm.orgImage->bits();
+    uchar* pResBits = prm.destImage->bits();
+
+    for (uint nCounter = prm.start ; runningFlag() && (bResp == false) && (nCounter < prm.stop) ; ++nCounter)
+    {
+        d->lock.lock();
+        nRandX    = d->generator.number(0, nWidth - 1);
+        nRandY    = d->generator.number(0, nHeight - 1);
+        nRandSize = d->generator.number(prm.MinDropSize, prm.MaxDropSize);
+        d->lock.unlock();
+        bResp     = CreateRainDrop(data, nWidth, nHeight, sixteenBit, bytesDepth,
+                                   pResBits, prm.pStatusBits,
+                                   nRandX, nRandY, nRandSize, prm.Coeff, prm.bLimitRange);
+    }
+}
+
 /* Function to apply the RainDrops effect backported from ImageProcessing version 2
  *
  * orgImage         => The image
@@ -161,17 +189,6 @@ void RainDropFilter::filterImage()
 void RainDropFilter::rainDropsImage(DImg* const orgImage, DImg* const destImage, int MinDropSize, int MaxDropSize,
                                     int Amount, int Coeff, bool bLimitRange, int progressMin, int progressMax)
 {
-    bool   bResp;
-    int    nRandSize, i;
-    int    nRandX, nRandY;
-    int    nCounter   = 0;
-    int    nWidth     = orgImage->width();
-    int    nHeight    = orgImage->height();
-    bool   sixteenBit = orgImage->sixteenBit();
-    int    bytesDepth = orgImage->bytesDepth();
-    uchar* data       = orgImage->bits();
-    uchar* pResBits   = destImage->bits();
-
     if (Amount <= 0)
     {
         return;
@@ -187,8 +204,8 @@ void RainDropFilter::rainDropsImage(DImg* const orgImage, DImg* const destImage,
         return;
     }
 
-    QScopedArrayPointer<uchar> pStatusBits(new uchar[nHeight * nWidth]);
-    memset(pStatusBits.data(), 0, nHeight * nWidth * sizeof(uchar));
+    QScopedArrayPointer<uchar> pStatusBits(new uchar[orgImage->height() * orgImage->width()]);
+    memset(pStatusBits.data(), 0, orgImage->height() * orgImage->width() * sizeof(uchar));
 
     // Initially, copy all pixels to destination
 
@@ -196,31 +213,34 @@ void RainDropFilter::rainDropsImage(DImg* const orgImage, DImg* const destImage,
 
     // Randomize.
 
-    for (i = 0; runningFlag() && (i < Amount); ++i)
+    QList<int> vals = multithreadedSteps(10000);
+
+    Args prm;
+    prm.orgImage    = orgImage;
+    prm.destImage   = destImage;
+    prm.MinDropSize = MinDropSize;
+    prm.MaxDropSize = MaxDropSize;
+    prm.Coeff       = Coeff;
+    prm.bLimitRange = bLimitRange;
+    prm.pStatusBits = pStatusBits.data();
+
+    for (int i = 0; runningFlag() && (i < Amount); ++i)
     {
-        nCounter = 0;
+        QList <QFuture<void> > tasks;
 
-        do
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
         {
-            nRandX    = d->generator.number(0, nWidth - 1);
-            nRandY    = d->generator.number(0, nHeight - 1);
-            nRandSize = d->generator.number(MinDropSize, MaxDropSize);
-            bResp     = CreateRainDrop(data, nWidth, nHeight, sixteenBit, bytesDepth,
-                                       pResBits, pStatusBits.data(),
-                                       nRandX, nRandY, nRandSize, Coeff, bLimitRange);
+            prm.start        = vals[j];
+            prm.stop         = vals[j+1];
 
-            ++nCounter;
+            tasks.append(QtConcurrent::run(this,
+                                           &RainDropFilter::rainDropsImageMultithreaded,
+                                           prm
+                                          ));
         }
-        while ((bResp == false) && (nCounter < 10000) && runningFlag());
 
-        // Update the progress bar in dialog.
-        if (nCounter >= 10000)
-        {
-            i = Amount;
-
-            postProgress(progressMax);
-            break;
-        }
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
 
         postProgress((int)(progressMin + ((double)(i) *
                                           (double)(progressMax - progressMin)) / (double)Amount));
@@ -593,6 +613,5 @@ int RainDropFilter::pixelOffset(int Width, int X, int Y, int bytesDepth)
 {
     return (Y * Width * bytesDepth + X * bytesDepth);
 }
-
 
 }  // namespace Digikam

@@ -68,6 +68,11 @@ public:
         setPending(0),
         setAccepted(0),
         setSpeed(0),
+        setRejectedThreshold(0),
+        setPendingThreshold(0),
+        setAcceptedThreshold(0),
+        setBlurWeight(0),
+        setNoiseWeight(0),
         setCompressionWeight(0)
     {}
 
@@ -201,7 +206,7 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
     d->setNoiseWeight       = new KIntNumInput(5, d->optionsView);
     d->setNoiseWeight->setRange(1, 100, 1);
     d->setNoiseWeight->setSliderEnabled(true);
-    d->setNoiseWeight->setLabel(i18n("Noise Weight"), Qt::AlignLeft | Qt::AlignTop);
+    d->setNoiseWeight->setLabel(i18n("Noise Weight:"), Qt::AlignLeft | Qt::AlignTop);
     d->setNoiseWeight->setWhatsThis(i18n("Weight to assign to Noise Algorithm"));
 
     d->setCompressionWeight = new KIntNumInput(5, d->optionsView);

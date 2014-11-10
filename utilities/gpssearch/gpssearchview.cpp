@@ -9,6 +9,7 @@
  * Copyright (C) 2008-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C)      2009 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2010-2011 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C)      2014 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -93,6 +94,7 @@ public:
     QItemSelectionModel*        selectionModel;
     SearchModel*                searchModel;
     GPSImageInfoSorter*         sortOrderOptionsHelper;
+    QString                     nonGeonlocatedItemsXml;
 };
 const QString GPSSearchView::GPSSearchViewPriv::configSplitterStateEntry("SplitterState");
 
@@ -153,7 +155,7 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     d->nameEdit = new KLineEdit(hbox);
     d->nameEdit->setClearButtonShown(true);
     d->nameEdit->setWhatsThis(i18n("Enter the name of the current map search to save in the "
-                                   "\"My Map Searches\" view."));
+                                   "\"Map Searches\" view."));
 
     d->saveBtn  = new QToolButton(hbox);
     d->saveBtn->setIcon(SmallIcon("document-save"));
@@ -225,6 +227,23 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
 
     // end of the second action row
 
+    // Show Non Geolocated Items row
+
+    QWidget* const nonGeolocatedActionRow = new QWidget();
+    QVBoxLayout* const thirdActionRowVBox = new QVBoxLayout();
+    thirdActionRowVBox->setMargin(0);
+    nonGeolocatedActionRow->setLayout(thirdActionRowVBox);
+
+    QPushButton* const nonGeolocatedBtn = new QPushButton(nonGeolocatedActionRow);
+    nonGeolocatedBtn->setText(i18n("Show Non-Geolocated Items"));
+    nonGeolocatedBtn->setIcon(KIcon("emblem-unmounted"));
+    thirdActionRowVBox->addWidget(nonGeolocatedBtn);
+
+    thirdActionRowVBox->addStretch(10);
+    vlayTop->addWidget(nonGeolocatedActionRow);
+
+    // end of the third action row
+
     vlayTop->addWidget(hbox);
     vlayTop->setStretchFactor(mapPanel, 10);
     vlayTop->setMargin(0);
@@ -265,6 +284,12 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
 
     connect(d->mapSearchWidget, SIGNAL(signalRemoveCurrentFilter()),
             this, SLOT(slotRemoveCurrentFilter()));
+
+    connect(nonGeolocatedBtn, SIGNAL(clicked()),
+            d->mapSearchWidget->getControlAction("mousemode-removecurrentregionselection"), SIGNAL(triggered()));
+
+    connect(nonGeolocatedBtn, SIGNAL(clicked()),
+            this, SLOT(showNonGeolocatedItems()));
 
     // ---------------------------------------------------------------
 
@@ -586,6 +611,46 @@ void GPSSearchView::slotMapSoloItems(const QList<qlonglong>& idList)
     emit(signalMapSoloItems(idList, "gpssearch"));
     d->mapSearchWidget->slotUpdateActionsEnabled();
 }
+
+void GPSSearchView::showNonGeolocatedItems()
+{
+    if(d->nonGeonlocatedItemsXml.isEmpty())
+    {
+        SearchXmlWriter writer;
+        writer.setFieldOperator((SearchXml::standardFieldOperator()));
+        writer.writeGroup();
+        writer.writeField("nogps", SearchXml::Equal);
+        writer.finishField();
+        writer.finishGroup();
+        writer.finish();
+        d->nonGeonlocatedItemsXml = writer.xml();
+    }
+
+    QString title = SAlbum::getTemporaryTitle(DatabaseSearch::MapSearch);
+    SAlbum* album = AlbumManager::instance()->findSAlbum(title);
+
+    int id;
+
+    if(album)
+    {
+        id = album->id();
+        DatabaseAccess().db()->updateSearch(id,DatabaseSearch::AdvancedSearch,
+                                            SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch), d->nonGeonlocatedItemsXml);
+    }
+    else
+    {
+        id = DatabaseAccess().db()->addSearch(DatabaseSearch::AdvancedSearch,
+                                              SAlbum::getTemporaryTitle(DatabaseSearch::AdvancedSearch), d->nonGeonlocatedItemsXml);
+    }
+
+    album = new SAlbum(i18n("Non Geo-located Items"), id);
+
+    if(album)
+    {
+        AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << album);
+    }
+}
+
 
 void GPSSearchView::slotRefreshMap()
 {

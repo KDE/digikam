@@ -6,7 +6,7 @@
  * Date        : 2009-07-17
  * Description : Metadata tags selector config panel.
  *
- * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -101,7 +101,7 @@ static const char* MakerNoteHumanList[] =
     "FlashType",
     "FlashDevice",
     "FNumber",
-    "Focus"
+    "Focus",
     "FocusDistance",
     "FocusMode",
     "FocusSetting",
@@ -194,6 +194,8 @@ public:
             filter << QString(list[i]);
         }
     };
+
+public:
 
     KTabWidget*           tab;
 
@@ -299,7 +301,8 @@ void MetadataPanel::applySettings()
     }
 
     config->sync();
-#endif
+
+#endif // KEXIV2_VERSION >= 0x010000
 }
 
 void MetadataPanel::slotTabChanged(int)
@@ -310,8 +313,9 @@ void MetadataPanel::slotTabChanged(int)
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group        = config->group("Image Properties SideBar");
 
-    QWidget* const tab = d->tab->currentWidget();
 #if KEXIV2_VERSION >= 0x010000
+
+    QWidget* const tab = d->tab->currentWidget();
 
     if (tab == d->exifViewerConfig)
     {
@@ -346,7 +350,8 @@ void MetadataPanel::slotTabChanged(int)
         }
     }
 
-#endif
+#endif // KEXIV2_VERSION >= 0x010000
+
     kapp->restoreOverrideCursor();
 }
 
