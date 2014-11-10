@@ -164,6 +164,15 @@ public:
         return m_indexList[index + Haar::NumberOfPixelsSquared];
     }
 
+private:
+
+    // To prevent cppcheck warnings.
+    SignatureMap(const SignatureMap& other)
+    {
+        m_indexList = new MapIndexType[2 * Haar::NumberOfPixelsSquared];
+        memcpy(m_indexList, other.m_indexList, sizeof(MapIndexType[2 * Haar::NumberOfPixelsSquared]));
+    }
+
 public:
 
     typedef bool MapIndexType;

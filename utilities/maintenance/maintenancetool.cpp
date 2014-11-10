@@ -37,7 +37,7 @@
 
 // Local includes
 
-#include "knotificationwrapper.h"
+#include "dnotificationwrapper.h"
 
 namespace Digikam
 {
@@ -91,7 +91,7 @@ void MaintenanceTool::slotDone()
     if (d->notification)
     {
         // Pop-up a message to bring user when all is done.
-        KNotificationWrapper(id(),
+        DNotificationWrapper(id(),
                              i18n("Process is done.\nDuration: %1", t.toString()),
                              kapp->activeWindow(), label());
     }

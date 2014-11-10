@@ -176,8 +176,8 @@ LoadingCache::LoadingCache()
     qRegisterMetaType<DImg>("DImg");
     qRegisterMetaType<DMetadata>("DMetadata");
 
-    connect(IccSettings::instance(), SIGNAL(settingsChanged(ICCSettingsContainer,ICCSettingsContainer)),
-            this, SLOT(iccSettingsChanged(ICCSettingsContainer,ICCSettingsContainer)));
+    connect(IccSettings::instance(), SIGNAL(settingsChanged(ICCSettingsContainer, ICCSettingsContainer)),
+            this, SLOT(iccSettingsChanged(ICCSettingsContainer, ICCSettingsContainer)));
 }
 
 LoadingCache::~LoadingCache()
@@ -361,9 +361,9 @@ void LoadingCache::notifyFileChanged(const QString& filePath)
 
 void LoadingCache::iccSettingsChanged(const ICCSettingsContainer& current, const ICCSettingsContainer& previous)
 {
-    if (current.enableCM != previous.enableCM                     ||
+    if (current.enableCM           != previous.enableCM           ||
         current.useManagedPreviews != previous.useManagedPreviews ||
-        current.monitorProfile != previous.monitorProfile)
+        current.monitorProfile     != previous.monitorProfile)
     {
         LoadingCache::CacheLock lock(this);
         removeImages();

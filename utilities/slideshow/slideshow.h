@@ -6,7 +6,7 @@
  * Date        : 2005-04-21
  * Description : slide show tool using preview of pictures.
  *
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,7 +30,7 @@
 #include <QMouseEvent>
 #include <QPaintEvent>
 #include <QWheelEvent>
-#include <QWidget>
+#include <QStackedWidget>
 
 // Local includes
 
@@ -43,57 +43,68 @@ namespace Digikam
 
 class DImg;
 
-class DIGIKAM_EXPORT SlideShow : public QWidget
+class DIGIKAM_EXPORT SlideShow : public QStackedWidget
 {
     Q_OBJECT
+
+public:
+
+    enum SlideShowViewMode
+    {
+        ErrorView=0,
+        ImageView,
+        EndView
+    };
 
 public:
 
     explicit SlideShow(const SlideShowSettings& settings);
     ~SlideShow();
 
-    void setCurrent(const KUrl& url);
+    void setCurrentItem(const KUrl& url);
+    KUrl currentItem() const;
+
+    void toggleTag(int tag);
+    void updateTags(const KUrl& url, const QStringList& tags);
 
 Q_SIGNALS:
 
     void signalRatingChanged(const KUrl&, int);
     void signalColorLabelChanged(const KUrl&, int);
     void signalPickLabelChanged(const KUrl&, int);
+    void signalToggleTag(const KUrl&, int);
+
+public Q_SLOTS:
+
+    void slotLoadNextItem();
+    void slotLoadPrevItem();
+    void slotPause();
+    void slotPlay();
+
+    void slotAssignRating(int);
+    void slotAssignColorLabel(int);
+    void slotAssignPickLabel(int);
 
 protected:
 
-    void paintEvent(QPaintEvent*);
     void mousePressEvent(QMouseEvent*);
-    void mouseMoveEvent(QMouseEvent*);
     void keyPressEvent(QKeyEvent*);
     void wheelEvent(QWheelEvent*);
-    bool eventFilter(QObject* obj, QEvent* ev);
 
 private Q_SLOTS:
 
-    void slotTimeOut();
     void slotMouseMoveTimeOut();
-    void slotGotImagePreview(const LoadingDescription&, const DImg&);
-    void slotRatingChanged(int);
-    void slotColorLabelChanged(int);
-    void slotPickLabelChanged(int);
-
-    void slotPause();
-    void slotPlay();
-    void slotPrev();
-    void slotNext();
-    void slotClose();
+    void slotImageLoaded(bool);
+    void slotScreenSelected(int);
 
 private:
 
-    void loadNextImage();
-    void loadPrevImage();
-    void preloadNextImage();
-    void updatePixmap();
-    void printInfoText(QPainter& p, int& offset, const QString& str);
-    void printComments(QPainter& p, int& offset, const QString& comments);
+    bool eventFilter(QObject* obj, QEvent* ev);
+    void preloadNextItem();
+    void endOfSlide();
     void inhibitScreenSaver();
     void allowScreenSaver();
+    void dispatchCurrentInfoChange(const KUrl& url);
     void makeCornerRectangles(const QRect& desktopRect, const QSize& size,
                               QRect* const topLeft, QRect* const topRight,
                               QRect* const topLeftLarger, QRect* const topRightLarger);

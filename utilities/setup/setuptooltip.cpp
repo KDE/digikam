@@ -6,7 +6,7 @@
  * Date        : 2006-07-09
  * Description : item tool tip configuration setup tab
  *
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,7 +40,7 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "importsettings.h"
 #include "setupcamera.h"
 #include "dfontselect.h"
@@ -76,6 +76,7 @@ public:
         showVideoFrameRate(0),
         showVideoVideoCodec(0),
         showAlbumNameBox(0),
+        showTitlesBox(0),
         showCommentsBox(0),
         showTagsBox(0),
         showLabelsBox(0),
@@ -85,6 +86,7 @@ public:
         showAlbumCollectionBox(0),
         showAlbumCategoryBox(0),
         showAlbumCaptionBox(0),
+        showAlbumPreviewBox(0),
         showImportToolTipsBox(0),
         showItemTitleBox(0),
         showItemDateBox(0),
@@ -135,6 +137,7 @@ public:
     QCheckBox*   showVideoVideoCodec;
 
     QCheckBox*   showAlbumNameBox;
+    QCheckBox*   showTitlesBox;
     QCheckBox*   showCommentsBox;
     QCheckBox*   showTagsBox;
     QCheckBox*   showLabelsBox;
@@ -145,6 +148,7 @@ public:
     QCheckBox*   showAlbumCollectionBox;
     QCheckBox*   showAlbumCategoryBox;
     QCheckBox*   showAlbumCaptionBox;
+    QCheckBox*   showAlbumPreviewBox;
 
     QCheckBox*   showImportToolTipsBox;
     QCheckBox*   showItemTitleBox;
@@ -273,6 +277,9 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->showAlbumNameBox  = new QCheckBox(i18n("Show album name"), d->digikamSettingBox);
     d->showAlbumNameBox->setWhatsThis(i18n("Set this option to display the album name."));
 
+    d->showTitlesBox     = new QCheckBox(i18n("Show image title"), d->digikamSettingBox);
+    d->showTitlesBox->setWhatsThis(i18n("Set this option to display the image title."));
+
     d->showCommentsBox   = new QCheckBox(i18n("Show image caption"), d->digikamSettingBox);
     d->showCommentsBox->setWhatsThis(i18n("Set this option to display the image captions."));
 
@@ -283,6 +290,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->showLabelsBox->setWhatsThis(i18n("Set this option to display the image pick, color, rating labels."));
 
     vlay4->addWidget(d->showAlbumNameBox);
+    vlay4->addWidget(d->showTitlesBox);
     vlay4->addWidget(d->showCommentsBox);
     vlay4->addWidget(d->showTagsBox);
     vlay4->addWidget(d->showLabelsBox);
@@ -354,12 +362,16 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->showAlbumCaptionBox    = new QCheckBox(i18n("Show album caption"));
     d->showAlbumCaptionBox->setWhatsThis(i18n("Set this option to display the album caption."));
 
+    d->showAlbumPreviewBox    = new QCheckBox(i18n("Show album preview"));
+    d->showAlbumPreviewBox->setWhatsThis(i18n("Set this option to display the album preview."));
+
     QVBoxLayout* const albumSettingBoxLayout = new QVBoxLayout;
     albumSettingBoxLayout->addWidget(d->showAlbumTitleBox);
     albumSettingBoxLayout->addWidget(d->showAlbumDateBox);
     albumSettingBoxLayout->addWidget(d->showAlbumCollectionBox);
     albumSettingBoxLayout->addWidget(d->showAlbumCategoryBox);
     albumSettingBoxLayout->addWidget(d->showAlbumCaptionBox);
+    albumSettingBoxLayout->addWidget(d->showAlbumPreviewBox);
     d->albumSettingBox->setLayout(albumSettingBoxLayout);
 
     QWidget* const space2 = new QWidget(vbox2);
@@ -485,7 +497,7 @@ SetupToolTip::~SetupToolTip()
 
 void SetupToolTip::applySettings()
 {
-    AlbumSettings* const settings = AlbumSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
 
     if (!settings)
     {
@@ -519,6 +531,7 @@ void SetupToolTip::applySettings()
     settings->setToolTipsShowVideoVideoCodec(d->showVideoVideoCodec->isChecked());
 
     settings->setToolTipsShowAlbumName(d->showAlbumNameBox->isChecked());
+    settings->setToolTipsShowTitles(d->showTitlesBox->isChecked());
     settings->setToolTipsShowComments(d->showCommentsBox->isChecked());
     settings->setToolTipsShowTags(d->showTagsBox->isChecked());
     settings->setToolTipsShowLabelRating(d->showLabelsBox->isChecked());
@@ -529,6 +542,7 @@ void SetupToolTip::applySettings()
     settings->setToolTipsShowAlbumCollection(d->showAlbumCollectionBox->isChecked());
     settings->setToolTipsShowAlbumCategory(d->showAlbumCategoryBox->isChecked());
     settings->setToolTipsShowAlbumCaption(d->showAlbumCaptionBox->isChecked());
+    settings->setToolTipsShowAlbumPreview(d->showAlbumPreviewBox->isChecked());
 
     settings->saveSettings();
 
@@ -558,7 +572,7 @@ void SetupToolTip::applySettings()
 
 void SetupToolTip::readSettings()
 {
-    AlbumSettings* const settings = AlbumSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
 
     if (!settings)
     {
@@ -592,6 +606,7 @@ void SetupToolTip::readSettings()
     d->showVideoVideoCodec->setChecked(settings->getToolTipsShowVideoVideoCodec());
 
     d->showAlbumNameBox->setChecked(settings->getToolTipsShowAlbumName());
+    d->showTitlesBox->setChecked(settings->getToolTipsShowTitles());
     d->showCommentsBox->setChecked(settings->getToolTipsShowComments());
     d->showTagsBox->setChecked(settings->getToolTipsShowTags());
     d->showLabelsBox->setChecked(settings->getToolTipsShowLabelRating());
@@ -609,6 +624,7 @@ void SetupToolTip::readSettings()
     d->showAlbumCollectionBox->setChecked(settings->getToolTipsShowAlbumCollection());
     d->showAlbumCategoryBox->setChecked(settings->getToolTipsShowAlbumCategory());
     d->showAlbumCaptionBox->setChecked(settings->getToolTipsShowAlbumCaption());
+    d->showAlbumPreviewBox->setChecked(settings->getToolTipsShowAlbumPreview());
 
     // -- Import Settings ------------------------------------------------------------------------
 

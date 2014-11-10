@@ -40,16 +40,19 @@ namespace Digikam
 inline bool GPSImageInfo::fromImageInfo(const ImageInfo& imageInfo, GPSImageInfo* const gpsImageInfo)
 {
     const ImagePosition pos = imageInfo.imagePosition();
+
     if (pos.isEmpty())
     {
         return false;
     }
 
     gpsImageInfo->coordinates.setLatLon(pos.latitudeNumber(), pos.longitudeNumber());
+
     if (pos.hasAltitude())
     {
         gpsImageInfo->coordinates.setAlt(pos.altitude());
     }
+
     gpsImageInfo->dateTime  = imageInfo.dateTime();
     gpsImageInfo->rating    = imageInfo.rating();
     gpsImageInfo->url       = imageInfo.fileUrl();
@@ -58,6 +61,6 @@ inline bool GPSImageInfo::fromImageInfo(const ImageInfo& imageInfo, GPSImageInfo
     return true;
 }
 
-} /* namespace Digikam */
+} // namespace Digikam
 
 #endif /* DIGIKAM2KGEOMAP_DATABASE_H */

@@ -42,7 +42,7 @@
 #include "albumdb.h"
 #include "albuminfo.h"
 #include "albummanager.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "databaseaccess.h"
 #include "imageinfo.h"
 #include "thumbnaildatabaseaccess.h"

@@ -71,12 +71,12 @@ extern "C"
 
 // Local includes
 
+#include "config-digikam.h"
 #include "dimagehistory.h"
 #include "pngloader.h"
 #include "tiffloader.h"
 #include "ppmloader.h"
 #include "rawloader.h"
-#include "jp2kloader.h"
 #include "pgfloader.h"
 #include "qimageloader.h"
 #include "jpegloader.h"
@@ -87,6 +87,10 @@ extern "C"
 #include "dmetadata.h"
 #include "dimgloaderobserver.h"
 #include "randomnumbergenerator.h"
+
+#ifdef HAVE_JASPER
+#include "jp2kloader.h"
+#endif // HAVE_JASPER
 
 typedef uint64_t ullong;
 typedef int64_t  llong;
@@ -513,6 +517,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
             break;
         }
 
+#ifdef HAVE_JASPER
         case (JP2K):
         {
             kDebug() << filePath << " : JPEG2000 file identified";
@@ -530,6 +535,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
 
             break;
         }
+#endif // HAVE_JASPER
 
         case (PGF):
         {
@@ -693,14 +699,16 @@ bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserv
         return loader.save(filePath, observer);
     }
 
-    if (frm == "JP2" || frm == "J2K" || frm == "JPX" || frm == "JPC" || frm == "PGX")
+#ifdef HAVE_JASPER
+    else if (frm == "JP2" || frm == "J2K" || frm == "JPX" || frm == "JPC" || frm == "PGX")
     {
         JP2KLoader loader(this);
         setAttribute("savedformat-isreadonly", loader.isReadOnly());
         return loader.save(filePath, observer);
     }
+#endif // HAVE_JASPER
 
-    if (frm == "PGF")
+    else if (frm == "PGF")
     {
         PGFLoader loader(this);
         setAttribute("savedformat-isreadonly", loader.isReadOnly());
@@ -888,7 +896,7 @@ uchar* DImg::bits() const
 
 uchar* DImg::copyBits() const
 {
-    uchar* data = new uchar[numBytes()];
+    uchar* const data = new uchar[numBytes()];
     memcpy(data, bits(), numBytes());
     return data;
 }
@@ -3005,7 +3013,7 @@ void DImg::prepareMetadataToSave(const QString& intendedDestPath, const QString&
         }
 
         // Update IPTC preview.
-        // see B.K.O #130525. a JPEG segment is limited to 64K. If the IPTC byte array is
+        // see bug #130525. a JPEG segment is limited to 64K. If the IPTC byte array is
         // bigger than 64K during of image preview tag size, the target JPEG image will be
         // broken. Note that IPTC image preview tag is limited to 256K!!!
         // There is no limitation with TIFF and PNG about IPTC byte array size.

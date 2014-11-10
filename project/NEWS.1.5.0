@@ -11,7 +11,7 @@ Image Editor        : Improvement of algorithm to convert 8 bits image to 16 and
 Batch Queue Manager : Add new tool to remove metadata from images.
 Batch Queue Manager : Add new tool to apply Lens corrections using LensFun library.
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 247977 : Libpgf relevant : digiKam crash while scrolling the thumbnail view.
 002 ==> 249402 : Download window presents file in the opposite order than expected.

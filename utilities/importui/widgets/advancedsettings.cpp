@@ -6,7 +6,7 @@
  * Date        : 2011-08-12
  * Description : advanced settings for camera interface.
  *
- * Copyright (C) 2011-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,6 +40,7 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "templateselector.h"
 #include "ddatetimeedit.h"
 #include "template.h"
@@ -78,19 +79,21 @@ public:
 AdvancedSettings::AdvancedSettings(QWidget* const parent)
     : QWidget(parent), d(new Private)
 {
-    QVBoxLayout* onFlyVlay = new QVBoxLayout(this);
-    d->templateSelector    = new TemplateSelector(this);
-    d->fixDateTimeCheck    = new QCheckBox(i18nc("@option:check", "Fix internal date && time"), this);
-    d->dateTimeEdit        = new DDateTimeEdit(this, "datepicker");
-    d->autoRotateCheck     = new QCheckBox(i18nc("@option:check", "Auto-rotate/flip image"), this);
-    d->convertJpegCheck    = new QCheckBox(i18nc("@option:check", "Convert to lossless file format"), this);
-    KHBox* hbox2           = new KHBox(this);
-    d->formatLabel         = new QLabel(i18n("New image format:"), hbox2);
-    d->losslessFormat      = new KComboBox(hbox2);
+    QVBoxLayout* const onFlyVlay = new QVBoxLayout(this);
+    d->templateSelector          = new TemplateSelector(this);
+    d->fixDateTimeCheck          = new QCheckBox(i18nc("@option:check", "Fix internal date && time"), this);
+    d->dateTimeEdit              = new DDateTimeEdit(this, "datepicker");
+    d->autoRotateCheck           = new QCheckBox(i18nc("@option:check", "Auto-rotate/flip image"), this);
+    d->convertJpegCheck          = new QCheckBox(i18nc("@option:check", "Convert to lossless file format"), this);
+    KHBox* const hbox2           = new KHBox(this);
+    d->formatLabel               = new QLabel(i18n("New image format:"), hbox2);
+    d->losslessFormat            = new KComboBox(hbox2);
     d->losslessFormat->insertItem(0, "PNG");
     d->losslessFormat->insertItem(1, "TIF");
-    d->losslessFormat->insertItem(2, "JP2");
-    d->losslessFormat->insertItem(3, "PGF");
+    d->losslessFormat->insertItem(2, "PGF");
+#ifdef HAVE_JASPER
+    d->losslessFormat->insertItem(3, "JP2");
+#endif // HAVE_JASPER
 
     onFlyVlay->addWidget(d->templateSelector);
     onFlyVlay->addWidget(d->fixDateTimeCheck);

@@ -422,11 +422,10 @@ void ImportFilterModel::setDirectSourceImportModel(ImportImageModel* const sourc
     setSourceModel(d->importImageModel);
 }
 
-void ImportFilterModel::slotProcessAdded(const QList< CamItemInfo >&)
+void ImportFilterModel::slotProcessAdded(const QList<CamItemInfo>&)
 {
     invalidate();
 }
-
 
 int ImportFilterModel::compareCategories(const QModelIndex& left, const QModelIndex& right) const
 {

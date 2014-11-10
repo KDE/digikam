@@ -5,7 +5,7 @@ NEW FEATURES:
 
 General : Add image title metadata support.
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 155374 : Allow setting Image titles different than image file name [patch].
 002 ==> 279581 : Can't compile digiKam with provided libpgf on PowerPC machine (BigEndian).

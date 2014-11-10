@@ -65,7 +65,6 @@ public:
 
 Q_SIGNALS:
 
-    void signalFileDeleted(const KUrl&);
     void signalWindowHasMoved();
 
 public Q_SLOTS:
@@ -150,13 +149,30 @@ private Q_SLOTS:
     void slotShowMenuBar();
     void slotNewToolbarConfig();
     void slotSetup();
+    void slotColorManagementOptionsChanged();
+    void slotToggleColorManagedView();
     void slotComponentsInfo();
     void slotDBStat();
 
+    void slotFileWithDefaultApplication();
     void slotSidebarTabTitleStyleChanged();
     void slotThemeChanged();
 
     void slotRefreshStatusBar();
+
+    void slotToggleLeftSideBar();
+    void slotToggleRightSideBar();
+    void slotPreviousLeftSideBarTab();
+    void slotNextLeftSideBarTab();
+    void slotPreviousRightSideBarTab();
+    void slotNextRightSideBarTab();
+
+    void slotRightSideBarActivateTitles();
+    void slotRightSideBarActivateComments();
+    void slotRightSideBarActivateAssignedTags();
+    void slotLeftSideBarActivateTitles();
+    void slotLeftSideBarActivateComments();
+    void slotLeftSideBarActivateAssignedTags();
 
 private:
 

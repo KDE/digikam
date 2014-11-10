@@ -79,6 +79,7 @@
 #include <klocale.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
+#include <kopenwithdialog.h>
 #include <knotifyconfigwidget.h>
 #include <kprotocolinfo.h>
 #include <kpushbutton.h>
@@ -97,6 +98,7 @@
 #include <ktoolbar.h>
 #include <ktoolbarpopupaction.h>
 #include <ktoolinvocation.h>
+#include <krun.h>
 #include <kurlcombobox.h>
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
@@ -113,7 +115,8 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "config-digikam.h"
+#include "applicationsettings.h"
 #include "actioncategorizedview.h"
 #include "buttonicondisabler.h"
 #include "canvas.h"
@@ -128,6 +131,7 @@
 #include "editortoolsettings.h"
 #include "editortooliface.h"
 #include "exposurecontainer.h"
+#include "fileoperation.h"
 #include "filereadwritelock.h"
 #include "filesaveoptionsbox.h"
 #include "filesaveoptionsdlg.h"
@@ -231,18 +235,25 @@ void EditorWindow::setupContextMenu()
     m_contextMenu = new KMenu(this);
 
     addAction2ContextMenu("editorwindow_fullscreen", true);
+    addAction2ContextMenu("options_show_menubar", true);
     m_contextMenu->addSeparator();
+
     // --------------------------------------------------------
+
     addAction2ContextMenu("editorwindow_backward", true);
     addAction2ContextMenu("editorwindow_forward", true);
     m_contextMenu->addSeparator();
+
     // --------------------------------------------------------
+
     addAction2ContextMenu("editorwindow_slideshow", true);
     addAction2ContextMenu("editorwindow_rotate_left", true);
     addAction2ContextMenu("editorwindow_rotate_right", true);
     addAction2ContextMenu("editorwindow_crop", true);
     m_contextMenu->addSeparator();
+
     // --------------------------------------------------------
+
     addAction2ContextMenu("editorwindow_delete", true);
 }
 
@@ -340,7 +351,7 @@ void EditorWindow::setupStandardActions()
     connect(m_lastAction, SIGNAL(triggered()), this, SLOT(slotLast()));
     actionCollection()->addAction("editorwindow_last", m_lastAction);
 
-    m_openVersionAction = new KAction(KIcon("image-loading"),//"document-open-recent"),
+    m_openVersionAction = new KAction(KIcon("image-loading"),
                                       i18nc("@action", "Open Original"), this);
     m_openVersionAction->setShortcut(KStandardShortcut::end());
     connect(m_openVersionAction, SIGNAL(triggered()), this, SLOT(slotOpenOriginal()));
@@ -349,13 +360,13 @@ void EditorWindow::setupStandardActions()
     m_saveAction = KStandardAction::save(this, SLOT(save()), this);
     actionCollection()->addAction("editorwindow_save", m_saveAction);
 
-    m_saveCurrentVersionAction = new KAction(KIcon("dialog-ok-apply"),//"task-accepted//"document-save"),
+    m_saveCurrentVersionAction = new KAction(KIcon("dialog-ok-apply"),
                                              i18nc("@action Save changes to current version", "Save Changes"), this);
     m_saveCurrentVersionAction->setToolTip(i18nc("@info:tooltip", "Save the modifications to the current version of the file"));
     connect(m_saveCurrentVersionAction, SIGNAL(triggered()), this, SLOT(saveCurrentVersion()));
     actionCollection()->addAction("editorwindow_savecurrentversion", m_saveCurrentVersionAction);
 
-    m_saveNewVersionAction = new KToolBarPopupAction(KIcon("list-add"),//"document-save-as"),
+    m_saveNewVersionAction = new KToolBarPopupAction(KIcon("list-add"),
                                                      i18nc("@action Save changes to a newly created version", "Save As New Version"), this);
     m_saveNewVersionAction->setToolTip(i18nc("@info:tooltip", "Save the current modifications to a new version of the file"));
     connect(m_saveNewVersionAction, SIGNAL(triggered()), this, SLOT(saveNewVersion()));
@@ -367,17 +378,18 @@ void EditorWindow::setupStandardActions()
     m_saveNewVersionAsAction->setToolTip(i18nc("@info:tooltip", "Save the current modifications to a new version of the file, "
                                                "specifying the filename and format"));
     connect(m_saveNewVersionAsAction, SIGNAL(triggered()), this, SLOT(saveNewVersionAs()));
-    //actionCollection()->addAction("editorwindow_savenewversionas", m_m_saveNewVersionAsAction);
+    //actionCollection()->addAction("editorwindow_savenewversionas", m_saveNewVersionAsAction);
 
     m_saveNewVersionInFormatAction = new KActionMenu(KIcon("image-x-generic"),
                                                      i18nc("@action Save As New Version...Save in format...",
                                                            "Save in Format"), this);
-    d->plugNewVersionInFormatAction(this, m_saveNewVersionInFormatAction, i18nc("@action:inmenu", "JPEG"), "JPG");
-    d->plugNewVersionInFormatAction(this, m_saveNewVersionInFormatAction, i18nc("@action:inmenu", "TIFF"), "TIFF");
-    d->plugNewVersionInFormatAction(this, m_saveNewVersionInFormatAction, i18nc("@action:inmenu", "PNG"), "PNG");
-    d->plugNewVersionInFormatAction(this, m_saveNewVersionInFormatAction, i18nc("@action:inmenu", "PGF"), "PGF");
+    d->plugNewVersionInFormatAction(this, m_saveNewVersionInFormatAction, i18nc("@action:inmenu", "JPEG"),      "JPG");
+    d->plugNewVersionInFormatAction(this, m_saveNewVersionInFormatAction, i18nc("@action:inmenu", "TIFF"),      "TIFF");
+    d->plugNewVersionInFormatAction(this, m_saveNewVersionInFormatAction, i18nc("@action:inmenu", "PNG"),       "PNG");
+    d->plugNewVersionInFormatAction(this, m_saveNewVersionInFormatAction, i18nc("@action:inmenu", "PGF"),       "PGF");
+#ifdef HAVE_JASPER
     d->plugNewVersionInFormatAction(this, m_saveNewVersionInFormatAction, i18nc("@action:inmenu", "JPEG 2000"), "JP2");
-
+#endif // HAVE_JASPER
     m_saveNewVersionAction->menu()->addAction(m_saveNewVersionAsAction);
     m_saveNewVersionAction->menu()->addAction(m_saveNewVersionInFormatAction);
 
@@ -388,16 +400,17 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addAction("editorwindow_saveas", m_saveAsAction);
 
     // This also triggers saveAs, but in the context of non-destructive we want a slightly different appearance
-    m_exportAction = new KAction(KIcon("document-export"),//"document-save-as"),
+    m_exportAction = new KAction(KIcon("document-export"),
                                  i18nc("@action", "Export"), this);
     m_exportAction->setToolTip(i18nc("@info:tooltip", "Save the file in a folder outside your collection"));
+    m_exportAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_E));  // NOTE: Gimp shortcut
     connect(m_exportAction, SIGNAL(triggered()), this, SLOT(saveAs()));
     actionCollection()->addAction("editorwindow_export", m_exportAction);
 
     m_revertAction = KStandardAction::revert(this, SLOT(slotRevert()), this);
     actionCollection()->addAction("editorwindow_revert", m_revertAction);
 
-    m_discardChangesAction = new KAction(KIcon("task-reject"),//"dialog-cancel"),//"list-remove"),//KStandardGuiItem::discard().icon(),
+    m_discardChangesAction = new KAction(KIcon("task-reject"),
                                          i18nc("@action", "Discard Changes"), this);
     m_discardChangesAction->setToolTip(i18nc("@info:tooltip", "Discard all current changes to this file"));
     connect(m_discardChangesAction, SIGNAL(triggered()), this, SLOT(slotDiscardChanges()));
@@ -415,6 +428,12 @@ void EditorWindow::setupStandardActions()
     d->filePrintAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_P));
     connect(d->filePrintAction, SIGNAL(triggered()), this, SLOT(slotFilePrint()));
     actionCollection()->addAction("editorwindow_print", d->filePrintAction);
+
+    KAction* const openWithAction = new KAction(KIcon("preferences-desktop-filetype-association"), i18n("Open With Default Application"), this);
+    openWithAction->setShortcut(KShortcut(Qt::META + Qt::Key_F4));
+    openWithAction->setWhatsThis(i18n("Open the item with default assigned application."));
+    connect(openWithAction, SIGNAL(triggered()), this, SLOT(slotFileWithDefaultApplication()));
+    actionCollection()->addAction("open_with_default_application", openWithAction);
 
     m_fileDeleteAction = new KAction(KIcon("user-trash"), i18nc("Non-pluralized", "Move to Trash"), this);
     m_fileDeleteAction->setShortcut(KShortcut(Qt::Key_Delete));
@@ -510,6 +529,7 @@ void EditorWindow::setupStandardActions()
     // --------------------------------------------------------
 
     createFullScreenAction("editorwindow_fullscreen");
+    createSidebarActions();
 
     d->slideShowAction = new KAction(KIcon("view-presentation"), i18n("Slideshow"), this);
     d->slideShowAction->setShortcut(KShortcut(Qt::Key_F9));
@@ -595,7 +615,7 @@ void EditorWindow::setupStandardActions()
     actionCollection()->addAction("editorwindow_showthumbs", m_showBarAction);
 
     d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
-    d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
+    d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for bug #171080
 
     KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          actionCollection());
     KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      actionCollection());
@@ -614,7 +634,6 @@ void EditorWindow::setupStandardActions()
 
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
-
 
     // -- Keyboard-only actions added to <MainWindow> ------------------------------
 
@@ -684,9 +703,9 @@ void EditorWindow::setupStatusBar()
     connect(d->previewToolBar, SIGNAL(signalPreviewModeChanged(int)),
             this, SIGNAL(signalPreviewModeChanged(int)));
 
-    QWidget* buttonsBox      = new QWidget(statusBar());
-    QHBoxLayout* hlay        = new QHBoxLayout(buttonsBox);
-    QButtonGroup* buttonsGrp = new QButtonGroup(buttonsBox);
+    QWidget* const buttonsBox      = new QWidget(statusBar());
+    QHBoxLayout* const hlay        = new QHBoxLayout(buttonsBox);
+    QButtonGroup* const buttonsGrp = new QButtonGroup(buttonsBox);
     buttonsGrp->setExclusive(false);
 
     d->underExposureIndicator = new QToolButton(buttonsBox);
@@ -717,9 +736,9 @@ void EditorWindow::setupStatusBar()
     statusBar()->addPermanentWidget(buttonsBox);
 }
 
-void EditorWindow::printImage(const KUrl& /*url*/)
+void EditorWindow::printImage(const KUrl&)
 {
-    DImg* image = m_canvas->interface()->getImg();
+    DImg* const image = m_canvas->interface()->getImg();
 
     if (!image || image->isNull())
     {
@@ -746,7 +765,7 @@ void EditorWindow::slotAboutToShowUndoMenu()
 
     for (int i = 0; i < titles.size(); ++i)
     {
-        QAction* action = m_undoAction->menu()->addAction(titles.at(i), d->undoSignalMapper, SLOT(map()));
+        QAction* const action = m_undoAction->menu()->addAction(titles.at(i), d->undoSignalMapper, SLOT(map()));
         d->undoSignalMapper->setMapping(action, i + 1);
     }
 }
@@ -758,7 +777,7 @@ void EditorWindow::slotAboutToShowRedoMenu()
 
     for (int i = 0; i < titles.size(); ++i)
     {
-        QAction* action = m_redoAction->menu()->addAction(titles.at(i), d->redoSignalMapper, SLOT(map()));
+        QAction* const action = m_redoAction->menu()->addAction(titles.at(i), d->redoSignalMapper, SLOT(map()));
         d->redoSignalMapper->setMapping(action, i + 1);
     }
 }
@@ -848,7 +867,7 @@ void EditorWindow::loadImagePlugins()
 
     QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
 
-    foreach(ImagePlugin* plugin, pluginList)
+    foreach(ImagePlugin* const plugin, pluginList)
     {
         if (plugin)
         {
@@ -860,15 +879,16 @@ void EditorWindow::loadImagePlugins()
 
             if (categoryStr != QString("__INVALID__") && !categoryStr.isEmpty())
             {
-                KActionCategory* category = new KActionCategory(categoryStr, d->imagepluginsActionCollection);
-                foreach(QAction* action, plugin->actionCollection()->actions())
+                KActionCategory* const category = new KActionCategory(categoryStr, d->imagepluginsActionCollection);
+                
+                foreach(QAction* const action, plugin->actionCollection()->actions())
                 {
                     category->addAction(action->objectName(), action);
                 }
             }
             else
             {
-                foreach(QAction* action, plugin->actionCollection()->actions())
+                foreach(QAction* const action, plugin->actionCollection()->actions())
                 {
                     d->imagepluginsActionCollection->addAction(action->objectName(), action);
                 }
@@ -894,7 +914,7 @@ void EditorWindow::unLoadImagePlugins()
 
     QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
 
-    foreach(ImagePlugin* plugin, pluginList)
+    foreach(ImagePlugin* const plugin, pluginList)
     {
         if (plugin)
         {
@@ -1032,12 +1052,10 @@ void EditorWindow::applyColorManagementSettings()
     d->viewCMViewAction->blockSignals(true);
     d->viewCMViewAction->setEnabled(settings.enableCM);
     d->viewCMViewAction->setChecked(settings.useManagedView);
-    d->viewCMViewAction->blockSignals(false);
     setColorManagedViewIndicatorToolTip(settings.enableCM, settings.useManagedView);
     d->viewCMViewAction->blockSignals(false);
 
-    d->viewSoftProofAction->setEnabled(settings.enableCM &&
-                                       !settings.defaultProofProfile.isEmpty());
+    d->viewSoftProofAction->setEnabled(settings.enableCM && !settings.defaultProofProfile.isEmpty());
     d->softProofOptionsAction->setEnabled(settings.enableCM);
 }
 
@@ -1131,7 +1149,7 @@ void EditorWindow::toggleStandardActions(bool val)
 
     QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
 
-    foreach(ImagePlugin* plugin, pluginList)
+    foreach(ImagePlugin* const plugin, pluginList)
     {
         if (plugin)
         {
@@ -1281,6 +1299,8 @@ DImageHistory EditorWindow::resolvedImageHistory(const DImageHistory& history)
     return r;
 }
 
+// --------------------------------------------------------------------------------
+
 class VersioningPromptUserSaveDialog : public TripleChoiceDialog
 {
 public:
@@ -1291,41 +1311,41 @@ public:
         setPlainCaption(i18nc("@title:window", "Save?"));
         setShowCancelButton(allowCancel);
 
-        QWidget* mainWidget = new QWidget;
+        QWidget* const mainWidget = new QWidget;
 
         // -- Icon and Header --
 
-        QLabel* warningIcon = new QLabel;
+        QLabel* const warningIcon = new QLabel;
         warningIcon->setPixmap(SmallIcon("dialog-warning", KIconLoader::SizeHuge));
-        QLabel* editIcon = new QLabel;
+        QLabel* const editIcon = new QLabel;
         editIcon->setPixmap(SmallIcon("document-edit", iconSize()));
-        QLabel* question = new QLabel;
+        QLabel* const question = new QLabel;
         question->setText(i18nc("@label", "The current image has been changed.<nl/>"
                                 "Do you wish to save your changes?"));
 
-        QHBoxLayout* headerLayout = new QHBoxLayout;
+        QHBoxLayout* const headerLayout = new QHBoxLayout;
         headerLayout->addWidget(question);
         headerLayout->addWidget(editIcon);
 
         // -- Central buttons --
 
-        QToolButton* saveCurrent = addChoiceButton(Ok, "dialog-ok-apply",
-                                                   i18nc("@action:button", "Save Changes"));
+        QToolButton* const saveCurrent = addChoiceButton(Ok, "dialog-ok-apply",
+                                                         i18nc("@action:button", "Save Changes"));
         saveCurrent->setToolTip(i18nc("@info:tooltip",
                                       "Save the current changes. Note: The original image will never be overwritten."));
-        QToolButton* saveVersion = addChoiceButton(Apply, "list-add",
-                                                   i18nc("@action:button", "Save Changes as a New Version"));
+        QToolButton* const saveVersion = addChoiceButton(Apply, "list-add",
+                                                         i18nc("@action:button", "Save Changes as a New Version"));
         saveVersion->setToolTip(i18nc("@info:tooltip",
                                       "Save the current changes as a new version. "
                                       "The loaded file will remain unchanged, a new file will be created."));
-        QToolButton* discard     = addChoiceButton(User1, "task-reject",
-                                                   i18nc("@action:button", "Discard Changes"));
+        QToolButton* const discard     = addChoiceButton(User1, "task-reject",
+                                                         i18nc("@action:button", "Discard Changes"));
         discard->setToolTip(i18nc("@info:tooltip",
                                   "Discard the changes applied to the image during this editing session."));
 
         // -- Layout --
 
-        QGridLayout* mainLayout = new QGridLayout;
+        QGridLayout* const mainLayout = new QGridLayout;
         mainLayout->addWidget(warningIcon, 0, 0, 2, 1, Qt::AlignTop);
         mainLayout->addLayout(headerLayout, 0, 1);
         //mainLayout->addLayout(buttonLayout);
@@ -1926,11 +1946,11 @@ void EditorWindow::startingSave(const KUrl& url)
 
 bool EditorWindow::showFileSaveDialog(const KUrl& initialUrl, KUrl& newURL)
 {
-    FileSaveOptionsBox* options               = new FileSaveOptionsBox();
+    FileSaveOptionsBox* const options         = new FileSaveOptionsBox();
     QPointer<KFileDialog> imageFileSaveDialog = new KFileDialog(initialUrl, QString(), this, options);
     options->setDialog(imageFileSaveDialog);
 
-    ImageDialogPreview* preview = new ImageDialogPreview(imageFileSaveDialog);
+    ImageDialogPreview* const preview = new ImageDialogPreview(imageFileSaveDialog);
     imageFileSaveDialog->setPreviewWidget(preview);
     imageFileSaveDialog->setOperationMode(KFileDialog::Saving);
     imageFileSaveDialog->setMode(KFile::File);
@@ -1991,7 +2011,7 @@ bool EditorWindow::showFileSaveDialog(const KUrl& initialUrl, KUrl& newURL)
     {
         imageFileSaveDialog->setWindowModality(Qt::WindowModal);
         d->currentWindowModalDialog = imageFileSaveDialog;
-        result = imageFileSaveDialog->exec();
+        result                      = imageFileSaveDialog->exec();
         d->currentWindowModalDialog = 0;
     }
 
@@ -2011,7 +2031,7 @@ bool EditorWindow::showFileSaveDialog(const KUrl& initialUrl, KUrl& newURL)
 
     if (showDialog && options->discoverFormat(newURL.fileName(), DImg::NONE) != DImg::NONE)
     {
-        FileSaveOptionsDlg* fileSaveOptionsDialog = new FileSaveOptionsDlg(this, options);
+        FileSaveOptionsDlg* const fileSaveOptionsDialog = new FileSaveOptionsDlg(this, options);
         options->slotImageFileFormatChanged(newURL.fileName());
 
         if (d->currentWindowModalDialog)
@@ -2071,10 +2091,13 @@ QStringList EditorWindow::getWritingFilters()
     kDebug() << "KImageIO offered pattern: " << writablePattern;
 
     // append custom file types
+
+#ifdef HAVE_JASPER
     if (!pattern.contains("*.jp2"))
     {
         writablePattern.append(QString("*.jp2|") + i18n("JPEG 2000 image"));
     }
+#endif // HAVE_JASPER
 
     if (!pattern.contains("*.pgf"))
     {
@@ -2138,7 +2161,7 @@ QString EditorWindow::getExtensionFromFilter(const QString& filter)
     // extract extension with the locations found above
     QString formatString = filter;
     formatString.remove(0, asteriskLocation + 2);
-    formatString = formatString.left(endLocation - asteriskLocation - 2);
+    formatString         = formatString.left(endLocation - asteriskLocation - 2);
     kDebug() << "Extracted format " << formatString;
     return formatString;
 }
@@ -2158,10 +2181,11 @@ QString EditorWindow::selectValidSavingFormat(const QString& filter,
     validTypes << "JPG";
     validTypes << "JPEG";
     validTypes << "JPE";
+    validTypes << "PGF";
+#ifdef HAVE_JASPER
     validTypes << "J2K";
     validTypes << "JP2";
-    validTypes << "PGF";
-
+#endif // HAVE_JASPER
     kDebug() << "Writable formats: " << validTypes;
 
     // if the auto filter is used, use the format provided in the filename
@@ -2437,8 +2461,8 @@ bool EditorWindow::startingSaveVersion(const KUrl& url, bool fork, bool saveAs, 
         }*/
 
         // check for overwrite, unless the operation explicitly tells us to overwrite
-        if (!(m_savingContext.versionFileOperation.tasks & VersionFileOperation::Replace)
-            && !checkOverwrite(newURL))
+        if (!(m_savingContext.versionFileOperation.tasks & VersionFileOperation::Replace) && 
+            !checkOverwrite(newURL))
         {
             return false;
         }
@@ -2513,98 +2537,28 @@ bool EditorWindow::checkOverwrite(const KUrl& url)
     return result == KMessageBox::Yes;
 }
 
-bool EditorWindow::moveLocalFile(const QString& src, const QString& dst)
+bool EditorWindow::moveLocalFile(const QString& org, const QString& dst)
 {
-    QString sidecarSrc = DMetadata::sidecarFilePathForFile(src);
+    QString sidecarOrg = DMetadata::sidecarFilePathForFile(org);
+    QString source     = m_savingContext.srcURL.toLocalFile();
 
-    if (QFileInfo(sidecarSrc).exists())
+    if (QFileInfo(sidecarOrg).exists())
     {
         QString sidecarDst = DMetadata::sidecarFilePathForFile(dst);
 
-        if (!localFileRename(sidecarSrc, sidecarDst))
+        if (!FileOperation::localFileRename(source, sidecarOrg, sidecarDst))
         {
             kError() << "Failed to move sidecar file";
         }
     }
 
-    if (!localFileRename(src, dst))
+    if (!FileOperation::localFileRename(source, org, dst))
     {
         KMessageBox::error(this,
                            i18n("Failed to overwrite original file"),
                            i18n("Error Saving File"));
         return false;
     }
-
-    return true;
-}
-
-bool EditorWindow::localFileRename(const QString& src, const QString& destPath)
-{
-    QString dest = destPath;
-    // check that we're not replacing a symlink
-    QFileInfo info(dest);
-
-    if (info.isSymLink())
-    {
-        dest = info.symLinkTarget();
-        kDebug() << "Target filePath" << QDir::toNativeSeparators(dest) << "is a symlink pointing to"
-                 << QDir::toNativeSeparators(dest) << ". Storing image there.";
-    }
-
-#ifndef Q_OS_WIN
-    QByteArray dstFileName = QFile::encodeName(dest);
-
-    // Store old permissions:
-    // Just get the current umask.
-    mode_t curr_umask = umask(S_IREAD | S_IWRITE);
-    // Restore the umask.
-    umask(curr_umask);
-
-    // For new files respect the umask setting.
-    mode_t filePermissions = (S_IREAD | S_IWRITE | S_IROTH | S_IWOTH | S_IRGRP | S_IWGRP) & ~curr_umask;
-
-    // For existing files, use the mode of the original file.
-    struct stat stbuf;
-
-    if (::stat(dstFileName, &stbuf) == 0)
-    {
-        filePermissions = stbuf.st_mode;
-    }
-#endif
-
-    struct stat st;
-
-    if (::stat(QFile::encodeName(m_savingContext.srcURL.toLocalFile()), &st) == 0)
-    {
-        // See B.K.O #329608: Restore file modification time from original file only if updateFileTimeStamp for Setup/Metadata is turned off.
-
-        if (!MetadataSettings::instance()->settings().updateFileTimeStamp)
-        {
-            struct utimbuf ut;
-            ut.modtime = st.st_mtime;
-            ut.actime  = st.st_atime;
-
-            if (::utime(QFile::encodeName(src), &ut) != 0)
-            {
-                kWarning() << "Failed to restore modification time for file " << dest;
-            }
-        }
-    }
-
-    // rename tmp file to dest
-    // KDE::rename() takes care of QString -> bytestring encoding
-    if (KDE::rename(src, dest) != 0)
-    {
-        return false;
-    }
-
-#ifndef Q_OS_WIN
-    // restore permissions
-    if (::chmod(dstFileName, filePermissions) != 0)
-    {
-        kWarning() << "Failed to restore file permissions for file " << dstFileName;
-    }
-#endif
 
     return true;
 }
@@ -2661,8 +2615,8 @@ void EditorWindow::moveFile()
                       DMetadata::sidecarUrl(m_savingContext.destinationURL));
         }
 
-        KIO::CopyJob* moveJob = KIO::move(KUrl::fromPath(m_savingContext.saveTempFileName),
-                                          m_savingContext.destinationURL);
+        KIO::CopyJob* const moveJob = KIO::move(KUrl::fromPath(m_savingContext.saveTempFileName),
+                                                m_savingContext.destinationURL);
 
         connect(moveJob, SIGNAL(result(KJob*)),
                 this, SLOT(slotKioMoveFinished(KJob*)));
@@ -2759,7 +2713,7 @@ void EditorWindow::setUnderExposureToolTip(bool on)
 {
     d->underExposureIndicator->setToolTip(
         on ? i18n("Under-Exposure indicator is enabled")
-        : i18n("Under-Exposure indicator is disabled"));
+           : i18n("Under-Exposure indicator is disabled"));
 }
 
 void EditorWindow::slotSetOverExposureIndicator(bool on)
@@ -2864,9 +2818,9 @@ KCategorizedView* EditorWindow::createToolSelectionView()
     }
 
     // Create action model
-    ActionItemModel* actionModel = new ActionItemModel(this);
+    ActionItemModel* const actionModel = new ActionItemModel(this);
     actionModel->setMode(ActionItemModel::ToplevelMenuCategory | ActionItemModel::SortCategoriesByInsertionOrder);
-    QString basicTransformCategory = i18nc("@title Image transformations", "Basic Transformations");
+    QString basicTransformCategory     = i18nc("@title Image transformations", "Basic Transformations");
 
     // builtin actions
     actionModel->addAction(d->rotateLeftAction, basicTransformCategory);
@@ -2880,7 +2834,7 @@ KCategorizedView* EditorWindow::createToolSelectionView()
     actionModel->addActions(menuBar(), d->imagepluginsActionCollection->actions());
 
     // setup categorized view
-    KCategorizedSortFilterProxyModel* filterModel = actionModel->createFilterModel();
+    KCategorizedSortFilterProxyModel* const filterModel = actionModel->createFilterModel();
 
     d->selectToolsActionView = new ActionCategorizedView;
     d->selectToolsActionView->setupIconMode();
@@ -2895,7 +2849,7 @@ KCategorizedView* EditorWindow::createToolSelectionView()
 
 void EditorWindow::setupSelectToolsAction()
 {
-    QWidgetAction* viewAction = new QWidgetAction(this);
+    QWidgetAction* const viewAction = new QWidgetAction(this);
     viewAction->setDefaultWidget(createToolSelectionView());
     d->selectToolsActionView->setMinimumSize(QSize(400, 400));
     m_selectToolsAction->addAction(viewAction);
@@ -2912,7 +2866,7 @@ void EditorWindow::slotSelectToolsMenuAboutToShow()
 {
     // adjust to window size
     QSize s = size();
-    s       /= 2;
+    s      /= 2;
     d->selectToolsActionView->setMinimumSize(s);
 }
 
@@ -2941,7 +2895,7 @@ void EditorWindow::addAction2ContextMenu(const QString& actionName, bool addDisa
         return;
     }
 
-    QAction* action = actionCollection()->action(actionName);
+    QAction* const action = actionCollection()->action(actionName);
 
     if (action && (action->isEnabled() || addDisabled))
     {
@@ -2961,6 +2915,22 @@ void EditorWindow::showSideBars(bool visible)
         // in horizontal mode thumbbar wont be member of the splitter, it is just ignored then
         rightSideBar()->backup(QList<QWidget*>() << thumbBar(), &d->fullscreenSizeBackup);
     }
+}
+
+void EditorWindow::slotToggleRightSideBar()
+{
+    rightSideBar()->isExpanded() ? rightSideBar()->shrink()
+                                 : rightSideBar()->expand();
+}
+
+void EditorWindow::slotPreviousRightSideBarTab()
+{
+    rightSideBar()->activePreviousTab();
+}
+
+void EditorWindow::slotNextRightSideBarTab()
+{
+    rightSideBar()->activeNextTab();
 }
 
 void EditorWindow::showThumbBar(bool visible)
@@ -2983,6 +2953,86 @@ void EditorWindow::customizedFullScreenMode(bool set)
     toolBarMenuAction()->setEnabled(!set);
     d->showMenuBarAction->setEnabled(!set);
     m_showBarAction->setEnabled(!set);
+}
+
+void EditorWindow::addServicesMenuForUrl(const KUrl& url)
+{
+    KService::List offers = FileOperation::servicesForOpenWith(url);
+
+    kDebug() << offers.count() << " services found to open " << url;
+
+    if (!offers.isEmpty())
+    {
+        KMenu* const servicesMenu = new KMenu(this);
+        qDeleteAll(servicesMenu->actions());
+
+        QAction* const serviceAction = servicesMenu->menuAction();
+        serviceAction->setText(i18n("Open With"));
+
+        foreach(const KService::Ptr& service, offers)
+        {
+            QString name          = service->name().replace('&', "&&");
+            QAction* const action = servicesMenu->addAction(name);
+            action->setIcon(KIcon(service->icon()));
+            action->setData(service->name());
+            d->servicesMap[name]  = service;
+        }
+
+        servicesMenu->addSeparator();
+        servicesMenu->addAction(i18n("Other..."));
+
+        m_contextMenu->addAction(serviceAction);
+
+        connect(servicesMenu, SIGNAL(triggered(QAction*)),
+                this, SLOT(slotOpenWith(QAction*)));
+    }
+    else
+    {
+        QAction* const serviceAction = new QAction(i18n("Open With..."), this);
+        m_contextMenu->addAction(serviceAction);
+
+        connect(serviceAction, SIGNAL(triggered()),
+                this, SLOT(slotOpenWith()));
+    }
+}
+
+void EditorWindow::openWith(const KUrl& url, QAction* action)
+{
+    KService::Ptr service;
+    QString name = action ? action->data().toString() : QString();
+
+    if (name.isEmpty())
+    {
+        QPointer<KOpenWithDialog> dlg = new KOpenWithDialog(url);
+
+        if (dlg->exec() != KOpenWithDialog::Accepted)
+        {
+            delete dlg;
+            return;
+        }
+
+        service = dlg->service();
+
+        if (!service)
+        {
+            // User entered a custom command
+            if (!dlg->text().isEmpty())
+            {
+                KRun::run(dlg->text(), url, this);
+            }
+
+            delete dlg;
+            return;
+        }
+
+        delete dlg;
+    }
+    else
+    {
+        service = d->servicesMap[name];
+    }
+
+    KRun::run(*service, url, this);
 }
 
 }  // namespace Digikam

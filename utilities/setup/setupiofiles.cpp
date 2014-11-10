@@ -6,7 +6,7 @@
  * Date        : 2006-01-23
  * Description : setup image editor output files settings.
  *
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,11 +39,15 @@
 
 // Local includes
 
-#include "jp2ksettings.h"
+#include "config-digikam.h"
 #include "jpegsettings.h"
 #include "pgfsettings.h"
 #include "pngsettings.h"
 #include "tiffsettings.h"
+
+#ifdef HAVE_JASPER
+#include "jp2ksettings.h"
+#endif // HAVE_JASPER
 
 namespace Digikam
 {
@@ -56,7 +60,9 @@ public:
         JPEGOptions(0),
         PNGOptions(0),
         TIFFOptions(0),
+#ifdef HAVE_JASPER
         JPEG2000Options(0),
+#endif // HAVE_JASPER
         PGFOptions(0)
 
 #ifdef _WIN32
@@ -68,15 +74,15 @@ public:
 
     QWidget* createGroupBox(QWidget* const w) const
     {
-        QGroupBox*   box    = new QGroupBox;
-        QVBoxLayout* layout = new QVBoxLayout;
+        QGroupBox* const  box     = new QGroupBox;
+        QVBoxLayout* const layout = new QVBoxLayout;
         layout->addWidget(w);
         box->setLayout(layout);
         return box;
     }
 
 public:
-    
+
     static const QString configGroupName;
     static const QString configJPEGCompressionEntry;
     static const QString configJPEGSubSamplingEntry;
@@ -90,7 +96,9 @@ public:
     JPEGSettings*        JPEGOptions;
     PNGSettings*         PNGOptions;
     TIFFSettings*        TIFFOptions;
+#ifdef HAVE_JASPER
     JP2KSettings*        JPEG2000Options;
+#endif // HAVE_JASPER
     PGFSettings*         PGFOptions;
 
 #ifdef _WIN32
@@ -118,13 +126,15 @@ const QString SetupIOFiles::Private::configShowImageSettingsDialog("ShowImageSet
 SetupIOFiles::SetupIOFiles(QWidget* const parent)
     : QScrollArea(parent), d(new Private)
 {
-    QWidget* panel     = new QWidget;
-    QVBoxLayout* vbox  = new QVBoxLayout;
-    d->JPEGOptions     = new JPEGSettings;
-    d->PNGOptions      = new PNGSettings;
-    d->TIFFOptions     = new TIFFSettings;
-    d->JPEG2000Options = new JP2KSettings;
-    d->PGFOptions      = new PGFSettings;
+    QWidget* const panel    = new QWidget;
+    QVBoxLayout* const vbox = new QVBoxLayout;
+    d->JPEGOptions          = new JPEGSettings;
+    d->PNGOptions           = new PNGSettings;
+    d->TIFFOptions          = new TIFFSettings;
+#ifdef HAVE_JASPER
+    d->JPEG2000Options      = new JP2KSettings;
+#endif // HAVE_JASPER
+    d->PGFOptions           = new PGFSettings;
 
 #ifdef _WIN32
     // Show Settings Dialog Option
@@ -138,7 +148,9 @@ SetupIOFiles::SetupIOFiles(QWidget* const parent)
     vbox->addWidget(d->createGroupBox(d->JPEGOptions));
     vbox->addWidget(d->createGroupBox(d->PNGOptions));
     vbox->addWidget(d->createGroupBox(d->TIFFOptions));
+#ifdef HAVE_JASPER
     vbox->addWidget(d->createGroupBox(d->JPEG2000Options));
+#endif // HAVE_JASPER
     vbox->addWidget(d->createGroupBox(d->PGFOptions));
 #ifdef _WIN32
     vbox->addWidget(d->createGroupBox(d->showImageSettingsDialog));
@@ -173,8 +185,10 @@ void SetupIOFiles::applySettings()
     group.writeEntry(d->configJPEGSubSamplingEntry,     d->JPEGOptions->getSubSamplingValue());
     group.writeEntry(d->configPNGCompressionEntry,      d->PNGOptions->getCompressionValue());
     group.writeEntry(d->configTIFFCompressionEntry,     d->TIFFOptions->getCompression());
+#ifdef HAVE_JASPER
     group.writeEntry(d->configJPEG2000CompressionEntry, d->JPEG2000Options->getCompressionValue());
     group.writeEntry(d->configJPEG2000LossLessEntry,    d->JPEG2000Options->getLossLessCompression());
+#endif // HAVE_JASPER
     group.writeEntry(d->configPGFCompressionEntry,      d->PGFOptions->getCompressionValue());
     group.writeEntry(d->configPGFLossLessEntry,         d->PGFOptions->getLossLessCompression());
 #ifdef _WIN32
@@ -191,8 +205,10 @@ void SetupIOFiles::readSettings()
     d->JPEGOptions->setSubSamplingValue(group.readEntry(d->configJPEGSubSamplingEntry,         1));  // Medium sub-sampling
     d->PNGOptions->setCompressionValue(group.readEntry(d->configPNGCompressionEntry,           9));
     d->TIFFOptions->setCompression(group.readEntry(d->configTIFFCompressionEntry,              false));
+#ifdef HAVE_JASPER
     d->JPEG2000Options->setCompressionValue(group.readEntry(d->configJPEG2000CompressionEntry, 75));
     d->JPEG2000Options->setLossLessCompression(group.readEntry(d->configJPEG2000LossLessEntry, true));
+#endif // HAVE_JASPER
     d->PGFOptions->setCompressionValue(group.readEntry(d->configPGFCompressionEntry,           3));
     d->PGFOptions->setLossLessCompression(group.readEntry(d->configPGFLossLessEntry,           true));
 #ifdef _WIN32

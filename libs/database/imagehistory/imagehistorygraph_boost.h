@@ -27,6 +27,11 @@
 // To include pragma directives for MSVC
 #include "config-digikam.h"
 
+// GCC pragma directive to reduce warnings from Boost header files.
+#ifdef Q_CC_GNU
+#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
+#endif
+
 // boost includes
 
 // prohibit boost using deprecated header files
@@ -56,12 +61,12 @@
 
 /** Install custom property ids, out-of-namespace */
 enum vertex_properties_t { vertex_properties };
-enum edge_properties_t { edge_properties };
+enum edge_properties_t   { edge_properties   };
 
 namespace boost
 {
 BOOST_INSTALL_PROPERTY(vertex, properties);
-BOOST_INSTALL_PROPERTY(edge, properties);
+BOOST_INSTALL_PROPERTY(edge,   properties);
 }
 
 namespace Digikam
@@ -179,6 +184,7 @@ public:
         }
 
     protected:
+
         vertex_t v;
     };
 
@@ -225,6 +231,7 @@ public:
         }
 
     protected:
+
         edge_t e;
         // there is not null_edge, we must emulate it
         bool   null;
@@ -322,6 +329,7 @@ public:
     {
         return boost::edge(v1, v2, graph).second;
     }
+
     /// Does not care for direction
     bool isConnected(const Vertex& v1, const Vertex& v2) const
     {
@@ -347,6 +355,7 @@ public:
     {
         return boost::get(vertex_properties, graph, v);
     }
+
     VertexProperties& properties(const Vertex& v)
     {
         return boost::get(vertex_properties, graph, v);
@@ -387,10 +396,12 @@ public:
 
         return properties(e);
     }
+
     const EdgeProperties& properties(const Edge& e) const
     {
         return boost::get(edge_properties, graph, e);
     }
+
     EdgeProperties& properties(const Edge& e)
     {
         return boost::get(edge_properties, graph, e);
@@ -414,7 +425,7 @@ public:
         /// These resolve to one of the flags above, depending on MeaningOfDirection
         EdgesToLeaf   = 1 << 2,
         EdgesToRoot   = 1 << 3,
-        AllEdges = InboundEdges | OutboundEdges
+        AllEdges      = InboundEdges | OutboundEdges
     };
 
     QList<Vertex> adjacentVertices(const Vertex& v, AdjacencyFlags flags = AllEdges) const
@@ -709,7 +720,6 @@ public:
     }
 
     template <typename LessThan>
-
     QList<Vertex> longestPathTouching(const Vertex& v, LessThan lessThan) const
     {
         if (v.isNull())
@@ -798,8 +808,8 @@ public:
     QMap<Vertex, int> shortestDistancesFrom(const Vertex& v) const
     {
         QList<Vertex> vertices;
+        Path          path;
 
-        Path path;
         if (direction == ParentToChild)
         {
             path.shortestPath(graph, v);
@@ -811,6 +821,7 @@ public:
 
         // change 2147483647 to -1
         typename QMap<Vertex, int>::iterator it;
+
         for (it = path.distances.begin(); it != path.distances.end(); ++it)
         {
             if (it.value() == std::numeric_limits<int>::max())
@@ -884,6 +895,7 @@ public:
 
         // remove all vertices from the DFS of v that are not in the dominated tree
         QList<Vertex> orderedTree;
+
         foreach(const Vertex& v, presortedVertices)
         {
             if (dominatedTree.contains(v))
@@ -908,6 +920,7 @@ public:
         }
 
         Vertex ref(givenRef);
+
         if (ref.isNull())
             ref = roots().first();
 
@@ -921,6 +934,7 @@ public:
         GraphSearch search;
         search.breadthFirstSearch(graph, vertices.first(), direction == ChildToParent);
         QList<Vertex> bfs = search.vertices;
+
         foreach(const Vertex& v, vertices)
         {
             bfs.removeOne(v);
@@ -932,6 +946,7 @@ public:
 
         // sort in any so far unreachable nodes
         vertex_range_t range = boost::vertices(graph);
+
         for (vertex_iter it = range.first; it != range.second; ++it)
         {
             if (!vertices.contains(*it))
@@ -943,9 +958,11 @@ public:
 
                 // any item reachable from *it should come after it
                 int minIndex = vertices.size();
+
                 foreach(const Vertex& c, childBfs)
                 {
                     int foundAt = vertices.indexOf(c);
+
                     if (foundAt == -1)
                     {
                         toInsert << c;
@@ -955,6 +972,7 @@ public:
                         minIndex = qMin(foundAt, minIndex);
                     }
                 }
+
                 foreach(const Vertex& c, toInsert)
                 {
                     vertices.insert(minIndex++, c);
@@ -980,6 +998,7 @@ public:
         }
 
         Vertex ref(givenRef);
+
         if (ref.isNull())
             ref = roots().first();
 
@@ -993,6 +1012,7 @@ public:
         GraphSearch search;
         search.depthFirstSearchSorted(graph, vertices.first(), direction == ChildToParent, lessThan);
         QList<Vertex> dfs = search.vertices;
+
         foreach(const Vertex& v, vertices)
         {
             dfs.removeOne(v);
@@ -1016,6 +1036,7 @@ protected:
     {
         QList<Vertex> children = predecessors.keys(v);
         vertices << children;
+
         foreach(const Vertex& child, children)
         {
             treeFromPredecessorsRecursive(child, vertices, predecessors);
@@ -1084,12 +1105,12 @@ protected:
         if (flags & CopyEdgeProperties)
         {
             vertex_index_map_t indexMap = boost::get(boost::vertex_index, graph);
-            edge_range_t range = boost::edges(graph);
+            edge_range_t range          = boost::edges(graph);
 
             for (edge_iter it = range.first; it != range.second; ++it)
             {
-                Vertex s = boost::source(*it, graph);
-                Vertex t = boost::target(*it, graph);
+                Vertex s       = boost::source(*it, graph);
+                Vertex t       = boost::target(*it, graph);
                 Vertex copiedS = copiedVertices[boost::get(indexMap, s)];
                 Vertex copiedT = copiedVertices[boost::get(indexMap, t)];
 
@@ -1116,12 +1137,12 @@ protected:
     {
         QList<Edge> removed;
         vertex_index_map_t indexMap = boost::get(boost::vertex_index, graph);
-        edge_range_t range = boost::edges(graph);
+        edge_range_t range          = boost::edges(graph);
 
         for (edge_iter it = range.first; it != range.second; ++it)
         {
-            Vertex s = boost::source(*it, graph);
-            Vertex t = boost::target(*it, graph);
+            Vertex s       = boost::source(*it, graph);
+            Vertex t       = boost::target(*it, graph);
             Vertex copiedS = copiedVertices[boost::get(indexMap, s)];
             Vertex copiedT = copiedVertices[boost::get(indexMap, t)];
 
@@ -1163,6 +1184,7 @@ protected:
     QList<Vertex> findZeroDegreeFrom(const Vertex& v, bool inOrOut) const
     {
         bool invertGraph = (direction == ChildToParent);
+
         if (!inOrOut)
             invertGraph = !invertGraph;
 
@@ -1170,6 +1192,7 @@ protected:
         search.breadthFirstSearch(graph, v, invertGraph);
 
         QList<Vertex> vertices;
+
         foreach(const Vertex& candidate, search.vertices)
         {
             if ( (inOrOut ? in_degree(candidate, graph) : out_degree(candidate, graph)) == 0)
@@ -1177,6 +1200,7 @@ protected:
                 vertices << candidate;
             }
         }
+
         return vertices;
      }
 
@@ -1209,6 +1233,7 @@ protected:
                 kDebug() << e.what();
             }
         }
+
         template <class GraphType>
         void longestPath(const GraphType& graph, const Vertex& v)
         {
@@ -1347,18 +1372,23 @@ protected:
         class CommonVisitor
         {
         protected:
+
             explicit CommonVisitor(GraphSearch* q) : q(q) {}
+
             void record(const Vertex& v) const
             {
                 q->vertices << v;
             }
+
             GraphSearch* const q;
         };
 
         class DepthFirstSearchVisitor : public boost::default_dfs_visitor, public CommonVisitor
         {
         public:
+
             explicit DepthFirstSearchVisitor(GraphSearch* q) : CommonVisitor(q) {}
+
             template <typename VertexType, typename GraphType>
             void discover_vertex(VertexType u, const GraphType&) const
             {
@@ -1369,7 +1399,9 @@ protected:
         class BreadthFirstSearchVisitor : public boost::default_bfs_visitor, public CommonVisitor
         {
         public:
+
             explicit BreadthFirstSearchVisitor(GraphSearch* q) : CommonVisitor(q) {}
+
             template <typename VertexType, typename GraphType>
             void discover_vertex(VertexType u, const GraphType&) const
             {
@@ -1385,11 +1417,15 @@ protected:
         class lessThanMapEdgeToTarget
         {
             typedef typename boost::graph_traits<GraphType>::edge_descriptor edge_descriptor;
+
         public:
+
             lessThanMapEdgeToTarget(const GraphType& g, VertexLessThan vertexLessThan)
                 : g(g), vertexLessThan(vertexLessThan) {}
+
             const GraphType& g;
             VertexLessThan vertexLessThan;
+
             bool operator()(const edge_descriptor& a, const edge_descriptor& b)
             {
                 return vertexLessThan(boost::target(a, g), boost::target(b, g));
@@ -1405,7 +1441,7 @@ protected:
 
             typedef typename boost::graph_traits<IncidenceGraph>::edge_descriptor edge_descriptor;
             QList<edge_descriptor> outEdges;
-            std::vector<VertexInfo> stack;
+            //std::vector<VertexInfo> stack;
 
             boost::put(color, u, boost::gray_color);
             vis.discover_vertex(u, g);
@@ -1512,5 +1548,9 @@ protected:
 
 } // namespace Digikam
 
-#endif // IMAGEHISTORYGRAPH_BOOST_H
+// Restore GCC warnings
+#ifdef Q_CC_GNU
+#pragma GCC diagnostic warning "-Wunused-local-typedefs"
+#endif
 
+#endif // IMAGEHISTORYGRAPH_BOOST_H

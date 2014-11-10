@@ -7,7 +7,7 @@
  * Description : Qt item view for images
  *
  * Copyright (C) 2009-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2011-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -103,6 +103,7 @@ QModelIndex DCategorizedView::Private::scrollPositionHint() const
     if (!hint.isValid() || !q->viewport()->rect().intersects(q->visualRect(hint)))
     {
         QList<QModelIndex> visibleIndexes = q->categorizedIndexesIn(q->viewport()->rect());
+
         if (!visibleIndexes.isEmpty())
         {
             hint = visibleIndexes.first();
@@ -365,16 +366,18 @@ void DCategorizedView::updateDelegateSizes()
                                 - style()->pixelMetric(QStyle::PM_ScrollBarExtent, 0, horizontalScrollBar());
     option.rect             = QRect(0, 0, contentWidth, contentHeight);
 */
-    option.rect = QRect(QPoint(0,0), viewport()->size());
+    option.rect = QRect(QPoint(0, 0), viewport()->size());
     d->delegate->setDefaultViewOptions(option);
 }
 
 void DCategorizedView::slotActivated(const QModelIndex& index)
 {
+    Qt::KeyboardModifiers modifiers = Qt::NoModifier;
+
     if (d->currentMouseEvent)
     {
-        // ignore activation if Ctrl or Shift is pressed (for selection)
-        Qt::KeyboardModifiers modifiers = d->currentMouseEvent->modifiers();
+        // Ignore activation if Ctrl or Shift is pressed (for selection)
+        modifiers                       = d->currentMouseEvent->modifiers();
         const bool shiftKeyPressed      = modifiers & Qt::ShiftModifier;
         const bool controlKeyPressed    = modifiers & Qt::ControlModifier;
 
@@ -398,7 +401,8 @@ void DCategorizedView::slotActivated(const QModelIndex& index)
         }
     }
 
-    indexActivated(index);
+    d->currentMouseEvent = 0;
+    indexActivated(index, modifiers);
 }
 
 void DCategorizedView::slotClicked(const QModelIndex& index)
@@ -507,11 +511,15 @@ void DCategorizedView::rowsAboutToBeRemoved(const QModelIndex& parent, int start
 
 void DCategorizedView::layoutAboutToBeChanged()
 {
-    if(selectionModel()) {
+    if(selectionModel())
+    {
         d->ensureOneSelectedItem = selectionModel()->hasSelection();
-    } else {
+    }
+    else
+    {
         kWarning() << "Called without selection model, check whether the models are ok..";
     }
+
     QModelIndex current      = currentIndex();
 
     // store some hints so that if all selected items were removed do not need to default to 0,0.
@@ -550,6 +558,7 @@ QModelIndex DCategorizedView::nextIndexHint(const QModelIndex& indexToAnchor, co
         {
             return QModelIndex();
         }
+
         return model()->index(removed.topLeft().row() - 1, 0);    // last remaining, no next one left
     }
     else
@@ -713,7 +722,7 @@ void DCategorizedView::showContextMenu(QContextMenuEvent*)
     // implemented in subclass
 }
 
-void DCategorizedView::indexActivated(const QModelIndex&)
+void DCategorizedView::indexActivated(const QModelIndex&, Qt::KeyboardModifiers)
 {
 }
 
@@ -793,16 +802,12 @@ void DCategorizedView::mousePressEvent(QMouseEvent* event)
     {
         emit viewportClicked(event);
     }
-
-    d->currentMouseEvent = 0;
 }
 
 void DCategorizedView::mouseReleaseEvent(QMouseEvent* event)
 {
     userInteraction();
-    d->currentMouseEvent = event;
     DigikamKCategorizedView::mouseReleaseEvent(event);
-    d->currentMouseEvent = 0;
 }
 
 void DCategorizedView::mouseMoveEvent(QMouseEvent* event)
@@ -830,9 +835,7 @@ void DCategorizedView::mouseMoveEvent(QMouseEvent* event)
         unsetCursor();
     }
 
-    d->currentMouseEvent = event;
     DigikamKCategorizedView::mouseMoveEvent(event);
-    d->currentMouseEvent = 0;
 
     d->delegate->mouseMoved(event, indexVisualRect, index);
 }

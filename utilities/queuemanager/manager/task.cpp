@@ -6,7 +6,7 @@
  * Date        : 2009-02-06
  * Description : Thread actions task.
  *
- * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2012      by Pankaj Kumar <me at panks dot me>
  *
  * This program is free software; you can redistribute it
@@ -52,6 +52,7 @@ extern "C"
 #include "fileactionmngr.h"
 #include "batchtool.h"
 #include "batchtoolsmanager.h"
+#include "fileoperation.h"
 
 namespace Digikam
 {
@@ -234,14 +235,17 @@ void Task::run()
     {
         if (DMetadata::hasSidecar(outUrl.toLocalFile()))
         {
-            if (KDE::rename(DMetadata::sidecarPath(outUrl.toLocalFile()),
-                            DMetadata::sidecarPath(dest.toLocalFile())) != 0)
+            if (!FileOperation::localFileRename(d->tools.m_itemUrl.toLocalFile(),
+                                               DMetadata::sidecarPath(outUrl.toLocalFile()),
+                                               DMetadata::sidecarPath(dest.toLocalFile())))
             {
                 emitActionData(ActionData::BatchFailed, i18n("Failed to create sidecar file..."), dest);
             }
         }
 
-        if (KDE::rename(outUrl.toLocalFile(), dest.toLocalFile()) != 0)
+        if (!FileOperation::localFileRename(d->tools.m_itemUrl.toLocalFile(), 
+                                           outUrl.toLocalFile(),
+                                           dest.toLocalFile()))
         {
             emitActionData(ActionData::BatchFailed, i18n("Failed to create file..."), dest);
         }

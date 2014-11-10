@@ -6,7 +6,7 @@ NEW FEATURES:
 AdvancedRename : The ReplaceModifier has regular expressions support now.
 ImageEditor    : Add an option to add vignetting over an image.
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 219559 : Crash when opening editor.
 002 ==> 217860 : Icon view movie thumbnail rotation overlay buttons.

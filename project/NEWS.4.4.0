@@ -1,0 +1,64 @@
+*****************************************************************************************************
+digiKam 4.4.0 - Release date: 2014-10-12
+
+NEW FEATURES:
+
+General   : Navigate between pictures using PageUp/PageDown is now possible while editing properties through captions/tags sidebar.
+General   : New keyboard shortcuts to improve usability while photo review (as to switch focus on text edit widget, or to toogle tags view).
+General   : New keyboard shortcut to switch on/off color managed view for thumbnails and preview.
+AlbumGUI  : Album preview can be displayed in tooltip.
+SlideShow : Labels and Tags keyboard shortcuts can be used while slideshow.
+SlideShow : Support multi-monitors computer.
+
+BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
+
+001 ==> 147175 - CANVAS : fit only large images to window.
+002 ==> 282900 - Control click on thumb to deselect resets focus to first photo.
+003 ==> 303179 - Customize status bar.
+004 ==> 229930 - Delete photos with the mouse action not an action icon.
+005 ==> 322053 - Filtered Icon-View and change rating changes all items from non filtered Icon-View.
+006 ==> 137320 - Thumbnails generation process should continue for images that are off-screen [patch].
+007 ==> 110658 - Thumbnails generation process should have low priority.
+008 ==> 224806 - ICONVIEW : use keyboard modifier with right mouse click to run default "Open With..." action
+009 ==> 309557 - Add a new option to show image Title information in tooltips.
+010 ==> 201698 - Add keyboard shortcut for album navigation when using Captions/Tags sidebar.
+011 ==> 211622 - Pressing PageDown should show the next image when focus is in Captions/Tags sidebar.
+012 ==> 131632 - Add keyboard shortcut for better captioning workflow.
+013 ==> 291695 - Add Keyboard shortcut to "Tags already assigned" button from Captions/Tags sidebar.
+014 ==> 290928 - Add keyboard shortcut to switch "Color managed view" from Preview mode.
+015 ==> 320304 - Aspect ratio not rounded and displays useless.
+016 ==> 325580 - digiKam crash running maintenance tool.
+017 ==> 338485 - Crash during Face recognition and detection about KFaceIface::Identity::isNull().
+018 ==> 275381 - GROUP : rating widget overlaps the grouping indicator over thumbnail.
+019 ==> 144168 - ICONVIEW : show only modification date if modification date is different than creation date.
+020 ==> 268284 - ZoomSlider from statubar tooltip looks inconsistent.
+021 ==> 152948 - Confirmation dialog is not needed if Captions/Tags take focus and no changes is performed.
+022 ==> 313947 - Add new toolbar button to change Labels, at new digiKam session button do not appear until make another change in toolbar.
+023 ==> 282506 - Keyboard shortcut tagging functionality is lost.
+024 ==> 309558 - Bad inheritance of keyboard shortcut when creating sub-tag.
+025 ==> 338509 - Tag-Shortcut not visible in Tag properties.
+026 ==> 275077 - Add Tags and Labels keyboard shortcuts in application configuration dialog.
+027 ==> 229680 - Add album thumbnail in album tooltip.
+028 ==> 206546 - Save or print mosaic from light table.
+029 ==> 339074 - CORE : warning from Qt when in database connection checker [patch].
+030 ==> 324287 - SCAN : frequent image scans slow.
+031 ==> 313857 - Add keyboard shorcut to apply Labels while Slideshow.
+032 ==> 312043 - Show image Title in Slideshow.
+033 ==> 242119 - Interactive Slideshow (presentation mode).
+034 ==> 339051 - Allow the usage of arrows to move in the photo sequence when in slideshow [patch].
+035 ==> 163941 - Show and assign Tags while Slideshow.
+036 ==> 339140 - Labels Search: Inconsistent font used for headings, does not follow theme.
+037 ==> 339144 - digiKam crashes in libkexiv2 metadata handling.
+038 ==> 339210 - digiKam crashes when trying to stop find duplicates.
+039 ==> 339341 - SCAN : digiKam not showing format label for .KRA or .ORA files.
+040 ==> 338629 - digiKam freezes on Import.
+041 ==> 336333 - Map view in import tool is very slow.
+042 ==> 339173 - Album Tool-Tips: Incorrect parent collection shown.
+043 ==> 339052 - MANAGER: Sort order (ascending/descending) not saved when window is closed.
+044 ==> 171199 - Single-click behavior on tree-view do not respect settings from KDE control panel.
+045 ==> 257313 - Slideshow on different display (presentation mode).
+046 ==> 338783 - No EXIF/XMP info in "Metadata" right side-bar tabs.
+047 ==> 337507 - Face Detection gives no results, no matter the accuracy setting.
+048 ==> 339440 - digiKam crashes when opening geolocation from sidebar or toolbar.
+049 ==> 313855 - Use single/double click setting from KDE control center to leave media player mode.
+050 ==> 339227 - Existing tags from image metadata are removed when adding new tags to multiple images.

@@ -63,6 +63,9 @@ static int fillMemoryInfo(Digikam::KMemoryInfo::KMemoryInfoData* const data)
 #include <sys/types.h>
 #include <sys/sysctl.h>
 #include <unistd.h>
+#include <fcntl.h>
+#include <kvm.h>
+#include <paths.h>
 #endif
 #if defined(Q_OS_NETBSD)
 #include <sys/param.h>

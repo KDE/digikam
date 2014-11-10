@@ -26,7 +26,7 @@
 
 // Qt includes
 
-#include <QObject>
+#include <QWidget>
 #include <QString>
 #include <QImage>
 #include <QPixmap>
@@ -52,7 +52,7 @@ class CameraThumbsCtrl : public QObject
 
 public:
 
-    CameraThumbsCtrl(CameraController* const ctrl, QObject* const parent);
+    CameraThumbsCtrl(CameraController* const ctrl, QWidget* const parent);
     ~CameraThumbsCtrl();
 
     /** fill item with relevant information.

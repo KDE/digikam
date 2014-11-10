@@ -9,7 +9,8 @@
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C)      2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C)      2010 by Andi Clemens <andi dot clemens at gmail dot com>
- * Copyright (C) 2011 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C)      2011 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C)      2014 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -593,10 +594,10 @@ void ImageFilterModel::setTagFilter(const QList<int>& includedTags, const QList<
     setImageFilterSettings(d->filter);
 }
 
-void ImageFilterModel::setRatingFilter(int rating, ImageFilterSettings::RatingCondition ratingCond)
+void ImageFilterModel::setRatingFilter(int rating, ImageFilterSettings::RatingCondition ratingCond, bool isUnratedExcluded)
 {
     Q_D(ImageFilterModel);
-    d->filter.setRatingFilter(rating, ratingCond);
+    d->filter.setRatingFilter(rating, ratingCond, isUnratedExcluded);
     setImageFilterSettings(d->filter);
 }
 
@@ -1015,6 +1016,13 @@ void ImageFilterModel::setCategorizationMode(ImageSortSettings::CategorizationMo
 {
     Q_D(ImageFilterModel);
     d->sorter.setCategorizationMode(mode);
+    setImageSortSettings(d->sorter);
+}
+
+void ImageFilterModel::setCategorizationSortOrder(ImageSortSettings::SortOrder order)
+{
+    Q_D(ImageFilterModel);
+    d->sorter.setCategorizationSortOrder(order);
     setImageSortSettings(d->sorter);
 }
 

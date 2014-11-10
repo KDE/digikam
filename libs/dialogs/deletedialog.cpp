@@ -49,7 +49,7 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "databaseurl.h"
 
 namespace Digikam
@@ -326,7 +326,7 @@ DeleteWidget::DeleteWidget(QWidget* const parent)
     d->checkBoxStack->addWidget(d->doNotShowAgain);
     d->checkBoxStack->setCurrentWidget(d->shouldDelete);
 
-    bool deleteInstead = !AlbumSettings::instance()->getUseTrash();
+    bool deleteInstead = !ApplicationSettings::instance()->getUseTrash();
     slotShouldDelete(deleteInstead);
     d->shouldDelete->setChecked(deleteInstead);
 }
@@ -521,14 +521,14 @@ bool DeleteDialog::confirmDeleteList(const KUrl::List& condemnedFiles,
 
     if (deleteMode == DeleteDialogMode::NoChoiceTrash)
     {
-        if (!AlbumSettings::instance()->getShowTrashDeleteDialog())
+        if (!ApplicationSettings::instance()->getShowTrashDeleteDialog())
         {
             return true;
         }
     }
     else if (deleteMode == DeleteDialogMode::NoChoiceDeletePermanently)
     {
-        if (!AlbumSettings::instance()->getShowPermanentDeleteDialog())
+        if (!ApplicationSettings::instance()->getShowPermanentDeleteDialog())
         {
             return true;
         }
@@ -545,7 +545,7 @@ void DeleteDialog::setUrls(const KUrl::List& urls)
 void DeleteDialog::slotUser1Clicked()
 {
     // Save user's preference
-    AlbumSettings* settings = AlbumSettings::instance();
+    ApplicationSettings* settings = ApplicationSettings::instance();
 
     if (d->saveShouldDeleteUserPreference)
     {

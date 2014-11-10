@@ -46,6 +46,7 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "camerathumbsctrl.h"
 #include "cameracontroller.h"
 #include "filtercombo.h"
@@ -118,7 +119,10 @@ public:
         imageViewSelectionAction(0),
         iconViewAction(0),
         camItemPreviewAction(0),
+#ifdef HAVE_KGEOMAP
         mapViewAction(0),
+#endif // HAVE_KGEOMAP
+        viewCMViewAction(0),
         cameraActions(0),
         helpMenu(0),
         advBox(0),
@@ -158,10 +162,10 @@ public:
 
     QString                       cameraTitle;
 
+    QStringList                   autoRotateItemsList;
     QStringList                   currentlyDeleting;
     QSet<QString>                 foldersToScan;
     CamItemInfoList               filesToBeAdded;
-    CamItemInfoList               autoRotateItemsList;
 
     KMenu*                        downloadMenu;
     KMenu*                        deleteMenu;
@@ -206,7 +210,10 @@ public:
     KSelectAction*                imageViewSelectionAction;
     KToggleAction*                iconViewAction;
     KToggleAction*                camItemPreviewAction;
+#ifdef HAVE_KGEOMAP
     KToggleAction*                mapViewAction;
+#endif // HAVE_KGEOMAP
+    KToggleAction*                viewCMViewAction;
 
     QActionGroup*                 cameraActions;
 
@@ -246,7 +253,7 @@ public:
     FilterComboBox*               filterComboBox;
 
     CHUpdateItemMap               map;
-    
+
     KMessageWidget*               errorWidget;
 };
 

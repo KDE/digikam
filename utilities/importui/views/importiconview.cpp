@@ -280,7 +280,7 @@ void ImportIconView::slotRotateRight(const QList<QModelIndex>& indexes)
     FileActionMngr::instance()->transform(imageInfos, KExiv2Iface::RotationMatrix::Rotate90);
 }
 
-void ImportIconView::activated(const CamItemInfo& info)
+void ImportIconView::activated(const CamItemInfo& info, Qt::KeyboardModifiers)
 {
     if (info.isNull())
     {
@@ -293,7 +293,7 @@ void ImportIconView::activated(const CamItemInfo& info)
     }
     else
     {
-        //TODO: openInEditor(info);
+        //TODO: openFile(info);
     }
 }
 
@@ -313,6 +313,7 @@ void ImportIconView::showContextMenuOnInfo(QContextMenuEvent* event, const CamIt
     ImportContextMenuHelper cmhelper(&popmenu);
 
     cmhelper.addAction("importui_fullscreen");
+    cmhelper.addAction("options_show_menubar");
     cmhelper.addAction("import_zoomfit2window");
     cmhelper.addSeparator();
     // --------------------------------------------------------
@@ -388,8 +389,10 @@ void ImportIconView::showContextMenu(QContextMenuEvent* event)
     ImportContextMenuHelper cmhelper(&popmenu);
 
     cmhelper.addAction("importui_fullscreen");
+    cmhelper.addAction("options_show_menubar");
     cmhelper.addSeparator();
     cmhelper.addAction("importui_close");
+
     // --------------------------------------------------------
 
     cmhelper.exec(event->globalPos());

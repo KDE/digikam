@@ -286,14 +286,14 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
         if (bit_depth == 16)
         {
-#ifdef USE_ADVANCEDDEBUGMSG
+#ifdef USE_IMGLOADERDEBUGMSG
             kDebug() << "PNG in 16 bits/color/pixel.";
 #endif
 
             switch (color_type)
             {
                 case PNG_COLOR_TYPE_RGB :            // RGB
-#ifdef USE_ADVANCEDDEBUGMSG
+#ifdef USE_IMGLOADERDEBUGMSG
                     kDebug() << "PNG in PNG_COLOR_TYPE_RGB";
 #endif
 
@@ -302,13 +302,13 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
                     break;
 
                 case PNG_COLOR_TYPE_RGB_ALPHA :     // RGBA
-#ifdef USE_ADVANCEDDEBUGMSG
+#ifdef USE_IMGLOADERDEBUGMSG
                     kDebug() << "PNG in PNG_COLOR_TYPE_RGB_ALPHA";
 #endif
                     break;
 
                 case PNG_COLOR_TYPE_GRAY :          // Grayscale
-#ifdef USE_ADVANCEDDEBUGMSG
+#ifdef USE_IMGLOADERDEBUGMSG
                     kDebug() << "PNG in PNG_COLOR_TYPE_GRAY";
 #endif
 
@@ -318,7 +318,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
                     break;
 
                 case PNG_COLOR_TYPE_GRAY_ALPHA :    // Grayscale + Alpha
-#ifdef USE_ADVANCEDDEBUGMSG
+#ifdef USE_IMGLOADERDEBUGMSG
                     kDebug() << "PNG in PNG_COLOR_TYPE_GRAY_ALPHA";
 #endif
                     png_set_gray_to_rgb(png_ptr);
@@ -326,7 +326,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
                     break;
 
                 case PNG_COLOR_TYPE_PALETTE :       // Indexed
-#ifdef USE_ADVANCEDDEBUGMSG
+#ifdef USE_IMGLOADERDEBUGMSG
                     kDebug() << "PNG in PNG_COLOR_TYPE_PALETTE";
 #endif
                     png_set_palette_to_rgb(png_ptr);
@@ -335,7 +335,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
                     break;
 
                 default:
-#ifdef USE_ADVANCEDDEBUGMSG
+#ifdef USE_IMGLOADERDEBUGMSG
                     kDebug() << "PNG color type unknown.";
 #endif
                     delete cleanupData;
@@ -345,7 +345,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
         }
         else
         {
-#ifdef USE_ADVANCEDDEBUGMSG
+#ifdef USE_IMGLOADERDEBUGMSG
             kDebug() << "PNG in >=8 bits/color/pixel.";
 #endif
             png_set_packing(png_ptr);
@@ -353,7 +353,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
             switch (color_type)
             {
                 case PNG_COLOR_TYPE_RGB :           // RGB
-#ifdef USE_ADVANCEDDEBUGMSG
+#ifdef USE_IMGLOADERDEBUGMSG
                     kDebug() << "PNG in PNG_COLOR_TYPE_RGB";
 #endif
                     png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
@@ -361,13 +361,13 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
                     break;
 
                 case PNG_COLOR_TYPE_RGB_ALPHA :     // RGBA
-#ifdef USE_ADVANCEDDEBUGMSG
+#ifdef USE_IMGLOADERDEBUGMSG
                     kDebug() << "PNG in PNG_COLOR_TYPE_RGB_ALPHA";
 #endif
                     break;
 
                 case PNG_COLOR_TYPE_GRAY :          // Grayscale
-#ifdef USE_ADVANCEDDEBUGMSG
+#ifdef USE_IMGLOADERDEBUGMSG
                     kDebug() << "PNG in PNG_COLOR_TYPE_GRAY";
 #endif
 #if PNG_LIBPNG_VER >= 10400
@@ -381,14 +381,14 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
                     break;
 
                 case PNG_COLOR_TYPE_GRAY_ALPHA :    // Grayscale + alpha
-#ifdef USE_ADVANCEDDEBUGMSG
+#ifdef USE_IMGLOADERDEBUGMSG
                     kDebug() << "PNG in PNG_COLOR_TYPE_GRAY_ALPHA";
 #endif
                     png_set_gray_to_rgb(png_ptr);
                     break;
 
                 case PNG_COLOR_TYPE_PALETTE :       // Indexed
-#ifdef USE_ADVANCEDDEBUGMSG
+#ifdef USE_IMGLOADERDEBUGMSG
                     kDebug() << "PNG in PNG_COLOR_TYPE_PALETTE";
 #endif
                     png_set_packing(png_ptr);
@@ -398,7 +398,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
                     break;
 
                 default:
-#ifdef USE_ADVANCEDDEBUGMSG
+#ifdef USE_IMGLOADERDEBUGMSG
                     kDebug() << "PNG color type unknown.";
 #endif
                     delete cleanupData;
@@ -593,7 +593,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
             {
                 imageSetEmbbededText(text_ptr[i].key, text_ptr[i].text);
 
-#ifdef USE_ADVANCEDDEBUGMSG
+#ifdef USE_IMGLOADERDEBUGMSG
                 kDebug() << "Reading PNG Embedded text: key=" << text_ptr[i].key
                          << " text=" << text_ptr[i].text;
 #endif
@@ -834,7 +834,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* const observer
             png_text text;
             text.key  = key.data();
             text.text = value.data();
-#ifdef USE_ADVANCEDDEBUGMSG
+#ifdef USE_IMGLOADERDEBUGMSG
             kDebug() << "Writing PNG Embedded text: key=" << text.key << " text=" << text.text;
 #endif
             text.compression = PNG_TEXT_COMPRESSION_zTXt;
@@ -852,7 +852,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* const observer
     png_text text;
     text.key  = (png_charp)("Software");
     text.text = softwareAsAscii.data();
-#ifdef USE_ADVANCEDDEBUGMSG
+#ifdef USE_IMGLOADERDEBUGMSG
     kDebug() << "Writing PNG Embedded text: key=" << text.key << " text=" << text.text;
 #endif
     text.compression = PNG_TEXT_COMPRESSION_zTXt;

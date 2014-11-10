@@ -36,7 +36,7 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "queuelist.h"
 #include "tooltipfiller.h"
 
@@ -73,7 +73,7 @@ void QueueToolTip::setQueueItem(QueueListViewItem* const item)
     d->item = item;
 
     if (!d->item ||
-        !AlbumSettings::instance()->showToolTipsIsValid())
+        !ApplicationSettings::instance()->showToolTipsIsValid())
     {
         hide();
     }

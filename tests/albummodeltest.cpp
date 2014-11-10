@@ -40,7 +40,7 @@
 #include "albumfiltermodel.h"
 #include "albummanager.h"
 #include "albummodel.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "albumthumbnailloader.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
@@ -81,7 +81,7 @@ void AlbumModelTest::initTestCase()
 
     kDebug() << "Using database path for test: " << dbPath;
 
-    AlbumSettings::instance()->setShowFolderTreeViewItemsCount(true);
+    ApplicationSettings::instance()->setShowFolderTreeViewItemsCount(true);
 
     // use a testing database
     AlbumManager::instance();

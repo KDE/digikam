@@ -6,7 +6,7 @@
  * Date        : 2006-02-22
  * Description : a tab widget to display GPS info
  *
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011      by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
@@ -89,27 +89,27 @@ public:
     {
     }
 
-    QLabel*                altLabel;
-    QLabel*                latLabel;
-    QLabel*                lonLabel;
-    QLabel*                dateLabel;
+    QLabel*                   altLabel;
+    QLabel*                   latLabel;
+    QLabel*                   lonLabel;
+    QLabel*                   dateLabel;
 
-    QToolButton*           detailsBtn;
-    KComboBox*             detailsCombo;
+    QToolButton*              detailsBtn;
+    KComboBox*                detailsCombo;
 
-    KSqueezedTextLabel*    altitude;
-    KSqueezedTextLabel*    latitude;
-    KSqueezedTextLabel*    longitude;
-    KSqueezedTextLabel*    date;
+    KSqueezedTextLabel*       altitude;
+    KSqueezedTextLabel*       latitude;
+    KSqueezedTextLabel*       longitude;
+    KSqueezedTextLabel*       date;
 
-    KGeoMap::KGeoMapWidget*      map;
+    KGeoMap::KGeoMapWidget*   map;
     KGeoMap::ItemMarkerTiler* itemMarkerTiler;
-    GPSImageInfo::List     gpsInfoList;
+    GPSImageInfo::List        gpsInfoList;
 
-    QStandardItemModel*    itemModel;
-    ImageGPSModelHelper*   gpsModelHelper;
-    GPSImageInfoSorter*    gpsImageInfoSorter;
-    bool                   boundariesShouldBeAdjusted;
+    QStandardItemModel*       itemModel;
+    ImageGPSModelHelper*      gpsModelHelper;
+    GPSImageInfoSorter*       gpsImageInfoSorter;
+    bool                      boundariesShouldBeAdjusted;
 };
 
 ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* const parent)
@@ -247,6 +247,7 @@ void ImagePropertiesGPSTab::slotGPSDetails()
     }
 
     const GPSImageInfo info = d->gpsInfoList.first();
+
     switch ( getWebGPSLocator() )
     {
         case MapQuest:
@@ -315,7 +316,6 @@ void ImagePropertiesGPSTab::slotGPSDetails()
             url.append("&zoom=15");
             break;
         }
-
     }
 
     kDebug() << url;
@@ -346,6 +346,7 @@ void ImagePropertiesGPSTab::setMetadata(const DMetadata& meta, const KUrl& url)
         const bool haveAlt = meta.getGPSAltitude(&alt);
 
         KGeoMap::GeoCoordinates coordinates(lat, lng);
+
         if (haveAlt)
         {
             coordinates.setAlt(alt);

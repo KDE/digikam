@@ -6,7 +6,7 @@
  * Date        : 2013-04-29
  * Description : digiKam XML GUI window
  *
- * Copyright (C) 2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -39,7 +39,6 @@
 #include <kxmlguiwindow.h>
 #include <ktogglefullscreenaction.h>
 #include <kglobalsettings.h>
-#include <kdebug.h>
 #include <kmenubar.h>
 #include <kstatusbar.h>
 #include <ktoolbar.h>
@@ -47,6 +46,7 @@
 #include <kactioncollection.h>
 #include <kdialog.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 // Local includes
 
@@ -101,7 +101,7 @@ public:
     /** Show only if toolbar is hidden */
     QToolButton*             fullScreenBtn;
 
-    /** Used by switchWindowToFullScreen() to manage state of full-screen button on managed window
+    /** Used by slotToggleFullScreen() to manage state of full-screen button on managed window
      */
     bool                     dirtyMainToolBar;
 
@@ -142,11 +142,24 @@ DXmlGuiWindow::~DXmlGuiWindow()
     delete d;
 }
 
+void DXmlGuiWindow::closeEvent(QCloseEvent* e)
+{
+    if(fullScreenIsActive())
+        slotToggleFullScreen(false);
+
+    KXmlGuiWindow::closeEvent(e);
+}
+
+void DXmlGuiWindow::setFullScreenOptions(int options)
+{
+    d->fsOptions = options;
+}
+
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
 {
     d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
     connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
-    actionCollection()->addAction("help_librariesinfo", d->libsInfoAction);   
+    actionCollection()->addAction("help_librariesinfo", d->libsInfoAction);
 
     d->about = new DAboutData(this);
     d->about->registerHelpActions();
@@ -163,9 +176,43 @@ void DXmlGuiWindow::createHelpActions(bool coreOptions)
     }
 }
 
-void DXmlGuiWindow::setFullScreenOptions(int options)
+void DXmlGuiWindow::createSidebarActions()
 {
-    d->fsOptions = options;
+    KAction* const tlsb = new KAction(i18n("Toggle Left Side-bar"), this);
+    tlsb->setShortcut(KShortcut(Qt::CTRL + Qt::META + Qt::Key_Left));
+    tlsb->setShortcutConfigurable(true);
+    connect(tlsb, SIGNAL(triggered()), this, SLOT(slotToggleLeftSideBar()));
+    actionCollection()->addAction("toggle-left-sidebar", tlsb);
+
+    KAction* const trsb = new KAction(i18n("Toggle Right Side-bar"), this);
+    trsb->setShortcut(KShortcut(Qt::CTRL + Qt::META + Qt::Key_Right));
+    trsb->setShortcutConfigurable(true);
+    connect(trsb, SIGNAL(triggered()), this, SLOT(slotToggleRightSideBar()));
+    actionCollection()->addAction("toggle-right-sidebar", trsb);
+
+    KAction* const plsb = new KAction(i18n("Previous Left Side-bar Tab"), this);
+    plsb->setShortcut(KShortcut(Qt::CTRL + Qt::META + Qt::Key_Home));
+    plsb->setShortcutConfigurable(true);
+    connect(plsb, SIGNAL(triggered()), this, SLOT(slotPreviousLeftSideBarTab()));
+    actionCollection()->addAction("previous-left-sidebar-tab", plsb);
+
+    KAction* const nlsb = new KAction(i18n("Next Left Side-bar Tab"), this);
+    nlsb->setShortcut(KShortcut(Qt::CTRL + Qt::META + Qt::Key_End));
+    nlsb->setShortcutConfigurable(true);
+    connect(nlsb, SIGNAL(triggered()), this, SLOT(slotNextLeftSideBarTab()));
+    actionCollection()->addAction("next-left-sidebar-tab", nlsb);
+
+    KAction* const prsb = new KAction(i18n("Previous Right Side-bar Tab"), this);
+    prsb->setShortcut(KShortcut(Qt::CTRL + Qt::META + Qt::Key_PageUp));
+    prsb->setShortcutConfigurable(true);
+    connect(prsb, SIGNAL(triggered()), this, SLOT(slotPreviousRightSideBarTab()));
+    actionCollection()->addAction("previous-right-sidebar-tab", prsb);
+
+    KAction* const nrsb = new KAction(i18n("Next Right Side-bar Tab"), this);
+    nrsb->setShortcut(KShortcut(Qt::CTRL + Qt::META + Qt::Key_PageDown));
+    nrsb->setShortcutConfigurable(true);
+    connect(nrsb, SIGNAL(triggered()), this, SLOT(slotNextRightSideBarTab()));
+    actionCollection()->addAction("next-right-sidebar-tab", nrsb);
 }
 
 void DXmlGuiWindow::createFullScreenAction(const QString& name)

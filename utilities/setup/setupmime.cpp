@@ -44,7 +44,7 @@
 // Local includes
 
 #include "albumdb.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "databaseaccess.h"
 
 namespace Digikam

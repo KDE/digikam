@@ -58,6 +58,7 @@ public:
     void   setLoadFullImageSize(bool b);
 
     void   checkForSelection(const ImageInfo& info);
+    void   toggleFullScreen(bool set);
 
     double leftZoomMax()  const;
     double leftZoomMin()  const;

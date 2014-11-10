@@ -6,7 +6,7 @@
  * Date        : 2006-01-20
  * Description : core image editor GUI implementation
  *
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -206,6 +206,9 @@ protected:
     void resetOrigin();
     void resetOriginSwitchFile();
 
+    void addServicesMenuForUrl(const KUrl& url);
+    void openWith(const KUrl& url, QAction* action);
+
     EditorStackView*           editorStackView()  const;
     ExposureSettingsContainer* exposureSettings() const;
     KCategorizedView*          createToolSelectionView();
@@ -232,6 +235,8 @@ protected:
     virtual void setupConnections() = 0;
     virtual void setupActions() = 0;
     virtual void setupUserArea() = 0;
+
+    virtual void addServicesMenu() = 0;
 
     virtual VersionManager* versionManager() const;
 
@@ -285,6 +290,7 @@ protected Q_SLOTS:
     virtual bool saveNewVersionAs() = 0;
     virtual bool saveNewVersionInFormat(const QString&) = 0;
     virtual void slotFilePrint() = 0;
+    virtual void slotFileWithDefaultApplication() = 0;
     virtual void slotDeleteCurrentItem() = 0;
     virtual void slotBackward() = 0;
     virtual void slotForward() = 0;
@@ -295,6 +301,7 @@ protected Q_SLOTS:
     virtual void slotContextMenu() = 0;
     virtual void slotRevert() = 0;
     virtual void slotAddedDropedItems(QDropEvent* e) = 0;
+    virtual void slotOpenWith(QAction* action=0) = 0;
 
 private Q_SLOTS:
 
@@ -321,6 +328,9 @@ private Q_SLOTS:
     void slotUndoStateChanged();
     void slotSelectToolsMenuAboutToShow();
     void slotThemeChanged();
+    void slotToggleRightSideBar();
+    void slotPreviousRightSideBarTab();
+    void slotNextRightSideBarTab();
 
 private:
 
@@ -395,7 +405,6 @@ private:
                                     const KUrl& targetUrl,
                                     const QString& autoFilter);
 
-    bool localFileRename(const QString& src, const QString& destPath);
     void movingSaveFileFinished(bool successful);
 
     void addAction2ContextMenu(const QString& actionName, bool addDisabled = false);

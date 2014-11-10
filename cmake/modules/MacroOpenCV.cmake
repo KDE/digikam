@@ -6,7 +6,7 @@
 # which try to find OpenCV version 2.4.9 
 # with internal components "core", "highgui", "objdetect", and "contrib".
 #
-# Copyright (c) 2010-2014, Gilles Caulier, <caulier.gilles@gmail.com>
+# Copyright (c) 2010-2014, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -16,69 +16,69 @@
 # Therefore, first try finding OpenCV using FIND_PACKAGE(OpenCV), and if that fails,
 # add our FindOpenCV.cmake to the search path and search again.
 
-MACRO(DETECT_OPENCV OPENCV_MIN_VERSION)
+macro(DETECT_OPENCV OPENCV_MIN_VERSION)
 
     # Reset to avoid picking up extra libraries
-    SET(OpenCV_LIBS)
+    set(OpenCV_LIBS)
 
     set(OPENCV_REQUIRED_COMPONENTS "${ARGN}" )
 
-    MESSAGE(STATUS "First try at finding OpenCV...")
-    FIND_PACKAGE(OpenCV COMPONENTS ${OPENCV_REQUIRED_COMPONENTS})
+    message(STATUS "First try at finding OpenCV...")
+    find_package(OpenCV COMPONENTS ${OPENCV_REQUIRED_COMPONENTS})
 
-    IF (NOT OpenCV_LIBRARIES AND NOT OpenCV_LIBS)
+    if(NOT OpenCV_LIBRARIES AND NOT OpenCV_LIBS)
 
-        MESSAGE(STATUS "Could not find OpenCV normally, trying internal FindOpenCV.cmake")
-        SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/modules_opencv)
-        FIND_PACKAGE(OpenCV REQUIRED COMPONENTS ${OPENCV_REQUIRED_COMPONENTS})
+        message(STATUS "Could not find OpenCV normally, trying internal FindOpenCV.cmake")
+        set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/modules_opencv)
+        find_package(OpenCV REQUIRED COMPONENTS ${OPENCV_REQUIRED_COMPONENTS})
 
-    ELSE ()
+    else()
 
-        MESSAGE(STATUS "Great, found OpenCV on the first try.")
+        message(STATUS "Great, found OpenCV on the first try.")
 
-    ENDIF ()
+    endif()
 
-    MESSAGE(STATUS "OpenCV Root directory is: ${OpenCV_DIR}")
+    message(STATUS "OpenCV Root directory is: ${OpenCV_DIR}")
 
     # check OpenCV version
 
-    IF (OpenCV_VERSION)
+    if(OpenCV_VERSION)
 
-        MESSAGE(STATUS "OpenCV: Found version ${OpenCV_VERSION} (required: ${OPENCV_MIN_VERSION})")
+        message(STATUS "OpenCV: Found version ${OpenCV_VERSION} (required: ${OPENCV_MIN_VERSION})")
 
-        IF (${OpenCV_VERSION} VERSION_LESS ${OPENCV_MIN_VERSION})
+        if(${OpenCV_VERSION} VERSION_LESS ${OPENCV_MIN_VERSION})
 
-            MESSAGE(WARNING "OpenCV: Version is too old.")
-            SET(OpenCV_FOUND FALSE)
+            message(WARNING "OpenCV: Version is too old.")
+            set(OpenCV_FOUND FALSE)
 
-        ENDIF (${OpenCV_VERSION} VERSION_LESS ${OPENCV_MIN_VERSION})
+        endif()
 
-    ELSE ()
+    else()
 
-        MESSAGE(WARNING "OpenCV: Version information not found, your version is probably too old.")
-        SET(OpenCV_FOUND FALSE)
+        message(WARNING "OpenCV: Version information not found, your version is probably too old.")
+        set(OpenCV_FOUND FALSE)
 
-    ENDIF ()
+    endif()
 
     # There are two versions of FindOpenCV.cmake in the wild, one defining
     # OpenCV_LIBRARIES, the other defining OpenCV_LIBS. Make sure we handle
     # both cases.
 
-    IF (NOT OpenCV_LIBRARIES)
+    if(NOT OpenCV_LIBRARIES)
 
-        SET(OpenCV_LIBRARIES ${OpenCV_LIBS})
+        set(OpenCV_LIBRARIES ${OpenCV_LIBS})
 
-    ENDIF ()
+    endif()
 
     # Same story with OpenCV_INCLUDE_DIRS and OpenCV_INCLUDE_DIR:
 
-    IF (NOT OpenCV_INCLUDE_DIRS)
+    if(NOT OpenCV_INCLUDE_DIRS)
 
-        SET(OpenCV_INCLUDE_DIRS ${OpenCV_INCLUDE_DIR})
+        set(OpenCV_INCLUDE_DIRS ${OpenCV_INCLUDE_DIR})
 
-    ENDIF ()
+    endif()
 
-    MESSAGE(STATUS "OpenCV headers: ${OpenCV_INCLUDE_DIRS}")
-    MESSAGE(STATUS "OpenCV libs   : ${OpenCV_LIBRARIES}")
+    message(STATUS "OpenCV headers: ${OpenCV_INCLUDE_DIRS}")
+    message(STATUS "OpenCV libs   : ${OpenCV_LIBRARIES}")
 
-ENDMACRO(DETECT_OPENCV)
+endmacro()

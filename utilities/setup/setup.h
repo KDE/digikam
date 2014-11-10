@@ -67,13 +67,12 @@ public:
         SlideshowPage,
         ImageQualityPage,
         CameraPage,
+
+#ifdef HAVE_KIPI
         KipiPluginsPage,
+#endif /* HAVE_KIPI */
+
         MiscellaneousPage,
-
-#ifdef USE_SCRIPT_IFACE
-        ScriptManagerPage,
-#endif
-
         SetupPageEnumLast
     };
 

@@ -6,7 +6,7 @@
  * Date        : 2007-04-15
  * Description : a zoom bar used in status bar.
  *
- * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -69,18 +69,18 @@ public:
         zoomCombo       = 0;
     }
 
-    QToolButton* zoomToFitButton;
-    QToolButton* zoomTo100Button;
-    QToolButton* zoomPlusButton;
-    QToolButton* zoomMinusButton;
+    QToolButton*    zoomToFitButton;
+    QToolButton*    zoomTo100Button;
+    QToolButton*    zoomPlusButton;
+    QToolButton*    zoomMinusButton;
 
-    QTimer*      zoomTimer;
+    QTimer*         zoomTimer;
 
-    QSlider*     zoomSlider;
+    QSlider*        zoomSlider;
 
-    KComboBox*   zoomCombo;
+    KComboBox*      zoomCombo;
 
-    DTipTracker* zoomTracker;
+    DCursorTracker* zoomTracker;
 };
 
 DZoomBar::DZoomBar(QWidget* const parent)
@@ -102,13 +102,13 @@ DZoomBar::DZoomBar(QWidget* const parent)
     d->zoomMinusButton->setFocusPolicy(Qt::NoFocus);
 
     d->zoomSlider  = new QSlider(Qt::Horizontal, this);
-    d->zoomTracker = new DTipTracker(QString(""), d->zoomSlider);
+    d->zoomTracker = new DCursorTracker(QString(""), d->zoomSlider);
     d->zoomSlider->setRange(ThumbnailSize::Small, ThumbnailSize::maxThumbsSize());
     d->zoomSlider->setSingleStep(ThumbnailSize::Step);
     d->zoomSlider->setValue(ThumbnailSize::Medium);
     d->zoomSlider->setFixedWidth(120);
     d->zoomSlider->setFocusPolicy(Qt::NoFocus);
-    d->zoomSlider->setInvertedControls(true);       // See B.K.O #161087
+    d->zoomSlider->setInvertedControls(true);       // See bug #161087
 
     d->zoomPlusButton = new QToolButton(this);
     d->zoomPlusButton->setAutoRaise(true);

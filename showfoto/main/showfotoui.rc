@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="400" name="showfoto" >
+<gui version="402" name="showfoto" >
 
 <MenuBar>
 
@@ -15,6 +15,7 @@
         <Action name="editorwindow_last" />
         <Separator/>
         <Action name="editorwindow_print" />
+        <Action name="open_with_default_application" />
         <Separator/>
         <Action name="editorwindow_save" />
         <Action name="editorwindow_saveas" />
@@ -80,10 +81,10 @@
     </Menu>
 
     <Menu name="help" ><text>&amp;Help</text>
-        <Action name="editorwindow_rawcameralist"/>
-        <Action name="editorwindow_librariesinfo"/>
-        <Action name="editorwindow_donatemoney" />
-        <Action name="editorwindow_contribute" />
+        <Action name="help_rawcameralist"/>
+        <Action name="help_librariesinfo"/>
+        <Action name="help_donatemoney" />
+        <Action name="help_contribute" />
     </Menu>
 
     <Merge/>

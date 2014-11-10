@@ -7,7 +7,7 @@
  * Description : perform lossless rotation/flip to JPEG file
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Parts of the loading code is taken from qjpeghandler.cpp, copyright follows:
@@ -53,6 +53,7 @@ extern "C"
 #include <utime.h>
 #include <setjmp.h>
 #include <jpeglib.h>
+#include "transupp.h"
 }
 
 // KDE includes
@@ -72,7 +73,6 @@ extern "C"
 #include "dmetadata.h"
 #include "metadatasettings.h"
 #include "filereadwritelock.h"
-#include "transupp.h"
 
 #ifdef Q_CC_MSVC
 #include "jpegwin.h"
@@ -113,7 +113,7 @@ static void jpegutils_jpeg_emit_message(j_common_ptr cinfo, int msg_level)
     char buffer[JMSG_LENGTH_MAX];
     (*cinfo->err->format_message)(cinfo, buffer);
 
-#ifdef USE_ADVANCEDDEBUGMSG
+#ifdef USE_IMGLOADERDEBUGMSG
     kDebug() << buffer << " (" << msg_level << ")";
 #endif
 }
@@ -123,7 +123,7 @@ static void jpegutils_jpeg_output_message(j_common_ptr cinfo)
     char buffer[JMSG_LENGTH_MAX];
     (*cinfo->err->format_message)(cinfo, buffer);
 
-#ifdef USE_ADVANCEDDEBUGMSG
+#ifdef USE_IMGLOADERDEBUGMSG
     kDebug() << buffer;
 #endif
 }
@@ -137,7 +137,7 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
         return false;
     }
 
-    FILE* inputFile = fopen(QFile::encodeName(path), "rb");
+    FILE* const inputFile = fopen(QFile::encodeName(path), "rb");
 
     if (!inputFile)
     {
@@ -150,11 +150,8 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
 
     // JPEG error handling - thanks to Marcus Meissner
     cinfo.err                 = jpeg_std_error(&jerr);
-
     cinfo.err->error_exit     = jpegutils_jpeg_error_exit;
-
     cinfo.err->emit_message   = jpegutils_jpeg_emit_message;
-
     cinfo.err->output_message = jpegutils_jpeg_output_message;
 
     if (setjmp(jerr.setjmp_buffer))
@@ -186,14 +183,14 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
     // libjpeg supports 1/1, 1/2, 1/4, 1/8
     int scale=1;
 
-    while (maximumSize* scale*2<=imgSize)
+    while(maximumSize*scale*2 <= imgSize)
     {
-        scale*=2;
+        scale *= 2;
     }
 
-    if (scale>8)
+    if (scale > 8)
     {
-        scale=8;
+        scale = 8;
     }
 
     //cinfo.scale_num = 1;
@@ -250,8 +247,8 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
             break;
     }
 
-    uchar* data = img.bits();
-    int bpl     = img.bytesPerLine();
+    uchar* const data = img.bits();
+    int bpl           = img.bytesPerLine();
 
     while (cinfo.output_scanline < cinfo.output_height)
     {
@@ -266,8 +263,8 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
         // Expand 24->32 bpp.
         for (uint j=0; j<cinfo.output_height; ++j)
         {
-            uchar* in = img.scanLine(j) + cinfo.output_width * 3;
-            QRgb* out = reinterpret_cast<QRgb*>(img.scanLine(j));
+            uchar* in       = img.scanLine(j) + cinfo.output_width * 3;
+            QRgb* const out = reinterpret_cast<QRgb*>(img.scanLine(j));
 
             for (uint i = cinfo.output_width; --i; )
             {
@@ -280,8 +277,8 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
     {
         for (uint j = 0; j < cinfo.output_height; ++j)
         {
-            uchar* in = img.scanLine(j) + cinfo.output_width * 4;
-            QRgb* out = reinterpret_cast<QRgb*>(img.scanLine(j));
+            uchar* in       = img.scanLine(j) + cinfo.output_width * 4;
+            QRgb* const out = reinterpret_cast<QRgb*>(img.scanLine(j));
 
             for (uint i = cinfo.output_width; --i; )
             {
@@ -379,6 +376,7 @@ bool JpegRotator::exifTransform(const RotationMatrix& matrix)
         {
             copyFile(m_file, m_destFile);
         }
+
         return true;
     }
 
@@ -389,7 +387,7 @@ bool JpegRotator::exifTransform(const RotationMatrix& matrix)
 
     for (int i=0; i<actions.size(); i++)
     {
-        SafeTemporaryFile* temp = new SafeTemporaryFile(dir + "/JpegRotator-XXXXXX.digikamtempfile.jpg");
+        SafeTemporaryFile* const temp = new SafeTemporaryFile(dir + "/JpegRotator-XXXXXX.digikamtempfile.jpg");
         temp->setAutoRemove(false);
         temp->open();
         QString tempFile = temp->fileName();
@@ -476,7 +474,7 @@ void JpegRotator::updateMetadata(const QString& fileName, const RotationMatrix &
 
     if (::stat(QFile::encodeName(m_file), &st) == 0)
     {
-        // See B.K.O #329608: Restore file modification time from original file only if updateFileTimeStamp for Setup/Metadata is turned off.
+        // See bug #329608: Restore file modification time from original file only if updateFileTimeStamp for Setup/Metadata is turned off.
 
         if (!MetadataSettings::instance()->settings().updateFileTimeStamp)
         {
@@ -646,7 +644,7 @@ bool jpegConvert(const QString& src, const QString& dest, const QString& documen
         // Update IPTC preview.
         QImage preview = image.smoothScale(1280, 1024, Qt::KeepAspectRatio).copyQImage();
 
-        // TODO: see B.K.O #130525. a JPEG segment is limited to 64K. If the IPTC byte array is
+        // TODO: see bug #130525. a JPEG segment is limited to 64K. If the IPTC byte array is
         // bigger than 64K duing of image preview tag size, the target JPEG image will be
         // broken. Note that IPTC image preview tag is limited to 256K!!!
         // Temp. solution to disable IPTC preview record in JPEG file until a right solution
@@ -705,7 +703,7 @@ bool isJpegImage(const QString& file)
 
     // Check if the file is an JPEG image
     QString format = QString(QImageReader::imageFormat(file)).toUpper();
-    // Check if its not MPO format (See B.K.O #307277).
+    // Check if its not MPO format (See bug #307277).
     QString ext    = fileInfo.suffix().toUpper();
 
     kDebug() << "mimetype = " << format << " ext = " << ext;

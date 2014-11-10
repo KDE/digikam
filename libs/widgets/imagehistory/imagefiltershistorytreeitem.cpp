@@ -56,6 +56,11 @@ ImageFiltersHistoryTreeItem::ImageFiltersHistoryTreeItem(const QString& data, Im
     d->itemData.append(data);
 }
 
+ImageFiltersHistoryTreeItem::ImageFiltersHistoryTreeItem(const ImageFiltersHistoryTreeItem& other)
+    : d(new Private(*other.d))
+{
+}
+
 ImageFiltersHistoryTreeItem::~ImageFiltersHistoryTreeItem()
 {
     qDeleteAll(d->childItems);

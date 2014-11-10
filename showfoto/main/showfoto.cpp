@@ -12,7 +12,7 @@
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2005-2006 by Tom Albers <tomalbers at kde dot nl>
  * Copyright (C) 2008      by Arnd Baecker <arnd dot baecker at web dot de>
- * Copyright (C) 2013      by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
+ * Copyright (C) 2013-2014 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -91,7 +91,6 @@ extern "C"
 #include <ksqueezedtextlabel.h>
 #include <KVBox>
 
-
 // LibKDcraw includes
 
 #include <libkdcraw/kdcraw.h>
@@ -103,6 +102,7 @@ extern "C"
 #include "editorcore.h"
 #include "dmetadata.h"
 #include "editorstackview.h"
+#include "fileoperation.h"
 #include "iccsettingscontainer.h"
 #include "imagedialog.h"
 #include "imageplugin.h"
@@ -123,7 +123,7 @@ extern "C"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
 #include "uifilevalidator.h"
-#include "knotificationwrapper.h"
+#include "dnotificationwrapper.h"
 #include "showfotodelegate.h"
 #include "showfotocategorizedview.h"
 #include "showfotosettings.h"
@@ -224,6 +224,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
 
     // -- Load current items ---------------------------
     slotDroppedUrls(urlList);
+
     if(!d->infoList.isEmpty())
     {
         slotOpenUrl(d->infoList.at(0));
@@ -397,27 +398,21 @@ void ShowFoto::setupUserArea()
     d->thumbBarDock->setFloating(false);
 
 
-    d->model = new ShowfotoThumbnailModel(d->thumbBar);
+    d->model       = new ShowfotoThumbnailModel(d->thumbBar);
     d->model->setThumbnailLoadThread(d->thumbLoadThread);
-    d->dDHandler = new ShowfotoDragDropHandler(d->model);
+    d->dDHandler   = new ShowfotoDragDropHandler(d->model);
     d->model->setDragDropHandler(d->dDHandler);
 
     d->filterModel = new ShowfotoFilterModel(d->thumbBar);
     d->filterModel->setSourceShowfotoModel(d->model);
 
     d->filterModel->setCategorizationMode(ShowfotoItemSortSettings::NoCategories);
-    //d->filterModel->setSortRole((ShowfotoItemSortSettings::SortRole)ShowfotoSettings::instance()->getImageSortOrder());
     d->filterModel->sort(0);
 
     d->thumbBar->setModels(d->model, d->filterModel);
     d->thumbBar->setSelectionMode(QAbstractItemView::SingleSelection);
-    //d->thumbBar->setModelsFiltered(d->model,d->filterModel);
 
     viewContainer->setAutoSaveSettings("ImageViewer Thumbbar", true);
-
-//  TODO: Implement selection overlay
-//  d->normalDelegate = new ShowfotoNormalDelegate(d->thumbBar);
-//  d->thumbBar->addSelectionOverlay(d->normalDelegate);
 
     d->thumbBar->installOverlays();
 
@@ -451,11 +446,11 @@ void ShowFoto::setupActions()
 
 void ShowFoto::readSettings()
 {
-    d->settings = ShowfotoSettings::instance();
+    d->settings        = ShowfotoSettings::instance();
 
     readStandardSettings();
 
-    QString defaultDir        = d->settings->getLastOpenedDir();
+    QString defaultDir = d->settings->getLastOpenedDir();
 
     if (defaultDir.isNull())
     {
@@ -499,7 +494,9 @@ void ShowFoto::applySettings()
     QString newStyle     = d->settings->getApplicationStyle();
 
     if (newStyle != currentStyle)
+    {
         kapp->setStyle(newStyle);
+    }
 
     // Current image deleted go to trash ?
     d->deleteItem2Trash = d->settings->getDeleteItem2Trash();
@@ -599,7 +596,7 @@ void ShowFoto::slotOpenUrl(const ShowfotoItemInfo& info)
 
     // By this condition we make sure that no crashes will happen
     // if no images were loaded to the canvas before
-    if(!d->imagePluginsLoaded)
+    if (!d->imagePluginsLoaded)
     {
         loadImagePlugins();
         d->imagePluginsLoaded = true;
@@ -622,8 +619,8 @@ void ShowFoto::slotChanged()
     QSize dims(m_canvas->imageWidth(), m_canvas->imageHeight());
     mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
     QString str = (!dims.isValid()) ? i18nc("unknown image dimensions", "Unknown")
-                  : i18nc("%1 width, %2 height, %3 mpixels", "%1x%2 (%3Mpx)",
-                          dims.width(),dims.height(),mpixels);
+                                    : i18nc("%1 width, %2 height, %3 mpixels", "%1x%2 (%3Mpx)",
+                                            dims.width(),dims.height(),mpixels);
     m_resLabel->setText(str);
 
     if (!d->thumbBar->currentInfo().isNull())
@@ -886,7 +883,7 @@ void ShowFoto::saveIsComplete()
     //d->thumbBar->invalidateThumb(d->currentItem);
 
     // Pop-up a message to bring user when save is done.
-    Digikam::KNotificationWrapper("editorsavefilecompleted", i18n("Image saved successfully"),
+    Digikam::DNotificationWrapper("editorsavefilecompleted", i18n("Image saved successfully"),
                                   this, windowTitle());
 
     resetOrigin();
@@ -916,8 +913,8 @@ void ShowFoto::saveAsIsComplete()
     slotUpdateItemInfo();
 
     // Pop-up a message to bring user when save is done.
-    Digikam::KNotificationWrapper("editorsavefilecompleted", i18n("Image saved successfully"),
-                                    this, windowTitle());
+    Digikam::DNotificationWrapper("editorsavefilecompleted", i18n("Image saved successfully"),
+                                  this, windowTitle());
 */
 }
 
@@ -1027,7 +1024,12 @@ void ShowFoto::slotDeleteCurrentItemResult(KJob* job)
 
 void ShowFoto::slotContextMenu()
 {
-    m_contextMenu->exec(QCursor::pos());
+    if (m_contextMenu)
+    {
+        m_contextMenu->addSeparator();
+        addServicesMenu();
+        m_contextMenu->exec(QCursor::pos());
+    }
 }
 
 void ShowFoto::slideShow(Digikam::SlideShowSettings& settings)
@@ -1068,7 +1070,7 @@ void ShowFoto::slideShow(Digikam::SlideShowSettings& settings)
 
         if (settings.startWithCurrent)
         {
-            slide->setCurrent(d->thumbBar->currentUrl());
+            slide->setCurrentItem(d->thumbBar->currentUrl());
         }
 
         slide->show();
@@ -1260,12 +1262,13 @@ void ShowFoto::openFolder(const KUrl& url)
 
 void ShowFoto::slotDroppedUrls(const KUrl::List& droppedUrls)
 {
-    if(!droppedUrls.isEmpty())
+    if (!droppedUrls.isEmpty())
     {
         KUrl::List validUrls;
 
-        foreach (KUrl url, droppedUrls) {
-            if(url.isValid())
+        foreach (const KUrl& url, droppedUrls)
+        {
+            if (url.isValid())
             {
                 validUrls << url;
             }
@@ -1276,27 +1279,27 @@ void ShowFoto::slotDroppedUrls(const KUrl::List& droppedUrls)
         KUrl::List imagesUrls;
         KUrl::List foldersUrls;
 
-        foreach (KUrl url, validUrls)
+        foreach (const KUrl& url, validUrls)
         {
-            if(KMimeType::findByUrl(url)->name().startsWith("image", Qt::CaseInsensitive))
+            if (KMimeType::findByUrl(url)->name().startsWith("image", Qt::CaseInsensitive))
             {
                 imagesUrls << url;
             }
 
-            if(KMimeType::findByUrl(url)->name() == "inode/directory")
+            if (KMimeType::findByUrl(url)->name() == "inode/directory")
             {
                 foldersUrls << url;
             }
         }
 
-        if(!imagesUrls.isEmpty())
+        if (!imagesUrls.isEmpty())
         {
             openUrls(imagesUrls);
         }
 
-        if(!foldersUrls.isEmpty())
+        if (!foldersUrls.isEmpty())
         {
-            foreach (KUrl fUrl, foldersUrls)
+            foreach (const KUrl& fUrl, foldersUrls)
             {
                 openFolder(fUrl);
             }
@@ -1337,6 +1340,21 @@ void ShowFoto::slotAddedDropedItems(QDropEvent* e)
     {
         slotDroppedUrls(urls);
     }
+}
+
+void ShowFoto::slotFileWithDefaultApplication()
+{
+    Digikam::FileOperation::openFilesWithDefaultApplication(KUrl::List() << d->thumbBar->currentUrl(), this);
+}
+
+void ShowFoto::addServicesMenu()
+{
+    addServicesMenuForUrl(d->thumbBar->currentUrl());
+}
+
+void ShowFoto::slotOpenWith(QAction* action)
+{
+    openWith(d->thumbBar->currentUrl(), action);
 }
 
 }   // namespace ShowFoto

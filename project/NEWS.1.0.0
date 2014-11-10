@@ -1,7 +1,7 @@
 *********************************************************************************************************
 digiKam 1.0.0 - Release date: 2009-12-20
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 216791 : Select next instead of privious picture when deleting a picture.
 002 ==> 216726 : Turn off ratings on thumbnails in view mode.
@@ -54,7 +54,7 @@ General        : Syntax highlighting and history management for AdvancedRename u
 ImageEditor    : New tool to remove noise using wavelets working in luminance (YCrCb color space).
 BatchQueueMgr  : New tool to remove noise using wavelets working in luminance (YCrCb color space).
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 213805 : Changing properties on a tag causes the tag tree to close.
 002 ==> 161295 : Allow inclusion of original filename in custom filename.
@@ -87,7 +87,7 @@ NEW FEATURES:
 General        : Updated internal LibPGF to 6.09.44.
 ImageEditor    : New Local Contrast tool to simulate HDR images (Tone Mapping).
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 130942 : digiKam should display the default EXIF rotation currently used.
 002 ==> 145442 : Contrast mask image plugin.
@@ -188,7 +188,7 @@ General        : AdvancedRename utility is used throughout digiKam now (AlbumUI,
 ImageEditor    : New menu option to switch image color space quickly.
 ImageEditor    : Black and White converter: add standard Blue and Yellow-Green color filters.
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 193482 : XMP/IPTC fields in Batch Rename tool.
 002 ==> 183435 : No more file manager at media:/camera.
@@ -255,7 +255,7 @@ General        : Add OpenStreetMap support in Geolocation panels.
 General        : Showfoto, Editor, Preview, LightTable: Thumbbar is now dockable everywhere.
 General        : Complete re-write of Color Management code. Add support of thumbs and preview CM.
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 192534 : Rename a folder, then rename a photo and you get an error.
 002 ==> 193522 : First run (with existing v3 database) fails, "No album library path...".
@@ -319,7 +319,7 @@ General        : Add support of Author properties to multi-language Captions. Us
                  an author name for each caption value.
 ImageEditor    : Close tools by pressing ESC.
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 199168 : Tags in db but not in IPTC.
 002 ==> 184445 : Deleting multiple files in folder view gives me multiple errors.
@@ -387,7 +387,7 @@ General        : digiKam use a new database to cache thumbnails instead ~./thumb
 General        : Added Multi-languages support to Caption and Tags right side-bar.
 AlbumGui       : Find Duplicates search can be limited to an album and tag range.
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 178189 : Do not create preview automatically for large pictures.
 002 ==> 172807 : Warning: JPEG format error, rc = 5.
@@ -482,7 +482,7 @@ ImageEditor    : New Liquid Rescale tool (http://www.digikam.org/node/439).
 
 CameraGUI      : New history of camera actions processed.
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 091742 : Batch process auto levels.
 002 ==> 149361 : Not all edit actions are available as batch commands (for example auto-levels and gamma correction).

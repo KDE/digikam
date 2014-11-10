@@ -856,7 +856,7 @@ void CollectionScanner::scanForStaleAlbums(const QList<int>& locationIdsToScan)
     QList<int> toBeDeleted;
 
 /*
-    // See B.K.O #231598
+    // See bug #231598
     QHash<int, CollectionLocation> albumRoots;
     foreach(const CollectionLocation& location, locations)
     {

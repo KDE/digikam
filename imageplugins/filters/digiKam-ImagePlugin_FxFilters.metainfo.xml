@@ -6,36 +6,49 @@
   <extends>digikam.desktop</extends>
   <name>ImagePlugin-FxFilters</name>
   <name xml:lang="ca">Connector d'imatge pels filtres d'efectes especials</name>
+  <name xml:lang="da">ImagePlugin-FxFilters</name>
   <name xml:lang="en-GB">ImagePlugin-FxFilters</name>
+  <name xml:lang="ko">그림 플러그인-효과 필터</name>
   <name xml:lang="nl">ImagePlugin-FxFilters</name>
   <name xml:lang="pl">WtyczkaObrazu-FiltryEfektówSpecjalnych</name>
   <name xml:lang="pt">ImagePlugin-FxFilters</name>
   <name xml:lang="pt-BR">ImagePlugin-FxFilters</name>
   <name xml:lang="sk">ImagePlugin-FxFilters</name>
+  <name xml:lang="sl">Vstavek za slike - filtri posebnih učinkov</name>
   <name xml:lang="sv">Bildinsticksprogrammet Filtereffekter</name>
   <name xml:lang="uk">ImagePlugin-FxFilters</name>
   <name xml:lang="x-test">xxImagePlugin-FxFiltersxx</name>
   <summary>Special effect filters plugin for digiKam</summary>
   <summary xml:lang="ca">Connector amb filtres d'efectes especials pel digiKam</summary>
   <summary xml:lang="cs">Modul filtrů speciálních efektů digiKamu</summary>
+  <summary xml:lang="da">digiKam-plugin til specialeffekt-filtre</summary>
+  <summary xml:lang="de">digiKam-Modul für Spezialeffekte</summary>
   <summary xml:lang="en-GB">Special effect filters plugin for digiKam</summary>
+  <summary xml:lang="es">Complemento de filtros de efectos especiales para digiKam</summary>
+  <summary xml:lang="ko">digiKam용 특수 효과 필터 플러그인</summary>
   <summary xml:lang="nl">digiKam-plugin voor speciale effectfilters</summary>
   <summary xml:lang="pl">Wtyczka filtrów efektów specjalnych dla digiKam</summary>
   <summary xml:lang="pt">'Plugin' de filtros de efeitos especiais para o digiKam</summary>
   <summary xml:lang="pt-BR">Plugin de filtros de efeitos especiais para o digiKam</summary>
   <summary xml:lang="sk">Plugin filtrov špeciálnych efektov pre digiKam</summary>
+  <summary xml:lang="sl">Vstavek s filtri posebnih učinkov</summary>
   <summary xml:lang="sv">Insticksprogram för Digikam med specialeffektfilter</summary>
   <summary xml:lang="uk">Додаток фільтрів спеціальних ефектів до digiKam</summary>
   <summary xml:lang="x-test">xxSpecial effect filters plugin for digiKamxx</summary>
   <developer_name>digiKam Project</developer_name>
   <developer_name xml:lang="ca">Projecte digiKam</developer_name>
   <developer_name xml:lang="cs">Projekt digiKam</developer_name>
+  <developer_name xml:lang="da">digiKam-projektet</developer_name>
+  <developer_name xml:lang="de">digiKam-Projekt</developer_name>
   <developer_name xml:lang="en-GB">digiKam Project</developer_name>
+  <developer_name xml:lang="es">Proyecto digiKam</developer_name>
+  <developer_name xml:lang="ko">digiKam 프로젝트</developer_name>
   <developer_name xml:lang="nl">digiKam-project</developer_name>
   <developer_name xml:lang="pl">Projekt digiKam</developer_name>
   <developer_name xml:lang="pt">Projecto digiKam</developer_name>
   <developer_name xml:lang="pt-BR">Projeto digiKam</developer_name>
   <developer_name xml:lang="sk">Projekt digiKamu</developer_name>
+  <developer_name xml:lang="sl">Projekt digiKam</developer_name>
   <developer_name xml:lang="sv">Digikam-projektet</developer_name>
   <developer_name xml:lang="uk">Проект digiKam</developer_name>
   <developer_name xml:lang="x-test">xxdigiKam Projectxx</developer_name>

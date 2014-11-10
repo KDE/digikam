@@ -1,153 +1,158 @@
 # Some useful macros for printing status information
 #
-# Copyright (c) 2010-2014, Gilles Caulier, <caulier.gilles@gmail.com>
+# Copyright (c) 2010-2014, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-SET(PRINT_COMPILE_LENGTH "40")
+set(PRINT_COMPILE_LENGTH "40")
 
-MACRO(FILL_WITH_DOTS VAR)
+macro(FILL_WITH_DOTS VAR)
 
-    STRING(LENGTH ${${VAR}} NAME_LENGTH)
+    string(LENGTH ${${VAR}} NAME_LENGTH)
 
-    MATH(EXPR DOT_LENGTH "${PRINT_COMPILE_LENGTH} - ${NAME_LENGTH}")
+    math(EXPR DOT_LENGTH "${PRINT_COMPILE_LENGTH} - ${NAME_LENGTH}")
 
-    IF(${DOT_LENGTH} LESS 0)
-    
-        SET(DOT_LENGTH 0)
-    
-    ENDIF()
+    if(${DOT_LENGTH} LESS 0)
 
-    FOREACH(COUNT RANGE ${DOT_LENGTH})
+        set(DOT_LENGTH 0)
 
-        SET(${VAR} "${${VAR}}.")
+    endif()
 
-    ENDFOREACH(COUNT)
+    foreach(COUNT RANGE ${DOT_LENGTH})
 
-ENDMACRO(FILL_WITH_DOTS)
+        set(${VAR} "${${VAR}}.")
+
+    endforeach()
+
+endmacro()
 
 # -------------------------------------------------------------------------
 
-MACRO(PRINT_LIBRARY_STATUS NAME WEBSITE VERSIONHINT)
+macro(PRINT_LIBRARY_STATUS NAME WEBSITE VERSIONHINT)
 
-    SET(LIB_MESSAGE "${NAME} library found")
+    set(LIB_MESSAGE "${NAME} found")
     FILL_WITH_DOTS(LIB_MESSAGE)
 
-    IF(${ARGN})
+    if(${ARGN})
 
-        MESSAGE(STATUS " ${LIB_MESSAGE} YES")
+        message(STATUS " ${LIB_MESSAGE} YES")
 
-    ELSE()
+    else()
 
-        MESSAGE(STATUS " ${LIB_MESSAGE} NO")
-        MESSAGE(STATUS "")
-        MESSAGE(SEND_ERROR " ${NAME} is needs. You need to install the ${NAME}${VERSIONHINT} library development package.")
-        MESSAGE(STATUS " ${NAME} website is at ${WEBSITE}")
-        MESSAGE(STATUS "")
+        message(STATUS " ${LIB_MESSAGE} NO")
+        message(SEND_ERROR " ${NAME} is needs. You need to install the ${NAME} ${VERSIONHINT} development package.")
+        message(STATUS " ${NAME} website is at ${WEBSITE}")
+        message(STATUS "")
 
-    ENDIF()
+    endif()
 
-ENDMACRO(PRINT_LIBRARY_STATUS)
+endmacro()
 
 # -------------------------------------------------------------------------
 
-MACRO(PRINT_QTMODULE_STATUS NAME)
+macro(PRINT_OPTIONAL_LIBRARY_STATUS NAME WEBSITE VERSIONHINT FEATUREMISSING)
 
-    SET(LIB_MESSAGE "${NAME} module found")
+    set(LIB_MESSAGE "${NAME} found")
     FILL_WITH_DOTS(LIB_MESSAGE)
 
-    IF(${ARGN})
-    
-        MESSAGE(STATUS " ${LIB_MESSAGE} YES")
-    
-    ELSE()
-    
-        MESSAGE(STATUS " ${LIB_MESSAGE} NO")
-        MESSAGE(STATUS "")
-        MESSAGE(SEND_ERROR " ${NAME} module is needs. You need to install a package containing the ${NAME} module.")
-        MESSAGE(STATUS "")
-    
-    ENDIF()
+    if(${ARGN})
 
-ENDMACRO(PRINT_QTMODULE_STATUS)
+        message(STATUS " ${LIB_MESSAGE} YES (optional)")
+
+    else()
+
+        message(STATUS " ${LIB_MESSAGE} NO  (optional)")
+        message(STATUS " ${FEATUREMISSING}")
+        message(STATUS " If you need this feature, please install the ${NAME} ${VERSIONHINT} development package.")
+        if(${WEBSITE})
+            message(STATUS " ${NAME} website is at ${WEBSITE}")
+        endif()
+        message(STATUS "")
+
+    endif()
+
+endmacro()
 
 # -------------------------------------------------------------------------
 
-MACRO(PRINT_EXECUTABLE_STATUS NAME TECHNICAL_NAME PATH_VARIABLE)
+macro(PRINT_QTMODULE_STATUS NAME)
 
-    SET(LIB_MESSAGE "${NAME} found")
+    set(LIB_MESSAGE "${NAME} module found")
     FILL_WITH_DOTS(LIB_MESSAGE)
 
-    IF(${ARGN})
-    
-        MESSAGE(STATUS " ${LIB_MESSAGE} YES")
-    
-    ELSE()
-    
-        MESSAGE(STATUS " ${LIB_MESSAGE} NO")
-        MESSAGE(STATUS "")
-        MESSAGE(STATUS " ${NAME} is needs. You need to install the package containing the \"${TECHNICAL_NAME}\" executable.")
-        MESSAGE(STATUS " If you have this executable installed, please specify the folder containing it by ${PATH_VARIABLE}")
-        MESSAGE(SEND_ERROR "")
-    
-    ENDIF()
+    if(${ARGN})
 
-ENDMACRO(PRINT_EXECUTABLE_STATUS)
+        message(STATUS " ${LIB_MESSAGE} YES")
+
+    else()
+
+        message(STATUS " ${LIB_MESSAGE} NO")
+        message(STATUS "")
+        message(SEND_ERROR " ${NAME} module is needs. You need to install a package containing the ${NAME} module.")
+        message(STATUS "")
+
+    endif()
+
+endmacro()
 
 # -------------------------------------------------------------------------
 
-MACRO(PRINT_COMPONENT_COMPILE_STATUS NAME)
+macro(PRINT_EXECUTABLE_STATUS NAME TECHNICAL_NAME PATH_VARIABLE)
 
-    SET(COMPILE_MESSAGE "${NAME} will be compiled")
+    set(LIB_MESSAGE "${NAME} found")
+    FILL_WITH_DOTS(LIB_MESSAGE)
+
+    if(${ARGN})
+
+        message(STATUS " ${LIB_MESSAGE} YES")
+
+    else()
+
+        message(STATUS " ${LIB_MESSAGE} NO")
+        message(STATUS "")
+        message(STATUS " ${NAME} is needs. You need to install the package containing the \"${TECHNICAL_NAME}\" executable.")
+        message(STATUS " If you have this executable installed, please specify the folder containing it by ${PATH_VARIABLE}")
+        message(SEND_ERROR "")
+
+    endif()
+
+endmacro()
+
+# -------------------------------------------------------------------------
+
+macro(PRINT_COMPONENT_COMPILE_STATUS NAME)
+
+    set(COMPILE_MESSAGE "${NAME} will be compiled")
     FILL_WITH_DOTS(COMPILE_MESSAGE)
 
     IF(${ARGN})
-    
-        MESSAGE(STATUS " ${COMPILE_MESSAGE} YES (optional)")
-    
-    ELSE()
-    
-        MESSAGE(STATUS " ${COMPILE_MESSAGE} NO  (optional - Look README file for more details about dependencies)")
-    
-    ENDIF()
 
-ENDMACRO(PRINT_PLUGIN_COMPILE_STATUS)
+        message(STATUS " ${COMPILE_MESSAGE} YES (optional)")
 
-# -------------------------------------------------------------------------
+    else()
 
-MACRO(PRINT_OPTIONAL_LIBRARY_STATUS NAME)
+        message(STATUS " ${COMPILE_MESSAGE} NO  (optional - Look README file for more details about dependencies)")
 
-    SET(LIB_MESSAGE "${NAME} library found")
-    FILL_WITH_DOTS(LIB_MESSAGE)
+    endif()
 
-    IF(${ARGN})
-
-        MESSAGE(STATUS " ${LIB_MESSAGE} YES (optional)")
-
-    ELSE()
-    
-        MESSAGE(STATUS " ${LIB_MESSAGE} NO  (optional)")
-    
-    ENDIF()
-
-ENDMACRO(PRINT_OPTIONAL_LIBRARY_STATUS)
+endmacro()
 
 # -------------------------------------------------------------------------
 
-MACRO(PRINT_OPTIONAL_QTMODULE_STATUS NAME)
+macro(PRINT_OPTIONAL_QTMODULE_STATUS NAME)
 
-    SET(LIB_MESSAGE "${NAME} module found")
+    set(LIB_MESSAGE "${NAME} module found")
     FILL_WITH_DOTS(LIB_MESSAGE)
 
-    IF(${ARGN})
+    if(${ARGN})
 
-        MESSAGE(STATUS " ${LIB_MESSAGE} YES (optional)")
-    
-    ELSE()
-    
-        MESSAGE(STATUS " ${LIB_MESSAGE} NO  (optional)")
-    
-    ENDIF()
+        message(STATUS " ${LIB_MESSAGE} YES (optional)")
 
-ENDMACRO(PRINT_OPTIONAL_QTMODULE_STATUS)
+    else()
+
+        message(STATUS " ${LIB_MESSAGE} NO  (optional)")
+
+    endif()
+
+endmacro()

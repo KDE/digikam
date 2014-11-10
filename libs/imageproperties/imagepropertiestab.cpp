@@ -6,7 +6,7 @@
  * Date        : 2006-04-19
  * Description : A tab to display general image information
  *
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2013      by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
@@ -75,6 +75,7 @@ public:
         permissions(0),
         mime(0),
         dimensions(0),
+        ratio(0),
         bitDepth(0),
         colorMode(0),
         make(0),
@@ -101,6 +102,7 @@ public:
         labelFilePermissions(0),
         labelImageMime(0),
         labelImageDimensions(0),
+        labelImageRatio(0),
         labelImageBitDepth(0),
         labelImageColorMode(0),
         labelPhotoMake(0),
@@ -145,6 +147,7 @@ public:
 
     DTextLabelName*  mime;
     DTextLabelName*  dimensions;
+    DTextLabelName*  ratio;
     DTextLabelName*  bitDepth;
     DTextLabelName*  colorMode;
 
@@ -175,6 +178,7 @@ public:
 
     DTextLabelValue* labelImageMime;
     DTextLabelValue* labelImageDimensions;
+    DTextLabelValue* labelImageRatio;
     DTextLabelValue* labelImageBitDepth;
     DTextLabelValue* labelImageColorMode;
 
@@ -263,13 +267,15 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     QWidget* const w2         = new QWidget(this);
     QGridLayout* const glay2  = new QGridLayout(w2);
 
-    d->mime                   = new DTextLabelName(i18n("Type: "),        w2);
-    d->dimensions             = new DTextLabelName(i18n("Dimensions: "),  w2);
-    d->bitDepth               = new DTextLabelName(i18n("Bit depth: "),   w2);
-    d->colorMode              = new DTextLabelName(i18n("Color mode: "),  w2);
+    d->mime                   = new DTextLabelName(i18n("Type: "),         w2);
+    d->dimensions             = new DTextLabelName(i18n("Dimensions: "),   w2);
+    d->ratio                  = new DTextLabelName(i18n("Aspect Ratio: "), w2);
+    d->bitDepth               = new DTextLabelName(i18n("Bit depth: "),    w2);
+    d->colorMode              = new DTextLabelName(i18n("Color mode: "),   w2);
 
     d->labelImageMime         = new DTextLabelValue(0, w2);
     d->labelImageDimensions   = new DTextLabelValue(0, w2);
+    d->labelImageRatio        = new DTextLabelValue(0, w2);
     d->labelImageBitDepth     = new DTextLabelValue(0, w2);
     d->labelImageColorMode    = new DTextLabelValue(0, w2);
 
@@ -277,10 +283,12 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay2->addWidget(d->labelImageMime,         0, 1, 1, 1);
     glay2->addWidget(d->dimensions,             1, 0, 1, 1);
     glay2->addWidget(d->labelImageDimensions,   1, 1, 1, 1);
-    glay2->addWidget(d->bitDepth,               2, 0, 1, 1);
-    glay2->addWidget(d->labelImageBitDepth,     2, 1, 1, 1);
-    glay2->addWidget(d->colorMode,              3, 0, 1, 1);
-    glay2->addWidget(d->labelImageColorMode,    3, 1, 1, 1);
+    glay2->addWidget(d->ratio,                  2, 0, 1, 1);
+    glay2->addWidget(d->labelImageRatio,        2, 1, 1, 1);
+    glay2->addWidget(d->bitDepth,               3, 0, 1, 1);
+    glay2->addWidget(d->labelImageBitDepth,     3, 1, 1, 1);
+    glay2->addWidget(d->colorMode,              4, 0, 1, 1);
+    glay2->addWidget(d->labelImageColorMode,    4, 1, 1, 1);
     glay2->setMargin(KDialog::spacingHint());
     glay2->setSpacing(0);
     glay2->setColumnStretch(1, 10);
@@ -450,6 +458,7 @@ void ImagePropertiesTab::setCurrentURL(const KUrl& url)
 
         d->labelImageMime->clear();
         d->labelImageDimensions->clear();
+        d->labelImageRatio->clear();
         d->labelImageBitDepth->clear();
         d->labelImageColorMode->clear();
 
@@ -541,6 +550,11 @@ void ImagePropertiesTab::setImageMime(const QString& str)
 void ImagePropertiesTab::setImageDimensions(const QString& str)
 {
     d->labelImageDimensions->setText(str);
+}
+
+void ImagePropertiesTab::setImageRatio(const QString& str)
+{
+    d->labelImageRatio->setText(str);
 }
 
 void ImagePropertiesTab::setImageBitDepth(const QString& str)
@@ -816,6 +830,132 @@ QStringList ImagePropertiesTab::shortenedTagPaths(const QStringList& tagPaths, Q
     }
 
     return tagsShortened;
+}
+
+void ImagePropertiesTab::shortenedMakeInfo(QString& make)
+{
+    make.remove(" CORPORATION",      Qt::CaseInsensitive);        // from Nikon, Pentax, and Olympus
+    make.remove("EASTMAN ",          Qt::CaseInsensitive);        // from Kodak
+    make.remove(" COMPANY",          Qt::CaseInsensitive);        // from Kodak
+    make.remove(" OPTICAL CO.,LTD",  Qt::CaseInsensitive);        // from Olympus
+    make.remove(" Techwin co.,Ltd.", Qt::CaseInsensitive);        // from Samsung
+    make.remove("  Co.,Ltd.",        Qt::CaseInsensitive);        // from Minolta
+}
+
+void ImagePropertiesTab::shortenedModelInfo(QString& model)
+{
+    model.remove("Canon ",           Qt::CaseInsensitive);
+    model.remove("NIKON ",           Qt::CaseInsensitive);
+    model.remove("PENTAX ",          Qt::CaseInsensitive);
+    model.remove(" DIGITAL",         Qt::CaseInsensitive);        // from Canon
+}
+
+/**
+ * Find rational approximation to given real number
+ *
+ *   val    : double value to convert as humain readable fraction
+ *   num    : fraction numerator
+ *   den    : fraction denominator
+ *   maxden : the maximum denominator allowed
+ *
+ * This function return approximation error of the fraction
+ *
+ * Based on the theory of continued fractions
+ * if x = a1 + 1/(a2 + 1/(a3 + 1/(a4 + ...)))
+ * Then best approximation is found by truncating this series
+ * wwith some adjustments in the last term.
+ *
+ * Note the fraction can be recovered as the first column of the matrix
+ *  ( a1 1 ) ( a2 1 ) ( a3 1 ) ...
+ *  ( 1  0 ) ( 1  0 ) ( 1  0 )
+ * Instead of keeping the sequence of continued fraction terms,
+ * we just keep the last partial product of these matrices.
+ *
+ * Details: http://stackoverflow.com/questions/95727/how-to-convert-floats-to-human-readable-fractions
+ *
+ */
+double ImagePropertiesTab::doubleToHumanReadableFraction(double val, long* num, long* den, long maxden)
+{
+    long   m[2][2];
+    long   ai;
+    double x = val;
+
+    // Initialize matrix
+
+    m[0][0] = m[1][1] = 1;
+    m[0][1] = m[1][0] = 0;
+
+    // Loop finding terms until denominator gets too big
+
+    while (m[1][0] *  ( ai = (long)x ) + m[1][1] <= maxden)
+    {
+        long t  = m[0][0] * ai + m[0][1];
+        m[0][1] = m[0][0];
+        m[0][0] = t;
+        t       = m[1][0] * ai + m[1][1];
+        m[1][1] = m[1][0];
+        m[1][0] = t;
+
+        if (x == (double)ai)
+            break;     // division by zero
+
+        x       = 1/(x - (double) ai);
+
+        if (x > (double)0x7FFFFFFF)
+            break;     // representation failure
+    }
+
+    // Now remaining x is between 0 and 1/ai
+    // Approx as either 0 or 1/m where m is max that will fit in maxden
+
+    *num = m[0][0];
+    *den = m[1][0];
+
+    if (*den == 1)
+    {
+        // Try other possibility
+
+        ai      = (maxden - m[1][1]) / m[1][0];
+        m[0][0] = m[0][0] * ai + m[0][1];
+        m[1][0] = m[1][0] * ai + m[1][1];
+
+        *num = m[0][0];
+        *den = m[1][0];
+    }
+
+    // Return approxiamtion error
+
+    return (val - ((double) m[0][0] / (double) m[1][0]));
+}
+
+bool ImagePropertiesTab::aspectRatioToString(int width, int height, QString& arString)
+{
+    if ( (width == 0) || (height == 0) )
+    {
+        return false;
+    }
+
+    int nw = width;
+    int nh = height;
+
+    // Always show ratio with and image horizontally oriented, for better readability
+    if (height > width)
+    {
+        nw = height;
+        nh = width;
+    }
+
+    long   num=0, den=0;
+    doubleToHumanReadableFraction((double)nw / (double)nh, &num, &den);
+
+    const QString awidth  = QString::number(num);
+    const QString aheight = QString::number(den);
+    const QString aratio  = KGlobal::locale()->formatNumber((double)num/(double)den, 2);
+
+    arString = i18nc("width : height (Aspect Ratio)", "%1:%2 (%3)",
+                     awidth, aheight, aratio);
+
+    return true;
 }
 
 }  // namespace Digikam

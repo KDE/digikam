@@ -44,7 +44,7 @@
 // Local includes
 
 #include "thumbnailsize.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "dfontselect.h"
 #include "fullscreensettings.h"
 #include "dxmlguiwindow.h"
@@ -141,9 +141,10 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     d->iconShowDateBox->setWhatsThis(i18n("Set this option to show the camera creation date "
                                           "below the image thumbnail."));
 
-    d->iconShowModDateBox    = new QCheckBox(i18n("Show file &modification date"), iconViewGroup);
+    d->iconShowModDateBox    = new QCheckBox(i18n("Show file &modification date (if different than creation date)"), iconViewGroup);
     d->iconShowModDateBox->setWhatsThis(i18n("Set this option to show the file modification date "
-                                             "below the image thumbnail."));
+                                             "below the image thumbnail if it's different than camera creation date. "
+                                             "This option is useful to identify quickly which items have been modified."));
 
     d->iconShowResolutionBox = new QCheckBox(i18n("Show ima&ge dimensions"), iconViewGroup);
     d->iconShowResolutionBox->setWhatsThis(i18n("Set this option to show the image size in pixels "
@@ -181,8 +182,8 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
 
     QLabel* leftClickLabel     = new QLabel(i18n("Thumbnail click action:"), iconViewGroup);
     d->leftClickActionComboBox = new KComboBox(iconViewGroup);
-    d->leftClickActionComboBox->addItem(i18n("Show embedded preview"), AlbumSettings::ShowPreview);
-    d->leftClickActionComboBox->addItem(i18n("Start image editor"), AlbumSettings::StartEditor);
+    d->leftClickActionComboBox->addItem(i18n("Show embedded preview"), ApplicationSettings::ShowPreview);
+    d->leftClickActionComboBox->addItem(i18n("Start image editor"), ApplicationSettings::StartEditor);
     d->leftClickActionComboBox->setToolTip(i18n("Choose what should happen when you click on a thumbnail."));
 
     d->iconViewFontSelect = new DFontSelect(i18n("Icon View font:"), panel);
@@ -220,11 +221,11 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QGroupBox* folderViewGroup = new QGroupBox(i18n("Folder View Options"), panel);
-    QGridLayout* grid2         = new QGridLayout(folderViewGroup);
+    QGroupBox* const folderViewGroup = new QGroupBox(i18n("Folder View Options"), panel);
+    QGridLayout* const grid2         = new QGridLayout(folderViewGroup);
 
-    d->iconTreeThumbLabel      = new QLabel(i18n("Tree View thumbnail size:"), folderViewGroup);
-    d->iconTreeThumbSize       = new KComboBox(folderViewGroup);
+    d->iconTreeThumbLabel = new QLabel(i18n("Tree View thumbnail size:"), folderViewGroup);
+    d->iconTreeThumbSize  = new KComboBox(folderViewGroup);
     d->iconTreeThumbSize->addItem(QString("16"));
     d->iconTreeThumbSize->addItem(QString("22"));
     d->iconTreeThumbSize->addItem(QString("32"));
@@ -246,10 +247,10 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QGroupBox* interfaceOptionsGroup = new QGroupBox(i18n("Preview Options"), panel);
-    QGridLayout* grid3               = new QGridLayout(interfaceOptionsGroup);
+    QGroupBox* const interfaceOptionsGroup = new QGroupBox(i18n("Preview Options"), panel);
+    QGridLayout* const grid3               = new QGridLayout(interfaceOptionsGroup);
 
-    d->previewLoadFullImageSize      = new QCheckBox(i18n("Embedded preview loads full-sized images"), interfaceOptionsGroup);
+    d->previewLoadFullImageSize = new QCheckBox(i18n("Embedded preview loads full-sized images"), interfaceOptionsGroup);
     d->previewLoadFullImageSize->setWhatsThis(i18n("<p>Set this option to load images at their full size "
                                                    "for preview, rather than at a reduced size. As this option "
                                                    "will make it take longer to load images, only use it if you have "
@@ -257,7 +258,7 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
                                                    "<p><b>Note:</b> for Raw images, a half size version of the Raw data "
                                                    "is used instead of the embedded JPEG preview.</p>"));
 
-    d->previewShowIcons              = new QCheckBox(i18n("Show icons and text over preview"), interfaceOptionsGroup);
+    d->previewShowIcons = new QCheckBox(i18n("Show icons and text over preview"), interfaceOptionsGroup);
     d->previewShowIcons->setWhatsThis(i18n("Uncheck this if you do not want to see icons and text in the image preview."));
 
     grid3->setMargin(KDialog::spacingHint());
@@ -303,7 +304,7 @@ SetupAlbumView::~SetupAlbumView()
 
 void SetupAlbumView::applySettings()
 {
-    AlbumSettings* const settings = AlbumSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
 
     if (!settings)
     {
@@ -327,7 +328,7 @@ void SetupAlbumView::applySettings()
     settings->setIconShowImageFormat(d->iconShowFormatBox->isChecked());
     settings->setIconViewFont(d->iconViewFontSelect->font());
 
-    settings->setItemLeftClickAction((AlbumSettings::ItemLeftClickAction)
+    settings->setItemLeftClickAction((ApplicationSettings::ItemLeftClickAction)
                                      d->leftClickActionComboBox->currentIndex());
 
     settings->setPreviewLoadFullImageSize(d->previewLoadFullImageSize->isChecked());
@@ -345,7 +346,7 @@ void SetupAlbumView::applySettings()
 
 void SetupAlbumView::readSettings()
 {
-    AlbumSettings* const settings = AlbumSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
 
     if (!settings)
     {

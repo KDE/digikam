@@ -26,7 +26,20 @@
 
 #include "config-digikam.h"
 
+// needed for KDE_EXPORT and KDE_IMPORT macros
+#include <kdemacros.h>
+
+#if defined(MAKE_DIGIKAMCORE_LIB)
+#  define DIGIKAM_LCMS_EXPORT KDE_EXPORT
+#else
+#  define DIGIKAM_LCMS_EXPORT KDE_IMPORT
+#endif
+
 #if defined(USE_LCMS_VERSION_1000)
+
+#ifndef LCMS_DLL
+#define LCMS_DLL
+#endif
 
 #include <lcms.h>
 #if LCMS_VERSION < 114
@@ -70,7 +83,10 @@
 
 #if defined(USE_LCMS_VERSION_2000)
 
-#define CMS_USE_CPP_API 1
+#ifndef CMS_DLL
+#define CMS_DLL
+#endif
+
 #include <lcms2.h>
 
 #define LCMS_DESC_MAX     512
@@ -82,23 +98,6 @@
 #define LCMS_ERROR_SHOW     1
 #define cmsFLAGS_NOTPRECALC               0x0100
 #define cmsFLAGS_WHITEBLACKCOMPENSATION   0x2000
-
-#ifdef Q_WS_WIN
-#  ifdef LCMS_DLL
-#    define LCMSEXPORT  __stdcall
-#    ifdef LCMS_DLL_BUILD
-#        define LCMSAPI     __declspec(dllexport)
-#    else
-#        define LCMSAPI     __declspec(dllimport)
-#    endif
-#  else
-#    define LCMSEXPORT cdecl
-#    define LCMSAPI
-#  endif
-#else
-#  define LCMSEXPORT
-#  define LCMSAPI
-#endif
 
 typedef int            LCMSBOOL;
 typedef unsigned char  BYTE,     *LPBYTE;
@@ -217,84 +216,84 @@ typedef enum
     icMaxEnumTag                        = 0xFFFFFFFFL
 } icTagSignature;
 
-LCMSAPI int    LCMSEXPORT                  dkCmsErrorAction(int nAction);
+DIGIKAM_LCMS_EXPORT int                     dkCmsErrorAction(int nAction);
 
-LCMSAPI DWORD  LCMSEXPORT                  dkCmsGetProfileICCversion(cmsHPROFILE hProfile);
+DIGIKAM_LCMS_EXPORT DWORD                   dkCmsGetProfileICCversion(cmsHPROFILE hProfile);
 
-void LCMSEXPORT                            dkCmsSetAlarmCodes(int r, int g, int b);
+DIGIKAM_LCMS_EXPORT void                    dkCmsSetAlarmCodes(int r, int g, int b);
 
-LCMSAPI QString       LCMSEXPORT           dkCmsTakeProductName(cmsHPROFILE hProfile);
+DIGIKAM_LCMS_EXPORT QString                 dkCmsTakeProductName(cmsHPROFILE hProfile);
 
-LCMSAPI QString       LCMSEXPORT           dkCmsTakeProductDesc(cmsHPROFILE hProfile);
+DIGIKAM_LCMS_EXPORT QString                 dkCmsTakeProductDesc(cmsHPROFILE hProfile);
 
-LCMSAPI QString       LCMSEXPORT           dkCmsTakeProductInfo(cmsHPROFILE hProfile);
+DIGIKAM_LCMS_EXPORT QString                 dkCmsTakeProductInfo(cmsHPROFILE hProfile);
 
-LCMSAPI QString       LCMSEXPORT           dkCmsTakeManufacturer(cmsHPROFILE hProfile);
+DIGIKAM_LCMS_EXPORT QString                 dkCmsTakeManufacturer(cmsHPROFILE hProfile);
 
-LCMSAPI LCMSBOOL      LCMSEXPORT           dkCmsTakeMediaWhitePoint(LPcmsCIEXYZ Dest, cmsHPROFILE hProfile);
+DIGIKAM_LCMS_EXPORT LCMSBOOL                dkCmsTakeMediaWhitePoint(LPcmsCIEXYZ Dest, cmsHPROFILE hProfile);
 
-LCMSAPI QString       LCMSEXPORT           dkCmsTakeModel(cmsHPROFILE hProfile);
+DIGIKAM_LCMS_EXPORT QString                 dkCmsTakeModel(cmsHPROFILE hProfile);
 
-LCMSAPI QString       LCMSEXPORT           dkCmsTakeCopyright(cmsHPROFILE hProfile);
+DIGIKAM_LCMS_EXPORT QString                 dkCmsTakeCopyright(cmsHPROFILE hProfile);
 
-LCMSAPI DWORD         LCMSEXPORT           dkCmsTakeHeaderFlags(cmsHPROFILE hProfile);
+DIGIKAM_LCMS_EXPORT DWORD                   dkCmsTakeHeaderFlags(cmsHPROFILE hProfile);
 
-LCMSAPI const BYTE*   LCMSEXPORT           dkCmsTakeProfileID(cmsHPROFILE hProfile);
+DIGIKAM_LCMS_EXPORT const BYTE*             dkCmsTakeProfileID(cmsHPROFILE hProfile);
 
-LCMSAPI LCMSBOOL      LCMSEXPORT           dkCmsIsTag(cmsHPROFILE hProfile, icTagSignature sig);
+DIGIKAM_LCMS_EXPORT LCMSBOOL                dkCmsIsTag(cmsHPROFILE hProfile, icTagSignature sig);
 
-LCMSAPI int           LCMSEXPORT           dkCmsTakeRenderingIntent(cmsHPROFILE hProfile);
+DIGIKAM_LCMS_EXPORT int                     dkCmsTakeRenderingIntent(cmsHPROFILE hProfile);
 
-LCMSBOOL                                   dkCmsAdaptMatrixFromD50(LPMAT3 r, LPcmsCIExyY DestWhitePt);
+DIGIKAM_LCMS_EXPORT LCMSBOOL                dkCmsAdaptMatrixFromD50(LPMAT3 r, LPcmsCIExyY DestWhitePt);
 
-LCMSBOOL                                   dkCmsReadICCMatrixRGB2XYZ(LPMAT3 r, cmsHPROFILE hProfile);
+DIGIKAM_LCMS_EXPORT LCMSBOOL                dkCmsReadICCMatrixRGB2XYZ(LPMAT3 r, cmsHPROFILE hProfile);
 
-LCMSAPI cmsHPROFILE   LCMSEXPORT           dkCmsOpenProfileFromMem(LPVOID MemPtr, DWORD dwSize);
+DIGIKAM_LCMS_EXPORT cmsHPROFILE             dkCmsOpenProfileFromMem(LPVOID MemPtr, DWORD dwSize);
 
-LCMSAPI icProfileClassSignature LCMSEXPORT dkCmsGetDeviceClass(cmsHPROFILE hProfile);
+DIGIKAM_LCMS_EXPORT icProfileClassSignature dkCmsGetDeviceClass(cmsHPROFILE hProfile);
 
-LCMSAPI LCMSBOOL      LCMSEXPORT           dkCmsCloseProfile(cmsHPROFILE hProfile);
+DIGIKAM_LCMS_EXPORT LCMSBOOL                dkCmsCloseProfile(cmsHPROFILE hProfile);
 
-LCMSAPI cmsHTRANSFORM LCMSEXPORT           dkCmsCreateProofingTransform(cmsHPROFILE Input,
-                                                                        DWORD InputFormat,
-                                                                        cmsHPROFILE Output,
-                                                                        DWORD OutputFormat,
-                                                                        cmsHPROFILE Proofing,
-                                                                        int Intent,
-                                                                        int ProofingIntent,
-                                                                        DWORD dwFlags);
+DIGIKAM_LCMS_EXPORT cmsHTRANSFORM           dkCmsCreateProofingTransform(cmsHPROFILE Input,
+                                                                         DWORD InputFormat,
+                                                                         cmsHPROFILE Output,
+                                                                         DWORD OutputFormat,
+                                                                         cmsHPROFILE Proofing,
+                                                                         int Intent,
+                                                                         int ProofingIntent,
+                                                                         DWORD dwFlags);
 
-LCMSAPI cmsHTRANSFORM LCMSEXPORT           dkCmsCreateTransform(cmsHPROFILE Input,
-                                                                DWORD InputFormat,
-                                                                cmsHPROFILE Output,
-                                                                DWORD OutputFormat,
-                                                                int Intent,
-                                                                DWORD dwFlags);
+DIGIKAM_LCMS_EXPORT cmsHTRANSFORM           dkCmsCreateTransform(cmsHPROFILE Input,
+                                                                 DWORD InputFormat,
+                                                                 cmsHPROFILE Output,
+                                                                 DWORD OutputFormat,
+                                                                 int Intent,
+                                                                 DWORD dwFlags);
 
-LCMSAPI cmsHPROFILE   LCMSEXPORT           dkCmsCreateXYZProfile();
+DIGIKAM_LCMS_EXPORT cmsHPROFILE             dkCmsCreateXYZProfile();
 
-LCMSAPI cmsHPROFILE   LCMSEXPORT           dkCmsCreate_sRGBProfile();
+DIGIKAM_LCMS_EXPORT cmsHPROFILE             dkCmsCreate_sRGBProfile();
 
-LCMSAPI void          LCMSEXPORT           dkCmsDeleteTransform(cmsHTRANSFORM hTransform);
+DIGIKAM_LCMS_EXPORT void                    dkCmsDeleteTransform(cmsHTRANSFORM hTransform);
 
-LCMSAPI double        LCMSEXPORT           dkCmsDeltaE(LPcmsCIELab Lab1, LPcmsCIELab Lab2);
+DIGIKAM_LCMS_EXPORT double                  dkCmsDeltaE(LPcmsCIELab Lab1, LPcmsCIELab Lab2);
 
-LCMSAPI void          LCMSEXPORT           dkCmsDoTransform(cmsHTRANSFORM Transform,
-                                                            LPVOID InputBuffer,
-                                                            LPVOID OutputBuffer,
-                                                            unsigned int Size);
+DIGIKAM_LCMS_EXPORT void                    dkCmsDoTransform(cmsHTRANSFORM Transform,
+                                                             LPVOID InputBuffer,
+                                                             LPVOID OutputBuffer,
+                                                             unsigned int Size);
 
-LCMSAPI void                    LCMSEXPORT dkCmsFloat2XYZEncoded(WORD XYZ[3], const cmsCIEXYZ* const fXYZ);
+DIGIKAM_LCMS_EXPORT void                    dkCmsFloat2XYZEncoded(WORD XYZ[3], const cmsCIEXYZ* const fXYZ);
 
-LCMSAPI icColorSpaceSignature   LCMSEXPORT dkCmsGetColorSpace(cmsHPROFILE hProfile);
+DIGIKAM_LCMS_EXPORT icColorSpaceSignature   dkCmsGetColorSpace(cmsHPROFILE hProfile);
 
-LCMSAPI icColorSpaceSignature   LCMSEXPORT dkCmsGetPCS(cmsHPROFILE hProfile);
+DIGIKAM_LCMS_EXPORT icColorSpaceSignature   dkCmsGetPCS(cmsHPROFILE hProfile);
 
-LCMSAPI LCMSBOOL                LCMSEXPORT dkCmsIsTag(cmsHPROFILE hProfile, icTagSignature sig);
+DIGIKAM_LCMS_EXPORT LCMSBOOL                dkCmsIsTag(cmsHPROFILE hProfile, icTagSignature sig);
 
-LCMSAPI cmsHPROFILE             LCMSEXPORT dkCmsOpenProfileFromFile(const char* const ICCProfile, const char* const sAccess);
+DIGIKAM_LCMS_EXPORT cmsHPROFILE             dkCmsOpenProfileFromFile(const char* const ICCProfile, const char* const sAccess);
 
-LCMSAPI void                    LCMSEXPORT dkCmsXYZ2xyY(LPcmsCIExyY Dest, const cmsCIEXYZ* const Source);
+DIGIKAM_LCMS_EXPORT void                    dkCmsXYZ2xyY(LPcmsCIExyY Dest, const cmsCIEXYZ* const Source);
 
 #endif // defined(USE_LCMS_VERSION_2000)
 

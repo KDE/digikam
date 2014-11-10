@@ -6,7 +6,7 @@
  * Date        : 2006-02-08
  * Description : A tab to display camera item information
  *
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,6 +42,7 @@
 // Local includes
 
 #include "imagepropertiestxtlabel.h"
+#include "imagepropertiestab.h"
 
 namespace Digikam
 {
@@ -59,6 +60,7 @@ public:
         isWritable(0),
         mime(0),
         dimensions(0),
+        ratio(0),
         newFileName(0),
         downloaded(0),
         make(0),
@@ -80,6 +82,7 @@ public:
         labelFileSize(0),
         labelImageMime(0),
         labelImageDimensions(0),
+        labelImageRatio(0),
         labelNewFileName(0),
         labelAlreadyDownloaded(0),
         labelPhotoMake(0),
@@ -118,6 +121,7 @@ public:
     DTextLabelName*  isWritable;
     DTextLabelName*  mime;
     DTextLabelName*  dimensions;
+    DTextLabelName*  ratio;
     DTextLabelName*  newFileName;
     DTextLabelName*  downloaded;
 
@@ -141,6 +145,7 @@ public:
     DTextLabelValue* labelFileSize;
     DTextLabelValue* labelImageMime;
     DTextLabelValue* labelImageDimensions;
+    DTextLabelValue* labelImageRatio;
     DTextLabelValue* labelNewFileName;
     DTextLabelValue* labelAlreadyDownloaded;
 
@@ -184,16 +189,17 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
     QWidget* w1               = new QWidget(this);
     QGridLayout* glay1        = new QGridLayout(w1);
 
-    d->file                   = new DTextLabelName(i18n("File: "),       w1);
-    d->folder                 = new DTextLabelName(i18n("Folder: "),     w1);
-    d->date                   = new DTextLabelName(i18n("Date: "),       w1);
-    d->size                   = new DTextLabelName(i18n("Size: "),       w1);
-    d->isReadable             = new DTextLabelName(i18n("Readable: "),   w1);
-    d->isWritable             = new DTextLabelName(i18n("Writable: "),   w1);
-    d->mime                   = new DTextLabelName(i18n("Type: "),       w1);
-    d->dimensions             = new DTextLabelName(i18n("Dimensions: "), w1);
-    d->newFileName            = new DTextLabelName(i18n("New Name: "),   w1);
-    d->downloaded             = new DTextLabelName(i18n("Downloaded: "), w1);
+    d->file                   = new DTextLabelName(i18n("File: "),         w1);
+    d->folder                 = new DTextLabelName(i18n("Folder: "),       w1);
+    d->date                   = new DTextLabelName(i18n("Date: "),         w1);
+    d->size                   = new DTextLabelName(i18n("Size: "),         w1);
+    d->isReadable             = new DTextLabelName(i18n("Readable: "),     w1);
+    d->isWritable             = new DTextLabelName(i18n("Writable: "),     w1);
+    d->mime                   = new DTextLabelName(i18n("Type: "),         w1);
+    d->dimensions             = new DTextLabelName(i18n("Dimensions: "),   w1);
+    d->ratio                  = new DTextLabelName(i18n("Aspect Ratio: "), w1);
+    d->newFileName            = new DTextLabelName(i18n("New Name: "),     w1);
+    d->downloaded             = new DTextLabelName(i18n("Downloaded: "),   w1);
 
     d->labelFile              = new DTextLabelValue(0, w1);
     d->labelFolder            = new DTextLabelValue(0, w1);
@@ -203,29 +209,32 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
     d->labelFileIsWritable    = new DTextLabelValue(0, w1);
     d->labelImageMime         = new DTextLabelValue(0, w1);
     d->labelImageDimensions   = new DTextLabelValue(0, w1);
+    d->labelImageRatio        = new DTextLabelValue(0, w1);
     d->labelNewFileName       = new DTextLabelValue(0, w1);
     d->labelAlreadyDownloaded = new DTextLabelValue(0, w1);
 
-    glay1->addWidget(d->file,                   0, 0, 1, 1);
-    glay1->addWidget(d->labelFile,              0, 1, 1, 1);
-    glay1->addWidget(d->folder,                 1, 0, 1, 1);
-    glay1->addWidget(d->labelFolder,            1, 1, 1, 1);
-    glay1->addWidget(d->date,                   2, 0, 1, 1);
-    glay1->addWidget(d->labelFileDate,          2, 1, 1, 1);
-    glay1->addWidget(d->size,                   3, 0, 1, 1);
-    glay1->addWidget(d->labelFileSize,          3, 1, 1, 1);
-    glay1->addWidget(d->isReadable,             4, 0, 1, 1);
-    glay1->addWidget(d->labelFileIsReadable,    4, 1, 1, 1);
-    glay1->addWidget(d->isWritable,             5, 0, 1, 1);
-    glay1->addWidget(d->labelFileIsWritable,    5, 1, 1, 1);
-    glay1->addWidget(d->mime,                   6, 0, 1, 1);
-    glay1->addWidget(d->labelImageMime,         6, 1, 1, 1);
-    glay1->addWidget(d->dimensions,             7, 0, 1, 1);
-    glay1->addWidget(d->labelImageDimensions,   7, 1, 1, 1);
-    glay1->addWidget(d->newFileName,            8, 0, 1, 1);
-    glay1->addWidget(d->labelNewFileName,       8, 1, 1, 1);
-    glay1->addWidget(d->downloaded,             9, 0, 1, 1);
-    glay1->addWidget(d->labelAlreadyDownloaded, 9, 1, 1, 1);
+    glay1->addWidget(d->file,                   0,  0, 1, 1);
+    glay1->addWidget(d->labelFile,              0,  1, 1, 1);
+    glay1->addWidget(d->folder,                 1,  0, 1, 1);
+    glay1->addWidget(d->labelFolder,            1,  1, 1, 1);
+    glay1->addWidget(d->date,                   2,  0, 1, 1);
+    glay1->addWidget(d->labelFileDate,          2,  1, 1, 1);
+    glay1->addWidget(d->size,                   3,  0, 1, 1);
+    glay1->addWidget(d->labelFileSize,          3,  1, 1, 1);
+    glay1->addWidget(d->isReadable,             4,  0, 1, 1);
+    glay1->addWidget(d->labelFileIsReadable,    4,  1, 1, 1);
+    glay1->addWidget(d->isWritable,             5,  0, 1, 1);
+    glay1->addWidget(d->labelFileIsWritable,    5,  1, 1, 1);
+    glay1->addWidget(d->mime,                   6,  0, 1, 1);
+    glay1->addWidget(d->labelImageMime,         6,  1, 1, 1);
+    glay1->addWidget(d->dimensions,             7,  0, 1, 1);
+    glay1->addWidget(d->labelImageDimensions,   7,  1, 1, 1);
+    glay1->addWidget(d->ratio,                  8,  0, 1, 1);
+    glay1->addWidget(d->labelImageRatio,        8,  1, 1, 1);
+    glay1->addWidget(d->newFileName,            9,  0, 1, 1);
+    glay1->addWidget(d->labelNewFileName,       9,  1, 1, 1);
+    glay1->addWidget(d->downloaded,             10, 0, 1, 1);
+    glay1->addWidget(d->labelAlreadyDownloaded, 10, 1, 1, 1);
     glay1->setColumnStretch(1, 10);
     glay1->setMargin(KDialog::spacingHint());
     glay1->setSpacing(0);
@@ -355,6 +364,7 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
         d->labelFileSize->setText(QString());
         d->labelImageMime->setText(QString());
         d->labelImageDimensions->setText(QString());
+        d->labelImageRatio->setText(QString());
         d->labelNewFileName->setText(QString());
         d->labelAlreadyDownloaded->setText(QString());
 
@@ -480,6 +490,11 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
             dims.width(), dims.height(), mpixels);
     d->labelImageDimensions->setText(str);
 
+    if (!dims.isValid()) str = unknown;
+    else ImagePropertiesTab::aspectRatioToString(dims.width(), dims.height(), str);
+
+    d->labelImageRatio->setText(str);
+
     // -- Download information ------------------------------------------
 
     d->labelNewFileName->setText(itemInfo.downloadName.isEmpty() ? i18n("<i>unchanged</i>") : itemInfo.downloadName);
@@ -514,7 +529,9 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
         widget(1)->show();
     }
 
-    d->labelPhotoMake->setText(photoInfo.make.isEmpty() ? unavailable : photoInfo.make);
+    ImagePropertiesTab::shortenedMakeInfo(photoInfo.make);
+    ImagePropertiesTab::shortenedModelInfo(photoInfo.model);
+    d->labelPhotoMake->setText(photoInfo.make.isEmpty()   ? unavailable : photoInfo.make);
     d->labelPhotoModel->setText(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
 
     if (photoInfo.dateTime.isValid())
@@ -536,7 +553,7 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
     }
     else
     {
-        str = i18n("%1 (35mm: %2)", photoInfo.focalLength, photoInfo.focalLength35mm);
+        str = i18n("%1 (%2)", photoInfo.focalLength, photoInfo.focalLength35mm);
         d->labelPhotoFocalLength->setText(str);
     }
 

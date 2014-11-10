@@ -46,24 +46,14 @@
 // Local includes
 
 #include "globals.h"
+#include "ratingwidget.h"
 
 namespace Digikam
 {
 
 RatingStarDrawer::RatingStarDrawer()
 {
-    // Pre-computed star polygon for a 15x15 pixmap.
-    m_starPolygon << QPoint(0,  6);
-    m_starPolygon << QPoint(5,  5);
-    m_starPolygon << QPoint(7,  0);
-    m_starPolygon << QPoint(9,  5);
-    m_starPolygon << QPoint(14, 6);
-    m_starPolygon << QPoint(10, 9);
-    m_starPolygon << QPoint(11, 14);
-    m_starPolygon << QPoint(7,  11);
-    m_starPolygon << QPoint(3,  14);
-    m_starPolygon << QPoint(4,  9);
-
+    m_starPolygon     = RatingWidget::starPolygon();
     m_starPolygonSize = QSize(15, 15);
 }
 

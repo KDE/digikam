@@ -6,7 +6,7 @@
  * Date        : 2010-02-27
  * Description : White Balance batch tool.
  *
- * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -73,13 +73,14 @@ BatchToolSettings WhiteBalance::defaultSettings()
     BatchToolSettings prm;
     WBContainer defaultPrm = m_settingsView->defaultSettings();
 
-    prm.insert("black",       (double)defaultPrm.black);
-    prm.insert("temperature", (double)defaultPrm.temperature);
-    prm.insert("green",       (double)defaultPrm.green);
-    prm.insert("dark",        (double)defaultPrm.dark);
-    prm.insert("gamma",       (double)defaultPrm.gamma);
-    prm.insert("saturation",  (double)defaultPrm.saturation);
-    prm.insert("exposition",  (double)defaultPrm.exposition);
+    prm.insert("black",          (double)defaultPrm.black);
+    prm.insert("temperature",    (double)defaultPrm.temperature);
+    prm.insert("green",          (double)defaultPrm.green);
+    prm.insert("dark",           (double)defaultPrm.dark);
+    prm.insert("gamma",          (double)defaultPrm.gamma);
+    prm.insert("saturation",     (double)defaultPrm.saturation);
+    prm.insert("expositionMain", (double)defaultPrm.expositionMain);
+    prm.insert("expositionFine", (double)defaultPrm.expositionFine);
 
     return prm;
 }
@@ -88,13 +89,14 @@ void WhiteBalance::slotAssignSettings2Widget()
 {
     WBContainer prm;
 
-    prm.black       = settings()["black"].toDouble();
-    prm.temperature = settings()["temperature"].toDouble();
-    prm.green       = settings()["green"].toDouble();
-    prm.dark        = settings()["dark"].toDouble();
-    prm.gamma       = settings()["gamma"].toDouble();
-    prm.saturation  = settings()["saturation"].toDouble();
-    prm.exposition  = settings()["exposition"].toDouble();
+    prm.black          = settings()["black"].toDouble();
+    prm.temperature    = settings()["temperature"].toDouble();
+    prm.green          = settings()["green"].toDouble();
+    prm.dark           = settings()["dark"].toDouble();
+    prm.gamma          = settings()["gamma"].toDouble();
+    prm.saturation     = settings()["saturation"].toDouble();
+    prm.expositionMain = settings()["expositionMain"].toDouble();
+    prm.expositionFine = settings()["expositionFine"].toDouble();
 
     m_settingsView->setSettings(prm);
 }
@@ -104,13 +106,14 @@ void WhiteBalance::slotSettingsChanged()
     BatchToolSettings prm;
     WBContainer currentPrm = m_settingsView->settings();
 
-    prm.insert("black",       (double)currentPrm.black);
-    prm.insert("temperature", (double)currentPrm.temperature);
-    prm.insert("green",       (double)currentPrm.green);
-    prm.insert("dark",        (double)currentPrm.dark);
-    prm.insert("gamma",       (double)currentPrm.gamma);
-    prm.insert("saturation",  (double)currentPrm.saturation);
-    prm.insert("exposition",  (double)currentPrm.exposition);
+    prm.insert("black",          (double)currentPrm.black);
+    prm.insert("temperature",    (double)currentPrm.temperature);
+    prm.insert("green",          (double)currentPrm.green);
+    prm.insert("dark",           (double)currentPrm.dark);
+    prm.insert("gamma",          (double)currentPrm.gamma);
+    prm.insert("saturation",     (double)currentPrm.saturation);
+    prm.insert("expositionMain", (double)currentPrm.expositionMain);
+    prm.insert("expositionFine", (double)currentPrm.expositionFine);
 
     BatchTool::slotSettingsChanged(prm);
 }
@@ -124,13 +127,14 @@ bool WhiteBalance::toolOperations()
 
     WBContainer prm;
 
-    prm.black       = settings()["black"].toDouble();
-    prm.temperature = settings()["temperature"].toDouble();
-    prm.green       = settings()["green"].toDouble();
-    prm.dark        = settings()["dark"].toDouble();
-    prm.gamma       = settings()["gamma"].toDouble();
-    prm.saturation  = settings()["saturation"].toDouble();
-    prm.exposition  = settings()["exposition"].toDouble();
+    prm.black          = settings()["black"].toDouble();
+    prm.temperature    = settings()["temperature"].toDouble();
+    prm.green          = settings()["green"].toDouble();
+    prm.dark           = settings()["dark"].toDouble();
+    prm.gamma          = settings()["gamma"].toDouble();
+    prm.saturation     = settings()["saturation"].toDouble();
+    prm.expositionMain = settings()["expositionMain"].toDouble();
+    prm.expositionFine = settings()["expositionFine"].toDouble();
 
     WBFilter wb(&image(), 0L, prm);
     applyFilter(&wb);

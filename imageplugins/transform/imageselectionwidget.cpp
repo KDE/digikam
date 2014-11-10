@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2007      by Jaromir Malenko <malenko at email.cz>
  * Copyright (C) 2008      by Roberto Castagnola <roberto dot castagnola at gmail dot com>
- * Copyright (C) 2004-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -189,6 +189,10 @@ void ImageSelectionWidget::setup(int w, int h,
                                  int aspectRatio, int orient,
                                  int guideLinesType)
 {
+    setMinimumSize(w, h);
+    setMouseTracking(true);
+    setAttribute(Qt::WA_DeleteOnClose);
+
     d->currentAspectRatioType  = aspectRatio;
     d->currentWidthRatioValue  = widthRatioValue;
     d->currentHeightRatioValue = heightRatioValue;
@@ -199,10 +203,6 @@ void ImageSelectionWidget::setup(int w, int h,
     d->moving                  = true;
     reverseRatioValues();
 
-    setMinimumSize(w, h);
-    setMouseTracking(true);
-    setAttribute(Qt::WA_DeleteOnClose);
-
     d->iface   = new ImageIface(QSize(w, h));
     d->preview = d->iface->preview();
     d->preview.setIccProfile( d->iface->original()->getIccProfile() );
@@ -210,7 +210,8 @@ void ImageSelectionWidget::setup(int w, int h,
 
     d->pixmap  = new QPixmap(w, h);
     d->image   = QRect(0, 0, d->iface->originalSize().width(), d->iface->originalSize().height());
-    d->rect    = QRect(w/2-d->preview.width()/2, h/2-d->preview.height()/2,
+    d->rect    = QRect((w-d->preview.width()) /2,
+                       (h-d->preview.height())/2,
                        d->preview.width(), d->preview.height());
 
     updatePixmap();
@@ -233,7 +234,8 @@ void ImageSelectionWidget::resizeEvent(QResizeEvent* e)
     d->preview.convertToEightBit();
 
     d->pixmap  = new QPixmap(w, h);
-    d->rect    = QRect(w/2-d->preview.width()/2, h/2-d->preview.height()/2,
+    d->rect    = QRect((w-d->preview.width()) /2,
+                       (h-d->preview.height())/2,
                        d->preview.width(), d->preview.height());
 
     // Drawing the gray overlay
@@ -411,7 +413,7 @@ void ImageSelectionWidget::setCenterSelection(int centerType)
 
     // Repaint
     updatePixmap();
-    repaint();
+    update();
     regionSelectionChanged();
 }
 
@@ -445,28 +447,28 @@ void ImageSelectionWidget::setBackgroundColor(const QColor& bg)
 {
     d->bgColor = bg;
     updatePixmap();
-    repaint();
+    update();
 }
 
 void ImageSelectionWidget::slotGuideLines(int guideLinesType)
 {
     d->guideLinesType = guideLinesType;
     updatePixmap();
-    repaint();
+    update();
 }
 
 void ImageSelectionWidget::slotChangeGuideColor(const QColor& color)
 {
     d->guideColor = color;
     updatePixmap();
-    repaint();
+    update();
 }
 
 void ImageSelectionWidget::slotChangeGuideSize(int size)
 {
     d->guideSize = size;
     updatePixmap();
-    repaint();
+    update();
 }
 
 void ImageSelectionWidget::setSelectionOrientation(int orient)
@@ -773,7 +775,7 @@ void ImageSelectionWidget::applyAspectRatio(bool useHeight, bool repaintWidget)
     if (repaintWidget)
     {
         updatePixmap();
-        repaint();
+        update();
     }
 }
 
@@ -807,7 +809,7 @@ void ImageSelectionWidget::regionSelectionMoved()
     normalizeRegion();
 
     updatePixmap();
-    repaint();
+    update();
 
     emit signalSelectionMoved( d->regionSelection );
 }
@@ -1296,7 +1298,7 @@ void ImageSelectionWidget::placeSelection(const QPoint& pm, bool symmetric, cons
 
     // Repaint
     updatePixmap();
-    repaint();
+    update();
 }
 
 void ImageSelectionWidget::mousePressEvent(QMouseEvent* e)
@@ -1378,7 +1380,7 @@ void ImageSelectionWidget::mousePressEvent(QMouseEvent* e)
                     d->regionSelection.moveCenter( pmVirtual );
                     normalizeRegion();
                     updatePixmap();
-                    repaint();
+                    update();
                 }
             }
         }
@@ -1422,7 +1424,7 @@ void ImageSelectionWidget::mouseMoveEvent(QMouseEvent* e)
             normalizeRegion();
 
             updatePixmap();
-            repaint();
+            update();
         }
         else
         {

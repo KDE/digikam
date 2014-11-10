@@ -1,0 +1,3 @@
+ADD_SUBDIRECTORY(detectblur)
+ADD_SUBDIRECTORY(detectcompression)
+ADD_SUBDIRECTORY(detectnoise)

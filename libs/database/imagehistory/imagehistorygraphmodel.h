@@ -67,7 +67,9 @@ public:
         FilterActionRole       = Qt::UserRole + 1020
     };
 
-    explicit ImageHistoryGraphModel(QObject* parent = 0);
+public:
+
+    explicit ImageHistoryGraphModel(QObject* const parent = 0);
     ~ImageHistoryGraphModel();
 
     void setMode(Mode mode);
@@ -117,8 +119,8 @@ public:
 
 private:
 
-    class ImageHistoryGraphModelPriv;
-    ImageHistoryGraphModelPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

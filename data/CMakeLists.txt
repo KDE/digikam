@@ -1,11 +1,14 @@
-ADD_SUBDIRECTORY(icons)
-ADD_SUBDIRECTORY(pics)
-ADD_SUBDIRECTORY(about)
-ADD_SUBDIRECTORY(database)
-ADD_SUBDIRECTORY(hotplug)
+#
+# Copyright (c) 2010-2014, Gilles Caulier, <caulier dot gilles at gmail dot com>
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-IF(USE_PRESENTATION_MODE)
-    ADD_SUBDIRECTORY(qmlshow)
-ENDIF(USE_PRESENTATION_MODE)
+add_subdirectory(icons)
+add_subdirectory(pics)
+add_subdirectory(about)
+add_subdirectory(database)
+add_subdirectory(hotplug)
+add_subdirectory(scripts)
 
-INSTALL(FILES tips DESTINATION ${DATA_INSTALL_DIR}/digikam)
+install(FILES tips DESTINATION ${DATA_INSTALL_DIR}/digikam)

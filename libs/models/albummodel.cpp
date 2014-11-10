@@ -34,7 +34,7 @@
 // Local includes
 
 #include "albummanager.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "albumthumbnailloader.h"
 
 namespace Digikam
@@ -45,7 +45,7 @@ AlbumModel::AlbumModel(RootAlbumBehavior rootBehavior, QObject* const parent)
                                   AlbumManager::instance()->findPAlbum(0),
                                   rootBehavior, parent)
 {
-    m_columnHeader = i18n("My Albums");
+    m_columnHeader = i18n("Albums");
     setupThumbnailLoading();
 
     connect(AlbumManager::instance(), SIGNAL(signalPAlbumsDirty(QMap<int, int>)),
@@ -83,7 +83,7 @@ TagModel::TagModel(RootAlbumBehavior rootBehavior, QObject* const parent)
                                   AlbumManager::instance()->findTAlbum(0),
                                   rootBehavior, parent)
 {
-    m_columnHeader = i18n("My Tags");
+    m_columnHeader = i18n("Tags");
     setupThumbnailLoading();
 
     setTagCount(NormalTagCount);
@@ -142,13 +142,13 @@ SearchModel::SearchModel(QObject* const parent)
                                   AlbumManager::instance()->findSAlbum(0),
                                   IgnoreRootAlbum, parent)
 {
-    m_columnHeader = i18n("My Searches");
+    m_columnHeader = i18n("Searches");
 
     setShowCount(false);
 
     // handle search icons
     albumSettingsChanged();
-    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+    connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(albumSettingsChanged()));
 }
 
@@ -234,10 +234,10 @@ Album* SearchModel::albumForId(int id) const
 
 void SearchModel::albumSettingsChanged()
 {
-    setPixmapForMapSearches(SmallIcon("applications-internet", AlbumSettings::instance()->getTreeViewIconSize()));
-    setPixmapForHaarSearches(SmallIcon("tools-wizard",         AlbumSettings::instance()->getTreeViewIconSize()));
-    setPixmapForNormalSearches(SmallIcon("edit-find",          AlbumSettings::instance()->getTreeViewIconSize()));
-    setPixmapForTimelineSearches(SmallIcon("chronometer",      AlbumSettings::instance()->getTreeViewIconSize()));
+    setPixmapForMapSearches(SmallIcon("applications-internet", ApplicationSettings::instance()->getTreeViewIconSize()));
+    setPixmapForHaarSearches(SmallIcon("tools-wizard",         ApplicationSettings::instance()->getTreeViewIconSize()));
+    setPixmapForNormalSearches(SmallIcon("edit-find",          ApplicationSettings::instance()->getTreeViewIconSize()));
+    setPixmapForTimelineSearches(SmallIcon("chronometer",      ApplicationSettings::instance()->getTreeViewIconSize()));
 }
 
 // ------------------------------------------------------------------
@@ -247,7 +247,7 @@ DateAlbumModel::DateAlbumModel(QObject* const parent)
                                  AlbumManager::instance()->findDAlbum(0),
                                  IgnoreRootAlbum, parent)
 {
-    m_columnHeader = i18n("My Calendar");
+    m_columnHeader = i18n("Dates");
 
     connect(AlbumManager::instance(), SIGNAL(signalDAlbumsDirty(QMap<YearMonth,int>)),
             this, SLOT(setYearMonthMap(QMap<YearMonth,int>)));

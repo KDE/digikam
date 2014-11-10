@@ -7,7 +7,7 @@
  * Description : image properties side bar using data from
  *               digiKam database.
  *
- * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2011 by Martin Klapetek <martin dot klapetek at gmail dot com>
  * Copyright (C)      2011 by Michael G. Hansen <mike at mghansen dot de>
@@ -46,21 +46,25 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "config-digikam.h"
+#include "applicationsettings.h"
 #include "databaseinfocontainers.h"
 #include "databasewatch.h"
-#include "digikam2kgeomap_database.h"
 #include "dimg.h"
 #include "imageattributeswatch.h"
 #include "imagedescedittab.h"
 #include "imageinfo.h"
-#include "imagepropertiesgpstab.h"
 #include "imagepropertiestab.h"
 #include "imagepropertiesmetadatatab.h"
 #include "imagepropertiescolorstab.h"
 #include "imagepropertiesversionstab.h"
 #include "imageposition.h"
 #include "tagscache.h"
+
+#ifdef HAVE_KGEOMAP
+#include "imagepropertiesgpstab.h"
+#include "digikam2kgeomap_database.h"
+#endif // HAVE_KGEOMAP
 
 namespace Digikam
 {
@@ -100,7 +104,7 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* const parent, Sideba
     d->desceditTab        = new ImageDescEditTab(parent);
     d->versionsHistoryTab = new ImagePropertiesVersionsTab(parent);
 
-    appendTab(d->desceditTab,        SmallIcon("imagecomment"), i18n("Caption/Tags"));
+    appendTab(d->desceditTab,        SmallIcon("imagecomment"), i18n("Captions/Tags"));
     appendTab(d->versionsHistoryTab, SmallIcon("view-catalog"), i18n("Versioning"));
 
     // ----------------------------------------------------------
@@ -123,7 +127,7 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* const parent, Sideba
     connect(ImageAttributesWatch::instance(), SIGNAL(signalFileMetadataChanged(KUrl)),
             this, SLOT(slotFileMetadataChanged(KUrl)));
 
-    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
+    connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotLoadMetadataFilters()));
 }
 
@@ -254,11 +258,13 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
             d->desceditTab->setItem();
             d->dirtyDesceditTab = true;
         }
+#ifdef HAVE_KGEOMAP
         else if (tab == m_gpsTab && !m_dirtyGpsTab)
         {
             m_gpsTab->setCurrentURL(m_currentURL);
             m_dirtyGpsTab = true;
         }
+#endif // HAVE_KGEOMAP
         else if (tab == d->versionsHistoryTab && !m_dirtyHistoryTab)
         {
             //TODO: Make a database-less parent class with only the filters tab
@@ -298,9 +304,11 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
             d->desceditTab->setItem(d->currentInfos.first());
             d->dirtyDesceditTab = true;
         }
+#ifdef HAVE_KGEOMAP
         else if (tab == m_gpsTab && !m_dirtyGpsTab)
         {
             GPSImageInfo info;
+
             if (!GPSImageInfo::fromImageInfo(d->currentInfos.first(), &info))
             {
                 m_gpsTab->setCurrentURL();
@@ -312,6 +320,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
 
             m_dirtyGpsTab = true;
         }
+#endif // HAVE_KGEOMAP
         else if (tab == d->versionsHistoryTab && !m_dirtyHistoryTab)
         {
             d->versionsHistoryTab->setItem(d->currentInfos.first(), d->currentHistory);
@@ -343,6 +352,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
             d->desceditTab->setItems(d->currentInfos);
             d->dirtyDesceditTab = true;
         }
+#ifdef HAVE_KGEOMAP
         else if (tab == m_gpsTab && !m_dirtyGpsTab)
         {
             GPSImageInfo::List list;
@@ -351,6 +361,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
                  it != d->currentInfos.constEnd(); ++it)
             {
                 GPSImageInfo info;
+
                 if (GPSImageInfo::fromImageInfo(*it, &info))
                 {
                     list << info;
@@ -368,6 +379,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
 
             m_dirtyGpsTab = true;
         }
+#endif // HAVE_KGEOMAP
         else if (tab == d->versionsHistoryTab && !m_dirtyHistoryTab)
         {
             // FIXME: Any sensible multi-selection functionality? Must scale for large n!
@@ -376,7 +388,9 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
         }
     }
 
-    m_gpsTab->setActive(tab==m_gpsTab);
+#ifdef HAVE_KGEOMAP
+    m_gpsTab->setActive(tab == m_gpsTab);
+#endif // HAVE_KGEOMAP
 
     unsetCursor();
 }
@@ -400,14 +414,18 @@ void ImagePropertiesSideBarDB::slotImageChangeDatabase(const ImageChangeset& cha
 {
     if (!d->currentInfos.isEmpty())
     {
-        QWidget* tab = getActiveTab();
+        QWidget* const tab = getActiveTab();
 
         if (!tab)
         {
             return;
         }
 
-        if (tab == m_propertiesTab || tab == m_gpsTab)
+        if (tab == m_propertiesTab
+#ifdef HAVE_KGEOMAP
+            || tab == m_gpsTab
+#endif // HAVE_KGEOMAP
+           )
         {
             ImageInfo& info = d->currentInfos.first();
 
@@ -416,10 +434,10 @@ void ImagePropertiesSideBarDB::slotImageChangeDatabase(const ImageChangeset& cha
                 // trigger an update, if changes touch the tab's information
                 DatabaseFields::Set set = changeset.changes();
 
-                if ( (set & DatabaseFields::ImagesAll) ||
+                if ( (set & DatabaseFields::ImagesAll)           ||
                      (set & DatabaseFields::ImageInformationAll) ||
-                     (set & DatabaseFields::ImageMetadataAll) ||
-                     (set & DatabaseFields::VideoMetadataAll) ||
+                     (set & DatabaseFields::ImageMetadataAll)    ||
+                     (set & DatabaseFields::VideoMetadataAll)    ||
                      (set & DatabaseFields::ImageCommentsAll) )
                 {
                     m_dirtyPropertiesTab = false;
@@ -429,7 +447,11 @@ void ImagePropertiesSideBarDB::slotImageChangeDatabase(const ImageChangeset& cha
                     m_dirtyGpsTab = false;
                 }
 
-                if ( tab == m_propertiesTab || tab == m_gpsTab)
+                if (tab == m_propertiesTab
+#ifdef HAVE_KGEOMAP
+                    || tab == m_gpsTab
+#endif // HAVE_KGEOMAP
+                   )
                 {
                     // update now - reuse code form slotChangedTab
                     slotChangedTab(tab);
@@ -443,7 +465,7 @@ void ImagePropertiesSideBarDB::slotImageTagChanged(const ImageTagChangeset& chan
 {
     if (!d->currentInfos.isEmpty())
     {
-        QWidget* tab = getActiveTab();
+        QWidget* const tab = getActiveTab();
 
         if (!tab)
         {
@@ -546,6 +568,17 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
             }
 
             m_propertiesTab->setImageDimensions(str);
+
+            if (commonInfo.width == 0 || commonInfo.height == 0)
+            {
+                str = i18n("Unknown");
+            }
+            else
+            {
+                m_propertiesTab->aspectRatioToString(commonInfo.width, commonInfo.height, str);
+            }
+
+            m_propertiesTab->setImageRatio(str);
             m_propertiesTab->setImageBitDepth(i18n("%1 bpp", commonInfo.colorDepth));
             m_propertiesTab->setImageColorMode(commonInfo.colorModel.isEmpty() ? unavailable : commonInfo.colorModel);
             m_propertiesTab->setImageMime(commonInfo.format);
@@ -553,8 +586,9 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
             // -- Photograph information ------------------------------------------
 
             m_propertiesTab->setPhotoInfoDisable(photoInfo.allFieldsNull);
-
-            m_propertiesTab->setPhotoMake(photoInfo.make.isEmpty() ? unavailable : photoInfo.make);
+            ImagePropertiesTab::shortenedMakeInfo(photoInfo.make);
+            ImagePropertiesTab::shortenedModelInfo(photoInfo.model);
+            m_propertiesTab->setPhotoMake(photoInfo.make.isEmpty()   ? unavailable : photoInfo.make);
             m_propertiesTab->setPhotoModel(photoInfo.model.isEmpty() ? unavailable : photoInfo.model);
 
             if (commonInfo.creationDate.isValid())
@@ -576,7 +610,7 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
             }
             else
             {
-                str = i18n("%1 (35mm: %2)", photoInfo.focalLength, photoInfo.focalLength35);
+                str = i18n("%1 (%2)", photoInfo.focalLength, photoInfo.focalLength35);
                 m_propertiesTab->setPhotoFocalLength(str);
             }
 
@@ -646,9 +680,8 @@ void ImagePropertiesSideBarDB::doLoadState()
 {
     ImagePropertiesSideBar::doLoadState();
 
-    KConfigGroup group = getConfigGroup();
-
-    KConfigGroup groupVersionTab = KConfigGroup(&group, entryName("Version Properties Tab"));
+    KConfigGroup group                = getConfigGroup();
+    KConfigGroup groupVersionTab      = KConfigGroup(&group, entryName("Version Properties Tab"));
     d->versionsHistoryTab->readSettings(groupVersionTab);
 
     KConfigGroup groupCaptionsTagsTab = KConfigGroup(&group, entryName("Captions Tags Properties Tab"));
@@ -659,8 +692,7 @@ void ImagePropertiesSideBarDB::doSaveState()
 {
     ImagePropertiesSideBar::doSaveState();
 
-    KConfigGroup group = getConfigGroup();
-
+    KConfigGroup group           = getConfigGroup();
     KConfigGroup groupVersionTab = KConfigGroup(&group, entryName("Version Properties Tab"));
     d->versionsHistoryTab->writeSettings(groupVersionTab);
 

@@ -189,7 +189,7 @@ SharpSettings::SharpSettings(QWidget* const parent)
 
     QLabel* const label2  = new QLabel(i18n("Radius:"), unsharpMaskSettings);
     d->radiusInput2 = new RDoubleNumInput(unsharpMaskSettings);
-    d->radiusInput2->setRange(0.0, 12.0, 0.1, true);
+    d->radiusInput2->setRange(0.1, 12.0, 0.1, true);
     d->radiusInput2->setDecimals(1);
     d->radiusInput2->setDefaultValue(1.0);
     d->radiusInput2->setWhatsThis(i18n("Radius value is the Gaussian blur matrix radius value "

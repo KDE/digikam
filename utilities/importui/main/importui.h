@@ -7,7 +7,7 @@
  * Description : Camera interface
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
  *
@@ -58,6 +58,7 @@ class Album;
 class CollectionLocation;
 class CameraHistoryUpdater;
 class ImportIconView;
+class CameraThumbsCtrl;
 
 class ImportUI : public DXmlGuiWindow
 {
@@ -87,7 +88,7 @@ public:
 
     DownloadSettings downloadSettings() const;
 
-    CameraController* getCameraController() const;
+    CameraThumbsCtrl* getCameraThumbsCtrl() const;
 
 Q_SIGNALS:
 
@@ -148,6 +149,7 @@ private:
     void customizedFullScreenMode(bool set);
     void toogleShowBar();
     void setInitialSorting();
+    void sidebarTabTitleStyleChanged();
 
 private Q_SLOTS:
 
@@ -225,10 +227,15 @@ private Q_SLOTS:
     void slotConfNotifications();
     void slotNewToolbarConfig();
     void slotSetup();
+    void slotColorManagementOptionsChanged();
+    void slotToggleColorManagedView();
     void slotComponentsInfo();
     void slotDBStat();
+    void slotToggleRightSideBar();
+    void slotPreviousRightSideBarTab();
+    void slotNextRightSideBarTab();
 
-    void slotSidebarTabTitleStyleChanged();
+    void slotSetupChanged();
 
 private:
 

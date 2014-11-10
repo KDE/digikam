@@ -6,7 +6,7 @@
  * Date        : 2009-07-18
  * Description : setup Metadata tab.
  *
- * Copyright (C) 2009-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,8 +57,6 @@
 #include "metadatapanel.h"
 #include "metadatasettings.h"
 
-using namespace Digikam;
-
 namespace ShowFoto
 {
 
@@ -74,12 +72,12 @@ public:
     {
     }
 
-    QCheckBox*     exifRotateBox;
-    QCheckBox*     exifSetOrientationBox;
+    QCheckBox*              exifRotateBox;
+    QCheckBox*              exifSetOrientationBox;
 
-    KTabWidget*    tab;
+    KTabWidget*             tab;
 
-    MetadataPanel* tagsCfgPanel;
+    Digikam::MetadataPanel* tagsCfgPanel;
 };
 
 SetupMetadata::SetupMetadata(QWidget* const parent )
@@ -161,7 +159,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent )
 
     // --------------------------------------------------------
 
-    d->tagsCfgPanel = new MetadataPanel(d->tab);
+    d->tagsCfgPanel = new Digikam::MetadataPanel(d->tab);
 
     // --------------------------------------------------------
 
@@ -189,14 +187,14 @@ void SetupMetadata::slotProcessExiv2Url(const QString& url)
 
 void SetupMetadata::applySettings()
 {
-    MetadataSettings* const mSettings = MetadataSettings::instance();
+    Digikam::MetadataSettings* const mSettings = Digikam::MetadataSettings::instance();
 
     if (!mSettings)
     {
         return;
     }
 
-    MetadataSettingsContainer set;
+    Digikam::MetadataSettingsContainer set;
 
     set.exifRotate         = d->exifRotateBox->isChecked();
     set.exifSetOrientation = d->exifSetOrientationBox->isChecked();
@@ -207,14 +205,14 @@ void SetupMetadata::applySettings()
 
 void SetupMetadata::readSettings()
 {
-    MetadataSettings* const mSettings = MetadataSettings::instance();
+    Digikam::MetadataSettings* const mSettings = Digikam::MetadataSettings::instance();
 
     if (!mSettings)
     {
         return;
     }
 
-    MetadataSettingsContainer set     = mSettings->settings();
+    Digikam::MetadataSettingsContainer set     = mSettings->settings();
 
     d->exifRotateBox->setChecked(set.exifRotate);
     d->exifSetOrientationBox->setChecked(set.exifSetOrientation);

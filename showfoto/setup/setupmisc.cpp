@@ -92,11 +92,11 @@ public:
 SetupMisc::SetupMisc(QWidget* const parent)
     : QScrollArea(parent), d(new Private)
 {
-    QWidget* panel      = new QWidget(viewport());
+    QWidget* const panel      = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
-    QVBoxLayout* layout = new QVBoxLayout(panel);
+    QVBoxLayout* const layout = new QVBoxLayout(panel);
 
     // -- Misc Options --------------------------------------------------------
 
@@ -111,21 +111,23 @@ SetupMisc::SetupMisc(QWidget* const parent)
     d->showCoordinates->setWhatsThis(i18n("Set this option to indicate if image has geolocation information."));
 
     KHBox* const tabStyleHbox = new KHBox(miscOptionsGroup);
-    d->sidebarTypeLabel = new QLabel(i18n("Sidebar tab title:"), tabStyleHbox);
-    d->sidebarType      = new KComboBox(tabStyleHbox);
+    d->sidebarTypeLabel       = new QLabel(i18n("Sidebar tab title:"), tabStyleHbox);
+    d->sidebarType            = new KComboBox(tabStyleHbox);
     d->sidebarType->addItem(i18n("Only For Active Tab"), 0);
     d->sidebarType->addItem(i18n("For All Tabs"),        1);
     d->sidebarType->setToolTip(i18n("Set this option to configure how sidebars tab title are visible."));
 
-    KHBox* const appStyleHbox      = new KHBox(miscOptionsGroup);
-    d->applicationStyleLabel = new QLabel(i18n("Widget style:"), appStyleHbox);
-    d->applicationStyle      = new KComboBox(appStyleHbox);
+    KHBox* const appStyleHbox = new KHBox(miscOptionsGroup);
+    d->applicationStyleLabel  = new QLabel(i18n("Widget style:"), appStyleHbox);
+    d->applicationStyle       = new KComboBox(appStyleHbox);
     d->applicationStyle->setToolTip(i18n("Set this option to choose the default window decoration and looks."));
 
     QStringList styleList = QStyleFactory::keys();
 
     for (int i = 0; i < styleList.count(); ++i)
+    {
         d->applicationStyle->addItem(styleList.at(i));
+    }
 
     gLayout5->addWidget(d->useTrash);
     gLayout5->addWidget(d->showSplash);

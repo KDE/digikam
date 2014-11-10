@@ -33,7 +33,6 @@
 #include "config-digikam.h"
 #include "assigntemplate.h"
 #include "autocorrection.h"
-#include "convert2jp2.h"
 #include "convert2jpeg.h"
 #include "convert2pgf.h"
 #include "convert2png.h"
@@ -64,8 +63,15 @@
 #include "convert16to8.h"
 #include "border.h"
 #include "removemetadata.h"
-#include "lensautofix.h"
 #include "dng.h"
+
+#ifdef HAVE_JASPER
+#include "convert2jp2.h"
+#endif // HAVE_JASPER
+
+#ifdef HAVE_LENSFUN
+#include "lensautofix.h"
+#endif // HAVE_LENSFUN
 
 namespace Digikam
 {
@@ -107,7 +113,9 @@ BatchToolsManager::BatchToolsManager()
     registerTool(new Convert2JPEG(this));
     registerTool(new Convert2PNG(this));
     registerTool(new Convert2TIFF(this));
+#ifdef HAVE_JASPER
     registerTool(new Convert2JP2(this));
+#endif // HAVE_JASPER
     registerTool(new Convert2PGF(this));
 
     // Transform
@@ -180,6 +188,7 @@ void BatchToolsManager::registerTool(BatchTool* const tool)
     {
         return;
     }
+
     tool->registerSettingsWidget();
     d->toolsList.append(tool);
 }

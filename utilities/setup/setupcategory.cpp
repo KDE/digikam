@@ -48,7 +48,7 @@
 
 // Local includes
 
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "thumbnailsize.h"
 
 namespace Digikam
@@ -224,7 +224,7 @@ void SetupCategory::slotAddCategory()
 
 void SetupCategory::applySettings()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    ApplicationSettings* settings = ApplicationSettings::instance();
 
     if (!settings)
     {
@@ -245,7 +245,7 @@ void SetupCategory::applySettings()
 
 void SetupCategory::readSettings()
 {
-    AlbumSettings* settings = AlbumSettings::instance();
+    ApplicationSettings* settings = ApplicationSettings::instance();
 
     if (!settings)
     {

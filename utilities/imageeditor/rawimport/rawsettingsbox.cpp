@@ -6,7 +6,7 @@
  * Date        : 2008-08-11
  * Description : Raw import settings box
  *
- * Copyright (C) 2008-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -89,7 +89,7 @@ public:
         optionContrastEntry("Contrast"),
         optionGammaEntry("Gamma"),
         optionSaturationEntry("Saturation"),
-        optionFineExposureEntry("FineExposure"),
+        optionMainExposureEntry("MainExposure"),
         optionCurvePrefix("RawCurve"),
         optionSettingsPageEntry("Settings Page"),
         optionDecodingSettingsTabEntry("Decoding Settings Tab")
@@ -101,7 +101,7 @@ public:
         saturationLabel        = 0;
         saturationInput        = 0;
         fineExposureLabel      = 0;
-        fineExposureInput      = 0;
+        mainExposureInput      = 0;
         contrastInput          = 0;
         contrastLabel          = 0;
         curveBox               = 0;
@@ -124,7 +124,7 @@ public:
     const QString        optionContrastEntry;
     const QString        optionGammaEntry;
     const QString        optionSaturationEntry;
-    const QString        optionFineExposureEntry;
+    const QString        optionMainExposureEntry;
     const QString        optionCurvePrefix;
     const QString        optionSettingsPageEntry;
     const QString        optionDecodingSettingsTabEntry;
@@ -156,7 +156,7 @@ public:
 
     RDoubleNumInput*     gammaInput;
     RDoubleNumInput*     saturationInput;
-    RDoubleNumInput*     fineExposureInput;
+    RDoubleNumInput*     mainExposureInput;
 
     DcrawSettingsWidget* decodingSettingsBox;
 };
@@ -239,11 +239,11 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* const parent)
     d->saturationInput->input()->setWhatsThis(i18n("Set here the color saturation correction."));
 
     d->fineExposureLabel = new QLabel(i18n("Exposure (E.V):"), d->advExposureBox);
-    d->fineExposureInput = new RDoubleNumInput(d->advExposureBox);
-    d->fineExposureInput->setDecimals(2);
-    d->fineExposureInput->setRange(-3.0, 3.0, 0.1);
-    d->fineExposureInput->setDefaultValue(0.0);
-    d->fineExposureInput->input()->setWhatsThis(i18n("This value in E.V will be used to perform "
+    d->mainExposureInput = new RDoubleNumInput(d->advExposureBox);
+    d->mainExposureInput->setDecimals(2);
+    d->mainExposureInput->setRange(-3.0, 3.0, 0.1);
+    d->mainExposureInput->setDefaultValue(0.0);
+    d->mainExposureInput->input()->setWhatsThis(i18n("This value in E.V will be used to perform "
                                                      "an exposure compensation of the image."));
 
     advExposureLayout->addWidget(d->brightnessLabel,   0, 0, 1, 1);
@@ -255,7 +255,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* const parent)
     advExposureLayout->addWidget(d->saturationLabel,   3, 0, 1, 1);
     advExposureLayout->addWidget(d->saturationInput,   3, 1, 1, 2);
     advExposureLayout->addWidget(d->fineExposureLabel, 4, 0, 1, 1);
-    advExposureLayout->addWidget(d->fineExposureInput, 4, 1, 1, 2);
+    advExposureLayout->addWidget(d->mainExposureInput, 4, 1, 1, 2);
     advExposureLayout->setRowStretch(5, 10);
     advExposureLayout->setSpacing(0);
     advExposureLayout->setMargin(spacingHint());
@@ -370,7 +370,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* const parent)
     connect(d->saturationInput, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalPostProcessingChanged()));
 
-    connect(d->fineExposureInput, SIGNAL(valueChanged(double)),
+    connect(d->mainExposureInput, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalPostProcessingChanged()));
 
     connect(d->decodingSettingsBox->inputProfileUrlEdit(), SIGNAL(openFileDialog(KUrlRequester*)),
@@ -426,7 +426,7 @@ void RawSettingsBox::resetSettings()
     d->contrastInput->slotReset();
     d->gammaInput->slotReset();
     d->saturationInput->slotReset();
-    d->fineExposureInput->slotReset();
+    d->mainExposureInput->slotReset();
     slotResetCurve();
 }
 
@@ -459,7 +459,7 @@ void RawSettingsBox::readSettings()
     d->contrastInput->setValue(group.readEntry(d->optionContrastEntry, 0));
     d->gammaInput->setValue(group.readEntry(d->optionGammaEntry, 1.0));
     d->saturationInput->setValue(group.readEntry(d->optionSaturationEntry, 1.0));
-    d->fineExposureInput->setValue(group.readEntry(d->optionFineExposureEntry, 0.0));
+    d->mainExposureInput->setValue(group.readEntry(d->optionMainExposureEntry, 0.0));
 
     d->curveWidget->restoreCurve(group, d->optionCurvePrefix);
 
@@ -486,7 +486,7 @@ void RawSettingsBox::writeSettings()
     group.writeEntry(d->optionContrastEntry,     d->contrastInput->value());
     group.writeEntry(d->optionGammaEntry,        d->gammaInput->value());
     group.writeEntry(d->optionSaturationEntry,   d->saturationInput->value());
-    group.writeEntry(d->optionFineExposureEntry, d->fineExposureInput->value());
+    group.writeEntry(d->optionMainExposureEntry, d->mainExposureInput->value());
 
     d->curveWidget->saveCurve(group, d->optionCurvePrefix);
 
@@ -505,11 +505,11 @@ DRawDecoding RawSettingsBox::settings() const
 {
     DRawDecoding settings(d->decodingSettingsBox->settings());
 
-    settings.bcg.brightness = (double)d->brightnessInput->value() / 250.0;
-    settings.bcg.contrast   = (double)(d->contrastInput->value() / 100.0) + 1.00;
-    settings.bcg.gamma      = d->gammaInput->value();
-    settings.wb.saturation  = d->saturationInput->value();
-    settings.wb.exposition  = d->fineExposureInput->value();
+    settings.bcg.brightness    = (double)d->brightnessInput->value() / 250.0;
+    settings.bcg.contrast      = (double)(d->contrastInput->value() / 100.0) + 1.00;
+    settings.bcg.gamma         = d->gammaInput->value();
+    settings.wb.saturation     = d->saturationInput->value();
+    settings.wb.expositionMain = d->mainExposureInput->value();
 
     if (d->curveWidget->curves()->isDirty())
     {

@@ -1,0 +1,212 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<!-- NOTE: don't forget to increase version ID when this file is modified -->
+<gui version="401" name="digikam" >
+
+ <MenuBar>
+
+  <Menu name="Browse" >
+   <text>&amp;Browse</text>
+     <Action name="browse_album" />
+     <Action name="browse_tag" />
+     <Action name="browse_labels" />
+     <Action name="browse_date" />
+     <Action name="browse_timeline" />
+     <Action name="browse_search" />
+     <Action name="browse_fuzzysearch" />
+     <Action name="browse_gpssearch" />
+     <Action name="browse_people" />
+   <Separator/>
+     <Action name="album_back" />
+     <Action name="album_forward" />
+   <Separator/>
+     <Action name="app_exit" />
+  </Menu>
+
+  <Menu name="Album" >
+   <text>&amp;Album</text>
+     <Action name="album_new" />
+     <Action name="album_propsEdit" />
+     <Action name="album_rename" />
+     <Action name="album_openinfilemanager" />
+     <Action name="album_openinterminal" />
+     <Action name="album_remove" />
+     <Action name="album_delete" />
+   <Separator/>
+     <Action name="album_write_metadata" />
+     <Action name="album_read_metadata" />
+  </Menu>
+
+  <Menu name="Tag" >
+   <text>T&amp;ag</text>
+     <Action name="open_tag_mngr"/>
+   <Separator/>
+     <Action name="tag_new" />
+     <Action name="tag_edit" />
+     <Action name="tag_delete" />
+  </Menu>
+
+  <Menu name="Image" >
+   <text>&amp;Image</text>
+     <Action name="image_edit" />
+     <Action name="open_with_default_application" />
+   <Separator />
+     <Action name="image_rename" />
+     <Action name="image_delete" />
+   <Separator />
+     <Action name="image_lighttable" />
+     <Action name="image_add_to_lighttable" />
+     <Action name="image_add_to_current_queue" />
+     <Action name="image_add_to_new_queue" />
+     <Action name="image_find_similar" />
+     <Action name="image_write_metadata" />
+     <Action name="image_read_metadata" />
+   <Separator />
+     <Action name="image_rotate"/>
+     <Action name="image_flip"/>
+     <Action name="image_transform_exif"/>
+     <Action name="image_set_exif_orientation"/>
+   <Separator />
+     <DefineGroup name="kipi_image_group" append="kipi_image_group" />
+  </Menu>
+
+  <Menu name="Edit" >
+   <text>&amp;Edit</text>
+     <Action name="cut_album_selection" />
+     <Action name="copy_album_selection" />
+     <Action name="paste_album_selection" />
+     <Separator/>
+     <Action name="selectAll" />
+     <Action name="selectNone" />
+     <Action name="selectInvert" />
+   </Menu>
+
+  <Menu name="View" >
+   <text>&amp;View</text>
+     <Action name="icon_view" />
+     <Action name="image_view" />
+     <Action name="map_view" />
+     <Action name="table_view" />
+     <!--<Action name="view_selection" />-->
+     <Separator/>
+     <Action name="slideshow" />
+     <DefineGroup name="kipi_tool_group" append="kipi_tool_group" />
+     <Action name="full_screen" />
+     <Action name="view_refresh" />
+     <Separator/>
+     <Action name="album_zoomin" />
+     <Action name="album_zoomout" />
+    <Separator/>
+     <Action name="album_zoomto100percents" />
+     <Action name="album_zoomfit2window" />
+     <Separator />
+     <Action name="album_sort" />
+     <Action name="image_sort" />
+     <Action name="image_sort_order" />
+     <Action name="image_group" />
+     <Action name="image_group_sort_order" />
+     <Action name="albums_recursive" />
+     <Action name="tags_recursive" />
+     <Separator />
+     <Action name="color_managed_view" />
+  </Menu>
+
+  <Menu name="Tools"><text>&amp;Tools</text>
+        <Action name="imageeditor" />
+        <Action name="light_table" />
+        <Action name="queue_manager" />
+      <Separator/>
+        <Action name="script_console"/>
+        <Action name="search_quick" />
+        <Action name="search_advanced" />
+        <Action name="find_duplicates" />
+      <Separator/>
+        <Action name="maintenance" />
+        <Action name="empty_tools_group" />
+      <Separator/>
+        <DefineGroup name="kipi_album_group" append="kipi_album_group" />
+      <Separator/>
+        <DefineGroup name="kipi_tool_group" append="kipi_tool_group" />
+      <Separator/>
+        <DefineGroup name="kipi_batch_group" append="kipi_batch_group" />
+  </Menu>
+
+  <Menu name="Import"><text>I&amp;mport</text>
+      <Action name="cameras" />
+      <Action name="usb_media" />
+      <Action name="card_reader" />
+      <Separator/>
+      <Action name="import_addImages" />
+      <Action name="import_addFolders" />
+      <Separator/>
+      <Action name="empty_import_group" />
+      <DefineGroup name="kipi_import_group" append="kipi_import_group" />
+  </Menu>
+
+   <Menu name="Export"><text>&amp;Export</text>
+      <Action name="empty_export_group" />
+      <DefineGroup name="kipi_export_group" append="kipi_export_group" />
+   </Menu>
+
+  <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>
+     <Merge name="StandardToolBarMenuHandler" />
+     <Action name="options_show_menubar"/>
+     <Action name="options_show_statusbar"/>
+     <Action name="options_show_toolbar"/>
+     <Action name="showthumbs" />
+     <Separator/>
+     <Action name="theme_menu" />
+     <Action name="options_configure_keybinding"/>
+     <Action name="options_configure_toolbars"/>
+     <Action name="options_configure_notifications"/>
+     <Action name="database_migration" />
+     <Action name="options_configure"/>
+  </Menu>
+
+  <Menu name="help"><Text>&amp;Help</Text>
+    <Action name="help_rawcameralist"/>
+    <Action name="help_librariesinfo"/>
+    <Action name="help_dbstat"/>
+    <Action name="help_kipi"/>
+    <Action name="help_tipofday"/>
+    <Separator/>
+    <Action name="help_donatemoney"/>
+    <Action name="help_contribute"/>
+  </Menu>
+
+  <Merge/>
+
+ </MenuBar>
+
+ <ToolBar noMerge="1" name="mainToolBar" >
+  <text>Main Toolbar</text>
+  <!--<Action name="album_back" />
+  <Action name="album_forward" />
+  <Separator/>-->
+  <Action name="imageeditor" />
+  <Action name="light_table" />
+  <Action name="queue_manager" />
+  <Action name="import_auto" />
+  <Separator/>
+  <Action name="icon_view" />
+  <Action name="image_view" />
+  <Action name="map_view" />
+  <Action name="table_view" />
+  <Separator/>
+  <Action name="slideshow" />
+  <Action name="full_screen" />
+  <Merge />
+  <WeakSeparator />
+  <Action name="logo_action" />
+ </ToolBar>
+
+ <MainWindow>
+  <Action name="exit_preview_mode"/>
+  <Action name="next_image"/>
+  <Action name="previous_image"/>
+  <Action name="first_image"/>
+  <Action name="last_image"/>
+ </MainWindow>
+
+ <ActionProperties/>
+
+</gui>

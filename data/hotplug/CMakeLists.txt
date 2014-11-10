@@ -1,19 +1,24 @@
-SET(digikamhelperdir ${DATA_INSTALL_DIR}/digikam/utils)
+#
+# Copyright (c) 2010-2014, Gilles Caulier, <caulier dot gilles at gmail dot com>
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+
+set(digikamhelperdir ${DATA_INSTALL_DIR}/digikam/utils)
 
 #configure_file(digikam-download.desktop.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/digikam-download.desktop @ONLY)
 #configure_file(digikam-gphoto2-camera.desktop.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/digikam-gphoto2-camera.desktop @ONLY)
 #configure_file(digikam-mount-and-download.desktop.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/digikam-mount-and-download.desktop @ONLY)
 
-CONFIGURE_FILE(digikam-opencamera.desktop.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/digikam-opencamera.desktop @ONLY)
+configure_file(digikam-opencamera.desktop.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/digikam-opencamera.desktop @ONLY)
 
-#INSTALL(FILES
-#        ${CMAKE_CURRENT_BINARY_DIR}/digikam-download.desktop
-#        ${CMAKE_CURRENT_BINARY_DIR}/digikam-gphoto2-camera.desktop
-#        ${CMAKE_CURRENT_BINARY_DIR}/digikam-mount-and-download.desktop
+#install(FILES ${CMAKE_CURRENT_BINARY_DIR}/digikam-download.desktop
+#              ${CMAKE_CURRENT_BINARY_DIR}/digikam-gphoto2-camera.desktop
+#              ${CMAKE_CURRENT_BINARY_DIR}/digikam-mount-and-download.desktop
 #        DESTINATION ${SERVICES_INSTALL_DIR}/ServiceMenus)
 
-INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/digikam-opencamera.desktop DESTINATION ${DATA_INSTALL_DIR}/solid/actions)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/digikam-opencamera.desktop DESTINATION ${DATA_INSTALL_DIR}/solid/actions)
 
-IF(NOT WIN32)
-    INSTALL(PROGRAMS digikam-camera DESTINATION ${digikamhelperdir})
-ENDIF(NOT WIN32)
+if(NOT WIN32)
+    install(PROGRAMS digikam-camera DESTINATION ${digikamhelperdir})
+endif()

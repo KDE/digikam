@@ -29,6 +29,10 @@
 
 #include <QSplitter>
 
+// KDE includes
+
+#include <kdebug.h>
+
 // Local includes
 
 #include "previewlayout.h"
@@ -53,8 +57,10 @@ public:
         importIconView      = 0;
         importPreviewView   = 0;
         mediaPlayerView     = 0;
-        mapWidgetView       = 0;
         syncingSelection    = false;
+#ifdef HAVE_KGEOMAP
+        mapWidgetView       = 0;
+#endif // HAVE_KGEOMAP
     }
 
     bool                syncingSelection;
@@ -67,7 +73,10 @@ public:
     ImportPreviewView*  importPreviewView;
     ThumbBarDock*       thumbBarDock;
     MediaPlayerView*    mediaPlayerView; // Reuse of albumgui mediaplayer view.
+
+#ifdef HAVE_KGEOMAP
     MapWidgetView*      mapWidgetView;
+#endif // HAVE_KGEOMAP
 };
 
 void ImportStackedView::setModels(ImportImageModel* model, ImportFilterModel* filterModel)
@@ -78,14 +87,15 @@ void ImportStackedView::setModels(ImportImageModel* model, ImportFilterModel* fi
     // TODO this is currently here because the code structure, waiting for restructuring..
     d->importIconView->init();
 
+#ifdef HAVE_KGEOMAP
     // TODO refactor MapWidgetView not to require the models on startup?
     d->mapWidgetView   = new MapWidgetView(d->importIconView->getSelectionModel(),
                                            d->importIconView->importFilterModel(), this,
                                            MapWidgetView::ApplicationImportUI);
     d->mapWidgetView->setObjectName("import_mapwidgetview");
     insertWidget(MapWidgetMode,     d->mapWidgetView);
+#endif // HAVE_KGEOMAP
 }
-
 
 ImportStackedView::ImportStackedView(QWidget* const parent)
     : QStackedWidget(parent), d(new Private)
@@ -99,7 +109,7 @@ ImportStackedView::ImportStackedView(QWidget* const parent)
     d->thumbBarDock->setWidget(d->thumbBar);
     d->thumbBarDock->setObjectName("import_thumbbar");
 
-    d->mediaPlayerView = new MediaPlayerView(this);
+    d->mediaPlayerView   = new MediaPlayerView(this);
 
     insertWidget(PreviewCameraMode, d->importIconView);
     insertWidget(PreviewImageMode,  d->importPreviewView);
@@ -234,10 +244,12 @@ ImportPreviewView* ImportStackedView::importPreviewView() const
     return d->importPreviewView;
 }
 
+#ifdef HAVE_KGEOMAP
 MapWidgetView* ImportStackedView::mapWidgetView() const
 {
     return d->mapWidgetView;
 }
+#endif // HAVE_KGEOMAP
 
 MediaPlayerView* ImportStackedView::mediaPlayerView() const
 {
@@ -339,16 +351,20 @@ void ImportStackedView::setViewMode(const StackedViewMode mode)
         setCurrentIndex(mode);
     }
 
+#ifdef HAVE_KGEOMAP
     d->mapWidgetView->setActive(mode == MapWidgetMode);
+#endif // HAVE_KGEOMAP
 
     if (mode == PreviewCameraMode)
     {
         d->importIconView->setFocus();
     }
+#ifdef HAVE_KGEOMAP
     else if (mode == MapWidgetMode)
     {
         d->mapWidgetView->setFocus();
     }
+#endif // HAVE_KGEOMAP
 
     emit signalViewModeChanged();
 }

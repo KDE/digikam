@@ -22,6 +22,7 @@
  * ============================================================ */
 
 #include "libsinfodlg.h"
+#include "config-digikam.h"
 
 // Qt includes
 
@@ -45,9 +46,13 @@
 #include <libkdcraw/version.h>
 #include <libkdcraw/kdcraw.h>
 
+#ifdef HAVE_KGEOMAP
 // Libkgeomap includes
 
 #include <libkgeomap/kgeomap_widget.h>
+
+using namespace KGeoMap;
+#endif // HAVE_KGEOMAP
 
 // C ANSI includes
 
@@ -55,11 +60,15 @@
 extern "C"
 {
 #endif
+
+#ifdef HAVE_JASPER
 #include <jasper/jas_version.h>
+#endif // HAVE_JASPER
+
 #include <png.h>
 #include <tiffvers.h>
 
-    // Avoid Warnings under Win32
+// Avoid Warnings under Win32
 #undef HAVE_STDLIB_H
 #undef HAVE_STDDEF_H
 #include <jpeglib.h>
@@ -73,15 +82,13 @@ extern "C"
 #include "greycstorationfilter.h"
 #include "pgfutils.h"
 #include "digikam-lcms.h"
-#include "config-digikam.h"
 
 #ifdef HAVE_LENSFUN
-#       include "lensfuniface.h"
+#include "lensfuniface.h"
 #endif // HAVE_LENSFUN
 
 using namespace KExiv2Iface;
 using namespace KDcrawIface;
-using namespace KGeoMap;
 
 namespace Digikam
 {
@@ -114,6 +121,8 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
 
 #ifdef HAVE_EIGEN3
     list.insert(i18n("LibEigen"),                    QString(EIGEN3_VERSION_STRING));
+#else
+    list.insert(i18n("LibEigen support"),            i18n("no"));
 #endif // HAVE_EIGEN3
 
     list.insert(i18n("LibKExiv2"),                   KExiv2::version());
@@ -133,28 +142,35 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
 
 #ifdef HAVE_LENSFUN
     list.insert(i18n("LibLensFun"),                  LensFunIface::lensFunVersion());
+#else
+    list.insert(i18n("LibLensFun support"),          i18n("no"));
 #endif // HAVE_LENSFUN
 
 #ifndef HAVE_LIBLQR_1
     list.insert(i18n("LibLqr support"),              i18n("yes"));
+#else
+    list.insert(i18n("LibLqr support"),              i18n("no"));
 #endif // HAVE_LIBLQR_1
 
     list.insert(i18n("LibPNG"),                      QString(PNG_LIBPNG_VER_STRING));
     list.insert(i18n("LibTIFF"),                     QString(TIFFLIB_VERSION_STR).replace('\n', ' '));
     list.insert(i18n("LibJPEG"),                     QString::number(JPEG_LIB_VERSION));
-    list.insert(i18n("LibJasper"),                   QString(jas_getversion()));
     list.insert(i18n("LibCImg"),                     GreycstorationFilter::cimgVersionString());
     list.insert(i18n("LibLCMS"),                     QString::number(LCMS_VERSION));
+    list.insert(i18n("LibPGF"),                      PGFUtils::libPGFVersion());
+
+#ifdef HAVE_JASPER
+    list.insert(i18n("LibJasper"),                   QString(jas_getversion()));
+#else
+    list.insert(i18n("LibJasper support"),           i18n("no"));
+#endif // HAVE_JASPER
+
+#ifdef HAVE_KGEOMAP
     list.insert(i18n("LibKGeoMap"),                  KGeoMapWidget::version());
     list.insert(i18n("Marble Widget"),               KGeoMapWidget::MarbleWidgetVersion());
-
-#ifdef USE_EXT_LIBPGF
-    list.insert(i18n("LibPGF"),                      QString("%1 - %2").arg(PGFUtils::libPGFVersion()).arg(i18n("external shared library")));
 #else
-    list.insert(i18n("LibPGF"),                      QString("%1 - %2").arg(PGFUtils::libPGFVersion()).arg(i18n("internal library")));
-#endif // USE_EXT_LIBPGF
-
-    list.insert(i18n("Parallelized PGF codec"),      PGFUtils::libPGFUseOpenMP() ? i18n("Yes") : i18n("No"));
+    list.insert(i18n("LibKGeoMap support"),          i18n("no"));
+#endif // HAVE_KGEOMAP
 
     int nbcore = QThreadPool::globalInstance()->maxThreadCount();
     list.insert(i18np("CPU core", "CPU cores", nbcore), QString("%1").arg(nbcore));

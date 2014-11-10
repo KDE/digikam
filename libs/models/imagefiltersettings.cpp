@@ -10,6 +10,7 @@
  * Copyright (C) 2011-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C)      2010 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C)      2011 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C)      2014 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,6 +53,7 @@ namespace Digikam
 ImageFilterSettings::ImageFilterSettings()
 {
     m_untaggedFilter       = false;
+    m_isUnratedExcluded    = false;
     m_ratingFilter         = 0;
     m_mimeTypeFilter       = MimeFilter::AllFiles;
     m_ratingCond           = GreaterEqualCondition;
@@ -170,7 +172,7 @@ bool ImageFilterSettings::isFilteringByGeolocation() const
 
 bool ImageFilterSettings::isFilteringByRating() const
 {
-    if (m_ratingFilter != 0 || m_ratingCond != GreaterEqualCondition)
+    if (m_ratingFilter != 0 || m_ratingCond != GreaterEqualCondition || m_isUnratedExcluded)
     {
         return true;
     }
@@ -220,10 +222,11 @@ void ImageFilterSettings::setTagFilter(const QList<int>& includedTags,
     m_pickLabelTagFilter  = plTagIds;
 }
 
-void ImageFilterSettings::setRatingFilter(int rating, RatingCondition ratingCondition)
+void ImageFilterSettings::setRatingFilter(int rating, RatingCondition ratingCondition, bool isUnratedExcluded)
 {
-    m_ratingFilter = rating;
-    m_ratingCond   = ratingCondition;
+    m_ratingFilter      = rating;
+    m_ratingCond        = ratingCondition;
+    m_isUnratedExcluded = isUnratedExcluded;
 }
 
 void ImageFilterSettings::setMimeTypeFilter(int mime)
@@ -444,28 +447,35 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* const foundText) 
             rating = 0;
         }
 
-        if (m_ratingCond == GreaterEqualCondition)
+        if(m_isUnratedExcluded && rating == 0)
         {
-            // If the rating is not >=, i.e it is <, then it does not match.
-            if (rating < m_ratingFilter)
-            {
-                match = false;
-            }
-        }
-        else if (m_ratingCond == EqualCondition)
-        {
-            // If the rating is not =, i.e it is !=, then it does not match.
-            if (rating != m_ratingFilter)
-            {
-                match = false;
-            }
+            match = false;
         }
         else
         {
-            // If the rating is not <=, i.e it is >, then it does not match.
-            if (rating > m_ratingFilter)
+            if (m_ratingCond == GreaterEqualCondition)
             {
-                match = false;
+                // If the rating is not >=, i.e it is <, then it does not match.
+                if (rating < m_ratingFilter)
+                {
+                    match = false;
+                }
+            }
+            else if (m_ratingCond == EqualCondition)
+            {
+                // If the rating is not =, i.e it is !=, then it does not match.
+                if (rating != m_ratingFilter)
+                {
+                    match = false;
+                }
+            }
+            else
+            {
+                // If the rating is not <=, i.e it is >, then it does not match.
+                if (rating > m_ratingFilter)
+                {
+                    match = false;
+                }
             }
         }
     }

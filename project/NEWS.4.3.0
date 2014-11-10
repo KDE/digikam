@@ -1,0 +1,154 @@
+*****************************************************************************************************
+digiKam 4.3.0 - Release date: 2014-09-07
+
+NEW FEATURES:
+
+Database     : Nepomuk support have been replaced by Baloo support (https://community.kde.org/Baloo).
+Map Searches : New option to display all non geolocated images from collections.
+General      : New notification event when kioslave cannot be started.
+General      : OSX event notifier is now used to dispatch notifications.
+AlbumGui     : New Action To Exclude Items Without Rating with items filter.
+               Details: http://mohamedanwer.wordpress.com/2014/08/28/new-action-to-exclude-items-without-rating/
+
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
+
+001 ==> 338048 - Separate Tags in Public and Private for Export.
+002 ==> 338055 - libkdepimlibs not found.
+003 ==> 317813 - SQLITE : digiKam do not accept previous DB Sqlite.
+004 ==> 198063 - SCAN : digiKam startup is extremely slow.
+005 ==> 262720 - SCAN : 'scan for new images' should work on just current Album.
+006 ==> 317864 - Album rename problem.
+007 ==> 230602 - Do not display photos, after the removal of the tag.
+008 ==> 318201 - Assigned tags in IconView should be sorted.
+009 ==> 336328 - Tags Manager's Sync Export DB to metadata, mirrors XMP but it only appends IPTC keywords data.
+010 ==> 335624 - digiKam crash when I start face recognition.
+011 ==> 338085 - digiKam 4.2 fails to start on windows.
+012 ==> 327646 - MySQL : Failed to create tables in database" Error In digiKam [patch].
+013 ==> 195006 - SQLITE : UTF8 characters not accepted in database file path.
+014 ==> 308931 - digiKam Nepomuk integration (v2).
+015 ==> 225869 - Add option to found no geolocated images in database.
+016 ==> 338429 - Removal of preposition 'My' from UI wording.
+017 ==> 289204 - General performance problems because of lacking multithreading / multicore support.
+018 ==> 332999 - Export shortcut.
+019 ==> 333001 - JP2 compression has no effect.
+020 ==> 327827 - Some pictures not visible in digiKam.
+021 ==> 338138 - Preview uses low quality interpolation.
+022 ==> 324323 - Hang on opening Geolocation pane on photos with XMP GPS tags.
+023 ==> 284126 - Documentation required for compilation but should be optional.
+024 ==> 258985 - digiKam does not store correct color profile in JPEG2000 or TIFF images.
+025 ==> 338172 - After changing the Properties of an album, the selector in the album list (left bar) jumps, a random album is selected.
+026 ==> 322789 - Enabling "color managed view" in editor slows down tool startup.
+027 ==> 156186 - Sorting of albums other than alphabetically.
+028 ==> 267511 - Export /print selection manager.
+029 ==> 129132 - Hidden tags for archiving purposes.
+030 ==> 266671 - Option to detect faces on all pictures that had no faces detected on previous runs.
+031 ==> 265268 - Usability: Change Icon in Scanresults to mark as "not a face".
+032 ==> 287621 - Right Click Face Tagging in Preview not working.
+033 ==> 262170 - The remove button for faces should be more explicit.
+034 ==> 286770 - Unknown face tag no longer shows any items, even though there are unlabelled face tags in images.
+035 ==> 263397 - Usability enhancement on changing confirmed faces.
+036 ==> 308642 - Faces assignement : user interface improvements.
+037 ==> 279199 - Several UI suggestions for face-detection.
+038 ==> 271841 - SCAN : KDirwatch and database : digikam very slow when editing iptc data.
+039 ==> 290421 - digiKam should inform users when kio-slave fail to load.
+040 ==> 289872 - Database will not open.
+041 ==> 306158 - GROUP : Sorting the image-groups by name in main image view, when the images are grouped in albums.
+042 ==> 338522 - digiKam doesn't save metadata to images.
+043 ==> 307613 - Face tag input field does not show when no Icon View Options are enabled.
+044 ==> 187651 - Improve wording and usability of first-run wizard.
+045 ==> 327054 - Startup scan happens twice if splash screen turned off in settings->misc->splash screen.
+046 ==> 279835 - Rating Filter : checkbox for including or excluding not rated images.
+047 ==> 298158 - When working in digiKam, metadata erased whereas GIMP preserves metadata.
+048 ==> 141014 - Time and dates in digiKam.
+049 ==> 188925 - Write image metadata in background with user feedback.
+050 ==> 126821 - Handle existing read-only photo trees without copying (i.e. virtual albums).
+051 ==> 335256 - Add option to view custom GPS EXIF tags (IPTC).
+052 ==> 213745 - Create date change when we modefy xmp metadata.
+053 ==> 275351 - User Icons won't show on digikam restart.
+054 ==> 278110 - Fuji X100 RAF RAW files doesn't show right under image editor.
+055 ==> 308821 - GoogleMaps : Impossible to open map view.
+056 ==> 338631 - Extending raw support.
+057 ==> 161619 - Smart zoom steps in Image Editor.
+058 ==> 284213 - Editing tools re-organized to sidepanel to save space with better usability.
+059 ==> 148238 - Fast switching between preview modes.
+060 ==> 155415 - PRINT : white lines in preview and output.
+061 ==> 229670 - Curves Widget does not restore a "free curve" correctly (in BWSepia filter).
+062 ==> 267216 - Enable auto detection of libjpeg turbo under fedora 14 or later.
+063 ==> 291972 - HEAD compiling issues under FreeBSD 8.2 [patch].
+064 ==> 326112 - SCAN : Moving an album (directory) loses metadata for cr2 files.
+065 ==> 322079 - Mouse wheel short cut to move through my pictures.
+066 ==> 312741 - When scrolling through lots of pics, these apper too small.
+067 ==> 293957 - Preview image not updated after rotation or flip.
+068 ==> 209343 - Mouse-wheel should jump to next/previous picture if used when viewing a picture.
+069 ==> 160591 - Forward / Back (Previous / Next) don't work in preview mode.
+070 ==> 132047 - Faster display of images and/or prefetch wished for.
+071 ==> 261562 - Drop tags over preview canvas.
+072 ==> 292407 - Display image center when Zooming to 100%.
+073 ==> 314377 - digiKam should display images without interpolation when zoom is > 200%.
+074 ==> 316863 - Zoom keyboard shortcuts not working in preview mode.
+075 ==> 154643 - Slideshow from digiKam could use some filter options.
+076 ==> 255792 - Photo selection mode while browsing album with Slideshow.
+077 ==> 321737 - Image editor always opens small window.
+078 ==> 288614 - Tags filter and Taggin sidebar are too similar, easy to mistake.
+079 ==> 291542 - Mouse scroll by itself does NOT take one to the next or previous picture in Reduced Size Preview.
+080 ==> 140743 - More flexible and consistent grouping of icons.
+081 ==> 248565 - Basic functionality not available via keyboard.
+082 ==> 246726 - Ask for confirmation when deleting many images.
+083 ==> 162552 - Compact image display in virtual folders.
+084 ==> 318700 - Preview mode not updated after importing or deleting pictures.
+085 ==> 333598 - Rebuild fingerprints crashes with large number (>40000) of images.
+086 ==> 251664 - Allow to remove all duplicates except in one selected Album.
+087 ==> 324900 - Impossible to select collection subfolder in duplicates search.
+088 ==> 336327 - digiKam crashed when start to import pictures from usb-drive.
+089 ==> 300020 - Picture not showing in the thumbnails after edition.
+090 ==> 329524 - Moving versioned pictures to a different album ungroups them.
+091 ==> 305359 - Advanced rename of lots of images is slow.
+092 ==> 333356 - Crash on attemp to change modified date to created date.
+093 ==> 134164 - Be able to use the settings from inside the .NEF file itself.
+094 ==> 338081 - Support HDR DNG images from HDRMerge.
+095 ==> 327628 - Add keyboard shortcut to rename album.
+096 ==> 287081 - F2 renames image, not Album in Thumbnails mode.
+097 ==> 320295 - Bad Exif orientation interpretation while importing.
+098 ==> 314952 - Import window should not lock the interface while reading photos.
+099 ==> 314953 - Import window and digiKam window freeze when clicking "Download all".
+100 ==> 161988 - Collapse of keyword tree.
+101 ==> 318577 - Batch queue fails to process multiple files simultaneously (in parallel).
+102 ==> 323299 - Synchronize sort order of icon-view and album tree-view.
+103 ==> 128333 - digiKam automatic photographic Labels.
+104 ==> 291903 - Minor tweaks to input-field "Enter new tag here...".
+105 ==> 115170 - MANAGER : add 'remove all tags' to menu hierarchy.
+106 ==> 331695 - MANAGER : misleading menu entry may lead to unintentionall purging of all tags.
+107 ==> 337688 - Reading/writing of keyword-tags to jpg and xmp corrupts tag hierarchy, duplicate root tag.
+108 ==> 335723 - MANAGER : "Quick Access List" can not be resized.
+109 ==> 329975 - Metadata tag is never (re-)read from image.
+110 ==> 326935 - Cannot open tiff-files.
+111 ==> 335718 - MANAGER : removing a tag turns entries in "Quick Access List" to "All tags".
+112 ==> 225723 - Simple sharpen is awfully slow.
+113 ==> 290442 - Unsharp Mask with radius less than 1.0 burns images.
+114 ==> 127374 - Maximum Radius way too small in Unsharp Mask tool.
+115 ==> 331523 - digiKam don't compile with next Lensfun version where CCI correction have been removed.
+116 ==> 315025 - 0Byte sized files after using 2 actions in Batch Queue Manager.
+117 ==> 314822 - BQM creates empty PNG output from PNG input.
+118 ==> 330118 - Downloading back the same image with "download and deleted", import tool says "image already exists".
+119 ==> 308836 - Add keyboard shortcuts to toggle display of left and right sidebar.
+120 ==> 144651 - Add Keyboard shortcuts to navigate between tabs from left and right sidebar.*
+121 ==> 286263 - digiKam automatically expands albums tree-view item while dragging over 
+122 ==> 307231 - Moving a tag from "my tag" collapse the tag under.
+123 ==> 240231 - Add an option to context menu to restore menu visibility when it have been hidden.
+124 ==> 201592 - Sorting images in queue from Batch Queue Manager.
+125 ==> 265231 - Tooltip do not show whole camera information.
+126 ==> 309471 - EXIF orientation is not determined for some JPEG files.
+127 ==> 307357 - Metadata from DNG files generated Lightroom 3 and 4 are not displayed in Image Editor right side-bar tab.
+128 ==> 324759 - When digiKam searches faces, it sets frames automatically. I can _NOT_ erase the "frames" any more.
+129 ==> 193485 - Sort images by Caption, Headline, Comments, etc.
+130 ==> 228394 - Sort images by EXIF tag.
+131 ==> 124890 - Sort images by camera.
+132 ==> 216634 - "Move" as default operation.
+133 ==> 284585 - Preserve RSync compatibility when changing Exif orientation and not Modification time.
+134 ==> 281574 - Black background for preview in fullscreen [patch].
+135 ==> 313855 - Double click over the preview canvas to leave preview mode.
+136 ==> 300647 - F5 in preview mode jumps to top of album instead to refresh canvas.
+137 ==> 324028 - Menu bar is missing after closing digiKam in fullscreen mode.
+138 ==> 318831 - Double-clicking on video thumbnail has no effect.
+139 ==> 275080 - Add keyboard shortcut for "Open With" default application.
+140 ==> 115597 - Add "Open With..." option in image editor.

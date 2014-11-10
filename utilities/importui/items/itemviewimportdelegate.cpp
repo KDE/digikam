@@ -47,6 +47,7 @@
 #include "imagescanner.h"
 #include "camiteminfo.h"
 #include "colorlabelwidget.h"
+#include "ratingwidget.h"
 
 namespace Digikam
 {
@@ -84,17 +85,7 @@ void ItemViewImportDelegatePrivate::clearRects()
 void ItemViewImportDelegatePrivate::makeStarPolygon()
 {
     // Pre-computed star polygon for a 15x15 pixmap.
-    starPolygon << QPoint(0,  6);
-    starPolygon << QPoint(5,  5);
-    starPolygon << QPoint(7,  0);
-    starPolygon << QPoint(9,  5);
-    starPolygon << QPoint(14, 6);
-    starPolygon << QPoint(10, 9);
-    starPolygon << QPoint(11, 14);
-    starPolygon << QPoint(7,  11);
-    starPolygon << QPoint(3,  14);
-    starPolygon << QPoint(4,  9);
-
+    starPolygon     = RatingWidget::starPolygon();
     starPolygonSize = QSize(15, 15);
 }
 
@@ -115,6 +106,7 @@ ItemViewImportDelegate::ItemViewImportDelegate(ItemViewImportDelegatePrivate& dd
 ItemViewImportDelegate::~ItemViewImportDelegate()
 {
     Q_D(ItemViewImportDelegate);
+
     removeAllOverlays();
     delete d;
 }
@@ -122,6 +114,7 @@ ItemViewImportDelegate::~ItemViewImportDelegate()
 ThumbnailSize ItemViewImportDelegate::thumbnailSize() const
 {
     Q_D(const ItemViewImportDelegate);
+
     return d->thumbSize;
 }
 
@@ -152,12 +145,14 @@ void ItemViewImportDelegate::setSpacing(int spacing)
 int ItemViewImportDelegate::spacing() const
 {
     Q_D(const ItemViewImportDelegate);
+
     return d->spacing;
 }
 
 QRect ItemViewImportDelegate::rect() const
 {
     Q_D(const ItemViewImportDelegate);
+
     return d->rect;
 }
 
@@ -174,24 +169,28 @@ QRect ItemViewImportDelegate::imageInformationRect() const
 QRect ItemViewImportDelegate::ratingRect() const
 {
     Q_D(const ItemViewImportDelegate);
+
     return d->ratingRect;
 }
 
 void ItemViewImportDelegate::setRatingEdited(const QModelIndex& index)
 {
     Q_D(ItemViewImportDelegate);
+
     d->editingRating = index;
 }
 
 QSize ItemViewImportDelegate::sizeHint(const QStyleOptionViewItem& /*option*/, const QModelIndex& /*index*/) const
 {
     Q_D(const ItemViewImportDelegate);
+
     return d->rect.size();
 }
 
 QSize ItemViewImportDelegate::gridSize() const
 {
     Q_D(const ItemViewImportDelegate);
+
     return d->gridSize;
 }
 
@@ -234,6 +233,7 @@ void ItemViewImportDelegate::mouseMoved(QMouseEvent* e, const QRect& visualRect,
 void ItemViewImportDelegate::setDefaultViewOptions(const QStyleOptionViewItem& option)
 {
     Q_D(ItemViewImportDelegate);
+
     d->font = option.font;
     invalidatePaintingCache();
 }
@@ -251,6 +251,7 @@ void ItemViewImportDelegate::slotSetupChanged()
 void ItemViewImportDelegate::invalidatePaintingCache()
 {
     Q_D(ItemViewImportDelegate);
+
     QSize oldGridSize = d->gridSize;
     updateSizeRectsAndPixmaps();
 
@@ -285,6 +286,7 @@ QRect ItemViewImportDelegate::drawThumbnail(QPainter* p, const QRect& thumbRect,
     p->drawPixmap(r.x() + (r.width()-thumbnail.width())/2,
                   r.y() + (r.height()-thumbnail.height())/2,
                   thumbnail);
+
     return actualPixmapRect;
 }
 
@@ -297,15 +299,12 @@ void ItemViewImportDelegate::drawRating(QPainter* p, const QModelIndex& index, c
     {
         p->drawPixmap(ratingRect, ratingPixmap(rating, isSelected));
     }
-/*
-    else
-        p->drawPixmap(r, ratingPixmap(-1, isSelected));
-*/
 }
 
 void ItemViewImportDelegate::drawName(QPainter* p,const QRect& nameRect, const QString& name) const
 {
     Q_D(const ItemViewImportDelegate);
+
     p->setFont(d->fontReg);
     p->drawText(nameRect, Qt::AlignCenter, name);//squeezedTextCached(p, nameRect.width(), name));
 }
@@ -313,6 +312,7 @@ void ItemViewImportDelegate::drawName(QPainter* p,const QRect& nameRect, const Q
 void ItemViewImportDelegate::drawCreationDate(QPainter* p, const QRect& dateRect, const QDateTime& date) const
 {
     Q_D(const ItemViewImportDelegate);
+
     p->setFont(d->fontXtra);
     QString str = dateToString(date);
     str         = i18nc("date of image creation", "created: %1", str);
@@ -361,8 +361,10 @@ void ItemViewImportDelegate::drawImageSize(QPainter* p, const QRect& dimsRect, c
         mpixels.setNum(dims.width()*dims.height()/1000000.0, 'f', 2);
 
         if (dims.isValid())
+        {
             resolution = i18nc("%1 width, %2 height, %3 mpixels", "%1x%2 (%3Mpx)",
                                dims.width(), dims.height(), mpixels);
+        }
         else
         {
             resolution = i18nc("unknown image resolution", "Unknown");
@@ -375,6 +377,7 @@ void ItemViewImportDelegate::drawImageSize(QPainter* p, const QRect& dimsRect, c
 void ItemViewImportDelegate::drawFileSize(QPainter* p, const QRect& r, qlonglong bytes) const
 {
     Q_D(const ItemViewImportDelegate);
+
     p->setFont(d->fontXtra);
     p->drawText(r, Qt::AlignCenter, KIO::convertSize(bytes));//squeezedTextCached(p, r.width(), KIO::convertSize(bytes)));
 }
@@ -383,6 +386,7 @@ void ItemViewImportDelegate::drawTags(QPainter* p, const QRect& r, const QString
                                      bool isSelected) const
 {
     Q_D(const ItemViewImportDelegate);
+
     p->setFont(d->fontCom);
     p->setPen(isSelected ? kapp->palette().color(QPalette::HighlightedText)
                          : kapp->palette().color(QPalette::Link));
@@ -415,7 +419,7 @@ void ItemViewImportDelegate::drawPickLabelIcon(QPainter* p, const QRect& r, int 
 }
 
 void ItemViewImportDelegate::drawColorLabelRect(QPainter* p, const QStyleOptionViewItem& option,
-                                               bool isSelected, int colorId) const
+                                                bool isSelected, int colorId) const
 {
     Q_D(const ItemViewImportDelegate);
     Q_UNUSED(option);
@@ -444,6 +448,7 @@ void ItemViewImportDelegate::drawGeolocationIndicator(QPainter* p, const QRect& 
 void ItemViewImportDelegate::drawDownloadIndicator(QPainter* p, const QRect& r, int itemType) const
 {
     QIcon icon;
+
     if (itemType == CamItemInfo::DownloadUnknown)
     {
         icon = KIconLoader::global()->loadIcon("dialog-information", KIconLoader::NoGroup, KIconLoader::SizeSmall);
@@ -487,7 +492,7 @@ void ItemViewImportDelegate::drawLockIndicator(QPainter* p, const QRect& r, int 
 }
 
 void ItemViewImportDelegate::drawFocusRect(QPainter* p, const QStyleOptionViewItem& option,
-                                          bool isSelected) const
+                                           bool isSelected) const
 {
     Q_D(const ItemViewImportDelegate);
 
@@ -546,7 +551,7 @@ void ItemViewImportDelegate::prepareFonts()
     d->fontXtra = d->font;
     d->fontCom.setItalic(true);
 
-    int fnSz = d->fontReg.pointSize();
+    int fnSz    = d->fontReg.pointSize();
 
     if (fnSz > 0)
     {

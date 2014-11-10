@@ -58,6 +58,11 @@ public:
 
 private:
 
+    // To prevent cppcheck warnings.
+    ImageFiltersHistoryTreeItem(const ImageFiltersHistoryTreeItem&);
+
+private:
+
     class Private;
     Private* const d;
 };

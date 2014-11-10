@@ -45,7 +45,7 @@
 
 #include "album.h"
 #include "albumdb.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "imageinfo.h"
 #include "metadatasettings.h"
 #include "collectionmanager.h"
@@ -337,7 +337,7 @@ QAbstractItemModel* KipiInterface::getTagTree() const
 QVariant KipiInterface::hostSetting(const QString& settingName)
 {
     MetadataSettings* mSettings = MetadataSettings::instance();
-    AlbumSettings* aSettings    = AlbumSettings::instance();
+    ApplicationSettings* aSettings    = ApplicationSettings::instance();
 
     if (!mSettings || !aSettings)
     {

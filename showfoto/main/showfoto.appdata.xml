@@ -6,12 +6,16 @@
   <name>Showfoto</name>
   <name xml:lang="ca">showFoto</name>
   <name xml:lang="cs">Showfoto</name>
+  <name xml:lang="da">showFoto</name>
+  <name xml:lang="de">Showfoto</name>
   <name xml:lang="en-GB">Showfoto</name>
+  <name xml:lang="es">Showfoto</name>
   <name xml:lang="nl">Showfoto</name>
   <name xml:lang="pl">Showfoto</name>
   <name xml:lang="pt">Showfoto</name>
   <name xml:lang="pt-BR">Showfoto</name>
   <name xml:lang="sk">Showfoto</name>
+  <name xml:lang="sl">Showfoto</name>
   <name xml:lang="sv">Showfoto</name>
   <name xml:lang="uk">Showfoto</name>
   <name xml:lang="x-test">xxShowfotoxx</name>
@@ -21,11 +25,16 @@
       Showfoto is the standalone image editor of the digiKam project.
     </p>
     <p xml:lang="ca">El showFoto és un editor d'imatges ràpid amb potents eines per a l'edició d'imatges. El pot usar per a visualitzar i millorar les vostres fotografies. El showFoto és un editor d'imatges independent del projecte digiKam.</p>
+    <p xml:lang="da">Showfoto er hurtig billedredigering med kraftfulde redigeringsværktøjer. Du kan bruge det til at fremvise dine fotos og forbedre dem. Showfoto er selvstændig billedredigering fra digiKam-projektet.</p>
+    <p xml:lang="de">Showfoto ist eine schnelle Bildbearbeitung mit einigen mächtigen Basiswerkzeugen. Sie können es benutzen, um Ihre Fotos anzusehen und Korrekturen und Änderungen durchzuführen. Showfoto ist das eigenständige Bildbearbeitungsprogramm des Digikam-Projekts.</p>
     <p xml:lang="en-GB">Showfoto is a fast Image Editor with powerful image editing tools. You can use it to view your photographs and improve them. Showfoto is the standalone image editor of the digiKam project.</p>
+    <p xml:lang="es">Showfoto es un rápido editor de imágenes con potentes herramientas de edición de imágenes. Puede usarlo para ver sus fotografías y mejorarlas. Showfoto es el editor de imágenes independiente del proyecto digiKam.</p>
     <p xml:lang="nl">Showfoto; is een snelle afbeeldingsbewerker met krachtige hulpmiddelen voor bewerken van afbeeldingen. U kunt het gebruiken om uw foto's te bekijken en te verbeteren. Showfoto is de alleenstaande bewerker van afbeeldingen van het digiKam project.</p>
     <p xml:lang="pl">Showfoto jest szybkim edytorem obrazów z zaawansowanymi narzędziami edycyjnymi. Można go używać do oglądania i polepszania zdjęć. Showfoto jest samodzielnym edytorem obrazów dla projektu digiKam.</p>
     <p xml:lang="pt">O Showfoto é um editor de imagens rápido com ferramentas de edição de imagens poderosas. Podê-lo-á usar para ver as suas fotografias e melhorá-las. O Showfoto é o editor de imagens independente do projecto digiKam.</p>
     <p xml:lang="pt-BR">Showfoto é um editor de imagens rápido com ferramentas poderosas para edição de imagens. Você poderá usá-lo para ver e aprimorar suas fotos. O Showfoto é o editor de imagens independentemente do projeto digiKam.</p>
+    <p xml:lang="sk">Showfoto je rýchly editor obrázkov so silnými nástrojmi na editáciu obrázkov. Môžete ho použiť na prehliadanie vašich fotografií a zlepšiť ich. ShowFoto je samostatný editor obrázkov projektu digiKam.</p>
+    <p xml:lang="sl">Showfoto je hiter urejevalnik slik z zmogljivimi orodji za urejanje slik. Uporabite ga lahko za ogled fotografij in njihovo izboljšavo. Showfoto je samostojen urejevalnik slik projekta digiKam.</p>
     <p xml:lang="sv">Showfoto är en snabb bildeditor med kraftfulla bildredigeringsverktyg. Den kan användas för att titta på fotografier och förbättra dem. Showfoto är Digikam-projektets  fristående bildeditor.</p>
     <p xml:lang="uk">Showfoto — швидкий редактор зображень, у якому ви знайдете досить потужні інструменти редагування зображень. Ви можете скористатися ним для перегляду і удосконалення ваших фотографій. Showfoto — окрема програма для редагування зображень зі складу проекту digiKam.</p>
     <p xml:lang="x-test">xxShowfoto is a fast Image Editor with powerful image editing tools. You can use it to view your photographs and improve them. Showfoto is the standalone image editor of the digiKam project.xx</p>
@@ -42,12 +51,16 @@
   <developer_name>digiKam Project</developer_name>
   <developer_name xml:lang="ca">Projecte digiKam</developer_name>
   <developer_name xml:lang="cs">Projekt digiKam</developer_name>
+  <developer_name xml:lang="da">digiKam-projektet</developer_name>
+  <developer_name xml:lang="de">digiKam-Projekt</developer_name>
   <developer_name xml:lang="en-GB">digiKam Project</developer_name>
+  <developer_name xml:lang="es">Proyecto digiKam</developer_name>
   <developer_name xml:lang="nl">digiKam-project</developer_name>
   <developer_name xml:lang="pl">Projekt digiKam</developer_name>
   <developer_name xml:lang="pt">Projecto digiKam</developer_name>
   <developer_name xml:lang="pt-BR">Projeto digiKam</developer_name>
   <developer_name xml:lang="sk">Projekt digiKamu</developer_name>
+  <developer_name xml:lang="sl">Projekt digiKam</developer_name>
   <developer_name xml:lang="sv">Digikam-projekt</developer_name>
   <developer_name xml:lang="uk">Проект digiKam</developer_name>
   <developer_name xml:lang="x-test">xxdigiKam Projectxx</developer_name>

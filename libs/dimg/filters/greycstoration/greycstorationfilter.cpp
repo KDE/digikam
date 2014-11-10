@@ -6,7 +6,7 @@
  * Date        : 2007-12-03
  * Description : Greycstoration interface.
  *
- * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -22,6 +22,7 @@
  *
  * ============================================================ */
 
+
 /** Don't use CImg interface (keyboard/mouse interaction) */
 #define cimg_display 0
 /** Only print debug information on the console */
@@ -33,14 +34,18 @@
 
 #include <cassert>
 
+// Qt includes
+
+#include <QMutex>
+#include <QMutexLocker>
+#include <QWaitCondition>
+
 // KDE includes
 
 #include <kdebug.h>
 
-// includes for GreycStoration
-#include <QMutex>
-#include <QMutexLocker>
-#include <QWaitCondition>
+// Local includes
+
 #include "dynamicthread.h"
 
 #define cimg_plugin "greycstoration.h"
@@ -49,9 +54,21 @@
  */
 #define GREYSTORATION_USING_GFACT 1
 
+// GCC pragma directives to reduce warnings from CImg header files.
+#ifdef Q_CC_GNU
+#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#endif
+
 // CImg includes
 
 #include "CImg.h"
+
+// Restore GCC warnings
+#ifdef Q_CC_GNU
+#pragma GCC diagnostic warning "-Wunused-local-typedefs"
+#pragma GCC diagnostic warning "-Wunused-but-set-variable"
+#endif
 
 extern "C"
 {

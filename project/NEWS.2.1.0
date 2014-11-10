@@ -11,7 +11,7 @@ CameraGUI : New option to filter icon-view by type mime.
 
 Preview   : New option to show/hide information over preview canvas.
 
-BUGFIXES FROM KDE BUGZILLA (alias B.K.O | http://bugs.kde.org):
+BUGFIXES FROM KDE BUGZILLA (http://bugs.kde.org):
 
 001 ==> 218365 : Show icon thumbs when loaded and not only after all were read.
 002 ==> 278526 : No picture is displayed in the Album View.

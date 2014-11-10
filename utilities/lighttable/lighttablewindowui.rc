@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="205" name="lighttablewindow" >
+<gui version="401" name="lighttablewindow" >
 
 <MenuBar>
 
@@ -13,6 +13,7 @@
         <Action name="lighttable_setitemleft" />
         <Action name="lighttable_setitemright" />
         <Action name="lighttable_edititem" />
+        <Action name="open_with_default_application" />
         <Separator/>
         <Action name="lighttable_removeitem" />
         <Action name="lighttable_clearlist" />
@@ -41,13 +42,15 @@
             <Action name="lighttable_zoomto100percents_right" />
             <Action name="lighttable_zoomfit2window_right" />
         </Menu>
+        <Separator />
+        <Action name="color_managed_view" />
     </Menu>
 
     <Menu name="help" ><text>&amp;Help</text>
         <Action name="help_rawcameralist"/>
         <Action name="help_librariesinfo"/>
         <Action name="help_dbstat"/>
-        <Separator/>        
+        <Separator/>
         <Action name="help_donatemoney" />
         <Action name="help_contribute" />
     </Menu>

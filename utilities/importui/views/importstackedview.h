@@ -32,13 +32,17 @@
 
 // Local includes
 
+#include "config-digikam.h"
 #include "importthumbnailbar.h"
 #include "importpreviewview.h"
 #include "thumbbardock.h"
 #include "camiteminfo.h"
 #include "importiconview.h"
 #include "mediaplayerview.h"
+
+#ifdef HAVE_KGEOMAP
 #include "mapwidgetview.h"
+#endif // HAVE_KGEOMAP
 
 namespace Digikam
 {
@@ -68,8 +72,11 @@ public:
     ImportThumbnailBar* thumbBar()          const;
     ImportIconView*     importIconView()    const;
     ImportPreviewView*  importPreviewView() const;
-    MapWidgetView*      mapWidgetView()     const;
     MediaPlayerView*    mediaPlayerView()   const;
+
+#ifdef HAVE_KGEOMAP
+    MapWidgetView*      mapWidgetView()     const;
+#endif // HAVE_KGEOMAP
 
     bool isInSingleFileMode()   const;
     bool isInMultipleFileMode() const;

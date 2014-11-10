@@ -7,7 +7,7 @@
  * Description : a widget to manage sidebar in GUI.
  *
  * Copyright (C) 2005-2006 by Joern Ahrens <joern dot ahrens at kdemail dot net>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -98,6 +98,16 @@ public:
      * Activates a tab
      */
     void setActiveTab(QWidget* const w);
+
+    /**
+     * Activates a next tab from current one. If current one is last, first one is actived.
+     */
+    void activeNextTab();
+
+    /**
+     * Activates a previous tab from current one. If current one is first, last one is actived.
+     */
+    void activePreviousTab();
 
     /**
      * Returns the currently activated tab, or 0 if no tab is active

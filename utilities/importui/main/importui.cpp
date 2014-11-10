@@ -97,7 +97,7 @@
 #include "advancedrenamemanager.h"
 #include "album.h"
 #include "albummanager.h"
-#include "albumsettings.h"
+#include "applicationsettings.h"
 #include "albumselectdialog.h"
 #include "cameracontroller.h"
 #include "camerafolderdialog.h"
@@ -116,10 +116,11 @@
 #include "dzoombar.h"
 #include "fileactionmngr.h"
 #include "freespacewidget.h"
+#include "iccsettings.h"
 #include "imagepropertiessidebarcamgui.h"
 #include "importsettings.h"
 #include "importview.h"
-#include "knotificationwrapper.h"
+#include "dnotificationwrapper.h"
 #include "newitemsfinder.h"
 #include "parsesettings.h"
 #include "renamecustomizer.h"
@@ -174,7 +175,8 @@ ImportUI::ImportUI(QWidget* const parent, const QString& cameraTitle,
     // -- Make signals/slots connections ---------------------------------
 
     setupConnections();
-    slotSidebarTabTitleStyleChanged();
+    sidebarTabTitleStyleChanged();
+    slotColorManagementOptionsChanged();
 
     // -- Read settings --------------------------------------------------
 
@@ -301,6 +303,7 @@ void ImportUI::setupUserArea()
 void ImportUI::setupActions()
 {
     d->cameraActions = new QActionGroup(this);
+
     // -- File menu ----------------------------------------------------
 
     d->cameraCancelAction = new KAction(KIcon("process-stop"), i18nc("@action Cancel process", "Cancel"), this);
@@ -484,11 +487,13 @@ void ImportUI::setupActions()
     connect(d->camItemPreviewAction, SIGNAL(triggered()), d->view, SLOT(slotImagePreview()));
     d->imageViewSelectionAction->addAction(d->camItemPreviewAction);
 
+#ifdef HAVE_KGEOMAP
     d->mapViewAction = new KToggleAction(KIcon("applications-internet"),
                                          i18nc("@action Switch to map view", "Map"), this);
     actionCollection()->addAction("importui_map_view", d->mapViewAction);
     connect(d->mapViewAction, SIGNAL(triggered()), d->view, SLOT(slotMapWidgetView()));
     d->imageViewSelectionAction->addAction(d->mapViewAction);
+#endif // HAVE_KGEOMAP
 
     /// @todo Add table view stuff here
 
@@ -594,7 +599,15 @@ void ImportUI::setupActions()
 
     // ------------------------------------------------------------------------------------------------
 
+    d->viewCMViewAction = new KToggleAction(KIcon("video-display"), i18n("Color-Managed View"), this);
+    d->viewCMViewAction->setShortcut(KShortcut(Qt::Key_F12));
+    connect(d->viewCMViewAction, SIGNAL(triggered()), this, SLOT(slotToggleColorManagedView()));
+    actionCollection()->addAction("color_managed_view", d->viewCMViewAction);
+
+    // ------------------------------------------------------------------------------------------------
+
     createFullScreenAction("importui_fullscreen");
+    createSidebarActions();
 
     d->showLogAction = new KToggleAction(KIcon("view-history"), i18nc("@option:check", "Show History"), this);
     d->showLogAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_H));
@@ -643,7 +656,7 @@ void ImportUI::setupActions()
 
     createGUI(xmlFile());
 
-    d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for B.K.O #171080
+    d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for bug #171080
 
     // hide the unsupported actions
     d->uploadAction->setVisible(d->controller->cameraUploadSupport());
@@ -659,6 +672,9 @@ void ImportUI::setupConnections()
 
     connect(d->historyView, SIGNAL(signalEntryClicked(QVariant)),
             this, SLOT(slotHistoryEntryClicked(QVariant)));
+
+    connect(IccSettings::instance(), SIGNAL(settingsChanged()),
+            this, SLOT(slotColorManagementOptionsChanged()));
 
     // -------------------------------------------------------------------------
 
@@ -699,8 +715,8 @@ void ImportUI::setupConnections()
     connect(CollectionManager::instance(), SIGNAL(locationStatusChanged(CollectionLocation,int)),
             this, SLOT(slotCollectionLocationStatusChanged(CollectionLocation,int)));
 
-    connect(AlbumSettings::instance(), SIGNAL(setupChanged()),
-            this, SLOT(slotSidebarTabTitleStyleChanged()));
+    connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
+            this, SLOT(slotSetupChanged()));
 
     connect(d->renameCustomizer, SIGNAL(signalChanged()),
             this, SLOT(slotDownloadNameChanged()));
@@ -807,9 +823,9 @@ void ImportUI::setupCameraController(const QString& model, const QString& port, 
     d->camThumbsCtrl = new CameraThumbsCtrl(d->controller, this);
 }
 
-CameraController* ImportUI::getCameraController() const
+CameraThumbsCtrl* ImportUI::getCameraThumbsCtrl() const
 {
-    return d->controller;
+    return d->camThumbsCtrl;
 }
 
 void ImportUI::setupAccelerators()
@@ -954,6 +970,8 @@ void ImportUI::refreshFreeSpace()
 
 void ImportUI::closeEvent(QCloseEvent* e)
 {
+    DXmlGuiWindow::closeEvent(e);
+
     if (dialogClosed())
     {
         e->accept();
@@ -1260,7 +1278,7 @@ void ImportUI::slotUpload()
 
     // Added RAW file formats supported by dcraw program like a type mime.
     // Note: we cannot use here "image/x-raw" type mime from KDE because it incomplete
-    // or unavailable(dcraw_0)(see file #121242 in B.K.O).
+    // or unavailable(dcraw_0)(see file #121242 in bug).
     patternList.append(QString("\n%1|Camera RAW files").arg(QString(KDcrawIface::KDcraw::rawFiles())));
     fileformats = patternList.join("\n");
 
@@ -1425,7 +1443,7 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
     // enable cancel action.
     d->cameraCancelAction->setEnabled(true);
 
-    // See B.K.O #143934: force to select all items to prevent problem
+    // See bug #143934: force to select all items to prevent problem
     // when !renameCustomizer->useDefault() ==> iconItem->getDownloadName()
     // can return an empty string in this case because it depends on selection.
     if (!onlySelected)
@@ -1510,7 +1528,7 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
     }
 
     // -- Check disk space ------------------------
-    // See B.K.O #139519: Always check free space available before to
+    // See bug #139519: Always check free space available before to
     // download items selection from camera.
 
     if (!checkDiskSpace(pAlbum))
@@ -1551,11 +1569,6 @@ void ImportUI::slotDownloaded(const QString& folder, const QString& file, int st
             int curr = d->statusProgressBar->progressValue();
             d->statusProgressBar->setProgressValue(curr + 1);
 
-            if (autoRotate)
-            {
-                d->autoRotateItemsList << info;
-            }
-
             d->renameCustomizer->setStartIndex(d->renameCustomizer->startIndex() + 1);
 
             DownloadHistory::setDownloaded(d->controller->cameraMD5ID(),
@@ -1578,11 +1591,11 @@ void ImportUI::slotDownloaded(const QString& folder, const QString& file, int st
             // Pop-up a notification to inform user when all is done, and inform if auto-rotation will take place.
             if (autoRotate)
             {
-                KNotificationWrapper("cameradownloaded", i18nc("@info Popup notification", "Images download finished, you can now detach your camera while the images will be auto-rotated"), this, windowTitle());
+                DNotificationWrapper("cameradownloaded", i18nc("@info Popup notification", "Images download finished, you can now detach your camera while the images will be auto-rotated"), this, windowTitle());
             }
             else
             {
-                KNotificationWrapper("cameradownloaded", i18nc("@info Popup notification", "Images download finished"), this, windowTitle());
+                DNotificationWrapper("cameradownloaded", i18nc("@info Popup notification", "Images download finished"), this, windowTitle());
             }
         }
     }
@@ -2069,6 +2082,11 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
         settings.dest = downloadUrl.toLocalFile();
         allItems.append(settings);
 
+        if (settings.autoRotate)
+        {
+            d->autoRotateItemsList << downloadUrl.toLocalFile();
+        }
+
         ++downloadedItems;
     }
 
@@ -2148,7 +2166,7 @@ bool ImportUI::createDateBasedSubAlbum(KUrl& downloadUrl, const CamItemInfo& inf
             break;
     }
 
-    // See B.K.O #136927 : we need to support file system which do not
+    // See bug #136927 : we need to support file system which do not
     // handle upper case properly.
     dirName = dirName.toLower();
 
@@ -2183,7 +2201,7 @@ bool ImportUI::createExtBasedSubAlbum(KUrl& downloadUrl, const CamItemInfo& info
         subAlbum = QString("MPG");
     }
 
-    // See B.K.O #136927 : we need to support file system which do not
+    // See bug #136927 : we need to support file system which do not
     // handle upper case properly.
     subAlbum = subAlbum.toLower();
 
@@ -2395,15 +2413,25 @@ void ImportUI::autoRotateItems()
         return;
     }
 
-    ImageInfoList list;
+    qlonglong         id;
+    ImageInfoList     list;
+    CollectionScanner scanner;
 
-    foreach (CamItemInfo info, d->autoRotateItemsList)
+    ScanController::instance()->suspendCollectionScan();
+
+    foreach (const QString& downloadUrl, d->autoRotateItemsList)
     {
         //TODO: Needs test for Gphoto items.
-        list << ImageInfo(info.url());
+        // make ImageInfo up to date
+        id = scanner.scanFile(downloadUrl, CollectionScanner::Rescan);
+        list << ImageInfo(id);
     }
 
     FileActionMngr::instance()->transform(list, KExiv2Iface::RotationMatrix::NoTransformation);
+
+    ScanController::instance()->resumeCollectionScan();
+
+    d->autoRotateItemsList.clear();
 }
 
 bool ImportUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
@@ -2542,12 +2570,6 @@ void ImportUI::slotShowMenuBar()
     menuBar()->setVisible(d->showMenuBarAction->isChecked());
 }
 
-void ImportUI::slotSidebarTabTitleStyleChanged()
-{
-    d->rightSideBar->setStyle(AlbumSettings::instance()->getSidebarTitleStyle());
-    d->rightSideBar->applySettings();
-}
-
 void ImportUI::slotLogMsg(const QString& msg, DHistoryView::EntryType type,
                           const QString& folder, const QString& file)
 {
@@ -2574,6 +2596,22 @@ void ImportUI::showSideBars(bool visible)
 {
     visible ? d->rightSideBar->restore()
             : d->rightSideBar->backup();
+}
+
+void ImportUI::slotToggleRightSideBar()
+{
+    d->rightSideBar->isExpanded() ? d->rightSideBar->shrink()
+                                  : d->rightSideBar->expand();
+}
+
+void ImportUI::slotPreviousRightSideBarTab()
+{
+    d->rightSideBar->activePreviousTab();
+}
+
+void ImportUI::slotNextRightSideBarTab()
+{
+    d->rightSideBar->activeNextTab();
 }
 
 void ImportUI::showThumbBar(bool visible)
@@ -2603,7 +2641,9 @@ void ImportUI::slotSwitchedToIconView()
 void ImportUI::slotSwitchedToMapView()
 {
     d->zoomBar->setBarMode(DZoomBar::ThumbsSizeCtrl);
+#ifdef HAVE_KGEOMAP
     d->imageViewSelectionAction->setCurrentAction(d->mapViewAction);
+#endif // HAVE_KGEOMAP
     toogleShowBar();
 }
 
@@ -2614,6 +2654,8 @@ void ImportUI::customizedFullScreenMode(bool set)
     d->showMenuBarAction->setEnabled(!set);
     set ? d->showBarAction->setEnabled(false)
         : toogleShowBar();
+
+    d->view->toggleFullScreen(set);
 }
 
 void ImportUI::toogleShowBar()
@@ -2629,6 +2671,43 @@ void ImportUI::toogleShowBar()
             d->showBarAction->setEnabled(false);
             break;
     }
+}
+
+void ImportUI::slotSetupChanged()
+{
+    // Load full-screen options
+    KConfigGroup group = ApplicationSettings::instance()->generalConfigGroup();
+    readFullScreenSettings(group);
+
+    d->view->applySettings();
+    sidebarTabTitleStyleChanged();
+}
+
+void ImportUI::sidebarTabTitleStyleChanged()
+{
+    d->rightSideBar->setStyle(ApplicationSettings::instance()->getSidebarTitleStyle());
+    d->rightSideBar->applySettings();
+}
+
+void ImportUI::slotToggleColorManagedView()
+{
+    if (!IccSettings::instance()->isEnabled())
+    {
+        return;
+    }
+
+    bool cmv = !IccSettings::instance()->settings().useManagedPreviews;
+    IccSettings::instance()->setUseManagedPreviews(cmv);
+}
+
+void ImportUI::slotColorManagementOptionsChanged()
+{
+    ICCSettingsContainer settings = IccSettings::instance()->settings();
+
+    d->viewCMViewAction->blockSignals(true);
+    d->viewCMViewAction->setEnabled(settings.enableCM);
+    d->viewCMViewAction->setChecked(settings.useManagedPreviews);
+    d->viewCMViewAction->blockSignals(false);
 }
 
 }  // namespace Digikam
