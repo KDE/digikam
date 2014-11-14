@@ -53,7 +53,7 @@ public:
 
     void applySettings();
 
-    bool exifAutoRotateAsChanged() const;
+    bool exifAutoRotateHasChanged() const;
 
     void setActiveMainTab(MetadataTab tab);
     void setActiveSubTab(int tab);

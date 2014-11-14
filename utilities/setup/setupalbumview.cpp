@@ -40,6 +40,7 @@
 #include <kcombobox.h>
 #include <kdialog.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 
 // Local includes
 
@@ -57,8 +58,8 @@ class SetupAlbumView::Private
 public:
 
     Private() :
-        useLargeThumbsAsChanged(false),
-        useLargeThumbsOrg(false),
+        useLargeThumbsOriginal(false),
+        useLargeThumbsShowedInfo(false),
         iconTreeThumbLabel(0),
         iconShowNameBox(0),
         iconShowSizeBox(0),
@@ -85,8 +86,8 @@ public:
     {
     }
 
-    bool                useLargeThumbsAsChanged;
-    bool                useLargeThumbsOrg;
+    bool                useLargeThumbsOriginal;
+    bool                useLargeThumbsShowedInfo;
 
     QLabel*             iconTreeThumbLabel;
 
@@ -392,24 +393,26 @@ void SetupAlbumView::readSettings()
     d->fullScreenSettings->readSettings(group);
 
     ThumbnailSize::readSettings(group);
-    d->useLargeThumbsOrg = ThumbnailSize::getUseLargeThumbs();
-    d->largeThumbsBox->setChecked(d->useLargeThumbsOrg);
+    d->useLargeThumbsOriginal = ThumbnailSize::getUseLargeThumbs();
+    d->largeThumbsBox->setChecked(d->useLargeThumbsOriginal);
 }
 
-bool SetupAlbumView::useLargeThumbsAsChanged() const
+bool SetupAlbumView::useLargeThumbsHasChanged() const
 {
-    return d->useLargeThumbsAsChanged;
+    return d->largeThumbsBox->isChecked() != d->useLargeThumbsOriginal;
 }
 
 void SetupAlbumView::slotUseLargeThumbsToggled(bool b)
 {
-    if (b != d->useLargeThumbsOrg)
+    // Show info if large thumbs were enabled, and only once.
+    if (b && d->useLargeThumbsShowedInfo && useLargeThumbsHasChanged())
     {
-        d->useLargeThumbsAsChanged = true;
-    }
-    else
-    {
-        d->useLargeThumbsAsChanged = false;
+        d->useLargeThumbsShowedInfo = true;
+        KMessageBox::information(this, i18nc("@info",
+                                       "This option changes the size in which thumbnails are generated. "
+                                       "You need to restart digiKam for this option to take effect. "
+                                       "Furthermore, you need to regenerate all already stored thumbnails via "
+                                       "the the <interface>Tools / Maintenance</interface> menu."));
     }
 }
 
