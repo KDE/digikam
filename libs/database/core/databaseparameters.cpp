@@ -107,7 +107,7 @@ DatabaseParameters::DatabaseParameters(const KUrl& url)
         port = queryPort.toInt();
     }
 
-#ifdef HAVE_MYSQLSUPPORT AND HAVE_INTERNALMYSQL
+#if defined(HAVE_MYSQLSUPPORT) && defined(HAVE_INTERNALMYSQL)
     QString queryServer = url.queryItem("internalServer");
 
     if (!queryServer.isNull())
@@ -231,7 +231,7 @@ void DatabaseParameters::readFromConfig(KSharedConfig::Ptr config, const QString
     userName                 = group.readEntry(configDatabaseUsername, QString());
     password                 = group.readEntry(configDatabasePassword, QString());
     connectOptions           = group.readEntry(configDatabaseConnectOptions, QString());
-#ifdef HAVE_MYSQLSUPPORT AND HAVE_INTERNALMYSQL
+#if defined(HAVE_MYSQLSUPPORT) && defined(HAVE_INTERNALMYSQL)
     internalServer           = group.readEntry(configInternalDatabaseServer, false);
 #else
     internalServer           = false;

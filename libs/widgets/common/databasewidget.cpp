@@ -100,7 +100,7 @@ void DatabaseWidget::setupMainArea()
 
     QLabel* const databaseTypeLabel                  = new QLabel(i18n("Type"));
     databaseType                                     = new QComboBox();
-#ifdef HAVE_MYSQLSUPPORT AND HAVE_INTERNALMYSQL
+#if defined(HAVE_MYSQLSUPPORT) && defined(HAVE_INTERNALMYSQL)
     QLabel* const internalServerLabel                = new QLabel(i18n("Internal Server"));
 #endif
     internalServer                                   = new QCheckBox();
@@ -131,7 +131,7 @@ void DatabaseWidget::setupMainArea()
     QFormLayout* const expertSettinglayout           = new QFormLayout();
     d->expertSettings->setLayout(expertSettinglayout);
 
-#ifdef HAVE_MYSQLSUPPORT AND HAVE_INTERNALMYSQL
+#if defined(HAVE_MYSQLSUPPORT) && defined(HAVE_INTERNALMYSQL)
     expertSettinglayout->addRow(internalServerLabel, internalServer);
 #endif
 
@@ -186,7 +186,7 @@ void DatabaseWidget::setupMainArea()
     connect(checkDatabaseConnectionButton, SIGNAL(clicked()),
             this, SLOT(checkDatabaseConnection()));
     
-#ifdef HAVE_MYSQLSUPPORT AND HAVE_INTERNALMYSQL
+#if defined(HAVE_MYSQLSUPPORT) && defined(HAVE_INTERNALMYSQL)
     connect(internalServer, SIGNAL(stateChanged(int)),
             this, SLOT(slotHandleInternalServerCheckbox(int)));
 #endif
@@ -346,7 +346,7 @@ void DatabaseWidget::setParametersFromSettings(const ApplicationSettings* const 
     originalDbType = settings->getDatabaseType();
     databasePathEdit->setUrl(settings->getDatabaseFilePath());
 
-#ifdef HAVE_MYSQLSUPPORT AND HAVE_INTERNALMYSQL
+#if defined(HAVE_MYSQLSUPPORT) && defined(HAVE_INTERNALMYSQL)
     internalServer->setChecked(settings->getInternalDatabaseServer());
 #else
     internalServer->setChecked(false);
