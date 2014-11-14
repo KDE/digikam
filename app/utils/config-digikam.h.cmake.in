@@ -34,16 +34,16 @@
 #cmakedefine HAVE_LENSFUN 1
 
 /* Define to 1 if an external Kipi shared library have been found */
-#cmakedefine HAVE_KIPI
+#cmakedefine HAVE_KIPI 1
 
 /* Define to 1 if an external Kface shared library have been found */
-#cmakedefine HAVE_KFACE
+#cmakedefine HAVE_KFACE 1
 
 /* Define to 1 if an external Kgeomap shared library have been found */
-#cmakedefine HAVE_KGEOMAP
+#cmakedefine HAVE_KGEOMAP 1
 
 /* Define to 1 if an external Eigen3 shared library have been found */
-#cmakedefine HAVE_EIGEN3
+#cmakedefine HAVE_EIGEN3 1
 
 /* The Eigen3 version string, if found, or an empty string otherwise */
 #define EIGEN3_VERSION_STRING "${EIGEN3_VERSION}"
