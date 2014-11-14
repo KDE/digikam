@@ -94,7 +94,8 @@ LoadingDescription::LoadingDescription(const QString& filePath, const DRawDecodi
       postProcessingParameters.colorManagement = cm;
 }
 
-LoadingDescription::LoadingDescription(const QString& filePath, int size,
+LoadingDescription::LoadingDescription(const QString& filePath,
+                                       const PreviewSettings& previewSettings, int size,
                                        ColorManagementSettings cm,
                                        LoadingDescription::PreviewParameters::PreviewType type)
     : filePath(filePath)
@@ -103,6 +104,7 @@ LoadingDescription::LoadingDescription(const QString& filePath, int size,
     rawDecodingHint                          = RawDecodingDefaultSettings;
     previewParameters.type                   = type;
     previewParameters.size                   = size;
+    previewParameters.previewSettings        = previewSettings;
     postProcessingParameters.colorManagement = cm;
 }
 

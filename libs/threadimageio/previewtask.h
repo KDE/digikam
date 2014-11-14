@@ -33,6 +33,8 @@
 
 #include "loadsavetask.h"
 
+namespace KExiv2Iface { class KExiv2Previews; }
+
 namespace Digikam
 {
 
@@ -41,7 +43,8 @@ class PreviewLoadingTask : public SharedLoadingTask
 public:
 
     PreviewLoadingTask(LoadSaveThread* const thread, const LoadingDescription& description)
-        : SharedLoadingTask(thread, description, LoadSaveThread::AccessModeRead, LoadingTaskStatusLoading)
+        : SharedLoadingTask(thread, description, LoadSaveThread::AccessModeRead, LoadingTaskStatusLoading),
+          m_fromRawEmbeddedPreview(false)
     {
     }
 
@@ -49,8 +52,15 @@ public:
 
 private:
 
-    bool needToScale(const QSize& imageSize, int previewSize);
-    bool loadImagePreview(QImage& image, const QString& path);
+    bool loadExiv2Preview(KExiv2Iface::KExiv2Previews& previews, int sizeLimit = -1);
+    bool loadLibRawPreview(int sizeLimit = -1);
+    bool loadHalfSizeRaw();
+    bool needToScale();
+    bool loadImagePreview(int sizeLimit = -1);
+    void convertQImageToDImg();
+
+    QImage m_qimage;
+    bool   m_fromRawEmbeddedPreview;
 };
 
 } // namespace Digikam

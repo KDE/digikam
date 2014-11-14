@@ -210,254 +210,147 @@ void PreviewLoadingTask::execute()
 
     // Preview is not in cache, we will load image from file.
 
-    int    size                = m_loadingDescription.previewParameters.size;
-    bool   fromEmbeddedPreview = false;
-    QImage qimage;
-
-    KExiv2Iface::KExiv2Previews previews(m_loadingDescription.filePath);
-    
-    // Check original image size using Exiv2.
-
-    QSize originalSize  = previews.originalSize();
     DImg::FORMAT format = DImg::fileFormat(m_loadingDescription.filePath);
+    m_fromRawEmbeddedPreview = false;
 
-    // If RAW file, promote LibRaw method to get original image size.
-
-    if (!originalSize.isValid() && format == DImg::RAW)
+    if (format == DImg::RAW)
     {
-        DcrawInfoContainer container;
-
-        if (KDcrawIface::KDcraw::rawFileIdentify(container, m_loadingDescription.filePath))
+        KExiv2Iface::KExiv2Previews previews(m_loadingDescription.filePath);
+        // Check original image size using Exiv2.
+        QSize originalSize  = previews.originalSize();
+        // If not valid, get original size from LibRaw
+        if (!originalSize.isValid())
         {
-            originalSize = container.imageSize;
-        }
-    }
-
-    // If minimum image size is passed (not null), we will try to find relevant embedded preview size from file.
-    
-    if (size)
-    {
-        int sizeLimit = -1;
-        int bestSize  = qMax(originalSize.width(), originalSize.height());
-
-        // for RAWs, the alternative is the half preview, so best size is already originalSize / 2
-
-        if (format == DImg::RAW)
-        {
-            bestSize /= 2;
-        }
-
-        if (m_loadingDescription.previewParameters.fastButLarge())
-        {
-            if (format == DImg::RAW)
+            DcrawInfoContainer container;
+            if (KDcrawIface::KDcraw::rawFileIdentify(container, m_loadingDescription.filePath))
             {
-                sizeLimit = qMin(size, bestSize);
+                originalSize = container.imageSize;
             }
         }
-        else
+
+        switch (m_loadingDescription.previewParameters.previewSettings.quality)
         {
-            int aBitSmallerThanSize = (int)lround(double(size) * 0.8);
-            sizeLimit               = qMin(aBitSmallerThanSize, bestSize);
-        }
-
-        // -- STAGE 1: Try to extract previews with Exiv2 ----------
-
-        // Only check the first and largest preview
-
-        if (sizeLimit != -1 && !previews.isEmpty() && continueQuery())
-        {
-            // Require at least half preview size
-
-            if (qMax(previews.width(), previews.height()) >= sizeLimit)
+            case PreviewSettings::FastPreview:
+            case PreviewSettings::FastButLargePreview:
             {
-
-                // See bug #339144 : only handle preview if right libkexiv2 version is used.
-#if KEXIV2_VERSION >= 0x020302
-                qimage = previews.image();
-#endif
-
-                if (!qimage.isNull())
+                // Size calculations
+                int sizeLimit = -1;
+                int bestSize  = qMax(originalSize.width(), originalSize.height());
+                // for RAWs, the alternative is the half preview, so best size is already originalSize / 2
+                bestSize /= 2;
+                if (m_loadingDescription.previewParameters.previewSettings.quality == PreviewSettings::FastButLargePreview)
                 {
-                    fromEmbeddedPreview = true;
+                    sizeLimit = qMin(m_loadingDescription.previewParameters.size, bestSize);
+                }
+
+                if (loadExiv2Preview(previews, sizeLimit))
+                {
+                    break;
+                }
+                if (loadLibRawPreview(sizeLimit))
+                {
+                    break;
+                }
+                loadHalfSizeRaw();
+            }
+            case PreviewSettings::HighQualityPreview:
+            {
+                switch (m_loadingDescription.previewParameters.previewSettings.rawLoading)
+                {
+                    case PreviewSettings::RawPreviewAutomatic:
+                    {
+                        // If we find a preview that is larger than half size (which is what we get from half-size original data), we take it
+                        int acceptableSize = qMax(lround(originalSize.width()  * 0.48), lround(originalSize.height() * 0.48));
+                        if (loadExiv2Preview(previews, acceptableSize))
+                        {
+                            break;
+                        }
+                        if (loadLibRawPreview(acceptableSize))
+                        {
+                            break;
+                        }
+                        loadHalfSizeRaw();
+                        break;
+                    }
+                    case PreviewSettings::RawPreviewFromEmbeddedPreview:
+                    {
+                        if (loadExiv2Preview(previews))
+                        {
+                            break;
+                        }
+                        if (loadLibRawPreview())
+                        {
+                            break;
+                        }
+                        loadHalfSizeRaw();
+                        break;
+                    }
+                    case PreviewSettings::RawPreviewFromRawHalfSize:
+                    {
+                        loadHalfSizeRaw();
+                        break;
+                    }
                 }
             }
         }
 
-        // -- STAGE 2: Try to extract previews with LibRaw ----------
-
-        if (format == DImg::RAW && qimage.isNull() && continueQuery())
+        // So far, everything loaded QImage. Convert to DImg.
+        convertQImageToDImg();
+    }
+    else // Non-RAW images
+    {
+        bool isFast = m_loadingDescription.previewParameters.previewSettings.quality == PreviewSettings::FastPreview;
+        switch (m_loadingDescription.previewParameters.previewSettings.quality)
         {
-            // Try LibRaw preview loading, it may support some more raws
-
-            QImage kdcrawPreview;
-            KDcrawIface::KDcraw::loadEmbeddedPreview(kdcrawPreview, m_loadingDescription.filePath);
-
-            if (!kdcrawPreview.isNull() && 
-                qMax(kdcrawPreview.width(), kdcrawPreview.height()) >= sizeLimit)
+            case PreviewSettings::FastPreview:
+            case PreviewSettings::FastButLargePreview:
             {
-                qimage              = kdcrawPreview;
-                fromEmbeddedPreview = true;
+                if (isFast && loadImagePreview(m_loadingDescription.previewParameters.size))
+                {
+                    convertQImageToDImg();
+                    break;
+                }
+                if (continueQuery())
+                {
+                    // Set a hint to try to load a JPEG or PGF with the fast scale-before-decoding method
+                    if (isFast)
+                    {
+                        m_img.setAttribute("scaledLoadingSize", m_loadingDescription.previewParameters.size);
+                    }
+
+                    m_img.load(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
+                }
+                break;
             }
-            else
+            case PreviewSettings::HighQualityPreview:
             {
-                // Fall back to non-demosaiced loading from raw data
-                
-                KDcrawIface::KDcraw::loadHalfPreview(qimage, m_loadingDescription.filePath);
+                if (continueQuery())
+                {
+                    m_img.load(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
+
+                    // Now that we did a full load of the image, consider putting it in the cache
+                    // but not for RAWs, there are so many cases to consider
+                    if (!m_img.isNull())
+                    {
+                        LoadingCache::CacheLock lock(cache);
+                        LoadingDescription fullDescription(m_loadingDescription.filePath);
+                        cache->putImage(fullDescription.cacheKey(), new DImg(m_img.copy()), m_loadingDescription.filePath);
+                    }
+                }
             }
         }
-
-        // -- STAGE 3: Try to extract Exif/IPTC preview -------------
-        
-        if (qimage.isNull() && continueQuery())
-        {
-            loadImagePreview(qimage, m_loadingDescription.filePath);
-        }
-
-        if (!qimage.isNull() && continueQuery())
-        {
-            // convert from QImage
-            m_img               = DImg(qimage);
-            DImg::FORMAT format = DImg::fileFormat(m_loadingDescription.filePath);
-            m_img.setAttribute("detectedFileFormat", format);
-            m_img.setAttribute("originalFilePath", m_loadingDescription.filePath);
-
-            DMetadata metadata(m_loadingDescription.filePath);
-            m_img.setAttribute("originalSize", metadata.getPixelSize());
-            m_img.setMetadata(metadata.data());
-
-            // mark as embedded preview (for Exif rotation)
-
-            if (fromEmbeddedPreview)
-            {
-                m_img.setAttribute("fromRawEmbeddedPreview", true);
-
-                // If we loaded the embedded preview, the Exif of the RAW indicates
-                // the color space of the preview (see bug 195950 for NEF files)
-                m_img.setIccProfile(metadata.getIccProfile());
-            }
-
-            // free memory
-            qimage = QImage();
-        }
-
-        // -- STAGE 4: Try to use DImg-dependent loading methods -------------
-
-        if (m_img.isNull() && continueQuery())
-        {
-            // Set a hint to try to load a JPEG or PGF with the fast scale-before-decoding method
-            if (!m_loadingDescription.previewParameters.fastButLarge())
-            {
-                m_img.setAttribute("scaledLoadingSize", size);
-            }
-
-            m_img.load(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
-        }
-
-        // -- END: error to load preview -------------------------------------
-        
         if (m_img.isNull() && continueQuery())
         {
             kWarning() << "Cannot extract preview for " << m_loadingDescription.filePath;
         }
     }
-    else // No minimum image size is passed, we will try to load full image as preview.
+
+    if (m_img.isNull() && continueQuery())
     {
-        // discard if smaller than half preview
-
-        int acceptableWidth  = lround(originalSize.width()  * 0.48);
-        int acceptableHeight = lround(originalSize.height() * 0.48);
-
-        // -- STAGE 1: Try to extract previews with Exiv2 ----------
-
-        if (qimage.isNull() && !previews.isEmpty() && continueQuery())
-        {
-            if (previews.width() >= acceptableWidth &&  previews.height() >= acceptableHeight)
-            {
-                qimage = previews.image();
-
-                if (!qimage.isNull())
-                {
-                    fromEmbeddedPreview = true;
-                }
-            }
-        }
-
-        // -- STAGE 2: Try to extract previews with LibRaw ----------
-
-        if (format == DImg::RAW && qimage.isNull() && continueQuery())
-        {
-            // Try libraw preview loading, it may support some more raws
-
-            QImage kdcrawPreview;
-            KDcrawIface::KDcraw::loadEmbeddedPreview(kdcrawPreview, m_loadingDescription.filePath);
-
-            if (!kdcrawPreview.isNull()                     &&
-                kdcrawPreview.width()  >= acceptableWidth   &&  
-                kdcrawPreview.height() >= acceptableHeight)
-            {
-                qimage              = kdcrawPreview;
-                fromEmbeddedPreview = true;
-            }
-            else
-            {
-                // Fall back to non-demosaiced loading or the raw data
-                KDcrawIface::KDcraw::loadHalfPreview(qimage, m_loadingDescription.filePath);
-            }
-        }
-        
-        if (!qimage.isNull() && continueQuery())
-        {
-            // convert from QImage
-
-            m_img               = DImg(qimage);
-            DImg::FORMAT format = DImg::fileFormat(m_loadingDescription.filePath);
-            m_img.setAttribute("detectedFileFormat", format);
-            m_img.setAttribute("originalFilePath", m_loadingDescription.filePath);
-
-            DMetadata metadata(m_loadingDescription.filePath);
-            m_img.setAttribute("originalSize", metadata.getPixelSize());
-            m_img.setMetadata(metadata.data());
-
-            // mark as embedded preview (for Exif rotation)
-
-            if (fromEmbeddedPreview)
-            {
-                m_img.setAttribute("fromRawEmbeddedPreview", true);
-
-                // If we loaded the embedded preview, the Exif of the RAW indicates
-                // the color space of the preview (see bug 195950 for NEF files)
-                m_img.setIccProfile(metadata.getIccProfile());
-            }
-
-            // free memory
-            qimage = QImage();
-        }
-
-        // -- STAGE 3: Try to use DImg-dependent loading methods -------------
-
-        if (m_img.isNull() && continueQuery())
-        {
-            m_img.load(m_loadingDescription.filePath, this, m_loadingDescription.rawDecodingSettings);
-
-            // Now that we did a full load of the image, consider putting it in the cache
-            // but not for RAWs, there are so many cases to consider
-            if (!m_img.isNull() && m_img.detectedFormat() != DImg::RAW)
-            {
-                LoadingCache::CacheLock lock(cache);
-                LoadingDescription fullDescription(m_loadingDescription.filePath);
-                cache->putImage(fullDescription.cacheKey(), new DImg(m_img.copy()), m_loadingDescription.filePath);
-            }
-        }
-
-        // -- END: error to load preview -------------------------------------
-
-        if (m_img.isNull() && continueQuery())
-        {
-            kWarning() << "Cannot extract preview for " << m_loadingDescription.filePath;
-        }
+        kWarning() << "Cannot extract preview for " << m_loadingDescription.filePath;
     }
-    
-    // Post rocessing 
+
+    // Post processing
 
     if (continueQuery())
     {
@@ -469,9 +362,9 @@ void PreviewLoadingTask::execute()
 
         QSize scaledSize = m_img.size();
 
-        if (needToScale(scaledSize, size))
+        if (needToScale())
         {
-            scaledSize.scale(size, size, Qt::KeepAspectRatio);
+            scaledSize.scale(m_loadingDescription.previewParameters.size, m_loadingDescription.previewParameters.size, Qt::KeepAspectRatio);
             m_img = m_img.smoothScale(scaledSize.width(), scaledSize.height());
         }
 
@@ -567,34 +460,117 @@ void PreviewLoadingTask::execute()
     }
 }
 
-bool PreviewLoadingTask::needToScale(const QSize& imageSize, int previewSize)
+bool PreviewLoadingTask::needToScale()
 {
-    if (!previewSize)
+    switch (m_loadingDescription.previewParameters.previewSettings.quality)
     {
-        return false;
+        case PreviewSettings::FastPreview:
+            if (m_loadingDescription.previewParameters.size > 0)
+            {
+                int maxSize             = qMax(m_img.width(), m_img.height());
+                int acceptableUpperSize = lround(1.25 * (double)m_loadingDescription.previewParameters.size);
+                return (maxSize >= acceptableUpperSize);
+            }
+            break;
+        case PreviewSettings::FastButLargePreview:
+        case PreviewSettings::HighQualityPreview:
+            break;
     }
-
-    if (m_loadingDescription.previewParameters.fastButLarge())
-    {
-        return false;
-    }
-
-    int maxSize             = imageSize.width() > imageSize.height() ? imageSize.width() : imageSize.height();
-    int acceptableUpperSize = lround(1.25 * (double)previewSize);
-    return (maxSize >= acceptableUpperSize);
+    return false;
 }
 
 // -- Exif/IPTC preview extraction using Exiv2 --------------------------------------------------------
 
-bool PreviewLoadingTask::loadImagePreview(QImage& image, const QString& path)
+bool PreviewLoadingTask::loadExiv2Preview(KExiv2Iface::KExiv2Previews& previews, int sizeLimit)
 {
-    DMetadata metadata(path);
-
-    if (metadata.getImagePreview(image))
+    if (previews.isEmpty() || !continueQuery())
     {
-        kDebug(50003) << "Use Exif/IPTC preview extraction. Size of image: "
-                      << image.width() << "x" << image.height();
+        return false;
+    }
+
+    if (sizeLimit == -1 || qMax(previews.width(), previews.height()) >= sizeLimit)
+    {
+        m_qimage = previews.image();
+
+        if (!m_qimage.isNull())
+        {
+            m_fromRawEmbeddedPreview = true;
+            return true;
+        }
+    }
+    return false;
+}
+
+bool PreviewLoadingTask::loadLibRawPreview(int sizeLimit)
+{
+    if (!continueQuery())
+    {
+        return false;
+    }
+
+    QImage kdcrawPreview;
+    KDcrawIface::KDcraw::loadEmbeddedPreview(kdcrawPreview, m_loadingDescription.filePath);
+
+    if (!kdcrawPreview.isNull() &&
+        (sizeLimit == -1 || qMax(kdcrawPreview.width(), kdcrawPreview.height()) >= sizeLimit) )
+    {
+        m_qimage                 = kdcrawPreview;
+        m_fromRawEmbeddedPreview = true;
         return true;
+    }
+    return false;
+}
+
+bool PreviewLoadingTask::loadHalfSizeRaw()
+{
+    KDcrawIface::KDcraw::loadHalfPreview(m_qimage, m_loadingDescription.filePath);
+    return !m_qimage.isNull();
+}
+
+void PreviewLoadingTask::convertQImageToDImg()
+{
+    if (!continueQuery())
+    {
+        return;
+    }
+
+    // convert from QImage
+    m_img               = DImg(m_qimage);
+    DImg::FORMAT format = DImg::fileFormat(m_loadingDescription.filePath);
+    m_img.setAttribute("detectedFileFormat", format);
+    m_img.setAttribute("originalFilePath", m_loadingDescription.filePath);
+
+    DMetadata metadata(m_loadingDescription.filePath);
+    m_img.setAttribute("originalSize", metadata.getPixelSize());
+    m_img.setMetadata(metadata.data());
+
+    // mark as embedded preview (for Exif rotation)
+
+    if (m_fromRawEmbeddedPreview)
+    {
+        m_img.setAttribute("fromRawEmbeddedPreview", true);
+
+        // If we loaded the embedded preview, the Exif of the RAW indicates
+        // the color space of the preview (see bug 195950 for NEF files)
+        m_img.setIccProfile(metadata.getIccProfile());
+    }
+
+    // free memory
+    m_qimage = QImage();
+}
+
+bool PreviewLoadingTask::loadImagePreview(int sizeLimit)
+{
+    DMetadata metadata(m_loadingDescription.filePath);
+
+    QImage previewImage;
+    if (metadata.getImagePreview(previewImage))
+    {
+        if (sizeLimit == -1 || qMax(previewImage.width(), previewImage.height()) > sizeLimit)
+        {
+            m_qimage = previewImage;
+            return true;
+        }
     }
 
     return false;
