@@ -161,10 +161,10 @@ LightTableView::~LightTableView()
     delete d;
 }
 
-void LightTableView::setLoadFullImageSize(bool b)
+void LightTableView::setPreviewSettings(const PreviewSettings& settings)
 {
-    d->leftPreview->previewItem()->setLoadFullImageSize(b);
-    d->rightPreview->previewItem()->setLoadFullImageSize(b);
+    d->leftPreview->previewItem()->setPreviewSettings(settings);
+    d->rightPreview->previewItem()->setPreviewSettings(settings);
 }
 
 void LightTableView::setSyncPreview(bool sync)

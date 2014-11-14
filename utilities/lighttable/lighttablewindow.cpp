@@ -142,7 +142,6 @@ LightTableWindow::LightTableWindow()
     // ------------------------------------------------
 
     setupConnections();
-    slotSidebarTabTitleStyleChanged();
     slotColorManagementOptionsChanged();
 
     readSettings();
@@ -206,7 +205,8 @@ void LightTableWindow::applySettings()
     d->autoLoadOnRightPanel   = group.readEntry("Auto Load Right Panel", true);
     d->autoSyncPreview        = group.readEntry("Auto Sync Preview",     true);
     d->clearOnCloseAction->setChecked(group.readEntry("Clear On Close", false));
-    d->previewView->setLoadFullImageSize(group.readEntry("Load Full Image size", false));
+    //d->previewView->setLoadFullImageSize(group.readEntry("Load Full Image size", false));
+    slotApplicationSettingsChanged();
 
     // Restore full screen Mode
     readFullScreenSettings(group);
@@ -350,7 +350,7 @@ void LightTableWindow::setupConnections()
             this, SLOT(slotProgressBarCancelButtonPressed()));
 
     connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
-            this, SLOT(slotSidebarTabTitleStyleChanged()));
+            this, SLOT(slotApplicationSettingsChanged()));
 
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
@@ -1598,13 +1598,15 @@ void LightTableWindow::slotShowMenuBar()
     menuBar()->setVisible(d->showMenuBarAction->isChecked());
 }
 
-void LightTableWindow::slotSidebarTabTitleStyleChanged()
+void LightTableWindow::slotApplicationSettingsChanged()
 {
     d->leftSideBar->setStyle(ApplicationSettings::instance()->getSidebarTitleStyle());
     d->rightSideBar->setStyle(ApplicationSettings::instance()->getSidebarTitleStyle());
 
     /// @todo Which part of the settings has to be reloaded?
     //     d->rightSideBar->applySettings();
+
+    d->previewView->setPreviewSettings(ApplicationSettings::instance()->getPreviewSettings());
 }
 
 void LightTableWindow::moveEvent(QMoveEvent* e)

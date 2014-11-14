@@ -78,12 +78,7 @@ void FingerprintsTask::run()
 {
     if(!d->cancel)
     {
-        LoadingDescription description(d->path, HaarIface::preferredSize(), LoadingDescription::ConvertToSRGB);
-        description.rawDecodingSettings.optimizeTimeLoading();
-        description.rawDecodingSettings.rawPrm.sixteenBitsImage   = false;
-        description.rawDecodingSettings.rawPrm.halfSizeColorImage = true;
-        description.rawDecodingHint                               = LoadingDescription::RawDecodingTimeOptimized;
-        DImg dimg = PreviewLoadThread::loadSynchronously(description);
+        DImg dimg = PreviewLoadThread::loadFastSynchronously(d->path, HaarIface::preferredSize());
 
         if(d->cancel)
             return;

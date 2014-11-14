@@ -36,6 +36,7 @@
 #include "dimg.h"
 #include "dimgpreviewitem.h"
 #include "imagezoomsettings.h"
+#include "previewsettings.h"
 
 namespace Digikam
 {
@@ -106,7 +107,7 @@ public:
     int                    previewSize;
 
     QString                path;
-    bool                   loadFullImageSize;
+    PreviewSettings        previewSettings;
     PreviewLoadThread*     previewThread;
     PreviewLoadThread*     preloadThread;
     QStringList            pathsToPreload;

@@ -38,6 +38,7 @@
 
 #include "infocontainer.h"
 #include "digikam_export.h"
+#include "previewsettings.h"
 
 namespace Digikam
 {
@@ -169,7 +170,7 @@ public:
 
     /** Load images (previews) in full size, not reduced version
      */
-    bool                         useFullSizePreviews;
+    PreviewSettings              previewSettings;
 
     /** List of pictures URL to slide
      */

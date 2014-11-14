@@ -155,7 +155,7 @@ private Q_SLOTS:
     void slotDBStat();
 
     void slotFileWithDefaultApplication();
-    void slotSidebarTabTitleStyleChanged();
+    void slotApplicationSettingsChanged();
     void slotThemeChanged();
 
     void slotRefreshStatusBar();
