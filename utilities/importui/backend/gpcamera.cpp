@@ -203,7 +203,7 @@ GPCamera::~GPCamera()
 DKCamera::CameraDriverType GPCamera::cameraDriverType()
 {
     return DKCamera::GPhotoDriver;
-};
+}
 
 QByteArray GPCamera::cameraMD5ID()
 {
