@@ -128,7 +128,6 @@ Debug options:
 
 Use CMake "-DENABLE_ADVANCEDDEBUGMSG=on"  flag to compile digiKam with more internal debug messages, especially in image loaders (disabled by default).
 Use CMake "-DKDE4_BUILD_TESTS=on"         flag to compile digiKam source code unit tests                                         (disabled by default).
-Use CMake "-DENABLE_THUMB_DB=off"         flag to compile digiKam without thumbnails database support                            (enabled  by default).
 
 digiKam do not have any video thumbnailer. Video support is delegate to KDE. To support Video thumbnails, 
 please install "ffmpegthumbs" package, which is the kdemultimedia Video thumbnail generator for KDE4 file managers.

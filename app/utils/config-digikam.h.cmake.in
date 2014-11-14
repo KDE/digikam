@@ -66,9 +66,6 @@
 /* Define to 1 if we know how to start mysqld */
 #cmakedefine HAVE_INTERNALMYSQL 1
 
-/* Define to 1 if thumbnails database is used */
-#cmakedefine USE_THUMBS_DB 1
-
 /* Define to 1 if you want Qt to scale the preview images */
 #cmakedefine USE_QT_SCALING 1
 

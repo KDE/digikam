@@ -957,17 +957,15 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
 
     // -- ---------------------------------------------------------
 
-#ifdef USE_THUMBS_DB
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
     ThumbnailLoadThread::initializeThumbnailDatabase(DatabaseAccess::parameters().thumbnailParameters(),
                                                      new DatabaseThumbnailInfoProvider());
 
-    DatabaseGUIErrorHandler* thumbnailsDBHandler = new DatabaseGUIErrorHandler(ThumbnailDatabaseAccess::parameters());
+    DatabaseGUIErrorHandler* const thumbnailsDBHandler = new DatabaseGUIErrorHandler(ThumbnailDatabaseAccess::parameters());
     ThumbnailDatabaseAccess::initDatabaseErrorHandler(thumbnailsDBHandler);
 
     QApplication::restoreOverrideCursor();
-#endif
 
     // -- ---------------------------------------------------------
 

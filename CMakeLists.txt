@@ -17,7 +17,6 @@ option(ENABLE_KDEPIMLIBSSUPPORT "Build digiKam with Kdepimlibs support (default=
 # Debug options:
 option(ENABLE_DIGIKAM_MODELTEST "Enable ModelTest on some models for debugging (default=OFF)"                    OFF)
 option(ENABLE_IMGLOADERDEBUGMSG "Build digiKam with more internal debug message into image loader (default=OFF)" OFF)
-option(ENABLE_THUMBS_DB         "Build digiKam with thumbnails database support (default=ON)"                    ON)
 
 # ==================================================================================================
 # Information to update before to release this package.
@@ -360,7 +359,6 @@ MACRO_BOOL_TO_01(KGEOMAP_FOUND            HAVE_KGEOMAP)
 # pixels, one probably needs this feature on these platforms as well.
 MACRO_BOOL_TO_01(APPLE                    USE_QT_SCALING)
 
-MACRO_BOOL_TO_01(ENABLE_THUMBS_DB         USE_THUMBS_DB)
 MACRO_BOOL_TO_01(ENABLE_IMGLOADERDEBUGMSG USE_IMGLOADERDEBUGMSG)
 
 # Set config files accordingly with optional dependencies

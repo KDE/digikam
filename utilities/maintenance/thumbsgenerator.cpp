@@ -139,8 +139,6 @@ void ThumbsGenerator::slotStart()
         d->allPicturesPath += DatabaseAccess().db()->getItemURLsInAlbum((*it)->id());
     }
 
-#ifdef USE_THUMBS_DB
-
     if (!d->rebuildAll)
     {
         QHash<QString, int> filePaths = ThumbnailDatabaseAccess().db()->getFilePathsWithThumbnail();
@@ -158,8 +156,6 @@ void ThumbsGenerator::slotStart()
             }
         }
     }
-
-#endif
 
     // remove non-image files from the list
     QStringList::iterator it = d->allPicturesPath.begin();
