@@ -63,6 +63,9 @@
 /* Define to 1 if an external SQLite v2 is installed */
 #cmakedefine HAVE_SQLITE2 1
 
+/* Define to 1 if we support mysql database */
+#cmakedefine HAVE_MYSQLSUPPORT 1
+
 /* Define to 1 if we know how to start mysqld */
 #cmakedefine HAVE_INTERNALMYSQL 1
 

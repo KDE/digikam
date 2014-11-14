@@ -132,7 +132,7 @@ macro(PRINT_COMPONENT_COMPILE_STATUS NAME)
 
     else()
 
-        message(STATUS " ${COMPILE_MESSAGE} NO  (optional - Look README file for more details about dependencies)")
+        message(STATUS " ${COMPILE_MESSAGE} NO  (optional)")
 
     endif()
 

@@ -44,22 +44,22 @@
 
 namespace
 {
-static const char* configGroupDatabase = "Database Settings";
+static const char* configGroupDatabase          = "Database Settings";
 static const char* configInternalDatabaseServer = "Internal Database Server";
-static const char* configDatabaseType = "Database Type";
-static const char* configDatabaseName = "Database Name";
+static const char* configDatabaseType           = "Database Type";
+static const char* configDatabaseName           = "Database Name";
 static const char* configDatabaseNameThumbnails = "Database Name Thumbnails";
-static const char* configDatabaseHostName = "Database Hostname";
-static const char* configDatabasePort = "Database Port";
-static const char* configDatabaseUsername = "Database Username";
-static const char* configDatabasePassword = "Database Password";
+static const char* configDatabaseHostName       = "Database Hostname";
+static const char* configDatabasePort           = "Database Port";
+static const char* configDatabaseUsername       = "Database Username";
+static const char* configDatabasePassword       = "Database Password";
 static const char* configDatabaseConnectOptions = "Database Connectoptions";
 // legacy
-static const char* configDatabaseFilePathEntry = "Database File Path";
-static const char* configAlbumPathEntry = "Album Path";
+static const char* configDatabaseFilePathEntry  = "Database File Path";
+static const char* configAlbumPathEntry         = "Album Path";
 
-static const char* digikam4db = "digikam4.db";
-static const char* thumbnails_digikamdb = "thumbnails-digikam.db";
+static const char* digikam4db                   = "digikam4.db";
+static const char* thumbnails_digikamdb         = "thumbnails-digikam.db";
 }
 
 namespace Digikam
@@ -79,15 +79,21 @@ DatabaseParameters::DatabaseParameters(const QString& type,
                                        const QString& userName,
                                        const QString& password,
                                        const QString& databaseNameThumbnails)
-    : databaseType(type), databaseName(databaseName),
-      connectOptions(connectOptions), hostName(hostName),
-      port(port), internalServer(internalServer), userName(userName),
-      password(password), databaseNameThumbnails(databaseNameThumbnails)
+    : databaseType(type),
+      databaseName(databaseName),
+      connectOptions(connectOptions),
+      hostName(hostName),
+      port(port),
+      internalServer(internalServer),
+      userName(userName),
+      password(password),
+      databaseNameThumbnails(databaseNameThumbnails)
 {
 }
 
 DatabaseParameters::DatabaseParameters(const KUrl& url)
-    : port(-1), internalServer(false)
+    : port(-1),
+      internalServer(false)
 {
     databaseType           = url.queryItem("databaseType");
     databaseName           = url.queryItem("databaseName");
@@ -101,7 +107,7 @@ DatabaseParameters::DatabaseParameters(const KUrl& url)
         port = queryPort.toInt();
     }
 
-#ifdef HAVE_INTERNALMYSQL
+#ifdef HAVE_MYSQLSUPPORT AND HAVE_INTERNALMYSQL
     QString queryServer = url.queryItem("internalServer");
 
     if (!queryServer.isNull())
@@ -110,10 +116,10 @@ DatabaseParameters::DatabaseParameters(const KUrl& url)
     }
 #else
     internalServer = false;
-#endif // HAVE_INTERNALMYSQL
+#endif
 
-    userName = url.queryItem("userName");
-    password = url.queryItem("password");
+    userName       = url.queryItem("userName");
+    password       = url.queryItem("password");
 }
 
 bool DatabaseParameters::operator==(const DatabaseParameters& other) const
@@ -131,7 +137,7 @@ bool DatabaseParameters::operator==(const DatabaseParameters& other) const
 
 bool DatabaseParameters::operator!=(const DatabaseParameters& other) const
 {
-    return (!operator==(other));
+    return (!operator == (other));
 }
 
 bool DatabaseParameters::isValid() const
@@ -146,12 +152,12 @@ bool DatabaseParameters::isValid() const
 
 bool DatabaseParameters::isSQLite() const
 {
-    return databaseType == "QSQLITE";
+    return (databaseType == "QSQLITE");
 }
 
 bool DatabaseParameters::isMySQL() const
 {
-    return databaseType == "QMYSQL";
+    return (databaseType == "QMYSQL");
 }
 
 QString DatabaseParameters::SQLiteDatabaseType()
@@ -225,11 +231,11 @@ void DatabaseParameters::readFromConfig(KSharedConfig::Ptr config, const QString
     userName                 = group.readEntry(configDatabaseUsername, QString());
     password                 = group.readEntry(configDatabasePassword, QString());
     connectOptions           = group.readEntry(configDatabaseConnectOptions, QString());
-#ifdef HAVE_INTERNALMYSQL
+#ifdef HAVE_MYSQLSUPPORT AND HAVE_INTERNALMYSQL
     internalServer           = group.readEntry(configInternalDatabaseServer, false);
 #else
     internalServer           = false;
-#endif // HAVE_INTERNALMYSQL
+#endif
 
     if (isSQLite() && !databaseName.isNull())
     {
@@ -518,20 +524,21 @@ void DatabaseParameters::removeFromUrl(KUrl& url)
 
 QDebug operator<<(QDebug dbg, const DatabaseParameters& p)
 {
-    dbg.nospace() << "DatabaseParameters: [ Type "
-                  << p.databaseType << ", ";
-    dbg.nospace() << "Name "
-                  << p.databaseName << " ";
-    dbg.nospace() << "(Thumbnails Name "
-                  << p.databaseNameThumbnails << "); ";
+    dbg.nospace() << "DatabaseParameters: [ Type " << p.databaseType           << ", ";
+    dbg.nospace() << "Name "                       << p.databaseName           << " ";
+    dbg.nospace() << "(Thumbnails Name "           << p.databaseNameThumbnails << "); ";
 
     if (!p.connectOptions.isEmpty())
+    {
         dbg.nospace() << "ConnectOptions: "
                       << p.connectOptions << ", ";
+    }
 
     if (!p.hostName.isEmpty())
+    {
         dbg.nospace() << "Host Name and Port: "
                       << p.hostName << " " << p.port << "; ";
+    }
 
     if (p.internalServer)
     {
@@ -539,8 +546,10 @@ QDebug operator<<(QDebug dbg, const DatabaseParameters& p)
     }
 
     if (!p.userName.isEmpty())
+    {
         dbg.nospace() << "Username and Password: "
                       << p.userName << ", " << p.password;
+    }
 
     dbg.nospace() << "] ";
 

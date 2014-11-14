@@ -14,6 +14,10 @@ option(ENABLE_LCMS2             "Build digiKam with LCMS2 instead LCMS1 (default
 option(ENABLE_BALOOSUPPORT      "Build digiKam with Baloo support (default=ON)"                                  ON)
 option(ENABLE_KDEPIMLIBSSUPPORT "Build digiKam with Kdepimlibs support (default=OFF)"                            OFF)
 
+# Mysql support:
+option(ENABLE_MYSQLSUPPORT      "Build digiKam with MySQL dabatase support (default=OFF)"                        OFF)
+option(ENABLE_INTERNALMYSQL     "Build digiKam with internal MySQL server executable (default=OFF)"              OFF)
+
 # Debug options:
 option(ENABLE_DIGIKAM_MODELTEST "Enable ModelTest on some models for debugging (default=OFF)"                    OFF)
 option(ENABLE_IMGLOADERDEBUGMSG "Build digiKam with more internal debug message into image loader (default=OFF)" OFF)
@@ -221,7 +225,7 @@ set(DIGIKAM_LIBJPEG_DIR libjpeg-${JPEG_LIB_VERSION})
 
 # -- Mysql rules ----------------------------------------------------------------------------------
 
-if(ENABLE_INTERNALMYSQL)
+if(ENABLE_MYSQLSUPPORT AND ENABLE_INTERNALMYSQL)
 
     # Check MySQL executables
 
@@ -348,6 +352,7 @@ MACRO_BOOL_TO_01(LENSFUN_FOUND            HAVE_LENSFUN)
 MACRO_BOOL_TO_01(Baloo_FOUND              HAVE_BALOO)
 MACRO_BOOL_TO_01(SQLITE2_FOUND            HAVE_SQLITE2)
 MACRO_BOOL_TO_01(LQR-1_FOUND              HAVE_LIBLQR_1)
+MACRO_BOOL_TO_01(ENABLE_MYSQLSUPPORT      HAVE_MYSQLSUPPORT)
 MACRO_BOOL_TO_01(ENABLE_INTERNALMYSQL     HAVE_INTERNALMYSQL)
 MACRO_BOOL_TO_01(JASPER_FOUND             HAVE_JASPER)
 MACRO_BOOL_TO_01(EIGEN3_FOUND             HAVE_EIGEN3)
@@ -377,14 +382,19 @@ message(STATUS " digiKam ${DIGIKAM_VERSION_STRING} dependencies results   <http:
 message(STATUS "")
 
 PRINT_QTMODULE_STATUS("Qt4 SQL" QT_QTSQL_FOUND)
+PRINT_COMPONENT_COMPILE_STATUS("MySQL Database Support" ENABLE_MYSQLSUPPORT)
 
-if(ENABLE_INTERNALMYSQL)
-    PRINT_EXECUTABLE_STATUS("MySQL Server" mysqld MYSQLD_PATH SERVERCMD_MYSQL)
-    if (NOT WIN32)
-        PRINT_EXECUTABLE_STATUS("MySQL install_db tool" mysql_install_db MYSQL_TOOLS_PATH INITCMD_MYSQL)
-    endif (NOT WIN32)
-else()
-    message(STATUS " mysql server found....................... NO  (optional - disabled by user)")
+if(ENABLE_MYSQLSUPPORT)
+
+    if (ENABLE_INTERNALMYSQL)
+        PRINT_EXECUTABLE_STATUS("MySQL Server" mysqld MYSQLD_PATH SERVERCMD_MYSQL)
+        if (NOT WIN32)
+            PRINT_EXECUTABLE_STATUS("MySQL install_db tool" mysql_install_db MYSQL_TOOLS_PATH INITCMD_MYSQL)
+        endif()
+    else()
+        message(STATUS " MySQL server found....................... NO  (optional - disabled by user)")
+    endif()
+
 endif()
 
 # ================================================================
