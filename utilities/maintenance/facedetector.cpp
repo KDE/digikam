@@ -96,18 +96,27 @@ class FaceDetector::Private
 public:
 
     Private()
+        : benchmark(false),
+          total(0),
+          progressValue(0),
+          currentProgressChunk(0),
+          currentScheduled(0),
+          currentFinished(0)
     {
-        benchmark  = false;
-        total      = 0;
     }
 
-    bool               benchmark;
+    bool                benchmark;
 
-    int                total;
+    int                 total;
 
-    AlbumPointerList<> albumTodoList;
-    ImageInfoJob       albumListing;
-    FacePipeline       pipeline;
+    AlbumPointerList<>  albumTodoList;
+    ImageInfoJob        albumListing;
+    FacePipeline        pipeline;
+    QMap<Album*,double> relativeProgressValue;
+    double              progressValue;
+    double              currentProgressChunk;
+    int                 currentScheduled;
+    int                 currentFinished;
 };
 
 FaceDetector::FaceDetector(const FaceScanSettings& settings, ProgressItem* const parent)
@@ -275,25 +284,33 @@ void FaceDetector::slotStart()
         QApplication::restoreOverrideCursor();
     }
 
-    d->total = 0;
-
+    // first, we use the relativeProgressValue map to store absolute counts
     foreach(Album* const album, d->albumTodoList)
     {
         if (album->type() == Album::PHYSICAL)
         {
-            d->total += palbumCounts.value(album->id());
+            d->relativeProgressValue[album] = palbumCounts.value(album->id());
         }
         else
             // this is possibly broken of course because we do not know if images have multiple tags,
             // but there's no better solution without expensive operation
         {
-            d->total += talbumCounts.value(album->id());
+            d->relativeProgressValue[album] = talbumCounts.value(album->id());
         }
     }
-
-    kDebug() << "Total is" << d->total;
-
+    // second, calculate (approximate) overall sum
+    d->total = 0;
+    foreach (double count, d->relativeProgressValue)
+    {
+        d->total += (int)count;
+    }
     d->total = qMax(1, d->total);
+    kDebug() << "Total is" << d->total;
+    // third, break absolute to relative values
+    for (QMap<Album*,double>::iterator it = d->relativeProgressValue.begin(); it != d->relativeProgressValue.end(); ++it)
+    {
+        it.value() /= double(d->total);
+    }
 
     setUsesBusyIndicator(false);
     setTotalItems(d->total);

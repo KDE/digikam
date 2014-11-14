@@ -1171,6 +1171,7 @@ void FacePipeline::Private::send(FacePipelineExtendedPackage::Ptr package)
 {
     start();
     ++totalPackagesAdded;
+    emit(q->processing(*package));
 
     if (senderFlowControl(package))
     {

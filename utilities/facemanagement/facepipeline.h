@@ -292,6 +292,8 @@ Q_SIGNALS:
     /// Emitted when processing has started
     void started(const QString& message);
 
+    /// Emitted when one package begins processing
+    void processing(const FacePipelinePackage& package);
     /// Emitted when one package has finished processing
     void processed(const FacePipelinePackage& package);
     void progressValueChanged(float progress);
