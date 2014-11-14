@@ -265,10 +265,6 @@ SetupEditor::SetupEditor(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    setAutoFillBackground(false);
-    viewport()->setAutoFillBackground(false);
-    panel->setAutoFillBackground(false);
-
     slotExpoSettingsChanged();
 }
 

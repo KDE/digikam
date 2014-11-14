@@ -252,9 +252,6 @@ FuzzySearchView::FuzzySearchView(SearchModel* const searchModel,
     mainWidget->setLayout(mainLayout);
 
     setWidget(mainWidget);
-    setAutoFillBackground(false);
-    mainWidget->setAutoFillBackground(false);
-    viewport()->setAutoFillBackground(false);
 
     // ---------------------------------------------------------------
 

@@ -291,10 +291,6 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
             this, SLOT(slotUseLargeThumbsToggled(bool)));
 
     // --------------------------------------------------------
-
-    setAutoFillBackground(false);
-    viewport()->setAutoFillBackground(false);
-    panel->setAutoFillBackground(false);
 }
 
 SetupAlbumView::~SetupAlbumView()

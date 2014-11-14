@@ -176,9 +176,6 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     QWidget* const page     = new QWidget(main->viewport());
     main->setWidget(page);
     main->setWidgetResizable(true);
-    main->setAutoFillBackground(false);
-    main->viewport()->setAutoFillBackground(false);
-    page->setAutoFillBackground(false);
 
     setMainWidget(main);
 

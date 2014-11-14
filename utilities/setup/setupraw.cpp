@@ -178,9 +178,6 @@ SetupRaw::SetupRaw(QWidget* const parent)
     readSettings();
 
     // --------------------------------------------------------
-
-    setAutoFillBackground(false);
-    viewport()->setAutoFillBackground(false);
 }
 
 SetupRaw::~SetupRaw()

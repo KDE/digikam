@@ -205,10 +205,6 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     adjustSize();
 
     // --------------------------------------------------------
-
-    setAutoFillBackground(false);
-    viewport()->setAutoFillBackground(false);
-    panel->setAutoFillBackground(false);
 }
 
 SetupToolTip::~SetupToolTip()

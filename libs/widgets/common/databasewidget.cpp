@@ -81,8 +81,6 @@ DatabaseWidget::~DatabaseWidget()
 
 void DatabaseWidget::setupMainArea()
 {
-    setAutoFillBackground(false);
-
     QVBoxLayout* const layout  = new QVBoxLayout();
     setLayout(layout);
 

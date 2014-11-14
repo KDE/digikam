@@ -421,12 +421,6 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
     enableToggled(d->enableNonDestructive->isChecked());
 
     // --------------------------------------------------------
-
-/*
-    setAutoFillBackground(false);
-    viewport()->setAutoFillBackground(false);
-    panel->setAutoFillBackground(false);
-*/
 }
 
 SetupVersioning::~SetupVersioning()

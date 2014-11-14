@@ -104,9 +104,6 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
     QWidget* const panel = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
-    setAutoFillBackground(false);
-    viewport()->setAutoFillBackground(false);
-    panel->setAutoFillBackground(false);
 
     QVBoxLayout* const layout = new QVBoxLayout(panel);
 

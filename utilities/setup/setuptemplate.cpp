@@ -174,10 +174,6 @@ SetupTemplate::SetupTemplate(QWidget* const parent)
     d->titleEdit->setFocus();
 
     // --------------------------------------------------------
-
-    setAutoFillBackground(false);
-    viewport()->setAutoFillBackground(false);
-    panel->setAutoFillBackground(false);
 }
 
 SetupTemplate::~SetupTemplate()

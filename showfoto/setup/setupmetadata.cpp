@@ -169,10 +169,6 @@ SetupMetadata::SetupMetadata(QWidget* const parent )
             this, SLOT(slotProcessExiv2Url(QString)));
 
     // --------------------------------------------------------
-
-    setAutoFillBackground(false);
-    viewport()->setAutoFillBackground(false);
-    d->tab->setAutoFillBackground(false);
 }
 
 SetupMetadata::~SetupMetadata()

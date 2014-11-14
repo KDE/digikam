@@ -248,10 +248,6 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
     // ---------------------------------------------------------------
 
     setWidget(d->settingsArea);
-    setAutoFillBackground(false);
-    viewport()->setAutoFillBackground(false);
-    d->settingsArea->setAutoFillBackground(false);
-    d->plainPage->setAutoFillBackground(false);
 
     // ---------------------------------------------------------------
 

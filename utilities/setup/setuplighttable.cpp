@@ -142,10 +142,6 @@ SetupLightTable::SetupLightTable(QWidget* const parent)
     readSettings();
 
     // --------------------------------------------------------
-
-    setAutoFillBackground(false);
-    viewport()->setAutoFillBackground(false);
-    panel->setAutoFillBackground(false);
 }
 
 SetupLightTable::~SetupLightTable()

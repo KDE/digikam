@@ -539,10 +539,6 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
             this, SLOT(slotExifAutoRotateToggled(bool)));
 
     // --------------------------------------------------------
-
-    setAutoFillBackground(false);
-    viewport()->setAutoFillBackground(false);
-    d->tab->setAutoFillBackground(false);
 }
 
 SetupMetadata::~SetupMetadata()

@@ -268,7 +268,6 @@ SetupCamera::SetupCamera(QWidget* const parent)
     setWidgetResizable(true);
 
     QWidget* const panel = new QWidget(d->tab);
-    panel->setAutoFillBackground(false);
 
     QGridLayout* const grid = new QGridLayout(panel);
     d->listView             = new QTreeWidget(panel);
@@ -343,7 +342,6 @@ SetupCamera::SetupCamera(QWidget* const parent)
     // -------------------------------------------------------------
 
     QWidget* const panel2     = new QWidget(d->tab);
-    panel2->setAutoFillBackground(false);
 
     QVBoxLayout* const layout = new QVBoxLayout(panel2);
     d->useFileMetadata        = new QCheckBox(i18n("Use file metadata (makes connection slower)"), panel2);
@@ -364,7 +362,6 @@ SetupCamera::SetupCamera(QWidget* const parent)
     // -------------------------------------------------------------
 
     QWidget* const panel3         = new QWidget(d->tab);
-    panel3->setAutoFillBackground(false);
 
     QGridLayout* const importGrid = new QGridLayout(panel3);
     d->importListView             = new QListWidget(panel3);
@@ -416,7 +413,6 @@ SetupCamera::SetupCamera(QWidget* const parent)
     // -- Import Icon View ----------------------------------------------------------
 
     QWidget* const panel4      = new QWidget(d->tab);
-    panel4->setAutoFillBackground(false);
 
     QVBoxLayout* const layout2 = new QVBoxLayout(panel4);
 
@@ -521,9 +517,6 @@ SetupCamera::SetupCamera(QWidget* const parent)
     d->tab->insertTab(3, panel4, i18n("Import Window"));
 
     // -------------------------------------------------------------
-
-    setAutoFillBackground(false);
-    viewport()->setAutoFillBackground(false);
 
     adjustSize();
 
