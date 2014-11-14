@@ -119,8 +119,7 @@ Note: all library dependencies require development and binary packages installed
 
 CMake compilation options to custom digiKam:
 
-Use CMake "-DENABLE_THUMB_DB=off"         flag to compile digiKam without thumbnail database support                             (enabled  by default).
-Use CMake "-DENABLE_INTERNALMYSQL=off"    flag to compile digiKam without internal MySQL server                                  (enabled  by default).
+Use CMake "-DENABLE_INTERNALMYSQL=on"     flag to compile digiKam with internal MySQL server                                     (disabled by default).
 Use CMake "-DENABLE_LCMS2=on"             flag to compile digiKam source code using lcms2 instead lcms1                          (disabled by default).
 Use CMake "-DENABLE_BALOOSUPPORT=on"      flag to compile digiKam with Baloo support                                             (disabled by default).
 Use CMake "-DENABLE_KDEPIMLIBSSUPPORT=on" flag to compile digiKam with KdePimLibs support                                        (disabled by default).
@@ -129,6 +128,7 @@ Debug options:
 
 Use CMake "-DENABLE_ADVANCEDDEBUGMSG=on"  flag to compile digiKam with more internal debug messages, especially in image loaders (disabled by default).
 Use CMake "-DKDE4_BUILD_TESTS=on"         flag to compile digiKam source code unit tests                                         (disabled by default).
+Use CMake "-DENABLE_THUMB_DB=off"         flag to compile digiKam without thumbnails database support                            (enabled  by default).
 
 digiKam do not have any video thumbnailer. Video support is delegate to KDE. To support Video thumbnails, 
 please install "ffmpegthumbs" package, which is the kdemultimedia Video thumbnail generator for KDE4 file managers.

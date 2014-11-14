@@ -9,8 +9,7 @@ project(digikam)
 message(STATUS "----------------------------------------------------------------------------------")
 message(STATUS "Starting CMake configuration for: digiKam")
 
-option(ENABLE_THUMBS_DB         "Build digiKam with thumbnails database support (default=ON)"                    ON)
-option(ENABLE_INTERNALMYSQL     "Build digiKam with insternal MySQL server executable (default=ON)"              ON)
+option(ENABLE_INTERNALMYSQL     "Build digiKam with internal MySQL server executable (default=OFF)"              OFF)
 option(ENABLE_LCMS2             "Build digiKam with LCMS2 instead LCMS1 (default=OFF)"                           OFF)
 option(ENABLE_BALOOSUPPORT      "Build digiKam with Baloo support (default=ON)"                                  ON)
 option(ENABLE_KDEPIMLIBSSUPPORT "Build digiKam with Kdepimlibs support (default=OFF)"                            OFF)
@@ -18,6 +17,7 @@ option(ENABLE_KDEPIMLIBSSUPPORT "Build digiKam with Kdepimlibs support (default=
 # Debug options:
 option(ENABLE_DIGIKAM_MODELTEST "Enable ModelTest on some models for debugging (default=OFF)"                    OFF)
 option(ENABLE_IMGLOADERDEBUGMSG "Build digiKam with more internal debug message into image loader (default=OFF)" OFF)
+option(ENABLE_THUMBS_DB         "Build digiKam with thumbnails database support (default=ON)"                    ON)
 
 # ==================================================================================================
 # Information to update before to release this package.
