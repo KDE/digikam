@@ -37,6 +37,8 @@
 #include "digikam_export.h"
 #include "loadingdescription.h"
 
+class PreviewSettings;
+
 namespace Digikam
 {
 
@@ -49,7 +51,7 @@ public:
     explicit SlideImage(QWidget* const parent = 0);
     ~SlideImage();
 
-    void setLoadFullImageSize(bool b);
+    void setPreviewSettings(const PreviewSettings& settings);
     void setLoadUrl(const KUrl& url);
     void setPreloadUrl(const KUrl& url);
 

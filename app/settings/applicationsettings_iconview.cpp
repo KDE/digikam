@@ -233,14 +233,14 @@ bool ApplicationSettings::getIconShowOverlays() const
     return d->iconShowOverlays;
 }
 
-void ApplicationSettings::setPreviewLoadFullImageSize(bool val)
+void ApplicationSettings::setPreviewSettings(const PreviewSettings& settings)
 {
-    d->previewLoadFullImageSize = val;
+    d->previewSettings = settings;
 }
 
-bool ApplicationSettings::getPreviewLoadFullImageSize() const
+PreviewSettings ApplicationSettings::getPreviewSettings() const
 {
-    return d->previewLoadFullImageSize;
+    return d->previewSettings;
 }
 
 void ApplicationSettings::setPreviewShowIcons(bool val)

@@ -113,7 +113,7 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
     // ---------------------------------------------------------------
 
     d->imageView = new SlideImage(this);
-    d->imageView->setLoadFullImageSize(d->settings.useFullSizePreviews);
+    d->imageView->setPreviewSettings(d->settings.previewSettings);
     d->imageView->installEventFilter(this);
 
     connect(d->imageView, SIGNAL(signalImageLoaded(bool)),

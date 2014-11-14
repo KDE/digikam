@@ -70,6 +70,7 @@
 #include "tagspopupmenu.h"
 #include "thememanager.h"
 #include "previewlayout.h"
+#include "previewsettings.h"
 #include "tagscache.h"
 #include "imagetagpair.h"
 #include "albummanager.h"
@@ -489,7 +490,7 @@ void ImagePreviewView::slotThemeChanged()
 
 void ImagePreviewView::slotSetupChanged()
 {
-    previewItem()->setLoadFullImageSize(ApplicationSettings::instance()->getPreviewLoadFullImageSize());
+    previewItem()->setPreviewSettings(ApplicationSettings::instance()->getPreviewSettings());
 
     d->toolBar->setVisible(ApplicationSettings::instance()->getPreviewShowIcons());
     setShowText(ApplicationSettings::instance()->getPreviewShowIcons());

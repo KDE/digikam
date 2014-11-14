@@ -39,6 +39,7 @@
 #include "loadingcacheinterface.h"
 #include "loadingdescription.h"
 #include "previewloadthread.h"
+#include "previewsettings.h"
 
 namespace Digikam
 {
@@ -61,7 +62,6 @@ DImgPreviewItem::DImgPreviewItemPrivate::DImgPreviewItemPrivate()
 {
     state             = DImgPreviewItem::NoImage;
     previewSize       = 1024;
-    loadFullImageSize = false;
     exifRotate        = false;
     previewThread     = 0;
     preloadThread     = 0;
@@ -104,6 +104,18 @@ void DImgPreviewItem::setDisplayingWidget(QWidget* const widget)
     d->previewThread->setDisplayingWidget(widget);
 }
 
+void DImgPreviewItem::setPreviewSettings(const PreviewSettings& settings)
+{
+    Q_D(DImgPreviewItem);
+    if (settings == d->previewSettings)
+    {
+        return;
+    }
+    d->previewSettings = settings;
+    reload();
+}
+
+/*
 void DImgPreviewItem::setLoadFullImageSize(bool b)
 {
     Q_D(DImgPreviewItem);
@@ -116,6 +128,7 @@ void DImgPreviewItem::setLoadFullImageSize(bool b)
     d->loadFullImageSize = b;
     reload();
 }
+*/
 
 QString DImgPreviewItem::path() const
 {
@@ -142,15 +155,7 @@ void DImgPreviewItem::setPath(const QString& path, bool rePreview)
     else
     {
         d->state = Loading;
-
-        if (d->loadFullImageSize)
-        {
-            d->previewThread->loadHighQuality(d->path);
-        }
-        else
-        {
-            d->previewThread->load(d->path, d->previewSize);
-        }
+        d->previewThread->load(d->path, d->previewSettings, d->previewSize);
 
         emit stateChanged(d->state);
     }
@@ -297,15 +302,7 @@ void DImgPreviewItem::preloadNext()
     }
 
     QString preloadPath = d->pathsToPreload.takeFirst();
-
-    if (d->loadFullImageSize)
-    {
-        d->preloadThread->loadHighQuality(preloadPath);
-    }
-    else
-    {
-        d->preloadThread->load(preloadPath, d->previewSize);
-    }
+    d->preloadThread->load(preloadPath, d->previewSettings, d->previewSize);
 }
 
 void DImgPreviewItem::slotFileChanged(const QString& path)

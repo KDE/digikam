@@ -43,7 +43,7 @@ public:
 
     void applySettings();
 
-    bool useLargeThumbsAsChanged() const;
+    bool useLargeThumbsHasChanged() const;
 
 private:
 

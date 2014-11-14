@@ -330,7 +330,7 @@ LoadingDescription ThumbnailLoadThread::Private::createLoadingDescription(const 
 {
     size = thumbnailSizeForPixmapSize(size);
 
-    LoadingDescription description(filePath, size,
+    LoadingDescription description(filePath, PreviewSettings(), size,
                                    LoadingDescription::NoColorConversion,
                                    LoadingDescription::PreviewParameters::Thumbnail);
 
@@ -354,7 +354,7 @@ LoadingDescription ThumbnailLoadThread::Private::createLoadingDescription(const 
 {
     size = thumbnailSizeForPixmapSize(size);
 
-    LoadingDescription description(filePath, size,
+    LoadingDescription description(filePath, PreviewSettings(), size,
                                    LoadingDescription::NoColorConversion,
                                    LoadingDescription::PreviewParameters::DetailThumbnail);
 

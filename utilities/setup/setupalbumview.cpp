@@ -38,8 +38,10 @@
 
 #include <kapplication.h>
 #include <kcombobox.h>
+#include <kdebug.h>
 #include <kdialog.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 
 // Local includes
 
@@ -48,6 +50,7 @@
 #include "dfontselect.h"
 #include "fullscreensettings.h"
 #include "dxmlguiwindow.h"
+#include "previewsettings.h"
 
 namespace Digikam
 {
@@ -57,8 +60,8 @@ class SetupAlbumView::Private
 public:
 
     Private() :
-        useLargeThumbsAsChanged(false),
-        useLargeThumbsOrg(false),
+        useLargeThumbsOriginal(false),
+        useLargeThumbsShowedInfo(false),
         iconTreeThumbLabel(0),
         iconShowNameBox(0),
         iconShowSizeBox(0),
@@ -73,7 +76,9 @@ public:
         iconShowRatingBox(0),
         iconShowFormatBox(0),
         iconShowCoordinatesBox(0),
-        previewLoadFullImageSize(0),
+        previewFastPreview(0),
+        previewFullView(0),
+        previewRawMode(0),
         previewShowIcons(0),
         showFolderTreeViewItemsCount(0),
         largeThumbsBox(0),
@@ -85,8 +90,8 @@ public:
     {
     }
 
-    bool                useLargeThumbsAsChanged;
-    bool                useLargeThumbsOrg;
+    bool                useLargeThumbsOriginal;
+    bool                useLargeThumbsShowedInfo;
 
     QLabel*             iconTreeThumbLabel;
 
@@ -103,7 +108,9 @@ public:
     QCheckBox*          iconShowRatingBox;
     QCheckBox*          iconShowFormatBox;
     QCheckBox*          iconShowCoordinatesBox;
-    QCheckBox*          previewLoadFullImageSize;
+    QRadioButton*       previewFastPreview;
+    QRadioButton*       previewFullView;
+    QComboBox*          previewRawMode;
     QCheckBox*          previewShowIcons;
     QCheckBox*          showFolderTreeViewItemsCount;
     QCheckBox*          largeThumbsBox;
@@ -182,7 +189,7 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
 
     QLabel* leftClickLabel     = new QLabel(i18n("Thumbnail click action:"), iconViewGroup);
     d->leftClickActionComboBox = new KComboBox(iconViewGroup);
-    d->leftClickActionComboBox->addItem(i18n("Show embedded preview"), ApplicationSettings::ShowPreview);
+    d->leftClickActionComboBox->addItem(i18n("Show embedded view"), ApplicationSettings::ShowPreview);
     d->leftClickActionComboBox->addItem(i18n("Start image editor"), ApplicationSettings::StartEditor);
     d->leftClickActionComboBox->setToolTip(i18n("Choose what should happen when you click on a thumbnail."));
 
@@ -250,21 +257,35 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     QGroupBox* const interfaceOptionsGroup = new QGroupBox(i18n("Preview Options"), panel);
     QGridLayout* const grid3               = new QGridLayout(interfaceOptionsGroup);
 
-    d->previewLoadFullImageSize = new QCheckBox(i18n("Embedded preview loads full-sized images"), interfaceOptionsGroup);
-    d->previewLoadFullImageSize->setWhatsThis(i18n("<p>Set this option to load images at their full size "
-                                                   "for preview, rather than at a reduced size. As this option "
-                                                   "will make it take longer to load images, only use it if you have "
-                                                   "a fast computer.</p>"
-                                                   "<p><b>Note:</b> for Raw images, a half size version of the Raw data "
-                                                   "is used instead of the embedded JPEG preview.</p>"));
+    d->previewFastPreview   = new QRadioButton(i18nc("@option:radio",
+                                                     "Embedded view shows a small, quick preview"));
+    d->previewFullView      = new QRadioButton(i18nc("@option:radio",
+                                                     "Embedded view shows shows the full image"));
+    QLabel* rawPreviewLabel = new QLabel(i18nc("@label:listbox Mode of RAW preview decoding:",
+                                               "Raw images:"));
+    d->previewRawMode       = new QComboBox;
+    d->previewRawMode->addItem(i18nc("@option:inlistbox Automatic choice of RAW image preview source",
+                                     "Automatic"), PreviewSettings::RawPreviewAutomatic);
+    d->previewRawMode->addItem(i18nc("@option:inlistbox Embedded preview as RAW image preview source",
+                                     "Embedded preview"), PreviewSettings::RawPreviewFromEmbeddedPreview);
+    d->previewRawMode->addItem(i18nc("@option:inlistbox Original, half-size data as RAW image preview source",
+                                     "Raw data in half size"), PreviewSettings::RawPreviewFromRawHalfSize);
 
     d->previewShowIcons = new QCheckBox(i18n("Show icons and text over preview"), interfaceOptionsGroup);
     d->previewShowIcons->setWhatsThis(i18n("Uncheck this if you do not want to see icons and text in the image preview."));
 
     grid3->setMargin(KDialog::spacingHint());
     grid3->setSpacing(KDialog::spacingHint());
-    grid3->addWidget(d->previewLoadFullImageSize, 0, 0, 1, 2);
-    grid3->addWidget(d->previewShowIcons,         1, 0, 1, 2);
+    grid3->addWidget(d->previewFastPreview, 0, 0, 1, 2);
+    grid3->addWidget(d->previewFullView,    1, 0, 1, 2);
+    grid3->addWidget(rawPreviewLabel,       2, 0, 1, 1);
+    grid3->addWidget(d->previewRawMode,     2, 1, 1, 1);
+    grid3->addWidget(d->previewShowIcons,   3, 0, 1, 2);
+
+    d->previewFastPreview->setChecked(true);
+    d->previewRawMode->setCurrentIndex(0);
+    d->previewRawMode->setEnabled(false);
+    connect(d->previewFullView, SIGNAL(toggled(bool)), d->previewRawMode, SLOT(setEnabled(bool)));
 
     // --------------------------------------------------------
 
@@ -327,7 +348,11 @@ void SetupAlbumView::applySettings()
     settings->setItemLeftClickAction((ApplicationSettings::ItemLeftClickAction)
                                      d->leftClickActionComboBox->currentIndex());
 
-    settings->setPreviewLoadFullImageSize(d->previewLoadFullImageSize->isChecked());
+    PreviewSettings previewSettings;
+    previewSettings.quality = d->previewFastPreview->isChecked() ? PreviewSettings::FastPreview : PreviewSettings::HighQualityPreview;
+    previewSettings.rawLoading = (PreviewSettings::RawLoading)d->previewRawMode->itemData(d->previewRawMode->currentIndex()).toInt();
+    settings->setPreviewSettings(previewSettings);
+
     settings->setPreviewShowIcons(d->previewShowIcons->isChecked());
     settings->setShowFolderTreeViewItemsCount(d->showFolderTreeViewItemsCount->isChecked());
     settings->saveSettings();
@@ -384,7 +409,17 @@ void SetupAlbumView::readSettings()
 
     d->leftClickActionComboBox->setCurrentIndex((int)settings->getItemLeftClickAction());
 
-    d->previewLoadFullImageSize->setChecked(settings->getPreviewLoadFullImageSize());
+    PreviewSettings previewSettings = settings->getPreviewSettings();
+    if (previewSettings.quality == PreviewSettings::FastPreview)
+    {
+        d->previewFastPreview->setChecked(true);
+    }
+    else
+    {
+        d->previewFullView->setChecked(true);
+    }
+    d->previewRawMode->setCurrentIndex(d->previewRawMode->findData(previewSettings.rawLoading));
+
     d->previewShowIcons->setChecked(settings->getPreviewShowIcons());
     d->showFolderTreeViewItemsCount->setChecked(settings->getShowFolderTreeViewItemsCount());
 
@@ -392,24 +427,26 @@ void SetupAlbumView::readSettings()
     d->fullScreenSettings->readSettings(group);
 
     ThumbnailSize::readSettings(group);
-    d->useLargeThumbsOrg = ThumbnailSize::getUseLargeThumbs();
-    d->largeThumbsBox->setChecked(d->useLargeThumbsOrg);
+    d->useLargeThumbsOriginal = ThumbnailSize::getUseLargeThumbs();
+    d->largeThumbsBox->setChecked(d->useLargeThumbsOriginal);
 }
 
-bool SetupAlbumView::useLargeThumbsAsChanged() const
+bool SetupAlbumView::useLargeThumbsHasChanged() const
 {
-    return d->useLargeThumbsAsChanged;
+    return d->largeThumbsBox->isChecked() != d->useLargeThumbsOriginal;
 }
 
 void SetupAlbumView::slotUseLargeThumbsToggled(bool b)
 {
-    if (b != d->useLargeThumbsOrg)
+    // Show info if large thumbs were enabled, and only once.
+    if (b && d->useLargeThumbsShowedInfo && useLargeThumbsHasChanged())
     {
-        d->useLargeThumbsAsChanged = true;
-    }
-    else
-    {
-        d->useLargeThumbsAsChanged = false;
+        d->useLargeThumbsShowedInfo = true;
+        KMessageBox::information(this, i18nc("@info",
+                                       "This option changes the size in which thumbnails are generated. "
+                                       "You need to restart digiKam for this option to take effect. "
+                                       "Furthermore, you need to regenerate all already stored thumbnails via "
+                                       "the the <interface>Tools / Maintenance</interface> menu."));
     }
 }
 
