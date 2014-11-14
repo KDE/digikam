@@ -125,7 +125,7 @@ void SlideShowBuilder::slotParseImageInfoList(const ImageInfoList& list)
     int               i = 0;
     SlideShowSettings settings;
     settings.readFromConfig();
-    settings.useFullSizePreviews = ApplicationSettings::instance()->getPreviewLoadFullImageSize();
+    settings.previewSettings = ApplicationSettings::instance()->getPreviewSettings();
 
     for (ImageInfoList::const_iterator it = list.constBegin();
          !d->cancel && (it != list.constEnd()) ; ++it)
