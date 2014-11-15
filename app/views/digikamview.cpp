@@ -1682,15 +1682,24 @@ void DigikamView::slotTogglePreviewMode(const ImageInfo& info)
           viewMode() == StackedView::MapWidgetMode)   &&
          !info.isNull() )
     {
-        d->lastViewMode = viewMode();
-
-        if (viewMode() == StackedView::IconViewMode)
+        if (info.isLocationAvailable())
         {
-            d->stackedview->setPreviewItem(info, d->iconView->previousInfo(info), d->iconView->nextInfo(info));
+            d->lastViewMode = viewMode();
+
+            if (viewMode() == StackedView::IconViewMode)
+            {
+                d->stackedview->setPreviewItem(info, d->iconView->previousInfo(info), d->iconView->nextInfo(info));
+            }
+            else
+            {
+                d->stackedview->setPreviewItem(info, ImageInfo(), ImageInfo());
+            }
         }
         else
         {
-            d->stackedview->setPreviewItem(info, ImageInfo(), ImageInfo());
+            QModelIndex index = d->iconView->indexForInfo(info);
+            d->iconView->showIndexNotification(index,
+                                               i18nc("@info", "<i>The storage location of this image<br/>is currently not available</i>"));
         }
     }
     else

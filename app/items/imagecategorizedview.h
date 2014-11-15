@@ -105,6 +105,8 @@ public:
         return nextInOrder(info, 1);
     }
 
+    QModelIndex indexForInfo(const ImageInfo& info) const;
+
     ThumbnailSize thumbnailSize() const;
 
     virtual void setThumbnailSize(const ThumbnailSize& size);

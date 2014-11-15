@@ -365,6 +365,11 @@ void ImageCategorizedView::toIndex(const KUrl& url)
     DCategorizedView::toIndex(d->filterModel->indexForPath(url.toLocalFile()));
 }
 
+QModelIndex ImageCategorizedView::indexForInfo(const ImageInfo& info) const
+{
+    return d->filterModel->indexForImageInfo(info);
+}
+
 ImageInfo ImageCategorizedView::nextInOrder(const ImageInfo& startingPoint, int nth)
 {
     QModelIndex index = d->filterModel->indexForImageInfo(startingPoint);
