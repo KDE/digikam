@@ -61,6 +61,7 @@ public:
         incrementalTimer = 0;
         recurseAlbums    = false;
         recurseTags      = false;
+        listOnlyAvailableImages = false;
         extraValueJob    = false;
     }
 
@@ -71,6 +72,7 @@ public:
 
     bool              recurseAlbums;
     bool              recurseTags;
+    bool              listOnlyAvailableImages;
     QString           specialListing;
 
     bool              extraValueJob;
@@ -112,6 +114,9 @@ ImageAlbumModel::ImageAlbumModel(QObject* parent)
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
             this, SLOT(slotAlbumsCleared()));
+
+    connect(AlbumManager::instance(), SIGNAL(signalShowOnlyAvailableAlbumsChanged(bool)),
+            this, SLOT(setListOnlyAvailableImages(bool)));
 }
 
 ImageAlbumModel::~ImageAlbumModel()
@@ -148,6 +153,15 @@ void ImageAlbumModel::setRecurseTags(bool recursiveListing)
     }
 }
 
+void ImageAlbumModel::setListOnlyAvailableImages(bool onlyAvailable)
+{
+    if (d->listOnlyAvailableImages!= onlyAvailable)
+    {
+        d->listOnlyAvailableImages = onlyAvailable;
+        refresh();
+    }
+}
+
 bool ImageAlbumModel::isRecursingAlbums() const
 {
     return d->recurseAlbums;
@@ -156,6 +170,11 @@ bool ImageAlbumModel::isRecursingAlbums() const
 bool ImageAlbumModel::isRecursingTags() const
 {
     return d->recurseTags;
+}
+
+bool ImageAlbumModel::isListingOnlyAvailableImages() const
+{
+    return d->listOnlyAvailableImages;
 }
 
 void ImageAlbumModel::setSpecialTagListing(const QString& specialListing)
@@ -179,11 +198,12 @@ void ImageAlbumModel::openAlbum(QList<Album*> albums)
     /**
      * Extra safety, ensure that no null pointers are added
      */
-    QList<Album*>::iterator it;
-    for(it = albums.begin(); it != albums.end(); ++it)
+    foreach (Album* a, albums)
     {
-        if((*it))
-            d->currentAlbums.append(*it);
+        if (a)
+        {
+            d->currentAlbums << a;
+        }
     }
     //emit listedAlbumChanged(d->currentAlbums);
     refresh();
@@ -312,6 +332,7 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
     d->job   = ImageLister::startListJob(url);
     d->job->addMetaData("listAlbumsRecursively", d->recurseAlbums ? "true" : "false");
     d->job->addMetaData("listTagsRecursively", d->recurseTags ? "true" : "false");
+    d->job->addMetaData("listOnlyAvailableImages", d->listOnlyAvailableImages ? "true" : "false");
 
     if (albums.first()->type() == Album::TAG && !d->specialListing.isNull())
     {

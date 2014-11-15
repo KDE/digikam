@@ -1703,6 +1703,16 @@ ImageInfo ImageInfo::copyItem(int dstAlbumID, const QString& dstFileName)
     return ImageInfo(id);
 }
 
+bool ImageInfo::isLocationAvailable() const
+{
+    if (!m_data)
+    {
+        return false;
+    }
+
+    return CollectionManager::instance()->locationForAlbumRootId(m_data->albumRootId).isAvailable();
+}
+
 QDebug operator<<(QDebug stream, const ImageInfo& info)
 {
     return stream << "ImageInfo [id = " << info.id() << ", databaseurl = "

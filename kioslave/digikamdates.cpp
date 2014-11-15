@@ -83,6 +83,7 @@ void kio_digikamdates::special(const QByteArray& data)
     else
     {
         Digikam::ImageLister lister;
+        lister.setListOnlyAvailable(metaData("listOnlyAvailableImages") == "true");
         // send data every 200 images to be more responsive
         Digikam::ImageListerSlaveBasePartsSendingReceiver receiver(this, 200);
         lister.list(&receiver, kurl);

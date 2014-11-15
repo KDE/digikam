@@ -102,6 +102,7 @@ void kio_digikamsearch::special(const QByteArray& data)
         Digikam::SearchInfo info = Digikam::DatabaseAccess().db()->getSearchInfo(id);
 
         Digikam::ImageLister lister;
+        lister.setListOnlyAvailable(metaData("listOnlyAvailableImages") == "true");
 
         if (listingType == 0)
         {

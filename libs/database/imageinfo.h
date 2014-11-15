@@ -468,6 +468,13 @@ public:
     //TODO: Move to album?
     ImageInfo copyItem(int dstAlbumID, const QString& dstFileName);
 
+    /**
+     * Returns true if this is a valid ImageInfo,
+     * and the location of the image is currently available
+     * (information freshly obtained from CollectionManager)
+     */
+    bool isLocationAvailable() const;
+
 private:
 
     friend class ImageInfoCache;
