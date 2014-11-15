@@ -472,11 +472,6 @@ public:
             LastInsertId
     */
 
-private Q_SLOTS:
-
-    void slotThreadFinished();
-    void slotMainThreadFinished();
-
 protected:
 
     DatabaseCoreBackendPrivate* const d_ptr;

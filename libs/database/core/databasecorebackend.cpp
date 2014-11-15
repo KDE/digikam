@@ -79,22 +79,64 @@ public:
     }
 };
 
-DatabaseCoreBackendPrivate::DatabaseCoreBackendPrivate(DatabaseCoreBackend* const backend)
-    : q(backend)
+DatabaseThreadData::DatabaseThreadData()
+    : valid(0),
+      transactionCount(0)
 {
-    status                   = DatabaseCoreBackend::Unavailable;
-    isInTransaction          = false;
-    operationStatus          = DatabaseCoreBackend::ExecuteNormal;
-    errorHandler             = 0;
-    lock                     = 0;
-    errorLockOperationStatus = DatabaseCoreBackend::ExecuteNormal;
+}
+
+DatabaseThreadData::~DatabaseThreadData()
+{
+    if (transactionCount)
+    {
+        kDebug() << "WARNING !!! Transaction count is" << transactionCount << "when destroying database!!!";
+    }
+    closeDatabase();
+}
+
+void DatabaseThreadData::closeDatabase()
+{
+    QString connectionToRemove;
+    if (database.isOpen())
+    {
+        connectionToRemove = database.connectionName();
+    }
+
+    // Destroy object
+    database = QSqlDatabase();
+
+    valid            = 0;
+    transactionCount = 0;
+    lastError        = QSqlError();
+
+    // Remove connection
+    if (!connectionToRemove.isNull())
+    {
+        QSqlDatabase::removeDatabase(connectionToRemove);
+    }
+}
+
+DatabaseCoreBackendPrivate::DatabaseCoreBackendPrivate(DatabaseCoreBackend* const backend)
+    : currentValidity(0),
+      isInTransaction(false),
+      status(DatabaseCoreBackend::Unavailable),
+      lock(0),
+      operationStatus(DatabaseCoreBackend::ExecuteNormal),
+      errorLockOperationStatus(DatabaseCoreBackend::ExecuteNormal),
+      errorHandler(0),
+      q(backend)
+{
+}
+
+DatabaseCoreBackendPrivate::~DatabaseCoreBackendPrivate()
+{
+    // Must be shut down from the main thread.
+    // Clean up the QThreadStorage. It deletes any stored data.
+    threadDataStorage.setLocalData(0);
 }
 
 void DatabaseCoreBackendPrivate::init(const QString& name, DatabaseLocking* const l)
 {
-    QObject::connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()),
-                     q, SLOT(slotMainThreadFinished()));
-
     backendName = name;
     lock        = l;
 
@@ -110,82 +152,43 @@ void DatabaseCoreBackendPrivate::init(const QString& name, DatabaseLocking* cons
 // finishing of the thread.
 QSqlDatabase DatabaseCoreBackendPrivate::databaseForThread()
 {
-    QThread* const thread = QThread::currentThread();
-    QSqlDatabase db       = threadDatabases[thread];
-    int isValid           = databasesValid[thread];
-
-    if (!isValid || !db.isOpen())
+    DatabaseThreadData* threadData = 0;
+    if (!threadDataStorage.hasLocalData())
     {
-        // need to open a db for thread
-        bool success = open(db);
-
-        if (!success)
-        {
-            kDebug() << "Error while opening the database. Details: [" << db.lastError() << "]";
-        }
-
-        QObject::connect(thread, SIGNAL(finished()),
-                         q, SLOT(slotThreadFinished()));
+        threadData = new DatabaseThreadData;
+        threadDataStorage.setLocalData(threadData);
     }
-
-#ifdef DATABASCOREBACKEND_DEBUG
     else
     {
-        kDebug() << "Database ["<< connectionName(thread) <<"] already open for thread ["<< thread <<"].";
+        threadData = threadDataStorage.localData();
     }
 
-#endif
-
-    return db;
-}
-
-void DatabaseCoreBackendPrivate::closeDatabaseForThread()
-{
-    QThread* const thread = QThread::currentThread();
-
-    // scope, so that db is destructed when calling removeDatabase
+    // do we need to reopen the database because parameter changed and validity was increased?
+    if (threadData->valid && threadData->valid < currentValidity)
     {
-        QSqlDatabase db = threadDatabases[thread];
+        threadData->closeDatabase();
+    }
 
-        if (db.isValid())
+    if (!threadData->valid || !threadData->database.isOpen())
+    {
+        threadData->database = createDatabaseConnection();
+
+        if (threadData->database.open())
         {
-            db.close();
+            threadData->valid = currentValidity;
+        }
+        else
+        {
+            kDebug() << "Error while opening the database. Error was" << threadData->database.lastError();
         }
     }
 
-    threadDatabases.remove(thread);
-    databaseErrors.remove(thread);
-    databasesValid[thread] = 0;
-    transactionCount.remove(thread);
-    QSqlDatabase::removeDatabase(connectionName(thread));
+    return threadData->database;
 }
 
-QSqlError DatabaseCoreBackendPrivate::databaseErrorForThread()
+QSqlDatabase DatabaseCoreBackendPrivate::createDatabaseConnection()
 {
-    QThread* const thread = QThread::currentThread();
-    return databaseErrors[thread];
-}
-
-void DatabaseCoreBackendPrivate::setDatabaseErrorForThread(const QSqlError& lastError)
-{
-    QThread* const thread = QThread::currentThread();
-    databaseErrors.insert(thread, lastError);
-}
-
-QString DatabaseCoreBackendPrivate::connectionName(QThread* const thread)
-{
-    return backendName + QString::number((quintptr)thread);
-}
-
-bool DatabaseCoreBackendPrivate::open(QSqlDatabase& db)
-{
-    if (db.isValid())
-    {
-        db.close();
-    }
-
-    QThread* const thread  = QThread::currentThread();
-    db                     = QSqlDatabase::addDatabase(parameters.databaseType, connectionName(thread));
+    QSqlDatabase db        = QSqlDatabase::addDatabase(parameters.databaseType, connectionName());
     QString connectOptions = parameters.connectOptions;
 
     if (parameters.isSQLite())
@@ -211,46 +214,47 @@ bool DatabaseCoreBackendPrivate::open(QSqlDatabase& db)
     db.setUserName(parameters.userName);
     db.setPassword(parameters.password);
 
-    bool success = db.open();
+    return db;
+}
 
-    if (success==false)
+void DatabaseCoreBackendPrivate::closeDatabaseForThread()
+{
+    if (threadDataStorage.hasLocalData())
     {
-        kDebug() << "Error while opening the database. Error was <" << db.lastError() << ">";
+        threadDataStorage.localData()->closeDatabase();
     }
+}
 
-    threadDatabases[thread]  = db;
-    databasesValid[thread]   = 1;
-    transactionCount[thread] = 0;
+QSqlError DatabaseCoreBackendPrivate::databaseErrorForThread()
+{
+    if (threadDataStorage.hasLocalData())
+    {
+        return threadDataStorage.localData()->lastError;
+    }
+    return QSqlError();
+}
 
-    return success;
+void DatabaseCoreBackendPrivate::setDatabaseErrorForThread(const QSqlError& lastError)
+{
+    if (threadDataStorage.hasLocalData())
+    {
+        threadDataStorage.localData()->lastError = lastError;
+    }
+}
+
+QString DatabaseCoreBackendPrivate::connectionName()
+{
+    return backendName + QString::number((quintptr)QThread::currentThread());
 }
 
 bool DatabaseCoreBackendPrivate::incrementTransactionCount()
 {
-    QThread* const thread = QThread::currentThread();
-    return (!transactionCount[thread]++);
+    return (!threadDataStorage.localData()->transactionCount++);
 }
 
 bool DatabaseCoreBackendPrivate::decrementTransactionCount()
 {
-    QThread* const thread = QThread::currentThread();
-    return (!--transactionCount[thread]);
-}
-
-bool DatabaseCoreBackendPrivate::isInTransactionInOtherThread() const
-{
-    QThread* const thread = QThread::currentThread();
-    QHash<QThread*, int>::const_iterator it;
-
-    for (it = transactionCount.constBegin(); it != transactionCount.constEnd(); ++it)
-    {
-        if (it.key() != thread && it.value())
-        {
-            return true;
-        }
-    }
-
-    return false;
+    return (!--threadDataStorage.localData()->transactionCount);
 }
 
 bool DatabaseCoreBackendPrivate::isInMainThread() const
@@ -740,18 +744,6 @@ void DatabaseCoreBackend::setDatabaseErrorHandler(DatabaseErrorHandler* const ha
     d->errorHandler = handler;
 }
 
-void DatabaseCoreBackend::slotThreadFinished()
-{
-    Q_D(DatabaseCoreBackend);
-    d->closeDatabaseForThread();
-}
-
-void DatabaseCoreBackend::slotMainThreadFinished()
-{
-    Q_D(DatabaseCoreBackend);
-    d->closeDatabaseForThread();
-}
-
 bool DatabaseCoreBackend::isCompatible(const DatabaseParameters& parameters)
 {
     return QSqlDatabase::drivers().contains(parameters.databaseType);
@@ -761,10 +753,8 @@ bool DatabaseCoreBackend::open(const DatabaseParameters& parameters)
 {
     Q_D(DatabaseCoreBackend);
     d->parameters = parameters;
-
-    // Force possibly opened thread dbs to re-open with new parameters.
-    // They are not accessible from this thread!
-    d->databasesValid.clear();
+    // This will make possibly opened thread dbs reload at next access
+    d->currentValidity++;
 
     int retries = 0;
 
@@ -1634,7 +1624,7 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::commitTransaction()
 bool DatabaseCoreBackend::isInTransaction() const
 {
     Q_D(const DatabaseCoreBackend);
-    return d->isInTransactionInOtherThread();
+    return d->isInTransaction;
 }
 
 void DatabaseCoreBackend::rollbackTransaction()
