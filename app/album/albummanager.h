@@ -604,6 +604,9 @@ public:
      */
     bool isMovingAlbum(Album* album) const;
 
+    bool isShowingOnlyAvailableAlbums() const;
+    void setShowOnlyAvailableAlbums(bool onlyAvailable);
+
     //@}
 
 Q_SIGNALS:
@@ -640,6 +643,8 @@ Q_SIGNALS:
     void signalDatesMapDirty(const QMap<QDateTime, int>&);
     void signalTagPropertiesChanged(TAlbum* album);
     void signalAlbumsUpdated(int type);
+    // Signals a change in this property. Please note that affected albums may appear or disappear after this signal has been emitted.
+    void signalShowOnlyAvailableAlbumsChanged(bool showsOnlyAvailableAlbums);
 
 private Q_SLOTS:
 
@@ -706,6 +711,7 @@ private:
      */
     bool hasDirectChildAlbumWithTitle(Album* parent, const QString& title);
 
+    bool handleCollectionStatusChange(const CollectionLocation& location, int oldStatus);
     void insertPAlbum(PAlbum* album, PAlbum* parent);
     void removePAlbum(PAlbum* album);
     void insertTAlbum(TAlbum* album, TAlbum* parent);

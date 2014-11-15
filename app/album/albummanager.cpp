@@ -162,6 +162,7 @@ public:
         hasPriorizedDbPath(false),
         dbPort(0),
         dbInternalServer(false),
+        showOnlyAvailableAlbums(false),
         albumListJob(0),
         dateListJob(0),
         tagListJob(0),
@@ -191,6 +192,8 @@ public:
     QString                     dbHostName;
     int                         dbPort;
     bool                        dbInternalServer;
+
+    bool                        showOnlyAvailableAlbums;
 
     KIO::TransferJob*           albumListJob;
     KIO::TransferJob*           dateListJob;
@@ -1077,11 +1080,10 @@ void AlbumManager::startScan()
     d->allAlbumsIdHash[d->rootDAlbum->globalID()] = d->rootDAlbum;
     emit signalAlbumAdded(d->rootDAlbum);
 
-    // create albums for album roots
-    QList<CollectionLocation> locations = CollectionManager::instance()->allAvailableLocations();
-    foreach(const CollectionLocation& location, locations)
+    // Create albums for album roots. Reuse logic implemented in the method
+    foreach(const CollectionLocation& location, CollectionManager::instance()->allLocations())
     {
-        addAlbumRoot(location);
+        handleCollectionStatusChange(location, CollectionLocation::LocationNull);
     }
 
     // listen to location status changes
@@ -1122,20 +1124,92 @@ void AlbumManager::slotCollectionLocationStatusChanged(const CollectionLocation&
         return;
     }
 
-    if (location.status() == CollectionLocation::LocationAvailable &&
-        oldStatus         != CollectionLocation::LocationAvailable)
+    if (handleCollectionStatusChange(location, oldStatus))
     {
-        addAlbumRoot(location);
-        // New albums have possibly appeared
+        // a change occurred. Possibly albums have appeared or disappeared
         scanPAlbums();
     }
-    else if (oldStatus         == CollectionLocation::LocationAvailable &&
-             location.status() != CollectionLocation::LocationAvailable)
+}
+
+/// Returns true if it added or removed an album
+bool AlbumManager::handleCollectionStatusChange(const CollectionLocation& location, int oldStatus)
+{
+    enum Action
+    {
+        Add,
+        Remove,
+        DoNothing
+    };
+    Action action = DoNothing;
+
+    switch (oldStatus)
+    {
+        case CollectionLocation::LocationNull:
+        case CollectionLocation::LocationHidden:
+        case CollectionLocation::LocationUnavailable:
+        {
+            switch (location.status())
+            {
+                case CollectionLocation::LocationNull: // not possible
+                    break;
+                case CollectionLocation::LocationHidden:
+                    action = Remove;
+                    break;
+                case CollectionLocation::LocationAvailable:
+                    action = Add;
+                    break;
+                case CollectionLocation::LocationUnavailable:
+                    if (d->showOnlyAvailableAlbums)
+                    {
+                        action = Remove;
+                    }
+                    else
+                    {
+                        action = Add;
+                    }
+                    break;
+                case CollectionLocation::LocationDeleted:
+                    action = Remove;
+                    break;
+            }
+            break;
+        }
+        case CollectionLocation::LocationAvailable:
+        {
+            switch (location.status())
+            {
+                case CollectionLocation::LocationNull:
+                case CollectionLocation::LocationHidden:
+                case CollectionLocation::LocationDeleted:
+                    action = Remove;
+                    break;
+                case CollectionLocation::LocationUnavailable:
+                    if (d->showOnlyAvailableAlbums)
+                    {
+                        action = Remove;
+                    }
+                    break;
+                case CollectionLocation::LocationAvailable: // not possible
+                    break;
+            }
+            break;
+        }
+        case CollectionLocation::LocationDeleted: // not possible
+            break;
+    }
+
+    if (action == Add && !d->albumRootAlbumHash.value(location.id()))
+    {
+        // This is the only place where album root albums are added
+        addAlbumRoot(location);
+        return true;
+    }
+    else if (action == Remove && d->albumRootAlbumHash.value(location.id()))
     {
         removeAlbumRoot(location);
-        // Albums have possibly disappeared
-        scanPAlbums();
+        return true;
     }
+    return false;
 }
 
 void AlbumManager::slotCollectionLocationPropertiesChanged(const CollectionLocation& location)
@@ -1178,6 +1252,30 @@ void AlbumManager::removeAlbumRoot(const CollectionLocation& location)
     {
         // delete album and all its children
         removePAlbum(album);
+    }
+}
+
+bool AlbumManager::isShowingOnlyAvailableAlbums() const
+{
+    return d->showOnlyAvailableAlbums;
+}
+
+void AlbumManager::setShowOnlyAvailableAlbums(bool onlyAvailable)
+{
+    if (d->showOnlyAvailableAlbums == onlyAvailable)
+    {
+        return;
+    }
+    d->showOnlyAvailableAlbums = onlyAvailable;
+    emit signalShowOnlyAvailableAlbumsChanged(d->showOnlyAvailableAlbums);
+    // We need to update the unavailable locations.
+    // We assume the handleCollectionStatusChange does the right thing (even though old status == current status)
+    foreach (const CollectionLocation& location, CollectionManager::instance()->allLocations())
+    {
+        if (location.status() == CollectionLocation::LocationUnavailable)
+        {
+            handleCollectionStatusChange(location, CollectionLocation::LocationUnavailable);
+        }
     }
 }
 
@@ -1225,16 +1323,17 @@ void AlbumManager::scanPAlbums()
     foreach(const AlbumInfo& info, currentAlbums)
     {
         // check that location of album is available
-        if (CollectionManager::instance()->locationForAlbumRootId(info.albumRootId).isAvailable())
+        if (d->showOnlyAvailableAlbums && !CollectionManager::instance()->locationForAlbumRootId(info.albumRootId).isAvailable())
         {
-            if (oldAlbums.contains(info.id))
-            {
-                oldAlbums.remove(info.id);
-            }
-            else
-            {
-                newAlbums << info;
-            }
+            continue;
+        }
+        if (oldAlbums.contains(info.id))
+        {
+            oldAlbums.remove(info.id);
+        }
+        else
+        {
+            newAlbums << info;
         }
     }
 
