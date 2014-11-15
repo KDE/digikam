@@ -143,6 +143,7 @@ protected:
     // reimplemented from parent class
     void contextMenuEvent(QContextMenuEvent* event);
     void keyPressEvent(QKeyEvent* event);
+    void leaveEvent(QEvent* event);
     void mouseMoveEvent(QMouseEvent* event);
     void mousePressEvent(QMouseEvent* event);
     void mouseReleaseEvent(QMouseEvent* event);
