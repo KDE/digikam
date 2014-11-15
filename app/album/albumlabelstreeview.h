@@ -159,7 +159,7 @@ public:
     Album* albumForSelectedItems() const;
 
     /**
-     * @brief Gets the the list of images generated, for exporting
+     * @brief Gets the list of images generated, for exporting
      *
      * @return KUrl List of images Urls
      */
@@ -219,7 +219,7 @@ private:
     void imagesUrlsForCurrentAlbum();
 
     /**
-     * @return "Labels Album" if the the tree-widget is not checkable
+     * @return "Labels Album" if the tree-widget is not checkable
      *         and returns "Exporting Album" if it was chackable
      */
     QString getDefaultTitle() const;

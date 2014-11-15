@@ -446,7 +446,7 @@ void SetupAlbumView::slotUseLargeThumbsToggled(bool b)
                                        "This option changes the size in which thumbnails are generated. "
                                        "You need to restart digiKam for this option to take effect. "
                                        "Furthermore, you need to regenerate all already stored thumbnails via "
-                                       "the the <interface>Tools / Maintenance</interface> menu."));
+                                       "the <interface>Tools / Maintenance</interface> menu."));
     }
 }
 

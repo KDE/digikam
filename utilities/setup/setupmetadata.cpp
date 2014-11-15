@@ -716,7 +716,7 @@ void SetupMetadata::slotExifAutoRotateToggled(bool b)
                                        "Switching off exif auto rotation will most probably show your images in a wrong orientation, "
                                        "so only change this option if you explicitly require this. "
                                        "Furthermore, you need to regenerate all already stored thumbnails via "
-                                       "the the <interface>Tools / Maintenance</interface> menu."));
+                                       "the <interface>Tools / Maintenance</interface> menu."));
     }
 }
 
