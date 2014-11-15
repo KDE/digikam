@@ -75,7 +75,6 @@ public:
     void closeDatabaseForThread();
     bool incrementTransactionCount();
     bool decrementTransactionCount();
-    bool isInTransactionInOtherThread() const;
 
     bool isInMainThread() const;
     bool isInUIThread()   const;
@@ -145,9 +144,9 @@ public :
         DatabaseCoreBackendPrivate* const d;
     };
 
-    // ----------------------------------------------------------------------
-
     friend class AbstractUnlocker;
+
+    // ------------------------------------------------------------------
 
     class AbstractWaitingUnlocker : public AbstractUnlocker
     {
@@ -164,7 +163,7 @@ public :
         QWaitCondition* const condVar;
     };
 
-    // ----------------------------------------------------------------------
+    // ------------------------------------------------------------------
 
     class ErrorLocker : public AbstractWaitingUnlocker
     {
@@ -174,7 +173,7 @@ public :
         void wait();
     };
 
-    // ----------------------------------------------------------------------
+    // ------------------------------------------------------------------
 
     class BusyWaiter : public AbstractWaitingUnlocker
     {

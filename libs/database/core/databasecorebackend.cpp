@@ -6,7 +6,7 @@
  * Date        : 2007-04-15
  * Description : Abstract database backend
  *
- * Copyright (C) 2007-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,21 +42,22 @@
 // KDE includes
 
 #include <kdebug.h>
-#include <kglobal.h>
 
 // Local includes
 
-#include "thumbnailschemaupdater.h"
 #include "dbactiontype.h"
+#include "thumbnailschemaupdater.h"
 
-//#define DATABASCOREBACKEND_DEBUG 1
 namespace Digikam
 {
 
 DatabaseLocking::DatabaseLocking()
-    : mutex(QMutex::Recursive), lockCount(0) // create a recursive mutex
+    : mutex(QMutex::Recursive),
+      lockCount(0) // create a recursive mutex
 {
 }
+
+// -----------------------------------------------------------------------------------------
 
 // For whatever reason, these methods are "static protected"
 class sotoSleep : public QThread
@@ -78,6 +79,23 @@ public:
         QThread::usleep(usecs);
     }
 };
+
+// -----------------------------------------------------------------------------------------
+
+DatabaseCoreBackendPrivate::BusyWaiter::BusyWaiter(DatabaseCoreBackendPrivate* const d)
+    : AbstractWaitingUnlocker(d, &d->busyWaitMutex, &d->busyWaitCondVar)
+{
+}
+
+// -----------------------------------------------------------------------------------------
+
+DatabaseCoreBackendPrivate::ErrorLocker::ErrorLocker(DatabaseCoreBackendPrivate* const d)
+    : AbstractWaitingUnlocker(d, &d->errorLockMutex, &d->errorLockCondVar)
+{
+}
+
+// -----------------------------------------------------------------------------------------
+
 
 DatabaseThreadData::DatabaseThreadData()
     : valid(0),
@@ -288,7 +306,7 @@ bool DatabaseCoreBackendPrivate::isSQLiteLockError(const SqlQuery& query) const
 bool DatabaseCoreBackendPrivate::isSQLiteLockTransactionError(const QSqlError& lastError) const
 {
     return parameters.isSQLite() &&
-           lastError.type() == QSqlError::TransactionError &&
+           lastError.type()         == QSqlError::TransactionError &&
            lastError.databaseText() == QLatin1String("database is locked");
     // wouldnt it be great if they gave us the database error number...
 }
@@ -356,74 +374,6 @@ void DatabaseCoreBackendPrivate::debugOutputFailedTransaction(const QSqlError& e
              << error.number() << error.type();
 }
 
-
-DatabaseCoreBackendPrivate::AbstractUnlocker::AbstractUnlocker(DatabaseCoreBackendPrivate* const d)
-    : count(0), d(d)
-{
-    // Why two mutexes? The main mutex is recursive and won't work with a condvar.
-
-    // acquire lock
-    d->lock->mutex.lock();
-    // store lock count
-    count = d->lock->lockCount;
-    // set lock count to 0
-    d->lock->lockCount = 0;
-
-    // unlock
-    for (int i=0; i<count; ++i)
-    {
-        d->lock->mutex.unlock();
-    }
-}
-
-void DatabaseCoreBackendPrivate::AbstractUnlocker::finishAcquire()
-{
-    // drop lock acquired in first line. Main mutex is now free.
-    // We maintain lock order (first main mutex, second error lock mutex)
-    // but we drop main mutex lock for waiting on the cond var.
-    d->lock->mutex.unlock();
-}
-
-DatabaseCoreBackendPrivate::AbstractUnlocker::~AbstractUnlocker()
-{
-    // lock main mutex as often as it was locked before
-    for (int i=0; i<count; ++i)
-    {
-        d->lock->mutex.lock();
-    }
-
-    // update lock count
-    d->lock->lockCount += count;
-}
-
-DatabaseCoreBackendPrivate::AbstractWaitingUnlocker::AbstractWaitingUnlocker(DatabaseCoreBackendPrivate* const d,
-                                                                             QMutex* const mutex, QWaitCondition* const condVar)
-    : AbstractUnlocker(d), mutex(mutex), condVar(condVar)
-{
-    // Why two mutexes? The main mutex is recursive and won't work with a condvar.
-    // lock condvar mutex (lock only if main mutex is locked)
-    mutex->lock();
-
-    finishAcquire();
-}
-
-DatabaseCoreBackendPrivate::AbstractWaitingUnlocker::~AbstractWaitingUnlocker()
-{
-    // unlock condvar mutex. Both mutexes are now free.
-    mutex->unlock();
-    // now base class destructor is executed, reallocating main mutex
-}
-
-bool DatabaseCoreBackendPrivate::AbstractWaitingUnlocker::wait(unsigned long time)
-{
-    return condVar->wait(mutex, time);
-}
-
-DatabaseCoreBackendPrivate::BusyWaiter::BusyWaiter(DatabaseCoreBackendPrivate* const d)
-    : AbstractWaitingUnlocker(d, &d->busyWaitMutex, &d->busyWaitCondVar)
-{
-}
-
 void DatabaseCoreBackendPrivate::transactionFinished()
 {
     // wakes up any BusyWaiter waiting on the busyWaitCondVar.
@@ -431,39 +381,18 @@ void DatabaseCoreBackendPrivate::transactionFinished()
     busyWaitCondVar.wakeOne();
 }
 
-DatabaseCoreBackendPrivate::ErrorLocker::ErrorLocker(DatabaseCoreBackendPrivate* const d)
-    : AbstractWaitingUnlocker(d, &d->errorLockMutex, &d->errorLockCondVar)
-{
-}
-
-/** This suspends the current thread if the query status as
- *  set by setFlag() is Wait and until the thread is woken with wakeAll().
- *  The DatabaseAccess mutex will be unlocked while waiting.
- */
-void DatabaseCoreBackendPrivate::ErrorLocker::wait()
-{
-    // we use a copy of the flag under lock of the errorLockMutex to be able to check it here
-    while (d->errorLockOperationStatus == DatabaseCoreBackend::Wait)
-    {
-        wait();
-    }
-}
-
-/** Set the wait flag to queryStatus. Typically, call this with Wait.
- */
+/** Set the wait flag to queryStatus. Typically, call this with Wait. */
 void DatabaseCoreBackendPrivate::setQueryOperationFlag(DatabaseCoreBackend::QueryOperationStatus status)
 {
     // Enforce lock order (first main mutex, second error lock mutex)
     QMutexLocker l(&errorLockMutex);
-
     // this change must be done under errorLockMutex lock
     errorLockOperationStatus = status;
     operationStatus          = status;
 }
 
 /** Set the wait flag to queryStatus and wake all waiting threads.
- *  Typically, call wakeAll with status ExecuteNormal or AbortQueries.
- */
+ *  Typically, call wakeAll with status ExecuteNormal or AbortQueries. */
 void DatabaseCoreBackendPrivate::queryOperationWakeAll(DatabaseCoreBackend::QueryOperationStatus status)
 {
     QMutexLocker l(&errorLockMutex);
@@ -530,7 +459,7 @@ bool DatabaseCoreBackendPrivate::handleWithErrorHandler(const SqlQuery* const qu
         }
         else
         {
-            kError() << "Failed to invoke DatabaseErrorHandler. Aborting all queries.";
+            kWarning() << "Failed to invoke DatabaseErrorHandler. Aborting all queries.";
             operationStatus = DatabaseCoreBackend::AbortQueries;
         }
 
@@ -568,7 +497,88 @@ void DatabaseCoreBackendPrivate::connectionErrorAbortQueries()
     queryOperationWakeAll(DatabaseCoreBackend::AbortQueries);
 }
 
-// -----------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------
+
+DatabaseCoreBackendPrivate::AbstractUnlocker::AbstractUnlocker(DatabaseCoreBackendPrivate* const d)
+    : count(0), d(d)
+{
+    // Why two mutexes? The main mutex is recursive and won't work with a condvar.
+
+    // acquire lock
+    d->lock->mutex.lock();
+    // store lock count
+    count = d->lock->lockCount;
+    // set lock count to 0
+    d->lock->lockCount = 0;
+
+    // unlock
+    for (int i=0; i<count; ++i)
+    {
+        d->lock->mutex.unlock();
+    }
+}
+
+void DatabaseCoreBackendPrivate::AbstractUnlocker::finishAcquire()
+{
+    // drop lock acquired in first line. Main mutex is now free.
+    // We maintain lock order (first main mutex, second error lock mutex)
+    // but we drop main mutex lock for waiting on the cond var.
+    d->lock->mutex.unlock();
+}
+
+DatabaseCoreBackendPrivate::AbstractUnlocker::~AbstractUnlocker()
+{
+    // lock main mutex as often as it was locked before
+    for (int i=0; i<count; ++i)
+    {
+        d->lock->mutex.lock();
+    }
+
+    // update lock count
+    d->lock->lockCount += count;
+}
+
+// -----------------------------------------------------------------------------------------
+
+DatabaseCoreBackendPrivate::AbstractWaitingUnlocker::AbstractWaitingUnlocker(DatabaseCoreBackendPrivate* const d,
+        QMutex* const mutex, QWaitCondition* const condVar)
+    : AbstractUnlocker(d), mutex(mutex), condVar(condVar)
+{
+    // Why two mutexes? The main mutex is recursive and won't work with a condvar.
+    // lock condvar mutex (lock only if main mutex is locked)
+    mutex->lock();
+
+    finishAcquire();
+}
+
+DatabaseCoreBackendPrivate::AbstractWaitingUnlocker::~AbstractWaitingUnlocker()
+{
+    // unlock condvar mutex. Both mutexes are now free.
+    mutex->unlock();
+    // now base class destructor is executed, reallocating main mutex
+}
+
+bool DatabaseCoreBackendPrivate::AbstractWaitingUnlocker::wait(unsigned long time)
+{
+    return condVar->wait(mutex, time);
+}
+
+// -----------------------------------------------------------------------------------------
+
+/** This suspends the current thread if the query status as
+ *  set by setFlag() is Wait and until the thread is woken with wakeAll().
+ *  The DatabaseAccess mutex will be unlocked while waiting.
+ */
+void DatabaseCoreBackendPrivate::ErrorLocker::wait()
+{
+    // we use a copy of the flag under lock of the errorLockMutex to be able to check it here
+    while (d->errorLockOperationStatus == DatabaseCoreBackend::Wait)
+    {
+        wait();
+    }
+}
+
+// -----------------------------------------------------------------------------------------
 
 DatabaseCoreBackend::DatabaseCoreBackend(const QString& backendName, DatabaseLocking* const locking)
     : d_ptr(new DatabaseCoreBackendPrivate(this))
@@ -602,33 +612,32 @@ DatabaseAction DatabaseCoreBackend::getDBAction(const QString& actionName) const
 
     if (action.name.isNull())
     {
-        kError() << "No DB action defined for" << actionName << "! Implementation missing for this database type.";
+        kWarning() << "No DB action defined for" << actionName << "! Implementation missing for this database type.";
     }
 
     return action;
 }
 
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const DatabaseAction& action, QList<QVariant>* const values,
-        QVariant* const lastInsertId)
+                                                                  QVariant* const lastInsertId)
 {
     return execDBAction(action, QMap<QString, QVariant>(), values, lastInsertId);
 }
 
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const QString& action, QList<QVariant>* const values,
-        QVariant* const lastInsertId)
+                                                                  QVariant* const lastInsertId)
 {
     return execDBAction(getDBAction(action), QMap<QString, QVariant>(), values, lastInsertId);
 }
 
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const QString& action, const QMap<QString, QVariant>& bindingMap,
-        QList<QVariant>* const values, QVariant* const lastInsertId)
+                                                                  QList<QVariant>* const values, QVariant* const lastInsertId)
 {
     return execDBAction(getDBAction(action), bindingMap, values, lastInsertId);
 }
 
-DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const DatabaseAction& action, const QMap<QString, 
-                                                                  QVariant>& bindingMap, QList<QVariant>* const values, 
-                                                                  QVariant* const lastInsertId)
+DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const DatabaseAction& action, const QMap<QString, QVariant>& bindingMap,
+                                                                  QList<QVariant>* const values, QVariant* const lastInsertId)
 {
     Q_D(DatabaseCoreBackend);
 
@@ -637,7 +646,7 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const Database
 
     if (action.name.isNull())
     {
-        kError() << "Attempt to execute null action";
+        kWarning() << "Attempt to execute null action";
         return DatabaseCoreBackend::SQLError;
     }
 
@@ -726,8 +735,8 @@ QSqlQuery DatabaseCoreBackend::execDBActionQuery(const DatabaseAction& action, c
 
         if (result.lastError().isValid() && result.lastError().number())
         {
-            kDebug() << "Error while executing DBAction ["<<  action.name
-                     <<"] Statement ["<<actionElement.statement<<"] Errornr. [" << result.lastError() << "]";
+            kDebug() << "Error while executing DBAction [" <<  action.name
+                     << "] Statement [" << actionElement.statement << "] Errornr. [" << result.lastError() << "]";
             break;
         }
     }
@@ -822,7 +831,7 @@ DatabaseCoreBackend::Status DatabaseCoreBackend::status() const
 }
 
 /*
-bool DatabaseCoreBackend::execSql(const QString& sql, QStringList* values)
+bool DatabaseCoreBackend::execSql(const QString& sql, QStringList* const values)
 {
     QSqlQuery query = execQuery(sql);
 
@@ -865,8 +874,7 @@ QList<QVariant> DatabaseCoreBackend::readToList(SqlQuery& query)
     return list;
 }
 
-DatabaseCoreBackend::QueryState DatabaseCoreBackend::handleQueryResult(SqlQuery& query, QList<QVariant>* const values, 
-                                                                       QVariant* const lastInsertId)
+DatabaseCoreBackend::QueryState DatabaseCoreBackend::handleQueryResult(SqlQuery& query, QList<QVariant>* const values, QVariant* const lastInsertId)
 {
     if (!query.isActive())
     {
@@ -891,57 +899,54 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::handleQueryResult(SqlQuery&
 
 // -------------------------------------------------------------------------------------
 
-DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql, QList<QVariant>* const values,
-                                                             QVariant* const lastInsertId)
+DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql, QList<QVariant>* const values, QVariant* const lastInsertId)
 {
     SqlQuery query = execQuery(sql);
     return handleQueryResult(query, values, lastInsertId);
 }
 
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql, const QVariant& boundValue1,
-        QList<QVariant>* values, QVariant* lastInsertId)
+                                                             QList<QVariant>* const values, QVariant* const lastInsertId)
 {
     SqlQuery query = execQuery(sql, boundValue1);
     return handleQueryResult(query, values, lastInsertId);
 }
 
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql,
-        const QVariant& boundValue1, const QVariant& boundValue2,
-        QList<QVariant>* const values, QVariant* const lastInsertId)
+                                                             const QVariant& boundValue1, const QVariant& boundValue2,
+                                                             QList<QVariant>* const values, QVariant* const lastInsertId)
 {
     SqlQuery query = execQuery(sql, boundValue1, boundValue2);
     return handleQueryResult(query, values, lastInsertId);
 }
 
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql,
-        const QVariant& boundValue1, const QVariant& boundValue2,
-        const QVariant& boundValue3, QList<QVariant>* const values,
-        QVariant* const lastInsertId)
+                                                             const QVariant& boundValue1, const QVariant& boundValue2,
+                                                             const QVariant& boundValue3, QList<QVariant>* const values,
+                                                             QVariant* const lastInsertId)
 {
     SqlQuery query = execQuery(sql, boundValue1, boundValue2, boundValue3);
     return handleQueryResult(query, values, lastInsertId);
 }
 
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql,
-        const QVariant& boundValue1, const QVariant& boundValue2,
-        const QVariant& boundValue3, const QVariant& boundValue4,
-        QList<QVariant>* const values, QVariant* const lastInsertId)
+                                                             const QVariant& boundValue1, const QVariant& boundValue2,
+                                                             const QVariant& boundValue3, const QVariant& boundValue4,
+                                                             QList<QVariant>* const values, QVariant* const lastInsertId)
 {
     SqlQuery query = execQuery(sql, boundValue1, boundValue2, boundValue3, boundValue4);
     return handleQueryResult(query, values, lastInsertId);
 }
 
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql, const QList<QVariant>& boundValues,
-        QList<QVariant>* const values, QVariant* const lastInsertId)
+                                                             QList<QVariant>* const values, QVariant* const lastInsertId)
 {
     SqlQuery query = execQuery(sql, boundValues);
     return handleQueryResult(query, values, lastInsertId);
 }
 
-// -------------------------------------------------------------------------------------
-
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql, const QMap<QString, QVariant>& bindingMap,
-        QList<QVariant>* const values, QVariant* const lastInsertId)
+                                                             QList<QVariant>* const values, QVariant* const lastInsertId)
 {
     SqlQuery query = execQuery(sql, bindingMap);
     return handleQueryResult(query, values, lastInsertId);
@@ -949,8 +954,7 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(const QString& sql,
 
 // -------------------------------------------------------------------------------------
 
-DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(SqlQuery& preparedQuery, 
-                                                             QList<QVariant>* const values, QVariant* const lastInsertId)
+DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(SqlQuery& preparedQuery, QList<QVariant>* const values, QVariant* const lastInsertId)
 {
     exec(preparedQuery);
     return handleQueryResult(preparedQuery, values, lastInsertId);
@@ -996,7 +1000,7 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execSql(SqlQuery& preparedQ
     return handleQueryResult(preparedQuery, values, lastInsertId);
 }
 
-// ----------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------
 
 SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QVariant& boundValue1)
 {
@@ -1119,9 +1123,9 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
 
             if (!bindingMap.contains(namedPlaceholder))
             {
-                kError() << "Missing place holder" << namedPlaceholder
-                         << "in binding map. The following values are defined for this action:"
-                         << bindingMap.keys() <<". This is a setup error!";
+                kWarning() << "Missing place holder" << namedPlaceholder
+                           << "in binding map. The following values are defined for this action:"
+                           << bindingMap.keys() <<". This is a setup error!";
                 //TODO What should we do here? How can we cancel that action?
             }
 
@@ -1240,7 +1244,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
 
     SqlQuery query = prepareQuery(preparedString);
 
-    for (int i=0; i<valuesToBind.size(); ++i)
+    for (int i=0; i < valuesToBind.size(); ++i)
     {
         query.bindValue(i, valuesToBind.at(i));
     }
@@ -1250,7 +1254,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
 }
 
 DatabaseCoreBackend::QueryState DatabaseCoreBackend::execUpsertDBAction(const DatabaseAction& action, const QVariant& id,
-        const QStringList fieldNames, const QList<QVariant>& values)
+                                                                        const QStringList fieldNames, const QList<QVariant>& values)
 {
     QMap<QString, QVariant> parameters;
     QMap<QString, QVariant> fieldValueMap;
@@ -1266,7 +1270,7 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execUpsertDBAction(const Da
 
     parameters.insert(":id",             id);
     parameters.insert(":fieldValueList", qVariantFromValue(fieldValueList));
-    parameters.insert(":fieldList",      qVariantFromValue (fieldList));
+    parameters.insert(":fieldList",      qVariantFromValue(fieldList));
     parameters.insert(":valueList",      qVariantFromValue(valueList));
 
     return execDBAction(action, parameters);
