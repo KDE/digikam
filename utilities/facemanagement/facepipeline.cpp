@@ -558,12 +558,13 @@ QList<QImage> FaceImageRetriever::getDetails(const DImg& src, const QList<Databa
 
 QList<QImage> FaceImageRetriever::getThumbnails(const QString& filePath, const QList<DatabaseFace>& faces)
 {
+    Q_UNUSED(filePath)
     thumbnailCatcher()->setActive(true);
 
     foreach (const DatabaseFace& face, faces)
     {
         QRect rect = face.region().toRect();
-        catcher->thread()->find(filePath, rect);
+        catcher->thread()->find(ImageInfo::thumbnailIdentifier(face.imageId()), rect);
         catcher->enqueue();
     }
 

@@ -139,10 +139,9 @@ bool ColumnThumbnail::paint(QPainter* const painter, const QStyleOptionViewItem&
 
         // However, digiKam limits the thumbnail size, so we also do that here
         const int maxSize = qMin(bestSize, (int)ThumbnailSize::maxThumbsSize());
-        const QString path = info.filePath();
         QPixmap thumbnail;
 
-        if (s->thumbnailLoadThread->find(path, thumbnail, maxSize))
+        if (s->thumbnailLoadThread->find(info.thumbnailIdentifier(), thumbnail, maxSize))
         {
             /// @todo Is slotThumbnailLoaded still called when the thumbnail is found right away?
             /// @todo Remove borders - but they actually look nice in the table

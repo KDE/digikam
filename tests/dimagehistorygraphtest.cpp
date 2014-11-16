@@ -93,7 +93,7 @@ void DImageHistoryGraphTest::initTestCase()
 
     foreach(const QString& file, readOnlyImages)
     {
-        ids << ImageInfo(file).id();
+        ids << ImageInfo::fromLocalFile(file).id();
     }
     QVERIFY(!ids.contains(-1));
     QVERIFY(ids.size() >= 24);
@@ -163,11 +163,11 @@ void DImageHistoryGraphTest::testEditing()
 
     CollectionScanner().completeScan();
 
-    ImageInfo orig(readOnlyImages.first());
-    ImageInfo one(collectionDir.filePath("1.jpg")),
-              two(collectionDir.filePath("2.jpg")),
-              three(collectionDir.filePath("3.jpg")),
-              four(collectionDir.filePath("4.jpg"));
+    ImageInfo orig  = ImageInfo::fromLocalFile(readOnlyImages.first());
+    ImageInfo one   = ImageInfo::fromLocalFile(collectionDir.filePath("1.jpg")),
+              two   = ImageInfo::fromLocalFile(collectionDir.filePath("2.jpg")),
+              three = ImageInfo::fromLocalFile(collectionDir.filePath("3.jpg")),
+              four  = ImageInfo::fromLocalFile(collectionDir.filePath("4.jpg"));
 
     typedef QPair<qlonglong, qlonglong> IdPair;
     QList<IdPair> controlCloud;

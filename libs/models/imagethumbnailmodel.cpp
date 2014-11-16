@@ -156,12 +156,12 @@ void ImageThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToP
         return;
     }
 
-    QStringList filePaths;
+    QList<ThumbnailIdentifier> ids;
     foreach(const QModelIndex& index, indexesToPrepare)
     {
-        filePaths << imageInfoRef(index).filePath();
+        ids << imageInfoRef(index).thumbnailIdentifier();
     }
-    d->thread->findGroup(filePaths, thumbSize.size());
+    d->thread->findGroup(ids, thumbSize.size());
 }
 
 void ImageThumbnailModel::preloadThumbnails(const QList<ImageInfo>& infos)
@@ -171,29 +171,28 @@ void ImageThumbnailModel::preloadThumbnails(const QList<ImageInfo>& infos)
         return;
     }
 
-    QStringList filePaths;
+    QList<ThumbnailIdentifier> ids;
     foreach(const ImageInfo& info, infos)
     {
-        filePaths << info.filePath();
+        ids << info.thumbnailIdentifier();
     }
-    d->preloadThread->stopAllTasks();
-    d->preloadThread->pregenerateGroup(filePaths, d->preloadThumbnailSize());
+    d->preloadThread->pregenerateGroup(ids, d->preloadThumbnailSize());
 }
 
-void ImageThumbnailModel::preloadThumbnails(const QList<QModelIndex>& infos)
+void ImageThumbnailModel::preloadThumbnails(const QList<QModelIndex>& indexesToPreload)
 {
     if (!d->preloadThread)
     {
         return;
     }
 
-    QStringList filePaths;
-    foreach(const QModelIndex& index, infos)
+    QList<ThumbnailIdentifier> ids;
+    foreach(const QModelIndex& index, indexesToPreload)
     {
-        filePaths << imageInfoRef(index).filePath();
+        ids << imageInfoRef(index).thumbnailIdentifier();
     }
     d->preloadThread->stopAllTasks();
-    d->preloadThread->pregenerateGroup(filePaths, d->preloadThumbnailSize());
+    d->preloadThread->pregenerateGroup(ids, d->preloadThumbnailSize());
 }
 
 void ImageThumbnailModel::preloadAllThumbnails()
@@ -217,21 +216,21 @@ QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const
         ImageInfo info = imageInfo(index);
         QString   path = info.filePath();
 
-        if (info.isNull() || path.isEmpty())
+        if (info.isNull())
         {
             return QVariant(QVariant::Pixmap);
         }
 
         if (!d->detailRect.isNull())
         {
-            if (d->thread->find(path, d->detailRect, thumbnail, d->thumbSize.size()))
+            if (d->thread->find(info.thumbnailIdentifier(), d->detailRect, thumbnail, d->thumbSize.size()))
             {
                 return thumbnail;
             }
         }
         else
         {
-            if (d->thread->find(path, thumbnail, d->thumbSize.size()))
+            if (d->thread->find(info.thumbnailIdentifier(), thumbnail, d->thumbSize.size()))
             {
                 return thumbnail;
             }
@@ -294,7 +293,17 @@ void ImageThumbnailModel::slotThumbnailLoaded(const LoadingDescription& loadingD
     }
 
     // In case of multiple occurrence, we currently do not know which thumbnail is this. Signal change on all.
-    foreach(const QModelIndex& index, indexesForPath(loadingDescription.filePath))
+    QModelIndexList indexes;
+    ThumbnailIdentifier thumbId = loadingDescription.thumbnailIdentifier();
+    if (thumbId.filePath.isEmpty())
+    {
+        indexes = indexesForImageId(thumbId.id);
+    }
+    else
+    {
+        indexes = indexesForPath(thumbId.filePath);
+    }
+    foreach(const QModelIndex& index, indexes)
     {
         if (thumb.isNull())
         {

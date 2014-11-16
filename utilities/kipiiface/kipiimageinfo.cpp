@@ -99,7 +99,7 @@ void KipiImageInfo::cloneData(ImageInfoShared* const other)
 {
     KUrl otherUrl = other->url();
 
-    ImageInfo parentInf(otherUrl.toLocalFile());
+    ImageInfo parentInf = ImageInfo::fromUrl(otherUrl);
     kDebug() << "Clone DB Info from" << parentInf.fileUrl().path() << "to" << _url.path();
     FileActionMngr::instance()->copyAttributes(parentInf, _url.toLocalFile());
 }

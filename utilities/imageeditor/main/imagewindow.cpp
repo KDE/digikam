@@ -639,7 +639,7 @@ void ImageWindow::slotFileOriginChanged(const QString& filePath)
 {
     // By redo or undo, we have virtually switched to a new image.
     // So we do _not_ load anything!
-    ImageInfo newCurrent(filePath);
+    ImageInfo newCurrent = ImageInfo::fromLocalFile(filePath);
 
     if (newCurrent.isNull() || !d->imageInfoModel->hasImage(newCurrent))
     {
@@ -800,7 +800,7 @@ void ImageWindow::slotChanged()
 
 void ImageWindow::slotToggleTag(const KUrl& url, int tagID)
 {
-    toggleTag(ImageInfo(url), tagID);
+    toggleTag(ImageInfo::fromUrl(url), tagID);
 }
 
 void ImageWindow::toggleTag(int tagID)
@@ -882,17 +882,17 @@ void ImageWindow::assignRating(const ImageInfo& info, int rating)
 
 void ImageWindow::slotRatingChanged(const KUrl& url, int rating)
 {
-    assignRating(ImageInfo(url), rating);
+    assignRating(ImageInfo::fromUrl(url), rating);
 }
 
 void ImageWindow::slotColorLabelChanged(const KUrl& url, int color)
 {
-    assignColorLabel(ImageInfo(url), color);
+    assignColorLabel(ImageInfo::fromUrl(url), color);
 }
 
 void ImageWindow::slotPickLabelChanged(const KUrl& url, int pick)
 {
-    assignPickLabel(ImageInfo(url), pick);
+    assignPickLabel(ImageInfo::fromUrl(url), pick);
 }
 
 void ImageWindow::slotUpdateItemInfo()
@@ -1604,7 +1604,7 @@ void ImageWindow::slotOpenOriginal()
         KUrl url;
         url.addPath(id.m_filePath);
         url.addPath(id.m_fileName);
-        imageInfos << ImageInfo(url);
+        imageInfos << ImageInfo::fromUrl(url);
     }
 
     ImageScanner::sortByProximity(imageInfos, d->currentImageInfo);

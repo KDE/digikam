@@ -102,7 +102,10 @@ QPixmap ImageGPSModelHelper::pixmapFromRepresentativeIndex(const QPersistentMode
     const GPSImageInfo currentGPSImageInfo = currentIndex.data(RoleGPSImageInfo).value<GPSImageInfo>();
 
     QPixmap thumbnail;
-    if (d->thumbnailLoadThread->find(currentGPSImageInfo.url.path(), thumbnail, qMax(size.width(), size.height())))
+    ThumbnailIdentifier thumbId;
+    thumbId.filePath = currentGPSImageInfo.url.path();
+    thumbId.id       = currentGPSImageInfo.id;
+    if (d->thumbnailLoadThread->find(thumbId, thumbnail, qMax(size.width(), size.height())))
     {
         // digikam returns thumbnails with a border around them, but libkgeomap expects them without a border
         return thumbnail.copy(1, 1, thumbnail.size().width()-2, thumbnail.size().height()-2);

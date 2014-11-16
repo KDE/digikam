@@ -725,7 +725,7 @@ void QueueListView::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const 
     if (item && !item->hasValidThumbnail())
     {
         ImageInfo info = item->info();
-        d->thumbLoadThread->find(info.fileUrl().toLocalFile());
+        d->thumbLoadThread->find(ThumbnailIdentifier(info.fileUrl().toLocalFile()));
     }
 
     QTreeWidget::drawRow(p, opt, index);
@@ -1159,7 +1159,7 @@ void QueueListView::slotCollectionImageChange(const CollectionImageChangeset& ch
 
 void QueueListView::reloadThumbs(const KUrl& url)
 {
-    d->thumbLoadThread->find(url.toLocalFile());
+    d->thumbLoadThread->find(ThumbnailIdentifier(url.toLocalFile()));
 }
 
 void QueueListView::setItemBusy(qlonglong id)

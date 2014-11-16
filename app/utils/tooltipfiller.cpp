@@ -610,7 +610,8 @@ QString ToolTipFiller::albumTipContents(PAlbum* const album, int count)
         if (settings->getToolTipsShowAlbumPreview())
         {
             tip += cnt.cellSpecBeg + i18n("Preview:") + cnt.cellSpecMid +
-            cnt.imageAsBase64(AlbumThumbnailLoader::instance()->getAlbumPreviewDirectly(album, ThumbnailSize::Medium)) +
+            cnt.imageAsBase64(AlbumThumbnailLoader::instance()->getAlbumThumbnailDirectly(album).toImage()) +
+            //cnt.imageAsBase64(AlbumThumbnailLoader::instance()->getAlbumPreviewDirectly(album, ThumbnailSize::Medium)) +
             cnt.cellSpecEnd;
         }
     }

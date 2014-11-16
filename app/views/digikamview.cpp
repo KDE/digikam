@@ -2198,7 +2198,7 @@ void DigikamView::slotRightSideBarActivateAssignedTags()
 void DigikamView::slotRatingChanged(const KUrl& url, int rating)
 {
     rating = qMin(RatingMax, qMax(RatingMin, rating));
-    ImageInfo info(url);
+    ImageInfo info = ImageInfo::fromUrl(url);
 
     if (!info.isNull())
     {
@@ -2208,7 +2208,7 @@ void DigikamView::slotRatingChanged(const KUrl& url, int rating)
 
 void DigikamView::slotColorLabelChanged(const KUrl& url, int color)
 {
-    ImageInfo info(url);
+    ImageInfo info = ImageInfo::fromUrl(url);
 
     if (!info.isNull())
     {
@@ -2218,7 +2218,7 @@ void DigikamView::slotColorLabelChanged(const KUrl& url, int color)
 
 void DigikamView::slotPickLabelChanged(const KUrl& url, int pick)
 {
-    ImageInfo info(url);
+    ImageInfo info = ImageInfo::fromUrl(url);
 
     if (!info.isNull())
     {
@@ -2228,7 +2228,7 @@ void DigikamView::slotPickLabelChanged(const KUrl& url, int pick)
 
 void DigikamView::slotToggleTag(const KUrl& url, int tagID)
 {
-    ImageInfo info(url);
+    ImageInfo info = ImageInfo::fromUrl(url);
 
     if (!info.isNull())
     {

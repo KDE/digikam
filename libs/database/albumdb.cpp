@@ -254,11 +254,8 @@ AlbumInfo::List AlbumDB::scanAlbums()
     AlbumInfo::List aList;
 
     QList<QVariant> values;
-    d->db->execSql("SELECT A.albumRoot, A.id, A.relativePath, A.date, A.caption, A.collection, B.albumRoot, B.relativePath, I.name \n "
-                   "FROM Albums AS A \n "
-                   "  LEFT JOIN Images AS I ON A.icon=I.id \n"
-                   "  LEFT JOIN Albums AS B ON B.id=I.album \n"
-                   " WHERE A.albumRoot != 0;", // exclude stale albums
+    d->db->execSql("SELECT albumRoot, id, relativePath, date, caption, collection, icon FROM Albums "
+                   " WHERE albumRoot != 0;", // exclude stale albums
                    &values);
 
     QString iconAlbumUrl, iconName;
@@ -267,29 +264,20 @@ AlbumInfo::List AlbumDB::scanAlbums()
     {
         AlbumInfo info;
 
-        info.albumRootId = (*it).toInt();
+        info.albumRootId    = (*it).toInt();
         ++it;
-        info.id = (*it).toInt();
+        info.id             = (*it).toInt();
         ++it;
-        info.relativePath = (*it).toString();
+        info.relativePath   = (*it).toString();
         ++it;
-        info.date = QDate::fromString((*it).toString(), Qt::ISODate);
+        info.date           = QDate::fromString((*it).toString(), Qt::ISODate);
         ++it;
-        info.caption = (*it).toString();
+        info.caption        = (*it).toString();
         ++it;
-        info.category = (*it).toString();
+        info.category       = (*it).toString();
         ++it;
-        info.iconAlbumRootId = (*it).toInt(); // will be 0 if null
+        info.iconId         = (*it).toLongLong();
         ++it;
-        iconAlbumUrl = (*it).toString();
-        ++it;
-        iconName = (*it).toString();
-        ++it;
-
-        if (!iconName.isEmpty())
-        {
-            info.iconRelativePath = iconAlbumUrl + '/' + iconName;
-        }
 
         aList.append(info);
     }
@@ -302,13 +290,7 @@ TagInfo::List AlbumDB::scanTags()
     TagInfo::List tList;
 
     QList<QVariant> values;
-    d->db->execSql("SELECT T.id, T.pid, T.name, A.relativePath, I.name, T.iconkde, A.albumRoot \n "
-                   "FROM Tags AS T \n"
-                   "  LEFT JOIN Images AS I ON I.id=T.icon \n "
-                   "  LEFT JOIN Albums AS A ON A.id=I.album; ", &values);
-
-    QString iconName, iconKDE, albumURL;
-    int iconAlbumRootId;
+    d->db->execSql("SELECT id, pid, name, icon, iconkde FROM Tags;", &values);
 
     for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
     {
@@ -320,24 +302,10 @@ TagInfo::List AlbumDB::scanTags()
         ++it;
         info.name   = (*it).toString();
         ++it;
-        albumURL    = (*it).toString();
+        info.iconId = (*it).toLongLong();
         ++it;
-        iconName    = (*it).toString();
+        info.icon   = (*it).toString();
         ++it;
-        iconKDE     = (*it).toString();
-        ++it;
-        iconAlbumRootId = (*it).toInt(); // will be 0 if null
-        ++it;
-
-        if (albumURL.isEmpty())
-        {
-            info.icon = iconKDE;
-        }
-        else
-        {
-            info.iconAlbumRootId  = iconAlbumRootId;
-            info.iconRelativePath = albumURL + '/' + iconName;
-        }
 
         tList.append(info);
     }
@@ -348,15 +316,7 @@ TagInfo::List AlbumDB::scanTags()
 TagInfo AlbumDB::getTagInfo(int tagId)
 {
     QList<QVariant> values;
-    d->db->execSql("SELECT T.id, T.pid, T.name, A.relativePath, I.name, T.iconkde, A.albumRoot \n "
-                   "FROM Tags AS T \n"
-                   "  LEFT JOIN Images AS I ON I.id=T.icon \n "
-                   "  LEFT JOIN Albums AS A ON A.id=I.album "
-                   "WHERE T.id=?;",
-                   tagId, &values);
-
-    QString iconName, iconKDE, albumURL;
-    int     iconAlbumRootId;
+    d->db->execSql("SELECT id, pid, name, icon, iconkde WHERE id=? FROM Tags;", tagId, &values);
 
     for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
     {
@@ -368,24 +328,10 @@ TagInfo AlbumDB::getTagInfo(int tagId)
         ++it;
         info.name   = (*it).toString();
         ++it;
-        albumURL    = (*it).toString();
+        info.iconId = (*it).toLongLong();
         ++it;
-        iconName    = (*it).toString();
+        info.icon   = (*it).toString();
         ++it;
-        iconKDE     = (*it).toString();
-        ++it;
-        iconAlbumRootId = (*it).toInt(); // will be 0 if null
-        ++it;
-
-        if (albumURL.isEmpty())
-        {
-            info.icon = iconKDE;
-        }
-        else
-        {
-            info.iconAlbumRootId  = iconAlbumRootId;
-            info.iconRelativePath = albumURL + '/' + iconName;
-        }
 
         return info;
     }
@@ -571,34 +517,6 @@ void AlbumDB::setAlbumIcon(int albumID, qlonglong iconID)
     d->db->recordChangeset(AlbumChangeset(albumID, AlbumChangeset::PropertiesChanged));
 }
 
-bool AlbumDB::getAlbumIcon(int albumID, int* albumRootId, QString* iconRelativePath)
-{
-    QList<QVariant> values;
-
-    d->db->execSql(QString("SELECT B.relativePath, I.name, B.albumRoot \n "
-                           "FROM Albums AS A \n "
-                           "  LEFT JOIN Images AS I ON I.id=A.icon \n "
-                           "  LEFT JOIN Albums AS B ON B.id=I.album \n "
-                           "WHERE A.id=?;"),
-                   albumID, &values);
-
-    if (values.isEmpty())
-    {
-        return false;
-    }
-
-    QList<QVariant>::const_iterator it = values.constBegin();
-    QString album                      = (*it).toString();
-    ++it;
-    QString iconName                   = (*it).toString();
-    ++it;
-    *albumRootId                       = (*it).toInt();
-
-    *iconRelativePath                  = album + '/' + iconName;
-
-    return !iconName.isEmpty();
-}
-
 void AlbumDB::deleteAlbum(int albumID)
 {
     QMap<QString, QVariant> parameters;
@@ -719,49 +637,6 @@ void AlbumDB::setTagIcon(int tagID, const QString& iconKDE, qlonglong iconID)
                    _iconKDE, _iconID, tagID);
 
     d->db->recordChangeset(TagChangeset(tagID, TagChangeset::IconChanged));
-}
-
-bool AlbumDB::getTagIcon(int tagID, int* iconAlbumRootId, QString* iconAlbumRelativePath, QString* icon)
-{
-    QList<QVariant> values;
-    d->db->execSql(QString("SELECT A.relativePath, I.name, T.iconkde, A.albumRoot \n "
-                           "FROM Tags AS T \n "
-                           "  LEFT JOIN Images AS I ON I.id=T.icon \n "
-                           "  LEFT JOIN Albums AS A ON A.id=I.album \n "
-                           "WHERE T.id=?;"),
-                   tagID, &values);
-
-    if (values.isEmpty())
-    {
-        return false;
-    }
-
-    QString iconName, iconKDE, albumURL;
-
-    QList<QVariant>::const_iterator it = values.constBegin();
-
-    albumURL    = (*it).toString();
-    ++it;
-    iconName    = (*it).toString();
-    ++it;
-    iconKDE     = (*it).toString();
-    ++it;
-
-    *iconAlbumRootId = (*it).toInt();
-    ++it;
-
-    if (albumURL.isEmpty())
-    {
-        *iconAlbumRelativePath = QString(); // krazy:exclude=nullstrassign
-        *icon = iconKDE;
-        return !iconKDE.isEmpty();
-    }
-    else
-    {
-        *iconAlbumRelativePath = albumURL + '/' + iconName;
-        *icon = QString(); // krazy:exclude=nullstrassign
-        return true;
-    }
 }
 
 void AlbumDB::setTagParentID(int tagID, int newParentTagID)

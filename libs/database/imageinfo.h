@@ -65,6 +65,8 @@ class ImageTagPair;
 class PhotoInfoContainer;
 class VideoInfoContainer;
 class Template;
+class ThumbnailIdentifier;
+class ThumbnailInfo;
 class TreeBuilder;
 
 /**
@@ -88,17 +90,24 @@ public:
     explicit ImageInfo(qlonglong ID);
 
     /**
-     * Constructor. Creates an ImageInfo object from a file url.
-     */
-    explicit ImageInfo(const KUrl& url);
-
-    /**
      * Constructor. Creates an ImageInfo object where the provided information
      * will initially be available cached, without database access.
      */
     explicit ImageInfo(const ImageListerRecord& record);
 
     ImageInfo(const ImageInfo& info);
+
+    /**
+     * Creates an ImageInfo object from a file url.
+     */
+    static ImageInfo fromLocalFile(const QString& path);
+    static ImageInfo fromUrl(const KUrl& url);
+
+    /**
+     * Create an ImageInfo object from the given combination, which
+     * must be cleaned and corresponding to the values in the database
+     */
+    static ImageInfo fromLocationAlbumAndName(int locationId, const QString& album, const QString& name);
 
     /**
      * Destructor
@@ -474,6 +483,18 @@ public:
      * (information freshly obtained from CollectionManager)
      */
     bool isLocationAvailable() const;
+
+    /**
+     * Scans the database for items with the given signature.
+     */
+    QList<ImageInfo> fromUniqueHash(const QString& uniqueHash, qlonglong fileSize);
+
+    /**
+     * Fills a ThumbnailIdentifier / ThumbnailInfo from this ImageInfo
+     */
+    ThumbnailIdentifier thumbnailIdentifier() const;
+    ThumbnailInfo thumbnailInfo() const;
+    static ThumbnailIdentifier thumbnailIdentifier(qlonglong id);
 
 private:
 

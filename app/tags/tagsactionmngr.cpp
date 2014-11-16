@@ -527,7 +527,7 @@ void TagsActionMngr::slotImageTagChanged(const ImageTagChangeset&)
     if (sld)
     {
         KUrl url = sld->currentItem();
-        ImageInfo info(url);
+        ImageInfo info = ImageInfo::fromUrl(url);
         sld->updateTags(url, AlbumManager::instance()->tagNames(info.tagIds()));
     }
 }

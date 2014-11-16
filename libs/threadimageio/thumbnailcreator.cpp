@@ -85,11 +85,22 @@ using namespace KDcrawIface;
 namespace Digikam
 {
 
-ThumbnailInfo::ThumbnailInfo()
+ThumbnailIdentifier::ThumbnailIdentifier()
+    : id(0)
 {
-    isAccessible    = false;
-    fileSize        = 0;
-    orientationHint = DMetadata::ORIENTATION_UNSPECIFIED;
+}
+
+ThumbnailIdentifier::ThumbnailIdentifier(const QString& filePath)
+    : filePath(filePath),
+      id(0)
+{
+}
+
+ThumbnailInfo::ThumbnailInfo()
+    : fileSize(0),
+      isAccessible(false),
+      orientationHint(DMetadata::ORIENTATION_UNSPECIFIED)
+{
 }
 
 ThumbnailCreator::ThumbnailCreator(StorageMethod method)
@@ -180,28 +191,12 @@ QString ThumbnailCreator::errorString() const
     return d->error;
 }
 
-void ThumbnailCreator::pregenerate(const QString& path) const
+QImage ThumbnailCreator::load(const ThumbnailIdentifier& identifier) const
 {
-    load(path, QRect(), true);
+    return load(identifier, QRect(), false);
 }
 
-void ThumbnailCreator::pregenerateDetail(const QString& path, const QRect& rect) const
-{
-    if (!rect.isValid())
-    {
-        kWarning() << "Invalid rectangle" << rect;
-        return;
-    }
-
-    load(path, rect, true);
-}
-
-QImage ThumbnailCreator::load(const QString& path) const
-{
-    return load(path, QRect(), false);
-}
-
-QImage ThumbnailCreator::loadDetail(const QString& path, const QRect& rect) const
+QImage ThumbnailCreator::loadDetail(const ThumbnailIdentifier& identifier, const QRect& rect) const
 {
     if (!rect.isValid())
     {
@@ -209,10 +204,26 @@ QImage ThumbnailCreator::loadDetail(const QString& path, const QRect& rect) cons
         return QImage();
     }
 
-    return load(path, rect, false);
+    return load(identifier, rect, false);
 }
 
-QImage ThumbnailCreator::load(const QString& path, const QRect& rect, bool pregenerate) const
+void ThumbnailCreator::pregenerate(const ThumbnailIdentifier& identifier) const
+{
+    load(identifier, QRect(), true);
+}
+
+void ThumbnailCreator::pregenerateDetail(const ThumbnailIdentifier& identifier, const QRect& rect) const
+{
+    if (!rect.isValid())
+    {
+        kWarning() << "Invalid rectangle" << rect;
+        return;
+    }
+
+    load(identifier, rect, true);
+}
+
+QImage ThumbnailCreator::load(const ThumbnailIdentifier& identifier, const QRect& rect, bool pregenerate) const
 {
     if (d->storageSize() <= 0)
     {
@@ -225,9 +236,8 @@ QImage ThumbnailCreator::load(const QString& path, const QRect& rect, bool prege
     {
         d->dbIdForReplacement = -1;    // just to prevent bugs
     }
-
     // get info about path
-    ThumbnailInfo info = makeThumbnailInfo(path, rect);
+    ThumbnailInfo info = makeThumbnailInfo(identifier, rect);
 
     // load pregenerated thumbnail
     ThumbnailImage image;
@@ -254,6 +264,12 @@ QImage ThumbnailCreator::load(const QString& path, const QRect& rect, bool prege
         case FreeDesktopStandard:
             image = loadFreedesktop(info);
             break;
+    }
+
+    // For images in offline collections we can stop here, they are not available on disk
+    if (image.isNull() && info.filePath.isEmpty())
+    {
+        return QImage();
     }
 
     // if pregenerated thumbnail is not available, generate
@@ -285,7 +301,7 @@ QImage ThumbnailCreator::load(const QString& path, const QRect& rect, bool prege
     if (image.isNull())
     {
         d->error = i18n("Thumbnail is null");
-        kWarning() << "Thumbnail is null for " << path;
+        kWarning() << "Thumbnail is null for " << identifier.filePath;
         return image.qimage;
     }
 
@@ -309,6 +325,11 @@ QImage ThumbnailCreator::load(const QString& path, const QRect& rect, bool prege
         }
     }
 
+    if (!info.customIdentifier.isNull())
+    {
+        image.qimage.setText("customIdentifier", info.customIdentifier);
+    }
+
     return image.qimage;
 }
 
@@ -330,32 +351,45 @@ QImage ThumbnailCreator::scaleForStorage(const QImage& qimage) const
     return qimage;
 }
 
-QString ThumbnailCreator::identifierForDetail(const QString& path, const QRect& rect) const
+QString ThumbnailCreator::identifierForDetail(const ThumbnailInfo& info, const QRect& rect)
 {
     QUrl url;
     url.setScheme("detail");
-    url.setPath(path);
+    url.setPath(info.filePath);
+    /* A scheme to support loading by database id, but this is a hack. Solve cleanly later (schema update)
+    url.setPath(identifier.fileName);
+    if (!identifier.uniqueHash.isNull())
+    {
+        url.addQueryItem("hash", identifier.uniqueHash);
+        url.addQueryItem("filesize", QString::number(identifier.fileSize));
+    }
+    else
+    {
+        url.addQueryItem("path", identifier.filePath);
+    }
+    */
     QString r = QString("%1,%2-%3x%4").arg(rect.x()).arg(rect.y()).arg(rect.width()).arg(rect.height());
     url.addQueryItem("rect", r);
     return url.toString();
 }
 
-ThumbnailInfo ThumbnailCreator::makeThumbnailInfo(const QString& path, const QRect& rect) const
+ThumbnailInfo ThumbnailCreator::makeThumbnailInfo(const ThumbnailIdentifier& identifier, const QRect& rect) const
 {
     ThumbnailInfo info;
 
     if (d->infoProvider)
     {
-        info = d->infoProvider->thumbnailInfo(path);
+        info = d->infoProvider->thumbnailInfo(identifier);
     }
     else
     {
-        info = fileThumbnailInfo(path);
+        info = fileThumbnailInfo(identifier.filePath);
     }
 
     if (!rect.isNull())
     {
-        info.customIdentifier = identifierForDetail(path, rect);
+        // Important: Pass the filled info, not the possibly half-filled identifier here because the hash is preferred for the customIdentifier!
+        info.customIdentifier = identifierForDetail(info, rect);
     }
 
     return info;
@@ -379,7 +413,7 @@ void ThumbnailCreator::store(const QString& path, const QImage& i, const QRect& 
     }
 
     QImage         qimage = scaleForStorage(i);
-    ThumbnailInfo  info   = makeThumbnailInfo(path, rect);
+    ThumbnailInfo  info   = makeThumbnailInfo(ThumbnailIdentifier(path), rect);
     ThumbnailImage image;
     image.qimage          = qimage;
 
@@ -413,7 +447,7 @@ void ThumbnailCreator::deleteThumbnailsFromDisk(const QString& filePath) const
 
             if (d->infoProvider)
             {
-                info = d->infoProvider->thumbnailInfo(filePath);
+                info = d->infoProvider->thumbnailInfo(ThumbnailIdentifier(filePath));
             }
             else
             {
@@ -948,8 +982,8 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info) con
 
     // Give priority to main database's rotation flag
     // NOTE: Breaks rotation of RAWs which do not contain JPEG previews
-    image.exifOrientation = DMetadata::ORIENTATION_UNSPECIFIED;
-    if (LoadSaveThread::infoProvider())
+    image.exifOrientation = info.orientationHint;
+    if (image.exifOrientation == DMetadata::ORIENTATION_UNSPECIFIED && !info.filePath.isEmpty() && LoadSaveThread::infoProvider())
     {
         image.exifOrientation = LoadSaveThread::infoProvider()->orientationHint(info.filePath);
     }
@@ -1013,6 +1047,7 @@ ThumbnailInfo ThumbnailCreator::fileThumbnailInfo(const QString& path)
     info.filePath     = path;
     QFileInfo fileInfo(path);
     info.isAccessible = fileInfo.exists();
+    info.fileName     = fileInfo.fileName();
 
     if (!info.isAccessible)
     {

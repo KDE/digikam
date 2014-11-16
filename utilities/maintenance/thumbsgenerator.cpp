@@ -162,7 +162,7 @@ void ThumbsGenerator::slotStart()
 
     while (it != d->allPicturesPath.end())
     {
-        ImageInfo info((*it));
+        ImageInfo info = ImageInfo::fromLocalFile(*it);
 
         if (info.category() != DatabaseItem::Image)
         {

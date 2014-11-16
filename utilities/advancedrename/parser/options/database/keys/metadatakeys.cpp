@@ -94,7 +94,7 @@ MetadataKeys::MetadataKeys()
 
 QString MetadataKeys::getDbValue(const QString& key, ParseSettings& settings)
 {
-    ImageInfo info(settings.fileUrl);
+    ImageInfo info = ImageInfo::fromUrl(settings.fileUrl);
     ImageMetadataContainer container = info.imageMetadataContainer();
     VideoMetadataContainer videoContainer = info.videoMetadataContainer();
     QString result;

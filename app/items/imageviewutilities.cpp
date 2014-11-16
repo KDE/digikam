@@ -98,7 +98,7 @@ void ImageViewUtilities::rename(const KUrl& imageUrl, const QString& newName)
         return;
     }
 
-    ImageInfo info(imageUrl.toLocalFile());
+    ImageInfo info = ImageInfo::fromUrl(imageUrl);
     DIO::rename(info, newName);
 }
 

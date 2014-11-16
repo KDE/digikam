@@ -73,7 +73,7 @@ CommonKeys::CommonKeys()
 
 QString CommonKeys::getDbValue(const QString& key, ParseSettings& settings)
 {
-    ImageInfo info(settings.fileUrl);
+    ImageInfo info = ImageInfo::fromUrl(settings.fileUrl);
     ImageCommonContainer container = info.imageCommonContainer();
     ImageCopyright copyright       = info.imageCopyright();
     QString result;

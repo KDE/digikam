@@ -109,7 +109,7 @@ void FindDuplicatesAlbum::drawRow(QPainter* p, const QStyleOptionViewItem& opt, 
 
     if (item && !item->hasValidThumbnail())
     {
-        d->thumbLoadThread->find(item->refUrl().toLocalFile());
+        d->thumbLoadThread->find(ThumbnailIdentifier(item->refUrl().toLocalFile()));
     }
 
     QTreeWidget::drawRow(p, opt, index);
