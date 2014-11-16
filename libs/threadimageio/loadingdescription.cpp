@@ -127,12 +127,12 @@ QString LoadingDescription::cacheKey() const
     // Thumbnail loading. This one is easy.
     if (previewParameters.type == PreviewParameters::Thumbnail)
     {
-        QString fileRef = filePath.isEmpty() ? previewParameters.storageReference.toString() : filePath;
+        QString fileRef = filePath.isEmpty() ? (QString("id:/")+previewParameters.storageReference.toString()) : filePath;
         return fileRef + "-thumbnail-" + QString::number(previewParameters.size);
     }
     else if (previewParameters.type == PreviewParameters::DetailThumbnail)
     {
-        QString fileRef = filePath.isEmpty() ? previewParameters.storageReference.toString() : filePath;
+        QString fileRef = filePath.isEmpty() ? (QString("id:/")+previewParameters.storageReference.toString()) : filePath;
         QRect rect         =  previewParameters.extraParameter.toRect();
         QString rectString = QString("%1,%2-%3x%4-").arg(rect.x()).arg(rect.y()).arg(rect.width()).arg(rect.height());
         return fileRef + "-thumbnail-" + rectString + QString::number(previewParameters.size);
