@@ -84,7 +84,7 @@ public:
         enum PreviewFlag
         {
             NoFlags         = 0,
-            OnlyPregenerate = 1 << 0,
+            OnlyPregenerate = 1 << 0
         };
         Q_DECLARE_FLAGS(PreviewFlags, PreviewFlag)
 
