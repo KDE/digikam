@@ -642,6 +642,7 @@ bool JpegRotator::performJpegTransform(TransformAction action, const QString& sr
 
 bool jpegConvert(const QString& src, const QString& dest, const QString& documentName, const QString& format)
 {
+    kDebug() << "Converting " << src << " to " << dest << " format: " << format << " documentName: " << documentName;
     QFileInfo fi(src);
 
     if (!fi.exists())
