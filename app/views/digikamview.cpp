@@ -400,6 +400,7 @@ DigikamView::~DigikamView()
 {
     saveViewState();
 
+    delete d->labelsSearchHandler;
     delete d->albumHistory;
     delete d;
 }
