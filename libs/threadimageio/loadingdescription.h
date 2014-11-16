@@ -38,6 +38,7 @@ namespace Digikam
 {
 
 class IccTransform;
+class ThumbnailIdentifier;
 
 class DIGIKAM_EXPORT LoadingDescription
 {
@@ -89,12 +90,7 @@ public:
 
     public:
 
-        PreviewParameters()
-        {
-            type  = NoPreview;
-            size  = 0;
-            flags = NoFlags;
-        }
+        PreviewParameters();
 
         bool onlyPregenerate() const
         {
@@ -110,6 +106,7 @@ public:
         PreviewFlags flags;
         PreviewSettings previewSettings;
         QVariant     extraParameter;
+        QVariant     storageReference;
     };
 
     // ---------------------------------------------------------------------
@@ -206,6 +203,11 @@ public:
      * Returns if this description will load a preview
      */
     bool                isPreviewImage() const;
+
+    /**
+     * If this referenced a thumbnail, recreate the identifier
+     */
+    ThumbnailIdentifier thumbnailIdentifier() const;
 
     /**
       * Returns whether the other loading task equals this one
