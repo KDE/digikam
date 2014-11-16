@@ -1024,6 +1024,8 @@ void QueueMgrWindow::slotQueueProcessed()
     }
 }
 
+// TODO assigning a workflow doesn't enable the actions in tools view
+// adding a tool (which causes signalAssignTools and slotAssignTools works fine
 void QueueMgrWindow::slotAssignQueueSettings(const QString& title)
 {
     if (!title.isEmpty())
