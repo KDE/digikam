@@ -1494,7 +1494,12 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
         else
         {
             AlbumList list = man->currentAlbums();
-            int albumId    = group.readEntry(d->configLastTargetAlbum, !list.isEmpty() ? list.first()->globalID() : 0);
+
+            int albumId = 0;
+            if (!list.isEmpty())
+            {
+                albumId = group.readEntry(d->configLastTargetAlbum, list.first()->globalID());
+            }
             album          = man->findAlbum(albumId);
 
             if (album && album->type() != Album::PHYSICAL)
