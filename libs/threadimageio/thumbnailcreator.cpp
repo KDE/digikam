@@ -236,7 +236,6 @@ QImage ThumbnailCreator::load(const ThumbnailIdentifier& identifier, const QRect
     {
         d->dbIdForReplacement = -1;    // just to prevent bugs
     }
-
     // get info about path
     ThumbnailInfo info = makeThumbnailInfo(identifier, rect);
 
@@ -265,6 +264,12 @@ QImage ThumbnailCreator::load(const ThumbnailIdentifier& identifier, const QRect
         case FreeDesktopStandard:
             image = loadFreedesktop(info);
             break;
+    }
+
+    // For images in offline collections we can stop here, they are not available on disk
+    if (image.isNull() && info.filePath.isEmpty())
+    {
+        return QImage();
     }
 
     // if pregenerated thumbnail is not available, generate

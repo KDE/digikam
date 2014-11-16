@@ -216,7 +216,7 @@ QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const
         ImageInfo info = imageInfo(index);
         QString   path = info.filePath();
 
-        if (info.isNull() || path.isEmpty())
+        if (info.isNull())
         {
             return QVariant(QVariant::Pixmap);
         }
@@ -293,7 +293,17 @@ void ImageThumbnailModel::slotThumbnailLoaded(const LoadingDescription& loadingD
     }
 
     // In case of multiple occurrence, we currently do not know which thumbnail is this. Signal change on all.
-    foreach(const QModelIndex& index, indexesForPath(loadingDescription.filePath))
+    QModelIndexList indexes;
+    ThumbnailIdentifier thumbId = loadingDescription.thumbnailIdentifier();
+    if (thumbId.filePath.isEmpty())
+    {
+        indexes = indexesForImageId(thumbId.id);
+    }
+    else
+    {
+        indexes = indexesForPath(thumbId.filePath);
+    }
+    foreach(const QModelIndex& index, indexes)
     {
         if (thumb.isNull())
         {
