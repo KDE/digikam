@@ -306,7 +306,7 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
             this, SLOT(slotNewDuplicatesSearch(Album*)));
 
     // Labels sidebar
-    d->labelsSideBar = new LabelsSideBarWidget(d->leftSideBar);
+    d->labelsSideBar       = new LabelsSideBarWidget(d->leftSideBar);
     d->leftSideBarWidgets << d->labelsSideBar;
     d->labelsSearchHandler = new AlbumLabelsSearchHandler(d->labelsSideBar->labelsTree());
 
