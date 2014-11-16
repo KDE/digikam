@@ -1910,12 +1910,26 @@ void AlbumManager::setCurrentAlbums(QList<Album*> albums)
     if(albums.isEmpty())
         return;
 
+    QList<Album*> filtered;
+    /**
+     * Filter out the null pointers
+    */
+    Q_FOREACH(Album *album, albums)
+    {
+        if(album != 0) {
+            filtered.append(album);
+        }
+    }
+
+    albums = filtered;
+
     /**
      * Sort is needed to identify selection correctly, ex AlbumHistory
      */
     qSort(albums.begin(),albums.end());
     d->currentAlbums.clear();
     d->currentAlbums+=albums;
+
     emit signalAlbumCurrentChanged(d->currentAlbums);
 }
 
@@ -2185,7 +2199,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
 
     if (!KIO::NetAccess::mkdir(fileUrl, qApp->activeWindow()))
     {
-        errMsg = i18n("Failed to create directory,");
+        errMsg = i18n("Failed to create directory.");
         return 0;
     }
 
