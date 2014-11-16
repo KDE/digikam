@@ -982,8 +982,8 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info) con
 
     // Give priority to main database's rotation flag
     // NOTE: Breaks rotation of RAWs which do not contain JPEG previews
-    image.exifOrientation = DMetadata::ORIENTATION_UNSPECIFIED;
-    if (LoadSaveThread::infoProvider())
+    image.exifOrientation = info.orientationHint;
+    if (image.exifOrientation == DMetadata::ORIENTATION_UNSPECIFIED && !info.filePath.isEmpty() && LoadSaveThread::infoProvider())
     {
         image.exifOrientation = LoadSaveThread::infoProvider()->orientationHint(info.filePath);
     }
