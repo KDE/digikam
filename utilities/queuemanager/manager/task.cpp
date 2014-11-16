@@ -254,7 +254,7 @@ void Task::run()
             // -- Now copy the digiKam attributes from original file to the new file ------------
 
             // ImageInfo must be tread-safe.
-            ImageInfo source(d->tools.m_itemUrl.toLocalFile());
+            ImageInfo source = ImageInfo::fromUrl(d->tools.m_itemUrl);
             FileActionMngr::instance()->copyAttributes(source, dest.toLocalFile());
 
             emitActionData(ActionData::BatchDone, i18n("Item processed successfully %1", renameMess), dest);

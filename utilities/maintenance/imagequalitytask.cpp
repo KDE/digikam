@@ -107,7 +107,7 @@ void ImageQualityTask::run()
             PickLabel pick;
             d->imgqsort = new ImgQSort(dimg, d->quality, &pick);
 
-            ImageInfo info(d->path);
+            ImageInfo info = ImageInfo::fromLocalFile(d->path);
             info.setPickLabel(pick);
             if(d->imgqsort)
                     delete d->imgqsort;                 //delete image data after setting label

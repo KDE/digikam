@@ -904,7 +904,7 @@ void FuzzySearchView::setCurrentImage(const ImageInfo& info)
     d->imageInfo = info;
     d->labelFile->setText(d->imageInfo.name());
     d->labelFolder->setText(d->imageInfo.fileUrl().directory());
-    d->thumbLoadThread->find(d->imageInfo.fileUrl().toLocalFile());
+    d->thumbLoadThread->find(d->imageInfo.thumbnailIdentifier());
 }
 
 void FuzzySearchView::setImageInfo(const ImageInfo& info)
