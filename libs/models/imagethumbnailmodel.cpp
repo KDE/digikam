@@ -156,12 +156,12 @@ void ImageThumbnailModel::prepareThumbnails(const QList<QModelIndex>& indexesToP
         return;
     }
 
-    QStringList filePaths;
+    QList<ThumbnailIdentifier> ids;
     foreach(const QModelIndex& index, indexesToPrepare)
     {
-        filePaths << imageInfoRef(index).filePath();
+        ids << imageInfoRef(index).thumbnailIdentifier();
     }
-    d->thread->findGroup(filePaths, thumbSize.size());
+    d->thread->findGroup(ids, thumbSize.size());
 }
 
 void ImageThumbnailModel::preloadThumbnails(const QList<ImageInfo>& infos)
@@ -171,29 +171,28 @@ void ImageThumbnailModel::preloadThumbnails(const QList<ImageInfo>& infos)
         return;
     }
 
-    QStringList filePaths;
+    QList<ThumbnailIdentifier> ids;
     foreach(const ImageInfo& info, infos)
     {
-        filePaths << info.filePath();
+        ids << info.thumbnailIdentifier();
     }
-    d->preloadThread->stopAllTasks();
-    d->preloadThread->pregenerateGroup(filePaths, d->preloadThumbnailSize());
+    d->preloadThread->pregenerateGroup(ids, d->preloadThumbnailSize());
 }
 
-void ImageThumbnailModel::preloadThumbnails(const QList<QModelIndex>& infos)
+void ImageThumbnailModel::preloadThumbnails(const QList<QModelIndex>& indexesToPreload)
 {
     if (!d->preloadThread)
     {
         return;
     }
 
-    QStringList filePaths;
-    foreach(const QModelIndex& index, infos)
+    QList<ThumbnailIdentifier> ids;
+    foreach(const QModelIndex& index, indexesToPreload)
     {
-        filePaths << imageInfoRef(index).filePath();
+        ids << imageInfoRef(index).thumbnailIdentifier();
     }
     d->preloadThread->stopAllTasks();
-    d->preloadThread->pregenerateGroup(filePaths, d->preloadThumbnailSize());
+    d->preloadThread->pregenerateGroup(ids, d->preloadThumbnailSize());
 }
 
 void ImageThumbnailModel::preloadAllThumbnails()
@@ -224,14 +223,14 @@ QVariant ImageThumbnailModel::data(const QModelIndex& index, int role) const
 
         if (!d->detailRect.isNull())
         {
-            if (d->thread->find(path, d->detailRect, thumbnail, d->thumbSize.size()))
+            if (d->thread->find(info.thumbnailIdentifier(), d->detailRect, thumbnail, d->thumbSize.size()))
             {
                 return thumbnail;
             }
         }
         else
         {
-            if (d->thread->find(path, thumbnail, d->thumbSize.size()))
+            if (d->thread->find(info.thumbnailIdentifier(), thumbnail, d->thumbSize.size()))
             {
                 return thumbnail;
             }

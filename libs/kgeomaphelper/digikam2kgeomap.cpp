@@ -40,9 +40,6 @@
 
 // local includes
 
-#include "imageinfo.h"
-#include "imageposition.h"
-
 namespace Digikam
 {
 
