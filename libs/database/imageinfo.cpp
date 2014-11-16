@@ -59,6 +59,7 @@
 #include "imagetagpair.h"
 #include "tagscache.h"
 #include "template.h"
+#include "thumbnailinfo.h"
 #include "infocontainer.h"
 
 namespace Digikam
@@ -315,46 +316,62 @@ ImageInfo::ImageInfo(qlonglong ID)
     }
 }
 
-ImageInfo::ImageInfo(const KUrl& url)
+ImageInfo ImageInfo::fromUrl(const KUrl& url)
 {
-    CollectionLocation location = CollectionManager::instance()->locationForUrl(url);
+    return fromLocalFile(url.toLocalFile());
+}
+
+ImageInfo ImageInfo::fromLocalFile(const QString& path)
+{
+    CollectionLocation location = CollectionManager::instance()->locationForPath(path);
 
     if (location.isNull())
     {
-        m_data = 0;
-        kWarning() << "No location could be retrieved for url" << url;
-        return;
+        kWarning() << "No location could be retrieved for" << path;
+        return ImageInfo();
     }
 
-    KUrl _url(url.directory());
-    QString album = CollectionManager::instance()->album(_url.toLocalFile());
+    KUrl url = KUrl::fromLocalFile(path);
+    QString album = CollectionManager::instance()->album(url.directory());
     QString name  = url.fileName();
 
-    // Cached?
-    m_data = ImageInfoStatic::cache()->infoForPath(location.id(), album, name);
+    return fromLocationAlbumAndName(location.id(), album, name);
+}
 
-    if (!m_data)
+ImageInfo ImageInfo::fromLocationAlbumAndName(int locationId, const QString& album, const QString& name)
+{
+    if (!locationId || album.isEmpty() || name.isEmpty())
+    {
+        return ImageInfo();
+    }
+
+    ImageInfo info;
+    // Cached?
+    info.m_data = ImageInfoStatic::cache()->infoForPath(locationId, album, name);
+
+    if (!info.m_data)
     {
 
-        ItemShortInfo info = DatabaseAccess().db()->getItemShortInfo(location.id(), album, name);
+        ItemShortInfo shortInfo = DatabaseAccess().db()->getItemShortInfo(locationId, album, name);
 
-        if (!info.id)
+        if (!shortInfo.id)
         {
-            m_data = 0;
+            info.m_data = 0;
             kWarning() << "No itemShortInfo could be retrieved from the database for image" << name;
-            return;
+            return info;
         }
 
-        m_data              = ImageInfoStatic::cache()->infoForId(info.id);
+        info.m_data         = ImageInfoStatic::cache()->infoForId(shortInfo.id);
 
         ImageInfoWriteLocker lock;
 
-        m_data->albumId     = info.albumID;
-        m_data->albumRootId = info.albumRootID;
-        m_data->name        = info.itemName;
+        info.m_data->albumId     = shortInfo.albumID;
+        info.m_data->albumRootId = shortInfo.albumRootID;
+        info.m_data->name        = shortInfo.itemName;
 
-        ImageInfoStatic::cache()->cacheByName(m_data);
+        ImageInfoStatic::cache()->cacheByName(info.m_data);
     }
+    return info;
 }
 
 ImageInfo::~ImageInfo()
@@ -1711,6 +1728,72 @@ bool ImageInfo::isLocationAvailable() const
     }
 
     return CollectionManager::instance()->locationForAlbumRootId(m_data->albumRootId).isAvailable();
+}
+
+QList<ImageInfo> ImageInfo::fromUniqueHash(const QString& uniqueHash, qlonglong fileSize)
+{
+    QList<ItemScanInfo> scanInfos = DatabaseAccess().db()->getIdenticalFiles(uniqueHash, fileSize);
+    QList<ImageInfo> infos;
+    foreach (const ItemScanInfo& scanInfo, scanInfos)
+    {
+        infos << ImageInfo(scanInfo.id);
+    }
+    return infos;
+}
+
+ThumbnailIdentifier ImageInfo::thumbnailIdentifier() const
+{
+    if (!m_data)
+    {
+        return ThumbnailIdentifier();
+    }
+
+    ThumbnailIdentifier id;
+    id.id       = m_data->id;
+    id.filePath = filePath();
+    return id;
+}
+
+ThumbnailInfo ImageInfo::thumbnailInfo() const
+{
+    if (!m_data)
+    {
+        return ThumbnailInfo();
+    }
+
+    ThumbnailInfo thumbinfo;
+    QVariantList values;
+
+    thumbinfo.id       = m_data->id;
+    thumbinfo.filePath = filePath();
+    thumbinfo.fileName = name();
+    thumbinfo.isAccessible = CollectionManager::instance()->locationForAlbumRootId(m_data->albumRootId).isAvailable();
+
+    DatabaseAccess access;
+    values = access.db()->getImagesFields(m_data->id,
+                                          DatabaseFields::ModificationDate | DatabaseFields::FileSize | DatabaseFields::UniqueHash);
+
+    if (!values.isEmpty())
+    {
+        thumbinfo.modificationDate = values.at(0).toDateTime();
+        thumbinfo.fileSize = values.at(1).toLongLong();
+        thumbinfo.uniqueHash = values.at(2).toString();
+    }
+
+    values = access.db()->getImageInformation(m_data->id, DatabaseFields::Orientation);
+
+    if (!values.isEmpty())
+    {
+        thumbinfo.orientationHint = values.first().toInt();
+    }
+
+    return thumbinfo;
+}
+
+ThumbnailIdentifier ImageInfo::thumbnailIdentifier(qlonglong id)
+{
+    ImageInfo info(id);
+    return info.thumbnailIdentifier();
 }
 
 QDebug operator<<(QDebug stream, const ImageInfo& info)
