@@ -312,7 +312,7 @@ bool HaarIface::indexImage(const QString& filename)
 
 bool HaarIface::indexImage(const QString& filename, const QImage& image)
 {
-    ImageInfo info(KUrl::fromPath(filename));
+    ImageInfo info = ImageInfo::fromLocalFile(filename);
 
     if (info.isNull())
     {
@@ -324,7 +324,7 @@ bool HaarIface::indexImage(const QString& filename, const QImage& image)
 
 bool HaarIface::indexImage(const QString& filename, const DImg& image)
 {
-    ImageInfo info(KUrl::fromPath(filename));
+    ImageInfo info = ImageInfo::fromLocalFile(filename);
 
     if (info.isNull())
     {

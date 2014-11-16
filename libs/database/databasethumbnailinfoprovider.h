@@ -27,7 +27,7 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "thumbnailcreator.h"
+#include "thumbnailinfo.h"
 #include "loadsavethread.h"
 
 namespace Digikam
@@ -37,7 +37,7 @@ class DIGIKAM_DATABASE_EXPORT DatabaseThumbnailInfoProvider : public ThumbnailIn
 {
 public:
 
-    ThumbnailInfo thumbnailInfo(const QString& path);
+    ThumbnailInfo thumbnailInfo(const ThumbnailIdentifier& identifier);
 };
 
 class DIGIKAM_DATABASE_EXPORT DatabaseLoadSaveFileInfoProvider : public LoadSaveFileInfoProvider

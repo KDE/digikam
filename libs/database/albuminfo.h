@@ -74,7 +74,7 @@ class AlbumInfo
 {
 public:
 
-    AlbumInfo() : id(0), albumRootId(0), iconAlbumRootId(0) {};
+    AlbumInfo() : id(0), albumRootId(0), iconId(0) {};
 
     typedef QList<AlbumInfo> List;
 
@@ -89,8 +89,7 @@ public:
     QString caption;
     QString category;
     QDate   date;
-    int     iconAlbumRootId;
-    QString iconRelativePath;
+    qlonglong iconId;
 
     /**
      * needed for sorting
@@ -113,7 +112,7 @@ class TagInfo
 {
 public:
 
-    TagInfo() : id(0), pid(0), iconAlbumRootId(0) {};
+    TagInfo() : id(0), pid(0), iconId(0) {};
 
     typedef QList<TagInfo> List;
 
@@ -126,8 +125,7 @@ public:
     int     pid;
     QString name;
     QString icon;
-    int     iconAlbumRootId;
-    QString iconRelativePath;
+    qlonglong iconId;
 
     bool operator<(const TagInfo& info) const
     {

@@ -318,15 +318,6 @@ public:
     void setAlbumIcon(int albumID, qlonglong iconID);
 
     /**
-     * Get the image that is set as album icon
-     * @param albumID the id of the album
-     * @param iconAlbumRootId Returns the album root id of the image
-     * @param iconAlbumRelativePath Returns the path below the album root of the image
-     * @returns true if there is an icon set.
-     */
-    bool getAlbumIcon(int albumID, int* iconAlbumRootId, QString* iconAlbumRelativePath);
-
-    /**
      * Given an albumid, this returns the album root id for that album
      * @param albumID the id of the albumdb
      * @return the id of the album root of this album
@@ -420,18 +411,6 @@ public:
      * if the iconKDE parameter is empty, then the iconID parameter is used
      */
     void setTagIcon(int tagID, const QString& iconKDE, qlonglong iconID);
-
-    /**
-     * Get the icon for the tag.
-     * This can be either an image of the collection, or a system icon name.
-     * So either iconAlbumRelativePath or icon will be null.
-     * @param tagID the id of the tag
-     * @param iconAlbumRootId Returns the album root id of the image
-     * @param iconAlbumRelativePath Returns the path below the album root of the image
-     * @param icon an icon name that can be loaded by the system iconloader
-     * @returns true if there is an icon set.
-     */
-    bool getTagIcon(int tagID, int* iconAlbumRootId, QString* iconAlbumRelativePath, QString* icon);
 
     /**
      * Set the parent tagid for the tag. This is equivalent to reparenting
