@@ -101,6 +101,11 @@ KipiInterface::~KipiInterface()
 
 KIPI::ImageCollection KipiInterface::currentAlbum()
 {
+    if(d->albumManager->currentAlbums().isEmpty())
+    {
+        return KIPI::ImageCollection(0);
+    }
+
     Album* currAlbum = d->albumManager->currentAlbums().first();
 
     if (currAlbum)
@@ -117,6 +122,11 @@ KIPI::ImageCollection KipiInterface::currentAlbum()
 
 KIPI::ImageCollection KipiInterface::currentSelection()
 {
+    if (d->albumManager->currentAlbums().isEmpty())
+    {
+            return KIPI::ImageCollection(0);
+    }
+
     Album* currAlbum = d->albumManager->currentAlbums().first();
 
     if (currAlbum)
