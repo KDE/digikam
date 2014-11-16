@@ -123,6 +123,7 @@ Use CMake "-DENABLE_LCMS2=on"             flag to compile digiKam source code us
 Use CMake "-DENABLE_BALOOSUPPORT=on"      flag to compile digiKam with Baloo support                                             (disabled by default).
 Use CMake "-DENABLE_KDEPIMLIBSSUPPORT=on" flag to compile digiKam with KdePimLibs support                                        (disabled by default).
 
+Mysql support options (experimental):
 
 Use CMake "-DENABLE_MYSQLSUPPORT=on"      flag to compile digiKam with MysSql support                                            (disabled by default).
 Use CMake "-DENABLE_INTERNALMYSQL=on"     flag to compile digiKam with internal MySQL server                                     (disabled by default).
