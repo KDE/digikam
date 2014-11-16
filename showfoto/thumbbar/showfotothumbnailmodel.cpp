@@ -322,7 +322,7 @@ bool ShowfotoThumbnailModel::pixmapForItem(QString url, QPixmap& pix) const
     {
         //TODO: Install a widget maximum size to prevent this situation
 
-        bool hasPixmap = d->thread->find(url, pix, d->maxThumbSize);
+        bool hasPixmap = d->thread->find(ThumbnailIdentifier(url), pix, d->maxThumbSize);
 
         if (hasPixmap)
         {
@@ -343,7 +343,7 @@ bool ShowfotoThumbnailModel::pixmapForItem(QString url, QPixmap& pix) const
     }
     else
     {
-        return d->thread->find(url, pix, d->thumbSize.size());
+        return d->thread->find(ThumbnailIdentifier(url), pix, d->thumbSize.size());
     }
 }
 

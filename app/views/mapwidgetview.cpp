@@ -373,10 +373,9 @@ QPixmap MapViewModelHelper::pixmapFromRepresentativeIndex(const QPersistentModel
 
             if (!info.isNull())
             {
-                const QString path = info.filePath();
                 QPixmap thumbnail;
 
-                if (d->thumbnailLoadThread->find(path, thumbnail, qMax(size.width()+2, size.height()+2)))
+                if (d->thumbnailLoadThread->find(info.thumbnailIdentifier(), thumbnail, qMax(size.width()+2, size.height()+2)))
                 {
                     return thumbnail.copy(1, 1, thumbnail.size().width()-2, thumbnail.size().height()-2);
                 }
