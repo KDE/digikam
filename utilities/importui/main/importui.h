@@ -202,7 +202,7 @@ private Q_SLOTS:
     void slotDeleted(const QString&, const QString&, bool);
     void slotLocked(const QString&, const QString&, bool);
 
-    void slotDownloadNameChanged();
+    void slotUpdateDownloadName();
     void slotSelectNew();
     void slotSelectLocked();
     void slotProgressTimerDone();

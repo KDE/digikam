@@ -668,7 +668,7 @@ void ImportUI::setupConnections()
 {
     //TODO: Needs testing.
     connect(d->advancedSettings, SIGNAL(signalDownloadNameChanged()),
-            this, SLOT(slotDownloadNameChanged()));
+            this, SLOT(slotUpdateDownloadName()));
 
     connect(d->historyView, SIGNAL(signalEntryClicked(QVariant)),
             this, SLOT(slotHistoryEntryClicked(QVariant)));
@@ -719,7 +719,7 @@ void ImportUI::setupConnections()
             this, SLOT(slotSetupChanged()));
 
     connect(d->renameCustomizer, SIGNAL(signalChanged()),
-            this, SLOT(slotDownloadNameChanged()));
+            this, SLOT(slotUpdateDownloadName()));
 }
 
 void ImportUI::setupStatusBar()
@@ -1691,14 +1691,16 @@ void ImportUI::slotLocked(const QString& folder, const QString& file, bool statu
     d->statusProgressBar->setProgressValue(curr + 1);
 }
 
-void ImportUI::slotDownloadNameChanged()
+void ImportUI::slotUpdateDownloadName()
 {
     CamItemInfoList list = d->view->allItems();
 
     foreach (CamItemInfo info, list)
     {
         CamItemInfo& refInfo = d->view->camItemInfoRef(info.folder, info.name);
+        kDebug() << "slotDownloadNameChanged, old: " << refInfo.downloadName;
         refInfo.downloadName = d->renameCustomizer->newName(info.name, info.ctime);
+        kDebug() << "slotDownloadNameChanged, new: " << refInfo.downloadName;
     }
 
     // connected to slotUpdateDownloadNames, and used externally
@@ -2038,7 +2040,8 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
         settings.colorLabel = info.colorLabel;
         settings.rating     = info.rating;
         dateTime            = info.ctime;
-        downloadName        = d->renameCustomizer->newName(info.name, info.ctime);
+
+        downloadName = info.downloadName; // downloadName should already be set by now
 
         KUrl downloadUrl(url);
 
@@ -2090,6 +2093,7 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
         if (settings.autoRotate)
         {
             d->autoRotateItemsList << downloadUrl.toLocalFile();
+            kDebug() << "autorotating for " << downloadUrl;
         }
 
         ++downloadedItems;
@@ -2309,7 +2313,7 @@ void ImportUI::slotNewSelection(bool hasSelection)
     }
 
     // TODO why new name is calculated on selection basis?!
-    slotDownloadNameChanged();
+    slotUpdateDownloadName();
 
     unsigned long fSize = 0;
     unsigned long dSize = 0;
