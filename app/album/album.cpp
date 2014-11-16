@@ -330,7 +330,8 @@ void Album::setUsedByLabelsTree(bool isUsed)
 // ------------------------------------------------------------------------------
 
 PAlbum::PAlbum(const QString& title)
-    : Album(Album::PHYSICAL, 0, true)
+    : Album(Album::PHYSICAL, 0, true),
+      m_iconId(0)
 {
     setTitle(title);
     m_isAlbumRootAlbum = false;
@@ -340,7 +341,8 @@ PAlbum::PAlbum(const QString& title)
 }
 
 PAlbum::PAlbum(int albumRoot, const QString& label)
-    : Album(Album::PHYSICAL, -1, false)
+    : Album(Album::PHYSICAL, -1, false),
+      m_iconId(0)
 {
     // set the id to -1 (line above). AlbumManager may change that later.
     setTitle(label);
@@ -351,7 +353,8 @@ PAlbum::PAlbum(int albumRoot, const QString& label)
 }
 
 PAlbum::PAlbum(int albumRoot, const QString& parentPath, const QString& title, int id)
-    : Album(Album::PHYSICAL, id, false)
+    : Album(Album::PHYSICAL, id, false),
+      m_iconId(0)
 {
     // If path is /holidays/2007, title is only "2007", path is "/holidays"
     setTitle(title);
@@ -440,16 +443,9 @@ QString PAlbum::prettyUrl() const
     return u;
 }
 
-QString PAlbum::icon() const
+qlonglong PAlbum::iconId() const
 {
-    return m_icon;
-}
-
-KUrl PAlbum::iconKURL() const
-{
-    KUrl u;
-    u.setPath(m_icon);
-    return u;
+    return m_iconId;
 }
 
 KUrl PAlbum::fileUrl() const
@@ -465,7 +461,8 @@ QString PAlbum::folderPath() const
 // --------------------------------------------------------------------------
 
 TAlbum::TAlbum(const QString& title, int id, bool root)
-    : Album(Album::TAG, id, root), m_pid(0)
+    : Album(Album::TAG, id, root), m_pid(0),
+      m_iconId(0)
 {
     setTitle(title);
 }
@@ -532,6 +529,11 @@ QString TAlbum::icon() const
 bool TAlbum::isInternalTag() const
 {
     return TagsCache::instance()->isInternalTag(id());
+}
+
+qlonglong TAlbum::iconId() const
+{
+    return m_iconId;
 }
 
 bool TAlbum::hasProperty(const QString& key) const

@@ -355,8 +355,7 @@ public:
     QString     folderPath()    const;
     DatabaseUrl databaseUrl()   const;
     KUrl        fileUrl()       const;
-    QString     icon()          const;
-    KUrl        iconKURL()      const;
+    qlonglong   iconId()        const;
     bool        isAlbumRoot()   const;
 
 private:
@@ -369,7 +368,7 @@ private:
     QString    m_parentPath;
     QString    m_category;
     QString    m_caption;
-    QString    m_icon;
+    qlonglong  m_iconId;
 
     QDate      m_date;
 
@@ -397,6 +396,7 @@ public:
     DatabaseUrl            databaseUrl() const;
     QString                prettyUrl() const;
     QString                icon() const;
+    qlonglong              iconId() const;
     QList<int>             tagIDs() const;
 
     bool                   isInternalTag() const;
@@ -406,9 +406,10 @@ public:
 
 private:
 
-    int     m_pid;
+    int       m_pid;
 
-    QString m_icon;
+    QString   m_icon;
+    qlonglong m_iconId;
 
     friend class AlbumManager;
 };

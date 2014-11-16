@@ -1421,16 +1421,7 @@ void AlbumManager::scanPAlbums()
         album->m_caption  = info.caption;
         album->m_category = info.category;
         album->m_date     = info.date;
-
-        if (info.iconAlbumRootId)
-        {
-            QString albumRootPath = CollectionManager::instance()->albumRootPath(info.iconAlbumRootId);
-
-            if (!albumRootPath.isNull())
-            {
-                album->m_icon = albumRootPath + info.iconRelativePath;
-            }
-        }
+        album->m_iconId   = info.iconId;
 
         insertPAlbum(album, parent);
     }
@@ -1494,21 +1485,9 @@ void AlbumManager::updateChangedPAlbums()
                     album->m_date     = info.date;
 
                     // Icon changed?
-                    QString icon;
-
-                    if (info.iconAlbumRootId)
+                    if (album->m_iconId != info.iconId)
                     {
-                        QString albumRootPath = CollectionManager::instance()->albumRootPath(info.iconAlbumRootId);
-
-                        if (!albumRootPath.isNull())
-                        {
-                            icon = albumRootPath + info.iconRelativePath;
-                        }
-                    }
-
-                    if (icon != album->m_icon)
-                    {
-                        album->m_icon = icon;
+                        album->m_iconId = info.iconId;
                         emit signalAlbumIconChanged(album);
                     }
                 }
@@ -1586,19 +1565,9 @@ void AlbumManager::scanTAlbums()
             TagInfo info  = *iter;
             TAlbum* album = new TAlbum(info.name, info.id);
 
-            if (info.icon.isNull())
-            {
-                // album image icon
-                QString albumRootPath = CollectionManager::instance()->albumRootPath(info.iconAlbumRootId);
-                album->m_icon         = albumRootPath + info.iconRelativePath;
-            }
-            else
-            {
-                // system icon
-                album->m_icon = info.icon;
-            }
-
-            album->m_pid = info.pid;
+            album->m_icon   = info.icon;
+            album->m_iconId = info.iconId;
+            album->m_pid    = info.pid;
             tagHash.insert(info.id, album);
         }
 
@@ -1644,10 +1613,11 @@ void AlbumManager::scanTAlbums()
 
             if (album)
             {
-                info.id   = album->m_id;
-                info.pid  = album->m_pid;
-                info.name = album->m_title;
-                info.icon = album->m_icon;
+                info.id     = album->m_id;
+                info.pid    = album->m_pid;
+                info.name   = album->m_title;
+                info.icon   = album->m_icon;
+                info.iconId = album->m_iconId;
             }
 
             tList.append(info);
@@ -1683,8 +1653,9 @@ void AlbumManager::scanTAlbums()
         TAlbum* parent = iter.value();
 
         // Create the new TAlbum
-        TAlbum* album = new TAlbum(info.name, info.id, false);
-        album->m_icon = info.icon;
+        TAlbum* album   = new TAlbum(info.name, info.id, false);
+        album->m_icon   = info.icon;
+        album->m_iconId = info.iconId;
         insertTAlbum(album, parent);
 
         // also insert it in the map we are doing lookup of parent tags
@@ -2357,18 +2328,7 @@ bool AlbumManager::updatePAlbumIcon(PAlbum* album, qlonglong iconID, QString& er
         DatabaseAccess access;
         ChangingDB changing(d);
         access.db()->setAlbumIcon(album->id(), iconID);
-        QString iconRelativePath;
-        int iconAlbumRootId;
-
-        if (access.db()->getAlbumIcon(album->id(), &iconAlbumRootId, &iconRelativePath))
-        {
-            QString albumRootPath = CollectionManager::instance()->albumRootPath(iconAlbumRootId);
-            album->m_icon         = albumRootPath + iconRelativePath;
-        }
-        else
-        {
-            album->m_icon.clear();
-        }
+        album->m_iconId = iconID;
     }
 
     emit signalAlbumIconChanged(album);
@@ -2621,24 +2581,8 @@ bool AlbumManager::updateTAlbumIcon(TAlbum* album, const QString& iconKDE,
         ChangingDB changing(d);
         access.db()->setTagIcon(album->id(), iconKDE, iconID);
         QString albumRelativePath, iconKDE;
-        int albumRootId;
-
-        if (access.db()->getTagIcon(album->id(), &albumRootId, &albumRelativePath, &iconKDE))
-        {
-            if (iconKDE.isEmpty())
-            {
-                QString albumRootPath = CollectionManager::instance()->albumRootPath(albumRootId);
-                album->m_icon = albumRootPath + albumRelativePath;
-            }
-            else
-            {
-                album->m_icon = iconKDE;
-            }
-        }
-        else
-        {
-            album->m_icon.clear();
-        }
+        album->m_icon   = iconKDE;
+        album->m_iconId = iconID;
     }
 
     emit signalAlbumIconChanged(album);
