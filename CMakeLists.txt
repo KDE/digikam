@@ -603,7 +603,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/rawloader.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/ppmloader.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/qimageloader.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/iccjpeg.c
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/pgfloader.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/jpegsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/pngsettings.cpp
@@ -770,13 +769,14 @@ if(DIGIKAM_CAN_BE_COMPILED)
     # digikam: camera download: auto-rotated images lose EXIF info ...
     # So make sure nofinal is always used here!
     KDE4_NO_ENABLE_FINAL(libjpegutils)
-    
+
     # Define libjpeg_EXPORTS: kde-win emerged libjpeg uses this define to
     # decide wether to make dllimport (by default) or dllexport. So, we need to export.
     add_definitions(-Dlibjpeg_EXPORTS)
 
     set(libjpegutils_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/jpegutils.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/iccjpeg.c
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/${DIGIKAM_LIBJPEG_DIR}/transupp.c
        )
 
