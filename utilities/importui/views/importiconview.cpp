@@ -254,7 +254,7 @@ void ImportIconView::removeSelectedFromGroup()
     //FileActionMngr::instance()->removeFromGroup(selectedCamItemInfos());
 }
 
-void ImportIconView::slotRotateLeft(const QList<QModelIndex>& indexes)
+void ImportIconView::slotRotateLeft(const QList<QModelIndex>& /*indexes*/)
 {
     /*
     QList<ImageInfo> imageInfos;
@@ -269,7 +269,7 @@ void ImportIconView::slotRotateLeft(const QList<QModelIndex>& indexes)
     */
 }
 
-void ImportIconView::slotRotateRight(const QList<QModelIndex>& indexes)
+void ImportIconView::slotRotateRight(const QList<QModelIndex>& /*indexes*/)
 {
     /*
     QList<ImageInfo> imageInfos;
