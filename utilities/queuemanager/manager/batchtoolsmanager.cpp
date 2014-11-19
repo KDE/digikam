@@ -63,7 +63,9 @@
 #include "convert16to8.h"
 #include "border.h"
 #include "removemetadata.h"
-#include "dng.h"
+//#include "dng.h"
+#include "bqmkipiplugin.h"
+#include <kipipluginloader.h>
 
 #ifdef HAVE_JASPER
 #include "convert2jp2.h"
@@ -160,7 +162,8 @@ BatchToolsManager::BatchToolsManager()
     // Filters
     registerTool(new FilmGrain(this));
     registerTool(new ColorFX(this));
-
+    
+    addKipiTools();
 }
 
 BatchToolsManager::~BatchToolsManager()
@@ -193,10 +196,24 @@ void BatchToolsManager::registerTool(BatchTool* const tool)
     d->toolsList.append(tool);
 }
 
-void BatchToolsManager::addKipiTool(BatchTool* tool)
+void BatchToolsManager::addKipiTools()
 {
-    registerTool(tool);
-    emit toolAdded(tool);
+    KipiPluginLoader* loader = KipiPluginLoader::instance();
+    
+    PluginLoader::PluginList list = loader->listPlugins();
+    
+    for (PluginLoader::PluginList::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
+    {
+        Plugin* const plugin = (*it)->plugin();
+	if(plugin == NULL)
+	    continue;
+	
+	if(plugin->hasFeature(Embeddable))
+	{
+	      BatchTool* tool = new BqmKipiPlugin(plugin->objectName(), this);
+	      registerTool(tool);
+	}
+    }  
 }
 
 BatchTool* BatchToolsManager::findTool(const QString& name, BatchTool::BatchToolGroup group) const

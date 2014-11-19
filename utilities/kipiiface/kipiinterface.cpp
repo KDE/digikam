@@ -61,11 +61,12 @@
 #include "kipiimageinfo.h"
 #include "kipiimagecollection.h"
 #include "progressmanager.h"
-#include "dng.h"
+//#include "dng.h"
 #include "batchtool.h"
 
 namespace Digikam
 {
+KipiInterface* KipiInterface::m_instance = 0;
 
 class KipiInterface::Private
 {
@@ -88,6 +89,7 @@ KipiInterface::KipiInterface(QObject* const parent, const char* name)
 {
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
     d->albumManager    = AlbumManager::instance();
+    m_instance = this;
 
     connect(DigikamApp::instance()->view(), SIGNAL(signalSelectionChanged(int)),
             this, SLOT(slotSelectionChanged(int)));
@@ -101,8 +103,17 @@ KipiInterface::~KipiInterface()
     delete d;
 }
 
-KIPI::ImageCollection KipiInterface::currentAlbum()
+KipiInterface* KipiInterface::instance()
 {
+    return m_instance;  
+}
+
+KIPI::ImageCollection KipiInterface::currentAlbum()
+{  
+    
+    if(d->albumManager->currentAlbums().isEmpty())
+        return KIPI::ImageCollection(0);
+    
     Album* currAlbum = d->albumManager->currentAlbums().first();
 
     if (currAlbum)
@@ -119,6 +130,9 @@ KIPI::ImageCollection KipiInterface::currentAlbum()
 
 KIPI::ImageCollection KipiInterface::currentSelection()
 {
+    if(d->albumManager->currentAlbums().isEmpty())
+        return KIPI::ImageCollection(0);
+    
     Album* currAlbum = d->albumManager->currentAlbums().first();
 
     if (currAlbum)
@@ -285,13 +299,17 @@ void KipiInterface::slotCurrentAlbumChanged(QList<Album*> albums)
     emit currentAlbumChanged(!(albums.isEmpty()));
 }
 
-void KipiInterface::settingsChanged(QString pluginName,QMap<QString, QVariant> settings)
-{
+//void KipiInterface::settingsChanged(QString pluginName,QMap<QString, QVariant> settings)
+//{
+    /*
     if(pluginName == "DNGConverter")
     {
         DNG::instance()->BatchTool::slotSettingsChanged(settings);
     }
-}
+    */
+    //kDebug()<<"Is it here";
+    //emit kipiSettingsChanged(pluginName,settings);
+//}
 
 void KipiInterface::thumbnail(const KUrl& url, int /*size*/)
 {

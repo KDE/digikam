@@ -295,7 +295,7 @@ DigikamApp::DigikamApp()
     AlbumManager::instance()->startScan();
 
     // Load Plugins.
-    loadPlugins();
+    //loadPlugins();
 
     // preload additional windows
     preloadWindows();
@@ -966,16 +966,7 @@ void DigikamApp::setupActions()
     connect(d->imageAddNewQueueAction, SIGNAL(triggered()), d->view, SLOT(slotImageAddToNewQueue()));
     actionCollection()->addAction("image_add_to_new_queue", d->imageAddNewQueueAction);
 
-    // NOTE: see bug #252130 and #283281 : we need to disable these actions when BQM is running.
-
-    connect(QueueMgrWindow::queueManagerWindow(), SIGNAL(signalBqmIsBusy(bool)),
-            d->bqmAction, SLOT(setDisabled(bool)));
-
-    connect(QueueMgrWindow::queueManagerWindow(), SIGNAL(signalBqmIsBusy(bool)),
-            d->imageAddCurrentQueueAction, SLOT(setDisabled(bool)));
-
-    connect(QueueMgrWindow::queueManagerWindow(), SIGNAL(signalBqmIsBusy(bool)),
-            d->imageAddNewQueueAction, SLOT(setDisabled(bool)));
+   
 
     // -----------------------------------------------------------------
 
@@ -1359,6 +1350,18 @@ void DigikamApp::setupActions()
     populateThemes();
 
     createGUI(xmlFile());
+    
+    loadPlugins();
+     // NOTE: see bug #252130 and #283281 : we need to disable these actions when BQM is running.
+
+    connect(QueueMgrWindow::queueManagerWindow(), SIGNAL(signalBqmIsBusy(bool)),
+            d->bqmAction, SLOT(setDisabled(bool)));
+
+    connect(QueueMgrWindow::queueManagerWindow(), SIGNAL(signalBqmIsBusy(bool)),
+            d->imageAddCurrentQueueAction, SLOT(setDisabled(bool)));
+
+    connect(QueueMgrWindow::queueManagerWindow(), SIGNAL(signalBqmIsBusy(bool)),
+            d->imageAddNewQueueAction, SLOT(setDisabled(bool)));
 }
 
 void DigikamApp::initGui()
@@ -2490,13 +2493,13 @@ void DigikamApp::slotDBStat()
 
 void DigikamApp::loadPlugins()
 {
+    // Setting the initial menu options after all plugins have been loaded
+    QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
+    
 #ifdef HAVE_KIPI
     // Load KIPI plugins
     new KipiPluginLoader(this, d->splashScreen);
 #endif /* HAVE_KIPI */
-
-    // Setting the initial menu options after all plugins have been loaded
-    QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
 
     d->view->slotAlbumSelected(albumList);
 

@@ -33,6 +33,7 @@
 // LibKIPI includes
 
 #include <libkipi/plugin.h>
+#include <libkipi/embeddableplugin.h>
 #include <libkipi/pluginloader.h>
 
 class QAction;
@@ -68,7 +69,7 @@ public:
     
     /** Maintains a list of kipi plugins that are ready to be plugged
      */
-    void plugKipi();
+    //void plugKipi();
 
     /** Return the instance of action collection for all KIPI plugins.
      */

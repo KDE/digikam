@@ -139,7 +139,7 @@ void Task::run()
 
     foreach (const BatchToolSet& set, d->tools.m_toolsList)
     {
-        d->tool = BatchToolsManager::instance()->findTool(set.name, set.group)->clone();
+	d->tool = BatchToolsManager::instance()->findTool(set.name, set.group)->clone();
         inUrl   = outUrl;
         index   = set.index + 1;
 

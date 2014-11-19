@@ -36,6 +36,8 @@
 namespace Digikam
 {
 
+class BqmKipiPlugin;  
+  
 class BatchToolsManager : public QObject
 {
     Q_OBJECT
@@ -49,7 +51,7 @@ public:
     void           registerTool(BatchTool* const tool);
     BatchTool*     findTool(const QString& name, BatchTool::BatchToolGroup group) const;
     BatchToolsList toolsList() const;
-    void addKipiTool(BatchTool* tool);
+    void addKipiTools();
     
 Q_SIGNALS:
 

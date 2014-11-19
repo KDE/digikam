@@ -22,12 +22,13 @@
  *
  * ============================================================ */
 
-#include "dng.moc"
+#include "bqmkipiplugin.moc"
 
 // Qt includes
 
 #include <QFileInfo>
 #include <QWidget>
+#include <QMap>
 
 // KDE includes
 
@@ -37,34 +38,66 @@
 #include <kglobal.h>
 #include <kdebug.h>
 
+#include <kipiinterface.h>
 #include <kipipluginloader.h>
 
 namespace Digikam
 {
   
-DNG* DNG::m_instance = 0;
+//BqmKipiPlugin* BqmKipiPlugin::m_instance = 0;
 
-DNG::DNG(QObject* const parent)
-    : BatchTool("DNG", KipiTool, parent)
+BqmKipiPlugin::BqmKipiPlugin(QString name, QObject* const parent)
+    : BatchTool(name, KipiTool, parent)
 {
     setToolTitle(i18n("Convert To DNG"));
     setToolDescription(i18n("Convert RAW images to DNG format."));
-    setToolIconName("image-jp2");
-    m_instance = this;
-}
-
-DNG::~DNG()
-{
-}
-
-DNG* DNG::instance()
-{
-    return m_instance;  
-}
-
-void DNG::registerSettingsWidget()
-{
+    setToolIconName("kipi-dngconverter");
+    //m_instance = this;
+    KipiPluginLoader* loader = KipiPluginLoader::instance();
     
+    PluginLoader::PluginList list = loader->listPlugins();
+    
+    for (PluginLoader::PluginList::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
+    {
+        Plugin* const temp = (*it)->plugin();
+	
+	if(temp == NULL)
+	    continue;
+	
+	if (temp->objectName() == name)
+	{
+	    plugin = dynamic_cast<EmbeddablePlugin*>(temp);
+	    break;
+	}
+    }
+    
+    m_settingsWidget = plugin->getWidget();
+	    
+    connect(plugin, SIGNAL(kipiSettingsChanged(QString ,QMap<QString, QVariant>)),
+            this, SLOT(slotKipiSettingsChanged(QString,QMap<QString, QVariant>)));
+    
+    //connect(KipiInterface::instance(), SIGNAL(kipiSettingsChanged(QString ,QMap<QString, QVariant>)),
+    //        this, SLOT(slotKipiSettingsChanged(QString,QMap<QString, QVariant>)));
+    //registerSettingsWidget();
+}
+
+BqmKipiPlugin::~BqmKipiPlugin()
+{
+}
+
+BatchTool* BqmKipiPlugin::clone(QObject* const parent=0) const
+{
+    return new BqmKipiPlugin(this->objectName(), parent);
+}
+
+//BqmKipiPlugin* BqmKipiPlugin::instance()
+//{
+//    return m_instance;  
+//}
+
+void BqmKipiPlugin::registerSettingsWidget()
+{
+    /*
     KipiPluginLoader* loader = KipiPluginLoader::instance();
     
     PluginLoader::PluginList list = loader->listPlugins();
@@ -77,47 +110,38 @@ void DNG::registerSettingsWidget()
 	    m_settingsWidget = plugin->settingsWidget();
 	}
     }
+    */
     BatchTool::registerSettingsWidget(); 
 }
 
-BatchToolSettings DNG::defaultSettings()
+BatchToolSettings BqmKipiPlugin::defaultSettings()
 {
-    BatchToolSettings ts;
-    ts.insert("previewMode",1);
-    ts.insert("compressLossLess",true);
-    ts.insert("updateFileDate",false);
-    ts.insert("backupOriginalRawFile",false);
-    ts.insert("ConflictRule",0);
-    return ts;   
+    return plugin->defaultSettings();
 }
 
-void DNG::slotAssignSettings2Widget()
+void BqmKipiPlugin::slotAssignSettings2Widget()
 {
-    KipiPluginLoader* loader = KipiPluginLoader::instance();
-    
-    PluginLoader::PluginList list = loader->listPlugins();
-    
-    for (PluginLoader::PluginList::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
-    {
-        Plugin* const plugin = (*it)->plugin();
-	if (plugin->objectName() == QString("DNGConverter"))
-	{
-	    plugin->assignSettings(settings());
-	}
+    plugin->assignSettings(settings());
+}
+
+void BqmKipiPlugin::slotKipiSettingsChanged(QString pluginName,QMap<QString, QVariant> settings)
+{
+    if(pluginName == this->objectName())
+    { 
+        BatchTool::slotSettingsChanged(settings);  
     }
 }
 
-// call to this function is not needed so left un-defined. Instead to call this function kipiinterface function, directly slotSettingsChanged(BatchToolSettings) was called.
-void DNG::slotSettingsChanged()
+void BqmKipiPlugin::slotSettingsChanged()
 {
 }
 
-QString DNG::outputSuffix() const
+QString BqmKipiPlugin::outputSuffix() const
 {
-    return QString("dng");
+    return plugin->outputSuffix();
 }
 
-bool DNG::toolOperations()
+bool BqmKipiPlugin::toolOperations()
 {
     /*
     if (!loadToDImg())

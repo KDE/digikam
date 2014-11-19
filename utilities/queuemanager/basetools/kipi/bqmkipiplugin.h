@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2014-8-21
- * Description : Plugged Kipi DNGConverter tool
+ * Date        : 2014-11-15
+ * Description : A generic class for plugged Kipi Tools
  *
  * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2014 by Shourya Singh Gupta <shouryasgupta@gmail.com>
@@ -22,47 +22,46 @@
  *
  * ============================================================ */
 
-#ifndef DNG_H
-#define DNG_H
+#ifndef BQMKIPIPLUGIN_H
+#define BQMKIPIPLUGIN_H
 
 // Local includes
 
 #include "batchtool.h"
+#include "kipipluginloader.h"
 
 namespace Digikam
-{
-
-class DNG : public BatchTool
+{  
+  
+class BqmKipiPlugin : public BatchTool
 {
     Q_OBJECT
 
 public:
 
-    explicit DNG(QObject* const parent = 0);
-    ~DNG();
+    explicit BqmKipiPlugin(QString name, QObject* const parent = 0);
+    ~BqmKipiPlugin();
     
     QString outputSuffix() const;
     BatchToolSettings defaultSettings();
 
-    BatchTool* clone(QObject* const parent=0) const { return new DNG(parent); };
+    BatchTool* clone(QObject* const parent) const;
  
     void registerSettingsWidget();
-    
-    static DNG* instance();
    
 public Q_SLOTS:
 
     void slotAssignSettings2Widget();
     void slotSettingsChanged();
+    void slotKipiSettingsChanged(QString pluginName,QMap<QString, QVariant> settings);
     
 private:
-
-    bool toolOperations();
     
-    static DNG* m_instance;
+    EmbeddablePlugin* plugin;
+    bool toolOperations();
     
 };
 
 }  // namespace Digikam
 
-#endif /* DNG_H */
+#endif /* BQMKIPIPLUGIN_H */

@@ -52,7 +52,6 @@
 #include "splashscreen.h"
 
 #include "batchtoolsmanager.h"
-#include "dng.h"
 
 namespace Digikam
 {
@@ -214,7 +213,7 @@ KipiPluginLoader::KipiPluginLoader(QObject* const parent, SplashScreen* const sp
     d->splashScreen = splash;
 
     d->loadPlugins();
-    plugKipi();
+    //plugKipi();
 }
 
 KipiPluginLoader::~KipiPluginLoader()
@@ -223,11 +222,11 @@ KipiPluginLoader::~KipiPluginLoader()
     m_instance = 0;
 }
 
-void KipiPluginLoader::plugKipi()
-{
-    BatchToolsManager* btm = BatchToolsManager::instance();
-    btm->addKipiTool(new DNG(btm));
-}
+//void KipiPluginLoader::plugKipi()
+//{
+//    BatchToolsManager* btm = BatchToolsManager::instance();
+//    btm->addKipiTool(new DNG(btm));
+//}
 
 KipiPluginLoader* KipiPluginLoader::instance()
 {
