@@ -198,6 +198,7 @@ void EditorToolIface::unLoadTool()
 
     // Reset info label in status bar with canvas selection info.
     d->editor->slotSelected(!d->editor->m_canvas->getSelectedArea().isNull());
+    d->editor->editorStackView()->canvas()->layout()->updateZoomAndSize();
 }
 
 void EditorToolIface::setToolInfoMessage(const QString& txt)
