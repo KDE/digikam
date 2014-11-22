@@ -689,7 +689,7 @@ void TagsManager::setupActions()
 
     /** organize group **/
     d->organizeAction      = new KActionMenu(KIcon("autocorrection"),
-                                             i18n("Organize"),this);
+                                             i18nc("@title:menu", "Organize"),this);
     d->organizeAction->setDelayed(false);
 
     KAction* const resetIcon     = new KAction(KIcon("view-refresh"),

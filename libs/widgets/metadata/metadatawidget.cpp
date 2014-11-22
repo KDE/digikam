@@ -158,9 +158,9 @@ MetadataWidget::MetadataWidget(QWidget* const parent, const char* name)
     d->toolBtn->setWhatsThis(i18n("Run tool over metadata tags."));
 
     KMenu* const toolMenu         = new KMenu(d->toolBtn);
-    QAction* const saveMetadata   = toolMenu->addAction(i18n("Save in file"));
-    QAction* const printMetadata  = toolMenu->addAction(i18n("Print"));
-    QAction* const copy2ClipBoard = toolMenu->addAction(i18n("Copy to Clipboard"));
+    QAction* const saveMetadata   = toolMenu->addAction(i18nc("@action:inmenu", "Save in file"));
+    QAction* const printMetadata  = toolMenu->addAction(i18nc("@action:inmenu", "Print"));
+    QAction* const copy2ClipBoard = toolMenu->addAction(i18nc("@action:inmenu", "Copy to Clipboard"));
     d->toolBtn->setMenu(toolMenu);
 
     d->view         = new MetadataListView(this);

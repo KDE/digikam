@@ -105,7 +105,7 @@ AlbumLabelsTreeView::AlbumLabelsTreeView(QWidget* const parent, bool setCheckabl
     d->iconSize            = QSize(d->iconSizeFromSetting, d->iconSizeFromSetting);
     d->isCheckableTreeView = setCheckable;
 
-    setHeaderLabel("Labels");
+    setHeaderLabel(i18nc("@title", "Labels"));
     setUniformRowHeights(false);
     initTreeView();
 

@@ -168,7 +168,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         SearchFieldRangeDouble* const field = new SearchFieldRangeDouble(parent);
         field->setFieldName(name);
         field->setText(i18n("File Size"), i18n("Size of the file"));
-        field->setBetweenText("-");
+        field->setBetweenText(i18nc("Size of the file ...-...", "-"));
         field->setNumberPrefixAndSuffix(QString(), "MB");
         field->setBoundary(0, 1000000, 1, 0.5);
         field->setFactor(1024 * 1024);
@@ -327,7 +327,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         SearchFieldRangeDouble* const field = new SearchFieldRangeDouble(parent);
         field->setFieldName(name);
         field->setText(i18n("Aperture"), i18n("Lens aperture as f-number"));
-        field->setBetweenText("-");
+        field->setBetweenText(i18nc("Lens aperture as f-number ...-...", "-"));
         field->setNoValueText("f/#");
         field->setNumberPrefixAndSuffix("f/", QString());
         field->setBoundary(0.3, 65536, 1, 0.1);
@@ -345,7 +345,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         SearchFieldRangeInt* const field = new SearchFieldRangeInt(parent);
         field->setFieldName(name);
         field->setText(i18n("Focal length"), i18n("Focal length of the lens"));
-        field->setBetweenText("-");
+        field->setBetweenText(i18nc("Focal length of the lens ...-...", "-"));
         field->setNumberPrefixAndSuffix(QString(), "mm");
         field->setBoundary(0, 200000, 10);
         field->setSuggestedValues(QList<int>()
@@ -362,7 +362,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         SearchFieldRangeInt* const field = new SearchFieldRangeInt(parent);
         field->setFieldName(name);
         field->setText(i18n("Focal length"), i18n("35mm equivalent focal length"));
-        field->setBetweenText("-");
+        field->setBetweenText(i18nc("35mm equivalent focal length ...-...", "-"));
         field->setNumberPrefixAndSuffix(QString(), "mm");
         field->setBoundary(0, 200000, 10);
         field->setSuggestedValues(QList<int>()
@@ -379,7 +379,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         SearchFieldRangeInt* const field = new SearchFieldRangeInt(parent);
         field->setFieldName(name);
         field->setText(i18n("Exposure"), i18n("Exposure time"));
-        field->setBetweenText("-");
+        field->setBetweenText(i18nc("Exposure time ...-...", "-"));
         field->setNumberPrefixAndSuffix(QString(), "s");
         field->enableFractionMagic("1/"); // it's 1/250, not 250 as in the spin box
         field->setBoundary(86400, -1024000, 10); // negative is 1/
@@ -418,7 +418,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         SearchFieldRangeInt* const field = new SearchFieldRangeInt(parent);
         field->setFieldName(name);
         field->setText(i18n("Sensitivity"), i18n("ISO film speed (linear scale, ASA)"));
-        field->setBetweenText("-");
+        field->setBetweenText(i18nc("ISO film speed (linear scale, ASA) ...-...", "-"));
         field->setBoundary(0, 2000000, 50);
         field->setSuggestedValues(QList<int>()
                                   << 6 << 8 << 10 << 12 << 16 << 20 << 25 << 32 << 40 << 50 << 64
@@ -459,7 +459,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         SearchFieldRangeInt* const field = new SearchFieldRangeInt(parent);
         field->setFieldName(name);
         field->setText(i18n("White balance"), i18n("Color temperature used for white balance"));
-        field->setBetweenText("-");
+        field->setBetweenText(i18nc("Color temperature used for white balance ...-...", "-"));
         field->setNumberPrefixAndSuffix(QString(), "K");
         field->setBoundary(1, 100000, 100);
         return field;
@@ -480,7 +480,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         SearchFieldRangeDouble* const field = new SearchFieldRangeDouble(parent);
         field->setFieldName(name);
         field->setText(i18n("Subject Distance"), i18n("Distance of the subject from the lens"));
-        field->setBetweenText("-");
+        field->setBetweenText(i18nc("Distance of the subject from the lens ...-...", "-"));
         field->setNumberPrefixAndSuffix(QString(), "m");
         field->setBoundary(0, 50000, 1, 0.1);
         return field;
@@ -507,7 +507,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         SearchFieldRangeDouble* const field = new SearchFieldRangeDouble(parent);
         field->setFieldName(name);
         field->setText(i18n("GPS"), i18n("Altitude range"));
-        field->setBetweenText("-");
+        field->setBetweenText(i18nc("Altitude range ...-...", "-"));
         field->setNumberPrefixAndSuffix(QString(), "m");
         field->setBoundary(0, 10000, 4, 1);
         return field;
@@ -580,7 +580,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         SearchFieldRangeInt* const field = new SearchFieldRangeInt(parent);
         field->setFieldName(name);
         field->setText(i18n("Pixel Size"), i18n("Value of (Width * Height) between"));
-        field->setBetweenText("and");
+        field->setBetweenText(i18nc("Value of (Width * Height) between...and...", "and"));
         field->setNumberPrefixAndSuffix(QString(), "px");
         field->setBoundary(1, 2000000000, 100);
         return field;
