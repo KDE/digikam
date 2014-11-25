@@ -12,4 +12,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 004 ==> 340945 - libkgeomap, libmediawiki, libkvkontakte, libkface not found.
 005 ==> 338532 - Sidecar files are neither created nor updated under Windows.
 006 ==> 335661 - CANVAS : image is displayed with wrong magnification after crop.
-007 ==> 
+007 ==> 338996 - CANVAS : Selection coordinates/size do not show either during selection or update when using selection area adjust controls [patch].
+008 ==> 

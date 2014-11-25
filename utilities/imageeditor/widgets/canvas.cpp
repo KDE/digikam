@@ -463,6 +463,19 @@ void Canvas::slotSelected()
     }
 
     d->core->setSelectedArea(sel);
+    emit signalSelectionChanged(sel);    
+}
+
+void Canvas::slotSelectionMoved()
+{
+    QRect sel = QRect(0, 0, 0, 0);
+
+    if (d->rubber)
+    {
+        sel = calcSelectedArea();
+    }
+
+    emit signalSelectionSetText(sel);
 }
 
 QRect Canvas::calcSelectedArea() const

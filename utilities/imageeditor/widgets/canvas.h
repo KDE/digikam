@@ -147,6 +147,7 @@ Q_SIGNALS:
     void signalSavingFinished(const QString& filename, bool success);
     void signalSavingProgress(const QString& filePath, float progress);
     void signalSelectionChanged(const QRect&);
+    void signalSelectionSetText(const QRect&);
     void signalToggleOffFitToWindow();
     void signalUndoSteps(int);
     void signalRedoSteps(int);
@@ -173,6 +174,7 @@ public Q_SLOTS:
     void slotSelectAll();
     void slotSelectNone();
     void slotSelected();
+    void slotSelectionMoved();
 
 protected:
 

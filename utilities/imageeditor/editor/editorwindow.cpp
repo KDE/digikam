@@ -312,6 +312,9 @@ void EditorWindow::setupStandardConnections()
     connect(m_canvas, SIGNAL(signalSelectionChanged(QRect)),
             this, SLOT(slotSelectionChanged(QRect)));
 
+    connect(m_canvas, SIGNAL(signalSelectionSetText(QRect)),
+            this, SLOT(slotSelectionSetText(QRect)));
+
     connect(m_canvas->interface(), SIGNAL(signalFileOriginChanged(QString)),
             this, SLOT(slotFileOriginChanged(QString)));
 
@@ -1614,7 +1617,7 @@ void EditorWindow::slotSelected(bool val)
     // Update status bar
     if (val)
     {
-        setToolInfoMessage(QString("(%1, %2) (%3 x %4)").arg(sel.x()).arg(sel.y()).arg(sel.width()).arg(sel.height()));
+        slotSelectionSetText(sel);
     }
     else
     {
@@ -2739,6 +2742,12 @@ void EditorWindow::slotToggleSlideShow()
 }
 
 void EditorWindow::slotSelectionChanged(const QRect& sel)
+{
+    slotSelectionSetText(sel);
+    emit signalSelectionChanged(sel);
+}
+
+void EditorWindow::slotSelectionSetText(const QRect& sel)
 {
     setToolInfoMessage(QString("(%1, %2) (%3 x %4)").arg(sel.x()).arg(sel.y()).arg(sel.width()).arg(sel.height()));
 }
