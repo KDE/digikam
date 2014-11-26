@@ -14,4 +14,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 006 ==> 335661 - CANVAS : image is displayed with wrong magnification after crop.
 007 ==> 338996 - CANVAS : Selection coordinates/size do not show either during selection or update when using selection area adjust controls [patch].
 008 ==> 339053 - Allow the usage of arrows to move in the photo sequence when in preview [patch].
-009 ==> 
+009 ==> 205776 - Option to load full image size in preview mode does not only do what it says with RAW files [patch].
+010 ==> 
