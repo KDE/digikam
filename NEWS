@@ -16,4 +16,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 008 ==> 339053 - Allow the usage of arrows to move in the photo sequence when in preview [patch].
 009 ==> 205776 - Option to load full image size in preview mode does not only do what it says with RAW files [patch].
 010 ==> 341306 - CANVAS: no "Select All" for the second time and selection fixes after crop and auto crop [patch].
-011 ==> 
+011 ==> 341298 - libkexiv2-4.14.3/libkexiv2/kexiv2exif.cpp:934: bad if test ?
+012 ==> 
