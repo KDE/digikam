@@ -353,6 +353,9 @@ void Canvas::slotAutoCrop()
     {
         d->rubber->setVisible(false);
     }
+
+    emit signalSelected(false);
+    addRubber();
 }
 
 void Canvas::slotCrop()
@@ -371,6 +374,9 @@ void Canvas::slotCrop()
     {
         d->rubber->setVisible(false);
     }
+
+    emit signalSelected(false);
+    addRubber();
 }
 
 void Canvas::setICCSettings(const ICCSettingsContainer& cmSettings)
@@ -526,12 +532,13 @@ void Canvas::slotModified()
 
 void Canvas::slotSelectAll()
 {
-    if (!d->rubber)
+    if (d->rubber)
     {
-        d->rubber = new RubberItem(d->canvasItem);
-        d->rubber->setCanvas(this);
+        delete d->rubber;
     }
 
+    d->rubber = new RubberItem(d->canvasItem);
+    d->rubber->setCanvas(this);
     d->rubber->setRectInSceneCoordinatesAdjusted(d->canvasItem->boundingRect());
     viewport()->setMouseTracking(true);
     viewport()->update();
