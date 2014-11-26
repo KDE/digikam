@@ -649,7 +649,9 @@ void LightTableWindow::setupActions()
     // Provides a menu entry that allows showing/hiding the statusbar
     createStandardStatusBarAction();
 
-    // -- Keyboard-only actions added to <MainWindow> ------------------------------
+    // -- Keyboard-only actions ----------------------------------------------------
+
+    d->addPageUpDownActions(this, this);
 
     KAction* const altBackwardAction = new KAction(i18n("Previous Image"), this);
     actionCollection()->addAction("lighttable_backward_shift_space", altBackwardAction);

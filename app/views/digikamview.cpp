@@ -231,15 +231,13 @@ QString DigikamView::Private::userPresentableAlbumTitle(const QString& title) co
 
 void DigikamView::Private::addPageUpDownActions(DigikamView* const q, QWidget* const w)
 {
-    QShortcut* const nextImageShortcut = new QShortcut(w);
-    nextImageShortcut->setKey(Qt::Key_PageDown);
-    nextImageShortcut->setContext(Qt::WidgetWithChildrenShortcut);
-    QObject::connect(nextImageShortcut, SIGNAL(activated()), q, SLOT(slotNextItem()));
+    defineShortcut(w, Qt::Key_PageDown, q, SLOT(slotNextItem()));
+    defineShortcut(w, Qt::Key_Down,     q, SLOT(slotNextItem()));
+    defineShortcut(w, Qt::Key_Right,    q, SLOT(slotNextItem()));
 
-    QShortcut* const prevImageShortcut = new QShortcut(w);
-    prevImageShortcut->setKey(Qt::Key_PageUp);
-    prevImageShortcut->setContext(Qt::WidgetWithChildrenShortcut);
-    QObject::connect(prevImageShortcut, SIGNAL(activated()), q, SLOT(slotPrevItem()));
+    defineShortcut(w, Qt::Key_PageUp,   q, SLOT(slotPrevItem()));
+    defineShortcut(w, Qt::Key_Up,       q, SLOT(slotPrevItem()));
+    defineShortcut(w, Qt::Key_Left,     q, SLOT(slotPrevItem()));
 }
 
 // -------------------------------------------------------------------------------------------

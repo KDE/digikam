@@ -58,11 +58,13 @@
 // KDE includes
 
 #include <kdeversion.h>
-#include <kaboutdata.h>
-#include <kaction.h>
+
 #if KDE_IS_VERSION(4,1,68)
 #include <kactioncategory.h>
 #endif
+
+#include <kaboutdata.h>
+#include <kaction.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kconfig.h>
@@ -167,7 +169,8 @@ namespace Digikam
 const QString EditorWindow::CONFIG_GROUP_NAME = "ImageViewer Settings";
 
 EditorWindow::EditorWindow(const char* const name)
-    : DXmlGuiWindow(0), d(new Private)
+    : DXmlGuiWindow(0),
+      d(new Private)
 {
     setObjectName(name);
     setWindowFlags(Qt::Window);
@@ -638,14 +641,16 @@ void EditorWindow::setupStandardActions()
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
-    // -- Keyboard-only actions added to <MainWindow> ------------------------------
+    // -- Keyboard-only actions --------------------------------------------------------
 
     KAction* altBackwardAction = new KAction(i18n("Previous Image"), this);
     actionCollection()->addAction("editorwindow_backward_shift_space", altBackwardAction);
     altBackwardAction->setShortcut(KShortcut(Qt::SHIFT + Qt::Key_Space));
     connect(altBackwardAction, SIGNAL(triggered()), this, SLOT(slotBackward()));
 
-    // -- Tool control actions ------------------------------
+    d->addPageUpDownActions(this, this);
+
+    // -- Tool control actions ---------------------------------------------------------
 
     m_selectToolsAction = new KActionMenu(KIcon("applications-graphics"),
                                           i18nc("@action Select image editor tool/filter", "Select Tool"), this);

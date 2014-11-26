@@ -36,6 +36,7 @@
 
 // Local includes
 
+#include "globals.h"
 #include "imagepropertiessidebardb.h"
 #include "statusprogressbar.h"
 #include "dzoombar.h"
@@ -95,6 +96,10 @@ public:
     {
     }
 
+    void addPageUpDownActions(LightTableWindow* const q, QWidget* const w);
+
+public:
+
     bool                      autoLoadOnRightPanel;
     bool                      autoSyncPreview;
     bool                      cancelSlideShow;
@@ -146,6 +151,14 @@ public:
     ImagePropertiesSideBarDB* leftSideBar;
     ImagePropertiesSideBarDB* rightSideBar;
 };
+
+void LightTableWindow::Private::addPageUpDownActions(LightTableWindow* const q, QWidget* const w)
+{
+    defineShortcut(w, Qt::Key_Down,  q, SLOT(slotForward()));
+    defineShortcut(w, Qt::Key_Right, q, SLOT(slotForward()));
+    defineShortcut(w, Qt::Key_Up,    q, SLOT(slotBackward()));
+    defineShortcut(w, Qt::Key_Left,  q, SLOT(slotBackward()));
+}
 
 }  // namespace Digikam
 

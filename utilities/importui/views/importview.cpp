@@ -36,6 +36,7 @@
 // Local includes
 
 #include "config-digikam.h"
+#include "globals.h"
 #include "importui.h"
 #include "importiconview.h"
 #include "thumbnailsize.h"
@@ -110,19 +111,13 @@ public:
 
 void ImportView::Private::addPageUpDownActions(ImportView* const q, QWidget* const w)
 {
-    QShortcut* const nextImageShortcut = new QShortcut(w);
-    nextImageShortcut->setKey(Qt::Key_PageDown);
-    nextImageShortcut->setContext(Qt::WidgetWithChildrenShortcut);
+    defineShortcut(w, Qt::Key_PageDown, q, SLOT(slotNextItem()));
+    defineShortcut(w, Qt::Key_Down,     q, SLOT(slotNextItem()));
+    defineShortcut(w, Qt::Key_Right,    q, SLOT(slotNextItem()));
 
-    connect(nextImageShortcut, SIGNAL(activated()),
-            q, SLOT(slotNextItem()));
-
-    QShortcut* const prevImageShortcut = new QShortcut(w);
-    prevImageShortcut->setKey(Qt::Key_PageUp);
-    prevImageShortcut->setContext(Qt::WidgetWithChildrenShortcut);
-
-    connect(prevImageShortcut, SIGNAL(activated()),
-            q, SLOT(slotPrevItem()));
+    defineShortcut(w, Qt::Key_PageUp,   q, SLOT(slotPrevItem()));
+    defineShortcut(w, Qt::Key_Up,       q, SLOT(slotPrevItem()));
+    defineShortcut(w, Qt::Key_Left,     q, SLOT(slotPrevItem()));
 }
 
 ImportView::ImportView(ImportUI* const ui, ImportImageModel* const model, ImportFilterModel* const filterModel, QWidget* const parent)
@@ -265,7 +260,7 @@ void ImportView::setupConnections()
 
 /*void ImportView::connectIconViewFilter(FilterStatusBar* filterbar)
 {
-    ImageAlbumFilterModel* model = d->iconView->imageAlbumFilterModel();
+    ImageAlbumFilterModel* const model = d->iconView->imageAlbumFilterModel();
 
     connect(model, SIGNAL(filterMatches(bool)),
             filterbar, SLOT(slotFilterMatches(bool)));

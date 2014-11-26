@@ -40,6 +40,7 @@
 
 // Local includes
 
+#include "globals.h"
 #include "editorwindow.h"
 #include "versionmanager.h"
 
@@ -117,6 +118,7 @@ public:
 
     void legacyUpdateSplitterState(KConfigGroup& group);
     void plugNewVersionInFormatAction(EditorWindow* const q, KActionMenu* const menuAction, const QString& text, const QString& format);
+    void addPageUpDownActions(EditorWindow* const q, QWidget* const w);
 
 public:
 
@@ -292,6 +294,14 @@ void EditorWindow::Private::plugNewVersionInFormatAction(EditorWindow* const q, 
 
     formatMenuActionMapper->setMapping(action, format);
     menuAction->menu()->addAction(action);
+}
+
+void EditorWindow::Private::addPageUpDownActions(EditorWindow* const q, QWidget* const w)
+{
+    defineShortcut(w, Qt::Key_Down,  q, SLOT(slotForward()));
+    defineShortcut(w, Qt::Key_Right, q, SLOT(slotForward()));
+    defineShortcut(w, Qt::Key_Up,    q, SLOT(slotBackward()));
+    defineShortcut(w, Qt::Key_Left,  q, SLOT(slotBackward()));
 }
 
 }  // namespace Digikam
