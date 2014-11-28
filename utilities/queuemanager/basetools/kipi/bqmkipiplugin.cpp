@@ -46,30 +46,16 @@ namespace Digikam
   
 //BqmKipiPlugin* BqmKipiPlugin::m_instance = 0;
 
-BqmKipiPlugin::BqmKipiPlugin(QString name, QObject* const parent)
-    : BatchTool(name, KipiTool, parent)
+BqmKipiPlugin::BqmKipiPlugin(EmbeddablePlugin* plugin, QObject* const parent)
+    : BatchTool(plugin->objectName(), KipiTool, parent)
 {
-    setToolTitle(i18n("Convert To DNG"));
-    setToolDescription(i18n("Convert RAW images to DNG format."));
-    setToolIconName("kipi-dngconverter");
+    this->plugin = plugin;
+    // TODO plugin->name() should be used, but why KComponentData is not initialized at this point?
+    //setToolTitle(plugin->name());
+    setToolTitle(plugin->objectName());
+    setToolDescription(plugin->description());
+    setToolIconName(plugin->iconName());
     //m_instance = this;
-    KipiPluginLoader* loader = KipiPluginLoader::instance();
-    
-    PluginLoader::PluginList list = loader->listPlugins();
-    
-    for (PluginLoader::PluginList::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
-    {
-        Plugin* const temp = (*it)->plugin();
-	
-	if(temp == NULL)
-	    continue;
-	
-	if (temp->objectName() == name)
-	{
-	    plugin = dynamic_cast<EmbeddablePlugin*>(temp);
-	    break;
-	}
-    }
     
     m_settingsWidget = plugin->getWidget();
 	    
@@ -87,7 +73,7 @@ BqmKipiPlugin::~BqmKipiPlugin()
 
 BatchTool* BqmKipiPlugin::clone(QObject* const parent=0) const
 {
-    return new BqmKipiPlugin(this->objectName(), parent);
+    return new BqmKipiPlugin(this->plugin, parent);
 }
 
 //BqmKipiPlugin* BqmKipiPlugin::instance()
@@ -97,20 +83,7 @@ BatchTool* BqmKipiPlugin::clone(QObject* const parent=0) const
 
 void BqmKipiPlugin::registerSettingsWidget()
 {
-    /*
-    KipiPluginLoader* loader = KipiPluginLoader::instance();
-    
-    PluginLoader::PluginList list = loader->listPlugins();
-    
-    for (PluginLoader::PluginList::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
-    {
-        Plugin* const plugin = (*it)->plugin();
-	if (plugin->objectName() == QString("DNGConverter"))
-	{
-	    m_settingsWidget = plugin->settingsWidget();
-	}
-    }
-    */
+    m_settingsWidget = plugin->getWidget();
     BatchTool::registerSettingsWidget(); 
 }
 
@@ -126,10 +99,7 @@ void BqmKipiPlugin::slotAssignSettings2Widget()
 
 void BqmKipiPlugin::slotKipiSettingsChanged(QString pluginName,QMap<QString, QVariant> settings)
 {
-    if(pluginName == this->objectName())
-    { 
-        BatchTool::slotSettingsChanged(settings);  
-    }
+    BatchTool::slotSettingsChanged(settings);
 }
 
 void BqmKipiPlugin::slotSettingsChanged()

@@ -39,7 +39,7 @@ class BqmKipiPlugin : public BatchTool
 
 public:
 
-    explicit BqmKipiPlugin(QString name, QObject* const parent = 0);
+    explicit BqmKipiPlugin(EmbeddablePlugin *plugin, QObject* const parent = 0);
     ~BqmKipiPlugin();
     
     QString outputSuffix() const;

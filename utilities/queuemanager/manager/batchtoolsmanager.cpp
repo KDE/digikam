@@ -205,15 +205,24 @@ void BatchToolsManager::addKipiTools()
     for (PluginLoader::PluginList::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
     {
         Plugin* const plugin = (*it)->plugin();
-	if(plugin == NULL)
-	    continue;
+        if(plugin == NULL) {
+            kWarning() << "got a null plugin from kipi..";
+            continue;
+        }
 	
-	if(plugin->hasFeature(Embeddable))
-	{
-	      BatchTool* tool = new BqmKipiPlugin(plugin->objectName(), this);
-	      registerTool(tool);
-	}
-    }  
+        if(plugin->hasFeature(Embeddable))
+        {
+            EmbeddablePlugin* const embeddable = qobject_cast<EmbeddablePlugin*>(plugin);
+            if(embeddable == NULL) {
+                kWarning() << "Unable to cast the plugin to embeddableplugin, incorrect features entry on a plugin?";
+                continue;
+            }
+
+            BatchTool* tool = new BqmKipiPlugin(embeddable, this);
+            kDebug() << "registering " << plugin->objectName();
+            registerTool(tool);
+        }
+    }
 }
 
 BatchTool* BatchToolsManager::findTool(const QString& name, BatchTool::BatchToolGroup group) const
