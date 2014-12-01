@@ -2423,7 +2423,7 @@ void ImportUI::autoRotateItems()
     {
         //TODO: Needs test for Gphoto items.
         // make ImageInfo up to date
-        id = scanner.scanFile(downloadUrl, CollectionScanner::Rescan);
+        id = scanner.scanFile(downloadUrl, CollectionScanner::NormalScan);
         list << ImageInfo(id);
     }
 
