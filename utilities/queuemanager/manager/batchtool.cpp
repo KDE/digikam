@@ -137,8 +137,10 @@ BatchTool::BatchTool(const QString& name, BatchToolGroup group, QObject* const p
 
 BatchTool::~BatchTool()
 {
+    // See bug #341566: to prevent crash, we need to delete later the settings widget.
+    m_settingsWidget->deleteLater();
+
     delete d->observer;
-    delete m_settingsWidget;
     delete d;
 }
 
