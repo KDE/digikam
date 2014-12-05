@@ -2458,9 +2458,9 @@ bool ImportUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
         }
     }
 
-    // looks like the directory does not exist, try to create it
-
-    PAlbum* const parent = AlbumManager::instance()->findPAlbum(parentURL);
+    // looks like the directory does not exist, try to create it.
+    // First we make sure that the parent exists.
+    PAlbum* parent = AlbumManager::instance()->findPAlbum(parentURL);
 
     if (!parent)
     {
@@ -2468,7 +2468,24 @@ bool ImportUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
         return false;
     }
 
-    return AlbumManager::instance()->createPAlbum(parent, sub, QString(), date, QString(), errMsg);
+    // Create the album, with any parent albums required for the structure
+    KUrl albumUrl(parentURL);
+    foreach (const QString& folder, sub.split(QChar('/'), QString::SkipEmptyParts))
+    {
+        albumUrl.cd(folder);
+        PAlbum* album = AlbumManager::instance()->findPAlbum(albumUrl);
+        if (!album)
+        {
+            album = AlbumManager::instance()->createPAlbum(parent, folder, QString(), date, QString(), errMsg);
+            if (!album)
+            {
+                return false;
+            }
+        }
+        parent = album;
+    }
+
+    return true;
 }
 
 void ImportUI::slotEditKeys()

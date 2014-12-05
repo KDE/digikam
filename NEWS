@@ -22,4 +22,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 014 ==> 320564 - CANVAS : full image dimensions not shown when not viewing at 100% zoom level.
 015 ==> 341053 - Text Filter broken [patch].
 016 ==> 341566 - digiKam crashed after closing when BQM was used before.
-017 ==> 
+017 ==> 294602 - Allow sub-subfolders when importing, thanks Jimmy for the patch.
+018 ==> 
