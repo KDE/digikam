@@ -397,6 +397,10 @@ void DRawDecoding::decodingSettingsToXml(const RawDecodingSettings& prm, QDomEle
     data.setAttribute(QString::fromLatin1("value"), prm.autoBrightness);
     elm.appendChild(data);
 
+    data = doc.createElement(QString::fromLatin1("fixcolorshighlights"));
+    data.setAttribute(QString::fromLatin1("value"), prm.fixColorsHighlights);
+    elm.appendChild(data);
+
     data = doc.createElement(QString::fromLatin1("sixteenbitsimage"));
     data.setAttribute(QString::fromLatin1("value"), prm.sixteenBitsImage);
     elm.appendChild(data);
@@ -564,6 +568,10 @@ void DRawDecoding::decodingSettingsFromXml(const QDomElement& elm, RawDecodingSe
         if (key == "autobrightness")
         {
             prm.autoBrightness = (bool)val.toInt(&ok);
+        }
+        else if (key == "fixcolorshighlights")
+        {
+            prm.fixColorsHighlights = (bool)val.toInt(&ok);
         }
         else if (key == "sixteenbitsimage")
         {
