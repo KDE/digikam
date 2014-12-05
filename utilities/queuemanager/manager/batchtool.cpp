@@ -137,8 +137,9 @@ BatchTool::BatchTool(const QString& name, BatchToolGroup group, QObject* const p
 
 BatchTool::~BatchTool()
 {
-    // See bug #341566: to prevent crash, we need to delete later the settings widget.
-    m_settingsWidget->deleteLater();
+    // NOTE: See bug #341566: no need to delete settings widget here.
+    // Owner is passed to ToolSettingsView, which will delete instance,
+    // even if Valgrind report a memory leak.
 
     delete d->observer;
     delete d;
