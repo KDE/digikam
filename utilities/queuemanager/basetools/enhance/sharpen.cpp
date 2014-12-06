@@ -189,7 +189,7 @@ bool Sharpen::toolOperations()
 
         case SharpContainer::UnsharpMask:
         {
-            int r     = (int)settings()["UnsharpMaskRadius"].toDouble();
+            double r     = settings()["UnsharpMaskRadius"].toDouble();
             double a  = settings()["UnsharpMaskAmount"].toDouble();
             double th = settings()["UnsharpMaskThreshold"].toDouble();
 

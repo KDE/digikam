@@ -204,7 +204,7 @@ FilterAction UnsharpMaskFilter::filterAction()
 void UnsharpMaskFilter::readParameters(const FilterAction& action)
 {
     m_amount    = action.parameter("amount").toDouble();
-    m_radius    = action.parameter("radius").toInt();
+    m_radius    = action.parameter("radius").toDouble();
     m_threshold = action.parameter("threshold").toDouble();
 }
 
