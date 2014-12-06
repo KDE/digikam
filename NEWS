@@ -3,6 +3,8 @@ digiKam 4.6.0 - Release date: 2014-12-14
 
 NEW FEATURES:
 
+Import : Allow sub-subfolders auto creation while importing.
+BQM    : Allow to save/load Workflow from tools context menu.
 
 BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 
@@ -22,6 +24,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 014 ==> 320564 - CANVAS : full image dimensions not shown when not viewing at 100% zoom level.
 015 ==> 341053 - Text Filter broken [patch].
 016 ==> 341566 - digiKam crashed after closing when BQM was used before.
-017 ==> 294602 - Allow sub-subfolders when importing, thanks Jimmy for the patch.
-018 ==> 339108 - Don't crash if the last used album doesn't exist.
+017 ==> 294602 - Sub sub-folders separated with '/' in file path cannot be created with album selection dialog [patch].
+018 ==> 339108 - Segfault trying to download photos.
 019 ==> 
