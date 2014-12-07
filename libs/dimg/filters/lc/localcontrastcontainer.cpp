@@ -60,14 +60,14 @@ LocalContrastContainer::~LocalContrastContainer()
 {
 }
 
-float LocalContrastContainer::getPower(int nstage) const
+double LocalContrastContainer::getPower(int nstage) const
 {
     float power = stage[nstage].power;
     power       = (float)(qPow(power / 100.0, 1.5) * 100.0);
     return power;
 }
 
-float LocalContrastContainer::getBlur(int nstage) const
+double LocalContrastContainer::getBlur(int nstage) const
 {
     return stage[nstage].blur;
 }

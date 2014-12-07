@@ -43,8 +43,8 @@ public:
     LocalContrastContainer();
     ~LocalContrastContainer();
 
-    float getPower(int nstage)  const;
-    float getBlur(int nstage)   const;
+    double getPower(int nstage)  const;
+    double getBlur(int nstage)   const;
 
 public:
 
@@ -57,8 +57,8 @@ public:
     struct
     {
         bool  enabled;
-        float power;
-        float blur;
+        double power;
+        double blur;
     }
     stage[TONEMAPPING_MAX_STAGES];
 };
