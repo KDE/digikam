@@ -26,4 +26,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 016 ==> 341566 - digiKam crashed after closing when BQM was used before.
 017 ==> 294602 - Sub sub-folders separated with '/' in file path cannot be created with album selection dialog [patch].
 018 ==> 339108 - Segfault trying to download photos.
-019 ==> 
+019 ==> 338367 - CANVAS : unable to zoom out to less than fit to window [patch].
+020 ==> 

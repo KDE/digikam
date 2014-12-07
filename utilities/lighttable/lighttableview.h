@@ -119,6 +119,8 @@ private Q_SLOTS:
 
     void slotLeftContentsMoved(int, int);
     void slotRightContentsMoved(int, int);
+    void slotLeftZoomFactorChanged(double);
+    void slotRightZoomFactorChanged(double);
     void slotLeftPreviewLoaded(bool);
     void slotRightPreviewLoaded(bool);
     void slotDeleteLeftItem();

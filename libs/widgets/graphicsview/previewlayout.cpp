@@ -206,6 +206,15 @@ void SinglePhotoPreviewLayout::setZoomFactor(double z, const QPoint& givenAnchor
     d->isFitToWindow = false;
     d->previousZoom  = d->zoomSettings()->zoomFactor();
 
+    if (z < minZoomFactor())
+    {
+        setMinZoomFactor(z);
+    }
+    else if (z > maxZoomFactor())
+    {
+        setMaxZoomFactor(z);
+    }
+
     d->zoomSettings()->setZoomFactor(z);
     d->item->sizeHasChanged();
     updateLayout();
@@ -302,8 +311,11 @@ void SinglePhotoPreviewLayout::updateZoomAndSize()
     // Set zoom for fit-in-window as minimum, but don't scale up images
     // that are smaller than the available space, only scale down.
     double fitZoom = d->zoomSettings()->fitToSizeZoomFactor(d->frameSize(), ImageZoomSettings::OnlyScaleDown);
-    setMinZoomFactor(fitZoom);
-    setMaxZoomFactor(12.0);
+
+    if (fitZoom < minZoomFactor() && fitZoom >= 0.01)
+    {
+        setMinZoomFactor(fitZoom);
+    }
 
     // Is currently the zoom factor set to fit to window? Then set it again to fit the new size.
     if (zoomFactor() <= fitZoom || d->isFitToWindow)

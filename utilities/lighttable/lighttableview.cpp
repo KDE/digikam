@@ -109,7 +109,7 @@ LightTableView::LightTableView(QWidget* const parent)
             this, SIGNAL(signalLeftPopupTagsView()));
 
     connect(d->leftPreview->layout(), SIGNAL(zoomFactorChanged(double)),
-            this, SIGNAL(signalLeftZoomFactorChanged(double)));
+            this, SLOT(slotLeftZoomFactorChanged(double)));
 
     connect(d->leftPreview, SIGNAL(contentsMoving(int,int)),
             this, SLOT(slotLeftContentsMoved(int,int)));
@@ -135,7 +135,7 @@ LightTableView::LightTableView(QWidget* const parent)
             this, SIGNAL(signalRightPopupTagsView()));
 
     connect(d->rightPreview->layout(), SIGNAL(zoomFactorChanged(double)),
-            this, SIGNAL(signalRightZoomFactorChanged(double)));
+            this, SLOT(slotRightZoomFactorChanged(double)));
 
     connect(d->rightPreview, SIGNAL(contentsMoving(int,int)),
             this, SLOT(slotRightContentsMoved(int,int)));
@@ -174,6 +174,7 @@ void LightTableView::setSyncPreview(bool sync)
     // Left panel like a reference to resync preview.
     if (d->syncPreview)
     {
+        slotLeftZoomFactorChanged(d->leftPreview->layout()->zoomFactor());
         slotLeftContentsMoved(d->leftPreview->contentsX(),
                               d->leftPreview->contentsY());
     }
@@ -305,21 +306,9 @@ void LightTableView::slotLeftContentsMoved(int x, int y)
 {
     if (d->syncPreview && !leftPreviewLoading())
     {
-        disconnect(d->rightPreview->layout(), SIGNAL(zoomFactorChanged(double)),
-                   this, SIGNAL(signalRightZoomFactorChanged(double)));
-
-        disconnect(d->rightPreview, SIGNAL(contentsMoving(int,int)),
-                   this, SLOT(slotRightContentsMoved(int,int)));
-
-        setRightZoomFactor(d->leftPreview->layout()->zoomFactor());
-        emit signalRightZoomFactorChanged(d->leftPreview->layout()->zoomFactor());
+        d->rightPreview->blockSignals(true);
         d->rightPreview->setContentsPos(x, y);
-
-        connect(d->rightPreview->layout(), SIGNAL(zoomFactorChanged(double)),
-                this, SIGNAL(signalRightZoomFactorChanged(double)));
-
-        connect(d->rightPreview, SIGNAL(contentsMoving(int,int)),
-                this, SLOT(slotRightContentsMoved(int,int)));
+        d->rightPreview->blockSignals(false);
     }
 }
 
@@ -327,23 +316,44 @@ void LightTableView::slotRightContentsMoved(int x, int y)
 {
     if (d->syncPreview && !rightPreviewLoading())
     {
-        disconnect(d->leftPreview->layout(), SIGNAL(zoomFactorChanged(double)),
-                   this, SIGNAL(signalLeftZoomFactorChanged(double)));
-
-        disconnect(d->leftPreview, SIGNAL(contentsMoving(int,int)),
-                   this, SLOT(slotLeftContentsMoved(int,int)));
-
-
-        setLeftZoomFactor(d->rightPreview->layout()->zoomFactor());
-        emit signalLeftZoomFactorChanged(d->rightPreview->layout()->zoomFactor());
+        d->leftPreview->blockSignals(true);
         d->leftPreview->setContentsPos(x, y);
-
-        connect(d->leftPreview->layout(), SIGNAL(zoomFactorChanged(double)),
-                this, SIGNAL(signalLeftZoomFactorChanged(double)));
-
-        connect(d->leftPreview, SIGNAL(contentsMoving(int,int)),
-                this, SLOT(slotLeftContentsMoved(int,int)));
+        d->leftPreview->blockSignals(false);
     }
+}
+
+void LightTableView::slotLeftZoomFactorChanged(double zoom)
+{
+    if (d->syncPreview && !leftPreviewLoading())
+    {
+        d->rightPreview->layout()->blockSignals(true);
+        d->rightPreview->blockSignals(true);
+
+        setRightZoomFactor(zoom);
+        emit signalRightZoomFactorChanged(zoom);
+
+        d->rightPreview->blockSignals(false);
+        d->rightPreview->layout()->blockSignals(false);
+    }
+
+    emit signalLeftZoomFactorChanged(zoom);
+}
+
+void LightTableView::slotRightZoomFactorChanged(double zoom)
+{
+    if (d->syncPreview && !rightPreviewLoading())
+    {
+        d->leftPreview->layout()->blockSignals(true);
+        d->leftPreview->blockSignals(true);
+
+        setLeftZoomFactor(zoom);
+        emit signalLeftZoomFactorChanged(zoom);
+
+        d->leftPreview->blockSignals(false);
+        d->leftPreview->layout()->blockSignals(false);
+    }
+
+    emit signalRightZoomFactorChanged(zoom);
 }
 
 ImageInfo LightTableView::leftImageInfo() const
