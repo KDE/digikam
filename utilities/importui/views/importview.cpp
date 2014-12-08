@@ -213,12 +213,6 @@ void ImportView::setupConnections()
     connect(d->iconView, SIGNAL(previewRequested(CamItemInfo,bool)),
             this, SLOT(slotTogglePreviewMode(CamItemInfo,bool)));
 
-    connect(d->iconView, SIGNAL(zoomOutStep()),
-            this, SLOT(slotZoomOut()));
-
-    connect(d->iconView, SIGNAL(zoomInStep()),
-            this, SLOT(slotZoomIn()));
-
     // -- Preview image widget Connections ------------------------
 
     connect(d->stackedView, SIGNAL(signalNextItem()),

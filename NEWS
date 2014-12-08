@@ -27,4 +27,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 017 ==> 294602 - Sub sub-folders separated with '/' in file path cannot be created with album selection dialog [patch].
 018 ==> 339108 - Segfault trying to download photos.
 019 ==> 338367 - CANVAS : unable to zoom out to less than fit to window [patch].
-020 ==> 
+020 ==> 341671 - IMPORT: Zoom Out and Zoom In button in preview mode working not [patch].
+021 ==> 

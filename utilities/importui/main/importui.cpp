@@ -573,14 +573,14 @@ void ImportUI::setupActions()
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
-    d->increaseThumbsAction = KStandardAction::zoomIn(this, SLOT(slotIncreaseThumbSize()), this);
+    d->increaseThumbsAction = KStandardAction::zoomIn(d->view, SLOT(slotZoomIn()), this);
     d->increaseThumbsAction->setEnabled(false);
     KShortcut keysPlus      = d->increaseThumbsAction->shortcut();
     keysPlus.setAlternate(Qt::Key_Plus);
     d->increaseThumbsAction->setShortcut(keysPlus);
     actionCollection()->addAction("importui_zoomplus", d->increaseThumbsAction);
 
-    d->decreaseThumbsAction = KStandardAction::zoomOut(this, SLOT(slotDecreaseThumbSize()), this);
+    d->decreaseThumbsAction = KStandardAction::zoomOut(d->view, SLOT(slotZoomOut()), this);
     d->decreaseThumbsAction->setEnabled(false);
     KShortcut keysMinus     = d->decreaseThumbsAction->shortcut();
     keysMinus.setAlternate(Qt::Key_Minus);
@@ -1120,18 +1120,6 @@ void ImportUI::slotBusy(bool val)
         // TODO see if this can be enabled too, except while downloading..
         d->advBox->setEnabled(false);
     }
-}
-
-void ImportUI::slotIncreaseThumbSize()
-{
-    int thumbSize = d->view->thumbnailSize().size() + ThumbnailSize::Step;
-    d->view->setThumbSize(thumbSize);
-}
-
-void ImportUI::slotDecreaseThumbSize()
-{
-    int thumbSize = d->view->thumbnailSize().size() - ThumbnailSize::Step;
-    d->view->setThumbSize(thumbSize);
 }
 
 void ImportUI::slotZoomSliderChanged(int size)
