@@ -30,4 +30,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 020 ==> 341671 - IMPORT: Zoom Out and Zoom In button in preview mode working not [patch].
 021 ==> 338224 - Inconsistent "Zoom to 100%" shortcut behavior between Preview Mode and Image Editor.
 022 ==> 263550 - CANVAS : image shifts position in mouse-over mode when changing between Before and After.
-023 ==> 
+023 ==> 333929 - Target ICC profile is common to all queues from BQM.
+024 ==> 

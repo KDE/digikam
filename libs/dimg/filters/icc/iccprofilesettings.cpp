@@ -138,7 +138,7 @@ void IccProfilesSettings::resetToDefault()
 
 IccProfile IccProfilesSettings::defaultProfile() const
 {
-    return d->profilesBox->itemData(-1).value<IccProfile>();
+    return d->profilesBox->itemData(0).value<IccProfile>();
 }
 
 void IccProfilesSettings::readSettings(KConfigGroup& group)
