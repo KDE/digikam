@@ -31,4 +31,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 021 ==> 338224 - Inconsistent "Zoom to 100%" shortcut behavior between Preview Mode and Image Editor.
 022 ==> 263550 - CANVAS : image shifts position in mouse-over mode when changing between Before and After.
 023 ==> 333929 - Target ICC profile is common to all queues from BQM.
-024 ==> 
+024 ==> 323112 - Preview fails when importing images because digiKam uses a wrong path with Gphoto2 camera [patch]
+025 ==> 
