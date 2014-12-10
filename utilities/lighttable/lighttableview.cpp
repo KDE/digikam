@@ -218,12 +218,12 @@ void LightTableView::setRightZoomFactor(double z)
 
 void LightTableView::slotLeftZoomTo100()
 {
-    d->leftPreview->layout()->setZoomFactor(1.0);
+    d->leftPreview->layout()->toggleFitToWindowOr100();
 }
 
 void LightTableView::slotRightZoomTo100()
 {
-    d->rightPreview->layout()->setZoomFactor(1.0);
+    d->rightPreview->layout()->toggleFitToWindowOr100();
 }
 
 void LightTableView::slotLeftFitToWindow()

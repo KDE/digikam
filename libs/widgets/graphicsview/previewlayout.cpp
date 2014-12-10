@@ -283,7 +283,7 @@ void SinglePhotoPreviewLayout::toggleFitToWindowOr100()
         return;
     }
 
-    if (d->isFitToWindow)
+    if (d->isFitToWindow || qRound(zoomFactor() * 1000) / 1000.0 != 1.0)
     {
         setZoomFactor(1.0);
     }

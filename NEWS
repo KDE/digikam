@@ -28,4 +28,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 018 ==> 339108 - Segfault trying to download photos.
 019 ==> 338367 - CANVAS : unable to zoom out to less than fit to window [patch].
 020 ==> 341671 - IMPORT: Zoom Out and Zoom In button in preview mode working not [patch].
-021 ==> 
+021 ==> 338224 - Inconsistent "Zoom to 100%" shortcut behavior between Preview Mode and Image Editor.
+022 ==> 
