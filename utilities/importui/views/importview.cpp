@@ -673,6 +673,11 @@ void ImportView::slotImagePreview()
  */
 void ImportView::slotTogglePreviewMode(const CamItemInfo& info, bool downloadPreview)
 {
+    if (!d->parent->cameraUseUMSDriver())
+    {
+        return;
+    }
+
     if (  (d->stackedView->viewMode() == ImportStackedView::PreviewCameraMode ||
            d->stackedView->viewMode() == ImportStackedView::MapWidgetMode || downloadPreview) &&
            !info.isNull() )

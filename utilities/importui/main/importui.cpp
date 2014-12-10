@@ -2253,7 +2253,7 @@ void ImportUI::slotNewSelection(bool hasSelection)
 
     d->downloadSelectedAction->setEnabled(hasSelection);
     d->downloadDelSelectedAction->setEnabled(hasSelection && d->controller->cameraDeleteSupport());
-    d->camItemPreviewAction->setEnabled(hasSelection);
+    d->camItemPreviewAction->setEnabled(hasSelection && cameraUseUMSDriver());
     d->deleteSelectedAction->setEnabled(hasSelection && d->controller->cameraDeleteSupport());
     d->lockAction->setEnabled(hasSelection);
 
@@ -2542,6 +2542,11 @@ bool ImportUI::cameraMkDirSupport() const
 bool ImportUI::cameraDelDirSupport() const
 {
     return d->controller->cameraDelDirSupport();
+}
+
+bool ImportUI::cameraUseUMSDriver() const
+{
+    return d->controller->cameraDriverType() == DKCamera::UMSDriver;
 }
 
 void ImportUI::enableZoomPlusAction(bool val)
