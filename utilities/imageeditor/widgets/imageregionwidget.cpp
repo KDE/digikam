@@ -117,8 +117,13 @@ void ImageRegionWidget::setHighLightPoints(const QPolygon& pointsList)
 
 void ImageRegionWidget::setCapturePointMode(bool b)
 {
+    if (d_ptr->capturePtMode && b)
+    {
+        return;
+    }
+
     d_ptr->capturePtMode = b;
-    viewport()->setMouseTracking(b);
+    viewport()->setMouseTracking(!b);
 
     if (b)
     {

@@ -33,4 +33,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 023 ==> 333929 - Target ICC profile is common to all queues from BQM.
 024 ==> 323112 - Preview fails when importing images because digiKam uses a wrong path with Gphoto2 camera [patch]
 025 ==> 331224 - Sync metadata eventually slow-down computer to unusable state.
-026 ==> 
+026 ==> 338276 - CANVAS : mouse-over preview mode does not work [patch].
+027 ==> 
