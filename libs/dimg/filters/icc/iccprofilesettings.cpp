@@ -132,7 +132,7 @@ void IccProfilesSettings::setCurrentProfile(const IccProfile& prof)
 void IccProfilesSettings::resetToDefault()
 {
     blockSignals(true);
-    d->profilesBox->setCurrentIndex(-1);
+    d->profilesBox->setCurrentIndex(0);
     blockSignals(false);
 }
 
