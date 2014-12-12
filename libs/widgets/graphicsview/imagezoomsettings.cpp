@@ -121,6 +121,9 @@ double ImageZoomSettings::fitToSizeZoomFactor(const QSizeF& frameSize, FitToSize
         zoom = m_zoomConst * frameSize.height() / m_size.height();
     }
 
+    // Zoom rounding down and scroll bars are never activated.
+    zoom = floor(zoom * 100000 - 0.1) / 100000.0;
+
     if (mode == OnlyScaleDown)
     {
         // OnlyScaleDown: accept that an image is smaller than available space, don't scale up
