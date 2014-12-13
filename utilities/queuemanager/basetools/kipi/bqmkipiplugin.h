@@ -58,6 +58,7 @@ public Q_SLOTS:
 private:
     
     EmbeddablePlugin* plugin;
+    PluginLoader::Info* info;
     bool toolOperations();
     
 };

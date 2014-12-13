@@ -50,11 +50,27 @@ BqmKipiPlugin::BqmKipiPlugin(EmbeddablePlugin* plugin, QObject* const parent)
     : BatchTool(plugin->objectName(), KipiTool, parent)
 {
     this->plugin = plugin;
-    // TODO plugin->name() should be used, but why KComponentData is not initialized at this point?
-    //setToolTitle(plugin->name());
-    setToolTitle(plugin->objectName());
-    setToolDescription(plugin->description());
-    setToolIconName(plugin->iconName());
+    
+    PluginLoader::PluginList list = KipiPluginLoader::instance()->listPlugins();
+    
+    for (PluginLoader::PluginList::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
+    {
+        Plugin* const temp = (*it)->plugin();
+	if(!temp)
+	    continue;
+	if(temp->objectName() == plugin->objectName())
+	{
+	    info = *it;
+	    break;
+	}
+	else
+	  continue;
+    }
+
+    
+    setToolTitle(info->name());
+    setToolDescription(info->comment());
+    setToolIconName(info->icon().name());
     //m_instance = this;
     
     m_settingsWidget = plugin->getWidget();
