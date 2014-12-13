@@ -46,31 +46,15 @@ namespace Digikam
   
 //BqmKipiPlugin* BqmKipiPlugin::m_instance = 0;
 
-BqmKipiPlugin::BqmKipiPlugin(EmbeddablePlugin* plugin, QObject* const parent)
+BqmKipiPlugin::BqmKipiPlugin(EmbeddablePlugin* plugin, PluginLoader::Info* info, QObject* const parent)
     : BatchTool(plugin->objectName(), KipiTool, parent)
 {
     this->plugin = plugin;
+    this->info = info;
     
-    PluginLoader::PluginList list = KipiPluginLoader::instance()->listPlugins();
-    
-    for (PluginLoader::PluginList::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
-    {
-        Plugin* const temp = (*it)->plugin();
-	if(!temp)
-	    continue;
-	if(temp->objectName() == plugin->objectName())
-	{
-	    info = *it;
-	    break;
-	}
-	else
-	  continue;
-    }
-
-    
-    setToolTitle(info->name());
-    setToolDescription(info->comment());
-    setToolIconName(info->icon().name());
+    setToolTitle(this->info->name());
+    setToolDescription(this->info->comment());
+    setToolIconName(this->info->icon().name());
     //m_instance = this;
     
     m_settingsWidget = plugin->getWidget();
@@ -89,7 +73,7 @@ BqmKipiPlugin::~BqmKipiPlugin()
 
 BatchTool* BqmKipiPlugin::clone(QObject* const parent=0) const
 {
-    return new BqmKipiPlugin(this->plugin, parent);
+    return new BqmKipiPlugin(this->plugin, this->info, parent);
 }
 
 //BqmKipiPlugin* BqmKipiPlugin::instance()

@@ -218,7 +218,7 @@ void BatchToolsManager::addKipiTools()
                 continue;
             }
 
-            BatchTool* tool = new BqmKipiPlugin(embeddable, this);
+            BatchTool* tool = new BqmKipiPlugin(embeddable, *it, this);
             kDebug() << "registering " << plugin->objectName();
             registerTool(tool);
         }
