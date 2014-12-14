@@ -194,8 +194,8 @@ void Canvas::fitToSelect()
     {
         // If selected area, use center of selection
         // and recompute zoom factor accordingly.
-        //double cpx       = sel.x() + sel.width()  / 2.0;
-        //double cpy       = sel.y() + sel.height() / 2.0;
+        double cpx       = sel.x() + sel.width()  / 2.0;
+        double cpy       = sel.y() + sel.height() / 2.0;
         double srcWidth  = sel.width();
         double srcHeight = sel.height();
         double dstWidth  = contentsRect().width();
@@ -205,12 +205,12 @@ void Canvas::fitToSelect()
         emit signalToggleOffFitToWindow();
 
         layout()->setZoomFactor(zoom);
-        //emit layout()->zoomFactorChanged(zoom);
 
-        //centerOn(cpx * d->zoom, cpy * d->zoom);
+        centerOn(cpx * zoom, cpy * zoom);
         viewport()->update();
     }
 }
+
 void Canvas::applyTransform(const IccTransform& t)
 {
     IccTransform transform(t);
