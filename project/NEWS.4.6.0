@@ -1,0 +1,42 @@
+*****************************************************************************************************
+digiKam 4.6.0 - Release date: 2014-12-14
+
+NEW FEATURES:
+
+Editor : Several fixes to complete image editor canvas port to Qt4 model/view.
+General: Better support of removable media and unvavailable items.
+Import : Allow sub-subfolders auto creation while importing.
+BQM    : Allow to save/load Workflow from tools context menu.
+
+BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
+
+001 ==> 340811 - Wrap album caption.
+002 ==> 340278 - Please provide a windows build of 4.4.
+003 ==> 341031 - LibLqr detected during build but shown as not supported in components information.
+004 ==> 340945 - libkgeomap, libmediawiki, libkvkontakte, libkface not found.
+005 ==> 338532 - Sidecar files are neither created nor updated under Windows.
+006 ==> 335661 - CANVAS : image is displayed with wrong magnification after crop.
+007 ==> 338996 - CANVAS : Selection coordinates/size do not show either during selection or update when using selection area adjust controls [patch].
+008 ==> 339053 - Allow the usage of arrows to move in the photo sequence when in preview [patch].
+009 ==> 205776 - Option to load full image size in preview mode does not only do what it says with RAW files [patch].
+010 ==> 341306 - CANVAS: no "Select All" for the second time and selection fixes after crop and auto crop [patch].
+011 ==> 341298 - libkexiv2-4.14.3/libkexiv2/kexiv2exif.cpp:934: bad if test ?
+012 ==> 341470 - Better speed after downloading many pictures with auto-rotation/flip option [patch].
+013 ==> 286611 - Tags are losts randomly when converting TIFF to PNG.
+014 ==> 320564 - CANVAS : full image dimensions not shown when not viewing at 100% zoom level.
+015 ==> 341053 - Text Filter broken [patch].
+016 ==> 341566 - digiKam crashed after closing when BQM was used before.
+017 ==> 294602 - Sub sub-folders separated with '/' in file path cannot be created with album selection dialog [patch].
+018 ==> 339108 - Segfault trying to download photos.
+019 ==> 338367 - CANVAS : unable to zoom out to less than fit to window [patch].
+020 ==> 341671 - IMPORT: Zoom Out and Zoom In button in preview mode working not [patch].
+021 ==> 338224 - Inconsistent "Zoom to 100%" shortcut behavior between Preview Mode and Image Editor.
+022 ==> 263550 - CANVAS : image shifts position in mouse-over mode when changing between Before and After.
+023 ==> 333929 - Target ICC profile is common to all queues from BQM.
+024 ==> 323112 - Preview fails when importing images because digiKam uses a wrong path with Gphoto2 camera [patch]
+025 ==> 331224 - Sync metadata eventually slow-down computer to unusable state.
+026 ==> 338276 - CANVAS : mouse-over preview mode does not work [patch].
+027 ==> 341825 - Rounding down zoom for fit to windows size and it will never scroll bars be displayed [patch].
+028 ==> 326796 - When returning from edit mode to preview mode, next image not always loaded.
+029 ==> 341868 - View->Fit to Selection no centering the new selection [patch].
+030 ==> 191494 - Support search in offline collections (e.g. removable medias).
