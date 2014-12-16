@@ -6,6 +6,9 @@
 
 project(digikam)
 
+
+if (false)
+
 message(STATUS "----------------------------------------------------------------------------------")
 message(STATUS "Starting CMake configuration for: digiKam")
 
@@ -1621,4 +1624,5 @@ if(DOXYGEN_FOUND)
 
     add_custom_target(doc ${DOXYGEN_EXECUTABLE} ${DOXYFILE}
                       WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+endif()
 endif()

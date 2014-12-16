@@ -15,17 +15,17 @@ set(digikamimageplugin_fxfilters_PART_SRCS imageplugin_fxfilters.cpp
                                            filmgraintool.cpp
    )
 
-KDE4_ADD_PLUGIN(digikamimageplugin_fxfilters ${digikamimageplugin_fxfilters_PART_SRCS})
+add_library(digikamimageplugin_fxfilters MODULE ${digikamimageplugin_fxfilters_PART_SRCS})
 
 target_link_libraries(digikamimageplugin_fxfilters
                       digikamcore
 
-                      ${KDE4_KDECORE_LIBS}
-                      ${KDE4_KDEUI_LIBS}
-                      ${KDE4_KIO_LIBS}
-                      ${QT_QTCORE_LIBRARY}
-                      ${QT_QTGUI_LIBRARY}
-                      ${KDCRAW_LIBRARIES}
+                      KF5::KDELibs4Support
+                      
+                      KF5::KIOCore
+                      Qt5::Core
+                      Qt5::Gui
+                      KF5::KDcraw
                      )
 
 install(TARGETS digikamimageplugin_fxfilters             DESTINATION ${PLUGIN_INSTALL_DIR})

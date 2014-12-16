@@ -54,30 +54,30 @@ if(KGEOMAP_FOUND)
        )
 endif()
 
-KDE4_ADD_UI_FILES(digikamcore_LIB_SRCS
+ki18n_wrap_ui(digikamcore_LIB_SRCS
                   ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/printiface/printoptionspage.ui
                  )
 
-KDE4_ADD_KCFG_FILES(digikamcore_LIB_SRCS
+kconfig_add_kcfg_files(digikamcore_LIB_SRCS
                     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/printiface/digikamconfig.kcfgc
                    )
 
-KDE4_ADD_LIBRARY(digikamcore SHARED ${digikamcore_LIB_SRCS})
+add_library(digikamcore SHARED ${digikamcore_LIB_SRCS})
 
 add_dependencies(digikamcore digikam-gitversion)
 
 target_link_libraries(digikamcore
-                      ${QT_QTSQL_LIBRARY}
+                      Qt5::Sql
 
-                      ${KDE4_KDECORE_LIBS}
-                      ${KDE4_KIO_LIBS}
-                      ${KDE4_KFILE_LIBS}
-                      ${KDE4_KHTML_LIBS}
-                      ${KDE4_KNOTIFYCONFIG_LIBRARY}
-                      ${KDE4_KDEUI_LIBS}
-                      ${KDE4_KUTILS_LIBS}
-                      ${KDE4_SOLID_LIBS}
-                      ${KDE4_THREADWEAVER_LIBRARIES}
+                      KF5::KDELibs4Support
+                      KF5::KIOCore
+                      
+                      KF5::KHtml
+                      KF5::NotifyConfig
+                      
+                      
+                      
+                      KF5::ThreadWeaver
 
                       ${JPEG_LIBRARIES}
                       ${TIFF_LIBRARIES}
@@ -89,8 +89,8 @@ target_link_libraries(digikamcore
                       # Required by CImg library which is using pthread internally.
                       ${CMAKE_THREAD_LIBS_INIT}
 
-                      ${KDCRAW_LIBRARIES}
-                      ${KEXIV2_LIBRARIES}
+                      KF5::KDcraw
+                      KF5::KExiv2
                      )
 
 if(Q_WS_X11)
@@ -119,7 +119,7 @@ if(LQR-1_FOUND)
 endif()
 
 if(KIPI_FOUND)
-   target_link_libraries(digikamcore ${KIPI_LIBRARIES})
+   target_link_libraries(digikamcore KF5::Kipi)
 endif()
 
 if(KFACE_FOUND)
@@ -156,19 +156,19 @@ if(SQLITE2_FOUND)
     set(digikamdatabase_LIB_SRCS ${digikamdatabase_LIB_SRCS} ${libalbumsqlite2_SRCS})
 endif()
 
-KDE4_ADD_LIBRARY(digikamdatabase SHARED ${digikamdatabase_LIB_SRCS})
+add_library(digikamdatabase SHARED ${digikamdatabase_LIB_SRCS})
 
 target_link_libraries(digikamdatabase
                       digikamcore
-                      ${QT_QTCORE_LIBRARY}
-                      ${QT_QTGUI_LIBRARY}
-                      ${QT_QTSQL_LIBRARY}
+                      Qt5::Core
+                      Qt5::Gui
+                      Qt5::Sql
 
-                      ${KDE4_KIO_LIBS}
-                      ${KDE4_SOLID_LIBS}
+                      KF5::KIOCore
+                      
 
-                      ${KEXIV2_LIBRARIES}
-                      ${KDCRAW_LIBRARIES}
+                      KF5::KExiv2
+                      KF5::KDcraw
 
                       ${PGF_LIBRARIES}
                      )
@@ -182,7 +182,7 @@ if(KGEOMAP_FOUND)
 endif()
 
 if(Baloo_FOUND)
-    target_link_libraries(digikamdatabase ${BALOO_LIBRARIES})
+    target_link_libraries(digikamdatabase Baloo)
 endif()
 
 if(SQLITE2_FOUND)
@@ -227,11 +227,11 @@ if(KGEOMAP_FOUND)
     set(digikam_SRCS ${digikam_SRCS} ${libkgeomaphelper_SRCS} ${libgpssearch_SRCS})
 endif()
 
-QT4_ADD_DBUS_ADAPTOR(digikam_SRCS main/org.kde.digikam.xml main/digikamapp.h Digikam::DigikamApp)
+qt5_add_dbus_adaptor(digikam_SRCS main/org.kde.digikam.xml main/digikamapp.h Digikam::DigikamApp)
 
 KDE4_ADD_APP_ICON(digikam_SRCS "../data/icons/apps/hi*-app-digikam.png")
 
-KDE4_ADD_EXECUTABLE(digikam ${digikam_SRCS})
+add_executable(digikam ${digikam_SRCS})
 
 # TO fill plist XML file for OSX #####################################################
 
@@ -245,19 +245,19 @@ set_target_properties(digikam PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURREN
 
 
 target_link_libraries(digikam
-                      ${QT_QTSQL_LIBRARY}
-                      ${QT_QTTEST_LIBRARY}
+                      Qt5::Sql
+                      Qt5::Test
 
-                      ${KDE4_KPARTS_LIBS}
-                      ${KDE4_PHONON_LIBS}
-                      ${KDE4_KHTML_LIBS}
-                      ${KDE4_KUTILS_LIBS}
-                      ${KDE4_KNOTIFYCONFIG_LIBRARY}
-                      ${KDE4_SOLID_LIBS}
-                      ${KDE4_THREADWEAVER_LIBRARIES}
+                      KF5::Parts
+                      Phonon::phonon4qt5
+                      KF5::KHtml
+                      
+                      KF5::NotifyConfig
+                      
+                      KF5::ThreadWeaver
 
-                      ${KEXIV2_LIBRARIES}
-                      ${KDCRAW_LIBRARIES}
+                      KF5::KExiv2
+                      KF5::KDcraw
 
                       ${LCMS_LIBRARIES}
 
@@ -271,11 +271,11 @@ target_link_libraries(digikam
                      )
 
 if(KDEPIMLIBS_FOUND)
-  target_link_libraries(digikam ${KDE4_KABC_LIBS} ${KDEPIMLIBS_AKONADI_LIBS} ${KDEPIMLIBS_AKONADI_CONTACT_LIBS})
+  target_link_libraries(digikam ${KDE4_KABC_LIBS} KF5::AkonadiCore KF5::AkonadiContact)
 endif()
 
 if(KIPI_FOUND)
-   target_link_libraries(digikam ${KIPI_LIBRARIES})
+   target_link_libraries(digikam KF5::Kipi)
 endif()
 
 if(KFACE_FOUND)
@@ -312,4 +312,4 @@ install(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(PROGRAMS main/digikam.desktop     DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(FILES    main/digikam.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata)
 install(FILES    main/digikamui.rc        DESTINATION ${DATA_INSTALL_DIR}/digikam)
-install(FILES    main/digikam.notifyrc    DESTINATION ${DATA_INSTALL_DIR}/digikam)
+install(FILES    main/digikam.notifyrc    DESTINATION ${KNOTIFYRC_INSTALL_DIR})

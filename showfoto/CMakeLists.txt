@@ -16,7 +16,7 @@ include_directories(BEFORE
 
 #Require by Greycstoration algorithm (CImg.h)
 if(NOT MSVC)
-    add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+    kde_enable_exceptions()
 endif()
 
 set(showfoto_SRCS
@@ -44,7 +44,7 @@ set(showfoto_SRCS
 
 KDE4_ADD_APP_ICON(showfoto_SRCS "../data/icons/apps/hi*-app-showfoto.png")
 
-KDE4_ADD_EXECUTABLE(showfoto ${showfoto_SRCS})
+add_executable(showfoto ${showfoto_SRCS})
 
 # To fill plist XML file for OSX #####################################################
 
@@ -59,10 +59,10 @@ set_target_properties(showfoto PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRE
 target_link_libraries(showfoto
                       digikamcore
 
-                      ${KEXIV2_LIBRARIES}
-                      ${KDCRAW_LIBRARIES}
+                      KF5::KExiv2
+                      KF5::KDcraw
                       ${KGEOMAP_LIBRARIES}
-                      ${KDE4_KIO_LIBS}
+                      KF5::KIOCore
                       ${LCMS_LIBRARIES}
                       ${OpenCV_LIBRARIES}
                      )

@@ -11,16 +11,16 @@ set(digikamimageplugin_decorate_PART_SRCS imageplugin_decorate.cpp
                                           texturetool.cpp
    )
 
-KDE4_ADD_PLUGIN(digikamimageplugin_decorate ${digikamimageplugin_decorate_PART_SRCS})
+add_library(digikamimageplugin_decorate MODULE ${digikamimageplugin_decorate_PART_SRCS})
 
 target_link_libraries(digikamimageplugin_decorate
                       digikamcore
 
-                      ${KDE4_KDECORE_LIBS}
-                      ${KDE4_KDEUI_LIBS}
-                      ${QT_QTCORE_LIBRARY}
-                      ${QT_QTGUI_LIBRARY}
-                      ${KDCRAW_LIBRARIES}
+                      KF5::KDELibs4Support
+                      
+                      Qt5::Core
+                      Qt5::Gui
+                      KF5::KDcraw
                      )
 
 install(TARGETS digikamimageplugin_decorate             DESTINATION ${PLUGIN_INSTALL_DIR})

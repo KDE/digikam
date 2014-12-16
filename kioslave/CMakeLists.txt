@@ -10,65 +10,65 @@ SET_DEBUG_AREA_CODE(${AREA_CODE_KIOSLAVES})
 
 set(kio_digikamtags_PART_SRCS digikamtags.cpp)
 
-KDE4_ADD_PLUGIN(kio_digikamtags ${kio_digikamtags_PART_SRCS})
+add_library(kio_digikamtags MODULE ${kio_digikamtags_PART_SRCS})
 
 target_link_libraries(kio_digikamtags
                       digikamdatabase
                       digikamcore
-                      ${KDE4_KIO_LIBS}
-                      ${QT_QTCORE_LIBRARY}
+                      KF5::KIOCore
+                      Qt5::Core
                      )
 
 # # digiKam Albums kio slave #########################################################
 
 set(kio_digikamalbums_PART_SRCS digikamalbums.cpp)
 
-KDE4_ADD_PLUGIN(kio_digikamalbums ${kio_digikamalbums_PART_SRCS})
+add_library(kio_digikamalbums MODULE ${kio_digikamalbums_PART_SRCS})
 
 target_link_libraries(kio_digikamalbums
                       digikamdatabase
                       digikamcore
-                      ${KDE4_KIO_LIBS}
-                      ${QT_QTCORE_LIBRARY}
+                      KF5::KIOCore
+                      Qt5::Core
                      )
 
 # # digiKam Date kio slave ###########################################################
 
 set(kio_digikamdates_PART_SRCS digikamdates.cpp)
 
-KDE4_ADD_PLUGIN(kio_digikamdates ${kio_digikamdates_PART_SRCS})
+add_library(kio_digikamdates MODULE ${kio_digikamdates_PART_SRCS})
 
 target_link_libraries(kio_digikamdates
                       digikamdatabase
                       digikamcore
-                      ${KDE4_KIO_LIBS}
-                      ${QT_QTCORE_LIBRARY}
+                      KF5::KIOCore
+                      Qt5::Core
                      )
 
 # # digiKam MapImages kio slave ######################################################
 
 set(kio_digikammapimages_PART_SRCS digikammapimages.cpp)
 
-KDE4_ADD_PLUGIN(kio_digikammapimages ${kio_digikammapimages_PART_SRCS})
+add_library(kio_digikammapimages MODULE ${kio_digikammapimages_PART_SRCS})
 
 target_link_libraries(kio_digikammapimages
                       digikamdatabase
                       digikamcore
-                      ${KDE4_KIO_LIBS}
-                      ${QT_QTCORE_LIBRARY}
+                      KF5::KIOCore
+                      Qt5::Core
                      )
 
 # # digiKam Search kio slave #########################################################
 
 set(kio_digikamsearch_PART_SRCS digikamsearch.cpp)
 
-KDE4_ADD_PLUGIN(kio_digikamsearch ${kio_digikamsearch_PART_SRCS})
+add_library(kio_digikamsearch MODULE ${kio_digikamsearch_PART_SRCS})
 
 target_link_libraries(kio_digikamsearch
                       digikamdatabase
                       digikamcore
-                      ${KDE4_KIO_LIBS}
-                      ${QT_QTCORE_LIBRARY}
+                      KF5::KIOCore
+                      Qt5::Core
                      )
 
 # Files to install ###################################################################

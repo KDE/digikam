@@ -27,18 +27,18 @@ if(LENSFUN_FOUND)
        )
 endif()
 
-KDE4_ADD_PLUGIN(digikamimageplugin_enhance ${digikamimageplugin_enhance_PART_SRCS})
+add_library(digikamimageplugin_enhance MODULE ${digikamimageplugin_enhance_PART_SRCS})
 
 target_link_libraries(digikamimageplugin_enhance
                       digikamcore
 
-                      ${KDE4_KDECORE_LIBS}
-                      ${KDE4_KDEUI_LIBS}
-                      ${KDE4_KIO_LIBS}
-                      ${QT_QTCORE_LIBRARY}
-                      ${QT_QTGUI_LIBRARY}
-                      ${KDCRAW_LIBRARIES}
-                      ${KEXIV2_LIBRARIES}
+                      KF5::KDELibs4Support
+                      
+                      KF5::KIOCore
+                      Qt5::Core
+                      Qt5::Gui
+                      KF5::KDcraw
+                      KF5::KExiv2
                      )
 
 if(LENSFUN_FOUND)
