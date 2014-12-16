@@ -3,6 +3,8 @@ digiKam 4.6.0 - Release date: 2014-12-14
 
 NEW FEATURES:
 
+Editor : Several fixes to complete image editor canvas port to Qt4 model/view.
+General: Better support of removable media and unvavailable items.
 Import : Allow sub-subfolders auto creation while importing.
 BQM    : Allow to save/load Workflow from tools context menu.
 
@@ -37,4 +39,4 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 027 ==> 341825 - Rounding down zoom for fit to windows size and it will never scroll bars be displayed [patch].
 028 ==> 326796 - When returning from edit mode to preview mode, next image not always loaded.
 029 ==> 341868 - View->Fit to Selection no centering the new selection [patch].
-030 ==> 
+030 ==> 191494 - Support search in offline collections (e.g. removable medias).
