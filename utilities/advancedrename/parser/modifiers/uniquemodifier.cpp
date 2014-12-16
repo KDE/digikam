@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "uniquemodifier.moc"
+#include "uniquemodifier.h"
 
 // KDE includes
 

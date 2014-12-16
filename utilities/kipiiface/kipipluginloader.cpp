@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "kipipluginloader.moc"
+#include "kipipluginloader.h"
 
 // Qt includes
 

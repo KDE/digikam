@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "advancedrenameinput.moc"
+#include "advancedrenameinput.h"
 
 // Qt includes
 

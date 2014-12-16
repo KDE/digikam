@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "picklabelfilter.moc"
+#include "picklabelfilter.h"
 
 // KDE includes
 

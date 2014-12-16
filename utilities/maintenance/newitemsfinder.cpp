@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "newitemsfinder.moc"
+#include "newitemsfinder.h"
 
 // Qt includes
 

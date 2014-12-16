@@ -25,7 +25,7 @@
  *
  * ============================================================ */
 
-#include "ddateedit.moc"
+#include "ddateedit.h"
 
 // Qt includes
 

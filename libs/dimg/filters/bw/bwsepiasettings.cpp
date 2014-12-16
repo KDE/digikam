@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "bwsepiasettings.moc"
+#include "bwsepiasettings.h"
 
 // Qt includes
 

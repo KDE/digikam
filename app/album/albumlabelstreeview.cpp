@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "albumlabelstreeview.moc"
+#include "albumlabelstreeview.h"
 
 // QT includes
 

@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "batchtool.moc"
+#include "batchtool.h"
 
 // Qt includes
 

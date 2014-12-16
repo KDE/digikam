@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "ditemdelegate.moc"
+#include "ditemdelegate.h"
 
 // C++ includes
 

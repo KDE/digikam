@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "iccpreviewwidget.moc"
+#include "iccpreviewwidget.h"
 
 // Qt includes
 

@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "imagepropertiestab.moc"
+#include "imagepropertiestab.h"
 
 // Qt includes
 

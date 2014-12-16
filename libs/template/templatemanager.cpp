@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "templatemanager.moc"
+#include "templatemanager.h"
 
 // Qt includes
 

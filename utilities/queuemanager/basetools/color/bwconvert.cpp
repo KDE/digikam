@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "bwconvert.moc"
+#include "bwconvert.h"
 
 // Qt includes
 

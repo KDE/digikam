@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "categorizeditemmodel.moc"
+#include "categorizeditemmodel.h"
 
 // Qt includes
 

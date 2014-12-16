@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "tagfolderview.moc"
+#include "tagfolderview.h"
 
 // Qt includes
 

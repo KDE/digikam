@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "albumselectdialog.moc"
+#include "albumselectdialog.h"
 
 // Qt includes
 

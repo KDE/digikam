@@ -25,7 +25,7 @@
 *
 * ============================================================ */
 
-#include "importui.moc"
+#include "importui.h"
 #include "importui_p.h"
 
 // Qt includes

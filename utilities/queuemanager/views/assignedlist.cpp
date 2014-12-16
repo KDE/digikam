@@ -23,7 +23,7 @@
 
 #define ICONSIZE 32
 
-#include "assignedlist.moc"
+#include "assignedlist.h"
 
 // Qt includes
 

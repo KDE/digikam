@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "progressview.moc"
+#include "progressview.h"
 
 // Qt includes
 

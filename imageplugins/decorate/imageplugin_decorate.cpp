@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imageplugin_decorate.moc"
+#include "imageplugin_decorate.h"
 
 // KDE includes
 

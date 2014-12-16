@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "contextmenuhelper.moc"
+#include "contextmenuhelper.h"
 #include "config-digikam.h"
 
 // Qt includes

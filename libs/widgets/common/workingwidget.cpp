@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "workingwidget.moc"
+#include "workingwidget.h"
 
 // Qt includes
 

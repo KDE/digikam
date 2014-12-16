@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "searchfields.moc"
+#include "searchfields.h"
 
 // C++ includes
 

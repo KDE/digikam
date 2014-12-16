@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "kipiuploadwidget.moc"
+#include "kipiuploadwidget.h"
 
 // Qt includes
 

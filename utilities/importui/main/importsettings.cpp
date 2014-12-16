@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "importsettings.moc"
+#include "importsettings.h"
 
 // KDE includes
 

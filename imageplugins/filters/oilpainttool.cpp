@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "oilpainttool.moc"
+#include "oilpainttool.h"
 
 // Qt includes
 

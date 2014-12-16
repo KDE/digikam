@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "slidetoolbar.moc"
+#include "slidetoolbar.h"
 
 // Qt includes
 

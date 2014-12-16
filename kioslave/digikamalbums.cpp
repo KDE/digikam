@@ -27,7 +27,7 @@
  *
  * ============================================================ */
 
-#include "digikamalbums.moc"
+#include "digikamalbums.h"
 
 // Qt includes
 

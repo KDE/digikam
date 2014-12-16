@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imageversionsmodel.moc"
+#include "imageversionsmodel.h"
 
 // KDE includes
 

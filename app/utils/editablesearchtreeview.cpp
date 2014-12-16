@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "editablesearchtreeview.moc"
+#include "editablesearchtreeview.h"
 
 // Qt includes
 

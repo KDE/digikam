@@ -21,7 +21,7 @@
 *
 * ============================================================ */
 
-#include "rubberitem.moc"
+#include "rubberitem.h"
 
 namespace Digikam
 {

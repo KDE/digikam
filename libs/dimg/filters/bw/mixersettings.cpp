@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "mixersettings.moc"
+#include "mixersettings.h"
 
 // Qt includes
 

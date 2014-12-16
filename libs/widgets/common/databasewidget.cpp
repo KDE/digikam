@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "databasewidget.moc"
+#include "databasewidget.h"
 
 // Qt includes
 

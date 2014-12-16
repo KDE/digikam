@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "contentawareresizetool.moc"
+#include "contentawareresizetool.h"
 
 // C++ includes
 

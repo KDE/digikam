@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "importiconview.moc"
+#include "importiconview.h"
 #include "importiconview_p.h"
 
 // Qt includes

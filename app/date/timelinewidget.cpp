@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "timelinewidget.moc"
+#include "timelinewidget.h"
 
 // C++ includes
 

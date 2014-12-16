@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "databasefieldstest.moc"
+#include "databasefieldstest.h"
 
 // KDE includes
 

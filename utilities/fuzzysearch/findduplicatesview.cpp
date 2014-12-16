@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "findduplicatesview.moc"
+#include "findduplicatesview.h"
 
 // Qt includes
 

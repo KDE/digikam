@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "sequencenumberoption.moc"
+#include "sequencenumberoption.h"
 
 // Qt includes
 

@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "filesaveoptionsbox.moc"
+#include "filesaveoptionsbox.h"
 
 // Qt includes
 

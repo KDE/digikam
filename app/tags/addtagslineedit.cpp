@@ -26,7 +26,7 @@
  *
  * ============================================================ */
 
-#include "addtagslineedit.moc"
+#include "addtagslineedit.h"
 
 // Qt includes
 

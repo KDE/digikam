@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "importthumbnailbar.moc"
+#include "importthumbnailbar.h"
 
 // KDE includes
 

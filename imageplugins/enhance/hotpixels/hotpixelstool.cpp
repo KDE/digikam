@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "hotpixelstool.moc"
+#include "hotpixelstool.h"
 
 // Qt includes
 

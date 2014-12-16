@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "tableview_column_digikam.moc"
+#include "tableview_column_digikam.h"
 
 // Qt includes
 

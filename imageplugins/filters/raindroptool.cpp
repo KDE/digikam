@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "raindroptool.moc"
+#include "raindroptool.h"
 
 // Qt includes
 

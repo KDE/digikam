@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagedelegateoverlay.moc"
+#include "imagedelegateoverlay.h"
 
 // Qt includes
 

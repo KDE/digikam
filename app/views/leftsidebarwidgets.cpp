@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "leftsidebarwidgets.moc"
+#include "leftsidebarwidgets.h"
 
 // QT includes
 

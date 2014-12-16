@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "queuesettingsview.moc"
+#include "queuesettingsview.h"
 
 // Qt includes
 

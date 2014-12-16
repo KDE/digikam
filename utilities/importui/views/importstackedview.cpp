@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "importstackedview.moc"
+#include "importstackedview.h"
 
 // Qt includes
 

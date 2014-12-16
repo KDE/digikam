@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "thumbstask.moc"
+#include "thumbstask.h"
 
 // KDE includes
 

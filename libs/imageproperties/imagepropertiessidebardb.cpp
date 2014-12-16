@@ -25,7 +25,7 @@
  *
  * ============================================================ */
 
-#include "imagepropertiessidebardb.moc"
+#include "imagepropertiessidebardb.h"
 
 // Qt includes
 

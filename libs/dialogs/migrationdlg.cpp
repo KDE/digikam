@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "migrationdlg.moc"
+#include "migrationdlg.h"
 
 // QT includes
 

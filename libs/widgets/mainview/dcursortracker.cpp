@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "dcursortracker.moc"
+#include "dcursortracker.h"
 
 // Qt includes
 

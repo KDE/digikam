@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "gpssearchview.moc"
+#include "gpssearchview.h"
 
 // Qt includes
 

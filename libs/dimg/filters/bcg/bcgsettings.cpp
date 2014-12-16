@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "bcgsettings.moc"
+#include "bcgsettings.h"
 
 // Qt includes
 

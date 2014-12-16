@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "filepropertiesoption.moc"
+#include "filepropertiesoption.h"
 
 // Qt includes
 

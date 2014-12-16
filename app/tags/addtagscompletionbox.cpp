@@ -26,7 +26,7 @@
  *
  * ============================================================ */
 
-#include "addtagscompletionbox.moc"
+#include "addtagscompletionbox.h"
 
 // Qt includes
 

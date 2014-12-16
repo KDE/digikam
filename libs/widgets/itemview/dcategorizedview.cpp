@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "dcategorizedview.moc"
+#include "dcategorizedview.h"
 
 // Qt includes
 

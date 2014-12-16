@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "subjectedit.moc"
+#include "subjectedit.h"
 
 // Qt includes
 

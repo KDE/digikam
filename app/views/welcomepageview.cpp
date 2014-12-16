@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "welcomepageview.moc"
+#include "welcomepageview.h"
 
 // Qt includes
 

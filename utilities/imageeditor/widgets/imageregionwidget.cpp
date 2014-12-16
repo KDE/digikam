@@ -23,7 +23,7 @@
  *
  * ============================================================ */ 
 
-#include "imageregionwidget.moc"
+#include "imageregionwidget.h"
 
 // C++ includes
 

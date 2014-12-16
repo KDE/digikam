@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "searchmodificationhelper.moc"
+#include "searchmodificationhelper.h"
 
 // KDE includes
 

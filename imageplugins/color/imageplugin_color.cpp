@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "imageplugin_color.moc"
+#include "imageplugin_color.h"
 
 // KDE includes
 

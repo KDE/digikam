@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "freerotationsettings.moc"
+#include "freerotationsettings.h"
 
 // Qt includes
 

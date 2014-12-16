@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "blurfxtool.moc"
+#include "blurfxtool.h"
 
 // Qt includes
 

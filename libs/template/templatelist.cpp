@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "templatelist.moc"
+#include "templatelist.h"
 
 // Qt includes
 

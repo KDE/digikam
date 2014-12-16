@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "border.moc"
+#include "border.h"
 
 // Qt includes
 

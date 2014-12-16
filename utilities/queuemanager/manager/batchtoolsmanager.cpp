@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "batchtoolsmanager.moc"
+#include "batchtoolsmanager.h"
 
 // KDE includes
 

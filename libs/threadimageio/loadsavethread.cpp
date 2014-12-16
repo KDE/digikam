@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "loadsavethread.moc"
+#include "loadsavethread.h"
 
 // KExiv2 includes
 

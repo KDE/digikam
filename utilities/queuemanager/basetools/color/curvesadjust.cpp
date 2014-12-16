@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "curvesadjust.moc"
+#include "curvesadjust.h"
 
 // Qt includes
 

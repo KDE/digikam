@@ -25,7 +25,7 @@
  *
  * ============================================================ */
 
-#include "imagedragdrop.moc"
+#include "imagedragdrop.h"
 
 // Qt includes
 

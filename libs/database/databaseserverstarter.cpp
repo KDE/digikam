@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "databaseserverstarter.moc"
+#include "databaseserverstarter.h"
 
 // Qt includes
 

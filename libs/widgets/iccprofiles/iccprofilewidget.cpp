@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "iccprofilewidget.moc"
+#include "iccprofilewidget.h"
 
 // Qt includes
 

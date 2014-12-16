@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "profileconversiontool.moc"
+#include "profileconversiontool.h"
 
 // Qt includes
 

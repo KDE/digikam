@@ -102,7 +102,7 @@ protected:
 };
 
 // for delegate
-#include "setupcollectionview.moc"
+#include "setupcollectionview.h"
 
 // -----------------------------------------------------------------------
 

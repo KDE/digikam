@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "inserttextwidget.moc"
+#include "inserttextwidget.h"
 
 // C++ includes
 

@@ -26,7 +26,7 @@
  * ============================================================ */
 
 #include "digikamimageview_p.h"
-#include "digikamimageview.moc"
+#include "digikamimageview.h"
 
 // Qt includes
 

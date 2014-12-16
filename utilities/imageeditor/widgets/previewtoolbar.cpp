@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "previewtoolbar.moc"
+#include "previewtoolbar.h"
 
 // Qt includes
 

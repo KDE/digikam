@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "facegroup.moc"
+#include "facegroup.h"
 
 // Qt includes
 

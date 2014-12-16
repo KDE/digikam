@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "directorynameoption.moc"
+#include "directorynameoption.h"
 
 // Qt includes
 

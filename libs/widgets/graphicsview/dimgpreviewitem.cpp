@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "dimgpreviewitem.moc"
+#include "dimgpreviewitem.h"
 #include "dimgitemspriv.h"
 
 // Qt includes

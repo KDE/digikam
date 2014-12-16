@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagepropertiesversionstab.moc"
+#include "imagepropertiesversionstab.h"
 
 // Qt includes
 

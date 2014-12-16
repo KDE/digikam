@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "ratingsearchutilities.moc"
+#include "ratingsearchutilities.h"
 
 // Qt includes
 

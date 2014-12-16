@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "localcontrasttool.moc"
+#include "localcontrasttool.h"
 
 // Qt includes
 

@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "queuemgrwindow.moc"
+#include "queuemgrwindow.h"
 #include "queuemgrwindow_p.h"
 
 // Qt includes

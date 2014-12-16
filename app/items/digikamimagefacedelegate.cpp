@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "digikamimagefacedelegate.moc"
+#include "digikamimagefacedelegate.h"
 #include "imagedelegatepriv.h"
 
 // KDE includes

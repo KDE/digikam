@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "daboutdata.moc"
+#include "daboutdata.h"
 
 // Qt includes
 

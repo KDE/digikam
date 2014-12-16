@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "cameracontroller.moc"
+#include "cameracontroller.h"
 
 // C ANSI includes
 

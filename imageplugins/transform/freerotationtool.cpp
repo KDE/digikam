@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "freerotationtool.moc"
+#include "freerotationtool.h"
 
 // C++ includes
 

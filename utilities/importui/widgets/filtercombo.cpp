@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "filtercombo.moc"
+#include "filtercombo.h"
 
 // Qt includes
 

@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "restorationtool.moc"
+#include "restorationtool.h"
 
 // Qt includes
 

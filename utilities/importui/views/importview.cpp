@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "importview.moc"
+#include "importview.h"
 
 // Qt includes
 

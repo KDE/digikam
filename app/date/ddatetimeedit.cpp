@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "ddatetimeedit.moc"
+#include "ddatetimeedit.h"
 
 // Qt includes
 

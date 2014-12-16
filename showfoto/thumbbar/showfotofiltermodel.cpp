@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "showfotofiltermodel.moc"
+#include "showfotofiltermodel.h"
 
 // Local includes
 

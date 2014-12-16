@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "iptcwidget.moc"
+#include "iptcwidget.h"
 
 // Qt includes
 

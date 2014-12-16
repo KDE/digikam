@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "imagedelegate.moc"
+#include "imagedelegate.h"
 #include "imagedelegatepriv.h"
 
 // C++ includes

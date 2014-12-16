@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "albumselectors.moc"
+#include "albumselectors.h"
 
 // Qt includes
 

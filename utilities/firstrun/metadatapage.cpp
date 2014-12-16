@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "metadatapage.moc"
+#include "metadatapage.h"
 
 // Qt includes
 

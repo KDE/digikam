@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "duplicatesfinder.moc"
+#include "duplicatesfinder.h"
 
 // Qt includes
 

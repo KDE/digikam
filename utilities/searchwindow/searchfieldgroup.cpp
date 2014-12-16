@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "searchfieldgroup.moc"
+#include "searchfieldgroup.h"
 
 // Qt includes
 

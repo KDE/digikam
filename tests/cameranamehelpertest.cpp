@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "cameranamehelpertest.moc"
+#include "cameranamehelpertest.h"
 
 // KDE includes
 

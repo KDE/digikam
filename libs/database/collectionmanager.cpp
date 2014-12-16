@@ -258,7 +258,7 @@ public:
 } // namespace Digikam
 
 // This is because of the private slot; we'd want a collectionmanager_p.h
-#include "collectionmanager.moc"
+#include "collectionmanager.h"
 
 namespace Digikam
 {

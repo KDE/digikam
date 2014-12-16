@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "editorstackview.moc"
+#include "editorstackview.h"
 
 // Local includes
 

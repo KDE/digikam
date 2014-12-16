@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "fileworkeriface.moc"
+#include "fileworkeriface.h"
 
 // KDE includes
 

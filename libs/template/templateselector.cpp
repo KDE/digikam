@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "templateselector.moc"
+#include "templateselector.h"
 
 // Qt includes
 

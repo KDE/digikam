@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "albumpropsedit.moc"
+#include "albumpropsedit.h"
 
 // Qt includes
 

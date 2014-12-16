@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "cameralist.moc"
+#include "cameralist.h"
 
 // Qt includes
 

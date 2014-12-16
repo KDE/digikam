@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "dateoption.moc"
+#include "dateoption.h"
 
 // Qt includes
 

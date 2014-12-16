@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "clickdragreleaseitem.moc"
+#include "clickdragreleaseitem.h"
 
 // Qt includes
 

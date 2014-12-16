@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "metadatalistview.moc"
+#include "metadatalistview.h"
 
 // Qt includes
 

@@ -24,7 +24,7 @@
 *
 * ============================================================ */
 
-#include "assignnameoverlay.moc"
+#include "assignnameoverlay.h"
 
 // Qt includes
 

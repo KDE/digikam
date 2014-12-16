@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "dbheaderlistitem.moc"
+#include "dbheaderlistitem.h"
 
 // Qt includes
 

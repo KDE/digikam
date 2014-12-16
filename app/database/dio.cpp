@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#include "dio.moc"
-#include "dio_p.moc"
+#include "dio.h"
+#include "dio_p.h"
 
 // Qt includes
 

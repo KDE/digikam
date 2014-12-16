@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "albumselectcombobox.moc"
+#include "albumselectcombobox.h"
 
 // Qt includes
 

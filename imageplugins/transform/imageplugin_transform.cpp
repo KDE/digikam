@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imageplugin_transform.moc"
+#include "imageplugin_transform.h"
 
 // KDE includes
 

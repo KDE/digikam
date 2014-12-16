@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "baloowrap.moc"
+#include "baloowrap.h"
 
 // KDE includes
 

@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "rawsettingsbox.moc"
+#include "rawsettingsbox.h"
 
 // Qt includes
 

@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "ddatepickerpopup.moc"
+#include "ddatepickerpopup.h"
 
 // Qt includes
 

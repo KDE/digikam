@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagemodel.moc"
+#include "imagemodel.h"
 
 // Qt includes
 

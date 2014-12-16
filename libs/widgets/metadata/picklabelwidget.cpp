@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "picklabelwidget.moc"
+#include "picklabelwidget.h"
 
 // Qt includes
 

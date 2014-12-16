@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "facerejectionoverlay.moc"
+#include "facerejectionoverlay.h"
 
 // KDE includes
 

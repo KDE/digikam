@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "histogrambox.moc"
+#include "histogrambox.h"
 
 // Qt includes
 

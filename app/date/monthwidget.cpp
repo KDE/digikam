@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "monthwidget.moc"
+#include "monthwidget.h"
 
 // Qt includes
 

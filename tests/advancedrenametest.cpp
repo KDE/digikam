@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "advancedrenametest.moc"
+#include "advancedrenametest.h"
 
 // C++ includes
 

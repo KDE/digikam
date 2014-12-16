@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "charcoaltool.moc"
+#include "charcoaltool.h"
 
 // Qt includes
 

@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imageplugin_fxfilters.moc"
+#include "imageplugin_fxfilters.h"
 
 // KDE includes
 

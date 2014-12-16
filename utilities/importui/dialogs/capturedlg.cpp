@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "capturedlg.moc"
+#include "capturedlg.h"
 
 // Qt includes
 

@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "fileactionmngr_p.moc"
+#include "fileactionmngr_p.h"
 
 // KDE includes
 

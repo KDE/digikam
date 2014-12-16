@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "metadatasynchronizer.moc"
+#include "metadatasynchronizer.h"
 
 // Qt includes
 

@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "invert.moc"
+#include "invert.h"
 
 // Qt includes
 

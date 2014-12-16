@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "rawimport.moc"
+#include "rawimport.h"
 
 // Qt includes
 

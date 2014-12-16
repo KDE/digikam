@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "assistantdlg.moc"
+#include "assistantdlg.h"
 
 // KDE includes
 

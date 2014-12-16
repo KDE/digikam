@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "slideshow.moc"
+#include "slideshow.h"
 
 // Qt includes
 

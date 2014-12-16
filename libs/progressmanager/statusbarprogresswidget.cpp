@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "statusbarprogresswidget.moc"
+#include "statusbarprogresswidget.h"
 
 // Qt includes
 

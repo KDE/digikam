@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "fingerprintsgenerator.moc"
+#include "fingerprintsgenerator.h"
 
 // Qt includes
 

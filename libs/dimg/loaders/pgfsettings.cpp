@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "pgfsettings.moc"
+#include "pgfsettings.h"
 
 // Qt includes
 

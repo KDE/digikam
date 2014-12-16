@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "itemviewshowfotodelegate.moc"
+#include "itemviewshowfotodelegate.h"
 
 // Qt includes
 

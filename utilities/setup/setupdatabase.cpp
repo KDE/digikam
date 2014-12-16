@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "setupdatabase.moc"
+#include "setupdatabase.h"
 
 // Qt includes
 

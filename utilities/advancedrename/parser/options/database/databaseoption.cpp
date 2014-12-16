@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "databaseoption.moc"
+#include "databaseoption.h"
 
 // Qt includes
 

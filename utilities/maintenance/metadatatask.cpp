@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "metadatatask.moc"
+#include "metadatatask.h"
 
 // KDE includes
 

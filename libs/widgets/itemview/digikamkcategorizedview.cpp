@@ -20,7 +20,7 @@
   * Boston, MA 02110-1301, USA.
   */
 
-#include "digikamkcategorizedview.moc"
+#include "digikamkcategorizedview.h"
 /// @todo Order should be changed according to krazy2, but compilation fails. Try again later. MH
 #include "digikamkcategorizedview_p.h"
 

@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "setupcategory.moc"
+#include "setupcategory.h"
 
 // Qt includes
 

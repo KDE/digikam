@@ -24,7 +24,7 @@
 *
 * ============================================================ */
 
-#include "tagslineeditoverlay.moc"
+#include "tagslineeditoverlay.h"
 
 // Qt includes
 

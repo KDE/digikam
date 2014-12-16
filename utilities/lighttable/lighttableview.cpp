@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "lighttableview.moc"
+#include "lighttableview.h"
 
 // Qt includes
 

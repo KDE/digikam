@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "tableview_selection_model_syncer.moc"
+#include "tableview_selection_model_syncer.h"
 
 // Qt includes
 

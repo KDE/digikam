@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "filtershistorywidget.moc"
+#include "filtershistorywidget.h"
 
 // Qt includes
 

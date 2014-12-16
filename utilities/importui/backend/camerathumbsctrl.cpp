@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "camerathumbsctrl.moc"
+#include "camerathumbsctrl.h"
 
 // Qt includes
 

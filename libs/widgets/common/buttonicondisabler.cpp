@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "buttonicondisabler.moc"
+#include "buttonicondisabler.h"
 
 // Qt includes
 

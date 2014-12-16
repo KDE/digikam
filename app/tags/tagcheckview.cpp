@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "tagcheckview.moc"
+#include "tagcheckview.h"
 
 // Qt includes
 

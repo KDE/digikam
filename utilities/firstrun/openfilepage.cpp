@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "openfilepage.moc"
+#include "openfilepage.h"
 
 // Qt includes
 

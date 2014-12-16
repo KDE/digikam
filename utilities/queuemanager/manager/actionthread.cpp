@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "actionthread.moc"
+#include "actionthread.h"
 
 // KDE includes
 

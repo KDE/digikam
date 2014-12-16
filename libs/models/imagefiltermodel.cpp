@@ -25,9 +25,9 @@
  *
  * ============================================================ */
 
-#include "imagefiltermodel.moc"
-#include "imagefiltermodelpriv.moc"
-#include "imagefiltermodelthreads.moc"
+#include "imagefiltermodel.h"
+#include "imagefiltermodelpriv.h"
+#include "imagefiltermodelthreads.h"
 
 // KDE includes
 

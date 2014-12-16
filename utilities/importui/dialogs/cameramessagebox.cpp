@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "cameramessagebox.moc"
+#include "cameramessagebox.h"
 
 // Qt includes
 

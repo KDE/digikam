@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "mimefilter.moc"
+#include "mimefilter.h"
 
 // KDE includes
 

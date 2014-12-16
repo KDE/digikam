@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "tiffsettings.moc"
+#include "tiffsettings.h"
 
 // Qt includes
 

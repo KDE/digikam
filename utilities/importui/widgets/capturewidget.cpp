@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "capturewidget.moc"
+#include "capturewidget.h"
 
 // Qt includes
 

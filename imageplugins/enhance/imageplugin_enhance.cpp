@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imageplugin_enhance.moc"
+#include "imageplugin_enhance.h"
 
 // KDE includes
 

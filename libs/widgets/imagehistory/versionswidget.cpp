@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "versionswidget.moc"
+#include "versionswidget.h"
 
 // Qt includes
 

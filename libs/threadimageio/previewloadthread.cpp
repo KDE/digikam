@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "previewloadthread.moc"
+#include "previewloadthread.h"
 
 // Local includes
 

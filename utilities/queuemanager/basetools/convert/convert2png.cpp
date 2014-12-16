@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "convert2png.moc"
+#include "convert2png.h"
 
 // Qt includes
 

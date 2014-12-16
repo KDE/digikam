@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "editorcore.moc"
+#include "editorcore.h"
 
 // C++ includes
 

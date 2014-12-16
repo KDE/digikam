@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "dbkeyselector.moc"
+#include "dbkeyselector.h"
 
 // Qt includes
 

@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "scriptingsettings.moc"
+#include "scriptingsettings.h"
 
 // Qt includes
 

@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "cameranameoption.moc"
+#include "cameranameoption.h"
 
 // KDE includes
 

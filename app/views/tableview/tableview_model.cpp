@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "tableview_model.moc"
+#include "tableview_model.h"
 
 // C++ includes
 

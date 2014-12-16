@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "albumwatch.moc"
+#include "albumwatch.h"
 
 // Qt includes
 

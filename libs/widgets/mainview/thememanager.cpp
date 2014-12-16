@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "thememanager.moc"
+#include "thememanager.h"
 
 // Qt includes
 

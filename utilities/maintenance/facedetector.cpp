@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "facedetector.moc"
+#include "facedetector.h"
 
 // Qt includes
 

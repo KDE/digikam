@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "collectionscanner.moc"
+#include "collectionscanner.h"
 
 // C++ includes
 

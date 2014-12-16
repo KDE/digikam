@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "rawcameradlg.moc"
+#include "rawcameradlg.h"
 
 // Qt includes
 

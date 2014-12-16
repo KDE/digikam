@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "maintenancemngr.moc"
+#include "maintenancemngr.h"
 
 // Qt includes
 

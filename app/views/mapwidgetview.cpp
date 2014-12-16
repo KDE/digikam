@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "mapwidgetview.moc"
+#include "mapwidgetview.h"
 
 //Qt includes
 

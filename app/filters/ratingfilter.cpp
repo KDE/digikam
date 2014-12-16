@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "ratingfilter.moc"
+#include "ratingfilter.h"
 
 // Qt includes
 

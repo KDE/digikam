@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "assignnamewidget.moc"
+#include "assignnamewidget.h"
 
 // Qt includes
 

@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "slideshowbuilder.moc"
+#include "slideshowbuilder.h"
 
 // Qt includes
 

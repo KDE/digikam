@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "albumhistory.moc"
+#include "albumhistory.h"
 
 // Qt includes
 

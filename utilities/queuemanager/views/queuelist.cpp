@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "queuelist.moc"
+#include "queuelist.h"
 
 // Qt includes
 

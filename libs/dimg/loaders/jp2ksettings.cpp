@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "jp2ksettings.moc"
+#include "jp2ksettings.h"
 
 // Qt includes
 

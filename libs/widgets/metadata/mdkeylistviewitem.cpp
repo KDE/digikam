@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "mdkeylistviewitem.moc"
+#include "mdkeylistviewitem.h"
 
 // Qt includes
 

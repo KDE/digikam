@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "importiconview_p.moc"
+#include "importiconview_p.h"
 
 namespace Digikam
 {

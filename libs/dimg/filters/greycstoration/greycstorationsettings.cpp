@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "greycstorationsettings.moc"
+#include "greycstorationsettings.h"
 
 // Qt includes
 

@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagefiltershistorymodel.moc"
+#include "imagefiltershistorymodel.h"
 
 // Qt includes
 

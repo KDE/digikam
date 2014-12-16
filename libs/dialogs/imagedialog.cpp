@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagedialog.moc"
+#include "imagedialog.h"
 
 // Qt includes
 

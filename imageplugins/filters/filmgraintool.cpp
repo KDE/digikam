@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "filmgraintool.moc"
+#include "filmgraintool.h"
 
 // Qt includes
 

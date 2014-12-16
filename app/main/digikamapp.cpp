@@ -26,7 +26,7 @@
  *
  * ============================================================ */
 
-#include "digikamapp.moc"
+#include "digikamapp.h"
 /// @todo Order should be changed according to krazy2, but compilation fails. Try again later. MH
 #include "digikamapp_p.h"
 

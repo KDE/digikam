@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "convert16to8.moc"
+#include "convert16to8.h"
 
 // KDE includes
 

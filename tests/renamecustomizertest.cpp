@@ -94,7 +94,7 @@ private Q_SLOTS:
 
 
 QTEST_KDEMAIN(RenameCustomizerTest, GUI)
-#include "renamecustomizertest.moc"
+#include "renamecustomizertest.h"
 
 
 

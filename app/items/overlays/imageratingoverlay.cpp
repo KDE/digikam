@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "imageratingoverlay.moc"
+#include "imageratingoverlay.h"
 
 // Qt includes
 

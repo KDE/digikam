@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "tooltipdialog.moc"
+#include "tooltipdialog.h"
 
 // KDE includes
 

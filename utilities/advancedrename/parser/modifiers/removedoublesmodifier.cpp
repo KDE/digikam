@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "removedoublesmodifier.moc"
+#include "removedoublesmodifier.h"
 
 // Qt includes
 

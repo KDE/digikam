@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "databaseguierrorhandler.moc"
+#include "databaseguierrorhandler.h"
 
 // Qt includes
 

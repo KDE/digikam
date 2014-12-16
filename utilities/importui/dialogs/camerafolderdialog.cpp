@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "camerafolderdialog.moc"
+#include "camerafolderdialog.h"
 
 // Qt includes
 

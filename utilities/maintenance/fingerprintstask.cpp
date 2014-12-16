@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "fingerprintstask.moc"
+#include "fingerprintstask.h"
 
 // KDE includes
 

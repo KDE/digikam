@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "showfotocoordinatesoverlay.moc"
+#include "showfotocoordinatesoverlay.h"
 
 // KDE includes
 

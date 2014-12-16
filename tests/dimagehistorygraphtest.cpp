@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "dimagehistorygraphtest.moc"
+#include "dimagehistorygraphtest.h"
 
 // Qt includes
 

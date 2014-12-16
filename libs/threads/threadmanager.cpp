@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "threadmanager.moc"
+#include "threadmanager.h"
 
 // Qt includes
 

@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "groupindicatoroverlay.moc"
+#include "groupindicatoroverlay.h"
 
 // Qt includes
 

@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "channelmixer.moc"
+#include "channelmixer.h"
 
 // Qt includes
 

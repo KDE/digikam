@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "sharpentool.moc"
+#include "sharpentool.h"
 
 // C++ includes
 

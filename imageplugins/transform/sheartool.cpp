@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "sheartool.moc"
+#include "sheartool.h"
 
 // Qt includes
 

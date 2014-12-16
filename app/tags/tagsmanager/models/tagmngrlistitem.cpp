@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "tagmngrlistitem.moc"
+#include "tagmngrlistitem.h"
 
 // Qt includes
 

@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "slideosd.moc"
+#include "slideosd.h"
 
 // Qt includes
 

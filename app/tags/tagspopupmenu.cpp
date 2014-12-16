@@ -28,7 +28,7 @@
  *
  * ============================================================ */
 
-#include "tagspopupmenu.moc"
+#include "tagspopupmenu.h"
 
 // Qt includes
 

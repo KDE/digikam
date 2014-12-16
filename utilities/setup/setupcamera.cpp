@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "setupcamera.moc"
+#include "setupcamera.h"
 
 // Qt includes
 

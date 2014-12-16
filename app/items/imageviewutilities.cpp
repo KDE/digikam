@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "imageviewutilities.moc"
+#include "imageviewutilities.h"
 
 // Qt includes
 

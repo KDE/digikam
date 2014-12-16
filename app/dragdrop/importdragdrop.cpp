@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "importdragdrop.moc"
+#include "importdragdrop.h"
 
 // Qt includes
 

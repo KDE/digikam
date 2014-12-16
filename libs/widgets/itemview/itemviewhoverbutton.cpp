@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "itemviewhoverbutton.moc"
+#include "itemviewhoverbutton.h"
 
 // Qt includes
 

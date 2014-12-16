@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "syncjob.moc"
+#include "syncjob.h"
 
 // Qt includes
 

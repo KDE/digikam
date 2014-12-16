@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagequalitysorter.moc"
+#include "imagequalitysorter.h"
 
 // Qt includes
 

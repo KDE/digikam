@@ -18,7 +18,7 @@
  *
  * ============================================================ */
 
-#include "lensfuncameraselector.moc"
+#include "lensfuncameraselector.h"
 
 // Qt includes
 

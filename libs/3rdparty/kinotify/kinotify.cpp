@@ -611,4 +611,4 @@ void KInotify::slotEvent( int ) { }
 #endif // defined(Q_OS_LINUX)
 
 // must be at the bottom for Q_PRIVATE_SLOT
-#include "kinotify.moc"
+#include "kinotify.h"

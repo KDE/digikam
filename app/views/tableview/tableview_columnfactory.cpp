@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "tableview_columnfactory.moc"
+#include "tableview_columnfactory.h"
 
 // Qt includes
 

@@ -22,7 +22,7 @@
 *
 * ============================================================ */
 
-#include "regionframeitem.moc"
+#include "regionframeitem.h"
 
 // C++ includes
 

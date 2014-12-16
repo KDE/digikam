@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "facescandialog.moc"
+#include "facescandialog.h"
 
 // Qt includes
 

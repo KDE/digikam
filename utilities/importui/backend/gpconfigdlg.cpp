@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "gpconfigdlg.moc"
+#include "gpconfigdlg.h"
 
 // Qt includes
 #include <Q3Grid>

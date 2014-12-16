@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "tagsactionmngr.moc"
+#include "tagsactionmngr.h"
 
 // Qt includes
 

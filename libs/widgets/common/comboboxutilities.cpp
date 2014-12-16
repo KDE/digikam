@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "comboboxutilities.moc"
+#include "comboboxutilities.h"
 
 // Qt includes
 

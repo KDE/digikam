@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "colorgradientwidget.moc"
+#include "colorgradientwidget.h"
 
 // Qt includes
 

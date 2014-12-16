@@ -25,7 +25,7 @@
  *
  * ============================================================ */
 
-#include "filtersidebarwidget.moc"
+#include "filtersidebarwidget.h"
 
 // Qt includes
 

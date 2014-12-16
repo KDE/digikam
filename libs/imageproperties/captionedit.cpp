@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "captionedit.moc"
+#include "captionedit.h"
 
 // KDE includes
 

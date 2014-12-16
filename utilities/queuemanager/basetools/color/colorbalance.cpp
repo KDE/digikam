@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "colorbalance.moc"
+#include "colorbalance.h"
 
 // Qt includes
 

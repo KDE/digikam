@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "importfilters.moc"
+#include "importfilters.h"
 
 // KDE includes
 

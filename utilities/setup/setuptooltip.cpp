@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "setuptooltip.moc"
+#include "setuptooltip.h"
 
 // Qt includes
 

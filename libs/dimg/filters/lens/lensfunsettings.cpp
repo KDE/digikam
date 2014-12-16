@@ -18,7 +18,7 @@
  *
  * ============================================================ */
 
-#include "lensfunsettings.moc"
+#include "lensfunsettings.h"
 
 // Qt includes
 

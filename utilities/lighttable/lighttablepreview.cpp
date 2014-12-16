@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "lighttablepreview.moc"
+#include "lighttablepreview.h"
 
 // Qt includes
 

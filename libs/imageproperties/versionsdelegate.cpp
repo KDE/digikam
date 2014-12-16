@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "versionsdelegate.moc"
+#include "versionsdelegate.h"
 
 // Qt includes
 

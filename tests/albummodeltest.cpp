@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "albummodeltest.moc"
+#include "albummodeltest.h"
 
 // Qt includes
 

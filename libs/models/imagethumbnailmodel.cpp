@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "imagethumbnailmodel.moc"
+#include "imagethumbnailmodel.h"
 
 // Qt includes
 

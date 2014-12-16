@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "databaseerrorhandler.moc"
+#include "databaseerrorhandler.h"
 
 namespace Digikam
 {

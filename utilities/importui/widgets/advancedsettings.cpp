@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "advancedsettings.moc"
+#include "advancedsettings.h"
 
 // Qt includes
 

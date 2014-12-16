@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "filmtool.moc"
+#include "filmtool.h"
 
 // C++ includes
 

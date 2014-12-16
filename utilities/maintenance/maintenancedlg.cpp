@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "maintenancedlg.moc"
+#include "maintenancedlg.h"
 
 // Qt includes
 

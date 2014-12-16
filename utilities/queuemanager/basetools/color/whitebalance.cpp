@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "whitebalance.moc"
+#include "whitebalance.h"
 
 // Qt includes
 

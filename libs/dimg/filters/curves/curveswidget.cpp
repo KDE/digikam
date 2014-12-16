@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "curveswidget.moc"
+#include "curveswidget.h"
 
 // C++ includes
 

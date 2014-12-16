@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "imagethumbnaildelegate.moc"
+#include "imagethumbnaildelegate.h"
 #include "imagedelegatepriv.h"
 
 // KDE includes

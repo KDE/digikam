@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "rawloader.moc"
+#include "rawloader.h"
 
 // C++ includes
 

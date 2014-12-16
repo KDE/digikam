@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "nrsettings.moc"
+#include "nrsettings.h"
 
 // Qt includes
 

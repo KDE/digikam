@@ -272,7 +272,7 @@ private Q_SLOTS:
 // ------------------------------------------------------------------------------
 
 // for ScanControllerLoadingCacheFileWatch
-#include "scancontroller.moc"
+#include "scancontroller.h"
 
 class ScanControllerCreator
 {

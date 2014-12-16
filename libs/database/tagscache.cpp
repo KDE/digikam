@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "tagscache.moc"
+#include "tagscache.h"
 
 // Qt includes
 

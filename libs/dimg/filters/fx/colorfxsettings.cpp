@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "colorfxsettings.moc"
+#include "colorfxsettings.h"
 
 // Qt includes
 

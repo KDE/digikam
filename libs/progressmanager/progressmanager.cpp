@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "progressmanager.moc"
+#include "progressmanager.h"
 
 // Qt includes
 

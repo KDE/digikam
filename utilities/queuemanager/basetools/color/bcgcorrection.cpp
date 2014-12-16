@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "bcgcorrection.moc"
+#include "bcgcorrection.h"
 
 // Qt includes
 

@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "hslcorrection.moc"
+#include "hslcorrection.h"
 
 // Qt includes
 

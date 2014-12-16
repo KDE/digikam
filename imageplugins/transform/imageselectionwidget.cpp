@@ -35,7 +35,7 @@
 // 1/PHI
 #define INVPHI   0.61803398874989479F
 
-#include "imageselectionwidget.moc"
+#include "imageselectionwidget.h"
 
 // C++ includes
 

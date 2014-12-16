@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "texturetool.moc"
+#include "texturetool.h"
 
 // Qt includes
 

@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "importthumbnailmodel.moc"
+#include "importthumbnailmodel.h"
 
 // Qt includes
 

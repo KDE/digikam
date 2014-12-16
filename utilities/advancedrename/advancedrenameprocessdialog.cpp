@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "advancedrenameprocessdialog.moc"
+#include "advancedrenameprocessdialog.h"
 
 // Qt includes
 

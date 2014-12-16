@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "slideimage.moc"
+#include "slideimage.h"
 
 // Qt includes
 

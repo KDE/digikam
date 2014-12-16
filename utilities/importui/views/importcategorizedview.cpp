@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "importcategorizedview.moc"
+#include "importcategorizedview.h"
 
 // Qt includes
 

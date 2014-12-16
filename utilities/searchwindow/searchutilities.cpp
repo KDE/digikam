@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "searchutilities.moc"
+#include "searchutilities.h"
 
 // C++ includes
 

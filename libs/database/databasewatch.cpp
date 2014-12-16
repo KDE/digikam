@@ -129,7 +129,7 @@ private:
     DatabaseWatchPriv* d;
 };
 
-#include "databasewatch.moc"
+#include "databasewatch.h"
 
 // ---------------------------------------------------------------------------------
 

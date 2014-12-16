@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "showfotothumbnailmodel.moc"
+#include "showfotothumbnailmodel.h"
 
 // KDE includes
 

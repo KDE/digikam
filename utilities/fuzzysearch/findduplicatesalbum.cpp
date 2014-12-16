@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "findduplicatesalbum.moc"
+#include "findduplicatesalbum.h"
 
 // Qt includes
 

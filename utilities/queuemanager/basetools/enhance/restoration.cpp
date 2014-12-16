@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "restoration.moc"
+#include "restoration.h"
 
 // Qt includes
 

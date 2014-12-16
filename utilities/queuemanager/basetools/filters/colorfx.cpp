@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "colorfx.moc"
+#include "colorfx.h"
 
 // KDE includes
 

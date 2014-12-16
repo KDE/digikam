@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "digikamimagedelegate.moc"
+#include "digikamimagedelegate.h"
 #include "imagedelegatepriv.h"
 
 // Qt includes

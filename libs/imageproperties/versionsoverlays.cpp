@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "versionsoverlays.moc"
+#include "versionsoverlays.h"
 
 // Qt includes
 

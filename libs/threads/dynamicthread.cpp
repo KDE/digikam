@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "dynamicthread.moc"
+#include "dynamicthread.h"
 
 // Qt includes
 

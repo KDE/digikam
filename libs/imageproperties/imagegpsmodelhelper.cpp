@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagegpsmodelhelper.moc"
+#include "imagegpsmodelhelper.h"
 
 // local includes
 

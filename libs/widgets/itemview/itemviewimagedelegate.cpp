@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "itemviewimagedelegate.moc"
+#include "itemviewimagedelegate.h"
 #include "itemviewimagedelegatepriv.h"
 
 // C++ includes

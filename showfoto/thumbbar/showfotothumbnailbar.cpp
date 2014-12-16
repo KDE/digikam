@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "showfotothumbnailbar.moc"
+#include "showfotothumbnailbar.h"
 
 // Qt includes
 

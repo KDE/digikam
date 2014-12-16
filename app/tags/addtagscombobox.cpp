@@ -26,7 +26,7 @@
  *
  * ============================================================ */
 
-#include "addtagscombobox.moc"
+#include "addtagscombobox.h"
 
 // KDE includes
 

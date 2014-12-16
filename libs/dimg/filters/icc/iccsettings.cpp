@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "iccsettings.moc"
+#include "iccsettings.h"
 
 // X11 includes
 

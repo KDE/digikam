@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "itemvisibilitycontroller.moc"
+#include "itemvisibilitycontroller.h"
 
 // Qt includes
 

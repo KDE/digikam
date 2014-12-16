@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "sidebar.moc"
+#include "sidebar.h"
 
 // Qt includes
 

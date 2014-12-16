@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "setupraw.moc"
+#include "setupraw.h"
 
 // Qt includes
 

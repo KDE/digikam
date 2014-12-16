@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "tagmngrlistview.moc"
+#include "tagmngrlistview.h"
 
 // Qt includes
 

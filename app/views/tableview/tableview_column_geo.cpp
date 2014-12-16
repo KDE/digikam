@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "tableview_column_geo.moc"
+#include "tableview_column_geo.h"
 
 // Qt includes
 

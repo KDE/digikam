@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "tableview.moc"
+#include "tableview.h"
 
 // Qt includes
 

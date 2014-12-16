@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "kipiinterface.moc"
+#include "kipiinterface.h"
 
 // Qt includes
 

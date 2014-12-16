@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "filterstatusbar.moc"
+#include "filterstatusbar.h"
 
 // Qt includes
 

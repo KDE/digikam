@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "fuzzysearchview.moc"
+#include "fuzzysearchview.h"
 
 // Qt includes
 

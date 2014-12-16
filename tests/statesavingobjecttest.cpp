@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "statesavingobjecttest.moc"
+#include "statesavingobjecttest.h"
 
 // Qt includes
 

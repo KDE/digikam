@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "geolocationfilter.moc"
+#include "geolocationfilter.h"
 
 // KDE includes
 

@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "abstractalbummodel.moc"
+#include "abstractalbummodel.h"
 #include "abstractalbummodelpriv.h"
 
 // Qt includes

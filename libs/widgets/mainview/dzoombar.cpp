@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "dzoombar.moc"
+#include "dzoombar.h"
 
 // C++ includes
 

@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "tagmngrtreeview.moc"
+#include "tagmngrtreeview.h"
 
 // Qt includes
 

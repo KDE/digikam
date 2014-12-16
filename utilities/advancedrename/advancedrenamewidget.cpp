@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "advancedrenamewidget.moc"
+#include "advancedrenamewidget.h"
 
 // Qt includes
 

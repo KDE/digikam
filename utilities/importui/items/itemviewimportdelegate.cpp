@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "itemviewimportdelegate.moc"
+#include "itemviewimportdelegate.h"
 #include "itemviewimportdelegatepriv.h"
 
 // Qt includes

@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "showfotokineticscroller.moc"
+#include "showfotokineticscroller.h"
 
 // Qt includes
 

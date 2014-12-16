@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "modelcompletion.moc"
+#include "modelcompletion.h"
 
 // Qt includes
 

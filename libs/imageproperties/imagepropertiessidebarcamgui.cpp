@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "imagepropertiessidebarcamgui.moc"
+#include "imagepropertiessidebarcamgui.h"
 
 // Qt includes
 

@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "splashscreen.moc"
+#include "splashscreen.h"
 
 // Qt includes
 

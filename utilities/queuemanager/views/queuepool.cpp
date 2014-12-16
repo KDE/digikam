@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "queuepool.moc"
+#include "queuepool.h"
 
 // Qt includes
 

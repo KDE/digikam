@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "uifilevalidatortest.moc"
+#include "uifilevalidatortest.h"
 
 // Qt includes
 

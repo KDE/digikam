@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "histogrampainter.moc"
+#include "histogrampainter.h"
 
 // C++ includes
 

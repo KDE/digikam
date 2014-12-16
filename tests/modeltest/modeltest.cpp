@@ -39,7 +39,7 @@
 **
 ****************************************************************************/
 
-#include "modeltest.moc"
+#include "modeltest.h"
 
 #include <QtGui>
 #include <QtTest/QtTest>

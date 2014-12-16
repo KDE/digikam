@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "printoptionspage.moc"
+#include "printoptionspage.h"
 
 // Qt includes
 

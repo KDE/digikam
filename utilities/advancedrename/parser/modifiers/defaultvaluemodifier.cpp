@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "defaultvaluemodifier.moc"
+#include "defaultvaluemodifier.h"
 
 // Qt includes
 

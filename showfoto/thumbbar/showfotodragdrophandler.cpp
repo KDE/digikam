@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "showfotodragdrophandler.moc"
+#include "showfotodragdrophandler.h"
 
 // Qt includes
 

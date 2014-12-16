@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "toolsettingsview.moc"
+#include "toolsettingsview.h"
 
 // Qt includes
 

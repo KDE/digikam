@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "setuptemplate.moc"
+#include "setuptemplate.h"
 
 // Qt includes
 

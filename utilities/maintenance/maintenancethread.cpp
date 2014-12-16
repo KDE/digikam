@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "maintenancethread.moc"
+#include "maintenancethread.h"
 
 // KDE includes
 

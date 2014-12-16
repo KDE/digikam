@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "advancedrenamemanager.moc"
+#include "advancedrenamemanager.h"
 
 // C++ includes
 

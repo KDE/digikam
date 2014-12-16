@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "versionstreeview.moc"
+#include "versionstreeview.h"
 
 // Qt includes
 

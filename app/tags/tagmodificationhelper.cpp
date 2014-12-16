@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "tagmodificationhelper.moc"
+#include "tagmodificationhelper.h"
 
 // Qt includes
 

@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "overlaywidget.moc"
+#include "overlaywidget.h"
 
 // KDE includes
 

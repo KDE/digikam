@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "fileactionprogress.moc"
+#include "fileactionprogress.h"
 
 // KDE includes
 

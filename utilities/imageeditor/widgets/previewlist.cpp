@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "previewlist.moc"
+#include "previewlist.h"
 
 // Qt includes
 

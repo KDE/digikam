@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "watermark.moc"
+#include "watermark.h"
 
 // Qt includes
 

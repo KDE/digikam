@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "ruledialog.moc"
+#include "ruledialog.h"
 
 // Qt includes
 

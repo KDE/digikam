@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagehistorygraphmodel.moc"
+#include "imagehistorygraphmodel.h"
 
 // Qt includes
 

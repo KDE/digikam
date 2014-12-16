@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "colorlabelwidget.moc"
+#include "colorlabelwidget.h"
 
 // Qt includes
 

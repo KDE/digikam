@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "importdelegate.moc"
+#include "importdelegate.h"
 #include "importdelegatepriv.h"
 
 // C++ includes

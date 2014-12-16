@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "camerahistoryupdater.moc"
+#include "camerahistoryupdater.h"
 
 // Qt includes
 

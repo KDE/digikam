@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "digikam2kgeomap.moc"
+#include "digikam2kgeomap.h"
 
 // Qt includes
 

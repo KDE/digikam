@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "dimgchilditem.moc"
+#include "dimgchilditem.h"
 
 // KDE includes
 

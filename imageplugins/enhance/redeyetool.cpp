@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "redeyetool.moc"
+#include "redeyetool.h"
 
 // Qt includes
 

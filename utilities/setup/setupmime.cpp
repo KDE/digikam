@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "setupmime.moc"
+#include "setupmime.h"
 
 // Qt includes
 

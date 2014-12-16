@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "digikamimageview_p.moc"
+#include "digikamimageview_p.h"
 
 // KDE includes
 

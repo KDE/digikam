@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "maintenancetool.moc"
+#include "maintenancetool.h"
 
 // Qt includes
 

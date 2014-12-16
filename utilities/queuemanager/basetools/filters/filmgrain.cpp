@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "filmgrain.moc"
+#include "filmgrain.h"
 
 // Qt includes
 

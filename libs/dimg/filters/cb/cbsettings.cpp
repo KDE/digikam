@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "cbsettings.moc"
+#include "cbsettings.h"
 
 // Qt includes
 

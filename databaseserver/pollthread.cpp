@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "pollthread.moc"
+#include "pollthread.h"
 
 // Qt includes
 

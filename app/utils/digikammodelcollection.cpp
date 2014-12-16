@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "digikammodelcollection.moc"
+#include "digikammodelcollection.h"
 
 // KDE includes
 

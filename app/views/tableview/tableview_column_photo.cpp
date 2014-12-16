@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "tableview_column_photo.moc"
+#include "tableview_column_photo.h"
 
 // Qt includes
 

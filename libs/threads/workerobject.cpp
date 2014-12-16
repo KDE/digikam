@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "workerobject.moc"
+#include "workerobject.h"
 
 // Qt includes
 

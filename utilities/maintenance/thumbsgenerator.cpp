@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "thumbsgenerator.moc"
+#include "thumbsgenerator.h"
 
 // Qt includes
 

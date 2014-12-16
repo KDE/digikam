@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "importcontextmenu.moc"
+#include "importcontextmenu.h"
 
 // Qt includes
 

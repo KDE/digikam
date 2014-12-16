@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "sharpsettings.moc"
+#include "sharpsettings.h"
 
 // Qt includes
 

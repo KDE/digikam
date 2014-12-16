@@ -25,7 +25,7 @@
  *
  * ============================================================ */
 
-#include "distortionfxtool.moc"
+#include "distortionfxtool.h"
 
 // Qt includes
 

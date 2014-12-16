@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "option.moc"
+#include "option.h"
 
 namespace Digikam
 {

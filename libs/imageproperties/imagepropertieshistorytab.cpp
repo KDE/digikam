@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagepropertieshistorytab.moc"
+#include "imagepropertieshistorytab.h"
 
 // Qt includes
 

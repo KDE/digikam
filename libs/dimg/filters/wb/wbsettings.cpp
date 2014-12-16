@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "wbsettings.moc"
+#include "wbsettings.h"
 
 // Qt includes
 

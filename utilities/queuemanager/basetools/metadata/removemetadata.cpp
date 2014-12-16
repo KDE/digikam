@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "removemetadata.moc"
+#include "removemetadata.h"
 
 // Qt includes
 

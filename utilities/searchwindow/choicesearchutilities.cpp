@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "choicesearchutilities.moc"
+#include "choicesearchutilities.h"
 
 // Qt includes
 

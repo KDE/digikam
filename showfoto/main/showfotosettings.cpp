@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "showfotosettings.moc"
+#include "showfotosettings.h"
 
 // Qt includes
 

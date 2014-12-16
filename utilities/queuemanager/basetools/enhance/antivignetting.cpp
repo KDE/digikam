@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "antivignetting.moc"
+#include "antivignetting.h"
 
 // Qt includes
 

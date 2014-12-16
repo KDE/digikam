@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "importfiltermodel.moc"
+#include "importfiltermodel.h"
 #include "camiteminfo.h"
 #include "filtercombo.h"
 #include "filter.h"

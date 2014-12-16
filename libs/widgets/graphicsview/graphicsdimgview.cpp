@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "graphicsdimgview.moc"
+#include "graphicsdimgview.h"
 
 // Qt includes
 

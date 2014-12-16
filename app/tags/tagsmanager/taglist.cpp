@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "taglist.moc"
+#include "taglist.h"
 
 // Qt includes
 

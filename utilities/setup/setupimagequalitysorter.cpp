@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "setupimagequalitysorter.moc"
+#include "setupimagequalitysorter.h"
 
 // Qt includes
 

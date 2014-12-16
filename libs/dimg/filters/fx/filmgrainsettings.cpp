@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "filmgrainsettings.moc"
+#include "filmgrainsettings.h"
 
 // Qt includes
 

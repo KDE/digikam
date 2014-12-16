@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "triplechoicedialog.moc"
+#include "triplechoicedialog.h"
 
 // Qt includes
 

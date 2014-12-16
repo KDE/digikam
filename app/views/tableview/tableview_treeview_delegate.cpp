@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "tableview_treeview_delegate.moc"
+#include "tableview_treeview_delegate.h"
 
 // Qt includes
 

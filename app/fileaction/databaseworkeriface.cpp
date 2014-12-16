@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "databaseworkeriface.moc"
+#include "databaseworkeriface.h"
 
 // KDE includes
 

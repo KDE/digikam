@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "iccprofilesettings.moc"
+#include "iccprofilesettings.h"
 
 // Qt includes
 

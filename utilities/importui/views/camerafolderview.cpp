@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "camerafolderview.moc"
+#include "camerafolderview.h"
 
 // KDE includes
 

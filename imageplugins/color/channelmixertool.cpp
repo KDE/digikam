@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "channelmixertool.moc"
+#include "channelmixertool.h"
 
 // C++ includes
 

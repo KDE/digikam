@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "tableview_column_configuration_dialog.moc"
+#include "tableview_column_configuration_dialog.h"
 
 // Qt includes
 

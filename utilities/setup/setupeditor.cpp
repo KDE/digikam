@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "setupeditor.moc"
+#include "setupeditor.h"
 
 // Qt includes
 

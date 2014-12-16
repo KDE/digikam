@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "metadatahub.moc"
+#include "metadatahub.h"
 
 // Qt includes
 

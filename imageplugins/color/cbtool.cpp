@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "cbtool.moc"
+#include "cbtool.h"
 
 // Qt includes
 

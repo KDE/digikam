@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "visibilitycontroller.moc"
+#include "visibilitycontroller.h"
 
 namespace Digikam
 {

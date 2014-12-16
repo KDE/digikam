@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "loadsavethreadtest.moc"
+#include "loadsavethreadtest.h"
 
 // Qt includes
 

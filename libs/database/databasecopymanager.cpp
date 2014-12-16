@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "databasecopymanager.moc"
+#include "databasecopymanager.h"
 
 // QT includes
 

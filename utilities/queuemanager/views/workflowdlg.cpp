@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "workflowdlg.moc"
+#include "workflowdlg.h"
 
 // Qt includes
 

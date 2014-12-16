@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "canvas.moc"
+#include "canvas.h"
 
 // Qt includes
 

@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "rawpage.moc"
+#include "rawpage.h"
 
 // Qt includes
 

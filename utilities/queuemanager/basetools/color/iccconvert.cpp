@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "iccconvert.moc"
+#include "iccconvert.h"
 
 // Qt includes
 

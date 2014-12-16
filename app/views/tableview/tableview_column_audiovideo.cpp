@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "tableview_column_audiovideo.moc"
+#include "tableview_column_audiovideo.h"
 
 // Qt includes
 

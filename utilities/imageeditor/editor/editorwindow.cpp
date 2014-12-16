@@ -23,7 +23,7 @@
  * ============================================================ */
 
 #include "editorwindow_p.h"
-#include "editorwindow.moc"
+#include "editorwindow.h"
 
 // C++ includes
 

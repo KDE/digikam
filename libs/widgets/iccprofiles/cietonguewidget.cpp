@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "cietonguewidget.moc"
+#include "cietonguewidget.h"
 
 // C++ includes
 

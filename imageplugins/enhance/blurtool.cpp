@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "blurtool.moc"
+#include "blurtool.h"
 
 // Qt includes
 

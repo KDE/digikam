@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagequalitytask.moc"
+#include "imagequalitytask.h"
 
 // KDE includes
 

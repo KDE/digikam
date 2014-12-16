@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "abstractdimagehistorytest.moc"
+#include "abstractdimagehistorytest.h"
 
 // Qt includes
 

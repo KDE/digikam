@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "dxmlguiwindow.moc"
+#include "dxmlguiwindow.h"
 
 // Qt includes
 

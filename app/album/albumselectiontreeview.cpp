@@ -24,7 +24,7 @@
  *
  * ============================================================ */
 
-#include "albumselectiontreeview.moc"
+#include "albumselectiontreeview.h"
 
 // Qt includes
 

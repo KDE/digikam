@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "bwsepiatool.moc"
+#include "bwsepiatool.h"
 
 // Qt includes
 

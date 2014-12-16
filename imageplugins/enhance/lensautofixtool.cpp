@@ -19,7 +19,7 @@
  *
  * ============================================================ */
 
-#include "lensautofixtool.moc"
+#include "lensautofixtool.h"
 
 // Qt includes
 

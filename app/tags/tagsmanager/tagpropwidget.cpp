@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "tagpropwidget.moc"
+#include "tagpropwidget.h"
 
 // Qt includes
 

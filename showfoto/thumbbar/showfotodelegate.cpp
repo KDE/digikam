@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "showfotodelegate.moc"
+#include "showfotodelegate.h"
 #include "showfotodelegatepriv.h"
 
 // Qt includes

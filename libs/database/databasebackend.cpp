@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "databasebackend.moc"
+#include "databasebackend.h"
 #include "databasebackend_p.h"
 
 // Qt includes

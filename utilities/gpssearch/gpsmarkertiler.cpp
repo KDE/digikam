@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "gpsmarkertiler.moc"
+#include "gpsmarkertiler.h"
 
 // Qt includes
 

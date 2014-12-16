@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "tagsmanager.moc"
+#include "tagsmanager.h"
 
 // Qt includes
 

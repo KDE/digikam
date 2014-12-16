@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagerotationoverlay.moc"
+#include "imagerotationoverlay.h"
 
 // KDE includes
 

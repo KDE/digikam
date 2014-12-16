@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "fileactionmngr.moc"
+#include "fileactionmngr.h"
 #include "fileactionmngr_p.h"
 
 // Qt includes

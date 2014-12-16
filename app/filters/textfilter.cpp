@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "textfilter.moc"
+#include "textfilter.h"
 
 // Qt includes
 

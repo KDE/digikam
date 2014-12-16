@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "dkcamera.moc"
+#include "dkcamera.h"
 
 // Local includes
 

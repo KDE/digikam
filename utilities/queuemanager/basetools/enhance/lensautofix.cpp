@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "lensautofix.moc"
+#include "lensautofix.h"
 
 // Qt includes
 

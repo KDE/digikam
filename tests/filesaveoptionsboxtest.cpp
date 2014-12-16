@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "filesaveoptionsboxtest.moc"
+#include "filesaveoptionsboxtest.h"
 
 // KDE includes
 

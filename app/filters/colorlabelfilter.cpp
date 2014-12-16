@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "colorlabelfilter.moc"
+#include "colorlabelfilter.h"
 
 // KDE includes
 

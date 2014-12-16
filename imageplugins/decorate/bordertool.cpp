@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "bordertool.moc"
+#include "bordertool.h"
 
 // Qt includes
 

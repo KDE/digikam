@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "ratingwidget.moc"
+#include "ratingwidget.h"
 
 // C++ includes
 

@@ -36,7 +36,7 @@
 #define REL_TO_ABS(n,m) \
     ((((n) / DENOM_SQRT) * (m) + ((n) % DENOM_SQRT) * (m) / DENOM_SQRT) / DENOM_SQRT)
 
-#include "blackframeparser.moc"
+#include "blackframeparser.h"
 
 // Qt includes
 

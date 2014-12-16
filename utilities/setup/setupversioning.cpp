@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "setupversioning.moc"
+#include "setupversioning.h"
 
 // Qt includes
 

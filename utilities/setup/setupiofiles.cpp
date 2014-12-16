@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "setupiofiles.moc"
+#include "setupiofiles.h"
 
 // Qt includes
 

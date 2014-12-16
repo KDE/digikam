@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "setupalbumview.moc"
+#include "setupalbumview.h"
 
 // Qt includes
 

@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "adjustcurvestool.moc"
+#include "adjustcurvestool.h"
 
 // C++ includes
 
