@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <kicon.h>
+#include <QIcon>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -247,7 +247,7 @@ void FaceDetector::slotStart()
 {
     MaintenanceTool::slotStart();
 
-    setThumbnail(KIcon("edit-image-face-show").pixmap(22));
+    setThumbnail(QIcon::fromTheme("edit-image-face-show").pixmap(22));
     setUsesBusyIndicator(true);
 
     // get total count, cached by AlbumManager

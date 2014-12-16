@@ -131,7 +131,7 @@ DHistoryView::~DHistoryView()
 void DHistoryView::slotContextMenu()
 {
     KMenu popmenu(this);
-    KAction* const action = new KAction(KIcon("edit-copy"), i18n("Copy to Clipboard"), this);
+    KAction* const action = new KAction(QIcon::fromTheme("edit-copy"), i18n("Copy to Clipboard"), this);
 
     connect(action, SIGNAL(triggered(bool)),
             this, SLOT(slotCopy2ClipBoard()));

@@ -37,7 +37,7 @@
 #include <kdebug.h>
 #include <kmenu.h>
 #include <kaction.h>
-#include <kicon.h>
+#include <QIcon>
 #include <klocale.h>
 
 // Local includes
@@ -145,7 +145,7 @@ void TagMngrListView::contextMenuEvent(QContextMenuEvent* event)
         return;
     }
 
-    KAction* const delAction = new KAction(KIcon("user-trash"), i18n("Delete Selected from List"),this);
+    KAction* const delAction = new KAction(QIcon::fromTheme("user-trash"), i18n("Delete Selected from List"),this);
     cmhelper.addAction(delAction, tagList, SLOT(slotDeleteSelected()),false);
 
     QModelIndexList sel = this->selectionModel()->selectedIndexes();

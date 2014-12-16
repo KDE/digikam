@@ -108,50 +108,50 @@ ImagePlugin_Color::ImagePlugin_Color(QObject* const parent, const QVariantList&)
     //-------------------------------
     // Colors menu actions
 
-    d->BCGAction = new KAction(KIcon("contrast"), i18n("Brightness/Contrast/Gamma..."), this);
+    d->BCGAction = new KAction(QIcon::fromTheme("contrast"), i18n("Brightness/Contrast/Gamma..."), this);
     actionCollection()->addAction("imageplugin_bcg", d->BCGAction );
     connect(d->BCGAction, SIGNAL(triggered(bool)),
             this, SLOT(slotBCG()));
 
     // NOTE: Photoshop 7 use CTRL+U.
-    d->HSLAction = new KAction(KIcon("adjusthsl"), i18n("Hue/Saturation/Lightness..."), this);
+    d->HSLAction = new KAction(QIcon::fromTheme("adjusthsl"), i18n("Hue/Saturation/Lightness..."), this);
     d->HSLAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_U));
     actionCollection()->addAction("imageplugin_hsl", d->HSLAction );
     connect(d->HSLAction, SIGNAL(triggered(bool)),
             this, SLOT(slotHSL()));
 
     // NOTE: Photoshop 7 use CTRL+B.
-    d->CBAction = new KAction(KIcon("adjustrgb"), i18n("Color Balance..."), this);
+    d->CBAction = new KAction(QIcon::fromTheme("adjustrgb"), i18n("Color Balance..."), this);
     d->CBAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_B));
     actionCollection()->addAction("imageplugin_rgb", d->CBAction );
     connect(d->CBAction, SIGNAL(triggered(bool)),
             this, SLOT(slotCB()));
 
     // NOTE: Photoshop 7 use CTRL+SHIFT+B with
-    d->autoCorrectionAction = new KAction(KIcon("autocorrection"), i18n("Auto-Correction..."), this);
+    d->autoCorrectionAction = new KAction(QIcon::fromTheme("autocorrection"), i18n("Auto-Correction..."), this);
     d->autoCorrectionAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_B));
     actionCollection()->addAction("imageplugin_autocorrection", d->autoCorrectionAction );
     connect(d->autoCorrectionAction, SIGNAL(triggered(bool)),
             this, SLOT(slotAutoCorrection()));
 
     // NOTE: Photoshop 7 use CTRL+I.
-    d->invertAction = new KAction(KIcon("invertimage"), i18n("Invert"), this);
+    d->invertAction = new KAction(QIcon::fromTheme("invertimage"), i18n("Invert"), this);
     d->invertAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_I));
     actionCollection()->addAction("imageplugin_invert", d->invertAction );
     connect(d->invertAction, SIGNAL(triggered(bool)),
             this, SLOT(slotInvert()));
 
-    d->convertTo8Bits = new KAction(KIcon("depth16to8"), i18n("8 bits"), this);
+    d->convertTo8Bits = new KAction(QIcon::fromTheme("depth16to8"), i18n("8 bits"), this);
     actionCollection()->addAction("imageplugin_convertto8bits", d->convertTo8Bits );
     connect(d->convertTo8Bits, SIGNAL(triggered(bool)),
             this, SLOT(slotConvertTo8Bits()));
 
-    d->convertTo16Bits = new KAction(KIcon("depth8to16"), i18n("16 bits"), this);
+    d->convertTo16Bits = new KAction(QIcon::fromTheme("depth8to16"), i18n("16 bits"), this);
     actionCollection()->addAction("imageplugin_convertto16bits", d->convertTo16Bits );
     connect(d->convertTo16Bits, SIGNAL(triggered(bool)),
             this, SLOT(slotConvertTo16Bits()));
 
-    d->profileMenuAction = new IccProfilesMenuAction(KIcon("colormanagement"), i18n("Color Space Conversion"), this);
+    d->profileMenuAction = new IccProfilesMenuAction(QIcon::fromTheme("colormanagement"), i18n("Color Space Conversion"), this);
     actionCollection()->addAction("imageplugin_colormanagement", d->profileMenuAction );
     connect(d->profileMenuAction, SIGNAL(triggered(IccProfile)),
             this, SLOT(slotConvertToColorSpace(IccProfile)));
@@ -161,37 +161,37 @@ ImagePlugin_Color::ImagePlugin_Color(QObject* const parent, const QVariantList&)
 
     slotUpdateColorSpaceMenu();
 
-    d->BWAction = new KAction(KIcon("bwtonal"), i18n("Black && White..."), this);
+    d->BWAction = new KAction(QIcon::fromTheme("bwtonal"), i18n("Black && White..."), this);
     actionCollection()->addAction("imageplugin_blackwhite", d->BWAction );
     connect(d->BWAction, SIGNAL(triggered(bool)),
             this, SLOT(slotBW()));
 
-    d->whitebalanceAction = new KAction(KIcon("whitebalance"), i18n("White Balance..."), this);
+    d->whitebalanceAction = new KAction(QIcon::fromTheme("whitebalance"), i18n("White Balance..."), this);
     d->whitebalanceAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_W));
     actionCollection()->addAction("imageplugin_whitebalance", d->whitebalanceAction );
     connect(d->whitebalanceAction, SIGNAL(triggered(bool)),
             this, SLOT(slotWhiteBalance()));
 
-    d->channelMixerAction = new KAction(KIcon("channelmixer"), i18n("Channel Mixer..."), this);
+    d->channelMixerAction = new KAction(QIcon::fromTheme("channelmixer"), i18n("Channel Mixer..."), this);
     d->channelMixerAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_H));
     actionCollection()->addAction("imageplugin_channelmixer", d->channelMixerAction );
     connect(d->channelMixerAction, SIGNAL(triggered(bool)),
             this, SLOT(slotChannelMixer()));
 
-    d->curvesAction = new KAction(KIcon("adjustcurves"), i18n("Curves Adjust..."), this);
+    d->curvesAction = new KAction(QIcon::fromTheme("adjustcurves"), i18n("Curves Adjust..."), this);
     // NOTE: Photoshop 7 use CTRL+M (but it's used in KDE to toogle menu bar).
     d->curvesAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_C));
     actionCollection()->addAction("imageplugin_adjustcurves", d->curvesAction);
     connect(d->curvesAction, SIGNAL(triggered(bool)),
             this, SLOT(slotCurvesAdjust()));
 
-    d->levelsAction  = new KAction(KIcon("adjustlevels"), i18n("Levels Adjust..."), this);
+    d->levelsAction  = new KAction(QIcon::fromTheme("adjustlevels"), i18n("Levels Adjust..."), this);
     d->levelsAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_L));
     actionCollection()->addAction("imageplugin_adjustlevels", d->levelsAction );
     connect(d->levelsAction, SIGNAL(triggered(bool)),
             this, SLOT(slotLevelsAdjust()));
 
-    d->filmAction = new KAction(KIcon("colorneg"), i18n("Color Negative..."), this);
+    d->filmAction = new KAction(QIcon::fromTheme("colorneg"), i18n("Color Negative..."), this);
     d->filmAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_I));
     actionCollection()->addAction("imageplugin_film", d->filmAction);
     connect(d->filmAction, SIGNAL(triggered(bool)),

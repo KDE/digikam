@@ -41,7 +41,7 @@
 #include <klocale.h>
 #include <knuminput.h>
 #include <kiconloader.h>
-#include <kicon.h>
+#include <QIcon>
 #include <kurllabel.h>
 #include <kurlrequester.h>
 

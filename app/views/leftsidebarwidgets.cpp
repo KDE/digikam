@@ -42,7 +42,7 @@
 #include <kpushbutton.h>
 #include <kdebug.h>
 #include <kdialog.h>
-#include <kicon.h>
+#include <QIcon>
 #include <kiconloader.h>
 #include <kinputdialog.h>
 #include <klocale.h>
@@ -680,13 +680,13 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
 
     QToolButton* const linHistoButton = new QToolButton(scaleBox);
     linHistoButton->setToolTip( i18n( "Linear" ) );
-    linHistoButton->setIcon(KIcon("view-object-histogram-linear"));
+    linHistoButton->setIcon(QIcon::fromTheme("view-object-histogram-linear"));
     linHistoButton->setCheckable(true);
     d->scaleBG->addButton(linHistoButton, TimeLineWidget::LinScale);
 
     QToolButton* const logHistoButton = new QToolButton(scaleBox);
     logHistoButton->setToolTip( i18n( "Logarithmic" ) );
-    logHistoButton->setIcon(KIcon("view-object-histogram-logarithmic"));
+    logHistoButton->setIcon(QIcon::fromTheme("view-object-histogram-logarithmic"));
     logHistoButton->setCheckable(true);
     d->scaleBG->addButton(logHistoButton, TimeLineWidget::LogScale);
 

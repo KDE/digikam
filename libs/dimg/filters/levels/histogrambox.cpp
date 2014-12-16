@@ -41,7 +41,7 @@
 // KDE includes
 
 #include <kcombobox.h>
-#include <kicon.h>
+#include <QIcon>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -99,13 +99,13 @@ HistogramBox::HistogramBox(QWidget* const parent, HistogramBoxType type, bool se
 
     d->linHistoButton = new QToolButton(scaleBox);
     d->linHistoButton->setToolTip(i18nc("linear histogram scaling mode", "Linear"));
-    d->linHistoButton->setIcon(KIcon("view-object-histogram-linear"));
+    d->linHistoButton->setIcon(QIcon::fromTheme("view-object-histogram-linear"));
     d->linHistoButton->setCheckable(true);
     d->scaleBG->addButton(d->linHistoButton, LinScaleHistogram);
 
     d->logHistoButton = new QToolButton(scaleBox);
     d->logHistoButton->setToolTip(i18nc("logarithmic histogram scaling mode", "Logarithmic"));
-    d->logHistoButton->setIcon(KIcon("view-object-histogram-logarithmic"));
+    d->logHistoButton->setIcon(QIcon::fromTheme("view-object-histogram-logarithmic"));
     d->logHistoButton->setCheckable(true);
     d->scaleBG->addButton(d->logHistoButton, LogScaleHistogram);
 

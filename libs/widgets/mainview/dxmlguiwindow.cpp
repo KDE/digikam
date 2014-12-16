@@ -159,7 +159,7 @@ void DXmlGuiWindow::setFullScreenOptions(int options)
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
 {
-    d->libsInfoAction = new KAction(KIcon("help-about"), i18n("Components Information"), this);
+    d->libsInfoAction = new KAction(QIcon::fromTheme("help-about"), i18n("Components Information"), this);
     connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
     actionCollection()->addAction("help_librariesinfo", d->libsInfoAction);
 
@@ -172,7 +172,7 @@ void DXmlGuiWindow::createHelpActions(bool coreOptions)
     // Add options only for core components (typically all excepted Showfoto)
     if (coreOptions)
     {
-        d->dbStatAction = new KAction(KIcon("network-server-database"), i18n("Database Statistics"), this);
+        d->dbStatAction = new KAction(QIcon::fromTheme("network-server-database"), i18n("Database Statistics"), this);
         connect(d->dbStatAction, SIGNAL(triggered()), this, SLOT(slotDBStat()));
         actionCollection()->addAction("help_dbstat", d->dbStatAction);
     }

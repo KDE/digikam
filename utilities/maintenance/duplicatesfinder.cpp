@@ -33,7 +33,7 @@
 #include <kio/job.h>
 #include <kapplication.h>
 #include <klocale.h>
-#include <kicon.h>
+#include <QIcon>
 #include <kdebug.h>
 
 // Local includes
@@ -96,7 +96,7 @@ void DuplicatesFinder::slotStart()
 {
     MaintenanceTool::slotStart();
     setLabel(i18n("Find duplicates items"));
-    setThumbnail(KIcon("tools-wizard").pixmap(22));
+    setThumbnail(QIcon::fromTheme("tools-wizard").pixmap(22));
     ProgressManager::addProgressItem(this);
 
     double thresh = d->similarity / 100.0;

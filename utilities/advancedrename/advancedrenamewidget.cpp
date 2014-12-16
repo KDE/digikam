@@ -36,7 +36,7 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kicon.h>
+#include <QIcon>
 #include <kiconloader.h>
 #include <klocale.h>
 

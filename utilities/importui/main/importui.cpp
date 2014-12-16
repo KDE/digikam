@@ -306,7 +306,7 @@ void ImportUI::setupActions()
 
     // -- File menu ----------------------------------------------------
 
-    d->cameraCancelAction = new KAction(KIcon("process-stop"), i18nc("@action Cancel process", "Cancel"), this);
+    d->cameraCancelAction = new KAction(QIcon::fromTheme("process-stop"), i18nc("@action Cancel process", "Cancel"), this);
     connect(d->cameraCancelAction, SIGNAL(triggered()), this, SLOT(slotCancelButton()));
     actionCollection()->addAction("importui_cancelprocess", d->cameraCancelAction);
     d->cameraCancelAction->setEnabled(false);
@@ -314,14 +314,14 @@ void ImportUI::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->cameraInfoAction = new KAction(KIcon("camera-photo"), i18nc("@action Information about camera", "Information"), this);
+    d->cameraInfoAction = new KAction(QIcon::fromTheme("camera-photo"), i18nc("@action Information about camera", "Information"), this);
     connect(d->cameraInfoAction, SIGNAL(triggered()), this, SLOT(slotInformation()));
     actionCollection()->addAction("importui_info", d->cameraInfoAction);
     d->cameraActions->addAction(d->cameraInfoAction);
 
     // -----------------------------------------------------------------
 
-    d->cameraCaptureAction = new KAction(KIcon("webcamreceive"), i18nc("@action Capture photo from camera", "Capture"), this);
+    d->cameraCaptureAction = new KAction(QIcon::fromTheme("webcamreceive"), i18nc("@action Capture photo from camera", "Capture"), this);
     connect(d->cameraCaptureAction, SIGNAL(triggered()), this, SLOT(slotCapture()));
     actionCollection()->addAction("importui_capture", d->cameraCaptureAction);
     d->cameraActions->addAction(d->cameraCaptureAction);
@@ -357,14 +357,14 @@ void ImportUI::setupActions()
 
     // -----------------------------------------------------------
 
-    d->selectNewItemsAction = new KAction(KIcon("favorites"), i18nc("@action:inmenu", "Select New Items"), this);
+    d->selectNewItemsAction = new KAction(QIcon::fromTheme("favorites"), i18nc("@action:inmenu", "Select New Items"), this);
     connect(d->selectNewItemsAction, SIGNAL(triggered()), this, SLOT(slotSelectNew()));
     actionCollection()->addAction("importui_selectnewitems", d->selectNewItemsAction);
     d->cameraActions->addAction(d->selectNewItemsAction);
 
     // -----------------------------------------------------------
 
-    d->selectLockedItemsAction = new KAction(KIcon("object-locked"), i18nc("@action:inmenu", "Select Locked Items"), this);
+    d->selectLockedItemsAction = new KAction(QIcon::fromTheme("object-locked"), i18nc("@action:inmenu", "Select Locked Items"), this);
     d->selectLockedItemsAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_L));
     connect(d->selectLockedItemsAction, SIGNAL(triggered()), this, SLOT(slotSelectLocked()));
     actionCollection()->addAction("importui_selectlockeditems", d->selectLockedItemsAction);
@@ -372,26 +372,26 @@ void ImportUI::setupActions()
 
     // --- Download actions ----------------------------------------------------
 
-    d->downloadAction = new KActionMenu(KIcon("document-save"), i18nc("@title:menu", "Download"), this);
+    d->downloadAction = new KActionMenu(QIcon::fromTheme("document-save"), i18nc("@title:menu", "Download"), this);
     d->downloadAction->setDelayed(false);
     actionCollection()->addAction("importui_imagedownload", d->downloadAction);
     d->cameraActions->addAction(d->downloadAction);
 
-    d->downloadNewAction = new KAction(KIcon("favorites"), i18nc("@action", "Download New"), this);
+    d->downloadNewAction = new KAction(QIcon::fromTheme("favorites"), i18nc("@action", "Download New"), this);
     d->downloadNewAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_N));
     connect(d->downloadNewAction, SIGNAL(triggered()), this, SLOT(slotDownloadNew()));
     actionCollection()->addAction("importui_imagedownloadnew", d->downloadNewAction);
     d->downloadAction->addAction(d->downloadNewAction);
     d->cameraActions->addAction(d->downloadNewAction);
 
-    d->downloadSelectedAction = new KAction(KIcon("document-save"), i18nc("@action", "Download Selected"), this);
+    d->downloadSelectedAction = new KAction(QIcon::fromTheme("document-save"), i18nc("@action", "Download Selected"), this);
     connect(d->downloadSelectedAction, SIGNAL(triggered()), this, SLOT(slotDownloadSelected()));
     actionCollection()->addAction("importui_imagedownloadselected", d->downloadSelectedAction);
     d->downloadSelectedAction->setEnabled(false);
     d->downloadAction->addAction(d->downloadSelectedAction);
     d->cameraActions->addAction(d->downloadSelectedAction);
 
-    d->downloadAllAction = new KAction(KIcon("document-save"), i18nc("@action", "Download All"), this);
+    d->downloadAllAction = new KAction(QIcon::fromTheme("document-save"), i18nc("@action", "Download All"), this);
     connect(d->downloadAllAction, SIGNAL(triggered()), this, SLOT(slotDownloadAll()));
     actionCollection()->addAction("importui_imagedownloadall", d->downloadAllAction);
     d->downloadAction->addAction(d->downloadAllAction);
@@ -422,7 +422,7 @@ void ImportUI::setupActions()
 
     // -------------------------------------------------------------------------
 
-    d->uploadAction = new KAction(KIcon("media-flash-smart-media"), i18nc("@action", "Upload..."), this);
+    d->uploadAction = new KAction(QIcon::fromTheme("media-flash-smart-media"), i18nc("@action", "Upload..."), this);
     d->uploadAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_U));
     connect(d->uploadAction, SIGNAL(triggered()), this, SLOT(slotUpload()));
     actionCollection()->addAction("importui_imageupload", d->uploadAction);
@@ -430,7 +430,7 @@ void ImportUI::setupActions()
 
     // -------------------------------------------------------------------------
 
-    d->lockAction = new KAction(KIcon("object-locked"), i18nc("@action", "Toggle Lock"), this);
+    d->lockAction = new KAction(QIcon::fromTheme("object-locked"), i18nc("@action", "Toggle Lock"), this);
     d->lockAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_L));
     connect(d->lockAction, SIGNAL(triggered()), this, SLOT(slotToggleLock()));
     actionCollection()->addAction("importui_imagelock", d->lockAction);
@@ -438,19 +438,19 @@ void ImportUI::setupActions()
 
     // -------------------------------------------------------------------------
 
-    d->markAsDownloadedAction = new KAction(KIcon("dialog-ok"), i18nc("@action", "Mark as downloaded"), this);
+    d->markAsDownloadedAction = new KAction(QIcon::fromTheme("dialog-ok"), i18nc("@action", "Mark as downloaded"), this);
     connect(d->markAsDownloadedAction, SIGNAL(triggered()), this, SLOT(slotMarkAsDownloaded()));
     actionCollection()->addAction("importui_imagemarkasdownloaded", d->markAsDownloadedAction);
     d->cameraActions->addAction(d->markAsDownloadedAction);
 
     // --- Delete actions ------------------------------------------------------
 
-    d->deleteAction = new KActionMenu(KIcon("user-trash"), i18nc("@title:menu", "Delete"), this);
+    d->deleteAction = new KActionMenu(QIcon::fromTheme("user-trash"), i18nc("@title:menu", "Delete"), this);
     d->deleteAction->setDelayed(false);
     actionCollection()->addAction("importui_delete", d->deleteAction);
     d->cameraActions->addAction(d->deleteAction);
 
-    d->deleteSelectedAction = new KAction(KIcon("edit-delete"), i18nc("@action", "Delete Selected"), this);
+    d->deleteSelectedAction = new KAction(QIcon::fromTheme("edit-delete"), i18nc("@action", "Delete Selected"), this);
     connect(d->deleteSelectedAction, SIGNAL(triggered()), this, SLOT(slotDeleteSelected()));
     actionCollection()->addAction("importui_imagedeleteselected", d->deleteSelectedAction);
     d->deleteSelectedAction->setShortcut(KShortcut(Qt::Key_Delete));
@@ -458,13 +458,13 @@ void ImportUI::setupActions()
     d->deleteAction->addAction(d->deleteSelectedAction);
     d->cameraActions->addAction(d->deleteSelectedAction);
 
-    d->deleteAllAction = new KAction(KIcon("edit-delete"), i18nc("@action", "Delete All"), this);
+    d->deleteAllAction = new KAction(QIcon::fromTheme("edit-delete"), i18nc("@action", "Delete All"), this);
     connect(d->deleteAllAction, SIGNAL(triggered()), this, SLOT(slotDeleteAll()));
     actionCollection()->addAction("importui_imagedeleteall", d->deleteAllAction);
     d->deleteAction->addAction(d->deleteAllAction);
     d->cameraActions->addAction(d->deleteAllAction);
 
-    d->deleteNewAction = new KAction(KIcon("edit-delete"), i18nc("@action", "Delete New"), this);
+    d->deleteNewAction = new KAction(QIcon::fromTheme("edit-delete"), i18nc("@action", "Delete New"), this);
     connect(d->deleteNewAction, SIGNAL(triggered()), this, SLOT(slotDeleteNew()));
     actionCollection()->addAction("importui_imagedeletenew", d->deleteNewAction);
     d->deleteAction->addAction(d->deleteNewAction);
@@ -472,23 +472,23 @@ void ImportUI::setupActions()
 
     // --- Icon view, items preview, and map actions ------------------------------------------------------
 
-    d->imageViewSelectionAction = new KSelectAction(KIcon("viewimage"), i18nc("@title:group", "Views"), this);
+    d->imageViewSelectionAction = new KSelectAction(QIcon::fromTheme("viewimage"), i18nc("@title:group", "Views"), this);
     actionCollection()->addAction("importui_view_selection", d->imageViewSelectionAction);
 
-    d->iconViewAction = new KToggleAction(KIcon("view-list-icons"),
+    d->iconViewAction = new KToggleAction(QIcon::fromTheme("view-list-icons"),
                                           i18nc("@action Go to thumbnails (icon) view", "Thumbnails"), this);
     actionCollection()->addAction("importui_icon_view", d->iconViewAction);
     connect(d->iconViewAction, SIGNAL(triggered()), d->view, SLOT(slotIconView()));
     d->imageViewSelectionAction->addAction(d->iconViewAction);
 
-    d->camItemPreviewAction = new KToggleAction(KIcon("viewimage"), i18nc("@action View the selected image", "Preview Item"), this);
+    d->camItemPreviewAction = new KToggleAction(QIcon::fromTheme("viewimage"), i18nc("@action View the selected image", "Preview Item"), this);
     d->camItemPreviewAction->setShortcut(KShortcut(Qt::Key_F3));
     actionCollection()->addAction("importui_item_view", d->camItemPreviewAction);
     connect(d->camItemPreviewAction, SIGNAL(triggered()), d->view, SLOT(slotImagePreview()));
     d->imageViewSelectionAction->addAction(d->camItemPreviewAction);
 
 #ifdef HAVE_KGEOMAP
-    d->mapViewAction = new KToggleAction(KIcon("applications-internet"),
+    d->mapViewAction = new KToggleAction(QIcon::fromTheme("applications-internet"),
                                          i18nc("@action Switch to map view", "Map"), this);
     actionCollection()->addAction("importui_map_view", d->mapViewAction);
     connect(d->mapViewAction, SIGNAL(triggered()), d->view, SLOT(slotMapWidgetView()));
@@ -537,8 +537,8 @@ void ImportUI::setupActions()
     connect(imageSortOrderMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImagesOrder(int)));
     actionCollection()->addAction("item_sort_order", d->itemSortOrderAction);
 
-    QAction* const sortAscendingAction = d->itemSortOrderAction->addAction(KIcon("view-sort-ascending"), i18nc("@item:inmenu Sorting Order", "Ascending"));
-    QAction* const sortDescendingAction = d->itemSortOrderAction->addAction(KIcon("view-sort-descending"), i18nc("@item:inmenu Sorting Order", "Descending"));
+    QAction* const sortAscendingAction = d->itemSortOrderAction->addAction(QIcon::fromTheme("view-sort-ascending"), i18nc("@item:inmenu Sorting Order", "Ascending"));
+    QAction* const sortDescendingAction = d->itemSortOrderAction->addAction(QIcon::fromTheme("view-sort-descending"), i18nc("@item:inmenu Sorting Order", "Descending"));
 
     connect(sortAscendingAction,  SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
     connect(sortDescendingAction, SIGNAL(triggered()), imageSortOrderMapper, SLOT(map()));
@@ -587,19 +587,19 @@ void ImportUI::setupActions()
     d->decreaseThumbsAction->setShortcut(keysMinus);
     actionCollection()->addAction("importui_zoomminus", d->decreaseThumbsAction);
 
-    d->zoomFitToWindowAction = new KAction(KIcon("zoom-fit-best"), i18nc("@action:inmenu", "Fit to &Window"), this);
+    d->zoomFitToWindowAction = new KAction(QIcon::fromTheme("zoom-fit-best"), i18nc("@action:inmenu", "Fit to &Window"), this);
     d->zoomFitToWindowAction->setShortcut(KShortcut(Qt::ALT + Qt::CTRL + Qt::Key_E));
     connect(d->zoomFitToWindowAction, SIGNAL(triggered()), d->view, SLOT(slotFitToWindow()));
     actionCollection()->addAction("import_zoomfit2window", d->zoomFitToWindowAction);
 
-    d->zoomTo100percents = new KAction(KIcon("zoom-original"), i18nc("@action:inmenu", "Zoom to 100%"), this);
+    d->zoomTo100percents = new KAction(QIcon::fromTheme("zoom-original"), i18nc("@action:inmenu", "Zoom to 100%"), this);
     d->zoomTo100percents->setShortcut(KShortcut(Qt::CTRL + Qt::Key_Comma));
     connect(d->zoomTo100percents, SIGNAL(triggered()), d->view, SLOT(slotZoomTo100Percents()));
     actionCollection()->addAction("import_zoomto100percents", d->zoomTo100percents);
 
     // ------------------------------------------------------------------------------------------------
 
-    d->viewCMViewAction = new KToggleAction(KIcon("video-display"), i18n("Color-Managed View"), this);
+    d->viewCMViewAction = new KToggleAction(QIcon::fromTheme("video-display"), i18n("Color-Managed View"), this);
     d->viewCMViewAction->setShortcut(KShortcut(Qt::Key_F12));
     connect(d->viewCMViewAction, SIGNAL(triggered()), this, SLOT(slotToggleColorManagedView()));
     actionCollection()->addAction("color_managed_view", d->viewCMViewAction);
@@ -609,12 +609,12 @@ void ImportUI::setupActions()
     createFullScreenAction("importui_fullscreen");
     createSidebarActions();
 
-    d->showLogAction = new KToggleAction(KIcon("view-history"), i18nc("@option:check", "Show History"), this);
+    d->showLogAction = new KToggleAction(QIcon::fromTheme("view-history"), i18nc("@option:check", "Show History"), this);
     d->showLogAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_H));
     connect(d->showLogAction, SIGNAL(triggered()), this, SLOT(slotShowLog()));
     actionCollection()->addAction("importui_showlog", d->showLogAction);
 
-    d->showBarAction = new KToggleAction(KIcon("view-choose"), i18nc("@option:check", "Show Thumbbar"), this);
+    d->showBarAction = new KToggleAction(QIcon::fromTheme("view-choose"), i18nc("@option:check", "Show Thumbbar"), this);
     d->showBarAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_T));
     connect(d->showBarAction, SIGNAL(triggered()), this, SLOT(slotToggleShowBar()));
     actionCollection()->addAction("showthumbs", d->showBarAction);
@@ -651,7 +651,7 @@ void ImportUI::setupActions()
 
     // ---------------------------------------------------------------------------------
 
-    d->connectAction = new KAction(KIcon("view-refresh"), i18nc("@action Connection failed, try again?", "Retry"), this);
+    d->connectAction = new KAction(QIcon::fromTheme("view-refresh"), i18nc("@action Connection failed, try again?", "Retry"), this);
     connect(d->connectAction, SIGNAL(triggered()), d->controller, SLOT(slotConnect()));
 
     createGUI(xmlFile());
@@ -726,7 +726,7 @@ void ImportUI::setupStatusBar()
 {
     d->statusProgressBar = new StatusProgressBar(statusBar());
     d->statusProgressBar->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    d->statusProgressBar->setNotificationTitle(d->cameraTitle, KIcon("camera-photo").pixmap(22));
+    d->statusProgressBar->setNotificationTitle(d->cameraTitle, QIcon::fromTheme("camera-photo").pixmap(22));
     statusBar()->addWidget(d->statusProgressBar, 100);
 
     //------------------------------------------------------------------------------

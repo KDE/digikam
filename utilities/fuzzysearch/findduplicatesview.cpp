@@ -98,11 +98,11 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
     d->listView           = new FindDuplicatesAlbum();
 
     d->updateFingerPrtBtn = new QPushButton(i18n("Update fingerprints"));
-    d->updateFingerPrtBtn->setIcon(KIcon("run-build"));
+    d->updateFingerPrtBtn->setIcon(QIcon::fromTheme("run-build"));
     d->updateFingerPrtBtn->setWhatsThis(i18n("Use this button to update all image fingerprints."));
 
     d->scanDuplicatesBtn  = new QPushButton(i18n("Find duplicates"));
-    d->scanDuplicatesBtn->setIcon(KIcon("system-search"));
+    d->scanDuplicatesBtn->setIcon(QIcon::fromTheme("system-search"));
     d->scanDuplicatesBtn->setWhatsThis(i18n("Use this button to scan the selected albums for "
                                             "duplicate items."));
 

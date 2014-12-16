@@ -198,7 +198,7 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
 
     d->defaultBtn = new KPushButton;
     d->defaultBtn->setGuiItem(KStandardGuiItem::defaults());
-    d->defaultBtn->setIcon(KIcon(SmallIcon("document-revert")));
+    d->defaultBtn->setIcon(QIcon::fromTheme(SmallIcon("document-revert")));
     d->defaultBtn->setToolTip(i18n("Reset all settings to their default values."));
 
     d->okBtn = new KPushButton;

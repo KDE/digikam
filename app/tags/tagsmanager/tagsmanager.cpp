@@ -178,7 +178,7 @@ void TagsManager::setupUi(KMainWindow* const Dialog)
      d->tagPixmap = new QLabel();
      d->tagPixmap->setText("Tag Pixmap");
      d->tagPixmap->setMaximumWidth(40);
-     d->tagPixmap->setPixmap(KIcon("tag").pixmap(30,30));
+     d->tagPixmap->setPixmap(QIcon::fromTheme("tag").pixmap(30,30));
 
      d->tagMngrView = new TagMngrTreeView(this,d->tagModel);
      d->tagMngrView->setConfigGroup(getConfigGroup());
@@ -683,30 +683,30 @@ void TagsManager::setupActions()
 
     d->mainToolbar->addSeparator();
 
-    d->addAction = new KAction(KIcon("list-add"),"",d->treeWindow);
+    d->addAction = new KAction(QIcon::fromTheme("list-add"),"",d->treeWindow);
 
-    d->delAction = new KAction(KIcon("list-remove"),"",d->treeWindow);
+    d->delAction = new KAction(QIcon::fromTheme("list-remove"),"",d->treeWindow);
 
     /** organize group **/
-    d->organizeAction      = new KActionMenu(KIcon("autocorrection"),
+    d->organizeAction      = new KActionMenu(QIcon::fromTheme("autocorrection"),
                                              i18nc("@title:menu", "Organize"),this);
     d->organizeAction->setDelayed(false);
 
-    KAction* const resetIcon     = new KAction(KIcon("view-refresh"),
+    KAction* const resetIcon     = new KAction(QIcon::fromTheme("view-refresh"),
                                          i18n("Reset tag Icon"), this);
 
-    KAction* const createTagAddr = new KAction(KIcon("tag-addressbook"),
+    KAction* const createTagAddr = new KAction(QIcon::fromTheme("tag-addressbook"),
                                          i18n("Create Tag from Address Book"),
                                          this);
-    KAction* const invSel        = new KAction(KIcon("tag-reset"),
+    KAction* const invSel        = new KAction(QIcon::fromTheme("tag-reset"),
                                          i18n("Invert Selection"), this);
 
-    KAction* const expandTree    = new KAction(KIcon("format-indent-more"),
+    KAction* const expandTree    = new KAction(QIcon::fromTheme("format-indent-more"),
                                          i18n("Expand Tag Tree"), this);
 
-    KAction* const expandSel     = new KAction(KIcon("format-indent-more"),
+    KAction* const expandSel     = new KAction(QIcon::fromTheme("format-indent-more"),
                                          i18n("Expand Selected Nodes"), this);
-    KAction* const delTagFromImg = new KAction(KIcon("tag-delete"),
+    KAction* const delTagFromImg = new KAction(QIcon::fromTheme("tag-delete"),
                                          i18n("Remove Tag from Images"), this);
 
     /** Tool tips  **/
@@ -756,18 +756,18 @@ void TagsManager::setupActions()
     d->organizeAction->addAction(delTagFromImg);
 
     /** Sync & Export Group **/
-    d->syncexportAction = new KActionMenu(KIcon("server-database"),
+    d->syncexportAction = new KActionMenu(QIcon::fromTheme("server-database"),
                                           i18n("Sync &Export"),this);
     d->syncexportAction->setDelayed(false);
 
-    KAction* const wrDbImg  = new KAction(KIcon("view-refresh"),
+    KAction* const wrDbImg  = new KAction(QIcon::fromTheme("view-refresh"),
                                           i18n("Write Tags from Database "
                                               "to Image"), this);
 
-    KAction* const readTags = new KAction(KIcon("tag-new"),
+    KAction* const readTags = new KAction(QIcon::fromTheme("tag-new"),
                                           i18n("Read Tags from Image"), this);
 
-    KAction* const wipeAll  = new KAction(KIcon("draw-eraser"),
+    KAction* const wipeAll  = new KAction(QIcon::fromTheme("draw-eraser"),
                                           i18n("Wipe all tags from Database only"), this);
 
 
@@ -804,7 +804,7 @@ void TagsManager::setupActions()
      * Right Toolbar with vertical properties button
      */
     d->rightToolBar = new KMultiTabBar(KMultiTabBar::Right);
-    d->rightToolBar->appendTab(KIcon("tag-properties").pixmap(10,10),
+    d->rightToolBar->appendTab(QIcon::fromTheme("tag-properties").pixmap(10,10),
                                0,i18n("Tag Properties"));
     d->rightToolBar->setStyle(KMultiTabBar::KDEV3ICON);
 

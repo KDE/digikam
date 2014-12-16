@@ -238,7 +238,7 @@ WBSettings::WBSettings(QWidget* const parent)
     d->temperaturePresetCB->setToolTip(toolTip);
 
     d->pickTemperature = new QToolButton;
-    d->pickTemperature->setIcon(KIcon("color-picker-grey"));
+    d->pickTemperature->setIcon(QIcon::fromTheme("color-picker-grey"));
     d->pickTemperature->setCheckable(true);
     d->pickTemperature->setToolTip(i18n("Temperature tone color picker."));
     d->pickTemperature->setWhatsThis(i18n("With this button, you can pick the color from the original "

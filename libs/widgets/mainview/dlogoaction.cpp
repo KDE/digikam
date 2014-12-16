@@ -83,12 +83,12 @@ DLogoAction::DLogoAction(QObject* const parent, bool alignOnright)
 
     if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
     {
-        setIcon(KIcon("digikam"));
+        setIcon(QIcon::fromTheme("digikam"));
         d->progressPixmap = QPixmap(KStandardDirs::locate("data", "digikam/data/banner-digikam.png"));
     }
     else
     {
-        setIcon(KIcon("showfoto"));
+        setIcon(QIcon::fromTheme("showfoto"));
         d->progressPixmap = QPixmap(KStandardDirs::locate("data", "showfoto/data/banner-showfoto.png"));
     }
 

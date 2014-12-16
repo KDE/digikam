@@ -42,7 +42,7 @@
 #include <kio/global.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kicon.h>
+#include <QIcon>
 #include <kapplication.h>
 
 // Local includes
@@ -286,7 +286,7 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     // If there is ImageHistory present, paint a small icon over the thumbnail to indicate that this is derived image
     if (info.hasImageHistory())
     {
-        p->drawPixmap(d->pixmapRect.right()-24, d->pixmapRect.bottom()-24, KIcon("svn_switch").pixmap(22, 22));
+        p->drawPixmap(d->pixmapRect.right()-24, d->pixmapRect.bottom()-24, QIcon::fromTheme("svn_switch").pixmap(22, 22));
     }
     */
 

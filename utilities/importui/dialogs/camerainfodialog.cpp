@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kicon.h>
+#include <QIcon>
 #include <klocale.h>
 #include <ktextedit.h>
 
@@ -57,7 +57,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget* const parent, const QString& summary
 
     KPageWidgetItem* const p1    = addPage(summaryView, i18nc("Device information summary", "Summary"));
     p1->setHeader(i18n("Device Summary"));
-    p1->setIcon(KIcon("dialog-information"));
+    p1->setIcon(QIcon::fromTheme("dialog-information"));
 
     // ----------------------------------------------------------
 
@@ -67,7 +67,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget* const parent, const QString& summary
 
     KPageWidgetItem* const p2    = addPage(manualView, i18nc("Manual of the device", "Manual"));
     p2->setHeader(i18n("Device Manual"));
-    p2->setIcon(KIcon("help-contents"));
+    p2->setIcon(QIcon::fromTheme("help-contents"));
 
     // ----------------------------------------------------------
 
@@ -77,7 +77,7 @@ CameraInfoDialog::CameraInfoDialog(QWidget* const parent, const QString& summary
 
     KPageWidgetItem* const p3    = addPage(aboutView, i18nc("About device driver", "About"));
     p3->setHeader(i18n("About Driver"));
-    p3->setIcon(KIcon("camera-photo"));
+    p3->setIcon(QIcon::fromTheme("camera-photo"));
 }
 
 CameraInfoDialog::~CameraInfoDialog()

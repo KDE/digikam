@@ -236,7 +236,7 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
 
     QPushButton* const nonGeolocatedBtn = new QPushButton(nonGeolocatedActionRow);
     nonGeolocatedBtn->setText(i18n("Show Non-Geolocated Items"));
-    nonGeolocatedBtn->setIcon(KIcon("emblem-unmounted"));
+    nonGeolocatedBtn->setIcon(QIcon::fromTheme("emblem-unmounted"));
     thirdActionRowVBox->addWidget(nonGeolocatedBtn);
 
     thirdActionRowVBox->addStretch(10);

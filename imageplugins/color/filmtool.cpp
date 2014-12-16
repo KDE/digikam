@@ -49,7 +49,7 @@
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
-#include <kicon.h>
+#include <QIcon>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -246,7 +246,7 @@ FilmTool::FilmTool(QObject* const parent)
     // -------------------------------------------------------------
 
     d->pickWhitePoint = new QToolButton();
-    d->pickWhitePoint->setIcon(KIcon("color-picker-white"));
+    d->pickWhitePoint->setIcon(QIcon::fromTheme("color-picker-white"));
     d->pickWhitePoint->setCheckable(true);
     d->pickWhitePoint->setToolTip( i18n( "White point color picker" ) );
     d->pickWhitePoint->setWhatsThis(i18n("With this button, you can pick the color of the orange mask "

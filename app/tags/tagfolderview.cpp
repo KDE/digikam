@@ -38,7 +38,7 @@
 #include <kmenu.h>
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kicon.h>
+#include <QIcon>
 #include <kaction.h>
 
 // Local includes
@@ -110,12 +110,12 @@ void TagFolderView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* a
     cmh.addAction(d->resetIconAction);
     cmh.addSeparator();
 
-    KAction* const expandSel   = new KAction(KIcon("format-indent-more"),
+    KAction* const expandSel   = new KAction(QIcon::fromTheme("format-indent-more"),
                                              i18n("Expand Selected Nodes"), this);
 
     cmh.addAction(expandSel, this, SLOT(slotExpandNode()), false);
 
-    KAction* const collapseSel = new KAction(KIcon("format-indent-more"),
+    KAction* const collapseSel = new KAction(QIcon::fromTheme("format-indent-more"),
                                              i18n("Collapse Selected Recursively"), this);
 
     cmh.addAction(collapseSel, this, SLOT(slotCollapseNode()), false);
@@ -261,12 +261,12 @@ void TagFolderView::setContexMenuItems(ContextMenuHelper& cmh, QList< TAlbum* > 
         cmh.addAction(d->findDuplAction);
     }
 
-    KAction* const expandSel   = new KAction(KIcon("format-indent-more"),
+    KAction* const expandSel   = new KAction(QIcon::fromTheme("format-indent-more"),
                                              i18n("Expand Selected Recursively"), this);
 
     cmh.addAction(expandSel, this, SLOT(slotExpandNode()), false);
 
-    KAction* const collapseSel = new KAction(KIcon("format-indent-more"),
+    KAction* const collapseSel = new KAction(QIcon::fromTheme("format-indent-more"),
                                              i18n("Collapse Selected Recursively"), this);
 
     cmh.addAction(collapseSel, this, SLOT(slotCollapseNode()), false);

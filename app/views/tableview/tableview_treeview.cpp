@@ -85,11 +85,11 @@ TableViewTreeView::TableViewTreeView(TableViewShared* const tableViewShared, QWi
     setWordWrap(true);
 //     viewport()->setAcceptDrops(true);
 
-    d->actionHeaderContextMenuRemoveColumn = new KAction(KIcon("edit-table-delete-column"), i18n("Remove this column"), this);
+    d->actionHeaderContextMenuRemoveColumn = new KAction(QIcon::fromTheme("edit-table-delete-column"), i18n("Remove this column"), this);
     connect(d->actionHeaderContextMenuRemoveColumn, SIGNAL(triggered(bool)),
             this, SLOT(slotHeaderContextMenuActionRemoveColumnTriggered()));
 
-    d->actionHeaderContextMenuConfigureColumn = new KAction(KIcon("configure"), i18n("Configure this column"), this);
+    d->actionHeaderContextMenuConfigureColumn = new KAction(QIcon::fromTheme("configure"), i18n("Configure this column"), this);
     connect(d->actionHeaderContextMenuConfigureColumn, SIGNAL(triggered(bool)),
             this, SLOT(slotHeaderContextMenuConfigureColumn()));
 
@@ -132,7 +132,7 @@ void TableViewTreeView::addColumnDescriptionsToMenu(const QList<TableViewColumnD
 
         if (!desc.columnIcon.isEmpty())
         {
-            action->setIcon(KIcon(desc.columnIcon));
+            action->setIcon(QIcon::fromTheme(desc.columnIcon));
         }
 
         if (desc.subColumns.isEmpty())

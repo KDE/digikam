@@ -47,7 +47,7 @@
 #include <kcursor.h>
 #include <kglobal.h>
 #include <khelpmenu.h>
-#include <kicon.h>
+#include <QIcon>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmenu.h>

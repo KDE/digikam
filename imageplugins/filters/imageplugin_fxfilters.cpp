@@ -80,42 +80,42 @@ ImagePlugin_FxFilters::ImagePlugin_FxFilters(QObject* const parent, const QVaria
     : ImagePlugin(parent, "ImagePlugin_FxFilters"),
       d(new Private)
 {
-    d->colorEffectsAction = new KAction(KIcon("colorfx"), i18n("Color Effects..."), this);
+    d->colorEffectsAction = new KAction(QIcon::fromTheme("colorfx"), i18n("Color Effects..."), this);
     actionCollection()->addAction("imageplugin_colorfx", d->colorEffectsAction);
     connect(d->colorEffectsAction, SIGNAL(triggered(bool)),
             this, SLOT(slotColorEffects()));
 
-    d->charcoalAction = new KAction(KIcon("charcoaltool"), i18n("Charcoal Drawing..."), this);
+    d->charcoalAction = new KAction(QIcon::fromTheme("charcoaltool"), i18n("Charcoal Drawing..."), this);
     actionCollection()->addAction("imageplugin_charcoal", d->charcoalAction);
     connect(d->charcoalAction, SIGNAL(triggered(bool)),
             this, SLOT(slotCharcoal()));
 
-    d->embossAction = new KAction(KIcon("embosstool"), i18n("Emboss..."), this);
+    d->embossAction = new KAction(QIcon::fromTheme("embosstool"), i18n("Emboss..."), this);
     actionCollection()->addAction("imageplugin_emboss", d->embossAction);
     connect(d->embossAction, SIGNAL(triggered(bool)),
             this, SLOT(slotEmboss()));
 
-    d->oilpaintAction = new KAction(KIcon("oilpaint"), i18n("Oil Paint..."), this);
+    d->oilpaintAction = new KAction(QIcon::fromTheme("oilpaint"), i18n("Oil Paint..."), this);
     actionCollection()->addAction("imageplugin_oilpaint", d->oilpaintAction);
     connect(d->oilpaintAction, SIGNAL(triggered(bool)),
             this ,SLOT(slotOilPaint()));
 
-    d->blurfxAction = new KAction(KIcon("blurfx"), i18n("Blur Effects..."), this);
+    d->blurfxAction = new KAction(QIcon::fromTheme("blurfx"), i18n("Blur Effects..."), this);
     actionCollection()->addAction("imageplugin_blurfx", d->blurfxAction);
     connect(d->blurfxAction, SIGNAL(triggered(bool)),
             this, SLOT(slotBlurFX()));
 
-    d->distortionfxAction = new KAction(KIcon("distortionfx"), i18n("Distortion Effects..."), this);
+    d->distortionfxAction = new KAction(QIcon::fromTheme("distortionfx"), i18n("Distortion Effects..."), this);
     actionCollection()->addAction("imageplugin_distortionfx", d->distortionfxAction );
     connect(d->distortionfxAction, SIGNAL(triggered(bool)),
             this, SLOT(slotDistortionFX()));
 
-    d->raindropAction = new KAction(KIcon("raindrop"), i18n("Raindrops..."), this);
+    d->raindropAction = new KAction(QIcon::fromTheme("raindrop"), i18n("Raindrops..."), this);
     actionCollection()->addAction("imageplugin_raindrop", d->raindropAction);
     connect(d->raindropAction, SIGNAL(triggered(bool)),
             this, SLOT(slotRainDrop()));
 
-    d->filmgrainAction  = new KAction(KIcon("filmgrain"), i18n("Add Film Grain..."), this);
+    d->filmgrainAction  = new KAction(QIcon::fromTheme("filmgrain"), i18n("Add Film Grain..."), this);
     actionCollection()->addAction("imageplugin_filmgrain", d->filmgrainAction);
     connect(d->filmgrainAction, SIGNAL(triggered(bool)),
             this, SLOT(slotFilmGrain()));

@@ -27,7 +27,7 @@
 
 #include <kapplication.h>
 #include <klocale.h>
-#include <kicon.h>
+#include <QIcon>
 #include <kdebug.h>
 
 // Local includes
@@ -40,7 +40,7 @@ FileActionProgress::FileActionProgress(const char* name)
 {
     ProgressManager::addProgressItem(this);
     setLabel(i18n("Process Items"));
-    setThumbnail(KIcon("digikam").pixmap(22));
+    setThumbnail(QIcon::fromTheme("digikam").pixmap(22));
 
     connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
             this, SLOT(slotCancel()));

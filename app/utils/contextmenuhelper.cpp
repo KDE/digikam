@@ -288,7 +288,7 @@ void ContextMenuHelper::addServicesMenu(const KUrl::List& selectedItems)
         {
             QString name          = service->name().replace('&', "&&");
             QAction* const action = servicesMenu->addAction(name);
-            action->setIcon(KIcon(service->icon()));
+            action->setIcon(QIcon::fromTheme(service->icon()));
             action->setData(service->name());
             d->servicesMap[name]  = service;
         }
@@ -786,7 +786,7 @@ void ContextMenuHelper::addGotoMenu(const imageIds &ids)
 void ContextMenuHelper::addQueueManagerMenu()
 {
     KMenu* const bqmMenu = new KMenu(i18n("Batch Queue Manager"), d->parent);
-    bqmMenu->menuAction()->setIcon(KIcon("bqm-diff"));
+    bqmMenu->menuAction()->setIcon(QIcon::fromTheme("bqm-diff"));
     bqmMenu->addAction(d->stdActionCollection->action("image_add_to_current_queue"));
     bqmMenu->addAction(d->stdActionCollection->action("image_add_to_new_queue"));
 

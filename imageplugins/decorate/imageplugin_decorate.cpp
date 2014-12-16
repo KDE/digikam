@@ -66,18 +66,18 @@ ImagePlugin_Decorate::ImagePlugin_Decorate(QObject* const parent, const QVariant
     : ImagePlugin(parent, "ImagePlugin_Decorate"),
       d(new Private)
 {
-    d->insertTextAction = new KAction(KIcon("insert-text"), i18n("Insert Text..."), this);
+    d->insertTextAction = new KAction(QIcon::fromTheme("insert-text"), i18n("Insert Text..."), this);
     d->insertTextAction->setShortcut(KShortcut(Qt::SHIFT+Qt::CTRL+Qt::Key_T));
     actionCollection()->addAction("imageplugin_inserttext", d->insertTextAction );
     connect(d->insertTextAction, SIGNAL(triggered(bool)),
             this, SLOT(slotInsertText()));
 
-    d->borderAction = new KAction(KIcon("bordertool"), i18n("Add Border..."), this);
+    d->borderAction = new KAction(QIcon::fromTheme("bordertool"), i18n("Add Border..."), this);
     actionCollection()->addAction("imageplugin_border", d->borderAction );
     connect(d->borderAction, SIGNAL(triggered(bool)),
             this, SLOT(slotBorder()));
 
-    d->textureAction = new KAction(KIcon("texture"), i18n("Apply Texture..."), this);
+    d->textureAction = new KAction(QIcon::fromTheme("texture"), i18n("Apply Texture..."), this);
     actionCollection()->addAction("imageplugin_texture", d->textureAction );
     connect(d->textureAction, SIGNAL(triggered(bool)),
             this, SLOT(slotTexture()));

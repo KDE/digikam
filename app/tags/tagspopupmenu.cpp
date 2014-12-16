@@ -572,13 +572,13 @@ void TagsPopupMenu::slotAboutToShow()
         if (d->mode == ASSIGN || d->mode == RECENTLYASSIGNED)
         {
             addSeparator();
-            TagToggleAction* const addTag = new TagToggleAction(KIcon(d->addTagPix), i18n("Add New Tag..."), d->addTagActions);
+            TagToggleAction* const addTag = new TagToggleAction(QIcon::fromTheme(d->addTagPix), i18n("Add New Tag..."), d->addTagActions);
             addTag->setData(0);   // root id
             addTag->setCheckBoxHidden(true);
             addAction(addTag);
 
             addSeparator();
-            TagToggleAction* const moreTag = new TagToggleAction(KIcon(d->tagViewPix), i18n("More Tags..."), d->addTagActions);
+            TagToggleAction* const moreTag = new TagToggleAction(QIcon::fromTheme(d->tagViewPix), i18n("More Tags..."), d->addTagActions);
             moreTag->setData(-1); // special id to query tag view
             moreTag->setCheckBoxHidden(true);
             addAction(moreTag);
@@ -710,7 +710,7 @@ KMenu* TagsPopupMenu::buildSubMenu(int tagid)
     {
         popup->addSeparator();
 
-        TagToggleAction* const action = new TagToggleAction(KIcon(d->addTagPix), i18n("Add New Tag..."), d->addTagActions);
+        TagToggleAction* const action = new TagToggleAction(QIcon::fromTheme(d->addTagPix), i18n("Add New Tag..."), d->addTagActions);
         action->setData(album->id());
         action->setCheckBoxHidden(true);
         popup->addAction(action);
@@ -767,18 +767,18 @@ void TagsPopupMenu::setAlbumIcon(QAction* action, TAlbum* album)
     {
         if (pix.isNull())
         {
-            action->setIcon(KIcon(loader->getStandardTagIcon(album)));
+            action->setIcon(QIcon::fromTheme(loader->getStandardTagIcon(album)));
         }
         else
         {
-            action->setIcon(KIcon(pix));
+            action->setIcon(QIcon::fromTheme(pix));
         }
     }
     else
     {
         // for the time while loading, set standard icon
         // usually this code path will not be used, as icons are cached
-        action->setIcon(KIcon(loader->getStandardTagIcon(album)));
+        action->setIcon(QIcon::fromTheme(loader->getStandardTagIcon(album)));
     }
 }
 
@@ -833,7 +833,7 @@ void TagsPopupMenu::slotTagThumbnail(Album* album, const QPixmap& pix)
     {
         if (action->data().toInt() == album->id())
         {
-            action->setIcon(KIcon(pix));
+            action->setIcon(QIcon::fromTheme(pix));
             return;
         }
     }

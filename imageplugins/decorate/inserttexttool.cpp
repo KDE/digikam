@@ -51,7 +51,7 @@
 #include <kcursor.h>
 #include <kfontchooser.h>
 #include <kglobal.h>
-#include <kicon.h>
+#include <QIcon>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>

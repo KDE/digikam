@@ -79,29 +79,29 @@ ImagePlugin_Transform::ImagePlugin_Transform(QObject* const parent, const QVaria
     : ImagePlugin(parent, "ImagePlugin_Transform"),
       d(new Private)
 {
-    d->perspectiveAction = new KAction(KIcon("perspective"), i18n("Perspective Adjustment..."), this);
+    d->perspectiveAction = new KAction(QIcon::fromTheme("perspective"), i18n("Perspective Adjustment..."), this);
     actionCollection()->addAction("imageplugin_perspective", d->perspectiveAction);
     connect(d->perspectiveAction, SIGNAL(triggered(bool)),
             this, SLOT(slotPerspective()));
 
-    d->sheartoolAction = new KAction(KIcon("shear"), i18n("Shear..."), this);
+    d->sheartoolAction = new KAction(QIcon::fromTheme("shear"), i18n("Shear..."), this);
     actionCollection()->addAction("imageplugin_sheartool", d->sheartoolAction);
     connect(d->sheartoolAction, SIGNAL(triggered(bool)),
             this, SLOT(slotShearTool()));
 
-    d->resizeAction = new KAction(KIcon("transform-scale"), i18n("&Resize..."), this);
+    d->resizeAction = new KAction(QIcon::fromTheme("transform-scale"), i18n("&Resize..."), this);
     actionCollection()->addAction("imageplugin_resize", d->resizeAction);
     connect(d->resizeAction, SIGNAL(triggered()),
             this, SLOT(slotResize()));
 
-    d->aspectRatioCropAction = new KAction(KIcon("ratiocrop"), i18n("Aspect Ratio Crop..."), this);
+    d->aspectRatioCropAction = new KAction(QIcon::fromTheme("ratiocrop"), i18n("Aspect Ratio Crop..."), this);
     actionCollection()->addAction("imageplugin_ratiocrop", d->aspectRatioCropAction);
     connect(d->aspectRatioCropAction, SIGNAL(triggered(bool)),
             this, SLOT(slotRatioCrop()));
 
 #ifdef HAVE_LIBLQR_1
 
-    d->contentAwareResizingAction = new KAction(KIcon("transform-scale"), i18n("Liquid Rescale..."), this);
+    d->contentAwareResizingAction = new KAction(QIcon::fromTheme("transform-scale"), i18n("Liquid Rescale..."), this);
     // d->contentAwareResizingAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_C));
     actionCollection()->addAction("imageplugin_contentawareresizing", d->contentAwareResizingAction);
     connect(d->contentAwareResizingAction, SIGNAL(triggered(bool)),
@@ -111,7 +111,7 @@ ImagePlugin_Transform::ImagePlugin_Transform(QObject* const parent, const QVaria
 
     //-----------------------------------------------------------------------------------
 
-    d->freerotationAction = new KAction(KIcon("freerotation"), i18n("Free Rotation..."), this);
+    d->freerotationAction = new KAction(QIcon::fromTheme("freerotation"), i18n("Free Rotation..."), this);
     actionCollection()->addAction("imageplugin_freerotation", d->freerotationAction );
     connect(d->freerotationAction, SIGNAL(triggered(bool)),
             this, SLOT(slotFreeRotation()));

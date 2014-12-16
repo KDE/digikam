@@ -160,7 +160,7 @@ void ThumbBarDock::reInitialize()
 
 KToggleAction* ThumbBarDock::getToggleAction(QObject* const parent, const QString& caption) const
 {
-    KToggleAction* action = new KToggleAction(KIcon("view-choose"), caption, parent);
+    KToggleAction* action = new KToggleAction(QIcon::fromTheme("view-choose"), caption, parent);
 
     // Default shortcut is Ctrl+T.
     action->setShortcut(KShortcut(Qt::CTRL+Qt::Key_T));

@@ -36,7 +36,7 @@
 #include <kseparator.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
-#include <kicon.h>
+#include <QIcon>
 #include <kiconloader.h>
 #include <kicondialog.h>
 #include <kmessagebox.h>
@@ -89,7 +89,7 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     QGridLayout* const grid = new QGridLayout(this);
     QLabel* const logo      = new QLabel(this);
 
-    logo->setPixmap(KIcon("tag-properties").pixmap(30,30));
+    logo->setPixmap(QIcon::fromTheme("tag-properties").pixmap(30,30));
     d->topLabel = new QLabel(this);
     d->topLabel->setText(i18n("Tag Properties"));
     d->topLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
@@ -124,7 +124,7 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     d->iconButton->setFixedSize(40, 40);
     iconTextLabel->setBuddy(d->iconButton);
 
-    d->resetIconButton = new QPushButton(KIcon("view-refresh"), i18n("Reset"), this);
+    d->resetIconButton = new QPushButton(QIcon::fromTheme("view-refresh"), i18n("Reset"), this);
 
     QLabel* const kscTextLabel = new QLabel(this);
     kscTextLabel->setText(i18n("&Shortcut:"));
@@ -260,7 +260,7 @@ void TagPropWidget::slotSelectionChanged(QList<Album*> albums)
 
         d->titleEdit->clear();
         d->icon.clear();
-        d->iconButton->setIcon(KIcon());
+        d->iconButton->setIcon(QIcon());
         d->keySeqWidget->clearKeySequence();
         if(containsRoot)
             enableItems(TagPropWidget::DisabledAll);

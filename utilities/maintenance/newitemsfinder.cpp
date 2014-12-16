@@ -32,7 +32,7 @@
 // KDE includes
 
 #include <klocale.h>
-#include <kicon.h>
+#include <QIcon>
 #include <kdebug.h>
 
 // Local includes
@@ -60,7 +60,7 @@ NewItemsFinder::NewItemsFinder(const FinderMode mode, const QStringList& folders
     : MaintenanceTool("NewItemsFinder", parent), d(new Private)
 {
     setLabel(i18n("Find new items"));
-    setThumbnail(KIcon("view-refresh").pixmap(22));
+    setThumbnail(QIcon::fromTheme("view-refresh").pixmap(22));
     ProgressManager::addProgressItem(this);
 
     d->mode = mode;

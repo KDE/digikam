@@ -31,7 +31,7 @@
 // KDE includes
 
 #include <kcategorizedsortfilterproxymodel.h>
-#include <kicon.h>
+#include <QIcon>
 #include <klocale.h>
 
 // Local includes
@@ -789,7 +789,7 @@ QVariant ImageHistoryGraphModel::data(const QModelIndex& index, int role) const
             case Qt::DecorationRole:
             {
                 QString iconName = DImgFilterManager::instance()->filterIcon(filterActionItem->action);
-                return KIcon(iconName);
+                return QIcon::fromTheme(iconName);
             }
             case FilterActionRole:
             {

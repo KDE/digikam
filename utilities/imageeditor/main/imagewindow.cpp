@@ -433,7 +433,7 @@ void ImageWindow::setupActions()
 {
     setupStandardActions();
 
-    d->toMainWindowAction = new KAction(KIcon("view-list-icons"),
+    d->toMainWindowAction = new KAction(QIcon::fromTheme("view-list-icons"),
                                         i18nc("@action Finish editing, close editor, back to main window", "Close Editor"), this);
     connect(d->toMainWindowAction, SIGNAL(triggered()), this, SLOT(slotToMainWindow()));
     actionCollection()->addAction("imageview_tomainwindow", d->toMainWindowAction);
@@ -442,7 +442,7 @@ void ImageWindow::setupActions()
 
     // Pop up dialog to ask user whether to permanently delete
 
-    d->fileDeletePermanentlyAction = new KAction(KIcon("edit-delete"), i18n("Delete File Permanently"), this);
+    d->fileDeletePermanentlyAction = new KAction(QIcon::fromTheme("edit-delete"), i18n("Delete File Permanently"), this);
     d->fileDeletePermanentlyAction->setShortcut(KShortcut(Qt::SHIFT + Qt::Key_Delete));
     connect(d->fileDeletePermanentlyAction, SIGNAL(triggered()),
             this, SLOT(slotDeleteCurrentItemPermanently()));
@@ -451,14 +451,14 @@ void ImageWindow::setupActions()
     // These two actions are hidden, no menu entry, no toolbar entry, no shortcut.
     // Power users may add them.
 
-    d->fileDeletePermanentlyDirectlyAction = new KAction(KIcon("edit-delete"),
+    d->fileDeletePermanentlyDirectlyAction = new KAction(QIcon::fromTheme("edit-delete"),
                                                          i18n("Delete Permanently without Confirmation"), this);
     connect(d->fileDeletePermanentlyDirectlyAction, SIGNAL(triggered()),
             this, SLOT(slotDeleteCurrentItemPermanentlyDirectly()));
     actionCollection()->addAction("image_delete_permanently_directly",
                                   d->fileDeletePermanentlyDirectlyAction);
 
-    d->fileTrashDirectlyAction = new KAction(KIcon("user-trash"),
+    d->fileTrashDirectlyAction = new KAction(QIcon::fromTheme("user-trash"),
                                              i18n("Move to Trash without Confirmation"), this);
     connect(d->fileTrashDirectlyAction, SIGNAL(triggered()),
             this, SLOT(slotTrashCurrentItemDirectly()));

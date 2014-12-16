@@ -35,7 +35,7 @@
 // KDE includes
 
 #include <kglobalsettings.h>
-#include <kicon.h>
+#include <QIcon>
 #include <kiconloader.h>
 #include <kiconeffect.h>
 #include <klocale.h>

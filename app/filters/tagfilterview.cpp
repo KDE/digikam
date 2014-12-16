@@ -81,8 +81,8 @@ TagFilterView::TagFilterView(QWidget* const parent, TagModel* const tagFilterMod
 
     d->tagFilterModeAction        = new KSelectAction(i18n("Tag Filter Mode"), this);
     d->ignoreTagAction            = d->tagFilterModeAction->addAction(i18n("Ignore This Tag"));
-    d->includeTagAction           = d->tagFilterModeAction->addAction(KIcon("list-add"), i18n("Must Have This Tag"));
-    d->excludeTagAction           = d->tagFilterModeAction->addAction(KIcon("list-remove"), i18n("Must Not Have This Tag"));
+    d->includeTagAction           = d->tagFilterModeAction->addAction(QIcon::fromTheme("list-add"), i18n("Must Have This Tag"));
+    d->excludeTagAction           = d->tagFilterModeAction->addAction(QIcon::fromTheme("list-remove"), i18n("Must Not Have This Tag"));
 }
 
 TagFilterView::~TagFilterView()

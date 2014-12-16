@@ -72,7 +72,7 @@ AlbumSelectTreeView::AlbumSelectTreeView(AlbumModel* const model, AlbumModificat
 {
     setAlbumModel(model);
     d->albumModificationHelper = albumModificationHelper;
-    d->newAlbumAction          = new KAction(KIcon("albumfolder-new"), i18n("Create New Album"), this);
+    d->newAlbumAction          = new KAction(QIcon::fromTheme("albumfolder-new"), i18n("Create New Album"), this);
 }
 
 AlbumSelectTreeView::~AlbumSelectTreeView()

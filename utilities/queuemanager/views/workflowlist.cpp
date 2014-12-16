@@ -242,9 +242,9 @@ QMimeData* WorkflowList::mimeData(const QList<QTreeWidgetItem*> items) const
 void WorkflowList::slotContextMenu()
 {
     KMenu popmenu(this);
-    KAction* const assignAction = new KAction(KIcon("bqm-add"),             i18n("Assign Workflow to current queue"), this);
-    KAction* const propAction   = new KAction(KIcon("document-properties"), i18n("Edit Workflow"),                    this);
-    KAction* const delAction    = new KAction(KIcon("edit-delete"),         i18n("Delete Workflow"),                  this);
+    KAction* const assignAction = new KAction(QIcon::fromTheme("bqm-add"),             i18n("Assign Workflow to current queue"), this);
+    KAction* const propAction   = new KAction(QIcon::fromTheme("document-properties"), i18n("Edit Workflow"),                    this);
+    KAction* const delAction    = new KAction(QIcon::fromTheme("edit-delete"),         i18n("Delete Workflow"),                  this);
 
     popmenu.addAction(assignAction);
     popmenu.addAction(propAction);

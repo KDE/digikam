@@ -430,7 +430,7 @@ void ShowFoto::setupActions()
     d->fileOpenAction = actionCollection()->addAction(KStandardAction::Open, "showfoto_open_file",
                         this, SLOT(slotOpenFile()));
 
-    d->openFilesInFolderAction = new KAction(KIcon("folder-image"), i18n("Open folder"), this);
+    d->openFilesInFolderAction = new KAction(QIcon::fromTheme("folder-image"), i18n("Open folder"), this);
     d->openFilesInFolderAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_O));
 
     connect(d->openFilesInFolderAction, SIGNAL(triggered()),
@@ -504,12 +504,12 @@ void ShowFoto::applySettings()
 
     if (d->deleteItem2Trash)
     {
-        m_fileDeleteAction->setIcon(KIcon("user-trash"));
+        m_fileDeleteAction->setIcon(QIcon::fromTheme("user-trash"));
         m_fileDeleteAction->setText(i18nc("Non-pluralized", "Move to Trash"));
     }
     else
     {
-        m_fileDeleteAction->setIcon(KIcon("edit-delete"));
+        m_fileDeleteAction->setIcon(QIcon::fromTheme("edit-delete"));
         m_fileDeleteAction->setText(i18n("Delete File"));
     }
 

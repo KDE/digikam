@@ -173,7 +173,7 @@ void CurvesBox::setup()
     d->pickerBox = new QWidget();
 
     d->pickBlack = new QToolButton;
-    d->pickBlack->setIcon(KIcon("color-picker-black"));
+    d->pickBlack->setIcon(QIcon::fromTheme("color-picker-black"));
     d->pickBlack->setCheckable(true);
     d->pickBlack->setToolTip(i18n("All channels shadow tone color picker"));
     d->pickBlack->setWhatsThis(i18n("With this button, you can pick the color from original "
@@ -181,7 +181,7 @@ void CurvesBox::setup()
                                     "smooth curves point on Red, Green, Blue, and Luminosity channels."));
 
     d->pickGray = new QToolButton;
-    d->pickGray->setIcon(KIcon("color-picker-grey"));
+    d->pickGray->setIcon(QIcon::fromTheme("color-picker-grey"));
     d->pickGray->setCheckable(true);
     d->pickGray->setToolTip(i18n("All channels middle tone color picker"));
     d->pickGray->setWhatsThis(i18n("With this button, you can pick the color from original "
@@ -189,7 +189,7 @@ void CurvesBox::setup()
                                    "smooth curves point on Red, Green, Blue, and Luminosity channels."));
 
     d->pickWhite = new QToolButton;
-    d->pickWhite->setIcon(KIcon("color-picker-white"));
+    d->pickWhite->setIcon(QIcon::fromTheme("color-picker-white"));
     d->pickWhite->setCheckable(true);
     d->pickWhite->setToolTip(i18n("All channels highlight tone color picker"));
     d->pickWhite->setWhatsThis(i18n("With this button, you can pick the color from original "

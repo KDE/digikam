@@ -323,15 +323,15 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* const parent)
     // ---------------------------------------------------------------
 
     button(Default)->setText(i18n("Reset"));
-    button(Default)->setIcon(KIcon(SmallIcon("document-revert")));
+    button(Default)->setIcon(QIcon::fromTheme(SmallIcon("document-revert")));
     button(Default)->setToolTip(i18n("Reset all settings to default values."));
 
     button(Ok)->setText(i18n("Import"));
-    button(Ok)->setIcon(KIcon(SmallIcon("dialog-ok")));
+    button(Ok)->setIcon(QIcon::fromTheme(SmallIcon("dialog-ok")));
     button(Ok)->setToolTip(i18n("Import image to editor using current settings."));
 
     button(Cancel)->setText(i18n("Use Default"));
-    button(Cancel)->setIcon(KIcon(SmallIcon("go-home")));
+    button(Cancel)->setIcon(QIcon::fromTheme(SmallIcon("go-home")));
     button(Cancel)->setToolTip(i18n("Use general Raw decoding settings to load this image in editor."));
 
     // ---------------------------------------------------------------

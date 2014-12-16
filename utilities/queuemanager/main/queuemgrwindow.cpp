@@ -272,7 +272,7 @@ void QueueMgrWindow::setupStatusBar()
     d->statusProgressBar->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->statusProgressBar->setMaximumHeight(fontMetrics().height() + 2);
     d->statusProgressBar->setNotify(true);
-    d->statusProgressBar->setNotificationTitle(i18n("Batch Queue Manager"), KIcon("bqm-diff").pixmap(22));
+    d->statusProgressBar->setNotificationTitle(i18n("Batch Queue Manager"), QIcon::fromTheme("bqm-diff").pixmap(22));
     statusBar()->addWidget(d->statusProgressBar, 60);
 
     d->statusLabel = new QLabel(statusBar());
@@ -350,32 +350,32 @@ void QueueMgrWindow::setupActions()
 {
     // -- Standard 'File' menu actions ---------------------------------------------
 
-    d->runAction = new KAction(KIcon("media-playback-start"), i18n("Run"), this);
+    d->runAction = new KAction(QIcon::fromTheme("media-playback-start"), i18n("Run"), this);
     d->runAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_P));
     d->runAction->setEnabled(false);
     connect(d->runAction, SIGNAL(triggered()), this, SLOT(slotRun()));
     actionCollection()->addAction("queuemgr_run", d->runAction);
 
-    d->stopAction = new KAction(KIcon("media-playback-stop"), i18n("Stop"), this);
+    d->stopAction = new KAction(QIcon::fromTheme("media-playback-stop"), i18n("Stop"), this);
     d->stopAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_S));
     d->stopAction->setEnabled(false);
     connect(d->stopAction, SIGNAL(triggered()), this, SLOT(slotStop()));
     actionCollection()->addAction("queuemgr_stop", d->stopAction);
 
-    d->newQueueAction = new KAction(KIcon("bqm-addqueue"), i18n("New Queue"), this);
+    d->newQueueAction = new KAction(QIcon::fromTheme("bqm-addqueue"), i18n("New Queue"), this);
     connect(d->newQueueAction, SIGNAL(triggered()), d->queuePool, SLOT(slotAddQueue()));
     actionCollection()->addAction("queuemgr_newqueue", d->newQueueAction);
 
-    d->removeQueueAction = new KAction(KIcon("bqm-rmqueue"), i18n("Remove Queue"), this);
+    d->removeQueueAction = new KAction(QIcon::fromTheme("bqm-rmqueue"), i18n("Remove Queue"), this);
     connect(d->removeQueueAction, SIGNAL(triggered()), d->queuePool, SLOT(slotRemoveCurrentQueue()));
     actionCollection()->addAction("queuemgr_removequeue", d->removeQueueAction);
 
     // TODO rename action to saveWorkflowAction to avoid confusion?
-    d->saveQueueAction = new KAction(KIcon("document-save"), i18n("Save Workflow"), this);
+    d->saveQueueAction = new KAction(QIcon::fromTheme("document-save"), i18n("Save Workflow"), this);
     connect(d->saveQueueAction, SIGNAL(triggered()), this, SLOT(slotSaveWorkflow()));
     actionCollection()->addAction("queuemgr_savequeue", d->saveQueueAction);
 
-    d->removeItemsSelAction = new KAction(KIcon("list-remove"), i18n("Remove items"), this);
+    d->removeItemsSelAction = new KAction(QIcon::fromTheme("list-remove"), i18n("Remove items"), this);
     d->removeItemsSelAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_K));
     d->removeItemsSelAction->setEnabled(false);
     connect(d->removeItemsSelAction, SIGNAL(triggered()), d->queuePool, SLOT(slotRemoveSelectedItems()));
@@ -386,7 +386,7 @@ void QueueMgrWindow::setupActions()
     connect(d->removeItemsDoneAction, SIGNAL(triggered()), d->queuePool, SLOT(slotRemoveItemsDone()));
     actionCollection()->addAction("queuemgr_removeitemsdone", d->removeItemsDoneAction);
 
-    d->clearQueueAction = new KAction(KIcon("edit-clear"), i18n("Clear Queue"), this);
+    d->clearQueueAction = new KAction(QIcon::fromTheme("edit-clear"), i18n("Clear Queue"), this);
     d->clearQueueAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_K));
     d->clearQueueAction->setEnabled(false);
     connect(d->clearQueueAction, SIGNAL(triggered()), d->queuePool, SLOT(slotClearList()));
@@ -397,19 +397,19 @@ void QueueMgrWindow::setupActions()
 
     // -- 'Tools' menu actions -----------------------------------------------------
 
-    d->moveUpToolAction = new KAction(KIcon("bqm-commit"), i18n("Move up"), this);
+    d->moveUpToolAction = new KAction(QIcon::fromTheme("bqm-commit"), i18n("Move up"), this);
     connect(d->moveUpToolAction, SIGNAL(triggered()), d->assignedList, SLOT(slotMoveCurrentToolUp()));
     actionCollection()->addAction("queuemgr_toolup", d->moveUpToolAction);
 
-    d->moveDownToolAction = new KAction(KIcon("bqm-update"), i18n("Move down"), this);
+    d->moveDownToolAction = new KAction(QIcon::fromTheme("bqm-update"), i18n("Move down"), this);
     connect(d->moveDownToolAction, SIGNAL(triggered()), d->assignedList, SLOT(slotMoveCurrentToolDown()));
     actionCollection()->addAction("queuemgr_tooldown", d->moveDownToolAction);
 
-    d->removeToolAction = new KAction(KIcon("bqm-remove"), i18n("Remove tool"), this);
+    d->removeToolAction = new KAction(QIcon::fromTheme("bqm-remove"), i18n("Remove tool"), this);
     connect(d->removeToolAction, SIGNAL(triggered()), d->assignedList, SLOT(slotRemoveCurrentTool()));
     actionCollection()->addAction("queuemgr_toolremove", d->removeToolAction);
 
-    d->clearToolsAction = new KAction(KIcon("edit-clear-list"), i18n("Clear List"), this);
+    d->clearToolsAction = new KAction(QIcon::fromTheme("edit-clear-list"), i18n("Clear List"), this);
     connect(d->clearToolsAction, SIGNAL(triggered()), d->assignedList, SLOT(slotClearToolsList()));
     actionCollection()->addAction("queuemgr_toolsclear", d->clearToolsAction);
 

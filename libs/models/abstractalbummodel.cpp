@@ -33,7 +33,7 @@
 
 #include <kdebug.h>
 #include <kglobal.h>
-#include <kicon.h>
+#include <QIcon>
 #include <klocale.h>
 
 // Local includes
@@ -1097,7 +1097,7 @@ void AbstractCheckableAlbumModel::prepareAddExcludeDecoration(Album* a, QPixmap&
         QPainter p(&icon);
         p.drawPixmap((icon.width()  - overlay_size) / 2,
                      (icon.height() - overlay_size) / 2,
-                     KIcon(state == Qt::PartiallyChecked ? "list-remove" : "list-add").pixmap(overlay_size, overlay_size));
+                     QIcon::fromTheme(state == Qt::PartiallyChecked ? "list-remove" : "list-add").pixmap(overlay_size, overlay_size));
     }
 }
 

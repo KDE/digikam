@@ -219,7 +219,7 @@ void ThemeManager::populateThemeMenu()
 
     d->themeMenuAction->addSeparator();
     KAction* const config = new KAction(i18n("Configuration..."), d->themeMenuAction);
-    config->setIcon(KIcon("preferences-desktop-theme"));
+    config->setIcon(QIcon::fromTheme("preferences-desktop-theme"));
     d->themeMenuAction->addAction(config);
 
     connect(config, SIGNAL(triggered()),

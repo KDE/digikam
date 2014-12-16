@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <kicon.h>
+#include <QIcon>
 #include <klocale.h>
 #include <kapplication.h>
 
@@ -192,12 +192,12 @@ void MetadataSynchronizer::parseList()
     if (d->direction == WriteFromDatabaseToFile)
     {
         setLabel(i18n("Synchronizing image metadata with database"));
-        setThumbnail(KIcon("document-edit").pixmap(22));
+        setThumbnail(QIcon::fromTheme("document-edit").pixmap(22));
     }
     else
     {
         setLabel(i18n("Updating database from image metadata"));
-        setThumbnail(KIcon("edit-redo").pixmap(22));
+        setThumbnail(QIcon::fromTheme("edit-redo").pixmap(22));
     }
 
     setTotalItems(d->imageInfoList.count());

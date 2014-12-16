@@ -135,26 +135,26 @@ void TagMngrTreeView::setContexMenuItems(ContextMenuHelper& cmh, QList<TAlbum*> 
     else
     {
         /** This is a dummy action, delete is disable for root tag **/
-        KAction* deleteTagsAction = new KAction(KIcon("user-trash"),
+        KAction* deleteTagsAction = new KAction(QIcon::fromTheme("user-trash"),
                                                 i18n("Delete Tags"), this);
         cmh.addAction(deleteTagsAction);
         deleteTagsAction->setEnabled(false);
     }
     cmh.addSeparator();
 
-    KAction* const resetIcon     = new KAction(KIcon("view-refresh"),
+    KAction* const resetIcon     = new KAction(QIcon::fromTheme("view-refresh"),
                                                i18n("Reset tag Icon"), this);
 
-    KAction* const invSel        = new KAction(KIcon("tag-reset"),
+    KAction* const invSel        = new KAction(QIcon::fromTheme("tag-reset"),
                                                i18n("Invert Selection"), this);
 
-    KAction* const expandTree    = new KAction(KIcon("format-indent-more"),
+    KAction* const expandTree    = new KAction(QIcon::fromTheme("format-indent-more"),
                                                i18n("Expand Tag Tree"), this);
 
-    KAction* const expandSel     = new KAction(KIcon("format-indent-more"),
+    KAction* const expandSel     = new KAction(QIcon::fromTheme("format-indent-more"),
                                                i18n("Expand Selected Nodes"), this);
 
-    KAction* const delTagFromImg = new KAction(KIcon("tag-delete"),
+    KAction* const delTagFromImg = new KAction(QIcon::fromTheme("tag-delete"),
                                                i18n("Remove Tag from Images"), this);
 
     cmh.addAction(resetIcon,     d->tagMngr, SLOT(slotResetTagIcon()),       false);

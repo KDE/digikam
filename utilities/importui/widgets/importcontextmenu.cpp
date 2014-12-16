@@ -225,7 +225,7 @@ void ImportContextMenuHelper::addServicesMenu(const KUrl::List& selectedItems)
         {
             QString name         = service->name().replace('&', "&&");
             QAction* action      = servicesMenu->addAction(name);
-            action->setIcon(KIcon(service->icon()));
+            action->setIcon(QIcon::fromTheme(service->icon()));
             action->setData(service->name());
             d->servicesMap[name] = service;
         }
@@ -300,7 +300,7 @@ void ImportContextMenuHelper::addRotateMenu(itemIds& /*ids*/)
 //    setSelectedIds(ids);
 
 //    KMenu* imageRotateMenu = new KMenu(i18n("Rotate"), d->parent);
-//    imageRotateMenu->setIcon(KIcon("object-rotate-right"));
+//    imageRotateMenu->setIcon(QIcon::fromTheme("object-rotate-right"));
 
 //    KAction* left = new KAction(this);
 //    left->setObjectName("rotate_ccw");

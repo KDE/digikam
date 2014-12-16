@@ -33,7 +33,7 @@
 #include <kaction.h>
 #include <kapplication.h>
 #include <klocale.h>
-#include <kicon.h>
+#include <QIcon>
 #include <kdebug.h>
 
 // Local includes
