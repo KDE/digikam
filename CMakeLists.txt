@@ -5,6 +5,24 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 project(digikam)
+cmake_minimum_required(VERSION 2.8.12)
+
+# we need some parts of the ECM CMake helpers
+find_package(ECM 1.3.0 REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${kdepim_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
+include(ECMOptionalAddSubdirectory)
+include(ECMInstallIcons)
+include(ECMSetupVersion)
+include(ECMAddTests)
+include(ECMMarkNonGuiExecutable)
+
+include(CMakePackageConfigHelpers)
+include(FeatureSummary)
+include(CheckFunctionExists)
+
+include(KDEInstallDirs)
+include(KDECMakeSettings)
+include(KDECompilerSettings)
 
 
 if (false)
