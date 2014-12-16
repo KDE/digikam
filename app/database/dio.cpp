@@ -169,7 +169,7 @@ void DIO::Private::processRename(const KUrl& src, const KUrl& dest)
     if (QFileInfo(sidecar).exists())
     {
         QString destSidecar = DMetadata::sidecarFilePathForFile(dest.toLocalFile());
-        emit jobToCreate(Rename, KUrl::List() << KUrl::fromPath(sidecar), KUrl::fromPath(destSidecar));
+        emit jobToCreate(Rename, KUrl::List() << QUrl::fromLocalFile(sidecar), KUrl::fromPath(destSidecar));
     }
 
     emit jobToCreate(Rename, KUrl::List() << src, dest);

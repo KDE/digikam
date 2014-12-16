@@ -49,6 +49,7 @@
 
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rexpanderbox.h>
+#include <QStandardPaths>
 
 using namespace KDcrawIface;
 
@@ -372,7 +373,7 @@ void NRSettings::writeSettings(KConfigGroup& group)
 
 void NRSettings::loadSettings()
 {
-    KUrl loadRestorationFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
+    KUrl loadRestorationFile = KFileDialog::getOpenUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
                                                        QString("*"), kapp->activeWindow(),
                                                        QString(i18n("Photograph Noise Reduction Settings File to Load")));
 
@@ -417,7 +418,7 @@ void NRSettings::loadSettings()
 
 void NRSettings::saveAsSettings()
 {
-    KUrl saveRestorationFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
+    KUrl saveRestorationFile = KFileDialog::getSaveUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
                                                        QString("*"), kapp->activeWindow(),
                                                        QString(i18n("Photograph Noise Reduction Settings File to Save")));
 

@@ -102,8 +102,8 @@ void ThumbnailCreator::initThumbnailDirs()
     d->smallThumbPath = normalThumbnailDir();
     d->bigThumbPath   = largeThumbnailDir();
 
-    KStandardDirs::makeDir(d->smallThumbPath, 0700);
-    KStandardDirs::makeDir(d->bigThumbPath, 0700);
+    QDir().mkpath(d->smallThumbPath, 0700);
+    QDir().mkpath(d->bigThumbPath, 0700);
 }
 
 QString ThumbnailCreator::thumbnailPath(const QString& filePath) const

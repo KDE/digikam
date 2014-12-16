@@ -171,7 +171,7 @@ void ImageDialogPreview::showPreview(const KUrl& url)
             }
             else
             {
-                dateTime = KGlobal::locale()->formatDateTime(info.dateTime, KLocale::ShortDate, true);
+                dateTime = KLocale::global()->formatDateTime(info.dateTime, KLocale::ShortDate, true);
             }
 
             if (info.aperture.isEmpty())

@@ -161,7 +161,7 @@ void LensAutoFixTool::slotLensChanged()
 void LensAutoFixTool::readSettings()
 {
     d->gboxSettings->blockSignals(true);
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->showGrid->setChecked(group.readEntry(d->configShowGrid, false));
@@ -173,7 +173,7 @@ void LensAutoFixTool::readSettings()
 
 void LensAutoFixTool::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     group.writeEntry(d->configShowGrid, d->showGrid->isChecked());

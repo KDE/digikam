@@ -195,7 +195,7 @@ void ChannelMixerTool::setFinalImage()
 
 void ChannelMixerTool::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->settingsView->readSettings(group);
@@ -211,7 +211,7 @@ void ChannelMixerTool::readSettings()
 
 void ChannelMixerTool::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->settingsView->writeSettings(group);

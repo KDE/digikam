@@ -409,7 +409,7 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSImageInfo::List& list)
 
         d->latitude->setText(QString::number(coordinates.lat()));
         d->longitude->setText(QString::number(coordinates.lon()));
-        d->date->setText(KGlobal::locale()->formatDateTime(info.dateTime,
+        d->date->setText(KLocale::global()->formatDateTime(info.dateTime,
                          KLocale::ShortDate, true));
     }
 

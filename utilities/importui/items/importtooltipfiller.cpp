@@ -75,14 +75,14 @@ QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
         if (settings->getToolTipsShowFileDate())
         {
             QDateTime createdDate  = info.ctime;
-            str                    = KGlobal::locale()->formatDateTime(createdDate, KLocale::ShortDate, true);
+            str                    = KLocale::global()->formatDateTime(createdDate, KLocale::ShortDate, true);
             tip                   += cnt.cellBeg + i18n("Date:") + cnt.cellMid + str + cnt.cellEnd;
         }
 
         if (settings->getToolTipsShowFileSize())
         {
             tip                   += cnt.cellBeg + i18n("Size:") + cnt.cellMid;
-            QString localeFileSize = KGlobal::locale()->formatNumber(info.size, 0);
+            QString localeFileSize = KLocale::global()->formatNumber(info.size, 0);
             str                    = i18n("%1 (%2)", KIO::convertSize(info.size), localeFileSize);
             tip                   += str + cnt.cellEnd;
         }
@@ -140,7 +140,7 @@ QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
                     str = str.left(cnt.maxStringLength-3) + "...";
                 }
 
-                metaStr += cnt.cellBeg + i18n("Make/Model:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+                metaStr += cnt.cellBeg + i18n("Make/Model:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
             }
 
             if (settings->getToolTipsShowPhotoFocal())
@@ -161,7 +161,7 @@ QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
                     str = str.left(cnt.maxStringLength-3) + "...";
                 }
 
-                metaStr += cnt.cellBeg + i18n("Aperture/Focal:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+                metaStr += cnt.cellBeg + i18n("Aperture/Focal:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
             }
 
             if (settings->getToolTipsShowPhotoExpo())
@@ -174,7 +174,7 @@ QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
                     str = str.left(cnt.maxStringLength-3) + "...";
                 }
 
-                metaStr += cnt.cellBeg + i18n("Exposure/Sensitivity:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+                metaStr += cnt.cellBeg + i18n("Exposure/Sensitivity:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
             }
 
             if (settings->getToolTipsShowPhotoFlash())
@@ -187,7 +187,7 @@ QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
                 }
 
                 metaStr += cnt.cellBeg + i18nc("camera flash settings",
-                                               "Flash:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+                                               "Flash:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
             }
 
             if (settings->getToolTipsShowPhotoWB())
@@ -199,7 +199,7 @@ QString ImportToolTipFiller::CamItemInfoTipContents(const CamItemInfo& info)
                     str = str.left(cnt.maxStringLength-3) + "...";
                 }
 
-                metaStr += cnt.cellBeg + i18n("White Balance:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+                metaStr += cnt.cellBeg + i18n("White Balance:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
             }
 
             tip += metaStr;

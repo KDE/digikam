@@ -65,6 +65,7 @@
 // LibKDcraw includes
 
 #include <libkdcraw/rnuminput.h>
+#include <QStandardPaths>
 
 // Local includes
 
@@ -324,7 +325,7 @@ ResizeTool::~ResizeTool()
 
 void ResizeTool::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     GreycstorationContainer prm;
@@ -350,7 +351,7 @@ void ResizeTool::readSettings()
 void ResizeTool::writeSettings()
 {
     GreycstorationContainer prm = d->settingsWidget->settings();
-    KConfigGroup group          = KGlobal::config()->group(d->configGroupName);
+    KConfigGroup group          = KSharedConfig::openConfig()->group(d->configGroupName);
 
     group.writeEntry(d->configFastApproxEntry,    prm.fastApprox);
     group.writeEntry(d->configInterpolationEntry, prm.interp);
@@ -578,7 +579,7 @@ void ResizeTool::processCImgUrl(const QString& url)
 
 void ResizeTool::slotLoadSettings()
 {
-    KUrl loadBlowupFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
+    KUrl loadBlowupFile = KFileDialog::getOpenUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
                           QString( "*" ), kapp->activeWindow(),
                           QString( i18n("Photograph Resizing Settings File to Load")) );
 
@@ -611,7 +612,7 @@ void ResizeTool::slotLoadSettings()
 
 void ResizeTool::slotSaveAsSettings()
 {
-    KUrl saveBlowupFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
+    KUrl saveBlowupFile = KFileDialog::getSaveUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
                           QString( "*" ), kapp->activeWindow(),
                           QString( i18n("Photograph Resizing Settings File to Save")) );
 

@@ -41,6 +41,7 @@
 #include <kglobalsettings.h>
 #include <kaboutdata.h>
 #include <kcomponentdata.h>
+#include <QFontDatabase>
 
 // Local includes
 
@@ -189,7 +190,7 @@ void SplashScreen::drawContents(QPainter* p)
     }
 
     // We use a device dependant font with a fixed size.
-    QFont fnt(KGlobalSettings::generalFont());
+    QFont fnt(QFontDatabase::systemFont(QFontDatabase::GeneralFont));
     fnt.setPixelSize(10);
     fnt.setBold(false);
     p->setFont(fnt);

@@ -83,9 +83,11 @@ int main(int argc, char* argv[])
     app.setTopWidget(w);
     w->show();
 
-    KGlobal::locale()->setMainCatalog("digikam");
-    KGlobal::locale()->insertCatalog("libkdcraw");
-    KGlobal::locale()->insertCatalog("libkexiv2");
+    KLocale::global()->setMainCatalog("digikam");
+    //KF5 port: remove this line and define TRANSLATION_DOMAIN in CMakeLists.txt instead
+//KLocale::global()->insertCatalog("libkdcraw");
+    //KF5 port: remove this line and define TRANSLATION_DOMAIN in CMakeLists.txt instead
+//KLocale::global()->insertCatalog("libkexiv2");
 
     int ret = app.exec();
 

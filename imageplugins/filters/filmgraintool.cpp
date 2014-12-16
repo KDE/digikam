@@ -114,7 +114,7 @@ FilmGrainTool::~FilmGrainTool()
 
 void FilmGrainTool::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->settingsView->readSettings(group);
@@ -122,7 +122,7 @@ void FilmGrainTool::readSettings()
 
 void FilmGrainTool::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->settingsView->writeSettings(group);

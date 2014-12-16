@@ -138,7 +138,7 @@ extern "C"
 
         KLocale::setMainCatalog("digikam");
         KComponentData componentData( "kio_digikamtags" );
-        KGlobal::locale();
+        KLocale::global();
 
         kDebug() << "*** kio_digikamtag started ***";
 

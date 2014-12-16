@@ -263,7 +263,7 @@ bool ShowfotoThumbnailModel::getThumbnail(const ShowfotoItemInfo& itemInfo, QIma
         return true;
     }
 
-    KSharedConfig::Ptr config  = KGlobal::config();
+    KSharedConfig::Ptr config  = KSharedConfig::openConfig();
     KConfigGroup group         = config->group("Camera Settings");
     bool turnHighQualityThumbs = group.readEntry("TurnHighQualityThumbs", false);
 

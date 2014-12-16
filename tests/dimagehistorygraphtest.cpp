@@ -105,7 +105,7 @@ void DImageHistoryGraphTest::cleanupTestCase()
 
     QFile(dbFile).remove();
 
-    KUrl deleteUrl = KUrl::fromPath(collectionDir.path());
+    KUrl deleteUrl = QUrl::fromLocalFile(collectionDir.path());
     KIO::NetAccess::del(deleteUrl, 0);
     qDebug() << "deleted test folder " << deleteUrl;
 }

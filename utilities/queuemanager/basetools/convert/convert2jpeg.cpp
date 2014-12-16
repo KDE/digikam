@@ -70,7 +70,7 @@ void Convert2JPEG::registerSettingsWidget()
 
 BatchToolSettings Convert2JPEG::defaultSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("ImageViewer Settings");
     int compression           = group.readEntry("JPEGCompression", 75);
     int subSampling           = group.readEntry("JPEGSubSampling", 1);  // Medium subsampling

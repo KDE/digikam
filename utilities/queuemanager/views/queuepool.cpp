@@ -468,7 +468,7 @@ void QueuePool::slotFileChanged(const QString& filePath)
 
         if (queue)
         {
-            queue->reloadThumbs(KUrl::fromPath(filePath));
+            queue->reloadThumbs(QUrl::fromLocalFile(filePath));
         }
     }
 }

@@ -542,11 +542,11 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
             ImageMetadataContainer photoInfo = info.imageMetadataContainer();
             VideoMetadataContainer videoInfo = info.videoMetadataContainer();
 
-            str = KGlobal::locale()->formatDateTime(commonInfo.fileModificationDate, KLocale::ShortDate, true);
+            str = KLocale::global()->formatDateTime(commonInfo.fileModificationDate, KLocale::ShortDate, true);
             m_propertiesTab->setFileModifiedDate(str);
 
             str = QString("%1 (%2)").arg(KIO::convertSize(commonInfo.fileSize))
-                  .arg(KGlobal::locale()->formatNumber(commonInfo.fileSize, 0));
+                  .arg(KLocale::global()->formatNumber(commonInfo.fileSize, 0));
             m_propertiesTab->setFileSize(str);
 
             //  These infos are not stored in DB
@@ -593,7 +593,7 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
 
             if (commonInfo.creationDate.isValid())
             {
-                str = KGlobal::locale()->formatDateTime(commonInfo.creationDate, KLocale::ShortDate, true);
+                str = KLocale::global()->formatDateTime(commonInfo.creationDate, KLocale::ShortDate, true);
                 m_propertiesTab->setPhotoDateTime(str);
             }
             else

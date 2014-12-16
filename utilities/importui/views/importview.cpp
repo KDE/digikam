@@ -279,7 +279,7 @@ void ImportView::loadViewState()
 {
     //TODO: d->filterWidget->loadState();
 
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("Import MainWindow");
 
     // Restore the splitter
@@ -297,7 +297,7 @@ void ImportView::loadViewState()
 
 void ImportView::saveViewState()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("Import MainWindow");
 
     //TODO: d->filterWidget->saveState();

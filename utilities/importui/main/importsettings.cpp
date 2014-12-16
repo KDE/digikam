@@ -30,6 +30,7 @@
 #include <kglobalsettings.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <QFontDatabase>
 
 // Local includes
 
@@ -226,7 +227,7 @@ ImportSettings* ImportSettings::instance()
 ImportSettings::ImportSettings()
     : QObject(), d(new Private)
 {
-    d->config = KGlobal::config();
+    d->config = KSharedConfig::openConfig();
     init();
     readSettings();
 }
@@ -253,9 +254,9 @@ void ImportSettings::init()
     d->iconShowOverlays             = true;
     d->iconShowRating               = true;
     d->iconShowTags                 = true;
-    d->iconviewFont                 = KGlobalSettings::generalFont();
+    d->iconviewFont                 = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
 
-    d->toolTipsFont                 = KGlobalSettings::generalFont();
+    d->toolTipsFont                 = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     d->showToolTips                 = false;
     d->tooltipShowFileName          = true;
     d->tooltipShowFileDate          = false;
@@ -301,9 +302,9 @@ void ImportSettings::readSettings()
     d->iconShowRating               = group.readEntry(d->configIconShowRatingEntry,               true);
     d->iconShowImageFormat          = group.readEntry(d->configIconShowImageFormatEntry,          false);
     d->iconShowCoordinates          = group.readEntry(d->configIconShowCoordinatesEntry,          false);
-    d->iconviewFont                 = group.readEntry(d->configIconViewFontEntry,                 KGlobalSettings::generalFont());
+    d->iconviewFont                 = group.readEntry(d->configIconViewFontEntry,                 QFontDatabase::systemFont(QFontDatabase::GeneralFont));
 
-    d->toolTipsFont                 = group.readEntry(d->configToolTipsFontEntry,                 KGlobalSettings::generalFont());
+    d->toolTipsFont                 = group.readEntry(d->configToolTipsFontEntry,                 QFontDatabase::systemFont(QFontDatabase::GeneralFont));
     d->showToolTips                 = group.readEntry(d->configShowToolTipsEntry,                 false);
     d->tooltipShowFileName          = group.readEntry(d->configToolTipsShowFileNameEntry,         true);
     d->tooltipShowFileDate          = group.readEntry(d->configToolTipsShowFileDateEntry,         false);

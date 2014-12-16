@@ -116,7 +116,7 @@ AntiVignettingTool::~AntiVignettingTool()
 
 void AntiVignettingTool::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->settingsView->readSettings(group);
@@ -125,7 +125,7 @@ void AntiVignettingTool::readSettings()
 
 void AntiVignettingTool::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->settingsView->writeSettings(group);

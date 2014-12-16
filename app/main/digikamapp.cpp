@@ -96,6 +96,9 @@
 // Libkexiv2
 
 #include <libkexiv2/rotationmatrix.h>
+#include <QStandardPaths>
+#include <KFormat>
+#include <KHelpClient>
 
 // Local includes
 
@@ -190,7 +193,7 @@ DigikamApp::DigikamApp()
     // --------------------------------------------------------
 
     m_instance = this;
-    d->config  = KGlobal::config();
+    d->config  = KSharedConfig::openConfig();
 
     setObjectName("Digikam");
 
@@ -2294,7 +2297,7 @@ void DigikamApp::fillSolidMenus()
 
             if (volume->size())
                 label += i18nc("device label etc... (<formatted byte size>)",
-                               " (%1)", KGlobal::locale()->formatByteSize(volume->size()));
+                               " (%1)", KFormat().formatByteSize(volume->size()));
         }
 
         QString iconName;
@@ -2482,7 +2485,7 @@ void DigikamApp::slotShowTip()
 
 void DigikamApp::slotShowKipiHelp()
 {
-    KToolInvocation::invokeHelp( QString(), "kipi-plugins" );
+    KHelpClient::invokeHelp( QString(), "kipi-plugins" );
 }
 
 void DigikamApp::slotDBStat()
@@ -2620,7 +2623,7 @@ void DigikamApp::slotImportAddImages()
 {
     QString startingPath;
 #if KDE_IS_VERSION(4,1,61)
-    startingPath = KGlobalSettings::picturesPath();
+    startingPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
 #else
     startingPath = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
 #endif

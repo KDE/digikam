@@ -340,7 +340,7 @@ void BatchTool::setOutputUrlFromInputUrl()
 
     KUrl url;
     url.setPath(path);
-    setOutputUrl(KUrl::fromPath(temp.fileName()));
+    setOutputUrl(QUrl::fromLocalFile(temp.fileName()));
 }
 
 bool BatchTool::isRawFile(const KUrl& url) const

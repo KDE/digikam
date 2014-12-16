@@ -4629,7 +4629,7 @@ QList<QVariant> AlbumDB::getImageIdsFromArea(qreal lat1, qreal lat2, qreal lng1,
 
 void AlbumDB::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->recentlyAssignedTags = group.readEntry(d->configRecentlyUsedTags, QList<int>());
@@ -4637,7 +4637,7 @@ void AlbumDB::readSettings()
 
 void AlbumDB::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     group.writeEntry(d->configRecentlyUsedTags, d->recentlyAssignedTags);

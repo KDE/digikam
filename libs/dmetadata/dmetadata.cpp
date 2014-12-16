@@ -2651,7 +2651,7 @@ QString DMetadata::valueToString (const QVariant& value, MetadataInfo::Field fie
             }
 
             // Try "en-us"
-            KLocale* locale = KGlobal::locale();
+            KLocale* locale = KLocale::global();
             QString spec = locale->language().toLower() + '-' + locale->country().toLower();
 
             if (map.contains(spec))
@@ -2957,7 +2957,7 @@ KUrl DMetadata::sidecarUrl(const KUrl& url)
 
 KUrl DMetadata::sidecarUrl(const QString& path)
 {
-    return KUrl::fromPath(sidecarFilePathForFile(path));
+    return QUrl::fromLocalFile(sidecarFilePathForFile(path));
 }
 
 QString DMetadata::sidecarPath(const QString& path)

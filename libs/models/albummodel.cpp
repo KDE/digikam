@@ -312,7 +312,7 @@ QString DateAlbumModel::albumName(Album* album) const
     }
     else
     {
-        return KGlobal::locale()->calendar()->monthName(dalbum->date(), KCalendarSystem::LongName);
+        return KLocale::global()->calendar()->monthName(dalbum->date(), KCalendarSystem::LongName);
     }
 }
 

@@ -311,7 +311,7 @@ void FileSaveOptionsBox::slotImageFileFormatChanged(const QString& ext)
 
 void FileSaveOptionsBox::applySettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("ImageViewer Settings");
     group.writeEntry("JPEGCompression",     d->JPEGOptions->getCompressionValue());
     group.writeEntry("JPEGSubSampling",     d->JPEGOptions->getSubSamplingValue());
@@ -328,7 +328,7 @@ void FileSaveOptionsBox::applySettings()
 
 void FileSaveOptionsBox::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("ImageViewer Settings");
     d->JPEGOptions->setCompressionValue( group.readEntry("JPEGCompression",         75) );
     d->JPEGOptions->setSubSamplingValue( group.readEntry("JPEGSubSampling",         1) );  // Medium subsampling

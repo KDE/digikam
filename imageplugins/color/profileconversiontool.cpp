@@ -186,7 +186,7 @@ void ProfileConversionTool::updateTransform()
 
 void ProfileConversionTool::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     d->profilesBox->setCurrentProfile(group.readPathEntry(d->configProfileEntry, d->currentProfile.filePath()));
     d->profilesBox->readSettings(group);
@@ -194,7 +194,7 @@ void ProfileConversionTool::readSettings()
 
 void ProfileConversionTool::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     group.writePathEntry(d->configProfileEntry, d->profilesBox->currentProfile().filePath());
     d->profilesBox->writeSettings(group);
@@ -246,7 +246,7 @@ void ProfileConversionTool::setFinalImage()
 QStringList ProfileConversionTool::favoriteProfiles()
 {
     Private d;
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d.configGroupName);
     return IccProfilesSettings::favoriteProfiles(group);
 }

@@ -597,7 +597,7 @@ QString VersionFileInfo::filePath() const
 
 KUrl VersionFileInfo::fileUrl() const
 {
-    KUrl url = KUrl::fromPath(path);
+    KUrl url = QUrl::fromLocalFile(path);
     url.addPath(fileName);
     return url;
 }

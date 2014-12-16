@@ -32,6 +32,7 @@
 #include <klocale.h>
 #include <kglobalsettings.h>
 #include <kapplication.h>
+#include <QFontDatabase>
 
 // Local includes
 
@@ -236,7 +237,7 @@ void ApplicationSettings::Private::init()
 
     thumbnailSize                       = ThumbnailSize::Medium;
     treeThumbnailSize                   = 22;
-    treeviewFont                        = KGlobalSettings::generalFont();
+    treeviewFont                        = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     sidebarTitleStyle                   = KMultiTabBar::VSNET;
 
     ratingFilterCond                    = ImageFilterSettings::GreaterEqualCondition;
@@ -260,8 +261,8 @@ void ApplicationSettings::Private::init()
     iconShowRating                      = true;
     iconShowImageFormat                 = false;
     iconShowCoordinates                 = false;
-    iconviewFont                        = KGlobalSettings::generalFont();
-    toolTipsFont                        = KGlobalSettings::generalFont();
+    iconviewFont                        = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
+    toolTipsFont                        = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     showToolTips                        = false;
     tooltipShowFileName                 = true;
     tooltipShowFileDate                 = false;

@@ -187,7 +187,7 @@ TextureTool::~TextureTool()
 
 void TextureTool::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     d->textureType->blockSignals(true);
     d->blendGain->blockSignals(true);
@@ -200,7 +200,7 @@ void TextureTool::readSettings()
 
 void TextureTool::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configTextureTypeEntry, d->textureType->currentIndex());
     group.writeEntry(d->configBlendGainEntry,   d->blendGain->value());

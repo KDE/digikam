@@ -102,7 +102,7 @@ BorderTool::~BorderTool()
 
 void BorderTool::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->settingsView->readSettings(group);
@@ -110,7 +110,7 @@ void BorderTool::readSettings()
 
 void BorderTool::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->settingsView->writeSettings(group);

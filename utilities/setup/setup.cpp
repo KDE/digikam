@@ -339,7 +339,7 @@ Setup::Setup(QWidget* const parent)
         }
     }
 
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QString("Setup Dialog"));
     restoreDialogSize(group);
 
@@ -348,7 +348,7 @@ Setup::Setup(QWidget* const parent)
 
 Setup::~Setup()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QString("Setup Dialog"));
     group.writeEntry("Setup Page", (int)activePageIndex());
     saveDialogSize(group);
@@ -561,7 +561,7 @@ void Setup::showPage(Setup::Page page)
 
     if (page == LastPageUsed)
     {
-        KSharedConfig::Ptr config = KGlobal::config();
+        KSharedConfig::Ptr config = KSharedConfig::openConfig();
         KConfigGroup group        = config->group(QString("Setup Dialog"));
 
         item = d->pageItem((Page)group.readEntry("Setup Page", (int)CollectionsPage));

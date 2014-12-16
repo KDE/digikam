@@ -233,7 +233,7 @@ void SlideProperties::paintEvent(QPaintEvent*)
     {
         if (photoInfo.dateTime.isValid())
         {
-            str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, KLocale::ShortDate, true);
+            str = KLocale::global()->formatDateTime(photoInfo.dateTime, KLocale::ShortDate, true);
             printInfoText(p, offset, str);
         }
     }

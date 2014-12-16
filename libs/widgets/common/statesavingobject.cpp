@@ -48,7 +48,7 @@ public:
 
     inline KConfigGroup getGroupFromObjectName()
     {
-        KSharedConfig::Ptr config = KGlobal::config();
+        KSharedConfig::Ptr config = KSharedConfig::openConfig();
 
         if (host->objectName().isEmpty())
         {

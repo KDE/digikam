@@ -194,10 +194,10 @@ QVariant ColumnItemProperties::data(TableViewModel::Item* const item, const int 
     switch (subColumn)
     {
         case SubColumnWidth:
-            return KGlobal::locale()->formatNumber(info.dimensions().width(), 0);
+            return KLocale::global()->formatNumber(info.dimensions().width(), 0);
 
         case SubColumnHeight:
-            return KGlobal::locale()->formatNumber(info.dimensions().height(), 0);
+            return KLocale::global()->formatNumber(info.dimensions().height(), 0);
 
         case SubColumnDimensions:
         {
@@ -208,8 +208,8 @@ QVariant ColumnItemProperties::data(TableViewModel::Item* const item, const int 
                 return QString();
             }
 
-            const QString widthString  = KGlobal::locale()->formatNumber(imgSize.width(),  0);
-            const QString heightString = KGlobal::locale()->formatNumber(imgSize.height(), 0);
+            const QString widthString  = KLocale::global()->formatNumber(imgSize.width(),  0);
+            const QString heightString = KLocale::global()->formatNumber(imgSize.height(), 0);
 
             return QString("%1x%2").arg(widthString).arg(heightString);
         }
@@ -225,7 +225,7 @@ QVariant ColumnItemProperties::data(TableViewModel::Item* const item, const int 
             }
 
             /// @todo make this configurable with si-prefixes
-            return KGlobal::locale()->formatNumber(pixelCount, 0);
+            return KLocale::global()->formatNumber(pixelCount, 0);
         }
 
         case SubColumnAspectRatio:
@@ -267,7 +267,7 @@ QVariant ColumnItemProperties::data(TableViewModel::Item* const item, const int 
         {
             const QDateTime creationDateTime = info.dateTime();
 
-            return KGlobal::locale()->formatDateTime(creationDateTime, KLocale::ShortDate, true);
+            return KLocale::global()->formatDateTime(creationDateTime, KLocale::ShortDate, true);
         }
 
         case SubColumnDigitizationDateTime:
@@ -275,7 +275,7 @@ QVariant ColumnItemProperties::data(TableViewModel::Item* const item, const int 
             const ImageCommonContainer commonInfo = info.imageCommonContainer();
             const QDateTime digitizationDateTime = commonInfo.digitizationDate;
 
-            return KGlobal::locale()->formatDateTime(digitizationDateTime, KLocale::ShortDate, true);
+            return KLocale::global()->formatDateTime(digitizationDateTime, KLocale::ShortDate, true);
         }
     }
 

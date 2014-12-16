@@ -170,7 +170,7 @@ RainDropTool::~RainDropTool()
 
 void RainDropTool::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     blockWidgetSignals(true);
@@ -184,7 +184,7 @@ void RainDropTool::readSettings()
 
 void RainDropTool::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configDropAdjustmentEntry,   d->dropInput->value());
     group.writeEntry(d->configAmountAdjustmentEntry, d->amountInput->value());

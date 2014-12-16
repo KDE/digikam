@@ -52,6 +52,7 @@
 #include <libkdcraw/rcombobox.h>
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rexpanderbox.h>
+#include <QStandardPaths>
 
 // Local includes
 
@@ -485,7 +486,7 @@ void SharpSettings::writeSettings(KConfigGroup& group)
 
 void SharpSettings::loadSettings()
 {
-    KUrl loadRestorationFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
+    KUrl loadRestorationFile = KFileDialog::getOpenUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
                                                        QString("*"), kapp->activeWindow(),
                                                        QString(i18n("Photograph Refocus Settings File to Load")));
 
@@ -529,7 +530,7 @@ void SharpSettings::loadSettings()
 
 void SharpSettings::saveAsSettings()
 {
-    KUrl saveRestorationFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
+    KUrl saveRestorationFile = KFileDialog::getSaveUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
                                                        QString("*"), kapp->activeWindow(),
                                                        QString(i18n("Photograph Refocus Settings File to Save")));
 

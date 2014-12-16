@@ -391,7 +391,7 @@ void IccTransform::setDoNotEmbedOutputProfile(bool doNotEmbed)
 /*
 void IccTransform::readFromConfig()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QString("Color Management"));
 
     int intent                = group.readEntry("RenderingIntent", 0);

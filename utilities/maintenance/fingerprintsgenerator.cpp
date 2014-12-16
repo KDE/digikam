@@ -152,7 +152,7 @@ void FingerPrintsGenerator::slotAdvance(const QImage& img)
 void FingerPrintsGenerator::slotDone()
 {
     // Switch on scanned for finger-prints flag on digiKam config file.
-    KGlobal::config()->group("General Settings").writeEntry("Finger Prints Generator First Run", true);
+    KSharedConfig::openConfig()->group("General Settings").writeEntry("Finger Prints Generator First Run", true);
 
     MaintenanceTool::slotDone();
 }

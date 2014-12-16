@@ -270,7 +270,7 @@ QVariant ColumnDigikamProperties::data(TableViewModel::Item* const item, const i
                 return QString();
             }
 
-            return KGlobal::locale()->formatNumber(itemRating, 0);
+            return KLocale::global()->formatNumber(itemRating, 0);
         }
 
     case SubColumnPickLabel:

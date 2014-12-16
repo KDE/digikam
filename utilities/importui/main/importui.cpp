@@ -865,7 +865,7 @@ void ImportUI::setupAccelerators()
 
 void ImportUI::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     readFullScreenSettings(group);
@@ -889,7 +889,7 @@ void ImportUI::readSettings()
 
 void ImportUI::saveSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     ImportSettings::instance()->setShowThumbbar(d->showBarAction->isChecked());
@@ -1167,7 +1167,7 @@ void ImportUI::slotConnected(bool val)
         d->errorWidget->hide();
         refreshFreeSpace();
         // FIXME ugly c&p from slotFolderList
-        KSharedConfig::Ptr config = KGlobal::config();
+        KSharedConfig::Ptr config = KSharedConfig::openConfig();
         KConfigGroup group        = config->group(d->configGroupName);
         bool useMetadata          = group.readEntry(d->configUseFileMetadata, false);
         d->controller->listRootFolder(useMetadata);
@@ -1184,7 +1184,7 @@ void ImportUI::slotFolderList(const QStringList& folderList)
     d->statusProgressBar->setProgressValue(0);
     d->statusProgressBar->setProgressTotalSteps(0);
 
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     bool useMetadata          = group.readEntry(d->configUseFileMetadata, false);
 
@@ -1449,7 +1449,7 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 
         // Check if default target album option is enabled.
 
-        KSharedConfig::Ptr config = KGlobal::config();
+        KSharedConfig::Ptr config = KSharedConfig::openConfig();
         KConfigGroup group        = config->group(d->configGroupName);
         bool useDefaultTarget     = group.readEntry(d->configUseDefaultTargetAlbum, false);
 
@@ -2495,7 +2495,7 @@ void ImportUI::slotEditKeys()
 
 void ImportUI::slotConfToolbars()
 {
-    saveMainWindowSettings(KGlobal::config()->group("Camera Settings"));
+    saveMainWindowSettings(KSharedConfig::openConfig()->group("Camera Settings"));
     KEditToolBar dlg(factory(), this);
 
     connect(&dlg, SIGNAL(newToolbarConfig()),
@@ -2511,7 +2511,7 @@ void ImportUI::slotConfNotifications()
 
 void ImportUI::slotNewToolbarConfig()
 {
-    applyMainWindowSettings(KGlobal::config()->group("Camera Settings"));
+    applyMainWindowSettings(KSharedConfig::openConfig()->group("Camera Settings"));
 }
 
 void ImportUI::slotSetup()

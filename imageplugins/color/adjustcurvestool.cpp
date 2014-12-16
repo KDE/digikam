@@ -201,7 +201,7 @@ void AdjustCurvesTool::slotScaleChanged()
 
 void AdjustCurvesTool::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     // we need to call the set methods here, otherwise the curve will not be updated correctly
@@ -220,7 +220,7 @@ void AdjustCurvesTool::readSettings()
 
 void AdjustCurvesTool::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configHistogramChannelEntry, (int)d->gboxSettings->histogramBox()->channel());
     group.writeEntry(d->configHistogramScaleEntry,   (int)d->gboxSettings->histogramBox()->scale());

@@ -368,7 +368,7 @@ NewNamesList AdvancedRenameDialog::newNames()
 
 void AdvancedRenameDialog::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     QSize s = group.readEntry(d->configDialogSizeEntry, QSize(d->minSizeDialog, d->minSizeDialog));
@@ -378,7 +378,7 @@ void AdvancedRenameDialog::readSettings()
 
 void AdvancedRenameDialog::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     group.writeEntry(d->configDialogSizeEntry, size());

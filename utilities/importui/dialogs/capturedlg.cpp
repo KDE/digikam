@@ -76,7 +76,7 @@ CaptureDlg::CaptureDlg(QWidget* const parent, CameraController* const controller
 
     d->captureWidget = new CaptureWidget(this);
     setMainWidget(d->captureWidget);
-    restoreDialogSize(KGlobal::config()->group("Capture Tool Dialog"));
+    restoreDialogSize(KSharedConfig::openConfig()->group("Capture Tool Dialog"));
 
 
     // -------------------------------------------------------------
@@ -116,7 +116,7 @@ void CaptureDlg::closeEvent(QCloseEvent* e)
     if(d->timer) {
         d->timer->stop();
     }
-    KConfigGroup group = KGlobal::config()->group("Capture Tool Dialog");
+    KConfigGroup group = KSharedConfig::openConfig()->group("Capture Tool Dialog");
     saveDialogSize(group);
     e->accept();
 }
@@ -127,7 +127,7 @@ void CaptureDlg::slotCancel()
     if(d->timer) {
         d->timer->stop();
     }
-    KConfigGroup group = KGlobal::config()->group("Capture Tool Dialog");
+    KConfigGroup group = KSharedConfig::openConfig()->group("Capture Tool Dialog");
     saveDialogSize(group);
     done(Cancel);
 }
@@ -147,7 +147,7 @@ void CaptureDlg::slotCapture()
     disconnect(d->controller, SIGNAL(signalPreview(QImage)),
                this, SLOT(slotPreviewDone(QImage)));
 
-    KConfigGroup group = KGlobal::config()->group("Capture Tool Dialog");
+    KConfigGroup group = KSharedConfig::openConfig()->group("Capture Tool Dialog");
     saveDialogSize(group);
     d->controller->capture();
     done(Ok);

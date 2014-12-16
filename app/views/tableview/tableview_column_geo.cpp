@@ -44,13 +44,13 @@ QString FormatAltitude(const qreal altitudeInMeters, const KLocale::MeasureSyste
 {
     if (measureSystem==KLocale::Metric)
     {
-        const QString altitudeInMetersString = KGlobal::locale()->formatNumber(altitudeInMeters, 2);
+        const QString altitudeInMetersString = KLocale::global()->formatNumber(altitudeInMeters, 2);
         return QString("%1 m").arg(altitudeInMetersString);
     }
     else
     {
         const qreal altitudeInFeet = altitudeInMeters /* m */ / ( 0.3048 /* m/foot */ );
-        const QString altitudeInFeetString = KGlobal::locale()->formatNumber(altitudeInFeet, 2);
+        const QString altitudeInFeetString = KLocale::global()->formatNumber(altitudeInFeet, 2);
         return QString("%1 ft").arg(altitudeInFeetString);
     }
 }
@@ -170,10 +170,10 @@ QVariant ColumnGeoProperties::data(TableViewModel::Item* const item, const int r
 
             return QString("%1,%2")
                 .arg(
-                    KGlobal::locale()->formatNumber(info.latitudeNumber(), 7)
+                    KLocale::global()->formatNumber(info.latitudeNumber(), 7)
                 )
                 .arg(
-                    KGlobal::locale()->formatNumber(info.longitudeNumber(), 7)
+                    KLocale::global()->formatNumber(info.longitudeNumber(), 7)
                 );
         }
 
@@ -187,7 +187,7 @@ QVariant ColumnGeoProperties::data(TableViewModel::Item* const item, const int r
 
             /// @todo Use an enum instead to avoid lots of string comparisons
             const QString formatKey = configuration.getSetting("format", "kde");
-            KLocale::MeasureSystem measureSystem = KGlobal::locale()->measureSystem();
+            KLocale::MeasureSystem measureSystem = KLocale::global()->measureSystem();
             if (formatKey=="metric")
             {
                 measureSystem = KLocale::Metric;

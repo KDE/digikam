@@ -60,6 +60,7 @@
 #include <ktabwidget.h>
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
+#include <QStandardPaths>
 
 // Local includes
 
@@ -253,7 +254,7 @@ InPaintingTool::~InPaintingTool()
 
 void InPaintingTool::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     GreycstorationContainer prm;
@@ -291,7 +292,7 @@ void InPaintingTool::readSettings()
 void InPaintingTool::writeSettings()
 {
     GreycstorationContainer prm = d->settingsWidget->settings();
-    KSharedConfig::Ptr config   = KGlobal::config();
+    KSharedConfig::Ptr config   = KSharedConfig::openConfig();
     KConfigGroup group          = config->group(d->configGroupName);
 
     group.writeEntry(d->configPresetEntry,        d->inpaintingTypeCB->currentIndex());
@@ -475,7 +476,7 @@ void InPaintingTool::setFinalImage()
 
 void InPaintingTool::slotLoadSettings()
 {
-    KUrl loadInpaintingFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
+    KUrl loadInpaintingFile = KFileDialog::getOpenUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
                                                       QString("*"), kapp->activeWindow(),
                                                       QString(i18n("Photograph In-Painting Settings File to Load")));
 
@@ -511,7 +512,7 @@ void InPaintingTool::slotLoadSettings()
 
 void InPaintingTool::slotSaveAsSettings()
 {
-    KUrl saveRestorationFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
+    KUrl saveRestorationFile = KFileDialog::getSaveUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
                                                        QString("*"), kapp->activeWindow(),
                                                        QString(i18n("Photograph In-Painting Settings File to Save")));
 

@@ -105,7 +105,7 @@ extern "C"
 
         KLocale::setMainCatalog("digikam");
         KComponentData componentData( "kio_digikamdates" );
-        KGlobal::locale();
+        KLocale::global();
 
         kDebug() << "*** kio_digikamdates started ***";
 

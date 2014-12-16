@@ -35,6 +35,7 @@
 #include <kglobalsettings.h>
 #include <klocale.h>
 #include <kcombobox.h>
+#include <QFontDatabase>
 
 namespace Digikam
 {
@@ -116,14 +117,14 @@ DFontSelect::FontMode DFontSelect::mode() const
 
 QFont DFontSelect::font() const
 {
-    return (d->mode == CustomFont) ? d->font : KGlobalSettings::generalFont();
+    return (d->mode == CustomFont) ? d->font : QFontDatabase::systemFont(QFontDatabase::GeneralFont);
 }
 
 void DFontSelect::setFont(const QFont& font)
 {
     d->font = font;
 
-    if (d->font == KGlobalSettings::generalFont())
+    if (d->font == QFontDatabase::systemFont(QFontDatabase::GeneralFont))
     {
         setMode(SystemFont);
     }

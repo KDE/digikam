@@ -220,7 +220,7 @@ DistortionFXTool::~DistortionFXTool()
 
 void DistortionFXTool::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     blockWidgetSignals(true);
@@ -237,7 +237,7 @@ void DistortionFXTool::readSettings()
 
 void DistortionFXTool::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     group.writeEntry(d->configEffectTypeEntry,          d->effectType->currentIndex());

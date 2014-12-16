@@ -36,6 +36,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kapplication.h>
+#include <QFontDatabase>
 
 // Local includes
 
@@ -198,7 +199,7 @@ ShowfotoSettings* ShowfotoSettings::instance()
 ShowfotoSettings::ShowfotoSettings()
     : QObject(), d(new Private)
 {
-    d->config = KGlobal::config();
+    d->config = KSharedConfig::openConfig();
     d->group  = d->config->group(d->configGroupDefault);
     init();
     readSettings();
@@ -268,7 +269,7 @@ void ShowfotoSettings::readSettings()
     d->showPhotoDate           = group.readEntry(d->configShowPhotoDate,  true);
     d->showPhotoMode           = group.readEntry(d->configShowPhotoMode,  true);
 
-    d->toolTipsFont            = group.readEntry(d->configToolTipsFont,KGlobalSettings::generalFont());
+    d->toolTipsFont            = group.readEntry(d->configToolTipsFont,QFontDatabase::systemFont(QFontDatabase::GeneralFont));
 }
 
 QString ShowfotoSettings::getLastOpenedDir() const

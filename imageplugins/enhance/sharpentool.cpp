@@ -139,14 +139,14 @@ void SharpenTool::slotSettingsChanged()
 
 void SharpenTool::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     d->sharpSettings->readSettings(group);
 }
 
 void SharpenTool::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     d->sharpSettings->writeSettings(group);
     group.sync();

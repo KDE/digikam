@@ -201,7 +201,7 @@ void SetupRaw::slotBehaviorChanged()
 
 void SetupRaw::applySettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configUseRawImportToolEntry, d->openTool->isChecked());
 
@@ -212,7 +212,7 @@ void SetupRaw::applySettings()
 
 void SetupRaw::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->dcrawSettings->readSettings(group);

@@ -400,7 +400,7 @@ void AdvancedRenameInput::slotAddToken(const QString& token)
 
 void AdvancedRenameInput::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     QStringList patternHistory = group.readEntry(d->configPatternHistoryListEntry, QStringList());
@@ -411,7 +411,7 @@ void AdvancedRenameInput::readSettings()
 
 void AdvancedRenameInput::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     QStringList patternHistory = group.readEntry(d->configPatternHistoryListEntry, QStringList());

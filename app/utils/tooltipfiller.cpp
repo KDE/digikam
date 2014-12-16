@@ -92,14 +92,14 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
         if (settings->getToolTipsShowFileDate())
         {
             QDateTime modifiedDate = commonInfo.fileModificationDate;
-            str                    = KGlobal::locale()->formatDateTime(modifiedDate, KLocale::ShortDate, true);
+            str                    = KLocale::global()->formatDateTime(modifiedDate, KLocale::ShortDate, true);
             tip                   += cnt.cellBeg + i18n("Date:") + cnt.cellMid + str + cnt.cellEnd;
         }
 
         if (settings->getToolTipsShowFileSize())
         {
             tip                   += cnt.cellBeg + i18n("Size:") + cnt.cellMid;
-            QString localeFileSize = KGlobal::locale()->formatNumber(commonInfo.fileSize, 0);
+            QString localeFileSize = KLocale::global()->formatNumber(commonInfo.fileSize, 0);
             str                    = i18n("%1 (%2)", KIO::convertSize(commonInfo.fileSize), localeFileSize);
             tip                   += str + cnt.cellEnd;
         }
@@ -170,14 +170,14 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                     str = str.left(cnt.maxStringLength-3) + "...";
                 }
 
-                metaStr += cnt.cellBeg + i18n("Make/Model:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+                metaStr += cnt.cellBeg + i18n("Make/Model:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
             }
 
             if (settings->getToolTipsShowPhotoDate())
             {
                 if (commonInfo.creationDate.isValid())
                 {
-                    str = KGlobal::locale()->formatDateTime(commonInfo.creationDate, KLocale::ShortDate, true);
+                    str = KLocale::global()->formatDateTime(commonInfo.creationDate, KLocale::ShortDate, true);
 
                     if (str.length() > cnt.maxStringLength)
                     {
@@ -185,12 +185,12 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                     }
 
                     metaStr += cnt.cellBeg + i18nc("creation date of the image",
-                                                   "Created:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+                                                   "Created:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
                 }
                 else
                 {
                     metaStr += cnt.cellBeg + i18nc("creation date of the image",
-                                                   "Created:") + cnt.cellMid + Qt::escape(cnt.unavailable) + cnt.cellEnd;
+                                                   "Created:") + cnt.cellMid + cnt.unavailable.toHtmlEscaped() + cnt.cellEnd;
                 }
             }
 
@@ -212,7 +212,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                     str = str.left(cnt.maxStringLength-3) + "...";
                 }
 
-                metaStr += cnt.cellBeg + i18n("Aperture/Focal:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+                metaStr += cnt.cellBeg + i18n("Aperture/Focal:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
             }
 
             if (settings->getToolTipsShowPhotoExpo())
@@ -225,7 +225,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                     str = str.left(cnt.maxStringLength-3) + "...";
                 }
 
-                metaStr += cnt.cellBeg + i18n("Exposure/Sensitivity:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+                metaStr += cnt.cellBeg + i18n("Exposure/Sensitivity:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
             }
 
             if (settings->getToolTipsShowPhotoMode())
@@ -252,7 +252,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                     str = str.left(cnt.maxStringLength-3) + "...";
                 }
 
-                metaStr += cnt.cellBeg + i18n("Mode/Program:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+                metaStr += cnt.cellBeg + i18n("Mode/Program:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
             }
 
             if (settings->getToolTipsShowPhotoFlash())
@@ -265,7 +265,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                 }
 
                 metaStr += cnt.cellBeg + i18nc("camera flash settings",
-                                               "Flash:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+                                               "Flash:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
             }
 
             if (settings->getToolTipsShowPhotoWB())
@@ -277,7 +277,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                     str = str.left(cnt.maxStringLength-3) + "...";
                 }
 
-                metaStr += cnt.cellBeg + i18n("White Balance:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+                metaStr += cnt.cellBeg + i18n("White Balance:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
             }
 
             tip += metaStr;
@@ -308,7 +308,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                     str = str.left(cnt.maxStringLength-3) + "...";
                 }
 
-                metaStr += cnt.cellBeg + i18n("Aspect Ratio:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+                metaStr += cnt.cellBeg + i18n("Aspect Ratio:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
             }
 
             if (settings->getToolTipsShowVideoDuration())
@@ -320,7 +320,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                 if (ok)
                 {
                     const QTime durationTime = QTime().addMSecs(durationDouble);
-                    durationString = KGlobal::locale()->formatTime(durationTime, true, true);
+                    durationString = KLocale::global()->formatTime(durationTime, true, true);
                 }
 
                 str = videoInfo.duration.isEmpty() ? cnt.unavailable : durationString;
@@ -330,7 +330,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                     str = str.left(cnt.maxStringLength-3) + "...";
                 }
 
-                metaStr += cnt.cellBeg + i18n("Duration:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+                metaStr += cnt.cellBeg + i18n("Duration:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
             }
 
             if (settings->getToolTipsShowVideoFrameRate())
@@ -341,7 +341,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
                 if (ok)
                 {
-                    frameRateString = KGlobal::locale()->formatNumber(frameRateDouble);
+                    frameRateString = KLocale::global()->formatNumber(frameRateDouble);
                 }
 
                 str = videoInfo.frameRate.isEmpty() ? cnt.unavailable : frameRateString;
@@ -351,7 +351,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                     str = str.left(cnt.maxStringLength-3) + "...";
                 }
 
-                metaStr += cnt.cellBeg + i18n("Frame Rate:") + cnt.cellMid + Qt::escape(str) + i18n("fps") + cnt.cellEnd;
+                metaStr += cnt.cellBeg + i18n("Frame Rate:") + cnt.cellMid + str.toHtmlEscaped() + i18n("fps") + cnt.cellEnd;
             }
 
             if (settings->getToolTipsShowVideoVideoCodec())
@@ -363,7 +363,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                     str = str.left(cnt.maxStringLength-3) + "...";
                 }
 
-                metaStr += cnt.cellBeg + i18n("Video Codec:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+                metaStr += cnt.cellBeg + i18n("Video Codec:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
             }
 
             if (settings->getToolTipsShowVideoAudioBitRate())
@@ -374,7 +374,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
 
                 if (ok)
                 {
-                    audioBitRateString = KGlobal::locale()->formatNumber(audioBitRateInt, 0);
+                    audioBitRateString = KLocale::global()->formatNumber(audioBitRateInt, 0);
                 }
 
                 str = videoInfo.audioBitRate.isEmpty() ? cnt.unavailable : audioBitRateString;
@@ -384,7 +384,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                     str = str.left(cnt.maxStringLength-3) + "...";
                 }
 
-                metaStr += cnt.cellBeg + i18n("Audio Bit Rate:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+                metaStr += cnt.cellBeg + i18n("Audio Bit Rate:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
             }
 
             if (settings->getToolTipsShowVideoAudioChannelType())
@@ -396,7 +396,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                     str = str.left(cnt.maxStringLength-3) + "...";
                 }
 
-                metaStr += cnt.cellBeg + i18n("Audio Channel Type:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+                metaStr += cnt.cellBeg + i18n("Audio Channel Type:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
             }
 
             if (settings->getToolTipsShowVideoAudioCompressor())
@@ -408,7 +408,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
                     str = str.left(cnt.maxStringLength-3) + "...";
                 }
 
-                metaStr += cnt.cellBeg + i18n("Audio Compressor:") + cnt.cellMid + Qt::escape(str) + cnt.cellEnd;
+                metaStr += cnt.cellBeg + i18n("Audio Compressor:") + cnt.cellMid + str.toHtmlEscaped() + cnt.cellEnd;
             }
 
             tip += metaStr;
@@ -576,7 +576,7 @@ QString ToolTipFiller::albumTipContents(PAlbum* const album, int count)
         if (settings->getToolTipsShowAlbumDate())
         {
             QDate date = album->date();
-            str        = KGlobal::locale()->formatDate(date, KLocale::ShortDate);
+            str        = KLocale::global()->formatDate(date, KLocale::ShortDate);
             tip        += cnt.cellBeg + i18n("Date:") + cnt.cellMid + str + cnt.cellEnd;
         }
 

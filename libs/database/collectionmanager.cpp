@@ -1356,7 +1356,7 @@ QString CollectionManager::albumRootPath(int id)
 
 KUrl CollectionManager::albumRoot(const KUrl& fileUrl)
 {
-    return KUrl::fromPath(albumRootPath(fileUrl.toLocalFile(KUrl::LeaveTrailingSlash)));
+    return QUrl::fromLocalFile(albumRootPath(fileUrl.toLocalFile(KUrl::LeaveTrailingSlash)));
 }
 
 QString CollectionManager::albumRootPath(const KUrl& fileUrl)
@@ -1477,7 +1477,7 @@ QString CollectionManager::album(const CollectionLocation& location, const QStri
 
 KUrl CollectionManager::oneAlbumRoot()
 {
-    return KUrl::fromPath(oneAlbumRootPath());
+    return QUrl::fromLocalFile(oneAlbumRootPath());
 }
 
 QString CollectionManager::oneAlbumRootPath()

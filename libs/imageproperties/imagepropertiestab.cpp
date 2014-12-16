@@ -704,7 +704,7 @@ void ImagePropertiesTab::setVideoAudioBitRate(const QString& str)
     const int audioBitRateInt = str.toInt(&ok);
     if (ok)
     {
-        audioBitRateString = KGlobal::locale()->formatNumber(audioBitRateInt, 0);
+        audioBitRateString = KLocale::global()->formatNumber(audioBitRateInt, 0);
     }
 
     d->labelVideoAudioBitRate->setText(audioBitRateString);
@@ -730,7 +730,7 @@ void ImagePropertiesTab::setVideoDuration(const QString& str)
     if (ok)
     {
         const QTime durationTime = QTime().addMSecs(durationDouble);
-        durationString = KGlobal::locale()->formatTime(durationTime, true, true);
+        durationString = KLocale::global()->formatTime(durationTime, true, true);
     }
 
     d->labelVideoDuration->setText(durationString);
@@ -744,7 +744,7 @@ void ImagePropertiesTab::setVideoFrameRate(const QString& str)
     const double frameRateDouble = str.toDouble(&ok);
     if (ok)
     {
-        frameRateString = KGlobal::locale()->formatNumber(frameRateDouble);
+        frameRateString = KLocale::global()->formatNumber(frameRateDouble);
     }
 
     d->labelVideoFrameRate->setText(frameRateString);
@@ -950,7 +950,7 @@ bool ImagePropertiesTab::aspectRatioToString(int width, int height, QString& arS
 
     const QString awidth  = QString::number(num);
     const QString aheight = QString::number(den);
-    const QString aratio  = KGlobal::locale()->formatNumber((double)num/(double)den, 2);
+    const QString aratio  = KLocale::global()->formatNumber((double)num/(double)den, 2);
 
     arString = i18nc("width : height (Aspect Ratio)", "%1:%2 (%3)",
                      awidth, aheight, aratio);

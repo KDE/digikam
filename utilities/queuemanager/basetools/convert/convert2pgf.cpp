@@ -70,7 +70,7 @@ void Convert2PGF::registerSettingsWidget()
 
 BatchToolSettings Convert2PGF::defaultSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("ImageViewer Settings");
     int compression           = group.readEntry("PGFCompression", 3);
     bool lossLessCompression  = group.readEntry("PGFLossLess",    true);

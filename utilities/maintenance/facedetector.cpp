@@ -358,7 +358,7 @@ void FaceDetector::slotDone()
     }
 
     // Switch on scanned for faces flag on digiKam config file.
-    KGlobal::config()->group("General Settings").writeEntry("Face Scanner First Run", true);
+    KSharedConfig::openConfig()->group("General Settings").writeEntry("Face Scanner First Run", true);
 
     MaintenanceTool::slotDone();
 }

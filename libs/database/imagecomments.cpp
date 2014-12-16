@@ -194,7 +194,7 @@ QString ImageComments::defaultComment(int* const index, DatabaseComment::Type ty
         return QString();
     }
 
-    KLocale* const locale = KGlobal::locale();
+    KLocale* const locale = KLocale::global();
     QString langCode      = locale->language().toLower() + '-';
     QString fullCode      = langCode + locale->country().toLower();
 

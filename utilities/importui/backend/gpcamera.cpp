@@ -1380,10 +1380,10 @@ bool GPCamera::cameraSummary(QString& summary)
                      "Model: <b>%2</b><br/>"
                      "Port: <b>%3</b><br/>"
                      "Path: <b>%4</b><br/><br/>",
-                     Qt::escape(title()),
-                     Qt::escape(model()),
-                     Qt::escape(port()),
-                     Qt::escape(path()));
+                     title().toHtmlEscaped(),
+                     model().toHtmlEscaped(),
+                     port().toHtmlEscaped(),
+                     path().toHtmlEscaped());
 
     summary += i18nc("@info List of supported device operations",
                      "Thumbnails: <b>%1</b><br/>"

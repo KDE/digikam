@@ -211,7 +211,7 @@ extern "C"
 
         KLocale::setMainCatalog("digikam");
         KComponentData componentData( "kio_digikamsearch" );
-        KGlobal::locale();
+        KLocale::global();
 
         kDebug() << "*** kio_digikamsearch started ***";
 

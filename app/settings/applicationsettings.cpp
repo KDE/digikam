@@ -39,6 +39,7 @@
 #include <kglobalsettings.h>
 #include <kapplication.h>
 #include <kstandarddirs.h>
+#include <QFontDatabase>
 
 // Local includes
 
@@ -73,7 +74,7 @@ ApplicationSettings* ApplicationSettings::instance()
 ApplicationSettings::ApplicationSettings()
     : QObject(), d(new Private(this))
 {
-    d->config = KGlobal::config();
+    d->config = KSharedConfig::openConfig();
     d->init();
     readSettings();
 
@@ -132,7 +133,7 @@ void ApplicationSettings::readSettings()
 
     d->thumbnailSize                    = group.readEntry(d->configDefaultIconSizeEntry,              (int)ThumbnailSize::Medium);
     d->treeThumbnailSize                = group.readEntry(d->configDefaultTreeIconSizeEntry,          22);
-    d->treeviewFont                     = group.readEntry(d->configTreeViewFontEntry,                 KGlobalSettings::generalFont());
+    d->treeviewFont                     = group.readEntry(d->configTreeViewFontEntry,                 QFontDatabase::systemFont(QFontDatabase::GeneralFont));
     d->currentTheme                     = group.readEntry(d->configThemeEntry,                        ThemeManager::instance()->defaultThemeName());
 
     d->sidebarTitleStyle                = (KMultiTabBar::KMultiTabBarStyle)group.readEntry(d->configSidebarTitleStyleEntry,
@@ -158,9 +159,9 @@ void ApplicationSettings::readSettings()
     d->iconShowRating                   = group.readEntry(d->configIconShowRatingEntry,               true);
     d->iconShowImageFormat              = group.readEntry(d->configIconShowImageFormatEntry,          false);
     d->iconShowCoordinates              = group.readEntry(d->configIconShowCoordinatesEntry,          false);
-    d->iconviewFont                     = group.readEntry(d->configIconViewFontEntry,                 KGlobalSettings::generalFont());
+    d->iconviewFont                     = group.readEntry(d->configIconViewFontEntry,                 QFontDatabase::systemFont(QFontDatabase::GeneralFont));
 
-    d->toolTipsFont                     = group.readEntry(d->configToolTipsFontEntry,                 KGlobalSettings::generalFont());
+    d->toolTipsFont                     = group.readEntry(d->configToolTipsFontEntry,                 QFontDatabase::systemFont(QFontDatabase::GeneralFont));
     d->showToolTips                     = group.readEntry(d->configShowToolTipsEntry,                 false);
     d->tooltipShowFileName              = group.readEntry(d->configToolTipsShowFileNameEntry,         true);
     d->tooltipShowFileDate              = group.readEntry(d->configToolTipsShowFileDateEntry,         false);

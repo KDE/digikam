@@ -775,7 +775,7 @@ DatabaseUrl ImageInfo::databaseUrl() const
 
 KUrl ImageInfo::fileUrl() const
 {
-    return KUrl::fromPath(filePath());
+    return QUrl::fromLocalFile(filePath());
 }
 
 QString ImageInfo::filePath() const

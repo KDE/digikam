@@ -473,7 +473,7 @@ void AlbumManager::checkDatabaseDirsAfterFirstRun(const QString& dbPath, const Q
             {
                 // SchemaUpdater expects Album Path to point to the album root of the 0.9 db file.
                 // Restore this situation.
-                KSharedConfigPtr config = KGlobal::config();
+                KSharedConfigPtr config = KSharedConfig::openConfig();
                 KConfigGroup group      = config->group("Album Settings");
                 group.writeEntry("Album Path", albumDir.path());
                 group.sync();
@@ -536,7 +536,7 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
                 {
                     // SchemaUpdater expects Album Path to point to the album root of the 0.9 db file.
                     // Restore this situation.
-                    KSharedConfigPtr config = KGlobal::config();
+                    KSharedConfigPtr config = KSharedConfig::openConfig();
                     KConfigGroup group = config->group("Album Settings");
                     group.writeEntry("Album Path", newDir.path());
                     group.sync();
@@ -770,7 +770,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
 
         // Copy an existing locale from the settings file (used < 0.8)
         // to the database.
-        KSharedConfig::Ptr config = KGlobal::config();
+        KSharedConfig::Ptr config = KSharedConfig::openConfig();
         KConfigGroup group = config->group("General Settings");
 
         if (group.hasKey("Locale"))

@@ -276,7 +276,7 @@ void RenameCustomizer::slotCustomRenameChanged()
 
 void RenameCustomizer::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
 
     KConfigGroup group   = config->group("Camera Settings");
     int def              = group.readEntry("Rename Method",        0);
@@ -291,7 +291,7 @@ void RenameCustomizer::readSettings()
 
 void RenameCustomizer::saveSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
 
     KConfigGroup group = config->group("Camera Settings");
     group.writeEntry("Rename Method",        d->buttonGroup->checkedId());

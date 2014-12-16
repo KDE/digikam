@@ -151,7 +151,7 @@ SetupLightTable::~SetupLightTable()
 
 void SetupLightTable::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     QColor Black(Qt::black);
     QColor White(Qt::white);
@@ -165,7 +165,7 @@ void SetupLightTable::readSettings()
 
 void SetupLightTable::applySettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     d->fullScreenSettings->saveSettings(group);
     group.writeEntry(d->configAutoSyncPreviewEntry,       d->autoSyncPreview->isChecked());

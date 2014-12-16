@@ -314,7 +314,7 @@ void SetupEditor::slotShowUnderExpoHistogramGuide(double v)
 
 void SetupEditor::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     QColor Black(Qt::black);
     QColor White(Qt::white);
@@ -330,7 +330,7 @@ void SetupEditor::readSettings()
 
 void SetupEditor::applySettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configUseThemeBackgroundColorEntry, d->themebackgroundColor->isChecked());
     group.writeEntry(d->configBackgroundColorEntry,         d->backgroundColor->color());

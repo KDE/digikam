@@ -712,7 +712,7 @@ void DigikamView::loadViewState()
 
     d->filterWidget->loadState();
 
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("MainWindow");
 
     // Restore the splitter
@@ -735,7 +735,7 @@ void DigikamView::loadViewState()
 
 void DigikamView::saveViewState()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("MainWindow");
 
     foreach(SidebarWidget* const widget, d->leftSideBarWidgets)

@@ -207,7 +207,7 @@ BlurFXTool::~BlurFXTool()
 
 void BlurFXTool::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     blockWidgetSignals(true);
@@ -222,7 +222,7 @@ void BlurFXTool::readSettings()
 
 void BlurFXTool::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     group.writeEntry(d->configEffectTypeEntry,         d->effectType->currentIndex());

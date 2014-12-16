@@ -36,6 +36,7 @@
 // KDE includes
 
 #include <kglobalsettings.h>
+#include <QFontDatabase>
 
 // Local includes
 
@@ -49,7 +50,7 @@ class DIGIKAM_EXPORT DToolTipStyleSheet
 
 public:
 
-    explicit DToolTipStyleSheet(const QFont& font = KGlobalSettings::generalFont());
+    explicit DToolTipStyleSheet(const QFont& font = QFontDatabase::systemFont(QFontDatabase::GeneralFont));
 
     QString breakString(const QString& input)                        const;
     QString elidedText(const QString& input, Qt::TextElideMode mode) const;

@@ -56,7 +56,7 @@ public:
 
     Private()
     {
-        KSharedConfig::Ptr config = KGlobal::config();
+        KSharedConfig::Ptr config = KSharedConfig::openConfig();
         KConfigGroup group        = config->group("Import Filters");
 
         for (int i = 0; true; ++i)
@@ -167,7 +167,7 @@ void FilterComboBox::indexChanged(int index)
 
 void FilterComboBox::saveSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("Import Filters");
 
     group.writeEntry("CurrentFilter", d->currentFilter);

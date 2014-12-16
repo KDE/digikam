@@ -283,7 +283,7 @@ InsertTextTool::~InsertTextTool()
 
 void InsertTextTool::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     QColor black(0, 0, 0);
     QFont  defaultFont;
@@ -318,7 +318,7 @@ void InsertTextTool::readSettings()
 
 void InsertTextTool::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     group.writeEntry(d->configTextRotationEntry,    d->textRotation->currentIndex());

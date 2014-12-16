@@ -238,7 +238,7 @@ void ShearTool::slotColorGuideChanged()
 
 void ShearTool::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     //    d->mainHAngleInput->setValue(group.readEntry(d->configMainHAngleEntry, d->mainHAngleInput->defaultValue()));
     //    d->mainVAngleInput->setValue(group.readEntry(d->configMainVAngleEntry, d->mainVAngleInput->defaultValue()));
@@ -250,7 +250,7 @@ void ShearTool::readSettings()
 
 void ShearTool::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     //    group.writeEntry(d->configMainHAngleEntry, d->mainHAngleInput->value());
     //    group.writeEntry(d->configMainVAngleEntry, d->mainVAngleInput->value());

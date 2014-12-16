@@ -100,14 +100,14 @@ NoiseReductionTool::~NoiseReductionTool()
 
 void NoiseReductionTool::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     d->nrSettings->readSettings(group);
 }
 
 void NoiseReductionTool::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->nrSettings->writeSettings(group);

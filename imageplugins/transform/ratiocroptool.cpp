@@ -596,7 +596,7 @@ RatioCropTool::~RatioCropTool()
 void RatioCropTool::readSettings()
 {
     QColor defaultGuideColor(250, 250, 255);
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     // --------------------------------------------------------
@@ -688,7 +688,7 @@ void RatioCropTool::readSettings()
 
 void RatioCropTool::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     if (d->originalIsLandscape)

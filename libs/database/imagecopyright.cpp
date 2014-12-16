@@ -496,7 +496,7 @@ int ImageCopyright::languageMatch(const QList<CopyrightInfo> infos, const QStrin
     if (languageCode.isNull())
     {
         // find local language
-        KLocale* const locale = KGlobal::locale();
+        KLocale* const locale = KLocale::global();
         langCode              = locale->language().toLower() + '-';
         fullCode              = langCode + locale->country().toLower();
     }

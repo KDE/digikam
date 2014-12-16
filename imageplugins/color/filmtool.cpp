@@ -567,7 +567,7 @@ void FilmTool::slotColorBalanceStateChanged(int state)
 
 void FilmTool::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     bool sb = d->originalImage->sixteenBit();
@@ -624,7 +624,7 @@ void FilmTool::readSettings()
 
 void FilmTool::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     bool sb                   = d->originalImage->sixteenBit();
 

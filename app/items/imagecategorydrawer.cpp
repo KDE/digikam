@@ -69,7 +69,7 @@ public:
 
 ImageCategoryDrawer::ImageCategoryDrawer(ImageCategorizedView* const parent)
 #if KDE_IS_VERSION(4,5,0)
-    : KCategoryDrawerV3(0), d(new Private)
+    : KCategoryDrawer(0), d(new Private)
 #else
     : d(new Private)
 #endif
@@ -266,7 +266,7 @@ void ImageCategoryDrawer::textForPAlbum(PAlbum* album, bool recursive, int count
 
     QDate date    = album->date();
 
-    KLocale tmpLocale(*KGlobal::locale());
+    KLocale tmpLocale(*KLocale::global());
 
     tmpLocale.setDateFormat("%d"); // day of month with two digits
     QString day   = tmpLocale.formatDate(date);
@@ -343,12 +343,12 @@ void ImageCategoryDrawer::textForDAlbum(DAlbum* album, int count, QString* heade
     if (album->range() == DAlbum::Month)
     {
         *header = i18nc("Month String - Year String", "%1 %2",
-                        KGlobal::locale()->calendar()->monthName(album->date(), KCalendarSystem::LongName),
-                        KGlobal::locale()->calendar()->formatDate(album->date(), "%Y"));
+                        KLocale::global()->calendar()->monthName(album->date(), KCalendarSystem::LongName),
+                        KLocale::global()->calendar()->formatDate(album->date(), "%Y"));
     }
     else
     {
-        *header = QString("%1").arg(KGlobal::locale()->calendar()->year(album->date()));
+        *header = QString("%1").arg(KLocale::global()->calendar()->year(album->date()));
     }
 
     *subLine = i18np("1 Item", "%1 Items", count);

@@ -296,7 +296,7 @@ bool IccSettings::useManagedPreviews() const
 ICCSettingsContainer IccSettings::Private::readFromConfig() const
 {
     ICCSettingsContainer s;
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(configGroup);
     s.readFromConfig(group);
     return s;
@@ -304,21 +304,21 @@ ICCSettingsContainer IccSettings::Private::readFromConfig() const
 
 void IccSettings::Private::writeToConfig() const
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(configGroup);
     settings.writeToConfig(group);
 }
 
 void IccSettings::Private::writeManagedViewToConfig() const
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(configGroup);
     settings.writeManagedViewToConfig(group);
 }
 
 void IccSettings::Private::writeManagedPreviewsToConfig() const
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(configGroup);
     settings.writeManagedPreviewsToConfig(group);
 }

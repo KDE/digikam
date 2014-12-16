@@ -53,6 +53,8 @@
 // LibKDcraw includes
 
 #include <libkdcraw/rnuminput.h>
+#include <QApplication>
+#include <QDesktopWidget>
 
 // Local includes
 
@@ -307,7 +309,7 @@ QSize EditorToolSettings::minimumSizeHint() const
     // Do not touch vertical size hint.
     // Limit to 40% of the desktop width.
     QSize hint        = QScrollArea::minimumSizeHint();
-    QRect desktopRect = KGlobalSettings::desktopGeometry(d->settingsArea);
+    QRect desktopRect = QApplication::desktop()->screenGeometry(d->settingsArea);
     int wSB           = verticalScrollBar()->height();
     hint.setWidth(qMin(d->settingsArea->minimumSizeHint().width() + wSB, desktopRect.width() * 2 / 5));
     return hint;

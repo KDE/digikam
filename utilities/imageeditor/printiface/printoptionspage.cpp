@@ -331,7 +331,7 @@ void PrintOptionsPage::saveConfig()
 
     d->mConfigDialogManager->updateSettings();
 
-    DigikamConfig::self()->writeConfig();
+    DigikamConfig::self()->save();
 }
 
 void PrintOptionsPage::slotAlertSettings(bool t)

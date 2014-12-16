@@ -117,7 +117,7 @@ void AlbumModelTest::cleanupTestCase()
     AlbumThumbnailLoader::instance()->cleanUp();
     LoadingCacheInterface::cleanUp();
 
-    KUrl deleteUrl = KUrl::fromPath(dbPath);
+    KUrl deleteUrl = QUrl::fromLocalFile(dbPath);
     KIO::NetAccess::del(deleteUrl, 0);
     kDebug() << "deleted test folder " << deleteUrl;
 
@@ -180,10 +180,10 @@ void AlbumModelTest::init()
     QCOMPARE(AlbumManager::instance()->allPAlbums().size(), 4);
 
     QString error;
-    palbumRoot0 = AlbumManager::instance()->findPAlbum(KUrl::fromPath(dbPath
+    palbumRoot0 = AlbumManager::instance()->findPAlbum(QUrl::fromLocalFile(dbPath
                   + "/root0"));
     QVERIFY2(palbumRoot0, "Error having PAlbum root0 in AlbumManager");
-    palbumRoot1 = AlbumManager::instance()->findPAlbum(KUrl::fromPath(dbPath
+    palbumRoot1 = AlbumManager::instance()->findPAlbum(QUrl::fromLocalFile(dbPath
                   + "/root1"));
     QVERIFY2(palbumRoot1, "Error having PAlbum root1 in AlbumManager");
 

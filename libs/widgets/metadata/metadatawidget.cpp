@@ -60,6 +60,7 @@
 // Libkexiv2 includes
 
 #include <libkexiv2/version.h>
+#include <QStandardPaths>
 
 // Local includes
 
@@ -434,7 +435,7 @@ void MetadataWidget::slotPrintMetadata()
 
 KUrl MetadataWidget::saveMetadataToFile(const QString& caption, const QString& fileFilter)
 {
-    QPointer<KFileDialog> fileSaveDialog = new KFileDialog(KUrl(KGlobalSettings::documentPath()), QString(), this);
+    QPointer<KFileDialog> fileSaveDialog = new KFileDialog(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)), QString(), this);
     fileSaveDialog->setOperationMode(KFileDialog::Saving);
     fileSaveDialog->setMode(KFile::File);
     fileSaveDialog->setSelection(d->fileName);

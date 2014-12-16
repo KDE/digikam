@@ -51,6 +51,7 @@
 #include <libkdcraw/rexpanderbox.h>
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/version.h>
+#include <QStandardPaths>
 
 // Local includes
 
@@ -537,7 +538,7 @@ void BWSepiaSettings::writeSettings(KConfigGroup& group)
 
 void BWSepiaSettings::loadSettings()
 {
-    KUrl loadFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
+    KUrl loadFile = KFileDialog::getOpenUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
                                             QString("*"), kapp->activeWindow(),
                                             QString(i18n("Black & White Settings File to Load")));
 
@@ -608,7 +609,7 @@ void BWSepiaSettings::loadSettings()
 
 void BWSepiaSettings::saveAsSettings()
 {
-    KUrl saveFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
+    KUrl saveFile = KFileDialog::getSaveUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
                                             QString("*"), kapp->activeWindow(),
                                             QString(i18n("Black & White Settings File to Save")));
 

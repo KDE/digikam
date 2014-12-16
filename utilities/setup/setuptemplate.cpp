@@ -185,7 +185,7 @@ void SetupTemplate::applySettings()
 {
     d->listView->applySettings();
 
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QString("Setup Dialog"));
     group.writeEntry("Template Tab", (int)(d->tview->currentIndex()));
     config->sync();
@@ -195,7 +195,7 @@ void SetupTemplate::readSettings()
 {
     d->listView->readSettings();
 
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QString("Setup Dialog"));
     d->tview->setCurrentIndex((TemplatePanel::TemplateTab)group.readEntry("Template Tab", (int)TemplatePanel::RIGHTS));
 }

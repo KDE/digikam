@@ -74,9 +74,9 @@ public:
     QPropertyAnimation* animation;
     KPixmapSequence     workingPixmap;
 #if KDE_IS_VERSION(4,5,0)
-    KCategoryDrawerV3*  categoryDrawer;
+    KCategoryDrawer*  categoryDrawer;
 #else
-    KCategoryDrawerV2*  categoryDrawer;
+    KCategoryDrawer*  categoryDrawer;
 #endif
     int                 thumbnailSize;
 
@@ -111,9 +111,9 @@ VersionsDelegate::VersionsDelegate(QObject* const parent)
     d->animation->setLoopCount(-1);
 
 #if KDE_IS_VERSION(4,5,0)
-    d->categoryDrawer = new KCategoryDrawerV3(0);
+    d->categoryDrawer = new KCategoryDrawer(0);
 #else
-    d->categoryDrawer = new KCategoryDrawerV2;
+    d->categoryDrawer = new KCategoryDrawer;
 #endif
 }
 

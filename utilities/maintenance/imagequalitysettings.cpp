@@ -57,7 +57,7 @@ ImageQualitySettings::~ImageQualitySettings()
 
 void ImageQualitySettings::readFromConfig()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("Image Quality Settings");
 
     enableSorter      = group.readEntry("Enable Sorter",      false);
@@ -79,7 +79,7 @@ void ImageQualitySettings::readFromConfig()
 
 void ImageQualitySettings::writeToConfig()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("Image Quality Settings");
 
     group.writeEntry("Enable Sorter",      enableSorter);

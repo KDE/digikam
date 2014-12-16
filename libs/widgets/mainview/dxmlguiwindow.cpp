@@ -47,6 +47,8 @@
 #include <kdialog.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <QApplication>
+#include <QDesktopWidget>
 
 // Local includes
 
@@ -376,7 +378,7 @@ bool DXmlGuiWindow::eventFilter(QObject* obj, QEvent* ev)
                     if (mev)
                     {
                         QPoint pos(mev->pos());
-                        QRect  desktopRect = KGlobalSettings::desktopGeometry(this);
+                        QRect  desktopRect = QApplication::desktop()->screenGeometry(this);
 
                         QRect sizeRect(QPoint(0, 0), d->fullScreenBtn->size());
                         QRect topLeft, topRight;

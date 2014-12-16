@@ -240,7 +240,7 @@ void LensDistortionTool::slotColorGuideChanged()
 
 void LensDistortionTool::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     blockWidgetSignals(true);
@@ -258,7 +258,7 @@ void LensDistortionTool::readSettings()
 
 void LensDistortionTool::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     group.writeEntry(d->config2ndOrderDistortionEntry, d->mainInput->value());

@@ -47,6 +47,7 @@
 
 // Local includes
 #include <databaseparameters.h>
+#include <QStandardPaths>
 #include "version.h"
 
 namespace Digikam
@@ -82,7 +83,7 @@ CollectionPage::CollectionPage(KAssistantDialog* const dlg)
     QString picturesPath;
 
 #if KDE_IS_VERSION(4,1,61)
-    picturesPath = KGlobalSettings::picturesPath();
+    picturesPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
 #else
 #   if QT_VERSION >= 0x040400
     picturesPath = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
@@ -163,7 +164,7 @@ QString CollectionPage::databasePath() const
 
 void CollectionPage::saveSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("General Settings");
     group.writeEntry("Version", digikam_version);
 

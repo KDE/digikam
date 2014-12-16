@@ -155,7 +155,7 @@ QVariant ColumnAudioVideoProperties::data(TableViewModel::Item* const item, cons
                 return QString();
             }
 
-            const QString audioBitRateString = KGlobal::locale()->formatNumber(audioBitRate, 0);
+            const QString audioBitRateString = KLocale::global()->formatNumber(audioBitRate, 0);
             return audioBitRateString;
         }
     case SubColumnAudioChannelType:
@@ -179,7 +179,7 @@ QVariant ColumnAudioVideoProperties::data(TableViewModel::Item* const item, cons
             }
 
             const QTime durationTime = QTime().addMSecs(duration);
-            const QString durationString = KGlobal::locale()->formatTime(durationTime, true, true);
+            const QString durationString = KLocale::global()->formatTime(durationTime, true, true);
             return durationString;
         }
     case SubColumnFrameRate:
@@ -191,7 +191,7 @@ QVariant ColumnAudioVideoProperties::data(TableViewModel::Item* const item, cons
                 return QString();
             }
 
-            const QString frameRateString = KGlobal::locale()->formatNumber(frameRate);
+            const QString frameRateString = KLocale::global()->formatNumber(frameRate);
             return frameRateString;
         }
     case SubColumnVideoCodec:

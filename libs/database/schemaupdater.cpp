@@ -890,7 +890,7 @@ bool SchemaUpdater::updateV4toV7()
 
     // --- Populate AlbumRoots (from config) ---
 
-    KSharedConfigPtr config  = KGlobal::config();
+    KSharedConfigPtr config  = KSharedConfig::openConfig();
     KConfigGroup group       = config->group("Album Settings");
     QString albumLibraryPath = group.readEntry("Album Path", QString());
 
@@ -913,7 +913,7 @@ bool SchemaUpdater::updateV4toV7()
     }
 
     CollectionLocation location =
-        CollectionManager::instance()->addLocation(KUrl::fromPath(albumLibraryPath));
+        CollectionManager::instance()->addLocation(QUrl::fromLocalFile(albumLibraryPath));
 
     if (location.isNull())
     {

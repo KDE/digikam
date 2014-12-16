@@ -50,6 +50,7 @@
 #include <kmessagebox.h>
 #include <kurlrequester.h>
 #include <kwidgetitemdelegate.h>
+#include <QStandardPaths>
 
 // Local includes
 
@@ -452,11 +453,11 @@ void SetupCollectionModel::apply()
 
         if (item.parentId == CategoryRemote)
         {
-            location = CollectionManager::instance()->addNetworkLocation(KUrl::fromPath(item.path), item.label);
+            location = CollectionManager::instance()->addNetworkLocation(QUrl::fromLocalFile(item.path), item.label);
         }
         else
         {
-            location = CollectionManager::instance()->addLocation(KUrl::fromPath(item.path), item.label);
+            location = CollectionManager::instance()->addLocation(QUrl::fromLocalFile(item.path), item.label);
         }
 
         if (location.isNull())
@@ -536,7 +537,7 @@ void SetupCollectionModel::addCollection(int category)
     else
     {
 #if KDE_IS_VERSION(4,1,61)
-        picturesPath = KGlobalSettings::picturesPath();
+        picturesPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
 #else
 #if QT_VERSION >= 0x040400
         picturesPath = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
@@ -573,10 +574,10 @@ void SetupCollectionModel::addCollection(int category)
     CollectionManager::LocationCheckResult result;
 
     if (category == CategoryRemote)
-        result = CollectionManager::instance()->checkNetworkLocation(KUrl::fromPath(path), assumeDeleted,
+        result = CollectionManager::instance()->checkNetworkLocation(QUrl::fromLocalFile(path), assumeDeleted,
                                                                      &messageFromManager, &deviceIcon);
     else
-        result = CollectionManager::instance()->checkLocation(KUrl::fromPath(path), assumeDeleted,
+        result = CollectionManager::instance()->checkLocation(QUrl::fromLocalFile(path), assumeDeleted,
                                                               &messageFromManager, &deviceIcon);
 
     // If there are other added collections then CollectionManager does not know about them. Check here.

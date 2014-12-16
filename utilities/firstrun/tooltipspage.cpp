@@ -110,7 +110,7 @@ TooltipsPage::~TooltipsPage()
 
 void TooltipsPage::saveSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("Album Settings");
 
     group.writeEntry("Show ToolTips",       d->showTooltips->isChecked());

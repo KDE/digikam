@@ -165,7 +165,7 @@ LightTableWindow::~LightTableWindow()
 
 void LightTableWindow::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("LightTable Settings");
 
     d->hSplitter->restoreState(group, "Horizontal Splitter State");
@@ -183,7 +183,7 @@ void LightTableWindow::readSettings()
 
 void LightTableWindow::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("LightTable Settings");
     d->hSplitter->saveState(group, "Horizontal Splitter State");
     group.writeEntry("Show Thumbbar", d->barViewDock->shouldBeVisible());
@@ -200,7 +200,7 @@ void LightTableWindow::writeSettings()
 
 void LightTableWindow::applySettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("LightTable Settings");
     d->autoLoadOnRightPanel   = group.readEntry("Auto Load Right Panel", true);
     d->autoSyncPreview        = group.readEntry("Auto Sync Preview",     true);
@@ -762,7 +762,7 @@ void LightTableWindow::slotRefreshStatusBar()
 
 void LightTableWindow::slotFileChanged(const QString& path)
 {
-    KUrl url = KUrl::fromPath(path);
+    KUrl url = QUrl::fromLocalFile(path);
     // NOTE: Thumbbar handle change through ImageCategorizedView
 
     if (!d->previewView->leftImageInfo().isNull())
@@ -1492,7 +1492,7 @@ void LightTableWindow::slotEditKeys()
 
 void LightTableWindow::slotConfToolbars()
 {
-    saveMainWindowSettings(KGlobal::config()->group("LightTable Settings"));
+    saveMainWindowSettings(KSharedConfig::openConfig()->group("LightTable Settings"));
     KEditToolBar dlg(factory(), this);
 
     connect(&dlg, SIGNAL(newToolbarConfig()),
@@ -1508,7 +1508,7 @@ void LightTableWindow::slotConfNotifications()
 
 void LightTableWindow::slotNewToolbarConfig()
 {
-    applyMainWindowSettings(KGlobal::config()->group("LightTable Settings"));
+    applyMainWindowSettings(KSharedConfig::openConfig()->group("LightTable Settings"));
 }
 
 void LightTableWindow::slotSetup()

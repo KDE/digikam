@@ -43,6 +43,7 @@
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
+#include <QDesktopWidget>
 
 // Local includes
 
@@ -76,7 +77,7 @@ public:
         }
 
         bool ok = false;
-        KGlobal::locale()->readDate( str, &ok );
+        KLocale::global()->readDate( str, &ok );
 
         if ( ok )
         {
@@ -127,7 +128,7 @@ DDateEdit::DDateEdit(QWidget* const parent, const char* const name)
     setEditable( true );
 
     d->date       = QDate::currentDate();
-    QString today = KGlobal::locale()->formatDate( d->date, KLocale::ShortDate );
+    QString today = KLocale::global()->formatDate( d->date, KLocale::ShortDate );
 
     addItem( today );
     setCurrentIndex( 0 );
@@ -191,7 +192,7 @@ void DDateEdit::showPopup()
         return;
     }
 
-    QRect desk          = KGlobalSettings::desktopGeometry( this );
+    QRect desk          = QApplication::desktop()->screenGeometry( this );
     QPoint popupPoint   = mapToGlobal( QPoint( 0,0 ) );
     int dateFrameHeight = d->popup->sizeHint().height();
 
@@ -340,7 +341,7 @@ QDate DDateEdit::parseDate( bool* replaced ) const
     }
     else
     {
-        result = KGlobal::locale()->readDate( text );
+        result = KLocale::global()->readDate( text );
     }
 
     return result;
@@ -464,7 +465,7 @@ void DDateEdit::setupKeywords()
 
     for ( int i = 1; i <= 7; ++i )
     {
-        dayName = KGlobal::locale()->calendar()->weekDayName( i ).toLower();
+        dayName = KLocale::global()->calendar()->weekDayName( i ).toLower();
         d->keywordMap.insert( dayName, i + 100 );
     }
 }
@@ -482,7 +483,7 @@ void DDateEdit::updateView()
 
     if ( d->date.isValid() )
     {
-        dateString = KGlobal::locale()->formatDate( d->date, KLocale::ShortDate );
+        dateString = KLocale::global()->formatDate( d->date, KLocale::ShortDate );
     }
 
     // We do not want to generate a signal here,

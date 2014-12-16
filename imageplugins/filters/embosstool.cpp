@@ -131,7 +131,7 @@ EmbossTool::~EmbossTool()
 
 void EmbossTool::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->depthInput->blockSignals(true);
@@ -141,7 +141,7 @@ void EmbossTool::readSettings()
 
 void EmbossTool::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     group.writeEntry(d->configDepthAdjustmentEntry, d->depthInput->value());

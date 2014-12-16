@@ -178,7 +178,7 @@ QPixmap DItemDelegate::makeDragPixmap(const QStyleOptionViewItem& option,
 
 QString DItemDelegate::dateToString(const QDateTime& datetime)
 {
-    return KGlobal::locale()->formatDateTime(datetime, KLocale::ShortDate, false);
+    return KLocale::global()->formatDateTime(datetime, KLocale::ShortDate, false);
 }
 
 QString DItemDelegate::squeezedTextCached(QPainter* const p, int width, const QString& text) const

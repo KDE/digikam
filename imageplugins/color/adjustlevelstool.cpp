@@ -56,6 +56,7 @@
 // LibKDcraw includes
 
 #include <libkdcraw/rnuminput.h>
+#include <QStandardPaths>
 
 // Local includes
 
@@ -744,7 +745,7 @@ void AdjustLevelsTool::slotScaleChanged()
 
 void AdjustLevelsTool::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     {
@@ -799,7 +800,7 @@ void AdjustLevelsTool::readSettings()
 
 void AdjustLevelsTool::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configHistogramChannelEntry, (int)d->gboxSettings->histogramBox()->channel());
     group.writeEntry(d->configHistogramScaleEntry,   (int)d->gboxSettings->histogramBox()->scale());
@@ -901,7 +902,7 @@ void AdjustLevelsTool::slotLoadSettings()
 {
     KUrl loadLevelsFile;
 
-    loadLevelsFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
+    loadLevelsFile = KFileDialog::getOpenUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
                      QString( "*" ), kapp->activeWindow(),
                      QString( i18n("Select Gimp Levels File to Load")) );
 
@@ -927,7 +928,7 @@ void AdjustLevelsTool::slotSaveAsSettings()
 {
     KUrl saveLevelsFile;
 
-    saveLevelsFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
+    saveLevelsFile = KFileDialog::getSaveUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
                      QString( "*" ), kapp->activeWindow(),
                      QString( i18n("Gimp Levels File to Save")) );
 

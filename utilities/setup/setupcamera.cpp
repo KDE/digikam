@@ -580,7 +580,7 @@ SetupCamera::~SetupCamera()
 
 bool SetupCamera::useFileMetadata()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     return (group.readEntry(d->configUseFileMetadata, false));
@@ -604,7 +604,7 @@ void SetupCamera::readSettings()
 
     // -------------------------------------------------------
 
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->useFileMetadata->setChecked(useFileMetadata());
@@ -703,7 +703,7 @@ void SetupCamera::applySettings()
 
     // -------------------------------------------------------
 
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     group.writeEntry(d->configUseFileMetadata,  d->useFileMetadata->isChecked());

@@ -59,6 +59,7 @@
 #include <libkdcraw/rcombobox.h>
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rexpanderbox.h>
+#include <QStandardPaths>
 
 using namespace KDcrawIface;
 
@@ -528,7 +529,7 @@ void WBSettings::writeSettings(KConfigGroup& group)
 
 void WBSettings::loadSettings()
 {
-    KUrl loadWhiteBalanceFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
+    KUrl loadWhiteBalanceFile = KFileDialog::getOpenUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
                                                         QString("*"), kapp->activeWindow(),
                                                         QString(i18n("White Color Balance Settings File to Load")));
 
@@ -575,7 +576,7 @@ void WBSettings::loadSettings()
 
 void WBSettings::saveAsSettings()
 {
-    KUrl saveWhiteBalanceFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
+    KUrl saveWhiteBalanceFile = KFileDialog::getSaveUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
                                                         QString("*"), kapp->activeWindow(),
                                                         QString(i18n("White Color Balance Settings File to Save")));
 

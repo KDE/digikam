@@ -69,7 +69,7 @@ void Convert2PNG::registerSettingsWidget()
 
 BatchToolSettings Convert2PNG::defaultSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("ImageViewer Settings");
     int compression           = group.readEntry("PNGCompression", 9);
     BatchToolSettings settings;

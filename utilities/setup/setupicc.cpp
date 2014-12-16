@@ -949,7 +949,7 @@ void SetupICC::slotShowDefaultSearchPaths()
 
 bool SetupICC::iccRepositoryIsValid()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QString("Color Management"));
 
     // If color management is disable, no need to check anymore.

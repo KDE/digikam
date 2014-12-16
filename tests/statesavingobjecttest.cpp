@@ -117,7 +117,7 @@ void StateSavingObjectTest::testGroupName()
     saver.setObjectName(name);
     QCOMPARE(saver.getGroup().name(), name);
 
-    KConfigGroup group = KGlobal::config()->group("SimpleTest Group");
+    KConfigGroup group = KSharedConfig::openConfig()->group("SimpleTest Group");
     saver.setConfigGroup(group);
     QCOMPARE(saver.getGroup().name(), group.name());
 
@@ -126,7 +126,7 @@ void StateSavingObjectTest::testGroupName()
     QCOMPARE(saver.getGroup().name(), group.name());
 
     // resetting group must work
-    KConfigGroup group2 = KGlobal::config()->group("Another SimpleTest Group");
+    KConfigGroup group2 = KSharedConfig::openConfig()->group("Another SimpleTest Group");
     saver.setConfigGroup(group2);
     QCOMPARE(saver.getGroup().name(), group2.name());
 

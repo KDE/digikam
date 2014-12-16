@@ -61,6 +61,7 @@
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rexpanderbox.h>
 #include <libkdcraw/version.h>
+#include <QStandardPaths>
 
 using namespace KDcrawIface;
 
@@ -656,7 +657,7 @@ void LocalContrastSettings::writeSettings(KConfigGroup& group)
 
 void LocalContrastSettings::loadSettings()
 {
-    KUrl loadFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
+    KUrl loadFile = KFileDialog::getOpenUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
                                             QString("*"), kapp->activeWindow(),
                                             QString(i18n("Photograph Local Contrast Settings File to Load")));
 
@@ -710,7 +711,7 @@ void LocalContrastSettings::loadSettings()
 
 void LocalContrastSettings::saveAsSettings()
 {
-    KUrl saveFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
+    KUrl saveFile = KFileDialog::getSaveUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
                                             QString("*"), kapp->activeWindow(),
                                             QString(i18n("Photograph Local Contrast Settings File to Save")));
 

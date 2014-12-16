@@ -95,6 +95,7 @@ extern "C"
 
 #include <libkdcraw/kdcraw.h>
 #include <libkdcraw/version.h>
+#include <QStandardPaths>
 
 // Local includes
 
@@ -155,7 +156,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     KGlobal::dirs()->addResourceDir("data", KStandardDirs::installPath("data") + QString("digikam"));
     KIconLoader::global()->addAppDir("digikam");
 
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
 
     if (group.readEntry("ShowSplash", true) && !kapp->isSessionRestored())
@@ -286,7 +287,7 @@ void ShowFoto::show()
 
     // Report errors from ICC repository path.
 
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
 
     if (!d->validIccPath)
     {
@@ -350,7 +351,7 @@ void ShowFoto::setupConnections()
 
 void ShowFoto::setupUserArea()
 {
-    KSharedConfig::Ptr config  = KGlobal::config();
+    KSharedConfig::Ptr config  = KSharedConfig::openConfig();
     KConfigGroup group         = config->group(EditorWindow::CONFIG_GROUP_NAME);
 
     QWidget* const widget      = new QWidget(this);
@@ -455,7 +456,7 @@ void ShowFoto::readSettings()
     if (defaultDir.isNull())
     {
 #if KDE_IS_VERSION(4,1,61)
-        defaultDir = KGlobalSettings::picturesPath();
+        defaultDir = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
 #else
         defaultDir = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
 #endif
@@ -664,7 +665,7 @@ bool ShowFoto::setup(bool iccSetupPage)
         return false;
     }
 
-    KGlobal::config()->sync();
+    KSharedConfig::openConfig()->sync();
 
     applySettings();
 
@@ -1165,7 +1166,7 @@ void ShowFoto::openFolder(const KUrl& url)
 
     // Determine sort ordering for the entries from configuration setting:
 
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
 
     QDir::SortFlags flag;

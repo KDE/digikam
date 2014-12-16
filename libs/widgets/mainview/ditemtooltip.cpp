@@ -48,6 +48,7 @@
 #include <kglobal.h>
 #include <kdeversion.h>
 #include <kapplication.h>
+#include <QDesktopWidget>
 
 namespace Digikam
 {
@@ -87,7 +88,7 @@ DToolTipStyleSheet::DToolTipStyleSheet(const QFont& font)
 QString DToolTipStyleSheet::breakString(const QString& input) const
 {
     QString str = input.simplified();
-    str         = Qt::escape(str);
+    str         = str.toHtmlEscaped();
 
     if (str.length() <= maxStringLength)
     {
@@ -226,7 +227,7 @@ void DItemToolTip::reposition()
     d->corner = 0;
     // should the tooltip be shown to the left or to the right of the ivi ?
 
-    QRect desk = KGlobalSettings::desktopGeometry(rect.center());
+    QRect desk = QApplication::desktop()->screenGeometry(rect.center());
 
     if (rect.center().x() + width() > desk.right())
     {

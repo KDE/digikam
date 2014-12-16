@@ -80,7 +80,7 @@ SlideShowSettings::~SlideShowSettings()
 
 void SlideShowSettings::readFromConfig()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(configGroupName);
     startWithCurrent          = group.readEntry(configSlideShowStartCurrentEntry,         false);
     delay                     = group.readEntry(configSlideShowDelayEntry,                5);
@@ -102,7 +102,7 @@ void SlideShowSettings::readFromConfig()
 
 void SlideShowSettings::writeToConfig()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(configGroupName);
     group.writeEntry(configSlideShowStartCurrentEntry,         startWithCurrent);
     group.writeEntry(configSlideShowDelayEntry,                delay);

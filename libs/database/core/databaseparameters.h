@@ -97,14 +97,14 @@ public:
     /** Return a set of default parameters for the give type */
     static DatabaseParameters defaultParameters(const QString databaseType);
 
-    static DatabaseParameters parametersFromConfig(KSharedConfig::Ptr config = KGlobal::config(),
+    static DatabaseParameters parametersFromConfig(KSharedConfig::Ptr config = KSharedConfig::openConfig(),
             const QString& configGroup = QString());
     /**
      * Read and write parameters from config. You can specify the group,
      * or use the default value.
      */
-    void readFromConfig(KSharedConfig::Ptr config = KGlobal::config(), const QString& configGroup = QString());
-    void writeToConfig(KSharedConfig::Ptr config = KGlobal::config(), const QString& configGroup = QString()) const;
+    void readFromConfig(KSharedConfig::Ptr config = KSharedConfig::openConfig(), const QString& configGroup = QString());
+    void writeToConfig(KSharedConfig::Ptr config = KSharedConfig::openConfig(), const QString& configGroup = QString()) const;
 
     /**
      * In case of SQLite, the databaseName typically is a file.
@@ -129,7 +129,7 @@ public:
     /** Replaces databaseName with databaseNameThumbnails. */
     DatabaseParameters thumbnailParameters() const;
 
-    void legacyAndDefaultChecks(const QString& suggestedPath = QString(), KSharedConfig::Ptr config = KGlobal::config());
+    void legacyAndDefaultChecks(const QString& suggestedPath = QString(), KSharedConfig::Ptr config = KSharedConfig::openConfig());
     void removeLegacyConfig(KSharedConfig::Ptr config);
 
     /**

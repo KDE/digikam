@@ -113,7 +113,7 @@ OpenFilePage::~OpenFilePage()
 
 void OpenFilePage::saveSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("Album Settings");
     group.writeEntry("Item Left Click Action", (int)(d->openInEditor->isChecked() ?
                                                      ApplicationSettings::StartEditor : ApplicationSettings::ShowPreview));

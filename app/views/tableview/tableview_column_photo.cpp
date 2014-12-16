@@ -265,7 +265,7 @@ QVariant ColumnPhotoProperties::data(TableViewModel::Item* const item, const int
             /// @todo Remove trailing zeros?
             /// @todo Align right? --> better align at decimal point
             const QString exposureTimeString = exposureTimeLocalizedString
-                .subs(KGlobal::locale()->formatNumber(exposureTime, 3))
+                .subs(KLocale::global()->formatNumber(exposureTime, 3))
                 .toString();
             return exposureTimeString;
         }

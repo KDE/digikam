@@ -70,7 +70,7 @@ void Convert2JP2::registerSettingsWidget()
 
 BatchToolSettings Convert2JP2::defaultSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("ImageViewer Settings");
     int compression           = group.readEntry("JPEG2000Compression", 75);
     bool lossLessCompression  = group.readEntry("JPEG2000LossLess",    true);

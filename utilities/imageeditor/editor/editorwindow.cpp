@@ -792,7 +792,7 @@ void EditorWindow::slotAboutToShowRedoMenu()
 
 void EditorWindow::slotConfToolbars()
 {
-    saveMainWindowSettings(KGlobal::config()->group(CONFIG_GROUP_NAME));
+    saveMainWindowSettings(KSharedConfig::openConfig()->group(CONFIG_GROUP_NAME));
     KEditToolBar dlg(factory(), this);
 
     connect(&dlg, SIGNAL(newToolbarConfig()),
@@ -808,7 +808,7 @@ void EditorWindow::slotConfNotifications()
 
 void EditorWindow::slotNewToolbarConfig()
 {
-    applyMainWindowSettings(KGlobal::config()->group(CONFIG_GROUP_NAME));
+    applyMainWindowSettings(KSharedConfig::openConfig()->group(CONFIG_GROUP_NAME));
 }
 
 void EditorWindow::slotIncreaseZoom()
@@ -934,7 +934,7 @@ void EditorWindow::unLoadImagePlugins()
 
 void EditorWindow::readStandardSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(CONFIG_GROUP_NAME);
 
     // Restore Canvas layout
@@ -970,7 +970,7 @@ void EditorWindow::applyStandardSettings()
 
     // -- GUI Settings -------------------------------------------------------
 
-    KConfigGroup group = KGlobal::config()->group(CONFIG_GROUP_NAME);
+    KConfigGroup group = KSharedConfig::openConfig()->group(CONFIG_GROUP_NAME);
 
     d->legacyUpdateSplitterState(group);
     m_splitter->restoreState(group);
@@ -998,7 +998,7 @@ void EditorWindow::applyIOSettings()
 {
     // -- JPEG, PNG, TIFF JPEG2000 files format settings --------------------------------------
 
-    KConfigGroup group = KGlobal::config()->group(CONFIG_GROUP_NAME);
+    KConfigGroup group = KSharedConfig::openConfig()->group(CONFIG_GROUP_NAME);
 
     m_IOFileSettings->JPEGCompression     = JPEGSettings::convertCompressionForLibJpeg(group.readEntry(d->configJpegCompressionEntry, 75));
 
@@ -1069,7 +1069,7 @@ void EditorWindow::applyColorManagementSettings()
 
 void EditorWindow::saveStandardSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(CONFIG_GROUP_NAME);
 
     group.writeEntry(d->configAutoZoomEntry, d->zoomFitToWindowAction->isChecked());
@@ -1965,7 +1965,7 @@ bool EditorWindow::showFileSaveDialog(const KUrl& initialUrl, KUrl& newURL)
     imageFileSaveDialog->setCaption(i18n("New Image File Name"));
 
     // restore old settings for the dialog
-    KSharedConfig::Ptr config         = KGlobal::config();
+    KSharedConfig::Ptr config         = KSharedConfig::openConfig();
     KConfigGroup group                = config->group(CONFIG_GROUP_NAME);
     const QString optionLastExtension = "LastSavedImageExtension";
     QString ext                       = group.readEntry(optionLastExtension, "png");
@@ -2623,7 +2623,7 @@ void EditorWindow::moveFile()
                       DMetadata::sidecarUrl(m_savingContext.destinationURL));
         }
 
-        KIO::CopyJob* const moveJob = KIO::move(KUrl::fromPath(m_savingContext.saveTempFileName),
+        KIO::CopyJob* const moveJob = KIO::move(QUrl::fromLocalFile(m_savingContext.saveTempFileName),
                                                 m_savingContext.destinationURL);
 
         connect(moveJob, SIGNAL(result(KJob*)),
@@ -2886,7 +2886,7 @@ void EditorWindow::slotSelectToolsMenuAboutToShow()
 
 void EditorWindow::slotThemeChanged()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(CONFIG_GROUP_NAME);
 
     if (!group.readEntry(d->configUseThemeBackgroundColorEntry, true))

@@ -177,7 +177,7 @@ Setup::Setup(QWidget* const parent, Setup::Page page)
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOkClicked()));
 
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QString("Setup Dialog"));
 
     if (page != LastPageUsed)
@@ -196,7 +196,7 @@ Setup::Setup(QWidget* const parent, Setup::Page page)
 
 Setup::~Setup()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QString("Setup Dialog"));
     group.writeEntry("Setup Page", (int)activePageIndex());
     saveDialogSize(group);

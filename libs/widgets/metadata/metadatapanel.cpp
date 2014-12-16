@@ -277,7 +277,7 @@ QStringList MetadataPanel::defaultXmpFilter()
 void MetadataPanel::applySettings()
 {
 #if KEXIV2_VERSION >= 0x010000
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("Image Properties SideBar");
 
     if (d->exifViewerConfig->itemsCount())
@@ -310,7 +310,7 @@ void MetadataPanel::slotTabChanged(int)
     DMetadata meta;
     kapp->setOverrideCursor(Qt::WaitCursor);
     kapp->processEvents();
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("Image Properties SideBar");
 
 #if KEXIV2_VERSION >= 0x010000

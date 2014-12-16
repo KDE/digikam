@@ -51,6 +51,7 @@
 
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rexpanderbox.h>
+#include <QStandardPaths>
 
 using namespace KDcrawIface;
 
@@ -545,7 +546,7 @@ void MixerSettings::loadSettings()
     FILE*          fp = 0L;
     MixerContainer settings;
 
-    loadGainsFileUrl = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
+    loadGainsFileUrl = KFileDialog::getOpenUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
                                                QString("*"), kapp->activeWindow(),
                                                QString(i18n("Select Gimp Gains Mixer File to Load")));
 
@@ -653,7 +654,7 @@ void MixerSettings::saveAsSettings()
     KUrl  saveGainsFileUrl;
     FILE* fp = 0L;
 
-    saveGainsFileUrl = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
+    saveGainsFileUrl = KFileDialog::getSaveUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
                                                QString("*"), kapp->activeWindow(),
                                                QString(i18n("Gimp Gains Mixer File to Save")));
 

@@ -46,6 +46,7 @@
 #include <ktabwidget.h>
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
+#include <QStandardPaths>
 
 // Local includes
 
@@ -213,7 +214,7 @@ RestorationTool::~RestorationTool()
 
 void RestorationTool::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     GreycstorationContainer prm;
@@ -251,7 +252,7 @@ void RestorationTool::readSettings()
 void RestorationTool::writeSettings()
 {
     GreycstorationContainer prm = d->settingsWidget->settings();
-    KSharedConfig::Ptr config   = KGlobal::config();
+    KSharedConfig::Ptr config   = KSharedConfig::openConfig();
     KConfigGroup group          = config->group(d->configGroupName);
 
     group.writeEntry(d->configPresetEntry,        d->restorationTypeCB->currentIndex());
@@ -361,7 +362,7 @@ void RestorationTool::setFinalImage()
 
 void RestorationTool::slotLoadSettings()
 {
-    KUrl loadRestorationFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
+    KUrl loadRestorationFile = KFileDialog::getOpenUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
                                QString( "*" ), kapp->activeWindow(),
                                QString( i18n("Photograph Restoration Settings File to Load")) );
 
@@ -399,7 +400,7 @@ void RestorationTool::slotLoadSettings()
 
 void RestorationTool::slotSaveAsSettings()
 {
-    KUrl saveRestorationFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
+    KUrl saveRestorationFile = KFileDialog::getSaveUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
                                QString( "*" ), kapp->activeWindow(),
                                QString( i18n("Photograph Restoration Settings File to Save")) );
 

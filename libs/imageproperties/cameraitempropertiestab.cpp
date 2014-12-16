@@ -434,14 +434,14 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
 
     if (itemInfo.ctime.isValid())
     {
-        d->labelFileDate->setText(KGlobal::locale()->formatDateTime(itemInfo.ctime, KLocale::ShortDate, true));
+        d->labelFileDate->setText(KLocale::global()->formatDateTime(itemInfo.ctime, KLocale::ShortDate, true));
     }
     else
     {
         d->labelFileDate->setText(unknown);
     }
 
-    str = i18n("%1 (%2)", KIO::convertSize(itemInfo.size), KGlobal::locale()->formatNumber(itemInfo.size, 0));
+    str = i18n("%1 (%2)", KIO::convertSize(itemInfo.size), KLocale::global()->formatNumber(itemInfo.size, 0));
     d->labelFileSize->setText(str);
 
     // -- Image Properties --------------------------------------------------
@@ -536,7 +536,7 @@ void CameraItemPropertiesTab::setCurrentItem(const CamItemInfo& itemInfo, const 
 
     if (photoInfo.dateTime.isValid())
     {
-        str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, KLocale::ShortDate, true);
+        str = KLocale::global()->formatDateTime(photoInfo.dateTime, KLocale::ShortDate, true);
         d->labelPhotoDateTime->setText(str);
     }
     else

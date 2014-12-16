@@ -70,7 +70,7 @@ void Convert2TIFF::registerSettingsWidget()
 
 BatchToolSettings Convert2TIFF::defaultSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("ImageViewer Settings");
     bool compression          = group.readEntry("TIFFCompression", false);
     BatchToolSettings settings;

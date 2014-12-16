@@ -178,7 +178,7 @@ HotPixelsTool::~HotPixelsTool()
 
 void HotPixelsTool::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     d->blackFrameURL          = KUrl(group.readEntry(d->configLastBlackFrameFileEntry, QString()));
     d->filterMethodCombo->setCurrentIndex(group.readEntry(d->configFilterMethodEntry,  d->filterMethodCombo->defaultIndex()));
@@ -198,7 +198,7 @@ void HotPixelsTool::readSettings()
 
 void HotPixelsTool::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configLastBlackFrameFileEntry, d->blackFrameURL.url());
     group.writeEntry(d->configFilterMethodEntry,       d->filterMethodCombo->currentIndex());

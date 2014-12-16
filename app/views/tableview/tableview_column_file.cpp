@@ -31,6 +31,7 @@
 #include <kcombobox.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <KFormat>
 
 // local includes
 
@@ -154,12 +155,12 @@ QVariant ColumnFileProperties::data(TableViewModel::Item* const item, const int 
         const QString formatKey = configuration.getSetting("format", "kde");
         if (formatKey=="kde")
         {
-            return KGlobal::locale()->formatByteSize(info.fileSize());
+            return KFormat().formatByteSize(info.fileSize());
         }
         else
         {
             // formatKey=="plain"
-            return KGlobal::locale()->formatNumber(info.fileSize(), 0);
+            return KLocale::global()->formatNumber(info.fileSize(), 0);
         }
         break;
     }
@@ -168,7 +169,7 @@ QVariant ColumnFileProperties::data(TableViewModel::Item* const item, const int 
     {
         const QDateTime lastModifiedTime = info.modDateTime();
 
-        return KGlobal::locale()->formatDateTime(lastModifiedTime, KLocale::ShortDate, true);
+        return KLocale::global()->formatDateTime(lastModifiedTime, KLocale::ShortDate, true);
     }
 
     }

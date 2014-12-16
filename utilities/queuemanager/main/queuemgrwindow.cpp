@@ -455,7 +455,7 @@ void QueueMgrWindow::refreshView()
 
 void QueueMgrWindow::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("Batch Queue Manager Settings");
 
     d->verticalSplitter->restoreState(group, d->VERTICAL_SPLITTER_CONFIG_KEY);
@@ -467,7 +467,7 @@ void QueueMgrWindow::readSettings()
 
 void QueueMgrWindow::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("Batch Queue Manager Settings");
 
     d->topSplitter->saveState(group,      d->TOP_SPLITTER_CONFIG_KEY);
@@ -487,7 +487,7 @@ void QueueMgrWindow::applySettings()
 
     d->queuePool->applySettings();
 
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("Batch Queue Manager Settings");
     readFullScreenSettings(group);
 }
@@ -573,7 +573,7 @@ void QueueMgrWindow::slotEditKeys()
 
 void QueueMgrWindow::slotConfToolbars()
 {
-    saveMainWindowSettings(KGlobal::config()->group("Batch Queue Manager Settings"));
+    saveMainWindowSettings(KSharedConfig::openConfig()->group("Batch Queue Manager Settings"));
     KEditToolBar dlg(factory(), this);
 
     connect(&dlg, SIGNAL(newToolbarConfig()),
@@ -589,7 +589,7 @@ void QueueMgrWindow::slotConfNotifications()
 
 void QueueMgrWindow::slotNewToolbarConfig()
 {
-    applyMainWindowSettings(KGlobal::config()->group("Batch Queue Manager Settings"));
+    applyMainWindowSettings(KSharedConfig::openConfig()->group("Batch Queue Manager Settings"));
 }
 
 void QueueMgrWindow::slotSetup()

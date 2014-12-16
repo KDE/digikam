@@ -55,9 +55,9 @@ void ActionCategorizedView::setupIconMode()
     setViewMode(QListView::IconMode);
     setMovement(QListView::Static);
 #if KDE_IS_VERSION(4,5,0)
-    setCategoryDrawer(new KCategoryDrawerV3(this)); // deprecated, but needed for KDE 4.4 compatibility
+    setCategoryDrawer(new KCategoryDrawer(this)); // deprecated, but needed for KDE 4.4 compatibility
 #else
-    setCategoryDrawer(new KCategoryDrawerV2);       // deprecated, but needed for KDE 4.4 compatibility
+    setCategoryDrawer(new KCategoryDrawer);       // deprecated, but needed for KDE 4.4 compatibility
 #endif
     setSelectionMode(QAbstractItemView::SingleSelection);
 

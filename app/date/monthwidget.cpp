@@ -248,10 +248,10 @@ void MonthWidget::paintEvent(QPaintEvent*)
                 {
 // FIXME: Remove this when KDE 4.7 is approx. 6 months old, so that most distributions should have included it (April 2012?)
 #if KDE_IS_VERSION(4,7,0)
-                    int weeknr = KGlobal::locale()->calendar()->week(QDate(d->year,
+                    int weeknr = KLocale::global()->calendar()->week(QDate(d->year,
                                  d->month, d->days[index].day));
 #else
-                    int weeknr = KGlobal::locale()->calendar()->weekNumber(QDate(d->year,
+                    int weeknr = KLocale::global()->calendar()->weekNumber(QDate(d->year,
                                  d->month, d->days[index].day));
 #endif
                     p.setPen(d->active ? Qt::black : Qt::gray);
@@ -281,7 +281,7 @@ void MonthWidget::paintEvent(QPaintEvent*)
         rsmall.setWidth(r.width() - 2);
         rsmall.setHeight(r.height() - 2);
         p.drawText(rsmall, Qt::AlignVCenter|Qt::AlignHCenter,
-                   KGlobal::locale()->calendar()->weekDayName(i, KCalendarSystem::ShortDayName)
+                   KLocale::global()->calendar()->weekDayName(i, KCalendarSystem::ShortDayName)
                    .remove(2,1));
         ++index;
     }
@@ -293,8 +293,8 @@ void MonthWidget::paintEvent(QPaintEvent*)
 
     p.drawText(r, Qt::AlignCenter,
                QString("%1 %2")
-               .arg(KGlobal::locale()->calendar()->monthName(d->month, KCalendarSystem::LongDayName))
-               .arg(KGlobal::locale()->calendar()->year(QDate(d->year,d->month,1))));
+               .arg(KLocale::global()->calendar()->monthName(d->month, KCalendarSystem::LongDayName))
+               .arg(KLocale::global()->calendar()->year(QDate(d->year,d->month,1))));
 
     p.end();
 

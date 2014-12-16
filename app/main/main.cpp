@@ -135,7 +135,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("General Settings");
     QString version           = group.readEntry("Version", QString());
     KConfigGroup mainConfig   = config->group("Album Settings");
@@ -224,10 +224,14 @@ int main(int argc, char* argv[])
     tipsFiles.append("digikam/tips");
     tipsFiles.append("kipi/tips");
 
-    KGlobal::locale()->insertCatalog("kipiplugins");
-    KGlobal::locale()->insertCatalog("libkdcraw");
-    KGlobal::locale()->insertCatalog("libkexiv2");
-    KGlobal::locale()->insertCatalog("libkipi");
+    //KF5 port: remove this line and define TRANSLATION_DOMAIN in CMakeLists.txt instead
+//KLocale::global()->insertCatalog("kipiplugins");
+    //KF5 port: remove this line and define TRANSLATION_DOMAIN in CMakeLists.txt instead
+//KLocale::global()->insertCatalog("libkdcraw");
+    //KF5 port: remove this line and define TRANSLATION_DOMAIN in CMakeLists.txt instead
+//KLocale::global()->insertCatalog("libkexiv2");
+    //KF5 port: remove this line and define TRANSLATION_DOMAIN in CMakeLists.txt instead
+//KLocale::global()->insertCatalog("libkipi");
 
     if (!app.isSessionRestored())
     {

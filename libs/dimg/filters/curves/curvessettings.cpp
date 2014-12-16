@@ -59,6 +59,7 @@
 #include <libkdcraw/rcombobox.h>
 #include <libkdcraw/rnuminput.h>
 #include <libkdcraw/rexpanderbox.h>
+#include <QStandardPaths>
 
 // Local includes
 
@@ -252,7 +253,7 @@ void CurvesSettings::loadSettings()
 {
     KUrl loadCurvesFile;
 
-    loadCurvesFile = KFileDialog::getOpenUrl(KGlobalSettings::documentPath(),
+    loadCurvesFile = KFileDialog::getOpenUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
                                              QString("*"), kapp->activeWindow(),
                                              QString(i18n("Select Gimp Curves File to Load")));
 
@@ -273,7 +274,7 @@ void CurvesSettings::saveAsSettings()
 {
     KUrl saveCurvesFile;
 
-    saveCurvesFile = KFileDialog::getSaveUrl(KGlobalSettings::documentPath(),
+    saveCurvesFile = KFileDialog::getSaveUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
                                              QString("*"), kapp->activeWindow(),
                                              QString(i18n("Gimp Curves File to Save")));
 

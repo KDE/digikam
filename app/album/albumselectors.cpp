@@ -259,7 +259,7 @@ void AlbumSelectors::setTAlbumSelected(Album* const album, bool singleSelection)
 
 void AlbumSelectors::loadState()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configName);
     d->wholePalbums->setChecked(group.readEntry(d->configUseWholePAlbumsEntry, true));    
     d->wholeTalbums->setChecked(group.readEntry(d->configUseWholeTAlbumsEntry, true));    
@@ -275,7 +275,7 @@ void AlbumSelectors::loadState()
 
 void AlbumSelectors::saveState()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configName);
     group.writeEntry(d->configUseWholePAlbumsEntry, wholeAlbumsCollection());
     group.writeEntry(d->configUseWholeTAlbumsEntry, wholeTagsCollection());

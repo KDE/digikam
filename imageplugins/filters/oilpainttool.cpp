@@ -146,7 +146,7 @@ OilPaintTool::~OilPaintTool()
 
 void OilPaintTool::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     d->brushSizeInput->blockSignals(true);
     d->smoothInput->blockSignals(true);
@@ -158,7 +158,7 @@ void OilPaintTool::readSettings()
 
 void OilPaintTool::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     group.writeEntry(d->configBrushSizeEntry,        d->brushSizeInput->value());

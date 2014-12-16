@@ -59,7 +59,7 @@ public:
     void setThumbnail(const QPixmap&);
 
     // the given text is interpreted as RichText, so you might need to
-    // Qt::escape() it before passing
+    // .toHtmlEscaped() it before passing
     void setStatus(const QString&);
 
     void setTotalSteps( int totalSteps );

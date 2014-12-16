@@ -67,7 +67,7 @@ void HistoryImageId::setCreationDate(const QDateTime& creationDate)
 
 void HistoryImageId::setPathOnDisk(const QString& filePath)
 {
-    KUrl url   = KUrl::fromPath(filePath);
+    KUrl url   = QUrl::fromLocalFile(filePath);
     m_filePath = url.directory(KUrl::ObeyTrailingSlash | KUrl::AppendTrailingSlash);
 }
 

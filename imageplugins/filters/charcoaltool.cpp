@@ -149,7 +149,7 @@ CharcoalTool::~CharcoalTool()
 
 void CharcoalTool::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     d->pencilInput->blockSignals(true);
     d->smoothInput->blockSignals(true);
@@ -161,7 +161,7 @@ void CharcoalTool::readSettings()
 
 void CharcoalTool::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configPencilAdjustmentEntry, d->pencilInput->value());
     group.writeEntry(d->configSmoothAdjustmentEntry, d->smoothInput->value());

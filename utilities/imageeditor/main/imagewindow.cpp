@@ -206,7 +206,7 @@ ImageWindow::ImageWindow()
     // -- Read settings --------------------------------
 
     readSettings();
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
     applyMainWindowSettings(group);
     d->thumbBarDock->setShouldBeVisible(group.readEntry(d->configShowThumbbarEntry, false));
@@ -259,7 +259,7 @@ void ImageWindow::closeEvent(QCloseEvent* e)
         thumbBar()->hide();
     }
 
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
     saveMainWindowSettings(group);
     saveSettings();
@@ -293,7 +293,7 @@ bool ImageWindow::queryClose()
 
 void ImageWindow::setupUserArea()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
 
     QWidget* const widget   = new QWidget(this);

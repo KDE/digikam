@@ -217,11 +217,11 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
     // -- File system information -----------------------------------------
 
     QDateTime modifiedDate = fileInfo.lastModified();
-    str = KGlobal::locale()->formatDateTime(modifiedDate, KLocale::ShortDate, true);
+    str = KLocale::global()->formatDateTime(modifiedDate, KLocale::ShortDate, true);
     m_propertiesTab->setFileModifiedDate(str);
 
     str = QString("%1 (%2)").arg(KIO::convertSize(fi.size()))
-          .arg(KGlobal::locale()->formatNumber(fi.size(), 0));
+          .arg(KLocale::global()->formatNumber(fi.size(), 0));
     m_propertiesTab->setFileSize(str);
     m_propertiesTab->setFileOwner(QString("%1 - %2").arg(fi.user()).arg(fi.group()));
     m_propertiesTab->setFilePermissions(fi.permissionsString());
@@ -277,7 +277,7 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
 
     if (photoInfo.dateTime.isValid())
     {
-        str = KGlobal::locale()->formatDateTime(photoInfo.dateTime, KLocale::ShortDate, true);
+        str = KLocale::global()->formatDateTime(photoInfo.dateTime, KLocale::ShortDate, true);
         m_propertiesTab->setPhotoDateTime(str);
     }
     else

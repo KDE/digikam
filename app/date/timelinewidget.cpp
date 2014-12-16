@@ -44,6 +44,8 @@
 #include <kglobalsettings.h>
 #include <klocale.h>
 #include <kapplication.h>
+#include <QApplication>
+#include <QDesktopWidget>
 
 // Local includes
 
@@ -76,7 +78,7 @@ public:
         startPos(96),
         slotNextTimer(0),
         slotPreviousTimer(0),
-        calendar(KGlobal::locale()->calendar()),
+        calendar(KLocale::global()->calendar()),
         timeUnit(TimeLineWidget::Month),
         scaleMode(TimeLineWidget::LinScale)
     {
@@ -313,7 +315,7 @@ int TimeLineWidget::cursorInfo(QString& infoDate) const
     {
         case Day:
         {
-            infoDate = KGlobal::locale()->formatDate(date);
+            infoDate = KLocale::global()->formatDate(date);
             break;
         }
 
@@ -789,7 +791,7 @@ void TimeLineWidget::paintItem(QPainter& p, const QRect& barRect,
                 p.setPen(dateColor);
                 p.drawLine(barRect.left(), barRect.bottom(),
                            barRect.left(), barRect.bottom() + d->bottomMargin / 2);
-                QString txt = KGlobal::locale()->formatDate(ref.date(), KLocale::ShortDate);
+                QString txt = KLocale::global()->formatDate(ref.date(), KLocale::ShortDate);
                 QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
                 p.drawText(barRect.left() - br.width() / 2, barRect.bottom() + d->bottomMargin, txt);
             }
@@ -824,7 +826,7 @@ void TimeLineWidget::paintItem(QPainter& p, const QRect& barRect,
             {
                 p.drawLine(barRect.left(), barRect.bottom(),
                            barRect.left(), barRect.bottom() + d->bottomMargin / 2);
-                QString txt = KGlobal::locale()->formatDate(ref.date(), KLocale::ShortDate);
+                QString txt = KLocale::global()->formatDate(ref.date(), KLocale::ShortDate);
                 QRect br    = p.fontMetrics().boundingRect(0, 0, width(), height(), 0, txt);
 
                 if (week != 50)
@@ -971,7 +973,7 @@ void TimeLineWidget::keyReleaseEvent(QKeyEvent *)
 void TimeLineWidget::keyScroll(bool isScrollNext)
 {
     QRect barRect;
-    QRect deskRect = KGlobalSettings::desktopGeometry(this);
+    QRect deskRect = QApplication::desktop()->screenGeometry(this);
     int items      = deskRect.width() / d->barWidth;
 
     d->nbItems      = (int)((width() / 2.0) / (float)d->barWidth);
@@ -1938,7 +1940,7 @@ QDateTime TimeLineWidget::dateTimeForPoint(const QPoint& pt, bool& isOnSelection
     QDateTime ref = d->refDateTime;
     ref.setTime(QTime(0, 0, 0, 0));
 
-    QRect deskRect = KGlobalSettings::desktopGeometry(this);
+    QRect deskRect = QApplication::desktop()->screenGeometry(this);
     int items      = deskRect.width() / d->barWidth;
 
     for (int i = 0 ; i < items ; ++i)

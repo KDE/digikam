@@ -158,7 +158,7 @@ void ImagePropertiesMetaDataTab::readSettings(const KConfigGroup& group)
 
 void ImagePropertiesMetaDataTab::loadFilters()
 {
-    KConfigGroup grp2 = KGlobal::config()->group("Image Properties SideBar");
+    KConfigGroup grp2 = KSharedConfig::openConfig()->group("Image Properties SideBar");
     d->exifWidget->setTagsFilter(grp2.readEntry("EXIF Tags Filter",                 MetadataPanel::defaultExifFilter()));
     d->makernoteWidget->setTagsFilter(grp2.readEntry("MAKERNOTE Tags Filter",       MetadataPanel::defaultMknoteFilter()));
     d->iptcWidget->setTagsFilter(grp2.readEntry("IPTC Tags Filter",                 MetadataPanel::defaultIptcFilter()));

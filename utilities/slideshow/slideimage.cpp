@@ -32,6 +32,8 @@
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <kapplication.h>
+#include <QApplication>
+#include <QDesktopWidget>
 
 // Local includes
 
@@ -92,7 +94,7 @@ void SlideImage::setPreviewSettings(const PreviewSettings& settings)
 {
     d->previewSettings = settings;
     // calculate preview size which is used for fast previews
-    QSize desktopSize = KGlobalSettings::desktopGeometry(parentWidget()).size();
+    QSize desktopSize = QApplication::desktop()->screenGeometry(parentWidget()).size();
     d->deskSize = qMax(640, qMax(desktopSize.height(), desktopSize.width()));
 }
 

@@ -453,7 +453,7 @@ void AdvancedRenameWidget::highlightLineEdit(const QString& word)
 
 void AdvancedRenameWidget::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     if (d->layoutStyle == LayoutNormal)
@@ -464,7 +464,7 @@ void AdvancedRenameWidget::readSettings()
 
 void AdvancedRenameWidget::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     // remove duplicate entries and save pattern history, omit empty strings

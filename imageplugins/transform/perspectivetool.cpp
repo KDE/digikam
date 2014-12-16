@@ -225,7 +225,7 @@ void PerspectiveTool::slotColorGuideChanged()
 void PerspectiveTool::readSettings()
 {
     QColor defaultGuideColor(Qt::red);
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->drawWhileMovingCheckBox->setChecked(group.readEntry( d->configDrawWhileMovingEntry,       true));
@@ -238,7 +238,7 @@ void PerspectiveTool::readSettings()
 
 void PerspectiveTool::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     group.writeEntry(d->configDrawWhileMovingEntry,       d->drawWhileMovingCheckBox->isChecked());

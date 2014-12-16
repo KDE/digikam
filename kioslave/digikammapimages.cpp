@@ -115,7 +115,7 @@ extern "C"
 
         KLocale::setMainCatalog("digikam");
         KComponentData componentData( "kio_digikammapimages" );
-        KGlobal::locale();
+        KLocale::global();
 
         kDebug() << "*** kio_digikammapimages started ***";
 

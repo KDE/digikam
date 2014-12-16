@@ -144,7 +144,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
     : KIPI::ImageCollectionSelector(parent),
       d(new Private)
 {
-    KSharedConfigPtr config  = KGlobal::config();
+    KSharedConfigPtr config  = KSharedConfig::openConfig();
     KConfigGroup configGroup = config->group("KipiImageCollectionSelector");
     d->iface                 = iface;
     d->tab                   = new KTabWidget(this);

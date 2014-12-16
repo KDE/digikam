@@ -443,7 +443,7 @@ CurvesWidget* RawSettingsBox::curvesWidget() const
 
 void RawSettingsBox::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->optionGroupName);
 
     histogramBox()->setChannel((ChannelType)group.readEntry(d->optionHistogramChannelEntry,
@@ -474,7 +474,7 @@ void RawSettingsBox::readSettings()
 
 void RawSettingsBox::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->optionGroupName);
 
     group.writeEntry(d->optionHistogramChannelEntry, (int)histogramBox()->channel());

@@ -175,7 +175,7 @@ SetupIOFiles::~SetupIOFiles()
 
 void SetupIOFiles::applySettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configJPEGCompressionEntry,     d->JPEGOptions->getCompressionValue());
     group.writeEntry(d->configJPEGSubSamplingEntry,     d->JPEGOptions->getSubSamplingValue());
@@ -195,7 +195,7 @@ void SetupIOFiles::applySettings()
 
 void SetupIOFiles::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     d->JPEGOptions->setCompressionValue(group.readEntry(d->configJPEGCompressionEntry,         75));
     d->JPEGOptions->setSubSamplingValue(group.readEntry(d->configJPEGSubSamplingEntry,         1));  // Medium sub-sampling

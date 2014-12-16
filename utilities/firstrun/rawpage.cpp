@@ -107,7 +107,7 @@ RawPage::~RawPage()
 
 void RawPage::saveSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QString("ImageViewer Settings"));
     group.writeEntry("UseRawImportTool", d->useRawImport->isChecked());
     config->sync();

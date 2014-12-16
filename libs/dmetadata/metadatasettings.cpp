@@ -66,7 +66,7 @@ public:
 MetadataSettingsContainer MetadataSettings::Private::readFromConfig() const
 {
     MetadataSettingsContainer s;
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(configGroup);
     s.readFromConfig(group);
     return s;
@@ -74,7 +74,7 @@ MetadataSettingsContainer MetadataSettings::Private::readFromConfig() const
 
 void MetadataSettings::Private::writeToConfig() const
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(configGroup);
     settings.writeToConfig(group);
 }

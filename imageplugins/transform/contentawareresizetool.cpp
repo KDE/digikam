@@ -487,7 +487,7 @@ ContentAwareResizeTool::~ContentAwareResizeTool()
 
 void ContentAwareResizeTool::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     blockWidgetSignals(true);
@@ -515,7 +515,7 @@ void ContentAwareResizeTool::readSettings()
 
 void ContentAwareResizeTool::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     // NOTE: size settings are not saved here because they depends of image size.

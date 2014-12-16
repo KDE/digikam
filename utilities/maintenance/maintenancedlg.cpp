@@ -362,7 +362,7 @@ MaintenanceSettings MaintenanceDlg::settings() const
 
 void MaintenanceDlg::readSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     d->expanderBox->readSettings(group);
     d->albumSelectors->loadState();
@@ -400,7 +400,7 @@ void MaintenanceDlg::readSettings()
 
 void MaintenanceDlg::writeSettings()
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
     d->expanderBox->writeSettings(group);
     d->albumSelectors->saveState();

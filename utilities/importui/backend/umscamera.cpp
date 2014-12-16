@@ -290,7 +290,7 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
         return true;
     }
 
-    KSharedConfig::Ptr config  = KGlobal::config();
+    KSharedConfig::Ptr config  = KSharedConfig::openConfig();
     KConfigGroup group         = config->group("Camera Settings");
     bool turnHighQualityThumbs = group.readEntry("TurnHighQualityThumbs", false);
 
@@ -584,11 +584,11 @@ bool UMSCamera::cameraSummary(QString& summary)
                      "Port: <b>%3</b><br/>"
                      "Path: <b>%4</b><br/>"
                      "UUID: <b>%5</b><br/><br/>",
-                     Qt::escape(title()),
-                     Qt::escape(model()),
-                     Qt::escape(port()),
-                     Qt::escape(path()),
-                     Qt::escape(uuid()));
+                     title().toHtmlEscaped(),
+                     model().toHtmlEscaped(),
+                     port().toHtmlEscaped(),
+                     path().toHtmlEscaped(),
+                     uuid().toHtmlEscaped());
 
     summary += i18nc("@info List of supported device operations",
                      "Thumbnails: <b>%1</b><br/>"
