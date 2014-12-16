@@ -32,7 +32,7 @@
 
 #include <kcategorizedsortfilterproxymodel.h>
 #include <QIcon>
-#include <klocale.h>
+#include <KLocalizedString>
 
 // Local includes
 

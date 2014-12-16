@@ -26,7 +26,7 @@
 // KDE includes
 
 #include <kdialog.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <klineedit.h>
 #include <kdebug.h>
 

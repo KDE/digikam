@@ -36,7 +36,7 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kio/job.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmenu.h>
 
 // Local includes

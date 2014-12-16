@@ -27,7 +27,7 @@
 
 #include <kdebug.h>
 #include <kio/global.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 // LibKDcraw includes
 

@@ -26,7 +26,7 @@
 // KDE includes
 
 #include <kcombobox.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdebug.h>
 #include <ksqueezedtextlabel.h>
 #include <kmimetypechooser.h>

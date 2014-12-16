@@ -33,7 +33,7 @@
 // KDE includes
 
 #include <kurl.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdebug.h>
 
 // Local includes

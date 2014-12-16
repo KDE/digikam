@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdialog.h>
 #include <kseparator.h>
 #include <kglobal.h>

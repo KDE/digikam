@@ -33,7 +33,7 @@
 #include <kdebug.h>
 #include <kinputdialog.h>
 #include <kio/jobuidelegate.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmessagebox.h>
 #include <kurl.h>
 

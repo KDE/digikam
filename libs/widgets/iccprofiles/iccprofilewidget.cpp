@@ -37,7 +37,7 @@
 #include <kapplication.h>
 #include <kdialog.h>
 #include <khbox.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdebug.h>
 
 // Local includes

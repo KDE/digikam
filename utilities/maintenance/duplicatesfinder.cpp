@@ -32,7 +32,7 @@
 
 #include <kio/job.h>
 #include <kapplication.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <QIcon>
 #include <kdebug.h>
 

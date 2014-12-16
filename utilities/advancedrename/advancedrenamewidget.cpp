@@ -38,7 +38,7 @@
 #include <kconfiggroup.h>
 #include <QIcon>
 #include <kiconloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 // LibKDcraw includes
 

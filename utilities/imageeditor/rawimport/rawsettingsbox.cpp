@@ -38,7 +38,7 @@
 #include <kconfig.h>
 #include <kfiledialog.h>
 #include <kiconloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kstandarddirs.h>
 #include <ktabwidget.h>
 #include <kvbox.h>

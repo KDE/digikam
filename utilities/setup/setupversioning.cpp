@@ -40,7 +40,7 @@
 // KDE includes
 
 #include <kiconloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <ktabwidget.h>
 #include <kapplication.h>
 

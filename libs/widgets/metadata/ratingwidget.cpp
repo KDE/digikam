@@ -41,7 +41,7 @@
 
 #include <kglobalsettings.h>
 #include <ksqueezedtextlabel.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdebug.h>
 #include <kmenu.h>
 #include <khbox.h>

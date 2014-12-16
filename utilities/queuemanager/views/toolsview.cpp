@@ -32,7 +32,7 @@
 
 #include <kdeversion.h>
 #include <kiconloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 // Local includes
 

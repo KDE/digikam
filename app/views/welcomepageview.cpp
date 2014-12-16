@@ -42,7 +42,7 @@
 #include <kglobalsettings.h>
 #include <khtml_part.h>
 #include <khtmlview.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kshortcut.h>
 #include <kstandarddirs.h>
 #include <ktoolinvocation.h>

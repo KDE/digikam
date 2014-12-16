@@ -45,7 +45,7 @@
 #include <QIcon>
 #include <kiconloader.h>
 #include <kinputdialog.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <ksqueezedtextlabel.h>
 #include <KTabWidget>
 

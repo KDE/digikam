@@ -38,7 +38,7 @@
 
 // KDE includes
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdeprintdialog.h>
 
 // Local includes

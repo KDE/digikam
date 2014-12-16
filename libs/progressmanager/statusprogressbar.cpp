@@ -35,7 +35,7 @@
 // KDE includes
 
 #include <ksqueezedtextlabel.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kiconloader.h>
 #include <kcursor.h>
 #include <kdebug.h>

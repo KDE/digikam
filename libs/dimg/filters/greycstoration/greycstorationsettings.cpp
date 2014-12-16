@@ -35,7 +35,7 @@
 // KDE includes
 
 #include <kdialog.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <ktabwidget.h>
 
 // LibKDcraw includes

@@ -48,7 +48,7 @@
 
 #include <kdeversion.h>
 #include <kglobalsettings.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kpushbutton.h>
 #include <kstandardguiitem.h>
 #include <ktextedit.h>

@@ -26,7 +26,7 @@
 // KDE includes
 
 #include <kapplication.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <QIcon>
 #include <kdebug.h>
 

@@ -41,7 +41,7 @@
 #include <kconfiggroup.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kseparator.h>
 #include <kstandarddirs.h>
 

@@ -39,7 +39,7 @@
 #include <kcombobox.h>
 #include <kconfig.h>
 #include <kdialog.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 // Local includes
 

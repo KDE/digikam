@@ -31,7 +31,7 @@
 // KDE includes
 
 #include <kcombobox.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kstandarddirs.h>
 #include <kurllabel.h>
 #include <kglobal.h>

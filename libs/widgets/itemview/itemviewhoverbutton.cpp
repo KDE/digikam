@@ -38,7 +38,7 @@
 #include <QIcon>
 #include <kiconloader.h>
 #include <kiconeffect.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 namespace Digikam
 {

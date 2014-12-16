@@ -37,7 +37,7 @@
 #include <kconfiggroup.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <knuminput.h>
 #include <kstandarddirs.h>
 

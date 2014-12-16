@@ -42,7 +42,7 @@
 
 #include <kiconloader.h>
 #include <kstandarddirs.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kstdguiitem.h>
 #include <kpushbutton.h>
 #include <kdebug.h>

@@ -30,7 +30,7 @@
 // KDE includes
 
 #include <klauncher_iface.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 // local includes
 

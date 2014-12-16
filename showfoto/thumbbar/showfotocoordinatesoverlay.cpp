@@ -26,7 +26,7 @@
 // KDE includes
 
 #include <kiconloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kglobalsettings.h>
 #include <kdebug.h>
 

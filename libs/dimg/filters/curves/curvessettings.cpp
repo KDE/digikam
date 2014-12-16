@@ -43,7 +43,7 @@
 #include <kdebug.h>
 #include <kurl.h>
 #include <kdialog.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kapplication.h>
 #include <kfiledialog.h>
 #include <kglobal.h>

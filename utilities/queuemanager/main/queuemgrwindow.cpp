@@ -42,7 +42,7 @@
 #include <kconfig.h>
 #include <kedittoolbar.h>
 #include <kglobal.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmenubar.h>
 #include <kmessagebox.h>
 #include <knotifyconfigwidget.h>

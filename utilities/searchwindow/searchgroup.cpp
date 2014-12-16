@@ -37,7 +37,7 @@
 
 #include <kcombobox.h>
 #include <kiconloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 

@@ -32,7 +32,7 @@
 // KDE includes
 
 #include <klineedit.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <ktabwidget.h>
 
 // LibKExiv2 includes

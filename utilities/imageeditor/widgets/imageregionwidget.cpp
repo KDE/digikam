@@ -36,7 +36,7 @@
 // KDE includes
 
 #include <kiconloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdebug.h>
 
 // Local includes

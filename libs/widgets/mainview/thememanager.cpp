@@ -39,7 +39,7 @@
 #include <kmenu.h>
 #include <kmessagebox.h>
 #include <kglobal.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kcolorscheme.h>
 #include <kactioncollection.h>
 #include <kstandarddirs.h>

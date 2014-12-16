@@ -42,7 +42,7 @@
 #include <kdialog.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kvbox.h>
 
 // LibKDcraw includes

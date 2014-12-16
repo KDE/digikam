@@ -50,7 +50,7 @@ extern "C"
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdebug.h>
 
 // Local includes

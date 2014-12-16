@@ -32,7 +32,7 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kio/job.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmimetype.h>
 
 // Local includes

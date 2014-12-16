@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kglobal.h>
 #include <kdebug.h>
 #include <kapplication.h>

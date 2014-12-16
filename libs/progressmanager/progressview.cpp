@@ -48,7 +48,7 @@
 #include <kdialog.h>
 #include <khbox.h>
 #include <kiconloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kstandardguiitem.h>
 
 // Local includes

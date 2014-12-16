@@ -51,7 +51,7 @@ extern "C"
 // KDE includes
 
 #include <kcodecs.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdebug.h>
 
 // Local includes

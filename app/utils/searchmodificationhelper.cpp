@@ -27,7 +27,7 @@
 
 #include <kdebug.h>
 #include <kinputdialog.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmessagebox.h>
 #include <kstandardguiitem.h>
 

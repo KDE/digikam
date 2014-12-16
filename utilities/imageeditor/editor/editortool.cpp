@@ -32,7 +32,7 @@
 
 #include <kapplication.h>
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 // Local includes
 

@@ -34,7 +34,7 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kcodecs.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <solid/device.h>
 #include <solid/deviceinterface.h>
 #include <solid/devicenotifier.h>

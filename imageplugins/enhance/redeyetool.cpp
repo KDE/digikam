@@ -48,7 +48,7 @@
 #include <khuesaturationselect.h>
 #include <QIcon>
 #include <kiconloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kstandarddirs.h>
 #include <kvbox.h>
 

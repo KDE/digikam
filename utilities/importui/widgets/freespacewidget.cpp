@@ -41,7 +41,7 @@
 // KDE includes
 
 #include <kurl.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kio/global.h>
 #include <kiconloader.h>
 #include <kdebug.h>

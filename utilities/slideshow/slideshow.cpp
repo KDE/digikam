@@ -44,7 +44,7 @@
 #include <kapplication.h>
 #include <kdeversion.h>
 #include <kdialog.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdebug.h>
 
 // Local includes

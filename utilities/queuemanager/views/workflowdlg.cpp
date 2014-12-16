@@ -38,7 +38,7 @@
 #include <klineedit.h>
 #include <kstandarddirs.h>
 #include <kseparator.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 namespace Digikam
 {

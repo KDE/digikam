@@ -33,7 +33,7 @@
 #include <kapplication.h>
 #include <kcombobox.h>
 #include <kdialog.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdebug.h>
 #include <ksqueezedtextlabel.h>
 

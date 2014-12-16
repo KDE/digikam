@@ -36,7 +36,7 @@
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kiconloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <ktabwidget.h>
 #include <kvbox.h>
 

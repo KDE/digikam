@@ -40,7 +40,7 @@
 #include <kconfig.h>
 #include <kdialog.h>
 #include <kglobal.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <knuminput.h>
 #include <kvbox.h>
 #include <kstandarddirs.h>

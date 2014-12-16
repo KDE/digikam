@@ -36,7 +36,7 @@
 #include <kio/job.h>
 #include <kio/deletejob.h>
 #include <kio/jobuidelegate.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdebug.h>
 
 // Local includes

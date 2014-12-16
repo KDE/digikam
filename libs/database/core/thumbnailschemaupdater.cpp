@@ -33,7 +33,7 @@
 
 #include <kio/job.h>
 #include <kio/netaccess.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>

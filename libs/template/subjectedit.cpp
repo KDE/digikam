@@ -32,7 +32,7 @@
 
 #include <khbox.h>
 #include <klineedit.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 namespace Digikam
 {

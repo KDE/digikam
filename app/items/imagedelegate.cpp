@@ -40,7 +40,7 @@
 
 #include <kglobal.h>
 #include <kio/global.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdebug.h>
 #include <QIcon>
 #include <kapplication.h>

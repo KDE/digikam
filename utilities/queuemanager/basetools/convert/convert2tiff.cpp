@@ -32,7 +32,7 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kglobal.h>
 
 // Local includes

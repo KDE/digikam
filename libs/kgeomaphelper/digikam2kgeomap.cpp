@@ -32,7 +32,7 @@
 // KDE includes
 
 #include <kaction.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 // libkgeomap includes
 

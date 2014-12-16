@@ -47,7 +47,7 @@
 // KDE includes
 
 #include <kcursor.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <kpixmapsequence.h>

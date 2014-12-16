@@ -45,7 +45,7 @@
 #include <kstandardaction.h>
 #include <kactioncollection.h>
 #include <kdialog.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdebug.h>
 #include <QApplication>
 #include <QDesktopWidget>

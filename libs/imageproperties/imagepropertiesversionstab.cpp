@@ -36,7 +36,7 @@
 #include <kconfiggroup.h>
 #include <kglobal.h>
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kiconloader.h>
 #include <kstandardguiitem.h>
 #include <kurl.h>

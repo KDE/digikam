@@ -47,7 +47,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kcursor.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kpushbutton.h>
 #include <kstandarddirs.h>
 #include <kstandardguiitem.h>

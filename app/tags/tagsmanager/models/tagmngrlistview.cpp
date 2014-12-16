@@ -38,7 +38,7 @@
 #include <kmenu.h>
 #include <kaction.h>
 #include <QIcon>
-#include <klocale.h>
+#include <KLocalizedString>
 
 // Local includes
 

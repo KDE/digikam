@@ -42,7 +42,7 @@
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <klineedit.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kstandarddirs.h>
 #include <kurlrequester.h>
 #include <kvbox.h>

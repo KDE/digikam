@@ -41,7 +41,7 @@
 #include <kcomponentdata.h>
 #include <kglobal.h>
 #include <kio/deletejob.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmimetype.h>
 #include <kdebug.h>
 

@@ -35,7 +35,7 @@
 // KDE includes
 
 #include <kdialog.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kvbox.h>
 #include <kapplication.h>
 

@@ -62,7 +62,7 @@
 #include <kiconloader.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmenubar.h>
 #include <kmessagebox.h>
 #include <knotifyconfigwidget.h>

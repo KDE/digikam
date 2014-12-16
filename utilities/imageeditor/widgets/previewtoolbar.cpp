@@ -37,7 +37,7 @@
 #include <kdialog.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kstandarddirs.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>

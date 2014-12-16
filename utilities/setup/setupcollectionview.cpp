@@ -42,7 +42,7 @@
 // KDE includes
 
 #include <kdeversion.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <klineedit.h>
 #include <kdialog.h>
 #include <kfiledialog.h>

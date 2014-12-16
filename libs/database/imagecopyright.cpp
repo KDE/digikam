@@ -27,7 +27,7 @@
 // KDE includes
 
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kglobal.h>
 
 // Local includes

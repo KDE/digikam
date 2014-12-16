@@ -41,7 +41,7 @@
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kimageio.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kstandarddirs.h>
 
 // LibKDcraw includes

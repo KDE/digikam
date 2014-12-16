@@ -32,7 +32,7 @@
 
 #include <kcalendarsystem.h>
 #include <kglobal.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kapplication.h>
 
 // Local includes

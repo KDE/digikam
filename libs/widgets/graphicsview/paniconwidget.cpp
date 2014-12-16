@@ -44,7 +44,7 @@
 
 #include <kcursor.h>
 #include <kiconloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 namespace Digikam
 {

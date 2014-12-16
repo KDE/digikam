@@ -43,7 +43,7 @@
 #include <kio/global.h>
 #include <kio/thumbcreator.h>
 #include <klibloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmimetype.h>
 #include <kservicetypetrader.h>
 #include <kstandarddirs.h>

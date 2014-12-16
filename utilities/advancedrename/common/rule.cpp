@@ -34,7 +34,7 @@
 // KDE includes
 
 #include <kiconloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 namespace Digikam
 {

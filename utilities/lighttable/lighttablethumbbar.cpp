@@ -34,7 +34,7 @@
 // KDE includes
 
 #include <kmenu.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kdebug.h>

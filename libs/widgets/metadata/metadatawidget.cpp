@@ -53,7 +53,7 @@
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdebug.h>
 #include <kmenu.h>
 

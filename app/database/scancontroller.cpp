@@ -44,7 +44,7 @@
 
 #include <kmessagebox.h>
 #include <kapplication.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kiconloader.h>
 #include <kdebug.h>
 

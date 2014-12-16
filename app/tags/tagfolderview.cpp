@@ -36,7 +36,7 @@
 
 #include <kdebug.h>
 #include <kmenu.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kiconloader.h>
 #include <QIcon>
 #include <kaction.h>

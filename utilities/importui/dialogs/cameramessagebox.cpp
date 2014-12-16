@@ -40,7 +40,7 @@
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdialog.h>
 #include <kdebug.h>
 

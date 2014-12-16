@@ -36,7 +36,7 @@
 // KDE includes
 
 #include <kconfiggroup.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kiconloader.h>
 #include <kurl.h>
 #include <kdebug.h>

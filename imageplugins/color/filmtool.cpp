@@ -51,7 +51,7 @@
 #include <kglobalsettings.h>
 #include <QIcon>
 #include <kiconloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 

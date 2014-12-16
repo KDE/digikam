@@ -45,7 +45,7 @@
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kfileitem.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmenu.h>
 #include <kmimetype.h>
 #include <kmimetypetrader.h>

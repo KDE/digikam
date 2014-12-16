@@ -47,7 +47,7 @@
 // KDE includes
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <klineedit.h>
 #include <kapplication.h>
 #include <kpagedialog.h>

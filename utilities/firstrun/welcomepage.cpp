@@ -30,7 +30,7 @@
 // KDE includes
 
 #include <kvbox.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 // Local includes
 

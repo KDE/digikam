@@ -36,7 +36,7 @@
 #include <kdialog.h>
 #include <kconfig.h>
 #include <kvbox.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kstandarddirs.h>
 #include <kapplication.h>
 #include <kurlrequester.h>

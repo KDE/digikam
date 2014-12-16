@@ -35,7 +35,7 @@
 // KDE includes
 
 #include <kcursor.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kiconloader.h>
 #include <kdatetable.h>
 #include <kglobalsettings.h>

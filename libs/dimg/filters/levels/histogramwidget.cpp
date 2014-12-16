@@ -43,7 +43,7 @@
 
 
 #include <kcursor.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kiconloader.h>
 #include <kpixmapsequence.h>
 #include <kdebug.h>

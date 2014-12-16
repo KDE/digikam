@@ -49,7 +49,7 @@ extern "C"
 #include <kdebug.h>
 #include <kcodecs.h>
 #include <kio/global.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmimetype.h>
 #include <solid/device.h>
 #include <solid/storageaccess.h>

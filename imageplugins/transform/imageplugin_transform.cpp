@@ -31,7 +31,7 @@
 #include <kcursor.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdebug.h>
 
 // Local includes

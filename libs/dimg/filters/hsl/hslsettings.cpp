@@ -34,7 +34,7 @@
 
 #include <kdebug.h>
 #include <kdialog.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kapplication.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>

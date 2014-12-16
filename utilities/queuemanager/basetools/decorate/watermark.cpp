@@ -46,7 +46,7 @@
 #include <kfontcombobox.h>
 #include <kurlrequester.h>
 #include <klineedit.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <knuminput.h>
 #include <kvbox.h>
 #include <kfiledialog.h>

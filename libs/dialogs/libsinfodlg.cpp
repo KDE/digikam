@@ -34,7 +34,7 @@
 // KDE includes
 
 #include <kdeversion.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 // Libkexiv2 includes
 

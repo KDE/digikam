@@ -32,7 +32,7 @@
 // KDE includes
 
 #include <kdialog.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kurlrequester.h>
 #include <khbox.h>
 #include <kdebug.h>

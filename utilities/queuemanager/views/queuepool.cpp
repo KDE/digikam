@@ -32,7 +32,7 @@
 #include <kapplication.h>
 #include <kdeversion.h>
 #include <kiconloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmessagebox.h>
 #include <kdebug.h>
 

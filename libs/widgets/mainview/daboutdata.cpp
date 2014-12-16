@@ -32,7 +32,7 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <QIcon>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kxmlguiwindow.h>
 #include <ktoolinvocation.h>
 

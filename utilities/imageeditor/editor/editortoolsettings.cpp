@@ -44,7 +44,7 @@
 #include <kdialog.h>
 #include <khbox.h>
 #include <kiconloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kpushbutton.h>
 #include <kstandarddirs.h>
 #include <kstandardguiitem.h>

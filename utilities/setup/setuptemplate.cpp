@@ -36,7 +36,7 @@
 #include <kdialog.h>
 #include <kglobalsettings.h>
 #include <klineedit.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmessagebox.h>
 
 // LibKExiv2 includes

@@ -34,7 +34,7 @@
 // KDE includes
 
 #include <kconfig.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdebug.h>
 
 // LibKipi includes

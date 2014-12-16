@@ -78,7 +78,7 @@
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <kimageio.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmenubar.h>
 #include <kmessagebox.h>
 #include <kopenwithdialog.h>

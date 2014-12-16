@@ -44,7 +44,7 @@
 #include <kcursor.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <ktoolinvocation.h>
