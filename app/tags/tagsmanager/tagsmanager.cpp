@@ -28,10 +28,10 @@
 
 #include <QQueue>
 #include <QTreeView>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QLineEdit>
-#include <QtGui/QListView>
+#include <QHeaderView>
+#include <QLabel>
+#include <QLineEdit>
+#include <QListView>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QDesktopWidget>

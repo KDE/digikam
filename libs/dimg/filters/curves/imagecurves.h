@@ -28,7 +28,7 @@
 
 #include <QSharedDataPointer>
 #include <QtCore/QPoint>
-#include <QtGui/QPolygon>
+#include <QPolygon>
 
 // KDE includes
 

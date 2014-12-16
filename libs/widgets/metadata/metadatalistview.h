@@ -29,8 +29,8 @@
 
 #include <QtCore/QString>
 #include <QtCore/QMap>
-#include <QtGui/QResizeEvent>
-#include <QtGui/QTreeWidget>
+#include <QResizeEvent>
+#include <QTreeWidget>
 
 // Local includes
 

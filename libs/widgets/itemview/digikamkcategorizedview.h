@@ -23,7 +23,7 @@
 
 // Qt includes
 
-#include <QtGui/QListView>
+#include <QListView>
 
 // Local includes
 

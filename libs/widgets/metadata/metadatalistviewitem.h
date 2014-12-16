@@ -28,7 +28,7 @@
 // Qt includes
 
 #include <QtCore/QString>
-#include <QtGui/QTreeWidgetItem>
+#include <QTreeWidgetItem>
 
 // Local includes
 

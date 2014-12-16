@@ -27,7 +27,7 @@
 // Qt includes
 
 #include <QtCore/QString>
-#include <QtGui/QWidget>
+#include <QWidget>
 
 // local includes
 #include "rule.h"

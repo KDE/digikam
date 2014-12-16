@@ -28,8 +28,8 @@
 
 // Qt includes
 
-#include <QtGui/QStackedWidget>
-#include <QtGui/QPixmap>
+#include <QStackedWidget>
+#include <QPixmap>
 #include <QtCore/QString>
 
 // Local includes

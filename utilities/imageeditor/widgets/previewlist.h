@@ -28,7 +28,7 @@
 // Qt includes
 
 #include <QtCore/QObject>
-#include <QtGui/QPixmap>
+#include <QPixmap>
 #include <QListWidget>
 #include <QListWidgetItem>
 

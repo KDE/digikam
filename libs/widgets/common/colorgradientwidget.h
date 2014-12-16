@@ -26,8 +26,8 @@
 
 // KDE includes
 
-#include <QtGui/QWidget>
-#include <QtGui/QColor>
+#include <QWidget>
+#include <QColor>
 
 // Local includes
 

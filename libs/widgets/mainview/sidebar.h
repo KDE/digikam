@@ -28,8 +28,8 @@
 
 // Qt includes
 
-#include <QtGui/QPixmap>
-#include <QtGui/QSplitter>
+#include <QPixmap>
+#include <QSplitter>
 
 // KDE includes
 

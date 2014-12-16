@@ -26,8 +26,8 @@
 
 // Qt includes
 
-#include <QtGui/QPainter>
-#include <QtGui/QPaintEvent>
+#include <QPainter>
+#include <QPaintEvent>
 #include <QtCore/QRect>
 #include <QtCore/QTimer>
 #include <QtCore/QTimeLine>

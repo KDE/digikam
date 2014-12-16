@@ -26,8 +26,8 @@
 
 // Qt includes
 
-#include <QtGui/QTreeWidget>
-#include <QtGui/QWidget>
+#include <QTreeWidget>
+#include <QWidget>
 #include <QtCore/QString>
 #include <QtCore/QVariant>
 

@@ -27,7 +27,7 @@
 
 // Qt includes
 
-#include <QtGui/QImage>
+#include <QImage>
 
 // Local includes
 

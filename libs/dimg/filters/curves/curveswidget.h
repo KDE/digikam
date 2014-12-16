@@ -26,10 +26,10 @@
 
 // Qt includes
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QtCore/QEvent>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QPaintEvent>
+#include <QMouseEvent>
+#include <QPaintEvent>
 
 // KDE includes
 

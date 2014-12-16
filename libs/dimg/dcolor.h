@@ -30,7 +30,7 @@
 
 // Qt includes
 
-#include <QtGui/QColor>
+#include <QColor>
 
 // Local includes
 

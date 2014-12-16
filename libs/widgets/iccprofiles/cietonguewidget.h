@@ -26,9 +26,9 @@
 
 // Qt includes
 
-#include <QtGui/QWidget>
-#include <QtGui/QColor>
-#include <QtGui/QPaintEvent>
+#include <QWidget>
+#include <QColor>
+#include <QPaintEvent>
 
 // KDE includes
 

@@ -27,14 +27,14 @@
 
 // Qt includes
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QtCore/QRect>
-#include <QtGui/QImage>
-#include <QtGui/QPixmap>
-#include <QtGui/QHideEvent>
-#include <QtGui/QMouseEvent>
+#include <QImage>
+#include <QPixmap>
+#include <QHideEvent>
+#include <QMouseEvent>
 #include <QtCore/QTimerEvent>
-#include <QtGui/QPaintEvent>
+#include <QPaintEvent>
 
 // Local includes
 

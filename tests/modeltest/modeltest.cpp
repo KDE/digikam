@@ -41,7 +41,7 @@
 
 #include "modeltest.moc"
 
-#include <QtGui/QtGui>
+#include <QtGui>
 #include <QtTest/QtTest>
 
 #undef Q_ASSERT

@@ -26,9 +26,9 @@
 
 // Qt includes
 
-#include <QtGui/QLabel>
-#include <QtGui/QListView>
-#include <QtGui/QComboBox>
+#include <QLabel>
+#include <QListView>
+#include <QComboBox>
 #include <QtCore/QPersistentModelIndex>
 
 // KDE includes

@@ -26,12 +26,12 @@
 
 // Qt includes
 
-#include <QtGui/QWidget>
-#include <QtGui/QColor>
-#include <QtGui/QPixmap>
-#include <QtGui/QResizeEvent>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QPaintEvent>
+#include <QWidget>
+#include <QColor>
+#include <QPixmap>
+#include <QResizeEvent>
+#include <QMouseEvent>
+#include <QPaintEvent>
 #include <QtCore/QPoint>
 #include <QtCore/QEvent>
 #include <QtCore/QTimerEvent>

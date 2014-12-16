@@ -30,7 +30,7 @@
 
 #include <QtCore/QEvent>
 #include <QtCore/QString>
-#include <QtGui/QLabel>
+#include <QLabel>
 
 // Local includes
 

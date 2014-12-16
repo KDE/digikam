@@ -27,7 +27,7 @@
 
 // Qt includes
 
-#include <QtGui/QPainter>
+#include <QPainter>
 
 // KDE includes
 

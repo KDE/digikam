@@ -33,13 +33,13 @@
 
 // Qt includes
 
-#include <QtGui/QCheckBox>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QLineEdit>
-#include <QtGui/QLabel>
-#include <QtGui/QToolButton>
-#include <QtGui/QPainter>
+#include <QCheckBox>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QLineEdit>
+#include <QLabel>
+#include <QToolButton>
+#include <QPainter>
 
 // Local includes
 
