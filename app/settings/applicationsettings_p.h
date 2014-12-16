@@ -24,6 +24,8 @@
 #ifndef APPLICATIONSETTINGS_P_H
 #define APPLICATIONSETTINGS_P_H
 
+#include "previewsettings.h"
+
 namespace Digikam
 {
 
@@ -111,6 +113,8 @@ public:
     static const QString                      configToolTipsShowAlbumCaptionEntry;
     static const QString                      configToolTipsShowAlbumPreviewEntry;
     static const QString                      configPreviewLoadFullImageSizeEntry;
+    static const QString                      configPreviewRawUseEmbeddedPreview;
+    static const QString                      configPreviewRawUseHalfSizeData;
     static const QString                      configPreviewShowIconsEntry;
     static const QString                      configShowThumbbarEntry;
     static const QString                      configShowFolderTreeViewItemsCountEntry;
@@ -191,7 +195,7 @@ public:
     bool                                      tooltipShowAlbumPreview;
 
     // preview settings
-    bool                                      previewLoadFullImageSize;
+    PreviewSettings                           previewSettings;
     bool                                      previewShowIcons;
     bool                                      showThumbbar;
 

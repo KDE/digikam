@@ -548,7 +548,7 @@ ImageInfo ScanController::scannedInfo(const QString& filePath)
     CollectionScanner scanner;
     scanner.setHintContainer(d->hints);
 
-    ImageInfo info(filePath);
+    ImageInfo info = ImageInfo::fromLocalFile(filePath);
 
     if (info.isNull())
     {

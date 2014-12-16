@@ -25,28 +25,48 @@
 #ifndef DIGIKAMGLOBALS_H
 #define DIGIKAMGLOBALS_H
 
-// Macros for image filters.
+// Qt includes
+
+#include <QObject>
+#include <QShortcut>
+
+/** Macros for image filters.
+ */
 #define CLAMP0255(a)   qBound(0,a,255)
 #define CLAMP065535(a) qBound(0,a,65535)
 #define CLAMP(x,l,u)   qBound(l,x,u)
 #define MAX3(a, b, c)  (qMax(qMax(a,b),c))
 #define MIN3(a, b, c)  (qMin(qMin(a,b),c))
 
-// Degrees to radian conversion coeff (PI/180). To optimize computation.
+/** Degrees to radian conversion coeff (PI/180). To optimize computation.
+ */
 #define DEG2RAD 0.017453292519943
 
 namespace Digikam
 {
 
-// Field value limits for all digiKam-specific fields (not EXIF/IPTC fields)
+/** Convenience method for creating keyboard shortcuts.
+ */
+inline QShortcut* defineShortcut(QWidget* const w, const QKeySequence& key, const QObject* receiver, const char* slot)
+{
+    QShortcut* const s = new QShortcut(w);
+    s->setKey(key);
+    s->setContext(Qt::WidgetWithChildrenShortcut);
+    QObject::connect(s, SIGNAL(activated()), receiver, slot);
 
+    return s;
+}
+
+/** Field value limits for all digiKam-specific fields (not EXIF/IPTC fields)
+ */
 static const int RatingMin          = 0;
 static const int RatingMax          = 5;
 static const int NoRating           = -1;
 
 // --------------------------------------------------------
 
-// segments for histograms and curves
+/** segments for histograms and curves
+ */
 static const int NUM_SEGMENTS_16BIT = 65536;
 static const int NUM_SEGMENTS_8BIT  = 256;
 static const int MAX_SEGMENT_16BIT  = NUM_SEGMENTS_16BIT - 1;
@@ -54,8 +74,9 @@ static const int MAX_SEGMENT_8BIT   = NUM_SEGMENTS_8BIT  - 1;
 
 // --------------------------------------------------------
 
-// Delay in milliseconds to automatically expands album tree-view with D&D
-// See bug #286263 for details.
+/** Delay in milliseconds to automatically expands album tree-view with D&D
+ *  See bug #286263 for details.
+ */
 static const int AUTOEXPANDDELAY    = 800;
 
 // --------------------------------------------------------

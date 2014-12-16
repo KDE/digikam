@@ -62,6 +62,7 @@
 #include "databaseparameters.h"
 #include "digikamapp.h"
 #include "scancontroller.h"
+#include "thumbnaildatabaseaccess.h"
 #include "version.h"
 
 using namespace Digikam;
@@ -235,6 +236,8 @@ int main(int argc, char* argv[])
 
     int ret = app.exec();
 
+    DatabaseAccess::cleanUpDatabase();
+    ThumbnailDatabaseAccess::cleanUpDatabase();
     KExiv2Iface::KExiv2::cleanupExiv2();
 
     return ret;

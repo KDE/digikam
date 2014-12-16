@@ -669,20 +669,24 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                     metadata.applyChanges();
                 }
 
-                // Convert JPEG file to lossless format if necessary,
+                // Convert JPEG file to lossless format if wanted,
                 // and move converted image to destination.
 
                 if (convertJpeg)
                 {
-                    kDebug() << "Convert to LossLess: " << file << " using (" << tempURL << ")";
-
                     KUrl tempURL2(dest);
                     tempURL2 = tempURL2.upUrl();
                     tempURL2.addPath(QString(".digikam-camera-tmp2-%1").arg(getpid()).append(file));
                     temp     = tempURL2.toLocalFile();
 
+                    // when convertnig a file, we need to set the new format extension..
+                    // would another place be better for this?
+                    dest = dest.left(dest.lastIndexOf('.')) + losslessFormat;
+                    kDebug() << "Convert to LossLess: " << file << " using (" << tempURL << ")  destination: " << dest;
+
                     if (!JPEGUtils::jpegConvert(tempURL.toLocalFile(), tempURL2.toLocalFile(), file, losslessFormat))
                     {
+                        kDebug() << "  Convert failed?! eh";
                         // convert failed. delete the temp file
                         unlink(QFile::encodeName(tempURL.toLocalFile()));
                         unlink(QFile::encodeName(tempURL2.toLocalFile()));
@@ -690,6 +694,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                     }
                     else
                     {
+                        kDebug() << "  Done, removing the temp file: " << tempURL;
                         // Else remove only the first temp file.
                         unlink(QFile::encodeName(tempURL.toLocalFile()));
                     }
@@ -777,6 +782,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 void CameraController::sendLogMsg(const QString& msg, DHistoryView::EntryType type,
                                   const QString& folder, const QString& file)
 {
+    kDebug() << "Log (" << file << " " << folder << ": " << msg;
     if (!d->canceled)
     {
         emit signalLogMsg(msg, type, folder, file);
@@ -880,9 +886,12 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
         return;
     }
 
+    kDebug() << "Checking whether (" << temp << ") has a sidecar";
+
     // move the file to the destination file
     if (DMetadata::hasSidecar(temp))
     {
+        kDebug() << "  Yes, renaming it to " << dest;
         if (KDE::rename(DMetadata::sidecarPath(temp), DMetadata::sidecarPath(dest)) != 0)
         {
             sendLogMsg(i18n("Failed to save sidecar file for <filename>%1</filename>", file), DHistoryView::ErrorEntry,  folder, file);
@@ -891,6 +900,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
 
     if (KDE::rename(temp, dest) != 0)
     {
+        kDebug() << "Renaming " << temp << " to " << dest << " failed";
         // rename failed. delete the temp file
         unlink(QFile::encodeName(temp));
         emit signalDownloaded(folder, file, CamItemInfo::DownloadFailed);
@@ -898,6 +908,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
     }
     else
     {
+        kDebug() << "Rename done, emiting downloaded signals:" << file << " info.filename: " << info.fileName();
         // TODO why two signals??
         emit signalDownloaded(folder, file, CamItemInfo::DownloadedYes);
         emit signalDownloadComplete(folder, file, info.path(), info.fileName());
@@ -905,6 +916,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
         // Run script
         if (!script.isEmpty())
         {
+            kDebug() << "Got a script, processing: " << script;
             KProcess process;
 
             process.setOutputChannelMode(KProcess::SeparateChannels);

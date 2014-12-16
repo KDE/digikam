@@ -526,6 +526,7 @@ void AssignedListView::slotContextMenu()
     popmenu.addAction(acol->action("queuemgr_tooldown"));
     popmenu.addAction(acol->action("queuemgr_toolremove"));
     popmenu.addSeparator();
+    popmenu.addAction(acol->action("queuemgr_savequeue"));
     popmenu.addAction(acol->action("queuemgr_toolsclear"));
     popmenu.exec(QCursor::pos());
 }

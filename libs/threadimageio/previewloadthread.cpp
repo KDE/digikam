@@ -39,14 +39,14 @@ PreviewLoadThread::PreviewLoadThread(QObject* const parent)
     m_loadingPolicy = LoadingPolicyFirstRemovePrevious;
 }
 
-LoadingDescription PreviewLoadThread::createLoadingDescription(const QString& filePath, int size)
+LoadingDescription PreviewLoadThread::createLoadingDescription(const QString& filePath, const PreviewSettings& settings, int size)
 {
-    return createLoadingDescription(filePath, size, IccManager::displayProfile(m_displayingWidget));
+    return createLoadingDescription(filePath, settings, size, IccManager::displayProfile(m_displayingWidget));
 }
 
-LoadingDescription PreviewLoadThread::createLoadingDescription(const QString& filePath, int size, const IccProfile& displayProfile)
+LoadingDescription PreviewLoadThread::createLoadingDescription(const QString& filePath, const PreviewSettings& previewSettings, int size, const IccProfile& displayProfile)
 {
-    LoadingDescription description(filePath, size);
+    LoadingDescription description(filePath, previewSettings, size);
 
     if (DImg::fileFormat(filePath) == DImg::RAW)
     {
@@ -74,21 +74,27 @@ LoadingDescription PreviewLoadThread::createLoadingDescription(const QString& fi
     return description;
 }
 
-void PreviewLoadThread::load(const QString& filePath, int size)
+void PreviewLoadThread::loadFast(const QString& filePath, int size)
 {
-    load(createLoadingDescription(filePath, size));
+    PreviewSettings settings(PreviewSettings::FastPreview);
+    load(createLoadingDescription(filePath, settings, size));
 }
 
 void PreviewLoadThread::loadFastButLarge(const QString& filePath, int size)
 {
-    LoadingDescription description       = createLoadingDescription(filePath, size);
-    description.previewParameters.flags |= LoadingDescription::PreviewParameters::FastButLarge;
-    load(description);
+    PreviewSettings settings(PreviewSettings::FastButLargePreview);
+    load(createLoadingDescription(filePath, settings, size));
 }
 
-void PreviewLoadThread::loadHighQuality(const QString& filePath)
+void PreviewLoadThread::loadHighQuality(const QString& filePath, PreviewSettings::RawLoading rawLoadingMode)
 {
-    load(filePath, 0);
+    PreviewSettings settings(PreviewSettings::HighQualityPreview, rawLoadingMode);
+    load(createLoadingDescription(filePath, settings, 0));
+}
+
+void PreviewLoadThread::load(const QString& filePath, const PreviewSettings& settings, int size)
+{
+    load(createLoadingDescription(filePath, settings, size));
 }
 
 void PreviewLoadThread::load(const LoadingDescription& description)
@@ -102,10 +108,27 @@ void PreviewLoadThread::setDisplayingWidget(QWidget* const widget)
     m_displayingWidget = widget;
 }
 
-DImg PreviewLoadThread::loadSynchronously(const QString& filePath, int size, const IccProfile& profile)
+DImg PreviewLoadThread::loadFastSynchronously(const QString& filePath, int size, const IccProfile& profile)
 {
-    LoadingDescription description = createLoadingDescription(filePath, size, profile);
-    return loadSynchronously(description);
+    PreviewSettings settings(PreviewSettings::FastPreview);
+    return loadSynchronously(createLoadingDescription(filePath, settings, size, profile));
+}
+
+DImg PreviewLoadThread::loadFastButLargeSynchronously(const QString& filePath, int minimumSize, const IccProfile& profile)
+{
+    PreviewSettings settings(PreviewSettings::FastButLargePreview);
+    return loadSynchronously(createLoadingDescription(filePath, settings, minimumSize, profile));
+}
+
+DImg PreviewLoadThread::loadHighQualitySynchronously(const QString& filePath, PreviewSettings::RawLoading rawLoadingMode, const IccProfile& profile)
+{
+    PreviewSettings settings(PreviewSettings::HighQualityPreview, rawLoadingMode);
+    return loadSynchronously(createLoadingDescription(filePath, settings, 0, profile));
+}
+
+DImg PreviewLoadThread::loadSynchronously(const QString& filePath, const PreviewSettings& previewSettings, int size, const IccProfile& profile)
+{
+    return loadSynchronously(createLoadingDescription(filePath, previewSettings, size, profile));
 }
 
 DImg PreviewLoadThread::loadSynchronously(const LoadingDescription& description)

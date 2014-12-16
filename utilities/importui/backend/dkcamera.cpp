@@ -121,7 +121,6 @@ bool DKCamera::captureImagePreviewSupport() const
     return m_captureImagePreviewSupport;
 }
 
-
 QString DKCamera::mimeType(const QString& fileext) const
 {
     if (fileext.isEmpty())

@@ -138,10 +138,6 @@ SetupCategory::SetupCategory(QWidget* const parent)
     adjustSize();
 
     // --------------------------------------------------------
-
-    setAutoFillBackground(false);
-    viewport()->setAutoFillBackground(false);
-    panel->setAutoFillBackground(false);
 }
 
 SetupCategory::~SetupCategory()

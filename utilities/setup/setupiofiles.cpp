@@ -166,10 +166,6 @@ SetupIOFiles::SetupIOFiles(QWidget* const parent)
     readSettings();
 
     // --------------------------------------------------------
-
-    setAutoFillBackground(false);
-    viewport()->setAutoFillBackground(false);
-    panel->setAutoFillBackground(false);
 }
 
 SetupIOFiles::~SetupIOFiles()

@@ -55,7 +55,6 @@
 #include <kstandarddirs.h>
 #include <ktabwidget.h>
 #include <kvbox.h>
-#include <boost/concept_check.hpp>
 
 // Local includes
 
@@ -253,9 +252,6 @@ FuzzySearchView::FuzzySearchView(SearchModel* const searchModel,
     mainWidget->setLayout(mainLayout);
 
     setWidget(mainWidget);
-    setAutoFillBackground(false);
-    mainWidget->setAutoFillBackground(false);
-    viewport()->setAutoFillBackground(false);
 
     // ---------------------------------------------------------------
 
@@ -908,7 +904,7 @@ void FuzzySearchView::setCurrentImage(const ImageInfo& info)
     d->imageInfo = info;
     d->labelFile->setText(d->imageInfo.name());
     d->labelFolder->setText(d->imageInfo.fileUrl().directory());
-    d->thumbLoadThread->find(d->imageInfo.fileUrl().toLocalFile());
+    d->thumbLoadThread->find(d->imageInfo.thumbnailIdentifier());
 }
 
 void FuzzySearchView::setImageInfo(const ImageInfo& info)

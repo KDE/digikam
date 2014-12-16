@@ -162,6 +162,7 @@ public:
         hasPriorizedDbPath(false),
         dbPort(0),
         dbInternalServer(false),
+        showOnlyAvailableAlbums(false),
         albumListJob(0),
         dateListJob(0),
         tagListJob(0),
@@ -191,6 +192,8 @@ public:
     QString                     dbHostName;
     int                         dbPort;
     bool                        dbInternalServer;
+
+    bool                        showOnlyAvailableAlbums;
 
     KIO::TransferJob*           albumListJob;
     KIO::TransferJob*           dateListJob;
@@ -957,17 +960,15 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
 
     // -- ---------------------------------------------------------
 
-#ifdef USE_THUMBS_DB
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
     ThumbnailLoadThread::initializeThumbnailDatabase(DatabaseAccess::parameters().thumbnailParameters(),
                                                      new DatabaseThumbnailInfoProvider());
 
-    DatabaseGUIErrorHandler* thumbnailsDBHandler = new DatabaseGUIErrorHandler(ThumbnailDatabaseAccess::parameters());
+    DatabaseGUIErrorHandler* const thumbnailsDBHandler = new DatabaseGUIErrorHandler(ThumbnailDatabaseAccess::parameters());
     ThumbnailDatabaseAccess::initDatabaseErrorHandler(thumbnailsDBHandler);
 
     QApplication::restoreOverrideCursor();
-#endif
 
     // -- ---------------------------------------------------------
 
@@ -1079,11 +1080,10 @@ void AlbumManager::startScan()
     d->allAlbumsIdHash[d->rootDAlbum->globalID()] = d->rootDAlbum;
     emit signalAlbumAdded(d->rootDAlbum);
 
-    // create albums for album roots
-    QList<CollectionLocation> locations = CollectionManager::instance()->allAvailableLocations();
-    foreach(const CollectionLocation& location, locations)
+    // Create albums for album roots. Reuse logic implemented in the method
+    foreach(const CollectionLocation& location, CollectionManager::instance()->allLocations())
     {
-        addAlbumRoot(location);
+        handleCollectionStatusChange(location, CollectionLocation::LocationNull);
     }
 
     // listen to location status changes
@@ -1124,20 +1124,92 @@ void AlbumManager::slotCollectionLocationStatusChanged(const CollectionLocation&
         return;
     }
 
-    if (location.status() == CollectionLocation::LocationAvailable &&
-        oldStatus         != CollectionLocation::LocationAvailable)
+    if (handleCollectionStatusChange(location, oldStatus))
     {
-        addAlbumRoot(location);
-        // New albums have possibly appeared
+        // a change occurred. Possibly albums have appeared or disappeared
         scanPAlbums();
     }
-    else if (oldStatus         == CollectionLocation::LocationAvailable &&
-             location.status() != CollectionLocation::LocationAvailable)
+}
+
+/// Returns true if it added or removed an album
+bool AlbumManager::handleCollectionStatusChange(const CollectionLocation& location, int oldStatus)
+{
+    enum Action
+    {
+        Add,
+        Remove,
+        DoNothing
+    };
+    Action action = DoNothing;
+
+    switch (oldStatus)
+    {
+        case CollectionLocation::LocationNull:
+        case CollectionLocation::LocationHidden:
+        case CollectionLocation::LocationUnavailable:
+        {
+            switch (location.status())
+            {
+                case CollectionLocation::LocationNull: // not possible
+                    break;
+                case CollectionLocation::LocationHidden:
+                    action = Remove;
+                    break;
+                case CollectionLocation::LocationAvailable:
+                    action = Add;
+                    break;
+                case CollectionLocation::LocationUnavailable:
+                    if (d->showOnlyAvailableAlbums)
+                    {
+                        action = Remove;
+                    }
+                    else
+                    {
+                        action = Add;
+                    }
+                    break;
+                case CollectionLocation::LocationDeleted:
+                    action = Remove;
+                    break;
+            }
+            break;
+        }
+        case CollectionLocation::LocationAvailable:
+        {
+            switch (location.status())
+            {
+                case CollectionLocation::LocationNull:
+                case CollectionLocation::LocationHidden:
+                case CollectionLocation::LocationDeleted:
+                    action = Remove;
+                    break;
+                case CollectionLocation::LocationUnavailable:
+                    if (d->showOnlyAvailableAlbums)
+                    {
+                        action = Remove;
+                    }
+                    break;
+                case CollectionLocation::LocationAvailable: // not possible
+                    break;
+            }
+            break;
+        }
+        case CollectionLocation::LocationDeleted: // not possible
+            break;
+    }
+
+    if (action == Add && !d->albumRootAlbumHash.value(location.id()))
+    {
+        // This is the only place where album root albums are added
+        addAlbumRoot(location);
+        return true;
+    }
+    else if (action == Remove && d->albumRootAlbumHash.value(location.id()))
     {
         removeAlbumRoot(location);
-        // Albums have possibly disappeared
-        scanPAlbums();
+        return true;
     }
+    return false;
 }
 
 void AlbumManager::slotCollectionLocationPropertiesChanged(const CollectionLocation& location)
@@ -1180,6 +1252,30 @@ void AlbumManager::removeAlbumRoot(const CollectionLocation& location)
     {
         // delete album and all its children
         removePAlbum(album);
+    }
+}
+
+bool AlbumManager::isShowingOnlyAvailableAlbums() const
+{
+    return d->showOnlyAvailableAlbums;
+}
+
+void AlbumManager::setShowOnlyAvailableAlbums(bool onlyAvailable)
+{
+    if (d->showOnlyAvailableAlbums == onlyAvailable)
+    {
+        return;
+    }
+    d->showOnlyAvailableAlbums = onlyAvailable;
+    emit signalShowOnlyAvailableAlbumsChanged(d->showOnlyAvailableAlbums);
+    // We need to update the unavailable locations.
+    // We assume the handleCollectionStatusChange does the right thing (even though old status == current status)
+    foreach (const CollectionLocation& location, CollectionManager::instance()->allLocations())
+    {
+        if (location.status() == CollectionLocation::LocationUnavailable)
+        {
+            handleCollectionStatusChange(location, CollectionLocation::LocationUnavailable);
+        }
     }
 }
 
@@ -1227,16 +1323,17 @@ void AlbumManager::scanPAlbums()
     foreach(const AlbumInfo& info, currentAlbums)
     {
         // check that location of album is available
-        if (CollectionManager::instance()->locationForAlbumRootId(info.albumRootId).isAvailable())
+        if (d->showOnlyAvailableAlbums && !CollectionManager::instance()->locationForAlbumRootId(info.albumRootId).isAvailable())
         {
-            if (oldAlbums.contains(info.id))
-            {
-                oldAlbums.remove(info.id);
-            }
-            else
-            {
-                newAlbums << info;
-            }
+            continue;
+        }
+        if (oldAlbums.contains(info.id))
+        {
+            oldAlbums.remove(info.id);
+        }
+        else
+        {
+            newAlbums << info;
         }
     }
 
@@ -1324,16 +1421,7 @@ void AlbumManager::scanPAlbums()
         album->m_caption  = info.caption;
         album->m_category = info.category;
         album->m_date     = info.date;
-
-        if (info.iconAlbumRootId)
-        {
-            QString albumRootPath = CollectionManager::instance()->albumRootPath(info.iconAlbumRootId);
-
-            if (!albumRootPath.isNull())
-            {
-                album->m_icon = albumRootPath + info.iconRelativePath;
-            }
-        }
+        album->m_iconId   = info.iconId;
 
         insertPAlbum(album, parent);
     }
@@ -1397,21 +1485,9 @@ void AlbumManager::updateChangedPAlbums()
                     album->m_date     = info.date;
 
                     // Icon changed?
-                    QString icon;
-
-                    if (info.iconAlbumRootId)
+                    if (album->m_iconId != info.iconId)
                     {
-                        QString albumRootPath = CollectionManager::instance()->albumRootPath(info.iconAlbumRootId);
-
-                        if (!albumRootPath.isNull())
-                        {
-                            icon = albumRootPath + info.iconRelativePath;
-                        }
-                    }
-
-                    if (icon != album->m_icon)
-                    {
-                        album->m_icon = icon;
+                        album->m_iconId = info.iconId;
                         emit signalAlbumIconChanged(album);
                     }
                 }
@@ -1489,19 +1565,9 @@ void AlbumManager::scanTAlbums()
             TagInfo info  = *iter;
             TAlbum* album = new TAlbum(info.name, info.id);
 
-            if (info.icon.isNull())
-            {
-                // album image icon
-                QString albumRootPath = CollectionManager::instance()->albumRootPath(info.iconAlbumRootId);
-                album->m_icon         = albumRootPath + info.iconRelativePath;
-            }
-            else
-            {
-                // system icon
-                album->m_icon = info.icon;
-            }
-
-            album->m_pid = info.pid;
+            album->m_icon   = info.icon;
+            album->m_iconId = info.iconId;
+            album->m_pid    = info.pid;
             tagHash.insert(info.id, album);
         }
 
@@ -1547,10 +1613,11 @@ void AlbumManager::scanTAlbums()
 
             if (album)
             {
-                info.id   = album->m_id;
-                info.pid  = album->m_pid;
-                info.name = album->m_title;
-                info.icon = album->m_icon;
+                info.id     = album->m_id;
+                info.pid    = album->m_pid;
+                info.name   = album->m_title;
+                info.icon   = album->m_icon;
+                info.iconId = album->m_iconId;
             }
 
             tList.append(info);
@@ -1586,8 +1653,9 @@ void AlbumManager::scanTAlbums()
         TAlbum* parent = iter.value();
 
         // Create the new TAlbum
-        TAlbum* album = new TAlbum(info.name, info.id, false);
-        album->m_icon = info.icon;
+        TAlbum* album   = new TAlbum(info.name, info.id, false);
+        album->m_icon   = info.icon;
+        album->m_iconId = info.iconId;
         insertTAlbum(album, parent);
 
         // also insert it in the map we are doing lookup of parent tags
@@ -1842,12 +1910,26 @@ void AlbumManager::setCurrentAlbums(QList<Album*> albums)
     if(albums.isEmpty())
         return;
 
+    QList<Album*> filtered;
+    /**
+     * Filter out the null pointers
+    */
+    Q_FOREACH(Album *album, albums)
+    {
+        if(album != 0) {
+            filtered.append(album);
+        }
+    }
+
+    albums = filtered;
+
     /**
      * Sort is needed to identify selection correctly, ex AlbumHistory
      */
     qSort(albums.begin(),albums.end());
     d->currentAlbums.clear();
     d->currentAlbums+=albums;
+
     emit signalAlbumCurrentChanged(d->currentAlbums);
 }
 
@@ -2117,7 +2199,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
 
     if (!KIO::NetAccess::mkdir(fileUrl, qApp->activeWindow()))
     {
-        errMsg = i18n("Failed to create directory,");
+        errMsg = i18n("Failed to create directory.");
         return 0;
     }
 
@@ -2260,18 +2342,7 @@ bool AlbumManager::updatePAlbumIcon(PAlbum* album, qlonglong iconID, QString& er
         DatabaseAccess access;
         ChangingDB changing(d);
         access.db()->setAlbumIcon(album->id(), iconID);
-        QString iconRelativePath;
-        int iconAlbumRootId;
-
-        if (access.db()->getAlbumIcon(album->id(), &iconAlbumRootId, &iconRelativePath))
-        {
-            QString albumRootPath = CollectionManager::instance()->albumRootPath(iconAlbumRootId);
-            album->m_icon         = albumRootPath + iconRelativePath;
-        }
-        else
-        {
-            album->m_icon.clear();
-        }
+        album->m_iconId = iconID;
     }
 
     emit signalAlbumIconChanged(album);
@@ -2524,24 +2595,8 @@ bool AlbumManager::updateTAlbumIcon(TAlbum* album, const QString& iconKDE,
         ChangingDB changing(d);
         access.db()->setTagIcon(album->id(), iconKDE, iconID);
         QString albumRelativePath, iconKDE;
-        int albumRootId;
-
-        if (access.db()->getTagIcon(album->id(), &albumRootId, &albumRelativePath, &iconKDE))
-        {
-            if (iconKDE.isEmpty())
-            {
-                QString albumRootPath = CollectionManager::instance()->albumRootPath(albumRootId);
-                album->m_icon = albumRootPath + albumRelativePath;
-            }
-            else
-            {
-                album->m_icon = iconKDE;
-            }
-        }
-        else
-        {
-            album->m_icon.clear();
-        }
+        album->m_icon   = iconKDE;
+        album->m_iconId = iconID;
     }
 
     emit signalAlbumIconChanged(album);

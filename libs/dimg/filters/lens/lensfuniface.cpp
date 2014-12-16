@@ -139,11 +139,11 @@ void LensFunIface::setFilterSettings(const LensFunContainer& other)
 
 LensFunIface::DevicePtr LensFunIface::findCamera(const QString& make, const QString& model) const
 {
-    const lfCamera* const* lfCamera = d->lfDb->FindCameras(make.toAscii().constData(), model.toAscii().constData());
+    const lfCamera* const* cameras = d->lfDb->GetCameras();
 
-    while (lfCamera && *lfCamera)
+    while (cameras && *cameras)
     {
-        DevicePtr cam = *lfCamera;
+        DevicePtr cam = *cameras;
         //        kDebug() << "Query camera:" << cam->Maker << "-" << cam->Model;
 
         if (QString(cam->Maker) == make && QString(cam->Model) == model)
@@ -152,7 +152,7 @@ LensFunIface::DevicePtr LensFunIface::findCamera(const QString& make, const QStr
             return cam;
         }
 
-        ++lfCamera;
+        ++cameras;
     }
 
     kDebug() << "Search for camera " << make << "-" << model << " ==> false";
@@ -161,11 +161,11 @@ LensFunIface::DevicePtr LensFunIface::findCamera(const QString& make, const QStr
 
 LensFunIface::LensPtr LensFunIface::findLens(const QString& model) const
 {
-    const lfLens* const* lfLens = d->lfDb->GetLenses();
+    const lfLens* const* lenses = d->lfDb->GetLenses();
 
-    while (lfLens && *lfLens)
+    while (lenses && *lenses)
     {
-        LensPtr lens = *lfLens;
+        LensPtr lens = *lenses;
 
         if (QString(lens->Model) == model)
         {
@@ -173,7 +173,7 @@ LensFunIface::LensPtr LensFunIface::findLens(const QString& model) const
             return lens;
         }
 
-        ++lfLens;
+        ++lenses;
     }
 
     kDebug() << "Search for lens " << model << " ==> false";

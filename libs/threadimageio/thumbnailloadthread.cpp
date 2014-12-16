@@ -138,12 +138,12 @@ public:
 
 public:
 
-    LoadingDescription        createLoadingDescription(const QString& filePath, int size, bool setLastDescription = true);
-    LoadingDescription        createLoadingDescription(const QString& filePath, int size,
+    LoadingDescription        createLoadingDescription(const ThumbnailIdentifier& identifier, int size, bool setLastDescription = true);
+    LoadingDescription        createLoadingDescription(const ThumbnailIdentifier& identifier, int size,
                                                        const QRect& detailRect, bool setLastDescription = true);
     bool                      checkDescription(const LoadingDescription& description);
-    QList<LoadingDescription> makeDescriptions(const QStringList& filePaths, int size);
-    QList<LoadingDescription> makeDescriptions(const QList<QPair<QString, QRect> >& filePathsAndRects, int size);
+    QList<LoadingDescription> makeDescriptions(const QList<ThumbnailIdentifier>& identifiers, int size);
+    QList<LoadingDescription> makeDescriptions(const QList<QPair<ThumbnailIdentifier, QRect> >& idsAndRects, int size);
     bool                      hasHighlightingBorder() const;
     int                       pixmapSizeForThumbnailSize(int thumbnailSize) const;
     int                       thumbnailSizeForPixmapSize(int pixmapSize) const;
@@ -325,14 +325,15 @@ int ThumbnailLoadThread::Private::thumbnailSizeForPixmapSize(int pixmapSize) con
 
 // --- Creating loading descriptions ---
 
-LoadingDescription ThumbnailLoadThread::Private::createLoadingDescription(const QString& filePath, int size, 
+LoadingDescription ThumbnailLoadThread::Private::createLoadingDescription(const ThumbnailIdentifier& identifier, int size,
                                                                           bool setLastDescription)
 {
     size = thumbnailSizeForPixmapSize(size);
 
-    LoadingDescription description(filePath, size,
+    LoadingDescription description(identifier.filePath, PreviewSettings(), size,
                                    LoadingDescription::NoColorConversion,
                                    LoadingDescription::PreviewParameters::Thumbnail);
+    description.previewParameters.storageReference = identifier.id;
 
     if (IccSettings::instance()->useManagedPreviews())
     {
@@ -349,14 +350,15 @@ LoadingDescription ThumbnailLoadThread::Private::createLoadingDescription(const 
     return description;
 }
 
-LoadingDescription ThumbnailLoadThread::Private::createLoadingDescription(const QString& filePath, int size, 
+LoadingDescription ThumbnailLoadThread::Private::createLoadingDescription(const ThumbnailIdentifier& identifier, int size,
                                                                           const QRect& detailRect, bool setLastDescription)
 {
     size = thumbnailSizeForPixmapSize(size);
 
-    LoadingDescription description(filePath, size,
+    LoadingDescription description(identifier.filePath, PreviewSettings(), size,
                                    LoadingDescription::NoColorConversion,
                                    LoadingDescription::PreviewParameters::DetailThumbnail);
+    description.previewParameters.storageReference = identifier.id;
 
     description.previewParameters.extraParameter = detailRect;
 
@@ -401,15 +403,16 @@ bool ThumbnailLoadThread::Private::checkDescription(const LoadingDescription& de
     return true;
 }
 
-QList<LoadingDescription> ThumbnailLoadThread::Private::makeDescriptions(const QStringList& filePaths, int size)
+QList<LoadingDescription> ThumbnailLoadThread::Private::makeDescriptions(const QList<ThumbnailIdentifier>& identifiers, int size)
 {
     QList<LoadingDescription> descriptions;
     {
-        LoadingDescription description = createLoadingDescription(QString(), size, false);
+        LoadingDescription description = createLoadingDescription(ThumbnailIdentifier(), size, false);
 
-        foreach(const QString& filePath, filePaths)
+        foreach(const ThumbnailIdentifier& identifier, identifiers)
         {
-            description.filePath = filePath;
+            description.filePath = identifier.filePath;
+            description.previewParameters.storageReference = identifier.id;
 
             if (!checkDescription(description))
             {
@@ -425,16 +428,17 @@ QList<LoadingDescription> ThumbnailLoadThread::Private::makeDescriptions(const Q
     return descriptions;
 }
 
-QList<LoadingDescription> ThumbnailLoadThread::Private::makeDescriptions(const QList<QPair<QString, QRect> >& filePathsAndRects, int size)
+QList<LoadingDescription> ThumbnailLoadThread::Private::makeDescriptions(const QList<QPair<ThumbnailIdentifier, QRect> >& identifiersAndRects, int size)
 {
     QList<LoadingDescription> descriptions;
     {
-        LoadingDescription description = createLoadingDescription(QString(), size, QRect(1,1,1,1), false);
-        typedef QPair<QString, QRect> StringRectPair;
+        LoadingDescription description = createLoadingDescription(ThumbnailIdentifier(), size, QRect(1,1,1,1), false);
+        typedef QPair<ThumbnailIdentifier, QRect> IdRectPair;
 
-        foreach(const StringRectPair& pair, filePathsAndRects)
+        foreach(const IdRectPair& pair, identifiersAndRects)
         {
-            description.filePath = pair.first;
+            description.filePath = pair.first.filePath;
+            description.previewParameters.storageReference = pair.first.id;
 
             if (!checkDescription(description))
             {
@@ -451,18 +455,18 @@ QList<LoadingDescription> ThumbnailLoadThread::Private::makeDescriptions(const Q
     return descriptions;
 }
 
-bool ThumbnailLoadThread::find(const QString& filePath, int size, QPixmap* retPixmap, bool emitSignal, const QRect& detailRect)
+bool ThumbnailLoadThread::find(const ThumbnailIdentifier& identifier, int size, QPixmap* retPixmap, bool emitSignal, const QRect& detailRect)
 {
     const QPixmap* pix = 0;
     LoadingDescription description;
 
     if (detailRect.isNull())
     {
-        description = d->createLoadingDescription(filePath, size);
+        description = d->createLoadingDescription(identifier, size);
     }
     else
     {
-        description = d->createLoadingDescription(filePath, size, detailRect);
+        description = d->createLoadingDescription(identifier, size, detailRect);
     }
 
     QString cacheKey = description.cacheKey();
@@ -505,90 +509,90 @@ bool ThumbnailLoadThread::find(const QString& filePath, int size, QPixmap* retPi
 
 // --- Normal thumbnails ---
 
-bool ThumbnailLoadThread::find(const QString& filePath, QPixmap& retPixmap, int size)
+bool ThumbnailLoadThread::find(const ThumbnailIdentifier& identifier, QPixmap& retPixmap, int size)
 {
-    return find(filePath, size, &retPixmap, false, QRect());
+    return find(identifier, size, &retPixmap, false, QRect());
 }
 
-bool ThumbnailLoadThread::find(const QString& filePath, QPixmap& retPixmap)
+bool ThumbnailLoadThread::find(const ThumbnailIdentifier& identifier, QPixmap& retPixmap)
 {
-    return find(filePath, retPixmap, d->size);
+    return find(identifier, retPixmap, d->size);
 }
 
-void ThumbnailLoadThread::find(const QString& filePath)
+void ThumbnailLoadThread::find(const ThumbnailIdentifier& identifier)
 {
-    find(filePath, d->size);
+    find(identifier, d->size);
 }
 
-void ThumbnailLoadThread::find(const QString& filePath, int size)
+void ThumbnailLoadThread::find(const ThumbnailIdentifier& identifier, int size)
 {
-    find(filePath, size, 0, true, QRect());
+    find(identifier, size, 0, true, QRect());
 }
 
-void ThumbnailLoadThread::findGroup(const QStringList& filePaths)
+void ThumbnailLoadThread::findGroup(QList<ThumbnailIdentifier>& identifiers)
 {
-    findGroup(filePaths, d->size);
+    findGroup(identifiers, d->size);
 }
 
-void ThumbnailLoadThread::findGroup(const QStringList& filePaths, int size)
+void ThumbnailLoadThread::findGroup(QList<ThumbnailIdentifier>& identifiers, int size)
 {
     if (!checkSize(size))
     {
         return;
     }
 
-    QList<LoadingDescription> descriptions = d->makeDescriptions(filePaths, size);
+    QList<LoadingDescription> descriptions = d->makeDescriptions(identifiers, size);
     ManagedLoadSaveThread::prependThumbnailGroup(descriptions);
 }
 
 // --- Detail thumbnails ---
 
-bool ThumbnailLoadThread::find(const QString& filePath, const QRect& rect, QPixmap& pixmap)
+bool ThumbnailLoadThread::find(const ThumbnailIdentifier& identifier, const QRect& rect, QPixmap& pixmap)
 {
-    return find(filePath, rect, pixmap, d->size);
+    return find(identifier, rect, pixmap, d->size);
 }
 
-bool ThumbnailLoadThread::find(const QString& filePath, const QRect& rect, QPixmap& pixmap, int size)
+bool ThumbnailLoadThread::find(const ThumbnailIdentifier& identifier, const QRect& rect, QPixmap& pixmap, int size)
 {
-    return find(filePath, size, &pixmap, false, rect);
+    return find(identifier, size, &pixmap, false, rect);
 }
 
-void ThumbnailLoadThread::find(const QString& filePath, const QRect& rect)
+void ThumbnailLoadThread::find(const ThumbnailIdentifier& identifier, const QRect& rect)
 {
-    find(filePath, rect, d->size);
+    find(identifier, rect, d->size);
 }
 
-void ThumbnailLoadThread::find(const QString& filePath, const QRect& rect, int size)
+void ThumbnailLoadThread::find(const ThumbnailIdentifier& identifier, const QRect& rect, int size)
 {
-    find(filePath, size, 0, true, rect);
+    find(identifier, size, 0, true, rect);
 }
 
-void ThumbnailLoadThread::findGroup(const QList<QPair<QString, QRect> >& filePathAndRects)
+void ThumbnailLoadThread::findGroup(const QList<QPair<ThumbnailIdentifier, QRect> >& idsAndRects)
 {
-    findGroup(filePathAndRects, d->size);
+    findGroup(idsAndRects, d->size);
 }
 
-void ThumbnailLoadThread::findGroup(const QList<QPair<QString, QRect> >& filePathsAndRects, int size)
+void ThumbnailLoadThread::findGroup(const QList<QPair<ThumbnailIdentifier, QRect> >& idsAndRects, int size)
 {
     if (!checkSize(size))
     {
         return;
     }
 
-    QList<LoadingDescription> descriptions = d->makeDescriptions(filePathsAndRects, size);
+    QList<LoadingDescription> descriptions = d->makeDescriptions(idsAndRects, size);
     ManagedLoadSaveThread::prependThumbnailGroup(descriptions);
 }
 
 // --- Preloading ---
 
-void ThumbnailLoadThread::preload(const QString& filePath)
+void ThumbnailLoadThread::preload(const ThumbnailIdentifier& identifier)
 {
-    preload(filePath, d->size);
+    preload(identifier, d->size);
 }
 
-void ThumbnailLoadThread::preload(const QString& filePath, int size)
+void ThumbnailLoadThread::preload(const ThumbnailIdentifier& identifier, int size)
 {
-    LoadingDescription description = d->createLoadingDescription(filePath, size);
+    LoadingDescription description = d->createLoadingDescription(identifier, size);
 
     if (d->checkDescription(description))
     {
@@ -596,35 +600,35 @@ void ThumbnailLoadThread::preload(const QString& filePath, int size)
     }
 }
 
-void ThumbnailLoadThread::preloadGroup(const QStringList& filePaths)
+void ThumbnailLoadThread::preloadGroup(QList<ThumbnailIdentifier>& identifiers)
 {
-    pregenerateGroup(filePaths, d->size);
+    preloadGroup(identifiers, d->size);
 }
 
-void ThumbnailLoadThread::preloadGroup(const QStringList& filePaths, int size)
+void ThumbnailLoadThread::preloadGroup(QList<ThumbnailIdentifier>& identifiers, int size)
 {
     if (!checkSize(size))
     {
         return;
     }
 
-    QList<LoadingDescription> descriptions = d->makeDescriptions(filePaths, size);
+    QList<LoadingDescription> descriptions = d->makeDescriptions(identifiers, size);
     ManagedLoadSaveThread::preloadThumbnailGroup(descriptions);
 }
 
-void ThumbnailLoadThread::pregenerateGroup(const QStringList& filePaths)
+void ThumbnailLoadThread::pregenerateGroup(const QList<ThumbnailIdentifier>& identifiers)
 {
-    pregenerateGroup(filePaths, d->size);
+    pregenerateGroup(identifiers, d->size);
 }
 
-void ThumbnailLoadThread::pregenerateGroup(const QStringList& filePaths, int size)
+void ThumbnailLoadThread::pregenerateGroup(const QList<ThumbnailIdentifier>& identifiers, int size)
 {
     if (!checkSize(size))
     {
         return;
     }
 
-    QList<LoadingDescription> descriptions = d->makeDescriptions(filePaths, size);
+    QList<LoadingDescription> descriptions = d->makeDescriptions(identifiers, size);
 
     for (int i=0; i<descriptions.size(); ++i)
     {

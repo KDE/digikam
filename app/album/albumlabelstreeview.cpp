@@ -105,7 +105,7 @@ AlbumLabelsTreeView::AlbumLabelsTreeView(QWidget* const parent, bool setCheckabl
     d->iconSize            = QSize(d->iconSizeFromSetting, d->iconSizeFromSetting);
     d->isCheckableTreeView = setCheckable;
 
-    setHeaderLabel("Labels");
+    setHeaderLabel(i18nc("@title", "Labels"));
     setUniformRowHeights(false);
     initTreeView();
 
@@ -191,7 +191,7 @@ QHash<AlbumLabelsTreeView::Labels, QList<int> > AlbumLabelsTreeView::selectedLab
     QList<int> selectedPicks;
     QList<int> selectedColors;
 
-    if(d->isCheckableTreeView)
+    if (d->isCheckableTreeView)
     {
         QTreeWidgetItemIterator it(this, QTreeWidgetItemIterator::Checked);
 
@@ -543,7 +543,7 @@ Album *AlbumLabelsSearchHandler::albumForSelectedItems() const
     return d->albumForSelectedItems;
 }
 
-KUrl::List AlbumLabelsSearchHandler::imagesUrls()
+KUrl::List AlbumLabelsSearchHandler::imagesUrls() const
 {
     return d->urlListForSelectedAlbum;
 }
@@ -553,7 +553,7 @@ QString AlbumLabelsSearchHandler::generatedName() const
     return d->generatedAlbumName;
 }
 
-void AlbumLabelsSearchHandler::restoreSelectionFromHistory(QHash<AlbumLabelsTreeView::Labels, QList<int> > neededLabels)
+void AlbumLabelsSearchHandler::restoreSelectionFromHistory(const QHash<AlbumLabelsTreeView::Labels, QList<int> >& neededLabels)
 {
     d->restoringSelectionFromHistory = true;
     d->treeWidget->restoreSelectionFromHistory(neededLabels);
@@ -566,7 +566,7 @@ bool AlbumLabelsSearchHandler::isRestoringSelectionFromHistory() const
     return d->restoringSelectionFromHistory;
 }
 
-QString AlbumLabelsSearchHandler::createXMLForCurrentSelection(QHash<AlbumLabelsTreeView::Labels, QList<int> > selectedLabels)
+QString AlbumLabelsSearchHandler::createXMLForCurrentSelection(const QHash<AlbumLabelsTreeView::Labels, QList<int> >& selectedLabels)
 {
     SearchXmlWriter writer;
     writer.setFieldOperator(SearchXml::standardFieldOperator());
@@ -685,13 +685,13 @@ SAlbum* AlbumLabelsSearchHandler::search(const QString &xml) const
         album = new SAlbum(d->generatedAlbumName, id);
     }
 
-    if(!album->isUsedByLabelsTree())
+    if (!album->isUsedByLabelsTree())
         album->setUsedByLabelsTree(true);
 
     return album;
 }
 
-void AlbumLabelsSearchHandler::generateAlbumNameForExporting(QList<int> ratings, QList<int> colorsList, QList<int> picksList)
+void AlbumLabelsSearchHandler::generateAlbumNameForExporting(const QList<int>& ratings, const QList<int>& colorsList, const QList<int>& picksList)
 {
     QString name;
     QString ratingsString;
@@ -936,7 +936,7 @@ void AlbumLabelsSearchHandler::slotResult(KJob* job)
     }
 }
 
-void AlbumLabelsSearchHandler::slotData(KIO::Job* job, QByteArray data)
+void AlbumLabelsSearchHandler::slotData(KIO::Job* job, const QByteArray& data)
 {
     Q_UNUSED(job);
 

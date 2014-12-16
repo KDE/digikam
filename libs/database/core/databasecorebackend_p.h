@@ -29,6 +29,7 @@
 #include <QHash>
 #include <QSqlDatabase>
 #include <QThread>
+#include <QThreadStorage>
 #include <QWaitCondition>
 
 // Local includes
@@ -40,28 +41,40 @@
 namespace Digikam
 {
 
+class DatabaseThreadData
+{
+public:
+
+    DatabaseThreadData();
+    ~DatabaseThreadData();
+
+    void closeDatabase();
+
+    QSqlDatabase database;
+    int          valid;
+    int          transactionCount;
+    QSqlError    lastError;
+};
+
 class DIGIKAM_EXPORT DatabaseCoreBackendPrivate : public DatabaseErrorAnswer
 {
 public:
 
     explicit DatabaseCoreBackendPrivate(DatabaseCoreBackend* const backend);
-    virtual ~DatabaseCoreBackendPrivate()
-    {
-    }
+    virtual ~DatabaseCoreBackendPrivate();
 
     void init(const QString& connectionName, DatabaseLocking* const locking);
 
-    QString connectionName(QThread* const thread);
+    QString connectionName();
 
     QSqlDatabase databaseForThread();
     QSqlError    databaseErrorForThread();
     void         setDatabaseErrorForThread(const QSqlError& lastError);
 
+    QSqlDatabase createDatabaseConnection();
     void closeDatabaseForThread();
-    bool open(QSqlDatabase& db);
     bool incrementTransactionCount();
     bool decrementTransactionCount();
-    bool isInTransactionInOtherThread() const;
 
     bool isInMainThread() const;
     bool isInUIThread()   const;
@@ -88,14 +101,10 @@ public:
 
 public:
 
-    // this is always accessed in mutex context, no need for QThreadStorage
-    QHash<QThread*, QSqlDatabase>             threadDatabases;
-    // this is not only db.isValid(), but also "parameters changed, need to reopen"
-    QHash<QThread*, int>                      databasesValid;
-    // for recursive transactions
-    QHash<QThread*, int>                      transactionCount;
+    QThreadStorage<DatabaseThreadData*>       threadDataStorage;
 
-    QHash<QThread*, QSqlError>                databaseErrors;
+    // This compares to DatabaseThreadData's valid. If currentValidity is increased and > valid, the db is marked as invalid
+    int                                       currentValidity;
 
     bool                                      isInTransaction;
 
@@ -135,9 +144,9 @@ public :
         DatabaseCoreBackendPrivate* const d;
     };
 
-    // ----------------------------------------------------------------------
-
     friend class AbstractUnlocker;
+
+    // ------------------------------------------------------------------
 
     class AbstractWaitingUnlocker : public AbstractUnlocker
     {
@@ -154,7 +163,7 @@ public :
         QWaitCondition* const condVar;
     };
 
-    // ----------------------------------------------------------------------
+    // ------------------------------------------------------------------
 
     class ErrorLocker : public AbstractWaitingUnlocker
     {
@@ -164,7 +173,7 @@ public :
         void wait();
     };
 
-    // ----------------------------------------------------------------------
+    // ------------------------------------------------------------------
 
     class BusyWaiter : public AbstractWaitingUnlocker
     {

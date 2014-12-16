@@ -35,50 +35,34 @@
 #include "collectionlocation.h"
 #include "databaseaccess.h"
 #include "imageinfo.h"
+#include "thumbnailcreator.h"
 
 namespace Digikam
 {
 
-ThumbnailInfo DatabaseThumbnailInfoProvider::thumbnailInfo(const QString& path)
+ThumbnailInfo DatabaseThumbnailInfoProvider::thumbnailInfo(const ThumbnailIdentifier& identifier)
 {
     // If code here proves to be a bottleneck we can add custom queries to albumdb to retrieve info all-in-one
-    ImageInfo imageinfo(path);
+    ImageInfo imageinfo;
+    if (identifier.id)
+    {
+        imageinfo = ImageInfo(identifier.id);
+    }
+    else
+    {
+        imageinfo = ImageInfo::fromLocalFile(identifier.filePath);
+    }
 
     if (imageinfo.isNull())
     {
-        return ThumbnailCreator::fileThumbnailInfo(path);
+        return ThumbnailCreator::fileThumbnailInfo(identifier.filePath);
     }
-
-    ThumbnailInfo thumbinfo;
-    QVariantList values;
-
-    thumbinfo.filePath = path;
-    thumbinfo.isAccessible = CollectionManager::instance()->locationForAlbumRootId(imageinfo.albumRootId()).isAvailable();
-
-    DatabaseAccess access;
-    values = access.db()->getImagesFields(imageinfo.id(),
-                                          DatabaseFields::ModificationDate | DatabaseFields::FileSize | DatabaseFields::UniqueHash);
-
-    if (!values.isEmpty())
-    {
-        thumbinfo.modificationDate = values.at(0).toDateTime();
-        thumbinfo.fileSize = values.at(1).toLongLong();
-        thumbinfo.uniqueHash = values.at(2).toString();
-    }
-
-    values = access.db()->getImageInformation(imageinfo.id(), DatabaseFields::Orientation);
-
-    if (!values.isEmpty())
-    {
-        thumbinfo.orientationHint = values.first().toInt();
-    }
-
-    return thumbinfo;
+    return imageinfo.thumbnailInfo();
 }
 
 int DatabaseLoadSaveFileInfoProvider::orientationHint(const QString& path)
 {
-    ImageInfo info(path);
+    ImageInfo info = ImageInfo::fromLocalFile(path);
     return info.orientation();
 }
 

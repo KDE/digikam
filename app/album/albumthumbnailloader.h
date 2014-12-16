@@ -145,7 +145,7 @@ public:
     /** Return a preview of physical album directly without to use cache.
      *  Size of image can be passed as argument.
      */
-    QImage getAlbumPreviewDirectly(PAlbum* const album, int size);
+    //QImage getAlbumPreviewDirectly(PAlbum* const album, int size);
 
 public:
 
@@ -188,7 +188,7 @@ private:
     AlbumThumbnailLoader();
     ~AlbumThumbnailLoader();
 
-    void    addUrl(Album* const album, const KUrl& url);
+    void    addUrl(Album* const album, qlonglong id);
     QPixmap loadIcon(const QString& name, int size = 0) const;
     int     computeIconSize(RelativeSize size)          const;
 

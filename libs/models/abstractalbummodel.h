@@ -58,27 +58,29 @@ public:
     enum RootAlbumBehavior
     {
         /** The root album will be included as a single parent item
-            with all top-level album as children */
+         *  with all top-level album as children
+	 */
         IncludeRootAlbum,
         /** The root album will not be included, but all top-level album
-            are represented as top-level items in this view */
+         *  are represented as top-level items in this view
+         */
         IgnoreRootAlbum
     };
 
     enum AlbumDataRole
     {
         /// Returns the album title. Principally the same as display role, but without any additions.
-        AlbumTitleRole = Qt::UserRole,
+        AlbumTitleRole    = Qt::UserRole,
         /// Returns the Album::Type of the associated album
-        AlbumTypeRole = Qt::UserRole + 1,
+        AlbumTypeRole     = Qt::UserRole + 1,
         /// Returns a pointer to the associated Album object
-        AlbumPointerRole = Qt::UserRole + 2,
+        AlbumPointerRole  = Qt::UserRole + 2,
         /// Returns the id of the associated Album object
-        AlbumIdRole = Qt::UserRole + 3,
+        AlbumIdRole       = Qt::UserRole + 3,
         /// Returns the global id (unique across all album types)
         AlbumGlobalIdRole = Qt::UserRole + 4,
         /// Returns the data to sort on
-        AlbumSortRole = Qt::UserRole + 5
+        AlbumSortRole     = Qt::UserRole + 5
     };
 
 public:
@@ -92,17 +94,21 @@ public:
                        QObject* const parent = 0);
     ~AbstractAlbumModel();
 
-    /// Set a drag drop handler.
+    /** Set a drag drop handler
+     */
     void setDragDropHandler(AlbumModelDragDropHandler* handler);
 
-    /// Returns the drag drop handler, or 0 if none is installed
+    /** Returns the drag drop handler, or 0 if none is installed
+     */
     AlbumModelDragDropHandler* dragDropHandler() const;
 
-    /** Returns the album object associated with the given model index */
+    /** Returns the album object associated with the given model index
+     */
     Album* albumForIndex(const QModelIndex& index) const;
 
     /** Return the QModelIndex for the given album, or an invalid index if
-        the album is not contained in this model. */
+     *  the album is not contained in this model.
+     */
     QModelIndex indexForAlbum(Album* album) const;
 
     /** Returns the album represented by the index. In contrast to albumForIndex(),
@@ -112,13 +118,16 @@ public:
 
     Album* rootAlbum() const;
 
-    /// Return the index corresponding to the root album. If the policy is IgnoreRootAlbum, this is an invalid index. */
+    /** Return the index corresponding to the root album. If the policy is IgnoreRootAlbum, this is an invalid index.
+     */
     QModelIndex rootAlbumIndex() const;
 
-    /// Returns the root album behavior set for this model
+    /** Returns the root album behavior set for this model
+     */
     RootAlbumBehavior rootAlbumBehavior() const;
 
-    /// Returns the Album::Type of the contained albums
+    /** Returns the Album::Type of the contained albums
+     */
     Album::Type albumType() const;
 
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
@@ -139,13 +148,15 @@ Q_SIGNALS:
 
     /** This is initialized once after creation, if the root album becomes available,
      *  if it was not already available at time of construction.
-     *  This is emitted regardless of root album policy. */
+     *  This is emitted regardless of root album policy.
+     */
     void rootAlbumAvailable();
 
 protected:
 
     /** Switch on drag and drop globally for all items. Default is true.
-     *  For per-item cases reimplement itemFlags(). */
+     *  For per-item cases reimplement itemFlags().
+     */
     void setEnableDrag(bool enable);
     void setEnableDrop(bool enable);
 
@@ -166,7 +177,8 @@ protected:
     virtual Qt::ItemFlags itemFlags(Album* album) const;
 
     /** Returns true for those and only those albums that shall be contained in this model.
-     *  They must have a common root album, which is set in the constructor. */
+     *  They must have a common root album, which is set in the constructor.
+     */
     virtual bool filterAlbum(Album* album) const;
 
     /// Notification when an entry is removed
@@ -247,16 +259,19 @@ public Q_SLOTS:
 
     /** Enable displaying the count. Set a map of album id -> count (excluding children).
      *  If an album is not contained, no count is displayed. To display a count of 0,
-     *  there must be an entry album id -> 0. */
+     *  there must be an entry album id -> 0.
+     */
     void setCountMap(const QMap<int, int>& idCountMap);
 
     /** Displays only the count of the album, without adding child albums' counts.
      *  This is the default.
-     *  Can connect to QTreeView's expanded() signal. */
+     *  Can connect to QTreeView's expanded() signal.
+     */
     void excludeChildrenCount(const QModelIndex& index);
 
     /** Displays sum of the count of the album and child albums' counts.
-     *  Can connect to QTreeView's collapsed() signal. */
+     *  Can connect to QTreeView's collapsed() signal.
+     */
     void includeChildrenCount(const QModelIndex& index);
 
     /**
@@ -389,7 +404,8 @@ public Q_SLOTS:
 Q_SIGNALS:
 
     /** Emitted when the check state of an album changes.
-     *  checkState contains the new Qt::CheckState of album */
+     *  checkState contains the new Qt::CheckState of album 
+     */
     void checkStateChanged(Album* album, Qt::CheckState checkState);
 
 protected:

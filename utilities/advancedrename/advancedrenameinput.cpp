@@ -93,9 +93,6 @@ void AdvancedRenameLineEdit::setupWidgets()
     setPalette(kapp->palette());
     setFocusPolicy(Qt::StrongFocus);
 
-    viewport()->setAutoFillBackground(false);
-    setAutoFillBackground(false);
-
     QFontMetrics fm = fontMetrics();
     int widgetHeight = fm.boundingRect(DUMMY_TEXT).height();
     setMinimumHeight(widgetHeight * 2);
@@ -352,7 +349,6 @@ void AdvancedRenameInput::setupWidgets()
     d->proxy    = new ProxyLineEdit(this);
     d->proxy->setWidget(d->lineEdit);
     d->proxy->setClearButtonShown(true);
-    d->proxy->setAutoFillBackground(false);
 
     setLineEdit(d->proxy);
 }

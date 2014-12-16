@@ -32,6 +32,7 @@
 // Local includes
 
 #include "managedloadsavethread.h"
+#include "thumbnailinfo.h"
 
 class KFileItem;
 class KJob;
@@ -84,12 +85,12 @@ public:
      * If the pixmap is not found in the cache, load() is called to start the loading process,
      * false is returned and pixmap is not touched.
      */
-    bool find(const QString& filePath, QPixmap& pixmap);
+    bool find(const ThumbnailIdentifier& identifier, QPixmap& pixmap);
 
     /**
      * Same as above, but does not use the global size, but an extra specified size.
      */
-    bool find(const QString& filePath, QPixmap& pixmap, int size);
+    bool find(const ThumbnailIdentifier& identifier, QPixmap& pixmap, int size);
 
     /**
      * Find a thumbnail.
@@ -97,45 +98,45 @@ public:
      * If you certainly need asynchronous return, connect with Qt::QueuedConnection to the signals.
      * If you connect directly, the signals may be sent from within the method call.
      */
-    void find(const QString& filePath);
+    void find(const ThumbnailIdentifier& identifier);
 
     /**
      * Same as above, but does not use the global size, but an extra specified size.
      */
-    void find(const QString& filePath, int size);
+    void find(const ThumbnailIdentifier& identifier, int size);
 
     /**
      * Find a group of thumbnails. The items will be loaded in order and signals will be sent.
      * Can be used to ensure that thumbnails are loaded in a particular order
      */
-    void findGroup(const QStringList& filePaths);
-    void findGroup(const QStringList& filePaths, int size);
+    void findGroup(QList<ThumbnailIdentifier>& identifiers);
+    void findGroup(QList<ThumbnailIdentifier>& identifiers, int size);
 
     /**
      * All tastes of find() methods, for loading the thumbnail of a detail
      */
-    bool find(const QString& filePath, const QRect& rect, QPixmap& pixmap);
-    bool find(const QString& filePath, const QRect& rect, QPixmap& pixmap, int size);
-    void find(const QString& filePath, const QRect& rect);
-    void find(const QString& filePath, const QRect& rect, int size);
-    void findGroup(const QList<QPair<QString, QRect> >& filePathAndRects);
-    void findGroup(const QList<QPair<QString, QRect> >& filePathsAndRects, int size);
+    bool find(const ThumbnailIdentifier& identifier, const QRect& rect, QPixmap& pixmap);
+    bool find(const ThumbnailIdentifier& identifier, const QRect& rect, QPixmap& pixmap, int size);
+    void find(const ThumbnailIdentifier& identifier, const QRect& rect);
+    void find(const ThumbnailIdentifier& identifier, const QRect& rect, int size);
+    void findGroup(const QList<QPair<ThumbnailIdentifier, QRect> >& filePathAndRects);
+    void findGroup(const QList<QPair<ThumbnailIdentifier, QRect> >& filePathsAndRects, int size);
 
     /**
      * Preload the thumbnail or thumbnail group.
      * This is essentially the same as loading, but with a lower priority.
      */
-    void preload(const QString& filePath);
-    void preload(const QString& filePath, int size);
-    void preloadGroup(const QStringList& filePaths);
-    void preloadGroup(const QStringList& filePaths, int size);
+    void preload(const ThumbnailIdentifier& identifier);
+    void preload(const ThumbnailIdentifier& identifier, int size);
+    void preloadGroup(QList<ThumbnailIdentifier>& identifiers);
+    void preloadGroup(QList<ThumbnailIdentifier>& identifiers, int size);
 
     /**
      * Pregenerate the thumbnail group.
      * No signals will be emitted when these are loaded.
      */
-    void pregenerateGroup(const QStringList& filePaths);
-    void pregenerateGroup(const QStringList& filePaths, int size);
+    void pregenerateGroup(const QList<ThumbnailIdentifier>& identifiers);
+    void pregenerateGroup(const QList<ThumbnailIdentifier>& identifiers, int size);
 
     /**
      * Load a thumbnail.
@@ -246,7 +247,7 @@ protected:
 
 private:
 
-    bool find(const QString& filePath, int size, QPixmap* retPixmap, bool emitSignal, const QRect& detailRect);
+    bool find(const ThumbnailIdentifier& identifier, int size, QPixmap* retPixmap, bool emitSignal, const QRect& detailRect);
     void load(const LoadingDescription& description, bool pregenerate);
     void loadWithKDE(const LoadingDescription& description);
     void startKdePreviewJob();

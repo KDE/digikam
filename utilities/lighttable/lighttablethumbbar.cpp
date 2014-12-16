@@ -321,12 +321,12 @@ void LightTableThumbBar::showContextMenuOnInfo(QContextMenuEvent* e, const Image
 
 void LightTableThumbBar::slotColorLabelChanged(const KUrl& url, int color)
 {
-    assignColorLabel(ImageInfo(url), color);
+    assignColorLabel(ImageInfo::fromUrl(url), color);
 }
 
 void LightTableThumbBar::slotPickLabelChanged(const KUrl& url, int pick)
 {
-    assignPickLabel(ImageInfo(url), pick);
+    assignPickLabel(ImageInfo::fromUrl(url), pick);
 }
 
 void LightTableThumbBar::slotAssignPickLabel(int pickId)
@@ -341,7 +341,7 @@ void LightTableThumbBar::slotAssignColorLabel(int colorId)
 
 void LightTableThumbBar::slotRatingChanged(const KUrl& url, int rating)
 {
-    assignRating(ImageInfo(url), rating);
+    assignRating(ImageInfo::fromUrl(url), rating);
 }
 
 void LightTableThumbBar::slotAssignRating(int rating)
@@ -367,7 +367,7 @@ void LightTableThumbBar::assignColorLabel(const ImageInfo& info, int colorId)
 
 void LightTableThumbBar::slotToggleTag(const KUrl& url, int tagID)
 {
-    toggleTag(ImageInfo(url), tagID);
+    toggleTag(ImageInfo::fromUrl(url), tagID);
 }
 
 void LightTableThumbBar::toggleTag(int tagID)

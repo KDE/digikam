@@ -146,7 +146,7 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
     list.insert(i18n("LibLensFun support"),          i18n("no"));
 #endif // HAVE_LENSFUN
 
-#ifndef HAVE_LIBLQR_1
+#ifdef HAVE_LIBLQR_1
     list.insert(i18n("LibLqr support"),              i18n("yes"));
 #else
     list.insert(i18n("LibLqr support"),              i18n("no"));

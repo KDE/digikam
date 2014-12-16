@@ -60,4 +60,10 @@ void RubberItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     d->canvas->slotSelected();
 }
 
+void RubberItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
+{
+    RegionFrameItem::mouseMoveEvent(event);
+    d->canvas->slotSelectionMoved();
+}
+
 } // namespace Digikam

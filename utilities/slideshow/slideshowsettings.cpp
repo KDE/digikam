@@ -70,7 +70,6 @@ SlideShowSettings::SlideShowSettings()
     printMakeModel        = false;
     printExpoSensitivity  = false;
     printTags             = false;
-    useFullSizePreviews   = true;
     showProgressIndicator = true;
     slideScreen           = -2;
 }

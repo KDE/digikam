@@ -119,11 +119,14 @@ Note: all library dependencies require development and binary packages installed
 
 CMake compilation options to custom digiKam:
 
-Use CMake "-DENABLE_THUMB_DB=off"         flag to compile digiKam without thumbnail database support                             (enabled  by default).
-Use CMake "-DENABLE_INTERNALMYSQL=off"    flag to compile digiKam without internal MySQL server                                  (enabled  by default).
 Use CMake "-DENABLE_LCMS2=on"             flag to compile digiKam source code using lcms2 instead lcms1                          (disabled by default).
 Use CMake "-DENABLE_BALOOSUPPORT=on"      flag to compile digiKam with Baloo support                                             (disabled by default).
 Use CMake "-DENABLE_KDEPIMLIBSSUPPORT=on" flag to compile digiKam with KdePimLibs support                                        (disabled by default).
+
+Mysql support options (experimental):
+
+Use CMake "-DENABLE_MYSQLSUPPORT=on"      flag to compile digiKam with MysSql support                                            (disabled by default).
+Use CMake "-DENABLE_INTERNALMYSQL=on"     flag to compile digiKam with internal MySQL server                                     (disabled by default).
 
 Debug options:
 

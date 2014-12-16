@@ -244,7 +244,7 @@ void BalooWrap::addInfoToDigikam(const BalooInfo& bInfo, const KUrl& fileUrl)
 {
     QStringList tags = bInfo.tags;
     QList<int> tagIdsForInfo;
-    ImageInfo info(fileUrl);
+    ImageInfo info = ImageInfo::fromUrl(fileUrl);
 
     // If the path is not in digikam collections, info will be null.
     // It does the same check first that we would be doing here

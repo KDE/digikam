@@ -81,6 +81,7 @@ public:
     bool    cameraUploadSupport() const;
     bool    cameraMkDirSupport() const;
     bool    cameraDelDirSupport() const;
+    bool    cameraUseUMSDriver() const;
     QString cameraTitle() const;
 
     void enableZoomPlusAction(bool val);
@@ -171,8 +172,6 @@ private Q_SLOTS:
     void slotFolderList(const QStringList& folderList);
     void slotFileList(const CamItemInfoList& fileList);
 
-    void slotIncreaseThumbSize();
-    void slotDecreaseThumbSize();
     void slotZoomSliderChanged(int size);
     void slotZoomChanged(double zoom);
     void slotThumbSizeChanged(int size);
@@ -202,7 +201,7 @@ private Q_SLOTS:
     void slotDeleted(const QString&, const QString&, bool);
     void slotLocked(const QString&, const QString&, bool);
 
-    void slotDownloadNameChanged();
+    void slotUpdateDownloadName();
     void slotSelectNew();
     void slotSelectLocked();
     void slotProgressTimerDone();

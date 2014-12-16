@@ -1318,9 +1318,11 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
+#ifdef HAVE_MYSQLSUPPORT
     KAction* const databaseMigrationAction = new KAction(KIcon("server-database"), i18n("Database Migration..."), this);
     connect(databaseMigrationAction, SIGNAL(triggered()), this, SLOT(slotDatabaseMigration()));
     actionCollection()->addAction("database_migration", databaseMigrationAction);
+#endif
 
     // -----------------------------------------------------------
 

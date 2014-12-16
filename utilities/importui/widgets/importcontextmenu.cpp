@@ -213,7 +213,7 @@ void ImportContextMenuHelper::addServicesMenu(const KUrl::List& selectedItems)
         }
     }
 
-    if (!offers.isEmpty())
+    if (!offers.isEmpty() && ImportUI::instance()->cameraUseUMSDriver())
     {
         KMenu* servicesMenu    = new KMenu(d->parent);
         qDeleteAll(servicesMenu->actions());
@@ -238,7 +238,7 @@ void ImportContextMenuHelper::addServicesMenu(const KUrl::List& selectedItems)
         connect(servicesMenu, SIGNAL(triggered(QAction*)),
                 this, SLOT(slotOpenWith(QAction*)));
     }
-    else
+    else if (ImportUI::instance()->cameraUseUMSDriver())
     {
         QAction* serviceAction = new QAction(i18nc("@title:menu", "Open With..."), this);
         addAction(serviceAction);

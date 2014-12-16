@@ -71,6 +71,8 @@ void IccConvert::registerSettingsWidget()
 
     connect(m_settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
+
+    BatchTool::registerSettingsWidget();
 }
 
 BatchToolSettings IccConvert::defaultSettings()

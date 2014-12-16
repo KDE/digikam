@@ -37,6 +37,8 @@
 namespace Digikam
 {
 
+class PreviewSettings;
+
 class LightTableView : public QFrame
 {
     Q_OBJECT
@@ -55,7 +57,7 @@ public:
     ImageInfo leftImageInfo() const;
     ImageInfo rightImageInfo() const;
 
-    void   setLoadFullImageSize(bool b);
+    void setPreviewSettings(const PreviewSettings& settings);
 
     void   checkForSelection(const ImageInfo& info);
     void   toggleFullScreen(bool set);
@@ -117,6 +119,8 @@ private Q_SLOTS:
 
     void slotLeftContentsMoved(int, int);
     void slotRightContentsMoved(int, int);
+    void slotLeftZoomFactorChanged(double);
+    void slotRightZoomFactorChanged(double);
     void slotLeftPreviewLoaded(bool);
     void slotRightPreviewLoaded(bool);
     void slotDeleteLeftItem();

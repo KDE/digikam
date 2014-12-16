@@ -47,15 +47,15 @@ class SlideImage::Private
 public:
 
     Private() :
-        useFullSizePreviews(false),
+        deskSize(1024),
         previewThread(0),
         previewPreloadThread(0)
     {
     }
 
-    bool                useFullSizePreviews;
+    PreviewSettings     previewSettings;
 
-    QSize               deskSize;
+    int                 deskSize;
     QPixmap             pixmap;
 
     KUrl                currentImage;
@@ -88,37 +88,23 @@ SlideImage::~SlideImage()
     delete d;
 }
 
-void SlideImage::setLoadFullImageSize(bool b)
+void SlideImage::setPreviewSettings(const PreviewSettings& settings)
 {
-    d->useFullSizePreviews = b;
+    d->previewSettings = settings;
+    // calculate preview size which is used for fast previews
+    QSize desktopSize = KGlobalSettings::desktopGeometry(parentWidget()).size();
+    d->deskSize = qMax(640, qMax(desktopSize.height(), desktopSize.width()));
 }
 
 void SlideImage::setLoadUrl(const KUrl& url)
 {
     d->currentImage = url;
-
-    if (d->useFullSizePreviews)
-    {
-        d->previewThread->loadHighQuality(url.toLocalFile());
-    }
-    else
-    {
-        QSize deskSize = KGlobalSettings::desktopGeometry(parentWidget()).size();
-        d->previewThread->load(url.toLocalFile(), qMax(deskSize.width(), deskSize.height()));
-    }
+    d->previewThread->load(url.toLocalFile(), d->previewSettings, d->deskSize);
 }
 
 void SlideImage::setPreloadUrl(const KUrl& url)
 {
-    if (d->useFullSizePreviews)
-    {
-        d->previewPreloadThread->loadHighQuality(url.toLocalFile());
-    }
-    else
-    {
-        QSize deskSize = KGlobalSettings::desktopGeometry(parentWidget()).size();
-        d->previewPreloadThread->load(url.toLocalFile(), qMax(deskSize.width(), deskSize.height()));
-    }
+    d->previewPreloadThread->load(url.toLocalFile(), d->previewSettings, d->deskSize);
 }
 
 void SlideImage::paintEvent(QPaintEvent*)

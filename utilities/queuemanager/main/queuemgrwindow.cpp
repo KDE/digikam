@@ -375,6 +375,7 @@ void QueueMgrWindow::setupActions()
     connect(d->removeQueueAction, SIGNAL(triggered()), d->queuePool, SLOT(slotRemoveCurrentQueue()));
     actionCollection()->addAction("queuemgr_removequeue", d->removeQueueAction);
 
+    // TODO rename action to saveWorkflowAction to avoid confusion?
     d->saveQueueAction = new KAction(KIcon("document-save"), i18n("Save Workflow"), this);
     connect(d->saveQueueAction, SIGNAL(triggered()), this, SLOT(slotSaveWorkflow()));
     actionCollection()->addAction("queuemgr_savequeue", d->saveQueueAction);
@@ -1028,6 +1029,8 @@ void QueueMgrWindow::slotQueueProcessed()
     }
 }
 
+// TODO assigning a workflow doesn't enable the actions in tools view
+// adding a tool (which causes signalAssignTools and slotAssignTools works fine
 void QueueMgrWindow::slotAssignQueueSettings(const QString& title)
 {
     if (!title.isEmpty())

@@ -40,6 +40,7 @@
 
 #include "drawdecoding.h"
 #include "digikam_export.h"
+#include "thumbnailinfo.h"
 
 namespace Digikam
 {
@@ -48,57 +49,6 @@ class IccProfile;
 class DImgLoaderObserver;
 class DMetadata;
 class ThumbnailImage;
-
-class DIGIKAM_EXPORT ThumbnailInfo
-{
-public:
-
-    ThumbnailInfo();
-    ~ThumbnailInfo() {};
-
-    /** The file path from which the thumbnail shall be generated */
-    QString   filePath;
-
-    /** The modification date of the original file.
-     *  Thumbnail will be regenerated if thumb's modification date is older than this.
-     */
-    QDateTime modificationDate;
-
-    /** If the original file is at all accessible on disk.
-     *  May be false if a file on a removable device is used.
-     */
-    bool      isAccessible;
-
-    /** If available, the uniqueHash + fileSize pair for identification
-     *  of the original file by content.
-     */
-    QString   uniqueHash;
-    qlonglong fileSize;
-
-    /** Gives a hint at the orientation of the image.
-     *  This can be used to supersede the Exif information in the file.
-     *  Will not be used if DMetadata::ORIENTATION_UNSPECIFIED (default value)
-     */
-    int       orientationHint;
-
-    /** A custom identifier, if neither filePath nor uniqueHash are applicable.
-     */
-    QString   customIdentifier;
-};
-
-// ------------------------------------------------------------------------------------------
-
-class DIGIKAM_EXPORT ThumbnailInfoProvider
-{
-public:
-
-    ThumbnailInfoProvider() {};
-    virtual ~ThumbnailInfoProvider() {};
-    virtual ThumbnailInfo thumbnailInfo(const QString& path)=0;
-};
-
-// ------------------------------------------------------------------------------------------
-
 class DatabaseThumbnailInfo;
 
 class DIGIKAM_EXPORT ThumbnailCreator
@@ -128,18 +78,19 @@ public:
     /**
      * Create a thumbnail for the specified file.
      */
-    QImage load(const QString& filePath) const;
+    QImage load(const ThumbnailIdentifier& identifier) const;
 
     /**
      * Creates a thumbnail for the specified detail of the file.
+     * A suitable custom identifier (for cache key etc.) is inserted as image.text("customIdentifier").
      */
-    QImage loadDetail(const QString& filePath, const QRect& detailRect) const;
+    QImage loadDetail(const ThumbnailIdentifier& identifier, const QRect& detailRect) const;
 
     /**
      * Ensures that the thumbnail is pregenerated in the database, but does not load it from there.
      */
-    void pregenerate(const QString& filePath) const;
-    void pregenerateDetail(const QString& filePath, const QRect& detailRect) const;
+    void pregenerate(const ThumbnailIdentifier& identifier) const;
+    void pregenerateDetail(const ThumbnailIdentifier& identifier, const QRect& detailRect) const;
 
     /**
      * Sets the thumbnail size. This is the maximum size of the QImage
@@ -221,13 +172,18 @@ public:
      */
     static ThumbnailInfo fileThumbnailInfo(const QString& path);
 
+    /**
+     * Returns the customIdentifier for the detail thumbnail
+     */
+    static QString identifierForDetail(const ThumbnailInfo& identifier, const QRect& rect);
+
 private:
 
     void initialize();
 
     ThumbnailImage createThumbnail(const ThumbnailInfo& info, const QRect& detailRect = QRect()) const;
 
-    QImage load(const QString& path, const QRect& rect, bool pregenerate) const;
+    QImage load(const ThumbnailIdentifier& id, const QRect& rect, bool pregenerate) const;
     QImage loadWithDImg(const QString& path, IccProfile* const profile) const;
     QImage loadImageDetail(const ThumbnailInfo& info, const DMetadata& metadata, const QRect& detailRect, IccProfile* const profile) const;
     QImage loadImagePreview(const DMetadata& metadata) const;
@@ -239,8 +195,7 @@ private:
 
     void store(const QString& path, const QImage& i, const QRect& rect) const;
 
-    ThumbnailInfo makeThumbnailInfo(const QString& path, const QRect& rect) const;
-    QString identifierForDetail(const QString& path, const QRect& rect) const;
+    ThumbnailInfo makeThumbnailInfo(const ThumbnailIdentifier& identifier, const QRect& rect) const;
     QImage scaleForStorage(const QImage& qimage) const;
 
     void storeInDatabase(const ThumbnailInfo& info, const ThumbnailImage& image) const;

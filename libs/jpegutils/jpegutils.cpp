@@ -28,14 +28,6 @@
 
 #define XMD_H
 
-/*
- * Define libjpeg_EXPORTS: kde-win emerged jpeg lib uses this define to
- * decide wether to make dllimport (by default) or dllexport. We need to
- * export.
- */
-
-#define libjpeg_EXPORTS
-
 #include "jpegutils.h"
 
 // C++ includes
@@ -53,8 +45,32 @@ extern "C"
 #include <utime.h>
 #include <setjmp.h>
 #include <jpeglib.h>
+}
+
+// Pragma directives to reduce warnings from libjpeg transupp header file.
+#if not defined(__APPLE__) && defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif
+
+#if defined(__APPLE__) && defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-parameter"
+#endif
+
+extern "C"
+{
 #include "transupp.h"
 }
+
+// Restore warnings
+#if not defined(__APPLE__) && defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+
+#if defined(__APPLE__) && defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 // KDE includes
 
@@ -626,6 +642,7 @@ bool JpegRotator::performJpegTransform(TransformAction action, const QString& sr
 
 bool jpegConvert(const QString& src, const QString& dest, const QString& documentName, const QString& format)
 {
+    kDebug() << "Converting " << src << " to " << dest << " format: " << format << " documentName: " << documentName;
     QFileInfo fi(src);
 
     if (!fi.exists())

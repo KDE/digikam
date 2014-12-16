@@ -57,6 +57,7 @@ public:
     bool hasScheduledRefresh() const;
     bool isRecursingAlbums() const;
     bool isRecursingTags() const;
+    bool isListingOnlyAvailableImages() const;
 
 public Q_SLOTS:
 
@@ -71,6 +72,7 @@ public Q_SLOTS:
 
     void setRecurseAlbums(bool recursiveListing);
     void setRecurseTags(bool recursiveListing);
+    void setListOnlyAvailableImages(bool onlyAvailable);
 
     void setSpecialTagListing(const QString& specialListing);
 

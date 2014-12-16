@@ -9,11 +9,14 @@ project(digikam)
 message(STATUS "----------------------------------------------------------------------------------")
 message(STATUS "Starting CMake configuration for: digiKam")
 
-option(ENABLE_THUMBS_DB         "Build digiKam with thumbnails database support (default=ON)"                    ON)
-option(ENABLE_INTERNALMYSQL     "Build digiKam with insternal MySQL server executable (default=ON)"              ON)
+option(ENABLE_INTERNALMYSQL     "Build digiKam with internal MySQL server executable (default=OFF)"              OFF)
 option(ENABLE_LCMS2             "Build digiKam with LCMS2 instead LCMS1 (default=OFF)"                           OFF)
 option(ENABLE_BALOOSUPPORT      "Build digiKam with Baloo support (default=ON)"                                  ON)
 option(ENABLE_KDEPIMLIBSSUPPORT "Build digiKam with Kdepimlibs support (default=OFF)"                            OFF)
+
+# Mysql support options (experimental):
+option(ENABLE_MYSQLSUPPORT      "Build digiKam with MySQL dabatase support (default=OFF)"                        OFF)
+option(ENABLE_INTERNALMYSQL     "Build digiKam with internal MySQL server executable (default=OFF)"              OFF)
 
 # Debug options:
 option(ENABLE_DIGIKAM_MODELTEST "Enable ModelTest on some models for debugging (default=OFF)"                    OFF)
@@ -24,11 +27,11 @@ option(ENABLE_IMGLOADERDEBUGMSG "Build digiKam with more internal debug message 
 
 # digiKam version
 set(DIGIKAM_MAJOR_VERSION "4")
-set(DIGIKAM_MINOR_VERSION "5")
+set(DIGIKAM_MINOR_VERSION "6")
 set(DIGIKAM_PATCH_VERSION "0")
 
 #digiKam release date
-set(DIGIKAM_RELEASE_DATE "2014-11-09")
+set(DIGIKAM_RELEASE_DATE "2014-12-16")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
@@ -71,6 +74,9 @@ set(AREA_CODE_IMAGEPLUGINS   "50006")
 set(AREA_CODE_DATABASESERVER "50007")
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=${AREA_CODE_GENERAL})
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
+
+# surpress deprecated warning for glibc 2.20+
+add_definitions(-D_DEFAULT_SOURCE)
 
 macro(SET_DEBUG_AREA_CODE _areacode)
     remove_definitions(-DKDE_DEFAULT_DEBUG_AREA=${AREA_CODE_GENERAL})
@@ -219,7 +225,7 @@ set(DIGIKAM_LIBJPEG_DIR libjpeg-${JPEG_LIB_VERSION})
 
 # -- Mysql rules ----------------------------------------------------------------------------------
 
-if(ENABLE_INTERNALMYSQL)
+if(ENABLE_MYSQLSUPPORT AND ENABLE_INTERNALMYSQL)
 
     # Check MySQL executables
 
@@ -346,6 +352,7 @@ MACRO_BOOL_TO_01(LENSFUN_FOUND            HAVE_LENSFUN)
 MACRO_BOOL_TO_01(Baloo_FOUND              HAVE_BALOO)
 MACRO_BOOL_TO_01(SQLITE2_FOUND            HAVE_SQLITE2)
 MACRO_BOOL_TO_01(LQR-1_FOUND              HAVE_LIBLQR_1)
+MACRO_BOOL_TO_01(ENABLE_MYSQLSUPPORT      HAVE_MYSQLSUPPORT)
 MACRO_BOOL_TO_01(ENABLE_INTERNALMYSQL     HAVE_INTERNALMYSQL)
 MACRO_BOOL_TO_01(JASPER_FOUND             HAVE_JASPER)
 MACRO_BOOL_TO_01(EIGEN3_FOUND             HAVE_EIGEN3)
@@ -360,7 +367,6 @@ MACRO_BOOL_TO_01(KGEOMAP_FOUND            HAVE_KGEOMAP)
 # pixels, one probably needs this feature on these platforms as well.
 MACRO_BOOL_TO_01(APPLE                    USE_QT_SCALING)
 
-MACRO_BOOL_TO_01(ENABLE_THUMBS_DB         USE_THUMBS_DB)
 MACRO_BOOL_TO_01(ENABLE_IMGLOADERDEBUGMSG USE_IMGLOADERDEBUGMSG)
 
 # Set config files accordingly with optional dependencies
@@ -376,14 +382,19 @@ message(STATUS " digiKam ${DIGIKAM_VERSION_STRING} dependencies results   <http:
 message(STATUS "")
 
 PRINT_QTMODULE_STATUS("Qt4 SQL" QT_QTSQL_FOUND)
+PRINT_COMPONENT_COMPILE_STATUS("MySQL Database Support" ENABLE_MYSQLSUPPORT)
 
-if(ENABLE_INTERNALMYSQL)
-    PRINT_EXECUTABLE_STATUS("MySQL Server" mysqld MYSQLD_PATH SERVERCMD_MYSQL)
-    if (NOT WIN32)
-        PRINT_EXECUTABLE_STATUS("MySQL install_db tool" mysql_install_db MYSQL_TOOLS_PATH INITCMD_MYSQL)
-    endif (NOT WIN32)
-else()
-    message(STATUS " mysql server found....................... NO  (optional - disabled by user)")
+if(ENABLE_MYSQLSUPPORT)
+
+    if (ENABLE_INTERNALMYSQL)
+        PRINT_EXECUTABLE_STATUS("MySQL Server" mysqld MYSQLD_PATH SERVERCMD_MYSQL)
+        if (NOT WIN32)
+            PRINT_EXECUTABLE_STATUS("MySQL install_db tool" mysql_install_db MYSQL_TOOLS_PATH INITCMD_MYSQL)
+        endif()
+    else()
+        message(STATUS " MySQL server found....................... NO  (optional - disabled by user)")
+    endif()
+
 endif()
 
 # ================================================================
@@ -402,18 +413,18 @@ PRINT_LIBRARY_STATUS("libopencv"              "http://opencv.willowgarage.com"  
 
 # ================================================================
 
-PRINT_OPTIONAL_LIBRARY_STATUS("libkipi"       "https://projects.kde.org/projects/kde/kdegraphics/libs/libkipi" "(version >= ${KIPI_MIN_VERSION})"   "digiKam will be compiled without Kipi-plugins support."                      KIPI_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libkface"      "https://projects.kde.org/projects/extragear/libs/libkface"      "(version >= 2.0.0)"                 "digiKam will be compiled without faces detection and recognition support."   KFACE_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libkgeomap"    "https://projects.kde.org/projects/extragear/libs/libkgeomap"    "(version >= ${KGEOMAP_MIN_VERSION}" "digiKam will be compiled without geolocation maps support."                  KGEOMAP_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libkdepimlibs" "http://pim.kde.org"                                             "(version >= 4.4.0)"                 "digiKam will be compiled without KDE address book support."                  KDEPIMLIBS_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libjasper"     "http://www.ece.uvic.ca/~mdadams/jasper"                         "(version >= 1.7.0)"                 "digiKam will be compiled without JPEG2000 support."                          JASPER_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("liblensfun"    "http://lensfun.sourceforge.net"                                 "(version >= 0.2.6)"                 "digiKam will be compiled without Lens Auto Correction tool support."         LENSFUN_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("liblqr-1"      "http://liblqr.wikidot.com"                                      "(version >= 0.4.1)"                 "digiKam will be compiled without Contents Aware Resizer tool support."       LQR-1_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libeigen3"     "http://eigen.tuxfamily.org"                                     "(version >= 3.0.0)"                 "digiKam will be compiled without Refocus tool support."                      EIGEN3_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libgphoto2"    "http://www.gphoto.org"                                          "(version >= 2.4.0)"                 "digiKam will be compiled without GPhoto2 camera drivers support."            GPHOTO2_FOUND AND LIBUSB_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libbaloo"      "https://projects.kde.org/projects/kde/kdelibs/baloo"            "(version >= 4.12.0)"                "digiKam will be compiled without KDE files indexing support."                Baloo_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libsqlite2"    "http://www.sqlite.org"                                          "(version >= 2.0.0)"                 "digiKam will be compiled without database version <= 0.7 importing support." SQLITE2_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("doxygen"       "http://www.doxygen.org"                                         "(version >= 1.8.0)"                 "digiKam will be compiled without API documentation building support."        DOXYGEN_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libkipi"       "https://projects.kde.org/projects/kde/kdegraphics/libs/libkipi" "(version >= ${KIPI_MIN_VERSION})"    "digiKam will be compiled without Kipi-plugins support."                      KIPI_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libkface"      "https://projects.kde.org/projects/extragear/libs/libkface"      "(version >= 2.0.0)"                  "digiKam will be compiled without faces detection and recognition support."   KFACE_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libkgeomap"    "https://projects.kde.org/projects/extragear/libs/libkgeomap"    "(version >= ${KGEOMAP_MIN_VERSION})" "digiKam will be compiled without geolocation maps support."                  KGEOMAP_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libkdepimlibs" "http://pim.kde.org"                                             "(version >= 4.4.0)"                  "digiKam will be compiled without KDE address book support."                  KDEPIMLIBS_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libjasper"     "http://www.ece.uvic.ca/~mdadams/jasper"                         "(version >= 1.7.0)"                  "digiKam will be compiled without JPEG2000 support."                          JASPER_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("liblensfun"    "http://lensfun.sourceforge.net"                                 "(version >= 0.2.6)"                  "digiKam will be compiled without Lens Auto Correction tool support."         LENSFUN_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("liblqr-1"      "http://liblqr.wikidot.com"                                      "(version >= 0.4.1)"                  "digiKam will be compiled without Contents Aware Resizer tool support."       LQR-1_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libeigen3"     "http://eigen.tuxfamily.org"                                     "(version >= 3.0.0)"                  "digiKam will be compiled without Refocus tool support."                      EIGEN3_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libgphoto2"    "http://www.gphoto.org"                                          "(version >= 2.4.0)"                  "digiKam will be compiled without GPhoto2 camera drivers support."            GPHOTO2_FOUND AND LIBUSB_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libbaloo"      "https://projects.kde.org/projects/kde/kdelibs/baloo"            "(version >= 4.12.0)"                 "digiKam will be compiled without KDE files indexing support."                Baloo_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libsqlite2"    "http://www.sqlite.org"                                          "(version >= 2.0.0)"                  "digiKam will be compiled without database version <= 0.7 importing support." SQLITE2_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("doxygen"       "http://www.doxygen.org"                                         "(version >= 1.8.0)"                  "digiKam will be compiled without API documentation building support."        DOXYGEN_FOUND)
 
 # ================================================================
 
@@ -592,7 +603,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/rawloader.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/ppmloader.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/qimageloader.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/iccjpeg.c
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/pgfloader.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/jpegsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/pngsettings.cpp
@@ -759,8 +769,14 @@ if(DIGIKAM_CAN_BE_COMPILED)
     # digikam: camera download: auto-rotated images lose EXIF info ...
     # So make sure nofinal is always used here!
     KDE4_NO_ENABLE_FINAL(libjpegutils)
+
+    # Define libjpeg_EXPORTS: kde-win emerged libjpeg uses this define to
+    # decide wether to make dllimport (by default) or dllexport. So, we need to export.
+    add_definitions(-Dlibjpeg_EXPORTS)
+
     set(libjpegutils_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/jpegutils.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/iccjpeg.c
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/${DIGIKAM_LIBJPEG_DIR}/transupp.c
        )
 
@@ -782,6 +798,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/loadsavetask.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/previewloadthread.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/previewtask.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/previewsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/thumbnailbasic.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/thumbnailcreator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/thumbnailloadthread.cpp

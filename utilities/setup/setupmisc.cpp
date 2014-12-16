@@ -149,10 +149,6 @@ SetupMisc::SetupMisc(QWidget* const parent)
     adjustSize();
 
     // --------------------------------------------------------
-
-    setAutoFillBackground(false);
-    viewport()->setAutoFillBackground(false);
-    panel->setAutoFillBackground(false);
 }
 
 SetupMisc::~SetupMisc()

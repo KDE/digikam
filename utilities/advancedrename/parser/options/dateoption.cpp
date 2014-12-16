@@ -291,7 +291,7 @@ QString DateOption::parseOperation(ParseSettings& settings)
     else
     {
         // lets try to re-read the file information
-        ImageInfo info(settings.fileUrl);
+        ImageInfo info = ImageInfo::fromUrl(settings.fileUrl);
 
         if (!info.isNull())
         {

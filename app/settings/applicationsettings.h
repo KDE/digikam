@@ -49,6 +49,7 @@ namespace Digikam
 
 class DatabaseParameters;
 class VersionManagerSettings;
+class PreviewSettings;
 
 class ApplicationSettings : public QObject
 {
@@ -241,8 +242,8 @@ public:
      */
     bool getIconShowOverlays() const;
 
-    void setPreviewLoadFullImageSize(bool val);
-    bool getPreviewLoadFullImageSize() const;
+    void setPreviewSettings(const PreviewSettings& settings);
+    PreviewSettings getPreviewSettings() const;
 
     void setPreviewShowIcons(bool val);
     bool getPreviewShowIcons() const;

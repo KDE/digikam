@@ -50,7 +50,7 @@ QString CameraNameOption::parseOperation(ParseSettings& settings)
 {
     QString result;
 
-    ImageInfo info(settings.fileUrl);
+    ImageInfo info = ImageInfo::fromUrl(settings.fileUrl);
 
     if (!info.isNull())
     {

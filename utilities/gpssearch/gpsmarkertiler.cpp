@@ -111,7 +111,7 @@ public:
 
     QList<InternalJobs>                    jobs;
     ThumbnailLoadThread*                   thumbnailLoadThread;
-    QHash<QString, QVariant>               thumbnailMap;
+    QHash<qlonglong, QVariant>             thumbnailMap;
     QList<QRectF>                          rectList;
     QList<int>                             rectLevel;
     bool                                   activeState;
@@ -443,10 +443,9 @@ QPixmap GPSMarkerTiler::pixmapFromRepresentativeIndex(const QVariant& index, con
 
     QPixmap thumbnail;
     ImageInfo info(indexForPixmap.second);
-    QString path = info.filePath();
-    d->thumbnailMap.insert(path, index);
+    d->thumbnailMap.insert(info.id(), index);
 
-    if (d->thumbnailLoadThread->find(path, thumbnail, qMax(size.width() + 2, size.height() + 2)))
+    if (d->thumbnailLoadThread->find(info.thumbnailIdentifier(), thumbnail, qMax(size.width() + 2, size.height() + 2)))
     {
         // digikam returns thumbnails with a border around them, but libkgeomap expects them without a border
         return thumbnail.copy(1, 1, thumbnail.size().width() - 2, thumbnail.size().height() - 2);
@@ -630,7 +629,7 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
  */
 void GPSMarkerTiler::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumbnail)
 {
-    QVariant index = d->thumbnailMap.value(loadingDescription.filePath);
+    QVariant index = d->thumbnailMap.value(loadingDescription.thumbnailIdentifier().id);
     //    QPair<KGeoMap::TileIndex, int> indexForPixmap =
     //        index.value<QPair<KGeoMap::TileIndex, int> >();
     emit signalThumbnailAvailableForIndex(index, thumbnail.copy(1, 1, thumbnail.size().width() - 2, thumbnail.size().height() - 2));

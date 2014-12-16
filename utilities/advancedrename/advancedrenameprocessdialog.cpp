@@ -113,7 +113,7 @@ void AdvancedRenameProcessDialog::processOne()
         return;
     }
 
-    d->thumbLoadThread->find(d->newNameList.first().first.toLocalFile());
+    d->thumbLoadThread->find(ThumbnailIdentifier(d->newNameList.first().first.toLocalFile()));
 }
 
 void AdvancedRenameProcessDialog::complete()

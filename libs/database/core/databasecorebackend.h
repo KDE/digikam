@@ -42,15 +42,12 @@
 namespace Digikam
 {
 
-class ThumbnailSchemaUpdater;
-class DatabaseErrorHandler;
 class DatabaseCoreBackendPrivate;
-
-// ------------------------------------------------------------------------------------------------------------
+class DatabaseErrorHandler;
+class ThumbnailSchemaUpdater;
 
 class DIGIKAM_EXPORT DatabaseLocking
 {
-
 public:
 
     DatabaseLocking();
@@ -61,7 +58,7 @@ public:
     int    lockCount;
 };
 
-// ------------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------
 
 class DIGIKAM_EXPORT DatabaseCoreBackend : public QObject
 {
@@ -202,7 +199,7 @@ public:
      * Add a DatabaseErrorHandler. This object must be created in the main thread.
      * If a database error occurs, this object can handle problem solving and user interaction.
      */
-    void setDatabaseErrorHandler(DatabaseErrorHandler* handler);
+    void setDatabaseErrorHandler(DatabaseErrorHandler* const handler);
 
     /**
       * Return config read from XML,
@@ -265,10 +262,10 @@ public:
      * Executes the SQL statement, and write the returned data into the values list.
      * If you are not interested in the returned data, set values to 0.
      * Methods are provided for up to four bound values (positional binding), or for a list of bound values.
-     * If you want the last inserted id (and your query is suitable), sett lastInsertId to the address of a QVariant.
+     * If you want the last inserted id (and your query is suitable), set lastInsertId to the address of a QVariant.
      * Additionally, methods are provided for prepared statements.
      */
-    QueryState execSql(const QString& sql, QList<QVariant>* values = 0, QVariant* const lastInsertId = 0);
+    QueryState execSql(const QString& sql, QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
     QueryState execSql(const QString& sql, const QVariant& boundValue1,
                        QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
     QueryState execSql(const QString& sql,
@@ -471,11 +468,6 @@ public:
             QuerySize
             LastInsertId
     */
-
-private Q_SLOTS:
-
-    void slotThreadFinished();
-    void slotMainThreadFinished();
 
 protected:
 

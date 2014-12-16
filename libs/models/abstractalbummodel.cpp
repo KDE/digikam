@@ -47,7 +47,8 @@ namespace Digikam
 
 AbstractAlbumModel::AbstractAlbumModel(Album::Type albumType, Album* const rootAlbum, RootAlbumBehavior rootBehavior,
                                        QObject* const parent)
-    : QAbstractItemModel(parent), d(new Private)
+    : QAbstractItemModel(parent),
+      d(new Private)
 {
     d->type         = albumType;
     d->rootAlbum    = rootAlbum;
@@ -399,7 +400,7 @@ QString AbstractAlbumModel::columnHeader() const
 
 Qt::ItemFlags AbstractAlbumModel::itemFlags(Album*) const
 {
-    Qt::ItemFlags f = Qt::ItemIsSelectable|Qt::ItemIsEnabled;
+    Qt::ItemFlags f = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 
     if (d->itemDrag)
     {
@@ -680,7 +681,7 @@ void AbstractCountingAlbumModel::includeChildrenCount(const QModelIndex& index)
 
 void AbstractCountingAlbumModel::setCountMap(const QMap<int, int>& idCountMap)
 {
-    d->countMap                        = idCountMap;
+    d->countMap                       = idCountMap;
     QMap<int, int>::const_iterator it = d->countMap.constBegin();
 
     for (; it != d->countMap.constEnd(); ++it)
@@ -725,12 +726,12 @@ void AbstractCountingAlbumModel::updateCount(Album* album)
     // insert or update
     if (includeIt == d->countHashReady.end())
     {
-        changed = true;
+        changed                        = true;
         d->countHashReady[album->id()] = count;
     }
     else
     {
-        changed = (includeIt.value() != count);
+        changed           = (includeIt.value() != count);
         includeIt.value() = count;
     }
 
@@ -757,12 +758,12 @@ void AbstractCountingAlbumModel::setCount(Album* album, int count)
     }
 
     QHash<int, int>::iterator includeIt = d->countHashReady.find(album->id());
-    bool changed = false;
+    bool changed                        = false;
 
     // insert or update
     if (includeIt == d->countHashReady.end())
     {
-        changed = true;
+        changed                        = true;
         d->countHashReady[album->id()] = count;
     }
     else
@@ -1031,7 +1032,7 @@ void AbstractCheckableAlbumModel::checkAllAlbums(const QModelIndex& parent)
 
 void AbstractCheckableAlbumModel::invertCheckedAlbums(const QModelIndex& parent)
 {
-    Album* album = albumForIndex(parent);
+    Album* const album = albumForIndex(parent);
 
     if (album)
     {

@@ -188,7 +188,7 @@ void EditorStackView::zoomTo100Percent()
 {
     if (viewMode() == CanvasMode)
     {
-        d->canvas->layout()->setZoomFactor(1.0);
+        d->canvas->layout()->toggleFitToWindowOr100();
     }
     else
     {
@@ -196,7 +196,7 @@ void EditorStackView::zoomTo100Percent()
 
         if (preview)
         {
-            preview->layout()->setZoomFactor(1.0);
+            preview->layout()->toggleFitToWindowOr100();
         }
     }
 }

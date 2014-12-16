@@ -79,10 +79,10 @@ void ThumbnailLoadingTask::execute()
         switch (m_loadingDescription.previewParameters.type)
         {
             case LoadingDescription::PreviewParameters::Thumbnail:
-                m_creator->pregenerate(m_loadingDescription.filePath);
+                m_creator->pregenerate(m_loadingDescription.thumbnailIdentifier());
                 break;
             case LoadingDescription::PreviewParameters::DetailThumbnail:
-                m_creator->pregenerateDetail(m_loadingDescription.filePath,
+                m_creator->pregenerateDetail(m_loadingDescription.thumbnailIdentifier(),
                                              m_loadingDescription.previewParameters.extraParameter.toRect());
                 break;
             default:
@@ -169,10 +169,10 @@ void ThumbnailLoadingTask::execute()
     switch (m_loadingDescription.previewParameters.type)
     {
         case LoadingDescription::PreviewParameters::Thumbnail:
-            m_qimage = m_creator->load(m_loadingDescription.filePath);
+            m_qimage = m_creator->load(m_loadingDescription.thumbnailIdentifier());
             break;
         case LoadingDescription::PreviewParameters::DetailThumbnail:
-            m_qimage = m_creator->loadDetail(m_loadingDescription.filePath,
+            m_qimage = m_creator->loadDetail(m_loadingDescription.thumbnailIdentifier(),
                                              m_loadingDescription.previewParameters.extraParameter.toRect());
             break;
         default:

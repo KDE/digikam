@@ -231,15 +231,13 @@ QString DigikamView::Private::userPresentableAlbumTitle(const QString& title) co
 
 void DigikamView::Private::addPageUpDownActions(DigikamView* const q, QWidget* const w)
 {
-    QShortcut* const nextImageShortcut = new QShortcut(w);
-    nextImageShortcut->setKey(Qt::Key_PageDown);
-    nextImageShortcut->setContext(Qt::WidgetWithChildrenShortcut);
-    QObject::connect(nextImageShortcut, SIGNAL(activated()), q, SLOT(slotNextItem()));
+    defineShortcut(w, Qt::Key_PageDown, q, SLOT(slotNextItem()));
+    defineShortcut(w, Qt::Key_Down,     q, SLOT(slotNextItem()));
+    defineShortcut(w, Qt::Key_Right,    q, SLOT(slotNextItem()));
 
-    QShortcut* const prevImageShortcut = new QShortcut(w);
-    prevImageShortcut->setKey(Qt::Key_PageUp);
-    prevImageShortcut->setContext(Qt::WidgetWithChildrenShortcut);
-    QObject::connect(prevImageShortcut, SIGNAL(activated()), q, SLOT(slotPrevItem()));
+    defineShortcut(w, Qt::Key_PageUp,   q, SLOT(slotPrevItem()));
+    defineShortcut(w, Qt::Key_Up,       q, SLOT(slotPrevItem()));
+    defineShortcut(w, Qt::Key_Left,     q, SLOT(slotPrevItem()));
 }
 
 // -------------------------------------------------------------------------------------------
@@ -306,7 +304,7 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
             this, SLOT(slotNewDuplicatesSearch(Album*)));
 
     // Labels sidebar
-    d->labelsSideBar = new LabelsSideBarWidget(d->leftSideBar);
+    d->labelsSideBar       = new LabelsSideBarWidget(d->leftSideBar);
     d->leftSideBarWidgets << d->labelsSideBar;
     d->labelsSearchHandler = new AlbumLabelsSearchHandler(d->labelsSideBar->labelsTree());
 
@@ -400,6 +398,7 @@ DigikamView::~DigikamView()
 {
     saveViewState();
 
+    delete d->labelsSearchHandler;
     delete d->albumHistory;
     delete d;
 }
@@ -1682,15 +1681,24 @@ void DigikamView::slotTogglePreviewMode(const ImageInfo& info)
           viewMode() == StackedView::MapWidgetMode)   &&
          !info.isNull() )
     {
-        d->lastViewMode = viewMode();
-
-        if (viewMode() == StackedView::IconViewMode)
+        if (info.isLocationAvailable())
         {
-            d->stackedview->setPreviewItem(info, d->iconView->previousInfo(info), d->iconView->nextInfo(info));
+            d->lastViewMode = viewMode();
+
+            if (viewMode() == StackedView::IconViewMode)
+            {
+                d->stackedview->setPreviewItem(info, d->iconView->previousInfo(info), d->iconView->nextInfo(info));
+            }
+            else
+            {
+                d->stackedview->setPreviewItem(info, ImageInfo(), ImageInfo());
+            }
         }
         else
         {
-            d->stackedview->setPreviewItem(info, ImageInfo(), ImageInfo());
+            QModelIndex index = d->iconView->indexForInfo(info);
+            d->iconView->showIndexNotification(index,
+                                               i18nc("@info", "<i>The storage location of this image<br/>is currently not available</i>"));
         }
     }
     else
@@ -2188,7 +2196,7 @@ void DigikamView::slotRightSideBarActivateAssignedTags()
 void DigikamView::slotRatingChanged(const KUrl& url, int rating)
 {
     rating = qMin(RatingMax, qMax(RatingMin, rating));
-    ImageInfo info(url);
+    ImageInfo info = ImageInfo::fromUrl(url);
 
     if (!info.isNull())
     {
@@ -2198,7 +2206,7 @@ void DigikamView::slotRatingChanged(const KUrl& url, int rating)
 
 void DigikamView::slotColorLabelChanged(const KUrl& url, int color)
 {
-    ImageInfo info(url);
+    ImageInfo info = ImageInfo::fromUrl(url);
 
     if (!info.isNull())
     {
@@ -2208,7 +2216,7 @@ void DigikamView::slotColorLabelChanged(const KUrl& url, int color)
 
 void DigikamView::slotPickLabelChanged(const KUrl& url, int pick)
 {
-    ImageInfo info(url);
+    ImageInfo info = ImageInfo::fromUrl(url);
 
     if (!info.isNull())
     {
@@ -2218,7 +2226,7 @@ void DigikamView::slotPickLabelChanged(const KUrl& url, int pick)
 
 void DigikamView::slotToggleTag(const KUrl& url, int tagID)
 {
-    ImageInfo info(url);
+    ImageInfo info = ImageInfo::fromUrl(url);
 
     if (!info.isNull())
     {

@@ -194,8 +194,8 @@ void Canvas::fitToSelect()
     {
         // If selected area, use center of selection
         // and recompute zoom factor accordingly.
-        //double cpx       = sel.x() + sel.width()  / 2.0;
-        //double cpy       = sel.y() + sel.height() / 2.0;
+        double cpx       = sel.x() + sel.width()  / 2.0;
+        double cpy       = sel.y() + sel.height() / 2.0;
         double srcWidth  = sel.width();
         double srcHeight = sel.height();
         double dstWidth  = contentsRect().width();
@@ -205,12 +205,12 @@ void Canvas::fitToSelect()
         emit signalToggleOffFitToWindow();
 
         layout()->setZoomFactor(zoom);
-        //emit layout()->zoomFactorChanged(zoom);
 
-        //centerOn(cpx * d->zoom, cpy * d->zoom);
+        centerOn(cpx * zoom, cpy * zoom);
         viewport()->update();
     }
 }
+
 void Canvas::applyTransform(const IccTransform& t)
 {
     IccTransform transform(t);
@@ -353,6 +353,9 @@ void Canvas::slotAutoCrop()
     {
         d->rubber->setVisible(false);
     }
+
+    emit signalSelected(false);
+    addRubber();
 }
 
 void Canvas::slotCrop()
@@ -371,6 +374,9 @@ void Canvas::slotCrop()
     {
         d->rubber->setVisible(false);
     }
+
+    emit signalSelected(false);
+    addRubber();
 }
 
 void Canvas::setICCSettings(const ICCSettingsContainer& cmSettings)
@@ -463,6 +469,19 @@ void Canvas::slotSelected()
     }
 
     d->core->setSelectedArea(sel);
+    emit signalSelectionChanged(sel);    
+}
+
+void Canvas::slotSelectionMoved()
+{
+    QRect sel = QRect(0, 0, 0, 0);
+
+    if (d->rubber)
+    {
+        sel = calcSelectedArea();
+    }
+
+    emit signalSelectionSetText(sel);
 }
 
 QRect Canvas::calcSelectedArea() const
@@ -513,12 +532,13 @@ void Canvas::slotModified()
 
 void Canvas::slotSelectAll()
 {
-    if (!d->rubber)
+    if (d->rubber)
     {
-        d->rubber = new RubberItem(d->canvasItem);
-        d->rubber->setCanvas(this);
+        delete d->rubber;
     }
 
+    d->rubber = new RubberItem(d->canvasItem);
+    d->rubber->setCanvas(this);
     d->rubber->setRectInSceneCoordinatesAdjusted(d->canvasItem->boundingRect());
     viewport()->setMouseTracking(true);
     viewport()->update();

@@ -96,10 +96,12 @@ void kio_digikamalbums::special(const QByteArray& data)
     }
     else
     {
-        bool recursive = (metaData("listAlbumsRecursively") == "true");
+        bool recursive               = (metaData("listAlbumsRecursively") == "true");
+        bool listOnlyAvailableImages = (metaData("listOnlyAvailableImages") == "true");
 
         Digikam::ImageLister lister;
         lister.setRecursive(recursive);
+        lister.setListOnlyAvailable(listOnlyAvailableImages);
         // send data every 200 images to be more responsive
         Digikam::ImageListerSlaveBaseGrowingPartsSendingReceiver receiver(this, 200, 2000, 100);
         lister.list(&receiver, kurl);

@@ -41,6 +41,7 @@ class DImg;
 class ICCSettingsContainer;
 class ImageInfo;
 class LoadingDescription;
+class PreviewSettings;
 
 class DIGIKAM_EXPORT DImgPreviewItem : public GraphicsDImgItem
 {
@@ -62,7 +63,7 @@ public:
     virtual ~DImgPreviewItem();
 
     void setDisplayingWidget(QWidget* const widget);
-    void setLoadFullImageSize(bool b);
+    void setPreviewSettings(const PreviewSettings& settings);
 
     QString path() const;
     void    setPath(const QString& path, bool rePreview = false);

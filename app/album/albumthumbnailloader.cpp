@@ -46,6 +46,7 @@
 #include "album.h"
 #include "albummanager.h"
 #include "applicationsettings.h"
+#include "imageinfo.h"
 #include "metadatasettings.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
@@ -53,8 +54,8 @@
 namespace Digikam
 {
 
-typedef QMap<QString, QList<int> > PathAlbumMap;
-typedef QMap<int, QPixmap>         AlbumThumbnailMap;
+typedef QMap<qlonglong, QList<int> >           IdAlbumMap;
+typedef QMap<int, QPixmap>                     AlbumThumbnailMap;
 
 class AlbumThumbnailLoaderCreator
 {
@@ -85,12 +86,24 @@ public:
     ThumbnailLoadThread*                 iconTagThumbThread;
     ThumbnailLoadThread*                 iconAlbumThumbThread;
 
-    PathAlbumMap                         pathAlbumMap;
+    IdAlbumMap                           idAlbumMap;
 
     AlbumThumbnailMap                    thumbnailMap;
 
     QCache<QPair<QString, int>, QPixmap> iconCache;
 };
+
+bool operator<(const ThumbnailIdentifier& a, const ThumbnailIdentifier& b)
+{
+    if (a.id || b.id)
+    {
+        return a.id < b.id;
+    }
+    else
+    {
+        return a.filePath < b.filePath;
+    }
+}
 
 AlbumThumbnailLoader* AlbumThumbnailLoader::instance()
 {
@@ -205,11 +218,9 @@ bool AlbumThumbnailLoader::getTagThumbnail(TAlbum* const album, QPixmap& icon)
 {
     if (!album->icon().isEmpty() && d->iconSize > d->minBlendSize)
     {
-        if (album->icon().startsWith('/'))
+        if (album->iconId())
         {
-            KUrl iconKURL;
-            iconKURL.setPath(album->icon());
-            addUrl(album, iconKURL);
+            addUrl(album, album->iconId());
             icon = QPixmap();
             return true;
         }
@@ -238,11 +249,9 @@ QPixmap AlbumThumbnailLoader::getTagThumbnailDirectly(TAlbum* const album)
             return *it;
         }
 
-        if (album->icon().startsWith('/'))
+        if (album->iconId())
         {
-            KUrl iconKURL;
-            iconKURL.setPath(album->icon());
-            addUrl(album, iconKURL);
+            addUrl(album, album->iconId());
         }
         else
         {
@@ -256,9 +265,9 @@ QPixmap AlbumThumbnailLoader::getTagThumbnailDirectly(TAlbum* const album)
 
 bool AlbumThumbnailLoader::getAlbumThumbnail(PAlbum* const album)
 {
-    if (!album->icon().isEmpty() && d->iconSize > d->minBlendSize)
+    if (album->iconId() && d->iconSize > d->minBlendSize)
     {
-        addUrl(album, album->iconKURL());
+        addUrl(album, album->iconId());
     }
     else
     {
@@ -270,7 +279,7 @@ bool AlbumThumbnailLoader::getAlbumThumbnail(PAlbum* const album)
 
 QPixmap AlbumThumbnailLoader::getAlbumThumbnailDirectly(PAlbum* const album)
 {
-    if (!album->icon().isEmpty() && d->iconSize > d->minBlendSize)
+    if (album->iconId() && d->iconSize > d->minBlendSize)
     {
         // icon cached?
         AlbumThumbnailMap::const_iterator it = d->thumbnailMap.constFind(album->globalID());
@@ -281,21 +290,14 @@ QPixmap AlbumThumbnailLoader::getAlbumThumbnailDirectly(PAlbum* const album)
         }
 
         // schedule for loading
-        addUrl(album, album->iconKURL());
+        addUrl(album, album->iconId());
     }
 
     return getStandardAlbumIcon(album);
 }
 
-void AlbumThumbnailLoader::addUrl(Album* const album, const KUrl& url)
+void AlbumThumbnailLoader::addUrl(Album* const album, qlonglong id)
 {
-/*
-    QPixmap* const pix = d->cache->find(album->iconKURL().toLocalFile());
-
-    if (pix)
-        return pix;
-*/
-
     // First check cached thumbnails.
     // We use a private cache which is actually a map to be sure to cache _all_ album thumbnails.
     // At startup, this is not relevant, as the views will add their requests in a row.
@@ -312,11 +314,11 @@ void AlbumThumbnailLoader::addUrl(Album* const album, const KUrl& url)
     }
 
     // Check if the URL has already been added
-    PathAlbumMap::iterator it             = d->pathAlbumMap.find(url.toLocalFile());
+    IdAlbumMap::iterator it = d->idAlbumMap.find(id);
 
-    if (it == d->pathAlbumMap.end())
+    if (it == d->idAlbumMap.end())
     {
-        // use two IOslaves so that tag and album thumbnails are loaded
+        // use two threads so that tag and album thumbnails are loaded
         // in parallel and not first album, then tag thumbnails
         if (album->type() == Album::TAG)
         {
@@ -333,7 +335,7 @@ void AlbumThumbnailLoader::addUrl(Album* const album, const KUrl& url)
             }
 
             // use the asynchronous version - with queued connections, see above
-            d->iconTagThumbThread->find(url.toLocalFile());
+            d->iconTagThumbThread->find(ImageInfo::thumbnailIdentifier(id));
         }
         else
         {
@@ -349,11 +351,11 @@ void AlbumThumbnailLoader::addUrl(Album* const album, const KUrl& url)
                         Qt::QueuedConnection);
             }
 
-            d->iconAlbumThumbThread->find(url.toLocalFile());
+            d->iconAlbumThumbThread->find(ImageInfo::thumbnailIdentifier(id));
         }
 
         // insert new entry to map, add album globalID
-        QList<int> &list = d->pathAlbumMap[url.toLocalFile()];
+        QList<int> &list = d->idAlbumMap[id];
         list.removeAll(album->globalID());
         list.push_back(album->globalID());
     }
@@ -375,7 +377,7 @@ void AlbumThumbnailLoader::setThumbnailSize(int size)
     d->iconSize = size;
 
     // clear task list
-    d->pathAlbumMap.clear();
+    d->idAlbumMap.clear();
     // clear cached thumbnails
     d->thumbnailMap.clear();
 
@@ -404,9 +406,10 @@ void AlbumThumbnailLoader::slotGotThumbnailFromIcon(const LoadingDescription& lo
     // We need to find all albums for which the given url has been requested,
     // and emit a signal for each album.
 
-    PathAlbumMap::iterator it = d->pathAlbumMap.find(loadingDescription.filePath);
+    ThumbnailIdentifier id = loadingDescription.thumbnailIdentifier();
+    IdAlbumMap::iterator it = d->idAlbumMap.find(id.id);
 
-    if (it != d->pathAlbumMap.end())
+    if (it != d->idAlbumMap.end())
     {
         AlbumManager* const manager = AlbumManager::instance();
 
@@ -440,7 +443,7 @@ void AlbumThumbnailLoader::slotGotThumbnailFromIcon(const LoadingDescription& lo
             }
         }
 
-        d->pathAlbumMap.erase(it);
+        d->idAlbumMap.erase(it);
     }
 }
 
@@ -474,17 +477,18 @@ void AlbumThumbnailLoader::slotIconChanged(Album* album)
     d->thumbnailMap.remove(album->globalID());
 }
 
+/*
+ * This code is maximally inefficient
 QImage AlbumThumbnailLoader::getAlbumPreviewDirectly(PAlbum* const album, int size)
 {
-    if (!album->iconKURL().toLocalFile().isEmpty())
+    if (album->iconId())
     {
         ThumbnailLoadThread* const thread    = new ThumbnailLoadThread;
         thread->setPixmapRequested(false);
         thread->setThumbnailSize(size);
         ThumbnailImageCatcher* const catcher = new ThumbnailImageCatcher(thread);
-        catcher->thread()->deleteThumbnail(album->iconKURL().toLocalFile());
         catcher->setActive(true);
-        catcher->thread()->find(album->iconKURL().toLocalFile());
+        catcher->thread()->find(ThumbnailIdentifier(album->iconId());
         catcher->enqueue();
         QList<QImage> images                 = catcher->waitForThumbnails();
         catcher->setActive(false);
@@ -497,5 +501,6 @@ QImage AlbumThumbnailLoader::getAlbumPreviewDirectly(PAlbum* const album, int si
 
     return loadIcon("folder", size).toImage();
 }
+*/
 
 } // namespace Digikam

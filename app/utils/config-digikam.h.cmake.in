@@ -34,16 +34,16 @@
 #cmakedefine HAVE_LENSFUN 1
 
 /* Define to 1 if an external Kipi shared library have been found */
-#cmakedefine HAVE_KIPI
+#cmakedefine HAVE_KIPI 1
 
 /* Define to 1 if an external Kface shared library have been found */
-#cmakedefine HAVE_KFACE
+#cmakedefine HAVE_KFACE 1
 
 /* Define to 1 if an external Kgeomap shared library have been found */
-#cmakedefine HAVE_KGEOMAP
+#cmakedefine HAVE_KGEOMAP 1
 
 /* Define to 1 if an external Eigen3 shared library have been found */
-#cmakedefine HAVE_EIGEN3
+#cmakedefine HAVE_EIGEN3 1
 
 /* The Eigen3 version string, if found, or an empty string otherwise */
 #define EIGEN3_VERSION_STRING "${EIGEN3_VERSION}"
@@ -63,11 +63,11 @@
 /* Define to 1 if an external SQLite v2 is installed */
 #cmakedefine HAVE_SQLITE2 1
 
+/* Define to 1 if we support mysql database */
+#cmakedefine HAVE_MYSQLSUPPORT 1
+
 /* Define to 1 if we know how to start mysqld */
 #cmakedefine HAVE_INTERNALMYSQL 1
-
-/* Define to 1 if thumbnails database is used */
-#cmakedefine USE_THUMBS_DB 1
 
 /* Define to 1 if you want Qt to scale the preview images */
 #cmakedefine USE_QT_SCALING 1

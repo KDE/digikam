@@ -288,7 +288,7 @@ void DZoomBar::slotZoomTextChanged(const QString& txt)
     bool ok     = false;
     double zoom = KGlobal::locale()->readNumber(txt, &ok) / 100.0;
 
-    if (ok && zoom > 0.0)
+    if (ok && zoom > 0.0 && zoom <= 48.0)
     {
         emit signalZoomValueEdited(zoom);
     }

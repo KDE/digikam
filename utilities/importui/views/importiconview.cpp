@@ -254,8 +254,9 @@ void ImportIconView::removeSelectedFromGroup()
     //FileActionMngr::instance()->removeFromGroup(selectedCamItemInfos());
 }
 
-void ImportIconView::slotRotateLeft(const QList<QModelIndex>& indexes)
+void ImportIconView::slotRotateLeft(const QList<QModelIndex>& /*indexes*/)
 {
+    /*
     QList<ImageInfo> imageInfos;
 
     foreach(const QModelIndex& index, indexes)
@@ -265,10 +266,12 @@ void ImportIconView::slotRotateLeft(const QList<QModelIndex>& indexes)
     }
 
     FileActionMngr::instance()->transform(imageInfos, KExiv2Iface::RotationMatrix::Rotate270);
+    */
 }
 
-void ImportIconView::slotRotateRight(const QList<QModelIndex>& indexes)
+void ImportIconView::slotRotateRight(const QList<QModelIndex>& /*indexes*/)
 {
+    /*
     QList<ImageInfo> imageInfos;
 
     foreach(const QModelIndex& index, indexes)
@@ -278,6 +281,7 @@ void ImportIconView::slotRotateRight(const QList<QModelIndex>& indexes)
     }
 
     FileActionMngr::instance()->transform(imageInfos, KExiv2Iface::RotationMatrix::Rotate90);
+    */
 }
 
 void ImportIconView::activated(const CamItemInfo& info, Qt::KeyboardModifiers)

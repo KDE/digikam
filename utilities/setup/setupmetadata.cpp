@@ -53,6 +53,7 @@
 #include <khbox.h>
 #include <kcombobox.h>
 #include <kdebug.h>
+#include <kmessagebox.h>
 
 // LibKExiv2 includes
 
@@ -76,8 +77,8 @@ class SetupMetadata::Private
 public:
 
     Private() :
-        exifAutoRotateAsChanged(false),
-        exifAutoRotateOrg(false),
+        exifAutoRotateOriginal(false),
+        exifAutoRotateShowedInfo(false),
         fieldsGroup(0),
         readWriteGroup(0),
         rotationGroup(0),
@@ -110,8 +111,8 @@ public:
     {
     }
 
-    bool           exifAutoRotateAsChanged;
-    bool           exifAutoRotateOrg;
+    bool           exifAutoRotateOriginal;
+    bool           exifAutoRotateShowedInfo;
 
     QGroupBox*     fieldsGroup;
     QGroupBox*     readWriteGroup;
@@ -539,10 +540,6 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
             this, SLOT(slotExifAutoRotateToggled(bool)));
 
     // --------------------------------------------------------
-
-    setAutoFillBackground(false);
-    viewport()->setAutoFillBackground(false);
-    d->tab->setAutoFillBackground(false);
 }
 
 SetupMetadata::~SetupMetadata()
@@ -663,8 +660,8 @@ void SetupMetadata::readSettings()
     d->allowRotateByMetadata->setChecked(set.rotationBehavior & MetadataSettingsContainer::RotateByMetadataFlag);
     d->allowLossyRotate->setChecked(set.rotationBehavior & MetadataSettingsContainer::RotateByLossyRotation);
 
-    d->exifAutoRotateOrg = set.exifRotate;
-    d->exifRotateBox->setChecked(d->exifAutoRotateOrg);
+    d->exifAutoRotateOriginal = set.exifRotate;
+    d->exifRotateBox->setChecked(d->exifAutoRotateOriginal);
     d->exifSetOrientationBox->setChecked(set.exifSetOrientation);
 
     d->saveTagsBox->setChecked(set.saveTags);
@@ -704,20 +701,22 @@ void SetupMetadata::readSettings()
 
 }
 
-bool SetupMetadata::exifAutoRotateAsChanged() const
+bool SetupMetadata::exifAutoRotateHasChanged() const
 {
-    return d->exifAutoRotateAsChanged;
+    return d->exifAutoRotateOriginal != d->exifRotateBox->isChecked();
 }
 
 void SetupMetadata::slotExifAutoRotateToggled(bool b)
 {
-    if (b != d->exifAutoRotateOrg)
+    // Show info if rotation was switched off, and only once.
+    if (!b && d->exifAutoRotateShowedInfo && exifAutoRotateHasChanged())
     {
-        d->exifAutoRotateAsChanged = true;
-    }
-    else
-    {
-        d->exifAutoRotateAsChanged = false;
+        d->exifAutoRotateShowedInfo = true;
+        KMessageBox::information(this, i18nc("@info",
+                                       "Switching off exif auto rotation will most probably show your images in a wrong orientation, "
+                                       "so only change this option if you explicitly require this. "
+                                       "Furthermore, you need to regenerate all already stored thumbnails via "
+                                       "the <interface>Tools / Maintenance</interface> menu."));
     }
 }
 

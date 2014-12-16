@@ -27,9 +27,17 @@
 // To include pragma directives for MSVC
 #include "config-digikam.h"
 
-// GCC pragma directive to reduce warnings from Boost header files.
-#ifdef Q_CC_GNU
+// Pragma directives to reduce warnings from Boost header files.
+#if not defined(__APPLE__) && defined(__GNUC__)
+#pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-local-typedefs"
+#endif
+
+#if defined(__APPLE__) && defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundef"
+#pragma clang diagnostic ignored "-Wunused-parameter"
+#pragma clang diagnostic ignored "-Wcast-align"
 #endif
 
 // boost includes
@@ -1548,9 +1556,13 @@ protected:
 
 } // namespace Digikam
 
-// Restore GCC warnings
-#ifdef Q_CC_GNU
-#pragma GCC diagnostic warning "-Wunused-local-typedefs"
+// Restore warnings
+#if not defined(__APPLE__) && defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+
+#if defined(__APPLE__) && defined(__clang__)
+#pragma clang diagnostic pop
 #endif
 
 #endif // IMAGEHISTORYGRAPH_BOOST_H

@@ -29,8 +29,6 @@
 
 #include <QFlags>
 
-// KDE includes
-
 // Local includes
 
 #include "dimgchilditem.h"

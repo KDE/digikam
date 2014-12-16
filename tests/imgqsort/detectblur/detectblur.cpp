@@ -22,10 +22,33 @@
  *
  * ============================================================ */
 
+// Pragma directives to reduce warnings from OpenCV header files.
+#if not defined(__APPLE__) && defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnon-virtual-dtor"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#endif
+
+#if defined(__APPLE__) && defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnon-virtual-dtor"
+#pragma clang diagnostic ignored "-Woverloaded-virtual"
+#pragma clang diagnostic ignored "-Wcast-align"
+#endif
+
 // OpenCV includes
 
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
+
+// Restore warnings
+#if not defined(__APPLE__) && defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+
+#if defined(__APPLE__) && defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 // C++ includes
 
@@ -42,7 +65,7 @@ Mat dst, detected_edges;
 
 int  edgeThresh            = 1;
 double    lowThreshold     = 0.4;   //given in research paper
-int const max_lowThreshold = 100;
+//int const max_lowThreshold = 100;
 int  ratio_value           = 3;
 int  kernel_size           = 3;
 char window_name[]         = "Edge Map";

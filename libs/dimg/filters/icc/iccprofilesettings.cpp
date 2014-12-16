@@ -132,13 +132,13 @@ void IccProfilesSettings::setCurrentProfile(const IccProfile& prof)
 void IccProfilesSettings::resetToDefault()
 {
     blockSignals(true);
-    d->profilesBox->setCurrentIndex(-1);
+    d->profilesBox->setCurrentIndex(0);
     blockSignals(false);
 }
 
 IccProfile IccProfilesSettings::defaultProfile() const
 {
-    return d->profilesBox->itemData(-1).value<IccProfile>();
+    return d->profilesBox->itemData(0).value<IccProfile>();
 }
 
 void IccProfilesSettings::readSettings(KConfigGroup& group)

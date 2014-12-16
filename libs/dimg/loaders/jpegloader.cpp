@@ -7,7 +7,7 @@
  * Description : A JPEG IO file for DImg framework
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -215,7 +215,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     // -------------------------------------------------------------------
     // Find out if we do the fast-track loading with reduced size. Jpeg specific.
     int scaledLoadingSize = 0;
-    QVariant attribute = imageGetAttribute("scaledLoadingSize");
+    QVariant attribute    = imageGetAttribute("scaledLoadingSize");
 
     if (attribute.isValid())
     {
@@ -264,28 +264,28 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     {
         case JCS_UNKNOWN:
             // perhaps jpeg_read_header did some guessing, leave value unchanged
-            colorModel = DImg::COLORMODELUNKNOWN;
+            colorModel            = DImg::COLORMODELUNKNOWN;
             break;
 
         case JCS_GRAYSCALE:
-            cinfo.out_color_space     = JCS_RGB;
-            colorModel = DImg::GRAYSCALE;
+            cinfo.out_color_space = JCS_RGB;
+            colorModel            = DImg::GRAYSCALE;
             break;
 
         case JCS_RGB:
-            cinfo.out_color_space     = JCS_RGB;
-            colorModel = DImg::RGB;
+            cinfo.out_color_space = JCS_RGB;
+            colorModel            = DImg::RGB;
             break;
 
         case JCS_YCbCr:
-            cinfo.out_color_space     = JCS_RGB;
-            colorModel = DImg::YCBCR;
+            cinfo.out_color_space = JCS_RGB;
+            colorModel            = DImg::YCBCR;
             break;
 
         case JCS_CMYK:
         case JCS_YCCK:
-            cinfo.out_color_space     = JCS_CMYK;
-            colorModel = DImg::CMYK;
+            cinfo.out_color_space = JCS_CMYK;
+            colorModel            = DImg::CMYK;
             break;
 
         default:
@@ -321,7 +321,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
                 scale = 8;
             }
 
-            //cinfo.scale_num = 1;
+            //cinfo.scale_num   = 1;
             //cinfo.scale_denom = scale;
             cinfo.scale_denom *= scale;
         }
@@ -363,8 +363,8 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
         // We only take RGB with 1 or 3 components, or CMYK with 4 components
         if (!(
-                (cinfo.out_color_space == JCS_RGB  && (cinfo.output_components == 3 || cinfo.output_components == 1))
-                || (cinfo.out_color_space == JCS_CMYK &&  cinfo.output_components == 4)
+                (cinfo.out_color_space == JCS_RGB  && (cinfo.output_components == 3 || cinfo.output_components == 1)) ||
+                (cinfo.out_color_space == JCS_CMYK &&  cinfo.output_components == 4)
             ))
         {
             jpeg_destroy_decompress(&cinfo);
@@ -453,8 +453,8 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
                         ptr2[1] = ptr[1];
                         ptr2[0] = ptr[2];
 
-                        ptr  += 3;
-                        ptr2 += 4;
+                        ptr    += 3;
+                        ptr2   += 4;
                     }
                 }
             }
@@ -504,8 +504,8 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
                         ptr2[1] = ptr[0];
                         ptr2[0] = ptr[0];
 
-                        ptr  ++;
-                        ptr2 += 4;
+                        ptr    ++;
+                        ptr2   += 4;
                     }
                 }
             }
@@ -545,7 +545,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
                     scans = h - l;
                 }
 
-                ptr = data;
+                ptr   = data;
 
                 for (y = 0; y < scans; ++y)
                 {
@@ -560,8 +560,8 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
                         ptr2[1] = k * ptr[1] / 255;
                         ptr2[0] = k * ptr[2] / 255;
 
-                        ptr  += 4;
-                        ptr2 += 4;
+                        ptr    += 4;
+                        ptr2   += 4;
                     }
                 }
             }
@@ -583,7 +583,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         }
 
         JOCTET* profile_data = NULL;
-        uint    profile_size;
+        uint    profile_size = 0;
 
         read_icc_profile(&cinfo, &profile_data, &profile_size);
 
@@ -649,11 +649,8 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observe
     // JPEG error handling.
 
     cinfo.err                 = jpeg_std_error(&jerr);
-
     cinfo.err->error_exit     = dimg_jpeg_error_exit;
-
     cinfo.err->emit_message   = dimg_jpeg_emit_message;
-
     cinfo.err->output_message = dimg_jpeg_output_message;
 
     // setjmp-save cleanup
@@ -852,8 +849,8 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observe
                 dstPtr[1] = srcPtr[1];  // Green
                 dstPtr[0] = srcPtr[2];  // Red
 
-                srcPtr += 4;
-                dstPtr += 3;
+                srcPtr   += 4;
+                dstPtr   += 3;
             }
 
             jpeg_write_scanlines(&cinfo, &line, 1);
@@ -889,8 +886,8 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observe
                 dstPtr[1] = (srcPtr[1] * 255UL) / 65535UL;  // Green
                 dstPtr[0] = (srcPtr[2] * 255UL) / 65535UL;  // Red
 
-                srcPtr += 4;
-                dstPtr += 3;
+                srcPtr   += 4;
+                dstPtr   += 3;
             }
 
             jpeg_write_scanlines(&cinfo, &line, 1);

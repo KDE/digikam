@@ -44,6 +44,7 @@
 #include "previewlayout.h"
 #include "thememanager.h"
 #include "importsettings.h"
+#include "previewsettings.h"
 
 namespace Digikam
 {
@@ -459,7 +460,9 @@ void ImportPreviewView::slotThemeChanged()
 
 void ImportPreviewView::slotSetupChanged()
 {
-    previewItem()->setLoadFullImageSize(ImportSettings::instance()->getPreviewLoadFullImageSize());
+    PreviewSettings settings;
+    settings.quality = ImportSettings::instance()->getPreviewLoadFullImageSize() ? PreviewSettings::HighQualityPreview : PreviewSettings::FastPreview;
+    previewItem()->setPreviewSettings(settings);
 
     d->toolBar->setVisible(ImportSettings::instance()->getPreviewShowIcons());
     setShowText(ImportSettings::instance()->getPreviewShowIcons());
@@ -469,16 +472,20 @@ void ImportPreviewView::slotSetupChanged()
 
 void ImportPreviewView::slotRotateLeft()
 {
+    /*
     ImageInfo info(d->item->camItemInfo().url().toLocalFile());
 
     FileActionMngr::instance()->transform(QList<ImageInfo>() << info, KExiv2Iface::RotationMatrix::Rotate270);
+    */
 }
 
 void ImportPreviewView::slotRotateRight()
 {
+    /*
     ImageInfo info(d->item->camItemInfo().url().toLocalFile());
 
     FileActionMngr::instance()->transform(QList<ImageInfo>() << info, KExiv2Iface::RotationMatrix::Rotate90);
+    */
 }
 
 void ImportPreviewView::slotDeleteItem()

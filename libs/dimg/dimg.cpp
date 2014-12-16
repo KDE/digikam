@@ -102,7 +102,7 @@ DImg::DImg()
     : m_priv(new Private)
 {
 }
-;
+
 DImg::DImg(const QByteArray& filePath, DImgLoaderObserver* const observer,
            const DRawDecoding& rawDecodingSettings)
     : m_priv(new Private)
@@ -646,6 +646,7 @@ bool DImg::save(const QString& filePath, FORMAT frm, DImgLoaderObserver* const o
 
 bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserver* const observer)
 {
+    kDebug() << "Saving to " << filePath << " with format: " << format;
     if (isNull())
     {
         return false;

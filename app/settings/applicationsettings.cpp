@@ -196,7 +196,26 @@ void ApplicationSettings::readSettings()
     d->tooltipShowAlbumCaption          = group.readEntry(d->configToolTipsShowAlbumCaptionEntry,     true);
     d->tooltipShowAlbumPreview          = group.readEntry(d->configToolTipsShowAlbumPreviewEntry,     false);
 
-    d->previewLoadFullImageSize         = group.readEntry(d->configPreviewLoadFullImageSizeEntry,     false);
+    if (group.readEntry(d->configPreviewLoadFullImageSizeEntry, true))
+    {
+        d->previewSettings.quality = PreviewSettings::HighQualityPreview;
+        if (group.readEntry(d->configPreviewRawUseEmbeddedPreview, false))
+        {
+            d->previewSettings.rawLoading = PreviewSettings::RawPreviewFromEmbeddedPreview;
+        }
+        else if (group.readEntry(d->configPreviewRawUseHalfSizeData, false))
+        {
+            d->previewSettings.rawLoading = PreviewSettings::RawPreviewFromRawHalfSize;
+        }
+        else
+        {
+            d->previewSettings.rawLoading = PreviewSettings::RawPreviewAutomatic;
+        }
+    }
+    else
+    {
+        d->previewSettings.quality = PreviewSettings::FastPreview;
+    }
     d->previewShowIcons                 = group.readEntry(d->configPreviewShowIconsEntry,             true);
     d->showThumbbar                     = group.readEntry(d->configShowThumbbarEntry,                 true);
 
@@ -320,7 +339,29 @@ void ApplicationSettings::saveSettings()
     group.writeEntry(d->configToolTipsShowAlbumCaptionEntry,           d->tooltipShowAlbumCaption);
     group.writeEntry(d->configToolTipsShowAlbumPreviewEntry,           d->tooltipShowAlbumPreview);
 
-    group.writeEntry(d->configPreviewLoadFullImageSizeEntry,           d->previewLoadFullImageSize);
+    if (d->previewSettings.quality == PreviewSettings::HighQualityPreview)
+    {
+        group.writeEntry(d->configPreviewLoadFullImageSizeEntry, true);
+        switch (d->previewSettings.rawLoading)
+        {
+            case PreviewSettings::RawPreviewAutomatic:
+                group.writeEntry(d->configPreviewRawUseEmbeddedPreview, false);
+                group.writeEntry(d->configPreviewRawUseHalfSizeData,    false);
+                break;
+            case PreviewSettings::RawPreviewFromEmbeddedPreview:
+                group.writeEntry(d->configPreviewRawUseEmbeddedPreview, true);
+                group.writeEntry(d->configPreviewRawUseHalfSizeData,    false);
+                break;
+            case PreviewSettings::RawPreviewFromRawHalfSize:
+                group.writeEntry(d->configPreviewRawUseEmbeddedPreview, false);
+                group.writeEntry(d->configPreviewRawUseHalfSizeData,    true);
+                break;
+        }
+    }
+    else
+    {
+        group.writeEntry(d->configPreviewLoadFullImageSizeEntry, false);
+    }
     group.writeEntry(d->configPreviewShowIconsEntry,                   d->previewShowIcons);
     group.writeEntry(d->configShowThumbbarEntry,                       d->showThumbbar);
 

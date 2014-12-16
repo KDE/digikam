@@ -91,12 +91,7 @@ void ImageQualityTask::run()
     {
         // Get item preview to perform quality analysis. No need to load whole image, this will be slower.
         // TODO : check if 1024 pixels size is enough to get suitable Quality results.
-        LoadingDescription description(d->path, 1024, LoadingDescription::ConvertToSRGB);
-        description.rawDecodingSettings.optimizeTimeLoading();
-        description.rawDecodingSettings.rawPrm.sixteenBitsImage   = false;
-        description.rawDecodingSettings.rawPrm.halfSizeColorImage = true;
-        description.rawDecodingHint                               = LoadingDescription::RawDecodingTimeOptimized;
-        DImg dimg                                                 = PreviewLoadThread::loadSynchronously(description);
+        DImg dimg = PreviewLoadThread::loadFastSynchronously(d->path, 1024);
 
         if (!dimg.isNull() && !d->cancel)
         {
@@ -112,7 +107,7 @@ void ImageQualityTask::run()
             PickLabel pick;
             d->imgqsort = new ImgQSort(dimg, d->quality, &pick);
 
-            ImageInfo info(d->path);
+            ImageInfo info = ImageInfo::fromLocalFile(d->path);
             info.setPickLabel(pick);
             if(d->imgqsort)
                     delete d->imgqsort;                 //delete image data after setting label

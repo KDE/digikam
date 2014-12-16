@@ -32,11 +32,13 @@
 
 #include "dimg.h"
 #include "digikam_export.h"
+#include "previewsettings.h"
 
 namespace Digikam
 {
 
 class IccTransform;
+class ThumbnailIdentifier;
 
 class DIGIKAM_EXPORT LoadingDescription
 {
@@ -82,31 +84,17 @@ public:
         enum PreviewFlag
         {
             NoFlags         = 0,
-            OnlyPregenerate = 1 << 0,
-            /// This prefers large images, but if loading a larger
-            /// image is very much slower, it will give a smaller image.
-            /// Size serves as a lower bound.
-            FastButLarge    = 1 << 1
+            OnlyPregenerate = 1 << 0
         };
         Q_DECLARE_FLAGS(PreviewFlags, PreviewFlag)
 
     public:
 
-        PreviewParameters()
-        {
-            type  = NoPreview;
-            size  = 0;
-            flags = NoFlags;
-        }
+        PreviewParameters();
 
         bool onlyPregenerate() const
         {
             return flags & OnlyPregenerate;
-        }
-
-        bool fastButLarge() const
-        {
-            return flags & FastButLarge;
         }
 
         bool operator==(const PreviewParameters& other) const;
@@ -116,7 +104,9 @@ public:
         PreviewType  type;
         int          size;
         PreviewFlags flags;
+        PreviewSettings previewSettings;
         QVariant     extraParameter;
+        QVariant     storageReference;
     };
 
     // ---------------------------------------------------------------------
@@ -178,7 +168,8 @@ public:
      *    If size is 0, DImg based loading will be used with default raw decoding settings.
      *    You can also adjust raw decoding settings and hint in this case.
      */
-    LoadingDescription(const QString& filePath, int size,
+    LoadingDescription(const QString& filePath,
+                       const PreviewSettings& settings, int size,
                        ColorManagementSettings = NoColorConversion,
                        PreviewParameters::PreviewType = PreviewParameters::PreviewImage);
 
@@ -212,6 +203,11 @@ public:
      * Returns if this description will load a preview
      */
     bool                isPreviewImage() const;
+
+    /**
+     * If this referenced a thumbnail, recreate the identifier
+     */
+    ThumbnailIdentifier thumbnailIdentifier() const;
 
     /**
       * Returns whether the other loading task equals this one

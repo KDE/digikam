@@ -769,6 +769,11 @@ void DCategorizedView::contextMenuEvent(QContextMenuEvent* event)
     }
 }
 
+void DCategorizedView::leaveEvent(QEvent*)
+{
+    hideIndexNotification();
+}
+
 void DCategorizedView::mousePressEvent(QMouseEvent* event)
 {
     userInteraction();
@@ -833,6 +838,14 @@ void DCategorizedView::mouseMoveEvent(QMouseEvent* event)
     else
     {
         unsetCursor();
+    }
+
+    if (d->notificationToolTip && d->notificationToolTip->isVisible())
+    {
+        if (!d->notificationToolTip->rect().adjusted(-50, -50, 50, 50).contains(event->pos()))
+        {
+            hideIndexNotification();
+        }
     }
 
     DigikamKCategorizedView::mouseMoveEvent(event);

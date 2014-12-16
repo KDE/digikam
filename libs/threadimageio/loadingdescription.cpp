@@ -26,15 +26,26 @@
 // Local includes
 
 #include "icctransform.h"
+#include "thumbnailinfo.h"
 
 namespace Digikam
 {
+
+LoadingDescription::PreviewParameters::PreviewParameters()
+    : type(NoPreview),
+      size(0),
+      flags(NoFlags)
+{
+}
 
 bool LoadingDescription::PreviewParameters::operator==(const PreviewParameters& other) const
 {
     return type  == other.type &&
            size  == other.size &&
-           flags == other.flags;
+           flags == other.flags &&
+           previewSettings == other.previewSettings &&
+           extraParameter  == other.extraParameter  &&
+           storageReference == other.storageReference;
 }
 
 bool LoadingDescription::PostProcessingParameters::operator==(const PostProcessingParameters& other) const
@@ -94,7 +105,8 @@ LoadingDescription::LoadingDescription(const QString& filePath, const DRawDecodi
       postProcessingParameters.colorManagement = cm;
 }
 
-LoadingDescription::LoadingDescription(const QString& filePath, int size,
+LoadingDescription::LoadingDescription(const QString& filePath,
+                                       const PreviewSettings& previewSettings, int size,
                                        ColorManagementSettings cm,
                                        LoadingDescription::PreviewParameters::PreviewType type)
     : filePath(filePath)
@@ -103,6 +115,7 @@ LoadingDescription::LoadingDescription(const QString& filePath, int size,
     rawDecodingHint                          = RawDecodingDefaultSettings;
     previewParameters.type                   = type;
     previewParameters.size                   = size;
+    previewParameters.previewSettings        = previewSettings;
     postProcessingParameters.colorManagement = cm;
 }
 
@@ -114,13 +127,15 @@ QString LoadingDescription::cacheKey() const
     // Thumbnail loading. This one is easy.
     if (previewParameters.type == PreviewParameters::Thumbnail)
     {
-        return filePath + "-thumbnail-" + QString::number(previewParameters.size);
+        QString fileRef = filePath.isEmpty() ? (QString("id:/")+previewParameters.storageReference.toString()) : filePath;
+        return fileRef + "-thumbnail-" + QString::number(previewParameters.size);
     }
     else if (previewParameters.type == PreviewParameters::DetailThumbnail)
     {
+        QString fileRef = filePath.isEmpty() ? (QString("id:/")+previewParameters.storageReference.toString()) : filePath;
         QRect rect         =  previewParameters.extraParameter.toRect();
         QString rectString = QString("%1,%2-%3x%4-").arg(rect.x()).arg(rect.y()).arg(rect.width()).arg(rect.height());
-        return filePath + "-thumbnail-" + rectString + QString::number(previewParameters.size);
+        return fileRef + "-thumbnail-" + rectString + QString::number(previewParameters.size);
     }
 
     // DImg loading
@@ -309,6 +324,18 @@ bool LoadingDescription::isThumbnail() const
 bool LoadingDescription::isPreviewImage() const
 {
     return previewParameters.type == PreviewParameters::PreviewImage;
+}
+
+ThumbnailIdentifier LoadingDescription::thumbnailIdentifier() const
+{
+    ThumbnailIdentifier id;
+    if (!isThumbnail())
+    {
+        return id;
+    }
+    id.filePath = filePath;
+    id.id       = previewParameters.storageReference.toLongLong();
+    return id;
 }
 
 QStringList LoadingDescription::possibleCacheKeys(const QString& filePath)

@@ -7,7 +7,7 @@
  * Description : Filter values for use with ImageFilterModel
  *
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2011-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C)      2010 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C)      2011 by Michael G. Hansen <mike at mghansen dot de>
  * Copyright (C)      2014 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
@@ -679,8 +679,8 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* const foundText) 
             else if (expFloat.indexIn(m_textFilterSettings.text) > -1)
             {
                 QString trimmedTextFilterSettingsText = m_textFilterSettings.text;
-                bool    canConverse;
-                double  ratio = trimmedTextFilterSettingsText.toDouble(&canConverse);
+                bool    canConverse                   = false;
+                double  ratio                         = trimmedTextFilterSettingsText.toDouble(&canConverse);
 
                 if (canConverse)
                 {
@@ -691,11 +691,14 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* const foundText) 
         }
 
         // Image Pixel Size
+        // See bug #341053 for details.
+
         if (m_textFilterSettings.textFields & SearchTextFilterSettings::ImagePixelSize)
         {
-            QSize size = info.dimensions();
+            QSize size    = info.dimensions();
             int pixelSize = size.height()*size.width();
-            QString text = m_textFilterSettings.text;
+            QString text  = m_textFilterSettings.text;
+
             if(text.contains(QRegExp("^>\\d{1,15}$")) && pixelSize > (text.remove(0,1)).toInt())
             {
                 textMatch = true;
@@ -704,7 +707,7 @@ bool ImageFilterSettings::matches(const ImageInfo& info, bool* const foundText) 
             {
                 textMatch = true;
             }
-            else if(pixelSize == text.toInt())
+            else if(text.contains(QRegExp("^\\d+$")) && pixelSize == text.toInt())
             {
                 textMatch = true;
             }
@@ -846,7 +849,7 @@ void VersionImageFilterSettings::setVersionManagerSettings(const VersionManagerS
 
     if (!settings.enabled)
     {
-    	return;
+        return;
     }
 
     if (!(settings.showInViewFlags & VersionManagerSettings::ShowOriginal))

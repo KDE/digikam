@@ -27,6 +27,7 @@
 // Local includes
 
 #include "managedloadsavethread.h"
+#include "previewsettings.h"
 
 namespace Digikam
 {
@@ -49,7 +50,7 @@ public:
      * Load a preview that is optimized for fast loading.
      * Raw decoding and color management settings will be adjusted.
      */
-    void load(const QString& filePath, int size);
+    void loadFast(const QString& filePath, int size);
 
     /**
      * Load a preview that is as large as possible without sacrificing speed
@@ -63,7 +64,16 @@ public:
      * for less speed.
      * Raw decoding and color management settings will be adjusted.
      */
-    void loadHighQuality(const QString& filePath);
+    void loadHighQuality(const QString& filePath, PreviewSettings::RawLoading rawLoadingMode = PreviewSettings::RawPreviewAutomatic);
+
+    /**
+     * Load a preview.
+     * Settings determine the loading mode.
+     * For fast loading, size is preview area size.
+     * For fast-but-large loading, it serves as a minimum size.
+     * For high quality loading, it is ignored
+     */
+    void load(const QString& filePath, const PreviewSettings& settings, int size = 0);
 
     /**
      * Load a preview. Loading description will not be touched.
@@ -73,13 +83,20 @@ public:
     /// Optionally, set the displaying widget for color management
     void setDisplayingWidget(QWidget* const widget);
 
-    static DImg loadSynchronously(const QString& filePath, int size, const IccProfile& profile = IccProfile());
+    /**
+     * Synchronous versions of the above methods.
+     * These are safe to call from the non-UI thread, as the IccProfile either passed or deduced independent from a displaying widget
+     */
+    static DImg loadFastSynchronously(const QString& filePath, int size, const IccProfile& profile = IccProfile());
+    static DImg loadFastButLargeSynchronously(const QString& filePath, int minimumSize, const IccProfile& profile = IccProfile());
+    static DImg loadHighQualitySynchronously(const QString& filePath, PreviewSettings::RawLoading rawLoadingMode = PreviewSettings::RawPreviewAutomatic, const IccProfile& profile = IccProfile());
+    static DImg loadSynchronously(const QString& filePath, const PreviewSettings& previewSettings, int size, const IccProfile& profile = IccProfile());
     static DImg loadSynchronously(const LoadingDescription& description);
 
 protected:
 
-    static LoadingDescription createLoadingDescription(const QString& filePath, int size, const IccProfile& profile);
-    LoadingDescription createLoadingDescription(const QString& filePath, int size);
+    static LoadingDescription createLoadingDescription(const QString& filePath, const PreviewSettings& settings, int size, const IccProfile& profile);
+    LoadingDescription createLoadingDescription(const QString& filePath, const PreviewSettings& settings, int size);
 
 protected:
 

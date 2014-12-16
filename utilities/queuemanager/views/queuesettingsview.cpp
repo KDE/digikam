@@ -276,16 +276,6 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     QTimer::singleShot(0, this, SLOT(slotResetSettings()));
 
     // --------------------------------------------------------
-
-    setAutoFillBackground(false);
-
-    sv->setAutoFillBackground(false);
-    sv->viewport()->setAutoFillBackground(false);
-    panel->setAutoFillBackground(false);
-
-    sv2->setAutoFillBackground(false);
-    sv2->viewport()->setAutoFillBackground(false);
-    vbox2->setAutoFillBackground(false);
 }
 
 QueueSettingsView::~QueueSettingsView()

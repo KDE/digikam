@@ -216,7 +216,7 @@ void DeleteItemList::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const
 
     if (item && !item->hasValidThumbnail())
     {
-        d->thumbLoadThread->find(item->fileUrl());
+        d->thumbLoadThread->find(ThumbnailIdentifier(item->fileUrl()));
     }
 
     QTreeWidget::drawRow(p, opt, index);

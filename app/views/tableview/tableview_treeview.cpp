@@ -266,7 +266,7 @@ QPixmap TableViewTreeView::pixmapForDrag(const QList< QModelIndex >& indexes) co
     ///       like in ImageModel. Getting thumbnails from ImageModel does not help, because it
     ///       does not necessarily prepare them the same way.
     /// @todo Make a central drag-drop thumbnail generator?
-    if (!s->thumbnailLoadThread->find(path, thumbnailPixmap, d->dragDropThumbnailSize.size()))
+    if (!s->thumbnailLoadThread->find(info.thumbnailIdentifier(), thumbnailPixmap, d->dragDropThumbnailSize.size()))
     {
         /// @todo better default pixmap?
         thumbnailPixmap.fill();

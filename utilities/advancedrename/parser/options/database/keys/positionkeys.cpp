@@ -73,7 +73,7 @@ PositionKeys::PositionKeys()
 
 QString PositionKeys::getDbValue(const QString& key, ParseSettings& settings)
 {
-    ImageInfo info(settings.fileUrl);
+    ImageInfo info = ImageInfo::fromUrl(settings.fileUrl);
     ImagePosition position = info.imagePosition();
 
     QString result;

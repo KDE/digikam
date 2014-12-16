@@ -561,10 +561,6 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
     slotToggledEnabled();
 
     // --------------------------------------------------------
-
-    setAutoFillBackground(false);
-    viewport()->setAutoFillBackground(false);
-    d->tab->setAutoFillBackground(false);
 }
 
 SetupICC::~SetupICC()

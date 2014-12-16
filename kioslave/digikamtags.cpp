@@ -101,9 +101,11 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
     else
     {
         bool recursive = (metaData("listTagsRecursively") == "true");
+        bool listOnlyAvailableImages = (metaData("listOnlyAvailableImages") == "true");
 
         Digikam::ImageLister lister;
         lister.setRecursive(recursive);
+        lister.setListOnlyAvailable(listOnlyAvailableImages);
         // send data every 200 images to be more responsive
         Digikam::ImageListerSlaveBasePartsSendingReceiver receiver(this, 200);
 
