@@ -20,4 +20,5 @@ install(FILES bricks2-texture.png
               modern-texture.png
               wall-texture.png
               moss-texture.png
-        DESTINATION ${DATA_INSTALL_DIR}/digikam/data )
+        DESTINATION ${DATA_INSTALL_DIR}/digikam/data
+)

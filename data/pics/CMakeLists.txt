@@ -27,11 +27,11 @@ install(FILES tag-new.png
               underexposure.png
               overexposure.png
         DESTINATION ${DATA_INSTALL_DIR}/digikam/icons/hicolor/32x32/actions
-       )
+)
 
 install(FILES tag.png
         DESTINATION ${DATA_INSTALL_DIR}/digikam/icons/hicolor/128x128/actions
-       )
+)
 
 install(FILES splash-digikam.png
               banner-digikam.png
@@ -61,7 +61,7 @@ install(FILES splash-digikam.png
               colors-chromared.png
               sample-aix.png
          DESTINATION ${DATA_INSTALL_DIR}/digikam/data
-       )
+)
 
 # Showfoto files ######################################################
 
@@ -69,5 +69,5 @@ install(FILES logo-showfoto.png
               banner-showfoto.png
               splash-showfoto.png
         DESTINATION ${DATA_INSTALL_DIR}/showfoto/data
-       )
+)
 
