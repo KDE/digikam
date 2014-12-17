@@ -45,7 +45,7 @@
 #include <klocalizedstring.h>
 #include <kvbox.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <dcrawsettingswidget.h>
 

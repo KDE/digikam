@@ -41,7 +41,7 @@
 #include <kstandarddirs.h>
 #include <khuesaturationselect.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <rnuminput.h>
 

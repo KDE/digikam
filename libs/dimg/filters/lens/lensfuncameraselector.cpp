@@ -37,7 +37,7 @@
 #include <kdebug.h>
 #include <ksqueezedtextlabel.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <rnuminput.h>
 #include <rcombobox.h>

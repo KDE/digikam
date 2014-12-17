@@ -38,7 +38,7 @@
 #include <kdebug.h>
 #include <klocalizedstring.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <kdcraw.h>
 

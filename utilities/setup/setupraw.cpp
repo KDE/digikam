@@ -40,7 +40,7 @@
 #include <klocalizedstring.h>
 #include <ktabwidget.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <dcrawsettingswidget.h>
 #include <version.h>

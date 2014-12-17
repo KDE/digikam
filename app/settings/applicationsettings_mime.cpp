@@ -25,7 +25,7 @@
  *
  * ============================================================ */
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <version.h>
 #include <kdcraw.h>

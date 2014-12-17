@@ -111,7 +111,7 @@
 #include <kio/netaccess.h>
 #include <kio/copyjob.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <version.h>
 

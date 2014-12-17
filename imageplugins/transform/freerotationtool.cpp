@@ -48,7 +48,7 @@
 #include <klocalizedstring.h>
 #include <kseparator.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <rexpanderbox.h>
 #include <version.h>

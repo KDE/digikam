@@ -46,7 +46,7 @@
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <rnuminput.h>
 #include <rexpanderbox.h>

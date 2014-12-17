@@ -26,7 +26,7 @@
 #ifndef RAWLOADER_H
 #define RAWLOADER_H
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <version.h>
 #include <kdcraw.h>

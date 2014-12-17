@@ -56,7 +56,7 @@ extern "C"
 #include <solid/storagedrive.h>
 #include <solid/storagevolume.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <kdcraw.h>
 

@@ -60,7 +60,7 @@ extern "C"
 #include <kdebug.h>
 #include <kglobal.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <version.h>
 #include <kdcraw.h>

@@ -39,7 +39,7 @@
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 
-// LibKExiv2 includes
+// Libkexiv2 includes
 
 #include <altlangstredit.h>
 

@@ -33,7 +33,7 @@
 
 #include <kurl.h>
 
-// LibKExiv2 includes
+// Libkexiv2 includes
 
 #include <kexiv2.h>
 #include <kexiv2data.h>

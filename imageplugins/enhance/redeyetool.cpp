@@ -52,7 +52,7 @@
 #include <kstandarddirs.h>
 #include <kvbox.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <rnuminput.h>
 

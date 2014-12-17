@@ -28,7 +28,7 @@
 
 #include <QString>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <rexpanderbox.h>
 

@@ -33,7 +33,7 @@
 #include <kimageio.h>
 #include <klocalizedstring.h>
 
-// LibKExiv2 includes
+// Libkexiv2 includes
 
 #include <kexiv2.h>
 #include <version.h>

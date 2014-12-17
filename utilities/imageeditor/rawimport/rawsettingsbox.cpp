@@ -44,7 +44,7 @@
 #include <kvbox.h>
 #include <kdebug.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <dcrawsettingswidget.h>
 #include <rnuminput.h>

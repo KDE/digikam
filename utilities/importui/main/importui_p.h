@@ -40,7 +40,7 @@
 #include <KActionMenu>
 #include <kurl.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <rexpanderbox.h>
 

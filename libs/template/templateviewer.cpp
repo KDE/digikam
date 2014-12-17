@@ -36,7 +36,7 @@
 #include <kurllabel.h>
 #include <ktoolinvocation.h>
 
-// LibKExiv2 includes
+// Libkexiv2 includes
 
 #include <countryselector.h>
 

@@ -53,7 +53,7 @@
 #include <kde_file.h>
 #include <kdebug.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <kdcraw.h>
 #include <rawfiles.h>

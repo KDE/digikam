@@ -47,7 +47,7 @@
 #include <kcolorbutton.h>
 #include <kseparator.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <rnuminput.h>
 #include <rcombobox.h>

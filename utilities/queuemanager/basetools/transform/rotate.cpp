@@ -36,7 +36,7 @@
 #include <kdebug.h>
 #include <kglobal.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <rcombobox.h>
 

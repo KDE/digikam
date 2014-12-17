@@ -38,7 +38,7 @@
 #include <kconfiggroup.h>
 #include <kdebug.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <version.h>
 #include <kdcraw.h>

@@ -30,7 +30,7 @@
 #include <QWidget>
 #include <QList>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <rexpanderbox.h>
 

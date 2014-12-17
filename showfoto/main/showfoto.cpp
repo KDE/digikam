@@ -91,7 +91,7 @@ extern "C"
 #include <ksqueezedtextlabel.h>
 #include <KVBox>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <kdcraw.h>
 #include <version.h>

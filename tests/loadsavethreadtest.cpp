@@ -29,7 +29,7 @@
 #include <QFileInfo>
 #include <QDebug>
 
-// LibKExiv2 includes
+// Libkexiv2 includes
 
 #include <kexiv2.h>
 

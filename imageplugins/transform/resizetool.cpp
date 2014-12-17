@@ -62,7 +62,7 @@
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <rnuminput.h>
 #include <QStandardPaths>

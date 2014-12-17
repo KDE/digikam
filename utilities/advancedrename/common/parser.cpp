@@ -27,7 +27,7 @@
 
 #include <QFileInfo>
 
-// LibKExiv2 includes
+// Libkexiv2 includes
 
 #include <version.h>
 

@@ -41,7 +41,7 @@
 #include <kstandarddirs.h>
 #include <kaboutdata.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <version.h>
 #include <kdcraw.h>

@@ -38,7 +38,7 @@
 #include <knuminput.h>
 #include <kglobal.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <rnuminput.h>
 

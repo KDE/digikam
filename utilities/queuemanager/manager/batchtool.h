@@ -28,7 +28,7 @@
 
 #include <QObject>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <rawdecodingsettings.h>
 

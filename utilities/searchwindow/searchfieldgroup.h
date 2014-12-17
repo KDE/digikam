@@ -31,7 +31,7 @@
 #include <QSet>
 #include <QWidget>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <rexpanderbox.h>
 

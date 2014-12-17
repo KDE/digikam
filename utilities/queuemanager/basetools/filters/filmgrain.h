@@ -26,7 +26,7 @@
 
 #include "batchtool.h"
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <rnuminput.h>
 

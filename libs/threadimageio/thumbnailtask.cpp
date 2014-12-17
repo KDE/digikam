@@ -39,7 +39,7 @@
 
 #include <kdebug.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <kdcraw.h>
 

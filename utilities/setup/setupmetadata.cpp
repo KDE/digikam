@@ -55,7 +55,7 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 
-// LibKExiv2 includes
+// Libkexiv2 includes
 
 #include <kexiv2.h>
 #include <version.h>

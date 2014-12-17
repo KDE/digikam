@@ -51,7 +51,7 @@
 #include <ksqueezedtextlabel.h>
 #include <kdebug.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <squeezedcombobox.h>
 #include <rexpanderbox.h>

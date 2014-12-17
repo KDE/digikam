@@ -45,7 +45,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <rcombobox.h>
 #include <rnuminput.h>

@@ -41,7 +41,7 @@
 #include <kglobal.h>
 #include <kdebug.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <dcrawinfocontainer.h>
 #include <kdcraw.h>

@@ -29,7 +29,7 @@
 #include <kio/global.h>
 #include <klocalizedstring.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <kdcraw.h>
 

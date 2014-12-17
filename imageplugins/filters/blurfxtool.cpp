@@ -42,7 +42,7 @@
 #include <klocalizedstring.h>
 #include <knuminput.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <rcombobox.h>
 #include <rnuminput.h>

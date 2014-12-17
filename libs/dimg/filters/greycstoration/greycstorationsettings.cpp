@@ -38,7 +38,7 @@
 #include <klocalizedstring.h>
 #include <ktabwidget.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <rnuminput.h>
 #include <rcombobox.h>

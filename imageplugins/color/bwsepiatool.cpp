@@ -37,7 +37,7 @@
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <rnuminput.h>
 

@@ -33,7 +33,7 @@
 #include <QPolygon>
 #include <QDomElement>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <rawdecodingsettings.h>
 #include <libkdcraw_version.h>

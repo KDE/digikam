@@ -44,7 +44,7 @@
 #include <version.h>
 #include <kexiv2previews.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <kdcraw.h>
 

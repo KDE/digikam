@@ -36,7 +36,7 @@
 #include <QIcon>
 #include <klineedit.h>
 
-// LibKExiv2 includes
+// Libkexiv2 includes
 
 #include <altlangstredit.h>
 #include <countryselector.h>

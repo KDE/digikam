@@ -28,7 +28,7 @@
 
 #include <kurl.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <rawdecodingsettings.h>
 

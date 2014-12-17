@@ -44,7 +44,7 @@
 #include <kaboutdata.h>
 #include <kcomponentdata.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <version.h>
 #include <kdcraw.h>

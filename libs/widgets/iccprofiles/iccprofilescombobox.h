@@ -29,7 +29,7 @@
 #include <kactionmenu.h>
 #include <kcombobox.h>
 
-// LibKDcraw includes
+// Libkdcraw includes
 
 #include <squeezedcombobox.h>
 
