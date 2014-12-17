@@ -49,7 +49,7 @@
 #include <khelpmenu.h>
 #include <QIcon>
 #include <kiconloader.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kmenu.h>
 #include <kstandarddirs.h>
 #include <kvbox.h>

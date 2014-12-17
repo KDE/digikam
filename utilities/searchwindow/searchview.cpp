@@ -35,7 +35,7 @@
 // KDE includes
 
 #include <kdialogbuttonbox.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kpushbutton.h>
 #include <kstandardguiitem.h>
 #include <kdebug.h>

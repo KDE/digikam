@@ -42,7 +42,7 @@
 #include <kdeversion.h>
 #include <kglobal.h>
 #include <kimageio.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <ktip.h>
 

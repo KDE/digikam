@@ -41,7 +41,7 @@
 #include <kconfig.h>
 #include <kdialog.h>
 #include <kglobal.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kmultitabbar.h>
 #include <knuminput.h>
 #include <kvbox.h>

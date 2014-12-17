@@ -36,7 +36,7 @@
 #include <kcomponentdata.h>
 #include <kglobal.h>
 #include <kio/global.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kstandarddirs.h>
 #include <kurl.h>
 #include <kdebug.h>

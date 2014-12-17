@@ -38,7 +38,7 @@
 
 #include <kdebug.h>
 #include <kglobal.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kstandarddirs.h>
 
 // Local includes

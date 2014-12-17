@@ -56,7 +56,7 @@ extern "C"
 #include <kde_file.h>
 #include <kiconloader.h>
 #include <kio/renamedialog.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kurl.h>

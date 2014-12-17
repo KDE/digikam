@@ -37,7 +37,7 @@
 #include <kcategorydrawer.h>
 #include <kcolorscheme.h>
 #include <kiconloader.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kpixmapsequence.h>
 #include <kdeversion.h>
 

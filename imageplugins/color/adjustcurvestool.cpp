@@ -42,7 +42,7 @@
 #include <kglobalsettings.h>
 #include <QIcon>
 #include <kiconloader.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kstandarddirs.h>
 
 // Local includes

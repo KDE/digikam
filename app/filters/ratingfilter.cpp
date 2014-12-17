@@ -38,7 +38,7 @@
 
 #include <kmenu.h>
 #include <kiconloader.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>

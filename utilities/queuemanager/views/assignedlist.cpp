@@ -38,7 +38,7 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kiconloader.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kmenu.h>
 #include <kdebug.h>
 

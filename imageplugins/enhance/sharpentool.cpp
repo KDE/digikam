@@ -41,7 +41,7 @@
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 
 // Local includes
 

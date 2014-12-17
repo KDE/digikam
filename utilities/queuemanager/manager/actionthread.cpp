@@ -26,7 +26,7 @@
 
 // KDE includes
 
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <threadweaver/JobCollection.h>

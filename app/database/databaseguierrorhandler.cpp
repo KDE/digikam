@@ -36,7 +36,7 @@
 
 #include <kdebug.h>
 #include <kmessagebox.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kguiitem.h>
 #include <kdialog.h>
 

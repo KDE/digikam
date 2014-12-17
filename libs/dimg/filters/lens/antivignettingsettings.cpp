@@ -39,7 +39,7 @@
 #include <kdebug.h>
 #include <kurl.h>
 #include <kdialog.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kapplication.h>
 #include <kseparator.h>
 #include <kglobal.h>

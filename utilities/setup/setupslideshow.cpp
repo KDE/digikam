@@ -37,7 +37,7 @@
 #include <kconfig.h>
 #include <kdialog.h>
 #include <kglobal.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <knuminput.h>
 #include <kcombobox.h>
 #include <khbox.h>

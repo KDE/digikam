@@ -49,7 +49,7 @@
 #include <khuesaturationselect.h>
 #include <kiconloader.h>
 #include <kinputdialog.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <ksqueezedtextlabel.h>
 #include <kstandarddirs.h>

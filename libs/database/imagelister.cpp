@@ -44,7 +44,7 @@
 // KDE includes
 
 #include <kglobal.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kcomponentdata.h>
 #include <kmimetype.h>
 #include <kdebug.h>

@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kvbox.h>
 #include <kdebug.h>
 #include <kglobal.h>

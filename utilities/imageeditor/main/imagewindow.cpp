@@ -59,7 +59,7 @@
 #include <kimageio.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kmenu.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>

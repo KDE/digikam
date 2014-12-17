@@ -32,7 +32,7 @@
 // KDE includes
 
 #include <kactionmenu.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kmenu.h>
 
 // Local includes

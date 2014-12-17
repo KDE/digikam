@@ -39,7 +39,7 @@
 #include <kconfiggroup.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <knuminput.h>
 
 // LibKDcraw includes

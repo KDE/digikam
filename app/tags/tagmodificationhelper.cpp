@@ -33,7 +33,7 @@
 
 #include <kapplication.h>
 #include <kdebug.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
 
 // Local includes

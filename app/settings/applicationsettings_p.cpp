@@ -29,7 +29,7 @@
 // KDE includes
 
 #include <kconfig.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kglobalsettings.h>
 #include <kapplication.h>
 #include <QFontDatabase>

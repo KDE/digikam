@@ -70,7 +70,7 @@
 #include <kimageio.h>
 #include <kinputdialog.h>
 #include <kio/global.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kmenubar.h>
 #include <kmenu.h>
 #include <kmessagebox.h>

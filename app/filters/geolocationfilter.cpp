@@ -26,7 +26,7 @@
 
 // KDE includes
 
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 
 namespace Digikam
 {

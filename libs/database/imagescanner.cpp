@@ -33,7 +33,7 @@
 
 #include <kfilemetainfo.h>
 #include <kmimetype.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 // Local includes

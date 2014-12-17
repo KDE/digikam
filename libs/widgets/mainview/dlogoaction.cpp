@@ -44,7 +44,7 @@
 #include <ktoolinvocation.h>
 #include <kstandarddirs.h>
 #include <kglobalsettings.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 
 // Local includes
 

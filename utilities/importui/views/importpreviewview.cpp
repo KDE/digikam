@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <ktoggleaction.h>
 #include <kmenu.h>
 #include <kapplication.h>

@@ -35,7 +35,7 @@
 
 #include <kapplication.h>
 #include <kiconloader.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kpixmapsequence.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>

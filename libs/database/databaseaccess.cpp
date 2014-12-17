@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 // Local includes

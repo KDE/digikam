@@ -35,7 +35,7 @@
 
 #include <kcombobox.h>
 #include <kdialog.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <knuminput.h>
 
 namespace Digikam

@@ -45,7 +45,7 @@
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kiconloader.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <knuminput.h>
 #include <kseparator.h>
 #include <kstandardguiitem.h>

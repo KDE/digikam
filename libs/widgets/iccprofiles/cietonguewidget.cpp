@@ -42,7 +42,7 @@
 // KDE includes
 
 
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kiconloader.h>
 #include <kpixmapsequence.h>
 #include <kdebug.h>

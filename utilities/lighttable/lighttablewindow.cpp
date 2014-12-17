@@ -39,7 +39,7 @@
 #include <kdebug.h>
 #include <kedittoolbar.h>
 #include <kglobal.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
 #include <knotifyconfigwidget.h>

@@ -43,7 +43,7 @@
 #include <kcursor.h>
 #include <kdialog.h>
 #include <kiconloader.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kmenu.h>
 #include <kdebug.h>
 #include <kmimetype.h>

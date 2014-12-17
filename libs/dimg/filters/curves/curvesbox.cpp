@@ -39,7 +39,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdialog.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 

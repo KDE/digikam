@@ -32,7 +32,7 @@
 // KDE includes
 
 #include <kconfig.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 // Libkipi includes

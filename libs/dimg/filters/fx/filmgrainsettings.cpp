@@ -37,13 +37,14 @@
 #include <kdebug.h>
 #include <kurl.h>
 #include <kdialog.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kapplication.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
+#include <kiconloader.h>
 
 // LibKDcraw includes
 

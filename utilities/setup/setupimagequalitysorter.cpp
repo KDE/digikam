@@ -38,7 +38,7 @@
 #include <kdialog.h>
 #include <kglobal.h>
 #include <kvbox.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <knuminput.h>
 #include <kiconloader.h>
 #include <QIcon>

@@ -41,7 +41,7 @@
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kimageio.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <knuminput.h>
 #include <kurlcombobox.h>
 

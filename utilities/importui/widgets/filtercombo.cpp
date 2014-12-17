@@ -29,7 +29,7 @@
 
 // KDE includes
 
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kconfiggroup.h>

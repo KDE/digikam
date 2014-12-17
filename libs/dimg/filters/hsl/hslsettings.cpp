@@ -34,7 +34,7 @@
 
 #include <kdebug.h>
 #include <kdialog.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kapplication.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>

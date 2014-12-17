@@ -32,7 +32,7 @@
 // KDE includes
 
 #include <QIcon>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kapplication.h>
 
 // Local includes

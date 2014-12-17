@@ -31,7 +31,7 @@
 // KDE includes
 
 #include <klineedit.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 
 // Local includes
 

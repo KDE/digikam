@@ -33,7 +33,7 @@
 // KDE includes
 
 #include <kcursor.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 
 namespace Digikam
 {

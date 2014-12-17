@@ -47,7 +47,7 @@
 #include <kcombobox.h>
 #include <kiconloader.h>
 #include <klineedit.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
 #include <kdebug.h>
 

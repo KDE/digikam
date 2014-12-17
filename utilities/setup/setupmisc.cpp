@@ -38,7 +38,7 @@
 #include <kcombobox.h>
 #include <kdialog.h>
 #include <khbox.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 
 // Local includes
 

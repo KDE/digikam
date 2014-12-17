@@ -31,7 +31,7 @@
 
 #include <kapplication.h>
 #include <kconfig.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kiconloader.h>
 
 // Local includes

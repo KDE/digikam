@@ -53,7 +53,7 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 
 // Local includes
 

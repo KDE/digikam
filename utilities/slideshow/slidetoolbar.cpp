@@ -35,7 +35,7 @@
 
 #include <kapplication.h>
 #include <kiconloader.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kselectaction.h>
 #include <kdebug.h>
 #include <kmenu.h>

@@ -39,7 +39,7 @@
 
 #include <kapplication.h>
 #include <kmessagebox.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <ktemporaryfile.h>

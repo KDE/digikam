@@ -25,7 +25,7 @@
 
 // KDE includes
 
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <ktextbrowser.h>
 
 // Local includes

@@ -39,7 +39,7 @@
 #include <kapplication.h>
 #include <kaction.h>
 #include <kdialog.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kglobalsettings.h>
 #include <phonon/seekslider.h>
 #include <phonon/videoplayer.h>

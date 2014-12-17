@@ -35,7 +35,7 @@
 
 #include <ksqueezedtextlabel.h>
 #include <kdialog.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kcombobox.h>
 #include <khbox.h>
 #include <klineedit.h>

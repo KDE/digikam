@@ -49,7 +49,7 @@
 #include <kconfig.h>
 #include <kdialog.h>
 #include <kglobal.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
 #include <kstandarddirs.h>
 #include <kvbox.h>

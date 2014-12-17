@@ -34,7 +34,7 @@
 // KDE includes
 
 #include <kcolorbutton.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kseparator.h>
 
 // Local includes

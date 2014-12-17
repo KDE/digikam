@@ -45,7 +45,7 @@
 #include <kdialog.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kseparator.h>
 
 // LibKDcraw includes

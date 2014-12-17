@@ -33,7 +33,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kvbox.h>
 
 // Local includes

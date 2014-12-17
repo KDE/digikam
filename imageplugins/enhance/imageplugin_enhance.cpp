@@ -26,7 +26,7 @@
 // KDE includes
 
 #include <kpassivepopup.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
 #include <kaction.h>

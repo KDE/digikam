@@ -70,7 +70,7 @@ extern "C"
 #include <kio/global.h>
 #include <kio/job.h>
 #include <kio/netaccess.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kwindowsystem.h>

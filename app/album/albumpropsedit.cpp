@@ -51,7 +51,7 @@
 #include <kiconloader.h>
 #include <kinputdialog.h>
 #include <klineedit.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <ktextedit.h>

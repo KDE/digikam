@@ -34,7 +34,7 @@
 
 #include <kdialog.h>
 #include <kvbox.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kstandarddirs.h>
 #include <kapplication.h>
 

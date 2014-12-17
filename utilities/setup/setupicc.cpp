@@ -50,7 +50,7 @@
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <klineedit.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kpagedialog.h>
 #include <kstandarddirs.h>

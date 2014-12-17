@@ -41,7 +41,7 @@
 #include <kiconloader.h>
 #include <klineedit.h>
 #include <klistwidget.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kpagedialog.h>
 #include <kurl.h>

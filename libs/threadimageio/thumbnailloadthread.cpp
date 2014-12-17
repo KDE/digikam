@@ -34,7 +34,7 @@
 
 #include <kdebug.h>
 #include <kglobal.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kiconloader.h>
 #include <kio/previewjob.h>
 #include <kmessagebox.h>

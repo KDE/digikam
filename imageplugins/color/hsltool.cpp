@@ -36,7 +36,7 @@
 #include <kconfig.h>
 #include <kcursor.h>
 #include <kglobal.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kstandarddirs.h>
 #include <kvbox.h>
 

@@ -32,7 +32,7 @@
 // KDE includes
 
 #include <kglobalsettings.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kdialog.h>
 #include <kiconloader.h>
 

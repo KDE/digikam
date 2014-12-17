@@ -32,7 +32,7 @@
 
 #include <kaction.h>
 #include <kapplication.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <QIcon>
 #include <kdebug.h>
 

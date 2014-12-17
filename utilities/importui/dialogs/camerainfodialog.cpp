@@ -31,7 +31,7 @@
 // KDE includes
 
 #include <QIcon>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <ktextedit.h>
 
 namespace Digikam

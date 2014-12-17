@@ -44,7 +44,7 @@
 #include <kglobal.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <knuminput.h>
 #include <kstandarddirs.h>
 

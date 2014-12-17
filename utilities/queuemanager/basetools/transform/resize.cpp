@@ -33,7 +33,7 @@
 // KDE includes
 
 #include <kcombobox.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <knuminput.h>
 #include <kvbox.h>
 #include <kglobal.h>

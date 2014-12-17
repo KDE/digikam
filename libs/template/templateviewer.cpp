@@ -29,7 +29,7 @@
 
 // KDE includes
 
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kiconloader.h>
 #include <kdialog.h>
 #include <kvbox.h>

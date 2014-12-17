@@ -42,7 +42,7 @@
 #include <kcalendarsystem.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <QDesktopWidget>
 
 // Local includes

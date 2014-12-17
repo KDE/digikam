@@ -34,7 +34,7 @@
 #include <kservicetypetrader.h>
 #include <klibloader.h>
 #include <kapplication.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kxmlguiclient.h>
 #include <kdebug.h>
 

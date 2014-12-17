@@ -31,7 +31,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kimageio.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 
 // LibKExiv2 includes
 

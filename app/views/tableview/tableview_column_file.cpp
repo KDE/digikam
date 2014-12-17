@@ -30,7 +30,7 @@
 
 #include <kcombobox.h>
 #include <kdebug.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <KFormat>
 
 // local includes

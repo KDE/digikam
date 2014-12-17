@@ -75,7 +75,7 @@ extern "C"
 #include <kio/copyjob.h>
 #include <kio/deletejob.h>
 #include <kio/netaccess.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kmenu.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>

@@ -33,7 +33,7 @@
 
 #include <kfontdialog.h>
 #include <kglobalsettings.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kcombobox.h>
 #include <QFontDatabase>
 

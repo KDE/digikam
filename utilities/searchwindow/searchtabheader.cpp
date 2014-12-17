@@ -41,7 +41,7 @@
 #include <kiconloader.h>
 #include <kinputdialog.h>
 #include <klineedit.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
 #include <kurllabel.h>
 #include <kdebug.h>

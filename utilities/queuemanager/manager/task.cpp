@@ -38,7 +38,7 @@ extern "C"
 // KDE includes
 
 #include <kde_file.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <threadweaver/ThreadWeaver.h>

@@ -26,7 +26,7 @@
 // KDE includes
 
 #include <kiconloader.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 
 // Local includes
 

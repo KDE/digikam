@@ -33,7 +33,7 @@
 // KDE includes
 
 #include <kdialog.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kaction.h>
 #include <kmenu.h>
 #include <kpushbutton.h>

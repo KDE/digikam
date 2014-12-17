@@ -35,7 +35,7 @@
 // KDE includes
 
 #include <kdebug.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kstandardguiitem.h>
 #include <kconfig.h>
 

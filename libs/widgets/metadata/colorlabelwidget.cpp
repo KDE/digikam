@@ -40,7 +40,7 @@
 
 #include <kglobalsettings.h>
 #include <ksqueezedtextlabel.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 #include <kmenu.h>
 #include <khbox.h>

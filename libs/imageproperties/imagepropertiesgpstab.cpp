@@ -47,7 +47,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include <kcombobox.h>
 #include <kdialog.h>
 #include <khbox.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
 #include <ktoolinvocation.h>
 #include <kdebug.h>

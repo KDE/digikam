@@ -37,7 +37,7 @@
 #include <kcomponentdata.h>
 #include <kglobal.h>
 #include <kio/global.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kdebug.h>
 
 // Local includes

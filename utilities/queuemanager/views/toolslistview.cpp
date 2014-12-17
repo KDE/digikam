@@ -36,7 +36,7 @@
 
 #include <kaction.h>
 #include <kiconloader.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kmenu.h>
 
 namespace Digikam

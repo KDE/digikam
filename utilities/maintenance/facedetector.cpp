@@ -36,7 +36,7 @@
 #include <QIcon>
 #include <kconfig.h>
 #include <kdebug.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kpushbutton.h>
 #include <kstandarddirs.h>
 #include <kstandardguiitem.h>

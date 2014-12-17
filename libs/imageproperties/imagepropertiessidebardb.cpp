@@ -37,7 +37,7 @@
 
 #include <kdebug.h>
 #include <kfileitem.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kconfig.h>
 #include <kapplication.h>
 #include <kcursor.h>
