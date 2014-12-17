@@ -47,7 +47,7 @@ extern "C"
 #include <QRegExp>
 #include <QFileInfo>
 #include <QPointer>
-#include <QtConcurrentRun>
+#include <QtConcurrent>
 #include <QFuture>
 #include <QFutureWatcher>
 

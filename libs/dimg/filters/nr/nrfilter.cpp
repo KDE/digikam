@@ -32,7 +32,7 @@
 
 // Qt includes
 
-#include <QtConcurrentRun>
+#include <QtConcurrent>
 
 // Local includes
 

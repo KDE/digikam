@@ -35,7 +35,7 @@
 
 // Qt includes
 
-#include <QtConcurrentRun>
+#include <QtConcurrent>
 
 // KDE includes
 

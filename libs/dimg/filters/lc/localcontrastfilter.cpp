@@ -30,7 +30,7 @@
 // Qt includes
 
 #include <qmath.h>
-#include <QtConcurrentRun>
+#include <QtConcurrent>
 
 // KDE includes
 

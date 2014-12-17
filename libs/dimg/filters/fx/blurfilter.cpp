@@ -28,7 +28,7 @@
 // Qt includes
 
 #include <qmath.h>
-#include <QtConcurrentRun>
+#include <QtConcurrent>
 #include <QMutex>
 
 // KDE includes

@@ -37,7 +37,7 @@
 // Qt includes
 
 #include <QDateTime>
-#include <QtConcurrentRun>
+#include <QtConcurrent>
 #include <qmath.h>
 
 // Local includes

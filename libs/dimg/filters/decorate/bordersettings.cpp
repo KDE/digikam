@@ -168,14 +168,12 @@ BorderSettings::BorderSettings(QWidget* parent)
     d->labelBorderPercent  = new QLabel(i18n("Width (%):"));
     d->borderPercent       = new RIntNumInput();
     d->borderPercent->setRange(1, 50, 1);
-    d->borderPercent->setSliderEnabled(true);
     d->borderPercent->setDefaultValue(10);
     d->borderPercent->setWhatsThis(i18n("Set here the border width as a percentage of the image size."));
 
     d->labelBorderWidth = new QLabel(i18n("Width (pixels):"));
     d->borderWidth      = new RIntNumInput();
     d->borderWidth->setRange(1, 1000, 1);
-    d->borderWidth->setSliderEnabled(true);
     d->borderWidth->setDefaultValue(100);
     d->borderWidth->setWhatsThis(i18n("Set here the border width in pixels to add around the image."));
 

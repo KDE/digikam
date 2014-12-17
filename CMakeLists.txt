@@ -113,6 +113,7 @@ option(ENABLE_IMGLOADERDEBUGMSG "Build digiKam with more internal debug message 
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
              Core
+             Concurrent
              Widgets
              Gui
              Sql

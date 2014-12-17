@@ -33,7 +33,7 @@
 
 // Qt includes
 
-#include <QtConcurrentRun>
+#include <QtConcurrent>
 #include <QMutex>
 
 // KDE includes

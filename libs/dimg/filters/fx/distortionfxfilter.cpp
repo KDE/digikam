@@ -39,7 +39,7 @@
 #include <QDateTime>
 #include <QSize>
 #include <QMutex>
-#include <QtConcurrentRun>
+#include <QtConcurrent>
 #include <qmath.h>
 
 // Local includes
