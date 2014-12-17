@@ -46,6 +46,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kcombobox.h>
+#include <kiconloader.h>
 
 // Libkdcraw includes
 
