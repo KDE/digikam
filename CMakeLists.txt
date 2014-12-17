@@ -5,43 +5,9 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 project(digikam)
-cmake_minimum_required(VERSION 2.8.12)
-
-# we need some parts of the ECM CMake helpers
-find_package(ECM 1.1.0 REQUIRED NO_MODULE)
-set(CMAKE_MODULE_PATH ${kdepim_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
-include(ECMOptionalAddSubdirectory)
-include(ECMInstallIcons)
-include(ECMSetupVersion)
-include(ECMAddTests)
-include(ECMMarkNonGuiExecutable)
-
-include(CMakePackageConfigHelpers)
-include(FeatureSummary)
-include(CheckFunctionExists)
-
-include(KDEInstallDirs)
-include(KDECMakeSettings)
-include(KDECompilerSettings)
-
-
-if (false)
 
 message(STATUS "----------------------------------------------------------------------------------")
-message(STATUS "Starting CMake configuration for: digiKam")
-
-option(ENABLE_INTERNALMYSQL     "Build digiKam with internal MySQL server executable (default=OFF)"              OFF)
-option(ENABLE_LCMS2             "Build digiKam with LCMS2 instead LCMS1 (default=OFF)"                           OFF)
-option(ENABLE_BALOOSUPPORT      "Build digiKam with Baloo support (default=ON)"                                  ON)
-option(ENABLE_KDEPIMLIBSSUPPORT "Build digiKam with Kdepimlibs support (default=OFF)"                            OFF)
-
-# Mysql support options (experimental):
-option(ENABLE_MYSQLSUPPORT      "Build digiKam with MySQL dabatase support (default=OFF)"                        OFF)
-option(ENABLE_INTERNALMYSQL     "Build digiKam with internal MySQL server executable (default=OFF)"              OFF)
-
-# Debug options:
-option(ENABLE_DIGIKAM_MODELTEST "Enable ModelTest on some models for debugging (default=OFF)"                    OFF)
-option(ENABLE_IMGLOADERDEBUGMSG "Build digiKam with more internal debug message into image loader (default=OFF)" OFF)
+message(STATUS "Starting CMake configuration for: ${PROJECT_NAME}")
 
 # ==================================================================================================
 # Information to update before to release this package.
@@ -61,7 +27,7 @@ set(DIGIKAM_RELEASE_DATE "2014-12-16")
 # "-beta3" : beta3 release.
 # "-rc"    : release candidate.
 # ""       : final release. Can be used in production.
-set(DIGIKAM_SUFFIX_VERSION "")
+set(DIGIKAM_SUFFIX_VERSION "-git")
 
 # ==================================================================================================
 # Set env. variables accordingly.
@@ -69,11 +35,11 @@ set(DIGIKAM_SUFFIX_VERSION "")
 # NOTE: This string is used to set libdigikamcore and libdigikamdatabase SO version ID
 set(DIGIKAM_VERSION_SHORT
     "${DIGIKAM_MAJOR_VERSION}.${DIGIKAM_MINOR_VERSION}.${DIGIKAM_PATCH_VERSION}"
-   )
+)
 
 set(DIGIKAM_VERSION_STRING
     "${DIGIKAM_VERSION_SHORT}${DIGIKAM_SUFFIX_VERSION}"
-   )
+)
 
 # Databse Schema version
 # We must set this variable here at top level because it is used in both digikam/database and data/database
@@ -81,6 +47,63 @@ set(DIGIKAM_VERSION_STRING
 # 1 : Original database schema
 # 2 : 08-08-2014 : Fix Images.names field size (see bug #327646)
 set(DBCONFIG_XML_VERSION "2")
+
+# =======================================================
+
+set(CMAKE_MIN_VERSION   "2.8.12")
+set(ECM_MIN_VERSION     "1.1.0")
+set(KF5_VERSION         "5.1.0")
+set(REQUIRED_QT_VERSION "5.2.0")
+set(KIPI_MIN_VERSION    "5.0.0")
+set(KEXIV2_MIN_VERSION  "5.0.0")
+set(KDCRAW_MIN_VERSION  "5.0.0")
+
+cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
+
+############## ECM setup ######################
+
+find_package(ECM ${ECM_MIN_VERSION} CONFIG REQUIRED)
+set(CMAKE_MODULE_PATH ${digikam_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
+
+# Cmake macros
+include(GenerateExportHeader)
+include(CheckFunctionExists)
+include(FeatureSummary)
+# ECM macros
+include(ECMOptionalAddSubdirectory)
+include(ECMAddTests)
+include(ECMMarkNonGuiExecutable)
+include(ECMGenerateHeaders)
+include(ECMGeneratePriFile)
+include(ECMPackageConfigHelpers)
+include(ECMSetupVersion)
+include(ECMInstallIcons)
+# KDE macros
+include(KDEInstallDirs)
+include(KDECMakeSettings)
+include(KDEFrameworkCompilerSettings)
+include(KDECompilerSettings)
+# Local macros
+include(MacroUtils)
+include(MacroLocalLibs)
+
+if (false)
+
+message(STATUS "----------------------------------------------------------------------------------")
+message(STATUS "Starting CMake configuration for: digiKam")
+
+option(ENABLE_INTERNALMYSQL     "Build digiKam with internal MySQL server executable (default=OFF)"              OFF)
+option(ENABLE_LCMS2             "Build digiKam with LCMS2 instead LCMS1 (default=OFF)"                           OFF)
+option(ENABLE_BALOOSUPPORT      "Build digiKam with Baloo support (default=ON)"                                  ON)
+option(ENABLE_KDEPIMLIBSSUPPORT "Build digiKam with Kdepimlibs support (default=OFF)"                            OFF)
+
+# Mysql support options (experimental):
+option(ENABLE_MYSQLSUPPORT      "Build digiKam with MySQL dabatase support (default=OFF)"                        OFF)
+option(ENABLE_INTERNALMYSQL     "Build digiKam with internal MySQL server executable (default=OFF)"              OFF)
+
+# Debug options:
+option(ENABLE_DIGIKAM_MODELTEST "Enable ModelTest on some models for debugging (default=OFF)"                    OFF)
+option(ENABLE_IMGLOADERDEBUGMSG "Build digiKam with more internal debug message into image loader (default=OFF)" OFF)
 
 # ==================================================================================================
 # Debug area codes
