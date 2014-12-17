@@ -121,7 +121,7 @@ if(KF5KFace_FOUND)
    target_link_libraries(digikamcore ${KF5KFace_LIBRARIES})
 endif()
 
-if(KF5KGeomap_FOUND)
+if(KF5KGeoMap_FOUND)
    target_link_libraries(digikamcore ${KF5KGeomap_LIBRARIES})
 endif()
 
@@ -171,7 +171,7 @@ if(KF5KFace_FOUND)
    target_link_libraries(digikamdatabase ${KF5KFace_LIBRARIES})
 endif()
 
-if(KF5KGeomap_FOUND)
+if(KF5KGeoMap_FOUND)
    target_link_libraries(digikamdatabase ${KF5KGeomap_LIBRARIES})
 endif()
 
@@ -217,7 +217,7 @@ if(KF5KFace_FOUND)
     set(digikam_SRCS ${digikam_SRCS} ${libfacemanagement_SRCS})
 endif()
 
-if(KF5KGeomap_FOUND)
+if(KF5KGeoMap_FOUND)
     set(digikam_SRCS ${digikam_SRCS} ${libkgeomaphelper_SRCS} ${libgpssearch_SRCS})
 endif()
 
@@ -275,7 +275,7 @@ if(KF5KFace_FOUND)
    target_link_libraries(digikam ${KF5KFace_LIBRARIES})
 endif()
 
-if(KF5KGeomap_FOUND)
+if(KF5KGeoMap_FOUND)
    target_link_libraries(digikam ${KF5KGeomap_LIBRARIES})
 endif()
 
