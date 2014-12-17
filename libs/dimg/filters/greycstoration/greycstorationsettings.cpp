@@ -167,7 +167,6 @@ GreycstorationSettings::GreycstorationSettings(KTabWidget* parent)
     d->iterationLabel = new QLabel(i18n("Iterations:"), d->generalPage);
     d->iterationInput = new RIntNumInput(d->generalPage);
     d->iterationInput->setRange(1, 5000, 1);
-    d->iterationInput->setSliderEnabled(true);
     d->iterationInput->setWhatsThis(i18n("Sets the number of times the filter is applied to the image."));
 
     d->alphaLabel = new QLabel(i18n("Noise:"), d->generalPage);
@@ -220,13 +219,11 @@ GreycstorationSettings::GreycstorationSettings(KTabWidget* parent)
     d->tileLabel = new QLabel(i18n("Tile size:"), d->advancedPage);
     d->tileInput = new RIntNumInput(d->advancedPage);
     d->tileInput->setRange(0, 2000, 1);
-    d->tileInput->setSliderEnabled(true);
     d->tileInput->setWhatsThis(i18n("Sets the tile size."));
 
     d->btileLabel = new QLabel(i18n("Tile border:"), d->advancedPage);
     d->btileInput = new RIntNumInput(d->advancedPage);
     d->btileInput->setRange(1, 20, 1);
-    d->btileInput->setSliderEnabled(true);
     d->btileInput->setWhatsThis(i18n("Sets the size of each tile border."));
 
     d->interpolationLabel = new QLabel(i18n("Interpolation:"), d->advancedPage);

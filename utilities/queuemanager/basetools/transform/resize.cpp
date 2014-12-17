@@ -148,7 +148,6 @@ void Resize::registerSettingsWidget()
     d->useCustom        = new QCheckBox(i18n("Use Custom Length"), vbox);
     d->customLength     = new KIntNumInput(vbox);
     d->customLength->setRange(10, 10000);
-    d->customLength->setSliderEnabled(true);
 
     QLabel* const space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);

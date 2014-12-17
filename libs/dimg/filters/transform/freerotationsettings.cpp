@@ -95,7 +95,6 @@ FreeRotationSettings::FreeRotationSettings(QWidget* const parent)
     QLabel* label3    = new QLabel(i18n("Main angle:"));
     d->angleInput     = new RIntNumInput;
     d->angleInput->setRange(-180, 180, 1);
-    d->angleInput->setSliderEnabled(true);
     d->angleInput->setDefaultValue(0);
     d->angleInput->setWhatsThis(i18n("An angle in degrees by which to rotate the image. "
                                      "A positive angle rotates the image clockwise; "

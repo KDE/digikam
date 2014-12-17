@@ -169,7 +169,6 @@ SharpSettings::SharpSettings(QWidget* const parent)
     QLabel* const label  = new QLabel(i18n("Sharpness:"), simpleSharpSettings);
     d->radiusInput = new RIntNumInput(simpleSharpSettings);
     d->radiusInput->setRange(0, 100, 1);
-    d->radiusInput->setSliderEnabled(true);
     d->radiusInput->setDefaultValue(0);
     d->radiusInput->setWhatsThis(i18n("A sharpness of 0 has no effect, "
                                       "1 and above determine the sharpen matrix radius "
@@ -274,7 +273,6 @@ SharpSettings::SharpSettings(QWidget* const parent)
     QLabel* const label9 = new QLabel(i18n("Matrix size:"), refocusSettings);
     d->matrixSize        = new RIntNumInput(refocusSettings);
     d->matrixSize->setRange(0, RefocusFilter::maxMatrixSize(), 1);
-    d->matrixSize->setSliderEnabled(true);
     d->matrixSize->setDefaultValue(5);
     d->matrixSize->setWhatsThis(i18n("This parameter determines the size of the transformation matrix. "
                                      "Increasing the matrix width may give better results, especially when you have "

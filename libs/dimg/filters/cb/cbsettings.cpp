@@ -90,7 +90,6 @@ CBSettings::CBSettings(QWidget* parent)
 
     d->rInput = new RIntNumInput();
     d->rInput->setRange(-100, 100, 1);
-    d->rInput->setSliderEnabled(true);
     d->rInput->setDefaultValue(0);
     d->rInput->setWhatsThis(i18n("Set here the cyan/red color adjustment of the image."));
 
@@ -104,7 +103,6 @@ CBSettings::CBSettings(QWidget* parent)
 
     d->gInput = new RIntNumInput();
     d->gInput->setRange(-100, 100, 1);
-    d->gInput->setSliderEnabled(true);
     d->gInput->setDefaultValue(0);
     d->gInput->setWhatsThis(i18n("Set here the magenta/green color adjustment of the image."));
 
@@ -121,7 +119,6 @@ CBSettings::CBSettings(QWidget* parent)
 
     d->bInput = new RIntNumInput();
     d->bInput->setRange(-100, 100, 1);
-    d->bInput->setSliderEnabled(true);
     d->bInput->setDefaultValue(0);
     d->bInput->setWhatsThis(i18n("Set here the yellow/blue color adjustment of the image."));
 

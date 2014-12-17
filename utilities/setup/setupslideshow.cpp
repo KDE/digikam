@@ -103,7 +103,6 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
 
     d->delayInput = new KIntNumInput(5, panel);
     d->delayInput->setRange(1, 3600, 1);
-    d->delayInput->setSliderEnabled(true);
     d->delayInput->setLabel(i18n("&Delay between images:"), Qt::AlignLeft | Qt::AlignTop);
     d->delayInput->setWhatsThis(i18n("The delay, in seconds, between images."));
 

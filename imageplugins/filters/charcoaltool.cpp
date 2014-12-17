@@ -109,7 +109,6 @@ CharcoalTool::CharcoalTool(QObject* const parent)
     QLabel* label1 = new QLabel(i18n("Pencil size:"));
     d->pencilInput = new RIntNumInput;
     d->pencilInput->setRange(1, 100, 1);
-    d->pencilInput->setSliderEnabled(true);
     d->pencilInput->setDefaultValue(5);
     d->pencilInput->setWhatsThis( i18n("Set here the charcoal pencil size used to simulate the drawing."));
 
@@ -118,7 +117,6 @@ CharcoalTool::CharcoalTool(QObject* const parent)
     QLabel* label2 = new QLabel(i18nc("smoothing value of the pencil", "Smooth:"));
     d->smoothInput = new RIntNumInput;
     d->smoothInput->setRange(1, 100, 1);
-    d->smoothInput->setSliderEnabled(true);
     d->smoothInput->setDefaultValue(10);
     d->smoothInput->setWhatsThis( i18n("This value controls the smoothing effect of the pencil "
                                        "under the canvas."));

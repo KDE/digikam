@@ -195,7 +195,6 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
     d->highSaturationInput = new RIntNumInput(firstPage);
     d->highSaturationInput->setRange(0, 100, 1);
     d->highSaturationInput->setDefaultValue(100);
-    d->highSaturationInput->setSliderEnabled(true);
     d->highSaturationInput->setObjectName("highSaturationInput");
     d->highSaturationInput->setWhatsThis(i18n("<b>Highlights saturation</b>: Usually the (perceived) saturation is "
                                               "increased. The user can choose to lower the saturation on original highlight "
@@ -207,7 +206,6 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
     d->lowSaturationInput = new RIntNumInput(firstPage);
     d->lowSaturationInput->setRange(0, 100, 1);
     d->lowSaturationInput->setDefaultValue(100);
-    d->lowSaturationInput->setSliderEnabled(true);
     d->lowSaturationInput->setObjectName("lowSaturationInput");
     d->lowSaturationInput->setWhatsThis(i18n("<b>Shadow saturation</b>: Usually the (perceived) saturation is "
                                              "increased. The user can choose to lower the saturation on original highlight "

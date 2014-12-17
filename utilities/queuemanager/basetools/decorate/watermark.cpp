@@ -211,7 +211,6 @@ void WaterMark::registerSettingsWidget()
     d->textOpacity = new KIntNumInput();
     d->textOpacity->setRange(0, 100);
     d->textOpacity->setValue(100);
-    d->textOpacity->setSliderEnabled(true);
     d->textOpacity->setWhatsThis(i18n("Set the opacity of the watermark text. 100 is fully opaque, 0 is fully transparent."));
     textSettingsGroupBoxLayout->addWidget(textOpacityLabel);
     textSettingsGroupBoxLayout->addWidget(d->textOpacity);
@@ -237,7 +236,6 @@ void WaterMark::registerSettingsWidget()
     d->backgroundOpacity = new KIntNumInput();
     d->backgroundOpacity->setRange(0, 100);
     d->backgroundOpacity->setValue(0xCC);
-    d->backgroundOpacity->setSliderEnabled(true);
     d->backgroundOpacity->setWhatsThis(i18n("Set the opacity of the watermark background. 100 is fully opaque, 0 is fully transparent."));
     textSettingsGroupBoxLayout->addWidget(backgroundOpacityLabel);
     textSettingsGroupBoxLayout->addWidget(d->backgroundOpacity);
@@ -258,7 +256,6 @@ void WaterMark::registerSettingsWidget()
     d->waterMarkSizePercent = new KIntNumInput(vbox);
     d->waterMarkSizePercent->setRange(0, 100);
     d->waterMarkSizePercent->setValue(30);
-    d->waterMarkSizePercent->setSliderEnabled(true);
     d->waterMarkSizePercent->setWhatsThis(i18n("Size of watermark, as a percentage of the marked image."));
     label5->setText(i18n("Size (%):"));
 
@@ -266,7 +263,6 @@ void WaterMark::registerSettingsWidget()
     d->xMarginInput = new KIntNumInput(vbox);
     d->xMarginInput->setRange(0, 100);
     d->xMarginInput->setValue(2);
-    d->xMarginInput->setSliderEnabled(true);
     d->xMarginInput->setWhatsThis(i18n("Margin from edge in X direction, as a percentage of the marked image"));
     label6->setText(i18n("X margin (%):"));
 
@@ -274,7 +270,6 @@ void WaterMark::registerSettingsWidget()
     d->yMarginInput = new KIntNumInput(vbox);
     d->yMarginInput->setRange(0, 100);
     d->yMarginInput->setValue(2);
-    d->yMarginInput->setSliderEnabled(true);
     d->yMarginInput->setWhatsThis(i18n("Margin from edge in Y direction, as a percentage of the marked image"));
     label7->setText(i18n("Y margin (%):"));
 

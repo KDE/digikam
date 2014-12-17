@@ -46,12 +46,10 @@ set(digikamcore_LIB_SRCS
     ${libeditorrawimport_SRCS}
     ${libeditoriface_SRCS}
     ${libeditorplugin_SRCS}
-   )
+)
 
 if(KGEOMAP_FOUND)
-    set(digikamcore_LIB_SRCS ${digikamcore_LIB_SRCS}
-                             ${libkgeomaphelper_SRCS}
-    )
+    set(digikamcore_LIB_SRCS ${digikamcore_LIB_SRCS} ${libkgeomaphelper_SRCS})
 endif()
 
 ki18n_wrap_ui(digikamcore_LIB_SRCS

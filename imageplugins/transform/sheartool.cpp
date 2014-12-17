@@ -146,7 +146,6 @@ ShearTool::ShearTool(QObject* const parent)
     QLabel* label3     = new QLabel(i18n("Main horizontal angle:"));
     d->mainHAngleInput = new RIntNumInput;
     d->mainHAngleInput->setRange(-45, 45, 1);
-    d->mainHAngleInput->setSliderEnabled(true);
     d->mainHAngleInput->setDefaultValue(0);
     d->mainHAngleInput->setWhatsThis( i18n("The main horizontal shearing angle, in degrees."));
 
@@ -159,7 +158,6 @@ ShearTool::ShearTool(QObject* const parent)
     QLabel* label5     = new QLabel(i18n("Main vertical angle:"));
     d->mainVAngleInput = new RIntNumInput;
     d->mainVAngleInput->setRange(-45, 45, 1);
-    d->mainVAngleInput->setSliderEnabled(true);
     d->mainVAngleInput->setDefaultValue(0);
     d->mainVAngleInput->setWhatsThis( i18n("The main vertical shearing angle, in degrees."));
 

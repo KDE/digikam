@@ -66,7 +66,6 @@ PNGSettings::PNGSettings(QWidget* parent)
     d->PNGGrid        = new QGridLayout(this);
     d->PNGcompression = new KIntNumInput(9, this);
     d->PNGcompression->setRange(1, 9);
-    d->PNGcompression->setSliderEnabled(true);
     d->labelPNGcompression = new QLabel(i18n("PNG compression:"), this);
 
     d->PNGcompression->setWhatsThis(i18n("<p>The compression value for PNG images:</p>"

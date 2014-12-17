@@ -76,7 +76,6 @@ JP2KSettings::JP2KSettings(QWidget* const parent)
 
     d->JPEG2000compression = new KIntNumInput(75, this);
     d->JPEG2000compression->setRange(1, 100, 1);
-    d->JPEG2000compression->setSliderEnabled(true);
     d->labelJPEG2000compression = new QLabel(i18n("JPEG 2000 quality:"), this);
 
     d->JPEG2000compression->setWhatsThis(i18n("<p>The quality value for JPEG 2000 images:</p>"

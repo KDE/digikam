@@ -119,7 +119,6 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
 
     d->setSpeed    = new KIntNumInput(5, d->optionsView);
     d->setSpeed->setRange(1, 3, 1);
-    d->setSpeed->setSliderEnabled(true);
     d->setSpeed->setLabel(i18n("Speed:"), Qt::AlignLeft | Qt::AlignTop);
     d->setSpeed->setWhatsThis(i18n("Tradeoff between speed and accuracy of sorting algorithm"));
 
@@ -178,37 +177,31 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
 
     d->setRejectedThreshold = new KIntNumInput(5, d->optionsView);
     d->setRejectedThreshold->setRange(1, 100, 1);
-    d->setRejectedThreshold->setSliderEnabled(true);
     d->setRejectedThreshold->setLabel(i18n("Rejected threshold:"), Qt::AlignLeft | Qt::AlignTop);
     d->setRejectedThreshold->setWhatsThis(i18n("Threshold below which all pictures are assigned Rejected Label"));
 
     d->setPendingThreshold  = new KIntNumInput(5, d->optionsView);
     d->setPendingThreshold->setRange(1, 100, 1);
-    d->setPendingThreshold->setSliderEnabled(true);
     d->setPendingThreshold->setLabel(i18n("Pending threshold:"), Qt::AlignLeft | Qt::AlignTop);
     d->setPendingThreshold->setWhatsThis(i18n("Threshold below which all pictures are assigned Pending Label"));
 
     d->setAcceptedThreshold = new KIntNumInput(5, d->optionsView);
     d->setAcceptedThreshold->setRange(1, 100, 1);
-    d->setAcceptedThreshold->setSliderEnabled(true);
     d->setAcceptedThreshold->setLabel(i18n("Accepted threshold:"), Qt::AlignLeft | Qt::AlignTop);
     d->setAcceptedThreshold->setWhatsThis(i18n("Threshold above which all pictures are assigned Accepted Label"));
 
     d->setBlurWeight        = new KIntNumInput(5, d->optionsView);
     d->setBlurWeight->setRange(1, 100, 1);
-    d->setBlurWeight->setSliderEnabled(true);
     d->setBlurWeight->setLabel(i18n("Blur Weight:"), Qt::AlignLeft | Qt::AlignTop);
     d->setBlurWeight->setWhatsThis(i18n("Weight to assign to Blur Algorithm"));
 
     d->setNoiseWeight       = new KIntNumInput(5, d->optionsView);
     d->setNoiseWeight->setRange(1, 100, 1);
-    d->setNoiseWeight->setSliderEnabled(true);
     d->setNoiseWeight->setLabel(i18n("Noise Weight:"), Qt::AlignLeft | Qt::AlignTop);
     d->setNoiseWeight->setWhatsThis(i18n("Weight to assign to Noise Algorithm"));
 
     d->setCompressionWeight = new KIntNumInput(5, d->optionsView);
     d->setCompressionWeight->setRange(1, 100, 1);
-    d->setCompressionWeight->setSliderEnabled(true);
     d->setCompressionWeight->setLabel(i18n("Compression Weight:"), Qt::AlignLeft | Qt::AlignTop);
     d->setCompressionWeight->setWhatsThis(i18n("Weight to assign to Compression Algorithm"));
 

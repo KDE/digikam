@@ -214,14 +214,12 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* const parent)
     d->brightnessInput = new RIntNumInput(d->advExposureBox);
     d->brightnessInput->setRange(-100, 100, 1);
     d->brightnessInput->setDefaultValue(0);
-    d->brightnessInput->setSliderEnabled(true);
     d->brightnessInput->input()->setWhatsThis(i18n("Set here the brightness adjustment of the image."));
 
     d->contrastLabel = new QLabel(i18n("Contrast:"), d->advExposureBox);
     d->contrastInput = new RIntNumInput(d->advExposureBox);
     d->contrastInput->setRange(-100, 100, 1);
     d->contrastInput->setDefaultValue(0);
-    d->contrastInput->setSliderEnabled(true);
     d->contrastInput->input()->setWhatsThis(i18n("Set here the contrast adjustment of the image."));
 
     d->gammaLabel = new QLabel(i18n("Gamma:"), d->advExposureBox);

@@ -97,14 +97,12 @@ ColorFXSettings::ColorFXSettings(QWidget* const parent)
     d->levelLabel = new QLabel(i18nc("level of the effect", "Level:"));
     d->levelInput = new RIntNumInput();
     d->levelInput->setRange(0, 100, 1);
-    d->levelInput->setSliderEnabled(true);
     d->levelInput->setDefaultValue(0);
     d->levelInput->setWhatsThis( i18n("Set here the level of the effect."));
 
     d->iterationLabel = new QLabel(i18n("Iteration:"));
     d->iterationInput = new RIntNumInput();
     d->iterationInput->setRange(0, 100, 1);
-    d->iterationInput->setSliderEnabled(true);
     d->iterationInput->setDefaultValue(0);
     d->iterationInput->setWhatsThis( i18n("This value controls the number of iterations "
                                           "to use with the Neon and Find Edges effects."));
@@ -145,14 +143,12 @@ void ColorFXSettings::slotEffectTypeChanged(int type)
     d->levelInput->blockSignals(true);
     d->iterationInput->blockSignals(true);
     d->levelInput->setRange(0, 100, 1);
-    d->levelInput->setSliderEnabled(true);
     d->levelInput->setValue(25);
 
     switch (type)
     {
         case ColorFXFilter::Solarize:
             d->levelInput->setRange(0, 100, 1);
-            d->levelInput->setSliderEnabled(true);
             d->levelInput->setValue(0);
             d->iterationInput->setEnabled(false);
             d->iterationLabel->setEnabled(false);
@@ -160,7 +156,6 @@ void ColorFXSettings::slotEffectTypeChanged(int type)
 
         case ColorFXFilter::Vivid:
             d->levelInput->setRange(0, 50, 1);
-            d->levelInput->setSliderEnabled(true);
             d->levelInput->setValue(5);
             d->iterationInput->setEnabled(false);
             d->iterationLabel->setEnabled(false);
@@ -169,12 +164,10 @@ void ColorFXSettings::slotEffectTypeChanged(int type)
         case ColorFXFilter::Neon:
         case ColorFXFilter::FindEdges:
             d->levelInput->setRange(0, 5, 1);
-            d->levelInput->setSliderEnabled(true);
             d->levelInput->setValue(3);
             d->iterationInput->setEnabled(true);
             d->iterationLabel->setEnabled(true);
             d->iterationInput->setRange(0, 5, 1);
-            d->iterationInput->setSliderEnabled(true);
             d->iterationInput->setValue(2);
             break;
     }

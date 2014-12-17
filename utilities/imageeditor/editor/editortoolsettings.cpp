@@ -186,7 +186,6 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
     d->guideSize         = new RIntNumInput(d->guideBox);
     d->guideSize->input()->setSuffix(QString("px"));
     d->guideSize->setRange(1, 5, 1);
-    d->guideSize->setSliderEnabled(true);
     d->guideSize->setDefaultValue(1);
     d->guideSize->setWhatsThis(i18n("Set here the width in pixels used to draw dashed guide lines."));
 

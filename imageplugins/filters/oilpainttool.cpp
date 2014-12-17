@@ -107,7 +107,6 @@ OilPaintTool::OilPaintTool(QObject* const parent)
     QLabel* label1    = new QLabel(i18n("Brush size:"));
     d->brushSizeInput = new RIntNumInput();
     d->brushSizeInput->setRange(1, 30, 1);
-    d->brushSizeInput->setSliderEnabled(true);
     d->brushSizeInput->setDefaultValue(1);
     d->brushSizeInput->setWhatsThis(i18n("Set here the brush size to use for simulating the oil painting."));
 
@@ -116,7 +115,6 @@ OilPaintTool::OilPaintTool(QObject* const parent)
     QLabel* label2  = new QLabel(i18nc("value of smoothing effect", "Smooth:"));
     d->smoothInput  = new RIntNumInput();
     d->smoothInput->setRange(10, 255, 1);
-    d->smoothInput->setSliderEnabled(true);
     d->smoothInput->setDefaultValue(10);
     d->smoothInput->setWhatsThis(i18n("This value controls the smoothing effect of the brush under the canvas."));
 

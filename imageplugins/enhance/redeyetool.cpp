@@ -152,7 +152,6 @@ RedEyeTool::RedEyeTool(QObject* const parent)
     d->thresholdLabel = new QLabel(i18n("Sensitivity:"));
     d->redThreshold   = new RIntNumInput();
     d->redThreshold->setRange(10, 90, 1);
-    d->redThreshold->setSliderEnabled(true);
     d->redThreshold->setDefaultValue(20);
     d->redThreshold->setWhatsThis(i18n("<p>Control the red pixel selection threshold.</p>"
                                        "<p>Low values will select more red pixels "
@@ -163,7 +162,6 @@ RedEyeTool::RedEyeTool(QObject* const parent)
     d->smoothLabel = new QLabel(i18nc("Smoothness when blurring border of changed pixels", "Smooth:"));
     d->smoothLevel = new RIntNumInput();
     d->smoothLevel->setRange(0, 5, 1);
-    d->smoothLevel->setSliderEnabled(true);
     d->smoothLevel->setDefaultValue(1);
     d->smoothLevel->setWhatsThis(i18n("Sets the smoothness value when blurring the border "
                                       "of the changed pixels. "
@@ -185,7 +183,6 @@ RedEyeTool::RedEyeTool(QObject* const parent)
     QLabel* label4 = new QLabel(i18n("Tint Level:"));
     d->tintLevel   = new RIntNumInput();
     d->tintLevel->setRange(1, 200, 1);
-    d->tintLevel->setSliderEnabled(true);
     d->tintLevel->setDefaultValue(128);
     d->tintLevel->setWhatsThis(i18n("Set the tint level to adjust the luminosity of "
                                     "the new color of the pupil."));

@@ -75,7 +75,6 @@ JPEGSettings::JPEGSettings(QWidget* const parent)
     d->JPEGGrid             = new QGridLayout(this);
     d->JPEGcompression      = new KIntNumInput(75, this);
     d->JPEGcompression->setRange(1, 100);
-    d->JPEGcompression->setSliderEnabled(true);
     d->labelJPEGcompression = new QLabel(i18n("JPEG quality:"), this);
 
     d->JPEGcompression->setWhatsThis(i18n("<p>The JPEG quality:</p>"

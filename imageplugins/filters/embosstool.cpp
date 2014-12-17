@@ -98,7 +98,6 @@ EmbossTool::EmbossTool(QObject* const parent)
     QLabel* label1 = new QLabel(i18n("Depth:"));
     d->depthInput  = new RIntNumInput;
     d->depthInput->setRange(10, 300, 1);
-    d->depthInput->setSliderEnabled(true);
     d->depthInput->setDefaultValue(30);
     d->depthInput->setWhatsThis( i18n("Set here the depth of the embossing image effect.") );
 

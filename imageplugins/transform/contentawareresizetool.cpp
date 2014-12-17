@@ -216,7 +216,6 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
     d->wInput          = new RIntNumInput(d->gboxSettings->plainPage());
     d->wInput->setRange(1, 2*d->orgWidth, 1);
     d->wInput->setDefaultValue(d->orgWidth);
-    d->wInput->setSliderEnabled(true);
     d->wInput->setObjectName("wInput");
     d->wInput->setWhatsThis(i18n("Set here the new image width in pixels."));
 
@@ -224,7 +223,6 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
     d->hInput           = new RIntNumInput(d->gboxSettings->plainPage());
     d->hInput->setRange(1, 2*d->orgHeight, 1);
     d->hInput->setDefaultValue(d->orgHeight);
-    d->hInput->setSliderEnabled(true);
     d->hInput->setObjectName("hInput");
     d->hInput->setWhatsThis(i18n("Set here the new image height in pixels."));
 
@@ -317,7 +315,6 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
     d->maskPenSize           = new RIntNumInput(d->gboxSettings->plainPage());
     d->maskPenSize->setRange(3, 64, 1);
     d->maskPenSize->setDefaultValue(10);
-    d->maskPenSize->setSliderEnabled(true);
     d->maskPenSize->setObjectName("maskPenSize");
     d->maskPenSize->setWhatsThis(i18n("Specify here the size of the brush used to paint masks."));
 
@@ -382,7 +379,6 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
     d->stepInput       = new RIntNumInput(d->gboxSettings->plainPage());
     d->stepInput->setRange(1, 5, 1);
     d->stepInput->setDefaultValue(1);
-    d->stepInput->setSliderEnabled(true);
     d->stepInput->setWhatsThis(i18n("This option lets you choose the maximum transversal step "
                                     "that the pixels in the seams can take. In the standard "
                                     "algorithm, corresponding to the default value step = 1, "
@@ -397,7 +393,6 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
     d->sideSwitchInput      = new RIntNumInput(d->gboxSettings->plainPage());
     d->sideSwitchInput->setRange(1, 20, 1);
     d->sideSwitchInput->setDefaultValue(4);
-    d->sideSwitchInput->setSliderEnabled(true);
     d->sideSwitchInput->setWhatsThis(i18n("During the carving process, at each step "
                                           "the optimal seam to be carved is chosen based on "
                                           "the relevance value for each pixel. However, in the case where two "

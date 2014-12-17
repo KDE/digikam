@@ -76,7 +76,6 @@ PGFSettings::PGFSettings(QWidget* const parent)
 
     d->PGFcompression = new KIntNumInput(3, this);
     d->PGFcompression->setRange(1, 9, 1);
-    d->PGFcompression->setSliderEnabled(true);
     d->labelPGFcompression = new QLabel(i18n("PGF quality:"), this);
 
     d->PGFcompression->setWhatsThis(i18n("<p>The quality value for PGF images:</p>"

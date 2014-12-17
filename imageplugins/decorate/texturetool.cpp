@@ -149,7 +149,6 @@ TextureTool::TextureTool(QObject* const parent)
     QLabel* label2 = new QLabel(i18n("Relief:"));
     d->blendGain   = new RIntNumInput;
     d->blendGain->setRange(1, 255, 1);
-    d->blendGain->setSliderEnabled(true);
     d->blendGain->setDefaultValue(200);
     d->blendGain->setWhatsThis(i18n("Set here the relief gain used to merge texture and image."));
 

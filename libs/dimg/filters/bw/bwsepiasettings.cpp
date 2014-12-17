@@ -285,7 +285,6 @@ BWSepiaSettings::BWSepiaSettings(QWidget* const parent, DImg* const img)
     d->strengthInput = new RIntNumInput(vbox);
     d->strengthInput->input()->setLabel(i18n("Strength:"), Qt::AlignLeft | Qt::AlignVCenter);
     d->strengthInput->setRange(1, 5, 1);
-    d->strengthInput->setSliderEnabled(true);
     d->strengthInput->setDefaultValue(1);
     d->strengthInput->setWhatsThis(i18n("Here, set the strength adjustment of the lens filter."));
 
@@ -356,7 +355,6 @@ BWSepiaSettings::BWSepiaSettings(QWidget* const parent, DImg* const img)
     d->cInput = new RIntNumInput(lumBox);
     d->cInput->input()->setLabel(i18n("Contrast:"), Qt::AlignLeft | Qt::AlignVCenter);
     d->cInput->setRange(-100, 100, 1);
-    d->cInput->setSliderEnabled(true);
     d->cInput->setDefaultValue(0);
     d->cInput->setWhatsThis(i18n("Set here the contrast adjustment of the image."));
 

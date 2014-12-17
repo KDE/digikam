@@ -175,14 +175,12 @@ DistortionFXTool::DistortionFXTool(QObject* const parent)
     d->levelLabel = new QLabel(i18nc("level of the effect", "Level:"));
     d->levelInput = new RIntNumInput();
     d->levelInput->setRange(0, 100, 1);
-    d->levelInput->setSliderEnabled(true);
     d->levelInput->setDefaultValue(50);
     d->levelInput->setWhatsThis( i18n("Set here the level of the effect."));
 
     d->iterationLabel = new QLabel(i18n("Iteration:"));
     d->iterationInput = new RIntNumInput();
     d->iterationInput->setRange(0, 100, 1);
-    d->iterationInput->setSliderEnabled(true);
     d->iterationInput->setDefaultValue(10);
     d->iterationInput->setWhatsThis( i18n("This value controls the iterations to use for Waves, "
                                           "Tile, and Neon effects."));
@@ -269,14 +267,12 @@ void DistortionFXTool::slotEffectTypeChanged(int type)
     blockWidgetSignals(true);
 
     d->levelInput->setRange(0, 100, 1);
-    d->levelInput->setSliderEnabled(true);
     d->levelInput->setValue(25);
 
     switch (type)
     {
         case DistortionFXFilter::Twirl:
             d->levelInput->setRange(-50, 50, 1);
-            d->levelInput->setSliderEnabled(true);
             d->levelInput->setValue(10);
             break;
 
@@ -286,13 +282,11 @@ void DistortionFXTool::slotEffectTypeChanged(int type)
         case DistortionFXFilter::CilindricalHV:
         case DistortionFXFilter::Caricature:
             d->levelInput->setRange(0, 200, 1);
-            d->levelInput->setSliderEnabled(true);
             d->levelInput->setValue(50);
             break;
 
         case DistortionFXFilter::MultipleCorners:
             d->levelInput->setRange(1, 10, 1);
-            d->levelInput->setSliderEnabled(true);
             d->levelInput->setValue(4);
             break;
 
@@ -306,7 +300,6 @@ void DistortionFXTool::slotEffectTypeChanged(int type)
             d->iterationInput->setEnabled(true);
             d->iterationLabel->setEnabled(true);
             d->iterationInput->setRange(0, 200, 1);
-            d->iterationInput->setSliderEnabled(true);
             d->iterationInput->setValue(10);
             break;
 

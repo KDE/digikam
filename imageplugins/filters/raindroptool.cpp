@@ -121,7 +121,6 @@ RainDropTool::RainDropTool(QObject* const parent)
     QLabel* label1 = new QLabel(i18n("Drop size:"));
     d->dropInput   = new RIntNumInput;
     d->dropInput->setRange(0, 200, 1);
-    d->dropInput->setSliderEnabled(true);
     d->dropInput->setDefaultValue(80);
     d->dropInput->setWhatsThis( i18n("Set here the raindrops' size."));
 
@@ -130,7 +129,6 @@ RainDropTool::RainDropTool(QObject* const parent)
     QLabel* label2 = new QLabel(i18n("Number:"));
     d->amountInput = new RIntNumInput;
     d->amountInput->setRange(1, 500, 1);
-    d->amountInput->setSliderEnabled(true);
     d->amountInput->setDefaultValue(150);
     d->amountInput->setWhatsThis( i18n("This value controls the maximum number of raindrops."));
 
@@ -139,7 +137,6 @@ RainDropTool::RainDropTool(QObject* const parent)
     QLabel* label3 = new QLabel(i18n("Fish eyes:"));
     d->coeffInput  = new RIntNumInput;
     d->coeffInput->setRange(1, 100, 1);
-    d->coeffInput->setSliderEnabled(true);
     d->coeffInput->setDefaultValue(30);
     d->coeffInput->setWhatsThis( i18n("This value is the fish-eye-effect optical "
                                       "distortion coefficient."));
