@@ -487,10 +487,8 @@ if(DIGIKAM_CAN_BE_COMPILED)
         add_definitions(${KDE4_ENABLE_EXCEPTIONS})
     endif()
 
-    include_directories(${KEXIV2_INCLUDE_DIR}
-                        ${KDCRAW_INCLUDE_DIR}
-                        ${KDE4_INCLUDES}
-                        ${QT_INCLUDES}
+    include_directories(${KF5KExiv2_INCLUDE_DIRS}
+                        ${KF5KDcraw_INCLUDE_DIRS}
                         ${PGF_INCLUDE_DIRS}
                         ${CMAKE_CURRENT_SOURCE_DIR}/app
                         ${CMAKE_CURRENT_BINARY_DIR}/app
@@ -517,7 +515,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
     # Boost library rules
 
     IF(Boost_FOUND)
-        INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
+        include_directories(${Boost_INCLUDE_DIRS})
     ENDIF()
 
     # LibLqr-1 library rules
@@ -542,23 +540,20 @@ if(DIGIKAM_CAN_BE_COMPILED)
 
     # Kipi-plugins support
 
-    if(KIPI_FOUND)
-        include_directories(${KIPI_INCLUDE_DIR})
-        add_definitions(${KIPI_DEFINITIONS})
+    if(KF5Kipi_FOUND)
+        include_directories(${KF5Kipi_INCLUDE_DIRS})
     endif()
 
     # Faces detection and recognition support
 
-    if(KFACE_FOUND)
-        include_directories(${KFACE_INCLUDE_DIR})
-        add_definitions(${KFACE_DEFINITIONS})
+    if(KF5KFace_FOUND)
+        include_directories(${KF5KFace_INCLUDE_DIRS})
     endif()
 
     # Geolocation maps support
 
-    if(KGEOMAP_FOUND)
-        include_directories(${KGEOMAP_INCLUDE_DIR})
-        add_definitions(${KGEOMAP_DEFINITIONS})
+    if(KF5KGeomap_FOUND)
+        include_directories(${KF5KGeomap_INCLUDE_DIRS})
     endif()
 
     # ==================================================================================================

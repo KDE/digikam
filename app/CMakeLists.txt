@@ -51,16 +51,16 @@ set(digikamcore_LIB_SRCS
 if(KGEOMAP_FOUND)
     set(digikamcore_LIB_SRCS ${digikamcore_LIB_SRCS}
                              ${libkgeomaphelper_SRCS}
-       )
+    )
 endif()
 
 ki18n_wrap_ui(digikamcore_LIB_SRCS
-                  ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/printiface/printoptionspage.ui
-                 )
+              ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/printiface/printoptionspage.ui
+)
 
 kconfig_add_kcfg_files(digikamcore_LIB_SRCS
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/printiface/digikamconfig.kcfgc
-                   )
+                       ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/printiface/digikamconfig.kcfgc
+)
 
 add_library(digikamcore SHARED ${digikamcore_LIB_SRCS})
 
@@ -75,10 +75,6 @@ target_link_libraries(digikamcore
                       KF5::KHtml
                       KF5::NotifyConfig
                       
-                      
-                      
-                      KF5::ThreadWeaver
-
                       ${JPEG_LIBRARIES}
                       ${TIFF_LIBRARIES}
                       ${PNG_LIBRARIES}
@@ -89,9 +85,9 @@ target_link_libraries(digikamcore
                       # Required by CImg library which is using pthread internally.
                       ${CMAKE_THREAD_LIBS_INIT}
 
-                      KF5::KDcraw
-                      KF5::KExiv2
-                     )
+                      ${KF5KExiv2_LIBRARIES}
+                      ${KF5KDcraw_LIBRARIES}
+)
 
 if(Q_WS_X11)
     target_link_libraries(digikamcore ${X11_LIBRARIES})
@@ -118,16 +114,16 @@ if(LQR-1_FOUND)
    target_link_libraries(digikamcore ${liblqr_LIBS})
 endif()
 
-if(KIPI_FOUND)
-   target_link_libraries(digikamcore KF5::Kipi)
+if(KF5Kipi_FOUND)
+   target_link_libraries(digikamcore ${KF5Kipi_LIBRARIES})
 endif()
 
-if(KFACE_FOUND)
-   target_link_libraries(digikamcore ${KFACE_LIBRARIES})
+if(KF5KFace_FOUND)
+   target_link_libraries(digikamcore ${KF5KFace_LIBRARIES})
 endif()
 
-if(KGEOMAP_FOUND)
-   target_link_libraries(digikamcore ${KGEOMAP_LIBRARIES})
+if(KF5KGeomap_FOUND)
+   target_link_libraries(digikamcore ${KF5KGeomap_LIBRARIES})
 endif()
 
 set_target_properties(digikamcore PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
@@ -146,7 +142,7 @@ set(digikamdatabase_LIB_SRCS
         ${libdatabasemodels_SRCS}
         ${libhaar_SRCS}
         ${pgfutils_SRCS}
-   )
+)
 
 if(Baloo_FOUND)
     set(digikamdatabase_LIB_SRCS ${digikamdatabase_LIB_SRCS} ${libbaloowrap_SRCS})
@@ -164,21 +160,20 @@ target_link_libraries(digikamdatabase
                       Qt5::Gui
                       Qt5::Sql
 
-                      KF5::KIOCore
-                      
+                      KF5::KIOCore                      
 
-                      KF5::KExiv2
-                      KF5::KDcraw
+                      ${KF5KExiv2_LIBRARIES}
+                      ${KF5KDcraw_LIBRARIES}
 
                       ${PGF_LIBRARIES}
-                     )
+)
 
-if(KFACE_FOUND)
-   target_link_libraries(digikamdatabase ${KFACE_LIBRARIES})
+if(KF5KFace_FOUND)
+   target_link_libraries(digikamdatabase ${KF5KFace_LIBRARIES})
 endif()
 
-if(KGEOMAP_FOUND)
-   target_link_libraries(digikamdatabase ${KGEOMAP_LIBRARIES})
+if(KF5KGeomap_FOUND)
+   target_link_libraries(digikamdatabase ${KF5KGeomap_LIBRARIES})
 endif()
 
 if(Baloo_FOUND)
@@ -213,17 +208,17 @@ set(digikam_SRCS ${libeditorgui_SRCS}
                  ${libdatabaseui_SRCS}
                  ${libimgqsort_SRCS}
                  main/main.cpp
-   )
+)
 
-if(KIPI_FOUND)
+if(KF5Kipi_FOUND)
     set(digikam_SRCS ${digikam_SRCS} ${libkipiiface_SRCS})
 endif()
 
-if(KFACE_FOUND)
+if(KF5KFace_FOUND)
     set(digikam_SRCS ${digikam_SRCS} ${libfacemanagement_SRCS})
 endif()
 
-if(KGEOMAP_FOUND)
+if(KF5KGeomap_FOUND)
     set(digikam_SRCS ${digikam_SRCS} ${libkgeomaphelper_SRCS} ${libgpssearch_SRCS})
 endif()
 
@@ -248,16 +243,15 @@ target_link_libraries(digikam
                       Qt5::Sql
                       Qt5::Test
 
-                      KF5::Parts
                       Phonon::phonon4qt5
+
+                      KF5::Parts
                       KF5::KHtml
-                      
                       KF5::NotifyConfig
                       
-                      KF5::ThreadWeaver
-
-                      KF5::KExiv2
-                      KF5::KDcraw
+                      
+                      ${KF5KExiv2_LIBRARIES}
+                      ${KF5KDcraw_LIBRARIES}
 
                       ${LCMS_LIBRARIES}
 
@@ -268,22 +262,22 @@ target_link_libraries(digikam
                       importui
 
                       ${OpenCV_LIBRARIES}
-                     )
+)
 
 if(KDEPIMLIBS_FOUND)
   target_link_libraries(digikam ${KDE4_KABC_LIBS} KF5::AkonadiCore KF5::AkonadiContact)
 endif()
 
-if(KIPI_FOUND)
-   target_link_libraries(digikam KF5::Kipi)
+if(KF5Kipi_FOUND)
+   target_link_libraries(digikam ${KF5Kipi_LIBRARIES})
 endif()
 
-if(KFACE_FOUND)
-   target_link_libraries(digikam ${KFACE_LIBRARIES})
+if(KF5KFace_FOUND)
+   target_link_libraries(digikam ${KF5KFace_LIBRARIES})
 endif()
 
-if(KGEOMAP_FOUND)
-   target_link_libraries(digikam ${KGEOMAP_LIBRARIES})
+if(KF5KGeomap_FOUND)
+   target_link_libraries(digikam ${KF5KGeomap_LIBRARIES})
 endif()
 
 if(NOT WIN32)
