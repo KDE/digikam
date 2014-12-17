@@ -1568,8 +1568,10 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${LCMS_INCLUDE_DIR}
     )
 
+     add_subdirectory(data)
+
 # TODO port Qt5
-#     add_subdirectory(data)
+#
 #     add_subdirectory(utilities)
 #     add_subdirectory(app)
 #     add_subdirectory(kioslave)

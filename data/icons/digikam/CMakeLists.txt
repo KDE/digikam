@@ -6,4 +6,4 @@
 
 # Install standard icons.
 
-KDE4_INSTALL_ICONS( ${DATA_INSTALL_DIR}/digikam/icons )
+ecm_install_icons(${DATA_INSTALL_DIR}/digikam/icons)

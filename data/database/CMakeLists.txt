@@ -11,4 +11,5 @@ configure_file(dbconfig.xml.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/dbconfig.xml)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/dbconfig.xml
               mysql-global.conf
-        DESTINATION ${DATA_INSTALL_DIR}/digikam/database )
+        DESTINATION ${DATA_INSTALL_DIR}/digikam/database
+)
