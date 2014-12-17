@@ -536,9 +536,9 @@ void BWSepiaSettings::writeSettings(KConfigGroup& group)
 
 void BWSepiaSettings::loadSettings()
 {
-    KUrl loadFile = KFileDialog::getOpenUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+    KUrl loadFile = KFileDialog::getOpenUrl(QUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                             QString("*"), kapp->activeWindow(),
-                                            QString(i18n("Black & White Settings File to Load")));
+                                            i18n("Black & White Settings File to Load"));
 
     if (loadFile.isEmpty())
     {
@@ -607,9 +607,9 @@ void BWSepiaSettings::loadSettings()
 
 void BWSepiaSettings::saveAsSettings()
 {
-    KUrl saveFile = KFileDialog::getSaveUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+    KUrl saveFile = KFileDialog::getSaveUrl(QUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                             QString("*"), kapp->activeWindow(),
-                                            QString(i18n("Black & White Settings File to Save")));
+                                            i18n("Black & White Settings File to Save"));
 
     if (saveFile.isEmpty())
     {

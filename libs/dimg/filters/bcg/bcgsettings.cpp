@@ -101,7 +101,7 @@ BCGSettings::BCGSettings(QWidget* const parent)
     QLabel* label4 = new QLabel(i18n("Gamma:"));
     d->gInput      = new RDoubleNumInput();
     d->gInput->setDecimals(2);
-    d->gInput->setRange(0.1, 3.0, 0.01, true);
+    d->gInput->setRange(0.1, 3.0, 0.01);
     d->gInput->setDefaultValue(1.0);
     d->gInput->setWhatsThis(i18n("Set here the gamma adjustment of the image."));
 
