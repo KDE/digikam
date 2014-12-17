@@ -90,8 +90,8 @@ ScriptingSettings::ScriptingSettings(QWidget* const parent)
     vlay->addWidget(d->scriptLabel);
     vlay->addWidget(hbox);
     vlay->addStretch();
-    vlay->setMargin(KDialog::spacingHint());
-    vlay->setSpacing(KDialog::spacingHint());
+    vlay->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    vlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     setWhatsThis(i18n("Set here the script that is executed for every imported image."));
 

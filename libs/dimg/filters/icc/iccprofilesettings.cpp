@@ -89,7 +89,7 @@ IccProfilesSettings::IccProfilesSettings(QWidget* const parent)
 
     layout()->setAlignment(newProfInfo, Qt::AlignLeft);
     setMargin(0);
-    setSpacing(KDialog::spacingHint());
+    setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 

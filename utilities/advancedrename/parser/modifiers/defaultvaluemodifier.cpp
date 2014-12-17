@@ -53,8 +53,8 @@ DefaultValueDialog::DefaultValueDialog(Rule* parent)
     QGridLayout* mainLayout = new QGridLayout(this);
     mainLayout->addWidget(srcLabel,   0, 0);
     mainLayout->addWidget(valueInput, 0, 1);
-    mainLayout->setSpacing(KDialog::spacingHint());
-    mainLayout->setMargin(KDialog::spacingHint());
+    mainLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    mainLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     mainLayout->setRowStretch(1, 10);
     mainWidget->setLayout(mainLayout);
 

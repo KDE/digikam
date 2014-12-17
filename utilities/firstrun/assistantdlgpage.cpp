@@ -78,15 +78,15 @@ AssistantDlgPage::AssistantDlgPage(KAssistantDialog* const dlg, const QString& t
     d->leftBottomPix    = new QLabel(vbox);
     d->leftBottomPix->setAlignment(Qt::AlignCenter);
     vbox->setStretchFactor(space, 10);
-    vbox->setMargin(KDialog::spacingHint());
-    vbox->setSpacing(KDialog::spacingHint());
+    vbox->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    vbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     
     KSeparator* const line = new KSeparator(Qt::Vertical, panel);
 
     d->hlay->addWidget(vbox);
     d->hlay->addWidget(line);
     d->hlay->setMargin(0);
-    d->hlay->setSpacing(KDialog::spacingHint());
+    d->hlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->page = dlg->addPage(this, title);
 }

@@ -138,7 +138,7 @@ void WaterMark::registerSettingsWidget()
 {
 
     KVBox* vbox = new KVBox;
-    vbox->setSpacing(KDialog::spacingHint());
+    vbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     vbox->setMargin(0);
 
     KHBox* hbox = new KHBox(vbox);
@@ -166,7 +166,7 @@ void WaterMark::registerSettingsWidget()
     d->imageSettingsGroupBox = new QGroupBox(vbox);
     d->imageSettingsGroupBox->setTitle(i18n("Image settings"));
     QVBoxLayout* imageSettingsGroupBoxLayout = new QVBoxLayout;
-    imageSettingsGroupBoxLayout->setMargin(KDialog::spacingHint());
+    imageSettingsGroupBoxLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     imageSettingsGroupBoxLayout->addStretch(1);
     d->imageSettingsGroupBox->setLayout(imageSettingsGroupBoxLayout);
 
@@ -180,7 +180,7 @@ void WaterMark::registerSettingsWidget()
     d->textSettingsGroupBox = new QGroupBox(vbox);
     d->textSettingsGroupBox->setTitle(i18n("Text settings"));
     QVBoxLayout* textSettingsGroupBoxLayout = new QVBoxLayout;
-    textSettingsGroupBoxLayout->setMargin(KDialog::spacingHint());
+    textSettingsGroupBoxLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     textSettingsGroupBoxLayout->addStretch(1);
     d->textSettingsGroupBox->setLayout(textSettingsGroupBoxLayout);
 

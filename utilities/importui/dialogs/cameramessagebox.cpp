@@ -289,7 +289,7 @@ int CameraMessageBox::createMessageBox(CameraThumbsCtrl* const ctrl,
 {
     QWidget* const mainWidget     = new QWidget(dialog);
     QVBoxLayout* const mainLayout = new QVBoxLayout(mainWidget);
-    mainLayout->setSpacing(KDialog::spacingHint() * 2); // provide extra spacing
+    mainLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing) * 2); // provide extra spacing
     mainLayout->setMargin(0);
 
     QHBoxLayout* const hLayout    = new QHBoxLayout();
@@ -309,7 +309,7 @@ int CameraMessageBox::createMessageBox(CameraThumbsCtrl* const ctrl,
     iconLayout->addWidget(iconLabel);
     iconLayout->addStretch(5);
     hLayout->addLayout(iconLayout, 0);
-    hLayout->addSpacing(KDialog::spacingHint());
+    hLayout->addSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     //--------------------------------------------------------------------------------
 

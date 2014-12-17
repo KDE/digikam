@@ -71,8 +71,8 @@ void Blur::registerSettingsWidget()
     grid->addWidget(label,         0, 0, 1, 2);
     grid->addWidget(m_radiusInput, 1, 0, 1, 2);
     grid->setRowStretch(2, 10);
-    grid->setMargin(KDialog::spacingHint());
-    grid->setSpacing(KDialog::spacingHint());
+    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     connect(m_radiusInput, SIGNAL(valueChanged(int)),
             this, SLOT(slotSettingsChanged()));

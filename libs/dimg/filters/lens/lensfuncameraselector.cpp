@@ -197,7 +197,7 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* const parent)
     grid->addWidget(d->distLabel,  9, 0, 1, 1);
     grid->addWidget(d->distance,   9, 1, 1, 2);
     grid->setMargin(0);
-    grid->setSpacing(KDialog::spacingHint());
+    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     connect(d->metadataUsage, SIGNAL(toggled(bool)),
             this, SLOT(slotUseMetadata(bool)));

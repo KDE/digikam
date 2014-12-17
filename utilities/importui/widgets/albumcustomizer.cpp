@@ -129,8 +129,8 @@ AlbumCustomizer::AlbumCustomizer(QWidget* const parent)
     albumVlay->addWidget(hbox2);
     albumVlay->addWidget(d->customExample);
     albumVlay->addStretch();
-    albumVlay->setMargin(KDialog::spacingHint());
-    albumVlay->setSpacing(KDialog::spacingHint());
+    albumVlay->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    albumVlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     setWhatsThis(i18n("Set how digiKam creates albums automatically when downloading."));
     d->autoAlbumExtCheck->setWhatsThis(i18n("Enable this option if you want to download your "

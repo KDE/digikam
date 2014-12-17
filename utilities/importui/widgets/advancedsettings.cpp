@@ -102,8 +102,8 @@ AdvancedSettings::AdvancedSettings(QWidget* const parent)
     onFlyVlay->addWidget(d->convertJpegCheck);
     onFlyVlay->addWidget(hbox2);
     onFlyVlay->addStretch();
-    onFlyVlay->setMargin(KDialog::spacingHint());
-    onFlyVlay->setSpacing(KDialog::spacingHint());
+    onFlyVlay->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    onFlyVlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     setWhatsThis(i18n("Set here all options to fix/transform JPEG files automatically "
                       "as they are downloaded."));

@@ -85,8 +85,8 @@ SlideEnd::SlideEnd(QWidget* const parent)
     grid->setColumnStretch(2, 10);
     grid->setRowStretch(0, 1);
     grid->setRowStretch(2, 10);
-    grid->setMargin(KDialog::spacingHint());
-    grid->setSpacing(KDialog::spacingHint());
+    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 }
 
 SlideEnd::~SlideEnd()

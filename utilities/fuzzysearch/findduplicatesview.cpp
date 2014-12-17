@@ -132,8 +132,8 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
     mainLayout->addWidget(d->scanDuplicatesBtn,  4, 0, 1, -1);
     mainLayout->setRowStretch(0, 10);
     mainLayout->setColumnStretch(1, 10);
-    mainLayout->setMargin(KDialog::spacingHint());
-    mainLayout->setSpacing(KDialog::spacingHint());
+    mainLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    mainLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     setLayout(mainLayout);
 
     // ---------------------------------------------------------------

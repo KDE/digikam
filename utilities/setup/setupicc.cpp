@@ -205,7 +205,7 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
     gridHeader->addWidget(d->enableColorManagement, 0, 0, 1, 1);
     gridHeader->addWidget(lcmsLogoLabel,            0, 2, 1, 1);
     gridHeader->setColumnStretch(1, 10);
-    gridHeader->setMargin(KDialog::spacingHint());
+    gridHeader->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     gridHeader->setSpacing(0);
 
     // --------------------------------------------------------
@@ -500,7 +500,7 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
     gridAdvanced->addWidget(d->bpcAlgorithm,      0, 0, 1, 2);
     gridAdvanced->addWidget(lablel,               1, 0, 1, 1);
     gridAdvanced->addWidget(d->renderingIntentKC, 1, 1, 1, 1);
-    gridAdvanced->setMargin(KDialog::spacingHint());
+    gridAdvanced->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     gridAdvanced->setSpacing(0);
 
     vboxAdvanced->addWidget(d->advancedSettingsGB);

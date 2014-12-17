@@ -234,7 +234,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* const parent)
     grid->addWidget(d->labelAlphaChannel,    7, 1, 1, 1);
     grid->addWidget(label12,                 8, 0, 1, 1);
     grid->addWidget(d->labelImageRegion,     8, 1, 1, 1);
-    grid->setMargin(KDialog::spacingHint());
+    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     grid->setSpacing(0);
 
     // -------------------------------------------------------------
@@ -260,8 +260,8 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* const parent)
     topLayout->addWidget(d->blueHistogram,  6, 0, 1, 4);
     topLayout->setRowStretch(7, 10);
     topLayout->setColumnStretch(2, 10);
-    topLayout->setMargin(KDialog::spacingHint());
-    topLayout->setSpacing(KDialog::spacingHint());
+    topLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    topLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     insertTab(Private::HISTOGRAM, sv, i18n("Histogram"));
 

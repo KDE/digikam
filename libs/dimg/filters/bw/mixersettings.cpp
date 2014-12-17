@@ -213,8 +213,8 @@ MixerSettings::MixerSettings(QWidget* parent)
     grid->addWidget(d->monochromeTips,     7, 0, 1, 5);
     grid->setRowStretch(8, 10);
     grid->setColumnStretch(2, 10);
-    grid->setMargin(KDialog::spacingHint());
-    grid->setSpacing(KDialog::spacingHint());
+    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 

@@ -135,7 +135,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     gLayout1->addWidget(d->showFileSizeBox);
     gLayout1->addWidget(d->showImageTypeBox);
     gLayout1->addWidget(d->showImageDimBox);
-    gLayout1->setMargin(KDialog::spacingHint());
+    gLayout1->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     gLayout1->setSpacing(0);
 
     // --------------------------------------------------------
@@ -177,7 +177,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     gLayout2->addWidget(d->showPhotoModeBox);
     gLayout2->addWidget(d->showPhotoFlashBox);
     gLayout2->addWidget(d->showPhotoWbBox);
-    gLayout2->setMargin(KDialog::spacingHint());
+    gLayout2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     gLayout2->setSpacing(0);
 
     layout->addWidget(d->showToolTipsBox);
@@ -185,8 +185,8 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     layout->addWidget(d->fileSettingBox);
     layout->addWidget(d->photoSettingBox);
     layout->addStretch();
-    layout->setMargin(KDialog::spacingHint());
-    layout->setSpacing(KDialog::spacingHint());
+    layout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // --------------------------------------------------------
 

@@ -156,7 +156,7 @@ NRSettings::NRSettings(QWidget* const parent)
     lumLay->addWidget(d->softLumInput, 1, 1, 1, 1);
     lumLay->setRowStretch(2, 10);
     lumLay->setSpacing(0);
-    lumLay->setMargin(KDialog::spacingHint());
+    lumLay->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 
@@ -183,7 +183,7 @@ NRSettings::NRSettings(QWidget* const parent)
     cRedLay->addWidget(d->softCrInput, 1, 1, 1, 1);
     cRedLay->setRowStretch(2, 10);
     cRedLay->setSpacing(0);
-    cRedLay->setMargin(KDialog::spacingHint());
+    cRedLay->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 
@@ -210,7 +210,7 @@ NRSettings::NRSettings(QWidget* const parent)
     cBlueLay->addWidget(d->softCbInput, 1, 1, 1, 1);
     cBlueLay->setRowStretch(2, 10);
     cBlueLay->setSpacing(0);
-    cBlueLay->setMargin(KDialog::spacingHint());
+    cBlueLay->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 
@@ -230,8 +230,8 @@ NRSettings::NRSettings(QWidget* const parent)
     grid->addWidget(d->checkAutoEst,   0, 0, 1, 2);
     grid->addWidget(d->advExpanderBox, 1, 0, 1, 2);
     grid->setRowStretch(1, 10);
-    grid->setMargin(KDialog::spacingHint());
-    grid->setSpacing(KDialog::spacingHint());
+    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 

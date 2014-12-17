@@ -293,7 +293,7 @@ BWSepiaSettings::BWSepiaSettings(QWidget* const parent, DImg* const img)
 
     vlay->addWidget(d->bwFilters);
     vlay->addWidget(d->strengthInput);
-    vlay->setSpacing(KDialog::spacingHint());
+    vlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     vlay->setMargin(0);
 
     // -------------------------------------------------------------
@@ -368,7 +368,7 @@ BWSepiaSettings::BWSepiaSettings(QWidget* const parent, DImg* const img)
     gridTab2->addWidget(d->curvesBox, 0, 0, 1, 1);
     gridTab2->addWidget(d->cInput,    1, 0, 1, 1);
     gridTab2->setRowStretch(2, 10);
-    gridTab2->setMargin(KDialog::spacingHint());
+    gridTab2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     gridTab2->setSpacing(0);
 
     // -------------------------------------------------------------
@@ -386,8 +386,8 @@ BWSepiaSettings::BWSepiaSettings(QWidget* const parent, DImg* const img)
 
     grid->addWidget(d->tab, 0, 0, 1, 10);
     grid->setRowStretch(0, 10);
-    grid->setMargin(KDialog::spacingHint());
-    grid->setSpacing(KDialog::spacingHint());
+    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 

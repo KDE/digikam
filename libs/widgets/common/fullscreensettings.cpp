@@ -79,7 +79,7 @@ FullScreenSettings::FullScreenSettings(int options, QWidget* const parent)
     vlay->addWidget(d->hideThumbBar);
     vlay->addWidget(d->hideSideBars);
     vlay->setMargin(0);
-    vlay->setSpacing(KDialog::spacingHint());
+    vlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     if (!(options & FS_TOOLBARS)) d->hideToolBars->hide();
     if (!(options & FS_THUMBBAR)) d->hideThumbBar->hide();

@@ -72,8 +72,8 @@ TIFFSettings::TIFFSettings(QWidget* const parent)
     d->TIFFGrid->addWidget(d->TIFFcompression, 0, 0, 1, 2);
     d->TIFFGrid->setColumnStretch(1, 10);
     d->TIFFGrid->setRowStretch(1, 10);
-    d->TIFFGrid->setMargin(KDialog::spacingHint());
-    d->TIFFGrid->setSpacing(KDialog::spacingHint());
+    d->TIFFGrid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    d->TIFFGrid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     connect(d->TIFFcompression, SIGNAL(toggled(bool)),
             this, SIGNAL(signalSettingsChanged()));

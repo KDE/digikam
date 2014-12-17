@@ -133,8 +133,8 @@ CBSettings::CBSettings(QWidget* parent)
     grid->addWidget(labelYellow,  2, 0, 1, 1);
     grid->addWidget(d->bInput,    2, 1, 1, 1);
     grid->addWidget(labelBlue,    2, 2, 1, 1);
-    grid->setMargin(KDialog::spacingHint());
-    grid->setSpacing(KDialog::spacingHint());
+    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     grid->setRowStretch(3, 10);
 
     // -------------------------------------------------------------

@@ -208,7 +208,7 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
     grid->addWidget(d->progressBox, 3, 0, 1, 1);
     grid->setRowStretch(0, 10);
     grid->setColumnStretch(1, 10);
-    grid->setSpacing(KDialog::spacingHint());
+    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     grid->setMargin(0);
 
     // ---------------------------------------------------------------

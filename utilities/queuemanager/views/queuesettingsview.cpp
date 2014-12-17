@@ -139,8 +139,8 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     KVBox* const vbox3       = new KVBox(sv3->viewport());
     sv3->setWidget(vbox3);
     sv3->setWidgetResizable(true);
-    vbox3->setMargin(KDialog::spacingHint());
-    vbox3->setSpacing(KDialog::spacingHint());
+    vbox3->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    vbox3->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->useOrgAlbum           = new QCheckBox(i18n("Use original Album"), vbox3);
     d->albumSel              = new AlbumSelectWidget(vbox3);
@@ -171,8 +171,8 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     d->renamingButtonGroup->addButton(d->renameManual,   QueueSettings::CUSTOMIZE);
 
     vbox2->setStretchFactor(space, 10);
-    vbox2->setMargin(KDialog::spacingHint());
-    vbox2->setSpacing(KDialog::spacingHint());
+    vbox2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    vbox2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     insertTab(Private::RENAMING, sv2, SmallIcon("insert-image"), i18n("File Renaming"));
 
@@ -230,8 +230,8 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     layout->addWidget(d->conflictLabel);
     layout->addWidget(conflictBox);
     layout->addWidget(d->useMutiCoreCPU);
-    layout->setMargin(KDialog::spacingHint());
-    layout->setSpacing(KDialog::spacingHint());
+    layout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     layout->addStretch();
 
     insertTab(Private::BEHAVIOR, sv, SmallIcon("dialog-information"), i18n("Behavior"));

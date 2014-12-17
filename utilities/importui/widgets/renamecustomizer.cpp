@@ -127,8 +127,8 @@ RenameCustomizer::RenameCustomizer(QWidget* const parent, const QString& cameraT
     d->renameDefaultCaseType->setWhatsThis(i18n("Set the method to use to change the case "
                                                 "of the image filenames."));
 
-    boxLayout1->setMargin(KDialog::spacingHint());
-    boxLayout1->setSpacing(KDialog::spacingHint());
+    boxLayout1->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    boxLayout1->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     boxLayout1->addSpacing(10);
     boxLayout1->addWidget(d->renameDefaultCase);
     boxLayout1->addWidget(d->renameDefaultCaseType);
@@ -149,8 +149,8 @@ RenameCustomizer::RenameCustomizer(QWidget* const parent, const QString& cameraT
     mainLayout->addWidget(d->renameCustom,         4, 0, 1, 2);
     mainLayout->addWidget(d->advancedRenameWidget, 5, 0, 1, 2);
     mainLayout->setRowStretch(6, 10);
-    mainLayout->setMargin(KDialog::spacingHint());
-    mainLayout->setSpacing(KDialog::spacingHint());
+    mainLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    mainLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -- setup connections -------------------------------------------------
 

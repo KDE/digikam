@@ -131,8 +131,8 @@ SetupMime::SetupMime(QWidget* const parent)
     grid1->addWidget(d->imageFileFilterLabel, 0, 1, 1, 1);
     grid1->addWidget(hbox1,                   1, 1, 1, 1);
     grid1->setColumnStretch(1, 10);
-    grid1->setMargin(KDialog::spacingHint());
-    grid1->setSpacing(KDialog::spacingHint());
+    grid1->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid1->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // --------------------------------------------------------
 
@@ -169,8 +169,8 @@ SetupMime::SetupMime(QWidget* const parent)
     grid2->addWidget(d->movieFileFilterLabel,   0, 1, 1, 1);
     grid2->addWidget(hbox2,                     1, 1, 1, 1);
     grid2->setColumnStretch(1, 10);
-    grid2->setMargin(KDialog::spacingHint());
-    grid2->setSpacing(KDialog::spacingHint());
+    grid2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // --------------------------------------------------------
 
@@ -207,13 +207,13 @@ SetupMime::SetupMime(QWidget* const parent)
     grid3->addWidget(d->audioFileFilterLabel, 0, 1, 1, 1);
     grid3->addWidget(hbox3,                   1, 1, 1, 1);
     grid3->setColumnStretch(1, 10);
-    grid3->setMargin(KDialog::spacingHint());
-    grid3->setSpacing(KDialog::spacingHint());
+    grid3->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid3->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // --------------------------------------------------------
 
-    layout->setMargin(KDialog::spacingHint());
-    layout->setSpacing(KDialog::spacingHint());
+    layout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     layout->addWidget(explanationLabel);
     layout->addWidget(imageFileFilterBox);
     layout->addWidget(movieFileFilterBox);

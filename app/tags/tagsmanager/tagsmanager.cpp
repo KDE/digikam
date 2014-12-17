@@ -667,10 +667,10 @@ void TagsManager::closeEvent(QCloseEvent* event)
 void TagsManager::setupActions()
 {
     d->mainToolbar = new KToolBar(d->treeWindow, true);
-    d->mainToolbar->layout()->setContentsMargins(KDialog::marginHint(),
-                                                 KDialog::marginHint(),
-                                                 KDialog::marginHint(),
-                                                 KDialog::marginHint());
+    d->mainToolbar->layout()->setContentsMargins(QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin),
+                                                 QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin),
+                                                 QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin),
+                                                 QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin));
 
     QWidgetAction* const pixMapAction = new QWidgetAction(this);
     pixMapAction->setDefaultWidget(d->tagPixmap);

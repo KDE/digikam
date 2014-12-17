@@ -324,7 +324,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     infoBoxGrid->addWidget(explanation,    0, 1, 1, 2);
     infoBoxGrid->setColumnStretch(1, 10);
     infoBoxGrid->setRowStretch(1, 10);
-    infoBoxGrid->setMargin(KDialog::spacingHint());
+    infoBoxGrid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     infoBoxGrid->setSpacing(0);
     infoBox->setLayout(infoBoxGrid);
 
@@ -514,15 +514,15 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     balooGrid->addWidget(balooExplanation, 0, 1, 1, 2);
     balooGrid->setColumnStretch(1, 10);
     balooGrid->setRowStretch(1, 10);
-    balooGrid->setMargin(KDialog::spacingHint());
+    balooGrid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     balooGrid->setSpacing(0);
 
     // --------------------------------------------------------
 
     balooLayout->setMargin(0);
-    balooLayout->setSpacing(KDialog::spacingHint());
+    balooLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     balooLayout->addWidget(balooGroup);
-    balooLayout->addSpacing(KDialog::spacingHint());
+    balooLayout->addSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     balooLayout->addWidget(balooBox);
     balooLayout->addWidget(d->resyncButton, 0, Qt::AlignRight);
     balooLayout->addStretch();

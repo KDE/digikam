@@ -244,7 +244,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
     }
 
     grid->setMargin(0);
-    grid->setSpacing(KDialog::spacingHint());
+    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     page->setLayout(grid);
 
     // Initialize ---------------------------------------------

@@ -115,7 +115,7 @@ SetupCollections::SetupCollections(KPageDialog* const dialog, QWidget* const par
     albumPathBoxLayout->addWidget(d->collectionView);
     albumPathBox->setLayout(albumPathBoxLayout);
     albumPathBoxLayout->setSpacing(0);
-    albumPathBoxLayout->setMargin(KDialog::spacingHint());
+    albumPathBoxLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // --------------------------------------------------------
 

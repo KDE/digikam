@@ -188,7 +188,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     : KVBox(parent), d(new Private)
 {
     setMargin(0);
-    setSpacing(KDialog::spacingHint());
+    setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     d->tabWidget           = new KTabWidget(this);
 
     d->metadataChangeTimer = new QTimer(this);
@@ -233,7 +233,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     // Buttons -----------------------------------------
 
     KHBox* const applyButtonBox = new KHBox(this);
-    applyButtonBox->setSpacing(KDialog::spacingHint());
+    applyButtonBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->applyBtn           = new QPushButton(i18n("Apply"), applyButtonBox);
     d->applyBtn->setIcon(SmallIcon("dialog-ok-apply"));
@@ -242,7 +242,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     //buttonsBox->setStretchFactor(d->applyBtn, 10);
 
     KHBox* const buttonsBox     = new KHBox(this);
-    buttonsBox->setSpacing(KDialog::spacingHint());
+    buttonsBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->revertBtn          = new QToolButton(buttonsBox);
     d->revertBtn->setIcon(SmallIcon("document-revert"));
@@ -267,8 +267,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     grid1->addWidget(colorBox,        4, 0, 1, 2);
     grid1->addWidget(rateBox,         5, 0, 1, 2);
     grid1->setRowStretch(1, 10);
-    grid1->setMargin(KDialog::spacingHint());
-    grid1->setSpacing(KDialog::spacingHint());
+    grid1->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid1->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->tabWidget->insertTab(Private::DESCRIPTIONS, sv, i18n("Description"));
 
@@ -301,7 +301,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
                                      "',' can be used to create more than one hierarchy at the same time."));
 
     KHBox* const tagsSearch = new KHBox(tagsArea);
-    tagsSearch->setSpacing(KDialog::spacingHint());
+    tagsSearch->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->tagsSearchBar   = new SearchTextBar(tagsSearch, "ImageDescEditTabTagsSearchBar");
     d->tagsSearchBar->setModel(d->tagCheckView->filteredModel(),
@@ -349,8 +349,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     grid2->addWidget(d->templateSelector, 0, 0, 1, 2);
     grid2->addWidget(d->templateViewer,   1, 0, 1, 2);
     grid2->setRowStretch(1, 10);
-    grid2->setMargin(KDialog::spacingHint());
-    grid2->setSpacing(KDialog::spacingHint());
+    grid2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->tabWidget->insertTab(Private::INFOS, sv2, i18n("Information"));
 

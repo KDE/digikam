@@ -340,8 +340,8 @@ WBSettings::WBSettings(QWidget* const parent)
     grid->addWidget(d->fineExposureLabel,      12, 0, 1, 2);
     grid->addWidget(d->fineExposureInput,      12, 2, 1, 4);
     grid->setRowStretch(13, 10);
-    grid->setMargin(KDialog::spacingHint());
-    grid->setSpacing(KDialog::spacingHint());
+    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 

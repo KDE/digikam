@@ -116,7 +116,7 @@ CurvesSettings::CurvesSettings(QWidget* const parent, DImg* const img)
     grid->addWidget(d->curvesBox, 0, 0, 1, 1);
     grid->setRowStretch(1, 10);
     grid->setMargin(0);
-    grid->setSpacing(KDialog::spacingHint());
+    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 

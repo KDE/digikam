@@ -158,8 +158,8 @@ SharpSettings::SharpSettings(QWidget* const parent)
     grid->addWidget(new KSeparator(parent), 1, 0, 1, 2);
     grid->addWidget(d->stack,               2, 0, 1, 2);
     grid->setRowStretch(3, 10);
-    grid->setMargin(KDialog::spacingHint());
-    grid->setSpacing(KDialog::spacingHint());
+    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 

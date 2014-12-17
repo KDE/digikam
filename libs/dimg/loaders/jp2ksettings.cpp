@@ -93,8 +93,8 @@ JP2KSettings::JP2KSettings(QWidget* const parent)
     d->JPEG2000Grid->addWidget(d->JPEG2000compression,      2, 0, 1, 2);
     d->JPEG2000Grid->setColumnStretch(1, 10);
     d->JPEG2000Grid->setRowStretch(3, 10);
-    d->JPEG2000Grid->setMargin(KDialog::spacingHint());
-    d->JPEG2000Grid->setSpacing(KDialog::spacingHint());
+    d->JPEG2000Grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    d->JPEG2000Grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     connect(d->JPEG2000LossLess, SIGNAL(toggled(bool)),
             this, SLOT(slotToggleJPEG2000LossLess(bool)));

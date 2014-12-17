@@ -93,8 +93,8 @@ void LensAutoFix::registerSettingsWidget()
     grid->addWidget(line,              2, 0, 1, 2);
     grid->addWidget(d->settingsView,   3, 0, 1, 2);
     grid->setRowStretch(4, 10);
-    grid->setMargin(KDialog::spacingHint());
-    grid->setSpacing(KDialog::spacingHint());
+    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     connect(d->settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));

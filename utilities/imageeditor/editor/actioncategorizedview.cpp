@@ -94,7 +94,7 @@ void ActionCategorizedView::adjustGridSize()
         }
     }
 
-    //grid += QSize(KDialog::spacingHint(), KDialog::spacingHint());
+    //grid += QSize(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing), QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     setGridSize(grid);
 }
 

@@ -103,7 +103,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent )
 
     gLayout1->addWidget(d->exifRotateBox);
     gLayout1->addWidget(d->exifSetOrientationBox);
-    gLayout1->setMargin(KDialog::spacingHint());
+    gLayout1->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     gLayout1->setSpacing(0);
 
     // --------------------------------------------------------
@@ -143,15 +143,15 @@ SetupMetadata::SetupMetadata(QWidget* const parent )
     grid->addWidget(exiv2LogoLabel, 0, 0, 1, 1);
     grid->addWidget(explanation,    0, 1, 1, 2);
     grid->setColumnStretch(1, 10);
-    grid->setMargin(KDialog::spacingHint());
+    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     grid->setSpacing(0);
 
     // --------------------------------------------------------
 
     mainLayout->setMargin(0);
-    mainLayout->setSpacing(KDialog::spacingHint());
+    mainLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     mainLayout->addWidget(ExifGroup);
-    mainLayout->addSpacing(KDialog::spacingHint());
+    mainLayout->addSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     mainLayout->addWidget(box);
     mainLayout->addStretch();
 

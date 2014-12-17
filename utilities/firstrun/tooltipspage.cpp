@@ -85,8 +85,8 @@ TooltipsPage::TooltipsPage(KAssistantDialog* const dlg)
 
     vlay->addWidget(d->hideTooltips);
     vlay->addWidget(d->showTooltips);
-    vlay->setMargin(KDialog::spacingHint());
-    vlay->setSpacing(KDialog::spacingHint());
+    vlay->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    vlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     QLabel* const label2 = new QLabel(vbox);
     label2->setWordWrap(true);

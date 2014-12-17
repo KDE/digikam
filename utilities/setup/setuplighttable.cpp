@@ -122,7 +122,7 @@ SetupLightTable::SetupLightTable(QWidget* const parent)
     gLayout->addWidget(d->autoLoadOnRightPanel);
     //gLayout->addWidget(d->loadFullImageSize);
     gLayout->addWidget(d->clearOnClose);
-    gLayout->setMargin(KDialog::spacingHint());
+    gLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     gLayout->setSpacing(0);
 
     // --------------------------------------------------------
@@ -134,7 +134,7 @@ SetupLightTable::SetupLightTable(QWidget* const parent)
     layout->addWidget(interfaceOptionsGroup);
     layout->addWidget(d->fullScreenSettings);
     layout->setMargin(0);
-    layout->setSpacing(KDialog::spacingHint());
+    layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     layout->addStretch();
 
     // --------------------------------------------------------

@@ -217,8 +217,8 @@ SearchTabHeader::SearchTabHeader(QWidget* const parent)
     grid1->addWidget(searchLabel,          0, 0);
     grid1->addWidget(d->keywordEdit,       0, 1);
     grid1->addWidget(d->advancedEditLabel, 1, 1);
-    grid1->setMargin(KDialog::spacingHint());
-    grid1->setSpacing(KDialog::spacingHint());
+    grid1->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid1->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->newSearchWidget->setLayout(grid1);
 
@@ -242,8 +242,8 @@ SearchTabHeader::SearchTabHeader(QWidget* const parent)
 
     hbox1->addWidget(d->saveNameEdit);
     hbox1->addWidget(d->saveButton);
-    hbox1->setMargin(KDialog::spacingHint());
-    hbox1->setSpacing(KDialog::spacingHint());
+    hbox1->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    hbox1->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->saveAsWidget->setLayout(hbox1);
 
@@ -259,8 +259,8 @@ SearchTabHeader::SearchTabHeader(QWidget* const parent)
 
     vbox1->addWidget(d->storedKeywordEditName);
     vbox1->addWidget(d->storedKeywordEdit);
-    vbox1->setMargin(KDialog::spacingHint());
-    vbox1->setSpacing(KDialog::spacingHint());
+    vbox1->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    vbox1->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->editSimpleWidget->setLayout(vbox1);
 

@@ -202,8 +202,8 @@ BorderSettings::BorderSettings(QWidget* parent)
     grid->addWidget(d->labelBackground,     10, 0, 1, 1);
     grid->addWidget(d->secondColorButton,   10, 1, 1, 2);
     grid->setRowStretch(11, 10);
-    grid->setMargin(KDialog::spacingHint());
-    grid->setSpacing(KDialog::spacingHint());
+    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 

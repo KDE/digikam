@@ -208,7 +208,7 @@ FreeRotationTool::FreeRotationTool(QObject* const parent)
     containerLayout2->addWidget(d->autoAdjustBtn,       1, 2, 2, 1);
     containerLayout2->addWidget(d->autoAdjustPoint2Btn, 2, 0, 1, 1);
     containerLayout2->setColumnStretch(1, 10);
-    containerLayout2->setMargin(KDialog::marginHint());
+    containerLayout2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin));
     autoAdjustContainer->setLayout(containerLayout2);
 
     // -------------------------------------------------------------

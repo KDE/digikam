@@ -233,7 +233,7 @@ void CurvesBox::setup()
     mainLayout->addLayout(l3,       1, 0, 1, 1);
     mainLayout->setRowStretch(2, 10);
     mainLayout->setMargin(0);
-    mainLayout->setSpacing(KDialog::spacingHint());
+    mainLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     setLayout(mainLayout);
 
     // default: disable all control widgets

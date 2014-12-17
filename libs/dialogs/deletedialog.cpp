@@ -283,7 +283,7 @@ DeleteWidget::DeleteWidget(QWidget* const parent)
     d->deleteText->setWordWrap(true);
 
     QHBoxLayout* hbox = new QHBoxLayout();
-    hbox->setSpacing(KDialog::spacingHint());
+    hbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     hbox->setMargin(0);
     hbox->addWidget(logo);
     hbox->addWidget(d->deleteText, 10);
@@ -314,8 +314,8 @@ DeleteWidget::DeleteWidget(QWidget* const parent)
     d->doNotShowAgain->setText(i18n("Do not &ask again"));
 
     QVBoxLayout* vbox = new QVBoxLayout(this);
-    vbox->setSpacing(KDialog::spacingHint());
-    vbox->setMargin(KDialog::spacingHint());
+    vbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    vbox->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     vbox->setContentsMargins(0, 0, 0, 0);
     vbox->addLayout(hbox);
     vbox->addWidget(d->fileList, 10);

@@ -110,7 +110,7 @@ FileSaveOptionsBox::FileSaveOptionsBox(QWidget* const parent)
 
     d->noneOptions = new QWidget(this);
     d->noneGrid    = new QGridLayout(d->noneOptions);
-    d->noneGrid->setSpacing(KDialog::spacingHint());
+    d->noneGrid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     d->noneOptions->setLayout(d->noneGrid);
     d->labelNone   = new QLabel(i18n("No options available"), d->noneOptions);
     d->noneGrid->addWidget(d->labelNone, 0, 0, 0, 1);

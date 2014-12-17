@@ -225,8 +225,8 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    grid1->setMargin(KDialog::spacingHint());
-    grid1->setSpacing(KDialog::spacingHint());
+    grid1->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid1->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     grid1->setAlignment(Qt::AlignTop);
     grid1->setColumnStretch(1, 10);
     grid1->addWidget(label1,                 0, 0, 1, 1);
@@ -297,8 +297,8 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
     grid2->addWidget(d->locationProvinceStateEdit, 2, 1, 1, 2);
     grid2->addWidget(label12,                      3, 0, 1, 1);
     grid2->addWidget(d->locationCountryCodeEdit,   3, 1, 1, 2);
-    grid2->setMargin(KDialog::spacingHint());
-    grid2->setSpacing(KDialog::spacingHint());
+    grid2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     grid2->setAlignment(Qt::AlignTop);
     grid2->setColumnStretch(1, 10);
     grid2->setRowStretch(4, 10);
@@ -411,8 +411,8 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
     grid3->addWidget(d->contactEmailEdit,         6, 1, 1, 2);
     grid3->addWidget(label20,                     7, 0, 1, 1);
     grid3->addWidget(d->contactWebUrlEdit,        7, 1, 1, 2);
-    grid3->setMargin(KDialog::spacingHint());
-    grid3->setSpacing(KDialog::spacingHint());
+    grid3->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid3->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     grid3->setAlignment(Qt::AlignTop);
     grid3->setColumnStretch(1, 10);
     grid3->setRowStretch(8, 10);
@@ -434,8 +434,8 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
     QGridLayout* grid4 = new QGridLayout(page4);
     d->subjects        = new SubjectEdit(page4);
 
-    grid4->setMargin(KDialog::spacingHint());
-    grid4->setSpacing(KDialog::spacingHint());
+    grid4->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid4->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     grid4->setAlignment(Qt::AlignTop);
     grid4->addWidget(d->subjects, 0, 0, 1, 1);
     grid4->setRowStretch(1, 10);

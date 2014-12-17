@@ -142,8 +142,8 @@ void Crop::registerSettingsWidget()
     mainLayout->addWidget(d->heightInput,               4, 1, 1, 3);
     mainLayout->addWidget(new QLabel(m_settingsWidget), 5, 1, 1, 3);
     mainLayout->setRowStretch(5, 10);
-    mainLayout->setMargin(KDialog::spacingHint());
-    mainLayout->setSpacing(KDialog::spacingHint());
+    mainLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    mainLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 

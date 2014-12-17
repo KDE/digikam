@@ -150,7 +150,7 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
 
     KHBox* hbox = new KHBox(this);
     hbox->setMargin(0);
-    hbox->setSpacing(KDialog::spacingHint());
+    hbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->nameEdit = new KLineEdit(hbox);
     d->nameEdit->setClearButtonShown(true);
@@ -247,13 +247,13 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     vlayTop->addWidget(hbox);
     vlayTop->setStretchFactor(mapPanel, 10);
     vlayTop->setMargin(0);
-    vlayTop->setSpacing(KDialog::spacingHint());
+    vlayTop->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     QFrame* const frameBottom     = new QFrame(d->splitter);
     QVBoxLayout* const vlayBottom = new QVBoxLayout(frameBottom);
     vlayBottom->addWidget(d->searchTreeView);
     vlayBottom->addWidget(d->searchGPSBar);
     vlayBottom->setMargin(0);
-    vlayBottom->setSpacing(KDialog::spacingHint());
+    vlayBottom->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->splitter->addWidget(frameTop);
     d->splitter->addWidget(frameBottom);

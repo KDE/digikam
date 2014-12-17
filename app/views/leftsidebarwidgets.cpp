@@ -696,7 +696,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
     hlay2->addWidget(logHistoButton);
 
     hlay->setMargin(0);
-    hlay->setSpacing(KDialog::spacingHint());
+    hlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     hlay->addWidget(label1);
     hlay->addWidget(d->timeUnitCB);
     hlay->addItem(new QSpacerItem(10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum));
@@ -718,7 +718,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
 
     KHBox* const hbox2 = new KHBox(panel);
     hbox2->setMargin(0);
-    hbox2->setSpacing(KDialog::spacingHint());
+    hbox2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->resetButton = new QToolButton(hbox2);
     d->resetButton->setIcon(SmallIcon("document-revert"));
@@ -745,8 +745,8 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
     grid->addWidget(d->scrollBar,        3, 0, 1, 4);
     grid->addWidget(hbox2,               4, 0, 1, 4);
     grid->setColumnStretch(2, 10);
-    grid->setMargin(KDialog::spacingHint());
-    grid->setSpacing(KDialog::spacingHint());
+    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // ---------------------------------------------------------------
 
@@ -763,7 +763,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
 
     vlay->addWidget(panel);
     vlay->addWidget(d->timeLineFolderView);
-    vlay->addItem(new QSpacerItem(KDialog::spacingHint(), KDialog::spacingHint(),
+    vlay->addItem(new QSpacerItem(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing), QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing),
                                   QSizePolicy::Minimum, QSizePolicy::Minimum));
     vlay->addWidget(d->searchDateBar);
     vlay->setMargin(0);

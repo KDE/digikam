@@ -238,7 +238,7 @@ FuzzySearchView::FuzzySearchView(SearchModel* const searchModel,
     d->searchFuzzyBar->setModel(d->searchTreeView->filteredModel(),
                                 AbstractAlbumModel::AlbumIdRole, AbstractAlbumModel::AlbumTitleRole);
     d->searchFuzzyBar->setFilterModel(d->searchTreeView->albumFilterModel());
-    d->folderView->setSpacing(KDialog::spacingHint());
+    d->folderView->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     d->folderView->setMargin(0);
 
     // ---------------------------------------------------------------
@@ -303,7 +303,7 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
 
     KHBox* const saveBox = new KHBox();
     saveBox->setMargin(0);
-    saveBox->setSpacing(KDialog::spacingHint());
+    saveBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->nameEditImage = new KLineEdit(saveBox);
     d->nameEditImage->setClearButtonShown(true);
@@ -333,8 +333,8 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
     mainLayout->addWidget(saveBox,        4, 0, 1, 3);
     mainLayout->setRowStretch(5, 10);
     mainLayout->setColumnStretch(1, 10);
-    mainLayout->setMargin(KDialog::spacingHint());
-    mainLayout->setSpacing(KDialog::spacingHint());
+    mainLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    mainLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     mainWidget->setLayout(mainLayout);
 
     return mainWidget;
@@ -402,13 +402,13 @@ QWidget* FuzzySearchView::setupSketchPanel() const
     settingsLayout->addWidget(d->resultsSketch, 0, 6);
     settingsLayout->setColumnStretch(4, 10);
     settingsLayout->setMargin(0);
-    settingsLayout->setSpacing(KDialog::spacingHint());
+    settingsLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // ---------------------------------------------------------------
 
     KHBox* const saveBox = new KHBox();
     saveBox->setMargin(0);
-    saveBox->setSpacing(KDialog::spacingHint());
+    saveBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->resetButton = new QToolButton(saveBox);
     d->resetButton->setIcon(SmallIcon("document-revert"));
@@ -440,8 +440,8 @@ QWidget* FuzzySearchView::setupSketchPanel() const
     mainLayout->addWidget(saveBox,        3, 0, 1, 3);
     mainLayout->setRowStretch(5, 10);
     mainLayout->setColumnStretch(1, 10);
-    mainLayout->setMargin(KDialog::spacingHint());
-    mainLayout->setSpacing(KDialog::spacingHint());
+    mainLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    mainLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     mainWidget->setLayout(mainLayout);
 
     return mainWidget;

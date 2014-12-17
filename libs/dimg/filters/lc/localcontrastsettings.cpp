@@ -220,8 +220,8 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
     grid1->addWidget(d->highSaturationInput,  3, 0, 1, 2);
     grid1->addWidget(label3,                  4, 0, 1, 2);
     grid1->addWidget(d->lowSaturationInput,   5, 0, 1, 2);
-    grid1->setMargin(KDialog::spacingHint());
-    grid1->setSpacing(KDialog::spacingHint());
+    grid1->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid1->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 
@@ -251,8 +251,8 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
     grid2->addWidget(d->powerInput1, 0, 1, 1, 1);
     grid2->addWidget(d->label5,      1, 0, 1, 1);
     grid2->addWidget(d->blurInput1,  1, 1, 1, 1);
-    grid2->setMargin(KDialog::spacingHint());
-    grid2->setSpacing(KDialog::spacingHint());
+    grid2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 
@@ -282,8 +282,8 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
     grid3->addWidget(d->powerInput2, 0, 1, 1, 1);
     grid3->addWidget(d->label7,      1, 0, 1, 1);
     grid3->addWidget(d->blurInput2,  1, 1, 1, 1);
-    grid3->setMargin(KDialog::spacingHint());
-    grid3->setSpacing(KDialog::spacingHint());
+    grid3->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid3->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 
@@ -313,8 +313,8 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
     grid4->addWidget(d->powerInput3, 0, 1, 1, 1);
     grid4->addWidget(d->label9,      1, 0, 1, 1);
     grid4->addWidget(d->blurInput3,  1, 1, 1, 1);
-    grid4->setMargin(KDialog::spacingHint());
-    grid4->setSpacing(KDialog::spacingHint());
+    grid4->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid4->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 
@@ -344,8 +344,8 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
     grid5->addWidget(d->powerInput4, 0, 1, 1, 1);
     grid5->addWidget(d->label11,     1, 0, 1, 1);
     grid5->addWidget(d->blurInput4,  1, 1, 1, 1);
-    grid5->setMargin(KDialog::spacingHint());
-    grid5->setSpacing(KDialog::spacingHint());
+    grid5->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid5->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 
@@ -369,8 +369,8 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
 
     grid->addWidget(d->expanderBox, 0, 0, 1, 1);
     grid->setRowStretch(0, 10);
-    grid->setMargin(KDialog::spacingHint());
-    grid->setSpacing(KDialog::spacingHint());
+    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 

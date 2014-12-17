@@ -130,8 +130,8 @@ FreeRotationSettings::FreeRotationSettings(QWidget* const parent)
     grid->addWidget(d->antialiasInput, 4, 0, 1, -1);
     grid->addWidget(label5,            5, 0, 1, 1);
     grid->addWidget(d->autoCropCB,     5, 1, 1, 1);
-    grid->setMargin(KDialog::spacingHint());
-    grid->setSpacing(KDialog::spacingHint());
+    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 

@@ -151,12 +151,12 @@ void DatabaseWidget::setupMainArea()
     vlay->addWidget(databasePathEdit);
     vlay->addWidget(d->expertSettings);
     vlay->setSpacing(0);
-    vlay->setMargin(KDialog::spacingHint());
+    vlay->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // --------------------------------------------------------
 
     layout->setMargin(0);
-    layout->setSpacing(KDialog::spacingHint());
+    layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     layout->addWidget(dbPathBox);
     layout->addStretch();
 

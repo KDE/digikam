@@ -154,8 +154,8 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     grid->setColumnStretch(2, 10);
     grid->setRowStretch(0, 10);
     grid->setRowStretch(2, 10);
-    grid->setMargin(KDialog::spacingHint());
-    grid->setSpacing(KDialog::spacingHint());
+    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     d->errorView->setLayout(grid);
 
     insertWidget(Private::ErrorView, d->errorView);
@@ -178,8 +178,8 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     d->grid->setColumnStretch(0, 10);
     d->grid->setColumnStretch(2, 10);
     d->grid->setRowStretch(0, 10);
-    d->grid->setMargin(KDialog::spacingHint());
-    d->grid->setSpacing(KDialog::spacingHint());
+    d->grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    d->grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     d->playerView->setLayout(d->grid);
 
     insertWidget(Private::PlayerView, d->playerView);

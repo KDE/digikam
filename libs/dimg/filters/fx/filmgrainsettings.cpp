@@ -186,7 +186,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* const parent)
     grid0->addWidget(d->sizeLabel,         0, 0, 1, 1);
     grid0->addWidget(d->grainSizeInput,    1, 0, 1, 1);
     grid0->addWidget(d->photoDistribution, 2, 0, 1, 1);
-    grid0->setMargin(KDialog::spacingHint());
+    grid0->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 
@@ -232,8 +232,8 @@ FilmGrainSettings::FilmGrainSettings(QWidget* const parent)
     grid1->addWidget(d->midtonesLumInput,   5, 0, 1, 1);
     grid1->addWidget(d->label4,             6, 0, 1, 1);
     grid1->addWidget(d->highlightsLumInput, 7, 0, 1, 1);
-    grid1->setMargin(KDialog::spacingHint());
-    grid1->setSpacing(KDialog::spacingHint());
+    grid1->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid1->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 
@@ -279,8 +279,8 @@ FilmGrainSettings::FilmGrainSettings(QWidget* const parent)
     grid2->addWidget(d->midtonesChromaBlueInput,   5, 0, 1, 1);
     grid2->addWidget(d->label8,                    6, 0, 1, 1);
     grid2->addWidget(d->highlightsChromaBlueInput, 7, 0, 1, 1);
-    grid2->setMargin(KDialog::spacingHint());
-    grid2->setSpacing(KDialog::spacingHint());
+    grid2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 
@@ -326,8 +326,8 @@ FilmGrainSettings::FilmGrainSettings(QWidget* const parent)
     grid3->addWidget(d->midtonesChromaRedInput,   5, 0, 1, 1);
     grid3->addWidget(d->label12,                  6, 0, 1, 1);
     grid3->addWidget(d->highlightsChromaRedInput, 7, 0, 1, 1);
-    grid3->setMargin(KDialog::spacingHint());
-    grid3->setSpacing(KDialog::spacingHint());
+    grid3->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid3->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 
@@ -353,8 +353,8 @@ FilmGrainSettings::FilmGrainSettings(QWidget* const parent)
     d->expanderBox->setCheckBoxVisible(3, true);
 
     grid->addWidget(d->expanderBox, 0, 0, 1, 1);
-    grid->setMargin(KDialog::spacingHint());
-    grid->setSpacing(KDialog::spacingHint());
+    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 

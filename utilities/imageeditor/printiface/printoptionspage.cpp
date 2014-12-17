@@ -103,7 +103,7 @@ public:
         cmPreferences        = new QPushButton(i18n("Settings..."), cmbox);
         QWidget* const space = new QWidget(cmbox);
         cmbox->setStretchFactor(space, 10);
-        cmbox->setSpacing(KDialog::spacingHint());
+        cmbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     }
 
     void initPositionFrame()

@@ -135,7 +135,7 @@ CollectionPage::CollectionPage(KAssistantDialog* const dlg)
     vlayout->addWidget(textLabel3);
     vlayout->addWidget(d->dbPathRequester);
     vlayout->setMargin(0);
-    vlayout->setSpacing(KDialog::spacingHint());
+    vlayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     setPageWidget(widget);
     setLeftBottomPix(KIconLoader::global()->loadIcon("server-database", KIconLoader::NoGroup, KIconLoader::SizeEnormous));

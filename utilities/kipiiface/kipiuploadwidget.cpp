@@ -75,7 +75,7 @@ KipiUploadWidget::KipiUploadWidget(KipiInterface* const iface, QWidget* const pa
     d->albumSel       = new AlbumSelectWidget(this);
     vlay->addWidget(d->albumSel);
     vlay->setMargin(0);
-    vlay->setSpacing(KDialog::spacingHint());
+    vlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     connect(d->albumSel, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotSelectionChanged()));

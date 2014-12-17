@@ -194,8 +194,8 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
     layout->addWidget(d->showLabels);
     layout->addWidget(screenSelectBox);
     layout->addStretch();
-    layout->setMargin(KDialog::spacingHint());
-    layout->setSpacing(KDialog::spacingHint());
+    layout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     readSettings();
 

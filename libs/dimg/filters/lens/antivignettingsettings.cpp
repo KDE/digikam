@@ -203,8 +203,8 @@ AntiVignettingSettings::AntiVignettingSettings(QWidget* parent)
     grid->addWidget(line,                  13, 0, 1, 3);
     grid->addWidget(d->addVignettingCheck, 14, 0, 1, 3);
     grid->setRowStretch(15, 10);
-    grid->setMargin(KDialog::spacingHint());
-    grid->setSpacing(KDialog::spacingHint());
+    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 

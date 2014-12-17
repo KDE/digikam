@@ -133,8 +133,8 @@ SetupTemplate::SetupTemplate(QWidget* const parent)
     // -------------------------------------------------------------
 
     QGridLayout* grid = new QGridLayout;
-    grid->setMargin(KDialog::spacingHint());
-    grid->setSpacing(KDialog::spacingHint());
+    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     grid->setAlignment(Qt::AlignTop);
     grid->setColumnStretch(1, 10);
     grid->setRowStretch(4, 10);

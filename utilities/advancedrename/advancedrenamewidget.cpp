@@ -246,7 +246,7 @@ void AdvancedRenameWidget::registerParserControls()
         {
             // register options
             QPushButton* btn      = 0;
-            DynamicLayout* layout = new DynamicLayout(KDialog::marginHint(), KDialog::marginHint());
+            DynamicLayout* layout = new DynamicLayout(QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin), QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin));
             foreach(Rule* p, d->parser->options())
             {
                 btn = p->registerButton(this);
@@ -400,7 +400,7 @@ void AdvancedRenameWidget::setupWidgets()
     }
 
     mainLayout->setMargin(0);
-    mainLayout->setSpacing(KDialog::marginHint());
+    mainLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin));
     setLayout(mainLayout);
 
     // --------------------------------------------------------

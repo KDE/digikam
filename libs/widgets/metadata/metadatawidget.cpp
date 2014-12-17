@@ -178,7 +178,7 @@ MetadataWidget::MetadataWidget(QWidget* const parent, const char* name)
     d->mainLayout->setColumnStretch(2, 10);
     d->mainLayout->setRowStretch(1, 10);
     d->mainLayout->setSpacing(0);
-    d->mainLayout->setMargin(KDialog::spacingHint());
+    d->mainLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -----------------------------------------------------------------
 
@@ -515,7 +515,7 @@ void MetadataWidget::setFileName(const QString& fileName)
 void MetadataWidget::setUserAreaWidget(QWidget* const w)
 {
     QVBoxLayout* const vLayout = new QVBoxLayout();
-    vLayout->setSpacing(KDialog::spacingHint());
+    vLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     vLayout->addWidget(w);
     vLayout->addStretch();
     d->mainLayout->addLayout(vLayout, 3, 0, 1, 5);

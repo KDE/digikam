@@ -316,12 +316,12 @@ QSize EditorToolSettings::minimumSizeHint() const
 
 int EditorToolSettings::marginHint()
 {
-    return KDialog::marginHint();
+    return QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin);
 }
 
 int EditorToolSettings::spacingHint()
 {
-    return KDialog::spacingHint();
+    return QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 }
 
 QWidget* EditorToolSettings::plainPage() const

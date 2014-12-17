@@ -148,8 +148,8 @@ SetupEditor::SetupEditor(QWidget* const parent)
 
     gLayout1->addWidget(d->themebackgroundColor);
     gLayout1->addWidget(d->colorBox);
-    gLayout1->setMargin(KDialog::spacingHint());
-    gLayout1->setSpacing(KDialog::spacingHint());
+    gLayout1->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    gLayout1->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // --------------------------------------------------------
 
@@ -223,8 +223,8 @@ SetupEditor::SetupEditor(QWidget* const parent)
     gLayout2->addWidget(d->expoIndicatorMode);
     gLayout2->addWidget(exampleLabel);
     gLayout2->addWidget(previewHBox);
-    gLayout2->setMargin(KDialog::spacingHint());
-    gLayout2->setSpacing(KDialog::spacingHint());
+    gLayout2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    gLayout2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // --------------------------------------------------------
 
@@ -233,7 +233,7 @@ SetupEditor::SetupEditor(QWidget* const parent)
     layout->addWidget(exposureOptionsGroup);
     layout->addStretch();
     layout->setMargin(0);
-    layout->setSpacing(KDialog::spacingHint());
+    layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // --------------------------------------------------------
 

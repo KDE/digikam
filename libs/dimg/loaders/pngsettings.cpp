@@ -81,8 +81,8 @@ PNGSettings::PNGSettings(QWidget* parent)
     d->PNGGrid->addWidget(d->PNGcompression,      1, 1, 1, 2);
     d->PNGGrid->setColumnStretch(1, 10);
     d->PNGGrid->setRowStretch(2, 10);
-    d->PNGGrid->setMargin(KDialog::spacingHint());
-    d->PNGGrid->setSpacing(KDialog::spacingHint());
+    d->PNGGrid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    d->PNGGrid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     connect(d->PNGcompression, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));

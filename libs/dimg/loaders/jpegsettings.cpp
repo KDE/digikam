@@ -121,8 +121,8 @@ JPEGSettings::JPEGSettings(QWidget* const parent)
     d->JPEGGrid->addWidget(d->labelWarning,         4, 0, 1, 1);
     d->JPEGGrid->setColumnStretch(1, 10);
     d->JPEGGrid->setRowStretch(5, 10);
-    d->JPEGGrid->setMargin(KDialog::spacingHint());
-    d->JPEGGrid->setSpacing(KDialog::spacingHint());
+    d->JPEGGrid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    d->JPEGGrid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     connect(d->JPEGcompression, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));

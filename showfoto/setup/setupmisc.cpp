@@ -164,8 +164,8 @@ SetupMisc::SetupMisc(QWidget* const parent)
     layout->addWidget(miscOptionsGroup);
     layout->addWidget(sortOptionsGroup);
     layout->addStretch();
-    layout->setSpacing(KDialog::spacingHint());
-    layout->setMargin(KDialog::spacingHint());
+    layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    layout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // --------------------------------------------------------
 

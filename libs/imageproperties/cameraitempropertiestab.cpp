@@ -236,7 +236,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
     glay1->addWidget(d->downloaded,             10, 0, 1, 1);
     glay1->addWidget(d->labelAlreadyDownloaded, 10, 1, 1, 1);
     glay1->setColumnStretch(1, 10);
-    glay1->setMargin(KDialog::spacingHint());
+    glay1->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     glay1->setSpacing(0);
 
     addItem(w1, SmallIcon("dialog-information"),
@@ -294,7 +294,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
     glay2->addWidget(d->whiteBalance,           10, 0, 1, 1);
     glay2->addWidget(d->labelPhotoWhiteBalance, 10, 1, 1, 1);
     glay2->setColumnStretch(1, 10);
-    glay2->setMargin(KDialog::spacingHint());
+    glay2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     glay2->setSpacing(0);
 
     addItem(w2, SmallIcon("camera-photo"),
@@ -335,7 +335,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
     glay3->addWidget(d->labelVideoFrameRate,        5, 1, 1, 1);
     glay3->addWidget(d->videoCodec,                 6, 0, 1, 1);
     glay3->addWidget(d->labelVideoVideoCodec,       6, 1, 1, 1);
-    glay3->setMargin(KDialog::spacingHint());
+    glay3->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     glay3->setSpacing(0);
     glay3->setColumnStretch(1, 10);
 

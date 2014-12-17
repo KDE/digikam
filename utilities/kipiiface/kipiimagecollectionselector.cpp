@@ -164,7 +164,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
     d->albumSearchBar->setFilterModel(d->albumTreeView->albumFilterModel());
 
     albumBox->setMargin(0);
-    albumBox->setSpacing(KDialog::spacingHint());
+    albumBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     albumBox->setStretchFactor(d->albumTreeView, 100);
     albumBox->setStretchFactor(d->albumSearchBar, 1);
 
@@ -186,7 +186,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
     d->tagSearchBar->setFilterModel(d->tagTreeView->albumFilterModel());
 
     tagBox->setMargin(0);
-    tagBox->setSpacing(KDialog::spacingHint());
+    tagBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     tagBox->setStretchFactor(d->tagTreeView, 100);
     tagBox->setStretchFactor(d->tagSearchBar, 1);
 
@@ -208,7 +208,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
     d->searchSearchBar->setFilterModel(d->searchTreeView->albumFilterModel());
 
     searchBox->setMargin(0);
-    searchBox->setSpacing(KDialog::spacingHint());
+    searchBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     searchBox->setStretchFactor(d->searchTreeView, 100);
     searchBox->setStretchFactor(d->searchSearchBar, 1);
 
@@ -219,7 +219,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
     d->labelsSearchHandler = new AlbumLabelsSearchHandler(d->labelsTree);
 
     labelsBox->setMargin(0);
-    labelsBox->setSpacing(KDialog::spacingHint());
+    labelsBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     labelsBox->setStretchFactor(d->labelsTree, 100);
 
     // -------------------------------------------------------------------------------

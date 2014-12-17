@@ -90,8 +90,8 @@ CameraFolderDialog::CameraFolderDialog(QWidget* const parent, const QMap<QString
     grid->addWidget(message,       1, 0, 1, 1);
     grid->addWidget(d->folderView, 0, 1, 3, 1);
     grid->setRowStretch(2, 10);
-    grid->setMargin(KDialog::spacingHint());
-    grid->setSpacing(KDialog::spacingHint());
+    grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->folderView->addVirtualFolder(cameraName);
     d->folderView->addRootFolder(QString("/"));

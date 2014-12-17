@@ -93,8 +93,8 @@ PGFSettings::PGFSettings(QWidget* const parent)
     d->PGFGrid->addWidget(d->PGFcompression,      2, 0, 1, 2);
     d->PGFGrid->setColumnStretch(1, 10);
     d->PGFGrid->setRowStretch(3, 10);
-    d->PGFGrid->setMargin(KDialog::spacingHint());
-    d->PGFGrid->setSpacing(KDialog::spacingHint());
+    d->PGFGrid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    d->PGFGrid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     connect(d->PGFLossLess, SIGNAL(toggled(bool)),
             this, SLOT(slotTogglePGFLossLess(bool)));
