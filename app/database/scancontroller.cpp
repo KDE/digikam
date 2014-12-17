@@ -24,7 +24,8 @@
  * ============================================================ */
 
 #include "scancontroller.h"
-#include "moc_scancontroller.cpp"
+// Special case: we need moc file here to compile
+#include "scancontroller.moc"
 
 // Qt includes
 

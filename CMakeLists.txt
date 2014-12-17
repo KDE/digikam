@@ -1564,6 +1564,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
     )
 
      add_subdirectory(data)
+     add_subdirectory(app)
 
 # TODO port Qt5
 #

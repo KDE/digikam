@@ -24,7 +24,8 @@
  * ============================================================ */
 
 #include "setupcollectionview.h"
-#include "moc_setupcollectionview.cpp"
+// Special case: we need moc file here to compile
+#include "setupcollectionview.moc"
 
 // Qt includes
 
