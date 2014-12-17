@@ -37,7 +37,7 @@
 
 #include <kexiv2.h>
 #include <kexiv2data.h>
-#include <version.h>
+#include <libkexiv2_version.h>
 
 // Local includes
 
