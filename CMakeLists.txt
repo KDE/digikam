@@ -115,6 +115,8 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
              Core
              Widgets
              Gui
+             Sql
+             Xml
              Test
 )
 
@@ -349,8 +351,6 @@ MACRO_BOOL_TO_01(APPLE                    USE_QT_SCALING)
 
 MACRO_BOOL_TO_01(ENABLE_IMGLOADERDEBUGMSG USE_IMGLOADERDEBUGMSG)
 
-if(false)
-
 # Set config files accordingly with optional dependencies
 
 configure_file(app/utils/config-digikam.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/app/utils/config-digikam.h)
@@ -363,7 +363,6 @@ message(STATUS "----------------------------------------------------------------
 message(STATUS " digiKam ${DIGIKAM_VERSION_STRING} dependencies results   <http://www.digikam.org>")
 message(STATUS "")
 
-PRINT_QTMODULE_STATUS("Qt4 SQL" QT_QTSQL_FOUND)
 PRINT_COMPONENT_COMPILE_STATUS("MySQL Database Support" ENABLE_MYSQLSUPPORT)
 
 if(ENABLE_MYSQLSUPPORT)
@@ -378,6 +377,8 @@ if(ENABLE_MYSQLSUPPORT)
     endif()
 
 endif()
+
+if(false)
 
 # ================================================================
 
