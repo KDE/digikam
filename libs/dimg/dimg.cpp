@@ -780,7 +780,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 
     // In second, we trying to parse file header.
 
-    FILE* const f = fopen(QFile::encodeName(filePath), "rb");
+    FILE* const f = fopen(QFile::encodeName(filePath).constData(), "rb");
 
     if (!f)
     {
@@ -823,7 +823,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
     {
         int         width, height, rgbmax;
         char        nl;
-        FILE* const file = fopen(QFile::encodeName(filePath), "rb");
+        FILE* const file = fopen(QFile::encodeName(filePath).constData(), "rb");
 
         // FIXME: scanf without field width limits can crash with huge input data
         if (file && fscanf(file, "P6 %d %d %d%c", &width, &height, &rgbmax, &nl) == 4)
@@ -2951,7 +2951,7 @@ void DImg::prepareMetadataToSave(const QString& intendedDestPath, const QString&
 
         for (KExiv2::MetaDataMap::iterator it = tiffThumbTags.begin(); it != tiffThumbTags.end(); ++it)
         {
-            meta.removeExifTag(it.key().toAscii());
+            meta.removeExifTag(it.key().toAscii().constData());
         }
     }
 
