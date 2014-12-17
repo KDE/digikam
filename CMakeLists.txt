@@ -87,10 +87,7 @@ include(KDECompilerSettings)
 include(MacroUtils)
 include(MacroLocalLibs)
 
-if (false)
-
-message(STATUS "----------------------------------------------------------------------------------")
-message(STATUS "Starting CMake configuration for: digiKam")
+# ==================================================================================================
 
 option(ENABLE_INTERNALMYSQL     "Build digiKam with internal MySQL server executable (default=OFF)"              OFF)
 option(ENABLE_LCMS2             "Build digiKam with LCMS2 instead LCMS1 (default=OFF)"                           OFF)
@@ -104,6 +101,8 @@ option(ENABLE_INTERNALMYSQL     "Build digiKam with internal MySQL server execut
 # Debug options:
 option(ENABLE_DIGIKAM_MODELTEST "Enable ModelTest on some models for debugging (default=OFF)"                    OFF)
 option(ENABLE_IMGLOADERDEBUGMSG "Build digiKam with more internal debug message into image loader (default=OFF)" OFF)
+
+if (false)
 
 # ==================================================================================================
 # Debug area codes
