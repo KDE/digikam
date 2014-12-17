@@ -60,9 +60,9 @@
 
 // libkexiv2 includes
 
-#include <libkexiv2/kexiv2previews.h>
-#include <libkexiv2/rotationmatrix.h>
-#include <libkexiv2/version.h>
+#include <kexiv2previews.h>
+#include <rotationmatrix.h>
+#include <version.h>
 
 // Local includes
 

@@ -38,7 +38,7 @@
 
 // LibKExiv2 includes
 
-#include <libkexiv2/countryselector.h>
+#include <countryselector.h>
 
 // Local includes
 

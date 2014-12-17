@@ -38,8 +38,8 @@
 
 // LibKExiv2 includes
 
-#include <libkexiv2/altlangstredit.h>
-#include <libkexiv2/countryselector.h>
+#include <altlangstredit.h>
+#include <countryselector.h>
 
 // Local includes
 

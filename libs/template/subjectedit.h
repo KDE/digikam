@@ -25,7 +25,7 @@
 
 // Local includes
 
-#include <libkexiv2/subjectwidget.h>
+#include <subjectwidget.h>
 
 using namespace KExiv2Iface;
 

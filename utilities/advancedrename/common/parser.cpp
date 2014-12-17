@@ -29,7 +29,7 @@
 
 // LibKExiv2 includes
 
-#include <libkexiv2/version.h>
+#include <version.h>
 
 // local includes
 

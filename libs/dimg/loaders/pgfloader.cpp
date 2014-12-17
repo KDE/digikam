@@ -57,7 +57,7 @@ extern "C"
 
 // Libkexiv2 includes
 
-#include <libkexiv2/kexiv2.h>
+#include <kexiv2.h>
 
 // Windows includes
 

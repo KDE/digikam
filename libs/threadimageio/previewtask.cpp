@@ -41,8 +41,8 @@
 
 // libkexiv2 includes
 
-#include <libkexiv2/version.h>
-#include <libkexiv2/kexiv2previews.h>
+#include <version.h>
+#include <kexiv2previews.h>
 
 // LibKDcraw includes
 

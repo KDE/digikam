@@ -32,9 +32,9 @@
 
 // Local includes
 
-#include <libkexiv2/version.h>
-#include <libkexiv2/altlangstredit.h>
-#include <libkexiv2/msgtextedit.h>
+#include <version.h>
+#include <altlangstredit.h>
+#include <msgtextedit.h>
 
 using namespace KExiv2Iface;
 

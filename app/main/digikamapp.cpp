@@ -95,7 +95,7 @@
 
 // Libkexiv2
 
-#include <libkexiv2/rotationmatrix.h>
+#include <rotationmatrix.h>
 #include <QStandardPaths>
 #include <KFormat>
 #include <KHelpClient>
