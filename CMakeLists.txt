@@ -57,6 +57,10 @@ set(REQUIRED_QT_VERSION "5.2.0")
 set(KIPI_MIN_VERSION    "5.0.0")
 set(KEXIV2_MIN_VERSION  "5.0.0")
 set(KDCRAW_MIN_VERSION  "5.0.0")
+set(KFACE_MIN_VERSION   "5.0.0")
+set(KGEOMAP_MIN_VERSION "5.0.0")
+set(PGF_MIN_VERSION     "6.12.24")
+set(OPENCV_MIN_VERSION  "2.4.9")
 
 cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
 
@@ -86,6 +90,8 @@ include(KDECompilerSettings)
 # Local macros
 include(MacroUtils)
 include(MacroLocalLibs)
+include(MacroOpenCV)
+include(MacroJPEG)
 
 # ==================================================================================================
 
@@ -102,109 +108,46 @@ option(ENABLE_INTERNALMYSQL     "Build digiKam with internal MySQL server execut
 option(ENABLE_DIGIKAM_MODELTEST "Enable ModelTest on some models for debugging (default=OFF)"                    OFF)
 option(ENABLE_IMGLOADERDEBUGMSG "Build digiKam with more internal debug message into image loader (default=OFF)" OFF)
 
-if (false)
+############## Find Packages ###################
 
-# ==================================================================================================
-# Debug area codes
-# These codes will be set for every project specific path automatically, so
-# that you can use kDebug() without any usage of the area code throughout the
-# digiKam code base.
+find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
+             Core
+             Widgets
+             Gui
+             Test
+)
 
-set(AREA_CODE_GENERAL        "50003")
-set(AREA_CODE_KIOSLAVES      "50004")
-set(AREA_CODE_SHOWFOTO       "50005")
-set(AREA_CODE_IMAGEPLUGINS   "50006")
-set(AREA_CODE_DATABASESERVER "50007")
-add_definitions(-DKDE_DEFAULT_DEBUG_AREA=${AREA_CODE_GENERAL})
-add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
-
-# surpress deprecated warning for glibc 2.20+
-add_definitions(-D_DEFAULT_SOURCE)
-
-macro(SET_DEBUG_AREA_CODE _areacode)
-    remove_definitions(-DKDE_DEFAULT_DEBUG_AREA=${AREA_CODE_GENERAL})
-    add_definitions(-DKDE_DEFAULT_DEBUG_AREA=${_areacode})
-endmacro()
+find_package(KF5 REQUIRED COMPONENTS
+             KDELibs4Support
+             Parts
+)
 
 # ==================================================================================================
 # Dependencies
 
-set(QT_MIN_VERSION   "4.6.0")
-set(KDE_MIN_VERSION  "4.4.0")
-find_package(Qt4  ${QT_MIN_VERSION}  REQUIRED)
-find_package(KDE4 ${KDE_MIN_VERSION} REQUIRED)
-
-include(KDE4Defaults)
-include(MacroLibrary)
-include(FindPackageHandleStandardArgs)
-include(FindPkgConfig)
-
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
-
-include(MacroUtils)
-include(MacroOpenCV)
-include(MacroJPEG)
-
 # mandatory
 
-set(PGF_MIN_VERSION   "6.12.24")
-find_package(TIFF                    REQUIRED)
-find_package(PNG                     REQUIRED)
-find_package(PGF ${PGF_MIN_VERSION}  REQUIRED)
-find_package(Kexiv2                  REQUIRED)
-find_package(Kdcraw                  REQUIRED)
+DETECT_JPEG()
+set(DIGIKAM_LIBJPEG_DIR libjpeg-${JPEG_LIB_VERSION})
+
+find_package(TIFF                   REQUIRED)
+find_package(PNG                    REQUIRED)
+find_package(PGF ${PGF_MIN_VERSION} REQUIRED)
+find_package(Boost                  REQUIRED)
+
+DETECT_OPENCV(${OPENCV_MIN_VERSION} core highgui objdetect contrib legacy imgproc)
+DETECT_LIBKEXIV2(${KEXIV2_MIN_VERSION})
+DETECT_LIBKDCRAW(${KDCRAW_MIN_VERSION})
 
 # optional
 
-set(KIPI_MIN_VERSION  "2.0.0")
-find_package(Kipi ${KIPI_MIN_VERSION})
-find_package(Kface)
-find_package(KGeoMap)
+DETECT_LIBKIPI(${KIPI_MIN_VERSION})
+DETECT_LIBKFACE(${KFACE_MIN_VERSION})
+DETECT_LIBKGEOMAP(${KGEOMAP_MIN_VERSION})
+
 find_package(PkgConfig)
 find_package(Jasper)
 find_package(Eigen3)
-find_package(Boost)
-
-# -- check OpenCV --------------------------------------------------------------------------------
-
-set(OPENCV_MIN_VERSION "2.4.9")
-DETECT_OPENCV(${OPENCV_MIN_VERSION}  core highgui objdetect contrib legacy imgproc)
-
-# -- check the libkdcraw version -----------------------------------------------------------------
-
-set(KDCRAW_MIN_VERSION "2.2.0")
-
-if(KDCRAW_VERSION)
-
-    message(STATUS "libkdcraw: Found version ${KDCRAW_VERSION} (required: ${KDCRAW_MIN_VERSION})")
-    if(${KDCRAW_VERSION} VERSION_LESS ${KDCRAW_MIN_VERSION})
-        set(KDCRAW_FOUND FALSE)
-    endif()
-
-else()
-
-    message(WARNING "libkdcraw: Version information not found, your version is probably too old.")
-    set(KDCRAW_FOUND FALSE)
-
-endif()
-
-# -- check the libkgeomap version -----------------------------------------------------------------
-
-set(KGEOMAP_MIN_VERSION "3.0.0")
-
-if(KGEOMAP_VERSION)
-
-    message(STATUS "libkgeomap: Found version ${KGEOMAP_VERSION} (required: ${KGEOMAP_MIN_VERSION})")
-    if(${KGEOMAP_VERSION} VERSION_LESS ${KGEOMAP_MIN_VERSION})
-        SET(KGEOMAP_FOUND FALSE)
-    endif()
-
-else()
-
-    message(WARNING "libkgeomap: Version information not found, your version is probably too old.")
-    set(KGEOMAP_FOUND FALSE)
-
-endif()
 
 # -- LCMS version 1 and 2 library handling (See bug #294105) -------------------------------------
 # Note: if ENABLE_LCMS2 is on and no LCMS2 is available, build will fail, even if LCMS1 is present
@@ -261,11 +204,6 @@ if(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
     find_library(KVM_LIBRARY kvm)
 endif()
 
-# -- Libjpeg rules --------------------------------------------------------------------------------
-
-DETECT_JPEG()
-set(DIGIKAM_LIBJPEG_DIR libjpeg-${JPEG_LIB_VERSION})
-
 # -- Mysql rules ----------------------------------------------------------------------------------
 
 if(ENABLE_MYSQLSUPPORT AND ENABLE_INTERNALMYSQL)
@@ -307,6 +245,9 @@ else()
     set(DATABASESERVERDIR "")
 
 endif()
+
+
+if(false)
 
 # ==================================================================================================
 # Optional dependencies
@@ -544,6 +485,13 @@ if(DIGIKAM_CAN_BE_COMPILED)
                     ${KDCRAW_DEFINITIONS}
                     ${KEXIV2_DEFINITIONS}
                    )
+
+    # TODO : obsolete ?
+    add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
+
+    # surpress deprecated warning for glibc 2.20+
+    add_definitions(-D_DEFAULT_SOURCE)
+
 
     # Enable C++ Exceptions support, require by Greycstoration algorithm (CImg.h)
     if(NOT MSVC)
