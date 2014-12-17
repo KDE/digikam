@@ -39,7 +39,6 @@
 // KDE includes
 
 #include <kstandarddirs.h>
-#include <kcodecs.h>       // for KMD5
 #include <kdebug.h>
 
 // Local includes
@@ -395,10 +394,10 @@ QByteArray DImgLoader::uniqueHash(const QString& filePath, const DImg& img, bool
 
     // Create the unique ID
 
-    KMD5 md5;
-
+    QCryptographicHash md5(QCryptographicHash::Md5);
+    
     // First, read the Exif data into the hash
-    md5.update(bv);
+    md5.addData(bv);
 
     // Second, read in the first 8KB of the file
     QFile qfile(filePath);
@@ -413,9 +412,9 @@ QByteArray DImgLoader::uniqueHash(const QString& filePath, const DImg& img, bool
         if ((readlen = qfile.read(databuf, 8192)) > 0)
         {
             QByteArray size = 0;
-            md5.update(databuf, readlen);
-            md5.update(size.setNum(qfile.size()));
-            hash = md5.hexDigest();
+            md5.addData(databuf, readlen);
+            md5.addData(size.setNum(qfile.size()));
+            hash = md5.result();
         }
     }
 
