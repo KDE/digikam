@@ -103,7 +103,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     readMetadata(filePath, DImg::JPEG);
 
     int colorModel   = DImg::COLORMODELUNKNOWN;
-    FILE* const file = fopen(QFile::encodeName(filePath), "rb");
+    FILE* const file = fopen(QFile::encodeName(filePath).constData(), "rb");
 
     if (!file)
     {
@@ -634,7 +634,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
 bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observer)
 {
-    FILE* const file = fopen(QFile::encodeName(filePath), "wb");
+    FILE* const file = fopen(QFile::encodeName(filePath).constData(), "wb");
 
     if (!file)
     {

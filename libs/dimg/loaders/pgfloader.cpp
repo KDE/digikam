@@ -106,7 +106,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer
     m_observer = observer;
     readMetadata(filePath, DImg::PGF);
 
-    FILE* file = fopen(QFile::encodeName(filePath), "rb");
+    FILE* file = fopen(QFile::encodeName(filePath).constData(), "rb");
 
     if (!file)
     {
@@ -143,7 +143,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 #ifdef UNICODE
     HANDLE fd = CreateFile((LPCWSTR)(QFile::encodeName(filePath).constData()), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
 #else
-    HANDLE fd = CreateFile(QFile::encodeName(filePath), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
+    HANDLE fd = CreateFile(QFile::encodeName(filePath).constData(), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
 #endif
 
     if (fd == INVALID_HANDLE_VALUE)
@@ -154,7 +154,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
 #else
 
-    int fd = open(QFile::encodeName(filePath), O_RDONLY);
+    int fd = open(QFile::encodeName(filePath).constData(), O_RDONLY);
 
     if (fd == -1)
     {
@@ -376,7 +376,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* const observer
 #ifdef UNICODE
     HANDLE fd = CreateFile((LPCWSTR)(QFile::encodeName(filePath).constData()), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
 #else
-    HANDLE fd = CreateFile(QFile::encodeName(filePath), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
+    HANDLE fd = CreateFile(QFile::encodeName(filePath).constData(), GENERIC_READ, 0, 0, OPEN_EXISTING, 0, 0);
 #endif
 
     if (fd == INVALID_HANDLE_VALUE)
@@ -386,7 +386,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* const observer
     }
 
 #elif defined(__POSIX__)
-    int fd = open(QFile::encodeName(filePath), O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+    int fd = open(QFile::encodeName(filePath).constData(), O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 
     if (fd == -1)
     {

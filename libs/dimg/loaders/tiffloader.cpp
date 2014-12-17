@@ -118,7 +118,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     // -------------------------------------------------------------------
     // Open the file
 
-    TIFF* tif = TIFFOpen(QFile::encodeName(filePath), "r");
+    TIFF* tif = TIFFOpen(QFile::encodeName(filePath).constData(), "r");
 
     if (!tif)
     {
@@ -596,7 +596,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver* const observe
     // -------------------------------------------------------------------
     // Open the file
 
-    TIFF* tif = TIFFOpen(QFile::encodeName(filePath), "w");
+    TIFF* tif = TIFFOpen(QFile::encodeName(filePath).constData(), "w");
 
     if (!tif)
     {

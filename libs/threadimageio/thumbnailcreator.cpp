@@ -1140,12 +1140,12 @@ void ThumbnailCreator::storeFreedesktop(const ThumbnailInfo& info, const Thumbna
 #ifndef Q_OS_WIN
 #if KDE_IS_VERSION(4,2,85)
             // KDE 4.3.0
-            ret = KDE::rename(QFile::encodeName(tempFileName),
-                              QFile::encodeName(thumbPath));
+            ret = KDE::rename(QFile::encodeName(tempFileName).constData(),
+                              QFile::encodeName(thumbPath).constData());
 #else
             // KDE 4.2.x or 4.1.x
-            ret = KDE_rename(QFile::encodeName(tempFileName),
-                             QFile::encodeName(thumbPath));
+            ret = KDE_rename(QFile::encodeName(tempFileName).constData(),
+                             QFile::encodeName(thumbPath).constData());
 #endif
 
             if (ret != 0)

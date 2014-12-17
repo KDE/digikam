@@ -440,7 +440,7 @@ void EditorCore::slotImageSaved(const QString& filePath, bool success)
     }
     else
     {
-        kWarning() << "error saving image '" << QFile::encodeName(filePath).data();
+        kWarning() << "error saving image '" << QFile::encodeName(filePath)..constData()();
     }
 
     d->currentFileToSave++;

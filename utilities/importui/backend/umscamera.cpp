@@ -417,13 +417,13 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
     // NOTE: this behavior don't need to be managed through Setup/Metadata settings.
     struct stat st;
 
-    if (::stat(QFile::encodeName(src), &st) == 0)
+    if (::stat(QFile::encodeName(src).constData(), &st) == 0)
     {
         struct utimbuf ut;
         ut.modtime = st.st_mtime;
         ut.actime  = st.st_atime;
 
-        ::utime(QFile::encodeName(dest), &ut);
+        ::utime(QFile::encodeName(dest).constData(), &ut);
     }
 
     return true;
@@ -436,7 +436,7 @@ bool UMSCamera::setLockItem(const QString& folder, const QString& itemName, bool
     if (lock)
     {
         // Lock the file to set read only flag
-        if (::chmod(QFile::encodeName(src), S_IREAD) == -1)
+        if (::chmod(QFile::encodeName(src).constData(), S_IREAD) == -1)
         {
             return false;
         }
@@ -444,7 +444,7 @@ bool UMSCamera::setLockItem(const QString& folder, const QString& itemName, bool
     else
     {
         // Unlock the file to set read/write flag
-        if (::chmod(QFile::encodeName(src), S_IREAD | S_IWRITE) == -1)
+        if (::chmod(QFile::encodeName(src).constData(), S_IREAD | S_IWRITE) == -1)
         {
             return false;
         }
@@ -465,18 +465,18 @@ bool UMSCamera::deleteItem(const QString& folder, const QString& itemName)
 
     if (thmLo.exists())
     {
-        ::unlink(QFile::encodeName(thmLo.filePath()));
+        ::unlink(QFile::encodeName(thmLo.filePath()).constData());
     }
 
     QFileInfo thmUp(folder + QString("/") + fi.baseName() + ".THM");          // Uppercase
 
     if (thmUp.exists())
     {
-        ::unlink(QFile::encodeName(thmUp.filePath()));
+        ::unlink(QFile::encodeName(thmUp.filePath()).constData());
     }
 
     // Remove the real image.
-    return (::unlink(QFile::encodeName(folder + QString("/") + itemName)) == 0);
+    return (::unlink(QFile::encodeName(folder + QString("/") + itemName).constData()) == 0);
 }
 
 bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const QString& localFile, CamItemInfo& info)
@@ -524,13 +524,13 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
     // NOTE: this behavior don't need to be managed through Setup/Metadata settings.
     struct stat st;
 
-    if (::stat(QFile::encodeName(src), &st) == 0)
+    if (::stat(QFile::encodeName(src).constData(), &st) == 0)
     {
         struct utimbuf ut;
         ut.modtime = st.st_mtime;
         ut.actime  = st.st_atime;
 
-        ::utime(QFile::encodeName(dest), &ut);
+        ::utime(QFile::encodeName(dest).constData(), &ut);
     }
 
     // Get new camera item information.

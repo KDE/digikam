@@ -1149,7 +1149,7 @@ bool ImageCurves::loadCurvesFromGimpCurvesFile(const KUrl& fileUrl)
     int   index[NUM_CHANNELS][NUM_POINTS];
     int   value[NUM_CHANNELS][NUM_POINTS];
 
-    file = fopen(QFile::encodeName(fileUrl.toLocalFile()), "r");
+    file = fopen(QFile::encodeName(fileUrl.toLocalFile()).constData(), "r");
 
     if (!file)
     {
@@ -1221,7 +1221,7 @@ bool ImageCurves::saveCurvesToGimpCurvesFile(const KUrl& fileUrl) const
     int   i, j;
     int   index;
 
-    file = fopen(QFile::encodeName(fileUrl.toLocalFile()), "w");
+    file = fopen(QFile::encodeName(fileUrl.toLocalFile()).constData(), "w");
 
     if (!file)
     {

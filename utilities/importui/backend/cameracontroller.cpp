@@ -621,7 +621,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
             if (!result)
             {
-                unlink(QFile::encodeName(tempURL.toLocalFile()));
+                unlink(QFile::encodeName(tempURL.toLocalFile()).constData());
                 sendLogMsg(i18n("Failed to download <filename>%1</filename>", file), DHistoryView::ErrorEntry, folder, file);
                 emit signalDownloaded(folder, file, CamItemInfo::DownloadFailed);
                 break;
@@ -688,15 +688,15 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                     {
                         kDebug() << "  Convert failed?! eh";
                         // convert failed. delete the temp file
-                        unlink(QFile::encodeName(tempURL.toLocalFile()));
-                        unlink(QFile::encodeName(tempURL2.toLocalFile()));
+                        unlink(QFile::encodeName(tempURL.toLocalFile()).constData());
+                        unlink(QFile::encodeName(tempURL2.toLocalFile()).constData());
                         sendLogMsg(i18n("Failed to convert file <filename>%1</filename> to JPEG", file), DHistoryView::ErrorEntry, folder, file);
                     }
                     else
                     {
                         kDebug() << "  Done, removing the temp file: " << tempURL;
                         // Else remove only the first temp file.
-                        unlink(QFile::encodeName(tempURL.toLocalFile()));
+                        unlink(QFile::encodeName(tempURL.toLocalFile()).constData());
                     }
                 }
             }
@@ -873,14 +873,14 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
 
     if (cancel)
     {
-        unlink(QFile::encodeName(temp));
+        unlink(QFile::encodeName(temp).constData());
         slotCancel();
         emit signalSkipped(folder, file);
         return;
     }
     else if (skip)
     {
-        unlink(QFile::encodeName(temp));
+        unlink(QFile::encodeName(temp).constData());
         sendLogMsg(i18n("Skipped file <filename>%1</filename>", file), DHistoryView::WarningEntry, folder, file);
         emit signalSkipped(folder, file);
         return;
@@ -902,7 +902,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
     {
         kDebug() << "Renaming " << temp << " to " << dest << " failed";
         // rename failed. delete the temp file
-        unlink(QFile::encodeName(temp));
+        unlink(QFile::encodeName(temp).constData());
         emit signalDownloaded(folder, file, CamItemInfo::DownloadFailed);
         sendLogMsg(i18n("Failed to download <filename>%1</filename>", file), DHistoryView::ErrorEntry,  folder, file);
     }

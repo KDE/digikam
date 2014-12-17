@@ -64,7 +64,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 {
     readMetadata(filePath, DImg::JPEG);
 
-    FILE* const file = fopen(QFile::encodeName(filePath), "rb");
+    FILE* const file = fopen(QFile::encodeName(filePath).constData(), "rb");
 
     if (!file)
     {
@@ -135,7 +135,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         return false;
     }
 
-    jp2_stream = jas_stream_fopen(QFile::encodeName(filePath), "rb");
+    jp2_stream = jas_stream_fopen(QFile::encodeName(filePath).constData(), "rb");
 
     if (jp2_stream == 0)
     {
@@ -560,7 +560,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
 bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* const observer)
 {
-    FILE* const file = fopen(QFile::encodeName(filePath), "wb");
+    FILE* const file = fopen(QFile::encodeName(filePath).constData(), "wb");
 
     if (!file)
     {
@@ -588,7 +588,7 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* const observe
         return false;
     }
 
-    jp2_stream = jas_stream_fopen(QFile::encodeName(filePath), "wb");
+    jp2_stream = jas_stream_fopen(QFile::encodeName(filePath).constData(), "wb");
 
     if (jp2_stream == 0)
     {

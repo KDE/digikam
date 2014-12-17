@@ -153,7 +153,7 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
         return false;
     }
 
-    FILE* const inputFile = fopen(QFile::encodeName(path), "rb");
+    FILE* const inputFile = fopen(QFile::encodeName(path).constData(), "rb");
 
     if (!inputFile)
     {
@@ -412,7 +412,7 @@ bool JpegRotator::exifTransform(const RotationMatrix& matrix)
 
         if (!performJpegTransform(actions[i], src, tempFile))
         {
-            ::unlink(QFile::encodeName(tempFile));
+            ::unlink(QFile::encodeName(tempFile).constData());
             kError() << "JPEG transform of" << src << "failed";
             return false;
         }
@@ -430,7 +430,7 @@ bool JpegRotator::exifTransform(const RotationMatrix& matrix)
 
         // atomic rename
 #ifndef Q_OS_WIN
-        if (::rename(QFile::encodeName(tempFile), QFile::encodeName(dest)) != 0)
+        if (::rename(QFile::encodeName(tempFile).constData(), QFile::encodeName(dest).constData()) != 0)
 #else
         if (::MoveFileEx(tempFile.utf16(), dest.utf16(), MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH) == 0)
 #endif
@@ -443,7 +443,7 @@ bool JpegRotator::exifTransform(const RotationMatrix& matrix)
 
     foreach (const QString tempFile, unlinkLater)
     {
-        ::unlink(QFile::encodeName(tempFile));
+        ::unlink(QFile::encodeName(tempFile).constData());
     }
 
     return true;
@@ -488,7 +488,7 @@ void JpegRotator::updateMetadata(const QString& fileName, const RotationMatrix &
 
     struct stat st;
 
-    if (::stat(QFile::encodeName(m_file), &st) == 0)
+    if (::stat(QFile::encodeName(m_file).constData(), &st) == 0)
     {
         // See bug #329608: Restore file modification time from original file only if updateFileTimeStamp for Setup/Metadata is turned off.
 
@@ -498,7 +498,7 @@ void JpegRotator::updateMetadata(const QString& fileName, const RotationMatrix &
             ut.modtime = st.st_mtime;
             ut.actime  = st.st_atime;
 
-            if (::utime(QFile::encodeName(fileName), &ut) != 0)
+            if (::utime(QFile::encodeName(fileName).constData(), &ut) != 0)
             {
                 kWarning() << "Failed to restore modification time for file " << fileName;
             }
@@ -507,7 +507,7 @@ void JpegRotator::updateMetadata(const QString& fileName, const RotationMatrix &
         // Restore permissions in all cases
 
 #ifndef Q_OS_WIN
-        if (::chmod(QFile::encodeName(fileName), st.st_mode) != 0)
+        if (::chmod(QFile::encodeName(fileName).constData(), st.st_mode) != 0)
         {
             kWarning() << "Failed to restore file permissions for file " << fileName;
         }
@@ -520,8 +520,8 @@ void JpegRotator::updateMetadata(const QString& fileName, const RotationMatrix &
 
 bool JpegRotator::performJpegTransform(TransformAction action, const QString& src, const QString& dest)
 {
-    QByteArray in                   = QFile::encodeName(src);
-    QByteArray out                  = QFile::encodeName(dest);
+    QByteArray in                   = QFile::encodeName(src).constData();
+    QByteArray out                  = QFile::encodeName(dest).constData();
 
     JCOPY_OPTION copyoption         = JCOPYOPT_ALL;
     jpeg_transform_info transformoption;

@@ -66,7 +66,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* const observer
     int  width, height, rgbmax;
     char nl;
 
-    FILE* const file = fopen(QFile::encodeName(filePath), "rb");
+    FILE* const file = fopen(QFile::encodeName(filePath).constData(), "rb");
 
     if (!file)
     {

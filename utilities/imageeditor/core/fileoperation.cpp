@@ -66,7 +66,7 @@ bool FileOperation::localFileRename(const QString& source, const QString& orgPat
     }
 
 #ifndef Q_OS_WIN
-    QByteArray dstFileName = QFile::encodeName(dest);
+    QByteArray dstFileName = QFile::encodeName(dest).constData();
 
     // Store old permissions:
     // Just get the current umask.
@@ -88,7 +88,7 @@ bool FileOperation::localFileRename(const QString& source, const QString& orgPat
 
     struct stat st;
 
-    if (::stat(QFile::encodeName(source), &st) == 0)
+    if (::stat(QFile::encodeName(source).constData(), &st) == 0)
     {
         // See bug #329608: Restore file modification time from original file only if updateFileTimeStamp for Setup/Metadata is turned off.
 
@@ -98,7 +98,7 @@ bool FileOperation::localFileRename(const QString& source, const QString& orgPat
             ut.modtime = st.st_mtime;
             ut.actime  = st.st_atime;
 
-            if (::utime(QFile::encodeName(orgPath), &ut) != 0)
+            if (::utime(QFile::encodeName(orgPath).constData(), &ut) != 0)
             {
                 kWarning() << "Failed to restore modification time for file " << dest;
             }

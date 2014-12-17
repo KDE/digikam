@@ -73,7 +73,7 @@ void AlbumDB_Sqlite2::setDBPath(const QString& path)
     }
 
     char* errMsg = 0;
-    m_db = sqlite_open(QFile::encodeName(path), 0, &errMsg);
+    m_db = sqlite_open(QFile::encodeName(path).constData(), 0, &errMsg);
 
     if (m_db == 0)
     {
@@ -110,7 +110,7 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
     int         error;
 
     // Compile SQL program to virtual machine
-    error = sqlite_compile( m_db, QFile::encodeName(sql), &tail, &vm, &errorStr );
+    error = sqlite_compile( m_db, QFile::encodeName(sql).constData(), &tail, &vm, &errorStr );
 
     if ( error != SQLITE_OK )
     {

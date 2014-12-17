@@ -555,7 +555,7 @@ void MixerSettings::loadSettings()
         return;
     }
 
-    fp = fopen(QFile::encodeName(loadGainsFileUrl.toLocalFile()), "r");
+    fp = fopen(QFile::encodeName(loadGainsFileUrl.toLocalFile()).constData(), "r");
 
     if (fp)
     {
@@ -663,7 +663,7 @@ void MixerSettings::saveAsSettings()
         return;
     }
 
-    fp = fopen(QFile::encodeName(saveGainsFileUrl.toLocalFile()), "w");
+    fp = fopen(QFile::encodeName(saveGainsFileUrl.toLocalFile()).constData(), "w");
 
     if (fp)
     {

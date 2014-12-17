@@ -189,7 +189,7 @@ void Task::run()
 
     foreach (const KUrl& url, tmp2del)
     {
-        unlink(QFile::encodeName(url.toLocalFile()));
+        unlink(QFile::encodeName(url.toLocalFile()).constData());
     }
 
     // Move processed temp file to target

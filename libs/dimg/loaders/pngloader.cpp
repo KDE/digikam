@@ -97,7 +97,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
     // -------------------------------------------------------------------
     // Open the file
 
-    f = fopen(QFile::encodeName(filePath), "rb");
+    f = fopen(QFile::encodeName(filePath).constData(), "rb");
 
     if (!f)
     {
@@ -644,7 +644,7 @@ bool PNGLoader::save(const QString& filePath, DImgLoaderObserver* const observer
     // -------------------------------------------------------------------
     // Open the file
 
-    f = fopen(QFile::encodeName(filePath), "wb");
+    f = fopen(QFile::encodeName(filePath).constData(), "wb");
 
     if (!f)
     {

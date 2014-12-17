@@ -1242,7 +1242,7 @@ bool GPCamera::uploadItem(const QString& folder, const QString& itemName, const 
 #ifdef HAVE_GPHOTO25
     errorCode = gp_camera_folder_put_file(d->camera,
                                           QFile::encodeName(folder).constData(),
-                                          QFile::encodeName(itemName),
+                                          QFile::encodeName(itemName).constData(),
                                           GP_FILE_TYPE_NORMAL,
                                           cfile,
                                           d->status->context);

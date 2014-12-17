@@ -326,7 +326,7 @@ bool KInotify::available()
 
 bool KInotify::watchingPath( const QString& path ) const
 {
-    const QByteArray p( stripTrailingSlash( QFile::encodeName( path ) ) );
+    const QByteArray p( stripTrailingSlash( QFile::encodeName( path ).constData() ) );
     return d->pathWatchHash.contains(p);
 }
 
@@ -336,7 +336,7 @@ bool KInotify::addWatch( const QString& path, WatchEvents mode, WatchFlags flags
 
     d->mode  = mode;
     d->flags = flags;
-    d->pathsToWatch.append( QFile::encodeName( path ) );
+    d->pathsToWatch.append( QFile::encodeName( path ).constData() );
     d->_k_addWatches();
     return true;
 }
@@ -345,7 +345,7 @@ bool KInotify::watchDirectory(const QString& path)
 {
     d->mode  = WatchEvents(EventMove | EventDelete | EventDeleteSelf | EventCloseWrite | EventCreate);
     d->flags = WatchFlags();
-    return d->addWatch(QFile::encodeName(path));
+    return d->addWatch(QFile::encodeName(path).constData());
 }
 
 bool KInotify::watchDirectoryAndSubdirs(const QString& path)
@@ -358,7 +358,7 @@ bool KInotify::watchDirectoryAndSubdirs(const QString& path)
 bool KInotify::removeWatch( const QString& path )
 {
     //kDebug() << path;
-    QByteArray encodedPath              = QFile::encodeName( path );
+    QByteArray encodedPath              = QFile::encodeName( path ).constData();
     QHash<int, QByteArray>::iterator it = d->watchPathHash.begin();
 
     while ( it != d->watchPathHash.end() )
@@ -379,7 +379,7 @@ bool KInotify::removeWatch( const QString& path )
 
 bool KInotify::removeDirectory( const QString& path )
 {
-    QByteArray encodedPath = QFile::encodeName( path );
+    QByteArray encodedPath = QFile::encodeName( path ).constData();
 
     int wd = d->pathWatchHash.value(encodedPath);
     if (wd)
