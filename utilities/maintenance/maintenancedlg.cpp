@@ -34,7 +34,7 @@
 
 // Libkdcraw includes
 
-#include <libkdcraw/rexpanderbox.h>
+#include <rexpanderbox.h>
 
 // KDE includes
 

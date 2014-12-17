@@ -33,8 +33,8 @@
 #include <kdebug.h>
 #include <kdialog.h>
 
-#include <libkdcraw/rnuminput.h>
-#include <libkdcraw/rcombobox.h>
+#include <rnuminput.h>
+#include <rcombobox.h>
 
 namespace Digikam
 {

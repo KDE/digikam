@@ -93,8 +93,8 @@ extern "C"
 
 // LibKDcraw includes
 
-#include <libkdcraw/kdcraw.h>
-#include <libkdcraw/version.h>
+#include <kdcraw.h>
+#include <version.h>
 #include <QStandardPaths>
 
 // Local includes

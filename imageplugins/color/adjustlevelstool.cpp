@@ -55,7 +55,7 @@
 
 // LibKDcraw includes
 
-#include <libkdcraw/rnuminput.h>
+#include <rnuminput.h>
 #include <QStandardPaths>
 
 // Local includes

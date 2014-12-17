@@ -46,10 +46,10 @@
 
 // LibKDcraw includes
 
-#include <libkdcraw/dcrawsettingswidget.h>
-#include <libkdcraw/rnuminput.h>
-#include <libkdcraw/version.h>
-#include <libkdcraw/rexpanderbox.h>
+#include <dcrawsettingswidget.h>
+#include <rnuminput.h>
+#include <version.h>
+#include <rexpanderbox.h>
 
 // Local includes
 

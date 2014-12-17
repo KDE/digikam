@@ -55,8 +55,8 @@
 
 // LibKDcraw includes
 
-#include <libkdcraw/kdcraw.h>
-#include <libkdcraw/rawfiles.h>
+#include <kdcraw.h>
+#include <rawfiles.h>
 
 // libkexiv2 includes
 

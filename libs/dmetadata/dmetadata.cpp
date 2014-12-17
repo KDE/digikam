@@ -43,8 +43,8 @@
 
 // LibKDcraw includes
 
-#include <libkdcraw/dcrawinfocontainer.h>
-#include <libkdcraw/kdcraw.h>
+#include <dcrawinfocontainer.h>
+#include <kdcraw.h>
 
 // Local includes
 

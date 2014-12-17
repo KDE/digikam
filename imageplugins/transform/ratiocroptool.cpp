@@ -54,10 +54,10 @@
 
 // LibKDcraw includes
 
-#include <libkdcraw/rcombobox.h>
-#include <libkdcraw/rnuminput.h>
-#include <libkdcraw/rexpanderbox.h>
-#include <libkdcraw/version.h>
+#include <rcombobox.h>
+#include <rnuminput.h>
+#include <rexpanderbox.h>
+#include <version.h>
 
 // Local includes
 

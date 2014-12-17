@@ -38,7 +38,7 @@
 
 // LibKDcraw includes
 
-#include <libkdcraw/rcombobox.h>
+#include <rcombobox.h>
 
 // Local includes
 

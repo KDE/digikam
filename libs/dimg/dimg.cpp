@@ -62,8 +62,8 @@ extern "C"
 
 // LibKDcraw includes
 
-#include <libkdcraw/version.h>
-#include <libkdcraw/kdcraw.h>
+#include <version.h>
+#include <kdcraw.h>
 
 // Libkexiv2 includes
 

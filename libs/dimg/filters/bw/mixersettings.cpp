@@ -49,8 +49,8 @@
 
 // LibKDcraw includes
 
-#include <libkdcraw/rnuminput.h>
-#include <libkdcraw/rexpanderbox.h>
+#include <rnuminput.h>
+#include <rexpanderbox.h>
 #include <QStandardPaths>
 
 using namespace KDcrawIface;

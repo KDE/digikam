@@ -47,7 +47,7 @@
 
 // LibKDcraw includes
 
-#include <libkdcraw/rnuminput.h>
+#include <rnuminput.h>
 
 // Local includes
 

@@ -40,8 +40,8 @@
 
 // LibKDcraw includes
 
-#include <libkdcraw/rnuminput.h>
-#include <libkdcraw/rcombobox.h>
+#include <rnuminput.h>
+#include <rcombobox.h>
 
 using namespace KDcrawIface;
 

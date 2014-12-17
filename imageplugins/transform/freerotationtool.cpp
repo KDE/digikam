@@ -50,8 +50,8 @@
 
 // LibKDcraw includes
 
-#include <libkdcraw/rexpanderbox.h>
-#include <libkdcraw/version.h>
+#include <rexpanderbox.h>
+#include <version.h>
 
 // Local includes
 

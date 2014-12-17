@@ -48,7 +48,7 @@
 
 // LibKDcraw includes
 
-#include <libkdcraw/rawfiles.h>
+#include <rawfiles.h>
 
 // Local includes
 

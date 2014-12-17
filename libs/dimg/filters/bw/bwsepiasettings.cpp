@@ -48,9 +48,9 @@
 
 // LibKDcraw includes
 
-#include <libkdcraw/rexpanderbox.h>
-#include <libkdcraw/rnuminput.h>
-#include <libkdcraw/version.h>
+#include <rexpanderbox.h>
+#include <rnuminput.h>
+#include <version.h>
 #include <QStandardPaths>
 
 // Local includes
