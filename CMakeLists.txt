@@ -409,9 +409,7 @@ PRINT_OPTIONAL_LIBRARY_STATUS("libkdepimlibs" "http://pim.kde.org"              
 
 # ================================================================
 
-if(false)
-
-if(QT_FOUND AND KDE4_FOUND AND JPEG_FOUND AND TIFF_FOUND AND PNG_FOUND AND LCMS_FOUND AND Boost_FOUND AND KEXIV2_FOUND AND KDCRAW_FOUND AND PGF_FOUND AND OpenCV_FOUND)
+if(Qt5_FOUND AND KF5_FOUND AND JPEG_FOUND AND TIFF_FOUND AND PNG_FOUND AND LCMS_FOUND AND Boost_FOUND AND KF5KExiv2_FOUND AND KF5KDcraw_FOUND AND PGF_FOUND AND OpenCV_FOUND)
     message(STATUS " digiKam can be compiled.................. YES")
     set(DIGIKAM_CAN_BE_COMPILED true)
 else()
@@ -459,9 +457,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
             string(REGEX REPLACE ".*\\(GCC\\).* ([34]\\.[0-9]) .*" "\\1.0" GCC_VERSION "${VERSION_GCC_INFO}")
         endif()
 
-        MACRO_ENSURE_VERSION("4.3.0" "${GCC_VERSION}" GCC_VERSION_BAD)
-
-        if(GCC_VERSION_BAD)
+        if (${GCC_VERSION} VERSION_LESS "4.3.0")
             message(STATUS "Adjusting compilation flags for GCC version (${GCC_VERSION} )")
             add_definitions(-fno-tree-pre)
         endif()
@@ -478,12 +474,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
 
     # ==================================================================================================
     # Definitions and includes rules
-
-    add_definitions(${QT_DEFINITIONS}
-                    ${KDE4_DEFINITIONS}
-                    ${KDCRAW_DEFINITIONS}
-                    ${KEXIV2_DEFINITIONS}
-                   )
 
     # TODO : obsolete ?
     add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
@@ -758,7 +748,9 @@ if(DIGIKAM_CAN_BE_COMPILED)
     # --enable-final triggers: http://bugs.kde.org/show_bug.cgi?id=126326
     # digikam: camera download: auto-rotated images lose EXIF info ...
     # So make sure nofinal is always used here!
-    KDE4_NO_ENABLE_FINAL(libjpegutils)
+
+    # TODO PORT QT5
+    #KDE4_NO_ENABLE_FINAL(libjpegutils)
 
     # Define libjpeg_EXPORTS: kde-win emerged libjpeg uses this define to
     # decide wether to make dllimport (by default) or dllexport. So, we need to export.
@@ -1576,18 +1568,19 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${LCMS_INCLUDE_DIR}
     )
 
-    add_subdirectory(data)
-    add_subdirectory(utilities)
-    add_subdirectory(app)
-    add_subdirectory(kioslave)
-    add_subdirectory(showfoto)
-    add_subdirectory(imageplugins)
+# TODO port Qt5
+#     add_subdirectory(data)
+#     add_subdirectory(utilities)
+#     add_subdirectory(app)
+#     add_subdirectory(kioslave)
+#     add_subdirectory(showfoto)
+#     add_subdirectory(imageplugins)
 
     if(ENABLE_INTERNALMYSQL)
         add_subdirectory(databaseserver)
     endif()
 
-    if(KDE4_BUILD_TESTS)
+    if(BUILD_TESTING)
         MACRO_OPTIONAL_ADD_SUBDIRECTORY(tests)
     endif()
 
@@ -1611,5 +1604,4 @@ if(DOXYGEN_FOUND)
 
     add_custom_target(doc ${DOXYGEN_EXECUTABLE} ${DOXYFILE}
                       WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
-endif()
 endif()
