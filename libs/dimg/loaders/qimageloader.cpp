@@ -171,7 +171,7 @@ bool QImageLoader::save(const QString& filePath, DImgLoaderObserver* const obser
 
     // Saving is opaque to us. No support for stopping from observer,
     // progress info are only pseudo values
-    bool success = image.save(filePath, format.toUpper(), quality);
+    bool success = image.save(filePath, format.toUpper().constData(), quality);
 
     if (observer && success)
     {

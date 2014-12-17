@@ -924,7 +924,7 @@ void TIFFLoader::tiffSetExifAsciiTag(TIFF* const tif, ttag_t tiffTag,
     if (!tag.isEmpty())
     {
         QByteArray str(tag.data(), tag.size());
-        TIFFSetField(tif, tiffTag, (const char*)str);
+        TIFFSetField(tif, tiffTag, (const char*)str.constData());
     }
 }
 
