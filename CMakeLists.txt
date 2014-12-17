@@ -61,6 +61,7 @@ set(KFACE_MIN_VERSION   "5.0.0")
 set(KGEOMAP_MIN_VERSION "5.0.0")
 set(PGF_MIN_VERSION     "6.12.24")
 set(OPENCV_MIN_VERSION  "2.4.9")
+set(LENSFUN_MIN_VERSION "0.2.6.0")
 
 cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
 
@@ -246,23 +247,20 @@ else()
 
 endif()
 
-
-if(false)
-
 # ==================================================================================================
-# Optional dependencies
+# More Optional Dependencies
 
-MACRO_OPTIONAL_FIND_PACKAGE(Doxygen)
-MACRO_OPTIONAL_FIND_PACKAGE(Sqlite2)
-MACRO_OPTIONAL_FIND_PACKAGE(Lqr-1)
+find_package(Doxygen)
+find_package(Sqlite2)
+find_package(Lqr-1)
 
 # -- libgphoto2 rules --------------------------------------------------------------------------
 
-MACRO_OPTIONAL_FIND_PACKAGE(Gphoto2)
+find_package(Gphoto2)
 
 if(NOT WIN32 AND GPHOTO2_FOUND)
     # See bug #268267 : digiKam need to be linked to libusb to prevent crash at gphoto2 init if opencv is linked with libdc1394
-    MACRO_OPTIONAL_FIND_PACKAGE(USB)
+    find_package(USB)
 endif()
 
 if(GPHOTO2_FOUND)
@@ -288,14 +286,12 @@ endif()
 # -- KDEPim libraries rules -------------------------------------------------------------------
 
 if(ENABLE_KDEPIMLIBSSUPPORT)
-    MACRO_OPTIONAL_FIND_PACKAGE(KdepimLibs)
+    find_package(KdepimLibs)
 endif()
 
 # -- Check LensFun library for Lens auto-correction tool --------------------------------------
 
-MACRO_OPTIONAL_FIND_PACKAGE(LensFun)
-
-set(LENSFUN_MIN_VERSION "0.2.6.0")
+find_package(LensFun)
 
 if(LENSFUN_VERSION)
     message(STATUS "liblensfun: Found version ${LENSFUN_VERSION} (required: ${LENSFUN_MIN_VERSION})")
@@ -303,7 +299,7 @@ if(LENSFUN_VERSION)
         set(LENSFUN_FOUND FALSE)
     endif()
 else()
-    message(WARNING "liblensfun: Version information not found, your version is probably too old.")
+    message(STATUS "liblensfun: Version information not found, your version is probably too old.")
     set(LENSFUN_FOUND FALSE)
 endif()
 
@@ -313,11 +309,11 @@ if(ENABLE_BALOOSUPPORT)
     # Baloo support from 4.12
     if(${KDE_VERSION} VERSION_GREATER "4.11.99")
 
-        MACRO_OPTIONAL_FIND_PACKAGE(KFileMetaData CONFIG)
+        find_package(KFileMetaData CONFIG)
         MACRO_LOG_FEATURE(KFileMetaData_FOUND "KFileMetaData Library"
                           "A library for extracting file metadata" "https://projects.kde.org/kfilemetadata" TRUE)
 
-        MACRO_OPTIONAL_FIND_PACKAGE(Baloo)
+        find_package(Baloo)
         MACRO_LOG_FEATURE(Baloo_FOUND "Baloo" "Baloo"
                           "http://www.kde.org" TRUE "" "Baloo extends the search and tagging")
 
@@ -352,6 +348,8 @@ MACRO_BOOL_TO_01(KGEOMAP_FOUND            HAVE_KGEOMAP)
 MACRO_BOOL_TO_01(APPLE                    USE_QT_SCALING)
 
 MACRO_BOOL_TO_01(ENABLE_IMGLOADERDEBUGMSG USE_IMGLOADERDEBUGMSG)
+
+if(false)
 
 # Set config files accordingly with optional dependencies
 
