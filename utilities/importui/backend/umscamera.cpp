@@ -108,8 +108,9 @@ QByteArray UMSCamera::cameraMD5ID()
     // mounted by a card reader or a camera. In this case, "already downloaded" flag will
     // be independent of the device used to mount memory card.
     camData.append(uuid());
-    KMD5 md5(camData.toUtf8());
-    return md5.hexDigest();
+    QCryptographicHash md5(QCryptographicHash::Md5);
+    md5.addData(camData.toUtf8());
+    return md5.result().toHex();
 }
 
 bool UMSCamera::getFreeSpace(unsigned long& /*kBSize*/, unsigned long& /*kBAvail*/)

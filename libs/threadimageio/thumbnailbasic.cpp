@@ -91,8 +91,9 @@ QString ThumbnailCreator::thumbnailUri(const QString& filePath)
 
 QString ThumbnailCreator::thumbnailPathFromUri(const QString& uri, const QString& basePath)
 {
-    KMD5 md5( QFile::encodeName(uri) );
-    return basePath + QFile::encodeName( md5.hexDigest() ) + QString(".png");
+    QCryptographicHash md5(QCryptographicHash::Md5);
+    md5.addData( QFile::encodeName(uri) );
+    return basePath + QFile::encodeName( md5.result().toHex() ) + QString(".png");
 }
 
 // --- non-static methods ---

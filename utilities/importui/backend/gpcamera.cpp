@@ -217,8 +217,9 @@ QByteArray GPCamera::cameraMD5ID()
     // TODO is it really necessary to have a path here? I think model+filename+size+ctime should be enough to give unique fingerprint
     // while still allowing you to move files around in the camera if needed
     camData.append(path());
-    KMD5 md5(camData.toUtf8());
-    md5data = md5.hexDigest();
+    QCryptographicHash md5(QCryptographicHash::Md5);
+    md5.addData(camData.toUtf8());
+    md5data = md5.result().toHex();
 #endif /* HAVE_GPHOTO2 */
 
     return md5data;
