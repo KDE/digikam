@@ -159,7 +159,7 @@ void DNotificationWrapper(const QString& eventId, const QString& message,
     {
         if (!parent)
         {
-            kWarning() << "parent is null";
+            qCWarning(DIGIKAM_GENERAL_LOG) << "parent is null";
             return;
         }
 

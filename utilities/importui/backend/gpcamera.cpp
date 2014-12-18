@@ -1760,7 +1760,7 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
     {
        if (cnt > 1)
        {
-          kWarning() << "More than one camera detected on port " << port
+          qCWarning(DIGIKAM_GENERAL_LOG) << "More than one camera detected on port " << port
                      << ". Due to restrictions in the GPhoto2 API, "
                      << "only the first camera is used.";
        }

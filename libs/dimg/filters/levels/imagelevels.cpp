@@ -742,14 +742,14 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(const KUrl& fileUrl)
 
         if (fields != 4)
         {
-            kWarning() <<  "Invalid Gimp levels file!";
+            qCWarning(DIGIKAM_GENERAL_LOG) <<  "Invalid Gimp levels file!";
             fclose(file);
             return false;
         }
 
         if (!fgets(buf, 50, file))
         {
-            kWarning() <<  "Invalid Gimp levels file!";
+            qCWarning(DIGIKAM_GENERAL_LOG) <<  "Invalid Gimp levels file!";
             fclose(file);
             return false;
         }
@@ -758,7 +758,7 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(const KUrl& fileUrl)
 
         if (buf == nptr || errno == ERANGE)
         {
-            kWarning() <<  "Invalid Gimp levels file!";
+            qCWarning(DIGIKAM_GENERAL_LOG) <<  "Invalid Gimp levels file!";
             fclose(file);
             return false;
         }

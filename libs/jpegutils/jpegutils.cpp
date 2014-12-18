@@ -500,7 +500,7 @@ void JpegRotator::updateMetadata(const QString& fileName, const RotationMatrix &
 
             if (::utime(QFile::encodeName(fileName).constData(), &ut) != 0)
             {
-                kWarning() << "Failed to restore modification time for file " << fileName;
+                qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to restore modification time for file " << fileName;
             }
         }
 
@@ -509,7 +509,7 @@ void JpegRotator::updateMetadata(const QString& fileName, const RotationMatrix &
 #ifndef Q_OS_WIN
         if (::chmod(QFile::encodeName(fileName).constData(), st.st_mode) != 0)
         {
-            kWarning() << "Failed to restore file permissions for file " << fileName;
+            qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to restore file permissions for file " << fileName;
         }
 #else
         QFile::Permissions permissions = QFile::permissions(m_file);
@@ -570,7 +570,7 @@ bool JpegRotator::performJpegTransform(TransformAction action, const QString& sr
 
     if (!input_file)
     {
-        kWarning() << "ExifRotate: Error in opening input file: " << input_file;
+        qCWarning(DIGIKAM_GENERAL_LOG) << "ExifRotate: Error in opening input file: " << input_file;
         return false;
     }
 
@@ -579,7 +579,7 @@ bool JpegRotator::performJpegTransform(TransformAction action, const QString& sr
     if (!output_file)
     {
         fclose(input_file);
-        kWarning() << "ExifRotate: Error in opening output file: " << output_file;
+        qCWarning(DIGIKAM_GENERAL_LOG) << "ExifRotate: Error in opening output file: " << output_file;
         return false;
     }
 

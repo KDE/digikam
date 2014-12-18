@@ -268,7 +268,7 @@ public:
 
             if (values.size() != 2)
             {
-                kWarning() << "Relation Interval requires a list of two values";
+                qCWarning(DIGIKAM_GENERAL_LOG) << "Relation Interval requires a list of two values";
                 return;
             }
 
@@ -299,7 +299,7 @@ public:
 
             if (values.size() != 2)
             {
-                kWarning() << "Relation Interval requires a list of two values";
+                qCWarning(DIGIKAM_GENERAL_LOG) << "Relation Interval requires a list of two values";
                 return;
             }
 
@@ -339,7 +339,7 @@ public:
 
             if (!date.isValid())
             {
-                kWarning() << "Date" << reader.value() << "is invalid";
+                qCWarning(DIGIKAM_GENERAL_LOG) << "Date" << reader.value() << "is invalid";
                 return;
             }
 
@@ -393,7 +393,7 @@ public:
 
             if (values.size() != 2)
             {
-                kWarning() << "Relation Interval requires a list of two values";
+                qCWarning(DIGIKAM_GENERAL_LOG) << "Relation Interval requires a list of two values";
                 return;
             }
 
@@ -630,7 +630,7 @@ public:
 
             if (list.size() != 2)
             {
-                kWarning() << "Relation 'Near' requires a list of two values";
+                qCWarning(DIGIKAM_GENERAL_LOG) << "Relation 'Near' requires a list of two values";
                 return;
             }
 
@@ -732,7 +732,7 @@ public:
             // Search type, currently only "rectangle"
             if (type != "rectangle")
             {
-                kWarning() << "Relation 'Inside' supports no other type than 'rectangle'";
+                qCWarning(DIGIKAM_GENERAL_LOG) << "Relation 'Inside' supports no other type than 'rectangle'";
                 return;
             }
 
@@ -742,7 +742,7 @@ public:
 
             if (list.size() != 4)
             {
-                kWarning() << "Relation 'Inside' requires a list of four values";
+                qCWarning(DIGIKAM_GENERAL_LOG) << "Relation 'Inside' requires a list of four values";
                 return;
             }
 
@@ -1127,7 +1127,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
         if (values.size() != 2)
         {
-            kWarning() << "Relation Interval requires a list of two values";
+            qCWarning(DIGIKAM_GENERAL_LOG) << "Relation Interval requires a list of two values";
         }
 
         sql += " ( CAST(VideoMetadata.audioBitRate AS INTEGER)";
@@ -1198,7 +1198,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
         if (values.size() != 2)
         {
-            kWarning() << "Relation Interval requires a list of two values";
+            qCWarning(DIGIKAM_GENERAL_LOG) << "Relation Interval requires a list of two values";
         }
 
         sql += " ( CAST(VideoMetadata.duration AS INTEGER)";
@@ -1218,7 +1218,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
         if (values.size() != 2)
         {
-            kWarning() << "Relation Interval requires a list of two values";
+            qCWarning(DIGIKAM_GENERAL_LOG) << "Relation Interval requires a list of two values";
         }
 
         sql += " ( CAST(VideoMetadata.frameRate AS REAL)";
@@ -1489,7 +1489,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     }
     else if (name == "similarity")
     {
-        kWarning() << "Search field \"similarity\" is not supported by ImageQueryBuilder";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Search field \"similarity\" is not supported by ImageQueryBuilder";
     }
     else
     {
@@ -1862,7 +1862,7 @@ QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant>* b
         }
         else
         {
-            kWarning() << "Unknown rule type: " << key << " passed to kioslave";
+            qCWarning(DIGIKAM_GENERAL_LOG) << "Unknown rule type: " << key << " passed to kioslave";
             continue;
         }
 
@@ -1900,7 +1900,7 @@ QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant>* b
         }
         else
         {
-            kWarning() << "Unknown op type: " << op << " passed to kioslave";
+            qCWarning(DIGIKAM_GENERAL_LOG) << "Unknown op type: " << op << " passed to kioslave";
             continue;
         }
 
@@ -2091,7 +2091,7 @@ QString SubQueryBuilder::build(enum SKey key, enum SOperator op,
         }
         case (KEYWORD):
         {
-            kWarning() << "KEYWORD Detected which is not possible";
+            qCWarning(DIGIKAM_GENERAL_LOG) << "KEYWORD Detected which is not possible";
             break;
         }
         case(RATING):

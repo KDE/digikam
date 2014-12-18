@@ -928,7 +928,7 @@ void AlbumLabelsSearchHandler::slotResult(KJob* job)
 {
     if (job->error())
     {
-        kWarning() << "Failed to list url: " << job->errorString();
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list url: " << job->errorString();
 
         // Pop-up a message about the error.
         DNotificationWrapper(QString(), job->errorString(),

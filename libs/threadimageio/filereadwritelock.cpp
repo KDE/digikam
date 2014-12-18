@@ -269,7 +269,7 @@ bool FileReadWriteLockStaticPrivate::lockForWrite_locked(Entry* entry, int mode,
     if (it != entry->readers.end())
     {
         // We could deadlock, or promote the read locks to write locks
-        kWarning() << "Locking for write, recursively locked for read: Promoting existing read locks to write locks! "
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Locking for write, recursively locked for read: Promoting existing read locks to write locks! "
                    << "Avoid this situation.";
         // The lock was locked for read it.value() times by this thread recursively
         recursiveReadLockCount = it.value();

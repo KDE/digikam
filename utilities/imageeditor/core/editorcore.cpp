@@ -440,7 +440,7 @@ void EditorCore::slotImageSaved(const QString& filePath, bool success)
     }
     else
     {
-        kWarning() << "error saving image '" << QFile::encodeName(filePath)..constData()();
+        qCWarning(DIGIKAM_GENERAL_LOG) << "error saving image '" << QFile::encodeName(filePath)..constData()();
     }
 
     d->currentFileToSave++;
@@ -698,7 +698,7 @@ DImg* EditorCore::getImg() const
     }
     else
     {
-        kWarning() << "d->image is NULL";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "d->image is NULL";
         return 0;
     }
 }
@@ -806,7 +806,7 @@ void EditorCore::putIccProfile(const IccProfile& profile)
 {
     if (d->image.isNull())
     {
-        kWarning() << "d->image is NULL";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "d->image is NULL";
         return;
     }
 
@@ -868,7 +868,7 @@ QString EditorCore::getImageFormat() const
     // It is a bug in the loader if format attribute is not given
     if (mimeType.isEmpty())
     {
-        kWarning() << "DImg object does not contain attribute \"format\"";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "DImg object does not contain attribute \"format\"";
         mimeType = QImageReader::imageFormat(getImageFilePath());
     }
 

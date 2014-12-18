@@ -184,7 +184,7 @@ void FileSaveOptionsBox::slotFilterChanged(const QString& newFilter)
 
     if (!d->dialog)
     {
-        kWarning() << "I need a dialog for working correctly. "
+        qCWarning(DIGIKAM_GENERAL_LOG) << "I need a dialog for working correctly. "
                    << "Set one with setDialog.";
     }
 
@@ -230,7 +230,7 @@ void FileSaveOptionsBox::setAutoFilter(const QString& autoFilter)
 
     if (!d->dialog)
     {
-        kWarning() << "I need a dialog for working correctly. "
+        qCWarning(DIGIKAM_GENERAL_LOG) << "I need a dialog for working correctly. "
                    << "Set one with setDialog.";
         return;
     }
@@ -297,7 +297,7 @@ DImg::FORMAT FileSaveOptionsBox::discoverFormat(const QString& filename, DImg::F
     }
     else
     {
-        kWarning() << "Using fallback format " << fallback;
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Using fallback format " << fallback;
     }
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Discovered format: " << format;

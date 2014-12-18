@@ -416,7 +416,7 @@ QMimeData* AlbumDragDropHandler::createMimeData(const QList<Album*>& albums)
 
     if (albums.size() > 1)
     {
-        kWarning() << "Dragging multiple albums is not implemented";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Dragging multiple albums is not implemented";
     }
 
     PAlbum* const palbum = dynamic_cast<PAlbum*>(albums.first());

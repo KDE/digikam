@@ -504,7 +504,7 @@ void KInotify::slotEvent( int socket )
         if ( event->mask & EventMoveSelf )
         {
 //            qCDebug(DIGIKAM_GENERAL_LOG) << path << "EventMoveSelf";
-            kWarning() << "EventMoveSelf: THIS CASE IS NOT HANDLED PROPERLY!";
+            qCWarning(DIGIKAM_GENERAL_LOG) << "EventMoveSelf: THIS CASE IS NOT HANDLED PROPERLY!";
         }
 
         if ( event->mask & EventMoveFrom )

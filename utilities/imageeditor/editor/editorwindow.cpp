@@ -1801,7 +1801,7 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
     }
     else
     {
-        kWarning() << "Why was slotSavingFinished called if we did not want to save a file?";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Why was slotSavingFinished called if we did not want to save a file?";
     }
 }
 
@@ -2081,7 +2081,7 @@ bool EditorWindow::showFileSaveDialog(const KUrl& initialUrl, KUrl& newURL)
     if (!newURL.isValid())
     {
         KMessageBox::error(this, i18n("Cannot Save: Found file path <filename>%1</filename> is invalid.", newURL.prettyUrl()));
-        kWarning() << "target URL is not valid !";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "target URL is not valid !";
         return false;
     }
 
@@ -2445,7 +2445,7 @@ bool EditorWindow::startingSaveVersion(const KUrl& url, bool fork, bool saveAs, 
                                        "the suggested version file name <filename>%2</filename>",
                                        url.fileName(),
                                        newURL.fileName()));
-        kWarning() << "target URL is not valid !";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "target URL is not valid !";
         return false;
     }
 

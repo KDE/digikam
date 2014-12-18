@@ -2012,7 +2012,7 @@ bool DigikamApp::checkSolidCamera(const Solid::Device& cameraDevice)
 
     if (!driverHandle.canConvert(QVariant::List))
     {
-        kWarning() << "Solid returns unsupported driver handle for gphoto2";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Solid returns unsupported driver handle for gphoto2";
         return false;
     }
 
@@ -2023,7 +2023,7 @@ bool DigikamApp::checkSolidCamera(const Solid::Device& cameraDevice)
         || !driverHandleList.at(2).canConvert(QVariant::Int)
        )
     {
-        kWarning() << "Solid returns unsupported driver handle for gphoto2";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Solid returns unsupported driver handle for gphoto2";
         return false;
     }
 

@@ -622,7 +622,7 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
     if (albumRoot.isNull() || album.isEmpty())
     {
         // If you want to scan the album root, pass "/"
-        kWarning() << "partialScan(QString, QString) called with invalid values";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "partialScan(QString, QString) called with invalid values";
         return;
     }
 
@@ -643,7 +643,7 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
 
     if (location.isNull())
     {
-        kWarning() << "Did not find a CollectionLocation for album root path " << albumRoot;
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Did not find a CollectionLocation for album root path " << albumRoot;
         return;
     }
 
@@ -723,7 +723,7 @@ qlonglong CollectionScanner::scanFile(const QString& albumRoot, const QString& a
 {
     if (album.isEmpty() || fileName.isEmpty())
     {
-        kWarning() << "scanFile(QString, QString, QString) called with empty album or empty filename";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "scanFile(QString, QString, QString) called with empty album or empty filename";
         return -1;
     }
 
@@ -731,7 +731,7 @@ qlonglong CollectionScanner::scanFile(const QString& albumRoot, const QString& a
 
     if (location.isNull())
     {
-        kWarning() << "Did not find a CollectionLocation for album root path " << albumRoot;
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Did not find a CollectionLocation for album root path " << albumRoot;
         return -1;
     }
 
@@ -740,7 +740,7 @@ qlonglong CollectionScanner::scanFile(const QString& albumRoot, const QString& a
 
     if (!fi.exists())
     {
-        kWarning() << "File given to scan does not exist" << albumRoot << album << fileName;
+        qCWarning(DIGIKAM_GENERAL_LOG) << "File given to scan does not exist" << albumRoot << album << fileName;
         return -1;
     }
 
@@ -1013,7 +1013,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
 
     if ( !dir.exists() || !dir.isReadable() )
     {
-        kWarning() << "Folder does not exist or is not readable: "
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Folder does not exist or is not readable: "
                    << dir.path();
         return;
     }
@@ -1765,7 +1765,7 @@ void CollectionScanner::scan(const QString& folderPath)
 
     if (albumRoot.isNull())
     {
-        kWarning() << "scanAlbums(QString): folder " << folderPath << " not found in collection.";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "scanAlbums(QString): folder " << folderPath << " not found in collection.";
         return;
     }
 
@@ -1823,7 +1823,7 @@ void CollectionScanner::scanAlbum(const QString& albumRoot, const QString& album
 
     if ( !dir.exists() || !dir.isReadable() )
     {
-        kWarning() << "Folder does not exist or is not readable: " << dir.path();
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Folder does not exist or is not readable: " << dir.path();
         return;
     }
 
@@ -1919,7 +1919,7 @@ void CollectionScanner::updateItemsWithoutDate()
 
             if (albumID <= 0)
             {
-                kWarning() << "Album ID == -1: " << albumURL;
+                qCWarning(DIGIKAM_GENERAL_LOG) << "Album ID == -1: " << albumURL;
             }
 
             if (fi.exists())

@@ -4593,7 +4593,7 @@ bool AlbumDB::copyAlbumProperties(int srcAlbumID, int dstAlbumID)
 
     if (values.isEmpty())
     {
-        kWarning() << " src album ID " << srcAlbumID << " does not exist";
+        qCWarning(DIGIKAM_GENERAL_LOG) << " src album ID " << srcAlbumID << " does not exist";
         return false;
     }
 

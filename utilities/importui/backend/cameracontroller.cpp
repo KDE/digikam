@@ -773,7 +773,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
         default:
         {
-            kWarning() << " unknown action specified";
+            qCWarning(DIGIKAM_GENERAL_LOG) << " unknown action specified";
             break;
         }
     }

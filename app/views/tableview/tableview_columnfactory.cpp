@@ -271,7 +271,7 @@ TableViewColumn::ColumnCompareResult TableViewColumn::compare(TableViewModel::It
     Q_UNUSED(itemA)
     Q_UNUSED(itemB)
 
-    kWarning()<<"Unimplemented custom comparison. Make sure getColumnFlags() does not return ColumnCustomSorting.";
+    qCWarning(DIGIKAM_GENERAL_LOG)<<"Unimplemented custom comparison. Make sure getColumnFlags() does not return ColumnCustomSorting.";
 
     return CmpEqual;
 }

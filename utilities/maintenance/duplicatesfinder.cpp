@@ -134,7 +134,7 @@ void DuplicatesFinder::slotDone()
 {
     if (d->job->error())
     {
-        kWarning() << "Failed to list url: " << d->job->errorString();
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list url: " << d->job->errorString();
 
         // Pop-up a message about the error.
         DNotificationWrapper(QString(), d->job->errorString(),

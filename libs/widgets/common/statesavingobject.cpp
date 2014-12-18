@@ -52,7 +52,7 @@ public:
 
         if (host->objectName().isEmpty())
         {
-            kWarning() << "Object name for " << host
+            qCWarning(DIGIKAM_GENERAL_LOG) << "Object name for " << host
                        << " is empty. Returning the default config group";
         }
 
@@ -204,7 +204,7 @@ KConfigGroup StateSavingObject::getConfigGroup() const
 
     if (!d->group.isValid())
     {
-        kWarning() << "KConfigGroup set via setConfigGroup is invalid. "
+        qCWarning(DIGIKAM_GENERAL_LOG) << "KConfigGroup set via setConfigGroup is invalid. "
                    << "Using object name based group.";
         return d->getGroupFromObjectName();
     }

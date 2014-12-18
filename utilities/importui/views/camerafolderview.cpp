@@ -130,7 +130,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
     }
     else
     {
-        kWarning() << "Could not find parent for subFolder "
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Could not find parent for subFolder "
                    << subFolder << " of folder " << folder;
         return 0;
     }

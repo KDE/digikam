@@ -517,7 +517,7 @@ void DCategorizedView::layoutAboutToBeChanged()
     }
     else
     {
-        kWarning() << "Called without selection model, check whether the models are ok..";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Called without selection model, check whether the models are ok..";
     }
 
     QModelIndex current      = currentIndex();

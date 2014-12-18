@@ -1177,7 +1177,7 @@ bool ImageCurves::loadCurvesFromGimpCurvesFile(const KUrl& fileUrl)
 
             if (fields != 2)
             {
-                kWarning() <<  "Invalid Gimp curves file!";
+                qCWarning(DIGIKAM_GENERAL_LOG) <<  "Invalid Gimp curves file!";
                 fclose(file);
                 return false;
             }

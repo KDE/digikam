@@ -265,7 +265,7 @@ TableViewColumn::ColumnCompareResult ColumnAudioVideoProperties::compare(TableVi
         }
 
     default:
-        kWarning() << "item: unimplemented comparison, subColumn=" << subColumn;
+        qCWarning(DIGIKAM_GENERAL_LOG) << "item: unimplemented comparison, subColumn=" << subColumn;
         return CmpEqual;
     }
 }

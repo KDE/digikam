@@ -204,7 +204,7 @@ void DateFolderView::gotoDate(const QDate& dt)
 
     if (!dateAlbum)
     {
-        kWarning() << "Could not retrieve an album for index " << dateIndex;
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Could not retrieve an album for index " << dateIndex;
         return;
     }
 

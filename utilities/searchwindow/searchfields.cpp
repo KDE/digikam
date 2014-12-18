@@ -701,7 +701,7 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
 
     else
     {
-        kWarning() << "SearchField::createField: cannot create SearchField for" << name;
+        qCWarning(DIGIKAM_GENERAL_LOG) << "SearchField::createField: cannot create SearchField for" << name;
     }
 
     return 0;

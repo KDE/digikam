@@ -584,7 +584,7 @@ void GPSMarkerTiler::slotMapImagesJobResult(KJob* job)
 
     if (job->error())
     {
-        kWarning() << "Failed to list images in selected area:" << job->errorString();
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list images in selected area:" << job->errorString();
 
         // Pop-up a message about the error.
         DNotificationWrapper(QString(), job->errorString(),

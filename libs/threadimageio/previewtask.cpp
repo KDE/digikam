@@ -341,13 +341,13 @@ void PreviewLoadingTask::execute()
         }
         if (m_img.isNull() && continueQuery())
         {
-            kWarning() << "Cannot extract preview for " << m_loadingDescription.filePath;
+            qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot extract preview for " << m_loadingDescription.filePath;
         }
     }
 
     if (m_img.isNull() && continueQuery())
     {
-        kWarning() << "Cannot extract preview for " << m_loadingDescription.filePath;
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot extract preview for " << m_loadingDescription.filePath;
     }
 
     // Post processing

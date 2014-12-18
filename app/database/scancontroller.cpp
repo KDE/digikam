@@ -1069,7 +1069,7 @@ void ScanController::hintAtMoveOrCopyOfAlbum(const PAlbum* const album, const QS
 
     if (location.isNull())
     {
-        kWarning() << "hintAtMoveOrCopyOfAlbum: Destination path" << dstPath
+        qCWarning(DIGIKAM_GENERAL_LOG) << "hintAtMoveOrCopyOfAlbum: Destination path" << dstPath
                    << "does not point to an available location.";
         return;
     }

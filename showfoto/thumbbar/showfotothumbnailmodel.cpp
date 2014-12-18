@@ -327,7 +327,7 @@ bool ShowfotoThumbnailModel::pixmapForItem(QString url, QPixmap& pix) const
         if (hasPixmap)
         {
 
-            kWarning() << "Thumbbar: Requested thumbnail size" << d->thumbSize.size()
+            qCWarning(DIGIKAM_GENERAL_LOG) << "Thumbbar: Requested thumbnail size" << d->thumbSize.size()
                        << "is larger than the maximum thumbnail size" << d->maxThumbSize
                        << ". Returning a scaled-up image.";
 

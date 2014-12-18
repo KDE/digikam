@@ -227,7 +227,7 @@ TableViewColumn::ColumnCompareResult ColumnGeoProperties::compare(
         return compareHelper<int>(int(hasAltitudeA), int(hasAltitudeB));
     }
 
-    kWarning() << "geo: unimplemented comparison, subColumn=" << subColumn;
+    qCWarning(DIGIKAM_GENERAL_LOG) << "geo: unimplemented comparison, subColumn=" << subColumn;
     return CmpEqual;
 }
 

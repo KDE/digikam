@@ -386,7 +386,7 @@ TableViewColumn::ColumnCompareResult ColumnItemProperties::compare(
         }
 
         default:
-            kWarning() << "item: unimplemented comparison, subColumn=" << subColumn;
+            qCWarning(DIGIKAM_GENERAL_LOG) << "item: unimplemented comparison, subColumn=" << subColumn;
             return CmpEqual;
     }
 }

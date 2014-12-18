@@ -396,7 +396,7 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
         // Check if others attributes are not yet managed here...
         if (!attributes.isEmpty())
         {
-            kWarning() << "These attributes are not yet managed by digiKam KIPI interface: " << attributes;
+            qCWarning(DIGIKAM_GENERAL_LOG) << "These attributes are not yet managed by digiKam KIPI interface: " << attributes;
         }
     }
 
@@ -499,7 +499,7 @@ void KipiImageInfo::delAttributes(const QStringList& res)
 
         if (!attributes.isEmpty())
         {
-            kWarning() << "These attributes are not yet managed by digiKam KIPI interface: " << attributes;
+            qCWarning(DIGIKAM_GENERAL_LOG) << "These attributes are not yet managed by digiKam KIPI interface: " << attributes;
         }
     }
 

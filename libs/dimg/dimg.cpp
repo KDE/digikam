@@ -1599,7 +1599,7 @@ void DImg::bitBltImage(const DImg* const src, int sx, int sy, int w, int h, int 
 
     if (src->sixteenBit() != sixteenBit())
     {
-        kWarning() << "Blitting from 8-bit to 16-bit or vice versa is not supported";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Blitting from 8-bit to 16-bit or vice versa is not supported";
         return;
     }
 
@@ -1623,7 +1623,7 @@ void DImg::bitBltImage(const uchar* const src, int sx, int sy, int w, int h, int
 
     if (bytesDepth() != sdepth)
     {
-        kWarning() << "Blitting from 8-bit to 16-bit or vice versa is not supported";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Blitting from 8-bit to 16-bit or vice versa is not supported";
         return;
     }
 
@@ -1753,7 +1753,7 @@ void DImg::bitBlendImage(DColorComposer* const composer, const DImg* const src,
 
     if (src->sixteenBit() != sixteenBit())
     {
-        kWarning() << "Blending from 8-bit to 16-bit or vice versa is not supported";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Blending from 8-bit to 16-bit or vice versa is not supported";
         return;
     }
 
@@ -2848,7 +2848,7 @@ QByteArray DImg::getUniqueHash() const
 
     if (!m_priv->attributes.contains("originalFilePath"))
     {
-        kWarning() << "DImg::getUniqueHash called without originalFilePath property set!";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "DImg::getUniqueHash called without originalFilePath property set!";
         return QByteArray();
     }
 
@@ -2881,7 +2881,7 @@ QByteArray DImg::getUniqueHashV2() const
 
     if (!m_priv->attributes.contains("originalFilePath"))
     {
-        kWarning() << "DImg::getUniqueHash called without originalFilePath property set!";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "DImg::getUniqueHash called without originalFilePath property set!";
         return QByteArray();
     }
 

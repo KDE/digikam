@@ -73,7 +73,7 @@ void AbstractSearchGroupContainer::removeSearchGroup(SearchGroup* group)
 {
     if (group->groupType() == SearchGroup::FirstGroup)
     {
-        kWarning() << "Attempt to delete the primary search group";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Attempt to delete the primary search group";
         return;
     }
 

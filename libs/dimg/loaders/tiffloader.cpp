@@ -153,7 +153,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     if (TIFFGetFieldDefaulted(tif, TIFFTAG_ROWSPERSTRIP, &rows_per_strip) == 0
         || rows_per_strip == 0 || rows_per_strip == (unsigned int) - 1)
     {
-        kWarning()  << "TIFF loader: Cannot handle non-stripped images. Loading file "
+        qCWarning(DIGIKAM_GENERAL_LOG)  << "TIFF loader: Cannot handle non-stripped images. Loading file "
                     << filePath;
         TIFFClose(tif);
         loadingFailed();
@@ -166,7 +166,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         //        || rows_per_strip    >  h
        )
     {
-        kWarning() << "TIFF loader: Encountered invalid value in image." << endl
+        qCWarning(DIGIKAM_GENERAL_LOG) << "TIFF loader: Encountered invalid value in image." << endl
                    << " bits_per_sample   : " << bits_per_sample  << endl
                    << " samples_per_pixel : " << samples_per_pixel << endl
                    << " rows_per_strip    : " << rows_per_strip << endl
@@ -189,7 +189,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         photometric != PHOTOMETRIC_PALETTE &&
         (m_loadFlags & LoadImageData))
     {
-        kWarning() << "Can not handle image without RGB color-space: "
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Can not handle image without RGB color-space: "
                    << photometric;
         TIFFClose(tif);
         loadingFailed();

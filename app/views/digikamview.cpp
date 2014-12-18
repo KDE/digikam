@@ -1184,7 +1184,7 @@ void DigikamView::slotSelectAlbum(const KUrl& url)
 
     if (!album)
     {
-        kWarning() << "Unable to find album for " << url;
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Unable to find album for " << url;
         return;
     }
 

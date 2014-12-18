@@ -99,7 +99,7 @@ PAlbum* AlbumModificationHelper::slotAlbumNew(PAlbum* parent)
 {
     if (!parent)
     {
-        kWarning() << "No parent album given";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "No parent album given";
         return 0;
     }
 
@@ -107,7 +107,7 @@ PAlbum* AlbumModificationHelper::slotAlbumNew(PAlbum* parent)
 
     if (!settings)
     {
-        kWarning() << "could not get Album Settings";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "could not get Album Settings";
         return 0;
     }
 

@@ -169,7 +169,7 @@ public:
 
                 if (value < 0.0)
                 {
-                    kWarning() << "Scaling value < 0: " << value << ". Assuming 0.";
+                    qCWarning(DIGIKAM_GENERAL_LOG) << "Scaling value < 0: " << value << ". Assuming 0.";
                     return 0;
                 }
 
@@ -544,13 +544,13 @@ void HistogramPainter::setSelection(double selectionMin, double selectionMax)
 {
     if (selectionMin < 0.0 || selectionMin > 1.0)
     {
-        kWarning() << "selectionMin out of range: " << selectionMin << ". Clamping value";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "selectionMin out of range: " << selectionMin << ". Clamping value";
         selectionMin = qMax(0.0, qMin(1.0, selectionMin));
     }
 
     if (selectionMax < 0.0 || selectionMax > 1.0)
     {
-        kWarning() << "selectionMax out of range: " << selectionMax << ". Clamping value";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "selectionMax out of range: " << selectionMax << ". Clamping value";
         selectionMax = qMax(0.0, qMin(1.0, selectionMax));
     }
 

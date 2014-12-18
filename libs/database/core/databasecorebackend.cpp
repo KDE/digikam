@@ -348,7 +348,7 @@ bool DatabaseCoreBackendPrivate::checkRetrySQLiteLockError(int retries)
     {
         if (retries > (isInUIThread() ? uiMaxRetries : maxRetries))
         {
-            kWarning() << "Detected locked database file. There is an active transaction. Waited but giving up now.";
+            qCWarning(DIGIKAM_GENERAL_LOG) << "Detected locked database file. There is an active transaction. Waited but giving up now.";
             return false;
         }
     }
@@ -459,7 +459,7 @@ bool DatabaseCoreBackendPrivate::handleWithErrorHandler(const SqlQuery* const qu
         }
         else
         {
-            kWarning() << "Failed to invoke DatabaseErrorHandler. Aborting all queries.";
+            qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to invoke DatabaseErrorHandler. Aborting all queries.";
             operationStatus = DatabaseCoreBackend::AbortQueries;
         }
 
@@ -612,7 +612,7 @@ DatabaseAction DatabaseCoreBackend::getDBAction(const QString& actionName) const
 
     if (action.name.isNull())
     {
-        kWarning() << "No DB action defined for" << actionName << "! Implementation missing for this database type.";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "No DB action defined for" << actionName << "! Implementation missing for this database type.";
     }
 
     return action;
@@ -646,7 +646,7 @@ DatabaseCoreBackend::QueryState DatabaseCoreBackend::execDBAction(const Database
 
     if (action.name.isNull())
     {
-        kWarning() << "Attempt to execute null action";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Attempt to execute null action";
         return DatabaseCoreBackend::SQLError;
     }
 
@@ -1123,7 +1123,7 @@ SqlQuery DatabaseCoreBackend::execQuery(const QString& sql, const QMap<QString, 
 
             if (!bindingMap.contains(namedPlaceholder))
             {
-                kWarning() << "Missing place holder" << namedPlaceholder
+                qCWarning(DIGIKAM_GENERAL_LOG) << "Missing place holder" << namedPlaceholder
                            << "in binding map. The following values are defined for this action:"
                            << bindingMap.keys() <<". This is a setup error!";
                 //TODO What should we do here? How can we cancel that action?

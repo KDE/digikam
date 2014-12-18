@@ -90,7 +90,7 @@ void StretchFilter::stretchContrastImage()
     QScopedPointer<ImageHistogram> histogram(new ImageHistogram(m_refImage));
     if (histogram.isNull())
     {
-        kWarning() << ("Unable to allocate memory!");
+        qCWarning(DIGIKAM_GENERAL_LOG) << ("Unable to allocate memory!");
         return;
     }
     histogram->calculate();
@@ -100,7 +100,7 @@ void StretchFilter::stretchContrastImage()
 
     if (normalize_map.isNull())
     {
-        kWarning() << ("Unable to allocate memory!");
+        qCWarning(DIGIKAM_GENERAL_LOG) << ("Unable to allocate memory!");
         return;
     }
 

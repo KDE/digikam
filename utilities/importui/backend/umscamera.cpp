@@ -385,14 +385,14 @@ bool UMSCamera::downloadItem(const QString& folder, const QString& itemName, con
 
     if (!sFile.open(QIODevice::ReadOnly))
     {
-        kWarning() << "Failed to open source file for reading: " << src;
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to open source file for reading: " << src;
         return false;
     }
 
     if (!dFile.open(QIODevice::WriteOnly))
     {
         sFile.close();
-        kWarning() << "Failed to open destination file for writing: " << dest;
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to open destination file for writing: " << dest;
         return false;
     }
 
@@ -490,14 +490,14 @@ bool UMSCamera::uploadItem(const QString& folder, const QString& itemName, const
 
     if (!sFile.open(QIODevice::ReadOnly))
     {
-        kWarning() << "Failed to open source file for reading: " << src;
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to open source file for reading: " << src;
         return false;
     }
 
     if (!dFile.open(QIODevice::WriteOnly))
     {
         sFile.close();
-        kWarning() << "Failed to open destination file for writing: " << dest;
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to open destination file for writing: " << dest;
         return false;
     }
 

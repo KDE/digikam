@@ -420,7 +420,7 @@ void ShowfotoCategorizedView::setSelectedUrls(const KUrl::List& urlList)
 
         if (!index.isValid())
         {
-            kWarning() << "no QModelIndex found for" << *it;
+            qCWarning(DIGIKAM_GENERAL_LOG) << "no QModelIndex found for" << *it;
         }
         else
         {

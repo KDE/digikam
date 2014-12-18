@@ -803,7 +803,7 @@ void TagsPopupMenu::slotAddTag(QAction* action)
 
     if (!parent)
     {
-        kWarning() << "Failed to find album with id " << tagID;
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to find album with id " << tagID;
         return;
     }
 

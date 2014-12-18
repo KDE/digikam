@@ -231,7 +231,7 @@ IccProfile PrintOptionsPage::outputProfile() const
 Qt::Alignment PrintOptionsPage::alignment() const
 {
     int id = d->mPositionGroup.checkedId();
-    kWarning() << "alignment=" << id;
+    qCWarning(DIGIKAM_GENERAL_LOG) << "alignment=" << id;
     return Qt::Alignment(id);
 }
 
@@ -296,7 +296,7 @@ void PrintOptionsPage::loadConfig()
     }
     else
     {
-        kWarning() << "Unknown button for position group";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Unknown button for position group";
     }
 
     button = d->mScaleGroup.button(DigikamConfig::printScaleMode());
@@ -307,7 +307,7 @@ void PrintOptionsPage::loadConfig()
     }
     else
     {
-        kWarning() << "Unknown button for scale group";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Unknown button for scale group";
     }
 
     d->mConfigDialogManager->updateWidgets();

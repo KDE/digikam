@@ -84,7 +84,7 @@ NewItemsFinder::NewItemsFinder(const FinderMode mode, const QStringList& folders
     // If we are scanning for newly imported files, we need to have the folders for scanning...
     if(mode == ScheduleCollectionScan && foldersToScan.isEmpty())
     {
-        kWarning() << "NewItemsFinder called without any folders. Wrong call.";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "NewItemsFinder called without any folders. Wrong call.";
     }
     
     d->foldersToScan = foldersToScan;

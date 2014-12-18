@@ -817,7 +817,7 @@ CollectionLocation CollectionManager::addLocation(const KUrl& fileUrl, const QSt
         }
 
         // fall back
-        kWarning() << "Unable to identify a path with Solid. Adding the location with path only.";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Unable to identify a path with Solid. Adding the location with path only.";
         ChangingDB changing(d);
         DatabaseAccess().db()->addAlbumRoot(AlbumRoot::VolumeHardWired,
                                             d->volumeIdentifier(path), "/", label);

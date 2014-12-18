@@ -265,7 +265,7 @@ void KipiInterface::delImage(const KUrl& url)
 
     if (!rootURL.isParentOf(url))
     {
-        kWarning() << "URL not in the album library";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "URL not in the album library";
     }
 
     // Is there a PAlbum for this URL
@@ -279,7 +279,7 @@ void KipiInterface::delImage(const KUrl& url)
     }
     else
     {
-        kWarning() << "Cannot find Parent album in the album library";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot find Parent album in the album library";
     }
 }
 

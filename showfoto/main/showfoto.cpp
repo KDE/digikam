@@ -929,7 +929,7 @@ KUrl ShowFoto::saveDestinationUrl()
 
     if (d->thumbBar->currentInfo().isNull())
     {
-        kWarning() << "Cannot return the url of the image to save "
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot return the url of the image to save "
                    << "because no image is selected.";
         return KUrl();
     }
@@ -941,7 +941,7 @@ bool ShowFoto::save()
 {
     if (d->thumbBar->currentInfo().isNull())
     {
-        kWarning() << "This should not happen";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "This should not happen";
         return true;
     }
 
@@ -953,7 +953,7 @@ bool ShowFoto::saveAs()
 {
     if (d->thumbBar->currentInfo().isNull())
     {
-        kWarning() << "This should not happen";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "This should not happen";
         return false;
     }
 

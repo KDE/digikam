@@ -175,7 +175,7 @@ void ModelCompletion::slotRowsAboutToBeRemoved(const QModelIndex& parent, int st
         }
         else
         {
-            kWarning() << "idToTextMap seems to be out of sync with the model. "
+            qCWarning(DIGIKAM_GENERAL_LOG) << "idToTextMap seems to be out of sync with the model. "
                        << "There is no entry for model index " << index;
         }
     }

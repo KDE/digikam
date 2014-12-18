@@ -615,7 +615,7 @@ void CurvesWidget::paintEvent(QPaintEvent*)
 
     if (!d->imageHistogram)
     {
-        kWarning() << "Should render a histogram, but did not get one.";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Should render a histogram, but did not get one.";
         return;
     }
 

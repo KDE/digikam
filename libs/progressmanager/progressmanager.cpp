@@ -383,7 +383,7 @@ ProgressManager::ProgressManager()
 {
     if (thread() != QApplication::instance()->thread())
     {
-        kWarning() << "Attention: ProgressManager was created from a thread. Create it in the main thread!";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Attention: ProgressManager was created from a thread. Create it in the main thread!";
         moveToThread(QApplication::instance()->thread());
     }
 

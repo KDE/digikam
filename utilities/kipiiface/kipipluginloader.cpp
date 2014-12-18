@@ -302,7 +302,7 @@ void KipiPluginLoader::slotKipiPluginPlug()
 
             if (cat == InvalidCategory)
             {
-                kWarning() << "Plugin action '" << actionName << "' has invalid category!";
+                qCWarning(DIGIKAM_GENERAL_LOG) << "Plugin action '" << actionName << "' has invalid category!";
                 continue;
             }
 

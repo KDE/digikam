@@ -1596,7 +1596,7 @@ void AlbumManager::scanTAlbums()
             }
             else
             {
-                kWarning() << "Failed to find parent tag for tag "
+                qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to find parent tag for tag "
                            << album->m_title
                            << " with pid "
                            << album->m_pid;
@@ -1643,7 +1643,7 @@ void AlbumManager::scanTAlbums()
 
         if (iter == tmap.constEnd())
         {
-            kWarning() << "Failed to find parent tag for tag "
+            qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to find parent tag for tag "
                        << info.name
                        << " with pid "
                        << info.pid;
@@ -3019,7 +3019,7 @@ void AlbumManager::slotAlbumsJobResult(KJob* job)
 
     if (job->error())
     {
-        kWarning() << k_funcinfo << "Failed to list albums";
+        qCWarning(DIGIKAM_GENERAL_LOG) << k_funcinfo << "Failed to list albums";
 
         // Pop-up a message about the error.
         DNotificationWrapper(QString(), job->errorString(),
@@ -3049,7 +3049,7 @@ void AlbumManager::slotPeopleJobResult(KJob* job)
 
     if (job->error())
     {
-        kWarning() << k_funcinfo << "Failed to list face tags";
+        qCWarning(DIGIKAM_GENERAL_LOG) << k_funcinfo << "Failed to list face tags";
 
         // Pop-up a message about the error.
         DNotificationWrapper(QString(), job->errorString(),
@@ -3092,7 +3092,7 @@ void AlbumManager::slotTagsJobResult(KJob* job)
 
     if (job->error())
     {
-        kWarning() << k_funcinfo << "Failed to list tags";
+        qCWarning(DIGIKAM_GENERAL_LOG) << k_funcinfo << "Failed to list tags";
 
         // Pop-up a message about the error.
         DNotificationWrapper(QString(), job->errorString(),
@@ -3122,7 +3122,7 @@ void AlbumManager::slotDatesJobResult(KJob* job)
 
     if (job->error())
     {
-        kWarning() << "Failed to list dates";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list dates";
 
         // Pop-up a message about the error.
         DNotificationWrapper(QString(), job->errorString(),

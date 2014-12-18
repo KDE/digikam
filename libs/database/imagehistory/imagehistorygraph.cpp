@@ -586,7 +586,7 @@ void ImageHistoryGraphData::addHistory(const DImageHistory& history, qlonglong e
                 }
                 else
                 {
-                    kWarning() << "Broken history: Same file referred by different entries. Refusing to add a loop.";
+                    qCWarning(DIGIKAM_GENERAL_LOG) << "Broken history: Same file referred by different entries. Refusing to add a loop.";
                 }
             }
 
@@ -619,7 +619,7 @@ void ImageHistoryGraph::addRelations(const QList<QPair<qlonglong, qlonglong> >& 
 
         if (pair.first == pair.second)
         {
-            kWarning() << "Broken relations cloud: Refusing to add a loop.";
+            qCWarning(DIGIKAM_GENERAL_LOG) << "Broken relations cloud: Refusing to add a loop.";
         }
 
         v1 = d->addVertex(pair.first);

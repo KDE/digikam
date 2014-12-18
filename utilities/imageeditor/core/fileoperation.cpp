@@ -100,7 +100,7 @@ bool FileOperation::localFileRename(const QString& source, const QString& orgPat
 
             if (::utime(QFile::encodeName(orgPath).constData(), &ut) != 0)
             {
-                kWarning() << "Failed to restore modification time for file " << dest;
+                qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to restore modification time for file " << dest;
             }
         }
     }
@@ -116,7 +116,7 @@ bool FileOperation::localFileRename(const QString& source, const QString& orgPat
     // restore permissions
     if (::chmod(dstFileName, filePermissions) != 0)
     {
-        kWarning() << "Failed to restore file permissions for file " << dstFileName;
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to restore file permissions for file " << dstFileName;
     }
 #endif // Q_OS_WIN
 

@@ -200,7 +200,7 @@ QImage ThumbnailCreator::loadDetail(const ThumbnailIdentifier& identifier, const
 {
     if (!rect.isValid())
     {
-        kWarning() << "Invalid rectangle" << rect;
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Invalid rectangle" << rect;
         return QImage();
     }
 
@@ -216,7 +216,7 @@ void ThumbnailCreator::pregenerateDetail(const ThumbnailIdentifier& identifier, 
 {
     if (!rect.isValid())
     {
-        kWarning() << "Invalid rectangle" << rect;
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Invalid rectangle" << rect;
         return;
     }
 
@@ -228,7 +228,7 @@ QImage ThumbnailCreator::load(const ThumbnailIdentifier& identifier, const QRect
     if (d->storageSize() <= 0)
     {
         d->error = i18n("No or invalid size specified");
-        kWarning() << "No or invalid size specified";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "No or invalid size specified";
         return QImage();
     }
 
@@ -301,7 +301,7 @@ QImage ThumbnailCreator::load(const ThumbnailIdentifier& identifier, const QRect
     if (image.isNull())
     {
         d->error = i18n("Thumbnail is null");
-        kWarning() << "Thumbnail is null for " << identifier.filePath;
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Thumbnail is null for " << identifier.filePath;
         return image.qimage;
     }
 
@@ -592,7 +592,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
     if (qimage.isNull())
     {
         d->error = i18n("Cannot create thumbnail for %1", path);
-        kWarning() << "Cannot create thumbnail for " << path;
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot create thumbnail for " << path;
         return ThumbnailImage();
     }
 
@@ -748,7 +748,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
         // else image is blurred due to down-sampling.
         if (!PGFUtils::writePGFImageData(image.qimage, dbInfo.data, 4))
         {
-            kWarning() << "Cannot save PGF thumb in DB";
+            qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot save PGF thumb in DB";
             return;
         }
     }
@@ -760,7 +760,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
 
         if (dbInfo.data.isNull())
         {
-            kWarning() << "Cannot save JPEG thumb in DB";
+            qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot save JPEG thumb in DB";
             return;
         }
     }
@@ -772,7 +772,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
 
         if (dbInfo.data.isNull())
         {
-            kWarning() << "Cannot save JPEG2000 thumb in DB";
+            qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot save JPEG2000 thumb in DB";
             return;
         }
     }
@@ -784,7 +784,7 @@ void ThumbnailCreator::storeInDatabase(const ThumbnailInfo& info, const Thumbnai
 
         if (dbInfo.data.isNull())
         {
-            kWarning() << "Cannot save PNG thumb in DB";
+            qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot save PNG thumb in DB";
             return;
         }
     }
@@ -939,7 +939,7 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info) con
     {
         if (!PGFUtils::readPGFImageData(dbInfo.data, image.qimage))
         {
-            kWarning() << "Cannot load PGF thumb from DB";
+            qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot load PGF thumb from DB";
             return ThumbnailImage();
         }
     }
@@ -951,7 +951,7 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info) con
 
         if (dbInfo.data.isNull())
         {
-            kWarning() << "Cannot load JPEG thumb from DB";
+            qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot load JPEG thumb from DB";
             return ThumbnailImage();
         }
     }
@@ -963,7 +963,7 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info) con
 
         if (dbInfo.data.isNull())
         {
-            kWarning() << "Cannot load JPEG2000 thumb from DB";
+            qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot load JPEG2000 thumb from DB";
             return ThumbnailImage();
         }
     }
@@ -975,7 +975,7 @@ ThumbnailImage ThumbnailCreator::loadFromDatabase(const ThumbnailInfo& info) con
 
         if (dbInfo.data.isNull())
         {
-            kWarning() << "Cannot load PNG thumb from DB";
+            qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot load PNG thumb from DB";
             return ThumbnailImage();
         }
     }

@@ -88,7 +88,7 @@ IccManager::IccManager(DImg& image, const ICCSettingsContainer& settings)
     {
         // Treat as missing profile
         d->embeddedProfile = IccProfile();
-        kWarning() << "Encountered invalid embbeded color profile in file" << d->image.attribute("originalFilePath").toString();
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Encountered invalid embbeded color profile in file" << d->image.attribute("originalFilePath").toString();
     }
 
     if (!d->embeddedProfile.isNull())

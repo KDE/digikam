@@ -77,7 +77,7 @@ void AlbumDB_Sqlite2::setDBPath(const QString& path)
 
     if (m_db == 0)
     {
-        kWarning() << "Cannot open database: " << errMsg;
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot open database: " << errMsg;
         free(errMsg);
         return;
     }
@@ -97,7 +97,7 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
 
     if ( !m_db )
     {
-        kWarning() << "SQLite pointer == NULL";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "SQLite pointer == NULL";
         return false;
     }
 
@@ -114,7 +114,7 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
 
     if ( error != SQLITE_OK )
     {
-        kWarning() << "sqlite_compile error: "
+        qCWarning(DIGIKAM_GENERAL_LOG) << "sqlite_compile error: "
                    << errorStr
                    << " on query: " << sql;
         sqlite_freemem( errorStr );
@@ -147,7 +147,7 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
 
     if ( error != SQLITE_DONE )
     {
-        kWarning() << "sqlite_step error: "
+        qCWarning(DIGIKAM_GENERAL_LOG) << "sqlite_step error: "
                    << errorStr
                    << " on query: " << sql;
         return false;

@@ -202,7 +202,7 @@ TableViewColumn::ColumnCompareResult ColumnFileProperties::compare(TableViewMode
 
     default:
 
-        kWarning() << "file: unimplemented comparison, subColumn=" << subColumn;
+        qCWarning(DIGIKAM_GENERAL_LOG) << "file: unimplemented comparison, subColumn=" << subColumn;
         return CmpEqual;
     }
 

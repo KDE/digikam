@@ -207,7 +207,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
             }
             else
             {
-                kWarning() << "ImagePluginLoader: createInstance returned 0 for "
+                qCWarning(DIGIKAM_GENERAL_LOG) << "ImagePluginLoader: createInstance returned 0 for "
                            << service->name()
                            << " (" << service->library() << ")"
                            << " with error: "

@@ -1562,7 +1562,7 @@ void FacePipeline::construct()
 
     if (d->pipeline.isEmpty())
     {
-        kWarning() << "Nothing plugged in. It's a noop.";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Nothing plugged in. It's a noop.";
         return;
     }
 
@@ -1608,7 +1608,7 @@ bool FacePipeline::process(const ImageInfo& info)
 
     if (filePath.isNull())
     {
-        kWarning() << "ImageInfo has no valid file path. Skipping.";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "ImageInfo has no valid file path. Skipping.";
         return false;
     }
 

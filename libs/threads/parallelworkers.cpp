@@ -176,7 +176,7 @@ int ParallelWorkers::replacementQtMetacall(QMetaObject::Call _c, int _id, void *
             int typeId = QMetaType::type(types[i]);
             if (!typeId && _a[i+1])
             {
-                kWarning() << "Unable to handle unregistered datatype" << types[i] << "Dropping signal.";
+                qCWarning(DIGIKAM_GENERAL_LOG) << "Unable to handle unregistered datatype" << types[i] << "Dropping signal.";
                 return _id - properMethods;
             }
             // we use QMetaType to copy the data. _a[0] is reserved for a return parameter.

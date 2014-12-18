@@ -192,13 +192,13 @@ DColor ImageIface::colorInfoFromOriginal(const QPoint& point) const
 {
     if (!original() || original()->isNull())
     {
-        kWarning() << "No image data available!";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "No image data available!";
         return DColor();
     }
 
     if (point.x() > originalSize().width() || point.y() > originalSize().height())
     {
-        kWarning() << "Coordinate out of range!";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Coordinate out of range!";
         return DColor();
     }
 
@@ -209,7 +209,7 @@ DColor ImageIface::colorInfoFromPreview(const QPoint& point) const
 {
     if (d->previewImage.isNull() || point.x() > d->previewWidth || point.y() > d->previewHeight)
     {
-        kWarning() << "Coordinate out of range or no image data available!";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Coordinate out of range or no image data available!";
         return DColor();
     }
 
@@ -220,7 +220,7 @@ DColor ImageIface::colorInfoFromTargetPreview(const QPoint& point) const
 {
     if (d->targetPreviewImage.isNull() || point.x() > d->previewWidth || point.y() > d->previewHeight)
     {
-        kWarning() << "Coordinate out of range or no image data available!";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Coordinate out of range or no image data available!";
         return DColor();
     }
 

@@ -101,7 +101,7 @@ void EqualizeFilter::equalizeImage()
 
     if (map.isNull() || equalize_map.isNull())
     {
-        kWarning() << ("Unable to allocate memory!");
+        qCWarning(DIGIKAM_GENERAL_LOG) << ("Unable to allocate memory!");
         return;
     }
 

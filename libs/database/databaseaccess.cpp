@@ -270,7 +270,7 @@ bool DatabaseAccess::checkReadyForUse(InitializationObserver* observer)
 
     if (!d->backend)
     {
-        kWarning() << "No database backend available in checkReadyForUse. "
+        qCWarning(DIGIKAM_GENERAL_LOG) << "No database backend available in checkReadyForUse. "
                    "Did you call setParameters before?";
         return false;
     }
