@@ -1586,7 +1586,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
     endif()
 
     if(BUILD_TESTING)
-        MACRO_OPTIONAL_ADD_SUBDIRECTORY(tests)
+        ADD_SUBDIRECTORY(tests)
     endif()
 
     if(NOT WIN32)
