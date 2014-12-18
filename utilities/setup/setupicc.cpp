@@ -59,7 +59,7 @@
 #include <kurllabel.h>
 #include <kurlrequester.h>
 #include <kvbox.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Libkdcraw includes
 

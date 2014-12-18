@@ -34,11 +34,11 @@
 
 // KDE includes
 
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Libkexiv2 includes
 
-#include <version.h>
+#include <libkexiv2_version.h>
 
 // Local includes
 

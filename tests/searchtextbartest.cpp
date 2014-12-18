@@ -32,7 +32,7 @@
 // KDE includes
 
 #include <qtest_kde.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 

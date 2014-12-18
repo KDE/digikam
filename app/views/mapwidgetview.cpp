@@ -35,15 +35,15 @@
 
 //KDE includes
 
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <khbox.h>
 #include <kvbox.h>
 #include <kconfig.h>
 
 // libkgeomap includes
 
-#include <libkgeomap/kgeomap_widget.h>
-#include <libkgeomap/itemmarkertiler.h>
+#include <kgeomap_widget.h>
+#include <itemmarkertiler.h>
 
 //local includes
 

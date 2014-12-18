@@ -30,15 +30,15 @@
 
 // KDE includes
 
-#include <digikam_debug.h>
 #include <klocalizedstring.h>
 
-// libkface includes
+// Libkface includes
 
-#include <libkface/version.h>
+#include <libkface_version.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "databaseaccess.h"
 #include "databaseconstants.h"
 #include "databaseoperationgroup.h"

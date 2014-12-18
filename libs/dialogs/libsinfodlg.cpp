@@ -38,18 +38,18 @@
 
 // Libkexiv2 includes
 
-#include <version.h>
+#include <libkexiv2_version.h>
 #include <kexiv2.h>
 
 // Libkdcraw includes
 
-#include <version.h>
+#include <libkdcraw_version.h>
 #include <kdcraw.h>
 
 #ifdef HAVE_KGEOMAP
 // Libkgeomap includes
 
-#include <libkgeomap/kgeomap_widget.h>
+#include <kgeomap_widget.h>
 
 using namespace KGeoMap;
 #endif // HAVE_KGEOMAP

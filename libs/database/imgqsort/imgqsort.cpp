@@ -38,7 +38,7 @@
 
 // Kde include
 
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 

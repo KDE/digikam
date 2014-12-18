@@ -36,10 +36,10 @@
 
 // KDE includes
 
-// libkface includes
+// Libkface includes
 
-#include <libkface/facedetector.h>
-#include <libkface/recognitiondatabase.h>
+#include <facedetector.h>
+#include <recognitiondatabase.h>
 
 // Local includes
 

@@ -64,7 +64,7 @@ extern "C"
 #include <kcombobox.h>
 #include <kconfiggroup.h>
 #include <kconfig.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kdeversion.h>
 #include <kdirwatch.h>
 #include <kio/global.h>

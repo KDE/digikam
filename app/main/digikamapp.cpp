@@ -49,7 +49,7 @@
 #include <kactioncategory.h>
 #endif
 
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kaboutdata.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
@@ -91,7 +91,7 @@
 // Libkdcraw includes
 
 #include <kdcraw.h>
-#include <version.h>
+#include <libkdcraw_version.h>
 
 // Libkexiv2
 

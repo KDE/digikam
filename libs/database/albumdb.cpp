@@ -51,7 +51,7 @@ extern "C"
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 

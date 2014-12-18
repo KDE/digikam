@@ -32,7 +32,7 @@
 #include <kgenericfactory.h>
 #include <klibloader.h>
 #include <klocalizedstring.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 

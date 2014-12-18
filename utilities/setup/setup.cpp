@@ -37,13 +37,13 @@
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kvbox.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 #ifdef HAVE_KIPI
 
 // Libkipi includes
 
-#include <libkipi/configwidget.h>
+#include <configwidget.h>
 
 using namespace KIPI;
 

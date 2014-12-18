@@ -37,10 +37,10 @@
 
 #include <kurl.h>
 
-// LibKIPI includes
+// Libkipi includes
 
-#include <libkipi/interface.h>
-#include <libkipi/version.h>
+#include <interface.h>
+#include <libkipi_version.h>
 
 // Local includes
 

@@ -37,11 +37,11 @@
 
 // KDE includes
 
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // libkexiv2 includes
 
-#include <version.h>
+#include <libkexiv2_version.h>
 #include <kexiv2previews.h>
 
 // Libkdcraw includes

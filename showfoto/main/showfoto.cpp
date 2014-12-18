@@ -57,6 +57,7 @@ extern "C"
 #include <QSplitter>
 #include <QVBoxLayout>
 #include <QLineEdit>
+#include <QStandardPaths>
 
 // KDE includes
 
@@ -87,18 +88,18 @@ extern "C"
 #include <ktoggleaction.h>
 #include <ktoolbar.h>
 #include <ktoolbarpopupaction.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <ksqueezedtextlabel.h>
 #include <KVBox>
 
 // Libkdcraw includes
 
 #include <kdcraw.h>
-#include <version.h>
-#include <QStandardPaths>
+#include <libkdcraw_version.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "canvas.h"
 #include "editorcore.h"
 #include "dmetadata.h"

@@ -31,7 +31,7 @@
 // KDE includes
 
 #include <kapplication.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <klocalizedstring.h>
 
 // Local includes

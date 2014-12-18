@@ -41,7 +41,7 @@
 #include <kdiskfreespaceinfo.h>
 #include <kaboutdata.h>
 #include <kcomponentdata.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kglobal.h>
 
 namespace Digikam

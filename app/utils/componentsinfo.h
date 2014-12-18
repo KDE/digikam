@@ -38,18 +38,18 @@
 
 #ifdef HAVE_KIPI
 
-// LibKIPI includes
+// Libkipi includes
 
-#include <libkipi/interface.h>
-#include <libkipi/pluginloader.h>
+#include <interface.h>
+#include <pluginloader.h>
 
 #endif /* HAVE_KIPI */
 
 #ifdef HAVE_KFACE
 
-// LibKface includes
+// Libkface includes
 
-#include <libkface/recognitiondatabase.h>
+#include <recognitiondatabase.h>
 
 #endif /* HAVE_KFACE */
 

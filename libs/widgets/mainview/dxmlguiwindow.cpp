@@ -46,7 +46,7 @@
 #include <kactioncollection.h>
 #include <kdialog.h>
 #include <klocalizedstring.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <QApplication>
 #include <QDesktopWidget>
 

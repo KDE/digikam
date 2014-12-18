@@ -31,7 +31,7 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 

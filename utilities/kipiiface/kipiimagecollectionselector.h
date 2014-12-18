@@ -30,10 +30,10 @@
 #include <QList>
 #include <QString>
 
-// LibKIPI includes
+// Libkipi includes
 
-#include <libkipi/imagecollection.h>
-#include <libkipi/imagecollectionselector.h>
+#include <imagecollection.h>
+#include <imagecollectionselector.h>
 
 // Local includes
 

@@ -49,7 +49,7 @@
 #include <kcursor.h>
 #include <kglobal.h>
 #include <kapplication.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 

@@ -32,7 +32,7 @@
 #include "imageinfo.h"
 #include "imageinfolist.h"
 #include "imageinfodata.h"
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 namespace Digikam
 {

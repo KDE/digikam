@@ -38,7 +38,7 @@
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kconfig.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kdeversion.h>
 #include <kglobal.h>
 #include <kimageio.h>
@@ -48,7 +48,7 @@
 
 // Libkexiv2 includes
 
-#include <version.h>
+#include <libkexiv2_version.h>
 #include <kexiv2.h>
 
 // Local includes

@@ -35,7 +35,7 @@
 // KDE includes
 
 #include <kapplication.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kdialog.h>
 #include <kmessagebox.h>
 #include <ktoolinvocation.h>

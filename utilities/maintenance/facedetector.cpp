@@ -35,7 +35,7 @@
 
 #include <QIcon>
 #include <kconfig.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <klocalizedstring.h>
 #include <kpushbutton.h>
 #include <kstandarddirs.h>
@@ -45,7 +45,7 @@
 
 // KFace includes
 
-#include <libkface/recognitiondatabase.h>
+#include <recognitiondatabase.h>
 
 // Local includes
 

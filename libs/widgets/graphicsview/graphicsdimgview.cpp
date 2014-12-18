@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kglobalsettings.h>
 #include <kdatetable.h> // for KPopupFrame
 

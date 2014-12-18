@@ -50,12 +50,12 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
 #include <ktoolinvocation.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // libkgeomap includes
 
-#include <libkgeomap/kgeomap_widget.h>
-#include <libkgeomap/itemmarkertiler.h>
+#include <kgeomap_widget.h>
+#include <itemmarkertiler.h>
 
 // local includes
 

@@ -46,7 +46,7 @@ extern "C"
 
 // KDE includes
 
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kcodecs.h>
 #include <kio/global.h>
 #include <klocalizedstring.h>

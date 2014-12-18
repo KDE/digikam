@@ -33,13 +33,13 @@
 
 #include <kconfig.h>
 #include <klocalizedstring.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Libkipi includes
 
-#include <libkipi/imagecollection.h>
-#include <libkipi/imageinfoshared.h>
-#include <libkipi/imagecollectionshared.h>
+#include <imagecollection.h>
+#include <imageinfoshared.h>
+#include <imagecollectionshared.h>
 
 // Local includes
 

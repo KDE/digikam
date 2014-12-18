@@ -50,7 +50,7 @@
 // Libkexiv2 includes
 
 #include <kexiv2.h>
-#include <version.h>
+#include <libkexiv2_version.h>
 
 // Local includes
 

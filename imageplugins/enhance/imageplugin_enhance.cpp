@@ -33,7 +33,7 @@
 #include <kactioncollection.h>
 #include <kcursor.h>
 #include <kapplication.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 

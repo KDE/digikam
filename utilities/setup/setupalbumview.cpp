@@ -38,7 +38,7 @@
 
 #include <kapplication.h>
 #include <kcombobox.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kdialog.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>

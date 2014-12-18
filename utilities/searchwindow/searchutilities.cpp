@@ -52,7 +52,7 @@
 #include <kpushbutton.h>
 #include <kstandardguiitem.h>
 #include <ktextedit.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 

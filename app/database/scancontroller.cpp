@@ -47,7 +47,7 @@
 #include <kapplication.h>
 #include <klocalizedstring.h>
 #include <kiconloader.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 

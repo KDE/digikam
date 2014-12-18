@@ -74,7 +74,7 @@
 #include <ktoolbar.h>
 #include <ktoolbarpopupaction.h>
 #include <kwindowsystem.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 

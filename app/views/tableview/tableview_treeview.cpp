@@ -33,7 +33,7 @@
 // KDE includes
 
 #include <kaction.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <klinkitemselectionmodel.h>
 #include <kmenu.h>
 

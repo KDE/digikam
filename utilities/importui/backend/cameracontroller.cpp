@@ -60,7 +60,7 @@ extern "C"
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kurl.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kprocess.h>
 #include <kmacroexpander.h>
 

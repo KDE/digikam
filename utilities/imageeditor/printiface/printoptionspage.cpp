@@ -38,7 +38,7 @@
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 

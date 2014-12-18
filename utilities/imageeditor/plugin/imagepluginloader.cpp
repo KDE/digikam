@@ -36,7 +36,7 @@
 #include <kapplication.h>
 #include <klocalizedstring.h>
 #include <kxmlguiclient.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 

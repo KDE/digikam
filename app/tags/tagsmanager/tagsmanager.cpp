@@ -40,7 +40,7 @@
 
 // KDE includes
 
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <klocalizedstring.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>

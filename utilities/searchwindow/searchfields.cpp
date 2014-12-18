@@ -49,7 +49,7 @@
 #include <klineedit.h>
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Libkdcraw includes
 

@@ -51,7 +51,7 @@
 #include <kurl.h>
 #include <kdeversion.h>
 #include <kde_file.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Libkdcraw includes
 
@@ -62,7 +62,7 @@
 
 #include <kexiv2previews.h>
 #include <rotationmatrix.h>
-#include <version.h>
+#include <libkexiv2_version.h>
 
 // Local includes
 

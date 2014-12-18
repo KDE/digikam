@@ -30,9 +30,9 @@
 #include <QObject>
 #include <QList>
 
-// LibKIPI includes
+// Libkipi includes
 
-#include <libkipi/plugin.h>
+#include <plugin.h>
 
 class QAction;
 

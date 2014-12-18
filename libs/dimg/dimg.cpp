@@ -57,12 +57,11 @@ extern "C"
 
 // KDE includes
 
-#include <digikam_debug.h>
 #include <kglobal.h>
 
 // Libkdcraw includes
 
-#include <version.h>
+#include <libkdcraw_version.h>
 #include <kdcraw.h>
 
 // Libkexiv2 includes
@@ -87,6 +86,7 @@ extern "C"
 #include "dmetadata.h"
 #include "dimgloaderobserver.h"
 #include "randomnumbergenerator.h"
+#include "digikam_debug.h"
 
 #ifdef HAVE_JASPER
 #include "jp2kloader.h"

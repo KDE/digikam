@@ -42,7 +42,7 @@
 #include <kiconloader.h>
 #include <kseparator.h>
 #include <kstandarddirs.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kdialog.h>
 #include <kkeysequencewidget.h>
 

@@ -52,13 +52,13 @@
 #include <kvbox.h>
 #include <khbox.h>
 #include <kcombobox.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kmessagebox.h>
 
 // Libkexiv2 includes
 
 #include <kexiv2.h>
-#include <version.h>
+#include <libkexiv2_version.h>
 
 // Local includes
 

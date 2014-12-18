@@ -39,11 +39,11 @@
 
 #include <khbox.h>
 #include <kmenu.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Libkdcraw includes
 
-#include <version.h>
+#include <libkdcraw_version.h>
 #include <rexpanderbox.h>
 
 // Local includes

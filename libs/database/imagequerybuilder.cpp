@@ -41,7 +41,7 @@
 #include <kcalendarsystem.h>
 #include <kcomponentdata.h>
 #include <kmimetype.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // KExiv2 includes
 

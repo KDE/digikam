@@ -43,7 +43,7 @@
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kfileitem.h>
 #include <klocalizedstring.h>
 #include <kmenu.h>

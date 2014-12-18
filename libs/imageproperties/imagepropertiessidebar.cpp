@@ -39,14 +39,14 @@
 #include <kcursor.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kglobalsettings.h>
 #include <kaboutdata.h>
 #include <kcomponentdata.h>
 
 // Libkdcraw includes
 
-#include <version.h>
+#include <libkdcraw_version.h>
 #include <kdcraw.h>
 
 // Local includes

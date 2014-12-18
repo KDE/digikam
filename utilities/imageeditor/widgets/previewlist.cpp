@@ -38,7 +38,7 @@
 #include <klocalizedstring.h>
 #include <kpixmapsequence.h>
 #include <kstandarddirs.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 

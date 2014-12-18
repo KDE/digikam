@@ -38,7 +38,7 @@
 #include <kdialog.h>
 #include <khbox.h>
 #include <klocalizedstring.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 

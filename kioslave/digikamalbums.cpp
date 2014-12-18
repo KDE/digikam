@@ -43,7 +43,7 @@
 #include <kio/deletejob.h>
 #include <klocalizedstring.h>
 #include <kmimetype.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Libkdcraw includes
 

@@ -35,11 +35,11 @@
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
 #include <kimageio.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Libkdcraw includes
 
-#include <version.h>
+#include <libkdcraw_version.h>
 #include <kdcraw.h>
 
 // Local includes

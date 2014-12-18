@@ -42,7 +42,7 @@
 #include <kstandarddirs.h>
 #include <klocalizedstring.h>
 #include <kdialog.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 namespace Digikam
 {

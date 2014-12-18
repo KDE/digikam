@@ -34,7 +34,7 @@
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kurl.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 

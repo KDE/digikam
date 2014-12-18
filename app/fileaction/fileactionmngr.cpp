@@ -34,7 +34,7 @@
 
 #include <kglobal.h>
 #include <klocalizedstring.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kprogressdialog.h>
 
 // Local includes

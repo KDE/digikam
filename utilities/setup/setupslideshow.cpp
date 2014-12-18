@@ -41,7 +41,7 @@
 #include <knuminput.h>
 #include <kcombobox.h>
 #include <khbox.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 

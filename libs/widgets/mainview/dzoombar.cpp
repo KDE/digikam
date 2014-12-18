@@ -42,7 +42,7 @@
 #include <kvbox.h>
 #include <kcombobox.h>
 #include <kglobal.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 

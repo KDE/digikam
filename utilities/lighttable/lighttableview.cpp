@@ -32,7 +32,7 @@
 // KDE includes
 
 #include <kdialog.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kapplication.h>
 
 // Local includes

@@ -33,9 +33,9 @@
 
 #include <kdebug.h>
 
-// libkface includes
+// Libkface includes
 
-#include <libkface/identity.h>
+#include <identity.h>
 
 // Local includes
 

@@ -31,7 +31,7 @@
 // KDE includes
 
 #include <kurl.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kiconloader.h>
 
 // Local includes

@@ -25,10 +25,10 @@
 #ifndef KIPIUPLOADWIDGET_H
 #define KIPIUPLOADWIDGET_H
 
-// LibKIPI includes
+// Libkipi includes
 
-#include <libkipi/imagecollection.h>
-#include <libkipi/uploadwidget.h>
+#include <imagecollection.h>
+#include <uploadwidget.h>
 
 class QWidget;
 

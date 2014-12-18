@@ -34,7 +34,7 @@
 #include <klibloader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 

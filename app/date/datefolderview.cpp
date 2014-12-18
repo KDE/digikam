@@ -44,7 +44,7 @@
 #include <kdeversion.h>
 #include <kcalendarsystem.h>
 #include <kconfiggroup.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 

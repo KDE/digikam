@@ -28,7 +28,7 @@
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 

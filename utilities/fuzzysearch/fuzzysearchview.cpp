@@ -43,7 +43,7 @@
 #include <kapplication.h>
 #include <kcolorvalueselector.h>
 #include <kconfig.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kdialog.h>
 #include <khbox.h>
 #include <khuesaturationselect.h>

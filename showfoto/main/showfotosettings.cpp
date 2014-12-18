@@ -32,7 +32,7 @@
 
 #include <kglobal.h>
 #include <kglobalsettings.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kapplication.h>

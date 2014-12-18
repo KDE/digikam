@@ -37,9 +37,9 @@
 #include <kmessagebox.h>
 #include <kinputdialog.h>
 
-// LibKIPI includes
+// Libkipi includes
 
-#include <libkipi/version.h>
+#include <libkipi_version.h>
 
 // Local includes
 

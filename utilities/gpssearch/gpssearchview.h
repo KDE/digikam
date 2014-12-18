@@ -33,8 +33,8 @@
 
 // libkgeomap includes
 
-#include <libkgeomap/modelhelper.h>
-#include <libkgeomap/kgeomap_widget.h>
+#include <modelhelper.h>
+#include <kgeomap_widget.h>
 
 // local includes
 

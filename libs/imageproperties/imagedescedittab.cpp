@@ -47,17 +47,17 @@
 #include <kdialog.h>
 #include <ktabwidget.h>
 #include <kpushbutton.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Libkexiv2 includes
 
-#include <version.h>
+#include <libkexiv2_version.h>
 #include <altlangstredit.h>
 #include <msgtextedit.h>
 
 // Libkdcraw includes
 
-#include <version.h>
+#include <libkdcraw_version.h>
 
 // Local includes
 

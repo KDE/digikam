@@ -34,7 +34,7 @@
 // KDE includes
 
 #include <kdirwatch.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 

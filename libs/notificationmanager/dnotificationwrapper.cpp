@@ -38,7 +38,7 @@
 #include <kstandarddirs.h>
 #include <knotification.h>
 #include <kpassivepopup.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 namespace Digikam
 {

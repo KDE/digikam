@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kiconloader.h>
 #include <kmenu.h>
 

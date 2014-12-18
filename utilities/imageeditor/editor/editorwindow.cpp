@@ -105,7 +105,7 @@
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
 #include <kde_file.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <ksqueezedtextlabel.h>
 #include <kio/job.h>
 #include <kio/netaccess.h>

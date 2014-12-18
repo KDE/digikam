@@ -48,7 +48,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kglobalsettings.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kxmlguiwindow.h>
 #include <ktoolinvocation.h>
 

@@ -42,7 +42,7 @@
 // KDE includes
 
 #include <ktabwidget.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kdialog.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>

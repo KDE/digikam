@@ -35,11 +35,11 @@
 
 #include <kconfig.h>
 #include <klocalizedstring.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // LibKipi includes
 
-#include <libkipi/interface.h>
+#include <interface.h>
 
 // Local includes
 

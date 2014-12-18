@@ -40,7 +40,7 @@
 #include <kdialog.h>
 #include <kfileitem.h>
 #include <kglobal.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 

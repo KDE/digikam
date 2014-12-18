@@ -39,7 +39,7 @@
 #include <kpushbutton.h>
 #include <kmessagebox.h>
 #include <kinputdialog.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 

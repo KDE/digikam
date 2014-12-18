@@ -36,7 +36,7 @@
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kconfig.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kedittoolbar.h>
 #include <kglobal.h>
 #include <klocalizedstring.h>
@@ -57,7 +57,7 @@
 
 // Libkdcraw includes
 
-#include <version.h>
+#include <libkdcraw_version.h>
 #include <kdcraw.h>
 
 // Local includes

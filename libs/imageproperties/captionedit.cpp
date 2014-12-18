@@ -28,11 +28,11 @@
 #include <kdialog.h>
 #include <klocalizedstring.h>
 #include <klineedit.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
-// Local includes
+// Libkexiv2 includes
 
-#include <version.h>
+#include <libkexiv2_version.h>
 #include <altlangstredit.h>
 #include <msgtextedit.h>
 

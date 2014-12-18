@@ -36,7 +36,7 @@
 
 #include <kapplication.h>
 #include <kconfig.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kdialog.h>
 #include <kfiledialog.h>
 #include <kglobal.h>

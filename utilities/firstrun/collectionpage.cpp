@@ -43,7 +43,7 @@
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
 #include <ktemporaryfile.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 #include <databaseparameters.h>

@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
 

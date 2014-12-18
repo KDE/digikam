@@ -32,8 +32,8 @@
 
 // libkgeomap includes
 
-#include <libkgeomap/kgeomap_primitives.h>
-#include <libkgeomap/modelhelper.h>
+#include <kgeomap_primitives.h>
+#include <modelhelper.h>
 
 // KDE includes
 

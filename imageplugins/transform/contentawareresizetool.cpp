@@ -49,12 +49,12 @@
 #include <kstandarddirs.h>
 #include <kvbox.h>
 
-// LibKDraw includes
+// Libkdcraw includes
 
 #include <rcombobox.h>
 #include <rnuminput.h>
 #include <rexpanderbox.h>
-#include <version.h>
+#include <libkdcraw_version.h>
 
 // Local includes
 

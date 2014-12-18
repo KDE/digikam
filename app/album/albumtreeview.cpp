@@ -36,7 +36,7 @@
 
 // KDE includes
 
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kiconloader.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>

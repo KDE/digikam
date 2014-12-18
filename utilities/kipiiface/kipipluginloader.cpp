@@ -37,13 +37,13 @@
 #include <kactioncollection.h>
 #include <kmenu.h>
 #include <kactionmenu.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kxmlguifactory.h>
 #include <kxmlguiwindow.h>
 
-// LibKIPI includes
+// Libkipi includes
 
-#include <libkipi/pluginloader.h>
+#include <pluginloader.h>
 
 // local includes
 

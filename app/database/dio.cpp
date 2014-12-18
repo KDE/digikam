@@ -37,7 +37,7 @@
 #include <kio/deletejob.h>
 #include <kio/jobuidelegate.h>
 #include <klocalizedstring.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 

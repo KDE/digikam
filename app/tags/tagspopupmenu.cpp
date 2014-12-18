@@ -48,7 +48,7 @@
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <ktoggleaction.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 

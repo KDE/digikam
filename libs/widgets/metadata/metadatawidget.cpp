@@ -45,6 +45,7 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QActionGroup>
+#include <QStandardPaths>
 
 // KDE includes
 
@@ -54,16 +55,15 @@
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <digikam_debug.h>
 #include <kmenu.h>
 
 // Libkexiv2 includes
 
-#include <version.h>
-#include <QStandardPaths>
+#include <libkexiv2_version.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "metadatalistview.h"
 #include "metadatalistviewitem.h"
 #include "mdkeylistviewitem.h"

@@ -34,7 +34,7 @@
 #include <kfilemetainfo.h>
 #include <kmimetype.h>
 #include <klocalizedstring.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 

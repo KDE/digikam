@@ -38,7 +38,7 @@
 #include <klocalizedstring.h>
 #include <kpushbutton.h>
 #include <kstandardguiitem.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kapplication.h>
 
 // Local includes

@@ -37,10 +37,10 @@
 
 #include <kurl.h>
 
-// LibKIPI includes
+// Libkipi includes
 
-#include <libkipi/imagecollection.h>
-#include <libkipi/imagecollectionshared.h>
+#include <imagecollection.h>
+#include <imagecollectionshared.h>
 
 // Local includes
 

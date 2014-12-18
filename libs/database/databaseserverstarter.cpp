@@ -50,7 +50,7 @@
 
 // KDE includes
 
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <klocalizedstring.h>

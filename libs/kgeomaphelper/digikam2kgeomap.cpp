@@ -36,7 +36,7 @@
 
 // libkgeomap includes
 
-#include <libkgeomap/kgeomap_widget.h>
+#include <kgeomap_widget.h>
 
 // local includes
 

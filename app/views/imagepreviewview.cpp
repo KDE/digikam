@@ -45,7 +45,7 @@
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kmenu.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
 #include <ktoggleaction.h>

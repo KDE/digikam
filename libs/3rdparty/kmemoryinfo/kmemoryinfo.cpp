@@ -28,7 +28,7 @@
 // KDE includes
 
 #include <kglobal.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 static int fillMemoryInfo(Digikam::KMemoryInfo::KMemoryInfoData* const data);
 
