@@ -44,7 +44,7 @@
 #include "comboboxutilities.h"
 
 class KTextEdit;
-class KPushButton;
+class QPushButton;
 
 namespace Digikam
 {
@@ -254,7 +254,7 @@ protected Q_SLOTS:
 protected:
 
     KTextEdit*   m_edit;
-    KPushButton* m_okButton;
+    QPushButton* m_okButton;
     QWidget*     m_widget;
 };
 

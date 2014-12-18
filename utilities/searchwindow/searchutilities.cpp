@@ -49,9 +49,11 @@
 #include <kdeversion.h>
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
-#include <kpushbutton.h>
+#include <QPushButton>
 #include <kstandardguiitem.h>
 #include <ktextedit.h>
+#include <KGuiItem>
+#include <KStandardGuiItem>
 #include "digikam_debug.h"
 
 // Local includes
@@ -623,7 +625,8 @@ StyleSheetDebugger::StyleSheetDebugger(QWidget* const object)
 
     m_edit            = new KTextEdit;
     vbox->addWidget(m_edit, 1);
-    m_okButton        = new KPushButton(KStandardGuiItem::ok());
+    m_okButton = new QPushButton;
+    KGuiItem::assign(m_okButton,KStandardGuiItem::ok());
     vbox->addWidget(m_okButton, 0, Qt::AlignRight);
 
     setLayout(vbox);

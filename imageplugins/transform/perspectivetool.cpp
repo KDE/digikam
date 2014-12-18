@@ -45,7 +45,7 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kpushbutton.h>
+#include <QPushButton>
 #include <kseparator.h>
 #include <kstandarddirs.h>
 

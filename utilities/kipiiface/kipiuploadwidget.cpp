@@ -33,7 +33,7 @@
 
 #include <kdialog.h>
 #include <klocalizedstring.h>
-#include <kpushbutton.h>
+#include <QPushButton>
 #include <kmessagebox.h>
 #include <kinputdialog.h>
 

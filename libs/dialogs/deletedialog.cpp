@@ -46,7 +46,7 @@
 #include <kstandarddirs.h>
 #include <klocalizedstring.h>
 #include <kstdguiitem.h>
-#include <kpushbutton.h>
+#include <QPushButton>
 
 // Local includes
 

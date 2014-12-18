@@ -47,7 +47,7 @@
 #include <kmessagebox.h>
 #include <kdialog.h>
 #include <ktabwidget.h>
-#include <kpushbutton.h>
+#include <QPushButton>
 
 // Libkexiv2 includes
 
@@ -143,7 +143,7 @@ public:
     QToolButton*         recentTagsBtn;
     QToolButton*         assignedTagsBtn;
     QToolButton*         revertBtn;
-    KPushButton*         openTagMngr;
+    QPushButton*         openTagMngr;
 
     QMenu*               moreMenu;
 
@@ -289,7 +289,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     d->tagCheckView = new TagCheckView(tagsArea, d->tagModel);
     d->tagCheckView->setCheckNewTags(true);
 
-    d->openTagMngr = new KPushButton( i18n("Open Tag Manager"));
+    d->openTagMngr = new QPushButton( i18n("Open Tag Manager"));
 
     d->newTagEdit   = new AddTagsLineEdit(tagsArea);
     d->newTagEdit->setModel(d->tagModel);

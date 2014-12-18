@@ -38,7 +38,7 @@
 #include <klocalizedstring.h>
 #include <kaction.h>
 #include <QMenu>
-#include <kpushbutton.h>
+#include <QPushButton>
 #include <kmessagebox.h>
 #include <kinputdialog.h>
 
@@ -136,7 +136,7 @@ public:
 
     SearchTextBar*           searchBar;
 
-    KPushButton*             newAlbumBtn;
+    QPushButton*             newAlbumBtn;
 };
 
 AlbumSelectWidget::AlbumSelectWidget(QWidget* const parent, PAlbum* const albumToSelect)
@@ -169,7 +169,7 @@ AlbumSelectWidget::AlbumSelectWidget(QWidget* const parent, PAlbum* const albumT
     d->searchBar->setConfigGroup(group);
     d->albumTreeView->setEntryPrefix("AlbumTreeView");
 
-    d->newAlbumBtn = new KPushButton(KGuiItem(i18n("&New Album"), "albumfolder-new",
+    d->newAlbumBtn = new QPushButton(KGuiItem(i18n("&New Album"), "albumfolder-new",
                                               i18n("Create new album")), this);
 
     grid->addWidget(d->albumTreeView, 0, 0, 1, 2);

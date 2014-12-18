@@ -38,7 +38,7 @@
 #include "histogrambox.h"
 #include "globals.h"
 
-class KPushButton;
+class QPushButton;
 class QPixmap;
 class QString;
 
@@ -94,7 +94,7 @@ public:
     int guideSize() const;
     void setGuideSize(int size);
 
-    KPushButton* button(int buttonCode) const;
+    QPushButton* button(int buttonCode) const;
     void enableButton(int buttonCode, bool state);
 
     virtual QSize minimumSizeHint() const;

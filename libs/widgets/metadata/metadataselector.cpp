@@ -34,7 +34,7 @@
 
 #include <klocalizedstring.h>
 #include <kdialog.h>
-#include <kpushbutton.h>
+#include <QPushButton>
 #include <QStyle>
 
 // Local includes
@@ -258,9 +258,9 @@ public:
 
     QStringList       defaultFilter;
 
-    KPushButton*      selectAllBtn;
-    KPushButton*      clearSelectionBtn;
-    KPushButton*      defaultSelectionBtn;
+    QPushButton*      selectAllBtn;
+    QPushButton*      clearSelectionBtn;
+    QPushButton*      defaultSelectionBtn;
 
     MetadataSelector* selector;
 
@@ -273,9 +273,9 @@ MetadataSelectorView::MetadataSelectorView(QWidget* const parent)
     QGridLayout* const grid = new QGridLayout(this);
     d->selector             = new MetadataSelector(this);
     d->searchBar            = new SearchTextBar(this, "MetadataSelectorView");
-    d->selectAllBtn         = new KPushButton(i18n("Select All"),this);
-    d->clearSelectionBtn    = new KPushButton(i18n("Clear"),this);
-    d->defaultSelectionBtn  = new KPushButton(i18n("Default"),this);
+    d->selectAllBtn         = new QPushButton(i18n("Select All"),this);
+    d->clearSelectionBtn    = new QPushButton(i18n("Clear"),this);
+    d->defaultSelectionBtn  = new QPushButton(i18n("Default"),this);
 
     grid->addWidget(d->selector,            0, 0, 1, 5);
     grid->addWidget(d->searchBar,           1, 0, 1, 1);

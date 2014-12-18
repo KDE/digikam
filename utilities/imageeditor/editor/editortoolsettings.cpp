@@ -45,7 +45,7 @@
 #include <khbox.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kpushbutton.h>
+#include <QPushButton>
 #include <kstandarddirs.h>
 #include <kstandardguiitem.h>
 #include <kvbox.h>
@@ -56,6 +56,8 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QStyle>
+#include <KGuiItem>
+#include <KStandardGuiItem>
 
 // Local includes
 
@@ -114,12 +116,12 @@ public:
     KComboBox*           channelCB;
     KComboBox*           colorsCB;
 
-    KPushButton*         okBtn;
-    KPushButton*         cancelBtn;
-    KPushButton*         tryBtn;
-    KPushButton*         defaultBtn;
-    KPushButton*         saveAsBtn;
-    KPushButton*         loadBtn;
+    QPushButton*         okBtn;
+    QPushButton*         cancelBtn;
+    QPushButton*         tryBtn;
+    QPushButton*         defaultBtn;
+    QPushButton*         saveAsBtn;
+    QPushButton*         loadBtn;
 
     KColorButton*        guideColorBt;
 
@@ -196,17 +198,17 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
 
     // ---------------------------------------------------------------
 
-    d->defaultBtn = new KPushButton;
-    d->defaultBtn->setGuiItem(KStandardGuiItem::defaults());
+    d->defaultBtn = new QPushButton;
+    KGuiItem::assign(d->defaultBtn, KStandardGuiItem::defaults());
     d->defaultBtn->setIcon(QIcon::fromTheme(SmallIcon("document-revert")));
     d->defaultBtn->setToolTip(i18n("Reset all settings to their default values."));
 
-    d->okBtn = new KPushButton;
-    d->okBtn->setGuiItem(KStandardGuiItem::ok());
+    d->okBtn = new QPushButton;
+    KGuiItem::assign(d->okBtn, KStandardGuiItem::ok());
     d->okBtn->setDefault(true);
 
-    d->cancelBtn = new KPushButton;
-    d->cancelBtn->setGuiItem(KStandardGuiItem::cancel());
+    d->cancelBtn = new QPushButton;
+    KGuiItem::assign(d->cancelBtn, KStandardGuiItem::cancel());
 
     QHBoxLayout* const hbox1 = new QHBoxLayout;
     hbox1->addWidget(d->defaultBtn);
@@ -216,17 +218,17 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
 
     // ---------------------------------------------------------------
 
-    d->loadBtn = new KPushButton;
-    d->loadBtn->setGuiItem(KStandardGuiItem::open());
+    d->loadBtn = new QPushButton;
+    KGuiItem::assign(d->loadBtn, KStandardGuiItem::open());
     d->loadBtn->setText(i18n("Load..."));
     d->loadBtn->setToolTip(i18n("Load all parameters from settings text file."));
 
-    d->saveAsBtn = new KPushButton;
-    d->saveAsBtn->setGuiItem(KStandardGuiItem::saveAs());
+    d->saveAsBtn = new QPushButton;
+    KGuiItem::assign(d->saveAsBtn, KStandardGuiItem::saveAs());
     d->saveAsBtn->setToolTip(i18n("Save all parameters to settings text file."));
 
-    d->tryBtn = new KPushButton;
-    d->tryBtn->setGuiItem(KStandardGuiItem::apply());
+    d->tryBtn = new QPushButton;
+    KGuiItem::assign(d->tryBtn, KStandardGuiItem::apply());
     d->tryBtn->setText(i18n("Try"));
     d->tryBtn->setToolTip(i18n("Try all settings."));
 
@@ -335,7 +337,7 @@ HistogramBox* EditorToolSettings::histogramBox() const
     return d->histogramBox;
 }
 
-KPushButton* EditorToolSettings::button(int buttonCode) const
+QPushButton* EditorToolSettings::button(int buttonCode) const
 {
     if (buttonCode & Default)
     {
@@ -372,7 +374,7 @@ KPushButton* EditorToolSettings::button(int buttonCode) const
 
 void EditorToolSettings::enableButton(int buttonCode, bool state)
 {
-    KPushButton* btn = button(buttonCode);
+    QPushButton* btn = button(buttonCode);
 
     if (btn)
     {

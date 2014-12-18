@@ -37,7 +37,7 @@
 #include <kconfig.h>
 #include "digikam_debug.h"
 #include <klocalizedstring.h>
-#include <kpushbutton.h>
+#include <QPushButton>
 #include <kstandarddirs.h>
 #include <kstandardguiitem.h>
 #include <ktextedit.h>
@@ -46,6 +46,8 @@
 // KFace includes
 
 #include <recognitiondatabase.h>
+#include <KGuiItem>
+#include <KStandardGuiItem>
 
 // Local includes
 
@@ -72,7 +74,8 @@ public:
         QVBoxLayout* const vbox     = new QVBoxLayout;
         KTextEdit* const edit       = new KTextEdit;
         vbox->addWidget(edit, 1);
-        KPushButton* const okButton = new KPushButton(KStandardGuiItem::ok());
+        QPushButton* const okButton = new QPushButton;
+        KGuiItem::assign(okButton,KStandardGuiItem::ok());
         vbox->addWidget(okButton, 0, Qt::AlignRight);
 
         setLayout(vbox);

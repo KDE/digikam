@@ -42,7 +42,7 @@
 // KDE includes
 
 #include <kcombobox.h>
-#include <kpushbutton.h>
+#include <QPushButton>
 #include <kdialog.h>
 #include <kiconloader.h>
 #include <kinputdialog.h>
@@ -198,7 +198,7 @@ public:
     {
     }
 
-    KPushButton*   openTagMngr;
+    QPushButton*   openTagMngr;
     SearchTextBar* tagSearchBar;
     TagFolderView* tagFolderView;
     QButtonGroup*  btnGroup;
@@ -223,7 +223,7 @@ TagViewSideBarWidget::TagViewSideBarWidget(QWidget* const parent, TagModel* cons
 
     QVBoxLayout* const layout = new QVBoxLayout(this);
 
-    d->openTagMngr   = new KPushButton( i18n("Open Tag Manager"));
+    d->openTagMngr   = new QPushButton( i18n("Open Tag Manager"));
 
     d->noTagsBtn = new QRadioButton(i18n("No Tags"), this);
     d->tagsBtn   = new QRadioButton(i18n("Existing Tags"), this);

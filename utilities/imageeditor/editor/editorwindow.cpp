@@ -84,7 +84,7 @@
 #include <kopenwithdialog.h>
 #include <knotifyconfigwidget.h>
 #include <kprotocolinfo.h>
-#include <kpushbutton.h>
+#include <QPushButton>
 #include <kselectaction.h>
 #include <kseparator.h>
 #include <kservice.h>

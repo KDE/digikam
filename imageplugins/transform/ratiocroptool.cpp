@@ -48,7 +48,7 @@
 #include <kconfiggroup.h>
 #include <kcursor.h>
 #include <klocalizedstring.h>
-#include <kpushbutton.h>
+#include <QPushButton>
 #include <kstandarddirs.h>
 #include <kstandardguiitem.h>
 
@@ -58,6 +58,8 @@
 #include <rnuminput.h>
 #include <rexpanderbox.h>
 #include <libkdcraw_version.h>
+#include <KGuiItem>
+#include <KStandardGuiItem>
 
 // Local includes
 
@@ -249,8 +251,8 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     // -------------------------------------------------------------
 
     // need to set the button to a KStdGuiItem that has no icon
-    KPushButton* const tryBtn = d->gboxSettings->button(EditorToolSettings::Try);
-    tryBtn->setGuiItem(KStandardGuiItem::Test);
+    QPushButton* const tryBtn = d->gboxSettings->button(EditorToolSettings::Try);
+    KGuiItem::assign(tryBtn, KStandardGuiItem::Test);
     tryBtn->setText(i18n("Max. Aspect"));
     tryBtn->setToolTip(i18n("Set selection area to the maximum size according "
                             "to the current ratio."));

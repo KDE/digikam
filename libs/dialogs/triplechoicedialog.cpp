@@ -32,7 +32,7 @@
 // KDE includes
 
 #include <kiconloader.h>
-#include <kpushbutton.h>
+#include <QPushButton>
 
 namespace Digikam
 {

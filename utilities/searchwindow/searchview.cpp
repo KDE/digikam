@@ -36,10 +36,12 @@
 
 #include <kdialogbuttonbox.h>
 #include <klocalizedstring.h>
-#include <kpushbutton.h>
+#include <QPushButton>
 #include <kstandardguiitem.h>
 #include "digikam_debug.h"
 #include <kapplication.h>
+#include <KGuiItem>
+#include <KStandardGuiItem>
 
 // Local includes
 
@@ -497,7 +499,8 @@ SearchViewBottomBar::SearchViewBottomBar(SearchViewThemedPartsCache* const cache
 {
     m_mainLayout      = new QHBoxLayout;
 
-    m_addGroupsButton = new KPushButton(KStandardGuiItem::add());
+    m_addGroupsButton = new QPushButton;
+    KGuiItem::assign(m_addGroupsButton,KStandardGuiItem::add());
     m_addGroupsButton->setText(i18n("Add Search Group"));
 
     connect(m_addGroupsButton, SIGNAL(clicked()),
@@ -505,7 +508,8 @@ SearchViewBottomBar::SearchViewBottomBar(SearchViewThemedPartsCache* const cache
 
     m_mainLayout->addWidget(m_addGroupsButton);
 
-    m_resetButton = new KPushButton(KStandardGuiItem::reset());
+    m_resetButton = new QPushButton;
+    KGuiItem::assign(m_resetButton,KStandardGuiItem::reset());
     //m_addGroupsButton->setText(i18n("Reset"));
 
     connect(m_resetButton, SIGNAL(clicked()),
@@ -524,7 +528,7 @@ SearchViewBottomBar::SearchViewBottomBar(SearchViewThemedPartsCache* const cache
                            QDialogButtonBox::RejectRole,
                            this,
                            SIGNAL(cancelPressed()));
-    KPushButton* aBtn = m_buttonBox->addButton(KStandardGuiItem::apply(),
+    QPushButton* aBtn = m_buttonBox->addButton(KStandardGuiItem::apply(),
                                                QDialogButtonBox::ApplyRole,
                                                this,
                                                SIGNAL(tryoutPressed()));
