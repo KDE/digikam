@@ -111,21 +111,21 @@ HSLSettings::HSLSettings(QWidget* const parent)
     QLabel* const label2 = new QLabel(i18n("Hue:"));
     d->hInput            = new RDoubleNumInput();
     d->hInput->setDecimals(0);
-    d->hInput->input()->setRange(-180.0, 180.0, 1.0, true);
+    //PORT QT5 d->hInput->input()->setRange(-180.0, 180.0, 1.0, true);
     d->hInput->setDefaultValue(0.0);
     d->hInput->setWhatsThis(i18n("Set here the hue adjustment of the image."));
 
     QLabel* const label3 = new QLabel(i18n("Saturation:"));
     d->sInput            = new RDoubleNumInput();
     d->sInput->setDecimals(2);
-    d->sInput->input()->setRange(-100.0, 100.0, 0.01, true);
+    //PORT QT5 d->sInput->input()->setRange(-100.0, 100.0, 0.01, true);
     d->sInput->setDefaultValue(0.0);
     d->sInput->setWhatsThis(i18n("Set here the saturation adjustment of the image."));
 
     QLabel* const label4 = new QLabel(i18n("Vibrance:"));
     d->vInput            = new RDoubleNumInput();
     d->vInput->setDecimals(2);
-    d->vInput->input()->setRange(-100.0, 100.0, 0.01, true);
+    //PORT QT5 d->vInput->input()->setRange(-100.0, 100.0, 0.01, true);
     d->vInput->setDefaultValue(0.0);
     d->vInput->setWhatsThis(i18n("Set here the vibrance adjustment of the image."
                                  "Vibrance performs selective saturation on less saturated colors and avoiding skin tones."));
@@ -133,7 +133,7 @@ HSLSettings::HSLSettings(QWidget* const parent)
     QLabel* const label5 = new QLabel(i18n("Lightness:"));
     d->lInput            = new RDoubleNumInput();
     d->lInput->setDecimals(2);
-    d->lInput->input()->setRange(-100.0, 100.0, 0.01, true);
+    //PORT QT5 d->lInput->input()->setRange(-100.0, 100.0, 0.01, true);
     d->lInput->setDefaultValue(0.0);
     d->lInput->setWhatsThis(i18n("Set here the lightness adjustment of the image."));
 
