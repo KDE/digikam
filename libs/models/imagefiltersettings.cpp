@@ -35,12 +35,9 @@
 
 #include <QDateTime>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "databasefields.h"
 #include "globals.h"
 #include "imageinfo.h"

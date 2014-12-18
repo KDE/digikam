@@ -34,12 +34,12 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <kstandarddirs.h>
 #include <kio/global.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "databasebackend.h"

@@ -37,10 +37,10 @@
 // KDE includes
 
 #include <kglobal.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "digikam_export.h"
 
 namespace Digikam

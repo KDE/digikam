@@ -31,11 +31,11 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <kstringhandler.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "albummanager.h"
 #include "albummodel.h"
 #include "applicationsettings.h"

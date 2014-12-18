@@ -6,7 +6,7 @@
  * Date        : 2012-01-13
  * Description : progress manager
  *
- * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2004      by Till Adam <adam at kde dot org>
  * Copyright (C) 2004      by David Faure <faure at kde dot org>
  *
@@ -41,10 +41,10 @@
 
 #include <klocalizedstring.h>
 #include <kiconloader.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "progressview.h"
 #include "progressmanager.h"
 

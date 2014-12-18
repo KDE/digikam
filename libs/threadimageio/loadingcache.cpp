@@ -34,10 +34,10 @@
 // KDE includes
 
 #include <kdirwatch.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "iccsettings.h"
 #include "kmemoryinfo.h"
 #include "dmetadata.h"

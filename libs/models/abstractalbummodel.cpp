@@ -28,16 +28,16 @@
 // Qt includes
 
 #include <QPainter>
+#include <QIcon>
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <kglobal.h>
-#include <QIcon>
 #include <klocalizedstring.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "albummanager.h"
 #include "albummodeldragdrophandler.h"
 #include "albumthumbnailloader.h"

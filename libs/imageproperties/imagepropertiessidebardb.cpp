@@ -35,7 +35,6 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <kfileitem.h>
 #include <klocalizedstring.h>
 #include <kconfig.h>
@@ -46,6 +45,7 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "config-digikam.h"
 #include "applicationsettings.h"
 #include "databaseinfocontainers.h"

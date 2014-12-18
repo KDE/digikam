@@ -33,7 +33,6 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <kcategorydrawer.h>
 #include <kcolorscheme.h>
 #include <kiconloader.h>
@@ -43,6 +42,7 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "imagedelegate.h"
 #include "imagehistorygraphmodel.h"
 #include "imageversionsmodel.h"

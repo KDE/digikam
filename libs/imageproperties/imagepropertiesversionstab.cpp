@@ -35,7 +35,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kglobal.h>
-#include "digikam_debug.h"
 #include <klocalizedstring.h>
 #include <kiconloader.h>
 #include <kstandardguiitem.h>
@@ -43,6 +42,7 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "imageversionsmodel.h"
 #include "dmetadata.h"
 #include "dimagehistory.h"

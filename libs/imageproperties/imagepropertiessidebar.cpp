@@ -39,7 +39,6 @@
 #include <kcursor.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include "digikam_debug.h"
 #include <kglobalsettings.h>
 #include <kaboutdata.h>
 #include <kcomponentdata.h>
@@ -51,6 +50,7 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "dimg.h"
 #include "dmetadata.h"
 #include "imagepropertiestab.h"

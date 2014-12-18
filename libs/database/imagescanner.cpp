@@ -34,10 +34,10 @@
 #include <kfilemetainfo.h>
 #include <kmimetype.h>
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "databaseurl.h"
 #include "databaseaccess.h"
 #include "albumdb.h"

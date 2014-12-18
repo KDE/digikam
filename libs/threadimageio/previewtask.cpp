@@ -35,10 +35,6 @@
 #include <QVariant>
 #include <QMatrix>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // libkexiv2 includes
 
 #include <libkexiv2_version.h>
@@ -50,6 +46,7 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "dmetadata.h"
 #include "jpegutils.h"
 #include "metadatasettings.h"

@@ -51,7 +51,6 @@
 #include <kurl.h>
 #include <kdeversion.h>
 #include <kde_file.h>
-#include "digikam_debug.h"
 
 // Libkdcraw includes
 
@@ -66,6 +65,7 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "databasebackend.h"
 #include "dimg.h"
 #include "dmetadata.h"

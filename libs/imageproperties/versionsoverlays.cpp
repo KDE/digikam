@@ -30,10 +30,10 @@
 
 #include <klocalizedstring.h>
 #include <kiconloader.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "imageinfo.h"
 #include "imagehistorygraphmodel.h"
 #include "imagelistmodel.h"

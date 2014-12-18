@@ -32,7 +32,6 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <kglobal.h>
 #include <klocalizedstring.h>
 #include <kiconloader.h>
@@ -42,6 +41,7 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "databaseparameters.h"
 #include "iccmanager.h"
 #include "iccprofile.h"

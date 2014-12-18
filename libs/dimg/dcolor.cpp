@@ -6,7 +6,7 @@
  * Date        : 2005-12-02
  * Description : 8-16 bits color container.
  *
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * RGB<->HLS transformation algorithms are inspired from methods
  * describe at this url :
@@ -28,7 +28,7 @@
 #include "dcolor.h"
 #include "globals.h"
 
-// KDE includes
+// Local includes
 
 #include "digikam_debug.h"
 

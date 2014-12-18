@@ -88,9 +88,8 @@ extern "C"
 #include <ktoggleaction.h>
 #include <ktoolbar.h>
 #include <ktoolbarpopupaction.h>
-#include "digikam_debug.h"
 #include <ksqueezedtextlabel.h>
-#include <KVBox>
+#include <kvbox.h>
 
 // Libkdcraw includes
 

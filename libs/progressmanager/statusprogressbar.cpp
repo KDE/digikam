@@ -8,7 +8,7 @@
  *               progress or a text in status bar.
  *               Progress events are dispatched to ProgressManager.
  *
- * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,10 +38,10 @@
 #include <klocalizedstring.h>
 #include <kiconloader.h>
 #include <kcursor.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "progressmanager.h"
 
 namespace Digikam

@@ -29,10 +29,10 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "albummanager.h"
 #include "applicationsettings.h"
 #include "albumthumbnailloader.h"

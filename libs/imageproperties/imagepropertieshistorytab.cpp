@@ -34,10 +34,10 @@
 
 #include <kurl.h>
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "imagefiltershistorymodel.h"
 #include "imagefiltershistorytreeitem.h"
 #include "imagefiltershistoryitemdelegate.h"

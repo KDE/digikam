@@ -50,7 +50,6 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
 #include <ktoolinvocation.h>
-#include "digikam_debug.h"
 
 // Libkgeomap includes
 
@@ -59,6 +58,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 
 // local includes
 
+#include "digikam_debug.h"
 #include "imagegpsmodelhelper.h"
 
 namespace Digikam

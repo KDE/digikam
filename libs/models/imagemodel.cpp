@@ -28,12 +28,9 @@
 #include <QHash>
 #include <QItemSelection>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "databasechangesets.h"
 #include "databasefields.h"
 #include "databasewatch.h"

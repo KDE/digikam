@@ -23,12 +23,9 @@
 
 #include "imagelistmodel.h"
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "databaseaccess.h"
 #include "databasechangesets.h"
 #include "databasewatch.h"

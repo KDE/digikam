@@ -6,7 +6,7 @@
  * Date        : 2006-02-23
  * Description : image metadata interface
  *
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2011      by Leif Huhn <leif at dkstat dot com>
  *
@@ -39,7 +39,6 @@
 
 #include <klocalizedstring.h>
 #include <kglobal.h>
-#include "digikam_debug.h"
 
 // Libkdcraw includes
 
@@ -48,6 +47,7 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "filereadwritelock.h"
 #include "metadatasettings.h"
 #include "template.h"

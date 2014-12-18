@@ -72,10 +72,6 @@ extern "C"
 #pragma clang diagnostic pop
 #endif
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Qt includes
 
 #include <QImageReader>
@@ -85,6 +81,7 @@ extern "C"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "config-digikam.h"
 #include "dmetadata.h"
 #include "metadatasettings.h"

@@ -37,6 +37,7 @@
 #include <QSignalMapper>
 #include <QTimer>
 #include <QToolButton>
+#include <QApplication>
 
 // KDE includes
 
@@ -47,7 +48,6 @@
 #include <kdialog.h>
 #include <ktabwidget.h>
 #include <kpushbutton.h>
-#include "digikam_debug.h"
 
 // Libkexiv2 includes
 
@@ -58,10 +58,10 @@
 // Libkdcraw includes
 
 #include <libkdcraw_version.h>
-#include <QApplication>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "captionedit.h"
 #include "ddatetimeedit.h"
 #include "addtagslineedit.h"

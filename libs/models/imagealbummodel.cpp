@@ -30,11 +30,11 @@
 // KDE includes
 
 #include <kio/job.h>
-#include "digikam_debug.h"
 #include <kapplication.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "albummanager.h"
 #include "databaseaccess.h"
 #include "databasechangesets.h"

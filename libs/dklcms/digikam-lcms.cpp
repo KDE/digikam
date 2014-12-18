@@ -25,12 +25,9 @@
 
 #include <QString>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "config-digikam.h"
 
 // LCMS includes

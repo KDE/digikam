@@ -7,7 +7,7 @@
  * Description : image file IO threaded interface.
  *
  * Copyright (C) 2005-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2005-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,12 +24,9 @@
 
 #include "managedloadsavethread.h"
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "loadsavetask.h"
 #include "previewtask.h"
 #include "thumbnailtask.h"

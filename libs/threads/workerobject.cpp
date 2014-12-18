@@ -31,12 +31,9 @@
 #include <QThread>
 #include <QWaitCondition>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "threadmanager.h"
 
 namespace Digikam

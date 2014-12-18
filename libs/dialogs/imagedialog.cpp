@@ -6,7 +6,7 @@
  * Date        : 2008-03-13
  * Description : image files selector dialog.
  *
- * Copyright (C) 2008-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,6 +28,8 @@
 #include <QLabel>
 #include <QPointer>
 #include <QVBoxLayout>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
@@ -35,17 +37,15 @@
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
 #include <kimageio.h>
-#include "digikam_debug.h"
 
 // Libkdcraw includes
 
 #include <libkdcraw_version.h>
 #include <kdcraw.h>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "ditemtooltip.h"
 #include "dmetadata.h"
 #include "loadingdescription.h"

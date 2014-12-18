@@ -28,12 +28,9 @@
 #include <QSharedData>
 #include <QMultiMap>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "tagscache.h"
