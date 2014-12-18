@@ -32,7 +32,7 @@
 #include <kactioncollection.h>
 #include <kcursor.h>
 #include <kapplication.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -85,7 +85,7 @@ ImagePlugin_Decorate::ImagePlugin_Decorate(QObject* const parent, const QVariant
     setActionCategory(i18n("Decorate"));
     setXMLFile("digikamimageplugin_decorate_ui.rc");
 
-    kDebug() << "ImagePlugin_Decorate plugin loaded";
+    qCDebug(DIGIKAM_IMAGEPLUGINS_LOG) << "ImagePlugin_Decorate plugin loaded";
 }
 
 ImagePlugin_Decorate::~ImagePlugin_Decorate()

@@ -34,7 +34,7 @@
 #include <klibloader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -200,7 +200,7 @@ ImagePlugin_Color::ImagePlugin_Color(QObject* const parent, const QVariantList&)
     setActionCategory(i18n("Colors"));
     setXMLFile("digikamimageplugin_color_ui.rc");
 
-    kDebug() << "ImagePlugin_Color plugin loaded";
+    qCDebug(DIGIKAM_IMAGEPLUGINS_LOG) << "ImagePlugin_Color plugin loaded";
 }
 
 ImagePlugin_Color::~ImagePlugin_Color()

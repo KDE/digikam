@@ -49,7 +49,7 @@
 #include <kcursor.h>
 #include <kglobal.h>
 #include <kapplication.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -755,7 +755,7 @@ void PerspectiveWidget::transformAffine(DImg* const orgImage, DImg* const destIm
                 }
                 else
                 {
-                    kDebug() << "homogeneous coordinate = 0...\n";
+                    qCDebug(DIGIKAM_IMAGEPLUGINS_LOG) << "homogeneous coordinate = 0...\n";
                 }
             }
 

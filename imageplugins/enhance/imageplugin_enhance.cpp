@@ -33,7 +33,7 @@
 #include <kactioncollection.h>
 #include <kcursor.h>
 #include <kapplication.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -188,7 +188,7 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* const parent, const QVariantLi
     setActionCategory(i18n("Enhance"));
     setXMLFile( "digikamimageplugin_enhance_ui.rc" );
 
-    kDebug() << "ImagePlugin_Enhance plugin loaded";
+    qCDebug(DIGIKAM_IMAGEPLUGINS_LOG) << "ImagePlugin_Enhance plugin loaded";
 }
 
 ImagePlugin_Enhance::~ImagePlugin_Enhance()

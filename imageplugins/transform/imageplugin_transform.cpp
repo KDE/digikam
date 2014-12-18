@@ -32,7 +32,7 @@
 #include <kgenericfactory.h>
 #include <klibloader.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -137,7 +137,7 @@ ImagePlugin_Transform::ImagePlugin_Transform(QObject* const parent, const QVaria
     setActionCategory(i18n("Transform"));
     setXMLFile("digikamimageplugin_transform_ui.rc");
 
-    kDebug() << "ImagePlugin_Transform plugin loaded";
+    qCDebug(DIGIKAM_IMAGEPLUGINS_LOG) << "ImagePlugin_Transform plugin loaded";
 }
 
 ImagePlugin_Transform::~ImagePlugin_Transform()

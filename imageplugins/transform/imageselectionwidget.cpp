@@ -65,7 +65,7 @@
 #include <kstandarddirs.h>
 #include <kcursor.h>
 #include <kglobal.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 

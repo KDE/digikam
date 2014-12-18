@@ -31,7 +31,7 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -123,7 +123,7 @@ ImagePlugin_FxFilters::ImagePlugin_FxFilters(QObject* const parent, const QVaria
     setActionCategory(i18n("Effects"));
     setXMLFile( "digikamimageplugin_fxfilters_ui.rc" );
 
-    kDebug() << "ImagePlugin_FxFilters plugin loaded";
+    qCDebug(DIGIKAM_IMAGEPLUGINS_LOG) << "ImagePlugin_FxFilters plugin loaded";
 }
 
 ImagePlugin_FxFilters::~ImagePlugin_FxFilters()
