@@ -549,7 +549,7 @@ void MixerSettings::loadSettings()
     FILE*          fp = 0L;
     MixerContainer settings;
 
-    loadGainsFileUrl = KFileDialog::getOpenUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+    loadGainsFileUrl = KFileDialog::getOpenUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                QString("*"), kapp->activeWindow(),
                                                QString(i18n("Select Gimp Gains Mixer File to Load")));
 
@@ -657,7 +657,7 @@ void MixerSettings::saveAsSettings()
     KUrl  saveGainsFileUrl;
     FILE* fp = 0L;
 
-    saveGainsFileUrl = KFileDialog::getSaveUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+    saveGainsFileUrl = KFileDialog::getSaveUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                QString("*"), kapp->activeWindow(),
                                                QString(i18n("Gimp Gains Mixer File to Save")));
 
