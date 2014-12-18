@@ -84,4 +84,4 @@ install(TARGETS  showfoto ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(PROGRAMS main/showfoto.desktop     DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(FILES    main/showfoto.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata)
-install(FILES    main/showfotoui.rc        DESTINATION ${DATA_INSTALL_DIR}/showfoto)
+install(FILES    main/showfotoui.rc        DESTINATION ${KXMLGUI_INSTALL_DIR}/showfoto)

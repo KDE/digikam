@@ -307,7 +307,8 @@ else()
 endif()
 
 # -- Baloo rules -----------------------------------------------------------------------------
-
+find_package(KF5Baloo)
+if(0)
 if(ENABLE_BALOOSUPPORT)
     # Baloo support from 4.12
     if(${KDE_VERSION} VERSION_GREATER "4.11.99")
@@ -326,7 +327,7 @@ if(ENABLE_BALOOSUPPORT)
 
     endif()
 endif()
-
+endif()
 # -- compilation options definitions --------------------------------------------------------
 
 MACRO_BOOL_TO_01(GPHOTO2_FOUND            HAVE_GPHOTO2)

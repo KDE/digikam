@@ -55,6 +55,6 @@ set(libimportui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/views/importview.cpp
 )
 
-KDE4_ADD_LIBRARY(importui STATIC ${libimportui_SRCS})
+add_library(importui STATIC ${libimportui_SRCS})
 
 install(FILES main/importui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam)

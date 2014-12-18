@@ -68,6 +68,6 @@ if(LENSFUN_FOUND)
        )
 endif()
 
-KDE4_ADD_LIBRARY(queuemanager STATIC ${libqueuemanager_SRCS})
+add_library(queuemanager STATIC ${libqueuemanager_SRCS})
 
 install( FILES main/queuemgrwindowui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam )
