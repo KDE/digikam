@@ -44,7 +44,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kstandarddirs.h>
 
 namespace Digikam
@@ -59,12 +59,12 @@ void PollThread::run()
 {
     do
     {
-        kDebug() << "Waiting " << waitTime << " seconds...stop: [" << stop << "]";
+        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Waiting " << waitTime << " seconds...stop: [" << stop << "]";
         sleep(waitTime);
     }
     while (!stop && checkDigikamInstancesRunning());
 
-    kDebug() << "Shutting down database server";
+    qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Shutting down database server";
     emit done();
 }
 
@@ -87,7 +87,7 @@ bool PollThread::checkDigikamInstancesRunning()
                 service.startsWith(digikamService)        ||
                 service.startsWith(digikamKioService))
             {
-                kDebug() << "At least service ["<< service <<"] is using the database server";
+                qCDebug(DIGIKAM_DATABASESERVER_LOG) << "At least service ["<< service <<"] is using the database server";
 
                 // At least one digikam/kio service was found
                 sem.release(1);
