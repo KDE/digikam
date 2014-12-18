@@ -128,6 +128,8 @@ find_package(KF5 REQUIRED COMPONENTS
              NotifyConfig
 )
 
+find_package(Phonon4Qt5 CONFIG REQUIRED)
+
 # ==================================================================================================
 # Dependencies
 
