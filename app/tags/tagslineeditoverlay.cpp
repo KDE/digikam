@@ -34,7 +34,7 @@
 
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -110,7 +110,7 @@ void TagsLineEditOverlay::hide()
 {
     //delegate()->setRatingEdited(QModelIndex());
     AbstractWidgetDelegateOverlay::hide();
-    //kDebug() << "Hide called, probably mouse left";
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Hide called, probably mouse left";
 
     if (!m_widget->hasFocus())
     {
@@ -128,7 +128,7 @@ void TagsLineEditOverlay::updatePosition()
     }
 
     QRect thumbrect = delegate()->ratingRect();
-    //kDebug() << "updatePosition called, probably a mouseover : " << thumbrect;
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "updatePosition called, probably a mouseover : " << thumbrect;
     QRect rect      = thumbrect;
 
     if (rect.width() > addTagsLineEdit()->width() )
@@ -153,13 +153,13 @@ void TagsLineEditOverlay::updateTag()
     }
 
     ImageInfo info = ImageModel::retrieveImageInfo(m_index);
-    kDebug() << "called updateTag()";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "called updateTag()";
     //TODO: ADD ratingWidget()->setRating(info.rating());
 }
 
 void TagsLineEditOverlay::slotTagChanged(int tagId)
 {
-    kDebug() << "Tag changed";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Tag changed";
 
     if (m_widget && m_widget->isVisible() && m_index.isValid())
     {
@@ -169,7 +169,7 @@ void TagsLineEditOverlay::slotTagChanged(int tagId)
 
 void TagsLineEditOverlay::slotTagChanged(const QString& name)
 {
-    kDebug() << "Tag changed";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Tag changed";
 
     if (m_widget && m_widget->isVisible() && m_index.isValid())
     {

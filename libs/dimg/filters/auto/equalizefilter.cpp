@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -83,7 +83,7 @@ void EqualizeFilter::equalizeImage()
 {
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
     {
-        kDebug() << "Ref. image and Org. has different bits depth";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Ref. image and Org. has different bits depth";
         return;
     }
 

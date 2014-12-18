@@ -37,7 +37,7 @@
 
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kvbox.h>
 
 // Local includes
@@ -284,7 +284,7 @@ void AssignNameOverlay::slotAssigned(const TaggingAction& action, const ImageInf
     Q_UNUSED(info);
     DatabaseFace face = DatabaseFace::fromVariant(faceIdentifier);
 
-    //kDebug() << "Confirming" << face << action.shallAssignTag() << action.tagId();
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Confirming" << face << action.shallAssignTag() << action.tagId();
 
     if (face.isConfirmedName() || !action.isValid())
     {

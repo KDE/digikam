@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <klocalizedstring.h>
 
 // libkface includes
@@ -127,7 +127,7 @@ QList<DatabaseFace> FaceUtils::toDatabaseFaces(qlonglong imageid,
             continue;
         }
 
-        //kDebug() << "New Entry" << fullSizeRect << tagId;
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "New Entry" << fullSizeRect << tagId;
         faces << DatabaseFace(type, imageid, tagId, TagRegion(fullSizeRect));
     }
 
@@ -186,7 +186,7 @@ QList<DatabaseFace> FaceUtils::writeUnconfirmedResults(qlonglong imageid,
             if (oldFace.region().intersects(newFace.region(), minOverlap))
             {
                 overlappingEntries << oldFace;
-                kDebug() << "Entry" << oldFace.region() << oldFace.tagId()
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Entry" << oldFace.region() << oldFace.tagId()
                          << "overlaps" << newFace.region() << newFace.tagId() << ", skipping";
             }
         }
@@ -276,14 +276,14 @@ KFaceIface::Identity FaceUtils::identityForTag(int tagId, KFaceIface::Recognitio
     if (!identity.isNull())
     {
 #if KFACE_VERSION >= 0x030500
-        kDebug() << "Found kface identity" << identity.id() << "for tag" << tagId;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Found kface identity" << identity.id() << "for tag" << tagId;
 #else
-        kDebug() << "Found kface identity" << identity.id << "for tag" << tagId;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Found kface identity" << identity.id << "for tag" << tagId;
 #endif
         return identity;
     }
 
-    kDebug() << "Adding new kface identity with attributes" << attributes;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Adding new kface identity with attributes" << attributes;
     identity = db.addIdentity(attributes);
     
 #if KFACE_VERSION >= 0x030500

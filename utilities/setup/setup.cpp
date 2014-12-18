@@ -37,7 +37,7 @@
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kvbox.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 #ifdef HAVE_KIPI
 

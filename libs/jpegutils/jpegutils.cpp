@@ -74,7 +74,7 @@ extern "C"
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Qt includes
 
@@ -118,7 +118,7 @@ static void jpegutils_jpeg_error_exit(j_common_ptr cinfo)
     char buffer[JMSG_LENGTH_MAX];
     (*cinfo->err->format_message)(cinfo, buffer);
 
-    kDebug() << "Jpegutils error, aborting operation:" << buffer;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Jpegutils error, aborting operation:" << buffer;
 
     longjmp(myerr->setjmp_buffer, 1);
 }
@@ -130,7 +130,7 @@ static void jpegutils_jpeg_emit_message(j_common_ptr cinfo, int msg_level)
     (*cinfo->err->format_message)(cinfo, buffer);
 
 #ifdef USE_IMGLOADERDEBUGMSG
-    kDebug() << buffer << " (" << msg_level << ")";
+    qCDebug(DIGIKAM_GENERAL_LOG) << buffer << " (" << msg_level << ")";
 #endif
 }
 
@@ -140,7 +140,7 @@ static void jpegutils_jpeg_output_message(j_common_ptr cinfo)
     (*cinfo->err->format_message)(cinfo, buffer);
 
 #ifdef USE_IMGLOADERDEBUGMSG
-    kDebug() << buffer;
+    qCDebug(DIGIKAM_GENERAL_LOG) << buffer;
 #endif
 }
 
@@ -642,12 +642,12 @@ bool JpegRotator::performJpegTransform(TransformAction action, const QString& sr
 
 bool jpegConvert(const QString& src, const QString& dest, const QString& documentName, const QString& format)
 {
-    kDebug() << "Converting " << src << " to " << dest << " format: " << format << " documentName: " << documentName;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Converting " << src << " to " << dest << " format: " << format << " documentName: " << documentName;
     QFileInfo fi(src);
 
     if (!fi.exists())
     {
-        kDebug() << "JpegConvert: file do not exist: " << src;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "JpegConvert: file do not exist: " << src;
         return false;
     }
 
@@ -723,7 +723,7 @@ bool isJpegImage(const QString& file)
     // Check if its not MPO format (See bug #307277).
     QString ext    = fileInfo.suffix().toUpper();
 
-    kDebug() << "mimetype = " << format << " ext = " << ext;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "mimetype = " << format << " ext = " << ext;
 
     if (format != "JPEG" || ext == "MPO")
     {

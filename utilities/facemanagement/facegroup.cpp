@@ -662,13 +662,13 @@ void FaceGroup::slotAssigned(const TaggingAction& action, const ImageInfo&, cons
 
         if (FaceTags::isTheUnknownPerson(tagId))
         {
-            kDebug() << "Refusing to assign the unknown person to an image";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Refusing to assign the unknown person to an image";
             return;
         }
 
         if (!tagId)
         {
-            kDebug() << "Failed to get person tag";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to get person tag";
             return;
         }
 
@@ -803,7 +803,7 @@ void ImagePreviewView::trainFaces()
             trainList += f;
     }
 
-    kDebug() << "Number of training faces" << trainList.size();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Number of training faces" << trainList.size();
 
     if(trainList.size()!=0)
     {
@@ -834,8 +834,8 @@ void ImagePreviewView::suggestFaces()
         }
     }
 
-    kDebug() << "Number of suggestions = " << recogList.size();
-    kDebug() << "Number of faceitems = " << d->faceitems.size();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Number of suggestions = " << recogList.size();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Number of faceitems = " << d->faceitems.size();
 
     // Now find the relevant face items and suggest faces
     for(int i = 0; i < recogList.size(); ++i)
@@ -844,7 +844,7 @@ void ImagePreviewView::suggestFaces()
         {
             if(recogList[i].toRect() == d->faceitems[j]->originalRect())
             {
-                kDebug() << "Suggesting a name " << recogList[i].name();
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Suggesting a name " << recogList[i].name();
                 d->faceitems[j]->suggest(recogList[i].name());
                 break;
             }

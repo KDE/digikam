@@ -34,7 +34,7 @@
 #include <kapplication.h>
 #include <klocalizedstring.h>
 #include <QIcon>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -288,7 +288,7 @@ bool TagsActionMngr::createTagActionShortcut(int tagId)
     // FIXME: tag icons can be files on disk, or system icon names. Only the latter will work here.
     KIcon     icon(SyncJob::getTagThumbnail(talbum));
 
-    kDebug() << "Create Shortcut " << ks.toString()
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Create Shortcut " << ks.toString()
              << " to Tag " << talbum->title() << " (" << tagId << ")";
 
     foreach(KActionCollection* const ac, d->actionCollectionList)
@@ -335,7 +335,7 @@ void TagsActionMngr::updateTagShortcut(int tagId, const QKeySequence& ks)
         return;
     }
 
-    kDebug() << "Tag Shortcut " << tagId << "Changed to " << ks;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Tag Shortcut " << tagId << "Changed to " << ks;
 
     QString value = TagsCache::instance()->propertyValue(tagId, TagPropertyName::tagKeyboardShortcut());
 
@@ -369,7 +369,7 @@ void TagsActionMngr::slotAlbumDeleted(Album* album)
     }
 
     removeTagActionShortcut(talbum->id());
-    kDebug() << "Delete Shortcut assigned to tag " << album->id();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Delete Shortcut assigned to tag " << album->id();
 }
 
 bool TagsActionMngr::removeTagActionShortcut(int tagId)
@@ -409,14 +409,14 @@ void TagsActionMngr::slotAssignFromShortcut()
     }
 
     int val = action->data().toInt();
-    kDebug() << "Shortcut value: " << val;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Shortcut value: " << val;
 
     QWidget* const w      = kapp->activeWindow();
     DigikamApp* const dkw = dynamic_cast<DigikamApp*>(w);
 
     if (dkw)
     {
-        //kDebug() << "Handling by DigikamApp";
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "Handling by DigikamApp";
 
         if (action->objectName().startsWith(d->ratingShortcutPrefix))
         {
@@ -442,7 +442,7 @@ void TagsActionMngr::slotAssignFromShortcut()
 
     if (imw)
     {
-        //kDebug() << "Handling by ImageWindow";
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "Handling by ImageWindow";
 
         if (action->objectName().startsWith(d->ratingShortcutPrefix))
         {
@@ -468,7 +468,7 @@ void TagsActionMngr::slotAssignFromShortcut()
 
     if (ltw)
     {
-        //kDebug() << "Handling by LightTableWindow";
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "Handling by LightTableWindow";
 
         if (action->objectName().startsWith(d->ratingShortcutPrefix))
         {
@@ -494,7 +494,7 @@ void TagsActionMngr::slotAssignFromShortcut()
 
     if (sld)
     {
-        //kDebug() << "Handling by SlideShow";
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "Handling by SlideShow";
 
         if (action->objectName().startsWith(d->ratingShortcutPrefix))
         {

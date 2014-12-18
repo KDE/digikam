@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -88,7 +88,7 @@ public:
         }
         if (index.row() < 0 || index.row() >= infos.size())
         {
-            kDebug() << "Invalid index" << index;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Invalid index" << index;
             return false;
         }
         return true;
@@ -98,7 +98,7 @@ public:
         // we assume isValid() being called before, no duplicate checks
         if (index.row() >= extraValues.size())
         {
-            kDebug() << "Invalid index for extraData" << index;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Invalid index for extraData" << index;
             return false;
         }
         return true;
@@ -522,7 +522,7 @@ void ImageModel::ensureHasImageInfos(const QList<ImageInfo>& infos, const QList<
     {
         if (!d->pendingExtraValues.isEmpty())
         {
-            kDebug() << "ExtraValue / No Extra Value mismatch. Ignoring added infos.";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "ExtraValue / No Extra Value mismatch. Ignoring added infos.";
             return;
         }
     }
@@ -530,7 +530,7 @@ void ImageModel::ensureHasImageInfos(const QList<ImageInfo>& infos, const QList<
     {
         if (d->pendingInfos.size() != d->pendingExtraValues.size())
         {
-            kDebug() << "ExtraValue / No Extra Value mismatch. Ignoring added infos.";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "ExtraValue / No Extra Value mismatch. Ignoring added infos.";
             return;
         }
     }

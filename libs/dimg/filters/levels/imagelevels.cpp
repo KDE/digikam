@@ -46,7 +46,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 

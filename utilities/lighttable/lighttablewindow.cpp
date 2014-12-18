@@ -36,7 +36,7 @@
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kconfig.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kedittoolbar.h>
 #include <kglobal.h>
 #include <klocalizedstring.h>
@@ -719,7 +719,7 @@ void LightTableWindow::loadImageInfos(const ImageInfoList& list,
                                       bool  addTo)
 {
     // Clear all items before adding new images to the light table.
-    kDebug() << "Clearing LT" << (!addTo);
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Clearing LT" << (!addTo);
 
     if (!addTo)
     {
@@ -1102,7 +1102,7 @@ void LightTableWindow::deleteItem(const ImageInfo& info, bool permanently)
         return;
     }
 
-    kDebug() << "Item to delete: " << u;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Item to delete: " << u;
 
     bool useTrash;
     bool preselectDeletePermanently = permanently;

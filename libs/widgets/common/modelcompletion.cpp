@@ -32,7 +32,7 @@
 // KDE includes
 
 #include <kglobal.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 namespace Digikam
 {
@@ -122,7 +122,7 @@ QAbstractItemModel* ModelCompletion::model() const
 
 void ModelCompletion::slotRowsInserted(const QModelIndex& parent, int start, int end)
 {
-    //kDebug() << "rowInserted in parent " << parent << ", start = " << start
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "rowInserted in parent " << parent << ", start = " << start
     //         << ", end = " << end;
 
     for (int i = start; i <= end; ++i)
@@ -147,7 +147,7 @@ void ModelCompletion::slotRowsInserted(const QModelIndex& parent, int start, int
 
 void ModelCompletion::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
 {
-    //kDebug() << "rows of parent " << parent << " removed, start = " << start
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "rows of parent " << parent << " removed, start = " << start
     //         << ", end = " << end;
     for (int i = start; i <= end; ++i)
     {
@@ -241,7 +241,7 @@ void ModelCompletion::disconnectFromModel(QAbstractItemModel* const model)
 
 void ModelCompletion::sync(QAbstractItemModel* const model)
 {
-    //kDebug() << "Starting sync with model " << model
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Starting sync with model " << model
     //         << ", rowCount for parent: " << model->rowCount();
 
     clear();
@@ -257,7 +257,7 @@ void ModelCompletion::sync(QAbstractItemModel* const model)
 void ModelCompletion::sync(QAbstractItemModel* const model, const QModelIndex& index)
 {
     QString itemName = index.data(d->displayRole).toString();
-    //kDebug() << "sync adding item '" << itemName << "' for index " << index;
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "sync adding item '" << itemName << "' for index " << index;
     addItem(itemName);
     d->idToTextMap.insert(index.data(d->uniqueIdRole).toInt(), itemName);
 

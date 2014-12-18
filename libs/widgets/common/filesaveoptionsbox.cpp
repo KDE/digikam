@@ -36,7 +36,7 @@
 
 #include <kapplication.h>
 #include <kconfig.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kdialog.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -166,7 +166,7 @@ void FileSaveOptionsBox::setDialog(KFileDialog* const dialog)
 
     d->dialog = dialog;
 
-    kDebug() << "set dialog to " << dialog;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "set dialog to " << dialog;
 
     // TODO handle these connections based on the selected filter
     connect(d->dialog, SIGNAL(filterChanged(QString)),
@@ -178,7 +178,7 @@ void FileSaveOptionsBox::setDialog(KFileDialog* const dialog)
 
 void FileSaveOptionsBox::slotFilterChanged(const QString& newFilter)
 {
-    kDebug() << "filter changed to '" << newFilter << "'";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "filter changed to '" << newFilter << "'";
 
     if (!d->dialog)
     {
@@ -190,7 +190,7 @@ void FileSaveOptionsBox::slotFilterChanged(const QString& newFilter)
     if (!d->autoFilter.isEmpty() &&
         (d->autoFilter == newFilter || d->autoFilter.section('|', 0, 0) == newFilter))
     {
-        kDebug() << "use automatic extension detection";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "use automatic extension detection";
 
         // use the user provided file name for guessing the desired file format
         connect(d->dialog->locationEdit(), SIGNAL(editTextChanged(QString)),
@@ -200,7 +200,7 @@ void FileSaveOptionsBox::slotFilterChanged(const QString& newFilter)
     }
     else
     {
-        kDebug() << "use manual extension detection";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "use manual extension detection";
 
         // don't use the file name provided by the user any more
         disconnect(d->dialog->locationEdit(), SIGNAL(editTextChanged(QString)),
@@ -222,7 +222,7 @@ void FileSaveOptionsBox::slotFilterChanged(const QString& newFilter)
 
 void FileSaveOptionsBox::setAutoFilter(const QString& autoFilter)
 {
-    kDebug() << "new auto filter is '" << autoFilter << "'";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "new auto filter is '" << autoFilter << "'";
 
     d->autoFilter = autoFilter;
 
@@ -238,7 +238,7 @@ void FileSaveOptionsBox::setAutoFilter(const QString& autoFilter)
 
 void FileSaveOptionsBox::slotImageFileSelected(const QString& file)
 {
-    kDebug() << "called for filename " << file;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "called for filename " << file;
 
     if (d->autoFilter.isEmpty())
     {
@@ -249,7 +249,7 @@ void FileSaveOptionsBox::slotImageFileSelected(const QString& file)
 
 DImg::FORMAT FileSaveOptionsBox::discoverFormat(const QString& filename, DImg::FORMAT fallback)
 {
-    kDebug() << "Trying to discover format based on filename '" << filename
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to discover format based on filename '" << filename
              << "', fallback = " << fallback;
 
     QStringList splitParts = filename.split('.');
@@ -257,7 +257,7 @@ DImg::FORMAT FileSaveOptionsBox::discoverFormat(const QString& filename, DImg::F
 
     if (splitParts.size() < 2)
     {
-        kDebug() << "filename '" << filename
+        qCDebug(DIGIKAM_GENERAL_LOG) << "filename '" << filename
                  << "' does not contain an extension separated by a point.";
         ext = filename;
     }
@@ -298,14 +298,14 @@ DImg::FORMAT FileSaveOptionsBox::discoverFormat(const QString& filename, DImg::F
         kWarning() << "Using fallback format " << fallback;
     }
 
-    kDebug() << "Discovered format: " << format;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Discovered format: " << format;
 
     return format;
 }
 
 void FileSaveOptionsBox::slotImageFileFormatChanged(const QString& ext)
 {
-    kDebug() << "Format selected: " << ext;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Format selected: " << ext;
     setCurrentIndex(discoverFormat(ext, DImg::NONE));
 }
 

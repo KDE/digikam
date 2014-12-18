@@ -35,7 +35,7 @@
 
 #include <QIcon>
 #include <kconfig.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <klocalizedstring.h>
 #include <kpushbutton.h>
 #include <kstandarddirs.h>
@@ -305,7 +305,7 @@ void FaceDetector::slotStart()
         d->total += (int)count;
     }
     d->total = qMax(1, d->total);
-    kDebug() << "Total is" << d->total;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Total is" << d->total;
     // third, break absolute to relative values
     for (QMap<Album*,double>::iterator it = d->relativeProgressValue.begin(); it != d->relativeProgressValue.end(); ++it)
     {
@@ -320,7 +320,7 @@ void FaceDetector::slotStart()
 
 void FaceDetector::slotContinueAlbumListing()
 {
-    kDebug() << d->albumListing.isRunning() << !d->pipeline.hasFinished();
+    qCDebug(DIGIKAM_GENERAL_LOG) << d->albumListing.isRunning() << !d->pipeline.hasFinished();
 
     // we get here by the finished signal from both, and want both to have finished to continue
     if (d->albumListing.isRunning() || !d->pipeline.hasFinished())

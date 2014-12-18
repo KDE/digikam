@@ -40,7 +40,7 @@
 #include <kapplication.h>
 #include <kmessagebox.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kglobalsettings.h>
 #include <ktemporaryfile.h>
 

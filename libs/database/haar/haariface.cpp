@@ -43,7 +43,7 @@
 // KDE includes
 
 #include <kurl.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -525,7 +525,7 @@ QList<qlonglong> HaarIface::bestMatches(Haar::SignatureData* const querySig, int
 
 /*
     for (QMap<double, qlonglong>::iterator it = bestMatches.begin(); it != bestMatches.end(); ++it)
-        kDebug() << it.key() << it.value();
+        qCDebug(DIGIKAM_GENERAL_LOG) << it.key() << it.value();
 */
 
     return bestMatches.values();
@@ -559,11 +559,11 @@ QList<qlonglong> HaarIface::bestMatchesWithThreshold(Haar::SignatureData* const 
     // Debug output
     if (bestMatches.count() > 1)
     {
-        kDebug() << "Duplicates with id and score:";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Duplicates with id and score:";
 
         for (QMultiMap<double, qlonglong>::const_iterator it = bestMatches.constBegin(); it != bestMatches.constEnd(); ++it)
         {
-            kDebug() << it.value() << QString::number(it.key() * 100)+QChar('%');
+            qCDebug(DIGIKAM_GENERAL_LOG) << it.value() << QString::number(it.key() * 100)+QChar('%');
         }
     }
 

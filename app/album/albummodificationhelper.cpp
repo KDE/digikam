@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kinputdialog.h>
 #include <kio/jobuidelegate.h>
 #include <klocalizedstring.h>

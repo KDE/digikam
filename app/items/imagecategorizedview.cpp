@@ -33,7 +33,7 @@
 // KDE includes
 
 #include <kiconloader.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -387,7 +387,7 @@ QModelIndex ImageCategorizedView::nextIndexHint(const QModelIndex& anchor, const
     QModelIndex hint = DCategorizedView::nextIndexHint(anchor, removed);
     ImageInfo info   = d->filterModel->imageInfo(anchor);
 
-    //kDebug() << "Having initial hint" << hint << "for" << anchor << d->model->numberOfIndexesForImageInfo(info);
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Having initial hint" << hint << "for" << anchor << d->model->numberOfIndexesForImageInfo(info);
 
     // Fixes a special case of multiple (face) entries for the same image.
     // If one is removed, any entry of the same image shall be preferred.
@@ -412,7 +412,7 @@ QModelIndex ImageCategorizedView::nextIndexHint(const QModelIndex& anchor, const
                 {
                     minDiff = distance;
                     hint    = index;
-                    //kDebug() << "Chose index" << hint << "at distance" << minDiff << "to" << anchor;
+                    //qCDebug(DIGIKAM_GENERAL_LOG) << "Chose index" << hint << "at distance" << minDiff << "to" << anchor;
                 }
             }
         }

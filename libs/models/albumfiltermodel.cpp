@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kstringhandler.h>
 
 // Local includes
@@ -109,7 +109,7 @@ void AlbumFilterModel::setSearchTextSettings(const SearchTextSettings& settings)
         }
 
         bool hasResult = validRows > 0;
-        kDebug() << "new search text settings: " << settings.text
+        qCDebug(DIGIKAM_GENERAL_LOG) << "new search text settings: " << settings.text
                  << ": hasResult = " << hasResult << ", validRows = "
                  << validRows;
         emit hasSearchResult(hasResult);

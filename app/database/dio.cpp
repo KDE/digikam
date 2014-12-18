@@ -37,7 +37,7 @@
 #include <kio/deletejob.h>
 #include <kio/jobuidelegate.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -82,7 +82,7 @@ void SidecarFinder::process(const KUrl::List& files)
             if (DMetadata::hasSidecar(url.toLocalFile()))
             {
                 localFiles << DMetadata::sidecarUrl(url);
-                kDebug()   << "Detected a sidecar" << localFiles.last();
+                qCDebug(DIGIKAM_GENERAL_LOG)   << "Detected a sidecar" << localFiles.last();
             }
 
             localFiles << url;

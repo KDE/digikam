@@ -40,7 +40,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kapplication.h>
 
 // Local includes
@@ -296,7 +296,7 @@ void RatingComboBoxWidget::paintEvent(QPaintEvent* e)
 {
     if (m_value >= RatingComboBox::Rating0)
     {
-        //kDebug() << "m_value" << m_value << "defaulting paint to parent" << this;
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "m_value" << m_value << "defaulting paint to parent" << this;
         RatingWidget::paintEvent(e);
     }
     else if (m_value == RatingComboBox::NoRating)

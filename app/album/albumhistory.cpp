@@ -31,7 +31,7 @@
 #include <QWidget>
 #include <QHash>
 #include <QtGlobal>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 
 // Local includes

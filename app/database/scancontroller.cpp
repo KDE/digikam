@@ -47,7 +47,7 @@
 #include <kapplication.h>
 #include <klocalizedstring.h>
 #include <kiconloader.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -1174,7 +1174,7 @@ void ScanControllerLoadingCacheFileWatch::slotImageChanged(const ImageChangeset&
         if (changes & DatabaseFields::ModificationDate || changes & DatabaseFields::Orientation)
         {
             ImageInfo info(imageId);
-            //kDebug() << imageId << info.filePath();
+            //qCDebug(DIGIKAM_GENERAL_LOG) << imageId << info.filePath();
             notifyFileChanged(info.filePath());
         }
     }

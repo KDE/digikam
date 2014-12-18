@@ -25,7 +25,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kurl.h>
 
 // Baloo includes
@@ -157,7 +157,7 @@ BalooInfo BalooWrap::getSemanticInfo(const KUrl& url)
 
     job->exec();
 
-    kDebug() << "Job started";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Job started";
     Baloo::File file = job->file();
 
     BalooInfo bInfo;
@@ -175,7 +175,7 @@ BalooInfo BalooWrap::getSemanticInfo(const KUrl& url)
 
 void BalooWrap::slotFetchFinished(KJob* job)
 {
-    kDebug() << "Job finished";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Job finished";
     Baloo::FileFetchJob* const fjob = static_cast<Baloo::FileFetchJob*>(job);
     Baloo::File file                = fjob->file();
 

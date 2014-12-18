@@ -35,7 +35,7 @@
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -117,7 +117,7 @@ CameraFolderDialog::CameraFolderDialog(QWidget* const parent, const QMap<QString
                 }
 
                 QString sub = folder.section('/', -1);
-                kDebug() << "Camera folder: '" << folder << "' (root='" << root << "', sub='" << sub << "')";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Camera folder: '" << folder << "' (root='" << root << "', sub='" << sub << "')";
                 d->folderView->addFolder(root, sub, it.value());
             }
         }
@@ -172,7 +172,7 @@ void CameraFolderDialog::slotFolderPathSelectionChanged(CameraFolderItem* item)
     if (item)
     {
         enableButtonOk(true);
-        kDebug() << "Camera folder path: " << selectedFolderPath();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Camera folder path: " << selectedFolderPath();
     }
     else
     {

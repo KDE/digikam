@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -211,7 +211,7 @@ DatabaseFace DatabaseFace::fromListing(qlonglong imageId, const QList<QVariant>&
     int tagId         = extraValues.at(2).toInt();
     QString attribute = extraValues.at(1).toString();
     QString value     = extraValues.at(0).toString();
-    //kDebug() << tagId << attribute << value;
+    //qCDebug(DIGIKAM_GENERAL_LOG) << tagId << attribute << value;
 
     return DatabaseFace(attribute,
                         imageId, tagId,

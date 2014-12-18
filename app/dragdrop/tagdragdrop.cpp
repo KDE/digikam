@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <klocalizedstring.h>
 #include <kmenu.h>
 #include <kmessagebox.h>
@@ -247,7 +247,7 @@ Qt::DropAction TagDragDropHandler::accepts(const QDropEvent* e, const QModelInde
 
         if (!DTagListDrag::decode(e->mimeData(), droppedId))
         {
-            kDebug() << "List decode error" << droppedId.isEmpty();
+            qCDebug(DIGIKAM_GENERAL_LOG) << "List decode error" << droppedId.isEmpty();
             return Qt::IgnoreAction;
         }
 

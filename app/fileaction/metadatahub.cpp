@@ -34,7 +34,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Libkexiv2 includes
 
@@ -182,7 +182,7 @@ void MetadataHub::reset()
 void MetadataHub::load(const ImageInfo& info)
 {
     d->count++;
-    //kDebug() << "---------------------------------Load from ImageInfo ----------------";
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "---------------------------------Load from ImageInfo ----------------";
 
     CaptionsMap commentMap;
     CaptionsMap titleMap;
@@ -196,7 +196,7 @@ void MetadataHub::load(const ImageInfo& info)
 
     Template tref = info.metadataTemplate();
     Template t    = TemplateManager::defaultManager()->findByContents(tref);
-    //kDebug() << "Found Metadata Template: " << t.templateTitle();
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Found Metadata Template: " << t.templateTitle();
 
     load(info.dateTime(),
          titleMap,
@@ -258,7 +258,7 @@ void MetadataHub::load(const DMetadata& metadata)
     Template tref = metadata.getMetadataTemplate();
     Template t    = TemplateManager::defaultManager()->findByContents(tref);
 
-    kDebug() << "Found Metadata Template: " << t.templateTitle();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Found Metadata Template: " << t.templateTitle();
 
     load(datetime, titles, comments, colorLabel, pickLabel, rating, t.isNull() ? tref : t);
 
@@ -1006,7 +1006,7 @@ void MetadataHub::writeToBaloo(const QString& filePath, const MetadataSettingsCo
 
     if (!baloo->getSyncToBaloo())
     {
-        kDebug() << "No write to baloo +++++++++++++++++++++++++++++++++++++";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "No write to baloo +++++++++++++++++++++++++++++++++++++";
         return;
     }
 
@@ -1461,7 +1461,7 @@ void MetadataHubOnTheRoad::slotInvalidate()
 void Digikam::MetadataHub::loadFaceTags(const ImageInfo& info, const QSize& size)
 {
     FaceTagsEditor editor;
-    //kDebug() << "Image Dimensions ----------------" << info.dimensions();
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Image Dimensions ----------------" << info.dimensions();
 
     QList<DatabaseFace> facesList = editor.confirmedDatabaseFaces(info.id());
     d->faceTagsList.clear();

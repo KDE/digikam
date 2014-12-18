@@ -26,7 +26,7 @@
 // KDE includes
 
 #include <kconfig.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kglobal.h>
 #include <ksharedconfig.h>
 
@@ -105,7 +105,7 @@ public:
 
         if (depth == StateSavingObject::DIRECT_CHILDREN)
         {
-            //kDebug() << "Also restoring " << action << " of direct children";
+            //qCDebug(DIGIKAM_GENERAL_LOG) << "Also restoring " << action << " of direct children";
             for (QObjectList::const_iterator childIt = host->children().begin();
                  childIt != host->children().end(); ++childIt)
             {
@@ -126,7 +126,7 @@ public:
         }
         else if (depth == StateSavingObject::RECURSIVE)
         {
-            //kDebug() << "Also " << action << " state of all children (recursive)";
+            //qCDebug(DIGIKAM_GENERAL_LOG) << "Also " << action << " state of all children (recursive)";
             recurse(host->children(), save);
         }
     }
@@ -166,7 +166,7 @@ void StateSavingObject::setStateSavingDepth(const StateSavingObject::StateSaving
 
 void StateSavingObject::setConfigGroup(const KConfigGroup& group)
 {
-    //kDebug() << "received new config group: " << group.name();
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "received new config group: " << group.name();
     d->group    = group;
     d->groupSet = true;
 }
@@ -178,7 +178,7 @@ void StateSavingObject::setEntryPrefix(const QString& prefix)
 
 void StateSavingObject::loadState()
 {
-    //kDebug() << "Loading state";
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Loading state";
 
     doLoadState();
 
@@ -187,7 +187,7 @@ void StateSavingObject::loadState()
 
 void StateSavingObject::saveState()
 {
-    //kDebug() << "Saving state";
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Saving state";
 
     doSaveState();
 
@@ -198,7 +198,7 @@ KConfigGroup StateSavingObject::getConfigGroup() const
 {
     if (!d->groupSet)
     {
-        //kDebug() << "No config group set, returning one based on object name";
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "No config group set, returning one based on object name";
         return d->getGroupFromObjectName();
     }
 

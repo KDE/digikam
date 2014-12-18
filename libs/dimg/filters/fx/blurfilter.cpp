@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 namespace Digikam
 {
@@ -200,7 +200,7 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
         }
         else
         {
-            kDebug() << "Radius too small..."; 
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Radius too small..."; 
         }
 
         progress = (int)( ( (double)y * (100.0 / QThreadPool::globalInstance()->maxThreadCount()) ) / (stop-start));
@@ -225,7 +225,7 @@ void BlurFilter::filterImage()
 {
     if (d->radius < 1)
     {
-        kDebug() << "Radius out of range..."; 
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Radius out of range..."; 
         return;
     }
 

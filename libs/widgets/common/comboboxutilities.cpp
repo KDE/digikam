@@ -38,7 +38,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 namespace Digikam
 {

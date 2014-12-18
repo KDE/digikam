@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kglobal.h>
 #include <klocalizedstring.h>
 #include <kiconloader.h>
@@ -214,7 +214,7 @@ void ThumbnailLoadThread::initializeThumbnailDatabase(const DatabaseParameters& 
 
     if (ThumbnailDatabaseAccess::checkReadyForUse(0))
     {
-        kDebug() << "Thumbnail db ready for use";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Thumbnail db ready for use";
         static_d->storageMethod = ThumbnailCreator::ThumbnailDatabase;
         static_d->provider      = provider;
     }

@@ -25,7 +25,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -60,7 +60,7 @@ void AutoExpoFilter::filterImage()
 
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
     {
-        kDebug() << "Ref. image and Org. have different bits depth";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Ref. image and Org. have different bits depth";
         return;
     }
 

@@ -34,7 +34,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kmenu.h>
 #include <kaction.h>
 #include <QIcon>
@@ -63,7 +63,7 @@ void TagMngrListView::startDrag(Qt::DropActions supportedActions)
 
     if(!tagmodel)
     {
-        kDebug() << "Error! no model available!";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Error! no model available!";
         return;
     }
 
@@ -71,7 +71,7 @@ void TagMngrListView::startDrag(Qt::DropActions supportedActions)
 
     if(!data)
     {
-        kDebug() << "Error! no data obtained!";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Error! no data obtained!";
         return;
     }
 
@@ -92,7 +92,7 @@ void TagMngrListView::dropEvent(QDropEvent *e)
 
     if(!tagmodel)
     {
-        kDebug() << "Error! no model available!";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Error! no model available!";
         return;
     }
 
@@ -166,7 +166,7 @@ void TagMngrListView::slotDeleteSelected()
 
     if(!tagmodel)
     {
-        kDebug() << "Error! no model available!";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Error! no model available!";
         return;
     }
 

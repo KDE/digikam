@@ -33,7 +33,7 @@
 #include <QMap>
 #include <QFileInfo>
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 

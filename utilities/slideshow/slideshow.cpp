@@ -45,7 +45,7 @@
 #include <kdeversion.h>
 #include <kdialog.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -455,7 +455,7 @@ void SlideShow::slotPlay()
 
 void SlideShow::slotScreenSelected(int screen)
 {
-    kDebug() << "move to screen: " << screen;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "move to screen: " << screen;
 
     QRect deskRect = kapp->desktop()->screenGeometry(screen);
 

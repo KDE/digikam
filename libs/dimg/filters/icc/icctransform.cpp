@@ -38,7 +38,7 @@
 #include <kapplication.h>
 #include <kglobal.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Lcms includes
 
@@ -542,7 +542,7 @@ bool IccTransform::open(TransformDescription& description)
 
     if (!d->handle)
     {
-        kDebug() << "LCMS internal error: cannot create a color transform instance";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "LCMS internal error: cannot create a color transform instance";
         return false;
     }
 
@@ -577,7 +577,7 @@ bool IccTransform::openProofing(TransformDescription& description)
 
     if (!d->handle)
     {
-        kDebug() << "LCMS internal error: cannot create a color transform instance";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "LCMS internal error: cannot create a color transform instance";
         return false;
     }
 

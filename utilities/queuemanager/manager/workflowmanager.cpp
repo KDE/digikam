@@ -36,7 +36,7 @@
 
 #include <kglobal.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kstandarddirs.h>
 
 // Local includes
@@ -126,7 +126,7 @@ void WorkflowManager::insertPrivate(const Workflow& q)
     {
         QMutexLocker lock(&d->mutex);
         d->qList.append(q);
-        kDebug() << "add : " << q.title;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "add : " << q.title;
     }
 
     emit signalQueueSettingsAdded(q.title);
@@ -146,7 +146,7 @@ void WorkflowManager::removePrivate(const Workflow& q)
         {
             if (it->title == q.title)
             {
-                kDebug() << "Remove " << it->title << " from Workflow list";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Remove " << it->title << " from Workflow list";
                 it = d->qList.erase(it);
                 break;
             }
@@ -295,7 +295,7 @@ bool WorkflowManager::save()
 
     if (!file.open(QIODevice::WriteOnly))
     {
-        kDebug() << "Cannot open XML file to store Workflow";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot open XML file to store Workflow";
         return false;
     }
 
@@ -316,7 +316,7 @@ bool WorkflowManager::load(QStringList& failed)
 
     if (!file.open(QIODevice::ReadOnly))
     {
-        kDebug() << "Cannot open XML file to load Workflow";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot open XML file to load Workflow";
         return false;
     }
 
@@ -324,7 +324,7 @@ bool WorkflowManager::load(QStringList& failed)
 
     if (!doc.setContent(&file))
     {
-        kDebug() << "Cannot load Workflow XML file";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot load Workflow XML file";
         return false;
     }
 
@@ -332,7 +332,7 @@ bool WorkflowManager::load(QStringList& failed)
 
     if (docElem.tagName() != "queuelist")
     {
-        kDebug() << "Workflow XML file do not content Queue List data";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Workflow XML file do not content Queue List data";
         return false;
     }
 
@@ -443,7 +443,7 @@ bool WorkflowManager::load(QStringList& failed)
                         QVariant var(val3);
                         var.convert(QVariant::nameToType(type.toAscii()));
 /*
-                        kDebug() << "name=" << pname << " :: " << "type=" << type << " :: " << "value=" << val3
+                        qCDebug(DIGIKAM_GENERAL_LOG) << "name=" << pname << " :: " << "type=" << type << " :: " << "value=" << val3
                                  << " :: " << "QVariant=" << var;
 */
                         set.settings.insert(pname, var);

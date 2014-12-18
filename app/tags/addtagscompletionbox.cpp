@@ -36,7 +36,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 
@@ -451,7 +451,7 @@ void AddTagsCompletionBox::sizeAndPosition(bool wasVisible)
             x                = orig.x() + geom.x();
             y                = orig.y() + geom.y();
 
-            //kDebug() << orig << screenSize << y << height() << screenSize.bottom() << (y + height() > screenSize.bottom());
+            //qCDebug(DIGIKAM_GENERAL_LOG) << orig << screenSize << y << height() << screenSize.bottom() << (y + height() > screenSize.bottom());
 
             if ( x + width() > screenSize.right() )
             {
@@ -523,7 +523,7 @@ QRect AddTagsCompletionBox::calculateGeometry() const
     const QSize maxSize   = d->maximumAvailableScreenSize(globalPositionHint());
     int suggestedHeight   = qMin(suggestedShownItems, count()) * itemSizeHint.height();
 
-    //kDebug() << itemSizeHint << maxHeight << suggestedHeight;
+    //qCDebug(DIGIKAM_GENERAL_LOG) << itemSizeHint << maxHeight << suggestedHeight;
 
     int h                 = qMin(maxSize.height(), suggestedHeight + frameHeight);
     int w                 = KListWidget::minimumSizeHint().width();
@@ -592,7 +592,7 @@ QSize AddTagsCompletionBox::Private::maximumAvailableScreenSize(const QPoint& or
 {
     QRect screenGeom = QApplication::desktop()->availableGeometry(orig);
 
-    //kDebug() << screenSize << orig << qMax(orig.y() - screenSize.top(), screenSize.bottom() - orig.y());
+    //qCDebug(DIGIKAM_GENERAL_LOG) << screenSize << orig << qMax(orig.y() - screenSize.top(), screenSize.bottom() - orig.y());
 
     if (!screenGeom.contains(orig))
     {

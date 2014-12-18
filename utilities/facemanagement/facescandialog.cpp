@@ -42,7 +42,7 @@
 // KDE includes
 
 #include <ktabwidget.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kdialog.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
@@ -189,7 +189,7 @@ void FaceScanDialog::setDetectionDefaultParameters()
 
 void FaceScanDialog::doLoadState()
 {
-    kDebug() << getConfigGroup().name();
+    qCDebug(DIGIKAM_GENERAL_LOG) << getConfigGroup().name();
     KConfigGroup group = getConfigGroup();
     QString mainTask   = group.readEntry(entryName(d->configMainTask), d->configValueDetectAndRecognize);
 
@@ -237,7 +237,7 @@ void FaceScanDialog::doLoadState()
 
 void FaceScanDialog::doSaveState()
 {
-    kDebug() << getConfigGroup().name();
+    qCDebug(DIGIKAM_GENERAL_LOG) << getConfigGroup().name();
     KConfigGroup group = getConfigGroup();
 
     QString mainTask;

@@ -45,7 +45,7 @@
 #include <klocalizedstring.h>
 #include <kstdguiitem.h>
 #include <kpushbutton.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -554,13 +554,13 @@ void DeleteDialog::slotUser1Clicked()
 
     if (d->saveDoNotShowAgainTrash)
     {
-        kDebug() << "setShowTrashDeleteDialog " << !d->widget->d->doNotShowAgain->isChecked();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "setShowTrashDeleteDialog " << !d->widget->d->doNotShowAgain->isChecked();
         settings->setShowTrashDeleteDialog(!d->widget->d->doNotShowAgain->isChecked());
     }
 
     if (d->saveDoNotShowAgainPermanent)
     {
-        kDebug() << "setShowPermanentDeleteDialog " << !d->widget->d->doNotShowAgain->isChecked();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "setShowPermanentDeleteDialog " << !d->widget->d->doNotShowAgain->isChecked();
         settings->setShowPermanentDeleteDialog(!d->widget->d->doNotShowAgain->isChecked());
     }
 

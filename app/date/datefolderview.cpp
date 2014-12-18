@@ -44,7 +44,7 @@
 #include <kdeversion.h>
 #include <kcalendarsystem.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -135,7 +135,7 @@ void DateFolderView::slotSelectionChanged(Album* selectedAlbum)
 {
     if (!d->active)
     {
-        kDebug() << "Not active, returning without action";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Not active, returning without action";
         return;
     }
 
@@ -190,13 +190,13 @@ void DateFolderView::doSaveState()
 
 void DateFolderView::gotoDate(const QDate& dt)
 {
-    kDebug() << "Going to date " << dt;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Going to date " << dt;
 
     QModelIndex dateIndex = d->dateTreeView->albumModel()->monthIndexForDate(dt);
 
     if (!dateIndex.isValid())
     {
-        kDebug() << "Cannot find an album for date " << dt;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot find an album for date " << dt;
         return;
     }
 
@@ -208,7 +208,7 @@ void DateFolderView::gotoDate(const QDate& dt)
         return;
     }
 
-    kDebug() << "Got date album " << dateAlbum;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Got date album " << dateAlbum;
 
     d->dateTreeView->setCurrentAlbums(QList<Album*>() << dateAlbum);
 

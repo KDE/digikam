@@ -42,7 +42,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -179,7 +179,7 @@ void GreycstorationFilter::computeChildrenThreads()
     const int numProcs    = qMax(QThread::idealThreadCount(), 1);
     const int maxThreads  = 16;
     d->computationThreads = qMin(maxThreads, 2 + ((numProcs - 1) * 2));
-    kDebug() << "GreycstorationFilter::Computation threads: " << d->computationThreads;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "GreycstorationFilter::Computation threads: " << d->computationThreads;
 }
 
 void GreycstorationFilter::setup()
@@ -196,7 +196,7 @@ void GreycstorationFilter::setup()
         m_destImage = DImg(d->newSize.width(), d->newSize.height(),
                            m_orgImage.sixteenBit(), m_orgImage.hasAlpha());
 
-        kDebug() << "GreycstorationFilter::Resize: new size: ("
+        qCDebug(DIGIKAM_GENERAL_LOG) << "GreycstorationFilter::Resize: new size: ("
                  << d->newSize.width() << ", " << d->newSize.height() << ")";
     }
     else
@@ -230,7 +230,7 @@ void GreycstorationFilter::cancelFilter()
 {
     // Because Greycstoration algorithm run in a child thread, we need
     // to stop it before to stop this thread.
-    kDebug() << "Stop Greycstoration computation...";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Stop Greycstoration computation...";
     d->threadManager->stop();
 
     // And now when stop main loop and clean up all
@@ -241,7 +241,7 @@ void GreycstorationFilter::filterImage()
 {
     register int x, y;
 
-    kDebug() << "Initialization...";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Initialization...";
 
     uchar* const data = m_orgImage.bits();
     int width         = m_orgImage.width();
@@ -259,7 +259,7 @@ void GreycstorationFilter::filterImage()
                  get_permute_axes("yzvx");
     }
 
-    kDebug() << "Process Computation...";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Process Computation...";
 
     try
     {
@@ -287,7 +287,7 @@ void GreycstorationFilter::filterImage()
     }
     catch (...)        // Everything went wrong.
     {
-        kDebug() << "Error during Greycstoration filter computation!";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Error during Greycstoration filter computation!";
 
         return;
     }
@@ -299,7 +299,7 @@ void GreycstorationFilter::filterImage()
 
     // Copy CImg onto destination.
 
-    kDebug() << "Finalization...";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Finalization...";
 
     uchar* const newData = m_destImage.bits();
     int newWidth         = m_destImage.width();
@@ -393,7 +393,7 @@ void GreycstorationFilter::inpainting()
     }
     else
     {
-        kDebug() << "Inpainting image: mask is null!";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Inpainting image: mask is null!";
         stop();
         return;
     }

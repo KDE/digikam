@@ -47,7 +47,7 @@
 
 #include <kcursor.h>
 #include <kmessagebox.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -191,7 +191,7 @@ void EditorCore::slotLoadRawFromTool()
 
 void EditorCore::slotLoadRaw()
 {
-    //    kDebug() << d->nextRawDescription.rawDecodingSettings;
+    //    qCDebug(DIGIKAM_GENERAL_LOG) << d->nextRawDescription.rawDecodingSettings;
     d->load(d->nextRawDescription);
     d->nextRawDescription = LoadingDescription();
 }
@@ -810,7 +810,7 @@ void EditorCore::putIccProfile(const IccProfile& profile)
         return;
     }
 
-    //kDebug() << "Embedding profile: " << profile;
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Embedding profile: " << profile;
     d->image.setIccProfile(profile);
     updateColorManagement();
     setModified();

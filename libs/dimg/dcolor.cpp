@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 namespace Digikam
 {
@@ -46,7 +46,7 @@ DColor::DColor(const QColor& color, bool sixteenBit)
     }
     else
     {
-        kDebug() << "QColor is invalid. reset color component to zero";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "QColor is invalid. reset color component to zero";
         m_red   = 0;
         m_green = 0;
         m_blue  = 0;

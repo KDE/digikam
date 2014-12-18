@@ -105,7 +105,7 @@
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
 #include <kde_file.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <ksqueezedtextlabel.h>
 #include <kio/job.h>
 #include <kio/netaccess.h>
@@ -847,7 +847,7 @@ void EditorWindow::slotZoomTo100Percents()
 
 void EditorWindow::slotZoomChanged(bool isMax, bool isMin, double zoom)
 {
-    //kDebug() << "EditorWindow::slotZoomChanged";
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "EditorWindow::slotZoomChanged";
     d->zoomPlusAction->setEnabled(!isMax);
     d->zoomMinusAction->setEnabled(!isMin);
 
@@ -904,7 +904,7 @@ void EditorWindow::loadImagePlugins()
         }
         else
         {
-            kDebug() << "Invalid plugin to add!";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Invalid plugin to add!";
         }
     }
 
@@ -1768,7 +1768,7 @@ void EditorWindow::slotSavingStarted(const QString& /*filename*/)
 void EditorWindow::slotSavingFinished(const QString& filename, bool success)
 {
     Q_UNUSED(filename);
-    kDebug() << filename << success << (m_savingContext.savingState != SavingContext::SavingStateNone);
+    qCDebug(DIGIKAM_GENERAL_LOG) << filename << success << (m_savingContext.savingState != SavingContext::SavingStateNone);
 
     // only handle this if we really wanted to save a file...
     if (m_savingContext.savingState != SavingContext::SavingStateNone)
@@ -1921,7 +1921,7 @@ void EditorWindow::setupTempSaveFile(const KUrl& url)
 
 void EditorWindow::startingSave(const KUrl& url)
 {
-    kDebug() << "startSaving url = " << url;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "startSaving url = " << url;
 
     // avoid any reentrancy. Should be impossible anyway since actions will be disabled.
     if (m_savingContext.savingState != SavingContext::SavingStateNone)
@@ -2029,7 +2029,7 @@ bool EditorWindow::showFileSaveDialog(const KUrl& initialUrl, KUrl& newURL)
     }
 
     newURL = imageFileSaveDialog->selectedUrl();
-    kDebug() << "Writing file to " << newURL;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Writing file to " << newURL;
 
 #ifdef _WIN32
     //-- Show Settings Dialog ----------------------------------------------
@@ -2096,7 +2096,7 @@ QStringList EditorWindow::getWritingFilters()
     // begin with the filters KImageIO supports
     QString pattern             = KImageIO::pattern(KImageIO::Writing);
     QStringList writablePattern = pattern.split(QChar('\n'));
-    kDebug() << "KImageIO offered pattern: " << writablePattern;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "KImageIO offered pattern: " << writablePattern;
 
     // append custom file types
 
@@ -2117,7 +2117,7 @@ QStringList EditorWindow::getWritingFilters()
 
 QString EditorWindow::findFilterByExtension(const QStringList& allFilters, const QString& extension)
 {
-    kDebug() << "Searching for a filter with extension '" << extension
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Searching for a filter with extension '" << extension
              << "' in: " << allFilters;
 
     const QString filterExtension = QString("*.%1").arg(extension.toLower());
@@ -2127,7 +2127,7 @@ QString EditorWindow::findFilterByExtension(const QStringList& allFilters, const
 
         if (filter.contains(filterExtension))
         {
-            kDebug() << "Found filter '" << filter << "'";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Found filter '" << filter << "'";
             return filter;
         }
 
@@ -2136,7 +2136,7 @@ QString EditorWindow::findFilterByExtension(const QStringList& allFilters, const
     // fall back to "all image types"
     if (!allFilters.empty() && allFilters.first().contains(filterExtension))
     {
-        kDebug() << "using fall back all images filter: " << allFilters.first();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "using fall back all images filter: " << allFilters.first();
         return allFilters.first();
     }
 
@@ -2145,14 +2145,14 @@ QString EditorWindow::findFilterByExtension(const QStringList& allFilters, const
 
 QString EditorWindow::getExtensionFromFilter(const QString& filter)
 {
-    kDebug() << "Trying to extract format from filter: " << filter;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to extract format from filter: " << filter;
 
     // find locations of interesting characters in the filter string
     const int asteriskLocation = filter.indexOf('*');
 
     if (asteriskLocation < 0)
     {
-        kDebug() << "Could not find a * in the filter";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Could not find a * in the filter";
         return QString();
     }
 
@@ -2163,26 +2163,26 @@ QString EditorWindow::getExtensionFromFilter(const QString& filter)
         endLocation = filter.length();
     }
 
-    kDebug() << "astriskLocation = " << asteriskLocation
+    qCDebug(DIGIKAM_GENERAL_LOG) << "astriskLocation = " << asteriskLocation
              << ", endLocation = " << endLocation;
 
     // extract extension with the locations found above
     QString formatString = filter;
     formatString.remove(0, asteriskLocation + 2);
     formatString         = formatString.left(endLocation - asteriskLocation - 2);
-    kDebug() << "Extracted format " << formatString;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Extracted format " << formatString;
     return formatString;
 }
 
 QString EditorWindow::selectValidSavingFormat(const QString& filter,
                                               const KUrl& targetUrl, const QString& autoFilter)
 {
-    kDebug() << "Trying to find a saving format with filter = "
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to find a saving format with filter = "
              << filter << ", targetUrl = " << targetUrl << ", autoFilter" << autoFilter;
 
     // build a list of valid types
     QStringList validTypes = KImageIO::types(KImageIO::Writing);
-    kDebug() << "KDE Offered types: " << validTypes;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "KDE Offered types: " << validTypes;
 
     validTypes << "TIF";
     validTypes << "TIFF";
@@ -2194,7 +2194,7 @@ QString EditorWindow::selectValidSavingFormat(const QString& filter,
     validTypes << "J2K";
     validTypes << "JP2";
 #endif // HAVE_JASPER
-    kDebug() << "Writable formats: " << validTypes;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Writable formats: " << validTypes;
 
     // if the auto filter is used, use the format provided in the filename
     if (filter == autoFilter || filter == autoFilter.section('|', 0, 0))
@@ -2206,7 +2206,7 @@ QString EditorWindow::selectValidSavingFormat(const QString& filter,
             // for local files QFileInfo can be used
             QFileInfo fi(targetUrl.toLocalFile());
             suffix = fi.suffix();
-            kDebug() << "Possible format from local file: " << suffix;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Possible format from local file: " << suffix;
         }
         else
         {
@@ -2219,12 +2219,12 @@ QString EditorWindow::selectValidSavingFormat(const QString& filter,
                 suffix = fileName.right(fileName.size() - periodLocation - 1);
             }
 
-            kDebug() << "Possible format from remote file: " << suffix;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Possible format from remote file: " << suffix;
         }
 
         if (!suffix.isEmpty() && validTypes.contains(suffix, Qt::CaseInsensitive))
         {
-            kDebug() << "Using format from target url " << suffix;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Using format from target url " << suffix;
             return suffix;
         }
     }
@@ -2237,7 +2237,7 @@ QString EditorWindow::selectValidSavingFormat(const QString& filter,
         if (!filterExtension.isEmpty() &&
             validTypes.contains(filterExtension, Qt::CaseInsensitive))
         {
-            kDebug() << "Using format from filter extension: " << filterExtension;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Using format from filter extension: " << filterExtension;
             return filterExtension;
         }
     }
@@ -2249,19 +2249,19 @@ QString EditorWindow::selectValidSavingFormat(const QString& filter,
 
         if (validTypes.contains(originalFormat, Qt::CaseInsensitive))
         {
-            kDebug() << "Using format from original file: " << originalFormat;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Using format from original file: " << originalFormat;
             return originalFormat;
         }
     }
 
-    kDebug() << "No suitable format found";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "No suitable format found";
 
     return QString();
 }
 
 bool EditorWindow::startingSaveAs(const KUrl& url)
 {
-    kDebug() << "startSavingAs called";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "startSavingAs called";
 
     if (m_savingContext.savingState != SavingContext::SavingStateNone)
     {
@@ -2406,7 +2406,7 @@ VersionFileOperation EditorWindow::saveInFormatVersionFileOperation(const KUrl& 
 
 bool EditorWindow::startingSaveVersion(const KUrl& url, bool fork, bool saveAs, const QString& format)
 {
-    kDebug() << "Saving image" << url << "non-destructive, new version:"
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Saving image" << url << "non-destructive, new version:"
              << fork << ", saveAs:" << saveAs << "format:" << format;
 
     if (m_savingContext.savingState != SavingContext::SavingStateNone)
@@ -2436,7 +2436,7 @@ bool EditorWindow::startingSaveVersion(const KUrl& url, bool fork, bool saveAs, 
     }
 
     const KUrl newURL = m_savingContext.versionFileOperation.saveFile.fileUrl();
-    kDebug() << "Writing file to " << newURL;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Writing file to " << newURL;
 
     if (!newURL.isValid())
     {
@@ -2573,19 +2573,19 @@ bool EditorWindow::moveLocalFile(const QString& org, const QString& dst)
 
 void EditorWindow::moveFile()
 {
-    kDebug() << m_savingContext.destinationURL << m_savingContext.destinationURL.isLocalFile();
+    qCDebug(DIGIKAM_GENERAL_LOG) << m_savingContext.destinationURL << m_savingContext.destinationURL.isLocalFile();
 
     // how to move a file depends on if the file is on a local system or not.
     if (m_savingContext.destinationURL.isLocalFile())
     {
-        kDebug() << "moving a local file";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "moving a local file";
 
         if (m_savingContext.executedOperation == SavingContext::SavingStateVersion)
         {
             // check if we need to move the current file to an intermediate name
             if (m_savingContext.versionFileOperation.tasks & VersionFileOperation::MoveToIntermediate)
             {
-                //kDebug() << "MoveToIntermediate: Moving " << m_savingContext.srcURL.toLocalFile() << "to" <<
+                //qCDebug(DIGIKAM_GENERAL_LOG) << "MoveToIntermediate: Moving " << m_savingContext.srcURL.toLocalFile() << "to" <<
                 //       m_savingContext.versionFileOperation.intermediateForLoadedFile.filePath() <<
                 moveLocalFile(m_savingContext.srcURL.toLocalFile(),
                               m_savingContext.versionFileOperation.intermediateForLoadedFile.filePath());
@@ -2615,7 +2615,7 @@ void EditorWindow::moveFile()
         // for remote destinations use kio to move the temp file over there
         // do not care for versioning here, atm not supported
 
-        kDebug() << "moving a remote file via KIO";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "moving a remote file via KIO";
 
         if (DMetadata::hasSidecar(m_savingContext.saveTempFileName))
         {
@@ -2973,7 +2973,7 @@ void EditorWindow::addServicesMenuForUrl(const KUrl& url)
 {
     KService::List offers = FileOperation::servicesForOpenWith(url);
 
-    kDebug() << offers.count() << " services found to open " << url;
+    qCDebug(DIGIKAM_GENERAL_LOG) << offers.count() << " services found to open " << url;
 
     if (!offers.isEmpty())
     {

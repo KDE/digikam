@@ -40,7 +40,7 @@ extern "C"
 #include <kde_file.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <threadweaver/ThreadWeaver.h>
 
 // Local includes
@@ -143,7 +143,7 @@ void Task::run()
         inUrl   = outUrl;
         index   = set.index + 1;
 
-        kDebug() << "Tool : index= " << index
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Tool : index= " << index
                  << " :: name= "     << set.name
                  << " :: group= "    << set.group
                  << " :: wurl= "     << workUrl;

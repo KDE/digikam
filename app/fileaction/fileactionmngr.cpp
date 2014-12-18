@@ -34,7 +34,7 @@
 
 #include <kglobal.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kprogressdialog.h>
 
 // Local includes
@@ -259,7 +259,7 @@ void FileActionMngr::applyMetadata(const QList<ImageInfo>& infos, MetadataHubOnT
 {
     if (hub->parent())
     {
-        kDebug() << "MetadataHubOnTheRoad object must not have a QObject parent";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "MetadataHubOnTheRoad object must not have a QObject parent";
         delete hub;
         return;
     }

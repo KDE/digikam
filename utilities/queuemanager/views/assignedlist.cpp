@@ -40,7 +40,7 @@
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kmenu.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 

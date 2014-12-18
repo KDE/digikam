@@ -42,7 +42,7 @@ extern "C"
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 namespace Digikam
 {
@@ -92,7 +92,7 @@ bool AlbumDB_Sqlite2::execSql(const QString& sql, QStringList* const values,
 {
     if ( debug )
     {
-        kDebug() << "SQL-query: " << sql;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "SQL-query: " << sql;
     }
 
     if ( !m_db )

@@ -33,7 +33,7 @@
 
 #include <klocalizedstring.h>
 #include <QIcon>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -104,7 +104,7 @@ void NewItemsFinder::slotStart()
     {
         case ScanDeferredFiles:
         {
-            kDebug() << "scan mode: ScanDeferredFiles";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "scan mode: ScanDeferredFiles";
 
             connect(ScanController::instance(), SIGNAL(completeScanDone()),
                     this, SLOT(slotDone()));
@@ -116,7 +116,7 @@ void NewItemsFinder::slotStart()
 
         case CompleteCollectionScan:
         {
-            kDebug() << "scan mode: CompleteCollectionScan";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "scan mode: CompleteCollectionScan";
 
             ScanController::instance()->completeCollectionScanInBackground(false);
 
@@ -130,7 +130,7 @@ void NewItemsFinder::slotStart()
 
         case ScheduleCollectionScan:
         {
-            kDebug() << "scan mode: ScheduleCollectionScan :: " << d->foldersToScan;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "scan mode: ScheduleCollectionScan :: " << d->foldersToScan;
             d->foldersScanned.clear();
 
             foreach(const QString& folder, d->foldersToScan)
@@ -143,19 +143,19 @@ void NewItemsFinder::slotStart()
 
 void NewItemsFinder::slotScanStarted(const QString& info)
 {
-    kDebug() << info;
+    qCDebug(DIGIKAM_GENERAL_LOG) << info;
     setStatus(info);
 }
 
 void NewItemsFinder::slotTotalFilesToScan(int t)
 {
-    kDebug() << "total scan value : " << t;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "total scan value : " << t;
     setTotalItems(t);
 }
 
 void NewItemsFinder::slotFilesScanned(int s)
 {
-    //kDebug() << "file scanned : " << s;
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "file scanned : " << s;
     advance(s);
 }
 

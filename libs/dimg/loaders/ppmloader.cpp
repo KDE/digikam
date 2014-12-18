@@ -44,7 +44,7 @@ extern "C"
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -70,7 +70,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
     if (!file)
     {
-        kDebug() << "Cannot open image file.";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot open image file.";
         loadingFailed();
         return false;
     }
@@ -79,7 +79,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
     if (fread(&header, 2, 1, file) != 1)
     {
-        kDebug() << "Cannot read header of file.";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot read header of file.";
         fclose(file);
         loadingFailed();
         return false;
@@ -89,7 +89,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
     if (*c != 'P')
     {
-        kDebug() << "Not a PPM file.";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Not a PPM file.";
         fclose(file);
         loadingFailed();
         return false;
@@ -99,7 +99,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
     if (*c != '6')
     {
-        kDebug() << "Not a PPM file.";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Not a PPM file.";
         fclose(file);
         loadingFailed();
         return false;
@@ -110,7 +110,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* const observer
     // FIXME: scanf without field width limits can crash with huge input data
     if (fscanf(file, "P6 %d %d %d%c", &width, &height, &rgbmax, &nl) != 4)
     {
-        kDebug() << "Corrupted PPM file.";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Corrupted PPM file.";
         fclose(file);
         loadingFailed();
         return false;
@@ -118,7 +118,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
     if (rgbmax <= 255)
     {
-        kDebug() << "Not a 16 bits per color per pixel PPM file.";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Not a 16 bits per color per pixel PPM file.";
         fclose(file);
         loadingFailed();
         return false;
@@ -137,7 +137,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
         if (data.isNull())
         {
-            kDebug() << "Failed to allocate memory for loading" << filePath;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to allocate memory for loading" << filePath;
             fclose(file);
             loadingFailed();
             return false;
@@ -149,7 +149,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* const observer
         int checkpoint = 0;
 
 #ifdef USE_IMGLOADERDEBUGMSG
-        kDebug() << "rgbmax=" << rgbmax << "  fac=" << fac;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "rgbmax=" << rgbmax << "  fac=" << fac;
 #endif
 
         for (int h = 0; h < height; ++h)

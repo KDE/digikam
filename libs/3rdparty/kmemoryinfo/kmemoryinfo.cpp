@@ -28,7 +28,7 @@
 // KDE includes
 
 #include <kglobal.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 static int fillMemoryInfo(Digikam::KMemoryInfo::KMemoryInfoData* const data);
 
@@ -123,7 +123,7 @@ qint64 KMemoryInfo::bytes(KMemoryInfo::MemoryDetails details) const
 
     if (details & TotalRam)
     {
-        kDebug() << "TotalRam: " << d->totalRam;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "TotalRam: " << d->totalRam;
 
         if (d->totalRam == -1)
             return -1;
@@ -132,7 +132,7 @@ qint64 KMemoryInfo::bytes(KMemoryInfo::MemoryDetails details) const
     }
     else if (details & AvailableRam)
     {
-        kDebug() << "AvailableRam: " << d->freeRam << " (cache: " << d->cacheRam << ")";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "AvailableRam: " << d->freeRam << " (cache: " << d->cacheRam << ")";
 
         if (d->freeRam == -1 || d->cacheRam == -1)
             return -1;
@@ -142,7 +142,7 @@ qint64 KMemoryInfo::bytes(KMemoryInfo::MemoryDetails details) const
 
     if (details & TotalSwap)
     {
-        kDebug() << "TotalSwap: " << d->totalSwap;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "TotalSwap: " << d->totalSwap;
 
         if (d->totalSwap == -1)
             return -1;
@@ -151,7 +151,7 @@ qint64 KMemoryInfo::bytes(KMemoryInfo::MemoryDetails details) const
     }
     else if (details & AvailableSwap)
     {
-        kDebug() << "AvailableSwap: " << d->freeSwap;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "AvailableSwap: " << d->freeSwap;
 
         if (d->freeSwap == -1)
             return -1;
@@ -191,7 +191,7 @@ int KMemoryInfo::update()
 {
     d->reset();
     const int res = fillMemoryInfo(d);
-    kDebug() << "Platform identified : " << d->platform;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Platform identified : " << d->platform;
     d->lastUpdate = QDateTime::currentDateTime();
     return res;
 }

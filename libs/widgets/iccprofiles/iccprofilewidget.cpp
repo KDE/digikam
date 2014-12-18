@@ -38,7 +38,7 @@
 #include <kdialog.h>
 #include <khbox.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -295,7 +295,7 @@ bool ICCProfileWidget::decodeMetadata()
 
     if (!hProfile)
     {
-        kDebug() << "Cannot parse ICC profile tags using LCMS";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot parse ICC profile tags using LCMS";
         return false;
     }
 

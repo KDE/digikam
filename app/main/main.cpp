@@ -38,7 +38,7 @@
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kconfig.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kdeversion.h>
 #include <kglobal.h>
 #include <kimageio.h>
@@ -113,7 +113,7 @@ int main(int argc, char* argv[])
                                    QSqlDatabase::drivers());
         }
 
-        kDebug() << "QT Sql drivers list: " << QSqlDatabase::drivers();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "QT Sql drivers list: " << QSqlDatabase::drivers();
         return 1;
     }
 

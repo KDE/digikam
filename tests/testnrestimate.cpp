@@ -29,7 +29,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Libkexiv2 includes
 
@@ -51,8 +51,8 @@ int main(int argc, char** argv)
 {
     if (argc != 2)
     {
-        kDebug() << "testnrestimate - test NR parameters";
-        kDebug() << "Usage: <image>";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "testnrestimate - test NR parameters";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Usage: <image>";
         return -1;
     }
 
@@ -73,7 +73,7 @@ int main(int argc, char** argv)
     nre.startFilterDirectly();
     NRContainer prm = nre.settings();
 
-    kDebug() << prm;
+    qCDebug(DIGIKAM_GENERAL_LOG) << prm;
 
     NRFilter nrf(&img, 0, prm);
     nrf.startFilterDirectly();

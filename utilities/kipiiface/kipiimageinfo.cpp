@@ -35,7 +35,7 @@
 
 #include <kconfig.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // LibKipi includes
 
@@ -86,7 +86,7 @@ KipiImageInfo::KipiImageInfo(Interface* const interface, const KUrl& url)
 
     if (d->info.isNull())
     {
-        kDebug() << "DB Info is null (" << url.path() << ")";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "DB Info is null (" << url.path() << ")";
     }
 }
 
@@ -100,7 +100,7 @@ void KipiImageInfo::cloneData(ImageInfoShared* const other)
     KUrl otherUrl = other->url();
 
     ImageInfo parentInf = ImageInfo::fromUrl(otherUrl);
-    kDebug() << "Clone DB Info from" << parentInf.fileUrl().path() << "to" << _url.path();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Clone DB Info from" << parentInf.fileUrl().path() << "to" << _url.path();
     FileActionMngr::instance()->copyAttributes(parentInf, _url.toLocalFile());
 }
 

@@ -35,7 +35,7 @@
 #include <klocalizedstring.h>
 #include <kurlrequester.h>
 #include <khbox.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 

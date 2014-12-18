@@ -26,7 +26,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -99,7 +99,7 @@ int FaceTagsHelper::tagForName(const QString& name, int tagId, int parentId, con
     {
         if (FaceTags::isPerson(tagId))
         {
-            //kDebug() << "Proposed tag is already a person";
+            //qCDebug(DIGIKAM_GENERAL_LOG) << "Proposed tag is already a person";
             return tagId;
         }
         else if (convert)
@@ -109,7 +109,7 @@ int FaceTagsHelper::tagForName(const QString& name, int tagId, int parentId, con
                 fullName = TagsCache::instance()->tagName(tagId);
             }
 
-            kDebug() << "Converting proposed tag to person, full name" << fullName;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Converting proposed tag to person, full name" << fullName;
             makeFaceTag(tagId, fullName);
             return tagId;
         }
@@ -122,7 +122,7 @@ int FaceTagsHelper::tagForName(const QString& name, int tagId, int parentId, con
 
     foreach(int id, candidates)
     {
-        kDebug() << "Candidate with set full name:" << id << fullName;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Candidate with set full name:" << id << fullName;
 
         if (parentId == -1)
         {
@@ -155,12 +155,12 @@ int FaceTagsHelper::tagForName(const QString& name, int tagId, int parentId, con
         // Is this tag already a person tag?
         if (FaceTags::isPerson(id))
         {
-            kDebug() << "Found tag with name" << name << "is already a person." << id;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Found tag with name" << name << "is already a person." << id;
             return id;
         }
         else if (convert)
         {
-            kDebug() << "Converting tag with name" << name << "to a person." << id;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Converting tag with name" << name << "to a person." << id;
             makeFaceTag(id, fullName);
             return id;
         }
@@ -169,7 +169,7 @@ int FaceTagsHelper::tagForName(const QString& name, int tagId, int parentId, con
     // Third: If desired, create a new tag
     if (create)
     {
-        kDebug() << "Creating new tag for name" << name << "fullName" << fullName;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Creating new tag for name" << name << "fullName" << fullName;
 
         if (parentId == -1)
         {

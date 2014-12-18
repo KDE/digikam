@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kglobal.h>
 #include <QIcon>
 #include <klocalizedstring.h>
@@ -1130,7 +1130,7 @@ bool AbstractCheckableAlbumModel::setData(const QModelIndex& index, const QVaria
             return false;
         }
 
-        //kDebug() << "Updating check state for album" << album->title() << "to" << value;
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "Updating check state for album" << album->title() << "to" << value;
         d->checkedAlbums.insert(album, state);
         emit dataChanged(index, index);
         emit checkStateChanged(album, state);

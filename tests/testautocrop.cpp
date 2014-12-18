@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Libkexiv2 includes
 
@@ -73,7 +73,7 @@ int main(int argc, char** argv)
     ac.startFilterDirectly();
     QRect rect = ac.autoInnerCrop();
 
-    kDebug() << "Cropped image area: " << rect;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Cropped image area: " << rect;
 
     img.crop(rect);
     img.save(outFilePath, "PNG");

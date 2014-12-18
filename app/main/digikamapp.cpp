@@ -49,7 +49,7 @@
 #include <kactioncategory.h>
 #endif
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kaboutdata.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
@@ -772,7 +772,7 @@ void DigikamApp::setupActions()
     foreach(SidebarWidget* const leftWidget, d->view->leftSidebarWidgets())
     {
         QString actionName = "browse_" + leftWidget->objectName().remove(' ').remove("Sidebar").remove("FolderView").remove("View").toLower();
-        kDebug() << actionName;
+        qCDebug(DIGIKAM_GENERAL_LOG) << actionName;
 
         KAction* const action = new KAction(QIcon::fromTheme(leftWidget->getIcon()), leftWidget->getCaption(), this);
         action->setShortcut(KShortcut(leftWidget->property("Shortcut").toInt()));
@@ -1858,7 +1858,7 @@ void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
 
         if (CameraList::findConnectedCamera(vendorId, productId, model, port))
         {
-            kDebug() << "Found camera from ids " << vendorId << " " << productId
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Found camera from ids " << vendorId << " " << productId
                      << " camera is: " << model << " at " << port;
 
             // the ImportUI will delete itself when it has finished
@@ -2000,7 +2000,7 @@ bool DigikamApp::checkSolidCamera(const Solid::Device& cameraDevice)
 
     QStringList drivers = camera->supportedDrivers();
 
-    kDebug() << "fillSolidMenus: Found Camera " << cameraDevice.vendor() + ' ' + cameraDevice.product() << " protocols " << camera->supportedProtocols() << " drivers " << camera->supportedDrivers("ptp");
+    qCDebug(DIGIKAM_GENERAL_LOG) << "fillSolidMenus: Found Camera " << cameraDevice.vendor() + ' ' + cameraDevice.product() << " protocols " << camera->supportedProtocols() << " drivers " << camera->supportedDrivers("ptp");
 
     // We handle gphoto2 cameras in this loop
     if (! (camera->supportedDrivers().contains("gphoto") || camera->supportedProtocols().contains("ptp")) )

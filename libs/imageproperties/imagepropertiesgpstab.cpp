@@ -50,7 +50,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
 #include <ktoolinvocation.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // libkgeomap includes
 
@@ -318,7 +318,7 @@ void ImagePropertiesGPSTab::slotGPSDetails()
         }
     }
 
-    kDebug() << url;
+    qCDebug(DIGIKAM_GENERAL_LOG) << url;
     KToolInvocation::self()->invokeBrowser(url);
 }
 

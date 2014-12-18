@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -123,17 +123,17 @@ bool DynamicThread::DynamicThreadPriv::transitionToRunning()
         }
         case DynamicThread::Running:
         {
-            kDebug() << "Transition to Running: Invalid Running state" << q;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Transition to Running: Invalid Running state" << q;
             return false;
         }
         case DynamicThread::Inactive:
         {
-            kDebug() << "Transition to Running: Invalid Inactive state" << q;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Transition to Running: Invalid Inactive state" << q;
             return false;
         }
         default:
         {
-            kDebug() << "Transition to Running: Should never reach here: assert?" << q;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Transition to Running: Should never reach here: assert?" << q;
             return false;
         }
     }
@@ -167,7 +167,7 @@ void DynamicThread::DynamicThreadPriv::transitionToInactive()
         }
         case DynamicThread::Inactive:
         {
-            kDebug() << "Transition to Inactive: Invalid Inactive state" << q;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Transition to Inactive: Invalid Inactive state" << q;
             break;
         }
     }

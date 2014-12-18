@@ -36,7 +36,7 @@
 // KDE includes
 
 #include <kurl.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -68,12 +68,12 @@ void ICCPreviewWidget::showPreview( const KUrl& url)
 
     if ( url.isLocalFile() && fInfo.isFile() && fInfo.isReadable() )
     {
-        kDebug() << url << " is a readable local file";
+        qCDebug(DIGIKAM_GENERAL_LOG) << url << " is a readable local file";
         m_iccProfileWidget->loadFromURL(url);
     }
     else
     {
-        kDebug() << url << " is not a readable local file";
+        qCDebug(DIGIKAM_GENERAL_LOG) << url << " is not a readable local file";
     }
 }
 

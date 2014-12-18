@@ -28,7 +28,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -40,12 +40,12 @@ int main(int argc, char** argv)
 {
     if (argc != 2)
     {
-        kDebug() << "pgfscaled - Load scaled version of PGF image and save to PNG";
-        kDebug() << "Usage: <pgffile>";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "pgfscaled - Load scaled version of PGF image and save to PNG";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Usage: <pgffile>";
         return -1;
     }
 
-    kDebug() << "Using LibPGF version: " << PGFUtils::libPGFVersion();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Using LibPGF version: " << PGFUtils::libPGFVersion();
     QImage img;
 
     // Write PGF file.
@@ -55,7 +55,7 @@ int main(int argc, char** argv)
 
     if ( !file.open(QIODevice::ReadOnly) )
     {
-        kDebug() << "Cannot open PGF file to read...";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot open PGF file to read...";
         return -1;
     }
 
@@ -63,7 +63,7 @@ int main(int argc, char** argv)
 
     if (!PGFUtils::loadPGFScaled(img, file.fileName(), 1280))
     {
-        kDebug() << "loadPGFScaled failed...";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "loadPGFScaled failed...";
         return -1;
     }
 

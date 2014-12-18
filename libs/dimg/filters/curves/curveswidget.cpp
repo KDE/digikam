@@ -49,7 +49,7 @@
 #include <kcursor.h>
 #include <klocalizedstring.h>
 #include <kiconloader.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kpixmapsequence.h>
 
 // Local includes
@@ -379,7 +379,7 @@ void CurvesWidget::setup(int w, int h, bool readOnly)
 
 void CurvesWidget::saveCurve(KConfigGroup& group, const QString& prefix)
 {
-    kDebug() << "Storing curves";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Storing curves";
 
     for (int channel = 0; channel < ImageCurves::NUM_CHANNELS; ++channel)
     {
@@ -405,11 +405,11 @@ void CurvesWidget::saveCurve(KConfigGroup& group, const QString& prefix)
 
 void CurvesWidget::restoreCurve(KConfigGroup& group, const QString& prefix)
 {
-    kDebug() << "Restoring curves";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Restoring curves";
 
     reset();
 
-    kDebug() << "curves " << curves() << " isSixteenBits = " << isSixteenBits();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "curves " << curves() << " isSixteenBits = " << isSixteenBits();
 
     for (int channel = 0; channel < ImageCurves::NUM_CHANNELS; ++channel)
     {
@@ -439,7 +439,7 @@ void CurvesWidget::restoreCurve(KConfigGroup& group, const QString& prefix)
 
 void CurvesWidget::updateData(const DImg& img)
 {
-    kDebug() << "updating data";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "updating data";
 
     stopHistogramComputation();
 

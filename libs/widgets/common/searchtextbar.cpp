@@ -38,7 +38,7 @@
 #include <kconfiggroup.h>
 #include <kglobal.h>
 #include <kconfig.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 

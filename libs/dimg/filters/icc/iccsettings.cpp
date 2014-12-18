@@ -50,7 +50,7 @@
 #include <kconfiggroup.h>
 #include <kglobal.h>
 #include <ksharedconfig.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -256,13 +256,13 @@ IccProfile IccSettings::Private::profileFromWindowSystem(QWidget* const widget)
             profile = bytes;
         }
 
-        kDebug() << "Found X.org XICC monitor profile" << profile.description();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Found X.org XICC monitor profile" << profile.description();
     }
 
 /*
     else
     {
-        kDebug() << "No X.org XICC profile installed for screen" << screenNumber;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "No X.org XICC profile installed for screen" << screenNumber;
     }
 */
 
@@ -417,7 +417,7 @@ QList<IccProfile> IccSettings::Private::scanDirectories(const QStringList& dirs)
     QList<IccProfile> profiles;
     QStringList       filters;
     filters << "*.icc" << "*.icm";
-    kDebug() << dirs;
+    qCDebug(DIGIKAM_GENERAL_LOG) << dirs;
 
     foreach(const QString& dirPath, dirs)
     {
@@ -445,7 +445,7 @@ void IccSettings::Private::scanDirectory(const QString& path, const QStringList&
     {
         if (info.isFile())
         {
-            //kDebug() << info.filePath() << (info.exists() && info.isReadable());
+            //qCDebug(DIGIKAM_GENERAL_LOG) << info.filePath() << (info.exists() && info.isReadable());
             IccProfile profile(info.filePath());
 
             if (profile.open())

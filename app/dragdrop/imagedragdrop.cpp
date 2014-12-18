@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kiconloader.h>
 #include <kio/job.h>
 #include <klocalizedstring.h>
@@ -456,7 +456,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
 
         if(!isDecoded)
         {
-            kDebug() << "Error: Deconding failed!";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Error: Deconding failed!";
             return false;
         }
 

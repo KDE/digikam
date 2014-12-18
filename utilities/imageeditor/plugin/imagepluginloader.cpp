@@ -36,7 +36,7 @@
 #include <kapplication.h>
 #include <klocalizedstring.h>
 #include <kxmlguiclient.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -190,7 +190,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
             {
                 d->pluginMap[name] = plugin;
 
-                kDebug() << "ImagePluginLoader: Loaded plugin " << service->name();
+                qCDebug(DIGIKAM_GENERAL_LOG) << "ImagePluginLoader: Loaded plugin " << service->name();
 
                 ++cpt;
 
@@ -201,7 +201,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
 
                 if (!validator.isValid())
                 {
-                    kDebug() << "Old ui file layout detected: " << service->name();
+                    qCDebug(DIGIKAM_GENERAL_LOG) << "Old ui file layout detected: " << service->name();
                     validator.fixConfigFile();
                 }
             }

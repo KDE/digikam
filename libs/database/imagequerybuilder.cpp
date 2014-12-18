@@ -41,7 +41,7 @@
 #include <kcalendarsystem.h>
 #include <kcomponentdata.h>
 #include <kmimetype.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // KExiv2 includes
 
@@ -158,7 +158,7 @@ QString ImageQueryBuilder::buildQueryFromXml(const QString& xml, QList<QVariant>
         }
     }
 
-    kDebug() << sql;
+    qCDebug(DIGIKAM_GENERAL_LOG) << sql;
 
     return sql;
 }
@@ -524,7 +524,7 @@ public:
 
             if (values.isEmpty())
             {
-                kDebug() << "List for OneOf is empty";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "List for OneOf is empty";
                 return;
             }
 
@@ -804,7 +804,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
             if (ids.isEmpty())
             {
-                kDebug() << "Relation 'InTree', name 'albumid': No values given";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Relation 'InTree', name 'albumid': No values given";
                 return false;
             }
 
@@ -874,7 +874,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
             if (ids.isEmpty())
             {
-                kDebug() << "Relation 'InTree', name 'tagid': No values given";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Relation 'InTree', name 'tagid': No values given";
                 return false;
             }
 
@@ -1074,7 +1074,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
             if (values.isEmpty())
             {
-                kDebug() << "List for OneOf is empty";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "List for OneOf is empty";
             }
 
             QList<double> ratioValues;
@@ -1148,7 +1148,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
             if (values.isEmpty())
             {
-                kDebug() << "List for OneOf is empty";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "List for OneOf is empty";
             }
 
             foreach(const QString& value, values)
@@ -1239,7 +1239,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
             if (values.isEmpty())
             {
-                kDebug() << "List for OneOf is empty";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "List for OneOf is empty";
             }
 
             foreach(const QString& value, values)
@@ -1408,7 +1408,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
             if (values.size() < 1 || values.size() > 2)
             {
-                kDebug() << "The imagetagproperty field requires one value (property) or two values (property, value).";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "The imagetagproperty field requires one value (property) or two values (property, value).";
                 return false;
             }
 
@@ -1493,7 +1493,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     }
     else
     {
-        kDebug() << "Search field" << name << "not known by this version of ImageQueryBuilder";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Search field" << name << "not known by this version of ImageQueryBuilder";
         return false;
     }
 

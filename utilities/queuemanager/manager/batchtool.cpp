@@ -35,7 +35,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <klocalizedstring.h>
 
 // Libkdcraw includes
@@ -336,7 +336,7 @@ void BatchTool::setOutputUrlFromInputUrl()
     SafeTemporaryFile temp(workingUrl().toLocalFile() + "/BatchTool-XXXXXX.digikamtempfile." + suffix);
     temp.setAutoRemove(false);
     temp.open();
-    kDebug() << "path: " << temp.fileName();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "path: " << temp.fileName();
 
     KUrl url;
     url.setPath(path);
@@ -409,10 +409,10 @@ bool BatchTool::apply()
 {
     d->cancel = false;
 
-    kDebug() << "Tool:       " << toolTitle();
-    kDebug() << "Input url:  " << inputUrl();
-    kDebug() << "Output url: " << outputUrl();
-    //kDebug() << "Settings:   ";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Tool:       " << toolTitle();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Input url:  " << inputUrl();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Output url: " << outputUrl();
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Settings:   ";
 
     BatchToolSettings prm = settings();
 
@@ -434,11 +434,11 @@ bool BatchTool::apply()
                 tmp.append(") ");
             }
 
-            //kDebug() << "   " << it.key() << ": " << tmp;
+            //qCDebug(DIGIKAM_GENERAL_LOG) << "   " << it.key() << ": " << tmp;
         }
         else
         {
-            //kDebug() << "   " << it.key() << ": " << it.value();
+            //qCDebug(DIGIKAM_GENERAL_LOG) << "   " << it.key() << ": " << it.value();
         }
     }
 

@@ -44,7 +44,7 @@
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
 #include <kurllabel.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -330,7 +330,7 @@ SearchWindow* SearchTabHeader::searchWindow() const
 {
     if (!d->searchWindow)
     {
-        kDebug() << "Creating search window";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Creating search window";
         // Create the advanced search edit window, deferred from constructor
         d->searchWindow = new SearchWindow;
 
@@ -353,7 +353,7 @@ void SearchTabHeader::selectedSearchChanged(Album* a)
 
     d->currentAlbum = album;
 
-    kDebug() << "changing to SAlbum " << album;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "changing to SAlbum " << album;
 
     if (!album)
     {
@@ -433,11 +433,11 @@ void SearchTabHeader::newAdvancedSearch()
 void SearchTabHeader::keywordChanged()
 {
     QString keywords = d->keywordEdit->text();
-    kDebug() << "keywords changed to '" << keywords << "'";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "keywords changed to '" << keywords << "'";
 
     if (d->oldKeywordContent == keywords || keywords.trimmed().isEmpty())
     {
-        kDebug() << "same keywords as before, ignoring...";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "same keywords as before, ignoring...";
         return;
     }
     else
@@ -475,11 +475,11 @@ void SearchTabHeader::saveSearch()
 
     QString name = d->saveNameEdit->text();
 
-    kDebug() << "name = " << name;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "name = " << name;
 
     if (name.isEmpty() || !d->currentAlbum)
     {
-        kDebug() << "no current album, returning";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "no current album, returning";
         // passive popup
         return;
     }

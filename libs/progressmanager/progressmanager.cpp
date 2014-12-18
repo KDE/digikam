@@ -36,7 +36,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <klocalizedstring.h>
 #include <kglobal.h>
 #include <kiconloader.h>

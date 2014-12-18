@@ -51,7 +51,7 @@
 #include <kurl.h>
 #include <kdeversion.h>
 #include <kde_file.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Libkdcraw includes
 
@@ -537,7 +537,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
         // Trying to load with libraw: RAW files.
         if (qimage.isNull())
         {
-            kDebug() << "Trying to load Embedded preview with libraw";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to load Embedded preview with libraw";
 
             if (KDcraw::loadEmbeddedPreview(qimage, path))
             {
@@ -548,7 +548,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
 
         if (qimage.isNull())
         {
-            kDebug() << "Trying to load half preview with libraw";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to load half preview with libraw";
 
             //TODO: Use DImg based loader instead?
             KDcraw::loadHalfPreview(qimage, path);
@@ -560,7 +560,7 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
         // Special case with DNG file. See bug #338081
         if (qimage.isNull())
         {
-            kDebug() << "Trying to load Embedded preview with Exiv2";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to load Embedded preview with Exiv2";
 
             KExiv2Iface::KExiv2Previews preview(path);
             qimage = preview.image();
@@ -662,7 +662,7 @@ QImage ThumbnailCreator::loadImagePreview(const DMetadata& metadata) const
 
     if (metadata.getImagePreview(image))
     {
-        kDebug() << "Use Exif/IPTC preview extraction. Size of image: "
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Use Exif/IPTC preview extraction. Size of image: "
                  << image.width() << "x" << image.height();
     }
 
@@ -1153,8 +1153,8 @@ void ThumbnailCreator::storeFreedesktop(const ThumbnailInfo& info, const Thumbna
             if(::MoveFileEx(tempFileName.utf16(), thumbPath.utf16(), MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH) == 0)
 #endif
             {
-                kDebug() << "Cannot rename thumb file (" << tempFileName << ")";
-                kDebug() << "to (" << thumbPath << ")...";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot rename thumb file (" << tempFileName << ")";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "to (" << thumbPath << ")...";
             }
         }
     }

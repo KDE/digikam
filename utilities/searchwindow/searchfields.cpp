@@ -49,7 +49,7 @@
 #include <klineedit.h>
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Libkdcraw includes
 
@@ -2273,7 +2273,7 @@ void SearchFieldAlbum::read(SearchXmlCachingReader& reader)
 
         if (!a)
         {
-            kDebug() << "Search: Did not find album for ID" << id << "given in Search XML";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Search: Did not find album for ID" << id << "given in Search XML";
             return;
         }
 
@@ -2754,7 +2754,7 @@ void SearchFieldLabels::read(SearchXmlCachingReader& reader)
 
         if (!a)
         {
-            kDebug() << "Search: Did not find Label album for ID" << id << "given in Search XML";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Search: Did not find Label album for ID" << id << "given in Search XML";
         }
         else
         {

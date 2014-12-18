@@ -29,7 +29,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -78,7 +78,7 @@ ImageTagPairPrivSharedPointer ImageTagPairPriv::createGuarded(qlonglong imageId,
 {
     if (imageId <= 0 || tagId <= 0)
     {
-        kDebug() << "Attempt to create invalid tag pair image id" << imageId << "tag id" << tagId;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Attempt to create invalid tag pair image id" << imageId << "tag id" << tagId;
         return *imageTagPairPrivSharedNull;
     }
     return ImageTagPairPrivSharedPointer(new ImageTagPairPriv);

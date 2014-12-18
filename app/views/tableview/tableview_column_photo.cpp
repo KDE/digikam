@@ -30,7 +30,7 @@
 // KDE includes
 
 #include <kcombobox.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <klocalizedstring.h>
 
 // local includes

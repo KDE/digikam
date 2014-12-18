@@ -40,7 +40,7 @@ extern "C"
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -77,7 +77,7 @@ void JPEGLoader::dimg_jpeg_emit_message(j_common_ptr cinfo, int msg_level)
     (*cinfo->err->format_message)(cinfo, buffer);
 
 #ifdef USE_IMGLOADERDEBUGMSG
-    kDebug() << buffer << " (" << msg_level << ")";
+    qCDebug(DIGIKAM_GENERAL_LOG) << buffer << " (" << msg_level << ")";
 #else
     Q_UNUSED(msg_level);
 #endif
@@ -89,7 +89,7 @@ void JPEGLoader::dimg_jpeg_output_message(j_common_ptr cinfo)
     (*cinfo->err->format_message)(cinfo, buffer);
 
 #ifdef USE_IMGLOADERDEBUGMSG
-    kDebug() << buffer;
+    qCDebug(DIGIKAM_GENERAL_LOG) << buffer;
 #endif
 }
 
@@ -355,7 +355,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         if (cinfo.rec_outbuf_height > 16)
         {
             jpeg_destroy_decompress(&cinfo);
-            kDebug() << "Height of JPEG scanline buffer out of range!";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Height of JPEG scanline buffer out of range!";
             delete cleanupData;
             loadingFailed();
             return false;
@@ -368,7 +368,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
             ))
         {
             jpeg_destroy_decompress(&cinfo);
-            kDebug()
+            qCDebug(DIGIKAM_GENERAL_LOG)
                     << "JPEG colorspace ("
                     << cinfo.out_color_space
                     << ") or Number of JPEG color components ("
@@ -385,7 +385,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         if (!data)
         {
             jpeg_destroy_decompress(&cinfo);
-            kDebug() << "Cannot allocate memory!";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot allocate memory!";
             delete cleanupData;
             loadingFailed();
             return false;
@@ -397,7 +397,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         if (!dest)
         {
             jpeg_destroy_decompress(&cinfo);
-            kDebug() << "Cannot allocate memory!";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot allocate memory!";
             delete cleanupData;
             loadingFailed();
             return false;
@@ -749,7 +749,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observe
     {
         case 1:  // 2x1, 1x1, 1x1 (4:2:2) : Medium
         {
-            kDebug() << "Using LibJPEG medium chroma-subsampling (4:2:2)";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Using LibJPEG medium chroma-subsampling (4:2:2)";
             cinfo.comp_info[0].h_samp_factor = 2;
             cinfo.comp_info[0].v_samp_factor = 1;
             cinfo.comp_info[1].h_samp_factor = 1;
@@ -761,7 +761,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observe
 
         case 2:  // 2x2, 1x1, 1x1 (4:1:1) : High
         {
-            kDebug() << "Using LibJPEG high chroma-subsampling (4:1:1)";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Using LibJPEG high chroma-subsampling (4:1:1)";
             cinfo.comp_info[0].h_samp_factor = 2;
             cinfo.comp_info[0].v_samp_factor = 2;
             cinfo.comp_info[1].h_samp_factor = 1;
@@ -773,7 +773,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observe
 
         default:  // 1x1 1x1 1x1 (4:4:4) : None
         {
-            kDebug() << "Using LibJPEG none chroma-subsampling (4:4:4)";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Using LibJPEG none chroma-subsampling (4:4:4)";
             cinfo.comp_info[0].h_samp_factor = 1;
             cinfo.comp_info[0].v_samp_factor = 1;
             cinfo.comp_info[1].h_samp_factor = 1;
@@ -787,7 +787,7 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observe
     jpeg_set_quality(&cinfo, quality, true);
     jpeg_start_compress(&cinfo, true);
 
-    kDebug() << "Using LibJPEG quality compression value: " << quality;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Using LibJPEG quality compression value: " << quality;
 
     if (observer)
     {

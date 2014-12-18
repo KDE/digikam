@@ -34,7 +34,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kstandarddirs.h>
 #include <kio/global.h>
 
@@ -97,7 +97,7 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
 
     #ifdef NFS_HACK
     newDB = locateLocal("appdata", KIO::encodeFileName(QDir::cleanPath(newDB)));
-    kDebug() << "NFS: " << newDB;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "NFS: " << newDB;
     #endif
 
     AlbumDB db3;
@@ -121,7 +121,7 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
     /*
     #ifdef NFS_HACK
     dbPath = locateLocal("appdata", KIO::encodeFileName(QDir::cleanPath(dbPath)));
-    kDebug() << "From NFS: " << dbPath;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "From NFS: " << dbPath;
     #endif
     */
 
@@ -129,7 +129,7 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
 
     if (!fi.exists())
     {
-        kDebug() << "No old database present. Not upgrading";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "No old database present. Not upgrading";
         albumDB->setSetting("UpgradedFromSqlite2", "yes");
         return true;
     }
@@ -139,7 +139,7 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
 
     if (!db2.isValid())
     {
-        kDebug() << "Failed to initialize Old Album Database";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to initialize Old Album Database";
         return false;
     }
 
@@ -332,8 +332,8 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
 
         if (it1 == albumMap.constEnd())
         {
-            kDebug() << "Could not find album with url: " << url;
-            kDebug() << "Most likely an external directory. Rejecting.";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Could not find album with url: " << url;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Most likely an external directory. Rejecting.";
             continue;
         }
 
@@ -354,15 +354,15 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
     // -- update setting entry ------------------------------------------
     albumDB->setSetting("UpgradedFromSqlite2", "yes");
 
-    kDebug() << "Successfully upgraded database to sqlite3 ";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Successfully upgraded database to sqlite3 ";
 
     // -- Check for db consistency ----------------------------------------
 
     /*
-    kDebug() << "Checking database consistency";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Checking database consistency";
 
 
-    kDebug() << "Checking Albums..................";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Checking Albums..................";
     values.clear();
     db2.execSql("SELECT id, url, date, caption, collection FROM Albums;", &values);
     for (QStringList::iterator it = values.begin(); it != values.end();)
@@ -400,10 +400,10 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
             return false;
         }
     }
-    kDebug() << " (" << values.count()/5 << " Albums) "  << "OK";
+    qCDebug(DIGIKAM_GENERAL_LOG) << " (" << values.count()/5 << " Albums) "  << "OK";
 
 
-    kDebug() << "Checking Tags....................";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Checking Tags....................";
     values.clear();
     db2.execSql("SELECT id, pid, name FROM Tags;", &values);
     for (QStringList::iterator it = values.begin(); it != values.end();)
@@ -433,10 +433,10 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
             return false;
         }
     }
-    kDebug() << " (" << values.count()/3 << " Tags) "  << "OK";
+    qCDebug(DIGIKAM_GENERAL_LOG) << " (" << values.count()/3 << " Tags) "  << "OK";
 
 
-    kDebug() << "Checking Images..................";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Checking Images..................";
     values.clear();
     db2.execSql("SELECT Albums.url, Images.name, Images.caption "
             "FROM Images, Albums WHERE Albums.id=Images.dirid;", &values);
@@ -468,10 +468,10 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
             return false;
         }
     }
-    kDebug() << " (" << values.count()/3 << " Images) " << "OK";
+    qCDebug(DIGIKAM_GENERAL_LOG) << " (" << values.count()/3 << " Images) " << "OK";
 
 
-    kDebug() << "Checking ImageTags...............";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Checking ImageTags...............";
     values.clear();
     db2.execSql("SELECT Albums.url, ImageTags.name, ImageTags.tagid "
             "FROM ImageTags, Albums WHERE \n "
@@ -505,9 +505,9 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
             return false;
         }
     }
-    kDebug() << " (" << values.count()/3 << " ImageTags) " << "OK";
+    qCDebug(DIGIKAM_GENERAL_LOG) << " (" << values.count()/3 << " ImageTags) " << "OK";
 
-    kDebug() << "Checking Album icons ...............";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Checking Album icons ...............";
     values.clear();
     db2.execSql("SELECT url, icon FROM Albums;", &values);
     for (QStringList::iterator it = values.begin(); it != values.end();)
@@ -538,10 +538,10 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
             return false;
         }
     }
-    kDebug() << " (" << values.count()/2 << " Album Icons) " << "OK";
+    qCDebug(DIGIKAM_GENERAL_LOG) << " (" << values.count()/2 << " Album Icons) " << "OK";
 
 
-    kDebug() << "Checking Tag icons ...............";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Checking Tag icons ...............";
     values.clear();
     db2.execSql("SELECT id, icon FROM Tags;", &values);
     for (QStringList::iterator it = values.begin(); it != values.end();)
@@ -614,10 +614,10 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
 
         }
     }
-    kDebug() << " (" << values.count()/2 << " Tag Icons) " << "OK";
+    qCDebug(DIGIKAM_GENERAL_LOG) << " (" << values.count()/2 << " Tag Icons) " << "OK";
 
-    kDebug() << "";
-    kDebug() << "All Tests: A-OK";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "All Tests: A-OK";
     */
 
     return true;

@@ -37,7 +37,7 @@
 #include <kactioncollection.h>
 #include <kmenu.h>
 #include <kactionmenu.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kxmlguifactory.h>
 #include <kxmlguiwindow.h>
 
@@ -320,7 +320,7 @@ void KipiPluginLoader::slotKipiPluginPlug()
             }
             else
             {
-                kDebug() << "Plugin '" << actionName << "' is disabled.";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Plugin '" << actionName << "' is disabled.";
             }
         }
     }

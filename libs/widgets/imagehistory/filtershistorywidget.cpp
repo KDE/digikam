@@ -34,7 +34,7 @@
 
 #include <kurl.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 

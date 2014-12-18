@@ -52,7 +52,7 @@
 #include <kvbox.h>
 #include <khbox.h>
 #include <kcombobox.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kmessagebox.h>
 
 // Libkexiv2 includes

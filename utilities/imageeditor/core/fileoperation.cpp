@@ -39,7 +39,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kde_file.h>
 #include <kmimetype.h>
 #include <krun.h>
@@ -61,7 +61,7 @@ bool FileOperation::localFileRename(const QString& source, const QString& orgPat
     if (info.isSymLink())
     {
         dest = info.symLinkTarget();
-        kDebug() << "Target filePath" << QDir::toNativeSeparators(dest) << "is a symlink pointing to"
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Target filePath" << QDir::toNativeSeparators(dest) << "is a symlink pointing to"
                  << QDir::toNativeSeparators(dest) << ". Storing image there.";
     }
 

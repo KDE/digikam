@@ -26,7 +26,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -94,7 +94,7 @@ QList<DatabaseFace> FaceTagsEditor::databaseFaces(qlonglong imageid, DatabaseFac
             foreach(const QString& regionString, pair.values(attribute))
             {
                 TagRegion region(regionString);
-                //kDebug() << "rect found as "<< region << "for attribute" << attribute << "tag" << pair.tagId();
+                //qCDebug(DIGIKAM_GENERAL_LOG) << "rect found as "<< region << "for attribute" << attribute << "tag" << pair.tagId();
 
                 if (!region.isValid())
                 {
@@ -116,7 +116,7 @@ QList<ImageTagPair> FaceTagsEditor::faceImageTagPairs(qlonglong imageid, Databas
 
     foreach(const ImageTagPair& pair, ImageTagPair::availablePairs(imageid))
     {
-        //kDebug() << pair.tagId() << pair.properties();
+        //qCDebug(DIGIKAM_GENERAL_LOG) << pair.tagId() << pair.properties();
         if (!FaceTags::isPerson(pair.tagId()))
         {
             continue;
@@ -208,7 +208,7 @@ DatabaseFace FaceTagsEditor::changeSuggestedName(const DatabaseFace& previousEnt
 {
     if (previousEntry.isConfirmedName())
     {
-        kDebug() << "Refusing to reset a confirmed name to an unconfirmed name";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Refusing to reset a confirmed name to an unconfirmed name";
         return previousEntry;
     }
 
@@ -233,7 +233,7 @@ DatabaseFace FaceTagsEditor::confirmName(const DatabaseFace& face, int tagId, co
 
     if (FaceTags::isTheUnknownPerson(newEntry.tagId()))
     {
-        kDebug() << "Refusing to confirm unknownPerson tag on face";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Refusing to confirm unknownPerson tag on face";
         return face;
     }
 

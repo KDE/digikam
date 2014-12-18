@@ -43,7 +43,7 @@
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
 #include <ktemporaryfile.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 #include <databaseparameters.h>
@@ -90,7 +90,7 @@ CollectionPage::CollectionPage(KAssistantDialog* const dlg)
 #   endif
 #endif
 
-    kDebug() << picturesPath;
+    qCDebug(DIGIKAM_GENERAL_LOG) << picturesPath;
 
     if (picturesPath.isEmpty())
     {
@@ -199,7 +199,7 @@ bool CollectionPage::checkSettings()
 bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
 {
     rootAlbumFolder = d->rootAlbumPathRequester->url().toLocalFile();
-    kDebug() << "Root album is : " << rootAlbumFolder;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Root album is : " << rootAlbumFolder;
 
     if (rootAlbumFolder.isEmpty())
     {
@@ -276,7 +276,7 @@ bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
 bool CollectionPage::checkDatabase(QString& dbFolder)
 {
     dbFolder = d->dbPathRequester->url().toLocalFile();
-    kDebug() << "DB folder is : " << dbFolder;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "DB folder is : " << dbFolder;
 
     if (dbFolder.isEmpty())
     {

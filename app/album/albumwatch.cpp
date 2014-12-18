@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kdirwatch.h>
 
 // Local includes
@@ -151,7 +151,7 @@ bool AlbumWatch::Private::inDirWatchParametersBlackList(const QFileInfo& info, c
             // check for equality
             if (modList == dbPathModificationDateList)
             {
-                //kDebug() << "Filtering out db-file-triggered dir watch signal";
+                //qCDebug(DIGIKAM_GENERAL_LOG) << "Filtering out db-file-triggered dir watch signal";
                 // we can skip the signal
                 return true;
             }
@@ -313,7 +313,7 @@ void AlbumWatch::slotAlbumAboutToBeDeleted(Album* a)
 
 void AlbumWatch::rescanDirectory(const QString& dir)
 {
-    kDebug() << "Detected change, triggering rescan of directory" << dir;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Detected change, triggering rescan of directory" << dir;
     ScanController::instance()->scheduleCollectionScanRelaxed(dir);
 }
 
@@ -436,7 +436,7 @@ void AlbumWatch::slotDirWatchDirty(const QString& path)
         return;
     }
 
-    kDebug() << "KDirWatch detected change at" << path;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "KDirWatch detected change at" << path;
 
     if (info.isDir())
     {
@@ -473,7 +473,7 @@ void AlbumWatch::connectToKDirWatch()
         mName = QString("INotify");
     }
 
-    kDebug() << "KDirWatch method = " << mName;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "KDirWatch method = " << mName;
 
     connect(d->dirWatch, SIGNAL(dirty(QString)),
             this, SLOT(slotDirWatchDirty(QString)));
@@ -501,14 +501,14 @@ void AlbumWatch::connectToKIO()
 
 void AlbumWatch::slotKioFileMoved(const QString& urlFrom, const QString& urlTo)
 {
-    kDebug() << urlFrom << urlTo;
+    qCDebug(DIGIKAM_GENERAL_LOG) << urlFrom << urlTo;
     handleKioNotification(KUrl(urlFrom));
     handleKioNotification(KUrl(urlTo));
 }
 
 void AlbumWatch::slotKioFilesDeleted(const QStringList& urls)
 {
-    kDebug() << urls;
+    qCDebug(DIGIKAM_GENERAL_LOG) << urls;
 
     foreach(const QString& url, urls)
     {
@@ -518,7 +518,7 @@ void AlbumWatch::slotKioFilesDeleted(const QStringList& urls)
 
 void AlbumWatch::slotKioFilesAdded(const QString& url)
 {
-    kDebug() << url;
+    qCDebug(DIGIKAM_GENERAL_LOG) << url;
     handleKioNotification(KUrl(url));
 }
 
@@ -528,14 +528,14 @@ void AlbumWatch::handleKioNotification(const KUrl& url)
     {
         QString path = url.directory();
 
-        //kDebug() << path << !CollectionManager::instance()->albumRootPath(path).isEmpty();
+        //qCDebug(DIGIKAM_GENERAL_LOG) << path << !CollectionManager::instance()->albumRootPath(path).isEmpty();
         // check path is in our collection
         if (CollectionManager::instance()->albumRootPath(path).isNull())
         {
             return;
         }
 
-        kDebug() << "KDirNotify detected file change at" << path;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "KDirNotify detected file change at" << path;
 
         rescanDirectory(path);
     }
@@ -546,7 +546,7 @@ void AlbumWatch::handleKioNotification(const KUrl& url)
         if (dbUrl.isAlbumUrl())
         {
             QString path = dbUrl.fileUrl().directory();
-            kDebug() << "KDirNotify detected file change at" << path;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "KDirNotify detected file change at" << path;
             rescanDirectory(path);
         }
     }

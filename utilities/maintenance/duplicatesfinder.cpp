@@ -34,7 +34,7 @@
 #include <kapplication.h>
 #include <klocalizedstring.h>
 #include <QIcon>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 

@@ -43,7 +43,7 @@
 
 // Kde include
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -155,7 +155,7 @@ void NREstimate::startAnalyse()
     // Array to store the centers of the clusters
     CvArr* centers = 0;
 
-    kDebug() << "Everything ready for the cvKmeans2 or as it seems to";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Everything ready for the cvKmeans2 or as it seems to";
     postProgress(10);
 
     //-- KMEANS ---------------------------------------------------------------------------------------------
@@ -166,7 +166,7 @@ void NREstimate::startAnalyse()
                   cvTermCriteria(CV_TERMCRIT_EPS + CV_TERMCRIT_ITER, 10, 1.0), 3, 0, 0, centers, 0);
     }
 
-    kDebug() << "cvKmeans2 successfully run";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "cvKmeans2 successfully run";
     postProgress(15);
 
     //-- Divide into cluster->columns, sample->rows, in matrix standard deviation ---------------------------
@@ -190,15 +190,15 @@ void NREstimate::startAnalyse()
     }
 
 /*
-    kDebug() << "Lets see what the rowPosition array looks like : ";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Lets see what the rowPosition array looks like : ";
 
     for(uint i=0 ; runningFlag() && (i < d->clusterCount) ; i++)
     {
-        kDebug() << "Cluster : "<< i << " the count is :" << rowPosition[i];
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Cluster : "<< i << " the count is :" << rowPosition[i];
     }
 */
 
-    kDebug() << "array indexed, and ready to find maximum";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "array indexed, and ready to find maximum";
     postProgress(20);
 
     //-- Finding maximum of the rowPosition array ------------------------------------------------------------
@@ -216,7 +216,7 @@ void NREstimate::startAnalyse()
     QString maxString;
     maxString.append(QString::number(max));
 
-    kDebug() << QString("maximum declared = %1").arg(maxString);
+    qCDebug(DIGIKAM_GENERAL_LOG) << QString("maximum declared = %1").arg(maxString);
     postProgress(25);
 
     //-- Divide and conquer ---------------------------------------------------------------------------------
@@ -246,7 +246,7 @@ void NREstimate::startAnalyse()
         ptr = reinterpret_cast<float*>(sd->data.ptr);
     }
 
-    kDebug() << "The rowPosition array is ready!";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "The rowPosition array is ready!";
     postProgress(40);
 
     for (uint i=0 ; runningFlag() && (i < m_orgImage.numPixels()) ; i++)
@@ -274,7 +274,7 @@ void NREstimate::startAnalyse()
         rPosition[columnIndex] = rPosition[columnIndex] + 1;
     }
 
-    kDebug() << "sd matrix creation over!";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "sd matrix creation over!";
     postProgress(50);
 
     //-- This part of the code would involve the sd matrix and make the mean and the std of the data -------------------
@@ -315,7 +315,7 @@ void NREstimate::startAnalyse()
         }
     }
 
-    kDebug() << "Make the mean and the std of the data";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Make the mean and the std of the data";
     postProgress(60);
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -366,7 +366,7 @@ void NREstimate::startAnalyse()
 
             filems.close();
 
-            kDebug() << "Done with the basic work of storing the mean and the std";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Done with the basic work of storing the mean and the std";
         }
     }
 
@@ -441,7 +441,7 @@ void NREstimate::startAnalyse()
         filewms.close();
     }
 
-    kDebug() << "Info : " << info;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Info : " << info;
     postProgress(80);
 
     // -- adaptation ---------------------------------------------------------------------------------------
@@ -506,7 +506,7 @@ void NREstimate::startAnalyse()
     d->prm.softness[1]   = CbSoft;
     d->prm.softness[2]   = CrSoft;
 
-    kDebug() << "All is completed";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "All is completed";
     postProgress(90);
 
     //-- releasing matrices and closing files ----------------------------------------------------------------------

@@ -34,7 +34,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 
@@ -91,7 +91,7 @@ int main(int argc, char** argv)
     // initialize database
     bool b = AlbumManager::instance()->setDatabase(params, false, "/media/fotos/Digikam Sample/");
 
-    kDebug() << "Database initialization done: " << b;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Database initialization done: " << b;
 
     QTimer::singleShot(500, &app, SLOT(quit()));
     app.exec();

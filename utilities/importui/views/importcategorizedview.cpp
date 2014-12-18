@@ -29,7 +29,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -328,7 +328,7 @@ QModelIndex ImportCategorizedView::nextIndexHint(const QModelIndex& anchor, cons
     QModelIndex hint = DCategorizedView::nextIndexHint(anchor, removed);
     CamItemInfo info   = d->filterModel->camItemInfo(anchor);
 
-    //kDebug() << "Having initial hint" << hint << "for" << anchor << d->model->numberOfIndexesForCamItemInfo(info);
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Having initial hint" << hint << "for" << anchor << d->model->numberOfIndexesForCamItemInfo(info);
 
     // Fixes a special case of multiple (face) entries for the same image.
     // If one is removed, any entry of the same image shall be preferred.
@@ -353,7 +353,7 @@ QModelIndex ImportCategorizedView::nextIndexHint(const QModelIndex& anchor, cons
                 {
                     minDiff = distance;
                     hint = index;
-                    //kDebug() << "Chose index" << hint << "at distance" << minDiff << "to" << anchor;
+                    //qCDebug(DIGIKAM_GENERAL_LOG) << "Chose index" << hint << "at distance" << minDiff << "to" << anchor;
                 }
             }
         }

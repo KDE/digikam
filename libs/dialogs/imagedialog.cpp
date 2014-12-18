@@ -35,7 +35,7 @@
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
 #include <kimageio.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Libkdcraw includes
 
@@ -372,7 +372,7 @@ ImageDialog::ImageDialog(QWidget* const parent, const KUrl& url, bool singleSele
 
     d->fileFormats = patternList.join("\n");
 
-    kDebug() << "file formats=" << d->fileFormats;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "file formats=" << d->fileFormats;
 
     QPointer<KFileDialog> dlg   = new KFileDialog(url, d->fileFormats, parent);
     ImageDialogPreview* preview = new ImageDialogPreview(dlg);

@@ -41,8 +41,8 @@ int main(int argc, char** argv)
 {
     if (argc != 2)
     {
-        kDebug() << "testlensfuniface - test to parse metadata dedicated to LensFun";
-        kDebug() << "Usage: <image>";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "testlensfuniface - test to parse metadata dedicated to LensFun";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Usage: <image>";
         return -1;
     }
 

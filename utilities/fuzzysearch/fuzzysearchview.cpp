@@ -43,7 +43,7 @@
 #include <kapplication.h>
 #include <kcolorvalueselector.h>
 #include <kconfig.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kdialog.h>
 #include <khbox.h>
 #include <khuesaturationselect.h>
@@ -665,19 +665,19 @@ void FuzzySearchView::slotTabChanged(int tab)
 void FuzzySearchView::slotAlbumSelected(Album* album)
 {
 
-    kDebug() << "Selected new album" << album;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Selected new album" << album;
 
     SAlbum* salbum = dynamic_cast<SAlbum*>(album);
 
     if (!salbum || !salbum->isHaarSearch())
     {
-        kDebug() << "Not a haar search, returning";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Not a haar search, returning";
         return;
     }
 
     if (!d->active)
     {
-        kDebug() << "Not active, returning";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Not active, returning";
         return;
     }
 

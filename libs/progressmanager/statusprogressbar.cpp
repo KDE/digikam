@@ -38,7 +38,7 @@
 #include <klocalizedstring.h>
 #include <kiconloader.h>
 #include <kcursor.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 

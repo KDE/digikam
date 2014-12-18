@@ -30,7 +30,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -255,7 +255,7 @@ void ChoiceSearchComboBox::setLabelText(const QString& text)
 
 void ChoiceSearchComboBox::labelClicked()
 {
-    kDebug() << "labelClicked";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "labelClicked";
     showPopup();
 }
 

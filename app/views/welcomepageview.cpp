@@ -47,7 +47,7 @@
 #include <kstandarddirs.h>
 #include <ktoolinvocation.h>
 #include <kurl.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -256,7 +256,7 @@ void WelcomePageView::slotThemeChanged()
                       .arg(infoPage())         // %6
                       .arg(digikamCss);        // %7
 
-    //    kDebug() << content;
+    //    qCDebug(DIGIKAM_GENERAL_LOG) << content;
 
     write(content);
     end();
@@ -273,7 +273,7 @@ void WelcomePageView::disablePredefinedActions()
     }
     else
     {
-        kDebug() << "failed to remove the shortcut of khtml's find action";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "failed to remove the shortcut of khtml's find action";
     }
 
     KAction* const findNextAction = qobject_cast<KAction*>(actionCollection()->action("findNext"));
@@ -284,7 +284,7 @@ void WelcomePageView::disablePredefinedActions()
     }
     else
     {
-        kDebug() << "failed to remove the shortcut of khtml's findNext action";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "failed to remove the shortcut of khtml's findNext action";
     }
 
     KAction* const findPreviousAction = qobject_cast<KAction*>(actionCollection()->action("findPrevious"));
@@ -295,7 +295,7 @@ void WelcomePageView::disablePredefinedActions()
     }
     else
     {
-        kDebug() << "failed to remove the shortcut of khtml's findPrevious action";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "failed to remove the shortcut of khtml's findPrevious action";
     }
 
     KAction* const selectAllAction = qobject_cast<KAction*>(actionCollection()->action("selectAll"));
@@ -306,7 +306,7 @@ void WelcomePageView::disablePredefinedActions()
     }
     else
     {
-        kDebug() << "failed to remove the shortcut of khtml's selectAll action";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "failed to remove the shortcut of khtml's selectAll action";
     }
 }
 

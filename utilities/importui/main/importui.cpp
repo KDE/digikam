@@ -60,7 +60,7 @@
 #include <kcalendarsystem.h>
 #include <kcombobox.h>
 #include <kconfig.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kdialog.h>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
@@ -1270,7 +1270,7 @@ void ImportUI::slotUpload()
     patternList.append(QString("\n%1|Camera RAW files").arg(QString(KDcrawIface::KDcraw::rawFiles())));
     fileformats = patternList.join("\n");
 
-    //kDebug() << "fileformats=" << fileformats;
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "fileformats=" << fileformats;
 
     KUrl::List urls = KFileDialog::getOpenUrls(CollectionManager::instance()->oneAlbumRootPath(),
                                                fileformats, this, i18nc("@title:window", "Select Image to Upload"));
@@ -1516,7 +1516,7 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 
     if (!pAlbum)
     {
-        kDebug() << "Destination Album is null";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Destination Album is null";
         return;
     }
 
@@ -1686,9 +1686,9 @@ void ImportUI::slotUpdateDownloadName()
     foreach (CamItemInfo info, list)
     {
         CamItemInfo& refInfo = d->view->camItemInfoRef(info.folder, info.name);
-        kDebug() << "slotDownloadNameChanged, old: " << refInfo.downloadName;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "slotDownloadNameChanged, old: " << refInfo.downloadName;
         refInfo.downloadName = d->renameCustomizer->newName(info.name, info.ctime);
-        kDebug() << "slotDownloadNameChanged, new: " << refInfo.downloadName;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "slotDownloadNameChanged, new: " << refInfo.downloadName;
     }
 
     // connected to slotUpdateDownloadNames, and used externally
@@ -2081,7 +2081,7 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
         if (settings.autoRotate)
         {
             d->autoRotateItemsList << downloadUrl.toLocalFile();
-            kDebug() << "autorotating for " << downloadUrl;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "autorotating for " << downloadUrl;
         }
 
         ++downloadedItems;

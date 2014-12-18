@@ -42,7 +42,7 @@
 #include <kstandarddirs.h>
 #include <ktabwidget.h>
 #include <kvbox.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Libkdcraw includes
 

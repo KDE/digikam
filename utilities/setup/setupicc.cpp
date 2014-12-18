@@ -59,7 +59,7 @@
 #include <kurllabel.h>
 #include <kurlrequester.h>
 #include <kvbox.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Libkdcraw includes
 
@@ -747,7 +747,7 @@ void SetupICC::fillCombos(bool report)
             KMessageBox::sorry(this, message);
         }
 
-        kDebug() << "No ICC profile files found!!!";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "No ICC profile files found!!!";
         d->mainDialog->enableButtonOk(false);
         return;
     }

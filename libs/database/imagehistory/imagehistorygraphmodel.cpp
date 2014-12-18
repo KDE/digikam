@@ -302,18 +302,18 @@ VertexItem* ImageHistoryGraphModel::Private::createVertexItem(const HistoryGraph
     const HistoryVertexProperties& props = graph().properties(v);
     ImageInfo info                       = givenInfo.isNull() ? props.firstImageInfo() : givenInfo;
     QModelIndex index                    = imageModel.indexForImageInfo(info);
-    //kDebug() << "Added" << info.id() << index;
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Added" << info.id() << index;
     VertexItem* item                     = new VertexItem(v);
     item->index                          = index;
     item->category                       = categories.value(v);
     vertexItems << item;
-    //kDebug() << "Adding vertex item" << graph().properties(v).firstImageInfo().id() << index;
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Adding vertex item" << graph().properties(v).firstImageInfo().id() << index;
     return item;
 }
 
 FilterActionItem* ImageHistoryGraphModel::Private::createFilterActionItem(const FilterAction& action)
 {
-    //kDebug() << "Adding vertex item for" << action.displayableName();
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Adding vertex item for" << action.displayableName();
     return new FilterActionItem(action);
 }
 
@@ -323,7 +323,7 @@ void ImageHistoryGraphModel::Private::build()
     vertexItems.clear();
     rootItem = new HistoryTreeItem;
 
-    //kDebug() << historyGraph;
+    //qCDebug(DIGIKAM_GENERAL_LOG) << historyGraph;
 
     HistoryGraph::Vertex ref = graph().findVertexByProperties(info);
     path                     = graph().longestPathTouching(ref, sortBy(newestInfoFirst));
@@ -436,7 +436,7 @@ void ImageHistoryGraphModel::Private::buildCombinedTree(const HistoryGraph::Vert
         const HistoryGraph::Vertex& v = path.at(i);
         HistoryGraph::Vertex previous = i ? path.at(i-1) : HistoryGraph::Vertex();
 //        HistoryGraph::Vertex next     = i < path.size() - 1 ? path[i+1] : HistoryGraph::Vertex();
-        //kDebug() << "Vertex on path" << path[i];
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "Vertex on path" << path[i];
         // create new item
         item = createVertexItem(v);
 

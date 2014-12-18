@@ -39,7 +39,7 @@
 #include <kcursor.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kglobalsettings.h>
 #include <kaboutdata.h>
 #include <kcomponentdata.h>

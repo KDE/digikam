@@ -57,7 +57,7 @@
 #include <ktoolinvocation.h>
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Libkdcraw includes
 
@@ -866,7 +866,7 @@ bool QueueMgrWindow::checkTargetAlbum(int queueId)
     {
         QString queueName              = d->queuePool->queueTitle(queueId);
         KUrl    processedItemsAlbumUrl = queue->settings().workingUrl;
-        kDebug() << "Target album for queue " << queueName << " is: " << processedItemsAlbumUrl.toLocalFile();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Target album for queue " << queueName << " is: " << processedItemsAlbumUrl.toLocalFile();
 
         if (processedItemsAlbumUrl.isEmpty())
         {
@@ -1038,7 +1038,7 @@ void QueueMgrWindow::slotAssignQueueSettings(const QString& title)
             AssignedBatchTools tools;
             tools.m_toolsList = q.aTools;
 
-            //kDebug() << tools.m_toolsList;
+            //qCDebug(DIGIKAM_GENERAL_LOG) << tools.m_toolsList;
 
             queue->setAssignedTools(tools);
             d->queuePool->slotQueueSelected(d->queuePool->currentIndex());

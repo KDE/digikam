@@ -28,7 +28,7 @@
 
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <threadweaver/JobCollection.h>
 #include <solid/device.h>
 
@@ -124,7 +124,7 @@ void ActionThread::slotThreadFinished()
 {
     if (isEmpty())
     {
-        kDebug() << "List of Pending Jobs is empty";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "List of Pending Jobs is empty";
         emit signalQueueProcessed();
     }
 }

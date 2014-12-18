@@ -39,7 +39,7 @@
 
 #include <kcodecs.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kstandarddirs.h>
 
 namespace

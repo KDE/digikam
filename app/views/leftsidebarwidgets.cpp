@@ -40,7 +40,7 @@
 
 #include <kcombobox.h>
 #include <kpushbutton.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kdialog.h>
 #include <QIcon>
 #include <kiconloader.h>

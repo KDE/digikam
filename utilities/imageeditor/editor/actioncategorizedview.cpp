@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kdeversion.h>
 #include <kcategorydrawer.h>
 

@@ -242,7 +242,7 @@ void GPSMarkerTiler::prepareTiles(const KGeoMap::GeoCoordinates& upperLeft, cons
 
     d->rectLevel.append(level);
 
-    kDebug() << "Listing" << lat1 << lat2 << lng1 << lng2;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Listing" << lat1 << lat2 << lng1 << lng2;
 
     DatabaseUrl u              = DatabaseUrl::fromAreaRange(lat1, lat2, lng1, lng2);
     KIO::Job* const currentJob = ImageLister::startListJob(u);

@@ -34,7 +34,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -405,13 +405,13 @@ void ImageIface::setSelection(const QString& caller, const FilterAction& action,
         img.size()       != selectionRect().size()
        )
     {
-        kDebug() << "Properties of image to overwrite selection differs than original image";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Properties of image to overwrite selection differs than original image";
         return;
     }
 
     if (img.isNull())
     {
-        kDebug() << "No image data to handle";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "No image data to handle";
         return;
     }
 
@@ -424,7 +424,7 @@ void ImageIface::setPreview(const DImg& img)
         img.sixteenBit() != previewSixteenBit()
        )
     {
-        kDebug() << "Properties of image differs than preview";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Properties of image differs than preview";
         return;
     }
 
@@ -432,7 +432,7 @@ void ImageIface::setPreview(const DImg& img)
 
     if (!data)
     {
-        kDebug() << "No preview image data to handle";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "No preview image data to handle";
         return;
     }
 
@@ -444,7 +444,7 @@ void ImageIface::setOriginal(const QString& caller, const FilterAction& action, 
 {
     if (img.isNull())
     {
-        kDebug() << "No image data to handle";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "No image data to handle";
         return;
     }
 

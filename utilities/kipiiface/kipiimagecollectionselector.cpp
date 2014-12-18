@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kdialog.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
@@ -250,7 +250,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
 
     // ------------------------------------------------------------------------------------
 
-    kDebug() << "Restoring view state";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Restoring view state";
 
     d->albumTreeView->loadState();
     d->albumSearchBar->loadState();
@@ -262,7 +262,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
 
 KipiImageCollectionSelector::~KipiImageCollectionSelector()
 {
-    kDebug() << "Saving view state";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Saving view state";
 
     d->albumTreeView->saveState();
     d->albumSearchBar->saveState();
@@ -284,7 +284,7 @@ QList<KIPI::ImageCollection> KipiImageCollectionSelector::selectedImageCollectio
     d->fillCollectionsFromCheckedModel(list,  d->searchModel, ext);
     d->fillCollectionsFromCheckedLabels(list, ext);
 
-    kDebug() << list.count() << " collection items selected";
+    qCDebug(DIGIKAM_GENERAL_LOG) << list.count() << " collection items selected";
 
     return list;
 }

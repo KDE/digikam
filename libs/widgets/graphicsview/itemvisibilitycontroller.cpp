@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 namespace Digikam
 {
@@ -390,7 +390,7 @@ void AnimationControl::syncProperties(QObject* const o)
 
 void AnimationControl::transitionToVisible(bool show, bool immediately)
 {
-    //kDebug() << "state" << state << "show" << show << items.size();
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "state" << state << "show" << show << items.size();
 
     if (show)
     {

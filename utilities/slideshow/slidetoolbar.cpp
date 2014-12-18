@@ -37,7 +37,7 @@
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kselectaction.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kmenu.h>
 
 // Local includes

@@ -32,7 +32,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kapplication.h>
 
 // Local includes
@@ -115,7 +115,7 @@ bool MaintenanceMngr::isRunning() const
 void MaintenanceMngr::setSettings(const MaintenanceSettings& settings)
 {
     d->settings = settings;
-    kDebug() << d->settings;
+    qCDebug(DIGIKAM_GENERAL_LOG) << d->settings;
 
     d->duration.start();
     stage1();
@@ -184,7 +184,7 @@ void MaintenanceMngr::slotToolCanceled(ProgressItem* tool)
 
 void MaintenanceMngr::stage1()
 {
-    kDebug() << "stage1";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "stage1";
 
     if (d->settings.newItems)
     {
@@ -217,7 +217,7 @@ void MaintenanceMngr::stage1()
 
 void MaintenanceMngr::stage2()
 {
-    kDebug() << "stage2";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "stage2";
 
     if (d->settings.thumbnails)
     {
@@ -239,7 +239,7 @@ void MaintenanceMngr::stage2()
 
 void MaintenanceMngr::stage3()
 {
-    kDebug() << "stage3";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "stage3";
 
     if (d->settings.fingerPrints)
     {
@@ -261,7 +261,7 @@ void MaintenanceMngr::stage3()
 
 void MaintenanceMngr::stage4()
 {
-    kDebug() << "stage4";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "stage4";
 
     if (d->settings.duplicates)
     {
@@ -277,7 +277,7 @@ void MaintenanceMngr::stage4()
 
 void MaintenanceMngr::stage5()
 {
-    kDebug() << "stage5";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "stage5";
 
 #ifdef HAVE_KFACE
     if (d->settings.faceManagement)
@@ -297,7 +297,7 @@ void MaintenanceMngr::stage5()
 
 void MaintenanceMngr::stage6()
 {
-    kDebug() << "stage6";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "stage6";
 
     if (d->settings.qualitySort && d->settings.quality.enableSorter)
     {
@@ -319,7 +319,7 @@ void MaintenanceMngr::stage6()
 
 void MaintenanceMngr::stage7()
 {
-    kDebug() << "stage7";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "stage7";
 
     if (d->settings.metadataSync)
     {

@@ -28,7 +28,7 @@
 
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -106,7 +106,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
 {
     CameraFolderItem* parentItem = findFolder(folder);
 
-    kDebug() << "Adding Subfolder " << subFolder
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Adding Subfolder " << subFolder
              << " of folder " << folder;
 
     if (parentItem)
@@ -121,7 +121,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
         path += subFolder;
         CameraFolderItem* item = new CameraFolderItem(parentItem, subFolder, path, pixmap);
 
-        kDebug() << "Added ViewItem with path "
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Added ViewItem with path "
                  << item->folderPath();
 
         item->setCount(nbItems);

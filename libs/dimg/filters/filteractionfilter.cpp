@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -182,7 +182,7 @@ void FilterActionFilter::filterImage()
 
     foreach(const FilterAction& action, d->actions)
     {
-        kDebug() << "Replaying action" << action.identifier();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Replaying action" << action.identifier();
 
         if (action.isNull())
         {

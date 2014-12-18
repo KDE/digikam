@@ -36,7 +36,7 @@
 #include <klocalizedstring.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Libkdcraw includes
 
@@ -139,7 +139,7 @@ const QString SchemaUpdater::getLastErrorMessage()
 
 bool SchemaUpdater::update()
 {
-    kDebug() << "SchemaUpdater update";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "SchemaUpdater update";
     bool success = startUpdates();
 
     // cancelled?
@@ -239,7 +239,7 @@ bool SchemaUpdater::startUpdates()
     {
         // Find out schema version of db file
         readVersionSettings();
-        kDebug() << "Have a database structure version " << d->currentVersion.toInt();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Have a database structure version " << d->currentVersion.toInt();
 
         // We absolutely require the DBVersion setting
         if (!d->currentVersion.isValid())
@@ -297,7 +297,7 @@ bool SchemaUpdater::startUpdates()
     }
     else
     {
-        kDebug() << "No database file available";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "No database file available";
         // Legacy handling?
 
         // first test if there are older files that need to be upgraded.
@@ -394,7 +394,7 @@ bool SchemaUpdater::endWrapSchemaUpdateStep(bool stepOperationSuccess, const QSt
             // error or cancelled?
             if (!d->observer->continueQuery())
             {
-                kDebug() << "Schema update cancelled by user";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Schema update cancelled by user";
             }
             else if (!d->setError)
             {
@@ -406,14 +406,14 @@ bool SchemaUpdater::endWrapSchemaUpdateStep(bool stepOperationSuccess, const QSt
         return false;
     }
 
-    kDebug() << "Success updating to v5";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Success updating to v5";
     d->backend->commitTransaction();
     return true;
 }
 
 bool SchemaUpdater::makeUpdates()
 {
-    kDebug() << "makeUpdates " << d->currentVersion.toInt() << " to " << schemaVersion();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "makeUpdates " << d->currentVersion.toInt() << " to " << schemaVersion();
 
     if (d->currentVersion.toInt() < schemaVersion())
     {
@@ -440,7 +440,7 @@ bool SchemaUpdater::makeUpdates()
                 return false;
             }
 
-            kDebug() << "Success updating v4 to v6";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Success updating v4 to v6";
 
             // Still set these even in >= 1.4 because 0.10 - 1.3 may want to apply the updates if not set
             setLegacySettingEntries();
@@ -466,7 +466,7 @@ bool SchemaUpdater::makeUpdates()
                 return false;
             }
 
-            kDebug() << "Success updating to v" << d->currentVersion;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Success updating to v" << d->currentVersion;
         }
 
         // add future updates here
@@ -815,7 +815,7 @@ static QStringList cleanUserFilterString(const QString& filterString)
 
 bool SchemaUpdater::updateV4toV7()
 {
-    kDebug() << "updateV4toV7";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "updateV4toV7";
 
     if (d->observer)
     {
@@ -846,7 +846,7 @@ bool SchemaUpdater::updateV4toV7()
         return false;
     }
 
-    kDebug() << "Moved tables";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Moved tables";
     // --- Drop some triggers and indices ---
 
     // Don't check for errors here. The "IF EXISTS" clauses seem not supported in SQLite
@@ -869,7 +869,7 @@ bool SchemaUpdater::updateV4toV7()
         d->observer->schemaUpdateProgress(i18n("Prepared table creation"));
     }
 
-    kDebug() << "Dropped triggers";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Dropped triggers";
 
     // --- Create new tables ---
 
@@ -948,7 +948,7 @@ bool SchemaUpdater::updateV4toV7()
         d->observer->schemaUpdateProgress(i18n("Configured one album root"));
     }
 
-    kDebug() << "Inserted album root";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Inserted album root";
 
     // --- With the album root, populate albums ---
 
@@ -974,7 +974,7 @@ bool SchemaUpdater::updateV4toV7()
         d->observer->schemaUpdateProgress(i18n("Imported albums"));
     }
 
-    kDebug() << "Populated albums";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Populated albums";
 
     // --- Add images ---
 
@@ -1010,7 +1010,7 @@ bool SchemaUpdater::updateV4toV7()
         d->observer->schemaUpdateProgress(i18n("Imported images information"));
     }
 
-    kDebug() << "Populated Images";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Populated Images";
 
     // --- Port searches ---
 
@@ -1061,7 +1061,7 @@ bool SchemaUpdater::updateV4toV7()
         return false;
     }
 
-    kDebug() << "Created triggers";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Created triggers";
 
     // --- Populate name filters ---
 
@@ -1085,7 +1085,7 @@ bool SchemaUpdater::updateV4toV7()
     configAudioFilter.subtract(defaultAudioFilter.toSet());
 
     d->albumDB->setUserFilterSettings(configImageFilter.toList(), configVideoFilter.toList(), configAudioFilter.toList());
-    kDebug() << "Set initial filter settings with user settings" << configImageFilter;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Set initial filter settings with user settings" << configImageFilter;
 
     if (d->observer)
     {
@@ -1211,7 +1211,7 @@ bool SchemaUpdater::updateV4toV7()
 
     d->currentRequiredVersion = 5;
     d->currentVersion = 7;
-    kDebug() << "Returning true from updating to 5";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Returning true from updating to 5";
     return true;
 }
 

@@ -27,7 +27,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kglobal.h>
 
 // Local includes
@@ -129,7 +129,7 @@ bool HistoryVertexProperties::operator==(const HistoryImageId& other) const
     {
         if (ImageScanner::sameReferredImage(id, other))
         {
-            //kDebug() << id << "is the same as" << other;
+            //qCDebug(DIGIKAM_GENERAL_LOG) << id << "is the same as" << other;
             return true;
         }
     }
@@ -239,13 +239,13 @@ ImageHistoryGraphData::addVertex(const HistoryImageId& imageId)
 
     Vertex v;
     QList<ImageInfo> infos;
-    //kDebug() << "Adding vertex" << imageId.m_uuid.left(6) << imageId.fileName();
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Adding vertex" << imageId.m_uuid.left(6) << imageId.fileName();
 
     // find by UUID
 
     // find by HistoryImageId (most notably, by UUID)
     v = findVertexByProperties(imageId);
-    //kDebug() << "Found by properties:" << (v.isNull() ? -1 : int(v));
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Found by properties:" << (v.isNull() ? -1 : int(v));
 
     if (v.isNull())
     {
@@ -253,7 +253,7 @@ ImageHistoryGraphData::addVertex(const HistoryImageId& imageId)
         foreach(qlonglong id, ImageScanner::resolveHistoryImageId(imageId))
         {
             ImageInfo info(id);
-            //kDebug() << "Found info id:" << info.id();
+            //qCDebug(DIGIKAM_GENERAL_LOG) << "Found info id:" << info.id();
             infos << info;
 
             if (v.isNull())
@@ -264,7 +264,7 @@ ImageHistoryGraphData::addVertex(const HistoryImageId& imageId)
     }
 
     applyProperties(v, infos, QList<HistoryImageId>() << imageId);
-    //kDebug() << "Returning vertex" << v;
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Returning vertex" << v;
     return v;
 }
 
@@ -282,7 +282,7 @@ HistoryGraph::Vertex ImageHistoryGraphData::addVertex(const ImageInfo& info)
     // Simply find by image id
     v = findVertexByProperties(info);
 
-    //kDebug() << "Find by id" << info.id() << ": found" << v.isNull();
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Find by id" << info.id() << ": found" << v.isNull();
     if (v.isNull())
     {
         // Find by contents
@@ -293,12 +293,12 @@ HistoryGraph::Vertex ImageHistoryGraphData::addVertex(const ImageInfo& info)
             v = findVertexByProperties(uuid);
         }
 
-        //kDebug() << "Find by uuid" << uuid << ": found" << v.isNull();
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "Find by uuid" << uuid << ": found" << v.isNull();
         if (v.isNull())
         {
             id = info.historyImageId();
             v  = findVertexByProperties(id);
-            //kDebug() << "Find by h-i-m" << ": found" << v.isNull();
+            //qCDebug(DIGIKAM_GENERAL_LOG) << "Find by h-i-m" << ": found" << v.isNull();
         }
 
         // Need to add new vertex. Do this through the method which will resolve the history id
@@ -309,7 +309,7 @@ HistoryGraph::Vertex ImageHistoryGraphData::addVertex(const ImageInfo& info)
     }
 
     applyProperties(v, QList<ImageInfo>() << info, QList<HistoryImageId>() << id);
-    //kDebug() << "Returning vertex" << v << properties(v).infos.size();
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Returning vertex" << v << properties(v).infos.size();
     return v;
 }
 
@@ -624,7 +624,7 @@ void ImageHistoryGraph::addRelations(const QList<QPair<qlonglong, qlonglong> >& 
 
         v1 = d->addVertex(pair.first);
         v2 = d->addVertex(pair.second);
-        //kDebug() << "Adding" << v1 << "->" << v2;
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "Adding" << v1 << "->" << v2;
         d->addEdge(v1, v2);
     }
 }
@@ -649,7 +649,7 @@ void ImageHistoryGraph::reduceEdges()
         if (!d->properties(e).actions.isEmpty())
         {
             // TODO: conflict resolution
-            kDebug() << "Conflicting history information: Edge removed by transitiveReduction is not empty.";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Conflicting history information: Edge removed by transitiveReduction is not empty.";
         }
     }
 

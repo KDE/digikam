@@ -44,7 +44,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Libkdcraw includes
 
@@ -498,14 +498,14 @@ void CollectionScanner::completeScan()
 
     if (d->deferredFileScanning)
     {
-        kDebug() << "Complete scan (file scanning deferred) took:" << time.elapsed() << "msecs.";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Complete scan (file scanning deferred) took:" << time.elapsed() << "msecs.";
         emit finishedCompleteScan();
         return;
     }
 
     completeScanCleanupPart();
 
-    kDebug() << "Complete scan took:" << time.elapsed() << "msecs.";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Complete scan took:" << time.elapsed() << "msecs.";
 }
 
 void CollectionScanner::finishCompleteScan(const QStringList& albumPaths)
@@ -992,7 +992,7 @@ int CollectionScanner::checkAlbum(const CollectionLocation& location, const QStr
 
             if (!src.isNull())
             {
-                //kDebug() << "Identified album" << src.albumId << "as source of new album" << fi.filePath();
+                //qCDebug(DIGIKAM_GENERAL_LOG) << "Identified album" << src.albumId << "as source of new album" << fi.filePath();
                 DatabaseAccess().db()->copyAlbumProperties(src.albumId, albumID);
                 d->establishedSourceAlbums[albumID] = src.albumId;
             }
@@ -1084,7 +1084,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
             }
             else
             {
-                //kDebug() << "Adding item " << fi->fileName();
+                //qCDebug(DIGIKAM_GENERAL_LOG) << "Adding item " << fi->fileName();
 
                 scanNewFile(*fi, albumID);
 
@@ -1343,7 +1343,7 @@ void CollectionScanner::copyFileProperties(const ImageInfo& source, const ImageI
     ImageInfo dest(d);
     DatabaseOperationGroup group;
 
-    kDebug() << "Copying properties from" << source.id() << "to" << dest.id();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Copying properties from" << source.id() << "to" << dest.id();
 
     // Rating, creation dates
     DatabaseFields::ImageInformation imageInfoFields = DatabaseFields::Rating       |
@@ -1400,7 +1400,7 @@ void CollectionScanner::itemsWereRemoved(const QList<qlonglong> &removedIds)
 
     // manage relations
     QList<qlonglong> relatedImages = DatabaseAccess().db()->getOneRelatedImageEach(removedIds, DatabaseRelation::DerivedFrom);
-    kDebug() << "Removed items:" << removedIds << "related items:" << relatedImages;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Removed items:" << removedIds << "related items:" << relatedImages;
 
     if (d->recordHistoryIds)
     {
@@ -1427,7 +1427,7 @@ void CollectionScanner::completeHistoryScanning()
     historyScanningStage2(ids);
 
     ids                  = DatabaseAccess().db()->getItemIDsInTag(needTaggingTag);
-    kDebug() << "items to tag" << ids;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "items to tag" << ids;
     historyScanningStage3(ids);
 }
 
@@ -1694,7 +1694,7 @@ void CollectionScanner::removeStaleAlbums()
 
     for (it = m_foldersToBeDeleted.constBegin(); it != m_foldersToBeDeleted.constEnd(); ++it)
     {
-        kDebug() << "Removing album " << (*it).albumRoot + '/' + (*it).url;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Removing album " << (*it).albumRoot + '/' + (*it).url;
         access.db()->deleteAlbum((*it).id);
     }
 }
@@ -1724,7 +1724,7 @@ void CollectionScanner::removeStaleFiles()
 
     for (it = m_filesToBeDeleted.constBegin(); it != m_filesToBeDeleted.constEnd(); ++it)
     {
-        kDebug() << "Removing: " << (*it).first << " in "
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Removing: " << (*it).first << " in "
                  << (*it).second;
         access.db()->deleteItem( (*it).second, (*it).first );
     }
@@ -1867,7 +1867,7 @@ void CollectionScanner::scanAlbum(const QString& albumRoot, const QString& album
             }
             else
             {
-                kDebug() << "Adding item " << fi->fileName();
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Adding item " << fi->fileName();
                 addItem(albumID, albumRoot, album, fi->fileName());
             }
         }
@@ -2066,7 +2066,7 @@ void CollectionScanner::scanAlbum(const QString& albumRoot, const QString& album
 
 void CollectionScanner::scanOneAlbum(const QString& albumRoot, const QString& album)
 {
-    kDebug() << "CollectionScanner::scanOneAlbum " << albumRoot << "/" << album;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "CollectionScanner::scanOneAlbum " << albumRoot << "/" << album;
     QDir dir(albumRoot + album);
     if (!dir.exists() || !dir.isReadable())
     {
@@ -2080,7 +2080,7 @@ void CollectionScanner::scanOneAlbum(const QString& albumRoot, const QString& al
 
         // get sub albums, but only direct subalbums (Album/ *, not Album/ * / *)
         currAlbumList = DatabaseAccess().db()->getSubalbumsForPath(albumRoot, album, true);
-        kDebug() << "currAlbumList is " << currAlbumList;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "currAlbumList is " << currAlbumList;
 
         const QFileInfoList* infoList = dir.entryInfoList(QDir::Dirs);
         if (!infoList)
@@ -2112,7 +2112,7 @@ void CollectionScanner::scanOneAlbum(const QString& albumRoot, const QString& al
         for (QStringList::iterator it = newAlbumList.begin();
              it != newAlbumList.end(); ++it)
         {
-            kDebug() << "New Album: " << *it;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "New Album: " << *it;
 
             QFileInfo fi(albumRoot + *it);
             DatabaseAccess().db()->addAlbum(albumRoot, *it, QString(), fi.lastModified().date(), QString());
@@ -2193,7 +2193,7 @@ void CollectionScanner::removeInvalidAlbums(const QString& albumRoot)
     DatabaseTransaction transaction(&access);
     for (QValueList<AlbumShortInfo>::iterator it = toBeDeleted.begin(); it != toBeDeleted.end(); ++it)
     {
-        kDebug() << "Removing album " << (*it).albumRoot + '/' + (*it).url;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Removing album " << (*it).albumRoot + '/' + (*it).url;
         access.db()->deleteAlbum((*it).id);
     }
 }

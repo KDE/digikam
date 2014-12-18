@@ -57,7 +57,7 @@ extern "C"
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kglobal.h>
 
 // Libkdcraw includes
@@ -188,10 +188,10 @@ DImg::~DImg()
 
 DImg& DImg::operator=(const DImg& image)
 {
-    //kDebug() << "Original image: " << m_priv->imageHistory.entries().count() << " | " << &m_priv;
-    //kDebug() << "New image: " << image.m_priv->imageHistory.entries().count() << " | " << &(image.m_priv);
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Original image: " << m_priv->imageHistory.entries().count() << " | " << &m_priv;
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "New image: " << image.m_priv->imageHistory.entries().count() << " | " << &(image.m_priv);
     m_priv = image.m_priv;
-    //kDebug() << "Original new image: " << m_priv->imageHistory.entries().count() << " | " << &m_priv;
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Original new image: " << m_priv->imageHistory.entries().count() << " | " << &m_priv;
     return *this;
 }
 
@@ -422,13 +422,13 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
     {
         case (NONE):
         {
-            kDebug() << filePath << " : Unknown image format !!!";
+            qCDebug(DIGIKAM_GENERAL_LOG) << filePath << " : Unknown image format !!!";
             return false;
         }
 
         case (JPEG):
         {
-            kDebug() << filePath << " : JPEG file identified";
+            qCDebug(DIGIKAM_GENERAL_LOG) << filePath << " : JPEG file identified";
             JPEGLoader loader(this);
             loader.setLoadFlags(loadFlags);
 
@@ -446,7 +446,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
 
         case (TIFF):
         {
-            kDebug() << filePath << " : TIFF file identified";
+            qCDebug(DIGIKAM_GENERAL_LOG) << filePath << " : TIFF file identified";
             TIFFLoader loader(this);
             loader.setLoadFlags(loadFlags);
 
@@ -464,7 +464,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
 
         case (PNG):
         {
-            kDebug() << filePath << " : PNG file identified";
+            qCDebug(DIGIKAM_GENERAL_LOG) << filePath << " : PNG file identified";
             PNGLoader loader(this);
             loader.setLoadFlags(loadFlags);
 
@@ -482,7 +482,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
 
         case (PPM):
         {
-            kDebug() << filePath << " : PPM file identified";
+            qCDebug(DIGIKAM_GENERAL_LOG) << filePath << " : PPM file identified";
             PPMLoader loader(this);
             loader.setLoadFlags(loadFlags);
 
@@ -500,7 +500,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
 
         case (RAW):
         {
-            kDebug() << filePath << " : RAW file identified";
+            qCDebug(DIGIKAM_GENERAL_LOG) << filePath << " : RAW file identified";
             RAWLoader loader(this, rawDecodingSettings);
             loader.setLoadFlags(loadFlags);
 
@@ -520,7 +520,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
 #ifdef HAVE_JASPER
         case (JP2K):
         {
-            kDebug() << filePath << " : JPEG2000 file identified";
+            qCDebug(DIGIKAM_GENERAL_LOG) << filePath << " : JPEG2000 file identified";
             JP2KLoader loader(this);
             loader.setLoadFlags(loadFlags);
 
@@ -539,7 +539,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
 
         case (PGF):
         {
-            kDebug() << filePath << " : PGF file identified";
+            qCDebug(DIGIKAM_GENERAL_LOG) << filePath << " : PGF file identified";
             PGFLoader loader(this);
             loader.setLoadFlags(loadFlags);
 
@@ -557,7 +557,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
 
         default:
         {
-            kDebug() << filePath << " : QIMAGE file identified";
+            qCDebug(DIGIKAM_GENERAL_LOG) << filePath << " : QIMAGE file identified";
             QImageLoader loader(this);
             loader.setLoadFlags(loadFlags);
 
@@ -646,7 +646,7 @@ bool DImg::save(const QString& filePath, FORMAT frm, DImgLoaderObserver* const o
 
 bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserver* const observer)
 {
-    kDebug() << "Saving to " << filePath << " with format: " << format;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Saving to " << filePath << " with format: " << format;
     if (isNull())
     {
         return false;
@@ -740,7 +740,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 
     if (!fileInfo.exists())
     {
-        kDebug() << "File \"" << filePath << "\" does not exist";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "File \"" << filePath << "\" does not exist";
         return NONE;
     }
 
@@ -784,7 +784,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 
     if (!f)
     {
-        kDebug() << "Failed to open file \"" << filePath << "\"";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to open file \"" << filePath << "\"";
         return NONE;
     }
 
@@ -794,7 +794,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 
     if (fread(&header, headerLen, 1, f) != 1)
     {
-        kDebug() << "Failed to read header of file \"" << filePath << "\"";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to read header of file \"" << filePath << "\"";
         fclose(f);
         return NONE;
     }
@@ -1562,7 +1562,7 @@ DImg DImg::copy(int x, int y, int w, int h) const
 {
     if (isNull() || w <= 0 || h <= 0)
     {
-        kDebug() << " : return null image!";
+        qCDebug(DIGIKAM_GENERAL_LOG) << " : return null image!";
         return DImg();
     }
 
@@ -2732,7 +2732,7 @@ void DImg::convertDepth(int depth)
 
     if (depth != 32 && depth != 64)
     {
-        kDebug() << " : wrong color depth!";
+        qCDebug(DIGIKAM_GENERAL_LOG) << " : wrong color depth!";
         return;
     }
 

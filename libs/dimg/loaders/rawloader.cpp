@@ -36,7 +36,7 @@
 // KDE includes
 
 #include <kstandarddirs.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -172,7 +172,7 @@ bool RAWLoader::loadedFromRawData(const QByteArray& data, int width, int height,
 
         if (!image)
         {
-            kDebug() << "Failed to allocate memory for loading raw file";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to allocate memory for loading raw file";
             return false;
         }
 
@@ -228,7 +228,7 @@ bool RAWLoader::loadedFromRawData(const QByteArray& data, int width, int height,
 
         if (!image)
         {
-            kDebug() << "Failed to allocate memory for loading raw file";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to allocate memory for loading raw file";
             return false;
         }
 

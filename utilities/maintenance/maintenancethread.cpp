@@ -25,7 +25,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <threadweaver/JobCollection.h>
 #include <solid/device.h>
 
@@ -165,7 +165,7 @@ void MaintenanceThread::slotThreadFinished()
 {
     if (isEmpty())
     {
-        kDebug() << "List of Pending Jobs is empty";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "List of Pending Jobs is empty";
         emit signalCompleted();
     }
 }

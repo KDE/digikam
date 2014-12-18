@@ -25,7 +25,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <qtest_kde.h>
 
 // Local includes

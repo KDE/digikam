@@ -41,7 +41,7 @@
 #include <kdiskfreespaceinfo.h>
 #include <kaboutdata.h>
 #include <kcomponentdata.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kglobal.h>
 
 namespace Digikam
@@ -117,7 +117,7 @@ bool UndoCache::putData(int level, const DImg& img) const
     KDiskFreeSpaceInfo info = KDiskFreeSpaceInfo::freeSpaceInfo(d->cacheDir);
     
     unsigned long fspace = (unsigned long)(info.available()/1024.0/1024.0);
-    kDebug() << "Free space available in Editor cache [" << d->cacheDir << "] in Mbytes: " << fspace;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Free space available in Editor cache [" << d->cacheDir << "] in Mbytes: " << fspace;
     
     if (file.exists() || 
         !file.open(QIODevice::WriteOnly) || 

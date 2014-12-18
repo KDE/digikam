@@ -42,7 +42,7 @@
 #include <kiconloader.h>
 #include <kseparator.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kdialog.h>
 #include <kkeysequencewidget.h>
 
@@ -396,7 +396,7 @@ AlbumList TagEditDlg::createTAlbum(TAlbum* const mainRootAlbum, const QString& t
             }
 
             QStringList tagsList = hierarchy.split('/', QString::SkipEmptyParts);
-            kDebug() << tagsList;
+            qCDebug(DIGIKAM_GENERAL_LOG) << tagsList;
 
             if (!tagsList.isEmpty())
             {
@@ -415,7 +415,7 @@ AlbumList TagEditDlg::createTAlbum(TAlbum* const mainRootAlbum, const QString& t
                         tagPath = QString("%1/%2").arg(root->tagPath()).arg(tag);
                     }
 
-                    kDebug() << tag << " :: " << tagPath;
+                    qCDebug(DIGIKAM_GENERAL_LOG) << tag << " :: " << tagPath;
 
                     if (!tag.isEmpty())
                     {

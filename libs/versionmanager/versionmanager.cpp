@@ -34,7 +34,7 @@
 #include <kdiskfreespaceinfo.h>
 #include <kglobal.h>
 #include <kurl.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -277,7 +277,7 @@ void VersionNameCreator::checkNeedNewVersion()
     // First we check if we have any other files available.
     // The resolved initial history contains only referred files found in the collection
     // Note: The loaded file will have type Current
-    kDebug() << m_resolvedInitialHistory.hasReferredImageOfType(HistoryImageId::Original)
+    qCDebug(DIGIKAM_GENERAL_LOG) << m_resolvedInitialHistory.hasReferredImageOfType(HistoryImageId::Original)
              << m_resolvedInitialHistory.hasReferredImageOfType(HistoryImageId::Intermediate)
              << m_fromRaw << q->workspaceFileFormats().contains(m_loadedFile.format);
 
@@ -336,12 +336,12 @@ void VersionNameCreator::setSaveFormat(const QString& override)
 
 void VersionNameCreator::setSaveFileName()
 {
-    kDebug() << "need new version" << m_newVersion;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "need new version" << m_newVersion;
 
     VersionNamingScheme* scheme = q->namingScheme();
     // initialize m_baseName, m_version, and m_intermediateCounter for intermediates
     m_baseName = scheme->baseName(m_loadedFile.path, m_loadedFile.fileName, &m_version, &m_intermediateCounter);
-    kDebug() << "analyzing file" << m_loadedFile.fileName << m_version << m_intermediateCounter;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "analyzing file" << m_loadedFile.fileName << m_version << m_intermediateCounter;
 
     if (!m_newVersion)
     {
@@ -408,7 +408,7 @@ void VersionNameCreator::initOperation()
 void VersionNameCreator::checkIntermediates()
 {
     // call when task has been determined
-    kDebug() << "Will replace" << bool(m_operation.tasks & VersionFileOperation::Replace)
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Will replace" << bool(m_operation.tasks & VersionFileOperation::Replace)
              << "save after each session" << bool(m_settings.saveIntermediateVersions & VersionManagerSettings::AfterEachSession)
              << "save after raw" << bool(m_settings.saveIntermediateVersions & VersionManagerSettings::AfterRawConversion)
              << "save when not repro" << bool(m_settings.saveIntermediateVersions & VersionManagerSettings::WhenNotReproducible);
@@ -431,7 +431,7 @@ void VersionNameCreator::checkIntermediates()
     int firstStep = m_resolvedInitialHistory.size();
     int lastStep  = m_currentHistory.size() - 2; // index of last but one entry
 
-    kDebug() << "initial history" << m_resolvedInitialHistory.size()
+    qCDebug(DIGIKAM_GENERAL_LOG) << "initial history" << m_resolvedInitialHistory.size()
              << "current history" << m_currentHistory.size()
              << "first step" << firstStep << "last step" << lastStep;
 
@@ -470,7 +470,7 @@ void VersionNameCreator::checkIntermediates()
     {
         for (int i = firstStep; i <= lastStep; ++i)
         {
-            kDebug() << "step" << i 
+            qCDebug(DIGIKAM_GENERAL_LOG) << "step" << i 
                      << "is reproducable" << (m_currentHistory.action(i).category() == FilterAction::ReproducibleFilter);
 
             switch (m_currentHistory.action(i).category())
@@ -485,7 +485,7 @@ void VersionNameCreator::checkIntermediates()
         }
     }
 
-    kDebug() << "Save intermediates after steps" << m_operation.intermediates.keys();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Save intermediates after steps" << m_operation.intermediates.keys();
 
     if (!m_operation.intermediates.isEmpty())
     {

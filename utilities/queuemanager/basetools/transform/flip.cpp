@@ -33,7 +33,7 @@
 #include <kcombobox.h>
 #include <klocalizedstring.h>
 #include <kvbox.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kglobal.h>
 
 // Local includes
@@ -119,7 +119,7 @@ bool Flip::toolOperations()
                 break;
 
             default:
-                kDebug() << "Unknown flip action";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Unknown flip action";
                 return false;
                 break;
         }

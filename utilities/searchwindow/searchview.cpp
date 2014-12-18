@@ -38,7 +38,7 @@
 #include <klocalizedstring.h>
 #include <kpushbutton.h>
 #include <kstandardguiitem.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kapplication.h>
 
 // Local includes
@@ -295,7 +295,7 @@ QString SearchView::write() const
     SearchXmlWriter writer;
     writeGroups(writer);
     writer.finish();
-    kDebug() << writer.xml();
+    qCDebug(DIGIKAM_GENERAL_LOG) << writer.xml();
     return writer.xml();
 }
 

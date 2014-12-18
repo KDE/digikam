@@ -35,7 +35,7 @@
 #include <kaction.h>
 #include <klinkitemselectionmodel.h>
 #include <kmenu.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // local includes
 
@@ -95,9 +95,9 @@ QSize TableViewItemDelegate::sizeHint(const QStyleOptionViewItem& option, const 
     /// @todo Debug output to find OSX crash
     if (columnIndex>=s->tableViewModel->columnCount(QModelIndex()))
     {
-        kDebug()<<"------ CRASH AHEAD: tableViewModelIndex = " << tableViewModelIndex;
-        kDebug()<<"------ CRASH AHEAD: s->tableViewModel->columnCount(QModelIndex()) = " << s->tableViewModel->columnCount(QModelIndex());
-        kDebug()<<"------ CRASH AHEAD: columnIndex: " << columnIndex;
+        qCDebug(DIGIKAM_GENERAL_LOG)<<"------ CRASH AHEAD: tableViewModelIndex = " << tableViewModelIndex;
+        qCDebug(DIGIKAM_GENERAL_LOG)<<"------ CRASH AHEAD: s->tableViewModel->columnCount(QModelIndex()) = " << s->tableViewModel->columnCount(QModelIndex());
+        qCDebug(DIGIKAM_GENERAL_LOG)<<"------ CRASH AHEAD: columnIndex: " << columnIndex;
     }
 
     TableViewColumn* const columnObject = s->tableViewModel->getColumnObject(columnIndex);

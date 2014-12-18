@@ -38,7 +38,7 @@
 
 // Kde include
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -168,12 +168,12 @@ void ImgQSort::startAnalyse()
         // Returns blur value between 0 and 1.
         // If NaN is returned just assign NoPickLabel
         blur  = blurdetector();
-        kDebug() << "Amount of Blur present in image is  : " << blur;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Amount of Blur present in image is  : " << blur;
 
         // Returns blur value between 1 and 32767.
         // If 1 is returned just assign NoPickLabel
         blur2 = blurdetector2();
-        kDebug() << "Amount of Blur present in image [using LoG Filter] is : " << blur2;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Amount of Blur present in image [using LoG Filter] is : " << blur2;
     }
 
     if (d->imq.detectNoise)
@@ -181,21 +181,21 @@ void ImgQSort::startAnalyse()
         // Some images give very low noise value. Assign NoPickLabel in that case.
         // Returns noise value between 0 and 1.
         noise = noisedetector();
-        kDebug() << "Amount of Noise present in image is : " << noise;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Amount of Noise present in image is : " << noise;
     }
 
     if (d->imq.detectCompression)
     {
         // Returns number of blocks in the image.
         compressionlevel = compressiondetector();
-        kDebug() << "Amount of compression artifacts present in image is : " << compressionlevel;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Amount of compression artifacts present in image is : " << compressionlevel;
     }
 
     if (d->imq.detectOverexposure)
     {
         // Returns if there is overexposure in the image
         exposurelevel = exposureamount();
-        kDebug() << "Exposure level present in image is : " << exposurelevel;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Exposure level present in image is : " << exposurelevel;
     }
 
 #ifdef TRACE
@@ -327,9 +327,9 @@ double ImgQSort::blurdetector() const
 
     double blurresult = average / maxval;
 
-    kDebug() << "The average of the edge intensity is " << average;
-    kDebug() << "The maximum of the edge intensity is " << maxval;
-    kDebug() << "The result of the edge intensity is  " << blurresult;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "The average of the edge intensity is " << average;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "The maximum of the edge intensity is " << maxval;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "The result of the edge intensity is  " << blurresult;
 
     return blurresult;
 }
@@ -339,7 +339,7 @@ short ImgQSort::blurdetector2() const
     // Algorithm using Laplacian of Gaussian Filter to detect blur.
     Mat out;
     Mat noise_free;
-    kDebug() << "Algorithm using LoG Filter started";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Algorithm using LoG Filter started";
 
     // To remove noise from the image
     GaussianBlur(d->src_gray, noise_free, Size(3,3), 0, 0, BORDER_DEFAULT);
@@ -404,7 +404,7 @@ double ImgQSort::noisedetector() const
     // Array to store the centers of the clusters.
     CvArr* centers = 0;
 
-    kDebug() << "Everything ready for the cvKmeans2 or as it seems to";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Everything ready for the cvKmeans2 or as it seems to";
 
     //-- KMEANS ---------------------------------------------------------------------------------------------
 
@@ -414,7 +414,7 @@ double ImgQSort::noisedetector() const
                   cvTermCriteria(CV_TERMCRIT_EPS + CV_TERMCRIT_ITER, 10, 1.0), 3, 0, 0, centers, 0);
     }
 
-    kDebug() << "cvKmeans2 successfully run";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "cvKmeans2 successfully run";
 
     //-- Divide into cluster->columns, sample->rows, in matrix standard deviation ---------------------------
 
@@ -436,7 +436,7 @@ double ImgQSort::noisedetector() const
         rowPosition[columnIndex]++;
     }
 
-    kDebug() << "array indexed, and ready to find maximum";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "array indexed, and ready to find maximum";
 
     //-- Finding maximum of the rowPosition array ------------------------------------------------------------
 
@@ -453,7 +453,7 @@ double ImgQSort::noisedetector() const
     QString maxString;
     maxString.append(QString::number(max));
 
-    kDebug() << QString("maximum declared = %1").arg(maxString);
+    qCDebug(DIGIKAM_GENERAL_LOG) << QString("maximum declared = %1").arg(maxString);
 
     //-- Divide and conquer ---------------------------------------------------------------------------------
 
@@ -480,7 +480,7 @@ double ImgQSort::noisedetector() const
         ptr = reinterpret_cast<float*>(sd->data.ptr);
     }
 
-    kDebug() << "The rowPosition array is ready!";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "The rowPosition array is ready!";
 
     for (uint i=0 ; runningFlag() && (i < d->neimage.numPixels()) ; i++)
     {
@@ -509,7 +509,7 @@ double ImgQSort::noisedetector() const
         rPosition[columnIndex] = rPosition[columnIndex] + 1;
     }
 
-    kDebug() << "sd matrix creation over!";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "sd matrix creation over!";
 
     //-- This part of the code would involve the sd matrix and make the mean and the std of the data -------------
 
@@ -549,7 +549,7 @@ double ImgQSort::noisedetector() const
         }
     }
 
-    kDebug() << "Make the mean and the std of the data";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Make the mean and the std of the data";
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -559,7 +559,7 @@ double ImgQSort::noisedetector() const
         stdStorePtr  = reinterpret_cast<float*>(stdStore->data.ptr);
     }
 
-    kDebug() << "Done with the basic work of storing the mean and the std";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Done with the basic work of storing the mean and the std";
 
     //-- Calculating weighted mean, and weighted std -----------------------------------------------------------
 
@@ -602,7 +602,7 @@ double ImgQSort::noisedetector() const
         info.append(QString::number(weightedStd));
     }
 
-    kDebug() << "Info : " << info;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Info : " << info;
 
     // -- adaptation ---------------------------------------------------------------------------------------
 
@@ -620,7 +620,7 @@ double ImgQSort::noisedetector() const
 
         noiseresult = ((datasd[0]/2)+(datasd[1]/2)+(datasd[2]/2))/3;
 
-        kDebug() << "All is completed";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "All is completed";
 
         //-- releasing matrices and closing files ----------------------------------------------------------------------
 

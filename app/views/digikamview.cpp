@@ -35,7 +35,7 @@
 // KDE includes
 
 #include <kapplication.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kdialog.h>
 #include <kmessagebox.h>
 #include <ktoolinvocation.h>
@@ -1108,7 +1108,7 @@ void DigikamView::getForwardHistory(QStringList& titles)
 
 void DigikamView::slotGotoAlbumAndItem(const ImageInfo& imageInfo)
 {
-    kDebug() << "going to " << imageInfo;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "going to " << imageInfo;
 
     emit signalNoCurrentItem();
 
@@ -1569,7 +1569,7 @@ void DigikamView::slotFitToWindow()
     else if (viewMode() == StackedView::IconViewMode)
     {
         int nts = d->iconView->fitToWidthIcons();
-        kDebug() << "new thumb size = " << nts;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "new thumb size = " << nts;
         setThumbSize(nts);
         toggleZoomActions();
         emit signalThumbSizeChanged(d->thumbSize);

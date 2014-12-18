@@ -36,7 +36,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kiconloader.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
@@ -407,7 +407,7 @@ void AbstractAlbumTreeView::slotSearchTextSettingsAboutToChange(bool searched, b
     // backup before we begin searching
     if (!searched && willSearch && d->searchBackup.isEmpty())
     {
-        kDebug() << "Searching started, backing up state";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Searching started, backing up state";
 
         QList<int> selection, expansion;
         saveStateRecursive(QModelIndex(), selection, expansion);
@@ -436,7 +436,7 @@ void AbstractAlbumTreeView::slotSearchTextSettingsChanged(bool wasSearching, boo
     // working
     if (searched)
     {
-        kDebug() << "Searched, expanding all results";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Searched, expanding all results";
         expandMatches(QModelIndex());
     }
 
@@ -444,7 +444,7 @@ void AbstractAlbumTreeView::slotSearchTextSettingsChanged(bool wasSearching, boo
     if (wasSearching && !searched && !d->searchBackup.isEmpty())
     {
 
-        kDebug() << "Searching finished, restoring tree view state";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Searching finished, restoring tree view state";
 
         collapseAll();
         restoreStateForHierarchy(QModelIndex(), d->searchBackup);
@@ -747,11 +747,11 @@ void AbstractAlbumTreeView::doLoadState()
 {
     KConfigGroup configGroup = getConfigGroup();
 
-    //kDebug() << "Loading view state from " << this << configGroup.name() << objectName();
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Loading view state from " << this << configGroup.name() << objectName();
 
     // extract the selection from the config
     const QStringList selection = configGroup.readEntry(entryName(d->configSelectionEntry), QStringList());
-    //kDebug() << "selection: " << selection;
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "selection: " << selection;
 
     foreach (const QString& key, selection)
     {
@@ -766,7 +766,7 @@ void AbstractAlbumTreeView::doLoadState()
 
     // extract expansion state from config
     const QStringList expansion = configGroup.readEntry(entryName(d->configExpansionEntry), QStringList());
-    //kDebug() << "expansion: " << expansion;
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "expansion: " << expansion;
 
     foreach (const QString& key, expansion)
     {
@@ -781,7 +781,7 @@ void AbstractAlbumTreeView::doLoadState()
 
     // extract current index from config
     const QString key = configGroup.readEntry(entryName(d->configCurrentIndexEntry), QString());
-    //kDebug() << "currentIndex: " << key;
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "currentIndex: " << key;
     bool validId;
     const int id      = key.toInt(&validId);
 
@@ -794,7 +794,7 @@ void AbstractAlbumTreeView::doLoadState()
     for (QMap<int, Digikam::State>::iterator it = d->statesByAlbumId.begin(); it
         != d->statesByAlbumId.end(); ++it)
     {
-        kDebug() << "id = " << it.key() << ": recovered state (selected = "
+        qCDebug(DIGIKAM_GENERAL_LOG) << "id = " << it.key() << ": recovered state (selected = "
         << it.value().selected << ", expanded = "
         << it.value().expanded << ", currentIndex = "
         << it.value().currentIndex << ")";
@@ -802,7 +802,7 @@ void AbstractAlbumTreeView::doLoadState()
 */
 
     // initial restore run, for everything already loaded
-    //kDebug() << "initial restore run with " << model()->rowCount() << " rows";
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "initial restore run with " << model()->rowCount() << " rows";
     restoreStateForHierarchy(QModelIndex(), d->statesByAlbumId);
 
     // also restore the sorting order
@@ -840,14 +840,14 @@ void AbstractAlbumTreeView::restoreState(const QModelIndex& index, QMap<int, Dig
         Digikam::State state = stateStore.value(album->id());
 
 /*
-        kDebug() << "Trying to restore state of album " << album->title() << "(" <<album->id() << ")"
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to restore state of album " << album->title() << "(" <<album->id() << ")"
                  << ": state(selected = " << state.selected
                  << ", expanded = " << state.expanded
                  << ", currentIndex = " << state.currentIndex << ")" << this;
 */
         if (state.selected)
         {
-            //kDebug() << "Selecting" << album->title();
+            //qCDebug(DIGIKAM_GENERAL_LOG) << "Selecting" << album->title();
             selectionModel()->select(index, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
         }
 
@@ -864,7 +864,7 @@ void AbstractAlbumTreeView::restoreState(const QModelIndex& index, QMap<int, Dig
         // restore the current index
         if (state.currentIndex)
         {
-            //kDebug() << "Setting current index" << album->title() << "(" << album->id() << ")";
+            //qCDebug(DIGIKAM_GENERAL_LOG) << "Setting current index" << album->title() << "(" << album->id() << ")";
             selectionModel()->setCurrentIndex(index, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
         }
     }
@@ -876,7 +876,7 @@ void AbstractAlbumTreeView::rowsInserted(const QModelIndex& parent, int start, i
 
     if (!d->statesByAlbumId.isEmpty())
     {
-        //kDebug() << "slot rowInserted called with index = " << index
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "slot rowInserted called with index = " << index
         //         << ", start = " << start << ", end = " << end << "remaining ids" << d->statesByAlbumId.keys();
 
         // Restore state for parent a second time - expansion can only be restored if there are children

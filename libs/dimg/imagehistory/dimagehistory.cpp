@@ -35,7 +35,7 @@
 // KDE includes
 
 #include <kglobal.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kurl.h>
 
 namespace Digikam
@@ -197,7 +197,7 @@ DImageHistory& DImageHistory::operator<<(const FilterAction& action)
     Entry entry;
     entry.action = action;
     d->entries << entry;
-    //kDebug() << "Entry added, total count " << d->entries.count();
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Entry added, total count " << d->entries.count();
     return *this;
 }
 
@@ -623,14 +623,14 @@ QString DImageHistory::toXml() const
 
     stream.writeEndDocument();
 
-    //kDebug() << xmlHistory;
+    //qCDebug(DIGIKAM_GENERAL_LOG) << xmlHistory;
 
     return xmlHistory;
 }
 
 DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
 {
-    //kDebug() << "Parsing image history XML";
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Parsing image history XML";
     DImageHistory h;
 
     if (xml.isEmpty())
@@ -657,7 +657,7 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
     {
         if (stream.name() == "file")
         {
-            //kDebug() << "Parsing file tag";
+            //qCDebug(DIGIKAM_GENERAL_LOG) << "Parsing file tag";
             HistoryImageId imageId(stream.attributes().value("uuid").toString());
 
             if (stream.attributes().value("type") == "original")
@@ -725,7 +725,7 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
         }
         else if (stream.name() == "filter")
         {
-            //kDebug() << "Parsing filter tag";
+            //qCDebug(DIGIKAM_GENERAL_LOG) << "Parsing filter tag";
             FilterAction::Category c = FilterAction::ComplexFilter;
             QStringRef categoryString = stream.attributes().value("filterCategory");
 
@@ -787,10 +787,10 @@ DImageHistory DImageHistory::fromXml(const QString& xml) //DImageHistory
     if (stream.hasError())
     {
         //TODO: error handling
-        kDebug() << "An error occurred during parsing: " << stream.errorString();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "An error occurred during parsing: " << stream.errorString();
     }
 
-    //kDebug() << "Parsing done";
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Parsing done";
     return h;
 }
 

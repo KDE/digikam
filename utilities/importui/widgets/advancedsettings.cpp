@@ -36,7 +36,7 @@
 #include <klocalizedstring.h>
 #include <kcombobox.h>
 #include <khbox.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 

@@ -46,7 +46,7 @@
 #include <kactioncollection.h>
 #include <kdialog.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <QApplication>
 #include <QDesktopWidget>
 
@@ -249,7 +249,7 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
 
     if (!set)
     {
-        kDebug() << "TURN OFF fullscreen";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "TURN OFF fullscreen";
 
         // restore menubar
 
@@ -288,7 +288,7 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
     }
     else
     {
-        kDebug() << "TURN ON fullscreen";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "TURN ON fullscreen";
 
         // hide menubar
 
@@ -354,7 +354,7 @@ bool DXmlGuiWindow::fullScreenIsActive() const
     if (d->fullScreenAction)
         return d->fullScreenAction->isChecked();
 
-    kDebug() << "FullScreenAction is not initialized";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "FullScreenAction is not initialized";
     return false;
 }
 

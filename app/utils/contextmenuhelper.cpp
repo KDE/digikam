@@ -43,7 +43,7 @@
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kfileitem.h>
 #include <klocalizedstring.h>
 #include <kmenu.h>
@@ -558,14 +558,14 @@ void ContextMenuHelper::slotABCContextMenu()
     Akonadi::ContactSearchJob* const job = new Akonadi::ContactSearchJob();
 
     if (!job->exec())
-        kDebug() << "Akonadi search was not succesfull";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Akonadi search was not succesfull";
 
     QStringList names;
 
     const KABC::Addressee::List contacts = job->contacts();
 
     if (contacts.isEmpty())
-        kDebug() << "No contacts in Akonadi";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "No contacts in Akonadi";
 
     Q_FOREACH(KABC::Addressee addr, contacts)
     {

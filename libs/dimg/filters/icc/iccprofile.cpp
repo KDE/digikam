@@ -40,7 +40,7 @@
 #include <kcodecs.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -578,7 +578,7 @@ QStringList IccProfile::defaultSearchPaths()
             }
         }
     }
-    //kDebug() << candidates << '\n' << paths;
+    //qCDebug(DIGIKAM_GENERAL_LOG) << candidates << '\n' << paths;
 
     return paths;
 }
@@ -599,7 +599,7 @@ void IccProfile::considerOriginalAdobeRGB(const QString& filePath)
 
         if (md5.hexDigest() == "dea88382d899d5f6e573b432473ae138")
         {
-            kDebug() << "The original Adobe RGB (1998) profile has been found at" << filePath;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "The original Adobe RGB (1998) profile has been found at" << filePath;
             static_d->adobeRGBPath = filePath;
         }
     }

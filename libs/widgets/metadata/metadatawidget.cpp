@@ -54,7 +54,7 @@
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kmenu.h>
 
 // Libkexiv2 includes

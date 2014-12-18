@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kglobal.h>
 #include <klocalizedstring.h>
 
@@ -480,7 +480,7 @@ bool DImgFilterManager::isRawConversion(const QString& filterIdentifier)
 DImgThreadedFilter* DImgFilterManager::createFilter(const QString& filterIdentifier, int version)
 {
     QMutexLocker lock(&d->mutex);
-    kDebug() << "Creating filter " << filterIdentifier;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Creating filter " << filterIdentifier;
     DImgFilterGenerator* gen = d->filterMap.value(filterIdentifier).data();
 
     if (gen)

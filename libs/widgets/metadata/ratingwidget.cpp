@@ -42,7 +42,7 @@
 #include <kglobalsettings.h>
 #include <ksqueezedtextlabel.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kmenu.h>
 #include <khbox.h>
 #include <kapplication.h>

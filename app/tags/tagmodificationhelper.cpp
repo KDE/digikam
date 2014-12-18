@@ -32,7 +32,7 @@
 // KDE includes
 
 #include <kapplication.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 
@@ -401,7 +401,7 @@ void TagModificationHelper::slotMultipleTagDel(QList<TAlbum* >& tags)
 void TagModificationHelper::slotMultipleTagDel()
 {
     QList<TAlbum*> lst = boundMultipleTags(sender());
-    kDebug() << lst.size();
+    qCDebug(DIGIKAM_GENERAL_LOG) << lst.size();
     slotMultipleTagDel(lst);
 }
 

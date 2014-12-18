@@ -38,7 +38,7 @@
 #include <klocalizedstring.h>
 #include <kpixmapsequence.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -130,7 +130,7 @@ void PreviewThreadWrapper::slotFilterProgress(int /*progress*/)
         return;
     }
 
-    //kDebug() << filter->filterName() << " : " << progress << " %";
+    //qCDebug(DIGIKAM_GENERAL_LOG) << filter->filterName() << " : " << progress << " %";
 }
 
 void PreviewThreadWrapper::startFilters()

@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <klocalizedstring.h>
 
 // libkface includes
@@ -284,7 +284,7 @@ FacePipelineExtendedPackage::Ptr ScanStateFilter::filter(const ImageInfo& info)
             {
                 FacePipelineExtendedPackage::Ptr package = d->buildPackage(info);
                 package->databaseFaces = databaseFaces;
-                //kDebug() << "Prepared package with" << databaseFaces.size();
+                //qCDebug(DIGIKAM_GENERAL_LOG) << "Prepared package with" << databaseFaces.size();
                 package->databaseFaces.setRole(FacePipelineDatabaseFace::ReadFromDatabase);
 
                 if (tasks)
@@ -306,7 +306,7 @@ void ScanStateFilter::process(const QList<ImageInfo>& infos)
 {
     QMutexLocker lock(threadMutex());
     toFilter << infos;
-    //kDebug() << "Received" << infos.size() << "images for filtering";
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Received" << infos.size() << "images for filtering";
     start(lock);
 }
 
@@ -357,7 +357,7 @@ void ScanStateFilter::run()
                 }
             }
 
-            //kDebug() << "Filtered" << todo.size() << "images, send" << send.size() << "skip" << skip.size();
+            //qCDebug(DIGIKAM_GENERAL_LOG) << "Filtered" << todo.size() << "images, send" << send.size() << "skip" << skip.size();
 
             {
                 QMutexLocker lock(threadMutex());
@@ -383,7 +383,7 @@ void ScanStateFilter::dispatch()
         toBeSkipped.clear();
     }
 
-    //kDebug() << "Dispatching, sending" << send.size() << "skipping" << skip.size();
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Dispatching, sending" << send.size() << "skipping" << skip.size();
     if (!skip.isEmpty())
     {
         d->skipFromFilter(skip);
@@ -443,7 +443,7 @@ void PreviewLoader::slotImageLoaded(const LoadingDescription& loadingDescription
 
     // Avoid congestion before detection or recognition by pausing the thread.
     // We are throwing around serious amounts of memory!
-    //kDebug() << "sent out packages:" << d->packagesOnTheRoad - scheduledPackages.size() << "scheduled:" << scheduledPackages.size();
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "sent out packages:" << d->packagesOnTheRoad - scheduledPackages.size() << "scheduled:" << scheduledPackages.size();
     if (sentOutLimitReached() && !scheduledPackages.isEmpty())
     {
         stop();
@@ -486,7 +486,7 @@ void DetectionWorker::process(FacePipelineExtendedPackage::Ptr package)
     QImage detectionImage  = scaleForDetection(package->image);
     package->detectedFaces = detector.detectFaces(detectionImage, package->image.originalSize());
 
-    kDebug() << "Found" << package->detectedFaces.size() << "faces in" << package->info.name()
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Found" << package->detectedFaces.size() << "faces in" << package->info.name()
              << package->image.size() << package->image.originalSize();
 
     package->processFlags |= FacePipelinePackage::ProcessedByDetector;
@@ -633,7 +633,7 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
         if (mode == FacePipeline::OverwriteUnconfirmed && (package->processFlags & FacePipelinePackage::ProcessedByDetector))
         {
             QList<DatabaseFace> oldEntries = utils.unconfirmedDatabaseFaces(package->info.id());
-            kDebug() << "Removing old entries" << oldEntries;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Removing old entries" << oldEntries;
             utils.removeFaces(oldEntries);
         }
 
@@ -761,7 +761,7 @@ void DetectionBenchmarker::process(FacePipelineExtendedPackage::Ptr package)
     if (package->databaseFaces.isEmpty())
     {
         // Detection / Recognition
-        kDebug() << "Benchmarking image" << package->info.name();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Benchmarking image" << package->info.name();
 
         FaceUtils utils;
         QList<DatabaseFace> groundTruth = utils.databaseFaces(package->info.id());
@@ -776,7 +776,7 @@ void DetectionBenchmarker::process(FacePipelineExtendedPackage::Ptr package)
         int trueFaces           = groundTruth.size();
         const double minOverlap = 0.75;
 
-        kDebug() << "There are" << trueFaces << "faces to be detected. The detector found" << testedFaces.size();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "There are" << trueFaces << "faces to be detected. The detector found" << testedFaces.size();
 
         ++totalImages;
         faces       += trueFaces;
@@ -819,7 +819,7 @@ void DetectionBenchmarker::process(FacePipelineExtendedPackage::Ptr package)
             }
             else
             {
-                kDebug() << "The image, truly without faces, is false-positive";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "The image, truly without faces, is false-positive";
                 ++falsePositiveImages;
             }
         }
@@ -827,7 +827,7 @@ void DetectionBenchmarker::process(FacePipelineExtendedPackage::Ptr package)
         truePositiveFaces  += matchedTrueFaces.size();
         falseNegativeFaces += unmatchedTrueFaces.size();
         falsePositiveFaces += unmatchedTestedFaces.size();
-        kDebug() << "Faces detected correctly:" << matchedTrueFaces.size() << ", faces missed:" << unmatchedTrueFaces.size()
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Faces detected correctly:" << matchedTrueFaces.size() << ", faces missed:" << unmatchedTrueFaces.size()
                  << ", faces falsely detected:" << unmatchedTestedFaces.size();
     }
 
@@ -837,8 +837,8 @@ void DetectionBenchmarker::process(FacePipelineExtendedPackage::Ptr package)
 
 QString DetectionBenchmarker::result() const
 {
-    kDebug() << "Per-image:" << trueNegativeImages << falsePositiveFaces;
-    kDebug() << "Per-face:" << truePositiveFaces << falseNegativeFaces << falsePositiveFaces; // 26 7 1
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Per-image:" << trueNegativeImages << falsePositiveFaces;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Per-face:" << truePositiveFaces << falseNegativeFaces << falsePositiveFaces; // 26 7 1
     int negativeImages = trueNegativeImages + falsePositiveImages;
     int trueFaces      = truePositiveFaces  + falseNegativeFaces;
     QString specificityWarning, sensitivityWarning;
@@ -1005,7 +1005,7 @@ Trainer::Trainer(FacePipeline::Private* const d)
 
 void Trainer::process(FacePipelineExtendedPackage::Ptr package)
 {
-    //kDebug() << "Trainer: processing one package";
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Trainer: processing one package";
     // Get a list of faces with type FaceForTraining (probably type is ConfirmedFace)
 
     QList<DatabaseFace> toTrain;
@@ -1225,7 +1225,7 @@ bool FacePipeline::Private::hasFinished()
 
 void FacePipeline::Private::checkFinished()
 {
-    kDebug() << "Check for finish: " << packagesOnTheRoad << "packages,"
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Check for finish: " << packagesOnTheRoad << "packages,"
              << infosForFiltering << "infos to filter, hasFinished()" << hasFinished();
 
     if (hasFinished())

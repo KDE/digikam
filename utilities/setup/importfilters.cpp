@@ -27,7 +27,7 @@
 
 #include <kcombobox.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <ksqueezedtextlabel.h>
 #include <kmimetypechooser.h>
 

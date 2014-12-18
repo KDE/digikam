@@ -46,7 +46,7 @@ extern "C"
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kcodecs.h>
 #include <kio/global.h>
 #include <klocalizedstring.h>
@@ -331,7 +331,7 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
 
     // Finally, we trying to get thumbnail using DImg API (slow).
 
-    kDebug() << "Use DImg loader to get thumbnail from : " << path;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Use DImg loader to get thumbnail from : " << path;
 
     DImg dimgThumb;
     // skip loading the data we don't need to speed it up.

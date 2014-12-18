@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kglobal.h>
 #include <kcodecs.h>
 #include <klocalizedstring.h>
@@ -70,7 +70,7 @@ public:
 
     explicit AlbumRootLocation(const AlbumRootInfo& info)
     {
-        kDebug() << "Creating new Location " << info.specificPath << " uuid " << info.identifier;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Creating new Location " << info.specificPath << " uuid " << info.identifier;
         m_id         = info.id;
         m_type       = (Type)info.type;
         specificPath = info.specificPath;
@@ -298,9 +298,9 @@ QList<SolidVolumeInfo> CollectionManagerPrivate::actuallyListVolumes()
 {
     QList<SolidVolumeInfo> volumes;
 
-    //kDebug() << "listFromType";
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "listFromType";
     QList<Solid::Device> devices = Solid::Device::listFromType(Solid::DeviceInterface::StorageAccess);
-    //kDebug() << "got listFromType";
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "got listFromType";
 
     udisToWatch.clear();
 
@@ -576,7 +576,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForLocation(const AlbumRootL
             // bail out if not provided
             if (dirHash.isNull())
             {
-                kDebug() << "No directory hash specified for the non-unique Label"
+                qCDebug(DIGIKAM_GENERAL_LOG) << "No directory hash specified for the non-unique Label"
                          << queryItem << "Resorting to returning the first match.";
                 return candidateVolumes.first();
             }
@@ -685,7 +685,7 @@ bool CollectionManagerPrivate::checkIfExists(const QString& filePath, QList<Coll
     {
         const KUrl locationPathUrl = location->albumRootPath();
 
-        //kDebug() << filePathUrl << locationPathUrl;
+        //qCDebug(DIGIKAM_GENERAL_LOG) << filePathUrl << locationPathUrl;
         // make sure filePathUrl is neither a child nor a parent
         // of an existing collection
         if (!locationPathUrl.isEmpty() &&
@@ -774,7 +774,7 @@ void CollectionManager::setWatchDisabled()
 
 CollectionLocation CollectionManager::addLocation(const KUrl& fileUrl, const QString& label)
 {
-    kDebug() << "addLocation " << fileUrl;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "addLocation " << fileUrl;
     QString path = fileUrl.toLocalFile(KUrl::RemoveTrailingSlash);
 
     if (!locationForPath(path).isNull())
@@ -831,7 +831,7 @@ CollectionLocation CollectionManager::addLocation(const KUrl& fileUrl, const QSt
 
 CollectionLocation CollectionManager::addNetworkLocation(const KUrl& fileUrl, const QString& label)
 {
-    kDebug() << "addLocation " << fileUrl;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "addLocation " << fileUrl;
     QString path = fileUrl.toLocalFile(KUrl::RemoveTrailingSlash);
 
     if (!locationForPath(path).isNull())
@@ -1630,7 +1630,7 @@ void CollectionManager::updateLocations()
             // Don't touch location->status, do not interfere with "hidden" setting
             location->available = available;
             location->setAbsolutePath(absolutePath);
-            kDebug() << "location for " << absolutePath << " is available " << available;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "location for " << absolutePath << " is available " << available;
             // set the status depending on "hidden" and "available"
             location->setStatusFromFlags();
         }

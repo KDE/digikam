@@ -47,7 +47,7 @@
 #include <kdialog.h>
 #include <ktabwidget.h>
 #include <kpushbutton.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Libkexiv2 includes
 

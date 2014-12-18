@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 namespace Digikam
 {
@@ -87,14 +87,14 @@ void DBusyDlg::setBusyThread(DBusyThread* const thread)
         connect(d->thread, SIGNAL(signalComplete()),
                 this, SLOT(slotComplete()));
 
-        kDebug() << "Thread is started";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Thread is started";
         d->thread->start();
     }
 }
 
 void DBusyDlg::slotComplete()
 {
-    kDebug() << "Thread is complete";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Thread is complete";
     accept();
 }
 

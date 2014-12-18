@@ -32,7 +32,7 @@
 
 #include <kio/job.h>
 #include <kurl.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 

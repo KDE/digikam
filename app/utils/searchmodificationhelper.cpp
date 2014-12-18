@@ -25,7 +25,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kinputdialog.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
@@ -196,7 +196,7 @@ SAlbum* SearchModificationHelper::slotCreateTimeLineSearch(const QString& desire
 
     writer.finish();
 
-    kDebug() << "Date search XML:\n" << writer.xml();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Date search XML:\n" << writer.xml();
 
     SAlbum* album = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::TimeLineSearch, writer.xml());
     AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << album);

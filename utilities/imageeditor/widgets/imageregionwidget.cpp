@@ -37,7 +37,7 @@
 
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -245,7 +245,7 @@ void ImageRegionWidget::emitCapturedPointFromOriginal(const QPointF& pt)
     int y        = (int)(pt.y() / layout()->zoomFactor());
     QPoint imgPt(x, y);
     DColor color = d_ptr->item->image().getPixelColor(x, y);
-    kDebug() << "Captured point from image : " << imgPt;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Captured point from image : " << imgPt;
     emit signalCapturedPointFromOriginal(color, imgPt);
 }
 

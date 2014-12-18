@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kglobalsettings.h>
 #include <kdatetable.h> // for KPopupFrame
 
@@ -454,7 +454,7 @@ void GraphicsDImgView::slotPanIconHidden()
 void GraphicsDImgView::slotPanIconSelectionMoved(const QRect& imageRect, bool b)
 {
     QRectF zoomRect = item()->zoomSettings()->mapImageToZoom(imageRect);
-    kDebug() << imageRect << zoomRect;
+    qCDebug(DIGIKAM_GENERAL_LOG) << imageRect << zoomRect;
     centerOn(item()->mapToScene(zoomRect.center()));
 
     if (b)

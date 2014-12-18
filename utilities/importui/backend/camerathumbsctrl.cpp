@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kurl.h>
 #include <kio/previewjob.h>
 #include <kdeversion.h>
@@ -255,12 +255,12 @@ void CameraThumbsCtrl::procressKDEPreview(const KFileItem& item, const QPixmap& 
     {
         // This call must be run outside Camera Controller thread.
         thumb = d->controller->mimeTypeThumbnail(file, ThumbnailSize::maxThumbsSize());
-        kDebug() << "Failed thumb from KDE Preview : " << item.url();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Failed thumb from KDE Preview : " << item.url();
     }
     else
     {
         thumb = pix;
-        kDebug() << "Got thumb from KDE Preview : " << item.url();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Got thumb from KDE Preview : " << item.url();
     }
 
     putItemToCache(url, info, thumb);

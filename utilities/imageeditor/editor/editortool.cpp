@@ -31,7 +31,7 @@
 // KDE includes
 
 #include <kapplication.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -455,7 +455,7 @@ DImgThreadedAnalyser* EditorToolThreaded::analyser() const
 
 void EditorToolThreaded::setAnalyser(DImgThreadedAnalyser* const analyser)
 {
-    kDebug() << "Analys " << toolName() << " started...";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Analys " << toolName() << " started...";
 
     toolSettings()->enableButton(EditorToolSettings::Ok,      false);
     toolSettings()->enableButton(EditorToolSettings::SaveAs,  false);
@@ -540,7 +540,7 @@ void EditorToolThreaded::slotFilterFinished(bool success)
         {
             case EditorToolThreaded::PreviewRendering:
             {
-                kDebug() << "Preview " << toolName() << " completed...";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Preview " << toolName() << " completed...";
                 setPreviewImage();
                 slotAbort();
                 break;
@@ -548,7 +548,7 @@ void EditorToolThreaded::slotFilterFinished(bool success)
 
             case EditorToolThreaded::FinalRendering:
             {
-                kDebug() << "Final" << toolName() << " completed...";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Final" << toolName() << " completed...";
                 setFinalImage();
                 EditorToolIface::editorToolIface()->setToolStopProgress();
                 kapp->restoreOverrideCursor();
@@ -566,7 +566,7 @@ void EditorToolThreaded::slotFilterFinished(bool success)
         {
             case EditorToolThreaded::PreviewRendering:
             {
-                kDebug() << "Preview " << toolName() << " failed...";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Preview " << toolName() << " failed...";
                 slotAbort();
                 break;
             }
@@ -591,12 +591,12 @@ void EditorToolThreaded::slotAnalyserFinished(bool success)
 {
     if (success)
     {
-        kDebug() << "Analys " << toolName() << " completed...";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Analys " << toolName() << " completed...";
         analyserCompleted();
     }
     else
     {
-        kDebug() << "Analys " << toolName() << " failed...";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Analys " << toolName() << " failed...";
         slotAbort();
     }
 }
@@ -613,7 +613,7 @@ void EditorToolThreaded::slotOk()
     writeSettings();
 
     d->currentRenderingMode = EditorToolThreaded::FinalRendering;
-    kDebug() << "Final " << toolName() << " started...";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Final " << toolName() << " started...";
 
     toolSettings()->enableButton(EditorToolSettings::Ok,      false);
     toolSettings()->enableButton(EditorToolSettings::SaveAs,  false);
@@ -643,7 +643,7 @@ void EditorToolThreaded::slotPreview()
     }
 
     d->currentRenderingMode = EditorToolThreaded::PreviewRendering;
-    kDebug() << "Preview " << toolName() << " started...";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Preview " << toolName() << " started...";
 
     toolSettings()->enableButton(EditorToolSettings::Ok,      false);
     toolSettings()->enableButton(EditorToolSettings::SaveAs,  false);

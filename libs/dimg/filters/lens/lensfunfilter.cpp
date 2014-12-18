@@ -28,7 +28,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -154,11 +154,11 @@ void LensFunFilter::filterImage()
                 ((d->iface->settings().filterVIG)                                   ? 1 : 0) +
                 ((d->iface->settings().filterDST || d->iface->settings().filterGEO) ? 1 : 0);
 
-    kDebug() << "LensFun Modifier Flags: " << modflags << "  Steps:" << steps;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "LensFun Modifier Flags: " << modflags << "  Steps:" << steps;
 
     if (steps < 1)
     {
-        kDebug() << "No LensFun Modifier steps. There is nothing to process...";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "No LensFun Modifier steps. There is nothing to process...";
         return;
     }
 
@@ -168,7 +168,7 @@ void LensFunFilter::filterImage()
     int lwidth = m_orgImage.width() * 2 * 3;
     QScopedArrayPointer<float> pos(new float[lwidth]);
 
-    kDebug() << "Image size to process: (" << m_orgImage.width() << ", " << m_orgImage.height() << ")";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Image size to process: (" << m_orgImage.width() << ", " << m_orgImage.height() << ")";
 
     // Stage 1: Chromatic Aberation Corrections
 
@@ -206,7 +206,7 @@ void LensFunFilter::filterImage()
             }
         }
 
-        kDebug() << "Chromatic Aberation Corrections applied. (loop: " << loop << ")";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Chromatic Aberation Corrections applied. (loop: " << loop << ")";
     }
 
     // Stage 2: Color Corrections: Vignetting and Color Contribution Index
@@ -244,7 +244,7 @@ void LensFunFilter::filterImage()
             }
         }
 
-        kDebug() << "Vignetting and Color Corrections applied. (loop: " << loop << ")";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Vignetting and Color Corrections applied. (loop: " << loop << ")";
     }
 
     // Stage 3: Distortion and Geometry Corrections
@@ -265,7 +265,7 @@ void LensFunFilter::filterImage()
 
                 for (unsigned long x = 0; runningFlag() && (x < tempImage.width()); ++x, ++loop)
                 {
-                    //kDebug() << " ZZ " << src[0] << " " << src[1] << " " << (int)src[0] << " " << (int)src[1];
+                    //qCDebug(DIGIKAM_GENERAL_LOG) << " ZZ " << src[0] << " " << src[1] << " " << (int)src[0] << " " << (int)src[1];
 
                     tempImage.setPixelColor(x, y, m_destImage.getSubPixelColor(src[0], src[1]));
                     src += 2;
@@ -281,7 +281,7 @@ void LensFunFilter::filterImage()
             }
         }
 
-        kDebug() << "Distortion and Geometry Corrections applied. (loop: " << loop << ")";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Distortion and Geometry Corrections applied. (loop: " << loop << ")";
 
         if (loop != 0)
         {

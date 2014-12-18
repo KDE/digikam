@@ -31,7 +31,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -104,7 +104,7 @@ bool DatabasePrivilegesChecker::checkPriv(DatabaseBackend& dbBackend, const QStr
         dbBackend.lastSQLError().isValid()                &&
         dbBackend.lastSQLError().number() != 0)
     {
-        kDebug() << "Error while creating a trigger. Details: " << dbBackend.lastSQLError();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Error while creating a trigger. Details: " << dbBackend.lastSQLError();
         return false;
     }
 

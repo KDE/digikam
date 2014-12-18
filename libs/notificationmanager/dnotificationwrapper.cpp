@@ -38,7 +38,7 @@
 #include <kstandarddirs.h>
 #include <knotification.h>
 #include <kpassivepopup.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 namespace Digikam
 {
@@ -118,7 +118,7 @@ void DNotificationWrapper(const QString& eventId, const QString& message,
     if (detectKDEDesktopIsRunning() &&
         QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.knotify"))
     {
-        kDebug() << "Event is dispatched to KDE desktop notifier";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Event is dispatched to KDE desktop notifier";
 
         if (eventId.isEmpty())
         {
@@ -136,7 +136,7 @@ void DNotificationWrapper(const QString& eventId, const QString& message,
 
     else if (MacNativeDispatchNotify(windowTitle, message))
     {
-        kDebug() << "Event is dispatched to OSX desktop notifier";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Event is dispatched to OSX desktop notifier";
         return;
     }
 
@@ -151,7 +151,7 @@ void DNotificationWrapper(const QString& eventId, const QString& message,
                                              << KGlobal::mainComponent().aboutData()->appName())
              == 0)
     {
-        kDebug() << "Event is dispatched to desktop notifier through DBUS";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Event is dispatched to desktop notifier through DBUS";
         return;
     }
 
@@ -163,7 +163,7 @@ void DNotificationWrapper(const QString& eventId, const QString& message,
             return;
         }
 
-        kDebug() << "Event is dispatched through a passive pop-up";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Event is dispatched through a passive pop-up";
 
         NotificationPassivePopup* const popup = new NotificationPassivePopup(parent);
         popup->showNotification(windowTitle, message, logoPixmap);

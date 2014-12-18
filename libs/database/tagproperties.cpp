@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -77,7 +77,7 @@ TagPropertiesPrivSharedPointer TagProperties::TagPropertiesPriv::createGuarded(i
 {
     if (tagId <= 0)
     {
-        kDebug() << "Attempt to create tag properties for tag id" << tagId;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Attempt to create tag properties for tag id" << tagId;
         return *tagPropertiesPrivSharedNull;
     }
     return TagPropertiesPrivSharedPointer(new TagPropertiesPriv);

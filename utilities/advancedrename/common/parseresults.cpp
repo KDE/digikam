@@ -25,7 +25,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 namespace
 {
@@ -195,7 +195,7 @@ void ParseResults::debug() const
         QString _token  = token(key);
         QString _result = result(key);
 
-        kDebug() << "(" << key.first << ":" << key.second << ") => "
+        qCDebug(DIGIKAM_GENERAL_LOG) << "(" << key.first << ":" << key.second << ") => "
                  << "(" << _token    << ":" << _result    << ")";
     }
 }

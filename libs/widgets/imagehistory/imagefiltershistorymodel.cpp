@@ -31,7 +31,7 @@
 // KDE includes
 
 #include <kurl.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kiconloader.h>
 
 // Local includes
@@ -65,7 +65,7 @@ ImageFiltersHistoryModel::ImageFiltersHistoryModel(QObject* const parent, const 
 {
     if (!url.isEmpty())
     {
-        //kDebug() << "Creating model with url" << url.toLocalFile();
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "Creating model with url" << url.toLocalFile();
         d->rootItem = new ImageFiltersHistoryTreeItem(url.fileName());
         d->lastUrl = url;
 
@@ -76,7 +76,7 @@ ImageFiltersHistoryModel::ImageFiltersHistoryModel(QObject* const parent, const 
     }
     else
     {
-        //kDebug() << "Creating empty model";
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "Creating empty model";
         d->rootItem = new ImageFiltersHistoryTreeItem("Generic");
     }
 }
@@ -96,14 +96,14 @@ void ImageFiltersHistoryModel::setUrl(const KUrl& url)
 
         d->rootItem = new ImageFiltersHistoryTreeItem(url.fileName());
         d->lastUrl  = url;
-        //kDebug() << "Updating model data with url" << rootData.first();
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "Updating model data with url" << rootData.first();
         DMetadata metadata(url.toLocalFile());
         setupModelData(DImageHistory::fromXml(metadata.getImageHistory()).entries(), d->rootItem);
     }
 /*
     else
     {
-        kDebug() << "Model not updated; url is" << url.pathOrUrl();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Model not updated; url is" << url.pathOrUrl();
     }
 */
 }
@@ -255,7 +255,7 @@ void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>&
         }
     }
 
-    //kDebug() << "Initializing model data, got" << entries.count() << "entries";
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Initializing model data, got" << entries.count() << "entries";
     QList<ImageFiltersHistoryTreeItem*> parents;
     QList<ImageFiltersHistoryTreeItem*> filters;
     parents << parent;
@@ -279,7 +279,7 @@ void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>&
         QPixmap icon     = SmallIcon(iconName, KIconLoader::SizeSmallMedium);
         itemData.append(icon);
 
-        //kDebug() << "Adding an entry: " << itemData;
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "Adding an entry: " << itemData;
         parents.first()->appendChild(new ImageFiltersHistoryTreeItem(itemData, parents.first()));
         filters << parents.last()->child(parents.last()->childCount()-1);
 

@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kcategorydrawer.h>
 #include <kcolorscheme.h>
 #include <kiconloader.h>
@@ -153,7 +153,7 @@ void VersionsDelegate::beginPainting()
 
 void VersionsDelegate::finishPainting()
 {
-    //kDebug() << "painting finished" << d->thumbsWaitingFor;
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "painting finished" << d->thumbsWaitingFor;
     if (d->thumbsWaitingFor)
     {
         d->animation->start();
@@ -269,7 +269,7 @@ void VersionsDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
     painter->save();
     painter->setRenderHint(QPainter::Antialiasing, true);
     QApplication::style()->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, painter);
-    //kDebug() << QApplication::style()->subElementRect(QStyle::SE_ItemViewItemDecoration, &option, 0);
+    //qCDebug(DIGIKAM_GENERAL_LOG) << QApplication::style()->subElementRect(QStyle::SE_ItemViewItemDecoration, &option, 0);
     if (dynamic_cast<const ImageVersionsModel*>(index.model())->paintTree())
     {
         const_cast<QStyleOptionViewItem&>(option).rect.setLeft(option.rect.left() + (index.data(Qt::UserRole).toInt() * 16));

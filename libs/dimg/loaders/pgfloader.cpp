@@ -53,7 +53,7 @@ extern "C"
 // KDE includes
 
 #include <ktemporaryfile.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Libkexiv2 includes
 
@@ -110,7 +110,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
     if (!file)
     {
-        kDebug() << "Error: Could not open source file.";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Error: Could not open source file.";
         loadingFailed();
         return false;
     }
@@ -187,7 +187,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer
                 break;
 
             default:
-                kDebug() << "Cannot load PGF image: color mode not supported (" << pgf.Mode() << ")";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot load PGF image: color mode not supported (" << pgf.Mode() << ")";
                 loadingFailed();
                 return false;
                 break;
@@ -200,7 +200,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer
                 break;
 
             default:
-                kDebug() << "Cannot load PGF image: color channels number not supported (" << pgf.Channels() << ")";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot load PGF image: color channels number not supported (" << pgf.Channels() << ")";
                 loadingFailed();
                 return false;
                 break;
@@ -221,7 +221,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer
                 break;
 
             default:
-                kDebug() << "Cannot load PGF image: color bits depth not supported (" << bitDepth << ")";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot load PGF image: color bits depth not supported (" << bitDepth << ")";
                 loadingFailed();
                 return false;
                 break;
@@ -229,14 +229,14 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
 #ifdef USE_IMGLOADERDEBUGMSG
         const PGFHeader* header = pgf.GetHeader();
-        kDebug() << "PGF width    = " << header->width;
-        kDebug() << "PGF height   = " << header->height;
-        kDebug() << "PGF bbp      = " << header->bpp;
-        kDebug() << "PGF channels = " << header->channels;
-        kDebug() << "PGF quality  = " << header->quality;
-        kDebug() << "PGF mode     = " << header->mode;
-        kDebug() << "Has Alpha    = " << m_hasAlpha;
-        kDebug() << "Is 16 bits   = " << m_sixteenBit;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "PGF width    = " << header->width;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "PGF height   = " << header->height;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "PGF bbp      = " << header->bpp;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "PGF channels = " << header->channels;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "PGF quality  = " << header->quality;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "PGF mode     = " << header->mode;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Has Alpha    = " << m_hasAlpha;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Is 16 bits   = " << m_sixteenBit;
 #endif
 
         // NOTE: see bug #273765 : Loading PGF thumbs with OpenMP support through a separated thread do not work properlly with libppgf 6.11.24
@@ -276,7 +276,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer
                     width  = w;
                     height = h;
                     level  = i;
-                    kDebug() << "Loading PGF scaled version at level " << i
+                    qCDebug(DIGIKAM_GENERAL_LOG) << "Loading PGF scaled version at level " << i
                              << " (" << w << " x " << h << ") for size "
                              << scaledLoadingSize;
                 }
@@ -341,7 +341,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer
             err -= AppError;
         }
 
-        kDebug() << "Error: Opening and reading PGF image failed (" << err << ")!";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Error: Opening and reading PGF image failed (" << err << ")!";
 
 #ifdef WIN32
         CloseHandle(fd);
@@ -381,7 +381,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* const observer
 
     if (fd == INVALID_HANDLE_VALUE)
     {
-        kDebug() << "Error: Could not open destination file.";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Error: Could not open destination file.";
         return false;
     }
 
@@ -390,7 +390,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* const observer
 
     if (fd == -1)
     {
-        kDebug() << "Error: Could not open destination file.";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Error: Could not open destination file.";
         return false;
     }
 
@@ -401,7 +401,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* const observer
         QVariant qualityAttr = imageGetAttribute("quality");
         int quality          = qualityAttr.isValid() ? qualityAttr.toInt() : 3;
 
-        kDebug() << "PGF quality: " << quality;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "PGF quality: " << quality;
 
         CPGFFileStream stream(fd);
         CPGFImage      pgf;
@@ -472,13 +472,13 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* const observer
 #endif
 
 #ifdef USE_IMGLOADERDEBUGMSG
-        kDebug() << "PGF width     = " << header.width;
-        kDebug() << "PGF height    = " << header.height;
-        kDebug() << "PGF bbp       = " << header.bpp;
-        kDebug() << "PGF channels  = " << header.channels;
-        kDebug() << "PGF quality   = " << header.quality;
-        kDebug() << "PGF mode      = " << header.mode;
-        kDebug() << "Bytes Written = " << nWrittenBytes;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "PGF width     = " << header.width;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "PGF height    = " << header.height;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "PGF bbp       = " << header.bpp;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "PGF channels  = " << header.channels;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "PGF quality   = " << header.quality;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "PGF mode      = " << header.mode;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Bytes Written = " << nWrittenBytes;
 #endif
 
 #ifdef WIN32
@@ -508,7 +508,7 @@ bool PGFLoader::save(const QString& filePath, DImgLoaderObserver* const observer
             err -= AppError;
         }
 
-        kDebug() << "Error: Opening and saving PGF image failed (" << err << ")!";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Error: Opening and saving PGF image failed (" << err << ")!";
 
 #ifdef WIN32
         CloseHandle(fd);

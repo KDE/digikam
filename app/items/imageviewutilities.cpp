@@ -40,7 +40,7 @@
 #include <kmimetypetrader.h>
 #include <kurl.h>
 #include <kwindowsystem.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 

@@ -33,7 +33,7 @@
 // KDE includes
 
 #include <kaction.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <klinkitemselectionmodel.h>
 #include <kmenu.h>
 
@@ -188,7 +188,7 @@ void TableViewTreeView::slotHeaderContextMenuAddColumn()
     }
 
     const TableViewColumnDescription desc = actionData.value<TableViewColumnDescription>();
-    kDebug() << "clicked: " << desc.columnTitle;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "clicked: " << desc.columnTitle;
     const int newColumnLogicalIndex = d->headerContextMenuActiveColumn+1;
     s->tableViewModel->addColumnAt(desc, newColumnLogicalIndex);
 
@@ -219,7 +219,7 @@ void TableViewTreeView::slotHeaderContextMenuAddColumn()
 
 void TableViewTreeView::slotHeaderContextMenuActionRemoveColumnTriggered()
 {
-    kDebug() << "remove column " << d->headerContextMenuActiveColumn;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "remove column " << d->headerContextMenuActiveColumn;
     s->tableViewModel->removeColumnAt(d->headerContextMenuActiveColumn);
 }
 
@@ -239,7 +239,7 @@ void TableViewTreeView::slotHeaderContextMenuConfigureColumn()
 
 AbstractItemDragDropHandler* TableViewTreeView::dragDropHandler() const
 {
-    kDebug()<<s->imageModel->dragDropHandler();
+    qCDebug(DIGIKAM_GENERAL_LOG)<<s->imageModel->dragDropHandler();
     return s->imageModel->dragDropHandler();
 }
 

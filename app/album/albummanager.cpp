@@ -64,7 +64,7 @@ extern "C"
 #include <kcombobox.h>
 #include <kconfiggroup.h>
 #include <kconfig.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kdeversion.h>
 #include <kdirwatch.h>
 #include <kio/global.h>
@@ -678,7 +678,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
     // -- Database initialization -------------------------------------------------
 
     // ensure, embedded database is loaded
-    kDebug() << params;
+    qCDebug(DIGIKAM_GENERAL_LOG) << params;
 
     if (params.internalServer)
     {
@@ -766,7 +766,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
 
     if (dbLocale.isNull())
     {
-        kDebug() << "No locale found in database";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "No locale found in database";
 
         // Copy an existing locale from the settings file (used < 0.8)
         // to the database.
@@ -775,7 +775,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
 
         if (group.hasKey("Locale"))
         {
-            kDebug() << "Locale found in configfile";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Locale found in configfile";
             dbLocale = group.readEntry("Locale", QString());
 
             // this hack is necessary, as we used to store the entire
@@ -793,7 +793,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
         }
         else
         {
-            kDebug() << "No locale found in config file";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "No locale found in config file";
             dbLocale = currLocale;
 
             localeChanged = false;
@@ -843,7 +843,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
         QString locDescription;
         QStringList candidateIds, candidateDescriptions;
         CollectionManager::instance()->migrationCandidates(loc, &locDescription, &candidateIds, &candidateDescriptions);
-        kDebug() << "Migration candidates for" << locDescription << ":" << candidateIds << candidateDescriptions;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Migration candidates for" << locDescription << ":" << candidateIds << candidateDescriptions;
 
         KDialog* dialog         = new KDialog;
         QWidget* widget         = new QWidget;
@@ -979,7 +979,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
 //    {
 //        QDBusInterface serviceInterface("org.kde.nepomuk.services.digikamnepomukservice",
 //                                        "/digikamnepomukservice", "org.kde.digikam.DigikamNepomukService");
-//        kDebug() << "nepomuk service available" << serviceInterface.isValid();
+//        qCDebug(DIGIKAM_GENERAL_LOG) << "nepomuk service available" << serviceInterface.isValid();
 
 //        if (serviceInterface.isValid())
 //        {
@@ -1015,7 +1015,7 @@ bool AlbumManager::checkNepomukService()
 
 //    if (!nepomukInterface.isValid())
 //    {
-//        kDebug() << "Nepomuk server is not reachable. Cannot start Digikam Nepomuk Service";
+//        qCDebug(DIGIKAM_GENERAL_LOG) << "Nepomuk server is not reachable. Cannot start Digikam Nepomuk Service";
 //        return false;
 //    }
 
@@ -1023,7 +1023,7 @@ bool AlbumManager::checkNepomukService()
 
 //    if (!availableServicesReply.isValid() || !availableServicesReply.value().contains("digikamnepomukservice"))
 //    {
-//        kDebug() << "digikamnepomukservice is not available in NepomukServer";
+//        qCDebug(DIGIKAM_GENERAL_LOG) << "digikamnepomukservice is not available in NepomukServer";
 //        return false;
 //    }
 
@@ -1033,14 +1033,14 @@ bool AlbumManager::checkNepomukService()
 //        if (!connect(&nepomukInterface, SIGNAL(serviceInitialized(QString)),
 //                     &loop, SLOT(quit())))
 //        {
-//            kDebug() << "Could not connect to Nepomuk server signal";
+//            qCDebug(DIGIKAM_GENERAL_LOG) << "Could not connect to Nepomuk server signal";
 //            return false;
 //        }
 
 //        QTimer::singleShot(1000, &loop, SLOT(quit()));
 //    */
 
-//    kDebug() << "Trying to start up digikamnepomukservice";
+//    qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to start up digikamnepomukservice";
 //    nepomukInterface.call(QDBus::NoBlock, "startService", "digikamnepomukservice");
 
 //    /*

@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -138,7 +138,7 @@ bool TagMngrListModel::setData(const QModelIndex& index, const QVariant& value, 
 
     if(!parent)
     {
-        kDebug() << "No node found";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "No node found";
         return false;
     }
 

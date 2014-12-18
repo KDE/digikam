@@ -26,7 +26,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -321,7 +321,7 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ImageInfo& info, int ac
 
         if (!tagId)
         {
-            kDebug() << "Failed to create a person tag for name" << it.key();
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to create a person tag for name" << it.key();
         }
 
         TagRegion region(it.value());

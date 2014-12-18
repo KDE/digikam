@@ -48,7 +48,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kglobalsettings.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kxmlguiwindow.h>
 #include <ktoolinvocation.h>
 
@@ -148,7 +148,7 @@ void ThemeManager::slotChangePalette()
     KSharedConfigPtr config = KSharedConfig::openConfig(filename);
     kapp->setPalette(KGlobalSettings::createNewApplicationPalette(config));
 
-    kDebug() << theme << " :: " << filename;
+    qCDebug(DIGIKAM_GENERAL_LOG) << theme << " :: " << filename;
 
     emit signalThemeChanged();
 }

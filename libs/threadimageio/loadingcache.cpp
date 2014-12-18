@@ -34,7 +34,7 @@
 // KDE includes
 
 #include <kdirwatch.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -251,7 +251,7 @@ void LoadingCache::notifyNewLoadingProcess(LoadingProcess* process, const Loadin
 
 void LoadingCache::setCacheSize(int megabytes)
 {
-    kDebug() << "Allowing a cache size of" << megabytes << "MB";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Allowing a cache size of" << megabytes << "MB";
     d->imageCache.setMaxCost(megabytes * 1024 * 1024);
 }
 
@@ -450,7 +450,7 @@ void ClassicLoadingCacheFileWatch::addedThumbnail(const QString& filePath)
 void ClassicLoadingCacheFileWatch::slotFileDirty(const QString& path)
 {
     // Signal comes from main thread
-    kDebug() << "LoadingCache slotFileDirty " << path;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "LoadingCache slotFileDirty " << path;
     // This method acquires a lock itself
     notifyFileChanged(path);
     // No need for locking here, we are in main thread
@@ -483,14 +483,14 @@ void ClassicLoadingCacheFileWatch::slotUpdateDirWatch()
 
     foreach(const QString& watchedItem, toBeRemoved)
     {
-        //kDebug() << "removing m_watch for " << *it;
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "removing m_watch for " << *it;
         m_watch->removeFile(watchedItem);
         m_watchedFiles.remove(watchedItem);
     }
 
     foreach(const QString& watchedItem, toBeAdded)
     {
-        //kDebug() << "adding m_watch for " << *it;
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "adding m_watch for " << *it;
         m_watch->addFile(watchedItem);
         m_watchedFiles.insert(watchedItem);
     }

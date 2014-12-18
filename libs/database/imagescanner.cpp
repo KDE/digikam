@@ -34,7 +34,7 @@
 #include <kfilemetainfo.h>
 #include <kmimetype.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -189,7 +189,7 @@ ImageScanner::ImageScanner(qlonglong imageid)
 
 ImageScanner::~ImageScanner()
 {
-    kDebug() << "Finishing took" << d->time.elapsed() << "ms";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Finishing took" << d->time.elapsed() << "ms";
     delete d;
 }
 
@@ -206,7 +206,7 @@ void ImageScanner::setCategory(DatabaseItem::Category category)
 
 void ImageScanner::commit()
 {
-    kDebug() << "Scanning took" << d->time.restart() << "ms";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Scanning took" << d->time.restart() << "ms";
 
     switch (d->commit.operation)
     {
@@ -371,7 +371,7 @@ bool ImageScanner::scanFromIdenticalFile()
         // Sort by priority, as implemented by custom lessThan()
         qStableSort(candidates.begin(), candidates.end(), lessThanForIdentity);
 
-        kDebug() << "Recognized" << d->fileInfo.filePath() << "as identical to item" << candidates.first().id;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Recognized" << d->fileInfo.filePath() << "as identical to item" << candidates.first().id;
 
         // Copy attributes.
         // Todo for the future is to worry about syncing identical files.
@@ -405,7 +405,7 @@ bool ImageScanner::copyFromSource(qlonglong srcId)
         return false;
     }
 
-    kDebug() << "Recognized" << d->fileInfo.filePath() << "as copied from" << srcId;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Recognized" << d->fileInfo.filePath() << "as copied from" << srcId;
     d->commit.copyImageAttributesId = srcId;
 
     return true;
@@ -416,7 +416,7 @@ void ImageScanner::prepareAddImage(int albumId)
     d->scanInfo.albumID          = albumId;
     d->scanInfo.status           = DatabaseItem::Visible;
 
-    kDebug() << "Adding new item" << d->fileInfo.filePath();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Adding new item" << d->fileInfo.filePath();
     d->commit.operation = ImageScannerCommit::AddItem;
 }
 
@@ -856,18 +856,18 @@ void ImageScanner::scanTags()
 
     if (pickId != -1)
     {
-        kDebug() << "Pick Label found : " << pickId;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Pick Label found : " << pickId;
 
         int tagId = TagsCache::instance()->tagForPickLabel((PickLabel)pickId);
 
         if (tagId)
         {
             d->commit.tagIds << tagId;
-            kDebug() << "Assigned Pick Label Tag  : " << tagId;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Assigned Pick Label Tag  : " << tagId;
         }
         else
         {
-            kDebug() << "Cannot find Pick Label Tag for : " << pickId;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot find Pick Label Tag for : " << pickId;
         }
     }
 
@@ -877,18 +877,18 @@ void ImageScanner::scanTags()
 
     if (colorId != -1)
     {
-        kDebug() << "Color Label found : " << colorId;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Color Label found : " << colorId;
 
         int tagId = TagsCache::instance()->tagForColorLabel((ColorLabel)colorId);
 
         if (tagId)
         {
             d->commit.tagIds << tagId;
-            kDebug() << "Assigned Color Label Tag  : " << tagId;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Assigned Color Label Tag  : " << tagId;
         }
         else
         {
-            kDebug() << "Cannot find Color Label Tag for : " << colorId;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot find Color Label Tag for : " << colorId;
         }
     }
 }
@@ -937,7 +937,7 @@ void ImageScanner::commitFaces()
 
         if (!tagId)
         {
-            kDebug() << "Failed to create a person tag for name" << name;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to create a person tag for name" << name;
         }
 
         TagRegion region(TagRegion::relativeToAbsolute(rect, size));
@@ -1052,11 +1052,11 @@ void ImageScanner::tagImageHistoryGraph(qlonglong id)
     {
         return;
     }
-    //kDebug() << "tagImageHistoryGraph" << id;
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "tagImageHistoryGraph" << id;
 
     // Load relation cloud, history of info and of all leaves of the tree into the graph, fully resolved
     ImageHistoryGraph graph    = ImageHistoryGraph::fromInfo(info, ImageHistoryGraph::LoadAll, ImageHistoryGraph::NoProcessing);
-    kDebug() << graph;
+    qCDebug(DIGIKAM_GENERAL_LOG) << graph;
 
     int originalVersionTag     = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::originalVersion());
     int currentVersionTag      = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::currentVersion());
@@ -1080,7 +1080,7 @@ void ImageScanner::tagImageHistoryGraph(qlonglong id)
 
     for (it = types.constBegin(); it != types.constEnd(); ++it)
     {
-        kDebug() << "Image" << it.key().id() << "type" << it.value();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Image" << it.key().id() << "type" << it.value();
         HistoryImageId::Types types = it.value();
 
         if (types & HistoryImageId::Original)
@@ -1841,7 +1841,7 @@ void ImageScanner::scanBalooInfo()
 
     if(!bInfo.comment.isEmpty())
     {
-        kDebug() << "+++++++++++++++++++++Comment " << bInfo.comment;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "+++++++++++++++++++++Comment " << bInfo.comment;
 
         if(!d->commit.captions.contains("x-default"))
         {

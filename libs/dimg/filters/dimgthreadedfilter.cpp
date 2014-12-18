@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 namespace Digikam
 {
@@ -179,7 +179,7 @@ void DImgThreadedFilter::startFilter()
     else  // No image data
     {
         emit finished(false);
-        kDebug() << m_name << "::No valid image data !!! ...";
+        qCDebug(DIGIKAM_GENERAL_LOG) << m_name << "::No valid image data !!! ...";
     }
 }
 
@@ -195,7 +195,7 @@ void DImgThreadedFilter::startFilterDirectly()
         {
             QDateTime now = QDateTime::currentDateTime();
             filterImage();
-            kDebug() << m_name << ":: excecution time : " << now.msecsTo(QDateTime::currentDateTime()) << " ms";
+            qCDebug(DIGIKAM_GENERAL_LOG) << m_name << ":: excecution time : " << now.msecsTo(QDateTime::currentDateTime()) << " ms";
         }
         catch (std::bad_alloc& ex)
         {
@@ -210,7 +210,7 @@ void DImgThreadedFilter::startFilterDirectly()
     else  // No image data
     {
         emit finished(false);
-        kDebug() << m_name << "::No valid image data !!! ...";
+        qCDebug(DIGIKAM_GENERAL_LOG) << m_name << "::No valid image data !!! ...";
     }
 }
 

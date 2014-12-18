@@ -28,7 +28,7 @@
 #include <kdialog.h>
 #include <klocalizedstring.h>
 #include <klineedit.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 

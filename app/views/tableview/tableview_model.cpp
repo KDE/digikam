@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // local includes
 
@@ -426,7 +426,7 @@ TableViewColumn* TableViewModel::getColumnObject(const int columnIndex)
     /// @todo Debug output to find OSX crash
     if (columnIndex>=d->columnObjects.count())
     {
-        kDebug()<<"------ CRASH AHEAD: columnObjects.count(): "<<d->columnObjects.count()<<", columnIndex: "<<columnIndex;
+        qCDebug(DIGIKAM_GENERAL_LOG)<<"------ CRASH AHEAD: columnObjects.count(): "<<d->columnObjects.count()<<", columnIndex: "<<columnIndex;
     }
 
     return d->columnObjects.at(columnIndex);

@@ -42,7 +42,7 @@
 
 #include <kaction.h>
 #include <kconfig.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kdialog.h>
 #include <khbox.h>
 #include <kinputdialog.h>
@@ -458,7 +458,7 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
         coordinatesList << -200 << -200 << -200 << -200;
     }
 
-    kDebug() << "West, North, East, South: " << coordinatesList;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "West, North, East, South: " << coordinatesList;
 
     SearchXmlWriter writer;
     writer.writeGroup();

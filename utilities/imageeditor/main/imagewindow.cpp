@@ -74,7 +74,7 @@
 #include <ktoolbar.h>
 #include <ktoolbarpopupaction.h>
 #include <kwindowsystem.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -996,13 +996,13 @@ void ImageWindow::saveIsComplete()
 
 void ImageWindow::saveVersionIsComplete()
 {
-    kDebug() << "save version done";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "save version done";
     saveAsIsComplete();
 }
 
 void ImageWindow::saveAsIsComplete()
 {
-    kDebug() << "Saved" << m_savingContext.srcURL << "to" << m_savingContext.destinationURL;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Saved" << m_savingContext.srcURL << "to" << m_savingContext.destinationURL;
 
     // Nothing to be done if operating without database
     if (d->currentImageInfo.isNull())
@@ -1018,7 +1018,7 @@ void ImageWindow::saveAsIsComplete()
     }
 
     // copy the metadata of the original file to the new file
-    kDebug() << "was versioned"
+    qCDebug(DIGIKAM_GENERAL_LOG) << "was versioned"
              << (m_savingContext.executedOperation == SavingContext::SavingStateVersion)
              << "current" << d->currentImageInfo.id() << d->currentImageInfo.name()
              << "destinations" << m_savingContext.versionFileOperation.allFilePaths();

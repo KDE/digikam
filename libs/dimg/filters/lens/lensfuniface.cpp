@@ -22,7 +22,7 @@
 
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 namespace Digikam
 {
@@ -144,18 +144,18 @@ LensFunIface::DevicePtr LensFunIface::findCamera(const QString& make, const QStr
     while (cameras && *cameras)
     {
         DevicePtr cam = *cameras;
-        //        kDebug() << "Query camera:" << cam->Maker << "-" << cam->Model;
+        //        qCDebug(DIGIKAM_GENERAL_LOG) << "Query camera:" << cam->Maker << "-" << cam->Model;
 
         if (QString(cam->Maker) == make && QString(cam->Model) == model)
         {
-            kDebug() << "Search for camera " << make << "-" << model << " ==> true";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Search for camera " << make << "-" << model << " ==> true";
             return cam;
         }
 
         ++cameras;
     }
 
-    kDebug() << "Search for camera " << make << "-" << model << " ==> false";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Search for camera " << make << "-" << model << " ==> false";
     return 0;
 }
 
@@ -169,14 +169,14 @@ LensFunIface::LensPtr LensFunIface::findLens(const QString& model) const
 
         if (QString(lens->Model) == model)
         {
-            kDebug() << "Search for lens " << model << " ==> true";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Search for lens " << model << " ==> true";
             return lens;
         }
 
         ++lenses;
     }
 
-    kDebug() << "Search for lens " << model << " ==> false";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Search for lens " << model << " ==> false";
     return 0;
 }
 
@@ -217,7 +217,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
     if (meta.isEmpty())
     {
-        kDebug() << "No metadata available";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "No metadata available";
         return LensFunIface::MetadataUnavailable;
     }
 
@@ -228,7 +228,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
     if (d->makeDescription.isEmpty())
     {
-        kDebug() << "No camera maker info available";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "No camera maker info available";
         exactMatch = false;
     }
     else
@@ -258,8 +258,8 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
         {
             setUsedCamera(lfCamera);
 
-            kDebug() << "Camera maker   : " << d->settings.cameraMake;
-            kDebug() << "Camera model   : " << d->settings.cameraModel;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Camera maker   : " << d->settings.cameraMake;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Camera model   : " << d->settings.cameraModel;
 
             // ------------------------------------------------------------------------------------------------
             // -- Performing lens description searches.
@@ -272,7 +272,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
                 // STAGE 1, search in LensFun database as well.
                 lensList = findLenses(d->usedCamera, d->lensDescription);
-                kDebug() << "* Check for lens by direct query (" << d->lensDescription << " : " << lensList.count() << ")";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "* Check for lens by direct query (" << d->lensDescription << " : " << lensList.count() << ")";
                 lensMatches.append(lensList);
 
                 // STAGE 2, Adapt exiv2 strings to lensfun strings for Nikon.
@@ -284,7 +284,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
                     lensCutted.remove("Zoom-");
                     lensCutted.replace("IF-ID", "ED-IF");
                     lensList = findLenses(d->usedCamera, lensCutted);
-                    kDebug() << "* Check for Nikon lens (" << lensCutted << " : " << lensList.count() << ")";
+                    qCDebug(DIGIKAM_GENERAL_LOG) << "* Check for Nikon lens (" << lensCutted << " : " << lensList.count() << ")";
                     lensMatches.append(lensList);
                 }
 
@@ -297,14 +297,14 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
                 lensCutted.replace(" - ", "-");
                 lensCutted.replace(" mm", "mn");
                 lensList   = findLenses(d->usedCamera, lensCutted);
-                kDebug() << "* Check for no maker lens (" << lensCutted << " : " << lensList.count() << ")";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "* Check for no maker lens (" << lensCutted << " : " << lensList.count() << ")";
                 lensMatches.append(lensList);
 
                 // Display the results.
 
                 if (lensMatches.isEmpty())
                 {
-                    kDebug() << "lens matches   : NOT FOUND";
+                    qCDebug(DIGIKAM_GENERAL_LOG) << "lens matches   : NOT FOUND";
                     exactMatch &= false;
                 }
                 else
@@ -313,19 +313,19 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
                     if(lensMatches.count() == 1)
                     {
                         setUsedLens(lensMatches.first());
-                        kDebug() << "Lens found     : " << d->settings.lensModel;
-                        kDebug() << "Crop Factor    : " << d->settings.cropFactor;
+                        qCDebug(DIGIKAM_GENERAL_LOG) << "Lens found     : " << d->settings.lensModel;
+                        qCDebug(DIGIKAM_GENERAL_LOG) << "Crop Factor    : " << d->settings.cropFactor;
                     }
                     else
                     {
-                        kDebug() << "lens matches   : more than one...";
+                        qCDebug(DIGIKAM_GENERAL_LOG) << "lens matches   : more than one...";
                         const lfLens* exact = 0;
 
                         Q_FOREACH(const lfLens* const l, lensMatches)
                         {
                             if(l->Model == d->lensDescription)
                             {
-                                kDebug() << "found exact match from" << lensMatches.count() << "possitibilites:" << l->Model;
+                                qCDebug(DIGIKAM_GENERAL_LOG) << "found exact match from" << lensMatches.count() << "possitibilites:" << l->Model;
                                 exact = l;
                             }
                         }
@@ -343,13 +343,13 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
             }
             else
             {
-                kDebug() << "Lens description string is empty";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Lens description string is empty";
                 exactMatch &= false;
             }
         }
         else
         {
-            kDebug() << "Cannot find Lensfun camera device for (" << d->makeDescription << " - " << d->modelDescription << ")";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot find Lensfun camera device for (" << d->makeDescription << " - " << d->modelDescription << ")";
             exactMatch &= false;
         }
     }
@@ -361,12 +361,12 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
     if (temp.isEmpty())
     {
-        kDebug() << "Focal Length   : NOT FOUND";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Focal Length   : NOT FOUND";
         exactMatch &= false;
     }
 
     d->settings.focalLength = temp.mid(0, temp.length() - 3).toDouble(); // HACK: strip the " mm" at the end ...
-    kDebug() << "Focal Length   : " << d->settings.focalLength;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Focal Length   : " << d->settings.focalLength;
 
     // ------------------------------------------------------------------------------------------------
 
@@ -374,12 +374,12 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
     if (temp.isEmpty())
     {
-        kDebug() << "Aperture       : NOT FOUND";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Aperture       : NOT FOUND";
         exactMatch &= false;
     }
 
     d->settings.aperture = temp.mid(1).toDouble();
-    kDebug() << "Aperture       : " << d->settings.aperture;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Aperture       : " << d->settings.aperture;
 
     // ------------------------------------------------------------------------------------------------
     // Try to get subject distance value.
@@ -421,7 +421,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
     if (temp.isEmpty())
     {
-        kDebug() << "Subject dist.  : NOT FOUND";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Subject dist.  : NOT FOUND";
         exactMatch &= false;
     }
     else
@@ -435,14 +435,14 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
             d->settings.subjectDistance = -1.0;
         }
 
-        kDebug() << "Subject dist.  : " << d->settings.subjectDistance;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Subject dist.  : " << d->settings.subjectDistance;
     }
 
     // ------------------------------------------------------------------------------------------------
 
     ret = exactMatch ? MetadataExactMatch : MetadataPartialMatch;
 
-    kDebug() << "Metadata match : " << metadataMatchDebugStr(ret);
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Metadata match : " << metadataMatchDebugStr(ret);
 
     return ret;
 }

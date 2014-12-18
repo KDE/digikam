@@ -34,7 +34,7 @@
 #include <QQueue>
 // KDE includes
 
-#include <kdebug.h>
+#include <digikam_debug.h>
 #include <kmenu.h>
 #include <klocalizedstring.h>
 #include <kiconloader.h>

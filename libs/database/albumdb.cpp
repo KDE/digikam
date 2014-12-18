@@ -51,7 +51,7 @@ extern "C"
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -3421,7 +3421,7 @@ QMap<QString, int> AlbumDB::getFormatStatistics(DatabaseItem::Category category)
     }
 
     queryString.append(" GROUP BY II.format;");
-    kDebug() << queryString;
+    qCDebug(DIGIKAM_GENERAL_LOG) << queryString;
 
     SqlQuery query = d->db->prepareQuery(queryString);
 
