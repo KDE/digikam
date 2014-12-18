@@ -37,7 +37,7 @@
 
 #include "digikam_export.h"
 #include "iccprofile.h"
-
+#include <QIcon>
 class QSignalMapper;
 
 namespace Digikam
@@ -100,7 +100,7 @@ class DIGIKAM_EXPORT IccProfilesMenuAction : public KActionMenu
 
 public:
 
-    IccProfilesMenuAction(const KIcon& icon, const QString& text, QObject* const parent);
+    IccProfilesMenuAction(const QIcon& icon, const QString& text, QObject* const parent);
     IccProfilesMenuAction(const QString& text, QObject* const parent);
 
     /**

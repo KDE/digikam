@@ -67,7 +67,7 @@ class TagToggleAction : public QWidgetAction
 public:
 
     TagToggleAction(const QString& text, QObject* const parent);
-    TagToggleAction(const KIcon& icon, const QString& text, QObject* const parent);
+    TagToggleAction(const QIcon& icon, const QString& text, QObject* const parent);
     virtual QWidget* createWidget(QWidget* parent);
 
     void setSpecialChecked(bool checked);
@@ -326,7 +326,7 @@ TagToggleAction::TagToggleAction(const QString& text, QObject* const parent)
     setCheckable(true);
 }
 
-TagToggleAction::TagToggleAction(const KIcon& icon, const QString& text, QObject* const parent)
+TagToggleAction::TagToggleAction(const QIcon& icon, const QString& text, QObject* const parent)
     : QWidgetAction(parent),
       m_checked(false),
       m_checkBoxHidden(false)

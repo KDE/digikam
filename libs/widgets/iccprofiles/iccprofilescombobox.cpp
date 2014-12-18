@@ -34,7 +34,7 @@
 #include <kactionmenu.h>
 #include <klocalizedstring.h>
 #include <QMenu>
-
+#include <QIcon>
 // Local includes
 
 #include "icctransform.h"
@@ -183,7 +183,7 @@ void IccProfilesComboBox::setCurrentProfile(const IccProfile& profile)
 
 // ------------------------------------------------------------------------------------------
 
-IccProfilesMenuAction::IccProfilesMenuAction(const KIcon& icon, const QString& text, QObject* const parent)
+IccProfilesMenuAction::IccProfilesMenuAction(const QIcon& icon, const QString& text, QObject* const parent)
     : KActionMenu(icon, text, parent),
       m_parent(parent)
 {

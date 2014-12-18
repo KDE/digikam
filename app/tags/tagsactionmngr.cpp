@@ -286,7 +286,7 @@ bool TagsActionMngr::createTagActionShortcut(int tagId)
 
     KShortcut ks(value);
     // FIXME: tag icons can be files on disk, or system icon names. Only the latter will work here.
-    KIcon     icon(SyncJob::getTagThumbnail(talbum));
+    QIcon     icon(SyncJob::getTagThumbnail(talbum));
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Create Shortcut " << ks.toString()
              << " to Tag " << talbum->title() << " (" << tagId << ")";
