@@ -899,7 +899,7 @@ void ShowFoto::saveAsIsComplete()
     // Add the file to the list of thumbbar images if it's not there already
     Digikam::ThumbBarItem* foundItem = d->thumbBar->findItemByUrl(m_savingContext.destinationURL);
     d->thumbBar->invalidateThumb(foundItem);
-    kDebug() << wantedUrls;
+    qCDebug(DIGIKAM_SHOWFOTO_LOG) << wantedUrls;
 
     if (!foundItem)
     {
@@ -1150,7 +1150,7 @@ void ShowFoto::openFolder(const KUrl& url)
     patterns.append (" ");
     patterns.append (filter.toUpper());
 
-    kDebug() << "patterns=" << patterns;
+    qCDebug(DIGIKAM_SHOWFOTO_LOG) << "patterns=" << patterns;
 
 
     // Get all image files from directory.

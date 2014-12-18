@@ -314,7 +314,7 @@ QModelIndex ShowfotoCategorizedView::nextIndexHint(const QModelIndex& anchor, co
     QModelIndex hint      = DCategorizedView::nextIndexHint(anchor, removed);
     ShowfotoItemInfo info = d->filterModel->showfotoItemInfo(anchor);
 
-    //kDebug() << "Having initial hint" << hint << "for" << anchor << d->model->numberOfIndexesForShowfotoItemInfo(info);
+    //qCDebug(DIGIKAM_SHOWFOTO_LOG) << "Having initial hint" << hint << "for" << anchor << d->model->numberOfIndexesForShowfotoItemInfo(info);
 
     // Fixes a special case of multiple (face) entries for the same image.
     // If one is removed, any entry of the same image shall be preferred.
@@ -339,7 +339,7 @@ QModelIndex ShowfotoCategorizedView::nextIndexHint(const QModelIndex& anchor, co
                 {
                     minDiff = distance;
                     hint    = index;
-                    //kDebug() << "Chose index" << hint << "at distance" << minDiff << "to" << anchor;
+                    //qCDebug(DIGIKAM_SHOWFOTO_LOG) << "Chose index" << hint << "at distance" << minDiff << "to" << anchor;
                 }
             }
         }

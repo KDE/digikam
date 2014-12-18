@@ -303,7 +303,7 @@ bool ShowfotoThumbnailModel::getThumbnail(const ShowfotoItemInfo& itemInfo, QIma
 
     // Finally, we trying to get thumbnail using DImg API (slow).
 
-//    kDebug() << "Use DImg loader to get thumbnail from : " << path;
+//    qCDebug(DIGIKAM_SHOWFOTO_LOG) << "Use DImg loader to get thumbnail from : " << path;
 
 //    DImg dimgThumb(path);
 
