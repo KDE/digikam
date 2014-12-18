@@ -57,15 +57,15 @@
 #include <ktoolinvocation.h>
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
-#include <digikam_debug.h>
 
 // Libkdcraw includes
 
-#include <version.h>
+#include <libkdcraw_version.h>
 #include <kdcraw.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "actions.h"
 #include "album.h"
 #include "batchtoolsmanager.h"

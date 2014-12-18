@@ -60,7 +60,7 @@
 #include <kcalendarsystem.h>
 #include <kcombobox.h>
 #include <kconfig.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kdialog.h>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
@@ -90,7 +90,7 @@
 
 #include <kdcraw.h>
 #include <rexpanderbox.h>
-#include <version.h>
+#include <libkdcraw_version.h>
 
 // Local includes
 

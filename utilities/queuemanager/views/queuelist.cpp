@@ -42,7 +42,7 @@
 #include <klocalizedstring.h>
 #include <kmenu.h>
 #include <kurl.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 

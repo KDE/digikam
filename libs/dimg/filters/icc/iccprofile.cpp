@@ -40,7 +40,7 @@
 #include <kcodecs.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 

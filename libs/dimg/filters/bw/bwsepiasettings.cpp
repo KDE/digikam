@@ -31,10 +31,10 @@
 #include <QFile>
 #include <QTextStream>
 #include <QCheckBox>
+#include <QStandardPaths>
 
 // KDE includes
 
-#include <digikam_debug.h>
 #include <kurl.h>
 #include <kdialog.h>
 #include <klocalizedstring.h>
@@ -50,11 +50,11 @@
 
 #include <rexpanderbox.h>
 #include <rnuminput.h>
-#include <version.h>
-#include <QStandardPaths>
+#include <libkdcraw_version.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "previewlist.h"
 #include "curvesbox.h"
 #include "curveswidget.h"

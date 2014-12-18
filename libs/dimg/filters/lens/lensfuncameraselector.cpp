@@ -34,7 +34,7 @@
 #include <kcombobox.h>
 #include <kdialog.h>
 #include <klocalizedstring.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <ksqueezedtextlabel.h>
 
 // Libkdcraw includes

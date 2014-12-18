@@ -28,7 +28,7 @@
 
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <threadweaver/JobCollection.h>
 #include <solid/device.h>
 

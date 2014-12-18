@@ -29,7 +29,7 @@
 
 // Libkexiv2 includes
 
-#include <version.h>
+#include <libkexiv2_version.h>
 
 // local includes
 
@@ -40,7 +40,6 @@
 #include "filepropertiesoption.h"
 #include "metadataoption.h"
 #include "sequencenumberoption.h"
-
 #include "casemodifier.h"
 #include "defaultvaluemodifier.h"
 #include "rangemodifier.h"

@@ -49,7 +49,7 @@
 #include <kcursor.h>
 #include <klocalizedstring.h>
 #include <kiconloader.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kpixmapsequence.h>
 
 // Local includes

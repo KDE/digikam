@@ -30,7 +30,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kglobal.h>
 
 // Local includes

@@ -46,7 +46,7 @@
 #include <klocalizedstring.h>
 #include <kiconloader.h>
 #include <kpixmapsequence.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 
 // Local includes
 

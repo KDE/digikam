@@ -40,7 +40,7 @@ extern "C"
 #include <kde_file.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <threadweaver/ThreadWeaver.h>
 
 // Local includes

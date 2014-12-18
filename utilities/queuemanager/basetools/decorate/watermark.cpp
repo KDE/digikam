@@ -50,7 +50,7 @@
 #include <knuminput.h>
 #include <kvbox.h>
 #include <kfiledialog.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kglobal.h>
 
 // Local includes

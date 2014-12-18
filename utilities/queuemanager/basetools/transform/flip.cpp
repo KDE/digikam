@@ -33,7 +33,7 @@
 #include <kcombobox.h>
 #include <klocalizedstring.h>
 #include <kvbox.h>
-#include <digikam_debug.h>
+#include "digikam_debug.h"
 #include <kglobal.h>
 
 // Local includes

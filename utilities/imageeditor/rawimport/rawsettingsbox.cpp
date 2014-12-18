@@ -42,13 +42,12 @@
 #include <kstandarddirs.h>
 #include <ktabwidget.h>
 #include <kvbox.h>
-#include "digikam_debug.h"
 
 // Libkdcraw includes
 
 #include <dcrawsettingswidget.h>
 #include <rnuminput.h>
-#include <version.h>
+#include <libkdcraw_version.h>
 #include <rexpanderbox.h>
 
 // Local includes
@@ -62,6 +61,7 @@
 #include "imagedialog.h"
 #include "imagehistogram.h"
 #include "globals.h"
+#include "digikam_debug.h"
 
 using namespace KDcrawIface;
 
