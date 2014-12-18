@@ -30,7 +30,7 @@
 #include <QList>
 #include <QByteArray>
 #include <QDateTime>
-#include <QDebug>
+
 
 // KDE includes
 

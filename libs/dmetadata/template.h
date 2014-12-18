@@ -29,7 +29,7 @@
 #include <QMetaType>
 #include <QString>
 #include <QStringList>
-#include <QDebug>
+
 
 // Libkexiv2 includes
 

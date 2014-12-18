@@ -28,7 +28,7 @@
 // Qt includes
 
 #include <QMetaType>
-#include <QDebug>
+
 
 // Local includes
 

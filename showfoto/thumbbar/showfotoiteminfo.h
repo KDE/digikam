@@ -28,7 +28,7 @@
 
 #include <QList>
 #include <QByteArray>
-#include <QDebug>
+
 
 // KDE includes
 

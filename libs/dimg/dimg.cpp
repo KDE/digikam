@@ -52,7 +52,7 @@ extern "C"
 #include <QPainter>
 #include <QPixmap>
 #include <QSysInfo>
-#include <QDebug>
+
 #include <QUuid>
 
 // KDE includes

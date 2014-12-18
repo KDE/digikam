@@ -25,7 +25,7 @@
 
 // Qt includes
 
-#include <QDebug>
+
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 #include <KDebug>

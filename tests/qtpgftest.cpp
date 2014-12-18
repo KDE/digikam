@@ -29,7 +29,7 @@
 #include <QBuffer>
 #include <QByteArray>
 #include <QDataStream>
-#include <QDebug>
+
 #include <QFile>
 #include <QIODevice>
 #include <QImage>

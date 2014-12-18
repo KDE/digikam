@@ -29,7 +29,7 @@
 #include <QMap>
 #include <QString>
 #include <QDateTime>
-#include <QDebug>
+
 
 // Libkexiv2 includes
 

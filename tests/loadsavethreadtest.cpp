@@ -27,7 +27,7 @@
 // Qt includes
 
 #include <QFileInfo>
-#include <QDebug>
+
 
 // Libkexiv2 includes
 

@@ -26,7 +26,7 @@
 
 // Qt includes
 
-#include <QDebug>
+
 
 namespace Digikam
 {
