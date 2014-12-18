@@ -41,14 +41,14 @@
 #include <kcalendarsystem.h>
 #include <kcomponentdata.h>
 #include <kmimetype.h>
-#include "digikam_debug.h"
 
-// KExiv2 includes
+// Libkexiv2 includes
 
 #include <kexiv2.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "databaseaccess.h"
 #include "albumdb.h"
 #include "geodetictools.h"

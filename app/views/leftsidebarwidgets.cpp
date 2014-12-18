@@ -35,24 +35,24 @@
 #include <QTimer>
 #include <QToolButton>
 #include <QRadioButton>
+#include <QApplication>
+#include <QStyle>
+#include <QIcon>
 
 // KDE includes
 
 #include <kcombobox.h>
 #include <kpushbutton.h>
-#include "digikam_debug.h"
 #include <kdialog.h>
-#include <QIcon>
 #include <kiconloader.h>
 #include <kinputdialog.h>
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
-#include <KTabWidget>
-#include <QApplication>
-#include <QStyle>
+#include <ktabwidget.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "albummanager.h"
 #include "albummodificationhelper.h"
 #include "albumselectiontreeview.h"

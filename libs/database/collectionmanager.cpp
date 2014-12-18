@@ -31,10 +31,10 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <kglobal.h>
 #include <kcodecs.h>
 #include <klocalizedstring.h>
+
 #include <solid/device.h>
 #include <solid/deviceinterface.h>
 #include <solid/devicenotifier.h>
@@ -44,9 +44,9 @@
 #include <solid/opticaldisc.h>
 #include <solid/predicate.h>
 
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "databaseaccess.h"
 #include "databasechangesets.h"
 #include "databasetransaction.h"

@@ -28,15 +28,13 @@
 
 #include "addtagslineedit.h"
 
-// Qt includes
-
 // KDE includes
 
-#include "digikam_debug.h"
 #include <klocalizedstring.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "addtagscompletionbox.h"
 #include "album.h"
 #include "albummodel.h"

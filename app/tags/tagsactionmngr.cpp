@@ -27,17 +27,17 @@
 
 #include <QList>
 #include <QShortcut>
+#include <QIcon>
 
 // KDE includes
 
 #include <kaction.h>
 #include <kapplication.h>
 #include <klocalizedstring.h>
-#include <QIcon>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"

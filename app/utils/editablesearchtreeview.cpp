@@ -31,12 +31,12 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <kiconloader.h>
 #include <kmenu.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "contextmenuhelper.h"
 
 namespace Digikam

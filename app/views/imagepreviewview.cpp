@@ -45,16 +45,15 @@
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kmenu.h>
-#include "digikam_debug.h"
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
 #include <ktoggleaction.h>
 #include <kstandarddirs.h>
 #include <kglobalsettings.h>
 
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "config-digikam.h"
 #include "imagepreviewviewitem.h"
 #include "applicationsettings.h"

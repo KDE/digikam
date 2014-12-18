@@ -7,7 +7,7 @@
  * Description : Qt item view for images - the delegate
  *
  * Copyright (C) 2002-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2002-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2002-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
@@ -27,12 +27,9 @@
 #include "digikamimagefacedelegate.h"
 #include "imagedelegatepriv.h"
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "applicationsettings.h"
 #include "databaseface.h"
 #include "imagemodel.h"

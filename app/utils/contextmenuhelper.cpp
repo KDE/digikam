@@ -43,7 +43,6 @@
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
-#include "digikam_debug.h"
 #include <kfileitem.h>
 #include <klocalizedstring.h>
 #include <kmenu.h>
@@ -71,6 +70,7 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"

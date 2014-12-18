@@ -34,10 +34,10 @@
 
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "imagedelegate.h"
 #include "imagemodel.h"
 #include "imagecategorizedview.h"

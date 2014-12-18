@@ -48,10 +48,10 @@
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <ktoggleaction.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"

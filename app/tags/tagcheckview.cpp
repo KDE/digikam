@@ -32,12 +32,12 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <kmenu.h>
 #include <kselectaction.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "contextmenuhelper.h"
 #include "tagmodificationhelper.h"
 

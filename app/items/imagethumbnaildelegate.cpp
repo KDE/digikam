@@ -29,11 +29,11 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <kiconloader.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "applicationsettings.h"
 #include "imagecategorizedview.h"
 #include "imagedelegateoverlay.h"

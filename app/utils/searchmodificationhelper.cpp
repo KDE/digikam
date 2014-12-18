@@ -25,7 +25,6 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <kinputdialog.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
@@ -33,6 +32,7 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "album.h"
 #include "albummanager.h"
 #include "haariface.h"

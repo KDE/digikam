@@ -24,7 +24,7 @@
 
 #include "mapwidgetview.h"
 
-//Qt includes
+// Qt includes
 
 #include <QWidget>
 #include <QVBoxLayout>
@@ -33,20 +33,20 @@
 #include <QAbstractItemModel>
 #include <QPersistentModelIndex>
 
-//KDE includes
+// KDE includes
 
-#include "digikam_debug.h"
 #include <khbox.h>
 #include <kvbox.h>
 #include <kconfig.h>
 
-// libkgeomap includes
+// Libkgeomap includes
 
 #include <kgeomap_widget.h>
 #include <itemmarkertiler.h>
 
 //local includes
 
+#include "digikam_debug.h"
 #include "camerathumbsctrl.h"
 #include "imageposition.h"
 #include "imageinfo.h"

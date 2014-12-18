@@ -41,6 +41,7 @@
 #include <QtDBus>
 #include <QDesktopServices>
 #include <QDomDocument>
+#include <QStandardPaths>
 
 // KDE includes
 
@@ -49,7 +50,6 @@
 #include <kactioncategory.h>
 #endif
 
-#include "digikam_debug.h"
 #include <kaboutdata.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
@@ -78,6 +78,8 @@
 #include <ktoolbarpopupaction.h>
 #include <ktoolinvocation.h>
 #include <kwindowsystem.h>
+#include <kformat.h>
+#include <khelpclient.h>
 
 #include <solid/camera.h>
 #include <solid/device.h>
@@ -96,12 +98,10 @@
 // Libkexiv2
 
 #include <rotationmatrix.h>
-#include <QStandardPaths>
-#include <KFormat>
-#include <KHelpClient>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albumselectdialog.h"

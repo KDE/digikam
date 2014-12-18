@@ -40,10 +40,10 @@
 #include <kmimetypetrader.h>
 #include <kurl.h>
 #include <kwindowsystem.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "album.h"
 #include "albummanager.h"
 #include "albumselectdialog.h"

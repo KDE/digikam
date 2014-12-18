@@ -49,10 +49,10 @@
 #include <kcursor.h>
 #include <kglobal.h>
 #include <kapplication.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "triangle.h"
 #include "imageiface.h"
 #include "pixelsaliasfilter.h"

@@ -36,12 +36,12 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "album.h"
 #include "albumfiltermodel.h"
 #include "albummanager.h"

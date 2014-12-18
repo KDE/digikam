@@ -33,10 +33,10 @@
 // KDE includes
 
 #include <kiconloader.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "album.h"
 #include "albummanager.h"
 #include "applicationsettings.h"

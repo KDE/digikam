@@ -34,7 +34,7 @@
 #include <kaction.h>
 #include <klocalizedstring.h>
 
-// libkgeomap includes
+// Libkgeomap includes
 
 #include <kgeomap_widget.h>
 

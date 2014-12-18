@@ -65,10 +65,10 @@
 #include <kstandarddirs.h>
 #include <kcursor.h>
 #include <kglobal.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "imageiface.h"
 #include "dimg.h"
 

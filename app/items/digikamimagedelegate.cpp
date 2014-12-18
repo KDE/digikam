@@ -27,15 +27,13 @@
 #include "digikamimagedelegate.h"
 #include "imagedelegatepriv.h"
 
-// Qt includes
-
 // KDE includes
 
-#include "digikam_debug.h"
 #include <kiconloader.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "applicationsettings.h"
 #include "imagecategorydrawer.h"
 #include "imagecategorizedview.h"

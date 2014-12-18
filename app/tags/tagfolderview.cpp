@@ -32,21 +32,21 @@
 #include <QEvent>
 #include <QContextMenuEvent>
 #include <QQueue>
+#include <QIcon>
+
 // KDE includes
 
-#include "digikam_debug.h"
 #include <kmenu.h>
 #include <klocalizedstring.h>
 #include <kiconloader.h>
-#include <QIcon>
 #include <kaction.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "albummanager.h"
 #include "contextmenuhelper.h"
 #include "tagmodificationhelper.h"
-
 
 namespace Digikam
 {

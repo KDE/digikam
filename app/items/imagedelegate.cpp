@@ -35,18 +35,18 @@
 
 #include <QCache>
 #include <QPainter>
+#include <QIcon>
 
 // KDE includes
 
 #include <kglobal.h>
 #include <kio/global.h>
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
-#include <QIcon>
 #include <kapplication.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "albummanager.h"
 #include "imagecategorydrawer.h"
 #include "imagecategorizedview.h"

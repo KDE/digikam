@@ -37,7 +37,6 @@
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
-#include "digikam_debug.h"
 #include <kmenu.h>
 #include <kmimetype.h>
 #include <krun.h>
@@ -49,6 +48,7 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "applicationsettings.h"
 #include "imagealbumfiltermodel.h"
 #include "imagealbummodel.h"

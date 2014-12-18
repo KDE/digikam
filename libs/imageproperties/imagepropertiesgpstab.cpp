@@ -52,7 +52,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include <ktoolinvocation.h>
 #include "digikam_debug.h"
 
-// libkgeomap includes
+// Libkgeomap includes
 
 #include <kgeomap_widget.h>
 #include <itemmarkertiler.h>

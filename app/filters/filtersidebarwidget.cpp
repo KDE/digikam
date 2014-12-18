@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2010-2011 by Andi Clemens <andi dot clemens at gmail dot com>
- * Copyright (C) 2011-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C)      2011 by Michael G. Hansen <mike at mghansen dot de>
  * Copyright (C)      2014 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
@@ -39,7 +39,6 @@
 
 #include <khbox.h>
 #include <kmenu.h>
-#include "digikam_debug.h"
 
 // Libkdcraw includes
 
@@ -48,6 +47,7 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "applicationsettings.h"
 #include "colorlabelfilter.h"
 #include "geolocationfilter.h"

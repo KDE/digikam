@@ -38,7 +38,6 @@
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kconfig.h>
-#include "digikam_debug.h"
 #include <kdeversion.h>
 #include <kglobal.h>
 #include <kimageio.h>
@@ -53,6 +52,7 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "albummanager.h"
 #include "assistantdlg.h"
 #include "collectionlocation.h"

@@ -24,7 +24,7 @@
 
 #include "loadsavethread.h"
 
-// KExiv2 includes
+// Libkexiv2 includes
 
 #include <rotationmatrix.h>
 

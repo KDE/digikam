@@ -32,7 +32,6 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <klocalizedstring.h>
 #include <kfileitem.h>
 #include <kglobal.h>
@@ -40,6 +39,7 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "albummanager.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"

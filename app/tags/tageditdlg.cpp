@@ -31,6 +31,8 @@
 #include <QLayout>
 #include <QPointer>
 #include <QTreeWidget>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
@@ -42,11 +44,8 @@
 #include <kiconloader.h>
 #include <kseparator.h>
 #include <kstandarddirs.h>
-#include "digikam_debug.h"
 #include <kdialog.h>
 #include <kkeysequencewidget.h>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 
@@ -55,6 +54,7 @@
 #include "searchtextbar.h"
 #include "tagsactionmngr.h"
 #include "databaseconstants.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
