@@ -41,6 +41,8 @@
 
 #include <libkdcraw_version.h>
 #include <kdcraw.h>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 

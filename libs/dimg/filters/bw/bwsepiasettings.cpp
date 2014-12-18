@@ -51,6 +51,8 @@
 #include <rexpanderbox.h>
 #include <rnuminput.h>
 #include <libkdcraw_version.h>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 

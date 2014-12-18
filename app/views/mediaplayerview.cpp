@@ -44,6 +44,8 @@
 #include <phonon/seekslider.h>
 #include <phonon/videoplayer.h>
 #include <phonon/videowidget.h>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 

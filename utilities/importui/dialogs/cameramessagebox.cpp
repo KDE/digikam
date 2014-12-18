@@ -42,6 +42,8 @@
 #include <kstandarddirs.h>
 #include <klocalizedstring.h>
 #include <kdialog.h>
+#include <QApplication>
+#include <QStyle>
 #include "digikam_debug.h"
 
 namespace Digikam

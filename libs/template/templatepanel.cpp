@@ -40,6 +40,8 @@
 
 #include <altlangstredit.h>
 #include <countryselector.h>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 

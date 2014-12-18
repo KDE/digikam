@@ -42,6 +42,8 @@
 // Libkexiv2 includes
 
 #include <altlangstredit.h>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 

@@ -45,6 +45,8 @@
 #include <kmultitabbar.h>
 #include <knuminput.h>
 #include <kvbox.h>
+#include <QApplication>
+#include <QStyle>
 
 //Local includes
 

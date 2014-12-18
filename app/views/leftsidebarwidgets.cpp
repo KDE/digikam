@@ -48,6 +48,8 @@
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
 #include <KTabWidget>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 

@@ -51,6 +51,8 @@
 
 #include <kexiv2.h>
 #include <libkexiv2_version.h>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 

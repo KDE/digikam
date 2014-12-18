@@ -45,6 +45,8 @@
 #include <kmessagebox.h>
 #include <kpagedialog.h>
 #include <kurl.h>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 

@@ -40,6 +40,8 @@
 // Libkdcraw includes
 
 #include <squeezedcombobox.h>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 

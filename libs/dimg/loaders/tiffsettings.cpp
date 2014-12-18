@@ -35,6 +35,8 @@
 
 #include <klocalizedstring.h>
 #include <kdialog.h>
+#include <QApplication>
+#include <QStyle>
 
 namespace Digikam
 {

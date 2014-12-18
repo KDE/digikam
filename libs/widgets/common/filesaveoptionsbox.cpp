@@ -44,6 +44,8 @@
 #include <klocalizedstring.h>
 #include <knuminput.h>
 #include <kurlcombobox.h>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 

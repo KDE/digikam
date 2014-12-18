@@ -45,6 +45,8 @@
 #include "digikam_debug.h"
 #include <kdialog.h>
 #include <kkeysequencewidget.h>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 

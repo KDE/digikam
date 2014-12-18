@@ -48,6 +48,8 @@
 // Libkdcraw includes
 
 #include <rnuminput.h>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 

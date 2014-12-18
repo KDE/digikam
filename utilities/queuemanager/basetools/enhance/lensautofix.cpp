@@ -35,6 +35,8 @@
 #include <kdialog.h>
 #include <kseparator.h>
 #include <kglobal.h>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 

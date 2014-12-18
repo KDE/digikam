@@ -36,6 +36,8 @@
 #include <kstandarddirs.h>
 #include <kassistantdialog.h>
 #include <kpagewidgetmodel.h>
+#include <QApplication>
+#include <QStyle>
 
 namespace Digikam
 {

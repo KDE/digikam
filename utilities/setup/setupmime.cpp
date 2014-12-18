@@ -40,6 +40,8 @@
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kvbox.h>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 

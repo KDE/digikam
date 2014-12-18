@@ -40,6 +40,8 @@
 // Libkipi includes
 
 #include <libkipi_version.h>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 

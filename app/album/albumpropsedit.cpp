@@ -57,6 +57,8 @@
 #include <ktextedit.h>
 #include <kurl.h>
 #include <kseparator.h>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 

@@ -50,6 +50,8 @@
 #include <rcombobox.h>
 #include <rnuminput.h>
 #include <rexpanderbox.h>
+#include <QApplication>
+#include <QStyle>
 
 using namespace KDcrawIface;
 

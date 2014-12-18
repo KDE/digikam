@@ -39,6 +39,8 @@
 #include <klocalizedstring.h>
 #include <ktabwidget.h>
 #include <kvbox.h>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 

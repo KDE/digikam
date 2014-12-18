@@ -35,6 +35,7 @@
 #include <klocalizedstring.h>
 #include <kdialog.h>
 #include <kpushbutton.h>
+#include <QStyle>
 
 // Local includes
 

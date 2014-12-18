@@ -39,6 +39,8 @@
 #include <kpushbutton.h>
 #include <kmessagebox.h>
 #include <kinputdialog.h>
+#include <QApplication>
+#include <QStyle>
 #include "digikam_debug.h"
 
 // Local includes

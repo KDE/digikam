@@ -46,6 +46,8 @@
 #include <kstandarddirs.h>
 #include <kurlrequester.h>
 #include <kvbox.h>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 

@@ -48,6 +48,8 @@
 // Libkdcraw includes
 
 #include <dcrawsettingswidget.h>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 

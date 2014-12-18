@@ -40,6 +40,7 @@
 #include <klocalizedstring.h>
 #include <kdialog.h>
 #include <kstringhandler.h>
+#include <QApplication>
 
 // Local includes
 

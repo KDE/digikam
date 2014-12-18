@@ -36,6 +36,8 @@
 #include <klocalizedstring.h>
 #include <kcombobox.h>
 #include <QFontDatabase>
+#include <QApplication>
+#include <QStyle>
 
 namespace Digikam
 {

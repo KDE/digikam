@@ -33,6 +33,8 @@
 #include <kcombobox.h>
 #include <kdialog.h>
 #include <klocalizedstring.h>
+#include <QApplication>
+#include <QStyle>
 #include "digikam_debug.h"
 
 namespace Digikam

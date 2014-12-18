@@ -41,6 +41,8 @@
 #include <kdialog.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
+#include <QApplication>
+#include <QStyle>
 #include "digikam_debug.h"
 
 // Local includes

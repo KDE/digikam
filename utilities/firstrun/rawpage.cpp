@@ -38,6 +38,8 @@
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
 #include <kapplication.h>
+#include <QApplication>
+#include <QStyle>
 
 namespace Digikam
 {

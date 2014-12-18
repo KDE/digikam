@@ -53,6 +53,8 @@
 #include <ksqueezedtextlabel.h>
 #include <kstandarddirs.h>
 #include <kvbox.h>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 

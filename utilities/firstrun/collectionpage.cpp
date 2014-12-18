@@ -48,6 +48,8 @@
 // Local includes
 #include <databaseparameters.h>
 #include <QStandardPaths>
+#include <QApplication>
+#include <QStyle>
 #include "version.h"
 
 namespace Digikam

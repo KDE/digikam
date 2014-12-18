@@ -53,6 +53,8 @@
 #include <rnuminput.h>
 #include <rexpanderbox.h>
 #include <QStandardPaths>
+#include <QApplication>
+#include <QStyle>
 
 using namespace KDcrawIface;
 

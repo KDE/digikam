@@ -39,6 +39,8 @@
 #include <kstandarddirs.h>
 #include <kseparator.h>
 #include <klocalizedstring.h>
+#include <QApplication>
+#include <QStyle>
 
 namespace Digikam
 {

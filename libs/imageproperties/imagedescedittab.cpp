@@ -58,6 +58,7 @@
 // Libkdcraw includes
 
 #include <libkdcraw_version.h>
+#include <QApplication>
 
 // Local includes
 

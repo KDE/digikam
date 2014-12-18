@@ -55,6 +55,7 @@
 #include <rnuminput.h>
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QStyle>
 
 // Local includes
 

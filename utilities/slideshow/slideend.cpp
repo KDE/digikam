@@ -37,6 +37,8 @@
 #include <kglobal.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
+#include <QApplication>
+#include <QStyle>
 
 namespace Digikam
 {

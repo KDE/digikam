@@ -46,6 +46,8 @@
 #include <kdialog.h>
 #include <khbox.h>
 #include <kinputdialog.h>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 

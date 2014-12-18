@@ -37,6 +37,8 @@
 #include <ktabwidget.h>
 #include <kvbox.h>
 #include <kseparator.h>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 

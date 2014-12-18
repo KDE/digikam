@@ -43,6 +43,8 @@
 #include "digikam_debug.h"
 #include <kglobalsettings.h>
 #include <ktemporaryfile.h>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 

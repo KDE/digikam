@@ -41,6 +41,8 @@
 
 #include <rnuminput.h>
 #include <rcombobox.h>
+#include <QApplication>
+#include <QStyle>
 
 using namespace KDcrawIface;
 

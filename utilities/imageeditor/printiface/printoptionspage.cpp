@@ -38,6 +38,8 @@
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
+#include <QApplication>
+#include <QStyle>
 #include "digikam_debug.h"
 
 // Local includes

@@ -44,6 +44,8 @@
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
 #include <kurllabel.h>
+#include <QApplication>
+#include <QStyle>
 #include "digikam_debug.h"
 
 // Local includes

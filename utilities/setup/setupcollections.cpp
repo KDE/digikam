@@ -50,6 +50,8 @@
 #include <kmessagebox.h>
 #include <kurlrequester.h>
 #include <ktemporaryfile.h>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 

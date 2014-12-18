@@ -45,6 +45,8 @@
 
 #include <rnuminput.h>
 #include <rexpanderbox.h>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 

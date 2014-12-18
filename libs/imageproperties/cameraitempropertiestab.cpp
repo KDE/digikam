@@ -38,6 +38,7 @@
 #include <kdialog.h>
 #include <kfileitem.h>
 #include <kmimetype.h>
+#include <QApplication>
 
 // Local includes
 

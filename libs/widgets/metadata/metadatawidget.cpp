@@ -60,6 +60,8 @@
 // Libkexiv2 includes
 
 #include <libkexiv2_version.h>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 

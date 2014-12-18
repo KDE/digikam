@@ -35,6 +35,8 @@
 
 #include <rnuminput.h>
 #include <rcombobox.h>
+#include <QApplication>
+#include <QStyle>
 
 namespace Digikam
 {

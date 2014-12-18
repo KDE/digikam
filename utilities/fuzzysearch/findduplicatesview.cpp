@@ -39,6 +39,8 @@
 #include <kdialog.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 

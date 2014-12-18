@@ -39,6 +39,8 @@
 #include <kcombobox.h>
 #include <khbox.h>
 #include <klineedit.h>
+#include <QApplication>
+#include <QStyle>
 #include "digikam_debug.h"
 
 // Local includes

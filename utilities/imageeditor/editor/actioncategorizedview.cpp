@@ -35,6 +35,8 @@
 #include "digikam_debug.h"
 #include <kdeversion.h>
 #include <kcategorydrawer.h>
+#include <QApplication>
+#include <QStyle>
 
 namespace Digikam
 {

@@ -51,6 +51,8 @@
 #include <ktabwidget.h>
 #include <kurllabel.h>
 #include <kconfig.h>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 

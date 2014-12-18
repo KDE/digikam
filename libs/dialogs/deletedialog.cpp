@@ -45,6 +45,8 @@
 #include <klocalizedstring.h>
 #include <kstdguiitem.h>
 #include <kpushbutton.h>
+#include <QApplication>
+#include <QStyle>
 #include "digikam_debug.h"
 
 // Local includes

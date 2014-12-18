@@ -42,6 +42,8 @@
 #include <kapplication.h>
 #include <kstandarddirs.h>
 #include <kaboutdata.h>
+#include <QApplication>
+#include <QStyle>
 
 // Local includes
 
