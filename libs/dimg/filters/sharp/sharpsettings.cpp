@@ -191,7 +191,7 @@ SharpSettings::SharpSettings(QWidget* const parent)
 
     QLabel* const label2  = new QLabel(i18n("Radius:"), unsharpMaskSettings);
     d->radiusInput2 = new RDoubleNumInput(unsharpMaskSettings);
-    d->radiusInput2->setRange(0.1, 12.0, 0.1, true);
+    d->radiusInput2->setRange(0.1, 12.0, 0.1);
     d->radiusInput2->setDecimals(1);
     d->radiusInput2->setDefaultValue(1.0);
     d->radiusInput2->setWhatsThis(i18n("Radius value is the Gaussian blur matrix radius value "
@@ -200,7 +200,7 @@ SharpSettings::SharpSettings(QWidget* const parent)
     QLabel* const label3 = new QLabel(i18n("Amount:"), unsharpMaskSettings);
     d->amountInput = new RDoubleNumInput(unsharpMaskSettings);
     d->amountInput->setDecimals(1);
-    d->amountInput->input()->setRange(0.0, 5.0, 0.1, true);
+    d->amountInput->setRange(0.0, 5.0, 0.1);
     d->amountInput->setDefaultValue(1.0);
     d->amountInput->setWhatsThis(i18n("The value of the difference between the "
                                       "original and the blur image that is added back into the original."));
@@ -208,7 +208,7 @@ SharpSettings::SharpSettings(QWidget* const parent)
     QLabel* const label4    = new QLabel(i18n("Threshold:"), unsharpMaskSettings);
     d->thresholdInput = new RDoubleNumInput(unsharpMaskSettings);
     d->thresholdInput->setDecimals(2);
-    d->thresholdInput->input()->setRange(0.0, 1.0, 0.01, true);
+    d->thresholdInput->setRange(0.0, 1.0, 0.01);
     d->thresholdInput->setDefaultValue(0.05);
     d->thresholdInput->setWhatsThis(i18n("The threshold, as a fraction of the maximum "
                                          "luminosity value, needed to apply the difference amount."));
@@ -235,7 +235,7 @@ SharpSettings::SharpSettings(QWidget* const parent)
     QLabel* const label5 = new QLabel(i18n("Circular sharpness:"), refocusSettings);
     d->radius            = new RDoubleNumInput(refocusSettings);
     d->radius->setDecimals(2);
-    d->radius->input()->setRange(0.0, 5.0, 0.01, true);
+    d->radius->setRange(0.0, 5.0, 0.01);
     d->radius->setDefaultValue(1.0);
     d->radius->setWhatsThis(i18n("This is the radius of the circular convolution. It is the most important "
                                  "parameter for using this plugin. For most images the default value of 1.0 "
@@ -244,7 +244,7 @@ SharpSettings::SharpSettings(QWidget* const parent)
     QLabel* const label6 = new QLabel(i18n("Correlation:"), refocusSettings);
     d->correlation       = new RDoubleNumInput(refocusSettings);
     d->correlation->setDecimals(2);
-    d->correlation->input()->setRange(0.0, 1.0, 0.01, true);
+    d->correlation->setRange(0.0, 1.0, 0.01);
     d->correlation->setDefaultValue(0.5);
     d->correlation->setWhatsThis(i18n("Increasing the correlation may help to reduce artifacts. The correlation can "
                                       "range from 0-1. Useful values are 0.5 and values close to 1, e.g. 0.95 and 0.99. "
@@ -254,7 +254,7 @@ SharpSettings::SharpSettings(QWidget* const parent)
     QLabel* const label7 = new QLabel(i18n("Noise filter:"), refocusSettings);
     d->noise             = new RDoubleNumInput(refocusSettings);
     d->noise->setDecimals(3);
-    d->noise->input()->setRange(0.0, 1.0, 0.001, true);
+    d->noise->setRange(0.0, 1.0, 0.001);
     d->noise->setDefaultValue(0.03);
     d->noise->setWhatsThis(i18n("Increasing the noise filter parameter may help to reduce artifacts. The noise filter "
                                 "can range from 0-1 but values higher than 0.1 are rarely helpful. When the noise filter "
@@ -265,7 +265,7 @@ SharpSettings::SharpSettings(QWidget* const parent)
     QLabel* const label8 = new QLabel(i18n("Gaussian sharpness:"), refocusSettings);
     d->gauss             = new RDoubleNumInput(refocusSettings);
     d->gauss->setDecimals(2);
-    d->gauss->input()->setRange(0.0, 1.0, 0.01, true);
+    d->gauss->setRange(0.0, 1.0, 0.01);
     d->gauss->setDefaultValue(0.0);
     d->gauss->setWhatsThis(i18n("This is the sharpness for the Gaussian convolution. Use this parameter when your "
                                 "blurring is of a Gaussian type. In most cases you should set this parameter to 0, because "
@@ -486,7 +486,7 @@ void SharpSettings::writeSettings(KConfigGroup& group)
 
 void SharpSettings::loadSettings()
 {
-    KUrl loadRestorationFile = KFileDialog::getOpenUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+    KUrl loadRestorationFile = KFileDialog::getOpenUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                        QString("*"), kapp->activeWindow(),
                                                        QString(i18n("Photograph Refocus Settings File to Load")));
 
@@ -530,7 +530,7 @@ void SharpSettings::loadSettings()
 
 void SharpSettings::saveAsSettings()
 {
-    KUrl saveRestorationFile = KFileDialog::getSaveUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+    KUrl saveRestorationFile = KFileDialog::getSaveUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                        QString("*"), kapp->activeWindow(),
                                                        QString(i18n("Photograph Refocus Settings File to Save")));
 

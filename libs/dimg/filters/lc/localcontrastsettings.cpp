@@ -237,7 +237,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
 
     d->label4      = new QLabel(i18n("Power:"), secondPage);
     d->powerInput1 = new RDoubleNumInput(firstPage);
-    d->powerInput1->input()->setRange(0.0, 100.0, 1.0, true);
+    d->powerInput1->setRange(0.0, 100.0, 1.0);
     d->powerInput1->setDefaultValue(30.0);
     d->powerInput1->setObjectName("powerInput1");
     d->powerInput1->setWhatsThis(i18n("<b>Power</b>: How strong the effect is applied."));
@@ -246,7 +246,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
 
     d->label5      = new QLabel(i18n("Blur:"), secondPage);
     d->blurInput1  = new RDoubleNumInput(firstPage);
-    d->blurInput1->input()->setRange(0.0, 1000.0, 1.0, true);
+    d->blurInput1->setRange(0.0, 1000.0, 1.0);
     d->blurInput1->setDefaultValue(80.0);
     d->blurInput1->setObjectName("blurInput1");
     d->blurInput1->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blurred before combining with the original "
@@ -268,7 +268,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
 
     d->label6      = new QLabel(i18n("Power:"), thirdPage);
     d->powerInput2 = new RDoubleNumInput(thirdPage);
-    d->powerInput2->input()->setRange(0.0, 100.0, 1.0, true);
+    d->powerInput2->setRange(0.0, 100.0, 1.0);
     d->powerInput2->setDefaultValue(30.0);
     d->powerInput2->setObjectName("powerInput2");
     d->powerInput2->setWhatsThis(i18n("<b>Power</b>: How strong the effect is applied."));
@@ -277,7 +277,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
 
     d->label7     = new QLabel(i18n("Blur:"), thirdPage);
     d->blurInput2 = new RDoubleNumInput(thirdPage);
-    d->blurInput2->input()->setRange(0.0, 1000.0, 1.0, true);
+    d->blurInput2->setRange(0.0, 1000.0, 1.0);
     d->blurInput2->setDefaultValue(80.0);
     d->blurInput2->setObjectName("blurInput2");
     d->blurInput2->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blurred before combining with the original "
@@ -299,7 +299,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
 
     d->label8      = new QLabel(i18n("Power:"), fourthPage);
     d->powerInput3 = new RDoubleNumInput(fourthPage);
-    d->powerInput3->input()->setRange(0.0, 100.0, 1.0, true);
+    d->powerInput3->setRange(0.0, 100.0, 1.0);
     d->powerInput3->setDefaultValue(30.0);
     d->powerInput3->setObjectName("powerInput3");
     d->powerInput3->setWhatsThis(i18n("<b>Power</b>: How strong the effect is applied."));
@@ -308,7 +308,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
 
     d->label9     = new QLabel(i18n("Blur:"), fourthPage);
     d->blurInput3 = new RDoubleNumInput(fourthPage);
-    d->blurInput3->input()->setRange(0.0, 1000.0, 1.0, true);
+    d->blurInput3->setRange(0.0, 1000.0, 1.0);
     d->blurInput3->setDefaultValue(80.0);
     d->blurInput3->setObjectName("blurInput3");
     d->blurInput3->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blurred before combining with the original "
@@ -330,7 +330,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
 
     d->label10     = new QLabel(i18n("Power:"), fifthPage);
     d->powerInput4 = new RDoubleNumInput(fifthPage);
-    d->powerInput4->input()->setRange(0.0, 100.0, 1.0, true);
+    d->powerInput4->setRange(0.0, 100.0, 1.0);
     d->powerInput4->setDefaultValue(30.0);
     d->powerInput4->setObjectName("powerInput4");
     d->powerInput4->setWhatsThis(i18n("<b>Power</b>: How strong the effect is applied."));
@@ -339,7 +339,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
 
     d->label11    = new QLabel(i18n("Blur:"), fifthPage);
     d->blurInput4 = new RDoubleNumInput(fifthPage);
-    d->blurInput4->input()->setRange(0.0, 1000.0, 1.0, true);
+    d->blurInput4->setRange(0.0, 1000.0, 1.0);
     d->blurInput4->setDefaultValue(80.0);
     d->blurInput4->setObjectName("blurInput4");
     d->blurInput4->setWhatsThis(i18n("<b>Blur</b>: How strong the image is blurred before combining with the original "
@@ -660,9 +660,9 @@ void LocalContrastSettings::writeSettings(KConfigGroup& group)
 
 void LocalContrastSettings::loadSettings()
 {
-    KUrl loadFile = KFileDialog::getOpenUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+    KUrl loadFile = KFileDialog::getOpenUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                             QString("*"), kapp->activeWindow(),
-                                            QString(i18n("Photograph Local Contrast Settings File to Load")));
+                                            i18n("Photograph Local Contrast Settings File to Load"));
 
     if (loadFile.isEmpty())
     {
@@ -714,9 +714,9 @@ void LocalContrastSettings::loadSettings()
 
 void LocalContrastSettings::saveAsSettings()
 {
-    KUrl saveFile = KFileDialog::getSaveUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+    KUrl saveFile = KFileDialog::getSaveUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                             QString("*"), kapp->activeWindow(),
-                                            QString(i18n("Photograph Local Contrast Settings File to Save")));
+                                            i18n("Photograph Local Contrast Settings File to Save"));
 
     if (saveFile.isEmpty())
     {

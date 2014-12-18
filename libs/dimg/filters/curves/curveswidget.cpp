@@ -40,7 +40,6 @@
 #include <QColor>
 #include <QFont>
 #include <QFontMetrics>
-#include <QCustomEvent>
 #include <QPaintEvent>
 #include <QMouseEvent>
 

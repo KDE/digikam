@@ -531,7 +531,7 @@ void WBSettings::writeSettings(KConfigGroup& group)
 
 void WBSettings::loadSettings()
 {
-    KUrl loadWhiteBalanceFile = KFileDialog::getOpenUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+    KUrl loadWhiteBalanceFile = KFileDialog::getOpenUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                         QString("*"), kapp->activeWindow(),
                                                         QString(i18n("White Color Balance Settings File to Load")));
 

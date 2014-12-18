@@ -141,14 +141,14 @@ NRSettings::NRSettings(QWidget* const parent)
     QLabel* label3      = new QLabel(i18n("Threshold:"), d->luminanceBox);
     d->thrLumInput      = new RDoubleNumInput(d->luminanceBox);
     d->thrLumInput->setDecimals(2);
-    d->thrLumInput->input()->setRange(0.0, 10.0, 0.1, true);
+    d->thrLumInput->setRange(0.0, 10.0, 0.1);
     d->thrLumInput->setDefaultValue(1.2);
     d->thrLumInput->setWhatsThis(thHelp);
 
     QLabel* label4      = new QLabel(i18n("Softness:"), d->luminanceBox);
     d->softLumInput     = new RDoubleNumInput(d->luminanceBox);
     d->softLumInput->setDecimals(1);
-    d->softLumInput->input()->setRange(0.0, 1.0, 0.1, true);
+    d->softLumInput->setRange(0.0, 1.0, 0.1);
     d->softLumInput->setDefaultValue(0.9);
     d->softLumInput->setWhatsThis(soHelp);
 
@@ -168,14 +168,14 @@ NRSettings::NRSettings(QWidget* const parent)
     QLabel* label5       = new QLabel(i18n("Threshold:"), d->chrominanceRedBox);
     d->thrCrInput        = new RDoubleNumInput(d->chrominanceRedBox);
     d->thrCrInput->setDecimals(2);
-    d->thrCrInput->input()->setRange(0.0, 10.0, 0.1, true);
+    d->thrCrInput->setRange(0.0, 10.0, 0.1);
     d->thrCrInput->setDefaultValue(1.2);
     d->thrCrInput->setWhatsThis(thHelp);
 
     QLabel* label6       = new QLabel(i18n("Softness:"), d->chrominanceRedBox);
     d->softCrInput       = new RDoubleNumInput(d->chrominanceRedBox);
     d->softCrInput->setDecimals(1);
-    d->softCrInput->input()->setRange(0.0, 1.0, 0.1, true);
+    d->softCrInput->setRange(0.0, 1.0, 0.1);
     d->softCrInput->setDefaultValue(0.9);
     d->softCrInput->setWhatsThis(soHelp);
 
@@ -195,14 +195,14 @@ NRSettings::NRSettings(QWidget* const parent)
     QLabel* label7        = new QLabel(i18n("Threshold:"), d->chrominanceBlueBox);
     d->thrCbInput         = new RDoubleNumInput(d->chrominanceBlueBox);
     d->thrCbInput->setDecimals(2);
-    d->thrCbInput->input()->setRange(0.0, 10.0, 0.1, true);
+    d->thrCbInput->setRange(0.0, 10.0, 0.1);
     d->thrCbInput->setDefaultValue(1.2);
     d->thrCbInput->setWhatsThis(thHelp);
 
     QLabel* label8        = new QLabel(i18n("Softness:"), d->chrominanceBlueBox);
     d->softCbInput        = new RDoubleNumInput(d->chrominanceBlueBox);
     d->softCbInput->setDecimals(1);
-    d->softCbInput->input()->setRange(0.0, 1.0, 0.1, true);
+    d->softCbInput->setRange(0.0, 1.0, 0.1);
     d->softCbInput->setDefaultValue(0.9);
     d->softCbInput->setWhatsThis(soHelp);
 
@@ -375,7 +375,7 @@ void NRSettings::writeSettings(KConfigGroup& group)
 
 void NRSettings::loadSettings()
 {
-    KUrl loadRestorationFile = KFileDialog::getOpenUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+    KUrl loadRestorationFile = KFileDialog::getOpenUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                        QString("*"), kapp->activeWindow(),
                                                        QString(i18n("Photograph Noise Reduction Settings File to Load")));
 
@@ -420,7 +420,7 @@ void NRSettings::loadSettings()
 
 void NRSettings::saveAsSettings()
 {
-    KUrl saveRestorationFile = KFileDialog::getSaveUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+    KUrl saveRestorationFile = KFileDialog::getSaveUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                        QString("*"), kapp->activeWindow(),
                                                        QString(i18n("Photograph Noise Reduction Settings File to Save")));
 

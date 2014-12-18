@@ -44,7 +44,7 @@
 #include <QApplication>
 #include <QStyle>
 #include "digikam_debug.h"
-
+#include <KIconLoader>
 // Local includes
 
 #include "colorgradientwidget.h"

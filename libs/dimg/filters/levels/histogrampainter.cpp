@@ -22,7 +22,7 @@
  * ============================================================ */
 
 #include "histogrampainter.h"
-
+#include "digikam_debug.h"
 // C++ includes
 
 #include <cmath>
