@@ -32,16 +32,13 @@
 #include <QMutexLocker>
 #include <QPointer>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Libkexiv2 includes
 
 #include <libkexiv2_version.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "databaseaccess.h"
 #include "databasewatch.h"
 #include "imageinfo.h"
@@ -51,14 +48,12 @@
 #include "applicationsettings.h"
 #include "imageattributeswatch.h"
 #include "tagscache.h"
+#include "applicationsettings.h"
+#include "facetagseditor.h"
 
 #ifdef HAVE_BALOO
 #include "baloowrap.h"
 #endif
-
-#include "applicationsettings.h"
-
-#include "facetagseditor.h"
 
 namespace Digikam
 {

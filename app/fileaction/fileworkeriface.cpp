@@ -26,10 +26,10 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "fileactionmngr_p.h"
 #include "imageattributeswatch.h"
 #include "imageinfotasksplitter.h"

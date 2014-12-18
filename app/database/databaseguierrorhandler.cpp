@@ -34,7 +34,6 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <kmessagebox.h>
 #include <klocalizedstring.h>
 #include <kguiitem.h>
@@ -42,7 +41,8 @@
 
 // Local includes
 
-#include <setup.h>
+#include "digikam_debug.h"
+#include "setup.h"
 
 namespace Digikam
 {

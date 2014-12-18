@@ -29,6 +29,8 @@
 #include <QHeaderView>
 #include <QTreeWidget>
 #include <QGridLayout>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
@@ -39,12 +41,10 @@
 #include <kpushbutton.h>
 #include <kmessagebox.h>
 #include <kinputdialog.h>
-#include <QApplication>
-#include <QStyle>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "album.h"
 #include "albummodificationhelper.h"
 #include "albumtreeview.h"

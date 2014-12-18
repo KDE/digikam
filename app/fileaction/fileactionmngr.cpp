@@ -34,11 +34,11 @@
 
 #include <kglobal.h>
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
 #include <kprogressdialog.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "applicationsettings.h"
 #include "imageinfotasksplitter.h"
 #include "loadingcacheinterface.h"

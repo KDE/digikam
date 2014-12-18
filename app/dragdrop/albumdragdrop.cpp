@@ -36,10 +36,10 @@
 #include <kio/job.h>
 #include <klocalizedstring.h>
 #include <kmenu.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "albummanager.h"
 #include "importui.h"
 #include "ddragobjects.h"

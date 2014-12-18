@@ -36,7 +36,6 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <kiconloader.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
@@ -44,6 +43,7 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "globals.h"
 #include "albumdragdrop.h"
 #include "albummanager.h"

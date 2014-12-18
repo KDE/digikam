@@ -30,13 +30,13 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <klocalizedstring.h>
 #include <kmenu.h>
 #include <kmessagebox.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "albummanager.h"
 #include "ddragobjects.h"
 #include "imageinfo.h"

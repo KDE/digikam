@@ -37,10 +37,10 @@
 #include <kio/deletejob.h>
 #include <kio/jobuidelegate.h>
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "imageinfo.h"
 #include "applicationsettings.h"
 #include "albummanager.h"

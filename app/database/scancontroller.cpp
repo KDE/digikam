@@ -47,10 +47,10 @@
 #include <kapplication.h>
 #include <klocalizedstring.h>
 #include <kiconloader.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "collectionscanner.h"
 #include "collectionscannerhints.h"
 #include "databaseaccess.h"

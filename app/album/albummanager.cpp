@@ -6,8 +6,8 @@
  * Date        : 2004-06-15
  * Description : Albums manager interface.
  *
- * Copyright (C) 2004 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -64,7 +64,6 @@ extern "C"
 #include <kcombobox.h>
 #include <kconfiggroup.h>
 #include <kconfig.h>
-#include "digikam_debug.h"
 #include <kdeversion.h>
 #include <kdirwatch.h>
 #include <kio/global.h>
@@ -77,6 +76,7 @@ extern "C"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "albumdb.h"
 #include "album.h"
 #include "applicationsettings.h"

@@ -21,10 +21,9 @@
  *
  * ============================================================ */
 
+// Local includes
+
 #include "fileactionimageinfolist.h"
-
-// KDE includes
-
 #include "digikam_debug.h"
 
 namespace Digikam

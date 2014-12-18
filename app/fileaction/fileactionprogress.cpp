@@ -23,11 +23,17 @@
 
 #include "fileactionprogress.h"
 
+// Qt includes
+
+#include <QIcon>
+
 // KDE includes
 
 #include <kapplication.h>
 #include <klocalizedstring.h>
-#include <QIcon>
+
+// Local includes
+
 #include "digikam_debug.h"
 
 // Local includes

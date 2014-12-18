@@ -32,11 +32,11 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <kdirwatch.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "album.h"
 #include "albummanager.h"
 #include "collectionlocation.h"

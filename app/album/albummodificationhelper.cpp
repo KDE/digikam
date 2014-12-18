@@ -30,7 +30,6 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <kinputdialog.h>
 #include <kio/jobuidelegate.h>
 #include <klocalizedstring.h>
@@ -39,6 +38,7 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "albummanager.h"
 #include "albumpropsedit.h"
 #include "applicationsettings.h"
