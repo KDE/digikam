@@ -8,7 +8,7 @@
  *               digiKam albums.
  *
  * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
  *
  * The forwarding code is copied from kdelibs' ForwardingSlavebase.
  * Copyright for the KDE file forwardingslavebase follows:
@@ -43,7 +43,6 @@
 #include <kio/deletejob.h>
 #include <klocalizedstring.h>
 #include <kmimetype.h>
-#include "digikam_debug.h"
 
 // Libkdcraw includes
 
@@ -57,6 +56,7 @@
 #include "databaseurl.h"
 #include "digikam_export.h"
 #include "imagelister.h"
+#include "digikam_debug.h"
 
 
 kio_digikamalbums::kio_digikamalbums(const QByteArray& pool_socket, const QByteArray& app_socket)

@@ -27,17 +27,16 @@
 
 #include <QTreeWidget>
 #include <QPainter>
-#include <QDebug>
 
 // KDE includes
 
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kurl.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "searchxml.h"
 #include "searchtabheader.h"
 #include "albummanager.h"

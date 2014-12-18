@@ -39,10 +39,10 @@
 #include <kglobal.h>
 #include <kio/global.h>
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "digikam_export.h"

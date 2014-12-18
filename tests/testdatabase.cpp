@@ -34,12 +34,12 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 
 // digiKam includes
 
+#include "digikam_debug.h"
 #include "daboutdata.h"
 #include "albummanager.h"
 #include "collectionlocation.h"
@@ -53,7 +53,7 @@
 
 namespace Digikam
 {
-    
+
 bool Setup::execSinglePage(Page)
 {
     return true;

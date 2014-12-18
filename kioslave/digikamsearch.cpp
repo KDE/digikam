@@ -6,7 +6,7 @@
  * Date        : 2005-04-21
  * Description : a kio-slave to process search on digiKam albums
  *
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -33,10 +33,10 @@
 
 #include <kcomponentdata.h>
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "databaseurl.h"

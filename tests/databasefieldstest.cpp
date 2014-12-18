@@ -25,11 +25,11 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <qtest_kde.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "databasefields.h"
 
 using namespace Digikam;

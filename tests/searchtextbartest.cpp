@@ -32,10 +32,10 @@
 // KDE includes
 
 #include <qtest_kde.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "searchtextbar.h"
 
 using namespace Digikam;

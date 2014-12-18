@@ -31,11 +31,10 @@
 #include <QWidget>
 #include <QHash>
 #include <QtGlobal>
-#include "digikam_debug.h"
-
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "album.h"
 #include "imageinfo.h"
 #include "albummanager.h"
@@ -50,6 +49,7 @@ uint qHash(QList<Digikam::Album*> key)
     Digikam::Album* temp = key.first();
     quint64 myint = (unsigned long long)temp;
     value = qHash(myint);
+
     for(int it = 1; it < key.size(); ++it)
     {
         Digikam::Album* al = key.at(it);

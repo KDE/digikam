@@ -30,12 +30,12 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <kio/netaccess.h>
 #include <qtest_kde.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "albumdb.h"
 #include "albumfiltermodel.h"
 #include "albummanager.h"

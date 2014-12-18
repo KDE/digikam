@@ -27,16 +27,13 @@
 #include <QFileInfo>
 #include <QString>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Libkexiv2 includes
 
 #include <kexiv2.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "dimg.h"
 #include "drawdecoding.h"
 #include "nrestimate.h"

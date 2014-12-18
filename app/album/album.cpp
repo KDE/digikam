@@ -28,10 +28,10 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "albumdb.h"
 #include "albummanager.h"
 #include "collectionmanager.h"

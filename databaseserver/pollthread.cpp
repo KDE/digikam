@@ -44,8 +44,11 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <kstandarddirs.h>
+
+// Local includes
+
+#include "digikam_debug.h"
 
 namespace Digikam
 {
