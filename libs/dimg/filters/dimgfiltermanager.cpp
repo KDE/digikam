@@ -246,7 +246,7 @@ void DImgFilterManager::Private::addGenerator(const ImgFilterPtr& generator)
     {
         if (filterMap.contains(id))
         {
-            kError() << "Attempt to register filter identifier" << id << "twice. Ignoring.";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Attempt to register filter identifier" << id << "twice. Ignoring.";
             continue;
         }
 

@@ -236,7 +236,7 @@ bool ThumbnailSchemaUpdater::updateV1ToV2()
 {
     if (!m_access->backend()->execDBAction(m_access->backend()->getDBAction("UpdateThumbnailsDBSchemaFromV1ToV2")))
     {
-        kError() << "Schema upgrade in ThumbnailDB from V1 to V2 failed!";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Schema upgrade in ThumbnailDB from V1 to V2 failed!";
         return false;
     }
 

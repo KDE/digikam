@@ -212,7 +212,7 @@ bool SchemaUpdater::startUpdates()
 
         if (!checker.checkPrivileges(insufficientRights))
         {
-            kError() << "Insufficient rights on databse.";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Insufficient rights on databse.";
             QString errorMsg = i18n(
                                 "You have insufficient privileges on the database.\n"
                                 "Following privileges are not assigned to you:\n %1"
@@ -245,7 +245,7 @@ bool SchemaUpdater::startUpdates()
         if (!d->currentVersion.isValid())
         {
             // Something is damaged. Give up.
-            kError() << "DBVersion not available! Giving up schema upgrading.";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "DBVersion not available! Giving up schema upgrading.";
             QString errorMsg = i18n(
                                    "The database is not valid: "
                                    "the \"DBVersion\" setting does not exist. "
@@ -624,7 +624,7 @@ bool SchemaUpdater::performUpdateToVersion(const QString& actionName, int newVer
 
     if (!d->backend->execDBAction(updateAction))
     {
-        kError() << "Schema update to V" << newVersion << "failed!";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Schema update to V" << newVersion << "failed!";
         // resort to default error message, set above
         return false;
     }
@@ -651,7 +651,7 @@ bool SchemaUpdater::updateToVersion(int targetVersion)
 {
     if (d->currentVersion != targetVersion-1)
     {
-        kError() << "updateToVersion performs only incremental updates. Called to update from"
+        qCDebug(DIGIKAM_GENERAL_LOG) << "updateToVersion performs only incremental updates. Called to update from"
                  << d->currentVersion << "to" << targetVersion << ", aborting.";
         return false;
     }
@@ -668,7 +668,7 @@ bool SchemaUpdater::updateToVersion(int targetVersion)
         // NOTE: If you add a new update step, please check the d->currentVersion at the bottom of updateV4toV7
             // If the update already comes with createTables, createTriggers, we dont need the extra update here
         default:
-            kError() << "Unsupported update to version" << targetVersion;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Unsupported update to version" << targetVersion;
             return false;
     }
 }
@@ -896,7 +896,7 @@ bool SchemaUpdater::updateV4toV7()
 
     if (albumLibraryPath.isEmpty())
     {
-        kError() << "Album library path from config file is empty. Aborting update.";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Album library path from config file is empty. Aborting update.";
         QString errorMsg    = i18n("No album library path has been found in the configuration file. "
                                    "Giving up the schema updating process. "
                                    "Please try with an empty database, or repair your configuration.");
@@ -917,7 +917,7 @@ bool SchemaUpdater::updateV4toV7()
 
     if (location.isNull())
     {
-        kError() << "Failure to create a collection location. Aborting update.";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Failure to create a collection location. Aborting update.";
         QString errorMsg    = i18n("There was an error associating your albumLibraryPath (\"%1\") "
                                    "with a storage volume of your system. "
                                    "This problem may indicate that there is a problem with your installation. "

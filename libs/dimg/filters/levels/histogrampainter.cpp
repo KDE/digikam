@@ -95,7 +95,7 @@ public:
                         break;
 
                     default:
-                        kError() << "Untreated channel type " << channelType << ". Using luminosity as default.";
+                        qCDebug(DIGIKAM_GENERAL_LOG) << "Untreated channel type " << channelType << ". Using luminosity as default.";
                         max = qMin(histogram->getMaximum(LuminosityChannel, startSeg, endSeg) / HISTOGRAM_CALC_CUTOFF_HEIGHT,
                                    histogram->getMaximum(LuminosityChannel, 0, segments - 1));
                         break;
@@ -122,7 +122,7 @@ public:
                         break;
 
                     default:
-                        kError() << "Untreated channel type " << channelType << ". Using luminosity as default.";
+                        qCDebug(DIGIKAM_GENERAL_LOG) << "Untreated channel type " << channelType << ". Using luminosity as default.";
                         max = histogram->getMaximum(LuminosityChannel, 0, segments - 1);
                         break;
                 }
@@ -139,7 +139,7 @@ public:
                 break;
 
             default:
-                kError() << "Untreated histogram scale " << scale << ". Using linear as default.";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Untreated histogram scale " << scale << ". Using linear as default.";
                 break;
         }
 
@@ -178,7 +178,7 @@ public:
 
             default:
             {
-                kError() << "Unknown scale type " << scale;
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Unknown scale type " << scale;
                 return 0;
             }
         }
@@ -583,7 +583,7 @@ void HistogramPainter::render(QPixmap& bufferPixmap)
 {
     if (!d->histogram)
     {
-        kError() << "Cannot render because the histogram is missing";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot render because the histogram is missing";
         return;
     }
 

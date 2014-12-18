@@ -373,14 +373,14 @@ bool JpegRotator::exifTransform(const RotationMatrix& matrix)
 
     if (!fi.exists())
     {
-        kError() << "ExifRotate: file does not exist: " << m_file;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "ExifRotate: file does not exist: " << m_file;
         return false;
     }
 
     if (!isJpegImage(m_file))
     {
         // Not a jpeg image.
-        kError() << "ExifRotate: not a JPEG file: " << m_file;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "ExifRotate: not a JPEG file: " << m_file;
         return false;
     }
 
@@ -413,7 +413,7 @@ bool JpegRotator::exifTransform(const RotationMatrix& matrix)
         if (!performJpegTransform(actions[i], src, tempFile))
         {
             ::unlink(QFile::encodeName(tempFile).constData());
-            kError() << "JPEG transform of" << src << "failed";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "JPEG transform of" << src << "failed";
             return false;
         }
 
@@ -436,7 +436,7 @@ bool JpegRotator::exifTransform(const RotationMatrix& matrix)
 #endif
         {
             unlinkLater << tempFile;
-            kError() << "Renaming" << tempFile << "to" << dest << "failed";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Renaming" << tempFile << "to" << dest << "failed";
             break;
         }
     }

@@ -120,7 +120,7 @@ TAlbum* TagModificationHelper::slotTagNew(TAlbum* parent, const QString& title, 
 
         if (!p)
         {
-            kError() << "Could not find root tag album";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Could not find root tag album";
             return 0;
         }
     }

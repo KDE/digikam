@@ -245,7 +245,7 @@ int Album::globalID() const
             return m_id | (1 << 31);
 
         default:
-            kError() << "Unknown album type";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Unknown album type";
             return -1;
     }
 }
@@ -754,7 +754,7 @@ QString SAlbum::getTemporaryTitle(DatabaseSearch::Type type, DatabaseSearch::Haa
             return "_Current_Duplicates_Search_";
 
         default:
-            kError() << "Untreated temporary search type " << type;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Untreated temporary search type " << type;
             return "_Current_Unknown_Search_";
     }
 }
@@ -770,7 +770,7 @@ QString SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarSearchType haarType)
             return "_Current_Fuzzy_Sketch_Search_";
 
         default:
-            kError() << "Untreated temporary haar search type " << haarType;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Untreated temporary haar search type " << haarType;
             return "_Current_Unknown_Haar_Search_";
     }
 }

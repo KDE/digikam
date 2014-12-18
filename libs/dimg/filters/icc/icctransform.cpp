@@ -588,13 +588,13 @@ bool IccTransform::checkProfiles()
 {
     if (!d->effectiveInputProfile().open())
     {
-        kError() << "Cannot open embedded profile";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot open embedded profile";
         return false;
     }
 
     if (!d->outputProfile.open())
     {
-        kError() << "Cannot open output profile";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot open output profile";
         return false;
     }
 
@@ -602,7 +602,7 @@ bool IccTransform::checkProfiles()
     {
         if (!d->proofProfile.open())
         {
-            kError() << "Cannot open proofing profile";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot open proofing profile";
             return false;
         }
     }
@@ -672,7 +672,7 @@ bool IccTransform::apply(QImage& qimage)
         qimage.format() != QImage::Format_ARGB32 &&
         qimage.format() != QImage::Format_ARGB32_Premultiplied)
     {
-        kError() << "Unsupported QImage format" << qimage.format();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Unsupported QImage format" << qimage.format();
         return false;
     }
 

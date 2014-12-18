@@ -205,7 +205,7 @@ void ThumbnailLoadThread::initializeThumbnailDatabase(const DatabaseParameters& 
 {
     if (static_d->firstThreadCreated)
     {
-        kError() << "Call initializeThumbnailDatabase at application start. "
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Call initializeThumbnailDatabase at application start. "
                  "There are already thumbnail loading threads created, "
                  "and these will not be switched to use the database. ";
     }
@@ -673,12 +673,12 @@ bool ThumbnailLoadThread::checkSize(int size)
 
     if (size <= 0)
     {
-        kError() << "ThumbnailLoadThread::load: No thumbnail size specified. Refusing to load thumbnail.";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "ThumbnailLoadThread::load: No thumbnail size specified. Refusing to load thumbnail.";
         return false;
     }
     else if (size > ThumbnailSize::maxThumbsSize())
     {
-        kError() << "ThumbnailLoadThread::load: Thumbnail size " << size
+        qCDebug(DIGIKAM_GENERAL_LOG) << "ThumbnailLoadThread::load: Thumbnail size " << size
                  << " is larger than " << ThumbnailSize::maxThumbsSize() << ". Refusing to load.";
         return false;
     }

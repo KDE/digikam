@@ -80,7 +80,7 @@ DatabaseServer::DatabaseServer(QCoreApplication* const application)
 
     if (qDBusRegisterMetaType<DatabaseServerError>() < 0)
     {
-        kError()<<"Error while registering DatabaseServerError class.";
+        qCDebug(DIGIKAM_GENERAL_LOG)<<"Error while registering DatabaseServerError class.";
     }
 }
 

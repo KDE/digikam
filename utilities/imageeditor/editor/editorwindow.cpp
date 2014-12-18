@@ -2556,7 +2556,7 @@ bool EditorWindow::moveLocalFile(const QString& org, const QString& dst)
 
         if (!FileOperation::localFileRename(source, sidecarOrg, sidecarDst))
         {
-            kError() << "Failed to move sidecar file";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to move sidecar file";
         }
     }
 

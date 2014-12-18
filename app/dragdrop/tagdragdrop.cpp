@@ -312,7 +312,7 @@ QMimeData* TagDragDropHandler::createMimeData(const QList<Album*>& albums)
 
     if (albums.isEmpty())
     {
-        kError() << "Cannot drag no tag";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot drag no tag";
         return 0;
     }
 

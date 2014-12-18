@@ -1771,7 +1771,7 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
     }
     else
     {
-       kError() << "Failed to get information for the listed camera";
+       qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to get information for the listed camera";
     }
 
     gp_list_free(camList);

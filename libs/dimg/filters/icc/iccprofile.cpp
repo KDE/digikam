@@ -158,7 +158,7 @@ IccProfile::IccProfile(const char* const location, const QString& relativePath)
 
     if (filePath.isNull())
     {
-        kError() << "The bundled profile" << relativePath << "cannot be found. Check your installation.";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "The bundled profile" << relativePath << "cannot be found. Check your installation.";
         return;
     }
 

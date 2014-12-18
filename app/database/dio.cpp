@@ -292,7 +292,7 @@ KIO::Job* DIO::createJob(int operation, const KUrl::List& src, const KUrl& dest)
     {
         if (src.size() != 1)
         {
-            kError() << "Invalid operation: renaming is not 1:1";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Invalid operation: renaming is not 1:1";
             return 0;
         }
 

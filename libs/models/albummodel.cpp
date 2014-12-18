@@ -339,7 +339,7 @@ QVariant DateAlbumModel::sortRoleData(Album* a) const
         return dalbum->date();
     }
 
-    kError() << "There must be a data album.";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "There must be a data album.";
     return QDate();
 }
 
@@ -377,7 +377,7 @@ void DateAlbumModel::setYearMonthMap(const QMap<YearMonth, int>& yearMonthMap)
                 albumToCountMap.insert((*it)->id(), 0);
                 break;
             default:
-                kError() << "Untreated DAlbum range " << dalbum->range();
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Untreated DAlbum range " << dalbum->range();
                 albumToCountMap.insert((*it)->id(), 0);
                 break;
         }

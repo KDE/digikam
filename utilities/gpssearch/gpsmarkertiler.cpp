@@ -530,7 +530,7 @@ void GPSMarkerTiler::slotMapImagesJobData(KIO::Job* job, const QByteArray& data)
 
     if (!ImageListerRecord::checkStream(ImageListerRecord::ExtraValueFormat, ds))
     {
-        kError() << "Binary stream from ioslave is not valid, rejecting";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Binary stream from ioslave is not valid, rejecting";
         return;
     }
 

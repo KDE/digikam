@@ -1383,7 +1383,7 @@ void AlbumManager::scanPAlbums()
 
             if (!album)
             {
-                kError() << "Did not find album root album in hash";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Did not find album root album in hash";
                 continue;
             }
 
@@ -1409,7 +1409,7 @@ void AlbumManager::scanPAlbums()
 
             if (!parent)
             {
-                kError() <<  "Could not find parent with url: "
+                qCDebug(DIGIKAM_GENERAL_LOG) <<  "Could not find parent with url: "
                          << QDir::toNativeSeparators(parentPath) << " for: " << QDir::toNativeSeparators(info.relativePath);
                 continue;
             }

@@ -105,7 +105,7 @@ void ParallelWorkers::add(WorkerObject* const worker)
     /*
     if (!asQObject()->inherits(worker->metaObject()->className()))
     {
-        kError() << "You need to derive the ParallelWorkers class from the WorkerObject you want to use";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "You need to derive the ParallelWorkers class from the WorkerObject you want to use";
         return;
     }
 

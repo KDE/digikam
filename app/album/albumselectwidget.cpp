@@ -244,7 +244,7 @@ void AlbumSelectWidget::setCurrentAlbumUrl(const KUrl& albumUrl)
     }
     else
     {
-        kError() << "Cannot find an album for " << albumUrl;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot find an album for " << albumUrl;
     }
 }
 

@@ -268,7 +268,7 @@ void ThumbnailLoadingTask::postProcess()
         }
         default:
         {
-            kError() << "Unsupported postprocessing parameter for thumbnail loading:"
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Unsupported postprocessing parameter for thumbnail loading:"
                      << m_loadingDescription.postProcessingParameters.colorManagement;
             break;
         }

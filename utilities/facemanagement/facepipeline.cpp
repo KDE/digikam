@@ -206,7 +206,7 @@ void ParallelPipes::add(WorkerObject* const worker)
 
     if (methodIndex == -1)
     {
-        kError() << "Object" << worker << "does not have a slot" << normalizedSignature << " - cannot use for processing.";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Object" << worker << "does not have a slot" << normalizedSignature << " - cannot use for processing.";
         return;
     }
 

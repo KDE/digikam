@@ -630,7 +630,7 @@ void CollectionScanner::partialScan(const QString& albumRoot, const QString& alb
     if (DatabaseAccess().backend()->isInTransaction())
     {
         // Install ScanController::instance()->suspendCollectionScan around your DatabaseTransaction
-        kError() << "Detected an active database transaction when starting a collection scan. "
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Detected an active database transaction when starting a collection scan. "
                          "Please report this error.";
         return;
     }

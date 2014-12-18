@@ -300,7 +300,7 @@ void ImageCurves::fillFromOtherCurves(ImageCurves* const otherCurves)
     }
     else
     {
-        kError() << "Bad logic error, could not fill one curve into another";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Bad logic error, could not fill one curve into another";
     }
 
     // invoke calculations once

@@ -1898,7 +1898,7 @@ QImage DImg::copyQImage() const
 
     if (img.isNull())
     {
-        kError() << "Failed to allocate memory to copy DImg of size" << size() << "to QImage";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to allocate memory to copy DImg of size" << size() << "to QImage";
         return QImage();
     }
 

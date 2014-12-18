@@ -390,7 +390,7 @@ void AlbumWatch::slotFileClosedAfterWrite(const QString& path)
 
 void AlbumWatch::slotInotifyWatchUserLimitReached()
 {
-    kError() << "Reached inotify limit";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Reached inotify limit";
 }
 
 void AlbumWatch::rescanPath(const QString& path)

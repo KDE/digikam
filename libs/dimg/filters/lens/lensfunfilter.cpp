@@ -89,13 +89,13 @@ void LensFunFilter::filterImage()
 
     if (!d->iface)
     {
-        kError() << "ERROR: LensFun Interface is null.";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "ERROR: LensFun Interface is null.";
         return;
     }
 
     if (!d->iface->usedLens())
     {
-        kError() << "ERROR: LensFun Interface Lens device is null.";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "ERROR: LensFun Interface Lens device is null.";
         return;
     }
 
@@ -144,7 +144,7 @@ void LensFunFilter::filterImage()
 
     if (!d->modifier)
     {
-        kError() << "ERROR: cannot initialize LensFun Modifier.";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "ERROR: cannot initialize LensFun Modifier.";
         return;
     }
 

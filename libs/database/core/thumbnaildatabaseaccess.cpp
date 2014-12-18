@@ -190,7 +190,7 @@ bool ThumbnailDatabaseAccess::checkReadyForUse(InitializationObserver* observer)
 
     if (!drivers.contains("QSQLITE"))
     {
-        kError() << "No SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "No SQLite3 driver available. List of QSqlDatabase drivers: " << drivers;
         d->lastError = i18n("The driver \"SQLITE\" for SQLite3 databases is not available.\n"
                             "digiKam depends on the drivers provided by the SQL module of Qt4.");
         return false;

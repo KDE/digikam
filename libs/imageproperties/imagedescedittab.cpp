@@ -1419,7 +1419,7 @@ void ImageDescEditTab::updateRecentTags()
                 }
                 else
                 {
-                    kError() << "Tag" << album << "doesn't have a valid parent";
+                    qCDebug(DIGIKAM_GENERAL_LOG) << "Tag" << album << "doesn't have a valid parent";
                 }
             }
         }

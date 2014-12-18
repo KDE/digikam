@@ -98,7 +98,7 @@ public:
 
         if (version != Version)
         {
-            kError() << "Unsupported binary version of Haar Blob in database";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Unsupported binary version of Haar Blob in database";
             return;
         }
 

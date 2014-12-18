@@ -254,7 +254,7 @@ bool AlbumSelectionTreeView::viewportEvent(QEvent* event)
 
     if (!helpEvent)
     {
-        kError() << "Unable to determine the correct type of the event. "
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Unable to determine the correct type of the event. "
                  << "This should not happen.";
         return false;
     }

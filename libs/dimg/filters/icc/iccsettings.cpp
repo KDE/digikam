@@ -198,7 +198,7 @@ IccProfile IccSettings::Private::profileFromWindowSystem(QWidget* const widget)
     QDesktopWidget* const desktop = QApplication::desktop();
     if (!desktop)
     {
-        kError() << "No desktop widget available for application";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "No desktop widget available for application";
         return IccProfile();
     }
 

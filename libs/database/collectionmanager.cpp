@@ -670,7 +670,7 @@ SolidVolumeInfo CollectionManagerPrivate::findVolumeForUrl(const KUrl& fileUrl, 
 
     if (!volumeMatch)
     {
-        kError() << "Failed to detect a storage volume for path " << path << " with Solid";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to detect a storage volume for path " << path << " with Solid";
     }
 
     return volume;
@@ -809,11 +809,11 @@ CollectionLocation CollectionManager::addLocation(const KUrl& fileUrl, const QSt
         // Empty volumes indicates that Solid is not working correctly.
         if (volumes.isEmpty())
         {
-            kError() << "Solid did not return any storage volumes on your system.";
-            kError() << "This indicates a missing implementation or a problem with your installation";
-            kError() << "On Linux, check that Solid and HAL are working correctly."
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Solid did not return any storage volumes on your system.";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "This indicates a missing implementation or a problem with your installation";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "On Linux, check that Solid and HAL are working correctly."
                      "Problems with RAID partitions have been reported, if you have RAID this error may be normal.";
-            kError() << "On Windows, Solid may not be fully implemented, if you are running Windows this error may be normal.";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "On Windows, Solid may not be fully implemented, if you are running Windows this error may be normal.";
         }
 
         // fall back

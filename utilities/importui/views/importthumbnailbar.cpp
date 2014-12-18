@@ -123,7 +123,7 @@ void ImportThumbnailBar::setScrollBarPolicy(Qt::ScrollBarPolicy policy)
     if (policy == Qt::ScrollBarAsNeeded)
     {
         // Delegate resizing will cause endless relayouting, see bug #228807
-        kError() << "The Qt::ScrollBarAsNeeded policy is not supported by ImportThumbnailBar";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "The Qt::ScrollBarAsNeeded policy is not supported by ImportThumbnailBar";
     }
 
     d->scrollPolicy = policy;

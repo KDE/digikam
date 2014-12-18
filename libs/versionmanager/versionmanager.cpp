@@ -443,7 +443,7 @@ void VersionNameCreator::checkIntermediates()
 
     if (!firstStep)
     {
-        kError() << "Invalid history: resolved initial history has no entries";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Invalid history: resolved initial history has no entries";
         firstStep = 1;
     }
 

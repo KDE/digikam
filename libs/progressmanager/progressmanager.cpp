@@ -473,7 +473,7 @@ void ProgressManager::addProgressItemImpl(ProgressItem* const t, ProgressItem* c
         if (t->thread() != QThread::currentThread())
         {
             // we cannot moveToThread this item living in a third thread. Refusing to add.
-            kError() << "Refusing to add in thread 1 a ProgressItem created in thread 2 to ProgressManager, living in thread 3";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Refusing to add in thread 1 a ProgressItem created in thread 2 to ProgressManager, living in thread 3";
             return;
         }
         // Move to ProgressManager's thread

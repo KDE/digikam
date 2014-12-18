@@ -664,7 +664,7 @@ void ImageDelegateOverlayContainer::installOverlay(ImageDelegateOverlay* overlay
 {
     if (!overlay->acceptsDelegate(asDelegate()))
     {
-        kError() << "Cannot accept delegate" << asDelegate() << "for installing" << overlay;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot accept delegate" << asDelegate() << "for installing" << overlay;
         return;
     }
 

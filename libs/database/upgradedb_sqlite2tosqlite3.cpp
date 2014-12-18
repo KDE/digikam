@@ -393,7 +393,7 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
                 .arg(backend->escapeString(album.collection)), &list, false);
         if (list.size() != 1)
         {
-            kError() << "Failed";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Failed";
             kWarning() << "";
             kWarning() << "Consistency check failed for Album: "
                        << album.url;
@@ -426,7 +426,7 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
         &list, false);
         if (list.size() != 1)
         {
-            kError() << "Failed";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Failed";
             kWarning() << "";
             kWarning() << "Consistency check failed for Tag: "
                        << name;
@@ -461,7 +461,7 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
         &list, false);
         if (list.size() != 1)
         {
-            kError() << "Failed";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Failed";
             kWarning() << "";
             kWarning() << "Consistency check failed for Image: "
                        << url << ", " << name << ", " << caption;
@@ -498,7 +498,7 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
         &list, false);
         if (list.size() != 1)
         {
-            kError() << "Failed";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Failed";
             kWarning() << "";
             kWarning() << "Consistency check failed for ImageTag: "
                        << url << ", " << name << ", " << tagid;
@@ -530,7 +530,7 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
 
         if (list.size() != 1)
         {
-            kError() << "Failed";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Failed";
             kWarning() << "";
             kWarning() << "Consistency check failed for Album Icon: "
                        << url << ", " << icon;
@@ -565,7 +565,7 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
 
             if (list.size() != 1)
             {
-                kError() << "Failed";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Failed";
                 kWarning() << "";
                 kWarning() << "Consistency check failed for Tag Icon: "
                            << id << ", " << icon;
@@ -604,7 +604,7 @@ bool upgradeDB_Sqlite2ToSqlite3(AlbumDB* albumDB, DatabaseBackend* backend, cons
                     .arg(id), &list);
             if (list.size() != 1)
             {
-                kError() << "Failed.";
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Failed.";
                 kWarning() << "";
                 kWarning() << "Consistency check failed for Tag Icon: "
                            << id << ", " << icon;

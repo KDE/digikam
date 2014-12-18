@@ -65,7 +65,7 @@ void JPEGLoader::dimg_jpeg_error_exit(j_common_ptr cinfo)
     (*cinfo->err->format_message)(cinfo, buffer);
 
 #ifdef USE_IMGLOADERDEBUGMSG
-    kError() << buffer;
+    qCDebug(DIGIKAM_GENERAL_LOG) << buffer;
 #endif
 
     longjmp(myerr->setjmp_buffer, 1);

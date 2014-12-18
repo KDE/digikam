@@ -351,7 +351,7 @@ void AlbumModelTest::slotStartModelDataChanged(const QModelIndex& topLeft, const
             QString message = "Album id " + QString::number(albumId)
                               + " was changed before adding signal was received";
             QFAIL(message.toAscii().data());
-            kError() << message;
+            qCDebug(DIGIKAM_GENERAL_LOG) << message;
         }
 
     }
@@ -561,7 +561,7 @@ void AlbumModelTest::testDAlbumContainsAlbums()
         }
         else
         {
-            kError() << "Unexpected album: " << dAlbum->title();
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Unexpected album: " << dAlbum->title();
             QFAIL("Unexpected album returned from model");
         }
 

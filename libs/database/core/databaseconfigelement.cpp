@@ -74,7 +74,7 @@ DatabaseConfigElementLoader::DatabaseConfigElementLoader()
     
     if (!isValid)
     {
-        kError() << errorMessage;
+        qCDebug(DIGIKAM_GENERAL_LOG) << errorMessage;
     }
 }
 

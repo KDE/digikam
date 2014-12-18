@@ -1872,7 +1872,7 @@ void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
         }
         else
         {
-            kError() << "Failed to detect camera with GPhoto2 from Solid information";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to detect camera with GPhoto2 from Solid information";
         }
     }
 }

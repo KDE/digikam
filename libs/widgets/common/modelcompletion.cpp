@@ -138,7 +138,7 @@ void ModelCompletion::slotRowsInserted(const QModelIndex& parent, int start, int
         }
         else
         {
-            kError() << "inserted rows are not valid for parent " << parent
+            qCDebug(DIGIKAM_GENERAL_LOG) << "inserted rows are not valid for parent " << parent
                      << parent.data(d->displayRole).toString() << "and child"
                      << child;
         }
@@ -155,7 +155,7 @@ void ModelCompletion::slotRowsAboutToBeRemoved(const QModelIndex& parent, int st
 
         if (!index.isValid())
         {
-            kError() << "Received an invalid index to be removed";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Received an invalid index to be removed";
             continue;
         }
 
@@ -192,7 +192,7 @@ void ModelCompletion::slotDataChanged(const QModelIndex& topLeft, const QModelIn
     {
         if (!d->model->hasIndex(row, topLeft.column(), topLeft.parent()))
         {
-            kError() << "Got wrong change event for index with row " << row
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Got wrong change event for index with row " << row
                      << ", column " << topLeft.column()
                      << " and parent " << topLeft.parent()
                      << " in model " << d->model << ". Ignoring it.";
@@ -203,7 +203,7 @@ void ModelCompletion::slotDataChanged(const QModelIndex& topLeft, const QModelIn
 
         if (!index.isValid())
         {
-            kError() << "illegal index in changed data";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "illegal index in changed data";
             continue;
         }
 
@@ -225,7 +225,7 @@ void ModelCompletion::slotDataChanged(const QModelIndex& topLeft, const QModelIn
             // operations needs a data change which is emitted as a dataChanged
             // signal which then will arrive at this class before the original
             // inserted signal arrived at this class.
-            //kError() << "idToTextMap did not contain an entry for index "
+            //qCDebug(DIGIKAM_GENERAL_LOG) << "idToTextMap did not contain an entry for index "
             //         << index << itemName;
         }
 

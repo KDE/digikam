@@ -127,7 +127,7 @@ int main(int argc, char* argv[])
 
         if (!commandLineDBDir.exists() || !commandLineDBDir.isDir())
         {
-            kError() << "The given database-directory does not exist or is not readable. Ignoring." << commandLineDBDir.path();
+            qCDebug(DIGIKAM_GENERAL_LOG) << "The given database-directory does not exist or is not readable. Ignoring." << commandLineDBDir.path();
         }
         else
         {

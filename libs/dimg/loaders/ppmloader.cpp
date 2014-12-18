@@ -174,7 +174,7 @@ bool PPMLoader::load(const QString& filePath, DImgLoaderObserver* const observer
 
                 if (fread(src, 6 * sizeof(unsigned char), 1, file) != 1)
                 {
-                    kError() << "Premature end of PPM file";
+                    qCDebug(DIGIKAM_GENERAL_LOG) << "Premature end of PPM file";
                     fclose(file);
                     loadingFailed();
                     return false;

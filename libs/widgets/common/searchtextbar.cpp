@@ -207,7 +207,7 @@ SearchTextBar::HighlightState SearchTextBar::getCurrentHighlightState() const
         return NO_RESULT;
     }
 
-    kError() << "Impossible highlighting state";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Impossible highlighting state";
 
     return NEUTRAL;
 }

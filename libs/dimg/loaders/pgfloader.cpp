@@ -354,7 +354,7 @@ bool PGFLoader::load(const QString& filePath, DImgLoaderObserver* const observer
     }
     catch (std::bad_alloc& e)
     {
-        kError() << "Failed to allocate memory for loading" << filePath << e.what();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to allocate memory for loading" << filePath << e.what();
 
 #ifdef WIN32
         CloseHandle(fd);

@@ -1169,7 +1169,7 @@ void DigikamView::slotGotoTagAndItem(int tagID)
     }
     else
     {
-        kError() << "Could not find a tag album for tag id " << tagID;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Could not find a tag album for tag id " << tagID;
     }
 
     // Set the activate item url to find in the Tag View after

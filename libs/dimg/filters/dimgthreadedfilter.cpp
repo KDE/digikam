@@ -200,7 +200,7 @@ void DImgThreadedFilter::startFilterDirectly()
         catch (std::bad_alloc& ex)
         {
             //TODO: User notification
-            kError() << "Caught out-of-memory exception! Aborting operation" << ex.what();
+            qCCritical(DIGIKAM_GENERAL_LOG) << "Caught out-of-memory exception! Aborting operation" << ex.what();
             emit finished(false);
             return;
         }
