@@ -38,7 +38,7 @@
 #include <kglobal.h>
 #include <kio/global.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -64,7 +64,7 @@ void kio_digikamdates::special(const QByteArray& data)
     QDataStream ds(data);
     ds >> kurl;
 
-    kDebug() << "Entered kio_digikamdates::special";
+    qCDebug(DIGIKAM_KIOSLAVES_LOG) << "Entered kio_digikamdates::special";
 
     Digikam::DatabaseParameters dbParameters(kurl);
     QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-digikamtags-%1")
@@ -107,18 +107,18 @@ extern "C"
         KComponentData componentData( "kio_digikamdates" );
         KLocale::global();
 
-        kDebug() << "*** kio_digikamdates started ***";
+        qCDebug(DIGIKAM_KIOSLAVES_LOG) << "*** kio_digikamdates started ***";
 
         if (argc != 4)
         {
-            kDebug() << "Usage: kio_digikamdates protocol domain-socket1 domain-socket2";
+            qCDebug(DIGIKAM_KIOSLAVES_LOG) << "Usage: kio_digikamdates protocol domain-socket1 domain-socket2";
             exit(-1);
         }
 
         kio_digikamdates slave(argv[2], argv[3]);
         slave.dispatchLoop();
 
-        kDebug() << "*** kio_digikamdates finished ***";
+        qCDebug(DIGIKAM_KIOSLAVES_LOG) << "*** kio_digikamdates finished ***";
         return 0;
     }
 }

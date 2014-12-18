@@ -39,7 +39,7 @@
 #include <kglobal.h>
 #include <kio/global.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -82,7 +82,7 @@ void kio_digikammapimages::special(const QByteArray& data)
         qreal lng2      = strLng2.toDouble();
 
         QList<QVariant> imagesInfoFromArea = Digikam::DatabaseAccess().db()->getImageIdsFromArea(lat1, lat2, lng1, lng2, 0, QString("rating"));
-        // kDebug() << "IMAGE IDS:" << imageIds;
+        // qCDebug(DIGIKAM_KIOSLAVES_LOG) << "IMAGE IDS:" << imageIds;
 
         QByteArray  ba;
         QDataStream os(&ba, QIODevice::WriteOnly);
@@ -117,18 +117,18 @@ extern "C"
         KComponentData componentData( "kio_digikammapimages" );
         KLocale::global();
 
-        kDebug() << "*** kio_digikammapimages started ***";
+        qCDebug(DIGIKAM_KIOSLAVES_LOG) << "*** kio_digikammapimages started ***";
 
         if (argc != 4)
         {
-            kDebug() << "Usage: kio_digikammapimages protocol domain-socket1 domain-socket2";
+            qCDebug(DIGIKAM_KIOSLAVES_LOG) << "Usage: kio_digikammapimages protocol domain-socket1 domain-socket2";
             exit(-1);
         }
 
         kio_digikammapimages slave(argv[2], argv[3]);
         slave.dispatchLoop();
 
-        kDebug() << "*** kio_digikammapimages finished ***";
+        qCDebug(DIGIKAM_KIOSLAVES_LOG) << "*** kio_digikammapimages finished ***";
         return 0;
     }
 }

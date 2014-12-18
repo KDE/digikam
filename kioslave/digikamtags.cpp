@@ -39,7 +39,7 @@
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
 #include <kurl.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -140,18 +140,18 @@ extern "C"
         KComponentData componentData( "kio_digikamtags" );
         KLocale::global();
 
-        kDebug() << "*** kio_digikamtag started ***";
+        qCDebug(DIGIKAM_KIOSLAVES_LOG) << "*** kio_digikamtag started ***";
 
         if (argc != 4)
         {
-            kDebug() << "Usage: kio_digikamtags  protocol domain-socket1 domain-socket2";
+            qCDebug(DIGIKAM_KIOSLAVES_LOG) << "Usage: kio_digikamtags  protocol domain-socket1 domain-socket2";
             exit(-1);
         }
 
         kio_digikamtagsProtocol slave(argv[2], argv[3]);
         slave.dispatchLoop();
 
-        kDebug() << "*** kio_digikamtags finished ***";
+        qCDebug(DIGIKAM_KIOSLAVES_LOG) << "*** kio_digikamtags finished ***";
         return 0;
     }
 }

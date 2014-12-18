@@ -33,7 +33,7 @@
 
 #include <kcomponentdata.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <digikam_debug.h>
 
 // Local includes
 
@@ -89,7 +89,7 @@ void kio_digikamsearch::special(const QByteArray& data)
         ds >> listingType;
     }
 
-    kDebug() << "kio_digikamsearch::special " << kurl;
+    qCDebug(DIGIKAM_KIOSLAVES_LOG) << "kio_digikamsearch::special " << kurl;
 
     Digikam::DatabaseUrl dbUrl(kurl);
     QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-digikamtags-%1")
@@ -174,7 +174,7 @@ void kio_digikamsearch::special(const QByteArray& data)
 
         if (albumIds.isEmpty() && tagIds.isEmpty())
         {
-            kDebug() << "No album ids passed for duplicates search";
+            qCDebug(DIGIKAM_KIOSLAVES_LOG) << "No album ids passed for duplicates search";
             error(KIO::ERR_INTERNAL, i18n("No album ids passed"));
             return;
         }
@@ -213,18 +213,18 @@ extern "C"
         KComponentData componentData( "kio_digikamsearch" );
         KLocale::global();
 
-        kDebug() << "*** kio_digikamsearch started ***";
+        qCDebug(DIGIKAM_KIOSLAVES_LOG) << "*** kio_digikamsearch started ***";
 
         if (argc != 4)
         {
-            kDebug() << "Usage: kio_digikamsearch protocol domain-socket1 domain-socket2";
+            qCDebug(DIGIKAM_KIOSLAVES_LOG) << "Usage: kio_digikamsearch protocol domain-socket1 domain-socket2";
             exit(-1);
         }
 
         kio_digikamsearch slave(argv[2], argv[3]);
         slave.dispatchLoop();
 
-        kDebug() << "*** kio_digikamsearch finished ***";
+        qCDebug(DIGIKAM_KIOSLAVES_LOG) << "*** kio_digikamsearch finished ***";
         return 0;
     }
 }
