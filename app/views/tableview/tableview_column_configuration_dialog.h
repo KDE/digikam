@@ -34,7 +34,7 @@
 #include "tableview_columnfactory.h"
 #include "tableview_shared.h"
 
-class KMenu;
+class QMenu;
 class QContextMenuEvent;
 
 namespace Digikam

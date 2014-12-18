@@ -88,7 +88,7 @@ class TagToggleMenuWidget : public QWidget
 {
 public:
 
-    TagToggleMenuWidget(KMenu* const parent, TagToggleAction* const action);
+    TagToggleMenuWidget(QMenu* const parent, TagToggleAction* const action);
 
 protected:
 
@@ -104,13 +104,13 @@ private:
 
 private:
 
-    KMenu*           m_menu;
+    QMenu*           m_menu;
     TagToggleAction* m_action;
 };
 
 // ------------------------------------------------------------------------
 
-TagToggleMenuWidget::TagToggleMenuWidget(KMenu* const parent, TagToggleAction* const action)
+TagToggleMenuWidget::TagToggleMenuWidget(QMenu* const parent, TagToggleAction* const action)
     : QWidget(parent)
 {
     m_menu   = parent;
@@ -261,7 +261,7 @@ void TagToggleMenuWidget::initMenuStyleOption(QStyleOptionMenuItem* option) cons
         option->menuItemType = QStyleOptionMenuItem::Normal;
     }
 
-    // seems KMenu does it like this
+    // seems QMenu does it like this
     option->maxIconWidth = style()->pixelMetric(QStyle::PM_SmallIconSize, 0, this);
     option->rect         = rect();
     option->menuRect     = parentWidget()->rect();
@@ -338,7 +338,7 @@ TagToggleAction::TagToggleAction(const KIcon& icon, const QString& text, QObject
 
 QWidget* TagToggleAction::createWidget(QWidget* parent)
 {
-    KMenu* const menu = qobject_cast<KMenu*>(parent);
+    QMenu* const menu = qobject_cast<QMenu*>(parent);
 
     if (menu)
     {
@@ -402,14 +402,14 @@ public:
 };
 
 TagsPopupMenu::TagsPopupMenu(qlonglong selectedImageId, Mode mode, QWidget* const parent)
-    : KMenu(parent), d(new Private)
+    : QMenu(parent), d(new Private)
 {
     d->selectedImageIDs << selectedImageId;
     setup(mode);
 }
 
 TagsPopupMenu::TagsPopupMenu(const QList<qlonglong>& selectedImageIds, Mode mode, QWidget* const parent)
-    : KMenu(parent), d(new Private)
+    : QMenu(parent), d(new Private)
 {
     d->selectedImageIDs = selectedImageIds;
     setup(mode);
@@ -592,7 +592,7 @@ bool lessThanByTitle(const Album* first, const Album* second)
     return first->title() < second->title();
 }
 
-void TagsPopupMenu::iterateAndBuildMenu(KMenu* menu, TAlbum* album)
+void TagsPopupMenu::iterateAndBuildMenu(QMenu* menu, TAlbum* album)
 {
     QList<Album*> sortedTags;
 
@@ -661,7 +661,7 @@ void TagsPopupMenu::iterateAndBuildMenu(KMenu* menu, TAlbum* album)
     }
 }
 
-KMenu* TagsPopupMenu::buildSubMenu(int tagid)
+QMenu* TagsPopupMenu::buildSubMenu(int tagid)
 {
     AlbumManager* const man = AlbumManager::instance();
     TAlbum* const album     = man->findTAlbum(tagid);
@@ -671,7 +671,7 @@ KMenu* TagsPopupMenu::buildSubMenu(int tagid)
         return 0;
     }
 
-    KMenu* const popup = new KMenu(this);
+    QMenu* const popup = new QMenu(this);
     popup->setSeparatorsCollapsible(true);
 
     if (d->mode == ASSIGN && !d->assignedTags.contains(album->id()))
@@ -719,7 +719,7 @@ KMenu* TagsPopupMenu::buildSubMenu(int tagid)
     return popup;
 }
 
-void TagsPopupMenu::buildFlatMenu(KMenu* menu)
+void TagsPopupMenu::buildFlatMenu(QMenu* menu)
 {
     QList<int> ids;
     QStringList shortenedPaths = TagsCache::instance()->shortenedTagPaths(d->assignedTags.toList(), &ids,

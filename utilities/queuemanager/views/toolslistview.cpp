@@ -37,7 +37,7 @@
 #include <kaction.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kmenu.h>
+#include <QMenu>
 
 namespace Digikam
 {
@@ -352,7 +352,7 @@ QMap<int, QString> ToolsListView::itemsToMap(const QList<QTreeWidgetItem*> items
 
 void ToolsListView::slotContextMenu()
 {
-    KMenu popmenu(this);
+    QMenu popmenu(this);
     KAction* const action = new KAction(QIcon::fromTheme("bqm-add"), i18n("Assign tools"), this);
     connect(action, SIGNAL(triggered(bool)),
             this, SLOT(slotAssignTools()));

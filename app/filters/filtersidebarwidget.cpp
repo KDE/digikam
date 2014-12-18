@@ -38,7 +38,7 @@
 // KDE includes
 
 #include <khbox.h>
-#include <kmenu.h>
+#include <QMenu>
 
 // Libkdcraw includes
 
@@ -97,7 +97,7 @@ public:
     TagFilterView*                         tagFilterView;
     SearchTextBar*                         tagFilterSearchBar;
     QToolButton*                           tagOptionsBtn;
-    KMenu*                                 tagOptionsMenu;
+    QMenu*                                 tagOptionsMenu;
     TagModel*                              tagFilterModel;
     QAction*                               tagOrCondAction;
     QAction*                               tagAndCondAction;
@@ -171,7 +171,7 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
                                         "to filter the images. This also includes the '%1' check box.",
                                         notTaggedTitle));
 
-    d->tagOptionsMenu  = new KMenu(d->tagOptionsBtn);
+    d->tagOptionsMenu  = new QMenu(d->tagOptionsBtn);
     d->tagOrCondAction = d->tagOptionsMenu->addAction(i18n("OR"));
     d->tagOrCondAction->setCheckable(true);
     d->tagAndCondAction = d->tagOptionsMenu->addAction(i18n("AND"));

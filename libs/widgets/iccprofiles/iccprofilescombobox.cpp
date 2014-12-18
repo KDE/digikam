@@ -33,7 +33,7 @@
 
 #include <kactionmenu.h>
 #include <klocalizedstring.h>
-#include <kmenu.h>
+#include <QMenu>
 
 // Local includes
 

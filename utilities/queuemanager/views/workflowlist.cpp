@@ -37,7 +37,7 @@
 #include <kaction.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kmessagebox.h>
 #include <kstandardguiitem.h>
 
@@ -241,7 +241,7 @@ QMimeData* WorkflowList::mimeData(const QList<QTreeWidgetItem*> items) const
 
 void WorkflowList::slotContextMenu()
 {
-    KMenu popmenu(this);
+    QMenu popmenu(this);
     KAction* const assignAction = new KAction(QIcon::fromTheme("bqm-add"),             i18n("Assign Workflow to current queue"), this);
     KAction* const propAction   = new KAction(QIcon::fromTheme("document-properties"), i18n("Edit Workflow"),                    this);
     KAction* const delAction    = new KAction(QIcon::fromTheme("edit-delete"),         i18n("Delete Workflow"),                  this);

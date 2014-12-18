@@ -88,7 +88,7 @@ public:
 };
 
 DDatePickerPopup::DDatePickerPopup( Items items, const QDate& date, QWidget* parent )
-    : KMenu( parent ), d(new DDatePickerPopupPriv)
+    : QMenu( parent ), d(new DDatePickerPopupPriv)
 {
     d->items      = items;
     d->datePicker = new KDatePicker( this );

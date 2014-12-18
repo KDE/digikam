@@ -55,7 +55,7 @@
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kmenu.h>
+#include <QMenu>
 
 // Libkexiv2 includes
 
@@ -108,7 +108,7 @@ public:
 
     QStringList            tagsFilter;
 
-    KMenu*                 optionsMenu;
+    QMenu*                 optionsMenu;
 
     MetadataListView*      view;
 
@@ -133,7 +133,7 @@ MetadataWidget::MetadataWidget(QWidget* const parent, const char* name)
     d->filterBtn->setPopupMode(QToolButton::InstantPopup);
     d->filterBtn->setWhatsThis(i18n("Apply tags filter over metadata."));
 
-    d->optionsMenu                  = new KMenu(d->filterBtn);
+    d->optionsMenu                  = new QMenu(d->filterBtn);
     QActionGroup* const filterGroup = new QActionGroup(this);
 
     d->noneAction     = d->optionsMenu->addAction(i18n("No filter"));
@@ -160,7 +160,7 @@ MetadataWidget::MetadataWidget(QWidget* const parent, const char* name)
     d->toolBtn->setPopupMode(QToolButton::InstantPopup);
     d->toolBtn->setWhatsThis(i18n("Run tool over metadata tags."));
 
-    KMenu* const toolMenu         = new KMenu(d->toolBtn);
+    QMenu* const toolMenu         = new QMenu(d->toolBtn);
     QAction* const saveMetadata   = toolMenu->addAction(i18nc("@action:inmenu", "Save in file"));
     QAction* const printMetadata  = toolMenu->addAction(i18nc("@action:inmenu", "Print"));
     QAction* const copy2ClipBoard = toolMenu->addAction(i18nc("@action:inmenu", "Copy to Clipboard"));

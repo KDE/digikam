@@ -41,7 +41,7 @@
 
 // KDE includes
 
-#include <kmenu.h>
+#include <QMenu>
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
@@ -145,7 +145,7 @@ public:
     QToolButton*         revertBtn;
     KPushButton*         openTagMngr;
 
-    KMenu*               moreMenu;
+    QMenu*               moreMenu;
 
     QSignalMapper*       recentTagsMapper;
 
@@ -256,7 +256,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     d->applyToAllVersionsButton->setToolTip(i18n("Apply all changes to all versions of this image"));
 
     d->moreButton = new QPushButton(i18n("More"), buttonsBox);
-    d->moreMenu   = new KMenu(captionTagsArea);
+    d->moreMenu   = new QMenu(captionTagsArea);
     d->moreButton->setMenu(d->moreMenu);
 
     // --------------------------------------------------
@@ -316,7 +316,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     d->assignedTagsBtn->setCheckable(true);
 
     d->recentTagsBtn            = new QToolButton(tagsSearch);
-    KMenu* const recentTagsMenu = new KMenu(d->recentTagsBtn);
+    QMenu* const recentTagsMenu = new QMenu(d->recentTagsBtn);
     d->recentTagsBtn->setToolTip( i18n("Recent Tags"));
     d->recentTagsBtn->setIcon(KIconLoader::global()->loadIcon("tag-recents",
                               KIconLoader::NoGroup, KIconLoader::SizeSmall));
@@ -1373,7 +1373,7 @@ void ImageDescEditTab::slotReloadForMetadataChange()
 
 void ImageDescEditTab::updateRecentTags()
 {
-    KMenu* const menu = dynamic_cast<KMenu*>(d->recentTagsBtn->menu());
+    QMenu* const menu = dynamic_cast<QMenu*>(d->recentTagsBtn->menu());
 
     if (!menu)
     {

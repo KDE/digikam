@@ -50,7 +50,7 @@
 #include <QIcon>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kstandarddirs.h>
 #include <kvbox.h>
 

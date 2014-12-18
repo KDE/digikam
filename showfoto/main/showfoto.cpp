@@ -77,7 +77,7 @@ extern "C"
 #include <kio/deletejob.h>
 #include <kio/netaccess.h>
 #include <klocalizedstring.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kmenubar.h>
 #include <kmessagebox.h>
 #include <kmultitabbar.h>

@@ -44,7 +44,7 @@ class QString;
 
 class KAction;
 class KActionCollection;
-class KMenu;
+class QMenu;
 
 namespace Digikam
 {
@@ -366,7 +366,7 @@ public:
      *
      * @param subMenu   the submenu to be added
      */
-    void addSubMenu(KMenu* subMenu);
+    void addSubMenu(QMenu* subMenu);
 
     /**
      * Add a separator to the context menu

@@ -72,7 +72,7 @@
 #include <kio/global.h>
 #include <klocalizedstring.h>
 #include <kmenubar.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kmessagebox.h>
 #include <knotifyconfigwidget.h>
 #include <kshortcutsdialog.h>

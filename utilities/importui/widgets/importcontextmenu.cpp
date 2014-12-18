@@ -136,7 +136,7 @@ void ImportContextMenuHelper::addAction(QAction* action, bool addDisabled)
     }
 }
 
-void ImportContextMenuHelper::addSubMenu(KMenu* subMenu)
+void ImportContextMenuHelper::addSubMenu(QMenu* subMenu)
 {
     d->parent->addMenu(subMenu);
 }
@@ -215,7 +215,7 @@ void ImportContextMenuHelper::addServicesMenu(const KUrl::List& selectedItems)
 
     if (!offers.isEmpty() && ImportUI::instance()->cameraUseUMSDriver())
     {
-        KMenu* servicesMenu    = new KMenu(d->parent);
+        QMenu* servicesMenu    = new QMenu(d->parent);
         qDeleteAll(servicesMenu->actions());
 
         QAction* serviceAction = servicesMenu->menuAction();
@@ -299,7 +299,7 @@ void ImportContextMenuHelper::addRotateMenu(itemIds& /*ids*/)
 {
 //    setSelectedIds(ids);
 
-//    KMenu* imageRotateMenu = new KMenu(i18n("Rotate"), d->parent);
+//    QMenu* imageRotateMenu = new QMenu(i18n("Rotate"), d->parent);
 //    imageRotateMenu->setIcon(QIcon::fromTheme("object-rotate-right"));
 
 //    KAction* left = new KAction(this);
@@ -336,7 +336,7 @@ void ImportContextMenuHelper::addAssignTagsMenu(itemIds& ids)
 {
     setSelectedIds(ids);
 
-    KMenu* assignTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::RECENTLYASSIGNED, d->parent);
+    QMenu* assignTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::RECENTLYASSIGNED, d->parent);
     assignTagsPopup->menuAction()->setText(i18n("Assign Tag"));
     assignTagsPopup->menuAction()->setIcon(SmallIcon("tag"));
     d->parent->addMenu(assignTagsPopup);
@@ -352,7 +352,7 @@ void ImportContextMenuHelper::addRemoveTagsMenu(itemIds& ids)
 {
     setSelectedIds(ids);
 
-    KMenu* removeTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::REMOVE, d->parent);
+    QMenu* removeTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::REMOVE, d->parent);
     removeTagsPopup->menuAction()->setText(i18n("Remove Tag"));
     removeTagsPopup->menuAction()->setIcon(SmallIcon("tag"));
     d->parent->addMenu(removeTagsPopup);
@@ -363,7 +363,7 @@ void ImportContextMenuHelper::addRemoveTagsMenu(itemIds& ids)
 
 void ImportContextMenuHelper::addLabelsAction()
 {
-    KMenu* menuLabels           = new KMenu(i18n("Assign Labels"), d->parent);
+    QMenu* menuLabels           = new QMenu(i18n("Assign Labels"), d->parent);
     PickLabelMenuAction* pmenu  = new PickLabelMenuAction(d->parent);
     ColorLabelMenuAction* cmenu = new ColorLabelMenuAction(d->parent);
     RatingMenuAction* rmenu     = new RatingMenuAction(d->parent);

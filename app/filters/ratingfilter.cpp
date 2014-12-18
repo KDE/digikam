@@ -36,7 +36,7 @@
 
 // KDE includes
 
-#include <kmenu.h>
+#include <QMenu>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kglobal.h>
@@ -218,7 +218,7 @@ public:
     QAction*            leCondAction;
     QAction*            excludeUnrated;
 
-    KMenu*              optionsMenu;
+    QMenu*              optionsMenu;
 
     RatingFilterWidget* ratingWidget;
 };
@@ -233,7 +233,7 @@ RatingFilter::RatingFilter(QWidget* const parent)
     d->optionsBtn->setIcon(KIconLoader::global()->loadIcon("configure", KIconLoader::Toolbar));
     d->optionsBtn->setPopupMode(QToolButton::InstantPopup);
 
-    d->optionsMenu  = new KMenu(d->optionsBtn);
+    d->optionsMenu  = new QMenu(d->optionsBtn);
     d->geCondAction = d->optionsMenu->addAction(i18n("Greater Than or Equals Condition"));
     d->geCondAction->setCheckable(true);
     d->eqCondAction = d->optionsMenu->addAction(i18n("Equals Condition"));

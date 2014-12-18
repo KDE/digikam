@@ -40,7 +40,7 @@
 #include <kactioncollection.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kurl.h>
 #include "digikam_debug.h"
 
@@ -1125,7 +1125,7 @@ void QueueListView::slotContextMenu()
     }
 
     KActionCollection* const acol = QueueMgrWindow::queueManagerWindow()->actionCollection();
-    KMenu popmenu(this);
+    QMenu popmenu(this);
     popmenu.addAction(acol->action("queuemgr_removeitemssel"));
     popmenu.addSeparator();
     popmenu.addAction(acol->action("queuemgr_clearlist"));

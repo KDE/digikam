@@ -43,7 +43,7 @@
 #include <ksqueezedtextlabel.h>
 #include <klocalizedstring.h>
 #include "digikam_debug.h"
-#include <kmenu.h>
+#include <QMenu>
 #include <khbox.h>
 #include <kapplication.h>
 #include <kxmlguiwindow.h>

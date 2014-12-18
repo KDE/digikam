@@ -35,7 +35,7 @@
 #include <kaction.h>
 #include "digikam_debug.h"
 #include <klinkitemselectionmodel.h>
-#include <kmenu.h>
+#include <QMenu>
 
 // local includes
 
@@ -123,7 +123,7 @@ bool TableViewTreeView::eventFilter(QObject* watched, QEvent* event)
     return QObject::eventFilter(watched, event);
 }
 
-void TableViewTreeView::addColumnDescriptionsToMenu(const QList<TableViewColumnDescription>& columnDescriptions, KMenu* const menu)
+void TableViewTreeView::addColumnDescriptionsToMenu(const QList<TableViewColumnDescription>& columnDescriptions, QMenu* const menu)
 {
     for (int i = 0; i<columnDescriptions.count(); ++i)
     {
@@ -144,7 +144,7 @@ void TableViewTreeView::addColumnDescriptionsToMenu(const QList<TableViewColumnD
         }
         else
         {
-            KMenu* const subMenu = new KMenu(menu);
+            QMenu* const subMenu = new QMenu(menu);
             addColumnDescriptionsToMenu(desc.subColumns, subMenu);
 
             action->setMenu(subMenu);
@@ -161,7 +161,7 @@ void TableViewTreeView::showHeaderContextMenu(QEvent* const event)
 
     d->headerContextMenuActiveColumn          = headerView->logicalIndexAt(e->pos());
     const TableViewColumn* const columnObject = s->tableViewModel->getColumnObject(d->headerContextMenuActiveColumn);
-    KMenu* const menu                         = new KMenu(this);
+    QMenu* const menu                         = new QMenu(this);
 
     d->actionHeaderContextMenuRemoveColumn->setEnabled(s->tableViewModel->columnCount(QModelIndex())>1);
     menu->addAction(d->actionHeaderContextMenuRemoveColumn);

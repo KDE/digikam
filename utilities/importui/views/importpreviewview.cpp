@@ -33,7 +33,7 @@
 
 #include <klocalizedstring.h>
 #include <ktoggleaction.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kapplication.h>
 
 // Local includes
@@ -360,7 +360,7 @@ void ImportPreviewView::showContextMenu(const CamItemInfo& info, QGraphicsSceneC
 
     // --------------------------------------------------------
 
-    KMenu popmenu(this);
+    QMenu popmenu(this);
     ImportContextMenuHelper cmhelper(&popmenu);
 
     cmhelper.addAction("importui_fullscreen");

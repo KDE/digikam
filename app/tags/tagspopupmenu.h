@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <kmenu.h>
+#include <QMenu>
 
 namespace Digikam
 {
@@ -41,7 +41,7 @@ namespace Digikam
 class Album;
 class TAlbum;
 
-class TagsPopupMenu : public KMenu
+class TagsPopupMenu : public QMenu
 {
     Q_OBJECT
 
@@ -77,9 +77,9 @@ private:
 
     void   setup(Mode mode);
     void   clearPopup();
-    KMenu* buildSubMenu(int tagid);
-    void   iterateAndBuildMenu(KMenu* menu, TAlbum* album);
-    void   buildFlatMenu(KMenu* menu);
+    QMenu* buildSubMenu(int tagid);
+    void   iterateAndBuildMenu(QMenu* menu, TAlbum* album);
+    void   buildFlatMenu(QMenu* menu);
     void   setAlbumIcon(QAction* action, TAlbum* album);
 
 private:

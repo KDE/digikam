@@ -35,7 +35,7 @@
 #include <kiconloader.h>
 #include <kio/job.h>
 #include <klocalizedstring.h>
-#include <kmenu.h>
+#include <QMenu>
 
 // Local includes
 
@@ -87,7 +87,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
         }
 
         // TODO Copy?
-        KMenu popMenu(view);
+        QMenu popMenu(view);
         QAction* const moveAction = popMenu.addAction(SmallIcon("go-jump"), i18n("&Move Here"));
         popMenu.addSeparator();
         popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
@@ -151,7 +151,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
             }
             else
             {
-                KMenu popMenu(view);
+                QMenu popMenu(view);
                 QAction* setAction = 0;
 
                 if (imageIDs.count() == 1)
@@ -193,7 +193,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
         }
         else
         {
-            KMenu popMenu(view);
+            QMenu popMenu(view);
             QAction* const moveAction = popMenu.addAction(SmallIcon("go-jump"), i18n("&Move Here"));
             QAction* const copyAction = popMenu.addAction(SmallIcon("edit-copy"), i18n("&Copy Here"));
             QAction* thumbnailAction  = 0;
@@ -253,7 +253,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
 
         if (ui)
         {
-            KMenu popMenu(view);
+            QMenu popMenu(view);
             QAction* const downAction    = popMenu.addAction(SmallIcon("file-export"),
                                                              i18n("Download From Camera"));
             QAction* const downDelAction = popMenu.addAction(SmallIcon("file-export"),
@@ -297,7 +297,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
         }
         else
         {
-            KMenu popMenu(view);
+            QMenu popMenu(view);
             QAction* const moveAction = popMenu.addAction(SmallIcon("go-jump"), i18n("&Move Here"));
             QAction* const copyAction = popMenu.addAction(SmallIcon("edit-copy"), i18n("&Copy Here"));
             popMenu.addSeparator();

@@ -45,7 +45,7 @@
 #include "tableview_shared.h"
 #include "thumbnailloadthread.h"
 
-class KMenu;
+class QMenu;
 class QContextMenuEvent;
 
 namespace Digikam

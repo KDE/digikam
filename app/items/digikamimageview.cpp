@@ -40,7 +40,7 @@
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kmessagebox.h>
 #include <kmimetype.h>
 #include <krun.h>
@@ -378,7 +378,7 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
 
     // --------------------------------------------------------
 
-    KMenu popmenu(this);
+    QMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
     cmhelper.setImageFilterModel(imageFilterModel());
 
@@ -487,7 +487,7 @@ void DigikamImageView::showGroupContextMenu(const QModelIndex& index, QContextMe
         selectedImageIDs << info.id();
     }
 
-    KMenu popmenu(this);
+    QMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
     cmhelper.setImageFilterModel(imageFilterModel());
     cmhelper.addGroupActions(selectedImageIDs);
@@ -521,7 +521,7 @@ void DigikamImageView::showContextMenu(QContextMenuEvent* event)
         return;
     }
 
-    KMenu popmenu(this);
+    QMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
     cmhelper.setImageFilterModel(imageFilterModel());
 

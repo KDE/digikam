@@ -42,7 +42,7 @@
 #include <ksqueezedtextlabel.h>
 #include <klocalizedstring.h>
 #include "digikam_debug.h"
-#include <kmenu.h>
+#include <QMenu>
 #include <khbox.h>
 #include <kapplication.h>
 #include <kxmlguiwindow.h>
@@ -312,7 +312,7 @@ public:
 PickLabelSelector::PickLabelSelector(QWidget* const parent)
     : QPushButton(parent), d(new Private)
 {
-    KMenu* const popup = new KMenu(this);
+    QMenu* const popup = new QMenu(this);
     setMenu(popup);
 
     QWidgetAction* const action = new QWidgetAction(this);

@@ -49,13 +49,13 @@ ShowfotoDragDropHandler::ShowfotoDragDropHandler(ShowfotoImageModel* const model
 {
 }
 
-QAction* ShowfotoDragDropHandler::addGroupAction(KMenu* const menu)
+QAction* ShowfotoDragDropHandler::addGroupAction(QMenu* const menu)
 {
     return menu->addAction(SmallIcon("arrow-down-double"),
                            i18nc("@action:inmenu Group images with this image", "Group here"));
 }
 
-QAction* ShowfotoDragDropHandler::addCancelAction(KMenu* const menu)
+QAction* ShowfotoDragDropHandler::addCancelAction(QMenu* const menu)
 {
     return menu->addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
 }

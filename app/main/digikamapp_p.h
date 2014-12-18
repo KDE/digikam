@@ -42,7 +42,7 @@
 #include <kconfig.h>
 #include <kaction.h>
 #include <kselectaction.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kstatusbar.h>
 #include <kcombobox.h>
 #include <ksqueezedtextlabel.h>

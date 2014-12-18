@@ -32,7 +32,7 @@
 // KDE includes
 
 #include <kaction.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <klinkitemselectionmodel.h>
 
 // local includes
@@ -205,7 +205,7 @@ void TableView::showTreeViewContextMenuOnEmptyArea(QContextMenuEvent* const even
         return;
     }
 
-    KMenu menu(this);
+    QMenu menu(this);
     ContextMenuHelper cmHelper(&menu);
 
     cmHelper.addAction("full_screen");
@@ -230,7 +230,7 @@ void TableView::showTreeViewContextMenuOnItem(QContextMenuEvent* const event, co
     viewAction->setEnabled(selectedImageIds.count() == 1);
 
     // Creation of the menu -----------------------------------
-    KMenu menu(this);
+    QMenu menu(this);
     ContextMenuHelper cmHelper(&menu);
 
     cmHelper.addAction("full_screen");

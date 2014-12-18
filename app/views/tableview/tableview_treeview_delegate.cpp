@@ -34,7 +34,7 @@
 
 #include <kaction.h>
 #include <klinkitemselectionmodel.h>
-#include <kmenu.h>
+#include <QMenu>
 #include "digikam_debug.h"
 
 // local includes

@@ -45,7 +45,7 @@
 #include <kapplication.h>
 #include <kfileitem.h>
 #include <klocalizedstring.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
 #include <kopenwithdialog.h>
@@ -204,7 +204,7 @@ void ContextMenuHelper::addAction(QAction* action, bool addDisabled)
     }
 }
 
-void ContextMenuHelper::addSubMenu(KMenu* subMenu)
+void ContextMenuHelper::addSubMenu(QMenu* subMenu)
 {
     d->parent->addMenu(subMenu);
 }
@@ -278,7 +278,7 @@ void ContextMenuHelper::addServicesMenu(const KUrl::List& selectedItems)
 
     if (!offers.isEmpty())
     {
-        KMenu* const servicesMenu = new KMenu(d->parent);
+        QMenu* const servicesMenu = new QMenu(d->parent);
         qDeleteAll(servicesMenu->actions());
 
         QAction* const serviceAction = servicesMenu->menuAction();
@@ -470,7 +470,7 @@ void ContextMenuHelper::addAssignTagsMenu(const imageIds &ids)
 {
     setSelectedIds(ids);
 
-    KMenu* const assignTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::RECENTLYASSIGNED, d->parent);
+    QMenu* const assignTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::RECENTLYASSIGNED, d->parent);
     assignTagsPopup->menuAction()->setText(i18n("Assign Tag"));
     assignTagsPopup->menuAction()->setIcon(SmallIcon("tag"));
     d->parent->addMenu(assignTagsPopup);
@@ -486,7 +486,7 @@ void ContextMenuHelper::addRemoveTagsMenu(const imageIds &ids)
 {
     setSelectedIds(ids);
 
-    KMenu* const removeTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::REMOVE, d->parent);
+    QMenu* const removeTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::REMOVE, d->parent);
     removeTagsPopup->menuAction()->setText(i18n("Remove Tag"));
     removeTagsPopup->menuAction()->setIcon(SmallIcon("tag"));
     d->parent->addMenu(removeTagsPopup);
@@ -504,7 +504,7 @@ void ContextMenuHelper::addRemoveTagsMenu(const imageIds &ids)
 
 void ContextMenuHelper::addLabelsAction()
 {
-    KMenu* const menuLabels           = new KMenu(i18n("Assign Labels"), d->parent);
+    QMenu* const menuLabels           = new QMenu(i18n("Assign Labels"), d->parent);
     PickLabelMenuAction* const pmenu  = new PickLabelMenuAction(d->parent);
     ColorLabelMenuAction* const cmenu = new ColorLabelMenuAction(d->parent);
     RatingMenuAction* const rmenu     = new RatingMenuAction(d->parent);
@@ -607,7 +607,7 @@ void ContextMenuHelper::slotDeselectAllAlbumItems()
 
 void ContextMenuHelper::addImportMenu()
 {
-    KMenu* const menuImport = new KMenu(i18n("Import"), d->parent);
+    QMenu* const menuImport = new QMenu(i18n("Import"), d->parent);
     QList<QAction*> importActions;
 
 #ifdef HAVE_KIPI
@@ -630,7 +630,7 @@ void ContextMenuHelper::addImportMenu()
 
 void ContextMenuHelper::addExportMenu()
 {
-    KMenu* const menuExport = new KMenu(i18n("Export"), d->parent);
+    QMenu* const menuExport = new QMenu(i18n("Export"), d->parent);
     QList<QAction*> exportActions;
 
 #ifdef HAVE_KIPI
@@ -658,7 +658,7 @@ void ContextMenuHelper::addExportMenu()
 
 void ContextMenuHelper::addBatchMenu()
 {
-    KMenu* const menuKIPIBatch = new KMenu(i18n("Batch Process"), d->parent);
+    QMenu* const menuKIPIBatch = new QMenu(i18n("Batch Process"), d->parent);
     QList<QAction*> batchActions;
 
 #ifdef HAVE_KIPI
@@ -728,7 +728,7 @@ void ContextMenuHelper::addGotoMenu(const imageIds &ids)
 
     d->gotoAlbumAction    = new QAction(SmallIcon("folder-image"),        i18n("Album"), this);
     d->gotoDateAction     = new QAction(SmallIcon("view-calendar-month"), i18n("Date"),  this);
-    KMenu* const gotoMenu = new KMenu(d->parent);
+    QMenu* const gotoMenu = new QMenu(d->parent);
     gotoMenu->addAction(d->gotoAlbumAction);
     gotoMenu->addAction(d->gotoDateAction);
 
@@ -785,7 +785,7 @@ void ContextMenuHelper::addGotoMenu(const imageIds &ids)
 
 void ContextMenuHelper::addQueueManagerMenu()
 {
-    KMenu* const bqmMenu = new KMenu(i18n("Batch Queue Manager"), d->parent);
+    QMenu* const bqmMenu = new QMenu(i18n("Batch Queue Manager"), d->parent);
     bqmMenu->menuAction()->setIcon(QIcon::fromTheme("bqm-diff"));
     bqmMenu->addAction(d->stdActionCollection->action("image_add_to_current_queue"));
     bqmMenu->addAction(d->stdActionCollection->action("image_add_to_new_queue"));
@@ -795,7 +795,7 @@ void ContextMenuHelper::addQueueManagerMenu()
         !QueueMgrWindow::queueManagerWindow()->queuesMap().isEmpty())
     {
         QueueMgrWindow* const qmw = QueueMgrWindow::queueManagerWindow();
-        KMenu* const queueMenu    = new KMenu(i18n("Add to Existing Queue"), bqmMenu);
+        QMenu* const queueMenu    = new QMenu(i18n("Add to Existing Queue"), bqmMenu);
 
         // queueActions is used by the exec() method to emit an appropriate signal.
         // Reset the map before filling in the actions.
@@ -837,7 +837,7 @@ void ContextMenuHelper::addAlbumCheckUncheckActions(Album* album)
     QVariant albumData = QVariant::fromValue(AlbumPointer<>(album));
     QString allString = album->type() == Album::TAG ? i18n("All Tags") : i18n("All Albums");
 
-    KMenu* const selectTagsMenu = new KMenu(i18nc("select tags menu", "Select"));
+    QMenu* const selectTagsMenu = new QMenu(i18nc("select tags menu", "Select"));
     addSubMenu(selectTagsMenu);
 
     selectTagsMenu->addAction(allString, d->albumModel, SLOT(checkAllAlbums()));
@@ -847,7 +847,7 @@ void ContextMenuHelper::addAlbumCheckUncheckActions(Album* album)
     selectChildrenAction->setData(albumData);
     selectParentsAction->setData(albumData);
 
-    KMenu* const deselectTagsMenu       = new KMenu(i18nc("deselect tags menu", "Deselect"));
+    QMenu* const deselectTagsMenu       = new QMenu(i18nc("deselect tags menu", "Deselect"));
     addSubMenu(deselectTagsMenu);
 
     deselectTagsMenu->addAction(allString, d->albumModel, SLOT(resetAllCheckedAlbums()));
@@ -926,7 +926,7 @@ void ContextMenuHelper::addGroupMenu(const imageIds &ids, const QList<QAction*>&
         actions << extraMenuItems;
     }
 
-    KMenu* const menu = new KMenu(i18n("Group"));
+    QMenu* const menu = new QMenu(i18n("Group"));
 
     foreach(QAction* const action, actions)
     {

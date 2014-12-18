@@ -60,7 +60,7 @@
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
 #include <klocalizedstring.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kmenubar.h>
 #include <kmessagebox.h>
 #include <kselectaction.h>
@@ -731,7 +731,7 @@ void ImageWindow::slotContextMenu()
 
         // Assign Labels -------------------------------------------
 
-        KMenu* const menuLabels           = new KMenu(i18n("Assign Labels"), m_contextMenu);
+        QMenu* const menuLabels           = new QMenu(i18n("Assign Labels"), m_contextMenu);
         PickLabelMenuAction* const pmenu  = new PickLabelMenuAction(m_contextMenu);
         ColorLabelMenuAction* const cmenu = new ColorLabelMenuAction(m_contextMenu);
         RatingMenuAction* const rmenu     = new RatingMenuAction(m_contextMenu);

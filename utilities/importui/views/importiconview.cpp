@@ -33,7 +33,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kmenu.h>
+#include <QMenu>
 
 // Local includes
 
@@ -313,7 +313,7 @@ void ImportIconView::showContextMenuOnInfo(QContextMenuEvent* event, const CamIt
 
     // --------------------------------------------------------
 
-    KMenu popmenu(this);
+    QMenu popmenu(this);
     ImportContextMenuHelper cmhelper(&popmenu);
 
     cmhelper.addAction("importui_fullscreen");
@@ -389,7 +389,7 @@ void ImportIconView::showContextMenuOnInfo(QContextMenuEvent* event, const CamIt
 
 void ImportIconView::showContextMenu(QContextMenuEvent* event)
 {
-    KMenu popmenu(this);
+    QMenu popmenu(this);
     ImportContextMenuHelper cmhelper(&popmenu);
 
     cmhelper.addAction("importui_fullscreen");

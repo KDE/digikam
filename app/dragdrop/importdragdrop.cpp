@@ -54,13 +54,13 @@ ImportDragDropHandler::ImportDragDropHandler(ImportImageModel* const model)
 {
 }
 
-QAction* ImportDragDropHandler::addGroupAction(KMenu* const menu)
+QAction* ImportDragDropHandler::addGroupAction(QMenu* const menu)
 {
     return menu->addAction(SmallIcon("arrow-down-double"),
                            i18nc("@action:inmenu Group images with this image", "Group here"));
 }
 
-QAction* ImportDragDropHandler::addCancelAction(KMenu* const menu)
+QAction* ImportDragDropHandler::addCancelAction(QMenu* const menu)
 {
     return menu->addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
 }
@@ -90,7 +90,7 @@ ImportDragDropHandler::DropAction ImportDragDropHandler::copyOrMove(const QDropE
         }
     }
 
-    KMenu popMenu(view);
+    QMenu popMenu(view);
 
     QAction* moveAction = 0;
 
@@ -154,8 +154,8 @@ bool ImportDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDr
     {
         KUrl::List lst = DigikamApp::instance()->view()->selectedUrls();
 
-        KMenu popMenu(view);
-        popMenu.addTitle(SmallIcon("digikam"), i18n("Exporting"));
+        QMenu popMenu(view);
+        popMenu.addSection(SmallIcon("digikam"), i18n("Exporting"));
         QAction* const upAction = popMenu.addAction(SmallIcon("media-flash-smart-media"),
                                                     i18n("Upload to Camera"));
         popMenu.addSeparator();

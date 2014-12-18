@@ -27,7 +27,7 @@
 // KDE includes
 
 #include <kactioncollection.h>
-#include <kmenu.h>
+#include <QMenu>
 
 // Local includes
 
@@ -202,7 +202,7 @@ public:
      *
      * @param subMenu   the submenu to be added
      */
-    void addSubMenu(KMenu* subMenu);
+    void addSubMenu(QMenu* subMenu);
 
     /**
      * Add a separator to the context menu

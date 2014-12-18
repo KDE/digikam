@@ -40,7 +40,7 @@
 #include "imageinfo.h"
 #include "statesavingobject.h"
 
-class KMenu;
+class QMenu;
 class QContextMenuEvent;
 class QItemDelegate;
 class QItemSelectionModel;

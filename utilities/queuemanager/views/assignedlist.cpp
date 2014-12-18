@@ -39,7 +39,7 @@
 #include <kactioncollection.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kmenu.h>
+#include <QMenu>
 #include "digikam_debug.h"
 
 // Local includes
@@ -521,7 +521,7 @@ void AssignedListView::slotContextMenu()
     }
 
     KActionCollection* const acol = QueueMgrWindow::queueManagerWindow()->actionCollection();
-    KMenu popmenu(this);
+    QMenu popmenu(this);
     popmenu.addAction(acol->action("queuemgr_toolup"));
     popmenu.addAction(acol->action("queuemgr_tooldown"));
     popmenu.addAction(acol->action("queuemgr_toolremove"));

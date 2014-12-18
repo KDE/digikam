@@ -37,7 +37,7 @@
 #include <kdialog.h>
 #include <klocalizedstring.h>
 #include <kaction.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kpushbutton.h>
 #include <kmessagebox.h>
 #include <kinputdialog.h>

@@ -34,7 +34,7 @@
 
 #include <kconfiggroup.h>
 #include <kactionmenu.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kdebug.h>
 #include <kservice.h>
 

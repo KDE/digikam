@@ -167,9 +167,9 @@ public:
     QSet<QString>                 foldersToScan;
     CamItemInfoList               filesToBeAdded;
 
-    KMenu*                        downloadMenu;
-    KMenu*                        deleteMenu;
-    KMenu*                        imageMenu;
+    QMenu*                        downloadMenu;
+    QMenu*                        deleteMenu;
+    QMenu*                        imageMenu;
 
     KAction*                      cameraCancelAction;
     KAction*                      cameraCaptureAction;

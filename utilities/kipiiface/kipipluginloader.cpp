@@ -35,7 +35,7 @@
 
 #include <kactioncategory.h>
 #include <kactioncollection.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kactionmenu.h>
 #include "digikam_debug.h"
 #include <kxmlguifactory.h>

@@ -55,7 +55,7 @@ class KCategorizedView;
 class KSelectAction;
 class KToggleAction;
 class KToolBarPopupAction;
-class KMenu;
+class QMenu;
 
 namespace Digikam
 {
@@ -139,7 +139,7 @@ protected:
 
     KActionMenu*              m_selectToolsAction;
 
-    KMenu*                    m_contextMenu;
+    QMenu*                    m_contextMenu;
     EditorStackView*          m_stackView;
     Canvas*                   m_canvas;
     ImagePluginLoader*        m_imagePluginLoader;

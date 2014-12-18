@@ -39,7 +39,7 @@
 #include <kiconloader.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
-#include <kmenu.h>
+#include <QMenu>
 
 // Local includes
 
@@ -1104,8 +1104,8 @@ void AbstractAlbumTreeView::contextMenuEvent(QContextMenuEvent* event)
 
     // --------------------------------------------------------
 
-    KMenu* const popmenu = new KMenu(this);
-    popmenu->addTitle(contextMenuIcon(), contextMenuTitle());
+    QMenu* const popmenu = new QMenu(this);
+    popmenu->addSection(contextMenuIcon(), contextMenuTitle());
     ContextMenuHelper cmhelper(popmenu);
 
     addCustomContextMenuActions(cmhelper, album);

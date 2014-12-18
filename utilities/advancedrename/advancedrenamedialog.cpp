@@ -40,7 +40,7 @@
 #include <kapplication.h>
 #include <klocalizedstring.h>
 #include <kurl.h>
-#include <kmenu.h>
+#include <QMenu>
 
 // Local includes
 
@@ -242,8 +242,8 @@ void AdvancedRenameDialog::slotSortDirectionTriggered(QAction* direction)
 
 void AdvancedRenameDialog::slotShowContextMenu(const QPoint& pos)
 {
-    KMenu menu(this);
-    menu.addTitle(i18n("Sort Images"));
+    QMenu menu(this);
+    menu.addSection(i18n("Sort Images"));
 
     ContextMenuHelper cmhelper(&menu);
     cmhelper.addAction(d->sortActionName);

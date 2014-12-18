@@ -36,7 +36,7 @@
 // KDE includes
 
 #include <kaction.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <klocalizedstring.h>
 #include <kapplication.h>
 #include <kiconloader.h>
@@ -130,7 +130,7 @@ DHistoryView::~DHistoryView()
 
 void DHistoryView::slotContextMenu()
 {
-    KMenu popmenu(this);
+    QMenu popmenu(this);
     KAction* const action = new KAction(QIcon::fromTheme("edit-copy"), i18n("Copy to Clipboard"), this);
 
     connect(action, SIGNAL(triggered(bool)),

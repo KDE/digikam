@@ -38,7 +38,7 @@
 #include <klocalizedstring.h>
 #include <kselectaction.h>
 #include "digikam_debug.h"
-#include <kmenu.h>
+#include <QMenu>
 
 // Local includes
 
@@ -108,7 +108,7 @@ SlideToolBar::SlideToolBar(const SlideShowSettings& settings, QWidget* const par
     if (num > 1)
     {
         d->screenSelectBtn      = new QToolButton(this);
-        KMenu* const screenMenu = new KMenu(d->screenSelectBtn);
+        QMenu* const screenMenu = new QMenu(d->screenSelectBtn);
         d->screenSelectBtn->setToolTip( i18n("Switch Screen"));
         d->screenSelectBtn->setIcon(d->loader->loadIcon("video-display", KIconLoader::Toolbar, d->iconSize));
         d->screenSelectBtn->setIconSize(QSize(d->iconSize, d->iconSize));

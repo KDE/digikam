@@ -26,7 +26,7 @@
 
 // KDE includes
 
-#include <kmenu.h>
+#include <QMenu>
 
 // Local includes
 
@@ -61,8 +61,8 @@ Q_SIGNALS:
 
 private:
 
-    QAction*   addGroupAction(KMenu* const menu);
-    QAction*   addCancelAction(KMenu* const menu);
+    QAction*   addGroupAction(QMenu* const menu);
+    QAction*   addCancelAction(QMenu* const menu);
 };
 
 } // namespace Digikam

@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include <kmenu.h>
+#include <QMenu>
 #include <kselectaction.h>
 
 // Local includes

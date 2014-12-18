@@ -46,7 +46,7 @@
 #include "tableview_shared.h"
 #include "thumbnailloadthread.h"
 
-class KMenu;
+class QMenu;
 class QContextMenuEvent;
 
 namespace Digikam
@@ -79,7 +79,7 @@ protected:
 
 private:
 
-    void addColumnDescriptionsToMenu(const QList<TableViewColumnDescription>& columnDescriptions, KMenu* const menu);
+    void addColumnDescriptionsToMenu(const QList<TableViewColumnDescription>& columnDescriptions, QMenu* const menu);
     void showHeaderContextMenu(QEvent* const event);
 
 private Q_SLOTS:

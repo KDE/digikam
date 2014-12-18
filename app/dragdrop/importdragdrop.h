@@ -27,7 +27,7 @@
 
 // KDE includes
 
-#include <kmenu.h>
+#include <QMenu>
 
 // Local includes
 
@@ -72,8 +72,8 @@ private:
     
 private:
 
-    QAction*   addGroupAction(KMenu* const menu);
-    QAction*   addCancelAction(KMenu* const menu);
+    QAction*   addGroupAction(QMenu* const menu);
+    QAction*   addCancelAction(QMenu* const menu);
     DropAction copyOrMove(const QDropEvent* e, QWidget* const view, bool allowMove = true, bool askForGrouping = false);
 };
 

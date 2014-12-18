@@ -31,7 +31,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kmessagebox.h>
 
 // Local includes
@@ -72,7 +72,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
         if(tagIDs.isEmpty())
             return false;
 
-        KMenu popMenu(view);
+        QMenu popMenu(view);
         QAction* const gotoAction = popMenu.addAction(SmallIcon("go-jump"), i18n("&Move Here"));
         popMenu.addSeparator();
         popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
@@ -153,7 +153,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
             }
             else
             {
-                KMenu popMenu(view);
+                QMenu popMenu(view);
                 QAction* setAction = 0;
 
                 if (imageIDs.count() == 1)
@@ -213,7 +213,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
         }
         else
         {
-            KMenu popMenu(view);
+            QMenu popMenu(view);
             QAction* const assignAction = popMenu.addAction(SmallIcon("tag"),
                                                             i18n("Assign Tag(s) '%1' to Items", tagNames.join(", ")));
             popMenu.addSeparator();

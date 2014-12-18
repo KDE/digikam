@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <kmenu.h>
+#include <QMenu>
 #include <klocalizedstring.h>
 #include <kiconloader.h>
 #include <kapplication.h>
@@ -268,7 +268,7 @@ void LightTableThumbBar::showContextMenuOnInfo(QContextMenuEvent* e, const Image
 
     // ----------------------------------------------------
 
-    KMenu popmenu(this);
+    QMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
     cmhelper.addAction(leftPanelAction, true);
     cmhelper.addAction(rightPanelAction, true);

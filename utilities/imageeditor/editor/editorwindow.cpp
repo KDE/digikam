@@ -235,7 +235,7 @@ ExposureSettingsContainer* EditorWindow::exposureSettings() const
 
 void EditorWindow::setupContextMenu()
 {
-    m_contextMenu = new KMenu(this);
+    m_contextMenu = new QMenu(this);
 
     addAction2ContextMenu("editorwindow_fullscreen", true);
     addAction2ContextMenu("options_show_menubar", true);
@@ -2977,7 +2977,7 @@ void EditorWindow::addServicesMenuForUrl(const KUrl& url)
 
     if (!offers.isEmpty())
     {
-        KMenu* const servicesMenu = new KMenu(this);
+        QMenu* const servicesMenu = new QMenu(this);
         qDeleteAll(servicesMenu->actions());
 
         QAction* const serviceAction = servicesMenu->menuAction();

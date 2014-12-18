@@ -34,7 +34,7 @@
 // KDE includes
 
 #include <kdatepicker.h>
-#include <kmenu.h>
+#include <QMenu>
 
 namespace Digikam
 {
@@ -54,7 +54,7 @@ namespace Digikam
 
    @author Bram Schoenmakers <bram_s@softhome.net>
 */
-class DDatePickerPopup: public KMenu
+class DDatePickerPopup: public QMenu
 {
     Q_OBJECT
 

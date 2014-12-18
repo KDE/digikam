@@ -36,7 +36,7 @@
 #include <kiconloader.h>
 #include <kio/job.h>
 #include <klocalizedstring.h>
-#include <kmenu.h>
+#include <QMenu>
 
 // Local includes
 
@@ -63,13 +63,13 @@ enum DropAction
     AssignTagAction
 };
 
-static QAction* addGroupAction(KMenu* const menu)
+static QAction* addGroupAction(QMenu* const menu)
 {
     return menu->addAction( SmallIcon("arrow-down-double"),
                             i18nc("@action:inmenu Group images with this image", "Group here"));
 }
 
-static QAction* addCancelAction(KMenu* const menu)
+static QAction* addCancelAction(QMenu* const menu)
 {
     return menu->addAction( SmallIcon("dialog-cancel"), i18n("C&ancel") );
 }
@@ -98,7 +98,7 @@ static DropAction copyOrMove(const QDropEvent* const e, QWidget* const view, boo
         }
     }
 
-    KMenu popMenu(view);
+    QMenu popMenu(view);
 
     QAction* moveAction = 0;
 
@@ -141,7 +141,7 @@ static DropAction copyOrMove(const QDropEvent* const e, QWidget* const view, boo
 
 static DropAction tagAction(const QDropEvent* const, QWidget* const view, bool askForGrouping)
 {
-    KMenu popMenu(view);
+    QMenu popMenu(view);
     QAction* const tagAction = popMenu.addAction(SmallIcon("tag"), i18n("Assign Tag to Dropped Items"));
     QAction* groupAction     = 0;
 
@@ -171,7 +171,7 @@ static DropAction tagAction(const QDropEvent* const, QWidget* const view, bool a
 
 static DropAction groupAction(const QDropEvent* const, QWidget* const view)
 {
-    KMenu popMenu(view);
+    QMenu popMenu(view);
     QAction* const groupAction = addGroupAction(&popMenu);
     popMenu.addSeparator();
     addCancelAction(&popMenu);
@@ -460,7 +460,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
             return false;
         }
 
-        KMenu popMenu(view);
+        QMenu popMenu(view);
 
         QList<ImageInfo> selectedInfos  = view->selectedImageInfosCurrentFirst();
         QAction* assignToSelectedAction = 0;
@@ -517,8 +517,8 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
             return false;
         }
 
-        KMenu popMenu(view);
-        popMenu.addTitle(SmallIcon("digikam"), i18n("Importing"));
+        QMenu popMenu(view);
+        popMenu.addSection(SmallIcon("digikam"), i18n("Importing"));
         QAction* const downAction    = popMenu.addAction(SmallIcon("get-hot-new-stuff"),
                                                          i18n("Download From Camera"));
         QAction* const downDelAction = popMenu.addAction(SmallIcon("get-hot-new-stuff"),

@@ -36,7 +36,7 @@
 
 // KDE includes
 
-#include <kmenu.h>
+#include <QMenu>
 #include <klocalizedstring.h>
 #include <kiconloader.h>
 #include <kaction.h>
@@ -324,8 +324,8 @@ void TagFolderView::contextMenuEvent(QContextMenuEvent* event)
         items.append(static_cast<TAlbum*>(albumForIndex(root)));
     }
 
-    KMenu popmenu(this);
-    popmenu.addTitle(contextMenuIcon(), contextMenuTitle());
+    QMenu popmenu(this);
+    popmenu.addSection(contextMenuIcon(), contextMenuTitle());
     ContextMenuHelper cmhelper(&popmenu);
 
     setContexMenuItems(cmhelper, items);

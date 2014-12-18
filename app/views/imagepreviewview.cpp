@@ -44,7 +44,7 @@
 #include <kdialog.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
 #include <ktoggleaction.h>
@@ -360,7 +360,7 @@ void ImagePreviewView::slotShowContextMenu(QGraphicsSceneContextMenuEvent* event
 
     // --------------------------------------------------------
 
-    KMenu popmenu(this);
+    QMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
 
     cmhelper.addAction("full_screen");
@@ -593,7 +593,7 @@ void ImagePreviewView::dropEvent(QDropEvent* e)
             return;
         }
 
-        KMenu popMenu(this);
+        QMenu popMenu(this);
         QAction* const assignToThisAction = popMenu.addAction(SmallIcon("tag"), i18n("Assign Tags to &This Item"));
         popMenu.addSeparator();
         popMenu.addAction(SmallIcon("dialog-cancel"), i18n("&Cancel"));

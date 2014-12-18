@@ -31,7 +31,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kiconloader.h>
 
 namespace Digikam
@@ -69,7 +69,7 @@ public:
 
     QToolButton*   optionsBtn;
 
-    KMenu*         optionsMenu;
+    QMenu*         optionsMenu;
 
     SearchTextBar* searchTextBar;
 };
@@ -89,7 +89,7 @@ TextFilter::TextFilter(QWidget* const parent)
     d->optionsBtn->setPopupMode(QToolButton::InstantPopup);
     d->optionsBtn->setWhatsThis(i18n("Defines which fields to search for the text in."));
 
-    d->optionsMenu           = new KMenu(d->optionsBtn);
+    d->optionsMenu           = new QMenu(d->optionsBtn);
     d->itemNameAction        = d->optionsMenu->addAction(i18n("Item Name"));
     d->itemNameAction->setCheckable(true);
     d->itemTitleAction       = d->optionsMenu->addAction(i18n("Item Title"));

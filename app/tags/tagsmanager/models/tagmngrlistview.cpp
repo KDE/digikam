@@ -35,7 +35,7 @@
 // KDE includes
 
 #include "digikam_debug.h"
-#include <kmenu.h>
+#include <QMenu>
 #include <kaction.h>
 #include <QIcon>
 #include <klocalizedstring.h>
@@ -135,7 +135,7 @@ void TagMngrListView::contextMenuEvent(QContextMenuEvent* event)
 {
     Q_UNUSED(event);
 
-    KMenu popmenu(this);
+    QMenu popmenu(this);
     ContextMenuHelper cmhelper(&popmenu);
 
     TagList* const tagList = dynamic_cast<TagList*>(this->parent());

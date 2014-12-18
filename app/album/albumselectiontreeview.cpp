@@ -36,7 +36,7 @@
 // KDE includes
 
 #include <kiconloader.h>
-#include <kmenu.h>
+#include <QMenu>
 
 // Local includes
 
