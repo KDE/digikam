@@ -216,7 +216,7 @@ void DImageHistory::insertReferredImage(int index, const HistoryImageId& id)
 {
     if (!id.isValid())
     {
-        kWarning() << "Attempt to add an invalid HistoryImageId";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Attempt to add an invalid HistoryImageId";
         return;
     }
 

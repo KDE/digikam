@@ -25,7 +25,6 @@
 #include "databasewatchadaptor.h"
 // Special case: we need moc file here to compile
 #include "databasewatch.moc"
-#include "databasewatchadaptor.moc"
 
 // C Ansi includes
 

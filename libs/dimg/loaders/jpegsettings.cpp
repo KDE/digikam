@@ -22,7 +22,7 @@
  * ============================================================ */
 
 #include "jpegsettings.h"
-
+#include <QApplication>
 // Qt includes
 
 #include <QFrame>

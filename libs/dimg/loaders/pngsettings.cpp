@@ -24,7 +24,8 @@
 #include "pngsettings.h"
 
 // Qt includes
-
+#include <QApplication>
+#include <QStyle>
 #include <QString>
 #include <QLabel>
 #include <QLayout>
