@@ -6,7 +6,7 @@
  * Date        : 2010-02-11
  * Description : HSL settings view.
  *
- * Copyright (C) 2010-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Julien Narboux <julien at narboux dot fr>
  *
  * This program is free software; you can redistribute it
@@ -29,11 +29,11 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QString>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
-#include "digikam_debug.h"
-#include <kdialog.h>
 #include <klocalizedstring.h>
 #include <kapplication.h>
 #include <kglobal.h>
@@ -44,11 +44,10 @@
 // Libkdcraw includes
 
 #include <rnuminput.h>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "colorgradientwidget.h"
 #include "hspreviewwidget.h"
 
@@ -111,21 +110,21 @@ HSLSettings::HSLSettings(QWidget* const parent)
     QLabel* const label2 = new QLabel(i18n("Hue:"));
     d->hInput            = new RDoubleNumInput();
     d->hInput->setDecimals(0);
-    //PORT QT5 d->hInput->input()->setRange(-180.0, 180.0, 1.0, true);
+    d->hInput->setRange(-180.0, 180.0, 1.0);
     d->hInput->setDefaultValue(0.0);
     d->hInput->setWhatsThis(i18n("Set here the hue adjustment of the image."));
 
     QLabel* const label3 = new QLabel(i18n("Saturation:"));
     d->sInput            = new RDoubleNumInput();
     d->sInput->setDecimals(2);
-    //PORT QT5 d->sInput->input()->setRange(-100.0, 100.0, 0.01, true);
+    d->sInput->setRange(-100.0, 100.0, 0.01);
     d->sInput->setDefaultValue(0.0);
     d->sInput->setWhatsThis(i18n("Set here the saturation adjustment of the image."));
 
     QLabel* const label4 = new QLabel(i18n("Vibrance:"));
     d->vInput            = new RDoubleNumInput();
     d->vInput->setDecimals(2);
-    //PORT QT5 d->vInput->input()->setRange(-100.0, 100.0, 0.01, true);
+    d->vInput->setRange(-100.0, 100.0, 0.01);
     d->vInput->setDefaultValue(0.0);
     d->vInput->setWhatsThis(i18n("Set here the vibrance adjustment of the image."
                                  "Vibrance performs selective saturation on less saturated colors and avoiding skin tones."));
@@ -133,7 +132,7 @@ HSLSettings::HSLSettings(QWidget* const parent)
     QLabel* const label5 = new QLabel(i18n("Lightness:"));
     d->lInput            = new RDoubleNumInput();
     d->lInput->setDecimals(2);
-    //PORT QT5 d->lInput->input()->setRange(-100.0, 100.0, 0.01, true);
+    d->lInput->setRange(-100.0, 100.0, 0.01);
     d->lInput->setDefaultValue(0.0);
     d->lInput->setWhatsThis(i18n("Set here the lightness adjustment of the image."));
 
