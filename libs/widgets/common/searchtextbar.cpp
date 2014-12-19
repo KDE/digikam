@@ -6,7 +6,7 @@
  * Date        : 2007-11-25
  * Description : a bar used to search a string.
  *
- * Copyright (C) 2007-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  *
  * This program is free software; you can redistribute it
@@ -36,12 +36,13 @@
 // KDE includes
 
 #include <kconfiggroup.h>
+#include <kglobalsettings.h>
 #include <kglobal.h>
 #include <kconfig.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "albumfiltermodel.h"
 #include "modelcompletion.h"
 
@@ -117,10 +118,8 @@ SearchTextBar::~SearchTextBar()
 void SearchTextBar::doLoadState()
 {
     KConfigGroup group        = getConfigGroup();
-    setCompletionMode((KGlobalSettings::Completion)group.readEntry(entryName(d->optionAutoCompletionModeEntry),
-                      (int)KGlobalSettings::completionMode()));
-    d->settings.caseSensitive = (Qt::CaseSensitivity)group.readEntry(entryName(d->optionCaseSensitiveEntry),
-                                (int)Qt::CaseInsensitive);
+    setCompletionMode((KGlobalSettings::Completion)group.readEntry(entryName(d->optionAutoCompletionModeEntry), (int)KGlobalSettings::completionMode()));
+    d->settings.caseSensitive = (Qt::CaseSensitivity)group.readEntry(entryName(d->optionCaseSensitiveEntry),    (int)Qt::CaseInsensitive);
     setIgnoreCase(d->settings.caseSensitive == Qt::CaseInsensitive);
 }
 
