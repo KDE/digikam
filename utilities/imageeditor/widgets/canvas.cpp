@@ -31,13 +31,13 @@
 #include <QClipboard>
 #include <QToolButton>
 #include <QScrollBar>
+#include <QMimeData>
 
 // KDE includes
 
 #include <kcursor.h>
 #include <klocalizedstring.h>
 #include <kiconloader.h>
-#include <kdatetable.h>
 #include <kglobalsettings.h>
 #include <kapplication.h>
 

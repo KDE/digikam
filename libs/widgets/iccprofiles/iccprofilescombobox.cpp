@@ -28,13 +28,15 @@
 #include <QFileInfo>
 #include <QSignalMapper>
 #include <QSet>
+#include <QMenu>
+#include <QIcon>
 
 // KDE includes
 
+#include <kaction.h>
 #include <kactionmenu.h>
 #include <klocalizedstring.h>
-#include <QMenu>
-#include <QIcon>
+
 // Local includes
 
 #include "icctransform.h"
@@ -233,7 +235,7 @@ void IccProfilesMenuAction::addProfile(const IccProfile& profile, const QString&
         description = profileUserString(profile);
     }
 
-    KAction* action = new KAction(d.left(50), m_parent);
+    KAction* const action = new KAction(d.left(50), m_parent);
     action->setData(QVariant::fromValue(profile));
     addAction(action);
 

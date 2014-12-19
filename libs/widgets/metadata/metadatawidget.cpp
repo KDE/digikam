@@ -6,7 +6,7 @@
  * Date        : 2006-02-22
  * Description : a generic widget to display metadata
  *
- * Copyright (C) 2006-2013 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,7 +27,6 @@
 
 #include <QButtonGroup>
 #include <QClipboard>
-#include <QColorGroup>
 #include <QDataStream>
 #include <QFile>
 #include <QFrame>
@@ -46,6 +45,9 @@
 #include <QVBoxLayout>
 #include <QActionGroup>
 #include <QStandardPaths>
+#include <QMenu>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
@@ -55,13 +57,10 @@
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <QMenu>
 
 // Libkexiv2 includes
 
 #include <libkexiv2_version.h>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 
@@ -169,7 +168,7 @@ MetadataWidget::MetadataWidget(QWidget* const parent, const char* name)
     d->view         = new MetadataListView(this);
 
     QString barName = QString(name) + "SearchBar";
-    d->searchBar    = new SearchTextBar(this, barName.toAscii());
+    d->searchBar    = new SearchTextBar(this, barName.toAscii().constData());
 
     // -----------------------------------------------------------------
 
@@ -441,7 +440,7 @@ KUrl MetadataWidget::saveMetadataToFile(const QString& caption, const QString& f
     fileSaveDialog->setOperationMode(KFileDialog::Saving);
     fileSaveDialog->setMode(KFile::File);
     fileSaveDialog->setSelection(d->fileName);
-    fileSaveDialog->setCaption(caption);
+    fileSaveDialog->setWindowTitle(caption);
     fileSaveDialog->setFilter(fileFilter);
 
     // Check for cancel.
