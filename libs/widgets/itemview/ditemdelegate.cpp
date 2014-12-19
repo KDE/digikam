@@ -38,13 +38,14 @@
 
 // KDE includes
 
+#include <kiconloader.h>
 #include <kglobal.h>
 #include <kio/global.h>
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "dcategorizedview.h"
 #include "thememanager.h"
 #include "thumbbardock.h"
