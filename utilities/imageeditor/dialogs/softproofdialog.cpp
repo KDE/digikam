@@ -36,6 +36,7 @@
 #include <kcolorbutton.h>
 #include <klocalizedstring.h>
 #include <kseparator.h>
+#include <kiconloader.h>
 
 // Local includes
 

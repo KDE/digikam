@@ -35,6 +35,10 @@
 #include <QToolButton>
 #include <QVariant>
 #include <QScrollBar>
+#include <QPushButton>
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QStyle>
 
 // KDE includes
 
@@ -45,19 +49,15 @@
 #include <khbox.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <QPushButton>
 #include <kstandarddirs.h>
 #include <kstandardguiitem.h>
 #include <kvbox.h>
+#include <kguiitem.h>
+#include <kstandardguiitem.h>
 
 // Libkdcraw includes
 
 #include <rnuminput.h>
-#include <QApplication>
-#include <QDesktopWidget>
-#include <QStyle>
-#include <KGuiItem>
-#include <KStandardGuiItem>
 
 // Local includes
 
@@ -200,7 +200,7 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
 
     d->defaultBtn = new QPushButton;
     KGuiItem::assign(d->defaultBtn, KStandardGuiItem::defaults());
-    d->defaultBtn->setIcon(QIcon::fromTheme(SmallIcon("document-revert")));
+    d->defaultBtn->setIcon(QIcon::fromTheme("document-revert").pixmap(16));
     d->defaultBtn->setToolTip(i18n("Reset all settings to their default values."));
 
     d->okBtn = new QPushButton;

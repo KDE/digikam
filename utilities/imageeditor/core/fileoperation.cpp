@@ -80,7 +80,7 @@ bool FileOperation::localFileRename(const QString& source, const QString& orgPat
     // For existing files, use the mode of the original file.
     struct stat stbuf;
 
-    if (::stat(dstFileName, &stbuf) == 0)
+    if (::stat(dstFileName.constData(), &stbuf) == 0)
     {
         filePermissions = stbuf.st_mode;
     }
@@ -114,7 +114,7 @@ bool FileOperation::localFileRename(const QString& source, const QString& orgPat
 
 #ifndef Q_OS_WIN
     // restore permissions
-    if (::chmod(dstFileName, filePermissions) != 0)
+    if (::chmod(dstFileName.constData(), filePermissions) != 0)
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to restore file permissions for file " << dstFileName;
     }
@@ -144,8 +144,8 @@ void FileOperation::openFilesWithDefaultApplication(const KUrl::List& urls, QWid
             return;
         }
 
-        KService::Ptr ptr                                  = offers.first();
-        QMap<KService::Ptr, KUrl::List>::const_iterator it = servicesMap.find(ptr);
+        KService::Ptr ptr                                    = offers.first();
+        QMap<KService::Ptr, KUrl::List>::iterator it = servicesMap.find(ptr);
 
         if (it != servicesMap.end())
         {
