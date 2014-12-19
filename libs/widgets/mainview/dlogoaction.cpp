@@ -34,13 +34,13 @@
 #include <QBoxLayout>
 #include <QTimer>
 #include <QPainter>
+#include <QApplication>
 
 // KDE includes
 
 #include <kurllabel.h>
 #include <ktoolbar.h>
 #include <kiconloader.h>
-#include <kapplication.h>
 #include <ktoolinvocation.h>
 #include <kstandarddirs.h>
 #include <kglobalsettings.h>
@@ -81,7 +81,7 @@ DLogoAction::DLogoAction(QObject* const parent, bool alignOnright)
 {
     setText("digikam.org");
 
-    if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
+    if (QApplication::applicationName() == QString("digikam"))
     {
         setIcon(QIcon::fromTheme("digikam"));
         d->progressPixmap = QPixmap(KStandardDirs::locate("data", "digikam/data/banner-digikam.png"));

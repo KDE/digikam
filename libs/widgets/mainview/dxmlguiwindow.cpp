@@ -33,6 +33,8 @@
 #include <QToolButton>
 #include <QEvent>
 #include <QHoverEvent>
+#include <QApplication>
+#include <QDesktopWidget>
 
 // KDE includes
 
@@ -46,12 +48,11 @@
 #include <kactioncollection.h>
 #include <kdialog.h>
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
-#include <QApplication>
-#include <QDesktopWidget>
+#include <kshortcut.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "daboutdata.h"
 
 namespace Digikam

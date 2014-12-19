@@ -27,6 +27,14 @@
 
 #include "thumbbardock.h"
 
+// Qt includes
+
+#include <QKeySequence>
+
+// KDE includes
+
+#include <ktoggleaction.h>
+
 namespace Digikam
 {
 
@@ -160,10 +168,10 @@ void ThumbBarDock::reInitialize()
 
 KToggleAction* ThumbBarDock::getToggleAction(QObject* const parent, const QString& caption) const
 {
-    KToggleAction* action = new KToggleAction(QIcon::fromTheme("view-choose"), caption, parent);
+    KToggleAction* const action = new KToggleAction(QIcon::fromTheme("view-choose"), caption, parent);
 
     // Default shortcut is Ctrl+T.
-    action->setShortcut(KShortcut(Qt::CTRL+Qt::Key_T));
+    action->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_T));
 
     // Connect the triggered signal, which is only emitted after a user action
     // and not programmatically, to the show/hide method.
