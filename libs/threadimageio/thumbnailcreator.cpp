@@ -1117,9 +1117,9 @@ void ThumbnailCreator::storeFreedesktop(const ThumbnailInfo& info, const Thumbna
         qimage = qimage.convertToFormat(QImage::Format_ARGB32);
     }
 
-    qimage.setText(QString("Thumb::URI").toLatin1(),   0, uri);
-    qimage.setText(QString("Thumb::MTime").toLatin1(), 0, QString::number(info.modificationDate.toTime_t()));
-    qimage.setText(QString("Software").toLatin1(),     0, d->digiKamFingerPrint);
+    qimage.setText(QString("Thumb::URI").toLatin1().constData(),   0, uri);
+    qimage.setText(QString("Thumb::MTime").toLatin1().constData(), 0, QString::number(info.modificationDate.toTime_t()));
+    qimage.setText(QString("Software").toLatin1().constData(),     0, d->digiKamFingerPrint);
 
     KTemporaryFile temp;
     temp.setPrefix(thumbPath + "-digikam-");

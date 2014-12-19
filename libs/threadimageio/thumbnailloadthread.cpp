@@ -38,6 +38,7 @@
 #include <kio/previewjob.h>
 #include <kmessagebox.h>
 #include <kdeversion.h>
+#include <kmimetype.h>
 
 // Local includes
 

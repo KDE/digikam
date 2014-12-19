@@ -103,8 +103,10 @@ void ThumbnailCreator::initThumbnailDirs()
     d->smallThumbPath = normalThumbnailDir();
     d->bigThumbPath   = largeThumbnailDir();
 
-    QDir().mkpath(d->smallThumbPath, 0700);
-    QDir().mkpath(d->bigThumbPath, 0700);
+#pragma message("PORT QT5")
+    // How to set persmission with QDir().makeDir() ?
+    KStandardDirs::makeDir(d->smallThumbPath, 0700);
+    KStandardDirs::makeDir(d->bigThumbPath, 0700);
 }
 
 QString ThumbnailCreator::thumbnailPath(const QString& filePath) const
@@ -128,7 +130,7 @@ QImage ThumbnailCreator::loadPNG(const QString& path) const
 
     has_alpha     = 0;
     has_grey      = 0;
-    FILE* const f = fopen(path.toLatin1(), "rb");
+    FILE* const f = fopen(path.toLatin1().constData(), "rb");
 
     if (!f)
     {
