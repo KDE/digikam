@@ -33,6 +33,7 @@
 
 // KDE includes
 
+#include <klocale.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
@@ -124,7 +125,7 @@ void ImageDialogPreview::showPreview()
     showPreview(url);
 }
 
-void ImageDialogPreview::showPreview(const KUrl& url)
+void ImageDialogPreview::showPreview(const QUrl& url)
 {
     if (!url.isValid())
     {
@@ -387,7 +388,7 @@ ImageDialog::ImageDialog(QWidget* const parent, const KUrl& url, bool singleSele
 
         if (caption.isEmpty())
         {
-            dlg->setCaption(i18n("Select an Image"));
+            dlg->setWindowTitle(i18n("Select an Image"));
         }
         else
         {
@@ -403,7 +404,7 @@ ImageDialog::ImageDialog(QWidget* const parent, const KUrl& url, bool singleSele
 
         if (caption.isEmpty())
         {
-            dlg->setCaption(i18n("Select Images"));
+            dlg->setWindowTitle(i18n("Select Images"));
         }
         else
         {

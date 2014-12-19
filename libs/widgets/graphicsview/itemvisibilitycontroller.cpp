@@ -132,7 +132,7 @@ void HidingStateChanger::slotPropertiesAssigned(bool visible)
     {
         if (m_object)
         {
-            m_object->setProperty(m_property, m_value);
+            m_object->setProperty(m_property.constData(), m_value);
         }
 
         emit stateChanged();

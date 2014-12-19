@@ -34,16 +34,14 @@
 #include <QHeaderView>
 #include <QMimeData>
 #include <QClipboard>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
 #include <klocalizedstring.h>
 #include <kiconloader.h>
-#include <kapplication.h>
 #include <kstandarddirs.h>
-#include <kaboutdata.h>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 
@@ -83,7 +81,7 @@ InfoDlg::InfoDlg(QWidget* const parent)
 
     QLabel* const logo      = new QLabel(page);
 
-    if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
+    if (QApplication::applicationName() == QString("digikam"))
     {
         logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                         .scaled(92, 92, Qt::KeepAspectRatio, Qt::SmoothTransformation));
@@ -100,8 +98,8 @@ InfoDlg::InfoDlg(QWidget* const parent)
     header->setWordWrap(true);
     header->setText(i18n("<font size=\"5\">%1</font><br/><b>Version %2</b>"
                          "<p>%3</p>",
-                         KGlobal::mainComponent().aboutData()->programName(),
-                         KGlobal::mainComponent().aboutData()->version(),
+                         QApplication::applicationName(),
+                         QApplication::applicationVersion(),
                          DAboutData::digiKamSlogan().toString()));
 
     // --------------------------------------------------------
@@ -156,9 +154,9 @@ void InfoDlg::slotCopy2ClipBoard()
 {
     QString textInfo;
 
-    textInfo.append(KGlobal::mainComponent().aboutData()->programName());
+    textInfo.append(QApplication::applicationName());
     textInfo.append(" version ");
-    textInfo.append(KGlobal::mainComponent().aboutData()->version());
+    textInfo.append(QApplication::applicationVersion());
     textInfo.append("\n");
 
     QTreeWidgetItemIterator it(d->listView);

@@ -29,12 +29,12 @@
 #include <QLayout>
 #include <QDesktopWidget>
 #include <QEvent>
+#include <QStyle>
+#include <QApplication>
 #include <QProgressBar>
 
 // KDE includes
 
-#include "digikam_debug.h"
-#include <kapplication.h>
 #include <khbox.h>
 #include <kdialog.h>
 
@@ -42,12 +42,11 @@
 
 #ifdef Q_OS_WIN32
 #include <windows.h>
-#include <QApplication>
-#include <QStyle>
 #endif
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "slideshow.h"
 #include "slidetoolbar.h"
 #include "slideproperties.h"

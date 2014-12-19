@@ -34,13 +34,15 @@
 #include <QPainter>
 #include <QPair>
 #include <QVariant>
+#include <QApplication>
+#include <QCollator>
 
 // KDE includes
 
 #include <klocalizedstring.h>
+#include <klocale.h>
 #include <kdialog.h>
-#include <kstringhandler.h>
-#include <QApplication>
+#include <kiconloader.h>
 
 // Local includes
 
@@ -766,7 +768,7 @@ typedef QPair<QString, QVariant> PathValuePair;
 
 static bool naturalLessThan(const PathValuePair& a, const PathValuePair& b)
 {
-    return KStringHandler::naturalCompare(a.first, b.first) < 0;
+    return (QCollator().compare(a.first, b.first) < 0);
 }
 
 QStringList ImagePropertiesTab::shortenedTagPaths(const QStringList& tagPaths, QList<QVariant>* identifiers)

@@ -29,19 +29,16 @@
 #include <QRect>
 #include <QSplitter>
 #include <QFileInfo>
+#include <QApplication>
 
 // KDE includes
 
 #include <kfileitem.h>
 #include <klocalizedstring.h>
 #include <kconfig.h>
-#include <kapplication.h>
 #include <kcursor.h>
-#include <kglobal.h>
 #include <kiconloader.h>
 #include <kglobalsettings.h>
-#include <kaboutdata.h>
-#include <kcomponentdata.h>
 
 // Libkdcraw includes
 
@@ -84,7 +81,7 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget* const parent,
     m_colorTab           = new ImagePropertiesColorsTab(parent);
 
     // NOTE: Special case with Showfoto which will only be able to load image, not video.
-    if (KGlobal::mainComponent().aboutData()->appName() != QString("digikam"))
+    if (QApplication::applicationName() != QString("digikam"))
         m_propertiesTab->setVideoInfoDisable(true);
 
     appendTab(m_propertiesTab, SmallIcon("document-properties"),   i18n("Properties"));

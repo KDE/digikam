@@ -139,7 +139,7 @@ void ExifWidget::buildView()
 QString ExifWidget::getTagTitle(const QString& key)
 {
     DMetadata metadataIface;
-    QString title = metadataIface.getExifTagTitle(key.toAscii());
+    QString title = metadataIface.getExifTagTitle(key.toAscii().constData());
 
     if (title.isEmpty())
     {
@@ -152,7 +152,7 @@ QString ExifWidget::getTagTitle(const QString& key)
 QString ExifWidget::getTagDescription(const QString& key)
 {
     DMetadata metadataIface;
-    QString desc = metadataIface.getExifTagDescription(key.toAscii());
+    QString desc = metadataIface.getExifTagDescription(key.toAscii().constData());
 
     if (desc.isEmpty())
     {

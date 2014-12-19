@@ -65,7 +65,7 @@ SlideEnd::SlideEnd(QWidget* const parent)
 
     QPixmap logo;
 
-    if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
+    if (QApplication::applicationName() == QString("digikam"))
     {
         logo = QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                 .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation);
