@@ -34,10 +34,10 @@
 #include <QDir>
 #include <QFile>
 #include <QMutex>
+#include <QCryptographicHash>
 
 // KDE includes
 
-#include <kcodecs.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include "digikam_debug.h"
@@ -594,10 +594,10 @@ void IccProfile::considerOriginalAdobeRGB(const QString& filePath)
 
     if (file.open(QIODevice::ReadOnly))
     {
-        KMD5 md5;
-        md5.update(file);
+        QCryptographicHash md5(QCryptographicHash::Md5);
+        md5.addData(&file);
 
-        if (md5.hexDigest() == "dea88382d899d5f6e573b432473ae138")
+        if (md5.result().toHex() == "dea88382d899d5f6e573b432473ae138")
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "The original Adobe RGB (1998) profile has been found at" << filePath;
             static_d->adobeRGBPath = filePath;
