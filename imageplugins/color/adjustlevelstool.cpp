@@ -928,7 +928,7 @@ void AdjustLevelsTool::slotSaveAsSettings()
 {
     KUrl saveLevelsFile;
 
-    saveLevelsFile = KFileDialog::getSaveUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+    saveLevelsFile = KFileDialog::getSaveUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                      QString( "*" ), kapp->activeWindow(),
                      QString( i18n("Gimp Levels File to Save")) );
 

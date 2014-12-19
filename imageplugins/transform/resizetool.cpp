@@ -610,7 +610,7 @@ void ResizeTool::slotLoadSettings()
 
 void ResizeTool::slotSaveAsSettings()
 {
-    KUrl saveBlowupFile = KFileDialog::getSaveUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+    KUrl saveBlowupFile = KFileDialog::getSaveUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                           QString( "*" ), kapp->activeWindow(),
                           QString( i18n("Photograph Resizing Settings File to Save")) );
 
