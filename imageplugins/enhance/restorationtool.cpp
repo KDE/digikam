@@ -400,7 +400,7 @@ void RestorationTool::slotLoadSettings()
 
 void RestorationTool::slotSaveAsSettings()
 {
-    KUrl saveRestorationFile = KFileDialog::getSaveUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+    KUrl saveRestorationFile = KFileDialog::getSaveUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                QString( "*" ), kapp->activeWindow(),
                                QString( i18n("Photograph Restoration Settings File to Save")) );
 

@@ -41,7 +41,7 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include "digikam_debug.h"
-
+#include <QCryptographicHash>
 // Local includes
 
 #include "dimg.h"

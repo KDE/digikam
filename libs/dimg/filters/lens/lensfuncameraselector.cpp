@@ -36,7 +36,7 @@
 #include <klocalizedstring.h>
 #include "digikam_debug.h"
 #include <ksqueezedtextlabel.h>
-
+#include <KHBox>
 // Libkdcraw includes
 
 #include <rnuminput.h>

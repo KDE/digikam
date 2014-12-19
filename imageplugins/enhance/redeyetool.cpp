@@ -39,7 +39,7 @@
 // KDE includes
 
 #include <kapplication.h>
-#include <kcolordialog.h>
+#include <QColorDialog>
 #include <kcolorvalueselector.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>

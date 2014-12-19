@@ -43,7 +43,7 @@
 #include <kcolorbutton.h>
 #include <kcombobox.h>
 #include <kdialog.h>
-#include <kfontcombobox.h>
+#include <QFontComboBox>
 #include <kurlrequester.h>
 #include <klineedit.h>
 #include <klocalizedstring.h>
@@ -110,7 +110,7 @@ public:
     KLineEdit*     textEdit;
 
     KComboBox*     comboBox;
-    KFontComboBox* fontChooserWidget;
+    QFontComboBox* fontChooserWidget;
 
     KColorButton*  fontColorButton;
     KColorButton*  backgroundColorButton;
@@ -195,7 +195,7 @@ void WaterMark::registerSettingsWidget()
     textSettingsGroupBoxLayout->addWidget(d->textEdit);
 
     QLabel* label2       = new QLabel();
-    d->fontChooserWidget = new KFontComboBox(vbox);
+    d->fontChooserWidget = new QFontComboBox(vbox);
     d->fontChooserWidget->setWhatsThis(i18n("Here you can choose the font to be used."));
     label2->setText(i18n("Font:"));
     textSettingsGroupBoxLayout->addWidget(label2);

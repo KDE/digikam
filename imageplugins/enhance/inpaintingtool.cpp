@@ -512,7 +512,7 @@ void InPaintingTool::slotLoadSettings()
 
 void InPaintingTool::slotSaveAsSettings()
 {
-    KUrl saveRestorationFile = KFileDialog::getSaveUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+    KUrl saveRestorationFile = KFileDialog::getSaveUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                        QString("*"), kapp->activeWindow(),
                                                        QString(i18n("Photograph In-Painting Settings File to Save")));
 

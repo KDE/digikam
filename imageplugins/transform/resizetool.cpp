@@ -229,7 +229,7 @@ ResizeTool::ResizeTool(QObject* const parent)
 
     QLabel* const label3 = new QLabel(i18n("Width (%):"), firstPage);
     d->wpInput           = new RDoubleNumInput(firstPage);
-    d->wpInput->setRange(1.0, 999.0, 1.0,);
+    d->wpInput->setRange(1.0, 999.0, 1.0);
     d->wpInput->setDefaultValue(100.0);
     d->wpInput->setObjectName("wpInput");
     d->wpInput->setWhatsThis( i18n("New image width in percent (%)."));
@@ -610,7 +610,7 @@ void ResizeTool::slotLoadSettings()
 
 void ResizeTool::slotSaveAsSettings()
 {
-    KUrl saveBlowupFile = KFileDialog::getSaveUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+    KUrl saveBlowupFile = KFileDialog::getSaveUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                           QString( "*" ), kapp->activeWindow(),
                           QString( i18n("Photograph Resizing Settings File to Save")) );
 

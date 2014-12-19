@@ -31,7 +31,7 @@
 // KDE includes
 
 #include <kapplication.h>
-#include <kcolordialog.h>
+#include <QColorDialog>
 #include <kcombobox.h>
 #include <kconfig.h>
 #include <kcursor.h>
