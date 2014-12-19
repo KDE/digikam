@@ -29,11 +29,11 @@
 #include <QDBusConnection>
 #include <QDBusConnectionInterface>
 #include <QProcess>
+#include <QApplication>
 
 // KDE includes
 
 #include <kglobalsettings.h>
-#include <kaboutdata.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <knotification.h>
@@ -103,7 +103,7 @@ void DNotificationWrapper(const QString& eventId, const QString& message,
 
     if (logoPixmap.isNull())
     {
-        if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
+        if (QApplication::applicationName() == QString("digikam"))
         {
             logoPixmap = QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                          .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -151,7 +151,7 @@ void DNotificationWrapper(const QString& eventId, const QString& message,
                                QStringList() << windowTitle
                                              << message
                                              << "-a"
-                                             << KGlobal::mainComponent().aboutData()->appName())
+                                             << QApplication::applicationName())
              == 0)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Event is dispatched to desktop notifier through DBUS";

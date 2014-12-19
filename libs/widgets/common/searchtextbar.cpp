@@ -118,7 +118,7 @@ SearchTextBar::~SearchTextBar()
 void SearchTextBar::doLoadState()
 {
     KConfigGroup group        = getConfigGroup();
-    setCompletionMode((KGlobalSettings::Completion)group.readEntry(entryName(d->optionAutoCompletionModeEntry), (int)KGlobalSettings::completionMode()));
+    setCompletionMode((KCompletion::CompletionMode)group.readEntry(entryName(d->optionAutoCompletionModeEntry), (int)KGlobalSettings::completionMode()));
     d->settings.caseSensitive = (Qt::CaseSensitivity)group.readEntry(entryName(d->optionCaseSensitiveEntry),    (int)Qt::CaseInsensitive);
     setIgnoreCase(d->settings.caseSensitive == Qt::CaseInsensitive);
 }

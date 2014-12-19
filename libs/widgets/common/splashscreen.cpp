@@ -7,7 +7,7 @@
  * Description : a widget to display splash with progress bar
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,15 +33,12 @@
 #include <QColor>
 #include <QTime>
 #include <QTextDocument>
+#include <QFontDatabase>
 
 // KDE includes
 
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
-#include <kglobalsettings.h>
-#include <kaboutdata.h>
-#include <kcomponentdata.h>
-#include <QFontDatabase>
 
 // Local includes
 
@@ -85,7 +82,7 @@ SplashScreen::SplashScreen()
 {
     QPixmap splash;
 
-    if (KGlobal::mainComponent().aboutData()->appName() == QString("digikam"))
+    if (QApplication::applicationName() == QString("digikam"))
     {
         splash = KStandardDirs::locate("data","digikam/data/splash-digikam.png");
     }
