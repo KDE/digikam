@@ -128,13 +128,13 @@ void EditorCore::Private::putImageData(uchar* const data, int w, int h, bool six
 {
     if (image.isNull())
     {
-        kWarning() << "d->image is NULL";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "d->image is NULL";
         return;
     }
 
     if (!data)
     {
-        kWarning() << "New image is NULL";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "New image is NULL";
         return;
     }
 
@@ -183,13 +183,13 @@ void EditorCore::Private::saveNext()
     }
 
     FileToSave& file = filesToSave[currentFileToSave];
-    kDebug() << "Saving file" << file.filePath << "at" << file.historyStep;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Saving file" << file.filePath << "at" << file.historyStep;
 
     if (file.historyStep != -1)
     {
         // intermediate. Need to get data from undo manager
         int currentStep = EditorCore::defaultInstance()->getImageHistory().size() - 1;
-        //kDebug() << "Requesting from undo manager data" << currentStep - file.historyStep << "steps back";
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "Requesting from undo manager data" << currentStep - file.historyStep << "steps back";
         undoMan->putImageDataAndHistory(&file.image, currentStep - file.historyStep);
     }
 
@@ -201,7 +201,7 @@ void EditorCore::Private::saveNext()
     }
 
     file.image.prepareMetadataToSave(file.intendedFilePath, file.mimeType, file.setExifOrientationTag);
-    //kDebug() << "Adjusting image" << file.mimeType << file.fileName << file.setExifOrientationTag << file.ioAttributes
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Adjusting image" << file.mimeType << file.fileName << file.setExifOrientationTag << file.ioAttributes
     //         << "image:" << file.image.size() << file.image.isNull();
 
     thread->save(file.image, file.filePath, file.mimeType);
@@ -337,7 +337,7 @@ void EditorCore::Private::saveAs(const QString& filePath, IOFileSettings* const 
         file.setExifOrientationTag = setExifOrientationTag;
         file.image                 = image.copyMetaData();
         filesToSave << file;
-        kDebug() << "Saving intermediate at history step" << file.historyStep
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Saving intermediate at history step" << file.historyStep
                  << "to" << file.filePath << "(" << file.mimeType << ")";
     }
 
@@ -353,7 +353,7 @@ void EditorCore::Private::saveAs(const QString& filePath, IOFileSettings* const 
     primary.image                 = image;
     filesToSave << primary;
 
-    kDebug() << "Saving to :" << primary.filePath << "(" << primary.mimeType << ")";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Saving to :" << primary.filePath << "(" << primary.mimeType << ")";
 
     saveNext();
 }

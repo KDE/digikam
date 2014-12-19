@@ -509,7 +509,7 @@ inline uint qHash(const ImageInfo& info)
     return info.hash();
 }
 
-//! kDebug() stream operator. Writes property @a info to the debug output in a nicely formatted way.
+//! qDebug() stream operator. Writes property @a info to the debug output in a nicely formatted way.
 DIGIKAM_DATABASE_EXPORT QDebug operator<<(QDebug stream, const ImageInfo& info);
 
 }  // namespace Digikam

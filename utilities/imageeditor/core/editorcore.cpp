@@ -440,7 +440,7 @@ void EditorCore::slotImageSaved(const QString& filePath, bool success)
     }
     else
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "error saving image '" << QFile::encodeName(filePath)..constData()();
+        qCWarning(DIGIKAM_GENERAL_LOG) << "error saving image '" << QFile::encodeName(filePath).constData();
     }
 
     d->currentFileToSave++;

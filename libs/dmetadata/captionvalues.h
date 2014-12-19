@@ -58,7 +58,7 @@ public:
     QDateTime date;
 };
 
-//! kDebug() stream operator. Writes values @a val to the debug output in a nicely formatted way.
+//! qDebug() stream operator. Writes values @a val to the debug output in a nicely formatted way.
 DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const CaptionValues& val);
 
 // --------------------------------------------------------------------

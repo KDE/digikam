@@ -72,7 +72,7 @@ public:
     BatchToolSettings         settings;
 };
 
-//! kDebug() stream operator. Writes property @a t to the debug output in a nicely formatted way.
+//! qDebug() stream operator. Writes property @a t to the debug output in a nicely formatted way.
 QDebug operator<<(QDebug dbg, const BatchToolSet& s);
 
 // -------------------------------------------------------------------------------------------------------------

@@ -524,7 +524,7 @@ private:
  *  AlbumIterator it(album);
  *  while ( it.current() )
  *  {
- *     kDebug() << "Album: " << it.current()->title();
+ *     qCDebug(DIGIKAM_GENERAL_LOG) << "Album: " << it.current()->title();
  *     ++it;
  *  }
  * \endcode

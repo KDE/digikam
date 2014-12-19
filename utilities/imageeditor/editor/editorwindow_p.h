@@ -257,7 +257,7 @@ void EditorWindow::Private::legacyUpdateSplitterState(KConfigGroup& group)
 
                 if (sizesList.count() == 3)
                 {
-                    kDebug() << "Found splitter based config, converting to dockbar";
+                    qCDebug(DIGIKAM_GENERAL_LOG) << "Found splitter based config, converting to dockbar";
                     // Remove the first entry (the thumbbar) and write the rest
                     // back. Then it should be fine.
                     sizesList.removeFirst();

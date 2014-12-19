@@ -94,7 +94,7 @@ public:
     int                  syncDirection;
 };
 
-//! kDebug() stream operator. Writes property @a s to the debug output in a nicely formatted way.
+//! qDebug() stream operator. Writes property @a s to the debug output in a nicely formatted way.
 QDebug operator<<(QDebug dbg, const MaintenanceSettings& s);
 
 }  // namespace Digikam

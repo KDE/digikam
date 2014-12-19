@@ -52,7 +52,7 @@ public:
     QString location;
 };
 
-//! kDebug() stream operator. Writes property @a inf to the debug output in a nicely formatted way.
+//! qDebug() stream operator. Writes property @a inf to the debug output in a nicely formatted way.
 DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const IptcCoreLocationInfo& inf);
 
 // ---------------------------------------------------------------------------------------------------
@@ -75,7 +75,7 @@ public:
     QString webUrl;
 };
 
-//! kDebug() stream operator. Writes property @a inf to the debug output in a nicely formatted way.
+//! qDebug() stream operator. Writes property @a inf to the debug output in a nicely formatted way.
 DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const IptcCoreContactInfo& inf);
 
 // ---------------------------------------------------------------------------------------------------

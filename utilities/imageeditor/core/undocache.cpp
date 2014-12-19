@@ -34,15 +34,17 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QStringList>
+#include <QApplication>
 
 // KDE includes
 
 #include <kstandarddirs.h>
 #include <kdiskfreespaceinfo.h>
-#include <kaboutdata.h>
-#include <kcomponentdata.h>
-#include "digikam_debug.h"
 #include <kglobal.h>
+
+// Local includes
+
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -68,7 +70,7 @@ public:
 UndoCache::UndoCache()
     : d(new Private)
 {
-    d->cacheDir    = KStandardDirs::locateLocal("cache", KGlobal::mainComponent().aboutData()->programName() + '/');
+    d->cacheDir    = KStandardDirs::locateLocal("cache", QApplication::applicationName() + '/');
 
     d->cachePrefix = QString("%1undocache-%2")
                      .arg(d->cacheDir)
