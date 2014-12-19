@@ -563,7 +563,7 @@ bool JpegRotator::performJpegTransform(TransformAction action, const QString& sr
     FILE* input_file  = 0;
     FILE* output_file = 0;
 
-    input_file = fopen(in, "rb");
+    input_file = fopen(in.constData(), "rb");
 
     if (!input_file)
     {
@@ -571,7 +571,7 @@ bool JpegRotator::performJpegTransform(TransformAction action, const QString& sr
         return false;
     }
 
-    output_file = fopen(out, "wb");
+    output_file = fopen(out.constData(), "wb");
 
     if (!output_file)
     {
