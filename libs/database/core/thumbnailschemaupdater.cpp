@@ -108,7 +108,7 @@ bool ThumbnailSchemaUpdater::startUpdates()
         if (version.isEmpty())
         {
             // Something is damaged. Give up.
-            kError(50003) << "DBThumbnailsVersion not available! Giving up schema upgrading.";
+            qCCritical(DIGIKAM_GENERAL_LOG) << "DBThumbnailsVersion not available! Giving up schema upgrading.";
             QString errorMsg = i18n(
                                    "The database is not valid: "
                                    "the \"DBThumbnailsVersion\" setting does not exist. "
