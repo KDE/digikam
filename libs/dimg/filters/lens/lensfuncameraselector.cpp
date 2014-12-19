@@ -172,17 +172,17 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* const parent)
 
     d->focal            = new RDoubleNumInput(this);
     d->focal->setDecimals(1);
-    d->focal->input()->setRange(1.0, 10000.0, 0.01, true);
+    d->focal->setRange(1.0, 10000.0, 0.01);
     d->focal->setDefaultValue(1.0);
 
     d->aperture         = new RDoubleNumInput(this);
     d->aperture->setDecimals(1);
-    d->aperture->input()->setRange(1.1, 256.0, 0.1, true);
+    d->aperture->setRange(1.1, 256.0, 0.1);
     d->aperture->setDefaultValue(1.1);
 
     d->distance         = new RDoubleNumInput(this);
     d->distance->setDecimals(1);
-    d->distance->input()->setRange(0.0, 10000.0, 0.1, true);
+    d->distance->setRange(0.0, 10000.0, 0.1);
     d->distance->setDefaultValue(0.0);
 
     grid->addWidget(hbox,          0, 0, 1, 3);

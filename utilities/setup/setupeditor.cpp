@@ -173,7 +173,7 @@ SetupEditor::SetupEditor(QWidget* const parent)
     QLabel* underExpoPcentlabel      = new QLabel(i18n("Under-exposure percents:"), underPcentBox);
     d->underExposurePcents           = new RDoubleNumInput(underPcentBox);
     d->underExposurePcents->setDecimals(1);
-    d->underExposurePcents->input()->setRange(0.1, 5.0, 0.1, true);
+    d->underExposurePcents->setRange(0.1, 5.0, 0.1);
     d->underExposurePcents->setDefaultValue(1.0);
     underExpoPcentlabel->setBuddy(d->underExposurePcents);
     d->underExposurePcents->setWhatsThis(i18n("Adjust the percents of the bottom of image histogram "
@@ -190,7 +190,7 @@ SetupEditor::SetupEditor(QWidget* const parent)
     QLabel* overExpoPcentlabel       = new QLabel(i18n("Over-exposure percents:"), overPcentBox);
     d->overExposurePcents            = new RDoubleNumInput(overPcentBox);
     d->overExposurePcents->setDecimals(1);
-    d->overExposurePcents->input()->setRange(0.1, 5.0, 0.1, true);
+    d->overExposurePcents->setRange(0.1, 5.0, 0.1);
     d->overExposurePcents->setDefaultValue(1.0);
     overExpoPcentlabel->setBuddy(d->underExposurePcents);
     d->overExposurePcents->setWhatsThis(i18n("Adjust the percents of the top of image histogram "

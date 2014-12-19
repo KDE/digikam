@@ -104,7 +104,7 @@ FreeRotationSettings::FreeRotationSettings(QWidget* const parent)
 
     QLabel* label4    = new QLabel(i18n("Fine angle:"));
     d->fineAngleInput = new RDoubleNumInput;
-    d->fineAngleInput->input()->setRange(-1.0, 1.0, 0.01, true);
+    d->fineAngleInput->setRange(-1.0, 1.0, 0.01);
     d->fineAngleInput->setDefaultValue(0);
     d->fineAngleInput->setWhatsThis(i18n("This value in degrees will be added to main angle value "
                                          "to set fine target angle."));

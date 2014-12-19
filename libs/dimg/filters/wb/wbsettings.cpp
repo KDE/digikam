@@ -199,7 +199,7 @@ WBSettings::WBSettings(QWidget* const parent)
     d->adjTemperatureLabel = new QLabel(i18n("Adjustment:"));
     d->temperatureInput    = new RDoubleNumInput;
     d->temperatureInput->setDecimals(1);
-    d->temperatureInput->input()->setRange(1750.0, 12000.0, 10.0);
+    d->temperatureInput->setRange(1750.0, 12000.0, 10.0);
     d->temperatureInput->setDefaultValue((double)d->DefaultTemperature);
     d->temperatureInput->setWhatsThis(i18n("Set here the white balance color temperature in Kelvin."));
 
@@ -254,35 +254,35 @@ WBSettings::WBSettings(QWidget* const parent)
     d->blackLabel = new QLabel(i18n("Black point:"));
     d->blackInput = new RDoubleNumInput;
     d->blackInput->setDecimals(2);
-    d->blackInput->input()->setRange(0.0, 0.05, 0.01, true);
+    d->blackInput->setRange(0.0, 0.05, 0.01);
     d->blackInput->setWhatsThis(i18n("Set here the black level value."));
     d->blackInput->setDefaultValue(0.0);
 
     d->darkLabel = new QLabel(i18n("Shadows:"));
     d->darkInput = new RDoubleNumInput;
     d->darkInput->setDecimals(2);
-    d->darkInput->input()->setRange(0.0, 1.0, 0.01, true);
+    d->darkInput->setRange(0.0, 1.0, 0.01);
     d->darkInput->setDefaultValue(0.5);
     d->darkInput->setWhatsThis(i18n("Set here the shadow noise suppression level."));
 
     d->saturationLabel = new QLabel(i18n("Saturation:"));
     d->saturationInput = new RDoubleNumInput;
     d->saturationInput->setDecimals(2);
-    d->saturationInput->input()->setRange(0.0, 2.0, 0.01, true);
+    d->saturationInput->setRange(0.0, 2.0, 0.01);
     d->saturationInput->setDefaultValue(1.0);
     d->saturationInput->setWhatsThis(i18n("Set here the saturation value."));
 
     d->gammaLabel = new QLabel(i18n("Gamma:"));
     d->gammaInput = new RDoubleNumInput;
     d->gammaInput->setDecimals(2);
-    d->gammaInput->input()->setRange(0.1, 3.0, 0.01, true);
+    d->gammaInput->setRange(0.1, 3.0, 0.01);
     d->gammaInput->setDefaultValue(1.0);
     d->gammaInput->setWhatsThis(i18n("Set here the gamma correction value."));
 
     d->greenLabel = new QLabel(i18n("Green:"));
     d->greenInput = new RDoubleNumInput;
     d->greenInput->setDecimals(2);
-    d->greenInput->input()->setRange(0.2, 2.5, 0.01, true);
+    d->greenInput->setRange(0.2, 2.5, 0.01);
     d->greenInput->setDefaultValue(1.0);
     d->greenInput->setWhatsThis(i18n("Set here the green component to control the magenta color "
                                      "cast removal level."));
@@ -303,14 +303,14 @@ WBSettings::WBSettings(QWidget* const parent)
                                              "and Black Point values."));
     d->mainExposureInput = new RDoubleNumInput;
     d->mainExposureInput->setDecimals(2);
-    d->mainExposureInput->input()->setRange(-6.0, 8.0, 0.1, true);
+    d->mainExposureInput->setRange(-6.0, 8.0, 0.1);
     d->mainExposureInput->setDefaultValue(0.0);
     d->mainExposureInput->setWhatsThis(i18n("Set here the main exposure compensation value in E.V."));
 
     d->fineExposureLabel = new QLabel(i18nc("fine exposure adjustment", "Fine:"));
     d->fineExposureInput = new RDoubleNumInput;
     d->fineExposureInput->setDecimals(2);
-    d->fineExposureInput->input()->setRange(-0.5, 0.5, 0.01, true);
+    d->fineExposureInput->setRange(-0.5, 0.5, 0.01);
     d->fineExposureInput->setDefaultValue(0.0);
     d->fineExposureInput->setWhatsThis(i18n("This value in E.V will be added to main exposure "
                                             "compensation value to set fine exposure adjustment."));
