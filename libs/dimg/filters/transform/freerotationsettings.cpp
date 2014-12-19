@@ -6,7 +6,7 @@
  * Date        : 2010-03-16
  * Description : Free rotation settings view.
  *
- * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -104,7 +104,7 @@ FreeRotationSettings::FreeRotationSettings(QWidget* const parent)
 
     QLabel* label4    = new QLabel(i18n("Fine angle:"));
     d->fineAngleInput = new RDoubleNumInput;
-    d->fineAngleInput->input()->setRange(-1.0, 1.0, 0.01, true);
+    d->fineAngleInput->setRange(-1.0, 1.0, 0.01);
     d->fineAngleInput->setDefaultValue(0);
     d->fineAngleInput->setWhatsThis(i18n("This value in degrees will be added to main angle value "
                                          "to set fine target angle."));
