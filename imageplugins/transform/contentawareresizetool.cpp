@@ -228,14 +228,14 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
 
     QLabel* labelWidthP = new QLabel(i18n("Width (%):"), d->gboxSettings->plainPage());
     d->wpInput          = new RDoubleNumInput(d->gboxSettings->plainPage());
-    d->wpInput->input()->setRange(1.0, 200.0, 1.0, true);
+    d->wpInput->setRange(1.0, 200.0, 1.0);
     d->wpInput->setDefaultValue(100.0);
     d->wpInput->setObjectName("wpInput");
     d->wpInput->setWhatsThis(i18n("New image width, as a percentage (%)."));
 
     QLabel* labelHeightP = new QLabel(i18n("Height (%):"), d->gboxSettings->plainPage());
     d->hpInput           = new RDoubleNumInput(d->gboxSettings->plainPage());
-    d->hpInput->input()->setRange(1.0, 200.0, 1.0, true);
+    d->hpInput->setRange(1.0, 200.0, 1.0);
     d->hpInput->setDefaultValue(100.0);
     d->hpInput->setObjectName("hpInput");
     d->hpInput->setWhatsThis(i18n("New image height, as a percentage (%)."));
@@ -258,7 +258,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
     QGridLayout* mixedRescaleLayout = new QGridLayout;
 
     d->mixedRescaleInput = new RDoubleNumInput(d->gboxSettings->plainPage());
-    d->mixedRescaleInput->input()->setRange(0.0, 100.0, 1.0, true);
+    d->mixedRescaleInput->setRange(0.0, 100.0, 1.0);
     d->mixedRescaleInput->setDefaultValue(100.0);
     d->mixedRescaleInput->setObjectName("mixedRescaleInput");
     d->mixedRescaleInput->setWhatsThis(i18n("Specify here your desired content-aware rescaling percentage."));
@@ -364,7 +364,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
 
     QLabel* labelRigidity = new QLabel(i18n("Overall rigidity of the seams:"), d->gboxSettings->plainPage());
     d->rigidityInput      = new RDoubleNumInput(d->gboxSettings->plainPage());
-    d->rigidityInput->input()->setRange(0.0, 10.0, 1.0, true);
+    d->rigidityInput->setRange(0.0, 10.0, 1.0);
     d->rigidityInput->setDefaultValue(0.0);
     d->rigidityInput->setWhatsThis(i18n("Use this value to give a negative bias to the seams which "
                                         "are not straight. May be useful to prevent distortions in "

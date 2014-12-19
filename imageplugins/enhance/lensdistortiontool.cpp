@@ -6,7 +6,7 @@
  * Date        : 2004-12-27
  * Description : a plugin to reduce lens distortions to an image.
  *
- * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -133,7 +133,7 @@ LensDistortionTool::LensDistortionTool(QObject* const parent)
 
     d->mainInput = new RDoubleNumInput(d->gboxSettings->plainPage());
     d->mainInput->setDecimals(1);
-    d->mainInput->input()->setRange(-100.0, 100.0, 0.1, true);
+    d->mainInput->setRange(-100.0, 100.0, 0.1);
     d->mainInput->setDefaultValue(0.0);
     d->mainInput->setWhatsThis( i18n("This value controls the amount of distortion. Negative values "
                                      "correct lens barrel distortion, while positive values correct lens "
@@ -145,7 +145,7 @@ LensDistortionTool::LensDistortionTool(QObject* const parent)
 
     d->edgeInput = new RDoubleNumInput(d->gboxSettings->plainPage());
     d->edgeInput->setDecimals(1);
-    d->edgeInput->input()->setRange(-100.0, 100.0, 0.1, true);
+    d->edgeInput->setRange(-100.0, 100.0, 0.1);
     d->edgeInput->setDefaultValue(0.0);
     d->edgeInput->setWhatsThis( i18n("This value controls in the same manner as the Main control, "
                                      "but has more effect at the edges of the image than at the center."));
@@ -156,7 +156,7 @@ LensDistortionTool::LensDistortionTool(QObject* const parent)
 
     d->rescaleInput = new RDoubleNumInput(d->gboxSettings->plainPage());
     d->rescaleInput->setDecimals(1);
-    d->rescaleInput->input()->setRange(-100.0, 100.0, 0.1, true);
+    d->rescaleInput->setRange(-100.0, 100.0, 0.1);
     d->rescaleInput->setDefaultValue(0.0);
     d->rescaleInput->setWhatsThis( i18n("This value rescales the overall image size."));
 
@@ -166,7 +166,7 @@ LensDistortionTool::LensDistortionTool(QObject* const parent)
 
     d->brightenInput = new RDoubleNumInput(d->gboxSettings->plainPage());
     d->brightenInput->setDecimals(1);
-    d->brightenInput->input()->setRange(-100.0, 100.0, 0.1, true);
+    d->brightenInput->setRange(-100.0, 100.0, 0.1);
     d->brightenInput->setDefaultValue(0.0);
     d->brightenInput->setWhatsThis( i18n("This value adjusts the brightness in image corners."));
 

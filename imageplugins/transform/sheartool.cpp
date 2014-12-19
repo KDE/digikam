@@ -151,7 +151,7 @@ ShearTool::ShearTool(QObject* const parent)
 
     QLabel* label4     = new QLabel(i18n("Fine horizontal angle:"));
     d->fineHAngleInput = new RDoubleNumInput;
-    d->fineHAngleInput->input()->setRange(-1.0, 1.0, 0.01, true);
+    d->fineHAngleInput->setRange(-1.0, 1.0, 0.01);
     d->fineHAngleInput->setDefaultValue(0);
     d->fineHAngleInput->setWhatsThis( i18n("This value in degrees will be added to main "
                                            "horizontal angle value to set fine adjustments."));
@@ -163,7 +163,7 @@ ShearTool::ShearTool(QObject* const parent)
 
     QLabel* label6     = new QLabel(i18n("Fine vertical angle:"));
     d->fineVAngleInput = new RDoubleNumInput;
-    d->fineVAngleInput->input()->setRange(-1.0, 1.0, 0.01, true);
+    d->fineVAngleInput->setRange(-1.0, 1.0, 0.01);
     d->fineVAngleInput->setDefaultValue(0);
     d->fineVAngleInput->setWhatsThis( i18n("This value in degrees will be added to main vertical "
                                            "angle value to set fine adjustments."));

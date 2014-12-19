@@ -138,7 +138,7 @@ GreycstorationSettings::GreycstorationSettings(KTabWidget* parent)
     d->sharpnessLabel = new QLabel(i18n("Detail preservation:"), d->generalPage);
     d->sharpnessInput = new RDoubleNumInput(d->generalPage);
     d->sharpnessInput->setDecimals(2);
-    d->sharpnessInput->input()->setRange(0.01, 1.0, 0.1, true);
+    d->sharpnessInput->setRange(0.01, 1.0, 0.1);
     d->sharpnessInput->setWhatsThis(i18n("Preservation of details to set the sharpening level "
                                          "of the small features in the target image. "
                                          "Higher values leave details sharp."));
@@ -146,14 +146,14 @@ GreycstorationSettings::GreycstorationSettings(KTabWidget* parent)
     d->anisotropyLabel = new QLabel(i18n("Anisotropy:"), d->generalPage);
     d->anisotropyInput = new RDoubleNumInput(d->generalPage);
     d->anisotropyInput->setDecimals(2);
-    d->anisotropyInput->input()->setRange(0.0, 1.0, 0.1, true);
+    d->anisotropyInput->setRange(0.0, 1.0, 0.1);
     d->anisotropyInput->setWhatsThis(i18n("Anisotropic (directional) modifier of the details. "
                                           "Keep it small for Gaussian noise."));
 
     d->amplitudeLabel = new QLabel(i18n("Smoothing:"), d->generalPage);
     d->amplitudeInput = new RDoubleNumInput(d->generalPage);
     d->amplitudeInput->setDecimals(2);
-    d->amplitudeInput->input()->setRange(0.01, 500.0, 0.1, true);
+    d->amplitudeInput->setRange(0.01, 500.0, 0.1);
     d->amplitudeInput->setWhatsThis(i18n("Total smoothing power: if the Detail Factor sets the relative "
                                          "smoothing and the Anisotropy Factor the direction, "
                                          "the Smoothing Factor sets the overall effect."));
@@ -161,7 +161,7 @@ GreycstorationSettings::GreycstorationSettings(KTabWidget* parent)
     d->sigmaLabel = new QLabel(i18n("Regularity:"), d->generalPage);
     d->sigmaInput = new RDoubleNumInput(d->generalPage);
     d->sigmaInput->setDecimals(2);
-    d->sigmaInput->input()->setRange(0.0, 10.0, 0.1, true);
+    d->sigmaInput->setRange(0.0, 10.0, 0.1);
     d->sigmaInput->setWhatsThis(i18n("This value controls the evenness of smoothing to the image. "
                                      "Do not use a high value here, or the "
                                      "target image will be completely blurred."));
@@ -174,7 +174,7 @@ GreycstorationSettings::GreycstorationSettings(KTabWidget* parent)
     d->alphaLabel = new QLabel(i18n("Noise:"), d->generalPage);
     d->alphaInput = new RDoubleNumInput(d->generalPage);
     d->alphaInput->setDecimals(2);
-    d->alphaInput->input()->setRange(0.01, 1.0, 0.1, true);
+    d->alphaInput->setRange(0.01, 1.0, 0.1);
     d->alphaInput->setWhatsThis(i18n("Sets the noise scale."));
 
     grid1->addWidget(d->sharpnessLabel,     0, 0, 1, 1);
@@ -202,20 +202,20 @@ GreycstorationSettings::GreycstorationSettings(KTabWidget* parent)
     d->daLabel = new QLabel(i18n("Angular step:"), d->advancedPage);
     d->daInput = new RDoubleNumInput(d->advancedPage);
     d->daInput->setDecimals(2);
-    d->daInput->input()->setRange(0.0, 90.0, 1.0, true);
+    d->daInput->setRange(0.0, 90.0, 1.0);
     d->daInput->setWhatsThis(i18n("Set here the angular integration step (in degrees) "
                                   "analogous to anisotropy."));
 
     d->dlLabel = new QLabel(i18n("Integral step:"), d->advancedPage);
     d->dlInput = new RDoubleNumInput(d->advancedPage);
     d->dlInput->setDecimals(2);
-    d->dlInput->input()->setRange(0.0, 1.0, 0.1, true);
+    d->dlInput->setRange(0.0, 1.0, 0.1);
     d->dlInput->setWhatsThis(i18n("Set here the spatial integral step."));
 
     d->gaussianPrecLabel = new QLabel(i18n("Gaussian:"), d->advancedPage);
     d->gaussianPrecInput = new RDoubleNumInput(d->advancedPage);
     d->gaussianPrecInput->setDecimals(2);
-    d->gaussianPrecInput->input()->setRange(0.01, 20.0, 0.01, true);
+    d->gaussianPrecInput->setRange(0.01, 20.0, 0.01);
     d->gaussianPrecInput->setWhatsThis(i18n("Set here the precision of the Gaussian function."));
 
     d->tileLabel = new QLabel(i18n("Tile size:"), d->advancedPage);

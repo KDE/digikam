@@ -229,14 +229,14 @@ ResizeTool::ResizeTool(QObject* const parent)
 
     QLabel* const label3 = new QLabel(i18n("Width (%):"), firstPage);
     d->wpInput           = new RDoubleNumInput(firstPage);
-    d->wpInput->input()->setRange(1.0, 999.0, 1.0, true);
+    d->wpInput->setRange(1.0, 999.0, 1.0,);
     d->wpInput->setDefaultValue(100.0);
     d->wpInput->setObjectName("wpInput");
     d->wpInput->setWhatsThis( i18n("New image width in percent (%)."));
 
     QLabel* const label4 = new QLabel(i18n("Height (%):"), firstPage);
     d->hpInput           = new RDoubleNumInput(firstPage);
-    d->hpInput->input()->setRange(1.0, 999.0, 1.0, true);
+    d->hpInput->setRange(1.0, 999.0, 1.0);
     d->hpInput->setDefaultValue(100.0);
     d->hpInput->setObjectName("hpInput");
     d->hpInput->setWhatsThis( i18n("New image height in percent (%)."));
