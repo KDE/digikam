@@ -140,17 +140,17 @@ bool DMetadata::loadUsingDcraw(const QString& filePath) const
 
         if (!identify.model.isNull())
         {
-            setExifTagString("Exif.Image.Model", identify.model.toLatin1(), false);
+            setExifTagString("Exif.Image.Model", identify.model.toLatin1().constData(), false);
         }
 
         if (!identify.make.isNull())
         {
-            setExifTagString("Exif.Image.Make", identify.make.toLatin1(), false);
+            setExifTagString("Exif.Image.Make", identify.make.toLatin1().constData(), false);
         }
 
         if (!identify.owner.isNull())
         {
-            setExifTagString("Exif.Image.Artist", identify.owner.toLatin1(), false);
+            setExifTagString("Exif.Image.Artist", identify.owner.toLatin1().constData(), false);
         }
 
         if (identify.sensitivity != -1)
@@ -1298,7 +1298,7 @@ bool DMetadata::getImageFacesMap(QMultiMap<QString,QVariant>& faces) const
 
     for (int i=1; ; i++)
     {
-        QString person = getXmpTagString(personPathTemplate.arg(i).toLatin1(), false);
+        QString person = getXmpTagString(personPathTemplate.arg(i).toLatin1().constData(), false);
 
         if (person.isEmpty())
             break;
@@ -1309,7 +1309,7 @@ bool DMetadata::getImageFacesMap(QMultiMap<QString,QVariant>& faces) const
         // percentage of the width/height of the entire image).
         // Similarly the width and height of the face's box are
         // indicated by W.WW and H.HH.
-        QString rectString = getXmpTagString(rectPathTemplate.arg(i).toLatin1(), false);
+        QString rectString = getXmpTagString(rectPathTemplate.arg(i).toLatin1().constData(), false);
         QStringList list   = rectString.split(',');
 
         if (list.size() < 4)
@@ -1339,16 +1339,16 @@ bool DMetadata::getImageFacesMap(QMultiMap<QString,QVariant>& faces) const
 
     for (int i=1; ; i++)
     {
-        QString person = getXmpTagString(mwg_personPathTemplate.arg(i).toLatin1(), false);
+        QString person = getXmpTagString(mwg_personPathTemplate.arg(i).toLatin1().constData(), false);
 
         if (person.isEmpty())
             break;
 
         // x and y is the center point
-        float x = getXmpTagString(mwg_rect_x_PathTemplate.arg(i).toLatin1(), false).toFloat();
-        float y = getXmpTagString(mwg_rect_y_PathTemplate.arg(i).toLatin1(), false).toFloat();
-        float w = getXmpTagString(mwg_rect_w_PathTemplate.arg(i).toLatin1(), false).toFloat();
-        float h = getXmpTagString(mwg_rect_h_PathTemplate.arg(i).toLatin1(), false).toFloat();
+        float x = getXmpTagString(mwg_rect_x_PathTemplate.arg(i).toLatin1().constData(), false).toFloat();
+        float y = getXmpTagString(mwg_rect_y_PathTemplate.arg(i).toLatin1().constData(), false).toFloat();
+        float w = getXmpTagString(mwg_rect_w_PathTemplate.arg(i).toLatin1().constData(), false).toFloat();
+        float h = getXmpTagString(mwg_rect_h_PathTemplate.arg(i).toLatin1().constData(), false).toFloat();
         QRectF rect(x - w/2,
                     y - h/2,
                     w,
@@ -1381,16 +1381,16 @@ bool DMetadata::setImageFacesMap(QMultiMap< QString, QVariant >& facesPath, bool
 
     if(!write)
     {
-        QString check = getXmpTagString(nameTagKey.arg(1).toLatin1());
+        QString check = getXmpTagString(nameTagKey.arg(1).toLatin1().constData());
 
         if(check.isEmpty())
             return true;
     }
 
-    setXmpTagString(qxmpTagName.toLatin1(),
+    setXmpTagString(qxmpTagName.toLatin1().constData(),
                     QString(),KExiv2::XmpTagType(1),false);
 
-    setXmpTagString(winQxmpTagName.toLatin1(),
+    setXmpTagString(winQxmpTagName.toLatin1().constData(),
                     QString(),KExiv2::XmpTagType(1),false);
 
     QMap<QString,QVariant>::const_iterator it = facesPath.constBegin();
@@ -1411,11 +1411,11 @@ bool DMetadata::setImageFacesMap(QMultiMap< QString, QVariant >& facesPath, bool
         rectString.append(QString::number(h));
 
         /** Set tag rect **/
-        setXmpTagString(winRectTagKey.arg(i).toLatin1(), rectString,
+        setXmpTagString(winRectTagKey.arg(i).toLatin1().constData(), rectString,
                              KExiv2::XmpTagType(0),false);
         /** Set tag name **/
 
-        setXmpTagString(winNameTagKey.arg(i).toLatin1(),it.key(),
+        setXmpTagString(winNameTagKey.arg(i).toLatin1().constData(),it.key(),
                              KExiv2::XmpTagType(0),false);
 
         /** Writing rectangle in Metadata Group format **/
@@ -1423,34 +1423,34 @@ bool DMetadata::setImageFacesMap(QMultiMap< QString, QVariant >& facesPath, bool
         y += h/2;
 
         /** Set tag name **/
-        ok &= setXmpTagString(nameTagKey.arg(i).toLatin1(),
+        ok &= setXmpTagString(nameTagKey.arg(i).toLatin1().constData(),
                               it.key(),KExiv2::XmpTagType(0),false);
         /** Set tag type as Face **/
-        ok &= setXmpTagString(typeTagKey.arg(i).toLatin1(),
+        ok &= setXmpTagString(typeTagKey.arg(i).toLatin1().constData(),
                               QString("Face"),KExiv2::XmpTagType(0),false);
 
         /** Set tag Area, with xmp type struct **/
-        ok &= setXmpTagString(areaTagKey.arg(i).toLatin1(),
+        ok &= setXmpTagString(areaTagKey.arg(i).toLatin1().constData(),
                               QString(),KExiv2::XmpTagType(2),false);
 
         /** Set stArea:x inside Area structure **/
-        ok &= setXmpTagString(areaxTagKey.arg(i).toLatin1(),
+        ok &= setXmpTagString(areaxTagKey.arg(i).toLatin1().constData(),
                               QString::number(x),KExiv2::XmpTagType(0),false);
 
         /** Set stArea:y inside Area structure **/
-        ok &= setXmpTagString(areayTagKey.arg(i).toLatin1(),
+        ok &= setXmpTagString(areayTagKey.arg(i).toLatin1().constData(),
                               QString::number(y),KExiv2::XmpTagType(0),false);
 
         /** Set stArea:w inside Area structure **/
-        ok &= setXmpTagString(areawTagKey.arg(i).toLatin1(),
+        ok &= setXmpTagString(areawTagKey.arg(i).toLatin1().constData(),
                               QString::number(w),KExiv2::XmpTagType(0),false);
 
         /** Set stArea:h inside Area structure **/
-        ok &= setXmpTagString(areahTagKey.arg(i).toLatin1(),
+        ok &= setXmpTagString(areahTagKey.arg(i).toLatin1().constData(),
                               QString::number(h),KExiv2::XmpTagType(0),false);
 
         /** Set stArea:unit inside Area structure  as normalized **/
-        ok &= setXmpTagString(areanormTagKey.arg(i).toLatin1(),
+        ok &= setXmpTagString(areanormTagKey.arg(i).toLatin1().constData(),
                               QString("normalized"),KExiv2::XmpTagType(0),false);
 
         ++it;
@@ -1938,7 +1938,7 @@ QString DMetadata::getLensDescription() const
 
     for (QStringList::const_iterator it = lensExifTags.constBegin(); it != lensExifTags.constEnd(); ++it)
     {
-        lens = getExifTagString((*it).toAscii());
+        lens = getExifTagString((*it).toAscii().constData());
 
         if ( !lens.isEmpty() &&
              !(lens.startsWith('(') && lens.endsWith(')')) )   // To prevent undecoded tag values from Exiv2 as "(65535)".
@@ -3129,7 +3129,7 @@ QString DMetadata::getExifTagStringFromTagsList(const QStringList& tagsList) con
 
     foreach(const QString& tag, tagsList)
     {
-        val = getExifTagString(tag.toAscii());
+        val = getExifTagString(tag.toAscii().constData());
         if (!val.isEmpty())
             return val;
     }
