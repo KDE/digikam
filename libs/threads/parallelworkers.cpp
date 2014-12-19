@@ -154,8 +154,8 @@ int ParallelWorkers::replacementQtMetacall(QMetaObject::Call _c, int _id, void *
     if (_c == QMetaObject::InvokeMetaMethod)
     {
         // This is the common ancestor's meta object, below WorkerObject
-        const QMetaObject* mobj = mocMetaObject();
-        const int properMethods = mobj->methodCount() - mobj->methodOffset();
+        const QMetaObject* const mobj = mocMetaObject();
+        const int properMethods       = mobj->methodCount() - mobj->methodOffset();
 
         if (_id >= properMethods)
         {
@@ -168,21 +168,25 @@ int ParallelWorkers::replacementQtMetacall(QMetaObject::Call _c, int _id, void *
         // Copy the argument data - _a is going to be deleted in our current thread
         QList<QByteArray> types = method.parameterTypes();
         QVector<QGenericArgument> args(10);
-        for (int i = 0; i<types.size(); i++)
+
+        for (int i = 0; i < types.size(); i++)
         {
-            int typeId = QMetaType::type(types[i]);
+            int typeId = QMetaType::type(types[i].constData());
+
             if (!typeId && _a[i+1])
             {
                 qCWarning(DIGIKAM_GENERAL_LOG) << "Unable to handle unregistered datatype" << types[i] << "Dropping signal.";
                 return _id - properMethods;
             }
+
             // we use QMetaType to copy the data. _a[0] is reserved for a return parameter.
-            void* data = QMetaType::construct(typeId, _a[i+1]);
-            args[i] = QGenericArgument(types[i], data);
+            void* const data = QMetaType::construct(typeId, _a[i+1]);
+            args[i]          = QGenericArgument(types[i].constData(), data);
         }
 
         // Find the object to be invoked
-        WorkerObject* obj = m_workers.at(m_currentIndex);
+        WorkerObject* const obj = m_workers.at(m_currentIndex);
+
         if (++m_currentIndex == m_workers.size())
         {
             m_currentIndex = 0;

@@ -312,7 +312,7 @@ bool KInotify::available()
         }
         else if( major * 1000000 + minor * 1000 + patch < 2006014 )  // < 2.6.14
         {
-            kDebug(7001) << "Can't use INotify, Linux kernel too old";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Can't use INotify, Linux kernel too old";
             return false;
         }
 
