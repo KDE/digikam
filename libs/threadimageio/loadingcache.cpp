@@ -27,7 +27,6 @@
 
 #include <QCoreApplication>
 #include <QEvent>
-#include <QCustomEvent>
 #include <QCache>
 #include <QHash>
 
