@@ -368,7 +368,7 @@ void DatabaseWidget::setParametersFromSettings(const ApplicationSettings* const 
 
     for (int i = 0; i < databaseType->count(); ++i)
     {
-        //kDebug(50003) << "Comparing comboboxentry on index ["<< i <<"] [" << databaseType->itemData(i)
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "Comparing comboboxentry on index ["<< i <<"] [" << databaseType->itemData(i)
         //              << "] with ["<< settings->getDatabaseType() << "]";
         if (databaseType->itemData(i).toString() == settings->getDatabaseType())
         {

@@ -21,6 +21,7 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
 /*
 #ifndef DATABASEPARAMETERS_DEBUG
 #define DATABASEPARAMETERS_DEBUG
@@ -34,13 +35,16 @@
 
 #include <QDir>
 #include <QFile>
+#include <QCryptographicHash>
 
 // KDE includes
 
-#include <kcodecs.h>
 #include <kconfiggroup.h>
-#include "digikam_debug.h"
 #include <kstandarddirs.h>
+
+// Local includes
+
+#include "digikam_debug.h"
 
 namespace
 {
@@ -182,15 +186,15 @@ QString DatabaseParameters::SQLiteDatabaseFile() const
 
 QByteArray DatabaseParameters::hash() const
 {
-    KMD5 md5;
-    md5.update(databaseType.toUtf8());
-    md5.update(databaseName.toUtf8());
-    md5.update(connectOptions.toUtf8());
-    md5.update(hostName.toUtf8());
-    md5.update((const char*)&port, sizeof(int));
-    md5.update(userName.toUtf8());
-    md5.update(password.toUtf8());
-    return md5.hexDigest();
+    QCryptographicHash md5(QCryptographicHash::Md5);
+    md5.addData(databaseType.toUtf8());
+    md5.addData(databaseName.toUtf8());
+    md5.addData(connectOptions.toUtf8());
+    md5.addData(hostName.toUtf8());
+    md5.addData((const char*)&port, sizeof(int));
+    md5.addData(userName.toUtf8());
+    md5.addData(password.toUtf8());
+    return md5.result().toHex();
 }
 
 DatabaseParameters DatabaseParameters::parametersFromConfig(KSharedConfig::Ptr config, const QString& configGroup)
@@ -447,7 +451,7 @@ DatabaseParameters DatabaseParameters::defaultParameters(const QString databaseT
 
     parameters.connectOptions   = connectOptions;
 
-    kDebug(50003) << "ConnectOptions "<< parameters.connectOptions;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "ConnectOptions "<< parameters.connectOptions;
     return parameters;
 }
 

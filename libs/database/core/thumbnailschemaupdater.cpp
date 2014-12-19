@@ -96,7 +96,7 @@ bool ThumbnailSchemaUpdater::startUpdates()
         // Find out schema version of db file
         QString version = m_access->db()->getSetting("DBThumbnailsVersion");
         QString versionRequired = m_access->db()->getSetting("DBThumbnailsVersionRequired");
-        kDebug(50003) << "Have a thumbnail database structure version " << version;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Have a thumbnail database structure version " << version;
 
         // mini schema update
         if (version.isEmpty() && m_access->parameters().isSQLite())
@@ -164,7 +164,7 @@ bool ThumbnailSchemaUpdater::startUpdates()
     }
     else
     {
-        //kDebug(50003) << "No database file available";
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "No database file available";
         DatabaseParameters parameters = m_access->parameters();
 
         // No legacy handling: start with a fresh db

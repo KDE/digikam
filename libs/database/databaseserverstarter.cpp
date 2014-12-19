@@ -119,7 +119,7 @@ DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QStri
 
         if ( dbServerMgrPath.isEmpty() )
         {
-            kDebug(50003) << "No path to digikamdatabaseserver set in server manager configuration!";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "No path to digikamdatabaseserver set in server manager configuration!";
         }
 
         const QStringList arguments;
@@ -128,9 +128,9 @@ DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QStri
 
         if ( !result )
         {
-            kDebug(50003) << "Could not start database server manager !";
-            kDebug(50003) << "executable:" << dbServerMgrPath;
-            kDebug(50003) << "arguments:" << arguments;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Could not start database server manager !";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "executable:" << dbServerMgrPath;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "arguments:" << arguments;
         }
     }
 
