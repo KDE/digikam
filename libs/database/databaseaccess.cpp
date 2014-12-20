@@ -107,7 +107,7 @@ DatabaseAccess::DatabaseAccess()
         d->initializing = true;
 
         d->backend->open(d->parameters);
-        d->databaseWatch->setDatabaseIdentifier(d->db->databaseUuid());
+        d->databaseWatch->setDatabaseIdentifier(d->db->databaseUuid().toString());
         CollectionManager::instance()->refresh();
 
         d->initializing = false;
@@ -210,7 +210,7 @@ void DatabaseAccess::setParameters(const DatabaseParameters& parameters, Applica
     if (!d->databaseWatch)
     {
         d->databaseWatch = new DatabaseWatch();
-        d->databaseWatch->setApplicationIdentifier(d->applicationIdentifier);
+        d->databaseWatch->setApplicationIdentifier(d->applicationIdentifier.toString());
 
         if (status == MainApplication)
         {
@@ -308,7 +308,7 @@ bool DatabaseAccess::checkReadyForUse(InitializationObserver* observer)
     }
 
     // set identifier again
-    d->databaseWatch->setDatabaseIdentifier(d->db->databaseUuid());
+    d->databaseWatch->setDatabaseIdentifier(d->db->databaseUuid().toString());
 
     // initialize CollectionManager
     CollectionManager::instance()->refresh();
