@@ -28,6 +28,7 @@
 #include <QCoreApplication>
 #include <QDir>
 #include <QThread>
+#include <QCryptographicHash>
 
 // KDE includes
 
@@ -492,12 +493,14 @@ QString CollectionManagerPrivate::directoryHash(const QString& path)
     if (dir.isReadable())
     {
         QStringList entries = dir.entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
-        KMD5 hash;
+        QCryptographicHash md5(QCryptographicHash::Md5);
+
         foreach(const QString& entry, entries)
         {
-            hash.update(entry.toUtf8());
+            md5.addData(entry.toUtf8());
         }
-        return hash.hexDigest();
+
+        return md5.result().toHex();
     }
 
     return QString();
