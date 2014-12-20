@@ -246,7 +246,7 @@ void ShowfotoSettings::readSettings()
     d->deleteItem2Trash        = group.readEntry(d->configDeleteItem2Trash, true);
     d->theme                   = group.readEntry(d->configCurrentTheme, Digikam::ThemeManager::instance()->defaultThemeName());
     d->rightSideBarStyle       = group.readEntry(d->configRightSideBarStyle, 0);
-    d->applicationStyle        = group.readEntry(d->configApplicationStyle, kapp->style()->objectName());
+    d->applicationStyle        = group.readEntry(d->configApplicationStyle, qApp->style()->objectName());
     d->showSplash              = group.readEntry(d->configShowSplash, true);
     d->sortOrder               = group.readEntry(d->configSortOrder, 0);
     d->reverseSort             = group.readEntry(d->configReverseSort, false);

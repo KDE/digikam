@@ -90,7 +90,7 @@ void AdvancedRenameLineEdit::setupWidgets()
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFrameStyle(QFrame::NoFrame);
-    setPalette(kapp->palette());
+    setPalette(qApp->palette());
     setFocusPolicy(Qt::StrongFocus);
 
     QFontMetrics fm = fontMetrics();

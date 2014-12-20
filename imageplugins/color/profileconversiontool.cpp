@@ -168,7 +168,7 @@ ProfileConversionTool::~ProfileConversionTool()
 
 void ProfileConversionTool::slotCurrentProfInfo()
 {
-    ICCProfileInfoDlg infoDlg(kapp->activeWindow(), QString(), d->currentProfile);
+    ICCProfileInfoDlg infoDlg(qApp->activeWindow(), QString(), d->currentProfile);
     infoDlg.exec();
 }
 

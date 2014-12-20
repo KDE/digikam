@@ -145,7 +145,7 @@ void SlideShowBuilder::slotParseImageInfoList(const ImageInfoList& list)
         settings.pictInfoMap.insert(info.fileUrl(), pictInfo);
 
         advance(i++);
-        kapp->processEvents();
+        qApp->processEvents();
     }
 
     if (!d->cancel)

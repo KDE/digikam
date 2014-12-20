@@ -220,8 +220,8 @@ void ShowfotoDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, co
         const_cast<ShowfotoDelegate*>(this)->updateActualPixmapRect(index, actualPixmapRect);
     }
 
-    p->setPen(isSelected ? kapp->palette().color(QPalette::HighlightedText)
-                         : kapp->palette().color(QPalette::Text));
+    p->setPen(isSelected ? qApp->palette().color(QPalette::HighlightedText)
+                         : qApp->palette().color(QPalette::Text));
 
     if (!d->nameRect.isNull())
     {

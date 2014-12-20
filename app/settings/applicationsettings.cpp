@@ -232,7 +232,7 @@ void ApplicationSettings::readSettings()
     d->showPermanentDeleteDialog        = group.readEntry(d->configShowPermanentDeleteDialogEntry,                   true);
     d->sidebarApplyDirectly             = group.readEntry(d->configApplySidebarChangesDirectlyEntry,                 false);
     d->stringComparisonType             = (StringComparisonType) group.readEntry(d->configStringComparisonTypeEntry, (int) Natural);
-    setApplicationStyle(group.readEntry(d->configApplicationStyleEntry, kapp->style()->objectName()));
+    setApplicationStyle(group.readEntry(d->configApplicationStyleEntry, qApp->style()->objectName()));
 
     // ---------------------------------------------------------------------
 

@@ -153,7 +153,7 @@ QPixmap AlbumLabelsTreeView::goldenStarPixmap(bool fillin) const
 
     QPainter p1(&pixmap);
     p1.setRenderHint(QPainter::Antialiasing, true);
-    if (fillin) p1.setBrush(kapp->palette().color(QPalette::Link));
+    if (fillin) p1.setBrush(qApp->palette().color(QPalette::Link));
     QPen pen(palette().color(QPalette::Active, foregroundRole()));
     p1.setPen(pen);
 

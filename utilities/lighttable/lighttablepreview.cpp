@@ -72,9 +72,9 @@ void LightTablePreview::showDragAndDropMessage()
         QFontMetrics fontMt(font());
         QRect fontRect = fontMt.boundingRect(0, 0, width(), height(), 0, msg);
         QPixmap pix(fontRect.size());
-        pix.fill(kapp->palette().color(QPalette::Base));
+        pix.fill(qApp->palette().color(QPalette::Base));
         QPainter p(&pix);
-        p.setPen(QPen(kapp->palette().color(QPalette::Text)));
+        p.setPen(QPen(qApp->palette().color(QPalette::Text)));
         p.drawText(0, 0, pix.width(), pix.height(),
                    Qt::AlignCenter | Qt::TextWordWrap,
                    msg);

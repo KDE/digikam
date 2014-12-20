@@ -109,7 +109,7 @@ IccProfilesSettings::~IccProfilesSettings()
 
 void IccProfilesSettings::slotNewProfInfo()
 {
-    ICCProfileInfoDlg infoDlg(kapp->activeWindow(), QString(), d->profilesBox->currentProfile());
+    ICCProfileInfoDlg infoDlg(qApp->activeWindow(), QString(), d->profilesBox->currentProfile());
     infoDlg.exec();
 }
 

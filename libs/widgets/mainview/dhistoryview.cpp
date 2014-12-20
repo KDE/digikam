@@ -164,7 +164,7 @@ void DHistoryView::addedEntry(const QString& msg, EntryType type, const QVariant
 {
     DHistoryViewItem* const item = new DHistoryViewItem(this, msg, type, metadata);
     // Dispatch events to Qt loop in case of bombarding of messages. See bug #338629
-    kapp->processEvents();
+    qApp->processEvents();
     setCurrentItem(item);
 }
 

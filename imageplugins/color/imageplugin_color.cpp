@@ -232,14 +232,14 @@ void ImagePlugin_Color::setEnabledActions(bool b)
 
 void ImagePlugin_Color::slotInvert()
 {
-    kapp->setOverrideCursor(Qt::WaitCursor);
+    qApp->setOverrideCursor(Qt::WaitCursor);
 
     ImageIface iface;
     InvertFilter invert(iface.original(), 0L);
     invert.startFilterDirectly();
     iface.setOriginal(i18n("Invert"), invert.filterAction(), invert.getTargetImage());
 
-    kapp->restoreOverrideCursor();
+    qApp->restoreOverrideCursor();
 }
 
 void ImagePlugin_Color::slotConvertTo8Bits()
@@ -248,13 +248,13 @@ void ImagePlugin_Color::slotConvertTo8Bits()
 
     if (!iface.originalSixteenBit())
     {
-        KMessageBox::error(kapp->activeWindow(), i18n("This image is already using a depth of 8 bits / color / pixel."));
+        KMessageBox::error(qApp->activeWindow(), i18n("This image is already using a depth of 8 bits / color / pixel."));
         return;
     }
     else
     {
         if (KMessageBox::warningContinueCancel(
-                kapp->activeWindow(),
+                qApp->activeWindow(),
                 i18n("Performing this operation will reduce image color quality. "
                      "Do you want to continue?"), QString(),
                 KStandardGuiItem::cont(), KStandardGuiItem::cancel(),
@@ -264,9 +264,9 @@ void ImagePlugin_Color::slotConvertTo8Bits()
         }
     }
 
-    kapp->setOverrideCursor(Qt::WaitCursor);
+    qApp->setOverrideCursor(Qt::WaitCursor);
     iface.convertOriginalColorDepth(32);
-    kapp->restoreOverrideCursor();
+    qApp->restoreOverrideCursor();
 }
 
 void ImagePlugin_Color::slotConvertTo16Bits()
@@ -275,13 +275,13 @@ void ImagePlugin_Color::slotConvertTo16Bits()
 
     if (iface.originalSixteenBit())
     {
-        KMessageBox::error(kapp->activeWindow(), i18n("This image is already using a depth of 16 bits / color / pixel."));
+        KMessageBox::error(qApp->activeWindow(), i18n("This image is already using a depth of 16 bits / color / pixel."));
         return;
     }
 
-    kapp->setOverrideCursor(Qt::WaitCursor);
+    qApp->setOverrideCursor(Qt::WaitCursor);
     iface.convertOriginalColorDepth(64);
-    kapp->restoreOverrideCursor();
+    qApp->restoreOverrideCursor();
 }
 
 void ImagePlugin_Color::slotConvertToColorSpace(const IccProfile& profile)
@@ -290,13 +290,13 @@ void ImagePlugin_Color::slotConvertToColorSpace(const IccProfile& profile)
 
     if (iface.originalIccProfile().isNull())
     {
-        KMessageBox::error(kapp->activeWindow(), i18n("This image is not color managed."));
+        KMessageBox::error(qApp->activeWindow(), i18n("This image is not color managed."));
         return;
     }
 
-    kapp->setOverrideCursor(Qt::WaitCursor);
+    qApp->setOverrideCursor(Qt::WaitCursor);
     ProfileConversionTool::fastConversion(profile);
-    kapp->restoreOverrideCursor();
+    qApp->restoreOverrideCursor();
 }
 
 void ImagePlugin_Color::slotUpdateColorSpaceMenu()

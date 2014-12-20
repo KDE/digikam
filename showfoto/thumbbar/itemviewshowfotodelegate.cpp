@@ -343,8 +343,8 @@ void ItemViewShowfotoDelegate::drawFocusRect(QPainter* p, const QStyleOptionView
 
     if (option.state & QStyle::State_HasFocus) //?? is current item
     {
-        p->setPen(QPen(isSelected ? kapp->palette().color(QPalette::HighlightedText)
-                                  : kapp->palette().color(QPalette::Text),
+        p->setPen(QPen(isSelected ? qApp->palette().color(QPalette::HighlightedText)
+                                  : qApp->palette().color(QPalette::Text),
                        1, Qt::DotLine));
         p->drawRect(1, 1, d->rect.width()-3, d->rect.height()-3);
     }
@@ -415,15 +415,15 @@ void ItemViewShowfotoDelegate::prepareBackground()
     else
     {
         d->regPixmap = QPixmap(d->rect.width(), d->rect.height());
-        d->regPixmap.fill(kapp->palette().color(QPalette::Base));
+        d->regPixmap.fill(qApp->palette().color(QPalette::Base));
         QPainter p1(&d->regPixmap);
-        p1.setPen(kapp->palette().color(QPalette::Midlight));
+        p1.setPen(qApp->palette().color(QPalette::Midlight));
         p1.drawRect(0, 0, d->rect.width()-1, d->rect.height()-1);
 
         d->selPixmap = QPixmap(d->rect.width(), d->rect.height());
-        d->selPixmap.fill(kapp->palette().color(QPalette::Highlight));
+        d->selPixmap.fill(qApp->palette().color(QPalette::Highlight));
         QPainter p2(&d->selPixmap);
-        p2.setPen(kapp->palette().color(QPalette::Midlight));
+        p2.setPen(qApp->palette().color(QPalette::Midlight));
         p2.drawRect(0, 0, d->rect.width()-1, d->rect.height()-1);
     }
 }

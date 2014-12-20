@@ -1124,7 +1124,7 @@ void ContextMenuHelper::addStandardActionCopy(QObject* recv, const char* slot)
 void ContextMenuHelper::addStandardActionPaste(QObject* recv, const char* slot)
 {
     KAction* const paste        = KStandardAction::paste(recv, slot, d->parent);
-    const QMimeData* const data = kapp->clipboard()->mimeData(QClipboard::Clipboard);
+    const QMimeData* const data = qApp->clipboard()->mimeData(QClipboard::Clipboard);
 
     if (!data || !KUrl::List::canDecode(data))
     {

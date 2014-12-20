@@ -200,7 +200,7 @@ DigikamApp::DigikamApp()
     KConfigGroup group = ApplicationSettings::instance()->generalConfigGroup();
 
     if (group.readEntry("Show Splash", true) &&
-        !kapp->isSessionRestored())
+        !qApp->isSessionRestored())
     {
         d->splashScreen = new SplashScreen();
         d->splashScreen->show();

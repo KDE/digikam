@@ -250,11 +250,11 @@ void MediaPlayerView::escapePreview()
 void MediaPlayerView::slotThemeChanged()
 {
     QPalette palette;
-    palette.setColor(d->errorView->backgroundRole(), kapp->palette().color(QPalette::Base));
+    palette.setColor(d->errorView->backgroundRole(), qApp->palette().color(QPalette::Base));
     d->errorView->setPalette(palette);
 
     QPalette palette2;
-    palette2.setColor(d->playerView->backgroundRole(), kapp->palette().color(QPalette::Base));
+    palette2.setColor(d->playerView->backgroundRole(), qApp->palette().color(QPalette::Base));
     d->playerView->setPalette(palette2);
 }
 

@@ -364,7 +364,7 @@ void RatingWidget::slotThemeChanged()
 
     QPainter p2(&d->selPixmap);
     p2.setRenderHint(QPainter::Antialiasing, true);
-    p2.setBrush(kapp->palette().color(QPalette::Link));
+    p2.setBrush(qApp->palette().color(QPalette::Link));
     p2.setPen(palette().color(QPalette::Active, foregroundRole()));
     p2.drawPolygon(starPolygon(), Qt::WindingFill);
     p2.end();
@@ -405,9 +405,9 @@ QIcon RatingWidget::buildIcon(int rate, int size)
     matrix.scale(size/15.0, size/15.0);
     p.setMatrix(matrix);
     p.setRenderHint(QPainter::Antialiasing, true);
-    p.setPen(kapp->palette().color(QPalette::Active, QPalette::ButtonText));
+    p.setPen(qApp->palette().color(QPalette::Active, QPalette::ButtonText));
 
-    if (rate > 0) p.setBrush(kapp->palette().color(QPalette::Link));
+    if (rate > 0) p.setBrush(qApp->palette().color(QPalette::Link));
 
     p.drawPolygon(starPolygon(), Qt::WindingFill);
     p.end();
@@ -522,7 +522,7 @@ RatingBox::~RatingBox()
 
 void RatingBox::slotUpdateDescription(int rating)
 {
-    KXmlGuiWindow* const app = dynamic_cast<KXmlGuiWindow*>(kapp->activeWindow());
+    KXmlGuiWindow* const app = dynamic_cast<KXmlGuiWindow*>(qApp->activeWindow());
 
     if (app)
     {

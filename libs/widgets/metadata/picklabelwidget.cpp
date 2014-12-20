@@ -174,7 +174,7 @@ void PickLabelWidget::updateDescription(PickLabel label)
 {
     d->desc->setText(labelPickName(label));
 
-    KXmlGuiWindow* const app = dynamic_cast<KXmlGuiWindow*>(kapp->activeWindow());
+    KXmlGuiWindow* const app = dynamic_cast<KXmlGuiWindow*>(qApp->activeWindow());
 
     if (app)
     {

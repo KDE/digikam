@@ -142,13 +142,13 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
     // ---------------------------------------------------------------
 
-    QDesktopWidget const* desktop = kapp->desktop();
+    QDesktopWidget const* desktop = qApp->desktop();
     const int preferenceScreen    = d->settings.slideScreen;
     int screen                    = 0;
 
     if (preferenceScreen == -2)
     {
-        screen = desktop->screenNumber(kapp->activeWindow());
+        screen = desktop->screenNumber(qApp->activeWindow());
     }
     else if (preferenceScreen == -1)
     {
@@ -160,7 +160,7 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
     }
     else
     {
-        screen                  = desktop->screenNumber(kapp->activeWindow());
+        screen                  = desktop->screenNumber(qApp->activeWindow());
         d->settings.slideScreen = -2;
         d->settings.writeToConfig();
     }
@@ -457,7 +457,7 @@ void SlideShow::slotScreenSelected(int screen)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "move to screen: " << screen;
 
-    QRect deskRect = kapp->desktop()->screenGeometry(screen);
+    QRect deskRect = qApp->desktop()->screenGeometry(screen);
 
     move(deskRect.x(), deskRect.y());
     resize(deskRect.width(), deskRect.height());

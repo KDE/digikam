@@ -176,7 +176,7 @@ void WhiteBalanceTool::slotColorSelectedFromTarget(const DColor& color)
 
 void WhiteBalanceTool::slotAutoAdjustExposure()
 {
-    kapp->activeWindow()->setCursor(Qt::WaitCursor);
+    qApp->activeWindow()->setCursor(Qt::WaitCursor);
 
     ImageIface iface;
     DImg* const img      = iface.original();
@@ -184,7 +184,7 @@ void WhiteBalanceTool::slotAutoAdjustExposure()
     WBFilter::autoExposureAdjustement(img, settings.black, settings.expositionMain);
     d->settingsView->setSettings(settings);
 
-    kapp->activeWindow()->unsetCursor();
+    qApp->activeWindow()->unsetCursor();
     slotTimer();
 }
 

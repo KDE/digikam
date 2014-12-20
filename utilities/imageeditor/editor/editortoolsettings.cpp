@@ -42,10 +42,8 @@
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kcolorbutton.h>
 #include <kcombobox.h>
-#include <kdialog.h>
 #include <khbox.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
@@ -162,9 +160,9 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
                                  "border-radius: 5px;"
                                  "background-color: %3;"
                                  "}")
-                         .arg(kapp->palette().color(QPalette::HighlightedText).name())
-                         .arg(kapp->palette().color(QPalette::HighlightedText).name())
-                         .arg(kapp->palette().color(QPalette::Highlight).name());
+                         .arg(QApplication::palette().color(QPalette::HighlightedText).name())
+                         .arg(QApplication::palette().color(QPalette::HighlightedText).name())
+                         .arg(QApplication::palette().color(QPalette::Highlight).name());
 
     QString noFrameStyle("QFrame {"
                          "border: none;"
@@ -174,7 +172,7 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
     d->toolName->setStyleSheet(noFrameStyle);
     d->toolIcon->setStyleSheet(noFrameStyle);
 
-    QGridLayout* descrLayout = new QGridLayout();
+    QGridLayout* const descrLayout = new QGridLayout();
     descrLayout->addWidget(d->toolIcon, 0, 0, 1, 1);
     descrLayout->addWidget(d->toolName, 0, 1, 1, 1);
     descrLayout->setColumnStretch(1, 10);
@@ -187,7 +185,7 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
     d->guideColorBt      = new KColorButton(QColor(Qt::red), d->guideBox);
     d->guideColorBt->setWhatsThis(i18n("Set here the color used to draw dashed guide lines."));
     d->guideSize         = new RIntNumInput(d->guideBox);
-    d->guideSize->input()->setSuffix(QString("px"));
+    d->guideSize->setSuffix(QString("px"));
     d->guideSize->setRange(1, 5, 1);
     d->guideSize->setDefaultValue(1);
     d->guideSize->setWhatsThis(i18n("Set here the width in pixels used to draw dashed guide lines."));

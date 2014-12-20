@@ -388,8 +388,8 @@ void ItemViewImportDelegate::drawTags(QPainter* p, const QRect& r, const QString
     Q_D(const ItemViewImportDelegate);
 
     p->setFont(d->fontCom);
-    p->setPen(isSelected ? kapp->palette().color(QPalette::HighlightedText)
-                         : kapp->palette().color(QPalette::Link));
+    p->setPen(isSelected ? qApp->palette().color(QPalette::HighlightedText)
+                         : qApp->palette().color(QPalette::Link));
 
     p->drawText(r, Qt::AlignCenter, squeezedTextCached(p, r.width(), tagsString));
 }
@@ -498,8 +498,8 @@ void ItemViewImportDelegate::drawFocusRect(QPainter* p, const QStyleOptionViewIt
 
     if (option.state & QStyle::State_HasFocus) //?? is current item
     {
-        p->setPen(QPen(isSelected ? kapp->palette().color(QPalette::HighlightedText)
-                                  : kapp->palette().color(QPalette::Text),
+        p->setPen(QPen(isSelected ? qApp->palette().color(QPalette::HighlightedText)
+                                  : qApp->palette().color(QPalette::Text),
                        1, Qt::DotLine));
         p->drawRect(1, 1, d->rect.width()-3, d->rect.height()-3);
     }
@@ -596,15 +596,15 @@ void ItemViewImportDelegate::prepareBackground()
     else
     {
         d->regPixmap = QPixmap(d->rect.width(), d->rect.height());
-        d->regPixmap.fill(kapp->palette().color(QPalette::Base));
+        d->regPixmap.fill(qApp->palette().color(QPalette::Base));
         QPainter p1(&d->regPixmap);
-        p1.setPen(kapp->palette().color(QPalette::Midlight));
+        p1.setPen(qApp->palette().color(QPalette::Midlight));
         p1.drawRect(0, 0, d->rect.width()-1, d->rect.height()-1);
 
         d->selPixmap = QPixmap(d->rect.width(), d->rect.height());
-        d->selPixmap.fill(kapp->palette().color(QPalette::Highlight));
+        d->selPixmap.fill(qApp->palette().color(QPalette::Highlight));
         QPainter p2(&d->selPixmap);
-        p2.setPen(kapp->palette().color(QPalette::Midlight));
+        p2.setPen(qApp->palette().color(QPalette::Midlight));
         p2.drawRect(0, 0, d->rect.width()-1, d->rect.height()-1);
     }
 }
@@ -658,8 +658,8 @@ void ItemViewImportDelegate::prepareRatingPixmaps(bool composeOverBackground)
 
             // use antialiasing
             painter.setRenderHint(QPainter::Antialiasing, true);
-            painter.setBrush(kapp->palette().color(QPalette::Link));
-            QPen pen(kapp->palette().color(QPalette::Text));
+            painter.setBrush(qApp->palette().color(QPalette::Link));
+            QPen pen(qApp->palette().color(QPalette::Text));
             // set a pen which joins the lines at a filled angle
             pen.setJoinStyle(Qt::MiterJoin);
             painter.setPen(pen);

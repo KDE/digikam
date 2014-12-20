@@ -256,7 +256,7 @@ void CurvesSettings::loadSettings()
     KUrl loadCurvesFile;
 
     loadCurvesFile = KFileDialog::getOpenUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                             QString("*"), kapp->activeWindow(),
+                                             QString("*"), qApp->activeWindow(),
                                              QString(i18n("Select Gimp Curves File to Load")));
 
     if (loadCurvesFile.isEmpty())
@@ -266,7 +266,7 @@ void CurvesSettings::loadSettings()
 
     if (d->curvesBox->curves()->loadCurvesFromGimpCurvesFile(loadCurvesFile) == false)
     {
-        KMessageBox::error(kapp->activeWindow(),
+        KMessageBox::error(qApp->activeWindow(),
                            i18n("Cannot load from the Gimp curves text file."));
         return;
     }
@@ -277,7 +277,7 @@ void CurvesSettings::saveAsSettings()
     KUrl saveCurvesFile;
 
     saveCurvesFile = KFileDialog::getSaveUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                             QString("*"), kapp->activeWindow(),
+                                             QString("*"), qApp->activeWindow(),
                                              QString(i18n("Gimp Curves File to Save")));
 
     if (saveCurvesFile.isEmpty())
@@ -287,7 +287,7 @@ void CurvesSettings::saveAsSettings()
 
     if (d->curvesBox->curves()->saveCurvesToGimpCurvesFile(saveCurvesFile) == false)
     {
-        KMessageBox::error(kapp->activeWindow(),
+        KMessageBox::error(qApp->activeWindow(),
                            i18n("Cannot save to the Gimp curves text file."));
         return;
     }

@@ -122,7 +122,7 @@ QString AdvancedRenameListItem::newName() const
 
 void AdvancedRenameListItem::markInvalid(bool invalid)
 {
-    QColor normalText = kapp->palette().text().color();
+    QColor normalText = qApp->palette().text().color();
     setForeground(OldName, invalid ? Qt::red : normalText);
     setForeground(NewName, invalid ? Qt::red : normalText);
 }

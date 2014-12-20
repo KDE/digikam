@@ -345,7 +345,7 @@ void MaintenanceMngr::done()
     // Pop-up a message to bring user when all is done.
     DNotificationWrapper("digiKam Maintenance", // not i18n
                          i18n("All operations are done.\nDuration: %1", t.toString()),
-                         kapp->activeWindow(), i18n("digiKam Maintenance"));
+                         qApp->activeWindow(), i18n("digiKam Maintenance"));
 
     emit signalComplete();
 }

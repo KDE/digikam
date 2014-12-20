@@ -314,7 +314,7 @@ void ApplicationSettings::Private::init()
     faceDetectionAccuracy               = 0.8;
 
     stringComparisonType                = ApplicationSettings::Natural;
-    applicationStyle                    = kapp->style()->objectName();
+    applicationStyle                    = qApp->style()->objectName();
 
     q->connect(q, SIGNAL(balooSettingsChanged()),
                q, SLOT(applyBalooSettings()));

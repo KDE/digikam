@@ -474,7 +474,7 @@ void AssignNameWidget::Private::updateVisualStyle()
 
         case TranslucentThemedFrameless:
         {
-            QColor bg = kapp->palette().color(QPalette::Base);
+            QColor bg = qApp->palette().color(QPalette::Base);
             q->setStyleSheet(
                 QString(
                     "QWidget { "

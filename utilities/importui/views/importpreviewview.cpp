@@ -454,7 +454,7 @@ void ImportPreviewView::showContextMenu(const CamItemInfo& info, QGraphicsSceneC
 void ImportPreviewView::slotThemeChanged()
 {
     QPalette plt(palette());
-    plt.setColor(backgroundRole(), kapp->palette().color(QPalette::Base));
+    plt.setColor(backgroundRole(), qApp->palette().color(QPalette::Base));
     setPalette(plt);
 }
 

@@ -224,7 +224,7 @@ void HotPixelsTool::slotResetSettings()
 
 void HotPixelsTool::slotAddBlackFrame()
 {
-    KUrl url = ImageDialog::getImageURL(kapp->activeWindow(), d->blackFrameURL, i18n("Select Black Frame Image"));
+    KUrl url = ImageDialog::getImageURL(qApp->activeWindow(), d->blackFrameURL, i18n("Select Black Frame Image"));
 
     if (!url.isEmpty())
     {

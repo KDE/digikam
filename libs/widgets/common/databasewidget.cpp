@@ -295,7 +295,7 @@ void DatabaseWidget::checkDatabaseConnection()
 {
     // TODO : if check DB connection operations can be threaded, use DBusyDlg dialog there...
 
-    kapp->setOverrideCursor(Qt::WaitCursor);
+    qApp->setOverrideCursor(Qt::WaitCursor);
 
     QString databaseID("ConnectionTest");
     QSqlDatabase testDatabase     = QSqlDatabase::addDatabase(currentDatabaseType(), databaseID);
@@ -306,7 +306,7 @@ void DatabaseWidget::checkDatabaseConnection()
     testDatabase.setPassword(parameters.password);
     testDatabase.setConnectOptions(parameters.connectOptions);
 
-    kapp->restoreOverrideCursor();
+    qApp->restoreOverrideCursor();
 
     bool result = testDatabase.open();
 

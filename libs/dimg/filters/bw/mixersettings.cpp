@@ -550,7 +550,7 @@ void MixerSettings::loadSettings()
     MixerContainer settings;
 
     loadGainsFileUrl = KFileDialog::getOpenUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                               QString("*"), kapp->activeWindow(),
+                                               QString("*"), qApp->activeWindow(),
                                                QString(i18n("Select Gimp Gains Mixer File to Load")));
 
     if (loadGainsFileUrl.isEmpty())
@@ -646,7 +646,7 @@ void MixerSettings::loadSettings()
     }
     else
     {
-        KMessageBox::error(kapp->activeWindow(),
+        KMessageBox::error(qApp->activeWindow(),
                            i18n("Cannot load settings from the Gains Mixer text file."));
         return;
     }
@@ -658,7 +658,7 @@ void MixerSettings::saveAsSettings()
     FILE* fp = 0L;
 
     saveGainsFileUrl = KFileDialog::getSaveUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                               QString("*"), kapp->activeWindow(),
+                                               QString("*"), qApp->activeWindow(),
                                                QString(i18n("Gimp Gains Mixer File to Save")));
 
     if (saveGainsFileUrl.isEmpty())
@@ -727,7 +727,7 @@ void MixerSettings::saveAsSettings()
     }
     else
     {
-        KMessageBox::error(kapp->activeWindow(),
+        KMessageBox::error(qApp->activeWindow(),
                            i18n("Cannot save settings to the Gains Mixer text file."));
         return;
     }

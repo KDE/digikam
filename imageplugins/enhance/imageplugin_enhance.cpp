@@ -255,7 +255,7 @@ void ImagePlugin_Enhance::slotRedEye()
 
     if (iface.selectionRect().size().isNull())
     {
-        EditorToolPassivePopup* popup = new EditorToolPassivePopup(kapp->activeWindow());
+        EditorToolPassivePopup* popup = new EditorToolPassivePopup(qApp->activeWindow());
         popup->setView(i18n("Red-Eye Correction Tool"),
                        i18n("You need to select a region including the eyes to use "
                             "the red-eye correction tool"));
@@ -274,7 +274,7 @@ void ImagePlugin_Enhance::slotInPainting()
 
     if (iface.selectionRect().size().isNull())
     {
-        EditorToolPassivePopup* popup = new EditorToolPassivePopup(kapp->activeWindow());
+        EditorToolPassivePopup* popup = new EditorToolPassivePopup(qApp->activeWindow());
         popup->setView(i18n("In-Painting Photograph Tool"),
                        i18n("To use this tool, you need to select a region "
                             "to in-paint."));

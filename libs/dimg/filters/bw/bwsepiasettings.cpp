@@ -545,7 +545,7 @@ void BWSepiaSettings::writeSettings(KConfigGroup& group)
 void BWSepiaSettings::loadSettings()
 {
     KUrl loadFile = KFileDialog::getOpenUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                            QString("*"), kapp->activeWindow(),
+                                            QString("*"), qApp->activeWindow(),
                                             i18n("Black & White Settings File to Load"));
 
     if (loadFile.isEmpty())
@@ -561,7 +561,7 @@ void BWSepiaSettings::loadSettings()
 
         if (stream.readLine() != "# Black & White Configuration File")
         {
-            KMessageBox::error(kapp->activeWindow(),
+            KMessageBox::error(qApp->activeWindow(),
                                i18n("\"%1\" is not a Black & White settings text file.",
                                     loadFile.fileName()));
             file.close();
@@ -607,7 +607,7 @@ void BWSepiaSettings::loadSettings()
     }
     else
     {
-        KMessageBox::error(kapp->activeWindow(), i18n("Cannot load settings from the Black & White text file."));
+        KMessageBox::error(qApp->activeWindow(), i18n("Cannot load settings from the Black & White text file."));
     }
 
     file.close();
@@ -616,7 +616,7 @@ void BWSepiaSettings::loadSettings()
 void BWSepiaSettings::saveAsSettings()
 {
     KUrl saveFile = KFileDialog::getSaveUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                            QString("*"), kapp->activeWindow(),
+                                            QString("*"), qApp->activeWindow(),
                                             i18n("Black & White Settings File to Save"));
 
     if (saveFile.isEmpty())
@@ -652,7 +652,7 @@ void BWSepiaSettings::saveAsSettings()
     }
     else
     {
-        KMessageBox::error(kapp->activeWindow(),
+        KMessageBox::error(qApp->activeWindow(),
                            i18n("Cannot save settings to the Black & White text file."));
     }
 

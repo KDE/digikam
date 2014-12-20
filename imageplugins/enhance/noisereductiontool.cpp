@@ -168,7 +168,7 @@ void NoiseReductionTool::analyserCompleted()
     if (!tool) return;
 
     d->nrSettings->setSettings(tool->settings());
-    kapp->restoreOverrideCursor();
+    qApp->restoreOverrideCursor();
     slotPreview();
 }
 

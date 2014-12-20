@@ -254,9 +254,9 @@ void PerspectiveTool::slotResetSettings()
 
 void PerspectiveTool::finalRendering()
 {
-    kapp->setOverrideCursor(Qt::WaitCursor);
+    qApp->setOverrideCursor(Qt::WaitCursor);
     d->previewWidget->applyPerspectiveAdjustment();
-    kapp->restoreOverrideCursor();
+    qApp->restoreOverrideCursor();
 }
 
 void PerspectiveTool::slotUpdateInfo(const QRect& newSize, float topLeftAngle, float topRightAngle,

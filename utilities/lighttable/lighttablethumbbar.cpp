@@ -457,7 +457,7 @@ void LightTableThumbBar::paintEvent(QPaintEvent* e)
     if (!countItems())
     {
         QPainter p(viewport());
-        p.setPen(QPen(kapp->palette().color(QPalette::Text)));
+        p.setPen(QPen(qApp->palette().color(QPalette::Text)));
         p.drawText(0, 0, width(), height(),
                    Qt::AlignCenter | Qt::TextWordWrap,
                    i18n("Drag and drop images here"));

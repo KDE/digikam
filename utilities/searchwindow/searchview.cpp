@@ -356,7 +356,7 @@ void SearchView::paintEvent(QPaintEvent*)
 
         QRadialGradient grad(0.5, 0.5, 1, 0.5, 0.3);
         grad.setCoordinateMode(QGradient::ObjectBoundingMode);
-        QColor color = kapp->palette().color(QPalette::Link);
+        QColor color = qApp->palette().color(QPalette::Link);
         QColor colorStart(color), colorEnd(color);
         colorStart.setAlphaF(0);
         colorEnd.setAlphaF(color.alphaF()  * animationStep / 100.0);
@@ -400,53 +400,53 @@ void SearchView::setTheme()
     }
 
     QString sheet =
-        // ".SearchView { background-color: " + kapp->palette().color(QPalette::Base).name() + "; } "
+        // ".SearchView { background-color: " + qApp->palette().color(QPalette::Base).name() + "; } "
         "#SearchGroupLabel_MainLabel "
         " { font-weight: bold; font-size: "
         + fontSizeLarger + ';' +
         "   color: "
-        + kapp->palette().color(QPalette::HighlightedText).name() + ';' +
+        + qApp->palette().color(QPalette::HighlightedText).name() + ';' +
         " } "
         "#SearchGroupLabel_SimpleLabel "
         " { font-size: "
         + fontSizeLarger + ';' +
         "   color: "
-        + kapp->palette().color(QPalette::HighlightedText).name() + ';' +
+        + qApp->palette().color(QPalette::HighlightedText).name() + ';' +
         " } "
         "#SearchGroupLabel_GroupOpLabel "
         " { font-weight: bold; font-size: "
         + fontSizeLarger + ';' +
         "   color: "
-        + kapp->palette().color(QPalette::HighlightedText).name() + ';' +
+        + qApp->palette().color(QPalette::HighlightedText).name() + ';' +
         "   text-decoration: underline; "
         " } "
         "#SearchGroupLabel_CheckBox "
         " { color: "
-        + kapp->palette().color(QPalette::HighlightedText).name() + ';' +
+        + qApp->palette().color(QPalette::HighlightedText).name() + ';' +
         " } "
         "#SearchGroupLabel_RemoveLabel "
         " { color: "
-        + kapp->palette().color(QPalette::HighlightedText).name() + ';' +
+        + qApp->palette().color(QPalette::HighlightedText).name() + ';' +
         "   font-style: italic; "
         "   text-decoration: underline; "
         " } "
         "#SearchGroupLabel_OptionsLabel "
         " { color: "
-        + kapp->palette().color(QPalette::HighlightedText).name() + ';' +
+        + qApp->palette().color(QPalette::HighlightedText).name() + ';' +
         "   font-style: italic; "
         "   text-decoration: underline; font-size: "
         + fontSizeSmaller + ';' +
         " } "
         "#SearchFieldGroupLabel_Label "
         " { color: "
-        + kapp->palette().color(QPalette::Link).name() + ';' +
+        + qApp->palette().color(QPalette::Link).name() + ';' +
         "   font-weight: bold; "
         " } "
         "#SearchField_MainLabel "
         " { font-weight: bold; } "
         "#SearchFieldChoice_ClickLabel "
         " { color: "
-        + kapp->palette().color(QPalette::Link).name() + ';' +
+        + qApp->palette().color(QPalette::Link).name() + ';' +
         "   font-style: italic; "
         "   text-decoration: underline; "
         " } "
@@ -471,7 +471,7 @@ QPixmap SearchView::cachedBannerPixmap(int w, int h) const
     if (!pix)
     {
         QPixmap pixmap(w, h);
-        pixmap.fill(kapp->palette().color(QPalette::Highlight));
+        pixmap.fill(qApp->palette().color(QPalette::Highlight));
         d->pixmapCache.insert(key, new QPixmap(pixmap));
         return pixmap;
     }

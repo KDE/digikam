@@ -578,7 +578,7 @@ void ResizeTool::processCImgUrl(const QString& url)
 void ResizeTool::slotLoadSettings()
 {
     KUrl loadBlowupFile = KFileDialog::getOpenUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
-                          QString( "*" ), kapp->activeWindow(),
+                          QString( "*" ), qApp->activeWindow(),
                           QString( i18n("Photograph Resizing Settings File to Load")) );
 
     if ( loadBlowupFile.isEmpty() )
@@ -592,7 +592,7 @@ void ResizeTool::slotLoadSettings()
     {
         if (!d->settingsWidget->loadSettings(file, QString("# Photograph Resizing Configuration File")))
         {
-            KMessageBox::error(kapp->activeWindow(),
+            KMessageBox::error(qApp->activeWindow(),
                                i18n("\"%1\" is not a Photograph Resizing settings text file.",
                                     loadBlowupFile.fileName()));
             file.close();
@@ -601,7 +601,7 @@ void ResizeTool::slotLoadSettings()
     }
     else
     {
-        KMessageBox::error(kapp->activeWindow(),
+        KMessageBox::error(qApp->activeWindow(),
                            i18n("Cannot load settings from the Photograph Resizing text file."));
     }
 
@@ -611,7 +611,7 @@ void ResizeTool::slotLoadSettings()
 void ResizeTool::slotSaveAsSettings()
 {
     KUrl saveBlowupFile = KFileDialog::getSaveUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                          QString( "*" ), kapp->activeWindow(),
+                          QString( "*" ), qApp->activeWindow(),
                           QString( i18n("Photograph Resizing Settings File to Save")) );
 
     if ( saveBlowupFile.isEmpty() )
@@ -627,7 +627,7 @@ void ResizeTool::slotSaveAsSettings()
     }
     else
     {
-        KMessageBox::error(kapp->activeWindow(), i18n("Cannot save settings to the Photograph Resizing text file."));
+        KMessageBox::error(qApp->activeWindow(), i18n("Cannot save settings to the Photograph Resizing text file."));
     }
 
     file.close();

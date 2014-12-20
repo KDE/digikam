@@ -477,7 +477,7 @@ void InPaintingTool::setFinalImage()
 void InPaintingTool::slotLoadSettings()
 {
     KUrl loadInpaintingFile = KFileDialog::getOpenUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
-                                                      QString("*"), kapp->activeWindow(),
+                                                      QString("*"), qApp->activeWindow(),
                                                       QString(i18n("Photograph In-Painting Settings File to Load")));
 
     if (loadInpaintingFile.isEmpty())
@@ -491,7 +491,7 @@ void InPaintingTool::slotLoadSettings()
     {
         if (!d->settingsWidget->loadSettings(file, QString("# Photograph Inpainting Configuration File V2")))
         {
-            KMessageBox::error(kapp->activeWindow(),
+            KMessageBox::error(qApp->activeWindow(),
                                i18n("\"%1\" is not a Photograph In-Painting settings text file.",
                                     loadInpaintingFile.fileName()));
             file.close();
@@ -500,7 +500,7 @@ void InPaintingTool::slotLoadSettings()
     }
     else
     {
-        KMessageBox::error(kapp->activeWindow(), i18n("Cannot load settings from the Photograph In-Painting text file."));
+        KMessageBox::error(qApp->activeWindow(), i18n("Cannot load settings from the Photograph In-Painting text file."));
     }
 
     file.close();
@@ -513,7 +513,7 @@ void InPaintingTool::slotLoadSettings()
 void InPaintingTool::slotSaveAsSettings()
 {
     KUrl saveRestorationFile = KFileDialog::getSaveUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                       QString("*"), kapp->activeWindow(),
+                                                       QString("*"), qApp->activeWindow(),
                                                        QString(i18n("Photograph In-Painting Settings File to Save")));
 
     if (saveRestorationFile.isEmpty())
@@ -529,7 +529,7 @@ void InPaintingTool::slotSaveAsSettings()
     }
     else
     {
-        KMessageBox::error(kapp->activeWindow(), i18n("Cannot save settings to the Photograph In-Painting text file."));
+        KMessageBox::error(qApp->activeWindow(), i18n("Cannot save settings to the Photograph In-Painting text file."));
     }
 
     file.close();

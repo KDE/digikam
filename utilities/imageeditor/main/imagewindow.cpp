@@ -1384,7 +1384,7 @@ void ImageWindow::slideShow(SlideShowSettings& settings)
             settings.fileList << info.fileUrl();
 
             m_nameLabel->setProgressValue((int)((i++ / cnt) * 100.0));
-            kapp->processEvents();
+            qApp->processEvents();
         }
     }
 
@@ -1410,7 +1410,7 @@ void ImageWindow::slideShow(SlideShowSettings& settings)
             settings.pictInfoMap.insert(*it, pictInfo);
 
             m_nameLabel->setProgressValue((int)((i++/cnt)*100.0));
-            kapp->processEvents();
+            qApp->processEvents();
         }
     }
 */

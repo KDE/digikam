@@ -854,7 +854,7 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
 
         emit signalProgressValueChanged(i++/(float)d->currInfos.count());
 
-        kapp->processEvents();
+        qApp->processEvents();
     }
 
     ScanController::instance()->resumeCollectionScan();
@@ -883,7 +883,7 @@ void ImageDescEditTab::slotWriteToFileMetadataFromDatabase()
         fileHub.write(info.filePath());
 
         emit signalProgressValueChanged(i++/(float)d->currInfos.count());
-        kapp->processEvents();
+        qApp->processEvents();
     }
 
     emit signalProgressFinished();

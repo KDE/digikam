@@ -810,14 +810,14 @@ void TagsPopupMenu::slotAddTag(QAction* action)
     QString      title, icon;
     QKeySequence ks;
 
-    if (!TagEditDlg::tagCreate(kapp->activeWindow(), parent, title, icon, ks))
+    if (!TagEditDlg::tagCreate(qApp->activeWindow(), parent, title, icon, ks))
     {
         return;
     }
 
     QMap<QString, QString> errMap;
     AlbumList tList = TagEditDlg::createTAlbum(parent, title, icon, ks, errMap);
-    TagEditDlg::showtagsListCreationError(kapp->activeWindow(), errMap);
+    TagEditDlg::showtagsListCreationError(qApp->activeWindow(), errMap);
 
     for (AlbumList::const_iterator it = tList.constBegin(); it != tList.constEnd(); ++it)
     {

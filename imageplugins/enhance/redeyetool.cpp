@@ -358,7 +358,7 @@ void RedEyeTool::slotResetSettings()
 
 void RedEyeTool::slotPreview()
 {
-    kapp->setOverrideCursor( Qt::WaitCursor );
+    qApp->setOverrideCursor( Qt::WaitCursor );
 
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
@@ -379,12 +379,12 @@ void RedEyeTool::slotPreview()
 
     d->gboxSettings->histogramBox()->histogram()->updateData(selection.copy(), DImg(), false);
 
-    kapp->restoreOverrideCursor();
+    qApp->restoreOverrideCursor();
 }
 
 void RedEyeTool::finalRendering()
 {
-    kapp->setOverrideCursor( Qt::WaitCursor );
+    qApp->setOverrideCursor( Qt::WaitCursor );
 
     ImageIface* const iface = d->previewWidget->imageIface();
     DImg selection          = iface->selection();
@@ -396,7 +396,7 @@ void RedEyeTool::finalRendering()
 
     iface->setSelection(i18n("Red Eyes Correction"), action, selection);
 
-    kapp->restoreOverrideCursor();
+    qApp->restoreOverrideCursor();
 }
 
 void RedEyeTool::redEyeFilter(DImg& selection)

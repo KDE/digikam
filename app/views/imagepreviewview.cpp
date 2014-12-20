@@ -483,7 +483,7 @@ void ImagePreviewView::slotAssignRating(int rating)
 void ImagePreviewView::slotThemeChanged()
 {
     QPalette plt(palette());
-    plt.setColor(backgroundRole(), kapp->palette().color(QPalette::Base));
+    plt.setColor(backgroundRole(), qApp->palette().color(QPalette::Base));
     setPalette(plt);
 }
 

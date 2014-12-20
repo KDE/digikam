@@ -363,7 +363,7 @@ void RestorationTool::setFinalImage()
 void RestorationTool::slotLoadSettings()
 {
     KUrl loadRestorationFile = KFileDialog::getOpenUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
-                               QString( "*" ), kapp->activeWindow(),
+                               QString( "*" ), qApp->activeWindow(),
                                QString( i18n("Photograph Restoration Settings File to Load")) );
 
     if ( loadRestorationFile.isEmpty() )
@@ -377,7 +377,7 @@ void RestorationTool::slotLoadSettings()
     {
         if (!d->settingsWidget->loadSettings(file, QString("# Photograph Restoration Configuration File V2")))
         {
-            KMessageBox::error(kapp->activeWindow(),
+            KMessageBox::error(qApp->activeWindow(),
                                i18n("\"%1\" is not a Photograph Restoration settings text file.",
                                     loadRestorationFile.fileName()));
             file.close();
@@ -388,7 +388,7 @@ void RestorationTool::slotLoadSettings()
     }
     else
     {
-        KMessageBox::error(kapp->activeWindow(), i18n("Cannot load settings from the Photograph Restoration text file."));
+        KMessageBox::error(qApp->activeWindow(), i18n("Cannot load settings from the Photograph Restoration text file."));
     }
 
     file.close();
@@ -401,7 +401,7 @@ void RestorationTool::slotLoadSettings()
 void RestorationTool::slotSaveAsSettings()
 {
     KUrl saveRestorationFile = KFileDialog::getSaveUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                               QString( "*" ), kapp->activeWindow(),
+                               QString( "*" ), qApp->activeWindow(),
                                QString( i18n("Photograph Restoration Settings File to Save")) );
 
     if ( saveRestorationFile.isEmpty() )
@@ -417,7 +417,7 @@ void RestorationTool::slotSaveAsSettings()
     }
     else
     {
-        KMessageBox::error(kapp->activeWindow(), i18n("Cannot save settings to the Photograph Restoration text file."));
+        KMessageBox::error(qApp->activeWindow(), i18n("Cannot save settings to the Photograph Restoration text file."));
     }
 
     file.close();

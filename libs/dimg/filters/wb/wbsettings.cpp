@@ -532,7 +532,7 @@ void WBSettings::writeSettings(KConfigGroup& group)
 void WBSettings::loadSettings()
 {
     KUrl loadWhiteBalanceFile = KFileDialog::getOpenUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                        QString("*"), kapp->activeWindow(),
+                                                        QString("*"), qApp->activeWindow(),
                                                         QString(i18n("White Color Balance Settings File to Load")));
 
     if (loadWhiteBalanceFile.isEmpty())
@@ -548,7 +548,7 @@ void WBSettings::loadSettings()
 
         if (stream.readLine() != "# White Color Balance Configuration File V2")
         {
-            KMessageBox::error(kapp->activeWindow(),
+            KMessageBox::error(qApp->activeWindow(),
                                i18n("\"%1\" is not a White Color Balance settings text file.",
                                     loadWhiteBalanceFile.fileName()));
             file.close();
@@ -569,7 +569,7 @@ void WBSettings::loadSettings()
     }
     else
     {
-        KMessageBox::error(kapp->activeWindow(),
+        KMessageBox::error(qApp->activeWindow(),
                            i18n("Cannot load settings from the White Color Balance text file."));
     }
 
@@ -579,7 +579,7 @@ void WBSettings::loadSettings()
 void WBSettings::saveAsSettings()
 {
     KUrl saveWhiteBalanceFile = KFileDialog::getSaveUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                        QString("*"), kapp->activeWindow(),
+                                                        QString("*"), qApp->activeWindow(),
                                                         QString(i18n("White Color Balance Settings File to Save")));
 
     if (saveWhiteBalanceFile.isEmpty())
@@ -604,7 +604,7 @@ void WBSettings::saveAsSettings()
     }
     else
     {
-        KMessageBox::error(kapp->activeWindow(),
+        KMessageBox::error(qApp->activeWindow(),
                            i18n("Cannot save settings to the White Color Balance text file."));
     }
 

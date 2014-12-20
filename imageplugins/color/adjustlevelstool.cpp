@@ -903,7 +903,7 @@ void AdjustLevelsTool::slotLoadSettings()
     KUrl loadLevelsFile;
 
     loadLevelsFile = KFileDialog::getOpenUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
-                     QString( "*" ), kapp->activeWindow(),
+                     QString( "*" ), qApp->activeWindow(),
                      QString( i18n("Select Gimp Levels File to Load")) );
 
     if ( loadLevelsFile.isEmpty() )
@@ -913,7 +913,7 @@ void AdjustLevelsTool::slotLoadSettings()
 
     if ( d->levels->loadLevelsFromGimpLevelsFile( loadLevelsFile ) == false )
     {
-        KMessageBox::error(kapp->activeWindow(),
+        KMessageBox::error(qApp->activeWindow(),
                            i18n("Cannot load from the Gimp levels text file."));
         return;
     }
@@ -929,7 +929,7 @@ void AdjustLevelsTool::slotSaveAsSettings()
     KUrl saveLevelsFile;
 
     saveLevelsFile = KFileDialog::getSaveUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                     QString( "*" ), kapp->activeWindow(),
+                     QString( "*" ), qApp->activeWindow(),
                      QString( i18n("Gimp Levels File to Save")) );
 
     if ( saveLevelsFile.isEmpty() )
@@ -939,7 +939,7 @@ void AdjustLevelsTool::slotSaveAsSettings()
 
     if ( d->levels->saveLevelsToGimpLevelsFile( saveLevelsFile ) == false )
     {
-        KMessageBox::error(kapp->activeWindow(),
+        KMessageBox::error(qApp->activeWindow(),
                            i18n("Cannot save to the Gimp levels text file."));
         return;
     }

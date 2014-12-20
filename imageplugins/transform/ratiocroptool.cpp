@@ -1067,7 +1067,7 @@ QRect RatioCropTool::getNormalizedRegion() const
 
 void RatioCropTool::finalRendering()
 {
-    kapp->setOverrideCursor( Qt::WaitCursor );
+    qApp->setOverrideCursor( Qt::WaitCursor );
 
     QRect currentRegion     = d->imageSelectionWidget->getRegionSelection();
     ImageIface* const iface = d->imageSelectionWidget->imageIface();
@@ -1085,7 +1085,7 @@ void RatioCropTool::finalRendering()
 
     iface->setOriginal(i18n("Aspect Ratio Crop"), action, imOrg);
 
-    kapp->restoreOverrideCursor();
+    qApp->restoreOverrideCursor();
     writeSettings();
 }
 

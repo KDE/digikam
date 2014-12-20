@@ -231,7 +231,7 @@ void ColorLabelWidget::updateDescription(ColorLabel label)
 {
     d->desc->setText(labelColorName(label));
 
-    KXmlGuiWindow* const app = dynamic_cast<KXmlGuiWindow*>(kapp->activeWindow());
+    KXmlGuiWindow* const app = dynamic_cast<KXmlGuiWindow*>(qApp->activeWindow());
 
     if (app)
     {
@@ -367,7 +367,7 @@ QIcon ColorLabelWidget::buildIcon(ColorLabel label, int size)
     {
         QPixmap pix(size, size);
         QPainter p(&pix);
-        p.setPen(kapp->palette().color(QPalette::Active, QPalette::ButtonText));
+        p.setPen(qApp->palette().color(QPalette::Active, QPalette::ButtonText));
         p.fillRect(0, 0, pix.width()-1, pix.height()-1, labelColor(label));
         p.drawRect(0, 0, pix.width()-1, pix.height()-1);
         return QIcon(pix);

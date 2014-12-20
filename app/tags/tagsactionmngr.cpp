@@ -183,7 +183,7 @@ void TagsActionMngr::registerLabelsActions(KActionCollection* const ac)
 
 void TagsActionMngr::registerActionsToWidget(QWidget* const wdg)
 {
-    DXmlGuiWindow* const win = dynamic_cast<DXmlGuiWindow*>(kapp->activeWindow());
+    DXmlGuiWindow* const win = dynamic_cast<DXmlGuiWindow*>(qApp->activeWindow());
 
     if (win)
     {
@@ -411,7 +411,7 @@ void TagsActionMngr::slotAssignFromShortcut()
     int val = action->data().toInt();
     qCDebug(DIGIKAM_GENERAL_LOG) << "Shortcut value: " << val;
 
-    QWidget* const w      = kapp->activeWindow();
+    QWidget* const w      = qApp->activeWindow();
     DigikamApp* const dkw = dynamic_cast<DigikamApp*>(w);
 
     if (dkw)
@@ -521,7 +521,7 @@ void TagsActionMngr::slotAssignFromShortcut()
 
 void TagsActionMngr::slotImageTagChanged(const ImageTagChangeset&)
 {
-    QWidget* const w     = kapp->activeWindow();
+    QWidget* const w     = qApp->activeWindow();
     SlideShow* const sld = dynamic_cast<SlideShow*>(w);
 
     if (sld)

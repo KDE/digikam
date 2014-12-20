@@ -101,7 +101,7 @@ public:
 CameraSelection::CameraSelection(QWidget* const parent)
     : KDialog(parent), d(new Private)
 {
-    kapp->setOverrideCursor(Qt::WaitCursor);
+    qApp->setOverrideCursor(Qt::WaitCursor);
     setHelp("cameraselection.anchor", "digikam");
     setCaption(i18n("Camera Configuration"));
     setButtons(KDialog::Help | KDialog::Ok | KDialog::Cancel);
@@ -287,7 +287,7 @@ CameraSelection::CameraSelection(QWidget* const parent)
     getSerialPortList();
 #endif /* HAVE_GPHOTO2 */
 
-    kapp->restoreOverrideCursor();
+    qApp->restoreOverrideCursor();
 }
 
 CameraSelection::~CameraSelection()

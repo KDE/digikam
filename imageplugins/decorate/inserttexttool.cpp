@@ -405,7 +405,7 @@ void InsertTextTool::slotUpdatePreview()
 
 void InsertTextTool::finalRendering()
 {
-    kapp->setOverrideCursor( Qt::WaitCursor );
+    qApp->setOverrideCursor( Qt::WaitCursor );
 
     ImageIface iface;
     DImg dest = d->previewWidget->makeInsertText();
@@ -425,7 +425,7 @@ void InsertTextTool::finalRendering()
 
     iface.setOriginal(i18n("Insert Text"), action, dest);
 
-    kapp->restoreOverrideCursor();
+    qApp->restoreOverrideCursor();
 }
 
 }  // namespace DigikamDecorateImagePlugin

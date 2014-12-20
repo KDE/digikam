@@ -308,8 +308,8 @@ void MetadataPanel::applySettings()
 void MetadataPanel::slotTabChanged(int)
 {
     DMetadata meta;
-    kapp->setOverrideCursor(Qt::WaitCursor);
-    kapp->processEvents();
+    qApp->setOverrideCursor(Qt::WaitCursor);
+    qApp->processEvents();
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group("Image Properties SideBar");
 
@@ -352,7 +352,7 @@ void MetadataPanel::slotTabChanged(int)
 
 #endif // KEXIV2_VERSION >= 0x010000
 
-    kapp->restoreOverrideCursor();
+    qApp->restoreOverrideCursor();
 }
 
 QStringList MetadataPanel::getAllCheckedTags()

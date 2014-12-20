@@ -71,7 +71,7 @@ void BlackFrameParser::parseHotPixels(const QString& file)
 
 void BlackFrameParser::parseBlackFrame(const KUrl& url)
 {
-    KIO::NetAccess::download(url, m_localFile, kapp->activeWindow());
+    KIO::NetAccess::download(url, m_localFile, qApp->activeWindow());
 
     if (!m_imageLoaderThread)
     {

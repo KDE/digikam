@@ -157,7 +157,7 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
     choices.append(i18nc("@label:listbox The current screen, for the presentation mode", "Current Screen"));
     choices.append(i18nc("@label:listbox The default screen for the presentation mode",  "Default Screen"));
 
-    for (int i = 0 ; i < kapp->desktop()->numScreens() ; ++i )
+    for (int i = 0 ; i < qApp->desktop()->numScreens() ; ++i )
     {
         choices.append(i18nc("@label:listbox %1 is the screen number (0, 1, ...)", "Screen %1", i));
     }
@@ -172,7 +172,7 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
             d->showCapIfNoTitle, SLOT(setDisabled(bool)));
 
     // Only digiKam support this feature, showFoto do not support digiKam database information.
-    if (kapp->applicationName() == "showfoto")
+    if (qApp->applicationName() == "showfoto")
     {
         d->showTitle->hide();
         d->showCapIfNoTitle->hide();
@@ -256,7 +256,7 @@ void SetupSlideShow::readSettings()
 
     const int screen = settings.slideScreen;
 
-    if (screen >= -2 && screen < kapp->desktop()->numScreens())
+    if (screen >= -2 && screen < qApp->desktop()->numScreens())
     {
         d->screenPlacement->setCurrentIndex(screen + 2);
     }

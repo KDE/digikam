@@ -1064,7 +1064,7 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
         }
 
         p.setPen(palette().color(QPalette::Foreground));
-        p.fillRect(barRect, QBrush(kapp->palette().color(QPalette::Link)));
+        p.fillRect(barRect, QBrush(qApp->palette().color(QPalette::Link)));
         p.drawLine(barRect.topLeft(), barRect.topRight());
         p.drawLine(barRect.topRight(), barRect.bottomRight());
         p.drawLine(barRect.bottomRight(), barRect.bottomLeft());
@@ -1090,7 +1090,7 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
 
         if (sel == Selected || sel == FuzzySelection)
         {
-            selBrush.setColor(kapp->palette().color(QPalette::Highlight));
+            selBrush.setColor(qApp->palette().color(QPalette::Highlight));
             selBrush.setStyle(Qt::SolidPattern);
 
             if (sel == FuzzySelection)
@@ -1149,7 +1149,7 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
         }
 
         p.setPen(palette().color(QPalette::Foreground));
-        p.fillRect(barRect, QBrush(kapp->palette().color(QPalette::Link)));
+        p.fillRect(barRect, QBrush(qApp->palette().color(QPalette::Link)));
         p.drawLine(barRect.topLeft(), barRect.topRight());
         p.drawLine(barRect.topRight(), barRect.bottomRight());
         p.drawLine(barRect.bottomRight(), barRect.bottomLeft());
@@ -1175,7 +1175,7 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
 
         if (sel == Selected || sel == FuzzySelection)
         {
-            selBrush.setColor(kapp->palette().color(QPalette::Highlight));
+            selBrush.setColor(qApp->palette().color(QPalette::Highlight));
             selBrush.setStyle(Qt::SolidPattern);
 
             if (sel == FuzzySelection)
@@ -1221,7 +1221,7 @@ void TimeLineWidget::paintEvent(QPaintEvent*)
 
         p.setPen(palette().color(QPalette::Active, QPalette::Shadow));
         focusRect.adjust(-1, -1, 1, 1);
-        p.setPen(kapp->palette().color(QPalette::HighlightedText));
+        p.setPen(qApp->palette().color(QPalette::HighlightedText));
         p.drawLine(focusRect.topLeft(), focusRect.topRight());
         p.drawLine(focusRect.topRight(), focusRect.bottomRight());
         p.drawLine(focusRect.bottomRight(), focusRect.bottomLeft());

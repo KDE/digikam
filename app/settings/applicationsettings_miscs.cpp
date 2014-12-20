@@ -142,7 +142,7 @@ void ApplicationSettings::setApplicationStyle(const QString& style)
     if (d->applicationStyle != style)
     {
         d->applicationStyle = style;
-        kapp->setStyle(d->applicationStyle);
+        qApp->setStyle(d->applicationStyle);
     }
 }
 

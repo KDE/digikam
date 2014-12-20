@@ -419,7 +419,7 @@ void MetadataWidget::slotPrintMetadata()
     QPrinter printer;
     printer.setFullPage(true);
 
-    QPointer<QPrintDialog> dialog = new QPrintDialog(&printer, kapp->activeWindow());
+    QPointer<QPrintDialog> dialog = new QPrintDialog(&printer, qApp->activeWindow());
 
     if (dialog->exec())
     {

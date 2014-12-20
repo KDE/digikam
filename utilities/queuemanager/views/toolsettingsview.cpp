@@ -114,9 +114,9 @@ ToolSettingsView::ToolSettingsView(QWidget* const parent)
                                  "border-radius: 5px;"
                                  "background-color: %3;"
                                  "}")
-                         .arg(kapp->palette().color(QPalette::HighlightedText).name())
-                         .arg(kapp->palette().color(QPalette::HighlightedText).name())
-                         .arg(kapp->palette().color(QPalette::Highlight).name());
+                         .arg(qApp->palette().color(QPalette::HighlightedText).name())
+                         .arg(qApp->palette().color(QPalette::HighlightedText).name())
+                         .arg(qApp->palette().color(QPalette::Highlight).name());
 
     QString noFrameStyle("QFrame {"
                          "border: none;"
@@ -189,11 +189,11 @@ void ToolSettingsView::setToolSettingsWidget(QWidget* const w)
 void ToolSettingsView::slotThemeChanged()
 {
     QPalette palette;
-    palette.setColor(d->messageView->backgroundRole(), kapp->palette().color(QPalette::Base));
+    palette.setColor(d->messageView->backgroundRole(), qApp->palette().color(QPalette::Base));
     d->messageView->setPalette(palette);
 
     QPalette palette2;
-    palette2.setColor(d->settingsView->backgroundRole(), kapp->palette().color(QPalette::Base));
+    palette2.setColor(d->settingsView->backgroundRole(), qApp->palette().color(QPalette::Base));
     d->settingsView->setPalette(palette2);
 }
 

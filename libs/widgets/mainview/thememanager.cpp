@@ -150,7 +150,7 @@ void ThemeManager::slotChangePalette()
 
     QString filename        = d->themeMap.value(theme);
     KSharedConfigPtr config = KSharedConfig::openConfig(filename);
-    kapp->setPalette(KGlobalSettings::createNewApplicationPalette(config));
+    qApp->setPalette(KGlobalSettings::createNewApplicationPalette(config));
 
     qCDebug(DIGIKAM_GENERAL_LOG) << theme << " :: " << filename;
 

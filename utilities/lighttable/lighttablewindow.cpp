@@ -1445,7 +1445,7 @@ void LightTableWindow::slideShow(SlideShowSettings& settings)
         settings.fileList.append((*it).fileUrl());
 
         d->statusProgressBar->setProgressValue((int)((i++ / (float)list.count()) * 100.0));
-        kapp->processEvents();
+        qApp->processEvents();
     }
 
     d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode, QString());

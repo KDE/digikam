@@ -128,14 +128,14 @@ void RatingComboBoxDelegate::drawRating(QPainter* painter, const QRect& rect, in
 
     painter->setRenderHint(QPainter::Antialiasing, true);
     //pen.setJoinStyle(Qt::MiterJoin);
-    painter->setPen(kapp->palette().color(QPalette::Text));
+    painter->setPen(qApp->palette().color(QPalette::Text));
 
     if (!selectable)
     {
         painter->setOpacity(.1);
     }
 
-    painter->setBrush(kapp->palette().color(QPalette::Link));
+    painter->setBrush(qApp->palette().color(QPalette::Link));
     // move painter while drawing polygons
     painter->translate(rect.topLeft());
     QRect drawRect = drawStarPolygons(painter, rating);

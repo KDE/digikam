@@ -166,7 +166,7 @@ void ImageCategoryDrawer::drawCategory(const QModelIndex& index, int /*sortRole*
             break;
     }
 
-    p->setPen(kapp->palette().color(QPalette::HighlightedText));
+    p->setPen(qApp->palette().color(QPalette::HighlightedText));
     p->setFont(fontBold);
 
     QRect tr;
@@ -402,7 +402,7 @@ void ImageCategoryDrawer::updateRectsAndPixmaps(int width)
     d->rect.setWidth(width);
 
     d->pixmap = QPixmap(d->rect.width(), d->rect.height());
-    d->pixmap.fill(kapp->palette().color(QPalette::Highlight));
+    d->pixmap.fill(qApp->palette().color(QPalette::Highlight));
 }
 
 } // namespace Digikam

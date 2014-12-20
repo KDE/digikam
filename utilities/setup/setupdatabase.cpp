@@ -231,7 +231,7 @@ void SetupDatabase::upgradeUniqueHashes()
 
 void SetupDatabase::showHashInformation()
 {
-    kapp->postEvent(d->hashesButton, new QHelpEvent(QEvent::WhatsThis, QPoint(0, 0), QCursor::pos()));
+    qApp->postEvent(d->hashesButton, new QHelpEvent(QEvent::WhatsThis, QPoint(0, 0), QCursor::pos()));
 }
 
 }  // namespace Digikam

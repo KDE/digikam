@@ -661,7 +661,7 @@ void LocalContrastSettings::writeSettings(KConfigGroup& group)
 void LocalContrastSettings::loadSettings()
 {
     KUrl loadFile = KFileDialog::getOpenUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                            QString("*"), kapp->activeWindow(),
+                                            QString("*"), qApp->activeWindow(),
                                             i18n("Photograph Local Contrast Settings File to Load"));
 
     if (loadFile.isEmpty())
@@ -677,7 +677,7 @@ void LocalContrastSettings::loadSettings()
 
         if (stream.readLine() != "# Photograph Local Contrast Configuration File")
         {
-            KMessageBox::error(kapp->activeWindow(),
+            KMessageBox::error(qApp->activeWindow(),
                                i18n("\"%1\" is not a Photograph Local Contrast settings text file.",
                                     loadFile.fileName()));
             file.close();
@@ -705,7 +705,7 @@ void LocalContrastSettings::loadSettings()
     }
     else
     {
-        KMessageBox::error(kapp->activeWindow(),
+        KMessageBox::error(qApp->activeWindow(),
                            i18n("Cannot load settings from the Photograph Local Contrast text file."));
     }
 
@@ -715,7 +715,7 @@ void LocalContrastSettings::loadSettings()
 void LocalContrastSettings::saveAsSettings()
 {
     KUrl saveFile = KFileDialog::getSaveUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                            QString("*"), kapp->activeWindow(),
+                                            QString("*"), qApp->activeWindow(),
                                             i18n("Photograph Local Contrast Settings File to Save"));
 
     if (saveFile.isEmpty())
@@ -749,7 +749,7 @@ void LocalContrastSettings::saveAsSettings()
     }
     else
     {
-        KMessageBox::error(kapp->activeWindow(),
+        KMessageBox::error(qApp->activeWindow(),
                            i18n("Cannot save settings to the Photograph Local Contrast text file."));
     }
 

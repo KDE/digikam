@@ -316,12 +316,12 @@ void LensFunCameraSelector::slotUseMetadata(bool b)
     d->modelDescription->clear();
     d->lensDescription->clear();
     d->metadataResult->clear();
-    d->makeLabel->setStyleSheet(kapp->styleSheet());
-    d->modelLabel->setStyleSheet(kapp->styleSheet());
-    d->lensLabel->setStyleSheet(kapp->styleSheet());
-    d->focalLabel->setStyleSheet(kapp->styleSheet());
-    d->aperLabel->setStyleSheet(kapp->styleSheet());
-    d->distLabel->setStyleSheet(kapp->styleSheet());
+    d->makeLabel->setStyleSheet(qApp->styleSheet());
+    d->modelLabel->setStyleSheet(qApp->styleSheet());
+    d->lensLabel->setStyleSheet(qApp->styleSheet());
+    d->focalLabel->setStyleSheet(qApp->styleSheet());
+    d->aperLabel->setStyleSheet(qApp->styleSheet());
+    d->distLabel->setStyleSheet(qApp->styleSheet());
     d->make->setEnabled(true);
     d->model->setEnabled(true);
     d->lens->setEnabled(true);
@@ -386,12 +386,12 @@ LensFunIface::MetadataMatch LensFunCameraSelector::findFromMetadata()
 
 void LensFunCameraSelector::refreshSettingsView()
 {
-    d->makeLabel->setStyleSheet(kapp->styleSheet());
-    d->modelLabel->setStyleSheet(kapp->styleSheet());
-    d->lensLabel->setStyleSheet(kapp->styleSheet());
-    d->focalLabel->setStyleSheet(kapp->styleSheet());
-    d->aperLabel->setStyleSheet(kapp->styleSheet());
-    d->distLabel->setStyleSheet(kapp->styleSheet());
+    d->makeLabel->setStyleSheet(qApp->styleSheet());
+    d->modelLabel->setStyleSheet(qApp->styleSheet());
+    d->lensLabel->setStyleSheet(qApp->styleSheet());
+    d->focalLabel->setStyleSheet(qApp->styleSheet());
+    d->aperLabel->setStyleSheet(qApp->styleSheet());
+    d->distLabel->setStyleSheet(qApp->styleSheet());
 
     if (!d->passiveMetadataUsage)
     {

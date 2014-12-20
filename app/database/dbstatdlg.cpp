@@ -53,7 +53,7 @@ namespace Digikam
 DBStatDlg::DBStatDlg(QWidget* const parent)
     : InfoDlg(parent)
 {
-    kapp->setOverrideCursor(Qt::WaitCursor);
+    qApp->setOverrideCursor(Qt::WaitCursor);
 
     setCaption(i18n("Database Statistics"));
     listView()->setHeaderLabels(QStringList() << i18n("Format") << i18n("Count"));
@@ -87,7 +87,7 @@ DBStatDlg::DBStatDlg(QWidget* const parent)
         new QTreeWidgetItem(listView(), QStringList() << i18n("Database internal server") << internal);
     }
 
-    kapp->restoreOverrideCursor();
+    qApp->restoreOverrideCursor();
 }
 
 DBStatDlg::~DBStatDlg()

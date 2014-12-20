@@ -93,7 +93,7 @@ void MaintenanceTool::slotDone()
         // Pop-up a message to bring user when all is done.
         DNotificationWrapper(id(),
                              i18n("Process is done.\nDuration: %1", t.toString()),
-                             kapp->activeWindow(), label());
+                             qApp->activeWindow(), label());
     }
 
     emit signalComplete();

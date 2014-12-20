@@ -504,7 +504,7 @@ void Setup::okClicked()
         return;
     }
 
-    kapp->setOverrideCursor(Qt::WaitCursor);
+    qApp->setOverrideCursor(Qt::WaitCursor);
 
     d->cameraPage->applySettings();
     d->databasePage->applySettings();
@@ -534,7 +534,7 @@ void Setup::okClicked()
     ApplicationSettings::instance()->emitSetupChanged();
     ImportSettings::instance()->emitSetupChanged();
 
-    kapp->restoreOverrideCursor();
+    qApp->restoreOverrideCursor();
 
     if (d->metadataPage->exifAutoRotateHasChanged())
     {

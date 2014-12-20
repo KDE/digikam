@@ -58,7 +58,7 @@ public:
         nextBtn(0),
         prevBtn(0),
         screenSelectBtn(0),
-        desktop(kapp->desktop()),
+        desktop(qApp->desktop()),
         loader(KIconLoader::global())
     {
     }

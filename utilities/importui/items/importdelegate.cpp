@@ -274,8 +274,8 @@ void ImportDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, cons
     // Draw Color Label rectangle
     drawColorLabelRect(p, option, isSelected, info.colorLabel);
 
-    p->setPen(isSelected ? kapp->palette().color(QPalette::HighlightedText)
-                         : kapp->palette().color(QPalette::Text));
+    p->setPen(isSelected ? qApp->palette().color(QPalette::HighlightedText)
+                         : qApp->palette().color(QPalette::Text));
 
     /*
     // If there is ImageHistory present, paint a small icon over the thumbnail to indicate that this is derived image

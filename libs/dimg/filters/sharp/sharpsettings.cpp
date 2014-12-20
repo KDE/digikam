@@ -487,7 +487,7 @@ void SharpSettings::writeSettings(KConfigGroup& group)
 void SharpSettings::loadSettings()
 {
     KUrl loadRestorationFile = KFileDialog::getOpenUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                       QString("*"), kapp->activeWindow(),
+                                                       QString("*"), qApp->activeWindow(),
                                                        QString(i18n("Photograph Refocus Settings File to Load")));
 
     if (loadRestorationFile.isEmpty())
@@ -503,7 +503,7 @@ void SharpSettings::loadSettings()
 
         if (stream.readLine() != "# Photograph Refocus Configuration File")
         {
-            KMessageBox::error(kapp->activeWindow(),
+            KMessageBox::error(qApp->activeWindow(),
                                i18n("\"%1\" is not a Photograph Refocus settings text file.",
                                     loadRestorationFile.fileName()));
             file.close();
@@ -522,7 +522,7 @@ void SharpSettings::loadSettings()
     }
     else
     {
-        KMessageBox::error(kapp->activeWindow(), i18n("Cannot load settings from the Photograph Refocus text file."));
+        KMessageBox::error(qApp->activeWindow(), i18n("Cannot load settings from the Photograph Refocus text file."));
     }
 
     file.close();
@@ -531,7 +531,7 @@ void SharpSettings::loadSettings()
 void SharpSettings::saveAsSettings()
 {
     KUrl saveRestorationFile = KFileDialog::getSaveUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                       QString("*"), kapp->activeWindow(),
+                                                       QString("*"), qApp->activeWindow(),
                                                        QString(i18n("Photograph Refocus Settings File to Save")));
 
     if (saveRestorationFile.isEmpty())
@@ -555,7 +555,7 @@ void SharpSettings::saveAsSettings()
     }
     else
     {
-        KMessageBox::error(kapp->activeWindow(), i18n("Cannot save settings to the Photograph Refocus text file."));
+        KMessageBox::error(qApp->activeWindow(), i18n("Cannot save settings to the Photograph Refocus text file."));
     }
 
     file.close();

@@ -462,7 +462,7 @@ bool ProgressManager::addProgressItem(ProgressItem* const t, ProgressItem* const
     }
     else
     {
-        KMessageBox::error(kapp->activeWindow(),
+        KMessageBox::error(qApp->activeWindow(),
                            i18n("A tool identified as \"%1\" is already running....", t->id()));
         t->setComplete();
         return false;

@@ -203,10 +203,10 @@ QString MdKeyListViewItem::getDecryptedKey() const
 
 void MdKeyListViewItem::slotThemeChanged()
 {
-    setBackground(0, QBrush(kapp->palette().color(QPalette::Highlight)));
-    setBackground(1, QBrush(kapp->palette().color(QPalette::Highlight)));
-    setForeground(0, QBrush(kapp->palette().color(QPalette::HighlightedText)));
-    setForeground(1, QBrush(kapp->palette().color(QPalette::HighlightedText)));
+    setBackground(0, QBrush(qApp->palette().color(QPalette::Highlight)));
+    setBackground(1, QBrush(qApp->palette().color(QPalette::Highlight)));
+    setForeground(0, QBrush(qApp->palette().color(QPalette::HighlightedText)));
+    setForeground(1, QBrush(qApp->palette().color(QPalette::HighlightedText)));
 }
 
 }  // namespace Digikam

@@ -343,7 +343,7 @@ void SlideProperties::printTags(QPainter& p, int& offset, QStringList& tags)
 
     if (!str.isEmpty())
     {
-        printInfoText(p, offset, str, kapp->palette().color(QPalette::Link).name());
+        printInfoText(p, offset, str, qApp->palette().color(QPalette::Link).name());
     }
 }
 

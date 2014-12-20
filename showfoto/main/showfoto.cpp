@@ -159,7 +159,7 @@ ShowFoto::ShowFoto(const KUrl::List& urlList)
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);
 
-    if (group.readEntry("ShowSplash", true) && !kapp->isSessionRestored())
+    if (group.readEntry("ShowSplash", true) && !qApp->isSessionRestored())
     {
         d->splash = new Digikam::SplashScreen();
         d->splash->show();
@@ -491,12 +491,12 @@ void ShowFoto::applySettings()
     d->rightSideBar->setStyle(d->settings->getRightSideBarStyle() == 0 ?
                               KMultiTabBar::VSNET : KMultiTabBar::KDEV3ICON);
 
-    QString currentStyle = kapp->style()->objectName();
+    QString currentStyle = qApp->style()->objectName();
     QString newStyle     = d->settings->getApplicationStyle();
 
     if (newStyle != currentStyle)
     {
-        kapp->setStyle(newStyle);
+        qApp->setStyle(newStyle);
     }
 
     // Current image deleted go to trash ?
@@ -1060,7 +1060,7 @@ void ShowFoto::slideShow(Digikam::SlideShowSettings& settings)
         settings.pictInfoMap.insert(*it, pictInfo);
 
         m_nameLabel->setProgressValue((int)((i++/cnt)*100.0f));
-        kapp->processEvents();
+        qApp->processEvents();
     }
 
     m_nameLabel->progressBarMode(Digikam::StatusProgressBar::TextMode, QString());

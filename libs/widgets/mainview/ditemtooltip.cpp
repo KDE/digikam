@@ -63,24 +63,24 @@ DToolTipStyleSheet::DToolTipStyleSheet(const QFont& font)
 
     headBeg     = QString("<tr bgcolor=\"%1\"><td colspan=\"2\">"
                           "<nobr><font size=\"-1\" color=\"%2\" face=\"%3\"><center><b>")
-                  .arg(kapp->palette().color(QPalette::Base).name())
-                  .arg(kapp->palette().color(QPalette::Text).name())
+                  .arg(qApp->palette().color(QPalette::Base).name())
+                  .arg(qApp->palette().color(QPalette::Text).name())
                   .arg(font.family());
     headEnd     = QString("</b></center></font></nobr></td></tr>");
 
     cellBeg     = QString("<tr><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\">")
-                  .arg(kapp->palette().color(QPalette::ToolTipText).name())
+                  .arg(qApp->palette().color(QPalette::ToolTipText).name())
                   .arg(font.family());
     cellMid     = QString("</font></nobr></td><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\">")
-                  .arg(kapp->palette().color(QPalette::ToolTipText).name())
+                  .arg(qApp->palette().color(QPalette::ToolTipText).name())
                   .arg(font.family());
     cellEnd     = QString("</font></nobr></td></tr>");
 
     cellSpecBeg = QString("<tr><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\">")
-                  .arg(kapp->palette().color(QPalette::ToolTipText).name())
+                  .arg(qApp->palette().color(QPalette::ToolTipText).name())
                   .arg(font.family());
     cellSpecMid = QString("</font></nobr></td><td><nobr><font size=\"-1\" color=\"%1\" face=\"%2\"><i>")
-                  .arg(kapp->palette().color(QPalette::ToolTipText).name())
+                  .arg(qApp->palette().color(QPalette::ToolTipText).name())
                   .arg(font.family());
     cellSpecEnd = QString("</i></font></nobr></td></tr>");
 }
@@ -270,7 +270,7 @@ void DItemToolTip::renderArrows()
     pix0.fill(Qt::transparent);
 
     QPainter p0(&pix0);
-    p0.setPen(QPen(kapp->palette().color(QPalette::Text), 1));
+    p0.setPen(QPen(qApp->palette().color(QPalette::Text), 1));
 
     for (int j=0; j<w; ++j)
     {
@@ -286,7 +286,7 @@ void DItemToolTip::renderArrows()
     pix1.fill(Qt::transparent);
 
     QPainter p1(&pix1);
-    p1.setPen(QPen(kapp->palette().color(QPalette::Text), 1));
+    p1.setPen(QPen(qApp->palette().color(QPalette::Text), 1));
 
     for (int j=0; j<w; ++j)
     {
@@ -302,7 +302,7 @@ void DItemToolTip::renderArrows()
     pix2.fill(Qt::transparent);
 
     QPainter p2(&pix2);
-    p2.setPen(QPen(kapp->palette().color(QPalette::Text), 1));
+    p2.setPen(QPen(qApp->palette().color(QPalette::Text), 1));
 
     for (int j=0; j<w; ++j)
     {
@@ -318,7 +318,7 @@ void DItemToolTip::renderArrows()
     pix3.fill(Qt::transparent);
 
     QPainter p3(&pix3);
-    p3.setPen(QPen(kapp->palette().color(QPalette::Text), 1));
+    p3.setPen(QPen(qApp->palette().color(QPalette::Text), 1));
 
     for (int j=0; j<w; ++j)
     {

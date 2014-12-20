@@ -511,25 +511,25 @@ void SetupVersioning::readSettings()
 
 void SetupVersioning::showNonDestructiveInformation()
 {
-    kapp->postEvent(d->enableNonDestructive, new QHelpEvent(QEvent::WhatsThis, QPoint(0, 0),
+    qApp->postEvent(d->enableNonDestructive, new QHelpEvent(QEvent::WhatsThis, QPoint(0, 0),
                                                             d->enableNonDestructive->mapToGlobal(QPoint(0, 0))));
 }
 
 void SetupVersioning::showFormatInformation()
 {
-    kapp->postEvent(d->formatBox, new QHelpEvent(QEvent::WhatsThis, QPoint(0, 0), d->formatBox->mapToGlobal(QPoint(0, 0))));
+    qApp->postEvent(d->formatBox, new QHelpEvent(QEvent::WhatsThis, QPoint(0, 0), d->formatBox->mapToGlobal(QPoint(0, 0))));
 }
 
 void SetupVersioning::showSnapshotInformation()
 {
     QPoint p(0, 0);
-    kapp->postEvent(d->snapshotGB, new QHelpEvent(QEvent::WhatsThis, p, d->snapshotGB->mapToGlobal(p)));
+    qApp->postEvent(d->snapshotGB, new QHelpEvent(QEvent::WhatsThis, p, d->snapshotGB->mapToGlobal(p)));
 }
 
 void SetupVersioning::showViewInformation()
 {
     QPoint p(0, 0);
-    kapp->postEvent(d->viewGB, new QHelpEvent(QEvent::WhatsThis, p, d->viewGB->mapToGlobal(p)));
+    qApp->postEvent(d->viewGB, new QHelpEvent(QEvent::WhatsThis, p, d->viewGB->mapToGlobal(p)));
 }
 
 void SetupVersioning::enableToggled(bool on)
