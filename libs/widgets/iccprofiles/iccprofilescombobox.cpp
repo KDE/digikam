@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <kaction.h>
+#include <QAction>
 #include <kactionmenu.h>
 #include <klocalizedstring.h>
 
@@ -235,7 +235,7 @@ void IccProfilesMenuAction::addProfile(const IccProfile& profile, const QString&
         description = profileUserString(profile);
     }
 
-    KAction* const action = new KAction(d.left(50), m_parent);
+    QAction * const action = new QAction(d.left(50), m_parent);
     action->setData(QVariant::fromValue(profile));
     addAction(action);
 
@@ -255,7 +255,7 @@ void IccProfilesMenuAction::disableIfEmpty()
 
 void IccProfilesMenuAction::slotTriggered(QObject* obj)
 {
-    KAction* action = static_cast<KAction*>(obj);
+    QAction * action = static_cast<QAction*>(obj);
     IccProfile profile = action->data().value<IccProfile>();
 
     if (!profile.isNull())

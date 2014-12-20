@@ -41,7 +41,7 @@
 #include <kglobal.h>
 #include <klocalizedstring.h>
 #include <kcolorscheme.h>
-#include <kaction.h>
+#include <QAction>
 #include <kactioncollection.h>
 #include <kstandarddirs.h>
 #include <kactionmenu.h>
@@ -186,7 +186,7 @@ void ThemeManager::populateThemeMenu()
     connect(d->themeMenuActionGroup, SIGNAL(triggered(QAction*)),
             this, SLOT(slotChangePalette()));
 
-    KAction* const action         = new KAction(defaultThemeName(), d->themeMenuActionGroup);
+    QAction * const action         = new QAction(defaultThemeName(), d->themeMenuActionGroup);
     action->setCheckable(true);
     d->themeMenuAction->addAction(action);
 
@@ -202,7 +202,7 @@ void ThemeManager::populateThemeMenu()
         QIcon icon              = createSchemePreviewIcon(config);
         KConfigGroup group(config, "General");
         const QString name      = group.readEntry("Name", info.baseName());
-        KAction* const ac       = new KAction(name, d->themeMenuActionGroup);
+        QAction * const ac       = new QAction(name, d->themeMenuActionGroup);
         d->themeMap.insert(name, filename);
         ac->setIcon(icon);
         ac->setCheckable(true);
@@ -222,7 +222,7 @@ void ThemeManager::populateThemeMenu()
     setCurrentTheme(theme);
 
     d->themeMenuAction->addSeparator();
-    KAction* const config = new KAction(i18n("Configuration..."), d->themeMenuAction);
+    QAction * const config = new QAction(i18n("Configuration..."), d->themeMenuAction);
     config->setIcon(QIcon::fromTheme("preferences-desktop-theme"));
     d->themeMenuAction->addAction(config);
 
