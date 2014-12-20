@@ -8,4 +8,5 @@ General: Integer and double input value sliders use now PhotoShop/Krita/Gimp lik
 BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 
 001 ==> 284216 - Using slider widget from Krita.
-002 ==> 
+002 ==> 342010 - digiKam crash, apparently in xcb.
+003 ==> 
