@@ -29,17 +29,17 @@
 #include <QList>
 #include <QString>
 #include <QSignalMapper>
+#include <QMenu>
 
 // KDE includes
 
 #include <kconfiggroup.h>
 #include <kactionmenu.h>
-#include <QMenu>
-#include <kdebug.h>
 #include <kservice.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "globals.h"
 #include "editorwindow.h"
 #include "versionmanager.h"

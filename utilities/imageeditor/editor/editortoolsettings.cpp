@@ -43,7 +43,6 @@
 // KDE includes
 
 #include <kcolorbutton.h>
-#include <kcombobox.h>
 #include <khbox.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
@@ -83,8 +82,6 @@ public:
         toolName(0),
         toolIcon(0),
         guideBox(0),
-        channelCB(0),
-        colorsCB(0),
         okBtn(0),
         cancelBtn(0),
         tryBtn(0),
@@ -110,9 +107,6 @@ public:
     QLabel*              toolIcon;
 
     KHBox*               guideBox;
-
-    KComboBox*           channelCB;
-    KComboBox*           colorsCB;
 
     QPushButton*         okBtn;
     QPushButton*         cancelBtn;
