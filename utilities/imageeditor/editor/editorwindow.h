@@ -47,6 +47,8 @@
 #include "dxmlguiwindow.h"
 
 class QSplitter;
+class QMenu;
+class QAction;
 
 class KSqueezedTextLabel;
 class KAction;
@@ -55,7 +57,6 @@ class KCategorizedView;
 class KSelectAction;
 class KToggleAction;
 class KToolBarPopupAction;
-class QMenu;
 
 namespace Digikam
 {
@@ -114,13 +115,13 @@ protected:
 
     KAction*                  m_openVersionAction;
     QAction*                  m_saveAction;
-    KAction*                  m_saveAsAction;
-    KAction*                  m_saveNewVersionAction;
+    QAction*                  m_saveAsAction;
+    KToolBarPopupAction*      m_saveNewVersionAction;
     KAction*                  m_saveCurrentVersionAction;
     KAction*                  m_saveNewVersionAsAction;
     KActionMenu*              m_saveNewVersionInFormatAction;
     KAction*                  m_exportAction;
-    KAction*                  m_revertAction;
+    QAction*                  m_revertAction;
     KAction*                  m_discardChangesAction;
     KAction*                  m_fileDeleteAction;
     QAction*                  m_forwardAction;

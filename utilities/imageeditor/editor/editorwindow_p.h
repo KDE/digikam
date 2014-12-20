@@ -44,6 +44,7 @@
 #include "editorwindow.h"
 #include "versionmanager.h"
 
+class QAction;
 class QDialog;
 class QEventLoop;
 class QLabel;
@@ -153,7 +154,7 @@ public:
 
     KActionCollection*           imagepluginsActionCollection;
 
-    KAction*                     copyAction;
+    QAction*                     copyAction;
     KAction*                     cropAction;
     KAction*                     autoCropAction;
     KAction*                     filePrintAction;
@@ -166,8 +167,8 @@ public:
     KAction*                     slideShowAction;
     KAction*                     softProofOptionsAction;
     KAction*                     zoomFitToSelectAction;
-    KAction*                     zoomMinusAction;
-    KAction*                     zoomPlusAction;
+    QAction*                     zoomMinusAction;
+    QAction*                     zoomPlusAction;
     KAction*                     zoomTo100percents;
 
     QSignalMapper*               undoSignalMapper;

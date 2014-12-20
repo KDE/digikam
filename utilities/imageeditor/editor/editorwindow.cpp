@@ -70,6 +70,7 @@
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kcursor.h>
 #include <kdialog.h>
 #include <kedittoolbar.h>
@@ -447,7 +448,7 @@ void EditorWindow::setupStandardActions()
     connect(m_fileDeleteAction, SIGNAL(triggered()), this, SLOT(slotDeleteCurrentItem()));
     actionCollection()->addAction("editorwindow_delete", m_fileDeleteAction);
 
-    KAction* closeAction = KStandardAction::close(this, SLOT(close()), this);
+    QAction* const closeAction = KStandardAction::close(this, SLOT(close()), this);
     actionCollection()->addAction("editorwindow_close", closeAction);
 
     // -- Standard 'Edit' menu actions ---------------------------------------------
@@ -457,7 +458,7 @@ void EditorWindow::setupStandardActions()
     d->copyAction->setEnabled(false);
 
     m_undoAction = new KToolBarPopupAction(QIcon::fromTheme("edit-undo"), i18n("Undo"), this);
-    m_undoAction->setShortcut(KStandardShortcut::undo());
+    m_undoAction->setShortcuts(KStandardShortcut::undo());
     m_undoAction->setEnabled(false);
     actionCollection()->addAction("editorwindow_undo", m_undoAction);
 
@@ -476,7 +477,7 @@ void EditorWindow::setupStandardActions()
     d->undoSignalMapper->setMapping(m_undoAction, 1);
 
     m_redoAction = new KToolBarPopupAction(QIcon::fromTheme("edit-redo"), i18n("Redo"), this);
-    m_redoAction->setShortcut(KStandardShortcut::redo());
+    m_redoAction->setShortcuts(KStandardShortcut::redo());
     m_redoAction->setEnabled(false);
     actionCollection()->addAction("editorwindow_redo", m_redoAction);
 
@@ -503,15 +504,13 @@ void EditorWindow::setupStandardActions()
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
-    d->zoomPlusAction  = KStandardAction::zoomIn(this, SLOT(slotIncreaseZoom()), this);
-    QKeySequence keysPlus = d->zoomPlusAction->shortcut();
-    keysPlus.setAlternate(Qt::Key_Plus);
+    d->zoomPlusAction     = KStandardAction::zoomIn(this, SLOT(slotIncreaseZoom()), this);
+    QKeySequence keysPlus(d->zoomPlusAction->shortcut(), Qt::Key_Plus);
     d->zoomPlusAction->setShortcut(keysPlus);
     actionCollection()->addAction("editorwindow_zoomplus", d->zoomPlusAction);
 
     d->zoomMinusAction  = KStandardAction::zoomOut(this, SLOT(slotDecreaseZoom()), this);
-    QKeySequence keysMinus = d->zoomMinusAction->shortcut();
-    keysMinus.setAlternate(Qt::Key_Minus);
+    QKeySequence keysMinus(d->zoomMinusAction->shortcut(), Qt::Key_Minus);
     d->zoomMinusAction->setShortcut(keysMinus);
     actionCollection()->addAction("editorwindow_zoomminus", d->zoomMinusAction);
 
@@ -760,8 +759,8 @@ void EditorWindow::printImage(const KUrl&)
 
 void EditorWindow::slotEditKeys()
 {
-    QKeySequencesDialog dialog(QKeySequencesEditor::AllActions,
-                            QKeySequencesEditor::LetterShortcutsAllowed, this);
+    KShortcutsDialog dialog(KShortcutsEditor::AllActions,
+                            KShortcutsEditor::LetterShortcutsAllowed, this);
     dialog.addCollection(actionCollection(), i18nc("general editor shortcuts", "General"));
     dialog.addCollection(d->imagepluginsActionCollection, i18nc("imageplugins shortcuts", "Image Plugins"));
     dialog.configure();
@@ -793,7 +792,8 @@ void EditorWindow::slotAboutToShowRedoMenu()
 
 void EditorWindow::slotConfToolbars()
 {
-    saveMainWindowSettings(KSharedConfig::openConfig()->group(CONFIG_GROUP_NAME));
+    KConfigGroup group(KSharedConfig::openConfig(), CONFIG_GROUP_NAME);
+    saveMainWindowSettings(group);
     KEditToolBar dlg(factory(), this);
 
     connect(&dlg, SIGNAL(newToolbarConfig()),
@@ -872,7 +872,7 @@ void EditorWindow::loadImagePlugins()
         delete d->imagepluginsActionCollection;
     }
 
-    d->imagepluginsActionCollection = new KActionCollection(this, KGlobal::mainComponent());
+    d->imagepluginsActionCollection = new KActionCollection(dynamic_cast<QObject*>(this));
 
     QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
 
@@ -889,7 +889,7 @@ void EditorWindow::loadImagePlugins()
             if (categoryStr != QString("__INVALID__") && !categoryStr.isEmpty())
             {
                 KActionCategory* const category = new KActionCategory(categoryStr, d->imagepluginsActionCollection);
-                
+
                 foreach(QAction* const action, plugin->actionCollection()->actions())
                 {
                     category->addAction(action->objectName(), action);
@@ -1963,7 +1963,7 @@ bool EditorWindow::showFileSaveDialog(const KUrl& initialUrl, KUrl& newURL)
     imageFileSaveDialog->setPreviewWidget(preview);
     imageFileSaveDialog->setOperationMode(KFileDialog::Saving);
     imageFileSaveDialog->setMode(KFile::File);
-    imageFileSaveDialog->setCaption(i18n("New Image File Name"));
+    imageFileSaveDialog->setWindowTitle(i18n("New Image File Name"));
 
     // restore old settings for the dialog
     KSharedConfig::Ptr config         = KSharedConfig::openConfig();
@@ -3018,7 +3018,7 @@ void EditorWindow::openWith(const KUrl& url, QAction* action)
 
     if (name.isEmpty())
     {
-        QPointer<KOpenWithDialog> dlg = new KOpenWithDialog(url);
+        QPointer<KOpenWithDialog> dlg = new KOpenWithDialog(QList<QUrl>() << url);
 
         if (dlg->exec() != KOpenWithDialog::Accepted)
         {
@@ -3033,7 +3033,7 @@ void EditorWindow::openWith(const KUrl& url, QAction* action)
             // User entered a custom command
             if (!dlg->text().isEmpty())
             {
-                KRun::run(dlg->text(), url, this);
+                KRun::run(dlg->text(), QList<QUrl>() << url, this);
             }
 
             delete dlg;
@@ -3047,7 +3047,7 @@ void EditorWindow::openWith(const KUrl& url, QAction* action)
         service = d->servicesMap[name];
     }
 
-    KRun::run(*service, url, this);
+    KRun::run(*service, QList<QUrl>() << url, this);
 }
 
 }  // namespace Digikam
