@@ -113,7 +113,7 @@ protected:
     QSplitter*                m_vSplitter;
 
     KAction*                  m_openVersionAction;
-    KAction*                  m_saveAction;
+    QAction*                  m_saveAction;
     KAction*                  m_saveAsAction;
     KAction*                  m_saveNewVersionAction;
     KAction*                  m_saveCurrentVersionAction;
@@ -123,8 +123,8 @@ protected:
     KAction*                  m_revertAction;
     KAction*                  m_discardChangesAction;
     KAction*                  m_fileDeleteAction;
-    KAction*                  m_forwardAction;
-    KAction*                  m_backwardAction;
+    QAction*                  m_forwardAction;
+    QAction*                  m_backwardAction;
 
     KAction*                  m_lastAction;
     KAction*                  m_firstAction;
