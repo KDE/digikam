@@ -28,23 +28,19 @@
 
 #include <QFlags>
 #include <QSharedDataPointer>
-
-// KDE includes
+#include <QDebug>
 
 // Local includes
 
-#include "dimagehistory.h"
 #include "digikam_export.h"
+#include "dimagehistory.h"
 #include "imageinfo.h"
-
-class QDebug;
 
 namespace Digikam
 {
 
 class DImageHistory;
 class ImageHistoryGraphData;
-class ImageInfo;
 
 class DIGIKAM_DATABASE_EXPORT ImageHistoryGraph
 {

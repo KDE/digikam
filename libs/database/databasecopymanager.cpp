@@ -31,11 +31,11 @@
 
 // KDE Includes
 
-#include "kdebug.h"
 #include "klocale.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "databasecorebackend.h"
 #include "databaseparameters.h"
 #include "albumdb.h"
@@ -147,7 +147,7 @@ void DatabaseCopyManager::copyDatabases(DatabaseParameters fromDBParameters, Dat
      */
     for (int i=0; m_isStopProcessing || i < tablesSize; ++i)
     {
-        emit stepStarted(i18n(QString("Copy %1...").arg(tables[i]).toLatin1()));
+        emit stepStarted(i18n(QString("Copy %1...").arg(tables[i]).toLatin1().constData()));
 
         // now perform the copy action
         if ( m_isStopProcessing ||

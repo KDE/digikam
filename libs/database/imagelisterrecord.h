@@ -32,7 +32,7 @@
 #include <QDateTime>
 #include <QSize>
 
-// KDE includes
+// Local includes
 
 #include "digikam_export.h"
 #include "albuminfo.h"
@@ -100,7 +100,7 @@ public:
      */
     static bool checkStream(ImageListerRecord::BinaryFormat format, QDataStream& data);
 
-    bool operator==(ImageListerRecord& record) const
+    bool operator==(const ImageListerRecord& record) const
     {
         return this->imageID == record.imageID;
     }

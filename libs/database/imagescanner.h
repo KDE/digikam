@@ -32,14 +32,13 @@
 // Local includes
 
 #include "dimg.h"
+#include "imageinfo.h"
 #include "dmetadata.h"
 #include "albuminfo.h"
 #include "databaseinfocontainers.h"
 
 namespace Digikam
 {
-
-class ImageInfo;
 
 class DIGIKAM_DATABASE_EXPORT ImageScanner
 {
