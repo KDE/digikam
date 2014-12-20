@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include <kaction.h>
+#include <QAction>
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
 #include <kxmlguiwindow.h>
@@ -57,15 +57,15 @@ void DAboutData::registerHelpActions()
 {
     KXmlGuiWindow* const kwin          = dynamic_cast<KXmlGuiWindow*>(parent());
 
-    KAction* const rawCameraListAction = new KAction(QIcon::fromTheme("kdcraw"), i18n("Supported RAW Cameras"), kwin);
+    QAction * const rawCameraListAction = new QAction(QIcon::fromTheme("kdcraw"), i18n("Supported RAW Cameras"), kwin);
     connect(rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
     kwin->actionCollection()->addAction("help_rawcameralist", rawCameraListAction);
 
-    KAction* const donateMoneyAction   = new KAction(QIcon::fromTheme("internet-web-browser"), i18n("Donate..."), kwin);
+    QAction * const donateMoneyAction   = new QAction(QIcon::fromTheme("internet-web-browser"), i18n("Donate..."), kwin);
     connect(donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
     kwin->actionCollection()->addAction("help_donatemoney", donateMoneyAction);
 
-    KAction* const contributeAction    = new KAction(QIcon::fromTheme("internet-web-browser"), i18n("Contribute..."), kwin);
+    QAction * const contributeAction    = new QAction(QIcon::fromTheme("internet-web-browser"), i18n("Contribute..."), kwin);
     connect(contributeAction, SIGNAL(triggered()), this, SLOT(slotContribute()));
     kwin->actionCollection()->addAction("help_contribute", contributeAction);
 }

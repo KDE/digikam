@@ -179,7 +179,8 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
     d->guideColorBt      = new KColorButton(QColor(Qt::red), d->guideBox);
     d->guideColorBt->setWhatsThis(i18n("Set here the color used to draw dashed guide lines."));
     d->guideSize         = new RIntNumInput(d->guideBox);
-    d->guideSize->setSuffix(QString("px"));
+#pragma "Port to KF5"
+    //d->guideSize->setSuffix(QString("px"));
     d->guideSize->setRange(1, 5, 1);
     d->guideSize->setDefaultValue(1);
     d->guideSize->setWhatsThis(i18n("Set here the width in pixels used to draw dashed guide lines."));

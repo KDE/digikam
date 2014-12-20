@@ -51,7 +51,7 @@ class QLabel;
 class QToolButton;
 class QWidgetAction;
 
-class KAction;
+class QAction;
 class KActionCollection;
 class KSqueezedTextLabel;
 class KToggleAction;
@@ -155,21 +155,21 @@ public:
     KActionCollection*           imagepluginsActionCollection;
 
     QAction*                     copyAction;
-    KAction*                     cropAction;
-    KAction*                     autoCropAction;
-    KAction*                     filePrintAction;
-    KAction*                     flipHorizAction;
-    KAction*                     flipVertAction;
-    KAction*                     rotateLeftAction;
-    KAction*                     rotateRightAction;
-    KAction*                     selectAllAction;
-    KAction*                     selectNoneAction;
-    KAction*                     slideShowAction;
-    KAction*                     softProofOptionsAction;
-    KAction*                     zoomFitToSelectAction;
+    QAction *                     cropAction;
+    QAction *                     autoCropAction;
+    QAction *                     filePrintAction;
+    QAction *                     flipHorizAction;
+    QAction *                     flipVertAction;
+    QAction *                     rotateLeftAction;
+    QAction *                     rotateRightAction;
+    QAction *                     selectAllAction;
+    QAction *                     selectNoneAction;
+    QAction *                     slideShowAction;
+    QAction *                     softProofOptionsAction;
+    QAction *                     zoomFitToSelectAction;
     QAction*                     zoomMinusAction;
     QAction*                     zoomPlusAction;
-    KAction*                     zoomTo100percents;
+    QAction *                     zoomTo100percents;
 
     QSignalMapper*               undoSignalMapper;
     QSignalMapper*               redoSignalMapper;
@@ -288,7 +288,7 @@ void EditorWindow::Private::plugNewVersionInFormatAction(EditorWindow* const q, 
                 q, SLOT(saveNewVersionInFormat(QString)));
     }
 
-    KAction* const action = new KAction(text, q);
+    QAction * const action = new QAction(text, q);
 
     connect(action, SIGNAL(triggered()),
             formatMenuActionMapper, SLOT(map()));
