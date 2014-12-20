@@ -23,8 +23,6 @@
 
 #include "databasewatch.h"
 #include "databasewatchadaptor.h"
-// Special case: we need moc file here to compile
-#include "databasewatch.moc"
 
 // C Ansi includes
 
@@ -362,3 +360,5 @@ void DatabaseWatch::slotSearchChangeDBus(const QString& databaseIdentifier,
 }
 
 } // namespace Digikam
+
+#include "databasewatch.moc"
