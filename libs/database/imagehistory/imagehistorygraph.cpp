@@ -23,15 +23,13 @@
 
 #include "imagehistorygraph.h"
 
-// Qt includes
-
 // KDE includes
 
-#include "digikam_debug.h"
 #include <kglobal.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "dimagehistory.h"
 #include "imagehistorygraphdata.h"
 #include "imagescanner.h"

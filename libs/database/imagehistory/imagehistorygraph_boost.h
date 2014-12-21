@@ -40,7 +40,7 @@
 #pragma clang diagnostic ignored "-Wcast-align"
 #endif
 
-// boost includes
+// Boost includes
 
 // prohibit boost using deprecated header files
 #define BOOST_NO_HASH
@@ -58,14 +58,11 @@
 #include <boost/graph/depth_first_search.hpp>
 #include <boost/graph/breadth_first_search.hpp>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Local includes
 
 // the file shipped with boost does not compile
 #include "transitive_reduction.hpp"
+#include "digikam_debug.h"
 
 /** Install custom property ids, out-of-namespace */
 enum vertex_properties_t { vertex_properties };

@@ -30,10 +30,10 @@
 
 // Local includes
 
+#include "imageinfo.h"
 #include "filteraction.h"
 #include "historyimageid.h"
 #include "imagehistorygraph_boost.h"
-#include "imageinfo.h"
 
 namespace Digikam
 {

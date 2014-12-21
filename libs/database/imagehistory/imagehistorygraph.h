@@ -24,6 +24,8 @@
 #ifndef IMAGEHISTORYGRAPH_H
 #define IMAGEHISTORYGRAPH_H
 
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 // Qt includes
 
 #include <QFlags>
@@ -33,14 +35,12 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "dimagehistory.h"
 #include "imageinfo.h"
+#include "dimagehistory.h"
+#include "imagehistorygraphdata.h"
 
 namespace Digikam
 {
-
-class DImageHistory;
-class ImageHistoryGraphData;
 
 class DIGIKAM_DATABASE_EXPORT ImageHistoryGraph
 {
@@ -190,4 +190,4 @@ QDebug DIGIKAM_DATABASE_EXPORT operator<<(QDebug dbg, const ImageHistoryGraph& g
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::ImageHistoryGraph::HistoryLoadingMode)
 
-#endif // IMAGEHISTORYGRAPHDATA_H
+#endif // IMAGEHISTORYGRAPH_H
