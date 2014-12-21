@@ -14,14 +14,16 @@ set(advancedrenametest_SRCS
     advancedrenametest.cpp
    )
 
-KDE4_ADD_UNIT_TEST(advancedrenametest ${advancedrenametest_SRCS})
+add_executable(advancedrenametest ${advancedrenametest_SRCS})
+add_test(advancedrenametest advancedrenametest)
+ecm_mark_as_test(advancedrenametest)
 
 target_link_libraries(advancedrenametest
-                      ${KDE4_KDEUI_LIBS}
-                      ${KEXIV2_LIBRARIES}
-                      ${KDCRAW_LIBRARIES}
-                      ${QT_QTGUI_LIBRARY}
-                      ${QT_QTTEST_LIBRARY}
+                      
+                      KF5::KExiv2
+                      KF5::KDcraw
+                      Qt5::Gui
+                      Qt5::Test
                       ${OpenCV_LIBRARIES}
                       digikamcore
                       digikamdatabase
@@ -34,14 +36,16 @@ set(renamecustomizertest_SRCS
     renamecustomizertest.cpp
    )
 
-KDE4_ADD_UNIT_TEST(renamecustomizertest ${renamecustomizertest_SRCS})
+add_executable(renamecustomizertest ${renamecustomizertest_SRCS})
+add_test(renamecustomizertest renamecustomizertest)
+ecm_mark_as_test(renamecustomizertest)
 
 target_link_libraries(renamecustomizertest
-                      ${KDE4_KDEUI_LIBS}
-                      ${KEXIV2_LIBRARIES}
-                      ${KDCRAW_LIBRARIES}
-                      ${QT_QTGUI_LIBRARY}
-                      ${QT_QTTEST_LIBRARY}
+                      
+                      KF5::KExiv2
+                      KF5::KDcraw
+                      Qt5::Gui
+                      Qt5::Test
                       ${OpenCV_LIBRARIES}
                       digikamcore
                       digikamdatabase
@@ -67,14 +71,16 @@ set(cameranamehelper_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_tooltips.cpp
    )
 
-KDE4_ADD_UNIT_TEST(cameranamehelpertest ${cameranamehelper_SRCS})
+add_executable(cameranamehelpertest ${cameranamehelper_SRCS})
+add_test(cameranamehelpertest cameranamehelpertest)
+ecm_mark_as_test(cameranamehelpertest)
 
 target_link_libraries(cameranamehelpertest
-                      ${KDE4_KDEUI_LIBS}
-                      ${QT_QTGUI_LIBRARY}
-                      ${QT_QTTEST_LIBRARY}
-                      ${KDCRAW_LIBRARIES}
-                      ${KEXIV2_LIBRARIES}
+                      
+                      Qt5::Gui
+                      Qt5::Test
+                      KF5::KDcraw
+                      KF5::KExiv2
                       ${OpenCV_LIBRARIES}
                       digikamcore
                       digikamdatabase
@@ -90,12 +96,14 @@ set(uifilevalidator_SRCS
     uifilevalidatortest.cpp
    )
 
-KDE4_ADD_UNIT_TEST(uifilevalidatortest ${uifilevalidator_SRCS})
+add_executable(uifilevalidatortest ${uifilevalidator_SRCS})
+add_test(uifilevalidatortest uifilevalidatortest)
+ecm_mark_as_test(uifilevalidatortest)
 
 target_link_libraries(uifilevalidatortest
-                      ${KDE4_KDECORE_LIBS}
-                      ${QT_QTGUI_LIBRARY}
-                      ${QT_QTTEST_LIBRARY}
+                      KF5::KDELibs4Support
+                      Qt5::Gui
+                      Qt5::Test
                       ${OpenCV_LIBRARIES}
                       digikamcore
                       digikamdatabase
@@ -111,12 +119,14 @@ set(statesavingobject_SRCS
     statesavingobjecttest.cpp
    )
 
-KDE4_ADD_UNIT_TEST(statesavingobjecttest ${statesavingobject_SRCS})
+add_executable(statesavingobjecttest ${statesavingobject_SRCS})
+add_test(statesavingobjecttest statesavingobjecttest)
+ecm_mark_as_test(statesavingobjecttest)
 
 target_link_libraries(statesavingobjecttest
-                      ${KDE4_KDECORE_LIBS}
-                      ${QT_QTGUI_LIBRARY}
-                      ${QT_QTTEST_LIBRARY}
+                      KF5::KDELibs4Support
+                      Qt5::Gui
+                      Qt5::Test
                       ${OpenCV_LIBRARIES}
                       digikamcore
                      )
@@ -131,12 +141,14 @@ set(freerotationtest_SRCS
     freerotationtest.cpp
    )
 
-KDE4_ADD_UNIT_TEST(freerotationtest ${freerotationtest_SRCS})
+add_executable(freerotationtest ${freerotationtest_SRCS})
+add_test(freerotationtest freerotationtest)
+ecm_mark_as_test(freerotationtest)
 
 target_link_libraries(freerotationtest
-                      ${KDE4_KDECORE_LIBS}
-                      ${QT_QTGUI_LIBRARY}
-                      ${QT_QTTEST_LIBRARY}
+                      KF5::KDELibs4Support
+                      Qt5::Gui
+                      Qt5::Test
                       ${OpenCV_LIBRARIES}
                       digikamcore
                      )
@@ -147,12 +159,14 @@ set(searchtextbartest_SRCS
     searchtextbartest.cpp
    )
 
-KDE4_ADD_UNIT_TEST(searchtextbartest ${searchtextbartest_SRCS})
+add_executable(searchtextbartest ${searchtextbartest_SRCS})
+add_test(searchtextbartest searchtextbartest)
+ecm_mark_as_test(searchtextbartest)
 
 target_link_libraries(searchtextbartest
-                      ${KDE4_KDEUI_LIBS}
-                      ${QT_QTGUI_LIBRARY}
-                      ${QT_QTTEST_LIBRARY}
+                      
+                      Qt5::Gui
+                      Qt5::Test
                       ${OpenCV_LIBRARIES}
                       digikamcore
                      )
@@ -163,12 +177,14 @@ set(filesaveoptionsboxtest_SRCS
     filesaveoptionsboxtest.cpp
    )
 
-KDE4_ADD_UNIT_TEST(filesaveoptionsboxtest ${filesaveoptionsboxtest_SRCS})
+add_executable(filesaveoptionsboxtest ${filesaveoptionsboxtest_SRCS})
+add_test(filesaveoptionsboxtest filesaveoptionsboxtest)
+ecm_mark_as_test(filesaveoptionsboxtest)
 
 target_link_libraries(filesaveoptionsboxtest
-                      ${KDE4_KDECORE_LIBS}
-                      ${QT_QTGUI_LIBRARY}
-                      ${QT_QTTEST_LIBRARY}
+                      KF5::KDELibs4Support
+                      Qt5::Gui
+                      Qt5::Test
                       ${OpenCV_LIBRARIES}
                       digikamcore
                      )
@@ -223,22 +239,24 @@ target_link_libraries(filesaveoptionsboxtest
 #    ${CMAKE_CURRENT_SOURCE_DIR}/../libs/template/templatepanel.cpp
 #   )
 #
-#KDE4_ADD_UNIT_TEST(albummodeltest ${albummodeltest_SRCS})
+#add_executable(albummodeltest ${albummodeltest_SRCS})
+add_test(albummodeltest albummodeltest)
+ecm_mark_as_test(albummodeltest)
 #
 #target_link_libraries(albummodeltest
-#                      ${KDE4_KIO_LIBS}
-#                      ${QT_QTGUI_LIBRARY}
-#                      ${QT_QTTEST_LIBRARY}
-#                      ${QT_QTXML_LIBRARY}
-#                      ${QT_QTSQL_LIBRARY}
-#                      ${KDCRAW_LIBRARIES}
-#                      ${KEXIV2_LIBRARIES}
+#                      KF5::KIOCore
+#                      Qt5::Gui
+#                      Qt5::Test
+#                      Qt5::Xml
+#                      Qt5::Sql
+#                      KF5::KDcraw
+#                      KF5::KExiv2
 #                      digikamdatabase
 #                      digikamcore
 #                     )
 #
 #if(KIPI_FOUND)
-#    target_link_libraries(albummodeltest ${KIPI_LIBRARIES})
+#    target_link_libraries(albummodeltest KF5::Kipi)
 #endif()
 #
 #if(GPHOTO2_FOUND)
@@ -252,13 +270,15 @@ set(dimagehistorytest_SRCS
     dimagehistorytest.cpp
    )
 
-KDE4_ADD_UNIT_TEST(dimagehistorytest ${dimagehistorytest_SRCS})
+add_executable(dimagehistorytest ${dimagehistorytest_SRCS})
+add_test(dimagehistorytest dimagehistorytest)
+ecm_mark_as_test(dimagehistorytest)
 
 target_link_libraries(dimagehistorytest
-                      ${KDE4_KDECORE_LIBS}
-                      ${QT_QTGUI_LIBRARY}
-                      ${QT_QTTEST_LIBRARY}
-                      ${KEXIV2_LIBRARIES}
+                      KF5::KDELibs4Support
+                      Qt5::Gui
+                      Qt5::Test
+                      KF5::KExiv2
                       ${OpenCV_LIBRARIES}
                       digikamcore
                      )
@@ -271,14 +291,16 @@ set(dimagehistorygraphtest_SRCS
     modeltest/modeltest.cpp
    )
 
-KDE4_ADD_UNIT_TEST(dimagehistorygraphtest ${dimagehistorygraphtest_SRCS})
+add_executable(dimagehistorygraphtest ${dimagehistorygraphtest_SRCS})
+add_test(dimagehistorygraphtest dimagehistorygraphtest)
+ecm_mark_as_test(dimagehistorygraphtest)
 
 target_link_libraries(dimagehistorygraphtest
-                      ${KDE4_KDECORE_LIBS}
-                      ${KDE4_KIO_LIBS}
-                      ${QT_QTGUI_LIBRARY}
-                      ${QT_QTTEST_LIBRARY}
-                      ${KEXIV2_LIBRARIES}
+                      KF5::KDELibs4Support
+                      KF5::KIOCore
+                      Qt5::Gui
+                      Qt5::Test
+                      KF5::KExiv2
                       ${OpenCV_LIBRARIES}
                       digikamdatabase
                       digikamcore
@@ -290,13 +312,15 @@ set(dimagefilteractiontest_SRCS
     dimagefilteractiontest.cpp
    )
 
-KDE4_ADD_UNIT_TEST(dimagefilteractiontest ${dimagefilteractiontest_SRCS})
+add_executable(dimagefilteractiontest ${dimagefilteractiontest_SRCS})
+add_test(dimagefilteractiontest dimagefilteractiontest)
+ecm_mark_as_test(dimagefilteractiontest)
 
 target_link_libraries(dimagefilteractiontest
-                      ${KDE4_KDECORE_LIBS}
-                      ${QT_QTGUI_LIBRARY}
-                      ${QT_QTTEST_LIBRARY}
-                      ${KEXIV2_LIBRARIES}
+                      KF5::KDELibs4Support
+                      Qt5::Gui
+                      Qt5::Test
+                      KF5::KExiv2
                       ${OpenCV_LIBRARIES}
                       digikamcore
                      )
@@ -307,13 +331,15 @@ set(databasefieldstest_SRCS
     databasefieldstest.cpp
    )
 
-#KDE4_ADD_UNIT_TEST(databasefieldstest ${databasefieldstest_SRCS})
+#add_executable(databasefieldstest ${databasefieldstest_SRCS})
+add_test(databasefieldstest databasefieldstest)
+ecm_mark_as_test(databasefieldstest)
 
 #target_link_libraries(databasefieldstest
-#                      ${KDE4_KDECORE_LIBS}
-#                      ${QT_QTGUI_LIBRARY}
-#                      ${QT_QTTEST_LIBRARY}
-#                      ${KEXIV2_LIBRARIES}
+#                      KF5::KDELibs4Support
+#                      Qt5::Gui
+#                      Qt5::Test
+#                      KF5::KExiv2
 #                      digikamcore
 #                     )
 
@@ -324,52 +350,58 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../libs/threadimageio
                    )
 
 set(qtpgftest_SRCS qtpgftest.cpp ${pgfutils_SRCS})
-KDE4_ADD_EXECUTABLE(qtpgftest NOGUI ${qtpgftest_SRCS})
-target_link_libraries(qtpgftest ${KDE4_KIO_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${PGF_LIBRARIES})
+add_executable(qtpgftest ${qtpgftest_SRCS})
+ecm_mark_nongui_executable(qtpgftest)
+target_link_libraries(qtpgftest KF5::KIOCore Qt5::Core Qt5::Gui ${PGF_LIBRARIES})
 
 set(pgfscaled_SRCS pgfscaled.cpp ${pgfutils_SRCS})
-KDE4_ADD_EXECUTABLE(pgfscaled NOGUI ${pgfscaled_SRCS})
-target_link_libraries(pgfscaled ${KDE4_KIO_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${PGF_LIBRARIES})
+add_executable(pgfscaled ${pgfscaled_SRCS})
+ecm_mark_nongui_executable(pgfscaled)
+target_link_libraries(pgfscaled KF5::KIOCore Qt5::Core Qt5::Gui ${PGF_LIBRARIES})
 
 set(loadpgfdata_SRCS loadpgfdata.cpp ${pgfutils_SRCS})
-KDE4_ADD_EXECUTABLE(loadpgfdata NOGUI ${loadpgfdata_SRCS})
-target_link_libraries(loadpgfdata ${KDE4_KIO_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${PGF_LIBRARIES})
+add_executable(loadpgfdata ${loadpgfdata_SRCS})
+ecm_mark_nongui_executable(loadpgfdata)
+target_link_libraries(loadpgfdata KF5::KIOCore Qt5::Core Qt5::Gui ${PGF_LIBRARIES})
 
 #------------------------------------------------------------------------
 
 set(testdimgloader_SRCS testdimgloader.cpp)
-KDE4_ADD_EXECUTABLE(testdimgloader NOGUI ${testdimgloader_SRCS})
+add_executable(testdimgloader ${testdimgloader_SRCS})
+ecm_mark_nongui_executable(testdimgloader)
 target_link_libraries(testdimgloader
                       digikamcore
-                      ${QT_QTCORE_LIBRARY}
-                      ${QT_QTGUI_LIBRARY}
-                      ${KDE4_KDECORE_LIBS}
-                      ${KEXIV2_LIBRARIES}
-                      ${KDCRAW_LIBRARIES}
+                      Qt5::Core
+                      Qt5::Gui
+                      KF5::KDELibs4Support
+                      KF5::KExiv2
+                      KF5::KDcraw
                       ${OpenCV_LIBRARIES}
                      )
 
 set(loadsavethreadtest_SRCS loadsavethreadtest.cpp)
-KDE4_ADD_EXECUTABLE(loadsavethreadtest NOGUI ${loadsavethreadtest_SRCS})
+add_executable(loadsavethreadtest ${loadsavethreadtest_SRCS})
+ecm_mark_nongui_executable(loadsavethreadtest)
 target_link_libraries(loadsavethreadtest
                       digikamcore
-                      ${QT_QTCORE_LIBRARY}
-                      ${QT_QTGUI_LIBRARY}
-                      ${KDE4_KDECORE_LIBS}
-                      ${KEXIV2_LIBRARIES}
-                      ${KDCRAW_LIBRARIES}
+                      Qt5::Core
+                      Qt5::Gui
+                      KF5::KDELibs4Support
+                      KF5::KExiv2
+                      KF5::KDcraw
                       ${OpenCV_LIBRARIES}
                      )
 
 if(LENSFUN_FOUND)
 
     set(testlensfuniface_SRCS testlensfuniface.cpp)
-    KDE4_ADD_EXECUTABLE(testlensfuniface NOGUI ${testlensfuniface_SRCS})
+    add_executable(testlensfuniface ${testlensfuniface_SRCS})
+ecm_mark_nongui_executable(testlensfuniface)
     target_link_libraries(testlensfuniface
                           digikamcore
-                          ${QT_QTCORE_LIBRARY}
-                          ${KDE4_KDECORE_LIBS}
-                          ${KEXIV2_LIBRARIES}
+                          Qt5::Core
+                          KF5::KDELibs4Support
+                          KF5::KExiv2
 
                           ${LENSFUN_LIBRARIES}
                           ${OpenCV_LIBRARIES}
@@ -389,28 +421,30 @@ endif()
 #------------------------------------------------------------------------
 
 set (testnrestimate_SRCS testnrestimate.cpp)
-KDE4_ADD_EXECUTABLE (testnrestimate NOGUI ${testnrestimate_SRCS})
+add_executable (testnrestimate ${testnrestimate_SRCS})
+ecm_mark_nongui_executable(testnrestimate)
 target_link_libraries(testnrestimate
                       digikamcore
-                      ${QT_QTCORE_LIBRARY}
-                      ${QT_QTGUI_LIBRARY}
-                      ${KDE4_KDECORE_LIBS}
-                      ${KEXIV2_LIBRARIES}
-                      ${KDCRAW_LIBRARIES}
+                      Qt5::Core
+                      Qt5::Gui
+                      KF5::KDELibs4Support
+                      KF5::KExiv2
+                      KF5::KDcraw
                       ${OpenCV_LIBRARIES}
                      )
 
 #------------------------------------------------------------------------
 
 set(testautocrop_SRCS testautocrop.cpp)
-KDE4_ADD_EXECUTABLE(testautocrop NOGUI ${testautocrop_SRCS})
+add_executable(testautocrop ${testautocrop_SRCS})
+ecm_mark_nongui_executable(testautocrop)
 target_link_libraries(testautocrop
                       digikamcore
-                      ${QT_QTCORE_LIBRARY}
-                      ${QT_QTGUI_LIBRARY}
-                      ${KDE4_KDECORE_LIBS}
-                      ${KEXIV2_LIBRARIES}
-                      ${KDCRAW_LIBRARIES}
+                      Qt5::Core
+                      Qt5::Gui
+                      KF5::KDELibs4Support
+                      KF5::KExiv2
+                      KF5::KDcraw
                       ${OpenCV_LIBRARIES}
                      )
 
@@ -433,16 +467,16 @@ set(testdatabase_SRCS testdatabase.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../app/settings/applicationsettings_tooltips.cpp
    )
 
-KDE4_ADD_EXECUTABLE(testdatabase ${testdatabase_SRCS})
+add_executable(testdatabase ${testdatabase_SRCS})
 target_link_libraries(testdatabase
                       digikamcore
                       digikamdatabase
-                      ${QT_QTCORE_LIBRARY}
-                      ${QT_QTGUI_LIBRARY}
-                      ${QT_QTSQL_LIBRARY}
-                      ${KDE4_KDECORE_LIBS}
-                      ${KDE4_KIO_LIBS}
-                      ${KEXIV2_LIBRARIES}
-                      ${KDCRAW_LIBRARIES}
+                      Qt5::Core
+                      Qt5::Gui
+                      Qt5::Sql
+                      KF5::KDELibs4Support
+                      KF5::KIOCore
+                      KF5::KExiv2
+                      KF5::KDcraw
                       ${OpenCV_LIBRARIES}
                      )
