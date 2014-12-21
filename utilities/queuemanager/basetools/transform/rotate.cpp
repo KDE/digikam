@@ -95,7 +95,7 @@ Rotate::~Rotate()
 void Rotate::registerSettingsWidget()
 {
 
-    KVBox* vbox  = new KVBox;
+    RVBox* vbox  = new RVBox;
     d->useExif   = new QCheckBox(i18n("Use Exif Orientation"), vbox);
 
     d->label     = new QLabel(vbox);

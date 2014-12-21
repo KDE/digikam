@@ -96,7 +96,7 @@ ToolSettingsView::ToolSettingsView(QWidget* const parent)
 
     // --------------------------------------------------------------------------
 
-    KVBox* vbox            = new KVBox(this);
+    RVBox* vbox            = new RVBox(this);
     QFrame* toolDescriptor = new QFrame(vbox);
     d->settingsViewIcon    = new QLabel();
     d->settingsViewTitle   = new QLabel();

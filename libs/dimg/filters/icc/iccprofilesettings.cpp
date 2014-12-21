@@ -79,7 +79,7 @@ const QString IccProfilesSettings::Private::configRecentlyUsedProfilesEntry("Rec
 // --------------------------------------------------------
 
 IccProfilesSettings::IccProfilesSettings(QWidget* const parent)
-    : KVBox(parent),
+    : RVBox(parent),
       d(new Private)
 {
     QLabel* const newProfileLabel  = new QLabel(i18n("Convert to:"), this);

@@ -46,7 +46,7 @@ namespace KExiv2Iface
 namespace Digikam
 {
 
-class CaptionEdit : public KVBox
+class CaptionEdit : public RVBox
 {
     Q_OBJECT
 

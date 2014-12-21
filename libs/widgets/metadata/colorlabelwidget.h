@@ -34,8 +34,11 @@
 
 // KDE includes
 
-#include <kvbox.h>
 #include <kactionmenu.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -44,10 +47,12 @@
 
 class QMenu;
 
+using namespace KDcrawIface;
+
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ColorLabelWidget : public KVBox
+class DIGIKAM_EXPORT ColorLabelWidget : public RVBox
 {
     Q_OBJECT
 

@@ -63,7 +63,7 @@ AutoCorrection::~AutoCorrection()
 
 void AutoCorrection::registerSettingsWidget()
 {
-    KVBox* const vbox   = new KVBox;
+    RVBox* const vbox   = new RVBox;
     QLabel* const label = new QLabel(vbox);
     m_comboBox          = new KComboBox(vbox);
     m_comboBox->insertItem(AutoLevelsCorrection,      i18n("Auto Levels"));

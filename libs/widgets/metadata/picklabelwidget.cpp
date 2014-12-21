@@ -78,18 +78,18 @@ public:
     QToolButton*        btnPndg;
     QToolButton*        btnAccpt;
 
-    KHBox*              descBox;
+    RHBox*              descBox;
 
     KSqueezedTextLabel* shortcut;
 };
 
 PickLabelWidget::PickLabelWidget(QWidget* const parent)
-    : KVBox(parent), d(new Private)
+    : RVBox(parent), d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setFocusPolicy(Qt::NoFocus);
 
-    KHBox* const hbox = new KHBox(this);
+    RHBox* const hbox = new RHBox(this);
     hbox->setMargin(0);
     hbox->setSpacing(0);
 
@@ -123,7 +123,7 @@ PickLabelWidget::PickLabelWidget(QWidget* const parent)
     d->pickBtns->addButton(d->btnPndg,  PendingLabel);
     d->pickBtns->addButton(d->btnAccpt, AcceptedLabel);
 
-    d->descBox  = new KHBox(this);
+    d->descBox  = new RHBox(this);
     d->descBox->setMargin(0);
     d->descBox->setSpacing(0);
     d->desc     = new QLabel(d->descBox);

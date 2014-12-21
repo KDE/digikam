@@ -148,7 +148,7 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
     d->showLabels          = new QCheckBox(i18n("Show image labels"), panel);
     d->showLabels->setWhatsThis(i18n("Show the digiKam image color label, pick label, and rating at the bottom of the screen."));
 
-    KHBox* const screenSelectBox = new KHBox(panel);
+    RHBox* const screenSelectBox = new RHBox(panel);
     new QLabel(i18n("Screen placement:"), screenSelectBox);
     d->screenPlacement           = new KComboBox(screenSelectBox);
     d->screenPlacement->setToolTip(i18n("In case of multi-screen computer, select here the monitor to slide contents."));

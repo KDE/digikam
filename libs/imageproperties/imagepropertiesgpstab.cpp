@@ -159,7 +159,7 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QWidget* const box            = new KHBox(this);
+    QWidget* const box            = new RHBox(this);
     QHBoxLayout* const hBoxLayout = reinterpret_cast<QHBoxLayout*>(box->layout());
 
     if (hBoxLayout)

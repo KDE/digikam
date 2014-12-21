@@ -40,7 +40,7 @@ namespace Digikam
 
 class ImportUI;
 
-class ImportView : public KHBox
+class ImportView : public RHBox
 {
     Q_OBJECT
 

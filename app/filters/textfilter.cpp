@@ -75,7 +75,7 @@ public:
 };
 
 TextFilter::TextFilter(QWidget* const parent)
-    : KHBox(parent), d(new Private)
+    : RHBox(parent), d(new Private)
 {
     d->searchTextBar = new SearchTextBar(this, "AlbumIconViewFilterSearchTextBar");
     d->searchTextBar->setTextQueryCompletion(true);

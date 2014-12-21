@@ -63,7 +63,7 @@ AssignTemplate::~AssignTemplate()
 
 void AssignTemplate::registerSettingsWidget()
 {
-    KVBox* const vbox  = new KVBox;
+    RVBox* const vbox  = new RVBox;
     m_templateSelector = new TemplateSelector(vbox);
     m_templateViewer   = new TemplateViewer(vbox);
     m_settingsWidget   = vbox;

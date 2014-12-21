@@ -238,9 +238,9 @@ void ImportUI::setupUserArea()
     filterModel->setSourceImportModel(model);
     filterModel->sort(0); // an initial sorting is necessary
 
-    KHBox* const widget = new KHBox(this);
+    RHBox* const widget = new RHBox(this);
     d->splitter         = new SidebarSplitter(widget);
-    KVBox* const vbox   = new KVBox(d->splitter);
+    RVBox* const vbox   = new RVBox(d->splitter);
     d->view             = new ImportView(this, model, filterModel, vbox);
     d->view->importFilterModel()->setCameraThumbsController(d->camThumbsCtrl);
     d->historyView      = new DHistoryView(vbox);

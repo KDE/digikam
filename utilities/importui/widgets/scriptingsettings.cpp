@@ -80,7 +80,7 @@ ScriptingSettings::ScriptingSettings(QWidget* const parent)
 
     QVBoxLayout* vlay      = new QVBoxLayout(this);
     d->scriptLabel         = new QLabel(i18n("Execute script for image:"), this);
-    KHBox* hbox            = new KHBox(this);
+    RHBox* hbox            = new RHBox(this);
     d->script              = new KUrlRequester(hbox);
     KFile::Modes mode      = KFile::File | KFile::ExistingOnly | KFile::LocalOnly;
     d->script->setMode(mode);

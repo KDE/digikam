@@ -157,7 +157,7 @@ TemplateViewer::TemplateViewer(QWidget* const parent)
 {
     setFrameStyle(QFrame::NoFrame);
 
-    KVBox* w1            = new KVBox(this);
+    RVBox* w1            = new RVBox(this);
     d->names             = new DTextLabelName(i18n("Names:"), w1);
     d->namesList         = new DTextList(QStringList(), w1);
     d->position          = new DTextLabelName(i18n("Position:"), w1);
@@ -187,7 +187,7 @@ TemplateViewer::TemplateViewer(QWidget* const parent)
 
     // ------------------------------------------------------------------
 
-    KVBox* w2                     = new KVBox(this);
+    RVBox* w2                     = new RVBox(this);
     d->locationCity               = new DTextLabelName(i18n("City:"), w2);
     d->labelLocationCity          = new DTextBrowser(QString(), w2);
     d->locationSublocation        = new DTextLabelName(i18n("Sublocation:"), w2);
@@ -207,7 +207,7 @@ TemplateViewer::TemplateViewer(QWidget* const parent)
 
     // ------------------------------------------------------------------
 
-    KVBox* w3                    = new KVBox(this);
+    RVBox* w3                    = new RVBox(this);
     d->contactAddress            = new DTextLabelName(i18n("Address:"), w3);
     d->labelContactAddress       = new DTextBrowser(QString(), w3);
     d->contactPostalCode         = new DTextLabelName(i18n("Postal Code:"), w3);
@@ -239,7 +239,7 @@ TemplateViewer::TemplateViewer(QWidget* const parent)
 
     // ------------------------------------------------------------------
 
-    KVBox* w4       = new KVBox(this);
+    RVBox* w4       = new RVBox(this);
     d->subjectsList = new DTextList(QStringList(), w4);
 
     addItem(w4, SmallIcon("feed-subscribe"),

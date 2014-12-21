@@ -119,7 +119,7 @@ AssignNameWidget* AssignNameOverlay::assignNameWidget() const
 
 QWidget* AssignNameOverlay::createWidget()
 {
-    KVBox* const vbox    = new KVBox(parentWidget());
+    RVBox* const vbox    = new RVBox(parentWidget());
     QWidget* const space = new QWidget(vbox);
     d->assignNameWidget  = new AssignNameWidget(vbox);
     d->assignNameWidget->setMode(AssignNameWidget::UnconfirmedEditMode);

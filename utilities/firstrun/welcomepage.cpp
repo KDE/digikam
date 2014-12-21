@@ -42,7 +42,7 @@ namespace Digikam
 WelcomePage::WelcomePage(KAssistantDialog* const dlg)
     : AssistantDlgPage(dlg, i18n("Welcome to digiKam %1", QString(digikam_version_short)))
 {
-    KVBox* const vbox   = new KVBox(this);
+    RVBox* const vbox   = new RVBox(this);
     QLabel* const title = new QLabel(vbox);
     title->setWordWrap(true);
     title->setText(i18n("<qt>"

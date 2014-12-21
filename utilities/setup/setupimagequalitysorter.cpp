@@ -76,7 +76,7 @@ public:
         setCompressionWeight(0)
     {}
 
-    KVBox*        optionsView;
+    RVBox*        optionsView;
     QCheckBox*    enableSorter;
     QCheckBox*    useFullImage;
     QCheckBox*    detectBlur;
@@ -110,7 +110,7 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
     d->enableSorter = new QCheckBox(i18n("Enable Image Quality Sorting (Experimental)"), panel);
     d->enableSorter->setWhatsThis(i18n("Enable this option to assign automatically Pick Labels based on image quality."));
 
-    d->optionsView  = new KVBox(panel);
+    d->optionsView  = new RVBox(panel);
 
     layout->addWidget(d->enableSorter);
     layout->addWidget(d->optionsView);
@@ -136,7 +136,7 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
 
     // ------------------------------------------------------------------------------
 
-    KHBox* const hlay1      = new KHBox(d->optionsView);
+    RHBox* const hlay1      = new RHBox(d->optionsView);
 
     d->setRejected          = new QCheckBox(i18n("Assign 'Rejected' Label to Low Quality Pictures"), hlay1);
     d->setRejected->setWhatsThis(i18n("Low quality images detected by blur, noise, and compression analysis will be assigned to Rejected label."));
@@ -149,7 +149,7 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
 
     // ------------------------------------------------------------------------------
 
-    KHBox* const hlay2      = new KHBox(d->optionsView);
+    RHBox* const hlay2      = new RHBox(d->optionsView);
 
     d->setPending           = new QCheckBox(i18n("Assign 'Pending' Label to Medium Quality Pictures"), hlay2);
     d->setPending->setWhatsThis(i18n("Medium quality images detected by blur, noise, and compression analysis will be assigned to Pending label."));
@@ -162,7 +162,7 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
 
     // ------------------------------------------------------------------------------
 
-    KHBox* const hlay3      = new KHBox(d->optionsView);
+    RHBox* const hlay3      = new RHBox(d->optionsView);
 
     d->setAccepted          = new QCheckBox(i18n("Assign 'Accepted' Label to High Quality Pictures"), hlay3);
     d->setAccepted->setWhatsThis(i18n("High quality images detected by blur, noise, and compression analysis will be assigned to Accepted label."));

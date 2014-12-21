@@ -138,7 +138,7 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     // --------------------------------------------------------
 
     QScrollArea* const sv3   = new QScrollArea(this);
-    KVBox* const vbox3       = new KVBox(sv3->viewport());
+    RVBox* const vbox3       = new RVBox(sv3->viewport());
     sv3->setWidget(vbox3);
     sv3->setWidgetResizable(true);
     vbox3->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
@@ -151,7 +151,7 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     // --------------------------------------------------------
 
     QScrollArea* const sv2   = new QScrollArea(this);
-    KVBox* const vbox2       = new KVBox(sv2->viewport());
+    RVBox* const vbox2       = new RVBox(sv2->viewport());
     sv2->setWidget(vbox2);
     sv2->setWidgetResizable(true);
 

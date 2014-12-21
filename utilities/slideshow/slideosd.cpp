@@ -87,8 +87,8 @@ public:
     QTimer*             progressTimer;
     QTimer*             slideTimer;
 
-    KHBox*              labelsBox;
-    KHBox*              progressBox;
+    RHBox*              labelsBox;
+    RHBox*              progressBox;
 
     SlideShow*          parent;
     SlideProperties*    slideProps;
@@ -127,7 +127,7 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
 
     // ---------------------------------------------------------------
 
-    d->labelsBox    = new KHBox(this);
+    d->labelsBox    = new RHBox(this);
 
     d->clWidget     = new ColorLabelSelector(d->labelsBox);
     d->clWidget->installEventFilter(this);
@@ -167,7 +167,7 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
 
     // ---------------------------------------------------------------
 
-    d->progressBox   = new KHBox(this);
+    d->progressBox   = new RHBox(this);
     d->progressBox->setVisible(d->settings.showProgressIndicator);
     d->progressBox->installEventFilter(d->parent);
     d->progressBox->setMouseTracking(true);

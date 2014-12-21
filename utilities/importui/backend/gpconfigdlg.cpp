@@ -136,7 +136,7 @@ void GPConfigDlg::appendWidget(QWidget* parent, CameraWidget* widget)
             QVBoxLayout* tabLayout = new QVBoxLayout(tab, marginHint(),
                                                      spacingHint());
             d->tabWidget->insertTab(tab, widget_label);
-            KVBox* tabContainer = new KVBox(tab);
+            RVBox* tabContainer = new RVBox(tab);
             tabContainer->setSpacing(spacingHint());
             tabLayout->addWidget(tabContainer);
             newParent = tabContainer;

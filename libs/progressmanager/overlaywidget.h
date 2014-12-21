@@ -25,9 +25,9 @@
 #ifndef OVERLAY_WIDGET_H
 #define OVERLAY_WIDGET_H
 
-// KDE includes
+// Libkdcraw includes
 
-#include <khbox.h>
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -35,6 +35,8 @@
 
 class QResizeEvent;
 class QEvent;
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -44,9 +46,9 @@ namespace Digikam
  * so that it can actually be on top of other widgets.
  * Currently the only supported type of alignment is "right aligned, on top of the other widget".
  *
- * OverlayWidget inherits KHBox for convenience purposes (layout, and frame)
+ * OverlayWidget inherits RHBox for convenience purposes (layout, and frame)
  */
-class DIGIKAM_EXPORT OverlayWidget : public KHBox
+class DIGIKAM_EXPORT OverlayWidget : public RHBox
 {
     Q_OBJECT
 

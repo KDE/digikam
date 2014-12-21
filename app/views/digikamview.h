@@ -62,7 +62,7 @@ class BatchSyncMetadata;
 class FilterStatusBar;
 class SlideShowSettings;
 
-class DigikamView : public KHBox
+class DigikamView : public RHBox
 {
     Q_OBJECT
 

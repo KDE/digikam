@@ -65,7 +65,7 @@ public:
 };
 
 CaptionEdit::CaptionEdit(QWidget* const parent)
-    : KVBox(parent), d(new Private)
+    : RVBox(parent), d(new Private)
 {
 
     d->altLangStrEdit = new AltLangStrEdit(this);

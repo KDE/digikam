@@ -122,7 +122,7 @@ const QString FilterSideBarWidget::Private::configMatchingConditionEntry("Matchi
 // ---------------------------------------------------------------------------------------------------
 
 FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const tagFilterModel)
-    : KVBox(parent), StateSavingObject(this), d(new Private)
+    : RVBox(parent), StateSavingObject(this), d(new Private)
 {
     setObjectName("TagFilter Sidebar");
 

@@ -87,7 +87,7 @@ AdvancedSettings::AdvancedSettings(QWidget* const parent)
     d->dateTimeEdit              = new DDateTimeEdit(this, "datepicker");
     d->autoRotateCheck           = new QCheckBox(i18nc("@option:check", "Auto-rotate/flip image"), this);
     d->convertJpegCheck          = new QCheckBox(i18nc("@option:check", "Convert to lossless file format"), this);
-    KHBox* const hbox2           = new KHBox(this);
+    RHBox* const hbox2           = new RHBox(this);
     d->formatLabel               = new QLabel(i18n("New image format:"), hbox2);
     d->losslessFormat            = new KComboBox(hbox2);
     d->losslessFormat->insertItem(0, "PNG");

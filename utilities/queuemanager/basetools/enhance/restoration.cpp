@@ -60,7 +60,7 @@ Restoration::~Restoration()
 
 void Restoration::registerSettingsWidget()
 {
-    KVBox* vbox   = new KVBox;
+    RVBox* vbox   = new RVBox;
 
     KUrlLabel* cimgLogoLabel = new KUrlLabel(vbox);
     cimgLogoLabel->setText(QString());

@@ -65,7 +65,7 @@ RawPage::RawPage(KAssistantDialog* const dlg)
     : AssistantDlgPage(dlg, i18n("<b>Configure Raw File Handling</b>")),
       d(new Private)
 {
-    KVBox* const vbox    = new KVBox(this);
+    RVBox* const vbox    = new RVBox(this);
     QLabel* const label1 = new QLabel(vbox);
     label1->setWordWrap(true);
     label1->setText(i18n("<qt>"

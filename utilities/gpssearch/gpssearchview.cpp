@@ -150,7 +150,7 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
 
     // ---------------------------------------------------------------
 
-    KHBox* hbox = new KHBox(this);
+    RHBox* hbox = new RHBox(this);
     hbox->setMargin(0);
     hbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 

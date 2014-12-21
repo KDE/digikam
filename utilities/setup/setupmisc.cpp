@@ -98,7 +98,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     
     // --------------------------------------------------------
 
-    KHBox* const tabStyleHbox = new KHBox(panel);
+    RHBox* const tabStyleHbox = new RHBox(panel);
     d->sidebarTypeLabel       = new QLabel(i18n("Sidebar tab title:"), tabStyleHbox);
     d->sidebarType            = new KComboBox(tabStyleHbox);
     d->sidebarType->addItem(i18n("Only For Active Tab"), 0);
@@ -107,7 +107,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    KHBox* const stringComparisonHbox = new KHBox(panel);
+    RHBox* const stringComparisonHbox = new RHBox(panel);
     d->stringComparisonTypeLabel      = new QLabel(i18n("String comparison type:"), stringComparisonHbox);
     d->stringComparisonType           = new KComboBox(stringComparisonHbox);
     d->stringComparisonType->addItem(i18nc("method to compare strings", "Natural"), ApplicationSettings::Natural);
@@ -122,7 +122,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    KHBox* const appStyleHbox = new KHBox(panel);
+    RHBox* const appStyleHbox = new RHBox(panel);
     d->applicationStyleLabel  = new QLabel(i18n("Widget style:"), appStyleHbox);
     d->applicationStyle       = new KComboBox(appStyleHbox);
     d->applicationStyle->setToolTip(i18n("Set this option to choose the default window decoration and looks."));

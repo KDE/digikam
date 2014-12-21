@@ -27,6 +27,8 @@
 #include <QLabel>
 #include <QString>
 #include <QWidget>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
@@ -34,15 +36,17 @@
 #include <kcombobox.h>
 #include <kdialog.h>
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
 #include <ksqueezedtextlabel.h>
-#include <KHBox>
+
 // Libkdcraw includes
 
+#include <rwidgetutils.h>
 #include <rnuminput.h>
 #include <rcombobox.h>
-#include <QApplication>
-#include <QStyle>
+
+// Local includes
+
+#include "digikam_debug.h"
 
 using namespace KDcrawIface;
 
@@ -119,13 +123,13 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* const parent)
     d->iface            = new LensFunIface();
 
     QGridLayout* grid   = new QGridLayout(this);
-    KHBox* hbox         = new KHBox(this);
+    RHBox* hbox         = new RHBox(this);
     d->metadataUsage    = new QCheckBox(i18n("Use Metadata"), hbox);
     QLabel* space       = new QLabel(hbox);
     d->metadataResult   = new QLabel(hbox);
     hbox->setStretchFactor(space, 10);
 
-    KHBox* hbox1        = new KHBox(this);
+    RHBox* hbox1        = new RHBox(this);
     d->makeLabel        = new QLabel(i18nc("camera make",  "Make:"),  hbox1);
     QLabel* space1      = new QLabel(hbox1);
     d->makeDescription  = new KSqueezedTextLabel(hbox1);
@@ -137,7 +141,7 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* const parent)
     d->make             = new RComboBox(this);
     d->make->setDefaultIndex(0);
 
-    KHBox* hbox2        = new KHBox(this);
+    RHBox* hbox2        = new RHBox(this);
     d->modelLabel       = new QLabel(i18nc("camera model", "Model:"), hbox2);
     QLabel* space2      = new QLabel(hbox2);
     d->modelDescription = new KSqueezedTextLabel(hbox2);
@@ -149,7 +153,7 @@ LensFunCameraSelector::LensFunCameraSelector(QWidget* const parent)
     d->model            = new RComboBox(this);
     d->model->setDefaultIndex(0);
 
-    KHBox* hbox3        = new KHBox(this);
+    RHBox* hbox3        = new RHBox(this);
     d->lensLabel        = new QLabel(i18nc("camera lens",  "Lens:"),  hbox3);
     QLabel* space3      = new QLabel(hbox3);
     d->lensDescription  = new KSqueezedTextLabel(hbox3);

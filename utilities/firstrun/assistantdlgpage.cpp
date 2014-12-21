@@ -70,7 +70,7 @@ AssistantDlgPage::AssistantDlgPage(KAssistantDialog* const dlg, const QString& t
     setWidgetResizable(true);
 
     d->hlay           = new QHBoxLayout(panel);
-    KVBox* const vbox = new KVBox(panel);
+    RVBox* const vbox = new RVBox(panel);
     d->logo           = new QLabel(vbox);
     d->logo->setAlignment(Qt::AlignCenter);
     d->logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))

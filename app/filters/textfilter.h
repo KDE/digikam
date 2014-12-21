@@ -24,9 +24,9 @@
 #ifndef TEXTFILTER_H
 #define TEXTFILTER_H
 
-// KDE includes
+// Libkdcraw includes
 
-#include <khbox.h>
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -35,12 +35,14 @@
 
 class QAction;
 
+using namespace KDcrawIface;
+
 namespace Digikam
 {
 
 class SearchTextBar;
 
-class TextFilter : public KHBox
+class TextFilter : public RHBox
 {
     Q_OBJECT
 

@@ -93,18 +93,18 @@ public:
     QToolButton*        btnBlack;
     QToolButton*        btnWhite;
 
-    KHBox*              descBox;
+    RHBox*              descBox;
 
     KSqueezedTextLabel* shortcut;
 };
 
 ColorLabelWidget::ColorLabelWidget(QWidget* const parent)
-    : KVBox(parent), d(new Private)
+    : RVBox(parent), d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setFocusPolicy(Qt::NoFocus);
 
-    KHBox* const hbox = new KHBox(this);
+    RHBox* const hbox = new RHBox(this);
     hbox->setMargin(0);
     hbox->setSpacing(0);
 
@@ -180,7 +180,7 @@ ColorLabelWidget::ColorLabelWidget(QWidget* const parent)
     d->colorBtns->addButton(d->btnBlack,   BlackLabel);
     d->colorBtns->addButton(d->btnWhite,   WhiteLabel);
 
-    d->descBox  = new KHBox(this);
+    d->descBox  = new RHBox(this);
     d->descBox->setMargin(0);
     d->descBox->setSpacing(0);
     d->desc     = new QLabel(d->descBox);

@@ -51,7 +51,7 @@ namespace Digikam
 class ImageInfo;
 class TaggingAction;
 
-class ImageDescEditTab : public KVBox
+class ImageDescEditTab : public RVBox
 {
     Q_OBJECT
 

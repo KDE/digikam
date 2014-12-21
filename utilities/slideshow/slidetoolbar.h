@@ -30,9 +30,9 @@
 #include <QWidget>
 #include <QKeyEvent>
 
-// KDE includes
+// Libkdcraw includes
 
-#include <khbox.h>
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -41,10 +41,12 @@
 
 class QAction;
 
+using namespace KDcrawIface;
+
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT SlideToolBar : public KHBox
+class DIGIKAM_EXPORT SlideToolBar : public RHBox
 {
     Q_OBJECT
 

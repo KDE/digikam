@@ -40,9 +40,10 @@
 #include <QSpinBox>
 #include <QScrollArea>
 #include <QToolButton>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
-
 
 #include <kapplication.h>
 #include <kcombobox.h>
@@ -52,9 +53,10 @@
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
 #include <kstandarddirs.h>
-#include <kvbox.h>
-#include <QApplication>
-#include <QStyle>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -68,6 +70,8 @@
 #include "cietonguewidget.h"
 #include "imagepropertiestxtlabel.h"
 #include "globals.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -154,7 +158,7 @@ ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    KVBox* histoBox    = new KVBox(histogramPage);
+    RVBox* histoBox    = new RVBox(histogramPage);
     d->histogramBox    = new HistogramBox(histoBox, LRGBAC, true);
     d->histogramBox->setStatisticsVisible(false);
 

@@ -62,8 +62,8 @@ CurvesAdjust::~CurvesAdjust()
 
 void CurvesAdjust::registerSettingsWidget()
 {
-    KVBox* vbox          = new KVBox;
-    KHBox* hbox          = new KHBox(vbox);
+    RVBox* vbox          = new RVBox;
+    RHBox* hbox          = new RHBox(vbox);
     QLabel* channelLabel = new QLabel(hbox);
     channelLabel->setText(i18n("Channel:"));
     m_channelCB          = new KComboBox(hbox);

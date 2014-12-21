@@ -31,17 +31,22 @@
 // KDE includes
 
 #include <kconfig.h>
-#include <kvbox.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
 #include "digikam_export.h"
 #include "iccprofile.h"
 
+using namespace KDcrawIface;
+
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT IccProfilesSettings : public KVBox
+class DIGIKAM_EXPORT IccProfilesSettings : public RVBox
 {
     Q_OBJECT
 

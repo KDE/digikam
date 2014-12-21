@@ -109,7 +109,7 @@ AlbumCustomizer::AlbumCustomizer(QWidget* const parent)
     QVBoxLayout* albumVlay = new QVBoxLayout(this);
     d->autoAlbumExtCheck   = new QCheckBox(i18nc("@option:check", "Extension-based sub-albums"), this);
     d->autoAlbumDateCheck  = new QCheckBox(i18nc("@option:check", "Date-based sub-albums"), this);
-    KHBox* hbox1           = new KHBox(this);
+    RHBox* hbox1           = new RHBox(this);
     d->folderDateLabel     = new QLabel(i18nc("@label:listbox", "Date format:"), hbox1);
     d->folderDateFormat    = new KComboBox(hbox1);
     d->folderDateFormat->insertItem(IsoDateFormat,    i18nc("@item:inlistbox", "ISO"));
@@ -117,7 +117,7 @@ AlbumCustomizer::AlbumCustomizer(QWidget* const parent)
     d->folderDateFormat->insertItem(LocalDateFormat,  i18nc("@item:inlistbox", "Local Settings"));
     d->folderDateFormat->insertItem(CustomDateFormat, i18nc("@item:inlistbox", "Custom"));
 
-    KHBox* hbox2           = new KHBox(this);
+    RHBox* hbox2           = new RHBox(this);
     d->customizer          = new KLineEdit(hbox2);
     d->tooltipToggleButton = new QToolButton(hbox2);
     d->tooltipToggleButton->setIcon(SmallIcon("dialog-information"));

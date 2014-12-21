@@ -151,7 +151,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
     d->iface                 = iface;
     d->tab                   = new KTabWidget(this);
 
-    KVBox* const albumBox = new KVBox(d->tab);
+    RVBox* const albumBox = new RVBox(d->tab);
     d->albumModel         = new AlbumModel(AbstractAlbumModel::IgnoreRootAlbum, albumBox);
     d->albumTreeView      = new AlbumTreeView(albumBox);
     d->albumTreeView->setAlbumModel(d->albumModel);
@@ -172,7 +172,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
 
     // -------------------------------------------------------------------------------
 
-    KVBox* const tagBox = new KVBox(d->tab);
+    RVBox* const tagBox = new RVBox(d->tab);
     d->tagModel         = new TagModel(AbstractAlbumModel::IgnoreRootAlbum, tagBox);
     d->tagTreeView      = new TagTreeView(tagBox);
     d->tagTreeView->setAlbumModel(d->tagModel);
@@ -194,7 +194,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
 
     // -------------------------------------------------------------------------------
 
-    KVBox* const searchBox  = new KVBox(d->tab);
+    RVBox* const searchBox  = new RVBox(d->tab);
     d->searchModel          = new SearchModel(searchBox);
     d->searchTreeView       = new SearchTreeView(searchBox);
     d->searchTreeView->setAlbumModel(d->searchModel);
@@ -216,7 +216,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
 
     // -------------------------------------------------------------------------------
 
-    KVBox* const labelsBox = new KVBox(d->tab);
+    RVBox* const labelsBox = new RVBox(d->tab);
     d->labelsTree          = new AlbumLabelsTreeView(labelsBox,true);
     d->labelsSearchHandler = new AlbumLabelsSearchHandler(d->labelsTree);
 

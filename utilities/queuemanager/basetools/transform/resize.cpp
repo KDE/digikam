@@ -135,7 +135,7 @@ Resize::~Resize()
 
 void Resize::registerSettingsWidget()
 {
-    KVBox* const vbox   = new KVBox;
+    RVBox* const vbox   = new RVBox;
     d->labelPreset      = new QLabel(i18n("Preset Length:"), vbox);
     d->comboBox         = new KComboBox(vbox);
     d->comboBox->insertItem(Private::Tiny,   i18np("Tiny (1 pixel)",   "Tiny (%1 pixels)",   d->presetLengthValue(Private::Tiny)));

@@ -43,18 +43,17 @@
 // KDE includes
 
 #include <kcolorbutton.h>
-#include <khbox.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
 #include <kstandardguiitem.h>
-#include <kvbox.h>
 #include <kguiitem.h>
 #include <kstandardguiitem.h>
 
 // Libkdcraw includes
 
 #include <rnuminput.h>
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -106,7 +105,7 @@ public:
     QLabel*              toolName;
     QLabel*              toolIcon;
 
-    KHBox*               guideBox;
+    RHBox*               guideBox;
 
     QPushButton*         okBtn;
     QPushButton*         cancelBtn;
@@ -136,7 +135,7 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
 
     QGridLayout* const gridSettings = new QGridLayout(d->settingsArea);
     d->plainPage                    = new QWidget;
-    d->guideBox                     = new KHBox;
+    d->guideBox                     = new RHBox;
     d->histogramBox                 = new HistogramBox;
 
     // ---------------------------------------------------------------
@@ -179,8 +178,7 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
     d->guideColorBt      = new KColorButton(QColor(Qt::red), d->guideBox);
     d->guideColorBt->setWhatsThis(i18n("Set here the color used to draw dashed guide lines."));
     d->guideSize         = new RIntNumInput(d->guideBox);
-#pragma "Port to KF5"
-    //d->guideSize->setSuffix(QString("px"));
+    d->guideSize->setSuffix(QString("px"));
     d->guideSize->setRange(1, 5, 1);
     d->guideSize->setDefaultValue(1);
     d->guideSize->setWhatsThis(i18n("Set here the width in pixels used to draw dashed guide lines."));

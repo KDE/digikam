@@ -160,7 +160,7 @@ public:
     QTimer*                   timerSketch;
     QTimer*                   timerImage;
 
-    KVBox*                    folderView;
+    RVBox*                    folderView;
 
     KLineEdit*                nameEditSketch;
     KLineEdit*                nameEditImage;
@@ -230,7 +230,7 @@ FuzzySearchView::FuzzySearchView(SearchModel* const searchModel,
 
     // ---------------------------------------------------------------
 
-    d->folderView     = new KVBox();
+    d->folderView     = new RVBox();
     d->searchTreeView = new EditableSearchTreeView(d->folderView, searchModel, searchModificationHelper);
     d->searchTreeView->filteredModel()->listHaarSearches();
     d->searchTreeView->filteredModel()->setListTemporarySearches(true);
@@ -267,7 +267,7 @@ FuzzySearchView::FuzzySearchView(SearchModel* const searchModel,
 
 QWidget* FuzzySearchView::setupFindSimilarPanel() const
 {
-    KHBox* const imageBox = new KHBox();
+    RHBox* const imageBox = new RHBox();
     d->imageWidget        = new QLabel(imageBox);
     d->imageWidget->setFixedSize(256, 256);
     d->imageWidget->setText(i18n("<p>Drag & drop an image here<br/>to perform similar<br/>items search.</p>"
@@ -303,7 +303,7 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
 
     // ---------------------------------------------------------------
 
-    KHBox* const saveBox = new KHBox();
+    RHBox* const saveBox = new RHBox();
     saveBox->setMargin(0);
     saveBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
@@ -344,7 +344,7 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
 
 QWidget* FuzzySearchView::setupSketchPanel() const
 {
-    KHBox* const drawingBox = new KHBox();
+    RHBox* const drawingBox = new RHBox();
     d->sketchWidget         = new SketchWidget(drawingBox);
     drawingBox->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     drawingBox->setLineWidth(1);
@@ -408,7 +408,7 @@ QWidget* FuzzySearchView::setupSketchPanel() const
 
     // ---------------------------------------------------------------
 
-    KHBox* const saveBox = new KHBox();
+    RHBox* const saveBox = new RHBox();
     saveBox->setMargin(0);
     saveBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 

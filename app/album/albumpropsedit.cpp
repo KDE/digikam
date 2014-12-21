@@ -189,7 +189,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
     d->datePicker = new DDatePicker(page);
     dateLabel->setBuddy(d->datePicker);
 
-    KHBox* const buttonRow            = new KHBox(page);
+    RHBox* const buttonRow            = new RHBox(page);
     QPushButton* const dateLowButton  = new QPushButton(i18nc("Selects the date of the oldest image",
                                                         "&Oldest"), buttonRow);
     QPushButton* const dateAvgButton  = new QPushButton(i18nc("Calculates the average date",

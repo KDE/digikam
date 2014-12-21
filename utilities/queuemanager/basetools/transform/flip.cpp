@@ -57,7 +57,7 @@ Flip::Flip(QObject* parent)
 
 void Flip::registerSettingsWidget()
 {
-    KVBox* vbox      = new KVBox;
+    RVBox* vbox      = new RVBox;
     QLabel* label    = new QLabel(vbox);
     m_comboBox       = new KComboBox(vbox);
     m_comboBox->insertItem(DImg::HORIZONTAL, i18n("Horizontal"));

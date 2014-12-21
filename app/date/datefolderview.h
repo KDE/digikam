@@ -51,7 +51,7 @@ class ImageFilterModel;
 template <class T>
 class AlbumPointer;
 
-class DateFolderView: public KVBox, public StateSavingObject
+class DateFolderView: public RVBox, public StateSavingObject
 {
     Q_OBJECT
 

@@ -35,14 +35,19 @@
 
 // KDE includes
 
-#include <kvbox.h>
 #include <kactionmenu.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
 #include "digikam_export.h"
 
 class QMenu;
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -115,7 +120,7 @@ private:
 
 // --------------------------------------------------------------------
 
-class DIGIKAM_EXPORT RatingBox : public KVBox
+class DIGIKAM_EXPORT RatingBox : public RVBox
 {
     Q_OBJECT
 

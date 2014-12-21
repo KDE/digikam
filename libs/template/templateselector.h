@@ -33,7 +33,7 @@ namespace Digikam
 
 class Template;
 
-class TemplateSelector : public KHBox
+class TemplateSelector : public RHBox
 {
     Q_OBJECT
 

@@ -61,7 +61,7 @@ RemoveMetadata::~RemoveMetadata()
 
 void RemoveMetadata::registerSettingsWidget()
 {
-    KVBox* const vbox = new KVBox;
+    RVBox* const vbox = new RVBox;
     m_removeExif      = new QCheckBox(i18n("Remove Exif"), vbox);
     m_removeIptc      = new QCheckBox(i18n("Remove Iptc"), vbox);
     m_removeXmp       = new QCheckBox(i18n("Remove Xmp"), vbox);

@@ -84,7 +84,7 @@ public:
 };
 
 DZoomBar::DZoomBar(QWidget* const parent)
-    : KHBox(parent), d(new Private)
+    : RHBox(parent), d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setFocusPolicy(Qt::NoFocus);

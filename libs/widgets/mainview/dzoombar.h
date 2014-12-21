@@ -28,9 +28,9 @@
 
 #include <QtCore/QString>
 
-// KDE includes
+// Libkdcraw includes
 
-#include <khbox.h>
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -38,10 +38,12 @@
 
 class QAction;
 
+using namespace KDcrawIface;
+
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DZoomBar : public KHBox
+class DIGIKAM_EXPORT DZoomBar : public RHBox
 {
     Q_OBJECT
 

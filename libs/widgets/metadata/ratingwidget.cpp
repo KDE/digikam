@@ -488,7 +488,7 @@ public:
 };
 
 RatingBox::RatingBox(QWidget* const parent)
-    : KVBox(parent), d(new Private)
+    : RVBox(parent), d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setFocusPolicy(Qt::NoFocus);

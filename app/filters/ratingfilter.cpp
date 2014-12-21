@@ -224,7 +224,7 @@ public:
 };
 
 RatingFilter::RatingFilter(QWidget* const parent)
-    : KHBox(parent), d(new Private)
+    : RHBox(parent), d(new Private)
 {
     d->ratingWidget = new RatingFilterWidget(this);
 

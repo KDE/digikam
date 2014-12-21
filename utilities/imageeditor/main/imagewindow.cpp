@@ -30,6 +30,7 @@
 
 // Qt includes
 
+#include <QMenu>
 #include <QCloseEvent>
 #include <QDragMoveEvent>
 #include <QDropEvent>
@@ -60,7 +61,6 @@
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
 #include <klocalizedstring.h>
-#include <QMenu>
 #include <kmenubar.h>
 #include <kmessagebox.h>
 #include <kselectaction.h>
@@ -74,7 +74,6 @@
 #include <ktoolbar.h>
 #include <ktoolbarpopupaction.h>
 #include <kwindowsystem.h>
-#include "digikam_debug.h"
 
 // Local includes
 
@@ -137,6 +136,7 @@
 #include "uifilevalidator.h"
 #include "undostate.h"
 #include "imagewindow_p.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {

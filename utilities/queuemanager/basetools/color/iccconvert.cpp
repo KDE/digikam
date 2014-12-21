@@ -63,7 +63,7 @@ IccConvert::~IccConvert()
 
 void IccConvert::registerSettingsWidget()
 {
-    KVBox* vbox      = new KVBox;
+    RVBox* vbox      = new RVBox;
     m_settingsView   = new IccProfilesSettings(vbox);
     QLabel* space    = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);

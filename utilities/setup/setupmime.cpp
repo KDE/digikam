@@ -111,7 +111,7 @@ SetupMime::SetupMime(QWidget* const parent)
     d->imageFileFilterLabel = new QLabel(imageFileFilterBox);
     d->imageFileFilterLabel->setText(i18n("Additional &image file extensions (<a href='image'>Currently-supported types</a>):"));
 
-    KHBox* hbox1           = new KHBox(imageFileFilterBox);
+    RHBox* hbox1           = new RHBox(imageFileFilterBox);
     d->imageFileFilterEdit = new KLineEdit(hbox1);
     d->imageFileFilterEdit->setWhatsThis(i18n("<p>Here you can add the extensions of image files (including RAW files) "
                                               "to be displayed in the Album view. Just put \"xyz abc\" "
@@ -147,7 +147,7 @@ SetupMime::SetupMime(QWidget* const parent)
     d->movieFileFilterLabel = new QLabel(movieFileFilterBox);
     d->movieFileFilterLabel->setText(i18n("Additional &movie file extensions (<a href='video'>Currently-supported types</a>):"));
 
-    KHBox* hbox2 = new KHBox(movieFileFilterBox);
+    RHBox* hbox2 = new RHBox(movieFileFilterBox);
     d->movieFileFilterEdit = new KLineEdit(hbox2);
     d->movieFileFilterEdit->setWhatsThis(i18n("<p>Here you can add extra extensions of video files "
                                               "to be displayed in your Album view. Just write \"xyz abc\" "
@@ -185,7 +185,7 @@ SetupMime::SetupMime(QWidget* const parent)
     d->audioFileFilterLabel = new QLabel(audioFileFilterBox);
     d->audioFileFilterLabel->setText(i18n("Additional &audio file extensions (<a href='audio'>Currently-supported types</a>):"));
 
-    KHBox* hbox3           = new KHBox(audioFileFilterBox);
+    RHBox* hbox3           = new RHBox(audioFileFilterBox);
     d->audioFileFilterEdit = new KLineEdit(hbox3);
     d->audioFileFilterEdit->setWhatsThis(i18n("<p>Here you can add extra extensions of audio files "
                                               "to be displayed in your Album view. Just write \"mp7\" "

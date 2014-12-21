@@ -81,7 +81,7 @@ private:
 
 // -----------------------------------------------------------------------------
 
-class RatingFilter : public KHBox
+class RatingFilter : public RHBox
 {
     Q_OBJECT
 

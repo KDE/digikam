@@ -30,6 +30,7 @@
 #include <QToolButton>
 #include <QDesktopWidget>
 #include <QActionGroup>
+#include <QMenu>
 
 // KDE includes
 
@@ -37,12 +38,17 @@
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kselectaction.h>
-#include "digikam_debug.h"
-#include <QMenu>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
 #include "slidehelp.h"
+#include "digikam_debug.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -77,7 +83,7 @@ public:
 };
 
 SlideToolBar::SlideToolBar(const SlideShowSettings& settings, QWidget* const parent)
-    : KHBox(parent), d(new Private)
+    : RHBox(parent), d(new Private)
 {
     setMouseTracking(true);
     setMargin(0);

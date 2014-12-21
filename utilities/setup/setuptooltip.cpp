@@ -192,7 +192,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    KVBox* const vbox       = new KVBox(panel);
+    RVBox* const vbox       = new RVBox(panel);
 
     d->showToolTipsBox      = new QCheckBox(i18n("Show icon-view and thumb-bar items' tool-tips"), vbox);
     d->showToolTipsBox->setWhatsThis(i18n("Set this option to display image information when "
@@ -342,7 +342,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    KVBox* const vbox2        = new KVBox(panel);
+    RVBox* const vbox2        = new RVBox(panel);
     d->showAlbumToolTipsBox   = new QCheckBox(i18n("Show album items' tool-tips"), vbox2);
     d->albumSettingBox        = new QGroupBox(i18n("Album Information"), vbox2);
 
@@ -383,7 +383,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    KVBox* const vbox3       = new KVBox(panel);
+    RVBox* const vbox3       = new RVBox(panel);
     d->showImportToolTipsBox = new QCheckBox(i18n("Show import items' tool-tips"), vbox3);
     d->importSettingBox      = new QGroupBox(i18n("Import Information"), vbox3);
 

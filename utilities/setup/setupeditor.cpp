@@ -96,7 +96,7 @@ public:
 
     QLabel*             expoPreview;
 
-    KHBox*              colorBox;
+    RHBox*              colorBox;
     KColorButton*       backgroundColor;
     KColorButton*       underExposureColor;
     KColorButton*       overExposureColor;
@@ -141,7 +141,7 @@ SetupEditor::SetupEditor(QWidget* const parent)
     d->themebackgroundColor->setWhatsThis(i18n("Enable this option to use the background theme "
                                                "color in the image editor area."));
 
-    d->colorBox                      = new KHBox(interfaceOptionsGroup);
+    d->colorBox                      = new RHBox(interfaceOptionsGroup);
     QLabel* backgroundColorlabel     = new QLabel(i18n("&Background color:"), d->colorBox);
     d->backgroundColor               = new KColorButton(d->colorBox);
     backgroundColorlabel->setBuddy(d->backgroundColor);
@@ -162,14 +162,14 @@ SetupEditor::SetupEditor(QWidget* const parent)
     QGroupBox* exposureOptionsGroup  = new QGroupBox(i18n("Exposure Indicators"), panel);
     QVBoxLayout* gLayout2            = new QVBoxLayout(exposureOptionsGroup);
 
-    KHBox* underExpoBox              = new KHBox(exposureOptionsGroup);
+    RHBox* underExpoBox              = new RHBox(exposureOptionsGroup);
     QLabel* underExpoColorlabel      = new QLabel(i18n("&Under-exposure color:"), underExpoBox);
     d->underExposureColor            = new KColorButton(underExpoBox);
     underExpoColorlabel->setBuddy(d->underExposureColor);
     d->underExposureColor->setWhatsThis(i18n("Customize color used in image editor to identify "
                                              "under-exposed pixels."));
 
-    KHBox* underPcentBox             = new KHBox(exposureOptionsGroup);
+    RHBox* underPcentBox             = new RHBox(exposureOptionsGroup);
     QLabel* underExpoPcentlabel      = new QLabel(i18n("Under-exposure percents:"), underPcentBox);
     d->underExposurePcents           = new RDoubleNumInput(underPcentBox);
     d->underExposurePcents->setDecimals(1);
@@ -179,14 +179,14 @@ SetupEditor::SetupEditor(QWidget* const parent)
     d->underExposurePcents->setWhatsThis(i18n("Adjust the percents of the bottom of image histogram "
                                               "which will be used to check under exposed pixels."));
 
-    KHBox* overExpoBox               = new KHBox(exposureOptionsGroup);
+    RHBox* overExpoBox               = new RHBox(exposureOptionsGroup);
     QLabel* overExpoColorlabel       = new QLabel(i18n("&Over-exposure color:"), overExpoBox);
     d->overExposureColor             = new KColorButton(overExpoBox);
     overExpoColorlabel->setBuddy(d->overExposureColor);
     d->overExposureColor->setWhatsThis(i18n("Customize color used in image editor to identify "
                                             "over-exposed pixels."));
 
-    KHBox* overPcentBox              = new KHBox(exposureOptionsGroup);
+    RHBox* overPcentBox              = new RHBox(exposureOptionsGroup);
     QLabel* overExpoPcentlabel       = new QLabel(i18n("Over-exposure percents:"), overPcentBox);
     d->overExposurePcents            = new RDoubleNumInput(overPcentBox);
     d->overExposurePcents->setDecimals(1);
@@ -203,7 +203,7 @@ SetupEditor::SetupEditor(QWidget* const parent)
                                             "Otherwise, indicators are turned on when one of the color components matches the condition."));
 
     QLabel* exampleLabel = new QLabel(i18n("Example:"), exposureOptionsGroup);
-    KHBox* previewHBox   = new KHBox(exposureOptionsGroup);
+    RHBox* previewHBox   = new RHBox(exposureOptionsGroup);
     d->expoPreview       = new QLabel(previewHBox);
     QLabel* space        = new QLabel(previewHBox);
     d->expoPreviewHisto  = new HistogramWidget(256, 128, previewHBox, false, false);

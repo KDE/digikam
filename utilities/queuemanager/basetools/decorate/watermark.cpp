@@ -139,11 +139,11 @@ WaterMark::~WaterMark()
 void WaterMark::registerSettingsWidget()
 {
 
-    KVBox* vbox = new KVBox;
+    RVBox* vbox = new RVBox;
     vbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     vbox->setMargin(0);
 
-    KHBox* hbox = new KHBox(vbox);
+    RHBox* hbox = new RHBox(vbox);
     hbox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     hbox->setSpacing(10);
 
@@ -217,7 +217,7 @@ void WaterMark::registerSettingsWidget()
     textSettingsGroupBoxLayout->addWidget(textOpacityLabel);
     textSettingsGroupBoxLayout->addWidget(d->textOpacity);
 
-    KHBox* useBackgroundHBox = new KHBox();
+    RHBox* useBackgroundHBox = new RHBox();
     useBackgroundHBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     useBackgroundHBox->setSpacing(5);
     d->useBackgroundCheckBox = new QCheckBox(useBackgroundHBox);

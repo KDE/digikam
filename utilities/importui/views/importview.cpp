@@ -121,7 +121,7 @@ void ImportView::Private::addPageUpDownActions(ImportView* const q, QWidget* con
 }
 
 ImportView::ImportView(ImportUI* const ui, ImportImageModel* const model, ImportFilterModel* const filterModel, QWidget* const parent)
-    : KHBox(parent), d(new Private)
+    : RHBox(parent), d(new Private)
 {
     d->model       = model;
     d->filterModel = filterModel;

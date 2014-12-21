@@ -40,7 +40,7 @@ namespace Digikam
 StartScanPage::StartScanPage(KAssistantDialog* const dlg)
     : AssistantDlgPage(dlg, i18n("Scan Your Collection"))
 {
-    KVBox* const vbox  = new KVBox(this);
+    RVBox* const vbox  = new RVBox(this);
     QLabel* const text = new QLabel(vbox);
     text->setWordWrap(true);
     text->setOpenExternalLinks(true);
