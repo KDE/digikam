@@ -1288,6 +1288,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collectionscannerhints.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseaccess.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasewatch.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasewatchadaptor.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasebackend.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databaseoperationgroup.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/databasetransaction.cpp

@@ -30,6 +30,10 @@
 #include <QDBusVariant>
 #include <QDBusAbstractAdaptor>
 
+// Local includes
+
+#include "databasewatch.h"
+
 // qdbuscpp2xml -S -M databasewatchadaptor.h -o org.kde.digikam.DatabaseChangesetRelay.xml
 
 class Digikam_DatabaseWatchAdaptor : public QDBusAbstractAdaptor
@@ -39,7 +43,7 @@ class Digikam_DatabaseWatchAdaptor : public QDBusAbstractAdaptor
 
 public:
 
-    explicit Digikam_DatabaseWatchAdaptor(Digikam::DatabaseWatch* watch);
+    explicit Digikam_DatabaseWatchAdaptor(Digikam::DatabaseWatch* const watch);
 
 Q_SIGNALS:
 
@@ -54,21 +58,27 @@ Q_SIGNALS:
     void imageChange(const QString& databaseIdentifier,
                      const QString& applicationIdentifier,
                      const Digikam::ImageChangeset& changeset);
+
     void imageTagChange(const QString& databaseIdentifier,
                         const QString& applicationIdentifier,
                         const Digikam::ImageTagChangeset& changeset);
+
     void collectionImageChange(const QString& databaseIdentifier,
                                const QString& applicationIdentifier,
                                const Digikam::CollectionImageChangeset& changeset);
+
     void albumChange(const QString& databaseIdentifier,
                      const QString& applicationIdentifier,
                      const Digikam::AlbumChangeset& changeset);
+
     void tagChange(const QString& databaseIdentifier,
                    const QString& applicationIdentifier,
                    const Digikam::TagChangeset& changeset);
+
     void albumRootChange(const QString& databaseIdentifier,
                          const QString& applicationIdentifier,
                          const Digikam::AlbumRootChangeset& changeset);
+
     void searchChange(const QString& databaseIdentifier,
                       const QString& applicationIdentifier,
                       const Digikam::SearchChangeset& changeset);

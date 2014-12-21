@@ -37,13 +37,8 @@
 // Local includes
 
 #include "collectionmanager.h"
+#include "databasewatchadaptor.h"
 #include "config-digikam.h"
-
-Digikam_DatabaseWatchAdaptor::Digikam_DatabaseWatchAdaptor(Digikam::DatabaseWatch* watch)
-    : QDBusAbstractAdaptor(watch)
-{
-    setAutoRelaySignals(true);
-}
 
 namespace Digikam
 {
@@ -106,8 +101,7 @@ public:
     virtual void run()
     {
         // We cannot use sessionBus() here but need to connect on our own
-        QDBusConnection threadConnection =
-            QDBusConnection::connectToBus(QDBusConnection::SessionBus, QString("DigikamDatabaseSlaveConnection-%1").arg(getpid()));
+        QDBusConnection threadConnection = QDBusConnection::connectToBus(QDBusConnection::SessionBus, QString("DigikamDatabaseSlaveConnection-%1").arg(getpid()));
 
         // DBus signals are received from within this thread and then sent with queued signals to the main thread
         d->connectWithDBus("imageTagChange", q,
@@ -126,8 +120,6 @@ private:
     DatabaseWatch*     q;
     DatabaseWatchPriv* d;
 };
-
-#include "databasewatch.h"
 
 // ---------------------------------------------------------------------------------
 
@@ -279,7 +271,6 @@ void DatabaseWatch::sendSearchChange(const SearchChangeset& cset)
     emit searchChange(d->databaseId, d->applicationId, cset);
 }
 
-
 // --- methods to dispatch from slave or peer to local listeners ---
 
 void DatabaseWatch::slotImageChangeDBus(const QString& databaseIdentifier,
@@ -287,7 +278,7 @@ void DatabaseWatch::slotImageChangeDBus(const QString& databaseIdentifier,
                                         const ImageChangeset& changeset)
 {
     if (applicationIdentifier != d->applicationId &&
-        databaseIdentifier == d->databaseId)
+        databaseIdentifier    == d->databaseId)
     {
         emit imageChange(changeset);
     }
@@ -298,7 +289,7 @@ void DatabaseWatch::slotImageTagChangeDBus(const QString& databaseIdentifier,
         const ImageTagChangeset& changeset)
 {
     if (applicationIdentifier != d->applicationId &&
-        databaseIdentifier == d->databaseId)
+        databaseIdentifier    == d->databaseId)
     {
         emit imageTagChange(changeset);
     }
@@ -309,7 +300,7 @@ void DatabaseWatch::slotCollectionImageChangeDBus(const QString& databaseIdentif
         const CollectionImageChangeset& changeset)
 {
     if (applicationIdentifier != d->applicationId &&
-        databaseIdentifier == d->databaseId)
+        databaseIdentifier    == d->databaseId)
     {
         emit collectionImageChange(changeset);
     }
@@ -320,7 +311,7 @@ void DatabaseWatch::slotAlbumChangeDBus(const QString& databaseIdentifier,
                                         const AlbumChangeset& changeset)
 {
     if (applicationIdentifier != d->applicationId &&
-        databaseIdentifier == d->databaseId)
+        databaseIdentifier    == d->databaseId)
     {
         emit albumChange(changeset);
     }
@@ -331,7 +322,7 @@ void DatabaseWatch::slotTagChangeDBus(const QString& databaseIdentifier,
                                       const TagChangeset& changeset)
 {
     if (applicationIdentifier != d->applicationId &&
-        databaseIdentifier == d->databaseId)
+        databaseIdentifier    == d->databaseId)
     {
         emit tagChange(changeset);
     }
@@ -342,7 +333,7 @@ void DatabaseWatch::slotAlbumRootChangeDBus(const QString& databaseIdentifier,
         const AlbumRootChangeset& changeset)
 {
     if (applicationIdentifier != d->applicationId &&
-        databaseIdentifier == d->databaseId)
+        databaseIdentifier    == d->databaseId)
     {
         emit albumRootChange(changeset);
     }
@@ -353,7 +344,7 @@ void DatabaseWatch::slotSearchChangeDBus(const QString& databaseIdentifier,
         const SearchChangeset& changeset)
 {
     if (applicationIdentifier != d->applicationId &&
-        databaseIdentifier == d->databaseId)
+        databaseIdentifier    == d->databaseId)
     {
         emit searchChange(changeset);
     }
