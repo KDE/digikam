@@ -33,7 +33,6 @@
 // KDE includes
 
 #include <kglobal.h>
-#include <kcodecs.h>
 #include <klocalizedstring.h>
 
 #include <solid/device.h>
@@ -1716,3 +1715,5 @@ void CollectionManager::slotAlbumRootChange(const AlbumRootChangeset& changeset)
 }
 
 }  // namespace Digikam
+
+#include "moc_collectionmanager.cpp"
