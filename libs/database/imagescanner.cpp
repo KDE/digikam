@@ -52,6 +52,8 @@
 #include "tagregion.h"
 #include "tagscache.h"
 #include "iostream"
+#include "dimagehistory.h"
+#include "imagehistorygraphdata.h"
 
 #ifdef HAVE_BALOO
 #include "baloowrap.h"

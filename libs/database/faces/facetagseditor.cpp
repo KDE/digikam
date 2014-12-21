@@ -26,7 +26,6 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <klocalizedstring.h>
 
 // Local includes
@@ -40,6 +39,7 @@
 #include "tagproperties.h"
 #include "tagscache.h"
 #include "tagregion.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -260,7 +260,7 @@ DatabaseFace FaceTagsEditor::confirmName(const DatabaseFace& face, int tagId, co
 
 DatabaseFace FaceTagsEditor::add(qlonglong imageId, int tagId, const TagRegion& region, bool trainFace)
 {
-    kDebug () << "Adding face with rectangle  " << region.toRect () << " to database";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Adding face with rectangle  " << region.toRect () << " to database";
     DatabaseFace newEntry(DatabaseFace::ConfirmedName, imageId, tagId, region);
     add(newEntry, trainFace);
     return newEntry;

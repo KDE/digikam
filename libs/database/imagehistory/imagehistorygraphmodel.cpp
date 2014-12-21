@@ -27,18 +27,18 @@
 
 #include <QAbstractItemModel>
 #include <QTreeWidgetItem>
+#include <QIcon>
 
 // KDE includes
 
 #include <kcategorizedsortfilterproxymodel.h>
-#include <QIcon>
 #include <klocalizedstring.h>
 
 // Local includes
 
 #include "dimgfiltermanager.h"
-#include "imagehistorygraphdata.h"
 #include "imagelistmodel.h"
+#include "imagehistorygraphdata.h"
 
 namespace Digikam
 {

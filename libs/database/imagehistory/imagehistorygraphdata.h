@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEHISTORYGRAPHDATA_H
-#define IMAGEHISTORYGRAPHDATA_H
+#ifndef IMAGE_HISTORY_GRAPH_DATA_H
+#define IMAGE_HISTORY_GRAPH_DATA_H
 
 // Qt includes
 
@@ -30,13 +30,14 @@
 
 // Local includes
 
-#include "imageinfo.h"
 #include "filteraction.h"
 #include "historyimageid.h"
 #include "imagehistorygraph_boost.h"
 
 namespace Digikam
 {
+
+class ImageInfo;
 
 class HistoryVertexProperties
 {
@@ -147,4 +148,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // IMAGEHISTORYGRAPHDATA_H
+#endif // IMAGE_HISTORY_GRAPH_DATA_H

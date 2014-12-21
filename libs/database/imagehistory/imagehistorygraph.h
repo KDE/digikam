@@ -24,8 +24,6 @@
 #ifndef IMAGEHISTORYGRAPH_H
 #define IMAGEHISTORYGRAPH_H
 
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-
 // Qt includes
 
 #include <QFlags>
@@ -34,13 +32,15 @@
 
 // Local includes
 
-#include "digikam_export.h"
 #include "imageinfo.h"
-#include "dimagehistory.h"
-#include "imagehistorygraphdata.h"
+#include "historyimageid.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
+
+class ImageHistoryGraphData;
+class DImageHistory;
 
 class DIGIKAM_DATABASE_EXPORT ImageHistoryGraph
 {

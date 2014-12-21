@@ -40,6 +40,7 @@ namespace Digikam
 class ImageHistoryGraph;
 class ImageInfo;
 class ImageListModel;
+class FilterAction;
 
 class DIGIKAM_DATABASE_EXPORT ImageHistoryGraphModel : public QAbstractItemModel, public DragDropModelImplementation
 {

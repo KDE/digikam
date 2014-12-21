@@ -31,8 +31,8 @@
 
 #include "digikam_debug.h"
 #include "dimagehistory.h"
-#include "imagehistorygraphdata.h"
 #include "imagescanner.h"
+#include "imagehistorygraphdata.h"
 
 namespace Digikam
 {
