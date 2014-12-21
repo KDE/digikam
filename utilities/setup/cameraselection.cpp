@@ -33,6 +33,9 @@
 #include <QPushButton>
 #include <QRadioButton>
 #include <QTreeWidget>
+#include <QUrl>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
@@ -45,9 +48,6 @@
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
 #include <kurlrequester.h>
-#include <kvbox.h>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 
@@ -194,7 +194,7 @@ CameraSelection::CameraSelection(QWidget* const parent)
     QLabel* umsMountLabel = new QLabel(umsMountBox);
     umsMountLabel->setText(i18n("Note: only for USB/IEEE mass storage cameras."));
 
-    d->umsMountURL = new KUrlRequester(QString("/mnt/camera"), umsMountBox);
+    d->umsMountURL = new KUrlRequester(QUrl::fromLocalFile("/mnt/camera"), umsMountBox);
     d->umsMountURL->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
     d->umsMountURL->setWhatsThis(i18n("<p>Set here the mount path to use on your computer. This "
                                       "option is only required if you use a <b>USB Mass Storage</b> "
@@ -374,7 +374,7 @@ void CameraSelection::setCamera(const QString& title, const QString& model,
             slotPortChanged();
         }
 
-        d->umsMountURL->setUrl(path);
+        d->umsMountURL->setUrl(QUrl::fromLocalFile(path));
     }
 }
 
@@ -445,14 +445,14 @@ void CameraSelection::slotSelectionChanged(QTreeWidgetItem* item, int)
 
         d->umsMountURL->setEnabled(true);
         d->umsMountURL->clear();
-        d->umsMountURL->setUrl(QString("/mnt/camera"));
+        d->umsMountURL->setUrl(QUrl::fromLocalFile("/mnt/camera"));
         return;
     }
     else
     {
         d->umsMountURL->setEnabled(true);
         d->umsMountURL->clear();
-        d->umsMountURL->setUrl(QString("/"));
+        d->umsMountURL->setUrl(QUrl::fromLocalFile("/"));
         d->umsMountURL->setEnabled(false);
     }
 

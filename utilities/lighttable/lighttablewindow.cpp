@@ -1513,7 +1513,7 @@ void LightTableWindow::slotNewToolbarConfig()
 
 void LightTableWindow::slotSetup()
 {
-    Setup::exec(this);
+    Setup::execDialog(this);
 }
 
 void LightTableWindow::slotLeftZoomFactorChanged(double zoom)

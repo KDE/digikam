@@ -31,23 +31,27 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QWhatsThis>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
-#include <kdialog.h>
 #include <kiconloader.h>
 #include <klineedit.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
-#include <kvbox.h>
-#include <QApplication>
-#include <QStyle>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
 #include "albumdb.h"
 #include "applicationsettings.h"
 #include "databaseaccess.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {

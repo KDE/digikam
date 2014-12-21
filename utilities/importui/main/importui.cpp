@@ -2516,7 +2516,7 @@ void ImportUI::slotNewToolbarConfig()
 
 void ImportUI::slotSetup()
 {
-    Setup::exec(this);
+    Setup::execDialog(this);
 }
 
 void ImportUI::slotCameraFreeSpaceInfo(unsigned long kBSize, unsigned long kBAvail)

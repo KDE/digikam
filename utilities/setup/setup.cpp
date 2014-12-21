@@ -302,6 +302,9 @@ Setup::Setup(QWidget* const parent)
     connect(buttonBox(), SIGNAL(helpRequested()),
             this, SLOT(slotHelp()));
 
+    connect(buttonBox()->button(QDialogButtonBox::Ok), &QPushButton::clicked,
+            this, &Setup::slotOkClicked);
+
 #ifdef HAVE_KIPI
     d->pluginsPage  = new ConfigWidget();
     d->pluginFilter = new SearchTextBar(d->pluginsPage, "PluginsSearchBar");
@@ -316,6 +319,7 @@ Setup::Setup(QWidget* const parent)
 
     connect(d->pluginsPage, SIGNAL(signalSearchResult(bool)),
             d->pluginFilter, SLOT(slotSearchResult(bool)));
+
 #endif /* HAVE_KIPI */
 
     d->miscPage  = new SetupMisc();
@@ -423,12 +427,12 @@ QSize Setup::sizeHint() const
     return hint;
 }
 
-bool Setup::exec(Page page)
+bool Setup::execDialog(Page page)
 {
-    return exec(0, page);
+    return execDialog(0, page);
 }
 
-bool Setup::exec(QWidget* const parent, Page page)
+bool Setup::execDialog(QWidget* const parent, Page page)
 {
     QPointer<Setup> setup = new Setup(parent);
     setup->showPage(page);
@@ -492,19 +496,7 @@ void Setup::slotSearchTextChanged(const SearchTextSettings& settings)
 #endif /* HAVE_KIPI */
 }
 
-void Setup::slotButtonClicked(int button)
-{
-    if (button == KDialog::Ok)
-    {
-        okClicked();
-    }
-    else
-    {
-        KDialog::slotButtonClicked(button);
-    }
-}
-
-void Setup::okClicked()
+void Setup::slotOkClicked()
 {
     if (!d->cameraPage->checkSettings())
     {

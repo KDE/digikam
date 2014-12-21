@@ -599,7 +599,7 @@ void QueueMgrWindow::slotSetup()
 
 void QueueMgrWindow::setup(Setup::Page page)
 {
-    Setup::exec(this, page);
+    Setup::execDialog(this, page);
 }
 
 void QueueMgrWindow::slotComponentsInfo()

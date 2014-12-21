@@ -2385,7 +2385,7 @@ void DigikamApp::slotSetup()
 
 bool DigikamApp::setup()
 {
-    return Setup::exec(this, Setup::LastPageUsed);
+    return Setup::execDialog(this, Setup::LastPageUsed);
 }
 
 bool DigikamApp::setupICC()

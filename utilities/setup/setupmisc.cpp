@@ -31,20 +31,24 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QStyleFactory>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
 #include <kapplication.h>
 #include <kcombobox.h>
-#include <kdialog.h>
-#include <khbox.h>
 #include <klocalizedstring.h>
-#include <QApplication>
-#include <QStyle>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
 #include "applicationsettings.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {

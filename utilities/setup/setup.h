@@ -76,11 +76,13 @@ public:
         SetupPageEnumLast
     };
 
+public:
+
     /** Show a setup dialog. The specified page will be selected.
         True is returned if the dialog was closed with Ok.
      */
-    static bool exec(Page page = LastPageUsed);
-    static bool exec(QWidget* const parent, Page page = LastPageUsed);
+    static bool execDialog(Page page = LastPageUsed);
+    static bool execDialog(QWidget* const parent, Page page = LastPageUsed);
 
     /** Show a setup dialog. Only the specified page will be available.
      */
@@ -97,8 +99,8 @@ public:
 private Q_SLOTS:
 
     void slotHelp();
-    void slotButtonClicked(int button);
     void slotSearchTextChanged(const SearchTextSettings& settings);
+    void slotOkClicked();
 
 private:
 
@@ -107,7 +109,6 @@ private:
 
     Setup::Page activePageIndex() const;
     void        showPage(Setup::Page page);
-    void        okClicked();
 
 private:
 

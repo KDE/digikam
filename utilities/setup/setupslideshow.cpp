@@ -30,6 +30,8 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QDesktopWidget>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
@@ -40,14 +42,17 @@
 #include <klocalizedstring.h>
 #include <knuminput.h>
 #include <kcombobox.h>
-#include <khbox.h>
-#include <QApplication>
-#include <QStyle>
-#include "digikam_debug.h"
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "slideshowsettings.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {

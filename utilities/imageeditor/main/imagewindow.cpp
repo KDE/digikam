@@ -951,7 +951,7 @@ void ImageWindow::slotUpdateItemInfo()
 
 bool ImageWindow::setup()
 {
-    return Setup::exec(this);
+    return Setup::execDialog(this);
 }
 
 bool ImageWindow::setupICC()

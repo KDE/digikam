@@ -29,6 +29,8 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QPushButton>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
@@ -38,12 +40,11 @@
 #include <klineedit.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
+#include <kiconloader.h>
 
 // Libkexiv2 includes
 
 #include <altlangstredit.h>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 

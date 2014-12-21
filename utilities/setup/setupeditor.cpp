@@ -31,6 +31,8 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QPainter>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
@@ -38,18 +40,15 @@
 #include <kapplication.h>
 #include <kcolorbutton.h>
 #include <kconfig.h>
-#include <kdialog.h>
 #include <kglobal.h>
 #include <klocalizedstring.h>
 #include <knuminput.h>
-#include <kvbox.h>
 #include <kstandarddirs.h>
 
 // Libkdcraw includes
 
 #include <rnuminput.h>
-#include <QApplication>
-#include <QStyle>
+#include <rwidgetutils.h>
 
 // Local includes
 
