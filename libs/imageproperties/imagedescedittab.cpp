@@ -570,14 +570,8 @@ void ImageDescEditTab::slotChangingItems()
 
 void ImageDescEditTab::slotAskToApplyChanges(const QList<ImageInfo>& infos, MetadataHubOnTheRoad* hub)
 {
-    KDialog* const dialog = new KDialog(this);
-
-    dialog->setCaption(i18n("Apply changes?"));
-    dialog->setButtons(KDialog::Yes | KDialog::No);
-    dialog->setDefaultButton(KDialog::Yes);
-    dialog->setEscapeButton(KDialog::No);
-    dialog->setButtonGuiItem(KDialog::Yes, KStandardGuiItem::yes());
-    dialog->setButtonGuiItem(KDialog::No,  KStandardGuiItem::discard());
+    QDialog* const dialog = new QDialog(this);
+    dialog->setWindowTitle(i18n("Apply changes?"));
     dialog->setModal(true);
 
     int changedFields = 0;
@@ -699,9 +693,14 @@ void ImageDescEditTab::slotAskToApplyChanges(const QList<ImageInfo>& infos, Meta
     }
 
     bool alwaysApply = false;
-    int returnCode   = KMessageBox::createKMessageBox(dialog, QMessageBox::Information, text, QStringList(),
+    int returnCode   = KMessageBox::createKMessageBox(dialog,
+                                                      new QDialogButtonBox(QDialogButtonBox::Yes | QDialogButtonBox::No),
+                                                      QMessageBox::Information,
+                                                      text,
+                                                      QStringList(),
                                                       i18n("Always apply changes without confirmation"),
-                                                      &alwaysApply, KMessageBox::Notify);
+                                                      &alwaysApply,
+                                                      KMessageBox::Notify);
 
     if (alwaysApply)
     {

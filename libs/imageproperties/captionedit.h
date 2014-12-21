@@ -30,9 +30,9 @@
 #include <QString>
 #include <QDateTime>
 
-// KDE includes
+// Libkdcraw includes
 
-#include <kvbox.h>
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -42,6 +42,8 @@ namespace KExiv2Iface
 {
     class MsgTextEdit;
 }
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {

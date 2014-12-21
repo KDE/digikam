@@ -30,6 +30,7 @@
 #include <QButtonGroup>
 #include <QCheckBox>
 #include <QDir>
+#include <QUrl>
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QIcon>
@@ -41,6 +42,8 @@
 #include <QStringList>
 #include <QVBoxLayout>
 #include <QWhatsThis>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
@@ -58,17 +61,14 @@
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
 #include <kurlrequester.h>
-#include <kvbox.h>
-#include "digikam_debug.h"
 
 // Libkdcraw includes
 
 #include <squeezedcombobox.h>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "applicationsettings.h"
 #include "iccprofileinfodlg.h"
 #include "iccprofilescombobox.h"
@@ -703,7 +703,7 @@ void SetupICC::readSettings(bool restore)
         d->defaultGuessRaw->setChecked(true);
     }
 
-    d->defaultPathKU->setUrl(settings.iccFolder);
+    d->defaultPathKU->setUrl(QUrl::fromLocalFile(settings.iccFolder));
     fillCombos(false);
 
     d->workProfilesKC->setCurrentProfile(settings.workspaceProfile);
