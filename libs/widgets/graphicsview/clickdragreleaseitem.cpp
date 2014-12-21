@@ -179,7 +179,13 @@ void ClickDragReleaseItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* e)
 
         d->state = HoverState;
         setCursor(Qt::CrossCursor);
+        setAcceptHoverEvents(false);
     }
+}
+
+void ClickDragReleaseItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* e)
+{
+    e->ignore();
 }
 
 void ClickDragReleaseItem::keyPressEvent(QKeyEvent* e)
