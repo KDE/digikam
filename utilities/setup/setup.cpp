@@ -36,8 +36,6 @@
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
-#include <kvbox.h>
-#include "digikam_debug.h"
 
 #ifdef HAVE_KIPI
 
@@ -51,6 +49,7 @@ using namespace KIPI;
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "applicationsettings.h"
 #include "thumbsgenerator.h"
 #include "setupalbumview.h"
@@ -188,7 +187,7 @@ public:
 Setup::Setup(QWidget* const parent)
     : KPageDialog(parent), d(new Private)
 {
-    setCaption(i18n("Configure"));
+    setWindowTitle(i18n("Configure"));
     setButtons(Help | Ok | Cancel);
     setDefaultButton(Ok);
     setHelp("setupdialog.anchor", "digikam");

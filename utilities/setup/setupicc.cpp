@@ -750,7 +750,7 @@ void SetupICC::fillCombos(bool report)
         }
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "No ICC profile files found!!!";
-        d->mainDialog->enableButtonOk(false);
+        d->mainDialog->button(QDialogButtonBox::Ok)->setEnabled(false);
         return;
     }
 
@@ -771,7 +771,7 @@ void SetupICC::fillCombos(bool report)
     }
     else
     {
-        d->managedView->setEnabled(true);
+        d->mainDialog->button(QDialogButtonBox::Ok)->setEnabled(true);
         d->managedPreviews->setEnabled(true);
     }
 
@@ -779,11 +779,11 @@ void SetupICC::fillCombos(bool report)
     {
         // If there is no workspace ICC profiles available,
         // the CM is broken and cannot be used.
-        d->mainDialog->enableButtonOk(false);
+        d->mainDialog->button(QDialogButtonBox::Ok)->setEnabled(false);
         return;
     }
 
-    d->mainDialog->enableButtonOk(true);
+    d->mainDialog->button(QDialogButtonBox::Ok)->setEnabled(true);
 }
 
 void SetupICC::setWidgetsEnabled(bool enabled)
@@ -810,7 +810,7 @@ void SetupICC::slotToggledEnabled()
     }
     else
     {
-        d->mainDialog->enableButtonOk(true);
+        d->mainDialog->button(QDialogButtonBox::Ok)->setEnabled(true);
     }
 }
 

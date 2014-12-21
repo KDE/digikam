@@ -24,8 +24,6 @@
  * ============================================================ */
 
 #include "setupcollectionview.h"
-// Special case: we need moc file here to compile
-#include "setupcollectionview.moc"
 
 // Qt includes
 
@@ -39,6 +37,7 @@
 #include <QSignalMapper>
 #include <QStyledItemDelegate>
 #include <QToolButton>
+#include <QStandardPaths>
 
 // KDE includes
 
@@ -48,10 +47,10 @@
 #include <kdialog.h>
 #include <kfiledialog.h>
 #include <kurl.h>
+#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kurlrequester.h>
 #include <kwidgetitemdelegate.h>
-#include <QStandardPaths>
 
 // Local includes
 
@@ -75,15 +74,15 @@ public:
     ~SetupCollectionDelegate();
 
     virtual QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const;
-    virtual bool editorEvent(QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index);
-    virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
-    virtual void setEditorData(QWidget* editor, const QModelIndex& index) const;
-    virtual void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const;
-    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
-    virtual void updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    virtual bool     editorEvent(QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index);
+    virtual void     paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    virtual void     setEditorData(QWidget* editor, const QModelIndex& index) const;
+    virtual void     setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const;
+    virtual QSize    sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    virtual void     updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index) const;
 
-    virtual QList<QWidget*> createItemWidgets() const;
-    virtual void updateItemWidgets(const QList<QWidget*> widgets, const QStyleOptionViewItem& option, const QPersistentModelIndex& index) const;
+    virtual QList<QWidget*> createItemWidgets(const QModelIndex& index) const;
+    virtual void            updateItemWidgets(const QList<QWidget*> widgets, const QStyleOptionViewItem& option, const QPersistentModelIndex& index) const;
 
 Q_SIGNALS:
 
@@ -146,19 +145,19 @@ SetupCollectionDelegate::~SetupCollectionDelegate()
 {
 }
 
-QList<QWidget*> SetupCollectionDelegate::createItemWidgets() const
+QList<QWidget*> SetupCollectionDelegate::createItemWidgets(const QModelIndex& /*index*/) const
 {
     // We only need a push button for certain indexes and a tool button for others,
     // but we have no index here, but need to provide the widgets for each index
 
     QList<QWidget*> list;
-    QPushButton* pushButton = new QPushButton();
+    QPushButton* const pushButton = new QPushButton();
     list << pushButton;
 
     connect(pushButton, SIGNAL(clicked()),
             m_categoryButtonMapper, SLOT(map()));
 
-    QToolButton* toolButton = new QToolButton();
+    QToolButton* const toolButton = new QToolButton();
     toolButton->setAutoRaise(true);
     list << toolButton;
 
@@ -1151,3 +1150,5 @@ int SetupCollectionModel::buttonMapId(const QModelIndex& index) const
 }
 
 } // namespace Digikam
+
+#include "setupcollectionview.moc"
