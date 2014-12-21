@@ -32,9 +32,9 @@
 #include <QPixmap>
 #include <QEvent>
 
-// KDE includes
+// Libkdcraw includes
 
-#include <kvbox.h>
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -45,6 +45,8 @@
 #include "metadatahub.h"
 #include "searchtextbar.h"
 #include "addtagslineedit.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {

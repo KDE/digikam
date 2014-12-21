@@ -30,6 +30,7 @@
 
 // Qt includes
 
+#include <QKeySequence>
 #include <QMenu>
 #include <QCloseEvent>
 #include <QDragMoveEvent>
@@ -67,13 +68,12 @@
 #include <kstandardaction.h>
 #include <kstandarddirs.h>
 #include <kstatusbar.h>
-#include <kstdaccel.h>
-#include <kstdguiitem.h>
 #include <ktemporaryfile.h>
 #include <ktoggleaction.h>
 #include <ktoolbar.h>
 #include <ktoolbarpopupaction.h>
 #include <kwindowsystem.h>
+#include <ksqueezedtextlabel.h>
 
 // Local includes
 
@@ -443,7 +443,7 @@ void ImageWindow::setupActions()
     // Pop up dialog to ask user whether to permanently delete
 
     d->fileDeletePermanentlyAction = new KAction(QIcon::fromTheme("edit-delete"), i18n("Delete File Permanently"), this);
-    d->fileDeletePermanentlyAction->setShortcut(KShortcut(Qt::SHIFT + Qt::Key_Delete));
+    d->fileDeletePermanentlyAction->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Delete));
     connect(d->fileDeletePermanentlyAction, SIGNAL(triggered()),
             this, SLOT(slotDeleteCurrentItemPermanently()));
     actionCollection()->addAction("image_delete_permanently", d->fileDeletePermanentlyAction);
@@ -472,17 +472,17 @@ void ImageWindow::setupActions()
     TagsActionMngr::defaultManager()->registerLabelsActions(actionCollection());
 
     KAction* const editTitles = new KAction(i18n("Edit Titles"), this);
-    editTitles->setShortcut( KShortcut(Qt::META + Qt::Key_T) );
+    editTitles->setShortcut( QKeySequence(Qt::META + Qt::Key_T) );
     actionCollection()->addAction("edit_titles", editTitles);
     connect(editTitles, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateTitles()));
 
     KAction* const editComments = new KAction(i18n("Edit Comments"), this);
-    editComments->setShortcut( KShortcut(Qt::META + Qt::Key_C) );
+    editComments->setShortcut( QKeySequence(Qt::META + Qt::Key_C) );
     actionCollection()->addAction("edit_comments", editComments);
     connect(editComments, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateComments()));
 
     KAction* const assignedTags = new KAction(i18n("Show Assigned Tags"), this);
-    assignedTags->setShortcut( KShortcut(Qt::META + Qt::Key_A) );
+    assignedTags->setShortcut( QKeySequence(Qt::META + Qt::Key_A) );
     actionCollection()->addAction("assigned _tags", assignedTags);
     connect(assignedTags, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateAssignedTags()));
 }

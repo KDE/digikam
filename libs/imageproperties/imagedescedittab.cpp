@@ -38,20 +38,19 @@
 #include <QTimer>
 #include <QToolButton>
 #include <QApplication>
+#include <QPushButton>
+#include <QMenu>
 
 // KDE includes
 
-#include <QMenu>
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kdialog.h>
 #include <ktabwidget.h>
-#include <QPushButton>
 
 // Libkexiv2 includes
 
-#include <libkexiv2_version.h>
 #include <altlangstredit.h>
 #include <msgtextedit.h>
 
@@ -424,10 +423,8 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
 
     // Initialize ---------------------------------------------
 
-#if KEXIV2_VERSION >= 0x020400
     d->titleEdit->textEdit()->installEventFilter(this);
     d->captionsEdit->textEdit()->installEventFilter(this);
-#endif
 
     d->dateTimeEdit->installEventFilter(this);
     d->pickLabelSelector->installEventFilter(this);
@@ -527,17 +524,13 @@ void ImageDescEditTab::setFocusToNewTagEdit()
 void ImageDescEditTab::setFocusToTitlesEdit()
 {
     d->tabWidget->setCurrentIndex(Private::DESCRIPTIONS);
-#if KEXIV2_VERSION >= 0x020400
     d->titleEdit->textEdit()->setFocus();
-#endif
 }
 
 void ImageDescEditTab::setFocusToCommentsEdit()
 {
     d->tabWidget->setCurrentIndex(Private::DESCRIPTIONS);
-#if KEXIV2_VERSION >= 0x020400
     d->captionsEdit->textEdit()->setFocus();
-#endif
 }
 
 void ImageDescEditTab::activateAssignedTagsButton()

@@ -28,9 +28,9 @@
 #include <QStyle>
 #include <QFile>
 #include <QGridLayout>
+#include <QApplication>
 
 // KDE includes
-
 
 #include <klocalizedstring.h>
 #include <kapplication.h>
@@ -38,7 +38,8 @@
 #include <kdialog.h>
 #include <kfileitem.h>
 #include <kmimetype.h>
-#include <QApplication>
+#include <kiconloader.h>
+#include <klocale.h>
 
 // Local includes
 

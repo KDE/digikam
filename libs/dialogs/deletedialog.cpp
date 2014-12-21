@@ -39,14 +39,14 @@
 #include <QHeaderView>
 #include <QApplication>
 #include <QStyle>
+#include <QPushButton>
 
 // KDE includes
 
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <klocalizedstring.h>
-#include <kstdguiitem.h>
-#include <QPushButton>
+#include <kstandardguiitem.h>
 
 // Local includes
 
