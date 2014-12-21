@@ -36,6 +36,8 @@
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
+#include <kwindowconfig.h>
+#include <khelpclient.h>
 
 #ifdef HAVE_KIPI
 
@@ -188,9 +190,8 @@ Setup::Setup(QWidget* const parent)
     : KPageDialog(parent), d(new Private)
 {
     setWindowTitle(i18n("Configure"));
-    setButtons(Help | Ok | Cancel);
-    setDefaultButton(Ok);
-    setHelp("setupdialog.anchor", "digikam");
+    setStandardButtons(QDialogButtonBox::Help | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    button(QDialogButtonBox::Ok)->setDefault(true);
     setFaceType(List);
     setModal(true);
 
@@ -298,6 +299,9 @@ Setup::Setup(QWidget* const parent)
     connect(d->cameraPage, SIGNAL(signalUseFileMetadataChanged(bool)),
             d->tooltipPage, SLOT(slotUseFileMetadataChanged(bool)));
 
+    connect(buttonBox(), SIGNAL(helpRequested()),
+            this, SLOT(slotHelp()));
+
 #ifdef HAVE_KIPI
     d->pluginsPage  = new ConfigWidget();
     d->pluginFilter = new SearchTextBar(d->pluginsPage, "PluginsSearchBar");
@@ -340,7 +344,7 @@ Setup::Setup(QWidget* const parent)
 
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QString("Setup Dialog"));
-    restoreDialogSize(group);
+    KWindowConfig::restoreWindowSize(windowHandle(), group);
 
     show();
 }
@@ -350,9 +354,14 @@ Setup::~Setup()
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QString("Setup Dialog"));
     group.writeEntry("Setup Page", (int)activePageIndex());
-    saveDialogSize(group);
+    KWindowConfig::saveWindowSize(windowHandle(), group);
     config->sync();
     delete d;
+}
+
+void Setup::slotHelp()
+{
+    KHelpClient::invokeHelp("setupdialog.anchor", "digikam");
 }
 
 void Setup::setTemplate(const Template& t)
