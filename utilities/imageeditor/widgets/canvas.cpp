@@ -463,6 +463,12 @@ void Canvas::slotSelected()
 {
     QRect sel = QRect(0, 0, 0, 0);
 
+    if (d->wrapItem)
+    {
+        cancelAddItem();
+        return;
+    }
+
     if (d->rubber)
     {
         sel = calcSelectedArea();
