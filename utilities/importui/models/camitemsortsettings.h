@@ -24,9 +24,9 @@
 #ifndef CAMITEMSORTSETTINGS_H
 #define CAMITEMSORTSETTINGS_H
 
-// KDE includes
+// Qt includes
 
-#include <kstringhandler.h>
+#include <QCollator>
 
 // Local includes
 
@@ -170,7 +170,9 @@ public:
     static inline int naturalCompare(const QString& a, const QString& b, Qt::SortOrder sortOrder,
                                      Qt::CaseSensitivity caseSensitive = Qt::CaseSensitive)
     {
-        return compareByOrder(KStringHandler::naturalCompare(a, b, caseSensitive), sortOrder);
+        QCollator collator;
+        collator.setCaseSensitivity(caseSensitive);
+        return (compareByOrder(collator.compare(a, b),sortOrder));
     }
 };
 

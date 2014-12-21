@@ -52,6 +52,7 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <QMenu>
 
 // KDE includes
 
@@ -60,8 +61,6 @@
 #include <kcalendarsystem.h>
 #include <kcombobox.h>
 #include <kconfig.h>
-#include "digikam_debug.h"
-#include <kdialog.h>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -72,7 +71,6 @@
 #include <kio/global.h>
 #include <klocalizedstring.h>
 #include <kmenubar.h>
-#include <QMenu>
 #include <kmessagebox.h>
 #include <knotifyconfigwidget.h>
 #include <kshortcutsdialog.h>
@@ -83,17 +81,18 @@
 #include <ktoolbar.h>
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
-#include <kvbox.h>
-#include <KMessageWidget>
+#include <kmessagewidget.h>
 
 // Libkdcraw includes
 
 #include <kdcraw.h>
 #include <rexpanderbox.h>
 #include <libkdcraw_version.h>
+#include <rwidgetutils.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "advancedrenamemanager.h"
 #include "album.h"
 #include "albummanager.h"

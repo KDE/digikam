@@ -46,7 +46,6 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <klocalizedstring.h>
 #include <klineedit.h>
 #include <kapplication.h>
@@ -56,9 +55,11 @@
 #include <kmessagebox.h>
 #include <kurlrequester.h>
 #include <ktemporaryfile.h>
+#include <kiconloader.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "applicationsettings.h"
 #include "databasewidget.h"
 #include "databaseparameters.h"

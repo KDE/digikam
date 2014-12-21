@@ -48,13 +48,13 @@
 #include "camerahistoryupdater.h"
 #include "downloadsettings.h"
 #include "importiconview.h"
-#include "importview.h"
 #include "dxmlguiwindow.h"
 
 namespace Digikam
 {
 
 class Album;
+class PAlbum;
 class CollectionLocation;
 class CameraHistoryUpdater;
 class ImportIconView;

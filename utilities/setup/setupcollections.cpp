@@ -38,10 +38,11 @@
 #include <QIntValidator>
 #include <QSpinBox>
 #include <QFormLayout>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <klocalizedstring.h>
 #include <klineedit.h>
 #include <kpagedialog.h>
@@ -50,11 +51,10 @@
 #include <kmessagebox.h>
 #include <kurlrequester.h>
 #include <ktemporaryfile.h>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "applicationsettings.h"
 #include "setupcollectionview.h"
 
