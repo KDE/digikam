@@ -1351,6 +1351,8 @@ if(DIGIKAM_CAN_BE_COMPILED)
     set(libdatabasemodels_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagemodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagefiltermodel.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagefiltermodelpriv.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagefiltermodelthreads.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagefiltersettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagelistmodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagesortsettings.cpp

@@ -36,6 +36,9 @@
 
 // Local includes
 
+#include "imageinfo.h"
+#include "imagefiltermodel.h"
+
 #include "digikam_export.h"
 // Yes, we need the EXPORT macro in a private header because
 // this private header is shared across binary objects.
@@ -43,6 +46,9 @@
 
 namespace Digikam
 {
+
+const int PrepareChunkSize = 101;
+const int FilterChunkSize  = 2001;
 
 class ImageFilterModelTodoPackage
 {
