@@ -112,17 +112,17 @@ public:
     KAction*                  fileDeleteAction;
     KAction*                  fileDeleteFinalAction;
     KAction*                  slideShowAction;
-    KAction*                  leftZoomPlusAction;
-    KAction*                  leftZoomMinusAction;
+    QAction*                  leftZoomPlusAction;
+    QAction*                  leftZoomMinusAction;
     KAction*                  leftZoomTo100percents;
     KAction*                  leftZoomFitToWindowAction;
-    KAction*                  rightZoomPlusAction;
-    KAction*                  rightZoomMinusAction;
+    QAction*                  rightZoomPlusAction;
+    QAction*                  rightZoomMinusAction;
     KAction*                  rightZoomTo100percents;
     KAction*                  rightZoomFitToWindowAction;
 
-    KAction*                  forwardAction;
-    KAction*                  backwardAction;
+    QAction*                  forwardAction;
+    QAction*                  backwardAction;
     KAction*                  firstAction;
     KAction*                  lastAction;
 
