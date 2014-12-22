@@ -27,20 +27,19 @@
 // Qt includes
 
 #include <QImage>
-#include <QThread>
 
-// KDE includes
+// Libkdcraw includes
 
-#include <threadweaver/Job.h>
+#include "ractionjob.h"
 
-using namespace ThreadWeaver;
+using namespace KDcrawIface;
 
 namespace Digikam
 {
 
 class ImageQualitySettings;
 
-class ImageQualityTask : public Job
+class ImageQualityTask : public RActionJob
 {
     Q_OBJECT
 

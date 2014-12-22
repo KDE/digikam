@@ -23,13 +23,9 @@
 
 #include "thumbstask.h"
 
-// KDE includes
-
-#include "digikam_debug.h"
-#include <threadweaver/ThreadWeaver.h>
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
 
@@ -52,7 +48,8 @@ public:
 // -------------------------------------------------------
 
 ThumbsTask::ThumbsTask()
-    : Job(0), d(new Private)
+    : RActionJob(),
+      d(new Private)
 {
     ThumbnailLoadThread* const thread = new ThumbnailLoadThread;
     thread->setPixmapRequested(false);

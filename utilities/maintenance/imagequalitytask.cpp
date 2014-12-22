@@ -23,13 +23,9 @@
 
 #include "imagequalitytask.h"
 
-// KDE includes
-
-#include "digikam_debug.h"
-#include <threadweaver/ThreadWeaver.h>
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "dimg.h"
 #include "previewloadthread.h"
 #include "imagequalitysettings.h"
@@ -58,7 +54,8 @@ public:
 // -------------------------------------------------------
 
 ImageQualityTask::ImageQualityTask()
-    : Job(0), d(new Private)
+    : RActionJob(),
+      d(new Private)
 {
 }
 

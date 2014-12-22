@@ -29,11 +29,11 @@
 #include <QPixmap>
 #include <QThread>
 
-// KDE includes
+// Libkdcraw includes
 
-#include <threadweaver/Job.h>
+#include "ractionjob.h"
 
-using namespace ThreadWeaver;
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -41,7 +41,7 @@ namespace Digikam
 class LoadingDescription;
 class DImg;
 
-class FingerprintsTask : public Job
+class FingerprintsTask : public RActionJob
 {
     Q_OBJECT
 

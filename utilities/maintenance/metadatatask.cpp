@@ -23,15 +23,11 @@
 
 #include "metadatatask.h"
 
-// KDE includes
-
-#include "digikam_debug.h"
-#include <threadweaver/ThreadWeaver.h>
-
 // Local includes
 
 #include "collectionscanner.h"
 #include "metadatahub.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -57,7 +53,8 @@ public:
 // -------------------------------------------------------
 
 MetadataTask::MetadataTask()
-    : Job(0), d(new Private)
+    : RActionJob(),
+      d(new Private)
 {
 }
 

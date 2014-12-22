@@ -23,13 +23,9 @@
 
 #include "fingerprintstask.h"
 
-// KDE includes
-
-#include "digikam_debug.h"
-#include <threadweaver/ThreadWeaver.h>
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "dimg.h"
 #include "haar.h"
 #include "haariface.h"
@@ -54,7 +50,7 @@ public:
 // -------------------------------------------------------
 
 FingerprintsTask::FingerprintsTask()
-    : Job(0), d(new Private)
+    : RActionJob(), d(new Private)
 {
 }
 

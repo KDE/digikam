@@ -25,12 +25,11 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
-#include <threadweaver/JobCollection.h>
 #include <solid/device.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "metadatatask.h"
 #include "thumbstask.h"
 #include "fingerprintstask.h"
@@ -41,7 +40,6 @@ using namespace Solid;
 
 namespace Digikam
 {
-
 
 MaintenanceThread::MaintenanceThread(QObject* const parent)
     : RActionThreadBase(parent)
@@ -70,7 +68,7 @@ void MaintenanceThread::setUseMultiCore(const bool b)
 
 void MaintenanceThread::syncMetadata(const ImageInfoList& items, MetadataSynchronizer::SyncDirection dir, bool tagsOnly)
 {
-    JobCollection* const collection = new JobCollection();
+    RJobCollection collection;
 
     for(int i=0; i < items.size(); i++)
     {
@@ -84,15 +82,15 @@ void MaintenanceThread::syncMetadata(const ImageInfoList& items, MetadataSynchro
         connect(this, SIGNAL(signalCanceled()),
                 t, SLOT(slotCancel()), Qt::QueuedConnection);
 
-        collection->addJob(t);
+        collection.insert(t, 0);
     }
 
-    appendJob(collection);
+    appendJobs(collection);
 }
 
 void MaintenanceThread::generateThumbs(const QStringList& paths)
 {
-    JobCollection* const collection = new JobCollection();
+    RJobCollection collection;
 
     for(int i=0; i < paths.size(); i++)
     {
@@ -105,15 +103,15 @@ void MaintenanceThread::generateThumbs(const QStringList& paths)
         connect(this, SIGNAL(signalCanceled()),
                 t, SLOT(slotCancel()), Qt::QueuedConnection);
 
-        collection->addJob(t);
+        collection.insert(t, 0);
     }
 
-    appendJob(collection);
+    appendJobs(collection);
 }
 
 void MaintenanceThread::generateFingerprints(const QStringList& paths)
 {
-    JobCollection* const collection = new JobCollection();
+    RJobCollection collection;
 
     for(int i=0; i < paths.size(); i++)
     {
@@ -126,15 +124,15 @@ void MaintenanceThread::generateFingerprints(const QStringList& paths)
         connect(this, SIGNAL(signalCanceled()),
                 t, SLOT(slotCancel()), Qt::QueuedConnection);
 
-        collection->addJob(t);
+        collection.insert(t, 0);
     }
 
-    appendJob(collection);
+    appendJobs(collection);
 }
 
 void MaintenanceThread::sortByImageQuality(const QStringList& paths, const ImageQualitySettings& quality)
 {
-    JobCollection* const collection = new JobCollection();
+    RJobCollection collection;
 
     for(int i=0; i < paths.size(); i++)
     {
@@ -147,10 +145,10 @@ void MaintenanceThread::sortByImageQuality(const QStringList& paths, const Image
         connect(this, SIGNAL(signalCanceled()),
                 t, SLOT(slotCancel()), Qt::QueuedConnection);
 
-        collection->addJob(t);
+        collection.insert(t, 0);
     }
 
-    appendJob(collection);
+    appendJobs(collection);
 }
 
 void MaintenanceThread::cancel()

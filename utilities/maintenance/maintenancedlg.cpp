@@ -34,6 +34,7 @@
 
 // Libkdcraw includes
 
+#include <rwidgetutils.h>
 #include <rexpanderbox.h>
 
 // KDE includes
@@ -43,7 +44,6 @@
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <knuminput.h>
-#include <kvbox.h>
 #include <kconfig.h>
 
 // Local includes
