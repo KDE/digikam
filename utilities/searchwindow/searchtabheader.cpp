@@ -33,7 +33,6 @@
 #include <QTimer>
 #include <QToolButton>
 #include <QVBoxLayout>
-#include <QColorGroup>
 
 // KDE includes
 

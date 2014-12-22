@@ -31,20 +31,21 @@
 #include <QPainter>
 #include <QTimeLine>
 #include <QVBoxLayout>
+#include <QPushButton>
 
 // KDE includes
 
 #include <kdialogbuttonbox.h>
 #include <klocalizedstring.h>
-#include <QPushButton>
 #include <kstandardguiitem.h>
-#include "digikam_debug.h"
 #include <kapplication.h>
-#include <KGuiItem>
-#include <KStandardGuiItem>
+#include <kguiitem.h>
+#include <kstandardguiitem.h>
+#include <kpushbutton.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "searchgroup.h"
 #include "searchutilities.h"
 #include "searchwindow.h"
@@ -528,10 +529,10 @@ SearchViewBottomBar::SearchViewBottomBar(SearchViewThemedPartsCache* const cache
                            QDialogButtonBox::RejectRole,
                            this,
                            SIGNAL(cancelPressed()));
-    QPushButton* aBtn = m_buttonBox->addButton(KStandardGuiItem::apply(),
-                                               QDialogButtonBox::ApplyRole,
-                                               this,
-                                               SIGNAL(tryoutPressed()));
+    KPushButton* const aBtn = m_buttonBox->addButton(KStandardGuiItem::apply(),
+                                                     QDialogButtonBox::ApplyRole,
+                                                     this,
+                                                     SIGNAL(tryoutPressed()));
     aBtn->setText(i18n("Try"));
     m_mainLayout->addWidget(m_buttonBox);
 

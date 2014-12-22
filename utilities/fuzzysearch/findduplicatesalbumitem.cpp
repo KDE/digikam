@@ -26,11 +26,11 @@
 // Qt includes
 
 #include <QPainter>
+#include <QCollator>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kstringhandler.h>
 #include <kiconloader.h>
 
 // Local includes
@@ -123,7 +123,7 @@ KUrl FindDuplicatesAlbumItem::refUrl() const
 bool FindDuplicatesAlbumItem::operator<(const QTreeWidgetItem& other) const
 {
     int column = treeWidget()->sortColumn();
-    int result = KStringHandler::naturalCompare(text(column), other.text(column));
+    int result = QCollator().compare(text(column), other.text(column));
 
     if (result < 0)
     {

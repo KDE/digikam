@@ -28,10 +28,7 @@
 // Qt includes
 
 #include <QSortFilterProxyModel>
-
-// KDE includes
-
-#include <kstringhandler.h>
+#include <QCollator>
 
 // Local includes
 
@@ -384,10 +381,16 @@ bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& righ
         switch (strComparisonType)
         {
             case ApplicationSettings::Natural:
-                return KStringHandler::naturalCompare(valLeft.toString(), valRight.toString(), sortCaseSensitivity()) < 0;
+            {
+                QCollator collator;
+                collator.setCaseSensitivity(sortCaseSensitivity());
+                return (collator.compare(valLeft.toString(), valRight.toString()) < 0);
+            }
             case ApplicationSettings::Normal:
             default:
-                return QString::compare(valLeft.toString(), valRight.toString(), sortCaseSensitivity()) < 0;
+            {
+                return (QString::compare(valLeft.toString(), valRight.toString(), sortCaseSensitivity()) < 0);
+            }
         }
     }
     else if((valLeft.type() == QVariant::Date) && (valRight.type() == QVariant::Date))

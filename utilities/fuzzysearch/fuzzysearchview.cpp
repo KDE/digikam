@@ -37,15 +37,14 @@
 #include <QTime>
 #include <QTimer>
 #include <QToolButton>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
 #include <kapplication.h>
 #include <kcolorvalueselector.h>
 #include <kconfig.h>
-#include "digikam_debug.h"
-#include <kdialog.h>
-#include <khbox.h>
 #include <khuesaturationselect.h>
 #include <kiconloader.h>
 #include <kinputdialog.h>
@@ -54,12 +53,14 @@
 #include <ksqueezedtextlabel.h>
 #include <kstandarddirs.h>
 #include <ktabwidget.h>
-#include <kvbox.h>
-#include <QApplication>
-#include <QStyle>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albuminfo.h"
@@ -79,6 +80,8 @@
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
 #include "fingerprintsgenerator.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {

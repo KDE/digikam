@@ -35,7 +35,6 @@
 
 #include "albummodel.h"
 #include "searchtextbar.h"
-#include "KStringHandler"
 
 namespace Digikam
 {
