@@ -36,16 +36,17 @@
 #include <QPointer>
 #include <QString>
 #include <QTimer>
+#include <QMenu>
 
 // KDE includes
 
+#include <kiconloader.h>
 #include <kaction.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kfileitem.h>
 #include <klocalizedstring.h>
-#include <QMenu>
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
 #include <kopenwithdialog.h>

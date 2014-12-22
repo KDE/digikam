@@ -33,13 +33,14 @@
 #include <QScrollBar>
 #include <QStyledItemDelegate>
 #include <QTimer>
+#include <QDrag>
+#include <QMenu>
 
 // KDE includes
 
 #include <kiconloader.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
-#include <QMenu>
 
 // Local includes
 

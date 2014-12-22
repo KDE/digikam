@@ -27,6 +27,7 @@
 
 // KDE includes
 
+#include <kurl.h>
 #include <kio/job.h>
 #include <kio/copyjob.h>
 

@@ -38,6 +38,7 @@
 
 #include <kiconloader.h>
 #include <klocalizedstring.h>
+#include <klistwidget.h>
 
 // Local includes
 
@@ -526,7 +527,7 @@ QRect AddTagsCompletionBox::calculateGeometry() const
     //qCDebug(DIGIKAM_GENERAL_LOG) << itemSizeHint << maxHeight << suggestedHeight;
 
     int h                 = qMin(maxSize.height(), suggestedHeight + frameHeight);
-    int w                 = KListWidget::minimumSizeHint().width();
+    int w                 = KListWidget().minimumSizeHint().width();
 
     if (d->allowExceedBounds)
     {

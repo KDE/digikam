@@ -31,14 +31,13 @@
 #include <QGridLayout>
 #include <QApplication>
 #include <QStyle>
+#include <QMenu>
+#include <QPushButton>
 
 // KDE includes
 
-#include <kdialog.h>
 #include <klocalizedstring.h>
 #include <kaction.h>
-#include <QMenu>
-#include <QPushButton>
 #include <kmessagebox.h>
 #include <kinputdialog.h>
 
@@ -169,8 +168,8 @@ AlbumSelectWidget::AlbumSelectWidget(QWidget* const parent, PAlbum* const albumT
     d->searchBar->setConfigGroup(group);
     d->albumTreeView->setEntryPrefix("AlbumTreeView");
 
-    d->newAlbumBtn = new QPushButton(KGuiItem(i18n("&New Album"), "albumfolder-new",
-                                              i18n("Create new album")), this);
+    d->newAlbumBtn = new QPushButton(this);
+    KGuiItem::assign(d->newAlbumBtn, KGuiItem(i18n("&New Album"), "albumfolder-new", i18n("Create new album")));
 
     grid->addWidget(d->albumTreeView, 0, 0, 1, 2);
     grid->addWidget(d->searchBar,     1, 0, 1, 1);

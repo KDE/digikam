@@ -297,7 +297,7 @@ KIO::Job* DIO::createJob(int operation, const KUrl::List& src, const KUrl& dest)
         }
 
         job = KIO::move(src.first(), dest, KIO::HideProgressInfo);
-        job->setProperty(renameFileProperty.toAscii(), src.first().toLocalFile());
+        job->setProperty(renameFileProperty.toAscii().constData(), src.first().toLocalFile());
 
         connect(job, SIGNAL(copyingDone(KIO::Job*,KUrl,KUrl,time_t,bool,bool)),
                 this, SLOT(slotRenamed(KIO::Job*,KUrl,KUrl)));
@@ -313,7 +313,7 @@ KIO::Job* DIO::createJob(int operation, const KUrl::List& src, const KUrl& dest)
 
     if (flags & SourceStatusUnknown)
     {
-        job->setProperty(noErrorMessageProperty.toAscii(), true);
+        job->setProperty(noErrorMessageProperty.toAscii().constData(), true);
     }
 
     connect(job, SIGNAL(result(KJob*)),
@@ -330,7 +330,7 @@ void DIO::slotResult(KJob* kjob)
     {
         // this slot can be used by others, too.
         // check if image renaming property is set.
-        QVariant v = job->property(renameFileProperty.toAscii());
+        QVariant v = job->property(renameFileProperty.toAscii().constData());
 
         if (!v.isNull())
         {
@@ -346,16 +346,9 @@ void DIO::slotResult(KJob* kjob)
             }
         }
 
-        if (job->property(noErrorMessageProperty.toAscii()).isValid())
+        if (job->property(noErrorMessageProperty.toAscii().constData()).isValid())
         {
             return;
-        }
-
-        QWidget* const w = QApplication::activeWindow();
-
-        if (w)
-        {
-            job->ui()->setWindow(w);
         }
 
         job->ui()->showErrorMessage();
@@ -374,7 +367,7 @@ void DIO::slotRenamed(KIO::Job* job, const KUrl&, const KUrl& newURL)
     // clean LoadingCache as well - be pragmatic, do it here.
     LoadingCacheInterface::fileChanged(fileURL.toLocalFile());
 
-    KUrl url(job->property(renameFileProperty.toAscii()).toString());
+    KUrl url(job->property(renameFileProperty.toAscii().constData()).toString());
     emit imageRenameSucceeded(url);
 }
 

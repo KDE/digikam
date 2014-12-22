@@ -1489,26 +1489,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/app/fileaction/fileworkeriface.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/app/fileaction/fileactionimageinfolist.cpp
 
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/addtagscombobox.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/addtagscompletionbox.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/addtagslineedit.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagcheckview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagfolderview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/taggingaction.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagslineeditoverlay.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagspopupmenu.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsactionmngr.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tageditdlg.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagmodificationhelper.cpp
-
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsmanager/tagsmanager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsmanager/tagpropwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsmanager/taglist.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsmanager/tagmngrtreeview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsmanager/models/tagmngrlistview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsmanager/models/tagmngrlistmodel.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsmanager/models/tagmngrlistitem.cpp
-
         ${CMAKE_CURRENT_SOURCE_DIR}/app/settings/applicationsettings.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/app/settings/applicationsettings_p.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/app/settings/applicationsettings_albums.cpp
@@ -1549,6 +1529,25 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/app/views/tableview/tableview_column_thumbnail.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/app/views/tableview/tableview_columnfactory.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/app/views/tableview/tableview_selection_model_syncer.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsmanager/tagsmanager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsmanager/tagpropwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsmanager/taglist.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsmanager/tagmngrtreeview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsmanager/models/tagmngrlistview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsmanager/models/tagmngrlistmodel.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsmanager/models/tagmngrlistitem.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/addtagscombobox.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/addtagscompletionbox.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/addtagslineedit.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagcheckview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagfolderview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/taggingaction.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagslineeditoverlay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagspopupmenu.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tageditdlg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagmodificationhelper.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsactionmngr.cpp
        )
 
     if(KFACE_FOUND)

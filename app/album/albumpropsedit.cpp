@@ -40,6 +40,8 @@
 #include <QRegExp>
 #include <QTextEdit>
 #include <QValidator>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
@@ -47,7 +49,6 @@
 #include <kcursor.h>
 #include <kdatepicker.h>
 #include <kdeversion.h>
-#include <khbox.h>
 #include <kiconloader.h>
 #include <kinputdialog.h>
 #include <klineedit.h>
@@ -57,8 +58,10 @@
 #include <ktextedit.h>
 #include <kurl.h>
 #include <kseparator.h>
-#include <QApplication>
-#include <QStyle>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -67,6 +70,8 @@
 #include "albummanager.h"
 #include "applicationsettings.h"
 #include "databaseaccess.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {

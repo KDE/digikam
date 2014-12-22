@@ -24,8 +24,6 @@
  * ============================================================ */
 
 #include "scancontroller.h"
-// Special case: we need moc file here to compile
-#include "scancontroller.moc"
 
 // Qt includes
 
@@ -1181,3 +1179,5 @@ void ScanControllerLoadingCacheFileWatch::slotImageChanged(const ImageChangeset&
 }
 
 }  // namespace Digikam
+
+#include "scancontroller.moc"

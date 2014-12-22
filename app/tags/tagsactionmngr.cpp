@@ -28,6 +28,7 @@
 #include <QList>
 #include <QShortcut>
 #include <QIcon>
+#include <QKeySequence>
 
 // KDE includes
 
@@ -204,9 +205,9 @@ bool TagsActionMngr::createRatingActionShortcut(KActionCollection* const ac, int
 {
     if (ac)
     {
-        KAction* const action = ac->addAction(QString("%1-%2").arg(d->ratingShortcutPrefix).arg(rating));
+        QAction* const action = ac->addAction(QString("%1-%2").arg(d->ratingShortcutPrefix).arg(rating));
         action->setText(i18n("Assign Rating \"%1 Star\"", rating));
-        action->setShortcut(KShortcut(QString("CTRL+%1").arg(rating)));
+        action->setShortcut(QKeySequence(QString("CTRL+%1").arg(rating)));
         action->setShortcutConfigurable(true);
         action->forgetGlobalShortcut();
         action->setIcon(RatingWidget::buildIcon(rating, KIconLoader::SizeSmallMedium));
@@ -225,9 +226,9 @@ bool TagsActionMngr::createPickLabelActionShortcut(KActionCollection* const ac, 
 {
     if (ac)
     {
-        KAction* const action = ac->addAction(QString("%1-%2").arg(d->pickShortcutPrefix).arg(pickId));
+        QAction* const action = ac->addAction(QString("%1-%2").arg(d->pickShortcutPrefix).arg(pickId));
         action->setText(i18n("Assign Pick Label \"%1\"", PickLabelWidget::labelPickName((PickLabel)pickId)));
-        action->setShortcut(KShortcut(QString("ALT+%1").arg(pickId)));
+        action->setShortcut(QKeySequence(QString("ALT+%1").arg(pickId)));
         action->setShortcutConfigurable(true);
         action->forgetGlobalShortcut();
         action->setIcon(PickLabelWidget::buildIcon((PickLabel)pickId, KIconLoader::SizeSmallMedium));
@@ -246,9 +247,9 @@ bool TagsActionMngr::createColorLabelActionShortcut(KActionCollection* const ac,
 {
     if (ac)
     {
-        KAction* const action = ac->addAction(QString("%1-%2").arg(d->colorShortcutPrefix).arg(colorId));
+        QAction* const action = ac->addAction(QString("%1-%2").arg(d->colorShortcutPrefix).arg(colorId));
         action->setText(i18n("Assign Color Label \"%1\"", ColorLabelWidget::labelColorName((ColorLabel)colorId)));
-        action->setShortcut(KShortcut(QString("ALT+CTRL+%1").arg(colorId)));
+        action->setShortcut(QKeySequence(QString("ALT+CTRL+%1").arg(colorId)));
         action->setShortcutConfigurable(true);
         action->forgetGlobalShortcut();
         action->setIcon(ColorLabelWidget::buildIcon((ColorLabel)colorId, KIconLoader::SizeSmallMedium));
@@ -284,16 +285,17 @@ bool TagsActionMngr::createTagActionShortcut(int tagId)
         return false;
     }
 
-    KShortcut ks(value);
+    QKeySequence ks(value);
     // FIXME: tag icons can be files on disk, or system icon names. Only the latter will work here.
     QIcon     icon(SyncJob::getTagThumbnail(talbum));
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Create Shortcut " << ks.toString()
-             << " to Tag " << talbum->title() << " (" << tagId << ")";
+                                 << " to Tag " << talbum->title() 
+                                 << " (" << tagId << ")";
 
     foreach(KActionCollection* const ac, d->actionCollectionList)
     {
-        KAction* const action = ac->addAction(QString("%1-%2").arg(d->tagShortcutPrefix).arg(tagId));
+        QAction* const action = ac->addAction(QString("%1-%2").arg(d->tagShortcutPrefix).arg(tagId));
         action->setText(i18n("Assign Tag \"%1\"", talbum->title()));
         action->setParent(this);
         action->setShortcut(ks);
@@ -316,7 +318,7 @@ bool TagsActionMngr::createTagActionShortcut(int tagId)
 
 void TagsActionMngr::slotTagActionChanged()
 {
-    KAction* const action = dynamic_cast<KAction*>(sender());
+    QAction* const action = dynamic_cast<QAction*>(sender());
 
     if (!action)
     {

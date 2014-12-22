@@ -39,7 +39,8 @@ void TwoProgressItemsContainer::scheduleOnProgressItem(QAtomicPointer<ProgressIt
 
     if (!ptr)
     {
-        ProgressItem* item = creator->createProgressItem(action);
+        ProgressItem* const item = creator->createProgressItem(action);
+
         if (ptr.testAndSetOrdered(0, item))
         {
             creator->addProgressItem(item);
@@ -49,14 +50,17 @@ void TwoProgressItemsContainer::scheduleOnProgressItem(QAtomicPointer<ProgressIt
             delete item;
         }
     }
-    ptr->incTotalItems(total);
+#pragma message("PORT QT5")
+//    ptr->incTotalItems(total);
 }
 
 void TwoProgressItemsContainer::advance(QAtomicPointer<ProgressItem>& ptr, int n)
 {
-    if (ptr->advance(n))
+#pragma message("PORT QT5")
+//    if (ptr->advance(n))
     {
-        ProgressItem* item = ptr;
+        ProgressItem* const item = ptr;
+
         if (item && ptr.testAndSetOrdered(item, 0))
         {
             item->setComplete();

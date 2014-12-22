@@ -31,6 +31,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
+#include <kcompletion.h>
 
 // Local includes
 
@@ -82,7 +83,7 @@ AddTagsLineEdit::AddTagsLineEdit(QWidget* const parent)
     d->completionBox = new AddTagsCompletionBox(this);
     setCompletionBox(d->completionBox);
 
-    setCompletionMode(KGlobalSettings::CompletionPopup);
+    setCompletionMode(KCompletion::CompletionPopup);
     setTrapReturnKey(true);
 
     connect(d->completionBox, SIGNAL(currentCompletionTextChanged(QString)),
@@ -233,7 +234,7 @@ void AddTagsLineEdit::makeCompletion(const QString& text)
 {
     // Need to reimplement already because setCompletedItems is not virtual
     KCompletion* const comp          = compObj();
-    KGlobalSettings::Completion mode = completionMode();
+    KCompletion::CompletionMode mode = completionMode();
     d->currentTaggingAction          = TaggingAction();
 
     if (text.isEmpty())
@@ -241,15 +242,15 @@ void AddTagsLineEdit::makeCompletion(const QString& text)
         emit taggingActionSelected(TaggingAction());
     }
 
-    if ( !comp || mode == KGlobalSettings::CompletionNone )
+    if ( !comp || mode == KCompletion::CompletionNone )
     {
         return;    // No completion object...
     }
 
     const QString match = comp->makeCompletion( text );
 
-    if ( mode == KGlobalSettings::CompletionPopup ||
-         mode == KGlobalSettings::CompletionPopupAuto )
+    if ( mode == KCompletion::CompletionPopup ||
+         mode == KCompletion::CompletionPopupAuto )
     {
         if ( text.isEmpty() )
         {
@@ -295,7 +296,7 @@ void AddTagsLineEdit::makeCompletion(const QString& text)
             return;
         }
 
-        if ( mode != KGlobalSettings::CompletionShell )
+        if ( mode != KCompletion::CompletionShell )
         {
             setUserSelection(false);
         }

@@ -61,6 +61,7 @@ extern "C"
 
 // KDE includes
 
+#include <kiconloader.h>
 #include <kcombobox.h>
 #include <kconfiggroup.h>
 #include <kconfig.h>
@@ -405,7 +406,8 @@ static bool moveToBackup(const QFileInfo& info)
     if (info.exists())
     {
         QFileInfo backup(info.dir(), info.fileName() + "-backup-" + QDateTime::currentDateTime().toString(Qt::ISODate));
-        KIO::Job* job = KIO::file_move(info.filePath(), backup.filePath(), -1, KIO::Overwrite | KIO::HideProgressInfo);
+        KIO::Job* const job = KIO::file_move(QUrl::fromLocalFile(info.filePath()), QUrl::fromLocalFile(backup.filePath()),
+                                             -1, KIO::Overwrite | KIO::HideProgressInfo);
 
         if (!KIO::NetAccess::synchronousRun(job, 0))
         {
@@ -430,8 +432,8 @@ static bool copyToNewLocation(const QFileInfo& oldFile, const QFileInfo& newFile
                        "Starting with an empty database.",
                        QDir::toNativeSeparators(oldFile.filePath()), QDir::toNativeSeparators(newFile.filePath()));
 
-    KIO::Job* job = KIO::file_copy(oldFile.filePath(), newFile.filePath(), -1,
-                                   KIO::Overwrite /*| KIO::HideProgressInfo*/);
+    KIO::Job* const job = KIO::file_copy(QUrl::fromLocalFile(oldFile.filePath()), QUrl::fromLocalFile(newFile.filePath()),
+                                         -1, KIO::Overwrite /*| KIO::HideProgressInfo*/);
 
     if (!KIO::NetAccess::synchronousRun(job, 0))
     {
@@ -3019,7 +3021,7 @@ void AlbumManager::slotAlbumsJobResult(KJob* job)
 
     if (job->error())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << k_funcinfo << "Failed to list albums";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list albums";
 
         // Pop-up a message about the error.
         DNotificationWrapper(QString(), job->errorString(),
@@ -3049,7 +3051,7 @@ void AlbumManager::slotPeopleJobResult(KJob* job)
 
     if (job->error())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << k_funcinfo << "Failed to list face tags";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list face tags";
 
         // Pop-up a message about the error.
         DNotificationWrapper(QString(), job->errorString(),
@@ -3092,7 +3094,7 @@ void AlbumManager::slotTagsJobResult(KJob* job)
 
     if (job->error())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << k_funcinfo << "Failed to list tags";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list tags";
 
         // Pop-up a message about the error.
         DNotificationWrapper(QString(), job->errorString(),

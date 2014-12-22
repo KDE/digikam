@@ -37,6 +37,7 @@
 #include <klocalizedstring.h>
 #include <kstandardguiitem.h>
 #include <kconfig.h>
+#include <kiconloader.h>
 
 // Local includes
 

@@ -27,7 +27,6 @@
 // Qt includes
 
 #include <QAction>
-#include <QDeclarativeContext>
 
 // KDE includes
 

@@ -35,8 +35,11 @@
 
 // KDE includes
 
-#include <khbox.h>
 #include <kurl.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // libkexiv2 includes
 
@@ -52,6 +55,7 @@
 #include "stackedview.h"
 
 using namespace KExiv2Iface;
+using namespace KDcrawIface;
 
 namespace Digikam
 {

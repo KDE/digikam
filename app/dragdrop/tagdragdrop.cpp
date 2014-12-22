@@ -27,11 +27,12 @@
 // Qt includes
 
 #include <QDropEvent>
+#include <QMenu>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <QMenu>
+#include <kiconloader.h>
 #include <kmessagebox.h>
 
 // Local includes

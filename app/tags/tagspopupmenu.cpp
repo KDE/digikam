@@ -32,6 +32,7 @@
 
 // Qt includes
 
+#include <QWidgetAction>
 #include <QPainter>
 #include <QPixmap>
 #include <QSet>
@@ -40,6 +41,7 @@
 #include <QStyleOptionButton>
 #include <QStyleOptionMenuItem>
 #include <QStyleOptionViewItem>
+#include <QToolButton>
 
 // KDE includes
 
@@ -519,16 +521,18 @@ void TagsPopupMenu::slotAboutToShow()
 
         if (recentTags.isEmpty())
         {
-            addTitle(d->recentTagPix, i18n("No Recently Assigned Tags"));
+#pragma message("PORT QT5")
+//            addTitle(d->recentTagPix, i18n("No Recently Assigned Tags"));
         }
         else
         {
-            addTitle(d->recentTagPix, i18n("Recently Assigned Tags"));
+#pragma message("PORT QT5")
+//            addTitle(d->recentTagPix, i18n("Recently Assigned Tags"));
 
             for (AlbumList::const_iterator it = recentTags.constBegin();
                  it != recentTags.constEnd(); ++it)
             {
-                TAlbum* album = static_cast<TAlbum*>(*it);
+                TAlbum* const album = static_cast<TAlbum*>(*it);
 
                 if (album)
                 {
@@ -572,13 +576,13 @@ void TagsPopupMenu::slotAboutToShow()
         if (d->mode == ASSIGN || d->mode == RECENTLYASSIGNED)
         {
             addSeparator();
-            TagToggleAction* const addTag = new TagToggleAction(QIcon::fromTheme(d->addTagPix), i18n("Add New Tag..."), d->addTagActions);
+            TagToggleAction* const addTag = new TagToggleAction(d->addTagPix, i18n("Add New Tag..."), d->addTagActions);
             addTag->setData(0);   // root id
             addTag->setCheckBoxHidden(true);
             addAction(addTag);
 
             addSeparator();
-            TagToggleAction* const moreTag = new TagToggleAction(QIcon::fromTheme(d->tagViewPix), i18n("More Tags..."), d->addTagActions);
+            TagToggleAction* const moreTag = new TagToggleAction(d->tagViewPix, i18n("More Tags..."), d->addTagActions);
             moreTag->setData(-1); // special id to query tag view
             moreTag->setCheckBoxHidden(true);
             addAction(moreTag);
@@ -710,7 +714,7 @@ QMenu* TagsPopupMenu::buildSubMenu(int tagid)
     {
         popup->addSeparator();
 
-        TagToggleAction* const action = new TagToggleAction(QIcon::fromTheme(d->addTagPix), i18n("Add New Tag..."), d->addTagActions);
+        TagToggleAction* const action = new TagToggleAction(d->addTagPix, i18n("Add New Tag..."), d->addTagActions);
         action->setData(album->id());
         action->setCheckBoxHidden(true);
         popup->addAction(action);
@@ -767,18 +771,18 @@ void TagsPopupMenu::setAlbumIcon(QAction* action, TAlbum* album)
     {
         if (pix.isNull())
         {
-            action->setIcon(QIcon::fromTheme(loader->getStandardTagIcon(album)));
+            action->setIcon(loader->getStandardTagIcon(album));
         }
         else
         {
-            action->setIcon(QIcon::fromTheme(pix));
+            action->setIcon(pix);
         }
     }
     else
     {
         // for the time while loading, set standard icon
         // usually this code path will not be used, as icons are cached
-        action->setIcon(QIcon::fromTheme(loader->getStandardTagIcon(album)));
+        action->setIcon(loader->getStandardTagIcon(album));
     }
 }
 
@@ -833,7 +837,7 @@ void TagsPopupMenu::slotTagThumbnail(Album* album, const QPixmap& pix)
     {
         if (action->data().toInt() == album->id())
         {
-            action->setIcon(QIcon::fromTheme(pix));
+            action->setIcon(pix);
             return;
         }
     }

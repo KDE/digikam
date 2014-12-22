@@ -31,14 +31,16 @@
 
 #include <QScopedPointer>
 
-// KDE includes
+// Libkdcraw includes
 
-#include <kvbox.h>
+#include <rwidgetutils.h>
 
 // Local includes
 
 #include "albummanager.h"
 #include "statesavingobject.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {

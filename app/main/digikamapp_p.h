@@ -36,13 +36,13 @@
 #include <QString>
 #include <QTimer>
 #include <QToolButton>
+#include <QMenu>
 
 // KDE includes
 
 #include <kconfig.h>
 #include <kaction.h>
 #include <kselectaction.h>
-#include <QMenu>
 #include <kstatusbar.h>
 #include <kcombobox.h>
 #include <ksqueezedtextlabel.h>
@@ -271,16 +271,16 @@ public:
     KActionMenu*                        imageExifOrientationActionMenu;
 
     // Edit Actions
-    KAction*                            cutItemsAction;
-    KAction*                            copyItemsAction;
-    KAction*                            pasteItemsAction;
+    QAction*                            cutItemsAction;
+    QAction*                            copyItemsAction;
+    QAction*                            pasteItemsAction;
     KAction*                            selectAllAction;
     KAction*                            selectNoneAction;
     KAction*                            selectInvertAction;
 
     // View Actions
-    KAction*                            zoomPlusAction;
-    KAction*                            zoomMinusAction;
+    QAction*                            zoomPlusAction;
+    QAction*                            zoomMinusAction;
     KAction*                            zoomFitToWindowAction;
     KAction*                            zoomTo100percents;
     KSelectAction*                      imageSortAction;

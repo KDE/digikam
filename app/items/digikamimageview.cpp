@@ -33,6 +33,7 @@
 #include <QClipboard>
 #include <QFileInfo>
 #include <QPointer>
+#include <QMenu>
 
 // KDE includes
 
@@ -40,7 +41,7 @@
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
-#include <QMenu>
+#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kmimetype.h>
 #include <krun.h>

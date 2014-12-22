@@ -34,16 +34,17 @@
 #include <QCheckBox>
 #include <QGridLayout>
 #include <QToolButton>
+#include <QMenu>
 
 // KDE includes
 
-#include <khbox.h>
-#include <QMenu>
+#include <kiconloader.h>
 
 // Libkdcraw includes
 
 #include <libkdcraw_version.h>
 #include <rexpanderbox.h>
+#include <rwidgetutils.h>
 
 // Local includes
 

@@ -460,9 +460,9 @@ void AlbumWatch::connectToKDirWatch()
     KDirWatch::Method m = d->dirWatch->internalMethod();
     QString           mName("FAM");
 
-    if (m == KDirWatch::DNotify)
+    if (m == KDirWatch::QFSWatch)
     {
-        mName = QString("DNotify");
+        mName = QString("QFSWatch");
     }
     else if (m == KDirWatch::Stat)
     {
