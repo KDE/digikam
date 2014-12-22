@@ -53,6 +53,7 @@ extern "C"
 #include "batchtool.h"
 #include "batchtoolsmanager.h"
 #include "fileoperation.h"
+#include "bqmkipiplugin.h"
 
 namespace Digikam
 {
@@ -156,11 +157,15 @@ void Task::run()
         d->tool->setRawDecodingSettings(d->settings.rawDecodingSettings);
         d->tool->setResetExifOrientationAllowed(d->settings.exifSetOrientation);
         d->tool->setLastChainedTool(index == d->tools.m_toolsList.count());
-        d->tool->setOutputUrlFromInputUrl();
-        d->tool->setBranchHistory(true);
+	
+	BqmKipiPlugin* const kipiTool = qobject_cast<BqmKipiPlugin*>(d->tool);
+        if(!kipiTool)
+	    d->tool->setOutputUrlFromInputUrl();
+        
+	d->tool->setBranchHistory(true);
 
-        outUrl   = d->tool->outputUrl();
         success  = d->tool->apply();
+	outUrl   = d->tool->outputUrl();
         tmpImage = d->tool->imageData();
         errMsg   = d->tool->errorDescription();
         tmp2del.append(outUrl);
@@ -174,7 +179,7 @@ void Task::run()
         }
         else if (!success)
         {
-            emitActionData(ActionData::BatchFailed, errMsg);
+	    emitActionData(ActionData::BatchFailed, errMsg);
             break;
         }
 

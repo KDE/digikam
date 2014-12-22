@@ -113,17 +113,12 @@ QString BqmKipiPlugin::outputSuffix() const
 
 bool BqmKipiPlugin::toolOperations()
 {
-    /*
-    if (!loadToDImg())
-    {
-        return false;
-    }
-
-    bool lossless = settings()["lossless"].toBool();
-    image().setAttribute("quality", lossless ? 100 : settings()["quality"].toInt());
-
-    return (savefromDImg());
-    */
-    return true;
+    plugin->startTask(inputUrl());
+    while(plugin->tempImg()==KUrl());            //This is important. It waits till the thread(of kipi plugin) processing the image has done its work.
+    setOutputUrl(plugin->tempImg());
+    setInputUrl(plugin->tempImg());              //This is done so that loadToDImg(which uses input url to load image) loads the image data of the processed image.
+    plugin->clearTempImg();
+    return(loadToDImg());                        //This is done because the next batch tool requries the image data of the processed image of previous batch tool.
 }
+
 }  // namespace Digikam
