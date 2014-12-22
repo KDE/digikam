@@ -29,17 +29,16 @@
 #include <QItemSelectionModel>
 #include <QTreeView>
 #include <QVBoxLayout>
+#include <QMenu>
 
 // KDE includes
 
 #include <kaction.h>
-#include "digikam_debug.h"
-#include <klinkitemselectionmodel.h>
-#include <QMenu>
 
 // local includes
 
 /// @todo clean up includes
+#include "digikam_debug.h"
 #include "contextmenuhelper.h"
 #include "imageinfo.h"
 #include "imagemodel.h"

@@ -1506,14 +1506,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/app/utils/slideshowbuilder.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/app/utils/digikammodelcollection.cpp
 
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/stackedview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/digikamview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/imagepreviewviewitem.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/imagepreviewview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/mediaplayerview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/welcomepageview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/leftsidebarwidgets.cpp
-
         ${CMAKE_CURRENT_SOURCE_DIR}/app/views/tableview/tableview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/app/views/tableview/tableview_treeview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/app/views/tableview/tableview_treeview_delegate.cpp
@@ -1536,6 +1528,14 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsmanager/models/tagmngrlistview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsmanager/models/tagmngrlistmodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsmanager/models/tagmngrlistitem.cpp
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/imagepreviewviewitem.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/imagepreviewview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/welcomepageview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/leftsidebarwidgets.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/digikamview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/stackedview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/mediaplayerview.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/addtagscombobox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/addtagscompletionbox.cpp

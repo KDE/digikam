@@ -1112,19 +1112,19 @@ void ContextMenuHelper::slotCloseAllGroups()
 
 void ContextMenuHelper::addStandardActionCut(QObject* recv, const char* slot)
 {
-    KAction* const cut = KStandardAction::cut(recv, slot, d->parent);
+    QAction* const cut = KStandardAction::cut(recv, slot, d->parent);
     addAction(cut);
 }
 
 void ContextMenuHelper::addStandardActionCopy(QObject* recv, const char* slot)
 {
-    KAction* const copy = KStandardAction::copy(recv, slot, d->parent);
+    QAction* const copy = KStandardAction::copy(recv, slot, d->parent);
     addAction(copy);
 }
 
 void ContextMenuHelper::addStandardActionPaste(QObject* recv, const char* slot)
 {
-    KAction* const paste        = KStandardAction::paste(recv, slot, d->parent);
+    QAction* const paste        = KStandardAction::paste(recv, slot, d->parent);
     const QMimeData* const data = qApp->clipboard()->mimeData(QClipboard::Clipboard);
 
     if (!data || !KUrl::List::canDecode(data))

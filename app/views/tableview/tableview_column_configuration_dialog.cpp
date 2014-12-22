@@ -29,7 +29,6 @@
 
 // KDE includes
 
-#include <klauncher_iface.h>
 #include <klocalizedstring.h>
 
 // local includes

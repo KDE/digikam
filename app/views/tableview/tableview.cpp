@@ -28,12 +28,13 @@
 #include <QHeaderView>
 #include <QItemSelectionModel>
 #include <QVBoxLayout>
+#include <QMenu>
 
 // KDE includes
 
 #include <kaction.h>
-#include <QMenu>
-#include <klinkitemselectionmodel.h>
+#include <kiconloader.h>
+//#include <klinkitemselectionmodel.h>
 
 // local includes
 

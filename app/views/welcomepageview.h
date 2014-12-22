@@ -33,6 +33,7 @@
 
 // KDE includes
 
+#include <kurl.h>
 #include <khtml_part.h>
 
 // Local includes
