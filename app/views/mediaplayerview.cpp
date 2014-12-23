@@ -33,19 +33,19 @@
 #include <QToolBar>
 #include <QEvent>
 #include <QMouseEvent>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
 #include <kapplication.h>
 #include <kaction.h>
-#include <kdialog.h>
+#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
 #include <phonon/seekslider.h>
 #include <phonon/videoplayer.h>
 #include <phonon/videowidget.h>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 

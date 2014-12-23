@@ -30,12 +30,12 @@
 
 // Qt includes
 
+#include <QTimer>
 #include <QShortcut>
 
 // KDE includes
 
-#include <kapplication.h>
-#include <kdialog.h>
+#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <ktoolinvocation.h>
 #include <krun.h>
@@ -1300,7 +1300,7 @@ void DigikamView::slotAlbumOpenInTerminal()
 
     // If the given directory is not local, it can still be the URL of an
     // ioslave using UDS_LOCAL_PATH which to be converted first.
-    KUrl url = KIO::NetAccess::mostLocalUrl(dir, this);
+    KUrl url = KIO::NetAccess::mostLocalUrl(QUrl::fromLocalFile(dir), this);
 
     //If the URL is local after the above conversion, set the directory.
     if (url.isLocalFile())
