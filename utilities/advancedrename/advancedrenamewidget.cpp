@@ -31,12 +31,14 @@
 #include <QPushButton>
 #include <QRegExp>
 #include <QToolButton>
+#include <QApplication>
+#include <QStyle>
+#include <QIcon>
 
 // KDE includes
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <QIcon>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 

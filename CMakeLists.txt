@@ -1584,12 +1584,8 @@ if(DIGIKAM_CAN_BE_COMPILED)
     endif()
 
     add_subdirectory(data)
+    add_subdirectory(utilities)
     add_subdirectory(app)
-
-# TODO port Qt5
-#
-#     add_subdirectory(utilities)
-#     add_subdirectory(app)
 #     add_subdirectory(kioslave)
 #     add_subdirectory(showfoto)
 #     add_subdirectory(imageplugins)
