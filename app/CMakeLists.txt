@@ -70,10 +70,9 @@ target_link_libraries(digikamcore
 
                       KF5::KDELibs4Support
                       KF5::KIOCore
-                      
                       KF5::KHtml
                       KF5::NotifyConfig
-                      
+
                       ${JPEG_LIBRARIES}
                       ${TIFF_LIBRARIES}
                       ${PNG_LIBRARIES}
@@ -201,11 +200,11 @@ set(digikam_SRCS ${libeditorgui_SRCS}
                  ${libfuzzysearch_SRCS}
                  ${libqueuemanager_SRCS}
                  ${libalbummodels_SRCS}
-                 ${libdigikamgui_SRCS}
                  ${libfirstrun_SRCS}
                  ${libtemplate_SRCS}
                  ${libdatabaseui_SRCS}
                  ${libimgqsort_SRCS}
+                 ${libdigikamgui_SRCS}
                  main/main.cpp
 )
 
@@ -247,8 +246,7 @@ target_link_libraries(digikam
                       KF5::Parts
                       KF5::KHtml
                       KF5::NotifyConfig
-                      
-                      
+
                       ${KF5KExiv2_LIBRARIES}
                       ${KF5KDcraw_LIBRARIES}
 
