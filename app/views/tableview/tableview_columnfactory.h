@@ -34,7 +34,7 @@
 
 #include <kconfiggroup.h>
 
-// local includes
+// Local includes
 
 #include "tableview_model.h"
 #include "tableview_shared.h"
@@ -161,6 +161,7 @@ class TableViewColumnConfigurationWidget : public QWidget
     Q_OBJECT
 
 public:
+
     explicit TableViewColumnConfigurationWidget(
             TableViewShared* const sharedObject,
             const TableViewColumnConfiguration& currentConfiguration,
@@ -178,6 +179,7 @@ class TableViewColumn : public QObject
     Q_OBJECT
 
 protected:
+
     TableViewShared* const s;
     TableViewColumnConfiguration configuration;
 
@@ -256,6 +258,7 @@ public:
         )
     {
         typename columnClass::SubColumn subColumn;
+
         if (!getSubColumnIndex<columnClass>(pConfiguration.columnId, &subColumn))
         {
             return false;
@@ -267,6 +270,7 @@ public:
     }
 
 Q_SIGNALS:
+
     void signalDataChanged(const qlonglong imageId);
     void signalAllDataChanged();
 };
@@ -284,8 +288,6 @@ public:
 
 private:
 
-    class Private;
-    const QScopedPointer<Private> d;
     TableViewShared* const s;
 };
 

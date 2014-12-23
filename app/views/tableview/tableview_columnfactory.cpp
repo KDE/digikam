@@ -22,25 +22,15 @@
 
 #include "tableview_columnfactory.h"
 
-// Qt includes
-
-// KDE includes
-
-#include "digikam_debug.h"
-
 // local includes
 
+#include "digikam_debug.h"
 #include "imagefiltermodel.h"
 #include "imageinfo.h"
 #include "tableview_columns.h"
 
 namespace Digikam
 {
-
-class TableViewColumnFactory::Private
-{
-public:
-};
 
 TableViewColumn::TableViewColumn(
         TableViewShared* const tableViewShared,
@@ -59,7 +49,6 @@ TableViewColumn::~TableViewColumn()
 
 TableViewColumnFactory::TableViewColumnFactory(TableViewShared* const tableViewShared, QObject* parent)
   : QObject(parent),
-    d(new Private()),
     s(tableViewShared)
 {
 }
@@ -141,12 +130,10 @@ QSize TableViewColumn::sizeHint(const QStyleOptionViewItem& option, TableViewMod
 
 TableViewColumnProfile::TableViewColumnProfile()
 {
-
 }
 
 TableViewColumnProfile::~TableViewColumnProfile()
 {
-
 }
 
 void TableViewColumnProfile::loadSettings(const KConfigGroup& configGroup)
