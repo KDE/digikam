@@ -501,15 +501,14 @@ if(DIGIKAM_CAN_BE_COMPILED)
     add_definitions(-D_DEFAULT_SOURCE)
 
     # Enable C++ Exceptions support, require by Greycstoration algorithm (CImg.h)
-    if(NOT MSVC)
-        add_definitions(${KDE4_ENABLE_EXCEPTIONS})
-    endif()
+    kde_enable_exceptions()
 
     # ==================================================================================================
     # Includes rules
 
     include_directories(${KF5KExiv2_INCLUDE_DIRS}
                         ${KF5KDcraw_INCLUDE_DIRS}
+                        ${PHONON_INCLUDE_DIR}
                         ${PGF_INCLUDE_DIRS}
                         ${CMAKE_CURRENT_SOURCE_DIR}/app
                         ${CMAKE_CURRENT_BINARY_DIR}/app
