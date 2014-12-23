@@ -24,9 +24,11 @@
 #ifndef TEMPLATESELECTOR_H
 #define TEMPLATESELECTOR_H
 
-// KDE includes
+// Libkdcraw includes
 
-#include <khbox.h>
+#include <rwidgetutils.h>
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {

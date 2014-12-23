@@ -29,12 +29,17 @@
 
 // KDE includes
 
-#include <kvbox.h>
 #include <klocalizedstring.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
 #include "version.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {

@@ -35,6 +35,7 @@
 #include <QMap>
 #include <QSqlError>
 #include <QLabel>
+#include <QGroupBox>
 
 // KDE includes
 

@@ -25,31 +25,31 @@
 
 // Qt includes
 
+#include <QStandardPaths>
+#include <QApplication>
+#include <QStyle>
 #include <QLabel>
 #include <QDir>
+#include <QUrl>
 #include <QDesktopServices>
 #include <QFileInfo>
 #include <QVBoxLayout>
 
 // KDE includes
 
-#include <kdialog.h>
-#include <kconfig.h>
-#include <kvbox.h>
+#include <kconfiggroup.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
-#include <kapplication.h>
+#include <kiconloader.h>
 #include <kurlrequester.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
 #include <ktemporaryfile.h>
-#include "digikam_debug.h"
 
 // Local includes
-#include <databaseparameters.h>
-#include <QStandardPaths>
-#include <QApplication>
-#include <QStyle>
+
+#include "digikam_debug.h"
+#include "databaseparameters.h"
 #include "version.h"
 
 namespace Digikam
@@ -82,15 +82,7 @@ CollectionPage::CollectionPage(KAssistantDialog* const dlg)
     QWidget* const widget      = new QWidget(this);
     QVBoxLayout* const vlayout = new QVBoxLayout(widget);
 
-    QString picturesPath;
-
-#if KDE_IS_VERSION(4,1,61)
-    picturesPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
-#else
-#   if QT_VERSION >= 0x040400
-    picturesPath = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
-#   endif
-#endif
+    QString picturesPath = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
 
     qCDebug(DIGIKAM_GENERAL_LOG) << picturesPath;
 
@@ -118,7 +110,7 @@ CollectionPage::CollectionPage(KAssistantDialog* const dlg)
 
     d->rootAlbumPathRequester = new KUrlRequester(widget);
     d->rootAlbumPathRequester->setMode(KFile::Directory | KFile::LocalOnly);
-    d->rootAlbumPathRequester->setUrl(picturesPath);
+    d->rootAlbumPathRequester->setUrl(QUrl::fromLocalFile(picturesPath));
 
     QLabel* const textLabel3 = new QLabel(widget);
     textLabel3->setWordWrap(true);
@@ -130,7 +122,7 @@ CollectionPage::CollectionPage(KAssistantDialog* const dlg)
 
     d->dbPathRequester = new KUrlRequester(widget);
     d->dbPathRequester->setMode(KFile::Directory | KFile::LocalOnly);
-    d->dbPathRequester->setUrl(picturesPath);
+    d->dbPathRequester->setUrl(QUrl::fromLocalFile(picturesPath));
 
     vlayout->addWidget(textLabel1);
     vlayout->addWidget(d->rootAlbumPathRequester);

@@ -234,7 +234,7 @@ void DatabaseWidget::slotDatabasePathEdited()
 
     if (!newPath.isEmpty() && !QDir::isAbsolutePath(newPath))
     {
-        databasePathEdit->setUrl(QString(QDir::homePath() + QLatin1Char('/') + QDir::fromNativeSeparators(newPath)));
+        databasePathEdit->setUrl(QUrl::fromLocalFile(QDir::homePath() + QLatin1Char('/') + QDir::fromNativeSeparators(newPath)));
     }
 
 #endif
@@ -346,7 +346,7 @@ void DatabaseWidget::setParametersFromSettings(const ApplicationSettings* const 
 {
     originalDbPath = settings->getDatabaseFilePath();
     originalDbType = settings->getDatabaseType();
-    databasePathEdit->setUrl(settings->getDatabaseFilePath());
+    databasePathEdit->setUrl(QUrl::fromLocalFile(settings->getDatabaseFilePath()));
 
 #if defined(HAVE_MYSQLSUPPORT) && defined(HAVE_INTERNALMYSQL)
     internalServer->setChecked(settings->getInternalDatabaseServer());

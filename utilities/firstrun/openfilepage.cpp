@@ -29,21 +29,25 @@
 #include <QRadioButton>
 #include <QButtonGroup>
 #include <QVBoxLayout>
-
-// KDE includes
-
-#include <kdialog.h>
-#include <kconfig.h>
-#include <kvbox.h>
-#include <klocalizedstring.h>
-#include <kstandarddirs.h>
-#include <kapplication.h>
 #include <QApplication>
 #include <QStyle>
 
-// Local settings.
+// KDE includes
+
+#include <kconfiggroup.h>
+#include <kiconloader.h>
+#include <klocalizedstring.h>
+#include <kstandarddirs.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
+
+// Local includes
 
 #include "applicationsettings.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {

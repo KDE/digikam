@@ -57,6 +57,7 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void slotFinishPressed();
+    void slotHelp();
 
 private:
 

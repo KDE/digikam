@@ -23,11 +23,16 @@
 
 #include "assistantdlg.h"
 
+// Qt includes
+
+#include <QPushButton>
+
 // KDE includes
 
 #include <klocalizedstring.h>
+#include <khelpclient.h>
 
-// Locale incudes.
+// Local incudes
 
 #include "welcomepage.h"
 #include "collectionpage.h"
@@ -70,8 +75,6 @@ public:
 AssistantDlg::AssistantDlg(QWidget* const parent)
     : KAssistantDialog(parent), d(new Private)
 {
-    setHelp("firstrundialog.anchor", "digikam");
-
     d->welcomePage    = new WelcomePage(this);    // First assistant page
     d->collectionPage = new CollectionPage(this);
     d->rawPage        = new RawPage(this);
@@ -86,13 +89,21 @@ AssistantDlg::AssistantDlg(QWidget* const parent)
 
     resize(600, 500);
 
-    connect(this, SIGNAL(user1Clicked()),
+    connect(finishButton(), SIGNAL(clicked()),
             this, SLOT(slotFinishPressed()));
+
+    connect(buttonBox(), SIGNAL(helpRequested()),
+            this, SLOT(slotHelp()));
 }
 
 AssistantDlg::~AssistantDlg()
 {
     delete d;
+}
+
+void AssistantDlg::slotHelp()
+{
+    KHelpClient::invokeHelp("firstrundialog.anchor", "digikam");
 }
 
 QString AssistantDlg::firstAlbumPath() const

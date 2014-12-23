@@ -26,19 +26,22 @@
 // Qt includes
 
 #include <QGridLayout>
+#include <QDesktopServices>
 
 // KDE includes
 
 #include <klocalizedstring.h>
 #include <kiconloader.h>
-#include <kdialog.h>
-#include <kvbox.h>
+#include <kurl.h>
 #include <kurllabel.h>
-#include <ktoolinvocation.h>
 
 // Libkexiv2 includes
 
 #include <countryselector.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -46,6 +49,7 @@
 #include "template.h"
 #include "templatemanager.h"
 
+using namespace KDcrawIface;
 using namespace KExiv2Iface;
 
 namespace Digikam
@@ -293,12 +297,12 @@ void TemplateViewer::setTemplate(const Template& t)
 
 void TemplateViewer::slotProcessUrl(const QString& url)
 {
-    KToolInvocation::self()->invokeBrowser(url);
+    QDesktopServices::openUrl(QUrl(url));
 }
 
 void TemplateViewer::slotProcessEmail(const QString& email)
 {
-    KToolInvocation::self()->invokeMailer(email);
+    QDesktopServices::openUrl(QUrl(QString("mailto:") + email));
 }
 
 }  // namespace Digikam

@@ -27,17 +27,22 @@
 
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
-#include <kvbox.h>
 #include <kiconloader.h>
 #include <kseparator.h>
 #include <kstandarddirs.h>
 #include <kassistantdialog.h>
 #include <kpagewidgetmodel.h>
-#include <QApplication>
-#include <QStyle>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
