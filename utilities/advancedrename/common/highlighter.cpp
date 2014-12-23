@@ -63,7 +63,7 @@ void Highlighter::highlightBlock(const QString& text)
                 case ModifierPattern:
                 {
                     // highlight parameters in options and modifiers
-                    if (expression.numCaptures() > 0 && !expression.cap(1).isEmpty())
+                    if (expression.captureCount() > 0 && !expression.cap(1).isEmpty())
                     {
                         QString fullmatched  = expression.cap(0);
                         QString parameters   = expression.cap(1);
