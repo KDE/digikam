@@ -31,6 +31,7 @@
 
 // KDE includes
 
+#include <kiconloader.h>
 #include <klineedit.h>
 #include <klocalizedstring.h>
 #include <ktabwidget.h>
