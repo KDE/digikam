@@ -34,7 +34,7 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
+#include <k4aboutdata.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kconfig.h>
@@ -69,16 +69,18 @@ using namespace Digikam;
 
 int main(int argc, char* argv[])
 {
-    KAboutData aboutData(ki18n("digiKam"),
+    K4AboutData aboutData("digikam",
                          0,
-                         KAboutLicense::GPL,
-                         DAboutData::digiKamSlogan(),
+                         ki18n("digiKam"),
                          digiKamVersion().toAscii(),
+                         DAboutData::digiKamSlogan(),
+                         K4AboutData::License_GPL,
                          DAboutData::copyright(),
                          additionalInformation(),
                          DAboutData::webProjectUrl().url().toUtf8());
 
-    DAboutData::authorsRegistration(aboutData);
+#pragma message("PORT QT5")
+    //DAboutData::authorsRegistration(aboutData);
 
     KCmdLineArgs::init(argc, argv, &aboutData);
 
