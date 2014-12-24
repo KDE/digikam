@@ -32,16 +32,16 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kvbox.h>
-#include "digikam_debug.h"
 #include <kglobal.h>
 
 // Libkdcraw includes
 
+#include <rwidgetutils.h>
 #include <rcombobox.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "dimg.h"
 #include "dimgbuiltinfilter.h"
 #include "dmetadata.h"
@@ -95,8 +95,8 @@ Rotate::~Rotate()
 void Rotate::registerSettingsWidget()
 {
 
-    RVBox* vbox  = new RVBox;
-    d->useExif   = new QCheckBox(i18n("Use Exif Orientation"), vbox);
+    RVBox* const vbox = new RVBox;
+    d->useExif        = new QCheckBox(i18n("Use Exif Orientation"), vbox);
 
     d->label     = new QLabel(vbox);
     d->comboBox  = new RComboBox(vbox);
@@ -109,7 +109,7 @@ void Rotate::registerSettingsWidget()
 
     d->frSettings = new FreeRotationSettings(vbox);
 
-    QLabel* space = new QLabel(vbox);
+    QLabel* const space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
     m_settingsWidget = vbox;

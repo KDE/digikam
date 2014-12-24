@@ -34,22 +34,21 @@
 #include <QTimer>
 #include <QTreeWidget>
 #include <QVBoxLayout>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
 #include <kconfig.h>
 #include <kdeversion.h>
-#include <kdialog.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kvbox.h>
 
 // Libkdcraw includes
 
 #include <dcrawsettingswidget.h>
-#include <QApplication>
-#include <QStyle>
+#include <rwidgetutils.h>
 
 // Local includes
 

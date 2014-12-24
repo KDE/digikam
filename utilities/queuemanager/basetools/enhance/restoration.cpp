@@ -34,12 +34,17 @@
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
 #include <kurllabel.h>
-#include <kvbox.h>
 #include <kglobal.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
 #include "dimg.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -60,9 +65,9 @@ Restoration::~Restoration()
 
 void Restoration::registerSettingsWidget()
 {
-    RVBox* vbox   = new RVBox;
+    RVBox* const vbox   = new RVBox;
 
-    KUrlLabel* cimgLogoLabel = new KUrlLabel(vbox);
+    KUrlLabel* const cimgLogoLabel = new KUrlLabel(vbox);
     cimgLogoLabel->setText(QString());
     cimgLogoLabel->setUrl("http://cimg.sourceforge.net");
     cimgLogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-cimg.png")));
@@ -80,7 +85,7 @@ void Restoration::registerSettingsWidget()
                                   "<b>Reduce Texturing</b>: reduce image artifacts, such as paper texture, or Moire patterns "
                                   "on scanned images.</p>"));
 
-    QLabel* space = new QLabel(vbox);
+    QLabel* const space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
     m_settingsWidget = vbox;

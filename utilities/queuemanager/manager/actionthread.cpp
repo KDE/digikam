@@ -28,12 +28,11 @@
 
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
-#include "digikam_debug.h"
-#include <threadweaver/JobCollection.h>
 #include <solid/device.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "config-digikam.h"
 #include "task.h"
 
@@ -89,7 +88,7 @@ void ActionThread::setSettings(const QueueSettings& settings)
 
 void ActionThread::processQueueItems(const QList<AssignedBatchTools>& items)
 {
-    JobCollection* const collection = new JobCollection();
+    RJobCollection collection;
 
     for(int i=0; i < items.size(); i++)
     {
@@ -106,10 +105,10 @@ void ActionThread::processQueueItems(const QList<AssignedBatchTools>& items)
         connect(this, SIGNAL(signalCancelTask()),
                 t, SLOT(slotCancel()), Qt::QueuedConnection);
 
-        collection->addJob(t);
+        collection.insert(t, 0);
     }
 
-    appendJob(collection);
+    appendJobs(collection);
 }
 
 void ActionThread::cancel()

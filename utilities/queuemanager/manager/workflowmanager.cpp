@@ -441,7 +441,7 @@ bool WorkflowManager::load(QStringList& failed)
                         QString pname = e3.attribute(QString::fromLatin1("name"));
                         QString type  = e3.attribute(QString::fromLatin1("type"));
                         QVariant var(val3);
-                        var.convert(QVariant::nameToType(type.toAscii()));
+                        var.convert(QVariant::nameToType(type.toAscii().constData()));
 /*
                         qCDebug(DIGIKAM_GENERAL_LOG) << "name=" << pname << " :: " << "type=" << type << " :: " << "value=" << val3
                                  << " :: " << "QVariant=" << var;

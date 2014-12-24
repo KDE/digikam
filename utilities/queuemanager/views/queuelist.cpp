@@ -32,6 +32,8 @@
 #include <QPainter>
 #include <QTimer>
 #include <QUrl>
+#include <QDrag>
+#include <QMenu>
 
 // KDE includes
 
@@ -40,12 +42,11 @@
 #include <kactioncollection.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <QMenu>
 #include <kurl.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "albumdb.h"
 #include "databasechangesets.h"
 #include "databasewatch.h"

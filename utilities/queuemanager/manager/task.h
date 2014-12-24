@@ -25,14 +25,13 @@
 #ifndef TASK_H
 #define TASK_H
 
-// Qt includes
-
-#include <QThread>
-
 // KDE includes
 
 #include <kurl.h>
-#include <threadweaver/Job.h>
+
+// Libkdcraw includes
+
+#include <ractionjob.h>
 
 // Local includes
 
@@ -40,12 +39,12 @@
 #include "queuesettings.h"
 #include "batchtoolutils.h"
 
-using namespace ThreadWeaver;
+using namespace KDcrawIface;
 
 namespace Digikam
 {
 
-class Task : public Job
+class Task : public RActionJob
 {
     Q_OBJECT
 

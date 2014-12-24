@@ -33,15 +33,20 @@
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
 #include <kcombobox.h>
-#include <kvbox.h>
-#include "digikam_debug.h"
 #include <kglobal.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "dimg.h"
 #include "curvesfilter.h"
 #include "curvessettings.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {

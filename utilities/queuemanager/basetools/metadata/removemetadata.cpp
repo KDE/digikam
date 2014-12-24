@@ -32,13 +32,18 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kvbox.h>
 #include <kglobal.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
 #include "dimg.h"
 #include "dmetadata.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {

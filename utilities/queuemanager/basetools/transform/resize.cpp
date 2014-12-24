@@ -35,13 +35,18 @@
 #include <kcombobox.h>
 #include <klocalizedstring.h>
 #include <knuminput.h>
-#include <kvbox.h>
 #include <kglobal.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
 #include "dimg.h"
 #include "dimgbuiltinfilter.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {

@@ -37,29 +37,33 @@
 #include <QRadioButton>
 #include <QCheckBox>
 #include <QGroupBox>
+#include <QApplication>
+#include <QStyle>
+#include <QFontComboBox>
 
 // KDE includes
 
 #include <kcolorbutton.h>
 #include <kcombobox.h>
-#include <kdialog.h>
-#include <QFontComboBox>
 #include <kurlrequester.h>
 #include <klineedit.h>
 #include <klocalizedstring.h>
 #include <knuminput.h>
-#include <kvbox.h>
 #include <kfiledialog.h>
-#include "digikam_debug.h"
 #include <kglobal.h>
-#include <QApplication>
-#include <QStyle>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "dimg.h"
 #include "blurfilter.h"
 #include "imagedialog.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -335,7 +339,7 @@ BatchToolSettings WaterMark::defaultSettings()
     settings.insert("Watermark image",    QString());
     settings.insert("Text",               QString());
     settings.insert("Font",               QFont());
-    settings.insert("Color",              Qt::black);
+    settings.insert("Color",              QColor(Qt::black));
     settings.insert("Text opacity",       100);
     settings.insert("Use background",     true);
     settings.insert("Background color",   QColor(0xCC, 0xCC, 0xCC));

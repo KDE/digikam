@@ -32,15 +32,20 @@
 
 #include <kcombobox.h>
 #include <klocalizedstring.h>
-#include <kvbox.h>
-#include "digikam_debug.h"
 #include <kglobal.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "dimg.h"
 #include "dimgbuiltinfilter.h"
 #include "jpegutils.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -57,13 +62,13 @@ Flip::Flip(QObject* parent)
 
 void Flip::registerSettingsWidget()
 {
-    RVBox* vbox      = new RVBox;
-    QLabel* label    = new QLabel(vbox);
+    RVBox* const vbox      = new RVBox;
+    QLabel* const label    = new QLabel(vbox);
     m_comboBox       = new KComboBox(vbox);
     m_comboBox->insertItem(DImg::HORIZONTAL, i18n("Horizontal"));
     m_comboBox->insertItem(DImg::VERTICAL,   i18n("Vertical"));
     label->setText(i18n("Flip:"));
-    QLabel* space    = new QLabel(vbox);
+    QLabel* const space    = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
     m_settingsWidget = vbox;

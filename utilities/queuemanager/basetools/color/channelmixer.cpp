@@ -31,14 +31,19 @@
 
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
-#include <kvbox.h>
 #include <kglobal.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
 #include "dimg.h"
 #include "mixerfilter.h"
 #include "mixersettings.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {

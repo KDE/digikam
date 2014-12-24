@@ -30,10 +30,11 @@
 #include <QWidget>
 #include <QGridLayout>
 #include <QCheckBox>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
-#include <kdialog.h>
 #include <klocalizedstring.h>
 #include <knuminput.h>
 #include <kglobal.h>
@@ -41,8 +42,6 @@
 // Libkdcraw includes
 
 #include <rnuminput.h>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 
@@ -106,13 +105,11 @@ void Crop::registerSettingsWidget()
     d->xInput = new RIntNumInput(m_settingsWidget);
     d->xInput->setWhatsThis( i18n("Set here the top left selection corner position for cropping."));
     d->xInput->setRange(0, 99999, 1);
-    d->xInput->setSliderEnabled(false);
     d->xInput->setDefaultValue(50);
 
     d->yInput = new RIntNumInput(m_settingsWidget);
     d->yInput->setWhatsThis( i18n("Set here the top left selection corner position for cropping."));
     d->yInput->setRange(0, 99999, 1);
-    d->yInput->setSliderEnabled(false);
     d->yInput->setDefaultValue(50);
 
     // -------------------------------------------------------------
@@ -123,13 +120,11 @@ void Crop::registerSettingsWidget()
     d->widthInput = new RIntNumInput(m_settingsWidget);
     d->widthInput->setWhatsThis( i18n("Set here the width selection for cropping."));
     d->widthInput->setRange(0, 99999, 1);
-    d->widthInput->setSliderEnabled(false);
     d->widthInput->setDefaultValue(800);
 
     d->heightInput = new RIntNumInput(m_settingsWidget);
     d->heightInput->setWhatsThis( i18n("Set here the height selection for cropping."));
     d->heightInput->setRange(0, 99999, 1);
-    d->heightInput->setSliderEnabled(false);
     d->heightInput->setDefaultValue(600);
 
     // -------------------------------------------------------------

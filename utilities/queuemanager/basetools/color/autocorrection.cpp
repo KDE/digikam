@@ -32,8 +32,11 @@
 
 #include <kcombobox.h>
 #include <klocalizedstring.h>
-#include <kvbox.h>
 #include <kglobal.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -43,6 +46,8 @@
 #include "stretchfilter.h"
 #include "autoexpofilter.h"
 #include "normalizefilter.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {

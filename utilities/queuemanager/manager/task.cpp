@@ -40,11 +40,10 @@ extern "C"
 #include <kde_file.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
-#include "digikam_debug.h"
-#include <threadweaver/ThreadWeaver.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "config-digikam.h"
 #include "dimg.h"
 #include "dmetadata.h"
@@ -78,7 +77,7 @@ public:
 // -------------------------------------------------------
 
 Task::Task()
-    : Job(0), d(new Private)
+    : RActionJob(), d(new Private)
 {
 }
 

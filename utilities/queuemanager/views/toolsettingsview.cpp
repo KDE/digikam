@@ -6,7 +6,7 @@
  * Date        : 2008-11-27
  * Description : a view to show Batch Tool Settings.
  *
- * Copyright (C) 2008-2012 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,18 +31,23 @@
 #include <QPushButton>
 #include <QScrollArea>
 #include <QString>
+#include <QApplication>
 
 // KDE includes
 
-#include <kdialog.h>
 #include <klocalizedstring.h>
-#include <kvbox.h>
-#include <kapplication.h>
+#include <kiconloader.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
 #include "thememanager.h"
 #include "batchtoolsmanager.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -96,8 +101,8 @@ ToolSettingsView::ToolSettingsView(QWidget* const parent)
 
     // --------------------------------------------------------------------------
 
-    RVBox* vbox            = new RVBox(this);
-    QFrame* toolDescriptor = new QFrame(vbox);
+    RVBox* const vbox            = new RVBox(this);
+    QFrame* const toolDescriptor = new QFrame(vbox);
     d->settingsViewIcon    = new QLabel();
     d->settingsViewTitle   = new QLabel();
     QFont font             = d->settingsViewTitle->font();
