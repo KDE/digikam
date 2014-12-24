@@ -3,4 +3,3 @@ ADD_SUBDIRECTORY(queuemanager)
 ADD_SUBDIRECTORY(imageeditor)
 ADD_SUBDIRECTORY(lighttable)
 ADD_SUBDIRECTORY(importui)
-

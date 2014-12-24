@@ -5,8 +5,6 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 set(libimportui_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/main/importui.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/main/importsettings.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/backend/cameracontroller.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backend/camerathumbsctrl.cpp
@@ -53,8 +51,17 @@ set(libimportui_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/views/importiconview_p.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/importstackedview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/views/importview.cpp
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/main/importsettings.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/main/importui.cpp
 )
 
 add_library(importui STATIC ${libimportui_SRCS})
+
+target_link_libraries(importui
+                      digikamcore
+                      ${KF5KExiv2_LIBRARIES}
+                      ${KF5KDcraw_LIBRARIES}
+                     )
 
 install(FILES main/importui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam)

@@ -70,4 +70,10 @@ endif()
 
 add_library(queuemanager STATIC ${libqueuemanager_SRCS})
 
+target_link_libraries(queuemanager
+                      digikamcore
+                      ${KF5KExiv2_LIBRARIES}
+                      ${KF5KDcraw_LIBRARIES}
+                     )
+
 install( FILES main/queuemgrwindowui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam )
