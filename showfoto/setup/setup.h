@@ -63,6 +63,7 @@ public:
 private Q_SLOTS:
 
     void slotOkClicked();
+    void slotHelp();
 
 private:
 

@@ -25,12 +25,13 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QPainter>
 
 // KDE includes
 
 #include <kio/global.h>
-#include <kapplication.h>
+#include <kiconloader.h>
 
 // Local includes
 

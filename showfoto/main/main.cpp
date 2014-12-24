@@ -25,7 +25,7 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
+#include <k4aboutdata.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kconfig.h>
@@ -48,16 +48,17 @@ using namespace Digikam;
 
 int main(int argc, char* argv[])
 {
-    KAboutData aboutData("showfoto", "digikam",
+    K4AboutData aboutData("showfoto", "digikam",
                          ki18n("showFoto"),
                          digiKamVersion().toAscii(),  // NOTE: showFoto version = digiKam version
                          DAboutData::digiKamSlogan(),
-                         KAboutData::License_GPL,
+                         K4AboutData::License_GPL,
                          DAboutData::copyright(),
                          additionalInformation(),
                          DAboutData::webProjectUrl().url().toUtf8());
 
-    DAboutData::authorsRegistration(aboutData);
+#pragma message("PORT QT5")
+    //DAboutData::authorsRegistration(aboutData);
 
     KCmdLineArgs::init(argc, argv, &aboutData);
 
@@ -83,10 +84,11 @@ int main(int argc, char* argv[])
     app.setTopWidget(w);
     w->show();
 
-    KLocale::global()->setMainCatalog("digikam");
-    //KF5 port: remove this line and define TRANSLATION_DOMAIN in CMakeLists.txt instead
+#pragma message("PORT QT5")
+//    KLocale::global()->setMainCatalog("digikam");
+//KF5 port: remove this line and define TRANSLATION_DOMAIN in CMakeLists.txt instead
 //KLocale::global()->insertCatalog("libkdcraw");
-    //KF5 port: remove this line and define TRANSLATION_DOMAIN in CMakeLists.txt instead
+//KF5 port: remove this line and define TRANSLATION_DOMAIN in CMakeLists.txt instead
 //KLocale::global()->insertCatalog("libkexiv2");
 
     int ret = app.exec();

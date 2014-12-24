@@ -26,15 +26,16 @@
 // Qt includes
 
 #include <QPointer>
+#include <QPushButton>
 
 // KDE includes
 
-#include <kapplication.h>
-#include <kconfig.h>
-#include <kglobal.h>
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
+#include <kwindowconfig.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kvbox.h>
+#include <khelpclient.h>
 
 // Local includes
 
@@ -101,10 +102,9 @@ public:
 Setup::Setup(QWidget* const parent, Setup::Page page)
     : KPageDialog(parent), d(new Private)
 {
-    setCaption(i18n("Configure"));
-    setButtons( KDialog::Help|KDialog::Ok|KDialog::Cancel );
-    setDefaultButton(KDialog::Ok);
-    setHelp("setupdialog.anchor", "showfoto");
+    setWindowTitle(i18n("Configure"));
+    setStandardButtons(QDialogButtonBox::Help | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    button(QDialogButtonBox::Ok)->setDefault(true);
     setFaceType(KPageDialog::List);
     setModal(true);
 
@@ -174,8 +174,11 @@ Setup::Setup(QWidget* const parent, Setup::Page page)
         }
     }
 
-    connect(this, SIGNAL(okClicked()),
-            this, SLOT(slotOkClicked()));
+    connect(buttonBox()->button(QDialogButtonBox::Ok), &QPushButton::clicked,
+            this, &Setup::slotOkClicked);
+
+    connect(buttonBox(), SIGNAL(helpRequested()),
+            this, SLOT(slotHelp()));
 
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QString("Setup Dialog"));
@@ -189,7 +192,7 @@ Setup::Setup(QWidget* const parent, Setup::Page page)
         showPage((Page)group.readEntry("Setup Page", (int)EditorPage));
     }
 
-    restoreDialogSize(group);
+    KWindowConfig::restoreWindowSize(windowHandle(), group);
 
     show();
 }
@@ -199,9 +202,14 @@ Setup::~Setup()
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QString("Setup Dialog"));
     group.writeEntry("Setup Page", (int)activePageIndex());
-    saveDialogSize(group);
+    KWindowConfig::saveWindowSize(windowHandle(), group);
     config->sync();
     delete d;
+}
+
+void Setup::slotHelp()
+{
+    KHelpClient::invokeHelp("setupdialog.anchor", "showfoto");
 }
 
 void Setup::slotOkClicked()

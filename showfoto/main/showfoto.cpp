@@ -58,14 +58,18 @@ extern "C"
 #include <QVBoxLayout>
 #include <QLineEdit>
 #include <QStandardPaths>
+#include <QMenu>
+#include <QStyle>
+#include <QKeySequence>
+#include <QApplication>
 
 // KDE includes
 
+#include <kdeversion.h>
 #include <kaction.h>
 #include <kactionmenu.h>
 #include <kselectaction.h>
 #include <kactioncollection.h>
-#include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
 #include <kfiledialog.h>
@@ -77,7 +81,6 @@ extern "C"
 #include <kio/deletejob.h>
 #include <kio/netaccess.h>
 #include <klocalizedstring.h>
-#include <QMenu>
 #include <kmenubar.h>
 #include <kmessagebox.h>
 #include <kmultitabbar.h>
@@ -89,7 +92,7 @@ extern "C"
 #include <ktoolbar.h>
 #include <ktoolbarpopupaction.h>
 #include <ksqueezedtextlabel.h>
-#include <kvbox.h>
+#include <kmimetype.h>
 
 // Libkdcraw includes
 
@@ -126,6 +129,7 @@ extern "C"
 #include "uifilevalidator.h"
 #include "dnotificationwrapper.h"
 #include "showfotodelegate.h"
+#include "showfotothumbnailmodel.h"
 #include "showfotocategorizedview.h"
 #include "showfotosettings.h"
 #include "showfoto_p.h"
@@ -431,7 +435,7 @@ void ShowFoto::setupActions()
                         this, SLOT(slotOpenFile()));
 
     d->openFilesInFolderAction = new KAction(QIcon::fromTheme("folder-image"), i18n("Open folder"), this);
-    d->openFilesInFolderAction->setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_O));
+    d->openFilesInFolderAction->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_O));
 
     connect(d->openFilesInFolderAction, SIGNAL(triggered()),
             this, SLOT(slotOpenFilesInFolder()));
@@ -737,7 +741,7 @@ void ShowFoto::slotOpenFilesInFolder()
         return;
     }
 
-    KUrl url(KFileDialog::getExistingDirectory(d->lastOpenedDirectory.directory(),
+    KUrl url(KFileDialog::getExistingDirectory(QUrl::fromLocalFile(d->lastOpenedDirectory.directory()),
              this, i18n("Open Images From Folder")));
 
     if (!url.isEmpty())
@@ -1359,3 +1363,5 @@ void ShowFoto::slotOpenWith(QAction* action)
 }
 
 }   // namespace ShowFoto
+
+#include "moc_showfoto.cpp"
