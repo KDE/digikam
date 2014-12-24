@@ -4,8 +4,6 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-SET_DEBUG_AREA_CODE(${AREA_CODE_KIOSLAVES})
-
 # # digiKam Tags kio slave ###########################################################
 
 set(kio_digikamtags_PART_SRCS digikamtags.cpp)
@@ -17,7 +15,7 @@ target_link_libraries(kio_digikamtags
                       digikamcore
                       KF5::KIOCore
                       Qt5::Core
-                     )
+)
 
 # # digiKam Albums kio slave #########################################################
 
@@ -30,7 +28,7 @@ target_link_libraries(kio_digikamalbums
                       digikamcore
                       KF5::KIOCore
                       Qt5::Core
-                     )
+)
 
 # # digiKam Date kio slave ###########################################################
 
@@ -43,7 +41,7 @@ target_link_libraries(kio_digikamdates
                       digikamcore
                       KF5::KIOCore
                       Qt5::Core
-                     )
+)
 
 # # digiKam MapImages kio slave ######################################################
 
@@ -56,7 +54,7 @@ target_link_libraries(kio_digikammapimages
                       digikamcore
                       KF5::KIOCore
                       Qt5::Core
-                     )
+)
 
 # # digiKam Search kio slave #########################################################
 
@@ -69,7 +67,7 @@ target_link_libraries(kio_digikamsearch
                       digikamcore
                       KF5::KIOCore
                       Qt5::Core
-                     )
+)
 
 # Files to install ###################################################################
 
@@ -85,4 +83,4 @@ install(FILES digikamtags.protocol
               digikamsearch.protocol
               digikammapimages.protocol
         DESTINATION ${SERVICES_INSTALL_DIR}
-       )
+)

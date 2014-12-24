@@ -4,20 +4,16 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-SET_DEBUG_AREA_CODE(${AREA_CODE_SHOWFOTO})
-
 # We need to include the setup dir for showfoto BEFORE the other include dirs,
 # otherwise the one from the "utilities" dir will be used
 include_directories(BEFORE
                     ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar
                     ${CMAKE_CURRENT_SOURCE_DIR}/setup
                     ${CMAKE_CURRENT_SOURCE_DIR}/main
-                   )
+)
 
 #Require by Greycstoration algorithm (CImg.h)
-if(NOT MSVC)
-    kde_enable_exceptions()
-endif()
+kde_enable_exceptions()
 
 set(showfoto_SRCS
     ${libsetupshowfoto_SRCS}
@@ -40,7 +36,7 @@ set(showfoto_SRCS
     main/showfotosettings.cpp
     main/main.cpp
     main/showfoto.cpp
-   )
+)
 
 KDE4_ADD_APP_ICON(showfoto_SRCS "../data/icons/apps/hi*-app-showfoto.png")
 
@@ -59,13 +55,13 @@ set_target_properties(showfoto PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRE
 target_link_libraries(showfoto
                       digikamcore
 
-                      KF5::KExiv2
-                      KF5::KDcraw
+                      ${KF5KExiv2_LIBRARIES}
+                      ${KF5KDcraw_LIBRARIES}
                       ${KGEOMAP_LIBRARIES}
                       KF5::KIOCore
                       ${LCMS_LIBRARIES}
                       ${OpenCV_LIBRARIES}
-                     )
+)
 
 if(KGEOMAP_FOUND)
    target_link_libraries(showfoto ${KGEOMAP_LIBRARIES})
