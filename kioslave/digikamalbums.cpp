@@ -655,7 +655,8 @@ extern "C"
         // Needed to load SQL driver plugins
         QCoreApplication app(argc, argv);
 
-        KLocale::setMainCatalog("digikam");
+#pragma message("PORT QT5")
+//        KLocale::setMainCatalog("digikam");
         KComponentData componentData( "kio_digikamalbums" );
         KLocale::global();
 

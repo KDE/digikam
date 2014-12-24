@@ -40,6 +40,7 @@
 #include <kio/slavebase.h>
 #include <kjob.h>
 #include <kio/job.h>
+#include <kurl.h>
 
 class kio_digikamalbums : public QObject, public KIO::SlaveBase
 {
