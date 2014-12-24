@@ -47,6 +47,7 @@ extern "C"
 #include <QFile>
 #include <QDateTime>
 #include <QTextDocument>
+#include <QCryptographicHash>
 
 // KDE includes
 
