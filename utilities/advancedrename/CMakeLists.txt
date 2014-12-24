@@ -21,9 +21,9 @@ file(GLOB libadvancedrename_UI
           ${CMAKE_CURRENT_SOURCE_DIR}/parser/options/*.ui
     )
 
-KDE4_ADD_UI_FILES(libadvancedrename_SRCS ${libadvancedrename_UI})
+ki18n_wrap_ui(libadvancedrename_SRCS ${libadvancedrename_UI})
 
-KDE4_ADD_LIBRARY(advancedrename STATIC ${libadvancedrename_SRCS})
+add_library(advancedrename STATIC ${libadvancedrename_SRCS})
 
 target_link_libraries(advancedrename
                       digikamdatabase
