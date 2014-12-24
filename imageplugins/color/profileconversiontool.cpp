@@ -109,7 +109,8 @@ ProfileConversionTool::ProfileConversionTool(QObject* const parent)
 {
     setObjectName("profile conversion");
     setToolName(i18n("Color Profile Conversion"));
-    setToolIcon(SmallIcon("colormanagement"));
+#pragma "Port, fixed size for SmallIcon.."
+    setToolIcon(QIcon::fromTheme("colormanagement").pixmap(16));
     //TODO setToolHelp("colormanagement.anchor");
 
     // -------------------------------------------------------------
