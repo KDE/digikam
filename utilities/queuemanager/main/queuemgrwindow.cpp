@@ -33,6 +33,7 @@
 #include <QGroupBox>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QKeySequence>
 
 // KDE includes
 
@@ -351,13 +352,13 @@ void QueueMgrWindow::setupActions()
     // -- Standard 'File' menu actions ---------------------------------------------
 
     d->runAction = new KAction(QIcon::fromTheme("media-playback-start"), i18n("Run"), this);
-    d->runAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_P));
+    d->runAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_P));
     d->runAction->setEnabled(false);
     connect(d->runAction, SIGNAL(triggered()), this, SLOT(slotRun()));
     actionCollection()->addAction("queuemgr_run", d->runAction);
 
     d->stopAction = new KAction(QIcon::fromTheme("media-playback-stop"), i18n("Stop"), this);
-    d->stopAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_S));
+    d->stopAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
     d->stopAction->setEnabled(false);
     connect(d->stopAction, SIGNAL(triggered()), this, SLOT(slotStop()));
     actionCollection()->addAction("queuemgr_stop", d->stopAction);
@@ -376,7 +377,7 @@ void QueueMgrWindow::setupActions()
     actionCollection()->addAction("queuemgr_savequeue", d->saveQueueAction);
 
     d->removeItemsSelAction = new KAction(QIcon::fromTheme("list-remove"), i18n("Remove items"), this);
-    d->removeItemsSelAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_K));
+    d->removeItemsSelAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_K));
     d->removeItemsSelAction->setEnabled(false);
     connect(d->removeItemsSelAction, SIGNAL(triggered()), d->queuePool, SLOT(slotRemoveSelectedItems()));
     actionCollection()->addAction("queuemgr_removeitemssel", d->removeItemsSelAction);
@@ -387,7 +388,7 @@ void QueueMgrWindow::setupActions()
     actionCollection()->addAction("queuemgr_removeitemsdone", d->removeItemsDoneAction);
 
     d->clearQueueAction = new KAction(QIcon::fromTheme("edit-clear"), i18n("Clear Queue"), this);
-    d->clearQueueAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_K));
+    d->clearQueueAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_K));
     d->clearQueueAction->setEnabled(false);
     connect(d->clearQueueAction, SIGNAL(triggered()), d->queuePool, SLOT(slotClearList()));
     actionCollection()->addAction("queuemgr_clearlist", d->clearQueueAction);
@@ -573,7 +574,9 @@ void QueueMgrWindow::slotEditKeys()
 
 void QueueMgrWindow::slotConfToolbars()
 {
-    saveMainWindowSettings(KSharedConfig::openConfig()->group("Batch Queue Manager Settings"));
+    KConfigGroup group = KSharedConfig::openConfig()->group("Batch Queue Manager Settings");
+    saveMainWindowSettings(group);
+
     KEditToolBar dlg(factory(), this);
 
     connect(&dlg, SIGNAL(newToolbarConfig()),
