@@ -1331,6 +1331,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
 
     set(pgfutils_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/pgfutils.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/utils/digikam_debug.cpp
        )
 
     set(libkde3rdparty_SRCS
