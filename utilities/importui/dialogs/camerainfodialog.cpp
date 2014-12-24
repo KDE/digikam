@@ -26,13 +26,15 @@
 
 // Qt includes
 
+#include <QIcon>
 #include <QTextEdit>
+#include <QDialogButtonBox>
 
 // KDE includes
 
-#include <QIcon>
 #include <klocalizedstring.h>
 #include <ktextedit.h>
+#include <khelpclient.h>
 
 namespace Digikam
 {
@@ -41,10 +43,8 @@ CameraInfoDialog::CameraInfoDialog(QWidget* const parent, const QString& summary
                                    const QString& about)
     : KPageDialog(parent)
 {
-    setCaption(i18nc("@title:window", "Device Information"));
-    setButtons(KDialog::Help | KDialog::Ok);
-    setDefaultButton(KDialog::Ok);
-    setHelp("digitalstillcamera.anchor", "digikam");
+    setWindowTitle(i18nc("@title:window", "Device Information"));
+    setStandardButtons(QDialogButtonBox::Help | QDialogButtonBox::Ok);
     setFaceType(KPageDialog::List);
     setModal(true);
     resize(500, 400);
@@ -78,10 +78,18 @@ CameraInfoDialog::CameraInfoDialog(QWidget* const parent, const QString& summary
     KPageWidgetItem* const p3    = addPage(aboutView, i18nc("About device driver", "About"));
     p3->setHeader(i18n("About Driver"));
     p3->setIcon(QIcon::fromTheme("camera-photo"));
+
+    connect(buttonBox(), SIGNAL(helpRequested()),
+            this, SLOT(slotHelp()));
 }
 
 CameraInfoDialog::~CameraInfoDialog()
 {
+}
+
+void CameraInfoDialog::slotHelp()
+{
+    KHelpClient::invokeHelp("digitalstillcamera.anchor", "digikam");
 }
 
 }  // namespace Digikam

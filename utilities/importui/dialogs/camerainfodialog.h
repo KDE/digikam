@@ -38,11 +38,17 @@ namespace Digikam
 
 class CameraInfoDialog : public KPageDialog
 {
+    Q_OBJECT
+
 public:
 
     CameraInfoDialog(QWidget* const parent, const QString& summary, const QString& manual,
                      const QString& about);
     ~CameraInfoDialog();
+
+private Q_SLOTS:
+
+    void slotHelp();
 };
 
 } // namespace Digikam

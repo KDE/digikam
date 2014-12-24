@@ -31,7 +31,6 @@
 #include <QThread>
 #include <QString>
 #include <QFileInfo>
-#include <QCustomEvent>
 #include <QPixmap>
 
 // Local includes

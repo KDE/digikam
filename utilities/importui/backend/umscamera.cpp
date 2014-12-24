@@ -43,14 +43,14 @@ extern "C"
 #include <QStringList>
 #include <QTextDocument>
 #include <QtGlobal>
+#include <QCryptographicHash>
 
 // KDE includes
 
-#include "digikam_debug.h"
-#include <kcodecs.h>
 #include <kio/global.h>
 #include <klocalizedstring.h>
 #include <kmimetype.h>
+
 #include <solid/device.h>
 #include <solid/storageaccess.h>
 #include <solid/storagedrive.h>
@@ -62,6 +62,7 @@ extern "C"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "config-digikam.h"
 #include "dimg.h"
 #include "dmetadata.h"

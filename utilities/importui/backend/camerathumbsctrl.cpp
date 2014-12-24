@@ -30,13 +30,14 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
+#include <kglobal.h>
 #include <kurl.h>
 #include <kio/previewjob.h>
 #include <kdeversion.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "cameracontroller.h"
 #include "thumbnailsize.h"
 #include "iccsettings.h"
@@ -207,11 +208,13 @@ void CameraThumbsCtrl::startKdePreviewJob()
 
 #if KDE_IS_VERSION(4,7,0)
     KFileItemList items;
-    for (KUrl::List::ConstIterator it = list.begin() ; it != list.end() ; ++it)
+
+    for (KUrl::List::iterator it = list.begin() ; it != list.end() ; ++it)
     {
         if ((*it).isValid())
             items.append(KFileItem(KFileItem::Unknown, KFileItem::Unknown, *it, true));
     }
+
     d->kdeJob = KIO::filePreview(items, QSize(ThumbnailSize::Huge, ThumbnailSize::Huge));
 #else
     d->kdeJob = KIO::filePreview(list, ThumbnailSize::Huge);
