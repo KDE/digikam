@@ -33,6 +33,8 @@
 #include <QLabel>
 #include <QHeaderView>
 #include <QMessageBox>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
@@ -41,10 +43,16 @@
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <klocalizedstring.h>
-#include <kdialog.h>
-#include <QApplication>
-#include <QStyle>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
+
+// Local includes
+
 #include "digikam_debug.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {

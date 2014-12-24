@@ -28,20 +28,25 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QToolButton>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
-#include <kdialog.h>
 #include <klocalizedstring.h>
 #include <kurlrequester.h>
-#include <khbox.h>
-#include <QApplication>
-#include <QStyle>
-#include "digikam_debug.h"
+#include <kiconloader.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "tooltipdialog.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
