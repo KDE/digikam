@@ -29,10 +29,10 @@
 
 // KDE includes
 
+#include <kiconloader.h>
 #include <kaction.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
-#include <kapplication.h>
 #include <kservice.h>
 #include <kmimetype.h>
 #include <kmimetypetrader.h>

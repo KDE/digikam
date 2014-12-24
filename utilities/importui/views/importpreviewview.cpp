@@ -28,13 +28,14 @@
 #include <QMouseEvent>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QToolBar>
+#include <QMenu>
+#include <QApplication>
 
 // KDE includes
 
 #include <klocalizedstring.h>
 #include <ktoggleaction.h>
-#include <QMenu>
-#include <kapplication.h>
+#include <kiconloader.h>
 
 // Local includes
 

@@ -24,9 +24,9 @@
 #ifndef IMPORTVIEW_H
 #define IMPORTVIEW_H
 
-// KDE includes
+// Libkdcraw includes
 
-#include <khbox.h>
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -34,6 +34,8 @@
 #include "sidebarwidget.h"
 #include "importui.h"
 #include "importstackedview.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
