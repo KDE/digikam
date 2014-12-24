@@ -33,24 +33,27 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QStyleFactory>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kcombobox.h>
 #include <kconfig.h>
-#include <kdialog.h>
 #include <kglobal.h>
 #include <klocalizedstring.h>
 #include <kmultitabbar.h>
 #include <knuminput.h>
-#include <kvbox.h>
-#include <QApplication>
-#include <QStyle>
 
-//Local includes
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
+
+// Local includes
 
 #include "showfotosettings.h"
+
+using namespace KDcrawIface;
 
 namespace ShowFoto
 {
