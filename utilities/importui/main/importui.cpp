@@ -53,11 +53,11 @@
 #include <QVBoxLayout>
 #include <QWidget>
 #include <QMenu>
+#include <QKeySequence>
 
 // KDE includes
 
 #include <kactioncollection.h>
-#include <kapplication.h>
 #include <kcalendarsystem.h>
 #include <kcombobox.h>
 #include <kconfig.h>
@@ -327,13 +327,13 @@ void ImportUI::setupActions()
 
     // -----------------------------------------------------------------
 
-    KAction* const closeAction = KStandardAction::close(this, SLOT(close()), this);
+    QAction* const closeAction = KStandardAction::close(this, SLOT(close()), this);
     actionCollection()->addAction("importui_close", closeAction);
 
     // -- Edit menu ----------------------------------------------------
 
     d->selectAllAction = new KAction(i18nc("@action:inmenu", "Select All"), this);
-    d->selectAllAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_A));
+    d->selectAllAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_A));
     connect(d->selectAllAction, SIGNAL(triggered()), d->view, SLOT(slotSelectAll()));
     actionCollection()->addAction("importui_selectall", d->selectAllAction);
     d->cameraActions->addAction(d->selectAllAction);
@@ -341,7 +341,7 @@ void ImportUI::setupActions()
     // -----------------------------------------------------------------
 
     d->selectNoneAction = new KAction(i18nc("@action:inmenu", "Select None"), this);
-    d->selectNoneAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_A));
+    d->selectNoneAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_A));
     connect(d->selectNoneAction, SIGNAL(triggered()), d->view, SLOT(slotSelectNone()));
     actionCollection()->addAction("importui_selectnone", d->selectNoneAction);
     d->cameraActions->addAction(d->selectNoneAction);
@@ -349,7 +349,7 @@ void ImportUI::setupActions()
     // -----------------------------------------------------------------
 
     d->selectInvertAction = new KAction(i18nc("@action:inmenu", "Invert Selection"), this);
-    d->selectInvertAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_Asterisk));
+    d->selectInvertAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Asterisk));
     connect(d->selectInvertAction, SIGNAL(triggered()), d->view, SLOT(slotSelectInvert()));
     actionCollection()->addAction("importui_selectinvert", d->selectInvertAction);
     d->cameraActions->addAction(d->selectInvertAction);
@@ -364,7 +364,7 @@ void ImportUI::setupActions()
     // -----------------------------------------------------------
 
     d->selectLockedItemsAction = new KAction(QIcon::fromTheme("object-locked"), i18nc("@action:inmenu", "Select Locked Items"), this);
-    d->selectLockedItemsAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_L));
+    d->selectLockedItemsAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_L));
     connect(d->selectLockedItemsAction, SIGNAL(triggered()), this, SLOT(slotSelectLocked()));
     actionCollection()->addAction("importui_selectlockeditems", d->selectLockedItemsAction);
     d->cameraActions->addAction(d->selectLockedItemsAction);
@@ -377,7 +377,7 @@ void ImportUI::setupActions()
     d->cameraActions->addAction(d->downloadAction);
 
     d->downloadNewAction = new KAction(QIcon::fromTheme("favorites"), i18nc("@action", "Download New"), this);
-    d->downloadNewAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_N));
+    d->downloadNewAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_N));
     connect(d->downloadNewAction, SIGNAL(triggered()), this, SLOT(slotDownloadNew()));
     actionCollection()->addAction("importui_imagedownloadnew", d->downloadNewAction);
     d->downloadAction->addAction(d->downloadNewAction);
@@ -399,7 +399,7 @@ void ImportUI::setupActions()
     // -------------------------------------------------------------------------
 
     d->downloadDelNewAction = new KAction(i18nc("@action", "Download && Delete New"), this);
-    d->downloadDelNewAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_N));
+    d->downloadDelNewAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_N));
     connect(d->downloadDelNewAction, SIGNAL(triggered()), this, SLOT(slotDownloadAndDeleteNew()));
     actionCollection()->addAction("importui_imagedownloaddeletenew", d->downloadDelNewAction);
     d->cameraActions->addAction(d->downloadDelNewAction);
@@ -422,7 +422,7 @@ void ImportUI::setupActions()
     // -------------------------------------------------------------------------
 
     d->uploadAction = new KAction(QIcon::fromTheme("media-flash-smart-media"), i18nc("@action", "Upload..."), this);
-    d->uploadAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_U));
+    d->uploadAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_U));
     connect(d->uploadAction, SIGNAL(triggered()), this, SLOT(slotUpload()));
     actionCollection()->addAction("importui_imageupload", d->uploadAction);
     d->cameraActions->addAction(d->uploadAction);
@@ -430,7 +430,7 @@ void ImportUI::setupActions()
     // -------------------------------------------------------------------------
 
     d->lockAction = new KAction(QIcon::fromTheme("object-locked"), i18nc("@action", "Toggle Lock"), this);
-    d->lockAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_L));
+    d->lockAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_L));
     connect(d->lockAction, SIGNAL(triggered()), this, SLOT(slotToggleLock()));
     actionCollection()->addAction("importui_imagelock", d->lockAction);
     d->cameraActions->addAction(d->lockAction);
@@ -452,7 +452,7 @@ void ImportUI::setupActions()
     d->deleteSelectedAction = new KAction(QIcon::fromTheme("edit-delete"), i18nc("@action", "Delete Selected"), this);
     connect(d->deleteSelectedAction, SIGNAL(triggered()), this, SLOT(slotDeleteSelected()));
     actionCollection()->addAction("importui_imagedeleteselected", d->deleteSelectedAction);
-    d->deleteSelectedAction->setShortcut(KShortcut(Qt::Key_Delete));
+    d->deleteSelectedAction->setShortcut(QKeySequence(Qt::Key_Delete));
     d->deleteSelectedAction->setEnabled(false);
     d->deleteAction->addAction(d->deleteSelectedAction);
     d->cameraActions->addAction(d->deleteSelectedAction);
@@ -481,7 +481,7 @@ void ImportUI::setupActions()
     d->imageViewSelectionAction->addAction(d->iconViewAction);
 
     d->camItemPreviewAction = new KToggleAction(QIcon::fromTheme("viewimage"), i18nc("@action View the selected image", "Preview Item"), this);
-    d->camItemPreviewAction->setShortcut(KShortcut(Qt::Key_F3));
+    d->camItemPreviewAction->setShortcut(QKeySequence(Qt::Key_F3));
     actionCollection()->addAction("importui_item_view", d->camItemPreviewAction);
     connect(d->camItemPreviewAction, SIGNAL(triggered()), d->view, SLOT(slotImagePreview()));
     d->imageViewSelectionAction->addAction(d->camItemPreviewAction);
@@ -574,32 +574,30 @@ void ImportUI::setupActions()
 
     d->increaseThumbsAction = KStandardAction::zoomIn(d->view, SLOT(slotZoomIn()), this);
     d->increaseThumbsAction->setEnabled(false);
-    KShortcut keysPlus      = d->increaseThumbsAction->shortcut();
-    keysPlus.setAlternate(Qt::Key_Plus);
+    QKeySequence keysPlus(d->increaseThumbsAction->shortcut(), Qt::Key_Plus);
     d->increaseThumbsAction->setShortcut(keysPlus);
     actionCollection()->addAction("importui_zoomplus", d->increaseThumbsAction);
 
     d->decreaseThumbsAction = KStandardAction::zoomOut(d->view, SLOT(slotZoomOut()), this);
     d->decreaseThumbsAction->setEnabled(false);
-    KShortcut keysMinus     = d->decreaseThumbsAction->shortcut();
-    keysMinus.setAlternate(Qt::Key_Minus);
+    QKeySequence keysMinus(d->decreaseThumbsAction->shortcut(), Qt::Key_Minus);
     d->decreaseThumbsAction->setShortcut(keysMinus);
     actionCollection()->addAction("importui_zoomminus", d->decreaseThumbsAction);
 
     d->zoomFitToWindowAction = new KAction(QIcon::fromTheme("zoom-fit-best"), i18nc("@action:inmenu", "Fit to &Window"), this);
-    d->zoomFitToWindowAction->setShortcut(KShortcut(Qt::ALT + Qt::CTRL + Qt::Key_E));
+    d->zoomFitToWindowAction->setShortcut(QKeySequence(Qt::ALT + Qt::CTRL + Qt::Key_E));
     connect(d->zoomFitToWindowAction, SIGNAL(triggered()), d->view, SLOT(slotFitToWindow()));
     actionCollection()->addAction("import_zoomfit2window", d->zoomFitToWindowAction);
 
     d->zoomTo100percents = new KAction(QIcon::fromTheme("zoom-original"), i18nc("@action:inmenu", "Zoom to 100%"), this);
-    d->zoomTo100percents->setShortcut(KShortcut(Qt::CTRL + Qt::Key_Comma));
+    d->zoomTo100percents->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Comma));
     connect(d->zoomTo100percents, SIGNAL(triggered()), d->view, SLOT(slotZoomTo100Percents()));
     actionCollection()->addAction("import_zoomto100percents", d->zoomTo100percents);
 
     // ------------------------------------------------------------------------------------------------
 
     d->viewCMViewAction = new KToggleAction(QIcon::fromTheme("video-display"), i18n("Color-Managed View"), this);
-    d->viewCMViewAction->setShortcut(KShortcut(Qt::Key_F12));
+    d->viewCMViewAction->setShortcut(QKeySequence(Qt::Key_F12));
     connect(d->viewCMViewAction, SIGNAL(triggered()), this, SLOT(slotToggleColorManagedView()));
     actionCollection()->addAction("color_managed_view", d->viewCMViewAction);
 
@@ -609,12 +607,12 @@ void ImportUI::setupActions()
     createSidebarActions();
 
     d->showLogAction = new KToggleAction(QIcon::fromTheme("view-history"), i18nc("@option:check", "Show History"), this);
-    d->showLogAction->setShortcut(KShortcut(Qt::CTRL + Qt::Key_H));
+    d->showLogAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
     connect(d->showLogAction, SIGNAL(triggered()), this, SLOT(slotShowLog()));
     actionCollection()->addAction("importui_showlog", d->showLogAction);
 
     d->showBarAction = new KToggleAction(QIcon::fromTheme("view-choose"), i18nc("@option:check", "Show Thumbbar"), this);
-    d->showBarAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_T));
+    d->showBarAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_T));
     connect(d->showBarAction, SIGNAL(triggered()), this, SLOT(slotToggleShowBar()));
     actionCollection()->addAction("showthumbs", d->showBarAction);
     d->showBarAction->setEnabled(false);
@@ -645,7 +643,7 @@ void ImportUI::setupActions()
 
     KAction* const altBackwardAction = new KAction(i18nc("@action", "Previous Image"), this);
     actionCollection()->addAction("importui_backward_shift_space", altBackwardAction);
-    altBackwardAction->setShortcut(KShortcut(Qt::SHIFT + Qt::Key_Space));
+    altBackwardAction->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Space));
     connect(altBackwardAction, SIGNAL(triggered()), d->view, SLOT(slotPrevItem()));
 
     // ---------------------------------------------------------------------------------
@@ -831,34 +829,34 @@ void ImportUI::setupAccelerators()
 {
     KAction* const escapeAction = new KAction(i18nc("@action", "Exit Preview Mode"), this);
     actionCollection()->addAction("exit_preview_mode", escapeAction);
-    escapeAction->setShortcut( KShortcut(Qt::Key_Escape) );
+    escapeAction->setShortcut( QKeySequence(Qt::Key_Escape) );
     connect(escapeAction, SIGNAL(triggered()), this, SIGNAL(signalEscapePressed()));
 
     KAction* const nextImageAction = new KAction(i18nc("@action","Next Image"), this);
     nextImageAction->setIcon(SmallIcon("go-next"));
     actionCollection()->addAction("next_image", nextImageAction);
-    nextImageAction->setShortcut(KShortcut(Qt::Key_Space));
+    nextImageAction->setShortcut(QKeySequence(Qt::Key_Space));
     connect(nextImageAction, SIGNAL(triggered()), d->view, SLOT(slotNextItem()));
 
     KAction* const previousImageAction = new KAction(i18nc("@action", "Previous Image"), this);
     previousImageAction->setIcon(SmallIcon("go-previous"));
     actionCollection()->addAction("previous_image", previousImageAction);
-    previousImageAction->setShortcut(KShortcut(Qt::Key_Backspace));
+    previousImageAction->setShortcut(QKeySequence(Qt::Key_Backspace));
     connect(previousImageAction, SIGNAL(triggered()), d->view, SLOT(slotPrevItem()));
 
     KAction* const altpreviousImageAction = new KAction(i18nc("@action", "Previous Image"), this);
     actionCollection()->addAction("alt_previous_image_shift_space", altpreviousImageAction);
-    altpreviousImageAction->setShortcut( KShortcut(Qt::SHIFT+Qt::Key_Space) );
+    altpreviousImageAction->setShortcut( QKeySequence(Qt::SHIFT+Qt::Key_Space) );
     connect(altpreviousImageAction, SIGNAL(triggered()), d->view, SLOT(slotPrevItem()));
 
     KAction* const firstImageAction = new KAction(i18nc("@action Go to first image", "First Image"), this);
     actionCollection()->addAction("first_image", firstImageAction);
-    firstImageAction->setShortcut(KShortcut(Qt::Key_Home) );
+    firstImageAction->setShortcut(QKeySequence(Qt::Key_Home) );
     connect(firstImageAction, SIGNAL(triggered()), d->view, SLOT(slotFirstItem()));
 
     KAction* const lastImageAction = new KAction(i18nc("@action Go to last image", "Last Image"), this);
     actionCollection()->addAction("last_image", lastImageAction);
-    lastImageAction->setShortcut(KShortcut(Qt::Key_End) );
+    lastImageAction->setShortcut(QKeySequence(Qt::Key_End) );
     connect(lastImageAction, SIGNAL(triggered()), d->view, SLOT(slotLastItem()));
 }
 
@@ -1271,7 +1269,7 @@ void ImportUI::slotUpload()
 
     //qCDebug(DIGIKAM_GENERAL_LOG) << "fileformats=" << fileformats;
 
-    KUrl::List urls = KFileDialog::getOpenUrls(CollectionManager::instance()->oneAlbumRootPath(),
+    KUrl::List urls = KFileDialog::getOpenUrls(QUrl::fromLocalFile(CollectionManager::instance()->oneAlbumRootPath()),
                                                fileformats, this, i18nc("@title:window", "Select Image to Upload"));
 
     if (!urls.isEmpty())
@@ -2494,7 +2492,9 @@ void ImportUI::slotEditKeys()
 
 void ImportUI::slotConfToolbars()
 {
-    saveMainWindowSettings(KSharedConfig::openConfig()->group("Camera Settings"));
+    KConfigGroup group = KSharedConfig::openConfig()->group("Camera Settings");
+    saveMainWindowSettings(group);
+
     KEditToolBar dlg(factory(), this);
 
     connect(&dlg, SIGNAL(newToolbarConfig()),

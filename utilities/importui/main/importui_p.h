@@ -174,8 +174,8 @@ public:
     KAction*                      cameraCancelAction;
     KAction*                      cameraCaptureAction;
     KAction*                      cameraInfoAction;
-    KAction*                      increaseThumbsAction;
-    KAction*                      decreaseThumbsAction;
+    QAction*                      increaseThumbsAction;
+    QAction*                      decreaseThumbsAction;
     KAction*                      zoomFitToWindowAction;
     KAction*                      zoomTo100percents;
     KActionMenu*                  deleteAction;
@@ -204,7 +204,7 @@ public:
     KSelectAction*                itemSortOrderAction;
     KSelectAction*                itemsGroupAction;
     KToggleAction*                showMenuBarAction;
-    KAction*                      showPreferencesAction;
+    QAction*                      showPreferencesAction;
     KToggleAction*                showLogAction;
     KToggleAction*                showBarAction;
     KSelectAction*                imageViewSelectionAction;
