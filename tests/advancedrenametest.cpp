@@ -30,21 +30,22 @@
 // Qt includes
 
 #include <QFileInfo>
+#include <QTest>
 
 // KDE includes
 
 #include <kurl.h>
-#include <qtest_kde.h>
+#include <kio/global.h>
 
 using namespace Digikam;
 
-QTEST_KDEMAIN(AdvancedRenameTest, GUI)
+QTEST_MAIN(AdvancedRenameTest)
 
 const QString imagesDir("advancedrenameimages/");
 
 QString createFilePath(const QString& file)
 {
-    return QString(KDESRCDIR + imagesDir + file);
+    return QString(QFINDTESTDATA(imagesDir) + file);
 }
 
 Q_DECLARE_METATYPE(QList<int>)
@@ -197,7 +198,7 @@ void AdvancedRenameTest::testDirectoryNameToken_data()
 
     // The main directory of digikam can have different names, depending on how the
     // user named it. Therefore we have to detect the name here:
-    const KUrl dir2up = KUrl(KDESRCDIR + imagesDir).upUrl();
+    const KUrl dir2up = KIO::upUrl(QUrl::fromLocalFile(QFINDTESTDATA(imagesDir)));
     const QString dir2upString = dir2up.url();
     QString digikamDir = dir2upString.right(dir2upString.size() - dir2up.upUrl().url().size());
     digikamDir.chop(1);
@@ -328,7 +329,7 @@ void AdvancedRenameTest::testFirstLetterOfEachWordUppercaseModifier_data()
             << QString("")
             << QString("");
 
-    QTest::newRow(fileName.toAscii())
+    QTest::newRow(fileName.toAscii().constData())
             << QString("[file]{firstupper}")
             << filePath
             << QString("Advancedrename_Testimage.jpg");

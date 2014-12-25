@@ -428,16 +428,17 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
 
     d->expanderBox = new RExpanderBox;
     d->expanderBox->setObjectName("ContentAwareResizeTool Expander");
-    d->expanderBox->addItem(sizeSettingsContainer, QIcon::fromTheme("transform-scale"), i18n("Target size"),
+#pragma message("hardcoded icon sizes!")
+    d->expanderBox->addItem(sizeSettingsContainer, QIcon::fromTheme("transform-scale").pixmap(16), i18n("Target size"),
                             QString("SizeSettingsContainer"), true);
-    d->expanderBox->addItem(mixedRescaleContainer, QIcon::fromTheme("transform-scale"),
+    d->expanderBox->addItem(mixedRescaleContainer, QIcon::fromTheme("transform-scale").pixmap(16),
                             i18n("Content-aware rescale percentage"),
                             QString("MixedRescaleContainer"), true);
-    d->expanderBox->addItem(maskSettingsContainer, QIcon::fromTheme("transform-scale"), i18n("Mask Settings"),
+    d->expanderBox->addItem(maskSettingsContainer, QIcon::fromTheme("transform-scale").pixmap(16), i18n("Mask Settings"),
                             QString("MaskSettingsContainer"), true);
-    d->expanderBox->addItem(energyFunctionsContainer, QIcon::fromTheme("transform-scale"), i18n("Energy function"),
+    d->expanderBox->addItem(energyFunctionsContainer, QIcon::fromTheme("transform-scale").pixmap(16), i18n("Energy function"),
                             QString("EnergyFunctionsContainer"), true);
-    d->expanderBox->addItem(advancedSettingsContainer, QIcon::fromTheme("system-run"), i18n("Advanced Settings"),
+    d->expanderBox->addItem(advancedSettingsContainer, QIcon::fromTheme("system-run").pixmap(16), i18n("Advanced Settings"),
                             QString("AdvancedSettingsContainer"), true);
     d->expanderBox->addStretch();
 
