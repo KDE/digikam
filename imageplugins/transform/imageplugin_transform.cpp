@@ -51,7 +51,6 @@ namespace DigikamTransformImagePlugin
 {
 
 K_PLUGIN_FACTORY( TransformFactory, registerPlugin<ImagePlugin_Transform>(); )
-K_EXPORT_PLUGIN ( TransformFactory("digikamimageplugin_transform") )
 
 class ImagePlugin_Transform::Private
 {
@@ -202,3 +201,5 @@ void ImagePlugin_Transform::slotFreeRotation()
 }
 
 } // namespace DigikamTransformImagePlugin
+
+#include "imageplugin_transform.moc"

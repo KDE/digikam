@@ -58,7 +58,6 @@ namespace DigikamEnhanceImagePlugin
 {
 
 K_PLUGIN_FACTORY( EnhanceFactory, registerPlugin<ImagePlugin_Enhance>(); )
-K_EXPORT_PLUGIN ( EnhanceFactory("digikamimageplugin_enhance") )
 
 class EditorToolPassivePopup : public KPassivePopup
 {
@@ -300,3 +299,5 @@ void ImagePlugin_Enhance::slotAntiVignetting()
 }
 
 } // namespace DigikamEnhanceImagePlugin
+
+#include "imageplugin_enhance.moc"

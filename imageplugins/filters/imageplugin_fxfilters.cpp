@@ -48,7 +48,6 @@ namespace DigikamFxFiltersImagePlugin
 {
 
 K_PLUGIN_FACTORY( FxFiltersFactory, registerPlugin<ImagePlugin_FxFilters>(); )
-K_EXPORT_PLUGIN ( FxFiltersFactory("digikamimageplugin_fxfilters") )
 
 class ImagePlugin_FxFilters::Private
 {
@@ -184,3 +183,5 @@ void ImagePlugin_FxFilters::slotFilmGrain()
 }
 
 } // namespace DigikamFxFiltersImagePlugin
+
+#include "imageplugin_fxfilters.moc"

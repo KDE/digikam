@@ -44,7 +44,6 @@ namespace DigikamDecorateImagePlugin
 {
 
 K_PLUGIN_FACTORY( DecorateFactory, registerPlugin<ImagePlugin_Decorate>(); )
-K_EXPORT_PLUGIN ( DecorateFactory("digikamimageplugin_decorate") )
 
 class ImagePlugin_Decorate::Private
 {
@@ -116,3 +115,5 @@ void ImagePlugin_Decorate::slotTexture()
 }
 
 } // namespace DigikamDecorateImagePlugin
+
+#include "imageplugin_decorate.moc"

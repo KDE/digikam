@@ -61,7 +61,6 @@ namespace DigikamColorImagePlugin
 {
 
 K_PLUGIN_FACTORY( ColorPluginFactory, registerPlugin<ImagePlugin_Color>(); )
-K_EXPORT_PLUGIN ( ColorPluginFactory("digikamimageplugin_color") )
 
 class ImagePlugin_Color::Private
 {
@@ -415,3 +414,5 @@ void ImagePlugin_Color::slotAutoCorrection()
 }
 
 } // namespace DigikamColorImagePlugin
+
+#include "imageplugin_color.moc"
