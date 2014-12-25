@@ -65,12 +65,12 @@ using namespace Digikam;
 
 int main(int argc, char** argv)
 {
-    KAboutData aboutData("digikam",
+    K4AboutData aboutData("digikam",
                          0,
                          ki18n("digiKam"),
                          digiKamVersion().toAscii(),
                          DAboutData::digiKamSlogan(),
-                         KAboutData::License_GPL,
+                         K4AboutData::License_GPL,
                          DAboutData::copyright(),
                          additionalInformation(),
                          DAboutData::webProjectUrl().url().toUtf8());

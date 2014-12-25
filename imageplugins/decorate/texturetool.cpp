@@ -29,6 +29,7 @@
 #include <QGridLayout>
 #include <QImage>
 #include <QLabel>
+#include <QIcon>
 
 // KDE includes
 

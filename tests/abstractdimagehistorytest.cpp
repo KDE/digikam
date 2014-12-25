@@ -29,6 +29,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QTime>
+#include <QTest>
 
 // Libkexiv2 includes
 
@@ -54,7 +55,7 @@ using namespace Digikam;
 
 QString AbstractDImageHistoryTest::imagePath()
 {
-    return QString(KDESRCDIR)+QString("albummodeltestimages");
+    return QFINDTESTDATA("albummodeltestimages");
 }
 
 QDebug operator<<(QDebug dbg, const HistoryImageId& id)

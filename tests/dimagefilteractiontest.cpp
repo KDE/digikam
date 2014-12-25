@@ -29,10 +29,7 @@
 #include <QLabel>
 #include <QDialog>
 #include <QHBoxLayout>
-
-// KDE includes
-
-#include <qtest_kde.h>
+#include <QTest>
 
 // Libkexiv2 includes
 
@@ -47,8 +44,7 @@
 
 using namespace Digikam;
 
-QTEST_KDEMAIN(DImageFilterActionTest, /*No*/GUI)
-//QTEST_MAIN(DImageFilterActionTest)
+QTEST_MAIN(DImageFilterActionTest)
 
 void DImageFilterActionTest::testDRawDecoding()
 {
@@ -164,6 +160,6 @@ QString DImageFilterActionTest::originalImage()
 
 QString DImageFilterActionTest::imagePath()
 {
-    return QString(KDESRCDIR) + "filteractiontestimages/";
+    return QFINDTESTDATA("filteractiontestimages");
 }
 

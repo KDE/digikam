@@ -133,7 +133,7 @@ RedEyeTool::RedEyeTool(QObject* const parent)
 {
     setObjectName("redeye");
     setToolName(i18n("Red Eye"));
-    setToolIcon(SmallIcon("redeyes"));
+    setToolIcon(QIcon::fromTheme("redeyes"));
     setToolHelp("redeyecorrectiontool.anchor");
 
     d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::PickColorMode, Qt::red, 1, false, ImageIface::ImageSelection);

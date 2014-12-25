@@ -34,6 +34,7 @@
 // Local includes
 
 #include "lensfuniface.h"
+#include "digikam_debug.h"
 
 using namespace Digikam;
 

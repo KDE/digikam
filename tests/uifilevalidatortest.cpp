@@ -33,9 +33,9 @@
 
 #include "uifilevalidator.h"
 
-const QString goodFile(KDESRCDIR"digikamui_good.rc");
-const QString badFile(KDESRCDIR"digikamui_bad.rc");
-const QString fixedFile(KDESRCDIR"fixedui.rc");
+const QString goodFile(QFINDTESTDATA("digikamui_good.rc"));
+const QString badFile(QFINDTESTDATA("digikamui_bad.rc"));
+const QString fixedFile(QFINDTESTDATA("fixedui.rc"));
 
 using namespace Digikam;
 

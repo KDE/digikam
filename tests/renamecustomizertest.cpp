@@ -47,7 +47,7 @@ const QString imagesDir("advancedrenameimages/");
 
 QString createFilePath(const QString& file)
 {
-    return QString(KDESRCDIR + imagesDir + file);
+    return QString(QFINDTESTDATA(imagesDir) + file);
 }
 
 const QString fileName  = "advancedrename_testimage.jpg";
