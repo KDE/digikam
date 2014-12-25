@@ -33,7 +33,6 @@
 #include <QCheckBox>
 #include <QCloseEvent>
 #include <QComboBox>
-#include <QCustomEvent>
 #include <QEvent>
 #include <QFile>
 #include <QFrame>
@@ -577,7 +576,8 @@ void ResizeTool::processCImgUrl(const QString& url)
 
 void ResizeTool::slotLoadSettings()
 {
-    KUrl loadBlowupFile = KFileDialog::getOpenUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+#pragma message("QUrl::fromLocalFile")
+    QUrl loadBlowupFile = KFileDialog::getOpenUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                           QString( "*" ), qApp->activeWindow(),
                           QString( i18n("Photograph Resizing Settings File to Load")) );
 
@@ -610,7 +610,8 @@ void ResizeTool::slotLoadSettings()
 
 void ResizeTool::slotSaveAsSettings()
 {
-    KUrl saveBlowupFile = KFileDialog::getSaveUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+#pragma message("QUrl::fromLocalFile")
+    QUrl saveBlowupFile = KFileDialog::getSaveUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                           QString( "*" ), qApp->activeWindow(),
                           QString( i18n("Photograph Resizing Settings File to Save")) );
 

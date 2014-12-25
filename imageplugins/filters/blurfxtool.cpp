@@ -270,7 +270,8 @@ void BlurFXTool::slotEffectTypeChanged(int type)
 
         case BlurFXFilter::FarBlur:
             d->distanceInput->setRange(0, 20, 1);
-            d->distanceInput->input()->setMaximum(20);
+#pragma message("port")
+            //d->distanceInput->input()->setMaximum(20);
             d->distanceInput->setValue(10);
             break;
 

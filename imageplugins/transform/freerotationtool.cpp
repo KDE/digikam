@@ -37,6 +37,7 @@
 #include <QPainter>
 #include <QPushButton>
 #include <QIcon>
+#include <QStyle>
 
 // KDE includes
 
@@ -208,6 +209,7 @@ FreeRotationTool::FreeRotationTool(QObject* const parent)
     containerLayout2->addWidget(d->autoAdjustBtn,       1, 2, 2, 1);
     containerLayout2->addWidget(d->autoAdjustPoint2Btn, 2, 0, 1, 1);
     containerLayout2->setColumnStretch(1, 10);
+#pragma message("check port")
     containerLayout2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin));
     autoAdjustContainer->setLayout(containerLayout2);
 
@@ -218,9 +220,11 @@ FreeRotationTool::FreeRotationTool(QObject* const parent)
 
     d->expanderBox    = new RExpanderBox;
     d->expanderBox->setObjectName("FreeRotationTool Expander");
-    d->expanderBox->addItem(autoAdjustContainer, QIcon::fromTheme("freerotation"), i18n("Automatic Adjustment"),
+#pragma message("hardcoded icon size")
+    d->expanderBox->addItem(autoAdjustContainer, QIcon::fromTheme("freerotation").pixmap(16), i18n("Automatic Adjustment"),
                             QString("AutoAdjustContainer"), true);
-    d->expanderBox->addItem(d->settingsView, QIcon::fromTheme("freerotation"), i18n("Settings"),
+#pragma message("hardcoded icon size")
+    d->expanderBox->addItem(d->settingsView, QIcon::fromTheme("freerotation").pixmap(16), i18n("Settings"),
                             QString("SettingsContainer"), true);
     d->expanderBox->addStretch();
 

@@ -23,6 +23,9 @@
 
 #include "imageplugin_transform.h"
 
+// Qt includes
+#include <QKeySequence>
+
 // KDE includes
 
 #include <kaction.h>
@@ -101,7 +104,7 @@ ImagePlugin_Transform::ImagePlugin_Transform(QObject* const parent, const QVaria
 #ifdef HAVE_LIBLQR_1
 
     d->contentAwareResizingAction = new KAction(QIcon::fromTheme("transform-scale"), i18n("Liquid Rescale..."), this);
-    // d->contentAwareResizingAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_C));
+    // d->contentAwareResizingAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_C));
     actionCollection()->addAction("imageplugin_contentawareresizing", d->contentAwareResizingAction);
     connect(d->contentAwareResizingAction, SIGNAL(triggered(bool)),
             this, SLOT(slotContentAwareResizing()));
@@ -116,19 +119,19 @@ ImagePlugin_Transform::ImagePlugin_Transform(QObject* const parent, const QVaria
             this, SLOT(slotFreeRotation()));
 
     KAction* point1Action = new KAction(i18n("Set Point 1"), this);
-    point1Action->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_1));
+    point1Action->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_1));
     actionCollection()->addAction("imageplugin_freerotation_point1", point1Action);
     connect(point1Action, SIGNAL(triggered(bool)),
             this, SIGNAL(signalPoint1Action()));
 
     KAction* const point2Action = new KAction(i18n("Set Point 2"), this);
-    point2Action->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_2));
+    point2Action->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_2));
     actionCollection()->addAction("imageplugin_freerotation_point2", point2Action);
     connect(point2Action, SIGNAL(triggered(bool)),
             this, SIGNAL(signalPoint2Action()));
 
     KAction* const autoAdjustAction = new KAction(i18n("Auto Adjust"), this);
-    autoAdjustAction->setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_R));
+    autoAdjustAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_R));
     actionCollection()->addAction("imageplugin_freerotation_autoadjust", autoAdjustAction);
     connect(autoAdjustAction, SIGNAL(triggered(bool)),
             this, SIGNAL(signalAutoAdjustAction()));
