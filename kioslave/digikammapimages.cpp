@@ -32,11 +32,10 @@
 #include <QDBusConnection>
 #include <QDataStream>
 #include <QFile>
+#include <QUrl>
 
 // KDE includes
 
-#include <kcomponentdata.h>
-#include <kglobal.h>
 #include <kio/global.h>
 #include <klocalizedstring.h>
 
@@ -60,12 +59,12 @@ kio_digikammapimages::~kio_digikammapimages()
 void kio_digikammapimages::special(const QByteArray& data)
 {
     bool        wantDirectQuery = (metaData("wantDirectQuery") == "true");
-    KUrl        kurl;
+    QUrl        url;
     QString     filter;
     QDataStream ds(data);
-    ds >> kurl;
+    ds >> url;
 
-    Digikam::DatabaseParameters dbParameters(kurl);
+    Digikam::DatabaseParameters dbParameters(url);
     QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-digikammapimages-%1")
                                                   .arg(QString::number(QCoreApplication::instance()->applicationPid())));
     Digikam::DatabaseAccess::setParameters(dbParameters);
@@ -96,7 +95,7 @@ void kio_digikammapimages::special(const QByteArray& data)
         lister.setListOnlyAvailable(metaData("listOnlyAvailableImages") == "true");
         // send data every 200 images to be more responsive
         Digikam::ImageListerSlaveBasePartsSendingReceiver receiver(this, 200);
-        lister.list(&receiver, kurl);
+        lister.list(&receiver, KUrl(url));
         // send rest
         receiver.sendData();
     }
@@ -112,11 +111,7 @@ extern "C"
     {
         // Needed to load SQL driver plugins
         QCoreApplication app(argc, argv);
-
-#pragma message("PORT QT5")
-//         KLocale::setMainCatalog("digikam");
-        KComponentData componentData( "kio_digikammapimages" );
-        KLocale::global();
+        app.setApplicationName(QStringLiteral("kio_digikammapimages"));
 
         qCDebug(DIGIKAM_KIOSLAVES_LOG) << "*** kio_digikammapimages started ***";
 

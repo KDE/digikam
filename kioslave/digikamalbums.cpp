@@ -38,10 +38,8 @@
 
 // KDE includes
 
-#include <kglobal.h>
 #include <kio/deletejob.h>
 #include <klocalizedstring.h>
-#include <kmimetype.h>
 
 // Libkdcraw includes
 
@@ -651,13 +649,8 @@ extern "C"
 {
     KDE_EXPORT int kdemain(int argc, char** argv)
     {
-#pragma message("PORT QT5")
-//        KLocale::setMainCatalog("digikam");
-
         QCoreApplication app(argc, argv);
         app.setApplicationName(QStringLiteral("kio_digikamalbums"));
-
-        KLocale::global();
 
         qCDebug(DIGIKAM_KIOSLAVES_LOG) << "*** kio_digikamalbums started ***";
 

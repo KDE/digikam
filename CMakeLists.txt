@@ -500,6 +500,9 @@ if(DIGIKAM_CAN_BE_COMPILED)
     # surpress deprecated warning for glibc 2.20+
     add_definitions(-D_DEFAULT_SOURCE)
 
+    # translations catalog
+    add_definitions(-DTRANSLATION_DOMAIN=\"digikam\")
+
     # Enable C++ Exceptions support, require by Greycstoration algorithm (CImg.h)
     kde_enable_exceptions()
 

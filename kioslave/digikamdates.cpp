@@ -31,11 +31,10 @@
 #include <QDBusConnection>
 #include <QDataStream>
 #include <QFile>
+#include <QUrl>
 
 // KDE includes
 
-#include <kcomponentdata.h>
-#include <kglobal.h>
 #include <kio/global.h>
 #include <klocalizedstring.h>
 
@@ -59,14 +58,14 @@ kio_digikamdates::~kio_digikamdates()
 void kio_digikamdates::special(const QByteArray& data)
 {
     bool        folders = (metaData("folders") == "true");
-    KUrl        kurl;
+    QUrl        url;
     QString     filter;
     QDataStream ds(data);
-    ds >> kurl;
+    ds >> url;
 
     qCDebug(DIGIKAM_KIOSLAVES_LOG) << "Entered kio_digikamdates::special";
 
-    Digikam::DatabaseParameters dbParameters(kurl);
+    Digikam::DatabaseParameters dbParameters(url);
     QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-digikamtags-%1")
                                                   .arg(QString::number(QCoreApplication::instance()->applicationPid())));
     Digikam::DatabaseAccess::setParameters(dbParameters);
@@ -86,7 +85,7 @@ void kio_digikamdates::special(const QByteArray& data)
         lister.setListOnlyAvailable(metaData("listOnlyAvailableImages") == "true");
         // send data every 200 images to be more responsive
         Digikam::ImageListerSlaveBasePartsSendingReceiver receiver(this, 200);
-        lister.list(&receiver, kurl);
+        lister.list(&receiver, KUrl(url));
         // send rest
         receiver.sendData();
     }
@@ -102,11 +101,7 @@ extern "C"
     {
         // Needed to load SQL driver plugins
         QCoreApplication app(argc, argv);
-
-#pragma message("PORT QT5")
-//         KLocale::setMainCatalog("digikam");
-        KComponentData componentData( "kio_digikamdates" );
-        KLocale::global();
+        app.setApplicationName(QStringLiteral("kio_digikamdates"));
 
         qCDebug(DIGIKAM_KIOSLAVES_LOG) << "*** kio_digikamdates started ***";
 

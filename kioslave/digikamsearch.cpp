@@ -28,10 +28,10 @@
 
 #include <QCoreApplication>
 #include <QDBusConnection>
+#include <QUrl>
 
 // KDE includes
 
-#include <kcomponentdata.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -49,12 +49,15 @@ class DuplicatesProgressObserver : public Digikam::HaarProgressObserver
 {
 public:
 
-    explicit DuplicatesProgressObserver(KIO::SlaveBase* slave) : m_slave(slave) {}
+    explicit DuplicatesProgressObserver(KIO::SlaveBase* slave) : m_slave(slave)
+    {
+    }
 
     virtual void totalNumberToScan(int number)
     {
         m_slave->totalSize(number);
     }
+
     virtual void processedNumber(int number)
     {
         m_slave->processedSize(number);
@@ -79,19 +82,19 @@ kio_digikamsearch::~kio_digikamsearch()
 void kio_digikamsearch::special(const QByteArray& data)
 {
     bool        duplicates = !metaData("duplicates").isEmpty();
-    KUrl        kurl;
+    QUrl        url;
     int         listingType = 0;
     QDataStream ds(data);
-    ds >> kurl;
+    ds >> url;
 
     if (!ds.atEnd())
     {
         ds >> listingType;
     }
 
-    qCDebug(DIGIKAM_KIOSLAVES_LOG) << "kio_digikamsearch::special " << kurl;
+    qCDebug(DIGIKAM_KIOSLAVES_LOG) << "kio_digikamsearch::special " << url;
 
-    Digikam::DatabaseUrl dbUrl(kurl);
+    Digikam::DatabaseUrl dbUrl(url);
     QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-digikamtags-%1")
                                                   .arg(QString::number(QCoreApplication::instance()->applicationPid())));
     Digikam::DatabaseAccess::setParameters((Digikam::DatabaseParameters)dbUrl);
@@ -208,11 +211,7 @@ extern "C"
     {
         // Needed to load SQL driver plugins
         QCoreApplication app(argc, argv);
-
-#pragma message("PORT QT5")
-//         KLocale::setMainCatalog("digikam");
-        KComponentData componentData( "kio_digikamsearch" );
-        KLocale::global();
+        app.setApplicationName(QStringLiteral("kio_digikamsearch"));
 
         qCDebug(DIGIKAM_KIOSLAVES_LOG) << "*** kio_digikamsearch started ***";
 

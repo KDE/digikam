@@ -30,15 +30,13 @@
 #include <QCoreApplication>
 #include <QDBusConnection>
 #include <QString>
+#include <QUrl>
 
 // KDE includes
 
-#include <kcomponentdata.h>
-#include <kglobal.h>
 #include <kio/global.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
-#include <kurl.h>
 
 // Local includes
 
@@ -61,13 +59,13 @@ kio_digikamtagsProtocol::~kio_digikamtagsProtocol()
 
 void kio_digikamtagsProtocol::special(const QByteArray& data)
 {
-    KUrl    kurl;
+    QUrl    url;
     QString filter;
 
     QDataStream ds(data);
-    ds >> kurl;
+    ds >> url;
 
-    Digikam::DatabaseParameters dbParameters(kurl);
+    Digikam::DatabaseParameters dbParameters(url);
     QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-%1")
                                                   .arg(QString::number(QCoreApplication::instance()->applicationPid())));
     Digikam::DatabaseAccess::setParameters(dbParameters);
@@ -111,13 +109,13 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
 
         if (!special.isNull())
         {
-            QString searchXml = lister.tagSearchXml(kurl, special, recursive);
+            QString searchXml = lister.tagSearchXml(KUrl(url), special, recursive);
             lister.setAllowExtraValues(true); // pass property value as extra value, different binary protocol
             lister.listImageTagPropertySearch(&receiver, searchXml);
         }
         else
         {
-            lister.list(&receiver, kurl);
+            lister.list(&receiver, KUrl(url));
         }
 
         // finish sending
@@ -135,11 +133,7 @@ extern "C"
     {
         // Needed to load SQL driver plugins
         QCoreApplication app(argc, argv);
-
-#pragma message("PORT QT5")
-//         KLocale::setMainCatalog("digikam");
-        KComponentData componentData( "kio_digikamtags" );
-        KLocale::global();
+        app.setApplicationName(QStringLiteral("kio_digikamtags"));
 
         qCDebug(DIGIKAM_KIOSLAVES_LOG) << "*** kio_digikamtag started ***";
 
