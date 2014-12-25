@@ -305,10 +305,7 @@ void KipiPluginLoader::slotKipiPluginPlug()
         {
             continue;
         }
-        
-	if (plugin->objectName() == QString("RemoveRedEyes"))
-	    continue;
-
+       
         ++cpt;
         plugin->setup(d->app);
         plugin->rebuild();
