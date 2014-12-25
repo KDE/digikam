@@ -29,6 +29,7 @@
 #include <QGridLayout>
 #include <QImage>
 #include <QLabel>
+#include <QIcon>
 
 // KDE includes
 
@@ -37,7 +38,6 @@
 #include <kconfiggroup.h>
 #include <kcursor.h>
 #include <kglobal.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
 
@@ -92,7 +92,7 @@ OilPaintTool::OilPaintTool(QObject* const parent)
 {
     setObjectName("oilpaint");
     setToolName(i18n("Oil Paint"));
-    setToolIcon(SmallIcon("oilpaint")); // krazy:exclude=iconnames
+    setToolIcon(QIcon::fromTheme("oilpaint")); // krazy:exclude=iconnames
 
     // -------------------------------------------------------------
 

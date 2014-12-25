@@ -44,6 +44,7 @@
 #include <QPixmap>
 #include <QPushButton>
 #include <QTimer>
+#include <QIcon>
 
 // KDE includes
 
@@ -53,7 +54,6 @@
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -158,7 +158,7 @@ InPaintingTool::InPaintingTool(QObject* const parent)
 {
     setObjectName("inpainting");
     setToolName(i18n("In-painting"));
-    setToolIcon(SmallIcon("inpainting"));
+    setToolIcon(QIcon::fromTheme("inpainting"));
 
     // -------------------------------------------------------------
 
@@ -476,7 +476,8 @@ void InPaintingTool::setFinalImage()
 
 void InPaintingTool::slotLoadSettings()
 {
-    KUrl loadInpaintingFile = KFileDialog::getOpenUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+#pragma message("QURL::fromLocalFile")
+    QUrl loadInpaintingFile = KFileDialog::getOpenUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                       QString("*"), qApp->activeWindow(),
                                                       QString(i18n("Photograph In-Painting Settings File to Load")));
 
@@ -512,7 +513,8 @@ void InPaintingTool::slotLoadSettings()
 
 void InPaintingTool::slotSaveAsSettings()
 {
-    KUrl saveRestorationFile = KFileDialog::getSaveUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+#pragma message("QUrl::fromLocalFile")
+    QUrl saveRestorationFile = KFileDialog::getSaveUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                        QString("*"), qApp->activeWindow(),
                                                        QString(i18n("Photograph In-Painting Settings File to Save")));
 

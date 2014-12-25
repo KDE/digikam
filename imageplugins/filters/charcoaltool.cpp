@@ -28,6 +28,7 @@
 
 #include <QLabel>
 #include <QGridLayout>
+#include <QIcon>
 
 // KDE includes
 
@@ -92,7 +93,7 @@ CharcoalTool::CharcoalTool(QObject* const parent)
 {
     setObjectName("charcoal");
     setToolName(i18n("Charcoal"));
-    setToolIcon(SmallIcon("charcoaltool"));
+    setToolIcon(QIcon::fromTheme("charcoaltool"));
 
     // -------------------------------------------------------------
 

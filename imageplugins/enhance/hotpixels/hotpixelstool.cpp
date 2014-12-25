@@ -32,6 +32,7 @@
 #include <QPolygon>
 #include <QProgressBar>
 #include <QPushButton>
+#include <QIcon>
 
 // KDE includes
 
@@ -114,7 +115,7 @@ HotPixelsTool::HotPixelsTool(QObject* const parent)
 {
     setObjectName("hotpixels");
     setToolName(i18n("Hot Pixels"));
-    setToolIcon(SmallIcon("hotpixels"));
+    setToolIcon(QIcon::fromTheme("hotpixels"));
 
     // -------------------------------------------------------------
 

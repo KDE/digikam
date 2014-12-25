@@ -36,6 +36,7 @@
 #include <QPixmap>
 #include <QPushButton>
 #include <QToolButton>
+#include <QIcon>
 
 // KDE includes
 
@@ -47,8 +48,6 @@
 #include <kcursor.h>
 #include <kglobal.h>
 #include <khelpmenu.h>
-#include <QIcon>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <QMenu>
 #include <kstandarddirs.h>
@@ -104,7 +103,7 @@ ColorFxTool::ColorFxTool(QObject* const parent)
 {
     setObjectName("coloreffects");
     setToolName(i18n("Color Effects"));
-    setToolIcon(SmallIcon("colorfx"));
+    setToolIcon(QIcon::fromTheme("colorfx"));
 
     // -------------------------------------------------------------
 

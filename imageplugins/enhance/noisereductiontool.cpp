@@ -26,13 +26,13 @@
 // Qt includes
 
 #include <QString>
+#include <QIcon>
 
 // KDE includes
 
 #include <kapplication.h>
 #include <kconfig.h>
 #include <klocalizedstring.h>
-#include <kiconloader.h>
 
 // Local includes
 
@@ -70,7 +70,7 @@ NoiseReductionTool::NoiseReductionTool(QObject* const parent)
 {
     setObjectName("noisereduction");
     setToolName(i18n("Noise Reduction"));
-    setToolIcon(SmallIcon("noisereduction"));
+    setToolIcon(QIcon::fromTheme("noisereduction"));
 
     // -------------------------------------------------------------
 

@@ -36,6 +36,7 @@
 #include <QPainter>
 #include <QPen>
 #include <QPixmap>
+#include <QIcon>
 
 // KDE includes
 
@@ -43,7 +44,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kglobal.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
 
@@ -110,7 +110,7 @@ LensDistortionTool::LensDistortionTool(QObject* const parent)
 {
     setObjectName("lensdistortion");
     setToolName(i18n("Lens Distortion"));
-    setToolIcon(SmallIcon("lensdistortion"));
+    setToolIcon(QIcon::fromTheme("lensdistortion"));
 
     d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);

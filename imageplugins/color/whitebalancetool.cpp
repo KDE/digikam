@@ -28,6 +28,7 @@
 // Qt includes
 
 #include <QString>
+#include <QIcon>
 
 // KDE includes
 
@@ -39,7 +40,6 @@
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
 #include <kvbox.h>
-#include <kiconloader.h>
 
 // Local includes
 
@@ -93,7 +93,7 @@ WhiteBalanceTool::WhiteBalanceTool(QObject* const parent)
 {
     setObjectName("whitebalance");
     setToolName(i18n("White Balance"));
-    setToolIcon(SmallIcon("whitebalance"));
+    setToolIcon(QIcon::fromTheme("whitebalance"));
     setInitPreview(true);
 
     // -------------------------------------------------------------

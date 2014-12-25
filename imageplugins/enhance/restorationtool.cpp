@@ -31,6 +31,7 @@
 #include <QImage>
 #include <QLabel>
 #include <QPixmap>
+#include <QIcon>
 
 // KDE includes
 
@@ -39,7 +40,6 @@
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -130,7 +130,7 @@ RestorationTool::RestorationTool(QObject* const parent)
 {
     setObjectName("restoration");
     setToolName(i18n("Restoration"));
-    setToolIcon(SmallIcon("restoration"));
+    setToolIcon(QIcon::fromTheme("restoration"));
 
     // -------------------------------------------------------------
 

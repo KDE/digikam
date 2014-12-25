@@ -38,6 +38,7 @@
 #include <QPushButton>
 #include <QTimer>
 #include <QToolButton>
+#include <QIcon>
 
 // KDE includes
 
@@ -47,7 +48,6 @@
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
-#include <QIcon>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
@@ -173,7 +173,7 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
 {
     setObjectName("adjustlevels");
     setToolName(i18n("Adjust Levels"));
-    setToolIcon(SmallIcon("adjustlevels"));
+    setToolIcon(QIcon::fromTheme("adjustlevels"));
     setInitPreview(true);
 
     ImageIface iface;

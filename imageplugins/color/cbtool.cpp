@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QLabel>
+#include <QIcon>
 
 // KDE includes
 
@@ -34,8 +35,6 @@
 #include <kconfiggroup.h>
 #include <kcursor.h>
 #include <kglobal.h>
-#include <QIcon>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
 #include <kvbox.h>
@@ -87,7 +86,7 @@ CBTool::CBTool(QObject* const parent)
 {
     setObjectName("colorbalance");
     setToolName(i18n("Color Balance"));
-    setToolIcon(SmallIcon("adjustrgb"));
+    setToolIcon(QIcon::fromTheme("adjustrgb"));
     setInitPreview(true);
 
     d->previewWidget = new ImageRegionWidget;

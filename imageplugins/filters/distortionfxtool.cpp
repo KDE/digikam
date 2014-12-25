@@ -34,6 +34,7 @@
 #include <QImage>
 #include <QLabel>
 #include <QSpinBox>
+#include <QIcon>
 
 // KDE includes
 
@@ -43,7 +44,6 @@
 #include <kcursor.h>
 #include <kglobal.h>
 #include <khelpmenu.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <knuminput.h>
 #include <kstandarddirs.h>
@@ -112,7 +112,7 @@ DistortionFXTool::DistortionFXTool(QObject* const parent)
 {
     setObjectName("distortionfx");
     setToolName(i18n("Distortion Effects"));
-    setToolIcon(SmallIcon("distortionfx"));
+    setToolIcon(QIcon::fromTheme("distortionfx"));
 
     d->previewWidget = new ImageRegionWidget;
     d->previewWidget->setWhatsThis(i18n("This is the preview of the distortion effect "

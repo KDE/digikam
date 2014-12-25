@@ -40,6 +40,7 @@
 #include <QToolButton>
 #include <QListWidget>
 #include <QCheckBox>
+#include <QIcon>
 
 // KDE includes
 
@@ -49,7 +50,6 @@
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
-#include <QIcon>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
@@ -166,7 +166,7 @@ FilmTool::FilmTool(QObject* const parent)
 {
     setObjectName("film");
     setToolName(i18n("Color Negative Film"));
-    setToolIcon(SmallIcon("colorneg"));
+    setToolIcon(QIcon::fromTheme("colorneg"));
     setInitPreview(true);
 
     ImageIface iface;

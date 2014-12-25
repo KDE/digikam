@@ -32,6 +32,7 @@
 #include <QGroupBox>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QIcon>
 
 // KDE includes
 
@@ -40,8 +41,6 @@
 #include <kcursor.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
-#include <QIcon>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
 
@@ -94,7 +93,7 @@ AdjustCurvesTool::AdjustCurvesTool(QObject* const parent)
 {
     setObjectName("adjustcurves");
     setToolName(i18n("Adjust Curves"));
-    setToolIcon(SmallIcon("adjustcurves"));
+    setToolIcon(QIcon::fromTheme("adjustcurves"));
 
     // -------------------------------------------------------------
 

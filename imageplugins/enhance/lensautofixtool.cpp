@@ -32,6 +32,7 @@
 #include <QPen>
 #include <QPixmap>
 #include <QTimer>
+#include <QIcon>
 
 // KDE includes
 
@@ -40,7 +41,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kglobal.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kseparator.h>
 #include <kstandarddirs.h>
@@ -94,7 +94,7 @@ LensAutoFixTool::LensAutoFixTool(QObject* const parent)
 {
     setObjectName("lensautocorrection");
     setToolName(i18n("Lens Auto-Correction"));
-    setToolIcon(SmallIcon("lensautofix"));
+    setToolIcon(QIcon::fromTheme("lensautofix"));
 
     d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);

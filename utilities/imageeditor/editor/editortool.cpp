@@ -111,6 +111,7 @@ QIcon EditorTool::toolIcon() const
 
 void EditorTool::setToolIcon(const QIcon& icon)
 {
+#pragma message("cleanup: pass const QString& and construct the QIcon object here?")
     d->icon = icon;
 }
 

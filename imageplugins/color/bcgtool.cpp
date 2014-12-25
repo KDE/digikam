@@ -28,6 +28,7 @@
 // Qt includes
 
 #include <QLabel>
+#include <QIcon>
 
 // KDE includes
 
@@ -38,7 +39,6 @@
 #include <kcursor.h>
 #include <kglobal.h>
 #include <QIcon>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
 #include <kvbox.h>
@@ -92,7 +92,7 @@ BCGTool::BCGTool(QObject* const parent)
     setObjectName("bcgadjust");
     setToolName(i18n("Brightness / Contrast / Gamma"));
     setToolVersion(1);
-    setToolIcon(SmallIcon("contrast"));
+    setToolIcon(QIcon::fromTheme("contrast"));
     setToolHelp("bcgadjusttool.anchor");
     setToolCategory(FilterAction::ReproducibleFilter);
     setInitPreview(true);

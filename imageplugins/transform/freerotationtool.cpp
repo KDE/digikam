@@ -36,6 +36,7 @@
 #include <QLabel>
 #include <QPainter>
 #include <QPushButton>
+#include <QIcon>
 
 // KDE includes
 
@@ -44,7 +45,6 @@
 #include <kconfiggroup.h>
 #include <kdialog.h>
 #include <kglobal.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kseparator.h>
 
@@ -110,7 +110,7 @@ FreeRotationTool::FreeRotationTool(QObject* const parent)
 {
     setObjectName("freerotation");
     setToolName(i18n("Free Rotation"));
-    setToolIcon(SmallIcon("freerotation"));
+    setToolIcon(QIcon::fromTheme("freerotation"));
 
     d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::HVGuideMode);
     d->previewWidget->setWhatsThis(i18n("This is the free rotation operation preview. "
@@ -218,9 +218,9 @@ FreeRotationTool::FreeRotationTool(QObject* const parent)
 
     d->expanderBox    = new RExpanderBox;
     d->expanderBox->setObjectName("FreeRotationTool Expander");
-    d->expanderBox->addItem(autoAdjustContainer, SmallIcon("freerotation"), i18n("Automatic Adjustment"),
+    d->expanderBox->addItem(autoAdjustContainer, QIcon::fromTheme("freerotation"), i18n("Automatic Adjustment"),
                             QString("AutoAdjustContainer"), true);
-    d->expanderBox->addItem(d->settingsView, SmallIcon("freerotation"), i18n("Settings"),
+    d->expanderBox->addItem(d->settingsView, QIcon::fromTheme("freerotation"), i18n("Settings"),
                             QString("SettingsContainer"), true);
     d->expanderBox->addStretch();
 

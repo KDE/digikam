@@ -31,6 +31,7 @@
 #include <QImage>
 #include <QLabel>
 #include <QSlider>
+#include <QIcon>
 
 // KDE includes
 
@@ -38,7 +39,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kglobal.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <knuminput.h>
 
@@ -107,7 +107,7 @@ BlurFXTool::BlurFXTool(QObject* const parent)
 {
     setObjectName("blurfx");
     setToolName(i18n("Blur Effects"));
-    setToolIcon(SmallIcon("blurfx"));
+    setToolIcon(QIcon::fromTheme("blurfx"));
 
     // -------------------------------------------------------------
 

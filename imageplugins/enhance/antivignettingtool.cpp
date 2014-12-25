@@ -33,6 +33,7 @@
 #include <QPainter>
 #include <QPen>
 #include <QPixmap>
+#include <QIcon>
 
 // KDE includes
 
@@ -40,7 +41,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kglobal.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <knuminput.h>
 #include <kstandarddirs.h>
@@ -84,7 +84,7 @@ AntiVignettingTool::AntiVignettingTool(QObject* const parent)
 {
     setObjectName("antivignetting");
     setToolName(i18n("Vignetting Correction"));
-    setToolIcon(SmallIcon("antivignetting"));
+    setToolIcon(QIcon::fromTheme("antivignetting"));
 
     d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
     setToolView(d->previewWidget);

@@ -30,6 +30,7 @@
 #include <QGridLayout>
 #include <QImage>
 #include <QLabel>
+#include <QIcon>
 
 // KDE includes
 
@@ -37,7 +38,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kglobal.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <knuminput.h>
 #include <kstandarddirs.h>
@@ -96,7 +96,7 @@ RainDropTool::RainDropTool(QObject* const parent)
 {
     setObjectName("raindrops");
     setToolName(i18n("Raindrops"));
-    setToolIcon(SmallIcon("raindrop"));
+    setToolIcon(QIcon::fromTheme("raindrop"));
 
     d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode);
     d->previewWidget->setWhatsThis(i18n("This is the preview of the Raindrop effect."

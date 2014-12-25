@@ -114,7 +114,7 @@ TextureTool::TextureTool(QObject* const parent)
 {
     setObjectName("texture");
     setToolName(i18n("Texture"));
-    setToolIcon(SmallIcon("texture"));
+    setToolIcon(QIcon::fromTheme("texture"));
 
     // -------------------------------------------------------------
 

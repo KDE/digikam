@@ -45,6 +45,7 @@
 #include <QPushButton>
 #include <QTimer>
 #include <QVBoxLayout>
+#include <QIcon>
 
 // KDE includes
 
@@ -53,7 +54,6 @@
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kseparator.h>
@@ -177,7 +177,7 @@ ResizeTool::ResizeTool(QObject* const parent)
 {
     setObjectName("resizeimage");
     setToolName(i18n("Resize Image"));
-    setToolIcon(SmallIcon("transform-scale"));
+    setToolIcon(QIcon::fromTheme("transform-scale"));
 
     d->previewWidget = new ImageGuideWidget(0, false, ImageGuideWidget::HVGuideMode, Qt::red, 1, false);
     setToolView(d->previewWidget);

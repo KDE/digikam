@@ -30,6 +30,7 @@
 #include <QGridLayout>
 #include <QImage>
 #include <QLabel>
+#include <QIcon>
 
 // KDE includes
 
@@ -37,7 +38,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kglobal.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
 
@@ -82,7 +82,7 @@ FilmGrainTool::FilmGrainTool(QObject* const parent)
 {
     setObjectName("filmgrain");
     setToolName(i18n("Film Grain"));
-    setToolIcon(SmallIcon("filmgrain"));
+    setToolIcon(QIcon::fromTheme("filmgrain"));
     setInitPreview(true);
 
     d->previewWidget = new ImageRegionWidget;

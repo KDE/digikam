@@ -33,6 +33,7 @@
 #include <QLabel>
 #include <QString>
 #include <QTextStream>
+#include <QIcon>
 
 // KDE includes
 
@@ -41,7 +42,6 @@
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -92,7 +92,7 @@ LocalContrastTool::LocalContrastTool(QObject* const parent)
 {
     setObjectName("localcontrast");
     setToolName(i18n("Local Contrast"));
-    setToolIcon(SmallIcon("tonemap"));
+    setToolIcon(QIcon::fromTheme("tonemap"));
 
     d->previewWidget = new ImageRegionWidget;
     setToolView(d->previewWidget);

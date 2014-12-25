@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QGridLayout>
+#include <QIcon>
 
 // KDE includes
 
@@ -34,7 +35,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kglobalsettings.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 
 // Libkdcraw includes
@@ -90,7 +90,7 @@ BWSepiaTool::BWSepiaTool(QObject* const parent)
 {
     setObjectName("convertbw");
     setToolName(i18n("Black and White"));
-    setToolIcon(SmallIcon("bwtonal"));
+    setToolIcon(QIcon::fromTheme("bwtonal"));
     setToolHelp("blackandwhitetool.anchor");
     setInitPreview(true);
 

@@ -34,6 +34,7 @@
 // Qt includes
 
 #include <QVBoxLayout>
+#include <QIcon>
 
 // KDE includes
 
@@ -44,8 +45,6 @@
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
-#include <QIcon>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -104,7 +103,7 @@ ChannelMixerTool::ChannelMixerTool(QObject* const parent)
 {
     setObjectName("channelmixer");
     setToolName(i18n("Channel Mixer"));
-    setToolIcon(SmallIcon("channelmixer"));
+    setToolIcon(QIcon::fromTheme("channelmixer"));
 
     // -------------------------------------------------------------
 

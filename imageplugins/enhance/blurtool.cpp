@@ -28,6 +28,7 @@
 
 #include <QGridLayout>
 #include <QLabel>
+#include <QIcon>
 
 // KDE includes
 
@@ -37,7 +38,6 @@
 #include <kconfiggroup.h>
 #include <kcursor.h>
 #include <kglobal.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 
 // Libkdcraw includes
@@ -85,7 +85,7 @@ BlurTool::BlurTool(QObject* const parent)
 {
     setObjectName("gaussianblur");
     setToolName(i18n("Blur"));
-    setToolIcon(SmallIcon("blurimage"));
+    setToolIcon(QIcon::fromTheme("blurimage"));
     setToolHelp("blursharpentool.anchor");
 
     d->gboxSettings  = new EditorToolSettings;

@@ -29,6 +29,7 @@
 #include <QGridLayout>
 #include <QImage>
 #include <QLabel>
+#include <QIcon>
 
 // KDE includes
 
@@ -37,7 +38,6 @@
 #include <kconfiggroup.h>
 #include <kcursor.h>
 #include <kglobal.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kseparator.h>
 #include <kstandarddirs.h>
@@ -112,7 +112,7 @@ ShearTool::ShearTool(QObject* const parent)
 {
     setObjectName("sheartool");
     setToolName(i18n("Shear Tool"));
-    setToolIcon(SmallIcon("shear"));
+    setToolIcon(QIcon::fromTheme("shear"));
 
     d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::HVGuideMode);
     d->previewWidget->setWhatsThis(i18n("This is the shear operation preview. "

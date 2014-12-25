@@ -27,12 +27,12 @@
 
 #include <QGridLayout>
 #include <QListWidget>
+#include <QIcon>
 
 // KDE includes
 
 #include <kapplication.h>
 #include <kconfiggroup.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -99,7 +99,7 @@ AutoCorrectionTool::AutoCorrectionTool(QObject* const parent)
     setObjectName("autocorrection");
     setToolName(i18n("Auto Correction"));
     setToolVersion(1);
-    setToolIcon(SmallIcon("autocorrection"));
+    setToolIcon(QIcon::fromTheme("autocorrection"));
     setToolHelp("autocolorcorrectiontool.anchor");
     setToolCategory(FilterAction::ReproducibleFilter);
 

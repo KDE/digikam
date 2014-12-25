@@ -31,6 +31,7 @@
 
 #include <QGridLayout>
 #include <QLabel>
+#include <QIcon>
 
 // KDE includes
 
@@ -85,7 +86,8 @@ SharpenTool::SharpenTool(QObject* const parent)
 {
     setObjectName("sharpen");
     setToolName(i18n("Sharpen"));
-    setToolIcon(SmallIcon("sharpenimage"));
+#pragma message("hardcoded size")
+    setToolIcon(QIcon::fromTheme("sharpenimage"));
     setToolHelp("blursharpentool.anchor");
 
     // -------------------------------------------------------------
