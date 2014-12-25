@@ -114,11 +114,19 @@ QString BqmKipiPlugin::outputSuffix() const
 bool BqmKipiPlugin::toolOperations()
 {
     plugin->startTask(inputUrl());
-    while(plugin->tempImg()==KUrl());            //This is important. It waits till the thread(of kipi plugin) processing the image has done its work.
-    setOutputUrl(plugin->tempImg());
-    setInputUrl(plugin->tempImg());              //This is done so that loadToDImg(which uses input url to load image) loads the image data of the processed image.
-    plugin->clearTempImg();
-    return(loadToDImg());                        //This is done because the next batch tool requries the image data of the processed image of previous batch tool.
+    while(plugin->status == KIPI::WAITING);                  //This is important. It waits till the thread(of kipi plugin) processing the image has done its work.
+    if(plugin->status == KIPI::SUCCESS)
+    {
+        setOutputUrl(plugin->tempImg());
+        setInputUrl(plugin->tempImg());              //This is done so that loadToDImg(which uses input url to load image) loads the image data of the processed image.
+        plugin->clearTempImg();
+        return(loadToDImg());                        //This is done because the next batch tool requries the image data of the processed image of previous batch tool.  
+    }
+    else
+    {
+        setErrorDescription(plugin->errorDescription());
+        return false; 
+    }
 }
 
 }  // namespace Digikam
