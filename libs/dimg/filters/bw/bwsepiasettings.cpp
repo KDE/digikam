@@ -32,11 +32,12 @@
 #include <QTextStream>
 #include <QCheckBox>
 #include <QStandardPaths>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
 #include <kurl.h>
-#include <kdialog.h>
 #include <klocalizedstring.h>
 #include <kapplication.h>
 #include <kfiledialog.h>
@@ -51,8 +52,7 @@
 #include <rexpanderbox.h>
 #include <rnuminput.h>
 #include <libkdcraw_version.h>
-#include <QApplication>
-#include <QStyle>
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -284,17 +284,17 @@ BWSepiaSettings::BWSepiaSettings(QWidget* const parent, DImg* const img)
                             "<p>Simulate black and white film exposure using a blue filter. "
                             "This accentuates haze and fog. Used for dye transfer and contrast effects.</p>"));
 
-    d->strengthInput = new RIntNumInput(vbox);
+    RHBox* const hbox1   = new RHBox(vbox);
+    QLabel* const label1 = new QLabel(i18n("Strength:"), hbox1);
+    label1->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
-#pragma message("PORT QT5")
-    //d->strengthInput->input()->setLabel(i18n("Strength:"), Qt::AlignLeft | Qt::AlignVCenter);
-
+    d->strengthInput     = new RIntNumInput(hbox1);
     d->strengthInput->setRange(1, 5, 1);
     d->strengthInput->setDefaultValue(1);
     d->strengthInput->setWhatsThis(i18n("Here, set the strength adjustment of the lens filter."));
 
     vlay->addWidget(d->bwFilters);
-    vlay->addWidget(d->strengthInput);
+    vlay->addWidget(hbox1);
     vlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     vlay->setMargin(0);
 
@@ -357,18 +357,18 @@ BWSepiaSettings::BWSepiaSettings(QWidget* const parent, DImg* const img)
 
     // -------------------------------------------------------------
 
-    d->cInput = new RIntNumInput(lumBox);
+    RHBox* const hbox2   = new RHBox(lumBox);
+    QLabel* const label2 = new QLabel(i18n("Contrast:"), hbox2);
+    label2->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
-#pragma message("PORT QT5")
-//    d->cInput->input()->setLabel(i18n("Contrast:"), Qt::AlignLeft | Qt::AlignVCenter);
-
+    d->cInput = new RIntNumInput(hbox2);
     d->cInput->setRange(-100, 100, 1);
     d->cInput->setDefaultValue(0);
     d->cInput->setWhatsThis(i18n("Set here the contrast adjustment of the image."));
 
     QGridLayout* gridTab2 = new QGridLayout(lumBox);
     gridTab2->addWidget(d->curvesBox, 0, 0, 1, 1);
-    gridTab2->addWidget(d->cInput,    1, 0, 1, 1);
+    gridTab2->addWidget(hbox2,        1, 0, 1, 1);
     gridTab2->setRowStretch(2, 10);
     gridTab2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     gridTab2->setSpacing(0);
