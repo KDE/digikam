@@ -86,7 +86,8 @@ HSLTool::HSLTool(QObject* const parent)
 {
     setObjectName("adjusthsl");
     setToolName(i18n("Hue / Saturation / Lightness"));
-    setToolIcon(SmallIcon("adjusthsl"));
+#pragma "port, hardcoded size"
+    setToolIcon(QIcon::fromTheme("adjusthsl").pixmap(16));
     setToolHelp("hsladjusttool.anchor");
     setInitPreview(true);
 

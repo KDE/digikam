@@ -34,6 +34,7 @@
 #include <klibloader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
+#include <kshortcut.h>
 
 // Local includes
 

@@ -229,7 +229,8 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
 
     d->minInput = new RIntNumInput();
     d->minInput->setRange(0, d->histoSegments, 1);
-    d->minInput->setSliderEnabled(false);
+#pragma "port"
+//    d->minInput->setSliderEnabled(false);
     d->minInput->setDefaultValue(0);
     d->minInput->setWhatsThis( i18n("Select the minimal input intensity value of the histogram here."));
     d->minInput->setToolTip( i18n( "Minimal input intensity." ) );
@@ -243,21 +244,24 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
 
     d->maxInput = new RIntNumInput();
     d->maxInput->setRange(0, d->histoSegments, 1);
-    d->maxInput->setSliderEnabled(false);
+#pragma "port"
+//    d->maxInput->setSliderEnabled(false);
     d->maxInput->setDefaultValue(d->histoSegments);
     d->maxInput->setToolTip( i18n( "Maximal input intensity." ) );
     d->maxInput->setWhatsThis( i18n("Select the maximal input intensity value of the histogram here."));
 
     d->minOutput = new RIntNumInput();
     d->minOutput->setRange(0, d->histoSegments, 1);
-    d->minOutput->setSliderEnabled(false);
+#pragma "port"
+//    d->minOutput->setSliderEnabled(false);
     d->minOutput->setDefaultValue(0);
     d->minOutput->setToolTip( i18n( "Minimal output intensity." ) );
     d->minOutput->setWhatsThis( i18n("Select the minimal output intensity value of the histogram here."));
 
     d->maxOutput = new RIntNumInput();
     d->maxOutput->setRange(0, d->histoSegments, 1);
-    d->maxOutput->setSliderEnabled(false);
+#pragma "port"
+//    d->maxOutput->setSliderEnabled(false);
     d->maxOutput->setDefaultValue(d->histoSegments);
     d->maxOutput->setToolTip( i18n( "Maximal output intensity." ) );
     d->maxOutput->setWhatsThis( i18n("Select the maximal output intensity value of the histogram here."));
@@ -902,7 +906,8 @@ void AdjustLevelsTool::slotLoadSettings()
 {
     KUrl loadLevelsFile;
 
-    loadLevelsFile = KFileDialog::getOpenUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+#pragma "hardcoded to accept only local files"
+    loadLevelsFile = KFileDialog::getOpenUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                      QString( "*" ), qApp->activeWindow(),
                      QString( i18n("Select Gimp Levels File to Load")) );
 
