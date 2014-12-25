@@ -34,13 +34,13 @@
 #include <QSet>
 #include <QString>
 #include <QTreeWidget>
+#include <QMenu>
 
 // KDE includes
 
 #include <kapplication.h>
 #include <klocalizedstring.h>
 #include <kurl.h>
-#include <QMenu>
 
 // Local includes
 

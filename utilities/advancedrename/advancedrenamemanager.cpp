@@ -33,10 +33,9 @@
 #include <QMap>
 #include <QFileInfo>
 
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "advancedrenamewidget.h"
 #include "parsesettings.h"
 #include "parser.h"

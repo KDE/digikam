@@ -44,7 +44,6 @@ class QString;
 
 class KAction;
 class KActionCollection;
-class QMenu;
 
 namespace Digikam
 {
