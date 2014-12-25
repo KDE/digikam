@@ -29,6 +29,8 @@
 #include <QLayout>
 #include <QScrollBar>
 #include <QTimer>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 

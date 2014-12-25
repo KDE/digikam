@@ -35,10 +35,11 @@
 #include <QString>
 #include <QTreeWidget>
 #include <QMenu>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
-#include <kapplication.h>
 #include <klocalizedstring.h>
 #include <kurl.h>
 
