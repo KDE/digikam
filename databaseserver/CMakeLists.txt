@@ -4,26 +4,24 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-SET_DEBUG_AREA_CODE(${AREA_CODE_DATABASESERVER})
-
 set(digikamdatabaseserver_SRCS ${lib..._SRCS}
                                databaseserver.cpp
                                pollthread.cpp
                                main.cpp
-   )
+)
 
-QT4_ADD_DBUS_ADAPTOR(digikamdatabaseserver_SRCS org.kde.digikam.DatabaseServer.xml
+qt5_add_dbus_adaptor(digikamdatabaseserver_SRCS org.kde.digikam.DatabaseServer.xml
                      databaseserver.h Digikam::DatabaseServer)
 
-KDE4_ADD_EXECUTABLE(digikamdatabaseserver ${digikamdatabaseserver_SRCS})
+add_executable(digikamdatabaseserver ${digikamdatabaseserver_SRCS})
 
 target_link_libraries(digikamdatabaseserver
                       digikamdatabase
                       digikamcore
 
-                      ${KDE4_KDECORE_LIBS}
-                      ${QT_QTSQL_LIBRARY}
-                     )
+                      Qt5::Sql
+                      KF5::Core
+)
 
 if(NOT WIN32)
     # To link under Solaris (see bug #274484)
