@@ -362,7 +362,8 @@ void RestorationTool::setFinalImage()
 
 void RestorationTool::slotLoadSettings()
 {
-    KUrl loadRestorationFile = KFileDialog::getOpenUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+#pragma message("hardcoded fromLocalFile")
+    QUrl loadRestorationFile = KFileDialog::getOpenUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                QString( "*" ), qApp->activeWindow(),
                                QString( i18n("Photograph Restoration Settings File to Load")) );
 
@@ -400,7 +401,8 @@ void RestorationTool::slotLoadSettings()
 
 void RestorationTool::slotSaveAsSettings()
 {
-    KUrl saveRestorationFile = KFileDialog::getSaveUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+#pragma message("hardcoded fromLocalFile")
+    QUrl saveRestorationFile = KFileDialog::getSaveUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                QString( "*" ), qApp->activeWindow(),
                                QString( i18n("Photograph Restoration Settings File to Save")) );
 

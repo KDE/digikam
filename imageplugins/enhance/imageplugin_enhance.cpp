@@ -23,6 +23,9 @@
 
 #include "imageplugin_enhance.h"
 
+// Qt includes
+#include <QKeySequence>
+
 // KDE includes
 
 #include <kpassivepopup.h>
@@ -152,7 +155,7 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* const parent, const QVariantLi
 
     d->inPaintingAction = new KAction(QIcon::fromTheme("inpainting"), i18n("In-painting..."), this);
     actionCollection()->addAction("imageplugin_inpainting", d->inPaintingAction);
-    d->inPaintingAction->setShortcut(KShortcut(Qt::CTRL+Qt::Key_E));
+    d->inPaintingAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_E));
     d->inPaintingAction->setWhatsThis( i18n( "This filter can be used to in-paint a part in a photo. "
                                        "To use this option, select a region to in-paint.") );
     connect(d->inPaintingAction, SIGNAL(triggered(bool)),
