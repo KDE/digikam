@@ -41,7 +41,6 @@
 #include <kapplication.h>
 #include <kcursor.h>
 #include <kglobal.h>
-#include <kiconloader.h>
 
 // Local includes
 
@@ -104,8 +103,8 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* const parent, Sideba
     d->desceditTab        = new ImageDescEditTab(parent);
     d->versionsHistoryTab = new ImagePropertiesVersionsTab(parent);
 
-    appendTab(d->desceditTab,        SmallIcon("imagecomment"), i18n("Captions/Tags"));
-    appendTab(d->versionsHistoryTab, SmallIcon("view-catalog"), i18n("Versioning"));
+    appendTab(d->desceditTab,        QIcon::fromTheme("imagecomment"), i18n("Captions/Tags"));
+    appendTab(d->versionsHistoryTab, QIcon::fromTheme("view-catalog"), i18n("Versioning"));
 
     // ----------------------------------------------------------
 

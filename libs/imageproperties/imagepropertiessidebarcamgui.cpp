@@ -36,7 +36,6 @@
 #include <kapplication.h>
 #include <kcursor.h>
 #include <kglobal.h>
-#include <kiconloader.h>
 
 // Local includes
 
@@ -95,8 +94,8 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget* const parent
     d->cameraItemTab = new CameraItemPropertiesTab(parent);
     d->metadataTab   = new ImagePropertiesMetaDataTab(parent);
 
-    appendTab(d->cameraItemTab, SmallIcon("document-properties"),   i18n("Properties"));
-    appendTab(d->metadataTab,   SmallIcon("exifinfo"),              i18n("Metadata")); // krazy:exclude=iconnames
+    appendTab(d->cameraItemTab, QIcon::fromTheme("document-properties"),   i18n("Properties"));
+    appendTab(d->metadataTab,   QIcon::fromTheme("exifinfo"),              i18n("Metadata")); // krazy:exclude=iconnames
 
 #ifdef HAVE_KGEOMAP
     d->gpsTab        = new ImagePropertiesGPSTab(parent);

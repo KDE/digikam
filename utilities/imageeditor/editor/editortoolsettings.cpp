@@ -43,7 +43,6 @@
 // KDE includes
 
 #include <kcolorbutton.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
 #include <kstandardguiitem.h>
@@ -416,9 +415,10 @@ void EditorToolSettings::setHistogramType(HistogramBoxType type)
     d->histogramBox->setHistogramType(type);
 }
 
-void EditorToolSettings::setToolIcon(const QPixmap& pixmap)
+void EditorToolSettings::setToolIcon(const QIcon& icon)
 {
-    d->toolIcon->setPixmap(pixmap);
+#pragma message("hardcoded icon size")
+    d->toolIcon->setPixmap(icon.pixmap(16));
 }
 
 void EditorToolSettings::setToolName(const QString& name)

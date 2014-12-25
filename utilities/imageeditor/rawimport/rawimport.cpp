@@ -26,13 +26,13 @@
 
 #include <QString>
 #include <QLayout>
+#include <QIcon>
 
 // KDE includes
 
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
 
@@ -74,7 +74,7 @@ RawImport::RawImport(const KUrl& url, QObject* const parent)
     d->settingsBox   = new RawSettingsBox(url, 0);
 
     setToolName(i18n("Raw Import"));
-    setToolIcon(SmallIcon("kdcraw"));
+    setToolIcon(QIcon::fromTheme("kdcraw"));
     setProgressMessage(i18n("Post Processing"));
     setToolView(d->previewWidget);
     setToolSettings(d->settingsBox);

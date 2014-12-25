@@ -99,7 +99,8 @@ void EditorToolIface::loadTool(EditorTool* const tool)
     d->tool = tool;
     d->editor->editorStackView()->setToolView(d->tool->toolView());
     d->editor->editorStackView()->setViewMode(EditorStackView::ToolViewMode);
-    d->editor->rightSideBar()->appendTab(d->tool->toolSettings(), d->tool->toolIcon(), d->tool->toolName());
+#pragma message("port: hardcoded pixmap size... ")
+    d->editor->rightSideBar()->appendTab(d->tool->toolSettings(), d->tool->toolIcon().pixmap(16), d->tool->toolName());
     d->editor->rightSideBar()->setActiveTab(d->tool->toolSettings());
     d->editor->toggleActions(false);
     d->editor->toggleToolActions(d->tool);

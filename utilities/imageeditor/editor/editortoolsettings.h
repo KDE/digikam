@@ -41,6 +41,7 @@
 class QPushButton;
 class QPixmap;
 class QString;
+class QIcon;
 
 namespace Digikam
 {
@@ -79,7 +80,7 @@ public:
     void setButtons(Buttons buttonMask);
     void setTools(Tools toolMask);
     void setHistogramType(HistogramBoxType type);
-    void setToolIcon(const QPixmap& pixmap);
+    void setToolIcon(const QIcon& pixmap);
     void setToolName(const QString& name);
 
     int marginHint();

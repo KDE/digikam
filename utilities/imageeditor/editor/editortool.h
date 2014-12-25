@@ -65,7 +65,7 @@ public:
     QString                toolHelp()     const;
     QString                toolName()     const;
     int                    toolVersion()  const;
-    QPixmap                toolIcon()     const;
+    QIcon                  toolIcon()     const;
     QWidget*               toolView()     const;
     EditorToolSettings*    toolSettings() const;
     FilterAction::Category toolCategory() const;
@@ -93,7 +93,7 @@ protected:
     void setToolHelp(const QString& anchor);
     void setToolName(const QString& name);
     void setToolVersion(const int version);
-    void setToolIcon(const QPixmap& icon);
+    void setToolIcon(const QIcon& icon);
     void setPreviewModeMask(int mask);
     void setToolCategory(const FilterAction::Category category);
 

@@ -291,7 +291,7 @@ void ImportUI::setupUserArea()
                        QString("ScriptingBox"), true);
     d->advBox->addStretch();
 
-    d->rightSideBar->appendTab(d->advBox, SmallIcon("configure"), i18n("Settings"));
+    d->rightSideBar->appendTab(d->advBox, QIcon::fromTheme("configure"), i18n("Settings"));
     d->rightSideBar->loadState();
 
     // -------------------------------------------------------------------------

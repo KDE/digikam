@@ -37,7 +37,6 @@
 #include <klocalizedstring.h>
 #include <kconfig.h>
 #include <kcursor.h>
-#include <kiconloader.h>
 #include <kglobalsettings.h>
 
 // Libkdcraw includes
@@ -84,9 +83,9 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget* const parent,
     if (QApplication::applicationName() != QString("digikam"))
         m_propertiesTab->setVideoInfoDisable(true);
 
-    appendTab(m_propertiesTab, SmallIcon("document-properties"),   i18n("Properties"));
-    appendTab(m_metadataTab,   SmallIcon("exifinfo"),              i18n("Metadata")); // krazy:exclude=iconnames
-    appendTab(m_colorTab,      SmallIcon("format-fill-color"),     i18n("Colors"));
+    appendTab(m_propertiesTab, QIcon::fromTheme("document-properties"),   i18n("Properties"));
+    appendTab(m_metadataTab,   QIcon::fromTheme("exifinfo"),              i18n("Metadata")); // krazy:exclude=iconnames
+    appendTab(m_colorTab,      QIcon::fromTheme("format-fill-color"),     i18n("Colors"));
 
 #ifdef HAVE_KGEOMAP
     m_gpsTab = new ImagePropertiesGPSTab(parent);

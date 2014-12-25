@@ -34,6 +34,7 @@
 #include <QPushButton>
 #include <QSpinBox>
 #include <QVBoxLayout>
+#include <QPushButton>
 
 // KDE includes
 
@@ -43,9 +44,7 @@
 #include <kconfiggroup.h>
 #include <kcursor.h>
 #include <kglobal.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <QPushButton>
 #include <kseparator.h>
 #include <kstandarddirs.h>
 
@@ -110,7 +109,7 @@ PerspectiveTool::PerspectiveTool(QObject* const parent)
 {
     setObjectName("perspective");
     setToolName(i18n("Perspective"));
-    setToolIcon(SmallIcon("perspective"));
+    setToolIcon(QIcon::fromTheme("perspective"));
 
     // -------------------------------------------------------------
 

@@ -230,7 +230,7 @@ void Sidebar::restore(const QList<QWidget*> thirdWidgetsToRestore, const QList<i
     }
 }
 
-void Sidebar::appendTab(QWidget* const w, const QPixmap& pic, const QString& title)
+void Sidebar::appendTab(QWidget* const w, const QIcon& pic, const QString& title)
 {
     // Store state (but not on initialization)
     if (isVisible())
@@ -240,7 +240,8 @@ void Sidebar::appendTab(QWidget* const w, const QPixmap& pic, const QString& tit
 
     // Add tab
     w->setParent(d->stack);
-    KMultiTabBar::appendTab(pic, d->tabs, title);
+#pragma message("port to use QTabBar? hardcoded icon size")
+    KMultiTabBar::appendTab(pic.pixmap(16), d->tabs, title);
     d->stack->insertWidget(d->tabs, w);
 
     tab(d->tabs)->setAcceptDrops(true);

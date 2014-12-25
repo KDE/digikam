@@ -40,6 +40,7 @@
 #include <QTimer>
 #include <QToolButton>
 #include <QVBoxLayout>
+#include <QIcon>
 
 // KDE includes
 
@@ -51,8 +52,6 @@
 #include <kcursor.h>
 #include <kfontchooser.h>
 #include <kglobal.h>
-#include <QIcon>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
 #include <ktextedit.h>
@@ -131,7 +130,7 @@ InsertTextTool::InsertTextTool(QObject* const parent)
 {
     setObjectName("inserttext");
     setToolName(i18n("Insert Text"));
-    setToolIcon(SmallIcon("insert-text"));
+    setToolIcon(QIcon::fromTheme("insert-text"));
 
     // -------------------------------------------------------------
 

@@ -369,7 +369,7 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
 
     // Tags Filter sidebar tab contents.
     d->filterWidget   = new FilterSideBarWidget(d->rightSideBar, d->modelCollection->getTagFilterModel());
-    d->rightSideBar->appendTab(d->filterWidget, SmallIcon("view-filter"), i18n("Filters"));
+    d->rightSideBar->appendTab(d->filterWidget, QIcon::fromTheme("view-filter"), i18n("Filters"));
 
     // Versions sidebar overlays
     d->rightSideBar->getFiltersHistoryTab()->addOpenAlbumAction(d->iconView->imageModel());

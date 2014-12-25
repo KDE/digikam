@@ -27,6 +27,7 @@
 
 #include <QWidget>
 #include <QTimer>
+#include <QIcon>
 
 // KDE includes
 
@@ -69,7 +70,7 @@ public:
     int                    version;
 
     QWidget*               view;
-    QPixmap                icon;
+    QIcon                  icon;
     QTimer*                timer;
 
     EditorToolSettings*    settings;
@@ -103,12 +104,12 @@ void EditorTool::setInitPreview(bool b)
     d->initPreview = b;
 }
 
-QPixmap EditorTool::toolIcon() const
+QIcon EditorTool::toolIcon() const
 {
     return d->icon;
 }
 
-void EditorTool::setToolIcon(const QPixmap& icon)
+void EditorTool::setToolIcon(const QIcon& icon)
 {
     d->icon = icon;
 }

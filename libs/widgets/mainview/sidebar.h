@@ -87,7 +87,7 @@ public:
      * @param pic icon which is shown in this tab
      * @param title text which is shown it this tab
      */
-    void appendTab(QWidget* const w, const QPixmap& pic, const QString& title);
+    void appendTab(QWidget* const w, const QIcon& pic, const QString& title);
 
     /**
      * Deletes a tab from the tabbar
