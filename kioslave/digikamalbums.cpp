@@ -38,7 +38,6 @@
 
 // KDE includes
 
-#include <kcomponentdata.h>
 #include <kglobal.h>
 #include <kio/deletejob.h>
 #include <klocalizedstring.h>
@@ -73,13 +72,13 @@ kio_digikamalbums::~kio_digikamalbums()
 
 void kio_digikamalbums::special(const QByteArray& data)
 {
-    KUrl        kurl;
+    QUrl        url;
     QDataStream ds(data);
-    ds >> kurl;
+    ds >> url;
 
-    qCDebug(DIGIKAM_KIOSLAVES_LOG) << "kio_digikamalbums::special " << kurl;
+    qCDebug(DIGIKAM_KIOSLAVES_LOG) << "kio_digikamalbums::special " << url;
 
-    Digikam::DatabaseParameters dbParameters(kurl);
+    Digikam::DatabaseParameters dbParameters(url);
     QDBusConnection::sessionBus().registerService(QString("org.kde.digikam.KIO-digikamtags-%1").arg(QString::number(QCoreApplication::instance()->applicationPid())));
     Digikam::DatabaseAccess::setParameters(dbParameters);
 
@@ -104,7 +103,7 @@ void kio_digikamalbums::special(const QByteArray& data)
         lister.setListOnlyAvailable(listOnlyAvailableImages);
         // send data every 200 images to be more responsive
         Digikam::ImageListerSlaveBaseGrowingPartsSendingReceiver receiver(this, 200, 2000, 100);
-        lister.list(&receiver, kurl);
+        lister.list(&receiver, KUrl(url));
         receiver.sendData();
     }
 
@@ -113,7 +112,7 @@ void kio_digikamalbums::special(const QByteArray& data)
 
 // ------------------------ Implementation of KIO::SlaveBase ------------------------ //
 
-void kio_digikamalbums::get(const KUrl& url)
+void kio_digikamalbums::get(const QUrl& url)
 {
     qCDebug(DIGIKAM_KIOSLAVES_LOG) << " : " << url;
 
@@ -121,7 +120,7 @@ void kio_digikamalbums::get(const KUrl& url)
 
     Digikam::DatabaseUrl dbUrl(url);
 
-    KIO::TransferJob* job = KIO::get(dbUrl.fileUrl(), KIO::NoReload, KIO::HideProgressInfo);
+    KIO::TransferJob* const job = KIO::get(dbUrl.fileUrl(), KIO::NoReload, KIO::HideProgressInfo);
     connectTransferJob(job);
 
     if (m_eventLoop->exec() != 0)
@@ -132,7 +131,7 @@ void kio_digikamalbums::get(const KUrl& url)
     finished();
 }
 
-void kio_digikamalbums::put(const KUrl& url, int permissions, KIO::JobFlags flags)
+void kio_digikamalbums::put(const QUrl& url, int permissions, KIO::JobFlags flags)
 {
     qCDebug(DIGIKAM_KIOSLAVES_LOG) << " : " << url.url();
 
@@ -145,11 +144,11 @@ void kio_digikamalbums::put(const KUrl& url, int permissions, KIO::JobFlags flag
 
     if (albumID == -1)
     {
-        error(KIO::ERR_UNKNOWN, i18n("Destination album %1 not found in database.", url.directory()));
+        error(KIO::ERR_UNKNOWN, i18n("Destination album %1 not found in database.", url.adjusted(QUrl::RemoveFilename).path()));
         return;
     }
 
-    KIO::TransferJob* job = KIO::put(dbUrl.fileUrl(), permissions, flags | KIO::HideProgressInfo);
+    KIO::TransferJob* const job = KIO::put(dbUrl.fileUrl(), permissions, flags | KIO::HideProgressInfo);
     connectTransferJob(job);
 
     if (m_eventLoop->exec() != 0)
@@ -163,7 +162,7 @@ void kio_digikamalbums::put(const KUrl& url, int permissions, KIO::JobFlags flag
     finished();
 }
 
-void kio_digikamalbums::copy(const KUrl& src, const KUrl& dst, int mode, KIO::JobFlags flags)
+void kio_digikamalbums::copy(const QUrl& src, const QUrl& dst, int mode, KIO::JobFlags flags)
 {
     qCDebug(DIGIKAM_KIOSLAVES_LOG) << "Src: " << src.path() << ", Dst: " << dst.path();
 
@@ -222,7 +221,7 @@ void kio_digikamalbums::copy(const KUrl& src, const KUrl& dst, int mode, KIO::Jo
     }
 */
 
-    KIO::Job* job = KIO::file_copy(dbUrlSrc.fileUrl(), dbUrlDst.fileUrl(), mode, flags | KIO::HideProgressInfo );
+    KIO::Job* const job = KIO::file_copy(dbUrlSrc.fileUrl(), dbUrlDst.fileUrl(), mode, flags | KIO::HideProgressInfo );
     connectJob(job);
 
     if (m_eventLoop->exec() != 0)
@@ -236,7 +235,7 @@ void kio_digikamalbums::copy(const KUrl& src, const KUrl& dst, int mode, KIO::Jo
     finished();
 }
 
-void kio_digikamalbums::rename(const KUrl& src, const KUrl& dst, KIO::JobFlags flags)
+void kio_digikamalbums::rename(const QUrl& src, const QUrl& dst, KIO::JobFlags flags)
 {
     qCDebug(DIGIKAM_KIOSLAVES_LOG) << "Src: " << src << ", Dst: " << dst;
 
@@ -281,7 +280,7 @@ void kio_digikamalbums::rename(const KUrl& src, const KUrl& dst, KIO::JobFlags f
 
         if (srcAlbumID == -1)
         {
-            error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database", src.directory()));
+            error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database", src.adjusted(QUrl::RemoveFilename).path()));
             return;
         }
 
@@ -289,7 +288,7 @@ void kio_digikamalbums::rename(const KUrl& src, const KUrl& dst, KIO::JobFlags f
 
         if (dstAlbumID == -1)
         {
-            error(KIO::ERR_UNKNOWN, i18n("Destination album %1 not found in database.", dst.directory()));
+            error(KIO::ERR_UNKNOWN, i18n("Destination album %1 not found in database.", dst.adjusted(QUrl::RemoveFilename).path()));
             return;
         }
     }
@@ -319,17 +318,17 @@ void kio_digikamalbums::rename(const KUrl& src, const KUrl& dst, KIO::JobFlags f
     finished();
 }
 
-void kio_digikamalbums::mkdir(const KUrl& url, int permissions)
+void kio_digikamalbums::mkdir(const QUrl& url, int permissions)
 {
     qCDebug(DIGIKAM_KIOSLAVES_LOG) << " : " << url.url();
 
     Digikam::DatabaseUrl dbUrl(url);
     // DatabaseUrl has a strong opinion there should be a slash, KDE does not
-    dbUrl.adjustPath(KUrl::AddTrailingSlash);
+    dbUrl.setPath(dbUrl.path() + '/');
     Digikam::DatabaseAccess::setParameters((Digikam::DatabaseParameters)dbUrl);
     Digikam::DatabaseAccess access;
 
-    KIO::SimpleJob* job = KIO::mkdir(dbUrl.fileUrl(), permissions);
+    KIO::SimpleJob* const job = KIO::mkdir(dbUrl.fileUrl(), permissions);
     connectSimpleJob(job);
 
     if (m_eventLoop->exec() != 0)
@@ -344,13 +343,13 @@ void kio_digikamalbums::mkdir(const KUrl& url, int permissions)
     finished();
 }
 
-void kio_digikamalbums::chmod(const KUrl& url, int permissions)
+void kio_digikamalbums::chmod(const QUrl& url, int permissions)
 {
     qCDebug(DIGIKAM_KIOSLAVES_LOG) << " : " << url.url();
 
     Digikam::DatabaseUrl dbUrl(url);
 
-    KIO::SimpleJob* job = KIO::chmod(dbUrl.fileUrl(), permissions);
+    KIO::SimpleJob* const job = KIO::chmod(dbUrl.fileUrl(), permissions);
     connectSimpleJob(job);
 
     if (m_eventLoop->exec() != 0)
@@ -361,7 +360,7 @@ void kio_digikamalbums::chmod(const KUrl& url, int permissions)
     finished();
 }
 
-void kio_digikamalbums::del(const KUrl& url, bool isFile)
+void kio_digikamalbums::del(const QUrl& url, bool isFile)
 {
     qCDebug(DIGIKAM_KIOSLAVES_LOG) << " : " << url.url();
 
@@ -385,7 +384,7 @@ void kio_digikamalbums::del(const KUrl& url, bool isFile)
 
         if (albumID == -1)
         {
-            error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database", url.directory()));
+            error(KIO::ERR_UNKNOWN, i18n("Source album %1 not found in database", url.adjusted(QUrl::RemoveFilename).path()));
             return;
         }
     }
@@ -403,12 +402,12 @@ void kio_digikamalbums::del(const KUrl& url, bool isFile)
 
     if (isFile)
     {
-        KIO::DeleteJob* job = KIO::del(dbUrl.fileUrl(), KIO::HideProgressInfo);
+        KIO::DeleteJob* const job = KIO::del(dbUrl.fileUrl(), KIO::HideProgressInfo);
         connectJob(job);
     }
     else
     {
-        KIO::SimpleJob* job = KIO::rmdir(dbUrl.fileUrl());
+        KIO::SimpleJob* const job = KIO::rmdir(dbUrl.fileUrl());
         connectSimpleJob(job);
     }
 
@@ -435,11 +434,11 @@ void kio_digikamalbums::del(const KUrl& url, bool isFile)
     finished();
 }
 
-void kio_digikamalbums::stat(const KUrl& url)
+void kio_digikamalbums::stat(const QUrl& url)
 {
     Digikam::DatabaseUrl dbUrl(url);
 
-    KIO::SimpleJob* job = KIO::stat(dbUrl.fileUrl(), KIO::HideProgressInfo);
+    KIO::SimpleJob* const job = KIO::stat(dbUrl.fileUrl(), KIO::HideProgressInfo);
     connectSimpleJob(job);
 
     if (m_eventLoop->exec() != 0)
@@ -450,7 +449,7 @@ void kio_digikamalbums::stat(const KUrl& url)
     finished();
 }
 
-void kio_digikamalbums::listDir(const KUrl& url)
+void kio_digikamalbums::listDir(const QUrl& url)
 {
     qCDebug(DIGIKAM_KIOSLAVES_LOG) << " : " << url.path();
 
@@ -460,7 +459,7 @@ void kio_digikamalbums::listDir(const KUrl& url)
     //createDigikamPropsUDSEntry(entry);
     //listEntry(entry, false);
 
-    KIO::ListJob* job = KIO::listDir(dbUrl.fileUrl(), KIO::HideProgressInfo);
+    KIO::ListJob* const job = KIO::listDir(dbUrl.fileUrl(), KIO::HideProgressInfo);
     connectListJob(job);
 
     if (m_eventLoop->exec() != 0)
@@ -519,8 +518,8 @@ void kio_digikamalbums::connectSimpleJob(KIO::SimpleJob* job)
 {
     connectJob(job);
 
-    connect( job, SIGNAL(redirection(KIO::Job*,KUrl)),
-             this, SLOT(slotRedirection(KIO::Job*,KUrl)) );
+    connect( job, SIGNAL(redirection(KIO::Job*,QUrl)),
+             this, SLOT(slotRedirection(KIO::Job*,QUrl)) );
 }
 
 void kio_digikamalbums::connectListJob(KIO::ListJob* job)
@@ -557,7 +556,7 @@ void kio_digikamalbums::slotResult(KJob* job)
     }
     else
     {
-        KIO::StatJob* stat_job = qobject_cast<KIO::StatJob*>(job);
+        KIO::StatJob* const stat_job = qobject_cast<KIO::StatJob*>(job);
 
         if ( stat_job!=0L )
         {
@@ -596,7 +595,7 @@ void kio_digikamalbums::slotSpeed(KJob* /*job*/, unsigned long bytesPerSecond)
     speed(bytesPerSecond);
 }
 
-void kio_digikamalbums::slotRedirection(KIO::Job* job, const KUrl& url)
+void kio_digikamalbums::slotRedirection(KIO::Job* job, const QUrl& url)
 {
     redirection(url);
 
@@ -652,12 +651,12 @@ extern "C"
 {
     KDE_EXPORT int kdemain(int argc, char** argv)
     {
-        // Needed to load SQL driver plugins
-        QCoreApplication app(argc, argv);
-
 #pragma message("PORT QT5")
 //        KLocale::setMainCatalog("digikam");
-        KComponentData componentData( "kio_digikamalbums" );
+
+        QCoreApplication app(argc, argv);
+        app.setApplicationName(QStringLiteral("kio_digikamalbums"));
+
         KLocale::global();
 
         qCDebug(DIGIKAM_KIOSLAVES_LOG) << "*** kio_digikamalbums started ***";
