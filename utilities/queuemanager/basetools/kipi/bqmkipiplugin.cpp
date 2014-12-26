@@ -119,11 +119,12 @@ bool BqmKipiPlugin::toolOperations()
     {
         setOutputUrl(plugin->tempImg());
         setInputUrl(plugin->tempImg());              //This is done so that loadToDImg(which uses input url to load image) loads the image data of the processed image.
-        plugin->clearTempImg();
+        plugin->reset();
         return(loadToDImg());                        //This is done because the next batch tool requries the image data of the processed image of previous batch tool.  
     }
     else
     {
+        plugin->reset();
         setErrorDescription(plugin->errorDescription());
         return false; 
     }
