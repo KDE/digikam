@@ -33,20 +33,18 @@
 #include <QLabel>
 #include <QRadioButton>
 #include <QVBoxLayout>
+#include <QApplication>
+#include <QStyle>
+#include <QComboBox>
 
 // KDE includes
 
-#include <kapplication.h>
-#include <kcombobox.h>
-#include "digikam_debug.h"
-#include <kdialog.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "thumbnailsize.h"
 #include "applicationsettings.h"
 #include "dfontselect.h"
@@ -117,8 +115,8 @@ public:
     QCheckBox*          showFolderTreeViewItemsCount;
     QCheckBox*          largeThumbsBox;
 
-    KComboBox*          iconTreeThumbSize;
-    KComboBox*          leftClickActionComboBox;
+    QComboBox*          iconTreeThumbSize;
+    QComboBox*          leftClickActionComboBox;
 
     DFontSelect*        iconViewFontSelect;
     DFontSelect*        treeViewFontSelect;
@@ -190,7 +188,7 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     d->iconShowCoordinatesBox->setWhatsThis(i18n("Set this option to indicate if image has geolocation information."));
 
     QLabel* leftClickLabel     = new QLabel(i18n("Thumbnail click action:"), iconViewGroup);
-    d->leftClickActionComboBox = new KComboBox(iconViewGroup);
+    d->leftClickActionComboBox = new QComboBox(iconViewGroup);
     d->leftClickActionComboBox->addItem(i18n("Show embedded view"), ApplicationSettings::ShowPreview);
     d->leftClickActionComboBox->addItem(i18n("Start image editor"), ApplicationSettings::StartEditor);
     d->leftClickActionComboBox->setToolTip(i18n("Choose what should happen when you click on a thumbnail."));
@@ -234,7 +232,7 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     QGridLayout* const grid2         = new QGridLayout(folderViewGroup);
 
     d->iconTreeThumbLabel = new QLabel(i18n("Tree View thumbnail size:"), folderViewGroup);
-    d->iconTreeThumbSize  = new KComboBox(folderViewGroup);
+    d->iconTreeThumbSize  = new QComboBox(folderViewGroup);
     d->iconTreeThumbSize->addItem(QString("16"));
     d->iconTreeThumbSize->addItem(QString("22"));
     d->iconTreeThumbSize->addItem(QString("32"));

@@ -37,10 +37,12 @@
 #include <QTreeWidgetItemIterator>
 #include <QVBoxLayout>
 #include <QListWidget>
+#include <QApplication>
+#include <QStyle>
+#include <QComboBox>
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kcursor.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
@@ -51,8 +53,6 @@
 #include <ktabwidget.h>
 #include <kurllabel.h>
 #include <kconfig.h>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 
@@ -235,7 +235,7 @@ public:
     QCheckBox*           previewItemsWhileDownload;
     QCheckBox*           previewShowIcons;
 
-    KComboBox*           leftClickActionComboBox;
+    QComboBox*           leftClickActionComboBox;
 
     DFontSelect*         iconViewFontSelect;
 
@@ -456,7 +456,7 @@ SetupCamera::SetupCamera(QWidget* const parent)
                                               "the image thumbnail for image rotation."));
 
     QLabel* const leftClickLabel = new QLabel(i18n("Thumbnail click action:"), iconViewGroup);
-    d->leftClickActionComboBox   = new KComboBox(iconViewGroup);
+    d->leftClickActionComboBox   = new QComboBox(iconViewGroup);
     d->leftClickActionComboBox->addItem(i18n("Show embedded preview"), ImportSettings::ShowPreview);
     d->leftClickActionComboBox->addItem(i18n("Start image editor"), ImportSettings::StartEditor);
     d->leftClickActionComboBox->setToolTip(i18n("Choose what should happen when you click on a thumbnail."));

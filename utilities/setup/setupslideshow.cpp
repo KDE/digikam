@@ -32,16 +32,14 @@
 #include <QDesktopWidget>
 #include <QApplication>
 #include <QStyle>
+#include <QComboBox>
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kconfig.h>
-#include <kdialog.h>
 #include <kglobal.h>
 #include <klocalizedstring.h>
 #include <knuminput.h>
-#include <kcombobox.h>
 
 // Libkdcraw includes
 
@@ -93,7 +91,7 @@ public:
     QCheckBox*    showCapIfNoTitle;
     QCheckBox*    showProgress;
 
-    KComboBox*    screenPlacement;
+    QComboBox*    screenPlacement;
     KIntNumInput* delayInput;
 };
 
@@ -155,7 +153,7 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
 
     RHBox* const screenSelectBox = new RHBox(panel);
     new QLabel(i18n("Screen placement:"), screenSelectBox);
-    d->screenPlacement           = new KComboBox(screenSelectBox);
+    d->screenPlacement           = new QComboBox(screenSelectBox);
     d->screenPlacement->setToolTip(i18n("In case of multi-screen computer, select here the monitor to slide contents."));
 
     QStringList choices;

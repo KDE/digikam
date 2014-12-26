@@ -33,11 +33,10 @@
 #include <QStyleFactory>
 #include <QApplication>
 #include <QStyle>
+#include <QComboBox>
 
 // KDE includes
 
-#include <kapplication.h>
-#include <kcombobox.h>
 #include <klocalizedstring.h>
 
 // Libkdcraw includes
@@ -80,9 +79,9 @@ public:
     QCheckBox* showPermanentDeleteDialogCheck;
     QCheckBox* sidebarApplyDirectlyCheck;
 
-    KComboBox* sidebarType;
-    KComboBox* stringComparisonType;
-    KComboBox* applicationStyle;
+    QComboBox* sidebarType;
+    QComboBox* stringComparisonType;
+    QComboBox* applicationStyle;
 };
 
 SetupMisc::SetupMisc(QWidget* const parent)
@@ -104,7 +103,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
 
     RHBox* const tabStyleHbox = new RHBox(panel);
     d->sidebarTypeLabel       = new QLabel(i18n("Sidebar tab title:"), tabStyleHbox);
-    d->sidebarType            = new KComboBox(tabStyleHbox);
+    d->sidebarType            = new QComboBox(tabStyleHbox);
     d->sidebarType->addItem(i18n("Only For Active Tab"), 0);
     d->sidebarType->addItem(i18n("For All Tabs"),        1);
     d->sidebarType->setToolTip(i18n("Set this option to configure how sidebar tab titles are visible."));
@@ -113,7 +112,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
 
     RHBox* const stringComparisonHbox = new RHBox(panel);
     d->stringComparisonTypeLabel      = new QLabel(i18n("String comparison type:"), stringComparisonHbox);
-    d->stringComparisonType           = new KComboBox(stringComparisonHbox);
+    d->stringComparisonType           = new QComboBox(stringComparisonHbox);
     d->stringComparisonType->addItem(i18nc("method to compare strings", "Natural"), ApplicationSettings::Natural);
     d->stringComparisonType->addItem(i18nc("method to compare strings", "Normal"),  ApplicationSettings::Normal);
     d->stringComparisonType->setToolTip(i18n("<qt>Sets the way in which strings are compared inside digiKam. "
@@ -128,7 +127,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
 
     RHBox* const appStyleHbox = new RHBox(panel);
     d->applicationStyleLabel  = new QLabel(i18n("Widget style:"), appStyleHbox);
-    d->applicationStyle       = new KComboBox(appStyleHbox);
+    d->applicationStyle       = new QComboBox(appStyleHbox);
     d->applicationStyle->setToolTip(i18n("Set this option to choose the default window decoration and looks."));
 
     QStringList styleList = QStyleFactory::keys();

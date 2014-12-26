@@ -36,11 +36,10 @@
 #include <QUrl>
 #include <QApplication>
 #include <QStyle>
+#include <QComboBox>
 
 // KDE includes
 
-#include <kapplication.h>
-#include <kcombobox.h>
 #include <kcursor.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
@@ -81,7 +80,7 @@ public:
 
     QLabel*        portPathLabel;
 
-    KComboBox*     portPathComboBox;
+    QComboBox*     portPathComboBox;
 
     QString        UMSCameraNameActual;
     QString        UMSCameraNameShown;
@@ -176,7 +175,7 @@ CameraSelection::CameraSelection(QWidget* const parent)
     d->portPathLabel = new QLabel(portPathBox);
     d->portPathLabel->setText(i18n("Note: only for serial port cameras."));
 
-    d->portPathComboBox = new KComboBox(portPathBox);
+    d->portPathComboBox = new QComboBox(portPathBox);
     d->portPathComboBox->setDuplicatesEnabled(false);
     d->portPathComboBox->setWhatsThis(i18n("<p>Select the serial port to use on your computer here. "
                                            "This option is only required if you use a serial camera.</p>"));

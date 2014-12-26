@@ -38,12 +38,11 @@
 #include <QApplication>
 #include <QStyle>
 #include <QIcon>
+#include <QComboBox>
+#include <QPushButton>
 
 // KDE includes
 
-#include <kcombobox.h>
-#include <QPushButton>
-#include <kdialog.h>
 #include <kiconloader.h>
 #include <kinputdialog.h>
 #include <klocalizedstring.h>
@@ -617,7 +616,7 @@ public:
     QToolButton*              resetButton;
     QToolButton*              saveButton;
 
-    KComboBox*                timeUnitCB;
+    QComboBox*                timeUnitCB;
     KLineEdit*                nameEdit;
     KSqueezedTextLabel*       cursorDateLabel;
 
@@ -660,7 +659,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
     QHBoxLayout* const hlay = new QHBoxLayout(hbox1);
 
     QLabel* const label1    = new QLabel(i18n("Time Unit:"), hbox1);
-    d->timeUnitCB  = new KComboBox(hbox1);
+    d->timeUnitCB  = new QComboBox(hbox1);
     d->timeUnitCB->addItem(i18n("Day"),   TimeLineWidget::Day);
     d->timeUnitCB->addItem(i18n("Week"),  TimeLineWidget::Week);
     d->timeUnitCB->addItem(i18n("Month"), TimeLineWidget::Month);

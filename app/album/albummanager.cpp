@@ -58,11 +58,11 @@ extern "C"
 #include <QRadioButton>
 #include <QTextCodec>
 #include <QTimer>
+#include <QComboBox>
 
 // KDE includes
 
 #include <kiconloader.h>
-#include <kcombobox.h>
 #include <kconfiggroup.h>
 #include <kconfig.h>
 #include <kdeversion.h>
@@ -870,7 +870,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
         layout->setColumnStretch(1, 1);
 
         QRadioButton* migrateButton = 0;
-        KComboBox* migrateChoices   = 0;
+        QComboBox* migrateChoices   = 0;
 
         if (!candidateIds.isEmpty())
         {
@@ -882,7 +882,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
                      "The collection is now located at this place:</p>"));
             migrateLabel->setWordWrap(true);
 
-            migrateChoices = new KComboBox;
+            migrateChoices = new QComboBox;
 
             for (int i = 0; i < candidateIds.size(); ++i)
             {

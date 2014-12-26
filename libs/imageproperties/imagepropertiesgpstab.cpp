@@ -41,12 +41,10 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include <QToolButton>
 #include <QStandardItemModel>
 #include <QStandardItem>
+#include <QComboBox>
 
 // KDE includes
 
-#include <kcombobox.h>
-#include <kdialog.h>
-#include <khbox.h>
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
 #include <ktoolinvocation.h>
@@ -95,7 +93,7 @@ public:
     QLabel*                   dateLabel;
 
     QToolButton*              detailsBtn;
-    KComboBox*                detailsCombo;
+    QComboBox*                detailsCombo;
 
     KSqueezedTextLabel*       altitude;
     KSqueezedTextLabel*       latitude;
@@ -167,7 +165,7 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* const parent)
         hBoxLayout->addStretch();
     }
 
-    d->detailsCombo = new KComboBox(box);
+    d->detailsCombo = new QComboBox(box);
     d->detailsBtn   = new QToolButton(box);
     d->detailsBtn->setIcon(SmallIcon("internet-web-browser"));
     d->detailsBtn->setToolTip(i18n("See more information on the Internet"));

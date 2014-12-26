@@ -42,10 +42,10 @@
 #include <QValidator>
 #include <QApplication>
 #include <QStyle>
+#include <QComboBox>
 
 // KDE includes
 
-#include <kcombobox.h>
 #include <kcursor.h>
 #include <kdatepicker.h>
 #include <kdeversion.h>
@@ -113,8 +113,8 @@ public:
     {
     }
 
-    KComboBox*   categoryCombo;
-    KComboBox*   parentCombo;
+    QComboBox*   categoryCombo;
+    QComboBox*   parentCombo;
     KLineEdit*   titleEdit;
     KTextEdit*   commentsEdit;
 
@@ -170,14 +170,14 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
     QLabel* const categoryLabel = new QLabel(page);
     categoryLabel->setText(i18n("Ca&tegory:"));
 
-    d->categoryCombo = new KComboBox(page);
+    d->categoryCombo = new QComboBox(page);
     d->categoryCombo->setEditable(true);
     categoryLabel->setBuddy(d->categoryCombo);
 
     QLabel* const parentLabel = new QLabel(page);
     parentLabel->setText(i18n("Ch&ild Of:"));
 
-    d->parentCombo = new KComboBox(page);
+    d->parentCombo = new QComboBox(page);
     parentLabel->setBuddy(d->parentCombo);
 
     QLabel* const commentsLabel = new QLabel(page);

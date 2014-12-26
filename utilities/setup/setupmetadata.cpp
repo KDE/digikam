@@ -36,12 +36,13 @@
 #include <QRadioButton>
 #include <QToolButton>
 #include <QVBoxLayout>
+#include <QApplication>
+#include <QStyle>
+#include <QComboBox>
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kconfig.h>
-#include <kdialog.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
@@ -49,21 +50,16 @@
 #include <ktabwidget.h>
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
-#include <kvbox.h>
-#include <khbox.h>
-#include <kcombobox.h>
-#include "digikam_debug.h"
 #include <kmessagebox.h>
 
 // Libkexiv2 includes
 
 #include <kexiv2.h>
 #include <libkexiv2_version.h>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "applicationsettings.h"
 #include "config-digikam.h"
 #include "metadatapanel.h"
@@ -134,7 +130,7 @@ public:
     QCheckBox*     writeXMPSidecarBox;
     QCheckBox*     readXMPSidecarBox;
     QCheckBox*     updateFileTimeStampBox;
-    KComboBox*     writingModeCombo;
+    QComboBox*     writingModeCombo;
 
     QRadioButton*  rotateByFlag;
     QRadioButton*  rotateByContents;
@@ -257,7 +253,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
                                               "Turn on this option to save, as specified, metadata to XMP sidecar files."));
     d->writeXMPSidecarBox->setEnabled(KExiv2::supportXmp());
 
-    d->writingModeCombo   = new KComboBox;
+    d->writingModeCombo   = new QComboBox;
     d->writingModeCombo->addItem(i18n("Write to XMP sidecar for read-only image only"), KExiv2::WRITETOSIDECARONLY4READONLYFILES);
     d->writingModeCombo->addItem(i18n("Write to XMP sidecar only"),                     KExiv2::WRITETOSIDECARONLY);
     d->writingModeCombo->addItem(i18n("Write to image and XMP Sidecar"),                KExiv2::WRITETOSIDECARANDIMAGE);
