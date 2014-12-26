@@ -26,15 +26,15 @@
 
 #include <QFormLayout>
 #include <QModelIndex>
+#include <QComboBox>
 
 // KDE includes
 
-#include <kcombobox.h>
-#include "digikam_debug.h"
 #include <klocalizedstring.h>
 
 // local includes
 
+#include "digikam_debug.h"
 #include "databaseinfocontainers.h"
 #include "imagepropertiestab.h"
 #include "dmetadata.h"
@@ -401,12 +401,12 @@ ColumnPhotoConfigurationWidget::ColumnPhotoConfigurationWidget(
         {
             QFormLayout* const box1 = new QFormLayout();
 
-            selectorExposureTimeFormat = new KComboBox(this);
+            selectorExposureTimeFormat = new QComboBox(this);
             selectorExposureTimeFormat->addItem(i18n("Fraction"), QString("fraction"));
             selectorExposureTimeFormat->addItem(i18n("Rational"), QString("rational"));
             box1->addRow(i18n("Format"), selectorExposureTimeFormat);
 
-            selectorExposureTimeUnit = new KComboBox(this);
+            selectorExposureTimeUnit = new QComboBox(this);
             selectorExposureTimeUnit->addItem(i18n("Seconds"), QString("seconds"));
             selectorExposureTimeUnit->addItem(i18n("Milliseconds"), QString("milliseconds"));
             selectorExposureTimeUnit->addItem(i18n("Microseconds"), QString("microseconds"));

@@ -33,7 +33,7 @@
 
 #include "tableview_columnfactory.h"
 
-class KComboBox;
+class QComboBox;
 
 namespace Digikam
 {
@@ -92,7 +92,7 @@ public:
 private:
 
     ColumnGeoProperties::SubColumn subColumn;
-    KComboBox* selectorAltitudeUnit;
+    QComboBox* selectorAltitudeUnit;
 };
 
 } /* namespace TableViewColumns */

@@ -25,16 +25,16 @@
 // Qt includes
 
 #include <QFormLayout>
+#include <QComboBox>
 
 // KDE includes
 
-#include <kcombobox.h>
-#include "digikam_debug.h"
 #include <klocalizedstring.h>
-#include <KFormat>
+#include <kformat.h>
 
 // local includes
 
+#include "digikam_debug.h"
 #include "imageinfo.h"
 
 namespace Digikam
@@ -223,7 +223,7 @@ ColumnFileConfigurationWidget::ColumnFileConfigurationWidget(
     case ColumnFileProperties::SubColumnSize:
         {
             QFormLayout* const box1 = new QFormLayout();
-            selectorSizeType = new KComboBox(this);
+            selectorSizeType = new QComboBox(this);
             selectorSizeType->addItem(i18n("KDE default"), QString("kde"));
             selectorSizeType->addItem(i18n("Plain"), QString("plain"));
             box1->addRow(i18n("Display format"), selectorSizeType);

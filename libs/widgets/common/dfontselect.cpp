@@ -28,16 +28,16 @@
 #include <QLabel>
 #include <QEvent>
 #include <QPushButton>
+#include <QFontDatabase>
+#include <QApplication>
+#include <QStyle>
+#include <QComboBox>
 
 // KDE includes
 
 #include <kfontdialog.h>
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
-#include <kcombobox.h>
-#include <QFontDatabase>
-#include <QApplication>
-#include <QStyle>
 
 namespace Digikam
 {
@@ -62,7 +62,7 @@ public:
 
     QPushButton*          chooseFontButton;
 
-    KComboBox*            modeCombo;
+    QComboBox*            modeCombo;
 
     DFontSelect::FontMode mode;
 };
@@ -80,7 +80,7 @@ DFontSelect::DFontSelect(const QString& text, QWidget* const parent)
         d->space->hide();
     }
 
-    d->modeCombo = new KComboBox(this);
+    d->modeCombo = new QComboBox(this);
     d->modeCombo->addItem(i18n("System Font"));
     d->modeCombo->addItem(i18n("Custom Font"));
 

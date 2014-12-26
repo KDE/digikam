@@ -25,16 +25,16 @@
 // Qt includes
 
 #include <QFormLayout>
+#include <QComboBox>
 
 // KDE includes
 
-#include <kcombobox.h>
-#include "digikam_debug.h"
 #include <kglobal.h>
 #include <klocalizedstring.h>
 
 // local includes
 
+#include "digikam_debug.h"
 #include "imageinfo.h"
 
 namespace
@@ -252,7 +252,7 @@ ColumnGeoConfigurationWidget::ColumnGeoConfigurationWidget(
     case ColumnGeoProperties::SubColumnAltitude:
         {
             QFormLayout* const box1 = new QFormLayout();
-            selectorAltitudeUnit = new KComboBox(this);
+            selectorAltitudeUnit    = new QComboBox(this);
             selectorAltitudeUnit->addItem(i18n("KDE default"), QString("kde"));
             selectorAltitudeUnit->addItem(i18n("Metric units"), QString("metric"));
             selectorAltitudeUnit->addItem(i18n("Imperial units"), QString("imperial"));

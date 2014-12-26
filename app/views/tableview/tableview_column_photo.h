@@ -33,7 +33,7 @@
 
 #include "tableview_columnfactory.h"
 
-class KComboBox;
+class QComboBox;
 
 namespace Digikam
 {
@@ -111,8 +111,8 @@ private Q_SLOTS:
 private:
 
     ColumnPhotoProperties::SubColumn subColumn;
-    KComboBox* selectorExposureTimeFormat;
-    KComboBox* selectorExposureTimeUnit;
+    QComboBox* selectorExposureTimeFormat;
+    QComboBox* selectorExposureTimeUnit;
 };
 
 } /* namespace TableViewColumns */
