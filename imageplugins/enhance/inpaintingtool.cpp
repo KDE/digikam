@@ -45,10 +45,11 @@
 #include <QPushButton>
 #include <QTimer>
 #include <QIcon>
+#include <QStandardPaths>
+#include <QApplication>
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kcombobox.h>
 #include <kcursor.h>
 #include <kfiledialog.h>
@@ -60,7 +61,6 @@
 #include <ktabwidget.h>
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
-#include <QStandardPaths>
 
 // Local includes
 
@@ -476,7 +476,6 @@ void InPaintingTool::setFinalImage()
 
 void InPaintingTool::slotLoadSettings()
 {
-#pragma message("QURL::fromLocalFile")
     QUrl loadInpaintingFile = KFileDialog::getOpenUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                       QString("*"), qApp->activeWindow(),
                                                       QString(i18n("Photograph In-Painting Settings File to Load")));
@@ -513,7 +512,6 @@ void InPaintingTool::slotLoadSettings()
 
 void InPaintingTool::slotSaveAsSettings()
 {
-#pragma message("QUrl::fromLocalFile")
     QUrl saveRestorationFile = KFileDialog::getSaveUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                        QString("*"), qApp->activeWindow(),
                                                        QString(i18n("Photograph In-Painting Settings File to Save")));

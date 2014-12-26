@@ -35,13 +35,11 @@
 
 // KDE includes
 
-#include <kapplication.h>
-#include <kconfig.h>
+#include <ksharedconfig.h>
 #include <kfiledialog.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
 #include <ktabwidget.h>
-#include <kvbox.h>
 
 // Libkdcraw includes
 

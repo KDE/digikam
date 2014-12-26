@@ -32,10 +32,11 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QIcon>
+#include <QStandardPaths>
+#include <QApplication>
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kcombobox.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -46,7 +47,6 @@
 #include <ktabwidget.h>
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
-#include <QStandardPaths>
 
 // Local includes
 
@@ -362,7 +362,6 @@ void RestorationTool::setFinalImage()
 
 void RestorationTool::slotLoadSettings()
 {
-#pragma message("hardcoded fromLocalFile")
     QUrl loadRestorationFile = KFileDialog::getOpenUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                QString( "*" ), qApp->activeWindow(),
                                QString( i18n("Photograph Restoration Settings File to Load")) );
@@ -401,7 +400,6 @@ void RestorationTool::slotLoadSettings()
 
 void RestorationTool::slotSaveAsSettings()
 {
-#pragma message("hardcoded fromLocalFile")
     QUrl saveRestorationFile = KFileDialog::getSaveUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                QString( "*" ), qApp->activeWindow(),
                                QString( i18n("Photograph Restoration Settings File to Save")) );

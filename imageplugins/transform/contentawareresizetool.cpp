@@ -40,14 +40,12 @@
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kglobal.h>
 #include <klocalizedstring.h>
 #include <kseparator.h>
 #include <kstandarddirs.h>
-#include <kvbox.h>
 
 // Libkdcraw includes
 
@@ -428,7 +426,6 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
 
     d->expanderBox = new RExpanderBox;
     d->expanderBox->setObjectName("ContentAwareResizeTool Expander");
-#pragma message("hardcoded icon sizes!")
     d->expanderBox->addItem(sizeSettingsContainer, QIcon::fromTheme("transform-scale").pixmap(16), i18n("Target size"),
                             QString("SizeSettingsContainer"), true);
     d->expanderBox->addItem(mixedRescaleContainer, QIcon::fromTheme("transform-scale").pixmap(16),

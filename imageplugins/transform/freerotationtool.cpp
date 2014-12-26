@@ -38,13 +38,12 @@
 #include <QPushButton>
 #include <QIcon>
 #include <QStyle>
+#include <QApplication>
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kdialog.h>
 #include <kglobal.h>
 #include <klocalizedstring.h>
 #include <kseparator.h>
@@ -196,9 +195,9 @@ FreeRotationTool::FreeRotationTool(QObject* const parent)
 
     // --------------------------------------------------------
 
-    QWidget* autoAdjustContainer  = new QWidget;
-    QGridLayout* containerLayout2 = new QGridLayout;
-    QLabel* autoDescr             = new QLabel;
+    QWidget* const autoAdjustContainer  = new QWidget;
+    QGridLayout* const containerLayout2 = new QGridLayout;
+    QLabel* const autoDescr             = new QLabel;
     autoDescr->setText(i18n("<p>Correct the rotation of your images automatically by assigning two points in the "
                             "preview widget and clicking <i>Adjust</i>.<br/>"
                             "You can either adjust horizontal or vertical lines.</p>"));
@@ -209,28 +208,25 @@ FreeRotationTool::FreeRotationTool(QObject* const parent)
     containerLayout2->addWidget(d->autoAdjustBtn,       1, 2, 2, 1);
     containerLayout2->addWidget(d->autoAdjustPoint2Btn, 2, 0, 1, 1);
     containerLayout2->setColumnStretch(1, 10);
-#pragma message("check port")
     containerLayout2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin));
     autoAdjustContainer->setLayout(containerLayout2);
 
     // -------------------------------------------------------------
 
-    KSeparator* line  = new KSeparator(Qt::Horizontal);
+    KSeparator* const line  = new KSeparator(Qt::Horizontal);
     d->settingsView   = new FreeRotationSettings(d->gboxSettings->plainPage());
 
     d->expanderBox    = new RExpanderBox;
     d->expanderBox->setObjectName("FreeRotationTool Expander");
-#pragma message("hardcoded icon size")
     d->expanderBox->addItem(autoAdjustContainer, QIcon::fromTheme("freerotation").pixmap(16), i18n("Automatic Adjustment"),
                             QString("AutoAdjustContainer"), true);
-#pragma message("hardcoded icon size")
     d->expanderBox->addItem(d->settingsView, QIcon::fromTheme("freerotation").pixmap(16), i18n("Settings"),
                             QString("SettingsContainer"), true);
     d->expanderBox->addStretch();
 
     // -------------------------------------------------------------
 
-    QGridLayout* grid2 = new QGridLayout;
+    QGridLayout* const grid2 = new QGridLayout;
     grid2->addWidget(label1,            0, 0, 1, 1);
     grid2->addWidget(d->newWidthLabel,  0, 1, 1, 1);
     grid2->addWidget(label2,            1, 0, 1, 1);

@@ -39,17 +39,19 @@
 #include <QTimer>
 #include <QToolButton>
 #include <QVBoxLayout>
+#include <QPushButton>
+#include <QApplication>
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kcolorbutton.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kcursor.h>
 #include <klocalizedstring.h>
-#include <QPushButton>
 #include <kstandarddirs.h>
+#include <kstandardguiitem.h>
+#include <kguiitem.h>
 #include <kstandardguiitem.h>
 
 // Libkdcraw includes
@@ -58,8 +60,6 @@
 #include <rnuminput.h>
 #include <rexpanderbox.h>
 #include <libkdcraw_version.h>
-#include <KGuiItem>
-#include <KStandardGuiItem>
 
 // Local includes
 
@@ -280,7 +280,6 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     grid3->setMargin(d->gboxSettings->spacingHint());
     grid3->setSpacing(d->gboxSettings->spacingHint());
 
-#pragma message("hardcoded icon size")
     d->expbox->addItem(cropInfo, QIcon::fromTheme("help-about").pixmap(16),
                        i18n("Crop Information"), QString("CropInformation"), true);
 
@@ -351,34 +350,26 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     d->customRatioNInput = new RIntNumInput(cropSelection);
     d->customRatioNInput->setRange(1, 10000, 1);
     d->customRatioNInput->setDefaultValue(1);
-#pragma message("port")
-//    d->customRatioNInput->setSliderEnabled(false);
     d->customRatioNInput->setWhatsThis( i18n("Set here the desired custom aspect numerator value."));
 
     d->customRatioDInput = new RIntNumInput(cropSelection);
     d->customRatioDInput->setRange(1, 10000, 1);
     d->customRatioDInput->setDefaultValue(1);
-#pragma message("port")
-//    d->customRatioDInput->setSliderEnabled(false);
     d->customRatioDInput->setWhatsThis( i18n("Set here the desired custom aspect denominator value."));
 
     // -------------------------------------------------------------
 
     QLabel* const positionLabel = new QLabel(i18n("Position:"), cropSelection);
     positionLabel->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
-    
+
     d->xInput = new RIntNumInput(cropSelection);
     d->xInput->setWhatsThis( i18n("Set here the top left selection corner position for cropping."));
     d->xInput->setRange(0, d->imageSelectionWidget->getOriginalImageWidth(), 1);
-#pragma message("port")
-//    d->xInput->setSliderEnabled(false);
     d->xInput->setDefaultValue(50);
 
     d->yInput = new RIntNumInput(cropSelection);
     d->yInput->setWhatsThis( i18n("Set here the top left selection corner position for cropping."));
     d->yInput->setRange(0, d->imageSelectionWidget->getOriginalImageWidth(), 1);
-#pragma message("port")
-//    d->yInput->setSliderEnabled(false);
     d->yInput->setDefaultValue(50);
 
     // -------------------------------------------------------------
@@ -391,8 +382,6 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     d->widthInput->setRange(d->imageSelectionWidget->getMinWidthRange(),
                             d->imageSelectionWidget->getMaxWidthRange(),
                             d->imageSelectionWidget->getWidthStep());
-#pragma message("port")
-//    d->widthInput->setSliderEnabled(false);
     d->widthInput->setDefaultValue(800);
 
     d->centerWidth = new QToolButton(cropSelection);
@@ -404,8 +393,6 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     d->heightInput->setRange(d->imageSelectionWidget->getMinHeightRange(),
                              d->imageSelectionWidget->getMaxHeightRange(),
                              d->imageSelectionWidget->getHeightStep());
-#pragma message("port")
-//    d->heightInput->setSliderEnabled(false);
     d->heightInput->setDefaultValue(600);
 
     d->centerHeight = new QToolButton(cropSelection);
@@ -435,7 +422,6 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     mainLayout->setMargin(d->gboxSettings->spacingHint());
     mainLayout->setSpacing(d->gboxSettings->spacingHint());
 
-#pragma message("hardcoded icon size")
     d->expbox->addItem(cropSelection, QIcon::fromTheme("transform-crop-and-resize").pixmap(16),
                        i18n("Crop Settings"), QString("CropSelection"), true);
 
@@ -478,8 +464,6 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     d->guideColorBt    = new KColorButton( QColor( 250, 250, 255 ), compositionGuide );
     d->guideSize       = new RIntNumInput(compositionGuide);
     d->guideSize->setRange(1, 5, 1);
-#pragma message("port")
-//    d->guideSize->setSliderEnabled(false);
     d->guideSize->setDefaultValue(1);
     d->guideColorBt->setWhatsThis(i18n("Set here the color used to draw composition guides."));
     d->guideSize->setWhatsThis(i18n("Set here the width in pixels used to draw composition guides."));
@@ -500,7 +484,6 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     grid2->setMargin(d->gboxSettings->spacingHint());
     grid2->setSpacing(d->gboxSettings->spacingHint());
 
-#pragma message("hardcoded icon size")
     d->expbox->addItem(compositionGuide, QIcon::fromTheme("tools-wizard").pixmap(16),
                        i18n("Composition Guides"), QString("CompositionGuide"), true);
 

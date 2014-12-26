@@ -35,7 +35,6 @@
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kglobal.h>
@@ -270,8 +269,6 @@ void BlurFXTool::slotEffectTypeChanged(int type)
 
         case BlurFXFilter::FarBlur:
             d->distanceInput->setRange(0, 20, 1);
-#pragma message("port")
-            //d->distanceInput->input()->setMaximum(20);
             d->distanceInput->setValue(10);
             break;
 

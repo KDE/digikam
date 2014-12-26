@@ -36,7 +36,6 @@
 // KDE includes
 
 #include <kaboutdata.h>
-#include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
 #include <kfiledialog.h>
@@ -86,8 +85,7 @@ SharpenTool::SharpenTool(QObject* const parent)
 {
     setObjectName("sharpen");
     setToolName(i18n("Sharpen"));
-#pragma message("hardcoded size")
-    setToolIcon(QIcon::fromTheme("sharpenimage"));
+    setToolIcon(QIcon::fromTheme("sharpenimage").pixmap(16));
     setToolHelp("blursharpentool.anchor");
 
     // -------------------------------------------------------------

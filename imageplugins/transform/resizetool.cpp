@@ -45,10 +45,11 @@
 #include <QTimer>
 #include <QVBoxLayout>
 #include <QIcon>
+#include <QStandardPaths>
+#include <QApplication>
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kcursor.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -64,7 +65,6 @@
 // Libkdcraw includes
 
 #include <rnuminput.h>
-#include <QStandardPaths>
 
 // Local includes
 
@@ -576,7 +576,6 @@ void ResizeTool::processCImgUrl(const QString& url)
 
 void ResizeTool::slotLoadSettings()
 {
-#pragma message("QUrl::fromLocalFile")
     QUrl loadBlowupFile = KFileDialog::getOpenUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                           QString( "*" ), qApp->activeWindow(),
                           QString( i18n("Photograph Resizing Settings File to Load")) );
@@ -610,7 +609,6 @@ void ResizeTool::slotLoadSettings()
 
 void ResizeTool::slotSaveAsSettings()
 {
-#pragma message("QUrl::fromLocalFile")
     QUrl saveBlowupFile = KFileDialog::getSaveUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                           QString( "*" ), qApp->activeWindow(),
                           QString( i18n("Photograph Resizing Settings File to Save")) );
