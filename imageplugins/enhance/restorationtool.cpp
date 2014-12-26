@@ -34,10 +34,10 @@
 #include <QIcon>
 #include <QStandardPaths>
 #include <QApplication>
+#include <QComboBox>
 
 // KDE includes
 
-#include <kcombobox.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
@@ -99,7 +99,7 @@ public:
 
     KTabWidget*             mainTab;
 
-    KComboBox*              restorationTypeCB;
+    QComboBox*              restorationTypeCB;
 
     GreycstorationSettings* settingsWidget;
     ImageRegionWidget*      previewWidget;
@@ -157,7 +157,7 @@ RestorationTool::RestorationTool(QObject* const parent)
 
     QLabel* const typeLabel = new QLabel(i18n("Filtering type:"), firstPage);
     typeLabel->setAlignment ( Qt::AlignRight | Qt::AlignVCenter);
-    d->restorationTypeCB    = new KComboBox(firstPage);
+    d->restorationTypeCB    = new QComboBox(firstPage);
     d->restorationTypeCB->addItem( i18n("Reduce Uniform Noise") );
     d->restorationTypeCB->addItem( i18n("Reduce JPEG Artifacts") );
     d->restorationTypeCB->addItem( i18n("Reduce Texturing") );

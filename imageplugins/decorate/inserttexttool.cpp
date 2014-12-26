@@ -41,12 +41,12 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QIcon>
+#include <QComboBox>
 
 // KDE includes
 
 #include <kapplication.h>
 #include <kcolorbutton.h>
-#include <kcombobox.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kcursor.h>
@@ -103,7 +103,7 @@ public:
     QButtonGroup*        alignButtonGroup;
     QFont                textFont;
 
-    KComboBox*           textRotation;
+    QComboBox*           textRotation;
     KColorButton*        fontColorButton;
     KFontChooser*        fontChooserWidget;
     KTextEdit*           textEdit;
@@ -201,7 +201,7 @@ InsertTextTool::InsertTextTool(QObject* const parent)
     // -------------------------------------------------------------
 
     QLabel* label1  = new QLabel(i18n("Rotation:"));
-    d->textRotation = new KComboBox();
+    d->textRotation = new QComboBox();
     d->textRotation->addItem(i18nc("no rotation", "None"));
     d->textRotation->addItem(i18n("90 Degrees"));
     d->textRotation->addItem(i18n("180 Degrees"));

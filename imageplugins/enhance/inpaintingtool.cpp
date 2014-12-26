@@ -47,10 +47,10 @@
 #include <QIcon>
 #include <QStandardPaths>
 #include <QApplication>
+#include <QComboBox>
 
 // KDE includes
 
-#include <kcombobox.h>
 #include <kcursor.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -121,7 +121,7 @@ public:
 
     KTabWidget*             mainTab;
 
-    KComboBox*              inpaintingTypeCB;
+    QComboBox*              inpaintingTypeCB;
 
     DImg                    originalImage;
     DImg                    cropImage;
@@ -183,7 +183,7 @@ InPaintingTool::InPaintingTool(QObject* const parent)
 
     QLabel* const typeLabel = new QLabel(i18n("Filtering type:"));
     typeLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    d->inpaintingTypeCB     = new KComboBox();
+    d->inpaintingTypeCB     = new QComboBox();
     d->inpaintingTypeCB->addItem(i18n("Remove Small Artifact"));
     d->inpaintingTypeCB->addItem(i18n("Remove Medium Artifact"));
     d->inpaintingTypeCB->addItem(i18n("Remove Large Artifact"));
