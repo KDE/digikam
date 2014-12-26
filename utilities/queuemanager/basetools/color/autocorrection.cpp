@@ -27,10 +27,10 @@
 
 #include <QLabel>
 #include <QWidget>
+#include <QComboBox>
 
 // KDE includes
 
-#include <kcombobox.h>
 #include <klocalizedstring.h>
 #include <kglobal.h>
 
@@ -70,7 +70,7 @@ void AutoCorrection::registerSettingsWidget()
 {
     RVBox* const vbox   = new RVBox;
     QLabel* const label = new QLabel(vbox);
-    m_comboBox          = new KComboBox(vbox);
+    m_comboBox          = new QComboBox(vbox);
     m_comboBox->insertItem(AutoLevelsCorrection,      i18n("Auto Levels"));
     m_comboBox->insertItem(NormalizeCorrection,       i18n("Normalize"));
     m_comboBox->insertItem(EqualizeCorrection,        i18n("Equalize"));

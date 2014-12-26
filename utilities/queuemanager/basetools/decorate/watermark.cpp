@@ -6,7 +6,7 @@
  * Date        : 2009-02-28
  * Description : batch tool to add visible watermark.
  *
- * Copyright (C) 2009-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Mikkel Baekhoej Christensen <mbc at baekhoej dot dk>
  *
  * This program is free software; you can redistribute it
@@ -40,11 +40,11 @@
 #include <QApplication>
 #include <QStyle>
 #include <QFontComboBox>
+#include <QComboBox>
 
 // KDE includes
 
 #include <kcolorbutton.h>
-#include <kcombobox.h>
 #include <kurlrequester.h>
 #include <klineedit.h>
 #include <klocalizedstring.h>
@@ -113,7 +113,7 @@ public:
     KUrlRequester* imageFileUrlRequester;
     KLineEdit*     textEdit;
 
-    KComboBox*     comboBox;
+    QComboBox*     comboBox;
     QFontComboBox* fontChooserWidget;
 
     KColorButton*  fontColorButton;
@@ -250,7 +250,7 @@ void WaterMark::registerSettingsWidget()
     d->textSettingsGroupBox->setVisible(false);
 
     QLabel* label4 = new QLabel(vbox);
-    d->comboBox    = new KComboBox(vbox);
+    d->comboBox    = new QComboBox(vbox);
     d->comboBox->insertItem(Private::TopLeft,     i18n("Top left"));
     d->comboBox->insertItem(Private::TopRight,    i18n("Top right"));
     d->comboBox->insertItem(Private::BottomLeft,  i18n("Bottom left"));

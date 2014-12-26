@@ -28,7 +28,7 @@
 
 #include "batchtool.h"
 
-class KComboBox;
+class QComboBox;
 
 namespace Digikam
 {
@@ -66,7 +66,7 @@ private Q_SLOTS:
 
 private:
 
-    KComboBox*      m_channelCB;
+    QComboBox*      m_channelCB;
     DImg            m_preview;
     CurvesSettings* m_settingsView;
 };

@@ -6,7 +6,7 @@
  * Date        : 2010-03-02
  * Description : Curves Adjust batch tool.
  *
- * Copyright (C) 2010-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,12 +27,12 @@
 
 #include <QLabel>
 #include <QWidget>
+#include <QComboBox>
 
 // KDE includes
 
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
-#include <kcombobox.h>
 #include <kglobal.h>
 
 // Libkdcraw includes
@@ -71,7 +71,7 @@ void CurvesAdjust::registerSettingsWidget()
     RHBox* hbox          = new RHBox(vbox);
     QLabel* channelLabel = new QLabel(hbox);
     channelLabel->setText(i18n("Channel:"));
-    m_channelCB          = new KComboBox(hbox);
+    m_channelCB          = new QComboBox(hbox);
     m_channelCB->addItem(i18n("Luminosity"), QVariant(LuminosityChannel));
     m_channelCB->addItem(i18n("Red"),        QVariant(RedChannel));
     m_channelCB->addItem(i18n("Green"),      QVariant(GreenChannel));

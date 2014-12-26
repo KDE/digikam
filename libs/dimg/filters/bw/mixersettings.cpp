@@ -32,29 +32,30 @@
 #include <QTextStream>
 #include <QCheckBox>
 #include <QPushButton>
+#include <QStandardPaths>
+#include <QApplication>
+#include <QStyle>
+#include <QComboBox>
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <kurl.h>
-#include <kdialog.h>
 #include <klocalizedstring.h>
-#include <kapplication.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kcombobox.h>
 #include <kiconloader.h>
 
 // Libkdcraw includes
 
 #include <rnuminput.h>
 #include <rexpanderbox.h>
-#include <QStandardPaths>
-#include <QApplication>
-#include <QStyle>
+
+// Local includes
+
+#include "digikam_debug.h"
 
 using namespace KDcrawIface;
 
@@ -105,7 +106,7 @@ public:
     QCheckBox*            preserveLuminosity;
     QCheckBox*            monochrome;
 
-    KComboBox*            outChannelCB;
+    QComboBox*            outChannelCB;
 
     MixerContainer        mixerSettings;
 
@@ -113,6 +114,7 @@ public:
     RDoubleNumInput*      greenGain;
     RDoubleNumInput*      blueGain;
 };
+
 const QString MixerSettings::MixerSettingsPriv::configMonochromeEntry("Monochrome");
 const QString MixerSettings::MixerSettingsPriv::configPreserveLuminosityEntry("PreserveLuminosity");
 const QString MixerSettings::MixerSettingsPriv::configRedRedGainEntry("RedRedGain");
@@ -137,7 +139,7 @@ MixerSettings::MixerSettings(QWidget* parent)
     QGridLayout* grid = new QGridLayout(this);
 
     d->outChannelLabel = new QLabel(i18n("Output Channel:"));
-    d->outChannelCB    = new KComboBox;
+    d->outChannelCB    = new QComboBox;
     d->outChannelCB->addItem(i18n("Red"),   QVariant(RedChannel));
     d->outChannelCB->addItem(i18n("Green"), QVariant(GreenChannel));
     d->outChannelCB->addItem(i18n("Blue"),  QVariant(BlueChannel));
