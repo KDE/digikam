@@ -29,19 +29,16 @@
 
 #include <QLabel>
 #include <QIcon>
+#include <QIcon>
 
 // KDE includes
 
-#include <kapplication.h>
-#include <kcombobox.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kcursor.h>
 #include <kglobal.h>
-#include <QIcon>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
-#include <kvbox.h>
 
 // Libkdcraw includes
 

@@ -37,21 +37,18 @@
 #include <QPushButton>
 #include <QToolButton>
 #include <QIcon>
+#include <QMenu>
 
 // KDE includes
 
 #include <kaboutdata.h>
-#include <kapplication.h>
-#include <kcombobox.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kcursor.h>
 #include <kglobal.h>
 #include <khelpmenu.h>
 #include <klocalizedstring.h>
-#include <QMenu>
 #include <kstandarddirs.h>
-#include <kvbox.h>
 
 // Local includes
 

@@ -27,14 +27,15 @@
 #include <QLabel>
 #include <QString>
 #include <QWidget>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
-#include <kcombobox.h>
-#include <kdialog.h>
 #include <klocalizedstring.h>
-#include <QApplication>
-#include <QStyle>
+
+// Local includes
+
 #include "digikam_debug.h"
 
 namespace Digikam

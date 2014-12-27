@@ -59,7 +59,6 @@
 
 #include <kactioncollection.h>
 #include <kcalendarsystem.h>
-#include <kcombobox.h>
 #include <kconfig.h>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>

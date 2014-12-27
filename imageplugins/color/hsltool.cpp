@@ -27,18 +27,16 @@
 // Qt includes
 
 #include <QLabel>
+#include <QColorDialog>
+#include <QIcon>
 
 // KDE includes
 
-#include <kapplication.h>
-#include <QColorDialog>
-#include <kcombobox.h>
 #include <kconfig.h>
 #include <kcursor.h>
 #include <kglobal.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
-#include <kvbox.h>
 
 // Local includes
 

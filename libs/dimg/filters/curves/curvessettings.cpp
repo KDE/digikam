@@ -37,20 +37,19 @@
 #include <QTextStream>
 #include <QToolButton>
 #include <QVBoxLayout>
+#include <QStandardPaths>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <kurl.h>
-#include <kdialog.h>
 #include <klocalizedstring.h>
-#include <kapplication.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kcombobox.h>
 #include <kseparator.h>
 #include <kiconloader.h>
 
@@ -59,12 +58,10 @@
 #include <rcombobox.h>
 #include <rnuminput.h>
 #include <rexpanderbox.h>
-#include <QStandardPaths>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "colorgradientwidget.h"
 
 using namespace KDcrawIface;

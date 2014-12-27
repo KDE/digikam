@@ -45,8 +45,6 @@
 
 // KDE includes
 
-#include <kapplication.h>
-#include <kcombobox.h>
 #include <kconfig.h>
 #include <kdialog.h>
 #include <kglobal.h>

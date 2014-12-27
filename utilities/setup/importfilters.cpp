@@ -25,9 +25,7 @@
 
 // KDE includes
 
-#include <kcombobox.h>
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
 #include <ksqueezedtextlabel.h>
 #include <kmimetypechooser.h>
 
@@ -43,6 +41,7 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "filtercombo.h"
 
 namespace Digikam

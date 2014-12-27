@@ -35,14 +35,13 @@
 
 // KDE includes
 
-#include <kcombobox.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "searchfieldgroup.h"
 #include "searchfields.h"
 #include "searchutilities.h"

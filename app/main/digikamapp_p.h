@@ -44,7 +44,6 @@
 #include <kaction.h>
 #include <kselectaction.h>
 #include <kstatusbar.h>
-#include <kcombobox.h>
 #include <ksqueezedtextlabel.h>
 
 // Local includes
