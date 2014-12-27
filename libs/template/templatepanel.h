@@ -35,7 +35,7 @@
 namespace Digikam
 {
 
-class TemplatePanel : public KTabWidget
+class TemplatePanel : public QTabWidget
 {
 public:
 

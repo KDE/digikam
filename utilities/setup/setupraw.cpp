@@ -73,7 +73,7 @@ public:
     static const QString  configGroupName;
     static const QString  configUseRawImportToolEntry;
 
-    KTabWidget*           tab;
+    QTabWidget*           tab;
 
     QWidget*              behaviorPanel;
     QWidget*              settingsPanel;
@@ -91,7 +91,7 @@ const QString SetupRaw::Private::configUseRawImportToolEntry("UseRawImportTool")
 SetupRaw::SetupRaw(QWidget* const parent)
     : QScrollArea(parent), d(new Private)
 {
-    d->tab = new KTabWidget;
+    d->tab = new QTabWidget;
 
     // --------------------------------------------------------
 

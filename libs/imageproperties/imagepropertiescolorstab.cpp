@@ -142,7 +142,7 @@ public:
 };
 
 ImagePropertiesColorsTab::ImagePropertiesColorsTab(QWidget* const parent)
-    : KTabWidget(parent), d(new Private)
+    : QTabWidget(parent), d(new Private)
 {
     // Histogram tab area -----------------------------------------------------
 

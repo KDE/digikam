@@ -166,7 +166,7 @@ public:
     QWidget*                    behaviorPanel;
     QWidget*                    profilesPanel;
     QWidget*                    advancedPanel;
-    KTabWidget*                 tab;
+    QTabWidget*                 tab;
     KPageDialog*                mainDialog;
 
     IccProfilesComboBox*        inProfilesKC;
@@ -179,7 +179,7 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
     : QScrollArea(parent), d(new Private)
 {
     d->mainDialog            = dialog;
-    d->tab                   = new KTabWidget(viewport());
+    d->tab                   = new QTabWidget(viewport());
     setWidget(d->tab);
     setWidgetResizable(true);
 

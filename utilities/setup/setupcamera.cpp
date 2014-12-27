@@ -245,7 +245,7 @@ public:
     QTreeWidget*         listView;
     QListWidget*         importListView;
 
-    KTabWidget*          tab;
+    QTabWidget*          tab;
 
     QLineEdit*           ignoreNamesEdit;
     QLineEdit*           ignoreExtensionsEdit;
@@ -265,7 +265,7 @@ const QString SetupCamera::Private::importFiltersConfigGroupName("Import Filters
 SetupCamera::SetupCamera(QWidget* const parent)
     : QScrollArea(parent), d(new Private)
 {
-    d->tab               = new KTabWidget(viewport());
+    d->tab               = new QTabWidget(viewport());
     setWidget(d->tab);
     setWidgetResizable(true);
 

@@ -138,7 +138,7 @@ public:
     QCheckBox*              preserveRatioBox;
     QCheckBox*              useGreycstorationBox;
 
-    KTabWidget*             mainTab;
+    QTabWidget*             mainTab;
 
     KUrlLabel*              cimgLogoLabel;
 
@@ -202,7 +202,7 @@ ResizeTool::ResizeTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->mainTab               = new KTabWidget();
+    d->mainTab               = new QTabWidget();
     QWidget* const firstPage = new QWidget(d->mainTab);
     QGridLayout* const grid  = new QGridLayout(firstPage);
 

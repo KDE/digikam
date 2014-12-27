@@ -171,7 +171,7 @@ public:
     QGroupBox*   albumSettingBox;
     QGroupBox*   importSettingBox;
 
-    KTabWidget*  tab;
+    QTabWidget*  tab;
 
     DFontSelect* fontSelect;
 };
@@ -188,7 +188,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->fontSelect           = new DFontSelect(i18n("Tool-Tips Font:"), panel);
     d->fontSelect->setToolTip(i18n("Select here the font used to display text in tool-tips."));
 
-    d->tab                  = new KTabWidget(panel);
+    d->tab                  = new QTabWidget(panel);
 
     // --------------------------------------------------------
 

@@ -77,7 +77,7 @@ public:
 const QString ImagePropertiesVersionsTab::Private::configActiveTab("Version Properties Tab");
 
 ImagePropertiesVersionsTab::ImagePropertiesVersionsTab(QWidget* const parent)
-    : KTabWidget(parent), d(new Private)
+    : QTabWidget(parent), d(new Private)
 {
     d->versionsWidget       = new VersionsWidget(this);
     insertTab(0, d->versionsWidget, i18n("Versions"));

@@ -160,7 +160,7 @@ public:
 
     DDateTimeEdit*       dateTimeEdit;
 
-    KTabWidget*          tabWidget;
+    QTabWidget*          tabWidget;
 
     SearchTextBar*       tagsSearchBar;
     AddTagsLineEdit*     newTagEdit;
@@ -189,7 +189,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
 {
     setMargin(0);
     setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    d->tabWidget           = new KTabWidget(this);
+    d->tabWidget           = new QTabWidget(this);
 
     d->metadataChangeTimer = new QTimer(this);
     d->metadataChangeTimer->setSingleShot(true);

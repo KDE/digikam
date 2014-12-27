@@ -85,7 +85,7 @@ public:
     {
     }
 
-    KTabWidget*    tab;
+    QTabWidget*    tab;
 
     QWidget*       nonDestructivePanel;
 

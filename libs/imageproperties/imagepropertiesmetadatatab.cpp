@@ -79,7 +79,7 @@ public:
 };
 
 ImagePropertiesMetaDataTab::ImagePropertiesMetaDataTab(QWidget* const parent)
-    : KTabWidget(parent), d(new Private)
+    : QTabWidget(parent), d(new Private)
 {
     // Exif tab area ---------------------------------------
 

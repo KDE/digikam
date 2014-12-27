@@ -143,8 +143,8 @@ public:
     QCheckBox*     readFromBalooBox;
     QToolButton*   resyncButton;
 
-    KTabWidget*    tab;
-    KTabWidget*    displaySubTab;
+    QTabWidget*    tab;
+    QTabWidget*    displaySubTab;
 
     MetadataPanel* tagsCfgPanel;
 };
@@ -152,7 +152,7 @@ public:
 SetupMetadata::SetupMetadata(QWidget* const parent)
     : QScrollArea(parent), d(new Private)
 {
-    d->tab = new KTabWidget(viewport());
+    d->tab = new QTabWidget(viewport());
     setWidget(d->tab);
     setWidgetResizable(true);
 
@@ -449,7 +449,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     QLabel* const displayIcon        = new QLabel;
     displayIcon->setPixmap(SmallIcon("view-list-tree", KIconLoader::SizeMedium));
 
-    d->displaySubTab                 = new KTabWidget;
+    d->displaySubTab                 = new QTabWidget;
     d->tagsCfgPanel                  = new MetadataPanel(d->displaySubTab);
 
     displayLayout->addWidget(displayIcon,      0, 0);

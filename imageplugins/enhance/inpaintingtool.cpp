@@ -119,7 +119,7 @@ public:
 
     QImage                  maskImage;
 
-    KTabWidget*             mainTab;
+    QTabWidget*             mainTab;
 
     QComboBox*              inpaintingTypeCB;
 
@@ -172,7 +172,7 @@ InPaintingTool::InPaintingTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->mainTab                     = new KTabWidget(d->gboxSettings->plainPage());
+    d->mainTab                     = new QTabWidget(d->gboxSettings->plainPage());
     QWidget* const firstPage       = new QWidget(d->mainTab);
 
     KUrlLabel* const cimgLogoLabel = new KUrlLabel();

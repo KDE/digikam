@@ -62,9 +62,9 @@ public:
 };
 
 ToolsView::ToolsView(QWidget* const parent)
-    : KTabWidget(parent), d(new Private)
+    : QTabWidget(parent), d(new Private)
 {
-    setTabBarHidden(false);
+    setTabBarAutoHide(false);
 
 #if KDE_IS_VERSION(4,3,0)
     setTabsClosable(false);

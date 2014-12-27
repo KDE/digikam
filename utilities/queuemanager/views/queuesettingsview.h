@@ -40,7 +40,7 @@ namespace Digikam
 class AssignedBatchTools;
 class QueueSettings;
 
-class QueueSettingsView : public KTabWidget
+class QueueSettingsView : public QTabWidget
 {
     Q_OBJECT
 

@@ -105,7 +105,7 @@ public:
 
     QCheckBox*       fastApproxCBox;
 
-    KTabWidget*      parent;
+    QTabWidget*      parent;
 
     RComboBox*       interpolationBox;
 
@@ -123,7 +123,7 @@ public:
     RIntNumInput*    tileInput;
 };
 
-GreycstorationSettings::GreycstorationSettings(KTabWidget* parent)
+GreycstorationSettings::GreycstorationSettings(QTabWidget* parent)
     : QObject(static_cast<QObject*>(parent)),
       d(new GreycstorationSettingsPriv)
 {

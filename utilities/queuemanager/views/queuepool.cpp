@@ -26,18 +26,18 @@
 // Qt includes
 
 #include <QTabBar>
+#include <QApplication>
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kdeversion.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "applicationsettings.h"
 #include "iccsettings.h"
 #include "metadatasettings.h"
@@ -52,9 +52,9 @@ namespace Digikam
 {
 
 QueuePool::QueuePool(QWidget* const parent)
-    : KTabWidget(parent)
+    : QTabWidget(parent)
 {
-    setTabBarHidden(false);
+    setTabBarAutoHide(false);
 #if KDE_IS_VERSION(4,3,0)
     setTabsClosable(false);
 #else
@@ -88,7 +88,7 @@ void QueuePool::keyPressEvent(QKeyEvent* event)
     }
     else
     {
-        KTabWidget::keyPressEvent(event);
+        QTabWidget::keyPressEvent(event);
     }
 }
 
@@ -152,7 +152,7 @@ QMap<int, QString> QueuePool::queuesMap() const
 
 QString QueuePool::queueTitle(int index) const
 {
-    // NOTE: clean up tab title. With KTabWidget, it sound like mistake is added, as '&' and space.
+    // NOTE: clean up tab title. With QTabWidget, it sound like mistake is added, as '&' and space.
     // NOTE update, & is an usability helper to allow keyboard access -teemu
     return (tabText(index).remove('&').remove(' '));
 }
@@ -371,7 +371,7 @@ void QueuePool::removeTab(int index)
         }
     }
 
-    KTabWidget::removeTab(index);
+    QTabWidget::removeTab(index);
 }
 
 void QueuePool::slotTestCanDecode(const QDragMoveEvent* e, bool& accept)

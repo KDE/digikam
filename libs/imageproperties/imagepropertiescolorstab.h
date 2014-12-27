@@ -47,7 +47,7 @@ namespace Digikam
 class DImg;
 class LoadingDescription;
 
-class DIGIKAM_EXPORT ImagePropertiesColorsTab : public KTabWidget
+class DIGIKAM_EXPORT ImagePropertiesColorsTab : public QTabWidget
 {
     Q_OBJECT
 

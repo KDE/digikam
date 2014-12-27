@@ -168,7 +168,7 @@ public:
     KLineEdit*                nameEditSketch;
     KLineEdit*                nameEditImage;
 
-    KTabWidget*               tabWidget;
+    QTabWidget*               tabWidget;
 
     KHueSaturationSelector*   hsSelector;
 
@@ -226,7 +226,7 @@ FuzzySearchView::FuzzySearchView(SearchModel* const searchModel,
     QWidget* const sketchPanel = setupSketchPanel();
     d->findDuplicatesPanel     = new FindDuplicatesView();
 
-    d->tabWidget               = new KTabWidget();
+    d->tabWidget               = new QTabWidget();
     d->tabWidget->insertTab(Private::DUPLICATES, d->findDuplicatesPanel, i18n("Duplicates"));
     d->tabWidget->insertTab(Private::SIMILARS,   imagePanel,             i18n("Image"));
     d->tabWidget->insertTab(Private::SKETCH,     sketchPanel,            i18n("Sketch"));

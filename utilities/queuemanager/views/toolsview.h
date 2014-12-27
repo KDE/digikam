@@ -37,7 +37,7 @@ namespace Digikam
 
 class BatchTool;
 
-class ToolsView : public KTabWidget
+class ToolsView : public QTabWidget
 {
     Q_OBJECT
 

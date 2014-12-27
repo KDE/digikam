@@ -41,7 +41,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ImagePropertiesMetaDataTab : public KTabWidget
+class DIGIKAM_EXPORT ImagePropertiesMetaDataTab : public QTabWidget
 {
     Q_OBJECT
 

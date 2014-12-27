@@ -77,7 +77,7 @@ public:
     QCheckBox*              exifRotateBox;
     QCheckBox*              exifSetOrientationBox;
 
-    KTabWidget*             tab;
+    QTabWidget*             tab;
 
     Digikam::MetadataPanel* tagsCfgPanel;
 };
@@ -85,7 +85,7 @@ public:
 SetupMetadata::SetupMetadata(QWidget* const parent )
     : QScrollArea(parent), d(new Private)
 {
-    d->tab = new KTabWidget(viewport());
+    d->tab = new QTabWidget(viewport());
     setWidget(d->tab);
     setWidgetResizable(true);
 

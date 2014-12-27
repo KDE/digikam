@@ -97,7 +97,7 @@ public:
     static const QString    configTileEntry;
     static const QString    configBTileEntry;
 
-    KTabWidget*             mainTab;
+    QTabWidget*             mainTab;
 
     QComboBox*              restorationTypeCB;
 
@@ -143,7 +143,7 @@ RestorationTool::RestorationTool(QObject* const parent)
                                 EditorToolSettings::Try);
 
     QGridLayout* const gridSettings = new QGridLayout(d->gboxSettings->plainPage());
-    d->mainTab                      = new KTabWidget( d->gboxSettings->plainPage() );
+    d->mainTab                      = new QTabWidget( d->gboxSettings->plainPage() );
 
     QWidget* const firstPage = new QWidget( d->mainTab );
     QGridLayout* const grid  = new QGridLayout(firstPage);

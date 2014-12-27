@@ -197,7 +197,7 @@ public:
 
 public:
 
-    KTabWidget*           tab;
+    QTabWidget*           tab;
 
     QStringList           defaultExifFilter;
     QStringList           defaultMknoteFilter;
@@ -210,7 +210,7 @@ public:
     MetadataSelectorView* xmpViewerConfig;
 };
 
-MetadataPanel::MetadataPanel(KTabWidget* const tab)
+MetadataPanel::MetadataPanel(QTabWidget* const tab)
     : QObject(tab), d(new Private)
 {
     d->tab = tab;

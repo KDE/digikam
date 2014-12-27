@@ -51,7 +51,7 @@ class ImageInfo;
 class ImageModel;
 class VersionsWidget;
 
-class ImagePropertiesVersionsTab : public KTabWidget
+class ImagePropertiesVersionsTab : public QTabWidget
 {
     Q_OBJECT
 

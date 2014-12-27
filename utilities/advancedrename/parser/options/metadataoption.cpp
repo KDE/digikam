@@ -56,7 +56,7 @@ MetadataOptionDialog::MetadataOptionDialog(Rule* parent) :
     separatorLineEdit(0)
 {
     QWidget* mainWidget  = new QWidget(this);
-    KTabWidget* tab      = new KTabWidget(this);
+    QTabWidget* tab      = new QTabWidget(this);
     metadataPanel        = new MetadataPanel(tab);
     QLabel* customLabel  = new QLabel(i18n("Keyword separator:"));
     separatorLineEdit    = new KLineEdit(this);

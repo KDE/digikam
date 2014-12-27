@@ -47,7 +47,7 @@ class AssignedBatchTools;
 class QueueSettings;
 class QueueListView;
 
-class QueuePool : public KTabWidget
+class QueuePool : public QTabWidget
 {
     Q_OBJECT
 

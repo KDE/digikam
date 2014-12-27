@@ -141,7 +141,7 @@ public:
     QPushButton*         updateBtn;
     QPushButton*         resetCurveBtn;
 
-    KTabWidget*          tabView;
+    QTabWidget*          tabView;
 
     CurvesWidget*        curveWidget;
 
@@ -167,7 +167,7 @@ RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* const parent)
     setHistogramType(LRGBC);
 
     QGridLayout* const gridSettings = new QGridLayout(plainPage());
-    d->tabView                      = new KTabWidget(plainPage());
+    d->tabView                      = new QTabWidget(plainPage());
 
     // - RAW Decoding view --------------------------------------------------------------
 

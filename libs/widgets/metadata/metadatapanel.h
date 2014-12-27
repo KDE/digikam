@@ -33,7 +33,7 @@
 
 #include "digikam_export.h"
 
-class KTabWidget;
+class QTabWidget;
 
 namespace Digikam
 {
@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT MetadataPanel : public QObject
 
 public:
 
-    explicit MetadataPanel(KTabWidget* const tab);
+    explicit MetadataPanel(QTabWidget* const tab);
     ~MetadataPanel();
 
     void                         applySettings();
