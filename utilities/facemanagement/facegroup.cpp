@@ -50,6 +50,7 @@
 #include "searchutilities.h"
 #include "taggingaction.h"
 #include "itemvisibilitycontroller.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {

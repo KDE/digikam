@@ -30,7 +30,7 @@
 #include <QString>
 #include <QPointer>
 
-class KAction;
+class QAction;
 
 namespace Digikam
 {
@@ -44,7 +44,7 @@ public:
     CameraType();
     CameraType(const QString& title, const QString& model,
                const QString& port, const QString& path,
-               int startingNumber, KAction* const action = 0);
+               int startingNumber, QAction* const action = 0);
     ~CameraType();
 
     CameraType(const CameraType& ctype);
@@ -55,7 +55,7 @@ public:
     void setPort(const QString& port);
     void setPath(const QString& path);
     void setStartingNumber(int sn);
-    void setAction(KAction* const action);
+    void setAction(QAction* const action);
     void setValid(bool valid);
     void setCurrentImportUI(ImportUI* const importui);
 
@@ -64,7 +64,7 @@ public:
     QString   port()            const;
     QString   path()            const;
     int       startingNumber()  const;
-    KAction*  action()          const;
+    QAction*  action()          const;
     bool      valid()           const;
     ImportUI* currentImportUI() const;
 

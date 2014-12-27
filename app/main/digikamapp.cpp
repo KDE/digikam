@@ -258,8 +258,8 @@ DigikamApp::DigikamApp()
     connect(d->cameraList, SIGNAL(signalCameraAdded(CameraType*)),
             this, SLOT(slotCameraAdded(CameraType*)));
 
-    connect(d->cameraList, SIGNAL(signalCameraRemoved(KAction*)),
-            this, SLOT(slotCameraRemoved(KAction*)));
+    connect(d->cameraList, SIGNAL(signalCameraRemoved(QAction*)),
+            this, SLOT(slotCameraRemoved(QAction*)));
 
     d->modelCollection = new DigikamModelCollection;
 
@@ -1693,7 +1693,7 @@ void DigikamApp::slotCameraAdded(CameraType* ctype)
     updateQuickImportAction();
 }
 
-void DigikamApp::slotCameraRemoved(KAction* cAction)
+void DigikamApp::slotCameraRemoved(QAction* cAction)
 {
     if (cAction)
     {

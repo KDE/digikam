@@ -32,10 +32,7 @@
 #include <QString>
 #include <QPixmap>
 #include <QVariant>
-
-// KDE includes
-
-#include <kurl.h>
+#include <QUrl>
 
 // Libkipi includes
 
@@ -72,16 +69,16 @@ public:
     KIPI::ImageCollection        currentAlbum();
     KIPI::ImageCollection        currentSelection();
     QList<KIPI::ImageCollection> allAlbums();
-    KIPI::ImageInfo              info(const KUrl&);
+    KIPI::ImageInfo              info(const QUrl&);
 
-    bool addImage(const KUrl&, QString& errmsg);
-    void delImage(const KUrl&);
-    void refreshImages(const KUrl::List& urls);
+    bool addImage(const QUrl&, QString& errmsg);
+    void delImage(const QUrl&);
+    void refreshImages(const QList<QUrl>& urls);
 
     int  features() const;
 
-    void thumbnail(const KUrl& url, int size);
-    void thumbnails(const KUrl::List& list, int size);
+    void thumbnail(const QUrl& url, int size);
+    void thumbnails(const QList<QUrl>& list, int size);
 
     KIPI::ImageCollectionSelector* imageCollectionSelector(QWidget* parent);
     KIPI::UploadWidget*            uploadWidget(QWidget* parent);
@@ -95,11 +92,11 @@ public:
     void    progressThumbnailChanged(const QString& id, const QPixmap& thumb);
     void    progressCompleted(const QString& id);
 
-    KIPI::FileReadWriteLock* createReadWriteLock(const KUrl& url) const;
+    KIPI::FileReadWriteLock* createReadWriteLock(const QUrl& url) const;
 
     #if KIPI_VERSION >= 0x020100
-    void aboutToEdit(const KUrl& url, KIPI::EditHints hints);
-    void editingFinished(const KUrl& url, KIPI::EditHints hints);
+    void aboutToEdit(const QUrl& url, KIPI::EditHints hints);
+    void editingFinished(const QUrl& url, KIPI::EditHints hints);
     #endif
 
 public Q_SLOTS:

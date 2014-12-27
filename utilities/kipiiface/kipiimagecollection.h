@@ -32,10 +32,7 @@
 
 #include <QString>
 #include <QDate>
-
-// KDE includes
-
-#include <kurl.h>
+#include <QUrl>
 
 // Libkipi includes
 
@@ -64,19 +61,19 @@ public:
 
 public:
 
-    KipiImageCollection(Type type, Album* const album, const QString& filter, KUrl::List imagesUrlList = KUrl::List());
+    KipiImageCollection(Type type, Album* const album, const QString& filter, QList<QUrl> imagesUrlList = QList<QUrl>());
     ~KipiImageCollection();
 
-    virtual QString    name();
-    virtual QString    comment();
-    virtual QString    category();
-    virtual QDate      date();
-    virtual KUrl::List images();
-    virtual KUrl       path();
-    virtual KUrl       uploadPath();
-    virtual KUrl       uploadRoot();
-    virtual QString    uploadRootName();
-    virtual bool       isDirectory();
+    virtual QString     name();
+    virtual QString     comment();
+    virtual QString     category();
+    virtual QDate       date();
+    virtual QList<QUrl> images();
+    virtual QUrl        path();
+    virtual QUrl        uploadPath();
+    virtual QUrl        uploadRoot();
+    virtual QString     uploadRootName();
+    virtual bool        isDirectory();
 
     virtual bool operator==(ImageCollectionShared&);
 

@@ -183,7 +183,7 @@ private Q_SLOTS:
     void slotSolidSetupDone(Solid::ErrorType errorType, QVariant errorData, const QString& udi);
     void slotSolidDeviceChanged(const QString& udi);
     void slotCameraAdded(CameraType*);
-    void slotCameraRemoved(KAction*);
+    void slotCameraRemoved(QAction*);
     void slotCameraAutoDetect();
     void downloadImages(const QString& folder);
     void cameraAutoDetect();

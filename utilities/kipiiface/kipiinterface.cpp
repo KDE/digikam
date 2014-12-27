@@ -33,7 +33,6 @@
 
 #include <kconfig.h>
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
 
 // Libkipi includes
 
@@ -43,6 +42,7 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "album.h"
 #include "albumdb.h"
 #include "applicationsettings.h"
@@ -82,7 +82,8 @@ public:
 };
 
 KipiInterface::KipiInterface(QObject* const parent, const char* name)
-    : KIPI::Interface(parent, name), d(new Private())
+    : KIPI::Interface(parent, name),
+      d(new Private())
 {
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
     d->albumManager    = AlbumManager::instance();
@@ -106,7 +107,7 @@ KIPI::ImageCollection KipiInterface::currentAlbum()
         return KIPI::ImageCollection(0);
     }
 
-    Album* currAlbum = d->albumManager->currentAlbums().first();
+    Album* const currAlbum = d->albumManager->currentAlbums().first();
 
     if (currAlbum)
     {
@@ -127,7 +128,7 @@ KIPI::ImageCollection KipiInterface::currentSelection()
             return KIPI::ImageCollection(0);
     }
 
-    Album* currAlbum = d->albumManager->currentAlbums().first();
+    Album* const currAlbum = d->albumManager->currentAlbums().first();
 
     if (currAlbum)
     {
@@ -157,7 +158,7 @@ QList<KIPI::ImageCollection> KipiInterface::allAlbums()
             continue;
         }
 
-        KipiImageCollection* col = new KipiImageCollection(KipiImageCollection::AllItems, *it, fileFilter);
+        KipiImageCollection* const col = new KipiImageCollection(KipiImageCollection::AllItems, *it, fileFilter);
         result.append(KIPI::ImageCollection(col));
     }
 
@@ -172,28 +173,27 @@ QList<KIPI::ImageCollection> KipiInterface::allAlbums()
             continue;
         }
 
-        KipiImageCollection* col = new KipiImageCollection(KipiImageCollection::AllItems,
-                                                           *it, fileFilter);
+        KipiImageCollection* const col = new KipiImageCollection(KipiImageCollection::AllItems, *it, fileFilter);
         result.append(KIPI::ImageCollection(col));
     }
 
     return result;
 }
 
-KIPI::ImageInfo KipiInterface::info(const KUrl& url)
+KIPI::ImageInfo KipiInterface::info(const QUrl& url)
 {
     return KIPI::ImageInfo(new KipiImageInfo(this, url));
 }
 
-void KipiInterface::refreshImages(const KUrl::List& urls)
+void KipiInterface::refreshImages(const QList<QUrl>& urls)
 {
-    KUrl::List ulist = urls;
+    QList<QUrl> ulist = urls;
 
     // Hard Refresh
     QSet<QString>    dirs;
     QList<qlonglong> ids;
 
-    foreach(const KUrl& url, urls)
+    foreach(const QUrl& url, urls)
     {
         ImageInfo info = ImageInfo::fromUrl(url);
 
@@ -206,7 +206,7 @@ void KipiInterface::refreshImages(const KUrl::List& urls)
         ThumbnailLoadThread::deleteThumbnail(path);
         LoadingCacheInterface::fileChanged(path);
         ImageAttributesWatch::instance()->fileMetadataChanged(url);
-        dirs << url.directory();
+        dirs << url.adjusted(QUrl::RemoveFilename).path();
     }
 
     ScanController::instance()->hintAtModificationOfItems(ids);
@@ -236,7 +236,7 @@ int KipiInterface::features() const
           );
 }
 
-bool KipiInterface::addImage(const KUrl& url, QString& errmsg)
+bool KipiInterface::addImage(const QUrl& url, QString& errmsg)
 {
     // Note : All copy/move operations are processed by the plugins.
 
@@ -246,7 +246,7 @@ bool KipiInterface::addImage(const KUrl& url, QString& errmsg)
         return false;
     }
 
-    PAlbum* targetAlbum = d->albumManager->findPAlbum(url.directory());
+    PAlbum* const targetAlbum = d->albumManager->findPAlbum(url.adjusted(QUrl::RemoveFilename).path());
 
     if (!targetAlbum)
     {
@@ -259,9 +259,9 @@ bool KipiInterface::addImage(const KUrl& url, QString& errmsg)
     return true;
 }
 
-void KipiInterface::delImage(const KUrl& url)
+void KipiInterface::delImage(const QUrl& url)
 {
-    KUrl rootURL(CollectionManager::instance()->albumRoot(url));
+    QUrl rootURL(CollectionManager::instance()->albumRoot(url));
 
     if (!rootURL.isParentOf(url))
     {
@@ -270,7 +270,7 @@ void KipiInterface::delImage(const KUrl& url)
 
     // Is there a PAlbum for this URL
 
-    PAlbum* palbum = d->albumManager->findPAlbum(KUrl(url.directory()));
+    PAlbum* const palbum = d->albumManager->findPAlbum(url.adjusted(QUrl::RemoveFilename).path());
 
     if (palbum)
     {
@@ -293,15 +293,15 @@ void KipiInterface::slotCurrentAlbumChanged(QList<Album*> albums)
     emit currentAlbumChanged(!(albums.isEmpty()));
 }
 
-void KipiInterface::thumbnail(const KUrl& url, int /*size*/)
+void KipiInterface::thumbnail(const QUrl& url, int /*size*/)
 {
     // NOTE: size is not used here. Cache use the max pixmap size to store thumbs (256).
     d->thumbLoadThread->find(ImageInfo::fromUrl(url).thumbnailIdentifier());
 }
 
-void KipiInterface::thumbnails(const KUrl::List& list, int size)
+void KipiInterface::thumbnails(const QList<QUrl>& list, int size)
 {
-    for (KUrl::List::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
+    for (QList<QUrl>::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
     {
         thumbnail(*it, size);
     }
@@ -309,7 +309,7 @@ void KipiInterface::thumbnails(const KUrl::List& list, int size)
 
 void KipiInterface::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
 {
-    emit gotThumbnail(KUrl(desc.filePath), pix);
+    emit gotThumbnail(QUrl(desc.filePath), pix);
 }
 
 KIPI::ImageCollectionSelector* KipiInterface::imageCollectionSelector(QWidget* parent)
@@ -327,8 +327,8 @@ QAbstractItemModel* KipiInterface::getTagTree() const
 
     if (!d->tagModel)
     {
-        QAbstractItemModel* newTagModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum, NULL);
-        d->tagModel                     = newTagModel;
+        QAbstractItemModel* const newTagModel = new TagModel(AbstractAlbumModel::IgnoreRootAlbum, NULL);
+        d->tagModel                           = newTagModel;
     }
 
     return d->tagModel;
@@ -336,8 +336,8 @@ QAbstractItemModel* KipiInterface::getTagTree() const
 
 QVariant KipiInterface::hostSetting(const QString& settingName)
 {
-    MetadataSettings* mSettings = MetadataSettings::instance();
-    ApplicationSettings* aSettings    = ApplicationSettings::instance();
+    MetadataSettings* const mSettings    = MetadataSettings::instance();
+    ApplicationSettings* const aSettings = ApplicationSettings::instance();
 
     if (!mSettings || !aSettings)
     {
@@ -394,7 +394,7 @@ QVariant KipiInterface::hostSetting(const QString& settingName)
 
 QString KipiInterface::progressScheduled(const QString& title, bool canBeCanceled, bool hasThumb) const
 {
-    ProgressItem* item = ProgressManager::createProgressItem(title, QString(), canBeCanceled, hasThumb);
+    ProgressItem* const item = ProgressManager::createProgressItem(title, QString(), canBeCanceled, hasThumb);
 
     if (canBeCanceled)
     {
@@ -407,7 +407,7 @@ QString KipiInterface::progressScheduled(const QString& title, bool canBeCancele
 
 void KipiInterface::progressValueChanged(const QString& id, float percent)
 {
-    ProgressItem* item = ProgressManager::instance()->findItembyId(id);
+    ProgressItem* const item = ProgressManager::instance()->findItembyId(id);
 
     if (item)
     {
@@ -417,7 +417,7 @@ void KipiInterface::progressValueChanged(const QString& id, float percent)
 
 void KipiInterface::progressStatusChanged(const QString& id, const QString& status)
 {
-    ProgressItem* item = ProgressManager::instance()->findItembyId(id);
+    ProgressItem* const item = ProgressManager::instance()->findItembyId(id);
 
     if (item)
     {
@@ -427,7 +427,7 @@ void KipiInterface::progressStatusChanged(const QString& id, const QString& stat
 
 void KipiInterface::progressThumbnailChanged(const QString& id, const QPixmap& thumb)
 {
-    ProgressItem* item = ProgressManager::instance()->findItembyId(id);
+    ProgressItem* const item = ProgressManager::instance()->findItembyId(id);
 
     if (item)
     {
@@ -437,7 +437,7 @@ void KipiInterface::progressThumbnailChanged(const QString& id, const QPixmap& t
 
 void KipiInterface::progressCompleted(const QString& id)
 {
-    ProgressItem* item = ProgressManager::instance()->findItembyId(id);
+    ProgressItem* const item = ProgressManager::instance()->findItembyId(id);
 
     if (item)
     {
@@ -446,7 +446,7 @@ void KipiInterface::progressCompleted(const QString& id)
 }
 
 #if KIPI_VERSION >= 0x020100
-void KipiInterface::aboutToEdit(const KUrl& url, KIPI::EditHints hints)
+void KipiInterface::aboutToEdit(const QUrl& url, KIPI::EditHints hints)
 {
     if (hints == KIPI::HintMetadataOnlyChange)
     {
@@ -455,7 +455,7 @@ void KipiInterface::aboutToEdit(const KUrl& url, KIPI::EditHints hints)
     }
 }
 
-void KipiInterface::editingFinished(const KUrl& url, KIPI::EditHints hints)
+void KipiInterface::editingFinished(const QUrl& url, KIPI::EditHints hints)
 {
     if ((hints & ~KIPI::HintEditAborted) == KIPI::HintMetadataOnlyChange)
     {
@@ -496,7 +496,7 @@ public:
     FileReadWriteLockKey key;
 };
 
-KIPI::FileReadWriteLock* KipiInterface::createReadWriteLock(const KUrl& url) const
+KIPI::FileReadWriteLock* KipiInterface::createReadWriteLock(const QUrl& url) const
 {
     return new KipiInterfaceFileReadWriteLock(url.toLocalFile());
 }

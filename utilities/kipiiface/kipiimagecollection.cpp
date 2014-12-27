@@ -31,7 +31,6 @@
 
 #include <kconfig.h>
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
 
 // Local includes
 
@@ -44,6 +43,7 @@
 #include "digikamview.h"
 #include "imagesortsettings.h"
 #include "namefilter.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -58,18 +58,18 @@ public:
         type  = SelectedItems;
     }
 
-    KUrl::List imagesFromPAlbum(PAlbum* const album) const;
-    KUrl::List imagesFromTAlbum(TAlbum* const album) const;
+    QList<QUrl> imagesFromPAlbum(PAlbum* const album) const;
+    QList<QUrl> imagesFromTAlbum(TAlbum* const album) const;
 
 public:
 
     QString                   imgFilter;
     KipiImageCollection::Type type;
     Album*                    album;
-    KUrl::List                readyImageUrlList;
+    QList<QUrl>                readyImageUrlList;
 };
 
-KipiImageCollection::KipiImageCollection(Type type, Album* const album, const QString& filter, KUrl::List imagesUrlList)
+KipiImageCollection::KipiImageCollection(Type type, Album* const album, const QString& filter, QList<QUrl> imagesUrlList)
     : ImageCollectionShared(), d(new Private)
 {
     d->type      = type;
@@ -150,7 +150,7 @@ QString KipiImageCollection::comment()
     return QString();
 }
 
-KUrl::List KipiImageCollection::images()
+QList<QUrl> KipiImageCollection::images()
 {
     if(!d->readyImageUrlList.isEmpty())
     {
@@ -194,12 +194,12 @@ KUrl::List KipiImageCollection::images()
             break;
     }
 
-    return KUrl::List();
+    return QList<QUrl>();
 }
 
 /** get the images from the Physical album in database and return the items found.
  */
-KUrl::List KipiImageCollection::Private::imagesFromPAlbum(PAlbum* const album) const
+QList<QUrl> KipiImageCollection::Private::imagesFromPAlbum(PAlbum* const album) const
 {
     // get the images from the database and return the items found
 
@@ -226,15 +226,15 @@ KUrl::List KipiImageCollection::Private::imagesFromPAlbum(PAlbum* const album) c
             // ByISize not supported
     }
 
-    QStringList urls = DatabaseAccess().db()->getItemURLsInAlbum(album->id(), sortOrder);
-    KUrl::List  urlList;
+    QStringList list = DatabaseAccess().db()->getItemURLsInAlbum(album->id(), sortOrder);
+    QList<QUrl> urlList;
     NameFilter  nameFilter(imgFilter);
 
-    for (QStringList::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
+    for (QStringList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
     {
         if (nameFilter.matches(*it))
         {
-            urlList.append(*it);
+            urlList << QUrl::fromLocalFile(*it);
         }
     }
 
@@ -243,24 +243,24 @@ KUrl::List KipiImageCollection::Private::imagesFromPAlbum(PAlbum* const album) c
 
 /** get the images from the Tags album in database and return the items found.
  */
-KUrl::List KipiImageCollection::Private::imagesFromTAlbum(TAlbum* const album) const
+QList<QUrl> KipiImageCollection::Private::imagesFromTAlbum(TAlbum* const album) const
 {
-    QStringList urls = DatabaseAccess().db()->getItemURLsInTag(album->id());
-    KUrl::List  urlList;
+    QStringList list = DatabaseAccess().db()->getItemURLsInTag(album->id());
+    QList<QUrl> urlList;
     NameFilter  nameFilter(imgFilter);
 
-    for (QStringList::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
+    for (QStringList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
     {
         if (nameFilter.matches(*it))
         {
-            urlList.append(*it);
+            urlList << QUrl::fromLocalFile(*it);
         }
     }
 
     return urlList;
 }
 
-KUrl KipiImageCollection::path()
+QUrl KipiImageCollection::path()
 {
     if (d->album->type() == Album::PHYSICAL)
     {
@@ -268,17 +268,17 @@ KUrl KipiImageCollection::path()
 
         if (p)
         {
-            KUrl url;
+            QUrl url;
             url.setPath(p->folderPath());
             return url;
         }
     }
 
-    qCWarning(DIGIKAM_GENERAL_LOG) << "Requesting KUrl from a virtual album";
-    return KUrl();
+    qCWarning(DIGIKAM_GENERAL_LOG) << "Requesting QUrl from a virtual album";
+    return QUrl();
 }
 
-KUrl KipiImageCollection::uploadPath()
+QUrl KipiImageCollection::uploadPath()
 {
     if (d->album->type() == Album::PHYSICAL)
     {
@@ -286,19 +286,19 @@ KUrl KipiImageCollection::uploadPath()
 
         if (p)
         {
-            KUrl url;
+            QUrl url;
             url.setPath(p->folderPath());
             return url;
         }
     }
 
-    qCWarning(DIGIKAM_GENERAL_LOG) << "Requesting KUrl from a virtual album";
-    return KUrl();
+    qCWarning(DIGIKAM_GENERAL_LOG) << "Requesting QUrl from a virtual album";
+    return QUrl();
 }
 
-KUrl KipiImageCollection::uploadRoot()
+QUrl KipiImageCollection::uploadRoot()
 {
-    return KUrl(CollectionManager::instance()->oneAlbumRootPath() + '/');
+    return QUrl(CollectionManager::instance()->oneAlbumRootPath() + '/');
 }
 
 QString KipiImageCollection::uploadRootName()

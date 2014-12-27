@@ -33,9 +33,9 @@
 
 // KDE includes
 
+#include <kio/global.h>
 #include <kconfig.h>
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
 
 // LibKipi includes
 
@@ -43,6 +43,7 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "album.h"
 #include "albumdb.h"
 #include "albummanager.h"
@@ -194,14 +195,14 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
         // Here we get informed that a plugin has renamed item
         if (attributes.contains("name"))
         {
-            PAlbum* p       = d->parentAlbum();
+            PAlbum* p = d->parentAlbum();
             QString newName = attributes["name"].toString();
 
             if (p && !newName.isEmpty())
             {
                 DatabaseAccess().db()->moveItem(p->id(), _url.fileName(), p->id(), newName);
-                _url = _url.upUrl();
-                _url.addPath(newName);
+                _url = KIO::upUrl(_url);
+                _url.setPath(newName);
             }
 
             attributes.remove("name");

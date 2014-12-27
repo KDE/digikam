@@ -24,9 +24,9 @@
 
 #include "cameratype.h"
 
-// KDE includes
+// Qt includes
 
-#include <kaction.h>
+#include <QAction>
 
 // Local includes
 
@@ -55,7 +55,7 @@ public:
     QString            port;
     QString            path;
 
-    KAction*           action;
+    QAction*           action;
 
     QPointer<ImportUI> currentImportUI;
 };
@@ -67,7 +67,7 @@ CameraType::CameraType()
 
 CameraType::CameraType(const QString& title, const QString& model,
                        const QString& port, const QString& path,
-                       int startingNumber, KAction* const action)
+                       int startingNumber, QAction* const action)
     : d(new Private)
 {
     setTitle(title);
@@ -137,7 +137,7 @@ void CameraType::setStartingNumber(int sn)
     d->startingNumber = sn;
 }
 
-void CameraType::setAction(KAction* const action)
+void CameraType::setAction(QAction* const action)
 {
     d->action = action;
 }
@@ -177,7 +177,7 @@ int CameraType::startingNumber() const
     return d->startingNumber;
 }
 
-KAction* CameraType::action() const
+QAction* CameraType::action() const
 {
     return d->action;
 }

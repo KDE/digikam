@@ -30,26 +30,30 @@
 #include <QHeaderView>
 #include <QTreeWidgetItemIterator>
 #include <QHBoxLayout>
+#include <QApplication>
+#include <QStyle>
+#include <QTabWidget>
 
 // KDE includes
 
-#include "digikam_debug.h"
-#include <kdialog.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <ktabwidget.h>
-#include <kvbox.h>
-#include <QApplication>
-#include <QStyle>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "album.h"
 #include "applicationsettings.h"
 #include "albumtreeview.h"
 #include "kipiimagecollection.h"
 #include "kipiinterface.h"
 #include "albumlabelstreeview.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -121,7 +125,7 @@ public:
 
 public:
 
-    KTabWidget*               tab;
+    QTabWidget*               tab;
 
     AlbumModel*               albumModel;
     AlbumTreeView*            albumTreeView;
@@ -149,7 +153,7 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
     KSharedConfigPtr config  = KSharedConfig::openConfig();
     KConfigGroup configGroup = config->group("KipiImageCollectionSelector");
     d->iface                 = iface;
-    d->tab                   = new KTabWidget(this);
+    d->tab                   = new QTabWidget(this);
 
     RVBox* const albumBox = new RVBox(d->tab);
     d->albumModel         = new AlbumModel(AbstractAlbumModel::IgnoreRootAlbum, albumBox);
