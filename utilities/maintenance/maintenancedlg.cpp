@@ -32,19 +32,18 @@
 #include <QComboBox>
 #include <QScrollArea>
 
+// KDE includes
+
+#include <klocalizedstring.h>
+#include <kiconloader.h>
+#include <kstandarddirs.h>
+#include <kconfig.h>
+
 // Libkdcraw includes
 
 #include <rwidgetutils.h>
 #include <rexpanderbox.h>
-
-// KDE includes
-
-#include <klocalizedstring.h>
-
-#include <kiconloader.h>
-#include <kstandarddirs.h>
-#include <knuminput.h>
-#include <kconfig.h>
+#include <rnuminput.h>
 
 // Local includes
 
@@ -143,7 +142,7 @@ public:
     QComboBox*           faceScannedHandling;
 #endif /* HAVE_KFACE */
 
-    KIntNumInput*        similarity;
+    RIntNumInput*        similarity;
     RExpanderBox*        expanderBox;
     AlbumSelectors*      albumSelectors;
 };
@@ -221,10 +220,9 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     new QLabel(i18n("Similarity (in percents): "), d->hbox);
     QWidget* const space = new QWidget(d->hbox);
     d->hbox->setStretchFactor(space, 10);
-    d->similarity        = new KIntNumInput(d->hbox);
-    d->similarity->setValue(90);
+    d->similarity        = new RIntNumInput(d->hbox);
+    d->similarity->setDefaultValue(90);
     d->similarity->setRange(0, 100, 1);
-    d->similarity->setSliderEnabled(false);
     d->expanderBox->insertItem(Private::Duplicates, d->hbox, SmallIcon("tools-wizard"),
                                i18n("Find Duplicates Items"), "Duplicates", false);
     d->expanderBox->setCheckBoxVisible(Private::Duplicates, true);

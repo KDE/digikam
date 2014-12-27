@@ -34,11 +34,11 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <knuminput.h>
 #include <kglobal.h>
 
 // Libkdcraw includes
 
+#include <rnuminput.h>
 #include <rwidgetutils.h>
 
 // Local includes
@@ -83,7 +83,7 @@ public:
 
     QCheckBox*    useCustom;
 
-    KIntNumInput* customLength;
+    RIntNumInput* customLength;
 
     QComboBox*    comboBox;
 };
@@ -151,8 +151,9 @@ void Resize::registerSettingsWidget()
     d->comboBox->insertItem(Private::Huge,   i18np("Huge (1 pixel)",   "Huge (%1 pixels)",   d->presetLengthValue(Private::Huge)));
 
     d->useCustom        = new QCheckBox(i18n("Use Custom Length"), vbox);
-    d->customLength     = new KIntNumInput(vbox);
-    d->customLength->setRange(10, 10000);
+    d->customLength     = new RIntNumInput(vbox);
+    d->customLength->setDefaultValue(Private::Medium);
+    d->customLength->setRange(10, 10000, 1);
 
     QLabel* const space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);

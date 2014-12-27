@@ -30,25 +30,28 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QVBoxLayout>
+#include <QIcon>
 
 // KDE includes
 
-
 #include <kconfig.h>
-#include <kdialog.h>
 #include <kglobal.h>
-
 #include <klocalizedstring.h>
-#include <knuminput.h>
 #include <kiconloader.h>
-#include <QIcon>
 #include <kurllabel.h>
 #include <kurlrequester.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
+#include <rnuminput.h>
 
 // Local includes
 
 #include "picklabelwidget.h"
 #include "imagequalitysettings.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -87,13 +90,13 @@ public:
     QCheckBox*    setPending;
     QCheckBox*    setAccepted;
 
-    KIntNumInput* setSpeed;
-    KIntNumInput* setRejectedThreshold;
-    KIntNumInput* setPendingThreshold;
-    KIntNumInput* setAcceptedThreshold;
-    KIntNumInput* setBlurWeight;
-    KIntNumInput* setNoiseWeight;
-    KIntNumInput* setCompressionWeight;
+    RIntNumInput* setSpeed;
+    RIntNumInput* setRejectedThreshold;
+    RIntNumInput* setPendingThreshold;
+    RIntNumInput* setAcceptedThreshold;
+    RIntNumInput* setBlurWeight;
+    RIntNumInput* setNoiseWeight;
+    RIntNumInput* setCompressionWeight;
 };
 
 // --------------------------------------------------------
@@ -117,9 +120,12 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
 
     // ------------------------------------------------------------------------------
 
-    d->setSpeed    = new KIntNumInput(5, d->optionsView);
+    RHBox* const hbox1 = new RHBox(d->optionsView);
+    QLabel* const lbl1 = new QLabel(i18n("Speed:"), hbox1);
+    lbl1->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    d->setSpeed    = new RIntNumInput(hbox1);
+    d->setSpeed->setDefaultValue(5);
     d->setSpeed->setRange(1, 3, 1);
-    d->setSpeed->setLabel(i18n("Speed:"), Qt::AlignLeft | Qt::AlignTop);
     d->setSpeed->setWhatsThis(i18n("Tradeoff between speed and accuracy of sorting algorithm"));
 
     d->detectBlur  = new QCheckBox(i18n("Detect Blur"), d->optionsView);
@@ -175,34 +181,52 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
 
     // ------------------------------------------------------------------------------
 
-    d->setRejectedThreshold = new KIntNumInput(5, d->optionsView);
+    RHBox* const hbox2 = new RHBox(d->optionsView);
+    QLabel* const lbl2 = new QLabel(i18n("Rejected threshold:"), hbox2);
+    lbl2->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    d->setRejectedThreshold = new RIntNumInput(hbox2);
+    d->setRejectedThreshold->setDefaultValue(5);
     d->setRejectedThreshold->setRange(1, 100, 1);
-    d->setRejectedThreshold->setLabel(i18n("Rejected threshold:"), Qt::AlignLeft | Qt::AlignTop);
     d->setRejectedThreshold->setWhatsThis(i18n("Threshold below which all pictures are assigned Rejected Label"));
 
-    d->setPendingThreshold  = new KIntNumInput(5, d->optionsView);
+    RHBox* const hbox3 = new RHBox(d->optionsView);
+    QLabel* const lbl3 = new QLabel(i18n("Pending threshold:"), hbox3);
+    lbl3->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    d->setPendingThreshold  = new RIntNumInput(hbox3);
+    d->setPendingThreshold->setDefaultValue(5);
     d->setPendingThreshold->setRange(1, 100, 1);
-    d->setPendingThreshold->setLabel(i18n("Pending threshold:"), Qt::AlignLeft | Qt::AlignTop);
     d->setPendingThreshold->setWhatsThis(i18n("Threshold below which all pictures are assigned Pending Label"));
 
-    d->setAcceptedThreshold = new KIntNumInput(5, d->optionsView);
+    RHBox* const hbox4 = new RHBox(d->optionsView);
+    QLabel* const lbl4 = new QLabel(i18n("Accepted threshold:"), hbox4);
+    lbl4->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    d->setAcceptedThreshold = new RIntNumInput(hbox4);
+    d->setAcceptedThreshold->setDefaultValue(5);
     d->setAcceptedThreshold->setRange(1, 100, 1);
-    d->setAcceptedThreshold->setLabel(i18n("Accepted threshold:"), Qt::AlignLeft | Qt::AlignTop);
     d->setAcceptedThreshold->setWhatsThis(i18n("Threshold above which all pictures are assigned Accepted Label"));
 
-    d->setBlurWeight        = new KIntNumInput(5, d->optionsView);
+    RHBox* const hbox5 = new RHBox(d->optionsView);
+    QLabel* const lbl5 = new QLabel(i18n("Blur Weight:"), hbox5);
+    lbl5->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    d->setBlurWeight        = new RIntNumInput(hbox5);
+    d->setBlurWeight->setDefaultValue(5);
     d->setBlurWeight->setRange(1, 100, 1);
-    d->setBlurWeight->setLabel(i18n("Blur Weight:"), Qt::AlignLeft | Qt::AlignTop);
     d->setBlurWeight->setWhatsThis(i18n("Weight to assign to Blur Algorithm"));
 
-    d->setNoiseWeight       = new KIntNumInput(5, d->optionsView);
+    RHBox* const hbox6 = new RHBox(d->optionsView);
+    QLabel* const lbl6 = new QLabel(i18n("Noise Weight:"), hbox6);
+    lbl6->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    d->setNoiseWeight       = new RIntNumInput(hbox6);
+    d->setNoiseWeight->setDefaultValue(5);
     d->setNoiseWeight->setRange(1, 100, 1);
-    d->setNoiseWeight->setLabel(i18n("Noise Weight:"), Qt::AlignLeft | Qt::AlignTop);
     d->setNoiseWeight->setWhatsThis(i18n("Weight to assign to Noise Algorithm"));
 
-    d->setCompressionWeight = new KIntNumInput(5, d->optionsView);
+    RHBox* const hbox7 = new RHBox(d->optionsView);
+    QLabel* const lbl7 = new QLabel(i18n("Compression Weight:"), hbox7);
+    lbl7->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    d->setCompressionWeight = new RIntNumInput(hbox7);
+    d->setCompressionWeight->setDefaultValue(5);
     d->setCompressionWeight->setRange(1, 100, 1);
-    d->setCompressionWeight->setLabel(i18n("Compression Weight:"), Qt::AlignLeft | Qt::AlignTop);
     d->setCompressionWeight->setWhatsThis(i18n("Weight to assign to Compression Algorithm"));
 
     QWidget* const vspace   = new QWidget(d->optionsView);

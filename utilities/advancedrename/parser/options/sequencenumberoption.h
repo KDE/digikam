@@ -29,8 +29,6 @@
 #include "option.h"
 #include "ruledialog.h"
 
-class KIntNumInput;
-
 namespace Ui
 {
 class SequenceNumberOptionDialogWidget;

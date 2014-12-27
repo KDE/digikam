@@ -30,14 +30,18 @@
 #include <QCheckBox>
 #include <QLayout>
 #include <QGridLayout>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kdialog.h>
-#include <knuminput.h>
-#include <QApplication>
-#include <QStyle>
+
+// Libkdcraw includes
+
+#include <rnuminput.h>
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -61,7 +65,7 @@ public:
 
     QCheckBox*    PGFLossLess;
 
-    KIntNumInput* PGFcompression;
+    RIntNumInput* PGFcompression;
 };
 
 PGFSettings::PGFSettings(QWidget* const parent)
@@ -76,7 +80,8 @@ PGFSettings::PGFSettings(QWidget* const parent)
                                       "<p>If this option is enabled, a lossless method will be used "
                                       "to compress PGF pictures.</p>"));
 
-    d->PGFcompression = new KIntNumInput(3, this);
+    d->PGFcompression = new RIntNumInput(this);
+    d->PGFcompression->setDefaultValue(3);
     d->PGFcompression->setRange(1, 9, 1);
     d->labelPGFcompression = new QLabel(i18n("PGF quality:"), this);
 

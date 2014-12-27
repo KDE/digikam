@@ -36,7 +36,12 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <knuminput.h>
+
+// Libkdcraw includes
+
+#include <rnuminput.h>
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -64,7 +69,7 @@ public:
 
     QComboBox*    subSamplingCB;
 
-    KIntNumInput* JPEGcompression;
+    RIntNumInput* JPEGcompression;
 };
 
 JPEGSettings::JPEGSettings(QWidget* const parent)
@@ -73,8 +78,9 @@ JPEGSettings::JPEGSettings(QWidget* const parent)
     setAttribute(Qt::WA_DeleteOnClose);
 
     d->JPEGGrid             = new QGridLayout(this);
-    d->JPEGcompression      = new KIntNumInput(75, this);
-    d->JPEGcompression->setRange(1, 100);
+    d->JPEGcompression      = new RIntNumInput(this);
+    d->JPEGcompression->setDefaultValue(75);
+    d->JPEGcompression->setRange(1, 100, 1);
     d->labelJPEGcompression = new QLabel(i18n("JPEG quality:"), this);
 
     d->JPEGcompression->setWhatsThis(i18n("<p>The JPEG quality:</p>"

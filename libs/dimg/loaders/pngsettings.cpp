@@ -24,6 +24,7 @@
 #include "pngsettings.h"
 
 // Qt includes
+
 #include <QApplication>
 #include <QStyle>
 #include <QString>
@@ -34,8 +35,12 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kdialog.h>
-#include <knuminput.h>
+
+// Libkdcraw includes
+
+#include <rnuminput.h>
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -56,7 +61,7 @@ public:
 
     QLabel*       labelPNGcompression;
 
-    KIntNumInput* PNGcompression;
+    RIntNumInput* PNGcompression;
 };
 
 PNGSettings::PNGSettings(QWidget* parent)
@@ -65,8 +70,9 @@ PNGSettings::PNGSettings(QWidget* parent)
     setAttribute(Qt::WA_DeleteOnClose);
 
     d->PNGGrid        = new QGridLayout(this);
-    d->PNGcompression = new KIntNumInput(9, this);
-    d->PNGcompression->setRange(1, 9);
+    d->PNGcompression = new RIntNumInput(this);
+    d->PNGcompression->setDefaultValue(6);
+    d->PNGcompression->setRange(1, 9, 1);
     d->labelPNGcompression = new QLabel(i18n("PNG compression:"), this);
 
     d->PNGcompression->setWhatsThis(i18n("<p>The compression value for PNG images:</p>"

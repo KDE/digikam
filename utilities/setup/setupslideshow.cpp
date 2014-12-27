@@ -39,11 +39,11 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <klocalizedstring.h>
-#include <knuminput.h>
 
 // Libkdcraw includes
 
 #include <rwidgetutils.h>
+#include <rnuminput.h>
 
 // Local includes
 
@@ -92,7 +92,7 @@ public:
     QCheckBox*    showProgress;
 
     QComboBox*    screenPlacement;
-    KIntNumInput* delayInput;
+    RIntNumInput* delayInput;
 };
 
 // --------------------------------------------------------
@@ -106,9 +106,12 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
 
     QVBoxLayout* const layout = new QVBoxLayout(panel);
 
-    d->delayInput = new KIntNumInput(5, panel);
+    RHBox* const hbox1 = new RHBox(panel);
+    QLabel* const lbl1 = new QLabel(i18n("&Delay between images:"), hbox1);
+    lbl1->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    d->delayInput = new RIntNumInput(hbox1);
+    d->delayInput->setDefaultValue(5);
     d->delayInput->setRange(1, 3600, 1);
-    d->delayInput->setLabel(i18n("&Delay between images:"), Qt::AlignLeft | Qt::AlignTop);
     d->delayInput->setWhatsThis(i18n("The delay, in seconds, between images."));
 
     d->startWithCurrent    = new QCheckBox(i18n("Start with current image"), panel);
