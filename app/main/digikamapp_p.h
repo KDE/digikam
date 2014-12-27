@@ -195,7 +195,6 @@ public:
         tagsActionManager(0),
         zoomBar(0),
         statusLabel(0),
-        mapViewSwitcher(0),
         modelCollection(0)
     {
     }
@@ -331,7 +330,6 @@ public:
     DZoomBar*                           zoomBar;
     KSqueezedTextLabel*                 statusLabel;
     QString                             statusBarSelectionText;
-    KComboBox*                          mapViewSwitcher;
 
     DigikamModelCollection*             modelCollection;
 };

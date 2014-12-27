@@ -28,8 +28,6 @@
 
 #include "batchtool.h"
 
-class KComboBox;
-
 namespace Digikam
 {
 
