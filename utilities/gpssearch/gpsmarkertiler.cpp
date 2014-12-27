@@ -36,6 +36,7 @@
 #include "digikam2kgeomap_database.h"
 #include "dnotificationwrapper.h"
 #include "digikamapp.h"
+#include "digikam_debug.h"
 
 /// @todo Actually use this definition!
 typedef QPair<KGeoMap::TileIndex, int> MapPair;

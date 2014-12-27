@@ -1266,7 +1266,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
     if(${KF5KFace_FOUND})
         set(libmaintenance_SRCS
             ${libmaintenance_SRCS}
-            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/facedetector.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/facesdetector.cpp
            )
     endif()
 

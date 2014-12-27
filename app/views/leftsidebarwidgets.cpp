@@ -47,7 +47,6 @@
 #include <kinputdialog.h>
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
-#include <ktabwidget.h>
 
 // Local includes
 
@@ -66,7 +65,7 @@
 #include "tagfolderview.h"
 #include "timelinewidget.h"
 #include "facescandialog.h"
-#include "facedetector.h"
+#include "facesdetector.h"
 #include "tagsmanager.h"
 #include "albumlabelstreeview.h"
 #include "albumdb.h"
@@ -1453,7 +1452,7 @@ void PeopleSideBarWidget::slotScanForFaces()
 
     if (dialog.exec() == QDialog::Accepted)
     {
-        FaceDetector* const tool = new FaceDetector(dialog.settings());
+        FacesDetector* const tool = new FacesDetector(dialog.settings());
         tool->start();
     }
 }

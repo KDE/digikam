@@ -23,34 +23,34 @@
  *
  * ============================================================ */
 
-#include "facedetector.h"
+#include "facesdetector.h"
 
 // Qt includes
 
 #include <QClipboard>
 #include <QVBoxLayout>
 #include <QTimer>
+#include <QIcon>
+#include <QPushButton>
+#include <QApplication>
 
 // KDE includes
 
-#include <QIcon>
 #include <kconfig.h>
-#include "digikam_debug.h"
 #include <klocalizedstring.h>
-#include <QPushButton>
 #include <kstandarddirs.h>
 #include <kstandardguiitem.h>
 #include <ktextedit.h>
-#include <kapplication.h>
+#include <kguiitem.h>
+#include <kstandardguiitem.h>
 
 // KFace includes
 
 #include <recognitiondatabase.h>
-#include <KGuiItem>
-#include <KStandardGuiItem>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "albumdb.h"
 #include "album.h"
 #include "albummanager.h"
@@ -94,7 +94,7 @@ public:
 
 // --------------------------------------------------------------------------
 
-class FaceDetector::Private
+class FacesDetector::Private
 {
 public:
 
@@ -122,8 +122,8 @@ public:
     int                 currentFinished;
 };
 
-FaceDetector::FaceDetector(const FaceScanSettings& settings, ProgressItem* const parent)
-    : MaintenanceTool("FaceDetector", parent),
+FacesDetector::FacesDetector(const FaceScanSettings& settings, ProgressItem* const parent)
+    : MaintenanceTool("FacesDetector", parent),
       d(new Private)
 {
     setLabel(i18n("Updating faces database."));
@@ -241,12 +241,12 @@ FaceDetector::FaceDetector(const FaceScanSettings& settings, ProgressItem* const
     }
 }
 
-FaceDetector::~FaceDetector()
+FacesDetector::~FacesDetector()
 {
     delete d;
 }
 
-void FaceDetector::slotStart()
+void FacesDetector::slotStart()
 {
     MaintenanceTool::slotStart();
 
@@ -321,7 +321,7 @@ void FaceDetector::slotStart()
     slotContinueAlbumListing();
 }
 
-void FaceDetector::slotContinueAlbumListing()
+void FacesDetector::slotContinueAlbumListing()
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << d->albumListing.isRunning() << !d->pipeline.hasFinished();
 
@@ -348,12 +348,12 @@ void FaceDetector::slotContinueAlbumListing()
     d->albumListing.allItemsFromAlbum(album);
 }
 
-void FaceDetector::slotItemsInfo(const ImageInfoList& items)
+void FacesDetector::slotItemsInfo(const ImageInfoList& items)
 {
     d->pipeline.process(items);
 }
 
-void FaceDetector::slotDone()
+void FacesDetector::slotDone()
 {
     if (d->benchmark)
     {
@@ -366,18 +366,18 @@ void FaceDetector::slotDone()
     MaintenanceTool::slotDone();
 }
 
-void FaceDetector::slotCancel()
+void FacesDetector::slotCancel()
 {
     d->pipeline.shutDown();
     MaintenanceTool::slotCancel();
 }
 
-void FaceDetector::slotImagesSkipped(const QList<ImageInfo>& infos)
+void FacesDetector::slotImagesSkipped(const QList<ImageInfo>& infos)
 {
     advance(infos.size());
 }
 
-void FaceDetector::slotShowOneDetected(const FacePipelinePackage& /*package*/)
+void FacesDetector::slotShowOneDetected(const FacePipelinePackage& /*package*/)
 {
     //TODO: Embedded images are gone. Needs to be solved by loading thumbnails
     /*QPixmap pix;

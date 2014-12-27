@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef BATCHFACEDETECTOR_H
-#define BATCHFACEDETECTOR_H
+#ifndef BATCHFACESDETECTOR_H
+#define BATCHFACESDETECTOR_H
 
 // Local includes
 
@@ -38,14 +38,14 @@ class FaceScanSettings;
 class ImageInfo;
 class ImageInfoList;
 
-class FaceDetector : public MaintenanceTool
+class FacesDetector : public MaintenanceTool
 {
     Q_OBJECT
 
 public:
 
-    explicit FaceDetector(const FaceScanSettings& settings, ProgressItem* const parent = 0);
-    ~FaceDetector();
+    explicit FacesDetector(const FaceScanSettings& settings, ProgressItem* const parent = 0);
+    ~FacesDetector();
 
 private Q_SLOTS:
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace Digikam
 
-#endif // BATCHFACEDETECTOR_H
+#endif // BATCHFACESDETECTOR_H

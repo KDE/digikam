@@ -37,20 +37,20 @@
 #include <QMenu>
 #include <QActionGroup>
 #include <QAction>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
 #include <kaction.h>
 #include <kconfig.h>
-#include "digikam_debug.h"
-#include <kdialog.h>
-#include <khbox.h>
+#include <kglobalsettings.h>
+#include <kiconloader.h>
 #include <kinputdialog.h>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "editablesearchtreeview.h"
 #include "imageinfojob.h"
 #include "searchxml.h"

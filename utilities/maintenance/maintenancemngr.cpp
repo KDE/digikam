@@ -49,7 +49,7 @@
 #include "progressmanager.h"
 
 #ifdef HAVE_KFACE
-#include "facedetector.h"
+#include "facesdetector.h"
 #endif /* HAVE_KFACE */
 
 namespace Digikam
@@ -70,7 +70,7 @@ public:
         imageQualitySorter    = 0;
 
 #ifdef HAVE_KFACE
-        faceDetector          = 0;
+        facesDetector         = 0;
 #endif /* HAVE_KFACE */
     }
 
@@ -88,12 +88,13 @@ public:
     ImageQualitySorter*    imageQualitySorter;
 
 #ifdef HAVE_KFACE
-    FaceDetector*          faceDetector;
+    FacesDetector*         facesDetector;
 #endif /* HAVE_KFACE */
 };
 
 MaintenanceMngr::MaintenanceMngr(QObject* const parent)
-    : QObject(parent), d(new Private)
+    : QObject(parent),
+      d(new Private)
 {
     connect(ProgressManager::instance(), SIGNAL(progressItemCompleted(ProgressItem*)),
             this, SLOT(slotToolCompleted(ProgressItem*)));
@@ -148,9 +149,9 @@ void MaintenanceMngr::slotToolCompleted(ProgressItem* tool)
         stage5();
     }
 #ifdef HAVE_KFACE
-    else if (tool == dynamic_cast<ProgressItem*>(d->faceDetector))
+    else if (tool == dynamic_cast<ProgressItem*>(d->facesDetector))
     {
-        d->faceDetector = 0;
+        d->facesDetector = 0;
         stage6();
     }
 #endif /* HAVE_KFACE */
@@ -173,7 +174,7 @@ void MaintenanceMngr::slotToolCanceled(ProgressItem* tool)
         tool == dynamic_cast<ProgressItem*>(d->fingerPrintsGenerator) ||
         tool == dynamic_cast<ProgressItem*>(d->duplicatesFinder)      ||
 #ifdef HAVE_KFACE
-        tool == dynamic_cast<ProgressItem*>(d->faceDetector)          ||
+        tool == dynamic_cast<ProgressItem*>(d->facesDetector)          ||
 #endif /* HAVE_KFACE */
         tool == dynamic_cast<ProgressItem*>(d->imageQualitySorter)    ||
         tool == dynamic_cast<ProgressItem*>(d->metadataSynchronizer))
@@ -284,9 +285,9 @@ void MaintenanceMngr::stage5()
     {
         // NOTE : Use multi-core CPU option is passed through FaceScanSettings
         d->settings.faceSettings.useFullCpu = d->settings.useMutiCoreCPU;
-        d->faceDetector                     = new FaceDetector(d->settings.faceSettings);
-        d->faceDetector->setNotificationEnabled(false);
-        d->faceDetector->start();
+        d->facesDetector                     = new FacesDetector(d->settings.faceSettings);
+        d->facesDetector->setNotificationEnabled(false);
+        d->facesDetector->start();
     }
     else
 #endif /* HAVE_KFACE */

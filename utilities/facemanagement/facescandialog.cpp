@@ -50,6 +50,7 @@
 // Libkdcraw includes
 
 #include <rnuminput.h>
+#include <rwidgetutils.h>
 
 // Local includes
 
@@ -57,6 +58,8 @@
 #include "albummodel.h"
 #include "albumselectors.h"
 #include "applicationsettings.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -137,7 +140,7 @@ public:
     AlbumSelectors*              albumSelectors;
 
     QToolButton*                 parametersResetButton;
-    KIntNumInput*                accuracyInput;
+    RIntNumInput*                accuracyInput;
 
     QCheckBox*                   useFullCpuButton;
     QCheckBox*                   retrainAllButton;
@@ -395,18 +398,18 @@ void FaceScanDialog::setupUi()
     d->parametersResetButton->setIcon(SmallIcon("document-revert"));
     d->parametersResetButton->setToolTip(i18nc("@action:button", "Reset to default values"));
 
-    d->accuracyInput                    = new KIntNumInput(parametersTab);
+    RHBox* const hbox                   = new RHBox(parametersTab);
+    QLabel* const accuracyLabel         = new QLabel(i18nc("@label Two extremities of a scale", "Fast   -   Accurate"), hbox);
+    accuracyLabel->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
+    d->accuracyInput                    = new RIntNumInput(hbox);
     d->accuracyInput->setRange(0, 100, 10);
-    d->accuracyInput->setSliderEnabled();
-    d->accuracyInput->setLabel(i18nc("@label Two extremities of a scale", "Fast   -   Accurate"),
-                               Qt::AlignTop | Qt::AlignHCenter);
     d->accuracyInput->setToolTip(i18nc("@info:tooltip",
                                        "Adjust speed versus accuracy: The higher the value, the more accurate the results "
                                        "will be, but it will take more time."));
 
     parametersLayout->addWidget(detectionLabel,           0, 0);
     parametersLayout->addWidget(d->parametersResetButton, 0, 1);
-    parametersLayout->addWidget(d->accuracyInput,         1, 0, 1, -1);
+    parametersLayout->addWidget(hbox,                     1, 0, 1, -1);
     parametersLayout->setColumnStretch(0, 10);
     parametersLayout->setRowStretch(2, 10);
 
@@ -465,7 +468,6 @@ void FaceScanDialog::setupUi()
 
     // ---
 
-    d->tabWidget->setAutomaticResizeTabs(true);
     setDetailsWidget(d->tabWidget);
 }
 
