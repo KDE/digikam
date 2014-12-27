@@ -34,8 +34,6 @@
 #include <QSharedData>
 #include <QWaitCondition>
 
-// KDE includes
-
 // Libkface includes
 
 #include <facedetector.h>

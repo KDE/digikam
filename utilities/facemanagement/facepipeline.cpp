@@ -31,7 +31,6 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <klocalizedstring.h>
 
 // Libkface includes
@@ -40,6 +39,7 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "loadingdescription.h"
 #include "metadatasettings.h"
 #include "tagscache.h"
@@ -202,7 +202,7 @@ void ParallelPipes::setPriority(QThread::Priority priority)
 void ParallelPipes::add(WorkerObject* const worker)
 {
     QByteArray normalizedSignature = QMetaObject::normalizedSignature("process(FacePipelineExtendedPackage::Ptr)");
-    int methodIndex                = worker->metaObject()->indexOfMethod(normalizedSignature);
+    int methodIndex                = worker->metaObject()->indexOfMethod(normalizedSignature.constData());
 
     if (methodIndex == -1)
     {
