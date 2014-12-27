@@ -58,7 +58,7 @@
 #include <kmessagebox.h>
 #include <kseparator.h>
 #include <kstandarddirs.h>
-#include <ktabwidget.h>
+
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
 

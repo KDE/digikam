@@ -50,7 +50,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <ktoolinvocation.h>
-#include <ktabwidget.h>
+
 #include <kurllabel.h>
 #include <kconfig.h>
 

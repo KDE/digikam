@@ -52,7 +52,7 @@
 #include <kmessagebox.h>
 #include <ksqueezedtextlabel.h>
 #include <kstandarddirs.h>
-#include <ktabwidget.h>
+
 
 // Libkdcraw includes
 

@@ -32,6 +32,7 @@
 #include <QToolBox>
 #include <QToolButton>
 #include <QIcon>
+#include <QTabWidget>
 
 // KDE includes
 
@@ -39,7 +40,6 @@
 #include <kfiledialog.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
-#include <ktabwidget.h>
 
 // Libkdcraw includes
 

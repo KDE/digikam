@@ -47,7 +47,7 @@
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kdialog.h>
-#include <ktabwidget.h>
+
 
 // Libkexiv2 includes
 

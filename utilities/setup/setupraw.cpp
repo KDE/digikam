@@ -29,16 +29,14 @@
 #include <QGroupBox>
 #include <QRadioButton>
 #include <QVBoxLayout>
+#include <QTabWidget>
 
 // KDE includes
 
-
 #include <kconfig.h>
-#include <kdialog.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <ktabwidget.h>
 
 // Libkdcraw includes
 

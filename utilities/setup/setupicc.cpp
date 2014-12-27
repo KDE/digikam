@@ -56,7 +56,7 @@
 #include <kmessagebox.h>
 #include <kpagedialog.h>
 #include <kstandarddirs.h>
-#include <ktabwidget.h>
+
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
 #include <kurlrequester.h>

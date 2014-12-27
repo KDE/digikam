@@ -36,7 +36,7 @@
 
 #include <kdialog.h>
 #include <klocalizedstring.h>
-#include <ktabwidget.h>
+
 
 // Libkdcraw includes
 

@@ -47,7 +47,7 @@
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
-#include <ktabwidget.h>
+
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
 #include <kmessagebox.h>

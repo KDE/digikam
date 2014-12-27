@@ -24,9 +24,9 @@
 #ifndef TEMPLATE_PANEL_H
 #define TEMPLATE_PANEL_H
 
-// KDE includes
+// Qt includes
 
-#include <ktabwidget.h>
+#include <QTabWidget>
 
 // Local includes
 

@@ -27,11 +27,11 @@
 // Qt includes
 
 #include <QWidget>
+#include <QTabWidget>
 
 // KDE includes
 
 #include <kurl.h>
-#include <ktabwidget.h>
 
 // Local includes
 

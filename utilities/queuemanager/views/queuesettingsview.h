@@ -29,10 +29,7 @@
 #include <QScrollArea>
 #include <QList>
 #include <QMap>
-
-// KDE includes
-
-#include <ktabwidget.h>
+#include <QTabWidget>
 
 namespace Digikam
 {

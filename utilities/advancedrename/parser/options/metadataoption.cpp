@@ -34,7 +34,7 @@
 #include <kiconloader.h>
 #include <klineedit.h>
 #include <klocalizedstring.h>
-#include <ktabwidget.h>
+
 
 // Libkexiv2 includes
 

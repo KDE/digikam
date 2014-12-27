@@ -30,10 +30,7 @@
 #include <QWidget>
 #include <QDragMoveEvent>
 #include <QDropEvent>
-
-// KDE includes
-
-#include <ktabwidget.h>
+#include <QTabWidget>
 
 // Local includes
 

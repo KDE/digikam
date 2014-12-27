@@ -26,7 +26,7 @@
 
 // KDE includes
 
-#include <ktabwidget.h>
+
 
 // Local includes
 

@@ -32,20 +32,17 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QVBoxLayout>
+#include <QTabWidget>
 
 // KDE includes
 
-
 #include <kconfig.h>
-#include <kdialog.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
-#include <ktabwidget.h>
 #include <ktoolinvocation.h>
 #include <kurllabel.h>
-#include <kvbox.h>
 
 // Libkexiv2 includes
 

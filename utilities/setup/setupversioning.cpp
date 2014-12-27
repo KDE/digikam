@@ -42,7 +42,7 @@
 
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <ktabwidget.h>
+
 
 // Local includes
 

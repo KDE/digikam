@@ -29,16 +29,14 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QVBoxLayout>
+#include <QTabWidget>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
-#include <kdialog.h>
 #include <klocalizedstring.h>
-#include <ktabwidget.h>
-#include <kvbox.h>
 #include <kseparator.h>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 

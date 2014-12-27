@@ -29,11 +29,11 @@
 #include <QWidget>
 #include <QModelIndex>
 #include <QPoint>
+#include <QTabWidget>
 
 // KDE includes
 
 #include <kurl.h>
-#include <ktabwidget.h>
 
 // Local includes
 

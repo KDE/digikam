@@ -45,7 +45,7 @@
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <ktabwidget.h>
+
 
 // Local includes
 

@@ -28,11 +28,11 @@
 
 #include <QWidget>
 #include <QByteArray>
+#include <QTabWidget>
 
 // KDE includes
 
 #include <kurl.h>
-#include <ktabwidget.h>
 
 // Local includes
 
