@@ -44,7 +44,7 @@ class QSpinBox;
 class QDoubleSpinBox;
 class QTimeEdit;
 class QTreeView;
-class KComboBox;
+class QComboBox;
 class KLineEdit;
 class KSqueezedTextLabel;
 
@@ -417,7 +417,7 @@ protected Q_SLOTS:
 
 protected:
 
-    KComboBox* m_comboBox;
+    QComboBox* m_comboBox;
 };
 
 //-----------------------------------------------------------------------------

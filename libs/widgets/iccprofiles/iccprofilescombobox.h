@@ -24,10 +24,14 @@
 #ifndef ICCPROFILESCOMBOBOX_H
 #define ICCPROFILESCOMBOBOX_H
 
+// Qt includes
+
+#include <QComboBox>
+#include <QIcon>
+
 // KDE includes
 
 #include <kactionmenu.h>
-#include <kcombobox.h>
 
 // Libkdcraw includes
 
@@ -37,7 +41,7 @@
 
 #include "digikam_export.h"
 #include "iccprofile.h"
-#include <QIcon>
+
 class QSignalMapper;
 
 namespace Digikam
@@ -82,7 +86,7 @@ public:
 
 // ----------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT IccRenderingIntentComboBox : public KComboBox
+class DIGIKAM_EXPORT IccRenderingIntentComboBox : public QComboBox
 {
 public:
 

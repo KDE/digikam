@@ -24,9 +24,9 @@
 #ifndef FILTERCOMBOBOX_H
 #define FILTERCOMBOBOX_H
 
-// KDE includes
+// Qt includes
 
-#include <kcombobox.h>
+#include <QComboBox>
 
 // Local includes
 
@@ -37,7 +37,7 @@ namespace Digikam
 
 class CamItemInfo;
 
-class FilterComboBox : public KComboBox
+class FilterComboBox : public QComboBox
 {
     Q_OBJECT
 

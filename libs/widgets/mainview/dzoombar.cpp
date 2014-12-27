@@ -35,17 +35,16 @@
 #include <QTimer>
 #include <QToolButton>
 #include <QList>
+#include <QComboBox>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kvbox.h>
-#include <kcombobox.h>
 #include <kglobal.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "dcursortracker.h"
 #include "thumbnailsize.h"
 
@@ -78,7 +77,7 @@ public:
 
     QSlider*        zoomSlider;
 
-    KComboBox*      zoomCombo;
+    QComboBox*      zoomCombo;
 
     DCursorTracker* zoomTracker;
 };
@@ -114,7 +113,8 @@ DZoomBar::DZoomBar(QWidget* const parent)
     d->zoomPlusButton->setAutoRaise(true);
     d->zoomPlusButton->setFocusPolicy(Qt::NoFocus);
 
-    d->zoomCombo = new KComboBox(true, this);
+    d->zoomCombo = new QComboBox(this);
+    d->zoomCombo->setEditable(true);
     d->zoomCombo->setDuplicatesEnabled(false);
     d->zoomCombo->setFocusPolicy(Qt::ClickFocus);
     d->zoomCombo->setInsertPolicy(QComboBox::NoInsert);

@@ -29,7 +29,7 @@
 #include "batchtool.h"
 #include "greycstorationfilter.h"
 
-class KComboBox;
+class QComboBox;
 
 namespace Digikam
 {
@@ -69,7 +69,7 @@ private:
         ReduceTexturing
     };
 
-    KComboBox*            m_comboBox;
+    QComboBox*            m_comboBox;
 
     GreycstorationFilter* m_cimgIface;
 };

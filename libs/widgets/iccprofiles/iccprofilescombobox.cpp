@@ -30,10 +30,10 @@
 #include <QSet>
 #include <QMenu>
 #include <QIcon>
+#include <QAction>
 
 // KDE includes
 
-#include <QAction>
 #include <kactionmenu.h>
 #include <klocalizedstring.h>
 
@@ -267,7 +267,7 @@ void IccProfilesMenuAction::slotTriggered(QObject* obj)
 // ------------------------------------------------------------------------------------------
 
 IccRenderingIntentComboBox::IccRenderingIntentComboBox(QWidget* const parent)
-    : KComboBox(parent)
+    : QComboBox(parent)
 {
     addItem("Perceptual", IccTransform::Perceptual);
     addItem("Relative Colorimetric", IccTransform::RelativeColorimetric);

@@ -43,7 +43,6 @@
 #include <kvbox.h>
 #include <klocalizedstring.h>
 
-
 namespace Digikam
 {
 
@@ -256,7 +255,7 @@ void GPConfigDlg::appendWidget(QWidget* parent, CameraWidget* widget)
         {
             gp_widget_get_value(widget, &widget_value_string);
 
-            QComboBox* comboBox = new KComboBox(parent);
+            QComboBox* comboBox = new QComboBox(parent);
             parent->layout()->addWidget(comboBox);
             comboBox->clear();
 

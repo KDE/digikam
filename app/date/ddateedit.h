@@ -34,10 +34,7 @@
 #include <QMap>
 #include <QMouseEvent>
 #include <QEvent>
-
-// KDE includes
-
-#include "kcombobox.h"
+#include <QComboBox>
 
 namespace Digikam
 {
@@ -59,7 +56,7 @@ namespace Digikam
   @author David Jarvie <software@astrojar.org.uk>
   @author Tobias Koenig <tokoe@kde.org>
 */
-class DDateEdit : public KComboBox
+class DDateEdit : public QComboBox
 {
     Q_OBJECT
 

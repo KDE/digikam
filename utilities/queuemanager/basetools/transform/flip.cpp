@@ -27,10 +27,10 @@
 
 #include <QLabel>
 #include <QWidget>
+#include <QComboBox>
 
 // KDE includes
 
-#include <kcombobox.h>
 #include <klocalizedstring.h>
 #include <kglobal.h>
 
@@ -64,7 +64,7 @@ void Flip::registerSettingsWidget()
 {
     RVBox* const vbox      = new RVBox;
     QLabel* const label    = new QLabel(vbox);
-    m_comboBox       = new KComboBox(vbox);
+    m_comboBox             = new QComboBox(vbox);
     m_comboBox->insertItem(DImg::HORIZONTAL, i18n("Horizontal"));
     m_comboBox->insertItem(DImg::VERTICAL,   i18n("Vertical"));
     label->setText(i18n("Flip:"));

@@ -38,6 +38,9 @@
 // KDE includes
 
 #include <klocalizedstring.h>
+
+// Local includes
+
 #include "digikam_debug.h"
 
 namespace Digikam
@@ -190,19 +193,19 @@ void ProxyClickLineEdit::mouseReleaseEvent(QMouseEvent* event)
 // -------------------------------------------------------------------------
 
 ModelIndexBasedComboBox::ModelIndexBasedComboBox(QWidget* const parent)
-    : KComboBox(parent)
+    : QComboBox(parent)
 {
 }
 
 void ModelIndexBasedComboBox::hidePopup()
 {
     m_currentIndex = view()->selectionModel()->currentIndex();
-    KComboBox::hidePopup();
+    QComboBox::hidePopup();
 }
 
 void ModelIndexBasedComboBox::showPopup()
 {
-    KComboBox::showPopup();
+    QComboBox::showPopup();
 
     if (m_currentIndex.isValid())
     {
@@ -395,7 +398,7 @@ public:
     // This line edit works like a weblink:
     // Readonly; A mouse press shows the popup; Cursor is the pointing hand.
 
-    explicit TreeViewComboBoxLineEdit(KComboBox* const box)
+    explicit TreeViewComboBoxLineEdit(QComboBox* const box)
         : KLineEdit(box)
     {
         m_box = box;
@@ -416,7 +419,7 @@ public:
 
 public:
 
-    KComboBox* m_box;
+    QComboBox* m_box;
 };
 
 TreeViewLineEditComboBox::TreeViewLineEditComboBox(QWidget* const parent)

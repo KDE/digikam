@@ -41,15 +41,14 @@
 #include <QSpinBox>
 #include <QTimeEdit>
 #include <QTreeView>
+#include <QComboBox>
 
 // KDE includes
 
-#include <kcombobox.h>
 #include <kiconloader.h>
 #include <klineedit.h>
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
-#include "digikam_debug.h"
 
 // Libkdcraw includes
 
@@ -58,6 +57,7 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "album.h"
 #include "albummanager.h"
 #include "albummodel.h"
@@ -2519,7 +2519,7 @@ SearchFieldComboBox::SearchFieldComboBox(QObject* const parent)
 
 void SearchFieldComboBox::setupValueWidgets(QGridLayout* layout, int row, int column)
 {
-    m_comboBox = new KComboBox;
+    m_comboBox = new QComboBox;
     m_comboBox->setEditable(false);
     layout->addWidget(m_comboBox, row, column, 1, 3);
 

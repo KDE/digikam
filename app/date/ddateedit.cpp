@@ -36,6 +36,7 @@
 #include <QLineEdit>
 #include <QMouseEvent>
 #include <QValidator>
+#include <QDesktopWidget>
 
 // KDE includes
 
@@ -43,7 +44,6 @@
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
-#include <QDesktopWidget>
 
 // Local includes
 
@@ -120,7 +120,7 @@ public:
 };
 
 DDateEdit::DDateEdit(QWidget* const parent, const char* const name)
-    : KComboBox(parent), d(new Private)
+    : QComboBox(parent), d(new Private)
 {
     setObjectName(name);
     // need at least one entry for popup to work
@@ -438,7 +438,7 @@ void DDateEdit::mousePressEvent( QMouseEvent* event )
         return;
     }
 
-    KComboBox::mousePressEvent( event );
+    QComboBox::mousePressEvent( event );
 }
 
 void DDateEdit::slotTextChanged( const QString& )

@@ -270,7 +270,7 @@ const QString AdvancedRenameInput::Private::configPatternHistoryListEntry("Patte
 // --------------------------------------------------------
 
 AdvancedRenameInput::AdvancedRenameInput(QWidget* parent)
-    : KComboBox(parent), d(new Private)
+    : QComboBox(parent), d(new Private)
 {
     setupWidgets();
     setupConnections();
@@ -373,7 +373,7 @@ void AdvancedRenameInput::setupConnections()
 
 void AdvancedRenameInput::changeEvent(QEvent* e)
 {
-    KComboBox::changeEvent(e);
+    QComboBox::changeEvent(e);
 
     if (e->type() == QEvent::EnabledChange)
     {

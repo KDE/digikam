@@ -33,15 +33,14 @@
 #include <QHBoxLayout>
 #include <QRadioButton>
 #include <QTimer>
+#include <QApplication>
+#include <QStyle>
+#include <QComboBox>
 
 // KDE includes
 
-#include <kcombobox.h>
-#include <kconfig.h>
-#include <kdialog.h>
+#include <kconfiggroup.h>
 #include <klocalizedstring.h>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 
@@ -90,7 +89,7 @@ public:
     QWidget*               focusedWidget;
     QWidget*               renameDefaultBox;
 
-    KComboBox*             renameDefaultCaseType;
+    QComboBox*             renameDefaultCaseType;
 
     AdvancedRenameWidget*  advancedRenameWidget;
     AdvancedRenameManager* advancedRenameManager;
@@ -121,7 +120,7 @@ RenameCustomizer::RenameCustomizer(QWidget* const parent, const QString& cameraT
     d->renameDefaultCase     = new QLabel(i18n("Change case to:"), d->renameDefaultBox);
     d->renameDefaultCase->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
 
-    d->renameDefaultCaseType = new KComboBox(d->renameDefaultBox);
+    d->renameDefaultCaseType = new QComboBox(d->renameDefaultBox);
     d->renameDefaultCaseType->insertItem(NONE,  i18nc("Leave filename as it is", "Leave as-is"));
     d->renameDefaultCaseType->insertItem(UPPER, i18nc("Filename to uppercase",   "Upper"));
     d->renameDefaultCaseType->insertItem(LOWER, i18nc("Filename to lowercase",   "Lower"));

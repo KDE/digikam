@@ -28,10 +28,7 @@
 
 #include <QPlainTextEdit>
 #include <QWidget>
-
-// KDE includes
-
-#include <kcombobox.h>
+#include <QComboBox>
 
 // Local includes
 
@@ -98,7 +95,7 @@ private:
 
 // --------------------------------------------------------
 
-class AdvancedRenameInput : public KComboBox
+class AdvancedRenameInput : public QComboBox
 {
     Q_OBJECT
 

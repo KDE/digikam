@@ -27,10 +27,10 @@
 
 #include <QLabel>
 #include <QWidget>
+#include <QComboBox>
 
 // KDE includes
 
-#include <kcombobox.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
 #include <kurllabel.h>
@@ -65,7 +65,7 @@ Restoration::~Restoration()
 
 void Restoration::registerSettingsWidget()
 {
-    RVBox* const vbox   = new RVBox;
+    RVBox* const vbox = new RVBox;
 
     KUrlLabel* const cimgLogoLabel = new KUrlLabel(vbox);
     cimgLogoLabel->setText(QString());
@@ -74,7 +74,7 @@ void Restoration::registerSettingsWidget()
     cimgLogoLabel->setToolTip(i18n("Visit CImg library website"));
 
     new QLabel(i18n("Filter:"), vbox);
-    m_comboBox = new KComboBox(vbox);
+    m_comboBox = new QComboBox(vbox);
     m_comboBox->insertItem(ReduceUniformNoise,  i18n("Reduce Uniform Noise"));
     m_comboBox->insertItem(ReduceJPEGArtefacts, i18n("Reduce JPEG Artifacts"));
     m_comboBox->insertItem(ReduceTexturing,     i18n("Reduce Texturing"));

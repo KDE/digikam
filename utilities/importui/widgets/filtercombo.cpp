@@ -30,12 +30,12 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
 #include <kglobal.h>
 #include <kconfiggroup.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "importfilters.h"
 #include "camiteminfo.h"
 
@@ -89,7 +89,7 @@ public:
 };
 
 FilterComboBox::FilterComboBox(QWidget* const parent)
-    : KComboBox(parent), d(new Private)
+    : QComboBox(parent), d(new Private)
 {
     fillCombo();
 

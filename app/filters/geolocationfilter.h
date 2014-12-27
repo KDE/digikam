@@ -25,9 +25,9 @@
 #ifndef GEOLOCATIONFILTER_H
 #define GEOLOCATIONFILTER_H
 
-// KDE includes
+// Qt includes
 
-#include <kcombobox.h>
+#include <QComboBox>
 
 // local includes
 
@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class GeolocationFilter : public KComboBox
+class GeolocationFilter : public QComboBox
 {
     Q_OBJECT
 

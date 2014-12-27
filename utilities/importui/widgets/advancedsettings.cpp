@@ -29,19 +29,18 @@
 #include <QLabel>
 #include <QCheckBox>
 #include <QToolButton>
+#include <QApplication>
+#include <QStyle>
+#include <QComboBox>
 
 // KDE includes
 
-#include <kdialog.h>
+#include <kconfiggroup.h>
 #include <klocalizedstring.h>
-#include <kcombobox.h>
-#include <khbox.h>
-#include <QApplication>
-#include <QStyle>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "config-digikam.h"
 #include "templateselector.h"
 #include "ddatetimeedit.h"
@@ -71,7 +70,7 @@ public:
     QCheckBox*        convertJpegCheck;
     QCheckBox*        fixDateTimeCheck;
 
-    KComboBox*        losslessFormat;
+    QComboBox*        losslessFormat;
 
     DDateTimeEdit*    dateTimeEdit;
 
@@ -89,7 +88,7 @@ AdvancedSettings::AdvancedSettings(QWidget* const parent)
     d->convertJpegCheck          = new QCheckBox(i18nc("@option:check", "Convert to lossless file format"), this);
     RHBox* const hbox2           = new RHBox(this);
     d->formatLabel               = new QLabel(i18n("New image format:"), hbox2);
-    d->losslessFormat            = new KComboBox(hbox2);
+    d->losslessFormat            = new QComboBox(hbox2);
     d->losslessFormat->insertItem(0, "PNG");
     d->losslessFormat->insertItem(1, "TIF");
     d->losslessFormat->insertItem(2, "PGF");

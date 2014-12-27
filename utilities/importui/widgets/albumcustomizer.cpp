@@ -32,12 +32,12 @@
 #include <QToolButton>
 #include <QApplication>
 #include <QStyle>
+#include <QComboBox>
 
 // KDE includes
 
 #include <ksqueezedtextlabel.h>
 #include <klocalizedstring.h>
-#include <kcombobox.h>
 #include <klineedit.h>
 #include <kiconloader.h>
 
@@ -82,7 +82,7 @@ public:
 
     KSqueezedTextLabel* customExample;
 
-    KComboBox*          folderDateFormat;
+    QComboBox*          folderDateFormat;
 
     TooltipDialog*      tooltipDialog;
 };
@@ -116,7 +116,7 @@ AlbumCustomizer::AlbumCustomizer(QWidget* const parent)
     d->autoAlbumDateCheck  = new QCheckBox(i18nc("@option:check", "Date-based sub-albums"), this);
     RHBox* hbox1           = new RHBox(this);
     d->folderDateLabel     = new QLabel(i18nc("@label:listbox", "Date format:"), hbox1);
-    d->folderDateFormat    = new KComboBox(hbox1);
+    d->folderDateFormat    = new QComboBox(hbox1);
     d->folderDateFormat->insertItem(IsoDateFormat,    i18nc("@item:inlistbox", "ISO"));
     d->folderDateFormat->insertItem(TextDateFormat,   i18nc("@item:inlistbox", "Full Text"));
     d->folderDateFormat->insertItem(LocalDateFormat,  i18nc("@item:inlistbox", "Local Settings"));

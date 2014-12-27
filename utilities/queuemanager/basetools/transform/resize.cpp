@@ -29,10 +29,10 @@
 #include <QLabel>
 #include <QSize>
 #include <QWidget>
+#include <QComboBox>
 
 // KDE includes
 
-#include <kcombobox.h>
 #include <klocalizedstring.h>
 #include <knuminput.h>
 #include <kglobal.h>
@@ -85,7 +85,7 @@ public:
 
     KIntNumInput* customLength;
 
-    KComboBox*    comboBox;
+    QComboBox*    comboBox;
 };
 
 int Resize::Private::presetLengthValue(WidthPreset preset)
@@ -142,7 +142,7 @@ void Resize::registerSettingsWidget()
 {
     RVBox* const vbox   = new RVBox;
     d->labelPreset      = new QLabel(i18n("Preset Length:"), vbox);
-    d->comboBox         = new KComboBox(vbox);
+    d->comboBox         = new QComboBox(vbox);
     d->comboBox->insertItem(Private::Tiny,   i18np("Tiny (1 pixel)",   "Tiny (%1 pixels)",   d->presetLengthValue(Private::Tiny)));
     d->comboBox->insertItem(Private::Small,  i18np("Small (1 pixel)",  "Small (%1 pixels)",  d->presetLengthValue(Private::Small)));
     d->comboBox->insertItem(Private::Medium, i18np("Medium (1 pixel)", "Medium (%1 pixels)", d->presetLengthValue(Private::Medium)));

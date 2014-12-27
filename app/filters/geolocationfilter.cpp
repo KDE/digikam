@@ -32,7 +32,7 @@ namespace Digikam
 {
 
 GeolocationFilter::GeolocationFilter(QWidget* const parent)
-    : KComboBox(parent)
+    : QComboBox(parent)
 {
     addItem( i18n("No geo filtering"),           QVariant::fromValue(ImageFilterSettings::GeolocationNoFilter) );
     addItem( i18n("Images with coordinates"),    QVariant::fromValue(ImageFilterSettings::GeolocationHasCoordinates) );
