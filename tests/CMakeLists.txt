@@ -251,7 +251,7 @@ ecm_mark_as_test(albummodeltest)
 #                      digikamcore
 #                     )
 #
-#if(KIPI_FOUND)
+#if(${KF5Kipi_FOUND})
 #    target_link_libraries(albummodeltest KF5::Kipi)
 #endif()
 #

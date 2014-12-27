@@ -45,19 +45,27 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 
 // KDE includes
 
+#include <klocale.h>
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
 #include <ktoolinvocation.h>
+#include <kiconloader.h>
 
 // Libkgeomap includes
 
 #include <kgeomap_widget.h>
 #include <itemmarkertiler.h>
 
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
+
 // local includes
 
 #include "digikam_debug.h"
 #include "imagegpsmodelhelper.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {

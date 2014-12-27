@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef KIPIUPLOADWIDGET_H
-#define KIPIUPLOADWIDGET_H
+#ifndef DIGIKAM_KIPIUPLOADWIDGET_H
+#define DIGIKAM_KIPIUPLOADWIDGET_H
 
 // Libkipi includes
 
@@ -59,4 +59,4 @@ private:
 
 }  // namespace Digikam
 
-#endif  // KIPIUPLOADWIDGET_H
+#endif  // DIGIKAM_KIPIUPLOADWIDGET_H

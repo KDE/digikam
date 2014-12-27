@@ -37,11 +37,14 @@
 
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
-#include "digikam_debug.h"
-#include <kvbox.h>
+
+// Libkdcraw includes
+
+#include <rwidgetutils.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "addtagscompletionbox.h"
 #include "addtagslineedit.h"
 #include "albummodel.h"
@@ -56,6 +59,8 @@
 #include "taggingaction.h"
 #include "tagscache.h"
 #include "searchutilities.h"
+
+using namespace KDcrawIface;
 
 namespace Digikam
 {

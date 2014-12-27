@@ -30,14 +30,13 @@
 #include <QStringList>
 #include <QAction>
 #include <QMap>
+#include <QMenu>
 
 // KDE includes
 
 #include <kactioncategory.h>
 #include <kactioncollection.h>
-#include <QMenu>
 #include <kactionmenu.h>
-#include "digikam_debug.h"
 #include <kxmlguifactory.h>
 #include <kxmlguiwindow.h>
 
@@ -47,6 +46,7 @@
 
 // local includes
 
+#include "digikam_debug.h"
 #include "kipiinterface.h"
 #include "digikamapp.h"
 #include "splashscreen.h"
@@ -90,7 +90,7 @@ public:
 
 void KipiPluginLoader::Private::loadPlugins()
 {
-    kipipluginsActionCollection = new KActionCollection(app, KGlobal::mainComponent());
+    kipipluginsActionCollection = new KActionCollection(app, "Digikam_KIPI_action_collection");
 
     if (splashScreen)
     {
@@ -295,7 +295,7 @@ void KipiPluginLoader::slotKipiPluginPlug()
         plugin->setup(d->app);
         plugin->rebuild();
 
-        foreach(KAction* const action, plugin->actions())
+        foreach(QAction* const action, plugin->actions())
         {
             QString actionName(action->objectName());
             Category cat = plugin->category(action);

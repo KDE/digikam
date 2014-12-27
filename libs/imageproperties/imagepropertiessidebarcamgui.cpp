@@ -33,7 +33,7 @@
 
 #include <klocalizedstring.h>
 #include <kconfig.h>
-#include <kapplication.h>
+#include <kiconloader.h>
 #include <kcursor.h>
 #include <kglobal.h>
 

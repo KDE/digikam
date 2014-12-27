@@ -38,20 +38,22 @@
 #include <QRadioButton>
 #include <QToolButton>
 #include <QVBoxLayout>
+#include <QTabWidget>
 
 // KDE includes
 
-#include <ktabwidget.h>
-#include "digikam_debug.h"
-#include <kdialog.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <knuminput.h>
 #include <kseparator.h>
 #include <kstandardguiitem.h>
 
+// Libkdcraw includes
+
+#include <rnuminput.h>
+
 // Local includes
 
+#include "digikam_debug.h"
 #include "albummodel.h"
 #include "albumselectors.h"
 #include "applicationsettings.h"
@@ -130,7 +132,7 @@ public:
     QComboBox*                   alreadyScannedBox;
     QRadioButton*                reRecognizeButton;
 
-    KTabWidget*                  tabWidget;
+    QTabWidget*                  tabWidget;
 
     AlbumSelectors*              albumSelectors;
 
@@ -373,7 +375,7 @@ void FaceScanDialog::setupUi()
 
     // --- Tab Widget ---
 
-    d->tabWidget = new KTabWidget;
+    d->tabWidget = new QTabWidget;
 
     // ---- Album tab ----
 

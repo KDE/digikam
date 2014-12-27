@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef KIPIPLUGINLOADER_H
-#define KIPIPLUGINLOADER_H
+#ifndef DIGIKAM_KIPIPLUGINLOADER_H
+#define DIGIKAM_KIPIPLUGINLOADER_H
 
 // Qt includes
 
@@ -91,4 +91,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // KIPIPLUGINLOADER_H
+#endif // DIGIKAM_KIPIPLUGINLOADER_H

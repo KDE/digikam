@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef KIPIINTERFACE_H
-#define KIPIINTERFACE_H
+#ifndef DIGIKAM_KIPI_INTERFACE_H
+#define DIGIKAM_KIPI_INTERFACE_H
 
 // Qt includes
 
@@ -119,4 +119,4 @@ private:
 
 }  // namespace Digikam
 
-#endif  // KIPIINTERFACE_H
+#endif  // DIGIKAM_KIPI_INTERFACE_H

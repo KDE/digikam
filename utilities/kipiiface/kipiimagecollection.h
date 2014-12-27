@@ -25,8 +25,8 @@
  *
  * ============================================================ */
 
-#ifndef KIPIIMAGECOLLECTION_H
-#define KIPIIMAGECOLLECTION_H
+#ifndef DIGIKAM_KIPIIMAGECOLLECTION_H
+#define DIGIKAM_KIPIIMAGECOLLECTION_H
 
 // Qt includes
 
@@ -80,8 +80,6 @@ public:
 
     virtual bool operator==(ImageCollectionShared&);
 
-
-
 private:
 
     class Private;
@@ -90,4 +88,4 @@ private:
 
 }  // namespace Digikam
 
-#endif  // KIPIIMAGECOLLECTION_H
+#endif  // DIGIKAM_KIPIIMAGECOLLECTION_H

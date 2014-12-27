@@ -321,10 +321,10 @@ endif()
 
 # -- Baloo rules -----------------------------------------------------------------------------
 find_package(KF5Baloo)
-if(0)
+
 if(ENABLE_BALOOSUPPORT)
     # Baloo support from 4.12
-    if(${KDE_VERSION} VERSION_GREATER "4.11.99")
+    if("${KDE_VERSION}" VERSION_GREATER "4.11.99")
 
         find_package(KFileMetaData CONFIG)
         MACRO_LOG_FEATURE(KFileMetaData_FOUND "KFileMetaData Library"
@@ -339,8 +339,9 @@ if(ENABLE_BALOOSUPPORT)
         endif()
 
     endif()
+
 endif()
-endif()
+
 # -- compilation options definitions --------------------------------------------------------
 
 MACRO_BOOL_TO_01(GPHOTO2_FOUND            HAVE_GPHOTO2)
@@ -353,9 +354,9 @@ MACRO_BOOL_TO_01(ENABLE_MYSQLSUPPORT      HAVE_MYSQLSUPPORT)
 MACRO_BOOL_TO_01(ENABLE_INTERNALMYSQL     HAVE_INTERNALMYSQL)
 MACRO_BOOL_TO_01(JASPER_FOUND             HAVE_JASPER)
 MACRO_BOOL_TO_01(EIGEN3_FOUND             HAVE_EIGEN3)
-MACRO_BOOL_TO_01(KIPI_FOUND               HAVE_KIPI)
-MACRO_BOOL_TO_01(KFACE_FOUND              HAVE_KFACE)
-MACRO_BOOL_TO_01(KGEOMAP_FOUND            HAVE_KGEOMAP)
+MACRO_BOOL_TO_01(${KF5Kipi_FOUND}         HAVE_KIPI)
+MACRO_BOOL_TO_01(${KF5KFace_FOUND}        HAVE_KFACE)
+MACRO_BOOL_TO_01(${KF5KGeoMap_FOUND}      HAVE_KGEOMAP)
 
 # Whether to use Qt's scaling to downscale previews. Under MacOSX, Qt
 # can make use of the higher physical resolution of Retina
@@ -892,7 +893,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiescolorstab.cpp
        )
 
-    if(KGEOMAP_FOUND)
+    if(${KF5KGeoMap_FOUND})
         set(libkgeomaphelper_SRCS
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/kgeomaphelper/digikam2kgeomap.cpp
            )
@@ -1178,14 +1179,14 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupimagequalitysorter.cpp
        )
 
-    if(KIPI_FOUND)
+    if(${KF5Kipi_FOUND})
         set(libkipiiface_SRCS
-            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipipluginloader.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiimageinfo.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiimagecollection.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiimagecollectionselector.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiuploadwidget.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiinterface.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiimageinfo.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipipluginloader.cpp
            )
     endif()
 
@@ -1193,7 +1194,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/baloo/baloowrap.cpp
        )
 
-    if(KFACE_FOUND)
+    if(${KF5KFace_FOUND})
         set(libfacemanagement_SRCS
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/faceutils.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/facegroup.cpp
@@ -1262,7 +1263,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancethread.cpp
        )
 
-    if(KFACE_FOUND)
+    if(${KF5KFace_FOUND})
         set(libmaintenance_SRCS
             ${libmaintenance_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/facedetector.cpp
@@ -1399,7 +1400,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch/sketchwidget.cpp
        )
 
-    if(KGEOMAP_FOUND)
+    if(${KF5KGeoMap_FOUND})
         set(libgpssearch_SRCS
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpssearchview.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/utilities/gpssearch/gpsmarkertiler.cpp
@@ -1553,7 +1554,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsactionmngr.cpp
        )
 
-    if(KFACE_FOUND)
+    if(${KF5KFace_FOUND})
         set(libdigikamgui_SRCS
             ${libdigikamgui_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/app/items/digikamimagefacedelegate.cpp
@@ -1562,7 +1563,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
            )
     endif()
 
-    if(KGEOMAP_FOUND)
+    if(${KF5KGeoMap_FOUND})
         set(libdigikamgui_SRCS
             ${libdigikamgui_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/app/views/mapwidgetview.cpp

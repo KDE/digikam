@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef KIPIIMAGEINFO_H
-#define KIPIIMAGEINFO_H
+#ifndef DIGIKAM_KIPIIMAGEINFO_H
+#define DIGIKAM_KIPIIMAGEINFO_H
 
 // Qt includes
 
@@ -74,4 +74,4 @@ private:
 
 }  // namespace Digikam
 
-#endif  // KIPIIMAGEINFO_H
+#endif  // DIGIKAM_KIPIIMAGEINFO_H

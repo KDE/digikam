@@ -63,7 +63,7 @@ target_link_libraries(showfoto
                       ${OpenCV_LIBRARIES}
 )
 
-if(KGEOMAP_FOUND)
+if(${KF5KGeoMap_FOUND})
    target_link_libraries(showfoto ${KGEOMAP_LIBRARIES})
 endif()
 

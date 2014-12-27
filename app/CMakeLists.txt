@@ -48,7 +48,7 @@ set(digikamcore_LIB_SRCS
     ${libeditorplugin_SRCS}
 )
 
-if(KGEOMAP_FOUND)
+if(${KF5KGeoMap_FOUND})
     set(digikamcore_LIB_SRCS ${digikamcore_LIB_SRCS} ${libkgeomaphelper_SRCS})
 endif()
 
@@ -112,16 +112,16 @@ if(LQR-1_FOUND)
    target_link_libraries(digikamcore ${liblqr_LIBS})
 endif()
 
-if(KF5Kipi_FOUND)
+if(${KF5Kipi_FOUND})
    target_link_libraries(digikamcore ${KF5Kipi_LIBRARIES})
 endif()
 
-if(KF5KFace_FOUND)
+if(${KF5KFace_FOUND})
    target_link_libraries(digikamcore ${KF5KFace_LIBRARIES})
 endif()
 
-if(KF5KGeoMap_FOUND)
-   target_link_libraries(digikamcore ${KF5KGeomap_LIBRARIES})
+if(${KF5KGeoMap_FOUND})
+   target_link_libraries(digikamcore ${KF5KGeoMap_LIBRARIES})
 endif()
 
 set_target_properties(digikamcore PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
@@ -166,12 +166,12 @@ target_link_libraries(digikamdatabase
                       ${PGF_LIBRARIES}
 )
 
-if(KF5KFace_FOUND)
+if(${KF5KFace_FOUND})
    target_link_libraries(digikamdatabase ${KF5KFace_LIBRARIES})
 endif()
 
-if(KF5KGeoMap_FOUND)
-   target_link_libraries(digikamdatabase ${KF5KGeomap_LIBRARIES})
+if(${KF5KGeoMap_FOUND})
+   target_link_libraries(digikamdatabase ${KF5KGeoMap_LIBRARIES})
 endif()
 
 if(Baloo_FOUND)
@@ -208,15 +208,15 @@ set(digikam_SRCS ${libeditorgui_SRCS}
                  main/main.cpp
 )
 
-if(KF5Kipi_FOUND)
+if(${KF5Kipi_FOUND})
     set(digikam_SRCS ${digikam_SRCS} ${libkipiiface_SRCS})
 endif()
 
-if(KF5KFace_FOUND)
+if(${KF5KFace_FOUND})
     set(digikam_SRCS ${digikam_SRCS} ${libfacemanagement_SRCS})
 endif()
 
-if(KF5KGeoMap_FOUND)
+if(${KF5KGeoMap_FOUND})
     set(digikam_SRCS ${digikam_SRCS} ${libkgeomaphelper_SRCS} ${libgpssearch_SRCS})
 endif()
 
@@ -265,16 +265,16 @@ if(KDEPIMLIBS_FOUND)
   target_link_libraries(digikam ${KDE4_KABC_LIBS} KF5::AkonadiCore KF5::AkonadiContact)
 endif()
 
-if(KF5Kipi_FOUND)
+if(${KF5Kipi_FOUND})
    target_link_libraries(digikam ${KF5Kipi_LIBRARIES})
 endif()
 
-if(KF5KFace_FOUND)
+if(${KF5KFace_FOUND})
    target_link_libraries(digikam ${KF5KFace_LIBRARIES})
 endif()
 
-if(KF5KGeoMap_FOUND)
-   target_link_libraries(digikam ${KF5KGeomap_LIBRARIES})
+if(${KF5KGeoMap_FOUND})
+   target_link_libraries(digikam ${KF5KGeoMap_LIBRARIES})
 endif()
 
 if(NOT WIN32)

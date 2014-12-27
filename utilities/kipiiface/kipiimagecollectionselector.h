@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef KIPIIMAGECOLLECTIONSELECTOR_H
-#define KIPIIMAGECOLLECTIONSELECTOR_H
+#ifndef DIGIKAM_KIPIIMAGECOLLECTIONSELECTOR_H
+#define DIGIKAM_KIPIIMAGECOLLECTIONSELECTOR_H
 
 // Qt includes
 
@@ -65,4 +65,4 @@ private:
 
 }  // namespace Digikam
 
-#endif  // KIPIIMAGECOLLECTIONSELECTOR_H
+#endif  // DIGIKAM_KIPIIMAGECOLLECTIONSELECTOR_H
