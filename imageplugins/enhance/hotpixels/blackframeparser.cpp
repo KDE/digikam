@@ -42,10 +42,10 @@
 
 #include <QImage>
 #include <QStringList>
+#include <QApplication>
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kdeversion.h>
 #include <kio/netaccess.h>
 #include <kio/job.h>

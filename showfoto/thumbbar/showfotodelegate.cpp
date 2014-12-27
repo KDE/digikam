@@ -29,10 +29,10 @@
 
 #include <QPainter>
 #include <QRect>
+#include <QApplication>
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kiconloader.h>
 
 // Local includes

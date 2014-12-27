@@ -35,7 +35,7 @@
 
 // KDE includes
 
-#include <kapplication.h>
+
 #include <kconfig.h>
 #include <kdialog.h>
 #include <kglobalsettings.h>

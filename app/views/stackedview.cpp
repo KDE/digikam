@@ -35,7 +35,7 @@
 // KDE includes
 
 #include <kurl.h>
-#include <kapplication.h>
+
 #include <kconfiggroup.h>
 #include <kconfig.h>
 #include <khtmlview.h>

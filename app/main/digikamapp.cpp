@@ -54,7 +54,7 @@
 #include <kaboutdata.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
-#include <kapplication.h>
+
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
 #include <kglobal.h>

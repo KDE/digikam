@@ -36,6 +36,7 @@
 #include <QCache>
 #include <QPainter>
 #include <QIcon>
+#include <QApplication>
 
 // KDE includes
 
@@ -43,11 +44,10 @@
 #include <kio/global.h>
 #include <klocalizedstring.h>
 #include <kiconloader.h>
-#include "digikam_debug.h"
-#include <kapplication.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "imagepropertiestab.h"
 #include "imagedelegateoverlay.h"
 #include "thememanager.h"

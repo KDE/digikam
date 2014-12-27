@@ -35,22 +35,21 @@
 #include <QPixmap>
 #include <QPushButton>
 #include <QToolButton>
+#include <QApplication>
+#include <QColorDialog>
+#include <QIcon>
 
 // KDE includes
 
-#include <kapplication.h>
-#include <QColorDialog>
 #include <kcolorvalueselector.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kcursor.h>
 #include <kglobal.h>
 #include <khuesaturationselect.h>
-#include <QIcon>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
-#include <kvbox.h>
 
 // Libkdcraw includes
 

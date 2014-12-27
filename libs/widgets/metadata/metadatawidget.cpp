@@ -51,7 +51,6 @@
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
@@ -425,7 +424,7 @@ void MetadataWidget::slotPrintMetadata()
     {
         QTextDocument doc;
         doc.setHtml(textmetadata);
-        QFont font(KApplication::font());
+        QFont font(QApplication::font());
         font.setPointSize(10);                // we define 10pt to be a nice base size for printing.
         doc.setDefaultFont(font);
         doc.print(&printer);

@@ -40,7 +40,7 @@
 
 // KDE includes
 
-#include <kapplication.h>
+
 
 namespace Digikam
 {

@@ -34,7 +34,7 @@
 
 #include <kglobalsettings.h>
 #include <kiconloader.h>
-#include <kapplication.h>
+
 
 // Local includes
 

@@ -30,16 +30,16 @@
 #include <QPixmap>
 #include <QTextDocument>
 #include <QDesktopWidget>
+#include <QApplication>
 
 // KDE includes
 
 #include <klocalizedstring.h>
 #include <kglobal.h>
-#include "digikam_debug.h"
-#include <kapplication.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "imagepropertiestab.h"
 
 namespace Digikam

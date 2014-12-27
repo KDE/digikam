@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kapplication.h>
+
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kcursor.h>

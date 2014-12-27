@@ -30,17 +30,17 @@
 #include <QPixmap>
 #include <QPainter>
 #include <QContextMenuEvent>
+#include <QApplication>
+#include <QMenu>
 
 // KDE includes
 
-#include <QMenu>
 #include <klocalizedstring.h>
 #include <kiconloader.h>
-#include <kapplication.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "albumdb.h"
 #include "applicationsettings.h"
 #include "contextmenuhelper.h"

@@ -29,17 +29,16 @@
 
 #include <QString>
 #include <QIcon>
+#include <QApplication>
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
-#include <kvbox.h>
 
 // Local includes
 

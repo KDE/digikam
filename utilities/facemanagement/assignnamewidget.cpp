@@ -28,11 +28,10 @@
 #include <QGridLayout>
 #include <QKeyEvent>
 #include <QToolButton>
+#include <QApplication>
 
 // KDE includes
 
-#include "digikam_debug.h"
-#include <kapplication.h>
 #include <kglobalsettings.h>
 #include <kstandardguiitem.h>
 
@@ -42,6 +41,7 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "addtagscombobox.h"
 #include "addtagscompletionbox.h"
 #include "addtagslineedit.h"

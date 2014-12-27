@@ -27,13 +27,13 @@
 // Qt includes
 
 #include <QPainter>
+#include <QApplication>
 
 // KDE includes
 
 #include <kcalendarsystem.h>
 #include <kglobal.h>
 #include <klocalizedstring.h>
-#include <kapplication.h>
 
 // Local includes
 

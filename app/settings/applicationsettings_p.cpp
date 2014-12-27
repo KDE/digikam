@@ -25,14 +25,14 @@
 
 #include <QString>
 #include <QFont>
+#include <QApplication>
+#include <QFontDatabase>
 
 // KDE includes
 
 #include <kconfig.h>
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
-#include <kapplication.h>
-#include <QFontDatabase>
 
 // Local includes
 

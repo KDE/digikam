@@ -39,7 +39,7 @@
 
 #include <kurl.h>
 #include <klocalizedstring.h>
-#include <kapplication.h>
+
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>

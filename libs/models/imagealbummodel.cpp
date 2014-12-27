@@ -30,7 +30,7 @@
 // KDE includes
 
 #include <kio/job.h>
-#include <kapplication.h>
+
 
 // Local includes
 

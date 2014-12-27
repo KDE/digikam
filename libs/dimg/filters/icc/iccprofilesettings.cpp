@@ -36,7 +36,7 @@
 #include "digikam_debug.h"
 #include <kdialog.h>
 #include <klocalizedstring.h>
-#include <kapplication.h>
+
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kstandarddirs.h>

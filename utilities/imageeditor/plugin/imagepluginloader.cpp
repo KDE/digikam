@@ -33,7 +33,7 @@
 
 #include <kservicetypetrader.h>
 #include <klibloader.h>
-#include <kapplication.h>
+
 #include <klocalizedstring.h>
 #include <kxmlguiclient.h>
 #include "digikam_debug.h"

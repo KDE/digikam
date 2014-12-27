@@ -40,7 +40,7 @@
 #include <kaction.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
-#include <kapplication.h>
+
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kmimetype.h>

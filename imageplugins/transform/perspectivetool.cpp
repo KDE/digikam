@@ -35,10 +35,10 @@
 #include <QSpinBox>
 #include <QVBoxLayout>
 #include <QPushButton>
+#include <QApplication>
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kcolorbutton.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>

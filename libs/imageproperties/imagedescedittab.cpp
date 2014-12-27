@@ -43,7 +43,7 @@
 
 // KDE includes
 
-#include <kapplication.h>
+
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kdialog.h>

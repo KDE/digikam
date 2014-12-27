@@ -30,7 +30,7 @@
 #include <klibloader.h>
 #include <kaction.h>
 #include <kactioncollection.h>
-#include <kapplication.h>
+
 
 // Local includes
 

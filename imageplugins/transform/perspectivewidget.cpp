@@ -48,7 +48,7 @@
 #include <kstandarddirs.h>
 #include <kcursor.h>
 #include <kglobal.h>
-#include <kapplication.h>
+
 
 // Local includes
 

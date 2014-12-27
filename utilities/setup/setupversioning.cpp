@@ -36,13 +36,13 @@
 #include <QRadioButton>
 #include <QVBoxLayout>
 #include <QWhatsThis>
+#include <QApplication>
 
 // KDE includes
 
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <ktabwidget.h>
-#include <kapplication.h>
 
 // Local includes
 

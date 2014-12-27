@@ -30,27 +30,26 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QPainter>
 #include <QPalette>
 #include <QPixmap>
 #include <QTimeLine>
 #include <QFont>
 #include <QAction>
+#include <QMenu>
 
 // KDE includes
 
 #include <kglobalsettings.h>
 #include <ksqueezedtextlabel.h>
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
-#include <QMenu>
-#include <khbox.h>
-#include <kapplication.h>
 #include <kxmlguiwindow.h>
 #include <kactioncollection.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "globals.h"
 #include "thememanager.h"
 

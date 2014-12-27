@@ -28,15 +28,11 @@
 
 #include <QGridLayout>
 #include <QLabel>
-
-// KDE includes
-
-#include <kdialog.h>
-#include "digikam_debug.h"
-#include <kapplication.h>
+#include <QApplication>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "dimg.h"
 #include "dzoombar.h"
 #include "thumbnailsize.h"

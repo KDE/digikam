@@ -35,19 +35,21 @@
 #include <QFontMetrics>
 #include <QFont>
 #include <QToolButton>
+#include <QApplication>
+#include <QMenu>
 
 // KDE includes
 
 #include <kglobalsettings.h>
 #include <ksqueezedtextlabel.h>
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
-#include <QMenu>
-#include <khbox.h>
-#include <kapplication.h>
 #include <kxmlguiwindow.h>
 #include <kactioncollection.h>
 #include <kiconloader.h>
+
+// Local includes
+
+#include "digikam_debug.h"
 
 namespace Digikam
 {

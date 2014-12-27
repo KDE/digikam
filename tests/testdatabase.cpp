@@ -34,7 +34,7 @@
 
 // KDE includes
 
-#include <kapplication.h>
+
 #include <kcmdlineargs.h>
 
 // digiKam includes

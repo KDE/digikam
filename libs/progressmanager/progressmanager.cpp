@@ -39,7 +39,7 @@
 #include <klocalizedstring.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <kapplication.h>
+
 #include <kmessagebox.h>
 
 // Local includes

@@ -34,7 +34,7 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kcursor.h>
-#include <kapplication.h>
+
 
 // Local includes
 

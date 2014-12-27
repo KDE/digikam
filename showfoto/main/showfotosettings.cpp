@@ -27,19 +27,19 @@
 // Qt includes
 
 #include <QStyle>
+#include <QApplication>
+#include <QFontDatabase>
 
 // KDE includes
 
 #include <kglobal.h>
 #include <kglobalsettings.h>
-#include "digikam_debug.h"
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kapplication.h>
-#include <QFontDatabase>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "setupmisc.h"
 #include "thememanager.h"
 

@@ -36,7 +36,7 @@
 #include <kaction.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
-#include <kapplication.h>
+
 #include <QMenu>
 #include <kmimetype.h>
 #include <krun.h>

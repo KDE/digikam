@@ -42,10 +42,10 @@
 #include <QVBoxLayout>
 #include <QIcon>
 #include <QComboBox>
+#include <QApplication>
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kcolorbutton.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>

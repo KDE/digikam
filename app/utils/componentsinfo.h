@@ -30,11 +30,11 @@
 
 #include <QString>
 #include <QMap>
+#include <QApplication>
 
 // KDE includes
 
 #include <klocale.h>
-#include <kapplication.h>
 
 #ifdef HAVE_KIPI
 
@@ -130,20 +130,20 @@ static inline void showDigikamComponentsInfo()
         list.insert(i18n("Database internal server"), internal);
     }
 
-    LibsInfoDlg* const dlg = new LibsInfoDlg(kapp->activeWindow());
+    LibsInfoDlg* const dlg = new LibsInfoDlg(qApp->activeWindow());
     dlg->setInfoMap(list);
     dlg->show();
 }
 
 static inline void showDigikamDatabaseStat()
 {
-    DBStatDlg* const dlg = new DBStatDlg(kapp->activeWindow());
+    DBStatDlg* const dlg = new DBStatDlg(qApp->activeWindow());
     dlg->show();
 }
 
 static inline void showRawCameraList()
 {
-    RawCameraDlg* const dlg = new RawCameraDlg(kapp->activeWindow());
+    RawCameraDlg* const dlg = new RawCameraDlg(qApp->activeWindow());
     dlg->show();
 }
 

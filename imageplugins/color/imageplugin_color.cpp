@@ -24,11 +24,14 @@
 
 #include "imageplugin_color.h"
 
+// Qt includes
+
+#include <QApplication>
+
 // KDE includes
 
 #include <kaction.h>
 #include <kactioncollection.h>
-#include <kapplication.h>
 #include <kcursor.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>

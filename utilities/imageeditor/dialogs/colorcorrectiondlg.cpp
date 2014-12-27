@@ -42,7 +42,7 @@
 
 #include <klocalizedstring.h>
 #include <kiconloader.h>
-#include <kapplication.h>
+
 #include <kseparator.h>
 #include <kstandarddirs.h>
 

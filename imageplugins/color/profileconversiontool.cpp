@@ -29,10 +29,10 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QPushButton>
+#include <QApplication>
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
 #include <kglobal.h>
@@ -109,7 +109,6 @@ ProfileConversionTool::ProfileConversionTool(QObject* const parent)
 {
     setObjectName("profile conversion");
     setToolName(i18n("Color Profile Conversion"));
-#pragma "Port, fixed size for SmallIcon.."
     setToolIcon(QIcon::fromTheme("colormanagement").pixmap(16));
     //TODO setToolHelp("colormanagement.anchor");
 

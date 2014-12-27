@@ -31,10 +31,10 @@
 #include <QDesktopWidget>
 #include <QActionGroup>
 #include <QMenu>
+#include <QApplication>
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kselectaction.h>

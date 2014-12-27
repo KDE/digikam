@@ -43,7 +43,7 @@
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
-#include <kapplication.h>
+
 #include <QApplication>
 #include <QDesktopWidget>
 

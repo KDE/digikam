@@ -39,7 +39,7 @@
 #include <klineedit.h>
 #include <klocalizedstring.h>
 #include <kicondialog.h>
-#include <kapplication.h>
+
 #include <kdeversion.h>
 #include <kiconloader.h>
 #include <kseparator.h>

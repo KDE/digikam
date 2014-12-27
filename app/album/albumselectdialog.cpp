@@ -39,7 +39,7 @@
 
 
 #include <klocalizedstring.h>
-#include <kapplication.h>
+
 #include <kstandarddirs.h>
 #include <QApplication>
 #include <QStyle>

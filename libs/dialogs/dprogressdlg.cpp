@@ -37,7 +37,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kapplication.h>
+
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <ksqueezedtextlabel.h>

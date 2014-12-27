@@ -37,6 +37,7 @@
 #include <QString>
 #include <QTimer>
 #include <QMenu>
+#include <QApplication>
 
 // KDE includes
 
@@ -44,7 +45,6 @@
 #include <kaction.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
-#include <kapplication.h>
 #include <kfileitem.h>
 #include <klocalizedstring.h>
 #include <kmimetype.h>

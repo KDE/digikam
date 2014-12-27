@@ -34,8 +34,8 @@
 
 // KDE includes
 
-#include <k4aboutdata.h>
 #include <kapplication.h>
+#include <k4aboutdata.h>
 #include <kcmdlineargs.h>
 #include <kconfig.h>
 #include <kdeversion.h>

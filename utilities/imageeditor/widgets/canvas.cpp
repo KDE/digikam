@@ -32,6 +32,7 @@
 #include <QToolButton>
 #include <QScrollBar>
 #include <QMimeData>
+#include <QApplication>
 
 // KDE includes
 
@@ -39,7 +40,6 @@
 #include <klocalizedstring.h>
 #include <kiconloader.h>
 #include <kglobalsettings.h>
-#include <kapplication.h>
 
 // Local includes
 

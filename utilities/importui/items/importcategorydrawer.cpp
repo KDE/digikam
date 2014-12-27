@@ -26,10 +26,10 @@
 // Qt includes
 
 #include <QPainter>
+#include <QApplication>
 
 // KDE includes
 
-#include <kapplication.h>
 #include <klocalizedstring.h>
 
 // Local includes

@@ -25,9 +25,9 @@
  *
  * ============================================================ */
 
-// KDE includes
+// Qt includes
 
-#include <kapplication.h>
+#include <QApplication>
 
 // Local includes
 

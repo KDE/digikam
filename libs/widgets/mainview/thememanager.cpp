@@ -34,6 +34,8 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QMenu>
+#include <QApplication>
+#include <QAction>
 
 // KDE includes
 
@@ -41,11 +43,9 @@
 #include <kglobal.h>
 #include <klocalizedstring.h>
 #include <kcolorscheme.h>
-#include <QAction>
 #include <kactioncollection.h>
 #include <kstandarddirs.h>
 #include <kactionmenu.h>
-#include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kglobalsettings.h>

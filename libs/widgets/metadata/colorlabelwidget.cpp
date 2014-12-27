@@ -25,6 +25,7 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QPainter>
 #include <QPixmap>
 #include <QIcon>
@@ -42,9 +43,7 @@
 #include <kglobalsettings.h>
 #include <ksqueezedtextlabel.h>
 #include <klocalizedstring.h>
-#include <khbox.h>
 #include <kiconloader.h>
-#include <kapplication.h>
 #include <kxmlguiwindow.h>
 #include <kactioncollection.h>
 

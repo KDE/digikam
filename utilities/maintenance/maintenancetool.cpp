@@ -28,15 +28,15 @@
 
 #include <QTime>
 #include <QTimer>
+#include <QApplication>
 
 // KDE includes
 
-#include <kapplication.h>
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "dnotificationwrapper.h"
 
 namespace Digikam

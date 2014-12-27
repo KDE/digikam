@@ -42,7 +42,7 @@
 
 // KDE includes
 
-#include <kapplication.h>
+
 #include <kcolorvalueselector.h>
 #include <kconfig.h>
 #include <khuesaturationselect.h>

@@ -28,15 +28,15 @@
 #include <QWidget>
 #include <QTimer>
 #include <QIcon>
+#include <QApplication>
 
 // KDE includes
 
-#include <kapplication.h>
-#include "digikam_debug.h"
 #include <klocalizedstring.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "dimgthreadedfilter.h"
 #include "dimgthreadedanalyser.h"
 #include "imageguidewidget.h"

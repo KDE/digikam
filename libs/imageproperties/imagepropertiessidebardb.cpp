@@ -38,7 +38,7 @@
 #include <kfileitem.h>
 #include <klocalizedstring.h>
 #include <kconfig.h>
-#include <kapplication.h>
+
 #include <kcursor.h>
 #include <kglobal.h>
 

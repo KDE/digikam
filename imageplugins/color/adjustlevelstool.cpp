@@ -29,6 +29,7 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QButtonGroup>
 #include <QColor>
 #include <QGridLayout>
@@ -39,10 +40,10 @@
 #include <QTimer>
 #include <QToolButton>
 #include <QIcon>
+#include <QStandardPaths>
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
 #include <kfiledialog.h>
@@ -56,7 +57,6 @@
 // Libkdcraw includes
 
 #include <rnuminput.h>
-#include <QStandardPaths>
 
 // Local includes
 
@@ -906,7 +906,6 @@ void AdjustLevelsTool::slotLoadSettings()
 {
     KUrl loadLevelsFile;
 
-#pragma "hardcoded to accept only local files"
     loadLevelsFile = KFileDialog::getOpenUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                      QString( "*" ), qApp->activeWindow(),
                      QString( i18n("Select Gimp Levels File to Load")) );

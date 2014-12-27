@@ -38,7 +38,7 @@
 
 // KDE includes
 
-#include <kapplication.h>
+
 #include <kvbox.h>
 #include <kconfig.h>
 #include <kcursor.h>

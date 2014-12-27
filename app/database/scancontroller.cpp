@@ -42,7 +42,7 @@
 // KDE includes
 
 #include <kmessagebox.h>
-#include <kapplication.h>
+
 #include <klocalizedstring.h>
 #include <kiconloader.h>
 

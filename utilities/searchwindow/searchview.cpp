@@ -32,13 +32,13 @@
 #include <QTimeLine>
 #include <QVBoxLayout>
 #include <QPushButton>
+#include <QApplication>
 
 // KDE includes
 
 #include <kdialogbuttonbox.h>
 #include <klocalizedstring.h>
 #include <kstandardguiitem.h>
-#include <kapplication.h>
 #include <kguiitem.h>
 #include <kstandardguiitem.h>
 #include <kpushbutton.h>

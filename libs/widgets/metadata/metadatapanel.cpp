@@ -28,12 +28,11 @@
 #include <QFrame>
 #include <QVBoxLayout>
 #include <QList>
+#include <QApplication>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <ktabwidget.h>
-#include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 

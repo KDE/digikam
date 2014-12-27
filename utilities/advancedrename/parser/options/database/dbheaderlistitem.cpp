@@ -28,11 +28,11 @@
 #include <QPalette>
 #include <QFont>
 #include <QPainter>
+#include <QApplication>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kapplication.h>
 
 // Local includes
 

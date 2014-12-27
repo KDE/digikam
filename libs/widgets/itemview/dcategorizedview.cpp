@@ -31,15 +31,15 @@
 #include <QScrollBar>
 #include <QSortFilterProxyModel>
 #include <QStyle>
+#include <QApplication>
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kiconloader.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "thememanager.h"
 #include "ditemdelegate.h"
 #include "abstractitemdragdrophandler.h"

@@ -43,12 +43,12 @@
 #include <QFormLayout>
 #include <QSqlDatabase>
 #include <QSqlError>
+#include <QApplication>
 
 // KDE includes
 
 #include <klocalizedstring.h>
 #include <klineedit.h>
-#include <kapplication.h>
 #include <kpagedialog.h>
 #include <kfiledialog.h>
 #include <kurl.h>

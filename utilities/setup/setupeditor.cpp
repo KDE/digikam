@@ -37,7 +37,7 @@
 // KDE includes
 
 #include <kaboutdata.h>
-#include <kapplication.h>
+
 #include <kcolorbutton.h>
 #include <kconfig.h>
 #include <kglobal.h>

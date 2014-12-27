@@ -32,13 +32,13 @@
 #include <QMimeData>
 #include <QClipboard>
 #include <QTime>
+#include <QApplication>
+#include <QMenu>
 
 // KDE includes
 
 #include <kaction.h>
-#include <QMenu>
 #include <klocalizedstring.h>
-#include <kapplication.h>
 #include <kiconloader.h>
 
 namespace Digikam

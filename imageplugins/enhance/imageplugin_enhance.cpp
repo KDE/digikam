@@ -24,7 +24,9 @@
 #include "imageplugin_enhance.h"
 
 // Qt includes
+
 #include <QKeySequence>
+#include <QApplication>
 
 // KDE includes
 
@@ -35,7 +37,6 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kcursor.h>
-#include <kapplication.h>
 
 // Local includes
 

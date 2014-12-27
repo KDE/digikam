@@ -68,7 +68,7 @@
 #include <kaboutdata.h>
 #include <QAction>
 #include <kactioncollection.h>
-#include <kapplication.h>
+
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kcursor.h>

@@ -33,11 +33,11 @@
 #include <QProgressBar>
 #include <QPushButton>
 #include <QIcon>
+#include <QApplication>
 
 // KDE includes
 
 #include <kaboutdata.h>
-#include <kapplication.h>
 #include <kconfig.h>
 #include <kfiledialog.h>
 #include <kglobal.h>

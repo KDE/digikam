@@ -32,12 +32,12 @@
 #include <QTextStream>
 #include <QTimer>
 #include <QWidget>
+#include <QApplication>
 
 // KDE includes
 
 #include <kaction.h>
 #include <kactioncollection.h>
-#include <kapplication.h>
 #include <kcursor.h>
 #include <kglobalsettings.h>
 #include <khtml_part.h>

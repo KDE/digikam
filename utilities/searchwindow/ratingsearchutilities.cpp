@@ -36,15 +36,15 @@
 #include <QStyle>
 #include <QStyleOption>
 #include <QVBoxLayout>
+#include <QApplication>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
-#include <kapplication.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "globals.h"
 #include "ratingwidget.h"
 

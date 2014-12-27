@@ -33,7 +33,7 @@
 
 #include <QIcon>
 #include <klocalizedstring.h>
-#include <kapplication.h>
+
 
 // Local includes
 

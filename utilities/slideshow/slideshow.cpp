@@ -38,17 +38,17 @@
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusMessage>
 #include <QtDBus/QDBusReply>
+#include <QApplication>
 
 // KDE includes
 
-#include <kapplication.h>
-#include <kdeversion.h>
 #include <kdialog.h>
+#include <kdeversion.h>
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "config-digikam.h"
 #include "slidetoolbar.h"
 #include "slideosd.h"

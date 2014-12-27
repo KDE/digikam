@@ -27,10 +27,10 @@
 // Qt includes
 
 #include <QPointer>
+#include <QApplication>
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kiconloader.h>

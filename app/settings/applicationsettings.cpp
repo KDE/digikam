@@ -31,15 +31,15 @@
 
 #include <QDBusInterface>
 #include <QStyle>
+#include <QApplication>
+#include <QFontDatabase>
 
 // KDE includes
 
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
-#include <kapplication.h>
 #include <kstandarddirs.h>
-#include <QFontDatabase>
 
 // Local includes
 

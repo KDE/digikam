@@ -47,7 +47,7 @@
 #include <kglobalsettings.h>
 #include <kglobal.h>
 #include <kdeversion.h>
-#include <kapplication.h>
+
 #include <QDesktopWidget>
 
 namespace Digikam

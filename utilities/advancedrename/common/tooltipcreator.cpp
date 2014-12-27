@@ -27,12 +27,12 @@
 
 #include <QRegExp>
 #include <QPalette>
+#include <QApplication>
 
 // KDE includes
 
 #include <klocalizedstring.h>
 #include <kiconloader.h>
-#include <kapplication.h>
 
 // Local includes
 

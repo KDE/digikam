@@ -26,12 +26,12 @@
 // Qt includes
 
 #include <QTimer>
+#include <QApplication>
+#include <QIcon>
 
 // KDE includes
 
-#include <kapplication.h>
 #include <klocalizedstring.h>
-#include <QIcon>
 
 // Local includes
 

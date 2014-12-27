@@ -30,12 +30,12 @@
 #include <QFont>
 #include <QTreeWidget>
 #include <QHeaderView>
+#include <QApplication>
 
 // KDE includes
 
 #include <klocalizedstring.h>
 #include <kiconloader.h>
-#include <kapplication.h>
 #include <kstandarddirs.h>
 #include <kaboutdata.h>
 

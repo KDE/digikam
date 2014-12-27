@@ -37,24 +37,23 @@
 #include <QDesktopWidget>
 #include <QDBusInterface>
 #include <QSplitter>
+#include <QApplication>
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <klocalizedstring.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <kaction.h>
 #include <ktoolbar.h>
-#include <kdialog.h>
 #include <kmainwindow.h>
 #include <kmultitabbar.h>
 #include <kactionmenu.h>
-#include <kapplication.h>
 #include <kmessagebox.h>
 
 // local includes
 
+#include "digikam_debug.h"
 #include "config-digikam.h"
 #include "tagpropwidget.h"
 #include "tagmngrtreeview.h"

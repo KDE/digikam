@@ -36,13 +36,13 @@
 #include <QCache>
 #include <QPainter>
 #include <QIcon>
+#include <QApplication>
 
 // KDE includes
 
 #include <kglobal.h>
 #include <kio/global.h>
 #include <klocalizedstring.h>
-#include <kapplication.h>
 
 // Local includes
 

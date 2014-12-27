@@ -27,6 +27,7 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QCursor>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMouseEvent>
@@ -34,17 +35,15 @@
 #include <QDragMoveEvent>
 #include <QDropEvent>
 #include <QDragEnterEvent>
+#include <QMenu>
 
 // KDE includes
 
 #include <kaction.h>
 #include <kactionmenu.h>
-#include <kapplication.h>
 #include <kcursor.h>
-#include <kdialog.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <QMenu>
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
 #include <ktoggleaction.h>

@@ -31,7 +31,7 @@
 
 #include "digikam_debug.h"
 #include <kglobalsettings.h>
-#include <kapplication.h>
+
 #include <QApplication>
 #include <QDesktopWidget>
 

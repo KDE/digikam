@@ -42,10 +42,10 @@
 #include <QStyleOptionMenuItem>
 #include <QStyleOptionViewItem>
 #include <QToolButton>
+#include <QApplication>
 
 // KDE includes
 
-#include <kapplication.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>

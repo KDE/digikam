@@ -51,7 +51,7 @@
 #include <kaction.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
-#include <kapplication.h>
+
 #include <kcategorizedview.h>
 #include <kconfig.h>
 #include <kcursor.h>

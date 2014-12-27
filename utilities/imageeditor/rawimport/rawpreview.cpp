@@ -31,17 +31,17 @@
 #include <QFileInfo>
 #include <QResizeEvent>
 #include <QFontMetrics>
+#include <QApplication>
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <kcursor.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kapplication.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "managedloadsavethread.h"
 #include "loadingdescription.h"
 #include "editorcore.h"
