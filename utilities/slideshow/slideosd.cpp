@@ -35,7 +35,7 @@
 
 // KDE includes
 
-#include <khbox.h>
+
 #include <kdialog.h>
 
 // Windows includes

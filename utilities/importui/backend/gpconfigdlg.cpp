@@ -40,7 +40,7 @@
 
 // KDE includes
 
-#include <kvbox.h>
+
 #include <klocalizedstring.h>
 
 namespace Digikam

@@ -39,7 +39,7 @@
 // KDE includes
 
 
-#include <kvbox.h>
+
 #include <kconfig.h>
 #include <kcursor.h>
 #include <kfiledialog.h>

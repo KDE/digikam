@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <khbox.h>
+
 #include <kiconloader.h>
 #include <klineedit.h>
 #include <kstandarddirs.h>

@@ -37,7 +37,7 @@
 #include <kglobal.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
-#include <kvbox.h>
+
 
 // Local includes
 

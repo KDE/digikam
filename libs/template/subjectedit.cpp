@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <khbox.h>
+
 #include <klineedit.h>
 #include <klocalizedstring.h>
 

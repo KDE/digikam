@@ -37,7 +37,7 @@
 #include <kconfig.h>
 #include <kdialog.h>
 #include <kglobal.h>
-#include <kvbox.h>
+
 #include <klocalizedstring.h>
 #include <knuminput.h>
 #include <kiconloader.h>

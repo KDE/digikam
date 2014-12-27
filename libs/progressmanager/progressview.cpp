@@ -45,7 +45,7 @@
 // KDE includes
 
 #include <kdialog.h>
-#include <khbox.h>
+
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kstandardguiitem.h>

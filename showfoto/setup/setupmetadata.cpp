@@ -33,6 +33,8 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QTabWidget>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
@@ -48,8 +50,6 @@
 
 #include <kexiv2.h>
 #include <libkexiv2_version.h>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 

@@ -35,8 +35,8 @@
 
 // KDE includes
 
-#include <khbox.h>
-#include <kvbox.h>
+
+
 #include <kconfig.h>
 
 // Libkgeomap includes
