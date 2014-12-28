@@ -40,7 +40,7 @@
 #include <kiconloader.h>
 #include <kicondialog.h>
 #include <kmessagebox.h>
-#include <kdialog.h>
+
 #include <QApplication>
 #include <QStyle>
 // local includes

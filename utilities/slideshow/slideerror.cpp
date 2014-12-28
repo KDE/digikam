@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <kdialog.h>
+
 #include <klocalizedstring.h>
 #include <QApplication>
 #include <QStyle>

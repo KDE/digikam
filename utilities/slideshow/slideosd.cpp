@@ -36,7 +36,7 @@
 // KDE includes
 
 
-#include <kdialog.h>
+
 
 // Windows includes
 

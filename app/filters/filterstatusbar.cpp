@@ -34,7 +34,7 @@
 
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kdialog.h>
+
 #include <klineedit.h>
 #include <QApplication>
 #include <QStyle>

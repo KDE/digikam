@@ -35,7 +35,7 @@
 #include <klocalizedstring.h>
 
 #include <kconfig.h>
-#include <kdialog.h>
+
 #include <kfileitem.h>
 #include <kmimetype.h>
 #include <kiconloader.h>

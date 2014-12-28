@@ -36,7 +36,7 @@
 #include <klocalizedstring.h>
 
 #include <kconfig.h>
-#include <kdialog.h>
+
 #include <kfileitem.h>
 #include <kglobal.h>
 

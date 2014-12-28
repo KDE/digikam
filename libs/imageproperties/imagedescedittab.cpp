@@ -46,7 +46,7 @@
 
 #include <kiconloader.h>
 #include <kmessagebox.h>
-#include <kdialog.h>
+
 
 
 // Libkexiv2 includes
@@ -707,7 +707,7 @@ void ImageDescEditTab::slotAskToApplyChanges(const QList<ImageInfo>& infos, Meta
         ApplicationSettings::instance()->setApplySidebarChangesDirectly(true);
     }
 
-    if (returnCode == KDialog::No)
+    if (returnCode == KMessageBox::No)
     {
         delete hub;
         return;

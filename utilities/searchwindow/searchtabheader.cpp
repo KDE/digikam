@@ -36,7 +36,7 @@
 
 // KDE includes
 
-#include <kdialog.h>
+
 #include <kiconloader.h>
 #include <kinputdialog.h>
 #include <klineedit.h>

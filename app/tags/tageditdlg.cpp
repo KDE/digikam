@@ -44,7 +44,7 @@
 #include <kiconloader.h>
 #include <kseparator.h>
 #include <kstandarddirs.h>
-#include <kdialog.h>
+
 #include <kkeysequencewidget.h>
 
 // Local includes

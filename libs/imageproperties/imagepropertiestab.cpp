@@ -41,7 +41,7 @@
 
 #include <klocalizedstring.h>
 #include <klocale.h>
-#include <kdialog.h>
+
 #include <kiconloader.h>
 
 // Local includes

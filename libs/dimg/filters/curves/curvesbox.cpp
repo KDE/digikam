@@ -38,7 +38,7 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kdialog.h>
+
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
 #include <QApplication>

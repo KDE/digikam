@@ -38,7 +38,7 @@
 
 #include "digikam_debug.h"
 #include <kurl.h>
-#include <kdialog.h>
+
 #include <klocalizedstring.h>
 
 #include <kseparator.h>

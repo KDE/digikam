@@ -619,38 +619,38 @@ void SetupCollectionModel::addCollection(int category)
     }
 
     // Create a dialog that displays volume information and allows to change the name of the collection
-    KDialog* dialog = new KDialog(m_dialogParentWidget);
+    KDialog* const dialog = new KDialog(m_dialogParentWidget);
     dialog->setCaption(i18n("Adding Collection"));
     dialog->setButtons(KDialog::Ok | KDialog::Cancel);
 
-    QWidget* mainWidget = new QWidget(dialog);
+    QWidget* const mainWidget = new QWidget(dialog);
     dialog->setMainWidget(mainWidget);
 
-    QLabel* nameLabel = new QLabel;
+    QLabel* const nameLabel = new QLabel;
     nameLabel->setText(i18n("Your new collection will be created with this name:"));
     nameLabel->setWordWrap(true);
 
     // lineedit for collection name
-    KLineEdit* nameEdit = new KLineEdit;
+    KLineEdit* const nameEdit = new KLineEdit;
     nameEdit->setClearButtonShown(true);
     nameLabel->setBuddy(nameEdit);
 
     // label for the icon showing the type of storage (hard disk, CD, USB drive)
-    QLabel* deviceIconLabel = new QLabel;
+    QLabel* const deviceIconLabel = new QLabel;
     deviceIconLabel->setPixmap(KIconLoader::global()->loadIcon(deviceIcon, KIconLoader::NoGroup, KIconLoader::SizeHuge));
 
-    QGroupBox* infoBox = new QGroupBox;
+    QGroupBox* const infoBox = new QGroupBox;
     //infoBox->setTitle(i18n("More Information"));
 
     // label either signalling everything is all right, or raising awareness to some problems
     // (like handling of CD identified by a label)
-    QLabel* iconLabel = new QLabel;
+    QLabel* const iconLabel = new QLabel;
     iconLabel->setPixmap(KIconLoader::global()->loadIcon(iconName, KIconLoader::NoGroup, KIconLoader::SizeLarge));
-    QLabel* infoLabel = new QLabel;
+    QLabel* const infoLabel = new QLabel;
     infoLabel->setText(messageFromManager);
     infoLabel->setWordWrap(true);
 
-    QHBoxLayout* hbox1 = new QHBoxLayout;
+    QHBoxLayout* const hbox1 = new QHBoxLayout;
     hbox1->addWidget(iconLabel);
     hbox1->addWidget(infoLabel);
     infoBox->setLayout(hbox1);

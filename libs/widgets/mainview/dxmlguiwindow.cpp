@@ -46,7 +46,7 @@
 #include <ktoolbar.h>
 #include <kstandardaction.h>
 #include <kactioncollection.h>
-#include <kdialog.h>
+
 #include <klocalizedstring.h>
 #include <kshortcut.h>
 

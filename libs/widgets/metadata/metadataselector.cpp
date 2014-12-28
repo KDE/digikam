@@ -33,7 +33,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kdialog.h>
+
 #include <QPushButton>
 #include <QStyle>
 
