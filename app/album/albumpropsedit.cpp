@@ -43,6 +43,7 @@
 #include <QApplication>
 #include <QStyle>
 #include <QComboBox>
+#include <QLineEdit>
 
 // KDE includes
 
@@ -51,7 +52,6 @@
 #include <kdeversion.h>
 #include <kiconloader.h>
 #include <kinputdialog.h>
-#include <klineedit.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -115,7 +115,7 @@ public:
 
     QComboBox*   categoryCombo;
     QComboBox*   parentCombo;
-    KLineEdit*   titleEdit;
+    QLineEdit*   titleEdit;
     KTextEdit*   commentsEdit;
 
     DDatePicker* datePicker;
@@ -159,8 +159,8 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
     QLabel* const titleLabel = new QLabel(page);
     titleLabel->setText(i18n("&Title:"));
 
-    d->titleEdit = new KLineEdit(page);
-    d->titleEdit->setClearButtonShown(true);
+    d->titleEdit = new QLineEdit(page);
+    d->titleEdit->setClearButtonEnabled(true);
     titleLabel->setBuddy(d->titleEdit);
 
     QRegExp titleRx("[^/]+");
@@ -285,7 +285,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
         d->commentsEdit->setText(album->caption());
         d->datePicker->setDate(album->date());
     }
-    
+
     d->titleEdit->selectAll();
     d->titleEdit->setFocus();
 
