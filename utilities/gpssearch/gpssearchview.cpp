@@ -39,10 +39,10 @@
 #include <QAction>
 #include <QApplication>
 #include <QStyle>
+#include <QLineEdit>
 
 // KDE includes
 
-#include <QAction>
 #include <kconfig.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
@@ -84,7 +84,7 @@ public:
 
     static const QString        configSplitterStateEntry;
     QToolButton*                saveBtn;
-    KLineEdit*                  nameEdit;
+    QLineEdit*                  nameEdit;
     ImageInfoJob                imageInfoJob;
     SearchTextBar*              searchGPSBar;
     EditableSearchTreeView*     searchTreeView;
@@ -154,8 +154,8 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     hbox->setMargin(0);
     hbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
-    d->nameEdit = new KLineEdit(hbox);
-    d->nameEdit->setClearButtonShown(true);
+    d->nameEdit = new QLineEdit(hbox);
+    d->nameEdit->setClearButtonEnabled(true);
     d->nameEdit->setWhatsThis(i18n("Enter the name of the current map search to save in the "
                                    "\"Map Searches\" view."));
 
