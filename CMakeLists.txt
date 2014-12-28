@@ -319,44 +319,36 @@ else()
     set(LENSFUN_FOUND FALSE)
 endif()
 
-# -- Baloo rules -----------------------------------------------------------------------------
-find_package(KF5Baloo)
+# -- Baloo libraries rules ---------------------------------------------------------------------
 
 if(ENABLE_BALOOSUPPORT)
-    # Baloo support from 4.12
-    if("${KDE_VERSION}" VERSION_GREATER "4.11.99")
 
-        find_package(KFileMetaData CONFIG)
-        MACRO_LOG_FEATURE(KFileMetaData_FOUND "KFileMetaData Library"
-                          "A library for extracting file metadata" "https://projects.kde.org/kfilemetadata" TRUE)
+    find_package(KF5Baloo)
+    find_package(KF5FileMetaData)
 
-        find_package(Baloo)
-        MACRO_LOG_FEATURE(Baloo_FOUND "Baloo" "Baloo"
-                          "http://www.kde.org" TRUE "" "Baloo extends the search and tagging")
-
-        if(NOT KFileMetaData_FOUND)
-            set(Baloo_FOUND FALSE)
-        endif()
-
+    if(KF5Baloo_FOUND AND KF5FileMetaData_FOUND)
+        set(Baloo_FOUND TRUE)
+    else()
+        set(Baloo_FOUND FALSE)
     endif()
 
 endif()
 
-# -- compilation options definitions --------------------------------------------------------
+# -- compilation options definitions -----------------------------------------------------------
 
 MACRO_BOOL_TO_01(GPHOTO2_FOUND            HAVE_GPHOTO2)
 MACRO_BOOL_TO_01(KDEPIMLIBS_FOUND         HAVE_KDEPIMLIBS)
 MACRO_BOOL_TO_01(LENSFUN_FOUND            HAVE_LENSFUN)
-MACRO_BOOL_TO_01(Baloo_FOUND              HAVE_BALOO)
 MACRO_BOOL_TO_01(SQLITE2_FOUND            HAVE_SQLITE2)
 MACRO_BOOL_TO_01(LQR-1_FOUND              HAVE_LIBLQR_1)
 MACRO_BOOL_TO_01(ENABLE_MYSQLSUPPORT      HAVE_MYSQLSUPPORT)
 MACRO_BOOL_TO_01(ENABLE_INTERNALMYSQL     HAVE_INTERNALMYSQL)
 MACRO_BOOL_TO_01(JASPER_FOUND             HAVE_JASPER)
 MACRO_BOOL_TO_01(EIGEN3_FOUND             HAVE_EIGEN3)
-MACRO_BOOL_TO_01(${KF5Kipi_FOUND}         HAVE_KIPI)
-MACRO_BOOL_TO_01(${KF5KFace_FOUND}        HAVE_KFACE)
-MACRO_BOOL_TO_01(${KF5KGeoMap_FOUND}      HAVE_KGEOMAP)
+MACRO_BOOL_TO_01(KF5Kipi_FOUND            HAVE_KIPI)
+MACRO_BOOL_TO_01(KF5KFace_FOUND           HAVE_KFACE)
+MACRO_BOOL_TO_01(KF5KGeoMap_FOUND         HAVE_KGEOMAP)
+MACRO_BOOL_TO_01(Baloo_FOUND              HAVE_BALOO)
 
 # Whether to use Qt's scaling to downscale previews. Under MacOSX, Qt
 # can make use of the higher physical resolution of Retina
@@ -671,12 +663,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
         include_directories(${GPHOTO2_INCLUDE_DIRS})
     endif()
 
-    # Baloo library rules
-
-    if(Baloo_FOUND)
-        include_directories(${BALOO_INCLUDE_DIR} ${KFILEMETADATA_INCLUDE_DIR})
-    endif()
-
     # Boost library rules
 
     IF(Boost_FOUND)
@@ -719,6 +705,12 @@ if(DIGIKAM_CAN_BE_COMPILED)
 
     if(KF5KGeoMap_FOUND)
         include_directories(${KF5KGeoMap_INCLUDE_DIRS})
+    endif()
+
+    # Baloo library rules
+
+    if(KF5Baloo_FOUND)
+        include_directories(${BALOO_INCLUDE_DIR} ${KFILEMETADATA_INCLUDE_DIR})
     endif()
 
     # ==================================================================================================

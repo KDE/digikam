@@ -38,12 +38,13 @@
 
 // KDE includes
 
-
-#include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdeversion.h>
 #include <kglobal.h>
 #include <kiconloader.h>
+
+// Local includes
+
 #include "digikam_debug.h"
 
 namespace Digikam
@@ -240,7 +241,6 @@ void Sidebar::appendTab(QWidget* const w, const QIcon& pic, const QString& title
 
     // Add tab
     w->setParent(d->stack);
-#pragma message("port to use QTabBar? hardcoded icon size")
     KMultiTabBar::appendTab(pic.pixmap(16), d->tabs, title);
     d->stack->insertWidget(d->tabs, w);
 

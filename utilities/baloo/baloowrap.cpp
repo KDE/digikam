@@ -25,18 +25,18 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <kurl.h>
 
 // Baloo includes
 
-#include <baloo/file.h>
-#include <baloo/filefetchjob.h>
-#include <baloo/filemodifyjob.h>
-#include <baloo/taglistjob.h>
+#include <Baloo/baloo/file.h>
+#include <Baloo/baloo/filefetchjob.h>
+#include <Baloo/baloo/filemodifyjob.h>
+#include <Baloo/baloo/taglistjob.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "tagscache.h"
 #include "albumdb.h"
 #include "databaseaccess.h"
@@ -158,9 +158,10 @@ BalooInfo BalooWrap::getSemanticInfo(const KUrl& url)
     job->exec();
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Job started";
-    Baloo::File file = job->file();
 
+    Baloo::File file = job->file();
     BalooInfo bInfo;
+
     // Baloo have rating from 0 to 10, while digikam have only from 0 to 5
     bInfo.rating     = file.rating()/2;
     bInfo.comment    = file.userComment();
@@ -176,6 +177,7 @@ BalooInfo BalooWrap::getSemanticInfo(const KUrl& url)
 void BalooWrap::slotFetchFinished(KJob* job)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "Job finished";
+
     Baloo::FileFetchJob* const fjob = static_cast<Baloo::FileFetchJob*>(job);
     Baloo::File file                = fjob->file();
 
@@ -244,7 +246,7 @@ void BalooWrap::addInfoToDigikam(const BalooInfo& bInfo, const KUrl& fileUrl)
 {
     QStringList tags = bInfo.tags;
     QList<int> tagIdsForInfo;
-    ImageInfo info = ImageInfo::fromUrl(fileUrl);
+    ImageInfo info   = ImageInfo::fromUrl(fileUrl);
 
     // If the path is not in digikam collections, info will be null.
     // It does the same check first that we would be doing here
@@ -302,7 +304,8 @@ void BalooWrap::setSyncToDigikam(bool value)
 // NOTE: useful code to extend functionality in the future
 //TagSet BalooWrap::allTags() const
 //{
-//    if (d->mAllTags.empty()) {
+//    if (d->mAllTags.empty())
+//    {
 //        const_cast<BalooWrap*>(this)->refreshAllTags();
 //    }
 //    return d->mAllTags;
@@ -314,7 +317,8 @@ void BalooWrap::setSyncToDigikam(bool value)
 //    job->exec();
 
 //    d->mAllTags.clear();
-//    Q_FOREACH(const QString& tag, job->tags()) {
+//    Q_FOREACH(const QString& tag, job->tags())
+//    {
 //        d->mAllTags << tag;
 //    }
 //}

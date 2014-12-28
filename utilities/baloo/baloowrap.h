@@ -30,10 +30,6 @@
 #include <QStringList>
 #include <QPointer>
 
-// KDE includes
-
-#include <kurl.h>
-
 // Local includes
 
 #include "digikam_export.h"
