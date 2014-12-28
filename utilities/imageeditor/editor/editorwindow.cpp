@@ -178,6 +178,8 @@ EditorWindow::EditorWindow(const char* const name)
 
     m_nonDestructive           = true;
     m_contextMenu              = 0;
+    m_servicesMenu             = 0;
+    m_serviceAction            = 0;
     m_canvas                   = 0;
     m_imagePluginLoader        = 0;
     m_openVersionAction        = 0;
@@ -2975,37 +2977,48 @@ void EditorWindow::addServicesMenuForUrl(const KUrl& url)
 
     kDebug() << offers.count() << " services found to open " << url;
 
+    if (m_servicesMenu)
+    {
+        delete m_servicesMenu;
+        m_servicesMenu = 0;
+    }
+
+    if (m_serviceAction)
+    {
+        delete m_serviceAction;
+        m_serviceAction = 0;
+    }
+
     if (!offers.isEmpty())
     {
-        KMenu* const servicesMenu = new KMenu(this);
-        qDeleteAll(servicesMenu->actions());
+        m_servicesMenu = new KMenu(this);
 
-        QAction* const serviceAction = servicesMenu->menuAction();
+        QAction* const serviceAction = m_servicesMenu->menuAction();
         serviceAction->setText(i18n("Open With"));
 
         foreach(const KService::Ptr& service, offers)
         {
             QString name          = service->name().replace('&', "&&");
-            QAction* const action = servicesMenu->addAction(name);
+            QAction* const action = m_servicesMenu->addAction(name);
             action->setIcon(KIcon(service->icon()));
             action->setData(service->name());
             d->servicesMap[name]  = service;
         }
 
-        servicesMenu->addSeparator();
-        servicesMenu->addAction(i18n("Other..."));
+        m_servicesMenu->addSeparator();
+        m_servicesMenu->addAction(i18n("Other..."));
 
         m_contextMenu->addAction(serviceAction);
 
-        connect(servicesMenu, SIGNAL(triggered(QAction*)),
+        connect(m_servicesMenu, SIGNAL(triggered(QAction*)),
                 this, SLOT(slotOpenWith(QAction*)));
     }
     else
     {
-        QAction* const serviceAction = new QAction(i18n("Open With..."), this);
-        m_contextMenu->addAction(serviceAction);
+        m_serviceAction = new QAction(i18n("Open With..."), this);
+        m_contextMenu->addAction(m_serviceAction);
 
-        connect(serviceAction, SIGNAL(triggered()),
+        connect(m_serviceAction, SIGNAL(triggered()),
                 this, SLOT(slotOpenWith()));
     }
 }

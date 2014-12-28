@@ -140,6 +140,9 @@ protected:
     KActionMenu*              m_selectToolsAction;
 
     KMenu*                    m_contextMenu;
+    KMenu*                    m_servicesMenu;
+    QAction*                  m_serviceAction;
+
     EditorStackView*          m_stackView;
     Canvas*                   m_canvas;
     ImagePluginLoader*        m_imagePluginLoader;
