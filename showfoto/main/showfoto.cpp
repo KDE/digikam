@@ -601,10 +601,14 @@ void ShowFoto::slotOpenUrl(const ShowfotoItemInfo& info)
 
     // By this condition we make sure that no crashes will happen
     // if no images were loaded to the canvas before
+    qDebug() << "Loading plugins?";
     if (!d->imagePluginsLoaded)
     {
+        qDebug() << "  Yes, doing it..";
         loadImagePlugins();
         d->imagePluginsLoaded = true;
+    } else {
+        qDebug() << "  Already loaded..";
     }
 }
 

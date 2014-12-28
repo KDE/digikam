@@ -877,6 +877,7 @@ void EditorWindow::loadImagePlugins()
     d->imagepluginsActionCollection = new KActionCollection(dynamic_cast<QObject*>(this));
 
     QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
+    qDebug() << "Got total of " << pluginList.size() << " image plugins";
 
     foreach(ImagePlugin* const plugin, pluginList)
     {
@@ -884,23 +885,27 @@ void EditorWindow::loadImagePlugins()
         {
             guiFactory()->addClient(plugin);
             plugin->setEnabledSelectionActions(false);
-
+            qDebug() << "loading plugin: " << plugin->componentName();
             // add actions to imagepluginsActionCollection
             QString categoryStr = plugin->actionCategory();
 
             if (categoryStr != QString("__INVALID__") && !categoryStr.isEmpty())
             {
+                qDebug() << "Adding to category " << categoryStr;
                 KActionCategory* const category = new KActionCategory(categoryStr, d->imagepluginsActionCollection);
 
                 foreach(QAction* const action, plugin->actionCollection()->actions())
                 {
+                    qDebug() << "  Action: " << action->objectName();
                     category->addAction(action->objectName(), action);
                 }
             }
             else
             {
+                qDebug() << "Adding non-categorized plugins:";
                 foreach(QAction* const action, plugin->actionCollection()->actions())
                 {
+                    qDebug() << "  " << action->objectName();
                     d->imagepluginsActionCollection->addAction(action->objectName(), action);
                 }
             }
