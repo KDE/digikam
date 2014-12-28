@@ -68,6 +68,9 @@ ImagePlugin_Decorate::ImagePlugin_Decorate(QObject* const parent, const QVariant
     : ImagePlugin(parent, "ImagePlugin_Decorate"),
       d(new Private)
 {
+    // to load the rc file from digikam's installation path
+    setComponentName("digikam", i18nc("to be displayed in shortcuts dialog", "Decoration plugins"));
+
     d->insertTextAction = new QAction(QIcon::fromTheme("insert-text"), i18n("Insert Text..."), this);
     d->insertTextAction->setShortcut(QKeySequence(Qt::SHIFT+Qt::CTRL+Qt::Key_T));
     actionCollection()->addAction("imageplugin_inserttext", d->insertTextAction );

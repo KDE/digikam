@@ -81,6 +81,9 @@ ImagePlugin_Transform::ImagePlugin_Transform(QObject* const parent, const QVaria
     : ImagePlugin(parent, "ImagePlugin_Transform"),
       d(new Private)
 {
+    // to load the rc file from digikam's installation path
+    setComponentName("digikam", i18nc("to be displayed in shortcuts dialog", "Transformation plugins"));
+
     d->perspectiveAction = new QAction(QIcon::fromTheme("perspective"), i18n("Perspective Adjustment..."), this);
     actionCollection()->addAction("imageplugin_perspective", d->perspectiveAction);
     connect(d->perspectiveAction, SIGNAL(triggered(bool)),

@@ -122,6 +122,9 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* const parent, const QVariantLi
     : ImagePlugin(parent, "ImagePlugin_Enhance"),
       d(new Private)
 {
+    // to load the rc file from digikam's installation path
+    setComponentName("digikam", i18nc("to be displayed in shortcuts dialog", "Enchance plugins"));
+
     d->restorationAction = new QAction(QIcon::fromTheme("restoration"), i18n("Restoration..."), this);
     actionCollection()->addAction("imageplugin_restoration", d->restorationAction);
     connect(d->restorationAction, SIGNAL(triggered(bool)),

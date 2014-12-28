@@ -108,6 +108,9 @@ ImagePlugin_Color::ImagePlugin_Color(QObject* const parent, const QVariantList&)
     : ImagePlugin(parent, "ImagePlugin_Color"),
       d(new Private)
 {
+    // to load the rc file from digikam's installation path
+    setComponentName("digikam", i18nc("to be displayed in shortcuts dialog", "Color adjustment plugins"));
+
     //-------------------------------
     // Colors menu actions
 

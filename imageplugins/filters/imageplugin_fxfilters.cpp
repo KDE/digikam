@@ -79,6 +79,9 @@ ImagePlugin_FxFilters::ImagePlugin_FxFilters(QObject* const parent, const QVaria
     : ImagePlugin(parent, "ImagePlugin_FxFilters"),
       d(new Private)
 {
+    // to load the rc file from digikam's installation path
+    setComponentName("digikam", i18nc("to be displayed in shortcuts dialog", "Filter plugins"));
+
     d->colorEffectsAction = new QAction(QIcon::fromTheme("colorfx"), i18n("Color Effects..."), this);
     actionCollection()->addAction("imageplugin_colorfx", d->colorEffectsAction);
     connect(d->colorEffectsAction, SIGNAL(triggered(bool)),
