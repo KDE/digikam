@@ -36,8 +36,6 @@
 
 // KDE includes
 
-#include <kconfig.h>
-#include <kglobal.h>
 #include <klocalizedstring.h>
 
 // Libkdcraw includes
@@ -100,7 +98,7 @@ public:
 SetupSlideShow::SetupSlideShow(QWidget* const parent)
     : QScrollArea(parent), d(new Private)
 {
-    QWidget* const panel = new QWidget(viewport());
+    QWidget* const panel      = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
@@ -109,7 +107,7 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
     RHBox* const hbox1 = new RHBox(panel);
     QLabel* const lbl1 = new QLabel(i18n("&Delay between images:"), hbox1);
     lbl1->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    d->delayInput = new RIntNumInput(hbox1);
+    d->delayInput      = new RIntNumInput(hbox1);
     d->delayInput->setDefaultValue(5);
     d->delayInput->setRange(1, 3600, 1);
     d->delayInput->setWhatsThis(i18n("The delay, in seconds, between images."));
@@ -186,7 +184,7 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
         d->showTags->hide();
     }
 
-    layout->addWidget(d->delayInput);
+    layout->addWidget(hbox1);
     layout->addWidget(d->startWithCurrent);
     layout->addWidget(d->loopMode);
     layout->addWidget(d->showProgress);
@@ -206,8 +204,6 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
     layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     readSettings();
-
-    // --------------------------------------------------------
 }
 
 SetupSlideShow::~SetupSlideShow()
