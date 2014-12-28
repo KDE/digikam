@@ -32,7 +32,7 @@
 // KDE includes
 
 #include <kcategorizedsortfilterproxymodel.h>
-#include <kdialog.h>
+
 
 // local includes
 

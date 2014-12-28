@@ -24,8 +24,6 @@
 #ifndef TRIPLECHOICEDIALOG_H
 #define TRIPLECHOICEDIALOG_H
 
-// Qt includes
-
 // KDE includes
 
 #include <kdialog.h>

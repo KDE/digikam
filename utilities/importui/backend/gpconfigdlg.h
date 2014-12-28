@@ -33,7 +33,7 @@ extern "C"
 
 // KDE includes
 
-#include <kdialog.h>
+
 
 class QWidget;
 

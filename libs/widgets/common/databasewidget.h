@@ -35,7 +35,7 @@
 
 // KDE includes
 
-#include <kdialog.h>
+
 #include <kurl.h>
 #include <kurlrequester.h>
 

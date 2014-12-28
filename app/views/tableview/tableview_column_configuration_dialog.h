@@ -23,8 +23,6 @@
 #ifndef TABLEVIEW_COLUMN_CONFIGURATION_DIALOG_H
 #define TABLEVIEW_COLUMN_CONFIGURATION_DIALOG_H
 
-// Qt includes
-
 // KDE includes
 
 #include <kdialog.h>
