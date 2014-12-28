@@ -35,18 +35,18 @@
 #include <QPushButton>
 #include <QRadioButton>
 #include <QVBoxLayout>
+#include <QApplication>
+#include <QStyle>
+#include <QLineEdit>
 
 // KDE includes
 
 #include <kiconloader.h>
-#include <klineedit.h>
 #include <klistwidget.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kpagedialog.h>
 #include <kurl.h>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 
@@ -75,7 +75,7 @@ public:
 
     KListWidget* albumCategoryBox;
 
-    KLineEdit*   categoryEdit;
+    QLineEdit*   categoryEdit;
 };
 
 SetupCategory::SetupCategory(QWidget* const parent)
@@ -89,8 +89,8 @@ SetupCategory::SetupCategory(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    d->categoryEdit     = new KLineEdit(panel);
-    d->categoryEdit->setClearButtonShown(true);
+    d->categoryEdit     = new QLineEdit(panel);
+    d->categoryEdit->setClearButtonEnabled(true);
 
     d->albumCategoryBox = new KListWidget(panel);
     d->albumCategoryBox->setWhatsThis(i18n("You can add or remove Album "
