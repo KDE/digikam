@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <kdeversion.h>
+#include <kcoreaddons_version.h>
 #include <klocalizedstring.h>
 
 // Libkexiv2 includes
@@ -102,7 +102,7 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
 
     QMap<QString, QString> list;
     list.insert(i18n("LibQt"),                       qVersion());
-    list.insert(i18n("LibKDE"),                      KDE::versionString());
+    list.insert(i18n("LibKDE"),                      QString(KCOREADDONS_VERSION_STRING));
     list.insert(i18n("LibKdcraw"),                   KDcraw::version());
     list.insert(i18n("LibRaw"),                      KDcraw::librawVersion());
 

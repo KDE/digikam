@@ -28,10 +28,6 @@
 
 #include <cmath>     // trunc on C99 compliant systems
 
-#if !defined(__MINGW32__)
-#include <kdefakes.h> // trunc for not C99 compliant systems
-#endif
-
 // Qt includes
 
 #include <QPainter>
