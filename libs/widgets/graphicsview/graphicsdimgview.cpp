@@ -370,6 +370,8 @@ void GraphicsDImgView::scrollPointOnPoint(const QPointF& scenePos, const QPoint&
     {
         verticalScrollBar()->setValue(int(viewPoint.y() - viewportPos.y()));
     }
+
+    viewport()->update();
 }
 
 void GraphicsDImgView::wheelEvent(QWheelEvent* e)
