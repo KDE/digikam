@@ -36,6 +36,8 @@
 
 
 #include <kcmdlineargs.h>
+#include <k4aboutdata.h>
+#include <kapplication.h>
 
 // digiKam includes
 
