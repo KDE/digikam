@@ -64,4 +64,4 @@ target_link_libraries(importui
                       ${KF5KDcraw_LIBRARIES}
                      )
 
-install(FILES main/importui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam)
+install(FILES main/importui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam)

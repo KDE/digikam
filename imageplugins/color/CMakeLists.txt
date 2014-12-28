@@ -34,7 +34,7 @@ target_link_libraries(digikamimageplugin_color
                      )
 
 install(TARGETS digikamimageplugin_color             DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES digikamimageplugin_color_ui.rc         DESTINATION ${DATA_INSTALL_DIR}/digikam)
+install(FILES digikamimageplugin_color_ui.rc         DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam)
 install(FILES digikamimageplugin_color.desktop       DESTINATION ${SERVICES_INSTALL_DIR})
 install(FILES adjustlevelstool.upd                   DESTINATION ${DATA_INSTALL_DIR}/kconf_update)
 install(FILES digiKam-ImagePlugin_Color.metainfo.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata)

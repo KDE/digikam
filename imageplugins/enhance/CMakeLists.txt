@@ -46,6 +46,6 @@ if(LENSFUN_FOUND)
 endif()
 
 install(TARGETS digikamimageplugin_enhance             DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES digikamimageplugin_enhance_ui.rc         DESTINATION ${DATA_INSTALL_DIR}/digikam)
+install(FILES digikamimageplugin_enhance_ui.rc         DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam)
 install(FILES digikamimageplugin_enhance.desktop       DESTINATION ${SERVICES_INSTALL_DIR})
 install(FILES digiKam-ImagePlugin_Enhance.metainfo.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata)

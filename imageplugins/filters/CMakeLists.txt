@@ -29,6 +29,6 @@ target_link_libraries(digikamimageplugin_fxfilters
                      )
 
 install(TARGETS digikamimageplugin_fxfilters             DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES digikamimageplugin_fxfilters_ui.rc         DESTINATION ${DATA_INSTALL_DIR}/digikam)
+install(FILES digikamimageplugin_fxfilters_ui.rc         DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam)
 install(FILES digikamimageplugin_fxfilters.desktop       DESTINATION ${SERVICES_INSTALL_DIR})
 install(FILES digiKam-ImagePlugin_FxFilters.metainfo.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata)

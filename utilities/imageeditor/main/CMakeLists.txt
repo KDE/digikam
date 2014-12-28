@@ -4,4 +4,4 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-install(FILES digikamimagewindowui.rc DESTINATION ${DATA_INSTALL_DIR}/digikam)
+install(FILES digikamimagewindowui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam)
