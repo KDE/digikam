@@ -11,4 +11,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 001 ==> 284216 - Using slider widget from Krita.
 002 ==> 342010 - digiKam crash, apparently in xcb.
 003 ==> 317599 - Port digiKam to KF5 and Qt5.
-004 ==> 
+004 ==> 342256 - digiKam Crash on Start.
+005 ==> 
