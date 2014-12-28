@@ -26,7 +26,7 @@
 
 // KDE includes
 
-#include <kaction.h>
+#include <QWidgetAction>
 
 // Local includes
 
@@ -35,7 +35,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DLogoAction : public KAction
+class DIGIKAM_EXPORT DLogoAction : public QWidgetAction
 {
     Q_OBJECT
 

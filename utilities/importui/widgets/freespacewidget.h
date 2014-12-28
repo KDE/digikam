@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <kaction.h>
+#include <QAction>
 #include <kdeversion.h>
 
 #if KDE_IS_VERSION(4,1,68)

@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include <kaction.h>
+#include <QAction>
 #include <kactioncollection.h>
 
 #include <kconfig.h>
@@ -466,63 +466,63 @@ void LightTableWindow::setupActions()
     d->forwardAction->setEnabled(false);
     d->forwardAction->setShortcut(QKeySequence(Qt::Key_PageDown, Qt::Key_Space));
 
-    d->firstAction = new KAction(QIcon::fromTheme("go-first"), i18n("&First"), this);
+    d->firstAction = new QAction(QIcon::fromTheme("go-first"), i18n("&First"), this);
     d->firstAction->setShortcut(QKeySequence::MoveToStartOfDocument);
     d->firstAction->setEnabled(false);
     connect(d->firstAction, SIGNAL(triggered()), this, SLOT(slotFirst()));
     actionCollection()->addAction("lighttable_first", d->firstAction);
 
-    d->lastAction = new KAction(QIcon::fromTheme("go-last"), i18n("&Last"), this);
+    d->lastAction = new QAction(QIcon::fromTheme("go-last"), i18n("&Last"), this);
     d->lastAction->setShortcut(QKeySequence::MoveToEndOfDocument);
     d->lastAction->setEnabled(false);
     connect(d->lastAction, SIGNAL(triggered()), this, SLOT(slotLast()));
     actionCollection()->addAction("lighttable_last", d->lastAction);
 
-    d->setItemLeftAction = new KAction(QIcon::fromTheme("arrow-left"), i18n("On left"), this);
+    d->setItemLeftAction = new QAction(QIcon::fromTheme("arrow-left"), i18n("On left"), this);
     d->setItemLeftAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_L));
     d->setItemLeftAction->setEnabled(false);
     d->setItemLeftAction->setWhatsThis(i18n("Show item on left panel"));
     connect(d->setItemLeftAction, SIGNAL(triggered()), this, SLOT(slotSetItemLeft()));
     actionCollection()->addAction("lighttable_setitemleft", d->setItemLeftAction);
 
-    d->setItemRightAction = new KAction(QIcon::fromTheme("arrow-right"), i18n("On right"), this);
+    d->setItemRightAction = new QAction(QIcon::fromTheme("arrow-right"), i18n("On right"), this);
     d->setItemRightAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R));
     d->setItemRightAction->setEnabled(false);
     d->setItemRightAction->setWhatsThis(i18n("Show item on right panel"));
     connect(d->setItemRightAction, SIGNAL(triggered()), this, SLOT(slotSetItemRight()));
     actionCollection()->addAction("lighttable_setitemright", d->setItemRightAction);
 
-    d->editItemAction = new KAction(QIcon::fromTheme("editimage"), i18n("Edit"), this);
+    d->editItemAction = new QAction(QIcon::fromTheme("editimage"), i18n("Edit"), this);
     d->editItemAction->setShortcut(QKeySequence(Qt::Key_F4));
     d->editItemAction->setEnabled(false);
     connect(d->editItemAction, SIGNAL(triggered()), this, SLOT(slotEditItem()));
     actionCollection()->addAction("lighttable_edititem", d->editItemAction);
 
-    KAction* const openWithAction = new KAction(QIcon::fromTheme("preferences-desktop-filetype-association"), i18n("Open With Default Application"), this);
+    QAction* const openWithAction = new QAction(QIcon::fromTheme("preferences-desktop-filetype-association"), i18n("Open With Default Application"), this);
     openWithAction->setShortcut(QKeySequence(Qt::META + Qt::Key_F4));
     openWithAction->setWhatsThis(i18n("Open the item with default assigned application."));
     connect(openWithAction, SIGNAL(triggered()), this, SLOT(slotFileWithDefaultApplication()));
     actionCollection()->addAction("open_with_default_application", openWithAction);
 
-    d->removeItemAction = new KAction(QIcon::fromTheme("list-remove"), i18n("Remove item from LightTable"), this);
+    d->removeItemAction = new QAction(QIcon::fromTheme("list-remove"), i18n("Remove item from LightTable"), this);
     d->removeItemAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_K));
     d->removeItemAction->setEnabled(false);
     connect(d->removeItemAction, SIGNAL(triggered()), this, SLOT(slotRemoveItem()));
     actionCollection()->addAction("lighttable_removeitem", d->removeItemAction);
 
-    d->clearListAction = new KAction(QIcon::fromTheme("edit-clear"), i18n("Remove all items from LightTable"), this);
+    d->clearListAction = new QAction(QIcon::fromTheme("edit-clear"), i18n("Remove all items from LightTable"), this);
     d->clearListAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_K));
     d->clearListAction->setEnabled(false);
     connect(d->clearListAction, SIGNAL(triggered()), this, SLOT(slotClearItemsList()));
     actionCollection()->addAction("lighttable_clearlist", d->clearListAction);
 
-    d->fileDeleteAction = new KAction(QIcon::fromTheme("user-trash"), i18nc("Non-pluralized", "Move to Trash"), this);
+    d->fileDeleteAction = new QAction(QIcon::fromTheme("user-trash"), i18nc("Non-pluralized", "Move to Trash"), this);
     d->fileDeleteAction->setShortcut(QKeySequence(Qt::Key_Delete));
     d->fileDeleteAction->setEnabled(false);
     connect(d->fileDeleteAction, SIGNAL(triggered()), this, SLOT(slotDeleteItem()));
     actionCollection()->addAction("lighttable_filedelete", d->fileDeleteAction);
 
-    d->fileDeleteFinalAction = new KAction(QIcon::fromTheme("edit-delete"), i18n("Delete immediately"), this);
+    d->fileDeleteFinalAction = new QAction(QIcon::fromTheme("edit-delete"), i18n("Delete immediately"), this);
     d->fileDeleteFinalAction->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Delete));
     d->fileDeleteFinalAction->setEnabled(false);
     connect(d->fileDeleteFinalAction, SIGNAL(triggered()), this, SLOT(slotDeleteFinalItem()));
@@ -560,7 +560,7 @@ void LightTableWindow::setupActions()
     createFullScreenAction("lighttable_fullscreen");
     createSidebarActions();
 
-    d->slideShowAction = new KAction(QIcon::fromTheme("view-presentation"), i18n("Slideshow"), this);
+    d->slideShowAction = new QAction(QIcon::fromTheme("view-presentation"), i18n("Slideshow"), this);
     d->slideShowAction->setShortcut(QKeySequence(Qt::Key_F9));
     connect(d->slideShowAction, SIGNAL(triggered()), this, SLOT(slotToggleSlideShow()));
     actionCollection()->addAction("lighttable_slideshow", d->slideShowAction);
@@ -579,12 +579,12 @@ void LightTableWindow::setupActions()
     d->leftZoomMinusAction->setShortcut(leftKeysMinus);
     actionCollection()->addAction("lighttable_zoomminus_left", d->leftZoomMinusAction);
 
-    d->leftZoomTo100percents = new KAction(QIcon::fromTheme("zoom-original"), i18n("Zoom to 100%"), this);
+    d->leftZoomTo100percents = new QAction(QIcon::fromTheme("zoom-original"), i18n("Zoom to 100%"), this);
     d->leftZoomTo100percents->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Comma));
     connect(d->leftZoomTo100percents, SIGNAL(triggered()), d->previewView, SLOT(slotLeftZoomTo100()));
     actionCollection()->addAction("lighttable_zoomto100percents_left", d->leftZoomTo100percents);
 
-    d->leftZoomFitToWindowAction = new KAction(QIcon::fromTheme("zoom-fit-best"), i18n("Fit to &Window"), this);
+    d->leftZoomFitToWindowAction = new QAction(QIcon::fromTheme("zoom-fit-best"), i18n("Fit to &Window"), this);
     d->leftZoomFitToWindowAction->setShortcut(QKeySequence(Qt::ALT + Qt::CTRL + Qt::Key_E));
     connect(d->leftZoomFitToWindowAction, SIGNAL(triggered()), d->previewView, SLOT(slotLeftFitToWindow()));
     actionCollection()->addAction("lighttable_zoomfit2window_left", d->leftZoomFitToWindowAction);
@@ -603,12 +603,12 @@ void LightTableWindow::setupActions()
     d->rightZoomMinusAction->setShortcut(rightKeysMinus);
     actionCollection()->addAction("lighttable_zoomminus_right", d->rightZoomMinusAction);
 
-    d->rightZoomTo100percents = new KAction(QIcon::fromTheme("zoom-original"), i18n("Zoom to 100%"), this);
+    d->rightZoomTo100percents = new QAction(QIcon::fromTheme("zoom-original"), i18n("Zoom to 100%"), this);
     d->rightZoomTo100percents->setShortcut(QKeySequence(Qt::SHIFT + Qt::CTRL + Qt::Key_Comma));
     connect(d->rightZoomTo100percents, SIGNAL(triggered()), d->previewView, SLOT(slotRightZoomTo100()));
     actionCollection()->addAction("lighttable_zoomto100percents_right", d->rightZoomTo100percents);
 
-    d->rightZoomFitToWindowAction = new KAction(QIcon::fromTheme("zoom-fit-best"), i18n("Fit to &Window"), this);
+    d->rightZoomFitToWindowAction = new QAction(QIcon::fromTheme("zoom-fit-best"), i18n("Fit to &Window"), this);
     d->rightZoomFitToWindowAction->setShortcut(QKeySequence(Qt::SHIFT + Qt::CTRL + Qt::Key_E));
     connect(d->rightZoomFitToWindowAction, SIGNAL(triggered()), d->previewView, SLOT(slotRightFitToWindow()));
     actionCollection()->addAction("lighttable_zoomfit2window_right", d->rightZoomFitToWindowAction);
@@ -647,7 +647,7 @@ void LightTableWindow::setupActions()
 
     d->addPageUpDownActions(this, this);
 
-    KAction* const altBackwardAction = new KAction(i18n("Previous Image"), this);
+    QAction* const altBackwardAction = new QAction(i18n("Previous Image"), this);
     actionCollection()->addAction("lighttable_backward_shift_space", altBackwardAction);
     altBackwardAction->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Space));
     connect(altBackwardAction, SIGNAL(triggered()), this, SLOT(slotBackward()));
@@ -655,32 +655,32 @@ void LightTableWindow::setupActions()
     // Labels shortcuts must be registered here to be saved in XML GUI files if user customize it.
     TagsActionMngr::defaultManager()->registerLabelsActions(actionCollection());
 
-    KAction* const editTitlesRight = new KAction(i18n("Edit Titles on the Right"), this);
+    QAction* const editTitlesRight = new QAction(i18n("Edit Titles on the Right"), this);
     editTitlesRight->setShortcut( QKeySequence(Qt::META + Qt::Key_T) );
     actionCollection()->addAction("edit_titles_right", editTitlesRight);
     connect(editTitlesRight, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateTitles()));
 
-    KAction* const editCommentsRight = new KAction(i18n("Edit Comments on the Right"), this);
+    QAction* const editCommentsRight = new QAction(i18n("Edit Comments on the Right"), this);
     editCommentsRight->setShortcut( QKeySequence(Qt::META + Qt::Key_C) );
     actionCollection()->addAction("edit_comments_right", editCommentsRight);
     connect(editCommentsRight, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateComments()));
 
-    KAction* const editTitlesLeft = new KAction(i18n("Edit Titles on the Left"), this);
+    QAction* const editTitlesLeft = new QAction(i18n("Edit Titles on the Left"), this);
     editTitlesLeft->setShortcut( QKeySequence(Qt::SHIFT + Qt::META + Qt::Key_T) );
     actionCollection()->addAction("edit_titles_left", editTitlesLeft);
     connect(editTitlesLeft, SIGNAL(triggered()), this, SLOT(slotLeftSideBarActivateTitles()));
 
-    KAction* const editCommentsLeft = new KAction(i18n("Edit Comments on the Left"), this);
+    QAction* const editCommentsLeft = new QAction(i18n("Edit Comments on the Left"), this);
     editCommentsLeft->setShortcut( QKeySequence(Qt::SHIFT + Qt::META + Qt::Key_C) );
     actionCollection()->addAction("edit_comments_left", editCommentsLeft);
     connect(editCommentsLeft, SIGNAL(triggered()), this, SLOT(slotLeftSideBarActivateComments()));
 
-    KAction* const assignedTagsRight = new KAction(i18n("Show Assigned Tags on the Right"), this);
+    QAction* const assignedTagsRight = new QAction(i18n("Show Assigned Tags on the Right"), this);
     assignedTagsRight->setShortcut( QKeySequence(Qt::META + Qt::Key_A) );
     actionCollection()->addAction("assigned _tags_right", assignedTagsRight);
     connect(assignedTagsRight, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateAssignedTags()));
 
-    KAction* const assignedTagsLeft = new KAction(i18n("Show Assigned Tags on the Left"), this);
+    QAction* const assignedTagsLeft = new QAction(i18n("Show Assigned Tags on the Left"), this);
     assignedTagsLeft->setShortcut( QKeySequence(Qt::SHIFT + Qt::META + Qt::Key_A) );
     actionCollection()->addAction("assigned _tags_left", assignedTagsLeft);
     connect(assignedTagsLeft, SIGNAL(triggered()), this, SLOT(slotLeftSideBarActivateAssignedTags()));

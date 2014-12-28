@@ -77,7 +77,7 @@ public:
 };
 
 DLogoAction::DLogoAction(QObject* const parent, bool alignOnright)
-    : KAction(parent), d(new Private)
+    : QWidgetAction(parent), d(new Private)
 {
     setText("digikam.org");
 
@@ -177,7 +177,7 @@ void DLogoAction::deleteWidget(QWidget* widget)
 {
     stop();
     d->urlLabel = 0;
-    KAction::deleteWidget(widget);
+    QWidgetAction::deleteWidget(widget);
 }
 
 void DLogoAction::slotProcessUrl(const QString& url)

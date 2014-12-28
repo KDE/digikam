@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <kaction.h>
+#include <QAction>
 #include <klocalizedstring.h>
 
 // Libkgeomap includes
@@ -60,9 +60,9 @@ public:
     QList<QPointer<KGeoMap::KGeoMapWidget> > mapWidgets;
     GPSImageInfoSorter::SortOptions          sortOrder;
     QPointer<QMenu>                          sortMenu;
-    KAction*                                 sortActionOldestFirst;
-    KAction*                                 sortActionYoungestFirst;
-    KAction*                                 sortActionRating;
+    QAction*                                 sortActionOldestFirst;
+    QAction*                                 sortActionYoungestFirst;
+    QAction*                                 sortActionRating;
 
 };
 
@@ -192,15 +192,15 @@ void GPSImageInfoSorter::initializeSortMenu()
     connect(sortOrderExclusive, SIGNAL(triggered(QAction*)),
             this, SLOT(slotSortOptionTriggered()));
 
-    d->sortActionOldestFirst = new KAction(i18n("Show oldest first"), sortOrderExclusive);
+    d->sortActionOldestFirst = new QAction(i18n("Show oldest first"), sortOrderExclusive);
     d->sortActionOldestFirst->setCheckable(true);
     d->sortMenu->addAction(d->sortActionOldestFirst);
 
-    d->sortActionYoungestFirst = new KAction(i18n("Show youngest first"), sortOrderExclusive);
+    d->sortActionYoungestFirst = new QAction(i18n("Show youngest first"), sortOrderExclusive);
     d->sortActionYoungestFirst->setCheckable(true);
     d->sortMenu->addAction(d->sortActionYoungestFirst);
 
-    d->sortActionRating = new KAction(i18n("Sort by rating"), this);
+    d->sortActionRating = new QAction(i18n("Sort by rating"), this);
     d->sortActionRating->setCheckable(true);
     d->sortMenu->addAction(d->sortActionRating);
 

@@ -30,7 +30,7 @@
 // KDE includes
 
 #include <kiconloader.h>
-#include <kaction.h>
+#include <QAction>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kservice.h>
@@ -302,14 +302,14 @@ void ImportContextMenuHelper::addRotateMenu(itemIds& /*ids*/)
 //    QMenu* imageRotateMenu = new QMenu(i18n("Rotate"), d->parent);
 //    imageRotateMenu->setIcon(QIcon::fromTheme("object-rotate-right"));
 
-//    KAction* left = new KAction(this);
+//    QAction* left = new QAction(this);
 //    left->setObjectName("rotate_ccw");
 //    left->setText(i18nc("rotate image left", "Left"));
 //    connect(left, SIGNAL(triggered(bool)),
 //            this, SLOT(slotRotate()));
 //    imageRotateMenu->addAction(left);
 
-//    KAction* right = new KAction(this);
+//    QAction* right = new QAction(this);
 //    right->setObjectName("rotate_cw");
 //    right->setText(i18nc("rotate image right", "Right"));
 //    connect(right, SIGNAL(triggered(bool)),

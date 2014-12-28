@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <kaction.h>
+#include <QAction>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -81,7 +81,7 @@ public:
     {
     }
 
-    QMultiMap<int, KAction*>  tagsActionMap;
+    QMultiMap<int, QAction*>  tagsActionMap;
     QList<KActionCollection*> actionCollectionList;
 
     const QString             ratingShortcutPrefix;
@@ -208,9 +208,9 @@ bool TagsActionMngr::createRatingActionShortcut(KActionCollection* const ac, int
         QAction* const action = ac->addAction(QString("%1-%2").arg(d->ratingShortcutPrefix).arg(rating));
         action->setText(i18n("Assign Rating \"%1 Star\"", rating));
         action->setShortcut(QKeySequence(QString("CTRL+%1").arg(rating)));
+        ac->setShortcutsConfigurable(action, true);
 #pragma message("PORT QT5")
 /*
-        action->setShortcutConfigurable(true);
         action->forgetGlobalShortcut();
 */
         action->setIcon(RatingWidget::buildIcon(rating, KIconLoader::SizeSmallMedium));
@@ -232,9 +232,9 @@ bool TagsActionMngr::createPickLabelActionShortcut(KActionCollection* const ac, 
         QAction* const action = ac->addAction(QString("%1-%2").arg(d->pickShortcutPrefix).arg(pickId));
         action->setText(i18n("Assign Pick Label \"%1\"", PickLabelWidget::labelPickName((PickLabel)pickId)));
         action->setShortcut(QKeySequence(QString("ALT+%1").arg(pickId)));
+        ac->setShortcutsConfigurable(action, true);
 #pragma message("PORT QT5")
 /*
-        action->setShortcutConfigurable(true);
         action->forgetGlobalShortcut();
 */
         action->setIcon(PickLabelWidget::buildIcon((PickLabel)pickId, KIconLoader::SizeSmallMedium));
@@ -256,9 +256,9 @@ bool TagsActionMngr::createColorLabelActionShortcut(KActionCollection* const ac,
         QAction* const action = ac->addAction(QString("%1-%2").arg(d->colorShortcutPrefix).arg(colorId));
         action->setText(i18n("Assign Color Label \"%1\"", ColorLabelWidget::labelColorName((ColorLabel)colorId)));
         action->setShortcut(QKeySequence(QString("ALT+CTRL+%1").arg(colorId)));
+        ac->setShortcutsConfigurable(action, true);
 #pragma message("PORT QT5")
 /*
-        action->setShortcutConfigurable(true);
         action->forgetGlobalShortcut();
 */
         action->setIcon(ColorLabelWidget::buildIcon((ColorLabel)colorId, KIconLoader::SizeSmallMedium));
@@ -308,9 +308,9 @@ bool TagsActionMngr::createTagActionShortcut(int tagId)
         action->setText(i18n("Assign Tag \"%1\"", talbum->title()));
         action->setParent(this);
         action->setShortcut(ks);
+        ac->setShortcutsConfigurable(action, true);
 #pragma message("PORT QT5")
 /*
-        action->setShortcutConfigurable(true);
         action->forgetGlobalShortcut();
 */
         action->setIcon(icon);
@@ -397,7 +397,7 @@ bool TagsActionMngr::removeTagActionShortcut(int tagId)
         return false;
     }
 
-    foreach(KAction* const act, d->tagsActionMap.values(tagId))
+    foreach(QAction* const act, d->tagsActionMap.values(tagId))
     {
         if (act)
         {
@@ -419,7 +419,7 @@ bool TagsActionMngr::removeTagActionShortcut(int tagId)
 
 void TagsActionMngr::slotAssignFromShortcut()
 {
-    KAction* const action = dynamic_cast<KAction*>(sender());
+    QAction* const action = dynamic_cast<QAction*>(sender());
 
     if (!action)
     {

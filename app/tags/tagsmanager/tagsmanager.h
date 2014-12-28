@@ -150,6 +150,8 @@ private:
      * @brief enableRootTagActions - enable or disable options when only root
      *                               tag is selected
      */
+
+    void setHelpText(QAction* action, const QString& text);
     void enableRootTagActions(bool value);
 
 private:

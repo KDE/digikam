@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <kaction.h>
+#include <QAction>
 
 // local includes
 

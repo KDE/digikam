@@ -35,6 +35,7 @@
 #include <QHoverEvent>
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QKeySequence>
 
 // KDE includes
 
@@ -48,7 +49,6 @@
 #include <kactioncollection.h>
 
 #include <klocalizedstring.h>
-#include <kshortcut.h>
 
 // Local includes
 
@@ -125,8 +125,8 @@ public:
     bool                     statusbarVisibility;
 
     // Common Help actions
-    KAction*                 dbStatAction;
-    KAction*                 libsInfoAction;
+    QAction*                 dbStatAction;
+    QAction*                 libsInfoAction;
     DAboutData*              about;
     DLogoAction*             anim;
 };
@@ -160,7 +160,7 @@ void DXmlGuiWindow::setFullScreenOptions(int options)
 
 void DXmlGuiWindow::createHelpActions(bool coreOptions)
 {
-    d->libsInfoAction = new KAction(QIcon::fromTheme("help-about"), i18n("Components Information"), this);
+    d->libsInfoAction = new QAction(QIcon::fromTheme("help-about"), i18n("Components Information"), this);
     connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
     actionCollection()->addAction("help_librariesinfo", d->libsInfoAction);
 
@@ -173,7 +173,7 @@ void DXmlGuiWindow::createHelpActions(bool coreOptions)
     // Add options only for core components (typically all excepted Showfoto)
     if (coreOptions)
     {
-        d->dbStatAction = new KAction(QIcon::fromTheme("network-server-database"), i18n("Database Statistics"), this);
+        d->dbStatAction = new QAction(QIcon::fromTheme("network-server-database"), i18n("Database Statistics"), this);
         connect(d->dbStatAction, SIGNAL(triggered()), this, SLOT(slotDBStat()));
         actionCollection()->addAction("help_dbstat", d->dbStatAction);
     }
@@ -181,41 +181,42 @@ void DXmlGuiWindow::createHelpActions(bool coreOptions)
 
 void DXmlGuiWindow::createSidebarActions()
 {
-    KAction* const tlsb = new KAction(i18n("Toggle Left Side-bar"), this);
-    tlsb->setShortcut(KShortcut(Qt::CTRL + Qt::META + Qt::Key_Left));
-    tlsb->setShortcutConfigurable(true);
+    KActionCollection * const ac = actionCollection();
+    QAction* const tlsb = new QAction(i18n("Toggle Left Side-bar"), this);
+    tlsb->setShortcut(QKeySequence(Qt::CTRL + Qt::META + Qt::Key_Left));
     connect(tlsb, SIGNAL(triggered()), this, SLOT(slotToggleLeftSideBar()));
-    actionCollection()->addAction("toggle-left-sidebar", tlsb);
+    ac->addAction("toggle-left-sidebar", tlsb);
+    ac->setShortcutsConfigurable(tlsb, true);
 
-    KAction* const trsb = new KAction(i18n("Toggle Right Side-bar"), this);
-    trsb->setShortcut(KShortcut(Qt::CTRL + Qt::META + Qt::Key_Right));
-    trsb->setShortcutConfigurable(true);
+    QAction* const trsb = new QAction(i18n("Toggle Right Side-bar"), this);
+    trsb->setShortcut(QKeySequence(Qt::CTRL + Qt::META + Qt::Key_Right));
     connect(trsb, SIGNAL(triggered()), this, SLOT(slotToggleRightSideBar()));
-    actionCollection()->addAction("toggle-right-sidebar", trsb);
+    ac->addAction("toggle-right-sidebar", trsb);
+    ac->setShortcutsConfigurable(trsb, true);
 
-    KAction* const plsb = new KAction(i18n("Previous Left Side-bar Tab"), this);
-    plsb->setShortcut(KShortcut(Qt::CTRL + Qt::META + Qt::Key_Home));
-    plsb->setShortcutConfigurable(true);
+    QAction* const plsb = new QAction(i18n("Previous Left Side-bar Tab"), this);
+    plsb->setShortcut(QKeySequence(Qt::CTRL + Qt::META + Qt::Key_Home));
     connect(plsb, SIGNAL(triggered()), this, SLOT(slotPreviousLeftSideBarTab()));
-    actionCollection()->addAction("previous-left-sidebar-tab", plsb);
+    ac->addAction("previous-left-sidebar-tab", plsb);
+    ac->setShortcutsConfigurable(plsb, true);
 
-    KAction* const nlsb = new KAction(i18n("Next Left Side-bar Tab"), this);
-    nlsb->setShortcut(KShortcut(Qt::CTRL + Qt::META + Qt::Key_End));
-    nlsb->setShortcutConfigurable(true);
+    QAction* const nlsb = new QAction(i18n("Next Left Side-bar Tab"), this);
+    nlsb->setShortcut(QKeySequence(Qt::CTRL + Qt::META + Qt::Key_End));
     connect(nlsb, SIGNAL(triggered()), this, SLOT(slotNextLeftSideBarTab()));
-    actionCollection()->addAction("next-left-sidebar-tab", nlsb);
+    ac->addAction("next-left-sidebar-tab", nlsb);
+    ac->setShortcutsConfigurable(nlsb, true);
 
-    KAction* const prsb = new KAction(i18n("Previous Right Side-bar Tab"), this);
-    prsb->setShortcut(KShortcut(Qt::CTRL + Qt::META + Qt::Key_PageUp));
-    prsb->setShortcutConfigurable(true);
+    QAction* const prsb = new QAction(i18n("Previous Right Side-bar Tab"), this);
+    prsb->setShortcut(QKeySequence(Qt::CTRL + Qt::META + Qt::Key_PageUp));
     connect(prsb, SIGNAL(triggered()), this, SLOT(slotPreviousRightSideBarTab()));
-    actionCollection()->addAction("previous-right-sidebar-tab", prsb);
+    ac->addAction("previous-right-sidebar-tab", prsb);
+    ac->setShortcutsConfigurable(prsb, true);
 
-    KAction* const nrsb = new KAction(i18n("Next Right Side-bar Tab"), this);
-    nrsb->setShortcut(KShortcut(Qt::CTRL + Qt::META + Qt::Key_PageDown));
-    nrsb->setShortcutConfigurable(true);
+    QAction* const nrsb = new QAction(i18n("Next Right Side-bar Tab"), this);
+    nrsb->setShortcut(QKeySequence(Qt::CTRL + Qt::META + Qt::Key_PageDown));
     connect(nrsb, SIGNAL(triggered()), this, SLOT(slotNextRightSideBarTab()));
-    actionCollection()->addAction("next-right-sidebar-tab", nrsb);
+    ac->addAction("next-right-sidebar-tab", nrsb);
+    ac->setShortcutsConfigurable(nrsb, true);
 }
 
 void DXmlGuiWindow::createFullScreenAction(const QString& name)

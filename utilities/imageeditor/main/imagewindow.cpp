@@ -48,7 +48,7 @@
 
 // KDE includes
 
-#include <kaction.h>
+#include <QAction>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 
@@ -433,7 +433,7 @@ void ImageWindow::setupActions()
 {
     setupStandardActions();
 
-    d->toMainWindowAction = new KAction(QIcon::fromTheme("view-list-icons"),
+    d->toMainWindowAction = new QAction(QIcon::fromTheme("view-list-icons"),
                                         i18nc("@action Finish editing, close editor, back to main window", "Close Editor"), this);
     connect(d->toMainWindowAction, SIGNAL(triggered()), this, SLOT(slotToMainWindow()));
     actionCollection()->addAction("imageview_tomainwindow", d->toMainWindowAction);
@@ -442,7 +442,7 @@ void ImageWindow::setupActions()
 
     // Pop up dialog to ask user whether to permanently delete
 
-    d->fileDeletePermanentlyAction = new KAction(QIcon::fromTheme("edit-delete"), i18n("Delete File Permanently"), this);
+    d->fileDeletePermanentlyAction = new QAction(QIcon::fromTheme("edit-delete"), i18n("Delete File Permanently"), this);
     d->fileDeletePermanentlyAction->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Delete));
     connect(d->fileDeletePermanentlyAction, SIGNAL(triggered()),
             this, SLOT(slotDeleteCurrentItemPermanently()));
@@ -451,14 +451,14 @@ void ImageWindow::setupActions()
     // These two actions are hidden, no menu entry, no toolbar entry, no shortcut.
     // Power users may add them.
 
-    d->fileDeletePermanentlyDirectlyAction = new KAction(QIcon::fromTheme("edit-delete"),
+    d->fileDeletePermanentlyDirectlyAction = new QAction(QIcon::fromTheme("edit-delete"),
                                                          i18n("Delete Permanently without Confirmation"), this);
     connect(d->fileDeletePermanentlyDirectlyAction, SIGNAL(triggered()),
             this, SLOT(slotDeleteCurrentItemPermanentlyDirectly()));
     actionCollection()->addAction("image_delete_permanently_directly",
                                   d->fileDeletePermanentlyDirectlyAction);
 
-    d->fileTrashDirectlyAction = new KAction(QIcon::fromTheme("user-trash"),
+    d->fileTrashDirectlyAction = new QAction(QIcon::fromTheme("user-trash"),
                                              i18n("Move to Trash without Confirmation"), this);
     connect(d->fileTrashDirectlyAction, SIGNAL(triggered()),
             this, SLOT(slotTrashCurrentItemDirectly()));
@@ -471,17 +471,17 @@ void ImageWindow::setupActions()
     // Labels shortcuts must be registered here to be saved in XML GUI files if user customize it.
     TagsActionMngr::defaultManager()->registerLabelsActions(actionCollection());
 
-    KAction* const editTitles = new KAction(i18n("Edit Titles"), this);
+    QAction* const editTitles = new QAction(i18n("Edit Titles"), this);
     editTitles->setShortcut( QKeySequence(Qt::META + Qt::Key_T) );
     actionCollection()->addAction("edit_titles", editTitles);
     connect(editTitles, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateTitles()));
 
-    KAction* const editComments = new KAction(i18n("Edit Comments"), this);
+    QAction* const editComments = new QAction(i18n("Edit Comments"), this);
     editComments->setShortcut( QKeySequence(Qt::META + Qt::Key_C) );
     actionCollection()->addAction("edit_comments", editComments);
     connect(editComments, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateComments()));
 
-    KAction* const assignedTags = new KAction(i18n("Show Assigned Tags"), this);
+    QAction* const assignedTags = new QAction(i18n("Show Assigned Tags"), this);
     assignedTags->setShortcut( QKeySequence(Qt::META + Qt::Key_A) );
     actionCollection()->addAction("assigned _tags", assignedTags);
     connect(assignedTags, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateAssignedTags()));

@@ -191,12 +191,12 @@ void PreviewToolBar::registerMenuActionGroup(EditorWindow* const editor)
 
     foreach (QAbstractButton* const btn, d->previewButtons->buttons())
     {
-        KAction* const ac = new KAction(btn->toolTip(), d->actionsGroup);
+        QAction* const ac = new QAction(btn->toolTip(), d->actionsGroup);
         ac->setData(QVariant(d->previewButtons->id(btn)));
         ac->setIcon(btn->icon());
         ac->setCheckable(true);
-        ac->setShortcutConfigurable(true);
         editor->actionCollection()->addAction(btn->objectName(), ac);
+        editor->actionCollection()->setShortcutsConfigurable(ac, true);
         d->actionsMenu->addAction(ac);
     }
 

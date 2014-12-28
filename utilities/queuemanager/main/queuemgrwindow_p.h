@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <kaction.h>
+#include <QAction>
 #include <kiconloader.h>
 #include <kselectaction.h>
 #include <ktoggleaction.h>
@@ -101,22 +101,22 @@ public:
 
     QLabel*                  statusLabel;
 
-    KAction*                 clearQueueAction;
-    KAction*                 removeItemsSelAction;
+    QAction*                 clearQueueAction;
+    QAction*                 removeItemsSelAction;
     QAction*                 removeItemsDoneAction;
     QAction*                 moveUpToolAction;
     QAction*                 moveDownToolAction;
     QAction*                 removeToolAction;
     QAction*                 clearToolsAction;
 
-    KAction*                 runAction;
-    KAction*                 stopAction;
-    KAction*                 removeQueueAction;
-    KAction*                 newQueueAction;
-    KAction*                 saveQueueAction;
-    KAction*                 donateMoneyAction;
-    KAction*                 contributeAction;
-    KAction*                 rawCameraListAction;
+    QAction*                 runAction;
+    QAction*                 stopAction;
+    QAction*                 removeQueueAction;
+    QAction*                 newQueueAction;
+    QAction*                 saveQueueAction;
+    QAction*                 donateMoneyAction;
+    QAction*                 contributeAction;
+    QAction*                 rawCameraListAction;
 
     SidebarSplitter*         topSplitter;
     SidebarSplitter*         bottomSplitter;

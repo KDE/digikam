@@ -34,7 +34,7 @@
 
 // KDE includes
 
-#include <kaction.h>
+#include <QAction>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <QMenu>
@@ -242,9 +242,9 @@ QMimeData* WorkflowList::mimeData(const QList<QTreeWidgetItem*> items) const
 void WorkflowList::slotContextMenu()
 {
     QMenu popmenu(this);
-    KAction* const assignAction = new KAction(QIcon::fromTheme("bqm-add"),             i18n("Assign Workflow to current queue"), this);
-    KAction* const propAction   = new KAction(QIcon::fromTheme("document-properties"), i18n("Edit Workflow"),                    this);
-    KAction* const delAction    = new KAction(QIcon::fromTheme("edit-delete"),         i18n("Delete Workflow"),                  this);
+    QAction* const assignAction = new QAction(QIcon::fromTheme("bqm-add"),             i18n("Assign Workflow to current queue"), this);
+    QAction* const propAction   = new QAction(QIcon::fromTheme("document-properties"), i18n("Edit Workflow"),                    this);
+    QAction* const delAction    = new QAction(QIcon::fromTheme("edit-delete"),         i18n("Delete Workflow"),                  this);
 
     popmenu.addAction(assignAction);
     popmenu.addAction(propAction);

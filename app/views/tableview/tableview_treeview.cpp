@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <kaction.h>
+#include <QAction>
 
 // local includes
 
@@ -64,8 +64,8 @@ public:
     }
 
     int           headerContextMenuActiveColumn;
-    KAction*      actionHeaderContextMenuRemoveColumn;
-    KAction*      actionHeaderContextMenuConfigureColumn;
+    QAction*      actionHeaderContextMenuRemoveColumn;
+    QAction*      actionHeaderContextMenuConfigureColumn;
     ThumbnailSize dragDropThumbnailSize;
 };
 
@@ -84,11 +84,11 @@ TableViewTreeView::TableViewTreeView(TableViewShared* const tableViewShared, QWi
     setWordWrap(true);
 //     viewport()->setAcceptDrops(true);
 
-    d->actionHeaderContextMenuRemoveColumn = new KAction(QIcon::fromTheme("edit-table-delete-column"), i18n("Remove this column"), this);
+    d->actionHeaderContextMenuRemoveColumn = new QAction(QIcon::fromTheme("edit-table-delete-column"), i18n("Remove this column"), this);
     connect(d->actionHeaderContextMenuRemoveColumn, SIGNAL(triggered(bool)),
             this, SLOT(slotHeaderContextMenuActionRemoveColumnTriggered()));
 
-    d->actionHeaderContextMenuConfigureColumn = new KAction(QIcon::fromTheme("configure"), i18n("Configure this column"), this);
+    d->actionHeaderContextMenuConfigureColumn = new QAction(QIcon::fromTheme("configure"), i18n("Configure this column"), this);
     connect(d->actionHeaderContextMenuConfigureColumn, SIGNAL(triggered(bool)),
             this, SLOT(slotHeaderContextMenuConfigureColumn()));
 
@@ -127,7 +127,7 @@ void TableViewTreeView::addColumnDescriptionsToMenu(const QList<TableViewColumnD
     for (int i = 0; i<columnDescriptions.count(); ++i)
     {
         const TableViewColumnDescription& desc = columnDescriptions.at(i);
-        KAction* const action                  = new KAction(desc.columnTitle, menu);
+        QAction* const action                  = new QAction(desc.columnTitle, menu);
 
         if (!desc.columnIcon.isEmpty())
         {

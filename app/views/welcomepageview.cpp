@@ -36,14 +36,14 @@
 
 // KDE includes
 
-#include <kaction.h>
+#include <QAction>
 #include <kactioncollection.h>
 #include <kcursor.h>
 #include <kglobalsettings.h>
 #include <khtml_part.h>
 #include <khtmlview.h>
 #include <klocalizedstring.h>
-#include <kshortcut.h>
+#include <QKeySequence>
 #include <kstandarddirs.h>
 #include <ktoolinvocation.h>
 #include <kurl.h>
@@ -265,44 +265,44 @@ void WelcomePageView::slotThemeChanged()
 
 void WelcomePageView::disablePredefinedActions()
 {
-    KAction* const findAction = qobject_cast<KAction*>(actionCollection()->action("find"));
+    QAction* const findAction = qobject_cast<QAction*>(actionCollection()->action("find"));
 
     if (findAction)
     {
-        findAction->setShortcut(KShortcut());
+        findAction->setShortcut(QKeySequence());
     }
     else
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "failed to remove the shortcut of khtml's find action";
     }
 
-    KAction* const findNextAction = qobject_cast<KAction*>(actionCollection()->action("findNext"));
+    QAction* const findNextAction = qobject_cast<QAction*>(actionCollection()->action("findNext"));
 
     if (findNextAction)
     {
-        findNextAction->setShortcut(KShortcut());
+        findNextAction->setShortcut(QKeySequence());
     }
     else
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "failed to remove the shortcut of khtml's findNext action";
     }
 
-    KAction* const findPreviousAction = qobject_cast<KAction*>(actionCollection()->action("findPrevious"));
+    QAction* const findPreviousAction = qobject_cast<QAction*>(actionCollection()->action("findPrevious"));
 
     if (findPreviousAction)
     {
-        findPreviousAction->setShortcut(KShortcut());
+        findPreviousAction->setShortcut(QKeySequence());
     }
     else
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "failed to remove the shortcut of khtml's findPrevious action";
     }
 
-    KAction* const selectAllAction = qobject_cast<KAction*>(actionCollection()->action("selectAll"));
+    QAction* const selectAllAction = qobject_cast<QAction*>(actionCollection()->action("selectAll"));
 
     if (selectAllAction)
     {
-        selectAllAction->setShortcut(KShortcut());
+        selectAllAction->setShortcut(QKeySequence());
     }
     else
     {

@@ -41,7 +41,7 @@
 #include "dhistoryview.h"
 #include "dxmlguiwindow.h"
 
-class KAction;
+class QAction;
 
 namespace Digikam
 {

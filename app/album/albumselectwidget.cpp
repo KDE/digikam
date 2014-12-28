@@ -37,7 +37,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kaction.h>
+#include <QAction>
 #include <kmessagebox.h>
 #include <kinputdialog.h>
 
@@ -64,7 +64,7 @@ public:
     }
 
     AlbumModificationHelper* albumModificationHelper;
-    KAction*                 newAlbumAction;
+    QAction*                 newAlbumAction;
 };
 
 AlbumSelectTreeView::AlbumSelectTreeView(AlbumModel* const model, AlbumModificationHelper* const albumModificationHelper, QWidget* const parent)
@@ -73,7 +73,7 @@ AlbumSelectTreeView::AlbumSelectTreeView(AlbumModel* const model, AlbumModificat
 {
     setAlbumModel(model);
     d->albumModificationHelper = albumModificationHelper;
-    d->newAlbumAction          = new KAction(QIcon::fromTheme("albumfolder-new"), i18n("Create New Album"), this);
+    d->newAlbumAction          = new QAction(QIcon::fromTheme("albumfolder-new"), i18n("Create New Album"), this);
 }
 
 AlbumSelectTreeView::~AlbumSelectTreeView()

@@ -39,7 +39,7 @@
 
 // KDE includes
 
-#include <kaction.h>
+#include <QAction>
 #include <kactionmenu.h>
 #include <kcursor.h>
 #include <kiconloader.h>

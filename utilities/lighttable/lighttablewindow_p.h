@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kaction.h>
+#include <QAction>
 #include <kselectaction.h>
 #include <ksqueezedtextlabel.h>
 
@@ -104,27 +104,27 @@ public:
     bool                      autoSyncPreview;
     bool                      cancelSlideShow;
 
-    KAction*                  setItemLeftAction;
-    KAction*                  setItemRightAction;
-    KAction*                  clearListAction;
-    KAction*                  editItemAction;
-    KAction*                  removeItemAction;
-    KAction*                  fileDeleteAction;
-    KAction*                  fileDeleteFinalAction;
-    KAction*                  slideShowAction;
+    QAction*                  setItemLeftAction;
+    QAction*                  setItemRightAction;
+    QAction*                  clearListAction;
+    QAction*                  editItemAction;
+    QAction*                  removeItemAction;
+    QAction*                  fileDeleteAction;
+    QAction*                  fileDeleteFinalAction;
+    QAction*                  slideShowAction;
     QAction*                  leftZoomPlusAction;
     QAction*                  leftZoomMinusAction;
-    KAction*                  leftZoomTo100percents;
-    KAction*                  leftZoomFitToWindowAction;
+    QAction*                  leftZoomTo100percents;
+    QAction*                  leftZoomFitToWindowAction;
     QAction*                  rightZoomPlusAction;
     QAction*                  rightZoomMinusAction;
-    KAction*                  rightZoomTo100percents;
-    KAction*                  rightZoomFitToWindowAction;
+    QAction*                  rightZoomTo100percents;
+    QAction*                  rightZoomFitToWindowAction;
 
     QAction*                  forwardAction;
     QAction*                  backwardAction;
-    KAction*                  firstAction;
-    KAction*                  lastAction;
+    QAction*                  firstAction;
+    QAction*                  lastAction;
 
     KToggleAction*            showBarAction;
     KToggleAction*            viewCMViewAction;

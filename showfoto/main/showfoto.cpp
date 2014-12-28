@@ -66,7 +66,7 @@ extern "C"
 // KDE includes
 
 #include <kdeversion.h>
-#include <kaction.h>
+#include <QAction>
 #include <kactionmenu.h>
 #include <kselectaction.h>
 #include <kactioncollection.h>
@@ -434,7 +434,7 @@ void ShowFoto::setupActions()
     d->fileOpenAction = actionCollection()->addAction(KStandardAction::Open, "showfoto_open_file",
                         this, SLOT(slotOpenFile()));
 
-    d->openFilesInFolderAction = new KAction(QIcon::fromTheme("folder-image"), i18n("Open folder"), this);
+    d->openFilesInFolderAction = new QAction(QIcon::fromTheme("folder-image"), i18n("Open folder"), this);
     d->openFilesInFolderAction->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_O));
 
     connect(d->openFilesInFolderAction, SIGNAL(triggered()),

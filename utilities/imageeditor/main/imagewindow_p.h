@@ -146,12 +146,12 @@ public:
 
     KMainWindow*              viewContainer;
 
-    KAction*                  toMainWindowAction;
+    QAction*                  toMainWindowAction;
 
     // Delete actions
-    KAction*                  fileDeletePermanentlyAction;
-    KAction*                  fileDeletePermanentlyDirectlyAction;
-    KAction*                  fileTrashDirectlyAction;
+    QAction*                  fileDeletePermanentlyAction;
+    QAction*                  fileDeletePermanentlyDirectlyAction;
+    QAction*                  fileTrashDirectlyAction;
 
     ImageInfo                 currentImageInfo;
     ImageListModel*           imageInfoModel;

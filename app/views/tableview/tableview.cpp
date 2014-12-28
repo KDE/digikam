@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include <kaction.h>
+#include <QAction>
 #include <kiconloader.h>
 //#include <klinkitemselectionmodel.h>
 
@@ -226,7 +226,7 @@ void TableView::showTreeViewContextMenuOnItem(QContextMenuEvent* const event, co
 
     // Temporary actions --------------------------------------
 
-    KAction* const viewAction = new KAction(i18nc("View the selected image", "Preview"), this);
+    QAction* const viewAction = new QAction(i18nc("View the selected image", "Preview"), this);
     viewAction->setIcon(SmallIcon("viewimage"));
     viewAction->setEnabled(selectedImageIds.count() == 1);
 
@@ -509,7 +509,7 @@ QList<QAction*> TableView::getExtraGroupingActions(QObject* const parentObject) 
 
     const TableViewModel::GroupingMode currentGroupingMode = s->tableViewModel->groupingMode();
 
-    KAction* const actionHideGrouped = new KAction(i18n("Hide grouped items"), parentObject);
+    QAction* const actionHideGrouped = new QAction(i18n("Hide grouped items"), parentObject);
     actionHideGrouped->setCheckable(true);
     actionHideGrouped->setChecked(currentGroupingMode == TableViewModel::GroupingHideGrouped);
     actionHideGrouped->setData(QVariant::fromValue<TableViewModel::GroupingMode>(TableViewModel::GroupingHideGrouped));
@@ -519,7 +519,7 @@ QList<QAction*> TableView::getExtraGroupingActions(QObject* const parentObject) 
 
     actionList << actionHideGrouped;
 
-    KAction* const actionIgnoreGrouping = new KAction(i18n("Ignore grouping"), parentObject);
+    QAction* const actionIgnoreGrouping = new QAction(i18n("Ignore grouping"), parentObject);
     actionIgnoreGrouping->setCheckable(true);
     actionIgnoreGrouping->setChecked(currentGroupingMode == TableViewModel::GroupingIgnoreGrouping);
     actionIgnoreGrouping->setData(QVariant::fromValue<TableViewModel::GroupingMode>(TableViewModel::GroupingIgnoreGrouping));
@@ -529,7 +529,7 @@ QList<QAction*> TableView::getExtraGroupingActions(QObject* const parentObject) 
 
     actionList << actionIgnoreGrouping;
 
-    KAction* const actionShowSubItems = new KAction(i18n("Show grouping in tree"), parentObject);
+    QAction* const actionShowSubItems = new QAction(i18n("Show grouping in tree"), parentObject);
     actionShowSubItems->setCheckable(true);
     actionShowSubItems->setChecked(currentGroupingMode == TableViewModel::GroupingShowSubItems);
     actionShowSubItems->setData(QVariant::fromValue<TableViewModel::GroupingMode>(TableViewModel::GroupingShowSubItems));

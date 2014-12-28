@@ -38,7 +38,7 @@
 // KDE includes
 
 #include <kpixmapsequence.h>
-#include <kaction.h>
+#include <QAction>
 #include <kactioncollection.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>

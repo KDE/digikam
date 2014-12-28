@@ -44,7 +44,7 @@
 #include <klocalizedstring.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
-#include <kaction.h>
+#include <QAction>
 #include <ktoolbar.h>
 #include <kmainwindow.h>
 #include <kmultitabbar.h>
@@ -108,11 +108,11 @@ public:
     KMultiTabBar*    rightToolBar;
     KActionMenu*     organizeAction;
     KActionMenu*     syncexportAction;
-    KAction*         tagProperties;
-    KAction*         addAction;
-    KAction*         delAction;
+    QAction*         tagProperties;
+    QAction*         addAction;
+    QAction*         delAction;
     /** Options unavailable for root tag **/
-    QList<KAction*>  rootDisabledOptions;
+    QList<QAction*>  rootDisabledOptions;
 
     TagList*         listView;
     TagPropWidget*   tagPropWidget;
@@ -682,51 +682,51 @@ void TagsManager::setupActions()
 
     d->mainToolbar->addSeparator();
 
-    d->addAction = new KAction(QIcon::fromTheme("list-add"),"",d->treeWindow);
+    d->addAction = new QAction(QIcon::fromTheme("list-add"),"",d->treeWindow);
 
-    d->delAction = new KAction(QIcon::fromTheme("list-remove"),"",d->treeWindow);
+    d->delAction = new QAction(QIcon::fromTheme("list-remove"),"",d->treeWindow);
 
     /** organize group **/
     d->organizeAction      = new KActionMenu(QIcon::fromTheme("autocorrection"),
                                              i18nc("@title:menu", "Organize"),this);
     d->organizeAction->setDelayed(false);
 
-    KAction* const resetIcon     = new KAction(QIcon::fromTheme("view-refresh"),
+    QAction* const resetIcon     = new QAction(QIcon::fromTheme("view-refresh"),
                                          i18n("Reset tag Icon"), this);
 
-    KAction* const createTagAddr = new KAction(QIcon::fromTheme("tag-addressbook"),
+    QAction* const createTagAddr = new QAction(QIcon::fromTheme("tag-addressbook"),
                                          i18n("Create Tag from Address Book"),
                                          this);
-    KAction* const invSel        = new KAction(QIcon::fromTheme("tag-reset"),
+    QAction* const invSel        = new QAction(QIcon::fromTheme("tag-reset"),
                                          i18n("Invert Selection"), this);
 
-    KAction* const expandTree    = new KAction(QIcon::fromTheme("format-indent-more"),
+    QAction* const expandTree    = new QAction(QIcon::fromTheme("format-indent-more"),
                                          i18n("Expand Tag Tree"), this);
 
-    KAction* const expandSel     = new KAction(QIcon::fromTheme("format-indent-more"),
+    QAction* const expandSel     = new QAction(QIcon::fromTheme("format-indent-more"),
                                          i18n("Expand Selected Nodes"), this);
-    KAction* const delTagFromImg = new KAction(QIcon::fromTheme("tag-delete"),
+    QAction* const delTagFromImg = new QAction(QIcon::fromTheme("tag-delete"),
                                          i18n("Remove Tag from Images"), this);
 
     /** Tool tips  **/
-    d->addAction->setHelpText(i18n("Add new tag to current tag. "
-                                  "Current tag is last clicked tag."));
+    setHelpText(d->addAction, i18n("Add new tag to current tag. "
+                                   "Current tag is last clicked tag."));
 
-    d->delAction->setHelpText(i18n("Delete selected items. "
+    setHelpText(d->delAction, i18n("Delete selected items. "
                                   "Also work with multiple items, "
                                   "but won't delete the root tag."));
 
-    resetIcon->setHelpText(i18n("Reset icon to selected tags. "
+    setHelpText(resetIcon, i18n("Reset icon to selected tags. "
                                "Works with multiple selection." ));
 
-    invSel->setHelpText(i18n("Invert selection. "
+    setHelpText(invSel, i18n("Invert selection. "
                             "Only visible items will be selected"));
 
-    expandTree->setHelpText(i18n("Expand tag tree by one level"));
+    setHelpText(expandTree, i18n("Expand tag tree by one level"));
 
-    expandSel->setHelpText(i18n("Selected items will be expanded"));
+    setHelpText(expandSel, i18n("Selected items will be expanded"));
 
-    delTagFromImg->setHelpText(i18n("Delete selected tag(s) from images. "
+    setHelpText(delTagFromImg, i18n("Delete selected tag(s) from images. "
                                     "Works with multiple selection."));
 
     connect(resetIcon, SIGNAL(triggered()),
@@ -759,23 +759,23 @@ void TagsManager::setupActions()
                                           i18n("Sync &Export"),this);
     d->syncexportAction->setDelayed(false);
 
-    KAction* const wrDbImg  = new KAction(QIcon::fromTheme("view-refresh"),
+    QAction* const wrDbImg  = new QAction(QIcon::fromTheme("view-refresh"),
                                           i18n("Write Tags from Database "
                                               "to Image"), this);
 
-    KAction* const readTags = new KAction(QIcon::fromTheme("tag-new"),
+    QAction* const readTags = new QAction(QIcon::fromTheme("tag-new"),
                                           i18n("Read Tags from Image"), this);
 
-    KAction* const wipeAll  = new KAction(QIcon::fromTheme("draw-eraser"),
+    QAction* const wipeAll  = new QAction(QIcon::fromTheme("draw-eraser"),
                                           i18n("Wipe all tags from Database only"), this);
 
 
-    wrDbImg->setHelpText(i18n("Write Tags Metadata to Image."));
+    setHelpText(wrDbImg, i18n("Write Tags Metadata to Image."));
 
-    readTags->setHelpText(i18n("Read tags from Images into Database. "
+    setHelpText(readTags, i18n("Read tags from Images into Database. "
                               "Existing tags won't be affected"));
 
-    wipeAll->setHelpText(i18n("Delete all tags from database only. Will not sync with files. "
+    setHelpText(wipeAll, i18n("Delete all tags from database only. Will not sync with files. "
                              "Proceed with caution."));
 
 
@@ -815,10 +815,20 @@ void TagsManager::setupActions()
     d->rootDisabledOptions.append(delTagFromImg);
 }
 
+// helper based on KAction::setHelpText
+void TagsManager::setHelpText(QAction *action, const QString &text)
+{
+    action->setStatusTip(text);
+    action->setToolTip(text);
+    if(action->whatsThis().isEmpty()) {
+        action->setWhatsThis(text);
+    }
+}
+
 
 void TagsManager::enableRootTagActions(bool value)
 {
-    Q_FOREACH(KAction* const action, d->rootDisabledOptions)
+    Q_FOREACH(QAction* const action, d->rootDisabledOptions)
     {
         if(value)
             action->setEnabled(true);

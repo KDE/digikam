@@ -42,7 +42,7 @@ class QMenu;
 class QPoint;
 class QString;
 
-class KAction;
+class QAction;
 class KActionCollection;
 
 namespace Digikam

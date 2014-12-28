@@ -34,7 +34,7 @@
 
 // KDE includes
 
-#include <kaction.h>
+#include <QAction>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <QMenu>
@@ -353,7 +353,7 @@ QMap<int, QString> ToolsListView::itemsToMap(const QList<QTreeWidgetItem*> items
 void ToolsListView::slotContextMenu()
 {
     QMenu popmenu(this);
-    KAction* const action = new KAction(QIcon::fromTheme("bqm-add"), i18n("Assign tools"), this);
+    QAction* const action = new QAction(QIcon::fromTheme("bqm-add"), i18n("Assign tools"), this);
     connect(action, SIGNAL(triggered(bool)),
             this, SLOT(slotAssignTools()));
 

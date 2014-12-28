@@ -28,7 +28,7 @@
 
 // KDE includes
 
-#include <kaction.h>
+#include <QAction>
 #include <kactioncollection.h>
 
 #include <kcursor.h>
@@ -69,41 +69,41 @@ public:
     {
     }
 
-    KAction* aspectRatioCropAction;
-    KAction* resizeAction;
-    KAction* contentAwareResizingAction;
-    KAction* sheartoolAction;
-    KAction* freerotationAction;
-    KAction* perspectiveAction;
+    QAction* aspectRatioCropAction;
+    QAction* resizeAction;
+    QAction* contentAwareResizingAction;
+    QAction* sheartoolAction;
+    QAction* freerotationAction;
+    QAction* perspectiveAction;
 };
 
 ImagePlugin_Transform::ImagePlugin_Transform(QObject* const parent, const QVariantList&)
     : ImagePlugin(parent, "ImagePlugin_Transform"),
       d(new Private)
 {
-    d->perspectiveAction = new KAction(QIcon::fromTheme("perspective"), i18n("Perspective Adjustment..."), this);
+    d->perspectiveAction = new QAction(QIcon::fromTheme("perspective"), i18n("Perspective Adjustment..."), this);
     actionCollection()->addAction("imageplugin_perspective", d->perspectiveAction);
     connect(d->perspectiveAction, SIGNAL(triggered(bool)),
             this, SLOT(slotPerspective()));
 
-    d->sheartoolAction = new KAction(QIcon::fromTheme("shear"), i18n("Shear..."), this);
+    d->sheartoolAction = new QAction(QIcon::fromTheme("shear"), i18n("Shear..."), this);
     actionCollection()->addAction("imageplugin_sheartool", d->sheartoolAction);
     connect(d->sheartoolAction, SIGNAL(triggered(bool)),
             this, SLOT(slotShearTool()));
 
-    d->resizeAction = new KAction(QIcon::fromTheme("transform-scale"), i18n("&Resize..."), this);
+    d->resizeAction = new QAction(QIcon::fromTheme("transform-scale"), i18n("&Resize..."), this);
     actionCollection()->addAction("imageplugin_resize", d->resizeAction);
     connect(d->resizeAction, SIGNAL(triggered()),
             this, SLOT(slotResize()));
 
-    d->aspectRatioCropAction = new KAction(QIcon::fromTheme("ratiocrop"), i18n("Aspect Ratio Crop..."), this);
+    d->aspectRatioCropAction = new QAction(QIcon::fromTheme("ratiocrop"), i18n("Aspect Ratio Crop..."), this);
     actionCollection()->addAction("imageplugin_ratiocrop", d->aspectRatioCropAction);
     connect(d->aspectRatioCropAction, SIGNAL(triggered(bool)),
             this, SLOT(slotRatioCrop()));
 
 #ifdef HAVE_LIBLQR_1
 
-    d->contentAwareResizingAction = new KAction(QIcon::fromTheme("transform-scale"), i18n("Liquid Rescale..."), this);
+    d->contentAwareResizingAction = new QAction(QIcon::fromTheme("transform-scale"), i18n("Liquid Rescale..."), this);
     // d->contentAwareResizingAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_C));
     actionCollection()->addAction("imageplugin_contentawareresizing", d->contentAwareResizingAction);
     connect(d->contentAwareResizingAction, SIGNAL(triggered(bool)),
@@ -113,24 +113,24 @@ ImagePlugin_Transform::ImagePlugin_Transform(QObject* const parent, const QVaria
 
     //-----------------------------------------------------------------------------------
 
-    d->freerotationAction = new KAction(QIcon::fromTheme("freerotation"), i18n("Free Rotation..."), this);
+    d->freerotationAction = new QAction(QIcon::fromTheme("freerotation"), i18n("Free Rotation..."), this);
     actionCollection()->addAction("imageplugin_freerotation", d->freerotationAction );
     connect(d->freerotationAction, SIGNAL(triggered(bool)),
             this, SLOT(slotFreeRotation()));
 
-    KAction* point1Action = new KAction(i18n("Set Point 1"), this);
+    QAction* point1Action = new QAction(i18n("Set Point 1"), this);
     point1Action->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_1));
     actionCollection()->addAction("imageplugin_freerotation_point1", point1Action);
     connect(point1Action, SIGNAL(triggered(bool)),
             this, SIGNAL(signalPoint1Action()));
 
-    KAction* const point2Action = new KAction(i18n("Set Point 2"), this);
+    QAction* const point2Action = new QAction(i18n("Set Point 2"), this);
     point2Action->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_2));
     actionCollection()->addAction("imageplugin_freerotation_point2", point2Action);
     connect(point2Action, SIGNAL(triggered(bool)),
             this, SIGNAL(signalPoint2Action()));
 
-    KAction* const autoAdjustAction = new KAction(i18n("Auto Adjust"), this);
+    QAction* const autoAdjustAction = new QAction(i18n("Auto Adjust"), this);
     autoAdjustAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_R));
     actionCollection()->addAction("imageplugin_freerotation_autoadjust", autoAdjustAction);
     connect(autoAdjustAction, SIGNAL(triggered(bool)),

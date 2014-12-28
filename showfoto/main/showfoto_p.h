@@ -84,8 +84,8 @@ public:
 
     KUrl                             lastOpenedDirectory;
 
-    KAction*                         openFilesInFolderAction;
-    KAction*                         first;
+    QAction*                         openFilesInFolderAction;
+    QAction*                         first;
     QDir                             dir;
     ShowfotoItemInfoList             infoList;
     ShowfotoThumbnailModel*          model;

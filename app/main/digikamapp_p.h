@@ -41,7 +41,7 @@
 // KDE includes
 
 #include <kconfig.h>
-#include <kaction.h>
+#include <QAction>
 #include <kselectaction.h>
 #include <kstatusbar.h>
 #include <ksqueezedtextlabel.h>
@@ -210,32 +210,32 @@ public:
     KSharedConfig::Ptr                  config;
 
     // Album Actions
-    KAction*                            newAction;
-    KAction*                            moveSelectionToAlbumAction;
-    KAction*                            deleteAction;
-    KAction*                            renameAction;
-    KAction*                            imageDeletePermanentlyAction;
-    KAction*                            imageDeletePermanentlyDirectlyAction;
-    KAction*                            imageTrashDirectlyAction;
+    QAction*                            newAction;
+    QAction*                            moveSelectionToAlbumAction;
+    QAction*                            deleteAction;
+    QAction*                            renameAction;
+    QAction*                            imageDeletePermanentlyAction;
+    QAction*                            imageDeletePermanentlyDirectlyAction;
+    QAction*                            imageTrashDirectlyAction;
     KToolBarPopupAction*                backwardActionMenu;
     KToolBarPopupAction*                forwardActionMenu;
 
-    KAction*                            addImagesAction;
-    KAction*                            propsEditAction;
-    KAction*                            addFoldersAction;
-    KAction*                            openInFileManagerAction;
-    KAction*                            openInTerminalAction;
-    KAction*                            refreshAction;
-    KAction*                            writeAlbumMetadataAction;
-    KAction*                            readAlbumMetadataAction;
+    QAction*                            addImagesAction;
+    QAction*                            propsEditAction;
+    QAction*                            addFoldersAction;
+    QAction*                            openInFileManagerAction;
+    QAction*                            openInTerminalAction;
+    QAction*                            refreshAction;
+    QAction*                            writeAlbumMetadataAction;
+    QAction*                            readAlbumMetadataAction;
 
     // Tag Actions
-    KAction*                            browseTagsAction;
-    KAction*                            openTagMngrAction;
-    KAction*                            newTagAction;
-    KAction*                            deleteTagAction;
-    KAction*                            editTagAction;
-    KAction*                            assignTagAction;
+    QAction*                            browseTagsAction;
+    QAction*                            openTagMngrAction;
+    QAction*                            newTagAction;
+    QAction*                            deleteTagAction;
+    QAction*                            editTagAction;
+    QAction*                            assignTagAction;
 
     // Image Actions
     KSelectAction*                      imageViewSelectionAction;
@@ -245,14 +245,14 @@ public:
 #endif // HAVE_KGEOMAP
     KToggleAction*                      imageTableViewAction;
     KToggleAction*                      imageIconViewAction;
-    KAction*                            imageLightTableAction;
-    KAction*                            imageAddLightTableAction;
-    KAction*                            imageAddCurrentQueueAction;
-    KAction*                            imageAddNewQueueAction;
-    KAction*                            imageViewAction;
-    KAction*                            imageWriteMetadataAction;
-    KAction*                            imageReadMetadataAction;
-    KAction*                            imageFindSimilarAction;
+    QAction*                            imageLightTableAction;
+    QAction*                            imageAddLightTableAction;
+    QAction*                            imageAddCurrentQueueAction;
+    QAction*                            imageAddNewQueueAction;
+    QAction*                            imageViewAction;
+    QAction*                            imageWriteMetadataAction;
+    QAction*                            imageReadMetadataAction;
+    QAction*                            imageFindSimilarAction;
     KToggleAction*                      imageSetExifOrientation1Action;
     KToggleAction*                      imageSetExifOrientation2Action;
     KToggleAction*                      imageSetExifOrientation3Action;
@@ -261,26 +261,26 @@ public:
     KToggleAction*                      imageSetExifOrientation6Action;
     KToggleAction*                      imageSetExifOrientation7Action;
     KToggleAction*                      imageSetExifOrientation8Action;
-    KAction*                            imageRenameAction;
+    QAction*                            imageRenameAction;
     KActionMenu*                        imageRotateActionMenu;
     KActionMenu*                        imageFlipActionMenu;
-    KAction*                            imageAutoExifActionMenu;
-    KAction*                            imageDeleteAction;
+    QAction*                            imageAutoExifActionMenu;
+    QAction*                            imageDeleteAction;
     KActionMenu*                        imageExifOrientationActionMenu;
 
     // Edit Actions
     QAction*                            cutItemsAction;
     QAction*                            copyItemsAction;
     QAction*                            pasteItemsAction;
-    KAction*                            selectAllAction;
-    KAction*                            selectNoneAction;
-    KAction*                            selectInvertAction;
+    QAction*                            selectAllAction;
+    QAction*                            selectNoneAction;
+    QAction*                            selectInvertAction;
 
     // View Actions
     QAction*                            zoomPlusAction;
     QAction*                            zoomMinusAction;
-    KAction*                            zoomFitToWindowAction;
-    KAction*                            zoomTo100percents;
+    QAction*                            zoomFitToWindowAction;
+    QAction*                            zoomTo100percents;
     KSelectAction*                      imageSortAction;
     KSelectAction*                      imageSortOrderAction;
     KSelectAction*                      imageGroupAction;
@@ -294,16 +294,16 @@ public:
 
     // Tools Actions
     KActionMenu*                        slideShowAction;
-    KAction*                            slideShowAllAction;
-    KAction*                            slideShowSelectionAction;
-    KAction*                            slideShowRecursiveAction;
-    KAction*                            bqmAction;
-    KAction*                            maintenanceAction;
-    KAction*                            slideShowQmlAction;
-    KAction*                            qualityAction;
+    QAction*                            slideShowAllAction;
+    QAction*                            slideShowSelectionAction;
+    QAction*                            slideShowRecursiveAction;
+    QAction*                            bqmAction;
+    QAction*                            maintenanceAction;
+    QAction*                            slideShowQmlAction;
+    QAction*                            qualityAction;
 
     // Application Actions
-    KAction*                            kipiHelpAction;
+    QAction*                            kipiHelpAction;
     QAction*                            addCameraSeparatorAction;
     QAction*                            quitAction;
     QAction*                            tipAction;

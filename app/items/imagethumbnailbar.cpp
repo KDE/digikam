@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <kaction.h>
+#include <QAction>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 
