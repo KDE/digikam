@@ -9,4 +9,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 001 ==> 341054 - No way to filter only files of a specific extension.
 002 ==> 342073 - The creation of the selection has a dysfunction after a very fast mouse double click [patch].
 003 ==> 342273 - CANVAS : When using zoom +/- from the staus-bar are image artifacts is visible [patch].
-004 ==> 
+004 ==> 342229 - Crash attempting to rotate empty (NULL) thumbnail [patch].
+005 ==> 
