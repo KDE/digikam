@@ -40,6 +40,7 @@
 #include <QIcon>
 #include <QComboBox>
 #include <QPushButton>
+#include <QLineEdit>
 
 // KDE includes
 
@@ -616,7 +617,7 @@ public:
     QToolButton*              saveButton;
 
     QComboBox*                timeUnitCB;
-    KLineEdit*                nameEdit;
+    QLineEdit*                nameEdit;
     KSqueezedTextLabel*       cursorDateLabel;
 
     SearchTextBar*            searchDateBar;
@@ -658,7 +659,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
     QHBoxLayout* const hlay = new QHBoxLayout(hbox1);
 
     QLabel* const label1    = new QLabel(i18n("Time Unit:"), hbox1);
-    d->timeUnitCB  = new QComboBox(hbox1);
+    d->timeUnitCB           = new QComboBox(hbox1);
     d->timeUnitCB->addItem(i18n("Day"),   TimeLineWidget::Day);
     d->timeUnitCB->addItem(i18n("Week"),  TimeLineWidget::Week);
     d->timeUnitCB->addItem(i18n("Month"), TimeLineWidget::Month);
@@ -724,8 +725,8 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
     d->resetButton->setIcon(SmallIcon("document-revert"));
     d->resetButton->setToolTip(i18n("Clear current selection"));
     d->resetButton->setWhatsThis(i18n("If you press this button, the current date selection on the time-line will be cleared."));
-    d->nameEdit    = new KLineEdit(hbox2);
-    d->nameEdit->setClearButtonShown(true);
+    d->nameEdit    = new QLineEdit(hbox2);
+    d->nameEdit->setClearButtonEnabled(true);
     d->nameEdit->setWhatsThis(i18n("Enter the name of the current dates search to save in the "
                                    "\"Searches\" view"));
 
