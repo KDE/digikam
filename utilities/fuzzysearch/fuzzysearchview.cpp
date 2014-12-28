@@ -27,7 +27,8 @@
 
 // Qt includes
 
-#include <qevent.h>
+#include <QEvent>
+#include <QDragEnterEvent>
 #include <QFrame>
 #include <QImage>
 #include <QLabel>
@@ -39,9 +40,9 @@
 #include <QToolButton>
 #include <QApplication>
 #include <QStyle>
+#include <QLineEdit>
 
 // KDE includes
-
 
 #include <kcolorvalueselector.h>
 #include <kconfig.h>
@@ -52,7 +53,6 @@
 #include <kmessagebox.h>
 #include <ksqueezedtextlabel.h>
 #include <kstandarddirs.h>
-
 
 // Libkdcraw includes
 
@@ -165,8 +165,8 @@ public:
 
     RVBox*                    folderView;
 
-    KLineEdit*                nameEditSketch;
-    KLineEdit*                nameEditImage;
+    QLineEdit*                nameEditSketch;
+    QLineEdit*                nameEditImage;
 
     QTabWidget*               tabWidget;
 
@@ -310,8 +310,8 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
     saveBox->setMargin(0);
     saveBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
-    d->nameEditImage = new KLineEdit(saveBox);
-    d->nameEditImage->setClearButtonShown(true);
+    d->nameEditImage = new QLineEdit(saveBox);
+    d->nameEditImage->setClearButtonEnabled(true);
     d->nameEditImage->setWhatsThis(i18n("Enter the name of the current similar image search to save in the "
                                         "\"Fuzzy Searches\" view."));
 
@@ -420,8 +420,8 @@ QWidget* FuzzySearchView::setupSketchPanel() const
     d->resetButton->setToolTip(i18n("Clear sketch"));
     d->resetButton->setWhatsThis(i18n("Use this button to clear sketch contents."));
 
-    d->nameEditSketch = new KLineEdit(saveBox);
-    d->nameEditSketch->setClearButtonShown(true);
+    d->nameEditSketch = new QLineEdit(saveBox);
+    d->nameEditSketch->setClearButtonEnabled(true);
     d->nameEditSketch->setWhatsThis(i18n("Enter the name of the current sketch search to save in the "
                                          "\"Fuzzy Searches\" view."));
 
