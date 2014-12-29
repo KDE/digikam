@@ -1318,9 +1318,12 @@ void ShowFoto::slotDroppedUrls(const KUrl::List& droppedUrls)
         emit signalInfoList(d->infoList);
 
 #pragma message("add errormessage when there's no valid urls, cleanup this method..")
-        if(!d->infoList.isEmpty()) {
+        if (!d->infoList.isEmpty())
+        {
             slotOpenUrl(d->infoList.at(0));
-        } else {
+        }
+        else 
+        {
             qWarning("infolist is empty..");
         }
 

@@ -23,15 +23,16 @@
 
 #include "captionedit.h"
 
+// Qt includes
+
+#include <QLineEdit>
+
 // KDE includes
 
-
 #include <klocalizedstring.h>
-#include <klineedit.h>
 
 // Libkexiv2 includes
 
-#include <libkexiv2_version.h>
 #include <altlangstredit.h>
 #include <msgtextedit.h>
 
@@ -54,7 +55,7 @@ public:
         authorEdit     = 0;
     }
 
-    KLineEdit*      authorEdit;
+    QLineEdit*      authorEdit;
 
     AltLangStrEdit* altLangStrEdit;
 
@@ -72,9 +73,9 @@ CaptionEdit::CaptionEdit(QWidget* const parent)
     d->altLangStrEdit->setTitle(i18n("Captions: "));
     d->altLangStrEdit->setClickMessage(i18n("Enter caption text here."));
 
-    d->authorEdit = new KLineEdit(this);
-    d->authorEdit->setClearButtonShown(true);
-    d->authorEdit->setClickMessage(i18n("Enter caption author name here."));
+    d->authorEdit = new QLineEdit(this);
+    d->authorEdit->setClearButtonEnabled(true);
+    d->authorEdit->setPlaceholderText(i18n("Enter caption author name here."));
 
     setMargin(0);
     setSpacing(0);
@@ -118,7 +119,6 @@ QString CaptionEdit::currentLanguageCode() const
 
 void CaptionEdit::setCurrentLanguageCode(const QString& lang)
 {
-#if KEXIV2_VERSION >= 0x020101
     if(d->altLangStrEdit->currentLanguageCode().isEmpty())
     {
         d->altLangStrEdit->setCurrentLanguageCode("x-default");
@@ -127,9 +127,6 @@ void CaptionEdit::setCurrentLanguageCode(const QString& lang)
     {
         d->altLangStrEdit->setCurrentLanguageCode(lang);
     }
-#else
-    Q_UNUSED(lang);
-#endif
 }
 
 void CaptionEdit::slotAddValue(const QString& lang, const QString& text)
@@ -205,11 +202,7 @@ void CaptionEdit::slotAuthorChanged(const QString& text)
 
 MsgTextEdit* CaptionEdit::textEdit() const
 {
-#if KEXIV2_VERSION >= 0x020400
     return d->altLangStrEdit->textEdit();
-#else
-    return 0;
-#endif
 }
 
 }  // namespace Digikam
