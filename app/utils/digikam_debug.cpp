@@ -19,8 +19,8 @@
 
 #include "digikam_debug.h"
 
-Q_LOGGING_CATEGORY(DIGIKAM_GENERAL_LOG,        "log_digikam_general")
-Q_LOGGING_CATEGORY(DIGIKAM_KIOSLAVES_LOG,      "log_digikam_kioslaves")
-Q_LOGGING_CATEGORY(DIGIKAM_SHOWFOTO_LOG,       "log_digikam_showfoto")
-Q_LOGGING_CATEGORY(DIGIKAM_IMAGEPLUGINS_LOG,   "log_digikam_imageplugins")
-Q_LOGGING_CATEGORY(DIGIKAM_DATABASESERVER_LOG, "log_digikam_databaseserver")
+Q_LOGGING_CATEGORY(DIGIKAM_GENERAL_LOG,        "digikam.general")
+Q_LOGGING_CATEGORY(DIGIKAM_KIOSLAVES_LOG,      "digikam.kioslaves")
+Q_LOGGING_CATEGORY(DIGIKAM_SHOWFOTO_LOG,       "digikam.showfoto")
+Q_LOGGING_CATEGORY(DIGIKAM_IMAGEPLUGINS_LOG,   "digikam.imageplugins")
+Q_LOGGING_CATEGORY(DIGIKAM_DATABASESERVER_LOG, "digikam.databaseserver")
