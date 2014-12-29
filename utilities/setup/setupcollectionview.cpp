@@ -38,12 +38,12 @@
 #include <QStyledItemDelegate>
 #include <QToolButton>
 #include <QStandardPaths>
+#include <QLineEdit>
 
 // KDE includes
 
 #include <kdeversion.h>
 #include <klocalizedstring.h>
-#include <klineedit.h>
 #include <kdialog.h>
 #include <kfiledialog.h>
 #include <kurl.h>
@@ -177,10 +177,12 @@ QSize SetupCollectionDelegate::sizeHint(const QStyleOptionViewItem& option, cons
     {
         // get the largest size hint for the icon/text of all category entries
         int maxStyledWidth = 0;
+
         foreach(const QModelIndex& catIndex, static_cast<const SetupCollectionModel*>(index.model())->categoryIndexes())
         {
             maxStyledWidth = qMax(maxStyledWidth, m_styledDelegate->sizeHint(option, catIndex).width());
         }
+
         const_cast<SetupCollectionDelegate*>(this)->m_categoryMaxStyledWidth = maxStyledWidth;
 
         // set real text on sample button to compute correct size hint
@@ -492,7 +494,7 @@ void SetupCollectionModel::apply()
     // Trigger collection scan
     if (!newItems.isEmpty() || !deletedItems.isEmpty())
     {
-        NewItemsFinder* tool = new NewItemsFinder();
+        NewItemsFinder* const tool = new NewItemsFinder();
         tool->start();
     }
 }
@@ -526,7 +528,7 @@ void SetupCollectionModel::addCollection(int category)
     if (m_collections.count() > 0)
     {
         const Item& item = m_collections[0];
-        picturesPath = item.path;
+        picturesPath     = item.path;
     }
     else
     {
@@ -619,8 +621,8 @@ void SetupCollectionModel::addCollection(int category)
     nameLabel->setWordWrap(true);
 
     // lineedit for collection name
-    KLineEdit* const nameEdit = new KLineEdit;
-    nameEdit->setClearButtonShown(true);
+    QLineEdit* const nameEdit = new QLineEdit;
+    nameEdit->setClearButtonEnabled(true);
     nameLabel->setBuddy(nameEdit);
 
     // label for the icon showing the type of storage (hard disk, CD, USB drive)
@@ -643,7 +645,7 @@ void SetupCollectionModel::addCollection(int category)
     hbox1->addWidget(infoLabel);
     infoBox->setLayout(hbox1);
 
-    QGridLayout* grid1 = new QGridLayout;
+    QGridLayout* const grid1 = new QGridLayout;
     grid1->addWidget(deviceIconLabel, 0, 0, 3, 1);
     grid1->addWidget(nameLabel, 0, 1);
     grid1->addWidget(nameEdit, 1, 1);
