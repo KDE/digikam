@@ -64,7 +64,8 @@ public:
 ToolsView::ToolsView(QWidget* const parent)
     : QTabWidget(parent), d(new Private)
 {
-    setTabBarAutoHide(false);
+#pragma port qt5
+    //setTabBarAutoHide(false);
 
 #if KDE_IS_VERSION(4,3,0)
     setTabsClosable(false);

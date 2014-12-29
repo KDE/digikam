@@ -246,7 +246,7 @@ target_link_libraries(digikam
                       KF5::Parts
                       KF5::KHtml
                       KF5::NotifyConfig
-
+                      KF5::KDELibs4Support
                       ${KF5KExiv2_LIBRARIES}
                       ${KF5KDcraw_LIBRARIES}
 

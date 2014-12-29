@@ -54,12 +54,9 @@ namespace Digikam
 QueuePool::QueuePool(QWidget* const parent)
     : QTabWidget(parent)
 {
-    setTabBarAutoHide(false);
-#if KDE_IS_VERSION(4,3,0)
+#pragma port to qt5
+    //setTabBarAutoHide(false);
     setTabsClosable(false);
-#else
-    setCloseButtonEnabled(false);
-#endif
     slotAddQueue();
 
     connect(this, SIGNAL(currentChanged(int)),
