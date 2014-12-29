@@ -41,15 +41,14 @@
 #include <QStyle>
 #include <QFontComboBox>
 #include <QComboBox>
+#include <QLineEdit>
 
 // KDE includes
 
 #include <kcolorbutton.h>
 #include <kurlrequester.h>
-#include <klineedit.h>
 #include <klocalizedstring.h>
 #include <kfiledialog.h>
-#include <kglobal.h>
 
 // Libkdcraw includes
 
@@ -111,7 +110,7 @@ public:
     QCheckBox*     useBackgroundCheckBox;
 
     KUrlRequester* imageFileUrlRequester;
-    KLineEdit*     textEdit;
+    QLineEdit*     textEdit;
 
     QComboBox*     comboBox;
     QFontComboBox* fontChooserWidget;
@@ -190,9 +189,9 @@ void WaterMark::registerSettingsWidget()
     d->textSettingsGroupBox->setLayout(textSettingsGroupBoxLayout);
 
     QLabel* const textEditLabel = new QLabel(vbox);
-    d->textEdit                 = new KLineEdit(vbox);
-    d->textEdit->setClearButtonShown(true);
-    d->textEdit->setClickMessage(i18n("Enter your watermark string here."));
+    d->textEdit                 = new QLineEdit(vbox);
+    d->textEdit->setClearButtonEnabled(true);
+    d->textEdit->setPlaceholderText(i18n("Enter your watermark string here."));
     textEditLabel->setText(i18n("Watermark text:"));
     textSettingsGroupBoxLayout->addWidget(textEditLabel);
     textSettingsGroupBoxLayout->addWidget(d->textEdit);
