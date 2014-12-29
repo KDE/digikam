@@ -35,15 +35,12 @@
 #include <QTimer>
 #include <QPainter>
 #include <QApplication>
+#include <QDesktopServices>
 
 // KDE includes
 
 #include <kurllabel.h>
-#include <ktoolbar.h>
-#include <kiconloader.h>
-#include <ktoolinvocation.h>
 #include <kstandarddirs.h>
-#include <kglobalsettings.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -182,7 +179,7 @@ void DLogoAction::deleteWidget(QWidget* widget)
 
 void DLogoAction::slotProcessUrl(const QString& url)
 {
-    KToolInvocation::invokeBrowser(url);
+    QDesktopServices::openUrl(QUrl(url));
 }
 
 } // namespace Digikam
