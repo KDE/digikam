@@ -33,11 +33,11 @@
 #include <QWhatsThis>
 #include <QApplication>
 #include <QStyle>
+#include <QLineEdit>
 
 // KDE includes
 
 #include <kiconloader.h>
-#include <klineedit.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 
@@ -81,23 +81,23 @@ public:
     QToolButton* revertMovieFileFilterBtn;
     QToolButton* revertAudioFileFilterBtn;
 
-    KLineEdit*   imageFileFilterEdit;
-    KLineEdit*   movieFileFilterEdit;
-    KLineEdit*   audioFileFilterEdit;
+    QLineEdit*   imageFileFilterEdit;
+    QLineEdit*   movieFileFilterEdit;
+    QLineEdit*   audioFileFilterEdit;
 };
 
 SetupMime::SetupMime(QWidget* const parent)
     : QScrollArea(parent), d(new Private)
 {
-    QWidget* panel = new QWidget(viewport());
+    QWidget* const panel = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
-    QVBoxLayout* layout = new QVBoxLayout(panel);
+    QVBoxLayout* const layout = new QVBoxLayout(panel);
 
     // --------------------------------------------------------
 
-    QLabel* explanationLabel = new QLabel;
+    QLabel* const explanationLabel = new QLabel;
     explanationLabel->setText(i18n("<p>digiKam attempts to support all of the image formats that digital cameras produce, "
                                    "while being able to handle a few other important video and audio formats.</p> "
                                    "<p>You can add to the already-appreciable list of formats that digiKam handles by "
@@ -106,17 +106,17 @@ SetupMime::SetupMime(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QGroupBox* imageFileFilterBox = new QGroupBox(i18n("Image Files"), panel);
-    QGridLayout* grid1            = new QGridLayout(imageFileFilterBox);
+    QGroupBox* const imageFileFilterBox = new QGroupBox(i18n("Image Files"), panel);
+    QGridLayout* const grid1            = new QGridLayout(imageFileFilterBox);
 
-    QLabel* logoLabel1 = new QLabel(imageFileFilterBox);
+    QLabel* const logoLabel1 = new QLabel(imageFileFilterBox);
     logoLabel1->setPixmap(DesktopIcon("image-jp2"));
 
-    d->imageFileFilterLabel = new QLabel(imageFileFilterBox);
+    d->imageFileFilterLabel  = new QLabel(imageFileFilterBox);
     d->imageFileFilterLabel->setText(i18n("Additional &image file extensions (<a href='image'>Currently-supported types</a>):"));
 
-    RHBox* hbox1           = new RHBox(imageFileFilterBox);
-    d->imageFileFilterEdit = new KLineEdit(hbox1);
+    RHBox* const hbox1     = new RHBox(imageFileFilterBox);
+    d->imageFileFilterEdit = new QLineEdit(hbox1);
     d->imageFileFilterEdit->setWhatsThis(i18n("<p>Here you can add the extensions of image files (including RAW files) "
                                               "to be displayed in the Album view. Just put \"xyz abc\" "
                                               "to display files with the xyz and abc extensions in your Album view.</p>"
@@ -142,17 +142,17 @@ SetupMime::SetupMime(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QGroupBox* movieFileFilterBox = new QGroupBox(i18n("Movie Files"), panel);
-    QGridLayout* grid2            = new QGridLayout(movieFileFilterBox);
+    QGroupBox* const movieFileFilterBox = new QGroupBox(i18n("Movie Files"), panel);
+    QGridLayout* const grid2            = new QGridLayout(movieFileFilterBox);
 
-    QLabel* logoLabel2 = new QLabel(movieFileFilterBox);
+    QLabel* const logoLabel2 = new QLabel(movieFileFilterBox);
     logoLabel2->setPixmap(DesktopIcon("video-mpeg"));
 
     d->movieFileFilterLabel = new QLabel(movieFileFilterBox);
     d->movieFileFilterLabel->setText(i18n("Additional &movie file extensions (<a href='video'>Currently-supported types</a>):"));
 
-    RHBox* hbox2 = new RHBox(movieFileFilterBox);
-    d->movieFileFilterEdit = new KLineEdit(hbox2);
+    RHBox* const hbox2     = new RHBox(movieFileFilterBox);
+    d->movieFileFilterEdit = new QLineEdit(hbox2);
     d->movieFileFilterEdit->setWhatsThis(i18n("<p>Here you can add extra extensions of video files "
                                               "to be displayed in your Album view. Just write \"xyz abc\" "
                                               "to support files with the *.xyz and *.abc extensions. "
@@ -180,17 +180,17 @@ SetupMime::SetupMime(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QGroupBox* audioFileFilterBox = new QGroupBox(i18n("Audio Files"), panel);
-    QGridLayout* grid3            = new QGridLayout(audioFileFilterBox);
+    QGroupBox* const audioFileFilterBox = new QGroupBox(i18n("Audio Files"), panel);
+    QGridLayout* const grid3            = new QGridLayout(audioFileFilterBox);
 
-    QLabel* logoLabel3 = new QLabel(audioFileFilterBox);
+    QLabel* const logoLabel3 = new QLabel(audioFileFilterBox);
     logoLabel3->setPixmap(DesktopIcon("audio-basic"));
 
     d->audioFileFilterLabel = new QLabel(audioFileFilterBox);
     d->audioFileFilterLabel->setText(i18n("Additional &audio file extensions (<a href='audio'>Currently-supported types</a>):"));
 
-    RHBox* hbox3           = new RHBox(audioFileFilterBox);
-    d->audioFileFilterEdit = new KLineEdit(hbox3);
+    RHBox* const hbox3     = new RHBox(audioFileFilterBox);
+    d->audioFileFilterEdit = new QLineEdit(hbox3);
     d->audioFileFilterEdit->setWhatsThis(i18n("<p>Here you can add extra extensions of audio files "
                                               "to be displayed in your Album view. Just write \"mp7\" "
                                               "to support files with the *.mp7 extension. "
@@ -249,8 +249,6 @@ SetupMime::SetupMime(QWidget* const parent)
     // --------------------------------------------------------
 
     readSettings();
-
-    // --------------------------------------------------------
 }
 
 SetupMime::~SetupMime()
@@ -267,10 +265,11 @@ void SetupMime::applySettings()
                      << "png";                                 // PNG
 
     QString imageFilter = d->imageFileFilterEdit->text();
+
     foreach(const QString& format, coreImageFormats)
     {
-        if (imageFilter.contains('-' + format)
-            || imageFilter.contains("-*." + format))
+        if (imageFilter.contains('-'   + format) ||
+            imageFilter.contains("-*." + format))
         {
             removedImageFormats << format;
         }
