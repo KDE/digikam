@@ -5,5 +5,6 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 set(detectnoise_SRCS detectnoise.cpp)
-KDE4_ADD_EXECUTABLE(detectnoise NOGUI ${detectnoise_SRCS})
+add_executable(detectnoise ${detectnoise_SRCS})
+ecm_mark_nongui_executable(detectnoise)
 target_link_libraries(detectnoise ${OpenCV_LIBRARIES})

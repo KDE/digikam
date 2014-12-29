@@ -5,5 +5,6 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 set(detectblur_SRCS detectblur.cpp)
-KDE4_ADD_EXECUTABLE(detectblur NOGUI ${detectblur_SRCS})
+add_executable(detectblur ${detectblur_SRCS})
+ecm_mark_nongui_executable(detectblur)
 target_link_libraries(detectblur ${OpenCV_LIBRARIES})

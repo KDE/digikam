@@ -5,5 +5,6 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 set(detectcompression_SRCS detectcompression.cpp)
-KDE4_ADD_EXECUTABLE(detectcompression NOGUI ${detectcompression_SRCS})
+add_executable(detectcompression ${detectcompression_SRCS})
+ecm_mark_nongui_executable(detectcompression)
 target_link_libraries(detectcompression ${OpenCV_LIBRARIES})
