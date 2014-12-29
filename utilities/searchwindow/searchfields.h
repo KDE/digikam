@@ -45,7 +45,7 @@ class QDoubleSpinBox;
 class QTimeEdit;
 class QTreeView;
 class QComboBox;
-class KLineEdit;
+class QLineEdit;
 class KSqueezedTextLabel;
 
 namespace Digikam
@@ -146,7 +146,7 @@ protected Q_SLOTS:
 
 protected:
 
-    KLineEdit* m_edit;
+    QLineEdit* m_edit;
 };
 
 //-----------------------------------------------------------------------------

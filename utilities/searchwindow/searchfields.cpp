@@ -42,11 +42,11 @@
 #include <QTimeEdit>
 #include <QTreeView>
 #include <QComboBox>
+#include <QLineEdit>
 
 // KDE includes
 
 #include <kiconloader.h>
-#include <klineedit.h>
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
 
@@ -861,7 +861,7 @@ SearchFieldText::SearchFieldText(QObject* const parent)
 
 void SearchFieldText::setupValueWidgets(QGridLayout* layout, int row, int column)
 {
-    m_edit = new KLineEdit;
+    m_edit = new QLineEdit;
     layout->addWidget(m_edit, row, column, 1, 3);
 
     connect(m_edit, SIGNAL(textChanged(QString)),
