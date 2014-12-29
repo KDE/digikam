@@ -33,22 +33,21 @@
 #include <QTimer>
 #include <QToolButton>
 #include <QVBoxLayout>
+#include <QApplication>
+#include <QStyle>
+#include <QLineEdit>
 
 // KDE includes
 
-
 #include <kiconloader.h>
 #include <kinputdialog.h>
-#include <klineedit.h>
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
 #include <kurllabel.h>
-#include <QApplication>
-#include <QStyle>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "album.h"
 #include "albummanager.h"
 #include "searchfolderview.h"
@@ -58,12 +57,12 @@
 namespace Digikam
 {
 
-class KeywordLineEdit : public KLineEdit
+class KeywordLineEdit : public QLineEdit
 {
 public:
 
     explicit KeywordLineEdit(QWidget* const parent = 0)
-        : KLineEdit(parent)
+        : QLineEdit(parent)
     {
         m_hasAdvanced = false;
     }
@@ -86,12 +85,12 @@ public:
             adjustStatus(false);
         }
 
-        KLineEdit::focusInEvent(e);
+        QLineEdit::focusInEvent(e);
     }
 
     void focusOutEvent(QFocusEvent* e)
     {
-        KLineEdit::focusOutEvent(e);
+        QLineEdit::focusOutEvent(e);
 
         if (m_hasAdvanced)
         {
@@ -162,11 +161,11 @@ public:
     KeywordLineEdit*    keywordEdit;
     QPushButton*        advancedEditLabel;
 
-    KLineEdit*          saveNameEdit;
+    QLineEdit*          saveNameEdit;
     QToolButton*        saveButton;
 
     KSqueezedTextLabel* storedKeywordEditName;
-    KLineEdit*          storedKeywordEdit;
+    QLineEdit*          storedKeywordEdit;
     KSqueezedTextLabel* storedAdvancedEditName;
     QPushButton*        storedAdvancedEditLabel;
 
@@ -184,7 +183,7 @@ public:
 SearchTabHeader::SearchTabHeader(QWidget* const parent)
     : QWidget(parent), d(new Private)
 {
-    QVBoxLayout* mainLayout = new QVBoxLayout(this);
+    QVBoxLayout* const mainLayout = new QVBoxLayout(this);
     setLayout(mainLayout);
 
     // upper part
@@ -207,13 +206,13 @@ SearchTabHeader::SearchTabHeader(QWidget* const parent)
     // upper part
 
     d->newSearchWidget->setTitle(i18n("New Search"));
-    QGridLayout* grid1   = new QGridLayout;
-    QLabel* searchLabel  = new QLabel(i18n("Search:"), this);
-    d->keywordEdit       = new KeywordLineEdit(this);
-    d->keywordEdit->setClearButtonShown(true);
-    d->keywordEdit->setClickMessage(i18n("Enter keywords here..."));
+    QGridLayout* const grid1  = new QGridLayout;
+    QLabel* const searchLabel = new QLabel(i18n("Search:"), this);
+    d->keywordEdit            = new KeywordLineEdit(this);
+    d->keywordEdit->setClearButtonEnabled(true);
+    d->keywordEdit->setPlaceholderText(i18n("Enter keywords here..."));
 
-    d->advancedEditLabel = new QPushButton(i18n("Advanced Search..."), this);
+    d->advancedEditLabel      = new QPushButton(i18n("Advanced Search..."), this);
 
     grid1->addWidget(searchLabel,          0, 0);
     grid1->addWidget(d->keywordEdit,       0, 1);
@@ -229,12 +228,12 @@ SearchTabHeader::SearchTabHeader(QWidget* const parent)
 
     d->saveAsWidget->setTitle(i18n("Save Current Search"));
 
-    QHBoxLayout* hbox1 = new QHBoxLayout;
-    d->saveNameEdit    = new KLineEdit(this);
+    QHBoxLayout* const hbox1 = new QHBoxLayout;
+    d->saveNameEdit          = new QLineEdit(this);
     d->saveNameEdit->setWhatsThis(i18n("Enter a name for the current search to save it in the "
                                        "\"Searches\" view"));
 
-    d->saveButton      = new QToolButton(this);
+    d->saveButton            = new QToolButton(this);
     d->saveButton->setIcon(SmallIcon("document-save"));
     d->saveButton->setToolTip(i18n("Save current search to a new virtual Album"));
     d->saveButton->setWhatsThis(i18n("If you press this button, the current search "
@@ -253,10 +252,10 @@ SearchTabHeader::SearchTabHeader(QWidget* const parent)
     // lower part, variant 2
     d->editSimpleWidget->setTitle(i18n("Edit Stored Search"));
 
-    QVBoxLayout* vbox1       = new QVBoxLayout;
+    QVBoxLayout* const vbox1 = new QVBoxLayout;
     d->storedKeywordEditName = new KSqueezedTextLabel(this);
     d->storedKeywordEditName->setTextElideMode(Qt::ElideRight);
-    d->storedKeywordEdit     = new KLineEdit(this);
+    d->storedKeywordEdit     = new QLineEdit(this);
 
     vbox1->addWidget(d->storedKeywordEditName);
     vbox1->addWidget(d->storedKeywordEdit);
@@ -270,7 +269,7 @@ SearchTabHeader::SearchTabHeader(QWidget* const parent)
     // lower part, variant 3
     d->editAdvancedWidget->setTitle(i18n("Edit Stored Search"));
 
-    QVBoxLayout* vbox2         = new QVBoxLayout;
+    QVBoxLayout* const vbox2   = new QVBoxLayout;
 
     d->storedAdvancedEditName  = new KSqueezedTextLabel(this);
     d->storedAdvancedEditName->setTextElideMode(Qt::ElideRight);
