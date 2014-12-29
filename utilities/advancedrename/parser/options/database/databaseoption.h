@@ -34,7 +34,7 @@
 #include "option.h"
 #include "ruledialog.h"
 
-class KLineEdit;
+class QLineEdit;
 
 namespace Digikam
 {
@@ -51,7 +51,7 @@ public:
     ~DatabaseOptionDialog();
 
     DbKeySelectorView* dbkeySelectorView;
-    KLineEdit*         separatorLineEdit;
+    QLineEdit*         separatorLineEdit;
 
 private:
 

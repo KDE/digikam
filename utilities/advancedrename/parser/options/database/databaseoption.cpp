@@ -28,18 +28,17 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QPointer>
+#include <QLineEdit>
 
 // KDE includes
 
-#include <klineedit.h>
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
 
 // Local includes
 
 #include "imagecomments.h"
 #include "dbkeyselector.h"
-
+#include "digikam_debug.h"
 #include "commonkeys.h"
 #include "metadatakeys.h"
 #include "positionkeys.h"
@@ -49,17 +48,18 @@ namespace Digikam
 
 DatabaseOptionDialog::DatabaseOptionDialog(Rule* parent) :
     RuleDialog(parent),
-    dbkeySelectorView(0), separatorLineEdit(0)
+    dbkeySelectorView(0),
+    separatorLineEdit(0)
 {
-    QWidget* mainWidget  = new QWidget(this);
-    dbkeySelectorView    = new DbKeySelectorView(this);
-    QLabel* customLabel  = new QLabel(i18n("Keyword separator:"));
-    separatorLineEdit    = new KLineEdit(this);
+    QWidget* const mainWidget = new QWidget(this);
+    dbkeySelectorView         = new DbKeySelectorView(this);
+    QLabel* const customLabel = new QLabel(i18n("Keyword separator:"));
+    separatorLineEdit         = new QLineEdit(this);
     separatorLineEdit->setText("_");
 
     // --------------------------------------------------------
 
-    QGridLayout* mainLayout = new QGridLayout(this);
+    QGridLayout* const mainLayout = new QGridLayout(this);
     mainLayout->addWidget(customLabel,       0, 0, 1, 1);
     mainLayout->addWidget(separatorLineEdit, 0, 1, 1, 1);
     mainLayout->addWidget(dbkeySelectorView, 1, 0, 1, -1);
@@ -104,7 +104,7 @@ void DatabaseOption::unregisterKeysCollection()
 {
     QSet<DbKeysCollection*> alreadyDeleted;
 
-    foreach(DbKeysCollection* key, m_map)
+    foreach(DbKeysCollection* const key, m_map)
     {
         if (key && !alreadyDeleted.contains(key))
         {
@@ -112,6 +112,7 @@ void DatabaseOption::unregisterKeysCollection()
             delete key;
         }
     }
+
     m_map.clear();
 }
 
@@ -145,8 +146,8 @@ void DatabaseOption::slotTokenTriggered(const QString& token)
 
 QString DatabaseOption::parseOperation(ParseSettings& settings)
 {
-    const QRegExp& reg  = regExp();
-    QString keyword     = reg.cap(2);
+    const QRegExp& reg = regExp();
+    QString keyword    = reg.cap(2);
 
     return parseDatabase(keyword, settings);
 }
@@ -159,7 +160,7 @@ QString DatabaseOption::parseDatabase(const QString& keyword, ParseSettings& set
     }
 
     DbKeysCollection* dbkey = 0;
-    dbkey = m_map.value(keyword);
+    dbkey                   = m_map.value(keyword);
 
     if (!dbkey)
     {
