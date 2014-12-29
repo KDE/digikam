@@ -797,7 +797,6 @@ void ThumbnailLoadThread::startKdePreviewJob()
 
     d->kdeTodo.clear();
 
-#if KDE_IS_VERSION(4,7,0)
     KFileItemList items;
 
     if (d->previewPlugins.isEmpty())
@@ -810,9 +809,6 @@ void ThumbnailLoadThread::startKdePreviewJob()
     }
 
     d->kdeJob = KIO::filePreview(items, QSize(d->creator->storedSize(), d->creator->storedSize()), &d->previewPlugins); // FIXME: do not know if size 0 is allowed
-#else
-    d->kdeJob = KIO::filePreview(list, d->creator->storedSize());                                                       // FIXME: do not know if size 0 is allowed
-#endif
 
     connect(d->kdeJob, SIGNAL(gotPreview(KFileItem,QPixmap)),
             this, SLOT(gotKDEPreview(KFileItem,QPixmap)));

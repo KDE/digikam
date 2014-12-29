@@ -459,11 +459,7 @@ void ShowFoto::readSettings()
 
     if (defaultDir.isNull())
     {
-#if KDE_IS_VERSION(4,1,61)
         defaultDir = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
-#else
-        defaultDir = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
-#endif
     }
 
     d->lastOpenedDirectory.setPath(defaultDir);

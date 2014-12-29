@@ -73,11 +73,7 @@ public:
     int                 animationState;
     QPropertyAnimation* animation;
     KPixmapSequence     workingPixmap;
-#if KDE_IS_VERSION(4,5,0)
     KCategoryDrawer*  categoryDrawer;
-#else
-    KCategoryDrawer*  categoryDrawer;
-#endif
     int                 thumbnailSize;
 
     int                 thumbsWaitingFor;
@@ -110,11 +106,7 @@ VersionsDelegate::VersionsDelegate(QObject* const parent)
     d->animation->setDuration(100 * d->workingPixmap.frameCount());
     d->animation->setLoopCount(-1);
 
-#if KDE_IS_VERSION(4,5,0)
     d->categoryDrawer = new KCategoryDrawer(0);
-#else
-    d->categoryDrawer = new KCategoryDrawer;
-#endif
 }
 
 VersionsDelegate::~VersionsDelegate()

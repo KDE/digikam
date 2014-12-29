@@ -206,7 +206,6 @@ void CameraThumbsCtrl::startKdePreviewJob()
     }
     d->kdeTodo.clear();
 
-#if KDE_IS_VERSION(4,7,0)
     KFileItemList items;
 
     for (KUrl::List::iterator it = list.begin() ; it != list.end() ; ++it)
@@ -216,9 +215,6 @@ void CameraThumbsCtrl::startKdePreviewJob()
     }
 
     d->kdeJob = KIO::filePreview(items, QSize(ThumbnailSize::Huge, ThumbnailSize::Huge));
-#else
-    d->kdeJob = KIO::filePreview(list, ThumbnailSize::Huge);
-#endif
 
     connect(d->kdeJob, SIGNAL(gotPreview(KFileItem,QPixmap)),
             this, SLOT(slotGotKDEPreview(KFileItem,QPixmap)));

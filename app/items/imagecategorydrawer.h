@@ -44,11 +44,7 @@ class SAlbum;
 class DAlbum;
 
 class ImageCategoryDrawer :
-#if KDE_IS_VERSION(4,5,0)
     public KCategoryDrawer
-#else
-    public KCategoryDrawer
-#endif
 {
 public:
 

@@ -67,11 +67,7 @@ ToolsView::ToolsView(QWidget* const parent)
 #pragma port qt5
     //setTabBarAutoHide(false);
 
-#if KDE_IS_VERSION(4,3,0)
     setTabsClosable(false);
-#else
-    setCloseButtonEnabled(false);
-#endif
     // --------------------------------------------------------
 
     d->baseTools = new ToolsListView(this);

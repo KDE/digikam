@@ -380,7 +380,6 @@ void FreeSpaceWidget::leaveEvent(QEvent* e)
     d->toolTip->hide();
 }
 
-#if KDE_IS_VERSION(4,1,68)
 void FreeSpaceWidget::slotTimeout()
 {
     foreach(const QString& path, d->paths)
@@ -396,40 +395,14 @@ void FreeSpaceWidget::slotTimeout()
         }
     }
 }
-#else
-
-void FreeSpaceWidget::slotTimeout()
-{
-    KMountPoint::List list = KMountPoint::currentMountPoints();
-
-    foreach(const QString& path, d->paths)
-    {
-        KMountPoint::Ptr mp = list.findByPath(path);
-
-        if (mp)
-        {
-            KDiskFreeSpace* const job = new KDiskFreeSpace(this);
-
-            connect(job, SIGNAL(foundMountPoint(QString,quint64,quint64,quint64)),
-                    this, SLOT(slotAvailableFreeSpace(QString,quint64,quint64,quint64)));
-
-            job->readDF(mp->mountPoint());
-        }
-    }
-}
-#endif /* KDE_IS_VERSION(4,1,68) */
 
 void FreeSpaceWidget::slotAvailableFreeSpace(const QString& mountPoint, quint64 kBSize,
                                              quint64 kBUsed, quint64 kBAvail)
 {
-#if KDE_IS_VERSION(4,1,68)
     Q_UNUSED(mountPoint);
     Q_UNUSED(kBSize);
     Q_UNUSED(kBUsed);
     Q_UNUSED(kBAvail);
-#else
-    addInformation(kBSize, kBUsed, kBAvail, mountPoint);
-#endif /* KDE_IS_VERSION(4,1,68) */
 }
 
 }  // namespace Digikam

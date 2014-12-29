@@ -39,11 +39,7 @@ namespace Digikam
 class ImportCategorizedView;
 
 class ImportCategoryDrawer :
-#if KDE_IS_VERSION(4,5,0)
     public KCategoryDrawer
-#else
-    public KCategoryDrawer
-#endif
 {
 public:
 

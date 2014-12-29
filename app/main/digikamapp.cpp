@@ -47,9 +47,7 @@
 // KDE includes
 
 #include <kdeversion.h>
-#if KDE_IS_VERSION(4,1,68)
 #include <kactioncategory.h>
-#endif
 
 #include <kaboutdata.h>
 #include <kactioncollection.h>
@@ -1845,14 +1843,9 @@ void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
 
         // NOTE: See bug #262296: With KDE 4.6, Solid API return device vendor id
         // and product id in hexadecimal strings.
-#if KDE_IS_VERSION(4,5,90)
         bool ok;
         int vendorId  = list.at(1).toString().toInt(&ok, 16);
         int productId = list.at(2).toString().toInt(&ok, 16);
-#else
-        int vendorId  = list.at(1).toInt();
-        int productId = list.at(2).toInt();
-#endif
         QString model, port;
 
         if (CameraList::findConnectedCamera(vendorId, productId, model, port))
@@ -2622,11 +2615,7 @@ void DigikamApp::slotZoomChanged(double zoom)
 void DigikamApp::slotImportAddImages()
 {
     QString startingPath;
-#if KDE_IS_VERSION(4,1,61)
     startingPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
-#else
-    startingPath = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
-#endif
     QString path = KFileDialog::getExistingDirectory(QUrl::fromLocalFile(startingPath), this,
                                                      i18n("Select folder to parse"));
 

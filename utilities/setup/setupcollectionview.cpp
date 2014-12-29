@@ -260,13 +260,7 @@ bool SetupCollectionDelegate::editorEvent(QEvent* event, QAbstractItemModel* mod
 
 void SetupCollectionDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-#if KDE_IS_VERSION(4,1,68)
     m_styledDelegate->paint(painter, option, index);
-#else
-    m_styledDelegate->paint(painter, option, index);
-    // Only mandatory for KDE 4.1.x
-    paintWidgets(painter, option, index);
-#endif
 }
 
 void SetupCollectionDelegate::setEditorData(QWidget* editor, const QModelIndex& index) const
@@ -536,13 +530,7 @@ void SetupCollectionModel::addCollection(int category)
     }
     else
     {
-#if KDE_IS_VERSION(4,1,61)
         picturesPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
-#else
-#if QT_VERSION >= 0x040400
-        picturesPath = QDesktopServices::storageLocation(QDesktopServices::PicturesLocation);
-#endif
-#endif
     }
 
     QString path = KFileDialog::getExistingDirectory(KUrl(picturesPath), m_dialogParentWidget,

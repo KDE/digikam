@@ -61,9 +61,7 @@
 
 #include <kdeversion.h>
 
-#if KDE_IS_VERSION(4,1,68)
 #include <kactioncategory.h>
-#endif
 
 #include <kaboutdata.h>
 #include <QAction>

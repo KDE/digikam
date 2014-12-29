@@ -34,12 +34,7 @@
 #include <QAction>
 #include <kdeversion.h>
 
-#if KDE_IS_VERSION(4,1,68)
 #include <kdiskfreespaceinfo.h>
-#else
-#include <kmountpoint.h>
-#include <kdiskfreespace.h>
-#endif
 
 namespace Digikam
 {
