@@ -33,12 +33,12 @@
 #include <QApplication>
 #include <QStyle>
 #include <QComboBox>
+#include <QLineEdit>
 
 // KDE includes
 
 #include <ksqueezedtextlabel.h>
 #include <klocalizedstring.h>
-#include <klineedit.h>
 #include <kiconloader.h>
 
 // Libkdcraw includes
@@ -88,7 +88,8 @@ public:
 };
 
 AlbumCustomizer::AlbumCustomizer(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     d->tooltipDialog = new TooltipDialog(this);
     d->tooltipDialog->setTooltip(i18n("<p>These expressions may be used to customize date format:</p>"
@@ -111,19 +112,19 @@ AlbumCustomizer::AlbumCustomizer(QWidget* const parent)
                                      ));
     d->tooltipDialog->resize(650, 530);
 
-    QVBoxLayout* albumVlay = new QVBoxLayout(this);
-    d->autoAlbumExtCheck   = new QCheckBox(i18nc("@option:check", "Extension-based sub-albums"), this);
-    d->autoAlbumDateCheck  = new QCheckBox(i18nc("@option:check", "Date-based sub-albums"), this);
-    RHBox* hbox1           = new RHBox(this);
-    d->folderDateLabel     = new QLabel(i18nc("@label:listbox", "Date format:"), hbox1);
-    d->folderDateFormat    = new QComboBox(hbox1);
+    QVBoxLayout* const albumVlay = new QVBoxLayout(this);
+    d->autoAlbumExtCheck         = new QCheckBox(i18nc("@option:check", "Extension-based sub-albums"), this);
+    d->autoAlbumDateCheck        = new QCheckBox(i18nc("@option:check", "Date-based sub-albums"), this);
+    RHBox* hbox1                 = new RHBox(this);
+    d->folderDateLabel           = new QLabel(i18nc("@label:listbox", "Date format:"), hbox1);
+    d->folderDateFormat          = new QComboBox(hbox1);
     d->folderDateFormat->insertItem(IsoDateFormat,    i18nc("@item:inlistbox", "ISO"));
     d->folderDateFormat->insertItem(TextDateFormat,   i18nc("@item:inlistbox", "Full Text"));
     d->folderDateFormat->insertItem(LocalDateFormat,  i18nc("@item:inlistbox", "Local Settings"));
     d->folderDateFormat->insertItem(CustomDateFormat, i18nc("@item:inlistbox", "Custom"));
 
-    RHBox* hbox2           = new RHBox(this);
-    d->customizer          = new KLineEdit(hbox2);
+    RHBox* const hbox2     = new RHBox(this);
+    d->customizer          = new QLineEdit(hbox2);
     d->tooltipToggleButton = new QToolButton(hbox2);
     d->tooltipToggleButton->setIcon(SmallIcon("dialog-information"));
     d->tooltipToggleButton->setToolTip(i18n("Show a list of all available options"));
