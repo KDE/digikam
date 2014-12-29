@@ -136,7 +136,7 @@ CameraSelection::CameraSelection(QWidget* const parent)
 
     QGroupBox* const titleBox   = new QGroupBox(i18n("Camera Title"), mainWidget());
     QVBoxLayout* const gLayout1 = new QVBoxLayout(titleBox);
-    d->titleEdit          = new QLineEdit(titleBox);
+    d->titleEdit                = new QLineEdit(titleBox);
     d->titleEdit->setWhatsThis(i18n("<p>Set here the name used in digiKam interface to "
                                     "identify this camera.</p>"));
 
@@ -206,7 +206,7 @@ CameraSelection::CameraSelection(QWidget* const parent)
 
     // --------------------------------------------------------------
 
-    QWidget* const box2         = new QWidget(mainWidget());
+    QWidget* const box2   = new QWidget(mainWidget());
     QGridLayout* gLayout5 = new QGridLayout(box2);
 
     QLabel* const logo = new QLabel(box2);

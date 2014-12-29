@@ -25,22 +25,22 @@
 
 // Qt includes
 
+#include <QPointer>
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
 #include <QRegExp>
 #include <QValidator>
+#include <QApplication>
+#include <QStyle>
+#include <QLineEdit>
 
 // KDE includes
 
-
 #include <kiconloader.h>
-#include <klineedit.h>
 #include <kstandarddirs.h>
 #include <kseparator.h>
 #include <klocalizedstring.h>
-#include <QApplication>
-#include <QStyle>
 
 namespace Digikam
 {
@@ -56,12 +56,13 @@ public:
     {
     }
 
-    KLineEdit* titleEdit;
-    KLineEdit* descEdit;
+    QLineEdit* titleEdit;
+    QLineEdit* descEdit;
 };
 
 WorkflowDlg::WorkflowDlg(const Workflow& wf, bool create)
-    : KDialog(0), d(new Private)
+    : KDialog(0),
+      d(new Private)
 {
     setCaption(create ? i18n("New Workflow") : i18n("Edit Workflow"));
     setButtons(Help|Ok|Cancel);
@@ -98,8 +99,8 @@ WorkflowDlg::WorkflowDlg(const Workflow& wf, bool create)
     QLabel* const titleLabel = new QLabel(page);
     titleLabel->setText(i18n("&Title:"));
 
-    d->titleEdit = new KLineEdit(page);
-    d->titleEdit->setClearButtonShown(true);
+    d->titleEdit = new QLineEdit(page);
+    d->titleEdit->setClearButtonEnabled(true);
     d->titleEdit->setValidator(validator);
     d->titleEdit->selectAll();
     d->titleEdit->setFocus();
@@ -110,8 +111,8 @@ WorkflowDlg::WorkflowDlg(const Workflow& wf, bool create)
     QLabel* const descLabel = new QLabel(page);
     descLabel->setText(i18n("Description:"));
 
-    d->descEdit = new KLineEdit(page);
-    d->titleEdit->setClearButtonShown(true);
+    d->descEdit = new QLineEdit(page);
+    d->titleEdit->setClearButtonEnabled(true);
     d->descEdit->setValidator(validator);
     descLabel->setBuddy(d->descEdit);
 
