@@ -31,12 +31,12 @@
 #include <QPushButton>
 #include <QApplication>
 #include <QStyle>
+#include <QLineEdit>
 
 // KDE includes
 
 #include <kconfiggroup.h>
 #include <kglobalsettings.h>
-#include <klineedit.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kiconloader.h>
@@ -73,7 +73,7 @@ public:
     QPushButton*   delButton;
     QPushButton*   repButton;
 
-    KLineEdit*     titleEdit;
+    QLineEdit*     titleEdit;
 
     TemplateList*  listView;
 
@@ -83,30 +83,30 @@ public:
 SetupTemplate::SetupTemplate(QWidget* const parent)
     : QScrollArea(parent), d(new Private)
 {
-    QWidget* panel = new QWidget(viewport());
+    QWidget* const panel = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
-    d->listView    = new TemplateList(panel);
+    d->listView = new TemplateList(panel);
     d->listView->setFixedHeight(100);
 
     // --------------------------------------------------------
 
-    QLabel* label0 = new QLabel(i18n("Template Title:"), panel);
-    d->titleEdit   = new KLineEdit(panel);
-    d->titleEdit->setClearButtonShown(true);
-    d->titleEdit->setClickMessage(i18n("Enter the metadata template title here."));
+    QLabel* const label0 = new QLabel(i18n("Template Title:"), panel);
+    d->titleEdit   = new QLineEdit(panel);
+    d->titleEdit->setClearButtonEnabled(true);
+    d->titleEdit->setPlaceholderText(i18n("Enter the metadata template title here."));
     d->titleEdit->setWhatsThis(i18n("<p>Enter the metadata template title here. This title will be "
                                     "used to identify a template in your collection.</p>"));
     label0->setBuddy(d->titleEdit);
 
     // --------------------------------------------------------
 
-    d->tview     = new TemplatePanel(panel);
+    d->tview = new TemplatePanel(panel);
 
     // --------------------------------------------------------
 
-    QLabel* note = new QLabel(i18n("<b>Note: These information are used to set "
+    QLabel* const note = new QLabel(i18n("<b>Note: These information are used to set "
                                    "<b><a href='http://en.wikipedia.org/wiki/Extensible_Metadata_Platform'>XMP</a></b> "
                                    "and <b><a href='http://en.wikipedia.org/wiki/IPTC'>IPTC</a></b> tag contents. "
                                    "There is no limitation with XMP, but note that IPTC text tags "
@@ -134,7 +134,7 @@ SetupTemplate::SetupTemplate(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    QGridLayout* grid = new QGridLayout;
+    QGridLayout* const grid = new QGridLayout;
     grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     grid->setAlignment(Qt::AlignTop);
@@ -150,7 +150,7 @@ SetupTemplate::SetupTemplate(QWidget* const parent)
     grid->addWidget(note,         6, 0, 1, 3);
     panel->setLayout(grid);
 
-    panel->setTabOrder(d->listView, d->addButton);
+    panel->setTabOrder(d->listView,  d->addButton);
     panel->setTabOrder(d->addButton, d->delButton);
     panel->setTabOrder(d->delButton, d->repButton);
     panel->setTabOrder(d->repButton, d->titleEdit);
@@ -174,8 +174,6 @@ SetupTemplate::SetupTemplate(QWidget* const parent)
 
     readSettings();
     d->titleEdit->setFocus();
-
-    // --------------------------------------------------------
 }
 
 SetupTemplate::~SetupTemplate()
@@ -206,7 +204,7 @@ void SetupTemplate::setTemplate(const Template& t)
 {
     if (!t.isNull())
     {
-        TemplateListItem* item = d->listView->find(t.templateTitle());
+        TemplateListItem* const item = d->listView->find(t.templateTitle());
         d->listView->setCurrentItem(item);
         return;
     }
@@ -216,7 +214,7 @@ void SetupTemplate::setTemplate(const Template& t)
 
 void SetupTemplate::slotSelectionChanged()
 {
-    TemplateListItem* item = dynamic_cast<TemplateListItem*>(d->listView->currentItem());
+    TemplateListItem* const item = dynamic_cast<TemplateListItem*>(d->listView->currentItem());
 
     if (!item)
     {
@@ -262,7 +260,7 @@ void SetupTemplate::slotAddTemplate()
 
 void SetupTemplate::slotDelTemplate()
 {
-    TemplateListItem* item = dynamic_cast<TemplateListItem*>(d->listView->currentItem());
+    TemplateListItem* const item = dynamic_cast<TemplateListItem*>(d->listView->currentItem());
     delete item;
 }
 
@@ -276,7 +274,7 @@ void SetupTemplate::slotRepTemplate()
         return;
     }
 
-    TemplateListItem* item = dynamic_cast<TemplateListItem*>(d->listView->currentItem());
+    TemplateListItem* const item = dynamic_cast<TemplateListItem*>(d->listView->currentItem());
 
     if (!item)
     {
