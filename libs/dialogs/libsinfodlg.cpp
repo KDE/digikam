@@ -100,82 +100,88 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
     // --------------------------------------------------------
     // By default set a list of common components information used by Showfoto and digiKam.
 
+    static const char* CONTEXT = "Component information, see help->components";
+    static const QString SUPPORTED_YES = i18nc("component is supported/available",     "Yes");
+    static const QString SUPPORTED_NO  = i18nc("component is not available/supported", "No");
+
     QMap<QString, QString> list;
-    list.insert(i18n("LibQt"),                       qVersion());
-    list.insert(i18n("LibKDE"),                      QString(KCOREADDONS_VERSION_STRING));
-    list.insert(i18n("LibKdcraw"),                   KDcraw::version());
-    list.insert(i18n("LibRaw"),                      KDcraw::librawVersion());
+    list.insert(i18nc(CONTEXT, "Qt"),                          qVersion());
+    list.insert(i18nc(CONTEXT, "KCoreAddons"),                 QString(KCOREADDONS_VERSION_STRING));
+    list.insert(i18nc(CONTEXT, "KDcraw"),                      KDcraw::version());
+    list.insert(i18nc(CONTEXT, "LibRaw"),                      KDcraw::librawVersion());
 
 #if KDCRAW_VERSION >= 0x000500
-    list.insert(i18n("Parallelized demosaicing"),    checkTriState(KDcraw::librawUseGomp()));
+    list.insert(i18nc(CONTEXT, "Parallelized demosaicing"),    checkTriState(KDcraw::librawUseGomp()));
 #endif
 
 #if KDCRAW_VERSION >= 0x020400
-    list.insert(i18n("Demosaic GPL2 pack support"),  checkTriState(KDcraw::librawUseGPL2DemosaicPack()));
-    list.insert(i18n("Demosaic GPL3 pack support"),  checkTriState(KDcraw::librawUseGPL3DemosaicPack()));
+    list.insert(i18nc(CONTEXT, "Demosaic GPL2 pack support"),  checkTriState(KDcraw::librawUseGPL2DemosaicPack()));
+    list.insert(i18nc(CONTEXT, "Demosaic GPL3 pack support"),  checkTriState(KDcraw::librawUseGPL3DemosaicPack()));
 #endif
 
 #if KDCRAW_VERSION >= 0x020200
-    list.insert(i18n("RawSpeed codec support"),      checkTriState(KDcraw::librawUseRawSpeed()));
+    list.insert(i18nc(CONTEXT, "RawSpeed codec support"),      checkTriState(KDcraw::librawUseRawSpeed()));
 #endif
 
 #ifdef HAVE_EIGEN3
-    list.insert(i18n("LibEigen"),                    QString(EIGEN3_VERSION_STRING));
+    list.insert(i18nc(CONTEXT, "Eigen"),                       QString(EIGEN3_VERSION_STRING));
 #else
-    list.insert(i18n("LibEigen support"),            i18n("no"));
+    list.insert(i18nc(CONTEXT, "Eigen support"),               SUPPORTED_NO);
 #endif // HAVE_EIGEN3
 
-    list.insert(i18n("LibKExiv2"),                   KExiv2::version());
-    list.insert(i18n("LibExiv2"),                    KExiv2::Exiv2Version());
-    list.insert(i18n("Exiv2 supports XMP metadata"), KExiv2::supportXmp() ?
+    list.insert(i18nc(CONTEXT, "KExiv2"),                      KExiv2::version());
+    list.insert(i18nc(CONTEXT, "Exiv2"),                       KExiv2::Exiv2Version());
+    list.insert(i18nc(CONTEXT, "Exiv2 supports XMP metadata"), KExiv2::supportXmp() ?
                 i18n("Yes") : i18n("No"));
-    list.insert(i18n("Exiv2 can write to Jpeg"),     KExiv2::supportMetadataWritting("image/jpeg") ?
+    list.insert(i18nc(CONTEXT, "Exiv2 can write to Jpeg"),     KExiv2::supportMetadataWritting("image/jpeg") ?
                 i18n("Yes") : i18n("No"));
-    list.insert(i18n("Exiv2 can write to Tiff"),     KExiv2::supportMetadataWritting("image/tiff") ?
+    list.insert(i18nc(CONTEXT, "Exiv2 can write to Tiff"),     KExiv2::supportMetadataWritting("image/tiff") ?
                 i18n("Yes") : i18n("No"));
-    list.insert(i18n("Exiv2 can write to Png"),      KExiv2::supportMetadataWritting("image/png") ?
+    list.insert(i18nc(CONTEXT, "Exiv2 can write to Png"),      KExiv2::supportMetadataWritting("image/png") ?
                 i18n("Yes") : i18n("No"));
-    list.insert(i18n("Exiv2 can write to Jp2"),      KExiv2::supportMetadataWritting("image/jp2") ?
+    list.insert(i18nc(CONTEXT, "Exiv2 can write to Jp2"),      KExiv2::supportMetadataWritting("image/jp2") ?
                 i18n("Yes") : i18n("No"));
-    list.insert(i18n("Exiv2 can write to Pgf"),      KExiv2::supportMetadataWritting("image/pgf") ?
+    list.insert(i18nc(CONTEXT, "Exiv2 can write to Pgf"),      KExiv2::supportMetadataWritting("image/pgf") ?
                 i18n("Yes") : i18n("No"));
 
 #ifdef HAVE_LENSFUN
-    list.insert(i18n("LibLensFun"),                  LensFunIface::lensFunVersion());
+    list.insert(i18nc(CONTEXT, "LensFun"),                     LensFunIface::lensFunVersion());
 #else
-    list.insert(i18n("LibLensFun support"),          i18n("no"));
+    list.insert(i18nc(CONTEXT, "LensFun support"),             SUPPORTED_NO);
 #endif // HAVE_LENSFUN
 
 #ifdef HAVE_LIBLQR_1
-    list.insert(i18n("LibLqr support"),              i18n("yes"));
+    list.insert(i18nc(CONTEXT, "LibLqr support"),              SUPPORTED_YES);
 #else
-    list.insert(i18n("LibLqr support"),              i18n("no"));
+    list.insert(i18nc(CONTEXT, "LibLqr support"),              SUPPORTED_NO);
 #endif // HAVE_LIBLQR_1
 
-    list.insert(i18n("LibPNG"),                      QString(PNG_LIBPNG_VER_STRING));
-    list.insert(i18n("LibTIFF"),                     QString(TIFFLIB_VERSION_STR).replace('\n', ' '));
-    list.insert(i18n("LibJPEG"),                     QString::number(JPEG_LIB_VERSION));
-    list.insert(i18n("LibCImg"),                     GreycstorationFilter::cimgVersionString());
-    list.insert(i18n("LibLCMS"),                     QString::number(LCMS_VERSION));
-    list.insert(i18n("LibPGF"),                      PGFUtils::libPGFVersion());
+    list.insert(i18nc(CONTEXT, "LibPNG"),                      QString(PNG_LIBPNG_VER_STRING));
+    list.insert(i18nc(CONTEXT, "LibTIFF"),                     QString(TIFFLIB_VERSION_STR).replace('\n', ' '));
+    list.insert(i18nc(CONTEXT, "LibJPEG"),                     QString::number(JPEG_LIB_VERSION));
+    list.insert(i18nc(CONTEXT, "LibCImg"),                     GreycstorationFilter::cimgVersionString());
+    list.insert(i18nc(CONTEXT, "LibLCMS"),                     QString::number(LCMS_VERSION));
+    list.insert(i18nc(CONTEXT, "LibPGF"),                      PGFUtils::libPGFVersion());
 
 #ifdef HAVE_JASPER
-    list.insert(i18n("LibJasper"),                   QString(jas_getversion()));
+    list.insert(i18nc(CONTEXT, "LibJasper"),                   QString(jas_getversion()));
 #else
-    list.insert(i18n("LibJasper support"),           i18n("no"));
+    list.insert(i18nc(CONTEXT, "LibJasper support"),           SUPPORTED_NO);
 #endif // HAVE_JASPER
 
 #ifdef HAVE_KGEOMAP
-    list.insert(i18n("LibKGeoMap"),                  KGeoMapWidget::version());
-    list.insert(i18n("Marble Widget"),               KGeoMapWidget::MarbleWidgetVersion());
+    list.insert(i18nc(CONTEXT, "KGeoMap"),                     KGeoMapWidget::version());
+    list.insert(i18nc(CONTEXT, "Marble"),                      KGeoMapWidget::MarbleWidgetVersion());
 #else
-    list.insert(i18n("LibKGeoMap support"),          i18n("no"));
+    list.insert(i18nc(CONTEXT, "KGeoMap support"),             SUPPORTED_NO);
 #endif // HAVE_KGEOMAP
 
-    int nbcore = QThreadPool::globalInstance()->maxThreadCount();
-    list.insert(i18np("CPU core", "CPU cores", nbcore), QString("%1").arg(nbcore));
+// TODO add sqlite versions here? Could be useful for debugging sqlite problems..
 
-    listView()->setHeaderLabels(QStringList() << i18n("Component") << i18n("Info"));
+    int nbcore = QThreadPool::globalInstance()->maxThreadCount();
+    list.insert(i18ncp(CONTEXT, "CPU core", "CPU cores", nbcore), QString("%1").arg(nbcore));
+
+    listView()->setHeaderLabels(QStringList() << i18nc("Name of the component", "Component") << i18nc("Is supported / version of the component", "Info"));
     setInfoMap(list);
 }
 
