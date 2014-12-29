@@ -29,15 +29,14 @@
 #include <QToolButton>
 #include <QPainter>
 #include <QHBoxLayout>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-
-#include <klineedit.h>
-#include <QApplication>
-#include <QStyle>
+#include <ksqueezedtextlabel.h>
 
 namespace Digikam
 {
@@ -65,7 +64,7 @@ public:
 
     int                 status;
 
-    KLineEdit*          info;
+    KSqueezedTextLabel* info;
     QToolButton*        resetBtn;
     QToolButton*        settingsBtn;
 
@@ -77,13 +76,9 @@ FilterStatusBar::FilterStatusBar(QWidget* const parent)
 {
     QHBoxLayout* const vlay = new QHBoxLayout(this);
 
-    d->info        = new KLineEdit(this);
-    d->info->setClearButtonShown(false);
-    d->info->setClickMessage(QString());
-    d->info->setReadOnly(true);
+    d->info        = new KSqueezedTextLabel(this);
     d->info->setContextMenuPolicy(Qt::NoContextMenu);
-    d->info->setSqueezedTextEnabled(true);
-    d->info->setDragEnabled(false);
+    d->info->setAutoFillBackground(true);
     d->info->setFocusPolicy(Qt::NoFocus);
     d->info->setWhatsThis(i18n("Background color indicates the global image filter status, "
                                "encompassing all filter settings from the right sidebar.\n\n"
@@ -178,7 +173,7 @@ void FilterStatusBar::slotFilterMatches(bool match)
 
     if (filtersList.isEmpty())
     {
-        d->info->setSqueezedText(i18n("No active filter"));
+        d->info->setText(i18n("No active filter"));
         d->info->setToolTip(QString());
         d->resetBtn->setEnabled(false);
         d->status = Private::None;
@@ -187,11 +182,11 @@ void FilterStatusBar::slotFilterMatches(bool match)
     {
         if (filtersList.count() == 1)
         {
-            d->info->setSqueezedText(i18n("One active filter"));
+            d->info->setText(i18n("One active filter"));
         }
         else
         {
-            d->info->setSqueezedText(i18np("1 active filter", "%1 active filters", filtersList.count()));
+            d->info->setText(i18np("1 active filter", "%1 active filters", filtersList.count()));
         }
 
         d->info->setToolTip(message);
@@ -204,17 +199,17 @@ void FilterStatusBar::slotFilterMatches(bool match)
     switch(d->status)
     {
         case Private::NotMatch:
-            pal.setColor(QPalette::Active, QPalette::Base, QColor(255, 200, 200));
-            pal.setColor(QPalette::Active, QPalette::Text, Qt::black);
+            pal.setColor(backgroundRole(), QColor(255, 200, 200));
+            pal.setColor(foregroundRole(), Qt::black);
             break;
         case Private::Match:
-            pal.setColor(QPalette::Active, QPalette::Base, QColor(200, 255, 200));
-            pal.setColor(QPalette::Active, QPalette::Text, Qt::black);
+            pal.setColor(backgroundRole(), QColor(200, 255, 200));
+            pal.setColor(foregroundRole(), Qt::black);
             break;
         default: // Private::None
             break;
     }
-
+ 
     d->info->setPalette(pal);
 
     update();
