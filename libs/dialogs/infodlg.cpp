@@ -100,7 +100,7 @@ InfoDlg::InfoDlg(QWidget* const parent)
                          "<p>%3</p>",
                          QApplication::applicationName(),
                          QApplication::applicationVersion(),
-                         DAboutData::digiKamSlogan().toString()));
+                         DAboutData::digiKamSlogan()));
 
     // --------------------------------------------------------
 

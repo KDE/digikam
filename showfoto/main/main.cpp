@@ -25,9 +25,9 @@
 
 // KDE includes
 
-#include <k4aboutdata.h>
-#include <kapplication.h>
-#include <kcmdlineargs.h>
+
+
+
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kimageio.h>
@@ -37,6 +37,11 @@
 
 #include <kexiv2.h>
 #include <libkexiv2_version.h>
+#include <QApplication>
+#include <KAboutData>
+#include <KLocalizedString>
+#include <QCommandLineParser>
+#include <QCommandLineOption>
 
 // Local includes
 
@@ -48,40 +53,47 @@ using namespace Digikam;
 
 int main(int argc, char* argv[])
 {
-    K4AboutData aboutData("showfoto", "digikam",
-                         ki18n("showFoto"),
-                         digiKamVersion().toAscii(),  // NOTE: showFoto version = digiKam version
-                         DAboutData::digiKamSlogan(),
-                         K4AboutData::License_GPL,
-                         DAboutData::copyright(),
-                         additionalInformation(),
-                         DAboutData::webProjectUrl().url().toUtf8());
+    QApplication app(argc, argv);
+#pragma message("is setApplicationDomain necessary or does it come from CMakeLists already?")
+    KLocalizedString::setApplicationDomain("digikam");
 
-#pragma message("PORT QT5")
-    //DAboutData::authorsRegistration(aboutData);
+    KAboutData aboutData(QString::fromLatin1("showfoto"), // component name
+                         i18n("showFoto"),                // display name
+                         digiKamVersion());               // NOTE: showFoto version = digiKam version
 
-    KCmdLineArgs::init(argc, argv, &aboutData);
+    aboutData.setShortDescription(DAboutData::digiKamSlogan());;
+    aboutData.setLicense(KAboutLicense::GPL);
+    aboutData.setCopyrightStatement(DAboutData::copyright());
+    aboutData.setOtherText(additionalInformation());
+    aboutData.setHomepage(DAboutData::webProjectUrl().url());
 
-    KCmdLineOptions options;
-    options.add("+[file(s) or folder(s)]", ki18n("File(s) or folder(s) to open"));
-    KCmdLineArgs::addCmdLineOptions( options );
+    DAboutData::authorsRegistration(aboutData);
+
+
+    QCommandLineParser parser;
+    KAboutData::setApplicationData(aboutData);
+    parser.addVersionOption();
+    parser.addHelpOption();
+    aboutData.setupCommandLine(&parser);
+    parser.addPositionalArgument("files", i18n("File(s) or folder(s) to open"), "[file(s) or folder(s)]");
+    parser.process(app);
+    aboutData.processCommandLine(&parser);
 
     KExiv2Iface::KExiv2::initializeExiv2();
 
-    KApplication app;
 
     KUrl::List urlList;
-    KCmdLineArgs* const args = KCmdLineArgs::parsedArgs();
+    QStringList urls = parser.positionalArguments();
 
-    for (int i = 0; i < args->count(); ++i)
-    {
-        urlList.append(args->url(i));
+    Q_FOREACH(const QString& url, urls) {
+        urlList.append(KUrl(url));
     }
 
-    args->clear();
+    parser.clearPositionalArguments();
 
     ShowFoto::ShowFoto* const w = new ShowFoto::ShowFoto(urlList);
-    app.setTopWidget(w);
+#pragma message("is setTopWidget necessary?")
+    //app.setTopWidget(w);
     w->show();
 
 #pragma message("PORT QT5")

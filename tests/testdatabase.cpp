@@ -35,9 +35,12 @@
 // KDE includes
 
 
-#include <kcmdlineargs.h>
-#include <k4aboutdata.h>
-#include <kapplication.h>
+
+#include <KAboutData>
+#include <KLocalizedString>
+#include <QCommandLineParser>
+
+
 
 // digiKam includes
 
@@ -67,18 +70,25 @@ using namespace Digikam;
 
 int main(int argc, char** argv)
 {
-    K4AboutData aboutData("digikam",
+    KAboutData aboutData("digikam",
                          0,
                          ki18n("digiKam"),
                          digiKamVersion().toAscii(),
                          DAboutData::digiKamSlogan(),
-                         K4AboutData::License_GPL,
+                         KAboutLicense::GPL,
                          DAboutData::copyright(),
                          additionalInformation(),
                          DAboutData::webProjectUrl().url().toUtf8());
 
-    KCmdLineArgs::init(argc, argv, &aboutData);
-    KApplication app;
+    QApplication app(argc, argv);
+    QCommandLineParser parser;
+    KAboutData::setApplicationData(aboutData);
+    parser.addVersionOption();
+    parser.addHelpOption();
+    //PORTING SCRIPT: adapt aboutdata variable if necessary
+    aboutData.setupCommandLine(&parser);
+    parser.process(app);
+    aboutData.processCommandLine(&parser);
 
     DatabaseParameters params;
     params.databaseType = DatabaseParameters::SQLiteDatabaseType();

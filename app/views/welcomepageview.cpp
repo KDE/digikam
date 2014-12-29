@@ -239,7 +239,7 @@ void WelcomePageView::slotThemeChanged()
     QString digikamCss       = KStandardDirs::locate("data", "digikam/about/digikam.css");
     QString fontSize         = QString::number(12);
     QString appTitle         = i18n("digiKam");
-    QString slogan           = DAboutData::digiKamSlogan().toString();
+    QString slogan           = DAboutData::digiKamSlogan();
     QString locationHtml     = KStandardDirs::locate("data", "digikam/about/main.html");
     QString locationRtl      = KStandardDirs::locate("data", "kdeui/about/kde_infopage_rtl.css" );
     QString rtl              = qApp->isRightToLeft() ? QString("@import \"%1\";" ).arg(locationRtl)

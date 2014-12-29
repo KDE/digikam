@@ -49,28 +49,28 @@ static inline const QString digiKamVersion()
     return QString(digikam_version);
 }
 
-static inline KLocalizedString additionalInformation()
+static inline QString additionalInformation()
 {
     QString gitVer       = QString(GITVERSION);
-    KLocalizedString ret = ki18n("IRC:\n"
-                                 "irc.freenode.net - #digikam\n\n"
-                                 "Feedback:\n"
-                                 "digikam-devel@kde.org\n\n"
-                                 "Build date: %1 (target: %2)")
-                                 .subs(__DATE__)
-                                 .subs("@CMAKE_BUILD_TYPE@");
+    QString ret          = i18n("IRC:\n"
+                                "irc.freenode.net - #digikam\n\n"
+                                "Feedback:\n"
+                                "digikam-devel@kde.org\n\n"
+                                "Build date: %1 (target: %2)",
+                                QString(__DATE__),
+                                "@CMAKE_BUILD_TYPE@");
 
     if (!gitVer.isEmpty() && !gitVer.startsWith("unknow") && !gitVer.startsWith("export"))
     {
-        ret = ki18n("IRC:\n"
-                    "irc.freenode.net - #digikam\n\n"
-                    "Feedback:\n"
-                    "digikam-devel@kde.org\n\n"
-                    "Build date: %1 (target: %2)\n"
-                    "Rev.: %3")
-                    .subs(__DATE__)
-                    .subs("@CMAKE_BUILD_TYPE@")
-                    .subs(QString("<a href='http://commits.kde.org/digikam/%1'>%2</a>").arg(gitVer).arg(gitVer));
+        ret = i18n("IRC:\n"
+                   "irc.freenode.net - #digikam\n\n"
+                   "Feedback:\n"
+                   "digikam-devel@kde.org\n\n"
+                   "Build date: %1 (target: %2)\n"
+                   "Rev.: %3",
+                   QString(__DATE__),
+                   "@CMAKE_BUILD_TYPE@",
+                   QString("<a href='http://commits.kde.org/digikam/%1'>%2</a>").arg(gitVer).arg(gitVer));
     }
 
     return ret;

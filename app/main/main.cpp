@@ -34,9 +34,9 @@
 
 // KDE includes
 
-#include <kapplication.h>
-#include <k4aboutdata.h>
-#include <kcmdlineargs.h>
+
+
+
 #include <kconfig.h>
 #include <kdeversion.h>
 #include <kglobal.h>
@@ -49,6 +49,11 @@
 
 #include <libkexiv2_version.h>
 #include <kexiv2.h>
+#include <QApplication>
+#include <KAboutData>
+#include <KLocalizedString>
+#include <QCommandLineParser>
+#include <QCommandLineOption>
 
 // Local includes
 
@@ -69,31 +74,39 @@ using namespace Digikam;
 
 int main(int argc, char* argv[])
 {
-    K4AboutData aboutData("digikam",
-                         0,
-                         ki18n("digiKam"),
-                         digiKamVersion().toAscii(),
-                         DAboutData::digiKamSlogan(),
-                         K4AboutData::License_GPL,
-                         DAboutData::copyright(),
-                         additionalInformation(),
-                         DAboutData::webProjectUrl().url().toUtf8());
+    QApplication app(argc, argv);
 
-#pragma message("PORT QT5")
-    //DAboutData::authorsRegistration(aboutData);
+    KAboutData aboutData(QString::fromLatin1("digikam"), // component name
+                         i18n("digiKam"),               // display name
+                         digiKamVersion());
 
-    KCmdLineArgs::init(argc, argv, &aboutData);
+#pragma message("is setApplicationDomain necessary or does it come from CMakeLists already?")
+    KLocalizedString::setApplicationDomain("digikam");
 
-    KCmdLineOptions options;
-    options.add("download-from <path>",     ki18n("Open camera dialog at <path>"));
-    options.add("download-from-udi <udi>",  ki18n("Open camera dialog for the device with Solid UDI <udi>"));
-    options.add("detect-camera",            ki18n("Automatically detect and open a connected gphoto2 camera"));
-    options.add("database-directory <dir>", ki18n("Start digikam with the SQLite database file found in the directory <dir>"));
-    KCmdLineArgs::addCmdLineOptions(options);
+    aboutData.setShortDescription(DAboutData::digiKamSlogan());;
+    aboutData.setLicense(KAboutLicense::GPL);
+    aboutData.setCopyrightStatement(DAboutData::copyright());
+    aboutData.setOtherText(additionalInformation());
+    aboutData.setHomepage(DAboutData::webProjectUrl().url());
+
+    DAboutData::authorsRegistration(aboutData);
+
+    QCommandLineParser parser;
+    KAboutData::setApplicationData(aboutData);
+    parser.addVersionOption();
+    parser.addHelpOption();
+    //PORTING SCRIPT: adapt aboutdata variable if necessary
+    aboutData.setupCommandLine(&parser);
+    parser.process(app);
+    aboutData.processCommandLine(&parser);
+
+    parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("from"), i18n("Open camera dialog at <path>"), QLatin1String("path")));
+    parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("udi"), i18n("Open camera dialog for the device with Solid UDI <udi>"), QLatin1String("udi")));
+    parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("detect-camera"), i18n("Automatically detect and open a connected gphoto2 camera")));
+    parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("directory"), i18n("Start digikam with the SQLite database file found in the directory <dir>"), QLatin1String("dir")));
 
     KExiv2Iface::KExiv2::initializeExiv2();
 
-    KApplication app;
 
     // Check if SQLite Qt4 plugin is available.
 
@@ -118,13 +131,11 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    KCmdLineArgs* const args = KCmdLineArgs::parsedArgs();
-
     QString commandLineDBPath;
 
-    if (args && args->isSet("database-directory"))
+    if (parser.isSet("database-directory"))
     {
-        QFileInfo commandLineDBDir(args->getOption("database-directory"));
+        QFileInfo commandLineDBDir(parser.value("database-directory"));
 
         if (!commandLineDBDir.exists() || !commandLineDBDir.isDir())
         {
@@ -148,7 +159,8 @@ int main(int argc, char* argv[])
     if (!mainConfig.exists() || (version.startsWith(QLatin1String("0.5"))))
     {
         AssistantDlg firstRun;
-        app.setTopWidget(&firstRun);
+#pragma message("is setTopWidget necessary?")
+        //app.setTopWidget(&firstRun);
         firstRun.show();
 
         if (firstRun.exec() == QDialog::Rejected)
@@ -204,19 +216,20 @@ int main(int argc, char* argv[])
                      QString::number(QCoreApplication::instance()->applicationPid()));
 
 
-    app.setTopWidget(digikam);
+#pragma message("port: is setTopWidget necessary?")
+    //app.setTopWidget(digikam);
     digikam->restoreSession();
     digikam->show();
 
-    if (args && args->isSet("download-from"))
+    if (parser.isSet("download-from"))
     {
-        digikam->downloadFrom(args->getOption("download-from"));
+        digikam->downloadFrom(parser.value("download-from"));
     }
-    else if (args && args->isSet("download-from-udi"))
+    else if (parser.isSet("download-from-udi"))
     {
-        digikam->downloadFromUdi(args->getOption("download-from-udi"));
+        digikam->downloadFromUdi(parser.value("download-from-udi"));
     }
-    else if (args && args->isSet("detect-camera"))
+    else if (parser.isSet("detect-camera"))
     {
         digikam->autoDetect();
     }
@@ -225,6 +238,7 @@ int main(int argc, char* argv[])
     tipsFiles.append("digikam/tips");
     tipsFiles.append("kipi/tips");
 
+#pragma message("port can these be safely removed?")
     //KF5 port: remove this line and define TRANSLATION_DOMAIN in CMakeLists.txt instead
 //KLocale::global()->insertCatalog("kipiplugins");
     //KF5 port: remove this line and define TRANSLATION_DOMAIN in CMakeLists.txt instead

@@ -54,11 +54,11 @@ public:
 
     void registerHelpActions();
 
-    static KLocalizedString digiKamSloganFormated();
-    static KLocalizedString digiKamSlogan();
-    static KLocalizedString copyright();
-    static KUrl             webProjectUrl();
-    static void             authorsRegistration(KAboutData& aboutData);
+    static const QString   digiKamSloganFormated();
+    static const QString   digiKamSlogan();
+    static const QString   copyright();
+    static const QUrl      webProjectUrl();
+    static void            authorsRegistration(KAboutData& aboutData);
 
 private Q_SLOTS:
 

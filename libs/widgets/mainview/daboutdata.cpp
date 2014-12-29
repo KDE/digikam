@@ -34,7 +34,6 @@
 
 #include <QAction>
 #include <kactioncollection.h>
-#include <klocalizedstring.h>
 #include <kxmlguiwindow.h>
 
 // Local includes
@@ -85,9 +84,9 @@ void DAboutData::slotContribute()
     QDesktopServices::openUrl(QUrl("http://www.digikam.org/?q=contrib"));
 }
 
-KLocalizedString DAboutData::digiKamSloganFormated()
+const QString DAboutData::digiKamSloganFormated()
 {
-    return ki18nc("This is the slogan formated string displayed in splashscreen. "
+    return i18nc("This is the slogan formated string displayed in splashscreen. "
                   "Please translate using short words else the slogan can be truncated.",
                   "<qt><font color=\"white\">"
                   "<b>Manage</b> your <b>photographs</b> like <b>a professional</b> "
@@ -96,20 +95,20 @@ KLocalizedString DAboutData::digiKamSloganFormated()
                  );
 }
 
-KLocalizedString DAboutData::digiKamSlogan()
+const QString DAboutData::digiKamSlogan()
 {
-    return ki18n("Manage your photographs like a professional, "
+    return i18n("Manage your photographs like a professional, "
                  "with the power of open source");
 }
 
-KLocalizedString DAboutData::copyright()
+const QString DAboutData::copyright()
 {
-    return ki18n("(c) 2002-2014, digiKam developers team");
+    return i18n("(c) 2002-2014, digiKam developers team");
 }
 
-KUrl DAboutData::webProjectUrl()
+const QUrl DAboutData::webProjectUrl()
 {
-    return KUrl("http://www.digikam.org");
+    return QUrl("http://www.digikam.org");
 }
 
 void DAboutData::authorsRegistration(KAboutData& aboutData)
