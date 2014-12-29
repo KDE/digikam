@@ -28,13 +28,12 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QPointer>
+#include <QLineEdit>
 
 // KDE includes
 
 #include <kiconloader.h>
-#include <klineedit.h>
 #include <klocalizedstring.h>
-
 
 // Libkexiv2 includes
 
@@ -55,18 +54,18 @@ MetadataOptionDialog::MetadataOptionDialog(Rule* parent) :
     metadataPanel(0),
     separatorLineEdit(0)
 {
-    QWidget* mainWidget  = new QWidget(this);
-    QTabWidget* tab      = new QTabWidget(this);
-    metadataPanel        = new MetadataPanel(tab);
-    QLabel* customLabel  = new QLabel(i18n("Keyword separator:"));
-    separatorLineEdit    = new KLineEdit(this);
+    QWidget* const mainWidget = new QWidget(this);
+    QTabWidget* const tab     = new QTabWidget(this);
+    metadataPanel             = new MetadataPanel(tab);
+    QLabel* const customLabel = new QLabel(i18n("Keyword separator:"));
+    separatorLineEdit         = new QLineEdit(this);
     separatorLineEdit->setText("_");
 
     // --------------------------------------------------------
 
     // We only need the "SearchBar" control element.
     // We also need to reset the default selections.
-    foreach(MetadataSelectorView* viewer, metadataPanel->viewers())
+    foreach(MetadataSelectorView* const viewer, metadataPanel->viewers())
     {
         viewer->setControlElements(MetadataSelectorView::SearchBar);
         viewer->clearSelection();
@@ -86,7 +85,7 @@ MetadataOptionDialog::MetadataOptionDialog(Rule* parent) :
 
     // --------------------------------------------------------
 
-    QGridLayout* mainLayout = new QGridLayout(this);
+    QGridLayout* const mainLayout = new QGridLayout(this);
     mainLayout->addWidget(customLabel,       0, 0, 1, 1);
     mainLayout->addWidget(separatorLineEdit, 0, 1, 1, 1);
     mainLayout->addWidget(tab,               1, 0, 1, -1);
@@ -158,9 +157,9 @@ void MetadataOption::slotTokenTriggered(const QString& token)
 
 QString MetadataOption::parseOperation(ParseSettings& settings)
 {
-    const QRegExp& reg  = regExp();
-    QString keyword     = reg.cap(2);
-    QString result      = parseMetadata(keyword, settings);
+    const QRegExp& reg = regExp();
+    QString keyword    = reg.cap(2);
+    QString result     = parseMetadata(keyword, settings);
     return result;
 }
 
