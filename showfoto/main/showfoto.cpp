@@ -1317,7 +1317,7 @@ void ShowFoto::slotDroppedUrls(const KUrl::List& droppedUrls)
         d->model->clearShowfotoItemInfos();
         emit signalInfoList(d->infoList);
 
-#pragma message("add errormessage when there's no valid urls, cleanup this method..")
+#pragma message("add errormessage when there is no valid urls. Cleanup this method...")
         if (!d->infoList.isEmpty())
         {
             slotOpenUrl(d->infoList.at(0));

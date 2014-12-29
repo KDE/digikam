@@ -37,13 +37,13 @@
 #include <QApplication>
 #include <QStyle>
 #include <QComboBox>
+#include <QLineEdit>
 
 // KDE includes
 
 #include <kcursor.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
-#include <klineedit.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
 #include <kurlrequester.h>
@@ -90,7 +90,7 @@ public:
 
     QTreeWidget*   listView;
 
-    KLineEdit*     titleEdit;
+    QLineEdit*     titleEdit;
 
     KUrlRequester* umsMountURL;
 
@@ -134,9 +134,9 @@ CameraSelection::CameraSelection(QWidget* const parent)
 
     // --------------------------------------------------------------
 
-    QGroupBox* titleBox   = new QGroupBox(i18n("Camera Title"), mainWidget());
-    QVBoxLayout* gLayout1 = new QVBoxLayout(titleBox);
-    d->titleEdit          = new KLineEdit(titleBox);
+    QGroupBox* const titleBox   = new QGroupBox(i18n("Camera Title"), mainWidget());
+    QVBoxLayout* const gLayout1 = new QVBoxLayout(titleBox);
+    d->titleEdit          = new QLineEdit(titleBox);
     d->titleEdit->setWhatsThis(i18n("<p>Set here the name used in digiKam interface to "
                                     "identify this camera.</p>"));
 
@@ -146,9 +146,9 @@ CameraSelection::CameraSelection(QWidget* const parent)
 
     // --------------------------------------------------------------
 
-    QGroupBox* portBox    = new QGroupBox(i18n("Camera Port Type"), mainWidget());
-    QVBoxLayout* gLayout2 = new QVBoxLayout(portBox);
-    d->portButtonGroup    = new QButtonGroup(portBox);
+    QGroupBox* const portBox    = new QGroupBox(i18n("Camera Port Type"), mainWidget());
+    QVBoxLayout* const gLayout2 = new QVBoxLayout(portBox);
+    d->portButtonGroup          = new QButtonGroup(portBox);
     d->portButtonGroup->setExclusive(true);
 
     d->usbButton = new QRadioButton(i18n("USB"), portBox);
@@ -169,8 +169,8 @@ CameraSelection::CameraSelection(QWidget* const parent)
 
     // --------------------------------------------------------------
 
-    QGroupBox* portPathBox = new QGroupBox(i18n("Camera Port Path"), mainWidget());
-    QVBoxLayout* gLayout3  = new QVBoxLayout(portPathBox);
+    QGroupBox* const portPathBox = new QGroupBox(i18n("Camera Port Path"), mainWidget());
+    QVBoxLayout* const gLayout3  = new QVBoxLayout(portPathBox);
 
     d->portPathLabel = new QLabel(portPathBox);
     d->portPathLabel->setText(i18n("Note: only for serial port cameras."));
@@ -187,10 +187,10 @@ CameraSelection::CameraSelection(QWidget* const parent)
 
     // --------------------------------------------------------------
 
-    QGroupBox* umsMountBox = new QGroupBox(i18n("Camera Mount Path"), mainWidget());
-    QVBoxLayout* gLayout4  = new QVBoxLayout(umsMountBox);
+    QGroupBox* const umsMountBox = new QGroupBox(i18n("Camera Mount Path"), mainWidget());
+    QVBoxLayout* const gLayout4  = new QVBoxLayout(umsMountBox);
 
-    QLabel* umsMountLabel = new QLabel(umsMountBox);
+    QLabel* const umsMountLabel = new QLabel(umsMountBox);
     umsMountLabel->setText(i18n("Note: only for USB/IEEE mass storage cameras."));
 
     d->umsMountURL = new KUrlRequester(QUrl::fromLocalFile("/mnt/camera"), umsMountBox);
@@ -206,27 +206,27 @@ CameraSelection::CameraSelection(QWidget* const parent)
 
     // --------------------------------------------------------------
 
-    QWidget* box2         = new QWidget(mainWidget());
+    QWidget* const box2         = new QWidget(mainWidget());
     QGridLayout* gLayout5 = new QGridLayout(box2);
 
-    QLabel* logo = new QLabel(box2);
+    QLabel* const logo = new QLabel(box2);
     logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
                     .scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-    QLabel* link = new QLabel(box2);
+    QLabel* const link = new QLabel(box2);
     link->setText(i18n("<p>To set a <b>USB Mass Storage</b> camera<br/>"
                        "(which looks like a removable drive when mounted<br/>"
                        "on your desktop), please use<br/>"
                        "<a href=\"umscamera\">%1</a> from the camera list.</p>",
                        d->UMSCameraNameShown));
 
-    QLabel* link2 = new QLabel(box2);
+    QLabel* const link2 = new QLabel(box2);
     link2->setText(i18n("<p>To set a <b>Generic PTP USB Device</b><br/>"
                         "(which uses Picture Transfer Protocol), please<br/>"
                         "use <a href=\"ptpcamera\">%1</a> from the camera list.</p>",
                         d->PTPCameraNameShown));
 
-    QLabel* explanation = new QLabel(box2);
+    QLabel* const explanation = new QLabel(box2);
     explanation->setOpenExternalLinks(true);
     explanation->setText(i18n("<p>A complete list of camera settings to use is<br/>"
                               "available at <a href='http://www.teaser.fr/~hfiguiere/linux/digicam.html'>"
@@ -340,7 +340,7 @@ void CameraSelection::setCamera(const QString& title, const QString& model,
 
     if (!list.isEmpty())
     {
-        QTreeWidgetItem* item = list.first();
+        QTreeWidgetItem* const item = list.first();
 
         if (!item)
         {
