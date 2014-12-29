@@ -127,12 +127,9 @@ public:
 QueueSettingsView::QueueSettingsView(QWidget* const parent)
     : QTabWidget(parent), d(new Private)
 {
-    setTabBarAutoHide(false);
-#if KDE_IS_VERSION(4,3,0)
+#pragma port to qt5
+    //setTabBarAutoHide(false);
     setTabsClosable(false);
-#else
-    setCloseButtonEnabled(false);
-#endif
 
     // --------------------------------------------------------
 
