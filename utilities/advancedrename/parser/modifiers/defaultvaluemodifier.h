@@ -29,7 +29,7 @@
 #include "modifier.h"
 #include "ruledialog.h"
 
-class KLineEdit;
+class QLineEdit;
 
 namespace Digikam
 {
@@ -43,7 +43,7 @@ public:
     explicit DefaultValueDialog(Rule* parent);
     ~DefaultValueDialog();
 
-    KLineEdit* valueInput;
+    QLineEdit* valueInput;
 
 private:
 
@@ -73,6 +73,5 @@ private:
 };
 
 } // namespace Digikam
-
 
 #endif /* DEFAULTVALUEMODIFIER_H */
