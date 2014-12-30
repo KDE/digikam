@@ -33,19 +33,17 @@
 #include <QTimer>
 #include <QWidget>
 #include <QApplication>
+#include <QDesktopServices>
+#include <QAction>
+#include <QKeySequence>
 
 // KDE includes
 
-#include <QAction>
 #include <kactioncollection.h>
-#include <kcursor.h>
-#include <kglobalsettings.h>
 #include <khtml_part.h>
 #include <khtmlview.h>
 #include <klocalizedstring.h>
-#include <QKeySequence>
 #include <kstandarddirs.h>
-#include <ktoolinvocation.h>
 #include <kurl.h>
 
 // Local includes
@@ -91,7 +89,7 @@ WelcomePageView::~WelcomePageView()
 
 void WelcomePageView::slotUrlOpen(const KUrl& url)
 {
-    KToolInvocation::invokeBrowser(url.url());
+    QDesktopServices::openUrl(QUrl(url.url()));
 }
 
 QString WelcomePageView::infoPage() const
