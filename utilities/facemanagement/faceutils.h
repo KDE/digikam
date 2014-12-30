@@ -36,6 +36,7 @@
 
 // Local includes
 
+#include "imageinfo.h"
 #include "facetagseditor.h"
 #include "digikam_export.h"
 
