@@ -164,8 +164,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent )
 
     readSettings();
 
-    connect(exiv2LogoLabel, SIGNAL(leftClickedUrl(QString)),
-            this, SLOT(slotProcessExiv2Url(QString)));
+    connect(exiv2LogoLabel, static_cast<void (KUrlLabel::*)(const QString &)>(&KUrlLabel::leftClickedUrl), this, &SetupMetadata::slotProcessExiv2Url);
 
     // --------------------------------------------------------
 }

@@ -107,8 +107,7 @@ ShowfotoCategorizedView::ShowfotoCategorizedView(QWidget* const parent)
     d->delayedEnterTimer->setInterval(10);
     d->delayedEnterTimer->setSingleShot(false);
 
-    connect(d->delayedEnterTimer, SIGNAL(timeout()),
-            this, SLOT(slotDelayedEnter()));
+    connect(d->delayedEnterTimer, &QTimer::timeout, this, &ShowfotoCategorizedView::slotDelayedEnter);
 }
 
 ShowfotoCategorizedView::~ShowfotoCategorizedView()
@@ -138,12 +137,9 @@ void ShowfotoCategorizedView::setModels(ShowfotoImageModel* model, ShowfotoSortF
 
     setModel(d->filterModel);
 
-    connect(d->filterModel, SIGNAL(layoutAboutToBeChanged()),
-            this, SLOT(layoutAboutToBeChanged()));
+    connect(d->filterModel, &ShowfotoSortFilterModel::layoutAboutToBeChanged, this, &ShowfotoCategorizedView::layoutAboutToBeChanged);
 
-    connect(d->filterModel, SIGNAL(layoutChanged()),
-            this, SLOT(layoutWasChanged()),
-            Qt::QueuedConnection);
+    connect(d->filterModel, &ShowfotoSortFilterModel::layoutChanged, this, &ShowfotoCategorizedView::layoutWasChanged, Qt::QueuedConnection);
 
     emit modelChanged();
 
@@ -216,11 +212,9 @@ void ShowfotoCategorizedView::setItemDelegate(ShowfotoDelegate* delegate)
     d->delegate->setViewOnAllOverlays(this);
     d->delegate->setAllOverlaysActive(true);
 
-    connect(d->delegate, SIGNAL(requestNotification(QModelIndex,QString)),
-            this, SLOT(showIndexNotification(QModelIndex,QString)));
+    connect(d->delegate, &ShowfotoDelegate::requestNotification, this, &ShowfotoCategorizedView::showIndexNotification);
 
-    connect(d->delegate, SIGNAL(hideNotification()),
-            this, SLOT(hideIndexNotification()));
+    connect(d->delegate, &ShowfotoDelegate::hideNotification, this, &ShowfotoCategorizedView::hideIndexNotification);
 }
 
 ShowfotoItemInfo ShowfotoCategorizedView::currentInfo() const

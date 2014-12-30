@@ -331,11 +331,9 @@ void ShowFoto::setupConnections()
     connect(this, SIGNAL(signalSelectionChanged(QRect)),
             d->rightSideBar, SLOT(slotImageSelectionChanged(QRect)));
 
-    connect(this, SIGNAL(signalOpenFolder(KUrl)),
-            this, SLOT(slotOpenFolder(KUrl)));
+    connect(this, &ShowFoto::signalOpenFolder, this, &ShowFoto::slotOpenFolder);
 
-    connect(this, SIGNAL(signalOpenFile(KUrl::List)),
-            this, SLOT(slotOpenFile()));
+    connect(this, &ShowFoto::signalOpenFile, this, &ShowFoto::slotOpenFile);
 
     connect(this,SIGNAL(signalInfoList(ShowfotoItemInfoList&)),
             d->model,SLOT(reAddShowfotoItemInfos(ShowfotoItemInfoList&)));
@@ -437,8 +435,7 @@ void ShowFoto::setupActions()
     d->openFilesInFolderAction = new QAction(QIcon::fromTheme("folder-image"), i18n("Open folder"), this);
     d->openFilesInFolderAction->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_O));
 
-    connect(d->openFilesInFolderAction, SIGNAL(triggered()),
-            this, SLOT(slotOpenFilesInFolder()));
+    connect(d->openFilesInFolderAction, &QAction::triggered, this, &ShowFoto::slotOpenFilesInFolder);
 
     actionCollection()->addAction("showfoto_open_folder", d->openFilesInFolderAction);
 

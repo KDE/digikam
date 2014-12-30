@@ -84,8 +84,7 @@ public:
 ShowfotoThumbnailModel::ShowfotoThumbnailModel(QObject* const parent)
     : ShowfotoImageModel(parent), d(new Private)
 {
-    connect(this,SIGNAL(signalThumbInfo(ShowfotoItemInfo,QImage)),
-            this,SLOT(slotThumbInfoLoaded(ShowfotoItemInfo,QImage)));
+    connect(this, &ShowfotoThumbnailModel::signalThumbInfo, this, &ShowfotoThumbnailModel::slotThumbInfoLoaded);
 }
 
 ShowfotoThumbnailModel::~ShowfotoThumbnailModel()
@@ -98,8 +97,7 @@ void ShowfotoThumbnailModel::setThumbnailLoadThread(ThumbnailLoadThread* thread)
 {
     d->thread = thread;
 
-    connect(d->thread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
-            this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
+    connect(d->thread, &ThumbnailLoadThread::signalThumbnailLoaded, this, &ShowfotoThumbnailModel::slotThumbnailLoaded);
 }
 
 ThumbnailLoadThread* ShowfotoThumbnailModel::thumbnailLoadThread() const

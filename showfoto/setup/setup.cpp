@@ -174,8 +174,7 @@ Setup::Setup(QWidget* const parent, Setup::Page page)
         }
     }
 
-    connect(buttonBox()->button(QDialogButtonBox::Ok), &QPushButton::clicked,
-            this, &Setup::slotOkClicked);
+    connect(buttonBox()->button(QDialogButtonBox::Ok), &QPushButton::clicked, this, &Setup::slotOkClicked);
 
     connect(buttonBox(), SIGNAL(helpRequested()),
             this, SLOT(slotHelp()));

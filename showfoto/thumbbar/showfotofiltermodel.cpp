@@ -319,11 +319,9 @@ void ShowfotoFilterModel::setSendShowfotoItemInfoSignals(bool sendSignals)
 {
     if (sendSignals)
     {
-        connect(this, SIGNAL(rowsInserted(QModelIndex,int,int)),
-                this, SLOT(slotRowsInserted(QModelIndex,int,int)));
+        connect(this, &ShowfotoFilterModel::rowsInserted, this, &ShowfotoFilterModel::slotRowsInserted);
 
-        connect(this, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
-                this, SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)));
+        connect(this, &ShowfotoFilterModel::rowsAboutToBeRemoved, this, &ShowfotoFilterModel::slotRowsAboutToBeRemoved);
     }
     else
     {
