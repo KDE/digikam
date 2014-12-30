@@ -43,7 +43,6 @@
 namespace Digikam
 {
 
-class ImageInfo;
 class ImageTagPair;
 
 class DIGIKAM_DATABASE_EXPORT FaceTagsEditor

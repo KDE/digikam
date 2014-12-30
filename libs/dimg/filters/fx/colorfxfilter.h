@@ -38,7 +38,6 @@
 namespace Digikam
 {
 
-class RandomNumberGenerator;
 
 class DIGIKAM_EXPORT ColorFXContainer
 {

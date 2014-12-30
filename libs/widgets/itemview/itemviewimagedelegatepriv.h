@@ -46,7 +46,6 @@
 namespace Digikam
 {
 
-class ImageDelegateOverlay;
 class ItemViewImageDelegate;
 
 class DIGIKAM_EXPORT ItemViewImageDelegatePrivate

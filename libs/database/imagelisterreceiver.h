@@ -39,7 +39,6 @@
 #include "digikam_export.h"
 #include "imagelisterrecord.h"
 
-class QDataStream;
 
 namespace Digikam
 {

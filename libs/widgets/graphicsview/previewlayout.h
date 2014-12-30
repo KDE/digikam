@@ -34,7 +34,6 @@
 
 #include "digikam_export.h"
 
-class QGraphicsView;
 
 namespace Digikam
 {

@@ -35,7 +35,6 @@
 #include "globals.h"
 
 class KConfigGroup;
-class KUrl;
 
 namespace Digikam
 {

@@ -36,7 +36,6 @@
 namespace Digikam
 {
 
-class WorkingWidget;
 
 class ImageVersionsModel : public QAbstractListModel
 {

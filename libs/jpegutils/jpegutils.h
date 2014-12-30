@@ -31,7 +31,6 @@
 #include <QString>
 #include <QImage>
 
-class QFile;
 
 // KExiv2 includes
 

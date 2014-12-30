@@ -39,7 +39,6 @@ namespace Digikam
 
 class DImg;
 class ICCSettingsContainer;
-class ImageInfo;
 class LoadingDescription;
 class PreviewSettings;
 

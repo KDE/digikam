@@ -67,7 +67,6 @@ class VideoInfoContainer;
 class Template;
 class ThumbnailIdentifier;
 class ThumbnailInfo;
-class TreeBuilder;
 
 /**
  * The ImageInfo class contains provides access to the database for a single image.

@@ -37,7 +37,6 @@ namespace Digikam
 {
 
 class DItemDelegate;
-class AbstractItemDragDropHandler;
 class ItemViewToolTip;
 
 class DIGIKAM_EXPORT DCategorizedView : public DigikamKCategorizedView, public DragDropViewImplementation

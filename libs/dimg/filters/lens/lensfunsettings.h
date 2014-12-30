@@ -31,7 +31,6 @@
 #include "lensfunfilter.h"
 #include "digikam_export.h"
 
-class QCheckBox;
 
 namespace Digikam
 {

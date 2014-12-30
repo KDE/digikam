@@ -36,7 +36,6 @@
 
 #include "digikam_export.h"
 
-class QTimer;
 
 namespace Digikam
 {

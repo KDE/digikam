@@ -39,7 +39,6 @@
 namespace Digikam
 {
 
-class DImg;
 
 class DIGIKAM_EXPORT IccProfile
 {

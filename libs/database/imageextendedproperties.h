@@ -40,7 +40,6 @@
 namespace Digikam
 {
 
-class CopyrightInfo;
 
 class DIGIKAM_DATABASE_EXPORT ImageExtendedProperties
 {

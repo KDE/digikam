@@ -35,10 +35,6 @@
 namespace Digikam
 {
 
-class ImageCategoryDrawer;
-class ImageCategorizedView;
-class ImageFilterModel;
-class ImageModel;
 class ItemViewImageDelegatePrivate;
 
 class DIGIKAM_EXPORT ItemViewImageDelegate : public DItemDelegate, public ImageDelegateOverlayContainer

@@ -41,8 +41,6 @@ namespace Digikam
 
 class AlbumShortInfo;
 class ImageInfoData;
-class ImageInfoReadLocker;
-class DatabaseAccess;
 
 // No EXPORT class
 class ImageInfoCache : public QObject

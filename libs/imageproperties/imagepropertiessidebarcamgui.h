@@ -35,7 +35,6 @@
 #include "sidebar.h"
 #include "digikam_export.h"
 
-class QSplitter;
 class QWidget;
 
 namespace Digikam
@@ -44,7 +43,6 @@ namespace Digikam
 class SidebarSplitter;
 class CamItemInfo;
 class DMetadata;
-class NavigateBarTab;
 
 class ImagePropertiesSideBarCamGui : public Sidebar
 {

@@ -44,7 +44,6 @@
 namespace Digikam
 {
 
-class ImageHistogram;
 class ImageCurves;
 class DImg;
 

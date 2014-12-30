@@ -46,7 +46,6 @@ namespace Digikam
 {
 
 class FiltersHistoryWidget;
-class ImageInfoList;
 class ImageInfo;
 class ImageModel;
 class VersionsWidget;

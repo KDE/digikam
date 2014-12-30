@@ -41,7 +41,6 @@ namespace Digikam
 
 class ImageChangeset;
 class ImageTagChangeset;
-class AbstractItemDragDropHandler;
 
 namespace DatabaseFields
 {
