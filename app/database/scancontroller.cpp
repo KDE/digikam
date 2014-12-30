@@ -305,26 +305,21 @@ ScanController::ScanController()
     d->showTimer = new QTimer(this);
     d->showTimer->setSingleShot(true);
 
-    connect(d->showTimer, SIGNAL(timeout()),
-            this, SLOT(slotShowProgressDialog()));
+    connect(d->showTimer, &QTimer::timeout, this, &ScanController::slotShowProgressDialog);
 
-    connect(this, SIGNAL(triggerShowProgressDialog()),
-            this, SLOT(slotTriggerShowProgressDialog()));
+    connect(this, &ScanController::triggerShowProgressDialog, this, &ScanController::slotTriggerShowProgressDialog);
 
     // create timer for relaxed scheduling
     d->relaxedTimer = new QTimer(this);
     d->relaxedTimer->setSingleShot(true);
     d->relaxedTimer->setInterval(250);
 
-    connect(d->relaxedTimer, SIGNAL(timeout()),
-            this, SLOT(slotRelaxedScanning()));
+    connect(d->relaxedTimer, &QTimer::timeout, this, &ScanController::slotRelaxedScanning);
 
     // interthread connections
-    connect(this, SIGNAL(errorFromInitialization(QString)),
-            this, SLOT(slotErrorFromInitialization(QString)));
+    connect(this, &ScanController::errorFromInitialization, this, &ScanController::slotErrorFromInitialization);
 
-    connect(this, SIGNAL(progressFromInitialization(QString,int)),
-            this, SLOT(slotProgressFromInitialization(QString,int)));
+    connect(this, &ScanController::progressFromInitialization, this, &ScanController::slotProgressFromInitialization);
 
     // start thread
     d->running = true;
@@ -379,8 +374,7 @@ void ScanController::createProgressDialog()
     connect(this, SIGNAL(incrementProgressDialog(int)),
             d->progressDialog, SLOT(incrementMaximum(int)));
 
-    connect(d->progressDialog, SIGNAL(signalCancelPressed()),
-            this, SLOT(slotCancelPressed()));
+    connect(d->progressDialog, &DProgressDlg::signalCancelPressed, this, &ScanController::slotCancelPressed);
 }
 
 void ScanController::slotCancelPressed()
@@ -814,26 +808,19 @@ void ScanController::connectCollectionScanner(CollectionScanner* const scanner)
 {
     scanner->setSignalsEnabled(true);
 
-    connect(scanner, SIGNAL(startCompleteScan()),
-            this, SLOT(slotStartCompleteScan()));
+    connect(scanner, &CollectionScanner::startCompleteScan, this, &ScanController::slotStartCompleteScan);
 
-    connect(scanner, SIGNAL(totalFilesToScan(int)),
-            this, SLOT(slotTotalFilesToScan(int)));
+    connect(scanner, &CollectionScanner::totalFilesToScan, this, &ScanController::slotTotalFilesToScan);
 
-    connect(scanner, SIGNAL(startScanningAlbum(QString,QString)),
-            this, SLOT(slotStartScanningAlbum(QString,QString)));
+    connect(scanner, &CollectionScanner::startScanningAlbum, this, &ScanController::slotStartScanningAlbum);
 
-    connect(scanner, SIGNAL(scannedFiles(int)),
-            this, SLOT(slotScannedFiles(int)));
+    connect(scanner, &CollectionScanner::scannedFiles, this, &ScanController::slotScannedFiles);
 
-    connect(scanner, SIGNAL(startScanningAlbumRoot(QString)),
-            this, SLOT(slotStartScanningAlbumRoot(QString)));
+    connect(scanner, &CollectionScanner::startScanningAlbumRoot, this, &ScanController::slotStartScanningAlbumRoot);
 
-    connect(scanner, SIGNAL(startScanningForStaleAlbums()),
-            this, SLOT(slotStartScanningForStaleAlbums()));
+    connect(scanner, &CollectionScanner::startScanningForStaleAlbums, this, &ScanController::slotStartScanningForStaleAlbums);
 
-    connect(scanner, SIGNAL(startScanningAlbumRoots()),
-            this, SLOT(slotStartScanningAlbumRoots()));
+    connect(scanner, &CollectionScanner::startScanningAlbumRoots, this, &ScanController::slotStartScanningAlbumRoots);
 }
 
 void ScanController::slotTotalFilesToScan(int count)
@@ -1158,8 +1145,7 @@ ScanControllerLoadingCacheFileWatch::ScanControllerLoadingCacheFileWatch()
     DatabaseWatch* const dbwatch = DatabaseAccess::databaseWatch();
 
     // we opt for a queued connection to make stuff a bit relaxed
-    connect(dbwatch, SIGNAL(imageChange(ImageChangeset)),
-            this, SLOT(slotImageChanged(ImageChangeset)),
+    connect(dbwatch, SIGNAL(imageChange(ImageChangeset)), this, SLOT(slotImageChanged(ImageChangeset)),
             Qt::QueuedConnection);
 }
 

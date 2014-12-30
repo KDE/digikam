@@ -57,11 +57,9 @@ DDateTimeEdit::DDateTimeEdit(QWidget* parent, const char* const name)
     d->datePopUp = new DDateEdit(this, "datepopup");
     d->timePopUp = new QTimeEdit(QTime::currentTime(), this);
 
-    connect(d->datePopUp, SIGNAL(dateChanged(QDate)),
-            this, SLOT(slotDateTimeChanged()));
+    connect(d->datePopUp, &DDateEdit::dateChanged, this, &DDateTimeEdit::slotDateTimeChanged);
 
-    connect(d->timePopUp, SIGNAL(timeChanged(QTime)),
-            this, SLOT(slotDateTimeChanged()));
+    connect(d->timePopUp, &QTimeEdit::timeChanged, this, &DDateTimeEdit::slotDateTimeChanged);
 }
 
 DDateTimeEdit::~DDateTimeEdit()

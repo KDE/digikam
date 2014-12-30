@@ -172,11 +172,9 @@ bool DatabaseGUIErrorHandler::checkDatabaseConnection()
     d->checker = new DatabaseConnectionChecker(d->parameters);
     QEventLoop loop;
 
-    connect(d->checker, SIGNAL(failedAttempt()),
-            this, SLOT(showProgressDialog()));
+    connect(d->checker, &DatabaseConnectionChecker::failedAttempt, this, &DatabaseGUIErrorHandler::showProgressDialog);
 
-    connect(d->checker, SIGNAL(done()),
-            &loop, SLOT(quit()));
+    connect(d->checker, &DatabaseConnectionChecker::done, &loop, &QEventLoop::quit);
 
     d->checker->start();
     loop.exec();

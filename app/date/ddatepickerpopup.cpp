@@ -94,11 +94,9 @@ DDatePickerPopup::DDatePickerPopup( Items items, const QDate& date, QWidget* par
     d->datePicker = new KDatePicker( this );
     d->datePicker->setCloseButton( false );
 
-    connect( d->datePicker, SIGNAL(dateEntered(QDate)),
-             this, SLOT(slotDateChanged(QDate)) );
+    connect(d->datePicker, &KDatePicker::dateEntered, this, &DDatePickerPopup::slotDateChanged);
 
-    connect( d->datePicker, SIGNAL(dateSelected(QDate)),
-             this, SLOT(slotDateChanged(QDate)) );
+    connect(d->datePicker, &KDatePicker::dateSelected, this, &DDatePickerPopup::slotDateChanged);
 
     d->datePicker->setDate( date );
 

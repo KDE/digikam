@@ -141,11 +141,9 @@ TimeLineWidget::TimeLineWidget(QWidget* const parent)
     d->slotNextTimer->setInterval(10);
     d->slotPreviousTimer->setInterval(10);
 
-    connect(d->slotNextTimer, SIGNAL(timeout()),
-            this, SLOT(slotNext()));
+    connect(d->slotNextTimer, &QTimer::timeout, this, &TimeLineWidget::slotNext);
 
-    connect(d->slotPreviousTimer, SIGNAL(timeout()),
-            this, SLOT(slotPrevious()));
+    connect(d->slotPreviousTimer, &QTimer::timeout, this, &TimeLineWidget::slotPrevious);
 
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
