@@ -34,15 +34,12 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QKeySequence>
+#include <QAction>
 
 // KDE includes
 
-#include <QAction>
 #include <kactioncollection.h>
-
-#include <kconfig.h>
 #include <kedittoolbar.h>
-#include <kglobal.h>
 #include <klocalizedstring.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
@@ -55,7 +52,6 @@
 #include <ktoggleaction.h>
 #include <ktogglefullscreenaction.h>
 #include <ktoolbar.h>
-#include <ktoolinvocation.h>
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
 
