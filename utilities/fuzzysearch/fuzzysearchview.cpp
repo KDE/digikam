@@ -45,10 +45,8 @@
 // KDE includes
 
 #include <kcolorvalueselector.h>
-#include <kconfig.h>
 #include <khuesaturationselect.h>
 #include <kiconloader.h>
-#include <kinputdialog.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <ksqueezedtextlabel.h>

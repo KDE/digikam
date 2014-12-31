@@ -241,7 +241,7 @@ int get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data)
     MEMORYSTATUSEX memstats;
 #endif
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     Q_UNUSED(data);
 #endif
 
@@ -557,7 +557,7 @@ int get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data)
 int get_swap_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data)
 {
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     Q_UNUSED(data);
 #endif
     

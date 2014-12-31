@@ -40,17 +40,15 @@
 #include <QApplication>
 #include <QStyle>
 #include <QComboBox>
+#include <QDesktopServices>
 
 // KDE includes
 
-#include <kcursor.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <ktoolinvocation.h>
-
 #include <kurllabel.h>
 #include <kconfig.h>
 
@@ -775,7 +773,7 @@ bool SetupCamera::checkSettings()
 
 void SetupCamera::slotProcessGphotoUrl(const QString& url)
 {
-    KToolInvocation::self()->invokeBrowser(url);
+    QDesktopServices::openUrl(QUrl(url));
 }
 
 void SetupCamera::slotSelectionChanged()

@@ -28,20 +28,18 @@
 // Qt includes
 
 #include <QVBoxLayout>
+#include <QPushButton>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
-
 #include <klocalizedstring.h>
-#include <QPushButton>
 #include <kmessagebox.h>
-#include <kinputdialog.h>
 
 // Libkipi includes
 
 #include <libkipi_version.h>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 

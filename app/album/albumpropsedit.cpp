@@ -47,11 +47,9 @@
 
 // KDE includes
 
-#include <kcursor.h>
 #include <kdatepicker.h>
 #include <kdeversion.h>
 #include <kiconloader.h>
-#include <kinputdialog.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>

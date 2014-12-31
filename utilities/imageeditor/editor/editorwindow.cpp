@@ -56,26 +56,19 @@
 #include <QLineEdit>
 #include <QKeySequence>
 #include <QPushButton>
+#include <QAction>
 
 // KDE includes
 
 #include <kdeversion.h>
-
 #include <kactioncategory.h>
-
 #include <kaboutdata.h>
-#include <QAction>
 #include <kactioncollection.h>
-
-#include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kcursor.h>
-
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
 #include <kfilefiltercombo.h>
 #include <kfileitemdelegate.h>
-#include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <kimageio.h>
@@ -99,13 +92,12 @@
 #include <ktogglefullscreenaction.h>
 #include <ktoolbar.h>
 #include <ktoolbarpopupaction.h>
-#include <ktoolinvocation.h>
 #include <krun.h>
 #include <kurlcombobox.h>
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
-#include <kde_file.h>
 #include <ksqueezedtextlabel.h>
+
 #include <kio/job.h>
 #include <kio/netaccess.h>
 #include <kio/copyjob.h>

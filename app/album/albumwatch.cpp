@@ -278,7 +278,7 @@ void AlbumWatch::slotAlbumAdded(Album* a)
             // Disable file watch for OS X and Windows and hope for future
             // improvement (possibly with the improvements planned for
             // QFileSystemWatcher in Qt 5.1)
-#if defined(Q_WS_MAC) || defined(Q_WS_WIN)
+#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
             d->dirWatch->addDir(dir, KDirWatch::WatchDirOnly);
 #else
             d->dirWatch->addDir(dir, KDirWatch::WatchFiles | KDirWatch::WatchDirOnly);

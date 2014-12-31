@@ -27,13 +27,14 @@
 
 // X11 includes
 
-#ifdef Q_WS_X11
+#pragma message("PORT QT5")
+#ifdef Q_WS__X11
 #   include <climits>
 #   include <X11/Xlib.h>
 #   include <X11/Xatom.h>
 #   include <fixx11h.h>
 #   include <QX11Info>
-#endif /* Q_WS_X11 */
+#endif /* Q_WS__X11 */
 
 // Qt includes
 
@@ -50,10 +51,10 @@
 #include <kconfiggroup.h>
 #include <kglobal.h>
 #include <ksharedconfig.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "iccprofile.h"
 #include "icctransform.h"
 
@@ -190,7 +191,8 @@ bool IccSettings::monitorProfileFromSystem() const
 */
 IccProfile IccSettings::Private::profileFromWindowSystem(QWidget* const widget)
 {
-#ifdef Q_WS_X11
+#pragma message("PORT QT5")
+#ifdef Q_WS__X11
 
     Qt::HANDLE appRootWindow;
     QString    atomName;
@@ -273,10 +275,10 @@ IccProfile IccSettings::Private::profileFromWindowSystem(QWidget* const widget)
         screenProfiles.insert(screenNumber, profile);
     }
 
-#elif defined Q_WS_WIN
+#elif defined Q_OS_WIN
     //TODO
     Q_UNUSED(widget);
-#elif defined Q_WS_MAC
+#elif defined Q_OS_MAC
     //TODO
     Q_UNUSED(widget);
 #endif

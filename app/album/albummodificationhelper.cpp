@@ -27,10 +27,10 @@
 // Qt includes
 
 #include <QAction>
+#include <QInputDialog>
 
 // KDE includes
 
-#include <kinputdialog.h>
 #include <kio/jobuidelegate.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
@@ -222,9 +222,12 @@ void AlbumModificationHelper::slotAlbumRename(PAlbum* album)
     QString oldTitle(album->title());
     bool    ok;
 
-    QString title = KInputDialog::getText(i18n("Rename Album (%1)", oldTitle),
+    QString title = QInputDialog::getText(d->dialogParent,
+                                          i18n("Rename Album (%1)", oldTitle),
                                           i18n("Enter new album name:"),
-                                          oldTitle, &ok, d->dialogParent);
+                                          QLineEdit::Normal,
+                                          oldTitle,
+                                          &ok);
 
     if (!ok)
     {

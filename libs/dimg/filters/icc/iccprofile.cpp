@@ -488,12 +488,12 @@ QStringList IccProfile::defaultSearchPaths()
 
     paths << KGlobal::dirs()->findDirs("data", "color/icc");
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 
     candidates << QDir::rootPath() + "/Windows/Spool/Drivers/Color/";   // For Win2K and WinXP
     candidates << QDir::rootPath() + "/Windows/Color/";                 // For Win98 and WinMe
 
-#elif defined (Q_WS_MAC)
+#elif defined (Q_OS_MAC)
 
     // Use a scheme highly identical to the Linux scheme, adapted for MacPorts in /opt/local and the OS X standard ColorSync directories
 

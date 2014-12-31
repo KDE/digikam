@@ -33,13 +33,12 @@
 #include <QStyle>
 #include <QMenu>
 #include <QPushButton>
+#include <QAction>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <QAction>
 #include <kmessagebox.h>
-#include <kinputdialog.h>
 
 // Local includes
 

@@ -35,15 +35,14 @@
 #include <QTabWidget>
 #include <QApplication>
 #include <QStyle>
+#include <QDesktopServices>
 
 // KDE includes
 
-#include <kconfig.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
-#include <ktoolinvocation.h>
 #include <kurllabel.h>
 
 // Libkexiv2 includes
@@ -176,7 +175,7 @@ SetupMetadata::~SetupMetadata()
 
 void SetupMetadata::slotProcessExiv2Url(const QString& url)
 {
-    KToolInvocation::self()->invokeBrowser(url);
+    QDesktopServices::openUrl(QUrl(url));
 }
 
 void SetupMetadata::applySettings()

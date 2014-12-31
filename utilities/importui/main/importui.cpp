@@ -54,19 +54,18 @@
 #include <QWidget>
 #include <QMenu>
 #include <QKeySequence>
+#include <QDesktopServices>
+#include <QInputDialog>
 
 // KDE includes
 
 #include <kactioncollection.h>
 #include <kcalendarsystem.h>
-#include <kconfig.h>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
-#include <kglobal.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
 #include <kimageio.h>
-#include <kinputdialog.h>
 #include <kio/global.h>
 #include <klocalizedstring.h>
 #include <kmenubar.h>
@@ -78,7 +77,6 @@
 #include <ktoggleaction.h>
 #include <ktogglefullscreenaction.h>
 #include <ktoolbar.h>
-#include <ktoolinvocation.h>
 #include <kurllabel.h>
 #include <kmessagewidget.h>
 
@@ -910,7 +908,7 @@ void ImportUI::saveSettings()
 
 void ImportUI::slotProcessUrl(const QString& url)
 {
-    KToolInvocation::invokeBrowser(url);
+    QDesktopServices::openUrl(QUrl(url));
 }
 
 bool ImportUI::isBusy() const
@@ -1359,7 +1357,12 @@ void ImportUI::slotUploadItems(const KUrl::List& urls)
             QString msg(i18nc("@info", "Camera Folder <resource>%1</resource> already contains the item <resource>%2</resource>.<nl>"
                              "Please enter a new filename (without extension):",
                              cameraFolder, fi.fileName()));
-            uploadInfo.name = KInputDialog::getText(i18nc("@title:window", "File already exists"), msg, name, &ok, this) + ext;
+            uploadInfo.name = QInputDialog::getText(this, 
+                                                    i18nc("@title:window", "File already exists"),
+                                                    msg,
+                                                    QLineEdit::Normal,
+                                                    name,
+                                                    &ok) + ext;
 
             if (!ok)
             {
