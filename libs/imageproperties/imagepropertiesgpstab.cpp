@@ -42,13 +42,13 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include <QStandardItemModel>
 #include <QStandardItem>
 #include <QComboBox>
+#include <QDesktopServices>
 
 // KDE includes
 
 #include <klocale.h>
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
-#include <ktoolinvocation.h>
 #include <kiconloader.h>
 
 // Libkgeomap includes
@@ -325,7 +325,7 @@ void ImagePropertiesGPSTab::slotGPSDetails()
     }
 
     qCDebug(DIGIKAM_GENERAL_LOG) << url;
-    KToolInvocation::self()->invokeBrowser(url);
+    QDesktopServices::openUrl(QUrl(url));
 }
 
 void ImagePropertiesGPSTab::setCurrentURL(const KUrl& url)
