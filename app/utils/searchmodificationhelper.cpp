@@ -23,9 +23,13 @@
 
 #include "searchmodificationhelper.h"
 
+// Qt includes
+
+#include <QInputDialog>
+
 // KDE includes
 
-#include <kinputdialog.h>
+
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kstandardguiitem.h>
@@ -116,8 +120,12 @@ bool SearchModificationHelper::checkName(QString& name)
         QString label = i18n( "Search name already exists.\n"
                               "Please enter a new name:" );
         bool ok;
-        QString newTitle = KInputDialog::getText(i18n("Name exists"), label,
-                                                 name, &ok, d->dialogParent);
+        QString newTitle = QInputDialog::getText(d->dialogParent,
+                                                 i18n("Name exists"),
+                                                 label,
+                                                 QLineEdit::Normal,
+                                                 name,
+                                                 &ok);
 
         if (!ok)
         {
@@ -140,9 +148,12 @@ void SearchModificationHelper::slotSearchRename(SAlbum* searchAlbum)
 
     QString oldName(searchAlbum->title());
     bool    ok;
-    QString name = KInputDialog::getText(i18n("Rename Album (%1)", oldName),
+    QString name = QInputDialog::getText(d->dialogParent, 
+                                         i18n("Rename Album (%1)", oldName),
                                          i18n("Enter new album name:"),
-                                         oldName, &ok, d->dialogParent);
+                                         QLineEdit::Normal,
+                                         oldName,
+                                         &ok);
 
     if (!ok || name == oldName || name.isEmpty())
     {
