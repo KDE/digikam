@@ -32,7 +32,6 @@
 // KDE includes
 
 #include <kdialog.h>
-//#include <kmessagebox.h>
 #include <kstandardguiitem.h>
 
 // Local includes

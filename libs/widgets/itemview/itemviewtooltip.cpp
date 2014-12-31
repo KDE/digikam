@@ -137,7 +137,7 @@ bool ItemViewToolTip::eventFilter(QObject* o, QEvent* e)
     switch (e->type())
     {
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
         case QEvent::KeyPress:
         case QEvent::KeyRelease:
         {
@@ -155,7 +155,7 @@ bool ItemViewToolTip::eventFilter(QObject* o, QEvent* e)
 
             break;
         }
-#endif // Q_WS_MAC
+#endif // Q_OS_MAC
 
         case QEvent::Leave:
             hide(); // could add a 300ms timer here, like Qt
