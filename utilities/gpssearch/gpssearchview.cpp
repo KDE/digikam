@@ -40,13 +40,12 @@
 #include <QApplication>
 #include <QStyle>
 #include <QLineEdit>
+#include <QInputDialog>
 
 // KDE includes
 
-#include <kconfig.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
-#include <kinputdialog.h>
 
 // Local includes
 
@@ -536,7 +535,12 @@ bool GPSSearchView::checkName(QString& name)
         QString label = i18n("Search name already exists.\n"
                              "Please enter a new name:");
         bool ok;
-        QString newTitle = KInputDialog::getText(i18n("Name exists"), label, name, &ok, this);
+        QString newTitle = QInputDialog::getText(this, 
+                                                 i18n("Name exists"),
+                                                 label,
+                                                 QLineEdit::Normal,
+                                                 name,
+                                                 &ok);
 
         if (!ok)
         {
