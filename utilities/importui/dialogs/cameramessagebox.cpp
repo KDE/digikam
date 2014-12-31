@@ -39,6 +39,7 @@
 // KDE includes
 
 #include <kurl.h>
+#include <kmessagebox.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
