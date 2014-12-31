@@ -48,14 +48,11 @@
 
 #include <kdeversion.h>
 #include <kactioncategory.h>
-
 #include <kaboutdata.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
-
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
-#include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <kio/job.h>
@@ -64,7 +61,6 @@
 #include <kmenubar.h>
 #include <kmessagebox.h>
 #include <knotifyconfigwidget.h>
-#include <QKeySequence>
 #include <kshortcutsdialog.h>
 #include <kstandardaction.h>
 #include <kstandarddirs.h>
@@ -74,7 +70,6 @@
 #include <ktogglefullscreenaction.h>
 #include <ktoolbar.h>
 #include <ktoolbarpopupaction.h>
-#include <ktoolinvocation.h>
 #include <kwindowsystem.h>
 #include <kformat.h>
 #include <khelpclient.h>
