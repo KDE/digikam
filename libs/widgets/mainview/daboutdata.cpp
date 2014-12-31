@@ -29,10 +29,10 @@
 #include <QIcon>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QAction>
 
 // KDE includes
 
-#include <QAction>
 #include <kactioncollection.h>
 #include <kxmlguiwindow.h>
 
@@ -103,7 +103,7 @@ const QString DAboutData::digiKamSlogan()
 
 const QString DAboutData::copyright()
 {
-    return i18n("(c) 2002-2014, digiKam developers team");
+    return i18n("(c) 2002-2015, digiKam developers team");
 }
 
 const QUrl DAboutData::webProjectUrl()
