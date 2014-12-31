@@ -47,19 +47,16 @@
 #include <QIcon>
 #include <QStandardPaths>
 #include <QApplication>
+#include <QDesktopServices>
 
 // KDE includes
 
-#include <kcursor.h>
 #include <kfiledialog.h>
-#include <kglobal.h>
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kseparator.h>
 #include <kstandarddirs.h>
-
-#include <ktoolinvocation.h>
 #include <kurllabel.h>
 
 // Libkdcraw includes
@@ -571,7 +568,7 @@ void ResizeTool::slotRestorationToggled(bool b)
 
 void ResizeTool::processCImgUrl(const QString& url)
 {
-    KToolInvocation::invokeBrowser(url);
+    QDesktopServices::openUrl(QUrl(url));
 }
 
 void ResizeTool::slotLoadSettings()
