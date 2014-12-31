@@ -45,7 +45,6 @@
 // KDE includes
 
 #include <kiconloader.h>
-#include <kinputdialog.h>
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
 

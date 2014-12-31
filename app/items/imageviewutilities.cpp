@@ -32,7 +32,6 @@
 
 // KDE includes
 
-#include <kinputdialog.h>
 #include <kio/jobuidelegate.h>
 #include <kmimetype.h>
 #include <krun.h>
