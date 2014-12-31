@@ -6,7 +6,7 @@
  * Date        : 2005-03-27
  * Description : black frames parser
  *
- * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2006 by Unai Garro <ugarro at users dot sourceforge dot net>
  *
  * Part of the algorithm for finding the hot pixels was based on

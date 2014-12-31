@@ -7,7 +7,7 @@
  * Description : a combo box to list date.
  *               this widget come from libkdepim.
  *
- * Copyright (C) 2011-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2002      by Cornelius Schumacher <schumacher@kde.org>
  * Copyright (C) 2003-2004 by Reinhold Kainhofer <reinhold@kainhofer.com>
  * Copyright (C) 2004      by Tobias Koenig <tokoe@kde.org>

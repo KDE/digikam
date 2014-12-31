@@ -6,7 +6,7 @@
  * Date        : 2008-11-21
  * Description : Batch Queue Manager items list.
  *
- * Copyright (C) 2008-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C)      2014 by Mohamed Anwer <mohammed dot ahmed dot anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
