@@ -54,15 +54,14 @@
 #include <QWidget>
 #include <QMenu>
 #include <QKeySequence>
+#include <QDesktopServices>
 
 // KDE includes
 
 #include <kactioncollection.h>
 #include <kcalendarsystem.h>
-#include <kconfig.h>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
-#include <kglobal.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
 #include <kimageio.h>
@@ -78,7 +77,6 @@
 #include <ktoggleaction.h>
 #include <ktogglefullscreenaction.h>
 #include <ktoolbar.h>
-#include <ktoolinvocation.h>
 #include <kurllabel.h>
 #include <kmessagewidget.h>
 
@@ -910,7 +908,7 @@ void ImportUI::saveSettings()
 
 void ImportUI::slotProcessUrl(const QString& url)
 {
-    KToolInvocation::invokeBrowser(url);
+    QDesktopServices::openUrl(QUrl(url));
 }
 
 bool ImportUI::isBusy() const

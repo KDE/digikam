@@ -69,7 +69,6 @@
 #include <kfiledialog.h>
 #include <kfilefiltercombo.h>
 #include <kfileitemdelegate.h>
-//#include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <kimageio.h>
