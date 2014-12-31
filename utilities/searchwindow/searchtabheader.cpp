@@ -36,11 +36,11 @@
 #include <QApplication>
 #include <QStyle>
 #include <QLineEdit>
+#include <QInputDialog>
 
 // KDE includes
 
 #include <kiconloader.h>
-#include <kinputdialog.h>
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
 #include <kurllabel.h>
@@ -491,8 +491,12 @@ void SearchTabHeader::saveSearch()
         QString label    = i18n("Search name already exists.\n"
                                 "Please enter a new name:");
         bool ok;
-        QString newTitle = KInputDialog::getText(i18n("Name exists"), label,
-                                                 name, &ok, this);
+        QString newTitle = QInputDialog::getText(this,
+                                                 i18n("Name exists"),
+                                                 label,
+                                                 QLineEdit::Normal,
+                                                 name,
+                                                 &ok);
 
         if (!ok)
         {
