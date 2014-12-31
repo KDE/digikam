@@ -35,17 +35,15 @@
 #include <QStandardPaths>
 #include <QApplication>
 #include <QComboBox>
+#include <QDesktopServices>
 
 // KDE includes
 
 #include <kfiledialog.h>
-#include <kglobal.h>
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-
-#include <ktoolinvocation.h>
 #include <kurllabel.h>
 
 // Local includes
@@ -326,7 +324,7 @@ void RestorationTool::slotResetSettings()
 
 void RestorationTool::processCImgUrl(const QString& url)
 {
-    KToolInvocation::invokeBrowser(url);
+    QDesktopServices::openUrl(QUrl(url));
 }
 
 void RestorationTool::preparePreview()
