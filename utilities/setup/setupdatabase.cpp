@@ -51,7 +51,7 @@
 #include <klineedit.h>
 #include <kpagedialog.h>
 #include <kfiledialog.h>
-#include <kurl.h>
+#include <QUrl>
 #include <kmessagebox.h>
 #include <kurlrequester.h>
 #include <ktemporaryfile.h>

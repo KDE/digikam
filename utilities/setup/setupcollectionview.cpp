@@ -46,7 +46,7 @@
 #include <klocalizedstring.h>
 #include <kdialog.h>
 #include <kfiledialog.h>
-#include <kurl.h>
+#include <QUrl>
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kurlrequester.h>
@@ -535,10 +535,10 @@ void SetupCollectionModel::addCollection(int category)
         picturesPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
     }
 
-    QString path = KFileDialog::getExistingDirectory(KUrl(picturesPath), m_dialogParentWidget,
+    QString path = KFileDialog::getExistingDirectory(QUrl(picturesPath), m_dialogParentWidget,
                                                      i18n("Choose the folder containing your collection"));
 #else
-    QString path = KFileDialog::getExistingDirectory(KUrl("kfiledialog:///collectionlocation"), m_dialogParentWidget,
+    QString path = KFileDialog::getExistingDirectory(QUrl("kfiledialog:///collectionlocation"), m_dialogParentWidget,
                                                      i18n("Choose the folder containing your collection"));
 #endif
 

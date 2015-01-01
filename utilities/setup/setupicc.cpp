@@ -531,7 +531,7 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
     connect(d->infoWorkProfiles, SIGNAL(clicked()),
             this, SLOT(slotClickedWork()));
 
-    connect(d->defaultPathKU, SIGNAL(urlSelected(KUrl)),
+    connect(d->defaultPathKU, SIGNAL(urlSelected(QUrl)),
             this, SLOT(slotUrlChanged()));
 
     connect(d->defaultPathKU, SIGNAL(textChanged(QString)),
