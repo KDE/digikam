@@ -33,7 +33,7 @@
 #include <kconfiggroup.h>
 #include <kdiskfreespaceinfo.h>
 #include <kglobal.h>
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -595,10 +595,11 @@ QString VersionFileInfo::filePath() const
     return path + '/' + fileName;
 }
 
-KUrl VersionFileInfo::fileUrl() const
+QUrl VersionFileInfo::fileUrl() const
 {
-    KUrl url = QUrl::fromLocalFile(path);
-    url.addPath(fileName);
+    QUrl url = QUrl::fromLocalFile(path);
+    url = url.adjusted(QUrl::StripTrailingSlash);
+    url.setPath(url.path() + '/' + fileName);
     return url;
 }
 

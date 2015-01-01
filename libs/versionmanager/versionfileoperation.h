@@ -36,7 +36,7 @@
 #include "digikam_export.h"
 #include "dimagehistory.h"
 
-class KUrl;
+class QUrl;
 
 namespace Digikam
 {
@@ -59,7 +59,7 @@ public:
     bool    isNull() const;
 
     QString filePath() const;
-    KUrl    fileUrl() const;
+    QUrl    fileUrl() const;
 
     QString path;
     QString fileName;
