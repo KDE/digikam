@@ -80,7 +80,7 @@ public:
     ImageInfo info;
 };
 
-KipiImageInfo::KipiImageInfo(Interface* const interface, const KUrl& url)
+KipiImageInfo::KipiImageInfo(Interface* const interface, const QUrl &url)
     : ImageInfoShared(interface, url) , d(new Private)
 {
     d->info = ScanController::instance()->scannedInfo(url.toLocalFile());
@@ -98,7 +98,7 @@ KipiImageInfo::~KipiImageInfo()
 
 void KipiImageInfo::cloneData(ImageInfoShared* const other)
 {
-    KUrl otherUrl = other->url();
+    QUrl otherUrl = other->url();
 
     ImageInfo parentInf = ImageInfo::fromUrl(otherUrl);
     qCDebug(DIGIKAM_GENERAL_LOG) << "Clone DB Info from" << parentInf.fileUrl().path() << "to" << _url.path();

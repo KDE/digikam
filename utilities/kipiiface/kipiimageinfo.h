@@ -36,7 +36,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // LibKipi includes
 
@@ -56,7 +56,7 @@ class KipiImageInfo : public ImageInfoShared
 {
 public:
 
-    KipiImageInfo(Interface* const interface, const KUrl& url);
+    KipiImageInfo(Interface* const interface, const QUrl &url);
     ~KipiImageInfo();
 
     void cloneData(ImageInfoShared* const other);
