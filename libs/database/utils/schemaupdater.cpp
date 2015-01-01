@@ -34,7 +34,7 @@
 #include <kio/job.h>
 #include <kio/netaccess.h>
 #include <klocalizedstring.h>
-#include <kurl.h>
+#include <QUrl>
 #include <kconfiggroup.h>
 
 // Libkdcraw includes
@@ -1029,7 +1029,7 @@ bool SchemaUpdater::updateV4toV7()
 
     for (SearchInfo::List::const_iterator it = sList.constBegin(); it != sList.constEnd(); ++it)
     {
-        KUrl url((*it).query);
+        QUrl url((*it).query);
 
         ImageQueryBuilder builder;
         QString query = builder.convertFromUrlToXml(url);
@@ -1040,11 +1040,11 @@ bool SchemaUpdater::updateV4toV7()
             name = i18n("Last Search (0.9)");
         }
 
-        if (url.queryItem("type") == QString("datesearch"))
+        if (QUrlQuery(url).queryItemValue("type") == QString("datesearch"))
         {
             d->albumDB->updateSearch((*it).id, DatabaseSearch::TimeLineSearch, name, query);
         }
-        else if (url.queryItem("1.key") == "keyword")
+        else if (QUrlQuery(url).queryItemValue("1.key") == "keyword")
         {
             d->albumDB->updateSearch((*it).id, DatabaseSearch::KeywordSearch, name, query);
         }
@@ -1265,16 +1265,16 @@ void SchemaUpdater::preAlpha010Update1()
 
     for (SearchInfo::List::const_iterator it = sList.constBegin(); it != sList.constEnd(); ++it)
     {
-        KUrl url((*it).query);
+        QUrl url((*it).query);
 
         ImageQueryBuilder builder;
         QString query = builder.convertFromUrlToXml(url);
 
-        if (url.queryItem("type") == QString("datesearch"))
+        if (QUrlQuery(url).queryItemValue("type") == QString("datesearch"))
         {
             d->albumDB->updateSearch((*it).id, DatabaseSearch::TimeLineSearch, (*it).name, query);
         }
-        else if (url.queryItem("1.key") == "keyword")
+        else if (QUrlQuery(url).queryItemValue("1.key") == "keyword")
         {
             d->albumDB->updateSearch((*it).id, DatabaseSearch::KeywordSearch, (*it).name, query);
         }
