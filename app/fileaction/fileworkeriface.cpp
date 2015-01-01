@@ -61,7 +61,7 @@ void FileActionMngrFileWorker::writeOrientationToFiles(FileActionImageInfoList i
         else
         {
             emit imageDataChanged(path, true, true);
-            KUrl url = QUrl::fromLocalFile(path);
+            QUrl url = QUrl::fromLocalFile(path);
             ImageAttributesWatch::instance()->fileMetadataChanged(url);
         }
 

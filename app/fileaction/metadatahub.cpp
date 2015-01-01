@@ -1044,7 +1044,7 @@ void MetadataHub::writeToBaloo(const QString& filePath, const MetadataSettingsCo
     }
 
     newKeywords = cleanupTags(newKeywords);
-    KUrl url(filePath);
+    QUrl url(filePath);
     baloo->setAllData(url,&newKeywords,comment,rating);
 #else
     Q_UNUSED(filePath);
