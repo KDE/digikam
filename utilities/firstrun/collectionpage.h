@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -56,8 +56,8 @@ public:
 
 private Q_SLOTS:
 
-    void slotAlbumRootChanged(const KUrl& url);
-    void slotDbPathChanged(const KUrl& url);
+    void slotAlbumRootChanged(const QUrl &url);
+    void slotDbPathChanged(const QUrl &url);
 
 private:
 

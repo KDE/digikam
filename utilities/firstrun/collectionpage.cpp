@@ -134,11 +134,11 @@ CollectionPage::CollectionPage(KAssistantDialog* const dlg)
     setPageWidget(widget);
     setLeftBottomPix(KIconLoader::global()->loadIcon("server-database", KIconLoader::NoGroup, KIconLoader::SizeEnormous));
 
-    connect(d->rootAlbumPathRequester, SIGNAL(urlSelected(KUrl)),
-            this, SLOT(slotAlbumRootChanged(KUrl)));
+    connect(d->rootAlbumPathRequester, SIGNAL(urlSelected(QUrl)),
+            this, SLOT(slotAlbumRootChanged(QUrl)));
 
-    connect(d->dbPathRequester, SIGNAL(urlSelected(KUrl)),
-            this, SLOT(slotDbPathChanged(KUrl)));
+    connect(d->dbPathRequester, SIGNAL(urlSelected(QUrl)),
+            this, SLOT(slotDbPathChanged(QUrl)));
 }
 
 CollectionPage::~CollectionPage()
@@ -212,7 +212,7 @@ bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
 #endif
 
 /*
-    if (KUrl(rootAlbumFolder).equals(KUrl(QDir::homePath()), KUrl::CompareWithoutFragment))
+    if (QUrl(rootAlbumFolder).equals(QUrl(QDir::homePath()), QUrl::CompareWithoutFragment))
     {
         KMessageBox::sorry(this, i18n("digiKam will not use your home folder as the "
                                       "root album. Please select another location."));
@@ -289,7 +289,7 @@ bool CollectionPage::checkDatabase(QString& dbFolder)
 #endif
 
 /*
-    if (KUrl(dbFolder).equals(KUrl(QDir::homePath()), KUrl::CompareWithoutFragment))
+    if (QUrl(dbFolder).equals(QUrl(QDir::homePath()), QUrl::CompareWithoutFragment))
     {
         KMessageBox::sorry(this, i18n("digiKam cannot use your home folder as "
                                       "database file path."));
@@ -347,7 +347,7 @@ bool CollectionPage::checkDatabase(QString& dbFolder)
     return true;
 }
 
-void CollectionPage::slotAlbumRootChanged(const KUrl& url)
+void CollectionPage::slotAlbumRootChanged(const QUrl &url)
 {
     if (!d->dbPathEdited)
     {
@@ -355,7 +355,7 @@ void CollectionPage::slotAlbumRootChanged(const KUrl& url)
     }
 }
 
-void CollectionPage::slotDbPathChanged(const KUrl&)
+void CollectionPage::slotDbPathChanged(const QUrl&)
 {
     d->dbPathEdited = true;
 }
