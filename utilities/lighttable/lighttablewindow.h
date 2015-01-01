@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 #include <ktoggleaction.h>
 
 // Local includes

@@ -754,7 +754,7 @@ void LightTableWindow::slotRefreshStatusBar()
 
 void LightTableWindow::slotFileChanged(const QString& path)
 {
-    KUrl url = QUrl::fromLocalFile(path);
+    QUrl url = QUrl::fromLocalFile(path);
     // NOTE: Thumbbar handle change through ImageCategorizedView
 
     if (!d->previewView->leftImageInfo().isNull())
@@ -1101,7 +1101,7 @@ void LightTableWindow::deleteItem(const ImageInfo& info, bool permanently)
 
     DeleteDialog dialog(this);
 
-    KUrl::List urlList;
+    QList<QUrl> urlList;
     urlList.append(u);
 
     if (!dialog.confirmDeleteList(urlList, DeleteDialogMode::Files, preselectDeletePermanently ?
@@ -1453,17 +1453,17 @@ void LightTableWindow::slideShow(SlideShowSettings& settings)
             slide->setCurrentItem(d->thumbView->currentInfo().fileUrl());
         }
 
-        connect(slide, SIGNAL(signalRatingChanged(KUrl,int)),
-                d->thumbView, SLOT(slotRatingChanged(KUrl,int)));
+        connect(slide, SIGNAL(signalRatingChanged(QUrl,int)),
+                d->thumbView, SLOT(slotRatingChanged(QUrl,int)));
 
-        connect(slide, SIGNAL(signalColorLabelChanged(KUrl,int)),
-                d->thumbView, SLOT(slotColorLabelChanged(KUrl,int)));
+        connect(slide, SIGNAL(signalColorLabelChanged(QUrl,int)),
+                d->thumbView, SLOT(slotColorLabelChanged(QUrl,int)));
 
-        connect(slide, SIGNAL(signalPickLabelChanged(KUrl,int)),
-                d->thumbView, SLOT(slotPickLabelChanged(KUrl,int)));
+        connect(slide, SIGNAL(signalPickLabelChanged(QUrl,int)),
+                d->thumbView, SLOT(slotPickLabelChanged(QUrl,int)));
 
-        connect(slide, SIGNAL(signalToggleTag(KUrl,int)),
-                d->thumbView, SLOT(slotToggleTag(KUrl,int)));
+        connect(slide, SIGNAL(signalToggleTag(QUrl,int)),
+                d->thumbView, SLOT(slotToggleTag(QUrl,int)));
 
         slide->show();
     }
@@ -1694,7 +1694,7 @@ void LightTableWindow::slotFileWithDefaultApplication()
 {
     if (!d->thumbView->currentInfo().isNull())
     {
-        FileOperation::openFilesWithDefaultApplication(KUrl::List() << d->thumbView->currentInfo().fileUrl(), this);
+        FileOperation::openFilesWithDefaultApplication(QList<QUrl>() << d->thumbView->currentInfo().fileUrl(), this);
     }
 }
 
