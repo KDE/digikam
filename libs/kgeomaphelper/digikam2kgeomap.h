@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // libkgeomap includes
 
@@ -89,7 +89,7 @@ public:
     KGeoMap::GeoCoordinates     coordinates;
     int                         rating;
     QDateTime                   dateTime;
-    KUrl                        url;
+    QUrl                        url;
 
     typedef QList<GPSImageInfo> List;
 };
