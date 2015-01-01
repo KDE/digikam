@@ -7,7 +7,7 @@
  * Description : Structures to use in AlbumDB
  *
  * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2005 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,10 +33,6 @@
 #include <QList>
 #include <QDateTime>
 
-// KDE includes
-
-#include <kurl.h>
-
 // Local includes
 
 #include "databaseconstants.h"
@@ -54,6 +50,8 @@ class AlbumRootInfo
 public:
 
     AlbumRootInfo() : id(0), type(AlbumRoot::UndefinedType), status(0) {};
+
+public:
 
     int             id;
     QString         label;
@@ -83,14 +81,6 @@ public:
         return id == 0;
     }
 
-    int     id;
-    int     albumRootId;
-    QString relativePath;
-    QString caption;
-    QString category;
-    QDate   date;
-    qlonglong iconId;
-
     /**
      * needed for sorting
      */
@@ -99,6 +89,17 @@ public:
         // include album root id?
         return relativePath < info.relativePath;
     }
+
+public:
+
+    int       id;
+    int       albumRootId;
+    QString   relativePath;
+    QString   caption;
+    QString   category;
+    QDate     date;
+    qlonglong iconId;
+
 };
 
 // --------------------------------------------------------------------------
@@ -112,7 +113,12 @@ class TagInfo
 {
 public:
 
-    TagInfo() : id(0), pid(0), iconId(0) {};
+    TagInfo()
+      : id(0),
+        pid(0),
+        iconId(0)
+    {
+    };
 
     typedef QList<TagInfo> List;
 
@@ -121,16 +127,18 @@ public:
         return id == 0;
     }
 
+    bool operator<(const TagInfo& info) const
+    {
+        return name < info.name;
+    }
+
+public:
+
     int     id;
     int     pid;
     QString name;
     QString icon;
     qlonglong iconId;
-
-    bool operator<(const TagInfo& info) const
-    {
-        return name < info.name;
-    }
 };
 
 // --------------------------------------------------------------------------
@@ -153,11 +161,6 @@ public:
         return id == 0;
     }
 
-    int                  id;
-    QString              name;
-    DatabaseSearch::Type type;
-    QString              query;
-
     /**
      * needed for sorting
      */
@@ -165,6 +168,13 @@ public:
     {
         return id < info.id;
     }
+
+public:
+
+    int                  id;
+    QString              name;
+    DatabaseSearch::Type type;
+    QString              query;
 };
 
 // --------------------------------------------------------------------------
@@ -179,6 +189,8 @@ public:
     {
         return id == 0;
     }
+
+public:
 
     int     id;
     QString relativePath;
@@ -198,6 +210,8 @@ public:
         return id == 0;
     }
 
+public:
+
     int     id;
     int     pid;
     QString name;
@@ -215,6 +229,8 @@ public:
     {
         return id == 0;
     }
+
+public:
 
     qlonglong id;
     QString   itemName;
@@ -239,6 +255,8 @@ public:
         return id == 0;
     }
 
+public:
+
     qlonglong              id;
     int                    albumID;
     QString                itemName;
@@ -262,6 +280,8 @@ public:
         return id == -1;
     }
 
+public:
+
     int                   id;
     qlonglong             imageId;
     DatabaseComment::Type type;
@@ -284,6 +304,8 @@ public:
         return id == -1;
     }
 
+public:
+
     qlonglong id;
     QString   property;
     QString   value;
@@ -303,6 +325,8 @@ public:
         return imageId == 0;
     }
 
+public:
+
     qlonglong imageId;
     QString   uuid;
     QString   history;
@@ -315,6 +339,8 @@ class ImageRelation
 public:
 
     ImageRelation() : subjectId(0), objectId(0), type(DatabaseRelation::UndefinedType) {}
+
+public:
 
     qlonglong              subjectId;
     qlonglong              objectId;
@@ -334,7 +360,9 @@ public:
         return tagId == -1;
     }
 
-    int tagId;
+public:
+
+    int     tagId;
     QString property;
     QString value;
 };
@@ -352,10 +380,12 @@ public:
         return imageId == -1;
     }
 
+public:
+
     qlonglong imageId;
-    int tagId;
-    QString property;
-    QString value;
+    int       tagId;
+    QString   property;
+    QString   value;
 };
 
 }  // namespace Digikam

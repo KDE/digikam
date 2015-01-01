@@ -37,10 +37,6 @@
 #include <QtCore/QMap>
 #include <QtCore/QUuid>
 
-// KDE includes
-
-#include <kurl.h>
-
 // Local includes
 
 #include "albuminfo.h"
@@ -1045,7 +1041,7 @@ public:
      * Return item URLs.
      */
      QStringList getItemsURLsWithTag(int tagId);
-    
+
     // ----------- Items and their tags -----------
 
     /**
