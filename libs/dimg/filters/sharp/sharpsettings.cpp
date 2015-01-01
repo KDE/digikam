@@ -486,7 +486,7 @@ void SharpSettings::writeSettings(KConfigGroup& group)
 
 void SharpSettings::loadSettings()
 {
-    QUrl loadRestorationFile = KFileDialog::getOpenUrl(QUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+    QUrl loadRestorationFile = KFileDialog::getOpenUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                        QString("*"), qApp->activeWindow(),
                                                        QString(i18n("Photograph Refocus Settings File to Load")));
 
@@ -530,7 +530,7 @@ void SharpSettings::loadSettings()
 
 void SharpSettings::saveAsSettings()
 {
-    QUrl saveRestorationFile = KFileDialog::getSaveUrl(QUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+    QUrl saveRestorationFile = KFileDialog::getSaveUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                        QString("*"), qApp->activeWindow(),
                                                        QString(i18n("Photograph Refocus Settings File to Save")));
 

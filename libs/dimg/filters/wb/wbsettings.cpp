@@ -578,7 +578,7 @@ void WBSettings::loadSettings()
 
 void WBSettings::saveAsSettings()
 {
-    QUrl saveWhiteBalanceFile = KFileDialog::getSaveUrl(QUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+    QUrl saveWhiteBalanceFile = KFileDialog::getSaveUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                         QString("*"), qApp->activeWindow(),
                                                         QString(i18n("White Color Balance Settings File to Save")));
 

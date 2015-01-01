@@ -252,7 +252,7 @@ void CurvesSettings::loadSettings()
 {
     QUrl loadCurvesFile;
 
-    loadCurvesFile = KFileDialog::getOpenUrl(QUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+    loadCurvesFile = KFileDialog::getOpenUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                              QString("*"), qApp->activeWindow(),
                                              QString(i18n("Select Gimp Curves File to Load")));
 
@@ -273,7 +273,7 @@ void CurvesSettings::saveAsSettings()
 {
     QUrl saveCurvesFile;
 
-    saveCurvesFile = KFileDialog::getSaveUrl(QUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+    saveCurvesFile = KFileDialog::getSaveUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                              QString("*"), qApp->activeWindow(),
                                              QString(i18n("Gimp Curves File to Save")));
 

@@ -657,7 +657,7 @@ void LocalContrastSettings::writeSettings(KConfigGroup& group)
 
 void LocalContrastSettings::loadSettings()
 {
-    QUrl loadFile = KFileDialog::getOpenUrl(QUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+    QUrl loadFile = KFileDialog::getOpenUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                             QString("*"), qApp->activeWindow(),
                                             i18n("Photograph Local Contrast Settings File to Load"));
 
@@ -711,7 +711,7 @@ void LocalContrastSettings::loadSettings()
 
 void LocalContrastSettings::saveAsSettings()
 {
-    QUrl saveFile = KFileDialog::getSaveUrl(QUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+    QUrl saveFile = KFileDialog::getSaveUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                             QString("*"), qApp->activeWindow(),
                                             i18n("Photograph Local Contrast Settings File to Save"));
 
