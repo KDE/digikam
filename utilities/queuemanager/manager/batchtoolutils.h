@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -98,7 +98,7 @@ public:
 public:
 
     QString      m_destFileName;
-    KUrl         m_itemUrl;
+    QUrl         m_itemUrl;
     BatchSetList m_toolsList;
 };
 

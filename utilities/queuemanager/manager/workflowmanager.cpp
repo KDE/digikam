@@ -387,7 +387,7 @@ bool WorkflowManager::load(QStringList& failed)
                 }
                 else if (name2 == "workingurl")
                 {
-                    q.qSettings.workingUrl = KUrl(val2);
+                    q.qSettings.workingUrl = QUrl(val2);
                 }
                 else if (name2 == "conflictrule")
                 {

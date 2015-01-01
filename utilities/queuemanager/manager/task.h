@@ -27,7 +27,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Libkdcraw includes
 
@@ -71,7 +71,7 @@ protected:
 
 private:
 
-    void emitActionData(ActionData::ActionStatus st, const QString& mess=QString(), const KUrl& dest=KUrl());
+    void emitActionData(ActionData::ActionStatus st, const QString& mess=QString(), const QUrl &dest=QUrl());
 
 private:
 

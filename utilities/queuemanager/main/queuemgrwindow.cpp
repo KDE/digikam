@@ -864,7 +864,7 @@ bool QueueMgrWindow::checkTargetAlbum(int queueId)
     if (!queue->settings().useOrgAlbum)
     {
         QString queueName              = d->queuePool->queueTitle(queueId);
-        KUrl    processedItemsAlbumUrl = queue->settings().workingUrl;
+        QUrl    processedItemsAlbumUrl = queue->settings().workingUrl;
         qCDebug(DIGIKAM_GENERAL_LOG) << "Target album for queue " << queueName << " is: " << processedItemsAlbumUrl.toLocalFile();
 
         if (processedItemsAlbumUrl.isEmpty())

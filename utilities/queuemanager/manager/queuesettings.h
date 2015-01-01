@@ -26,7 +26,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Libkdcraw includes
 
@@ -86,7 +86,7 @@ public:
 
     QString             renamingParser;
 
-    KUrl                workingUrl;
+    QUrl                workingUrl;
 
     ConflictRule        conflictRule;
     RenamingRule        renamingRule;

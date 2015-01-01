@@ -106,7 +106,7 @@ void Task::slotCancel()
 
 }
 
-void Task::emitActionData(ActionData::ActionStatus st, const QString& mess, const KUrl& dest)
+void Task::emitActionData(ActionData::ActionStatus st, const QString& mess, const QUrl &dest)
 {
     ActionData ad;
     ad.fileUrl = d->tools.m_itemUrl;
@@ -127,14 +127,15 @@ void Task::run()
 
     // Loop with all batch tools operations to apply on item.
 
-    bool       success = false;
-    int        index   = 0;
-    KUrl       outUrl  = d->tools.m_itemUrl;
-    KUrl       workUrl = !d->settings.useOrgAlbum ? d->settings.workingUrl : KUrl(d->tools.m_itemUrl.directory(KUrl::AppendTrailingSlash));
-    KUrl       inUrl;
-    KUrl::List tmp2del;
-    DImg       tmpImage;
-    QString    errMsg;
+    bool        success = false;
+    int         index   = 0;
+    QUrl        outUrl  = d->tools.m_itemUrl;
+    QUrl        workUrl = !d->settings.useOrgAlbum ? d->settings.workingUrl 
+                                                   : d->tools.m_itemUrl.adjusted(QUrl::RemoveFilename);
+    QUrl        inUrl;
+    QList<QUrl> tmp2del;
+    DImg        tmpImage;
+    QString     errMsg;
 
     foreach (const BatchToolSet& set, d->tools.m_toolsList)
     {
@@ -186,15 +187,16 @@ void Task::run()
     // We don't remove last output tmp url.
     tmp2del.removeAll(outUrl);
 
-    foreach (const KUrl& url, tmp2del)
+    foreach (const QUrl &url, tmp2del)
     {
         unlink(QFile::encodeName(url.toLocalFile()).constData());
     }
 
     // Move processed temp file to target
 
-    KUrl dest = workUrl;
-    dest.setFileName(d->tools.m_destFileName);
+    QUrl dest = workUrl;
+    dest = dest.adjusted(QUrl::RemoveFilename);
+    dest.setPath(dest.path() + d->tools.m_destFileName);
     QString renameMess;
     QFileInfo fi(dest.toLocalFile());
 
@@ -216,7 +218,8 @@ void Task::run()
                 else
                 {
                     i++;
-                    dest.setFileName(fi.completeBaseName() + QString("_%1.").arg(i) + fi.completeSuffix());
+                    dest = dest.adjusted(QUrl::RemoveFilename);
+                    dest.setPath(dest.path() + fi.completeBaseName() + QString("_%1.").arg(i) + fi.completeSuffix());
                     fileFound = true;
                 }
             }

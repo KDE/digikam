@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 namespace Digikam
 {
@@ -64,8 +64,8 @@ public:
 
     QString      message;
 
-    KUrl         fileUrl;
-    KUrl         destUrl;
+    QUrl         fileUrl;
+    QUrl         destUrl;
 };
 
 }  // namespace Digikam

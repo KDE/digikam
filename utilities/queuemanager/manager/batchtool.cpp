@@ -85,9 +85,9 @@ public:
     QString                       toolDescription;    // User friendly tool description.
     QString                       toolIconName;
 
-    KUrl                          inputUrl;
-    KUrl                          outputUrl;
-    KUrl                          workingUrl;
+    QUrl                          inputUrl;
+    QUrl                          outputUrl;
+    QUrl                          workingUrl;
 
     DImg                          image;
 
@@ -207,22 +207,22 @@ void BatchTool::setSettings(const BatchToolSettings& settings)
     emit signalAssignSettings2Widget();
 }
 
-void BatchTool::setInputUrl(const KUrl& inputUrl)
+void BatchTool::setInputUrl(const QUrl &inputUrl)
 {
     d->inputUrl = inputUrl;
 }
 
-KUrl BatchTool::inputUrl() const
+QUrl BatchTool::inputUrl() const
 {
     return d->inputUrl;
 }
 
-void BatchTool::setOutputUrl(const KUrl& outputUrl)
+void BatchTool::setOutputUrl(const QUrl &outputUrl)
 {
     d->outputUrl = outputUrl;
 }
 
-KUrl BatchTool::outputUrl() const
+QUrl BatchTool::outputUrl() const
 {
     return d->outputUrl;
 }
@@ -287,12 +287,12 @@ RawDecodingSettings BatchTool::rawDecodingSettings() const
     return d->rawDecodingSettings;
 }
 
-void BatchTool::setWorkingUrl(const KUrl& workingUrl)
+void BatchTool::setWorkingUrl(const QUrl &workingUrl)
 {
     d->workingUrl = workingUrl;
 }
 
-KUrl BatchTool::workingUrl() const
+QUrl BatchTool::workingUrl() const
 {
     return d->workingUrl;
 }
@@ -338,12 +338,12 @@ void BatchTool::setOutputUrlFromInputUrl()
     temp.open();
     qCDebug(DIGIKAM_GENERAL_LOG) << "path: " << temp.fileName();
 
-    KUrl url;
+    QUrl url;
     url.setPath(path);
     setOutputUrl(QUrl::fromLocalFile(temp.fileName()));
 }
 
-bool BatchTool::isRawFile(const KUrl& url) const
+bool BatchTool::isRawFile(const QUrl &url) const
 {
     QString   rawFilesExt(KDcraw::rawFiles());
     QFileInfo fileInfo(url.toLocalFile());

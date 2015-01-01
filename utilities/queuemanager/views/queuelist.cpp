@@ -42,7 +42,7 @@
 #include <kactioncollection.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -360,8 +360,8 @@ Qt::DropActions QueueListView::supportedDropActions() const
 
 QMimeData* QueueListView::mimeData(const QList<QTreeWidgetItem*> items) const
 {
-    KUrl::List urls;
-    KUrl::List kioURLs;
+    QList<QUrl> urls;
+    QList<QUrl> kioURLs;
     QList<int> albumIDs;
     QList<qlonglong> imageIDs;
 
@@ -740,7 +740,7 @@ void QueueListView::slotThumbnailLoaded(const LoadingDescription& desc, const QP
     {
         QueueListViewItem* const item = dynamic_cast<QueueListViewItem*>(*it);
 
-        if (item && item->info().fileUrl() == KUrl(desc.filePath))
+        if (item && item->info().fileUrl() == QUrl(desc.filePath))
         {
             if (pix.isNull())
             {
@@ -891,7 +891,7 @@ QueueListViewItem* QueueListView::findItemById(qlonglong id)
     return 0;
 }
 
-QueueListViewItem* QueueListView::findItemByUrl(const KUrl& url)
+QueueListViewItem* QueueListView::findItemByUrl(const QUrl &url)
 {
     QTreeWidgetItemIterator it(this);
 
@@ -1064,7 +1064,7 @@ void QueueListView::updateDestFileNames()
                 QFileInfo fi(info.filePath());
 
                 ParseSettings ps;
-                ps.fileUrl = KUrl(fi.absoluteFilePath());
+                ps.fileUrl = QUrl(fi.absoluteFilePath());
                 files << ps;
             }
 
@@ -1158,7 +1158,7 @@ void QueueListView::slotCollectionImageChange(const CollectionImageChangeset& ch
     }
 }
 
-void QueueListView::reloadThumbs(const KUrl& url)
+void QueueListView::reloadThumbs(const QUrl &url)
 {
     d->thumbLoadThread->find(ThumbnailIdentifier(url.toLocalFile()));
 }
