@@ -45,7 +45,7 @@ public:
     explicit ExifWidget(QWidget* const parent, const char* name=0);
     ~ExifWidget();
 
-    bool loadFromURL(const KUrl& url);
+    bool loadFromURL(const QUrl &url);
 
     QString getTagDescription(const QString& key);
     QString getTagTitle(const QString& key);

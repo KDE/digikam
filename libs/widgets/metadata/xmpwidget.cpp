@@ -86,7 +86,7 @@ QString XmpWidget::getMetadataTitle()
     return i18n("XMP Schema");
 }
 
-bool XmpWidget::loadFromURL(const KUrl& url)
+bool XmpWidget::loadFromURL(const QUrl &url)
 {
     setFileName(url.fileName());
 
@@ -175,7 +175,7 @@ QString XmpWidget::getTagDescription(const QString& key)
 
 void XmpWidget::slotSaveMetadataToFile()
 {
-    KUrl url = saveMetadataToFile(i18n("XMP File to Save"),
+    QUrl url = saveMetadataToFile(i18n("XMP File to Save"),
                                   QString("*.xmp|"+i18n("XMP text Files (*.xmp)")));
     storeMetadataToFile(url, getMetadata().getXmp());
 }

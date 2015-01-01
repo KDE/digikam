@@ -288,7 +288,7 @@ bool CIETongueWidget::setProfileData(const QByteArray& profileData)
     return (d->profileDataAvailable);
 }
 
-bool CIETongueWidget::setProfileFromFile(const KUrl& file)
+bool CIETongueWidget::setProfileFromFile(const QUrl &file)
 {
     if (!file.isEmpty() && file.isValid())
     {

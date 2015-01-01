@@ -244,7 +244,7 @@ QString ICCProfileWidget::getMetadataTitle()
     return i18n("ICC Color Profile Information");
 }
 
-bool ICCProfileWidget::loadFromURL(const KUrl& url)
+bool ICCProfileWidget::loadFromURL(const QUrl &url)
 {
     setFileName(url.toLocalFile());
 
@@ -493,7 +493,7 @@ QString ICCProfileWidget::getTagTitle(const QString& key)
 
 void ICCProfileWidget::slotSaveMetadataToFile()
 {
-    KUrl url = saveMetadataToFile(i18n("ICC color profile File to Save"),
+    QUrl url = saveMetadataToFile(i18n("ICC color profile File to Save"),
                                   QString("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)")));
     storeMetadataToFile(url, d->profile.data());
 }

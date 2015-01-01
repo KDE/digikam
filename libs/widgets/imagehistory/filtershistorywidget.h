@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -85,7 +85,7 @@ public:
     explicit FiltersHistoryWidget(QWidget* const parent);
     ~FiltersHistoryWidget();
 
-    void setCurrentURL(const KUrl& url = KUrl());
+    void setCurrentURL(const QUrl &url = QUrl());
 
 public Q_SLOTS:
 

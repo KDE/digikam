@@ -35,7 +35,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 #include "digikam_debug.h"
 
 // Local includes
@@ -61,7 +61,7 @@ ICCPreviewWidget::~ICCPreviewWidget()
 {
 }
 
-void ICCPreviewWidget::showPreview( const KUrl& url)
+void ICCPreviewWidget::showPreview( const QUrl &url)
 {
     clearPreview();
     QFileInfo fInfo(url.toLocalFile());
@@ -79,7 +79,7 @@ void ICCPreviewWidget::showPreview( const KUrl& url)
 
 void ICCPreviewWidget::clearPreview()
 {
-    m_iccProfileWidget->loadFromURL(KUrl());
+    m_iccProfileWidget->loadFromURL(QUrl());
 }
 
 } // namespace Digikam

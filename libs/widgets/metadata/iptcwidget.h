@@ -41,7 +41,7 @@ public:
     explicit IptcWidget(QWidget* const parent, const char* name=0);
     ~IptcWidget();
 
-    bool loadFromURL(const KUrl& url);
+    bool loadFromURL(const QUrl &url);
 
     QString getTagDescription(const QString& key);
     QString getTagTitle(const QString& key);

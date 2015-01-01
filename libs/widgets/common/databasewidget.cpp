@@ -199,12 +199,12 @@ QString DatabaseWidget::currentDatabaseType() const
     return databaseType->itemData(databaseType->currentIndex()).toString();
 }
 
-void DatabaseWidget::slotChangeDatabasePath(const KUrl& result)
+void DatabaseWidget::slotChangeDatabasePath(const QUrl &result)
 {
 #ifdef _WIN32
     // Work around bug #189168
     KTemporaryFile temp;
-    temp.setPrefix(result.toLocalFile(KUrl::AddTrailingSlash));
+    temp.setPrefix(result.toLocalFile(QUrl::AddTrailingSlash));
     temp.open();
 
     if (!result.isEmpty() && !temp.open())
@@ -258,8 +258,8 @@ void DatabaseWidget::setDatabaseInputFields(const QString& currentIndexStr)
         databasePathEdit->setVisible(true);
         d->expertSettings->setVisible(false);
 
-        connect(databasePathEdit, SIGNAL(urlSelected(KUrl)),
-                this, SLOT(slotChangeDatabasePath(KUrl)));
+        connect(databasePathEdit, SIGNAL(urlSelected(QUrl)),
+                this, SLOT(slotChangeDatabasePath(QUrl)));
 
         connect(databasePathEdit, SIGNAL(textChanged(QString)),
                 this, SLOT(slotDatabasePathEditedDelayed()));
@@ -270,8 +270,8 @@ void DatabaseWidget::setDatabaseInputFields(const QString& currentIndexStr)
         databasePathEdit->setVisible(false);
         d->expertSettings->setVisible(true);
         
-        disconnect(databasePathEdit, SIGNAL(urlSelected(KUrl)),
-                   this, SLOT(slotChangeDatabasePath(KUrl)));
+        disconnect(databasePathEdit, SIGNAL(urlSelected(QUrl)),
+                   this, SLOT(slotChangeDatabasePath(QUrl)));
 
         disconnect(databasePathEdit, SIGNAL(textChanged(QString)),
                    this, SLOT(slotDatabasePathEditedDelayed()));

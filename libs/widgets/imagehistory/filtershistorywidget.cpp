@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 #include <klocalizedstring.h>
 #include "digikam_debug.h"
 
@@ -80,7 +80,7 @@ FiltersHistoryWidget::FiltersHistoryWidget(QWidget* const parent)
     d->layout      = new QGridLayout(this);
     d->view        = new QTreeView(this);
     d->delegate    = new ImageFiltersHistoryItemDelegate(this);
-    d->model       = new ImageFiltersHistoryModel(0, KUrl());
+    d->model       = new ImageFiltersHistoryModel(0, QUrl());
     d->headerLabel = new QLabel(this);
 
     d->headerLabel->setText(i18n("Used filters"));
@@ -105,7 +105,7 @@ FiltersHistoryWidget::~FiltersHistoryWidget()
     delete d;
 }
 
-void FiltersHistoryWidget::setCurrentURL(const KUrl& url)
+void FiltersHistoryWidget::setCurrentURL(const QUrl &url)
 {
     d->model->setUrl(url);
     d->view->setModel(d->model);

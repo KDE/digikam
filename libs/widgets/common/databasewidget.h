@@ -36,7 +36,7 @@
 // KDE includes
 
 
-#include <kurl.h>
+#include <QUrl>
 #include <kurlrequester.h>
 
 // Local includes
@@ -94,7 +94,7 @@ private Q_SLOTS:
 
     void slotHandleInternalServerCheckbox(int enableFields);
     void slotHandleDBTypeIndexChanged(int index);
-    void slotChangeDatabasePath(const KUrl&);
+    void slotChangeDatabasePath(const QUrl&);
     void slotDatabasePathEditedDelayed();
     void slotDatabasePathEdited();
 

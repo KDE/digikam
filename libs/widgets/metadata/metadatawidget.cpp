@@ -281,7 +281,7 @@ const DMetadata& MetadataWidget::getMetadata()
     return d->metadata;
 }
 
-bool MetadataWidget::storeMetadataToFile(const KUrl& url, const QByteArray& metaData)
+bool MetadataWidget::storeMetadataToFile(const QUrl &url, const QByteArray& metaData)
 {
     if ( url.isEmpty() )
     {
@@ -433,9 +433,9 @@ void MetadataWidget::slotPrintMetadata()
     delete dialog;
 }
 
-KUrl MetadataWidget::saveMetadataToFile(const QString& caption, const QString& fileFilter)
+QUrl MetadataWidget::saveMetadataToFile(const QString& caption, const QString& fileFilter)
 {
-    QPointer<KFileDialog> fileSaveDialog = new KFileDialog(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)), QString(), this);
+    QPointer<KFileDialog> fileSaveDialog = new KFileDialog(QUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)), QString(), this);
     fileSaveDialog->setOperationMode(KFileDialog::Saving);
     fileSaveDialog->setMode(KFile::File);
     fileSaveDialog->setSelection(d->fileName);
@@ -445,13 +445,13 @@ KUrl MetadataWidget::saveMetadataToFile(const QString& caption, const QString& f
     // Check for cancel.
     if ( fileSaveDialog->exec() == KFileDialog::Accepted )
     {
-        KUrl selUrl = fileSaveDialog->selectedUrl();
+        QUrl selUrl = fileSaveDialog->selectedUrl();
         delete fileSaveDialog;
         return selUrl;
     }
 
     delete fileSaveDialog;
-    return KUrl();
+    return QUrl();
 }
 
 void MetadataWidget::setMode(int mode)

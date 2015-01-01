@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // lcms includes
 
@@ -55,7 +55,7 @@ public:
     ~CIETongueWidget();
 
     bool setProfileData(const QByteArray& profileData=QByteArray());
-    bool setProfileFromFile(const KUrl& file=KUrl());
+    bool setProfileFromFile(const QUrl &file=QUrl());
 
     void loadingStarted();
     void loadingFailed();

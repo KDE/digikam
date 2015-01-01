@@ -46,7 +46,7 @@ public:
     explicit ICCProfileWidget(QWidget* const parent, int w=256, int h=256);
     ~ICCProfileWidget();
 
-    bool    loadFromURL(const KUrl& url);
+    bool    loadFromURL(const QUrl &url);
     bool    loadFromProfileData(const QString& fileName, const QByteArray& data);
     bool    loadProfile(const QString& fileName, const IccProfile& data);
 

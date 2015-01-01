@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 #include "digikam_debug.h"
 #include <kiconloader.h>
 
@@ -55,12 +55,12 @@ public:
 
     ImageFiltersHistoryTreeItem* rootItem;
     QList<FilterAction>          filterStack;
-    KUrl                         lastUrl;
+    QUrl                         lastUrl;
 
     int                          disabledEntries;
 };
 
-ImageFiltersHistoryModel::ImageFiltersHistoryModel(QObject* const parent, const KUrl& url)
+ImageFiltersHistoryModel::ImageFiltersHistoryModel(QObject* const parent, const QUrl &url)
     : QAbstractItemModel(parent), d(new Private)
 {
     if (!url.isEmpty())
@@ -87,7 +87,7 @@ ImageFiltersHistoryModel::~ImageFiltersHistoryModel()
     delete d;
 }
 
-void ImageFiltersHistoryModel::setUrl(const KUrl& url)
+void ImageFiltersHistoryModel::setUrl(const QUrl &url)
 {
     if (!url.isEmpty())
     {

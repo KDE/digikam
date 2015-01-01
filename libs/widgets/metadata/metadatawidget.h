@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -76,7 +76,7 @@ public:
     virtual QString getTagDescription(const QString& key);
 
     virtual bool loadFromData(const QString& fileName, const DMetadata& data=DMetadata());
-    virtual bool loadFromURL(const KUrl& url)=0;
+    virtual bool loadFromURL(const QUrl &url)=0;
 
 Q_SIGNALS:
 
@@ -107,8 +107,8 @@ protected:
     void   setIfdList(const DMetadata::MetaDataMap& ifds, const QStringList& keysFilter,
                       const QStringList& tagsFilter);
 
-    KUrl   saveMetadataToFile(const QString& caption, const QString& fileFilter);
-    bool   storeMetadataToFile(const KUrl& url, const QByteArray& metaData);
+    QUrl   saveMetadataToFile(const QString& caption, const QString& fileFilter);
+    bool   storeMetadataToFile(const QUrl &url, const QByteArray& metaData);
 
     virtual void buildView();
     virtual bool decodeMetadata()=0;

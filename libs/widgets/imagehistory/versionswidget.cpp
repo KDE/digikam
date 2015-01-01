@@ -38,7 +38,7 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 #include <kiconloader.h>
-#include <kurl.h>
+#include <QUrl>
 #include "digikam_debug.h"
 
 // Local includes

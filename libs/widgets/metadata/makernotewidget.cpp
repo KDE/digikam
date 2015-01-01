@@ -70,7 +70,7 @@ QString MakerNoteWidget::getMetadataTitle()
     return i18n("MakerNote EXIF Tags");
 }
 
-bool MakerNoteWidget::loadFromURL(const KUrl& url)
+bool MakerNoteWidget::loadFromURL(const QUrl &url)
 {
     setFileName(url.toLocalFile());
 
@@ -159,7 +159,7 @@ QString MakerNoteWidget::getTagDescription(const QString& key)
 
 void MakerNoteWidget::slotSaveMetadataToFile()
 {
-    KUrl url = saveMetadataToFile(i18n("EXIF File to Save"),
+    QUrl url = saveMetadataToFile(i18n("EXIF File to Save"),
                                   QString("*.exif|"+i18n("EXIF binary Files (*.exif)")));
 
 #if KEXIV2_VERSION >= 0x010000

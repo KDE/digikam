@@ -34,7 +34,7 @@
 
 #include "digikam_export.h"
 
-class KUrl;
+class QUrl;
 
 namespace Digikam
 {
@@ -52,7 +52,7 @@ public:
 
 public Q_SLOTS:
 
-    virtual void showPreview(const KUrl& url);
+    virtual void showPreview(const QUrl &url);
     virtual void clearPreview();
 
 protected:
