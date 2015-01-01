@@ -2947,15 +2947,15 @@ KExiv2::AltLangMap DMetadata::toAltLangMap(const QVariant& var)
 
 #if KEXIV2_VERSION < 0x020300
 
-KUrl DMetadata::sidecarUrl(const KUrl& url)
+QUrl DMetadata::sidecarUrl(const QUrl &url)
 {
     QString sidecarPath = sidecarFilePathForFile(url.path());
-    KUrl sidecarUrl(url);
+    QUrl sidecarUrl(url);
     sidecarUrl.setPath(sidecarPath);
     return sidecarUrl;
 }
 
-KUrl DMetadata::sidecarUrl(const QString& path)
+QUrl DMetadata::sidecarUrl(const QString& path)
 {
     return QUrl::fromLocalFile(sidecarFilePathForFile(path));
 }

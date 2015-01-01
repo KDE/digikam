@@ -315,6 +315,7 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
     }
 
     QUrl url;
+
     if(albums.first()->type() == Album::TAG)
     {
         QList<int> tagIds;
