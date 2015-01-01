@@ -37,7 +37,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 #include <kstandarddirs.h>
 
 // C ANSI includes
@@ -86,7 +86,7 @@ QString ThumbnailCreator::thumbnailPath(const QString& filePath, const QString& 
 
 QString ThumbnailCreator::thumbnailUri(const QString& filePath)
 {
-    return KUrl(filePath).url();
+    return QUrl(filePath).url();
 }
 
 QString ThumbnailCreator::thumbnailPathFromUri(const QString& uri, const QString& basePath)

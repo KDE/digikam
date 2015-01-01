@@ -131,7 +131,7 @@ public:
     QMutex                          resultsMutex;
 
     QList<LoadingDescription>       kdeTodo;
-    QHash<KUrl, LoadingDescription> kdeJobHash;
+    QHash<QUrl, LoadingDescription> kdeJobHash;
     KIO::PreviewJob*                kdeJob;
 
     QList<LoadingDescription>       lastDescriptions;
@@ -786,11 +786,11 @@ void ThumbnailLoadThread::startKdePreviewJob()
     }
 
     d->kdeJobHash.clear();
-    KUrl::List list;
+    QList<QUrl> list;
 
     foreach(const LoadingDescription& description, d->kdeTodo)
     {
-        KUrl url = QUrl::fromLocalFile(description.filePath);
+        QUrl url = QUrl::fromLocalFile(description.filePath);
         list << url;
         d->kdeJobHash[url] = description;
     }
@@ -802,7 +802,7 @@ void ThumbnailLoadThread::startKdePreviewJob()
     if (d->previewPlugins.isEmpty())
       d->previewPlugins = KIO::PreviewJob::availablePlugins();
 
-    for (KUrl::List::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
+    for (QList<QUrl>::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
     {
         if ((*it).isValid())
             items.append(KFileItem(KFileItem::Unknown, KFileItem::Unknown, *it, true));

@@ -48,7 +48,7 @@
 #include <kservicetypetrader.h>
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
-#include <kurl.h>
+#include <QUrl>
 #include <kdeversion.h>
 #include <kde_file.h>
 
