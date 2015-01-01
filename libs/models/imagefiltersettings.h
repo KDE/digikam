@@ -38,7 +38,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -201,7 +201,7 @@ public:
 public:
 
     /// --- URL whitelist filter
-    void setUrlWhitelist(const KUrl::List& urlList, const QString& id);
+    void setUrlWhitelist(const QList<QUrl>& urlList, const QString& id);
 
 public:
 
@@ -257,7 +257,7 @@ private:
     GeolocationCondition             m_geolocationCondition;
 
     /// --- URL whitelist filter
-    QHash<QString,KUrl::List>        m_urlWhitelists;
+    QHash<QString,QList<QUrl>>        m_urlWhitelists;
 
     /// --- ID whitelist filter
     QHash<QString,QList<qlonglong> > m_idWhitelists;

@@ -314,7 +314,7 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
         return;
     }
 
-    KUrl url;
+    QUrl url;
     if(albums.first()->type() == Album::TAG)
     {
         QList<int> tagIds;
@@ -329,9 +329,9 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
         url = albums.first()->databaseUrl();
 
     d->extraValueJob = false;
-    d->job   = ImageLister::startListJob(url);
-    d->job->addMetaData("listAlbumsRecursively", d->recurseAlbums ? "true" : "false");
-    d->job->addMetaData("listTagsRecursively", d->recurseTags ? "true" : "false");
+    d->job           = ImageLister::startListJob(KUrl(url));
+    d->job->addMetaData("listAlbumsRecursively",   d->recurseAlbums           ? "true" : "false");
+    d->job->addMetaData("listTagsRecursively",     d->recurseTags             ? "true" : "false");
     d->job->addMetaData("listOnlyAvailableImages", d->listOnlyAvailableImages ? "true" : "false");
 
     if (albums.first()->type() == Album::TAG && !d->specialListing.isNull())

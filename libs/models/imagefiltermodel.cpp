@@ -369,7 +369,7 @@ void ImageFilterModel::setRatingFilter(int rating, ImageFilterSettings::RatingCo
     setImageFilterSettings(d->filter);
 }
 
-void ImageFilterModel::setUrlWhitelist(const KUrl::List urlList, const QString& id)
+void ImageFilterModel::setUrlWhitelist(const QList<QUrl> urlList, const QString& id)
 {
     Q_D(ImageFilterModel);
     d->filter.setUrlWhitelist(urlList, id);
