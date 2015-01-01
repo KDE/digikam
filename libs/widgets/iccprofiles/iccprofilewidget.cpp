@@ -244,7 +244,7 @@ QString ICCProfileWidget::getMetadataTitle()
     return i18n("ICC Color Profile Information");
 }
 
-bool ICCProfileWidget::loadFromURL(const QUrl &url)
+bool ICCProfileWidget::loadFromURL(const QUrl& url)
 {
     setFileName(url.toLocalFile());
 

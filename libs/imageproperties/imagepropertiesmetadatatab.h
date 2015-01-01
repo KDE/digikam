@@ -50,7 +50,7 @@ public:
     explicit ImagePropertiesMetaDataTab(QWidget* const parent);
     ~ImagePropertiesMetaDataTab();
 
-    void setCurrentURL(const QUrl &url=QUrl());
+    void setCurrentURL(const QUrl& url=QUrl());
     void setCurrentData(const DMetadata& metadata=DMetadata(),
                         const QString& filename=QString());
 

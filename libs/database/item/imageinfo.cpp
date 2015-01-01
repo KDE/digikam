@@ -313,7 +313,7 @@ ImageInfo::ImageInfo(qlonglong ID)
     }
 }
 
-ImageInfo ImageInfo::fromUrl(const QUrl &url)
+ImageInfo ImageInfo::fromUrl(const QUrl& url)
 {
     return fromLocalFile(url.toLocalFile());
 }

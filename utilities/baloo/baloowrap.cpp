@@ -94,22 +94,22 @@ BalooWrap* BalooWrap::instance()
 }
 
 
-void BalooWrap::setTags(const QUrl &url, QStringList* const tags)
+void BalooWrap::setTags(const QUrl& url, QStringList* const tags)
 {
     setAllData(url,tags, NULL, -1);
 }
 
-void BalooWrap::setComment(const QUrl &url, QString* const comment)
+void BalooWrap::setComment(const QUrl& url, QString* const comment)
 {
     setAllData(url, NULL, comment, -1);
 }
 
-void BalooWrap::setRating(const QUrl &url, int rating)
+void BalooWrap::setRating(const QUrl& url, int rating)
 {
     setAllData(url, NULL, NULL, rating);
 }
 
-void BalooWrap::setAllData(const QUrl &url, QStringList* const tags, QString* const comment, int rating)
+void BalooWrap::setAllData(const QUrl& url, QStringList* const tags, QString* const comment, int rating)
 {
     if(!d->syncFromDigikamToBaloo)
     {
@@ -146,7 +146,7 @@ void BalooWrap::setAllData(const QUrl &url, QStringList* const tags, QString* co
     }
 }
 
-BalooInfo BalooWrap::getSemanticInfo(const QUrl &url)
+BalooInfo BalooWrap::getSemanticInfo(const QUrl& url)
 {
     if(!d->syncFromBalooToDigikam)
     {
@@ -242,7 +242,7 @@ int BalooWrap::bestDigikamTagForTagName(const ImageInfo& info, const QString& ta
     }
 }
 
-void BalooWrap::addInfoToDigikam(const BalooInfo& bInfo, const QUrl &fileUrl)
+void BalooWrap::addInfoToDigikam(const BalooInfo& bInfo, const QUrl& fileUrl)
 {
     QStringList tags = bInfo.tags;
     QList<int> tagIdsForInfo;

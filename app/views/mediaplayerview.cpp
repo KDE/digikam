@@ -279,7 +279,7 @@ void MediaPlayerView::setPreviewMode(int mode)
     d->toolBar->raise();
 }
 
-void MediaPlayerView::setCurrentItem(const QUrl &url, bool hasPrevious, bool hasNext)
+void MediaPlayerView::setCurrentItem(const QUrl& url, bool hasPrevious, bool hasNext)
 {
     d->prevAction->setEnabled(hasPrevious);
     d->nextAction->setEnabled(hasNext);

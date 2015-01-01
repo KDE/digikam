@@ -65,7 +65,7 @@ public:
                        const QString& password = QString(),
                        const QString& databaseNameThumbnails = QString());
 
-    explicit DatabaseParameters(const QUrl &url);
+    explicit DatabaseParameters(const QUrl& url);
     DatabaseParameters();
 
     void insertInUrl(QUrl& url) const;

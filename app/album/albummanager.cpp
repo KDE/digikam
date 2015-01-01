@@ -1974,7 +1974,7 @@ QList<TAlbum*> AlbumManager::currentTAlbums() const
     return talbums;
 }
 
-PAlbum* AlbumManager::findPAlbum(const QUrl &url) const
+PAlbum* AlbumManager::findPAlbum(const QUrl& url) const
 {
     CollectionLocation location = CollectionManager::instance()->locationForUrl(url);
 

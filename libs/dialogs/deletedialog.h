@@ -74,7 +74,7 @@ class DeleteItem : public QTreeWidgetItem
 
 public:
 
-    DeleteItem(QTreeWidget* const parent, const QUrl &url);
+    DeleteItem(QTreeWidget* const parent, const QUrl& url);
     virtual ~DeleteItem();
 
     bool    hasValidThumbnail() const;

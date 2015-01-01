@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT RawImport : public EditorToolThreaded
 
 public:
 
-    RawImport(const QUrl &url, QObject* const parent);
+    RawImport(const QUrl& url, QObject* const parent);
     ~RawImport();
 
     DRawDecoding rawDecodingSettings()      const;

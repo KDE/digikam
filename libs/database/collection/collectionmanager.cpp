@@ -209,7 +209,7 @@ public:
      *  Find from a given list (usually the result of listVolumes) the volume
      *  on which the file path specified by the url is located.
      */
-    SolidVolumeInfo findVolumeForUrl(const QUrl &fileUrl, const QList<SolidVolumeInfo> volumes);
+    SolidVolumeInfo findVolumeForUrl(const QUrl& fileUrl, const QList<SolidVolumeInfo> volumes);
 
     /// Create the volume identifier for the given volume info
     static QString volumeIdentifier(const SolidVolumeInfo& info);
@@ -648,7 +648,7 @@ QString CollectionManagerPrivate::technicalDescription(const AlbumRootLocation* 
     return QString();
 }
 
-SolidVolumeInfo CollectionManagerPrivate::findVolumeForUrl(const QUrl &fileUrl, const QList<SolidVolumeInfo> volumes)
+SolidVolumeInfo CollectionManagerPrivate::findVolumeForUrl(const QUrl& fileUrl, const QList<SolidVolumeInfo> volumes)
 {
     SolidVolumeInfo volume;
     // v.path is specified to have a trailing slash. path needs one as well.
@@ -778,7 +778,7 @@ void CollectionManager::setWatchDisabled()
     d->watchEnabled = false;
 }
 
-CollectionLocation CollectionManager::addLocation(const QUrl &fileUrl, const QString& label)
+CollectionLocation CollectionManager::addLocation(const QUrl& fileUrl, const QString& label)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "addLocation " << fileUrl;
     QString path = fileUrl.adjusted(QUrl::StripTrailingSlash).toLocalFile();
@@ -835,7 +835,7 @@ CollectionLocation CollectionManager::addLocation(const QUrl &fileUrl, const QSt
     return locationForPath(path);
 }
 
-CollectionLocation CollectionManager::addNetworkLocation(const QUrl &fileUrl, const QString& label)
+CollectionLocation CollectionManager::addNetworkLocation(const QUrl& fileUrl, const QString& label)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "addLocation " << fileUrl;
     QString path = fileUrl.adjusted(QUrl::StripTrailingSlash).toLocalFile();
@@ -854,7 +854,7 @@ CollectionLocation CollectionManager::addNetworkLocation(const QUrl &fileUrl, co
     return locationForPath(path);
 }
 
-CollectionManager::LocationCheckResult CollectionManager::checkLocation(const QUrl &fileUrl,
+CollectionManager::LocationCheckResult CollectionManager::checkLocation(const QUrl& fileUrl,
         QList<CollectionLocation> assumeDeleted, QString* message, QString* iconName)
 {
     if (!fileUrl.isLocalFile())
@@ -1034,7 +1034,7 @@ CollectionManager::LocationCheckResult CollectionManager::checkLocation(const QU
     }
 }
 
-CollectionManager::LocationCheckResult CollectionManager::checkNetworkLocation(const QUrl &fileUrl,
+CollectionManager::LocationCheckResult CollectionManager::checkNetworkLocation(const QUrl& fileUrl,
         QList<CollectionLocation> assumeDeleted, QString* message, QString* iconName)
 {
     if (!fileUrl.isLocalFile())
@@ -1310,7 +1310,7 @@ CollectionLocation CollectionManager::locationForAlbumRootId(int id)
     }
 }
 
-CollectionLocation CollectionManager::locationForAlbumRoot(const QUrl &fileUrl)
+CollectionLocation CollectionManager::locationForAlbumRoot(const QUrl& fileUrl)
 {
     return locationForAlbumRootPath(fileUrl.adjusted(QUrl::StripTrailingSlash).toLocalFile());
 }
@@ -1331,7 +1331,7 @@ CollectionLocation CollectionManager::locationForAlbumRootPath(const QString& al
     return CollectionLocation();
 }
 
-CollectionLocation CollectionManager::locationForUrl(const QUrl &fileUrl)
+CollectionLocation CollectionManager::locationForUrl(const QUrl& fileUrl)
 {
     return locationForPath(fileUrl.adjusted(QUrl::StripTrailingSlash).toLocalFile());
 }
@@ -1370,12 +1370,12 @@ QString CollectionManager::albumRootPath(int id)
     return QString();
 }
 
-QUrl CollectionManager::albumRoot(const QUrl &fileUrl)
+QUrl CollectionManager::albumRoot(const QUrl& fileUrl)
 {
     return QUrl::fromLocalFile(albumRootPath(QUrl::fromLocalFile(fileUrl.toLocalFile()).adjusted(QUrl::StripTrailingSlash)));
 }
 
-QString CollectionManager::albumRootPath(const QUrl &fileUrl)
+QString CollectionManager::albumRootPath(const QUrl& fileUrl)
 {
     return albumRootPath(QUrl::fromLocalFile(fileUrl.toLocalFile()).adjusted(QUrl::StripTrailingSlash));
 }
@@ -1402,7 +1402,7 @@ QString CollectionManager::albumRootPath(const QString& givenPath)
     return QString();
 }
 
-bool CollectionManager::isAlbumRoot(const QUrl &fileUrl)
+bool CollectionManager::isAlbumRoot(const QUrl& fileUrl)
 {
     return isAlbumRoot(fileUrl.adjusted(QUrl::StripTrailingSlash).toLocalFile());
 }
@@ -1422,7 +1422,7 @@ bool CollectionManager::isAlbumRoot(const QString& filePath)
     return false;
 }
 
-QString CollectionManager::album(const QUrl &fileUrl)
+QString CollectionManager::album(const QUrl& fileUrl)
 {
     return album(fileUrl.adjusted(QUrl::StripTrailingSlash).toLocalFile());
 }
@@ -1466,7 +1466,7 @@ QString CollectionManager::album(const QString& filePath)
     return QString();
 }
 
-QString CollectionManager::album(const CollectionLocation& location, const QUrl &fileUrl)
+QString CollectionManager::album(const CollectionLocation& location, const QUrl& fileUrl)
 {
     return album(location, fileUrl.adjusted(QUrl::StripTrailingSlash).toLocalFile());
 }

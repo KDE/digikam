@@ -53,7 +53,7 @@ class DIGIKAM_EXPORT RawPreview : public GraphicsDImgView
 
 public:
 
-    RawPreview(const QUrl &url, QWidget* const parent);
+    RawPreview(const QUrl& url, QWidget* const parent);
     ~RawPreview();
 
     DImg& demosaicedImage()    const;

@@ -80,7 +80,7 @@ public:
     ImageInfo info;
 };
 
-KipiImageInfo::KipiImageInfo(Interface* const interface, const QUrl &url)
+KipiImageInfo::KipiImageInfo(Interface* const interface, const QUrl& url)
     : ImageInfoShared(interface, url) , d(new Private)
 {
     d->info = ScanController::instance()->scannedInfo(url.toLocalFile());

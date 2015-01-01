@@ -104,7 +104,7 @@ ImagePropertiesSideBar::~ImagePropertiesSideBar()
 {
 }
 
-void ImagePropertiesSideBar::itemChanged(const QUrl &url, const QRect& rect, DImg* const img)
+void ImagePropertiesSideBar::itemChanged(const QUrl& url, const QRect& rect, DImg* const img)
 {
     if (!url.isValid())
     {
@@ -197,7 +197,7 @@ void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
     unsetCursor();
 }
 
-void ImagePropertiesSideBar::setImagePropertiesInformation(const QUrl &url)
+void ImagePropertiesSideBar::setImagePropertiesInformation(const QUrl& url)
 {
     if (!url.isValid())
     {

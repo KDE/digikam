@@ -109,17 +109,17 @@ public:
 
     /** Manage current input url processed by this tool.
      */
-    void setInputUrl(const QUrl &inputUrl);
+    void setInputUrl(const QUrl& inputUrl);
     QUrl inputUrl() const;
 
     /** Manage current output url processed by this tool.
      */
-    void setOutputUrl(const QUrl &outputUrl);
+    void setOutputUrl(const QUrl& outputUrl);
     QUrl outputUrl() const;
 
     /** Manage current working url used by this tool to process items.
      */
-    void setWorkingUrl(const QUrl &workingUrl);
+    void setWorkingUrl(const QUrl& workingUrl);
     QUrl workingUrl() const;
 
     /** Manage instance of current image data container loaded by this tool.
@@ -228,7 +228,7 @@ protected:
 
     /** Method to check if file pointed by url is a RAW image
      */
-    bool isRawFile(const QUrl &url) const;
+    bool isRawFile(const QUrl& url) const;
 
     /** Set string to describe an error which appear during apply() method.
      */

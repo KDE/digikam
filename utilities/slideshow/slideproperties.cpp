@@ -75,7 +75,7 @@ SlideProperties::~SlideProperties()
     delete d;
 }
 
-void SlideProperties::setCurrentInfo(const SlidePictureInfo& info, const QUrl &url)
+void SlideProperties::setCurrentInfo(const SlidePictureInfo& info, const QUrl& url)
 {
     d->info = info;
     d->url  = url;

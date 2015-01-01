@@ -95,7 +95,7 @@ public:
     explicit AlbumSelectWidget(QWidget* const parent = 0, PAlbum* const albumToSelect = 0);
     ~AlbumSelectWidget();
 
-    void setCurrentAlbumUrl(const QUrl &albumUrl);
+    void setCurrentAlbumUrl(const QUrl& albumUrl);
     QUrl currentAlbumUrl() const;
 
     PAlbum* currentAlbum() const;

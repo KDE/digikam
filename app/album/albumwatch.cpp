@@ -522,7 +522,7 @@ void AlbumWatch::slotKioFilesAdded(const QString& url)
     handleKioNotification(QUrl(url));
 }
 
-void AlbumWatch::handleKioNotification(const QUrl &url)
+void AlbumWatch::handleKioNotification(const QUrl& url)
 {
     if (url.isLocalFile())
     {

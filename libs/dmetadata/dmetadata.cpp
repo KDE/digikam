@@ -2947,7 +2947,7 @@ KExiv2::AltLangMap DMetadata::toAltLangMap(const QVariant& var)
 
 #if KEXIV2_VERSION < 0x020300
 
-QUrl DMetadata::sidecarUrl(const QUrl &url)
+QUrl DMetadata::sidecarUrl(const QUrl& url)
 {
     QString sidecarPath = sidecarFilePathForFile(url.path());
     QUrl sidecarUrl(url);

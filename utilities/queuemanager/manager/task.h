@@ -71,7 +71,7 @@ protected:
 
 private:
 
-    void emitActionData(ActionData::ActionStatus st, const QString& mess=QString(), const QUrl &dest=QUrl());
+    void emitActionData(ActionData::ActionStatus st, const QString& mess=QString(), const QUrl& dest=QUrl());
 
 private:
 

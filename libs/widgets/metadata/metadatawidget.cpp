@@ -281,7 +281,7 @@ const DMetadata& MetadataWidget::getMetadata()
     return d->metadata;
 }
 
-bool MetadataWidget::storeMetadataToFile(const QUrl &url, const QByteArray& metaData)
+bool MetadataWidget::storeMetadataToFile(const QUrl& url, const QByteArray& metaData)
 {
     if ( url.isEmpty() )
     {

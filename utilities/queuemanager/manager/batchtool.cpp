@@ -207,7 +207,7 @@ void BatchTool::setSettings(const BatchToolSettings& settings)
     emit signalAssignSettings2Widget();
 }
 
-void BatchTool::setInputUrl(const QUrl &inputUrl)
+void BatchTool::setInputUrl(const QUrl& inputUrl)
 {
     d->inputUrl = inputUrl;
 }
@@ -217,7 +217,7 @@ QUrl BatchTool::inputUrl() const
     return d->inputUrl;
 }
 
-void BatchTool::setOutputUrl(const QUrl &outputUrl)
+void BatchTool::setOutputUrl(const QUrl& outputUrl)
 {
     d->outputUrl = outputUrl;
 }
@@ -287,7 +287,7 @@ RawDecodingSettings BatchTool::rawDecodingSettings() const
     return d->rawDecodingSettings;
 }
 
-void BatchTool::setWorkingUrl(const QUrl &workingUrl)
+void BatchTool::setWorkingUrl(const QUrl& workingUrl)
 {
     d->workingUrl = workingUrl;
 }
@@ -343,7 +343,7 @@ void BatchTool::setOutputUrlFromInputUrl()
     setOutputUrl(QUrl::fromLocalFile(temp.fileName()));
 }
 
-bool BatchTool::isRawFile(const QUrl &url) const
+bool BatchTool::isRawFile(const QUrl& url) const
 {
     QString   rawFilesExt(KDcraw::rawFiles());
     QFileInfo fileInfo(url.toLocalFile());

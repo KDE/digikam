@@ -113,7 +113,7 @@ public:
     int           pendingItemsCount();
     int           pendingTasksCount();
 
-    QueueListViewItem* findItemByUrl(const QUrl &url);
+    QueueListViewItem* findItemByUrl(const QUrl& url);
     QueueListViewItem* findItemById(qlonglong id);
 
     void setSettings(const QueueSettings& settings);
@@ -124,7 +124,7 @@ public:
 
     void setEnableToolTips(bool val);
 
-    void reloadThumbs(const QUrl &url);
+    void reloadThumbs(const QUrl& url);
 
     void setItemBusy(qlonglong id);
     QPixmap progressPixmapForIndex(int index) const;

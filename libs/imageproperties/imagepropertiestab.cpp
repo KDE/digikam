@@ -448,7 +448,7 @@ ImagePropertiesTab::~ImagePropertiesTab()
     delete d;
 }
 
-void ImagePropertiesTab::setCurrentURL(const QUrl &url)
+void ImagePropertiesTab::setCurrentURL(const QUrl& url)
 {
     if (url.isEmpty())
     {

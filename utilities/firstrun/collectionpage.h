@@ -56,8 +56,8 @@ public:
 
 private Q_SLOTS:
 
-    void slotAlbumRootChanged(const QUrl &url);
-    void slotDbPathChanged(const QUrl &url);
+    void slotAlbumRootChanged(const QUrl& url);
+    void slotDbPathChanged(const QUrl& url);
 
 private:
 

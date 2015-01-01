@@ -56,7 +56,7 @@ public:
     explicit ImagePropertiesColorsTab(QWidget* const parent);
     ~ImagePropertiesColorsTab();
 
-    void setData(const QUrl &url=QUrl(), const QRect& selectionArea = QRect(), DImg* const img=0);
+    void setData(const QUrl& url=QUrl(), const QRect& selectionArea = QRect(), DImg* const img=0);
 
     void setSelection(const QRect& selectionArea);
 
@@ -65,7 +65,7 @@ public:
 
 private:
 
-    void loadImageFromUrl(const QUrl &url);
+    void loadImageFromUrl(const QUrl& url);
     void updateInformation();
     void updateStatistics();
     void getICCData();

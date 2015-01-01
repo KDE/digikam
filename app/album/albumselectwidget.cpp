@@ -232,7 +232,7 @@ QUrl AlbumSelectWidget::currentAlbumUrl() const
     return QUrl();
 }
 
-void AlbumSelectWidget::setCurrentAlbumUrl(const QUrl &albumUrl)
+void AlbumSelectWidget::setCurrentAlbumUrl(const QUrl& albumUrl)
 {
     PAlbum* const urlAlbum = AlbumManager::instance()->findPAlbum(albumUrl);
 

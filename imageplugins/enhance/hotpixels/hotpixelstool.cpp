@@ -284,7 +284,7 @@ void HotPixelsTool::setFinalImage()
     iface.setOriginal(i18n("Hot Pixels Correction"), filter()->filterAction(), filter()->getTargetImage());
 }
 
-void HotPixelsTool::slotBlackFrame(const QList<HotPixel>& hpList, const QUrl &blackFrameURL)
+void HotPixelsTool::slotBlackFrame(const QList<HotPixel>& hpList, const QUrl& blackFrameURL)
 {
     d->blackFrameURL = blackFrameURL;
     d->hotPixelsList = hpList;

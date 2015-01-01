@@ -70,7 +70,7 @@ QString MakerNoteWidget::getMetadataTitle()
     return i18n("MakerNote EXIF Tags");
 }
 
-bool MakerNoteWidget::loadFromURL(const QUrl &url)
+bool MakerNoteWidget::loadFromURL(const QUrl& url)
 {
     setFileName(url.toLocalFile());
 

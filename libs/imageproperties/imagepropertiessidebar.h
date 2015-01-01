@@ -62,7 +62,7 @@ public:
                            KMultiTabBarPosition side=KMultiTabBar::Left, bool mimimizedDefault=false);
     ~ImagePropertiesSideBar();
 
-    virtual void itemChanged(const QUrl &url, const QRect& rect = QRect(), DImg* const img = 0);
+    virtual void itemChanged(const QUrl& url, const QRect& rect = QRect(), DImg* const img = 0);
 
 Q_SIGNALS:
 
@@ -90,7 +90,7 @@ protected:
      */
     void doSaveState();
 
-    virtual void setImagePropertiesInformation(const QUrl &url);
+    virtual void setImagePropertiesInformation(const QUrl& url);
 
 protected:
 

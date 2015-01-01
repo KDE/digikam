@@ -106,7 +106,7 @@ void Task::slotCancel()
 
 }
 
-void Task::emitActionData(ActionData::ActionStatus st, const QString& mess, const QUrl &dest)
+void Task::emitActionData(ActionData::ActionStatus st, const QString& mess, const QUrl& dest)
 {
     ActionData ad;
     ad.fileUrl = d->tools.m_itemUrl;
@@ -187,7 +187,7 @@ void Task::run()
     // We don't remove last output tmp url.
     tmp2del.removeAll(outUrl);
 
-    foreach (const QUrl &url, tmp2del)
+    foreach (const QUrl& url, tmp2del)
     {
         unlink(QFile::encodeName(url.toLocalFile()).constData());
     }

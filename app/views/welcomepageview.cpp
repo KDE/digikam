@@ -87,7 +87,7 @@ WelcomePageView::~WelcomePageView()
 {
 }
 
-void WelcomePageView::slotUrlOpen(const QUrl &url)
+void WelcomePageView::slotUrlOpen(const QUrl& url)
 {
     QDesktopServices::openUrl(QUrl(url.url()));
 }

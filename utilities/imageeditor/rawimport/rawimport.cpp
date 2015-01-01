@@ -67,7 +67,7 @@ public:
     DImg            postProcessedImage;
 };
 
-RawImport::RawImport(const QUrl &url, QObject* const parent)
+RawImport::RawImport(const QUrl& url, QObject* const parent)
     : EditorToolThreaded(parent), d(new Private)
 {
     d->previewWidget = new RawPreview(url, 0);

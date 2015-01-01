@@ -81,8 +81,8 @@ public:
      * You may pass an optional user-visible label that will be stored in the database.
      * The label has no further meaning and can be freely chosen.
      */
-    CollectionLocation addLocation(const QUrl &fileUrl, const QString& label = QString());
-    CollectionLocation addNetworkLocation(const QUrl &fileUrl, const QString& label = QString());
+    CollectionLocation addLocation(const QUrl& fileUrl, const QString& label = QString());
+    CollectionLocation addNetworkLocation(const QUrl& fileUrl, const QString& label = QString());
 
     enum LocationCheckResult
     {
@@ -102,9 +102,9 @@ public:
      * The text is i18n'ed and can be presented to the user.
      * The returned result enum describes the test result.
      */
-    LocationCheckResult checkLocation(const QUrl &fileUrl, QList<CollectionLocation> assumeDeleted,
+    LocationCheckResult checkLocation(const QUrl& fileUrl, QList<CollectionLocation> assumeDeleted,
                                       QString* message = 0, QString* suggestedMessageIconName = 0);
-    LocationCheckResult checkNetworkLocation(const QUrl &fileUrl, QList<CollectionLocation> assumeDeleted,
+    LocationCheckResult checkNetworkLocation(const QUrl& fileUrl, QList<CollectionLocation> assumeDeleted,
             QString* message = 0, QString* suggestedMessageIconName = 0);
 
     /**
@@ -178,7 +178,7 @@ public:
      * Returns 0 if no collection location matches.
      * Only available (or hidden, but available) locations are guaranteed to be found.
      */
-    CollectionLocation locationForAlbumRoot(const QUrl &fileUrl);
+    CollectionLocation locationForAlbumRoot(const QUrl& fileUrl);
     CollectionLocation locationForAlbumRootPath(const QString& albumRootPath);
 
     /**
@@ -186,7 +186,7 @@ public:
      * Equivalent to calling locationForAlbumRoot(albumRoot(fileUrl)).
      * Only available (or hidden, but available) locations are guaranteed to be found.
      */
-    CollectionLocation locationForUrl(const QUrl &fileUrl);
+    CollectionLocation locationForUrl(const QUrl& fileUrl);
     CollectionLocation locationForPath(const QString& filePath);
 
     /**
@@ -200,8 +200,8 @@ public:
      * ending without a slash. Example: "/media/fotos/Paris 2007" gives "/media/fotos".
      * Only available (or hidden, but available) album roots are guaranteed to be found.
      */
-    QUrl    albumRoot(const QUrl &fileUrl);
-    QString albumRootPath(const QUrl &fileUrl);
+    QUrl    albumRoot(const QUrl& fileUrl);
+    QString albumRootPath(const QUrl& fileUrl);
     QString albumRootPath(const QString& filePath);
     /**
      * Returns true if the given path forms an album root.
@@ -211,7 +211,7 @@ public:
      *          "/media/fotos" returns true, "/media/fotos/Paris 2007" and "/media" return false.
      * Only available (or hidden, but available) album roots are guaranteed to be found.
      */
-    bool    isAlbumRoot(const QUrl &fileUrl);
+    bool    isAlbumRoot(const QUrl& fileUrl);
     /// the file path should not end with the directory slash. Using DatabaseUrl's method is fine.
     bool    isAlbumRoot(const QString& filePath);
 
@@ -226,9 +226,9 @@ public:
      * Note that you have to feed a path/url pointing to a directory. File names cannot
      * be recognized as such by this method, and will be treated as a directory.
      */
-    QString album(const QUrl &fileUrl);
+    QString album(const QUrl& fileUrl);
     QString album(const QString& filePath);
-    QString album(const CollectionLocation& location, const QUrl &fileUrl);
+    QString album(const CollectionLocation& location, const QUrl& fileUrl);
     QString album(const CollectionLocation& location, const QString& filePath);
 
     /**

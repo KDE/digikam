@@ -134,7 +134,7 @@ void FileOperation::openFilesWithDefaultApplication(const QList<QUrl>& urls, QWi
 
     QMap<KService::Ptr, QList<QUrl>> servicesMap;
 
-    foreach (const QUrl &url, urls)
+    foreach (const QUrl& url, urls)
     {
         const QString mimeType = KMimeType::findByUrl(url, 0, true, true)->name();
         KService::List offers  = KMimeTypeTrader::self()->query(mimeType, "Application");
@@ -173,7 +173,7 @@ KService::List FileOperation::servicesForOpenWith(const QList<QUrl>& urls)
     QStringList    mimeTypes;
     KService::List offers;
 
-    foreach(const QUrl &item, urls)
+    foreach(const QUrl& item, urls)
     {
         const QString mimeType = KMimeType::findByUrl(item, 0, true, true)->name();
 

@@ -911,7 +911,7 @@ void DigikamView::slotLastItem()
     }
 }
 
-void DigikamView::slotSelectItemByUrl(const QUrl &url)
+void DigikamView::slotSelectItemByUrl(const QUrl& url)
 {
     /// @todo This functions seems not to be used anywhere right now
     /// @todo Adapt to TableView
@@ -1178,7 +1178,7 @@ void DigikamView::slotGotoTagAndItem(int tagID)
     // d->iconView->setAlbumItemToFind(url);
 }
 
-void DigikamView::slotSelectAlbum(const QUrl &url)
+void DigikamView::slotSelectAlbum(const QUrl& url)
 {
     PAlbum* const album = d->albumManager->findPAlbum(url);
 
@@ -2193,7 +2193,7 @@ void DigikamView::slotRightSideBarActivateAssignedTags()
     d->rightSideBar->imageDescEditTab()->activateAssignedTagsButton();
 }
 
-void DigikamView::slotRatingChanged(const QUrl &url, int rating)
+void DigikamView::slotRatingChanged(const QUrl& url, int rating)
 {
     rating = qMin(RatingMax, qMax(RatingMin, rating));
     ImageInfo info = ImageInfo::fromUrl(url);
@@ -2204,7 +2204,7 @@ void DigikamView::slotRatingChanged(const QUrl &url, int rating)
     }
 }
 
-void DigikamView::slotColorLabelChanged(const QUrl &url, int color)
+void DigikamView::slotColorLabelChanged(const QUrl& url, int color)
 {
     ImageInfo info = ImageInfo::fromUrl(url);
 
@@ -2214,7 +2214,7 @@ void DigikamView::slotColorLabelChanged(const QUrl &url, int color)
     }
 }
 
-void DigikamView::slotPickLabelChanged(const QUrl &url, int pick)
+void DigikamView::slotPickLabelChanged(const QUrl& url, int pick)
 {
     ImageInfo info = ImageInfo::fromUrl(url);
 
@@ -2224,7 +2224,7 @@ void DigikamView::slotPickLabelChanged(const QUrl &url, int pick)
     }
 }
 
-void DigikamView::slotToggleTag(const QUrl &url, int tagID)
+void DigikamView::slotToggleTag(const QUrl& url, int tagID)
 {
     ImageInfo info = ImageInfo::fromUrl(url);
 

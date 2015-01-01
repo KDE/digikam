@@ -196,7 +196,7 @@ public:
 #if KEXIV2_VERSION < 0x020300
     static QString sidecarPath(const QString& path);
     /** Like KExiv2::sidecarFilePathForFile, but works for remote URLs */
-    static QUrl sidecarUrl(const QUrl &url);
+    static QUrl sidecarUrl(const QUrl& url);
     /** Gives a file url for a local path */
     static QUrl sidecarUrl(const QString& path);
     /** Performs a QFileInfo based check if the given local file has a sidecar */

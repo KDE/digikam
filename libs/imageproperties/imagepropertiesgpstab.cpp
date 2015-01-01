@@ -328,7 +328,7 @@ void ImagePropertiesGPSTab::slotGPSDetails()
     QDesktopServices::openUrl(QUrl(url));
 }
 
-void ImagePropertiesGPSTab::setCurrentURL(const QUrl &url)
+void ImagePropertiesGPSTab::setCurrentURL(const QUrl& url)
 {
     if (url.isEmpty())
     {
@@ -341,7 +341,7 @@ void ImagePropertiesGPSTab::setCurrentURL(const QUrl &url)
     setMetadata(meta, url);
 }
 
-void ImagePropertiesGPSTab::setMetadata(const DMetadata& meta, const QUrl &url)
+void ImagePropertiesGPSTab::setMetadata(const DMetadata& meta, const QUrl& url)
 {
     double lat, lng;
     const bool haveCoordinates = meta.getGPSLatitudeNumber(&lat) && meta.getGPSLongitudeNumber(&lng);

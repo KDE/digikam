@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT RawSettingsBox : public EditorToolSettings
 
 public:
 
-    RawSettingsBox(const QUrl &url, QWidget* const parent);
+    RawSettingsBox(const QUrl& url, QWidget* const parent);
     ~RawSettingsBox();
 
     void setBusy(bool b);

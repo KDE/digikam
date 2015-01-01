@@ -67,7 +67,7 @@ QString IptcWidget::getMetadataTitle()
     return i18n("IPTC Records");
 }
 
-bool IptcWidget::loadFromURL(const QUrl &url)
+bool IptcWidget::loadFromURL(const QUrl& url)
 {
     setFileName(url.fileName());
 

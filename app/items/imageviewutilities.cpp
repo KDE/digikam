@@ -90,7 +90,7 @@ void ImageViewUtilities::setAsAlbumThumbnail(Album* album, const ImageInfo& imag
     }
 }
 
-void ImageViewUtilities::rename(const QUrl &imageUrl, const QString& newName)
+void ImageViewUtilities::rename(const QUrl& imageUrl, const QString& newName)
 {
     if (imageUrl.isEmpty() || !imageUrl.isLocalFile() || newName.isEmpty())
     {
@@ -151,7 +151,7 @@ void ImageViewUtilities::deleteImagesDirectly(const QList<ImageInfo>& infos, con
 
 void ImageViewUtilities::notifyFileContentChanged(const QList<QUrl>& urls)
 {
-    foreach(const QUrl &url, urls)
+    foreach(const QUrl& url, urls)
     {
         QString path = url.toLocalFile();
         ThumbnailLoadThread::deleteThumbnail(path);

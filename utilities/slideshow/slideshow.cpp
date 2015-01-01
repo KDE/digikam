@@ -184,7 +184,7 @@ SlideShow::~SlideShow()
     delete d;
 }
 
-void SlideShow::setCurrentItem(const QUrl &url)
+void SlideShow::setCurrentItem(const QUrl& url)
 {
     int index = d->settings.fileList.indexOf(url);
 
@@ -423,7 +423,7 @@ void SlideShow::slotAssignPickLabel(int pick)
     emit signalPickLabelChanged(currentItem(), pick);
 }
 
-void SlideShow::updateTags(const QUrl &url, const QStringList& tags)
+void SlideShow::updateTags(const QUrl& url, const QStringList& tags)
 {
     d->settings.pictInfoMap[url].tags = tags;
     dispatchCurrentInfoChange(url);
@@ -434,7 +434,7 @@ void SlideShow::toggleTag(int tag)
     emit signalToggleTag(currentItem(), tag);
 }
 
-void SlideShow::dispatchCurrentInfoChange(const QUrl &url)
+void SlideShow::dispatchCurrentInfoChange(const QUrl& url)
 {
     if (currentItem() == url)
         d->osd->setCurrentInfo(d->settings.pictInfoMap[currentItem()], currentItem());

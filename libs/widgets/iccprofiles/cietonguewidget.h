@@ -55,7 +55,7 @@ public:
     ~CIETongueWidget();
 
     bool setProfileData(const QByteArray& profileData=QByteArray());
-    bool setProfileFromFile(const QUrl &file=QUrl());
+    bool setProfileFromFile(const QUrl& file=QUrl());
 
     void loadingStarted();
     void loadingFailed();

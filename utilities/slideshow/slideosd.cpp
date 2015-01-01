@@ -244,7 +244,7 @@ SlideToolBar* SlideOSD::toolBar() const
     return d->toolBar;
 }
 
-void SlideOSD::setCurrentInfo(const SlidePictureInfo& info, const QUrl &url)
+void SlideOSD::setCurrentInfo(const SlidePictureInfo& info, const QUrl& url)
 {
     // Update info text.
 

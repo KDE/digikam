@@ -61,7 +61,7 @@ ICCPreviewWidget::~ICCPreviewWidget()
 {
 }
 
-void ICCPreviewWidget::showPreview( const QUrl &url)
+void ICCPreviewWidget::showPreview( const QUrl& url)
 {
     clearPreview();
     QFileInfo fInfo(url.toLocalFile());

@@ -72,7 +72,7 @@ public:
     QUrl url;
 };
 
-DeleteItem::DeleteItem(QTreeWidget* const parent, const QUrl &url)
+DeleteItem::DeleteItem(QTreeWidget* const parent, const QUrl& url)
     : QTreeWidgetItem(parent), d(new Private)
 {
     d->url = url;
@@ -342,7 +342,7 @@ void DeleteWidget::setUrls(const QList<QUrl>& urls)
 {
     d->fileList->clear();
 
-    foreach(const QUrl &url, urls)
+    foreach(const QUrl& url, urls)
     {
         new DeleteItem(d->fileList, url);
     }

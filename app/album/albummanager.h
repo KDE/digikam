@@ -210,7 +210,7 @@ public:
      * @return PAlbum corresponding to supplied @p url
      * @param url the url we need to check
      */
-    PAlbum*   findPAlbum(const QUrl &url) const;
+    PAlbum*   findPAlbum(const QUrl& url) const;
 
     /**
      * @return a PAlbum with given ID
@@ -723,7 +723,7 @@ private:
     void addAlbumRoot(const CollectionLocation& location);
     void removeAlbumRoot(const CollectionLocation& location);
 
-    void handleKioNotification(const QUrl &url);
+    void handleKioNotification(const QUrl& url);
 
     static AlbumManager* internalInstance;
     void addGuardedPointer(Album* a, Album** pointer);

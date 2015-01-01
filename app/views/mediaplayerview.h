@@ -66,7 +66,7 @@ public:
     explicit MediaPlayerView(QWidget* const parent);
     ~MediaPlayerView();
 
-    void setCurrentItem(const QUrl &url   = QUrl(),
+    void setCurrentItem(const QUrl& url   = QUrl(),
                         bool  hasPrevious = false,
                         bool  hasNext     = false);
     void escapePreview();

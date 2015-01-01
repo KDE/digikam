@@ -52,7 +52,7 @@ public:
 
 public Q_SLOTS:
 
-    virtual void showPreview(const QUrl &url);
+    virtual void showPreview(const QUrl& url);
     virtual void clearPreview();
 
 protected:

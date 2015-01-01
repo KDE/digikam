@@ -165,7 +165,7 @@ public Q_SLOTS:
     void slotGotoDateAndItem(const ImageInfo& imageInfo);
     void slotGotoTagAndItem(int tagID);
 
-    void slotSelectAlbum(const QUrl &url);
+    void slotSelectAlbum(const QUrl& url);
     void slotSetCurrentWhenAvailable(const qlonglong id);
 
     // Tag action slots

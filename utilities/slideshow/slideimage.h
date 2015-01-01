@@ -52,8 +52,8 @@ public:
     ~SlideImage();
 
     void setPreviewSettings(const PreviewSettings& settings);
-    void setLoadUrl(const QUrl &url);
-    void setPreloadUrl(const QUrl &url);
+    void setLoadUrl(const QUrl& url);
+    void setPreloadUrl(const QUrl& url);
 
 Q_SIGNALS:
 

@@ -100,7 +100,7 @@ public:
      * Creates an ImageInfo object from a file url.
      */
     static ImageInfo fromLocalFile(const QString& path);
-    static ImageInfo fromUrl(const QUrl &url);
+    static ImageInfo fromUrl(const QUrl& url);
 
     /**
      * Create an ImageInfo object from the given combination, which

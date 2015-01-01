@@ -347,7 +347,7 @@ bool CollectionPage::checkDatabase(QString& dbFolder)
     return true;
 }
 
-void CollectionPage::slotAlbumRootChanged(const QUrl &url)
+void CollectionPage::slotAlbumRootChanged(const QUrl& url)
 {
     if (!d->dbPathEdited)
     {

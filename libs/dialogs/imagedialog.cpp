@@ -354,7 +354,7 @@ public:
     QList<QUrl> urls;
 };
 
-ImageDialog::ImageDialog(QWidget* const parent, const QUrl &url, bool singleSelect, const QString& caption)
+ImageDialog::ImageDialog(QWidget* const parent, const QUrl& url, bool singleSelect, const QString& caption)
     : d(new Private)
 {
     d->singleSelect         = singleSelect;
@@ -443,7 +443,7 @@ QList<QUrl> ImageDialog::urls() const
     return d->urls;
 }
 
-QList<QUrl> ImageDialog::getImageURLs(QWidget* const parent, const QUrl &url, const QString& caption)
+QList<QUrl> ImageDialog::getImageURLs(QWidget* const parent, const QUrl& url, const QString& caption)
 {
     ImageDialog dlg(parent, url, false, caption);
 
@@ -457,7 +457,7 @@ QList<QUrl> ImageDialog::getImageURLs(QWidget* const parent, const QUrl &url, co
     }
 }
 
-QUrl ImageDialog::getImageURL(QWidget* const parent, const QUrl &url, const QString& caption)
+QUrl ImageDialog::getImageURL(QWidget* const parent, const QUrl& url, const QString& caption)
 {
     ImageDialog dlg(parent, url, true, caption);
 

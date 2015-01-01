@@ -1596,7 +1596,7 @@ public:
     QString             val;
 };
 
-QString ImageQueryBuilder::convertFromUrlToXml(const QUrl &url) const
+QString ImageQueryBuilder::convertFromUrlToXml(const QUrl& url) const
 {
     int  count = QUrlQuery(url).queryItemValue("count").toInt();
 
@@ -1798,7 +1798,7 @@ public:
 
 // -------------------------------------------------------------------------
 
-QString ImageQueryBuilder::buildQueryFromUrl(const QUrl &url, QList<QVariant>* boundValues) const
+QString ImageQueryBuilder::buildQueryFromUrl(const QUrl& url, QList<QVariant>* boundValues) const
 {
     int count = QUrlQuery(url).queryItemValue("count").toInt();
 

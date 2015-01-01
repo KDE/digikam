@@ -75,7 +75,7 @@ QString ExifWidget::getMetadataTitle()
     return i18n("Standard EXIF Tags");
 }
 
-bool ExifWidget::loadFromURL(const QUrl &url)
+bool ExifWidget::loadFromURL(const QUrl& url)
 {
     setFileName(url.toLocalFile());
 

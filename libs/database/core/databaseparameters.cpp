@@ -95,7 +95,7 @@ DatabaseParameters::DatabaseParameters(const QString& type,
 {
 }
 
-DatabaseParameters::DatabaseParameters(const QUrl &url)
+DatabaseParameters::DatabaseParameters(const QUrl& url)
     : port(-1),
       internalServer(false)
 {

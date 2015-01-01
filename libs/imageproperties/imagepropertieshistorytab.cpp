@@ -104,7 +104,7 @@ ImagePropertiesHistoryTab::~ImagePropertiesHistoryTab()
     delete d;
 }
 
-void ImagePropertiesHistoryTab::setCurrentURL(const QUrl &url)
+void ImagePropertiesHistoryTab::setCurrentURL(const QUrl& url)
 {
     d->model->setUrl(url);
     d->view->setModel(d->model);

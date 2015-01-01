@@ -60,7 +60,7 @@ public:
     int                          disabledEntries;
 };
 
-ImageFiltersHistoryModel::ImageFiltersHistoryModel(QObject* const parent, const QUrl &url)
+ImageFiltersHistoryModel::ImageFiltersHistoryModel(QObject* const parent, const QUrl& url)
     : QAbstractItemModel(parent), d(new Private)
 {
     if (!url.isEmpty())
@@ -87,7 +87,7 @@ ImageFiltersHistoryModel::~ImageFiltersHistoryModel()
     delete d;
 }
 
-void ImageFiltersHistoryModel::setUrl(const QUrl &url)
+void ImageFiltersHistoryModel::setUrl(const QUrl& url)
 {
     if (!url.isEmpty())
     {

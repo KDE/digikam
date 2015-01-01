@@ -78,7 +78,7 @@ private:
     void connectToKInotify();
     void connectToKDirWatch();
     void connectToKIO();
-    void handleKioNotification(const QUrl &url);
+    void handleKioNotification(const QUrl& url);
 
 private:
 

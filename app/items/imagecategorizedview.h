@@ -85,7 +85,7 @@ public:
 
     /** Selects the index as current and scrolls to it.
      */
-    void toIndex(const QUrl &url);
+    void toIndex(const QUrl& url);
 
     /** Returns the n-th info after the given one.
      *  Specifically, return the previous info for nth = -1
@@ -137,7 +137,7 @@ public Q_SLOTS:
 
     /** Set as current item the item identified by its file url.
      */
-    void setCurrentUrl(const QUrl &url);
+    void setCurrentUrl(const QUrl& url);
 
     /** Set as current item the item identified by the imageinfo.
      */

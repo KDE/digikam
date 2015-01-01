@@ -98,13 +98,13 @@ void SlideImage::setPreviewSettings(const PreviewSettings& settings)
     d->deskSize = qMax(640, qMax(desktopSize.height(), desktopSize.width()));
 }
 
-void SlideImage::setLoadUrl(const QUrl &url)
+void SlideImage::setLoadUrl(const QUrl& url)
 {
     d->currentImage = url;
     d->previewThread->load(url.toLocalFile(), d->previewSettings, d->deskSize);
 }
 
-void SlideImage::setPreloadUrl(const QUrl &url)
+void SlideImage::setPreloadUrl(const QUrl& url)
 {
     d->previewPreloadThread->load(url.toLocalFile(), d->previewSettings, d->deskSize);
 }

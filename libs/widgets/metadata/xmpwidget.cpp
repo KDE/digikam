@@ -86,7 +86,7 @@ QString XmpWidget::getMetadataTitle()
     return i18n("XMP Schema");
 }
 
-bool XmpWidget::loadFromURL(const QUrl &url)
+bool XmpWidget::loadFromURL(const QUrl& url)
 {
     setFileName(url.fileName());
 

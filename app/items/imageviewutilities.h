@@ -82,14 +82,14 @@ public Q_SLOTS:
     void openInfos(const ImageInfo& info, const QList<ImageInfo>& allInfosToOpen, Album* currentAlbum);
     void openInfosWithDefaultApplication(const QList<ImageInfo>& allInfosToOpen);
 
-    void rename(const QUrl &imageUrl, const QString& newName);
+    void rename(const QUrl& imageUrl, const QString& newName);
     void setAsAlbumThumbnail(Album* album, const ImageInfo& imageInfo);
 
     void createGroupByTimeFromInfoList(const ImageInfoList& imageInfoList);
 
 Q_SIGNALS:
 
-    void editorCurrentUrlChanged(const QUrl &url);
+    void editorCurrentUrlChanged(const QUrl& url);
 
 protected:
 

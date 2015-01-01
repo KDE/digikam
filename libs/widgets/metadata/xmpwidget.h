@@ -41,7 +41,7 @@ public:
     explicit XmpWidget(QWidget* const parent, const char* name=0);
     ~XmpWidget();
 
-    bool loadFromURL(const QUrl &url);
+    bool loadFromURL(const QUrl& url);
 
     QString getTagDescription(const QString& key);
     QString getTagTitle(const QString& key);

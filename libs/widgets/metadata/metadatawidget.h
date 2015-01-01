@@ -76,7 +76,7 @@ public:
     virtual QString getTagDescription(const QString& key);
 
     virtual bool loadFromData(const QString& fileName, const DMetadata& data=DMetadata());
-    virtual bool loadFromURL(const QUrl &url)=0;
+    virtual bool loadFromURL(const QUrl& url)=0;
 
 Q_SIGNALS:
 
@@ -108,7 +108,7 @@ protected:
                       const QStringList& tagsFilter);
 
     QUrl   saveMetadataToFile(const QString& caption, const QString& fileFilter);
-    bool   storeMetadataToFile(const QUrl &url, const QByteArray& metaData);
+    bool   storeMetadataToFile(const QUrl& url, const QByteArray& metaData);
 
     virtual void buildView();
     virtual bool decodeMetadata()=0;

@@ -165,8 +165,8 @@ public:
 
     /// Methods for to save/load the curves values to/from a Gimp curves text file.
 
-    bool saveCurvesToGimpCurvesFile(const QUrl &fileUrl) const;
-    bool loadCurvesFromGimpCurvesFile(const QUrl &fileUrl);
+    bool saveCurvesToGimpCurvesFile(const QUrl& fileUrl) const;
+    bool loadCurvesFromGimpCurvesFile(const QUrl& fileUrl);
 
     static QPoint getDisabledValue();
 

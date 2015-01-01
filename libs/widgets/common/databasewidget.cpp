@@ -199,7 +199,7 @@ QString DatabaseWidget::currentDatabaseType() const
     return databaseType->itemData(databaseType->currentIndex()).toString();
 }
 
-void DatabaseWidget::slotChangeDatabasePath(const QUrl &result)
+void DatabaseWidget::slotChangeDatabasePath(const QUrl& result)
 {
 #ifdef _WIN32
     // Work around bug #189168

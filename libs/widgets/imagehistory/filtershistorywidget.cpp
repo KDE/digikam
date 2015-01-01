@@ -105,7 +105,7 @@ FiltersHistoryWidget::~FiltersHistoryWidget()
     delete d;
 }
 
-void FiltersHistoryWidget::setCurrentURL(const QUrl &url)
+void FiltersHistoryWidget::setCurrentURL(const QUrl& url)
 {
     d->model->setUrl(url);
     d->view->setModel(d->model);

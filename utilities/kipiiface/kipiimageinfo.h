@@ -56,7 +56,7 @@ class KipiImageInfo : public ImageInfoShared
 {
 public:
 
-    KipiImageInfo(Interface* const interface, const QUrl &url);
+    KipiImageInfo(Interface* const interface, const QUrl& url);
     ~KipiImageInfo();
 
     void cloneData(ImageInfoShared* const other);

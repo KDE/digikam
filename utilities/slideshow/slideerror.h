@@ -48,7 +48,7 @@ public:
     explicit SlideError(QWidget* const parent = 0);
     ~SlideError();
 
-    void setCurrentUrl(const QUrl &url);
+    void setCurrentUrl(const QUrl& url);
 
 private:
 

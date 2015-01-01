@@ -141,12 +141,12 @@ void ImagePropertiesSideBarDB::itemChanged(const ImageInfo& info, const QRect& r
     itemChanged(info.fileUrl(), info, rect, img, history);
 }
 
-void ImagePropertiesSideBarDB::itemChanged(const QUrl &url, const QRect& rect, DImg* const img)
+void ImagePropertiesSideBarDB::itemChanged(const QUrl& url, const QRect& rect, DImg* const img)
 {
     itemChanged(url, ImageInfo(), rect, img, DImageHistory());
 }
 
-void ImagePropertiesSideBarDB::itemChanged(const QUrl &url, const ImageInfo& info,
+void ImagePropertiesSideBarDB::itemChanged(const QUrl& url, const ImageInfo& info,
                                            const QRect& rect, DImg* const img, const DImageHistory& history)
 {
     if ( !url.isValid() )
@@ -394,7 +394,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
     unsetCursor();
 }
 
-void ImagePropertiesSideBarDB::slotFileMetadataChanged(const QUrl &url)
+void ImagePropertiesSideBarDB::slotFileMetadataChanged(const QUrl& url)
 {
     if (url == m_currentURL)
     {
@@ -525,7 +525,7 @@ void ImagePropertiesSideBarDB::refreshTagsView()
     //d->desceditTab->refreshTagsView();
 }
 
-void ImagePropertiesSideBarDB::setImagePropertiesInformation(const QUrl &url)
+void ImagePropertiesSideBarDB::setImagePropertiesInformation(const QUrl& url)
 {
     foreach(const ImageInfo& info, d->currentInfos)
     {

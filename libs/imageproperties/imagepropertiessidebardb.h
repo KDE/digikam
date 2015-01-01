@@ -70,7 +70,7 @@ public:
     ImagePropertiesVersionsTab* getFiltersHistoryTab() const;
     ImageDescEditTab*           imageDescEditTab()     const;
 
-    virtual void itemChanged(const QUrl &url, const QRect& rect = QRect(), DImg* const img = 0);
+    virtual void itemChanged(const QUrl& url, const QRect& rect = QRect(), DImg* const img = 0);
 
     virtual void itemChanged(const ImageInfo& info, const QRect& rect = QRect(),
                              DImg* const img = 0, const DImageHistory& history = DImageHistory());
@@ -101,15 +101,15 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void slotChangedTab(QWidget* tab);
-    void slotFileMetadataChanged(const QUrl &url);
+    void slotFileMetadataChanged(const QUrl& url);
     void slotImageChangeDatabase(const ImageChangeset& changeset);
     void slotImageTagChanged(const ImageTagChangeset& changeset);
 
 private:
 
-    void itemChanged(const QUrl &url, const ImageInfo& info, const QRect& rect, DImg* const img, const DImageHistory& history);
+    void itemChanged(const QUrl& url, const ImageInfo& info, const QRect& rect, DImg* const img, const DImageHistory& history);
     void itemChanged(const ImageInfoList& infos, const QRect& rect, DImg* const img, const DImageHistory& history);
-    void setImagePropertiesInformation(const QUrl &url);
+    void setImagePropertiesInformation(const QUrl& url);
 
 protected:
 

@@ -891,7 +891,7 @@ QueueListViewItem* QueueListView::findItemById(qlonglong id)
     return 0;
 }
 
-QueueListViewItem* QueueListView::findItemByUrl(const QUrl &url)
+QueueListViewItem* QueueListView::findItemByUrl(const QUrl& url)
 {
     QTreeWidgetItemIterator it(this);
 
@@ -1158,7 +1158,7 @@ void QueueListView::slotCollectionImageChange(const CollectionImageChangeset& ch
     }
 }
 
-void QueueListView::reloadThumbs(const QUrl &url)
+void QueueListView::reloadThumbs(const QUrl& url)
 {
     d->thumbLoadThread->find(ThumbnailIdentifier(url.toLocalFile()));
 }

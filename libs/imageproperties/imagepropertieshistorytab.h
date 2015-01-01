@@ -85,7 +85,7 @@ public:
     explicit ImagePropertiesHistoryTab(QWidget* const parent);
     ~ImagePropertiesHistoryTab();
 
-    void setCurrentURL(const QUrl &url = QUrl());
+    void setCurrentURL(const QUrl& url = QUrl());
 
 public Q_SLOTS:
 

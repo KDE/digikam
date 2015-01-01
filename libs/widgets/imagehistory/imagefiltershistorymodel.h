@@ -49,10 +49,10 @@ class ImageFiltersHistoryModel : public QAbstractItemModel
 
 public:
 
-    explicit ImageFiltersHistoryModel(QObject* const parent = 0, const QUrl &url = QUrl());
+    explicit ImageFiltersHistoryModel(QObject* const parent = 0, const QUrl& url = QUrl());
     ~ImageFiltersHistoryModel();
 
-    void setUrl(const QUrl &url);
+    void setUrl(const QUrl& url);
     bool removeRows(int row, int count, const QModelIndex& parent);
     void setupModelData(const QList<DImageHistory::Entry>& entries, ImageFiltersHistoryTreeItem* parent = 0);
 

@@ -47,7 +47,7 @@ public:
     explicit SlideProperties(const SlideShowSettings& settings, QWidget* const parent);
     ~SlideProperties();
 
-    void setCurrentInfo(const SlidePictureInfo& info, const QUrl &url);
+    void setCurrentInfo(const SlidePictureInfo& info, const QUrl& url);
 
 private:
 

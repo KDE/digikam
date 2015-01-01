@@ -65,9 +65,9 @@ public:
 
     void clearGPSInfo();
     void setGPSInfoList(const GPSImageInfo::List& list);
-    void setCurrentURL(const QUrl &url=QUrl());
+    void setCurrentURL(const QUrl& url=QUrl());
 
-    void setMetadata(const DMetadata& meta, const QUrl &url);
+    void setMetadata(const DMetadata& meta, const QUrl& url);
 
     int  getWebGPSLocator() const;
     void setWebGPSLocator(int locator);

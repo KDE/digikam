@@ -360,7 +360,7 @@ QList<QUrl> ImageCategorizedView::selectedUrls() const
     return urls;
 }
 
-void ImageCategorizedView::toIndex(const QUrl &url)
+void ImageCategorizedView::toIndex(const QUrl& url)
 {
     DCategorizedView::toIndex(d->filterModel->indexForPath(url.toLocalFile()));
 }
@@ -465,7 +465,7 @@ void ImageCategorizedView::setCurrentWhenAvailable(qlonglong imageId)
     d->scrollToItemId = imageId;
 }
 
-void ImageCategorizedView::setCurrentUrl(const QUrl &url)
+void ImageCategorizedView::setCurrentUrl(const QUrl& url)
 {
     if (url.isEmpty())
     {

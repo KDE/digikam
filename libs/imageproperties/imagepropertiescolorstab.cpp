@@ -353,7 +353,7 @@ void ImagePropertiesColorsTab::writeSettings(KConfigGroup& group)
     group.writeEntry("Current ICC Item",          d->iccProfileWidget->getCurrentItemKey());
 }
 
-void ImagePropertiesColorsTab::setData(const QUrl &url, const QRect& selectionArea, DImg* const img)
+void ImagePropertiesColorsTab::setData(const QUrl& url, const QRect& selectionArea, DImg* const img)
 {
     // We might be getting duplicate events from AlbumIconView,
     // which will cause all sorts of duplicate work.
@@ -445,7 +445,7 @@ void ImagePropertiesColorsTab::setData(const QUrl &url, const QRect& selectionAr
     }
 }
 
-void ImagePropertiesColorsTab::loadImageFromUrl(const QUrl &url)
+void ImagePropertiesColorsTab::loadImageFromUrl(const QUrl& url)
 {
     // create thread on demand
     if (!d->imageLoaderThread)
