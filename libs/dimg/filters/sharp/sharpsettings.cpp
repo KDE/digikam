@@ -36,7 +36,7 @@
 // KDE includes
 
 #include "digikam_debug.h"
-#include <kurl.h>
+#include <QUrl>
 
 #include <klocalizedstring.h>
 
@@ -486,7 +486,7 @@ void SharpSettings::writeSettings(KConfigGroup& group)
 
 void SharpSettings::loadSettings()
 {
-    KUrl loadRestorationFile = KFileDialog::getOpenUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+    QUrl loadRestorationFile = KFileDialog::getOpenUrl(QUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                        QString("*"), qApp->activeWindow(),
                                                        QString(i18n("Photograph Refocus Settings File to Load")));
 
@@ -530,7 +530,7 @@ void SharpSettings::loadSettings()
 
 void SharpSettings::saveAsSettings()
 {
-    KUrl saveRestorationFile = KFileDialog::getSaveUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+    QUrl saveRestorationFile = KFileDialog::getSaveUrl(QUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                        QString("*"), qApp->activeWindow(),
                                                        QString(i18n("Photograph Refocus Settings File to Save")));
 

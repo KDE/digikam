@@ -37,7 +37,7 @@
 // KDE includes
 
 #include "digikam_debug.h"
-#include <kurl.h>
+#include <QUrl>
 
 #include <klocalizedstring.h>
 

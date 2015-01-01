@@ -698,9 +698,9 @@ int ImageLevels::getLevelHighOutputValue(int channel)
     return 0;
 }
 
-bool ImageLevels::loadLevelsFromGimpLevelsFile(const KUrl& fileUrl)
+bool ImageLevels::loadLevelsFromGimpLevelsFile(const QUrl &fileUrl)
 {
-    // TODO : support KUrl !
+    // TODO : support QUrl !
 
     FILE*   file = 0;
     int     low_input[5];
@@ -777,9 +777,9 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(const KUrl& fileUrl)
     return true;
 }
 
-bool ImageLevels::saveLevelsToGimpLevelsFile(const KUrl& fileUrl)
+bool ImageLevels::saveLevelsToGimpLevelsFile(const QUrl &fileUrl)
 {
-    // TODO : support KUrl !
+    // TODO : support QUrl !
 
     FILE* file = 0;
     int   i;

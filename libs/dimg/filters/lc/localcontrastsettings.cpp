@@ -44,7 +44,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 #include <klocalizedstring.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -657,7 +657,7 @@ void LocalContrastSettings::writeSettings(KConfigGroup& group)
 
 void LocalContrastSettings::loadSettings()
 {
-    KUrl loadFile = KFileDialog::getOpenUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+    QUrl loadFile = KFileDialog::getOpenUrl(QUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                             QString("*"), qApp->activeWindow(),
                                             i18n("Photograph Local Contrast Settings File to Load"));
 
@@ -711,7 +711,7 @@ void LocalContrastSettings::loadSettings()
 
 void LocalContrastSettings::saveAsSettings()
 {
-    KUrl saveFile = KFileDialog::getSaveUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+    QUrl saveFile = KFileDialog::getSaveUrl(QUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                             QString("*"), qApp->activeWindow(),
                                             i18n("Photograph Local Contrast Settings File to Save"));
 

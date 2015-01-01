@@ -43,7 +43,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 #include <klocalizedstring.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -250,9 +250,9 @@ void CurvesSettings::writeSettings(KConfigGroup& group)
 
 void CurvesSettings::loadSettings()
 {
-    KUrl loadCurvesFile;
+    QUrl loadCurvesFile;
 
-    loadCurvesFile = KFileDialog::getOpenUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+    loadCurvesFile = KFileDialog::getOpenUrl(QUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                              QString("*"), qApp->activeWindow(),
                                              QString(i18n("Select Gimp Curves File to Load")));
 
@@ -271,9 +271,9 @@ void CurvesSettings::loadSettings()
 
 void CurvesSettings::saveAsSettings()
 {
-    KUrl saveCurvesFile;
+    QUrl saveCurvesFile;
 
-    saveCurvesFile = KFileDialog::getSaveUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+    saveCurvesFile = KFileDialog::getSaveUrl(QUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                              QString("*"), qApp->activeWindow(),
                                              QString(i18n("Gimp Curves File to Save")));
 

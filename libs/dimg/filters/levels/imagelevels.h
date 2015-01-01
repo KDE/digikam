@@ -26,7 +26,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -80,8 +80,8 @@ public:
 
     // Methods for to save/load the levels values to/from a Gimp levels text file.
 
-    bool   saveLevelsToGimpLevelsFile(const KUrl& fileUrl);
-    bool   loadLevelsFromGimpLevelsFile(const KUrl& fileUrl);
+    bool   saveLevelsToGimpLevelsFile(const QUrl &fileUrl);
+    bool   loadLevelsFromGimpLevelsFile(const QUrl &fileUrl);
 
 private:
 

@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -165,8 +165,8 @@ public:
 
     /// Methods for to save/load the curves values to/from a Gimp curves text file.
 
-    bool saveCurvesToGimpCurvesFile(const KUrl& fileUrl) const;
-    bool loadCurvesFromGimpCurvesFile(const KUrl& fileUrl);
+    bool saveCurvesToGimpCurvesFile(const QUrl &fileUrl) const;
+    bool loadCurvesFromGimpCurvesFile(const QUrl &fileUrl);
 
     static QPoint getDisabledValue();
 

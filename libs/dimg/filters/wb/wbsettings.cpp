@@ -43,7 +43,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 #include <klocalizedstring.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -531,7 +531,7 @@ void WBSettings::writeSettings(KConfigGroup& group)
 
 void WBSettings::loadSettings()
 {
-    KUrl loadWhiteBalanceFile = KFileDialog::getOpenUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+    QUrl loadWhiteBalanceFile = KFileDialog::getOpenUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                         QString("*"), qApp->activeWindow(),
                                                         QString(i18n("White Color Balance Settings File to Load")));
 
@@ -578,7 +578,7 @@ void WBSettings::loadSettings()
 
 void WBSettings::saveAsSettings()
 {
-    KUrl saveWhiteBalanceFile = KFileDialog::getSaveUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+    QUrl saveWhiteBalanceFile = KFileDialog::getSaveUrl(QUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                         QString("*"), qApp->activeWindow(),
                                                         QString(i18n("White Color Balance Settings File to Save")));
 

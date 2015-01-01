@@ -1138,9 +1138,9 @@ void ImageCurves::setCurveType(ImageCurves::CurveType type)
     }
 }
 
-bool ImageCurves::loadCurvesFromGimpCurvesFile(const KUrl& fileUrl)
+bool ImageCurves::loadCurvesFromGimpCurvesFile(const QUrl &fileUrl)
 {
-    // TODO : support KUrl !
+    // TODO : support QUrl !
 
     FILE* file = 0;
     int   i, j;
@@ -1213,9 +1213,9 @@ void ImageCurves::curvesCalculateAllCurves()
     }
 }
 
-bool ImageCurves::saveCurvesToGimpCurvesFile(const KUrl& fileUrl) const
+bool ImageCurves::saveCurvesToGimpCurvesFile(const QUrl &fileUrl) const
 {
-    // TODO : support KUrl !
+    // TODO : support QUrl !
 
     FILE* file = 0;
     int   i, j;

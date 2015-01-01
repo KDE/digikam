@@ -35,7 +35,7 @@
 // KDE includes
 
 #include "digikam_debug.h"
-#include <kurl.h>
+#include <QUrl>
 
 #include <klocalizedstring.h>
 
@@ -375,7 +375,7 @@ void NRSettings::writeSettings(KConfigGroup& group)
 
 void NRSettings::loadSettings()
 {
-    KUrl loadRestorationFile = KFileDialog::getOpenUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+    QUrl loadRestorationFile = KFileDialog::getOpenUrl(QUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                        QString("*"), qApp->activeWindow(),
                                                        QString(i18n("Photograph Noise Reduction Settings File to Load")));
 
@@ -420,7 +420,7 @@ void NRSettings::loadSettings()
 
 void NRSettings::saveAsSettings()
 {
-    KUrl saveRestorationFile = KFileDialog::getSaveUrl(KUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+    QUrl saveRestorationFile = KFileDialog::getSaveUrl(QUrl(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                        QString("*"), qApp->activeWindow(),
                                                        QString(i18n("Photograph Noise Reduction Settings File to Save")));
 
