@@ -25,7 +25,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT RawImport : public EditorToolThreaded
 
 public:
 
-    RawImport(const KUrl& url, QObject* const parent);
+    RawImport(const QUrl &url, QObject* const parent);
     ~RawImport();
 
     DRawDecoding rawDecodingSettings()      const;

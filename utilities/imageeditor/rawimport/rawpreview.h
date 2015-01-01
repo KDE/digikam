@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -53,7 +53,7 @@ class DIGIKAM_EXPORT RawPreview : public GraphicsDImgView
 
 public:
 
-    RawPreview(const KUrl& url, QWidget* const parent);
+    RawPreview(const QUrl &url, QWidget* const parent);
     ~RawPreview();
 
     DImg& demosaicedImage()    const;

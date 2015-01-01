@@ -64,7 +64,7 @@ public:
 
     double                 currentFitWindowZoom;
 
-    KUrl                   url;
+    QUrl                   url;
 
     DImg                   demosaicedImg;
 
@@ -74,7 +74,7 @@ public:
     ImagePreviewItem*      item;
 };
 
-RawPreview::RawPreview(const KUrl& url, QWidget* const parent)
+RawPreview::RawPreview(const QUrl &url, QWidget* const parent)
     : GraphicsDImgView(parent), d(new Private)
 {
     d->item   = new ImagePreviewItem();

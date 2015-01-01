@@ -25,7 +25,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT RawSettingsBox : public EditorToolSettings
 
 public:
 
-    RawSettingsBox(const KUrl& url, QWidget* const parent);
+    RawSettingsBox(const QUrl &url, QWidget* const parent);
     ~RawSettingsBox();
 
     void setBusy(bool b);

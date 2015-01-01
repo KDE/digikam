@@ -159,7 +159,7 @@ public:
     DcrawSettingsWidget* decodingSettingsBox;
 };
 
-RawSettingsBox::RawSettingsBox(const KUrl& url, QWidget* const parent)
+RawSettingsBox::RawSettingsBox(const QUrl &url, QWidget* const parent)
     : EditorToolSettings(parent), d(new Private)
 {
     setButtons(Default | Ok | Cancel);
