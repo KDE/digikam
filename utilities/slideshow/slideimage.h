@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -52,8 +52,8 @@ public:
     ~SlideImage();
 
     void setPreviewSettings(const PreviewSettings& settings);
-    void setLoadUrl(const KUrl& url);
-    void setPreloadUrl(const KUrl& url);
+    void setLoadUrl(const QUrl &url);
+    void setPreloadUrl(const QUrl &url);
 
 Q_SIGNALS:
 

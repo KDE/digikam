@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -47,7 +47,7 @@ public:
     explicit SlideProperties(const SlideShowSettings& settings, QWidget* const parent);
     ~SlideProperties();
 
-    void setCurrentInfo(const SlidePictureInfo& info, const KUrl& url);
+    void setCurrentInfo(const SlidePictureInfo& info, const QUrl &url);
 
 private:
 

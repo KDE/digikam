@@ -61,18 +61,18 @@ public:
     explicit SlideShow(const SlideShowSettings& settings);
     ~SlideShow();
 
-    void setCurrentItem(const KUrl& url);
-    KUrl currentItem() const;
+    void setCurrentItem(const QUrl &url);
+    QUrl currentItem() const;
 
     void toggleTag(int tag);
-    void updateTags(const KUrl& url, const QStringList& tags);
+    void updateTags(const QUrl &url, const QStringList& tags);
 
 Q_SIGNALS:
 
-    void signalRatingChanged(const KUrl&, int);
-    void signalColorLabelChanged(const KUrl&, int);
-    void signalPickLabelChanged(const KUrl&, int);
-    void signalToggleTag(const KUrl&, int);
+    void signalRatingChanged(const QUrl&, int);
+    void signalColorLabelChanged(const QUrl&, int);
+    void signalPickLabelChanged(const QUrl&, int);
+    void signalToggleTag(const QUrl&, int);
 
 public Q_SLOTS:
 
@@ -104,7 +104,7 @@ private:
     void endOfSlide();
     void inhibitScreenSaver();
     void allowScreenSaver();
-    void dispatchCurrentInfoChange(const KUrl& url);
+    void dispatchCurrentInfoChange(const QUrl &url);
     void makeCornerRectangles(const QRect& desktopRect, const QSize& size,
                               QRect* const topLeft, QRect* const topRight,
                               QRect* const topLeftLarger, QRect* const topRightLarger);

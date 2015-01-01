@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -48,7 +48,7 @@ public:
     explicit SlideError(QWidget* const parent = 0);
     ~SlideError();
 
-    void setCurrentUrl(const KUrl& url);
+    void setCurrentUrl(const QUrl &url);
 
 private:
 

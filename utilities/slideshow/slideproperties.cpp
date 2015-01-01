@@ -56,7 +56,7 @@ public:
 
     const int         maxStringLen;
 
-    KUrl              url;
+    QUrl              url;
 
     SlideShowSettings settings;
     SlidePictureInfo  info;
@@ -75,7 +75,7 @@ SlideProperties::~SlideProperties()
     delete d;
 }
 
-void SlideProperties::setCurrentInfo(const SlidePictureInfo& info, const KUrl& url)
+void SlideProperties::setCurrentInfo(const SlidePictureInfo& info, const QUrl &url)
 {
     d->info = info;
     d->url  = url;

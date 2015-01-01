@@ -82,7 +82,7 @@ SlideError::~SlideError()
     delete d;
 }
 
-void SlideError::setCurrentUrl(const KUrl& url)
+void SlideError::setCurrentUrl(const QUrl &url)
 {
     d->errorMsg->setText(i18n("An error has occurred to show item\n%1", url.fileName()));
 }

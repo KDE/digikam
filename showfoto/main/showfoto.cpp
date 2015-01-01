@@ -62,16 +62,14 @@ extern "C"
 #include <QStyle>
 #include <QKeySequence>
 #include <QApplication>
+#include <QAction>
 
 // KDE includes
 
 #include <kdeversion.h>
-#include <QAction>
 #include <kactionmenu.h>
 #include <kselectaction.h>
 #include <kactioncollection.h>
-#include <kconfig.h>
-#include <kcursor.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
@@ -1051,7 +1049,7 @@ void ShowFoto::slideShow(Digikam::SlideShowSettings& settings)
     m_nameLabel->progressBarMode(Digikam::StatusProgressBar::CancelProgressBarMode,
                                  i18n("Preparing slideshow. Please wait..."));
 
-    for (KUrl::List::ConstIterator it = settings.fileList.constBegin() ;
+    for (QList<QUrl>::ConstIterator it = settings.fileList.constBegin() ;
          !m_cancelSlideShow && (it != settings.fileList.constEnd()) ; ++it)
     {
         Digikam::SlidePictureInfo pictInfo;

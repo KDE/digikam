@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -53,7 +53,7 @@ public:
     SlideOSD(const SlideShowSettings& settings, SlideShow* const parent = 0);
     ~SlideOSD();
 
-    void setCurrentInfo(const SlidePictureInfo& info, const KUrl& url);
+    void setCurrentInfo(const SlidePictureInfo& info, const QUrl &url);
 
     void pause(bool b);
     bool isPaused() const;

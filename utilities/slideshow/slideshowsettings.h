@@ -29,10 +29,7 @@
 #include <QMap>
 #include <QColor>
 #include <QString>
-
-// KDE includes
-
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -174,11 +171,11 @@ public:
 
     /** List of pictures URL to slide
      */
-    KUrl::List                   fileList;
+    QList<QUrl>                  fileList;
 
     /** Map of pictures information to slide
      */
-    QMap<KUrl, SlidePictureInfo> pictInfoMap;
+    QMap<QUrl, SlidePictureInfo> pictInfoMap;
 
 private:
 

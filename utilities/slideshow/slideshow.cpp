@@ -184,7 +184,7 @@ SlideShow::~SlideShow()
     delete d;
 }
 
-void SlideShow::setCurrentItem(const KUrl& url)
+void SlideShow::setCurrentItem(const QUrl &url)
 {
     int index = d->settings.fileList.indexOf(url);
 
@@ -194,7 +194,7 @@ void SlideShow::setCurrentItem(const KUrl& url)
     }
 }
 
-KUrl SlideShow::currentItem() const
+QUrl SlideShow::currentItem() const
 {
     return d->settings.fileList.value(d->fileIndex);
 }
@@ -220,7 +220,7 @@ void SlideShow::slotLoadNextItem()
 
     if (d->fileIndex < num)
     {
-        d->imageView->setLoadUrl(currentItem().toLocalFile());
+        d->imageView->setLoadUrl(QUrl::fromLocalFile(currentItem().toLocalFile()));
     }
     else
     {
@@ -249,7 +249,7 @@ void SlideShow::slotLoadPrevItem()
 
     if (d->fileIndex >= 0 && d->fileIndex < num)
     {
-        d->imageView->setLoadUrl(currentItem().toLocalFile());
+        d->imageView->setLoadUrl(QUrl::fromLocalFile(currentItem().toLocalFile()));
     }
     else
     {
@@ -307,8 +307,7 @@ void SlideShow::preloadNextItem()
 
     if (index < num)
     {
-
-        d->imageView->setPreloadUrl(currentItem().toLocalFile());
+        d->imageView->setPreloadUrl(QUrl::fromLocalFile(currentItem().toLocalFile()));
     }
 }
 
@@ -424,7 +423,7 @@ void SlideShow::slotAssignPickLabel(int pick)
     emit signalPickLabelChanged(currentItem(), pick);
 }
 
-void SlideShow::updateTags(const KUrl& url, const QStringList& tags)
+void SlideShow::updateTags(const QUrl &url, const QStringList& tags)
 {
     d->settings.pictInfoMap[url].tags = tags;
     dispatchCurrentInfoChange(url);
@@ -435,7 +434,7 @@ void SlideShow::toggleTag(int tag)
     emit signalToggleTag(currentItem(), tag);
 }
 
-void SlideShow::dispatchCurrentInfoChange(const KUrl& url)
+void SlideShow::dispatchCurrentInfoChange(const QUrl &url)
 {
     if (currentItem() == url)
         d->osd->setCurrentInfo(d->settings.pictInfoMap[currentItem()], currentItem());
