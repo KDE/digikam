@@ -72,8 +72,8 @@ public:
     QList<ImageInfo> selectedImageInfosCurrentFirst() const;
     ImageInfo currentInfo();
     ImageInfoList allInfo()     const;
-    KUrl::List allUrls()        const;
-    KUrl::List selectedUrls()   const;
+    QList<QUrl> allUrls()        const;
+    QList<QUrl> selectedUrls()   const;
     int numberOfSelectedItems() const;
     ImageInfo nextInfo()        const;
     ImageInfo previousInfo()    const;

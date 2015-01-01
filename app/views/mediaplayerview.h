@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 #include <phonon/mediaobject.h>
 
 class QEvent;
@@ -66,7 +66,7 @@ public:
     explicit MediaPlayerView(QWidget* const parent);
     ~MediaPlayerView();
 
-    void setCurrentItem(const KUrl& url   = KUrl(),
+    void setCurrentItem(const QUrl &url   = QUrl(),
                         bool  hasPrevious = false,
                         bool  hasNext     = false);
     void escapePreview();

@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 #include <khtml_part.h>
 
 // Local includes
@@ -60,7 +60,7 @@ private:
 
 private Q_SLOTS:
 
-    void slotUrlOpen(const KUrl&);
+    void slotUrlOpen(const QUrl&);
     void slotThemeChanged();
 };
 

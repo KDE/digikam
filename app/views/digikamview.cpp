@@ -785,7 +785,7 @@ QList<SidebarWidget*> DigikamView::leftSidebarWidgets() const
     return d->leftSideBarWidgets;
 }
 
-KUrl::List DigikamView::allUrls() const
+QList<QUrl> DigikamView::allUrls() const
 {
     /// @todo This functions seems not to be used anywhere right now
 
@@ -799,7 +799,7 @@ KUrl::List DigikamView::allUrls() const
     }
 }
 
-KUrl::List DigikamView::selectedUrls() const
+QList<QUrl> DigikamView::selectedUrls() const
 {
     switch (viewMode())
     {
@@ -911,7 +911,7 @@ void DigikamView::slotLastItem()
     }
 }
 
-void DigikamView::slotSelectItemByUrl(const KUrl& url)
+void DigikamView::slotSelectItemByUrl(const QUrl &url)
 {
     /// @todo This functions seems not to be used anywhere right now
     /// @todo Adapt to TableView
@@ -1178,7 +1178,7 @@ void DigikamView::slotGotoTagAndItem(int tagID)
     // d->iconView->setAlbumItemToFind(url);
 }
 
-void DigikamView::slotSelectAlbum(const KUrl& url)
+void DigikamView::slotSelectAlbum(const QUrl &url)
 {
     PAlbum* const album = d->albumManager->findPAlbum(url);
 
@@ -1270,7 +1270,7 @@ void DigikamView::slotAlbumOpenInFileManager()
 
     if (palbum)
     {
-        new KRun(KUrl(palbum->folderPath()), this); // KRun will delete itself.
+        new KRun(QUrl(palbum->folderPath()), this); // KRun will delete itself.
     }
 }
 
@@ -1300,7 +1300,7 @@ void DigikamView::slotAlbumOpenInTerminal()
 
     // If the given directory is not local, it can still be the URL of an
     // ioslave using UDS_LOCAL_PATH which to be converted first.
-    KUrl url = KIO::NetAccess::mostLocalUrl(QUrl::fromLocalFile(dir), this);
+    QUrl url = KIO::NetAccess::mostLocalUrl(QUrl::fromLocalFile(dir), this);
 
     //If the URL is local after the above conversion, set the directory.
     if (url.isLocalFile())
@@ -2103,17 +2103,17 @@ void DigikamView::slotSlideShowBuilderComplete(const SlideShowSettings& settings
         slide->setCurrentItem(currentUrl());
     }
 
-    connect(slide, SIGNAL(signalRatingChanged(KUrl,int)),
-            this, SLOT(slotRatingChanged(KUrl,int)));
+    connect(slide, SIGNAL(signalRatingChanged(QUrl,int)),
+            this, SLOT(slotRatingChanged(QUrl,int)));
 
-    connect(slide, SIGNAL(signalColorLabelChanged(KUrl,int)),
-            this, SLOT(slotColorLabelChanged(KUrl,int)));
+    connect(slide, SIGNAL(signalColorLabelChanged(QUrl,int)),
+            this, SLOT(slotColorLabelChanged(QUrl,int)));
 
-    connect(slide, SIGNAL(signalPickLabelChanged(KUrl,int)),
-            this, SLOT(slotPickLabelChanged(KUrl,int)));
+    connect(slide, SIGNAL(signalPickLabelChanged(QUrl,int)),
+            this, SLOT(slotPickLabelChanged(QUrl,int)));
 
-    connect(slide, SIGNAL(signalToggleTag(KUrl,int)),
-            this, SLOT(slotToggleTag(KUrl,int)));
+    connect(slide, SIGNAL(signalToggleTag(QUrl,int)),
+            this, SLOT(slotToggleTag(QUrl,int)));
 
     slide->show();
 }
@@ -2193,7 +2193,7 @@ void DigikamView::slotRightSideBarActivateAssignedTags()
     d->rightSideBar->imageDescEditTab()->activateAssignedTagsButton();
 }
 
-void DigikamView::slotRatingChanged(const KUrl& url, int rating)
+void DigikamView::slotRatingChanged(const QUrl &url, int rating)
 {
     rating = qMin(RatingMax, qMax(RatingMin, rating));
     ImageInfo info = ImageInfo::fromUrl(url);
@@ -2204,7 +2204,7 @@ void DigikamView::slotRatingChanged(const KUrl& url, int rating)
     }
 }
 
-void DigikamView::slotColorLabelChanged(const KUrl& url, int color)
+void DigikamView::slotColorLabelChanged(const QUrl &url, int color)
 {
     ImageInfo info = ImageInfo::fromUrl(url);
 
@@ -2214,7 +2214,7 @@ void DigikamView::slotColorLabelChanged(const KUrl& url, int color)
     }
 }
 
-void DigikamView::slotPickLabelChanged(const KUrl& url, int pick)
+void DigikamView::slotPickLabelChanged(const QUrl &url, int pick)
 {
     ImageInfo info = ImageInfo::fromUrl(url);
 
@@ -2224,7 +2224,7 @@ void DigikamView::slotPickLabelChanged(const KUrl& url, int pick)
     }
 }
 
-void DigikamView::slotToggleTag(const KUrl& url, int tagID)
+void DigikamView::slotToggleTag(const QUrl &url, int tagID)
 {
     ImageInfo info = ImageInfo::fromUrl(url);
 
@@ -2330,7 +2330,7 @@ ImageInfoList DigikamView::allInfo() const
     }
 }
 
-KUrl DigikamView::currentUrl() const
+QUrl DigikamView::currentUrl() const
 {
     const ImageInfo cInfo = currentInfo();
 

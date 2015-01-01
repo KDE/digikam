@@ -354,7 +354,7 @@ void ImagePreviewView::slotShowContextMenu(QGraphicsSceneContextMenuEvent* event
 
     QList<qlonglong> idList;
     idList << info.id();
-    KUrl::List selectedItems;
+    QList<QUrl> selectedItems;
     selectedItems << info.fileUrl();
 
     // --------------------------------------------------------

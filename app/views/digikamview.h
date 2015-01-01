@@ -35,7 +35,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Libkdcraw includes
 
@@ -98,9 +98,9 @@ public:
 
     void connectIconViewFilter(FilterStatusBar* const filter);
 
-    KUrl::List allUrls()      const;
-    KUrl::List selectedUrls() const;
-    KUrl currentUrl()         const;
+    QList<QUrl> allUrls()      const;
+    QList<QUrl> selectedUrls() const;
+    QUrl currentUrl()         const;
     bool hasCurrentItem()     const;
     ImageInfo currentInfo()   const;
 
@@ -165,7 +165,7 @@ public Q_SLOTS:
     void slotGotoDateAndItem(const ImageInfo& imageInfo);
     void slotGotoTagAndItem(int tagID);
 
-    void slotSelectAlbum(const KUrl& url);
+    void slotSelectAlbum(const QUrl &url);
     void slotSetCurrentWhenAvailable(const qlonglong id);
 
     // Tag action slots
@@ -256,7 +256,7 @@ private Q_SLOTS:
     void slotPrevItem();
     void slotNextItem();
     void slotLastItem();
-    void slotSelectItemByUrl(const KUrl&);
+    void slotSelectItemByUrl(const QUrl&);
     void slotAwayFromSelection();
 
     void slotViewModeChanged();
@@ -271,10 +271,10 @@ private Q_SLOTS:
 
     void slotImageChangeFailed(const QString& message, const QStringList& fileNames);
 
-    void slotRatingChanged(const KUrl&, int);
-    void slotColorLabelChanged(const KUrl&, int);
-    void slotPickLabelChanged(const KUrl&, int);
-    void slotToggleTag(const KUrl&, int);
+    void slotRatingChanged(const QUrl&, int);
+    void slotColorLabelChanged(const QUrl&, int);
+    void slotPickLabelChanged(const QUrl&, int);
+    void slotToggleTag(const QUrl&, int);
 
     void slotPopupFiltersView();
     void slotSetupMetadataFilters(int);

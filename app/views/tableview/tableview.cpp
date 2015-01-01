@@ -555,10 +555,10 @@ void TableView::slotGroupingModeActionTriggered()
     s->tableViewModel->setGroupingMode(newGroupingMode);
 }
 
-KUrl::List TableView::allUrls() const
+QList<QUrl> TableView::allUrls() const
 {
     const ImageInfoList allInfo = s->tableViewModel->allImageInfo();
-    KUrl::List resultList;
+    QList<QUrl> resultList;
 
     Q_FOREACH(const ImageInfo& info, allInfo)
     {
@@ -568,7 +568,7 @@ KUrl::List TableView::allUrls() const
     return resultList;
 }
 
-KUrl::List TableView::selectedUrls() const
+QList<QUrl> TableView::selectedUrls() const
 {
     return s->tableViewModel->selectedUrls();
 }

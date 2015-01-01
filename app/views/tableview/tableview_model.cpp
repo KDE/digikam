@@ -1350,20 +1350,20 @@ QList<ImageInfo> TableViewModel::allImageInfo() const
     return infoList;
 }
 
-KUrl::List TableViewModel::selectedUrls() const
+QList<QUrl> TableViewModel::selectedUrls() const
 {
     return urlsFromIndexes(s->tableViewSelectionModel->selectedRows());
 }
 
-KUrl::List TableViewModel::urlsFromIndexes(const QModelIndexList& indexList) const
+QList<QUrl> TableViewModel::urlsFromIndexes(const QModelIndexList& indexList) const
 {
-    KUrl::List resultList;
+    QList<QUrl> resultList;
 
     Q_FOREACH(const QModelIndex& index, indexList)
     {
         Item* const item     = itemFromIndex(index);
         const ImageInfo info = infoFromItem(item);
-        const KUrl itemUrl   = info.fileUrl();
+        const QUrl itemUrl   = info.fileUrl();
 
         if (!itemUrl.isEmpty())
         {

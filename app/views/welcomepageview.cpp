@@ -44,7 +44,7 @@
 #include <khtmlview.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -74,8 +74,8 @@ WelcomePageView::WelcomePageView(QWidget* const parent)
 
     // ------------------------------------------------------------
 
-    connect(browserExtension(), SIGNAL(openUrlRequest(KUrl,KParts::OpenUrlArguments,KParts::BrowserArguments)),
-            this, SLOT(slotUrlOpen(KUrl)));
+    connect(browserExtension(), SIGNAL(openUrlRequest(QUrl,KParts::OpenUrlArguments,KParts::BrowserArguments)),
+            this, SLOT(slotUrlOpen(QUrl)));
 
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
@@ -87,7 +87,7 @@ WelcomePageView::~WelcomePageView()
 {
 }
 
-void WelcomePageView::slotUrlOpen(const KUrl& url)
+void WelcomePageView::slotUrlOpen(const QUrl &url)
 {
     QDesktopServices::openUrl(QUrl(url.url()));
 }

@@ -34,7 +34,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 #include <kconfiggroup.h>
 #include <kconfig.h>

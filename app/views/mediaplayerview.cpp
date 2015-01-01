@@ -131,7 +131,7 @@ public:
     Phonon::VideoPlayer* player;
     Phonon::SeekSlider*  slider;
 
-    KUrl                 currentItem;
+    QUrl                 currentItem;
 };
 
 MediaPlayerView::MediaPlayerView(QWidget* const parent)
@@ -279,7 +279,7 @@ void MediaPlayerView::setPreviewMode(int mode)
     d->toolBar->raise();
 }
 
-void MediaPlayerView::setCurrentItem(const KUrl& url, bool hasPrevious, bool hasNext)
+void MediaPlayerView::setCurrentItem(const QUrl &url, bool hasPrevious, bool hasNext)
 {
     d->prevAction->setEnabled(hasPrevious);
     d->nextAction->setEnabled(hasNext);
