@@ -35,7 +35,7 @@
 // KDE includes
 
 #include <kglobal.h>
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 

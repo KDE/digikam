@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 namespace Digikam
 {
@@ -67,8 +67,8 @@ void HistoryImageId::setCreationDate(const QDateTime& creationDate)
 
 void HistoryImageId::setPathOnDisk(const QString& filePath)
 {
-    KUrl url   = QUrl::fromLocalFile(filePath);
-    m_filePath = url.directory(KUrl::ObeyTrailingSlash | KUrl::AppendTrailingSlash);
+    QUrl url = QUrl::fromLocalFile(filePath);
+    m_filePath = url.adjusted(QUrl::RemoveFilename).path() + "/";
 }
 
 void HistoryImageId::setPath(const QString& path)
