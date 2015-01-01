@@ -42,7 +42,6 @@
 
 // KDE includes
 
-#include <kurl.h>
 #include "digikam_debug.h"
 
 // Local includes
