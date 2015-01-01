@@ -39,7 +39,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -62,7 +62,7 @@ public:
     ~BlackFrameParser();
 
     void parseHotPixels(const QString& file);
-    void parseBlackFrame(const KUrl& url);
+    void parseBlackFrame(const QUrl &url);
     void parseBlackFrame(QImage& img);
 
     QImage image() const

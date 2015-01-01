@@ -55,7 +55,7 @@ BlackFrameListView::BlackFrameListView(QWidget* const parent)
 
 // ----------------------------------------------------------------------------
 
-BlackFrameListViewItem::BlackFrameListViewItem(BlackFrameListView* const parent, const KUrl& url)
+BlackFrameListViewItem::BlackFrameListViewItem(BlackFrameListView* const parent, const QUrl &url)
     : QObject(parent), QTreeWidgetItem(parent)
 {
     m_parent        = parent;
@@ -66,8 +66,8 @@ BlackFrameListViewItem::BlackFrameListViewItem(BlackFrameListView* const parent,
     connect(m_parser, SIGNAL(signalParsed(QList<HotPixel>)),
             this, SLOT(slotParsed(QList<HotPixel>)));
 
-    connect(this, SIGNAL(signalParsed(QList<HotPixel>,KUrl)),
-            parent, SLOT(slotParsed(QList<HotPixel>,KUrl)));
+    connect(this, SIGNAL(signalParsed(QList<HotPixel>,QUrl)),
+            parent, SLOT(slotParsed(QList<HotPixel>,QUrl)));
 
     connect(m_parser, SIGNAL(signalLoadingProgress(float)),
             this, SIGNAL(signalLoadingProgress(float)));

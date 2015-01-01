@@ -37,7 +37,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 #include <klocale.h>
 
 // Local includes
@@ -59,11 +59,11 @@ public:
 
 Q_SIGNALS:
 
-    void signalBlackFrameSelected(const QList<HotPixel>&, const KUrl&);
+    void signalBlackFrameSelected(const QList<HotPixel>&, const QUrl&);
 
 private Q_SLOTS:
 
-    void slotParsed(const QList<HotPixel>& hotPixels, const KUrl& blackFrameURL)
+    void slotParsed(const QList<HotPixel>& hotPixels, const QUrl &blackFrameURL)
     {
         emit signalBlackFrameSelected(hotPixels, blackFrameURL);
     };
@@ -77,12 +77,12 @@ class BlackFrameListViewItem : public QObject, QTreeWidgetItem
 
 public:
 
-    BlackFrameListViewItem(BlackFrameListView* const parent, const KUrl& url);
+    BlackFrameListViewItem(BlackFrameListView* const parent, const QUrl &url);
     ~BlackFrameListViewItem() {};
 
 Q_SIGNALS:
 
-    void signalParsed(const QList<HotPixel>&, const KUrl&);
+    void signalParsed(const QList<HotPixel>&, const QUrl&);
     void signalLoadingProgress(float);
     void signalLoadingComplete();
 
@@ -110,7 +110,7 @@ private:
 
     QString             m_blackFrameDesc;
 
-    KUrl                m_blackFrameURL;
+    QUrl                m_blackFrameURL;
 
     BlackFrameParser*   m_parser;
 

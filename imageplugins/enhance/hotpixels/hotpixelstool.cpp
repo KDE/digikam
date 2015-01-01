@@ -89,7 +89,7 @@ public:
     QProgressBar*        progressBar;
     QList<HotPixel>      hotPixelsList;
 
-    KUrl                 blackFrameURL;
+    QUrl                 blackFrameURL;
 
     RComboBox*           filterMethodCombo;
 
@@ -168,8 +168,8 @@ HotPixelsTool::HotPixelsTool(QObject* const parent)
     connect(d->blackFrameButton, SIGNAL(clicked()),
             this, SLOT(slotAddBlackFrame()));
 
-    connect(d->blackFrameListView, SIGNAL(signalBlackFrameSelected(QList<HotPixel>,KUrl)),
-            this, SLOT(slotBlackFrame(QList<HotPixel>,KUrl)));
+    connect(d->blackFrameListView, SIGNAL(signalBlackFrameSelected(QList<HotPixel>,QUrl)),
+            this, SLOT(slotBlackFrame(QList<HotPixel>,QUrl)));
 }
 
 HotPixelsTool::~HotPixelsTool()
@@ -181,7 +181,7 @@ void HotPixelsTool::readSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
-    d->blackFrameURL          = KUrl(group.readEntry(d->configLastBlackFrameFileEntry, QString()));
+    d->blackFrameURL          = QUrl(group.readEntry(d->configLastBlackFrameFileEntry, QString()));
     d->filterMethodCombo->setCurrentIndex(group.readEntry(d->configFilterMethodEntry,  d->filterMethodCombo->defaultIndex()));
 
     if (d->blackFrameURL.isValid())
@@ -225,7 +225,7 @@ void HotPixelsTool::slotResetSettings()
 
 void HotPixelsTool::slotAddBlackFrame()
 {
-    KUrl url = ImageDialog::getImageURL(qApp->activeWindow(), d->blackFrameURL, i18n("Select Black Frame Image"));
+    QUrl url = ImageDialog::getImageURL(qApp->activeWindow(), d->blackFrameURL, i18n("Select Black Frame Image"));
 
     if (!url.isEmpty())
     {
@@ -284,7 +284,7 @@ void HotPixelsTool::setFinalImage()
     iface.setOriginal(i18n("Hot Pixels Correction"), filter()->filterAction(), filter()->getTargetImage());
 }
 
-void HotPixelsTool::slotBlackFrame(const QList<HotPixel>& hpList, const KUrl& blackFrameURL)
+void HotPixelsTool::slotBlackFrame(const QList<HotPixel>& hpList, const QUrl &blackFrameURL)
 {
     d->blackFrameURL = blackFrameURL;
     d->hotPixelsList = hpList;

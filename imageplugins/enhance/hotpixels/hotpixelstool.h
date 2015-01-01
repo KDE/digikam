@@ -37,7 +37,7 @@
 #include "editortool.h"
 #include "hotpixel.h"
 
-class KUrl;
+class QUrl;
 
 namespace DigikamEnhanceImagePlugin
 {
@@ -57,7 +57,7 @@ private Q_SLOTS:
 
     void slotLoadingProgress(float v);
     void slotLoadingComplete();
-    void slotBlackFrame(const QList<HotPixel>& hpList, const KUrl& blackFrameURL);
+    void slotBlackFrame(const QList<HotPixel>& hpList, const QUrl &blackFrameURL);
     void slotAddBlackFrame();
     void slotResetSettings();
 
