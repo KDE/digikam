@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -217,7 +217,7 @@ public:
      *
      * @param selectedItems the list of selected items
      */
-    void addServicesMenu(const KUrl::List& selectedItems);
+    void addServicesMenu(const QList<QUrl>& selectedItems);
 
     /**
      * Add the Goto menu.
@@ -403,7 +403,7 @@ private Q_SLOTS:
 private:
 
     void setSelectedIds(const imageIds& ids);
-    void setSelectedItems(const KUrl::List& urls);
+    void setSelectedItems(const QList<QUrl>& urls);
     bool imageIdsHaveSameCategory(const imageIds& ids, DatabaseItem::Category category);
     QList<QAction*> groupMenuActions(const imageIds& ids);
     void setGroupsOpen(bool open);

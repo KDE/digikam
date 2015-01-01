@@ -120,7 +120,7 @@ public:
     QAction*                     setThumbnailAction;
 
     QList<qlonglong>             selectedIds;
-    KUrl::List                   selectedItems;
+    QList<QUrl>                   selectedItems;
 
     QMap<int, QAction*>          queueActions;
     QMap<QString, KService::Ptr> servicesMap;
@@ -271,7 +271,7 @@ void ContextMenuHelper::addStandardActionThumbnail(const imageIds &ids, Album* a
     }
 }
 
-void ContextMenuHelper::addServicesMenu(const KUrl::List& selectedItems)
+void ContextMenuHelper::addServicesMenu(const QList<QUrl>& selectedItems)
 {
     setSelectedItems(selectedItems);
 
@@ -321,7 +321,7 @@ void ContextMenuHelper::slotOpenWith()
 void ContextMenuHelper::slotOpenWith(QAction* action)
 {
     KService::Ptr service;
-    KUrl::List list = d->selectedItems;
+    QList<QUrl> list = d->selectedItems;
     QString name    = action ? action->data().toString() : QString();
 
     if (name.isEmpty())
@@ -1127,7 +1127,7 @@ void ContextMenuHelper::addStandardActionPaste(QObject* recv, const char* slot)
     QAction* const paste        = KStandardAction::paste(recv, slot, d->parent);
     const QMimeData* const data = qApp->clipboard()->mimeData(QClipboard::Clipboard);
 
-    if (!data || !KUrl::List::canDecode(data))
+    if (!data || !data->hasUrls())
     {
         paste->setEnabled(false);
     }
@@ -1192,7 +1192,7 @@ void ContextMenuHelper::setSelectedIds(const imageIds &ids)
     }
 }
 
-void ContextMenuHelper::setSelectedItems(const KUrl::List& urls)
+void ContextMenuHelper::setSelectedItems(const QList<QUrl>& urls)
 {
     if (d->selectedItems.isEmpty())
     {

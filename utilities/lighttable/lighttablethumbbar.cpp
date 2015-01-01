@@ -274,7 +274,7 @@ void LightTableThumbBar::showContextMenuOnInfo(QContextMenuEvent* e, const Image
     cmhelper.addAction(rightPanelAction, true);
     cmhelper.addSeparator();
     cmhelper.addAction(editAction);
-    cmhelper.addServicesMenu(KUrl(info.fileUrl()));
+    cmhelper.addServicesMenu(QList<QUrl>() << info.fileUrl());
     cmhelper.addSeparator();
     cmhelper.addLabelsAction();
     cmhelper.addSeparator();
