@@ -845,6 +845,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
     // -- UUID Checking ---------------------------------------------------------
 
     QList<CollectionLocation> disappearedLocations = CollectionManager::instance()->checkHardWiredLocations();
+
     foreach(const CollectionLocation& loc, disappearedLocations)
     {
         QString locDescription;
@@ -959,7 +960,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
         }
         else
         {
-            CollectionManager::instance()->addLocation(suggestedAlbumRoot);
+            CollectionManager::instance()->addLocation(QUrl::fromLocalFile(suggestedAlbumRoot));
             // Not needed? See bug #188959
             //ScanController::instance()->completeCollectionScan();
         }

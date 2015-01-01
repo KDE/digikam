@@ -1755,7 +1755,7 @@ void CollectionScanner::scanAlbums()
 void CollectionScanner::scan(const QString& folderPath)
 {
     CollectionManager* manager = CollectionManager::instance();
-    KUrl url;
+    QUrl url;
     url.setPath(folderPath);
     QString albumRoot = manager->albumRootPath(url);
     QString album = manager->album(url);
@@ -1803,7 +1803,7 @@ void CollectionScanner::scan(const QString& albumRoot, const QString& album)
 
 void CollectionScanner::scanAlbum(const QString& filePath)
 {
-    KUrl url;
+    QUrl url;
     url.setPath(filePath);
     scanAlbum(CollectionManager::instance()->albumRootPath(url), CollectionManager::instance()->album(url));
 }

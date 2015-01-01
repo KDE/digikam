@@ -34,7 +34,7 @@
 #include <kio/job.h>
 #include <kio/netaccess.h>
 #include <klocalizedstring.h>
-#include <kconfig.h>
+#include <kurl.h>
 #include <kconfiggroup.h>
 
 // Libkdcraw includes
