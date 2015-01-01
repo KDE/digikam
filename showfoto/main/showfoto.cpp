@@ -1352,7 +1352,7 @@ void ShowFoto::slotAddedDropedItems(QDropEvent* e)
 
 void ShowFoto::slotFileWithDefaultApplication()
 {
-    Digikam::FileOperation::openFilesWithDefaultApplication(KUrl::List() << d->thumbBar->currentUrl(), this);
+    Digikam::FileOperation::openFilesWithDefaultApplication(QList<QUrl>() << d->thumbBar->currentUrl(), this);
 }
 
 void ShowFoto::addServicesMenu()

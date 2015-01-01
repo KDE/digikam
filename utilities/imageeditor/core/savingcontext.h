@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -85,9 +85,9 @@ public:
     QString              originalFormat;
     QString              format;
 
-    KUrl                 srcURL;
-    KUrl                 destinationURL;
-    KUrl                 moveSrcURL;
+    QUrl                 srcURL;
+    QUrl                 destinationURL;
+    QUrl                 moveSrcURL;
 
     QTemporaryFile*      saveTempFile;
     QString              saveTempFileName;

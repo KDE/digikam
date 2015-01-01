@@ -138,7 +138,7 @@ void EditorCore::load(const QString& filePath, IOFileSettings* const iofileSetti
         {
             d->nextRawDescription = description;
 
-            RawImport* const rawImport = new RawImport(KUrl(filePath), this);
+            RawImport* const rawImport = new RawImport(QUrl(filePath), this);
             EditorToolIface::editorToolIface()->loadTool(rawImport);
 
             connect(rawImport, SIGNAL(okClicked()),

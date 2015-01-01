@@ -2969,7 +2969,7 @@ void EditorWindow::customizedFullScreenMode(bool set)
 
 void EditorWindow::addServicesMenuForUrl(const KUrl& url)
 {
-    KService::List offers = FileOperation::servicesForOpenWith(url);
+    KService::List offers = FileOperation::servicesForOpenWith(QList<QUrl>() << url);
 
     qCDebug(DIGIKAM_GENERAL_LOG) << offers.count() << " services found to open " << url;
 

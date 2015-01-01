@@ -123,7 +123,7 @@ bool FileOperation::localFileRename(const QString& source, const QString& orgPat
     return true;
 }
 
-void FileOperation::openFilesWithDefaultApplication(const KUrl::List& urls, QWidget* const parentWidget)
+void FileOperation::openFilesWithDefaultApplication(const QList<QUrl>& urls, QWidget* const parentWidget)
 {
     if (urls.isEmpty())
     {
@@ -132,9 +132,9 @@ void FileOperation::openFilesWithDefaultApplication(const KUrl::List& urls, QWid
 
     // Create a map of service depending of type mimes to route and start only one instance of relevant application with all same type mime files.
 
-    QMap<KService::Ptr, KUrl::List> servicesMap;
+    QMap<KService::Ptr, QList<QUrl>> servicesMap;
 
-    foreach (const KUrl& url, urls)
+    foreach (const QUrl &url, urls)
     {
         const QString mimeType = KMimeType::findByUrl(url, 0, true, true)->name();
         KService::List offers  = KMimeTypeTrader::self()->query(mimeType, "Application");
@@ -145,7 +145,7 @@ void FileOperation::openFilesWithDefaultApplication(const KUrl::List& urls, QWid
         }
 
         KService::Ptr ptr                            = offers.first();
-        QMap<KService::Ptr, KUrl::List>::iterator it = servicesMap.find(ptr);
+        QMap<KService::Ptr, QList<QUrl>>::iterator it = servicesMap.find(ptr);
 
         if (it != servicesMap.end())
         {
@@ -153,11 +153,11 @@ void FileOperation::openFilesWithDefaultApplication(const KUrl::List& urls, QWid
         }
         else
         {
-            servicesMap.insert(ptr, KUrl::List() << url);
+            servicesMap.insert(ptr, QList<QUrl>() << url);
         }
     }
 
-    for (QMap<KService::Ptr, KUrl::List>::const_iterator it = servicesMap.constBegin();
+    for (QMap<KService::Ptr, QList<QUrl>>::const_iterator it = servicesMap.constBegin();
          it != servicesMap.constEnd(); ++it)
     {
         // Run the dedicated app to open the item.
@@ -165,7 +165,7 @@ void FileOperation::openFilesWithDefaultApplication(const KUrl::List& urls, QWid
     }
 }
 
-KService::List FileOperation::servicesForOpenWith(const KUrl::List& urls)
+KService::List FileOperation::servicesForOpenWith(const QList<QUrl>& urls)
 {
     // This code is inspired by KonqMenuActions:
     // kdebase/apps/lib/konq/konq_menuactions.cpp
@@ -173,7 +173,7 @@ KService::List FileOperation::servicesForOpenWith(const KUrl::List& urls)
     QStringList    mimeTypes;
     KService::List offers;
 
-    foreach(const KUrl& item, urls)
+    foreach(const QUrl &item, urls)
     {
         const QString mimeType = KMimeType::findByUrl(item, 0, true, true)->name();
 
