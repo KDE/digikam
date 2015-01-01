@@ -178,7 +178,7 @@ void DIO::Private::processRename(const KUrl& src, const KUrl& dest)
 void DIO::Private::albumToAlbum(int operation, const PAlbum* const src, const PAlbum* const dest)
 {
     ScanController::instance()->hintAtMoveOrCopyOfAlbum(src, dest);
-    emit jobToCreate(operation, src->fileUrl(), dest->fileUrl());
+    emit jobToCreate(operation, KUrl(src->fileUrl()), KUrl(dest->fileUrl()));
 }
 
 void DIO::Private::imagesToAlbum(int operation, const QList<ImageInfo> infos, const PAlbum* const dest)

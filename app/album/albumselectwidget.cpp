@@ -220,7 +220,7 @@ void AlbumSelectWidget::setCurrentAlbum(PAlbum* const albumToSelect)
     d->albumTreeView->setCurrentAlbums(QList<Album*>() << albumToSelect);
 }
 
-KUrl AlbumSelectWidget::currentAlbumUrl() const
+QUrl AlbumSelectWidget::currentAlbumUrl() const
 {
     PAlbum* const palbum = d->albumTreeView->currentAlbum();
 
@@ -229,10 +229,10 @@ KUrl AlbumSelectWidget::currentAlbumUrl() const
         return palbum->fileUrl();
     }
 
-    return KUrl();
+    return QUrl();
 }
 
-void AlbumSelectWidget::setCurrentAlbumUrl(const KUrl& albumUrl)
+void AlbumSelectWidget::setCurrentAlbumUrl(const QUrl &albumUrl)
 {
     PAlbum* const urlAlbum = AlbumManager::instance()->findPAlbum(albumUrl);
 

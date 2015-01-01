@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -78,7 +78,7 @@ private:
     void connectToKInotify();
     void connectToKDirWatch();
     void connectToKIO();
-    void handleKioNotification(const KUrl& url);
+    void handleKioNotification(const QUrl &url);
 
 private:
 

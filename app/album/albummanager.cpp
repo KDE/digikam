@@ -992,7 +992,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
 //        if (serviceInterface.isValid())
 //        {
 //            DatabaseParameters parameters = DatabaseAccess::parameters();
-//            KUrl url;
+//            QUrl url;
 //            parameters.insertInUrl(url);
 //            serviceInterface.call(QDBus::NoBlock, "setDatabase", url.url());
 //        }
@@ -1974,7 +1974,7 @@ QList<TAlbum*> AlbumManager::currentTAlbums() const
     return talbums;
 }
 
-PAlbum* AlbumManager::findPAlbum(const KUrl& url) const
+PAlbum* AlbumManager::findPAlbum(const QUrl &url) const
 {
     CollectionLocation location = CollectionManager::instance()->locationForUrl(url);
 
@@ -2202,8 +2202,9 @@ PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
     }
 
     DatabaseUrl url = parent->databaseUrl();
-    url.addPath(name);
-    KUrl fileUrl    = url.fileUrl();
+    url = url.adjusted(QUrl::StripTrailingSlash);
+    url.setPath(url.path() + '/' + name);
+    QUrl fileUrl = url.fileUrl();
 
     if (!KIO::NetAccess::mkdir(fileUrl, qApp->activeWindow()))
     {
@@ -2274,10 +2275,10 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
     }
 
     QString oldAlbumPath = album->albumPath();
-    KUrl oldUrl          = album->fileUrl();
+    QUrl oldUrl = album->fileUrl();
     album->setTitle(newName);
     album->m_path        = newName;
-    KUrl newUrl          = album->fileUrl();
+    QUrl newUrl = album->fileUrl();
     QString newAlbumPath = album->albumPath();
 
     // We use a private shortcut around collection scanner noticing our changes,

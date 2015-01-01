@@ -37,7 +37,7 @@
 
 //KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 #include "albumlabelstreeview.h"
 
 namespace Digikam

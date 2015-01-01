@@ -54,7 +54,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <ktextedit.h>
-#include <kurl.h>
+#include <QUrl>
 #include <kseparator.h>
 
 // Libkdcraw includes

@@ -32,7 +32,7 @@
 // KDE includes
 
 #include <kiconloader.h>
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -509,7 +509,7 @@ public:
     QString              oldXml;
     Album*               albumForSelectedItems;
     QString              generatedAlbumName;
-    KUrl::List           urlListForSelectedAlbum;
+    QList<QUrl>           urlListForSelectedAlbum;
 };
 
 AlbumLabelsSearchHandler::AlbumLabelsSearchHandler(AlbumLabelsTreeView* const treeWidget) :
@@ -542,7 +542,7 @@ Album *AlbumLabelsSearchHandler::albumForSelectedItems() const
     return d->albumForSelectedItems;
 }
 
-KUrl::List AlbumLabelsSearchHandler::imagesUrls() const
+QList<QUrl> AlbumLabelsSearchHandler::imagesUrls() const
 {
     return d->urlListForSelectedAlbum;
 }
@@ -842,8 +842,8 @@ void AlbumLabelsSearchHandler::generateAlbumNameForExporting(const QList<int>& r
 
 void AlbumLabelsSearchHandler::imagesUrlsForCurrentAlbum()
 {
-    KUrl url                    = d->albumForSelectedItems->databaseUrl();
-    KIO::TransferJob* const job = ImageLister::startListJob(url);
+    QUrl url = d->albumForSelectedItems->databaseUrl();
+    KIO::TransferJob* const job = ImageLister::startListJob(KUrl(url));
     job->addMetaData("listAlbumsRecursively", "true");
 
     connect(job, SIGNAL(result(KJob*)),
@@ -946,7 +946,7 @@ void AlbumLabelsSearchHandler::slotData(KIO::Job* job, const QByteArray& data)
 
     QByteArray    tmp(data);
     QDataStream   ds(&tmp, QIODevice::ReadOnly);
-    KUrl::List urlList;
+    QList<QUrl> urlList;
 
     while (!ds.atEnd())
     {

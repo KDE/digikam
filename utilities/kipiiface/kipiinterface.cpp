@@ -246,7 +246,7 @@ bool KipiInterface::addImage(const QUrl& url, QString& errmsg)
         return false;
     }
 
-    PAlbum* const targetAlbum = d->albumManager->findPAlbum(url.adjusted(QUrl::RemoveFilename).path());
+    PAlbum* const targetAlbum = d->albumManager->findPAlbum(url.adjusted(QUrl::RemoveFilename));
 
     if (!targetAlbum)
     {
@@ -270,7 +270,7 @@ void KipiInterface::delImage(const QUrl& url)
 
     // Is there a PAlbum for this URL
 
-    PAlbum* const palbum = d->albumManager->findPAlbum(url.adjusted(QUrl::RemoveFilename).path());
+    PAlbum* const palbum = d->albumManager->findPAlbum(url.adjusted(QUrl::RemoveFilename));
 
     if (palbum)
     {

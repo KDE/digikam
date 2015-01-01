@@ -448,7 +448,7 @@ qlonglong PAlbum::iconId() const
     return m_iconId;
 }
 
-KUrl PAlbum::fileUrl() const
+QUrl PAlbum::fileUrl() const
 {
     return databaseUrl().fileUrl();
 }

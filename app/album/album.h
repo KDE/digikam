@@ -37,7 +37,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -354,7 +354,7 @@ public:
     QString     prettyUrl()     const;
     QString     folderPath()    const;
     DatabaseUrl databaseUrl()   const;
-    KUrl        fileUrl()       const;
+    QUrl        fileUrl()       const;
     qlonglong   iconId()        const;
     bool        isAlbumRoot()   const;
 

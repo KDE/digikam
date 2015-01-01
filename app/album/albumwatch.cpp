@@ -399,8 +399,8 @@ void AlbumWatch::rescanPath(const QString& path)
     {
         return;
     }
-    KUrl url(path);
-    rescanDirectory(url.directory());
+    QUrl url(path);
+    rescanDirectory(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path());
 }
 
 /* ---------- KDirWatch ---------- */
@@ -502,8 +502,8 @@ void AlbumWatch::connectToKIO()
 void AlbumWatch::slotKioFileMoved(const QString& urlFrom, const QString& urlTo)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << urlFrom << urlTo;
-    handleKioNotification(KUrl(urlFrom));
-    handleKioNotification(KUrl(urlTo));
+    handleKioNotification(QUrl(urlFrom));
+    handleKioNotification(QUrl(urlTo));
 }
 
 void AlbumWatch::slotKioFilesDeleted(const QStringList& urls)
@@ -512,21 +512,21 @@ void AlbumWatch::slotKioFilesDeleted(const QStringList& urls)
 
     foreach(const QString& url, urls)
     {
-        handleKioNotification(KUrl(url));
+        handleKioNotification(QUrl(url));
     }
 }
 
 void AlbumWatch::slotKioFilesAdded(const QString& url)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << url;
-    handleKioNotification(KUrl(url));
+    handleKioNotification(QUrl(url));
 }
 
-void AlbumWatch::handleKioNotification(const KUrl& url)
+void AlbumWatch::handleKioNotification(const QUrl &url)
 {
     if (url.isLocalFile())
     {
-        QString path = url.directory();
+        QString path = url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path();
 
         //qCDebug(DIGIKAM_GENERAL_LOG) << path << !CollectionManager::instance()->albumRootPath(path).isEmpty();
         // check path is in our collection

@@ -1086,8 +1086,8 @@ void LightTableWindow::deleteItem(bool permanently)
 
 void LightTableWindow::deleteItem(const ImageInfo& info, bool permanently)
 {
-    KUrl u               = info.fileUrl();
-    PAlbum* const palbum = AlbumManager::instance()->findPAlbum(u.directory());
+    QUrl u               = info.fileUrl();
+    PAlbum* const palbum = AlbumManager::instance()->findPAlbum(u.adjusted(QUrl::RemoveFilename));
 
     if (!palbum)
     {

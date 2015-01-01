@@ -34,7 +34,7 @@
 #include <kio/jobuidelegate.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -186,7 +186,7 @@ void AlbumModificationHelper::slotAlbumDelete(PAlbum* album)
     }
 
     // find subalbums
-    KUrl::List childrenList;
+    QList<QUrl> childrenList;
     addAlbumChildrenToList(childrenList, album);
 
     DeleteDialog dialog(d->dialogParent);
@@ -245,7 +245,7 @@ void AlbumModificationHelper::slotAlbumRename(PAlbum* album)
     }
 }
 
-void AlbumModificationHelper::addAlbumChildrenToList(KUrl::List& list, Album* const album)
+void AlbumModificationHelper::addAlbumChildrenToList(QList<QUrl>& list, Album* const album)
 {
     // simple recursive helper function
     if (album)
