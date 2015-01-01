@@ -40,7 +40,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 #include <klocalizedstring.h>
 #include <kio/global.h>
 #include <kiconloader.h>

@@ -116,7 +116,7 @@ public:
      *
      * @param selectedItems the list of selected items
      */
-    void addServicesMenu(const KUrl::List& selectedItems);
+    void addServicesMenu(const QList<QUrl>& selectedItems);
 
     /**
      * Add actions to add, remove or edit a tag.
@@ -236,7 +236,7 @@ private Q_SLOTS:
 private:
 
     void setSelectedIds(itemIds& ids);
-    void setSelectedItems(const KUrl::List& urls);
+    void setSelectedItems(const QList<QUrl>& urls);
     //QList<QAction*> groupMenuActions(itemIds& ids);
     void setGroupsOpen(bool open);
 

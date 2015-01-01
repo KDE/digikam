@@ -66,7 +66,7 @@ public:
     {}
 
     QList<qlonglong>             selectedIds;
-    KUrl::List                   selectedItems;
+    QList<QUrl>                   selectedItems;
 
     QMap<int, QAction*>          queueActions;
     QMap<QString, KService::Ptr> servicesMap;
@@ -160,7 +160,7 @@ void ImportContextMenuHelper::addAction(QAction* action, QObject* recv, const ch
     addAction(action, addDisabled);
 }
 
-void ImportContextMenuHelper::addServicesMenu(const KUrl::List& selectedItems)
+void ImportContextMenuHelper::addServicesMenu(const QList<QUrl>& selectedItems)
 {
     setSelectedItems(selectedItems);
 
@@ -170,7 +170,7 @@ void ImportContextMenuHelper::addServicesMenu(const KUrl::List& selectedItems)
     QStringList    mimeTypes;
     KService::List offers;
 
-    foreach(const KUrl& item, d->selectedItems)
+    foreach(const QUrl &item, d->selectedItems)
     {
         const QString mimeType = KMimeType::findByUrl(item, 0, true, true)->name();
 
@@ -257,7 +257,7 @@ void ImportContextMenuHelper::slotOpenWith()
 void ImportContextMenuHelper::slotOpenWith(QAction* action)
 {
     KService::Ptr service;
-    KUrl::List list = d->selectedItems;
+    QList<QUrl> list = d->selectedItems;
 
     QString name = action ? action->data().toString() : QString();
 
@@ -422,7 +422,7 @@ void ImportContextMenuHelper::setSelectedIds(itemIds& ids)
     }
 }
 
-void ImportContextMenuHelper::setSelectedItems(const KUrl::List& urls)
+void ImportContextMenuHelper::setSelectedItems(const QList<QUrl>& urls)
 {
     if (d->selectedItems.isEmpty())
     {
