@@ -920,7 +920,7 @@ void FuzzySearchView::setImageInfo(const ImageInfo& info)
 
 void FuzzySearchView::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
 {
-    if (!d->imageInfo.isNull() && KUrl(desc.filePath) == d->imageInfo.fileUrl())
+    if (!d->imageInfo.isNull() && QUrl(desc.filePath) == d->imageInfo.fileUrl())
         d->imageWidget->setPixmap(pix.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 }
 

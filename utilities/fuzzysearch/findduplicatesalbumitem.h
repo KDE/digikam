@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -53,7 +53,7 @@ public:
     bool hasValidThumbnail() const;
 
     SAlbum* album()  const;
-    KUrl    refUrl() const;
+    QUrl    refUrl() const;
 
     void setThumb(const QPixmap& pix, bool hasThumb = true);
 

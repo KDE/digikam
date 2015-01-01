@@ -115,7 +115,7 @@ SAlbum* FindDuplicatesAlbumItem::album() const
     return d->album;
 }
 
-KUrl FindDuplicatesAlbumItem::refUrl() const
+QUrl FindDuplicatesAlbumItem::refUrl() const
 {
     return d->refImgInfo.fileUrl();
 }
