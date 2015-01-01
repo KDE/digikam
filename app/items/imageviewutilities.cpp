@@ -37,7 +37,7 @@
 #include <krun.h>
 #include <kservice.h>
 #include <kmimetypetrader.h>
-#include <kurl.h>
+#include <QUrl>
 #include <kwindowsystem.h>
 
 // Local includes
@@ -90,7 +90,7 @@ void ImageViewUtilities::setAsAlbumThumbnail(Album* album, const ImageInfo& imag
     }
 }
 
-void ImageViewUtilities::rename(const KUrl& imageUrl, const QString& newName)
+void ImageViewUtilities::rename(const QUrl &imageUrl, const QString& newName)
 {
     if (imageUrl.isEmpty() || !imageUrl.isLocalFile() || newName.isEmpty())
     {
@@ -108,7 +108,7 @@ bool ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, const Delet
         return false;
     }
 
-    KUrl::List urlList;
+    QList<QUrl> urlList;
 
     foreach(const ImageInfo& info, infos)
     {
@@ -149,9 +149,9 @@ void ImageViewUtilities::deleteImagesDirectly(const QList<ImageInfo>& infos, con
     DIO::del(infos, useTrash);
 }
 
-void ImageViewUtilities::notifyFileContentChanged(const KUrl::List& urls)
+void ImageViewUtilities::notifyFileContentChanged(const QList<QUrl>& urls)
 {
-    foreach(const KUrl& url, urls)
+    foreach(const QUrl &url, urls)
     {
         QString path = url.toLocalFile();
         ThumbnailLoadThread::deleteThumbnail(path);
@@ -284,8 +284,8 @@ void ImageViewUtilities::openInfos(const ImageInfo& info, const QList<ImageInfo>
 
     imview->disconnect(this);
 
-    connect(imview, SIGNAL(signalURLChanged(KUrl)),
-            this, SIGNAL(editorCurrentUrlChanged(KUrl)));
+    connect(imview, SIGNAL(signalURLChanged(QUrl)),
+            this, SIGNAL(editorCurrentUrlChanged(QUrl)));
 
     imview->loadImageInfos(allInfosToOpen, info,
                            currentAlbum ? i18n("Album \"%1\"", currentAlbum->title()) : QString());
@@ -310,7 +310,7 @@ void ImageViewUtilities::openInfosWithDefaultApplication(const QList<ImageInfo>&
         return;
     }
 
-    KUrl::List urls;
+    QList<QUrl> urls;
 
     foreach (const ImageInfo& inf, infos)
     {

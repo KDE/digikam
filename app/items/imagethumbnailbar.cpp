@@ -43,7 +43,7 @@
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kstandardaction.h>
-#include <kurl.h>
+#include <QUrl>
 #include <kwindowsystem.h>
 
 // Local includes

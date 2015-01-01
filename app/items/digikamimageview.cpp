@@ -48,7 +48,7 @@
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kstandardaction.h>
-#include <kurl.h>
+#include <QUrl>
 #include <kwindowsystem.h>
 
 // Local includes
@@ -164,8 +164,8 @@ DigikamImageView::DigikamImageView(QWidget* const parent)
 
     d->utilities = new ImageViewUtilities(this);
 
-    connect(d->utilities, SIGNAL(editorCurrentUrlChanged(KUrl)),
-            this, SLOT(setCurrentUrl(KUrl)));
+    connect(d->utilities, SIGNAL(editorCurrentUrlChanged(QUrl)),
+            this, SLOT(setCurrentUrl(QUrl)));
 
     connect(imageModel()->dragDropHandler(), SIGNAL(assignTags(QList<ImageInfo>,QList<int>)),
             FileActionMngr::instance(), SLOT(assignTags(QList<ImageInfo>,QList<int>)));
@@ -678,7 +678,7 @@ void DigikamImageView::removeSelectedFromGroup()
 
 void DigikamImageView::rename()
 {
-    KUrl::List   urls = selectedUrls();
+    QList<QUrl>   urls = selectedUrls();
     NewNamesList newNamesList;
 
     QPointer<AdvancedRenameDialog> dlg = new AdvancedRenameDialog(this);
@@ -688,7 +688,7 @@ void DigikamImageView::rename()
     {
         newNamesList = dlg->newNames();
 
-        KUrl nextUrl = nextInOrder(selectedImageInfos().last(),1).fileUrl();
+        QUrl nextUrl = nextInOrder(selectedImageInfos().last(),1).fileUrl();
         setCurrentUrl(nextUrl);
     }
 

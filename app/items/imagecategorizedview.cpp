@@ -296,7 +296,7 @@ ImageInfo ImageCategorizedView::currentInfo() const
     return d->filterModel->imageInfo(currentIndex());
 }
 
-KUrl ImageCategorizedView::currentUrl() const
+QUrl ImageCategorizedView::currentUrl() const
 {
     return currentInfo().fileUrl();
 }
@@ -334,10 +334,10 @@ QList<ImageInfo> ImageCategorizedView::imageInfos() const
     return d->filterModel->imageInfosSorted();
 }
 
-KUrl::List ImageCategorizedView::urls() const
+QList<QUrl> ImageCategorizedView::urls() const
 {
     QList<ImageInfo> infos = imageInfos();
-    KUrl::List       urls;
+    QList<QUrl>       urls;
 
     foreach(const ImageInfo& info, infos)
     {
@@ -347,10 +347,10 @@ KUrl::List ImageCategorizedView::urls() const
     return urls;
 }
 
-KUrl::List ImageCategorizedView::selectedUrls() const
+QList<QUrl> ImageCategorizedView::selectedUrls() const
 {
     QList<ImageInfo> infos = selectedImageInfos();
-    KUrl::List       urls;
+    QList<QUrl>       urls;
 
     foreach(const ImageInfo& info, infos)
     {
@@ -360,7 +360,7 @@ KUrl::List ImageCategorizedView::selectedUrls() const
     return urls;
 }
 
-void ImageCategorizedView::toIndex(const KUrl& url)
+void ImageCategorizedView::toIndex(const QUrl &url)
 {
     DCategorizedView::toIndex(d->filterModel->indexForPath(url.toLocalFile()));
 }
@@ -465,7 +465,7 @@ void ImageCategorizedView::setCurrentWhenAvailable(qlonglong imageId)
     d->scrollToItemId = imageId;
 }
 
-void ImageCategorizedView::setCurrentUrl(const KUrl& url)
+void ImageCategorizedView::setCurrentUrl(const QUrl &url)
 {
     if (url.isEmpty())
     {
@@ -493,11 +493,11 @@ void ImageCategorizedView::setCurrentInfo(const ImageInfo& info)
     setCurrentIndex(index);
 }
 
-void ImageCategorizedView::setSelectedUrls(const KUrl::List& urlList)
+void ImageCategorizedView::setSelectedUrls(const QList<QUrl>& urlList)
 {
     QItemSelection mySelection;
 
-    for (KUrl::List::const_iterator it = urlList.constBegin(); it!=urlList.constEnd(); ++it)
+    for (QList<QUrl>::const_iterator it = urlList.constBegin(); it!=urlList.constEnd(); ++it)
     {
         const QString path = it->path();
         const QModelIndex index = d->filterModel->indexForPath(path);

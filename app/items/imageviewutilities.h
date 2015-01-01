@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -77,19 +77,19 @@ public Q_SLOTS:
     void insertToQueueManager(const QList<ImageInfo>& list, const ImageInfo& currentInfo, bool newQueue);
     void insertSilentToQueueManager(const QList<ImageInfo>& list, const ImageInfo& currentInfo, int queueid);
 
-    void notifyFileContentChanged(const KUrl::List& urls);
+    void notifyFileContentChanged(const QList<QUrl>& urls);
 
     void openInfos(const ImageInfo& info, const QList<ImageInfo>& allInfosToOpen, Album* currentAlbum);
     void openInfosWithDefaultApplication(const QList<ImageInfo>& allInfosToOpen);
 
-    void rename(const KUrl& imageUrl, const QString& newName);
+    void rename(const QUrl &imageUrl, const QString& newName);
     void setAsAlbumThumbnail(Album* album, const ImageInfo& imageInfo);
 
     void createGroupByTimeFromInfoList(const ImageInfoList& imageInfoList);
 
 Q_SIGNALS:
 
-    void editorCurrentUrlChanged(const KUrl& url);
+    void editorCurrentUrlChanged(const QUrl &url);
 
 protected:
 
