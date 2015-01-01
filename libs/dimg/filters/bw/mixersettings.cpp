@@ -36,15 +36,14 @@
 #include <QApplication>
 #include <QStyle>
 #include <QComboBox>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <kurl.h>
 #include <klocalizedstring.h>
 #include <kfiledialog.h>
-#include <kglobal.h>
 #include <kglobalsettings.h>
-#include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 
@@ -648,8 +647,8 @@ void MixerSettings::loadSettings()
     }
     else
     {
-        KMessageBox::error(qApp->activeWindow(),
-                           i18n("Cannot load settings from the Gains Mixer text file."));
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("Cannot load settings from the Gains Mixer text file."));
         return;
     }
 }
@@ -729,8 +728,8 @@ void MixerSettings::saveAsSettings()
     }
     else
     {
-        KMessageBox::error(qApp->activeWindow(),
-                           i18n("Cannot save settings to the Gains Mixer text file."));
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("Cannot save settings to the Gains Mixer text file."));
         return;
     }
 }

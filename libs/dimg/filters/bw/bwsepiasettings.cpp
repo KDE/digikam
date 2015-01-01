@@ -34,16 +34,14 @@
 #include <QStandardPaths>
 #include <QApplication>
 #include <QStyle>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <kurl.h>
 #include <klocalizedstring.h>
-
 #include <kfiledialog.h>
-#include <kglobal.h>
 #include <kglobalsettings.h>
-#include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 
@@ -561,9 +559,8 @@ void BWSepiaSettings::loadSettings()
 
         if (stream.readLine() != "# Black & White Configuration File")
         {
-            KMessageBox::error(qApp->activeWindow(),
-                               i18n("\"%1\" is not a Black & White settings text file.",
-                                    loadFile.fileName()));
+            QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                                  i18n("\"%1\" is not a Black & White settings text file.", loadFile.fileName()));
             file.close();
             return;
         }
@@ -607,7 +604,8 @@ void BWSepiaSettings::loadSettings()
     }
     else
     {
-        KMessageBox::error(qApp->activeWindow(), i18n("Cannot load settings from the Black & White text file."));
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("Cannot load settings from the Black & White text file."));
     }
 
     file.close();
@@ -652,8 +650,8 @@ void BWSepiaSettings::saveAsSettings()
     }
     else
     {
-        KMessageBox::error(qApp->activeWindow(),
-                           i18n("Cannot save settings to the Black & White text file."));
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("Cannot save settings to the Black & White text file."));
     }
 
     file.close();

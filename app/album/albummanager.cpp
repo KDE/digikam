@@ -59,21 +59,22 @@ extern "C"
 #include <QTextCodec>
 #include <QTimer>
 #include <QComboBox>
+#include <QMessageBox>
 
 // KDE includes
 
+#include <kmessagebox.h>
 #include <kiconloader.h>
 #include <kconfiggroup.h>
-#include <kconfig.h>
 #include <kdeversion.h>
 #include <kdirwatch.h>
+#include <klocalizedstring.h>
+#include <kstandarddirs.h>
+#include <kwindowsystem.h>
+
 #include <kio/global.h>
 #include <kio/job.h>
 #include <kio/netaccess.h>
-#include <klocalizedstring.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
-#include <kwindowsystem.h>
 
 // Local includes
 
@@ -411,7 +412,8 @@ static bool moveToBackup(const QFileInfo& info)
 
         if (!KIO::NetAccess::synchronousRun(job, 0))
         {
-            KMessageBox::error(0, i18n("Failed to backup the existing database file (\"%1\"). "
+            QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                                  i18n("Failed to backup the existing database file (\"%1\"). "
                                        "Refusing to replace file without backup, using the existing file.",
                                        QDir::toNativeSeparators(info.filePath())));
             return false;
@@ -437,7 +439,7 @@ static bool copyToNewLocation(const QFileInfo& oldFile, const QFileInfo& newFile
 
     if (!KIO::NetAccess::synchronousRun(job, 0))
     {
-        KMessageBox::error(0, message);
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(), message);
         return false;
     }
 
@@ -692,7 +694,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
             QString message = i18n("<p><b>An error occurred during the internal server start.</b></p>"
                                    "Details:\n %1", result.getErrorText());
             QApplication::changeOverrideCursor(Qt::ArrowCursor);
-            KMessageBox::error(parent, message);
+            QMessageBox::critical(parent, qApp->applicationName(), message);
             QApplication::changeOverrideCursor(Qt::WaitCursor);
         }
     }
@@ -704,7 +706,8 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
 
     if (!handler->checkDatabaseConnection())
     {
-        KMessageBox::error(0, i18n("<p>Failed to open the database. "
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("<p>Failed to open the database. "
                                    "</p><p>You cannot use digiKam without a working database. "
                                    "digiKam will attempt to start now, but it will <b>not</b> be functional. "
                                    "Please check the database settings in the <b>configuration menu</b>.</p>"
@@ -735,7 +738,8 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
 
             if (errorMsg.isEmpty())
             {
-                KMessageBox::error(0, i18n("<p>Failed to open the database. "
+                QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                                      i18n("<p>Failed to open the database. "
                                            "</p><p>You cannot use digiKam without a working database. "
                                            "digiKam will attempt to start now, but it will <b>not</b> be functional. "
                                            "Please check the database settings in the <b>configuration menu</b>.</p>"
@@ -743,7 +747,8 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
             }
             else
             {
-                KMessageBox::error(0, i18n("<p>Failed to open the database. Error message from database:</p>"
+                QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                                      i18n("<p>Failed to open the database. Error message from database:</p>"
                                            "<p><b>%1</b></p>"
                                            "</p><p>You cannot use digiKam without a working database. "
                                            "digiKam will attempt to start now, but it will <b>not</b> be functional. "
