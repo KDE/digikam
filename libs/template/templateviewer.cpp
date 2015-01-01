@@ -32,7 +32,7 @@
 
 #include <klocalizedstring.h>
 #include <kiconloader.h>
-#include <kurl.h>
+#include <QUrl>
 #include <kurllabel.h>
 
 // Libkexiv2 includes
@@ -287,7 +287,7 @@ void TemplateViewer::setTemplate(const Template& t)
     d->labelContactPhone->setText(t.contactInfo().phone);
     d->labelContactEmail->setUrl(t.contactInfo().email);
     d->labelContactEmail->setText(t.contactInfo().email);
-    KUrl url(t.contactInfo().webUrl);
+    QUrl url(t.contactInfo().webUrl);
     d->labelContactWebUrl->setText(url.host());
     d->labelContactWebUrl->setUrl(url.url());
 
