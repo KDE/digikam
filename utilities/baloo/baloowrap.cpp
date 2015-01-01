@@ -25,7 +25,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Baloo includes
 
@@ -94,22 +94,22 @@ BalooWrap* BalooWrap::instance()
 }
 
 
-void BalooWrap::setTags(const KUrl& url, QStringList* const tags)
+void BalooWrap::setTags(const QUrl &url, QStringList* const tags)
 {
     setAllData(url,tags, NULL, -1);
 }
 
-void BalooWrap::setComment(const KUrl& url, QString* const comment)
+void BalooWrap::setComment(const QUrl &url, QString* const comment)
 {
     setAllData(url, NULL, comment, -1);
 }
 
-void BalooWrap::setRating(const KUrl& url, int rating)
+void BalooWrap::setRating(const QUrl &url, int rating)
 {
     setAllData(url, NULL, NULL, rating);
 }
 
-void BalooWrap::setAllData(const KUrl& url, QStringList* const tags, QString* const comment, int rating)
+void BalooWrap::setAllData(const QUrl &url, QStringList* const tags, QString* const comment, int rating)
 {
     if(!d->syncFromDigikamToBaloo)
     {
@@ -146,7 +146,7 @@ void BalooWrap::setAllData(const KUrl& url, QStringList* const tags, QString* co
     }
 }
 
-BalooInfo BalooWrap::getSemanticInfo(const KUrl& url)
+BalooInfo BalooWrap::getSemanticInfo(const QUrl &url)
 {
     if(!d->syncFromBalooToDigikam)
     {
@@ -186,7 +186,7 @@ void BalooWrap::slotFetchFinished(KJob* job)
     bInfo.comment = file.userComment();
     bInfo.tags    = file.tags().toSet().toList();
 
-    KUrl url      = KUrl::fromLocalFile(file.url());
+    QUrl url = QUrl::fromLocalFile(file.url());
     addInfoToDigikam(bInfo, url);
 }
 
@@ -242,7 +242,7 @@ int BalooWrap::bestDigikamTagForTagName(const ImageInfo& info, const QString& ta
     }
 }
 
-void BalooWrap::addInfoToDigikam(const BalooInfo& bInfo, const KUrl& fileUrl)
+void BalooWrap::addInfoToDigikam(const BalooInfo& bInfo, const QUrl &fileUrl)
 {
     QStringList tags = bInfo.tags;
     QList<int> tagIdsForInfo;

@@ -35,7 +35,7 @@
 #include "digikam_export.h"
 
 class KJob;
-class KUrl;
+class QUrl;
 
 namespace Digikam
 {
@@ -82,11 +82,11 @@ public:
     static BalooWrap* instance();
     static bool isCreated();
 
-    void setTags(const KUrl& url, QStringList* const tags);
+    void setTags(const QUrl &url, QStringList* const tags);
 
-    void setComment(const KUrl& url, QString* const comment);
+    void setComment(const QUrl &url, QString* const comment);
 
-    void setRating(const KUrl& url, int rating);
+    void setRating(const QUrl &url, int rating);
 
     /**
      * @brief setAllData - generic method to set all data from digiKam to Baloo
@@ -95,7 +95,7 @@ public:
      * @param comment    - comment set to image, pass NULL to ignore
      * @param rating     - rating to set to image, set to -1 to ignore
      */
-    void setAllData(const KUrl& url, QStringList* const tags, QString* const comment, int rating);
+    void setAllData(const QUrl &url, QStringList* const tags, QString* const comment, int rating);
 
     /**
      * @brief getSemanticInfo - Used by ImageScanner to retrieve all information
@@ -103,7 +103,7 @@ public:
      * @param url  - image url
      * @return     - container class for tags, comment, rating
      */
-    BalooInfo getSemanticInfo(const KUrl& url);
+    BalooInfo getSemanticInfo(const QUrl &url);
 
     /**
      * @brief bestDigikamTagForTagName - used in previous Nepomuk implementation,
@@ -120,7 +120,7 @@ public:
      * @param info
      * @param url
      */
-    void addInfoToDigikam(const BalooInfo& info, const KUrl& fileUrl);
+    void addInfoToDigikam(const BalooInfo& info, const QUrl &fileUrl);
 
     void setSyncToBaloo(bool value);
 
