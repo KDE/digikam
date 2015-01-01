@@ -27,10 +27,6 @@
 #include <QString>
 #include <QFile>
 
-// KDE includes
-
-#include "digikam_debug.h"
-
 // Local includes
 
 #include "lensfuniface.h"

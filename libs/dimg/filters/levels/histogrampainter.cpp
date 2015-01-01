@@ -22,7 +22,7 @@
  * ============================================================ */
 
 #include "histogrampainter.h"
-#include "digikam_debug.h"
+
 // C++ includes
 
 #include <cmath>
@@ -33,8 +33,11 @@
 
 // KDE includes
 
+#include <klocale.h>
+
+// Local includes
+
 #include "digikam_debug.h"
-#include "klocale.h"
 
 #define HISTOGRAM_CALC_CUTOFF_MIN    0.1
 #define HISTOGRAM_CALC_CUTOFF_MAX    0.9
