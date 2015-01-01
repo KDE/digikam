@@ -123,8 +123,8 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* const parent, Sideba
     connect(DatabaseAccess::databaseWatch(), SIGNAL(imageTagChange(ImageTagChangeset)),
             this, SLOT(slotImageTagChanged(ImageTagChangeset)));
 
-    connect(ImageAttributesWatch::instance(), SIGNAL(signalFileMetadataChanged(KUrl)),
-            this, SLOT(slotFileMetadataChanged(KUrl)));
+    connect(ImageAttributesWatch::instance(), SIGNAL(signalFileMetadataChanged(QUrl)),
+            this, SLOT(slotFileMetadataChanged(QUrl)));
 
     connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
             this, SLOT(slotLoadMetadataFilters()));
@@ -141,12 +141,12 @@ void ImagePropertiesSideBarDB::itemChanged(const ImageInfo& info, const QRect& r
     itemChanged(info.fileUrl(), info, rect, img, history);
 }
 
-void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const QRect& rect, DImg* const img)
+void ImagePropertiesSideBarDB::itemChanged(const QUrl &url, const QRect& rect, DImg* const img)
 {
     itemChanged(url, ImageInfo(), rect, img, DImageHistory());
 }
 
-void ImagePropertiesSideBarDB::itemChanged(const KUrl& url, const ImageInfo& info,
+void ImagePropertiesSideBarDB::itemChanged(const QUrl &url, const ImageInfo& info,
                                            const QRect& rect, DImg* const img, const DImageHistory& history)
 {
     if ( !url.isValid() )
@@ -394,7 +394,7 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
     unsetCursor();
 }
 
-void ImagePropertiesSideBarDB::slotFileMetadataChanged(const KUrl& url)
+void ImagePropertiesSideBarDB::slotFileMetadataChanged(const QUrl &url)
 {
     if (url == m_currentURL)
     {
@@ -525,7 +525,7 @@ void ImagePropertiesSideBarDB::refreshTagsView()
     //d->desceditTab->refreshTagsView();
 }
 
-void ImagePropertiesSideBarDB::setImagePropertiesInformation(const KUrl& url)
+void ImagePropertiesSideBarDB::setImagePropertiesInformation(const QUrl &url)
 {
     foreach(const ImageInfo& info, d->currentInfos)
     {

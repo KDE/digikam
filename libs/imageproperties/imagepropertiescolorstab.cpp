@@ -353,7 +353,7 @@ void ImagePropertiesColorsTab::writeSettings(KConfigGroup& group)
     group.writeEntry("Current ICC Item",          d->iccProfileWidget->getCurrentItemKey());
 }
 
-void ImagePropertiesColorsTab::setData(const KUrl& url, const QRect& selectionArea, DImg* const img)
+void ImagePropertiesColorsTab::setData(const QUrl &url, const QRect& selectionArea, DImg* const img)
 {
     // We might be getting duplicate events from AlbumIconView,
     // which will cause all sorts of duplicate work.
@@ -375,7 +375,7 @@ void ImagePropertiesColorsTab::setData(const KUrl& url, const QRect& selectionAr
 
     d->currentFilePath.clear();
     d->currentLoadingDescription = LoadingDescription();
-    d->iccProfileWidget->loadFromURL(KUrl());
+    d->iccProfileWidget->loadFromURL(QUrl());
 
     // Clear information.
     d->labelMeanValue->clear();
@@ -445,7 +445,7 @@ void ImagePropertiesColorsTab::setData(const KUrl& url, const QRect& selectionAr
     }
 }
 
-void ImagePropertiesColorsTab::loadImageFromUrl(const KUrl& url)
+void ImagePropertiesColorsTab::loadImageFromUrl(const QUrl &url)
 {
     // create thread on demand
     if (!d->imageLoaderThread)

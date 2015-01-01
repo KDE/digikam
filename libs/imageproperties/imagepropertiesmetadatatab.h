@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -50,7 +50,7 @@ public:
     explicit ImagePropertiesMetaDataTab(QWidget* const parent);
     ~ImagePropertiesMetaDataTab();
 
-    void setCurrentURL(const KUrl& url=KUrl());
+    void setCurrentURL(const QUrl &url=QUrl());
     void setCurrentData(const DMetadata& metadata=DMetadata(),
                         const QString& filename=QString());
 

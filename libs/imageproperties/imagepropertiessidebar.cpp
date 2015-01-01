@@ -104,7 +104,7 @@ ImagePropertiesSideBar::~ImagePropertiesSideBar()
 {
 }
 
-void ImagePropertiesSideBar::itemChanged(const KUrl& url, const QRect& rect, DImg* const img)
+void ImagePropertiesSideBar::itemChanged(const QUrl &url, const QRect& rect, DImg* const img)
 {
     if (!url.isValid())
     {
@@ -125,7 +125,7 @@ void ImagePropertiesSideBar::itemChanged(const KUrl& url, const QRect& rect, DIm
 
 void ImagePropertiesSideBar::slotNoCurrentItem()
 {
-    m_currentURL = KUrl();
+    m_currentURL = QUrl();
 
     m_propertiesTab->setCurrentURL();
     m_metadataTab->setCurrentURL();
@@ -197,7 +197,7 @@ void ImagePropertiesSideBar::slotChangedTab(QWidget* tab)
     unsetCursor();
 }
 
-void ImagePropertiesSideBar::setImagePropertiesInformation(const KUrl& url)
+void ImagePropertiesSideBar::setImagePropertiesInformation(const QUrl &url)
 {
     if (!url.isValid())
     {

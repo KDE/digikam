@@ -310,7 +310,7 @@ void VersionsDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
 
     QRect textRect = option.rect;
     textRect.setLeft(textRect.left() + 72);
-    KUrl path(index.data(Qt::DisplayRole).toString());
+    QUrl path(index.data(Qt::DisplayRole).toString());
 
     if (index.row() == 0 && index.model()->rowCount() > 1)
     {

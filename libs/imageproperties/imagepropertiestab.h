@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Libkdcraw includes
 
@@ -53,7 +53,7 @@ public:
     explicit ImagePropertiesTab(QWidget* const parent);
     ~ImagePropertiesTab();
 
-    void setCurrentURL(const KUrl& url=KUrl());
+    void setCurrentURL(const QUrl &url=QUrl());
 
     void setPhotoInfoDisable(const bool b);
     void setVideoInfoDisable(const bool b);

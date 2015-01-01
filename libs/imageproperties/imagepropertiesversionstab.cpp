@@ -38,7 +38,7 @@
 #include <klocalizedstring.h>
 #include <kiconloader.h>
 #include <kstandardguiitem.h>
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 

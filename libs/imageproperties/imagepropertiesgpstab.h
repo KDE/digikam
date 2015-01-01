@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -65,9 +65,9 @@ public:
 
     void clearGPSInfo();
     void setGPSInfoList(const GPSImageInfo::List& list);
-    void setCurrentURL(const KUrl& url=KUrl());
+    void setCurrentURL(const QUrl &url=QUrl());
 
-    void setMetadata(const DMetadata& meta, const KUrl& url);
+    void setMetadata(const DMetadata& meta, const QUrl &url);
 
     int  getWebGPSLocator() const;
     void setWebGPSLocator(int locator);

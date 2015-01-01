@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Libkdcraw includes
 

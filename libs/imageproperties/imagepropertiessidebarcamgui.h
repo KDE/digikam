@@ -28,7 +28,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -59,7 +59,7 @@ public:
 
     void itemChanged(const CamItemInfo& itemInfo, const DMetadata& meta);
 
-    KUrl url() const;
+    QUrl url() const;
 
 public Q_SLOTS:
 

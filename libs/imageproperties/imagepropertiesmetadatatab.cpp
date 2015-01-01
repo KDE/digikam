@@ -177,7 +177,7 @@ void ImagePropertiesMetaDataTab::writeSettings(KConfigGroup& group)
     group.writeEntry("Current XMP Item",            d->xmpWidget->getCurrentItemKey());
 }
 
-void ImagePropertiesMetaDataTab::setCurrentURL(const KUrl& url)
+void ImagePropertiesMetaDataTab::setCurrentURL(const QUrl &url)
 {
     if (url.isEmpty())
     {

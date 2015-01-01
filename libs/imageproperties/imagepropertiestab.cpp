@@ -448,7 +448,7 @@ ImagePropertiesTab::~ImagePropertiesTab()
     delete d;
 }
 
-void ImagePropertiesTab::setCurrentURL(const KUrl& url)
+void ImagePropertiesTab::setCurrentURL(const QUrl &url)
 {
     if (url.isEmpty())
     {
@@ -498,7 +498,7 @@ void ImagePropertiesTab::setCurrentURL(const KUrl& url)
     setEnabled(true);
 
     d->labelFile->setText(url.fileName());
-    d->labelFolder->setText(QDir::toNativeSeparators(url.directory()));
+    d->labelFolder->setText(QDir::toNativeSeparators(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path()));
 }
 
 void ImagePropertiesTab::setPhotoInfoDisable(const bool b)

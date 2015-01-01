@@ -27,7 +27,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -62,7 +62,7 @@ public:
                            KMultiTabBarPosition side=KMultiTabBar::Left, bool mimimizedDefault=false);
     ~ImagePropertiesSideBar();
 
-    virtual void itemChanged(const KUrl& url, const QRect& rect = QRect(), DImg* const img = 0);
+    virtual void itemChanged(const QUrl &url, const QRect& rect = QRect(), DImg* const img = 0);
 
 Q_SIGNALS:
 
@@ -90,7 +90,7 @@ protected:
      */
     void doSaveState();
 
-    virtual void setImagePropertiesInformation(const KUrl& url);
+    virtual void setImagePropertiesInformation(const QUrl &url);
 
 protected:
 
@@ -102,7 +102,7 @@ protected:
 
     QRect                       m_currentRect;
 
-    KUrl                        m_currentURL;
+    QUrl                        m_currentURL;
 
     DImg*                       m_image;
 
