@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -112,10 +112,10 @@ public:
      * the given file url. In case of multiple occurrences of the same file, the simpler
      * overrides returns any one found first, use the QList methods to retrieve all occurrences.
      */
-    QModelIndex        indexForUrl(const KUrl& fileUrl)   const;
-    QList<QModelIndex> indexesForUrl(const KUrl& fileUrl) const;
-    CamItemInfo        camItemInfo(const KUrl& fileUrl)   const;
-    QList<CamItemInfo> camItemInfos(const KUrl& fileUrl)  const;
+    QModelIndex        indexForUrl(const QUrl &fileUrl)   const;
+    QList<QModelIndex> indexesForUrl(const QUrl &fileUrl) const;
+    CamItemInfo        camItemInfo(const QUrl &fileUrl)   const;
+    QList<CamItemInfo> camItemInfos(const QUrl &fileUrl)  const;
 
     /**
      * Clears the CamItemInfos and resets the model.

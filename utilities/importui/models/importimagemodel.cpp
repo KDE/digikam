@@ -312,11 +312,11 @@ qlonglong ImportImageModel::retrieveCamItemId(const QModelIndex& index)
     return model->camItemId(row);
 }
 
-QModelIndex ImportImageModel::indexForUrl(const KUrl& fileUrl) const
+QModelIndex ImportImageModel::indexForUrl(const QUrl &fileUrl) const
 {
     if (d->keepFileUrlCache)
     {
-        return indexForCamItemId(d->fileUrlHash.value(fileUrl.prettyUrl()));
+        return indexForCamItemId(d->fileUrlHash.value(fileUrl.toDisplayString()));
     }
     else
     {
@@ -334,11 +334,11 @@ QModelIndex ImportImageModel::indexForUrl(const KUrl& fileUrl) const
     return QModelIndex();
 }
 
-QList<QModelIndex> ImportImageModel::indexesForUrl(const KUrl& fileUrl) const
+QList<QModelIndex> ImportImageModel::indexesForUrl(const QUrl &fileUrl) const
 {
     if (d->keepFileUrlCache)
     {
-        return indexesForCamItemId(d->fileUrlHash.value(fileUrl.prettyUrl()));
+        return indexesForCamItemId(d->fileUrlHash.value(fileUrl.toDisplayString()));
     }
     else
     {
@@ -357,11 +357,11 @@ QList<QModelIndex> ImportImageModel::indexesForUrl(const KUrl& fileUrl) const
     }
 }
 
-CamItemInfo ImportImageModel::camItemInfo(const KUrl& fileUrl) const
+CamItemInfo ImportImageModel::camItemInfo(const QUrl &fileUrl) const
 {
     if (d->keepFileUrlCache)
     {
-        qlonglong id = d->fileUrlHash.value(fileUrl.prettyUrl());
+        qlonglong id = d->fileUrlHash.value(fileUrl.toDisplayString());
 
         if (id)
         {
@@ -387,13 +387,13 @@ CamItemInfo ImportImageModel::camItemInfo(const KUrl& fileUrl) const
     return CamItemInfo();
 }
 
-QList<CamItemInfo> ImportImageModel::camItemInfos(const KUrl& fileUrl) const
+QList<CamItemInfo> ImportImageModel::camItemInfos(const QUrl &fileUrl) const
 {
     QList<CamItemInfo> infos;
 
     if (d->keepFileUrlCache)
     {
-        qlonglong id = d->fileUrlHash.value(fileUrl.prettyUrl());
+        qlonglong id = d->fileUrlHash.value(fileUrl.toDisplayString());
 
         if (id)
         {
@@ -565,7 +565,7 @@ void ImportImageModel::slotFileDeleted(const QString& folder, const QString& fil
 {
     Q_UNUSED(status)
 
-    CamItemInfo info = camItemInfo(KUrl::fromLocalFile(folder + file));
+    CamItemInfo info = camItemInfo(QUrl::fromLocalFile(folder + file));
     removeCamItemInfo(info);
 }
 
