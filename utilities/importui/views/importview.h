@@ -68,14 +68,14 @@ public:
     CamItemInfo& camItemInfoRef(const QString& folder, const QString& file)  const;
     bool         hasImage(const CamItemInfo& info)                           const;
 
-    KUrl::List         allUrls()                                             const;
-    KUrl::List         selectedUrls()                                        const;
+    QList<QUrl>         allUrls()                                             const;
+    QList<QUrl>         selectedUrls()                                        const;
     QList<CamItemInfo> selectedCamItemInfos()                                const;
     QList<CamItemInfo> allItems()                                            const;
     void               setSelectedCamItemInfos(const CamItemInfoList& infos) const;
     int                downloadedCamItemInfos()                              const;
     bool               hasCurrentItem()                                      const;
-    bool               isSelected(const KUrl& url)                           const;
+    bool               isSelected(const QUrl &url)                           const;
 
     double                             zoomMin()           const;
     double                             zoomMax()           const;
@@ -129,7 +129,7 @@ private Q_SLOTS:
     void slotPrevItem();
     void slotNextItem();
     void slotLastItem();
-    void slotSelectItemByUrl(const KUrl&);
+    void slotSelectItemByUrl(const QUrl&);
 
     void slotViewModeChanged();
     void slotEscapePreview();

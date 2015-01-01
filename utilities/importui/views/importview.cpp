@@ -332,12 +332,12 @@ bool ImportView::hasImage(const CamItemInfo& info) const
     return d->iconView->importImageModel()->hasImage(info);
 }
 
-KUrl::List ImportView::allUrls() const
+QList<QUrl> ImportView::allUrls() const
 {
     return d->iconView->urls();
 }
 
-KUrl::List ImportView::selectedUrls() const
+QList<QUrl> ImportView::selectedUrls() const
 {
     return d->iconView->selectedUrls();
 }
@@ -373,11 +373,11 @@ int ImportView::downloadedCamItemInfos() const
     return numberOfDownloaded;
 }
 
-bool ImportView::isSelected(const KUrl& url) const
+bool ImportView::isSelected(const QUrl &url) const
 {
-    QList<KUrl> urlsList = selectedUrls();
+    QList<QUrl> urlsList = selectedUrls();
 
-    foreach(const KUrl& selected, urlsList)
+    foreach(const QUrl &selected, urlsList)
     {
         if (url == selected)
         {
@@ -408,7 +408,7 @@ void ImportView::slotLastItem()
     d->iconView->toLastIndex();
 }
 
-void ImportView::slotSelectItemByUrl(const KUrl& url)
+void ImportView::slotSelectItemByUrl(const QUrl &url)
 {
     d->iconView->toIndex(url);
 }

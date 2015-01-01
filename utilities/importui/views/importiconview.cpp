@@ -139,9 +139,9 @@ int ImportIconView::fitToWidthIcons()
 
 CamItemInfo ImportIconView::camItemInfo(const QString& folder, const QString& file)
 {
-    KUrl url(folder);
-    url.adjustPath(KUrl::AddTrailingSlash);
-    url.setFileName(file);
+    QUrl url = QUrl::fromLocalFile(folder + "/");
+    url      = url.adjusted(QUrl::RemoveFilename);
+    url.setPath(url.path() + file);
     QModelIndex indexForCamItemInfo = importFilterModel()->indexForPath(url.toLocalFile());
 
     if(indexForCamItemInfo.isValid())
@@ -154,11 +154,11 @@ CamItemInfo ImportIconView::camItemInfo(const QString& folder, const QString& fi
 
 CamItemInfo& ImportIconView::camItemInfoRef(const QString& folder, const QString& file)
 {
-    KUrl url(folder);
-    url.adjustPath(KUrl::AddTrailingSlash);
-    url.setFileName(file);
+    QUrl url = QUrl::fromLocalFile(folder + "/");
+    url = url.adjusted(QUrl::RemoveFilename);
+    url.setPath(url.path() + file);
     QModelIndex indexForCamItemInfo = importFilterModel()->indexForPath(url.toLocalFile());
-    QModelIndex mappedIndex = importFilterModel()->mapToSource(indexForCamItemInfo);
+    QModelIndex mappedIndex         = importFilterModel()->mapToSource(indexForCamItemInfo);
     return importImageModel()->camItemInfoRef(mappedIndex);
 }
 
@@ -174,7 +174,7 @@ void ImportIconView::slotSetupChanged()
 
 void ImportIconView::rename()
 {
-    KUrl::List   urls = selectedUrls();
+    QList<QUrl>   urls = selectedUrls();
     NewNamesList newNamesList;
 
     QPointer<AdvancedRenameDialog> dlg = new AdvancedRenameDialog(this);

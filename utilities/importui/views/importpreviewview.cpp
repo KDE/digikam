@@ -356,7 +356,7 @@ void ImportPreviewView::showContextMenu(const CamItemInfo& info, QGraphicsSceneC
 
     QList<qlonglong> idList;
     idList << info.id;
-    KUrl::List selectedItems;
+    QList<QUrl> selectedItems;
     selectedItems << info.url();
 
     // --------------------------------------------------------
