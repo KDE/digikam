@@ -30,10 +30,10 @@
 #include <QIcon>
 #include <QKeySequence>
 #include <QApplication>
+#include <QAction>
 
 // KDE includes
 
-#include <QAction>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -544,7 +544,7 @@ void TagsActionMngr::slotImageTagChanged(const ImageTagChangeset&)
 
     if (sld)
     {
-        KUrl url = sld->currentItem();
+        QUrl url = sld->currentItem();
         ImageInfo info = ImageInfo::fromUrl(url);
         sld->updateTags(url, AlbumManager::instance()->tagNames(info.tagIds()));
     }
