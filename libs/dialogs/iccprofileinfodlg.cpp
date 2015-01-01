@@ -47,7 +47,7 @@ ICCProfileInfoDlg::ICCProfileInfoDlg(QWidget* const parent, const QString& profi
 
     if (profile.isNull())
     {
-        profileWidget->loadFromURL(KUrl(profilePath));
+        profileWidget->loadFromURL(QUrl(profilePath));
     }
     else
     {

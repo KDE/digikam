@@ -36,7 +36,7 @@
 // KDE includes
 
 #include <kdialog.h>
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -74,11 +74,11 @@ class DeleteItem : public QTreeWidgetItem
 
 public:
 
-    DeleteItem(QTreeWidget* const parent, const KUrl& url);
+    DeleteItem(QTreeWidget* const parent, const QUrl &url);
     virtual ~DeleteItem();
 
     bool    hasValidThumbnail() const;
-    KUrl    url()               const;
+    QUrl    url()               const;
     QString fileUrl()           const;
 
     void setThumb(const QPixmap& pix, bool hasThumb=true);
@@ -125,7 +125,7 @@ public:
     explicit DeleteWidget(QWidget* const parent = 0);
     virtual ~DeleteWidget();
 
-    void setUrls(const KUrl::List& urls);
+    void setUrls(const QList<QUrl>& urls);
     void setListMode(DeleteDialogMode::ListMode mode);
     void setDeleteMode(DeleteDialogMode::DeleteMode deleteMode);
 
@@ -165,12 +165,12 @@ public:
     explicit DeleteDialog(QWidget* const parent);
     virtual ~DeleteDialog();
 
-    bool confirmDeleteList(const KUrl::List& condemnedURLs,
+    bool confirmDeleteList(const QList<QUrl>& condemnedURLs,
                            DeleteDialogMode::ListMode listMode,
                            DeleteDialogMode::DeleteMode deleteMode);
     bool shouldDelete() const;
 
-    void setUrls(const KUrl::List& urls);
+    void setUrls(const QList<QUrl>& urls);
     void presetDeleteMode(DeleteDialogMode::DeleteMode mode);
     void setListMode(DeleteDialogMode::ListMode mode);
 

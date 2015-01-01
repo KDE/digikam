@@ -69,15 +69,15 @@ public:
 
     bool hasThumb;
 
-    KUrl url;
+    QUrl url;
 };
 
-DeleteItem::DeleteItem(QTreeWidget* const parent, const KUrl& url)
+DeleteItem::DeleteItem(QTreeWidget* const parent, const QUrl &url)
     : QTreeWidgetItem(parent), d(new Private)
 {
     d->url = url;
 
-    if (d->url.protocol() == "digikamalbums")
+    if (d->url.scheme() == "digikamalbums")
     {
         if (DatabaseUrl(d->url).isAlbumUrl())
         {
@@ -106,7 +106,7 @@ bool DeleteItem::hasValidThumbnail() const
     return d->hasThumb;
 }
 
-KUrl DeleteItem::url() const
+QUrl DeleteItem::url() const
 {
     return d->url;
 }
@@ -117,12 +117,12 @@ QString DeleteItem::fileUrl() const
     {
         return (d->url.toLocalFile());
     }
-    else if (d->url.protocol() == "digikamalbums")
+    else if (d->url.scheme() == "digikamalbums")
     {
         return (DatabaseUrl(d->url).fileUrl().toLocalFile());
     }
 
-    return (d->url.prettyUrl());
+    return (d->url.toDisplayString());
 }
 
 void DeleteItem::setThumb(const QPixmap& pix, bool hasThumb)
@@ -338,11 +338,11 @@ DeleteWidget::~DeleteWidget()
     delete d;
 }
 
-void DeleteWidget::setUrls(const KUrl::List& urls)
+void DeleteWidget::setUrls(const QList<QUrl>& urls)
 {
     d->fileList->clear();
 
-    foreach(const KUrl& url, urls)
+    foreach(const QUrl &url, urls)
     {
         new DeleteItem(d->fileList, url);
     }
@@ -513,7 +513,7 @@ DeleteDialog::~DeleteDialog()
     delete d;
 }
 
-bool DeleteDialog::confirmDeleteList(const KUrl::List& condemnedFiles,
+bool DeleteDialog::confirmDeleteList(const QList<QUrl>& condemnedFiles,
                                      DeleteDialogMode::ListMode listMode,
                                      DeleteDialogMode::DeleteMode deleteMode)
 {
@@ -539,7 +539,7 @@ bool DeleteDialog::confirmDeleteList(const KUrl::List& condemnedFiles,
     return exec() == QDialog::Accepted;
 }
 
-void DeleteDialog::setUrls(const KUrl::List& urls)
+void DeleteDialog::setUrls(const QList<QUrl>& urls)
 {
     d->widget->setUrls(urls);
 }

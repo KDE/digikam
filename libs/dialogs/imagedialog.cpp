@@ -70,7 +70,7 @@ public:
     QLabel*              imageLabel;
     QLabel*              infoLabel;
 
-    KUrl                 currentURL;
+    QUrl                 currentURL;
 
     DMetadata            metaIface;
 
@@ -120,7 +120,7 @@ void ImageDialogPreview::resizeEvent(QResizeEvent*)
 
 void ImageDialogPreview::showPreview()
 {
-    KUrl url(d->currentURL);
+    QUrl url(d->currentURL);
     clearPreview();
     showPreview(url);
 }
@@ -309,7 +309,7 @@ void ImageDialogPreview::showPreview(const QUrl& url)
 
 void ImageDialogPreview::slotThumbnail(const LoadingDescription& desc, const QPixmap& pix)
 {
-    if (KUrl(desc.filePath) == d->currentURL)
+    if (QUrl(desc.filePath) == d->currentURL)
     {
         QPixmap pixmap;
         QSize   s = d->imageLabel->contentsRect().size();
@@ -331,7 +331,7 @@ void ImageDialogPreview::clearPreview()
 {
     d->imageLabel->clear();
     d->infoLabel->clear();
-    d->currentURL = KUrl();
+    d->currentURL = QUrl();
 }
 
 // ------------------------------------------------------------------------
@@ -350,11 +350,11 @@ public:
 
     QString    fileFormats;
 
-    KUrl       url;
-    KUrl::List urls;
+    QUrl       url;
+    QList<QUrl> urls;
 };
 
-ImageDialog::ImageDialog(QWidget* const parent, const KUrl& url, bool singleSelect, const QString& caption)
+ImageDialog::ImageDialog(QWidget* const parent, const QUrl &url, bool singleSelect, const QString& caption)
     : d(new Private)
 {
     d->singleSelect         = singleSelect;
@@ -433,17 +433,17 @@ QString ImageDialog::fileFormats() const
     return d->fileFormats;
 }
 
-KUrl ImageDialog::url() const
+QUrl ImageDialog::url() const
 {
     return d->url;
 }
 
-KUrl::List ImageDialog::urls() const
+QList<QUrl> ImageDialog::urls() const
 {
     return d->urls;
 }
 
-KUrl::List ImageDialog::getImageURLs(QWidget* const parent, const KUrl& url, const QString& caption)
+QList<QUrl> ImageDialog::getImageURLs(QWidget* const parent, const QUrl &url, const QString& caption)
 {
     ImageDialog dlg(parent, url, false, caption);
 
@@ -453,21 +453,21 @@ KUrl::List ImageDialog::getImageURLs(QWidget* const parent, const KUrl& url, con
     }
     else
     {
-        return KUrl::List();
+        return QList<QUrl>();
     }
 }
 
-KUrl ImageDialog::getImageURL(QWidget* const parent, const KUrl& url, const QString& caption)
+QUrl ImageDialog::getImageURL(QWidget* const parent, const QUrl &url, const QString& caption)
 {
     ImageDialog dlg(parent, url, true, caption);
 
-    if (dlg.url() != KUrl())
+    if (dlg.url() != QUrl())
     {
         return dlg.url();
     }
     else
     {
-        return KUrl();
+        return QUrl();
     }
 }
 

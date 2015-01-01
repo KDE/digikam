@@ -26,7 +26,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 #include <kpreviewwidgetbase.h>
 
 // Local includes
@@ -76,16 +76,16 @@ class DIGIKAM_EXPORT ImageDialog
 
 public:
 
-    ImageDialog(QWidget* const parent, const KUrl& url, bool singleSelect=false, const QString& caption=QString());
+    ImageDialog(QWidget* const parent, const QUrl &url, bool singleSelect=false, const QString& caption=QString());
     ~ImageDialog();
 
-    KUrl       url()          const;
-    KUrl::List urls()         const;
+    QUrl       url()          const;
+    QList<QUrl> urls()         const;
     bool       singleSelect() const;
     QString    fileFormats()  const;
 
-    static KUrl::List getImageURLs(QWidget* const parent, const KUrl& url, const QString& caption=QString());
-    static KUrl getImageURL(QWidget* const parent, const KUrl& url, const QString& caption=QString());
+    static QList<QUrl> getImageURLs(QWidget* const parent, const QUrl &url, const QString& caption=QString());
+    static QUrl getImageURL(QWidget* const parent, const QUrl &url, const QString& caption=QString());
 
 private:
 
