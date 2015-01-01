@@ -2918,8 +2918,8 @@ void DImg::prepareMetadataToSave(const QString& intendedDestPath, const QString&
         flags &= ~ResetExifOrientationTag;
     }
 
-    KUrl url = QUrl::fromLocalFile(originalFilePath());
-    prepareMetadataToSave(intendedDestPath, destMimeType, url.fileName(KUrl::ObeyTrailingSlash), flags);
+    QUrl url = QUrl::fromLocalFile(originalFilePath());
+    prepareMetadataToSave(intendedDestPath, destMimeType, url.fileName(), flags);
 }
 
 void DImg::prepareMetadataToSave(const QString& intendedDestPath, const QString& destMimeType,
@@ -3061,9 +3061,9 @@ void DImg::prepareMetadataToSave(const QString& intendedDestPath, const QString&
         DImageHistory forSaving(m_priv->imageHistory);
         forSaving.adjustReferredImages();
 
-        KUrl url   = QUrl::fromLocalFile(intendedDestPath);
-        QString filePath = url.directory(KUrl::ObeyTrailingSlash | KUrl::AppendTrailingSlash);
-        QString fileName = url.fileName(KUrl::ObeyTrailingSlash);
+        QUrl url = QUrl::fromLocalFile(intendedDestPath);
+        QString filePath = url.adjusted(QUrl::RemoveFilename).path() + "/";
+        QString fileName = url.fileName();
 
         if (!filePath.isEmpty() && !fileName.isEmpty())
         {
