@@ -36,7 +36,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 #include <klocalizedstring.h>
 #include <kcalendarsystem.h>
 #include <kcomponentdata.h>
@@ -122,7 +122,7 @@ QString ImageQueryBuilder::buildQuery(const QString& q, QList<QVariant> *boundVa
     // Handle legacy query descriptions
     if (q.startsWith(QLatin1String("digikamsearch:")))
     {
-        return buildQueryFromUrl(KUrl(q), boundValues);
+        return buildQueryFromUrl(QUrl(q), boundValues);
     }
     else
     {
@@ -1596,9 +1596,9 @@ public:
     QString             val;
 };
 
-QString ImageQueryBuilder::convertFromUrlToXml(const KUrl& url) const
+QString ImageQueryBuilder::convertFromUrlToXml(const QUrl &url) const
 {
-    int  count = url.queryItem("count").toInt();
+    int  count = QUrlQuery(url).queryItemValue("count").toInt();
 
     if (count <= 0)
     {
@@ -1611,8 +1611,8 @@ QString ImageQueryBuilder::convertFromUrlToXml(const KUrl& url) const
     {
         RuleTypeForConversion rule;
 
-        QString key = url.queryItem(QString::number(i) + ".key").toLower();
-        QString op  = url.queryItem(QString::number(i) + ".op").toLower();
+        QString key = QUrlQuery(url).queryItemValue(QString::number(i) + ".key").toLower();
+        QString op  = QUrlQuery(url).queryItemValue(QString::number(i) + ".op").toLower();
 
         if (key == "album")
         {
@@ -1688,7 +1688,7 @@ QString ImageQueryBuilder::convertFromUrlToXml(const KUrl& url) const
             }
         }
 
-        rule.val = url.queryItem(QString::number(i) + ".val");
+        rule.val = QUrlQuery(url).queryItemValue(QString::number(i) + ".val");
 
         rulesMap.insert(i, rule);
     }
@@ -1798,9 +1798,9 @@ public:
 
 // -------------------------------------------------------------------------
 
-QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant>* boundValues) const
+QString ImageQueryBuilder::buildQueryFromUrl(const QUrl &url, QList<QVariant>* boundValues) const
 {
-    int count = url.queryItem("count").toInt();
+    int count = QUrlQuery(url).queryItemValue("count").toInt();
 
     if (count <= 0)
     {
@@ -1813,8 +1813,8 @@ QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant>* b
     {
         RuleType rule;
 
-        QString key = url.queryItem(QString::number(i) + ".key").toLower();
-        QString op  = url.queryItem(QString::number(i) + ".op").toLower();
+        QString key = QUrlQuery(url).queryItemValue(QString::number(i) + ".key").toLower();
+        QString op  = QUrlQuery(url).queryItemValue(QString::number(i) + ".op").toLower();
 
         if (key == "album")
         {
@@ -1904,7 +1904,7 @@ QString ImageQueryBuilder::buildQueryFromUrl(const KUrl& url, QList<QVariant>* b
             continue;
         }
 
-        rule.val = url.queryItem(QString::number(i) + ".val");
+        rule.val = QUrlQuery(url).queryItemValue(QString::number(i) + ".val");
 
         rulesMap.insert(i, rule);
     }

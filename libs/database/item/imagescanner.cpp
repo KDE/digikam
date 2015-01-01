@@ -1823,7 +1823,7 @@ void ImageScanner::scanBalooInfo()
         return;
     }
 
-    BalooInfo bInfo = baloo->getSemanticInfo(KUrl(d->fileInfo.absoluteFilePath()));
+    BalooInfo bInfo = baloo->getSemanticInfo(QUrl(d->fileInfo.absoluteFilePath()));
 
     if (!bInfo.tags.isEmpty())
     {

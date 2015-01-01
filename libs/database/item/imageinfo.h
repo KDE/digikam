@@ -36,7 +36,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -100,7 +100,7 @@ public:
      * Creates an ImageInfo object from a file url.
      */
     static ImageInfo fromLocalFile(const QString& path);
-    static ImageInfo fromUrl(const KUrl& url);
+    static ImageInfo fromUrl(const QUrl &url);
 
     /**
      * Create an ImageInfo object from the given combination, which
@@ -156,7 +156,7 @@ public:
 
     /**
      * Returns the digikamalbums:// URL.
-     * The returned object can be used as a KUrl.
+     * The returned object can be used as a QUrl.
      * Always use this for KIO operations
      */
     DatabaseUrl databaseUrl() const;
@@ -165,7 +165,7 @@ public:
      * Returns the file:// url.
      * This is equivalent to databaseUrl().fileUrl()
      */
-    KUrl fileUrl() const;
+    QUrl fileUrl() const;
 
     /**
      * Equivalent to fileUrl().path()

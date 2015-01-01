@@ -313,7 +313,7 @@ ImageInfo::ImageInfo(qlonglong ID)
     }
 }
 
-ImageInfo ImageInfo::fromUrl(const KUrl& url)
+ImageInfo ImageInfo::fromUrl(const QUrl &url)
 {
     return fromLocalFile(url.toLocalFile());
 }
@@ -328,8 +328,8 @@ ImageInfo ImageInfo::fromLocalFile(const QString& path)
         return ImageInfo();
     }
 
-    KUrl url = KUrl::fromLocalFile(path);
-    QString album = CollectionManager::instance()->album(url.directory());
+    QUrl url = QUrl::fromLocalFile(path);
+    QString album = CollectionManager::instance()->album(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path());
     QString name  = url.fileName();
 
     return fromLocationAlbumAndName(location.id(), album, name);
@@ -770,7 +770,7 @@ DatabaseUrl ImageInfo::databaseUrl() const
     return DatabaseUrl::fromAlbumAndName(m_data->name, album, albumRoot, m_data->albumRootId);
 }
 
-KUrl ImageInfo::fileUrl() const
+QUrl ImageInfo::fileUrl() const
 {
     return QUrl::fromLocalFile(filePath());
 }

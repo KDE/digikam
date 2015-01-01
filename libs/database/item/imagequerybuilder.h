@@ -36,7 +36,7 @@
 #include "searchxml.h"
 #include "digikam_export.h"
 
-class KUrl;
+class QUrl;
 
 namespace Digikam
 {
@@ -72,9 +72,9 @@ public:
     ImageQueryBuilder();
 
     QString buildQuery(const QString& q, QList<QVariant>* boundValues, ImageQueryPostHooks* const hooks) const;
-    QString buildQueryFromUrl(const KUrl& url, QList<QVariant>* boundValues) const;
+    QString buildQueryFromUrl(const QUrl &url, QList<QVariant>* boundValues) const;
     QString buildQueryFromXml(const QString& xml, QList<QVariant>* boundValues, ImageQueryPostHooks* const hooks) const;
-    QString convertFromUrlToXml(const KUrl& url) const;
+    QString convertFromUrlToXml(const QUrl &url) const;
 
     /**
      * Use for special queries where ImageTagProperties table is JOIN'ed.
