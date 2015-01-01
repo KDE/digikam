@@ -95,16 +95,16 @@ DatabaseParameters::DatabaseParameters(const QString& type,
 {
 }
 
-DatabaseParameters::DatabaseParameters(const KUrl& url)
+DatabaseParameters::DatabaseParameters(const QUrl &url)
     : port(-1),
       internalServer(false)
 {
-    databaseType           = url.queryItem("databaseType");
-    databaseName           = url.queryItem("databaseName");
-    databaseNameThumbnails = url.queryItem("databaseNameThumbnails");
-    connectOptions         = url.queryItem("connectOptions");
-    hostName               = url.queryItem("hostName");
-    QString queryPort      = url.queryItem("port");
+    databaseType           = QUrlQuery(url).queryItemValue("databaseType");
+    databaseName           = QUrlQuery(url).queryItemValue("databaseName");
+    databaseNameThumbnails = QUrlQuery(url).queryItemValue("databaseNameThumbnails");
+    connectOptions         = QUrlQuery(url).queryItemValue("connectOptions");
+    hostName               = QUrlQuery(url).queryItemValue("hostName");
+    QString queryPort      = QUrlQuery(url).queryItemValue("port");
 
     if (!queryPort.isNull())
     {
@@ -112,7 +112,7 @@ DatabaseParameters::DatabaseParameters(const KUrl& url)
     }
 
 #if defined(HAVE_MYSQLSUPPORT) && defined(HAVE_INTERNALMYSQL)
-    QString queryServer = url.queryItem("internalServer");
+    QString queryServer = QUrlQuery(url).queryItemValue("internalServer");
 
     if (!queryServer.isNull())
     {
@@ -122,8 +122,8 @@ DatabaseParameters::DatabaseParameters(const KUrl& url)
     internalServer = false;
 #endif
 
-    userName       = url.queryItem("userName");
-    password       = url.queryItem("password");
+    userName       = QUrlQuery(url).queryItemValue("userName");
+    password       = QUrlQuery(url).queryItemValue("password");
 }
 
 bool DatabaseParameters::operator==(const DatabaseParameters& other) const
@@ -476,7 +476,7 @@ DatabaseParameters DatabaseParameters::parametersForSQLiteDefaultFile(const QStr
     return parametersForSQLite(QDir::cleanPath(directory + QDir::separator() + digikam4db));
 }
 
-void DatabaseParameters::insertInUrl(KUrl& url) const
+void DatabaseParameters::insertInUrl(QUrl& url) const
 {
     removeFromUrl(url);
 
@@ -514,7 +514,7 @@ void DatabaseParameters::insertInUrl(KUrl& url) const
     }
 }
 
-void DatabaseParameters::removeFromUrl(KUrl& url)
+void DatabaseParameters::removeFromUrl(QUrl& url)
 {
     url.removeQueryItem("databaseType");
     url.removeQueryItem("databaseName");

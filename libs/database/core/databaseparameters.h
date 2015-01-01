@@ -34,7 +34,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <ksharedconfig.h>
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -52,7 +52,7 @@ public:
     /**
       * This class encapsulates all parameters needed to establish
       * a connection to a database (inspired by the API of QT SQL of Qt4).
-      * The values can be read from and written to a KUrl.
+      * The values can be read from and written to a QUrl.
       */
 
     DatabaseParameters(const QString& type,
@@ -65,10 +65,10 @@ public:
                        const QString& password = QString(),
                        const QString& databaseNameThumbnails = QString());
 
-    explicit DatabaseParameters(const KUrl& url);
+    explicit DatabaseParameters(const QUrl &url);
     DatabaseParameters();
 
-    void insertInUrl(KUrl& url) const;
+    void insertInUrl(QUrl& url) const;
     bool operator==(const DatabaseParameters& other) const;
     bool operator!=(const DatabaseParameters& other) const;
 
@@ -139,7 +139,7 @@ public:
     static DatabaseParameters parametersForSQLite(const QString& databaseFile);
     static DatabaseParameters parametersForSQLiteDefaultFile(const QString& directory);
 
-    static void removeFromUrl(KUrl& url);
+    static void removeFromUrl(QUrl& url);
 
 public:
 
