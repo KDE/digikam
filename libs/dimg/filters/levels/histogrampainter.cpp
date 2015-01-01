@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include "kdebug.h"
+#include "digikam_debug.h"
 #include "klocale.h"
 
 #define HISTOGRAM_CALC_CUTOFF_MIN    0.1
