@@ -31,7 +31,7 @@
 // KDE includes
 
 #include <kio/job.h>
-#include <kurl.h>
+#include <QUrl>
 #include "digikam_debug.h"
 
 // Local includes
