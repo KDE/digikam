@@ -170,7 +170,7 @@ void ImportContextMenuHelper::addServicesMenu(const QList<QUrl>& selectedItems)
     QStringList    mimeTypes;
     KService::List offers;
 
-    foreach(const QUrl &item, d->selectedItems)
+    foreach(const QUrl& item, d->selectedItems)
     {
         const QString mimeType = KMimeType::findByUrl(item, 0, true, true)->name();
 

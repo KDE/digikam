@@ -36,16 +36,16 @@
 namespace Digikam
 {
 
-DatabaseUrl DatabaseUrl::fromFileUrl(const QUrl &fileUrl,
-                                     const QUrl &albumRoot,
+DatabaseUrl DatabaseUrl::fromFileUrl(const QUrl& fileUrl,
+                                     const QUrl& albumRoot,
                                      const DatabaseParameters& parameters)
 {
     CollectionLocation location = CollectionManager::instance()->locationForAlbumRoot(albumRoot);
     return fromFileUrl(fileUrl, albumRoot, location.id(), parameters);
 }
 
-DatabaseUrl DatabaseUrl::fromFileUrl(const QUrl &fileUrl,
-                                     const QUrl &albumRoot,
+DatabaseUrl DatabaseUrl::fromFileUrl(const QUrl& fileUrl,
+                                     const QUrl& albumRoot,
                                      int   albumRootId,
                                      const DatabaseParameters& parameters)
 {
@@ -64,7 +64,7 @@ DatabaseUrl DatabaseUrl::fromFileUrl(const QUrl &fileUrl,
 
 DatabaseUrl DatabaseUrl::fromAlbumAndName(const QString& name,
         const QString& album,
-        const QUrl &albumRoot,
+        const QUrl& albumRoot,
         const DatabaseParameters& parameters)
 {
     CollectionLocation location = CollectionManager::instance()->locationForAlbumRoot(albumRoot);
@@ -73,7 +73,7 @@ DatabaseUrl DatabaseUrl::fromAlbumAndName(const QString& name,
 
 DatabaseUrl DatabaseUrl::fromAlbumAndName(const QString& name,
         const QString& album,
-        const QUrl &albumRoot,
+        const QUrl& albumRoot,
         int   albumRootId,
         const DatabaseParameters& parameters)
 {
@@ -184,7 +184,7 @@ DatabaseUrl DatabaseUrl::searchUrl(int id,
     return url;
 }
 
-DatabaseUrl::DatabaseUrl(const QUrl &digikamalbumsUrl)
+DatabaseUrl::DatabaseUrl(const QUrl& digikamalbumsUrl)
     : QUrl(digikamalbumsUrl)
 {
 }
@@ -198,7 +198,7 @@ DatabaseUrl::DatabaseUrl()
 {
 }
 
-DatabaseUrl& DatabaseUrl::operator=(const QUrl &digikamalbumsUrl)
+DatabaseUrl& DatabaseUrl::operator=(const QUrl& digikamalbumsUrl)
 {
     QUrl::operator=(digikamalbumsUrl);
     return *this;
@@ -210,7 +210,7 @@ DatabaseUrl& DatabaseUrl::operator=(const DatabaseUrl& url)
     return *this;
 }
 
-bool DatabaseUrl::operator==(const QUrl &digikamalbumsUrl) const
+bool DatabaseUrl::operator==(const QUrl& digikamalbumsUrl) const
 {
     return QUrl::operator==(digikamalbumsUrl);
 }

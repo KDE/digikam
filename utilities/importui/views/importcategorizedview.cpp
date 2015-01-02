@@ -306,7 +306,7 @@ QList<QUrl> ImportCategorizedView::selectedUrls() const
     return urls;
 }
 
-void ImportCategorizedView::toIndex(const QUrl &url)
+void ImportCategorizedView::toIndex(const QUrl& url)
 {
     DCategorizedView::toIndex(d->filterModel->indexForPath(url.toLocalFile()));
 }
@@ -396,7 +396,7 @@ void ImportCategorizedView::setCurrentWhenAvailable(qlonglong camItemId)
     d->scrollToItemId = camItemId;
 }
 
-void ImportCategorizedView::setCurrentUrl(const QUrl &url)
+void ImportCategorizedView::setCurrentUrl(const QUrl& url)
 {
     if (url.isEmpty())
     {

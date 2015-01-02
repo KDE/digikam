@@ -75,7 +75,7 @@ public:
     void               setSelectedCamItemInfos(const CamItemInfoList& infos) const;
     int                downloadedCamItemInfos()                              const;
     bool               hasCurrentItem()                                      const;
-    bool               isSelected(const QUrl &url)                           const;
+    bool               isSelected(const QUrl& url)                           const;
 
     double                             zoomMin()           const;
     double                             zoomMax()           const;

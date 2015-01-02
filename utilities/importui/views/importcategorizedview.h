@@ -74,7 +74,7 @@ public:
     QList<QUrl>             urls()                             const;
 
     /** Selects the index as current and scrolls to it */
-    void toIndex(const QUrl &url);
+    void toIndex(const QUrl& url);
 
     /** Returns the n-th info after the given one.
      *  Specifically, return the previous info for nth = -1
@@ -112,7 +112,7 @@ public Q_SLOTS:
     void setCurrentWhenAvailable(qlonglong camItemId);
 
     /** Set as current item the item identified by its file url */
-    void setCurrentUrl(const QUrl &url);
+    void setCurrentUrl(const QUrl& url);
 
     /** Set as current item the item identified by the CamItemInfo */
     void setCurrentInfo(const CamItemInfo& info);

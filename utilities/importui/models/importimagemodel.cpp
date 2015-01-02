@@ -312,7 +312,7 @@ qlonglong ImportImageModel::retrieveCamItemId(const QModelIndex& index)
     return model->camItemId(row);
 }
 
-QModelIndex ImportImageModel::indexForUrl(const QUrl &fileUrl) const
+QModelIndex ImportImageModel::indexForUrl(const QUrl& fileUrl) const
 {
     if (d->keepFileUrlCache)
     {
@@ -334,7 +334,7 @@ QModelIndex ImportImageModel::indexForUrl(const QUrl &fileUrl) const
     return QModelIndex();
 }
 
-QList<QModelIndex> ImportImageModel::indexesForUrl(const QUrl &fileUrl) const
+QList<QModelIndex> ImportImageModel::indexesForUrl(const QUrl& fileUrl) const
 {
     if (d->keepFileUrlCache)
     {
@@ -357,7 +357,7 @@ QList<QModelIndex> ImportImageModel::indexesForUrl(const QUrl &fileUrl) const
     }
 }
 
-CamItemInfo ImportImageModel::camItemInfo(const QUrl &fileUrl) const
+CamItemInfo ImportImageModel::camItemInfo(const QUrl& fileUrl) const
 {
     if (d->keepFileUrlCache)
     {
@@ -387,7 +387,7 @@ CamItemInfo ImportImageModel::camItemInfo(const QUrl &fileUrl) const
     return CamItemInfo();
 }
 
-QList<CamItemInfo> ImportImageModel::camItemInfos(const QUrl &fileUrl) const
+QList<CamItemInfo> ImportImageModel::camItemInfos(const QUrl& fileUrl) const
 {
     QList<CamItemInfo> infos;
 

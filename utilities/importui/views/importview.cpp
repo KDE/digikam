@@ -373,11 +373,11 @@ int ImportView::downloadedCamItemInfos() const
     return numberOfDownloaded;
 }
 
-bool ImportView::isSelected(const QUrl &url) const
+bool ImportView::isSelected(const QUrl& url) const
 {
     QList<QUrl> urlsList = selectedUrls();
 
-    foreach(const QUrl &selected, urlsList)
+    foreach(const QUrl& selected, urlsList)
     {
         if (url == selected)
         {
@@ -408,7 +408,7 @@ void ImportView::slotLastItem()
     d->iconView->toLastIndex();
 }
 
-void ImportView::slotSelectItemByUrl(const QUrl &url)
+void ImportView::slotSelectItemByUrl(const QUrl& url)
 {
     d->iconView->toIndex(url);
 }

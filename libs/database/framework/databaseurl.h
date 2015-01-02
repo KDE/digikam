@@ -63,13 +63,13 @@ public:
       *   (if the file is "/media/fotos/Summer 2007/001.jpg", the album root may be "/media/fotos")
       * - The parameters of the database that is referenced
       */
-    static DatabaseUrl fromFileUrl(const QUrl &fileUrl,
-                                   const QUrl &albumRoot,
+    static DatabaseUrl fromFileUrl(const QUrl& fileUrl,
+                                   const QUrl& albumRoot,
                                    int   albumRootId,
                                    const DatabaseParameters& parameters = DatabaseAccess::parameters());
 
-    static DatabaseUrl fromFileUrl(const QUrl &fileUrl,
-                                   const QUrl &albumRoot,
+    static DatabaseUrl fromFileUrl(const QUrl& fileUrl,
+                                   const QUrl& albumRoot,
                                    const DatabaseParameters& parameters = DatabaseAccess::parameters());
 
     /**
@@ -79,13 +79,13 @@ public:
      */
     static DatabaseUrl fromAlbumAndName(const QString& name,
                                         const QString& album,
-                                        const QUrl &albumRoot,
+                                        const QUrl& albumRoot,
                                         int   albumRootId,
                                         const DatabaseParameters& parameters = DatabaseAccess::parameters());
 
     static DatabaseUrl fromAlbumAndName(const QString& name,
                                         const QString& album,
-                                        const QUrl &albumRoot,
+                                        const QUrl& albumRoot,
                                         const DatabaseParameters& parameters = DatabaseAccess::parameters());
 
     /**
@@ -142,7 +142,7 @@ public:
     /**
       * Create a DatabaseUrl object from a QUrl, to retrieve the information stored
       */
-    DatabaseUrl(const QUrl &digikamUrl);
+    DatabaseUrl(const QUrl& digikamUrl);
 
     /**
      * Create an invalid database URL
@@ -247,10 +247,10 @@ public:
 
     DatabaseUrl(const DatabaseUrl& url);
 
-    DatabaseUrl& operator=(const QUrl &digikamalbumsUrl);
+    DatabaseUrl& operator=(const QUrl& digikamalbumsUrl);
     DatabaseUrl& operator=(const DatabaseUrl& url);
 
-    bool operator==(const QUrl &digikamalbumsUrl) const;
+    bool operator==(const QUrl& digikamalbumsUrl) const;
 };
 
 }  // namespace Digikam
