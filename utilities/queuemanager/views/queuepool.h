@@ -104,7 +104,7 @@ private :
 private Q_SLOTS:
 
     void slotFileChanged(const QString&);
-    void slotCloseQueueRequest(QWidget*);
+    void slotCloseQueueRequest(int);
     void slotTestCanDecode(const QDragMoveEvent*, bool&);
 };
 

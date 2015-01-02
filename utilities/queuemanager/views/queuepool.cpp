@@ -62,8 +62,8 @@ QueuePool::QueuePool(QWidget* const parent)
     connect(this, SIGNAL(currentChanged(int)),
             this, SLOT(slotQueueSelected(int)));
 
-    connect(this, SIGNAL(closeRequest(QWidget*)),
-            this, SLOT(slotCloseQueueRequest(QWidget*)));
+    connect(this, SIGNAL(tabCloseRequested(int)),
+            this, SLOT(slotCloseQueueRequest(int)));
 
     connect(this, SIGNAL(testCanDecode(const QDragMoveEvent*,bool&)),
             this, SLOT(slotTestCanDecode(const QDragMoveEvent*,bool&)));
@@ -334,9 +334,9 @@ void QueuePool::slotQueueSelected(int index)
     }
 }
 
-void QueuePool::slotCloseQueueRequest(QWidget* w)
+void QueuePool::slotCloseQueueRequest(int index)
 {
-    removeTab(indexOf(w));
+    removeTab(index);
 
     if (count() == 0)
     {
