@@ -545,7 +545,7 @@ void AlbumWatch::handleKioNotification(const QUrl& url)
 
         if (dbUrl.isAlbumUrl())
         {
-            QString path = dbUrl.fileUrl().directory();
+            QString path = dbUrl.fileUrl().adjusted(QUrl::RemoveFilename).path();
             qCDebug(DIGIKAM_GENERAL_LOG) << "KDirNotify detected file change at" << path;
             rescanDirectory(path);
         }

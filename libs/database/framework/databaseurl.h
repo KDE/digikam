@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_DATABASE_EXPORT DatabaseUrl : public KUrl
+class DIGIKAM_DATABASE_EXPORT DatabaseUrl : public QUrl
 {
 public:
 
@@ -63,13 +63,13 @@ public:
       *   (if the file is "/media/fotos/Summer 2007/001.jpg", the album root may be "/media/fotos")
       * - The parameters of the database that is referenced
       */
-    static DatabaseUrl fromFileUrl(const KUrl& fileUrl,
-                                   const KUrl& albumRoot,
+    static DatabaseUrl fromFileUrl(const QUrl &fileUrl,
+                                   const QUrl &albumRoot,
                                    int   albumRootId,
                                    const DatabaseParameters& parameters = DatabaseAccess::parameters());
 
-    static DatabaseUrl fromFileUrl(const KUrl& fileUrl,
-                                   const KUrl& albumRoot,
+    static DatabaseUrl fromFileUrl(const QUrl &fileUrl,
+                                   const QUrl &albumRoot,
                                    const DatabaseParameters& parameters = DatabaseAccess::parameters());
 
     /**
@@ -79,13 +79,13 @@ public:
      */
     static DatabaseUrl fromAlbumAndName(const QString& name,
                                         const QString& album,
-                                        const KUrl& albumRoot,
+                                        const QUrl &albumRoot,
                                         int   albumRootId,
                                         const DatabaseParameters& parameters = DatabaseAccess::parameters());
 
     static DatabaseUrl fromAlbumAndName(const QString& name,
                                         const QString& album,
-                                        const KUrl& albumRoot,
+                                        const QUrl &albumRoot,
                                         const DatabaseParameters& parameters = DatabaseAccess::parameters());
 
     /**
@@ -140,9 +140,9 @@ public:
     static DatabaseUrl searchUrl(int searchId,
                                  const DatabaseParameters& parameters = DatabaseAccess::parameters());
     /**
-      * Create a DatabaseUrl object from a KUrl, to retrieve the information stored
+      * Create a DatabaseUrl object from a QUrl, to retrieve the information stored
       */
-    DatabaseUrl(const KUrl& digikamUrl);
+    DatabaseUrl(const QUrl &digikamUrl);
 
     /**
      * Create an invalid database URL
@@ -179,7 +179,7 @@ public:
     /** Returns the album root URL of the file or album referenced by this URL
      *  In the example above, this is "file://media/fotos"
      */
-    KUrl albumRoot() const;
+    QUrl albumRoot() const;
 
     /** Returns the album root path of the file or album referenced by this URL
      *  In the example above, this is "/media/fotos"
@@ -202,7 +202,7 @@ public:
     /**
      * Converts this digikamalbums:// URL to a file:// URL
      */
-    KUrl fileUrl() const;
+    QUrl fileUrl() const;
 
     /// Tag URL
 
@@ -247,10 +247,10 @@ public:
 
     DatabaseUrl(const DatabaseUrl& url);
 
-    DatabaseUrl& operator=(const KUrl& digikamalbumsUrl);
+    DatabaseUrl& operator=(const QUrl &digikamalbumsUrl);
     DatabaseUrl& operator=(const DatabaseUrl& url);
 
-    bool operator==(const KUrl& digikamalbumsUrl) const;
+    bool operator==(const QUrl &digikamalbumsUrl) const;
 };
 
 }  // namespace Digikam

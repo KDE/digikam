@@ -35,6 +35,7 @@
 #include <QDBusConnection>
 #include <QDataStream>
 #include <QFileInfo>
+#include <QUrl>
 
 // KDE includes
 
@@ -101,7 +102,7 @@ void kio_digikamalbums::special(const QByteArray& data)
         lister.setListOnlyAvailable(listOnlyAvailableImages);
         // send data every 200 images to be more responsive
         Digikam::ImageListerSlaveBaseGrowingPartsSendingReceiver receiver(this, 200, 2000, 100);
-        lister.list(&receiver, KUrl(url));
+        lister.list(&receiver, url);
         receiver.sendData();
     }
 

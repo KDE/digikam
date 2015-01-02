@@ -36,23 +36,23 @@
 namespace Digikam
 {
 
-DatabaseUrl DatabaseUrl::fromFileUrl(const KUrl& fileUrl,
-                                     const KUrl& albumRoot,
+DatabaseUrl DatabaseUrl::fromFileUrl(const QUrl &fileUrl,
+                                     const QUrl &albumRoot,
                                      const DatabaseParameters& parameters)
 {
     CollectionLocation location = CollectionManager::instance()->locationForAlbumRoot(albumRoot);
     return fromFileUrl(fileUrl, albumRoot, location.id(), parameters);
 }
 
-DatabaseUrl DatabaseUrl::fromFileUrl(const KUrl& fileUrl,
-                                     const KUrl& albumRoot,
+DatabaseUrl DatabaseUrl::fromFileUrl(const QUrl &fileUrl,
+                                     const QUrl &albumRoot,
                                      int   albumRootId,
                                      const DatabaseParameters& parameters)
 {
     DatabaseUrl url;
-    url.setProtocol("digikamalbums");
+    url.setScheme("digikamalbums");
     // get album root path without trailing slash
-    QString albumRootPath = albumRoot.toLocalFile(KUrl::RemoveTrailingSlash);
+    QString albumRootPath = albumRoot.adjusted(QUrl::StripTrailingSlash).toLocalFile();
     // get the hierarchy below the album root
     QString pathUnderRoot = fileUrl.toLocalFile().remove(albumRootPath);
     url.setPath(pathUnderRoot);
@@ -64,7 +64,7 @@ DatabaseUrl DatabaseUrl::fromFileUrl(const KUrl& fileUrl,
 
 DatabaseUrl DatabaseUrl::fromAlbumAndName(const QString& name,
         const QString& album,
-        const KUrl& albumRoot,
+        const QUrl &albumRoot,
         const DatabaseParameters& parameters)
 {
     CollectionLocation location = CollectionManager::instance()->locationForAlbumRoot(albumRoot);
@@ -73,18 +73,18 @@ DatabaseUrl DatabaseUrl::fromAlbumAndName(const QString& name,
 
 DatabaseUrl DatabaseUrl::fromAlbumAndName(const QString& name,
         const QString& album,
-        const KUrl& albumRoot,
+        const QUrl &albumRoot,
         int   albumRootId,
         const DatabaseParameters& parameters)
 {
     DatabaseUrl url;
-    url.setProtocol("digikamalbums");
-
+    url.setScheme("digikamalbums");
     url.setPath("/");
-    url.addPath(album + '/');
-    url.addPath(name);
 
-    url.addQueryItem("albumRoot", albumRoot.toLocalFile(KUrl::RemoveTrailingSlash));
+    url.setPath(url.path() + QChar('/') + album + QChar('/'));
+    url.setPath(url.path() + QChar('/') + name);
+
+    url.addQueryItem("albumRoot", albumRoot.adjusted(QUrl::StripTrailingSlash).toLocalFile());
     url.addQueryItem("albumRootId", QString::number(albumRootId));
     url.setParameters(parameters);
     return url;
@@ -93,7 +93,7 @@ DatabaseUrl DatabaseUrl::fromAlbumAndName(const QString& name,
 DatabaseUrl DatabaseUrl::albumUrl(const DatabaseParameters& parameters)
 {
     DatabaseUrl url;
-    url.setProtocol("digikamalbums");
+    url.setScheme("digikamalbums");
     url.setParameters(parameters);
     return url;
 }
@@ -102,11 +102,11 @@ DatabaseUrl DatabaseUrl::fromTagIds(const QList<int>& tagIds,
                                     const DatabaseParameters& parameters)
 {
     DatabaseUrl url;
-    url.setProtocol("digikamtags");
+    url.setScheme("digikamtags");
 
     for (QList<int>::const_iterator it = tagIds.constBegin(); it != tagIds.constEnd(); ++it)
     {
-        url.addPath(QChar('/') + QString::number(*it));
+        url.setPath(url.path() + QChar('/') + QString::number(*it));
     }
 
     url.setParameters(parameters);
@@ -116,7 +116,7 @@ DatabaseUrl DatabaseUrl::fromTagIds(const QList<int>& tagIds,
 DatabaseUrl DatabaseUrl::dateUrl(const DatabaseParameters& parameters)
 {
     DatabaseUrl url;
-    url.setProtocol("digikamdates");
+    url.setScheme("digikamdates");
     url.setParameters(parameters);
     return url;
 }
@@ -144,7 +144,7 @@ DatabaseUrl DatabaseUrl::fromDateRange(const QDate& startDate,
                                        const DatabaseParameters& parameters)
 {
     DatabaseUrl url;
-    url.setProtocol("digikamdates");
+    url.setScheme("digikamdates");
 
     url.setPath(startDate.toString(Qt::ISODate) + '/' + endDate.toString(Qt::ISODate));
 
@@ -155,7 +155,7 @@ DatabaseUrl DatabaseUrl::fromDateRange(const QDate& startDate,
 DatabaseUrl DatabaseUrl::mapImagesUrl(const DatabaseParameters& parameters)
 {
     DatabaseUrl url;
-    url.setProtocol("digikammapimages");
+    url.setScheme("digikammapimages");
     url.setParameters(parameters);
     return url;
 }
@@ -165,7 +165,7 @@ DatabaseUrl DatabaseUrl::fromAreaRange(const qreal lat1, const qreal lat2,
                                        const DatabaseParameters& parameters)
 {
     DatabaseUrl url;
-    url.setProtocol("digikammapimages");
+    url.setScheme("digikammapimages");
     url.addQueryItem("lat1", QString::number(lat1));
     url.addQueryItem("lon1", QString::number(lng1));
     url.addQueryItem("lat2", QString::number(lat2));
@@ -178,19 +178,19 @@ DatabaseUrl DatabaseUrl::searchUrl(int id,
                                    const DatabaseParameters& parameters)
 {
     DatabaseUrl url;
-    url.setProtocol("digikamsearch");
+    url.setScheme("digikamsearch");
     url.addQueryItem("searchId", QString::number(id));
     url.setParameters(parameters);
     return url;
 }
 
-DatabaseUrl::DatabaseUrl(const KUrl& digikamalbumsUrl)
-    : KUrl(digikamalbumsUrl)
+DatabaseUrl::DatabaseUrl(const QUrl &digikamalbumsUrl)
+    : QUrl(digikamalbumsUrl)
 {
 }
 
 DatabaseUrl::DatabaseUrl(const DatabaseUrl& url)
-    : KUrl(url)
+    : QUrl(url)
 {
 }
 
@@ -198,21 +198,21 @@ DatabaseUrl::DatabaseUrl()
 {
 }
 
-DatabaseUrl& DatabaseUrl::operator=(const KUrl& digikamalbumsUrl)
+DatabaseUrl& DatabaseUrl::operator=(const QUrl &digikamalbumsUrl)
 {
-    KUrl::operator=(digikamalbumsUrl);
+    QUrl::operator=(digikamalbumsUrl);
     return *this;
 }
 
 DatabaseUrl& DatabaseUrl::operator=(const DatabaseUrl& url)
 {
-    KUrl::operator=(url);
+    QUrl::operator=(url);
     return *this;
 }
 
-bool DatabaseUrl::operator==(const KUrl& digikamalbumsUrl) const
+bool DatabaseUrl::operator==(const QUrl &digikamalbumsUrl) const
 {
-    return KUrl::operator==(digikamalbumsUrl);
+    return QUrl::operator==(digikamalbumsUrl);
 }
 
 /*
@@ -234,83 +234,81 @@ void DatabaseUrl::setParameters(const DatabaseParameters& parameters)
     parameters.insertInUrl(*this);
 }
 
-
-// --- Protocol ---
+// --- Protocol --------------------------------------------------------------------------------
 
 bool DatabaseUrl::isAlbumUrl() const
 {
-    return protocol() == QString("digikamalbums");
+    return scheme() == QString("digikamalbums");
 }
 
 bool DatabaseUrl::isTagUrl() const
 {
-    return protocol() == QString("digikamtags");
+    return scheme() == QString("digikamtags");
 }
 
 bool DatabaseUrl::isDateUrl() const
 {
-    return protocol() == QString("digikamdates");
+    return scheme() == QString("digikamdates");
 }
 
 bool DatabaseUrl::isMapImagesUrl() const
 {
-    return protocol() == QString("digikammapimages");
+    return scheme() == QString("digikammapimages");
 }
 
 bool DatabaseUrl::isSearchUrl() const
 {
-    return protocol() == QString("digikamsearch");
+    return scheme() == QString("digikamsearch");
 }
 
+// --- Album URL ----------------------------------------------------------------------------
 
-// --- Album URL ---
-
-KUrl DatabaseUrl::albumRoot() const
+QUrl DatabaseUrl::albumRoot() const
 {
-    QString albumRoot = queryItem("albumRoot");
+    QString albumRoot = QUrlQuery(*this).queryItemValue("albumRoot");
 
     if (!albumRoot.isNull())
     {
-        KUrl albumRootUrl;
+        QUrl albumRootUrl;
         albumRootUrl.setPath(albumRoot);
         return albumRootUrl;
     }
 
-    return KUrl();
+    return QUrl();
 }
 
 QString DatabaseUrl::albumRootPath() const
 {
-    return queryItem("albumRoot");
+    return QUrlQuery(*this).queryItemValue("albumRoot");
 }
 
 int DatabaseUrl::albumRootId() const
 {
-    return queryItem("albumRootId").toInt();
+    return QUrlQuery(*this).queryItemValue("albumRootId").toInt();
 }
 
 QString DatabaseUrl::album() const
 {
     // obey trailing slash in the path - albums have a trailing slash
     // get result without trailing slash
-    return directory(KUrl::ObeyTrailingSlash);
+    return adjusted(QUrl::RemoveFilename).path();
 }
 
 QString DatabaseUrl::name() const
 {
     // do not ignore trailing slash in the path - albums have a trailing slash
-    return fileName(KUrl::ObeyTrailingSlash);
+    return fileName();
 }
 
-KUrl DatabaseUrl::fileUrl() const
+QUrl DatabaseUrl::fileUrl() const
 {
-    KUrl fileUrl(albumRoot());
-    fileUrl.addPath(path());
+    QUrl fileUrl(albumRoot());
+    fileUrl = fileUrl.adjusted(QUrl::StripTrailingSlash);
+    fileUrl.setPath(fileUrl.path() + '/' + (path()));
     return fileUrl;
 }
 
-
-// --- Tag URL ---
+// --- Tag URL ------------------------------------------------------------------------
 
 int DatabaseUrl::tagId() const
 {
@@ -335,7 +333,7 @@ QList<int> DatabaseUrl::tagIds() const
     return ids;
 }
 
-// --- Date URL ---
+// --- Date URL -----------------------------------------------------------------------
 
 QDate DatabaseUrl::startDate() const
 {
@@ -365,28 +363,28 @@ QDate DatabaseUrl::endDate() const
     }
 }
 
-// --- MapImages URL ---
+// --- MapImages URL --------------------------------------------------------------------------------
 
 bool DatabaseUrl::areaCoordinates(double* lat1, double* lat2, double* lon1, double* lon2) const
 {
     bool ok, allOk = true;
-    *lat1 = queryItem("lat1").toDouble(&ok);
+    *lat1 = QUrlQuery(*this).queryItemValue("lat1").toDouble(&ok);
     allOk = ok && allOk;
-    *lat2 = queryItem("lat2").toDouble(&ok);
+    *lat2 = QUrlQuery(*this).queryItemValue("lat2").toDouble(&ok);
     allOk = ok && allOk;
-    *lon1 = queryItem("lon1").toDouble(&ok);
+    *lon1 = QUrlQuery(*this).queryItemValue("lon1").toDouble(&ok);
     allOk = ok && allOk;
-    *lon2 = queryItem("lon2").toDouble(&ok);
+    *lon2 = QUrlQuery(*this).queryItemValue("lon2").toDouble(&ok);
     allOk = ok && allOk;
 
     return allOk;
 }
 
-// --- Search URL ---
+// --- Search URL --------------------------------------------------------------------
 
 int DatabaseUrl::searchId() const
 {
-    return queryItem("searchId").toInt();
+    return QUrlQuery(*this).queryItemValue("searchId").toInt();
 }
 
 }  // namespace Digikam

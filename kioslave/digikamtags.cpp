@@ -36,7 +36,6 @@
 
 #include <kio/global.h>
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
 
 // Local includes
 
@@ -98,7 +97,7 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
     }
     else
     {
-        bool recursive = (metaData("listTagsRecursively") == "true");
+        bool recursive               = (metaData("listTagsRecursively")     == "true");
         bool listOnlyAvailableImages = (metaData("listOnlyAvailableImages") == "true");
 
         Digikam::ImageLister lister;
@@ -109,13 +108,13 @@ void kio_digikamtagsProtocol::special(const QByteArray& data)
 
         if (!special.isNull())
         {
-            QString searchXml = lister.tagSearchXml(KUrl(url), special, recursive);
+            QString searchXml = lister.tagSearchXml(url, special, recursive);
             lister.setAllowExtraValues(true); // pass property value as extra value, different binary protocol
             lister.listImageTagPropertySearch(&receiver, searchXml);
         }
         else
         {
-            lister.list(&receiver, KUrl(url));
+            lister.list(&receiver, url);
         }
 
         // finish sending
