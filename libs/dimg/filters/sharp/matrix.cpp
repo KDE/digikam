@@ -40,12 +40,23 @@
 
 #include <QString>
 
-//Including Eigen
+// Eigen includes
+
+// Pragma directives to reduce warnings from Boost header files.
+#if not defined(__APPLE__) && defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
+#endif
 
 #include <Eigen/Eigen>
 #include <Eigen/LU>
 
-// KDE includes
+// Restore warnings
+#if not defined(__APPLE__) && defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+
+// Local includes
 
 #include "digikam_debug.h"
 

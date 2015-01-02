@@ -31,11 +31,11 @@
 #include <QBuffer>
 #include <QHashIterator>
 #include <QFileInfo>
+#include <QUrl>
 
 // KDE includes
 
 #include <kglobal.h>
-#include <QUrl>
 
 // Local includes
 

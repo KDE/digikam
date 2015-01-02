@@ -26,10 +26,7 @@
 
 // Qt includes
 
-#include <QtCore/QFileInfo>
-
-// KDE includes
-
+#include <QFileInfo>
 #include <QUrl>
 
 namespace Digikam
