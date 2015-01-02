@@ -41,7 +41,6 @@
 // KDE includes
 
 #include <kcalendarsystem.h>
-#include <kglobal.h>
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
 
@@ -137,7 +136,7 @@ DDateEdit::DDateEdit(QWidget* const parent, const char* const name)
     connect( lineEdit(), SIGNAL(returnPressed()),
              this, SLOT(lineEnterPressed()) );
 
-    connect( this, SIGNAL(textChanged(QString)),
+    connect( this, SIGNAL(currentTextChanged(QString)),
              SLOT(slotTextChanged(QString)) );
 
     d->popup = new DDatePickerPopup( DDatePickerPopup::DatePicker | DDatePickerPopup::Words );
