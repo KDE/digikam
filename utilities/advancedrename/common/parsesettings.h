@@ -75,7 +75,7 @@ public:
 
 public:
 
-    KUrl                     fileUrl;
+    QUrl                     fileUrl;
     QString                  parseString;
     QString                  str2Modify;
     QDateTime                creationTime;

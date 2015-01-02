@@ -68,13 +68,13 @@ AdvancedRenameProcessDialog::AdvancedRenameProcessDialog(const NewNamesList& lis
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
             this, SLOT(slotGotThumbnail(LoadingDescription,QPixmap)));
 
-    connect(DIO::instance(), SIGNAL(imageRenameSucceeded(KUrl)),
-            this, SLOT(slotRenameSuccess(KUrl)));
+    connect(DIO::instance(), SIGNAL(imageRenameSucceeded(QUrl)),
+            this, SLOT(slotRenameSuccess(QUrl)));
 
-    connect(DIO::instance(), SIGNAL(imageRenameFailed(KUrl)),
-            this, SLOT(slotRenameFailed(KUrl)));
+    connect(DIO::instance(), SIGNAL(imageRenameFailed(QUrl)),
+            this, SLOT(slotRenameFailed(QUrl)));
 
-    connect(DIO::instance(), SIGNAL(renamingAborted(KUrl)),
+    connect(DIO::instance(), SIGNAL(renamingAborted(QUrl)),
             this, SLOT(slotCancel()));
 
     setModal(true);
@@ -146,7 +146,7 @@ void AdvancedRenameProcessDialog::slotCancel()
     done(Cancel);
 }
 
-void AdvancedRenameProcessDialog::slotRenameSuccess(const KUrl& src)
+void AdvancedRenameProcessDialog::slotRenameSuccess(const QUrl &src)
 {
     if (d->cancel || d->newNameList.isEmpty())
     {
@@ -173,7 +173,7 @@ void AdvancedRenameProcessDialog::slotRenameSuccess(const KUrl& src)
     }
 }
 
-void AdvancedRenameProcessDialog::slotRenameFailed(const KUrl&)
+void AdvancedRenameProcessDialog::slotRenameFailed(const QUrl&)
 {
     abort();
 }

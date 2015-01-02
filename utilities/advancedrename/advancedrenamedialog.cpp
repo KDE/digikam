@@ -41,7 +41,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -63,7 +63,7 @@ public:
     {
     }
 
-    KUrl    imageUrl;
+    QUrl    imageUrl;
     QString completeFileName;
 };
 
@@ -74,7 +74,7 @@ AdvancedRenameListItem::AdvancedRenameListItem(QTreeWidget* view)
 {
 }
 
-AdvancedRenameListItem::AdvancedRenameListItem(QTreeWidget* view, const KUrl& url)
+AdvancedRenameListItem::AdvancedRenameListItem(QTreeWidget* view, const QUrl &url)
     : QTreeWidgetItem(view), d(new Private)
 {
     setImageUrl(url);
@@ -85,7 +85,7 @@ AdvancedRenameListItem:: ~AdvancedRenameListItem()
     delete d;
 }
 
-void AdvancedRenameListItem::setImageUrl(const KUrl& url)
+void AdvancedRenameListItem::setImageUrl(const QUrl &url)
 {
     d->imageUrl = url;
 
@@ -96,7 +96,7 @@ void AdvancedRenameListItem::setImageUrl(const KUrl& url)
     setNewName(d->completeFileName);
 }
 
-KUrl AdvancedRenameListItem::imageUrl() const
+QUrl AdvancedRenameListItem::imageUrl() const
 {
     return d->imageUrl;
 }
@@ -304,7 +304,7 @@ void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
     }
 }
 
-void AdvancedRenameDialog::slotAddImages(const KUrl::List& urls)
+void AdvancedRenameDialog::slotAddImages(const QList<QUrl>& urls)
 {
     if (urls.isEmpty())
     {
@@ -314,7 +314,7 @@ void AdvancedRenameDialog::slotAddImages(const KUrl::List& urls)
     d->listView->clear();
     d->advancedRenameManager->reset();
     QList<ParseSettings> files;
-    foreach(const KUrl& url, urls)
+    foreach(const QUrl &url, urls)
     {
         ParseSettings ps;
         ps.fileUrl = url;
@@ -344,7 +344,7 @@ void AdvancedRenameDialog::initDialog()
 
     foreach(const QString& file, fileList)
     {
-        KUrl url(file);
+        QUrl url(file);
         new AdvancedRenameListItem(d->listView, url);
     }
 
@@ -535,8 +535,8 @@ void AdvancedRenameDialog::setupConnections()
     connect(d->advancedRenameWidget, SIGNAL(signalReturnPressed()),
             this, SLOT(slotReturnPressed()));
 
-    connect(d->advancedRenameManager, SIGNAL(signalSortingChanged(KUrl::List)),
-            this, SLOT(slotAddImages(KUrl::List)));
+    connect(d->advancedRenameManager, SIGNAL(signalSortingChanged(QList<QUrl>)),
+            this, SLOT(slotAddImages(QList<QUrl>)));
 
     connect(d->listView, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(slotShowContextMenu(QPoint)));

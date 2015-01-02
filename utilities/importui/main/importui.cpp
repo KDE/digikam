@@ -2000,7 +2000,7 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
             if (onlySelected && (d->view->isSelected(info.url())))
             {
                 ParseSettings parseSettings;
-                parseSettings.fileUrl      = info.name;
+                parseSettings.fileUrl      = QUrl::fromLocalFile(info.name);
                 parseSettings.creationTime = info.ctime;
                 renameFiles.append(parseSettings);
             }
@@ -2292,7 +2292,7 @@ void ImportUI::slotNewSelection(bool hasSelection)
         foreach(CamItemInfo info, list)
         {
             ParseSettings parseSettings;
-            parseSettings.fileUrl = info.name;
+            parseSettings.fileUrl      = QUrl::fromLocalFile(info.name);
             parseSettings.creationTime = info.ctime;
             renameFiles.append(parseSettings);
         }

@@ -129,7 +129,13 @@ void AdvancedRenameManager::setSortAction(SortAction action)
 {
     d->sortAction = action;
     initialize();
-    emit signalSortingChanged(d->files);
+
+    QList<QUrl> list;
+
+    foreach(QString file, d->files)
+        list << QUrl::fromLocalFile(file);
+
+    emit signalSortingChanged(list);
 }
 
 AdvancedRenameManager::SortAction AdvancedRenameManager::sortAction() const
@@ -141,7 +147,13 @@ void AdvancedRenameManager::setSortDirection(SortDirection direction)
 {
     d->sortDirection = direction;
     initialize();
-    emit signalSortingChanged(d->files);
+
+    QList<QUrl> list;
+
+    foreach(QString file, d->files)
+        list << QUrl::fromLocalFile(file);
+
+    emit signalSortingChanged(list);
 }
 
 AdvancedRenameManager::SortDirection AdvancedRenameManager::sortDirection() const
@@ -238,7 +250,7 @@ void AdvancedRenameManager::parseFiles(const QString& parseString)
 
     foreach(const QString& file, d->files)
     {
-        KUrl url(file);
+        QUrl url(file);
         ParseSettings settings;
         settings.fileUrl      = url;
         settings.parseString  = parseString;
@@ -260,7 +272,7 @@ void AdvancedRenameManager::parseFiles(const QString& parseString, const ParseSe
 
     foreach(const QString& file, d->files)
     {
-        KUrl url(file);
+        QUrl url(file);
         ParseSettings settings = _settings;
         settings.fileUrl       = url;
         settings.parseString   = parseString;

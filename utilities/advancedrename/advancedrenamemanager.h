@@ -26,7 +26,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Qt includes
 
@@ -103,7 +103,7 @@ public:
 
 Q_SIGNALS:
 
-    void signalSortingChanged(KUrl::List);
+    void signalSortingChanged(QList<QUrl>);
 
 private:
 

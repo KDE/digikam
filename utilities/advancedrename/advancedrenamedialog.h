@@ -33,7 +33,7 @@
 // KDE includes
 
 #include <kdialog.h>
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -62,11 +62,11 @@ public:
 public:
 
     explicit AdvancedRenameListItem(QTreeWidget* view);
-    AdvancedRenameListItem(QTreeWidget* view, const KUrl& info);
+    AdvancedRenameListItem(QTreeWidget* view, const QUrl &info);
     virtual ~AdvancedRenameListItem();
 
-    void setImageUrl(const KUrl& url);
-    KUrl imageUrl() const;
+    void setImageUrl(const QUrl &url);
+    QUrl imageUrl() const;
 
     void setName(const QString& name);
     QString name() const;
@@ -90,7 +90,7 @@ private:
 
 // --------------------------------------------------------
 
-typedef QPair<KUrl, QString> NewNameInfo;
+typedef QPair<QUrl, QString> NewNameInfo;
 typedef QList<NewNameInfo>   NewNamesList;
 
 class AdvancedRenameDialog : public KDialog
@@ -106,7 +106,7 @@ public:
 
 public Q_SLOTS:
 
-    void slotAddImages(const KUrl::List& urls);
+    void slotAddImages(const QList<QUrl>& urls);
 
 private Q_SLOTS:
 
