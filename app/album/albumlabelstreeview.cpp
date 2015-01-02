@@ -843,7 +843,7 @@ void AlbumLabelsSearchHandler::generateAlbumNameForExporting(const QList<int>& r
 void AlbumLabelsSearchHandler::imagesUrlsForCurrentAlbum()
 {
     QUrl url = d->albumForSelectedItems->databaseUrl();
-    KIO::TransferJob* const job = ImageLister::startListJob(KUrl(url));
+    KIO::TransferJob* const job = ImageLister::startListJob(url);
     job->addMetaData("listAlbumsRecursively", "true");
 
     connect(job, SIGNAL(result(KJob*)),

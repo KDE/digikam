@@ -330,7 +330,7 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
         url = albums.first()->databaseUrl();
 
     d->extraValueJob = false;
-    d->job           = ImageLister::startListJob(KUrl(url));
+    d->job           = ImageLister::startListJob(url);
     d->job->addMetaData("listAlbumsRecursively",   d->recurseAlbums           ? "true" : "false");
     d->job->addMetaData("listTagsRecursively",     d->recurseTags             ? "true" : "false");
     d->job->addMetaData("listOnlyAvailableImages", d->listOnlyAvailableImages ? "true" : "false");
