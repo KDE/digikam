@@ -29,6 +29,7 @@
 
 // Qt includes
 
+#include <QLineEdit>
 #include <QAction>
 #include <QLayout>
 #include <QSlider>
@@ -40,7 +41,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kglobal.h>
+#include <klocale.h>
 
 // Local includes
 
@@ -155,8 +156,8 @@ DZoomBar::DZoomBar(QWidget* const parent)
     connect(d->zoomCombo, SIGNAL(activated(int)),
             this, SLOT(slotZoomSelected(int)));
 
-    connect(d->zoomCombo, SIGNAL(returnPressed(QString)),
-            this, SLOT(slotZoomTextChanged(QString)));
+    connect(d->zoomCombo->lineEdit(), SIGNAL(returnPressed()),
+            this, SLOT(slotZoomTextChanged()));
 
     // -------------------------------------------------------------
 
@@ -283,8 +284,9 @@ void DZoomBar::slotZoomSelected(int index)
     }
 }
 
-void DZoomBar::slotZoomTextChanged(const QString& txt)
+void DZoomBar::slotZoomTextChanged()
 {
+    QString txt = d->zoomCombo->currentText();
     bool ok     = false;
     double zoom = KLocale::global()->readNumber(txt, &ok) / 100.0;
 

@@ -92,7 +92,7 @@ private Q_SLOTS:
     void slotDelayedZoomSliderChanged();
     void slotZoomSliderReleased();
     void slotZoomSelected(int);
-    void slotZoomTextChanged(const QString&);
+    void slotZoomTextChanged();
 
 private:
 
