@@ -519,7 +519,7 @@ void DigikamApp::downloadFromUdi(const QString& udi)
 QString DigikamApp::currentDatabaseParameters() const
 {
     DatabaseParameters parameters = DatabaseAccess::parameters();
-    KUrl url;
+    QUrl url;
     parameters.insertInUrl(url);
     return url.url();
 }
@@ -1727,8 +1727,8 @@ void DigikamApp::slotOpenCameraUiFromPath(const QString& path)
                                                    "directory browse", "Fixed", path, 1);
     cgui->show();
 
-    connect(cgui, SIGNAL(signalLastDestination(KUrl)),
-            d->view, SLOT(slotSelectAlbum(KUrl)));
+    connect(cgui, SIGNAL(signalLastDestination(QUrl)),
+            d->view, SLOT(slotSelectAlbum(QUrl)));
 }
 
 void DigikamApp::slotOpenManualCamera(QAction* action)
@@ -1758,8 +1758,8 @@ void DigikamApp::slotOpenManualCamera(QAction* action)
 
             cgui->show();
 
-            connect(cgui, SIGNAL(signalLastDestination(KUrl)),
-                    d->view, SLOT(slotSelectAlbum(KUrl)));
+            connect(cgui, SIGNAL(signalLastDestination(QUrl)),
+                    d->view, SLOT(slotSelectAlbum(QUrl)));
         }
     }
 }
@@ -1854,8 +1854,8 @@ void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
 
             cgui->show();
 
-            connect(cgui, SIGNAL(signalLastDestination(KUrl)),
-                    d->view, SLOT(slotSelectAlbum(KUrl)));
+            connect(cgui, SIGNAL(signalLastDestination(QUrl)),
+                    d->view, SLOT(slotSelectAlbum(QUrl)));
         }
         else
         {
@@ -1946,8 +1946,8 @@ void DigikamApp::openSolidUsmDevice(const QString& udi, const QString& givenLabe
 
         cgui->show();
 
-        connect(cgui, SIGNAL(signalLastDestination(KUrl)),
-                d->view, SLOT(slotSelectAlbum(KUrl)));
+        connect(cgui, SIGNAL(signalLastDestination(QUrl)),
+                d->view, SLOT(slotSelectAlbum(QUrl)));
     }
 }
 
@@ -2625,7 +2625,7 @@ void DigikamApp::slotImportAddImages()
 
 void DigikamApp::slotImportAddFolders()
 {
-    QPointer<KFileDialog> dlg = new KFileDialog(KUrl(), "inode/directory", this);
+    QPointer<KFileDialog> dlg = new KFileDialog(QUrl(), "inode/directory", this);
     dlg->setWindowTitle(i18n("Select folders to import into album"));
     dlg->setMode(KFile::Directory | KFile::Files);
 
@@ -2635,7 +2635,7 @@ void DigikamApp::slotImportAddFolders()
         return;
     }
 
-    KUrl::List urls = dlg->selectedUrls();
+    QList<QUrl> urls = dlg->selectedUrls();
     delete dlg;
 
     if (urls.empty())

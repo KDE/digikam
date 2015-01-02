@@ -36,7 +36,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 #include <kio/global.h>
 #include <kio/netaccess.h>
 #include <solid/solidnamespace.h>
