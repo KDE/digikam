@@ -620,7 +620,7 @@ bool MetadataHub::writeToMetadata(ImageInfo info, MetadataHub::WriteMode writeMo
     if (write(metadata, writeMode, settings))
     {
         bool success = metadata.applyChanges();
-        ImageAttributesWatch::instance()->fileMetadataChanged(info.filePath());
+        ImageAttributesWatch::instance()->fileMetadataChanged(QUrl::fromLocalFile(info.filePath()));
         return success;
     }
 
@@ -757,7 +757,7 @@ bool MetadataHub::write(const QString& filePath, WriteMode writeMode, const Meta
     if (write(metadata, writeMode, settings))
     {
         bool success = metadata.applyChanges();
-        ImageAttributesWatch::instance()->fileMetadataChanged(filePath);
+        ImageAttributesWatch::instance()->fileMetadataChanged(QUrl::fromLocalFile(filePath));
         return success;
     }
 
@@ -825,7 +825,7 @@ bool MetadataHub::writeTags(const QString& filePath, MetadataHub::WriteMode writ
     if (writeTags(metadata, saveTags))
     {
         bool success = metadata.applyChanges();
-        ImageAttributesWatch::instance()->fileMetadataChanged(filePath);
+        ImageAttributesWatch::instance()->fileMetadataChanged(QUrl::fromLocalFile(filePath));
         return success;
     }
     else

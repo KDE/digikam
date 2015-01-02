@@ -63,19 +63,19 @@ namespace
 
 // ------------------------------------------------------------------------------------------------
 
-SidecarFinder::SidecarFinder(const KUrl::List& files)
+SidecarFinder::SidecarFinder(const QList<QUrl>& files)
 {
     process(files);
 }
 
-SidecarFinder::SidecarFinder(const KUrl& file)
+SidecarFinder::SidecarFinder(const QUrl &file)
 {
-    process(KUrl::List() << file);
+    process(QList<QUrl>() << file);
 }
 
-void SidecarFinder::process(const KUrl::List& files)
+void SidecarFinder::process(const QList<QUrl>& files)
 {
-    foreach (const KUrl& url, files)
+    foreach (const QUrl &url, files)
     {
         if (url.isLocalFile())
         {
@@ -138,17 +138,17 @@ void GroupedImagesFinder::process(const QList<ImageInfo> source)
 DIO::Private::Private(DIO* const q)
     : q(q)
 {
-    connectAndSchedule(this, SIGNAL(jobToProcess(int,KUrl::List,KUrl)),
-                       this, SLOT(processJob(int,KUrl::List,KUrl)));
+    connectAndSchedule(this, SIGNAL(jobToProcess(int,QList<QUrl>,QUrl)),
+                       this, SLOT(processJob(int,QList<QUrl>,QUrl)));
 
-    connectAndSchedule(this, SIGNAL(renameToProcess(KUrl,KUrl)),
-                       this, SLOT(processRename(KUrl,KUrl)));
+    connectAndSchedule(this, SIGNAL(renameToProcess(QUrl,QUrl)),
+                       this, SLOT(processRename(QUrl,QUrl)));
 
-    connect(this, SIGNAL(jobToCreate(int,KUrl::List,KUrl)),
-            q, SLOT(createJob(int,KUrl::List,KUrl)));
+    connect(this, SIGNAL(jobToCreate(int,QList<QUrl>,QUrl)),
+            q, SLOT(createJob(int,QList<QUrl>,QUrl)));
 }
 
-void DIO::Private::processJob(int operation, const KUrl::List& srcList, const KUrl& dest)
+void DIO::Private::processJob(int operation, const QList<QUrl>& srcList, const QUrl &dest)
 {
     SidecarFinder finder(srcList);
 
@@ -162,23 +162,23 @@ void DIO::Private::processJob(int operation, const KUrl::List& srcList, const KU
     }
 }
 
-void DIO::Private::processRename(const KUrl& src, const KUrl& dest)
+void DIO::Private::processRename(const QUrl &src, const QUrl& dest)
 {
     QString sidecar = DMetadata::sidecarFilePathForFile(src.toLocalFile());
 
     if (QFileInfo(sidecar).exists())
     {
         QString destSidecar = DMetadata::sidecarFilePathForFile(dest.toLocalFile());
-        emit jobToCreate(Rename, KUrl::List() << QUrl::fromLocalFile(sidecar), QUrl::fromLocalFile(destSidecar));
+        emit jobToCreate(Rename, QList<QUrl>() << QUrl::fromLocalFile(sidecar), QUrl::fromLocalFile(destSidecar));
     }
 
-    emit jobToCreate(Rename, KUrl::List() << src, dest);
+    emit jobToCreate(Rename, QList<QUrl>() << src, dest);
 }
 
 void DIO::Private::albumToAlbum(int operation, const PAlbum* const src, const PAlbum* const dest)
 {
     ScanController::instance()->hintAtMoveOrCopyOfAlbum(src, dest);
-    emit jobToCreate(operation, KUrl(src->fileUrl()), KUrl(dest->fileUrl()));
+    emit jobToCreate(operation, QList<QUrl>() << src->fileUrl(), dest->fileUrl());
 }
 
 void DIO::Private::imagesToAlbum(int operation, const QList<ImageInfo> infos, const PAlbum* const dest)
@@ -188,7 +188,7 @@ void DIO::Private::imagesToAlbum(int operation, const QList<ImageInfo> infos, co
 
     QStringList      filenames;
     QList<qlonglong> ids;
-    KUrl::List       urls;
+    QList<QUrl>       urls;
 
     foreach(const ImageInfo& info, finder.infos)
     {
@@ -202,16 +202,17 @@ void DIO::Private::imagesToAlbum(int operation, const QList<ImageInfo> infos, co
     emit jobToProcess(operation, urls, dest->fileUrl());
 }
 
-void DIO::Private::filesToAlbum(int operation, const KUrl::List& srcList, const PAlbum* const dest)
+void DIO::Private::filesToAlbum(int operation, const QList<QUrl>& srcList, const PAlbum* const dest)
 {
     emit jobToProcess(operation, srcList, dest->fileUrl());
 }
 
 void DIO::Private::renameFile(const ImageInfo& info, const QString& newName)
 {
-    KUrl oldUrl = info.fileUrl();
-    KUrl newUrl = oldUrl;
-    newUrl.setFileName(newName);
+    QUrl oldUrl = info.fileUrl();
+    QUrl newUrl = oldUrl;
+    newUrl = newUrl.adjusted(QUrl::RemoveFilename);
+    newUrl.setPath(newUrl.path() + newName);
 
     PAlbum* const album = AlbumManager::instance()->findPAlbum(info.albumId());
 
@@ -225,14 +226,14 @@ void DIO::Private::renameFile(const ImageInfo& info, const QString& newName)
 
 void DIO::Private::deleteFiles(const QList<ImageInfo>& infos, bool useTrash)
 {
-    KUrl::List urls;
+    QList<QUrl> urls;
 
     foreach(const ImageInfo& info, infos)
     {
         urls << info.fileUrl();
     }
 
-    emit jobToProcess(useTrash ? Trash : Delete, urls, KUrl());
+    emit jobToProcess(useTrash ? Trash : Delete, urls, QUrl());
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -269,7 +270,7 @@ void DIO::cleanUp()
     instance()->d->wait();
 }
 
-KIO::Job* DIO::createJob(int operation, const KUrl::List& src, const KUrl& dest)
+KIO::Job* DIO::createJob(int operation, const QList<QUrl>& src, const QUrl &dest)
 {
     if (src.isEmpty())
     {
@@ -299,8 +300,8 @@ KIO::Job* DIO::createJob(int operation, const KUrl::List& src, const KUrl& dest)
         job = KIO::move(src.first(), dest, KIO::HideProgressInfo);
         job->setProperty(renameFileProperty.toAscii().constData(), src.first().toLocalFile());
 
-        connect(job, SIGNAL(copyingDone(KIO::Job*,KUrl,KUrl,time_t,bool,bool)),
-                this, SLOT(slotRenamed(KIO::Job*,KUrl,KUrl)));
+        connect(job, SIGNAL(copyingDone(KIO::Job*,QUrl,QUrl,time_t,bool,bool)),
+                this, SLOT(slotRenamed(KIO::Job*,QUrl,QUrl)));
     }
     else if (operation == Trash)
     {
@@ -334,7 +335,7 @@ void DIO::slotResult(KJob* kjob)
 
         if (!v.isNull())
         {
-            KUrl url(v.toString());
+            QUrl url(v.toString());
 
             if (job->error() == KIO::Job::KilledJobError)
             {
@@ -355,19 +356,20 @@ void DIO::slotResult(KJob* kjob)
     }
 }
 
-void DIO::slotRenamed(KIO::Job* job, const KUrl&, const KUrl& newURL)
+void DIO::slotRenamed(KIO::Job* job, const QUrl &, const QUrl& newURL)
 {
     // reconstruct file path from digikamalbums:// URL
-    KUrl fileURL;
-    fileURL.setPath(newURL.user());
-    fileURL.addPath(newURL.path());
+    QUrl fileURL;
+    fileURL.setPath(newURL.userName());
+    fileURL = fileURL.adjusted(QUrl::StripTrailingSlash);
+    fileURL.setPath(fileURL.path() + '/' + (newURL.path()));
 
     // refresh thumbnail
     ThumbnailLoadThread::deleteThumbnail(fileURL.toLocalFile());
     // clean LoadingCache as well - be pragmatic, do it here.
     LoadingCacheInterface::fileChanged(fileURL.toLocalFile());
 
-    KUrl url(job->property(renameFileProperty.toAscii().constData()).toString());
+    QUrl url(job->property(renameFileProperty.toAscii().constData()).toString());
     emit imageRenameSucceeded(url);
 }
 
@@ -417,12 +419,12 @@ void DIO::move(const QList<ImageInfo> infos, const PAlbum* const dest)
 
 // External files -> album --------------------------------------------
 
-void DIO::copy(const KUrl& src, const PAlbum* const dest)
+void DIO::copy(const QUrl &src, const PAlbum* const dest)
 {
-    copy(KUrl::List() << src, dest);
+    copy(QList<QUrl>() << src, dest);
 }
 
-void DIO::copy(const KUrl::List& srcList, const PAlbum* const dest)
+void DIO::copy(const QList<QUrl>& srcList, const PAlbum* const dest)
 {
     if (!dest)
     {
@@ -432,12 +434,12 @@ void DIO::copy(const KUrl::List& srcList, const PAlbum* const dest)
     instance()->d->filesToAlbum(Copy, srcList, dest);
 }
 
-void DIO::move(const KUrl& src, const PAlbum* const dest)
+void DIO::move(const QUrl &src, const PAlbum* const dest)
 {
-    move(KUrl::List() << src, dest);
+    move(QList<QUrl>() << src, dest);
 }
 
-void DIO::move(const KUrl::List& srcList, const PAlbum* const dest)
+void DIO::move(const QList<QUrl>& srcList, const PAlbum* const dest)
 {
     if (!dest)
     {
@@ -473,7 +475,7 @@ void DIO::del(const PAlbum* const album, bool useTrash)
         return;
     }
 
-    instance()->createJob(useTrash ? Trash : Delete, KUrl::List() << album->fileUrl(), KUrl());
+    instance()->createJob(useTrash ? Trash : Delete, QList<QUrl>() << album->fileUrl(), QUrl());
 }
 
 } // namespace Digikam

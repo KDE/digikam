@@ -44,7 +44,7 @@ public:
 
     void albumToAlbum(int operation, const PAlbum* const src, const PAlbum* const dest);
     void imagesToAlbum(int operation, const QList<ImageInfo> ids, const PAlbum* const dest);
-    void filesToAlbum(int operation, const KUrl::List& src, const PAlbum* const dest);
+    void filesToAlbum(int operation, const QList<QUrl>& src, const PAlbum* const dest);
 
     void renameFile(const ImageInfo& info, const QString& newName);
 
@@ -54,15 +54,15 @@ public:
 
 public Q_SLOTS:
 
-    void processJob(int operation, const KUrl::List& src, const KUrl& dest);
-    void processRename(const KUrl& src, const KUrl& dest);
+    void processJob(int operation, const QList<QUrl>& src, const QUrl &dest);
+    void processRename(const QUrl &src, const QUrl& dest);
 
 Q_SIGNALS:
 
-    void jobToProcess(int operation, const KUrl::List& src, const KUrl& dest);
-    void renameToProcess(const KUrl& src, const KUrl& dest);
-    void jobToCreate(int operation, const KUrl::List& src, const KUrl& dest);
-    void remoteFilesToStat(int operation, const KUrl::List& srcToStat, const KUrl& dest);
+    void jobToProcess(int operation, const QList<QUrl>& src, const QUrl &dest);
+    void renameToProcess(const QUrl &src, const QUrl& dest);
+    void jobToCreate(int operation, const QList<QUrl>& src, const QUrl &dest);
+    void remoteFilesToStat(int operation, const QList<QUrl>& srcToStat, const QUrl &dest);
 
 public:
 
@@ -78,16 +78,16 @@ class SidecarFinder
 {
 public:
 
-    explicit SidecarFinder(const KUrl::List& files);
-    explicit SidecarFinder(const KUrl& file);
+    explicit SidecarFinder(const QList<QUrl>& files);
+    explicit SidecarFinder(const QUrl &file);
 
-    KUrl::List localFiles;
-    KUrl::List remoteFiles;
-    KUrl::List possibleRemoteSidecars;
+    QList<QUrl> localFiles;
+    QList<QUrl> remoteFiles;
+    QList<QUrl> possibleRemoteSidecars;
 
 private:
 
-    void process(const KUrl::List&);
+    void process(const QList<QUrl>&);
 };
 
 // ------------------------

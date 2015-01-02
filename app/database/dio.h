@@ -27,7 +27,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 #include <kio/job.h>
 #include <kio/copyjob.h>
 
@@ -56,10 +56,10 @@ public:
     static void copy(const QList<ImageInfo> infos, const PAlbum* const dest);
 
     /// Copy an external file to another album
-    static void copy(const KUrl& src, const PAlbum* const dest);
+    static void copy(const QUrl &src, const PAlbum* const dest);
 
     /// Copy external files to another album
-    static void copy(const KUrl::List& srcList, const PAlbum* const dest);
+    static void copy(const QList<QUrl>& srcList, const PAlbum* const dest);
 
     /// Move an album into another album
     static void move(const PAlbum* src, const PAlbum* const dest);
@@ -68,10 +68,10 @@ public:
     static void move(const QList<ImageInfo> infos, const PAlbum* const dest);
 
     /// Move external files another album
-    static void move(const KUrl& src, const PAlbum* const dest);
+    static void move(const QUrl &src, const PAlbum* const dest);
 
     /// Move external files into another album
-    static void move(const KUrl::List& srcList, const PAlbum* const dest);
+    static void move(const QList<QUrl>& srcList, const PAlbum* const dest);
 
     static void del(const QList<ImageInfo>& infos, bool useTrash);
     static void del(const ImageInfo& info, bool useTrash);
@@ -84,15 +84,15 @@ public:
 
 Q_SIGNALS:
 
-    void imageRenameSucceeded(const KUrl&);
-    void imageRenameFailed(const KUrl&);
-    void renamingAborted(const KUrl&);
+    void imageRenameSucceeded(const QUrl&);
+    void imageRenameFailed(const QUrl&);
+    void renamingAborted(const QUrl&);
 
 protected Q_SLOTS:
 
     void slotResult(KJob* kjob);
-    void slotRenamed(KIO::Job*, const KUrl&, const KUrl& newURL);
-    KIO::Job* createJob(int operation, const KUrl::List& src, const KUrl& dest);
+    void slotRenamed(KIO::Job*, const QUrl &, const QUrl& newURL);
+    KIO::Job* createJob(int operation, const QList<QUrl>& src, const QUrl &dest);
 
 private:
 
