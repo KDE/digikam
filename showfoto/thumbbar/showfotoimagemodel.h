@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -109,10 +109,10 @@ public:
      * the given file url. In case of multiple occurrences of the same file, the simpler
      * overrides returns any one found first, use the QList methods to retrieve all occurrences.
      */
-    QModelIndex             indexForUrl(const KUrl& fileUrl)        const;
-    QList<QModelIndex>      indexesForUrl(const KUrl& fileUrl)      const;
-    ShowfotoItemInfo        showfotoItemInfo(const KUrl& fileUrl)   const;
-    QList<ShowfotoItemInfo> showfotoItemInfos(const KUrl& fileUrl)  const;
+    QModelIndex             indexForUrl(const QUrl &fileUrl)        const;
+    QList<QModelIndex>      indexesForUrl(const QUrl &fileUrl)      const;
+    ShowfotoItemInfo        showfotoItemInfo(const QUrl &fileUrl)   const;
+    QList<ShowfotoItemInfo> showfotoItemInfos(const QUrl &fileUrl)  const;
 
     void addShowfotoItemInfo(const ShowfotoItemInfo& info);
     void addShowfotoItemInfos(const QList<ShowfotoItemInfo>& infos);

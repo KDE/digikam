@@ -135,7 +135,7 @@ extern "C"
 namespace ShowFoto
 {
 
-ShowFoto::ShowFoto(const KUrl::List& urlList)
+ShowFoto::ShowFoto(const QList<QUrl>& urlList)
     : Digikam::EditorWindow("Showfoto"), d(new Private)
 {
     setXMLFile("showfotoui.rc");
@@ -345,8 +345,8 @@ void ShowFoto::setupConnections()
     connect(d->rightSideBar, SIGNAL(signalSetupMetadataFilters(int)),
             this, SLOT(slotSetupMetadataFilters(int)));
 
-    connect(d->dDHandler, SIGNAL(signalDroppedUrls(KUrl::List)),
-            this, SLOT(slotDroppedUrls(KUrl::List)));
+    connect(d->dDHandler, SIGNAL(signalDroppedUrls(QList<QUrl>)),
+            this, SLOT(slotDroppedUrls(QList<QUrl>)));
 }
 
 void ShowFoto::setupUserArea()
@@ -520,11 +520,11 @@ void ShowFoto::slotOpenFile()
         return;
     }
 
-    KUrl::List urls = Digikam::ImageDialog::getImageURLs(this, d->lastOpenedDirectory);    
+    QList<QUrl> urls = Digikam::ImageDialog::getImageURLs(this, d->lastOpenedDirectory);    
     openUrls(urls);
 }
 
-void ShowFoto::openUrls(const KUrl::List &urls)
+void ShowFoto::openUrls(const QList<QUrl> &urls)
 {
     if (!urls.isEmpty())
     {
@@ -533,14 +533,14 @@ void ShowFoto::openUrls(const KUrl::List &urls)
         DMetadata            meta;
         int i = 0;
 
-        for (KUrl::List::const_iterator it = urls.constBegin();
+        for (QList<QUrl>::const_iterator it = urls.constBegin();
              it != urls.constEnd(); ++it)
         {
             QFileInfo fi((*it).toLocalFile());
             iteminfo.name      = fi.fileName();
             iteminfo.mime      = fi.suffix();
             iteminfo.size      = fi.size();
-            iteminfo.url       = fi.filePath();
+            iteminfo.url       = QUrl::fromLocalFile(fi.filePath());
             iteminfo.folder    = fi.path();
             iteminfo.dtime     = fi.created();
             meta.load(fi.filePath());
@@ -690,7 +690,9 @@ void ShowFoto::slotUpdateItemInfo()
 
         for (int i = 0; i < d->itemsNb; i++)
         {
-            if (d->thumbBar->showfotoItemInfos().at(i).url.equals(d->thumbBar->currentUrl()))
+            QUrl url = d->thumbBar->showfotoItemInfos().at(i).url;
+
+            if (url.matches(d->thumbBar->currentUrl(), QUrl::None))
             {
                 break;
             }
@@ -702,7 +704,7 @@ void ShowFoto::slotUpdateItemInfo()
                      "%1 (%2 of %3)", d->thumbBar->currentInfo().name,
                      index, d->itemsNb);
 
-        setCaption(QDir::toNativeSeparators(d->thumbBar->currentUrl().directory()));
+        setCaption(QDir::toNativeSeparators(d->thumbBar->currentUrl().adjusted(QUrl::RemoveFilename).path()));
     }
     else
     {
@@ -714,7 +716,7 @@ void ShowFoto::slotUpdateItemInfo()
     toggleNavigation( index );
 }
 
-void ShowFoto::slotOpenFolder(const KUrl& url)
+void ShowFoto::slotOpenFolder(const QUrl &url)
 {
     if (!d->thumbBar->currentInfo().isNull() && !promptUserSave(d->thumbBar->currentUrl()))
     {
@@ -736,7 +738,7 @@ void ShowFoto::slotOpenFilesInFolder()
         return;
     }
 
-    KUrl url(KFileDialog::getExistingDirectory(QUrl::fromLocalFile(d->lastOpenedDirectory.directory()),
+    QUrl url(KFileDialog::getExistingDirectory(QUrl::fromLocalFile(d->lastOpenedDirectory.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path()),
              this, i18n("Open Images From Folder")));
 
     if (!url.isEmpty())
@@ -922,14 +924,14 @@ void ShowFoto::saveVersionIsComplete()
 {
 }
 
-KUrl ShowFoto::saveDestinationUrl()
+QUrl ShowFoto::saveDestinationUrl()
 {
 
     if (d->thumbBar->currentInfo().isNull())
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot return the url of the image to save "
                    << "because no image is selected.";
-        return KUrl();
+        return QUrl();
     }
 
     return d->thumbBar->currentUrl();
@@ -960,7 +962,7 @@ bool ShowFoto::saveAs()
 
 void ShowFoto::slotDeleteCurrentItem()
 {
-    KUrl urlCurrent(d->thumbBar->currentUrl());
+    QUrl urlCurrent(d->thumbBar->currentUrl());
 
     if (!d->deleteItem2Trash)
     {
@@ -1107,7 +1109,7 @@ bool ShowFoto::saveNewVersionInFormat(const QString&)
     return false;
 }
 
-void ShowFoto::openFolder(const KUrl& url)
+void ShowFoto::openFolder(const QUrl &url)
 {
     if (!url.isValid() || !url.isLocalFile())
     {
@@ -1235,7 +1237,7 @@ void ShowFoto::openFolder(const KUrl& url)
         iteminfo.mime      = (*fi).suffix();
         iteminfo.size      = (*fi).size();
         iteminfo.folder    = (*fi).path();
-        iteminfo.url       = (*fi).filePath();
+        iteminfo.url       = QUrl::fromLocalFile((*fi).filePath());
         iteminfo.dtime     = (*fi).created();
         meta.load((*fi).filePath());
         iteminfo.ctime     = meta.getImageDateTime();
@@ -1260,13 +1262,13 @@ void ShowFoto::openFolder(const KUrl& url)
     d->lastOpenedDirectory = d->infoList.at(0).url;
 }
 
-void ShowFoto::slotDroppedUrls(const KUrl::List& droppedUrls)
+void ShowFoto::slotDroppedUrls(const QList<QUrl>& droppedUrls)
 {
     if (!droppedUrls.isEmpty())
     {
-        KUrl::List validUrls;
+        QList<QUrl> validUrls;
 
-        foreach (const KUrl& url, droppedUrls)
+        foreach (const QUrl &url, droppedUrls)
         {
             if (url.isValid())
             {
@@ -1276,10 +1278,10 @@ void ShowFoto::slotDroppedUrls(const KUrl::List& droppedUrls)
 
         d->droppedUrls = true;
 
-        KUrl::List imagesUrls;
-        KUrl::List foldersUrls;
+        QList<QUrl> imagesUrls;
+        QList<QUrl> foldersUrls;
 
-        foreach (const KUrl& url, validUrls)
+        foreach (const QUrl &url, validUrls)
         {
             if (KMimeType::findByUrl(url)->name().startsWith("image", Qt::CaseInsensitive))
             {
@@ -1299,7 +1301,7 @@ void ShowFoto::slotDroppedUrls(const KUrl::List& droppedUrls)
 
         if (!foldersUrls.isEmpty())
         {
-            foreach (const KUrl& fUrl, foldersUrls)
+            foreach (const QUrl &fUrl, foldersUrls)
             {
                 openFolder(fUrl);
             }
@@ -1330,7 +1332,7 @@ void ShowFoto::slotSetupMetadataFilters(int tab)
 void ShowFoto::slotAddedDropedItems(QDropEvent* e)
 {
     QList<QUrl> list = e->mimeData()->urls();
-    KUrl::List urls;
+    QList<QUrl> urls;
 
     foreach(const QUrl& url, list)
     {
@@ -1338,7 +1340,7 @@ void ShowFoto::slotAddedDropedItems(QDropEvent* e)
 
         if (fi.exists())
         {
-            urls.append(KUrl(url));
+            urls.append(QUrl(url));
         }
     }
 

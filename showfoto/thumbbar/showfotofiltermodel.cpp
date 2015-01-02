@@ -156,7 +156,7 @@ QList<ShowfotoItemInfo> ShowfotoSortFilterModel::showfotoItemInfos(const QList<Q
 
 QModelIndex ShowfotoSortFilterModel::indexForPath(const QString& filePath) const
 {
-    KUrl fileUrl;
+    QUrl fileUrl;
     fileUrl.setPath(filePath);
     return mapFromSourceShowfotoModel(sourceShowfotoModel()->indexForUrl(fileUrl));
 }

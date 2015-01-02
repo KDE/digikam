@@ -82,7 +82,7 @@ public:
 
     QAction*                         fileOpenAction;
 
-    KUrl                             lastOpenedDirectory;
+    QUrl                             lastOpenedDirectory;
 
     QAction*                         openFilesInFolderAction;
     QAction*                         first;

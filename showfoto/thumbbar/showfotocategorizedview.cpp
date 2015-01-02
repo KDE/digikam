@@ -222,7 +222,7 @@ ShowfotoItemInfo ShowfotoCategorizedView::currentInfo() const
     return d->filterModel->showfotoItemInfo(currentIndex());
 }
 
-KUrl ShowfotoCategorizedView::currentUrl() const
+QUrl ShowfotoCategorizedView::currentUrl() const
 {
     return currentInfo().url;
 }
@@ -260,10 +260,10 @@ QList<ShowfotoItemInfo> ShowfotoCategorizedView::showfotoItemInfos() const
     return d->filterModel->showfotoItemInfosSorted();
 }
 
-KUrl::List ShowfotoCategorizedView::urls() const
+QList<QUrl> ShowfotoCategorizedView::urls() const
 {
     QList<ShowfotoItemInfo> infos = showfotoItemInfos();
-    KUrl::List              urls;
+    QList<QUrl>              urls;
 
     foreach(const ShowfotoItemInfo& info, infos)
     {
@@ -273,10 +273,10 @@ KUrl::List ShowfotoCategorizedView::urls() const
     return urls;
 }
 
-KUrl::List ShowfotoCategorizedView::selectedUrls() const
+QList<QUrl> ShowfotoCategorizedView::selectedUrls() const
 {
     QList<ShowfotoItemInfo> infos = selectedShowfotoItemInfos();
-    KUrl::List              urls;
+    QList<QUrl>              urls;
 
     foreach(const ShowfotoItemInfo& info, infos)
     {
@@ -286,7 +286,7 @@ KUrl::List ShowfotoCategorizedView::selectedUrls() const
     return urls;
 }
 
-void ShowfotoCategorizedView::toIndex(const KUrl& url)
+void ShowfotoCategorizedView::toIndex(const QUrl &url)
 {
     DCategorizedView::toIndex(d->filterModel->indexForPath(url.toLocalFile()));
 }
@@ -375,7 +375,7 @@ void ShowfotoCategorizedView::setCurrentWhenAvailable(qlonglong showfotoItemId)
     d->scrollToItemId = showfotoItemId;
 }
 
-void ShowfotoCategorizedView::setCurrentUrl(const KUrl& url)
+void ShowfotoCategorizedView::setCurrentUrl(const QUrl &url)
 {
     if (url.isEmpty())
     {
@@ -403,11 +403,11 @@ void ShowfotoCategorizedView::setCurrentInfo(const ShowfotoItemInfo& info)
     setCurrentIndex(index);
 }
 
-void ShowfotoCategorizedView::setSelectedUrls(const KUrl::List& urlList)
+void ShowfotoCategorizedView::setSelectedUrls(const QList<QUrl>& urlList)
 {
     QItemSelection mySelection;
 
-    for (KUrl::List::const_iterator it = urlList.constBegin(); it!=urlList.constEnd(); ++it)
+    for (QList<QUrl>::const_iterator it = urlList.constBegin(); it!=urlList.constEnd(); ++it)
     {
         const QString path      = it->path();
         const QModelIndex index = d->filterModel->indexForPath(path);

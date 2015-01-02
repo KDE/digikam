@@ -34,7 +34,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 #include <kjob.h>
 #include <kprogressdialog.h>
 
@@ -185,23 +185,23 @@ protected:
     void toggleNonDestructiveActions();
     void toggleToolActions(EditorTool* tool = 0);
 
-    void printImage(const KUrl& url);
+    void printImage(const QUrl &url);
 
     void unLoadImagePlugins();
     void loadImagePlugins();
 
     bool promptForOverWrite();
 
-    bool promptUserSave(const KUrl& url, SaveAskMode mode = AskIfNeeded, bool allowCancel = true);
+    bool promptUserSave(const QUrl &url, SaveAskMode mode = AskIfNeeded, bool allowCancel = true);
     bool waitForSavingToComplete();
-    void startingSave(const KUrl& url);
-    bool startingSaveAs(const KUrl& url);
-    bool startingSaveCurrentVersion(const KUrl& url);
-    bool startingSaveNewVersion(const KUrl& url);
-    bool startingSaveNewVersionAs(const KUrl& url);
-    bool startingSaveNewVersionInFormat(const KUrl& url, const QString& format);
-    bool checkPermissions(const KUrl& url);
-    bool checkOverwrite(const KUrl& url);
+    void startingSave(const QUrl &url);
+    bool startingSaveAs(const QUrl &url);
+    bool startingSaveCurrentVersion(const QUrl &url);
+    bool startingSaveNewVersion(const QUrl &url);
+    bool startingSaveNewVersionAs(const QUrl &url);
+    bool startingSaveNewVersionInFormat(const QUrl &url, const QString& format);
+    bool checkPermissions(const QUrl &url);
+    bool checkOverwrite(const QUrl &url);
     bool moveLocalFile(const QString& src, const QString& dest);
     void moveFile();
     void colorManage();
@@ -210,16 +210,16 @@ protected:
     void resetOrigin();
     void resetOriginSwitchFile();
 
-    void addServicesMenuForUrl(const KUrl& url);
-    void openWith(const KUrl& url, QAction* action);
+    void addServicesMenuForUrl(const QUrl &url);
+    void openWith(const QUrl &url, QAction* action);
 
     EditorStackView*           editorStackView()  const;
     ExposureSettingsContainer* exposureSettings() const;
     KCategorizedView*          createToolSelectionView();
 
-    VersionFileOperation saveVersionFileOperation(const KUrl& url, bool fork);
-    VersionFileOperation saveAsVersionFileOperation(const KUrl& url, const KUrl& saveLocation, const QString& format);
-    VersionFileOperation saveInFormatVersionFileOperation(const KUrl& url, const QString& format);
+    VersionFileOperation saveVersionFileOperation(const QUrl &url, bool fork);
+    VersionFileOperation saveAsVersionFileOperation(const QUrl &url, const QUrl& saveLocation, const QString& format);
+    VersionFileOperation saveInFormatVersionFileOperation(const QUrl &url, const QString& format);
 
 
     virtual bool hasOriginalToRestore();
@@ -252,7 +252,7 @@ protected:
      *
      * @return destination for the file that is currently being saved.
      */
-    virtual KUrl saveDestinationUrl() = 0;
+    virtual QUrl saveDestinationUrl() = 0;
 
     virtual void saveIsComplete() = 0;
     virtual void saveAsIsComplete() = 0;
@@ -355,12 +355,12 @@ private:
 
     void setToolInfoMessage(const QString& txt);
 
-    bool startingSaveVersion(const KUrl& url, bool subversion, bool saveAs, const QString& format);
+    bool startingSaveVersion(const QUrl &url, bool subversion, bool saveAs, const QString& format);
 
     void setPreviewModeMask(int mask);
     PreviewToolBar::PreviewMode previewMode() const;
 
-    bool showFileSaveDialog(const KUrl& initialUrl, KUrl& newURL);
+    bool showFileSaveDialog(const QUrl &initialUrl, QUrl& newURL);
 
     /**
      * Sets up a temp file to save image contents to and updates the saving
@@ -368,7 +368,7 @@ private:
      *
      * @param url file to save the image to
      */
-    void setupTempSaveFile(const KUrl& url);
+    void setupTempSaveFile(const QUrl &url);
 
     /**
      * Returns a list of filters that can be passed to a KFileDialog for all
@@ -407,7 +407,7 @@ private:
      * @return The valid extension which could be found, or a null string
      */
     QString selectValidSavingFormat(const QString& filter,
-                                    const KUrl& targetUrl,
+                                    const QUrl &targetUrl,
                                     const QString& autoFilter);
 
     void movingSaveFileFinished(bool successful);

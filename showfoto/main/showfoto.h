@@ -28,9 +28,9 @@
 #ifndef SHOWFOTO_H
 #define SHOWFOTO_H
 
-// KDE includes
+// Qt includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -48,7 +48,7 @@ class ShowFoto : public Digikam::EditorWindow
 
 public:
 
-    explicit ShowFoto(const KUrl::List& urlList);
+    explicit ShowFoto(const QList<QUrl>& urlList);
     ~ShowFoto();
 
     bool setup();
@@ -78,7 +78,7 @@ private:
     bool save();
     bool saveAs();
     void finishSaving(bool success);
-    KUrl saveDestinationUrl();
+    QUrl saveDestinationUrl();
     bool saveNewVersion();
     bool saveCurrentVersion();
     bool saveNewVersionAs();
@@ -90,8 +90,8 @@ private:
 
     void slideShow(Digikam::SlideShowSettings& settings);
 
-    void openFolder(const KUrl& url);
-    void openUrls(const KUrl::List& urls);
+    void openFolder(const QUrl &url);
+    void openUrls(const QList<QUrl>& urls);
 
     Digikam::ThumbBarDock* thumbBar()     const;
     Digikam::Sidebar*      rightSideBar() const;
@@ -108,9 +108,9 @@ private Q_SLOTS:
 
     void slotOpenFile();
     void slotOpenUrl(const ShowfotoItemInfo& info);
-    void slotOpenFolder(const KUrl&);
+    void slotOpenFolder(const QUrl&);
     void slotOpenFilesInFolder();
-    void slotDroppedUrls(const KUrl::List& droppedUrls);
+    void slotDroppedUrls(const QList<QUrl>& droppedUrls);
     void slotDeleteCurrentItem();
 
     void slotChanged();
@@ -131,9 +131,9 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 
-    void signalLoadCurrentItem(const KUrl::List& urlList);
-    void signalOpenFolder(const KUrl&);
-    void signalOpenFile(const KUrl::List& urls);
+    void signalLoadCurrentItem(const QList<QUrl>& urlList);
+    void signalOpenFolder(const QUrl&);
+    void signalOpenFile(const QList<QUrl>& urls);
     void signalInfoList(ShowfotoItemInfoList&);
 
 private:

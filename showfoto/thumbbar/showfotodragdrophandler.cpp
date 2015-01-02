@@ -29,14 +29,15 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <kiconloader.h>
 #include <kio/job.h>
 #include <klocalizedstring.h>
 #include <kmimetype.h>
+#include <kurlmimedata.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "ddragobjects.h"
 #include "showfotocategorizedview.h"
 #include "showfotoiteminfo.h"
@@ -69,7 +70,7 @@ bool ShowfotoDragDropHandler::dropEvent(QAbstractItemView* abstractview, const Q
         return false;
     }
 
-    KUrl::List urls = e->mimeData()->urls();
+    QList<QUrl> urls = e->mimeData()->urls();
 
     emit signalDroppedUrls(urls);
 
@@ -78,7 +79,7 @@ bool ShowfotoDragDropHandler::dropEvent(QAbstractItemView* abstractview, const Q
 
 Qt::DropAction ShowfotoDragDropHandler::accepts(const QDropEvent* e, const QModelIndex& /*dropIndex*/)
 {
-    if (KUrl::List::canDecode(e->mimeData()))
+    if (e->mimeData()->hasUrls())
     {
         return Qt::LinkAction;
     }
@@ -89,7 +90,7 @@ Qt::DropAction ShowfotoDragDropHandler::accepts(const QDropEvent* e, const QMode
 QStringList ShowfotoDragDropHandler::mimeTypes() const
 {
     QStringList mimeTypes;
-    mimeTypes << KUrl::List::mimeDataTypes();
+    mimeTypes << KUrlMimeData::mimeDataTypes();
 
     return mimeTypes;
 }
@@ -99,7 +100,7 @@ QMimeData* ShowfotoDragDropHandler::createMimeData(const QList<QModelIndex>& ind
     QList<ShowfotoItemInfo> infos = model()->showfotoItemInfos(indexes);
     QMimeData* const mimeData     = new QMimeData();
 
-    KUrl::List       urls;
+    QList<QUrl>       urls;
 
     foreach(const ShowfotoItemInfo& info, infos)
     {

@@ -401,8 +401,8 @@ void ImageWindow::setupConnections()
 
     ImageAttributesWatch* watch = ImageAttributesWatch::instance();
 
-    connect(watch, SIGNAL(signalFileMetadataChanged(KUrl)),
-            this, SLOT(slotFileMetadataChanged(KUrl)));
+    connect(watch, SIGNAL(signalFileMetadataChanged(QUrl)),
+            this, SLOT(slotFileMetadataChanged(QUrl)));
 
 /*
     connect(DatabaseAccess::databaseWatch(), SIGNAL(collectionImageChange(CollectionImageChangeset)),
@@ -583,7 +583,7 @@ void ImageWindow::slotLoadCurrent()
     setViewToURL(d->currentUrl());
 }
 
-void ImageWindow::setViewToURL(const KUrl& url)
+void ImageWindow::setViewToURL(const QUrl &url)
 {
     emit signalURLChanged(url);
 }
@@ -798,7 +798,7 @@ void ImageWindow::slotChanged()
 */
 }
 
-void ImageWindow::slotToggleTag(const KUrl& url, int tagID)
+void ImageWindow::slotToggleTag(const QUrl &url, int tagID)
 {
     toggleTag(ImageInfo::fromUrl(url), tagID);
 }
@@ -880,17 +880,17 @@ void ImageWindow::assignRating(const ImageInfo& info, int rating)
     }
 }
 
-void ImageWindow::slotRatingChanged(const KUrl& url, int rating)
+void ImageWindow::slotRatingChanged(const QUrl &url, int rating)
 {
     assignRating(ImageInfo::fromUrl(url), rating);
 }
 
-void ImageWindow::slotColorLabelChanged(const KUrl& url, int color)
+void ImageWindow::slotColorLabelChanged(const QUrl &url, int color)
 {
     assignColorLabel(ImageInfo::fromUrl(url), color);
 }
 
-void ImageWindow::slotPickLabelChanged(const KUrl& url, int pick)
+void ImageWindow::slotPickLabelChanged(const QUrl &url, int pick)
 {
     assignPickLabel(ImageInfo::fromUrl(url), pick);
 }
@@ -935,7 +935,7 @@ void ImageWindow::slotUpdateItemInfo()
     // is not include in the digiKam Albums library database.
     // This is necessary when ImageEditor is opened from cameraclient.
 
-    KUrl u(d->currentUrl().directory());
+    QUrl u(d->currentUrl().directory());
     PAlbum* palbum = AlbumManager::instance()->findPAlbum(u);
 
     if (!palbum)
@@ -1146,7 +1146,7 @@ bool ImageWindow::saveNewVersionInFormat(const QString& format)
     return startingSaveNewVersionInFormat(d->currentUrl(), format);
 }
 
-KUrl ImageWindow::saveDestinationUrl()
+QUrl ImageWindow::saveDestinationUrl()
 {
     return d->currentUrl();
 }
@@ -1191,7 +1191,7 @@ void ImageWindow::deleteCurrentItem(bool ask, bool permanently)
 
         DeleteDialog dialog(this);
 
-        KUrl::List urlList;
+        QList<QUrl> urlList;
         urlList << d->currentUrl();
 
         if (!dialog.confirmDeleteList(urlList,
@@ -1242,7 +1242,7 @@ void ImageWindow::removeCurrent()
     }
 }
 
-void ImageWindow::slotFileMetadataChanged(const KUrl& url)
+void ImageWindow::slotFileMetadataChanged(const QUrl &url)
 {
     if (url == d->currentUrl())
     {
@@ -1400,7 +1400,7 @@ void ImageWindow::slideShow(SlideShowSettings& settings)
         DMetadata meta;
         settings.fileList   = d->urlList;
 
-        for (KUrl::List::Iterator it = d->urlList.begin() ;
+        for (QList<QUrl>::Iterator it = d->urlList.begin() ;
              !m_cancelSlideShow && (it != d->urlList.end()) ; ++it)
         {
             SlidePictureInfo pictInfo;
@@ -1427,17 +1427,17 @@ void ImageWindow::slideShow(SlideShowSettings& settings)
             slide->setCurrentItem(d->currentUrl());
         }
 
-        connect(slide, SIGNAL(signalRatingChanged(KUrl,int)),
-                this, SLOT(slotRatingChanged(KUrl,int)));
+        connect(slide, SIGNAL(signalRatingChanged(QUrl,int)),
+                this, SLOT(slotRatingChanged(QUrl,int)));
 
-        connect(slide, SIGNAL(signalColorLabelChanged(KUrl,int)),
-                this, SLOT(slotColorLabelChanged(KUrl,int)));
+        connect(slide, SIGNAL(signalColorLabelChanged(QUrl,int)),
+                this, SLOT(slotColorLabelChanged(QUrl,int)));
 
-        connect(slide, SIGNAL(signalPickLabelChanged(KUrl,int)),
-                this, SLOT(slotPickLabelChanged(KUrl,int)));
+        connect(slide, SIGNAL(signalPickLabelChanged(QUrl,int)),
+                this, SLOT(slotPickLabelChanged(QUrl,int)));
 
-        connect(slide, SIGNAL(signalToggleTag(KUrl,int)),
-                this, SLOT(slotToggleTag(KUrl,int)));
+        connect(slide, SIGNAL(signalToggleTag(QUrl,int)),
+                this, SLOT(slotToggleTag(QUrl,int)));
 
         slide->show();
     }
@@ -1445,11 +1445,11 @@ void ImageWindow::slideShow(SlideShowSettings& settings)
 
 void ImageWindow::dragMoveEvent(QDragMoveEvent* e)
 {
-    int        albumID;
-    QList<int> albumIDs;
+    int              albumID;
+    QList<int>       albumIDs;
     QList<qlonglong> imageIDs;
-    KUrl::List urls;
-    KUrl::List kioURLs;
+    KUrl::List       urls;
+    KUrl::List       kioURLs;
 
     if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs) ||
         DAlbumDrag::decode(e->mimeData(), urls, albumID)                    ||
@@ -1464,11 +1464,11 @@ void ImageWindow::dragMoveEvent(QDragMoveEvent* e)
 
 void ImageWindow::dropEvent(QDropEvent* e)
 {
-    int        albumID;
-    QList<int> albumIDs;
+    int              albumID;
+    QList<int>       albumIDs;
     QList<qlonglong> imageIDs;
-    KUrl::List urls;
-    KUrl::List kioURLs;
+    KUrl::List       urls;
+    KUrl::List       kioURLs;
 
     if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
     {
@@ -1601,9 +1601,11 @@ void ImageWindow::slotOpenOriginal()
 
     foreach(const HistoryImageId& id, originals)
     {
-        KUrl url;
-        url.addPath(id.m_filePath);
-        url.addPath(id.m_fileName);
+        QUrl url;
+        url = url.adjusted(QUrl::StripTrailingSlash);
+        url.setPath(url.path() + '/' + (id.m_filePath));
+        url = url.adjusted(QUrl::StripTrailingSlash);
+        url.setPath(url.path() + '/' + (id.m_fileName));
         imageInfos << ImageInfo::fromUrl(url);
     }
 

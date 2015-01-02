@@ -82,11 +82,11 @@ int main(int argc, char* argv[])
     KExiv2Iface::KExiv2::initializeExiv2();
 
 
-    KUrl::List urlList;
+    QList<QUrl> urlList;
     QStringList urls = parser.positionalArguments();
 
     Q_FOREACH(const QString& url, urls) {
-        urlList.append(KUrl(url));
+        urlList.append(QUrl(url));
     }
 
     parser.clearPositionalArguments();

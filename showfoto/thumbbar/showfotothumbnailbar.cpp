@@ -195,7 +195,7 @@ QModelIndex ShowfotoThumbnailBar::lastIndex() const
     return showfotoFilterModel()->index(showfotoFilterModel()->rowCount() - 1, 0);
 }
 
-ShowfotoItemInfo ShowfotoThumbnailBar::findItemByUrl(const KUrl url)
+ShowfotoItemInfo ShowfotoThumbnailBar::findItemByUrl(const QUrl url)
 {
     ShowfotoItemInfoList lst = showfotoItemInfos();
 

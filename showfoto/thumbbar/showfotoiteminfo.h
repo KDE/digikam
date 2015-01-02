@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -58,7 +58,7 @@ public:
 
 //    /** Return the local file system (mounted on computer) url to the file.
 //     */
-//    KUrl url()    const;
+//    QUrl url()    const;
 
     /** Compare for information equality and un-equality, not including variable values.
      */
@@ -69,7 +69,7 @@ public:
 
     /// Static values.
     qint64             size;                 // file size in bytes.
-    KUrl               url;                  // file Url
+    QUrl               url;                  // file Url
 
     QString            name;                 // File name in file-system
     QString            folder;               // Folder path to access to file

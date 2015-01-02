@@ -86,7 +86,7 @@ public:
         return !currentImageInfo.isNull();
     }
 
-    KUrl currentUrl() const
+    QUrl currentUrl() const
     {
         return currentImageInfo.fileUrl();
     }

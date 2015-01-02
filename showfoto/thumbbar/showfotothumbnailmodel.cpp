@@ -142,7 +142,7 @@ QVariant ShowfotoThumbnailModel::data(const QModelIndex& index, int role) const
         QImage    thumbnailImage;
         QPixmap   pixmap;
         ShowfotoItemInfo info = showfotoItemInfo(index);
-        QString url           = info.url.prettyUrl();
+        QString url           = info.url.toDisplayString();
         QString path          = info.folder + QString("/") + info.name;
 
         if (info.isNull() || url.isEmpty())
@@ -220,7 +220,7 @@ void ShowfotoThumbnailModel::slotThumbnailLoaded(const LoadingDescription& loadi
     }
 
     // In case of multiple occurrence, we currently do not know which thumbnail is this. Signal change on all.
-    foreach(const QModelIndex& index, indexesForUrl(loadingDescription.filePath))
+    foreach(const QModelIndex& index, indexesForUrl(QUrl::fromLocalFile(loadingDescription.filePath)))
     {
         if (thumb.isNull())
         {

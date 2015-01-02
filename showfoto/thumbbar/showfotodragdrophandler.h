@@ -57,7 +57,7 @@ public:
 Q_SIGNALS:
 
     void dioResult(KJob*);
-    void signalDroppedUrls(const KUrl::List& droppedUrls);
+    void signalDroppedUrls(const QList<QUrl>& droppedUrls);
 
 private:
 
