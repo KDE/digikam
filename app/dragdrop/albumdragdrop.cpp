@@ -29,13 +29,14 @@
 // Qt includes
 
 #include <QDropEvent>
+#include <QMenu>
 
 // KDE includes
 
 #include <kiconloader.h>
 #include <kio/job.h>
 #include <klocalizedstring.h>
-#include <QMenu>
+#include <kurlmimedata.h>
 
 // Local includes
 
@@ -71,7 +72,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
 
     if (DAlbumDrag::canDecode(e->mimeData()))
     {
-        KUrl::List urls;
+        QList<QUrl> urls;
         int        albumId;
 
         if (!DAlbumDrag::decode(e->mimeData(), urls, albumId))
@@ -109,8 +110,8 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
     else if (DItemDrag::canDecode(e->mimeData()))
     {
 
-        KUrl::List       urls;
-        KUrl::List       kioURLs;
+        QList<QUrl>       urls;
+        QList<QUrl>       kioURLs;
         QList<int>       albumIDs;
         QList<qlonglong> imageIDs;
 
@@ -277,9 +278,9 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
         }
     }
     // -- DnD from an external source ---------------------
-    else if (KUrl::List::canDecode(e->mimeData()))
+    else if (e->mimeData()->hasUrls())
     {
-        KUrl::List srcURLs = KUrl::List::fromMimeData(e->mimeData());
+        QList<QUrl> srcURLs = KUrlMimeData::urlsFromMimeData(e->mimeData());
         bool move          = false;
         bool copy          = false;
 
@@ -352,7 +353,7 @@ Qt::DropAction AlbumDragDropHandler::accepts(const QDropEvent* e, const QModelIn
             return Qt::IgnoreAction;
         }
 
-        KUrl::List urls;
+        QList<QUrl> urls;
         int        albumId;
 
         if (!DAlbumDrag::decode(e->mimeData(), urls, albumId))
@@ -381,9 +382,9 @@ Qt::DropAction AlbumDragDropHandler::accepts(const QDropEvent* e, const QModelIn
 
         return Qt::MoveAction;
     }
-    else if (DItemDrag::canDecode(e->mimeData()) ||
+    else if (DItemDrag::canDecode(e->mimeData())           ||
              DCameraItemListDrag::canDecode(e->mimeData()) ||
-             KUrl::List::canDecode(e->mimeData()))
+             e->mimeData()->hasUrls())
     {
         // Do not allow drop images on album root
         if (destAlbum && !destAlbum->isRoot())
@@ -402,7 +403,7 @@ QStringList AlbumDragDropHandler::mimeTypes() const
     mimeTypes << DAlbumDrag::mimeTypes()
               << DItemDrag::mimeTypes()
               << DCameraItemListDrag::mimeTypes()
-              << KUrl::List::mimeDataTypes();
+              << KUrlMimeData::mimeDataTypes();
 
     return mimeTypes;
 }
@@ -422,7 +423,7 @@ QMimeData* AlbumDragDropHandler::createMimeData(const QList<Album*>& albums)
     PAlbum* const palbum = dynamic_cast<PAlbum*>(albums.first());
 
     return (new DAlbumDrag(albums.first()->databaseUrl(), albums.first()->id(),
-                          palbum ? palbum->fileUrl() : KUrl()));
+                          palbum ? palbum->fileUrl() : QUrl()));
 }
 
 } // namespace Digikam

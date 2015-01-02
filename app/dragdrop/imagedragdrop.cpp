@@ -30,13 +30,14 @@
 // Qt includes
 
 #include <QDropEvent>
+#include <QMenu>
 
 // KDE includes
 
 #include <kiconloader.h>
 #include <kio/job.h>
 #include <klocalizedstring.h>
-#include <QMenu>
+#include <kurlmimedata.h>
 
 // Local includes
 
@@ -264,8 +265,8 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
     if (DItemDrag::canDecode(e->mimeData()))
     {
         // Drag & drop inside of digiKam
-        KUrl::List       urls;
-        KUrl::List       kioURLs;
+        QList<QUrl>       urls;
+        QList<QUrl>       kioURLs;
         QList<int>       albumIDs;
         QList<qlonglong> imageIDs;
 
@@ -419,7 +420,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
 
         return false;
     }
-    else if (KUrl::List::canDecode(e->mimeData()))
+    else if (e->mimeData()->hasUrls())
     {
         if (!palbum && !m_readOnly)
         {
@@ -428,7 +429,7 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
 
         // Drag & drop outside of digiKam
 
-        KUrl::List srcURLs = KUrl::List::fromMimeData(e->mimeData());
+        QList<QUrl> srcURLs = KUrlMimeData::urlsFromMimeData(e->mimeData());
 
         if (m_readOnly)
         {
@@ -553,7 +554,7 @@ Qt::DropAction ImageDragDropHandler::accepts(const QDropEvent* e, const QModelIn
         return Qt::IgnoreAction;
     }
 
-    if (DItemDrag::canDecode(e->mimeData()) || KUrl::List::canDecode(e->mimeData()))
+    if (DItemDrag::canDecode(e->mimeData()) || e->mimeData()->hasUrls())
     {
         if (e->keyboardModifiers() & Qt::ControlModifier)
         {
@@ -585,7 +586,7 @@ QStringList ImageDragDropHandler::mimeTypes() const
               << DTagListDrag::mimeTypes()
               << DCameraItemListDrag::mimeTypes()
               << DCameraDragObject::mimeTypes()
-              << KUrl::List::mimeDataTypes();
+              << KUrlMimeData::mimeDataTypes();
 
     return mimeTypes;
 }
@@ -594,8 +595,8 @@ QMimeData* ImageDragDropHandler::createMimeData(const QList<QModelIndex>& indexe
 {
     QList<ImageInfo> infos = model()->imageInfos(indexes);
 
-    KUrl::List       urls;
-    KUrl::List       kioURLs;
+    QList<QUrl>      urls;
+    QList<QUrl>      kioURLs;
     QList<int>       albumIDs;
     QList<qlonglong> imageIDs;
 

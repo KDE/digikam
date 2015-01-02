@@ -33,6 +33,7 @@
 #include <kiconloader.h>
 #include <kio/job.h>
 #include <klocalizedstring.h>
+#include <kurlmimedata.h>
 
 // Local includes
 
@@ -152,7 +153,7 @@ bool ImportDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDr
 
     if (DItemDrag::canDecode(e->mimeData()))
     {
-        KUrl::List lst = DigikamApp::instance()->view()->selectedUrls();
+        QList<QUrl> lst = DigikamApp::instance()->view()->selectedUrls();
 
         QMenu popMenu(view);
         popMenu.addSection(SmallIcon("digikam"), i18n("Exporting"));
@@ -184,7 +185,7 @@ bool ImportDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDr
 
 Qt::DropAction ImportDragDropHandler::accepts(const QDropEvent* e, const QModelIndex& /*dropIndex*/)
 {
-    if (DItemDrag::canDecode(e->mimeData()) || KUrl::List::canDecode(e->mimeData()))
+    if (DItemDrag::canDecode(e->mimeData()) || e->mimeData()->hasUrls())
     {
         if (e->keyboardModifiers() & Qt::ControlModifier)
         {
@@ -215,7 +216,7 @@ QStringList ImportDragDropHandler::mimeTypes() const
               << DTagListDrag::mimeTypes()
               << DCameraItemListDrag::mimeTypes()
               << DCameraDragObject::mimeTypes()
-              << KUrl::List::mimeDataTypes();
+              << KUrlMimeData::mimeDataTypes();
 
     return mimeTypes;
 }

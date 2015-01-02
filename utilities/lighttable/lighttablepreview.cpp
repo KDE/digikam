@@ -106,7 +106,7 @@ bool LightTablePreview::dragEventWrapper(const QMimeData* data) const
         int              albumID;
         QList<int>       albumIDs;
         QList<qlonglong> imageIDs;
-        KUrl::List       urls, kioURLs;
+        QList<QUrl>      urls, kioURLs;
 
         if (DItemDrag::decode(data, urls, kioURLs, albumIDs, imageIDs) ||
             DAlbumDrag::decode(data, urls, albumID)                    ||
@@ -126,7 +126,7 @@ void LightTablePreview::dropEvent(QDropEvent* e)
         int              albumID;
         QList<int>       albumIDs;
         QList<qlonglong> imageIDs;
-        KUrl::List       urls, kioURLs;
+        QList<QUrl>      urls, kioURLs;
 
         if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
         {

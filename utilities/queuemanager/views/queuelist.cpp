@@ -431,8 +431,8 @@ void QueueListView::dragMoveEvent(QDragMoveEvent* e)
     int              albumID;
     QList<int>       albumIDs;
     QList<qlonglong> imageIDs;
-    KUrl::List       urls;
-    KUrl::List       kioURLs;
+    QList<QUrl>      urls;
+    QList<QUrl>      kioURLs;
 
     if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs) ||
         DAlbumDrag::decode(e->mimeData(), urls, albumID)                    ||
@@ -476,8 +476,8 @@ void QueueListView::dropEvent(QDropEvent* e)
     int              albumID;
     QList<int>       albumIDs;
     QList<qlonglong> imageIDs;
-    KUrl::List       urls;
-    KUrl::List       kioURLs;
+    QList<QUrl>      urls;
+    QList<QUrl>      kioURLs;
 
     if (DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
     {

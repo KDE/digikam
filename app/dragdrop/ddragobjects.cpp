@@ -30,8 +30,8 @@
 namespace Digikam
 {
 
-DItemDrag::DItemDrag(const KUrl::List& urls,
-                     const KUrl::List& kioUrls,
+DItemDrag::DItemDrag(const QList<QUrl>& urls,
+                     const QList<QUrl>& kioUrls,
                      const QList<int>& albumIDs,
                      const QList<qlonglong>& imageIDs)
     : QMimeData()
@@ -58,7 +58,7 @@ DItemDrag::DItemDrag(const KUrl::List& urls,
     setData("digikam/image-ids-long", ba4);
 
     // commonly accessible mime data, for dragging to outside digikam
-    urls.populateMimeData(this);
+    setUrls(urls);
 }
 
 QStringList DItemDrag::mimeTypes()
@@ -84,8 +84,8 @@ bool DItemDrag::canDecode(const QMimeData* e)
 }
 
 bool DItemDrag::decode(const QMimeData* e,
-                       KUrl::List& urls,
-                       KUrl::List& kioUrls,
+                       QList<QUrl>& urls,
+                       QList<QUrl>& kioUrls,
                        QList<int>& albumIDs,
                        QList<qlonglong>& imageIDs)
 {
@@ -128,7 +128,7 @@ bool DItemDrag::decode(const QMimeData* e,
                 dsImages >> imageIDs;
             }
 
-            KUrl u;
+            QUrl u;
             QDataStream dsKio(kioarray);
 
             if (!dsKio.atEnd())
@@ -145,12 +145,12 @@ bool DItemDrag::decode(const QMimeData* e,
 
 // ------------------------------------------------------------------------
 
-DAlbumDrag::DAlbumDrag(const KUrl& databaseUrl, int albumid, const KUrl& fileUrl)
+DAlbumDrag::DAlbumDrag(const QUrl &databaseUrl, int albumid, const QUrl& fileUrl)
     : QMimeData()
 {
     QByteArray  ba;
     QDataStream ds(&ba, QIODevice::WriteOnly);
-    ds << (KUrl::List() << databaseUrl);
+    ds << (QList<QUrl>() << databaseUrl);
     setData("digikam/digikamalbums", ba);
 
     QByteArray  ba2;
@@ -161,7 +161,7 @@ DAlbumDrag::DAlbumDrag(const KUrl& databaseUrl, int albumid, const KUrl& fileUrl
     // commonly accessible mime data, for dragging to outside digikam
     if (!fileUrl.isEmpty())
     {
-        fileUrl.populateMimeData(this);
+        setUrls(QList<QUrl>() << fileUrl);
     }
 }
 
@@ -188,9 +188,9 @@ bool DAlbumDrag::canDecode(const QMimeData* e)
     return true;
 }
 
-bool DAlbumDrag::decode(const QMimeData* e, KUrl::List& kioUrls, int& albumID)
+bool DAlbumDrag::decode(const QMimeData* e, QList<QUrl>& kioUrls, int& albumID)
 {
-    KUrl url;
+    QUrl url;
     albumID = -1;
 
     QByteArray albumarray = e->data("digikam/album-ids");
@@ -207,7 +207,7 @@ bool DAlbumDrag::decode(const QMimeData* e, KUrl::List& kioUrls, int& albumID)
             albumID = ids.first();
         }
 
-        KUrl u;
+        QUrl u;
         QDataStream dsKio(kioarray);
 
         if (!dsKio.atEnd())
