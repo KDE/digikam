@@ -583,7 +583,7 @@ void ImageWindow::slotLoadCurrent()
     setViewToURL(d->currentUrl());
 }
 
-void ImageWindow::setViewToURL(const QUrl &url)
+void ImageWindow::setViewToURL(const QUrl& url)
 {
     emit signalURLChanged(url);
 }
@@ -798,7 +798,7 @@ void ImageWindow::slotChanged()
 */
 }
 
-void ImageWindow::slotToggleTag(const QUrl &url, int tagID)
+void ImageWindow::slotToggleTag(const QUrl& url, int tagID)
 {
     toggleTag(ImageInfo::fromUrl(url), tagID);
 }
@@ -880,17 +880,17 @@ void ImageWindow::assignRating(const ImageInfo& info, int rating)
     }
 }
 
-void ImageWindow::slotRatingChanged(const QUrl &url, int rating)
+void ImageWindow::slotRatingChanged(const QUrl& url, int rating)
 {
     assignRating(ImageInfo::fromUrl(url), rating);
 }
 
-void ImageWindow::slotColorLabelChanged(const QUrl &url, int color)
+void ImageWindow::slotColorLabelChanged(const QUrl& url, int color)
 {
     assignColorLabel(ImageInfo::fromUrl(url), color);
 }
 
-void ImageWindow::slotPickLabelChanged(const QUrl &url, int pick)
+void ImageWindow::slotPickLabelChanged(const QUrl& url, int pick)
 {
     assignPickLabel(ImageInfo::fromUrl(url), pick);
 }
@@ -1242,7 +1242,7 @@ void ImageWindow::removeCurrent()
     }
 }
 
-void ImageWindow::slotFileMetadataChanged(const QUrl &url)
+void ImageWindow::slotFileMetadataChanged(const QUrl& url)
 {
     if (url == d->currentUrl())
     {

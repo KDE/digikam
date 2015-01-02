@@ -145,7 +145,7 @@ bool DItemDrag::decode(const QMimeData* e,
 
 // ------------------------------------------------------------------------
 
-DAlbumDrag::DAlbumDrag(const QUrl &databaseUrl, int albumid, const QUrl& fileUrl)
+DAlbumDrag::DAlbumDrag(const QUrl& databaseUrl, int albumid, const QUrl& fileUrl)
     : QMimeData()
 {
     QByteArray  ba;

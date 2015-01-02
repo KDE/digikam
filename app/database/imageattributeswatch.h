@@ -58,7 +58,7 @@ public:
         void imageCaptionChanged(qint64 imageId);
 */
 
-    void fileMetadataChanged(const QUrl &url);
+    void fileMetadataChanged(const QUrl& url);
 
 Q_SIGNALS:
 
@@ -89,7 +89,7 @@ Q_SIGNALS:
         Usually, the database is updated accordingly, so then this
         signal is sent in combination with one or more of the above signals.
     */
-    void signalFileMetadataChanged(const QUrl &url);
+    void signalFileMetadataChanged(const QUrl& url);
 
 private Q_SLOTS:
 

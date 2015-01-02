@@ -74,7 +74,7 @@ AdvancedRenameListItem::AdvancedRenameListItem(QTreeWidget* view)
 {
 }
 
-AdvancedRenameListItem::AdvancedRenameListItem(QTreeWidget* view, const QUrl &url)
+AdvancedRenameListItem::AdvancedRenameListItem(QTreeWidget* view, const QUrl& url)
     : QTreeWidgetItem(view), d(new Private)
 {
     setImageUrl(url);
@@ -85,7 +85,7 @@ AdvancedRenameListItem:: ~AdvancedRenameListItem()
     delete d;
 }
 
-void AdvancedRenameListItem::setImageUrl(const QUrl &url)
+void AdvancedRenameListItem::setImageUrl(const QUrl& url)
 {
     d->imageUrl = url;
 
@@ -314,7 +314,7 @@ void AdvancedRenameDialog::slotAddImages(const QList<QUrl>& urls)
     d->listView->clear();
     d->advancedRenameManager->reset();
     QList<ParseSettings> files;
-    foreach(const QUrl &url, urls)
+    foreach(const QUrl& url, urls)
     {
         ParseSettings ps;
         ps.fileUrl = url;

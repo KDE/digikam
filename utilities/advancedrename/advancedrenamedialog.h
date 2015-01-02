@@ -62,10 +62,10 @@ public:
 public:
 
     explicit AdvancedRenameListItem(QTreeWidget* view);
-    AdvancedRenameListItem(QTreeWidget* view, const QUrl &info);
+    AdvancedRenameListItem(QTreeWidget* view, const QUrl& info);
     virtual ~AdvancedRenameListItem();
 
-    void setImageUrl(const QUrl &url);
+    void setImageUrl(const QUrl& url);
     QUrl imageUrl() const;
 
     void setName(const QString& name);

@@ -68,14 +68,14 @@ SidecarFinder::SidecarFinder(const QList<QUrl>& files)
     process(files);
 }
 
-SidecarFinder::SidecarFinder(const QUrl &file)
+SidecarFinder::SidecarFinder(const QUrl& file)
 {
     process(QList<QUrl>() << file);
 }
 
 void SidecarFinder::process(const QList<QUrl>& files)
 {
-    foreach (const QUrl &url, files)
+    foreach (const QUrl& url, files)
     {
         if (url.isLocalFile())
         {
@@ -148,7 +148,7 @@ DIO::Private::Private(DIO* const q)
             q, SLOT(createJob(int,QList<QUrl>,QUrl)));
 }
 
-void DIO::Private::processJob(int operation, const QList<QUrl>& srcList, const QUrl &dest)
+void DIO::Private::processJob(int operation, const QList<QUrl>& srcList, const QUrl& dest)
 {
     SidecarFinder finder(srcList);
 
@@ -162,7 +162,7 @@ void DIO::Private::processJob(int operation, const QList<QUrl>& srcList, const Q
     }
 }
 
-void DIO::Private::processRename(const QUrl &src, const QUrl& dest)
+void DIO::Private::processRename(const QUrl& src, const QUrl& dest)
 {
     QString sidecar = DMetadata::sidecarFilePathForFile(src.toLocalFile());
 
@@ -270,7 +270,7 @@ void DIO::cleanUp()
     instance()->d->wait();
 }
 
-KIO::Job* DIO::createJob(int operation, const QList<QUrl>& src, const QUrl &dest)
+KIO::Job* DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest)
 {
     if (src.isEmpty())
     {
@@ -356,7 +356,7 @@ void DIO::slotResult(KJob* kjob)
     }
 }
 
-void DIO::slotRenamed(KIO::Job* job, const QUrl &, const QUrl& newURL)
+void DIO::slotRenamed(KIO::Job* job, const QUrl& , const QUrl& newURL)
 {
     // reconstruct file path from digikamalbums:// URL
     QUrl fileURL;
@@ -419,7 +419,7 @@ void DIO::move(const QList<ImageInfo> infos, const PAlbum* const dest)
 
 // External files -> album --------------------------------------------
 
-void DIO::copy(const QUrl &src, const PAlbum* const dest)
+void DIO::copy(const QUrl& src, const PAlbum* const dest)
 {
     copy(QList<QUrl>() << src, dest);
 }
@@ -434,7 +434,7 @@ void DIO::copy(const QList<QUrl>& srcList, const PAlbum* const dest)
     instance()->d->filesToAlbum(Copy, srcList, dest);
 }
 
-void DIO::move(const QUrl &src, const PAlbum* const dest)
+void DIO::move(const QUrl& src, const PAlbum* const dest)
 {
     move(QList<QUrl>() << src, dest);
 }

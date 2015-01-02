@@ -83,7 +83,7 @@ class DAlbumDrag : public QMimeData
 {
 public:
 
-    DAlbumDrag(const QUrl &databaseUrl, int albumid, const QUrl& fileUrl = QUrl());
+    DAlbumDrag(const QUrl& databaseUrl, int albumid, const QUrl& fileUrl = QUrl());
     static QStringList mimeTypes();
     static bool canDecode(const QMimeData* e);
     static bool decode(const QMimeData* e, QList<QUrl>& urls, int& albumID);

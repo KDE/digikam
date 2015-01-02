@@ -56,7 +56,7 @@ public:
     static void copy(const QList<ImageInfo> infos, const PAlbum* const dest);
 
     /// Copy an external file to another album
-    static void copy(const QUrl &src, const PAlbum* const dest);
+    static void copy(const QUrl& src, const PAlbum* const dest);
 
     /// Copy external files to another album
     static void copy(const QList<QUrl>& srcList, const PAlbum* const dest);
@@ -68,7 +68,7 @@ public:
     static void move(const QList<ImageInfo> infos, const PAlbum* const dest);
 
     /// Move external files another album
-    static void move(const QUrl &src, const PAlbum* const dest);
+    static void move(const QUrl& src, const PAlbum* const dest);
 
     /// Move external files into another album
     static void move(const QList<QUrl>& srcList, const PAlbum* const dest);
@@ -91,8 +91,8 @@ Q_SIGNALS:
 protected Q_SLOTS:
 
     void slotResult(KJob* kjob);
-    void slotRenamed(KIO::Job*, const QUrl &, const QUrl& newURL);
-    KIO::Job* createJob(int operation, const QList<QUrl>& src, const QUrl &dest);
+    void slotRenamed(KIO::Job*, const QUrl& , const QUrl& newURL);
+    KIO::Job* createJob(int operation, const QList<QUrl>& src, const QUrl& dest);
 
 private:
 

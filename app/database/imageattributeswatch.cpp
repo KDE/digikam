@@ -111,7 +111,7 @@ void ImageAttributesWatch::slotImageTagChange(const ImageTagChangeset& changeset
     }
 }
 
-void ImageAttributesWatch::fileMetadataChanged(const QUrl &url)
+void ImageAttributesWatch::fileMetadataChanged(const QUrl& url)
 {
     emit signalFileMetadataChanged(url);
 }

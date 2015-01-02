@@ -54,15 +54,15 @@ public:
 
 public Q_SLOTS:
 
-    void processJob(int operation, const QList<QUrl>& src, const QUrl &dest);
-    void processRename(const QUrl &src, const QUrl& dest);
+    void processJob(int operation, const QList<QUrl>& src, const QUrl& dest);
+    void processRename(const QUrl& src, const QUrl& dest);
 
 Q_SIGNALS:
 
-    void jobToProcess(int operation, const QList<QUrl>& src, const QUrl &dest);
-    void renameToProcess(const QUrl &src, const QUrl& dest);
-    void jobToCreate(int operation, const QList<QUrl>& src, const QUrl &dest);
-    void remoteFilesToStat(int operation, const QList<QUrl>& srcToStat, const QUrl &dest);
+    void jobToProcess(int operation, const QList<QUrl>& src, const QUrl& dest);
+    void renameToProcess(const QUrl& src, const QUrl& dest);
+    void jobToCreate(int operation, const QList<QUrl>& src, const QUrl& dest);
+    void remoteFilesToStat(int operation, const QList<QUrl>& srcToStat, const QUrl& dest);
 
 public:
 
@@ -79,7 +79,7 @@ class SidecarFinder
 public:
 
     explicit SidecarFinder(const QList<QUrl>& files);
-    explicit SidecarFinder(const QUrl &file);
+    explicit SidecarFinder(const QUrl& file);
 
     QList<QUrl> localFiles;
     QList<QUrl> remoteFiles;

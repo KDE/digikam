@@ -146,7 +146,7 @@ void AdvancedRenameProcessDialog::slotCancel()
     done(Cancel);
 }
 
-void AdvancedRenameProcessDialog::slotRenameSuccess(const QUrl &src)
+void AdvancedRenameProcessDialog::slotRenameSuccess(const QUrl& src)
 {
     if (d->cancel || d->newNameList.isEmpty())
     {

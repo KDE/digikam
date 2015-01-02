@@ -716,7 +716,7 @@ void ShowFoto::slotUpdateItemInfo()
     toggleNavigation( index );
 }
 
-void ShowFoto::slotOpenFolder(const QUrl &url)
+void ShowFoto::slotOpenFolder(const QUrl& url)
 {
     if (!d->thumbBar->currentInfo().isNull() && !promptUserSave(d->thumbBar->currentUrl()))
     {
@@ -1109,7 +1109,7 @@ bool ShowFoto::saveNewVersionInFormat(const QString&)
     return false;
 }
 
-void ShowFoto::openFolder(const QUrl &url)
+void ShowFoto::openFolder(const QUrl& url)
 {
     if (!url.isValid() || !url.isLocalFile())
     {
@@ -1268,7 +1268,7 @@ void ShowFoto::slotDroppedUrls(const QList<QUrl>& droppedUrls)
     {
         QList<QUrl> validUrls;
 
-        foreach (const QUrl &url, droppedUrls)
+        foreach (const QUrl& url, droppedUrls)
         {
             if (url.isValid())
             {
@@ -1281,7 +1281,7 @@ void ShowFoto::slotDroppedUrls(const QList<QUrl>& droppedUrls)
         QList<QUrl> imagesUrls;
         QList<QUrl> foldersUrls;
 
-        foreach (const QUrl &url, validUrls)
+        foreach (const QUrl& url, validUrls)
         {
             if (KMimeType::findByUrl(url)->name().startsWith("image", Qt::CaseInsensitive))
             {
@@ -1301,7 +1301,7 @@ void ShowFoto::slotDroppedUrls(const QList<QUrl>& droppedUrls)
 
         if (!foldersUrls.isEmpty())
         {
-            foreach (const QUrl &fUrl, foldersUrls)
+            foreach (const QUrl& fUrl, foldersUrls)
             {
                 openFolder(fUrl);
             }

@@ -1376,7 +1376,7 @@ public:
     }
 };
 
-bool EditorWindow::promptUserSave(const QUrl &url, SaveAskMode mode, bool allowCancel)
+bool EditorWindow::promptUserSave(const QUrl& url, SaveAskMode mode, bool allowCancel)
 {
     if (d->currentWindowModalDialog)
     {
@@ -1876,7 +1876,7 @@ void EditorWindow::finishSaving(bool success)
     }
 }
 
-void EditorWindow::setupTempSaveFile(const QUrl &url)
+void EditorWindow::setupTempSaveFile(const QUrl& url)
 {
     // if the destination url is on local file system, try to set the temp file
     // location to the destination folder, otherwise use a local default
@@ -1917,7 +1917,7 @@ void EditorWindow::setupTempSaveFile(const QUrl &url)
     m_savingContext.saveTempFile = 0;
 }
 
-void EditorWindow::startingSave(const QUrl &url)
+void EditorWindow::startingSave(const QUrl& url)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "startSaving url = " << url;
 
@@ -1950,7 +1950,7 @@ void EditorWindow::startingSave(const QUrl &url)
                                   m_savingContext.destinationURL.toLocalFile());
 }
 
-bool EditorWindow::showFileSaveDialog(const QUrl &initialUrl, QUrl& newURL)
+bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
 {
     FileSaveOptionsBox* const options         = new FileSaveOptionsBox();
     QPointer<KFileDialog> imageFileSaveDialog = new KFileDialog(initialUrl, QString(), this, options);
@@ -2173,7 +2173,7 @@ QString EditorWindow::getExtensionFromFilter(const QString& filter)
 }
 
 QString EditorWindow::selectValidSavingFormat(const QString& filter,
-                                              const QUrl &targetUrl, const QString& autoFilter)
+                                              const QUrl& targetUrl, const QString& autoFilter)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to find a saving format with filter = "
              << filter << ", targetUrl = " << targetUrl << ", autoFilter" << autoFilter;
@@ -2257,7 +2257,7 @@ QString EditorWindow::selectValidSavingFormat(const QString& filter,
     return QString();
 }
 
-bool EditorWindow::startingSaveAs(const QUrl &url)
+bool EditorWindow::startingSaveAs(const QUrl& url)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "startSavingAs called";
 
@@ -2355,27 +2355,27 @@ bool EditorWindow::startingSaveAs(const QUrl &url)
     return true;
 }
 
-bool EditorWindow::startingSaveCurrentVersion(const QUrl &url)
+bool EditorWindow::startingSaveCurrentVersion(const QUrl& url)
 {
     return startingSaveVersion(url, false, false, QString());
 }
 
-bool EditorWindow::startingSaveNewVersion(const QUrl &url)
+bool EditorWindow::startingSaveNewVersion(const QUrl& url)
 {
     return startingSaveVersion(url, true, false, QString());
 }
 
-bool EditorWindow::startingSaveNewVersionAs(const QUrl &url)
+bool EditorWindow::startingSaveNewVersionAs(const QUrl& url)
 {
     return startingSaveVersion(url, true, true, QString());
 }
 
-bool EditorWindow::startingSaveNewVersionInFormat(const QUrl &url, const QString& format)
+bool EditorWindow::startingSaveNewVersionInFormat(const QUrl& url, const QString& format)
 {
     return startingSaveVersion(url, true, false, format);
 }
 
-VersionFileOperation EditorWindow::saveVersionFileOperation(const QUrl &url, bool fork)
+VersionFileOperation EditorWindow::saveVersionFileOperation(const QUrl& url, bool fork)
 {
     DImageHistory resolvedHistory = m_canvas->interface()->getResolvedInitialHistory();
     DImageHistory history = m_canvas->interface()->getImageHistory();
@@ -2385,7 +2385,7 @@ VersionFileOperation EditorWindow::saveVersionFileOperation(const QUrl &url, boo
                                        currentName, resolvedHistory, history);
 }
 
-VersionFileOperation EditorWindow::saveAsVersionFileOperation(const QUrl &url, const QUrl& saveUrl, const QString& format)
+VersionFileOperation EditorWindow::saveAsVersionFileOperation(const QUrl& url, const QUrl& saveUrl, const QString& format)
 {
     DImageHistory resolvedHistory = m_canvas->interface()->getResolvedInitialHistory();
     DImageHistory history         = m_canvas->interface()->getImageHistory();
@@ -2395,7 +2395,7 @@ VersionFileOperation EditorWindow::saveAsVersionFileOperation(const QUrl &url, c
     return versionManager()->operationNewVersionAs(currentName, saveLocation, resolvedHistory, history);
 }
 
-VersionFileOperation EditorWindow::saveInFormatVersionFileOperation(const QUrl &url, const QString& format)
+VersionFileOperation EditorWindow::saveInFormatVersionFileOperation(const QUrl& url, const QString& format)
 {
     DImageHistory resolvedHistory = m_canvas->interface()->getResolvedInitialHistory();
     DImageHistory history         = m_canvas->interface()->getImageHistory();
@@ -2404,7 +2404,7 @@ VersionFileOperation EditorWindow::saveInFormatVersionFileOperation(const QUrl &
     return versionManager()->operationNewVersionInFormat(currentName, format, resolvedHistory, history);
 }
 
-bool EditorWindow::startingSaveVersion(const QUrl &url, bool fork, bool saveAs, const QString& format)
+bool EditorWindow::startingSaveVersion(const QUrl& url, bool fork, bool saveAs, const QString& format)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "Saving image" << url << "non-destructive, new version:"
              << fork << ", saveAs:" << saveAs << "format:" << format;
@@ -2501,7 +2501,7 @@ bool EditorWindow::startingSaveVersion(const QUrl &url, bool fork, bool saveAs, 
     return true;
 }
 
-bool EditorWindow::checkPermissions(const QUrl &url)
+bool EditorWindow::checkPermissions(const QUrl& url)
 {
     //TODO: Check that the permissions can actually be changed
     //      if write permissions are not available.
@@ -2530,7 +2530,7 @@ bool EditorWindow::checkPermissions(const QUrl &url)
     return true;
 }
 
-bool EditorWindow::checkOverwrite(const QUrl &url)
+bool EditorWindow::checkOverwrite(const QUrl& url)
 {
     int result =
 
@@ -2969,7 +2969,7 @@ void EditorWindow::customizedFullScreenMode(bool set)
     m_showBarAction->setEnabled(!set);
 }
 
-void EditorWindow::addServicesMenuForUrl(const QUrl &url)
+void EditorWindow::addServicesMenuForUrl(const QUrl& url)
 {
     KService::List offers = FileOperation::servicesForOpenWith(QList<QUrl>() << url);
 
@@ -3021,7 +3021,7 @@ void EditorWindow::addServicesMenuForUrl(const QUrl &url)
     }
 }
 
-void EditorWindow::openWith(const QUrl &url, QAction* action)
+void EditorWindow::openWith(const QUrl& url, QAction* action)
 {
     KService::Ptr service;
     QString name = action ? action->data().toString() : QString();

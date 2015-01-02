@@ -2433,7 +2433,7 @@ void ImportUI::autoRotateItems()
     d->autoRotateItemsList.clear();
 }
 
-bool ImportUI::createAutoAlbum(const QUrl &parentURL, const QString& sub,
+bool ImportUI::createAutoAlbum(const QUrl& parentURL, const QString& sub,
                                const QDate& date, QString& errMsg) const
 {
     QUrl u(parentURL);

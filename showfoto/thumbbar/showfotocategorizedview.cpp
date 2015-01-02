@@ -286,7 +286,7 @@ QList<QUrl> ShowfotoCategorizedView::selectedUrls() const
     return urls;
 }
 
-void ShowfotoCategorizedView::toIndex(const QUrl &url)
+void ShowfotoCategorizedView::toIndex(const QUrl& url)
 {
     DCategorizedView::toIndex(d->filterModel->indexForPath(url.toLocalFile()));
 }
@@ -375,7 +375,7 @@ void ShowfotoCategorizedView::setCurrentWhenAvailable(qlonglong showfotoItemId)
     d->scrollToItemId = showfotoItemId;
 }
 
-void ShowfotoCategorizedView::setCurrentUrl(const QUrl &url)
+void ShowfotoCategorizedView::setCurrentUrl(const QUrl& url)
 {
     if (url.isEmpty())
     {

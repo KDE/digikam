@@ -275,17 +275,17 @@ void CameraThumbsCtrl::slotKdePreviewFinished(KJob*)
 
 // -- Cache management methods ------------------------------------------------------------
 
-const CachedItem* CameraThumbsCtrl::retrieveItemFromCache(const QUrl &url) const
+const CachedItem* CameraThumbsCtrl::retrieveItemFromCache(const QUrl& url) const
 {
     return d->cache[url];
 }
 
-bool CameraThumbsCtrl::hasItemFromCache(const QUrl &url) const
+bool CameraThumbsCtrl::hasItemFromCache(const QUrl& url) const
 {
     return d->cache.contains(url);
 }
 
-void CameraThumbsCtrl::putItemToCache(const QUrl &url, const CamItemInfo& info, const QPixmap& thumb)
+void CameraThumbsCtrl::putItemToCache(const QUrl& url, const CamItemInfo& info, const QPixmap& thumb)
 {
     int infoCost  = sizeof(info);
     int thumbCost = thumb.width() * thumb.height() * thumb.depth() / 8;
@@ -294,7 +294,7 @@ void CameraThumbsCtrl::putItemToCache(const QUrl &url, const CamItemInfo& info, 
                     infoCost + thumbCost);
 }
 
-void CameraThumbsCtrl::removeItemFromCache(const QUrl &url)
+void CameraThumbsCtrl::removeItemFromCache(const QUrl& url)
 {
     d->cache.remove(url);
 }

@@ -90,7 +90,7 @@ private:
 
     void slideShow(Digikam::SlideShowSettings& settings);
 
-    void openFolder(const QUrl &url);
+    void openFolder(const QUrl& url);
     void openUrls(const QList<QUrl>& urls);
 
     Digikam::ThumbBarDock* thumbBar()     const;

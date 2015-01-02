@@ -119,7 +119,7 @@ private:
 
     void readSettings();
     void saveSettings();
-    bool createAutoAlbum(const QUrl &parentURL, const QString& sub,
+    bool createAutoAlbum(const QUrl& parentURL, const QString& sub,
                          const QDate& date, QString& errMsg) const;
 
     bool dialogClosed();

@@ -172,7 +172,7 @@ ShowfotoItemInfo ShowfotoImageModel::retrieveShowfotoItemInfo(const QModelIndex&
     return model->showfotoItemInfo(row);
 }
 
-QModelIndex ShowfotoImageModel::indexForUrl(const QUrl &fileUrl) const
+QModelIndex ShowfotoImageModel::indexForUrl(const QUrl& fileUrl) const
 {
         const int size = d->infos.size();
 
@@ -187,7 +187,7 @@ QModelIndex ShowfotoImageModel::indexForUrl(const QUrl &fileUrl) const
     return QModelIndex();
 }
 
-QList<QModelIndex> ShowfotoImageModel::indexesForUrl(const QUrl &fileUrl) const
+QList<QModelIndex> ShowfotoImageModel::indexesForUrl(const QUrl& fileUrl) const
 {
         QList<QModelIndex> indexes;
         const int          size = d->infos.size();
@@ -203,7 +203,7 @@ QList<QModelIndex> ShowfotoImageModel::indexesForUrl(const QUrl &fileUrl) const
         return indexes;
 }
 
-ShowfotoItemInfo ShowfotoImageModel::showfotoItemInfo(const QUrl &fileUrl) const
+ShowfotoItemInfo ShowfotoImageModel::showfotoItemInfo(const QUrl& fileUrl) const
 {
         foreach(const ShowfotoItemInfo& info, d->infos)
         {
@@ -216,7 +216,7 @@ ShowfotoItemInfo ShowfotoImageModel::showfotoItemInfo(const QUrl &fileUrl) const
     return ShowfotoItemInfo();
 }
 
-QList<ShowfotoItemInfo> ShowfotoImageModel::showfotoItemInfos(const QUrl &fileUrl) const
+QList<ShowfotoItemInfo> ShowfotoImageModel::showfotoItemInfos(const QUrl& fileUrl) const
 {
     QList<ShowfotoItemInfo> infos;
 

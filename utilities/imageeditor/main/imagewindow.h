@@ -79,7 +79,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
-    void signalURLChanged(const QUrl &url);
+    void signalURLChanged(const QUrl& url);
     void signalSavingDialogProgress(float value);
 
 private:
@@ -115,7 +115,7 @@ private:
     void saveIsComplete();
     void saveAsIsComplete();
     void saveVersionIsComplete();
-    void setViewToURL(const QUrl &url);
+    void setViewToURL(const QUrl& url);
     void deleteCurrentItem(bool ask, bool permanently);
     void removeCurrent();
 
