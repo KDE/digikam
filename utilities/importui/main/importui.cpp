@@ -1266,7 +1266,7 @@ void ImportUI::slotUpload()
 
     //qCDebug(DIGIKAM_GENERAL_LOG) << "fileformats=" << fileformats;
 
-    KUrl::List urls = KFileDialog::getOpenUrls(QUrl::fromLocalFile(CollectionManager::instance()->oneAlbumRootPath()),
+    QList<QUrl> urls = KFileDialog::getOpenUrls(QUrl::fromLocalFile(CollectionManager::instance()->oneAlbumRootPath()),
                                                fileformats, this, i18nc("@title:window", "Select Image to Upload"));
 
     if (!urls.isEmpty())
@@ -1275,7 +1275,7 @@ void ImportUI::slotUpload()
     }
 }
 
-void ImportUI::slotUploadItems(const KUrl::List& urls)
+void ImportUI::slotUploadItems(const QList<QUrl>& urls)
 {
     if (d->busy)
     {
@@ -1292,7 +1292,7 @@ void ImportUI::slotUploadItems(const KUrl::List& urls)
         // Check if space require to upload new items in camera is enough.
         quint64 totalKbSize = 0;
 
-        for (KUrl::List::const_iterator it = urls.constBegin() ; it != urls.constEnd() ; ++it)
+        for (QList<QUrl>::const_iterator it = urls.constBegin() ; it != urls.constEnd() ; ++it)
         {
             QFileInfo fi((*it).toLocalFile());
             totalKbSize += fi.size() / 1024;
@@ -1328,7 +1328,7 @@ void ImportUI::slotUploadItems(const KUrl::List& urls)
 
     QString cameraFolder = dlg->selectedFolderPath();
 
-    for (KUrl::List::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
+    for (QList<QUrl>::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
     {
         QFileInfo fi((*it).toLocalFile());
 
@@ -1983,7 +1983,7 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
     QDateTime            dateTime;
     DownloadSettingsList allItems;
     DownloadSettings     settings = downloadSettings();
-    KUrl url                      = pAlbum->fileUrl();
+    QUrl url = pAlbum->fileUrl();
     int downloadedItems           = 0;
 
     // -- Download camera items -------------------------------
@@ -2030,7 +2030,7 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
 
         downloadName = info.downloadName; // downloadName should already be set by now
 
-        KUrl downloadUrl(url);
+        QUrl downloadUrl(url);
 
         if (!createSubAlbums(downloadUrl, info))
         {
@@ -2041,13 +2041,15 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
 
         if (downloadName.isEmpty())
         {
-            downloadUrl.addPath(settings.file);
+            downloadUrl = downloadUrl.adjusted(QUrl::StripTrailingSlash);
+            downloadUrl.setPath(downloadUrl.path() + '/' + (settings.file));
         }
         else
         {
             // when using custom renaming (e.g. by date, see bug 179902)
             // make sure that we create unique names
-            downloadUrl.addPath(downloadName);
+            downloadUrl = downloadUrl.adjusted(QUrl::StripTrailingSlash);
+            downloadUrl.setPath(downloadUrl.path() + '/' + (downloadName));
             QString suggestedPath = downloadUrl.toLocalFile();
 
             if (usedDownloadPaths.contains(suggestedPath))
@@ -2066,7 +2068,7 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
                 while (usedDownloadPaths.contains(currentVariant));
 
                 usedDownloadPaths << currentVariant;
-                downloadUrl = KUrl(currentVariant);
+                downloadUrl = QUrl(currentVariant);
             }
             else
             {
@@ -2108,7 +2110,7 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
     return true;
 }
 
-bool ImportUI::createSubAlbums(KUrl& downloadUrl, const CamItemInfo& info)
+bool ImportUI::createSubAlbums(QUrl& downloadUrl, const CamItemInfo& info)
 {
     bool success = true;
  
@@ -2124,7 +2126,7 @@ bool ImportUI::createSubAlbums(KUrl& downloadUrl, const CamItemInfo& info)
     return success;
 }
 
-bool ImportUI::createSubAlbum(KUrl& downloadUrl, const QString& subalbum, const QDate& date)
+bool ImportUI::createSubAlbum(QUrl& downloadUrl, const QString& subalbum, const QDate& date)
 {
     QString errMsg;
 
@@ -2134,11 +2136,12 @@ bool ImportUI::createSubAlbum(KUrl& downloadUrl, const QString& subalbum, const 
         return false;
     }
 
-    downloadUrl.addPath(subalbum);
+    downloadUrl = downloadUrl.adjusted(QUrl::StripTrailingSlash);
+    downloadUrl.setPath(downloadUrl.path() + '/' + (subalbum));
     return true;
 }
 
-bool ImportUI::createDateBasedSubAlbum(KUrl& downloadUrl, const CamItemInfo& info)
+bool ImportUI::createDateBasedSubAlbum(QUrl& downloadUrl, const CamItemInfo& info)
 {
     QString dirName;
     QDateTime dateTime = info.ctime;
@@ -2169,7 +2172,7 @@ bool ImportUI::createDateBasedSubAlbum(KUrl& downloadUrl, const CamItemInfo& inf
     return createSubAlbum(downloadUrl, dirName, dateTime.date());
 }
 
-bool ImportUI::createExtBasedSubAlbum(KUrl& downloadUrl, const CamItemInfo& info)
+bool ImportUI::createExtBasedSubAlbum(QUrl& downloadUrl, const CamItemInfo& info)
 {
     // We use the target file name to compute sub-albums name to take a care about
     // conversion on the fly option.
@@ -2374,7 +2377,7 @@ void ImportUI::slotItemsSelected(const CamItemInfo& info, bool selected)
         // if selected item is in the list of item which will be deleted, set no current item
         if (!d->currentlyDeleting.contains(info.folder + info.name))
         {
-            //KUrl url(info.folder + '/' + info.name);
+            //QUrl url(info.folder + '/' + info.name);
             //TODO: d->rightSideBar->itemChanged(info, info);
             //d->controller->getExif(info.folder, info.name);
         }
@@ -2430,11 +2433,12 @@ void ImportUI::autoRotateItems()
     d->autoRotateItemsList.clear();
 }
 
-bool ImportUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
+bool ImportUI::createAutoAlbum(const QUrl &parentURL, const QString& sub,
                                const QDate& date, QString& errMsg) const
 {
-    KUrl u(parentURL);
-    u.addPath(sub);
+    QUrl u(parentURL);
+    u = u.adjusted(QUrl::StripTrailingSlash);
+    u.setPath(u.path() + '/' + (sub));
 
     // first stat to see if the album exists
     QFileInfo info(u.toLocalFile());
@@ -2465,19 +2469,24 @@ bool ImportUI::createAutoAlbum(const KUrl& parentURL, const QString& sub,
     }
 
     // Create the album, with any parent albums required for the structure
-    KUrl albumUrl(parentURL);
+    QDir albumDir(parentURL.path());
+
     foreach (const QString& folder, sub.split(QChar('/'), QString::SkipEmptyParts))
     {
-        albumUrl.cd(folder);
-        PAlbum* album = AlbumManager::instance()->findPAlbum(albumUrl);
+        albumDir.cd(folder);
+
+        PAlbum* album = AlbumManager::instance()->findPAlbum(QUrl::fromLocalFile(albumDir.path()));
+
         if (!album)
         {
             album = AlbumManager::instance()->createPAlbum(parent, folder, QString(), date, QString(), errMsg);
+
             if (!album)
             {
                 return false;
             }
         }
+
         parent = album;
     }
 

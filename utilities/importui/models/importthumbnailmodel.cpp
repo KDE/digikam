@@ -96,7 +96,7 @@ QVariant ImportThumbnailModel::data(const QModelIndex& index, int role) const
     if (role == ThumbnailRole && d->thumbsCtrl && index.isValid())
     {
         CamItemInfo info = camItemInfo(index);
-        QString     path = info.url().prettyUrl();
+        QString     path = info.url().toDisplayString();
         CachedItem  item;
 
         // use mimetype thumbnail also if the mime is set to something else than to image

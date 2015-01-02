@@ -50,22 +50,24 @@ extern "C"
 #include <QtConcurrent>
 #include <QFuture>
 #include <QFutureWatcher>
+#include <QUrl>
 
 // KDE includes
 
 #include <kde_file.h>
 #include <kiconloader.h>
-#include <kio/renamedialog.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kurl.h>
-#include "digikam_debug.h"
 #include <kprocess.h>
 #include <kmacroexpander.h>
 
+#include <kio/renamedialog.h>
+#include <kio/global.h>
+
 // Local includes
 
+#include "digikam_debug.h"
 #include "config-digikam.h"
 #include "template.h"
 #include "templatemanager.h"
@@ -153,7 +155,7 @@ CameraController::CameraController(QWidget* const parent,
     // URL parsing (c) Stephan Kulow
     if (path.startsWith(QLatin1String("camera:/")))
     {
-        KUrl url(path);
+        QUrl url(path);
         qCDebug(DIGIKAM_GENERAL_LOG) << "path " << path << " " << url <<  " " << url.host();
         QString xport = url.host();
 
@@ -168,7 +170,7 @@ CameraController::CameraController(QWidget* const parent,
                 qCDebug(DIGIKAM_GENERAL_LOG) << "USB " << xport << " " << usbport;
                 // if ((xport == usbport) || ((count == 1) && (xport == "usb:"))) {
                 //   model = xmodel;
-                d->camera = new GPCamera(title, url.user(), "usb:", "/");
+                d->camera = new GPCamera(title, url.userName(), "usb:", "/");
                 // }
             }
         }
@@ -611,9 +613,10 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
             emit signalDownloaded(folder, file, CamItemInfo::DownloadStarted);
 
-            KUrl tempURL(dest);
-            tempURL      = tempURL.upUrl();
-            tempURL.addPath(QString(".digikam-camera-tmp1-%1").arg(getpid()).append(file));
+            QUrl tempURL(dest);
+            tempURL = KIO::upUrl(tempURL);
+            tempURL = tempURL.adjusted(QUrl::StripTrailingSlash);
+            tempURL.setPath(tempURL.path() + '/' + (QString(".digikam-camera-tmp1-%1").arg(getpid()).append(file)));
             qCDebug(DIGIKAM_GENERAL_LOG) << "Downloading: " << file << " using (" << tempURL << ")";
             QString temp = tempURL.toLocalFile();
 
@@ -674,9 +677,10 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
                 if (convertJpeg)
                 {
-                    KUrl tempURL2(dest);
-                    tempURL2 = tempURL2.upUrl();
-                    tempURL2.addPath(QString(".digikam-camera-tmp2-%1").arg(getpid()).append(file));
+                    QUrl tempURL2(dest);
+                    tempURL2 = KIO::upUrl(tempURL2);
+                    tempURL2 = tempURL2.adjusted(QUrl::StripTrailingSlash);
+                    tempURL2.setPath(tempURL2.path() + '/' + (QString(".digikam-camera-tmp2-%1").arg(getpid()).append(file)));
                     temp     = tempURL2.toLocalFile();
 
                     // when convertnig a file, we need to set the new format extension..

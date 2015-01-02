@@ -514,7 +514,7 @@ bool ImportImageModel::hasImage(qlonglong id) const
 
 bool ImportImageModel::hasImage(const CamItemInfo& info) const
 {
-    return d->fileUrlHash.contains(info.url().prettyUrl());
+    return d->fileUrlHash.contains(info.url().toDisplayString());
 }
 
 void ImportImageModel::emitDataChangedForAll()
@@ -642,7 +642,7 @@ void ImportImageModel::publiciseInfos(const CamItemInfoList& infos)
 
         if (d->keepFileUrlCache)
         {
-            d->fileUrlHash[info.url().prettyUrl()] = id;
+            d->fileUrlHash[info.url().toDisplayString()] = id;
         }
     }
 

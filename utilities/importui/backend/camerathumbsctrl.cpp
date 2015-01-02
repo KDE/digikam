@@ -31,7 +31,7 @@
 // KDE includes
 
 #include <kglobal.h>
-#include <kurl.h>
+#include <QUrl>
 #include <kio/previewjob.h>
 #include <kdeversion.h>
 
@@ -76,14 +76,14 @@ public:
     {
     }
 
-    QCache<KUrl, CachedItem> cache;  // Camera info/thumb cache based on item url keys.
+    QCache<QUrl, CachedItem> cache;  // Camera info/thumb cache based on item url keys.
 
-    KUrl::List               pendingItems;
+    QList<QUrl>               pendingItems;
 
     CameraController*        controller;
 
     QList<CamItemInfo>       kdeTodo;
-    QHash<KUrl, CamItemInfo> kdeJobHash;
+    QHash<QUrl, CamItemInfo> kdeJobHash;
     KIO::PreviewJob*         kdeJob;
 };
 
@@ -197,10 +197,10 @@ void CameraThumbsCtrl::startKdePreviewJob()
     }
 
     d->kdeJobHash.clear();
-    KUrl::List list;
+    QList<QUrl> list;
     foreach(const CamItemInfo& info, d->kdeTodo)
     {
-        KUrl url           = info.url();
+        QUrl url = info.url();
         list << url;
         d->kdeJobHash[url] = info;
     }
@@ -208,7 +208,7 @@ void CameraThumbsCtrl::startKdePreviewJob()
 
     KFileItemList items;
 
-    for (KUrl::List::iterator it = list.begin() ; it != list.end() ; ++it)
+    for (QList<QUrl>::iterator it = list.begin() ; it != list.end() ; ++it)
     {
         if ((*it).isValid())
             items.append(KFileItem(KFileItem::Unknown, KFileItem::Unknown, *it, true));
@@ -275,17 +275,17 @@ void CameraThumbsCtrl::slotKdePreviewFinished(KJob*)
 
 // -- Cache management methods ------------------------------------------------------------
 
-const CachedItem* CameraThumbsCtrl::retrieveItemFromCache(const KUrl& url) const
+const CachedItem* CameraThumbsCtrl::retrieveItemFromCache(const QUrl &url) const
 {
     return d->cache[url];
 }
 
-bool CameraThumbsCtrl::hasItemFromCache(const KUrl& url) const
+bool CameraThumbsCtrl::hasItemFromCache(const QUrl &url) const
 {
     return d->cache.contains(url);
 }
 
-void CameraThumbsCtrl::putItemToCache(const KUrl& url, const CamItemInfo& info, const QPixmap& thumb)
+void CameraThumbsCtrl::putItemToCache(const QUrl &url, const CamItemInfo& info, const QPixmap& thumb)
 {
     int infoCost  = sizeof(info);
     int thumbCost = thumb.width() * thumb.height() * thumb.depth() / 8;
@@ -294,7 +294,7 @@ void CameraThumbsCtrl::putItemToCache(const KUrl& url, const CamItemInfo& info, 
                     infoCost + thumbCost);
 }
 
-void CameraThumbsCtrl::removeItemFromCache(const KUrl& url)
+void CameraThumbsCtrl::removeItemFromCache(const QUrl &url)
 {
     d->cache.remove(url);
 }

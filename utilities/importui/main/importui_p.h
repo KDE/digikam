@@ -38,7 +38,7 @@
 #include <kselectaction.h>
 #include <ktoggleaction.h>
 #include <KActionMenu>
-#include <kurl.h>
+#include <QUrl>
 
 // Libkdcraw includes
 
@@ -217,7 +217,7 @@ public:
 
     QActionGroup*                 cameraActions;
 
-    KUrl                          lastDestURL;
+    QUrl                          lastDestURL;
 
     KHelpMenu*                    helpMenu;
 

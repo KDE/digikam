@@ -38,7 +38,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -93,7 +93,7 @@ public:
 
 Q_SIGNALS:
 
-    void signalLastDestination(const KUrl&);
+    void signalLastDestination(const QUrl&);
     void signalWindowHasMoved();
     void signalEscapePressed();
     void signalPreviewRequested(CamItemInfo, bool);
@@ -101,7 +101,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     void slotDownload(bool onlySelected, bool deleteAfter, Album* pAlbum = 0);
-    void slotUploadItems(const KUrl::List&); // public to be used in drag'n'drop
+    void slotUploadItems(const QList<QUrl>&); // public to be used in drag'n'drop
 
 protected:
 
@@ -119,7 +119,7 @@ private:
 
     void readSettings();
     void saveSettings();
-    bool createAutoAlbum(const KUrl& parentURL, const QString& sub,
+    bool createAutoAlbum(const QUrl &parentURL, const QString& sub,
                          const QDate& date, QString& errMsg) const;
 
     bool dialogClosed();
@@ -139,10 +139,10 @@ private:
 
     bool checkDiskSpace(PAlbum* pAlbum);
     bool downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool deleteAfter);
-    bool createSubAlbums(KUrl& downloadUrl, const CamItemInfo& info);
-    bool createSubAlbum(KUrl& downloadUrl, const QString& subalbum, const QDate& date);
-    bool createDateBasedSubAlbum(KUrl& downloadUrl, const CamItemInfo& info);
-    bool createExtBasedSubAlbum(KUrl& downloadUrl, const CamItemInfo& info);
+    bool createSubAlbums(QUrl& downloadUrl, const CamItemInfo& info);
+    bool createSubAlbum(QUrl& downloadUrl, const QString& subalbum, const QDate& date);
+    bool createDateBasedSubAlbum(QUrl& downloadUrl, const CamItemInfo& info);
+    bool createExtBasedSubAlbum(QUrl& downloadUrl, const CamItemInfo& info);
 
     void showThumbBar(bool visible);
     void showSideBars(bool visible);

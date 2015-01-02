@@ -71,12 +71,16 @@ bool CamItemInfo::isNull() const
            tagIds.isEmpty();
 }
 
-KUrl CamItemInfo::url() const
+QUrl CamItemInfo::url() const
 {
-    KUrl url;
-    url.addPath(folder);
-    url.adjustPath(KUrl::AddTrailingSlash);
-    url.setFileName(name);
+    QUrl url;
+    url = url.adjusted(QUrl::StripTrailingSlash);
+    url.setPath(url.path() + '/' + (folder));
+
+    if (!url.path().endsWith('/')) url.setPath(url.path() + '/');
+
+    url = url.adjusted(QUrl::RemoveFilename);
+    url.setPath(url.path() + name);
     return url;
 }
 

@@ -34,7 +34,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -71,7 +71,7 @@ public:
 
     /** Return the local file system (mounted on computer) url to the camera file.
      */
-    KUrl url()    const;
+    QUrl url()    const;
 
     /** Compare for camera information equality, not including variable values.
      */

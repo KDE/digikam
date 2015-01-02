@@ -186,7 +186,7 @@ void ImportCategoryDrawer::viewHeaderText(const QModelIndex& index, QString* hea
     if(!info.isNull())
     {
         int count            = d->view->categoryRange(index).height();
-        QStringList splitted = info.url().prettyUrl().split('/');
+        QStringList splitted = info.url().toDisplayString().split('/');
         *header              = splitted.value(splitted.length() - 2);
 
         *subLine             = i18np("1 Item", "%1 Items", count);

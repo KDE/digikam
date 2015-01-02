@@ -37,7 +37,7 @@
 
 class KFileItem;
 class KJob;
-class KUrl;
+class QUrl;
 
 namespace Digikam
 {
@@ -91,10 +91,10 @@ private:
     void procressKDEPreview(const KFileItem& item, const QPixmap& pix);
 
     /// Cache management methods.
-    void removeItemFromCache(const KUrl& url);
-    void putItemToCache(const KUrl& url, const CamItemInfo&, const QPixmap& thumb);
-    bool hasItemFromCache(const KUrl& url) const;
-    const CachedItem* retrieveItemFromCache(const KUrl& url) const;
+    void removeItemFromCache(const QUrl &url);
+    void putItemToCache(const QUrl &url, const CamItemInfo&, const QPixmap& thumb);
+    bool hasItemFromCache(const QUrl &url) const;
+    const CachedItem* retrieveItemFromCache(const QUrl &url) const;
 
 private:
 
