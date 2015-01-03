@@ -64,7 +64,8 @@ WelcomePageView::WelcomePageView(QWidget* const parent)
     setRenderHint(QPainter::TextAntialiasing);
 //    disablePredefinedActions();
     // ------------------------------------------------------------
-
+    connect(this,SIGNAL(linkClicked(QUrl)),
+            this,SLOT(slotUrlOpen(const QUrl&)));
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
