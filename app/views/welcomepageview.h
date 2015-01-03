@@ -30,9 +30,6 @@
 
 #include <QString>
 #include <QByteArray>
-
-// KDE includes
-
 #include <QUrl>
 #include <QWebView>
 

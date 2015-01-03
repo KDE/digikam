@@ -41,8 +41,6 @@
 // KDE includes
 
 #include <kactioncollection.h>
-//#include <khtml_part.h>
-//#include <khtmlview.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
 
@@ -63,9 +61,12 @@ WelcomePageView::WelcomePageView(QWidget* const parent)
     page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
     setRenderHint(QPainter::TextAntialiasing);
 //    disablePredefinedActions();
+
     // ------------------------------------------------------------
+
     connect(this,SIGNAL(linkClicked(QUrl)),
             this,SLOT(slotUrlOpen(const QUrl&)));
+
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
@@ -250,51 +251,53 @@ void WelcomePageView::slotThemeChanged()
     show();
 }
 
-//void WelcomePageView::disablePredefinedActions()
-//{
-//    QAction* const findAction = qobject_cast<QAction*>(actionCollection()->action("find"));
-//
-//   if (findAction)
-//    {
-//        findAction->setShortcut(QKeySequence());
-//    }
-//    else
-//    {
-//        qCDebug(DIGIKAM_GENERAL_LOG) << "failed to remove the shortcut of khtml's find action";
-//    }
-//
-//    QAction* const findNextAction = qobject_cast<QAction*>(actionCollection()->action("findNext"));
-//
-//    if (findNextAction)
-//    {
-//        findNextAction->setShortcut(QKeySequence());
-//    }
-//    else
-//    {
-//        qCDebug(DIGIKAM_GENERAL_LOG) << "failed to remove the shortcut of khtml's findNext action";
-//    }
-//
-//    QAction* const findPreviousAction = qobject_cast<QAction*>(actionCollection()->action("findPrevious"));
-//
-//    if (findPreviousAction)
-//    {
-//        findPreviousAction->setShortcut(QKeySequence());
-//    }
-//    else
-//    {
-//        qCDebug(DIGIKAM_GENERAL_LOG) << "failed to remove the shortcut of khtml's findPrevious action";
-//    }
+/*
+void WelcomePageView::disablePredefinedActions()
+{
+   QAction* const findAction = qobject_cast<QAction*>(actionCollection()->action("find"));
 
-//    QAction* const selectAllAction = qobject_cast<QAction*>(actionCollection()->action("selectAll"));
-//
-//    if (selectAllAction)
-//    {
-//        selectAllAction->setShortcut(QKeySequence());
-//    }
-//    else
-//    {
-//        qCDebug(DIGIKAM_GENERAL_LOG) << "failed to remove the shortcut of khtml's selectAll action";
-//    }
-//}
+   if (findAction)
+   {
+       findAction->setShortcut(QKeySequence());
+   }
+   else
+   {
+       qCDebug(DIGIKAM_GENERAL_LOG) << "failed to remove the shortcut of khtml's find action";
+   }
+
+   QAction* const findNextAction = qobject_cast<QAction*>(actionCollection()->action("findNext"));
+
+   if (findNextAction)
+   {
+       findNextAction->setShortcut(QKeySequence());
+   }
+   else
+   {
+       qCDebug(DIGIKAM_GENERAL_LOG) << "failed to remove the shortcut of khtml's findNext action";
+   }
+
+   QAction* const findPreviousAction = qobject_cast<QAction*>(actionCollection()->action("findPrevious"));
+
+   if (findPreviousAction)
+   {
+       findPreviousAction->setShortcut(QKeySequence());
+   }
+   else
+   {
+       qCDebug(DIGIKAM_GENERAL_LOG) << "failed to remove the shortcut of khtml's findPrevious action";
+   }
+
+   QAction* const selectAllAction = qobject_cast<QAction*>(actionCollection()->action("selectAll"));
+
+   if (selectAllAction)
+   {
+       selectAllAction->setShortcut(QKeySequence());
+   }
+   else
+   {
+       qCDebug(DIGIKAM_GENERAL_LOG) << "failed to remove the shortcut of khtml's selectAll action";
+   }
+}
+*/
 
 }  // namespace Digikam
