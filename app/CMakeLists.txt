@@ -243,7 +243,6 @@ target_link_libraries(digikam
                       Qt5::WebKitWidgets
                       Phonon::phonon4qt5
 
-                      KF5::Parts
                       KF5::KHtml
                       KF5::NotifyConfig
                       KF5::KDELibs4Support
