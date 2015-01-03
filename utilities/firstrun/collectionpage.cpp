@@ -212,7 +212,7 @@ bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
 #endif
 
 /*
-    if (QUrl(rootAlbumFolder).equals(QUrl(QDir::homePath()), QUrl::CompareWithoutFragment))
+    if (QUrl::fromLocalFile(rootAlbumFolder).equals(QUrl::fromLocalFile(QDir::homePath()), QUrl::CompareWithoutFragment))
     {
         KMessageBox::sorry(this, i18n("digiKam will not use your home folder as the "
                                       "root album. Please select another location."));
@@ -289,7 +289,7 @@ bool CollectionPage::checkDatabase(QString& dbFolder)
 #endif
 
 /*
-    if (QUrl(dbFolder).equals(QUrl(QDir::homePath()), QUrl::CompareWithoutFragment))
+    if (QUrl::fromLocalFile(dbFolder).equals(QUrl::fromLocalFile(QDir::homePath()), QUrl::CompareWithoutFragment))
     {
         KMessageBox::sorry(this, i18n("digiKam cannot use your home folder as "
                                       "database file path."));
