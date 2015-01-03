@@ -31,16 +31,13 @@
 #include <QSplitter>
 #include <QTimer>
 #include <QWidget>
+#include <QUrl>
 
 // KDE includes
 
-#include <QUrl>
-
 #include <kconfiggroup.h>
 #include <kconfig.h>
-#include <khtmlview.h>
 #include <kglobal.h>
-//#include <klinkitemselectionmodel.h>
 
 // Local includes
 

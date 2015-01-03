@@ -70,7 +70,6 @@ target_link_libraries(digikamcore
 
                       KF5::KDELibs4Support
                       KF5::KIOCore
-                      KF5::KHtml
                       KF5::NotifyConfig
 
                       ${JPEG_LIBRARIES}
@@ -243,7 +242,6 @@ target_link_libraries(digikam
                       Qt5::WebKitWidgets
                       Phonon::phonon4qt5
 
-                      KF5::KHtml
                       KF5::NotifyConfig
                       KF5::KDELibs4Support
                       ${KF5KExiv2_LIBRARIES}
