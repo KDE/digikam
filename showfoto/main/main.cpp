@@ -23,25 +23,20 @@
  *
  * ============================================================ */
 
+// Qt includes
+
+#include <QApplication>
+#include <QCommandLineParser>
+#include <QCommandLineOption>
+
 // KDE includes
 
-
-
-
-#include <kconfig.h>
-#include <kglobal.h>
-#include <kimageio.h>
 #include <klocalizedstring.h>
 
 // Libkexiv2 includes
 
 #include <kexiv2.h>
 #include <libkexiv2_version.h>
-#include <QApplication>
-#include <KAboutData>
-#include <KLocalizedString>
-#include <QCommandLineParser>
-#include <QCommandLineOption>
 
 // Local includes
 
@@ -81,12 +76,12 @@ int main(int argc, char* argv[])
 
     KExiv2Iface::KExiv2::initializeExiv2();
 
-
     QList<QUrl> urlList;
     QStringList urls = parser.positionalArguments();
 
-    Q_FOREACH(const QString& url, urls) {
-        urlList.append(QUrl(url));
+    Q_FOREACH(const QString& url, urls)
+    {
+        urlList.append(QUrl::fromLocalFile(url));
     }
 
     parser.clearPositionalArguments();
