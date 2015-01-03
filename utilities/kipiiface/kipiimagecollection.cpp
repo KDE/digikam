@@ -298,7 +298,7 @@ QUrl KipiImageCollection::uploadPath()
 
 QUrl KipiImageCollection::uploadRoot()
 {
-    return QUrl(CollectionManager::instance()->oneAlbumRootPath() + '/');
+    return QUrl::fromLocalFile(CollectionManager::instance()->oneAlbumRootPath() + '/');
 }
 
 QString KipiImageCollection::uploadRootName()
