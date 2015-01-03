@@ -28,9 +28,6 @@
 
 #include <QDateTime>
 #include <QList>
-
-// KDE includes
-
 #include <QUrl>
 
 // Local includes
@@ -131,14 +128,15 @@ public:
     /**
      * Create an empty digikammapimages:/ url
      */
-
     static DatabaseUrl mapImagesUrl(const DatabaseParameters& parameters = DatabaseAccess::parameters());
+
     static DatabaseUrl fromAreaRange(const qreal lat1, const qreal lng1, const qreal lat2, const qreal lng2, const DatabaseParameters& parameters = DatabaseAccess::parameters());
+
     /**
      * Create a digikamsearch: URL for the search with the given id.
      */
-    static DatabaseUrl searchUrl(int searchId,
-                                 const DatabaseParameters& parameters = DatabaseAccess::parameters());
+    static DatabaseUrl searchUrl(int searchId, const DatabaseParameters& parameters = DatabaseAccess::parameters());
+
     /**
       * Create a DatabaseUrl object from a QUrl, to retrieve the information stored
       */
@@ -153,16 +151,18 @@ public:
      * These test for the protocol of this URL.
      * The protocol string is of course available via protocol().
      */
-    bool isAlbumUrl() const;
-    bool isTagUrl() const;
-    bool isDateUrl() const;
-    bool isSearchUrl() const;
+    bool isAlbumUrl()     const;
+    bool isTagUrl()       const;
+    bool isDateUrl()      const;
+    bool isSearchUrl()    const;
     bool isMapImagesUrl() const;
+
     /**
      * Returns the DatabaseParameters stored in this URL.
      * Applicable to all protocols.
      */
     DatabaseParameters parameters() const;
+
     /**
      * Change the database parameters stored in this URL
      * Applicable to all protocols.
@@ -176,21 +176,26 @@ public:
 
     /// Album URL
 
-    /** Returns the album root URL of the file or album referenced by this URL
-     *  In the example above, this is "file://media/fotos"
+    /**
+     * Returns the album root URL of the file or album referenced by this URL
+     * In the example above, this is "file://media/fotos"
      */
     QUrl albumRoot() const;
 
-    /** Returns the album root path of the file or album referenced by this URL
-     *  In the example above, this is "/media/fotos"
+    /**
+     * Returns the album root path of the file or album referenced by this URL
+     * In the example above, this is "/media/fotos"
      */
     QString albumRootPath() const;
 
-    /** Returns the album root id */
+    /**
+     * Returns the album root id
+     */
     int albumRootId() const;
 
-    /** Returns the album: This is the directory hierarchy below the album root.
-     *  In the example above, the album is "/Summer 2007"
+    /**
+     * Returns the album: This is the directory hierarchy below the album root.
+     * In the example above, the album is "/Summer 2007"
      */
     QString album() const;
 
@@ -235,7 +240,6 @@ public:
      * Returns the coordinates surrounding the map area.
      * Returns true if the string to number conversion was ok.
      */
-
     bool areaCoordinates(double* lat1, double* lat2, double* lon1, double* lon2) const;
 
     /// Search URL

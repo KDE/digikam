@@ -23,9 +23,13 @@
 
 #include "baloowrap.h"
 
-// KDE includes
+// Qt includes
 
 #include <QUrl>
+
+// KDE includes
+
+#include <klocalizedstring.h>
 
 // Baloo includes
 

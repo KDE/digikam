@@ -28,11 +28,12 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
+#include <klocale.h>
 #include <klocalizedstring.h>
 
 // local includes
 
+#include "digikam_debug.h"
 #include "imageinfo.h"
 #include "databaseinfocontainers.h"
 #include "imagepropertiestab.h"

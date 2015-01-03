@@ -28,13 +28,11 @@
 
 #include <QString>
 #include <QtGlobal>
+#include <QUrl>
 
 // KDE includes
 
-#include <kconfig.h>
-#include <kglobal.h>
 #include <ksharedconfig.h>
-#include <QUrl>
 
 // Local includes
 

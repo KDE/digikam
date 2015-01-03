@@ -32,11 +32,13 @@
 
 // KDE includes
 
+#include <kglobal.h>
 #include <kde_file.h>
+#include <klocalizedstring.h>
+
 #include <kio/job.h>
 #include <kio/deletejob.h>
 #include <kio/jobuidelegate.h>
-#include <klocalizedstring.h>
 
 // Local includes
 

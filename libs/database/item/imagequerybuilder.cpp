@@ -41,6 +41,7 @@
 #include <kcalendarsystem.h>
 #include <kcomponentdata.h>
 #include <kmimetype.h>
+#include <kglobal.h>
 
 // Libkexiv2 includes
 
@@ -73,7 +74,7 @@ public:
 
 ImageQueryPostHooks::~ImageQueryPostHooks()
 {
-    foreach(ImageQueryPostHook* hook, m_postHooks)
+    foreach(ImageQueryPostHook* const hook, m_postHooks)
     {
         delete hook;
     }
@@ -86,13 +87,14 @@ void ImageQueryPostHooks::addHook(ImageQueryPostHook* const hook)
 
 bool ImageQueryPostHooks::checkPosition(double latitudeNumber, double longitudeNumber)
 {
-    foreach(ImageQueryPostHook* hook, m_postHooks)
+    foreach(ImageQueryPostHook* const hook, m_postHooks)
     {
         if (!hook->checkPosition(latitudeNumber, longitudeNumber))
         {
             return false;
         }
     }
+
     return true;
 }
 
@@ -101,7 +103,7 @@ bool ImageQueryPostHooks::checkPosition(double latitudeNumber, double longitudeN
 ImageQueryBuilder::ImageQueryBuilder()
 {
     // build a lookup table for month names
-    const KCalendarSystem* cal = KGlobal::locale()->calendar();
+    const KCalendarSystem* const cal = KGlobal::locale()->calendar();
 
     for (int i=1; i<=12; ++i)
     {

@@ -29,6 +29,7 @@
 
 // KDE includes
 
+#include <klocale.h>
 #include <klocalizedstring.h>
 #include <kformat.h>
 

@@ -32,18 +32,19 @@
 #include <QHeaderView>
 #include <QPainter>
 #include <QUrl>
+#include <QMimeData>
+#include <QAction>
+#include <QMenu>
 
 // KDE includes
 
-#include <QAction>
 #include <kactioncollection.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <QMenu>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "queuemgrwindow.h"
 #include "queuesettingsview.h"
 #include "toolslistview.h"
