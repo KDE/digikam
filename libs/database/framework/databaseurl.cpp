@@ -61,6 +61,8 @@ DatabaseUrl DatabaseUrl::fromFileUrl(const QUrl& fileUrl,
     url.addQueryItem("albumRootId", QString::number(albumRootId));
     url.setParameters(parameters);
 
+    qCDebug(DIGIKAM_GENERAL_LOG) << "DatabaseUrl::fromFileUrl : " << url.toDisplayString();
+
     return url;
 }
 
@@ -91,6 +93,7 @@ DatabaseUrl DatabaseUrl::fromAlbumAndName(const QString& name,
     url.addQueryItem("albumRootId", QString::number(albumRootId));
     url.setParameters(parameters);
 
+    qCDebug(DIGIKAM_GENERAL_LOG) << "DatabaseUrl::fromAlbumAndName : " << url.toDisplayString();
     return url;
 }
 
@@ -100,6 +103,7 @@ DatabaseUrl DatabaseUrl::albumUrl(const DatabaseParameters& parameters)
     url.setScheme("digikamalbums");
     url.setParameters(parameters);
 
+    qCDebug(DIGIKAM_GENERAL_LOG) << "DatabaseUrl::albumUrl : " << url.toDisplayString();
     return url;
 }
 
@@ -128,8 +132,7 @@ DatabaseUrl DatabaseUrl::dateUrl(const DatabaseParameters& parameters)
     return url;
 }
 
-DatabaseUrl DatabaseUrl::fromDateForMonth(const QDate& date,
-        const DatabaseParameters& parameters)
+DatabaseUrl DatabaseUrl::fromDateForMonth(const QDate& date, const DatabaseParameters& parameters)
 {
     QDate firstDayOfMonth(date.year(), date.month(), 1);
     QDate firstDayOfNextMonth = firstDayOfMonth.addMonths(1);
@@ -137,8 +140,7 @@ DatabaseUrl DatabaseUrl::fromDateForMonth(const QDate& date,
     return ( fromDateRange(firstDayOfMonth, firstDayOfNextMonth, parameters) );
 }
 
-DatabaseUrl DatabaseUrl::fromDateForYear(const QDate& date,
-        const DatabaseParameters& parameters)
+DatabaseUrl DatabaseUrl::fromDateForYear(const QDate& date, const DatabaseParameters& parameters)
 {
     QDate firstDayOfYear(date.year(), 1, 1);
     QDate firstDayOfNextYear = firstDayOfYear.addYears(1);
@@ -152,9 +154,7 @@ DatabaseUrl DatabaseUrl::fromDateRange(const QDate& startDate,
 {
     DatabaseUrl url;
     url.setScheme("digikamdates");
-
     url.setPath(startDate.toString(Qt::ISODate) + QChar('/') + endDate.toString(Qt::ISODate));
-
     url.setParameters(parameters);
 
     return url;
@@ -191,6 +191,7 @@ DatabaseUrl DatabaseUrl::searchUrl(int id, const DatabaseParameters& parameters)
     url.addQueryItem("searchId", QString::number(id));
     url.setParameters(parameters);
 
+    qCDebug(DIGIKAM_GENERAL_LOG) << "DatabaseUrl::searchUrl : " << url.toDisplayString();
     return url;
 }
 
@@ -231,8 +232,8 @@ bool DatabaseUrl::operator==(const QUrl& digikamalbumsUrl) const
 DatabaseUrl::operator DatabaseParameters() const
 {
     return parameters();
-}*/
-
+}
+*/
 
 // --- Database parameters ---------------------------------------------------------------------
 

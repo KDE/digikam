@@ -139,7 +139,7 @@ KIO::TransferJob* ImageLister::startListJob(const DatabaseUrl& url, int extraVal
     QDataStream ds(&ba, QIODevice::WriteOnly);
     ds << url;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Query Kioslave Url:" << url;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Query Kioslave Url:" << url.toDisplayString();
 
     if (extraValue != -1)
     {
