@@ -85,17 +85,18 @@ AdvancedRenameLineEdit::~AdvancedRenameLineEdit()
 
 void AdvancedRenameLineEdit::setupWidgets()
 {
+    setStyleSheet("background:transparent");
     setLineWrapMode(QPlainTextEdit::NoWrap);
     setWordWrapMode(QTextOption::NoWrap);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setFocusPolicy(Qt::StrongFocus);
     setFrameStyle(QFrame::NoFrame);
     setPalette(qApp->palette());
-    setFocusPolicy(Qt::StrongFocus);
 
     QFontMetrics fm = fontMetrics();
-    int widgetHeight = fm.boundingRect(DUMMY_TEXT).height();
-    setMinimumHeight(widgetHeight * 2);
+    int textHeight  = fm.boundingRect(DUMMY_TEXT).height();
+    setFixedHeight(textHeight + fm.leading() + 8);
 
     // --------------------------------------------------------
 
@@ -349,7 +350,9 @@ void AdvancedRenameInput::setupWidgets()
     d->proxy    = new ProxyLineEdit(this);
     d->proxy->setWidget(d->lineEdit);
     d->proxy->setClearButtonShown(true);
+    d->proxy->setContentsMargins(0, -2, 0, 2);
 
+    setMinimumHeight(d->lineEdit->height() + 2);
     setLineEdit(d->proxy);
 }
 

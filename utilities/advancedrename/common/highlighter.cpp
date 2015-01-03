@@ -158,7 +158,7 @@ void Highlighter::setupHighlightingGrammar()
 
     // --------------------------------------------------------
 
-    quotationFormat.setForeground(Qt::blue);
+    quotationFormat.setForeground(QColor("#5050ff")); // light blue
     quotationFormat.setFontItalic(true);
     quotationRule.pattern = QRegExp("\".*\"");
     quotationRule.pattern.setMinimal(true);
