@@ -72,7 +72,7 @@ extern "C"
 #include <kactioncollection.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
-#include <kglobalsettings.h>
+
 #include <kiconloader.h>
 #include <kimageio.h>
 #include <klocalizedstring.h>
