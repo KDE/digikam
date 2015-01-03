@@ -1270,7 +1270,8 @@ void DigikamView::slotAlbumOpenInFileManager()
 
     if (palbum)
     {
-        new KRun(QUrl(palbum->folderPath()), this); // KRun will delete itself.
+        // NOTE: KRun will delete itself.
+        new KRun(QUrl::fromLocalFile(palbum->folderPath()), this);
     }
 }
 
