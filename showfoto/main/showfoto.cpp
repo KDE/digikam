@@ -75,9 +75,6 @@ extern "C"
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <kimageio.h>
-#include <kio/copyjob.h>
-#include <kio/deletejob.h>
-#include <kio/netaccess.h>
 #include <klocalizedstring.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
@@ -91,6 +88,10 @@ extern "C"
 #include <ktoolbarpopupaction.h>
 #include <ksqueezedtextlabel.h>
 #include <kmimetype.h>
+
+#include <kio/copyjob.h>
+#include <kio/deletejob.h>
+#include <kio/netaccess.h>
 
 // Libkdcraw includes
 
@@ -1340,7 +1341,7 @@ void ShowFoto::slotAddedDropedItems(QDropEvent* e)
 
         if (fi.exists())
         {
-            urls.append(QUrl(url));
+            urls.append(url);
         }
     }
 
