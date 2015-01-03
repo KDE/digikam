@@ -27,7 +27,6 @@
 
 // Qt includes
 
-#include <QMutexLocker>
 #include <QPointer>
 
 // KDE includes

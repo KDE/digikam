@@ -26,12 +26,9 @@
 
 // Qt includes
 
-#include <QHeaderView>
-#include <QTreeWidget>
 #include <QGridLayout>
 #include <QApplication>
 #include <QStyle>
-#include <QMenu>
 #include <QPushButton>
 #include <QAction>
 

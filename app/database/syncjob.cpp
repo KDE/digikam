@@ -26,8 +26,6 @@
 
 // Qt includes
 
-#include <QApplication>
-#include <QPainter>
 #include <QEventLoop>
 
 // KDE includes

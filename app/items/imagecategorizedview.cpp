@@ -25,9 +25,6 @@
 
 // Qt includes
 
-#include <QHelpEvent>
-#include <QScrollBar>
-#include <QStyle>
 #include <QTimer>
 
 // KDE includes

@@ -27,12 +27,11 @@
 #include "tagcheckview.h"
 
 // Qt includes
-
+#include <QMenu>
 #include <QAction>
 
 // KDE includes
 
-#include <QMenu>
 #include <kselectaction.h>
 
 // Local includes

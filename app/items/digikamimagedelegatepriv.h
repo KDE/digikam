@@ -29,7 +29,6 @@
 
 // Qt includes
 
-#include <QRect>
 #include <QCache>
 
 // Local includes

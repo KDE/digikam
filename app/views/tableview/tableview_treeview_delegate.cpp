@@ -24,16 +24,10 @@
 
 // Qt includes
 
-#include <QContextMenuEvent>
-#include <QHeaderView>
-#include <QItemSelectionModel>
 #include <QTreeView>
-#include <QVBoxLayout>
-#include <QMenu>
 
 // KDE includes
 
-#include <QAction>
 
 // local includes
 

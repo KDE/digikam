@@ -29,16 +29,11 @@
 
 #include <QCheckBox>
 #include <QDateTime>
-#include <QDir>
-#include <QFileInfo>
-#include <QFrame>
 #include <QGridLayout>
-#include <QGroupBox>
 #include <QLabel>
 #include <QPointer>
 #include <QPushButton>
 #include <QRegExp>
-#include <QTextEdit>
 #include <QValidator>
 #include <QApplication>
 #include <QStyle>
@@ -54,7 +49,6 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <ktextedit.h>
-#include <QUrl>
 #include <kseparator.h>
 
 // Libkdcraw includes

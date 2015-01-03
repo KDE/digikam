@@ -31,7 +31,6 @@
 // Qt includes
 
 #include <QPainter>
-#include <QPen>
 #include <QPixmap>
 #include <QTimer>
 #include <QApplication>

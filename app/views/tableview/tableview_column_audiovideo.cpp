@@ -24,7 +24,6 @@
 
 // Qt includes
 
-#include <QModelIndex>
 
 // KDE includes
 

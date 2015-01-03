@@ -30,7 +30,6 @@
 // Qt includes
 
 #include <QMouseEvent>
-#include <QScrollBar>
 #include <QStyledItemDelegate>
 #include <QTimer>
 #include <QDrag>

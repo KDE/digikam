@@ -28,9 +28,6 @@
 // Qt includes
 
 #include <QLabel>
-#include <QFrame>
-#include <QLayout>
-#include <QCursor>
 #include <QGridLayout>
 #include <QPixmap>
 #include <QPointer>

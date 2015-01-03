@@ -32,7 +32,6 @@
 
 #include <QList>
 #include <QString>
-#include <QDateTime>
 #include <QMap>
 
 // KDE includes

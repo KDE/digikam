@@ -30,10 +30,8 @@
 
 // Qt includes
 
-#include <QList>
 #include <QAction>
 #include <QString>
-#include <QUrl>
 
 // KDE includes
 

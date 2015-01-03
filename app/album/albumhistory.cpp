@@ -30,7 +30,6 @@
 #include <QString>
 #include <QWidget>
 #include <QHash>
-#include <QtGlobal>
 
 // Local includes
 

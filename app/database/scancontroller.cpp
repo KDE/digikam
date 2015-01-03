@@ -27,17 +27,15 @@
 
 // Qt includes
 
-#include <QApplication>
 #include <QStringList>
-#include <QDir>
 #include <QFileInfo>
 #include <QPixmap>
-#include <QProgressBar>
 #include <QTime>
 #include <QMutex>
 #include <QMutexLocker>
 #include <QWaitCondition>
 #include <QTimer>
+#include <QEventLoop>
 
 // KDE includes
 

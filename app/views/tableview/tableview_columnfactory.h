@@ -27,7 +27,6 @@
 
 #include <QObject>
 #include <QHash>
-#include <QStringList>
 #include <QWidget>
 
 // KDE includes

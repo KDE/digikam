@@ -41,7 +41,6 @@
 #include <QStyleOptionButton>
 #include <QStyleOptionMenuItem>
 #include <QStyleOptionViewItem>
-#include <QToolButton>
 #include <QApplication>
 
 // KDE includes

@@ -27,7 +27,6 @@
 // Qt includes
 
 #include <QVBoxLayout>
-#include <QListWidget>
 #include <QPushButton>
 #include <QVariant>
 

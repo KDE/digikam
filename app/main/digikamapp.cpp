@@ -32,14 +32,9 @@
 
 // Qt includes
 
-#include <QDataStream>
-#include <QLabel>
 #include <QPointer>
-#include <QRegExp>
 #include <QSignalMapper>
 #include <QStringList>
-#include <QtDBus>
-#include <QDesktopServices>
 #include <QDomDocument>
 #include <QStandardPaths>
 #include <QKeySequence>

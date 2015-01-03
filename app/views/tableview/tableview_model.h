@@ -26,7 +26,6 @@
 // Qt includes
 
 #include <QAbstractItemModel>
-#include <QSortFilterProxyModel>
 
 // KDE includes
 

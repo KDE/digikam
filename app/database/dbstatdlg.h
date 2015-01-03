@@ -26,7 +26,6 @@
 
 // Qt includes
 
-#include <QMap>
 
 // KDE includes
 

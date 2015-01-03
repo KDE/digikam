@@ -28,7 +28,6 @@
 
 #include <QGridLayout>
 #include <QLabel>
-#include <QLayout>
 #include <QPointer>
 #include <QTreeWidget>
 #include <QApplication>

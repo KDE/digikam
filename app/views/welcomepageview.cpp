@@ -29,7 +29,6 @@
 
 #include <QFile>
 #include <QFileInfo>
-#include <QTextStream>
 #include <QTimer>
 #include <QWidget>
 #include <QApplication>

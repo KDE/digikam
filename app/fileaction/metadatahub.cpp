@@ -30,7 +30,6 @@
 #include <QFileInfo>
 #include <QMutex>
 #include <QMutexLocker>
-#include <QPointer>
 
 // Libkexiv2 includes
 

@@ -32,7 +32,6 @@
 
 // KDE includes
 
-#include <QUrl>
 
 class QString;
 

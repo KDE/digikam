@@ -28,14 +28,11 @@
 
 // Qt includes
 
-#include <QByteArray>
 #include <QMainWindow>
 #include <QStackedWidget>
-#include <QString>
 
 // KDE includes
 
-#include <QUrl>
 
 // Local includes
 

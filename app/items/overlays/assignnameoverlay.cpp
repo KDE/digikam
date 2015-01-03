@@ -29,8 +29,6 @@
 // Qt includes
 
 #include <QApplication>
-#include <QFocusEvent>
-#include <QMouseEvent>
 #include <QPushButton>
 
 // KDE includes

@@ -28,7 +28,6 @@
 // Qt includes
 
 #include <QGraphicsSceneContextMenuEvent>
-#include <QMouseEvent>
 
 // Local includes
 

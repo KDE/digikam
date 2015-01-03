@@ -28,10 +28,6 @@
 // Qt includes
 
 #include <QLayout>
-#include <QPainter>
-#include <QPalette>
-#include <QPixmap>
-#include <QCursor>
 #include <QToolButton>
 
 // KDE includes

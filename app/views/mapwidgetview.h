@@ -28,7 +28,6 @@
 // Qt includes
 
 #include <QWidget>
-#include <QSortFilterProxyModel>
 
 // libkgeomap includes
 

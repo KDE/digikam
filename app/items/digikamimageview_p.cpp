@@ -28,7 +28,6 @@
 // KDE includes
 
 #include <kactionmenu.h>
-#include <QMenu>
 
 // Local includes
 

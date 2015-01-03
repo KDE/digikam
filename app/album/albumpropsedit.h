@@ -28,7 +28,6 @@
 
 // Qt includes
 
-#include <QDateTime>
 #include <QString>
 #include <QStringList>
 

@@ -24,8 +24,6 @@
 
 // Qt includes
 
-#include <QItemSelectionModel>
-#include <QVBoxLayout>
 
 // KDE includes
 

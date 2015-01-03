@@ -27,8 +27,6 @@
 // Qt includes
 
 #include <QDateTime>
-#include <QBuffer>
-#include <QTextDocument>
 
 // KDE includes
 

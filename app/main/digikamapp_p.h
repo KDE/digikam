@@ -27,16 +27,11 @@
 
 // Qt includes
 
-#include <QByteArray>
 #include <QEventLoop>
-#include <QList>
 #include <QMap>
 #include <QPointer>
 #include <QSignalMapper>
 #include <QString>
-#include <QTimer>
-#include <QToolButton>
-#include <QMenu>
 #include <QAction>
 
 // KDE includes

@@ -27,10 +27,7 @@
 
 // Qt includes
 
-#include <QMutex>
-#include <QPointer>
 #include <QThread>
-#include <QWaitCondition>
 
 // Local includes
 

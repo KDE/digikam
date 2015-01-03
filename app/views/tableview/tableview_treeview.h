@@ -27,7 +27,6 @@
 
 #include <QTreeView>
 #include <QWidget>
-#include <QItemDelegate>
 
 // KDE includes
 

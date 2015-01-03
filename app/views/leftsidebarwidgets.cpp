@@ -30,7 +30,6 @@
 
 #include <QButtonGroup>
 #include <QLabel>
-#include <QLayout>
 #include <QScrollBar>
 #include <QTimer>
 #include <QToolButton>

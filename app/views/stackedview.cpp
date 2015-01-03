@@ -27,11 +27,8 @@
 
 // Qt includes
 
-#include <QFileInfo>
 #include <QSplitter>
-#include <QTimer>
 #include <QWidget>
-#include <QUrl>
 
 // KDE includes
 

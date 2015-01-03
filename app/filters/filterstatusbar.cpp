@@ -27,7 +27,6 @@
 // Qt includes
 
 #include <QToolButton>
-#include <QPainter>
 #include <QHBoxLayout>
 #include <QApplication>
 #include <QStyle>

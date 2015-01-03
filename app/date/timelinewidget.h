@@ -27,13 +27,11 @@
 
 // Qt includes
 
-#include <QList>
 #include <QString>
 #include <QWidget>
 #include <QDateTime>
 #include <QPaintEvent>
 #include <QWheelEvent>
-#include <QResizeEvent>
 #include <QMouseEvent>
 
 // Local inclues

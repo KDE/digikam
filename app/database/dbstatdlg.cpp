@@ -29,7 +29,6 @@
 #include <QString>
 #include <QFont>
 #include <QTreeWidget>
-#include <QHeaderView>
 #include <QApplication>
 
 // KDE includes

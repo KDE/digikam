@@ -29,7 +29,6 @@
 // Qt includes
 
 #include <QAction>
-#include <QEvent>
 #include <QContextMenuEvent>
 #include <QQueue>
 #include <QIcon>

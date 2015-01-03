@@ -27,7 +27,6 @@
 // Qt includes
 
 #include <QDrag>
-#include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QMimeData>
 #include <QItemSelectionModel>

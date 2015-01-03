@@ -26,7 +26,6 @@
 
 // Qt includes
 
-#include <QList>
 
 // Local includes
 

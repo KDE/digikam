@@ -25,7 +25,6 @@
 // Qt includes
 
 #include <QFormLayout>
-#include <QModelIndex>
 #include <QComboBox>
 
 // KDE includes

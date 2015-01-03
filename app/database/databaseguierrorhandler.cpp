@@ -31,6 +31,7 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QThread>
+#include <QWaitCondition>
 
 // KDE includes
 

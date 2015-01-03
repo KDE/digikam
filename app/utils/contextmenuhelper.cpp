@@ -28,7 +28,6 @@
 // Qt includes
 
 #include <QAction>
-#include <QWidgetAction>
 #include <QClipboard>
 #include <QMap>
 #include <QMenu>

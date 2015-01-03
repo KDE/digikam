@@ -28,14 +28,9 @@
 
 #include <QQueue>
 #include <QTreeView>
-#include <QHeaderView>
 #include <QLabel>
-#include <QLineEdit>
-#include <QListView>
-#include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QDesktopWidget>
-#include <QDBusInterface>
 #include <QSplitter>
 #include <QApplication>
 

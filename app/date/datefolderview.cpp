@@ -28,11 +28,6 @@
 
 // Qt includes
 
-#include <QDateTime>
-#include <QFont>
-#include <QPainter>
-#include <QStyle>
-#include <QFileInfo>
 
 // KDE includes
 

@@ -27,7 +27,6 @@
 
 #include <QWidget>
 #include <QLabel>
-#include <QString>
 #include <QFrame>
 #include <QGridLayout>
 #include <QToolBar>

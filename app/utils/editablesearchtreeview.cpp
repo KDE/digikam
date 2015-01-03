@@ -26,13 +26,11 @@
 #include "editablesearchtreeview.h"
 
 // Qt includes
-
-#include <QEvent>
+#include <QAction>
 
 // KDE includes
 
 #include <kiconloader.h>
-#include <QMenu>
 
 // Local includes
 

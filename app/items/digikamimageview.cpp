@@ -30,8 +30,6 @@
 
 // Qt includes
 
-#include <QClipboard>
-#include <QFileInfo>
 #include <QPointer>
 #include <QMenu>
 

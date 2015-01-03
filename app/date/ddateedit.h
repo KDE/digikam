@@ -30,8 +30,6 @@
 
 // Qt includes
 
-#include <QDateTime>
-#include <QMap>
 #include <QMouseEvent>
 #include <QEvent>
 #include <QComboBox>

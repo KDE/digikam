@@ -28,7 +28,6 @@
 
 #include <QWidget>
 #include <QVBoxLayout>
-#include <QLabel>
 #include <QItemSelectionModel>
 #include <QAbstractItemModel>
 #include <QPersistentModelIndex>

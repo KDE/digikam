@@ -26,7 +26,6 @@
 
 // Qt includes
 
-#include <QXmlDefaultHandler>
 #include <QByteArray>
 
 // Local includes

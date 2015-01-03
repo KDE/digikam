@@ -28,7 +28,6 @@
 // Qt includes
 
 #include <QApplication>
-#include <QCursor>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMouseEvent>
 #include <QToolBar>

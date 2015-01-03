@@ -30,13 +30,10 @@
 
 #include <QAction>
 #include <QEvent>
-#include <QSortFilterProxyModel>
-#include <QToolTip>
 
 // KDE includes
 
 #include <kiconloader.h>
-#include <QMenu>
 
 // Local includes
 

@@ -29,8 +29,6 @@
 
 // Qt includes
 
-#include <QDBusInterface>
-#include <QStyle>
 #include <QApplication>
 #include <QFontDatabase>
 

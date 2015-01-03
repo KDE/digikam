@@ -24,7 +24,6 @@
 
 // Qt includes
 
-#include <QDir>
 #include <QFile>
 #include <QFileInfo>
 #include <QSqlDatabase>

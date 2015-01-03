@@ -26,7 +26,6 @@
 
 // Qt includes
 
-#include <QMap>
 #include <QObject>
 #include <QWidget>
 

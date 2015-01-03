@@ -26,7 +26,6 @@
 
 // Qt includes
 
-#include <QAbstractButton>
 #include <QAbstractItemView>
 
 // Local includes

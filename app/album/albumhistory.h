@@ -31,13 +31,11 @@
 // Qt includes
 
 #include <QList>
-#include <QMap>
 #include <QObject>
 #include <QStringList>
 
 //KDE includes
 
-#include <QUrl>
 #include "albumlabelstreeview.h"
 
 namespace Digikam

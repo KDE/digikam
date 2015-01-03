@@ -26,24 +26,17 @@
 
 // Qt includes
 
-#include <QClipboard>
-#include <QFileInfo>
-#include <QPointer>
-#include <QScrollBar>
 
 // KDE includes
 
-#include <QAction>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 
-#include <QMenu>
 #include <kmimetype.h>
 #include <krun.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kstandardaction.h>
-#include <QUrl>
 #include <kwindowsystem.h>
 
 // Local includes

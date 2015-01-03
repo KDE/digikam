@@ -31,7 +31,6 @@
 
 // KDE includes
 
-#include <QUrl>
 
 namespace Digikam
 {

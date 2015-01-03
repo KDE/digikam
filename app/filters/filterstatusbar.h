@@ -26,7 +26,6 @@
 
 // Qt includes
 
-#include <QString>
 #include <QWidget>
 
 // Local includes

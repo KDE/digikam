@@ -29,10 +29,8 @@
 
 // Qt includes
 
-#include <QEvent>
 #include <QList>
 #include <QMap>
-#include <QPainter>
 #include <QCache>
 #include <QPair>
 
