@@ -32,14 +32,11 @@
 #include <QVBoxLayout>
 #include <QFrame>
 #include <QScrollArea>
-
-// KDE includes
-
 #include <QUrl>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "iccprofilewidget.h"
 
 namespace Digikam

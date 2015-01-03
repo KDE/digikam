@@ -186,7 +186,7 @@ ImageScanner::ImageScanner(qlonglong imageid)
 
     QString albumRootPath = CollectionManager::instance()->albumRootPath(shortInfo.albumRootID);
     d->fileInfo           = QFileInfo(DatabaseUrl::fromAlbumAndName(shortInfo.itemName,
-                                      shortInfo.album, QUrl(albumRootPath), shortInfo.albumRootID).fileUrl().toLocalFile());
+                                      shortInfo.album, QUrl::fromLocalFile(albumRootPath), shortInfo.albumRootID).fileUrl().toLocalFile());
 }
 
 ImageScanner::~ImageScanner()
@@ -1823,7 +1823,7 @@ void ImageScanner::scanBalooInfo()
         return;
     }
 
-    BalooInfo bInfo = baloo->getSemanticInfo(QUrl(d->fileInfo.absoluteFilePath()));
+    BalooInfo bInfo = baloo->getSemanticInfo(QUrl::fromLocalFile(d->fileInfo.absoluteFilePath()));
 
     if (!bInfo.tags.isEmpty())
     {

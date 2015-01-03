@@ -36,11 +36,11 @@
 
 #include <kglobal.h>
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
 #include <kstandarddirs.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "queuesettings.h"
 #include "batchtoolsmanager.h"
 
@@ -387,7 +387,7 @@ bool WorkflowManager::load(QStringList& failed)
                 }
                 else if (name2 == "workingurl")
                 {
-                    q.qSettings.workingUrl = QUrl(val2);
+                    q.qSettings.workingUrl = QUrl::fromLocalFile(val2);
                 }
                 else if (name2 == "conflictrule")
                 {

@@ -45,12 +45,11 @@
 
 // KDE includes
 
-#include <kcursor.h>
 #include <kmessagebox.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "colorcorrectiondlg.h"
 #include "dimgbuiltinfilter.h"
 #include "undomanager.h"
@@ -138,7 +137,7 @@ void EditorCore::load(const QString& filePath, IOFileSettings* const iofileSetti
         {
             d->nextRawDescription = description;
 
-            RawImport* const rawImport = new RawImport(QUrl(filePath), this);
+            RawImport* const rawImport = new RawImport(QUrl::fromLocalFile(filePath), this);
             EditorToolIface::editorToolIface()->loadTool(rawImport);
 
             connect(rawImport, SIGNAL(okClicked()),

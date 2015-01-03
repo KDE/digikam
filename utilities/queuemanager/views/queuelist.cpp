@@ -34,15 +34,14 @@
 #include <QUrl>
 #include <QDrag>
 #include <QMenu>
+#include <QAction>
 
 // KDE includes
 
 #include <kpixmapsequence.h>
-#include <QAction>
 #include <kactioncollection.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <QUrl>
 
 // Local includes
 
@@ -740,7 +739,7 @@ void QueueListView::slotThumbnailLoaded(const LoadingDescription& desc, const QP
     {
         QueueListViewItem* const item = dynamic_cast<QueueListViewItem*>(*it);
 
-        if (item && item->info().fileUrl() == QUrl(desc.filePath))
+        if (item && item->info().fileUrl() == QUrl::fromLocalFile(desc.filePath))
         {
             if (pix.isNull())
             {
@@ -1064,7 +1063,7 @@ void QueueListView::updateDestFileNames()
                 QFileInfo fi(info.filePath());
 
                 ParseSettings ps;
-                ps.fileUrl = QUrl(fi.absoluteFilePath());
+                ps.fileUrl = QUrl::fromLocalFile(fi.absoluteFilePath());
                 files << ps;
             }
 

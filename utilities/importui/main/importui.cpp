@@ -2068,7 +2068,7 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
                 while (usedDownloadPaths.contains(currentVariant));
 
                 usedDownloadPaths << currentVariant;
-                downloadUrl = QUrl(currentVariant);
+                downloadUrl = QUrl::fromLocalFile(currentVariant);
             }
             else
             {

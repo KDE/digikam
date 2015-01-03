@@ -33,10 +33,10 @@
 #include <QDir>
 #include <QMap>
 #include <QRectF>
+#include <QUrl>
 
 // KDE includes
 
-#include <QUrl>
 #include <klocalizedstring.h>
 #include <kcalendarsystem.h>
 #include <kcomponentdata.h>

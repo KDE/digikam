@@ -29,15 +29,15 @@
 #include <QTreeView>
 #include <QMenu>
 #include <QLabel>
+#include <QUrl>
 
 // KDE includes
 
-#include <QUrl>
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "imagefiltershistorymodel.h"
 #include "imagefiltershistorytreeitem.h"
 #include "imagefiltershistoryitemdelegate.h"
