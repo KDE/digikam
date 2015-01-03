@@ -274,7 +274,7 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
     connect(d->nameEdit, SIGNAL(textChanged(QString)),
             this, SLOT(slotCheckNameEditGPSConditions()));
 
-    connect(d->nameEdit, SIGNAL(returnPressed(QString)),
+    connect(d->nameEdit, SIGNAL(returnPressed()),
             d->saveBtn, SLOT(animateClick()));
 
     connect(d->mapSearchWidget, SIGNAL(signalRegionSelectionChanged()),

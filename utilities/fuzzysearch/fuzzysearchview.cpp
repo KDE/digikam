@@ -503,13 +503,13 @@ void FuzzySearchView::setupConnections()
     connect(d->nameEditSketch, SIGNAL(textChanged(QString)),
             this, SLOT(slotCheckNameEditSketchConditions()));
 
-    connect(d->nameEditSketch, SIGNAL(returnPressed(QString)),
+    connect(d->nameEditSketch, SIGNAL(returnPressed()),
             d->saveBtnSketch, SLOT(animateClick()));
 
     connect(d->nameEditImage, SIGNAL(textChanged(QString)),
             this, SLOT(slotCheckNameEditImageConditions()));
 
-    connect(d->nameEditImage, SIGNAL(returnPressed(QString)),
+    connect(d->nameEditImage, SIGNAL(returnPressed()),
             d->saveBtnImage, SLOT(animateClick()));
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),

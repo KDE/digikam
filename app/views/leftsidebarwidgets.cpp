@@ -810,7 +810,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
     connect(d->nameEdit, SIGNAL(textChanged(QString)),
             this, SLOT(slotCheckAboutSelection()));
 
-    connect(d->nameEdit, SIGNAL(returnPressed(QString)),
+    connect(d->nameEdit, SIGNAL(returnPressed()),
             d->saveButton, SLOT(animateClick()));
 }
 
