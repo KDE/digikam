@@ -12,4 +12,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 004 ==> 342229 - Crash attempting to rotate empty (NULL) thumbnail [patch].
 005 ==> 342293 - Each mouse right click creates a new Open With entry in the context menu [patch].
 006 ==> 342346 - Show only vendor specific meta data which is relevant.
-007 ==> 
+007 ==> 336127 - Rename pattern textbox not tall enough and uses hard-coded font colors [patch].
+008 ==> 
