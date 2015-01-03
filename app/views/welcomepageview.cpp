@@ -36,6 +36,7 @@
 #include <QDesktopServices>
 #include <QAction>
 #include <QKeySequence>
+#include <QUrl>
 
 // KDE includes
 
@@ -44,7 +45,6 @@
 #include <khtmlview.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
-#include <QUrl>
 
 // Local includes
 
@@ -89,7 +89,7 @@ WelcomePageView::~WelcomePageView()
 
 void WelcomePageView::slotUrlOpen(const QUrl& url)
 {
-    QDesktopServices::openUrl(QUrl(url.url()));
+    QDesktopServices::openUrl(url);
 }
 
 QString WelcomePageView::infoPage() const
