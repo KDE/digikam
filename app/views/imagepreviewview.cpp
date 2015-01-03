@@ -47,7 +47,7 @@
 #include <kmimetypetrader.h>
 #include <ktoggleaction.h>
 #include <kstandarddirs.h>
-#include <kglobalsettings.h>
+
 
 // Local includes
 

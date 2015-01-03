@@ -32,7 +32,7 @@
 
 #include "digikam_debug.h"
 #include <klocalizedstring.h>
-#include <kglobalsettings.h>
+
 
 // Local includes
 

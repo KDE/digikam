@@ -41,7 +41,7 @@
 // KDE includes
 
 #include <kcalendarsystem.h>
-#include <kglobalsettings.h>
+
 #include <klocalizedstring.h>
 
 // Local includes

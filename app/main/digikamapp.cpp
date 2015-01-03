@@ -48,7 +48,7 @@
 #include <kactionmenu.h>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
-#include <kglobalsettings.h>
+
 #include <kiconloader.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>

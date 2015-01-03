@@ -36,7 +36,7 @@
 
 #include <kconfig.h>
 #include <kglobal.h>
-#include <kglobalsettings.h>
+
 #include <kstandarddirs.h>
 
 // Local includes

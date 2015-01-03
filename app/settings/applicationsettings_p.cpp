@@ -32,7 +32,7 @@
 
 #include <kconfig.h>
 #include <klocalizedstring.h>
-#include <kglobalsettings.h>
+
 
 // Local includes
 

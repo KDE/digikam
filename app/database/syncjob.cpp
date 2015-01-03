@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kglobalsettings.h>
+
 #include <kiconloader.h>
 
 
