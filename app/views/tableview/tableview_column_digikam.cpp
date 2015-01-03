@@ -28,11 +28,12 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
+#include <klocale.h>
 #include <klocalizedstring.h>
 
 // local includes
 
+#include "digikam_debug.h"
 #include "databasefields.h"
 #include "globals.h"
 #include "imageinfo.h"
@@ -51,12 +52,10 @@ ColumnDigikamProperties::ColumnDigikamProperties(
   : TableViewColumn(tableViewShared, pConfiguration, parent),
     subColumn(pSubColumn)
 {
-
 }
 
 ColumnDigikamProperties::~ColumnDigikamProperties()
 {
-
 }
 
 QStringList ColumnDigikamProperties::getSubColumns()
@@ -105,16 +104,16 @@ QString ColumnDigikamProperties::getTitle() const
 {
     switch (subColumn)
     {
-    case SubColumnRating:
-        return i18n("Rating");
-    case SubColumnPickLabel:
-        return i18n("Pick label");
-    case SubColumnColorLabel:
-        return i18n("Color label");
-    case SubColumnTitle:
-        return i18n("Title");
-    case SubColumnCaption:
-        return i18n("Caption");
+        case SubColumnRating:
+            return i18n("Rating");
+        case SubColumnPickLabel:
+            return i18n("Pick label");
+        case SubColumnColorLabel:
+            return i18n("Color label");
+        case SubColumnTitle:
+            return i18n("Title");
+        case SubColumnCaption:
+            return i18n("Caption");
     }
 
     return QString();
@@ -124,9 +123,9 @@ TableViewColumn::ColumnFlags ColumnDigikamProperties::getColumnFlags() const
 {
     ColumnFlags flags(ColumnNoFlags);
 
-    if (  (subColumn == SubColumnRating)
-       || (subColumn == SubColumnPickLabel)
-       || (subColumn == SubColumnColorLabel) )
+    if ((subColumn == SubColumnRating)    ||
+        (subColumn == SubColumnPickLabel) ||
+        (subColumn == SubColumnColorLabel))
     {
         flags|=ColumnCustomSorting;
     }
@@ -136,7 +135,7 @@ TableViewColumn::ColumnFlags ColumnDigikamProperties::getColumnFlags() const
 
 QVariant ColumnDigikamProperties::data(TableViewModel::Item* const item, const int role) const
 {
-    if ( (role != Qt::DisplayRole) &&
+    if ( (role != Qt::DisplayRole)       &&
          (role != Qt::TextAlignmentRole) &&
          (role != Qt::ForegroundRole ) )
     {
@@ -163,8 +162,8 @@ QVariant ColumnDigikamProperties::data(TableViewModel::Item* const item, const i
             {
                 const ImageInfo info = s->tableViewModel->infoFromItem(item);
                 const PickLabel pickLabel = PickLabel(info.pickLabel());
-
                 QColor labelColor;
+
                 switch (pickLabel)
                 {
                     case NoPickLabel:
@@ -198,8 +197,8 @@ QVariant ColumnDigikamProperties::data(TableViewModel::Item* const item, const i
             {
                 const ImageInfo info = s->tableViewModel->infoFromItem(item);
                 const ColorLabel colorLabel = ColorLabel(info.colorLabel());
-
                 QColor labelColor;
+
                 switch (colorLabel)
                 {
                     case NoColorLabel:
@@ -442,4 +441,3 @@ bool Digikam::TableViewColumns::ColumnDigikamProperties::columnAffectedByChanges
 } /* namespace TableViewColumns */
 
 } /* namespace Digikam */
-

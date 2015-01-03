@@ -28,6 +28,10 @@
 #include <QSharedData>
 #include <QMultiMap>
 
+// KDE includes
+
+#include <kglobal.h>
+
 // Local includes
 
 #include "digikam_debug.h"
@@ -39,6 +43,7 @@ namespace Digikam
 {
 
 typedef QExplicitlySharedDataPointer<TagProperties::TagPropertiesPriv> TagPropertiesPrivSharedPointer;
+
 class TagProperties::TagPropertiesPriv : public QSharedData
 {
 public:
@@ -51,6 +56,8 @@ public:
     }
 
     bool isNull() const;
+
+public:
 
     int                         tagId;
     QMultiMap<QString, QString> properties;

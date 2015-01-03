@@ -30,7 +30,6 @@
 // KDE includes
 
 #include <kiconloader.h>
-#include <QAction>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kservice.h>
@@ -39,6 +38,7 @@
 #include <kopenwithdialog.h>
 #include <krun.h>
 #include <kstandardaction.h>
+#include <klocalizedstring.h>
 
 // Local includes
 

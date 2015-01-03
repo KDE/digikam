@@ -27,6 +27,10 @@
 
 #include <QSharedData>
 
+// KDE includes
+
+#include <kglobal.h>
+
 // Local includes
 
 #include "digikam_debug.h"
@@ -41,6 +45,7 @@ namespace Digikam
 typedef QSharedDataPointer<ImageTagPairPriv> ImageTagPairPrivSharedPointer;
 class ImageTagPairPriv : public QSharedData
 {
+
 public:
 
     static ImageTagPairPrivSharedPointer createGuarded(qlonglong imageId, int tagId);
@@ -56,20 +61,30 @@ public:
     void init(const ImageInfo& info, int tagId);
     void checkProperties();
 
-    ImageInfo info;
-    int  tagId;
-    bool isAssigned;
+public:
 
-    bool propertiesLoaded;
+    ImageInfo                   info;
+    int                         tagId;
+    bool                        isAssigned;
+    bool                        propertiesLoaded;
     QMultiMap<QString, QString> properties;
 };
+
+// -----------------------------------------------------------------------
 
 class ImageTagPairPrivSharedNull : public ImageTagPairPrivSharedPointer
 {
 public:
-    ImageTagPairPrivSharedNull() : QSharedDataPointer<ImageTagPairPriv>(new ImageTagPairPriv) {}
+
+    ImageTagPairPrivSharedNull() 
+        : QSharedDataPointer<ImageTagPairPriv>(new ImageTagPairPriv)
+    {
+    }
 };
+
 K_GLOBAL_STATIC(ImageTagPairPrivSharedNull, imageTagPairPrivSharedNull)
+
+// -----------------------------------------------------------------------
 
 ImageTagPairPrivSharedPointer ImageTagPairPriv::createGuarded(qlonglong imageId, int tagId)
 {
@@ -78,6 +93,7 @@ ImageTagPairPrivSharedPointer ImageTagPairPriv::createGuarded(qlonglong imageId,
         qCDebug(DIGIKAM_GENERAL_LOG) << "Attempt to create invalid tag pair image id" << imageId << "tag id" << tagId;
         return *imageTagPairPrivSharedNull;
     }
+
     return ImageTagPairPrivSharedPointer(new ImageTagPairPriv);
 }
 
@@ -87,6 +103,7 @@ void ImageTagPairPriv::init(const ImageInfo& i, int t)
     {
         return;
     }
+
     tagId = t;
     info  = i;
     isAssigned = info.tagIds().contains(tagId);
@@ -97,10 +114,12 @@ void ImageTagPairPriv::checkProperties()
     if (!isNull() && !propertiesLoaded)
     {
         QList<ImageTagProperty> props = DatabaseAccess().db()->getImageTagProperties(info.id(), tagId);
+
         foreach(const ImageTagProperty& p, props)
         {
             properties.insert(p.property, p.value);
         }
+
         propertiesLoaded = true;
     }
 }
@@ -162,10 +181,12 @@ QList<ImageTagPair> ImageTagPair::availablePairs(const ImageInfo& info)
     }
 
     QList<int> tagIds = DatabaseAccess().db()->getTagIdsWithProperties(info.id());
+
     foreach(int tagId, tagIds)
     {
         pairs << ImageTagPair(info, tagId);
     }
+
     return pairs;
 }
 
@@ -211,6 +232,7 @@ bool ImageTagPair::hasProperty(const QString& key) const
 bool ImageTagPair::hasAnyProperty(const QStringList& keys) const
 {
     d->checkProperties();
+
     foreach(const QString& key, keys)
     {
         if (d->properties.contains(key))
@@ -218,6 +240,7 @@ bool ImageTagPair::hasAnyProperty(const QStringList& keys) const
             return true;
         }
     }
+
     return false;
 }
 
@@ -237,10 +260,12 @@ QStringList ImageTagPair::allValues(const QStringList& keys) const
 {
     d->checkProperties();
     QStringList values;
+
     foreach(const QString& key, keys)
     {
         values << d->properties.values(key);
     }
+
     return values;
 }
 
@@ -343,5 +368,4 @@ void ImageTagPair::clearProperties()
     d->propertiesLoaded = true;
 }
 
-}
-
+} // namespace Digikam

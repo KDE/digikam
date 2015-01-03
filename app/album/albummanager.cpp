@@ -71,6 +71,7 @@ extern "C"
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
 #include <kwindowsystem.h>
+#include <kglobal.h>
 
 #include <kio/global.h>
 #include <kio/job.h>
