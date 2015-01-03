@@ -67,6 +67,7 @@ add_dependencies(digikamcore digikam-gitversion)
 target_link_libraries(digikamcore
                       Qt5::Sql
                       Qt5::Concurrent
+                      Qt5::Multimedia
 
                       KF5::KDELibs4Support
                       KF5::KIOCore
@@ -240,7 +241,8 @@ target_link_libraries(digikam
                       Qt5::Sql
                       Qt5::Test
                       Qt5::WebKitWidgets
-                      Phonon::phonon4qt5
+                      Qt5::Multimedia
+                      Qt5::MultimediaWidgets
 
                       KF5::NotifyConfig
                       KF5::KDELibs4Support

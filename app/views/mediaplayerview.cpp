@@ -35,15 +35,12 @@
 #include <QApplication>
 #include <QStyle>
 #include <QAction>
-
+#include <QVideoWidget>
+#include <QSlider>
 // KDE includes
 
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
-
-#include <phonon/seekslider.h>
-#include <phonon/videoplayer.h>
-#include <phonon/videowidget.h>
 
 // Local includes
 
@@ -112,7 +109,8 @@ public:
         nextAction(0),
         toolBar(0),
         grid(0),
-        player(0),
+        videoWidget(0),
+        player(0), 
         slider(0)
     {
     }
@@ -127,9 +125,9 @@ public:
 
     QGridLayout*         grid;
 
-    Phonon::VideoPlayer* player;
-    Phonon::SeekSlider*  slider;
-
+    QVideoWidget*        videoWidget;
+    QMediaPlayer*        player;
+    QSlider*             slider;
     QUrl                 currentItem;
 };
 
@@ -163,17 +161,20 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     // --------------------------------------------------------------------------
 
     d->playerView = new QFrame(this);
-    d->player     = new Phonon::VideoPlayer(Phonon::VideoCategory, this);
-    d->slider     = new Phonon::SeekSlider(this);
-    d->slider->setMediaObject(d->player->mediaObject());
-    d->player->mediaObject()->setTickInterval(100);
-    d->player->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    d->videoWidget = new QVideoWidget(this);
+    d->player = new QMediaPlayer(this,QMediaPlayer::VideoSurface);
+    d->player->setVideoOutput(d->videoWidget);                                                                                             
+    d->slider     = new QSlider(Qt::Horizontal,this);
+    d->slider->setRange(0, 0);
+
+    d->player->setNotifyInterval(100);
+    d->videoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     d->playerView->setFrameStyle(QFrame::StyledPanel|QFrame::Plain);
     d->playerView->setLineWidth(1);
 
     d->grid = new QGridLayout;
-    d->grid->addWidget(d->player->videoWidget(), 0, 0, 1, 3);
+    d->grid->addWidget(d->videoWidget  ,         0, 0, 1, 3);
     d->grid->addWidget(d->slider,                1, 0, 1, 3);
     d->grid->setColumnStretch(0, 10);
     d->grid->setColumnStretch(2, 10);
@@ -191,15 +192,15 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     setPreviewMode(Private::PlayerView);
 
     d->errorView->installEventFilter(new MediaPlayerMouseClickFilter(this));
-    d->player->videoWidget()->installEventFilter(new MediaPlayerMouseClickFilter(this));
+    d->videoWidget->installEventFilter(new MediaPlayerMouseClickFilter(this));
 
     // --------------------------------------------------------------------------
 
-    connect(d->player->mediaObject(), SIGNAL(finished()),
+    connect(d->player, SIGNAL(finished()),
             this, SLOT(slotPlayerFinished()));
 
-    connect(d->player->mediaObject(), SIGNAL(stateChanged(Phonon::State,Phonon::State)),
-            this, SLOT(slotPlayerstateChanged(Phonon::State,Phonon::State)));
+    connect(d->player, SIGNAL(stateChanged(QMediaPlayer::State)),
+            this, SLOT(slotPlayerStateChanged(QMediaPlayer::State)));
 
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
@@ -209,32 +210,39 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
 
     connect(d->nextAction, SIGNAL(triggered()),
             this, SIGNAL(signalNextItem()));
+    connect(d->player, SIGNAL(positionChanged(qint64)), 
+            this, SLOT(positionChanged(qint64)));
+    connect(d->player, SIGNAL(durationChanged(qint64)), 
+            this, SLOT(durationChanged(qint64)));
 }
 
 MediaPlayerView::~MediaPlayerView()
 {
     d->player->stop();
     delete d->player;
+    delete d->videoWidget;
+    delete d->slider;
     delete d;
 }
 
 void MediaPlayerView::reload()
 {
     d->player->stop();
-    d->player->play(d->currentItem);
+    d->player->setMedia(d->currentItem);
+    d->player->play();
 }
 
 void MediaPlayerView::slotPlayerFinished()
 {
-    if (d->player->mediaObject()->errorType() == Phonon::FatalError)
+    if (d->player->error() != QMediaPlayer::NoError)
     {
         setPreviewMode(Private::ErrorView);
     }
 }
 
-void MediaPlayerView::slotPlayerstateChanged(Phonon::State newState, Phonon::State /*oldState*/)
+void MediaPlayerView::slotPlayerStateChanged(QMediaPlayer::State newState)
 {
-    if (newState == Phonon::ErrorState)
+    if (newState < 0 || newState > 2)
     {
         setPreviewMode(Private::ErrorView);
     }
@@ -291,15 +299,31 @@ void MediaPlayerView::setCurrentItem(const QUrl& url, bool hasPrevious, bool has
     }
 
     if (d->currentItem == url &&
-        (d->player->isPlaying() || d->player->isPaused()))
+        (d->player->state() == QMediaPlayer::PlayingState || 
+         d->player->state() == QMediaPlayer::PausedState))
     {
         return;
     }
 
     d->currentItem = url;
 
-    d->player->play(d->currentItem);
+    d->player->setMedia(d->currentItem);
     setPreviewMode(Private::PlayerView);
+    d->player->play();
+}
+void MediaPlayerView::positionChanged(qint64 position)
+{
+    d->slider->setValue(position);
+}
+
+void MediaPlayerView::durationChanged(qint64 duration)
+{
+    d->slider->setRange(0, duration);
+}
+
+void MediaPlayerView::setPosition(int position)
+{
+    d->player->setPosition(position);
 }
 
 }  // namespace Digikam

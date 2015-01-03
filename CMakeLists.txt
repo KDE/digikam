@@ -120,6 +120,8 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
              Xml
              Test
              WebKitWidgets
+             Multimedia
+             MultimediaWidgets
 )
 
 find_package(KF5 REQUIRED COMPONENTS
@@ -127,8 +129,6 @@ find_package(KF5 REQUIRED COMPONENTS
              NotifyConfig
              KHtml
 )
-
-find_package(Phonon4Qt5 CONFIG REQUIRED)
 
 # ==================================================================================================
 # Dependencies
@@ -504,7 +504,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
 
     include_directories(${KF5KExiv2_INCLUDE_DIRS}
                         ${KF5KDcraw_INCLUDE_DIRS}
-                        ${PHONON_INCLUDE_DIR}
                         ${PGF_INCLUDE_DIRS}
                         ${CMAKE_CURRENT_SOURCE_DIR}/app
                         ${CMAKE_CURRENT_BINARY_DIR}/app

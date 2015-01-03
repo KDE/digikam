@@ -31,7 +31,7 @@
 // KDE includes
 
 #include <QUrl>
-#include <phonon/mediaobject.h>
+#include <QMediaPlayer>
 
 class QEvent;
 
@@ -86,7 +86,11 @@ private Q_SLOTS:
 
     void slotPlayerFinished();
     void slotThemeChanged();
-    void slotPlayerstateChanged(Phonon::State newState, Phonon::State oldState);
+    void slotPlayerStateChanged(QMediaPlayer::State newState);
+//slidebar slots
+    void positionChanged(qint64 position);
+    void durationChanged(qint64 duration);
+    void setPosition(int position);
 
 private:
 
