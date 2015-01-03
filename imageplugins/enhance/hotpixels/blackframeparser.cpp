@@ -66,7 +66,7 @@ BlackFrameParser::~BlackFrameParser()
 
 void BlackFrameParser::parseHotPixels(const QString& file)
 {
-    parseBlackFrame(QUrl(file));
+    parseBlackFrame(QUrl::fromLocalFile(file));
 }
 
 void BlackFrameParser::parseBlackFrame(const QUrl& url)

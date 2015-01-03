@@ -181,7 +181,7 @@ void HotPixelsTool::readSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
-    d->blackFrameURL          = QUrl(group.readEntry(d->configLastBlackFrameFileEntry, QString()));
+    d->blackFrameURL          = QUrl::fromLocalFile(group.readEntry(d->configLastBlackFrameFileEntry, QString()));
     d->filterMethodCombo->setCurrentIndex(group.readEntry(d->configFilterMethodEntry,  d->filterMethodCombo->defaultIndex()));
 
     if (d->blackFrameURL.isValid())

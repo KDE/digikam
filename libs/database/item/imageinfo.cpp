@@ -767,7 +767,7 @@ DatabaseUrl ImageInfo::databaseUrl() const
     QString albumRoot = CollectionManager::instance()->albumRootPath(m_data->albumRootId);
 
     ImageInfoReadLocker lock;
-    return DatabaseUrl::fromAlbumAndName(m_data->name, album, QUrl(albumRoot), m_data->albumRootId);
+    return DatabaseUrl::fromAlbumAndName(m_data->name, album, QUrl::fromLocalFile(albumRoot), m_data->albumRootId);
 }
 
 QUrl ImageInfo::fileUrl() const

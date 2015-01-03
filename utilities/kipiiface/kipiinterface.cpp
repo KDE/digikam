@@ -309,7 +309,7 @@ void KipiInterface::thumbnails(const QList<QUrl>& list, int size)
 
 void KipiInterface::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
 {
-    emit gotThumbnail(QUrl(desc.filePath), pix);
+    emit gotThumbnail(QUrl::fromLocalFile(desc.filePath), pix);
 }
 
 KIPI::ImageCollectionSelector* KipiInterface::imageCollectionSelector(QWidget* parent)
