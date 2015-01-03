@@ -309,7 +309,7 @@ void ImageDialogPreview::showPreview(const QUrl& url)
 
 void ImageDialogPreview::slotThumbnail(const LoadingDescription& desc, const QPixmap& pix)
 {
-    if (QUrl(desc.filePath) == d->currentURL)
+    if (QUrl::fromLocalFile(desc.filePath) == d->currentURL)
     {
         QPixmap pixmap;
         QSize   s = d->imageLabel->contentsRect().size();
