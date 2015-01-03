@@ -135,7 +135,7 @@ StackedView::StackedView(QWidget* const parent)
 
     insertWidget(IconViewMode,     d->imageIconView);
     insertWidget(PreviewImageMode, d->imagePreviewView);
-    insertWidget(WelcomePageMode,  d->welcomePageView->view());
+    insertWidget(WelcomePageMode,  d->welcomePageView);
     insertWidget(MediaPlayerMode,  d->mediaPlayerView);
     insertWidget(TableViewMode,    d->tableView);
 

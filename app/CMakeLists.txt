@@ -240,7 +240,7 @@ set_target_properties(digikam PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURREN
 target_link_libraries(digikam
                       Qt5::Sql
                       Qt5::Test
-
+                      Qt5::WebKitWidgets
                       Phonon::phonon4qt5
 
                       KF5::Parts

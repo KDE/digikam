@@ -119,6 +119,7 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
              Sql
              Xml
              Test
+             WebKitWidgets
 )
 
 find_package(KF5 REQUIRED COMPONENTS

@@ -34,7 +34,7 @@
 // KDE includes
 
 #include <QUrl>
-#include <khtml_part.h>
+#include <QWebView>
 
 // Local includes
 
@@ -43,7 +43,7 @@
 namespace Digikam
 {
 
-class WelcomePageView : public KHTMLPart
+class WelcomePageView : public QWebView
 {
     Q_OBJECT
 
