@@ -84,29 +84,8 @@ void WelcomePageView::slotUrlOpen(const QUrl& url)
 QString WelcomePageView::infoPage() const
 {
     QStringList newFeatures;
-    newFeatures << i18n("New Faces Recognition engine;");
-    newFeatures << i18n("New Table-View view mode dedicated to show album items in a list view;");
-    newFeatures << i18n("New tool to Auto-Crop image based on black hole borders detection;");
-    newFeatures << i18n("New Aspect Ratio information displayed in icon-view and tooltips;");
-    newFeatures << i18n("New filter based on Aspect-Ratio information;");
-    newFeatures << i18n("New search tool to find items based on Aspect-Ratio information;");
-    newFeatures << i18n("KIPI actions tool-bar support;");
-    newFeatures << i18n("Automatic Noise Reduction tool;");
-    newFeatures << i18n("Import tool rewritten using Model/View;");
-    newFeatures << i18n("Pipelined downloads from camera device;");
-    newFeatures << i18n("Items preview when downloading from camera device;");
-    newFeatures << i18n("Video Metadata support;");
-    newFeatures << i18n("Multi-core CPU support in Batch Queue Manager;");
-    newFeatures << i18n("Full RAW demosaicing settings customizable in Batch Queue Manager;");
-    newFeatures << i18n("Raw preview extraction support in Batch Queue Manager;");
-    newFeatures << i18n("Add Workflow concept to Batch Queue Manager to load/save Queue Settings between sessions;");
-    newFeatures << i18n("Add Crop tool to Batch Queue Manager;");
-    newFeatures << i18n("Add Color Effect tool to Batch Queue Manager;");
-    newFeatures << i18n("Support for the latest camera RAW files using <a href=\"http://www.libraw.org\">LibRaw</a>, "
-                        "including Canon EOS 5D Mark III, EOS 650D, EOS 1D-X, Fujifilm X1-Pro, "
-                        "Nikon D4, D3200, D800, D800E, Olympus E-M5, Samsung NX20, NX210, NX100, NX-1000, "
-                        "Sony NEX-F3, SLT-A37, SLT-A57, DSC-RX100 "
-                        "(see the Help menu for the full list of RAW cameras supported);");
+    newFeatures << i18n("Port to Qt5 and KF5;");
+    // Add new features here...
     newFeatures << i18n("...and much more.");
 
     QString featureItems;
@@ -178,7 +157,7 @@ QString WelcomePageView::infoPage() const
             QString(digikam_version),            // %1 : current digiKam version
             "help:/digikam/index.html",          // %2 : digiKam help:// Url
             DAboutData::webProjectUrl().url(),   // %3 : digiKam homepage Url
-            "2.x",                               // %4 : prior digiKam version
+            "4.x",                               // %4 : prior digiKam version
             featureItems,                        // %5 : prior KDE version
             QString(),                           // %6 : generated list of new features
             QString());                          // %7 : previous digiKam release.
@@ -230,7 +209,7 @@ void WelcomePageView::slotThemeChanged()
     QString locationHtml     = KStandardDirs::locate("data", "digikam/about/main.html");
     QString locationRtl      = KStandardDirs::locate("data", "kdeui/about/kde_infopage_rtl.css" );
     QString rtl              = qApp->isRightToLeft() ? QString("@import \"%1\";" ).arg(locationRtl)
-                               : QString();
+                                                     : QString();
 
 //    begin(QUrl::fromLocalFile(locationHtml));
 
