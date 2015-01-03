@@ -44,7 +44,7 @@
 #include <kcolorvalueselector.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kcursor.h>
+
 #include <kglobal.h>
 #include <khuesaturationselect.h>
 #include <kiconloader.h>

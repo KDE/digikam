@@ -39,7 +39,7 @@
 #include <klocalizedstring.h>
 #include <kconfig.h>
 
-#include <kcursor.h>
+
 #include <kglobal.h>
 
 // Local includes

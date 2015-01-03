@@ -46,7 +46,7 @@
 // KDE includes
 
 #include <kstandarddirs.h>
-#include <kcursor.h>
+
 #include <kglobal.h>
 
 

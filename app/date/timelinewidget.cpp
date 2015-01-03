@@ -34,18 +34,15 @@
 #include <QPen>
 #include <QPixmap>
 #include <QTimer>
+#include <QApplication>
+#include <QDesktopWidget>
 
 // KDE includes
 
 #include <kdeversion.h>
 #include <kcalendarsystem.h>
-#include <kcursor.h>
-#include <kglobal.h>
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
-
-#include <QApplication>
-#include <QDesktopWidget>
 
 // Local includes
 

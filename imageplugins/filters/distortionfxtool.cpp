@@ -41,7 +41,7 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kcursor.h>
+
 #include <kglobal.h>
 #include <khelpmenu.h>
 #include <klocalizedstring.h>

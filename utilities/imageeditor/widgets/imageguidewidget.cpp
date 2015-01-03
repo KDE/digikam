@@ -37,7 +37,7 @@
 // KDE includes
 
 #include <kstandarddirs.h>
-#include <kcursor.h>
+
 #include "digikam_debug.h"
 
 // Local includes

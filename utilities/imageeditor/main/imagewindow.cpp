@@ -54,7 +54,7 @@
 
 #include <kcategorizedview.h>
 #include <kconfig.h>
-#include <kcursor.h>
+
 #include <kdeversion.h>
 #include <kfiledialog.h>
 #include <kglobal.h>

@@ -37,7 +37,7 @@
 #include <ksqueezedtextlabel.h>
 #include <klocalizedstring.h>
 #include <kiconloader.h>
-#include <kcursor.h>
+
 
 // Local includes
 

@@ -31,7 +31,7 @@
 #include <QAction>
 #include <kactioncollection.h>
 
-#include <kcursor.h>
+
 #include <kgenericfactory.h>
 #include <klibloader.h>
 #include <klocalizedstring.h>

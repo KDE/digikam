@@ -36,7 +36,7 @@
 #include <klibloader.h>
 #include <QAction>
 #include <kactioncollection.h>
-#include <kcursor.h>
+
 
 // Local includes
 

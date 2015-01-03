@@ -41,7 +41,7 @@
 
 #include <QAction>
 #include <kactionmenu.h>
-#include <kcursor.h>
+
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kmimetype.h>

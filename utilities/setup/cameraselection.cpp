@@ -41,7 +41,7 @@
 
 // KDE includes
 
-#include <kcursor.h>
+
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>

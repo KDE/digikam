@@ -32,7 +32,7 @@
 
 
 #include <kconfig.h>
-#include <kcursor.h>
+
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
 

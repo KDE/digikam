@@ -42,7 +42,7 @@
 
 // KDE includes
 
-#include <kcursor.h>
+
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 
