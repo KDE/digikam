@@ -6,7 +6,7 @@
  * Date        : 2006-20-12
  * Description : a view to embed Phonon media player.
  *
- * Copyright (C) 2006-2014 Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,6 +37,7 @@
 #include <QAction>
 #include <QVideoWidget>
 #include <QSlider>
+
 // KDE includes
 
 #include <klocalizedstring.h>
@@ -160,11 +161,11 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
 
     // --------------------------------------------------------------------------
 
-    d->playerView = new QFrame(this);
+    d->playerView  = new QFrame(this);
     d->videoWidget = new QVideoWidget(this);
-    d->player = new QMediaPlayer(this,QMediaPlayer::VideoSurface);
+    d->player      = new QMediaPlayer(this,QMediaPlayer::VideoSurface);
     d->player->setVideoOutput(d->videoWidget);                                                                                             
-    d->slider     = new QSlider(Qt::Horizontal,this);
+    d->slider      = new QSlider(Qt::Horizontal,this);
     d->slider->setRange(0, 0);
 
     d->player->setNotifyInterval(100);
@@ -174,8 +175,8 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     d->playerView->setLineWidth(1);
 
     d->grid = new QGridLayout;
-    d->grid->addWidget(d->videoWidget  ,         0, 0, 1, 3);
-    d->grid->addWidget(d->slider,                1, 0, 1, 3);
+    d->grid->addWidget(d->videoWidget, 0, 0, 1, 3);
+    d->grid->addWidget(d->slider,      1, 0, 1, 3);
     d->grid->setColumnStretch(0, 10);
     d->grid->setColumnStretch(2, 10);
     d->grid->setRowStretch(0, 10);
@@ -210,8 +211,10 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
 
     connect(d->nextAction, SIGNAL(triggered()),
             this, SIGNAL(signalNextItem()));
+
     connect(d->player, SIGNAL(positionChanged(qint64)), 
             this, SLOT(positionChanged(qint64)));
+
     connect(d->player, SIGNAL(durationChanged(qint64)), 
             this, SLOT(durationChanged(qint64)));
 }
@@ -311,6 +314,7 @@ void MediaPlayerView::setCurrentItem(const QUrl& url, bool hasPrevious, bool has
     setPreviewMode(Private::PlayerView);
     d->player->play();
 }
+
 void MediaPlayerView::positionChanged(qint64 position)
 {
     d->slider->setValue(position);
