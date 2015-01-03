@@ -37,11 +37,11 @@
 #include <QTimer>
 #include <QToolButton>
 #include <QMenu>
+#include <QAction>
 
 // KDE includes
 
 #include <kconfig.h>
-#include <QAction>
 #include <kselectaction.h>
 #include <kstatusbar.h>
 #include <ksqueezedtextlabel.h>

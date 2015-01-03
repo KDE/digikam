@@ -37,7 +37,7 @@
 #include <kmessagebox.h>
 #include <klocalizedstring.h>
 #include <kguiitem.h>
-
+#include <kprogressdialog.h>
 
 // Local includes
 

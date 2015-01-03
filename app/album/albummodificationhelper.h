@@ -29,10 +29,6 @@
 #include <QObject>
 #include <QWidget>
 
-// KDE includes
-
-#include <kjob.h>
-
 // Local includes
 
 #include "album.h"

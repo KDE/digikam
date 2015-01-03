@@ -30,10 +30,6 @@
 
 #include <QTreeView>
 
-// KDE includes
-
-#include <kconfiggroup.h>
-
 // Local includes
 
 #include "albummanager.h"

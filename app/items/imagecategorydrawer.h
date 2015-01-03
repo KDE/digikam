@@ -43,8 +43,7 @@ class TAlbum;
 class SAlbum;
 class DAlbum;
 
-class ImageCategoryDrawer :
-    public KCategoryDrawer
+class ImageCategoryDrawer : public KCategoryDrawer
 {
 public:
 

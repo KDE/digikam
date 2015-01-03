@@ -30,11 +30,11 @@
 // Qt includes
 
 #include <QDateTime>
+#include <QMenu>
 
 // KDE includes
 
 #include <kdatepicker.h>
-#include <QMenu>
 
 namespace Digikam
 {

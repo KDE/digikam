@@ -32,10 +32,6 @@
 #include <QThread>
 #include <QWaitCondition>
 
-// KDE includes
-
-#include <kprogressdialog.h>
-
 // Local includes
 
 #include "databasecorebackend.h"

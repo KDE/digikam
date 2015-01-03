@@ -72,6 +72,7 @@ extern "C"
 #include <kstandarddirs.h>
 #include <kwindowsystem.h>
 #include <kglobal.h>
+#include <kdialog.h>
 
 #include <kio/global.h>
 #include <kio/job.h>

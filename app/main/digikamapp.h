@@ -33,10 +33,10 @@
 #include <QList>
 #include <QAction>
 #include <QString>
+#include <QUrl>
 
 // KDE includes
 
-#include <QUrl>
 #include <kio/global.h>
 #include <kio/netaccess.h>
 #include <solid/solidnamespace.h>
