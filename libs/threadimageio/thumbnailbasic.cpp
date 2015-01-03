@@ -34,10 +34,10 @@
 #include <QImage>
 #include <QDir>
 #include <QCryptographicHash>
+#include <QUrl>
 
 // KDE includes
 
-#include <QUrl>
 #include <kstandarddirs.h>
 
 // C ANSI includes
@@ -86,14 +86,14 @@ QString ThumbnailCreator::thumbnailPath(const QString& filePath, const QString& 
 
 QString ThumbnailCreator::thumbnailUri(const QString& filePath)
 {
-    return QUrl(filePath).url();
+    return QUrl::fromLocalFile(filePath).url();
 }
 
 QString ThumbnailCreator::thumbnailPathFromUri(const QString& uri, const QString& basePath)
 {
     QCryptographicHash md5(QCryptographicHash::Md5);
     md5.addData( QFile::encodeName(uri).constData() );
-    return basePath + QFile::encodeName( md5.result().toHex() ).constData() + QString(".png");
+    return ( basePath + QFile::encodeName( md5.result().toHex() ).constData() + QString(".png") );
 }
 
 // --- non-static methods ---
