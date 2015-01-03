@@ -81,6 +81,7 @@ uint qHash(const ImageListerRecord& key)
 static inline int toInt32BitSafe(const QList<QVariant>::const_iterator& it)
 {
     qlonglong v = (*it).toLongLong();
+
     if (v > std::numeric_limits<int>::max() || v < 0)
     {
         return -1;
@@ -137,6 +138,8 @@ KIO::TransferJob* ImageLister::startListJob(const DatabaseUrl& url, int extraVal
     QByteArray ba;
     QDataStream ds(&ba, QIODevice::WriteOnly);
     ds << url;
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Query Kioslave Url:" << url;
 
     if (extraValue != -1)
     {
@@ -288,6 +291,7 @@ void ImageLister::listTag(ImageListerReceiver* const receiver, QList<int> tagIds
 {
     QSet<ImageListerRecord> records;
     QList<int>::iterator it;
+
     for(it = tagIds.begin(); it != tagIds.end(); ++it)
     {
         QList<QVariant>         values;
