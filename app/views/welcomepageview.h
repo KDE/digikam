@@ -53,7 +53,6 @@ private:
 
     QByteArray fileToString(const QString& aFileName) const;
     QString    infoPage() const;
-    void       disablePredefinedActions();
 
 private Q_SLOTS:
 

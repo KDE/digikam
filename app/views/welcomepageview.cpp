@@ -33,13 +33,9 @@
 #include <QWidget>
 #include <QApplication>
 #include <QDesktopServices>
-#include <QAction>
-#include <QKeySequence>
-#include <QUrl>
 
 // KDE includes
 
-#include <kactioncollection.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
 
@@ -59,7 +55,6 @@ WelcomePageView::WelcomePageView(QWidget* const parent)
     setFocusPolicy(Qt::WheelFocus);
     page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
     setRenderHint(QPainter::TextAntialiasing);
-//    disablePredefinedActions();
 
     // ------------------------------------------------------------
 
@@ -201,17 +196,15 @@ QByteArray WelcomePageView::fileToString(const QString& aFileName) const
 
 void WelcomePageView::slotThemeChanged()
 {
-    QString infoPageCss      = KStandardDirs::locate("data", "kdeui/about/kde_infopage.css");
+    QString infoPageCss      = KStandardDirs::locate("data", "kf5/infopage/kde_infopage.css");
     QString digikamCss       = KStandardDirs::locate("data", "digikam/about/digikam.css");
     QString fontSize         = QString::number(12);
     QString appTitle         = i18n("digiKam");
     QString slogan           = DAboutData::digiKamSlogan();
     QString locationHtml     = KStandardDirs::locate("data", "digikam/about/main.html");
-    QString locationRtl      = KStandardDirs::locate("data", "kdeui/about/kde_infopage_rtl.css" );
+    QString locationRtl      = KStandardDirs::locate("data", "kf5/infopage/kde_infopage_rtl.css" );
     QString rtl              = qApp->isRightToLeft() ? QString("@import \"%1\";" ).arg(locationRtl)
                                                      : QString();
-
-//    begin(QUrl::fromLocalFile(locationHtml));
 
     QString content = fileToString(locationHtml);
     content         = content.arg(infoPageCss) // %1
@@ -222,60 +215,10 @@ void WelcomePageView::slotThemeChanged()
                       .arg(infoPage())         // %6
                       .arg(digikamCss);        // %7
 
-    //    qCDebug(DIGIKAM_GENERAL_LOG) << content;
+        qCDebug(DIGIKAM_GENERAL_LOG) << content;
 
-    setHtml(content);
- //   end();
+    setHtml(content, QUrl::fromLocalFile(locationHtml));
     show();
 }
-
-/*
-void WelcomePageView::disablePredefinedActions()
-{
-   QAction* const findAction = qobject_cast<QAction*>(actionCollection()->action("find"));
-
-   if (findAction)
-   {
-       findAction->setShortcut(QKeySequence());
-   }
-   else
-   {
-       qCDebug(DIGIKAM_GENERAL_LOG) << "failed to remove the shortcut of khtml's find action";
-   }
-
-   QAction* const findNextAction = qobject_cast<QAction*>(actionCollection()->action("findNext"));
-
-   if (findNextAction)
-   {
-       findNextAction->setShortcut(QKeySequence());
-   }
-   else
-   {
-       qCDebug(DIGIKAM_GENERAL_LOG) << "failed to remove the shortcut of khtml's findNext action";
-   }
-
-   QAction* const findPreviousAction = qobject_cast<QAction*>(actionCollection()->action("findPrevious"));
-
-   if (findPreviousAction)
-   {
-       findPreviousAction->setShortcut(QKeySequence());
-   }
-   else
-   {
-       qCDebug(DIGIKAM_GENERAL_LOG) << "failed to remove the shortcut of khtml's findPrevious action";
-   }
-
-   QAction* const selectAllAction = qobject_cast<QAction*>(actionCollection()->action("selectAll"));
-
-   if (selectAllAction)
-   {
-       selectAllAction->setShortcut(QKeySequence());
-   }
-   else
-   {
-       qCDebug(DIGIKAM_GENERAL_LOG) << "failed to remove the shortcut of khtml's selectAll action";
-   }
-}
-*/
 
 }  // namespace Digikam
