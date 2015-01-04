@@ -72,6 +72,7 @@ extern "C"
 #include <kwindowsystem.h>
 #include <kglobal.h>
 #include <kdialog.h>
+#include <kjobwidgets.h>
 
 #include <kio/global.h>
 #include <kio/job.h>
@@ -2207,7 +2208,10 @@ PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
     url.setPath(url.path() + '/' + name);
     QUrl fileUrl = url.fileUrl();
 
-    if (!KIO::NetAccess::mkdir(fileUrl, qApp->activeWindow()))
+    auto mkdirJob = KIO::mkdir(fileUrl);
+    KJobWidgets::setWindow(mkdirJob, QApplication::activeWindow());
+
+    if (!mkdirJob->exec())
     {
         errMsg = i18n("Failed to create directory.");
         return 0;
