@@ -32,9 +32,11 @@
 // KDE includes
 
 #include <kurl.h>
+#include <kjob.h>
 
 // Local includes
 
+#include "config-digikam.h"
 #include "albuminfo.h"
 
 class QAction;
@@ -389,8 +391,12 @@ private Q_SLOTS:
 
     void slotOpenWith();
     void slotOpenWith(QAction* action);
-    void slotABCContextMenu();
+
+#ifdef HAVE_KDEPIMLIBS
+    void slotABCSearchResult(KJob*);
     void slotABCMenuTriggered(QAction*);
+#endif // HAVE_KDEPIMLIBS
+
     void slotDeselectAllAlbumItems();
     void slotOpenGroups();
     void slotCloseGroups();
