@@ -48,10 +48,10 @@
 #include <QStandardPaths>
 #include <QApplication>
 #include <QDesktopServices>
+#include <QFileDialog>
 
 // KDE includes
 
-#include <kfiledialog.h>
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
@@ -573,9 +573,9 @@ void ResizeTool::processCImgUrl(const QString& url)
 
 void ResizeTool::slotLoadSettings()
 {
-    QUrl loadBlowupFile = KFileDialog::getOpenUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                          QString( "*" ), qApp->activeWindow(),
-                          QString( i18n("Photograph Resizing Settings File to Load")) );
+    QUrl loadBlowupFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Photograph Resizing Settings File to Load"),
+                                                      QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+                                                      QString("*"));
 
     if ( loadBlowupFile.isEmpty() )
     {
@@ -606,9 +606,9 @@ void ResizeTool::slotLoadSettings()
 
 void ResizeTool::slotSaveAsSettings()
 {
-    QUrl saveBlowupFile = KFileDialog::getSaveUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                          QString( "*" ), qApp->activeWindow(),
-                          QString( i18n("Photograph Resizing Settings File to Save")) );
+    QUrl saveBlowupFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Photograph Resizing Settings File to Save"),
+                                                      QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+                                                      QString("*"));
 
     if ( saveBlowupFile.isEmpty() )
     {
