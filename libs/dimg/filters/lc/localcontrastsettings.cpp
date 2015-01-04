@@ -41,12 +41,12 @@
 #include <QStandardPaths>
 #include <QApplication>
 #include <QStyle>
+#include <QUrl>
+#include <QFileDialog>
 
 // KDE includes
 
-#include <QUrl>
 #include <klocalizedstring.h>
-#include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
@@ -657,9 +657,9 @@ void LocalContrastSettings::writeSettings(KConfigGroup& group)
 
 void LocalContrastSettings::loadSettings()
 {
-    QUrl loadFile = KFileDialog::getOpenUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                            QString("*"), qApp->activeWindow(),
-                                            i18n("Photograph Local Contrast Settings File to Load"));
+    QUrl loadFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Photograph Local Contrast Settings File to Load"),
+                                                QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+                                                QString("*"));
 
     if (loadFile.isEmpty())
     {
@@ -711,9 +711,9 @@ void LocalContrastSettings::loadSettings()
 
 void LocalContrastSettings::saveAsSettings()
 {
-    QUrl saveFile = KFileDialog::getSaveUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                            QString("*"), qApp->activeWindow(),
-                                            i18n("Photograph Local Contrast Settings File to Save"));
+    QUrl saveFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Photograph Local Contrast Settings File to Save"),
+                                                QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+                                                QString("*"));
 
     if (saveFile.isEmpty())
     {
