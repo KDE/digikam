@@ -49,10 +49,10 @@
 #include <QApplication>
 #include <QComboBox>
 #include <QDesktopServices>
+#include <QFileDialog>
 
 // KDE includes
 
-#include <kfiledialog.h>
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
@@ -473,9 +473,9 @@ void InPaintingTool::setFinalImage()
 
 void InPaintingTool::slotLoadSettings()
 {
-    QUrl loadInpaintingFile = KFileDialog::getOpenUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                      QString("*"), qApp->activeWindow(),
-                                                      QString(i18n("Photograph In-Painting Settings File to Load")));
+    QUrl loadInpaintingFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Photograph In-Painting Settings File to Load"),
+                                                          QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+                                                          QString("*"));
 
     if (loadInpaintingFile.isEmpty())
     {
@@ -509,9 +509,9 @@ void InPaintingTool::slotLoadSettings()
 
 void InPaintingTool::slotSaveAsSettings()
 {
-    QUrl saveRestorationFile = KFileDialog::getSaveUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                       QString("*"), qApp->activeWindow(),
-                                                       QString(i18n("Photograph In-Painting Settings File to Save")));
+    QUrl saveRestorationFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Photograph In-Painting Settings File to Save"),
+                                                           QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+                                                           QString("*"));
 
     if (saveRestorationFile.isEmpty())
     {
