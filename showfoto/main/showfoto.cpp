@@ -63,6 +63,7 @@ extern "C"
 #include <QKeySequence>
 #include <QApplication>
 #include <QAction>
+#include <QFileDialog>
 
 // KDE includes
 
@@ -70,9 +71,7 @@ extern "C"
 #include <kactionmenu.h>
 #include <kselectaction.h>
 #include <kactioncollection.h>
-#include <kfiledialog.h>
 #include <kglobal.h>
-
 #include <kiconloader.h>
 #include <kimageio.h>
 #include <klocalizedstring.h>
@@ -739,8 +738,8 @@ void ShowFoto::slotOpenFilesInFolder()
         return;
     }
 
-    QUrl url(KFileDialog::getExistingDirectory(QUrl::fromLocalFile(d->lastOpenedDirectory.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path()),
-             this, i18n("Open Images From Folder")));
+    QUrl url = QUrl::fromLocalFile(QFileDialog::getExistingDirectory(this, i18n("Open Images From Folder"),
+                                                                     d->lastOpenedDirectory.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path()));
 
     if (!url.isEmpty())
     {
