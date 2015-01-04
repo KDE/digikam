@@ -1205,7 +1205,7 @@ void EditorWindow::slotSavingProgress(const QString&, float progress)
 
     if (m_savingProgressDialog)
     {
-        m_savingProgressDialog->progressBar()->setValue((int)(progress * 100.0));
+        m_savingProgressDialog->setValue((int)(progress * 100.0));
     }
 }
 
@@ -1216,12 +1216,13 @@ void EditorWindow::execSavingProgressDialog()
         return;
     }
 
-    m_savingProgressDialog = new KProgressDialog(this, i18n("Saving image..."),
-                                                 i18n("Please wait for the image to be saved..."));
+    m_savingProgressDialog = new QProgressDialog(this);
+    m_savingProgressDialog->setWindowTitle(i18n("Saving image..."));
+    m_savingProgressDialog->setLabelText(i18n("Please wait for the image to be saved..."));
     m_savingProgressDialog->setAttribute(Qt::WA_DeleteOnClose);
     m_savingProgressDialog->setAutoClose(true);
     m_savingProgressDialog->setMinimumDuration(1000);
-    m_savingProgressDialog->progressBar()->setMaximum(100);
+    m_savingProgressDialog->setMaximum(100);
     // we must enter a fully modal dialog, no QEventLoop is sufficient for KWin to accept longer waiting times
     m_savingProgressDialog->setModal(true);
     m_savingProgressDialog->exec();
