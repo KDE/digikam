@@ -21,7 +21,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KIntNumInput" name="digits">
+      <widget class="QSpinBox" name="digits">
        <property name="value">
         <number>1</number>
        </property>
@@ -51,7 +51,7 @@
          </widget>
         </item>
         <item>
-         <widget class="KIntNumInput" name="start">
+         <widget class="QSpinBox" name="start">
           <property name="value">
            <number>1</number>
           </property>
@@ -72,7 +72,7 @@
          </widget>
         </item>
         <item>
-         <widget class="KIntNumInput" name="step">
+         <widget class="QSpinBox" name="step">
           <property name="value">
            <number>1</number>
           </property>
@@ -116,11 +116,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KIntNumInput</class>
-   <extends>QWidget</extends>
-   <header>knuminput.h</header>
-  </customwidget>
  </customwidgets>
  <resources/>
  <connections/>

@@ -21,7 +21,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="KIntNumInput" name="startInput" native="true">
+      <widget class="QSpinBox" name="startInput" native="true">
        <property name="minimum" stdset="0">
         <number>1</number>
        </property>
@@ -45,7 +45,7 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="KIntNumInput" name="stopInput" native="true">
+      <widget class="QSpinBox" name="stopInput" native="true">
        <property name="minimum" stdset="0">
         <number>1</number>
        </property>
@@ -69,11 +69,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KIntNumInput</class>
-   <extends>QWidget</extends>
-   <header>knuminput.h</header>
-  </customwidget>
  </customwidgets>
  <resources/>
  <connections/>
