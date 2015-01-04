@@ -37,12 +37,12 @@
 #include <QStyle>
 #include <QComboBox>
 #include <QMessageBox>
+#include <QUrl>
+#include <QFileDialog>
 
 // KDE includes
 
-#include <QUrl>
 #include <klocalizedstring.h>
-#include <kfiledialog.h>
 #include <kglobalsettings.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
@@ -550,9 +550,9 @@ void MixerSettings::loadSettings()
     FILE*          fp = 0L;
     MixerContainer settings;
 
-    loadGainsFileUrl = KFileDialog::getOpenUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                               QString("*"), qApp->activeWindow(),
-                                               QString(i18n("Select Gimp Gains Mixer File to Load")));
+    loadGainsFileUrl = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Select Gimp Gains Mixer File to Load"), 
+                                                   QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+                                                   QString("*"));
 
     if (loadGainsFileUrl.isEmpty())
     {
@@ -658,9 +658,9 @@ void MixerSettings::saveAsSettings()
     QUrl  saveGainsFileUrl;
     FILE* fp = 0L;
 
-    saveGainsFileUrl = KFileDialog::getSaveUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                               QString("*"), qApp->activeWindow(),
-                                               QString(i18n("Gimp Gains Mixer File to Save")));
+    saveGainsFileUrl = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Gimp Gains Mixer File to Save"), 
+                                                   QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+                                                   QString("*"));
 
     if (saveGainsFileUrl.isEmpty())
     {
