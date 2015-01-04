@@ -32,13 +32,13 @@
 #include <QSqlError>
 #include <QThread>
 #include <QWaitCondition>
+#include <QProgressDialog>
 
 // KDE includes
 
 #include <kmessagebox.h>
 #include <klocalizedstring.h>
 #include <kguiitem.h>
-#include <kprogressdialog.h>
 
 // Local includes
 
@@ -150,7 +150,7 @@ public:
         checker = 0;
     }
 
-    QPointer<KProgressDialog>  dialog;
+    QPointer<QProgressDialog>  dialog;
 
     DatabaseParameters         parameters;
     DatabaseConnectionChecker* checker;
@@ -197,12 +197,12 @@ void DatabaseGUIErrorHandler::showProgressDialog()
         return;
     }
 
-    d->dialog = new KProgressDialog;
+    d->dialog = new QProgressDialog;
     d->dialog->setModal(true);
     d->dialog->setAttribute(Qt::WA_DeleteOnClose);
-    d->dialog->showCancelButton(true);
-    d->dialog->progressBar()->setMinimum(0);
-    d->dialog->progressBar()->setMaximum(0);
+    d->dialog->setCancelButton(0);
+    d->dialog->setMinimum(0);
+    d->dialog->setMaximum(0);
     d->dialog->setLabelText(i18n("Error while opening the database.\n"
                                  "digiKam will try to automatically reconnect to the database."));
 
