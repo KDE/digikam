@@ -33,10 +33,10 @@
 #include <QString>
 #include <QFontMetrics>
 #include <QTextBrowser>
+#include <QListWidget>
 
 // KDE includes
 
-#include <klistwidget.h>
 #include <kglobalsettings.h>
 #include <ksqueezedtextlabel.h>
 
@@ -115,12 +115,12 @@ public:
 
 // -------------------------------------------------------------------
 
-class DTextList : public KListWidget
+class DTextList : public QListWidget
 {
 public:
 
     explicit DTextList(const QStringList& list, QWidget* const parent=0)
-        : KListWidget(parent)
+        : QListWidget(parent)
     {
         addItems(list);
         setLinesNumber(6);

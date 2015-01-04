@@ -38,15 +38,15 @@
 #include <QApplication>
 #include <QStyle>
 #include <QLineEdit>
+#include <QUrl>
+#include <QListWidget>
 
 // KDE includes
 
 #include <kiconloader.h>
-#include <klistwidget.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kpagedialog.h>
-#include <QUrl>
 
 // Local includes
 
@@ -73,7 +73,7 @@ public:
     QPushButton* delCategoryButton;
     QPushButton* repCategoryButton;
 
-    KListWidget* albumCategoryBox;
+    QListWidget* albumCategoryBox;
 
     QLineEdit*   categoryEdit;
 };
@@ -92,7 +92,7 @@ SetupCategory::SetupCategory(QWidget* const parent)
     d->categoryEdit     = new QLineEdit(panel);
     d->categoryEdit->setClearButtonEnabled(true);
 
-    d->albumCategoryBox = new KListWidget(panel);
+    d->albumCategoryBox = new QListWidget(panel);
     d->albumCategoryBox->setWhatsThis(i18n("You can add or remove Album "
                                            "category types here to improve how "
                                            "your Albums are sorted in digiKam."));
