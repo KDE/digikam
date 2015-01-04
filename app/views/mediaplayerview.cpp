@@ -41,7 +41,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kglobalsettings.h>
 
 // Local includes
 
@@ -59,8 +58,8 @@ MediaPlayerMouseClickFilter::MediaPlayerMouseClickFilter(QObject* const parent)
 
 bool MediaPlayerMouseClickFilter::eventFilter(QObject* obj, QEvent* event)
 {
-    if ((KGlobalSettings::singleClick()  && event->type() == QEvent::MouseButtonRelease) ||
-        (!KGlobalSettings::singleClick() && event->type() == QEvent::MouseButtonDblClick))
+    if ((qApp->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick)  && event->type() == QEvent::MouseButtonRelease) ||
+        (!qApp->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick) && event->type() == QEvent::MouseButtonDblClick))
     {
         QMouseEvent* const mouseEvent = dynamic_cast<QMouseEvent*>(event);
 

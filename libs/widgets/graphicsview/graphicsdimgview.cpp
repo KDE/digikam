@@ -30,10 +30,10 @@
 #include <QGraphicsScene>
 #include <QScrollBar>
 #include <QToolButton>
+#include <QStyle>
 
 // KDE includes
 
-#include <kglobalsettings.h>
 #include <kpopupframe.h>
 
 // Local includes
@@ -206,7 +206,7 @@ void GraphicsDImgView::mouseDoubleClickEvent(QMouseEvent* e)
     {
         emit leftButtonDoubleClicked();
 
-        if (!KGlobalSettings::singleClick())
+        if (!qApp->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick))
         {
             emit activated();
         }
@@ -234,7 +234,7 @@ void GraphicsDImgView::mousePressEvent(QMouseEvent* e)
     {
         d->mousePressPos = e->pos();
 
-        if (!KGlobalSettings::singleClick() || e->button() == Qt::MidButton)
+        if (!qApp->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick) || e->button() == Qt::MidButton)
         {
             startPanning(e->pos());
         }
@@ -279,7 +279,7 @@ void GraphicsDImgView::mouseReleaseEvent(QMouseEvent* e)
     {
         if (!d->movingInProgress && e->button() == Qt::LeftButton)
         {
-            if (KGlobalSettings::singleClick())
+            if (qApp->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick))
             {
                 emit activated();
             }
