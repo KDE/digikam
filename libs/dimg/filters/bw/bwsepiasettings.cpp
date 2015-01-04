@@ -34,13 +34,13 @@
 #include <QStandardPaths>
 #include <QApplication>
 #include <QStyle>
+#include <QUrl>
 #include <QMessageBox>
+#include <QFileDialog>
 
 // KDE includes
 
-#include <QUrl>
 #include <klocalizedstring.h>
-#include <kfiledialog.h>
 #include <kglobalsettings.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
@@ -542,9 +542,9 @@ void BWSepiaSettings::writeSettings(KConfigGroup& group)
 
 void BWSepiaSettings::loadSettings()
 {
-    QUrl loadFile = KFileDialog::getOpenUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                            QString("*"), qApp->activeWindow(),
-                                            i18n("Black & White Settings File to Load"));
+    QUrl loadFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Black & White Settings File to Load"),
+                                                QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+                                                QString("*"));
 
     if (loadFile.isEmpty())
     {
@@ -613,9 +613,9 @@ void BWSepiaSettings::loadSettings()
 
 void BWSepiaSettings::saveAsSettings()
 {
-    QUrl saveFile = KFileDialog::getSaveUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                            QString("*"), qApp->activeWindow(),
-                                            i18n("Black & White Settings File to Save"));
+    QUrl saveFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Black & White Settings File to Save"), 
+                                                QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+                                                QString("*"));
 
     if (saveFile.isEmpty())
     {
