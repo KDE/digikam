@@ -28,10 +28,7 @@
 
 #include <QThread>
 #include <QString>
-
-// KDE includes
-
-#include <kprogressdialog.h>
+#include <QProgressDialog>
 
 // Local includes
 
@@ -61,7 +58,7 @@ protected:
 
 // ----------------------------------------------------------------------------------
 
-class DIGIKAM_EXPORT DBusyDlg : public KProgressDialog
+class DIGIKAM_EXPORT DBusyDlg : public QProgressDialog
 {
     Q_OBJECT
 

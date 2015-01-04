@@ -60,17 +60,18 @@ public:
 };
 
 DBusyDlg::DBusyDlg(const QString& txt, QWidget* const parent)
-    : KProgressDialog(parent, QString(), txt, Qt::FramelessWindowHint),
+    : QProgressDialog(parent, Qt::FramelessWindowHint),
       d(new Private)
 {
-    setAllowCancel(false);
+    setLabelText(txt);
+    setCancelButton(0);
     setMinimumDuration(0);
     setModal(true);
     setAutoClose(false);
 
-    progressBar()->setMaximum(0);
-    progressBar()->setMinimum(0);
-    progressBar()->setValue(0);
+    setMaximum(0);
+    setMinimum(0);
+    setValue(0);
 }
 
 DBusyDlg::~DBusyDlg()
