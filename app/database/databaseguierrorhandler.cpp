@@ -173,9 +173,11 @@ bool DatabaseGUIErrorHandler::checkDatabaseConnection()
     d->checker = new DatabaseConnectionChecker(d->parameters);
     QEventLoop loop;
 
-    connect(d->checker, &DatabaseConnectionChecker::failedAttempt, this, &DatabaseGUIErrorHandler::showProgressDialog);
+    connect(d->checker, &DatabaseConnectionChecker::failedAttempt,
+            this, &DatabaseGUIErrorHandler::showProgressDialog);
 
-    connect(d->checker, &DatabaseConnectionChecker::done, &loop, &QEventLoop::quit);
+    connect(d->checker, &DatabaseConnectionChecker::done,
+            &loop, &QEventLoop::quit);
 
     d->checker->start();
     loop.exec();
@@ -200,7 +202,6 @@ void DatabaseGUIErrorHandler::showProgressDialog()
     d->dialog = new QProgressDialog;
     d->dialog->setModal(true);
     d->dialog->setAttribute(Qt::WA_DeleteOnClose);
-    d->dialog->setCancelButton(0);
     d->dialog->setMinimum(0);
     d->dialog->setMaximum(0);
     d->dialog->setLabelText(i18n("Error while opening the database.\n"
