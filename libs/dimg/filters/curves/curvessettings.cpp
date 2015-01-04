@@ -40,12 +40,12 @@
 #include <QStandardPaths>
 #include <QApplication>
 #include <QStyle>
+#include <QFileDialog>
+#include <QUrl>
 
 // KDE includes
 
-#include <QUrl>
 #include <klocalizedstring.h>
-#include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
@@ -252,9 +252,9 @@ void CurvesSettings::loadSettings()
 {
     QUrl loadCurvesFile;
 
-    loadCurvesFile = KFileDialog::getOpenUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                             QString("*"), qApp->activeWindow(),
-                                             QString(i18n("Select Gimp Curves File to Load")));
+    loadCurvesFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Select Gimp Curves File to Load"),
+                                                 QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+                                                 QString("*"));
 
     if (loadCurvesFile.isEmpty())
     {
@@ -273,9 +273,9 @@ void CurvesSettings::saveAsSettings()
 {
     QUrl saveCurvesFile;
 
-    saveCurvesFile = KFileDialog::getSaveUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                             QString("*"), qApp->activeWindow(),
-                                             QString(i18n("Gimp Curves File to Save")));
+    saveCurvesFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Gimp Curves File to Save"),
+                                                 QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+                                                 QString("*"));
 
     if (saveCurvesFile.isEmpty())
     {
