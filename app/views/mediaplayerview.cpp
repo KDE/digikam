@@ -46,6 +46,7 @@
 
 #include "stackedview.h"
 #include "thememanager.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -214,6 +215,8 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
             this, SLOT(positionChanged(qint64)));
     connect(d->player, SIGNAL(durationChanged(qint64)), 
             this, SLOT(durationChanged(qint64)));
+    connect(d->player, SIGNAL(error(QMediaPlayer::Error)), 
+            this, SLOT(handlePlaterError()));
 }
 
 MediaPlayerView::~MediaPlayerView()
@@ -324,6 +327,11 @@ void MediaPlayerView::durationChanged(qint64 duration)
 void MediaPlayerView::setPosition(int position)
 {
     d->player->setPosition(position);
+}
+
+void MediaPlayerView::handlePlayerError()
+{
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Error: "<<d->player->errorString();
 }
 
 }  // namespace Digikam
