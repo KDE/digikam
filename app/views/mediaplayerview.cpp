@@ -165,8 +165,8 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     d->playerView  = new QFrame(this);
     d->videoWidget = new QVideoWidget(this);
     d->player      = new QMediaPlayer(this,QMediaPlayer::VideoSurface);
-    d->player->setVideoOutput(d->videoWidget);                                                                                             
-    d->slider      = new QSlider(Qt::Horizontal,this);
+    d->player->setVideoOutput(d->videoWidget);
+    d->slider      = new QSlider(Qt::Horizontal, this);
     d->slider->setRange(0, 0);
 
     d->player->setNotifyInterval(100);
@@ -213,12 +213,13 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     connect(d->nextAction, SIGNAL(triggered()),
             this, SIGNAL(signalNextItem()));
 
-    connect(d->player, SIGNAL(positionChanged(qint64)), 
+    connect(d->player, SIGNAL(positionChanged(qint64)),
             this, SLOT(positionChanged(qint64)));
 
-    connect(d->player, SIGNAL(durationChanged(qint64)), 
+    connect(d->player, SIGNAL(durationChanged(qint64)),
             this, SLOT(durationChanged(qint64)));
-    connect(d->player, SIGNAL(error(QMediaPlayer::Error)), 
+
+    connect(d->player, SIGNAL(error(QMediaPlayer::Error)),
             this, SLOT(handlePlayerError()));
 }
 
@@ -252,8 +253,10 @@ void MediaPlayerView::slotPlayerStateChanged(QMediaPlayer::State newState)
     {
         setPreviewMode(Private::ErrorView);
     }
-    if ( newState == QMediaPlayer::StoppedState && 
-        d->player->mediaStatus() == QMediaPlayer::EndOfMedia ){
+
+    if (newState                 == QMediaPlayer::StoppedState &&
+        d->player->mediaStatus() == QMediaPlayer::EndOfMedia)
+    {
         emit signalFinished();
     }
 }
@@ -309,7 +312,7 @@ void MediaPlayerView::setCurrentItem(const QUrl& url, bool hasPrevious, bool has
     }
 
     if (d->currentItem == url &&
-        (d->player->state() == QMediaPlayer::PlayingState || 
+        (d->player->state() == QMediaPlayer::PlayingState ||
          d->player->state() == QMediaPlayer::PausedState))
     {
         return;
@@ -339,7 +342,7 @@ void MediaPlayerView::setPosition(int position)
 
 void MediaPlayerView::handlePlayerError()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Error: "<<d->player->errorString();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Error: " << d->player->errorString();
 }
 
 }  // namespace Digikam
