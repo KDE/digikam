@@ -32,15 +32,15 @@
 #include <QTextStream>
 #include <QCheckBox>
 #include <QStackedWidget>
+#include <QFileDialog>
+#include <QUrl>
+#include <QStandardPaths>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
-#include "digikam_debug.h"
-#include <QUrl>
-
 #include <klocalizedstring.h>
-
-#include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
@@ -52,12 +52,10 @@
 #include <rcombobox.h>
 #include <rnuminput.h>
 #include <rexpanderbox.h>
-#include <QStandardPaths>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "config-digikam.h"
 
 #ifdef HAVE_EIGEN3
@@ -486,9 +484,9 @@ void SharpSettings::writeSettings(KConfigGroup& group)
 
 void SharpSettings::loadSettings()
 {
-    QUrl loadRestorationFile = KFileDialog::getOpenUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                       QString("*"), qApp->activeWindow(),
-                                                       QString(i18n("Photograph Refocus Settings File to Load")));
+    QUrl loadRestorationFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Photograph Refocus Settings File to Load"),
+                                                           QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+                                                           QString("*"));
 
     if (loadRestorationFile.isEmpty())
     {
@@ -530,9 +528,9 @@ void SharpSettings::loadSettings()
 
 void SharpSettings::saveAsSettings()
 {
-    QUrl saveRestorationFile = KFileDialog::getSaveUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                       QString("*"), qApp->activeWindow(),
-                                                       QString(i18n("Photograph Refocus Settings File to Save")));
+    QUrl saveRestorationFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Photograph Refocus Settings File to Save"),
+                                                           QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+                                                           QString("*"));
 
     if (saveRestorationFile.isEmpty())
     {
