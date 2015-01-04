@@ -44,10 +44,7 @@
 
 // KDE includes
 
-
 #include <kconfig.h>
-
-#include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>

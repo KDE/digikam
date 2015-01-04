@@ -31,15 +31,13 @@
 #include <QString>
 #include <QFile>
 #include <QTextStream>
+#include <QUrl>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
-#include "digikam_debug.h"
-#include <QUrl>
-
 #include <klocalizedstring.h>
-
-#include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
@@ -49,8 +47,10 @@
 
 #include <rnuminput.h>
 #include <rexpanderbox.h>
-#include <QApplication>
-#include <QStyle>
+
+// Local includes
+
+#include "digikam_debug.h"
 
 using namespace KDcrawIface;
 

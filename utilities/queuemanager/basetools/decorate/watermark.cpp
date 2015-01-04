@@ -48,7 +48,6 @@
 #include <kcolorbutton.h>
 #include <kurlrequester.h>
 #include <klocalizedstring.h>
-#include <kfiledialog.h>
 
 // Libkdcraw includes
 

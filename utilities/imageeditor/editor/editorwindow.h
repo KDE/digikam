@@ -371,15 +371,15 @@ private:
     void setupTempSaveFile(const QUrl& url);
 
     /**
-     * Returns a list of filters that can be passed to a KFileDialog for all
+     * Returns a list of filters that can be passed to a QFileDialog for all
      * writable image types.
      *
-     * @return list of filters for KFileDialog
+     * @return list of filters for QFileDialog
      */
     QStringList getWritingFilters();
 
     /**
-     * Find the KFileDialog filter that belongs to an extension.
+     * Find the QFileDialog filter that belongs to an extension.
      *
      * @param allFilters list with all filters
      * @param extension the extension to search for
@@ -389,7 +389,7 @@ private:
                                   const QString& extension);
 
     /**
-     * Tries to extract a file extension from a KFileDialog filter.
+     * Tries to extract a file extension from a QFileDialog filter.
      *
      * @param filter to extract the file extension from
      * @return file extension found in the filter or an empty string if no

@@ -37,7 +37,6 @@
 // KDE includes
 
 #include <ksharedconfig.h>
-#include <kfiledialog.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
 

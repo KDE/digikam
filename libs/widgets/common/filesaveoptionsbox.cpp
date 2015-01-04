@@ -31,24 +31,22 @@
 #include <QImageReader>
 #include <QLabel>
 #include <QWidget>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
-
 #include <kconfig.h>
-#include "digikam_debug.h"
-
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kimageio.h>
 #include <klocalizedstring.h>
 #include <knuminput.h>
 #include <kurlcombobox.h>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "config-digikam.h"
 #include "jpegsettings.h"
 #include "pngsettings.h"

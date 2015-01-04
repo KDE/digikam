@@ -39,7 +39,6 @@
 
 #include <kaboutdata.h>
 #include <kconfig.h>
-#include <kfiledialog.h>
 #include <kglobal.h>
 #include <kimageio.h>
 #include <klocalizedstring.h>

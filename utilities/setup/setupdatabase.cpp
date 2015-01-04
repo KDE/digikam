@@ -44,14 +44,13 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QApplication>
+#include <QUrl>
 
 // KDE includes
 
 #include <klocalizedstring.h>
 #include <klineedit.h>
 #include <kpagedialog.h>
-#include <kfiledialog.h>
-#include <QUrl>
 #include <kmessagebox.h>
 #include <kurlrequester.h>
 #include <ktemporaryfile.h>

@@ -45,18 +45,15 @@
 #include <QProgressBar>
 #include <QSplitter>
 #include <QTimer>
+#include <QAction>
 
 // KDE includes
 
-#include <QAction>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
-
 #include <kcategorizedview.h>
 #include <kconfig.h>
-
 #include <kdeversion.h>
-#include <kfiledialog.h>
 #include <kglobal.h>
 #include <kimageio.h>
 #include <kio/job.h>
