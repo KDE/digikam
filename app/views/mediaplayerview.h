@@ -74,6 +74,7 @@ Q_SIGNALS:
     void signalNextItem();
     void signalPrevItem();
     void signalEscapePreview();
+    void signalFinished();
 
 public Q_SLOTS:
 

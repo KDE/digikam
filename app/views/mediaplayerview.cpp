@@ -198,7 +198,7 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
 
     // --------------------------------------------------------------------------
 
-    connect(d->player, SIGNAL(finished()),
+    connect(this, SIGNAL(signalFinished()),
             this, SLOT(slotPlayerFinished()));
 
     connect(d->player, SIGNAL(stateChanged(QMediaPlayer::State)),
@@ -219,7 +219,7 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     connect(d->player, SIGNAL(durationChanged(qint64)), 
             this, SLOT(durationChanged(qint64)));
     connect(d->player, SIGNAL(error(QMediaPlayer::Error)), 
-            this, SLOT(handlePlaterError()));
+            this, SLOT(handlePlayerError()));
 }
 
 MediaPlayerView::~MediaPlayerView()
@@ -251,6 +251,10 @@ void MediaPlayerView::slotPlayerStateChanged(QMediaPlayer::State newState)
     if (newState < 0 || newState > 2)
     {
         setPreviewMode(Private::ErrorView);
+    }
+    if ( newState == QMediaPlayer::StoppedState && 
+        d->player->mediaStatus() == QMediaPlayer::EndOfMedia ){
+        emit signalFinished();
     }
 }
 
