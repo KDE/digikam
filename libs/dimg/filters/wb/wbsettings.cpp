@@ -40,12 +40,12 @@
 #include <QStandardPaths>
 #include <QApplication>
 #include <QStyle>
+#include <QUrl>
+#include <QFileDialog>
 
 // KDE includes
 
-#include <QUrl>
 #include <klocalizedstring.h>
-#include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
@@ -531,9 +531,9 @@ void WBSettings::writeSettings(KConfigGroup& group)
 
 void WBSettings::loadSettings()
 {
-    QUrl loadWhiteBalanceFile = KFileDialog::getOpenUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                        QString("*"), qApp->activeWindow(),
-                                                        QString(i18n("White Color Balance Settings File to Load")));
+    QUrl loadWhiteBalanceFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("White Color Balance Settings File to Load"),
+                                                            QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+                                                            QString("*"));
 
     if (loadWhiteBalanceFile.isEmpty())
     {
@@ -578,9 +578,9 @@ void WBSettings::loadSettings()
 
 void WBSettings::saveAsSettings()
 {
-    QUrl saveWhiteBalanceFile = KFileDialog::getSaveUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                        QString("*"), qApp->activeWindow(),
-                                                        QString(i18n("White Color Balance Settings File to Save")));
+    QUrl saveWhiteBalanceFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("White Color Balance Settings File to Save"),
+                                                            QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+                                                            QString("*"));
 
     if (saveWhiteBalanceFile.isEmpty())
     {
