@@ -43,7 +43,7 @@
 #include <kglobal.h>
 #include <klocalizedstring.h>
 #include <kmultitabbar.h>
-#include <knuminput.h>
+
 
 // Libkdcraw includes
 

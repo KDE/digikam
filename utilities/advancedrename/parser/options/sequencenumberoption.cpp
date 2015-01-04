@@ -33,7 +33,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <knuminput.h>
+
 
 // Local includes
 

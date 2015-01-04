@@ -38,7 +38,7 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <knuminput.h>
+
 #include <kstandarddirs.h>
 
 // Libkdcraw includes

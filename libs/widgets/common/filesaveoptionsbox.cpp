@@ -41,7 +41,7 @@
 #include <kglobal.h>
 #include <kimageio.h>
 #include <klocalizedstring.h>
-#include <knuminput.h>
+
 #include <kurlcombobox.h>
 
 // Local includes

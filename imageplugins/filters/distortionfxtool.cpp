@@ -45,7 +45,7 @@
 #include <kglobal.h>
 #include <khelpmenu.h>
 #include <klocalizedstring.h>
-#include <knuminput.h>
+
 #include <kstandarddirs.h>
 
 // Libkdcraw includes

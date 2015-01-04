@@ -39,7 +39,7 @@
 #include <kconfiggroup.h>
 #include <kglobal.h>
 #include <klocalizedstring.h>
-#include <knuminput.h>
+
 #include <kstandarddirs.h>
 
 // Libkdcraw includes

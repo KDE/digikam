@@ -36,7 +36,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <knuminput.h>
+
 #include <kglobal.h>
 
 // Libkdcraw includes
