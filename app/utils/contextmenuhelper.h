@@ -28,13 +28,15 @@
 // Qt includes
 
 #include <QList>
+#include <QUrl>
 
 // KDE includes
 
-#include <QUrl>
+#include <kjob.h>
 
 // Local includes
 
+#include "config-digikam.h"
 #include "albuminfo.h"
 
 class QAction;
@@ -388,8 +390,6 @@ private Q_SLOTS:
 
     void slotOpenWith();
     void slotOpenWith(QAction* action);
-    void slotABCContextMenu();
-    void slotABCMenuTriggered(QAction*);
     void slotDeselectAllAlbumItems();
     void slotOpenGroups();
     void slotCloseGroups();
@@ -400,13 +400,19 @@ private Q_SLOTS:
     void slotSelectParents();
     void slotDeselectParents();
 
+#ifdef HAVE_KDEPIMLIBS
+    void slotABCSearchResult(KJob*);
+    void slotABCMenuTriggered(QAction*);
+#endif // HAVE_KDEPIMLIBS
+
 private:
 
+    void setGroupsOpen(bool open);
     void setSelectedIds(const imageIds& ids);
     void setSelectedItems(const QList<QUrl>& urls);
+
     bool imageIdsHaveSameCategory(const imageIds& ids, DatabaseItem::Category category);
     QList<QAction*> groupMenuActions(const imageIds& ids);
-    void setGroupsOpen(bool open);
 
 private:
 

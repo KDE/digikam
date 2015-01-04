@@ -23,7 +23,6 @@
  * ============================================================ */
 
 #include "contextmenuhelper.h"
-#include "config-digikam.h"
 
 // Qt includes
 
@@ -37,11 +36,11 @@
 #include <QTimer>
 #include <QMenu>
 #include <QApplication>
+#include <QAction>
 
 // KDE includes
 
 #include <kiconloader.h>
-#include <QAction>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kfileitem.h>
@@ -534,63 +533,70 @@ void ContextMenuHelper::addCreateTagFromAddressbookMenu()
 
     d->ABCmenu = new QMenu(d->parent);
 
-
-    connect(d->ABCmenu, SIGNAL(aboutToShow()),
-            this, SLOT(slotABCContextMenu()));
-
     QAction* const abcAction = d->ABCmenu->menuAction();
     abcAction->setIcon(SmallIcon("tag-addressbook"));
     abcAction->setText(i18n("Create Tag From Address Book"));
     d->parent->addMenu(d->ABCmenu);
 
-    connect(d->ABCmenu, SIGNAL(triggered(QAction*)),
-            this, SLOT(slotABCMenuTriggered(QAction*)));
+QAction* const nothingFound = d->ABCmenu->addAction(i18n("No address book entries found"));
+    nothingFound->setEnabled(false);
+
+    Akonadi::ContactSearchJob* const job = new Akonadi::ContactSearchJob();
+    job->setQuery(Akonadi::ContactSearchJob::ContactUid, "");
+
+    connect(job, SIGNAL(result(KJob*)),
+            this, SLOT(slotABCSearchResult(KJob*)));
 
 #endif // HAVE_KDEPIMLIBS
 }
 
-void ContextMenuHelper::slotABCContextMenu()
-{
 #ifdef HAVE_KDEPIMLIBS
 
-    d->ABCmenu->clear();
-
-    Akonadi::ContactSearchJob* const job = new Akonadi::ContactSearchJob();
-
-    if (!job->exec())
+void ContextMenuHelper::slotABCSearchResult(KJob* job)
+{
+    if (job->error())
+    {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Akonadi search was not succesfull";
+        return;
+    }
+
+    Akonadi::ContactSearchJob *searchJob = qobject_cast<Akonadi::ContactSearchJob*>(job);
+    const KABC::Addressee::List contacts = searchJob->contacts();
+
+    if (contacts.isEmpty())
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "No contacts in Akonadi";
+        return;
+    }
 
     QStringList names;
 
-    const KABC::Addressee::List contacts = job->contacts();
-
-    if (contacts.isEmpty())
-        qCDebug(DIGIKAM_GENERAL_LOG) << "No contacts in Akonadi";
-
-    Q_FOREACH(KABC::Addressee addr, contacts)
+    foreach(const KABC::Addressee& addr, contacts)
     {
-        names.push_back(addr.name());
-    }
-
-    qSort(names);
-
-    for (QStringList::ConstIterator it = names.constBegin(); it != names.constEnd(); ++it)
-    {
-        QString name = *it;
-
-        if (!name.isNull() )
+        if (!addr.realName().isNull())
         {
-            d->ABCmenu->addAction(name);
+            names.append(addr.realName());
         }
     }
 
-    if (d->ABCmenu->isEmpty())
+    names.removeDuplicates();
+    names.sort();
+
+    if (names.isEmpty())
     {
-        QAction* const nothingFound = d->ABCmenu->addAction(i18n("No address book entries found"));
-        nothingFound->setEnabled(false);
+        qCDebug(DIGIKAM_GENERAL_LOG) << "No names in the address book";
+        return;
     }
 
-#endif // HAVE_KDEPIMLIBS
+    d->ABCmenu->clear();
+
+    foreach (const QString& name, names)
+    {
+        d->ABCmenu->addAction(name);
+    }
+
+    connect(d->ABCmenu, SIGNAL(triggered(QAction*)),
+            this, SLOT(slotABCMenuTriggered(QAction*)));
 }
 
 void ContextMenuHelper::slotABCMenuTriggered(QAction* action)
@@ -598,6 +604,8 @@ void ContextMenuHelper::slotABCMenuTriggered(QAction* action)
     QString name = action->iconText();
     emit signalAddNewTagFromABCMenu(name);
 }
+
+#endif // HAVE_KDEPIMLIBS
 
 void ContextMenuHelper::slotDeselectAllAlbumItems()
 {
