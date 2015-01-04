@@ -41,12 +41,11 @@
 #include <QToolButton>
 #include <QIcon>
 #include <QStandardPaths>
+#include <QFileDialog>
 
 // KDE includes
 
 #include <kconfig.h>
-
-#include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
@@ -898,9 +897,9 @@ void AdjustLevelsTool::slotLoadSettings()
 {
     QUrl loadLevelsFile;
 
-    loadLevelsFile = KFileDialog::getOpenUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                     QString( "*" ), qApp->activeWindow(),
-                     QString( i18n("Select Gimp Levels File to Load")) );
+    loadLevelsFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Select Gimp Levels File to Load"),
+                                                 QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+                                                 QString("*"));
 
     if ( loadLevelsFile.isEmpty() )
     {
@@ -924,9 +923,9 @@ void AdjustLevelsTool::slotSaveAsSettings()
 {
     QUrl saveLevelsFile;
 
-    saveLevelsFile = KFileDialog::getSaveUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                     QString( "*" ), qApp->activeWindow(),
-                     QString( i18n("Gimp Levels File to Save")) );
+    saveLevelsFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Gimp Levels File to Save"),
+                                                 QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+                                                 QString("*"));
 
     if ( saveLevelsFile.isEmpty() )
     {
