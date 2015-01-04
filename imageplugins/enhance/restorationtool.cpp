@@ -36,10 +36,10 @@
 #include <QApplication>
 #include <QComboBox>
 #include <QDesktopServices>
+#include <QFileDialog>
 
 // KDE includes
 
-#include <kfiledialog.h>
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
@@ -360,9 +360,9 @@ void RestorationTool::setFinalImage()
 
 void RestorationTool::slotLoadSettings()
 {
-    QUrl loadRestorationFile = KFileDialog::getOpenUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                               QString( "*" ), qApp->activeWindow(),
-                               QString( i18n("Photograph Restoration Settings File to Load")) );
+    QUrl loadRestorationFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Photograph Restoration Settings File to Load"), 
+                                                           QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+                                                           QString("*"));
 
     if ( loadRestorationFile.isEmpty() )
     {
@@ -398,9 +398,9 @@ void RestorationTool::slotLoadSettings()
 
 void RestorationTool::slotSaveAsSettings()
 {
-    QUrl saveRestorationFile = KFileDialog::getSaveUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                               QString( "*" ), qApp->activeWindow(),
-                               QString( i18n("Photograph Restoration Settings File to Save")) );
+    QUrl saveRestorationFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Photograph Restoration Settings File to Save"),
+                                                           QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+                                                           QString("*"));
 
     if ( saveRestorationFile.isEmpty() )
     {
