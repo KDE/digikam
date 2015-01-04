@@ -207,7 +207,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
 
     d->titleEdit    = new AltLangStrEdit(captionTagsArea);
     d->titleEdit->setTitle(i18n("Title:"));
-    d->titleEdit->setClickMessage(i18n("Enter title here."));
+    d->titleEdit->setPlaceholderText(i18n("Enter title here."));
 
     d->captionsEdit = new CaptionEdit(captionTagsArea);
 
@@ -295,7 +295,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     d->newTagEdit->setTagTreeView(d->tagCheckView);
     //, "ImageDescEditTabNewTagEdit",
     //d->newTagEdit->setCaseSensitive(false);
-    d->newTagEdit->setClickMessage(i18n("Enter tag here."));
+    d->newTagEdit->setPlaceholderText(i18n("Enter tag here."));
     d->newTagEdit->setWhatsThis(i18n("Enter the text used to create tags here. "
                                      "'/' can be used to create a hierarchy of tags. "
                                      "',' can be used to create more than one hierarchy at the same time."));

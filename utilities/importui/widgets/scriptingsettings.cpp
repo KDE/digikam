@@ -89,7 +89,7 @@ ScriptingSettings::ScriptingSettings(QWidget* const parent)
     d->script              = new KUrlRequester(hbox);
     KFile::Modes mode      = KFile::File | KFile::ExistingOnly | KFile::LocalOnly;
     d->script->setMode(mode);
-    d->script->setClickMessage(i18n("No script selected"));
+    d->script->setPlaceholderText(i18n("No script selected"));
     d->tooltipToggleButton = new QToolButton(hbox);
     d->tooltipToggleButton->setIcon(SmallIcon("dialog-information"));
     d->tooltipToggleButton->setToolTip(i18n("Show a list of all available options"));

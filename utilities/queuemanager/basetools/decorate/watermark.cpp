@@ -176,7 +176,7 @@ void WaterMark::registerSettingsWidget()
 
     QLabel* const label = new QLabel();
     d->imageFileUrlRequester = new KUrlRequester();
-    d->imageFileUrlRequester->setClickMessage(i18n("Click to select watermark image."));
+    d->imageFileUrlRequester->setPlaceholderText(i18n("Click to select watermark image."));
     label->setText(i18n("Watermark image:"));
     imageSettingsGroupBoxLayout->addWidget(label);
     imageSettingsGroupBoxLayout->addWidget(d->imageFileUrlRequester);

@@ -62,7 +62,7 @@ QWidget* TagsLineEditOverlay::createWidget()
 {
     //const bool animate = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
     AddTagsLineEdit* const lineEdit = new AddTagsLineEdit(parentWidget());
-    lineEdit->setClickMessage("Name");
+    lineEdit->setPlaceholderText("Name");
     lineEdit->setReadOnly(false);
 
     TagModel* const model           = new TagModel(AbstractAlbumModel::IncludeRootAlbum, this);

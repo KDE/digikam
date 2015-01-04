@@ -129,9 +129,9 @@ void AddTagsComboBox::setCurrentTag(TAlbum* album)
     slotViewIndexActivated(view()->currentIndex());
 }
 
-void AddTagsComboBox::setClickMessage(const QString& message)
+void AddTagsComboBox::setPlaceholderText(const QString& message)
 {
-    d->lineEdit->setClickMessage(message);
+    d->lineEdit->setPlaceholderText(message);
 }
 
 QString AddTagsComboBox::text() const

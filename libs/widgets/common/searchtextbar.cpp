@@ -94,7 +94,7 @@ SearchTextBar::SearchTextBar(QWidget* const parent, const char* const name, cons
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setClearButtonShown(true);
-    setClickMessage(msg);
+    setPlaceholderText(msg);
     setObjectName(name + QString(" Search Text Tool"));
 
     d->completion = new ModelCompletion;

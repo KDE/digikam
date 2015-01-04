@@ -145,7 +145,7 @@ DateOptionDialog::DateOptionDialog(Rule* parent)
     QRegExp validRegExp("[^/]+");
     QValidator* validator = new QRegExpValidator(validRegExp, this);
     ui->customFormatInput->setValidator(validator);
-    ui->customFormatInput->setClickMessage(i18n("Enter custom format"));
+    ui->customFormatInput->setPlaceholderText(i18n("Enter custom format"));
 
     // --------------------------------------------------------
 

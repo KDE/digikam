@@ -71,7 +71,7 @@ public:
      */
     void setTagTreeView(TagTreeView* treeView);
 
-    void setClickMessage(const QString& message);
+    void setPlaceholderText(const QString& message);
 
     QString text() const;
     void setText(const QString& text);
