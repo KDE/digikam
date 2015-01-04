@@ -23,10 +23,13 @@
 
 #include "tooltipdialog.h"
 
+// Qt includes
+
+#include <QTextBrowser>
+
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <ktextbrowser.h>
 
 // Local includes
 
@@ -43,13 +46,13 @@ public:
         textBrowser(0)
     {}
 
-    KTextBrowser* textBrowser;
+    QTextBrowser* textBrowser;
 };
 
-TooltipDialog::TooltipDialog(QWidget* parent)
+TooltipDialog::TooltipDialog(QWidget* const parent)
     : KDialog(parent), d(new Private)
 {
-    d->textBrowser = new KTextBrowser(this);
+    d->textBrowser = new QTextBrowser(this);
     d->textBrowser->setFrameStyle(QFrame::NoFrame);
     d->textBrowser->setOpenLinks(true);
     d->textBrowser->setOpenExternalLinks(true);
