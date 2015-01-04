@@ -32,11 +32,11 @@
 #include <QColor>
 #include <QString>
 #include <QFontMetrics>
+#include <QTextBrowser>
 
 // KDE includes
 
 #include <klistwidget.h>
-#include <ktextbrowser.h>
 #include <kglobalsettings.h>
 #include <ksqueezedtextlabel.h>
 
@@ -85,12 +85,12 @@ public:
 
 // -------------------------------------------------------------------
 
-class DTextBrowser : public KTextBrowser
+class DTextBrowser : public QTextBrowser
 {
 public:
 
     explicit DTextBrowser(const QString& text, QWidget* const parent=0)
-        : KTextBrowser(parent)
+        : QTextBrowser(parent)
     {
         setOpenExternalLinks(false);
         setOpenLinks(false);
