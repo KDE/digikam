@@ -31,15 +31,15 @@
 #include <QFile>
 #include <QTextStream>
 #include <QCheckBox>
+#include <QUrl>
+#include <QStandardPaths>
+#include <QApplication>
+#include <QStyle>
+#include <QFileDialog>
 
 // KDE includes
 
-#include "digikam_debug.h"
-#include <QUrl>
-
 #include <klocalizedstring.h>
-
-#include <kfiledialog.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
@@ -49,9 +49,10 @@
 
 #include <rnuminput.h>
 #include <rexpanderbox.h>
-#include <QStandardPaths>
-#include <QApplication>
-#include <QStyle>
+
+// Local includes
+
+#include "digikam_debug.h"
 
 using namespace KDcrawIface;
 
@@ -375,9 +376,9 @@ void NRSettings::writeSettings(KConfigGroup& group)
 
 void NRSettings::loadSettings()
 {
-    QUrl loadRestorationFile = KFileDialog::getOpenUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                       QString("*"), qApp->activeWindow(),
-                                                       QString(i18n("Photograph Noise Reduction Settings File to Load")));
+    QUrl loadRestorationFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Photograph Noise Reduction Settings File to Load"),
+                                                           QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+                                                           QString("*"));
 
     if (loadRestorationFile.isEmpty())
     {
@@ -420,9 +421,9 @@ void NRSettings::loadSettings()
 
 void NRSettings::saveAsSettings()
 {
-    QUrl saveRestorationFile = KFileDialog::getSaveUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
-                                                       QString("*"), qApp->activeWindow(),
-                                                       QString(i18n("Photograph Noise Reduction Settings File to Save")));
+    QUrl saveRestorationFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Photograph Noise Reduction Settings File to Save"),
+                                                           QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+                                                           QString("*"));
 
     if (saveRestorationFile.isEmpty())
     {
