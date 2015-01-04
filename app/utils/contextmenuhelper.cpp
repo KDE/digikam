@@ -36,7 +36,6 @@
 #include <QTimer>
 #include <QMenu>
 #include <QApplication>
-#include <QAction>
 
 // KDE includes
 
@@ -111,7 +110,8 @@ public:
         ABCmenu(0),
         stdActionCollection(0),
         q(q)
-    {}
+    {
+    }
 
     QAction*                     gotoAlbumAction;
     QAction*                     gotoDateAction;
@@ -213,8 +213,7 @@ void ContextMenuHelper::addSeparator()
     d->parent->addSeparator();
 }
 
-void ContextMenuHelper::addAction(QAction* action, QObject* recv, const char* slot,
-                                  bool addDisabled)
+void ContextMenuHelper::addAction(QAction* action, QObject* recv, const char* slot, bool addDisabled)
 {
     if (!action)
     {
@@ -244,7 +243,7 @@ void ContextMenuHelper::addStandardActionLightTable()
     addAction(action);
 }
 
-void ContextMenuHelper::addStandardActionThumbnail(const imageIds &ids, Album* album)
+void ContextMenuHelper::addStandardActionThumbnail(const imageIds& ids, Album* album)
 {
     if (d->setThumbnailAction)
     {
@@ -372,6 +371,7 @@ bool ContextMenuHelper::imageIdsHaveSameCategory(const imageIds& ids, DatabaseIt
             break;
         }
     }
+
     return sameCategory;
 }
 
@@ -538,7 +538,7 @@ void ContextMenuHelper::addCreateTagFromAddressbookMenu()
     abcAction->setText(i18n("Create Tag From Address Book"));
     d->parent->addMenu(d->ABCmenu);
 
-QAction* const nothingFound = d->ABCmenu->addAction(i18n("No address book entries found"));
+    QAction* const nothingFound = d->ABCmenu->addAction(i18n("No address book entries found"));
     nothingFound->setEnabled(false);
 
     Akonadi::ContactSearchJob* const job = new Akonadi::ContactSearchJob();
