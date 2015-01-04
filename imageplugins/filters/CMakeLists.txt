@@ -20,12 +20,14 @@ add_library(digikamimageplugin_fxfilters MODULE ${digikamimageplugin_fxfilters_P
 target_link_libraries(digikamimageplugin_fxfilters
                       digikamcore
 
-                      KF5::KDELibs4Support
-                      
-                      KF5::KIOCore
                       Qt5::Core
                       Qt5::Gui
-                      KF5::KDcraw
+
+                      KF5::KDELibs4Support
+                      KF5::KIOCore
+
+                      ${KF5KExiv2_LIBRARIES}
+                      ${KF5KDcraw_LIBRARIES}
                      )
 
 install(TARGETS digikamimageplugin_fxfilters             DESTINATION ${PLUGIN_INSTALL_DIR})

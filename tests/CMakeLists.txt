@@ -23,6 +23,7 @@ target_link_libraries(advancedrenametest
                       Qt5::Test
                       ${KF5KExiv2_LIBRARIES}
                       ${KF5KDcraw_LIBRARIES}
+                      KF5::KDELibs4Support
                       ${OpenCV_LIBRARIES}
                       digikamcore
                       digikamdatabase
@@ -42,6 +43,7 @@ ecm_mark_as_test(renamecustomizertest)
 target_link_libraries(renamecustomizertest
                       Qt5::Gui
                       Qt5::Test
+                      KF5::KDELibs4Support
                       digikamcore
                       digikamdatabase
                       importui
@@ -76,6 +78,7 @@ ecm_mark_as_test(cameranamehelpertest)
 target_link_libraries(cameranamehelpertest
                       Qt5::Gui
                       Qt5::Test
+                      KF5::KDELibs4Support
                       digikamcore
                       digikamdatabase
                       ${KF5KDcraw_LIBRARIES}
@@ -163,6 +166,7 @@ ecm_mark_as_test(searchtextbartest)
 target_link_libraries(searchtextbartest
                       Qt5::Gui
                       Qt5::Test
+                      KF5::KDELibs4Support
                       digikamcore
                       ${OpenCV_LIBRARIES}
 )
@@ -245,6 +249,7 @@ ecm_mark_as_test(albummodeltest)
 #                      Qt5::Xml
 #                      Qt5::Sql
 #                      KF5::KIOCore
+#                      KF5::KDELibs4Support
 #                      ${KF5KDcraw_LIBRARIES}
 #                      ${KF5KExiv2_LIBRARIES}
 #                      digikamdatabase
@@ -352,6 +357,7 @@ target_link_libraries(qtpgftest
                       Qt5::Core
                       Qt5::Gui
                       KF5::KIOCore
+                      KF5::KDELibs4Support
                       ${PGF_LIBRARIES}
 )
 
@@ -362,6 +368,7 @@ target_link_libraries(pgfscaled
                       Qt5::Core
                       Qt5::Gui
                       KF5::KIOCore
+                      KF5::KDELibs4Support
                       ${PGF_LIBRARIES}
 )
 
@@ -372,6 +379,7 @@ target_link_libraries(loadpgfdata
                       Qt5::Core
                       Qt5::Gui
                       KF5::KIOCore
+                      KF5::KDELibs4Support
                       ${PGF_LIBRARIES}
 )
 

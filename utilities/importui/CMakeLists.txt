@@ -60,6 +60,7 @@ add_library(importui STATIC ${libimportui_SRCS})
 
 target_link_libraries(importui
                       digikamcore
+                      KF5::KDELibs4Support
                       ${KF5KExiv2_LIBRARIES}
                       ${KF5KDcraw_LIBRARIES}
                      )

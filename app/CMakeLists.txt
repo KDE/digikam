@@ -159,6 +159,7 @@ target_link_libraries(digikamdatabase
                       Qt5::Sql
 
                       KF5::KIOCore
+                      KF5::KDELibs4Support
 
                       ${KF5KExiv2_LIBRARIES}
                       ${KF5KDcraw_LIBRARIES}

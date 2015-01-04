@@ -27,6 +27,7 @@ add_library(advancedrename STATIC ${libadvancedrename_SRCS})
 
 target_link_libraries(advancedrename
                       digikamdatabase
+                      KF5::KDELibs4Support
                       ${KF5KExiv2_LIBRARIES}
                       ${KF5KDcraw_LIBRARIES}
                      )

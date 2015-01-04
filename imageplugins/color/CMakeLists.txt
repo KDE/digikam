@@ -24,13 +24,14 @@ add_library(digikamimageplugin_color MODULE ${digikamimageplugin_color_PART_SRCS
 target_link_libraries(digikamimageplugin_color
                       digikamcore
 
-                      KF5::KDELibs4Support
-                      
-                      KF5::KIOCore
                       Qt5::Core
                       Qt5::Gui
-                      KF5::KDcraw
-                      KF5::KExiv2
+
+                      KF5::KDELibs4Support
+                      KF5::KIOCore
+
+                      ${KF5KExiv2_LIBRARIES}
+                      ${KF5KDcraw_LIBRARIES}
                      )
 
 install(TARGETS digikamimageplugin_color             DESTINATION ${PLUGIN_INSTALL_DIR})
