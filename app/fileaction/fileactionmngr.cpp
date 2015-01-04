@@ -28,12 +28,12 @@
 // Qt includes
 
 #include <QPointer>
+#include <QProgressDialog>
 
 // KDE includes
 
 #include <kglobal.h>
 #include <klocalizedstring.h>
-#include <kprogressdialog.h>
 
 // Local includes
 
@@ -86,10 +86,9 @@ bool FileActionMngr::requestShutDown()
         return true;
     }
 
-    QPointer<KProgressDialog> dialog = new KProgressDialog;
-    dialog->progressBar()->setMinimum(0);
-    dialog->progressBar()->setMaximum(0);
-    dialog->setAllowCancel(true);
+    QPointer<QProgressDialog> dialog = new QProgressDialog;
+    dialog->setMinimum(0);
+    dialog->setMaximum(0);
     dialog->setMinimumDuration(100);
     dialog->setLabelText(i18nc("@label", "Finishing tasks"));
 
