@@ -58,12 +58,13 @@ extern "C"
 #include <QVBoxLayout>
 #include <QLineEdit>
 #include <QStandardPaths>
-#include <QMenu>
 #include <QStyle>
 #include <QKeySequence>
 #include <QApplication>
 #include <QAction>
 #include <QFileDialog>
+#include <QMenu>
+#include <QMenuBar>
 
 // KDE includes
 
@@ -75,7 +76,6 @@ extern "C"
 #include <kiconloader.h>
 #include <kimageio.h>
 #include <klocalizedstring.h>
-#include <kmenubar.h>
 #include <kmessagebox.h>
 #include <kmultitabbar.h>
 #include <kprotocolinfo.h>
