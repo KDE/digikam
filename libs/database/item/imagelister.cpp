@@ -154,10 +154,7 @@ void ImageLister::list(ImageListerReceiver* const receiver, const DatabaseUrl& u
     if (url.isAlbumUrl())
     {
         int albumRootId = url.albumRootId();
-        qCDebug(DIGIKAM_GENERAL_LOG) << "ImageLister::list : albumRootId = " << albumRootId;
-
         QString album   = url.album();
-        qCDebug(DIGIKAM_GENERAL_LOG) << "ImageLister::list : album = " << album;
 
         listAlbum(receiver, albumRootId, album);
     }
