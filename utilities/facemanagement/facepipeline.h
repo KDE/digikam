@@ -29,16 +29,13 @@
 #include <QFlags>
 #include <QThread>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Libkface includes
 
 #include <identity.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "databaseface.h"
 #include "dimg.h"
 #include "imageinfo.h"

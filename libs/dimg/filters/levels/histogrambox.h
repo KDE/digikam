@@ -29,12 +29,9 @@
 
 #include <QWidget>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "digikam_export.h"
 #include "globals.h"
 

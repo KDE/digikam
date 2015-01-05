@@ -27,18 +27,15 @@
 // Qt includes
 
 #include <QWidget>
-#include <QtCore/QEvent>
+#include <QEvent>
 #include <QMouseEvent>
 #include <QPaintEvent>
-
-// KDE includes
-
-#include <kdebug.h>
 
 // Local includes
 
 #include "dimg.h"
 #include "dcolor.h"
+#include "digikam_debug.h"
 #include "digikam_export.h"
 #include "globals.h"
 

@@ -57,6 +57,8 @@
 #include <QKeySequence>
 #include <QPushButton>
 #include <QAction>
+#include <QMenuBar>
+#include <QMenu>
 
 // KDE includes
 
@@ -73,7 +75,6 @@
 #include <kiconloader.h>
 #include <kimageio.h>
 #include <klocalizedstring.h>
-#include <kmenubar.h>
 #include <kmessagebox.h>
 #include <kopenwithdialog.h>
 #include <knotifyconfigwidget.h>

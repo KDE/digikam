@@ -28,13 +28,10 @@
 
 #include <QScrollArea>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Local includes
 
 #include "digikam_export.h"
+#include "digikam_debug.h"
 #include "histogrambox.h"
 #include "globals.h"
 

@@ -50,9 +50,8 @@ class QSplitter;
 class QMenu;
 class QAction;
 
-class KSqueezedTextLabel;
-class QAction;
 class KActionMenu;
+class KSqueezedTextLabel;
 class KCategorizedView;
 class KSelectAction;
 class KToggleAction;

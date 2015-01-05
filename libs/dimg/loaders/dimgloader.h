@@ -36,12 +36,9 @@
 #include <QByteArray>
 #include <QVariant>
 
-// KDE includes
-
-#include <kdebug.h>
-
 // Local includes
 
+#include "digikam_debug.h"
 #include "digikam_export.h"
 #include "dimg.h"
 
@@ -151,8 +148,8 @@ Q_INLINE_TEMPLATE Type* DImgLoader::new_failureTolerant(quint64 w, quint64 h, ui
 
     if (requested > std::numeric_limits<size_t>::max())
     {
-        kError() << "Requested memory of" << requested*quint64(sizeof(Type))
-                 << "is larger than size_t supported by platform.";
+        qCCritical(DIGIKAM_GENERAL_LOG) << "Requested memory of" << requested*quint64(sizeof(Type))
+                                        << "is larger than size_t supported by platform.";
         return 0;
     }
 
@@ -184,7 +181,7 @@ Q_INLINE_TEMPLATE Type* DImgLoader::new_failureTolerant(size_t size)
     }
     catch (std::bad_alloc& ex)
     {
-        kError() << "Failed to allocate chunk of memory of size" << size << ex.what();
+        qCCritical(DIGIKAM_GENERAL_LOG) << "Failed to allocate chunk of memory of size" << size << ex.what();
         reserved = 0;
     }
 

@@ -51,7 +51,6 @@ class QLabel;
 class QToolButton;
 class QWidgetAction;
 
-class QAction;
 class KActionCollection;
 class KSqueezedTextLabel;
 class KToggleAction;
