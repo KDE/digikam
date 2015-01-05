@@ -27,13 +27,13 @@
 
 #include <QCache>
 #include <QPair>
+#include <QUrl>
 
 // KDE includes
 
 #include <kglobal.h>
-#include <QUrl>
-#include <kio/previewjob.h>
 #include <kdeversion.h>
+#include <kio/previewjob.h>
 
 // Local includes
 
@@ -198,12 +198,14 @@ void CameraThumbsCtrl::startKdePreviewJob()
 
     d->kdeJobHash.clear();
     QList<QUrl> list;
+
     foreach(const CamItemInfo& info, d->kdeTodo)
     {
         QUrl url = info.url();
         list << url;
         d->kdeJobHash[url] = info;
     }
+
     d->kdeTodo.clear();
 
     KFileItemList items;
@@ -211,7 +213,7 @@ void CameraThumbsCtrl::startKdePreviewJob()
     for (QList<QUrl>::iterator it = list.begin() ; it != list.end() ; ++it)
     {
         if ((*it).isValid())
-            items.append(KFileItem(KFileItem::Unknown, KFileItem::Unknown, *it, true));
+            items.append(KFileItem(*it));
     }
 
     d->kdeJob = KIO::filePreview(items, QSize(ThumbnailSize::Huge, ThumbnailSize::Huge));
@@ -289,9 +291,7 @@ void CameraThumbsCtrl::putItemToCache(const QUrl& url, const CamItemInfo& info, 
 {
     int infoCost  = sizeof(info);
     int thumbCost = thumb.width() * thumb.height() * thumb.depth() / 8;
-    d->cache.insert(url,
-                    new CachedItem(info, thumb),
-                    infoCost + thumbCost);
+    d->cache.insert(url, new CachedItem(info, thumb), infoCost + thumbCost);
 }
 
 void CameraThumbsCtrl::removeItemFromCache(const QUrl& url)

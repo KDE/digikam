@@ -35,9 +35,10 @@
 
 #include "camiteminfo.h"
 
+class QUrl;
+
 class KFileItem;
 class KJob;
-class QUrl;
 
 namespace Digikam
 {
