@@ -52,11 +52,12 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <QMenu>
 #include <QKeySequence>
 #include <QDesktopServices>
 #include <QInputDialog>
 #include <QFileDialog>
+#include <QMenuBar>
+#include <QMenu>
 
 // KDE includes
 
@@ -67,7 +68,6 @@
 #include <kiconloader.h>
 #include <kimageio.h>
 #include <klocalizedstring.h>
-#include <kmenubar.h>
 #include <kmessagebox.h>
 #include <knotifyconfigwidget.h>
 #include <kshortcutsdialog.h>
