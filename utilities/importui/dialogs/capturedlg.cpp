@@ -32,6 +32,7 @@
 #include <kconfig.h>
 #include <klocalizedstring.h>
 #include <kglobal.h>
+#include <kwindowconfig.h>
 
 // Local includes
 
@@ -76,8 +77,9 @@ CaptureDlg::CaptureDlg(QWidget* const parent, CameraController* const controller
 
     d->captureWidget = new CaptureWidget(this);
     setMainWidget(d->captureWidget);
-    restoreDialogSize(KSharedConfig::openConfig()->group("Capture Tool Dialog"));
 
+    KConfigGroup group = KSharedConfig::openConfig()->group("Capture Tool Dialog");
+    KWindowConfig::restoreWindowSize(windowHandle(), group);
 
     // -------------------------------------------------------------
 
@@ -92,7 +94,8 @@ CaptureDlg::CaptureDlg(QWidget* const parent, CameraController* const controller
 
     // -------------------------------------------------------------
 
-    if(d->controller->cameraCaptureImagePreviewSupport()) {
+    if(d->controller->cameraCaptureImagePreviewSupport())
+    {
         d->timer = new QTimer(this);
 
         connect( d->timer, SIGNAL(timeout()),
@@ -113,22 +116,30 @@ CaptureDlg::~CaptureDlg()
 void CaptureDlg::closeEvent(QCloseEvent* e)
 {
     d->stopPreview = true;
-    if(d->timer) {
+
+    if(d->timer)
+    {
         d->timer->stop();
     }
+
     KConfigGroup group = KSharedConfig::openConfig()->group("Capture Tool Dialog");
-    saveDialogSize(group);
+    KWindowConfig::saveWindowSize(windowHandle(), group);
+
     e->accept();
 }
 
 void CaptureDlg::slotCancel()
 {
     d->stopPreview = true;
-    if(d->timer) {
+
+    if(d->timer)
+    {
         d->timer->stop();
     }
+
     KConfigGroup group = KSharedConfig::openConfig()->group("Capture Tool Dialog");
-    saveDialogSize(group);
+    KWindowConfig::saveWindowSize(windowHandle(), group);
+
     done(Cancel);
 }
 
@@ -140,7 +151,9 @@ void CaptureDlg::slotPreview()
 void CaptureDlg::slotCapture()
 {
     d->stopPreview = true;
-    if(d->timer) {
+
+    if(d->timer)
+    {
         d->timer->stop();
     }
 
@@ -148,8 +161,9 @@ void CaptureDlg::slotCapture()
                this, SLOT(slotPreviewDone(QImage)));
 
     KConfigGroup group = KSharedConfig::openConfig()->group("Capture Tool Dialog");
-    saveDialogSize(group);
+    KWindowConfig::saveWindowSize(windowHandle(), group);
     d->controller->capture();
+
     done(Ok);
 }
 
