@@ -38,8 +38,6 @@
 #include <kfileitem.h>
 #include <klocalizedstring.h>
 #include <kconfig.h>
-
-
 #include <kglobal.h>
 
 // Local includes
@@ -533,7 +531,7 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const QUrl& url)
         {
             QString str;
             QString unavailable(i18n("<i>unavailable</i>"));
-            KFileItem fi(KFileItem::Unknown, KFileItem::Unknown, url);
+            KFileItem fi(url);
 
             // -- File system information -----------------------------------------
 
