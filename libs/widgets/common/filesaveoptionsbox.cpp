@@ -41,7 +41,6 @@
 #include <kglobal.h>
 #include <kimageio.h>
 #include <klocalizedstring.h>
-
 #include <kurlcombobox.h>
 
 // Local includes

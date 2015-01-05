@@ -30,14 +30,12 @@
 #include <QStackedWidget>
 #include <QString>
 
-// KDE includes
-
-#include <kfiledialog.h>
-
 // Local includes
 
 #include "dimg.h"
 #include "digikam_export.h"
+
+class KFileDialog;
 
 namespace Digikam
 {
