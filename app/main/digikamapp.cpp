@@ -38,6 +38,8 @@
 #include <QDomDocument>
 #include <QStandardPaths>
 #include <QKeySequence>
+#include <QMenu>
+#include <QMenuBar>
 
 // KDE includes
 
@@ -48,12 +50,10 @@
 #include <kactionmenu.h>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
-
 #include <kiconloader.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
 #include <klocalizedstring.h>
-#include <kmenubar.h>
 #include <kmessagebox.h>
 #include <knotifyconfigwidget.h>
 #include <kshortcutsdialog.h>
