@@ -30,6 +30,8 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QAction>
+#include <QMenuBar>
+#include <QMenu>
 
 // KDE includes
 
@@ -38,7 +40,6 @@
 #include <kedittoolbar.h>
 #include <kglobal.h>
 #include <klocalizedstring.h>
-#include <kmenubar.h>
 #include <kmessagebox.h>
 #include <knotifyconfigwidget.h>
 #include <kselectaction.h>
