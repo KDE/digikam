@@ -94,6 +94,7 @@ DatabaseUrl DatabaseUrl::fromAlbumAndName(const QString& name,
     url.setParameters(parameters);
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "DatabaseUrl::fromAlbumAndName : " << url.toDisplayString();
+
     return url;
 }
 
