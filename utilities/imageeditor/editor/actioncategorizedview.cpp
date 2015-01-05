@@ -29,14 +29,17 @@
 #include <QPropertyAnimation>
 #include <QScrollBar>
 #include <QSignalMapper>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <kdeversion.h>
 #include <kcategorydrawer.h>
-#include <QApplication>
-#include <QStyle>
+
+// Local includes
+
+#include "digikam_debug.h"
 
 namespace Digikam
 {

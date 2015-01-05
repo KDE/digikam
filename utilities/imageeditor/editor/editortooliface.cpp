@@ -99,14 +99,13 @@ void EditorToolIface::loadTool(EditorTool* const tool)
     d->tool = tool;
     d->editor->editorStackView()->setToolView(d->tool->toolView());
     d->editor->editorStackView()->setViewMode(EditorStackView::ToolViewMode);
-#pragma message("port: hardcoded pixmap size... ")
     d->editor->rightSideBar()->appendTab(d->tool->toolSettings(), d->tool->toolIcon().pixmap(16), d->tool->toolName());
     d->editor->rightSideBar()->setActiveTab(d->tool->toolSettings());
     d->editor->toggleActions(false);
     d->editor->toggleToolActions(d->tool);
 
     // If editor tool has zoomable preview, switch on zoom actions.
-    
+
     d->editor->toggleZoomActions(d->editor->editorStackView()->isZoomablePreview());
 
     ImageGuideWidget* const view = dynamic_cast<ImageGuideWidget*>(d->tool->toolView());
@@ -127,7 +126,7 @@ void EditorToolIface::loadTool(EditorTool* const tool)
     {
         connect(d->editor, SIGNAL(signalPreviewModeChanged(int)),
                 view2, SLOT(slotPreviewModeChanged(int)));
-        
+
         connect(d->editor->editorStackView(), SIGNAL(signalZoomChanged(bool,bool,double)),
                 view2, SLOT(slotOriginalImageRegionChangedDelayed()));
 
