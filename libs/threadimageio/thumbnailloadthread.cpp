@@ -805,7 +805,7 @@ void ThumbnailLoadThread::startKdePreviewJob()
     for (QList<QUrl>::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
     {
         if ((*it).isValid())
-            items.append(KFileItem(KFileItem::Unknown, KFileItem::Unknown, *it, true));
+            items.append(KFileItem(*it));
     }
 
     d->kdeJob = KIO::filePreview(items, QSize(d->creator->storedSize(), d->creator->storedSize()), &d->previewPlugins); // FIXME: do not know if size 0 is allowed
