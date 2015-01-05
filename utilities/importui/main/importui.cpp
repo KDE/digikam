@@ -56,17 +56,16 @@
 #include <QKeySequence>
 #include <QDesktopServices>
 #include <QInputDialog>
+#include <QFileDialog>
 
 // KDE includes
 
 #include <kactioncollection.h>
 #include <kcalendarsystem.h>
 #include <kedittoolbar.h>
-#include <kfiledialog.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
 #include <kimageio.h>
-#include <kio/global.h>
 #include <klocalizedstring.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
@@ -79,6 +78,7 @@
 #include <ktoolbar.h>
 #include <kurllabel.h>
 #include <kmessagewidget.h>
+#include <kio/global.h>
 
 // Libkdcraw includes
 
@@ -1266,8 +1266,9 @@ void ImportUI::slotUpload()
 
     //qCDebug(DIGIKAM_GENERAL_LOG) << "fileformats=" << fileformats;
 
-    QList<QUrl> urls = KFileDialog::getOpenUrls(QUrl::fromLocalFile(CollectionManager::instance()->oneAlbumRootPath()),
-                                               fileformats, this, i18nc("@title:window", "Select Image to Upload"));
+    QList<QUrl> urls = QFileDialog::getOpenFileUrls(this, i18nc("@title:window", "Select Image to Upload"),
+                                                    QUrl::fromLocalFile(CollectionManager::instance()->oneAlbumRootPath()),
+                                                    fileformats);
 
     if (!urls.isEmpty())
     {
