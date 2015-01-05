@@ -26,10 +26,6 @@
 #ifndef DIGIKAMTHUMBNAILCREATORPRIV_H
 #define DIGIKAMTHUMBNAILCREATORPRIV_H
 
-// KDE includes
-
-#include <klocale.h>
-
 // Local includes
 
 #include "dmetadata.h"

@@ -33,24 +33,24 @@
 #include <QPainter>
 #include <QBuffer>
 #include <QIODevice>
+#include <QFile>
+#include <QUrl>
 
 // KDE includes
 
-#include <kcodecs.h>
 #include <kcomponentdata.h>
 #include <kglobal.h>
 #include <kimageio.h>
-#include <kio/global.h>
-#include <kio/thumbcreator.h>
 #include <klibloader.h>
 #include <klocalizedstring.h>
 #include <kmimetype.h>
 #include <kservicetypetrader.h>
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
-#include <QUrl>
 #include <kdeversion.h>
-#include <kde_file.h>
+
+#include <kio/global.h>
+#include <kio/thumbcreator.h>
 
 // Libkdcraw includes
 
@@ -1138,7 +1138,7 @@ void ThumbnailCreator::storeFreedesktop(const ThumbnailInfo& info, const Thumbna
             temp.close();
 
 #ifndef Q_OS_WIN
-            ret = KDE::rename(QFile::encodeName(tempFileName).constData(),
+            ret = QFile::rename(QFile::encodeName(tempFileName).constData(),
                               QFile::encodeName(thumbPath).constData());
             if (ret != 0)
 #else

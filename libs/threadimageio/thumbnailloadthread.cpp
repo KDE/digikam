@@ -35,10 +35,10 @@
 #include <kglobal.h>
 #include <klocalizedstring.h>
 #include <kiconloader.h>
-#include <kio/previewjob.h>
 #include <kmessagebox.h>
 #include <kdeversion.h>
 #include <kmimetype.h>
+#include <kio/previewjob.h>
 
 // Local includes
 

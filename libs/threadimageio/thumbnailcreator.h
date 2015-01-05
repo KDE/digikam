@@ -32,10 +32,6 @@
 #include <QPixmap>
 #include <QImage>
 
-// KDE includes
-
-#include <kfileitem.h>
-
 // Local includes
 
 #include "drawdecoding.h"
