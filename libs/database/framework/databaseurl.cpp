@@ -310,7 +310,9 @@ QString DatabaseUrl::album() const
 {
     // obey trailing slash in the path - albums have a trailing slash
     // get result without trailing slash
-    return ( adjusted(QUrl::RemoveFilename).path() );
+    QUrl url = adjusted(QUrl::RemoveFilename);
+    
+    return ( url.adjusted(QUrl::StripTrailingSlash).path() );
 }
 
 QString DatabaseUrl::name() const
