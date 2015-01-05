@@ -31,7 +31,6 @@
 // Qt includes
 
 #include <QKeySequence>
-#include <QMenu>
 #include <QCloseEvent>
 #include <QDragMoveEvent>
 #include <QDropEvent>
@@ -46,6 +45,8 @@
 #include <QSplitter>
 #include <QTimer>
 #include <QAction>
+#include <QMenu>
+#include <QMenuBar>
 
 // KDE includes
 
@@ -56,10 +57,7 @@
 #include <kdeversion.h>
 #include <kglobal.h>
 #include <kimageio.h>
-#include <kio/job.h>
-#include <kio/jobuidelegate.h>
 #include <klocalizedstring.h>
-#include <kmenubar.h>
 #include <kmessagebox.h>
 #include <kselectaction.h>
 #include <kstandardaction.h>
@@ -71,6 +69,9 @@
 #include <ktoolbarpopupaction.h>
 #include <kwindowsystem.h>
 #include <ksqueezedtextlabel.h>
+
+#include <kio/job.h>
+#include <kio/jobuidelegate.h>
 
 // Local includes
 
