@@ -33,15 +33,14 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QApplication>
+#include <QDialogButtonBox>
 
 // KDE includes
 
-#include <kdialogbuttonbox.h>
 #include <klocalizedstring.h>
 #include <kstandardguiitem.h>
 #include <kguiitem.h>
 #include <kstandardguiitem.h>
-#include <kpushbutton.h>
 
 // Local includes
 
@@ -62,7 +61,7 @@ AbstractSearchGroupContainer::AbstractSearchGroupContainer(QWidget* const parent
 
 SearchGroup* AbstractSearchGroupContainer::addSearchGroup()
 {
-    SearchGroup* group = createSearchGroup();
+    SearchGroup* const group = createSearchGroup();
     m_groups << group;
     addGroupToLayout(group);
 
@@ -125,7 +124,7 @@ void AbstractSearchGroupContainer::finishReadingGroups()
 
 void AbstractSearchGroupContainer::writeGroups(SearchXmlWriter& writer) const
 {
-    foreach(SearchGroup* group, m_groups)
+    foreach(SearchGroup* const group, m_groups)
     {
         group->write(writer);
     }
@@ -139,10 +138,12 @@ void AbstractSearchGroupContainer::removeSendingSearchGroup()
 QList<QRect> AbstractSearchGroupContainer::startupAnimationAreaOfGroups() const
 {
     QList<QRect> list;
-    foreach(SearchGroup* group, m_groups)
+
+    foreach(SearchGroup* const group, m_groups)
     {
         list += group->startupAnimationArea();
     }
+
     return list;
 }
 
@@ -517,23 +518,25 @@ SearchViewBottomBar::SearchViewBottomBar(SearchViewThemedPartsCache* const cache
             this, SIGNAL(resetPressed()));
 
     m_mainLayout->addWidget(m_resetButton);
-
     m_mainLayout->addStretch(1);
 
-    m_buttonBox = new KDialogButtonBox(this);
-    m_buttonBox->addButton(KStandardGuiItem::ok(),
-                           QDialogButtonBox::AcceptRole,
-                           this,
-                           SIGNAL(okPressed()));
-    m_buttonBox->addButton(KStandardGuiItem::cancel(),
-                           QDialogButtonBox::RejectRole,
-                           this,
-                           SIGNAL(cancelPressed()));
-    KPushButton* const aBtn = m_buttonBox->addButton(KStandardGuiItem::apply(),
-                                                     QDialogButtonBox::ApplyRole,
-                                                     this,
-                                                     SIGNAL(tryoutPressed()));
-    aBtn->setText(i18n("Try"));
+    m_buttonBox = new QDialogButtonBox(this);
+
+    QPushButton* const ok = m_buttonBox->addButton(QDialogButtonBox::Ok);
+
+    connect(ok, SIGNAL(clicked()),
+            this, SIGNAL(okPressed()));
+
+    QPushButton* const cancel = m_buttonBox->addButton(QDialogButtonBox::Cancel);
+
+    connect(cancel, SIGNAL(clicked()),
+            this, SIGNAL(cancelPressed()));
+
+    QPushButton* const aBtn = m_buttonBox->addButton(i18n("Try"), QDialogButtonBox::ApplyRole);
+
+    connect(aBtn, SIGNAL(clicked()),
+            this, SIGNAL(tryoutPressed()));
+
     m_mainLayout->addWidget(m_buttonBox);
 
     setLayout(m_mainLayout);
