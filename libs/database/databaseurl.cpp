@@ -34,7 +34,7 @@
 
 // KDE includes
 
-#include "kdebug.h"
+#include <kdebug.h>
 
 namespace Digikam
 {
@@ -62,6 +62,9 @@ DatabaseUrl DatabaseUrl::fromFileUrl(const KUrl& fileUrl,
     url.addQueryItem("albumRoot", albumRootPath);
     url.addQueryItem("albumRootId", QString::number(albumRootId));
     url.setParameters(parameters);
+    
+    kDebug() << "DatabaseUrl::fromFileUrl : " << url.prettyUrl();
+
     return url;
 }
 
@@ -90,6 +93,8 @@ DatabaseUrl DatabaseUrl::fromAlbumAndName(const QString& name,
     url.addQueryItem("albumRoot", albumRoot.toLocalFile(KUrl::RemoveTrailingSlash));
     url.addQueryItem("albumRootId", QString::number(albumRootId));
     url.setParameters(parameters);
+    
+    kDebug() << "DatabaseUrl::fromAlbumAndName : " << url.prettyUrl();
     return url;
 }
 
@@ -98,6 +103,8 @@ DatabaseUrl DatabaseUrl::albumUrl(const DatabaseParameters& parameters)
     DatabaseUrl url;
     url.setProtocol("digikamalbums");
     url.setParameters(parameters);
+
+    kDebug() << "DatabaseUrl::albumUrl : " << url.prettyUrl();
     return url;
 }
 
@@ -113,6 +120,8 @@ DatabaseUrl DatabaseUrl::fromTagIds(const QList<int>& tagIds,
     }
 
     url.setParameters(parameters);
+    
+    kDebug() << "DatabaseUrl::fromTagIds : " << url.prettyUrl();
     return url;
 }
 
@@ -121,11 +130,12 @@ DatabaseUrl DatabaseUrl::dateUrl(const DatabaseParameters& parameters)
     DatabaseUrl url;
     url.setProtocol("digikamdates");
     url.setParameters(parameters);
+    
+    kDebug() << "DatabaseUrl::dateUrl : " << url.prettyUrl();
     return url;
 }
 
-DatabaseUrl DatabaseUrl::fromDateForMonth(const QDate& date,
-        const DatabaseParameters& parameters)
+DatabaseUrl DatabaseUrl::fromDateForMonth(const QDate& date, const DatabaseParameters& parameters)
 {
     QDate firstDayOfMonth(date.year(), date.month(), 1);
     QDate firstDayOfNextMonth = firstDayOfMonth.addMonths(1);
@@ -133,8 +143,7 @@ DatabaseUrl DatabaseUrl::fromDateForMonth(const QDate& date,
     return fromDateRange(firstDayOfMonth, firstDayOfNextMonth, parameters);
 }
 
-DatabaseUrl DatabaseUrl::fromDateForYear(const QDate& date,
-        const DatabaseParameters& parameters)
+DatabaseUrl DatabaseUrl::fromDateForYear(const QDate& date, const DatabaseParameters& parameters)
 {
     QDate firstDayOfYear(date.year(), 1, 1);
     QDate firstDayOfNextYear = firstDayOfYear.addYears(1);
@@ -148,10 +157,10 @@ DatabaseUrl DatabaseUrl::fromDateRange(const QDate& startDate,
 {
     DatabaseUrl url;
     url.setProtocol("digikamdates");
-
     url.setPath(startDate.toString(Qt::ISODate) + '/' + endDate.toString(Qt::ISODate));
-
     url.setParameters(parameters);
+    
+    kDebug() << "DatabaseUrl::fromDateRange : " << url.prettyUrl();
     return url;
 }
 
@@ -160,6 +169,8 @@ DatabaseUrl DatabaseUrl::mapImagesUrl(const DatabaseParameters& parameters)
     DatabaseUrl url;
     url.setProtocol("digikammapimages");
     url.setParameters(parameters);
+    
+    kDebug() << "DatabaseUrl::mapImagesUrl : " << url.prettyUrl();
     return url;
 }
 
@@ -174,6 +185,8 @@ DatabaseUrl DatabaseUrl::fromAreaRange(const qreal lat1, const qreal lat2,
     url.addQueryItem("lat2", QString::number(lat2));
     url.addQueryItem("lon2", QString::number(lng2));
     url.setParameters(parameters);
+    
+    kDebug() << "DatabaseUrl::fromAreaRange : " << url.prettyUrl();    
     return url;
 }
 
@@ -184,6 +197,8 @@ DatabaseUrl DatabaseUrl::searchUrl(int id,
     url.setProtocol("digikamsearch");
     url.addQueryItem("searchId", QString::number(id));
     url.setParameters(parameters);
+    
+    kDebug() << "DatabaseUrl::searchUrl : " << url.prettyUrl();
     return url;
 }
 
