@@ -35,13 +35,14 @@
 #include <QLabel>
 #include <QKeySequence>
 #include <QAction>
+#include <QMenuBar>
+#include <QMenu>
 
 // KDE includes
 
 #include <kactioncollection.h>
 #include <kedittoolbar.h>
 #include <klocalizedstring.h>
-#include <kmenubar.h>
 #include <kmessagebox.h>
 #include <knotifyconfigwidget.h>
 #include <kselectaction.h>
