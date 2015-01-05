@@ -240,7 +240,8 @@ void MediaPlayerView::reload()
 
 void MediaPlayerView::slotPlayerFinished()
 {
-    if (d->player->error() != QMediaPlayer::NoError)
+    if ( d->player->state() == QMediaPlayer::StoppedState  && 
+         d->player->error() != QMediaPlayer::NoError)
     {
         setPreviewMode(Private::ErrorView);
     }
@@ -248,7 +249,8 @@ void MediaPlayerView::slotPlayerFinished()
 
 void MediaPlayerView::slotPlayerStateChanged(QMediaPlayer::State newState)
 {
-    if (newState < 0 || newState > 2)
+    if ( newState           == QMediaPlayer::StoppedState  && 
+         d->player->error() != QMediaPlayer::NoError )
     {
         setPreviewMode(Private::ErrorView);
     }
@@ -341,6 +343,8 @@ void MediaPlayerView::setPosition(int position)
 
 void MediaPlayerView::handlePlayerError()
 {
+
+    setPreviewMode(Private::ErrorView);
     qCDebug(DIGIKAM_GENERAL_LOG) << "Error: " << d->player->errorString();
 }
 
