@@ -31,12 +31,13 @@
 
 // KDE includes
 
-#include <kdialog.h>
 #include <kstandardguiitem.h>
 
 // Local includes
 
 #include "camerathumbsctrl.h"
+
+class KDialog;
 
 namespace Digikam
 {

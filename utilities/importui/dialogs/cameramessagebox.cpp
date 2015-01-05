@@ -35,15 +35,16 @@
 #include <QMessageBox>
 #include <QApplication>
 #include <QStyle>
+#include <QUrl>
 
 // KDE includes
 
-#include <QUrl>
 #include <kmessagebox.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <klocalizedstring.h>
+#include <kdialog.h>
 
 // Libkdcraw includes
 
@@ -102,7 +103,7 @@ void CameraItem::setThumb(const QPixmap& pix, bool hasThumb)
     QPixmap pixmap(iconSize + 2, iconSize + 2);
     pixmap.fill(Qt::transparent);
     QPainter p(&pixmap);
-    p.drawPixmap((pixmap.width() / 2)  - (pix.width() / 2),
+    p.drawPixmap((pixmap.width()  / 2)  - (pix.width() / 2),
                  (pixmap.height() / 2) - (pix.height() / 2), pix);
 
     QIcon icon = QIcon(pixmap);
