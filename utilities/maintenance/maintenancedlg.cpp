@@ -38,6 +38,7 @@
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <kconfig.h>
+#include <kwindowconfig.h>
 
 // Libkdcraw includes
 
@@ -393,7 +394,7 @@ void MaintenanceDlg::readSettings()
         slotItemToggled(i, d->expanderBox->isChecked(i));
     }
 
-    restoreDialogSize(group);
+    KWindowConfig::restoreWindowSize(windowHandle(), group);
 }
 
 void MaintenanceDlg::writeSettings()
@@ -424,7 +425,7 @@ void MaintenanceDlg::writeSettings()
     group.writeEntry(d->configMetadataSync,        prm.metadataSync);
     group.writeEntry(d->configSyncDirection,       prm.syncDirection);
 
-    saveDialogSize(group);
+    KWindowConfig::saveWindowSize(windowHandle(), group);
 }
 
 void MaintenanceDlg::slotItemToggled(int index, bool b)
