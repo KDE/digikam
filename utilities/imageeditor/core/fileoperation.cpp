@@ -36,17 +36,17 @@
 #include <QByteArray>
 #include <QDir>
 #include <QWidget>
+#include <QFile>
 
 // KDE includes
 
-#include "digikam_debug.h"
-#include <kde_file.h>
 #include <kmimetype.h>
 #include <krun.h>
 #include <kmimetypetrader.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "metadatasettings.h"
 
 namespace Digikam
@@ -106,8 +106,8 @@ bool FileOperation::localFileRename(const QString& source, const QString& orgPat
     }
 
     // rename tmp file to dest
-    // KDE::rename() takes care of QString -> bytestring encoding
-    if (KDE::rename(orgPath, dest) != 0)
+    // QFile::rename() takes care of QString -> bytestring encoding
+    if (QFile::rename(orgPath, dest) != 0)
     {
         return false;
     }
