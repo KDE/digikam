@@ -146,7 +146,7 @@ KIO::TransferJob* ImageLister::startListJob(const DatabaseUrl& url, int extraVal
         ds << extraValue;
     }
 
-    return new KIO::SpecialJob(url, ba);
+    return (new KIO::SpecialJob(url, ba));
 }
 
 void ImageLister::list(ImageListerReceiver* const receiver, const DatabaseUrl& url)

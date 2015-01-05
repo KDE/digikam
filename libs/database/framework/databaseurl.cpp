@@ -120,6 +120,7 @@ DatabaseUrl DatabaseUrl::fromTagIds(const QList<int>& tagIds,
 
     url.setParameters(parameters);
 
+    qCDebug(DIGIKAM_GENERAL_LOG) << "DatabaseUrl::fromTagIds : " << url.toDisplayString();
     return url;
 }
 
@@ -129,6 +130,7 @@ DatabaseUrl DatabaseUrl::dateUrl(const DatabaseParameters& parameters)
     url.setScheme("digikamdates");
     url.setParameters(parameters);
 
+    qCDebug(DIGIKAM_GENERAL_LOG) << "DatabaseUrl::dateUrl : " << url.toDisplayString();
     return url;
 }
 
@@ -157,6 +159,7 @@ DatabaseUrl DatabaseUrl::fromDateRange(const QDate& startDate,
     url.setPath(startDate.toString(Qt::ISODate) + QChar('/') + endDate.toString(Qt::ISODate));
     url.setParameters(parameters);
 
+    qCDebug(DIGIKAM_GENERAL_LOG) << "DatabaseUrl::fromDateRange : " << url.toDisplayString();
     return url;
 }
 
@@ -166,6 +169,7 @@ DatabaseUrl DatabaseUrl::mapImagesUrl(const DatabaseParameters& parameters)
     url.setScheme("digikammapimages");
     url.setParameters(parameters);
 
+    qCDebug(DIGIKAM_GENERAL_LOG) << "DatabaseUrl::mapImagesUrl : " << url.toDisplayString();
     return url;
 }
 
@@ -181,6 +185,7 @@ DatabaseUrl DatabaseUrl::fromAreaRange(const qreal lat1, const qreal lat2,
     url.addQueryItem("lon2", QString::number(lng2));
     url.setParameters(parameters);
 
+    qCDebug(DIGIKAM_GENERAL_LOG) << "DatabaseUrl::fromAreaRange : " << url.toDisplayString();
     return url;
 }
 
