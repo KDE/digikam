@@ -36,13 +36,14 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QKeySequence>
+#include <QMenuBar>
+#include <QMenu>
 
 // KDE includes
 
 #include <kxmlguiwindow.h>
 #include <ktogglefullscreenaction.h>
 #include <kglobalsettings.h>
-#include <kmenubar.h>
 #include <kstatusbar.h>
 #include <ktoolbar.h>
 #include <kstandardaction.h>
