@@ -460,11 +460,7 @@ void RawSettingsBox::readSettings()
 
     d->tabView->setCurrentIndex(group.readEntry(d->optionSettingsPageEntry, 0));
 
-#if KDCRAW_VERSION >= 0x020000
     d->postProcessSettingsBox->readSettings(group);
-#else
-    d->postProcessSettingsBox->readSettings();
-#endif
 }
 
 void RawSettingsBox::writeSettings()
@@ -487,11 +483,7 @@ void RawSettingsBox::writeSettings()
 
     group.writeEntry(d->optionSettingsPageEntry, d->tabView->currentIndex());
 
-#if KDCRAW_VERSION >= 0x020000
     d->postProcessSettingsBox->writeSettings(group);
-#else
-    d->postProcessSettingsBox->writeSettings();
-#endif
 
     group.sync();
 }
@@ -501,7 +493,7 @@ DRawDecoding RawSettingsBox::settings() const
     DRawDecoding settings(d->decodingSettingsBox->settings());
 
     settings.bcg.brightness    = (double)d->brightnessInput->value() / 250.0;
-    settings.bcg.contrast      = (double)(d->contrastInput->value() / 100.0) + 1.00;
+    settings.bcg.contrast      = (double)(d->contrastInput->value()  / 100.0) + 1.00;
     settings.bcg.gamma         = d->gammaInput->value();
     settings.wb.saturation     = d->saturationInput->value();
     settings.wb.expositionMain = d->mainExposureInput->value();
@@ -515,7 +507,7 @@ DRawDecoding RawSettingsBox::settings() const
     return settings;
 }
 
-void RawSettingsBox::slotFileDialogAboutToOpen(KUrlRequester* requester)
+void RawSettingsBox::slotFileDialogAboutToOpen(KUrlRequester* /*requester*/)
 {
 #pragma message("PORT QT5")
     //requester->fileDialog()->setPreviewWidget(new ICCPreviewWidget(requester));
