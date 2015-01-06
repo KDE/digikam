@@ -72,29 +72,29 @@ inline QShortcut* defineShortcut(QWidget* const w, const QKeySequence& key, cons
  */
 inline QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode)
 {
-    QStringList       mimeTypes;
+    QStringList       formats;
     QList<QByteArray> supported;
-    
+
     switch(mode)
     {
-        case QIODevice::ReadOnly:               
-            supported = QImageReader::supportedMimeTypes();
+        case QIODevice::ReadOnly:
+            supported = QImageReader::supportedImageFormats();
             break;
-        case QIODevice::WriteOnly:               
-            supported = QImageWriter::supportedMimeTypes();
+        case QIODevice::WriteOnly:
+            supported = QImageWriter::supportedImageFormats();
             break;
-        case QIODevice::ReadWrite:               
-            supported = QImageWriter::supportedMimeTypes() + QImageReader::supportedMimeTypes();
+        case QIODevice::ReadWrite:
+            supported = QImageWriter::supportedImageFormats() + QImageReader::supportedImageFormats();
             break;
         default:
             qCDebug(DIGIKAM_GENERAL_LOG) << "Unsupported mode!";
             break;
     }
 
-    Q_FOREACH(QByteArray mimeType, supported)
-        mimeTypes.append(QString::fromLatin1(mimeType));
+    Q_FOREACH(QByteArray frm, supported)
+        formats.append(QString("*.") + QString::fromLatin1(frm) + QString("|%1 Image").arg(QString::fromLatin1(frm).toUpper()));
 
-    return mimeTypes;
+    return formats;
 }
 
 /** Field value limits for all digiKam-specific fields (not EXIF/IPTC fields)
