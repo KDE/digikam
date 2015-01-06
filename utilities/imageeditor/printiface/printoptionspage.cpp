@@ -30,6 +30,9 @@
 #include <QGridLayout>
 #include <QToolButton>
 #include <QPushButton>
+#include <QApplication>
+#include <QStyle>
+#include <QHBoxLayout>
 
 // KDE includes
 
@@ -38,12 +41,10 @@
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
-#include <QApplication>
-#include <QStyle>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "digikamconfig.h"
 #include "iccsettings.h"
 #include "iccsettingscontainer.h"
@@ -100,12 +101,16 @@ public:
 
     void initColorManagement()
     {
-        colorManaged         = new QCheckBox(i18n("Use Color Management for Printing"), cmbox);
+        QHBoxLayout* const hlay = new QHBoxLayout(cmbox);
+        colorManaged            = new QCheckBox(i18n("Use Color Management for Printing"), cmbox);
         colorManaged->setChecked(false);
-        cmPreferences        = new QPushButton(i18n("Settings..."), cmbox);
-        QWidget* const space = new QWidget(cmbox);
-        cmbox->setStretchFactor(space, 10);
-        cmbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+        cmPreferences           = new QPushButton(i18n("Settings..."), cmbox);
+        QWidget* const space    = new QWidget(cmbox);
+        hlay->addWidget(colorManaged);
+        hlay->addWidget(cmPreferences);
+        hlay->addWidget(space);
+        hlay->setStretchFactor(space, 10);
+        hlay->setSpacing(0);
     }
 
     void initPositionFrame()

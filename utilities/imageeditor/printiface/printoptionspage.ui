@@ -41,7 +41,7 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout" >
         <item>
-         <widget class="KHBox" name="cmbox" />
+         <widget class="QWidget" name="cmbox" />
         </item>
         <item>
          <widget class="QCheckBox" name="kcfg_PrintAutoRotate" >
@@ -297,10 +297,6 @@
  <layoutdefault spacing="6" margin="11" />
   <customwidgets>
   <customwidget>
-   <class>KHBox</class>
-   <extends>QFrame</extends>
-   <header location="global" >khbox.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>
