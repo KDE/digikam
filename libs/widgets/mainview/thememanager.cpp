@@ -186,7 +186,7 @@ void ThemeManager::populateThemeMenu()
     connect(d->themeMenuActionGroup, SIGNAL(triggered(QAction*)),
             this, SLOT(slotChangePalette()));
 
-    QAction * const action         = new QAction(defaultThemeName(), d->themeMenuActionGroup);
+    QAction* const action         = new QAction(defaultThemeName(), d->themeMenuActionGroup);
     action->setCheckable(true);
     d->themeMenuAction->addAction(action);
 
@@ -202,7 +202,7 @@ void ThemeManager::populateThemeMenu()
         QIcon icon              = createSchemePreviewIcon(config);
         KConfigGroup group(config, "General");
         const QString name      = group.readEntry("Name", info.baseName());
-        QAction * const ac       = new QAction(name, d->themeMenuActionGroup);
+        QAction* const ac       = new QAction(name, d->themeMenuActionGroup);
         d->themeMap.insert(name, filename);
         ac->setIcon(icon);
         ac->setCheckable(true);
@@ -222,7 +222,7 @@ void ThemeManager::populateThemeMenu()
     setCurrentTheme(theme);
 
     d->themeMenuAction->addSeparator();
-    QAction * const config = new QAction(i18n("Configuration..."), d->themeMenuAction);
+    QAction* const config = new QAction(i18n("Configuration..."), d->themeMenuAction);
     config->setIcon(QIcon::fromTheme("preferences-desktop-theme"));
     d->themeMenuAction->addAction(config);
 
@@ -232,7 +232,7 @@ void ThemeManager::populateThemeMenu()
 
 void ThemeManager::slotConfigColors()
 {
-    int ret = KToolInvocation::kdeinitExec("kcmshell4", QStringList() << "colors");
+    int ret = KToolInvocation::kdeinitExec("kcmshell5", QStringList() << "colors");
 
     if (ret > 0)
     {
