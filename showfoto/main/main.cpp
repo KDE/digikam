@@ -52,7 +52,6 @@ int main(int argc, char* argv[])
     KLocalizedString::setApplicationDomain("digikam");
     KLocalizedString::setApplicationDomain("libkdcraw");
     KLocalizedString::setApplicationDomain("libkexiv2");
-    KLocalizedString::setApplicationDomain("libkface");
     KLocalizedString::setApplicationDomain("libkgeomap");
 
     KAboutData aboutData(QString::fromLatin1("showfoto"), // component name
