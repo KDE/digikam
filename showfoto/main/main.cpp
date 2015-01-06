@@ -50,6 +50,10 @@ int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
     KLocalizedString::setApplicationDomain("digikam");
+    KLocalizedString::setApplicationDomain("libkdcraw");
+    KLocalizedString::setApplicationDomain("libkexiv2");
+    KLocalizedString::setApplicationDomain("libkface");
+    KLocalizedString::setApplicationDomain("libkgeomap");
 
     KAboutData aboutData(QString::fromLatin1("showfoto"), // component name
                          i18n("showFoto"),                // display name
@@ -87,13 +91,6 @@ int main(int argc, char* argv[])
 
     ShowFoto::ShowFoto* const w = new ShowFoto::ShowFoto(urlList);
     w->show();
-
-#pragma message("PORT QT5")
-//    KLocale::global()->setMainCatalog("digikam");
-//KF5 port: remove this line and define TRANSLATION_DOMAIN in CMakeLists.txt instead
-//KLocale::global()->insertCatalog("libkdcraw");
-//KF5 port: remove this line and define TRANSLATION_DOMAIN in CMakeLists.txt instead
-//KLocale::global()->insertCatalog("libkexiv2");
 
     int ret = app.exec();
 

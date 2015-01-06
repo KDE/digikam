@@ -69,6 +69,12 @@ int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
     KLocalizedString::setApplicationDomain("digikam");
+    KLocalizedString::setApplicationDomain("libkdcraw");
+    KLocalizedString::setApplicationDomain("libkexiv2");
+    KLocalizedString::setApplicationDomain("libkface");
+    KLocalizedString::setApplicationDomain("libkgeomap");
+    KLocalizedString::setApplicationDomain("kipiplugins");
+    KLocalizedString::setApplicationDomain("libkipi");
 
     KAboutData aboutData(QString::fromLatin1("digikam"), // component name
                          i18n("digiKam"),                // display name
@@ -221,16 +227,6 @@ int main(int argc, char* argv[])
     QStringList tipsFiles;
     tipsFiles.append("digikam/tips");
     tipsFiles.append("kipi/tips");
-
-#pragma message("port can these be safely removed?")
-    //KF5 port: remove this line and define TRANSLATION_DOMAIN in CMakeLists.txt instead
-//KLocale::global()->insertCatalog("kipiplugins");
-    //KF5 port: remove this line and define TRANSLATION_DOMAIN in CMakeLists.txt instead
-//KLocale::global()->insertCatalog("libkdcraw");
-    //KF5 port: remove this line and define TRANSLATION_DOMAIN in CMakeLists.txt instead
-//KLocale::global()->insertCatalog("libkexiv2");
-    //KF5 port: remove this line and define TRANSLATION_DOMAIN in CMakeLists.txt instead
-//KLocale::global()->insertCatalog("libkipi");
 
     if (!app.isSessionRestored())
     {
