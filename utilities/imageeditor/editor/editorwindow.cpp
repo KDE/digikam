@@ -73,7 +73,6 @@
 #include <kfileitemdelegate.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
-#include <kimageio.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kopenwithdialog.h>
@@ -111,6 +110,7 @@
 
 #include "digikam_debug.h"
 #include "config-digikam.h"
+#include "globals.h"
 #include "applicationsettings.h"
 #include "actioncategorizedview.h"
 #include "buttonicondisabler.h"
@@ -2093,21 +2093,20 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
 
 QStringList EditorWindow::getWritingFilters()
 {
-    // begin with the filters KImageIO supports
-    QString pattern             = KImageIO::pattern(KImageIO::Writing);
-    QStringList writablePattern = pattern.split(QChar('\n'));
+    // begin with the filters Qt supports
+    QStringList writablePattern = supportedImageMimeTypes(QIODevice::WriteOnly);
     qCDebug(DIGIKAM_GENERAL_LOG) << "KImageIO offered pattern: " << writablePattern;
 
     // append custom file types
 
 #ifdef HAVE_JASPER
-    if (!pattern.contains("*.jp2"))
+    if (!writablePattern.contains("*.jp2"))
     {
         writablePattern.append(QString("*.jp2|") + i18n("JPEG 2000 image"));
     }
 #endif // HAVE_JASPER
 
-    if (!pattern.contains("*.pgf"))
+    if (!writablePattern.contains("*.pgf"))
     {
         writablePattern.append(QString("*.pgf|") + i18n("Progressive Graphics File"));
     }
@@ -2181,8 +2180,8 @@ QString EditorWindow::selectValidSavingFormat(const QString& filter,
              << filter << ", targetUrl = " << targetUrl << ", autoFilter" << autoFilter;
 
     // build a list of valid types
-    QStringList validTypes = KImageIO::types(KImageIO::Writing);
-    qCDebug(DIGIKAM_GENERAL_LOG) << "KDE Offered types: " << validTypes;
+    QStringList validTypes = supportedImageMimeTypes(QIODevice::WriteOnly);
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Qt Offered types: " << validTypes;
 
     validTypes << "TIF";
     validTypes << "TIFF";

@@ -66,7 +66,6 @@
 #include <kedittoolbar.h>
 #include <khelpmenu.h>
 #include <kiconloader.h>
-#include <kimageio.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <knotifyconfigwidget.h>
@@ -90,6 +89,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "globals.h"
 #include "advancedrenamemanager.h"
 #include "album.h"
 #include "albummanager.h"
@@ -1248,9 +1248,9 @@ void ImportUI::slotUpload()
 
     QString fileformats;
 
-    QStringList patternList = KImageIO::pattern(KImageIO::Reading).split('\n');
+    QStringList patternList = supportedImageMimeTypes(QIODevice::ReadOnly);
 
-    // All Images from list must been always the first entry given by KDE API
+    // All Images from list must been always the first entry given by Qt API
     QString allPictures = patternList.at(0);
 
     // Add RAW file format to All Images" type mime and replace current.

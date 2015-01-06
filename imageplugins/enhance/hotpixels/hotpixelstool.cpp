@@ -37,10 +37,8 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kconfig.h>
 #include <kglobal.h>
-#include <kimageio.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
 
@@ -118,16 +116,16 @@ HotPixelsTool::HotPixelsTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->gboxSettings   = new EditorToolSettings;
+    d->gboxSettings         = new EditorToolSettings;
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel|
                                 EditorToolSettings::Try);
 
-    QGridLayout* grid = new QGridLayout(d->gboxSettings->plainPage());
+    QGridLayout* const grid = new QGridLayout(d->gboxSettings->plainPage());
 
-    QLabel* filterMethodLabel = new QLabel(i18n("Filter:"), d->gboxSettings->plainPage());
-    d->filterMethodCombo      = new RComboBox(d->gboxSettings->plainPage());
+    QLabel* const filterMethodLabel = new QLabel(i18n("Filter:"), d->gboxSettings->plainPage());
+    d->filterMethodCombo            = new RComboBox(d->gboxSettings->plainPage());
     d->filterMethodCombo->addItem(i18nc("average filter mode", "Average"));
     d->filterMethodCombo->addItem(i18nc("linear filter mode", "Linear"));
     d->filterMethodCombo->addItem(i18nc("quadratic filter mode", "Quadratic"));

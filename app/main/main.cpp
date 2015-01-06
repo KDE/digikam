@@ -30,29 +30,23 @@
 #include <QDBusConnection>
 #include <QString>
 #include <QStringList>
+#include <QApplication>
+#include <QCommandLineParser>
+#include <QCommandLineOption>
 
 // KDE includes
 
-
-
-
 #include <kconfig.h>
-#include <kdeversion.h>
 #include <kglobal.h>
-#include <kimageio.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <ktip.h>
+#include <kaboutdata.h>
 
 // Libkexiv2 includes
 
 #include <libkexiv2_version.h>
 #include <kexiv2.h>
-#include <QApplication>
-#include <KAboutData>
-#include <KLocalizedString>
-#include <QCommandLineParser>
-#include <QCommandLineOption>
 
 // Local includes
 
@@ -76,7 +70,7 @@ int main(int argc, char* argv[])
     QApplication app(argc, argv);
 
     KAboutData aboutData(QString::fromLatin1("digikam"), // component name
-                         i18n("digiKam"),               // display name
+                         i18n("digiKam"),                // display name
                          digiKamVersion());
 
 #pragma message("is setApplicationDomain necessary or does it come from CMakeLists already?")
@@ -94,18 +88,16 @@ int main(int argc, char* argv[])
     KAboutData::setApplicationData(aboutData);
     parser.addVersionOption();
     parser.addHelpOption();
-    //PORTING SCRIPT: adapt aboutdata variable if necessary
     aboutData.setupCommandLine(&parser);
     parser.process(app);
     aboutData.processCommandLine(&parser);
 
-    parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("from"), i18n("Open camera dialog at <path>"), QLatin1String("path")));
-    parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("udi"), i18n("Open camera dialog for the device with Solid UDI <udi>"), QLatin1String("udi")));
+    parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("from"),          i18n("Open camera dialog at <path>"), QLatin1String("path")));
+    parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("udi"),           i18n("Open camera dialog for the device with Solid UDI <udi>"), QLatin1String("udi")));
     parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("detect-camera"), i18n("Automatically detect and open a connected gphoto2 camera")));
-    parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("directory"), i18n("Start digikam with the SQLite database file found in the directory <dir>"), QLatin1String("dir")));
+    parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("directory"),     i18n("Start digikam with the SQLite database file found in the directory <dir>"), QLatin1String("dir")));
 
     KExiv2Iface::KExiv2::initializeExiv2();
-
 
     // Check if SQLite Qt4 plugin is available.
 
@@ -158,8 +150,6 @@ int main(int argc, char* argv[])
     if (!mainConfig.exists() || (version.startsWith(QLatin1String("0.5"))))
     {
         AssistantDlg firstRun;
-#pragma message("is setTopWidget necessary?")
-        //app.setTopWidget(&firstRun);
         firstRun.show();
 
         if (firstRun.exec() == QDialog::Rejected)
@@ -214,9 +204,6 @@ int main(int argc, char* argv[])
     QDBusConnection::sessionBus().unregisterService("org.kde.digikam.startup-" +
                      QString::number(QCoreApplication::instance()->applicationPid()));
 
-
-#pragma message("port: is setTopWidget necessary?")
-    //app.setTopWidget(digikam);
     digikam->restoreSession();
     digikam->show();
 

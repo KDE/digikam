@@ -37,7 +37,6 @@
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
-#include <kimageio.h>
 
 // Libkdcraw includes
 
@@ -52,6 +51,7 @@
 #include "loadingdescription.h"
 #include "thumbnailsize.h"
 #include "thumbnailloadthread.h"
+#include "globals.h"
 
 namespace Digikam
 {
@@ -97,7 +97,7 @@ ImageDialogPreview::ImageDialogPreview(QWidget* const parent)
     vlay->addWidget(d->infoLabel);
     vlay->addStretch();
 
-    setSupportedMimeTypes(KImageIO::mimeTypes());
+    setSupportedMimeTypes(supportedImageMimeTypes(QIODevice::WriteOnly));
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
             this, SLOT(slotThumbnail(LoadingDescription,QPixmap)));
@@ -358,7 +358,7 @@ ImageDialog::ImageDialog(QWidget* const parent, const QUrl& url, bool singleSele
     : d(new Private)
 {
     d->singleSelect         = singleSelect;
-    QStringList patternList = KImageIO::pattern(KImageIO::Reading).split('\n', QString::SkipEmptyParts);
+    QStringList patternList = supportedImageMimeTypes(QIODevice::ReadOnly);
 
     // All Images from list must been always the first entry given by KDE API
     QString allPictures     = patternList[0];

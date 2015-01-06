@@ -40,7 +40,6 @@
 
 #include <kcomponentdata.h>
 #include <kglobal.h>
-#include <kimageio.h>
 #include <klibloader.h>
 #include <klocalizedstring.h>
 #include <kmimetype.h>

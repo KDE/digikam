@@ -37,7 +37,6 @@
 #include <kfileitem.h>
 #include <klocalizedstring.h>
 #include <kconfig.h>
-
 #include <kglobalsettings.h>
 
 // Libkdcraw includes
@@ -207,7 +206,7 @@ void ImagePropertiesSideBar::setImagePropertiesInformation(const QUrl& url)
     QString str;
     QString unavailable(i18n("<i>unavailable</i>"));
 
-    KFileItem fi(KFileItem::Unknown, KFileItem::Unknown, url);
+    KFileItem fi(url);
     QFileInfo fileInfo(url.toLocalFile());
     DMetadata metaData(url.toLocalFile());
 

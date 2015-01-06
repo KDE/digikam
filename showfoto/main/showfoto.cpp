@@ -65,6 +65,8 @@ extern "C"
 #include <QFileDialog>
 #include <QMenu>
 #include <QMenuBar>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 // KDE includes
 
@@ -74,7 +76,6 @@ extern "C"
 #include <kactioncollection.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <kimageio.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kmultitabbar.h>
@@ -99,6 +100,7 @@ extern "C"
 
 // Local includes
 
+#include "globals.h"
 #include "digikam_debug.h"
 #include "canvas.h"
 #include "editorcore.h"
@@ -1118,12 +1120,12 @@ void ShowFoto::openFolder(const QUrl& url)
 
     // Parse KDE image IO mime types registration to get files filter pattern.
 
-    QStringList mimeTypes = KImageIO::mimeTypes(KImageIO::Reading);
+    QStringList mimeTypes = supportedImageMimeTypes(QIODevice::ReadOnly);
     QString filter;
 
     for (QStringList::ConstIterator it = mimeTypes.constBegin() ; it != mimeTypes.constEnd() ; ++it)
     {
-        QString format = KImageIO::typeForMime(*it).at(0).toUpper();
+        QString format = QMimeDatabase().mimeTypeForName(*it).name().toUpper();
         filter.append ("*.");
         filter.append (format);
         filter.append (" ");

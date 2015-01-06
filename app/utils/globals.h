@@ -29,6 +29,16 @@
 
 #include <QObject>
 #include <QShortcut>
+#include <QList>
+#include <QImageReader>
+#include <QImageWriter>
+#include <QByteArray>
+#include <QStringList>
+#include <QIODevice>
+
+// Local includes
+
+#include "digikam_debug.h"
 
 /** Macros for image filters.
  */
@@ -55,6 +65,36 @@ inline QShortcut* defineShortcut(QWidget* const w, const QKeySequence& key, cons
     QObject::connect(s, SIGNAL(activated()), receiver, slot);
 
     return s;
+}
+
+/** Return list of supported image type mime for reading or writing operations.
+ *  Supported modes are QIODevice::ReadOnly, QIODevice::WriteOnly, and QIODevice::ReadWrite.
+ */
+inline QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode)
+{
+    QStringList       mimeTypes;
+    QList<QByteArray> supported;
+    
+    switch(mode)
+    {
+        case QIODevice::ReadOnly:               
+            supported = QImageReader::supportedMimeTypes();
+            break;
+        case QIODevice::WriteOnly:               
+            supported = QImageWriter::supportedMimeTypes();
+            break;
+        case QIODevice::ReadWrite:               
+            supported = QImageWriter::supportedMimeTypes() + QImageReader::supportedMimeTypes();
+            break;
+        default:
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Unsupported mode!";
+            break;
+    }
+
+    Q_FOREACH(QByteArray mimeType, supported)
+        mimeTypes.append(QString::fromLatin1(mimeType));
+
+    return mimeTypes;
 }
 
 /** Field value limits for all digiKam-specific fields (not EXIF/IPTC fields)
