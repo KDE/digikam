@@ -49,7 +49,6 @@
 #include <kpagedialog.h>
 #include <kmessagebox.h>
 #include <kurlrequester.h>
-#include <ktemporaryfile.h>
 
 // Local includes
 

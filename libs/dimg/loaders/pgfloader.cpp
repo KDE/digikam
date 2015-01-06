@@ -50,11 +50,6 @@ extern "C"
 #include <QTextStream>
 #include <QDataStream>
 
-// KDE includes
-
-#include <ktemporaryfile.h>
-#include "digikam_debug.h"
-
 // Libkexiv2 includes
 
 #include <kexiv2.h>
@@ -71,6 +66,7 @@ extern "C"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "pgfutils.h"

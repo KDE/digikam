@@ -34,20 +34,19 @@
 #include <QLabel>
 #include <QGroupBox>
 #include <QTimer>
-
-// KDE includes
-
-
-#include <kmessagebox.h>
-#include <klocalizedstring.h>
-#include "digikam_debug.h"
-#include <kglobalsettings.h>
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <QApplication>
 #include <QStyle>
 
+// KDE includes
+
+#include <kmessagebox.h>
+#include <klocalizedstring.h>
+#include <kglobalsettings.h>
+
 // Local includes
 
+#include "digikam_debug.h"
 #include "config-digikam.h"
 #include "databaseparameters.h"
 #include "databaseserverstarter.h"
@@ -204,7 +203,7 @@ void DatabaseWidget::slotChangeDatabasePath(const QUrl& result)
 #ifdef _WIN32
     // Work around bug #189168
     KTemporaryFile temp;
-    temp.setPrefix(result.toLocalFile(QUrl::AddTrailingSlash));
+    temp.setFileTemplate(result.toLocalFile(QUrl::AddTrailingSlash) + QLatin1String("XXXXXX"));
     temp.open();
 
     if (!result.isEmpty() && !temp.open())

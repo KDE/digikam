@@ -90,6 +90,7 @@
 
 #include "digikam_debug.h"
 #include "globals.h"
+#include "cameramessagebox.h"
 #include "advancedrenamemanager.h"
 #include "album.h"
 #include "albummanager.h"
@@ -97,7 +98,6 @@
 #include "albumselectdialog.h"
 #include "cameracontroller.h"
 #include "camerafolderdialog.h"
-#include "cameramessagebox.h"
 #include "camerainfodialog.h"
 #include "cameralist.h"
 #include "cameranamehelper.h"

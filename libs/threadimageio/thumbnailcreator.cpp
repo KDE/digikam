@@ -35,6 +35,7 @@
 #include <QIODevice>
 #include <QFile>
 #include <QUrl>
+#include <QTemporaryFile>
 
 // KDE includes
 
@@ -45,7 +46,6 @@
 #include <kmimetype.h>
 #include <kservicetypetrader.h>
 #include <kstandarddirs.h>
-#include <ktemporaryfile.h>
 #include <kdeversion.h>
 
 #include <kio/global.h>
@@ -1120,9 +1120,8 @@ void ThumbnailCreator::storeFreedesktop(const ThumbnailInfo& info, const Thumbna
     qimage.setText(QString("Thumb::MTime").toLatin1().constData(), 0, QString::number(info.modificationDate.toTime_t()));
     qimage.setText(QString("Software").toLatin1().constData(),     0, d->digiKamFingerPrint);
 
-    KTemporaryFile temp;
-    temp.setPrefix(thumbPath + "-digikam-");
-    temp.setSuffix(".png");
+    QTemporaryFile temp;
+    temp.setFileTemplate(thumbPath + QLatin1String("-digikam-") + QLatin1String("XXXXXX") + QLatin1String(".png"));
     temp.setAutoRemove(false);
 
     if (temp.open())

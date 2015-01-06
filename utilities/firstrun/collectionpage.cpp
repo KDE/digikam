@@ -34,6 +34,7 @@
 #include <QDesktopServices>
 #include <QFileInfo>
 #include <QVBoxLayout>
+#include <QTemporaryFile>
 
 // KDE includes
 
@@ -44,7 +45,6 @@
 #include <kurlrequester.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
-#include <ktemporaryfile.h>
 
 // Local includes
 
@@ -251,8 +251,8 @@ bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
 
 #ifdef _WIN32
     // Work around bug #189168
-    KTemporaryFile temp;
-    temp.setPrefix(rootAlbumFolder);
+    QTemporaryFile temp;
+    temp.setFileTemplate(rootAlbumFolder + QLatin1String("XXXXXX"));
 
     if (!temp.open())
 #else
@@ -328,9 +328,9 @@ bool CollectionPage::checkDatabase(QString& dbFolder)
 
 #ifdef _WIN32
     // Work around bug #189168
-    KTemporaryFile temp;
-    temp.setPrefix(dbFolder);
-
+    QTemporaryFile temp;
+    temp.setFileTemplate(dbFolder + QLatin1String("XXXXXX"));
+    
     if (!temp.open())
 #else
     if (!path.isWritable())

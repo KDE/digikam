@@ -53,7 +53,6 @@
 #include <kpagedialog.h>
 #include <kmessagebox.h>
 #include <kurlrequester.h>
-#include <ktemporaryfile.h>
 #include <kiconloader.h>
 
 // Local includes

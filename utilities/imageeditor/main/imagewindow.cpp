@@ -62,7 +62,6 @@
 #include <kstandardaction.h>
 #include <kstandarddirs.h>
 #include <kstatusbar.h>
-#include <ktemporaryfile.h>
 #include <ktoggleaction.h>
 #include <ktoolbar.h>
 #include <ktoolbarpopupaction.h>
