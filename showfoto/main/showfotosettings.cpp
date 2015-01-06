@@ -33,7 +33,6 @@
 // KDE includes
 
 #include <kglobal.h>
-
 #include <kconfig.h>
 #include <kconfiggroup.h>
 

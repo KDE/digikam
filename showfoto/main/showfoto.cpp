@@ -331,9 +331,11 @@ void ShowFoto::setupConnections()
     connect(this, SIGNAL(signalSelectionChanged(QRect)),
             d->rightSideBar, SLOT(slotImageSelectionChanged(QRect)));
 
-    connect(this, &ShowFoto::signalOpenFolder, this, &ShowFoto::slotOpenFolder);
+    connect(this, &ShowFoto::signalOpenFolder,
+            this, &ShowFoto::slotOpenFolder);
 
-    connect(this, &ShowFoto::signalOpenFile, this, &ShowFoto::slotOpenFile);
+    connect(this, &ShowFoto::signalOpenFile,
+            this, &ShowFoto::slotOpenFile);
 
     connect(this,SIGNAL(signalInfoList(ShowfotoItemInfoList&)),
             d->model,SLOT(reAddShowfotoItemInfos(ShowfotoItemInfoList&)));
@@ -932,7 +934,7 @@ QUrl ShowFoto::saveDestinationUrl()
     if (d->thumbBar->currentInfo().isNull())
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot return the url of the image to save "
-                   << "because no image is selected.";
+                                       << "because no image is selected.";
         return QUrl();
     }
 
@@ -1312,13 +1314,13 @@ void ShowFoto::slotDroppedUrls(const QList<QUrl>& droppedUrls)
         d->model->clearShowfotoItemInfos();
         emit signalInfoList(d->infoList);
 
-#pragma message("add errormessage when there is no valid urls. Cleanup this method...")
         if (!d->infoList.isEmpty())
         {
             slotOpenUrl(d->infoList.at(0));
         }
         else 
         {
+#pragma message("add errormessage when there is no valid urls...")
             qWarning("infolist is empty..");
         }
 
