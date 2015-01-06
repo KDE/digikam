@@ -31,7 +31,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kcompletion.h>
 
 // Local includes
 
@@ -87,7 +86,7 @@ AddTagsLineEdit::AddTagsLineEdit(QWidget* const parent)
     setTrapReturnKey(true);
 
     connect(d->completionBox, SIGNAL(currentCompletionTextChanged(QString)),
-            this, SLOT(slotCompletionBoxTextChanged(QString)) );
+            this, SLOT(slotCompletionBoxTextChanged(QString)));
 
     connect(d->completionBox, SIGNAL(currentTaggingActionChanged(TaggingAction)),
             this, SLOT(slotCompletionBoxTaggingActionChanged(TaggingAction)));
@@ -96,7 +95,7 @@ AddTagsLineEdit::AddTagsLineEdit(QWidget* const parent)
             this, SLOT(slotCompletionBoxCancelled()));
 
     connect(d->completionBox, SIGNAL(completionActivated(QString)),
-            this, SIGNAL(completionBoxActivated(QString)) );
+            this, SIGNAL(completionBoxActivated(QString)));
 
     connect(this, SIGNAL(completion(QString)),
             this, SLOT(makeCompletion(QString)));
@@ -220,7 +219,7 @@ void AddTagsLineEdit::setCompletionObject(KCompletion* comp, bool)
     KCompletionBase::setCompletionObject(comp, false);
 }
 
-AddTagsCompletionBox* AddTagsLineEdit::completionBox() const
+AddTagsCompletionBox* AddTagsLineEdit::tagCompletionBox() const
 {
     return d->completionBox;
 }

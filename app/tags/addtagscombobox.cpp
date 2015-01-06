@@ -109,7 +109,7 @@ AddTagsLineEdit* AddTagsComboBox::lineEdit() const
 
 AddTagsCompletionBox* AddTagsComboBox::completionBox() const
 {
-    return d->lineEdit->completionBox();
+    return d->lineEdit->tagCompletionBox();
 }
 
 void AddTagsComboBox::setTagTreeView(TagTreeView* view)

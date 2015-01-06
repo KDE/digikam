@@ -24,8 +24,6 @@
 #ifndef ADDTAGSLINEEDIT_H
 #define ADDTAGSLINEEDIT_H
 
-// Qt includes
-
 // KDE includes
 
 #include <klineedit.h>
@@ -74,7 +72,7 @@ public:
     TaggingAction currentTaggingAction() const;
 
     /// The custom completion box in use
-    AddTagsCompletionBox* completionBox() const;
+    AddTagsCompletionBox* tagCompletionBox() const;
 
 public Q_SLOTS:
 

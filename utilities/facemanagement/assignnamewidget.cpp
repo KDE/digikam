@@ -294,7 +294,7 @@ void AssignNameWidget::Private::layoutAddTagsWidget(bool exceedBounds, int minim
     }
     else
     {
-        lineEdit->completionBox()->setAllowExceedBounds(exceedBounds);
+        lineEdit->tagCompletionBox()->setAllowExceedBounds(exceedBounds);
     }
 }
 
