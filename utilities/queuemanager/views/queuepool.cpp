@@ -54,8 +54,6 @@ namespace Digikam
 QueuePool::QueuePool(QWidget* const parent)
     : QTabWidget(parent)
 {
-#pragma port to qt5
-    //setTabBarAutoHide(false);
     setTabsClosable(false);
     slotAddQueue();
 
