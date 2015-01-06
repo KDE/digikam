@@ -189,7 +189,7 @@ bool IccSettings::monitorProfileFromSystem() const
  *  Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *  Copyright (C) 2007 Adrian Page <adrian@pagenet.plus.com>IccProfile Private::profileForScreen(QWidget *widget)
 */
-IccProfile IccSettings::Private::profileFromWindowSystem(QWidget* const widget)
+IccProfile IccSettings::Private::profileFromWindowSystem(QWidget* const /*widget*/)
 {
 #pragma message("PORT QT5")
 #ifdef Q_WS__X11
