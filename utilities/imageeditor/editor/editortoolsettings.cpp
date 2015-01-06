@@ -47,7 +47,6 @@
 #include <kstandarddirs.h>
 #include <kstandardguiitem.h>
 #include <kguiitem.h>
-#include <kstandardguiitem.h>
 
 // Libkdcraw includes
 
@@ -416,7 +415,6 @@ void EditorToolSettings::setHistogramType(HistogramBoxType type)
 
 void EditorToolSettings::setToolIcon(const QIcon& icon)
 {
-#pragma message("hardcoded icon size")
     d->toolIcon->setPixmap(icon.pixmap(16));
 }
 
