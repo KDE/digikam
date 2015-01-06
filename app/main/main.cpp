@@ -68,13 +68,11 @@ using namespace Digikam;
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
+    KLocalizedString::setApplicationDomain("digikam");
 
     KAboutData aboutData(QString::fromLatin1("digikam"), // component name
                          i18n("digiKam"),                // display name
                          digiKamVersion());
-
-#pragma message("is setApplicationDomain necessary or does it come from CMakeLists already?")
-    KLocalizedString::setApplicationDomain("digikam");
 
     aboutData.setShortDescription(DAboutData::digiKamSlogan());;
     aboutData.setLicense(KAboutLicense::GPL);

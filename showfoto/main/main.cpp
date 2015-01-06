@@ -49,7 +49,6 @@ using namespace Digikam;
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
-#pragma message("is setApplicationDomain necessary or does it come from CMakeLists already?")
     KLocalizedString::setApplicationDomain("digikam");
 
     KAboutData aboutData(QString::fromLatin1("showfoto"), // component name
@@ -87,8 +86,6 @@ int main(int argc, char* argv[])
     parser.clearPositionalArguments();
 
     ShowFoto::ShowFoto* const w = new ShowFoto::ShowFoto(urlList);
-#pragma message("is setTopWidget necessary?")
-    //app.setTopWidget(w);
     w->show();
 
 #pragma message("PORT QT5")
