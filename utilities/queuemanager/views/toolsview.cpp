@@ -64,9 +64,6 @@ public:
 ToolsView::ToolsView(QWidget* const parent)
     : QTabWidget(parent), d(new Private)
 {
-#pragma port qt5
-    //setTabBarAutoHide(false);
-
     setTabsClosable(false);
     // --------------------------------------------------------
 

@@ -24,10 +24,6 @@
 #ifndef TOOLS_VIEW_H
 #define TOOLS_VIEW_H
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "dhistoryview.h"

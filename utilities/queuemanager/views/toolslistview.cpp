@@ -31,13 +31,13 @@
 #include <QMimeData>
 #include <QPainter>
 #include <QPixmap>
+#include <QAction>
+#include <QMenu>
 
 // KDE includes
 
-#include <QAction>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <QMenu>
 
 namespace Digikam
 {

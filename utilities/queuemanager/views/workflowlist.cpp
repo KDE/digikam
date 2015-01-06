@@ -31,13 +31,13 @@
 #include <QMimeData>
 #include <QPainter>
 #include <QPixmap>
+#include <QMenu>
+#include <QAction>
 
 // KDE includes
 
-#include <QAction>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <QMenu>
 #include <kmessagebox.h>
 #include <kstandardguiitem.h>
 

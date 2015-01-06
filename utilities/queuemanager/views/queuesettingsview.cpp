@@ -127,8 +127,6 @@ public:
 QueueSettingsView::QueueSettingsView(QWidget* const parent)
     : QTabWidget(parent), d(new Private)
 {
-#pragma port to qt5
-    //setTabBarAutoHide(false);
     setTabsClosable(false);
 
     // --------------------------------------------------------
