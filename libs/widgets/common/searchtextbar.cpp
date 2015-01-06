@@ -36,7 +36,7 @@
 // KDE includes
 
 #include <kconfiggroup.h>
-#include <kglobalsettings.h>
+#include <kcompletion.h>
 #include <kglobal.h>
 #include <kconfig.h>
 
@@ -118,7 +118,7 @@ SearchTextBar::~SearchTextBar()
 void SearchTextBar::doLoadState()
 {
     KConfigGroup group        = getConfigGroup();
-    setCompletionMode((KCompletion::CompletionMode)group.readEntry(entryName(d->optionAutoCompletionModeEntry), (int)KGlobalSettings::completionMode()));
+    setCompletionMode((KCompletion::CompletionMode)group.readEntry(entryName(d->optionAutoCompletionModeEntry), (int)KCompletion().completionMode()));
     d->settings.caseSensitive = (Qt::CaseSensitivity)group.readEntry(entryName(d->optionCaseSensitiveEntry),    (int)Qt::CaseInsensitive);
     setIgnoreCase(d->settings.caseSensitive == Qt::CaseInsensitive);
 }
@@ -127,7 +127,7 @@ void SearchTextBar::doSaveState()
 {
     KConfigGroup group = getConfigGroup();
 
-    if (completionMode() != KGlobalSettings::completionMode())
+    if (completionMode() != KCompletion().completionMode())
     {
         group.writeEntry(entryName(d->optionAutoCompletionModeEntry), (int)completionMode());
     }
