@@ -41,7 +41,7 @@
 #include <kcalendarsystem.h>
 #include <kcomponentdata.h>
 #include <kmimetype.h>
-#include <kglobal.h>
+#include <klocale.h>
 
 // Libkexiv2 includes
 
@@ -103,7 +103,7 @@ bool ImageQueryPostHooks::checkPosition(double latitudeNumber, double longitudeN
 ImageQueryBuilder::ImageQueryBuilder()
 {
     // build a lookup table for month names
-    const KCalendarSystem* const cal = KGlobal::locale()->calendar();
+    const KCalendarSystem* const cal = KLocale::global()->calendar();
 
     for (int i=1; i<=12; ++i)
     {
