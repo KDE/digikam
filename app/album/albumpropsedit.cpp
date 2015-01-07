@@ -39,15 +39,13 @@
 #include <QStyle>
 #include <QComboBox>
 #include <QLineEdit>
+#include <QStandardPaths>
 
 // KDE includes
 
 #include <kdatepicker.h>
-#include <kdeversion.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <ktextedit.h>
 #include <kseparator.h>
 
@@ -127,7 +125,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
     d->album            = album;
     QWidget* const page = new QWidget(this);
     QLabel* const logo  = new QLabel(page);
-    logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
                     .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     QLabel* const topLabel = new QLabel(page);
@@ -187,12 +185,9 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
     dateLabel->setBuddy(d->datePicker);
 
     RHBox* const buttonRow            = new RHBox(page);
-    QPushButton* const dateLowButton  = new QPushButton(i18nc("Selects the date of the oldest image",
-                                                        "&Oldest"), buttonRow);
-    QPushButton* const dateAvgButton  = new QPushButton(i18nc("Calculates the average date",
-                                                        "&Average"), buttonRow);
-    QPushButton* const dateHighButton = new QPushButton(i18nc("Selects the date of the newest image",
-                                                        "Newest"), buttonRow);
+    QPushButton* const dateLowButton  = new QPushButton(i18nc("Selects the date of the oldest image", "&Oldest"),  buttonRow);
+    QPushButton* const dateAvgButton  = new QPushButton(i18nc("Calculates the average date",          "&Average"), buttonRow);
+    QPushButton* const dateHighButton = new QPushButton(i18nc("Selects the date of the newest image", "Newest"),   buttonRow);
 
     if (create)
     {
