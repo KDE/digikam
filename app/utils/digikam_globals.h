@@ -32,6 +32,10 @@
 #include <QIODevice>
 #include <QKeySequence>
 
+// Local includes
+
+#include "digikam_export.h"
+
 class QWidget;
 class QObject;
 
@@ -144,12 +148,12 @@ enum ChannelType
 
 /** Convenience method for creating keyboard shortcuts.
  */
-inline QShortcut* defineShortcut(QWidget* const w, const QKeySequence& key, const QObject* receiver, const char* slot);
+DIGIKAM_EXPORT QShortcut* defineShortcut(QWidget* const w, const QKeySequence& key, const QObject* receiver, const char* slot);
 
 /** Return list of supported image formats by Qt for reading or writing operations.
  *  Supported modes are QIODevice::ReadOnly, QIODevice::WriteOnly, and QIODevice::ReadWrite.
  */
-inline QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode);
+DIGIKAM_EXPORT QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode);
 
 } // namespace Digikam
 
