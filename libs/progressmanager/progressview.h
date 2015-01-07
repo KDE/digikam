@@ -30,10 +30,6 @@
 
 #include <QScrollArea>
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "overlaywidget.h"
