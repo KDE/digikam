@@ -36,6 +36,8 @@
 #include <QMenu>
 #include <QApplication>
 #include <QAction>
+#include <QStandardPaths>
+#include <QDirIterator>
 
 // KDE includes
 
@@ -44,7 +46,6 @@
 #include <klocalizedstring.h>
 #include <kcolorscheme.h>
 #include <kactioncollection.h>
-#include <kstandarddirs.h>
 #include <kactionmenu.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -190,7 +191,18 @@ void ThemeManager::populateThemeMenu()
     action->setCheckable(true);
     d->themeMenuAction->addAction(action);
 
-    const QStringList schemeFiles = KGlobal::dirs()->findAllResources("data", "color-schemes/*.colors", KStandardDirs::NoDuplicates);
+    QStringList schemeFiles;
+    const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "color-schemes", QStandardPaths::LocateDirectory);
+
+    Q_FOREACH (const QString& dir, dirs)
+    {
+        QDirIterator it(dir, QStringList() << QStringLiteral("*.colors"));
+
+        while (it.hasNext())
+        {
+            schemeFiles.append(it.next());
+        }
+    }
 
     QMap<QString, QAction*> actionMap;
 
