@@ -35,15 +35,15 @@
 #include <QFile>
 #include <QMutex>
 #include <QCryptographicHash>
+#include <QStandardPaths>
 
 // KDE includes
 
 #include <kglobal.h>
-#include <kstandarddirs.h>
-#include "digikam_debug.h"
-#include <QCryptographicHash>
+
 // Local includes
 
+#include "digikam_debug.h"
 #include "dimg.h"
 
 namespace Digikam
@@ -154,8 +154,19 @@ IccProfile::IccProfile(const QString& filePath)
 IccProfile::IccProfile(const char* const location, const QString& relativePath)
     : d(0)
 {
-    QString filePath = KStandardDirs::locate(location, relativePath);
+    QString filePath;
 
+    // NOTE: if necessary, implement new location support here.
+
+    if (QString(location) == QString("data"))
+    {
+         filePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, relativePath);
+    }
+    else
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Data location " << location << " to handle bundled profile is not supported.";
+    }
+        
     if (filePath.isNull())
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "The bundled profile" << relativePath << "cannot be found. Check your installation.";
@@ -178,7 +189,7 @@ IccProfile IccProfile::adobeRGB()
 
     if (path.isEmpty())
     {
-        path = KStandardDirs::locate("data", "libkdcraw/profiles/compatibleWithAdobeRGB1998.icc");
+        path = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "libkdcraw/profiles/compatibleWithAdobeRGB1998.icc");
     }
 
     return IccProfile(path);
@@ -237,12 +248,12 @@ bool IccProfile::operator==(const IccProfile& other) const
     {
         if (!d->filePath.isNull() || !other.d->filePath.isNull())
         {
-            return d->filePath == other.d->filePath;
+            return (d->filePath == other.d->filePath);
         }
 
         if (!d->data.isNull() || other.d->data.isNull())
         {
-            return d->data == other.d->data;
+            return (d->data == other.d->data);
         }
     }
 
@@ -259,7 +270,7 @@ bool IccProfile::isSameProfileAs(IccProfile& other)
     if (d && other.d)
     {
         // uses memcmp
-        return data() == other.data();
+        return (data() == other.data());
     }
 
     return false;
@@ -486,7 +497,7 @@ QStringList IccProfile::defaultSearchPaths()
     QStringList paths;
     QStringList candidates;
 
-    paths << KGlobal::dirs()->findDirs("data", "color/icc");
+    paths << QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "color/icc", QStandardPaths::LocateDirectory);
 
 #ifdef Q_OS_WIN
 
