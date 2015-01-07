@@ -36,6 +36,7 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QSet>
+#include <QFont>
 #include <QString>
 #include <QStyle>
 #include <QStyleOptionButton>
@@ -522,13 +523,19 @@ void TagsPopupMenu::slotAboutToShow()
 
         if (recentTags.isEmpty())
         {
-#pragma message("PORT QT5")
-//            addTitle(d->recentTagPix, i18n("No Recently Assigned Tags"));
+            QAction* const title = new QAction(d->recentTagPix, i18n("No Recently Assigned Tags"), this);
+            QFont font           = title->font();
+            font.setBold(true);
+            title->setFont(font);
+            title->setDisabled(true);
         }
         else
         {
-#pragma message("PORT QT5")
-//            addTitle(d->recentTagPix, i18n("Recently Assigned Tags"));
+            QAction* const title = new QAction(d->recentTagPix, i18n("Recently Assigned Tags"), this);
+            QFont font           = title->font();
+            font.setBold(true);
+            title->setFont(font);
+            title->setDisabled(true);
 
             for (AlbumList::const_iterator it = recentTags.constBegin();
                  it != recentTags.constEnd(); ++it)
