@@ -313,6 +313,7 @@ QRect TagToggleMenuWidget::checkIndicatorSize(QStyleOption* option) const
     QStyleOptionButton opt;
     opt.QStyleOption::operator=(*option);
     //opt.rect = bounding;
+
     return style()->subElementRect(QStyle::SE_ViewItemCheckIndicator, &opt, this);
 }
 
@@ -482,6 +483,7 @@ void TagsPopupMenu::slotAboutToShow()
         // also add the parents of the assigned tags
 
         bool hasValidTag = false;
+
         for (QSet<int>::const_iterator it = d->assignedTags.constBegin(); it != d->assignedTags.constEnd(); ++it)
         {
             TAlbum* const album = man->findTAlbum(*it);

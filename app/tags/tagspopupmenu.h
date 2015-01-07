@@ -30,9 +30,6 @@
 // Qt includes
 
 #include <QList>
-
-// KDE includes
-
 #include <QMenu>
 
 namespace Digikam
