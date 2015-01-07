@@ -43,7 +43,7 @@
 #include "dimg.h"
 #include "blurfilter.h"
 #include "mixerfilter.h"
-#include "globals.h"
+#include "digikam_globals.h"
 
 namespace Digikam
 {

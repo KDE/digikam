@@ -42,7 +42,7 @@
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "databasewatch.h"
-#include "globals.h"
+#include "digikam_globals.h"
 #include "imagepropertiestab.h"
 #include "tagproperties.h"
 

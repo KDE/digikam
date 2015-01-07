@@ -31,7 +31,7 @@
 
 // local includes
 
-#include "globals.h"
+#include "digikam_globals.h"
 
 namespace Digikam
 {

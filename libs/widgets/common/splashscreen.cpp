@@ -43,7 +43,7 @@
 // Local includes
 
 #include "daboutdata.h"
-#include "version.h"
+#include "digikam_version.h"
 
 namespace Digikam
 {

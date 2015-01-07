@@ -34,7 +34,7 @@
 
 // Local includes
 
-#include "globals.h"
+#include "digikam_globals.h"
 #include "dimg.h"
 #include "pixelsaliasfilter.h"
 

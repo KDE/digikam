@@ -38,7 +38,7 @@
 
 // Local includes
 
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "jpegsettings.h"
 #include "pgfsettings.h"
 #include "pngsettings.h"

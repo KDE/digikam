@@ -44,7 +44,7 @@
 #include "digikam_debug.h"
 #include "daboutdata.h"
 #include "thememanager.h"
-#include "version.h"
+#include "digikam_version.h"
 
 namespace Digikam
 {

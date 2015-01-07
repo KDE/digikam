@@ -34,7 +34,7 @@
 
 #include "dimg.h"
 #include "pixelsaliasfilter.h"
-#include "globals.h"
+#include "digikam_globals.h"
 
 namespace Digikam
 {

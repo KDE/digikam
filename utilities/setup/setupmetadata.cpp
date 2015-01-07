@@ -59,7 +59,7 @@
 
 #include "digikam_debug.h"
 #include "applicationsettings.h"
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "metadatapanel.h"
 #include "metadatasettings.h"
 

@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "pgfloader.h"
 
 // C Ansi includes

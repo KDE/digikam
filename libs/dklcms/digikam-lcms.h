@@ -24,7 +24,7 @@
 #ifndef DIGIKAM_LCMS_H
 #define DIGIKAM_LCMS_H
 
-#include "config-digikam.h"
+#include "digikam_config.h"
 
 // needed for KDE_EXPORT and KDE_IMPORT macros
 #include <kdemacros.h>

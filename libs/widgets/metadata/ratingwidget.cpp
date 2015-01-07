@@ -50,7 +50,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "globals.h"
+#include "digikam_globals.h"
 #include "thememanager.h"
 
 namespace Digikam

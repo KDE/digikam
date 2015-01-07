@@ -33,7 +33,7 @@
 #include "digikam_debug.h"
 #include "thumbnailloadthread.h"
 #include "digikam_export.h"
-#include "globals.h"
+#include "digikam_globals.h"
 
 namespace Digikam
 {

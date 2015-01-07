@@ -95,7 +95,7 @@
 #include "editorstackview.h"
 #include "fileactionmngr.h"
 #include "fileoperation.h"
-#include "globals.h"
+#include "digikam_globals.h"
 #include "iccsettingscontainer.h"
 #include "imageattributeswatch.h"
 #include "imagefiltermodel.h"

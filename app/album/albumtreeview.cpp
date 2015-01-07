@@ -44,7 +44,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "globals.h"
+#include "digikam_globals.h"
 #include "albumdragdrop.h"
 #include "albummanager.h"
 #include "albummodeldragdrophandler.h"

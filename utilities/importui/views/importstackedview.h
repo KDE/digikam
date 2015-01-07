@@ -32,7 +32,7 @@
 
 // Local includes
 
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "importthumbnailbar.h"
 #include "importpreviewview.h"
 #include "thumbbardock.h"

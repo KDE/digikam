@@ -36,7 +36,7 @@
 
 // Local includes
 
-#include "globals.h"
+#include "digikam_globals.h"
 #include "imagepropertiessidebardb.h"
 #include "statusprogressbar.h"
 #include "dzoombar.h"

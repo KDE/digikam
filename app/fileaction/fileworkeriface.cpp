@@ -34,7 +34,7 @@
 #include "imageattributeswatch.h"
 #include "imageinfotasksplitter.h"
 #include "scancontroller.h"
-#include "globals.h"
+#include "digikam_globals.h"
 #include "jpegutils.h"
 #include "dimg.h"
 

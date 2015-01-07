@@ -51,7 +51,7 @@
 #include "loadingdescription.h"
 #include "thumbnailsize.h"
 #include "thumbnailloadthread.h"
-#include "globals.h"
+#include "digikam_globals.h"
 
 namespace Digikam
 {

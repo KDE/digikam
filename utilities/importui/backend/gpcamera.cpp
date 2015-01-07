@@ -57,7 +57,7 @@ extern "C"
 
 // Local includes
 
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "dmetadata.h"
 
 //#define GPHOTO2_DEBUG 1

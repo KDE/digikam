@@ -49,7 +49,7 @@
 #include "digikam_debug.h"
 #include "colorgradientwidget.h"
 #include "histogramwidget.h"
-#include "globals.h"
+#include "digikam_globals.h"
 
 namespace Digikam
 {

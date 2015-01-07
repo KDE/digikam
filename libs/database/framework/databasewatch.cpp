@@ -38,7 +38,7 @@
 
 #include "collectionmanager.h"
 #include "databasewatchadaptor.h"
-#include "config-digikam.h"
+#include "digikam_config.h"
 
 namespace Digikam
 {

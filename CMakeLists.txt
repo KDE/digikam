@@ -360,7 +360,7 @@ MACRO_BOOL_TO_01(ENABLE_IMGLOADERDEBUGMSG USE_IMGLOADERDEBUGMSG)
 
 # Set config files accordingly with optional dependencies
 
-configure_file(app/utils/config-digikam.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/app/utils/config-digikam.h)
+configure_file(app/utils/digikam_config.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/app/utils/digikam_config.h)
 
 # ==================================================================================================
 # Log messages
@@ -983,6 +983,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/thememanager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/sidebar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/app/utils/digikam_debug.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/app/utils/digikam_globals.cpp
        )
 
     set(libitemview_SRCS

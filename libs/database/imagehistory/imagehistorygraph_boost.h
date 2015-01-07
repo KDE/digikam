@@ -25,7 +25,7 @@
 #define IMAGEHISTORYGRAPH_BOOST_H
 
 // To include pragma directives for MSVC
-#include "config-digikam.h"
+#include "digikam_config.h"
 
 // Pragma directives to reduce warnings from Boost header files.
 #if not defined(__APPLE__) && defined(__GNUC__)

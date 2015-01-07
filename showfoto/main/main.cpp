@@ -42,7 +42,7 @@
 
 #include "daboutdata.h"
 #include "showfoto.h"
-#include "version.h"
+#include "digikam_version.h"
 
 using namespace Digikam;
 

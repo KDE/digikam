@@ -41,7 +41,7 @@
 
 // Local includes
 
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "digikam_export.h"
 #include "dxmlguiwindow.h"
 

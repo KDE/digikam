@@ -35,7 +35,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "globals.h"
+#include "digikam_globals.h"
 #include "albumdb.h"
 #include "databaseaccess.h"
 #include "databaseinfocontainers.h"

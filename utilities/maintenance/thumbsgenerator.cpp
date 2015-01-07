@@ -48,7 +48,7 @@
 #include "thumbnaildatabaseaccess.h"
 #include "thumbnaildb.h"
 #include "maintenancethread.h"
-#include "config-digikam.h"
+#include "digikam_config.h"
 
 namespace Digikam
 {

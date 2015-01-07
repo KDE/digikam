@@ -40,7 +40,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "globals.h"
+#include "digikam_globals.h"
 #include "editorwindow.h"
 #include "versionmanager.h"
 

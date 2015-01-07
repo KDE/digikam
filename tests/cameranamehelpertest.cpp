@@ -30,7 +30,7 @@
 // Local includes
 
 #include "cameranamehelper.h"
-#include "config-digikam.h"
+#include "digikam_config.h"
 
 using namespace Digikam;
 

@@ -32,7 +32,7 @@
 
 // Local includes
 
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "digikamimageview.h"
 #include "digikamimagedelegate.h"
 #include "imagerotationoverlay.h"

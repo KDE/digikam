@@ -32,7 +32,7 @@
 
 // Local includes
 
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "dimg.h"
 #include "exposurecontainer.h"
 #include "iccmanager.h"

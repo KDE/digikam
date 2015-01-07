@@ -31,7 +31,7 @@
 
 // Local includes
 
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "sidebar.h"
 #include "digikam_export.h"
 #include "searchtextbar.h"

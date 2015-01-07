@@ -56,7 +56,7 @@
 #include "dimg.h"
 #include "imagehistogram.h"
 #include "imagecurves.h"
-#include "globals.h"
+#include "digikam_globals.h"
 #include "histogrampainter.h"
 
 namespace Digikam

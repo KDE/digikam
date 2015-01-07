@@ -57,7 +57,7 @@
 #include "imagecurves.h"
 #include "imagedialog.h"
 #include "imagehistogram.h"
-#include "globals.h"
+#include "digikam_globals.h"
 #include "digikam_debug.h"
 
 using namespace KDcrawIface;

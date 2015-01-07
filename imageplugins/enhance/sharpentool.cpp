@@ -43,7 +43,7 @@
 
 // Local includes
 
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "sharpsettings.h"
 #include "sharpenfilter.h"
 #include "unsharpmaskfilter.h"

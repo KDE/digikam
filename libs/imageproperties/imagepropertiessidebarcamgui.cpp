@@ -39,7 +39,7 @@
 
 // Local includes
 
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "dmetadata.h"
 #include "camiteminfo.h"
 #include "cameraitempropertiestab.h"

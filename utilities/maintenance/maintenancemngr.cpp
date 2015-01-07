@@ -37,7 +37,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "maintenancesettings.h"
 #include "newitemsfinder.h"
 #include "thumbsgenerator.h"

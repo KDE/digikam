@@ -41,7 +41,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "templateselector.h"
 #include "ddatetimeedit.h"
 #include "template.h"

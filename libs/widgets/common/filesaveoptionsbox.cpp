@@ -45,7 +45,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "jpegsettings.h"
 #include "pngsettings.h"
 #include "tiffsettings.h"

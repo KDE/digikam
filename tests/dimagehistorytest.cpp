@@ -36,7 +36,7 @@
 
 // Local includes
 
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "editortooliface.h"
 #include "editorwindow.h"
 #include "imageiface.h"

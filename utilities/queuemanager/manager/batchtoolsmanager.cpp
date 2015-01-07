@@ -29,7 +29,7 @@
 
 // Local includes
 
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "assigntemplate.h"
 #include "autocorrection.h"
 #include "convert2jpeg.h"

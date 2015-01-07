@@ -22,7 +22,7 @@
  * ============================================================ */
 
 #include "libsinfodlg.h"
-#include "config-digikam.h"
+#include "digikam_config.h"
 
 // Qt includes
 

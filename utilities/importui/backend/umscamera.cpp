@@ -63,7 +63,7 @@ extern "C"
 // Local includes
 
 #include "digikam_debug.h"
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "dimg.h"
 #include "dmetadata.h"
 #include "imagescanner.h"

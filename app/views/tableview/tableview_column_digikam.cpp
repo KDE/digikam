@@ -34,7 +34,7 @@
 
 #include "digikam_debug.h"
 #include "databasefields.h"
-#include "globals.h"
+#include "digikam_globals.h"
 #include "imageinfo.h"
 
 namespace Digikam

@@ -109,8 +109,8 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "config-digikam.h"
-#include "globals.h"
+#include "digikam_config.h"
+#include "digikam_globals.h"
 #include "applicationsettings.h"
 #include "actioncategorizedview.h"
 #include "buttonicondisabler.h"

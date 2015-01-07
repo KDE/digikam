@@ -52,7 +52,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "imagepreviewviewitem.h"
 #include "applicationsettings.h"
 #include "contextmenuhelper.h"

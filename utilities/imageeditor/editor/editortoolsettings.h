@@ -33,7 +33,7 @@
 #include "digikam_export.h"
 #include "digikam_debug.h"
 #include "histogrambox.h"
-#include "globals.h"
+#include "digikam_globals.h"
 
 class QPushButton;
 class QPixmap;

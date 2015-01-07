@@ -53,7 +53,7 @@
 #include "collectionscanner.h"
 #include "imagequerybuilder.h"
 #include "collectionscannerobserver.h"
-#include "config-digikam.h"
+#include "digikam_config.h"
 #ifdef HAVE_SQLITE2
 #include "upgradedb_sqlite2tosqlite3.h"
 #endif

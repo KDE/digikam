@@ -51,7 +51,7 @@
 // Local includes
 
 #include "imagehistogram.h"
-#include "globals.h"
+#include "digikam_globals.h"
 
 namespace Digikam
 {

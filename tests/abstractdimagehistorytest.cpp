@@ -37,7 +37,7 @@
 
 // Local includes
 
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "bcgfilter.h"
 #include "curvesfilter.h"
 #include "autolevelsfilter.h"

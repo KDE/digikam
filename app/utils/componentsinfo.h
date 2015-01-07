@@ -24,7 +24,7 @@
 #ifndef COMPONENTS_INFO_H
 #define COMPONENTS_INFO_H
 
-#include "config-digikam.h"
+#include "digikam_config.h"
 
 // Qt includes
 

@@ -61,7 +61,7 @@
 #include "digikamapp.h"
 #include "scancontroller.h"
 #include "thumbnaildatabaseaccess.h"
-#include "version.h"
+#include "digikam_version.h"
 
 using namespace Digikam;
 

@@ -31,16 +31,12 @@
 #include <QDBusConnection>
 #include <QString>
 #include <QTimer>
+#include <QCommandLineParser>
 
 // KDE includes
 
-
-
-#include <KAboutData>
-#include <KLocalizedString>
-#include <QCommandLineParser>
-
-
+#include <kaboutdata.h>
+#include <klocalizedstring.h>
 
 // digiKam includes
 
@@ -54,7 +50,7 @@
 #include "scancontroller.h"
 #include "setup.h"
 #include "thumbnaildatabaseaccess.h"
-#include "version.h"
+#include "digikam_version.h"
 
 namespace Digikam
 {

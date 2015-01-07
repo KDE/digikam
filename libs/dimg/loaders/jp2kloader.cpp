@@ -43,7 +43,7 @@
 
 // Local includes
 
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 #include "dmetadata.h"

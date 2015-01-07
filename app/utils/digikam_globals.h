@@ -27,18 +27,13 @@
 
 // Qt includes
 
-#include <QObject>
 #include <QShortcut>
-#include <QList>
-#include <QImageReader>
-#include <QImageWriter>
-#include <QByteArray>
 #include <QStringList>
 #include <QIODevice>
+#include <QKeySequence>
 
-// Local includes
-
-#include "digikam_debug.h"
+class QWidget;
+class QObject;
 
 /** Macros for image filters.
  */
@@ -54,48 +49,6 @@
 
 namespace Digikam
 {
-
-/** Convenience method for creating keyboard shortcuts.
- */
-inline QShortcut* defineShortcut(QWidget* const w, const QKeySequence& key, const QObject* receiver, const char* slot)
-{
-    QShortcut* const s = new QShortcut(w);
-    s->setKey(key);
-    s->setContext(Qt::WidgetWithChildrenShortcut);
-    QObject::connect(s, SIGNAL(activated()), receiver, slot);
-
-    return s;
-}
-
-/** Return list of supported image type mime for reading or writing operations.
- *  Supported modes are QIODevice::ReadOnly, QIODevice::WriteOnly, and QIODevice::ReadWrite.
- */
-inline QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode)
-{
-    QStringList       formats;
-    QList<QByteArray> supported;
-
-    switch(mode)
-    {
-        case QIODevice::ReadOnly:
-            supported = QImageReader::supportedImageFormats();
-            break;
-        case QIODevice::WriteOnly:
-            supported = QImageWriter::supportedImageFormats();
-            break;
-        case QIODevice::ReadWrite:
-            supported = QImageWriter::supportedImageFormats() + QImageReader::supportedImageFormats();
-            break;
-        default:
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Unsupported mode!";
-            break;
-    }
-
-    Q_FOREACH(QByteArray frm, supported)
-        formats.append(QString("*.") + QString::fromLatin1(frm) + QString("|%1 Image").arg(QString::fromLatin1(frm).toUpper()));
-
-    return formats;
-}
 
 /** Field value limits for all digiKam-specific fields (not EXIF/IPTC fields)
  */
@@ -186,6 +139,17 @@ enum ChannelType
     AlphaChannel,
     ColorChannels
 };
+
+// --------------------------------------------------------
+
+/** Convenience method for creating keyboard shortcuts.
+ */
+inline QShortcut* defineShortcut(QWidget* const w, const QKeySequence& key, const QObject* receiver, const char* slot);
+
+/** Return list of supported image formats by Qt for reading or writing operations.
+ *  Supported modes are QIODevice::ReadOnly, QIODevice::WriteOnly, and QIODevice::ReadWrite.
+ */
+inline QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode);
 
 } // namespace Digikam
 

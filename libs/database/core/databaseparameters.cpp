@@ -28,7 +28,7 @@
 #endif
 */
 
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "databaseparameters.h"
 
 // Qt includes

@@ -55,7 +55,7 @@
 #include "imageinfo.h"
 #include "imageposition.h"
 #include "imagecopyright.h"
-#include "globals.h"
+#include "digikam_globals.h"
 #include "scancontroller.h"
 #include "tagscache.h"
 

@@ -58,7 +58,7 @@
 #include "cameralist.h"
 #include "cameraselection.h"
 #include "cameratype.h"
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "gpcamera.h"
 #include "filtercombo.h"
 #include "importfilters.h"

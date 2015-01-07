@@ -41,7 +41,7 @@
 
 // Local includes
 
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "imagefiltersettings.h"
 #include "imagesortsettings.h"
 #include "mimefilter.h"

@@ -31,7 +31,7 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "globals.h"
+#include "digikam_globals.h"
 #include "dimgthreadedfilter.h"
 
 namespace Digikam

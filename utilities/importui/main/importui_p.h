@@ -46,7 +46,7 @@
 
 // Local includes
 
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "camerathumbsctrl.h"
 #include "cameracontroller.h"
 #include "filtercombo.h"

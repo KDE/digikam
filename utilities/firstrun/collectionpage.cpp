@@ -50,7 +50,7 @@
 
 #include "digikam_debug.h"
 #include "databaseparameters.h"
-#include "version.h"
+#include "digikam_version.h"
 
 namespace Digikam
 {

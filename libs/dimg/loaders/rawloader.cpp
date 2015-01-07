@@ -48,7 +48,7 @@
 #include "curvesfilter.h"
 #include "bcgfilter.h"
 #include "wbfilter.h"
-#include "globals.h"
+#include "digikam_globals.h"
 #include "dimagehistory.h"
 
 namespace Digikam

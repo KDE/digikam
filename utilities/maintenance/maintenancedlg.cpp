@@ -48,7 +48,7 @@
 
 // Local includes
 
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "setup.h"
 #include "albumselectors.h"
 #include "facescansettings.h"

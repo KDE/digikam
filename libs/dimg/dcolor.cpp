@@ -26,7 +26,7 @@
  * ============================================================ */
 
 #include "dcolor.h"
-#include "globals.h"
+#include "digikam_globals.h"
 
 // Local includes
 

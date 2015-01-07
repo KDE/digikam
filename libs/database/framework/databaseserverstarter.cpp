@@ -57,7 +57,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "config-digikam.h"
+#include "digikam_config.h"
 
 namespace Digikam
 {

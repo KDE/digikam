@@ -69,7 +69,7 @@ extern "C"
 
 // Local includes
 
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "dimagehistory.h"
 #include "pngloader.h"
 #include "tiffloader.h"

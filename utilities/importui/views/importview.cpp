@@ -35,8 +35,8 @@
 
 // Local includes
 
-#include "config-digikam.h"
-#include "globals.h"
+#include "digikam_config.h"
+#include "digikam_globals.h"
 #include "importui.h"
 #include "importiconview.h"
 #include "thumbnailsize.h"

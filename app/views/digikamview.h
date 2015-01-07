@@ -45,7 +45,7 @@
 
 // Local includes
 
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "searchtextbar.h"
 #include "imageinfo.h"
 #include "digikammodelcollection.h"

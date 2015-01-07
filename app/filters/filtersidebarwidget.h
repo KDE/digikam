@@ -32,16 +32,12 @@
 
 #include <QWidget>
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "imagefiltersettings.h"
 #include "statesavingobject.h"
 #include "textfilter.h"
-#include "globals.h"
+#include "digikam_globals.h"
 
 namespace Digikam
 {

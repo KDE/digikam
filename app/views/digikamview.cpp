@@ -43,7 +43,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "albumhistory.h"
 #include "applicationsettings.h"
 #include "metadatasynchronizer.h"
@@ -62,7 +62,7 @@
 #include "mediaplayerview.h"
 #include "metadatasettings.h"
 #include "newitemsfinder.h"
-#include "globals.h"
+#include "digikam_globals.h"
 #include "metadatahub.h"
 #include "fileactionmngr.h"
 #include "queuemgrwindow.h"

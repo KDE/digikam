@@ -43,7 +43,7 @@
 
 // Local includes
 
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "albummanager.h"
 #include "applicationsettings.h"
 #include "cameralist.h"

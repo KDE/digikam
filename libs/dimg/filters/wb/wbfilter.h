@@ -34,7 +34,7 @@
 
 #include "digikam_export.h"
 #include "dimgthreadedfilter.h"
-#include "globals.h"
+#include "digikam_globals.h"
 #include "wbcontainer.h"
 
 using namespace Digikam;

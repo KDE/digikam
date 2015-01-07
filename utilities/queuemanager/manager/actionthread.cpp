@@ -33,7 +33,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "task.h"
 
 using namespace Solid;

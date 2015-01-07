@@ -67,7 +67,7 @@
 #include "iccprofilewidget.h"
 #include "cietonguewidget.h"
 #include "imagepropertiestxtlabel.h"
-#include "globals.h"
+#include "digikam_globals.h"
 
 using namespace KDcrawIface;
 

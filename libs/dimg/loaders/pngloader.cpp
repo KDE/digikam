@@ -53,8 +53,8 @@ extern "C"
 
 // Local includes
 
-#include "config-digikam.h"
-#include "version.h"
+#include "digikam_config.h"
+#include "digikam_version.h"
 #include "dimg.h"
 #include "dimgloaderobserver.h"
 

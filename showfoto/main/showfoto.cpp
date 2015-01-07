@@ -100,7 +100,7 @@ extern "C"
 
 // Local includes
 
-#include "globals.h"
+#include "digikam_globals.h"
 #include "digikam_debug.h"
 #include "canvas.h"
 #include "editorcore.h"

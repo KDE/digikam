@@ -56,7 +56,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "config-digikam.h"
+#include "digikam_config.h"
 
 #ifdef HAVE_EIGEN3
 #include "refocusfilter.h"

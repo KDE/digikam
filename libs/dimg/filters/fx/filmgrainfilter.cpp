@@ -42,7 +42,7 @@
 // Local includes
 
 #include "dimg.h"
-#include "globals.h"
+#include "digikam_globals.h"
 #include "randomnumbergenerator.h"
 
 namespace Digikam

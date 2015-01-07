@@ -39,7 +39,7 @@
 
 #include "dcolor.h"
 #include "digikam_export.h"
-#include "globals.h"
+#include "digikam_globals.h"
 
 namespace Digikam
 {

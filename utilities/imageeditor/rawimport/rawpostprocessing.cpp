@@ -34,7 +34,7 @@
 #include "wbfilter.h"
 #include "curvesfilter.h"
 #include "bcgfilter.h"
-#include "globals.h"
+#include "digikam_globals.h"
 
 namespace Digikam
 {

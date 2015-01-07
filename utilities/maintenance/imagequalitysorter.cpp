@@ -33,7 +33,7 @@
 
 // Local includes
 
-#include "globals.h"
+#include "digikam_globals.h"
 #include "dimg.h"
 #include "albumdb.h"
 #include "albummanager.h"

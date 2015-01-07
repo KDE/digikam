@@ -37,7 +37,7 @@
 
 // Local includes
 
-#include "version.h"
+#include "digikam_version.h"
 
 using namespace KDcrawIface;
 

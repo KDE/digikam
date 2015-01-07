@@ -32,7 +32,7 @@
 
 // Local includes
 
-#include "config-digikam.h"
+#include "digikam_config.h"
 #include "albummodel.h"
 #include "albummodificationhelper.h"
 #include "imagealbumfiltermodel.h"

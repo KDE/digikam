@@ -53,7 +53,7 @@
 #include "dimg.h"
 #include "ditemtooltip.h"
 #include "imagehistogram.h"
-#include "globals.h"
+#include "digikam_globals.h"
 #include "histogrampainter.h"
 
 namespace Digikam

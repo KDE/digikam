@@ -28,7 +28,7 @@
 
 #include "digikam_export.h"
 #include "wbfilter.h"
-#include "globals.h"
+#include "digikam_globals.h"
 #include "filteraction.h"
 
 using namespace Digikam;

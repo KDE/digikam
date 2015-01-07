@@ -51,8 +51,8 @@
 #include "filereadwritelock.h"
 #include "metadatasettings.h"
 #include "template.h"
-#include "version.h"
-#include "globals.h"
+#include "digikam_version.h"
+#include "digikam_globals.h"
 
 using namespace KDcrawIface;
 
