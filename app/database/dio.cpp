@@ -32,7 +32,6 @@
 // KDE includes
 
 #include <kglobal.h>
-#include <kde_file.h>
 #include <klocalizedstring.h>
 
 #include <kio/job.h>

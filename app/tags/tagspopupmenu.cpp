@@ -523,19 +523,11 @@ void TagsPopupMenu::slotAboutToShow()
 
         if (recentTags.isEmpty())
         {
-            QAction* const title = new QAction(d->recentTagPix, i18n("No Recently Assigned Tags"), this);
-            QFont font           = title->font();
-            font.setBold(true);
-            title->setFont(font);
-            title->setDisabled(true);
+            addSection(d->recentTagPix, i18n("No Recently Assigned Tags"));
         }
         else
         {
-            QAction* const title = new QAction(d->recentTagPix, i18n("Recently Assigned Tags"), this);
-            QFont font           = title->font();
-            font.setBold(true);
-            title->setFont(font);
-            title->setDisabled(true);
+            addSection(d->recentTagPix, i18n("Recently Assigned Tags"));
 
             for (AlbumList::const_iterator it = recentTags.constBegin();
                  it != recentTags.constEnd(); ++it)
