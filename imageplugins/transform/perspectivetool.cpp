@@ -46,7 +46,7 @@
 #include <kglobal.h>
 #include <klocalizedstring.h>
 #include <kseparator.h>
-#include <kstandarddirs.h>
+
 
 // Local includes
 

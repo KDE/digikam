@@ -38,7 +38,7 @@
 
 #include <kglobal.h>
 #include <kglobalsettings.h>
-#include <kstandarddirs.h>
+
 #include <khuesaturationselect.h>
 
 // Libkdcraw includes

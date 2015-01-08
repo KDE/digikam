@@ -39,7 +39,7 @@
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 
-#include <kstandarddirs.h>
+
 
 // Libkdcraw includes
 

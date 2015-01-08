@@ -41,7 +41,7 @@
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
-#include <kstandarddirs.h>
+
 
 // Libkdcraw includes
 

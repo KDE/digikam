@@ -43,7 +43,7 @@
 #include <kglobal.h>
 #include <klocalizedstring.h>
 
-#include <kstandarddirs.h>
+
 
 // Libkdcraw includes
 

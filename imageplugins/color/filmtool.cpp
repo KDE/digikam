@@ -50,7 +50,7 @@
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
-#include <kstandarddirs.h>
+
 
 // Libkdcraw includes
 

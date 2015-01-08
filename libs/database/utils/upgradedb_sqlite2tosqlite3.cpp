@@ -34,7 +34,7 @@
 
 // KDE includes
 
-#include <kstandarddirs.h>
+
 #include <kio/global.h>
 
 // Local includes

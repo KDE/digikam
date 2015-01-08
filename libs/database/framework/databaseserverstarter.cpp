@@ -50,7 +50,7 @@
 
 // KDE includes
 
-#include <kstandarddirs.h>
+
 #include <kmessagebox.h>
 #include <klocalizedstring.h>
 

@@ -85,7 +85,7 @@
 #include <kservicetypetrader.h>
 #include <kshortcutsdialog.h>
 #include <kstandardaction.h>
-#include <kstandarddirs.h>
+
 #include <kstandardshortcut.h>
 #include <kstatusbar.h>
 #include <ktoggleaction.h>

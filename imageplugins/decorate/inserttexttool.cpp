@@ -53,7 +53,7 @@
 #include <kfontchooser.h>
 #include <kglobal.h>
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
+
 #include <ktextedit.h>
 
 // Local includes

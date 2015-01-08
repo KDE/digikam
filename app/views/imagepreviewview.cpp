@@ -46,7 +46,7 @@
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
 #include <ktoggleaction.h>
-#include <kstandarddirs.h>
+
 
 
 // Local includes

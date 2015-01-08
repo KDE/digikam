@@ -32,7 +32,7 @@
 
 #include <kcombobox.h>
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
+
 #include <kurllabel.h>
 #include <kglobal.h>
 

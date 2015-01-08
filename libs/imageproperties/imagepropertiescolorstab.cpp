@@ -50,7 +50,7 @@
 #include <kglobal.h>
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
-#include <kstandarddirs.h>
+
 
 // Libkdcraw includes
 

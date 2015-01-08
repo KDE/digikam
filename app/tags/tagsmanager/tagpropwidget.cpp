@@ -33,7 +33,7 @@
 
 #include <kkeysequencewidget.h>
 #include <kseparator.h>
-#include <kstandarddirs.h>
+
 #include "digikam_debug.h"
 #include <QIcon>
 #include <kiconloader.h>

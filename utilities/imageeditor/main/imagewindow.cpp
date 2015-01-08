@@ -60,7 +60,7 @@
 #include <kmessagebox.h>
 #include <kselectaction.h>
 #include <kstandardaction.h>
-#include <kstandarddirs.h>
+
 #include <kstatusbar.h>
 #include <ktoggleaction.h>
 #include <ktoolbar.h>

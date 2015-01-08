@@ -50,7 +50,7 @@
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
-#include <kstandarddirs.h>
+
 #include <kseparator.h>
 #include <kiconloader.h>
 

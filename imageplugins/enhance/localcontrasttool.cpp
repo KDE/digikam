@@ -42,7 +42,7 @@
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
-#include <kstandarddirs.h>
+
 
 // Local includes
 

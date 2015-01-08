@@ -42,7 +42,7 @@
 #include <kmessagebox.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
-#include <kstandarddirs.h>
+
 #include <klocalizedstring.h>
 #include <kdialog.h>
 

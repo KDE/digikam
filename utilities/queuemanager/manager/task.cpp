@@ -38,7 +38,7 @@ extern "C"
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
+
 
 // Local includes
 

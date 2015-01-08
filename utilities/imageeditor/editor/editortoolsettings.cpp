@@ -44,7 +44,7 @@
 
 #include <kcolorbutton.h>
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
+
 #include <kstandardguiitem.h>
 #include <kguiitem.h>
 

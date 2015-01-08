@@ -48,7 +48,7 @@
 #include <kglobal.h>
 #include <khelpmenu.h>
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
+
 
 // Local includes
 

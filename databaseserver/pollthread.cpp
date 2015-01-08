@@ -44,7 +44,7 @@
 
 // KDE includes
 
-#include <kstandarddirs.h>
+
 
 // Local includes
 

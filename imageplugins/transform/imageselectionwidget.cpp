@@ -62,7 +62,7 @@
 
 // KDE includes
 
-#include <kstandarddirs.h>
+
 
 #include <kglobal.h>
 

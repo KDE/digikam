@@ -35,7 +35,7 @@
 
 #include <klocale.h>
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
+
 #include <kfiledialog.h>
 
 // Libkdcraw includes

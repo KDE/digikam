@@ -36,7 +36,7 @@
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kglobal.h>
-#include <kstandarddirs.h>
+
 
 // Local includes
 

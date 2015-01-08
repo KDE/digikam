@@ -43,7 +43,7 @@
 
 
 #include <kglobal.h>
-#include <kstandarddirs.h>
+
 
 // Local includes
 

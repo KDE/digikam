@@ -68,7 +68,7 @@ extern "C"
 #include <kdeversion.h>
 #include <kdirwatch.h>
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
+
 #include <kwindowsystem.h>
 #include <kglobal.h>
 #include <kdialog.h>

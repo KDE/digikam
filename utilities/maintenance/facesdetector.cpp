@@ -38,7 +38,7 @@
 
 #include <kconfig.h>
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
+
 #include <kstandardguiitem.h>
 #include <ktextedit.h>
 #include <kguiitem.h>

@@ -27,7 +27,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
+
 #include <solid/device.h>
 
 // Local includes

@@ -45,7 +45,7 @@
 #include <klocalizedstring.h>
 #include <kmimetype.h>
 #include <kservicetypetrader.h>
-#include <kstandarddirs.h>
+
 #include <kdeversion.h>
 
 #include <kio/global.h>
