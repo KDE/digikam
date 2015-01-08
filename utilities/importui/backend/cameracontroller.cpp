@@ -51,13 +51,13 @@ extern "C"
 #include <QFuture>
 #include <QFutureWatcher>
 #include <QUrl>
+#include <QDir>
 
 // KDE includes
 
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <kprocess.h>
 #include <kmacroexpander.h>
 
@@ -1237,7 +1237,7 @@ void CameraController::openFile(const QString& folder, const QString& file)
     cmd->action        = CameraCommand::cam_open;
     cmd->map.insert("folder", QVariant(folder));
     cmd->map.insert("file",   QVariant(file));
-    cmd->map.insert("dest",   QVariant(KStandardDirs::locateLocal("tmp", file)));
+    cmd->map.insert("dest",   QVariant(QDir::tempPath() + QChar('/') + QString(file)));
     addCommand(cmd);
 }
 

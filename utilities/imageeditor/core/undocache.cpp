@@ -38,7 +38,6 @@
 
 // KDE includes
 
-#include <kstandarddirs.h>
 #include <kdiskfreespaceinfo.h>
 #include <kglobal.h>
 
@@ -70,7 +69,7 @@ public:
 UndoCache::UndoCache()
     : d(new Private)
 {
-    d->cacheDir    = KStandardDirs::locateLocal("cache", QApplication::applicationName() + '/');
+    d->cacheDir    = QStandardPaths::locate(QStandardPaths::GenericCacheLocation, QChar('/') + QApplication::applicationName() + QChar('/'));
 
     d->cachePrefix = QString("%1undocache-%2")
                      .arg(d->cacheDir)
@@ -117,10 +116,10 @@ bool UndoCache::putData(int level, const DImg& img) const
 {
     QFile file(d->cacheFile(level));
     KDiskFreeSpaceInfo info = KDiskFreeSpaceInfo::freeSpaceInfo(d->cacheDir);
-    
+
     unsigned long fspace = (unsigned long)(info.available()/1024.0/1024.0);
     qCDebug(DIGIKAM_GENERAL_LOG) << "Free space available in Editor cache [" << d->cacheDir << "] in Mbytes: " << fspace;
-    
+
     if (file.exists() || 
         !file.open(QIODevice::WriteOnly) || 
         fspace < 1024) // Check if free space is over 1 Gb to put data in cache. 
