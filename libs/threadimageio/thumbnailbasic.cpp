@@ -36,10 +36,6 @@
 #include <QCryptographicHash>
 #include <QUrl>
 
-// KDE includes
-
-#include <kstandarddirs.h>
-
 // C ANSI includes
 
 extern "C"
@@ -105,10 +101,23 @@ void ThumbnailCreator::initThumbnailDirs()
     d->smallThumbPath = normalThumbnailDir();
     d->bigThumbPath   = largeThumbnailDir();
 
-#pragma message("PORT QT5")
-    // How to set persmission with QDir().makeDir() ?
-    KStandardDirs::makeDir(d->smallThumbPath, 0700);
-    KStandardDirs::makeDir(d->bigThumbPath, 0700);
+    if (!QDir(d->smallThumbPath).exists())
+    {
+        if (QDir().mkpath(d->smallThumbPath))
+        {
+            QFile f(d->smallThumbPath);
+            f.setPermissions(QFile::ReadUser | QFile::WriteUser | QFile::ExeUser); // 0700
+        }
+    }
+
+    if (!QDir(d->bigThumbPath).exists())
+    {
+        if (QDir().mkpath(d->bigThumbPath))
+        {
+            QFile f(d->bigThumbPath);
+            f.setPermissions(QFile::ReadUser | QFile::WriteUser | QFile::ExeUser); // 0700
+        }
+    }
 }
 
 QString ThumbnailCreator::thumbnailPath(const QString& filePath) const
