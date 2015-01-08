@@ -36,11 +36,11 @@
 #include <QPainter>
 #include <QApplication>
 #include <QDesktopServices>
+#include <QStandardPaths>
 
 // KDE includes
 
 #include <kurllabel.h>
-#include <kstandarddirs.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -81,12 +81,12 @@ DLogoAction::DLogoAction(QObject* const parent, bool alignOnright)
     if (QApplication::applicationName() == QString("digikam"))
     {
         setIcon(QIcon::fromTheme("digikam"));
-        d->progressPixmap = QPixmap(KStandardDirs::locate("data", "digikam/data/banner-digikam.png"));
+        d->progressPixmap = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/banner-digikam.png"));
     }
     else
     {
         setIcon(QIcon::fromTheme("showfoto"));
-        d->progressPixmap = QPixmap(KStandardDirs::locate("data", "showfoto/data/banner-showfoto.png"));
+        d->progressPixmap = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "showfoto/data/banner-showfoto.png"));
     }
 
     d->alignOnright  = alignOnright;
