@@ -38,11 +38,12 @@
 #include <QDBusConnectionInterface>
 #include <QDBusReply>
 #include <QProcess>
+#include <QStandardPaths>
 
 // KDE includes
 
-#include <klocalizedstring.h>
 #include <kstandarddirs.h>
+#include <klocalizedstring.h>
 
 // Local includes
 
@@ -151,7 +152,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     //TODO Don't know if this is needed, because after the thread is finished, the database server manager should close
     d->pollThread->stop = false;
 
-    // QString filepath = KStandardDirs::locate("data", "digikam/database/dbconfig.xml");
+    // QString filepath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/database/dbconfig.xml");
 
     //TODO Move the database command outside of the code to the dbconfig.xml file
     const QString mysqldPath(DatabaseConfigElement::element(dbType).dbServerCmd);
@@ -201,8 +202,8 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
         dirs.makeDir(miscDir);
     }
 
-    const QString globalConfig = KStandardDirs::locate("data", "digikam/database/mysql-global.conf");
-    const QString localConfig  = KStandardDirs::locate("data", "digikam/database/mysql-local.conf");
+    const QString globalConfig = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/database/mysql-global.conf");
+    const QString localConfig  = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/database/mysql-local.conf");
     const QString actualConfig = KStandardDirs::locateLocal( "data", QLatin1String( "digikam" ) ) + QLatin1String("/mysql.conf");
 
     if ( globalConfig.isEmpty() )

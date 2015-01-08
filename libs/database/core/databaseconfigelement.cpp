@@ -33,17 +33,17 @@
 #include <QFile>
 #include <QIODevice>
 #include <QTextStream>
+#include <QStandardPaths>
 
 // KDE includes
 
-#include "digikam_debug.h"
 #include <kglobal.h>
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
 
 // Local includes
 
 #include "dbconfigversion.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -71,7 +71,7 @@ K_GLOBAL_STATIC(DatabaseConfigElementLoader, loader)
 DatabaseConfigElementLoader::DatabaseConfigElementLoader()
 {
     isValid = readConfig();
-    
+
     if (!isValid)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << errorMessage;
@@ -208,7 +208,7 @@ void DatabaseConfigElementLoader::readDBActions(QDomElement& sqlStatementElement
 
 bool DatabaseConfigElementLoader::readConfig()
 {
-    QString filepath = KStandardDirs::locate("data", "digikam/database/dbconfig.xml");
+    QString filepath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/database/dbconfig.xml");
     qCDebug(DIGIKAM_GENERAL_LOG) << "Loading SQL code from config file" << filepath;
     QFile file(filepath);
 
@@ -291,7 +291,7 @@ bool DatabaseConfigElementLoader::readConfig()
 
 #ifdef DATABASEPARAMETERS_DEBUG
     qCDebug(DIGIKAM_GENERAL_LOG) << "Found entries: " << databaseConfigs.size();
-    
+
     foreach(const DatabaseConfigElement& configElement, databaseConfigs )
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "DatabaseID: " << configElement.databaseID;
@@ -311,6 +311,7 @@ bool DatabaseConfigElementLoader::readConfig()
         {
             QList<databaseActionElement> l_DBActionElement = configElement.sqlStatements[actionKey].dBActionElements;
             qCDebug(DIGIKAM_GENERAL_LOG) << "DBAction [" << actionKey << "] has [" << l_DBActionElement.size() << "] actions";
+
             foreach(const databaseActionElement statement, l_DBActionElement)
             {
                 qCDebug(DIGIKAM_GENERAL_LOG) << "\tMode ["<< statement.mode <<"] Value ["<< statement.statement <<"]";
