@@ -31,7 +31,6 @@
 
 // KDE includes
 
-#include <klineedit.h>
 #include <klocalizedstring.h>
 
 namespace Digikam

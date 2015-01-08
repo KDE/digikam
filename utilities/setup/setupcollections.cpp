@@ -45,7 +45,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <klineedit.h>
 #include <kpagedialog.h>
 #include <kmessagebox.h>
 #include <kurlrequester.h>
