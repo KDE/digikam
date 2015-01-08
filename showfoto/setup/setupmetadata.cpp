@@ -36,13 +36,13 @@
 #include <QApplication>
 #include <QStyle>
 #include <QDesktopServices>
+#include <QStandardPaths>
 
 // KDE includes
 
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
 #include <kurllabel.h>
 
 // Libkexiv2 includes
@@ -113,7 +113,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent )
     KUrlLabel* const exiv2LogoLabel = new KUrlLabel(box);
     exiv2LogoLabel->setText(QString());
     exiv2LogoLabel->setUrl("http://www.exiv2.org");
-    exiv2LogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-exiv2.png")));
+    exiv2LogoLabel->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-exiv2.png")));
     exiv2LogoLabel->setWhatsThis(i18n("Visit Exiv2 project website"));
 
     QLabel* const explanation = new QLabel(box);

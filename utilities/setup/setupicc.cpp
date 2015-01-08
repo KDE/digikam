@@ -45,17 +45,15 @@
 #include <QApplication>
 #include <QStyle>
 #include <QDesktopServices>
+#include <QStandardPaths>
 
 // KDE includes
 
-#include <kglobal.h>
-#include <kglobalsettings.h>
-#include <kiconloader.h>
 #include <klineedit.h>
+#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kpagedialog.h>
-#include <kstandarddirs.h>
 #include <kurllabel.h>
 #include <kurlrequester.h>
 
@@ -198,7 +196,7 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
     KUrlLabel* const lcmsLogoLabel = new KUrlLabel(colorPolicy);
     lcmsLogoLabel->setText(QString());
     lcmsLogoLabel->setUrl("http://www.littlecms.com");
-    lcmsLogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-lcms.png")));
+    lcmsLogoLabel->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-lcms.png")));
     lcmsLogoLabel->setToolTip(i18n("Visit Little CMS project website"));
 
     gridHeader->addWidget(d->enableColorManagement, 0, 0, 1, 1);

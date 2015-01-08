@@ -33,17 +33,13 @@
 #include <QPainter>
 #include <QApplication>
 #include <QStyle>
+#include <QStandardPaths>
 
 // KDE includes
 
-#include <kaboutdata.h>
-
 #include <kcolorbutton.h>
-#include <kconfig.h>
-#include <kglobal.h>
+#include <ksharedconfig.h>
 #include <klocalizedstring.h>
-
-#include <kstandarddirs.h>
 
 // Libkdcraw includes
 
@@ -162,14 +158,14 @@ SetupEditor::SetupEditor(QWidget* const parent)
     QVBoxLayout* gLayout2            = new QVBoxLayout(exposureOptionsGroup);
 
     RHBox* underExpoBox              = new RHBox(exposureOptionsGroup);
-    QLabel* underExpoColorlabel      = new QLabel(i18n("&Under-exposure color:"), underExpoBox);
+    QLabel* underExpoColorlabel      = new QLabel(i18n("&Under-exposure color: "), underExpoBox);
     d->underExposureColor            = new KColorButton(underExpoBox);
     underExpoColorlabel->setBuddy(d->underExposureColor);
     d->underExposureColor->setWhatsThis(i18n("Customize color used in image editor to identify "
                                              "under-exposed pixels."));
 
     RHBox* underPcentBox             = new RHBox(exposureOptionsGroup);
-    QLabel* underExpoPcentlabel      = new QLabel(i18n("Under-exposure percents:"), underPcentBox);
+    QLabel* underExpoPcentlabel      = new QLabel(i18n("Under-exposure percents: "), underPcentBox);
     d->underExposurePcents           = new RDoubleNumInput(underPcentBox);
     d->underExposurePcents->setDecimals(1);
     d->underExposurePcents->setRange(0.1, 5.0, 0.1);
@@ -179,14 +175,14 @@ SetupEditor::SetupEditor(QWidget* const parent)
                                               "which will be used to check under exposed pixels."));
 
     RHBox* overExpoBox               = new RHBox(exposureOptionsGroup);
-    QLabel* overExpoColorlabel       = new QLabel(i18n("&Over-exposure color:"), overExpoBox);
+    QLabel* overExpoColorlabel       = new QLabel(i18n("&Over-exposure color: "), overExpoBox);
     d->overExposureColor             = new KColorButton(overExpoBox);
     overExpoColorlabel->setBuddy(d->overExposureColor);
     d->overExposureColor->setWhatsThis(i18n("Customize color used in image editor to identify "
                                             "over-exposed pixels."));
 
     RHBox* overPcentBox              = new RHBox(exposureOptionsGroup);
-    QLabel* overExpoPcentlabel       = new QLabel(i18n("Over-exposure percents:"), overPcentBox);
+    QLabel* overExpoPcentlabel       = new QLabel(i18n("Over-exposure percents: "), overPcentBox);
     d->overExposurePcents            = new RDoubleNumInput(overPcentBox);
     d->overExposurePcents->setDecimals(1);
     d->overExposurePcents->setRange(0.1, 5.0, 0.1);
@@ -206,7 +202,7 @@ SetupEditor::SetupEditor(QWidget* const parent)
     d->expoPreview       = new QLabel(previewHBox);
     QLabel* space        = new QLabel(previewHBox);
     d->expoPreviewHisto  = new HistogramWidget(256, 128, previewHBox, false, false);
-    d->preview           = DImg(KStandardDirs::locate("data", "digikam/data/sample-aix.png"));
+    d->preview           = DImg(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/sample-aix.png"));
 
     if (!d->preview.isNull())
     {

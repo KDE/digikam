@@ -41,6 +41,7 @@
 #include <QStyle>
 #include <QComboBox>
 #include <QDesktopServices>
+#include <QStandardPaths>
 
 // KDE includes
 
@@ -48,7 +49,6 @@
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <kurllabel.h>
 #include <kconfig.h>
 
@@ -315,7 +315,7 @@ SetupCamera::SetupCamera(QWidget* const parent)
     KUrlLabel* const gphotoLogoLabel = new KUrlLabel(panel);
     gphotoLogoLabel->setText(QString());
     gphotoLogoLabel->setUrl("http://www.gphoto.org");
-    gphotoLogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-gphoto.png")));
+    gphotoLogoLabel->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-gphoto.png")));
     gphotoLogoLabel->setToolTip(i18n("Visit Gphoto project website"));
 
 #ifndef HAVE_GPHOTO2
