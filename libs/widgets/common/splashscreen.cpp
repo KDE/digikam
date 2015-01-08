@@ -34,11 +34,11 @@
 #include <QTime>
 #include <QTextDocument>
 #include <QFontDatabase>
+#include <QStandardPaths>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
 
 // Local includes
 
@@ -84,11 +84,11 @@ SplashScreen::SplashScreen()
 
     if (QApplication::applicationName() == QString("digikam"))
     {
-        splash = KStandardDirs::locate("data","digikam/data/splash-digikam.png");
+        splash = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/splash-digikam.png");
     }
     else
     {
-        splash = KStandardDirs::locate("data","showfoto/data/splash-showfoto.png");
+        splash = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "showfoto/data/splash-showfoto.png");
     }
 
     // Under Linux, only test versions has Beta stage.
@@ -103,7 +103,7 @@ SplashScreen::SplashScreen()
     if (isBeta)
     {
         QPainter p(&splash);
-        p.drawPixmap(412, 27, KStandardDirs::locate("data","digikam/data/logo-beta.png"));
+        p.drawPixmap(412, 27, QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-beta.png"));
         p.end();
     }
 
