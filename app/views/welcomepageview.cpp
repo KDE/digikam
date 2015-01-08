@@ -33,11 +33,11 @@
 #include <QWidget>
 #include <QApplication>
 #include <QDesktopServices>
+#include <QStandardPaths>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
 
 // Local includes
 
@@ -196,13 +196,13 @@ QByteArray WelcomePageView::fileToString(const QString& aFileName) const
 
 void WelcomePageView::slotThemeChanged()
 {
-    QString infoPageCss      = KStandardDirs::locate("data", "kf5/infopage/kde_infopage.css");
-    QString digikamCss       = KStandardDirs::locate("data", "digikam/about/digikam.css");
+    QString infoPageCss      = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kf5/infopage/kde_infopage.css");
+    QString digikamCss       = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/about/digikam.css");
     QString fontSize         = QString::number(12);
     QString appTitle         = i18n("digiKam");
     QString slogan           = DAboutData::digiKamSlogan();
-    QString locationHtml     = KStandardDirs::locate("data", "digikam/about/main.html");
-    QString locationRtl      = KStandardDirs::locate("data", "kf5/infopage/kde_infopage_rtl.css" );
+    QString locationHtml     = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/about/main.html");
+    QString locationRtl      = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kf5/infopage/kde_infopage_rtl.css" );
     QString rtl              = qApp->isRightToLeft() ? QString("@import \"%1\";" ).arg(locationRtl)
                                                      : QString();
 
