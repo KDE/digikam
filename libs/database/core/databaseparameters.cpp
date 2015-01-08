@@ -36,11 +36,11 @@
 #include <QDir>
 #include <QFile>
 #include <QCryptographicHash>
+#include <QStandardPaths>
 
 // KDE includes
 
 #include <kconfiggroup.h>
-#include <kstandarddirs.h>
 
 // Local includes
 
@@ -303,7 +303,7 @@ void DatabaseParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
     // If the internal server should be started, then the connection options must be reset
     if (databaseType == "QMYSQL" && internalServer)
     {
-        const QString miscDir  = KStandardDirs::locateLocal("data", "digikam/db_misc");
+        const QString miscDir  = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QChar('/') + QString("digikam/db_misc");
         databaseType           = "QMYSQL";
         databaseName           = "digikam";
         internalServer         = true;
@@ -445,7 +445,7 @@ DatabaseParameters DatabaseParameters::defaultParameters(const QString databaseT
     parameters.userName          = config.userName;
     parameters.password          = config.password;
     parameters.port              = config.port.toInt();
-    const QString miscDir        = KStandardDirs::locateLocal("data", "digikam/db_misc");
+    const QString miscDir        = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QChar('/') + QString("digikam/db_misc");
     QString connectOptions       = config.connectOptions;
     connectOptions.replace(QString("$$DBMISCPATH$$"), miscDir);
 

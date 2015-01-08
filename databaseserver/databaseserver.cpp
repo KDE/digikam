@@ -42,7 +42,6 @@
 
 // KDE includes
 
-#include <kstandarddirs.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -170,11 +169,10 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     //  const QString miscDir     = XdgBaseDirs::saveDir( "data", QLatin1String( "Digikam/db_misc" ) );
     //  const QString fileDataDir = XdgBaseDirs::saveDir( "data", QLatin1String( "Digikam/file_db_data" ) );
 
-    KStandardDirs dirs;
-    const QString akDir       = KStandardDirs::locateLocal("data", "digikam/");
-    const QString dataDir     = KStandardDirs::locateLocal("data", "digikam/db_data");
-    const QString miscDir     = KStandardDirs::locateLocal("data", "digikam/db_misc");
-    const QString fileDataDir = KStandardDirs::locateLocal("data", "digikam/file_db_data");
+    const QString akDir       = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QChar('/') + QString("digikam/");
+    const QString dataDir     = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QChar('/') + QString("digikam/db_data");
+    const QString miscDir     = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QChar('/') + QString("digikam/db_misc");
+    const QString fileDataDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QChar('/') + QString("digikam/file_db_data");
 
     /*
     * TODO Move the database command outside of the code to the dbconfig.xml file.
@@ -182,29 +180,29 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     */
     const QString mysqlInitCmd(QString::fromLatin1("%1 --user=digikam --datadir=%2").arg(DatabaseConfigElement::element(dbType).dbInitCmd, dataDir));
 
-    if (!dirs.exists(akDir))
+    if (!QFile::exists(akDir))
     {
-        dirs.makeDir(akDir);
+        QDir().mkpath(akDir);
     }
 
-    if (!dirs.exists(dataDir))
+    if (!QFile::exists(dataDir))
     {
-        dirs.makeDir(dataDir);
+        QDir().mkpath(dataDir);
     }
 
-    if (!dirs.exists(miscDir))
+    if (!QFile::exists(miscDir))
     {
-        dirs.makeDir(miscDir);
+        QDir().mkpath(miscDir);
     }
 
-    if (!dirs.exists(miscDir))
+    if (!QFile::exists(miscDir))
     {
-        dirs.makeDir(miscDir);
+        QDir().mkpath(miscDir);
     }
 
     const QString globalConfig = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/database/mysql-global.conf");
     const QString localConfig  = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/database/mysql-local.conf");
-    const QString actualConfig = KStandardDirs::locateLocal( "data", QLatin1String( "digikam" ) ) + QLatin1String("/mysql.conf");
+    const QString actualConfig = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/digikam/mysql.conf");
 
     if ( globalConfig.isEmpty() )
     {
