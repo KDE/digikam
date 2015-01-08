@@ -39,7 +39,7 @@
 
 // KDE includes
 
-#include <kglobal.h>
+
 
 // Local includes
 
@@ -118,7 +118,7 @@ public:
     QString adobeRGBPath;
 };
 
-K_GLOBAL_STATIC(IccProfileStatic, static_d)
+Q_GLOBAL_STATIC(IccProfileStatic, static_d)
 
 // ----------------------------------------------------------------------------------
 

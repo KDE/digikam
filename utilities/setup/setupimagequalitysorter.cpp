@@ -35,7 +35,7 @@
 // KDE includes
 
 #include <kconfig.h>
-#include <kglobal.h>
+
 #include <klocalizedstring.h>
 #include <kiconloader.h>
 #include <kurllabel.h>

@@ -27,7 +27,7 @@
 
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
-#include <kglobal.h>
+
 
 namespace Digikam
 {

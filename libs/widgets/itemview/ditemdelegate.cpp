@@ -39,7 +39,7 @@
 // KDE includes
 
 #include <kiconloader.h>
-#include <kglobal.h>
+
 #include <kio/global.h>
 #include <klocalizedstring.h>
 

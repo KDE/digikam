@@ -42,7 +42,7 @@
 // KDE includes
 
 
-#include <kglobal.h>
+
 
 
 // Local includes

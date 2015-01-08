@@ -27,7 +27,7 @@
 
 #include <kconfiggroup.h>
 #include <kconfig.h>
-#include <kglobal.h>
+
 #include <ksharedconfig.h>
 
 // Local includes

@@ -27,7 +27,7 @@
 
 #include <kconfig.h>
 #include "digikam_debug.h"
-#include <kglobal.h>
+
 #include <ksharedconfig.h>
 
 namespace Digikam

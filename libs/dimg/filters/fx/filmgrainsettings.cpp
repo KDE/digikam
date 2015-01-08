@@ -39,7 +39,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kglobal.h>
+
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
 #include <kiconloader.h>

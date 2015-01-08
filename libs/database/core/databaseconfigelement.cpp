@@ -37,7 +37,7 @@
 
 // KDE includes
 
-#include <kglobal.h>
+
 #include <klocalizedstring.h>
 
 // Local includes
@@ -66,7 +66,7 @@ public:
     QString errorMessage;
 };
 
-K_GLOBAL_STATIC(DatabaseConfigElementLoader, loader)
+Q_GLOBAL_STATIC(DatabaseConfigElementLoader, loader)
 
 DatabaseConfigElementLoader::DatabaseConfigElementLoader()
 {

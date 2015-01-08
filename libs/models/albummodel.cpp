@@ -26,7 +26,7 @@
 // KDE includes
 
 #include <kcalendarsystem.h>
-#include <kglobal.h>
+
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 

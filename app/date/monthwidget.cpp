@@ -41,7 +41,7 @@
 
 #include <kcalendarsystem.h>
 #include <kdeversion.h>
-#include <kglobal.h>
+
 #include <klocalizedstring.h>
 
 // Local includes

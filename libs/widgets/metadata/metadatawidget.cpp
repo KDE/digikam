@@ -52,7 +52,7 @@
 // KDE includes
 
 #include <kfiledialog.h>
-#include <kglobal.h>
+
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>

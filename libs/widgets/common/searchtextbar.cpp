@@ -37,7 +37,7 @@
 
 #include <kconfiggroup.h>
 #include <kcompletion.h>
-#include <kglobal.h>
+
 #include <kconfig.h>
 
 // Local includes

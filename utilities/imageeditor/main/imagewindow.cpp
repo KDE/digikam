@@ -55,7 +55,7 @@
 #include <kcategorizedview.h>
 #include <kconfig.h>
 #include <kdeversion.h>
-#include <kglobal.h>
+
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kselectaction.h>

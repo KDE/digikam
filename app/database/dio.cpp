@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <kglobal.h>
+
 #include <klocalizedstring.h>
 
 #include <kio/job.h>
@@ -245,7 +245,7 @@ public:
     DIO object;
 };
 
-K_GLOBAL_STATIC(DIOCreator, creator)
+Q_GLOBAL_STATIC(DIOCreator, creator)
 
 // ------------------------------------------------------------------------------------------------
 

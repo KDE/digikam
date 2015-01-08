@@ -31,7 +31,7 @@
 
 #include <kconfig.h>
 #include <klocalizedstring.h>
-#include <kglobal.h>
+#include <ksharedconfig.h>
 #include <kwindowconfig.h>
 
 // Local includes

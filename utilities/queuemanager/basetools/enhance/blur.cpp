@@ -33,7 +33,7 @@
 
 #include <klocalizedstring.h>
 
-#include <kglobal.h>
+
 #include <QApplication>
 #include <QStyle>
 

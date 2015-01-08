@@ -35,7 +35,7 @@
 
 // KDE includes
 
-#include <kglobal.h>
+
 
 // Local includes
 
@@ -67,7 +67,7 @@ public:
     }
 };
 
-K_GLOBAL_STATIC(PrivateSharedNull, imageHistoryPrivSharedNull)
+Q_GLOBAL_STATIC(PrivateSharedNull, imageHistoryPrivSharedNull)
 
 // -----------------------------------------------------------------------------------------------
 

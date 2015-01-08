@@ -37,7 +37,7 @@
 
 #include <kaboutdata.h>
 #include <kconfig.h>
-#include <kglobal.h>
+
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
 

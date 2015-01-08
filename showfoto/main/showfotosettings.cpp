@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include <kglobal.h>
+
 #include <kconfig.h>
 #include <kconfiggroup.h>
 
@@ -186,7 +186,7 @@ public:
     ShowfotoSettings object;
 };
 
-K_GLOBAL_STATIC(ShowfotoSettingsCreator, creator)
+Q_GLOBAL_STATIC(ShowfotoSettingsCreator, creator)
 
 // -------------------------------------------------------------------------------------------------
 

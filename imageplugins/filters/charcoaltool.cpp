@@ -35,7 +35,7 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kglobal.h>
+
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 

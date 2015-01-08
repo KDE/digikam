@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <kglobal.h>
+
 #include <kdeversion.h>
 #include <kio/previewjob.h>
 
@@ -61,7 +61,7 @@ public:
     IccProfile profile;
 };
 
-K_GLOBAL_STATIC(CameraThumbsCtrlStaticPriv, static_d)
+Q_GLOBAL_STATIC(CameraThumbsCtrlStaticPriv, static_d)
 
 // ------------------------------------------------------------------------------------------
 

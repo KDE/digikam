@@ -32,7 +32,7 @@
 // KDE includes
 
 #include <kcalendarsystem.h>
-#include <kglobal.h>
+
 #include <klocalizedstring.h>
 
 // Local includes

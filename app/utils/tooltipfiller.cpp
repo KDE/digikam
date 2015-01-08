@@ -32,8 +32,7 @@
 
 #include <klocalizedstring.h>
 #include <kfileitem.h>
-#include <kglobal.h>
-#include <kdeversion.h>
+#include <klocale.h>
 
 // Local includes
 

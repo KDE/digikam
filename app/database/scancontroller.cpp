@@ -42,7 +42,7 @@
 #include <kmessagebox.h>
 #include <klocalizedstring.h>
 #include <kiconloader.h>
-#include <kglobal.h>
+
 
 // Local includes
 
@@ -278,7 +278,7 @@ public:
     ScanController object;
 };
 
-K_GLOBAL_STATIC(ScanControllerCreator, creator)
+Q_GLOBAL_STATIC(ScanControllerCreator, creator)
 
 // ------------------------------------------------------------------------------
 

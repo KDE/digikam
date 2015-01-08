@@ -27,7 +27,7 @@
 
 // KDE includes
 
-#include <kglobal.h>
+
 #include "digikam_debug.h"
 
 static int fillMemoryInfo(Digikam::KMemoryInfo::KMemoryInfoData* const data);
@@ -81,7 +81,7 @@ public:
     }
 };
 
-K_GLOBAL_STATIC(KMemoryInfoDataSharedNull, kmemoryInfoDataSharedNull)
+Q_GLOBAL_STATIC(KMemoryInfoDataSharedNull, kmemoryInfoDataSharedNull)
 
 // ------------------------------------------------------------------------------------------
 

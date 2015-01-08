@@ -42,7 +42,7 @@
 // KDE includes
 
 #include <kmessagebox.h>
-#include <kglobal.h>
+
 #include <klocalizedstring.h>
 #include <kcolorscheme.h>
 #include <kactioncollection.h>
@@ -67,7 +67,7 @@ public:
     ThemeManager object;
 };
 
-K_GLOBAL_STATIC(ThemeManagerCreator, creator)
+Q_GLOBAL_STATIC(ThemeManagerCreator, creator)
 
 // ---------------------------------------------------------------
 

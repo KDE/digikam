@@ -34,7 +34,7 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kglobal.h>
+
 #include <ksharedconfig.h>
 
 // Local includes
@@ -100,7 +100,7 @@ public:
     MetadataSettings object;
 };
 
-K_GLOBAL_STATIC(MetadataSettingsCreator, metatadaSettingsCreator)
+Q_GLOBAL_STATIC(MetadataSettingsCreator, metatadaSettingsCreator)
 
 // -----------------------------------------------------------------------------------------------
 

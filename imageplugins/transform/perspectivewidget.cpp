@@ -47,7 +47,7 @@
 
 
 
-#include <kglobal.h>
+
 
 
 // Local includes

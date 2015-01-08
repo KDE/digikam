@@ -35,7 +35,7 @@
 #include <kconfig.h>
 #include <kiconloader.h>
 
-#include <kglobal.h>
+
 
 // Local includes
 

@@ -26,7 +26,7 @@
 // KDE includes
 
 #include "digikam_debug.h"
-#include <kglobal.h>
+
 
 // Local includes
 

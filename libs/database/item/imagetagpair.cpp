@@ -29,7 +29,7 @@
 
 // KDE includes
 
-#include <kglobal.h>
+
 
 // Local includes
 
@@ -82,7 +82,7 @@ public:
     }
 };
 
-K_GLOBAL_STATIC(ImageTagPairPrivSharedNull, imageTagPairPrivSharedNull)
+Q_GLOBAL_STATIC(ImageTagPairPrivSharedNull, imageTagPairPrivSharedNull)
 
 // -----------------------------------------------------------------------
 

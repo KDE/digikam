@@ -43,7 +43,7 @@
 
 // KDE includes
 
-#include <kglobal.h>
+
 #include <klocalizedstring.h>
 #include <kcomponentdata.h>
 #include <kmimetype.h>

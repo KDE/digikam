@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include <kglobal.h>
+
 #include <klocalizedstring.h>
 
 // Local includes
@@ -55,7 +55,7 @@ public:
     FileActionMngr object;
 };
 
-K_GLOBAL_STATIC(FileActionMngrCreator, metadataManagercreator)
+Q_GLOBAL_STATIC(FileActionMngrCreator, metadataManagercreator)
 
 FileActionMngr* FileActionMngr::instance()
 {

@@ -36,7 +36,7 @@
 
 // KDE includes
 
-#include <kglobal.h>
+
 #include <klocalizedstring.h>
 
 // Local includes
@@ -71,7 +71,7 @@ public:
     TemplateManager object;
 };
 
-K_GLOBAL_STATIC(TemplateManagerCreator, creator)
+Q_GLOBAL_STATIC(TemplateManagerCreator, creator)
 
 TemplateManager* TemplateManager::defaultManager()
 {

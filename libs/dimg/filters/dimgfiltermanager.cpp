@@ -33,7 +33,7 @@
 // KDE includes
 
 #include "digikam_debug.h"
-#include <kglobal.h>
+
 #include <klocalizedstring.h>
 
 // Local includes
@@ -263,7 +263,7 @@ public:
     DImgFilterManager object;
 };
 
-K_GLOBAL_STATIC(DImgFilterManagerCreator, creator)
+Q_GLOBAL_STATIC(DImgFilterManagerCreator, creator)
 
 DImgFilterManager* DImgFilterManager::instance()
 {

@@ -34,7 +34,7 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kglobal.h>
+
 #include <klocalizedstring.h>
 #include <kiconloader.h>
 #include <kstandardguiitem.h>

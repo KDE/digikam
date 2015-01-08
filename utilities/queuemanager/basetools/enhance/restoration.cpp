@@ -34,7 +34,7 @@
 
 #include <klocalizedstring.h>
 #include <kurllabel.h>
-#include <kglobal.h>
+
 
 // Libkdcraw includes
 

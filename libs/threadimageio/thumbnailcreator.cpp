@@ -40,7 +40,7 @@
 // KDE includes
 
 #include <kcomponentdata.h>
-#include <kglobal.h>
+
 #include <klibloader.h>
 #include <klocalizedstring.h>
 #include <kmimetype.h>

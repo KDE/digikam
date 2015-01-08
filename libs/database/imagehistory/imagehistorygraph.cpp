@@ -25,7 +25,7 @@
 
 // KDE includes
 
-#include <kglobal.h>
+
 
 // Local includes
 
@@ -46,7 +46,7 @@ public:
     ImageHistoryGraphDataSharedNull() : QSharedDataPointer<ImageHistoryGraphData>(new ImageHistoryGraphData) {}
 };
 
-K_GLOBAL_STATIC(ImageHistoryGraphDataSharedNull, imageHistoryGraphDataSharedNull)
+Q_GLOBAL_STATIC(ImageHistoryGraphDataSharedNull, imageHistoryGraphDataSharedNull)
 
 // -----------------------------------------------------------------------------------------------
 

@@ -35,11 +35,11 @@
 #include <QFileInfo>
 #include <QStringList>
 #include <QApplication>
+#include <QStandardPaths>
 
 // KDE includes
 
 #include <kdiskfreespaceinfo.h>
-#include <kglobal.h>
 
 // Local includes
 

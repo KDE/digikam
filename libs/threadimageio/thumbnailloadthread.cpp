@@ -98,7 +98,7 @@ public:
     IccProfile                      profile;
 };
 
-K_GLOBAL_STATIC(ThumbnailLoadThreadStaticPriv, static_d)
+Q_GLOBAL_STATIC(ThumbnailLoadThreadStaticPriv, static_d)
 
 // -------------------------------------------------------------------
 

@@ -49,7 +49,7 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kglobal.h>
+
 #include <ksharedconfig.h>
 
 // Local includes
@@ -101,7 +101,7 @@ public:
     IccSettings object;
 };
 
-K_GLOBAL_STATIC(IccSettingsCreator, creator)
+Q_GLOBAL_STATIC(IccSettingsCreator, creator)
 
 // -----------------------------------------------------------------------------------------------
 

@@ -56,7 +56,7 @@ extern "C"
 
 // KDE includes
 
-#include <kglobal.h>
+
 
 // Libkdcraw includes
 
@@ -1978,7 +1978,7 @@ private:
     const bool m_isRaster;
 };
 
-K_GLOBAL_STATIC(PixmapPaintEngineDetector, pixmapPaintEngineDetector)
+Q_GLOBAL_STATIC(PixmapPaintEngineDetector, pixmapPaintEngineDetector)
 
 QPixmap DImg::convertToPixmap() const
 {

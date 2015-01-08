@@ -70,7 +70,7 @@ extern "C"
 #include <klocalizedstring.h>
 
 #include <kwindowsystem.h>
-#include <kglobal.h>
+
 #include <kdialog.h>
 #include <kjobwidgets.h>
 
@@ -280,7 +280,7 @@ public:
     AlbumManager object;
 };
 
-K_GLOBAL_STATIC(AlbumManagerCreator, creator)
+Q_GLOBAL_STATIC(AlbumManagerCreator, creator)
 
 // -----------------------------------------------------------------------------------
 

@@ -31,7 +31,7 @@
 
 // KDE includes
 
-#include <kglobal.h>
+
 #include "digikam_debug.h"
 
 namespace Digikam

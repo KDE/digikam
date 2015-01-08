@@ -37,7 +37,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kglobal.h>
+
 #include <kiconloader.h>
 
 #include <kmessagebox.h>
@@ -345,7 +345,7 @@ public:
     QEventLoop*                   waitingLoop;
 };
 
-K_GLOBAL_STATIC(ProgressManagerCreator, creator)
+Q_GLOBAL_STATIC(ProgressManagerCreator, creator)
 
 void ProgressManager::Private::addItem(ProgressItem* const t, ProgressItem* const parent)
 {

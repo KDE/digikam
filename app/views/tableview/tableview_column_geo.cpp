@@ -29,7 +29,7 @@
 
 // KDE includes
 
-#include <kglobal.h>
+#include <klocale.h>
 #include <klocalizedstring.h>
 
 // local includes
@@ -42,7 +42,7 @@ namespace
 
 QString FormatAltitude(const qreal altitudeInMeters, const KLocale::MeasureSystem& measureSystem)
 {
-    if (measureSystem==KLocale::Metric)
+    if (measureSystem == KLocale::Metric)
     {
         const QString altitudeInMetersString = KLocale::global()->formatNumber(altitudeInMeters, 2);
         return QString("%1 m").arg(altitudeInMetersString);
@@ -71,12 +71,10 @@ ColumnGeoProperties::ColumnGeoProperties(
   : TableViewColumn(tableViewShared, pConfiguration, parent),
     subColumn(pSubColumn)
 {
-
 }
 
 ColumnGeoProperties::~ColumnGeoProperties()
 {
-
 }
 
 QStringList ColumnGeoProperties::getSubColumns()
@@ -92,18 +90,9 @@ TableViewColumnDescription ColumnGeoProperties::getDescription()
 {
     TableViewColumnDescription description(QLatin1String("geo-properties"), i18n("Geo properties"));
     description.setIcon("applications-internet");
-
-    description.addSubColumn(
-        TableViewColumnDescription("geohascoordinates", i18n("Geotagged"))
-    );
-
-    description.addSubColumn(
-        TableViewColumnDescription("geocoordinates", i18n("Coordinates"))
-    );
-
-    description.addSubColumn(
-        TableViewColumnDescription("geoaltitude", i18n("Altitude"))
-    );
+    description.addSubColumn(TableViewColumnDescription("geohascoordinates", i18n("Geotagged")));
+    description.addSubColumn(TableViewColumnDescription("geocoordinates", i18n("Coordinates")));
+    description.addSubColumn(TableViewColumnDescription("geoaltitude", i18n("Altitude")));
 
     return description;
 }
@@ -112,12 +101,12 @@ QString ColumnGeoProperties::getTitle() const
 {
     switch (subColumn)
     {
-    case SubColumnHasCoordinates:
-        return i18n("Geotagged");
-    case SubColumnCoordinates:
-        return i18n("Coordinates");
-    case SubColumnAltitude:
-        return i18n("Altitude");
+        case SubColumnHasCoordinates:
+            return i18n("Geotagged");
+        case SubColumnCoordinates:
+            return i18n("Coordinates");
+        case SubColumnAltitude:
+            return i18n("Altitude");
     }
 
     return QString();
@@ -158,26 +147,21 @@ QVariant ColumnGeoProperties::data(TableViewModel::Item* const item, const int r
 
     switch (subColumn)
     {
-    case SubColumnHasCoordinates:
-        return info.hasCoordinates() ? i18n("Yes") : i18n("No");
+        case SubColumnHasCoordinates:
+            return info.hasCoordinates() ? i18n("Yes") : i18n("No");
 
-    case SubColumnCoordinates:
+        case SubColumnCoordinates:
         {
             if (!info.hasCoordinates())
             {
                 return QString();
             }
 
-            return QString("%1,%2")
-                .arg(
-                    KLocale::global()->formatNumber(info.latitudeNumber(), 7)
-                )
-                .arg(
-                    KLocale::global()->formatNumber(info.longitudeNumber(), 7)
-                );
+            return QString("%1,%2").arg(KLocale::global()->formatNumber(info.latitudeNumber(), 7))
+                                   .arg(KLocale::global()->formatNumber(info.longitudeNumber(), 7));
         }
 
-    case SubColumnAltitude:
+        case SubColumnAltitude:
         {
             /// @todo Needs custom sorting
             if ((!info.hasCoordinates()) || (!info.hasAltitude()))
@@ -188,6 +172,7 @@ QVariant ColumnGeoProperties::data(TableViewModel::Item* const item, const int r
             /// @todo Use an enum instead to avoid lots of string comparisons
             const QString formatKey = configuration.getSetting("format", "kde");
             KLocale::MeasureSystem measureSystem = KLocale::global()->measureSystem();
+
             if (formatKey=="metric")
             {
                 measureSystem = KLocale::Metric;
@@ -198,6 +183,7 @@ QVariant ColumnGeoProperties::data(TableViewModel::Item* const item, const int r
             }
 
             const QString formattedAltitude = FormatAltitude(info.altitudeNumber(), measureSystem);
+
             return formattedAltitude;
         }
     }
@@ -221,20 +207,22 @@ TableViewColumn::ColumnCompareResult ColumnGeoProperties::compare(
             const double altitudeA = infoA.altitudeNumber();
             const double altitudeB = infoB.altitudeNumber();
 
-            return compareHelper<double>(altitudeA, altitudeB);
+            return (compareHelper<double>(altitudeA, altitudeB));
         }
 
-        return compareHelper<int>(int(hasAltitudeA), int(hasAltitudeB));
+        return (compareHelper<int>(int(hasAltitudeA), int(hasAltitudeB)));
     }
 
     qCWarning(DIGIKAM_GENERAL_LOG) << "geo: unimplemented comparison, subColumn=" << subColumn;
+
     return CmpEqual;
 }
 
 TableViewColumnConfigurationWidget* ColumnGeoProperties::getConfigurationWidget(QWidget* const parentWidget) const
 {
     TableViewColumnConfiguration myConfiguration = getConfiguration();
-    return new ColumnGeoConfigurationWidget(s, myConfiguration, parentWidget);
+
+    return (new ColumnGeoConfigurationWidget(s, myConfiguration, parentWidget));
 }
 
 ColumnGeoConfigurationWidget::ColumnGeoConfigurationWidget(
@@ -249,7 +237,7 @@ ColumnGeoConfigurationWidget::ColumnGeoConfigurationWidget(
 
     switch (subColumn)
     {
-    case ColumnGeoProperties::SubColumnAltitude:
+        case ColumnGeoProperties::SubColumnAltitude:
         {
             QFormLayout* const box1 = new QFormLayout();
             selectorAltitudeUnit    = new QComboBox(this);
@@ -261,18 +249,17 @@ ColumnGeoConfigurationWidget::ColumnGeoConfigurationWidget(
             setLayout(box1);
 
             const int index = selectorAltitudeUnit->findData(configuration.getSetting("format", "kde"));
-            selectorAltitudeUnit->setCurrentIndex(index>=0 ? index : 0);
+            selectorAltitudeUnit->setCurrentIndex(index >= 0 ? index : 0);
             break;
         }
 
-    default:
-        break;
+        default:
+            break;
     }
 }
 
 ColumnGeoConfigurationWidget::~ColumnGeoConfigurationWidget()
 {
-
 }
 
 TableViewColumnConfiguration ColumnGeoConfigurationWidget::getNewConfiguration()

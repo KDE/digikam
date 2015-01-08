@@ -35,7 +35,7 @@
 // KDE includes
 
 #include <kconfig.h>
-#include <kglobal.h>
+
 
 
 
@@ -60,7 +60,7 @@ public:
     ApplicationSettings object;
 };
 
-K_GLOBAL_STATIC(ApplicationSettingsCreator, creator)
+Q_GLOBAL_STATIC(ApplicationSettingsCreator, creator)
 
 // -------------------------------------------------------------------------------------------------
 

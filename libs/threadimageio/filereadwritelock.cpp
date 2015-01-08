@@ -36,7 +36,7 @@
 
 // KDE includes
 
-#include <kglobal.h>
+
 
 // Local includes
 
@@ -382,7 +382,7 @@ void FileReadWriteLockStaticPrivate::unlockAndDrop(Entry* entry)
     drop_locked(entry);
 }
 
-K_GLOBAL_STATIC(FileReadWriteLockStaticPrivate, static_d)
+Q_GLOBAL_STATIC(FileReadWriteLockStaticPrivate, static_d)
 
 // -------------------------------------------------------------------------
 

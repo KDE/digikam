@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kglobal.h>
+
 
 // Local includes
 
@@ -75,7 +75,7 @@ public:
     }
 };
 
-K_GLOBAL_STATIC(TagPropertiesPrivSharedNull, tagPropertiesPrivSharedNull)
+Q_GLOBAL_STATIC(TagPropertiesPrivSharedNull, tagPropertiesPrivSharedNull)
 
 TagPropertiesPrivSharedPointer TagProperties::TagPropertiesPriv::createGuarded(int tagId)
 {

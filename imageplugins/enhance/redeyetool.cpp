@@ -45,7 +45,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 
-#include <kglobal.h>
+
 #include <khuesaturationselect.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>

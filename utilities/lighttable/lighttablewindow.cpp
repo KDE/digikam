@@ -38,7 +38,7 @@
 #include <kactioncollection.h>
 #include <kconfig.h>
 #include <kedittoolbar.h>
-#include <kglobal.h>
+
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <knotifyconfigwidget.h>

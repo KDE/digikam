@@ -36,7 +36,7 @@
 
 #include <kconfig.h>
 
-#include <kglobal.h>
+
 #include <kconfiggroup.h>
 #include "digikam_debug.h"
 

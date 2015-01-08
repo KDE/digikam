@@ -30,15 +30,14 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QVBoxLayout>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
 #include <kconfig.h>
-
-#include <kglobal.h>
+#include <ksharedconfig.h>
 #include <klocalizedstring.h>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 

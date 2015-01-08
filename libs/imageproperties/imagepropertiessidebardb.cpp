@@ -38,7 +38,7 @@
 #include <kfileitem.h>
 #include <klocalizedstring.h>
 #include <kconfig.h>
-#include <kglobal.h>
+
 
 // Local includes
 

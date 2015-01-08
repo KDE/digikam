@@ -34,7 +34,7 @@
 // KDE includes
 
 #include <kconfig.h>
-#include <kglobal.h>
+#include <ksharedconfig.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 

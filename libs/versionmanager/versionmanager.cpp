@@ -32,7 +32,7 @@
 
 #include <kconfiggroup.h>
 #include <kdiskfreespaceinfo.h>
-#include <kglobal.h>
+
 #include <QUrl>
 
 // Local includes

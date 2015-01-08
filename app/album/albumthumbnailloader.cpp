@@ -36,7 +36,7 @@
 
 // KDE includes
 
-#include <kglobal.h>
+
 #include <kiconloader.h>
 
 // Local includes
@@ -62,7 +62,7 @@ public:
     AlbumThumbnailLoader object;
 };
 
-K_GLOBAL_STATIC(AlbumThumbnailLoaderCreator, creator)
+Q_GLOBAL_STATIC(AlbumThumbnailLoaderCreator, creator)
 
 // ---------------------------------------------------------------------------------------------
 

@@ -26,7 +26,7 @@
 
 // KDE includes
 
-#include <kglobal.h>
+
 #include <kglobalsettings.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -215,7 +215,7 @@ public:
     ImportSettings object;
 };
 
-K_GLOBAL_STATIC(ImportSettingsCreator, creator)
+Q_GLOBAL_STATIC(ImportSettingsCreator, creator)
 
 // -------------------------------------------------------------------------------------------------
 

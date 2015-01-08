@@ -35,7 +35,7 @@
 
 // KDE includes
 
-#include <kglobal.h>
+
 
 // Local includes
 
@@ -238,7 +238,7 @@ class ThreadManagerCreator
 public:
     ThreadManager object;
 };
-K_GLOBAL_STATIC(ThreadManagerCreator, creator)
+Q_GLOBAL_STATIC(ThreadManagerCreator, creator)
 
 ThreadManager* ThreadManager::instance()
 {

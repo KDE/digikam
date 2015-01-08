@@ -25,7 +25,7 @@
 
 // KDE includes
 
-#include <kglobal.h>
+
 
 // Local includes
 
@@ -95,7 +95,7 @@ public:
     BatchToolsManager object;
 };
 
-K_GLOBAL_STATIC(BatchToolsManagerCreator, batchToolsManagerCreator)
+Q_GLOBAL_STATIC(BatchToolsManagerCreator, batchToolsManagerCreator)
 
 // --------------------------------------------------------------------------------
 

@@ -35,7 +35,7 @@
 
 // KDE includes
 
-#include <kglobal.h>
+
 #include <klocalizedstring.h>
 
 // Local includes
@@ -72,7 +72,7 @@ public:
     WorkflowManager object;
 };
 
-K_GLOBAL_STATIC(WorkflowManagerCreator, creator)
+Q_GLOBAL_STATIC(WorkflowManagerCreator, creator)
 
 WorkflowManager* WorkflowManager::instance()
 {

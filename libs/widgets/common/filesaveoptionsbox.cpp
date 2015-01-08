@@ -38,7 +38,7 @@
 
 #include <kconfig.h>
 #include <kfiledialog.h>
-#include <kglobal.h>
+#include <ksharedconfig.h>
 #include <klocalizedstring.h>
 #include <kurlcombobox.h>
 

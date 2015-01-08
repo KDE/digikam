@@ -34,7 +34,7 @@
 
 // KDE includes
 
-#include <kglobal.h>
+
 
 // Local includes
 
@@ -256,7 +256,7 @@ class TagsCacheCreator
 public:
     TagsCache object;
 };
-K_GLOBAL_STATIC(TagsCacheCreator, creator)
+Q_GLOBAL_STATIC(TagsCacheCreator, creator)
 
 // ------------------------------------------------------------------------------------------
 
