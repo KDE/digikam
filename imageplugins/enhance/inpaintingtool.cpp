@@ -50,13 +50,13 @@
 #include <QComboBox>
 #include <QDesktopServices>
 #include <QFileDialog>
+#include <QStandardPaths>
 
 // KDE includes
 
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <kurllabel.h>
 
 // Local includes
@@ -175,7 +175,7 @@ InPaintingTool::InPaintingTool(QObject* const parent)
     KUrlLabel* const cimgLogoLabel = new KUrlLabel();
     cimgLogoLabel->setText(QString());
     cimgLogoLabel->setUrl("http://cimg.sourceforge.net");
-    cimgLogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-cimg.png")));
+    cimgLogoLabel->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-cimg.png")));
     cimgLogoLabel->setToolTip(i18n("Visit CImg library website"));
 
     QLabel* const typeLabel = new QLabel(i18n("Filtering type:"));

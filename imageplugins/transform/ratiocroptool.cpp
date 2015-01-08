@@ -41,16 +41,14 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QApplication>
+#include <QStandardPaths>
 
 // KDE includes
 
 #include <kcolorbutton.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
-#include <kstandardguiitem.h>
 #include <kguiitem.h>
 #include <kstandardguiitem.h>
 
@@ -385,7 +383,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     d->widthInput->setDefaultValue(800);
 
     d->centerWidth = new QToolButton(cropSelection);
-    d->centerWidth->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/centerwidth.png")));
+    d->centerWidth->setIcon(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/centerwidth.png")));
     d->centerWidth->setWhatsThis( i18n("Set width position to center."));
 
     d->heightInput = new RIntNumInput(cropSelection);
@@ -396,7 +394,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     d->heightInput->setDefaultValue(600);
 
     d->centerHeight = new QToolButton(cropSelection);
-    d->centerHeight->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/centerheight.png")));
+    d->centerHeight->setIcon(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/centerheight.png")));
     d->centerHeight->setWhatsThis( i18n("Set height position to center."));
 
     // -------------------------------------------------------------

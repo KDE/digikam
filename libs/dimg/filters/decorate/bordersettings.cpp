@@ -34,6 +34,7 @@
 #include <QUrl>
 #include <QApplication>
 #include <QStyle>
+#include <QStandardPaths>
 
 // KDE includes
 
@@ -41,7 +42,6 @@
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <kcolorbutton.h>
 #include <kseparator.h>
 
@@ -544,7 +544,7 @@ QString BorderSettings::getBorderPath(int border)
             break;
     }
 
-    return (KStandardDirs::locate("data", QString("digikam/data/") + pattern + QString(".png")));
+    return (QStandardPaths::locate(QStandardPaths::GenericDataLocation, QString("digikam/data/") + pattern + QString(".png")));
 }
 
 void BorderSettings::toggleBorderSlider(bool b)

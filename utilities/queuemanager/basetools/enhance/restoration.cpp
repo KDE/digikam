@@ -28,11 +28,11 @@
 #include <QLabel>
 #include <QWidget>
 #include <QComboBox>
+#include <QStandardPaths>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
 #include <kurllabel.h>
 #include <kglobal.h>
 
@@ -70,7 +70,7 @@ void Restoration::registerSettingsWidget()
     KUrlLabel* const cimgLogoLabel = new KUrlLabel(vbox);
     cimgLogoLabel->setText(QString());
     cimgLogoLabel->setUrl("http://cimg.sourceforge.net");
-    cimgLogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-cimg.png")));
+    cimgLogoLabel->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-cimg.png")));
     cimgLogoLabel->setToolTip(i18n("Visit CImg library website"));
 
     new QLabel(i18n("Filter:"), vbox);

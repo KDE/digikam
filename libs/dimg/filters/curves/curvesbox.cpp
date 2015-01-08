@@ -33,20 +33,20 @@
 #include <QPushButton>
 #include <QTextStream>
 #include <QToolButton>
+#include <QApplication>
+#include <QStyle>
+#include <QStandardPaths>
 
 // KDE includes
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
-#include <QApplication>
-#include <QStyle>
-#include "digikam_debug.h"
-#include <KIconLoader>
+#include <kiconloader.h>
+
 // Local includes
 
+#include "digikam_debug.h"
 #include "colorgradientwidget.h"
 #include "curveswidget.h"
 #include "editortoolsettings.h"
@@ -143,14 +143,14 @@ void CurvesBox::setup()
     QWidget* typeBox = new QWidget();
 
     d->curveFree = new QToolButton;
-    d->curveFree->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/curvefree.png")));
+    d->curveFree->setIcon(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/curvefree.png")));
     d->curveFree->setCheckable(true);
     d->curveFree->setToolTip(i18n("Curve free mode"));
     d->curveFree->setWhatsThis(i18n("With this button, you can draw your curve free-hand "
                                     "with the mouse."));
 
     d->curveSmooth = new QToolButton;
-    d->curveSmooth->setIcon(QPixmap(KStandardDirs::locate("data", "digikam/data/curvemooth.png")));
+    d->curveSmooth->setIcon(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/curvemooth.png")));
     d->curveSmooth->setCheckable(true);
     d->curveSmooth->setToolTip(i18n("Curve smooth mode"));
     d->curveSmooth->setWhatsThis(i18n("With this button, the curve type is constrained to "

@@ -49,6 +49,7 @@
 #include <QApplication>
 #include <QDesktopServices>
 #include <QFileDialog>
+#include <QStandardPaths>
 
 // KDE includes
 
@@ -56,7 +57,6 @@
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kseparator.h>
-#include <kstandarddirs.h>
 #include <kurllabel.h>
 
 // Libkdcraw includes
@@ -240,7 +240,7 @@ ResizeTool::ResizeTool(QObject* const parent)
     d->cimgLogoLabel = new KUrlLabel(firstPage);
     d->cimgLogoLabel->setText(QString());
     d->cimgLogoLabel->setUrl("http://cimg.sourceforge.net");
-    d->cimgLogoLabel->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-cimg.png")));
+    d->cimgLogoLabel->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-cimg.png")));
     d->cimgLogoLabel->setToolTip(i18n("Visit CImg library website"));
 
     d->useGreycstorationBox = new QCheckBox(i18n("Restore photograph (slow)"), firstPage);

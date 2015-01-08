@@ -30,17 +30,15 @@
 #include <QImage>
 #include <QLabel>
 #include <QIcon>
+#include <QStandardPaths>
 
 // KDE includes
-
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-
-#include <kstandarddirs.h>
 
 // Libkdcraw includes
 
@@ -321,7 +319,7 @@ QString TextureTool::getTexturePath(int texture)
             break;
     }
 
-    return (KStandardDirs::locate("data", QString("digikam/data/") + pattern + QString(".png")));
+    return (QStandardPaths::locate(QStandardPaths::GenericDataLocation, QString("digikam/data/") + pattern + QString(".png")));
 }
 
 }  // namespace DigikamDecorateImagePlugin
