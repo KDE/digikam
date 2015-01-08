@@ -50,14 +50,13 @@ void TwoProgressItemsContainer::scheduleOnProgressItem(QAtomicPointer<ProgressIt
             delete item;
         }
     }
-#pragma message("PORT QT5")
-//    ptr->incTotalItems(total);
+
+    ptr.load()->incTotalItems(total);
 }
 
 void TwoProgressItemsContainer::advance(QAtomicPointer<ProgressItem>& ptr, int n)
 {
-#pragma message("PORT QT5")
-//    if (ptr->advance(n))
+    if (ptr.load()->advance(n))
     {
         ProgressItem* const item = ptr;
 
