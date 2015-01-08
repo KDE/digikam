@@ -32,12 +32,12 @@
 #include <QMutex>
 #include <QTextStream>
 #include <QTextCodec>
+#include <QStandardPaths>
 
 // KDE includes
 
 #include <kglobal.h>
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
 
 // Local includes
 
@@ -81,7 +81,7 @@ TemplateManager* TemplateManager::defaultManager()
 TemplateManager::TemplateManager()
     : d(new Private)
 {
-    d->file = KStandardDirs::locateLocal("appdata", "template.xml");
+    d->file = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QString("/template.xml");
 
     load();
 }

@@ -31,12 +31,12 @@
 #include <QDomElement>
 #include <QTextStream>
 #include <QTextCodec>
+#include <QStandardPaths>
 
 // KDE includes
 
 #include <kglobal.h>
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
 
 // Local includes
 
@@ -84,7 +84,7 @@ WorkflowManager* WorkflowManager::instance()
 WorkflowManager::WorkflowManager()
     : d(new Private)
 {
-    d->file = KStandardDirs::locateLocal("appdata", "queue.xml");
+    d->file = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QString("/queue.xml");
 }
 
 WorkflowManager::~WorkflowManager()

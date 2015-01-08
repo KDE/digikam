@@ -51,14 +51,11 @@
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
 #include <kiconloader.h>
-#include <kio/job.h>
-#include <kio/jobuidelegate.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <knotifyconfigwidget.h>
 #include <kshortcutsdialog.h>
 #include <kstandardaction.h>
-#include <kstandarddirs.h>
 #include <kstandardshortcut.h>
 #include <ktip.h>
 #include <ktoggleaction.h>
@@ -68,6 +65,9 @@
 #include <kwindowsystem.h>
 #include <kformat.h>
 #include <khelpclient.h>
+
+#include <kio/job.h>
+#include <kio/jobuidelegate.h>
 
 #include <solid/camera.h>
 #include <solid/device.h>
@@ -241,7 +241,7 @@ DigikamApp::DigikamApp()
     d->cardReaderMenu  = new KActionMenu(this);
     d->quickImportMenu = new KActionMenu(this);
 
-    d->cameraList = new CameraList(this, KStandardDirs::locateLocal("appdata", "cameras.xml"));
+    d->cameraList = new CameraList(this, QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QString( "/cameras.xml"));
 
     connect(d->cameraList, SIGNAL(signalCameraAdded(CameraType*)),
             this, SLOT(slotCameraAdded(CameraType*)));
