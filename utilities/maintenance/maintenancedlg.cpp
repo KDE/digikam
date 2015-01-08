@@ -31,12 +31,12 @@
 #include <QGridLayout>
 #include <QComboBox>
 #include <QScrollArea>
+#include <QStandardPaths>
 
 // KDE includes
 
 #include <klocalizedstring.h>
 #include <kiconloader.h>
-#include <kstandarddirs.h>
 #include <kconfig.h>
 #include <kwindowconfig.h>
 
@@ -182,7 +182,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     QGridLayout* const grid = new QGridLayout(page);
 
     d->logo                 = new QLabel(page);
-    d->logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+    d->logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
                        .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     d->title                = new QLabel(i18n("<qt><b>Select Maintenance Operations to Process</b></qt>"), page);
     d->expanderBox          = new RExpanderBox(page);

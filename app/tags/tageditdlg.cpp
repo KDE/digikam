@@ -32,18 +32,15 @@
 #include <QTreeWidget>
 #include <QApplication>
 #include <QStyle>
+#include <QStandardPaths>
 
 // KDE includes
 
 #include <klineedit.h>
 #include <klocalizedstring.h>
 #include <kicondialog.h>
-
-#include <kdeversion.h>
 #include <kiconloader.h>
 #include <kseparator.h>
-#include <kstandarddirs.h>
-
 #include <kkeysequencewidget.h>
 
 // Local includes
@@ -125,7 +122,7 @@ TagEditDlg::TagEditDlg(QWidget* const parent, TAlbum* const album, bool create)
 
     QGridLayout* const grid = new QGridLayout(page);
     QLabel* const logo      = new QLabel(page);
-    logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
                     .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     d->topLabel             = new QLabel(page);

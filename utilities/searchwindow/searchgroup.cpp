@@ -32,12 +32,12 @@
 #include <QRadioButton>
 #include <QStackedLayout>
 #include <QVBoxLayout>
+#include <QStandardPaths>
 
 // KDE includes
 
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
 
 // Local includes
 
@@ -478,7 +478,7 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache* const cache, Sear
     if (type == SearchGroup::FirstGroup)
     {
         QLabel* logo = new QLabel;
-        logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+        logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
                         .scaled(96, 96, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
         d->optionsLabel = new RClickLabel;

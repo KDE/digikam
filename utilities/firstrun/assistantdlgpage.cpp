@@ -29,12 +29,12 @@
 #include <QLabel>
 #include <QApplication>
 #include <QStyle>
+#include <QStandardPaths>
 
 // KDE includes
 
 #include <kiconloader.h>
 #include <kseparator.h>
-#include <kstandarddirs.h>
 #include <kassistantdialog.h>
 #include <kpagewidgetmodel.h>
 
@@ -78,7 +78,7 @@ AssistantDlgPage::AssistantDlgPage(KAssistantDialog* const dlg, const QString& t
     RVBox* const vbox = new RVBox(panel);
     d->logo           = new QLabel(vbox);
     d->logo->setAlignment(Qt::AlignCenter);
-    d->logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+    d->logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
                        .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     QLabel* const space = new QLabel(vbox);

@@ -36,15 +36,13 @@
 #include <QPushButton>
 #include <QRadioButton>
 #include <QVBoxLayout>
+#include <QStandardPaths>
 
 // KDE includes
 
-
 #include <klocalizedstring.h>
 #include <kiconloader.h>
-
 #include <kseparator.h>
-#include <kstandarddirs.h>
 
 // Local includes
 
@@ -222,7 +220,7 @@ QLayout* ColorCorrectionDlg::createHeading() const
     message->setWordWrap(true);
 
     QLabel* logo      = new QLabel;
-    logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
                     .scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     KSeparator* line  = new KSeparator(Qt::Horizontal);

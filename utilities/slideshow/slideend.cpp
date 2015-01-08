@@ -28,17 +28,16 @@
 #include <QLabel>
 #include <QGridLayout>
 #include <QPalette>
+#include <QStandardPaths>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
-
 
 #include <klocalizedstring.h>
 #include <kaboutdata.h>
 #include <kglobal.h>
 #include <kcomponentdata.h>
-#include <kstandarddirs.h>
-#include <QApplication>
-#include <QStyle>
 
 namespace Digikam
 {
@@ -67,12 +66,12 @@ SlideEnd::SlideEnd(QWidget* const parent)
 
     if (QApplication::applicationName() == QString("digikam"))
     {
-        logo = QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+        logo = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
                 .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
     else
     {
-        logo = QPixmap(KStandardDirs::locate("data", "showfoto/data/logo-showfoto.png"))
+        logo = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "showfoto/data/logo-showfoto.png"))
                 .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 

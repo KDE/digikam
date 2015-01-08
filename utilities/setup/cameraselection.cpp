@@ -38,14 +38,13 @@
 #include <QStyle>
 #include <QComboBox>
 #include <QLineEdit>
+#include <QStandardPaths>
 
 // KDE includes
-
 
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
 #include <kurlrequester.h>
 
 // Local includes
@@ -210,7 +209,7 @@ CameraSelection::CameraSelection(QWidget* const parent)
     QGridLayout* gLayout5 = new QGridLayout(box2);
 
     QLabel* const logo = new QLabel(box2);
-    logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
                     .scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     QLabel* const link = new QLabel(box2);

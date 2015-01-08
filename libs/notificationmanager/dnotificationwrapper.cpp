@@ -30,12 +30,12 @@
 #include <QDBusConnectionInterface>
 #include <QProcess>
 #include <QApplication>
+#include <QStandardPaths>
 
 // KDE includes
 
 #include <kglobalsettings.h>
 #include <kiconloader.h>
-#include <kstandarddirs.h>
 #include <knotification.h>
 #include <kpassivepopup.h>
 
@@ -105,12 +105,12 @@ void DNotificationWrapper(const QString& eventId, const QString& message,
     {
         if (QApplication::applicationName() == QString("digikam"))
         {
-            logoPixmap = QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+            logoPixmap = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
                          .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
         else
         {
-            logoPixmap = QPixmap(KStandardDirs::locate("data", "digikam/data/logo-showfoto.png"))
+            logoPixmap = QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "showfoto/data/logo-showfoto.png"))
                          .scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
     }

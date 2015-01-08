@@ -31,15 +31,13 @@
 #include <QGridLayout>
 #include <QPixmap>
 #include <QPointer>
+#include <QStandardPaths>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
-
 #include <klocalizedstring.h>
-
-#include <kstandarddirs.h>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 
@@ -83,7 +81,7 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* const parent, PAlbum* const albumT
 
     QGridLayout* const grid = new QGridLayout(page);
     QLabel* const logo      = new QLabel(page);
-    logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
                     .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     QLabel* const message   = new QLabel(page);

@@ -28,19 +28,18 @@
 #include <QLabel>
 #include <QFrame>
 #include <QGridLayout>
+#include <QStandardPaths>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
-
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
-#include <QApplication>
-#include <QStyle>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "camerafolderitem.h"
 #include "camerafolderview.h"
 
@@ -81,7 +80,7 @@ CameraFolderDialog::CameraFolderDialog(QWidget* const parent, const QMap<QString
     QLabel* const logo      = new QLabel(page);
     QLabel* const message   = new QLabel(page);
 
-    logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
                     .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     message->setText(i18n("<p>Please select the camera folder "

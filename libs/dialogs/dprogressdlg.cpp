@@ -33,13 +33,12 @@
 #include <QVBoxLayout>
 #include <QProgressBar>
 #include <QTreeWidget>
+#include <QStandardPaths>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-
 #include <kiconloader.h>
-#include <kstandarddirs.h>
 #include <ksqueezedtextlabel.h>
 
 namespace Digikam
@@ -96,7 +95,7 @@ DProgressDlg::DProgressDlg(QWidget* const parent, const QString& caption)
     d->label->setWordWrap(true);
     d->actionPix->setFixedSize(QSize(32, 32));
 
-    d->logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+    d->logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
                        .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     grid->addWidget(d->logo,        0, 0, 3, 1);

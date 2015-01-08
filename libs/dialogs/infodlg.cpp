@@ -36,12 +36,12 @@
 #include <QClipboard>
 #include <QApplication>
 #include <QStyle>
+#include <QStandardPaths>
 
 // KDE includes
 
 #include <klocalizedstring.h>
 #include <kiconloader.h>
-#include <kstandarddirs.h>
 
 // Local includes
 
@@ -83,12 +83,12 @@ InfoDlg::InfoDlg(QWidget* const parent)
 
     if (QApplication::applicationName() == QString("digikam"))
     {
-        logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+        logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
                         .scaled(92, 92, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     }
     else
     {
-        logo->setPixmap(QPixmap(KStandardDirs::locate("data", "showfoto/data/logo-showfoto.png"))
+        logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "showfoto/data/logo-showfoto.png"))
                         .scaled(92, 92, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     }
 

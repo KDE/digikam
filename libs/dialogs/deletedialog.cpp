@@ -40,11 +40,11 @@
 #include <QApplication>
 #include <QStyle>
 #include <QPushButton>
+#include <QStandardPaths>
 
 // KDE includes
 
 #include <kiconloader.h>
-#include <kstandarddirs.h>
 #include <klocalizedstring.h>
 #include <kstandardguiitem.h>
 
@@ -268,7 +268,7 @@ DeleteWidget::DeleteWidget(QWidget* const parent)
 
     d->checkBoxStack = new QStackedWidget(this);
     QLabel* logo     = new QLabel(this);
-    logo->setPixmap(QPixmap(KStandardDirs::locate("data", "digikam/data/logo-digikam.png"))
+    logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
                     .scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     d->warningIcon   = new QLabel(this);
