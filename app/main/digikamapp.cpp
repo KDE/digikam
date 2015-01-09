@@ -32,6 +32,7 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QPointer>
 #include <QSignalMapper>
 #include <QStringList>
@@ -40,19 +41,18 @@
 #include <QKeySequence>
 #include <QMenu>
 #include <QMenuBar>
+#include <QIcon>
+#include <QMessageBox>
 
 // KDE includes
 
-#include <kdeversion.h>
 #include <kactioncategory.h>
 #include <kaboutdata.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 #include <knotifyconfigwidget.h>
 #include <kshortcutsdialog.h>
 #include <kstandardaction.h>
@@ -417,7 +417,7 @@ void DigikamApp::show()
                                "choose \"No\", and the \"Color Management\" feature "
                                "will be disabled until you solve this issue.</p>");
 
-        if (KMessageBox::warningYesNo(this, message) == KMessageBox::Yes)
+        if (QMessageBox::warning(this, qApp->applicationName(), message, QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
         {
             if (!setupICC())
             {
@@ -630,13 +630,13 @@ void DigikamApp::setupAccelerators()
     connect(escapeAction, SIGNAL(triggered()), this, SIGNAL(signalEscapePressed()));
 
     QAction* const nextImageAction = new QAction(i18n("Next Image"), this);
-    nextImageAction->setIcon(SmallIcon("go-next"));
+    nextImageAction->setIcon(QIcon::fromTheme("go-next").pixmap(16));
     actionCollection()->addAction("next_image", nextImageAction);
     nextImageAction->setShortcut(QKeySequence(Qt::Key_Space));
     connect(nextImageAction, SIGNAL(triggered()), this, SIGNAL(signalNextItem()));
 
     QAction* const previousImageAction = new QAction(i18n("Previous Image"), this);
-    previousImageAction->setIcon(SmallIcon("go-previous"));
+    previousImageAction->setIcon(QIcon::fromTheme("go-previous").pixmap(16));
     actionCollection()->addAction("previous_image", previousImageAction);
     previousImageAction->setShortcut(QKeySequence(Qt::Key_Backspace));
     connect(previousImageAction, SIGNAL(triggered()), this, SIGNAL(signalPrevItem()));
@@ -1767,7 +1767,7 @@ void DigikamApp::slotOpenSolidDevice(const QString& udi)
 
     if (!device.isValid())
     {
-        KMessageBox::error(this, i18n("The specified device (\"%1\") is not valid.", udi));
+        QMessageBox::critical(this, qApp->applicationName(), i18n("The specified device (\"%1\") is not valid.", udi));
         return;
     }
 
@@ -1779,7 +1779,7 @@ void DigikamApp::slotOpenSolidDevice(const QString& udi)
     {
         if (!checkSolidCamera(device))
         {
-            KMessageBox::error(this, i18n("The specified camera (\"%1\") is not supported.", udi));
+            QMessageBox::critical(this, qApp->applicationName(), i18n("The specified camera (\"%1\") is not supported.", udi));
             return;
         }
 
@@ -1920,7 +1920,7 @@ void DigikamApp::openSolidUsmDevice(const QString& udi, const QString& givenLabe
 
             if (returnCode == 1)
             {
-                KMessageBox::error(this, d->solidErrorMessage);
+                QMessageBox::critical(this, qApp->applicationName(), d->solidErrorMessage);
                 return;
             }
         }
