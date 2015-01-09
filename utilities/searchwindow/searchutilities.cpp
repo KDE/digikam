@@ -46,7 +46,7 @@
 
 // KDE includes
 
-#include <kdeversion.h>
+
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
 #include <QPushButton>

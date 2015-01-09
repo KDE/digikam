@@ -72,7 +72,7 @@ extern "C"
 
 // KDE includes
 
-#include <kdeversion.h>
+
 #include <kactionmenu.h>
 #include <kselectaction.h>
 #include <kactioncollection.h>

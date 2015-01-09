@@ -34,7 +34,7 @@
 
 // KDE includes
 
-#include <kdeversion.h>
+
 #include <kcategorydrawer.h>
 
 // Local includes

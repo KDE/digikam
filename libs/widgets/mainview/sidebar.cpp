@@ -39,7 +39,7 @@
 // KDE includes
 
 #include <kconfiggroup.h>
-#include <kdeversion.h>
+
 
 #include <kiconloader.h>
 

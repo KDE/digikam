@@ -46,7 +46,7 @@
 #include "digikam_debug.h"
 #include <kglobalsettings.h>
 
-#include <kdeversion.h>
+
 
 #include <QDesktopWidget>
 

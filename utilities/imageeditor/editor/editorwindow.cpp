@@ -62,7 +62,7 @@
 
 // KDE includes
 
-#include <kdeversion.h>
+
 #include <kactioncategory.h>
 #include <kaboutdata.h>
 #include <kactioncollection.h>

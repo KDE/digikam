@@ -38,7 +38,7 @@
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kpixmapsequence.h>
-#include <kdeversion.h>
+
 
 // Local includes
 

@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include <kdeversion.h>
+
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>

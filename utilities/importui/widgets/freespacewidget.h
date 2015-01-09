@@ -32,7 +32,7 @@
 // KDE includes
 
 #include <QAction>
-#include <kdeversion.h>
+
 
 #include <kdiskfreespaceinfo.h>
 

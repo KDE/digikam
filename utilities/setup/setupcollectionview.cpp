@@ -43,7 +43,7 @@
 
 // KDE includes
 
-#include <kdeversion.h>
+
 #include <klocalizedstring.h>
 #include <kdialog.h>
 #include <kfiledialog.h>

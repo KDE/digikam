@@ -36,7 +36,7 @@
 #include <klocalizedstring.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
-#include <kdeversion.h>
+
 #include <kmimetype.h>
 #include <kio/previewjob.h>
 

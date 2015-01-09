@@ -65,7 +65,7 @@ extern "C"
 #include <kmessagebox.h>
 #include <kiconloader.h>
 #include <kconfiggroup.h>
-#include <kdeversion.h>
+
 #include <kdirwatch.h>
 #include <klocalizedstring.h>
 

@@ -43,7 +43,7 @@
 // KDE includes
 
 #include <kdialog.h>
-#include <kdeversion.h>
+
 #include <klocalizedstring.h>
 
 // Local includes

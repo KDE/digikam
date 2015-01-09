@@ -36,7 +36,7 @@
 
 #include <kiconloader.h>
 #include <kconfig.h>
-#include <kdeversion.h>
+
 #include <kcalendarsystem.h>
 #include <kconfiggroup.h>
 

@@ -40,7 +40,7 @@
 // KDE includes
 
 #include <kcalendarsystem.h>
-#include <kdeversion.h>
+
 
 #include <klocalizedstring.h>
 

@@ -54,7 +54,7 @@
 #include <kactioncollection.h>
 #include <kcategorizedview.h>
 #include <kconfig.h>
-#include <kdeversion.h>
+
 
 #include <klocalizedstring.h>
 #include <kmessagebox.h>

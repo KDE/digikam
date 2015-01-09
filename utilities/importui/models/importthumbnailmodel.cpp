@@ -32,7 +32,7 @@
 
 #include <kio/previewjob.h>
 #include "digikam_debug.h"
-#include <kdeversion.h>
+
 
 // Local includes
 

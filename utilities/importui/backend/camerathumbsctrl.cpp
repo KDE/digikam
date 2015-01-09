@@ -32,7 +32,7 @@
 // KDE includes
 
 
-#include <kdeversion.h>
+
 #include <kio/previewjob.h>
 
 // Local includes

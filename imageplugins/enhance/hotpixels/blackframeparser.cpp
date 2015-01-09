@@ -46,7 +46,7 @@
 
 // KDE includes
 
-#include <kdeversion.h>
+
 #include <kio/netaccess.h>
 #include <kio/job.h>
 

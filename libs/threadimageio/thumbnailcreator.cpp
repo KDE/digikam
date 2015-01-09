@@ -46,7 +46,7 @@
 #include <kmimetype.h>
 #include <kservicetypetrader.h>
 
-#include <kdeversion.h>
+
 
 #include <kio/global.h>
 #include <kio/thumbcreator.h>
