@@ -28,12 +28,13 @@
 
 #include <QDropEvent>
 #include <QMenu>
+#include <QIcon>
+#include <QMessageBox>
+#include <QApplication>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kiconloader.h>
-#include <kmessagebox.h>
 
 // Local includes
 
@@ -74,9 +75,9 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
             return false;
 
         QMenu popMenu(view);
-        QAction* const gotoAction = popMenu.addAction(SmallIcon("go-jump"), i18n("&Move Here"));
+        QAction* const gotoAction = popMenu.addAction(QIcon::fromTheme("go-jump").pixmap(16), i18n("&Move Here"));
         popMenu.addSeparator();
-        popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
+        popMenu.addAction(QIcon::fromTheme("dialog-cancel").pixmap(16), i18n("C&ancel"));
         popMenu.setMouseTracking(true);
         QAction* const choice     = popMenu.exec(QCursor::pos());
 
@@ -113,7 +114,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
 
                 if (!AlbumManager::instance()->moveTAlbum(talbum, newParentTag, errMsg))
                 {
-                    KMessageBox::error(view, errMsg);
+                    QMessageBox::critical(view, qApp->applicationName(), errMsg);
                 }
 
                 if (view && !view->isVisible())
@@ -163,7 +164,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
                 }
 
                 popMenu.addSeparator();
-                popMenu.addAction( SmallIcon("dialog-cancel"), i18n("C&ancel") );
+                popMenu.addAction( QIcon::fromTheme("dialog-cancel").pixmap(16), i18n("C&ancel") );
 
                 popMenu.setMouseTracking(true);
                 QAction* const choice = popMenu.exec(QCursor::pos());
@@ -215,10 +216,10 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
         else
         {
             QMenu popMenu(view);
-            QAction* const assignAction = popMenu.addAction(SmallIcon("tag"),
+            QAction* const assignAction = popMenu.addAction(QIcon::fromTheme("tag").pixmap(16),
                                                             i18n("Assign Tag(s) '%1' to Items", tagNames.join(", ")));
             popMenu.addSeparator();
-            popMenu.addAction( SmallIcon("dialog-cancel"), i18n("C&ancel") );
+            popMenu.addAction( QIcon::fromTheme("dialog-cancel").pixmap(16), i18n("C&ancel") );
 
             popMenu.setMouseTracking(true);
             QAction* const choice = popMenu.exec(QCursor::pos());

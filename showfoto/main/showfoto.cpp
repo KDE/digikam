@@ -68,6 +68,7 @@ extern "C"
 #include <QMimeDatabase>
 #include <QMimeType>
 #include <QMessageBox>
+#include <QApplication>
 
 // KDE includes
 
@@ -300,7 +301,7 @@ void ShowFoto::show()
                                "select \"No\". In this case, \"Color Management\" feature "
                                "will be disabled until you solve this issue</p>");
 
-        if (QMessageBox::warning(this, windowTitle(), message, QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+        if (QMessageBox::warning(this, qApp->applicationName(), message, QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
         {
             if (!setup(true))
             {
@@ -978,7 +979,7 @@ void ShowFoto::slotDeleteCurrentItem()
         QString warnMsg(i18n("About to delete file \"%1\"\nAre you sure?",
                              urlCurrent.fileName()));
 
-        if (QMessageBox::warning(this, windowTitle(), warnMsg, QMessageBox::Apply | QMessageBox::Abort)
+        if (QMessageBox::warning(this, qApp->applicationName(), warnMsg, QMessageBox::Apply | QMessageBox::Abort)
             !=  QMessageBox::Apply)
         {
             return;
@@ -1005,7 +1006,7 @@ void ShowFoto::slotDeleteCurrentItemResult(KJob* job)
     if (job->error() != 0)
     {
         QString errMsg(job->errorString());
-        QMessageBox::critical(this, windowTitle(), errMsg);
+        QMessageBox::critical(this, qApp->applicationName(), errMsg);
         return;
     }
 
@@ -1322,7 +1323,7 @@ void ShowFoto::slotDroppedUrls(const QList<QUrl>& droppedUrls)
         }
         else 
         {
-            QMessageBox::information(this, windowTitle(), i18n("There is no dropped item to process."));
+            QMessageBox::information(this, qApp->applicationName(), i18n("There is no dropped item to process."));
             qWarning("infolist is empty..");
         }
 
