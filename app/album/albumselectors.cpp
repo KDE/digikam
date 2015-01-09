@@ -30,13 +30,12 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QCheckBox>
+#include <QIcon>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kstandardguiitem.h>
 #include <kconfig.h>
-#include <kiconloader.h>
 
 // Local includes
 
@@ -56,8 +55,7 @@ public:
 
     explicit ModelClearButton(AbstractCheckableAlbumModel* const model)
     {
-        setPixmap(SmallIcon(qApp->isLeftToRight() ? "edit-clear-locationbar-rtl" : "edit-clear-locationbar-ltr",
-                            0, KIconLoader::DefaultState));
+        setPixmap(QIcon::fromTheme(qApp->isLeftToRight() ? "edit-clear-locationbar-rtl" : "edit-clear-locationbar-ltr").pixmap(16));
         stayVisibleWhenAnimatedOut(true);
 
         connect(this, SIGNAL(clicked()),
@@ -84,7 +82,7 @@ public:
 
     static const QString         configUseWholePAlbumsEntry;
     static const QString         configUseWholeTAlbumsEntry;
-    
+
     QString                      configName;
     QCheckBox*                   wholePalbums;
     QCheckBox*                   wholeTalbums;
@@ -208,7 +206,7 @@ AlbumList AlbumSelectors::selectedPAlbums() const
     {
         albums << d->albumSelectCB->model()->checkedAlbums();
     }
-    
+
     return albums;
 }
 
@@ -220,7 +218,7 @@ bool AlbumSelectors::wholeTagsCollection() const
 AlbumList AlbumSelectors::selectedTAlbums() const
 {
     AlbumList albums;
-    
+
     if (wholeTagsCollection())
     {
         albums << AlbumManager::instance()->allTAlbums();
@@ -229,7 +227,7 @@ AlbumList AlbumSelectors::selectedTAlbums() const
     {
         albums << d->tagSelectCB->model()->checkedAlbums();
     }
-    
+
     return albums;
 }
 
@@ -263,10 +261,10 @@ void AlbumSelectors::loadState()
     KConfigGroup group        = config->group(d->configName);
     d->wholePalbums->setChecked(group.readEntry(d->configUseWholePAlbumsEntry, true));    
     d->wholeTalbums->setChecked(group.readEntry(d->configUseWholeTAlbumsEntry, true));    
-    
+
     d->albumSelectCB->view()->loadState();
     d->tagSelectCB->view()->loadState();
-    
+
     slotUpdateClearButtons();
 
     slotWholePalbums(wholeAlbumsCollection());
@@ -279,7 +277,7 @@ void AlbumSelectors::saveState()
     KConfigGroup group        = config->group(d->configName);
     group.writeEntry(d->configUseWholePAlbumsEntry, wholeAlbumsCollection());
     group.writeEntry(d->configUseWholeTAlbumsEntry, wholeTagsCollection());
-    
+
     d->albumSelectCB->view()->saveState();
     d->tagSelectCB->view()->saveState();
 }

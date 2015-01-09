@@ -30,10 +30,7 @@
 
 #include <QAction>
 #include <QEvent>
-
-// KDE includes
-
-#include <kiconloader.h>
+#include <QIcon>
 
 // Local includes
 
@@ -176,8 +173,8 @@ AlbumSelectionTreeView::AlbumSelectionTreeView(QWidget* const parent, AlbumModel
     setAlbumModel(model);
     d->albumModificationHelper = albumModificationHelper;
     d->toolTip                 = new AlbumViewToolTip(this);
-    d->findDuplAction          = new QAction(SmallIcon("tools-wizard"), i18n("Find Duplicates..."), this);
-    d->rebuildThumbsAction     = new QAction(SmallIcon("view-refresh"), i18n("Refresh"),            this);
+    d->findDuplAction          = new QAction(QIcon::fromTheme("tools-wizard").pixmap(16), i18n("Find Duplicates..."), this);
+    d->rebuildThumbsAction     = new QAction(QIcon::fromTheme("view-refresh").pixmap(16), i18n("Refresh"),            this);
 
     connect(d->findDuplAction,      SIGNAL(triggered()),
             this, SLOT(slotFindDuplicates()));
