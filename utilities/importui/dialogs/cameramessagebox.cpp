@@ -32,7 +32,6 @@
 #include <QLayout>
 #include <QLabel>
 #include <QHeaderView>
-#include <QMessageBox>
 #include <QApplication>
 #include <QStyle>
 #include <QUrl>
