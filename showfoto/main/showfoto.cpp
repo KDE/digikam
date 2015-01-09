@@ -1325,7 +1325,7 @@ void ShowFoto::slotDroppedUrls(const QList<QUrl>& droppedUrls)
         }
         else 
         {
-#pragma message("add errormessage when there is no valid urls...")
+            QMessageBox::information(this, windowTitle(), i18n("There is no dropped item to process."));
             qWarning("infolist is empty..");
         }
 
