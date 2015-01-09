@@ -152,8 +152,9 @@ ImportView::ImportView(ImportUI* const ui, ImportImageModel* const model, Import
 
     d->addPageUpDownActions(this, d->stackedView->importPreviewView());
     d->addPageUpDownActions(this, d->stackedView->thumbBar());
+#ifdef BUILD_VIDEO
     d->addPageUpDownActions(this, d->stackedView->mediaPlayerView());
-
+#endif //BUILD_VIDEO
     d->selectionTimer = new QTimer(this);
     d->selectionTimer->setSingleShot(true);
     d->selectionTimer->setInterval(75);

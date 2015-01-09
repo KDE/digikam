@@ -73,7 +73,9 @@ public:
         imageIconView      = 0;
         imagePreviewView   = 0;
         welcomePageView    = 0;
+#ifdef BUILD_VIDEO
         mediaPlayerView    = 0;
+#endif //BUILD_VIDEO
         needUpdateBar      = false;
         syncingSelection   = false;
         tableView          = 0;
@@ -91,7 +93,9 @@ public:
     DigikamImageView*  imageIconView;
     ImageThumbnailBar* thumbBar;
     ImagePreviewView*  imagePreviewView;
+#ifdef BUILD_VIDEO
     MediaPlayerView*   mediaPlayerView;
+#endif //BUILD_VIDEO
     ThumbBarDock*      thumbBarDock;
     WelcomePageView*   welcomePageView;
     TableView*         tableView;
@@ -113,7 +117,9 @@ StackedView::StackedView(QWidget* const parent)
     d->thumbBarDock->setObjectName("mainwindow_thumbbar");
 
     d->welcomePageView = new WelcomePageView(this);
+#ifdef BUILD_VIDEO
     d->mediaPlayerView = new MediaPlayerView(this);
+#endif //BUILD_VIDEO
     d->tableView       = new TableView(d->imageIconView->getSelectionModel(),
                                        d->imageIconView->imageFilterModel(),
                                        this);
@@ -130,7 +136,9 @@ StackedView::StackedView(QWidget* const parent)
     insertWidget(IconViewMode,     d->imageIconView);
     insertWidget(PreviewImageMode, d->imagePreviewView);
     insertWidget(WelcomePageMode,  d->welcomePageView);
+#ifdef BUILD_VIDEO
     insertWidget(MediaPlayerMode,  d->mediaPlayerView);
+#endif //BUILD_VIDEO
     insertWidget(TableViewMode,    d->tableView);
 
 #ifdef HAVE_KGEOMAP
@@ -198,6 +206,7 @@ StackedView::StackedView(QWidget* const parent)
     connect(d->thumbBarDock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             d->thumbBar, SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
 
+#ifdef BUILD_VIDEO
     connect(d->mediaPlayerView, SIGNAL(signalNextItem()),
             this, SIGNAL(signalNextItem()));
 
@@ -206,7 +215,7 @@ StackedView::StackedView(QWidget* const parent)
 
     connect(d->mediaPlayerView, SIGNAL(signalEscapePreview()),
             this, SIGNAL(signalEscapePreview()));
-
+#endif //BUILD_VIDEO
     connect(d->imagePreviewView, SIGNAL(signalPreviewLoaded(bool)),
             this, SLOT(slotPreviewLoaded(bool)));
 }
@@ -244,10 +253,12 @@ ImageThumbnailBar* StackedView::thumbBar() const
 
 void StackedView::slotEscapePreview()
 {
+#ifdef BUILD_VIDEO
     if (viewMode() == MediaPlayerMode)
     {
         d->mediaPlayerView->escapePreview();
     }
+#endif //BUILD_VIDEO
 }
 
 DigikamImageView* StackedView::imageIconView() const
@@ -271,11 +282,12 @@ TableView* StackedView::tableView() const
 {
     return d->tableView;
 }
-
+#ifdef BUILD_VIDEO
 MediaPlayerView* StackedView::mediaPlayerView() const
 {
     return d->mediaPlayerView;
 }
+#endif //BUILD_VIDEO
 
 bool StackedView::isInSingleFileMode() const
 {
@@ -300,7 +312,9 @@ void StackedView::setPreviewItem(const ImageInfo& info, const ImageInfo& previou
     {
         if (viewMode() == MediaPlayerMode)
         {
+#ifdef BUILD_VIDEO
             d->mediaPlayerView->setCurrentItem();
+#endif //BUILD_VIDEO
         }
         else if (viewMode() == PreviewImageMode)
         {
@@ -317,15 +331,19 @@ void StackedView::setPreviewItem(const ImageInfo& info, const ImageInfo& previou
                 d->imagePreviewView->setImageInfo();
             }
 
+#ifdef BUILD_VIDEO
             setViewMode(MediaPlayerMode);
             d->mediaPlayerView->setCurrentItem(info.fileUrl(), !previous.isNull(), !next.isNull());
+#endif //BUILD_VIDEO
         }
         else
         {
             // Stop media player if running...
             if (viewMode() == MediaPlayerMode)
             {
+#ifdef BUILD_VIDEO
                 d->mediaPlayerView->setCurrentItem();
+#endif //BUILD_VIDEO
             }
 
             d->imagePreviewView->setImageInfo(info, previous, next);

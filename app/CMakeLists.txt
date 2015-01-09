@@ -67,7 +67,6 @@ add_dependencies(digikamcore digikam-gitversion)
 target_link_libraries(digikamcore
                       Qt5::Sql
                       Qt5::Concurrent
-                      Qt5::Multimedia
 
                       KF5::KDELibs4Support
                       KF5::KIOCore
@@ -86,7 +85,9 @@ target_link_libraries(digikamcore
                       ${KF5KExiv2_LIBRARIES}
                       ${KF5KDcraw_LIBRARIES}
 )
-
+if(ENABLE_VIDEO)
+  target_link_libraries(digikamcore Qt5::Multimedia)
+endif()
 if(Q_WS_X11)
     target_link_libraries(digikamcore ${X11_LIBRARIES})
 endif()
@@ -242,8 +243,6 @@ target_link_libraries(digikam
                       Qt5::Sql
                       Qt5::Test
                       Qt5::WebKitWidgets
-                      Qt5::Multimedia
-                      Qt5::MultimediaWidgets
 
                       KF5::NotifyConfig
                       KF5::KDELibs4Support
@@ -260,6 +259,9 @@ target_link_libraries(digikam
 
                       ${OpenCV_LIBRARIES}
 )
+if(ENABLE_VIDEO)
+  target_link_libraries(digikam Qt5::Multimedia Qt5::MultimediaWidgets)
+endif()
 
 if(KDEPIMLIBS_FOUND)
   target_link_libraries(digikam ${KDE4_KABC_LIBS} KF5::AkonadiCore KF5::AkonadiContact)
