@@ -32,21 +32,20 @@
 
 #include <QPointer>
 #include <QMenu>
+#include <QIcon>
+#include <QAction>
+#include <QUrl>
 
 // KDE includes
 
-#include <QAction>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
-
-#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kmimetype.h>
 #include <krun.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kstandardaction.h>
-#include <QUrl>
 #include <kwindowsystem.h>
 
 // Local includes
@@ -372,7 +371,7 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
 
     // Temporary actions --------------------------------------
 
-    QAction* const viewAction = new QAction(SmallIcon("viewimage"), i18nc("View the selected image", "Preview"), this);
+    QAction* const viewAction = new QAction(QIcon::fromTheme("viewimage").pixmap(16), i18nc("View the selected image", "Preview"), this);
     viewAction->setEnabled(selectedImageIDs.count() == 1);
 
     // --------------------------------------------------------

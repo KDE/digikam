@@ -28,10 +28,7 @@
 #include <QSignalMapper>
 #include <QToolBar>
 #include <QToolButton>
-
-// KDE includes
-
-#include <kiconloader.h>
+#include <QIcon>
 #include <QPushButton>
 
 namespace Digikam
@@ -43,7 +40,7 @@ public:
 
     Private()
         : clicked(KDialog::None),
-          iconSize(KIconLoader::SizeMedium),
+          iconSize(22),
           toolBar(0),
           secondSeparator(0)
     {
@@ -109,7 +106,7 @@ QToolButton* TripleChoiceDialog::addChoiceButton(int key, const QString& iconNam
 {
     QToolButton* button = new QToolButton;
     button->setText(text);
-    button->setIcon(SmallIcon(iconName, d->iconSize));
+    button->setIcon(QIcon::fromTheme(iconName).pixmap(d->iconSize));
     button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     button->setAutoRaise(true);
     button->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);

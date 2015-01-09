@@ -34,10 +34,10 @@
 #include <QTimer>
 #include <QDrag>
 #include <QMenu>
+#include <QIcon>
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
 
@@ -219,7 +219,7 @@ AbstractAlbumTreeView::AbstractAlbumTreeView(QWidget* const parent, Flags flags)
     d->resizeColumnsTimer->setInterval(200);
     d->resizeColumnsTimer->setSingleShot(true);
 
-    d->contextMenuIcon  = SmallIcon("digikam");
+    d->contextMenuIcon  = QIcon::fromTheme("digikam").pixmap(16);
     d->contextMenuTitle = i18n("Context menu");
 
     connect(d->resizeColumnsTimer, SIGNAL(timeout()),
