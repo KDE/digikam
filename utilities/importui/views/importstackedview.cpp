@@ -56,7 +56,10 @@ public:
         thumbBarDock        = 0;
         importIconView      = 0;
         importPreviewView   = 0;
+#ifdef BUILD_VIDEO
         mediaPlayerView     = 0;
+
+#endif // BUILD_VIDEO
         syncingSelection    = false;
 #ifdef HAVE_KGEOMAP
         mapWidgetView       = 0;
@@ -72,8 +75,9 @@ public:
     ImportThumbnailBar* thumbBar;
     ImportPreviewView*  importPreviewView;
     ThumbBarDock*       thumbBarDock;
+#ifdef BUILD_VIDEO
     MediaPlayerView*    mediaPlayerView; // Reuse of albumgui mediaplayer view.
-
+#endif // BUILD_VIDEO
 #ifdef HAVE_KGEOMAP
     MapWidgetView*      mapWidgetView;
 #endif // HAVE_KGEOMAP
@@ -108,12 +112,15 @@ ImportStackedView::ImportStackedView(QWidget* const parent)
     d->thumbBar->installOverlays();
     d->thumbBarDock->setWidget(d->thumbBar);
     d->thumbBarDock->setObjectName("import_thumbbar");
-
+#ifdef BUILD_VIDEO
     d->mediaPlayerView   = new MediaPlayerView(this);
-
+#endif //BUILD_VIDEO
     insertWidget(PreviewCameraMode, d->importIconView);
     insertWidget(PreviewImageMode,  d->importPreviewView);
+
+#ifdef BUILD_VIDEO
     insertWidget(MediaPlayerMode,   d->mediaPlayerView);
+#endif //BUILD_VIDEO
 
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -181,7 +188,7 @@ ImportStackedView::ImportStackedView(QWidget* const parent)
 
     connect(d->thumbBarDock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             d->thumbBar, SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
-
+#ifdef BUILD_VIDEO
     connect(d->mediaPlayerView, SIGNAL(signalNextItem()),
             this, SIGNAL(signalNextItem()));
 
@@ -190,6 +197,7 @@ ImportStackedView::ImportStackedView(QWidget* const parent)
 
     connect(d->mediaPlayerView, SIGNAL(signalEscapePreview()),
             this, SIGNAL(signalEscapePreview()));
+#endif //BUILD_VIDEO
 
     connect(d->importPreviewView, SIGNAL(signalPreviewLoaded(bool)),
             this, SLOT(slotPreviewLoaded(bool)));
@@ -228,10 +236,12 @@ ImportThumbnailBar* ImportStackedView::thumbBar() const
 
 void ImportStackedView::slotEscapePreview()
 {
+#ifdef BUILD_VIDEO
     if (viewMode() == MediaPlayerMode)
     {
         d->mediaPlayerView->escapePreview();
     }
+#endif //BUILD_VIDEO
 }
 
 ImportIconView* ImportStackedView::importIconView() const
@@ -250,11 +260,12 @@ MapWidgetView* ImportStackedView::mapWidgetView() const
     return d->mapWidgetView;
 }
 #endif // HAVE_KGEOMAP
-
+#ifdef BUILD_VIDEO
 MediaPlayerView* ImportStackedView::mediaPlayerView() const
 {
     return d->mediaPlayerView;
 }
+#endif //BUILD_VIDEO
 
 bool ImportStackedView::isInSingleFileMode() const
 {
@@ -272,7 +283,9 @@ void ImportStackedView::setPreviewItem(const CamItemInfo& info, const CamItemInf
     {
         if (viewMode() == MediaPlayerMode)
         {
+#ifdef BUILD_VIDEO
             d->mediaPlayerView->setCurrentItem();
+#endif //BUILD_VIDEO
         }
         else if (viewMode() == PreviewImageMode)
         {
@@ -288,16 +301,19 @@ void ImportStackedView::setPreviewItem(const CamItemInfo& info, const CamItemInf
             {
                 d->importPreviewView->setCamItemInfo();
             }
-
+#ifdef BUILD_VIDEO
             setViewMode(MediaPlayerMode);
             d->mediaPlayerView->setCurrentItem(info.url(), !previous.isNull(), !next.isNull());
+#endif //BUILD_VIDEO
         }
         else
         {
             // Stop media player if running...
             if (viewMode() == MediaPlayerMode)
             {
+#ifdef BUILD_VIDEO
                 d->mediaPlayerView->setCurrentItem();
+#endif //BUILD_VIDEO
             }
 
             d->importPreviewView->setCamItemInfo(info, previous, next);

@@ -48,7 +48,9 @@ class DigikamImageView;
 class ImageCategorizedView;
 class ImagePreviewView;
 class TableView;
+#ifdef BUILD_VIDEO
 class MediaPlayerView;
+#endif //BUILD_VIDEO
 class ImageThumbnailBar;
 
 #ifdef HAVE_KGEOMAP
@@ -86,7 +88,9 @@ public:
     DigikamImageView*  imageIconView()    const;
     ImagePreviewView*  imagePreviewView() const;
     TableView*         tableView()        const;
+#ifdef BUILD_VIDEO
     MediaPlayerView*   mediaPlayerView()  const;
+#endif //BUILD_VIDEO
 
 #ifdef HAVE_KGEOMAP
     MapWidgetView*     mapWidgetView()    const;

@@ -20,7 +20,7 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
+#ifdef BUILD_VIDEO
 #include "mediaplayerview.h"
 
 // Qt includes
@@ -349,3 +349,4 @@ void MediaPlayerView::handlePlayerError()
 }
 
 }  // namespace Digikam
+#endif // BUILD_VIDEO

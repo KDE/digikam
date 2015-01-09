@@ -282,8 +282,10 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
 
     d->addPageUpDownActions(this, d->stackedview->imagePreviewView());
     d->addPageUpDownActions(this, d->stackedview->thumbBar());
-    d->addPageUpDownActions(this, d->stackedview->mediaPlayerView());
 
+#ifdef BUILD_VIDEO
+    d->addPageUpDownActions(this, d->stackedview->mediaPlayerView());
+#endif //BUILD_VIDEO
     d->rightSideBar = new ImagePropertiesSideBarDB(this, d->splitter, KMultiTabBar::Right, true);
     d->rightSideBar->setObjectName("Digikam Right Sidebar");
 
@@ -1319,9 +1321,11 @@ void DigikamView::slotRefresh()
         case StackedView::PreviewImageMode:
             d->stackedview->imagePreviewView()->reload();
             break;
+#ifdef BUILD_VIDEO
         case StackedView::MediaPlayerMode:
             d->stackedview->mediaPlayerView()->reload();
             break;
+#endif //BUILD_VIDEO
         default:
             Album* const album = d->iconView->currentAlbum();
             if (!album) return;
