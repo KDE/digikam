@@ -67,6 +67,7 @@ extern "C"
 #include <QMenuBar>
 #include <QMimeDatabase>
 #include <QMimeType>
+#include <QMessageBox>
 
 // KDE includes
 
@@ -77,7 +78,6 @@ extern "C"
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 #include <kmultitabbar.h>
 #include <kprotocolinfo.h>
 #include <kstandardaction.h>
@@ -300,7 +300,7 @@ void ShowFoto::show()
                                "select \"No\". In this case, \"Color Management\" feature "
                                "will be disabled until you solve this issue</p>");
 
-        if (KMessageBox::warningYesNo(this, message) == KMessageBox::Yes)
+        if (QMessageBox::warning(this, windowTitle(), message, QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
         {
             if (!setup(true))
             {
@@ -978,11 +978,8 @@ void ShowFoto::slotDeleteCurrentItem()
         QString warnMsg(i18n("About to delete file \"%1\"\nAre you sure?",
                              urlCurrent.fileName()));
 
-        if (KMessageBox::warningContinueCancel(this,
-                                               warnMsg,
-                                               i18n("Warning"),
-                                               KStandardGuiItem::del())
-            !=  KMessageBox::Continue)
+        if (QMessageBox::warning(this, windowTitle(), warnMsg, QMessageBox::Apply | QMessageBox::Abort)
+            !=  QMessageBox::Apply)
         {
             return;
         }
@@ -1008,7 +1005,7 @@ void ShowFoto::slotDeleteCurrentItemResult(KJob* job)
     if (job->error() != 0)
     {
         QString errMsg(job->errorString());
-        KMessageBox::error(this, errMsg);
+        QMessageBox::critical(this, windowTitle(), errMsg);
         return;
     }
 
