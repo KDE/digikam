@@ -30,13 +30,13 @@
 
 #include <QDropEvent>
 #include <QMenu>
+#include <QIcon>
 
 // KDE includes
 
-#include <kiconloader.h>
-#include <kio/job.h>
 #include <klocalizedstring.h>
 #include <kurlmimedata.h>
+#include <kio/job.h>
 
 // Local includes
 
@@ -89,9 +89,9 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
 
         // TODO Copy?
         QMenu popMenu(view);
-        QAction* const moveAction = popMenu.addAction(SmallIcon("go-jump"), i18n("&Move Here"));
+        QAction* const moveAction = popMenu.addAction(QIcon::fromTheme("go-jump").pixmap(16), i18n("&Move Here"));
         popMenu.addSeparator();
-        popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
+        popMenu.addAction(QIcon::fromTheme("dialog-cancel").pixmap(16), i18n("C&ancel"));
         popMenu.setMouseTracking(true);
         QAction* const choice = popMenu.exec(QCursor::pos());
 
@@ -161,7 +161,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
                 }
 
                 popMenu.addSeparator();
-                popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
+                popMenu.addAction(QIcon::fromTheme("dialog-cancel").pixmap(16), i18n("C&ancel"));
                 popMenu.setMouseTracking(true);
                 QAction* const choice = popMenu.exec(QCursor::pos());
                 set                   = (setAction == choice);
@@ -195,8 +195,8 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
         else
         {
             QMenu popMenu(view);
-            QAction* const moveAction = popMenu.addAction(SmallIcon("go-jump"), i18n("&Move Here"));
-            QAction* const copyAction = popMenu.addAction(SmallIcon("edit-copy"), i18n("&Copy Here"));
+            QAction* const moveAction = popMenu.addAction(QIcon::fromTheme("go-jump").pixmap(16), i18n("&Move Here"));
+            QAction* const copyAction = popMenu.addAction(QIcon::fromTheme("edit-copy").pixmap(16), i18n("&Copy Here"));
             QAction* thumbnailAction  = 0;
 
             if (imageIDs.count() == 1)
@@ -205,7 +205,7 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
             }
 
             popMenu.addSeparator();
-            popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
+            popMenu.addAction(QIcon::fromTheme("dialog-cancel").pixmap(16), i18n("C&ancel"));
             popMenu.setMouseTracking(true);
             QAction* const choice = popMenu.exec(QCursor::pos());
 
@@ -255,12 +255,12 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
         if (ui)
         {
             QMenu popMenu(view);
-            QAction* const downAction    = popMenu.addAction(SmallIcon("file-export"),
+            QAction* const downAction    = popMenu.addAction(QIcon::fromTheme("file-export").pixmap(16),
                                                              i18n("Download From Camera"));
-            QAction* const downDelAction = popMenu.addAction(SmallIcon("file-export"),
+            QAction* const downDelAction = popMenu.addAction(QIcon::fromTheme("file-export").pixmap(16),
                                                              i18n("Download && Delete From Camera"));
             popMenu.addSeparator();
-            popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
+            popMenu.addAction(QIcon::fromTheme("dialog-cancel").pixmap(16), i18n("C&ancel"));
             popMenu.setMouseTracking(true);
             QAction* const choice = popMenu.exec(QCursor::pos());
 
@@ -299,10 +299,10 @@ bool AlbumDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* 
         else
         {
             QMenu popMenu(view);
-            QAction* const moveAction = popMenu.addAction(SmallIcon("go-jump"), i18n("&Move Here"));
-            QAction* const copyAction = popMenu.addAction(SmallIcon("edit-copy"), i18n("&Copy Here"));
+            QAction* const moveAction = popMenu.addAction(QIcon::fromTheme("go-jump").pixmap(16), i18n("&Move Here"));
+            QAction* const copyAction = popMenu.addAction(QIcon::fromTheme("edit-copy").pixmap(16), i18n("&Copy Here"));
             popMenu.addSeparator();
-            popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
+            popMenu.addAction(QIcon::fromTheme("dialog-cancel").pixmap(16), i18n("C&ancel"));
             popMenu.setMouseTracking(true);
             QAction* const choice     = popMenu.exec(QCursor::pos());
 
