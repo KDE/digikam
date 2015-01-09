@@ -32,13 +32,11 @@
 #include <QContextMenuEvent>
 #include <QQueue>
 #include <QIcon>
+#include <QMenu>
 
 // KDE includes
 
-#include <QMenu>
 #include <klocalizedstring.h>
-#include <kiconloader.h>
-#include <QAction>
 
 // Local includes
 
@@ -72,8 +70,8 @@ TagFolderView::TagFolderView(QWidget* const parent, TagModel* const model)
 {
     setAlbumModel(model);
 
-    d->resetIconAction = new QAction(SmallIcon("view-refresh"), i18n("Reset Tag Icon"), this);
-    d->findDuplAction  = new QAction(SmallIcon("tools-wizard"), i18n("Find Duplicates..."), this);
+    d->resetIconAction = new QAction(QIcon::fromTheme("view-refresh").pixmap(16), i18n("Reset Tag Icon"), this);
+    d->findDuplAction  = new QAction(QIcon::fromTheme("tools-wizard").pixmap(16), i18n("Find Duplicates..."), this);
 
     setSortingEnabled(true);
     setSelectAlbumOnClick(true);

@@ -26,7 +26,7 @@
 
 #include "leftsidebarwidgets.h"
 
-// QT includes
+// Qt includes
 
 #include <QButtonGroup>
 #include <QLabel>
@@ -40,10 +40,10 @@
 #include <QComboBox>
 #include <QPushButton>
 #include <QLineEdit>
+#include <QIcon>
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
 
@@ -163,7 +163,7 @@ void AlbumFolderViewSideBarWidget::setCurrentAlbum(PAlbum* album)
 
 QPixmap AlbumFolderViewSideBarWidget::getIcon()
 {
-    return SmallIcon("folder-image");
+    return QIcon::fromTheme("folder-image").pixmap(16);
 }
 
 QString AlbumFolderViewSideBarWidget::getCaption()
@@ -371,7 +371,7 @@ void TagViewSideBarWidget::setNoTagsAlbum()
 
 QPixmap TagViewSideBarWidget::getIcon()
 {
-    return SmallIcon("tag");
+    return QIcon::fromTheme("tag").pixmap(16);
 }
 
 QString TagViewSideBarWidget::getCaption()
@@ -488,7 +488,7 @@ void LabelsSideBarWidget::doSaveState()
 
 QPixmap LabelsSideBarWidget::getIcon()
 {
-    return SmallIcon("favorites");
+    return QIcon::fromTheme("favorites").pixmap(16);
 }
 
 QString LabelsSideBarWidget::getCaption()
@@ -572,7 +572,7 @@ void DateFolderViewSideBarWidget::gotoDate(const QDate& date)
 
 QPixmap DateFolderViewSideBarWidget::getIcon()
 {
-    return SmallIcon("view-calendar-list");
+    return QIcon::fromTheme("view-calendar-list").pixmap(16);
 }
 
 QString DateFolderViewSideBarWidget::getCaption()
@@ -720,7 +720,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
     hbox2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->resetButton = new QToolButton(hbox2);
-    d->resetButton->setIcon(SmallIcon("document-revert"));
+    d->resetButton->setIcon(QIcon::fromTheme("document-revert").pixmap(16));
     d->resetButton->setToolTip(i18n("Clear current selection"));
     d->resetButton->setWhatsThis(i18n("If you press this button, the current date selection on the time-line will be cleared."));
     d->nameEdit    = new QLineEdit(hbox2);
@@ -729,7 +729,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
                                    "\"Searches\" view"));
 
     d->saveButton  = new QToolButton(hbox2);
-    d->saveButton->setIcon(SmallIcon("document-save"));
+    d->saveButton->setIcon(QIcon::fromTheme("document-save").pixmap(16));
     d->saveButton->setEnabled(false);
     d->saveButton->setToolTip(i18n("Save current selection to a new virtual Album"));
     d->saveButton->setWhatsThis(i18n("If you press this button, the dates selected on the time-line will be "
@@ -901,7 +901,7 @@ void TimelineSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
 
 QPixmap TimelineSideBarWidget::getIcon()
 {
-    return SmallIcon("player-time");
+    return QIcon::fromTheme("player-time").pixmap(16);
 }
 
 QString TimelineSideBarWidget::getCaption()
@@ -1148,7 +1148,7 @@ void SearchSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
 
 QPixmap SearchSideBarWidget::getIcon()
 {
-    return SmallIcon("edit-find");
+    return QIcon::fromTheme("edit-find").pixmap(16);
 }
 
 QString SearchSideBarWidget::getCaption()
@@ -1233,7 +1233,7 @@ void FuzzySearchSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
 
 QPixmap FuzzySearchSideBarWidget::getIcon()
 {
-    return SmallIcon("tools-wizard");
+    return QIcon::fromTheme("tools-wizard").pixmap(16);
 }
 
 QString FuzzySearchSideBarWidget::getCaption()
@@ -1324,7 +1324,7 @@ void GPSSearchSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
 
 QPixmap GPSSearchSideBarWidget::getIcon()
 {
-    return SmallIcon("applications-internet");
+    return QIcon::fromTheme("applications-internet").pixmap(16);
 }
 
 QString GPSSearchSideBarWidget::getCaption()
@@ -1458,7 +1458,7 @@ void PeopleSideBarWidget::slotScanForFaces()
 
 QPixmap PeopleSideBarWidget::getIcon()
 {
-    return SmallIcon("edit-image-face-show");
+    return QIcon::fromTheme("edit-image-face-show").pixmap(16);
 }
 
 QString PeopleSideBarWidget::getCaption()

@@ -36,10 +36,10 @@
 #include <QTimer>
 #include <QMenu>
 #include <QApplication>
+#include <QIcon>
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kfileitem.h>
@@ -377,7 +377,7 @@ bool ContextMenuHelper::imageIdsHaveSameCategory(const imageIds& ids, DatabaseIt
 
 void ContextMenuHelper::addActionNewTag(TagModificationHelper* helper, TAlbum* tag)
 {
-    QAction* const newTagAction = new QAction(SmallIcon("tag-new"), i18n("New Tag..."), this);
+    QAction* const newTagAction = new QAction(QIcon::fromTheme("tag-new").pixmap(16), i18n("New Tag..."), this);
     addAction(newTagAction);
     helper->bindTag(newTagAction, tag);
 
@@ -387,7 +387,7 @@ void ContextMenuHelper::addActionNewTag(TagModificationHelper* helper, TAlbum* t
 
 void ContextMenuHelper::addActionDeleteTag(TagModificationHelper* helper, TAlbum* tag)
 {
-    QAction* const deleteTagAction = new QAction(SmallIcon("user-trash"), i18n("Delete Tag"), this);
+    QAction* const deleteTagAction = new QAction(QIcon::fromTheme("user-trash").pixmap(16), i18n("Delete Tag"), this);
     addAction(deleteTagAction);
     helper->bindTag(deleteTagAction, tag);
 
@@ -397,7 +397,7 @@ void ContextMenuHelper::addActionDeleteTag(TagModificationHelper* helper, TAlbum
 
 void ContextMenuHelper::addActionDeleteTags(Digikam::TagModificationHelper* helper, QList< TAlbum* > tags)
 {
-    QAction* const deleteTagsAction = new QAction(SmallIcon("user-trash"), i18n("Delete Tags"), this);
+    QAction* const deleteTagsAction = new QAction(QIcon::fromTheme("user-trash").pixmap(16), i18n("Delete Tags"), this);
     addAction(deleteTagsAction);
     helper->bindMultipleTags(deleteTagsAction, tags);
 
@@ -407,7 +407,7 @@ void ContextMenuHelper::addActionDeleteTags(Digikam::TagModificationHelper* help
 
 void ContextMenuHelper::addActionEditTag(TagModificationHelper* helper, TAlbum* tag)
 {
-    QAction* const editTagAction = new QAction(SmallIcon("tag-properties"), i18nc("Edit Tag Properties", "Properties..."), this);
+    QAction* const editTagAction = new QAction(QIcon::fromTheme("tag-properties").pixmap(16), i18nc("Edit Tag Properties", "Properties..."), this);
     addAction(editTagAction);
     helper->bindTag(editTagAction, tag);
 
@@ -457,7 +457,7 @@ void ContextMenuHelper::addActionRenameAlbum(AlbumModificationHelper* helper, PA
 
 void ContextMenuHelper::addActionResetAlbumIcon(AlbumModificationHelper* helper, PAlbum* album)
 {
-    QAction* const action = new QAction(SmallIcon("view-refresh"), i18n("Reset Album Icon"), this);
+    QAction* const action = new QAction(QIcon::fromTheme("view-refresh").pixmap(16), i18n("Reset Album Icon"), this);
     addAction(action, !album->isRoot());
     helper->bindAlbum(action, album);
 
@@ -471,7 +471,7 @@ void ContextMenuHelper::addAssignTagsMenu(const imageIds &ids)
 
     QMenu* const assignTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::RECENTLYASSIGNED, d->parent);
     assignTagsPopup->menuAction()->setText(i18n("Assign Tag"));
-    assignTagsPopup->menuAction()->setIcon(SmallIcon("tag"));
+    assignTagsPopup->menuAction()->setIcon(QIcon::fromTheme("tag").pixmap(16));
     d->parent->addMenu(assignTagsPopup);
 
     connect(assignTagsPopup, SIGNAL(signalTagActivated(int)),
@@ -487,7 +487,7 @@ void ContextMenuHelper::addRemoveTagsMenu(const imageIds &ids)
 
     QMenu* const removeTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::REMOVE, d->parent);
     removeTagsPopup->menuAction()->setText(i18n("Remove Tag"));
-    removeTagsPopup->menuAction()->setIcon(SmallIcon("tag"));
+    removeTagsPopup->menuAction()->setIcon(QIcon::fromTheme("tag").pixmap(16));
     d->parent->addMenu(removeTagsPopup);
 
     // Performance: Only check for tags if there are <250 images selected
@@ -534,7 +534,7 @@ void ContextMenuHelper::addCreateTagFromAddressbookMenu()
     d->ABCmenu = new QMenu(d->parent);
 
     QAction* const abcAction = d->ABCmenu->menuAction();
-    abcAction->setIcon(SmallIcon("tag-addressbook"));
+    abcAction->setIcon(QIcon::fromTheme("tag-addressbook").pixmap(16));
     abcAction->setText(i18n("Create Tag From Address Book"));
     d->parent->addMenu(d->ABCmenu);
 
@@ -734,15 +734,15 @@ void ContextMenuHelper::addGotoMenu(const imageIds &ids)
         return;
     }
 
-    d->gotoAlbumAction    = new QAction(SmallIcon("folder-image"),        i18n("Album"), this);
-    d->gotoDateAction     = new QAction(SmallIcon("view-calendar-month"), i18n("Date"),  this);
+    d->gotoAlbumAction    = new QAction(QIcon::fromTheme("folder-image").pixmap(16),        i18n("Album"), this);
+    d->gotoDateAction     = new QAction(QIcon::fromTheme("view-calendar-month").pixmap(16), i18n("Date"),  this);
     QMenu* const gotoMenu = new QMenu(d->parent);
     gotoMenu->addAction(d->gotoAlbumAction);
     gotoMenu->addAction(d->gotoDateAction);
 
     TagsPopupMenu* const gotoTagsPopup = new TagsPopupMenu(d->selectedIds, TagsPopupMenu::DISPLAY, gotoMenu);
     QAction* const gotoTag             = gotoMenu->addMenu(gotoTagsPopup);
-    gotoTag->setIcon(SmallIcon("tag"));
+    gotoTag->setIcon(QIcon::fromTheme("tag").pixmap(16));
     gotoTag->setText(i18n("Tag"));
 
     // Disable the goto Tag popup menu, if there are no tags at all.
@@ -782,7 +782,7 @@ void ContextMenuHelper::addGotoMenu(const imageIds &ids)
     }
 
     QAction* const gotoMenuAction = gotoMenu->menuAction();
-    gotoMenuAction->setIcon(SmallIcon("go-jump"));
+    gotoMenuAction->setIcon(QIcon::fromTheme("go-jump").pixmap(16));
     gotoMenuAction->setText(i18n("Go To"));
 
     connect(gotoTagsPopup, SIGNAL(signalTagActivated(int)),
@@ -1144,8 +1144,8 @@ void ContextMenuHelper::addStandardActionPaste(QObject* recv, const char* slot)
 
 void ContextMenuHelper::addStandardActionItemDelete(QObject* recv, const char* slot, int quantity)
 {
-    QAction* const trashAction = new QAction(SmallIcon("user-trash"), i18ncp("@action:inmenu Pluralized",
-                                                                       "Move to Trash", "Move %1 Files to Trash", quantity), d->parent);
+    QAction* const trashAction = new QAction(QIcon::fromTheme("user-trash").pixmap(16), i18ncp("@action:inmenu Pluralized",
+                                             "Move to Trash", "Move %1 Files to Trash", quantity), d->parent);
     connect(trashAction, SIGNAL(triggered()),
             recv, slot);
 
