@@ -31,13 +31,13 @@
 
 #include <QDropEvent>
 #include <QMenu>
+#include <QIcon>
 
 // KDE includes
 
-#include <kiconloader.h>
-#include <kio/job.h>
 #include <klocalizedstring.h>
 #include <kurlmimedata.h>
+#include <kio/job.h>
 
 // Local includes
 
@@ -66,13 +66,13 @@ enum DropAction
 
 static QAction* addGroupAction(QMenu* const menu)
 {
-    return menu->addAction( SmallIcon("arrow-down-double"),
+    return menu->addAction( QIcon::fromTheme("arrow-down-double").pixmap(16),
                             i18nc("@action:inmenu Group images with this image", "Group here"));
 }
 
 static QAction* addCancelAction(QMenu* const menu)
 {
-    return menu->addAction( SmallIcon("dialog-cancel"), i18n("C&ancel") );
+    return menu->addAction( QIcon::fromTheme("dialog-cancel").pixmap(16), i18n("C&ancel") );
 }
 
 static DropAction copyOrMove(const QDropEvent* const e, QWidget* const view, bool allowMove = true, bool askForGrouping = false)
@@ -105,10 +105,10 @@ static DropAction copyOrMove(const QDropEvent* const e, QWidget* const view, boo
 
     if (allowMove)
     {
-        moveAction = popMenu.addAction( SmallIcon("go-jump"), i18n("&Move Here"));
+        moveAction = popMenu.addAction( QIcon::fromTheme("go-jump").pixmap(16), i18n("&Move Here"));
     }
 
-    QAction* const copyAction = popMenu.addAction( SmallIcon("edit-copy"), i18n("&Copy Here"));
+    QAction* const copyAction = popMenu.addAction( QIcon::fromTheme("edit-copy").pixmap(16), i18n("&Copy Here"));
     popMenu.addSeparator();
 
     QAction* groupAction = 0;
@@ -143,7 +143,7 @@ static DropAction copyOrMove(const QDropEvent* const e, QWidget* const view, boo
 static DropAction tagAction(const QDropEvent* const, QWidget* const view, bool askForGrouping)
 {
     QMenu popMenu(view);
-    QAction* const tagAction = popMenu.addAction(SmallIcon("tag"), i18n("Assign Tag to Dropped Items"));
+    QAction* const tagAction = popMenu.addAction(QIcon::fromTheme("tag").pixmap(16), i18n("Assign Tag to Dropped Items"));
     QAction* groupAction     = 0;
 
     if (askForGrouping)
@@ -468,20 +468,20 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
 
         if (selectedInfos.count() > 1)
         {
-            assignToSelectedAction = popMenu.addAction(SmallIcon("tag"), i18n("Assign Tags to &Selected Items"));
+            assignToSelectedAction = popMenu.addAction(QIcon::fromTheme("tag").pixmap(16), i18n("Assign Tags to &Selected Items"));
         }
 
         QAction* assignToThisAction = 0;
 
         if (droppedOn.isValid())
         {
-            assignToThisAction = popMenu.addAction(SmallIcon("tag"), i18n("Assign Tags to &This Item"));
+            assignToThisAction = popMenu.addAction(QIcon::fromTheme("tag").pixmap(16), i18n("Assign Tags to &This Item"));
         }
 
-        QAction* const assignToAllAction = popMenu.addAction(SmallIcon("tag"), i18n("Assign Tags to &All Items"));
+        QAction* const assignToAllAction = popMenu.addAction(QIcon::fromTheme("tag").pixmap(16), i18n("Assign Tags to &All Items"));
 
         popMenu.addSeparator();
-        popMenu.addAction(SmallIcon("dialog-cancel"), i18n("&Cancel"));
+        popMenu.addAction(QIcon::fromTheme("dialog-cancel").pixmap(16), i18n("&Cancel"));
 
         popMenu.setMouseTracking(true);
         QAction* const choice = popMenu.exec(view->mapToGlobal(e->pos()));
@@ -519,13 +519,13 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
         }
 
         QMenu popMenu(view);
-        popMenu.addSection(SmallIcon("digikam"), i18n("Importing"));
-        QAction* const downAction    = popMenu.addAction(SmallIcon("get-hot-new-stuff"),
+        popMenu.addSection(QIcon::fromTheme("digikam").pixmap(16), i18n("Importing"));
+        QAction* const downAction    = popMenu.addAction(QIcon::fromTheme("get-hot-new-stuff").pixmap(16),
                                                          i18n("Download From Camera"));
-        QAction* const downDelAction = popMenu.addAction(SmallIcon("get-hot-new-stuff"),
+        QAction* const downDelAction = popMenu.addAction(QIcon::fromTheme("get-hot-new-stuff").pixmap(16),
                                                          i18n("Download && Delete From Camera"));
         popMenu.addSeparator();
-        popMenu.addAction(SmallIcon("dialog-cancel"), i18n("C&ancel"));
+        popMenu.addAction(QIcon::fromTheme("dialog-cancel").pixmap(16), i18n("C&ancel"));
         popMenu.setMouseTracking(true);
         QAction* const choice        = popMenu.exec(view->mapToGlobal(e->pos()));
 
