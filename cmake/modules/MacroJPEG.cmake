@@ -76,7 +76,7 @@ macro(DETECT_JPEG)
 
         else()
 
-            set(JPEG_LIB_VERSION 84)
+            set(JPEG_LIB_VERSION 91)
 
         endif()
 
