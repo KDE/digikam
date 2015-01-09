@@ -30,10 +30,7 @@
 #include <QString>
 #include <QPixmap>
 #include <QTreeWidgetItem>
-
-// KDE includes
-
-#include <kiconloader.h>
+#include <QIcon>
 
 namespace Digikam
 {
@@ -44,11 +41,11 @@ class CameraFolderItem : public QTreeWidgetItem
 public:
 
     CameraFolderItem(QTreeWidget* const parent, const QString& name,
-                     const QPixmap& pixmap = SmallIcon("folder"));
+                     const QPixmap& pixmap = QIcon::fromTheme("folder").pixmap(16));
 
     CameraFolderItem(QTreeWidgetItem* const parent, const QString& folderName,
                      const QString& folderPath,
-                     const QPixmap& pixmap = SmallIcon("folder"));
+                     const QPixmap& pixmap = QIcon::fromTheme("folder").pixmap(16));
 
     ~CameraFolderItem();
 
