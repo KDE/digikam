@@ -34,10 +34,7 @@
 #include <QGridLayout>
 #include <QToolButton>
 #include <QMenu>
-
-// KDE includes
-
-#include <kiconloader.h>
+#include <QIcon>
 
 // Libkdcraw includes
 
@@ -132,19 +129,19 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
     // --------------------------------------------------------------------------------------------------------
 
     d->textFilter = new TextFilter(d->expbox);
-    d->expbox->addItem(d->textFilter, SmallIcon("text-field"),
+    d->expbox->addItem(d->textFilter, QIcon::fromTheme("text-field").pixmap(16),
                        i18n("Text Filter"), QString("TextFilter"), true);
 
     // --------------------------------------------------------------------------------------------------------
 
     d->mimeFilter = new MimeFilter(d->expbox);
-    d->expbox->addItem(d->mimeFilter, SmallIcon("system-file-manager"),
+    d->expbox->addItem(d->mimeFilter, QIcon::fromTheme("system-file-manager").pixmap(16),
                        i18n("MIME Type Filter"), QString("TypeMimeFilter"), true);
 
     // --------------------------------------------------------------------------------------------------------
 
     d->geolocationFilter = new GeolocationFilter(d->expbox);
-    d->expbox->addItem(d->geolocationFilter, SmallIcon("applications-internet"),
+    d->expbox->addItem(d->geolocationFilter, QIcon::fromTheme("applications-internet").pixmap(16),
                        i18n("Geolocation Filter"), QString("TypeGeolocationFilter"), true);
 
     // --------------------------------------------------------------------------------------------------------
@@ -165,7 +162,7 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
 
     d->tagOptionsBtn = new QToolButton(box3);
     d->tagOptionsBtn->setToolTip( i18n("Tags Matching Condition"));
-    d->tagOptionsBtn->setIcon(KIconLoader::global()->loadIcon("configure", KIconLoader::Toolbar));
+    d->tagOptionsBtn->setIcon(QIcon::fromTheme("configure").pixmap(16));
     d->tagOptionsBtn->setPopupMode(QToolButton::InstantPopup);
     d->tagOptionsBtn->setWhatsThis(i18n("Defines in which way the selected tags are combined "
                                         "to filter the images. This also includes the '%1' check box.",
@@ -188,7 +185,7 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
     lay3->setMargin(0);
     lay3->setSpacing(0);
 
-    d->expbox->addItem(box3, SmallIcon("tag-assigned"), i18n("Tags Filter"), QString("TagsFilter"), true);
+    d->expbox->addItem(box3, QIcon::fromTheme("tag-assigned").pixmap(16), i18n("Tags Filter"), QString("TagsFilter"), true);
 
     // --------------------------------------------------------------------------------------------------------
 
@@ -206,7 +203,7 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
     lay4->setMargin(0);
     lay4->setSpacing(0);
 
-    d->expbox->addItem(box4, SmallIcon("favorites"), i18n("Labels Filter"), QString("LabelsFilter"), true);
+    d->expbox->addItem(box4, QIcon::fromTheme("favorites").pixmap(16), i18n("Labels Filter"), QString("LabelsFilter"), true);
 
     d->expanderVlay = dynamic_cast<QVBoxLayout*>(dynamic_cast<QScrollArea*>(d->expbox)->widget()->layout());
     d->space        = new QWidget();
