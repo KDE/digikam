@@ -392,7 +392,7 @@ void ImportStackedView::syncSelection(ImportCategorizedView* const from, ImportC
 
     if(!fromModel || !toModel)
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "one or both of the models are null?! from:" << from << "to:" << to;
+        qCWarning(LOG_IMPORTUI) << "one or both of the models are null?! from:" << from << "to:" << to;
         return;
     }
 

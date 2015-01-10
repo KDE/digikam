@@ -94,7 +94,7 @@ bool Filter::match(const QStringList& wildcards, const QString& name)
     foreach(const QString& wildcard, wildcards)
     {
         match = regexp(wildcard).exactMatch(name);
-        //qCDebug(DIGIKAM_GENERAL_LOG) << "**" << wildcard << name << match;
+        //qCDebug(LOG_IMPORTUI) << "**" << wildcard << name << match;
         if (match)
         {
             break;

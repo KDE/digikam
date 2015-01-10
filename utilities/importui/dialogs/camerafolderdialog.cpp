@@ -118,7 +118,7 @@ CameraFolderDialog::CameraFolderDialog(QWidget* const parent, const QMap<QString
                 }
 
                 QString sub = folder.section('/', -1);
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Camera folder: '" << folder << "' (root='" << root << "', sub='" << sub << "')";
+                qCDebug(LOG_IMPORTUI) << "Camera folder: '" << folder << "' (root='" << root << "', sub='" << sub << "')";
                 d->folderView->addFolder(root, sub, it.value());
             }
         }
@@ -173,7 +173,7 @@ void CameraFolderDialog::slotFolderPathSelectionChanged(CameraFolderItem* item)
     if (item)
     {
         enableButtonOk(true);
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Camera folder path: " << selectedFolderPath();
+        qCDebug(LOG_IMPORTUI) << "Camera folder path: " << selectedFolderPath();
     }
     else
     {

@@ -1254,7 +1254,7 @@ void ImportUI::slotUpload()
     patternList.append(QString("\n%1|Camera RAW files").arg(QString(KDcrawIface::KDcraw::rawFiles())));
     fileformats = patternList.join("\n");
 
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "fileformats=" << fileformats;
+    //qCDebug(LOG_IMPORTUI) << "fileformats=" << fileformats;
 
     QList<QUrl> urls = QFileDialog::getOpenFileUrls(this, i18nc("@title:window", "Select Image to Upload"),
                                                     QUrl::fromLocalFile(CollectionManager::instance()->oneAlbumRootPath()),
@@ -1506,7 +1506,7 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 
     if (!pAlbum)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Destination Album is null";
+        qCDebug(LOG_IMPORTUI) << "Destination Album is null";
         return;
     }
 
@@ -1676,9 +1676,9 @@ void ImportUI::slotUpdateDownloadName()
     foreach (CamItemInfo info, list)
     {
         CamItemInfo& refInfo = d->view->camItemInfoRef(info.folder, info.name);
-        qCDebug(DIGIKAM_GENERAL_LOG) << "slotDownloadNameChanged, old: " << refInfo.downloadName;
+        //qCDebug(LOG_IMPORTUI) << "slotDownloadNameChanged, old: " << refInfo.downloadName;
         refInfo.downloadName = d->renameCustomizer->newName(info.name, info.ctime);
-        qCDebug(DIGIKAM_GENERAL_LOG) << "slotDownloadNameChanged, new: " << refInfo.downloadName;
+        //qCDebug(LOG_IMPORTUI) << "slotDownloadNameChanged, new: " << refInfo.downloadName;
     }
 
     // connected to slotUpdateDownloadNames, and used externally
@@ -2073,7 +2073,7 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
         if (settings.autoRotate)
         {
             d->autoRotateItemsList << downloadUrl.toLocalFile();
-            qCDebug(DIGIKAM_GENERAL_LOG) << "autorotating for " << downloadUrl;
+            qCDebug(LOG_IMPORTUI) << "autorotating for " << downloadUrl;
         }
 
         ++downloadedItems;

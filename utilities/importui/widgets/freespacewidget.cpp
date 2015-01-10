@@ -271,7 +271,7 @@ unsigned long FreeSpaceWidget::kBAvail(const QString& path) const
 
     if (!mountPointMatch)
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Did not identify a valid mount point for" << path;
+        qCWarning(LOG_IMPORTUI) << "Did not identify a valid mount point for" << path;
         return (unsigned long)(-1);
     }
 
