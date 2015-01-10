@@ -6,7 +6,7 @@
  * Date        : 2007-02-06
  * Description : setup RAW decoding settings.
  *
- * Copyright (C) 2007-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -96,29 +96,29 @@ SetupRaw::SetupRaw(QWidget* const parent)
     // --------------------------------------------------------
 
     d->behaviorPanel = new QWidget;
-    QVBoxLayout* behaviorLayout = new QVBoxLayout;
+    QVBoxLayout* const behaviorLayout = new QVBoxLayout;
 
-    QLabel* rawExplanation = new QLabel;
+    QLabel* const rawExplanation = new QLabel;
     rawExplanation->setText(i18nc("@info",
-                                  "A <emphasis>raw image file</emphasis> contains minimally processed data "
-                                  "from the image sensor of a digital camera.<nl/>"
-                                  "Opening a raw file requires extensive data interpretation and processing."));
+                                  "<p>A <i>raw image file</i> contains minimally processed data "
+                                  "from the image sensor of a digital camera.</p>"
+                                  "<p>Opening a raw file requires extensive data interpretation and processing.</p>"));
     rawExplanation->setWordWrap(true);
-    QLabel* rawIcon     = new QLabel;
+    QLabel* const rawIcon        = new QLabel;
     rawIcon->setPixmap(SmallIcon("camera-photo", KIconLoader::SizeLarge));
-    QHBoxLayout* header = new QHBoxLayout;
+    QHBoxLayout* const header    = new QHBoxLayout;
     header->addWidget(rawIcon);
     header->addWidget(rawExplanation);
     header->setStretchFactor(rawExplanation, 10);
     header->addStretch(1);
 
-    QGroupBox* behaviorBox = new QGroupBox;
-    QGridLayout* boxLayout = new QGridLayout;
+    QGroupBox* const behaviorBox = new QGroupBox;
+    QGridLayout* const boxLayout = new QGridLayout;
 
-    QLabel* openIcon       = new QLabel;
+    QLabel* const openIcon       = new QLabel;
     openIcon->setPixmap(SmallIcon("document-open", KIconLoader::SizeMedium));
 
-    QLabel* openIntro      = new QLabel(i18nc("@label", "Open raw files in the image editor"));
+    QLabel* const openIntro      = new QLabel(i18nc("@label", "Open raw files in the image editor"));
 
     d->openSimple  = new QRadioButton(i18nc("@option:radio Open raw files...",
                                             "Fast and simple, as 8 bit image"));
@@ -143,7 +143,7 @@ SetupRaw::SetupRaw(QWidget* const parent)
     // --------------------------------------------------------
 
     d->settingsPanel            = new QWidget;
-    QVBoxLayout* settingsLayout = new QVBoxLayout;
+    QVBoxLayout* const settingsLayout = new QVBoxLayout;
 
     d->dcrawSettings = new DcrawSettingsWidget(0, 0 /* no advanced settings shown */);
     d->dcrawSettings->setItemIcon(0, SmallIcon("kdcraw"));
