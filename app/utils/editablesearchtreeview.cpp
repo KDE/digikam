@@ -63,8 +63,8 @@ EditableSearchTreeView::EditableSearchTreeView(QWidget* const parent,
     setAlbumModel(searchModel);
     d->searchModificationHelper = searchModificationHelper;
 
-    d->renameSearchAction = new QAction(QIcon::fromTheme("edit-rename").pixmap(16), i18n("Rename..."), this);
-    d->deleteSearchAction = new QAction(QIcon::fromTheme("edit-delete").pixmap(16), i18n("Delete"), this);
+    d->renameSearchAction = new QAction(QIcon::fromTheme("edit-rename"), i18n("Rename..."), this);
+    d->deleteSearchAction = new QAction(QIcon::fromTheme("edit-delete"), i18n("Delete"),    this);
 
     setSortingEnabled(true);
     setSelectAlbumOnClick(true);

@@ -159,16 +159,16 @@ ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode)
 
     // ------------------------------------------------------------
 
-    d->prevAction          = new QAction(QIcon::fromTheme("go-previous").pixmap(16),         i18nc("go to previous image", "Back"),  this);
-    d->nextAction          = new QAction(QIcon::fromTheme("go-next").pixmap(16),             i18nc("go to next image", "Forward"),   this);
-    d->rotLeftAction       = new QAction(QIcon::fromTheme("object-rotate-left").pixmap(16),  i18nc("@info:tooltip", "Rotate Left"),  this);
-    d->rotRightAction      = new QAction(QIcon::fromTheme("object-rotate-right").pixmap(16), i18nc("@info:tooltip", "Rotate Right"), this);
+    d->prevAction          = new QAction(QIcon::fromTheme("go-previous"),         i18nc("go to previous image", "Back"),  this);
+    d->nextAction          = new QAction(QIcon::fromTheme("go-next"),             i18nc("go to next image", "Forward"),   this);
+    d->rotLeftAction       = new QAction(QIcon::fromTheme("object-rotate-left"),  i18nc("@info:tooltip", "Rotate Left"),  this);
+    d->rotRightAction      = new QAction(QIcon::fromTheme("object-rotate-right"), i18nc("@info:tooltip", "Rotate Right"), this);
 
 #ifdef HAVE_KFACE
-    d->addPersonAction     = new QAction(QIcon::fromTheme("list-add-user").pixmap(16),       i18n("Add a Face Tag"),                 this);
-    d->forgetFacesAction   = new QAction(QIcon::fromTheme("list-remove-user").pixmap(16),    i18n("Clear all faces on this image"),  this);
+    d->addPersonAction     = new QAction(QIcon::fromTheme("list-add-user"),       i18n("Add a Face Tag"),                 this);
+    d->forgetFacesAction   = new QAction(QIcon::fromTheme("list-remove-user"),    i18n("Clear all faces on this image"),  this);
     d->peopleToggleAction  = new KToggleAction(i18n("Show Face Tags"),                                             this);
-    d->peopleToggleAction->setIcon(QIcon::fromTheme("user-identity").pixmap(16));
+    d->peopleToggleAction->setIcon(QIcon::fromTheme("user-identity"));
 #endif /* HAVE_KFACE */
 
     d->toolBar             = new QToolBar(this);
@@ -589,9 +589,9 @@ void ImagePreviewView::dropEvent(QDropEvent* e)
         }
 
         QMenu popMenu(this);
-        QAction* const assignToThisAction = popMenu.addAction(QIcon::fromTheme("tag").pixmap(16), i18n("Assign Tags to &This Item"));
+        QAction* const assignToThisAction = popMenu.addAction(QIcon::fromTheme("tag"), i18n("Assign Tags to &This Item"));
         popMenu.addSeparator();
-        popMenu.addAction(QIcon::fromTheme("dialog-cancel").pixmap(16), i18n("&Cancel"));
+        popMenu.addAction(QIcon::fromTheme("dialog-cancel"), i18n("&Cancel"));
         popMenu.setMouseTracking(true);
         QAction* const choice             = popMenu.exec(this->mapToGlobal(e->pos()));
 

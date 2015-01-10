@@ -59,18 +59,15 @@ extern "C"
 #include <QTimer>
 #include <QComboBox>
 #include <QMessageBox>
+#include <QIcon>
 
 // KDE includes
 
 #include <kmessagebox.h>
-
 #include <kconfiggroup.h>
-
 #include <kdirwatch.h>
 #include <klocalizedstring.h>
-
 #include <kwindowsystem.h>
-
 #include <kdialog.h>
 #include <kjobwidgets.h>
 

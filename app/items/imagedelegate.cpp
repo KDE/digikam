@@ -40,9 +40,8 @@
 
 // KDE includes
 
-
-#include <kio/global.h>
 #include <klocalizedstring.h>
+#include <kio/global.h>
 
 // Local includes
 
@@ -282,13 +281,13 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     p->setPen(isSelected ? qApp->palette().color(QPalette::HighlightedText)
                          : qApp->palette().color(QPalette::Text));
 
-    /*
+/*
     // If there is ImageHistory present, paint a small icon over the thumbnail to indicate that this is derived image
     if (info.hasImageHistory())
     {
         p->drawPixmap(d->pixmapRect.right()-24, d->pixmapRect.bottom()-24, QIcon::fromTheme("svn_switch").pixmap(22, 22));
     }
-    */
+*/
 
     if (!d->nameRect.isNull())
     {

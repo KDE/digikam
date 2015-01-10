@@ -34,11 +34,6 @@
 #include <QCache>
 #include <QPair>
 
-// KDE includes
-
-
-
-
 // Local includes
 
 #include "album.h"
@@ -203,8 +198,7 @@ QPixmap AlbumThumbnailLoader::loadIcon(const QString& name, int size) const
 
     if (!pix)
     {
-        d->iconCache.insert(qMakePair(name, size),
-                            new QPixmap(QIcon::fromTheme(name).pixmap(size)));
+        d->iconCache.insert(qMakePair(name, size), new QPixmap(QIcon::fromTheme(name).pixmap(size)));
         pix = d->iconCache[qMakePair(name, size)];
     }
 

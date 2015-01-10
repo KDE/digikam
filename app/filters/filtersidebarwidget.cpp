@@ -38,7 +38,6 @@
 
 // Libkdcraw includes
 
-#include <libkdcraw_version.h>
 #include <rexpanderbox.h>
 #include <rwidgetutils.h>
 
@@ -162,7 +161,7 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
 
     d->tagOptionsBtn = new QToolButton(box3);
     d->tagOptionsBtn->setToolTip( i18n("Tags Matching Condition"));
-    d->tagOptionsBtn->setIcon(QIcon::fromTheme("configure").pixmap(16));
+    d->tagOptionsBtn->setIcon(QIcon::fromTheme("configure"));
     d->tagOptionsBtn->setPopupMode(QToolButton::InstantPopup);
     d->tagOptionsBtn->setWhatsThis(i18n("Defines in which way the selected tags are combined "
                                         "to filter the images. This also includes the '%1' check box.",
@@ -398,11 +397,7 @@ void FilterSideBarWidget::doLoadState()
 
     KConfigGroup group = getConfigGroup();
 
-#if KDCRAW_VERSION >= 0x020000
     d->expbox->readSettings(group);
-#else
-    d->expbox->readSettings();
-#endif
 
     d->textFilter->setsearchTextFields((SearchTextFilterSettings::TextFilterFields)
                                        (group.readEntry(entryName(d->configSearchTextFilterFieldsEntry),
@@ -430,11 +425,7 @@ void FilterSideBarWidget::doSaveState()
 {
     KConfigGroup group = getConfigGroup();
 
-#if KDCRAW_VERSION >= 0x020000
     d->expbox->writeSettings(group);
-#else
-    d->expbox->writeSettings();
-#endif
 
     group.writeEntry(entryName(d->configSearchTextFilterFieldsEntry), (int)d->textFilter->searchTextFields());
 

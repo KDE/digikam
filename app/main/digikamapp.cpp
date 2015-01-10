@@ -630,13 +630,13 @@ void DigikamApp::setupAccelerators()
     connect(escapeAction, SIGNAL(triggered()), this, SIGNAL(signalEscapePressed()));
 
     QAction* const nextImageAction = new QAction(i18n("Next Image"), this);
-    nextImageAction->setIcon(QIcon::fromTheme("go-next").pixmap(16));
+    nextImageAction->setIcon(QIcon::fromTheme("go-next"));
     actionCollection()->addAction("next_image", nextImageAction);
     nextImageAction->setShortcut(QKeySequence(Qt::Key_Space));
     connect(nextImageAction, SIGNAL(triggered()), this, SIGNAL(signalNextItem()));
 
     QAction* const previousImageAction = new QAction(i18n("Previous Image"), this);
-    previousImageAction->setIcon(QIcon::fromTheme("go-previous").pixmap(16));
+    previousImageAction->setIcon(QIcon::fromTheme("go-previous"));
     actionCollection()->addAction("previous_image", previousImageAction);
     previousImageAction->setShortcut(QKeySequence(Qt::Key_Backspace));
     connect(previousImageAction, SIGNAL(triggered()), this, SIGNAL(signalPrevItem()));

@@ -70,8 +70,8 @@ TagFolderView::TagFolderView(QWidget* const parent, TagModel* const model)
 {
     setAlbumModel(model);
 
-    d->resetIconAction = new QAction(QIcon::fromTheme("view-refresh").pixmap(16), i18n("Reset Tag Icon"), this);
-    d->findDuplAction  = new QAction(QIcon::fromTheme("tools-wizard").pixmap(16), i18n("Find Duplicates..."), this);
+    d->resetIconAction = new QAction(QIcon::fromTheme("view-refresh"), i18n("Reset Tag Icon"),     this);
+    d->findDuplAction  = new QAction(QIcon::fromTheme("tools-wizard"), i18n("Find Duplicates..."), this);
 
     setSortingEnabled(true);
     setSelectAlbumOnClick(true);

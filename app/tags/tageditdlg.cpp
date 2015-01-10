@@ -38,7 +38,6 @@
 
 #include <klocalizedstring.h>
 #include <kicondialog.h>
-
 #include <kseparator.h>
 #include <kkeysequencewidget.h>
 
@@ -271,7 +270,7 @@ QKeySequence TagEditDlg::shortcut() const
 void TagEditDlg::slotIconResetClicked()
 {
     d->icon = QString("tag");
-    d->iconButton->setIcon(QIcon::fromTheme(d->icon).pixmap(20));
+    d->iconButton->setIcon(QIcon::fromTheme(d->icon));
 }
 
 void TagEditDlg::slotIconChanged()
@@ -286,7 +285,7 @@ void TagEditDlg::slotIconChanged()
     }
 
     d->icon = icon;
-    d->iconButton->setIcon(QIcon::fromTheme(d->icon).pixmap(20));
+    d->iconButton->setIcon(QIcon::fromTheme(d->icon));
 }
 
 void TagEditDlg::slotTitleChanged(const QString& newtitle)
