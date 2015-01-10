@@ -46,13 +46,13 @@
 #include <QStyle>
 #include <QDesktopServices>
 #include <QStandardPaths>
+#include <QIcon>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <klineedit.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 #include <kpagedialog.h>
 #include <kurllabel.h>
 #include <kurlrequester.h>
@@ -211,14 +211,14 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
     QHBoxLayout* const hboxWS  = new QHBoxLayout(d->workspaceGB);
 
     QLabel* const workIcon     = new QLabel;
-    workIcon->setPixmap(SmallIcon("input-tablet"));
+    workIcon->setPixmap(QIcon::fromTheme("input-tablet").pixmap(16));
     d->workProfilesKC    = new IccProfilesComboBox;
     d->workProfilesKC->setWhatsThis(i18n("<p>This is the color space all the images will be converted to when opened "
                                          "(if you choose to convert) and the profile that will be embedded when saving. "
                                          "Good and safe choices are <b>Adobe RGB (1998)</b> and <b>sRGB IEC61966-2.1</b>"));
 
     d->infoWorkProfiles = new QPushButton;
-    d->infoWorkProfiles->setIcon(SmallIcon("dialog-information"));
+    d->infoWorkProfiles->setIcon(QIcon::fromTheme("dialog-information").pixmap(16));
     d->infoWorkProfiles->setWhatsThis(i18n("<p>You can use this button to get more detailed "
                                            "information about the selected workspace profile.</p>"));
 
@@ -232,7 +232,7 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
     QVBoxLayout* const vlayMismatch = new QVBoxLayout(d->mismatchGB);
 
     QLabel* const behaviorIcon  = new QLabel;
-    behaviorIcon->setPixmap(SmallIcon("image-loading", KIconLoader::SizeMedium));
+    behaviorIcon->setPixmap(QIcon::fromTheme("image-loading").pixmap(32));
     QLabel* const behaviorLabel = new QLabel(i18n("When the profile of an image does not match the working color space"));
     behaviorLabel->setWordWrap(true);
 
@@ -264,7 +264,7 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
     QVBoxLayout* const vlayMissing = new QVBoxLayout(d->missingGB);
 
     QLabel*const  missingIcon  = new QLabel;
-    missingIcon->setPixmap(SmallIcon("image-missing", KIconLoader::SizeMedium));
+    missingIcon->setPixmap(QIcon::fromTheme("image-missing").pixmap(32));
     QLabel* const missingLabel = new QLabel(i18n("When an image has no color profile information"));
     missingLabel->setWordWrap(true);
 
@@ -315,7 +315,7 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
     QVBoxLayout* const vlayRaw     = new QVBoxLayout(d->rawGB);
 
     QLabel* const rawBehaviorIcon  = new QLabel;
-    rawBehaviorIcon->setPixmap(SmallIcon("kdcraw", KIconLoader::SizeMedium));
+    rawBehaviorIcon->setPixmap(QIcon::fromTheme("kdcraw").pixmap(32));
     QLabel* const rawBehaviorLabel = new QLabel(i18n("When loading a RAW file with uncalibrated colors"));
     rawBehaviorLabel->setWordWrap(true);
 
@@ -361,7 +361,7 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
     QGridLayout* const gridView    = new QGridLayout(d->viewGB);
 
     QLabel* const monitorIcon      = new QLabel;
-    monitorIcon->setPixmap(SmallIcon("video-display", KIconLoader::SizeMedium));
+    monitorIcon->setPixmap(QIcon::fromTheme("video-display").pixmap(32));
     QLabel* const monitorProfiles  = new QLabel(i18n("Monitor profile:"));
 
     d->monitorProfilesKC     = new IccProfilesComboBox;
@@ -369,7 +369,7 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
     d->monitorProfilesKC->setWhatsThis(i18n("<p>Select the color profile for your monitor here.</p>"));
 
     d->infoMonitorProfiles   = new QPushButton;
-    d->infoMonitorProfiles->setIcon(SmallIcon("dialog-information"));
+    d->infoMonitorProfiles->setIcon(QIcon::fromTheme("dialog-information").pixmap(16));
     d->infoMonitorProfiles->setWhatsThis(i18n("<p>You can use this button to get more detailed "
                                               "information about the selected monitor profile.</p>"));
 
@@ -401,7 +401,7 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
     QGridLayout* const gridIP  = new QGridLayout(d->inputGB);
 
     QLabel* const inputIcon    = new QLabel;
-    inputIcon->setPixmap(SmallIcon("input-tablet", KIconLoader::SizeMedium));
+    inputIcon->setPixmap(QIcon::fromTheme("input-tablet").pixmap(32));
     QLabel* const inputLabel   = new QLabel(i18n("Default input color profile:"));
     d->inProfilesKC            = new IccProfilesComboBox;
     d->inProfilesKC->setWhatsThis(i18n("<p>This is the default color profile for your input device "
@@ -410,7 +410,7 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
                                        "Some of the options about loading behavior above refer to this profile.</p>"));
 
     d->infoInProfiles = new QPushButton;
-    d->infoInProfiles->setIcon(SmallIcon("dialog-information"));
+    d->infoInProfiles->setIcon(QIcon::fromTheme("dialog-information").pixmap(16));
     d->infoInProfiles->setWhatsThis(i18n("<p>You can use this button to get more detailed "
                                          "information about the selected input profile.</p>"));
 
@@ -426,7 +426,7 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
     QGridLayout* const gridProof = new QGridLayout(d->proofGB);
 
     QLabel* const proofIcon      = new QLabel;
-    proofIcon->setPixmap(SmallIcon("printer", KIconLoader::SizeMedium));
+    proofIcon->setPixmap(QIcon::fromTheme("printer").pixmap(32));
     QLabel* const proofLabel     = new QLabel(i18n("Output device profile:"));
     d->proofProfilesKC           = new IccProfilesComboBox;
     proofLabel->setBuddy(d->proofProfilesKC);
@@ -435,7 +435,7 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
                                           "be able to preview how an image will be rendered via an output device.</p>"));
 
     d->infoProofProfiles   = new QPushButton;
-    d->infoProofProfiles->setIcon(SmallIcon("dialog-information"));
+    d->infoProofProfiles->setIcon(QIcon::fromTheme("dialog-information").pixmap(16));
     d->infoProofProfiles->setWhatsThis(i18n("<p>You can use this button to get more detailed "
                                             "information about the selected proofing profile.</p>"));
 
@@ -451,7 +451,7 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
     QGridLayout* const gridIccFolder = new QGridLayout(d->iccFolderGB);
 
     QLabel* const iccFolderIcon = new QLabel;
-    iccFolderIcon->setPixmap(SmallIcon("folder-downloads", KIconLoader::SizeMedium));
+    iccFolderIcon->setPixmap(QIcon::fromTheme("folder-downloads").pixmap(32));
     d->iccFolderLabel           = new QLabel(i18n("digiKam looks for ICC profiles in a number of <a href='default'>default locations</a>. "
                                                  "You can specify an additional folder:"));
     d->iccFolderLabel->setWordWrap(true);
@@ -741,7 +741,7 @@ void SetupICC::fillCombos(bool report)
         if (report)
         {
             QString message = i18n("No ICC profiles files found.");
-            KMessageBox::sorry(this, message);
+            QMessageBox::information(this, qApp->applicationName(), message);
         }
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "No ICC profile files found!!!";
@@ -862,7 +862,7 @@ void SetupICC::profileInfo(const IccProfile& profile)
 {
     if (profile.isNull())
     {
-        KMessageBox::error(this, i18n("No profile is selected."), i18n("Profile Error"));
+        QMessageBox::critical(this, i18n("Profile Error"), i18n("No profile is selected."));
         return;
     }
 

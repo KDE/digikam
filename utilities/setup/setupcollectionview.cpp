@@ -36,18 +36,18 @@
 #include <QPushButton>
 #include <QSignalMapper>
 #include <QStyledItemDelegate>
+#include <QMessageBox>
 #include <QToolButton>
 #include <QStandardPaths>
 #include <QLineEdit>
 #include <QUrl>
+#include <QIcon>
 
 // KDE includes
-
 
 #include <klocalizedstring.h>
 #include <kdialog.h>
 #include <kfiledialog.h>
-#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kurlrequester.h>
 #include <kwidgetitemdelegate.h>
@@ -603,7 +603,7 @@ void SetupCollectionModel::addCollection(int category)
 
         case CollectionManager::LocationNotAllowed:
         case CollectionManager::LocationInvalidCheck:
-            KMessageBox::sorry(m_dialogParentWidget, messageFromManager, i18n("Problem Adding Collection"));
+            QMessageBox::warning(m_dialogParentWidget, i18n("Problem Adding Collection"), messageFromManager);
             // fail
             return;
     }
@@ -627,7 +627,7 @@ void SetupCollectionModel::addCollection(int category)
 
     // label for the icon showing the type of storage (hard disk, CD, USB drive)
     QLabel* const deviceIconLabel = new QLabel;
-    deviceIconLabel->setPixmap(KIconLoader::global()->loadIcon(deviceIcon, KIconLoader::NoGroup, KIconLoader::SizeHuge));
+    deviceIconLabel->setPixmap(QIcon::fromTheme(deviceIcon).pixmap(64));
 
     QGroupBox* const infoBox = new QGroupBox;
     //infoBox->setTitle(i18n("More Information"));
@@ -635,7 +635,7 @@ void SetupCollectionModel::addCollection(int category)
     // label either signalling everything is all right, or raising awareness to some problems
     // (like handling of CD identified by a label)
     QLabel* const iconLabel = new QLabel;
-    iconLabel->setPixmap(KIconLoader::global()->loadIcon(iconName, KIconLoader::NoGroup, KIconLoader::SizeLarge));
+    iconLabel->setPixmap(QIcon::fromTheme(iconName).pixmap(48));
     QLabel* const infoLabel = new QLabel;
     infoLabel->setText(messageFromManager);
     infoLabel->setWordWrap(true);
@@ -712,12 +712,11 @@ void SetupCollectionModel::deleteCollection(int internalId)
     QString label       = data(indexForId(internalId, (int)ColumnName), Qt::DisplayRole).toString();
     KGuiItem removeItem = KStandardGuiItem::cont();
     removeItem.setText(i18n("Remove Collection"));
-    int result = KMessageBox::warningContinueCancel(m_dialogParentWidget,
-                                                    i18n("Do you want to remove the collection \"%1\" from your list of collections?", label),
-                                                    i18n("Remove Collection?"),
-                                                    removeItem);
+    int result = QMessageBox::warning(m_dialogParentWidget, i18n("Remove Collection?"),
+                                      i18n("Do you want to remove the collection \"%1\" from your list of collections?", label),
+                                      QMessageBox::Yes | QMessageBox::No);
 
-    if (result == KMessageBox::Continue)
+    if (result == QMessageBox::Yes)
     {
         // Remove from model. Removing from CollectionManager is done in apply()!
         beginRemoveRows(parentIndex, index.row(), index.row());
@@ -763,13 +762,13 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
                     switch (index.row())
                     {
                         case CategoryLocal:
-                            return SmallIcon("drive-harddisk", KIconLoader::SizeMedium);
+                            return QIcon::fromTheme("drive-harddisk").pixmap(32);
 
                         case CategoryRemovable:
-                            return SmallIcon("drive-removable-media-usb", KIconLoader::SizeMedium);
+                            return QIcon::fromTheme("drive-removable-media-usb").pixmap(32);
 
                         case CategoryRemote:
-                            return SmallIcon("network-wired", KIconLoader::SizeMedium);
+                            return QIcon::fromTheme("network-wired").pixmap(32);
                     }
 
                     break;
@@ -835,39 +834,39 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
                 {
                     if (item.deleted)
                     {
-                        return SmallIcon("edit-delete");
+                        return QIcon::fromTheme("edit-delete").pixmap(16);
                     }
 
                     if (item.location.isNull())
                     {
-                        return SmallIcon("folder-new");
+                        return QIcon::fromTheme("folder-new").pixmap(16);
                     }
 
                     switch (item.location.status())
                     {
                         case CollectionLocation::LocationAvailable:
-                            return SmallIcon("dialog-ok-apply");
+                            return QIcon::fromTheme("dialog-ok-apply").pixmap(16);
 
                         case CollectionLocation::LocationHidden:
-                            return SmallIcon("object-locked");
+                            return QIcon::fromTheme("object-locked").pixmap(16);
 
                         case CollectionLocation::LocationUnavailable:
 
                             switch (item.parentId)
                             {
                                 case CategoryLocal:
-                                    return SmallIcon("drive-harddisk", 0, KIconLoader::DisabledState);
+                                    return QIcon::fromTheme("drive-harddisk").pixmap(16, QIcon::Disabled);
 
                                 case CategoryRemovable:
-                                    return SmallIcon("drive-removable-media-usb", 0, KIconLoader::DisabledState);
+                                    return QIcon::fromTheme("drive-removable-media-usb").pixmap(16, QIcon::Disabled);
 
                                 case CategoryRemote:
-                                    return SmallIcon("network-wired", 0, KIconLoader::DisabledState);
+                                    return QIcon::fromTheme("network-wired").pixmap(16, QIcon::Disabled);
                             }
 
                         case CollectionLocation::LocationNull:
                         case CollectionLocation::LocationDeleted:
-                            return SmallIcon("edit-delete");
+                            return QIcon::fromTheme("edit-delete").pixmap(16);
                     }
                 }
                 else if (role == Qt::ToolTipRole)
@@ -901,7 +900,7 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
                         return true;
 
                     case ButtonDecorationRole:
-                        return SmallIcon("edit-delete");
+                        return QIcon::fromTheme("edit-delete").pixmap(16);
 
                     case ButtonMapId:
                         return buttonMapId(index);
