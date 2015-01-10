@@ -41,14 +41,11 @@
 #include <QToolButton>
 #include <QMap>
 #include <QPixmap>
+#include <QIcon>
 
 // KDE includes
 
-
-
-#include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kstandardguiitem.h>
 
 // Local includes
 
@@ -198,7 +195,7 @@ TransactionItem::TransactionItem(QWidget* const parent, ProgressItem* const item
     if (item->hasThumbnail())
     {
         d->itemThumb = new QLabel(h);
-        d->itemThumb->setFixedSize(QSize(KIconLoader::SizeSmallMedium, KIconLoader::SizeSmallMedium));
+        d->itemThumb->setFixedSize(QSize(22, 22));
         h->layout()->addWidget(d->itemThumb);
         h->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
     }
@@ -214,7 +211,7 @@ TransactionItem::TransactionItem(QWidget* const parent, ProgressItem* const item
 
     if (item->canBeCanceled())
     {
-        d->cancelButton = new QPushButton(SmallIcon("dialog-cancel"), QString(), h);
+        d->cancelButton = new QPushButton(QIcon::fromTheme("dialog-cancel"), QString(), h);
         d->cancelButton->setToolTip( i18n("Cancel this operation."));
 
         connect(d->cancelButton, SIGNAL(clicked()),

@@ -33,10 +33,10 @@
 #include <QStackedLayout>
 #include <QVBoxLayout>
 #include <QStandardPaths>
+#include <QIcon>
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -491,7 +491,7 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache* const cache, Sear
         QVBoxLayout* headerLayout = new QVBoxLayout;
         QLabel* simpleLabel1      = new QLabel;
         //simpleLabel->setText(i18n("Find Pictures meeting all of these conditions"));
-        //simpleLabel->setPixmap(SmallIcon("edit-find", 128));
+        //simpleLabel->setPixmap(QIcon::fromTheme("edit-find").pixmap(128));
         simpleLabel1->setText(i18n("<qt><p>Search your collection<br/>for pictures meeting the following conditions</p></qt>"));
         simpleLabel1->setObjectName("SearchGroupLabel_SimpleLabel");
         headerLayout->addStretch(3);

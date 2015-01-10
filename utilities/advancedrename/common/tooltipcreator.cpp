@@ -28,11 +28,11 @@
 #include <QRegExp>
 #include <QPalette>
 #include <QApplication>
+#include <QIcon>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kiconloader.h>
 
 // Local includes
 
@@ -89,7 +89,7 @@ QString TooltipCreator::getInfoIconResourceName()
 
 QPixmap TooltipCreator::getInfoIcon()
 {
-    return SmallIcon("lighttable", KIconLoader::SizeMedium);
+    return QIcon::fromTheme("lighttable").pixmap(32);
 }
 
 QString TooltipCreator::tooltip(Parser* parser)

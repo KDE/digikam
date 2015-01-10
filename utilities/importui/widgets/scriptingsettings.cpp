@@ -30,12 +30,12 @@
 #include <QToolButton>
 #include <QApplication>
 #include <QStyle>
+#include <QIcon>
 
 // KDE includes
 
 #include <klocalizedstring.h>
 #include <kurlrequester.h>
-#include <kiconloader.h>
 
 // Libkdcraw includes
 
@@ -91,7 +91,7 @@ ScriptingSettings::ScriptingSettings(QWidget* const parent)
     d->script->setMode(mode);
     d->script->setPlaceholderText(i18n("No script selected"));
     d->tooltipToggleButton = new QToolButton(hbox);
-    d->tooltipToggleButton->setIcon(SmallIcon("dialog-information"));
+    d->tooltipToggleButton->setIcon(QIcon::fromTheme("dialog-information"));
     d->tooltipToggleButton->setToolTip(i18n("Show a list of all available options"));
 
     vlay->addWidget(d->scriptLabel);

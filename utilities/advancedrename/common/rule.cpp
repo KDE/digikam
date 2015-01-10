@@ -30,10 +30,10 @@
 #include <QPushButton>
 #include <QRegExp>
 #include <QString>
+#include <QIcon>
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 
 namespace Digikam
@@ -89,11 +89,11 @@ QPixmap Rule::icon(Rule::IconType type) const
     switch (type)
     {
         case Dialog:
-            icon = DesktopIcon(d->iconName);
+            icon = QIcon::fromTheme(d->iconName).pixmap(48);
             break;
 
         default:
-            icon = SmallIcon(d->iconName);
+            icon = QIcon::fromTheme(d->iconName).pixmap(16);
             break;
     }
 
@@ -124,7 +124,7 @@ QPushButton* Rule::createButton(const QString& name, const QIcon& icon)
 {
     const int maxHeight = 28;
 
-    QPushButton* button = new QPushButton;
+    QPushButton* const button = new QPushButton;
     button->setText(name);
     button->setIcon(icon);
     button->setMinimumHeight(maxHeight);
@@ -135,16 +135,15 @@ QPushButton* Rule::createButton(const QString& name, const QIcon& icon)
 
 QPushButton* Rule::registerButton(QWidget* parent)
 {
-    QPushButton* button = 0;
-    button = createButton(objectName(), icon());
+    QPushButton* button = createButton(objectName(), icon());
 
     QList<QAction*> actions;
 
     if (d->tokens.count() > 1 && d->useTokenMenu)
     {
-        QMenu* menu = new QMenu(button);
+        QMenu* const menu = new QMenu(button);
 
-        foreach(Token* token, d->tokens)
+        foreach(Token* const token, d->tokens)
         {
             actions << token->action();
         }
@@ -154,7 +153,8 @@ QPushButton* Rule::registerButton(QWidget* parent)
     }
     else if (!d->tokens.isEmpty())
     {
-        Token* token = d->tokens.first();
+        Token* const token = d->tokens.first();
+
         connect(button, SIGNAL(clicked()),
                 token, SLOT(slotTriggered()));
 
@@ -171,10 +171,10 @@ QAction* Rule::registerMenu(QMenu* parent)
 
     if (d->tokens.count() > 1 && d->useTokenMenu)
     {
-        QMenu* menu = new QMenu(parent);
+        QMenu* const menu = new QMenu(parent);
         QList<QAction*> actions;
 
-        foreach(Token* token, d->tokens)
+        foreach(Token* const token, d->tokens)
         {
             actions << token->action();
         }
@@ -204,7 +204,7 @@ bool Rule::addToken(const QString& id, const QString& description, const QString
         return false;
     }
 
-    Token* token = new Token(id, description);
+    Token* const token = new Token(id, description);
 
     if (!actionName.isEmpty())
     {

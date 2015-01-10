@@ -37,10 +37,10 @@
 #include <QStyle>
 #include <QLineEdit>
 #include <QInputDialog>
+#include <QIcon>
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
 #include <kurllabel.h>
@@ -234,7 +234,7 @@ SearchTabHeader::SearchTabHeader(QWidget* const parent)
                                        "\"Searches\" view"));
 
     d->saveButton            = new QToolButton(this);
-    d->saveButton->setIcon(SmallIcon("document-save"));
+    d->saveButton->setIcon(QIcon::fromTheme("document-save"));
     d->saveButton->setToolTip(i18n("Save current search to a new virtual Album"));
     d->saveButton->setWhatsThis(i18n("If you press this button, the current search "
                                      "will be saved to a new virtual Search Album using the name "

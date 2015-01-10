@@ -33,10 +33,10 @@
 #include <QPixmap>
 #include <QMenu>
 #include <QAction>
+#include <QIcon>
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kstandardguiitem.h>
@@ -57,7 +57,7 @@ WorkflowItem::WorkflowItem(WorkflowList* const parent, const QString& title)
 
     Workflow q = WorkflowManager::instance()->findByTitle(title);
 
-    setIcon(0, SmallIcon("step"));
+    setIcon(0, QIcon::fromTheme("step"));
     setText(0, title);
     setText(1, QString::number(q.aTools.count()));
     setText(2, q.desc);
@@ -177,7 +177,7 @@ void WorkflowList::startDrag(Qt::DropActions /*supportedActions*/)
             return;
         }
 
-        QPixmap icon(DesktopIcon("step", 48));
+        QPixmap icon(QIcon::fromTheme("step").pixmap(48));
         int w = icon.width();
         int h = icon.height();
 
@@ -312,6 +312,7 @@ void WorkflowList::slotAssignQueueSettings()
     if (!list.isEmpty())
     {
         WorkflowItem* const item = dynamic_cast<WorkflowItem*>(list.first());
+
         if (item)
         {
             emit signalAssignQueueSettings(item->title());

@@ -28,14 +28,12 @@
 // Qt includes
 
 #include <QSplitter>
+#include <QIcon>
 
 // KDE includes
 
 #include <klocalizedstring.h>
 #include <kconfig.h>
-#include <kiconloader.h>
-
-
 
 // Local includes
 
@@ -99,7 +97,7 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget* const parent
 
 #ifdef HAVE_KGEOMAP
     d->gpsTab        = new ImagePropertiesGPSTab(parent);
-    appendTab(d->gpsTab,        SmallIcon("applications-internet"), i18n("Geolocation"));
+    appendTab(d->gpsTab,        QIcon::fromTheme("applications-internet"), i18n("Geolocation"));
 #endif // HAVE_KGEOMAP
 
     // ----------------------------------------------------------

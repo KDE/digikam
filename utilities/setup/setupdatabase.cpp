@@ -45,14 +45,14 @@
 #include <QSqlError>
 #include <QApplication>
 #include <QUrl>
+#include <QIcon>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <klocalizedstring.h>
 #include <kpagedialog.h>
-#include <kmessagebox.h>
 #include <kurlrequester.h>
-#include <kiconloader.h>
 
 // Local includes
 
@@ -109,7 +109,7 @@ SetupDatabase::SetupDatabase(KPageDialog* const dialog, QWidget* const parent)
                                             "prior to 2.0.</note>"));
 
         QPushButton* const infoHash     = new QPushButton;
-        infoHash->setIcon(SmallIcon("dialog-information"));
+        infoHash->setIcon(QIcon::fromTheme("dialog-information"));
         infoHash->setToolTip(i18nc("@info:tooltip", "Get information about <interface>Update File Hashes</interface>"));
 
         updateLayout->addWidget(d->hashesButton, 0, 0);
@@ -214,14 +214,15 @@ void SetupDatabase::readSettings()
 
 void SetupDatabase::upgradeUniqueHashes()
 {
-    int result = KMessageBox::warningContinueCancel(this, i18nc("@info",
-                                                                "<para>The process of updating the file hashes takes a few minutes.</para> "
-                                                                "<para>Please ensure that any important collections on removable media are connected. "
-                                                                "<note>After the upgrade you cannot use your database with a digiKam version "
-                                                                "prior to 2.0.</note></para> "
-                                                                "<para>Do you want to begin the update?</para>"));
+    int result = QMessageBox::warning(this, qApp->applicationName(),
+                                      i18nc("@info",
+                                            "<p>The process of updating the file hashes takes a few minutes.</p> "
+                                            "<p>Please ensure that any important collections on removable media are connected. "
+                                            "<note>After the upgrade you cannot use your database with a digiKam version "
+                                            "prior to 2.0.</note></p> "
+                                            "<p>Do you want to begin the update?</p>"));
 
-    if (result == KMessageBox::Continue)
+    if (result == QMessageBox::Yes)
     {
         ScanController::instance()->updateUniqueHash();
     }

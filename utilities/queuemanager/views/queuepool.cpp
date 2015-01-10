@@ -27,11 +27,10 @@
 
 #include <QTabBar>
 #include <QApplication>
+#include <QIcon>
 
 // KDE includes
 
-
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 
@@ -159,7 +158,7 @@ void QueuePool::slotAddQueue()
     if (!queue)
         return;
 
-    int index = addTab(queue, SmallIcon("bqm-diff"), QString("#%1").arg(count() + 1));
+    int index = addTab(queue, QIcon::fromTheme("bqm-diff"), QString("#%1").arg(count() + 1));
 
     connect(queue, SIGNAL(signalQueueContentsChanged()),
             this, SIGNAL(signalQueueContentsChanged()));

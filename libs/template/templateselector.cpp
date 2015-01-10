@@ -28,20 +28,18 @@
 #include <QAbstractItemView>
 #include <QLabel>
 #include <QToolButton>
+#include <QApplication>
+#include <QStyle>
+#include <QIcon>
 
 // KDE includes
 
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
 
-#include <kiconloader.h>
-
-
 // Libkdcraw includes
 
 #include <squeezedcombobox.h>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 
@@ -80,7 +78,7 @@ TemplateSelector::TemplateSelector(QWidget* const parent)
     d->label         = new QLabel(i18n("Template: "), this);
     d->templateCombo = new SqueezedComboBox(this);
     d->setupButton   = new QToolButton(this);
-    d->setupButton->setIcon(SmallIcon("document-edit"));
+    d->setupButton->setIcon(QIcon::fromTheme("document-edit"));
     d->setupButton->setWhatsThis(i18n("Open metadata template editor"));
     d->templateCombo->setWhatsThis(i18n("<p>Select here the action to perform using the metadata template.</p>"
                                         "<p><b>To remove</b>: delete already-assigned template.</p>"

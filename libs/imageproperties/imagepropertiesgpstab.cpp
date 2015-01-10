@@ -43,13 +43,13 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include <QStandardItem>
 #include <QComboBox>
 #include <QDesktopServices>
+#include <QIcon>
 
 // KDE includes
 
 #include <klocale.h>
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
-#include <kiconloader.h>
 
 // Libkgeomap includes
 
@@ -175,7 +175,7 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* const parent)
 
     d->detailsCombo = new QComboBox(box);
     d->detailsBtn   = new QToolButton(box);
-    d->detailsBtn->setIcon(SmallIcon("internet-web-browser"));
+    d->detailsBtn->setIcon(QIcon::fromTheme("internet-web-browser"));
     d->detailsBtn->setToolTip(i18n("See more information on the Internet"));
     d->detailsCombo->insertItem(MapQuest,      QString("MapQuest"));
     d->detailsCombo->insertItem(GoogleMaps,    QString("Google Maps"));

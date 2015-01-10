@@ -30,10 +30,10 @@
 #include <QSplitter>
 #include <QFileInfo>
 #include <QApplication>
+#include <QIcon>
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <kfileitem.h>
 #include <klocalizedstring.h>
 #include <kconfig.h>
@@ -89,7 +89,7 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget* const parent,
 
 #ifdef HAVE_KGEOMAP
     m_gpsTab = new ImagePropertiesGPSTab(parent);
-    appendTab(m_gpsTab,        SmallIcon("applications-internet"), i18n("Geolocation"));
+    appendTab(m_gpsTab,        QIcon::fromTheme("applications-internet"), i18n("Geolocation"));
 #endif // HAVE_KGEOMAP
 
     connect(this, SIGNAL(signalChangedTab(QWidget*)),

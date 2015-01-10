@@ -32,15 +32,15 @@
 // Qt includes
 
 #include <QTimer>
+#include <QIcon>
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "imageregionitem.h"
 #include "previewtoolbar.h"
 #include "previewlayout.h"
@@ -129,7 +129,7 @@ void ImageRegionWidget::setCapturePointMode(bool b)
     {
         d_ptr->oldRenderingPreviewMode = d_ptr->renderingPreviewMode;
         slotPreviewModeChanged(PreviewToolBar::PreviewOriginalImage);
-        viewport()->setCursor(QCursor(SmallIcon("color-picker", 32), 1, 28));
+        viewport()->setCursor(QCursor(QIcon::fromTheme("color-picker").pixmap(32), 1, 28));
     }
     else
     {

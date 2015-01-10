@@ -39,11 +39,10 @@
 #include <QMouseEvent>
 #include <QHideEvent>
 #include <QToolButton>
+#include <QIcon>
 
 // KDE includes
 
-
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 
 namespace Digikam
@@ -114,7 +113,7 @@ QToolButton* PanIconWidget::button()
 {
     QToolButton* const btn = new QToolButton;
     btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btn->setIcon(SmallIcon("transform-move"));
+    btn->setIcon(QIcon::fromTheme("transform-move"));
     btn->hide();
     btn->setToolTip( i18n("Pan the image to a region"));
 

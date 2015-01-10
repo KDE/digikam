@@ -35,14 +35,13 @@
 #include <QApplication>
 #include <QStyle>
 #include <QStandardPaths>
+#include <QIcon>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
-#include <kiconloader.h>
 
 // Libkdcraw includes
 
@@ -336,7 +335,7 @@ FilmGrainSettings::FilmGrainSettings(QWidget* const parent)
     d->expanderBox = new RExpanderBox();
     d->expanderBox->setObjectName("Noise Expander");
 
-    d->expanderBox->addItem(commonPage, SmallIcon("system-run"),
+    d->expanderBox->addItem(commonPage, QIcon::fromTheme("system-run").pixmap(16),
                             i18n("Common Settings"),
                             QString("CommonSettingsContainer"), true);
     d->expanderBox->addItem(firstPage, QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/colors-luma.png"),

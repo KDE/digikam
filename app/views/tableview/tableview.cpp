@@ -29,12 +29,8 @@
 #include <QItemSelectionModel>
 #include <QVBoxLayout>
 #include <QMenu>
-
-// KDE includes
-
 #include <QAction>
-#include <kiconloader.h>
-//#include <klinkitemselectionmodel.h>
+#include <QIcon>
 
 // local includes
 
@@ -227,7 +223,7 @@ void TableView::showTreeViewContextMenuOnItem(QContextMenuEvent* const event, co
     // Temporary actions --------------------------------------
 
     QAction* const viewAction = new QAction(i18nc("View the selected image", "Preview"), this);
-    viewAction->setIcon(SmallIcon("viewimage"));
+    viewAction->setIcon(QIcon::fromTheme("viewimage"));
     viewAction->setEnabled(selectedImageIds.count() == 1);
 
     // Creation of the menu -----------------------------------

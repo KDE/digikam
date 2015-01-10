@@ -27,15 +27,12 @@
 
 #include <QHashIterator>
 #include <QPixmap>
-
-// KDE includes
-
 #include <QUrl>
-#include "digikam_debug.h"
-#include <kiconloader.h>
+#include <QIcon>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "dimgfiltermanager.h"
 #include "dmetadata.h"
 #include "imagefiltershistorytreeitem.h"
@@ -276,7 +273,7 @@ void ImageFiltersHistoryModel::setupModelData(const QList<DImageHistory::Entry>&
         itemData.append(DImgFilterManager::instance()->i18nDisplayableName(entries.at(i).action));
 
         QString iconName = DImgFilterManager::instance()->filterIcon(entries.at(i).action);
-        QPixmap icon     = SmallIcon(iconName, KIconLoader::SizeSmallMedium);
+        QPixmap icon     = QIcon::fromTheme(iconName).pixmap(22);
         itemData.append(icon);
 
         //qCDebug(DIGIKAM_GENERAL_LOG) << "Adding an entry: " << itemData;

@@ -35,13 +35,12 @@
 #include <QApplication>
 #include <QStyle>
 #include <QUrl>
+#include <QIcon>
 
 // KDE includes
 
 #include <kmessagebox.h>
 #include <kglobalsettings.h>
-#include <kiconloader.h>
-
 #include <klocalizedstring.h>
 #include <kdialog.h>
 
@@ -77,7 +76,7 @@ CameraItem::CameraItem(QTreeWidget* const parent, const CamItemInfo& info)
     : QTreeWidgetItem(parent), d(new Private)
 {
     d->info = info;
-    setThumb(SmallIcon("image-x-generic", parent->iconSize().width(), KIconLoader::DisabledState), false);
+    setThumb(QIcon::fromTheme("image-x-generic").pixmap(parent->iconSize().width(), QIcon::Disabled), false);
     setText(1, d->info.name);
 }
 
@@ -232,8 +231,7 @@ void CameraMessageBox::informationList(CameraThumbsCtrl* const ctrl,
     dialog->setEscapeButton(KDialog::Ok);
 
     bool checkboxResult = false;
-    QIcon icon          = KIconLoader::global()->loadIcon("dialog-information", KIconLoader::NoGroup, KIconLoader::SizeHuge,
-                                                          KIconLoader::DefaultState, QStringList(), 0, true);
+    QIcon icon          = QIcon::fromTheme("dialog-information").pixmap(64);
 
     createMessageBox(ctrl, dialog, icon, text, items,
                      dontShowAgainName.isEmpty() ? QString() : i18n("Do not show this message again"),
@@ -270,8 +268,7 @@ int CameraMessageBox::warningContinueCancelList(CameraThumbsCtrl* const ctrl,
     dialog->setEscapeButton(KDialog::No);
 
     bool checkboxResult = false;
-    QIcon icon          = KIconLoader::global()->loadIcon("dialog-warning", KIconLoader::NoGroup, KIconLoader::SizeHuge,
-                                                          KIconLoader::DefaultState, QStringList(), 0, true);
+    QIcon icon          = QIcon::fromTheme("dialog-warning").pixmap(64);
     const int result    = createMessageBox(ctrl, dialog, icon, text, items,
                                            dontAskAgainName.isEmpty() ? QString() : i18n("Do not ask again"),
                                            &checkboxResult);

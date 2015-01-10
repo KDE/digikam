@@ -41,11 +41,11 @@
 #include <QStyle>
 #include <QLineEdit>
 #include <QInputDialog>
+#include <QIcon>
 
 // KDE includes
 
 #include <kglobalsettings.h>
-#include <kiconloader.h>
 
 // Local includes
 
@@ -159,7 +159,7 @@ GPSSearchView::GPSSearchView(QWidget* parent, SearchModel* searchModel,
                                    "\"Map Searches\" view."));
 
     d->saveBtn  = new QToolButton(hbox);
-    d->saveBtn->setIcon(SmallIcon("document-save"));
+    d->saveBtn->setIcon(QIcon::fromTheme("document-save"));
     d->saveBtn->setEnabled(false);
     d->saveBtn->setToolTip(i18n("Save current map search to a new virtual album."));
     d->saveBtn->setWhatsThis(i18n("If this button is pressed, the current map search "

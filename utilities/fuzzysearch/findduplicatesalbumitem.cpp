@@ -27,11 +27,11 @@
 
 #include <QPainter>
 #include <QCollator>
+#include <QIcon>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kiconloader.h>
 
 // Local includes
 
@@ -75,7 +75,7 @@ FindDuplicatesAlbumItem::FindDuplicatesAlbumItem(QTreeWidget* const parent, SAlb
         setText(1, QString::number(list.count()));
     }
 
-    setThumb(SmallIcon("image-x-generic", parent->iconSize().width(), KIconLoader::DisabledState), false);
+    setThumb(QIcon::fromTheme("image-x-generic").pixmap(parent->iconSize().width(), QIcon::Disabled), false);
 }
 
 FindDuplicatesAlbumItem::~FindDuplicatesAlbumItem()
