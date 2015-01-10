@@ -32,11 +32,11 @@
 #include <QContextMenuEvent>
 #include <QApplication>
 #include <QMenu>
+#include <QIcon>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kiconloader.h>
 
 // Local includes
 
@@ -256,11 +256,11 @@ void LightTableThumbBar::showContextMenuOnInfo(QContextMenuEvent* e, const Image
 
     QAction* leftPanelAction = 0, *rightPanelAction = 0, *editAction = 0, *removeAction = 0, *clearAllAction = 0;
 
-    leftPanelAction  = new QAction(SmallIcon("arrow-left"),        i18n("Show on left panel"),  this);
-    rightPanelAction = new QAction(SmallIcon("arrow-right"),       i18n("Show on right panel"), this);
-    editAction       = new QAction(SmallIcon("editimage"),         i18n("Edit"),                this);
-    removeAction     = new QAction(SmallIcon("dialog-close"),      i18n("Remove item"),         this);
-    clearAllAction   = new QAction(SmallIcon("edit-delete-shred"), i18n("Clear all"),           this);
+    leftPanelAction  = new QAction(QIcon::fromTheme("arrow-left").pixmap(16),        i18n("Show on left panel"),  this);
+    rightPanelAction = new QAction(QIcon::fromTheme("arrow-right").pixmap(16),       i18n("Show on right panel"), this);
+    editAction       = new QAction(QIcon::fromTheme("editimage").pixmap(16),         i18n("Edit"),                this);
+    removeAction     = new QAction(QIcon::fromTheme("dialog-close").pixmap(16),      i18n("Remove item"),         this);
+    clearAllAction   = new QAction(QIcon::fromTheme("edit-delete-shred").pixmap(16), i18n("Clear all"),           this);
 
     leftPanelAction->setEnabled(d->navigateByPair  ? false : true);
     rightPanelAction->setEnabled(d->navigateByPair ? false : true);

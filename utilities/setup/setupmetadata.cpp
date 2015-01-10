@@ -41,19 +41,18 @@
 #include <QComboBox>
 #include <QDesktopServices>
 #include <QStandardPaths>
+#include <QIcon>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <kglobalsettings.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kurllabel.h>
-#include <kmessagebox.h>
 
 // Libkexiv2 includes
 
 #include <kexiv2.h>
-#include <libkexiv2_version.h>
 
 // Local includes
 
@@ -171,7 +170,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
                                        "when moving or sending the files to different systems.</para>"));
 
     QLabel* const fieldsIconLabel = new QLabel;
-    fieldsIconLabel->setPixmap(SmallIcon("format-list-unordered", KIconLoader::SizeMedium));
+    fieldsIconLabel->setPixmap(QIcon::fromTheme("format-list-unordered").pixmap(32));
 
     QLabel* const fieldsLabel     = new QLabel(i18nc("@label", "Write This Information to the Metadata"));
 
@@ -235,7 +234,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     QGridLayout* const readWriteLayout = new QGridLayout;
 
     QLabel* const readWriteIconLabel   = new QLabel;
-    readWriteIconLabel->setPixmap(SmallIcon("document-open", KIconLoader::SizeMedium));
+    readWriteIconLabel->setPixmap(QIcon::fromTheme("document-open").pixmap(32));
 
     QLabel* const readWriteLabel       = new QLabel(i18nc("@label", "Reading and Writing Metadata"));
 
@@ -343,7 +342,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 
     QLabel* const rotationExplanation = new QLabel(i18nc("@label", "When rotating a file"));
     QLabel* const rotationIcon        = new QLabel;
-    rotationIcon->setPixmap(SmallIcon("transform-rotate", KIconLoader::SizeMedium));
+    rotationIcon->setPixmap(QIcon::fromTheme("transform-rotate").pixmap(32));
 
     d->rotateByFlag             = new QRadioButton(i18nc("@option:radio", "Rotate by only setting a flag"));
     d->rotateByContents         = new QRadioButton(i18nc("@option:radio", "Rotate by changing the content if possible"));
@@ -414,7 +413,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 
     QLabel* const rotationAdvExpl  = new QLabel(i18nc("@label", "Advanced Settings"));
     QLabel* const rotationAdvIcon  = new QLabel;
-    rotationAdvIcon->setPixmap(SmallIcon("configure", KIconLoader::SizeMedium));
+    rotationAdvIcon->setPixmap(QIcon::fromTheme("configure").pixmap(32));
 
     d->exifRotateBox         = new QCheckBox;
     d->exifRotateBox->setText(i18n("Show images/thumbnails &rotated according to orientation tag."));
@@ -445,7 +444,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     QLabel* const displayLabel       = new QLabel(i18nc("@info:label", "Select Metadata Fields to Be Displayed"));
 
     QLabel* const displayIcon        = new QLabel;
-    displayIcon->setPixmap(SmallIcon("view-list-tree", KIconLoader::SizeMedium));
+    displayIcon->setPixmap(QIcon::fromTheme("view-list-tree").pixmap(32));
 
     d->displaySubTab                 = new QTabWidget;
     d->tagsCfgPanel                  = new MetadataPanel(d->displaySubTab);
@@ -491,7 +490,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     balooBox->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
     QLabel* const balooLogoLabel   = new QLabel;
-    balooLogoLabel->setPixmap(KIconLoader::global()->loadIcon("baloo", KIconLoader::NoGroup, KIconLoader::SizeLarge));
+    balooLogoLabel->setPixmap(QIcon::fromTheme("baloo").pixmap(48));
 
     QLabel* const balooExplanation = new QLabel(balooBox);
     balooExplanation->setOpenExternalLinks(true);
@@ -708,11 +707,12 @@ void SetupMetadata::slotExifAutoRotateToggled(bool b)
     if (!b && d->exifAutoRotateShowedInfo && exifAutoRotateHasChanged())
     {
         d->exifAutoRotateShowedInfo = true;
-        KMessageBox::information(this, i18nc("@info",
-                                       "Switching off exif auto rotation will most probably show your images in a wrong orientation, "
-                                       "so only change this option if you explicitly require this. "
-                                       "Furthermore, you need to regenerate all already stored thumbnails via "
-                                       "the <interface>Tools / Maintenance</interface> menu."));
+        QMessageBox::information(this, qApp->applicationName(),
+                                 i18nc("@info",
+                                 "Switching off exif auto rotation will most probably show your images in a wrong orientation, "
+                                 "so only change this option if you explicitly require this. "
+                                 "Furthermore, you need to regenerate all already stored thumbnails via "
+                                 "the <interface>Tools / Maintenance</interface> menu."));
     }
 }
 

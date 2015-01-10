@@ -39,10 +39,10 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QTabWidget>
+#include <QIcon>
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kseparator.h>
 #include <kstandardguiitem.h>
@@ -296,7 +296,7 @@ void FaceScanDialog::setupUi()
     // ---- Introductory labels ----
 
     QLabel* const personIcon   = new QLabel;
-    personIcon->setPixmap(SmallIcon("edit-image-face-show", KIconLoader::SizeLarge));
+    personIcon->setPixmap(QIcon::fromTheme("edit-image-face-show").pixmap(48));
 
     QLabel* const introduction = new QLabel;
     introduction->setText(i18nc("@info",
@@ -324,7 +324,7 @@ void FaceScanDialog::setupUi()
     detectAndRecognizeLabel->setButton(d->detectAndRecognizeButton);
     ButtonExtendedLabel* const detectAndRecognizeIcon  = new ButtonExtendedLabel;
     ButtonExtendedLabel* const detectIcon              = new ButtonExtendedLabel;
-    detectAndRecognizeIcon->setPixmap(SmallIcon("edit-image-face-detect", KIconLoader::SizeLarge));
+    detectAndRecognizeIcon->setPixmap(QIcon::fromTheme("edit-image-face-detect").pixmap(48));
     detectIcon->setButton(d->detectButton);
     detectAndRecognizeIcon->setButton(d->detectAndRecognizeButton);
     detectAndRecognizeIcon->setAlignment(Qt::AlignCenter);
@@ -344,7 +344,7 @@ void FaceScanDialog::setupUi()
     //reRecognizeLabel->setWordWrap(true);
     reRecognizeLabel->setButton(d->reRecognizeButton);
     ButtonExtendedLabel* const reRecognizeIcon = new ButtonExtendedLabel;
-    reRecognizeIcon->setPixmap(SmallIcon("edit-image-face-recognize", KIconLoader::SizeLarge));
+    reRecognizeIcon->setPixmap(QIcon::fromTheme("edit-image-face-recognize").pixmap(48));
     reRecognizeIcon->setButton(d->reRecognizeButton);
     reRecognizeIcon->setAlignment(Qt::AlignCenter);
 
@@ -395,7 +395,7 @@ void FaceScanDialog::setupUi()
     d->parametersResetButton            = new QToolButton(parametersTab);
     d->parametersResetButton->setAutoRaise(true);
     d->parametersResetButton->setFocusPolicy(Qt::NoFocus);
-    d->parametersResetButton->setIcon(SmallIcon("document-revert"));
+    d->parametersResetButton->setIcon(QIcon::fromTheme("document-revert").pixmap(16));
     d->parametersResetButton->setToolTip(i18nc("@action:button", "Reset to default values"));
 
     RHBox* const hbox                   = new RHBox(parametersTab);

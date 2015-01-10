@@ -43,23 +43,20 @@
 #include <QStyle>
 #include <QUrl>
 #include <QFileDialog>
+#include <QIcon>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-
 #include <kglobalsettings.h>
-#include <kmessagebox.h>
-
 #include <kseparator.h>
-#include <kiconloader.h>
 
 // Libkdcraw includes
 
 #include <rcombobox.h>
 #include <rnuminput.h>
 #include <rexpanderbox.h>
-#include <libkdcraw_version.h>
 
 // Local includes
 
@@ -168,13 +165,13 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
-    QGridLayout* grid = new QGridLayout(parent);
+    QGridLayout* const grid = new QGridLayout(parent);
 
-    QWidget* firstPage = new QWidget();
-    QGridLayout* grid1 = new QGridLayout(firstPage);
+    QWidget* const firstPage = new QWidget();
+    QGridLayout* const grid1 = new QGridLayout(firstPage);
 
-    QLabel* label1     = new QLabel(i18n("Function:"), firstPage);
-    d->functionInput   = new RComboBox(firstPage);
+    QLabel* const label1 = new QLabel(i18n("Function:"), firstPage);
+    d->functionInput     = new RComboBox(firstPage);
     d->functionInput->addItem(i18n("Power"));
     d->functionInput->addItem(i18n("Linear"));
     d->functionInput->setDefaultIndex(0);
@@ -193,7 +190,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    QLabel* label2         = new QLabel(i18n("Highlights saturation:"), firstPage);
+    QLabel* const label2   = new QLabel(i18n("Highlights saturation:"), firstPage);
     d->highSaturationInput = new RIntNumInput(firstPage);
     d->highSaturationInput->setRange(0, 100, 1);
     d->highSaturationInput->setDefaultValue(100);
@@ -204,7 +201,7 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    QLabel* label3        = new QLabel(i18n("Shadow saturation:"), firstPage);
+    QLabel* const label3  = new QLabel(i18n("Shadow saturation:"), firstPage);
     d->lowSaturationInput = new RIntNumInput(firstPage);
     d->lowSaturationInput->setRange(0, 100, 1);
     d->lowSaturationInput->setDefaultValue(100);
@@ -227,8 +224,8 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    QWidget* secondPage = new QWidget();
-    QGridLayout* grid2  = new QGridLayout(secondPage);
+    QWidget* const secondPage = new QWidget();
+    QGridLayout* const grid2  = new QGridLayout(secondPage);
 
     // -------------------------------------------------------------
 
@@ -258,8 +255,8 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    QWidget* thirdPage = new QWidget();
-    QGridLayout* grid3 = new QGridLayout(thirdPage);
+    QWidget* const thirdPage = new QWidget();
+    QGridLayout* const grid3 = new QGridLayout(thirdPage);
 
     // -------------------------------------------------------------
 
@@ -289,8 +286,8 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    QWidget* fourthPage = new QWidget();
-    QGridLayout* grid4  = new QGridLayout(fourthPage);
+    QWidget* const fourthPage = new QWidget();
+    QGridLayout* const grid4  = new QGridLayout(fourthPage);
 
     // -------------------------------------------------------------
 
@@ -320,8 +317,8 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    QWidget* fifthPage = new QWidget();
-    QGridLayout* grid5 = new QGridLayout(fifthPage);
+    QWidget* const fifthPage = new QWidget();
+    QGridLayout* const grid5 = new QGridLayout(fifthPage);
 
     // -------------------------------------------------------------
 
@@ -353,15 +350,15 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
 
     d->expanderBox = new RExpanderBox;
     d->expanderBox->setObjectName("LocalContrastTool Expander");
-    d->expanderBox->addItem(firstPage, SmallIcon("contrast"), i18n("General settings"),
+    d->expanderBox->addItem(firstPage, QIcon::fromTheme("contrast").pixmap(16), i18n("General settings"),
                             QString("GeneralSettingsContainer"), true);
-    d->expanderBox->addItem(secondPage, SmallIcon("contrast"), i18n("Stage 1"),
+    d->expanderBox->addItem(secondPage, QIcon::fromTheme("contrast").pixmap(16), i18n("Stage 1"),
                             QString("Stage1SettingsContainer"), true);
-    d->expanderBox->addItem(thirdPage, SmallIcon("contrast"), i18n("Stage 2"),
+    d->expanderBox->addItem(thirdPage, QIcon::fromTheme("contrast").pixmap(16), i18n("Stage 2"),
                             QString("Stage2SettingsContainer"), true);
-    d->expanderBox->addItem(fourthPage, SmallIcon("contrast"), i18n("Stage 3"),
+    d->expanderBox->addItem(fourthPage, QIcon::fromTheme("contrast").pixmap(16), i18n("Stage 3"),
                             QString("Stage3SettingsContainer"), true);
-    d->expanderBox->addItem(fifthPage, SmallIcon("contrast"), i18n("Stage 4"),
+    d->expanderBox->addItem(fifthPage, QIcon::fromTheme("contrast").pixmap(16), i18n("Stage 4"),
                             QString("Stage4SettingsContainer"), true);
     d->expanderBox->addStretch();
     d->expanderBox->setCheckBoxVisible(1, true);
@@ -614,11 +611,7 @@ void LocalContrastSettings::readSettings(KConfigGroup& group)
 
     setSettings(prm);
 
-#if KDCRAW_VERSION >= 0x020000
     d->expanderBox->readSettings(group);
-#else
-    d->expanderBox->readSettings();
-#endif
 
     d->expanderBox->setEnabled(true);
 }
@@ -648,11 +641,7 @@ void LocalContrastSettings::writeSettings(KConfigGroup& group)
     group.writeEntry(d->configPower4Entry,          prm.stage[3].power);
     group.writeEntry(d->configBlur4Entry,           prm.stage[3].blur);
 
-#if KDCRAW_VERSION >= 0x020000
     d->expanderBox->writeSettings(group);
-#else
-    d->expanderBox->writeSettings();
-#endif
 }
 
 void LocalContrastSettings::loadSettings()
@@ -674,9 +663,9 @@ void LocalContrastSettings::loadSettings()
 
         if (stream.readLine() != "# Photograph Local Contrast Configuration File")
         {
-            KMessageBox::error(qApp->activeWindow(),
-                               i18n("\"%1\" is not a Photograph Local Contrast settings text file.",
-                                    loadFile.fileName()));
+            QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                                  i18n("\"%1\" is not a Photograph Local Contrast settings text file.",
+                                       loadFile.fileName()));
             file.close();
             return;
         }
@@ -702,8 +691,8 @@ void LocalContrastSettings::loadSettings()
     }
     else
     {
-        KMessageBox::error(qApp->activeWindow(),
-                           i18n("Cannot load settings from the Photograph Local Contrast text file."));
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("Cannot load settings from the Photograph Local Contrast text file."));
     }
 
     file.close();
@@ -746,8 +735,8 @@ void LocalContrastSettings::saveAsSettings()
     }
     else
     {
-        KMessageBox::error(qApp->activeWindow(),
-                           i18n("Cannot save settings to the Photograph Local Contrast text file."));
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("Cannot save settings to the Photograph Local Contrast text file."));
     }
 
     file.close();

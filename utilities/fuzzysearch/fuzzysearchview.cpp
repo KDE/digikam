@@ -41,16 +41,15 @@
 #include <QApplication>
 #include <QStyle>
 #include <QLineEdit>
+#include <QIcon>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <kcolorvalueselector.h>
 #include <khuesaturationselect.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 #include <ksqueezedtextlabel.h>
-
 
 // Libkdcraw includes
 
@@ -314,7 +313,7 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
                                         "\"Fuzzy Searches\" view."));
 
     d->saveBtnImage  = new QToolButton(saveBox);
-    d->saveBtnImage->setIcon(SmallIcon("document-save"));
+    d->saveBtnImage->setIcon(QIcon::fromTheme("document-save").pixmap(16));
     d->saveBtnImage->setEnabled(false);
     d->saveBtnImage->setToolTip(i18n("Save current similar image search to a new virtual Album"));
     d->saveBtnImage->setWhatsThis(i18n("If you press this button, the current "
@@ -370,14 +369,14 @@ QWidget* FuzzySearchView::setupSketchPanel() const
 
     d->undoBtnSketch   = new QToolButton();
     d->undoBtnSketch->setAutoRepeat(true);
-    d->undoBtnSketch->setIcon(SmallIcon("edit-undo"));
+    d->undoBtnSketch->setIcon(QIcon::fromTheme("edit-undo").pixmap(16));
     d->undoBtnSketch->setToolTip(i18n("Undo last draw on sketch"));
     d->undoBtnSketch->setWhatsThis(i18n("Use this button to undo last drawing action on sketch."));
     d->undoBtnSketch->setEnabled(false);
 
     d->redoBtnSketch   = new QToolButton();
     d->redoBtnSketch->setAutoRepeat(true);
-    d->redoBtnSketch->setIcon(SmallIcon("edit-redo"));
+    d->redoBtnSketch->setIcon(QIcon::fromTheme("edit-redo").pixmap(16));
     d->redoBtnSketch->setToolTip(i18n("Redo last draw on sketch"));
     d->redoBtnSketch->setWhatsThis(i18n("Use this button to redo last drawing action on sketch."));
     d->redoBtnSketch->setEnabled(false);
@@ -414,7 +413,7 @@ QWidget* FuzzySearchView::setupSketchPanel() const
     saveBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->resetButton = new QToolButton(saveBox);
-    d->resetButton->setIcon(SmallIcon("document-revert"));
+    d->resetButton->setIcon(QIcon::fromTheme("document-revert").pixmap(16));
     d->resetButton->setToolTip(i18n("Clear sketch"));
     d->resetButton->setWhatsThis(i18n("Use this button to clear sketch contents."));
 
@@ -424,7 +423,7 @@ QWidget* FuzzySearchView::setupSketchPanel() const
                                          "\"Fuzzy Searches\" view."));
 
     d->saveBtnSketch = new QToolButton(saveBox);
-    d->saveBtnSketch->setIcon(SmallIcon("document-save"));
+    d->saveBtnSketch->setIcon(QIcon::fromTheme("document-save").pixmap(16));
     d->saveBtnSketch->setEnabled(false);
     d->saveBtnSketch->setToolTip(i18n("Save current sketch search to a new virtual Album"));
     d->saveBtnSketch->setWhatsThis(i18n("If you press this button, the current sketch "
@@ -609,11 +608,11 @@ void FuzzySearchView::setActive(bool val)
                                "Do you want to build fingerprints now?\n"
                                "Note: This process can take a while. You can run it "
                                "any time later using 'Tools/Rebuild all Fingerprints'.");
-            int result = KMessageBox::questionYesNo(this, msg, i18n("No Fingerprints"));
+            int result = QMessageBox::question(this, i18n("No Fingerprints"), msg);
 
-            if (result == KMessageBox::Yes)
+            if (result == QMessageBox::Yes)
             {
-                FingerPrintsGenerator* tool = new FingerPrintsGenerator(true);
+                FingerPrintsGenerator* const tool = new FingerPrintsGenerator(true);
                 tool->start();
             }
         }
@@ -635,6 +634,7 @@ void FuzzySearchView::slotTabChanged(int tab)
      * Set a list with only one element, albummanager can set only multiple albums
      */
     QList<Album*> albums;
+
     switch (tab)
     {
         case Private::SIMILARS:
@@ -655,9 +655,11 @@ void FuzzySearchView::slotTabChanged(int tab)
 
         default:  // DUPLICATES
         {
-            Album* album = d->findDuplicatesPanel->currentFindDuplicatesAlbum();
+            Album* const album = d->findDuplicatesPanel->currentFindDuplicatesAlbum();
+
             if(album)
                 albums << album;
+
             AlbumManager::instance()->setCurrentAlbums(albums);
             d->folderView->setVisible(false);
             break;
@@ -670,7 +672,7 @@ void FuzzySearchView::slotAlbumSelected(Album* album)
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Selected new album" << album;
 
-    SAlbum* salbum = dynamic_cast<SAlbum*>(album);
+    SAlbum* const salbum = dynamic_cast<SAlbum*>(album);
 
     if (!salbum || !salbum->isHaarSearch())
     {

@@ -58,6 +58,7 @@
 #include <QFileDialog>
 #include <QMenuBar>
 #include <QMenu>
+#include <QIcon>
 
 // KDE includes
 
@@ -65,12 +66,10 @@
 #include <kcalendarsystem.h>
 #include <kedittoolbar.h>
 #include <khelpmenu.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <knotifyconfigwidget.h>
 #include <kshortcutsdialog.h>
-
 #include <kstatusbar.h>
 #include <ktoggleaction.h>
 #include <ktogglefullscreenaction.h>
@@ -83,7 +82,6 @@
 
 #include <kdcraw.h>
 #include <rexpanderbox.h>
-#include <libkdcraw_version.h>
 #include <rwidgetutils.h>
 
 // Local includes
@@ -266,25 +264,25 @@ void ImportUI::setupUserArea()
     d->renameCustomizer = new RenameCustomizer(d->advBox, d->cameraTitle);
     d->renameCustomizer->setWhatsThis(i18n("Set how digiKam will rename files as they are downloaded."));
     //d->view->setRenameCustomizer(d->renameCustomizer);
-    d->advBox->addItem(d->renameCustomizer, SmallIcon("insert-image"), i18n("File Renaming Options"),
+    d->advBox->addItem(d->renameCustomizer, QIcon::fromTheme("insert-image").pixmap(16), i18n("File Renaming Options"),
                        QString("RenameCustomizer"), true);
 
     // -- Albums Auto-creation options -----------------------------------------
 
     d->albumCustomizer = new AlbumCustomizer(d->advBox);
-    d->advBox->addItem(d->albumCustomizer, SmallIcon("folder-new"), i18n("Auto-creation of Albums"),
+    d->advBox->addItem(d->albumCustomizer, QIcon::fromTheme("folder-new").pixmap(16), i18n("Auto-creation of Albums"),
                        QString("AlbumBox"), false);
 
     // -- On the Fly options ---------------------------------------------------
 
     d->advancedSettings = new AdvancedSettings(d->advBox);
-    d->advBox->addItem(d->advancedSettings, SmallIcon("system-run"), i18n("On the Fly Operations (JPEG only)"),
+    d->advBox->addItem(d->advancedSettings, QIcon::fromTheme("system-run").pixmap(16), i18n("On the Fly Operations (JPEG only)"),
                        QString("OnFlyBox"), true);
 
     // -- Scripting options ---------------------------------------------------
 
     d->scriptingSettings = new ScriptingSettings(d->advBox);
-    d->advBox->addItem(d->scriptingSettings, SmallIcon("utilities-terminal"), i18n("Scripting"),
+    d->advBox->addItem(d->scriptingSettings, QIcon::fromTheme("utilities-terminal").pixmap(16), i18n("Scripting"),
                        QString("ScriptingBox"), true);
     d->advBox->addStretch();
 
@@ -830,13 +828,13 @@ void ImportUI::setupAccelerators()
     connect(escapeAction, SIGNAL(triggered()), this, SIGNAL(signalEscapePressed()));
 
     QAction* const nextImageAction = new QAction(i18nc("@action","Next Image"), this);
-    nextImageAction->setIcon(SmallIcon("go-next"));
+    nextImageAction->setIcon(QIcon::fromTheme("go-next").pixmap(16));
     actionCollection()->addAction("next_image", nextImageAction);
     nextImageAction->setShortcut(QKeySequence(Qt::Key_Space));
     connect(nextImageAction, SIGNAL(triggered()), d->view, SLOT(slotNextItem()));
 
     QAction* const previousImageAction = new QAction(i18nc("@action", "Previous Image"), this);
-    previousImageAction->setIcon(SmallIcon("go-previous"));
+    previousImageAction->setIcon(QIcon::fromTheme("go-previous").pixmap(16));
     actionCollection()->addAction("previous_image", previousImageAction);
     previousImageAction->setShortcut(QKeySequence(Qt::Key_Backspace));
     connect(previousImageAction, SIGNAL(triggered()), d->view, SLOT(slotPrevItem()));
@@ -870,11 +868,7 @@ void ImportUI::readSettings()
     d->advancedSettings->readSettings(group);
     d->scriptingSettings->readSettings(group);
 
-#if KDCRAW_VERSION >= 0x020000
     d->advBox->readSettings(group);
-#else
-    d->advBox->readSettings();
-#endif
 
     d->splitter->restoreState(group);
 
@@ -893,11 +887,7 @@ void ImportUI::saveSettings()
     d->advancedSettings->saveSettings(group);
     d->scriptingSettings->saveSettings(group);
 
-#if KDCRAW_VERSION >= 0x020000
     d->advBox->writeSettings(group);
-#else
-    d->advBox->writeSettings();
-#endif
 
     d->rightSideBar->saveState();
     d->splitter->saveState(group);
