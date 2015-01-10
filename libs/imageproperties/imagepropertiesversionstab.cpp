@@ -36,7 +36,7 @@
 #include <kconfiggroup.h>
 
 #include <klocalizedstring.h>
-#include <kiconloader.h>
+
 #include <kstandardguiitem.h>
 #include <QUrl>
 

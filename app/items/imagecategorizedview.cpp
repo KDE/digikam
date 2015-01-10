@@ -29,7 +29,7 @@
 
 // KDE includes
 
-#include <kiconloader.h>
+
 
 // Local includes
 

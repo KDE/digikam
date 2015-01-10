@@ -39,7 +39,7 @@
 // KDE includes
 
 #include <kactioncollection.h>
-#include <kiconloader.h>
+
 #include <klocalizedstring.h>
 
 // Local includes
@@ -78,7 +78,7 @@ void AssignedListViewItem::setToolSet(const BatchToolSet& set)
 
     if (tool)
     {
-        setIcon(1, KIconLoader::global()->loadIcon(tool->toolIconName(), KIconLoader::NoGroup, ICONSIZE));
+        setIcon(1, QIcon::fromTheme(tool->toolIconName()).pixmap(ICONSIZE));
         setText(1, tool->toolTitle());
     }
 }

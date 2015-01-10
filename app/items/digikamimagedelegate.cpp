@@ -29,7 +29,7 @@
 
 // KDE includes
 
-#include <kiconloader.h>
+
 
 // Local includes
 
@@ -90,10 +90,10 @@ void DigikamImageDelegate::updateRects()
     d->drawImageFormat                 = albumSettings->getIconShowImageFormat();
     d->drawCoordinates                 = ApplicationSettings::instance()->getIconShowCoordinates();
 
-    const int iconSize = KIconLoader::SizeSmallMedium;
+    const int iconSize = 22;
     d->pickLabelRect   = QRect(d->margin, y, iconSize, iconSize);
     d->groupRect       = QRect(d->contentWidth - iconSize, y, iconSize, iconSize);
-    d->coordinatesRect = QRect(d->contentWidth - KIconLoader::SizeSmall+2, d->pixmapRect.top(), KIconLoader::SizeSmall, KIconLoader::SizeSmall);
+    d->coordinatesRect = QRect(d->contentWidth - 16+2, d->pixmapRect.top(), 16, 16);
 
     if (albumSettings->getIconShowRating())
     {

@@ -37,7 +37,7 @@
 // KDE includes
 
 
-#include <kiconloader.h>
+
 
 // Local includes
 
@@ -203,9 +203,8 @@ QPixmap AlbumThumbnailLoader::loadIcon(const QString& name, int size) const
 
     if (!pix)
     {
-        KIconLoader* const iconLoader = KIconLoader::global();
         d->iconCache.insert(qMakePair(name, size),
-                            new QPixmap(iconLoader->loadIcon(name, KIconLoader::NoGroup, size)));
+                            new QPixmap(QIcon::fromTheme(name).pixmap(size)));
         pix = d->iconCache[qMakePair(name, size)];
     }
 

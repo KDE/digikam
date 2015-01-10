@@ -35,7 +35,7 @@
 
 // KDE includes
 
-#include <kiconloader.h>
+
 #include <klocalizedstring.h>
 #include <kselectaction.h>
 
@@ -58,14 +58,13 @@ class SlideToolBar::Private
 public:
 
     Private() :
-        iconSize(KIconLoader::SizeSmall),
+        iconSize(16),
         playBtn(0),
         stopBtn(0),
         nextBtn(0),
         prevBtn(0),
         screenSelectBtn(0),
-        desktop(qApp->desktop()),
-        loader(KIconLoader::global())
+        desktop(qApp->desktop())
     {
     }
 
@@ -78,8 +77,6 @@ public:
     QToolButton*    screenSelectBtn;
 
     QDesktopWidget* desktop;
-
-    KIconLoader*    loader;
 };
 
 SlideToolBar::SlideToolBar(const SlideShowSettings& settings, QWidget* const parent)
@@ -99,10 +96,10 @@ SlideToolBar::SlideToolBar(const SlideShowSettings& settings, QWidget* const par
     d->nextBtn->setFocusPolicy(Qt::NoFocus);
     d->stopBtn->setFocusPolicy(Qt::NoFocus);
 
-    d->playBtn->setIcon(d->loader->loadIcon("media-playback-pause", KIconLoader::Toolbar, d->iconSize));
-    d->prevBtn->setIcon(d->loader->loadIcon("media-skip-backward",  KIconLoader::Toolbar, d->iconSize));
-    d->nextBtn->setIcon(d->loader->loadIcon("media-skip-forward",   KIconLoader::Toolbar, d->iconSize));
-    d->stopBtn->setIcon(d->loader->loadIcon("media-playback-stop",  KIconLoader::Toolbar, d->iconSize));
+    d->playBtn->setIcon(QIcon::fromTheme("media-playback-pause").pixmap(d->iconSize));
+    d->prevBtn->setIcon(QIcon::fromTheme("media-skip-backward").pixmap(d->iconSize));
+    d->nextBtn->setIcon(QIcon::fromTheme("media-skip-forward").pixmap(d->iconSize));
+    d->stopBtn->setIcon(QIcon::fromTheme("media-playback-stop").pixmap(d->iconSize));
 
     d->playBtn->setIconSize(QSize(d->iconSize, d->iconSize));
     d->prevBtn->setIconSize(QSize(d->iconSize, d->iconSize));
@@ -116,7 +113,7 @@ SlideToolBar::SlideToolBar(const SlideShowSettings& settings, QWidget* const par
         d->screenSelectBtn      = new QToolButton(this);
         QMenu* const screenMenu = new QMenu(d->screenSelectBtn);
         d->screenSelectBtn->setToolTip( i18n("Switch Screen"));
-        d->screenSelectBtn->setIcon(d->loader->loadIcon("video-display", KIconLoader::Toolbar, d->iconSize));
+        d->screenSelectBtn->setIcon(QIcon::fromTheme("video-display").pixmap(d->iconSize));
         d->screenSelectBtn->setIconSize(QSize(d->iconSize, d->iconSize));
         d->screenSelectBtn->setMenu(screenMenu);
         d->screenSelectBtn->setPopupMode(QToolButton::InstantPopup);
@@ -199,12 +196,12 @@ void SlideToolBar::slotPlayBtnToggled()
 {
     if (d->playBtn->isChecked())
     {
-        d->playBtn->setIcon(d->loader->loadIcon("media-playback-start", KIconLoader::Toolbar, d->iconSize));
+        d->playBtn->setIcon(QIcon::fromTheme("media-playback-start").pixmap(d->iconSize));
         emit signalPause();
     }
     else
     {
-        d->playBtn->setIcon(d->loader->loadIcon("media-playback-pause", KIconLoader::Toolbar, d->iconSize));
+        d->playBtn->setIcon(QIcon::fromTheme("media-playback-pause").pixmap(d->iconSize));
         emit signalPlay();
     }
 }
@@ -214,7 +211,7 @@ void SlideToolBar::slotNexPrevClicked()
     if (!d->playBtn->isChecked())
     {
         d->playBtn->setChecked(true);
-        d->playBtn->setIcon(d->loader->loadIcon("media-playback-start", KIconLoader::Toolbar, d->iconSize));
+        d->playBtn->setIcon(QIcon::fromTheme("media-playback-start").pixmap(d->iconSize));
         emit signalPause();
     }
 }

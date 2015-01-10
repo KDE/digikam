@@ -34,7 +34,7 @@
 
 #include <klocalizedstring.h>
 
-#include <kiconloader.h>
+
 #include <kconfig.h>
 
 #include <kcalendarsystem.h>

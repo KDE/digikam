@@ -33,7 +33,7 @@
 
 #include <kconfig.h>
 
-#include <kiconloader.h>
+
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kwindowconfig.h>

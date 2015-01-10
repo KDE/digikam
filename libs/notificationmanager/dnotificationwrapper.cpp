@@ -35,7 +35,7 @@
 // KDE includes
 
 #include <kglobalsettings.h>
-#include <kiconloader.h>
+
 #include <knotification.h>
 #include <kpassivepopup.h>
 

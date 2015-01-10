@@ -47,7 +47,7 @@
 
 
 #include <khuesaturationselect.h>
-#include <kiconloader.h>
+
 #include <klocalizedstring.h>
 
 

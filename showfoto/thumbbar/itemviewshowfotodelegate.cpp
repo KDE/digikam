@@ -31,7 +31,7 @@
 // KDE includes
 
 #include <kio/global.h>
-#include <kiconloader.h>
+
 
 // Local includes
 
@@ -298,7 +298,7 @@ void ItemViewShowfotoDelegate::drawGeolocationIndicator(QPainter* p, const QRect
 {
     if (!r.isNull())
     {
-        QIcon icon = KIconLoader::global()->loadIcon("applications-internet", KIconLoader::NoGroup, KIconLoader::SizeSmall);
+        QIcon icon = QIcon::fromTheme("applications-internet").pixmap(16);
         qreal op   = p->opacity();
         p->setOpacity(0.5);
         icon.paint(p, r);

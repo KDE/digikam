@@ -38,7 +38,7 @@
 
 // KDE includes
 
-#include <kiconloader.h>
+
 
 #include <kio/global.h>
 #include <klocalizedstring.h>
@@ -108,12 +108,12 @@ QPixmap DItemDelegate::makeDragPixmap(const QStyleOptionViewItem& option,
 
     if (icon.isNull())
     {
-        icon = QPixmap(DesktopIcon("image-jp2", KIconLoader::SizeMedium));
+        icon = QPixmap(QIcon::fromTheme("image-jp2").pixmap(32));
     }
 
-    if (qMax(icon.width(), icon.height()) > KIconLoader::SizeHuge)
+    if (qMax(icon.width(), icon.height()) > 64)
     {
-        icon = icon.scaled(KIconLoader::SizeHuge, KIconLoader::SizeHuge,
+        icon = icon.scaled(64, 64,
                            Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 

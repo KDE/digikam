@@ -35,7 +35,7 @@
 // KDE includes
 
 #include <kconfiggroup.h>
-#include <kiconloader.h>
+
 #include <ksharedconfig.h>
 #include <klocalizedstring.h>
 
@@ -107,7 +107,7 @@ TooltipsPage::TooltipsPage(KAssistantDialog* const dlg)
                          "</qt>"));
 
     setPageWidget(vbox);
-    setLeftBottomPix(KIconLoader::global()->loadIcon("dialog-information", KIconLoader::NoGroup, KIconLoader::SizeEnormous));
+    setLeftBottomPix(QIcon::fromTheme("dialog-information").pixmap(128));
 }
 
 TooltipsPage::~TooltipsPage()

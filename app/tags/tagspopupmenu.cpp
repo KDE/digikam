@@ -46,7 +46,7 @@
 
 // KDE includes
 
-#include <kiconloader.h>
+
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <ktoggleaction.h>
@@ -421,10 +421,9 @@ TagsPopupMenu::TagsPopupMenu(const QList<qlonglong>& selectedImageIds, Mode mode
 void TagsPopupMenu::setup(Mode mode)
 {
     d->mode                 = mode;
-    KIconLoader* iconLoader = KIconLoader::global();
-    d->addTagPix            = iconLoader->loadIcon("tag",          KIconLoader::NoGroup, KIconLoader::SizeSmall);
-    d->recentTagPix         = iconLoader->loadIcon("tag-assigned", KIconLoader::NoGroup, KIconLoader::SizeSmall);
-    d->tagViewPix           = iconLoader->loadIcon("imagecomment", KIconLoader::NoGroup, KIconLoader::SizeSmall);
+    d->addTagPix            = QIcon::fromTheme("tag").pixmap(16);
+    d->recentTagPix         = QIcon::fromTheme("tag-assigned").pixmap(16);
+    d->tagViewPix           = QIcon::fromTheme("imagecomment").pixmap(16);
     d->addTagActions        = new QActionGroup(this);
     d->toggleTagActions     = new QActionGroup(this);
 

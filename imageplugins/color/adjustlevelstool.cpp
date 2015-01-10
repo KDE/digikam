@@ -48,7 +48,7 @@
 #include <kconfig.h>
 
 #include <kglobalsettings.h>
-#include <kiconloader.h>
+
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 
@@ -303,13 +303,13 @@ AdjustLevelsTool::AdjustLevelsTool(QObject* const parent)
     // -------------------------------------------------------------
 
     d->autoButton = new QToolButton();
-    d->autoButton->setIcon(KIconLoader::global()->loadIcon("system-run", KIconLoader::Toolbar));
+    d->autoButton->setIcon(QIcon::fromTheme("system-run"));
     d->autoButton->setToolTip( i18n( "Adjust all levels automatically." ) );
     d->autoButton->setWhatsThis(i18n("If you press this button, all channel levels will be adjusted "
                                      "automatically."));
 
     d->resetButton = new QPushButton(i18n("&Reset"));
-    d->resetButton->setIcon(KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar));
+    d->resetButton->setIcon(QIcon::fromTheme("document-revert"));
     d->resetButton->setToolTip( i18n( "Reset current channel levels' values." ) );
     d->resetButton->setWhatsThis(i18n("If you press this button, all levels' values "
                                       "from the currently selected channel "

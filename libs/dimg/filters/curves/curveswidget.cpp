@@ -47,7 +47,7 @@
 
 
 #include <klocalizedstring.h>
-#include <kiconloader.h>
+
 #include "digikam_debug.h"
 #include <kpixmapsequence.h>
 
@@ -94,7 +94,7 @@ public:
         clearFlag        = HistogramNone;
         progressCount    = 0;
         progressTimer    = 0;
-        progressPix      = KPixmapSequence("process-working", KIconLoader::SizeSmallMedium);
+        progressPix      = KPixmapSequence("process-working", 32);
     }
 
     bool              readOnlyMode;

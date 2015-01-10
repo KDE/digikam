@@ -47,7 +47,7 @@
 #include <kconfig.h>
 
 #include <kglobalsettings.h>
-#include <kiconloader.h>
+
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 
@@ -252,13 +252,13 @@ FilmTool::FilmTool(QObject* const parent)
             "after inversion. It is also the reference point for applying the film profile."));
 
     d->resetButton = new QPushButton(i18n("&Reset"));
-    d->resetButton->setIcon(KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar));
+    d->resetButton->setIcon(QIcon::fromTheme("document-revert"));
     d->resetButton->setToolTip( i18n( "Reset white point." ) );
     d->resetButton->setWhatsThis(i18n("If you press this button, the white point is "
                                       "reset to pure white."));
 
     d->autoButton = new QToolButton();
-    d->autoButton->setIcon(KIconLoader::global()->loadIcon("system-run", KIconLoader::Toolbar));
+    d->autoButton->setIcon(QIcon::fromTheme("system-run"));
     d->autoButton->setToolTip( i18n( "Adjust white point automatically." ) );
     d->autoButton->setWhatsThis(i18n("If you press this button, the white point is calculated "
             "from the image data automatically. This function requires to have some residual "

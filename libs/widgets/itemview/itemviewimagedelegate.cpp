@@ -43,7 +43,7 @@
 
 #include <kio/global.h>
 #include <klocalizedstring.h>
-#include <kiconloader.h>
+
 
 // Local includes
 
@@ -473,15 +473,15 @@ void ItemViewImageDelegate::drawPickLabelIcon(QPainter* p, const QRect& r, int p
 
         if (pickId == RejectedLabel)
         {
-            icon = KIconLoader::global()->loadIcon("flag-red", KIconLoader::NoGroup, r.width());
+            icon = QIcon::fromTheme("flag-red").pixmap(r.width());
         }
         else if (pickId == PendingLabel)
         {
-            icon = KIconLoader::global()->loadIcon("flag-yellow", KIconLoader::NoGroup, r.width());
+            icon = QIcon::fromTheme("flag-yellow").pixmap(r.width());
         }
         else if (pickId == AcceptedLabel)
         {
-            icon = KIconLoader::global()->loadIcon("flag-green", KIconLoader::NoGroup, r.width());
+            icon = QIcon::fromTheme("flag-green").pixmap(r.width());
         }
 
         icon.paint(p, r);
@@ -492,19 +492,19 @@ void ItemViewImageDelegate::drawPanelSideIcon(QPainter* p, bool left, bool right
 {
     Q_D(const ItemViewImageDelegate);
 
-    int iconSize = KIconLoader::SizeSmall;
+    int iconSize = 16;
 
     if (left)
     {
         QRect r(3, d->rect.height()/2 - iconSize/2, iconSize, iconSize);
-        QIcon icon = KIconLoader::global()->loadIcon("arrow-left", KIconLoader::NoGroup, iconSize);
+        QIcon icon = QIcon::fromTheme("arrow-left").pixmap(iconSize);
         icon.paint(p, r);
     }
 
     if (right)
     {
         QRect r(d->rect.width() - 3 - iconSize, d->rect.height()/2 - iconSize/2, iconSize, iconSize);
-        QIcon icon = KIconLoader::global()->loadIcon("arrow-right", KIconLoader::NoGroup, iconSize);
+        QIcon icon = QIcon::fromTheme("arrow-right").pixmap(iconSize);
         icon.paint(p, r);
     }
 }
@@ -513,7 +513,7 @@ void ItemViewImageDelegate::drawGeolocationIndicator(QPainter* p, const QRect& r
 {
     if (!r.isNull())
     {
-        QIcon icon = KIconLoader::global()->loadIcon("applications-internet", KIconLoader::NoGroup, KIconLoader::SizeSmall);
+        QIcon icon = QIcon::fromTheme("applications-internet").pixmap(16);
         qreal op   = p->opacity();
         p->setOpacity(0.5);
         icon.paint(p, r);
@@ -530,11 +530,11 @@ void ItemViewImageDelegate::drawGroupIndicator(QPainter* p, const QRect& r,
 
         if (open)
         {
-            icon = KIconLoader::global()->loadIcon("image-stack-open", KIconLoader::NoGroup, r.width());
+            icon = QIcon::fromTheme("image-stack-open").pixmap(r.width());
         }
         else
         {
-            icon = KIconLoader::global()->loadIcon("image-stack", KIconLoader::NoGroup, r.width());
+            icon = QIcon::fromTheme("image-stack").pixmap(r.width());
         }
 
         qreal op     = p->opacity();

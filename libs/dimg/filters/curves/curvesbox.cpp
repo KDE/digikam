@@ -42,7 +42,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
-#include <kiconloader.h>
+
 
 // Local includes
 
@@ -216,7 +216,7 @@ void CurvesBox::setup()
     // -------------------------------------------------------------
 
     d->resetButton = new QPushButton(i18n("&Reset"));
-    d->resetButton->setIcon(KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar));
+    d->resetButton->setIcon(QIcon::fromTheme("document-revert"));
     d->resetButton->setToolTip(i18n("Reset current channel curves' values."));
     d->resetButton->setWhatsThis(i18n("If you press this button, all curves' values "
                                       "from the currently selected channel "

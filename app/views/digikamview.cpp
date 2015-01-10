@@ -35,7 +35,7 @@
 
 // KDE includes
 
-#include <kiconloader.h>
+
 #include <kmessagebox.h>
 #include <ktoolinvocation.h>
 #include <krun.h>

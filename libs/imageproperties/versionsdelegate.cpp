@@ -35,7 +35,7 @@
 
 #include <kcategorydrawer.h>
 #include <kcolorscheme.h>
-#include <kiconloader.h>
+
 #include <klocalizedstring.h>
 #include <kpixmapsequence.h>
 
@@ -98,7 +98,7 @@ public:
 VersionsDelegate::VersionsDelegate(QObject* const parent)
     : QStyledItemDelegate(parent), d(new Private)
 {
-    d->workingPixmap = KPixmapSequence("process-working", KIconLoader::SizeSmallMedium);
+    d->workingPixmap = KPixmapSequence("process-working", 22);
 
     d->animation     = new QPropertyAnimation(this, "animationState", this);
     d->animation->setStartValue(0);

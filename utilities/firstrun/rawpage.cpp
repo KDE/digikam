@@ -34,7 +34,7 @@
 
 // KDE includes
 
-#include <kiconloader.h>
+
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
@@ -104,7 +104,7 @@ RawPage::RawPage(KAssistantDialog* const dlg)
                          "</qt>"));
 
     setPageWidget(vbox);
-    setLeftBottomPix(KIconLoader::global()->loadIcon("kdcraw", KIconLoader::NoGroup, KIconLoader::SizeEnormous));
+    setLeftBottomPix(QIcon::fromTheme("kdcraw").pixmap(128));
 }
 
 RawPage::~RawPage()

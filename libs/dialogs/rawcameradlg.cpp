@@ -36,7 +36,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kiconloader.h>
+
 
 
 #include <kaboutdata.h>

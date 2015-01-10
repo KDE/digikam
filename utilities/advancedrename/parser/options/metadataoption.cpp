@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include <kiconloader.h>
+
 #include <klocalizedstring.h>
 
 // Libkexiv2 includes
@@ -109,8 +109,7 @@ MetadataOption::MetadataOption()
     QString iconName("metadataedit");
 
     // metadataedit icon can be missing if KIPI plugins are not installed, load different icon in this case
-    QPixmap icon = KIconLoader::global()->loadIcon(iconName, KIconLoader::Small, 0,
-                                                   KIconLoader::DefaultState, QStringList(), 0L, true);
+    QPixmap icon = QIcon::fromTheme(iconName).pixmap(16);
 
     if (icon.isNull())
     {

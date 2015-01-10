@@ -26,7 +26,7 @@
 
 // KDE includes
 
-#include <kiconloader.h>
+
 #include <klocalizedstring.h>
 #include "digikam_debug.h"
 

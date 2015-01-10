@@ -51,7 +51,7 @@
 #include <kmessagebox.h>
 
 #include <kseparator.h>
-#include <kiconloader.h>
+
 
 // Libkdcraw includes
 
@@ -297,7 +297,7 @@ WBSettings::WBSettings(QWidget* const parent)
 
     d->mainExposureLabel  = new QLabel(i18nc("main exposure value", "Main:"));
     d->autoAdjustExposure = new QToolButton;
-    d->autoAdjustExposure->setIcon(KIconLoader::global()->loadIcon("system-run", KIconLoader::Toolbar));
+    d->autoAdjustExposure->setIcon(QIcon::fromTheme("system-run"));
     d->autoAdjustExposure->setToolTip(i18n("Auto exposure adjustments"));
     d->autoAdjustExposure->setWhatsThis(i18n("With this button, you can automatically adjust Exposure "
                                              "and Black Point values."));

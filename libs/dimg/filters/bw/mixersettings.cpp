@@ -45,7 +45,7 @@
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
 
-#include <kiconloader.h>
+
 
 // Libkdcraw includes
 
@@ -170,7 +170,7 @@ MixerSettings::MixerSettings(QWidget* parent)
     // -------------------------------------------------------------
 
     d->resetButton = new QPushButton(i18n("&Reset"));
-    d->resetButton->setIcon(KIconLoader::global()->loadIcon("document-revert", KIconLoader::Toolbar));
+    d->resetButton->setIcon(QIcon::fromTheme("document-revert"));
     d->resetButton->setWhatsThis(i18n("Reset color channels' gains settings from "
                                       "the currently selected channel."));
 

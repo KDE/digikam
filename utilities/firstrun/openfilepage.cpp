@@ -35,7 +35,7 @@
 // KDE includes
 
 #include <kconfiggroup.h>
-#include <kiconloader.h>
+
 #include <klocalizedstring.h>
 
 
@@ -109,7 +109,7 @@ OpenFilePage::OpenFilePage(KAssistantDialog* const dlg)
                          "</qt>"));
 
     setPageWidget(vbox);
-    setLeftBottomPix(KIconLoader::global()->loadIcon("editimage", KIconLoader::NoGroup, KIconLoader::SizeEnormous));
+    setLeftBottomPix(QIcon::fromTheme("editimage").pixmap(128));
 }
 
 OpenFilePage::~OpenFilePage()

@@ -33,7 +33,7 @@
 // KDE includes
 
 #include <QMenu>
-#include <kiconloader.h>
+
 #include <klocalizedstring.h>
 
 
@@ -226,7 +226,7 @@ RatingFilter::RatingFilter(QWidget* const parent)
 
     d->optionsBtn   = new QToolButton(this);
     d->optionsBtn->setToolTip( i18n("Rating Filter Options"));
-    d->optionsBtn->setIcon(KIconLoader::global()->loadIcon("configure", KIconLoader::Toolbar));
+    d->optionsBtn->setIcon(QIcon::fromTheme("configure"));
     d->optionsBtn->setPopupMode(QToolButton::InstantPopup);
 
     d->optionsMenu  = new QMenu(d->optionsBtn);

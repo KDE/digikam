@@ -26,7 +26,6 @@
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -49,9 +48,7 @@ QSize ImageSelectionOverlayButton::sizeHint() const
 
 QPixmap ImageSelectionOverlayButton::icon()
 {
-    return KIconLoader::global()->loadIcon(isChecked() ? "list-remove" : "list-add",
-                                           KIconLoader::NoGroup,
-                                           KIconLoader::SizeSmall);
+    return QIcon::fromTheme(isChecked() ? "list-remove" : "list-add").pixmap(16);
 }
 
 void ImageSelectionOverlayButton::updateToolTip()

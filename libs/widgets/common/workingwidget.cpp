@@ -30,10 +30,10 @@
 #include <QTimer>
 #include <QList>
 #include <QPixmap>
+#include <QIcon>
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <kpixmapsequence.h>
 
 namespace Digikam
@@ -57,7 +57,7 @@ public:
 WorkingWidget::WorkingWidget(QWidget* const parent)
     : QLabel(parent), d(new Private)
 {
-    QPixmap pix(KIconLoader::global()->iconPath("process-working.png", KIconLoader::Dialog));
+    QPixmap pix = QIcon::fromTheme("process-working.png").pixmap(48);
 
     d->pixmaps = KPixmapSequence(pix);
 

@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <kiconloader.h>
+
 
 // Local includes
 
@@ -549,7 +549,7 @@ void ShowfotoThumbnailDelegate::updateRects()
 
     d->pixmapRect      = QRect(d->margin, d->margin, d->contentWidth, d->contentWidth);
     d->rect            = QRect(0, 0, d->contentWidth + 2*d->margin, d->contentWidth + 2*d->margin);
-    d->coordinatesRect = QRect(d->contentWidth - KIconLoader::SizeSmall+2, d->pixmapRect.top(), KIconLoader::SizeSmall, KIconLoader::SizeSmall);
+    d->coordinatesRect = QRect(d->contentWidth - 16+2, d->pixmapRect.top(), 16, 16);
 
     if (d->flow == QListView::LeftToRight)
     {

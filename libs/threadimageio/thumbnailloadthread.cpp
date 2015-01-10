@@ -34,7 +34,7 @@
 
 #include <kglobal.h>
 #include <klocalizedstring.h>
-#include <kiconloader.h>
+
 #include <kmessagebox.h>
 
 #include <kmimetype.h>
@@ -871,7 +871,7 @@ QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription& descripti
 
     if (mimeType)
     {
-        pix = DesktopIcon(mimeType->iconName(), KIconLoader::SizeEnormous);
+        pix = QIcon::fromTheme(mimeType->iconName()).pixmap(128);
     }
 
 /*
@@ -879,27 +879,28 @@ QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription& descripti
     QString ext = QFileInfo(url.toLocalFile()).suffix();
 
     ApplicationSettings* const settings = ApplicationSettings::instance();
+
     if (settings)
     {
         if (settings->getImageFileFilter().toUpper().contains(ext.toUpper()) ||
             settings->getRawFileFilter().toUpper().contains(ext.toUpper()))
         {
-            pix = DesktopIcon("image", KIconLoader::SizeEnormous);
+            pix = QIcon::fromTheme(("image").pixmap(128);
         }
         else if (settings->getMovieFileFilter().toUpper().contains(ext.toUpper()))
         {
-            pix = DesktopIcon("video", KIconLoader::SizeEnormous);
+            pix = QIcon::fromTheme(("video").pixmap(128);
         }
         else if (settings->getAudioFileFilter().toUpper().contains(ext.toUpper()))
         {
-            pix = DesktopIcon("sound", KIconLoader::SizeEnormous);
+            pix = QIcon::fromTheme("sound").pixmap(128);
         }
     }
 */
 
     if (pix.isNull())
     {
-        pix = DesktopIcon("image-missing", KIconLoader::SizeEnormous);
+        pix = QIcon::fromTheme("image-missing").pixmap(128);
     }
 
     if (pix.isNull())

@@ -36,7 +36,7 @@
 
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
-#include <kiconloader.h>
+
 #include <klocalizedstring.h>
 
 
@@ -106,7 +106,7 @@ PreviewPage::PreviewPage(KAssistantDialog* const dlg)
                          "</qt>"));
 
     setPageWidget(vbox);
-    setLeftBottomPix(KIconLoader::global()->loadIcon("viewimage", KIconLoader::NoGroup, KIconLoader::SizeEnormous));
+    setLeftBottomPix(QIcon::fromTheme("viewimage").pixmap(128));
 }
 
 PreviewPage::~PreviewPage()

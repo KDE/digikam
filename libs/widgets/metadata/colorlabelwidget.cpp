@@ -43,7 +43,7 @@
 #include <kglobalsettings.h>
 #include <ksqueezedtextlabel.h>
 #include <klocalizedstring.h>
-#include <kiconloader.h>
+
 #include <kxmlguiwindow.h>
 #include <kactioncollection.h>
 
@@ -372,7 +372,7 @@ QIcon ColorLabelWidget::buildIcon(ColorLabel label, int size)
         return QIcon(pix);
     }
 
-    return KIconLoader::global()->loadIcon("emblem-unmounted", KIconLoader::NoGroup, size);
+    return QIcon::fromTheme("emblem-unmounted").pixmap(size);
 }
 
 QColor ColorLabelWidget::labelColor(ColorLabel label)

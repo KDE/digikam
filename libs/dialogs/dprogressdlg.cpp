@@ -38,7 +38,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kiconloader.h>
+
 #include <ksqueezedtextlabel.h>
 
 namespace Digikam
@@ -149,7 +149,7 @@ void DProgressDlg::addedAction(const QPixmap& itemPix, const QString& text)
 
     if (pix.isNull())
     {
-        pix = DesktopIcon("image-missing", KIconLoader::SizeMedium);    // 32x32 px
+        pix = QIcon::fromTheme("image-missing").pixmap(32);    // 32x32 px
     }
     else
     {

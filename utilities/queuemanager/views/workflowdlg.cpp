@@ -38,7 +38,7 @@
 
 // KDE includes
 
-#include <kiconloader.h>
+
 #include <kseparator.h>
 #include <klocalizedstring.h>
 

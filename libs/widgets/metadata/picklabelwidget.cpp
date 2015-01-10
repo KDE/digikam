@@ -45,7 +45,7 @@
 #include <klocalizedstring.h>
 #include <kxmlguiwindow.h>
 #include <kactioncollection.h>
-#include <kiconloader.h>
+
 
 // Local includes
 
@@ -257,20 +257,20 @@ QIcon PickLabelWidget::buildIcon(PickLabel label, int size)
     switch(label)
     {
         case RejectedLabel:
-            return KIconLoader::global()->loadIcon("flag-red", KIconLoader::NoGroup, size);
+            return QIcon::fromTheme("flag-red").pixmap(size);
             break;
         case PendingLabel:
-            return KIconLoader::global()->loadIcon("flag-yellow", KIconLoader::NoGroup, size);
+            return QIcon::fromTheme("flag-yellow").pixmap(size);
             break;
         case AcceptedLabel:
-            return KIconLoader::global()->loadIcon("flag-green", KIconLoader::NoGroup, size);
+            return QIcon::fromTheme("flag-green").pixmap(size);
             break;
         default:
             break;
     }
 
     // default : NoPickLabel
-    return KIconLoader::global()->loadIcon("flag-black", KIconLoader::NoGroup, size);
+    return QIcon::fromTheme("flag-black").pixmap(size);
 }
 
 QString PickLabelWidget::labelPickName(PickLabel label)

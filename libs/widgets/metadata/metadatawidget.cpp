@@ -54,7 +54,7 @@
 #include <kfiledialog.h>
 
 #include <kglobalsettings.h>
-#include <kiconloader.h>
+
 #include <klocalizedstring.h>
 
 // Libkexiv2 includes
@@ -127,7 +127,7 @@ MetadataWidget::MetadataWidget(QWidget* const parent, const char* name)
 
     d->filterBtn  = new QToolButton(this);
     d->filterBtn->setToolTip(i18n("Tags filter options"));
-    d->filterBtn->setIcon(KIconLoader::global()->loadIcon("view-filter", KIconLoader::Toolbar));
+    d->filterBtn->setIcon(QIcon::fromTheme("view-filter"));
     d->filterBtn->setPopupMode(QToolButton::InstantPopup);
     d->filterBtn->setWhatsThis(i18n("Apply tags filter over metadata."));
 
@@ -154,7 +154,7 @@ MetadataWidget::MetadataWidget(QWidget* const parent, const char* name)
 
     d->toolBtn = new QToolButton(this);
     d->toolBtn->setToolTip(i18n("Tools"));
-    d->toolBtn->setIcon(KIconLoader::global()->loadIcon("system-run", KIconLoader::Toolbar));
+    d->toolBtn->setIcon(QIcon::fromTheme("system-run"));
     d->toolBtn->setPopupMode(QToolButton::InstantPopup);
     d->toolBtn->setWhatsThis(i18n("Run tool over metadata tags."));
 
@@ -173,7 +173,7 @@ MetadataWidget::MetadataWidget(QWidget* const parent, const char* name)
 
     d->mainLayout->addWidget(d->filterBtn, 0, 0, 1, 1);
     d->mainLayout->addWidget(d->searchBar, 0, 1, 1, 3);
-    d->mainLayout->addWidget(d->toolBtn, 0, 4, 1, 1);
+    d->mainLayout->addWidget(d->toolBtn,   0, 4, 1, 1);
     d->mainLayout->addWidget(d->view,      1, 0, 1, 5);
     d->mainLayout->setColumnStretch(2, 10);
     d->mainLayout->setRowStretch(1, 10);

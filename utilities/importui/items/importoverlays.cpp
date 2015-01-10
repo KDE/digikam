@@ -26,7 +26,7 @@
 
 // KDE includes
 
-#include <kiconloader.h>
+
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
 
@@ -423,11 +423,11 @@ QPixmap ImportRotateOverlayButton::icon()
 {
     if (m_direction == ImportRotateOverlayLeft)
     {
-        return KIconLoader::global()->loadIcon("object-rotate-left", KIconLoader::NoGroup, KIconLoader::SizeSmall);
+        return QIcon::fromTheme("object-rotate-left").pixmap(16);
     }
     else
     {
-        return KIconLoader::global()->loadIcon("object-rotate-right", KIconLoader::NoGroup, KIconLoader::SizeSmall);
+        return QIcon::fromTheme("object-rotate-right").pixmap(16);
     }
 }
 
@@ -471,7 +471,7 @@ void ImportRotateOverlay::updateButton(const QModelIndex& index)
 {
     const QRect rect = m_view->visualRect(index);
     const int gap    = 5;
-    const int x      = rect.right() - 2*gap - (isLeft() ? KIconLoader::SizeSmall*5 + 2 : KIconLoader::SizeSmall*4 +2);
+    const int x      = rect.right() - 2*gap - (isLeft() ? 16*5 + 2 : 16*4 +2);
     const int y      = rect.top() + gap;
     button()->move(QPoint(x, y));
 }

@@ -43,7 +43,7 @@
 
 
 #include <klocalizedstring.h>
-#include <kiconloader.h>
+
 #include <kpixmapsequence.h>
 #include "digikam_debug.h"
 
@@ -174,7 +174,7 @@ public:
         hMonitorProfile(0),
         hXFORM(0)
     {
-        progressPix = KPixmapSequence("process-working", KIconLoader::SizeSmallMedium);
+        progressPix = KPixmapSequence("process-working", 22);
     }
 
     bool            profileDataAvailable;

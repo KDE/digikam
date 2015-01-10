@@ -6,7 +6,7 @@
  * Date        : 2009-04-30
  * Description : Qt item view mouse hover button
  *
- * Copyright (C) 2008 by Peter Penz <peter.penz@gmx.at>
+ * Copyright (C) 2008      by Peter Penz <peter.penz@gmx.at>
  * Copyright (C) 2009-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -28,16 +28,14 @@
 
 #include <QPainter>
 #include <QPaintEvent>
-#include <QtCore/QRect>
-#include <QtCore/QTimer>
-#include <QtCore/QTimeLine>
+#include <QRect>
+#include <QTimer>
+#include <QTimeLine>
+#include <QIcon>
 
 // KDE includes
 
 #include <kglobalsettings.h>
-#include <QIcon>
-#include <kiconloader.h>
-#include <kiconeffect.h>
 #include <klocalizedstring.h>
 
 namespace Digikam
@@ -156,8 +154,7 @@ void ItemViewHoverButton::paintEvent(QPaintEvent* event)
     // draw the icon overlay
     if (m_isHovered)
     {
-        KIconEffect iconEffect;
-        QPixmap activeIcon = iconEffect.apply(m_icon, KIconLoader::Desktop, KIconLoader::ActiveState);
+        QPixmap activeIcon = QIcon(m_icon).pixmap(48);
         painter.drawPixmap(0, 0, activeIcon);
     }
     else
@@ -196,9 +193,7 @@ void ItemViewHoverButton::setFadingValue(int value)
 void ItemViewHoverButton::setIconOverlay()
 {
     const char* icon = isChecked() ? "list-remove" : "list-add";
-    m_icon = KIconLoader::global()->loadIcon(icon,
-                                             KIconLoader::NoGroup,
-                                             KIconLoader::SizeSmall);
+    m_icon = QIcon::fromTheme(icon).pixmap(16);
 }
 */
 

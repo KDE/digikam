@@ -41,7 +41,7 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-#include <kiconloader.h>
+
 #include <kurlrequester.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
@@ -132,7 +132,7 @@ CollectionPage::CollectionPage(KAssistantDialog* const dlg)
     vlayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     setPageWidget(widget);
-    setLeftBottomPix(KIconLoader::global()->loadIcon("server-database", KIconLoader::NoGroup, KIconLoader::SizeEnormous));
+    setLeftBottomPix(QIcon::fromTheme("server-database").pixmap(128));
 
     connect(d->rootAlbumPathRequester, SIGNAL(urlSelected(QUrl)),
             this, SLOT(slotAlbumRootChanged(QUrl)));

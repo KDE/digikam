@@ -26,7 +26,6 @@
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -52,9 +51,7 @@ QSize FaceRejectionOverlayButton::sizeHint() const
 
 QPixmap FaceRejectionOverlayButton::icon()
 {
-    return KIconLoader::global()->loadIcon("dialog-close",
-                                           KIconLoader::NoGroup,
-                                           KIconLoader::SizeSmall);
+    return QIcon::fromTheme("dialog-close").pixmap(16);
 }
 
 void FaceRejectionOverlayButton::updateToolTip()

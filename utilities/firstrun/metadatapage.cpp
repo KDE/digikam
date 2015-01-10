@@ -34,7 +34,7 @@
 
 // KDE includes
 
-#include <kiconloader.h>
+
 #include <klocalizedstring.h>
 
 
@@ -106,7 +106,7 @@ MetadataPage::MetadataPage(KAssistantDialog* const dlg)
                          "</qt>"));
 
     setPageWidget(vbox);
-    setLeftBottomPix(KIconLoader::global()->loadIcon("exifinfo", KIconLoader::NoGroup, KIconLoader::SizeEnormous));
+    setLeftBottomPix(QIcon::fromTheme("exifinfo").pixmap(128));
 }
 
 MetadataPage::~MetadataPage()

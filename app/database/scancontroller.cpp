@@ -41,7 +41,7 @@
 
 #include <kmessagebox.h>
 #include <klocalizedstring.h>
-#include <kiconloader.h>
+
 
 
 // Local includes
@@ -176,7 +176,7 @@ public:
     {
         if (albumPix.isNull())
         {
-            albumPix = KIconLoader::global()->loadIcon("folder-image", KIconLoader::NoGroup, 32);
+            albumPix = QIcon::fromTheme("folder-image").pixmap(32);
         }
 
         return albumPix;
@@ -186,7 +186,7 @@ public:
     {
         if (rootPix.isNull())
         {
-            rootPix = KIconLoader::global()->loadIcon("folder-open", KIconLoader::NoGroup, 32);
+            rootPix = QIcon::fromTheme("folder-open").pixmap(32);
         }
 
         return rootPix;
@@ -196,7 +196,7 @@ public:
     {
         if (actionPix.isNull())
         {
-            actionPix = KIconLoader::global()->loadIcon("system-run", KIconLoader::NoGroup, 32);
+            actionPix = QIcon::fromTheme("system-run").pixmap(32);
         }
 
         return actionPix;
@@ -206,7 +206,7 @@ public:
     {
         if (errorPix.isNull())
         {
-            errorPix = KIconLoader::global()->loadIcon("dialog-error", KIconLoader::NoGroup, 32);
+            errorPix = QIcon::fromTheme("dialog-error").pixmap(32);
         }
 
         return errorPix;
@@ -216,7 +216,7 @@ public:
     {
         if (errorPix.isNull())
         {
-            errorPix = KIconLoader::global()->loadIcon("view-refresh", KIconLoader::NoGroup, 32);
+            errorPix = QIcon::fromTheme("view-refresh").pixmap(32);
         }
 
         return errorPix;

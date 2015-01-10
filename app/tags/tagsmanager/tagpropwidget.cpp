@@ -36,7 +36,7 @@
 
 #include "digikam_debug.h"
 #include <QIcon>
-#include <kiconloader.h>
+
 #include <kicondialog.h>
 #include <kmessagebox.h>
 
@@ -281,7 +281,7 @@ void TagPropWidget::slotIconResetClicked()
 
     d->changed = true;
     d->icon    = QString("tag");
-    d->iconButton->setIcon(KIconLoader::global()->loadIcon(d->icon, KIconLoader::NoGroup, 20));
+    d->iconButton->setIcon(QIcon::fromTheme(d->icon).pixmap(20));
 }
 void TagPropWidget::slotIconChanged()
 {
@@ -297,7 +297,7 @@ void TagPropWidget::slotIconChanged()
     }
 
     d->icon = icon;
-    d->iconButton->setIcon(KIconLoader::global()->loadIcon(d->icon, KIconLoader::NoGroup, 20));
+    d->iconButton->setIcon(QIcon::fromTheme(d->icon).pixmap(20));
 }
 
 void TagPropWidget::slotDataChanged()

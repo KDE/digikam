@@ -38,7 +38,7 @@
 
 #include <klocalizedstring.h>
 
-#include <kiconloader.h>
+
 
 #include <kmessagebox.h>
 
@@ -195,11 +195,11 @@ void ProgressItem::setThumbnail(const QPixmap& thumb)
 
     if (pix.isNull())
     {
-        pix = DesktopIcon("image-missing", KIconLoader::SizeSmallMedium);
+        pix = QIcon::fromTheme("image-missing").pixmap(22);
     }
     else
     {
-        pix = pix.scaled(KIconLoader::SizeSmallMedium, KIconLoader::SizeSmallMedium, 
+        pix = pix.scaled(22, 22, 
                          Qt::KeepAspectRatio, Qt::FastTransformation);
     }
 

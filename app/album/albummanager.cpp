@@ -63,7 +63,7 @@ extern "C"
 // KDE includes
 
 #include <kmessagebox.h>
-#include <kiconloader.h>
+
 #include <kconfiggroup.h>
 
 #include <kdirwatch.h>
@@ -861,7 +861,7 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
         mainLayout->setColumnStretch(1, 1);
 
         QLabel* deviceIconLabel = new QLabel;
-        deviceIconLabel->setPixmap(KIconLoader::global()->loadIcon("drive-harddisk", KIconLoader::NoGroup, KIconLoader::SizeHuge));
+        deviceIconLabel->setPixmap(QIcon::fromTheme("drive-harddisk").pixmap(64));
         mainLayout->addWidget(deviceIconLabel, 0, 0);
 
         QLabel* mainLabel = new QLabel(

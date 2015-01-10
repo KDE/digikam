@@ -77,7 +77,7 @@ extern "C"
 #include <kselectaction.h>
 #include <kactioncollection.h>
 #include <kglobal.h>
-#include <kiconloader.h>
+
 #include <klocalizedstring.h>
 #include <kmultitabbar.h>
 #include <kprotocolinfo.h>
@@ -158,8 +158,10 @@ ShowFoto::ShowFoto(const QList<QUrl>& urlList)
 
     // Show splash-screen at start up.
 
+/*
     KGlobal::dirs()->addResourceDir("data", KStandardDirs::installPath("data") + QString("digikam"));
     KIconLoader::global()->addAppDir("digikam");
+*/
 
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(EditorWindow::CONFIG_GROUP_NAME);

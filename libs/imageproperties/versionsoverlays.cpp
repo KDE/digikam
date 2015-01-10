@@ -29,7 +29,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kiconloader.h>
+
 
 // Local includes
 
@@ -64,16 +64,14 @@ ShowHideVersionsOverlay::Button::Button(QAbstractItemView* parentView)
 
 QSize ShowHideVersionsOverlay::Button::sizeHint() const
 {
-    return QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall);
+    return QSize(16, 16);
 }
 
 QPixmap ShowHideVersionsOverlay::Button::icon()
 {
     const char* icon = isChecked() ? "edit-bomb" : "edit-clear-history";
     //const char* icon = isChecked() ? "layer-visible-off" : "layer-visible-on";
-    return KIconLoader::global()->loadIcon(icon,
-                                           KIconLoader::NoGroup,
-                                           KIconLoader::SizeSmall);
+    return QIcon::fromTheme(icon).pixmap(16);
 }
 
 void ShowHideVersionsOverlay::Button::updateToolTip()
@@ -185,14 +183,12 @@ ActionVersionsOverlay::Button::Button(QAbstractItemView* const parentView, const
 
 QSize ActionVersionsOverlay::Button::sizeHint() const
 {
-    return QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall);
+    return QSize(16, 16);
 }
 
 QPixmap ActionVersionsOverlay::Button::icon()
 {
-    return KIconLoader::global()->loadIcon(gui.iconName(),
-                                           KIconLoader::NoGroup,
-                                           KIconLoader::SizeSmall);
+    return QIcon::fromTheme(gui.iconName()).pixmap(16);
 }
 
 void ActionVersionsOverlay::Button::updateToolTip()
@@ -208,7 +204,7 @@ ActionVersionsOverlay::ActionVersionsOverlay(QObject* const parent, const KGuiIt
 {
 }
 
-ActionVersionsOverlay::Button *ActionVersionsOverlay::button() const
+ActionVersionsOverlay::Button* ActionVersionsOverlay::button() const
 {
     return static_cast<Button*>(HoverButtonDelegateOverlay::button());
 }

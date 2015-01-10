@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <kiconloader.h>
+
 #include <kseparator.h>
 #include <kassistantdialog.h>
 #include <kpagewidgetmodel.h>

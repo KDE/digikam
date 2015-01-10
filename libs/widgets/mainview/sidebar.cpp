@@ -41,7 +41,7 @@
 #include <kconfiggroup.h>
 
 
-#include <kiconloader.h>
+
 
 // Local includes
 

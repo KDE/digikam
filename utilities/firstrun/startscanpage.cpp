@@ -26,12 +26,11 @@
 // Qt includes
 
 #include <QLabel>
+#include <QIcon>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-
-#include <kiconloader.h>
 
 // Libkdcraw includes
 
@@ -67,7 +66,7 @@ StartScanPage::StartScanPage(KAssistantDialog* const dlg)
                        "</qt>"));
 
     setPageWidget(vbox);
-    setLeftBottomPix(KIconLoader::global()->loadIcon("system-search", KIconLoader::NoGroup, KIconLoader::SizeEnormous));
+    setLeftBottomPix(QIcon::fromTheme("system-search").pixmap(128));
 }
 
 StartScanPage::~StartScanPage()

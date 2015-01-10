@@ -43,7 +43,7 @@
 // KDE includes
 
 #include <kglobalsettings.h>
-#include <kiconloader.h>
+
 #include <klocalizedstring.h>
 #include <kurlrequester.h>
 

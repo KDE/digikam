@@ -55,7 +55,7 @@ extern "C"
 
 // KDE includes
 
-#include <kiconloader.h>
+
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kprocess.h>
@@ -356,22 +356,22 @@ QPixmap CameraController::mimeTypeThumbnail(const QString& itemName, int thumbSi
 
     if (mime.startsWith(QLatin1String("image/x-raw")))
     {
-        return DesktopIcon("kdcraw", thumbSize);
+        return QIcon::fromTheme("kdcraw").pixmap(thumbSize);
     }
     else if (mime.startsWith(QLatin1String("image/")))
     {
-        return DesktopIcon("image-x-generic", thumbSize);
+        return QIcon::fromTheme("image-x-generic").pixmap(thumbSize);
     }
     else if (mime.startsWith(QLatin1String("video/")))
     {
-        return DesktopIcon("video-x-generic", thumbSize);
+        return QIcon::fromTheme("video-x-generic").pixmap(thumbSize);
     }
     else if (mime.startsWith(QLatin1String("audio/")))
     {
-        return DesktopIcon("audio-x-generic", thumbSize);
+        return QIcon::fromTheme("audio-x-generic").pixmap(thumbSize);
     }
 
-    return DesktopIcon("unknown", thumbSize);
+    return QIcon::fromTheme("unknown").pixmap(thumbSize);
 }
 
 void CameraController::slotCancel()

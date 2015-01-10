@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <kiconloader.h>
+
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
 
@@ -89,13 +89,13 @@ FilterStatusBar::FilterStatusBar(QWidget* const parent)
                                "Press the Settings button from the right side to open the filters panel."));
 
     d->resetBtn    = new QToolButton(this);
-    d->resetBtn->setIcon(KIconLoader::global()->loadIcon("edit-delete", KIconLoader::Toolbar));
+    d->resetBtn->setIcon(QIcon::fromTheme("edit-delete"));
     d->resetBtn->setToolTip(i18n("Reset all active filters"));
     d->resetBtn->setFocusPolicy(Qt::NoFocus);
     d->resetBtn->setAutoRaise(true);
 
     d->settingsBtn = new QToolButton(this);
-    d->settingsBtn->setIcon(KIconLoader::global()->loadIcon("view-filter", KIconLoader::Toolbar));
+    d->settingsBtn->setIcon(QIcon::fromTheme("view-filter"));
     d->settingsBtn->setToolTip(i18n("Open filter settings panel"));
     d->settingsBtn->setFocusPolicy(Qt::NoFocus);
     d->settingsBtn->setAutoRaise(true);

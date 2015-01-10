@@ -51,7 +51,7 @@
 #include <kmessagebox.h>
 
 #include <kseparator.h>
-#include <kiconloader.h>
+
 
 // Libkdcraw includes
 
