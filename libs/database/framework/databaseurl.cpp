@@ -323,9 +323,7 @@ QString DatabaseUrl::name() const
 
 QUrl DatabaseUrl::fileUrl() const
 {
-    QUrl fileUrl(albumRoot());
-    fileUrl = fileUrl.adjusted(QUrl::StripTrailingSlash);
-    fileUrl.setPath(fileUrl.path() + QChar('/') + (path()));
+    QUrl fileUrl = QUrl::fromLocalFile(albumRoot().toString() + path());
 
     return fileUrl;
 }

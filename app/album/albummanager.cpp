@@ -2213,7 +2213,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
 
     if (!mkdirJob->exec())
     {
-        errMsg = i18n("Failed to create directory.");
+        errMsg = i18n("Failed to create directory '%1': %2", fileUrl.toString(), mkdirJob->errorString()); // TODO add tags?
         return 0;
     }
 
