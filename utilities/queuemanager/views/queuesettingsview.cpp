@@ -36,13 +36,11 @@
 #include <QVBoxLayout>
 #include <QApplication>
 #include <QStyle>
+#include <QIcon>
 
 // KDE includes
 
 #include <kconfig.h>
-
-
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 
 // Libkdcraw includes
@@ -140,7 +138,7 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
 
     d->useOrgAlbum           = new QCheckBox(i18n("Use original Album"), vbox3);
     d->albumSel              = new AlbumSelectWidget(vbox3);
-    insertTab(Private::TARGET, sv3, SmallIcon("folder-image"), i18n("Target"));
+    insertTab(Private::TARGET, sv3, QIcon::fromTheme("folder-image").pixmap(16), i18n("Target"));
 
     // --------------------------------------------------------
 
@@ -170,7 +168,7 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     vbox2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     vbox2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
-    insertTab(Private::RENAMING, sv2, SmallIcon("insert-image"), i18n("File Renaming"));
+    insertTab(Private::RENAMING, sv2, QIcon::fromTheme("insert-image").pixmap(16), i18n("File Renaming"));
 
     // --------------------------------------------------------
 
@@ -230,16 +228,16 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     layout->addStretch();
 
-    insertTab(Private::BEHAVIOR, sv, SmallIcon("dialog-information"), i18n("Behavior"));
+    insertTab(Private::BEHAVIOR, sv, QIcon::fromTheme("dialog-information").pixmap(16), i18n("Behavior"));
 
     // --------------------------------------------------------
 
     d->rawSettings = new DcrawSettingsWidget(panel, DcrawSettingsWidget::SIXTEENBITS | DcrawSettingsWidget::COLORSPACE);
-    d->rawSettings->setItemIcon(0, SmallIcon("kdcraw"));
-    d->rawSettings->setItemIcon(1, SmallIcon("whitebalance"));
-    d->rawSettings->setItemIcon(2, SmallIcon("lensdistortion"));
+    d->rawSettings->setItemIcon(0, QIcon::fromTheme("kdcraw").pixmap(16));
+    d->rawSettings->setItemIcon(1, QIcon::fromTheme("whitebalance").pixmap(16));
+    d->rawSettings->setItemIcon(2, QIcon::fromTheme("lensdistortion").pixmap(16));
 
-    insertTab(Private::RAW, d->rawSettings, SmallIcon("kdcraw"), i18n("Raw Decoding"));
+    insertTab(Private::RAW, d->rawSettings, QIcon::fromTheme("kdcraw").pixmap(16), i18n("Raw Decoding"));
 
     // --------------------------------------------------------
 

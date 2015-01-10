@@ -33,10 +33,10 @@
 #include <QPixmap>
 #include <QAction>
 #include <QMenu>
+#include <QIcon>
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 
 namespace Digikam
@@ -55,47 +55,47 @@ ToolListViewGroup::ToolListViewGroup(QTreeWidget* const parent, BatchTool::Batch
     switch (m_group)
     {
         case BatchTool::ColorTool:
-            setIcon(0, SmallIcon("digikam"));
+            setIcon(0, QIcon::fromTheme("digikam").pixmap(16));
             setText(0, i18n("Color"));
             break;
 
         case BatchTool::EnhanceTool:
-            setIcon(0, SmallIcon("digikam"));
+            setIcon(0, QIcon::fromTheme("digikam").pixmap(16));
             setText(0, i18n("Enhance"));
             break;
 
         case BatchTool::TransformTool:
-            setIcon(0, SmallIcon("digikam"));
+            setIcon(0, QIcon::fromTheme("digikam").pixmap(16));
             setText(0, i18n("Transform"));
             break;
 
         case BatchTool::DecorateTool:
-            setIcon(0, SmallIcon("digikam"));
+            setIcon(0, QIcon::fromTheme("digikam").pixmap(16));
             setText(0, i18n("Decorate"));
             break;
 
         case BatchTool::FiltersTool:
-            setIcon(0, SmallIcon("digikam"));
+            setIcon(0, QIcon::fromTheme("digikam").pixmap(16));
             setText(0, i18n("Filters"));
             break;
 
         case BatchTool::ConvertTool:
-            setIcon(0, SmallIcon("digikam"));
+            setIcon(0, QIcon::fromTheme("digikam").pixmap(16));
             setText(0, i18n("Convert"));
             break;
 
         case BatchTool::MetadataTool:
-            setIcon(0, SmallIcon("digikam"));
+            setIcon(0, QIcon::fromTheme("digikam").pixmap(16));
             setText(0, i18n("Metadata"));
             break;
 
         case BatchTool::KipiTool:
-            setIcon(0, SmallIcon("kipi"));
+            setIcon(0, QIcon::fromTheme("kipi").pixmap(16));
             setText(0, i18n("Kipi-plugins"));
             break;
 
         default:      // User customized tools.
-            setIcon(0, SmallIcon("user-properties"));
+            setIcon(0, QIcon::fromTheme("user-properties").pixmap(16));
             setText(0, i18n("Custom Tools"));
             break;
     }
@@ -122,7 +122,7 @@ ToolListViewItem::ToolListViewItem(ToolListViewGroup* const parent, BatchTool* c
 
     if (m_tool)
     {
-        setIcon(0, SmallIcon(m_tool->toolIconName()));
+        setIcon(0, QIcon::fromTheme(m_tool->toolIconName()).pixmap(16));
         setText(0, m_tool->toolTitle());
         setText(1, m_tool->toolDescription());
     }
@@ -264,7 +264,7 @@ void ToolsListView::startDrag(Qt::DropActions /*supportedActions*/)
         return;
     }
 
-    QPixmap icon(DesktopIcon("system-run", 48));
+    QPixmap icon(QIcon::fromTheme("system-run").pixmap(48));
     int w = icon.width();
     int h = icon.height();
 

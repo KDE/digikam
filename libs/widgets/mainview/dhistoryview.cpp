@@ -34,12 +34,12 @@
 #include <QTime>
 #include <QApplication>
 #include <QMenu>
+#include <QAction>
+#include <QIcon>
 
 // KDE includes
 
-#include <QAction>
 #include <klocalizedstring.h>
-#include <kiconloader.h>
 
 namespace Digikam
 {
@@ -56,28 +56,28 @@ public:
         switch (type)
         {
             case DHistoryView::StartingEntry:
-                setIcon(0, SmallIcon("system-run"));
+                setIcon(0, QIcon::fromTheme("system-run").pixmap(16));
                 break;
             case DHistoryView::SuccessEntry:
-                setIcon(0, SmallIcon("dialog-ok"));
+                setIcon(0, QIcon::fromTheme("dialog-ok").pixmap(16));
                 break;
             case DHistoryView::WarningEntry:
-                setIcon(0, SmallIcon("dialog-warning"));
+                setIcon(0, QIcon::fromTheme("dialog-warning").pixmap(16));
                 setTextColor(2, Qt::darkYellow);
                 break;
             case DHistoryView::ErrorEntry:
-                setIcon(0, SmallIcon("dialog-error"));
+                setIcon(0, QIcon::fromTheme("dialog-error").pixmap(16));
                 setTextColor(2, Qt::red);
                 break;
             case DHistoryView::ProgressEntry:
-                setIcon(0, SmallIcon("dialog-information"));
+                setIcon(0, QIcon::fromTheme("dialog-information").pixmap(16));
                 break;
             case DHistoryView::CancelEntry:
-                setIcon(0, SmallIcon("dialog-cancel"));
+                setIcon(0, QIcon::fromTheme("dialog-cancel").pixmap(16));
                 setTextColor(2, Qt::darkBlue);
                 break;
             default:
-                setIcon(0, SmallIcon("dialog-information"));
+                setIcon(0, QIcon::fromTheme("dialog-information").pixmap(16));
                 break;
         }
 
