@@ -30,12 +30,12 @@
 #include <QRadioButton>
 #include <QVBoxLayout>
 #include <QTabWidget>
+#include <QIcon>
 
 // KDE includes
 
 #include <kconfig.h>
 #include <ksharedconfig.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 
 // Libkdcraw includes
@@ -94,29 +94,29 @@ SetupRaw::SetupRaw(QWidget* const parent)
     // --------------------------------------------------------
 
     d->behaviorPanel = new QWidget;
-    QVBoxLayout* behaviorLayout = new QVBoxLayout;
+    QVBoxLayout* const behaviorLayout = new QVBoxLayout;
 
-    QLabel* rawExplanation = new QLabel;
+    QLabel* const rawExplanation = new QLabel;
     rawExplanation->setText(i18nc("@info",
-                                  "A <emphasis>raw image file</emphasis> contains minimally processed data "
-                                  "from the image sensor of a digital camera.<nl/>"
-                                  "Opening a raw file requires extensive data interpretation and processing."));
+                                  "<p>A <i>raw image file</i> contains minimally processed data "
+                                  "from the image sensor of a digital camera.</p>"
+                                  "<p>Opening a raw file requires extensive data interpretation and processing.</p>"));
     rawExplanation->setWordWrap(true);
-    QLabel* rawIcon     = new QLabel;
-    rawIcon->setPixmap(SmallIcon("camera-photo", KIconLoader::SizeLarge));
-    QHBoxLayout* header = new QHBoxLayout;
+    QLabel* const rawIcon        = new QLabel;
+    rawIcon->setPixmap(QIcon::fromTheme("camera-photo").pixmap(48));
+    QHBoxLayout* const header    = new QHBoxLayout;
     header->addWidget(rawIcon);
     header->addWidget(rawExplanation);
     header->setStretchFactor(rawExplanation, 10);
     header->addStretch(1);
 
-    QGroupBox* behaviorBox = new QGroupBox;
-    QGridLayout* boxLayout = new QGridLayout;
+    QGroupBox* const behaviorBox = new QGroupBox;
+    QGridLayout* const boxLayout = new QGridLayout;
 
-    QLabel* openIcon       = new QLabel;
-    openIcon->setPixmap(SmallIcon("document-open", KIconLoader::SizeMedium));
+    QLabel* const openIcon       = new QLabel;
+    openIcon->setPixmap(QIcon::fromTheme("document-open").pixmap(32));
 
-    QLabel* openIntro      = new QLabel(i18nc("@label", "Open raw files in the image editor"));
+    QLabel* const openIntro      = new QLabel(i18nc("@label", "Open raw files in the image editor"));
 
     d->openSimple  = new QRadioButton(i18nc("@option:radio Open raw files...",
                                             "Fast and simple, as 8 bit image"));
@@ -141,12 +141,12 @@ SetupRaw::SetupRaw(QWidget* const parent)
     // --------------------------------------------------------
 
     d->settingsPanel            = new QWidget;
-    QVBoxLayout* settingsLayout = new QVBoxLayout;
+    QVBoxLayout* const settingsLayout = new QVBoxLayout;
 
     d->dcrawSettings = new DcrawSettingsWidget(0, 0 /* no advanced settings shown */);
-    d->dcrawSettings->setItemIcon(0, SmallIcon("kdcraw"));
-    d->dcrawSettings->setItemIcon(1, SmallIcon("whitebalance"));
-    d->dcrawSettings->setItemIcon(2, SmallIcon("lensdistortion"));
+    d->dcrawSettings->setItemIcon(0, QIcon::fromTheme("kdcraw").pixmap(16));
+    d->dcrawSettings->setItemIcon(1, QIcon::fromTheme("whitebalance").pixmap(16));
+    d->dcrawSettings->setItemIcon(2, QIcon::fromTheme("lensdistortion").pixmap(16));
 
     settingsLayout->addWidget(d->dcrawSettings);
     d->settingsPanel->setLayout(settingsLayout);
