@@ -37,17 +37,17 @@
 #include <QFont>
 #include <QBoxLayout>
 #include <QFontMetrics>
+#include <QUrl>
+#include <QIcon>
 
 // KDE includes
 
-#include <QUrl>
 #include <klocalizedstring.h>
 #include <kio/global.h>
-#include <kiconloader.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "freespacetooltip.h"
 #include "applicationsettings.h"
 
@@ -142,11 +142,11 @@ void FreeSpaceWidget::setMode(FreeSpaceMode mode)
 
     if (d->mode == FreeSpaceWidget::AlbumLibrary)
     {
-        d->iconPix = SmallIcon("folder-image");
+        d->iconPix = QIcon::fromTheme("folder-image").pixmap(16);
     }
     else 
     {
-        d->iconPix = SmallIcon("camera-photo");
+        d->iconPix = QIcon::fromTheme("camera-photo").pixmap(16);
     }
 
     update();
@@ -299,6 +299,7 @@ void FreeSpaceWidget::paintEvent(QPaintEvent*)
         {
             barcol = QColor(240, 255, 62);   // Smooth Yellow.
         }
+
         if (peUsed > 95)
         {
             barcol = QColor(255, 62, 62);    // Smooth Red.

@@ -26,10 +26,10 @@
 // Qt includes
 
 #include <QAction>
+#include <QIcon>
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kservice.h>
@@ -63,7 +63,8 @@ public:
         ABCmenu(0),
         stdActionCollection(0),
         q(q)
-    {}
+    {
+    }
 
     QList<qlonglong>             selectedIds;
     QList<QUrl>                   selectedItems;
@@ -84,14 +85,14 @@ public:
 
     QAction* copyFromMainCollection(const char* name)
     {
-        QAction* mainAction = stdActionCollection->action(name);
+        QAction* const mainAction = stdActionCollection->action(name);
 
         if (!mainAction)
         {
             return 0;
         }
 
-        QAction* action = new QAction(mainAction->icon(), mainAction->text(), q);
+        QAction* const action = new QAction(mainAction->icon(), mainAction->text(), q);
         action->setToolTip(mainAction->toolTip());
         return action;
     }
@@ -119,7 +120,7 @@ ImportContextMenuHelper::~ImportContextMenuHelper()
 
 void ImportContextMenuHelper::addAction(const char* name, bool addDisabled)
 {
-    QAction* action = d->stdActionCollection->action(name);
+    QAction* const action = d->stdActionCollection->action(name);
     addAction(action, addDisabled);
 }
 
@@ -215,16 +216,16 @@ void ImportContextMenuHelper::addServicesMenu(const QList<QUrl>& selectedItems)
 
     if (!offers.isEmpty() && ImportUI::instance()->cameraUseUMSDriver())
     {
-        QMenu* servicesMenu    = new QMenu(d->parent);
+        QMenu* const servicesMenu    = new QMenu(d->parent);
         qDeleteAll(servicesMenu->actions());
 
-        QAction* serviceAction = servicesMenu->menuAction();
+        QAction* const serviceAction = servicesMenu->menuAction();
         serviceAction->setText(i18nc("@title:menu", "Open With"));
 
         foreach(KService::Ptr service, offers)
         {
-            QString name         = service->name().replace('&', "&&");
-            QAction* action      = servicesMenu->addAction(name);
+            QString name          = service->name().replace('&', "&&");
+            QAction* const action = servicesMenu->addAction(name);
             action->setIcon(QIcon::fromTheme(service->icon()));
             action->setData(service->name());
             d->servicesMap[name] = service;
@@ -240,7 +241,7 @@ void ImportContextMenuHelper::addServicesMenu(const QList<QUrl>& selectedItems)
     }
     else if (ImportUI::instance()->cameraUseUMSDriver())
     {
-        QAction* serviceAction = new QAction(i18nc("@title:menu", "Open With..."), this);
+        QAction* const serviceAction = new QAction(i18nc("@title:menu", "Open With..."), this);
         addAction(serviceAction);
 
         connect(serviceAction, SIGNAL(triggered()),
@@ -299,17 +300,17 @@ void ImportContextMenuHelper::addRotateMenu(itemIds& /*ids*/)
 {
 //    setSelectedIds(ids);
 
-//    QMenu* imageRotateMenu = new QMenu(i18n("Rotate"), d->parent);
+//    QMenu* const imageRotateMenu = new QMenu(i18n("Rotate"), d->parent);
 //    imageRotateMenu->setIcon(QIcon::fromTheme("object-rotate-right"));
 
-//    QAction* left = new QAction(this);
+//    QAction* const left = new QAction(this);
 //    left->setObjectName("rotate_ccw");
 //    left->setText(i18nc("rotate image left", "Left"));
 //    connect(left, SIGNAL(triggered(bool)),
 //            this, SLOT(slotRotate()));
 //    imageRotateMenu->addAction(left);
 
-//    QAction* right = new QAction(this);
+//    QAction* const right = new QAction(this);
 //    right->setObjectName("rotate_cw");
 //    right->setText(i18nc("rotate image right", "Right"));
 //    connect(right, SIGNAL(triggered(bool)),
@@ -336,9 +337,9 @@ void ImportContextMenuHelper::addAssignTagsMenu(itemIds& ids)
 {
     setSelectedIds(ids);
 
-    QMenu* assignTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::RECENTLYASSIGNED, d->parent);
+    QMenu* const assignTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::RECENTLYASSIGNED, d->parent);
     assignTagsPopup->menuAction()->setText(i18n("Assign Tag"));
-    assignTagsPopup->menuAction()->setIcon(SmallIcon("tag"));
+    assignTagsPopup->menuAction()->setIcon(QIcon::fromTheme("tag"));
     d->parent->addMenu(assignTagsPopup);
 
     connect(assignTagsPopup, SIGNAL(signalTagActivated(int)),
@@ -352,9 +353,9 @@ void ImportContextMenuHelper::addRemoveTagsMenu(itemIds& ids)
 {
     setSelectedIds(ids);
 
-    QMenu* removeTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::REMOVE, d->parent);
+    QMenu* const removeTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::REMOVE, d->parent);
     removeTagsPopup->menuAction()->setText(i18n("Remove Tag"));
-    removeTagsPopup->menuAction()->setIcon(SmallIcon("tag"));
+    removeTagsPopup->menuAction()->setIcon(QIcon::fromTheme("tag"));
     d->parent->addMenu(removeTagsPopup);
 
     connect(removeTagsPopup, SIGNAL(signalTagActivated(int)),
@@ -363,10 +364,10 @@ void ImportContextMenuHelper::addRemoveTagsMenu(itemIds& ids)
 
 void ImportContextMenuHelper::addLabelsAction()
 {
-    QMenu* menuLabels           = new QMenu(i18n("Assign Labels"), d->parent);
-    PickLabelMenuAction* pmenu  = new PickLabelMenuAction(d->parent);
-    ColorLabelMenuAction* cmenu = new ColorLabelMenuAction(d->parent);
-    RatingMenuAction* rmenu     = new RatingMenuAction(d->parent);
+    QMenu* const menuLabels           = new QMenu(i18n("Assign Labels"), d->parent);
+    PickLabelMenuAction* const pmenu  = new PickLabelMenuAction(d->parent);
+    ColorLabelMenuAction* const cmenu = new ColorLabelMenuAction(d->parent);
+    RatingMenuAction* const rmenu     = new RatingMenuAction(d->parent);
     menuLabels->addAction(pmenu);
     menuLabels->addAction(cmenu);
     menuLabels->addAction(rmenu);
@@ -395,7 +396,7 @@ void ImportContextMenuHelper::setImportFilterModel(ImportFilterModel* model)
 
 QAction* ImportContextMenuHelper::exec(const QPoint& pos, QAction* at)
 {
-    QAction* choice = d->parent->exec(pos, at);
+    QAction* const choice = d->parent->exec(pos, at);
 
     if (choice)
     {

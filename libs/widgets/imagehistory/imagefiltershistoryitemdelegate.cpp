@@ -30,16 +30,15 @@
 #include <QGradient>
 #include <QLinearGradient>
 #include <QApplication>
+#include <QIcon>
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocalizedstring.h>
-#include "digikam_debug.h"
-#include <kcolorscheme.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "dimgfiltermanager.h"
 
 namespace Digikam
@@ -111,8 +110,10 @@ void ImageFiltersHistoryItemDelegate::paint(QPainter* painter, const QStyleOptio
         painter->drawRect(option.rect);
         painter->setRenderHint(QPainter::Antialiasing, true);
 
-        QPixmap icon = SmallIcon(index.data(Qt::DecorationRole).toString(), KIconLoader::SizeSmallMedium,
-                                 (flags & Qt::ItemIsEnabled) ? KIconLoader::DefaultState : KIconLoader::DisabledState);
+        QPixmap icon = QIcon::fromTheme(index.data(Qt::DecorationRole).toString()).pixmap(22,
+                                        (flags & Qt::ItemIsEnabled) ? QIcon::Normal
+                                                                    : QIcon::Disabled
+                                       );
         painter->drawPixmap(option.rect.left()+4, option.rect.top()+5, icon);
     }
 
@@ -138,7 +139,7 @@ void ImageFiltersHistoryItemDelegate::paint(QPainter* painter, const QStyleOptio
     {
         //infoIcon.setToolTip(i18n("This filter's name is unknown, so you see only its identifier"));    //FIXME: better string?
         painter->drawPixmap(option.rect.right() - 22, option.rect.top() + 8,
-                            SmallIcon("dialog-information", KIconLoader::SizeSmall));
+                            QIcon::fromTheme("dialog-information").pixmap(16));
         painter->drawText(textRect, Qt::AlignVCenter, index.data(Qt::DecorationRole).toString());
     }
 

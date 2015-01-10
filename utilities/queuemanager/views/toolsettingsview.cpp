@@ -31,12 +31,12 @@
 #include <QPushButton>
 #include <QScrollArea>
 #include <QString>
+#include <QIcon>
 #include <QApplication>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kiconloader.h>
 
 // Libkdcraw includes
 
@@ -110,7 +110,7 @@ ToolSettingsView::ToolSettingsView(QWidget* const parent)
     d->settingsViewTitle->setFont(font);
 
     d->settingsViewReset = new QPushButton();
-    d->settingsViewReset->setIcon(SmallIcon("document-revert"));
+    d->settingsViewReset->setIcon(QIcon::fromTheme("document-revert"));
     d->settingsViewReset->setToolTip(i18n("Reset current tool settings to default values."));
 
     QString frameStyle = QString("QFrame {"
@@ -243,7 +243,7 @@ void ToolSettingsView::slotToolSelected(const BatchToolSet& set)
 
     if (d->tool)
     {
-        d->settingsViewIcon->setPixmap(SmallIcon(d->tool->toolIconName()).scaled(QSize(22, 22)));
+        d->settingsViewIcon->setPixmap(QIcon::fromTheme(d->tool->toolIconName()).pixmap(22));
         d->settingsViewTitle->setText(d->tool->toolTitle());
         d->tool->setSettings(d->set.settings);
 

@@ -59,6 +59,7 @@
 #include <QAction>
 #include <QMenuBar>
 #include <QMenu>
+#include <QIcon>
 
 // KDE includes
 
@@ -72,7 +73,6 @@
 #include <kfilefiltercombo.h>
 #include <kfileitemdelegate.h>
 #include <kglobalsettings.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kopenwithdialog.h>
@@ -1324,9 +1324,9 @@ public:
         // -- Icon and Header --
 
         QLabel* const warningIcon = new QLabel;
-        warningIcon->setPixmap(SmallIcon("dialog-warning", KIconLoader::SizeHuge));
+        warningIcon->setPixmap(QIcon::fromTheme("dialog-warning").pixmap(64));
         QLabel* const editIcon = new QLabel;
-        editIcon->setPixmap(SmallIcon("document-edit", iconSize()));
+        editIcon->setPixmap(QIcon::fromTheme("document-edit").pixmap(iconSize()));
         QLabel* const question = new QLabel;
         question->setText(i18nc("@label", "The current image has been changed.<nl/>"
                                 "Do you wish to save your changes?"));
