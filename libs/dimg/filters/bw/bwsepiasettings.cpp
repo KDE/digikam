@@ -37,19 +37,17 @@
 #include <QUrl>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QIcon>
 
 // KDE includes
 
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
 
-#include <kiconloader.h>
-
 // Libkdcraw includes
 
 #include <rexpanderbox.h>
 #include <rnuminput.h>
-#include <libkdcraw_version.h>
 #include <rwidgetutils.h>
 
 // Local includes
@@ -127,8 +125,8 @@ const QString BWSepiaSettings::Private::configStrengthAdjustmentEntry("StrengthA
 const QString BWSepiaSettings::Private::configCurveEntry("BWSepiaCurve");
 
 PreviewListItem* BWSepiaSettings::Private::addItem(PreviewList* const list,
-                                                               const QString& name,
-                                                               BWSepiaContainer::BlackWhiteConversionType type)
+                                                   const QString& name,
+                                                   BWSepiaContainer::BlackWhiteConversionType type)
 {
     BWSepiaFilter* const filter = new BWSepiaFilter(&thumbImage, 0, BWSepiaContainer(type));
     PreviewListItem* const item = list->addItem(filter, name, type);
@@ -147,10 +145,10 @@ BWSepiaSettings::BWSepiaSettings(QWidget* const parent, DImg* const img)
     }
     else
     {
-        d->thumbImage = DImg(DesktopIcon("image-x-generic", 128).toImage());
+        d->thumbImage = DImg(QIcon::fromTheme("image-x-generic").pixmap(128).toImage());
     }
 
-    QGridLayout* grid = new QGridLayout(parent);
+    QGridLayout* const grid = new QGridLayout(parent);
 
     d->tab = new RExpanderBoxExclusive(this);
 
@@ -374,13 +372,13 @@ BWSepiaSettings::BWSepiaSettings(QWidget* const parent, DImg* const img)
     // -------------------------------------------------------------
 
     // Some new icons may be needed : a film roll, a lens filter and ?
-    d->tab->addItem(d->bwFilm, SmallIcon("filmgrain"),
+    d->tab->addItem(d->bwFilm, QIcon::fromTheme("filmgrain").pixmap(16),
                     i18n("Film"), QString("Film"), true);
-    d->tab->addItem(vbox, SmallIcon("lensautofix"),
+    d->tab->addItem(vbox, QIcon::fromTheme("lensautofix").pixmap(16),
                     i18n("Lens Filters"), QString("Lens Filters"), false);
-    d->tab->addItem(d->bwTone, SmallIcon("fill-color"),
+    d->tab->addItem(d->bwTone, QIcon::fromTheme("fill-color").pixmap(16),
                     i18n("Tone"), QString("Tone"), false);
-    d->tab->addItem(lumBox, SmallIcon("adjustcurves"),
+    d->tab->addItem(lumBox, QIcon::fromTheme("adjustcurves").pixmap(16),
                     i18n("Luminosity"), QString("Luminosity"), false);
     d->tab->addStretch();
 
@@ -503,11 +501,7 @@ void BWSepiaSettings::readSettings(KConfigGroup& group)
     BWSepiaContainer prm;
     BWSepiaContainer defaultPrm = defaultSettings();
 
-#if KDCRAW_VERSION >= 0x020000
     d->tab->readSettings(group);
-#else
-    d->tab->readSettings();
-#endif
 
     prm.filmType        = group.readEntry(d->configBWFilmEntry,             defaultPrm.filmType);
     prm.filterType      = group.readEntry(d->configBWFilterEntry,           defaultPrm.filterType);
@@ -525,11 +519,7 @@ void BWSepiaSettings::writeSettings(KConfigGroup& group)
 {
     BWSepiaContainer prm = settings();
 
-#if KDCRAW_VERSION >= 0x020000
     d->tab->writeSettings(group);
-#else
-    d->tab->writeSettings();
-#endif
 
     group.writeEntry(d->configBWFilmEntry,             prm.filmType);
     group.writeEntry(d->configBWFilterEntry,           prm.filterType);

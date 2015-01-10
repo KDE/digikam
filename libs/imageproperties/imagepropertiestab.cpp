@@ -36,13 +36,12 @@
 #include <QVariant>
 #include <QApplication>
 #include <QCollator>
+#include <QIcon>
 
 // KDE includes
 
 #include <klocalizedstring.h>
 #include <klocale.h>
-
-#include <kiconloader.h>
 
 // Local includes
 
@@ -262,7 +261,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay1->setColumnStretch(1, 10);
 
     insertItem(ImagePropertiesTab::Private::FileProperties,
-               w1, SmallIcon("dialog-information"),
+               w1, QIcon::fromTheme("dialog-information").pixmap(16),
                i18n("File Properties"), QString("FileProperties"), true);
 
     // --------------------------------------------------
@@ -297,7 +296,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay2->setColumnStretch(1, 10);
 
     insertItem(ImagePropertiesTab::Private::ImageProperties,
-               w2, SmallIcon("image-x-generic"),
+               w2, QIcon::fromTheme("image-x-generic").pixmap(16),
                i18n("Item Properties"), QString("ItemProperties"), true);
 
     // --------------------------------------------------
@@ -356,7 +355,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay3->setSpacing(0);
 
     insertItem(ImagePropertiesTab::Private::PhotoProperties,
-               w3, SmallIcon("camera-photo"),
+               w3, QIcon::fromTheme("camera-photo").pixmap(16),
                i18n("Photograph Properties"), QString("PhotographProperties"), true);
 
     // --------------------------------------------------
@@ -399,7 +398,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay4->setColumnStretch(1, 10);
 
     insertItem(ImagePropertiesTab::Private::VideoProperties,
-               w4, SmallIcon("video-x-generic"),
+               w4, QIcon::fromTheme("video-x-generic").pixmap(16),
                i18n("Video Properties"), QString("VideoProperties"), true);
 
     // --------------------------------------------------
@@ -435,7 +434,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay5->setColumnStretch(1, 10);
 
     insertItem(ImagePropertiesTab::Private::digiKamProperties,
-               w5, SmallIcon("imagecomment"),
+               w5, QIcon::fromTheme("imagecomment").pixmap(16),
                i18n("digiKam Properties"), QString("DigikamProperties"), true);
 
     // --------------------------------------------------
@@ -730,6 +729,7 @@ void ImagePropertiesTab::setVideoDuration(const QString& str)
     QString durationString = str;
     bool ok;
     const double durationDouble = str.toDouble(&ok);
+
     if (ok)
     {
         const QTime durationTime = QTime().addMSecs(durationDouble);
@@ -745,6 +745,7 @@ void ImagePropertiesTab::setVideoFrameRate(const QString& str)
     QString frameRateString = str;
     bool ok;
     const double frameRateDouble = str.toDouble(&ok);
+
     if (ok)
     {
         frameRateString = KLocale::global()->formatNumber(frameRateDouble);

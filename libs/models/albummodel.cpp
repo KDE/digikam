@@ -23,11 +23,13 @@
 
 #include "albummodel.h"
 
+// Qt includes
+
+#include <QIcon>
+
 // KDE includes
 
 #include <kcalendarsystem.h>
-
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -234,10 +236,10 @@ Album* SearchModel::albumForId(int id) const
 
 void SearchModel::albumSettingsChanged()
 {
-    setPixmapForMapSearches(SmallIcon("applications-internet", ApplicationSettings::instance()->getTreeViewIconSize()));
-    setPixmapForHaarSearches(SmallIcon("tools-wizard",         ApplicationSettings::instance()->getTreeViewIconSize()));
-    setPixmapForNormalSearches(SmallIcon("edit-find",          ApplicationSettings::instance()->getTreeViewIconSize()));
-    setPixmapForTimelineSearches(SmallIcon("chronometer",      ApplicationSettings::instance()->getTreeViewIconSize()));
+    setPixmapForMapSearches(QIcon::fromTheme("applications-internet").pixmap(ApplicationSettings::instance()->getTreeViewIconSize()));
+    setPixmapForHaarSearches(QIcon::fromTheme("tools-wizard").pixmap(ApplicationSettings::instance()->getTreeViewIconSize()));
+    setPixmapForNormalSearches(QIcon::fromTheme("edit-find").pixmap(ApplicationSettings::instance()->getTreeViewIconSize()));
+    setPixmapForTimelineSearches(QIcon::fromTheme("chronometer").pixmap(ApplicationSettings::instance()->getTreeViewIconSize()));
 }
 
 // ------------------------------------------------------------------
