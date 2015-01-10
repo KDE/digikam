@@ -213,7 +213,7 @@ bool TagsActionMngr::createRatingActionShortcut(KActionCollection* const ac, int
 /*
         action->forgetGlobalShortcut();
 */
-        action->setIcon(RatingWidget::buildIcon(rating, KIconLoader::SizeSmallMedium));
+        action->setIcon(RatingWidget::buildIcon(rating, 32));
         action->setData(rating);
 
         connect(action, SIGNAL(triggered()),
@@ -237,7 +237,7 @@ bool TagsActionMngr::createPickLabelActionShortcut(KActionCollection* const ac, 
 /*
         action->forgetGlobalShortcut();
 */
-        action->setIcon(PickLabelWidget::buildIcon((PickLabel)pickId, KIconLoader::SizeSmallMedium));
+        action->setIcon(PickLabelWidget::buildIcon((PickLabel)pickId, 32));
         action->setData(pickId);
 
         connect(action, SIGNAL(triggered()),
@@ -261,7 +261,7 @@ bool TagsActionMngr::createColorLabelActionShortcut(KActionCollection* const ac,
 /*
         action->forgetGlobalShortcut();
 */
-        action->setIcon(ColorLabelWidget::buildIcon((ColorLabel)colorId, KIconLoader::SizeSmallMedium));
+        action->setIcon(ColorLabelWidget::buildIcon((ColorLabel)colorId, 32));
         action->setData(colorId);
 
         connect(action, SIGNAL(triggered()),

@@ -32,7 +32,7 @@
 // KDE includes
 
 #include <kconfiggroup.h>
-#include <kiconloader.h>
+
 
 // Local includes
 

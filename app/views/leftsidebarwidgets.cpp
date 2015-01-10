@@ -1385,7 +1385,7 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* const parent, TagModel* const 
     d->rescanButton->setText(i18n("Scan collection for faces"));
 
     d->personIcon     = new QLabel;
-    d->personIcon->setPixmap(KIconLoader::global()->loadIcon("edit-image-face-show", KIconLoader::NoGroup, 48));
+    d->personIcon->setPixmap(QIcon::fromTheme("edit-image-face-show").pixmap(48));
 
     d->textLabel      = new QLabel(i18n("People Tags"));
 

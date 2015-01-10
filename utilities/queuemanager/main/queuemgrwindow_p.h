@@ -32,7 +32,7 @@
 // KDE includes
 
 #include <QAction>
-#include <kiconloader.h>
+
 #include <kselectaction.h>
 #include <ktoggleaction.h>
 
