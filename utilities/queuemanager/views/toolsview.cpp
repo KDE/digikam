@@ -27,11 +27,10 @@
 
 #include <QList>
 #include <QWidget>
+#include <QIcon>
 
 // KDE includes
 
-
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -65,6 +64,7 @@ ToolsView::ToolsView(QWidget* const parent)
     : QTabWidget(parent), d(new Private)
 {
     setTabsClosable(false);
+
     // --------------------------------------------------------
 
     d->baseTools = new ToolsListView(this);
@@ -76,19 +76,19 @@ ToolsView::ToolsView(QWidget* const parent)
     new ToolListViewGroup(d->baseTools, BatchTool::FiltersTool);
     new ToolListViewGroup(d->baseTools, BatchTool::ConvertTool);
     new ToolListViewGroup(d->baseTools, BatchTool::MetadataTool);
-    insertTab(TOOLS, d->baseTools, SmallIcon("digikam"), i18n("Base Tools"));
+    insertTab(TOOLS, d->baseTools, QIcon::fromTheme("digikam").pixmap(16), i18n("Base Tools"));
 
     // --------------------------------------------------------
 
     d->workflow    = new WorkflowList(this);
     d->workflow->setWhatsThis(i18n("This is the list of your customized workflow settings."));
-    insertTab(WORKFLOW, d->workflow, SmallIcon("step"), i18n("Workflow"));
+    insertTab(WORKFLOW, d->workflow, QIcon::fromTheme("step").pixmap(16), i18n("Workflow"));
 
     // --------------------------------------------------------
 
     d->historyView = new DHistoryView(this);
     d->historyView->setWhatsThis(i18n("You can see below the history of last batch operations processed."));
-    insertTab(HISTORY, d->historyView, SmallIcon("view-history"), i18n("History"));
+    insertTab(HISTORY, d->historyView, QIcon::fromTheme("view-history").pixmap(16), i18n("History"));
 
     // --------------------------------------------------------
 

@@ -30,10 +30,7 @@
 // Qt includes
 
 #include <QAction>
-
-// KDE includes
-
-#include <kiconloader.h>
+#include <QIcon>
 
 // Local includes
 
@@ -63,9 +60,9 @@ NormalSearchTreeView::NormalSearchTreeView(QWidget* const parent,
       d(new Private)
 {
 
-    d->newAction  = new QAction(SmallIcon("document-new"),
+    d->newAction  = new QAction(QIcon::fromTheme("document-new").pixmap(16),
                                i18nc("Create new search", "New..."), this);
-    d->editAction = new QAction(SmallIcon("edit-find"),
+    d->editAction = new QAction(QIcon::fromTheme("edit-find").pixmap(16),
                                 i18nc("Edit selected search", "Edit..."), this);
 }
 
@@ -81,7 +78,7 @@ void NormalSearchTreeView::addCustomContextMenuActions(ContextMenuHelper& cmh, A
 
     EditableSearchTreeView::addCustomContextMenuActions(cmh, album);
 
-    SAlbum* salbum = dynamic_cast<SAlbum*>(album);
+    SAlbum* const salbum = dynamic_cast<SAlbum*>(album);
 
     d->editAction->setEnabled(salbum);
     cmh.addAction(d->editAction);
@@ -89,8 +86,8 @@ void NormalSearchTreeView::addCustomContextMenuActions(ContextMenuHelper& cmh, A
 
 void NormalSearchTreeView::handleCustomContextMenuAction(QAction* action, AlbumPointer<Album> album)
 {
-    Album* a       = album;
-    SAlbum* salbum = dynamic_cast<SAlbum*>(a);
+    Album* a             = album;
+    SAlbum* const salbum = dynamic_cast<SAlbum*>(a);
 
     if (action == d->newAction && salbum)
     {

@@ -43,10 +43,10 @@
 #include <QTreeView>
 #include <QComboBox>
 #include <QLineEdit>
+#include <QIcon>
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
 
@@ -114,12 +114,15 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
             QStringList Categories = settings->getAlbumCategoryNames();
             int size = Categories.size();
             QStringList categorychoices;
+
             for(int i=0; i<size; i++)
             {
                 categorychoices << Categories.at(i) << Categories.at(i);
             }
+
             field->setChoice(categorychoices);
         }
+
         return field;
     }
     else if (name == "tagid")
@@ -304,7 +307,6 @@ SearchField* SearchField::createField(const QString& name, SearchFieldGroup* con
         field->setChoice(map);
         return field;
     }
-
     else if (name == "make")
     {
         //string
@@ -744,11 +746,11 @@ void SearchField::setup(QGridLayout* const layout, int line)
     // setup the clear button that appears dynamically
     if (qApp->isLeftToRight())
     {
-        m_clearButton->setPixmap(SmallIcon("edit-clear-locationbar-rtl", 0, KIconLoader::DefaultState));
+        m_clearButton->setPixmap(QIcon::fromTheme("edit-clear-locationbar-rtl").pixmap(16));
     }
     else
     {
-        m_clearButton->setPixmap(SmallIcon("edit-clear-locationbar-ltr", 0, KIconLoader::DefaultState));
+        m_clearButton->setPixmap(QIcon::fromTheme("edit-clear-locationbar-ltr").pixmap(16));
     }
 
     // Important: Don't cause re-layouting when button gets hidden/shown!

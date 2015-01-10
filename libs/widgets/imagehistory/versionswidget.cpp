@@ -32,17 +32,17 @@
 #include <QPaintEvent>
 #include <QToolButton>
 #include <QTreeView>
+#include <QUrl>
+#include <QIcon>
 
 // KDE includes
 
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
-#include <kiconloader.h>
-#include <QUrl>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "applicationsettings.h"
 #include "dimagehistory.h"
 #include "imagehistorygraphmodel.h"
@@ -96,19 +96,19 @@ VersionsWidget::VersionsWidget(QWidget* const parent)
 
     d->viewButtonGroup        = new QButtonGroup(this);
     d->listModeButton         = new QToolButton;
-    d->listModeButton->setIcon(SmallIcon("view-list-icons"));
+    d->listModeButton->setIcon(QIcon::fromTheme("view-list-icons").pixmap(16));
     d->listModeButton->setCheckable(true);
     d->listModeButton->setToolTip(i18n("Show available versions in a list"));
     d->viewButtonGroup->addButton(d->listModeButton, ImageHistoryGraphModel::ImagesListMode);
 
     d->treeModeButton         = new QToolButton;
-    d->treeModeButton->setIcon(SmallIcon("view-list-tree"));
+    d->treeModeButton->setIcon(QIcon::fromTheme("view-list-tree").pixmap(16));
     d->treeModeButton->setCheckable(true);
     d->treeModeButton->setToolTip(i18n("Show available versions as a tree"));
     d->viewButtonGroup->addButton(d->treeModeButton, ImageHistoryGraphModel::ImagesTreeMode);
 
     d->combinedModeButton     = new QToolButton;
-    d->combinedModeButton->setIcon(SmallIcon("view-list-details"));
+    d->combinedModeButton->setIcon(QIcon::fromTheme("view-list-details").pixmap(16));
     d->combinedModeButton->setCheckable(true);
     d->combinedModeButton->setToolTip(i18n("Show available versions and the applied filters in a combined list"));
     d->viewButtonGroup->addButton(d->combinedModeButton, ImageHistoryGraphModel::CombinedTreeMode);
