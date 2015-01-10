@@ -39,7 +39,6 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 
 // Libkdcraw includes
@@ -343,13 +342,13 @@ void AdvancedRenameWidget::setupWidgets()
     // --------------------------------------------------------
 
     d->tooltipToggleButton = new QToolButton;
-    d->tooltipToggleButton->setIcon(SmallIcon("dialog-information"));
+    d->tooltipToggleButton->setIcon(QIcon::fromTheme("dialog-information").pixmap(16));
     d->tooltipToggleButton->setToolTip(i18n("Show a list of all available options"));
 
     // --------------------------------------------------------
 
     QString modifiersStr     = i18n("Modifiers");
-    QPixmap modifiersIcon    = SmallIcon("document-edit");
+    QPixmap modifiersIcon    = QIcon::fromTheme("document-edit").pixmap(16);
     QString modifiersTooltip = i18n("<p>Add a modifier to a renaming option. "
                                     "To activate this button, place the cursor behind a renaming option "
                                     "or an already assigned modifier.</p>");
@@ -384,7 +383,7 @@ void AdvancedRenameWidget::setupWidgets()
     {
         d->optionsButton = new QPushButton;
         d->optionsButton->setText(i18n("Options"));
-        d->optionsButton->setIcon(SmallIcon("configure"));
+        d->optionsButton->setIcon(QIcon::fromTheme("configure").pixmap(16));
         d->optionsButton->setToolTip(i18n("<p>Add renaming options to the parse string.</p>"));
 
         // --------------------------------------------------------

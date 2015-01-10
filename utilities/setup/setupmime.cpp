@@ -34,12 +34,12 @@
 #include <QApplication>
 #include <QStyle>
 #include <QLineEdit>
+#include <QIcon>
+#include <QMessageBox>
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 
 // Libkdcraw includes
 
@@ -110,7 +110,7 @@ SetupMime::SetupMime(QWidget* const parent)
     QGridLayout* const grid1            = new QGridLayout(imageFileFilterBox);
 
     QLabel* const logoLabel1 = new QLabel(imageFileFilterBox);
-    logoLabel1->setPixmap(DesktopIcon("image-jp2"));
+    logoLabel1->setPixmap(QIcon::fromTheme("image-jp2").pixmap(48));
 
     d->imageFileFilterLabel  = new QLabel(imageFileFilterBox);
     d->imageFileFilterLabel->setText(i18n("Additional &image file extensions (<a href='image'>Currently-supported types</a>):"));
@@ -130,7 +130,7 @@ SetupMime::SetupMime(QWidget* const parent)
     hbox1->setStretchFactor(d->imageFileFilterEdit, 10);
 
     d->revertImageFileFilterBtn = new QToolButton(hbox1);
-    d->revertImageFileFilterBtn->setIcon(SmallIcon("view-refresh"));
+    d->revertImageFileFilterBtn->setIcon(QIcon::fromTheme("view-refresh").pixmap(16));
     d->revertImageFileFilterBtn->setToolTip(i18n("Revert to default settings"));
 
     grid1->addWidget(logoLabel1,              0, 0, 2, 1);
@@ -146,7 +146,7 @@ SetupMime::SetupMime(QWidget* const parent)
     QGridLayout* const grid2            = new QGridLayout(movieFileFilterBox);
 
     QLabel* const logoLabel2 = new QLabel(movieFileFilterBox);
-    logoLabel2->setPixmap(DesktopIcon("video-mpeg"));
+    logoLabel2->setPixmap(QIcon::fromTheme("video-mpeg").pixmap(48));
 
     d->movieFileFilterLabel = new QLabel(movieFileFilterBox);
     d->movieFileFilterLabel->setText(i18n("Additional &movie file extensions (<a href='video'>Currently-supported types</a>):"));
@@ -168,7 +168,7 @@ SetupMime::SetupMime(QWidget* const parent)
     hbox2->setStretchFactor(d->movieFileFilterEdit, 10);
 
     d->revertMovieFileFilterBtn = new QToolButton(hbox2);
-    d->revertMovieFileFilterBtn->setIcon(SmallIcon("view-refresh"));
+    d->revertMovieFileFilterBtn->setIcon(QIcon::fromTheme("view-refresh").pixmap(16));
     d->revertMovieFileFilterBtn->setToolTip(i18n("Revert to default settings"));
 
     grid2->addWidget(logoLabel2,                0, 0, 2, 1);
@@ -184,7 +184,7 @@ SetupMime::SetupMime(QWidget* const parent)
     QGridLayout* const grid3            = new QGridLayout(audioFileFilterBox);
 
     QLabel* const logoLabel3 = new QLabel(audioFileFilterBox);
-    logoLabel3->setPixmap(DesktopIcon("audio-basic"));
+    logoLabel3->setPixmap(QIcon::fromTheme("audio-basic").pixmap(48));
 
     d->audioFileFilterLabel = new QLabel(audioFileFilterBox);
     d->audioFileFilterLabel->setText(i18n("Additional &audio file extensions (<a href='audio'>Currently-supported types</a>):"));
@@ -206,7 +206,7 @@ SetupMime::SetupMime(QWidget* const parent)
     hbox3->setStretchFactor(d->audioFileFilterEdit, 10);
 
     d->revertAudioFileFilterBtn = new QToolButton(hbox3);
-    d->revertAudioFileFilterBtn->setIcon(SmallIcon("view-refresh"));
+    d->revertAudioFileFilterBtn->setIcon(QIcon::fromTheme("view-refresh").pixmap(16));
     d->revertAudioFileFilterBtn->setToolTip(i18n("Revert to default settings"));
 
     grid3->addWidget(logoLabel3,              0, 0, 2, 1);
@@ -277,17 +277,17 @@ void SetupMime::applySettings()
 
     if (!removedImageFormats.isEmpty())
     {
-        int result = KMessageBox::warningYesNo(this,
-                                               i18n("<p>You have chosen to remove the following image formats "
-                                                    "from the list of supported formats: <b>%1</b>.</p>"
-                                                    "<p>These are very common formats. If you have images in your collection "
-                                                    "with these formats, they will be removed from the database and you will "
-                                                    "lose all information about them, including rating and tags.</p>"
-                                                    "<p>Are you sure you want to apply your changes and lose the support for these formats?</p>",
-                                                    removedImageFormats.join(" "))
+        int result = QMessageBox::warning(this, qApp->applicationName(),
+                                          i18n("<p>You have chosen to remove the following image formats "
+                                               "from the list of supported formats: <b>%1</b>.</p>"
+                                               "<p>These are very common formats. If you have images in your collection "
+                                               "with these formats, they will be removed from the database and you will "
+                                               "lose all information about them, including rating and tags.</p>"
+                                               "<p>Are you sure you want to apply your changes and lose the support for these formats?</p>",
+                                               removedImageFormats.join(" "))
                                               );
 
-        if (result != KMessageBox::Yes)
+        if (result != QMessageBox::Yes)
         {
             return;
         }

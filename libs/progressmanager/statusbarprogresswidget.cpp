@@ -36,11 +36,11 @@
 #include <QPushButton>
 #include <QStackedWidget>
 #include <QTimer>
+#include <QIcon>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kiconloader.h>
 
 // Local includes
 
@@ -108,7 +108,7 @@ StatusbarProgressWidget::StatusbarProgressWidget(ProgressView* const progressVie
 
     d->pButton        = new QPushButton(this);
     d->pButton->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
-    QPixmap smallIcon = SmallIcon("go-up");
+    QPixmap smallIcon = QIcon::fromTheme("go-up").pixmap(16);
     d->pButton->setIcon(smallIcon);
     d->box->addWidget(d->pButton);
     d->stack          = new QStackedWidget(this);
@@ -361,13 +361,13 @@ void StatusbarProgressWidget::slotProgressViewVisible(bool b)
     // Update the hide/show button when the detailed one is shown/hidden
     if (b)
     {
-        d->pButton->setIcon(SmallIcon("go-down"));
+        d->pButton->setIcon(QIcon::fromTheme("go-down").pixmap(16));
         d->pButton->setToolTip(i18n("Hide detailed progress window"));
         setMode();
     }
     else
     {
-        d->pButton->setIcon(SmallIcon("go-up"));
+        d->pButton->setIcon(QIcon::fromTheme("go-up").pixmap(16));
         d->pButton->setToolTip(i18n("Show detailed progress window"));
     }
 }

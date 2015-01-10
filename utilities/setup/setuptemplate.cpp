@@ -32,14 +32,14 @@
 #include <QApplication>
 #include <QStyle>
 #include <QLineEdit>
+#include <QIcon>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <kconfiggroup.h>
-#include <kglobalsettings.h>
+#include <ksharedconfig.h>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
-#include <kiconloader.h>
 
 // Libkexiv2 includes
 
@@ -93,7 +93,7 @@ SetupTemplate::SetupTemplate(QWidget* const parent)
     // --------------------------------------------------------
 
     QLabel* const label0 = new QLabel(i18n("Template Title:"), panel);
-    d->titleEdit   = new QLineEdit(panel);
+    d->titleEdit         = new QLineEdit(panel);
     d->titleEdit->setClearButtonEnabled(true);
     d->titleEdit->setPlaceholderText(i18n("Enter the metadata template title here."));
     d->titleEdit->setWhatsThis(i18n("<p>Enter the metadata template title here. This title will be "
@@ -124,11 +124,11 @@ SetupTemplate::SetupTemplate(QWidget* const parent)
     d->repButton = new QPushButton(panel);
 
     d->addButton->setText(i18n("&Add..."));
-    d->addButton->setIcon(SmallIcon("list-add"));
+    d->addButton->setIcon(QIcon::fromTheme("list-add").pixmap(16));
     d->delButton->setText(i18n("&Remove"));
-    d->delButton->setIcon(SmallIcon("list-remove"));
+    d->delButton->setIcon(QIcon::fromTheme("list-remove").pixmap(16));
     d->repButton->setText(i18n("&Replace..."));
-    d->repButton->setIcon(SmallIcon("view-refresh"));
+    d->repButton->setIcon(QIcon::fromTheme("view-refresh").pixmap(16));
     d->delButton->setEnabled(false);
     d->repButton->setEnabled(false);
 
@@ -241,13 +241,13 @@ void SetupTemplate::slotAddTemplate()
 
     if (title.isEmpty())
     {
-        KMessageBox::error(this, i18n("Cannot register new metadata template without title."));
+        QMessageBox::critical(this, qApp->applicationName(), i18n("Cannot register new metadata template without title."));
         return;
     }
 
     if (d->listView->find(title))
     {
-        KMessageBox::error(this, i18n("A metadata template named '%1' already exists.", title));
+        QMessageBox::critical(this, qApp->applicationName(), i18n("A metadata template named '%1' already exists.", title));
         return;
     }
 
@@ -270,7 +270,7 @@ void SetupTemplate::slotRepTemplate()
 
     if (title.isEmpty())
     {
-        KMessageBox::error(this, i18n("Cannot register new metadata template without title."));
+        QMessageBox::critical(this, qApp->applicationName(), i18n("Cannot register new metadata template without title."));
         return;
     }
 

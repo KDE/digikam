@@ -35,9 +35,7 @@
 // KDE includes
 
 #include <kconfig.h>
-
 #include <klocalizedstring.h>
-#include <kiconloader.h>
 #include <kurllabel.h>
 #include <kurlrequester.h>
 
@@ -151,7 +149,7 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
     hlay1->setStretchFactor(hspace1, 10);
 
     QLabel* const workIcon1 = new QLabel(hlay1);
-    workIcon1->setPixmap(SmallIcon("flag-red"));
+    workIcon1->setPixmap(QIcon::fromTheme("flag-red").pixmap(16));
 
     // ------------------------------------------------------------------------------
 
@@ -164,7 +162,7 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
     hlay2->setStretchFactor(hspace2, 10);
 
     QLabel* const workIcon2 = new QLabel(hlay2);
-    workIcon2->setPixmap(SmallIcon("flag-yellow"));
+    workIcon2->setPixmap(QIcon::fromTheme("flag-yellow").pixmap(16));
 
     // ------------------------------------------------------------------------------
 
@@ -177,7 +175,7 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
     hlay3->setStretchFactor(hspace3, 10);
 
     QLabel* const workIcon3 = new QLabel(hlay3);
-    workIcon3->setPixmap(SmallIcon("flag-green"));
+    workIcon3->setPixmap(QIcon::fromTheme("flag-green").pixmap(16));
 
     // ------------------------------------------------------------------------------
 

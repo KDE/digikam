@@ -40,13 +40,12 @@
 #include <QLineEdit>
 #include <QUrl>
 #include <QListWidget>
+#include <QIcon>
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
-#include <kpagedialog.h>
+//#include <kpagedialog.h>
 
 // Local includes
 
@@ -103,9 +102,9 @@ SetupCategory::SetupCategory(QWidget* const parent)
     d->delCategoryButton = new QPushButton(i18n("&Remove"), panel);
     d->repCategoryButton = new QPushButton(i18n("&Replace"), panel);
 
-    d->addCategoryButton->setIcon(SmallIcon("list-add"));
-    d->delCategoryButton->setIcon(SmallIcon("list-remove"));
-    d->repCategoryButton->setIcon(SmallIcon("view-refresh"));
+    d->addCategoryButton->setIcon(QIcon::fromTheme("list-add").pixmap(16));
+    d->delCategoryButton->setIcon(QIcon::fromTheme("list-remove").pixmap(16));
+    d->repCategoryButton->setIcon(QIcon::fromTheme("view-refresh").pixmap(16));
     d->delCategoryButton->setEnabled(false);
     d->repCategoryButton->setEnabled(false);
 
