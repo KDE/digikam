@@ -29,16 +29,14 @@
 #include <QFile>
 #include <QGridLayout>
 #include <QApplication>
+#include <QIcon>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-
 #include <kconfig.h>
-
 #include <kfileitem.h>
 #include <kmimetype.h>
-#include <kiconloader.h>
 #include <klocale.h>
 
 // Local includes
@@ -241,7 +239,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
     glay1->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     glay1->setSpacing(0);
 
-    addItem(w1, SmallIcon("dialog-information"),
+    addItem(w1, QIcon::fromTheme("dialog-information").pixmap(16),
             i18n("Camera File Properties"), QString("FileProperties"), true);
 
     // --------------------------------------------------
@@ -299,7 +297,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
     glay2->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     glay2->setSpacing(0);
 
-    addItem(w2, SmallIcon("camera-photo"),
+    addItem(w2, QIcon::fromTheme("camera-photo").pixmap(16),
             i18n("Photograph Properties"), QString("PhotographProperties"), true);
 
     // -------------------------------------------------- 
@@ -341,7 +339,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
     glay3->setSpacing(0);
     glay3->setColumnStretch(1, 10);
 
-    addItem(w3, SmallIcon("video-x-generic"),
+    addItem(w3, QIcon::fromTheme("video-x-generic").pixmap(16),
             i18n("Video Properties"), QString("VideoProperties"), true);
 
     // --------------------------------------------------

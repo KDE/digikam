@@ -35,12 +35,12 @@
 #include <QDrag>
 #include <QMenu>
 #include <QAction>
+#include <QIcon>
 
 // KDE includes
 
 #include <kpixmapsequence.h>
 #include <kactioncollection.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -94,7 +94,7 @@ QueueListViewItem::QueueListViewItem(QueueListView* const view, const ImageInfo&
     : QTreeWidgetItem(view), d(new Private)
 {
     d->view = view;
-    setThumb(SmallIcon("image-x-generic", KIconLoader::SizeLarge, KIconLoader::DisabledState), false);
+    setThumb(QIcon::fromTheme("image-x-generic").pixmap(48, QIcon::Disabled), false);
     setInfo(info);
 }
 
@@ -166,7 +166,7 @@ void QueueListViewItem::animProgress()
 void QueueListViewItem::setCanceled()
 {
     setPixmap(d->preview);
-    setIcon(1, SmallIcon("dialog-cancel"));
+    setIcon(1, QIcon::fromTheme("dialog-cancel").pixmap(16));
     d->done          = false;
     d->isBusy        = false;
     d->progressIndex = 0;
@@ -175,7 +175,7 @@ void QueueListViewItem::setCanceled()
 void QueueListViewItem::setFailed()
 {
     setPixmap(d->preview);
-    setIcon(1, SmallIcon("dialog-error"));
+    setIcon(1, QIcon::fromTheme("dialog-error").pixmap(16));
     d->done          = false;
     d->isBusy        = false;
     d->progressIndex = 0;
@@ -184,7 +184,7 @@ void QueueListViewItem::setFailed()
 void QueueListViewItem::setDone()
 {
     setPixmap(d->preview);
-    setIcon(1, SmallIcon("dialog-ok"));
+    setIcon(1, QIcon::fromTheme("dialog-ok").pixmap(16));
     d->done          = true;
     d->isBusy        = false;
     d->progressIndex = 0;
@@ -262,7 +262,7 @@ public:
         toolTip         = 0;
         toolTipItem     = 0;
         thumbLoadThread = ThumbnailLoadThread::defaultThread();
-        progressPix     = KPixmapSequence("process-working", KIconLoader::SizeSmallMedium);
+        progressPix     = KPixmapSequence("process-working", 22);
     }
 
     bool                 showTips;
@@ -390,7 +390,7 @@ void QueueListView::startDrag(Qt::DropActions /*supportedActions*/)
         return;
     }
 
-    QPixmap icon(DesktopIcon("image-jp2", 48));
+    QPixmap icon(QIcon::fromTheme("image-jp2").pixmap(48));
     int w = icon.width();
     int h = icon.height();
 
@@ -743,7 +743,7 @@ void QueueListView::slotThumbnailLoaded(const LoadingDescription& desc, const QP
         {
             if (pix.isNull())
             {
-                item->setThumb(SmallIcon("image-x-generic", d->iconSize, KIconLoader::DisabledState));
+                item->setThumb(QIcon::fromTheme("image-x-generic").pixmap(d->iconSize, QIcon::Disabled));
             }
             else
             {

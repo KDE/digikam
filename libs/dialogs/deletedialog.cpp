@@ -41,10 +41,10 @@
 #include <QStyle>
 #include <QPushButton>
 #include <QStandardPaths>
+#include <QIcon>
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kstandardguiitem.h>
 
@@ -81,16 +81,16 @@ DeleteItem::DeleteItem(QTreeWidget* const parent, const QUrl& url)
     {
         if (DatabaseUrl(d->url).isAlbumUrl())
         {
-            setThumb(SmallIcon("folder", parent->iconSize().width()));
+            setThumb(QIcon::fromTheme("folder").pixmap(parent->iconSize().width()));
         }
         else
         {
-            setThumb(SmallIcon("tag", parent->iconSize().width()));
+            setThumb(QIcon::fromTheme("tag").pixmap(parent->iconSize().width()));
         }
     }
     else
     {
-        setThumb(SmallIcon("image-x-generic", parent->iconSize().width(), KIconLoader::DisabledState), false);
+        setThumb(QIcon::fromTheme("image-x-generic").pixmap(parent->iconSize().width(), QIcon::Disabled), false);
     }
 
     setText(1, fileUrl());
@@ -395,14 +395,12 @@ void DeleteWidget::updateText()
             {
                 d->deleteText->setText(i18n("These items will be <b>permanently "
                                             "deleted</b> from your hard disk."));
-                d->warningIcon->setPixmap(KIconLoader::global()->loadIcon("dialog-warning",
-                                          KIconLoader::Desktop, KIconLoader::SizeLarge));
+                d->warningIcon->setPixmap(QIcon::fromTheme("dialog-warning").pixmap(48));
             }
             else
             {
                 d->deleteText->setText(i18n("These items will be moved to Trash."));
-                d->warningIcon->setPixmap(KIconLoader::global()->loadIcon("user-trash-full",
-                                          KIconLoader::Desktop, KIconLoader::SizeLarge));
+                d->warningIcon->setPixmap(QIcon::fromTheme("user-trash-full").pixmap(48));
                 d->numFiles->setText(i18np("<b>1</b> item selected.", "<b>%1</b> items selected.",
                                            d->fileList->topLevelItemCount()));
             }
@@ -417,14 +415,12 @@ void DeleteWidget::updateText()
             {
                 d->deleteText->setText(i18n("These albums will be <b>permanently "
                                             "deleted</b> from your hard disk."));
-                d->warningIcon->setPixmap(KIconLoader::global()->loadIcon("dialog-warning",
-                                          KIconLoader::Desktop, KIconLoader::SizeLarge));
+                d->warningIcon->setPixmap(QIcon::fromTheme("dialog-warning").pixmap(48));
             }
             else
             {
                 d->deleteText->setText(i18n("These albums will be moved to Trash."));
-                d->warningIcon->setPixmap(KIconLoader::global()->loadIcon("user-trash-full",
-                                          KIconLoader::Desktop, KIconLoader::SizeLarge));
+                d->warningIcon->setPixmap(QIcon::fromTheme("user-trash-full").pixmap(48));
             }
 
             d->numFiles->setText(i18np("<b>1</b> album selected.", "<b>%1</b> albums selected.",
@@ -442,8 +438,7 @@ void DeleteWidget::updateText()
                                             "<p>Note that <b>all subalbums</b> "
                                             "are included in this list and will "
                                             "be deleted permanently as well.</p>"));
-                d->warningIcon->setPixmap(KIconLoader::global()->loadIcon("dialog-warning",
-                                          KIconLoader::Desktop, KIconLoader::SizeLarge));
+                d->warningIcon->setPixmap(QIcon::fromTheme("dialog-warning").pixmap(48));
             }
             else
             {
@@ -451,8 +446,7 @@ void DeleteWidget::updateText()
                                             "<p>Note that <b>all subalbums</b> "
                                             "are included in this list and will "
                                             "be moved to Trash as well.</p>"));
-                d->warningIcon->setPixmap(KIconLoader::global()->loadIcon("user-trash-full",
-                                          KIconLoader::Desktop, KIconLoader::SizeLarge));
+                d->warningIcon->setPixmap(QIcon::fromTheme("user-trash-full").pixmap(48));
             }
 
             d->numFiles->setText(i18np("<b>1</b> album selected.", "<b>%1</b> albums selected.",
@@ -536,7 +530,7 @@ bool DeleteDialog::confirmDeleteList(const QList<QUrl>& condemnedFiles,
         }
     }
 
-    return exec() == QDialog::Accepted;
+    return (exec() == QDialog::Accepted);
 }
 
 void DeleteDialog::setUrls(const QList<QUrl>& urls)
@@ -547,7 +541,7 @@ void DeleteDialog::setUrls(const QList<QUrl>& urls)
 void DeleteDialog::slotUser1Clicked()
 {
     // Save user's preference
-    ApplicationSettings* settings = ApplicationSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
 
     if (d->saveShouldDeleteUserPreference)
     {

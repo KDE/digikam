@@ -40,23 +40,16 @@
 #include <QApplication>
 #include <QPushButton>
 #include <QMenu>
+#include <QIcon>
 
 // KDE includes
 
-
-#include <kiconloader.h>
 #include <kmessagebox.h>
-
-
 
 // Libkexiv2 includes
 
 #include <altlangstredit.h>
 #include <msgtextedit.h>
-
-// Libkdcraw includes
-
-#include <libkdcraw_version.h>
 
 // Local includes
 
@@ -236,7 +229,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     applyButtonBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->applyBtn           = new QPushButton(i18n("Apply"), applyButtonBox);
-    d->applyBtn->setIcon(SmallIcon("dialog-ok-apply"));
+    d->applyBtn->setIcon(QIcon::fromTheme("dialog-ok-apply").pixmap(16));
     d->applyBtn->setEnabled(false);
     d->applyBtn->setToolTip( i18n("Apply all changes to images"));
     //buttonsBox->setStretchFactor(d->applyBtn, 10);
@@ -245,12 +238,12 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     buttonsBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->revertBtn          = new QToolButton(buttonsBox);
-    d->revertBtn->setIcon(SmallIcon("document-revert"));
+    d->revertBtn->setIcon(QIcon::fromTheme("document-revert").pixmap(16));
     d->revertBtn->setToolTip( i18n("Revert all changes"));
     d->revertBtn->setEnabled(false);
 
     d->applyToAllVersionsButton = new QPushButton(i18n("Apply to all versions"), buttonsBox);
-    d->applyToAllVersionsButton->setIcon(SmallIcon("dialog-ok-apply"));
+    d->applyToAllVersionsButton->setIcon(QIcon::fromTheme("dialog-ok-apply").pixmap(16));
     d->applyToAllVersionsButton->setEnabled(false);
     d->applyToAllVersionsButton->setToolTip(i18n("Apply all changes to all versions of this image"));
 
@@ -310,16 +303,14 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
 
     d->assignedTagsBtn = new QToolButton(tagsSearch);
     d->assignedTagsBtn->setToolTip( i18n("Tags already assigned"));
-    d->assignedTagsBtn->setIcon(KIconLoader::global()->loadIcon("tag-assigned",
-                                KIconLoader::NoGroup, KIconLoader::SizeSmall));
+    d->assignedTagsBtn->setIcon(QIcon::fromTheme("tag-assigned").pixmap(16));
     d->assignedTagsBtn->setCheckable(true);
 
     d->recentTagsBtn            = new QToolButton(tagsSearch);
     QMenu* const recentTagsMenu = new QMenu(d->recentTagsBtn);
     d->recentTagsBtn->setToolTip( i18n("Recent Tags"));
-    d->recentTagsBtn->setIcon(KIconLoader::global()->loadIcon("tag-recents",
-                              KIconLoader::NoGroup, KIconLoader::SizeSmall));
-    d->recentTagsBtn->setIconSize(QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall));
+    d->recentTagsBtn->setIcon(QIcon::fromTheme("tag-recents").pixmap(16));
+    d->recentTagsBtn->setIconSize(QSize(16, 16));
     d->recentTagsBtn->setMenu(recentTagsMenu);
     d->recentTagsBtn->setPopupMode(QToolButton::InstantPopup);
     d->recentTagsMapper = new QSignalMapper(this);
@@ -462,16 +453,10 @@ ImageDescEditTab::~ImageDescEditTab()
 void ImageDescEditTab::readSettings(KConfigGroup& group)
 {
     d->tabWidget->setCurrentIndex(group.readEntry("ImageDescEdit Tab", (int)Private::DESCRIPTIONS));
-#if KEXIV2_VERSION >= 0x020101
     d->titleEdit->setCurrentLanguageCode(group.readEntry("ImageDescEditTab TitleLang", QString()));
-#endif
     d->captionsEdit->setCurrentLanguageCode(group.readEntry("ImageDescEditTab CaptionsLang", QString()));
 
-#if KDCRAW_VERSION >= 0x020000
     d->templateViewer->readSettings(group);
-#else
-    d->templateViewer->readSettings();
-#endif
 
     d->tagCheckView->setConfigGroup(group);
     d->tagCheckView->setEntryPrefix("ImageDescEditTab TagCheckView");
@@ -487,11 +472,7 @@ void ImageDescEditTab::writeSettings(KConfigGroup& group)
     group.writeEntry("ImageDescEditTab TitleLang",    d->titleEdit->currentLanguageCode());
     group.writeEntry("ImageDescEditTab CaptionsLang", d->captionsEdit->currentLanguageCode());
 
-#if KDCRAW_VERSION >= 0x020000
     d->templateViewer->writeSettings(group);
-#else
-    d->templateViewer->writeSettings();
-#endif
 
     d->tagCheckView->saveState();
     d->tagsSearchBar->saveState();
@@ -835,14 +816,14 @@ void ImageDescEditTab::slotReadFromFileMetadataToDatabase()
     {
         scanner.scanFile(info, CollectionScanner::Rescan);
 
-        /*
+/*
         // A batch operation: a hub for each single file, not the common hub
         MetadataHub fileHub(MetadataHub::NewTagsImport);
         // read in from DMetadata
         fileHub.load(info.filePath());
         // write out to database
         fileHub.write(info);
-        */
+*/
 
         emit signalProgressValueChanged(i++/(float)d->currInfos.count());
 
