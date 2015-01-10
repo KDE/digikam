@@ -6,7 +6,7 @@
  * Date        : 2010-08-06
  * Description : setup tab for image versioning
  *
- * Copyright (C) 2010 by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  * Copyright (C) 2012-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -37,12 +37,11 @@
 #include <QVBoxLayout>
 #include <QWhatsThis>
 #include <QApplication>
+#include <QIcon>
 
 // KDE includes
 
-#include <kiconloader.h>
 #include <klocalizedstring.h>
-
 
 // Local includes
 
@@ -141,10 +140,10 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
                                                 "<para> All steps of the editing history are recorded and can be accessed later.</para>"));
 
     QLabel* iconLabel       = new QLabel;
-    iconLabel->setPixmap(SmallIcon("view-catalog", KIconLoader::SizeMedium));//"folder-image"));
+    iconLabel->setPixmap(QIcon::fromTheme("view-catalog").pixmap(32));
 
     d->infoNonDestructive   = new QPushButton;
-    d->infoNonDestructive->setIcon(SmallIcon("dialog-information"));
+    d->infoNonDestructive->setIcon(QIcon::fromTheme("dialog-information").pixmap(16));
     d->infoNonDestructive->setToolTip(i18nc("@info:tooltip", "Get information on non-destructive editing and file versioning"));
 
     gridHeader->addWidget(iconLabel,               0, 0);
@@ -158,7 +157,7 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
     QGridLayout* wsLayout  = new QGridLayout;
 
     QLabel* workIcon       = new QLabel;
-    workIcon->setPixmap(SmallIcon("document-save-as", KIconLoader::SizeMedium));
+    workIcon->setPixmap(QIcon::fromTheme("document-save-as").pixmap(32));
     QLabel* formatLabel    = new QLabel(i18nc("@label", "Save files as"));
 
     // keep in sync with VersionManager::workspaceFileFormats()
@@ -223,7 +222,7 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
 */
 
     d->infoFormat = new QPushButton;
-    d->infoFormat->setIcon(SmallIcon("dialog-information"));
+    d->infoFormat->setIcon(QIcon::fromTheme("dialog-information").pixmap(16));
     d->infoFormat->setToolTip(i18nc("@info:tooltip", "Get information on available image file formats"));
 
     wsLayout->addWidget(workIcon,           0, 0);
@@ -243,7 +242,7 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
 
     QLabel* closingExplanation = new QLabel(i18nc("@label", "When closing the editor"));
     QLabel* closingIcon        = new QLabel;
-    closingIcon->setPixmap(SmallIcon("dialog-ok-apply", KIconLoader::SizeMedium));
+    closingIcon->setPixmap(QIcon::fromTheme("dialog-ok-apply").pixmap(32));
     d->askToSave               = new QRadioButton(i18nc("@option:radio", "Always ask to save changes"));
     d->autoSave                = new QRadioButton(i18nc("@option:radio", "Save changes automatically"));
 
@@ -290,12 +289,12 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
     d->snapshotGB->setWhatsThis(snapshotWhatsThis);
 
     QLabel* snapshotIconLabel = new QLabel;
-    snapshotIconLabel->setPixmap(SmallIcon("insert-image", KIconLoader::SizeMedium));
+    snapshotIconLabel->setPixmap(QIcon::fromTheme("insert-image").pixmap(32));
 
     QLabel* snapshotLabel     = new QLabel(i18nc("@label", "Keep a snapshot of an edited image"));
 
     d->infoSnapshot           = new QPushButton;
-    d->infoSnapshot->setIcon(SmallIcon("dialog-information"));
+    d->infoSnapshot->setIcon(QIcon::fromTheme("dialog-information").pixmap(16));
     d->infoSnapshot->setToolTip(i18nc("@info:tooltip", "Get an explanation for these options"));
 
     d->snapshotAfterRaw       = new QCheckBox(i18nc("@option:check", "After converting from a RAW image"));
@@ -357,10 +356,10 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
     QLabel* viewLabel     =  new QLabel(i18nc("@label", "In main view"));
 
     QLabel* viewIconLabel = new QLabel;
-    viewIconLabel->setPixmap(SmallIcon("view-list-icons", KIconLoader::SizeMedium));
+    viewIconLabel->setPixmap(QIcon::fromTheme("view-list-icons").pixmap(32));
 
     d->infoView           = new QPushButton;
-    d->infoView->setIcon(SmallIcon("dialog-information"));
+    d->infoView->setIcon(QIcon::fromTheme("dialog-information").pixmap(16));
     d->infoView->setToolTip(i18nc("@info:tooltip", "Get an explanation for these options"));
 
     d->viewShowOriginal   = new QCheckBox(i18nc("@option:check", "Always show original images"));

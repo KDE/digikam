@@ -42,13 +42,13 @@
 #include <QComboBox>
 #include <QDesktopServices>
 #include <QStandardPaths>
+#include <QIcon>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <kglobalsettings.h>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 #include <kurllabel.h>
 #include <kconfig.h>
 
@@ -299,13 +299,13 @@ SetupCamera::SetupCamera(QWidget* const parent)
     d->autoDetectButton = new QPushButton(panel);
 
     d->addButton->setText(i18n("&Add..."));
-    d->addButton->setIcon(SmallIcon("list-add"));
+    d->addButton->setIcon(QIcon::fromTheme("list-add").pixmap(16));
     d->removeButton->setText(i18n("&Remove"));
-    d->removeButton->setIcon(SmallIcon("list-remove"));
+    d->removeButton->setIcon(QIcon::fromTheme("list-remove").pixmap(16));
     d->editButton->setText(i18n("&Edit..."));
-    d->editButton->setIcon(SmallIcon("configure"));
+    d->editButton->setIcon(QIcon::fromTheme("configure").pixmap(16));
     d->autoDetectButton->setText(i18n("Auto-&Detect"));
-    d->autoDetectButton->setIcon(SmallIcon("system-search"));
+    d->autoDetectButton->setIcon(QIcon::fromTheme("system-search").pixmap(16));
     d->removeButton->setEnabled(false);
     d->editButton->setEnabled(false);
 
@@ -390,11 +390,11 @@ SetupCamera::SetupCamera(QWidget* const parent)
     label->setText(i18n("Ignored file names:"));
     label2->setText(i18n("Ignored file extensions:"));
     d->importAddButton->setText(i18n("&Add..."));
-    d->importAddButton->setIcon(SmallIcon("list-add"));
+    d->importAddButton->setIcon(QIcon::fromTheme("list-add").pixmap(16));
     d->importRemoveButton->setText(i18n("&Remove"));
-    d->importRemoveButton->setIcon(SmallIcon("list-remove"));
+    d->importRemoveButton->setIcon(QIcon::fromTheme("list-remove").pixmap(16));
     d->importEditButton->setText(i18n("&Edit..."));
-    d->importEditButton->setIcon(SmallIcon("configure"));
+    d->importEditButton->setIcon(QIcon::fromTheme("configure").pixmap(16));
     d->importRemoveButton->setEnabled(false);
     d->importEditButton->setEnabled(false);
 
@@ -763,8 +763,8 @@ bool SetupCamera::checkSettings()
     if (d->useDefaultTargetAlbum->isChecked() && !d->target1AlbumSelector->currentAlbum())
     {
         d->tab->setCurrentIndex(1);
-        KMessageBox::information(this, i18n("No default target album have been selected to process download "
-                                            "from camera device. Please select one."));
+        QMessageBox::information(this, qApp->applicationName(), i18n("No default target album have been selected to process download "
+                                                                     "from camera device. Please select one."));
         return false;
     }
 
@@ -778,7 +778,7 @@ void SetupCamera::slotProcessGphotoUrl(const QString& url)
 
 void SetupCamera::slotSelectionChanged()
 {
-    QTreeWidgetItem* item = d->listView->currentItem();
+    QTreeWidgetItem* const item = d->listView->currentItem();
 
     if (!item)
     {
@@ -867,9 +867,9 @@ void SetupCamera::slotAutoDetectCamera()
 
     if (ret != 0)
     {
-        KMessageBox::error(this, i18n("Failed to auto-detect camera.\n"
-                                      "Please check if your camera is turned on "
-                                      "and retry or try setting it manually."));
+        QMessageBox::critical(this, qApp->applicationName(), i18n("Failed to auto-detect camera.\n"
+                                                                  "Please check if your camera is turned on "
+                                                                  "and retry or try setting it manually."));
         return;
     }
 
@@ -881,11 +881,11 @@ void SetupCamera::slotAutoDetectCamera()
 
     if (!d->listView->findItems(model, Qt::MatchExactly, 1).isEmpty())
     {
-        KMessageBox::information(this, i18n("Camera '%1' (%2) is already in list.", model, port));
+        QMessageBox::information(this, qApp->applicationName(), i18n("Camera '%1' (%2) is already in list.", model, port));
     }
     else
     {
-        KMessageBox::information(this, i18n("Found camera '%1' (%2) and added it to the list.", model, port));
+        QMessageBox::information(this, qApp->applicationName(), i18n("Found camera '%1' (%2) and added it to the list.", model, port));
         slotAddedCamera(model, model, port, QString("/"));
     }
 }
@@ -943,7 +943,7 @@ void SetupCamera::slotPreviewItemsClicked()
 {
     if (d->previewItemsWhileDownload->isChecked() && d->previewLoadFullImageSize->isChecked())
     {
-        KMessageBox::information(this, i18n("In order to enable this feature, the full-sized preview will be disabled."));
+        QMessageBox::information(this, qApp->applicationName(), i18n("In order to enable this feature, the full-sized preview will be disabled."));
 
         d->previewLoadFullImageSize->setChecked(false);
     }
@@ -953,7 +953,7 @@ void SetupCamera::slotPreviewFullImageSizeClicked()
 {
     if (d->previewItemsWhileDownload->isChecked() && d->previewLoadFullImageSize)
     {
-        KMessageBox::information(this, i18n("If the full-sized preview is enabled it will affect the speed of previewing each item while download."));
+        QMessageBox::information(this, qApp->applicationName(), i18n("If the full-sized preview is enabled it will affect the speed of previewing each item while download."));
         d->previewItemsWhileDownload->setChecked(false);
     }
 }

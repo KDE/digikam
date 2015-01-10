@@ -31,12 +31,12 @@
 #include <QGridLayout>
 #include <QComboBox>
 #include <QScrollArea>
+#include <QIcon>
 #include <QStandardPaths>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kiconloader.h>
 #include <kconfig.h>
 #include <kwindowconfig.h>
 
@@ -192,26 +192,26 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     RVBox* const options    = new RVBox;
     d->albumSelectors       = new AlbumSelectors(i18nc("@label", "Process items from:"), d->configGroupName, options);
     d->useMutiCoreCPU       = new QCheckBox(i18nc("@option:check", "Work on all processor cores"), options);
-    d->expanderBox->insertItem(Private::Options, options, SmallIcon("configure"), i18n("Common Options"), "Options", true);
+    d->expanderBox->insertItem(Private::Options, options, QIcon::fromTheme("configure").pixmap(16), i18n("Common Options"), "Options", true);
 
     // --------------------------------------------------------------------------------------
 
     d->expanderBox->insertItem(Private::NewItems, new QLabel(i18n("<qt>No option<br>"
                                "<i>Note: only Albums Collection are processed by this tool.</i></qt>")),
-                               SmallIcon("view-refresh"), i18n("Scan for new items"), "NewItems", false);
+                               QIcon::fromTheme("view-refresh").pixmap(16), i18n("Scan for new items"), "NewItems", false);
     d->expanderBox->setCheckBoxVisible(Private::NewItems, true);
 
     // --------------------------------------------------------------------------------------
 
     d->scanThumbs        = new QCheckBox(i18n("Scan for changed or non-cataloged items (faster)"));
-    d->expanderBox->insertItem(Private::Thumbnails, d->scanThumbs, SmallIcon("view-process-all"),
+    d->expanderBox->insertItem(Private::Thumbnails, d->scanThumbs, QIcon::fromTheme("view-process-all").pixmap(16),
                                i18n("Rebuild Thumbnails"), "Thumbnails", false);
     d->expanderBox->setCheckBoxVisible(Private::Thumbnails, true);
 
     // --------------------------------------------------------------------------------------
 
     d->scanFingerPrints  = new QCheckBox(i18n("Scan for changed or non-cataloged items (faster)"));
-    d->expanderBox->insertItem(Private::FingerPrints, d->scanFingerPrints, SmallIcon("run-build"),
+    d->expanderBox->insertItem(Private::FingerPrints, d->scanFingerPrints, QIcon::fromTheme("run-build").pixmap(16),
                                i18n("Rebuild Finger-prints"), "Fingerprints", false);
     d->expanderBox->setCheckBoxVisible(Private::FingerPrints, true);
 
@@ -224,7 +224,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     d->similarity        = new RIntNumInput(d->hbox);
     d->similarity->setDefaultValue(90);
     d->similarity->setRange(0, 100, 1);
-    d->expanderBox->insertItem(Private::Duplicates, d->hbox, SmallIcon("tools-wizard"),
+    d->expanderBox->insertItem(Private::Duplicates, d->hbox, QIcon::fromTheme("tools-wizard").pixmap(16),
                                i18n("Find Duplicates Items"), "Duplicates", false);
     d->expanderBox->setCheckBoxVisible(Private::Duplicates, true);
 
@@ -240,7 +240,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     d->faceScannedHandling->addItem(i18n("Skip images already scanned"),          FaceScanSettings::Skip);
     d->faceScannedHandling->addItem(i18n("Scan again and merge results"),         FaceScanSettings::Merge);
     d->faceScannedHandling->addItem(i18n("Clear unconfirmed results and rescan"), FaceScanSettings::Rescan);
-    d->expanderBox->insertItem(Private::FaceManagement, d->hbox3, SmallIcon("edit-image-face-detect"),
+    d->expanderBox->insertItem(Private::FaceManagement, d->hbox3, QIcon::fromTheme("edit-image-face-detect").pixmap(16),
                                i18n("Detect and recognize Faces (experimental)"), "FaceManagement", false);
     d->expanderBox->setCheckBoxVisible(Private::FaceManagement, true);
 
@@ -263,7 +263,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     QWidget* const space2 = new QWidget(hbox12);
     hbox12->setStretchFactor(space2, 10);
     d->qualitySetup       = new QPushButton(i18n("Settings..."), hbox12);
-    d->expanderBox->insertItem(Private::ImageQualitySorter, d->vbox, SmallIcon("flag-green"),
+    d->expanderBox->insertItem(Private::ImageQualitySorter, d->vbox, QIcon::fromTheme("flag-green").pixmap(16),
                                i18n("Image Quality Sorter"), "ImageQualitySorter", false);
     d->expanderBox->setCheckBoxVisible(Private::ImageQualitySorter, true);
 
@@ -283,7 +283,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     QWidget* const space6 = new QWidget(hbox22);
     hbox22->setStretchFactor(space6, 10);
     d->metadataSetup      = new QPushButton(i18n("Settings..."), hbox22);
-    d->expanderBox->insertItem(Private::MetadataSync, d->vbox2, SmallIcon("run-build-file"),
+    d->expanderBox->insertItem(Private::MetadataSync, d->vbox2, QIcon::fromTheme("run-build-file").pixmap(16),
                                i18n("Sync Metadata and Database"), "MetadataSync", false);
     d->expanderBox->setCheckBoxVisible(Private::MetadataSync, true);
     d->expanderBox->insertStretch(Private::Stretch);
