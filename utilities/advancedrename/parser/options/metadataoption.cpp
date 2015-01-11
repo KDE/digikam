@@ -32,13 +32,7 @@
 
 // KDE includes
 
-
 #include <klocalizedstring.h>
-
-// Libkexiv2 includes
-
-#include <kexiv2.h>
-#include <libkexiv2_version.h>
 
 // Local includes
 
@@ -49,7 +43,7 @@
 namespace Digikam
 {
 
-MetadataOptionDialog::MetadataOptionDialog(Rule* parent) :
+MetadataOptionDialog::MetadataOptionDialog(Rule* const parent) :
     RuleDialog(parent),
     metadataPanel(0),
     separatorLineEdit(0)

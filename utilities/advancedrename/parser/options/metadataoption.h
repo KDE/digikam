@@ -46,8 +46,10 @@ class MetadataOptionDialog : public RuleDialog
 
 public:
 
-    explicit MetadataOptionDialog(Rule* parent);
+    explicit MetadataOptionDialog(Rule* const parent);
     ~MetadataOptionDialog();
+
+public:
 
     MetadataPanel* metadataPanel;
     QLineEdit*     separatorLineEdit;

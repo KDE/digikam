@@ -166,7 +166,7 @@ void QueueListViewItem::animProgress()
 void QueueListViewItem::setCanceled()
 {
     setPixmap(d->preview);
-    setIcon(1, QIcon::fromTheme("dialog-cancel").pixmap(16));
+    setIcon(1, QIcon::fromTheme("dialog-cancel"));
     d->done          = false;
     d->isBusy        = false;
     d->progressIndex = 0;
@@ -175,7 +175,7 @@ void QueueListViewItem::setCanceled()
 void QueueListViewItem::setFailed()
 {
     setPixmap(d->preview);
-    setIcon(1, QIcon::fromTheme("dialog-error").pixmap(16));
+    setIcon(1, QIcon::fromTheme("dialog-error"));
     d->done          = false;
     d->isBusy        = false;
     d->progressIndex = 0;
@@ -184,7 +184,7 @@ void QueueListViewItem::setFailed()
 void QueueListViewItem::setDone()
 {
     setPixmap(d->preview);
-    setIcon(1, QIcon::fromTheme("dialog-ok").pixmap(16));
+    setIcon(1, QIcon::fromTheme("dialog-ok"));
     d->done          = true;
     d->isBusy        = false;
     d->progressIndex = 0;
@@ -413,7 +413,7 @@ void QueueListView::startDrag(Qt::DropActions /*supportedActions*/)
     p.drawText(r, Qt::AlignCenter, text);
     p.end();
 
-    QDrag* drag = new QDrag(this);
+    QDrag* const drag = new QDrag(this);
     drag->setMimeData(mimeData(items));
     drag->setPixmap(pix);
     drag->exec();

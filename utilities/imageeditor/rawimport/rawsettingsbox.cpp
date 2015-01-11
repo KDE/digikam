@@ -39,12 +39,10 @@
 #include <ksharedconfig.h>
 #include <klocalizedstring.h>
 
-
 // Libkdcraw includes
 
 #include <dcrawsettingswidget.h>
 #include <rnuminput.h>
-#include <libkdcraw_version.h>
 #include <rexpanderbox.h>
 
 // Local includes
@@ -182,13 +180,13 @@ RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
 
     d->abortBtn  = new QPushButton(d->rawdecodingBox);
     d->abortBtn->setText(i18n("Abort"));
-    d->abortBtn->setIcon(QIcon::fromTheme("dialog-cancel").pixmap(16));
+    d->abortBtn->setIcon(QIcon::fromTheme("dialog-cancel"));
     d->abortBtn->setEnabled(false);
     d->abortBtn->setToolTip(i18n("Abort the current Raw image preview."));
 
     d->updateBtn = new QPushButton(d->rawdecodingBox);
     d->updateBtn->setText(i18n("Update"));
-    d->updateBtn->setIcon(QIcon::fromTheme("view-refresh").pixmap(16));
+    d->updateBtn->setIcon(QIcon::fromTheme("view-refresh"));
     d->updateBtn->setEnabled(false);
     d->updateBtn->setToolTip(i18n("Generate a Raw image preview using current settings."));
 
@@ -270,7 +268,7 @@ RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
     d->curveWidget->setWhatsThis(i18n("This is the curve adjustment of the image luminosity"));
 
     d->resetCurveBtn   = new QPushButton(i18n("Reset"), d->curveBox);
-    d->resetCurveBtn->setIcon(QIcon::fromTheme("document-revert").pixmap(16));
+    d->resetCurveBtn->setIcon(QIcon::fromTheme("document-revert"));
     d->resetCurveBtn->setToolTip(i18n("Reset curve to linear"));
 
     QLabel* const spaceh                 = new QLabel(d->curveBox);
@@ -318,15 +316,15 @@ RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
     // ---------------------------------------------------------------
 
     button(Default)->setText(i18n("Reset"));
-    button(Default)->setIcon(QIcon::fromTheme("document-revert").pixmap(16));
+    button(Default)->setIcon(QIcon::fromTheme("document-revert"));
     button(Default)->setToolTip(i18n("Reset all settings to default values."));
 
     button(Ok)->setText(i18n("Import"));
-    button(Ok)->setIcon(QIcon::fromTheme("dialog-ok").pixmap(16));
+    button(Ok)->setIcon(QIcon::fromTheme("dialog-ok"));
     button(Ok)->setToolTip(i18n("Import image to editor using current settings."));
 
     button(Cancel)->setText(i18n("Use Default"));
-    button(Cancel)->setIcon(QIcon::fromTheme("go-home").pixmap(16));
+    button(Cancel)->setIcon(QIcon::fromTheme("go-home"));
     button(Cancel)->setToolTip(i18n("Use general Raw decoding settings to load this image in editor."));
 
     // ---------------------------------------------------------------

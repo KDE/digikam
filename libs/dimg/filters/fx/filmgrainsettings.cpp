@@ -41,7 +41,6 @@
 
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
-#include <kmessagebox.h>
 
 // Libkdcraw includes
 

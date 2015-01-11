@@ -37,10 +37,6 @@
 #include <QRect>
 #include <QApplication>
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "importimagemodel.h"
@@ -166,11 +162,13 @@ ImportCategoryDrawer* ImportDelegate::categoryDrawer() const
     return d->categoryDrawer;
 }
 
-//QRect ImportDelegate::commentsRect() const
-//{
-//    Q_D(const ImportDelegate);
-//    return d->commentsRect;
-//}
+/*
+QRect ImportDelegate::commentsRect() const
+{
+   Q_D(const ImportDelegate);
+   return d->commentsRect;
+}
+*/
 
 QRect ImportDelegate::tagsRect() const
 {
@@ -278,13 +276,14 @@ void ImportDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, cons
     p->setPen(isSelected ? qApp->palette().color(QPalette::HighlightedText)
                          : qApp->palette().color(QPalette::Text));
 
-    /*
+/*
     // If there is ImageHistory present, paint a small icon over the thumbnail to indicate that this is derived image
-    if (info.hasImageHistory())
+ 
+ if (info.hasImageHistory())
     {
-        p->drawPixmap(d->pixmapRect.right()-24, d->pixmapRect.bottom()-24, QIcon::fromTheme("svn_switch").pixmap(22, 22));
+        p->drawPixmap(d->pixmapRect.right()-24, d->pixmapRect.bottom()-24, QIcon::fromTheme("svn_switch").pixmap(22));
     }
-    */
+*/
 
     if (!d->nameRect.isNull())
     {
@@ -318,11 +317,13 @@ void ImportDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, cons
     }
 
     //TODO: Implement grouping in import tool.
-    /*if (!d->groupRect.isNull())
+/*
+    if (!d->groupRect.isNull())
     {
         drawGroupIndicator(p, d->groupRect, info.numberOfGroupedImages(),
                            index.data(ImportFilterModel::GroupIsOpenRole).toBool());
-    }*/
+    }
+*/
 
     if (!d->tagRect.isNull())
     {
@@ -773,11 +774,13 @@ void ImportNormalDelegate::updateRects()
     }
 
     //TODO: Add resolution entry in importSettings.
-    /*if (importSettings->getIconShowResolution())
+/*
+    if (importSettings->getIconShowResolution())
     {
         d->resolutionRect = QRect(d->margin, y, d->contentWidth, d->oneRowXtraRect.height());
         y                 = d->resolutionRect.bottom() ;
-    }*/
+    }
+*/
 
     if (importSettings->getIconShowSize())
     {

@@ -44,9 +44,7 @@
 
 #include <kcolorbutton.h>
 #include <klocalizedstring.h>
-
 #include <kstandardguiitem.h>
-#include <kguiitem.h>
 
 // Libkdcraw includes
 
@@ -189,7 +187,7 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
 
     d->defaultBtn = new QPushButton;
     KGuiItem::assign(d->defaultBtn, KStandardGuiItem::defaults());
-    d->defaultBtn->setIcon(QIcon::fromTheme("document-revert").pixmap(16));
+    d->defaultBtn->setIcon(QIcon::fromTheme("document-revert"));
     d->defaultBtn->setToolTip(i18n("Reset all settings to their default values."));
 
     d->okBtn = new QPushButton;

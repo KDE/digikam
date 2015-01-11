@@ -187,15 +187,15 @@ ImportPreviewView::ImportPreviewView(QWidget* const parent, Mode mode)
 
     // ------------------------------------------------------------
 
-    d->escapePreviewAction = new QAction(QIcon::fromTheme("folder-image").pixmap(16),             i18n("Escape preview"),                 this);
-    d->prevAction          = new QAction(QIcon::fromTheme("go-previous").pixmap(16),              i18nc("go to previous image", "Back"),  this);
-    d->nextAction          = new QAction(QIcon::fromTheme("go-next").pixmap(16),                  i18nc("go to next image", "Forward"),   this);
-    d->rotLeftAction       = new QAction(QIcon::fromTheme("object-rotate-left").pixmap(16),       i18nc("@info:tooltip", "Rotate Left"),  this);
-    d->rotRightAction      = new QAction(QIcon::fromTheme("object-rotate-right").pixmap(16),      i18nc("@info:tooltip", "Rotate Right"), this);
-    //FIXME: d->addPersonAction    = new QAction(QIcon::fromTheme("list-add-user").pixmap(16),    i18n("Add a Face Tag"),                 this);
-    //FIXME: d->forgetFacesAction  = new QAction(QIcon::fromTheme("list-remove-user").pixmap(16), i18n("Clear all faces on this image"),  this);
-    //FIXME: d->peopleToggleAction = new KToggleAction(i18n("Show Face Tags"),                                                            this);
-    //FIXME: d->peopleToggleAction->setIcon(QIcon::fromTheme("user-identity").pixmap(16));
+    d->escapePreviewAction = new QAction(QIcon::fromTheme("folder-image"),             i18n("Escape preview"),                 this);
+    d->prevAction          = new QAction(QIcon::fromTheme("go-previous"),              i18nc("go to previous image", "Back"),  this);
+    d->nextAction          = new QAction(QIcon::fromTheme("go-next"),                  i18nc("go to next image", "Forward"),   this);
+    d->rotLeftAction       = new QAction(QIcon::fromTheme("object-rotate-left"),       i18nc("@info:tooltip", "Rotate Left"),  this);
+    d->rotRightAction      = new QAction(QIcon::fromTheme("object-rotate-right"),      i18nc("@info:tooltip", "Rotate Right"), this);
+    //FIXME: d->addPersonAction    = new QAction(QIcon::fromTheme("list-add-user"),    i18n("Add a Face Tag"),                 this);
+    //FIXME: d->forgetFacesAction  = new QAction(QIcon::fromTheme("list-remove-user"), i18n("Clear all faces on this image"),  this);
+    //FIXME: d->peopleToggleAction = new KToggleAction(i18n("Show Face Tags"),                                                 this);
+    //FIXME: d->peopleToggleAction->setIcon(QIcon::fromTheme("user-identity"));
 
     d->toolBar = new QToolBar(this);
 

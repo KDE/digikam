@@ -231,9 +231,8 @@ void CameraMessageBox::informationList(CameraThumbsCtrl* const ctrl,
     dialog->setEscapeButton(KDialog::Ok);
 
     bool checkboxResult = false;
-    QIcon icon          = QIcon::fromTheme("dialog-information").pixmap(64);
 
-    createMessageBox(ctrl, dialog, icon, text, items,
+    createMessageBox(ctrl, dialog, QIcon::fromTheme("dialog-information"), text, items,
                      dontShowAgainName.isEmpty() ? QString() : i18n("Do not show this message again"),
                      &checkboxResult);
 
@@ -268,8 +267,7 @@ int CameraMessageBox::warningContinueCancelList(CameraThumbsCtrl* const ctrl,
     dialog->setEscapeButton(KDialog::No);
 
     bool checkboxResult = false;
-    QIcon icon          = QIcon::fromTheme("dialog-warning").pixmap(64);
-    const int result    = createMessageBox(ctrl, dialog, icon, text, items,
+    const int result    = createMessageBox(ctrl, dialog, QIcon::fromTheme("dialog-warning"), text, items,
                                            dontAskAgainName.isEmpty() ? QString() : i18n("Do not ask again"),
                                            &checkboxResult);
 

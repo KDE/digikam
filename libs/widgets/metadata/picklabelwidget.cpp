@@ -46,7 +46,6 @@
 #include <kxmlguiwindow.h>
 #include <kactioncollection.h>
 
-
 // Local includes
 
 #include "digikam_debug.h"

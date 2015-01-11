@@ -63,7 +63,6 @@
 
 // KDE includes
 
-
 #include <kactioncategory.h>
 #include <kaboutdata.h>
 #include <kactioncollection.h>
@@ -85,7 +84,6 @@
 #include <kservicetypetrader.h>
 #include <kshortcutsdialog.h>
 #include <kstandardaction.h>
-
 #include <kstandardshortcut.h>
 #include <kstatusbar.h>
 #include <ktoggleaction.h>
@@ -1446,7 +1444,7 @@ bool EditorWindow::promptUserSave(const QUrl& url, SaveAskMode mode, bool allowC
                                                        KStandardGuiItem::discard());
                 }
 
-                shallSave = (result == KMessageBox::Yes);
+                shallSave    = (result == KMessageBox::Yes);
                 shallDiscard = (result == KMessageBox::No);
             }
         }

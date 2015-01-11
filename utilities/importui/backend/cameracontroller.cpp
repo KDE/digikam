@@ -55,7 +55,6 @@ extern "C"
 
 // KDE includes
 
-
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kprocess.h>

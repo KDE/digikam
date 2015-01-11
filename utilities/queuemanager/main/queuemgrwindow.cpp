@@ -37,13 +37,13 @@
 #include <QAction>
 #include <QMenuBar>
 #include <QMenu>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <kactioncollection.h>
 #include <kedittoolbar.h>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 #include <knotifyconfigwidget.h>
 #include <kselectaction.h>
 #include <kshortcutsdialog.h>
@@ -58,7 +58,6 @@
 
 // Libkdcraw includes
 
-#include <libkdcraw_version.h>
 #include <kdcraw.h>
 
 // Local includes
@@ -616,15 +615,14 @@ bool QueueMgrWindow::queryClose()
 {
     if (isBusy())
     {
-        int result = KMessageBox::warningYesNo(this,
-                                               i18n("Batch Queue Manager is running. Do you want to cancel current job?"),
-                                               i18n("Processing under progress"));
+        int result = QMessageBox::question(this, i18n("Processing under progress"),
+                                           i18n("Batch Queue Manager is running. Do you want to cancel current job?"));
 
-        if (result == KMessageBox::Yes)
+        if (result == QMessageBox::Yes)
         {
             slotStop();
         }
-        else if (result == KMessageBox::No)
+        else if (result == QMessageBox::No)
         {
             return false;
         }
@@ -710,7 +708,7 @@ void QueueMgrWindow::slotRun()
 
     if (!d->queuePool->totalPendingItems())
     {
-        KMessageBox::error(this, i18n("There are no items to process in the queues."));
+        QMessageBox::critical(this, qApp->applicationName(), i18n("There are no items to process in the queues."));
         processingAborted();
         return;
     }
@@ -870,10 +868,9 @@ bool QueueMgrWindow::checkTargetAlbum(int queueId)
 
         if (processedItemsAlbumUrl.isEmpty())
         {
-            KMessageBox::error(this,
-                            i18n("Album to host processed items from queue \"%1\" is not set. "
-                                    "Please select one from Queue Settings panel.", queueName),
-                            i18n("Processed items album settings"));
+            QMessageBox::critical(this, i18n("Processed items album settings"),
+                                  i18n("Album to host processed items from queue \"%1\" is not set. "
+                                       "Please select one from Queue Settings panel.", queueName));
             return false;
         }
 
@@ -881,11 +878,10 @@ bool QueueMgrWindow::checkTargetAlbum(int queueId)
 
         if (!dir.exists() || !dir.isWritable())
         {
-            KMessageBox::error(this,
-                            i18n("Album to host processed items from queue \"%1\" "
-                                    "is not available or not writable. "
-                                    "Please set another one from Queue Settings panel.", queueName),
-                            i18n("Processed items album settings"));
+            QMessageBox::critical(this, i18n("Processed items album settings"),
+                                  i18n("Album to host processed items from queue \"%1\" "
+                                       "is not available or not writable. "
+                                       "Please set another one from Queue Settings panel.", queueName));
             return false;
         }
     }
