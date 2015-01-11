@@ -31,9 +31,6 @@
 #include <QMainWindow>
 #include <QStackedWidget>
 
-// KDE includes
-
-
 // Local includes
 
 #include "digikam_config.h"
@@ -48,10 +45,11 @@ class DigikamImageView;
 class ImageCategorizedView;
 class ImagePreviewView;
 class TableView;
-#ifdef BUILD_VIDEO
-class MediaPlayerView;
-#endif //BUILD_VIDEO
 class ImageThumbnailBar;
+
+#ifdef HAVE_VIDEOPLAYER
+class MediaPlayerView;
+#endif //HAVE_VIDEOPLAYER
 
 #ifdef HAVE_KGEOMAP
 class MapWidgetView;
@@ -88,9 +86,10 @@ public:
     DigikamImageView*  imageIconView()    const;
     ImagePreviewView*  imagePreviewView() const;
     TableView*         tableView()        const;
-#ifdef BUILD_VIDEO
+
+#ifdef HAVE_VIDEOPLAYER
     MediaPlayerView*   mediaPlayerView()  const;
-#endif //BUILD_VIDEO
+#endif //HAVE_VIDEOPLAYER
 
 #ifdef HAVE_KGEOMAP
     MapWidgetView*     mapWidgetView()    const;

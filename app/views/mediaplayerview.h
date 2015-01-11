@@ -23,7 +23,11 @@
 
 #ifndef MEDIAPLAYERVIEW_H
 #define MEDIAPLAYERVIEW_H
-#ifdef BUILD_VIDEO
+
+#include "digikam_config.h"
+
+#ifdef HAVE_VIDEOPLAYER
+
 // Qt includes
 
 #include <QStackedWidget>
@@ -104,5 +108,7 @@ private:
 };
 
 }  // namespace Digikam
-#endif /* BUILD_VIDEO */
+
+#endif /* HAVE_VIDEOPLAYER */
+
 #endif /* MEDIAPLAYERVIEW_H */

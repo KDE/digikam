@@ -35,7 +35,6 @@
 
 // KDE includes
 
-
 #include <kmessagebox.h>
 #include <ktoolinvocation.h>
 #include <krun.h>
@@ -283,9 +282,10 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
     d->addPageUpDownActions(this, d->stackedview->imagePreviewView());
     d->addPageUpDownActions(this, d->stackedview->thumbBar());
 
-#ifdef BUILD_VIDEO
+#ifdef HAVE_VIDEOPLAYER
     d->addPageUpDownActions(this, d->stackedview->mediaPlayerView());
-#endif //BUILD_VIDEO
+#endif //HAVE_VIDEOPLAYER
+
     d->rightSideBar = new ImagePropertiesSideBarDB(this, d->splitter, KMultiTabBar::Right, true);
     d->rightSideBar->setObjectName("Digikam Right Sidebar");
 
@@ -1321,11 +1321,11 @@ void DigikamView::slotRefresh()
         case StackedView::PreviewImageMode:
             d->stackedview->imagePreviewView()->reload();
             break;
-#ifdef BUILD_VIDEO
+#ifdef HAVE_VIDEOPLAYER
         case StackedView::MediaPlayerMode:
             d->stackedview->mediaPlayerView()->reload();
             break;
-#endif //BUILD_VIDEO
+#endif //HAVE_VIDEOPLAYER
         default:
             Album* const album = d->iconView->currentAlbum();
             if (!album) return;
@@ -1873,12 +1873,12 @@ void DigikamView::slotImageDelete()
 {
     switch (viewMode())
     {
-    case StackedView::TableViewMode:
-        d->tableView->slotDeleteSelected(ImageViewUtilities::DeleteUseTrash);
-        break;
+        case StackedView::TableViewMode:
+            d->tableView->slotDeleteSelected(ImageViewUtilities::DeleteUseTrash);
+            break;
 
-    default:
-        d->iconView->deleteSelected(ImageViewUtilities::DeleteUseTrash);
+        default:
+            d->iconView->deleteSelected(ImageViewUtilities::DeleteUseTrash);
     }
 }
 
@@ -1886,12 +1886,12 @@ void DigikamView::slotImageDeletePermanently()
 {
     switch (viewMode())
     {
-    case StackedView::TableViewMode:
-        d->tableView->slotDeleteSelected(ImageViewUtilities::DeletePermanently);
-        break;
+        case StackedView::TableViewMode:
+            d->tableView->slotDeleteSelected(ImageViewUtilities::DeletePermanently);
+            break;
 
-    default:
-        d->iconView->deleteSelected(ImageViewUtilities::DeletePermanently);
+        default:
+            d->iconView->deleteSelected(ImageViewUtilities::DeletePermanently);
     }
 }
 
@@ -1899,12 +1899,12 @@ void DigikamView::slotImageDeletePermanentlyDirectly()
 {
     switch (viewMode())
     {
-    case StackedView::TableViewMode:
-        d->tableView->slotDeleteSelectedWithoutConfirmation(ImageViewUtilities::DeletePermanently);
-        break;
+        case StackedView::TableViewMode:
+            d->tableView->slotDeleteSelectedWithoutConfirmation(ImageViewUtilities::DeletePermanently);
+            break;
 
-    default:
-        d->iconView->deleteSelectedDirectly(ImageViewUtilities::DeletePermanently);
+        default:
+            d->iconView->deleteSelectedDirectly(ImageViewUtilities::DeletePermanently);
     }
 }
 
@@ -1912,12 +1912,12 @@ void DigikamView::slotImageTrashDirectly()
 {
     switch (viewMode())
     {
-    case StackedView::TableViewMode:
-        d->tableView->slotDeleteSelectedWithoutConfirmation(ImageViewUtilities::DeleteUseTrash);
-        break;
+        case StackedView::TableViewMode:
+            d->tableView->slotDeleteSelectedWithoutConfirmation(ImageViewUtilities::DeleteUseTrash);
+            break;
 
-    default:
-        d->iconView->deleteSelectedDirectly(ImageViewUtilities::DeleteUseTrash);
+        default:
+            d->iconView->deleteSelectedDirectly(ImageViewUtilities::DeleteUseTrash);
     }
 }
 
@@ -1925,12 +1925,12 @@ void DigikamView::slotSelectAll()
 {
     switch (viewMode())
     {
-    case StackedView::TableViewMode:
-        d->tableView->selectAll();
-        break;
+        case StackedView::TableViewMode:
+            d->tableView->selectAll();
+            break;
 
-    default:
-        d->iconView->selectAll();
+        default:
+            d->iconView->selectAll();
     }
 }
 
@@ -1938,12 +1938,12 @@ void DigikamView::slotSelectNone()
 {
     switch (viewMode())
     {
-    case StackedView::TableViewMode:
-        d->tableView->clearSelection();
-        break;
+        case StackedView::TableViewMode:
+            d->tableView->clearSelection();
+            break;
 
-    default:
-        d->iconView->clearSelection();
+        default:
+            d->iconView->clearSelection();
     }
 }
 
@@ -1951,12 +1951,12 @@ void DigikamView::slotSelectInvert()
 {
     switch (viewMode())
     {
-    case StackedView::TableViewMode:
-        d->tableView->invertSelection();
-        break;
+        case StackedView::TableViewMode:
+            d->tableView->invertSelection();
+            break;
 
-    default:
-        d->iconView->invertSelection();
+        default:
+            d->iconView->invertSelection();
     }
 }
 
@@ -2074,7 +2074,7 @@ void DigikamView::slotSlideShowSelection()
 void DigikamView::slotSlideShowRecursive()
 {
     QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
-    Album* album = 0;
+    Album* album            = 0;
 
     if(!albumList.isEmpty())
     {

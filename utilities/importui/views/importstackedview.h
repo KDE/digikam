@@ -38,9 +38,11 @@
 #include "thumbbardock.h"
 #include "camiteminfo.h"
 #include "importiconview.h"
-#ifdef BUILD_VIDEO
+
+#ifdef HAVE_VIDEOPLAYER
 #include "mediaplayerview.h"
-#endif //BUILD_VIDEO
+#endif //HAVE_VIDEOPLAYER
+
 #ifdef HAVE_KGEOMAP
 #include "mapwidgetview.h"
 #endif // HAVE_KGEOMAP
@@ -73,9 +75,11 @@ public:
     ImportThumbnailBar* thumbBar()          const;
     ImportIconView*     importIconView()    const;
     ImportPreviewView*  importPreviewView() const;
-#ifdef BUILD_VIDEO
+
+#ifdef HAVE_VIDEOPLAYER
     MediaPlayerView*    mediaPlayerView()   const;
-#endif //BUILD_VIDEO
+#endif //HAVE_VIDEOPLAYER
+
 #ifdef HAVE_KGEOMAP
     MapWidgetView*      mapWidgetView()     const;
 #endif // HAVE_KGEOMAP

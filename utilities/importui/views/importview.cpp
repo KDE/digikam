@@ -31,10 +31,10 @@
 // KDE includes
 
 #include <kmessagebox.h>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "digikam_config.h"
 #include "digikam_globals.h"
 #include "importui.h"
@@ -152,9 +152,11 @@ ImportView::ImportView(ImportUI* const ui, ImportImageModel* const model, Import
 
     d->addPageUpDownActions(this, d->stackedView->importPreviewView());
     d->addPageUpDownActions(this, d->stackedView->thumbBar());
-#ifdef BUILD_VIDEO
+
+#ifdef HAVE_VIDEOPLAYER
     d->addPageUpDownActions(this, d->stackedView->mediaPlayerView());
-#endif //BUILD_VIDEO
+#endif //HAVE_VIDEOPLAYER
+
     d->selectionTimer = new QTimer(this);
     d->selectionTimer->setSingleShot(true);
     d->selectionTimer->setInterval(75);
@@ -253,7 +255,8 @@ void ImportView::setupConnections()
             //this, SLOT(slotSidebarTabTitleStyleChanged()));
 }
 
-/*void ImportView::connectIconViewFilter(FilterStatusBar* filterbar)
+/*
+void ImportView::connectIconViewFilter(FilterStatusBar* filterbar)
 {
     ImageAlbumFilterModel* const model = d->iconView->imageAlbumFilterModel();
 
@@ -274,7 +277,8 @@ void ImportView::slotPopupFiltersView()
 {
     d->rightSideBar->setActiveTab(d->filterWidget);
     d->filterWidget->setFocusToTextFilter();
-}*/
+}
+*/
 
 void ImportView::loadViewState()
 {

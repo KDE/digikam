@@ -128,7 +128,9 @@ if (ENABLE_VIDEO)
                 Multimedia
                 MultimediaWidgets
     )
-    add_definitions("-DBUILD_VIDEO")
+    set(HAVE_VIDEOPLAYER TRUE)
+else()
+    set(HAVE_VIDEOPLAYER FALSE)
 endif()
 
 find_package(KF5 REQUIRED COMPONENTS
@@ -215,9 +217,7 @@ if(X11_FOUND)
     find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
                  X11Extras
     )
-
     set(HAVE_X11 TRUE)
-
 else()
     set(HAVE_X11 FALSE)
 endif()
