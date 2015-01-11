@@ -45,7 +45,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-//#include <kpagedialog.h>
 
 // Local includes
 
@@ -102,9 +101,9 @@ SetupCategory::SetupCategory(QWidget* const parent)
     d->delCategoryButton = new QPushButton(i18n("&Remove"), panel);
     d->repCategoryButton = new QPushButton(i18n("&Replace"), panel);
 
-    d->addCategoryButton->setIcon(QIcon::fromTheme("list-add").pixmap(16));
-    d->delCategoryButton->setIcon(QIcon::fromTheme("list-remove").pixmap(16));
-    d->repCategoryButton->setIcon(QIcon::fromTheme("view-refresh").pixmap(16));
+    d->addCategoryButton->setIcon(QIcon::fromTheme("list-add"));
+    d->delCategoryButton->setIcon(QIcon::fromTheme("list-remove"));
+    d->repCategoryButton->setIcon(QIcon::fromTheme("view-refresh"));
     d->delCategoryButton->setEnabled(false);
     d->repCategoryButton->setEnabled(false);
 

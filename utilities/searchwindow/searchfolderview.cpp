@@ -60,10 +60,8 @@ NormalSearchTreeView::NormalSearchTreeView(QWidget* const parent,
       d(new Private)
 {
 
-    d->newAction  = new QAction(QIcon::fromTheme("document-new").pixmap(16),
-                               i18nc("Create new search", "New..."), this);
-    d->editAction = new QAction(QIcon::fromTheme("edit-find").pixmap(16),
-                                i18nc("Edit selected search", "Edit..."), this);
+    d->newAction  = new QAction(QIcon::fromTheme("document-new"), i18nc("Create new search", "New..."),  this);
+    d->editAction = new QAction(QIcon::fromTheme("edit-find"), i18nc("Edit selected search", "Edit..."), this);
 }
 
 NormalSearchTreeView::~NormalSearchTreeView()

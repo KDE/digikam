@@ -124,11 +124,11 @@ SetupTemplate::SetupTemplate(QWidget* const parent)
     d->repButton = new QPushButton(panel);
 
     d->addButton->setText(i18n("&Add..."));
-    d->addButton->setIcon(QIcon::fromTheme("list-add").pixmap(16));
+    d->addButton->setIcon(QIcon::fromTheme("list-add"));
     d->delButton->setText(i18n("&Remove"));
-    d->delButton->setIcon(QIcon::fromTheme("list-remove").pixmap(16));
+    d->delButton->setIcon(QIcon::fromTheme("list-remove"));
     d->repButton->setText(i18n("&Replace..."));
-    d->repButton->setIcon(QIcon::fromTheme("view-refresh").pixmap(16));
+    d->repButton->setIcon(QIcon::fromTheme("view-refresh"));
     d->delButton->setEnabled(false);
     d->repButton->setEnabled(false);
 

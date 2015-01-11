@@ -28,15 +28,15 @@
 
 #include <QApplication>
 #include <QTimer>
+#include <QIcon>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <QIcon>
-#include "digikam_debug.h"
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "scancontroller.h"
 
 namespace Digikam
@@ -86,7 +86,7 @@ NewItemsFinder::NewItemsFinder(const FinderMode mode, const QStringList& folders
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "NewItemsFinder called without any folders. Wrong call.";
     }
-    
+
     d->foldersToScan = foldersToScan;
     d->foldersToScan.sort();
 }

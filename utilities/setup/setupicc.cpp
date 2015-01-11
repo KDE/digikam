@@ -218,7 +218,7 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
                                          "Good and safe choices are <b>Adobe RGB (1998)</b> and <b>sRGB IEC61966-2.1</b>"));
 
     d->infoWorkProfiles = new QPushButton;
-    d->infoWorkProfiles->setIcon(QIcon::fromTheme("dialog-information").pixmap(16));
+    d->infoWorkProfiles->setIcon(QIcon::fromTheme("dialog-information"));
     d->infoWorkProfiles->setWhatsThis(i18n("<p>You can use this button to get more detailed "
                                            "information about the selected workspace profile.</p>"));
 
@@ -263,7 +263,7 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
     d->missingGB                   = new QGroupBox;//(i18n("Missing Profile Behavior"));
     QVBoxLayout* const vlayMissing = new QVBoxLayout(d->missingGB);
 
-    QLabel*const  missingIcon  = new QLabel;
+    QLabel* const  missingIcon  = new QLabel;
     missingIcon->setPixmap(QIcon::fromTheme("image-missing").pixmap(32));
     QLabel* const missingLabel = new QLabel(i18n("When an image has no color profile information"));
     missingLabel->setWordWrap(true);
@@ -369,7 +369,7 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
     d->monitorProfilesKC->setWhatsThis(i18n("<p>Select the color profile for your monitor here.</p>"));
 
     d->infoMonitorProfiles   = new QPushButton;
-    d->infoMonitorProfiles->setIcon(QIcon::fromTheme("dialog-information").pixmap(16));
+    d->infoMonitorProfiles->setIcon(QIcon::fromTheme("dialog-information"));
     d->infoMonitorProfiles->setWhatsThis(i18n("<p>You can use this button to get more detailed "
                                               "information about the selected monitor profile.</p>"));
 
@@ -410,7 +410,7 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
                                        "Some of the options about loading behavior above refer to this profile.</p>"));
 
     d->infoInProfiles = new QPushButton;
-    d->infoInProfiles->setIcon(QIcon::fromTheme("dialog-information").pixmap(16));
+    d->infoInProfiles->setIcon(QIcon::fromTheme("dialog-information"));
     d->infoInProfiles->setWhatsThis(i18n("<p>You can use this button to get more detailed "
                                          "information about the selected input profile.</p>"));
 
@@ -435,7 +435,7 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
                                           "be able to preview how an image will be rendered via an output device.</p>"));
 
     d->infoProofProfiles   = new QPushButton;
-    d->infoProofProfiles->setIcon(QIcon::fromTheme("dialog-information").pixmap(16));
+    d->infoProofProfiles->setIcon(QIcon::fromTheme("dialog-information"));
     d->infoProofProfiles->setWhatsThis(i18n("<p>You can use this button to get more detailed "
                                             "information about the selected proofing profile.</p>"));
 

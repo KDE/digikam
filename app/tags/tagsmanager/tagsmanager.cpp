@@ -33,13 +33,11 @@
 #include <QDesktopWidget>
 #include <QSplitter>
 #include <QApplication>
+#include <QAction>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-
-
-#include <QAction>
 #include <ktoolbar.h>
 #include <kmainwindow.h>
 #include <kmultitabbar.h>
@@ -798,11 +796,10 @@ void TagsManager::setupActions()
      * Right Toolbar with vertical properties button
      */
     d->rightToolBar = new KMultiTabBar(KMultiTabBar::Right);
-    d->rightToolBar->appendTab(QIcon::fromTheme("tag-properties").pixmap(10,10),
-                               0,i18n("Tag Properties"));
+    d->rightToolBar->appendTab(QIcon::fromTheme("tag-properties").pixmap(16), 0, i18n("Tag Properties"));
     d->rightToolBar->setStyle(KMultiTabBar::KDEV3ICON);
 
-    connect(d->rightToolBar->tab(0),SIGNAL(clicked()),
+    connect(d->rightToolBar->tab(0), SIGNAL(clicked()),
             this, SLOT(slotOpenProperties()));
 
     d->rootDisabledOptions.append(d->delAction);

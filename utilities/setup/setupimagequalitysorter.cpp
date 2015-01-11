@@ -36,8 +36,6 @@
 
 #include <kconfig.h>
 #include <klocalizedstring.h>
-#include <kurllabel.h>
-#include <kurlrequester.h>
 
 // Libkdcraw includes
 

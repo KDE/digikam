@@ -130,7 +130,7 @@ SetupMime::SetupMime(QWidget* const parent)
     hbox1->setStretchFactor(d->imageFileFilterEdit, 10);
 
     d->revertImageFileFilterBtn = new QToolButton(hbox1);
-    d->revertImageFileFilterBtn->setIcon(QIcon::fromTheme("view-refresh").pixmap(16));
+    d->revertImageFileFilterBtn->setIcon(QIcon::fromTheme("view-refresh"));
     d->revertImageFileFilterBtn->setToolTip(i18n("Revert to default settings"));
 
     grid1->addWidget(logoLabel1,              0, 0, 2, 1);
@@ -168,7 +168,7 @@ SetupMime::SetupMime(QWidget* const parent)
     hbox2->setStretchFactor(d->movieFileFilterEdit, 10);
 
     d->revertMovieFileFilterBtn = new QToolButton(hbox2);
-    d->revertMovieFileFilterBtn->setIcon(QIcon::fromTheme("view-refresh").pixmap(16));
+    d->revertMovieFileFilterBtn->setIcon(QIcon::fromTheme("view-refresh"));
     d->revertMovieFileFilterBtn->setToolTip(i18n("Revert to default settings"));
 
     grid2->addWidget(logoLabel2,                0, 0, 2, 1);
@@ -206,7 +206,7 @@ SetupMime::SetupMime(QWidget* const parent)
     hbox3->setStretchFactor(d->audioFileFilterEdit, 10);
 
     d->revertAudioFileFilterBtn = new QToolButton(hbox3);
-    d->revertAudioFileFilterBtn->setIcon(QIcon::fromTheme("view-refresh").pixmap(16));
+    d->revertAudioFileFilterBtn->setIcon(QIcon::fromTheme("view-refresh"));
     d->revertAudioFileFilterBtn->setToolTip(i18n("Revert to default settings"));
 
     grid3->addWidget(logoLabel3,              0, 0, 2, 1);

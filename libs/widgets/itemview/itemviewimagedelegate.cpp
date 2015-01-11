@@ -40,10 +40,8 @@
 
 // KDE includes
 
-
-#include <kio/global.h>
 #include <klocalizedstring.h>
-
+#include <kio/global.h>
 
 // Local includes
 

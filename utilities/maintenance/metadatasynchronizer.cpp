@@ -28,12 +28,11 @@
 
 #include <QString>
 #include <QTimer>
+#include <QIcon>
 
 // KDE includes
 
-#include <QIcon>
 #include <klocalizedstring.h>
-
 
 // Local includes
 

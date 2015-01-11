@@ -299,13 +299,13 @@ SetupCamera::SetupCamera(QWidget* const parent)
     d->autoDetectButton = new QPushButton(panel);
 
     d->addButton->setText(i18n("&Add..."));
-    d->addButton->setIcon(QIcon::fromTheme("list-add").pixmap(16));
+    d->addButton->setIcon(QIcon::fromTheme("list-add"));
     d->removeButton->setText(i18n("&Remove"));
-    d->removeButton->setIcon(QIcon::fromTheme("list-remove").pixmap(16));
+    d->removeButton->setIcon(QIcon::fromTheme("list-remove"));
     d->editButton->setText(i18n("&Edit..."));
-    d->editButton->setIcon(QIcon::fromTheme("configure").pixmap(16));
+    d->editButton->setIcon(QIcon::fromTheme("configure"));
     d->autoDetectButton->setText(i18n("Auto-&Detect"));
-    d->autoDetectButton->setIcon(QIcon::fromTheme("system-search").pixmap(16));
+    d->autoDetectButton->setIcon(QIcon::fromTheme("system-search"));
     d->removeButton->setEnabled(false);
     d->editButton->setEnabled(false);
 
@@ -390,11 +390,11 @@ SetupCamera::SetupCamera(QWidget* const parent)
     label->setText(i18n("Ignored file names:"));
     label2->setText(i18n("Ignored file extensions:"));
     d->importAddButton->setText(i18n("&Add..."));
-    d->importAddButton->setIcon(QIcon::fromTheme("list-add").pixmap(16));
+    d->importAddButton->setIcon(QIcon::fromTheme("list-add"));
     d->importRemoveButton->setText(i18n("&Remove"));
-    d->importRemoveButton->setIcon(QIcon::fromTheme("list-remove").pixmap(16));
+    d->importRemoveButton->setIcon(QIcon::fromTheme("list-remove"));
     d->importEditButton->setText(i18n("&Edit..."));
-    d->importEditButton->setIcon(QIcon::fromTheme("configure").pixmap(16));
+    d->importEditButton->setIcon(QIcon::fromTheme("configure"));
     d->importRemoveButton->setEnabled(false);
     d->importEditButton->setEnabled(false);
 

@@ -123,11 +123,11 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
     : QScrollArea(parent), d(new Private)
 {
     d->nonDestructivePanel            = new QWidget;
-    QVBoxLayout* nonDestructiveLayout = new QVBoxLayout;
+    QVBoxLayout* const nonDestructiveLayout = new QVBoxLayout;
 
     // ---
 
-    QGridLayout* gridHeader = new QGridLayout;
+    QGridLayout* const gridHeader = new QGridLayout;
 
     d->enableNonDestructive = new QCheckBox;
     d->enableNonDestructive->setText(i18n("Enable Non-Destructive Editing and Versioning"));
@@ -139,11 +139,11 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
                                                 "whilst always preserving the original image.</para> "
                                                 "<para> All steps of the editing history are recorded and can be accessed later.</para>"));
 
-    QLabel* iconLabel       = new QLabel;
+    QLabel* const iconLabel = new QLabel;
     iconLabel->setPixmap(QIcon::fromTheme("view-catalog").pixmap(32));
 
     d->infoNonDestructive   = new QPushButton;
-    d->infoNonDestructive->setIcon(QIcon::fromTheme("dialog-information").pixmap(16));
+    d->infoNonDestructive->setIcon(QIcon::fromTheme("dialog-information"));
     d->infoNonDestructive->setToolTip(i18nc("@info:tooltip", "Get information on non-destructive editing and file versioning"));
 
     gridHeader->addWidget(iconLabel,               0, 0);
@@ -153,12 +153,12 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    d->workspaceGB         = new QGroupBox(i18nc("@title:group", "Workspace File Format"));
-    QGridLayout* wsLayout  = new QGridLayout;
+    d->workspaceGB              = new QGroupBox(i18nc("@title:group", "Workspace File Format"));
+    QGridLayout* const wsLayout = new QGridLayout;
 
-    QLabel* workIcon       = new QLabel;
+    QLabel* const workIcon      = new QLabel;
     workIcon->setPixmap(QIcon::fromTheme("document-save-as").pixmap(32));
-    QLabel* formatLabel    = new QLabel(i18nc("@label", "Save files as"));
+    QLabel* const formatLabel   = new QLabel(i18nc("@label", "Save files as"));
 
     // keep in sync with VersionManager::workspaceFileFormats()
     d->formatBox           = new QComboBox;
@@ -222,7 +222,7 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
 */
 
     d->infoFormat = new QPushButton;
-    d->infoFormat->setIcon(QIcon::fromTheme("dialog-information").pixmap(16));
+    d->infoFormat->setIcon(QIcon::fromTheme("dialog-information"));
     d->infoFormat->setToolTip(i18nc("@info:tooltip", "Get information on available image file formats"));
 
     wsLayout->addWidget(workIcon,           0, 0);
@@ -237,14 +237,14 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
 
     // ---
 
-    d->closingGB               = new QGroupBox;//(i18nc("@title:group", "Automatic Saving"));
-    QGridLayout* closingLayout = new QGridLayout;
+    d->closingGB                     = new QGroupBox;//(i18nc("@title:group", "Automatic Saving"));
+    QGridLayout* const closingLayout = new QGridLayout;
 
-    QLabel* closingExplanation = new QLabel(i18nc("@label", "When closing the editor"));
-    QLabel* closingIcon        = new QLabel;
+    QLabel* const closingExplanation = new QLabel(i18nc("@label", "When closing the editor"));
+    QLabel* const closingIcon        = new QLabel;
     closingIcon->setPixmap(QIcon::fromTheme("dialog-ok-apply").pixmap(32));
-    d->askToSave               = new QRadioButton(i18nc("@option:radio", "Always ask to save changes"));
-    d->autoSave                = new QRadioButton(i18nc("@option:radio", "Save changes automatically"));
+    d->askToSave                     = new QRadioButton(i18nc("@option:radio", "Always ask to save changes"));
+    d->autoSave                      = new QRadioButton(i18nc("@option:radio", "Save changes automatically"));
 
     closingLayout->addWidget(closingIcon,        0, 0);
     closingLayout->addWidget(closingExplanation, 0, 1);
@@ -259,9 +259,9 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
     // --------------------------------------------------------
 
 /*
-    QGridLayout* snapshotHeader = new QGridLayout;
+    QGridLayout* const snapshotHeader = new QGridLayout;
 
-    QLabel *snapshotExplanation = new QLabel;
+    QLabel* const snapshotExplanation = new QLabel;
     snapshotExplanation->setText(i18nc("@label",
                                        "For an edited image, there is at least one file representing the current version."
                                        "DigiKam can take and keep additional, intermediate snapshots during editing."));
@@ -272,8 +272,8 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
     snapshotHeader->addWidget(snapshotExplanation,     0, 1);
 */
 
-    d->snapshotGB = new QGroupBox;//(i18nc("@title:group", "Intermediate Version Snapshots"));
-    QGridLayout* snapshotLayout = new QGridLayout;
+    d->snapshotGB                     = new QGroupBox;//(i18nc("@title:group", "Intermediate Version Snapshots"));
+    QGridLayout* const snapshotLayout = new QGridLayout;
 
     QString snapshotWhatsThis = i18nc("@info:whatsthis",
                                       "<para>First and foremost, the <emphasis>original image will never be overwritten.</emphasis> "
@@ -288,13 +288,13 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
                                       "access, for example if some editing steps cannot be automatically reproduced.</para> ");
     d->snapshotGB->setWhatsThis(snapshotWhatsThis);
 
-    QLabel* snapshotIconLabel = new QLabel;
+    QLabel* const snapshotIconLabel = new QLabel;
     snapshotIconLabel->setPixmap(QIcon::fromTheme("insert-image").pixmap(32));
 
-    QLabel* snapshotLabel     = new QLabel(i18nc("@label", "Keep a snapshot of an edited image"));
+    QLabel* const snapshotLabel     = new QLabel(i18nc("@label", "Keep a snapshot of an edited image"));
 
     d->infoSnapshot           = new QPushButton;
-    d->infoSnapshot->setIcon(QIcon::fromTheme("dialog-information").pixmap(16));
+    d->infoSnapshot->setIcon(QIcon::fromTheme("dialog-information"));
     d->infoSnapshot->setToolTip(i18nc("@info:tooltip", "Get an explanation for these options"));
 
     d->snapshotAfterRaw       = new QCheckBox(i18nc("@option:check", "After converting from a RAW image"));
@@ -324,13 +324,13 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
 
 /*
     d->viewPanel = new QWidget;
-    QVBoxLayout* viewLayout = new QVBoxLayout;
+    QVBoxLayout* const viewLayout = new QVBoxLayout;
 
     // ---
 
-    QGridLayout* viewHeaderLayout = new QGridLayout;
+    QGridLayout* const viewHeaderLayout = new QGridLayout;
 
-    QLabel* viewExplanation = new QLabel;
+    QLabel* const viewExplanation = new QLabel;
     viewExplanation->setText(i18nc("@label",
                                    "If an image has been edited, only the current versions will be shown. "
                                    "From the right sidebar, you can access all hidden files. "
@@ -344,7 +344,7 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
 */
 
     d->viewGB = new QGroupBox;
-    QGridLayout* viewGBLayout = new QGridLayout;
+    QGridLayout* const viewGBLayout = new QGridLayout;
 
     QString viewWhatsThis = i18nc("@info:whatsthis",
                                   "<para>If an image has been edited, only the <interface>current versions</interface> "
@@ -353,13 +353,13 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
                                   "<para>With the options here, you can choose to show certain files permanently.</para>");
     d->viewGB->setWhatsThis(viewWhatsThis);
 
-    QLabel* viewLabel     =  new QLabel(i18nc("@label", "In main view"));
+    QLabel* const viewLabel     =  new QLabel(i18nc("@label", "In main view"));
 
-    QLabel* viewIconLabel = new QLabel;
+    QLabel* const viewIconLabel = new QLabel;
     viewIconLabel->setPixmap(QIcon::fromTheme("view-list-icons").pixmap(32));
 
     d->infoView           = new QPushButton;
-    d->infoView->setIcon(QIcon::fromTheme("dialog-information").pixmap(16));
+    d->infoView->setIcon(QIcon::fromTheme("dialog-information"));
     d->infoView->setToolTip(i18nc("@info:tooltip", "Get an explanation for these options"));
 
     d->viewShowOriginal   = new QCheckBox(i18nc("@option:check", "Always show original images"));

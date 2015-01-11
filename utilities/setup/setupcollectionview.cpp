@@ -762,13 +762,13 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
                     switch (index.row())
                     {
                         case CategoryLocal:
-                            return QIcon::fromTheme("drive-harddisk").pixmap(32);
+                            return QIcon::fromTheme("drive-harddisk");
 
                         case CategoryRemovable:
-                            return QIcon::fromTheme("drive-removable-media-usb").pixmap(32);
+                            return QIcon::fromTheme("drive-removable-media-usb");
 
                         case CategoryRemote:
-                            return QIcon::fromTheme("network-wired").pixmap(32);
+                            return QIcon::fromTheme("network-wired");
                     }
 
                     break;
@@ -834,21 +834,21 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
                 {
                     if (item.deleted)
                     {
-                        return QIcon::fromTheme("edit-delete").pixmap(16);
+                        return QIcon::fromTheme("edit-delete");
                     }
 
                     if (item.location.isNull())
                     {
-                        return QIcon::fromTheme("folder-new").pixmap(16);
+                        return QIcon::fromTheme("folder-new");
                     }
 
                     switch (item.location.status())
                     {
                         case CollectionLocation::LocationAvailable:
-                            return QIcon::fromTheme("dialog-ok-apply").pixmap(16);
+                            return QIcon::fromTheme("dialog-ok-apply");
 
                         case CollectionLocation::LocationHidden:
-                            return QIcon::fromTheme("object-locked").pixmap(16);
+                            return QIcon::fromTheme("object-locked");
 
                         case CollectionLocation::LocationUnavailable:
 
@@ -866,7 +866,7 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
 
                         case CollectionLocation::LocationNull:
                         case CollectionLocation::LocationDeleted:
-                            return QIcon::fromTheme("edit-delete").pixmap(16);
+                            return QIcon::fromTheme("edit-delete");
                     }
                 }
                 else if (role == Qt::ToolTipRole)
@@ -900,7 +900,7 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
                         return true;
 
                     case ButtonDecorationRole:
-                        return QIcon::fromTheme("edit-delete").pixmap(16);
+                        return QIcon::fromTheme("edit-delete");
 
                     case ButtonMapId:
                         return buttonMapId(index);

@@ -203,7 +203,6 @@ void SearchGroup::setup(Type type)
 
     // ----- //
 
-
     label = new SearchFieldGroupLabel(this);
     label->setTitle(i18n("Geographic position"));
     group = new SearchFieldGroup(this);
@@ -223,7 +222,7 @@ void SearchGroup::setup(Type type)
     // ----- //
 
     // prepare subgroup layout
-    QHBoxLayout* indentLayout = new QHBoxLayout;
+    QHBoxLayout* const indentLayout = new QHBoxLayout;
     indentLayout->setContentsMargins(0, 0, 0, 0);
     indentLayout->setSpacing(0);
 
@@ -310,7 +309,7 @@ void SearchGroup::read(SearchXmlCachingReader& reader)
 SearchGroup* SearchGroup::createSearchGroup()
 {
     // create a sub group - view is the same
-    SearchGroup* group = new SearchGroup(m_view);
+    SearchGroup* const group = new SearchGroup(m_view);
     group->setup(SearchGroup::ChainGroup);
     return group;
 }
@@ -357,8 +356,10 @@ SearchGroup::Type SearchGroup::groupType() const
 QList<QRect> SearchGroup::startupAnimationArea() const
 {
     QList<QRect> rects;
+
     // from subgroups;
     rects += startupAnimationAreaOfGroups();
+
     // field groups
     foreach(SearchFieldGroup* fieldGroup, m_fieldGroups)
     {
@@ -443,24 +444,24 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache* const cache, Sear
 
     // leave styling to style sheet (by object name)
 
-    QLabel* mainLabel     = new QLabel(i18n("Find Pictures"));
+    QLabel* const mainLabel = new QLabel(i18n("Find Pictures"));
     mainLabel->setObjectName("SearchGroupLabel_MainLabel");
 
     // Use radio button with a separate label to fix styling problem, see bug 195809
-    d->allBox             = new QRadioButton;
-    QLabel* allBoxLabel   = new QLabel(i18n("Meet All of the following conditions"));
+    d->allBox                 = new QRadioButton;
+    QLabel* const allBoxLabel = new QLabel(i18n("Meet All of the following conditions"));
     allBoxLabel->setObjectName("SearchGroupLabel_CheckBox");
 
     d->anyBox = new QRadioButton;
-    QLabel* anyBoxLabel   = new QLabel(i18n("Meet Any of the following conditions"));
+    QLabel* const anyBoxLabel = new QLabel(i18n("Meet Any of the following conditions"));
     anyBoxLabel->setObjectName("SearchGroupLabel_CheckBox");
 
     d->noneBox = new QRadioButton;
-    QLabel* noneBoxLabel  = new QLabel(i18n("None of these conditions are met"));
+    QLabel* const noneBoxLabel = new QLabel(i18n("None of these conditions are met"));
     noneBoxLabel->setObjectName("SearchGroupLabel_CheckBox");
 
-    d->oneNotBox            = new QRadioButton;
-    QLabel* oneNotBoxLabel = new QLabel(i18n("At least one of these conditions is not met"));
+    d->oneNotBox                 = new QRadioButton;
+    QLabel* const oneNotBoxLabel = new QLabel(i18n("At least one of these conditions is not met"));
     oneNotBoxLabel->setObjectName("SearchGroupLabel_CheckBox");
 
     connect(d->allBox, SIGNAL(toggled(bool)),
@@ -477,7 +478,7 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache* const cache, Sear
 
     if (type == SearchGroup::FirstGroup)
     {
-        QLabel* logo = new QLabel;
+        QLabel* const logo = new QLabel;
         logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
                         .scaled(96, 96, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
@@ -487,9 +488,9 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache* const cache, Sear
         connect(d->optionsLabel, SIGNAL(activated()),
                 this, SLOT(toggleShowOptions()));
 
-        QWidget* simpleHeader     = new QWidget;
-        QVBoxLayout* headerLayout = new QVBoxLayout;
-        QLabel* simpleLabel1      = new QLabel;
+        QWidget* const simpleHeader     = new QWidget;
+        QVBoxLayout* const headerLayout = new QVBoxLayout;
+        QLabel* const simpleLabel1      = new QLabel;
         //simpleLabel->setText(i18n("Find Pictures meeting all of these conditions"));
         //simpleLabel->setPixmap(QIcon::fromTheme("edit-find").pixmap(128));
         simpleLabel1->setText(i18n("<qt><p>Search your collection<br/>for pictures meeting the following conditions</p></qt>"));
@@ -500,8 +501,8 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache* const cache, Sear
         headerLayout->setMargin(0);
         simpleHeader->setLayout(headerLayout);
 
-        QWidget* optionsBox        = new QWidget;
-        QGridLayout* optionsLayout = new QGridLayout;
+        QWidget* const optionsBox        = new QWidget;
+        QGridLayout* const optionsLayout = new QGridLayout;
         optionsLayout->addLayout(new RadioButtonHBox(d->allBox, allBoxLabel, layoutDirection()),       0, 0);
         optionsLayout->addLayout(new RadioButtonHBox(d->anyBox, anyBoxLabel, layoutDirection()),       1, 0);
         optionsLayout->addLayout(new RadioButtonHBox(d->noneBox, noneBoxLabel, layoutDirection()),     0, 1);
@@ -514,10 +515,10 @@ SearchGroupLabel::SearchGroupLabel(SearchViewThemedPartsCache* const cache, Sear
         d->stackedLayout->addWidget(optionsBox);
         d->stackedLayout->setMargin(0);
 
-        d->layout->addWidget(mainLabel,       0, 0, 1, 1);
+        d->layout->addWidget(mainLabel,        0, 0, 1, 1);
         d->layout->addLayout(d->stackedLayout, 1, 0, 1, 1);
         d->layout->addWidget(d->optionsLabel,  1, 1, 1, 1, Qt::AlignRight | Qt::AlignBottom);
-        d->layout->addWidget(logo,            0, 2, 2, 1, Qt::AlignTop);
+        d->layout->addWidget(logo,             0, 2, 2, 1, Qt::AlignTop);
         d->layout->setColumnStretch(1, 10);
 
         setExtended(false);

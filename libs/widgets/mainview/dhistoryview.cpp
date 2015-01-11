@@ -56,28 +56,28 @@ public:
         switch (type)
         {
             case DHistoryView::StartingEntry:
-                setIcon(0, QIcon::fromTheme("system-run").pixmap(16));
+                setIcon(0, QIcon::fromTheme("system-run"));
                 break;
             case DHistoryView::SuccessEntry:
-                setIcon(0, QIcon::fromTheme("dialog-ok").pixmap(16));
+                setIcon(0, QIcon::fromTheme("dialog-ok"));
                 break;
             case DHistoryView::WarningEntry:
-                setIcon(0, QIcon::fromTheme("dialog-warning").pixmap(16));
+                setIcon(0, QIcon::fromTheme("dialog-warning"));
                 setTextColor(2, Qt::darkYellow);
                 break;
             case DHistoryView::ErrorEntry:
-                setIcon(0, QIcon::fromTheme("dialog-error").pixmap(16));
+                setIcon(0, QIcon::fromTheme("dialog-error"));
                 setTextColor(2, Qt::red);
                 break;
             case DHistoryView::ProgressEntry:
-                setIcon(0, QIcon::fromTheme("dialog-information").pixmap(16));
+                setIcon(0, QIcon::fromTheme("dialog-information"));
                 break;
             case DHistoryView::CancelEntry:
-                setIcon(0, QIcon::fromTheme("dialog-cancel").pixmap(16));
+                setIcon(0, QIcon::fromTheme("dialog-cancel"));
                 setTextColor(2, Qt::darkBlue);
                 break;
             default:
-                setIcon(0, QIcon::fromTheme("dialog-information").pixmap(16));
+                setIcon(0, QIcon::fromTheme("dialog-information"));
                 break;
         }
 

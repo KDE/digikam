@@ -28,22 +28,20 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QPushButton>
+#include <QApplication>
+#include <QStyle>
+#include <QIcon>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <kkeysequencewidget.h>
 #include <kseparator.h>
-
-#include "digikam_debug.h"
-#include <QIcon>
-
 #include <kicondialog.h>
-#include <kmessagebox.h>
 
-#include <QApplication>
-#include <QStyle>
 // local includes
 
+#include "digikam_debug.h"
 #include "searchtextbar.h"
 #include "album.h"
 #include "albummanager.h"
@@ -199,18 +197,18 @@ TagPropWidget::~TagPropWidget()
 void TagPropWidget::slotSelectionChanged(QList<Album*> albums)
 {
 
-    if(albums.isEmpty())
+    if (albums.isEmpty())
     {
         enableItems(TagPropWidget::DisabledAll);
         return;
     }
 
-    if(d->changed)
+    if (d->changed)
     {
-        int rez = KMessageBox::questionYesNo(this,
-                                             i18n("Previous tags were changed. "
-                                                "Save changes? "));
-        if(rez == KMessageBox::Yes)
+        int rez = QMessageBox::question(this, qApp->applicationName(),
+                                        i18n("Previous tags were changed. "
+                                             "Save changes? "));
+        if (rez == QMessageBox::Yes)
         {
             slotSaveChanges();
         }
@@ -218,11 +216,11 @@ void TagPropWidget::slotSelectionChanged(QList<Album*> albums)
         d->changed = false;
     }
 
-    if(albums.size() == 1)
+    if (albums.size() == 1)
     {
         TAlbum* const album = dynamic_cast<TAlbum*>(albums.first());
 
-        if(!album)
+        if (!album)
         {
             return;
         }
@@ -235,7 +233,7 @@ void TagPropWidget::slotSelectionChanged(QList<Album*> albums)
         d->iconButton->setIcon(SyncJob::getTagThumbnail(album));
         d->keySeqWidget->setKeySequence(Seq);
 
-        if(album->isRoot())
+        if (album->isRoot())
             enableItems(TagPropWidget::DisabledAll);
         else
             enableItems(TagPropWidget::EnabledAll);
@@ -246,7 +244,7 @@ void TagPropWidget::slotSelectionChanged(QList<Album*> albums)
         QList<Album*>::iterator it;
         bool containsRoot = false;
 
-        for(it = albums.begin(); it != albums.end(); ++it)
+        for (it = albums.begin(); it != albums.end(); ++it)
         {
             TAlbum* const temp = dynamic_cast<TAlbum*>(*it);
 
@@ -263,7 +261,8 @@ void TagPropWidget::slotSelectionChanged(QList<Album*> albums)
         d->icon.clear();
         d->iconButton->setIcon(QIcon());
         d->keySeqWidget->clearKeySequence();
-        if(containsRoot)
+
+        if (containsRoot)
             enableItems(TagPropWidget::DisabledAll);
         else
             enableItems(TagPropWidget::IconOnly);
@@ -281,14 +280,14 @@ void TagPropWidget::slotIconResetClicked()
 
     d->changed = true;
     d->icon    = QString("tag");
-    d->iconButton->setIcon(QIcon::fromTheme(d->icon).pixmap(20));
+    d->iconButton->setIcon(QIcon::fromTheme(d->icon));
 }
+
 void TagPropWidget::slotIconChanged()
 {
     d->changed   = true;
     KIconDialog dlg(this);
-    dlg.setup(KIconLoader::NoGroup, KIconLoader::Application, false,
-              20, false, false, false);
+    dlg.setup(KIconLoader::NoGroup, KIconLoader::Application, false, 20, false, false, false);
     QString icon = dlg.openDialog();
 
     if (icon.isEmpty() || icon == d->icon)
@@ -297,7 +296,7 @@ void TagPropWidget::slotIconChanged()
     }
 
     d->icon = icon;
-    d->iconButton->setIcon(QIcon::fromTheme(d->icon).pixmap(20));
+    d->iconButton->setIcon(QIcon::fromTheme(d->icon));
 }
 
 void TagPropWidget::slotDataChanged()
@@ -320,7 +319,7 @@ void TagPropWidget::slotSaveChanges()
 
             if (!AlbumManager::instance()->renameTAlbum(tag, title, errMsg))
             {
-                KMessageBox::error(0, errMsg);
+                QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(), errMsg);
             }
         }
 
@@ -330,7 +329,7 @@ void TagPropWidget::slotSaveChanges()
 
             if (!AlbumManager::instance()->updateTAlbumIcon(tag, icon, 0, errMsg))
             {
-                KMessageBox::error(0, errMsg);
+                QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(), errMsg);
             }
         }
 
@@ -353,7 +352,7 @@ void TagPropWidget::slotSaveChanges()
 
                 if (!AlbumManager::instance()->updateTAlbumIcon(tag, d->icon, 0, errMsg))
                 {
-                    KMessageBox::error(0, errMsg);
+                    QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(), errMsg);
                 }
             }
         }
