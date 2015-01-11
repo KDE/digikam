@@ -233,6 +233,8 @@ void DIO::Private::deleteFiles(const QList<ImageInfo>& infos, bool useTrash)
         urls << info.fileUrl();
     }
 
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Deleting files:" << urls;
+
     emit jobToProcess(useTrash ? Trash : Delete, urls, QUrl());
 }
 
@@ -257,6 +259,7 @@ DIO* DIO::instance()
 DIO::DIO()
     : d(new Private(this))
 {
+    qRegisterMetaType<QList<QUrl>>("QList<QUrl>");
 }
 
 DIO::~DIO()
