@@ -54,16 +54,16 @@ bool Template::operator==(const Template& t) const
     bool b9  = m_contactInfo     == t.m_contactInfo;
     bool b10 = m_subjects        == t.m_subjects;
     /*
-        qCDebug(DIGIKAM_GENERAL_LOG) << t.authors()         << m_authors         << b1;
-        qCDebug(DIGIKAM_GENERAL_LOG) << t.authorsPosition() << m_authorsPosition << b2;
-        qCDebug(DIGIKAM_GENERAL_LOG) << t.credit()          << m_credit          << b3;
-        qCDebug(DIGIKAM_GENERAL_LOG) << t.copyright()       << m_copyright       << b4;
-        qCDebug(DIGIKAM_GENERAL_LOG) << t.rightUsageTerms() << m_rightUsageTerms << b5;
-        qCDebug(DIGIKAM_GENERAL_LOG) << t.source()          << m_source          << b6;
-        qCDebug(DIGIKAM_GENERAL_LOG) << t.instructions()    << m_instructions    << b7;
-        qCDebug(DIGIKAM_GENERAL_LOG) << t.locationInfo()    << m_locationInfo    << b8;
-        qCDebug(DIGIKAM_GENERAL_LOG) << t.contactInfo()     << m_contactInfo     << b9;
-        qCDebug(DIGIKAM_GENERAL_LOG) << t.IptcSubjects()    << m_subjects        << b10;
+        qCDebug(LOG_METADATA) << t.authors()         << m_authors         << b1;
+        qCDebug(LOG_METADATA) << t.authorsPosition() << m_authorsPosition << b2;
+        qCDebug(LOG_METADATA) << t.credit()          << m_credit          << b3;
+        qCDebug(LOG_METADATA) << t.copyright()       << m_copyright       << b4;
+        qCDebug(LOG_METADATA) << t.rightUsageTerms() << m_rightUsageTerms << b5;
+        qCDebug(LOG_METADATA) << t.source()          << m_source          << b6;
+        qCDebug(LOG_METADATA) << t.instructions()    << m_instructions    << b7;
+        qCDebug(LOG_METADATA) << t.locationInfo()    << m_locationInfo    << b8;
+        qCDebug(LOG_METADATA) << t.contactInfo()     << m_contactInfo     << b9;
+        qCDebug(LOG_METADATA) << t.IptcSubjects()    << m_subjects        << b10;
     */
     return b1 && b2 && b3 && b4 && b5 && b6 && b7 && b8 && b9 && b10;
 }

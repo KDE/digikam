@@ -238,7 +238,7 @@ bool DMetadata::mSecTimeStamp(const char* const exifTagName, int& ms) const
             if (ok)
             {
                 ms = _ms;
-                qCDebug(DIGIKAM_GENERAL_LOG) << "msec timestamp: " << ms;
+                qCDebug(LOG_METADATA) << "msec timestamp: " << ms;
             }
         }
     }
@@ -358,7 +358,7 @@ bool DMetadata::setImageComments(const CaptionsMap& comments) const
           return false;
     */
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << getFilePath() << " ==> Comment: " << comments;
+    qCDebug(LOG_METADATA) << getFilePath() << " ==> Comment: " << comments;
 
     // In first, set captions properties to digiKam XMP namespace
 
@@ -543,7 +543,7 @@ CaptionsMap DMetadata::getImageTitles() const
 
 bool DMetadata::setImageTitles(const CaptionsMap& titles) const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << getFilePath() << " ==> Title: " << titles;
+    qCDebug(LOG_METADATA) << getFilePath() << " ==> Title: " << titles;
 
     QString defaultTitle = titles[QString("x-default")].caption;
 
@@ -734,11 +734,11 @@ bool DMetadata::setImagePickLabel(int pickId) const
 {
     if (pickId < NoPickLabel || pickId > AcceptedLabel)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Pick Label value to write is out of range!";
+        qCDebug(LOG_METADATA) << "Pick Label value to write is out of range!";
         return false;
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << getFilePath() << " ==> Pick Label: " << pickId;
+    qCDebug(LOG_METADATA) << getFilePath() << " ==> Pick Label: " << pickId;
 
     if (!setProgramId())
     {
@@ -760,11 +760,11 @@ bool DMetadata::setImageColorLabel(int colorId) const
 {
     if (colorId < NoColorLabel || colorId > WhiteLabel)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Color Label value to write is out of range!";
+        qCDebug(LOG_METADATA) << "Color Label value to write is out of range!";
         return false;
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << getFilePath() << " ==> Color Label: " << colorId;
+    qCDebug(LOG_METADATA) << getFilePath() << " ==> Color Label: " << colorId;
 
     if (!setProgramId())
     {
@@ -795,11 +795,11 @@ bool DMetadata::setImageRating(int rating) const
 
     if (rating < RatingMin || rating > RatingMax)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Rating value to write is out of range!";
+        qCDebug(LOG_METADATA) << "Rating value to write is out of range!";
         return false;
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << getFilePath() << " ==> Rating: " << rating;
+    qCDebug(LOG_METADATA) << getFilePath() << " ==> Rating: " << rating;
 
     if (!setProgramId())
     {
@@ -886,7 +886,7 @@ QString DMetadata::getImageHistory() const
     if (hasXmp())
     {
         QString value = getXmpTagString("Xmp.digiKam.ImageHistory", false);
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Loading image history " << value;
+        qCDebug(LOG_METADATA) << "Loading image history " << value;
         return value;
     }
 
@@ -1218,7 +1218,7 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
     {
         // See bug #197285: LightRoom use '|' as separator.
         tagsPath = tagsPath.replaceInStrings("|", "/");
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Tags Path imported from LightRoom: " << tagsPath;
+        qCDebug(LOG_METADATA) << "Tags Path imported from LightRoom: " << tagsPath;
         return true;
     }
 
@@ -1243,7 +1243,7 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath) const
         if (ntp != tagsPath)
         {
             tagsPath = ntp;
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Tags Path imported from Imach: " << tagsPath;
+            qCDebug(LOG_METADATA) << "Tags Path imported from Imach: " << tagsPath;
         }
 
         return true;
@@ -1314,7 +1314,7 @@ bool DMetadata::getImageFacesMap(QMultiMap<QString,QVariant>& faces) const
 
         if (list.size() < 4)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot parse WLPG rectangle string" << rectString;
+            qCDebug(LOG_METADATA) << "Cannot parse WLPG rectangle string" << rectString;
             continue;
         }
 
@@ -1355,7 +1355,7 @@ bool DMetadata::getImageFacesMap(QMultiMap<QString,QVariant>& faces) const
                     h);
 
         faces.insertMulti(person, rect);
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Found new rect " << person << " "<< rect;
+        qCDebug(LOG_METADATA) << "Found new rect " << person << " "<< rect;
     }
 #endif
 
@@ -1485,7 +1485,7 @@ bool DMetadata::setMetadataTemplate(const Template& t) const
     KExiv2::AltLangMap rightUsage = t.rightUsageTerms();
     QString instructions          = t.instructions();
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Applying Metadata Template: " << t.templateTitle() << " :: " << authors;
+    qCDebug(LOG_METADATA) << "Applying Metadata Template: " << t.templateTitle() << " :: " << authors;
 
     // Set XMP tags. XMP<->IPTC Schema from Photoshop 7.0
 
@@ -1975,7 +1975,7 @@ IccProfile DMetadata::getIccProfile() const
 
     if (!data.isNull())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Found an ICC profile in Exif metadata";
+        qCDebug(LOG_METADATA) << "Found an ICC profile in Exif metadata";
         return data;
     }
 
@@ -1984,13 +1984,13 @@ IccProfile DMetadata::getIccProfile() const
     {
         case DMetadata::WORKSPACE_SRGB:
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Exif color-space tag is sRGB. Using default sRGB ICC profile.";
+            qCDebug(LOG_METADATA) << "Exif color-space tag is sRGB. Using default sRGB ICC profile.";
             return IccProfile::sRGB();
         }
 
         case DMetadata::WORKSPACE_ADOBERGB:
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Exif color-space tag is AdobeRGB. Using default AdobeRGB ICC profile.";
+            qCDebug(LOG_METADATA) << "Exif color-space tag is AdobeRGB. Using default AdobeRGB ICC profile.";
             return IccProfile::adobeRGB();
         }
 
@@ -2024,7 +2024,7 @@ bool DMetadata::setIptcTag(const QString& text, int maxLength,
 {
     QString truncatedText = text;
     truncatedText.truncate(maxLength);
-    qCDebug(DIGIKAM_GENERAL_LOG) << getFilePath() << " ==> " << debugLabel << ": " << truncatedText;
+    qCDebug(LOG_METADATA) << getFilePath() << " ==> " << debugLabel << ": " << truncatedText;
     return setIptcTagString(tagKey, truncatedText);    // returns false if failed
 }
 
@@ -2766,7 +2766,7 @@ QMap<int, QString> DMetadata::possibleValuesForEnumField(MetadataInfo::Field fie
             //more: TODO?
             return map;
         default:
-            qCWarning(DIGIKAM_GENERAL_LOG) << "Unsupported field " << field << " in DMetadata::possibleValuesForEnumField";
+            qCWarning(LOG_METADATA) << "Unsupported field " << field << " in DMetadata::possibleValuesForEnumField";
             return map;
     }
 
