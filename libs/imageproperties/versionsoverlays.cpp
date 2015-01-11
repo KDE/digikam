@@ -26,10 +26,11 @@
 
 // Qt includes
 
+#include <QIcon>
+
 // KDE includes
 
 #include <klocalizedstring.h>
-
 
 // Local includes
 
@@ -134,7 +135,8 @@ void ShowHideVersionsOverlay::slotClicked(bool checked)
     if (index.isValid())
     {
         ImageInfo info = ImageModel::retrieveImageInfo(index);
-        int tagId = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::versionAlwaysVisible());
+        int tagId      = TagsCache::instance()->getOrCreateInternalTag(InternalTagName::versionAlwaysVisible());
+
         if (checked)
         {
             info.setTag(tagId);

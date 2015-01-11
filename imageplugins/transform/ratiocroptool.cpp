@@ -49,7 +49,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
-#include <kguiitem.h>
 #include <kstandardguiitem.h>
 
 // Libkdcraw includes

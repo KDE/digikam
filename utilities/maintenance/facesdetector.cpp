@@ -33,15 +33,12 @@
 #include <QIcon>
 #include <QPushButton>
 #include <QApplication>
+#include <QTextEdit>
 
 // KDE includes
 
 #include <kconfig.h>
 #include <klocalizedstring.h>
-
-#include <kstandardguiitem.h>
-#include <ktextedit.h>
-#include <kguiitem.h>
 #include <kstandardguiitem.h>
 
 // KFace includes
@@ -72,7 +69,7 @@ public:
         setAttribute(Qt::WA_DeleteOnClose);
 
         QVBoxLayout* const vbox     = new QVBoxLayout;
-        KTextEdit* const edit       = new KTextEdit;
+        QTextEdit* const edit       = new QTextEdit;
         vbox->addWidget(edit, 1);
         QPushButton* const okButton = new QPushButton;
         KGuiItem::assign(okButton,KStandardGuiItem::ok());
@@ -288,6 +285,7 @@ void FacesDetector::slotStart()
     }
 
     // first, we use the relativeProgressValue map to store absolute counts
+
     foreach(Album* const album, d->albumTodoList)
     {
         if (album->type() == Album::PHYSICAL)
@@ -301,15 +299,21 @@ void FacesDetector::slotStart()
             d->relativeProgressValue[album] = talbumCounts.value(album->id());
         }
     }
+
     // second, calculate (approximate) overall sum
+
     d->total = 0;
+
     foreach (double count, d->relativeProgressValue)
     {
         d->total += (int)count;
     }
+
     d->total = qMax(1, d->total);
     qCDebug(DIGIKAM_GENERAL_LOG) << "Total is" << d->total;
+
     // third, break absolute to relative values
+
     for (QMap<Album*,double>::iterator it = d->relativeProgressValue.begin(); it != d->relativeProgressValue.end(); ++it)
     {
         it.value() /= double(d->total);
@@ -380,7 +384,8 @@ void FacesDetector::slotImagesSkipped(const QList<ImageInfo>& infos)
 void FacesDetector::slotShowOneDetected(const FacePipelinePackage& /*package*/)
 {
     //TODO: Embedded images are gone. Needs to be solved by loading thumbnails
-    /*QPixmap pix;
+/*
+    QPixmap pix;
 
     if (!package.faces.isEmpty())
     {
@@ -392,7 +397,7 @@ void FacesDetector::slotShowOneDetected(const FacePipelinePackage& /*package*/)
     }
 
     setThumbnail(pix);
-    */
+*/
     advance(1);
 }
 

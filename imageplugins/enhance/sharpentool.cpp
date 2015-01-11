@@ -35,9 +35,7 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <kconfig.h>
-
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
 
@@ -83,7 +81,7 @@ SharpenTool::SharpenTool(QObject* const parent)
 {
     setObjectName("sharpen");
     setToolName(i18n("Sharpen"));
-    setToolIcon(QIcon::fromTheme("sharpenimage").pixmap(16));
+    setToolIcon(QIcon::fromTheme("sharpenimage"));
     setToolHelp("blursharpentool.anchor");
 
     // -------------------------------------------------------------

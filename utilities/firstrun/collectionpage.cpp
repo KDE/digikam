@@ -35,16 +35,14 @@
 #include <QFileInfo>
 #include <QVBoxLayout>
 #include <QTemporaryFile>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
-
-
 #include <kurlrequester.h>
 #include <kglobalsettings.h>
-#include <kmessagebox.h>
 
 // Local includes
 
@@ -197,7 +195,8 @@ bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
 
     if (rootAlbumFolder.isEmpty())
     {
-        KMessageBox::sorry(this, i18n("You must select a folder for digiKam to "
+        QMessageBox::information(this, qApp->applicationName(), 
+                                 i18n("You must select a folder for digiKam to "
                                       "use as the root album. All of your images will go there."));
         return false;
     }
@@ -214,7 +213,8 @@ bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
 /*
     if (QUrl::fromLocalFile(rootAlbumFolder).equals(QUrl::fromLocalFile(QDir::homePath()), QUrl::CompareWithoutFragment))
     {
-        KMessageBox::sorry(this, i18n("digiKam will not use your home folder as the "
+        QMessageBox::information(this, qApp->applicationName(), 
+                                 i18n("digiKam will not use your home folder as the "
                                       "root album. Please select another location."));
         return false;
     }
@@ -224,25 +224,23 @@ bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
 
     if (!targetPath.exists())
     {
-        int rc = KMessageBox::questionYesNo(this,
-                                            i18n("<p>The folder to use as the root album path does not exist:</p>"
+        int rc = QMessageBox::question(this, i18n("Create Root Album Folder?"),
+                                       i18n("<p>The folder to use as the root album path does not exist:</p>"
                                                  "<p><b>%1</b></p>"
                                                  "Would you like digiKam to create it for you?",
-                                                 rootAlbumFolder),
-                                            i18n("Create Root Album Folder?"));
+                                                 rootAlbumFolder));
 
-        if (rc == KMessageBox::No)
+        if (rc == QMessageBox::No)
         {
             return false;
         }
 
         if (!targetPath.mkpath(rootAlbumFolder))
         {
-            KMessageBox::sorry(this,
-                               i18n("<p>digiKam could not create the folder to use as the root album.\n"
-                                    "Please select a different location.</p>"
-                                    "<p><b>%1</b></p>", rootAlbumFolder),
-                               i18n("Create Root Album Folder Failed"));
+            QMessageBox::information(this, i18n("Create Root Album Folder Failed"),
+                                     i18n("<p>digiKam could not create the folder to use as the root album.\n"
+                                          "Please select a different location.</p>"
+                                          "<p><b>%1</b></p>", rootAlbumFolder));
             return false;
         }
     }
@@ -259,9 +257,10 @@ bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
     if (!path.isWritable())
 #endif
     {
-        KMessageBox::information(this, i18n("You do not seem to have write access for the folder "
-                                            "selected to be the root album.\n"
-                                            "Warning: Without write access, items cannot be edited."));
+        QMessageBox::information(this, qApp->applicationName(), 
+                                 i18n("You do not seem to have write access for the folder "
+                                      "selected to be the root album.\n"
+                                      "Warning: Without write access, items cannot be edited."));
     }
 
     return true;
@@ -274,7 +273,8 @@ bool CollectionPage::checkDatabase(QString& dbFolder)
 
     if (dbFolder.isEmpty())
     {
-        KMessageBox::sorry(this, i18n("You must select a folder for digiKam to "
+        QMessageBox::information(this, qApp->applicationName(), 
+                                 i18n("You must select a folder for digiKam to "
                                       "store information and metadata in a database file."));
         return false;
     }
@@ -291,7 +291,8 @@ bool CollectionPage::checkDatabase(QString& dbFolder)
 /*
     if (QUrl::fromLocalFile(dbFolder).equals(QUrl::fromLocalFile(QDir::homePath()), QUrl::CompareWithoutFragment))
     {
-        KMessageBox::sorry(this, i18n("digiKam cannot use your home folder as "
+        QMessageBox::information(this, qApp->applicationName(), 
+                                 i18n("digiKam cannot use your home folder as "
                                       "database file path."));
         return false;
     }
@@ -301,25 +302,22 @@ bool CollectionPage::checkDatabase(QString& dbFolder)
 
     if (!targetPath.exists())
     {
-        int rc = KMessageBox::questionYesNo(this,
+        int rc = QMessageBox::question(this, i18n("Create Database Folder?"),
                                             i18n("<p>The folder to put your database in does not seem to exist:</p>"
                                                  "<p><b>%1</b></p>"
-                                                 "Would you like digiKam to create it for you?",
-                                                 dbFolder),
-                                            i18n("Create Database Folder?"));
+                                                 "Would you like digiKam to create it for you?", dbFolder));
 
-        if (rc == KMessageBox::No)
+        if (rc == QMessageBox::No)
         {
             return false;
         }
 
         if (!targetPath.mkpath(dbFolder))
         {
-            KMessageBox::sorry(this,
-                               i18n("<p>digiKam could not create the folder to host your database file.\n"
-                                    "Please select a different location.</p>"
-                                    "<p><b>%1</b></p>", dbFolder),
-                               i18n("Create Database Folder Failed"));
+            QMessageBox::information(this, i18n("Create Database Folder Failed"),
+                                     i18n("<p>digiKam could not create the folder to host your database file.\n"
+                                          "Please select a different location.</p>"
+                                          "<p><b>%1</b></p>", dbFolder));
             return false;
         }
     }
@@ -330,17 +328,17 @@ bool CollectionPage::checkDatabase(QString& dbFolder)
     // Work around bug #189168
     QTemporaryFile temp;
     temp.setFileTemplate(dbFolder + QLatin1String("XXXXXX"));
-    
+
     if (!temp.open())
 #else
     if (!path.isWritable())
 #endif
     {
-        KMessageBox::information(this, i18n("<p>You do not seem to have write access "
-                                            "for the folder to host the database file.<br/>"
-                                            "Please select a different location.</p>"
-                                            "<p><b>%1</b></p>", dbFolder),
-                                 i18n("No Database Write Access"));
+        QMessageBox::information(this, i18n("No Database Write Access"),
+                                 i18n("<p>You do not seem to have write access "
+                                      "for the folder to host the database file.<br/>"
+                                      "Please select a different location.</p>"
+                                      "<p><b>%1</b></p>", dbFolder));
         return false;
     }
 

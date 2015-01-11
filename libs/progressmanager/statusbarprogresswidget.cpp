@@ -108,12 +108,10 @@ StatusbarProgressWidget::StatusbarProgressWidget(ProgressView* const progressVie
 
     d->pButton        = new QPushButton(this);
     d->pButton->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
-    QPixmap smallIcon = QIcon::fromTheme("go-up").pixmap(16);
-    d->pButton->setIcon(smallIcon);
+    d->pButton->setIcon(QIcon::fromTheme("go-up"));
     d->box->addWidget(d->pButton);
     d->stack          = new QStackedWidget(this);
-    int maximumHeight = qMax(smallIcon.height(), fontMetrics().height());
-    d->stack->setMaximumHeight(maximumHeight);
+    d->stack->setMaximumHeight(fontMetrics().height());
     d->box->addWidget(d->stack);
 
     d->pButton->setToolTip(i18n("Open detailed progress dialog"));
@@ -128,7 +126,7 @@ StatusbarProgressWidget::StatusbarProgressWidget(ProgressView* const progressVie
     d->pLabel->installEventFilter(this);
     d->pLabel->setMinimumWidth(w);
     d->stack->insertWidget(2, d->pLabel);
-    d->pButton->setMaximumHeight(maximumHeight);
+    d->pButton->setMaximumHeight(fontMetrics().height());
     setMinimumWidth(minimumSizeHint().width());
 
     setMode();
@@ -361,13 +359,13 @@ void StatusbarProgressWidget::slotProgressViewVisible(bool b)
     // Update the hide/show button when the detailed one is shown/hidden
     if (b)
     {
-        d->pButton->setIcon(QIcon::fromTheme("go-down").pixmap(16));
+        d->pButton->setIcon(QIcon::fromTheme("go-down"));
         d->pButton->setToolTip(i18n("Hide detailed progress window"));
         setMode();
     }
     else
     {
-        d->pButton->setIcon(QIcon::fromTheme("go-up").pixmap(16));
+        d->pButton->setIcon(QIcon::fromTheme("go-up"));
         d->pButton->setToolTip(i18n("Show detailed progress window"));
     }
 }

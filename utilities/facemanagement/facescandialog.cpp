@@ -395,7 +395,7 @@ void FaceScanDialog::setupUi()
     d->parametersResetButton            = new QToolButton(parametersTab);
     d->parametersResetButton->setAutoRaise(true);
     d->parametersResetButton->setFocusPolicy(Qt::NoFocus);
-    d->parametersResetButton->setIcon(QIcon::fromTheme("document-revert").pixmap(16));
+    d->parametersResetButton->setIcon(QIcon::fromTheme("document-revert"));
     d->parametersResetButton->setToolTip(i18nc("@action:button", "Reset to default values"));
 
     RHBox* const hbox                   = new RHBox(parametersTab);

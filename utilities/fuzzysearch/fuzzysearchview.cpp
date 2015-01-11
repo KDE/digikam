@@ -313,7 +313,7 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
                                         "\"Fuzzy Searches\" view."));
 
     d->saveBtnImage  = new QToolButton(saveBox);
-    d->saveBtnImage->setIcon(QIcon::fromTheme("document-save").pixmap(16));
+    d->saveBtnImage->setIcon(QIcon::fromTheme("document-save"));
     d->saveBtnImage->setEnabled(false);
     d->saveBtnImage->setToolTip(i18n("Save current similar image search to a new virtual Album"));
     d->saveBtnImage->setWhatsThis(i18n("If you press this button, the current "
@@ -369,14 +369,14 @@ QWidget* FuzzySearchView::setupSketchPanel() const
 
     d->undoBtnSketch   = new QToolButton();
     d->undoBtnSketch->setAutoRepeat(true);
-    d->undoBtnSketch->setIcon(QIcon::fromTheme("edit-undo").pixmap(16));
+    d->undoBtnSketch->setIcon(QIcon::fromTheme("edit-undo"));
     d->undoBtnSketch->setToolTip(i18n("Undo last draw on sketch"));
     d->undoBtnSketch->setWhatsThis(i18n("Use this button to undo last drawing action on sketch."));
     d->undoBtnSketch->setEnabled(false);
 
     d->redoBtnSketch   = new QToolButton();
     d->redoBtnSketch->setAutoRepeat(true);
-    d->redoBtnSketch->setIcon(QIcon::fromTheme("edit-redo").pixmap(16));
+    d->redoBtnSketch->setIcon(QIcon::fromTheme("edit-redo"));
     d->redoBtnSketch->setToolTip(i18n("Redo last draw on sketch"));
     d->redoBtnSketch->setWhatsThis(i18n("Use this button to redo last drawing action on sketch."));
     d->redoBtnSketch->setEnabled(false);
@@ -413,7 +413,7 @@ QWidget* FuzzySearchView::setupSketchPanel() const
     saveBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->resetButton = new QToolButton(saveBox);
-    d->resetButton->setIcon(QIcon::fromTheme("document-revert").pixmap(16));
+    d->resetButton->setIcon(QIcon::fromTheme("document-revert"));
     d->resetButton->setToolTip(i18n("Clear sketch"));
     d->resetButton->setWhatsThis(i18n("Use this button to clear sketch contents."));
 
@@ -423,7 +423,7 @@ QWidget* FuzzySearchView::setupSketchPanel() const
                                          "\"Fuzzy Searches\" view."));
 
     d->saveBtnSketch = new QToolButton(saveBox);
-    d->saveBtnSketch->setIcon(QIcon::fromTheme("document-save").pixmap(16));
+    d->saveBtnSketch->setIcon(QIcon::fromTheme("document-save"));
     d->saveBtnSketch->setEnabled(false);
     d->saveBtnSketch->setToolTip(i18n("Save current sketch search to a new virtual Album"));
     d->saveBtnSketch->setWhatsThis(i18n("If you press this button, the current sketch "

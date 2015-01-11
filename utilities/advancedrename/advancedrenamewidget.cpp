@@ -101,6 +101,7 @@ public:
     CWMask               controlWidgetsMask;
     LStyle               layoutStyle;
 };
+
 const QString AdvancedRenameWidget::Private::configGroupName("AdvancedRename Widget");
 const QString AdvancedRenameWidget::Private::configExpandedStateEntry("Options are expanded");
 
@@ -192,7 +193,7 @@ void AdvancedRenameWidget::setControlWidgets(ControlWidgets mask)
 
     // we need a parser and at least one renaming option to successfully use
     // this widget.
-    bool enable = d->parser && !(d->parser->options().isEmpty());
+    bool enable       = d->parser && !(d->parser->options().isEmpty());
 
     // enable the modifier toolbutton if environment has been set up correctly
     bool enableModBtn = enable && !(d->parser->modifiers().isEmpty());
@@ -218,7 +219,7 @@ QMenu* AdvancedRenameWidget::createControlsMenu(QWidget* parent, const RulesList
     QMenu* menu     = new QMenu(parent);
     QAction* action = 0;
 
-    foreach(Rule* rule, rules)
+    foreach(Rule* const rule, rules)
     {
         action = rule->registerMenu(menu);
 
@@ -247,8 +248,10 @@ void AdvancedRenameWidget::registerParserControls()
         {
             // register options
             QPushButton* btn      = 0;
-            DynamicLayout* layout = new DynamicLayout(QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin), QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin));
-            foreach(Rule* p, d->parser->options())
+            DynamicLayout* const layout = new DynamicLayout(QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin),
+                                                            QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+
+            foreach(Rule* const p, d->parser->options())
             {
                 btn = p->registerButton(this);
 
@@ -265,21 +268,22 @@ void AdvancedRenameWidget::registerParserControls()
                 connect(p, SIGNAL(signalTokenTriggered(QString)),
                         d->renameInput, SLOT(slotAddToken(QString)));
             }
+
             d->btnContainer->setLayout(layout);
             setMinimumWidth(d->btnContainer->layout()->sizeHint().width());
 
             // register modifiers
-            QMenu* modifiersMenu = createControlsMenu(d->modifiersToolButton, modifiersList);
+            QMenu* const modifiersMenu = createControlsMenu(d->modifiersToolButton, modifiersList);
             d->modifiersToolButton->setMenu(modifiersMenu);
         }
         else    // LayoutCompact
         {
             // register options
-            QMenu* optionsMenu = createControlsMenu(d->optionsButton, optionsList);
+            QMenu* const optionsMenu = createControlsMenu(d->optionsButton, optionsList);
             d->optionsButton->setMenu(optionsMenu);
 
             // register modifiers
-            QMenu* modifiersMenu = createControlsMenu(d->modifiersButton, modifiersList);
+            QMenu* const modifiersMenu = createControlsMenu(d->modifiersButton, modifiersList);
             d->modifiersButton->setMenu(modifiersMenu);
         }
 
@@ -342,7 +346,7 @@ void AdvancedRenameWidget::setupWidgets()
     // --------------------------------------------------------
 
     d->tooltipToggleButton = new QToolButton;
-    d->tooltipToggleButton->setIcon(QIcon::fromTheme("dialog-information").pixmap(16));
+    d->tooltipToggleButton->setIcon(QIcon::fromTheme("dialog-information"));
     d->tooltipToggleButton->setToolTip(i18n("Show a list of all available options"));
 
     // --------------------------------------------------------
@@ -356,7 +360,7 @@ void AdvancedRenameWidget::setupWidgets()
     // --------------------------------------------------------
 
     delete layout();
-    QGridLayout* mainLayout = new QGridLayout;
+    QGridLayout* const mainLayout = new QGridLayout;
 
     if (d->layoutStyle == LayoutNormal)
     {
@@ -383,7 +387,7 @@ void AdvancedRenameWidget::setupWidgets()
     {
         d->optionsButton = new QPushButton;
         d->optionsButton->setText(i18n("Options"));
-        d->optionsButton->setIcon(QIcon::fromTheme("configure").pixmap(16));
+        d->optionsButton->setIcon(QIcon::fromTheme("configure"));
         d->optionsButton->setToolTip(i18n("<p>Add renaming options to the parse string.</p>"));
 
         // --------------------------------------------------------

@@ -27,17 +27,16 @@
 // Qt includes
 
 #include <QTimer>
+#include <QIcon>
 
 // KDE includes
 
-#include <kio/job.h>
-
 #include <klocalizedstring.h>
-#include <QIcon>
-#include "digikam_debug.h"
+#include <kio/job.h>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "albummanager.h"
 #include "imagelister.h"
 #include "dnotificationwrapper.h"

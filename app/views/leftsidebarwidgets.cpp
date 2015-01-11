@@ -720,7 +720,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
     hbox2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->resetButton = new QToolButton(hbox2);
-    d->resetButton->setIcon(QIcon::fromTheme("document-revert").pixmap(16));
+    d->resetButton->setIcon(QIcon::fromTheme("document-revert"));
     d->resetButton->setToolTip(i18n("Clear current selection"));
     d->resetButton->setWhatsThis(i18n("If you press this button, the current date selection on the time-line will be cleared."));
     d->nameEdit    = new QLineEdit(hbox2);
@@ -729,7 +729,7 @@ TimelineSideBarWidget::TimelineSideBarWidget(QWidget* const parent, SearchModel*
                                    "\"Searches\" view"));
 
     d->saveButton  = new QToolButton(hbox2);
-    d->saveButton->setIcon(QIcon::fromTheme("document-save").pixmap(16));
+    d->saveButton->setIcon(QIcon::fromTheme("document-save"));
     d->saveButton->setEnabled(false);
     d->saveButton->setToolTip(i18n("Save current selection to a new virtual Album"));
     d->saveButton->setWhatsThis(i18n("If you press this button, the dates selected on the time-line will be "

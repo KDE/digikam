@@ -33,10 +33,7 @@
 // KDE includes
 
 #include <kconfig.h>
-
-
 #include <klocalizedstring.h>
-
 
 // Local includes
 
@@ -84,7 +81,7 @@ HSLTool::HSLTool(QObject* const parent)
 {
     setObjectName("adjusthsl");
     setToolName(i18n("Hue / Saturation / Lightness"));
-    setToolIcon(QIcon::fromTheme("adjusthsl").pixmap(16));
+    setToolIcon(QIcon::fromTheme("adjusthsl"));
     setToolHelp("hsladjusttool.anchor");
     setInitPreview(true);
 

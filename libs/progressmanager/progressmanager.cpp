@@ -33,14 +33,12 @@
 #include <QMutexLocker>
 #include <QThread>
 #include <QEventLoop>
+#include <QMessageBox>
+#include <QIcon>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-
-
-
-#include <kmessagebox.h>
 
 // Local includes
 
@@ -199,8 +197,7 @@ void ProgressItem::setThumbnail(const QPixmap& thumb)
     }
     else
     {
-        pix = pix.scaled(22, 22, 
-                         Qt::KeepAspectRatio, Qt::FastTransformation);
+        pix = pix.scaled(22, 22, Qt::KeepAspectRatio, Qt::FastTransformation);
     }
 
     emit progressItemThumbnail(this, pix);
@@ -462,7 +459,7 @@ bool ProgressManager::addProgressItem(ProgressItem* const t, ProgressItem* const
     }
     else
     {
-        KMessageBox::error(qApp->activeWindow(),
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
                            i18n("A tool identified as \"%1\" is already running....", t->id()));
         t->setComplete();
         return false;

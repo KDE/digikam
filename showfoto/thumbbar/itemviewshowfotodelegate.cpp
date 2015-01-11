@@ -32,7 +32,6 @@
 
 #include <kio/global.h>
 
-
 // Local includes
 
 #include "thememanager.h"

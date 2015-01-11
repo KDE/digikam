@@ -27,13 +27,12 @@
 
 #include <QDropEvent>
 #include <QIcon>
+#include <QMimeData>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kmimetype.h>
 #include <kurlmimedata.h>
-#include <kio/job.h>
 
 // Local includes
 
@@ -52,13 +51,13 @@ ShowfotoDragDropHandler::ShowfotoDragDropHandler(ShowfotoImageModel* const model
 
 QAction* ShowfotoDragDropHandler::addGroupAction(QMenu* const menu)
 {
-    return menu->addAction(QIcon::fromTheme("arrow-down-double").pixmap(16),
+    return menu->addAction(QIcon::fromTheme("arrow-down-double"),
                            i18nc("@action:inmenu Group images with this image", "Group here"));
 }
 
 QAction* ShowfotoDragDropHandler::addCancelAction(QMenu* const menu)
 {
-    return menu->addAction(QIcon::fromTheme("dialog-cancel").pixmap(16), i18n("C&ancel"));
+    return menu->addAction(QIcon::fromTheme("dialog-cancel"), i18n("C&ancel"));
 }
 
 bool ShowfotoDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDropEvent* e, const QModelIndex& droppedOn)

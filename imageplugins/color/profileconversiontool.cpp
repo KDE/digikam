@@ -34,8 +34,6 @@
 // KDE includes
 
 #include <kconfig.h>
-
-
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
 
@@ -109,7 +107,7 @@ ProfileConversionTool::ProfileConversionTool(QObject* const parent)
 {
     setObjectName("profile conversion");
     setToolName(i18n("Color Profile Conversion"));
-    setToolIcon(QIcon::fromTheme("colormanagement").pixmap(16));
+    setToolIcon(QIcon::fromTheme("colormanagement"));
     //TODO setToolHelp("colormanagement.anchor");
 
     // -------------------------------------------------------------
