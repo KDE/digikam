@@ -611,7 +611,8 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
             emit signalDownloaded(folder, file, CamItemInfo::DownloadStarted);
 
-            QUrl tempURL(dest);
+            // TODO clean-up up and generalize temporary file creation
+            QUrl tempURL = QUrl::fromLocalFile(dest);
             tempURL = KIO::upUrl(tempURL);
             tempURL = tempURL.adjusted(QUrl::StripTrailingSlash);
             tempURL.setPath(tempURL.path() + '/' + (QString(".digikam-camera-tmp1-%1").arg(getpid()).append(file)));
@@ -675,7 +676,8 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
                 if (convertJpeg)
                 {
-                    QUrl tempURL2(dest);
+                    // TODO clean-up up and generalize temporary file creation
+                    QUrl tempURL2 = QUrl::fromLocalFile(dest);
                     tempURL2 = KIO::upUrl(tempURL2);
                     tempURL2 = tempURL2.adjusted(QUrl::StripTrailingSlash);
                     tempURL2.setPath(tempURL2.path() + '/' + (QString(".digikam-camera-tmp2-%1").arg(getpid()).append(file)));
@@ -889,12 +891,10 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
         return;
     }
 
-    qCDebug(LOG_IMPORTUI) << "Checking whether (" << temp << ") has a sidecar";
-
     // move the file to the destination file
     if (DMetadata::hasSidecar(temp))
     {
-        qCDebug(LOG_IMPORTUI) << "  Yes, renaming it to " << dest;
+        qCDebug(LOG_IMPORTUI) << "File" << temp << " has a sidecar, renaming it to " << DMetadata::sidecarPath(dest);
 
         if (QFile::rename(DMetadata::sidecarPath(temp), DMetadata::sidecarPath(dest)) != 0)
         {
@@ -908,7 +908,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
         // rename failed. delete the temp file
         unlink(QFile::encodeName(temp).constData());
         emit signalDownloaded(folder, file, CamItemInfo::DownloadFailed);
-        sendLogMsg(i18n("Failed to download <filename>%1</filename>", file), DHistoryView::ErrorEntry,  folder, file);
+        sendLogMsg(xi18n("Failed to download <filename>%1</filename>", file), DHistoryView::ErrorEntry,  folder, file);
     }
     else
     {
