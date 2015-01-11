@@ -32,6 +32,7 @@
 
 #include <QTimer>
 #include <QShortcut>
+#include <QApplication>
 
 // KDE includes
 
@@ -1264,7 +1265,7 @@ void DigikamView::slotAlbumOpenInFileManager()
 
     if (album->isRoot())
     {
-        KMessageBox::error(this, i18n("Cannot open the root album. It is not a physical location."));
+        QMessageBox::critical(this, qApp->applicationName(), i18n("Cannot open the root album. It is not a physical location."));
         return;
     }
 
@@ -1288,7 +1289,7 @@ void DigikamView::slotAlbumOpenInTerminal()
 
     if (album->isRoot())
     {
-        KMessageBox::error(this, i18n("Cannot open the root. It is not a physical location."));
+        QMessageBox::critical(this, qApp->applicationName(), i18n("Cannot open the root. It is not a physical location."));
         return;
     }
 

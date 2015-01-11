@@ -36,10 +36,11 @@
 #include <QWaitCondition>
 #include <QTimer>
 #include <QEventLoop>
+#include <QApplication>
+#include <QMessageBox>
 
 // KDE includes
 
-#include <kmessagebox.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -984,7 +985,7 @@ void ScanController::slotErrorFromInitialization(const QString& errorMessage)
         d->progressDialog->addedAction(d->errorPixmap(), message);
     }
 
-    KMessageBox::error(d->progressDialog, errorMessage);
+    QMessageBox::critical(d->progressDialog, qApp->applicationName(), errorMessage);
 }
 
 void ScanController::setInitializationMessage()

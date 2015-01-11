@@ -26,10 +26,10 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QAction>
 
 // KDE includes
-
 
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
@@ -184,7 +184,7 @@ void TagModificationHelper::slotTagEdit(TAlbum* t)
 
         if (!AlbumManager::instance()->renameTAlbum(tag, title, errMsg))
         {
-            KMessageBox::error(0, errMsg);
+            QMessageBox::critical(0, qApp->applicationName(), errMsg);
         }
     }
 
@@ -194,7 +194,7 @@ void TagModificationHelper::slotTagEdit(TAlbum* t)
 
         if (!AlbumManager::instance()->updateTAlbumIcon(tag, icon, 0, errMsg))
         {
-            KMessageBox::error(0, errMsg);
+            QMessageBox::critical(0, qApp->applicationName(), errMsg);
         }
     }
 
@@ -279,7 +279,7 @@ void TagModificationHelper::slotTagDelete(TAlbum* t)
 
         if (!AlbumManager::instance()->deleteTAlbum(tag, errMsg))
         {
-            KMessageBox::error(0, errMsg);
+            QMessageBox::critical(0, qApp->applicationName(), errMsg);
         }
     }
 }
@@ -391,7 +391,7 @@ void TagModificationHelper::slotMultipleTagDel(QList<TAlbum* >& tags)
 
             if (!AlbumManager::instance()->deleteTAlbum(it.value(), errMsg))
             {
-                KMessageBox::error(0, errMsg);
+                QMessageBox::critical(0, qApp->applicationName(), errMsg);
             }
         }
     }
