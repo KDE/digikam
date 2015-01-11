@@ -33,19 +33,18 @@
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QCommandLineOption>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <kconfig.h>
 
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 #include <ktip.h>
 #include <kaboutdata.h>
 
 // Libkexiv2 includes
 
-#include <libkexiv2_version.h>
 #include <kexiv2.h>
 
 // Local includes
@@ -103,23 +102,27 @@ int main(int argc, char* argv[])
 
     KExiv2Iface::KExiv2::initializeExiv2();
 
-    // Check if SQLite Qt4 plugin is available.
+    // Check if Qt database plugins are available.
 
     if (!QSqlDatabase::isDriverAvailable(DatabaseParameters::SQLiteDatabaseType()) &&
         !QSqlDatabase::isDriverAvailable(DatabaseParameters::MySQLDatabaseType()))
     {
         if (QSqlDatabase::drivers().isEmpty())
         {
-            KMessageBox::error(0, i18n("Run-time Qt4 SQLite or MySQL database plugin is not available - "
+            QMessageBox::critical(0, qApp->applicationName(),
+                                  i18n("Run-time Qt SQLite or MySQL database plugin is not available. "
                                        "please install it.\n"
                                        "There is no database plugin installed on your computer."));
         }
         else
         {
-            KMessageBox::errorList(0, i18n("Run-time Qt4 SQLite or MySQL database plugin is not available - "
-                                           "please install it.\n"
-                                           "Database plugins installed on your computer are listed below:"),
-                                   QSqlDatabase::drivers());
+            QMessageBox errorList(QMessageBox::Warning, qApp->applicationName(),
+                                  i18n("Run-time Qt SQLite or MySQL database plugin is not available. "
+                                       "Please install it.\n"
+                                       "Press Details button to list database plugins installed on your computer."),
+                                  QMessageBox::Ok);
+            errorList.setDetailedText(QSqlDatabase::drivers().join("\n"));
+            errorList.exec();
         }
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "QT Sql drivers list: " << QSqlDatabase::drivers();

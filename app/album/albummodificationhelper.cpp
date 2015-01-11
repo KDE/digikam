@@ -26,15 +26,15 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QAction>
 #include <QInputDialog>
+#include <QUrl>
+#include <QMessageBox>
 
 // KDE includes
 
-#include <kio/jobuidelegate.h>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
-#include <QUrl>
 
 // Local includes
 
@@ -116,11 +116,11 @@ PAlbum* AlbumModificationHelper::slotAlbumNew(PAlbum* parent)
 
     if(!libraryDir.exists())
     {
-        KMessageBox::error(0,
-                           i18n("The album library has not been set correctly.\n"
-                                "Select \"Configure Digikam\" from the Settings "
-                                "menu and choose a folder to use for the album "
-                                "library."));
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("The album library has not been set correctly.\n"
+                                   "Select \"Configure Digikam\" from the Settings "
+                                   "menu and choose a folder to use for the album "
+                                   "library."));
         return;
     }
 */
@@ -166,7 +166,7 @@ PAlbum* AlbumModificationHelper::slotAlbumNew(PAlbum* parent)
 
     if (!album)
     {
-        KMessageBox::error(0, errMsg);
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(), errMsg);
         return 0;
     }
 
@@ -240,7 +240,7 @@ void AlbumModificationHelper::slotAlbumRename(PAlbum* album)
 
         if (!AlbumManager::instance()->renamePAlbum(album, title, errMsg))
         {
-            KMessageBox::error(0, errMsg);
+            QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(), errMsg);
         }
     }
 }
@@ -312,9 +312,10 @@ void AlbumModificationHelper::slotAlbumEdit(PAlbum* album)
 
             if (!AlbumManager::instance()->renamePAlbum(album, title, errMsg))
             {
-                KMessageBox::error(d->dialogParent, errMsg);
+                QMessageBox::critical(d->dialogParent, qApp->applicationName(), errMsg);
             }
         }
+
         // Resorting the tree View after changing metadata
         DigikamApp::instance()->view()->slotSortAlbums(ApplicationSettings::instance()->getAlbumSortOrder());
     }

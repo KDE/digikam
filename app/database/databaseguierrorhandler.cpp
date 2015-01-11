@@ -33,12 +33,12 @@
 #include <QThread>
 #include <QWaitCondition>
 #include <QProgressDialog>
+#include <QMessageBox>
+#include <QApplication>
 
 // KDE includes
 
-#include <kmessagebox.h>
 #include <klocalizedstring.h>
-#include <kguiitem.h>
 
 // Local includes
 
@@ -232,7 +232,7 @@ void DatabaseGUIErrorHandler::consultUserForError(DatabaseErrorAnswer* answer, c
     // Handle all other database errors
     QString message = i18n("<p><b>A database error occurred.</b></p>"
                            "Details:\n %1", error.text());
-    KMessageBox::error(parent, message);
+    QMessageBox::critical(parent, qApp->applicationName(), message);
     answer->connectionErrorAbortQueries();
 }
 

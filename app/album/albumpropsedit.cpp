@@ -40,12 +40,12 @@
 #include <QComboBox>
 #include <QLineEdit>
 #include <QStandardPaths>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <kdatepicker.h>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 #include <ktextedit.h>
 #include <kseparator.h>
 
@@ -443,9 +443,9 @@ void AlbumPropsEdit::slotDateAverageButtonClicked()
     }
     else
     {
-        KMessageBox::error(this,
-                           i18n("Could not calculate an average."),
-                           i18n("Could Not Calculate Average"));
+        QMessageBox::critical(this, i18n("Could Not Calculate Average"),
+                                    i18n("Could not calculate date average for this album."));
+
     }
 }
 
