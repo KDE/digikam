@@ -30,26 +30,22 @@
 #include <QLabel>
 #include <QString>
 #include <QPushButton>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
-#include "digikam_debug.h"
-
 #include <klocalizedstring.h>
-
-
 #include <kglobalsettings.h>
-
 
 // Libkdcraw includes
 
 #include <rnuminput.h>
 #include <rexpanderbox.h>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "iccprofilescombobox.h"
 #include "iccprofileinfodlg.h"
 #include "iccsettings.h"

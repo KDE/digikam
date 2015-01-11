@@ -85,11 +85,13 @@ target_link_libraries(digikamcore
                       ${KF5KExiv2_LIBRARIES}
                       ${KF5KDcraw_LIBRARIES}
 )
+
 if(ENABLE_VIDEO)
-  target_link_libraries(digikamcore Qt5::Multimedia)
+    target_link_libraries(digikamcore Qt5::Multimedia)
 endif()
-if(Q_WS_X11)
-    target_link_libraries(digikamcore ${X11_LIBRARIES})
+
+if(X11_FOUND)
+    target_link_libraries(digikamcore Qt5::X11Extras ${X11_LIBRARIES})
 endif()
 
 if(APPLE)

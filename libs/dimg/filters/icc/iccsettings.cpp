@@ -24,17 +24,17 @@
  * ============================================================ */
 
 #include "iccsettings.h"
+#include "digikam_config.h"
 
 // X11 includes
 
-#pragma message("PORT QT5")
-#ifdef Q_WS__X11
+#ifdef HAVE_X11
 #   include <climits>
 #   include <X11/Xlib.h>
 #   include <X11/Xatom.h>
 #   include <fixx11h.h>
 #   include <QX11Info>
-#endif /* Q_WS__X11 */
+#endif /* HAVE_X11 */
 
 // Qt includes
 
@@ -47,9 +47,7 @@
 
 // KDE includes
 
-#include <kconfig.h>
 #include <kconfiggroup.h>
-
 #include <ksharedconfig.h>
 
 // Local includes
@@ -184,18 +182,18 @@ bool IccSettings::monitorProfileFromSystem() const
 /*
  * From koffice/libs/pigment/colorprofiles/KoLcmsColorProfileContainer.cpp
  * Copyright (C) 2000 Matthias Elter <elter@kde.org>
- *                2001 John Califf
- *                2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (C) 2007 Thomas Zander <zander@kde.org>
- *  Copyright (C) 2007 Adrian Page <adrian@pagenet.plus.com>IccProfile Private::profileForScreen(QWidget *widget)
+ *               2001 John Califf
+ *               2004 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Adrian Page <adrian@pagenet.plus.com>
+ * IccProfile Private::profileForScreen(QWidget* widget)
 */
-IccProfile IccSettings::Private::profileFromWindowSystem(QWidget* const /*widget*/)
+IccProfile IccSettings::Private::profileFromWindowSystem(QWidget* const widget)
 {
-#pragma message("PORT QT5")
-#ifdef Q_WS__X11
+#ifdef HAVE_X11
 
-    Qt::HANDLE appRootWindow;
-    QString    atomName;
+    unsigned long appRootWindow;
+    QString       atomName;
 
     QDesktopWidget* const desktop = QApplication::desktop();
 
@@ -234,22 +232,14 @@ IccProfile IccSettings::Private::profileFromWindowSystem(QWidget* const /*widget
     unsigned long bytes_after;
     quint8*       str = 0;
 
-    static Atom icc_atom = XInternAtom(QX11Info::display(), atomName.toLatin1(), True);
+    static Atom icc_atom = XInternAtom(QX11Info::display(), atomName.toLatin1().constData(), True);
 
-    if (icc_atom != None &&
-        XGetWindowProperty(QX11Info::display(),
-                           appRootWindow,
-                           icc_atom,
-                           0,
-                           INT_MAX,
-                           False,
-                           XA_CARDINAL,
-                           &type,
-                           &format,
-                           &nitems,
-                           &bytes_after,
-                           (unsigned char**)& str) == Success &&
-        nitems
+    if ((icc_atom != None)                                                &&
+        (XGetWindowProperty(QX11Info::display(), appRootWindow, icc_atom,
+                           0, INT_MAX, False, XA_CARDINAL,
+                           &type, &format, &nitems, &bytes_after,
+                           (unsigned char**)& str) == Success)            &&
+         nitems
        )
     {
         QByteArray bytes = QByteArray::fromRawData((char*)str, (quint32)nitems);
@@ -259,15 +249,12 @@ IccProfile IccSettings::Private::profileFromWindowSystem(QWidget* const /*widget
             profile = bytes;
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Found X.org XICC monitor profile" << profile.description();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Found X.org XICC monitor profile " << profile.description();
     }
-
-/*
     else
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "No X.org XICC profile installed for screen" << screenNumber;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "No X.org XICC profile installed for screen " << screenNumber;
     }
-*/
 
     // insert to cache even if null
     {
@@ -280,6 +267,9 @@ IccProfile IccSettings::Private::profileFromWindowSystem(QWidget* const /*widget
     Q_UNUSED(widget);
 #elif defined Q_OS_MAC
     //TODO
+    Q_UNUSED(widget);
+#else
+    // Unsupported platform
     Q_UNUSED(widget);
 #endif
 

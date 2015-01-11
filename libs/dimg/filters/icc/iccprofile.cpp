@@ -37,10 +37,6 @@
 #include <QCryptographicHash>
 #include <QStandardPaths>
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "digikam_debug.h"

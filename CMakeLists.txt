@@ -122,13 +122,15 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
              Test
              WebKitWidgets
 )
+
 if (ENABLE_VIDEO)
-  find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
-             Multimedia
-             MultimediaWidgets
- )
-  add_definitions("-DBUILD_VIDEO")
+    find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
+                Multimedia
+                MultimediaWidgets
+    )
+    add_definitions("-DBUILD_VIDEO")
 endif()
+
 find_package(KF5 REQUIRED COMPONENTS
              KDELibs4Support
              NotifyConfig
@@ -204,6 +206,20 @@ else()
 
     endif()
 
+endif()
+
+# For Monitor Profiles management with LCMS
+find_package(X11)
+
+if(X11_FOUND)
+    find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
+                 X11Extras
+    )
+
+    set(HAVE_X11 TRUE)
+
+else()
+    set(HAVE_X11 FALSE)
 endif()
 
 # -- To link under Solaris (see bug #274484) ------------------------------------------------------
@@ -657,6 +673,10 @@ if(DIGIKAM_CAN_BE_COMPILED)
                         ${TIFF_INCLUDE_DIR}
                         ${LCMS_INCLUDE_DIR}
     )
+
+    if(X11_FOUND)
+        include_directories(${X11_INCLUDE_DIR})
+    endif()
 
     # JPEG2000 support
 
