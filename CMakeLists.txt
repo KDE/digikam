@@ -123,7 +123,7 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
              WebKitWidgets
 )
 
-if (ENABLE_VIDEO)
+if(ENABLE_VIDEO)
     find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
                 Multimedia
                 MultimediaWidgets
@@ -1552,7 +1552,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/app/views/leftsidebarwidgets.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/app/views/digikamview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/app/views/stackedview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/views/mediaplayerview.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/addtagscombobox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/addtagscompletionbox.cpp
@@ -1567,6 +1566,13 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsactionmngr.cpp
        )
 
+    if(ENABLE_VIDEO)
+        set(libdigikamgui_SRCS
+            ${libdigikamgui_SRCS}
+            ${CMAKE_CURRENT_SOURCE_DIR}/app/views/mediaplayerview.cpp
+           )
+    endif()
+       
     if(${KF5KFace_FOUND})
         set(libdigikamgui_SRCS
             ${libdigikamgui_SRCS}

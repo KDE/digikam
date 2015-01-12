@@ -21,10 +21,6 @@
  *
  * ============================================================ */
 
-#include "digikam_config.h"
-
-#ifdef HAVE_VIDEOPLAYER
-
 #include "mediaplayerview.h"
 
 // Qt includes
@@ -353,5 +349,3 @@ void MediaPlayerView::handlePlayerError()
 }
 
 }  // namespace Digikam
-
-#endif // HAVE_VIDEOPLAYER
