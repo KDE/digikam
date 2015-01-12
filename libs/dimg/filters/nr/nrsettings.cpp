@@ -217,13 +217,13 @@ NRSettings::NRSettings(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    d->advExpanderBox->addItem(d->luminanceBox, QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/colors-luma.png"),
+    d->advExpanderBox->addItem(d->luminanceBox, QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/colors-luma.png")),
                                i18n("Luminance"),
                                QString("Luminance"), true);
-    d->advExpanderBox->addItem(d->chrominanceBlueBox, QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/colors-chromablue.png"),
+    d->advExpanderBox->addItem(d->chrominanceBlueBox, QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/colors-chromablue.png")),
                                i18n("Chrominance Blue"),
                                QString("ChrominanceBlue"), true);
-    d->advExpanderBox->addItem(d->chrominanceRedBox, QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/colors-chromared.png"),
+    d->advExpanderBox->addItem(d->chrominanceRedBox, QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/colors-chromared.png")),
                                i18n("Chrominance Red"),
                                QString("ChrominanceRed"), true);
     d->advExpanderBox->addStretch();

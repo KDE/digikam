@@ -292,8 +292,8 @@ RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
 
     d->postProcessSettingsBox->addItem(d->advExposureBox, i18n("Exposure"),         QString("exposure"), true);
     d->postProcessSettingsBox->addItem(d->curveBox,       i18n("Luminosity Curve"), QString("luminositycurve"), false);
-    d->postProcessSettingsBox->setItemIcon(0, QIcon::fromTheme("contrast").pixmap(16));
-    d->postProcessSettingsBox->setItemIcon(1, QIcon::fromTheme("adjustcurves").pixmap(16));
+    d->postProcessSettingsBox->setItemIcon(0, QIcon::fromTheme("contrast"));
+    d->postProcessSettingsBox->setItemIcon(1, QIcon::fromTheme("adjustcurves"));
     d->postProcessSettingsBox->addStretch();
 
     // - Image info view --------------------------------------------------------------
@@ -303,10 +303,10 @@ RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
 
     // ---------------------------------------------------------------
 
-    d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::DEMOSAICING,     QIcon::fromTheme("kdcraw").pixmap(16));
-    d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::WHITEBALANCE,    QIcon::fromTheme("whitebalance").pixmap(16));
-    d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::CORRECTIONS,     QIcon::fromTheme("lensdistortion").pixmap(16));
-    d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::COLORMANAGEMENT, QIcon::fromTheme("colormanagement").pixmap(16));
+    d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::DEMOSAICING,     QIcon::fromTheme("kdcraw"));
+    d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::WHITEBALANCE,    QIcon::fromTheme("whitebalance"));
+    d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::CORRECTIONS,     QIcon::fromTheme("lensdistortion"));
+    d->decodingSettingsBox->setItemIcon(DcrawSettingsWidget::COLORMANAGEMENT, QIcon::fromTheme("colormanagement"));
     d->decodingSettingsBox->updateMinimumWidth();
 
     d->tabView->insertTab(0, d->rawdecodingBox,         i18n("Raw Decoding"));

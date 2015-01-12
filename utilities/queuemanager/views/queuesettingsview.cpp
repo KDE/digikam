@@ -233,9 +233,9 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     // --------------------------------------------------------
 
     d->rawSettings = new DcrawSettingsWidget(panel, DcrawSettingsWidget::SIXTEENBITS | DcrawSettingsWidget::COLORSPACE);
-    d->rawSettings->setItemIcon(0, QIcon::fromTheme("kdcraw").pixmap(16));
-    d->rawSettings->setItemIcon(1, QIcon::fromTheme("whitebalance").pixmap(16));
-    d->rawSettings->setItemIcon(2, QIcon::fromTheme("lensdistortion").pixmap(16));
+    d->rawSettings->setItemIcon(0, QIcon::fromTheme("kdcraw"));
+    d->rawSettings->setItemIcon(1, QIcon::fromTheme("whitebalance"));
+    d->rawSettings->setItemIcon(2, QIcon::fromTheme("lensdistortion"));
 
     insertTab(Private::RAW, d->rawSettings, QIcon::fromTheme("kdcraw").pixmap(16), i18n("Raw Decoding"));
 

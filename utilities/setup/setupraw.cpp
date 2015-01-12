@@ -144,9 +144,9 @@ SetupRaw::SetupRaw(QWidget* const parent)
     QVBoxLayout* const settingsLayout = new QVBoxLayout;
 
     d->dcrawSettings = new DcrawSettingsWidget(0, 0 /* no advanced settings shown */);
-    d->dcrawSettings->setItemIcon(0, QIcon::fromTheme("kdcraw").pixmap(16));
-    d->dcrawSettings->setItemIcon(1, QIcon::fromTheme("whitebalance").pixmap(16));
-    d->dcrawSettings->setItemIcon(2, QIcon::fromTheme("lensdistortion").pixmap(16));
+    d->dcrawSettings->setItemIcon(0, QIcon::fromTheme("kdcraw"));
+    d->dcrawSettings->setItemIcon(1, QIcon::fromTheme("whitebalance"));
+    d->dcrawSettings->setItemIcon(2, QIcon::fromTheme("lensdistortion"));
 
     settingsLayout->addWidget(d->dcrawSettings);
     d->settingsPanel->setLayout(settingsLayout);

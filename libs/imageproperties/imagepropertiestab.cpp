@@ -261,7 +261,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay1->setColumnStretch(1, 10);
 
     insertItem(ImagePropertiesTab::Private::FileProperties,
-               w1, QIcon::fromTheme("dialog-information").pixmap(16),
+               w1, QIcon::fromTheme("dialog-information"),
                i18n("File Properties"), QString("FileProperties"), true);
 
     // --------------------------------------------------
@@ -296,7 +296,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay2->setColumnStretch(1, 10);
 
     insertItem(ImagePropertiesTab::Private::ImageProperties,
-               w2, QIcon::fromTheme("image-x-generic").pixmap(16),
+               w2, QIcon::fromTheme("image-x-generic"),
                i18n("Item Properties"), QString("ItemProperties"), true);
 
     // --------------------------------------------------
@@ -355,7 +355,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay3->setSpacing(0);
 
     insertItem(ImagePropertiesTab::Private::PhotoProperties,
-               w3, QIcon::fromTheme("camera-photo").pixmap(16),
+               w3, QIcon::fromTheme("camera-photo"),
                i18n("Photograph Properties"), QString("PhotographProperties"), true);
 
     // --------------------------------------------------
@@ -398,7 +398,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay4->setColumnStretch(1, 10);
 
     insertItem(ImagePropertiesTab::Private::VideoProperties,
-               w4, QIcon::fromTheme("video-x-generic").pixmap(16),
+               w4, QIcon::fromTheme("video-x-generic"),
                i18n("Video Properties"), QString("VideoProperties"), true);
 
     // --------------------------------------------------
@@ -434,7 +434,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay5->setColumnStretch(1, 10);
 
     insertItem(ImagePropertiesTab::Private::digiKamProperties,
-               w5, QIcon::fromTheme("imagecomment").pixmap(16),
+               w5, QIcon::fromTheme("imagecomment"),
                i18n("digiKam Properties"), QString("DigikamProperties"), true);
 
     // --------------------------------------------------
