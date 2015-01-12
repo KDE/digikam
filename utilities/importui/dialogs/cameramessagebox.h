@@ -37,7 +37,7 @@
 
 #include "camerathumbsctrl.h"
 
-class KDialog;
+class QDialog;
 
 namespace Digikam
 {
@@ -115,7 +115,7 @@ public:
 private:
 
     static int createMessageBox(CameraThumbsCtrl* const ctrl,
-                                KDialog* const dialog,
+                                QDialog* const dlg,
                                 const QIcon& icon,
                                 const QString& text,
                                 const CamItemInfoList& items,

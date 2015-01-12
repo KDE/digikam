@@ -285,7 +285,7 @@ int CameraMessageBox::warningContinueCancelList(CameraThumbsCtrl* const ctrl,
 }
 
 int CameraMessageBox::createMessageBox(CameraThumbsCtrl* const ctrl,
-                                       KDialog* const dialog,
+                                       QDialog* const dlg,
                                        const QIcon& icon,
                                        const QString& text,
                                        const CamItemInfoList& items,
@@ -293,6 +293,8 @@ int CameraMessageBox::createMessageBox(CameraThumbsCtrl* const ctrl,
                                        bool* checkboxReturn
                                       )
 {
+    KDialog* const dialog = dynamic_cast<KDialog*>(dlg);
+
     QWidget* const mainWidget     = new QWidget(dialog);
     QVBoxLayout* const mainLayout = new QVBoxLayout(mainWidget);
     mainLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing) * 2); // provide extra spacing
