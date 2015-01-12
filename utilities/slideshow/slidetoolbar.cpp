@@ -37,10 +37,6 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <rwidgetutils.h>
-
 // Local includes
 
 #include "slidehelp.h"
