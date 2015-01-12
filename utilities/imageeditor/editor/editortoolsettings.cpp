@@ -413,7 +413,7 @@ void EditorToolSettings::setHistogramType(HistogramBoxType type)
 
 void EditorToolSettings::setToolIcon(const QIcon& icon)
 {
-    d->toolIcon->setPixmap(icon.pixmap(16));
+    d->toolIcon->setPixmap(icon.pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize)));
 }
 
 void EditorToolSettings::setToolName(const QString& name)

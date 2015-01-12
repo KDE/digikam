@@ -44,6 +44,7 @@
 #include <QComboBox>
 #include <QLineEdit>
 #include <QIcon>
+#include <QStyle>
 
 // KDE includes
 
@@ -746,11 +747,11 @@ void SearchField::setup(QGridLayout* const layout, int line)
     // setup the clear button that appears dynamically
     if (qApp->isLeftToRight())
     {
-        m_clearButton->setPixmap(QIcon::fromTheme("edit-clear-locationbar-rtl").pixmap(16));
+        m_clearButton->setPixmap(QIcon::fromTheme("edit-clear-locationbar-rtl").pixmap(QApplication::style()->pixelMetric(QStyle::PM_SmallIconSize)));
     }
     else
     {
-        m_clearButton->setPixmap(QIcon::fromTheme("edit-clear-locationbar-ltr").pixmap(16));
+        m_clearButton->setPixmap(QIcon::fromTheme("edit-clear-locationbar-ltr").pixmap(QApplication::style()->pixelMetric(QStyle::PM_SmallIconSize)));
     }
 
     // Important: Don't cause re-layouting when button gets hidden/shown!

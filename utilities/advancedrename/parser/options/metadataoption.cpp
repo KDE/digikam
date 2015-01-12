@@ -29,6 +29,8 @@
 #include <QLabel>
 #include <QPointer>
 #include <QLineEdit>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
@@ -103,7 +105,7 @@ MetadataOption::MetadataOption()
     QString iconName("metadataedit");
 
     // metadataedit icon can be missing if KIPI plugins are not installed, load different icon in this case
-    QPixmap icon = QIcon::fromTheme(iconName).pixmap(16);
+    QPixmap icon = QIcon::fromTheme(iconName).pixmap(QApplication::style()->pixelMetric(QStyle::PM_SmallIconSize));
 
     if (icon.isNull())
     {

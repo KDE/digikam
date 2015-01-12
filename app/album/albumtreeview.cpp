@@ -219,7 +219,7 @@ AbstractAlbumTreeView::AbstractAlbumTreeView(QWidget* const parent, Flags flags)
     d->resizeColumnsTimer->setInterval(200);
     d->resizeColumnsTimer->setSingleShot(true);
 
-    d->contextMenuIcon  = QIcon::fromTheme("digikam").pixmap(16);
+    d->contextMenuIcon  = QIcon::fromTheme("digikam").pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize));
     d->contextMenuTitle = i18n("Context menu");
 
     connect(d->resizeColumnsTimer, SIGNAL(timeout()),

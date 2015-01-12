@@ -211,7 +211,7 @@ SetupICC::SetupICC(QWidget* const parent, KPageDialog* const dialog)
     QHBoxLayout* const hboxWS  = new QHBoxLayout(d->workspaceGB);
 
     QLabel* const workIcon     = new QLabel;
-    workIcon->setPixmap(QIcon::fromTheme("input-tablet").pixmap(16));
+    workIcon->setPixmap(QIcon::fromTheme("input-tablet").pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize)));
     d->workProfilesKC    = new IccProfilesComboBox;
     d->workProfilesKC->setWhatsThis(i18n("<p>This is the color space all the images will be converted to when opened "
                                          "(if you choose to convert) and the profile that will be embedded when saving. "

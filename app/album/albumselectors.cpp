@@ -55,7 +55,7 @@ public:
 
     explicit ModelClearButton(AbstractCheckableAlbumModel* const model)
     {
-        setPixmap(QIcon::fromTheme(qApp->isLeftToRight() ? "edit-clear-locationbar-rtl" : "edit-clear-locationbar-ltr").pixmap(16));
+        setPixmap(QIcon::fromTheme(qApp->isLeftToRight() ? "edit-clear-locationbar-rtl" : "edit-clear-locationbar-ltr").pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize)));
         stayVisibleWhenAnimatedOut(true);
 
         connect(this, SIGNAL(clicked()),

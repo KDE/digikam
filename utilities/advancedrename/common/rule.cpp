@@ -31,6 +31,8 @@
 #include <QRegExp>
 #include <QString>
 #include <QIcon>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
@@ -93,7 +95,7 @@ QPixmap Rule::icon(Rule::IconType type) const
             break;
 
         default:
-            icon = QIcon::fromTheme(d->iconName).pixmap(16);
+            icon = QIcon::fromTheme(d->iconName).pixmap(QApplication::style()->pixelMetric(QStyle::PM_SmallIconSize));
             break;
     }
 

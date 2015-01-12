@@ -421,9 +421,9 @@ TagsPopupMenu::TagsPopupMenu(const QList<qlonglong>& selectedImageIds, Mode mode
 void TagsPopupMenu::setup(Mode mode)
 {
     d->mode                 = mode;
-    d->addTagPix            = QIcon::fromTheme("tag").pixmap(16);
-    d->recentTagPix         = QIcon::fromTheme("tag-assigned").pixmap(16);
-    d->tagViewPix           = QIcon::fromTheme("imagecomment").pixmap(16);
+    d->addTagPix            = QIcon::fromTheme("tag").pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize));
+    d->recentTagPix         = QIcon::fromTheme("tag-assigned").pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize));
+    d->tagViewPix           = QIcon::fromTheme("imagecomment").pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize));
     d->addTagActions        = new QActionGroup(this);
     d->toggleTagActions     = new QActionGroup(this);
 

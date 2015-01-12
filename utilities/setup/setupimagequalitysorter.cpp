@@ -31,6 +31,8 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QIcon>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
@@ -147,7 +149,7 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
     hlay1->setStretchFactor(hspace1, 10);
 
     QLabel* const workIcon1 = new QLabel(hlay1);
-    workIcon1->setPixmap(QIcon::fromTheme("flag-red").pixmap(16));
+    workIcon1->setPixmap(QIcon::fromTheme("flag-red").pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize)));
 
     // ------------------------------------------------------------------------------
 
@@ -160,7 +162,7 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
     hlay2->setStretchFactor(hspace2, 10);
 
     QLabel* const workIcon2 = new QLabel(hlay2);
-    workIcon2->setPixmap(QIcon::fromTheme("flag-yellow").pixmap(16));
+    workIcon2->setPixmap(QIcon::fromTheme("flag-yellow").pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize)));
 
     // ------------------------------------------------------------------------------
 
@@ -173,7 +175,7 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
     hlay3->setStretchFactor(hspace3, 10);
 
     QLabel* const workIcon3 = new QLabel(hlay3);
-    workIcon3->setPixmap(QIcon::fromTheme("flag-green").pixmap(16));
+    workIcon3->setPixmap(QIcon::fromTheme("flag-green").pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize)));
 
     // ------------------------------------------------------------------------------
 

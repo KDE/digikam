@@ -35,6 +35,7 @@
 #include <QStackedWidget>
 #include <QTimer>
 #include <QHash>
+#include <QStyle>
 
 // KDE includes
 
@@ -238,7 +239,7 @@ void Sidebar::appendTab(QWidget* const w, const QIcon& pic, const QString& title
 
     // Add tab
     w->setParent(d->stack);
-    KMultiTabBar::appendTab(pic.pixmap(16), d->tabs, title);
+    KMultiTabBar::appendTab(pic.pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize)), d->tabs, title);
     d->stack->insertWidget(d->tabs, w);
 
     tab(d->tabs)->setAcceptDrops(true);

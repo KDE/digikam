@@ -796,7 +796,7 @@ void TagsManager::setupActions()
      * Right Toolbar with vertical properties button
      */
     d->rightToolBar = new KMultiTabBar(KMultiTabBar::Right);
-    d->rightToolBar->appendTab(QIcon::fromTheme("tag-properties").pixmap(16), 0, i18n("Tag Properties"));
+    d->rightToolBar->appendTab(QIcon::fromTheme("tag-properties").pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize)), 0, i18n("Tag Properties"));
     d->rightToolBar->setStyle(KMultiTabBar::KDEV3ICON);
 
     connect(d->rightToolBar->tab(0), SIGNAL(clicked()),

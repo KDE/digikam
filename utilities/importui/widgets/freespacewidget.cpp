@@ -39,6 +39,7 @@
 #include <QFontMetrics>
 #include <QUrl>
 #include <QIcon>
+#include <QStyle>
 
 // KDE includes
 
@@ -142,11 +143,11 @@ void FreeSpaceWidget::setMode(FreeSpaceMode mode)
 
     if (d->mode == FreeSpaceWidget::AlbumLibrary)
     {
-        d->iconPix = QIcon::fromTheme("folder-image").pixmap(16);
+        d->iconPix = QIcon::fromTheme("folder-image").pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize));
     }
     else 
     {
-        d->iconPix = QIcon::fromTheme("camera-photo").pixmap(16);
+        d->iconPix = QIcon::fromTheme("camera-photo").pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize));
     }
 
     update();
