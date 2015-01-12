@@ -42,11 +42,13 @@
 #include <QLineEdit>
 #include <QUrl>
 #include <QIcon>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kdialog.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <kurlrequester.h>
@@ -609,14 +611,11 @@ void SetupCollectionModel::addCollection(int category)
     }
 
     // Create a dialog that displays volume information and allows to change the name of the collection
-    KDialog* const dialog = new KDialog(m_dialogParentWidget);
-    dialog->setCaption(i18n("Adding Collection"));
-    dialog->setButtons(KDialog::Ok | KDialog::Cancel);
+    QDialog* const dialog = new QDialog(m_dialogParentWidget);
+    dialog->setWindowTitle(i18n("Adding Collection"));
 
     QWidget* const mainWidget = new QWidget(dialog);
-    dialog->setMainWidget(mainWidget);
-
-    QLabel* const nameLabel = new QLabel;
+    QLabel* const nameLabel   = new QLabel;
     nameLabel->setText(i18n("Your new collection will be created with this name:"));
     nameLabel->setWordWrap(true);
 
@@ -647,11 +646,23 @@ void SetupCollectionModel::addCollection(int category)
 
     QGridLayout* const grid1 = new QGridLayout;
     grid1->addWidget(deviceIconLabel, 0, 0, 3, 1);
-    grid1->addWidget(nameLabel, 0, 1);
-    grid1->addWidget(nameEdit, 1, 1);
-    grid1->addWidget(infoBox, 2, 1);
+    grid1->addWidget(nameLabel,       0, 1);
+    grid1->addWidget(nameEdit,        1, 1);
+    grid1->addWidget(infoBox,         2, 1);
     mainWidget->setLayout(grid1);
 
+    QVBoxLayout* const vbx          = new QVBoxLayout(dialog);
+    QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, dialog);
+    vbx->addWidget(mainWidget);
+    vbx->addWidget(buttons);
+    dialog->setLayout(vbx);
+
+    connect(buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+            dialog, SLOT(accept()));
+    
+    connect(buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
+            dialog, SLOT(reject()));
+    
     // default to directory name as collection name
     QDir dir(path);
     nameEdit->setText(dir.dirName());
