@@ -37,6 +37,7 @@
 
 // Local includes
 
+#include "digikam_config.h"
 #include "applicationsettings.h"
 #include "digikamimageview.h"
 #include "digikamview.h"
@@ -47,9 +48,12 @@
 #include "loadingcacheinterface.h"
 #include "previewlayout.h"
 #include "welcomepageview.h"
-#include "mediaplayerview.h"
 #include "thumbbardock.h"
 #include "tableview.h"
+
+#ifdef HAVE_VIDEOPLAYER
+#include "mediaplayerview.h"
+#endif //HAVE_VIDEOPLAYER
 
 #ifdef HAVE_KGEOMAP
 #include "mapwidgetview.h"

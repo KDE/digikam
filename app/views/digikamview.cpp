@@ -44,6 +44,7 @@
 
 #include "digikam_debug.h"
 #include "digikam_config.h"
+#include "digikam_globals.h"
 #include "albumhistory.h"
 #include "applicationsettings.h"
 #include "metadatasynchronizer.h"
@@ -59,10 +60,8 @@
 #include "filterstatusbar.h"
 #include "leftsidebarwidgets.h"
 #include "loadingcacheinterface.h"
-#include "mediaplayerview.h"
 #include "metadatasettings.h"
 #include "newitemsfinder.h"
-#include "digikam_globals.h"
 #include "metadatahub.h"
 #include "fileactionmngr.h"
 #include "queuemgrwindow.h"
@@ -84,6 +83,10 @@
 #include "thumbsgenerator.h"
 #include "albumlabelstreeview.h"
 #include "tagsactionmngr.h"
+
+#ifdef HAVE_VIDEOPLAYER
+#include "mediaplayerview.h"
+#endif //HAVE_VIDEOPLAYER
 
 #ifdef HAVE_KGEOMAP
 #include "mapwidgetview.h"
