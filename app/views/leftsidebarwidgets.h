@@ -71,8 +71,8 @@ public:
     void    doSaveState();
     void    applySettings();
     void    changeAlbumFromHistory(QList<Album*> album);
-    QPixmap getIcon();
-    QString getCaption();
+    const QIcon getIcon();
+    const QString getCaption();
 
     AlbumPointer<PAlbum> currentAlbum() const;
 
@@ -112,8 +112,8 @@ public:
     void    doSaveState();
     void    applySettings();
     void    changeAlbumFromHistory(QList<Album*> album);
-    QPixmap getIcon();
-    QString getCaption();
+    const QIcon getIcon();
+    const QString getCaption();
 
     AlbumPointer<TAlbum> currentAlbum() const;
 
@@ -164,8 +164,8 @@ public:
     void    changeAlbumFromHistory(QList<Album *> album);
     void    doLoadState();
     void    doSaveState();
-    QPixmap getIcon();
-    QString getCaption();
+    const QIcon  getIcon();
+    const QString getCaption();
 
     QHash<AlbumLabelsTreeView::Labels, QList<int> > selectedLabels();
 
@@ -197,8 +197,8 @@ public:
     void    doSaveState();
     void    applySettings();
     void    changeAlbumFromHistory(QList<Album*> album);
-    QPixmap getIcon();
-    QString getCaption();
+    const QIcon  getIcon();
+    const QString getCaption();
 
     AlbumPointer<DAlbum> currentAlbum() const;
 
@@ -232,8 +232,8 @@ public:
     void    doSaveState();
     void    applySettings();
     void    changeAlbumFromHistory(QList<Album*> album);
-    QPixmap getIcon();
-    QString getCaption();
+    const QIcon  getIcon();
+    const QString getCaption();
 
 private Q_SLOTS:
 
@@ -278,8 +278,8 @@ public:
     void    doSaveState();
     void    applySettings();
     void    changeAlbumFromHistory(QList<Album*> album);
-    QPixmap getIcon();
-    QString getCaption();
+    const QIcon getIcon();
+    const QString getCaption();
 
     void newKeywordSearch();
     void newAdvancedSearch();
@@ -310,8 +310,8 @@ public:
     void    doSaveState();
     void    applySettings();
     void    changeAlbumFromHistory(QList<Album*> album);
-    QPixmap getIcon();
-    QString getCaption();
+    const QIcon getIcon();
+    const QString getCaption();
 
     void newDuplicatesSearch(Album* album);
     void newSimilarSearch(const ImageInfo& imageInfo);
@@ -347,8 +347,8 @@ public:
     void    doSaveState();
     void    applySettings();
     void    changeAlbumFromHistory(QList<Album*> album);
-    QPixmap getIcon();
-    QString getCaption();
+    const QIcon getIcon();
+    const QString getCaption();
 
 Q_SIGNALS:
 
@@ -386,8 +386,8 @@ public:
     void    doSaveState();
     void    applySettings();
     void    changeAlbumFromHistory(QList<Album*> album);
-    QPixmap getIcon();
-    QString getCaption();
+    const QIcon  getIcon();
+    const QString getCaption();
 
 private Q_SLOTS:
 

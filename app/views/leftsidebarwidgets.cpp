@@ -161,12 +161,12 @@ void AlbumFolderViewSideBarWidget::setCurrentAlbum(PAlbum* album)
     d->albumFolderView->setCurrentAlbums(QList<Album*>() << album);
 }
 
-QPixmap AlbumFolderViewSideBarWidget::getIcon()
+const QIcon AlbumFolderViewSideBarWidget::getIcon()
 {
-    return QIcon::fromTheme("folder-image").pixmap(16);
+    return QIcon::fromTheme("folder-image");
 }
 
-QString AlbumFolderViewSideBarWidget::getCaption()
+const QString AlbumFolderViewSideBarWidget::getCaption()
 {
     return i18n("Albums");
 }
@@ -369,12 +369,12 @@ void TagViewSideBarWidget::setNoTagsAlbum()
     }
 }
 
-QPixmap TagViewSideBarWidget::getIcon()
+const QIcon TagViewSideBarWidget::getIcon()
 {
-    return QIcon::fromTheme("tag").pixmap(16);
+    return QIcon::fromTheme("tag");
 }
 
-QString TagViewSideBarWidget::getCaption()
+const QString TagViewSideBarWidget::getCaption()
 {
     return i18n("Tags");
 }
@@ -486,12 +486,12 @@ void LabelsSideBarWidget::doSaveState()
     d->labelsTree->doSaveState();
 }
 
-QPixmap LabelsSideBarWidget::getIcon()
+const QIcon LabelsSideBarWidget::getIcon()
 {
-    return QIcon::fromTheme("favorites").pixmap(16);
+    return QIcon::fromTheme("favorites");
 }
 
-QString LabelsSideBarWidget::getCaption()
+const QString LabelsSideBarWidget::getCaption()
 {
     return i18n("Labels");
 }
@@ -570,12 +570,12 @@ void DateFolderViewSideBarWidget::gotoDate(const QDate& date)
     d->dateFolderView->gotoDate(date);
 }
 
-QPixmap DateFolderViewSideBarWidget::getIcon()
+const QIcon DateFolderViewSideBarWidget::getIcon()
 {
-    return QIcon::fromTheme("view-calendar-list").pixmap(16);
+    return QIcon::fromTheme("view-calendar-list");
 }
 
-QString DateFolderViewSideBarWidget::getCaption()
+const QString DateFolderViewSideBarWidget::getCaption()
 {
     return i18n("Dates");
 }
@@ -899,12 +899,12 @@ void TimelineSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
     d->timeLineFolderView->setCurrentAlbums(album);
 }
 
-QPixmap TimelineSideBarWidget::getIcon()
+const QIcon TimelineSideBarWidget::getIcon()
 {
-    return QIcon::fromTheme("player-time").pixmap(16);
+    return QIcon::fromTheme("player-time");
 }
 
-QString TimelineSideBarWidget::getCaption()
+const QString TimelineSideBarWidget::getCaption()
 {
     return i18n("Timeline");
 }
@@ -1146,12 +1146,12 @@ void SearchSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
     d->searchTreeView->setCurrentAlbums(album);
 }
 
-QPixmap SearchSideBarWidget::getIcon()
+const QIcon SearchSideBarWidget::getIcon()
 {
-    return QIcon::fromTheme("edit-find").pixmap(16);
+    return QIcon::fromTheme("edit-find");
 }
 
-QString SearchSideBarWidget::getCaption()
+const QString SearchSideBarWidget::getCaption()
 {
     return i18nc("Avanced search images, access stored searches", "Search");
 }
@@ -1231,12 +1231,12 @@ void FuzzySearchSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
     d->fuzzySearchView->setCurrentAlbum(salbum);
 }
 
-QPixmap FuzzySearchSideBarWidget::getIcon()
+const QIcon FuzzySearchSideBarWidget::getIcon()
 {
-    return QIcon::fromTheme("tools-wizard").pixmap(16);
+    return QIcon::fromTheme("tools-wizard");
 }
 
-QString FuzzySearchSideBarWidget::getCaption()
+const QString FuzzySearchSideBarWidget::getCaption()
 {
     return i18nc("Fuzzy Search images, as dupplicates, sketch, similars searches", "Fuzzy");
 }
@@ -1322,12 +1322,12 @@ void GPSSearchSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
     d->gpsSearchView->changeAlbumFromHistory(dynamic_cast<SAlbum*>(album.first()));
 }
 
-QPixmap GPSSearchSideBarWidget::getIcon()
+const QIcon GPSSearchSideBarWidget::getIcon()
 {
-    return QIcon::fromTheme("applications-internet").pixmap(16);
+    return QIcon::fromTheme("applications-internet");
 }
 
-QString GPSSearchSideBarWidget::getCaption()
+const QString GPSSearchSideBarWidget::getCaption()
 {
     return i18nc("Search images on a map", "Map");
 }
@@ -1456,12 +1456,12 @@ void PeopleSideBarWidget::slotScanForFaces()
     }
 }
 
-QPixmap PeopleSideBarWidget::getIcon()
+const QIcon PeopleSideBarWidget::getIcon()
 {
-    return QIcon::fromTheme("edit-image-face-show").pixmap(16);
+    return QIcon::fromTheme("edit-image-face-show");
 }
 
-QString PeopleSideBarWidget::getCaption()
+const QString PeopleSideBarWidget::getCaption()
 {
     return i18nc("Browse images sorted by depicted people", "People");
 }
