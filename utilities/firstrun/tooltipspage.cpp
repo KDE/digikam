@@ -105,7 +105,7 @@ TooltipsPage::TooltipsPage(KAssistantDialog* const dlg)
                          "</qt>"));
 
     setPageWidget(vbox);
-    setLeftBottomPix(QIcon::fromTheme("dialog-information").pixmap(128));
+    setLeftBottomPix(QIcon::fromTheme("dialog-information"));
 }
 
 TooltipsPage::~TooltipsPage()

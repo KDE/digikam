@@ -114,9 +114,10 @@ void AssistantDlgPage::setPageWidget(QWidget* const w)
     d->hlay->setStretchFactor(w, 10);
 }
 
-void AssistantDlgPage::setLeftBottomPix(const QPixmap& pix)
+void AssistantDlgPage::setLeftBottomPix(const QIcon& icon)
 {
-    d->leftBottomPix->setPixmap(pix);
+#pragma message("hardcoded pixmap size")
+    d->leftBottomPix->setPixmap(icon.pixmap(128));
 }
 
 }   // namespace Digikam

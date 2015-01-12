@@ -47,7 +47,7 @@ public:
     KPageWidgetItem* page() const;
 
     void setPageWidget(QWidget* const w);
-    void setLeftBottomPix(const QPixmap& pix);
+    void setLeftBottomPix(const QIcon &icon);
 
 private:
 

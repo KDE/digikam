@@ -102,7 +102,7 @@ RawPage::RawPage(KAssistantDialog* const dlg)
                          "</qt>"));
 
     setPageWidget(vbox);
-    setLeftBottomPix(QIcon::fromTheme("kdcraw").pixmap(128));
+    setLeftBottomPix(QIcon::fromTheme("kdcraw"));
 }
 
 RawPage::~RawPage()

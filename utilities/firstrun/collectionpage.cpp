@@ -130,7 +130,7 @@ CollectionPage::CollectionPage(KAssistantDialog* const dlg)
     vlayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     setPageWidget(widget);
-    setLeftBottomPix(QIcon::fromTheme("server-database").pixmap(128));
+    setLeftBottomPix(QIcon::fromTheme("server-database"));
 
     connect(d->rootAlbumPathRequester, SIGNAL(urlSelected(QUrl)),
             this, SLOT(slotAlbumRootChanged(QUrl)));

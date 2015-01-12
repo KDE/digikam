@@ -511,7 +511,7 @@ void ItemViewImageDelegate::drawGeolocationIndicator(QPainter* p, const QRect& r
 {
     if (!r.isNull())
     {
-        QIcon icon = QIcon::fromTheme("applications-internet").pixmap(16);
+        QIcon icon = QIcon::fromTheme("applications-internet");
         qreal op   = p->opacity();
         p->setOpacity(0.5);
         icon.paint(p, r);

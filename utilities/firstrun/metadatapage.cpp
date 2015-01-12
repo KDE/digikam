@@ -104,7 +104,7 @@ MetadataPage::MetadataPage(KAssistantDialog* const dlg)
                          "</qt>"));
 
     setPageWidget(vbox);
-    setLeftBottomPix(QIcon::fromTheme("exifinfo").pixmap(128));
+    setLeftBottomPix(QIcon::fromTheme("exifinfo"));
 }
 
 MetadataPage::~MetadataPage()

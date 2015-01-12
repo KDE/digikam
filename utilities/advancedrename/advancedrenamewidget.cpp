@@ -352,7 +352,7 @@ void AdvancedRenameWidget::setupWidgets()
     // --------------------------------------------------------
 
     QString modifiersStr     = i18n("Modifiers");
-    QPixmap modifiersIcon    = QIcon::fromTheme("document-edit").pixmap(16);
+    QIcon   modifiersIcon    = QIcon::fromTheme("document-edit");
     QString modifiersTooltip = i18n("<p>Add a modifier to a renaming option. "
                                     "To activate this button, place the cursor behind a renaming option "
                                     "or an already assigned modifier.</p>");

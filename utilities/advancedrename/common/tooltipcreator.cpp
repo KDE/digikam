@@ -87,9 +87,9 @@ QString TooltipCreator::getInfoIconResourceName()
     return QString("mydata://info.png");
 }
 
-QPixmap TooltipCreator::getInfoIcon()
+QIcon TooltipCreator::getInfoIcon()
 {
-    return QIcon::fromTheme("lighttable").pixmap(32);
+    return QIcon::fromTheme("lighttable");
 }
 
 QString TooltipCreator::tooltip(Parser* parser)

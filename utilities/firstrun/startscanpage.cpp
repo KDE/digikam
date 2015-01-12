@@ -66,7 +66,7 @@ StartScanPage::StartScanPage(KAssistantDialog* const dlg)
                        "</qt>"));
 
     setPageWidget(vbox);
-    setLeftBottomPix(QIcon::fromTheme("system-search").pixmap(128));
+    setLeftBottomPix(QIcon::fromTheme("system-search"));
 }
 
 StartScanPage::~StartScanPage()

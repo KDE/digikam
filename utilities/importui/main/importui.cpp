@@ -264,25 +264,25 @@ void ImportUI::setupUserArea()
     d->renameCustomizer = new RenameCustomizer(d->advBox, d->cameraTitle);
     d->renameCustomizer->setWhatsThis(i18n("Set how digiKam will rename files as they are downloaded."));
     //d->view->setRenameCustomizer(d->renameCustomizer);
-    d->advBox->addItem(d->renameCustomizer, QIcon::fromTheme("insert-image").pixmap(16), i18n("File Renaming Options"),
+    d->advBox->addItem(d->renameCustomizer, QIcon::fromTheme("insert-image"), i18n("File Renaming Options"),
                        QString("RenameCustomizer"), true);
 
     // -- Albums Auto-creation options -----------------------------------------
 
     d->albumCustomizer = new AlbumCustomizer(d->advBox);
-    d->advBox->addItem(d->albumCustomizer, QIcon::fromTheme("folder-new").pixmap(16), i18n("Auto-creation of Albums"),
+    d->advBox->addItem(d->albumCustomizer, QIcon::fromTheme("folder-new"), i18n("Auto-creation of Albums"),
                        QString("AlbumBox"), false);
 
     // -- On the Fly options ---------------------------------------------------
 
     d->advancedSettings = new AdvancedSettings(d->advBox);
-    d->advBox->addItem(d->advancedSettings, QIcon::fromTheme("system-run").pixmap(16), i18n("On the Fly Operations (JPEG only)"),
+    d->advBox->addItem(d->advancedSettings, QIcon::fromTheme("system-run"), i18n("On the Fly Operations (JPEG only)"),
                        QString("OnFlyBox"), true);
 
     // -- Scripting options ---------------------------------------------------
 
     d->scriptingSettings = new ScriptingSettings(d->advBox);
-    d->advBox->addItem(d->scriptingSettings, QIcon::fromTheme("utilities-terminal").pixmap(16), i18n("Scripting"),
+    d->advBox->addItem(d->scriptingSettings, QIcon::fromTheme("utilities-terminal"), i18n("Scripting"),
                        QString("ScriptingBox"), true);
     d->advBox->addStretch();
 

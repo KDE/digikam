@@ -107,7 +107,7 @@ OpenFilePage::OpenFilePage(KAssistantDialog* const dlg)
                          "</qt>"));
 
     setPageWidget(vbox);
-    setLeftBottomPix(QIcon::fromTheme("editimage").pixmap(128));
+    setLeftBottomPix(QIcon::fromTheme("editimage"));
 }
 
 OpenFilePage::~OpenFilePage()

@@ -104,7 +104,7 @@ PreviewPage::PreviewPage(KAssistantDialog* const dlg)
                          "</qt>"));
 
     setPageWidget(vbox);
-    setLeftBottomPix(QIcon::fromTheme("viewimage").pixmap(128));
+    setLeftBottomPix(QIcon::fromTheme("viewimage"));
 }
 
 PreviewPage::~PreviewPage()
