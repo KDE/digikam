@@ -60,6 +60,9 @@ extern "C"
 #include <QComboBox>
 #include <QMessageBox>
 #include <QIcon>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
 
 // KDE includes
 
@@ -68,7 +71,6 @@ extern "C"
 #include <kdirwatch.h>
 #include <klocalizedstring.h>
 #include <kwindowsystem.h>
-#include <kdialog.h>
 #include <kjobwidgets.h>
 
 #include <kio/global.h>
@@ -852,26 +854,25 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
         CollectionManager::instance()->migrationCandidates(loc, &locDescription, &candidateIds, &candidateDescriptions);
         qCDebug(DIGIKAM_GENERAL_LOG) << "Migration candidates for" << locDescription << ":" << candidateIds << candidateDescriptions;
 
-        KDialog* dialog         = new KDialog;
-        QWidget* widget         = new QWidget;
-        QGridLayout* mainLayout = new QGridLayout;
+        QDialog* const dialog         = new QDialog;
+        QWidget* const widget         = new QWidget(dialog);
+        QGridLayout* const mainLayout = new QGridLayout;
         mainLayout->setColumnStretch(1, 1);
 
-        QLabel* deviceIconLabel = new QLabel;
+        QLabel* const deviceIconLabel = new QLabel;
         deviceIconLabel->setPixmap(QIcon::fromTheme("drive-harddisk").pixmap(64));
         mainLayout->addWidget(deviceIconLabel, 0, 0);
 
-        QLabel* mainLabel = new QLabel(
-            i18n("<p>The collection </p><p><b>%1</b><br/>(%2)</p><p> is currently not found on your system.<br/> "
-                 "Please choose the most appropriate option to handle this situation:</p>",
-                 loc.label(), QDir::toNativeSeparators(locDescription)));
+        QLabel* const mainLabel = new QLabel(i18n("<p>The collection </p><p><b>%1</b><br/>(%2)</p><p> is currently not found on your system.<br/> "
+                                                  "Please choose the most appropriate option to handle this situation:</p>",
+                                             loc.label(), QDir::toNativeSeparators(locDescription)));
         mainLabel->setWordWrap(true);
         mainLayout->addWidget(mainLabel, 0, 1);
 
-        QGroupBox* groupBox = new QGroupBox;
+        QGroupBox* const groupBox = new QGroupBox;
         mainLayout->addWidget(groupBox, 1, 0, 1, 2);
 
-        QGridLayout* layout = new QGridLayout;
+        QGridLayout* const layout = new QGridLayout;
         layout->setColumnStretch(1, 1);
 
         QRadioButton* migrateButton = 0;
@@ -879,12 +880,11 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
 
         if (!candidateIds.isEmpty())
         {
-            migrateButton = new QRadioButton;
-            QLabel* migrateLabel = new QLabel(
-                i18n("<p>The collection is still available, but the identifier changed.<br/>"
-                     "This can be caused by restoring a backup, changing the partition layout "
-                     "or the file system settings.<br/>"
-                     "The collection is now located at this place:</p>"));
+            migrateButton              = new QRadioButton;
+            QLabel* const migrateLabel = new QLabel(i18n("<p>The collection is still available, but the identifier changed.<br/>"
+                                                         "This can be caused by restoring a backup, changing the partition layout "
+                                                         "or the file system settings.<br/>"
+                                                         "The collection is now located at this place:</p>"));
             migrateLabel->setWordWrap(true);
 
             migrateChoices = new QComboBox;
@@ -899,28 +899,32 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
             layout->addWidget(migrateChoices, 1, 1);
         }
 
-        QRadioButton* isRemovableButton = new QRadioButton;
-        QLabel* isRemovableLabel        = new QLabel(
-            i18n("The collection is located on a storage device which is not always attached. "
-                 "Mark the collection as a removable collection."));
+        QRadioButton* const isRemovableButton = new QRadioButton;
+        QLabel* const isRemovableLabel        = new QLabel(i18n("The collection is located on a storage device which is not always attached. "
+                                                                "Mark the collection as a removable collection."));
         isRemovableLabel->setWordWrap(true);
         layout->addWidget(isRemovableButton, 2, 0, Qt::AlignTop);
         layout->addWidget(isRemovableLabel,  2, 1);
 
-        QRadioButton* solveManuallyButton = new QRadioButton;
-        QLabel* solveManuallyLabel        = new QLabel(
-            i18n("Take no action now. I would like to solve the problem "
-                 "later using the setup dialog"));
+        QRadioButton* const solveManuallyButton = new QRadioButton;
+        QLabel* const solveManuallyLabel        = new QLabel(i18n("Take no action now. I would like to solve the problem "
+                                                                  "later using the setup dialog"));
         solveManuallyLabel->setWordWrap(true);
         layout->addWidget(solveManuallyButton, 3, 0, Qt::AlignTop);
         layout->addWidget(solveManuallyLabel,  3, 1);
 
         groupBox->setLayout(layout);
-
         widget->setLayout(mainLayout);
-        dialog->setCaption(i18n("Collection not found"));
-        dialog->setMainWidget(widget);
-        dialog->setButtons(KDialog::Ok);
+        
+        QVBoxLayout* const vbx          = new QVBoxLayout(dialog);
+        QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Ok, dialog);
+        vbx->addWidget(widget);
+        vbx->addWidget(buttons);
+        dialog->setLayout(vbx);
+        dialog->setWindowTitle(i18n("Collection not found"));
+        
+        connect(buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+                dialog, SLOT(accept()));
 
         // Default option: If there is only one candidate, default to migration.
         // Otherwise default to do nothing now.
