@@ -100,7 +100,7 @@ option(ENABLE_INTERNALMYSQL     "Build digiKam with internal MySQL server execut
 option(ENABLE_LCMS2             "Build digiKam with LCMS2 instead LCMS1 (default=OFF)"                           OFF)
 option(ENABLE_BALOOSUPPORT      "Build digiKam with Baloo support (default=ON)"                                  OFF)
 option(ENABLE_KDEPIMLIBSSUPPORT "Build digiKam with Kdepimlibs support (default=OFF)"                            OFF)
-option(ENABLE_VIDEO             "Build digiKam with QtMultimedia support (default=ON)"                            ON)
+option(ENABLE_MEDIAPLAYER       "Build digiKam with QtMultimedia support (default=ON)"                            ON)
 
 # Mysql support options (experimental):
 option(ENABLE_MYSQLSUPPORT      "Build digiKam with MySQL dabatase support (default=OFF)"                        OFF)
@@ -123,7 +123,7 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
              WebKitWidgets
 )
 
-if(ENABLE_VIDEO)
+if(ENABLE_MEDIAPLAYER)
     find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
                 Multimedia
                 MultimediaWidgets
@@ -1566,7 +1566,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsactionmngr.cpp
        )
 
-    if(ENABLE_VIDEO)
+    if(ENABLE_MEDIAPLAYER)
         set(libdigikamgui_SRCS
             ${libdigikamgui_SRCS}
             ${CMAKE_CURRENT_SOURCE_DIR}/app/views/mediaplayerview.cpp

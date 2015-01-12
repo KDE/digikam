@@ -86,7 +86,7 @@ target_link_libraries(digikamcore
                       ${KF5KDcraw_LIBRARIES}
 )
 
-if(ENABLE_VIDEO)
+if(ENABLE_MEDIAPLAYER)
     target_link_libraries(digikamcore Qt5::Multimedia)
 endif()
 
@@ -261,7 +261,7 @@ target_link_libraries(digikam
 
                       ${OpenCV_LIBRARIES}
 )
-if(ENABLE_VIDEO)
+if(ENABLE_MEDIAPLAYER)
   target_link_libraries(digikam Qt5::Multimedia Qt5::MultimediaWidgets)
 endif()
 
