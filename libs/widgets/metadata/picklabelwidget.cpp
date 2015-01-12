@@ -250,7 +250,7 @@ QList<PickLabel> PickLabelWidget::colorLabels() const
     return list;
 }
 
-QIcon PickLabelWidget::buildIcon(PickLabel label, int size)
+QIcon PickLabelWidget::buildIcon(PickLabel label)
 {
     switch(label)
     {

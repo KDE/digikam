@@ -84,7 +84,7 @@ public:
 
     static QString labelPickName(PickLabel label);
 
-    static QIcon buildIcon(PickLabel label, int size=12);
+    static QIcon buildIcon(PickLabel label);
 
 Q_SIGNALS:
 

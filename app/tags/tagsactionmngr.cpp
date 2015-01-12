@@ -237,7 +237,7 @@ bool TagsActionMngr::createPickLabelActionShortcut(KActionCollection* const ac, 
 /*
         action->forgetGlobalShortcut();
 */
-        action->setIcon(PickLabelWidget::buildIcon((PickLabel)pickId, 32));
+        action->setIcon(PickLabelWidget::buildIcon((PickLabel)pickId));
         action->setData(pickId);
 
         connect(action, SIGNAL(triggered()),
