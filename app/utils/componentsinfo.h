@@ -104,6 +104,12 @@ static inline void showDigikamComponentsInfo()
     list.insert(i18n("Kdepimlibs support"), i18n("no"));
 #endif /* HAVE_KDEPIMLIBS */
 
+#ifdef HAVE_VIDEOPLAYER
+    list.insert(i18n("QtMultimedia support"), i18n("Yes"));
+#else
+    list.insert(i18n("QtMultimedia support"), i18n("no"));
+#endif /* HAVE_VIDEOPLAYER */
+
 #ifdef HAVE_KIPI
     list.insert(i18n("LibKipi"),      KIPI::Interface::version());
     list.insert(i18n("Kipi-Plugins"), KIPI::PluginLoader::instance()->kipiPluginsVersion());
