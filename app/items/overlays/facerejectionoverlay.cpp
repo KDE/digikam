@@ -49,9 +49,9 @@ QSize FaceRejectionOverlayButton::sizeHint() const
     return QSize(16, 16);
 }
 
-QPixmap FaceRejectionOverlayButton::icon()
+QIcon FaceRejectionOverlayButton::icon()
 {
-    return QIcon::fromTheme("dialog-close").pixmap(16);
+    return QIcon::fromTheme("dialog-close");
 }
 
 void FaceRejectionOverlayButton::updateToolTip()

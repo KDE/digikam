@@ -26,7 +26,6 @@
 // Qt includes
 
 #include <QPainter>
-#include <QPixmap>
 #include <QIcon>
 #include <QLayout>
 #include <QLabel>
@@ -256,20 +255,20 @@ QIcon PickLabelWidget::buildIcon(PickLabel label, int size)
     switch(label)
     {
         case RejectedLabel:
-            return QIcon::fromTheme("flag-red").pixmap(size);
+            return QIcon::fromTheme("flag-red");
             break;
         case PendingLabel:
-            return QIcon::fromTheme("flag-yellow").pixmap(size);
+            return QIcon::fromTheme("flag-yellow");
             break;
         case AcceptedLabel:
-            return QIcon::fromTheme("flag-green").pixmap(size);
+            return QIcon::fromTheme("flag-green");
             break;
         default:
             break;
     }
 
     // default : NoPickLabel
-    return QIcon::fromTheme("flag-black").pixmap(size);
+    return QIcon::fromTheme("flag-black");
 }
 
 QString PickLabelWidget::labelPickName(PickLabel label)

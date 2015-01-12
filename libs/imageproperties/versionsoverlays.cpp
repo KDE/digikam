@@ -54,7 +54,7 @@ public:
 
 protected:
 
-    virtual QPixmap icon();
+    virtual QIcon icon();
     virtual void updateToolTip();
 };
 
@@ -68,11 +68,11 @@ QSize ShowHideVersionsOverlay::Button::sizeHint() const
     return QSize(16, 16);
 }
 
-QPixmap ShowHideVersionsOverlay::Button::icon()
+QIcon ShowHideVersionsOverlay::Button::icon()
 {
-    const char* icon = isChecked() ? "edit-bomb" : "edit-clear-history";
+    QString icon = isChecked() ? "edit-bomb" : "edit-clear-history";
     //const char* icon = isChecked() ? "layer-visible-off" : "layer-visible-on";
-    return QIcon::fromTheme(icon).pixmap(16);
+    return QIcon::fromTheme(icon);
 }
 
 void ShowHideVersionsOverlay::Button::updateToolTip()
@@ -170,7 +170,7 @@ public:
 
 protected:
 
-    virtual QPixmap icon();
+    virtual QIcon icon();
     virtual void updateToolTip();
 
 protected:
@@ -188,9 +188,9 @@ QSize ActionVersionsOverlay::Button::sizeHint() const
     return QSize(16, 16);
 }
 
-QPixmap ActionVersionsOverlay::Button::icon()
+QIcon ActionVersionsOverlay::Button::icon()
 {
-    return QIcon::fromTheme(gui.iconName()).pixmap(16);
+    return QIcon::fromTheme(gui.iconName());
 }
 
 void ActionVersionsOverlay::Button::updateToolTip()

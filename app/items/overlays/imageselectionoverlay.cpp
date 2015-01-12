@@ -46,9 +46,9 @@ QSize ImageSelectionOverlayButton::sizeHint() const
     return QSize(16, 16);
 }
 
-QPixmap ImageSelectionOverlayButton::icon()
+QIcon ImageSelectionOverlayButton::icon()
 {
-    return QIcon::fromTheme(isChecked() ? "list-remove" : "list-add").pixmap(16);
+    return QIcon::fromTheme(isChecked() ? "list-remove" : "list-add");
 }
 
 void ImageSelectionOverlayButton::updateToolTip()

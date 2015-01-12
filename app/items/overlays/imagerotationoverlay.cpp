@@ -48,15 +48,15 @@ QSize ImageRotateOverlayButton::sizeHint() const
     return QSize(16, 16);
 }
 
-QPixmap ImageRotateOverlayButton::icon()
+QIcon ImageRotateOverlayButton::icon()
 {
     if (m_direction == ImageRotateOverlayLeft)
     {
-        return QIcon::fromTheme("object-rotate-left").pixmap(16);
+        return QIcon::fromTheme("object-rotate-left");
     }
     else
     {
-        return QIcon::fromTheme("object-rotate-right").pixmap(16);
+        return QIcon::fromTheme("object-rotate-right");
     }
 }
 

@@ -371,7 +371,7 @@ QIcon ColorLabelWidget::buildIcon(ColorLabel label, int size)
         return QIcon(pix);
     }
 
-    return QIcon::fromTheme("emblem-unmounted").pixmap(size);
+    return QIcon::fromTheme("emblem-unmounted");
 }
 
 QColor ColorLabelWidget::labelColor(ColorLabel label)

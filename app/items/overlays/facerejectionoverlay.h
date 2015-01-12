@@ -46,7 +46,7 @@ public:
 
 protected:
 
-    virtual QPixmap icon();
+    virtual QIcon icon();
     virtual void updateToolTip();
 };
 

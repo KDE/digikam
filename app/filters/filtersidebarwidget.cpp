@@ -128,19 +128,19 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
     // --------------------------------------------------------------------------------------------------------
 
     d->textFilter = new TextFilter(d->expbox);
-    d->expbox->addItem(d->textFilter, QIcon::fromTheme("text-field").pixmap(16),
+    d->expbox->addItem(d->textFilter, QIcon::fromTheme("text-field"),
                        i18n("Text Filter"), QString("TextFilter"), true);
 
     // --------------------------------------------------------------------------------------------------------
 
     d->mimeFilter = new MimeFilter(d->expbox);
-    d->expbox->addItem(d->mimeFilter, QIcon::fromTheme("system-file-manager").pixmap(16),
+    d->expbox->addItem(d->mimeFilter, QIcon::fromTheme("system-file-manager"),
                        i18n("MIME Type Filter"), QString("TypeMimeFilter"), true);
 
     // --------------------------------------------------------------------------------------------------------
 
     d->geolocationFilter = new GeolocationFilter(d->expbox);
-    d->expbox->addItem(d->geolocationFilter, QIcon::fromTheme("applications-internet").pixmap(16),
+    d->expbox->addItem(d->geolocationFilter, QIcon::fromTheme("applications-internet"),
                        i18n("Geolocation Filter"), QString("TypeGeolocationFilter"), true);
 
     // --------------------------------------------------------------------------------------------------------
@@ -184,7 +184,7 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
     lay3->setMargin(0);
     lay3->setSpacing(0);
 
-    d->expbox->addItem(box3, QIcon::fromTheme("tag-assigned").pixmap(16), i18n("Tags Filter"), QString("TagsFilter"), true);
+    d->expbox->addItem(box3, QIcon::fromTheme("tag-assigned"), i18n("Tags Filter"), QString("TagsFilter"), true);
 
     // --------------------------------------------------------------------------------------------------------
 
@@ -202,7 +202,7 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
     lay4->setMargin(0);
     lay4->setSpacing(0);
 
-    d->expbox->addItem(box4, QIcon::fromTheme("favorites").pixmap(16), i18n("Labels Filter"), QString("LabelsFilter"), true);
+    d->expbox->addItem(box4, QIcon::fromTheme("favorites"), i18n("Labels Filter"), QString("LabelsFilter"), true);
 
     d->expanderVlay = dynamic_cast<QVBoxLayout*>(dynamic_cast<QScrollArea*>(d->expbox)->widget()->layout());
     d->space        = new QWidget();

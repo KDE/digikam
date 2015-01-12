@@ -154,7 +154,8 @@ void ItemViewHoverButton::paintEvent(QPaintEvent* event)
     // draw the icon overlay
     if (m_isHovered)
     {
-        QPixmap activeIcon = QIcon(m_icon).pixmap(48);
+#pragma message("hardcoded pixmap sizes")
+        QPixmap activeIcon = m_icon.pixmap(48);
         painter.drawPixmap(0, 0, activeIcon);
     }
     else
@@ -162,7 +163,7 @@ void ItemViewHoverButton::paintEvent(QPaintEvent* event)
         if (m_fadingValue < 255)
         {
             // apply an alpha mask respecting the fading value to the icon
-            QPixmap icon = m_icon;
+            QPixmap icon = m_icon.pixmap(16);
             QPixmap alphaMask(icon.width(), icon.height());
             const QColor color(m_fadingValue, m_fadingValue, m_fadingValue);
             alphaMask.fill(color);
@@ -172,7 +173,7 @@ void ItemViewHoverButton::paintEvent(QPaintEvent* event)
         else
         {
             // no fading is required
-            painter.drawPixmap(0, 0, m_icon);
+            painter.drawPixmap(0, 0, m_icon.pixmap(16));
         }
     }
 }

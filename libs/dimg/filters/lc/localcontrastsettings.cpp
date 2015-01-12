@@ -350,15 +350,15 @@ LocalContrastSettings::LocalContrastSettings(QWidget* const parent)
 
     d->expanderBox = new RExpanderBox;
     d->expanderBox->setObjectName("LocalContrastTool Expander");
-    d->expanderBox->addItem(firstPage, QIcon::fromTheme("contrast").pixmap(16), i18n("General settings"),
+    d->expanderBox->addItem(firstPage, QIcon::fromTheme("contrast"), i18n("General settings"),
                             QString("GeneralSettingsContainer"), true);
-    d->expanderBox->addItem(secondPage, QIcon::fromTheme("contrast").pixmap(16), i18n("Stage 1"),
+    d->expanderBox->addItem(secondPage, QIcon::fromTheme("contrast"), i18n("Stage 1"),
                             QString("Stage1SettingsContainer"), true);
-    d->expanderBox->addItem(thirdPage, QIcon::fromTheme("contrast").pixmap(16), i18n("Stage 2"),
+    d->expanderBox->addItem(thirdPage, QIcon::fromTheme("contrast"), i18n("Stage 2"),
                             QString("Stage2SettingsContainer"), true);
-    d->expanderBox->addItem(fourthPage, QIcon::fromTheme("contrast").pixmap(16), i18n("Stage 3"),
+    d->expanderBox->addItem(fourthPage, QIcon::fromTheme("contrast"), i18n("Stage 3"),
                             QString("Stage3SettingsContainer"), true);
-    d->expanderBox->addItem(fifthPage, QIcon::fromTheme("contrast").pixmap(16), i18n("Stage 4"),
+    d->expanderBox->addItem(fifthPage, QIcon::fromTheme("contrast"), i18n("Stage 4"),
                             QString("Stage4SettingsContainer"), true);
     d->expanderBox->addStretch();
     d->expanderBox->setCheckBoxVisible(1, true);

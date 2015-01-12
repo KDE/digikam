@@ -186,7 +186,7 @@ TemplateViewer::TemplateViewer(QWidget* const parent)
     d->source->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->instructions->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
-    addItem(w1, QIcon::fromTheme("flag-red").pixmap(16),
+    addItem(w1, QIcon::fromTheme("flag-red"),
             i18n("Rights"), QString("Rights"), true);
 
     // ------------------------------------------------------------------
@@ -206,7 +206,7 @@ TemplateViewer::TemplateViewer(QWidget* const parent)
     d->locationProvinceState->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->locationCountry->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
-    addItem(w2, QIcon::fromTheme("applications-internet").pixmap(16),
+    addItem(w2, QIcon::fromTheme("applications-internet"),
             i18n("Location"), QString("Location"), true);
 
     // ------------------------------------------------------------------
@@ -238,7 +238,7 @@ TemplateViewer::TemplateViewer(QWidget* const parent)
     d->contactEmail->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->contactWebUrl->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
-    addItem(w3, QIcon::fromTheme("view-pim-contacts").pixmap(16),
+    addItem(w3, QIcon::fromTheme("view-pim-contacts"),
             i18n("Contact"), QString("Contact"), true);
 
     // ------------------------------------------------------------------
@@ -246,7 +246,7 @@ TemplateViewer::TemplateViewer(QWidget* const parent)
     RVBox* w4       = new RVBox(this);
     d->subjectsList = new DTextList(QStringList(), w4);
 
-    addItem(w4, QIcon::fromTheme("feed-subscribe").pixmap(16),
+    addItem(w4, QIcon::fromTheme("feed-subscribe"),
             i18n("Subjects"), QString("Subjects"), true);
 
     addStretch();

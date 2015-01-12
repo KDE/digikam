@@ -372,13 +372,13 @@ BWSepiaSettings::BWSepiaSettings(QWidget* const parent, DImg* const img)
     // -------------------------------------------------------------
 
     // Some new icons may be needed : a film roll, a lens filter and ?
-    d->tab->addItem(d->bwFilm, QIcon::fromTheme("filmgrain").pixmap(16),
+    d->tab->addItem(d->bwFilm, QIcon::fromTheme("filmgrain"),
                     i18n("Film"), QString("Film"), true);
-    d->tab->addItem(vbox, QIcon::fromTheme("lensautofix").pixmap(16),
+    d->tab->addItem(vbox, QIcon::fromTheme("lensautofix"),
                     i18n("Lens Filters"), QString("Lens Filters"), false);
-    d->tab->addItem(d->bwTone, QIcon::fromTheme("fill-color").pixmap(16),
+    d->tab->addItem(d->bwTone, QIcon::fromTheme("fill-color"),
                     i18n("Tone"), QString("Tone"), false);
-    d->tab->addItem(lumBox, QIcon::fromTheme("adjustcurves").pixmap(16),
+    d->tab->addItem(lumBox, QIcon::fromTheme("adjustcurves"),
                     i18n("Luminosity"), QString("Luminosity"), false);
     d->tab->addStretch();
 

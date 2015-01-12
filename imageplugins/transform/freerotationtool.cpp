@@ -217,9 +217,9 @@ FreeRotationTool::FreeRotationTool(QObject* const parent)
 
     d->expanderBox    = new RExpanderBox;
     d->expanderBox->setObjectName("FreeRotationTool Expander");
-    d->expanderBox->addItem(autoAdjustContainer, QIcon::fromTheme("freerotation").pixmap(16), i18n("Automatic Adjustment"),
+    d->expanderBox->addItem(autoAdjustContainer, QIcon::fromTheme("freerotation"), i18n("Automatic Adjustment"),
                             QString("AutoAdjustContainer"), true);
-    d->expanderBox->addItem(d->settingsView, QIcon::fromTheme("freerotation").pixmap(16), i18n("Settings"),
+    d->expanderBox->addItem(d->settingsView, QIcon::fromTheme("freerotation"), i18n("Settings"),
                             QString("SettingsContainer"), true);
     d->expanderBox->addStretch();
 

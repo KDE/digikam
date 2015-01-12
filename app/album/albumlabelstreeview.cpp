@@ -381,7 +381,7 @@ void AlbumLabelsTreeView::initPicksTree()
         QTreeWidgetItem* const pickWidgetItem = new QTreeWidgetItem(d->picks);
         pickWidgetItem->setText(0, pick);
         pickWidgetItem->setFont(0, d->regularFont);
-        pickWidgetItem->setIcon(0, QIcon::fromTheme(pickSetIcons.at(pickSetNames.indexOf(pick))).pixmap(48));
+        pickWidgetItem->setIcon(0, QIcon::fromTheme(pickSetIcons.at(pickSetNames.indexOf(pick))));
     }
 }
 
@@ -395,7 +395,7 @@ void AlbumLabelsTreeView::initColorsTree()
     QTreeWidgetItem* noColor = new QTreeWidgetItem(d->colors);
     noColor->setText(0, i18n("No Color"));
     noColor->setFont(0, d->regularFont);
-    noColor->setIcon(0, QIcon::fromTheme("emblem-unmounted").pixmap(48));
+    noColor->setIcon(0, QIcon::fromTheme("emblem-unmounted"));
 
     QStringList colorSet;
     colorSet << "red"      << "orange"

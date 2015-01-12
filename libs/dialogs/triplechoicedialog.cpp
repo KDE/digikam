@@ -106,7 +106,7 @@ QToolButton* TripleChoiceDialog::addChoiceButton(int key, const QString& iconNam
 {
     QToolButton* const button = new QToolButton;
     button->setText(text);
-    button->setIcon(QIcon::fromTheme(iconName).pixmap(d->iconSize));
+    button->setIcon(QIcon::fromTheme(iconName));
     button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     button->setAutoRaise(true);
     button->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);

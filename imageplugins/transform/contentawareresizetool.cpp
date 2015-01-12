@@ -279,7 +279,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
 
     QLabel* labeRedMaskTool = new QLabel(i18n("Suppression weight mask:"), d->gboxSettings->plainPage());
     d->redMaskTool          = new QToolButton(d->gboxSettings->plainPage());
-    d->redMaskTool->setIcon(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/indicator-red.png")));
+    d->redMaskTool->setIcon(QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/indicator-red.png")));
     d->redMaskTool->setCheckable(true);
     d->redMaskTool->setChecked(true);
     d->redMaskTool->setToolTip(i18n("Draw a suppression mask"));
@@ -291,7 +291,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
 
     QLabel* labeGreenMaskTool = new QLabel(i18n("Preservation weight mask:"), d->gboxSettings->plainPage());
     d->greenMaskTool          = new QToolButton(d->gboxSettings->plainPage());
-    d->greenMaskTool->setIcon(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/indicator-green.png")));
+    d->greenMaskTool->setIcon(QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/indicator-green.png")));
     d->greenMaskTool->setCheckable(true);
     d->greenMaskTool->setToolTip(i18n("Draw a preservation mask"));
     d->greenMaskTool->setWhatsThis(i18n("Click on this button to draw zones marking which areas of the "
@@ -301,7 +301,7 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
 
     QLabel* labeEraseMaskTool = new QLabel(i18n("Erase mask:"), d->gboxSettings->plainPage());
     d->eraseMaskTool          = new QToolButton(d->gboxSettings->plainPage());
-    d->eraseMaskTool->setIcon(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/indicator-gray.png")));
+    d->eraseMaskTool->setIcon(QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/indicator-gray.png")));
     d->eraseMaskTool->setCheckable(true);
     d->eraseMaskTool->setToolTip(i18n("Erase mask"));
     d->eraseMaskTool->setWhatsThis(i18n("Click on this button to erase mask regions."));
@@ -425,16 +425,16 @@ ContentAwareResizeTool::ContentAwareResizeTool(QObject* const parent)
 
     d->expanderBox = new RExpanderBox;
     d->expanderBox->setObjectName("ContentAwareResizeTool Expander");
-    d->expanderBox->addItem(sizeSettingsContainer, QIcon::fromTheme("transform-scale").pixmap(16), i18n("Target size"),
+    d->expanderBox->addItem(sizeSettingsContainer, QIcon::fromTheme("transform-scale"), i18n("Target size"),
                             QString("SizeSettingsContainer"), true);
-    d->expanderBox->addItem(mixedRescaleContainer, QIcon::fromTheme("transform-scale").pixmap(16),
+    d->expanderBox->addItem(mixedRescaleContainer, QIcon::fromTheme("transform-scale"),
                             i18n("Content-aware rescale percentage"),
                             QString("MixedRescaleContainer"), true);
-    d->expanderBox->addItem(maskSettingsContainer, QIcon::fromTheme("transform-scale").pixmap(16), i18n("Mask Settings"),
+    d->expanderBox->addItem(maskSettingsContainer, QIcon::fromTheme("transform-scale"), i18n("Mask Settings"),
                             QString("MaskSettingsContainer"), true);
-    d->expanderBox->addItem(energyFunctionsContainer, QIcon::fromTheme("transform-scale").pixmap(16), i18n("Energy function"),
+    d->expanderBox->addItem(energyFunctionsContainer, QIcon::fromTheme("transform-scale"), i18n("Energy function"),
                             QString("EnergyFunctionsContainer"), true);
-    d->expanderBox->addItem(advancedSettingsContainer, QIcon::fromTheme("system-run").pixmap(16), i18n("Advanced Settings"),
+    d->expanderBox->addItem(advancedSettingsContainer, QIcon::fromTheme("system-run"), i18n("Advanced Settings"),
                             QString("AdvancedSettingsContainer"), true);
     d->expanderBox->addStretch();
 
