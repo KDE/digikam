@@ -56,7 +56,6 @@ class SlideToolBar::Private
 public:
 
     Private() :
-        iconSize(16),
         playBtn(0),
         stopBtn(0),
         nextBtn(0),
@@ -65,8 +64,6 @@ public:
         desktop(qApp->desktop())
     {
     }
-
-    const int       iconSize;
 
     QToolButton*    playBtn;
     QToolButton*    stopBtn;
@@ -99,12 +96,6 @@ SlideToolBar::SlideToolBar(const SlideShowSettings& settings, QWidget* const par
     d->nextBtn->setIcon(QIcon::fromTheme("media-skip-forward"));
     d->stopBtn->setIcon(QIcon::fromTheme("media-playback-stop"));
 
-#pragma message("is forcing the iconsize even necessary here?")
-    d->playBtn->setIconSize(QSize(d->iconSize, d->iconSize));
-    d->prevBtn->setIconSize(QSize(d->iconSize, d->iconSize));
-    d->nextBtn->setIconSize(QSize(d->iconSize, d->iconSize));
-    d->stopBtn->setIconSize(QSize(d->iconSize, d->iconSize));
-
     int num = d->desktop->numScreens();
 
     if (num > 1)
@@ -113,7 +104,6 @@ SlideToolBar::SlideToolBar(const SlideShowSettings& settings, QWidget* const par
         QMenu* const screenMenu = new QMenu(d->screenSelectBtn);
         d->screenSelectBtn->setToolTip( i18n("Switch Screen"));
         d->screenSelectBtn->setIcon(QIcon::fromTheme("video-display"));
-        d->screenSelectBtn->setIconSize(QSize(d->iconSize, d->iconSize));
         d->screenSelectBtn->setMenu(screenMenu);
         d->screenSelectBtn->setPopupMode(QToolButton::InstantPopup);
         d->screenSelectBtn->setFocusPolicy(Qt::NoFocus);
