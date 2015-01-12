@@ -718,7 +718,7 @@ void ImportUI::setupStatusBar()
 {
     d->statusProgressBar = new StatusProgressBar(statusBar());
     d->statusProgressBar->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    d->statusProgressBar->setNotificationTitle(d->cameraTitle, QIcon::fromTheme("camera-photo").pixmap(22));
+    d->statusProgressBar->setNotificationTitle(d->cameraTitle, QIcon::fromTheme("camera-photo"));
     statusBar()->addWidget(d->statusProgressBar, 100);
 
     //------------------------------------------------------------------------------

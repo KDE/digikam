@@ -269,7 +269,7 @@ void QueueMgrWindow::setupStatusBar()
     d->statusProgressBar->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->statusProgressBar->setMaximumHeight(fontMetrics().height() + 2);
     d->statusProgressBar->setNotify(true);
-    d->statusProgressBar->setNotificationTitle(i18n("Batch Queue Manager"), QIcon::fromTheme("bqm-diff").pixmap(22));
+    d->statusProgressBar->setNotificationTitle(i18n("Batch Queue Manager"), QIcon::fromTheme("bqm-diff"));
     statusBar()->addWidget(d->statusProgressBar, 60);
 
     d->statusLabel = new QLabel(statusBar());

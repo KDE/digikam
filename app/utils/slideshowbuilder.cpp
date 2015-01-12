@@ -91,7 +91,7 @@ void SlideShowBuilder::slotRun()
             this, SLOT(slotCancel()));
 
     setLabel(i18n("Preparing slideshow"));
-    setThumbnail(QIcon::fromTheme("digikam").pixmap(22));
+    setThumbnail(QIcon::fromTheme("digikam"));
 
     if (d->album)
     {

@@ -70,7 +70,8 @@ public:
     bool                notify;
     QString             progressId;
     QString             title;
-    QPixmap             icon;
+#pragma message("avoid copying?")
+    QIcon               icon;
 
     QWidget*            progressWidget;
     QPushButton*        cancelButton;
@@ -123,7 +124,7 @@ void StatusProgressBar::setNotify(bool b)
     d->notify = b;
 }
 
-void StatusProgressBar::setNotificationTitle(const QString& title, const QPixmap& icon)
+void StatusProgressBar::setNotificationTitle(const QString& title, const QIcon &icon)
 {
     d->title = title;
     d->icon  = icon;
@@ -212,6 +213,7 @@ void StatusProgressBar::progressBarMode(int mode, const QString& text)
 
         if (d->notify)
         {
+#pragma message("using isnull for checking whether there's a thumb or not may not be a good idea?")
             ProgressItem* const item = ProgressManager::createProgressItem(d->title, QString(), false, !d->icon.isNull());
             item->setTotalItems(d->progressBar->maximum());
             item->setCompletedItems(d->progressBar->value());

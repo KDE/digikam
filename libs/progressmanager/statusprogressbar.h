@@ -29,7 +29,6 @@
 // Qt includes
 
 #include <QStackedWidget>
-#include <QPixmap>
 #include <QtCore/QString>
 
 // Local includes
@@ -68,7 +67,7 @@ public:
     void setProgressTotalSteps(int v);
 
     void setNotify(bool b);
-    void setNotificationTitle(const QString& title, const QPixmap& icon=QPixmap());
+    void setNotificationTitle(const QString& title, const QIcon& icon);
 
 public Q_SLOTS:
 

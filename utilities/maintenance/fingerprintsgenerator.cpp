@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QString>
+#include <QIcon>
 
 // KDE includes
 
@@ -145,7 +146,7 @@ void FingerPrintsGenerator::slotStart()
 
 void FingerPrintsGenerator::slotAdvance(const QImage& img)
 {
-    setThumbnail(QPixmap::fromImage(img));
+    setThumbnail(QIcon(QPixmap::fromImage(img)));
     advance(1);
 }
 

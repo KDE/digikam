@@ -46,7 +46,7 @@ FileActionProgress::FileActionProgress(const char* name)
 {
     ProgressManager::addProgressItem(this);
     setLabel(i18n("Process Items"));
-    setThumbnail(QIcon::fromTheme("digikam").pixmap(22));
+    setThumbnail(QIcon::fromTheme("digikam"));
 
     connect(this, SIGNAL(progressItemCanceled(ProgressItem*)),
             this, SLOT(slotCancel()));

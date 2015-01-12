@@ -185,20 +185,17 @@ void ProgressItem::setUsesBusyIndicator(bool useBusyIndicator)
     emit progressItemUsesBusyIndicator(this, useBusyIndicator);
 }
 
-void ProgressItem::setThumbnail(const QPixmap& thumb)
+void ProgressItem::setThumbnail(const QIcon& icon)
 {
     if (!hasThumbnail()) return;
-
-    QPixmap pix = thumb;
-
-    if (pix.isNull())
+#pragma message("hardcoded thumbsizes")
+    if (icon.isNull())
     {
-        pix = QIcon::fromTheme("image-missing").pixmap(22);
+        emit progressItemThumbnail(this, QIcon::fromTheme("image-missing").pixmap(22));
+        return;
     }
-    else
-    {
-        pix = pix.scaled(22, 22, Qt::KeepAspectRatio, Qt::FastTransformation);
-    }
+
+    QPixmap pix = icon.pixmap(22);
 
     emit progressItemThumbnail(this, pix);
 }

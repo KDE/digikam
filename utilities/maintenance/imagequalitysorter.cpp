@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QString>
+#include <QIcon>
 
 // KDE includes
 
@@ -150,7 +151,7 @@ void ImageQualitySorter::slotStart()
 
 void ImageQualitySorter::slotAdvance(const QImage& img)
 {
-    setThumbnail(QPixmap::fromImage(img));
+    setThumbnail(QIcon(QPixmap::fromImage(img)));
     advance(1);
 }
 

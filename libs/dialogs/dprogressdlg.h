@@ -70,7 +70,7 @@ public Q_SLOTS:
 
     void setButtonText(const QString& text);
     void setButtonGuiItem(const KGuiItem& item);
-    void addedAction(const QPixmap& pix, const QString& text);
+    void addedAction(const QIcon &icon, const QString& text);
     void reset();
 
 protected Q_SLOTS:

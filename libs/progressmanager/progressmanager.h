@@ -108,7 +108,7 @@ public:
     /**
      * Sets whether this item has a thumbnail.
      */
-    void setThumbnail(const QPixmap& thumb);
+    void setThumbnail(const QIcon &icon);
 
     /**
      * @return The current progress value of this item in percent.
