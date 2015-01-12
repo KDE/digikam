@@ -79,10 +79,10 @@ CameraFolderView::~CameraFolderView()
     delete d;
 }
 
-void CameraFolderView::addVirtualFolder(const QString& name, const QPixmap& pixmap)
+void CameraFolderView::addVirtualFolder(const QString& name, const QIcon& icon)
 {
     d->cameraName    = name;
-    d->virtualFolder = new CameraFolderItem(this, d->cameraName, pixmap);
+    d->virtualFolder = new CameraFolderItem(this, d->cameraName, icon);
     d->virtualFolder->setExpanded(true);
     d->virtualFolder->setSelected(false);
     // item is not selectable.
@@ -90,9 +90,9 @@ void CameraFolderView::addVirtualFolder(const QString& name, const QPixmap& pixm
     d->virtualFolder->setDisabled(false);
 }
 
-void CameraFolderView::addRootFolder(const QString& folder, int nbItems, const QPixmap& pixmap)
+void CameraFolderView::addRootFolder(const QString& folder, int nbItems, const QIcon &icon)
 {
-    d->rootFolder = new CameraFolderItem(d->virtualFolder, folder, folder, pixmap);
+    d->rootFolder = new CameraFolderItem(d->virtualFolder, folder, folder, icon);
     d->rootFolder->setExpanded(true);
 
     if (nbItems != -1)
@@ -102,7 +102,7 @@ void CameraFolderView::addRootFolder(const QString& folder, int nbItems, const Q
 }
 
 CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QString& subFolder,
-                                              int nbItems, const QPixmap& pixmap)
+                                              int nbItems, const QIcon &icon)
 {
     CameraFolderItem* parentItem = findFolder(folder);
 
@@ -119,7 +119,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
         }
 
         path += subFolder;
-        CameraFolderItem* item = new CameraFolderItem(parentItem, subFolder, path, pixmap);
+        CameraFolderItem* item = new CameraFolderItem(parentItem, subFolder, path, icon);
 
         qCDebug(LOG_IMPORTUI) << "Added ViewItem with path "
                  << item->folderPath();

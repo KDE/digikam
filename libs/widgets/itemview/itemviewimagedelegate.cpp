@@ -471,15 +471,15 @@ void ItemViewImageDelegate::drawPickLabelIcon(QPainter* p, const QRect& r, int p
 
         if (pickId == RejectedLabel)
         {
-            icon = QIcon::fromTheme("flag-red").pixmap(r.width());
+            icon = QIcon::fromTheme("flag-red");
         }
         else if (pickId == PendingLabel)
         {
-            icon = QIcon::fromTheme("flag-yellow").pixmap(r.width());
+            icon = QIcon::fromTheme("flag-yellow");
         }
         else if (pickId == AcceptedLabel)
         {
-            icon = QIcon::fromTheme("flag-green").pixmap(r.width());
+            icon = QIcon::fromTheme("flag-green");
         }
 
         icon.paint(p, r);
@@ -495,14 +495,14 @@ void ItemViewImageDelegate::drawPanelSideIcon(QPainter* p, bool left, bool right
     if (left)
     {
         QRect r(3, d->rect.height()/2 - iconSize/2, iconSize, iconSize);
-        QIcon icon = QIcon::fromTheme("arrow-left").pixmap(iconSize);
+        QIcon icon = QIcon::fromTheme("arrow-left");
         icon.paint(p, r);
     }
 
     if (right)
     {
         QRect r(d->rect.width() - 3 - iconSize, d->rect.height()/2 - iconSize/2, iconSize, iconSize);
-        QIcon icon = QIcon::fromTheme("arrow-right").pixmap(iconSize);
+        QIcon icon = QIcon::fromTheme("arrow-right");
         icon.paint(p, r);
     }
 }
@@ -528,11 +528,11 @@ void ItemViewImageDelegate::drawGroupIndicator(QPainter* p, const QRect& r,
 
         if (open)
         {
-            icon = QIcon::fromTheme("image-stack-open").pixmap(r.width());
+            icon = QIcon::fromTheme("image-stack-open");
         }
         else
         {
-            icon = QIcon::fromTheme("image-stack").pixmap(r.width());
+            icon = QIcon::fromTheme("image-stack");
         }
 
         qreal op     = p->opacity();

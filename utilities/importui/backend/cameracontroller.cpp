@@ -343,7 +343,7 @@ QByteArray CameraController::cameraMD5ID() const
     return d->camera->cameraMD5ID();
 }
 
-QPixmap CameraController::mimeTypeThumbnail(const QString& itemName, int thumbSize) const
+QIcon CameraController::mimeTypeThumbnail(const QString& itemName) const
 {
     if (!d->camera)
     {
@@ -355,22 +355,22 @@ QPixmap CameraController::mimeTypeThumbnail(const QString& itemName, int thumbSi
 
     if (mime.startsWith(QLatin1String("image/x-raw")))
     {
-        return QIcon::fromTheme("kdcraw").pixmap(thumbSize);
+        return QIcon::fromTheme("kdcraw");
     }
     else if (mime.startsWith(QLatin1String("image/")))
     {
-        return QIcon::fromTheme("image-x-generic").pixmap(thumbSize);
+        return QIcon::fromTheme("image-x-generic");
     }
     else if (mime.startsWith(QLatin1String("video/")))
     {
-        return QIcon::fromTheme("video-x-generic").pixmap(thumbSize);
+        return QIcon::fromTheme("video-x-generic");
     }
     else if (mime.startsWith(QLatin1String("audio/")))
     {
-        return QIcon::fromTheme("audio-x-generic").pixmap(thumbSize);
+        return QIcon::fromTheme("audio-x-generic");
     }
 
-    return QIcon::fromTheme("unknown").pixmap(thumbSize);
+    return QIcon::fromTheme("unknown");
 }
 
 void CameraController::slotCancel()

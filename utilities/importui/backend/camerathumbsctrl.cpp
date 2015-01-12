@@ -141,7 +141,7 @@ bool CameraThumbsCtrl::getThumbInfo(const CamItemInfo& info, CachedItem& item) c
         d->controller->getThumbsInfo(CamItemInfoList() << info, ThumbnailSize::maxThumbsSize());
     }
 
-    item = CachedItem(info, d->controller->mimeTypeThumbnail(info.name, ThumbnailSize::maxThumbsSize()));
+    item = CachedItem(info, d->controller->mimeTypeThumbnail(info.name).pixmap(ThumbnailSize::maxThumbsSize()));
 
     return false;
 }
@@ -159,7 +159,7 @@ void CameraThumbsCtrl::slotThumbInfo(const QString&, const QString& file, const 
 
     if (thumb.isNull())
     {
-        thumbnail = d->controller->mimeTypeThumbnail(file, ThumbnailSize::maxThumbsSize()).toImage();
+        thumbnail = d->controller->mimeTypeThumbnail(file).pixmap(ThumbnailSize::maxThumbsSize()).toImage();
     }
 
     putItemToCache(info.url(), info, QPixmap::fromImage(thumbnail));
@@ -176,7 +176,7 @@ void CameraThumbsCtrl::slotThumbInfoFailed(const QString& /*folder*/, const QStr
     }
     else
     {
-        QPixmap pix = d->controller->mimeTypeThumbnail(file, ThumbnailSize::maxThumbsSize());
+        QPixmap pix = d->controller->mimeTypeThumbnail(file).pixmap(ThumbnailSize::maxThumbsSize());
         putItemToCache(info.url(), info, pix);
         d->pendingItems.removeAll(info.url());
         emit signalThumbInfoReady(info);
@@ -255,7 +255,7 @@ void CameraThumbsCtrl::procressKDEPreview(const KFileItem& item, const QPixmap& 
     if (pix.isNull())
     {
         // This call must be run outside Camera Controller thread.
-        thumb = d->controller->mimeTypeThumbnail(file, ThumbnailSize::maxThumbsSize());
+        thumb = d->controller->mimeTypeThumbnail(file).pixmap(ThumbnailSize::maxThumbsSize());
         qCDebug(LOG_IMPORTUI) << "Failed thumb from KDE Preview : " << item.url();
     }
     else

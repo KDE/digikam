@@ -94,7 +94,7 @@ public:
     void lockFile(const QString& folder, const QString& file, bool lock);
     void openFile(const QString& folder, const QString& file);
 
-    QPixmap mimeTypeThumbnail(const QString& itemName, int thumbSize) const;
+    QIcon mimeTypeThumbnail(const QString& itemName) const;
 
 Q_SIGNALS:
 

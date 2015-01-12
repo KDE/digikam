@@ -104,7 +104,7 @@ QVariant ImportThumbnailModel::data(const QModelIndex& index, int role) const
         // at least gphoto2 doesn't really like it and will error a lot and slow down
         if (info.isNull() || path.isEmpty() || !info.previewPossible)
         {
-            return QVariant(d->thumbsCtrl->cameraController()->mimeTypeThumbnail(path, d->thumbSize.size()));
+            return QVariant(d->thumbsCtrl->cameraController()->mimeTypeThumbnail(path));
         }
 
         if (d->thumbsCtrl->getThumbInfo(info, item))
@@ -112,7 +112,7 @@ QVariant ImportThumbnailModel::data(const QModelIndex& index, int role) const
             return QVariant(item.second.scaled(d->thumbSize.size(), d->thumbSize.size(), Qt::KeepAspectRatio));
         }
 
-        return QVariant(d->thumbsCtrl->cameraController()->mimeTypeThumbnail(path, d->thumbSize.size()));
+        return QVariant(d->thumbsCtrl->cameraController()->mimeTypeThumbnail(path));
     }
 
     return ImportImageModel::data(index, role);

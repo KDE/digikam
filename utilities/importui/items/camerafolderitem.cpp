@@ -45,23 +45,23 @@ public:
     QString name;
 };
 
-CameraFolderItem::CameraFolderItem(QTreeWidget* const parent, const QString& name, const QPixmap& pixmap)
+CameraFolderItem::CameraFolderItem(QTreeWidget* const parent, const QString& name, const QIcon& icon)
     : QTreeWidgetItem(parent), d(new Private)
 {
     d->name = name;
-    setIcon(0, pixmap);
+    setIcon(0, icon);
     setText(0, d->name);
 }
 
 CameraFolderItem::CameraFolderItem(QTreeWidgetItem* const parent, const QString& folderName,
-                                   const QString& folderPath, const QPixmap& pixmap)
+                                   const QString& folderPath, const QIcon &icon)
     : QTreeWidgetItem(parent), d(new Private)
 {
     d->folderName    = folderName;
     d->folderPath    = folderPath;
     d->virtualFolder = false;
     d->name          = folderName;
-    setIcon(0, pixmap);
+    setIcon(0, icon);
     setText(0, d->name);
 }
 
