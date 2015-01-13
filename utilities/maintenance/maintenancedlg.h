@@ -24,9 +24,9 @@
 #ifndef MAINTENANCEDLG_H
 #define MAINTENANCEDLG_H
 
-// KDE includes
+// Qt includes
 
-#include <kdialog.h>
+#include <QDialog>
 
 // Local includes
 
@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class MaintenanceDlg : public KDialog
+class MaintenanceDlg : public QDialog
 {
     Q_OBJECT
 
@@ -53,6 +53,7 @@ private Q_SLOTS:
     void slotMetadataSetup();
     void slotQualitySetup();
     void slotOk();
+    void slotHelp();
 
 private:
 

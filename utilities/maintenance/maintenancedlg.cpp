@@ -33,12 +33,16 @@
 #include <QScrollArea>
 #include <QIcon>
 #include <QStandardPaths>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
+#include <QPushButton>
 
 // KDE includes
 
 #include <klocalizedstring.h>
 #include <kconfig.h>
 #include <kwindowconfig.h>
+#include <khelpclient.h>
 
 // Libkdcraw includes
 
@@ -85,6 +89,7 @@ public:
 public:
 
     Private() :
+        buttons(0),
         logo(0),
         title(0),
         scanThumbs(0),
@@ -125,6 +130,7 @@ public:
     static const QString configMetadataSync;
     static const QString configSyncDirection;
 
+    QDialogButtonBox*    buttons;
     QLabel*              logo;
     QLabel*              title;
     QCheckBox*           scanThumbs;
@@ -165,19 +171,17 @@ const QString MaintenanceDlg::Private::configMetadataSync("MetadataSync");
 const QString MaintenanceDlg::Private::configSyncDirection("SyncDirection");
 
 MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
-    : KDialog(parent), d(new Private)
+    : QDialog(parent), d(new Private)
 {
-    setHelp("digikam");
-    setCaption(i18n("Maintenance"));
-    setButtons(Ok | Help | Cancel);
-    setDefaultButton(Cancel);
+    setWindowTitle(i18n("Maintenance"));
+
+    d->buttons = new QDialogButtonBox(QDialogButtonBox::Help | QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
+    d->buttons->button(QDialogButtonBox::Cancel)->setDefault(true);
 
     QScrollArea* const main = new QScrollArea(this);
     QWidget* const page     = new QWidget(main->viewport());
     main->setWidget(page);
     main->setWidgetResizable(true);
-
-    setMainWidget(main);
 
     QGridLayout* const grid = new QGridLayout(page);
 
@@ -293,15 +297,26 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     grid->addWidget(d->logo,                        0, 0, 1, 1);
     grid->addWidget(d->title,                       0, 1, 1, 1);
     grid->addWidget(d->expanderBox,                 5, 0, 3, 2);
-    grid->setSpacing(spacingHint());
+    grid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     grid->setMargin(0);
     grid->setColumnStretch(1, 10);
     grid->setRowStretch(5, 10);
 
+    QVBoxLayout* const vbx = new QVBoxLayout(this);
+    vbx->addWidget(main);
+    vbx->addWidget(d->buttons);
+    setLayout(vbx);
+
     // --------------------------------------------------------------------------------------
 
-    connect(this, SIGNAL(okClicked()),
+    connect(d->buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
             this, SLOT(slotOk()));
+
+    connect(d->buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
+            this, SLOT(reject()));
+
+    connect(d->buttons->button(QDialogButtonBox::Help), SIGNAL(clicked()),
+            this, SLOT(slotHelp()));
 
     connect(d->expanderBox, SIGNAL(signalItemToggled(int,bool)),
             this, SLOT(slotItemToggled(int,bool)));
@@ -325,6 +340,7 @@ MaintenanceDlg::~MaintenanceDlg()
 void MaintenanceDlg::slotOk()
 {
     writeSettings();
+    accept();
 }
 
 MaintenanceSettings MaintenanceDlg::settings() const
@@ -471,6 +487,11 @@ void MaintenanceDlg::slotMetadataSetup()
 void MaintenanceDlg::slotQualitySetup()
 {
     Setup::execSinglePage(this, Setup::ImageQualityPage);
+}
+
+void MaintenanceDlg::slotHelp()
+{
+    KHelpClient::invokeHelp("digikam");
 }
 
 }  // namespace Digikam

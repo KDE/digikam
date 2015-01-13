@@ -560,6 +560,7 @@ void CameraSelection::slotOkClicked()
 {
     emit signalOkClicked(currentTitle(),    currentModel(),
                          currentPortPath(), currentCameraPath());
+    accept();
 }
 
 void CameraSelection::slotSearchTextChanged(const SearchTextSettings& settings)
