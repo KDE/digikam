@@ -681,7 +681,7 @@ void DigikamImageView::rename()
     QPointer<AdvancedRenameDialog> dlg = new AdvancedRenameDialog(this);
     dlg->slotAddImages(urls);
 
-    if (dlg->exec() == KDialog::Accepted)
+    if (dlg->exec() == QDialog::Accepted)
     {
         newNamesList = dlg->newNames();
 

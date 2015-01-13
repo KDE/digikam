@@ -33,6 +33,9 @@
 #include <QApplication>
 #include <QStyle>
 #include <QStandardPaths>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
+#include <QPushButton>
 
 // KDE includes
 
@@ -40,6 +43,7 @@
 #include <kicondialog.h>
 #include <kseparator.h>
 #include <kkeysequencewidget.h>
+#include <khelpclient.h>
 
 // Local includes
 
@@ -53,7 +57,7 @@
 namespace Digikam
 {
 
-class TagsListCreationErrorDialog : public KDialog
+class TagsListCreationErrorDialog : public QDialog
 {
 
 public:
@@ -73,6 +77,7 @@ public:
         titleEdit       = 0;
         iconButton      = 0;
         resetIconButton = 0;
+        buttons         = 0;
         mainRootAlbum   = 0;
         topLabel        = 0;
         keySeqWidget    = 0;
@@ -88,6 +93,8 @@ public:
     QPushButton*        iconButton;
     QPushButton*        resetIconButton;
 
+    QDialogButtonBox*   buttons;
+
     KKeySequenceWidget* keySeqWidget;
 
     TAlbum*             mainRootAlbum;
@@ -95,26 +102,25 @@ public:
 };
 
 TagEditDlg::TagEditDlg(QWidget* const parent, TAlbum* const album, bool create)
-    : KDialog(parent), d(new Private)
+    : QDialog(parent), d(new Private)
 {
-    setButtons(Help|Ok|Cancel);
-    setDefaultButton(Ok);
     setModal(true);
-    setHelp("tagscreation.anchor", "digikam");
+
+    d->buttons = new QDialogButtonBox(QDialogButtonBox::Help | QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
+    d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
 
     if (create)
     {
-        setCaption(i18n("New Tag"));
+        setWindowTitle(i18n("New Tag"));
     }
     else
     {
-        setCaption(i18n("Edit Tag"));
+        setWindowTitle(i18n("Edit Tag"));
     }
 
     d->mainRootAlbum    = album;
     d->create           = create;
     QWidget* const page = new QWidget(this);
-    setMainWidget(page);
 
     // --------------------------------------------------------
 
@@ -229,6 +235,11 @@ TagEditDlg::TagEditDlg(QWidget* const parent, TAlbum* const album, bool create)
     grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin));
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
+    QVBoxLayout* const vbx = new QVBoxLayout(this);
+    vbx->addWidget(page);
+    vbx->addWidget(d->buttons);
+    setLayout(vbx);
+
     // --------------------------------------------------------
 
     connect(d->iconButton, SIGNAL(clicked()),
@@ -239,6 +250,15 @@ TagEditDlg::TagEditDlg(QWidget* const parent, TAlbum* const album, bool create)
 
     connect(d->titleEdit, SIGNAL(textChanged(QString)),
             this, SLOT(slotTitleChanged(QString)));
+
+    connect(d->buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+            this, SLOT(accept()));
+
+    connect(d->buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
+            this, SLOT(reject()));
+
+    connect(d->buttons->button(QDialogButtonBox::Help), SIGNAL(clicked()),
+            this, SLOT(slotHelp()));
 
     // --------------------------------------------------------
 
@@ -317,7 +337,7 @@ void TagEditDlg::slotTitleChanged(const QString& newtitle)
 
     QRegExp emptyTitle = QRegExp("^\\s*$");
     bool enable        = (!emptyTitle.exactMatch(newtitle) && !newtitle.isEmpty());
-    enableButtonOk(enable);
+    d->buttons->button(QDialogButtonBox::Ok)->setEnabled(enable);
 }
 
 bool TagEditDlg::tagEdit(QWidget* const parent, TAlbum* const album, QString& title, QString& icon, QKeySequence& ks)
@@ -468,23 +488,27 @@ void TagEditDlg::showtagsListCreationError(QWidget* const parent, const QMap<QSt
     }
 }
 
+void TagEditDlg::slotHelp()
+{
+    KHelpClient::invokeHelp("tagscreation.anchor", "digikam");
+}
+
 // ------------------------------------------------------------------------------
 
 TagsListCreationErrorDialog::TagsListCreationErrorDialog(QWidget* const parent, const QMap<QString, QString>& errMap)
-    : KDialog(parent)
+    : QDialog(parent)
 {
-    setButtons(Help|Ok);
-    setDefaultButton(Ok);
     setModal(true);
-    setHelp("tagscreation.anchor", "digikam");
-    setCaption(i18n("Tag creation Error"));
+    setWindowTitle(i18n("Tag creation Error"));
 
-    QWidget* const box          = new QWidget(this);
-    setMainWidget(box);
-    QVBoxLayout* const vLay     = new QVBoxLayout(box);
+    QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Ok, this);
+    buttons->button(QDialogButtonBox::Ok)->setDefault(true);
 
-    QLabel* const label         = new QLabel(i18n("An error occurred during tag creation:"), box);
-    QTreeWidget* const listView = new QTreeWidget(box);
+    QWidget* const page         = new QWidget(this);
+    QVBoxLayout* const vLay     = new QVBoxLayout(page);
+
+    QLabel* const label         = new QLabel(i18n("An error occurred during tag creation:"), page);
+    QTreeWidget* const listView = new QTreeWidget(page);
     listView->setHeaderLabels(QStringList() << i18n("Tag Path") << i18n("Error"));
     listView->setRootIsDecorated(false);
     listView->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -499,6 +523,14 @@ TagsListCreationErrorDialog::TagsListCreationErrorDialog(QWidget* const parent, 
     {
         new QTreeWidgetItem(listView, QStringList() << it.key() << it.value());
     }
+
+    QVBoxLayout* const vbx = new QVBoxLayout(this);
+    vbx->addWidget(page);
+    vbx->addWidget(buttons);
+    setLayout(vbx);
+
+    connect(buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+            this, SLOT(accept()));
 
     adjustSize();
 }

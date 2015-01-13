@@ -30,10 +30,7 @@
 #include <QMap>
 #include <QString>
 #include <QKeySequence>
-
-// KDE includes
-
-#include <kdialog.h>
+#include <QDialog>
 
 // Local includes
 
@@ -42,7 +39,7 @@
 namespace Digikam
 {
 
-class TagEditDlg : public KDialog
+class TagEditDlg : public QDialog
 {
     Q_OBJECT
 
@@ -75,6 +72,7 @@ private Q_SLOTS:
     void slotIconChanged();
     void slotIconResetClicked();
     void slotTitleChanged(const QString& newtitle);
+    void slotHelp();
 
 private:
 
