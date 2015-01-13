@@ -26,12 +26,9 @@
 
 // Qt includes
 
-#include <QtCore/QByteArray>
-#include <QtCore/QString>
-
-// KDE includes
-
-#include <kdialog.h>
+#include <QByteArray>
+#include <QString>
+#include <QDialog>
 
 // Local includes
 
@@ -43,13 +40,18 @@ class QWidget;
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT ICCProfileInfoDlg : public KDialog
+class DIGIKAM_EXPORT ICCProfileInfoDlg : public QDialog
 {
+    Q_OBJECT
 
 public:
 
     ICCProfileInfoDlg(QWidget* const parent, const QString& profilePath, const IccProfile& profileData = IccProfile());
     ~ICCProfileInfoDlg();
+
+private Q_SLOTS:
+
+    void slotHelp();
 };
 
 }  // namespace Digikam

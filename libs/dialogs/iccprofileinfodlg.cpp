@@ -23,9 +23,16 @@
 
 #include "iccprofileinfodlg.h"
 
+// Qt includes
+
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
+#include <QPushButton>
+
 // KDE includes
 
 #include <klocalizedstring.h>
+#include <khelpclient.h>
 
 // Local includes
 
@@ -35,14 +42,14 @@ namespace Digikam
 {
 
 ICCProfileInfoDlg::ICCProfileInfoDlg(QWidget* const parent, const QString& profilePath, const IccProfile& profile)
-    : KDialog(parent)
+    : QDialog(parent)
 {
-    setCaption(i18n("Color Profile Info - %1", profilePath));
-    setButtons(Help|Ok);
-    setDefaultButton(Ok);
     setModal(true);
-    setHelp("iccprofile.anchor", "digikam");
+    setWindowTitle(i18n("Color Profile Info - %1", profilePath));
 
+    QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Help | QDialogButtonBox::Ok, this);
+    buttons->button(QDialogButtonBox::Ok)->setDefault(true);    
+    
     ICCProfileWidget* const profileWidget = new ICCProfileWidget(this, 340, 256);
 
     if (profile.isNull())
@@ -54,11 +61,25 @@ ICCProfileInfoDlg::ICCProfileInfoDlg(QWidget* const parent, const QString& profi
         profileWidget->loadProfile(profilePath, profile);
     }
 
-    setMainWidget(profileWidget);
+    QVBoxLayout* const vbx = new QVBoxLayout(this);
+    vbx->addWidget(profileWidget);
+    vbx->addWidget(buttons);
+    setLayout(vbx);
+
+    connect(buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+            this, SLOT(accept()));
+
+    connect(buttons->button(QDialogButtonBox::Help), SIGNAL(clicked()),
+            this, SLOT(slotHelp()));
 }
 
 ICCProfileInfoDlg::~ICCProfileInfoDlg()
 {
+}
+
+void ICCProfileInfoDlg::slotHelp()
+{
+    KHelpClient::invokeHelp("iccprofile.anchor", "digikam");
 }
 
 }  // namespace Digikam
