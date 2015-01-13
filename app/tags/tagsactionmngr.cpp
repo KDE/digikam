@@ -207,8 +207,8 @@ bool TagsActionMngr::createRatingActionShortcut(KActionCollection* const ac, int
     {
         QAction* const action = ac->addAction(QString("%1-%2").arg(d->ratingShortcutPrefix).arg(rating));
         action->setText(i18n("Assign Rating \"%1 Star\"", rating));
-        action->setShortcut(QKeySequence(QString("CTRL+%1").arg(rating)));
         ac->setShortcutsConfigurable(action, true);
+        ac->setDefaultShortcut(action, QKeySequence(QString("CTRL+%1").arg(rating)));
 #pragma message("PORT QT5")
 /*
         action->forgetGlobalShortcut();
@@ -231,8 +231,8 @@ bool TagsActionMngr::createPickLabelActionShortcut(KActionCollection* const ac, 
     {
         QAction* const action = ac->addAction(QString("%1-%2").arg(d->pickShortcutPrefix).arg(pickId));
         action->setText(i18n("Assign Pick Label \"%1\"", PickLabelWidget::labelPickName((PickLabel)pickId)));
-        action->setShortcut(QKeySequence(QString("ALT+%1").arg(pickId)));
         ac->setShortcutsConfigurable(action, true);
+        ac->setDefaultShortcut(action, QKeySequence(QString("ALT+%1").arg(pickId)));
 #pragma message("PORT QT5")
 /*
         action->forgetGlobalShortcut();
@@ -255,8 +255,8 @@ bool TagsActionMngr::createColorLabelActionShortcut(KActionCollection* const ac,
     {
         QAction* const action = ac->addAction(QString("%1-%2").arg(d->colorShortcutPrefix).arg(colorId));
         action->setText(i18n("Assign Color Label \"%1\"", ColorLabelWidget::labelColorName((ColorLabel)colorId)));
-        action->setShortcut(QKeySequence(QString("ALT+CTRL+%1").arg(colorId)));
         ac->setShortcutsConfigurable(action, true);
+        ac->setDefaultShortcut(action, QKeySequence(QString("ALT+CTRL+%1").arg(colorId)));
 #pragma message("PORT QT5")
 /*
         action->forgetGlobalShortcut();
@@ -307,8 +307,8 @@ bool TagsActionMngr::createTagActionShortcut(int tagId)
         QAction* const action = ac->addAction(QString("%1-%2").arg(d->tagShortcutPrefix).arg(tagId));
         action->setText(i18n("Assign Tag \"%1\"", talbum->title()));
         action->setParent(this);
-        action->setShortcut(ks);
         ac->setShortcutsConfigurable(action, true);
+        ac->setDefaultShortcut(action, ks);
 #pragma message("PORT QT5")
 /*
         action->forgetGlobalShortcut();

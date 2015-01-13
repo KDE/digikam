@@ -347,68 +347,70 @@ void QueueMgrWindow::setupActions()
 {
     // -- Standard 'File' menu actions ---------------------------------------------
 
+    KActionCollection *ac = actionCollection();
+
     d->runAction = new QAction(QIcon::fromTheme("media-playback-start"), i18n("Run"), this);
-    d->runAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_P));
     d->runAction->setEnabled(false);
     connect(d->runAction, SIGNAL(triggered()), this, SLOT(slotRun()));
-    actionCollection()->addAction("queuemgr_run", d->runAction);
+    ac->addAction("queuemgr_run", d->runAction);
+    ac->setDefaultShortcut(d->runAction, Qt::CTRL + Qt::Key_P);
 
     d->stopAction = new QAction(QIcon::fromTheme("media-playback-stop"), i18n("Stop"), this);
-    d->stopAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
     d->stopAction->setEnabled(false);
     connect(d->stopAction, SIGNAL(triggered()), this, SLOT(slotStop()));
-    actionCollection()->addAction("queuemgr_stop", d->stopAction);
+    ac->addAction("queuemgr_stop", d->stopAction);
+    ac->setDefaultShortcut(d->stopAction, Qt::CTRL + Qt::Key_S);
 
     d->newQueueAction = new QAction(QIcon::fromTheme("bqm-addqueue"), i18n("New Queue"), this);
     connect(d->newQueueAction, SIGNAL(triggered()), d->queuePool, SLOT(slotAddQueue()));
-    actionCollection()->addAction("queuemgr_newqueue", d->newQueueAction);
+    ac->addAction("queuemgr_newqueue", d->newQueueAction);
 
     d->removeQueueAction = new QAction(QIcon::fromTheme("bqm-rmqueue"), i18n("Remove Queue"), this);
     connect(d->removeQueueAction, SIGNAL(triggered()), d->queuePool, SLOT(slotRemoveCurrentQueue()));
-    actionCollection()->addAction("queuemgr_removequeue", d->removeQueueAction);
+    ac->addAction("queuemgr_removequeue", d->removeQueueAction);
 
     // TODO rename action to saveWorkflowAction to avoid confusion?
     d->saveQueueAction = new QAction(QIcon::fromTheme("document-save"), i18n("Save Workflow"), this);
     connect(d->saveQueueAction, SIGNAL(triggered()), this, SLOT(slotSaveWorkflow()));
-    actionCollection()->addAction("queuemgr_savequeue", d->saveQueueAction);
+    ac->addAction("queuemgr_savequeue", d->saveQueueAction);
 
     d->removeItemsSelAction = new QAction(QIcon::fromTheme("list-remove"), i18n("Remove items"), this);
-    d->removeItemsSelAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_K));
     d->removeItemsSelAction->setEnabled(false);
     connect(d->removeItemsSelAction, SIGNAL(triggered()), d->queuePool, SLOT(slotRemoveSelectedItems()));
-    actionCollection()->addAction("queuemgr_removeitemssel", d->removeItemsSelAction);
+    ac->addAction("queuemgr_removeitemssel", d->removeItemsSelAction);
+    ac->setDefaultShortcut(d->removeItemsSelAction, Qt::CTRL + Qt::Key_K);
 
     d->removeItemsDoneAction = new QAction(i18n("Remove processed items"), this);
     d->removeItemsDoneAction->setEnabled(false);
     connect(d->removeItemsDoneAction, SIGNAL(triggered()), d->queuePool, SLOT(slotRemoveItemsDone()));
-    actionCollection()->addAction("queuemgr_removeitemsdone", d->removeItemsDoneAction);
+    ac->addAction("queuemgr_removeitemsdone", d->removeItemsDoneAction);
 
     d->clearQueueAction = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clear Queue"), this);
-    d->clearQueueAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_K));
     d->clearQueueAction->setEnabled(false);
     connect(d->clearQueueAction, SIGNAL(triggered()), d->queuePool, SLOT(slotClearList()));
-    actionCollection()->addAction("queuemgr_clearlist", d->clearQueueAction);
+    ac->addAction("queuemgr_clearlist", d->clearQueueAction);
+    ac->setDefaultShortcut(d->clearQueueAction, Qt::CTRL + Qt::SHIFT + Qt::Key_K);
 
-    actionCollection()->addAction(KStandardAction::Close, "queuemgr_close",
+    ac->addAction(KStandardAction::Close, "queuemgr_close",
                                   this, SLOT(close()));
 
     // -- 'Tools' menu actions -----------------------------------------------------
 
     d->moveUpToolAction = new QAction(QIcon::fromTheme("bqm-commit"), i18n("Move up"), this);
     connect(d->moveUpToolAction, SIGNAL(triggered()), d->assignedList, SLOT(slotMoveCurrentToolUp()));
-    actionCollection()->addAction("queuemgr_toolup", d->moveUpToolAction);
+    ac->addAction("queuemgr_toolup", d->moveUpToolAction);
 
     d->moveDownToolAction = new QAction(QIcon::fromTheme("bqm-update"), i18n("Move down"), this);
     connect(d->moveDownToolAction, SIGNAL(triggered()), d->assignedList, SLOT(slotMoveCurrentToolDown()));
-    actionCollection()->addAction("queuemgr_tooldown", d->moveDownToolAction);
+    ac->addAction("queuemgr_tooldown", d->moveDownToolAction);
 
     d->removeToolAction = new QAction(QIcon::fromTheme("bqm-remove"), i18n("Remove tool"), this);
     connect(d->removeToolAction, SIGNAL(triggered()), d->assignedList, SLOT(slotRemoveCurrentTool()));
-    actionCollection()->addAction("queuemgr_toolremove", d->removeToolAction);
+    ac->addAction("queuemgr_toolremove", d->removeToolAction);
 
     d->clearToolsAction = new QAction(QIcon::fromTheme("edit-clear-list"), i18n("Clear List"), this);
     connect(d->clearToolsAction, SIGNAL(triggered()), d->assignedList, SLOT(slotClearToolsList()));
-    actionCollection()->addAction("queuemgr_toolsclear", d->clearToolsAction);
+    ac->addAction("queuemgr_toolsclear", d->clearToolsAction);
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
@@ -416,12 +418,12 @@ void QueueMgrWindow::setupActions()
 
     // -- Standard 'Configure' menu actions ----------------------------------------
 
-    d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
+    d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), ac);
 
-    KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          actionCollection());
-    KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      actionCollection());
-    KStandardAction::configureNotifications(this, SLOT(slotConfNotifications()), actionCollection());
-    KStandardAction::preferences(this,            SLOT(slotSetup()),             actionCollection());
+    KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          ac);
+    KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      ac);
+    KStandardAction::configureNotifications(this, SLOT(slotConfNotifications()), ac);
+    KStandardAction::preferences(this,            SLOT(slotSetup()),             ac);
 
     // ---------------------------------------------------------------------------------
 

@@ -623,37 +623,34 @@ void DigikamApp::setupStatusBar()
 
 void DigikamApp::setupAccelerators()
 {
+    KActionCollection* ac = actionCollection();
+
     // Action are added by <MainWindow> tag in ui.rc XML file
     QAction* const escapeAction = new QAction(i18n("Exit Preview Mode"), this);
-    actionCollection()->addAction("exit_preview_mode", escapeAction);
-    escapeAction->setShortcut( QKeySequence(Qt::Key_Escape) );
+    ac->addAction("exit_preview_mode", escapeAction);
+    ac->setDefaultShortcut(escapeAction, Qt::Key_Escape);
     connect(escapeAction, SIGNAL(triggered()), this, SIGNAL(signalEscapePressed()));
 
     QAction* const nextImageAction = new QAction(i18n("Next Image"), this);
     nextImageAction->setIcon(QIcon::fromTheme("go-next"));
-    actionCollection()->addAction("next_image", nextImageAction);
-    nextImageAction->setShortcut(QKeySequence(Qt::Key_Space));
+    ac->addAction("next_image", nextImageAction);
+    ac->setDefaultShortcut(nextImageAction, Qt::Key_Space);
     connect(nextImageAction, SIGNAL(triggered()), this, SIGNAL(signalNextItem()));
 
     QAction* const previousImageAction = new QAction(i18n("Previous Image"), this);
     previousImageAction->setIcon(QIcon::fromTheme("go-previous"));
-    actionCollection()->addAction("previous_image", previousImageAction);
-    previousImageAction->setShortcut(QKeySequence(Qt::Key_Backspace));
+    ac->addAction("previous_image", previousImageAction);
+    ac->setDefaultShortcuts(previousImageAction, QList<QKeySequence>() << Qt::Key_Backspace << Qt::SHIFT+Qt::Key_Space);
     connect(previousImageAction, SIGNAL(triggered()), this, SIGNAL(signalPrevItem()));
 
-    QAction* const altpreviousImageAction = new QAction(i18n("Previous Image"), this);
-    actionCollection()->addAction("alt_previous_image_shift_space", altpreviousImageAction);
-    altpreviousImageAction->setShortcut( QKeySequence(Qt::SHIFT+Qt::Key_Space) );
-    connect(altpreviousImageAction, SIGNAL(triggered()), this, SIGNAL(signalPrevItem()));
-
     QAction* const firstImageAction = new QAction(i18n("First Image"), this);
-    actionCollection()->addAction("first_image", firstImageAction);
-    firstImageAction->setShortcut(QKeySequence(Qt::Key_Home) );
+    ac->addAction("first_image", firstImageAction);
+    ac->setDefaultShortcuts(firstImageAction, KStandardShortcut::begin());
     connect(firstImageAction, SIGNAL(triggered()), this, SIGNAL(signalFirstItem()));
 
     QAction* const lastImageAction = new QAction(i18n("Last Image"), this);
-    actionCollection()->addAction("last_image", lastImageAction);
-    lastImageAction->setShortcut(QKeySequence(Qt::Key_End) );
+    ac->addAction("last_image", lastImageAction);
+    ac->setDefaultShortcuts(lastImageAction, KStandardShortcut::end());
     connect(lastImageAction, SIGNAL(triggered()), this, SIGNAL(signalLastItem()));
 
     d->cutItemsAction = KStandardAction::cut(this, SIGNAL(signalCutAlbumItemsSelection()), this);
@@ -662,36 +659,38 @@ void DigikamApp::setupAccelerators()
 #pragma message("PORT QT5")
 //    QKeySequence cutShortcut = d->cutItemsAction->shortcut();
 //    cutShortcut.remove(Qt::SHIFT | Qt::Key_Delete, QKeySequence::KeepEmpty);
-//    d->cutItemsAction->setShortcut(cutShortcut);
-    actionCollection()->addAction("cut_album_selection", d->cutItemsAction);
+//    ac->setDefaultShortcut(d->cutItemsAction, cutShortcut);
+    ac->addAction("cut_album_selection", d->cutItemsAction);
 
     d->copyItemsAction = KStandardAction::copy(this, SIGNAL(signalCopyAlbumItemsSelection()), this);
-    actionCollection()->addAction("copy_album_selection", d->copyItemsAction);
+    ac->addAction("copy_album_selection", d->copyItemsAction);
 
     d->pasteItemsAction = KStandardAction::paste(this, SIGNAL(signalPasteAlbumItemsSelection()), this);
-    actionCollection()->addAction("paste_album_selection", d->pasteItemsAction);
+    ac->addAction("paste_album_selection", d->pasteItemsAction);
 
     // Labels shortcuts must be registered here to be saved in XML GUI files if user customize it.
-    d->tagsActionManager->registerLabelsActions(actionCollection());
+    d->tagsActionManager->registerLabelsActions(ac);
 
     QAction* const editTitles = new QAction(i18n("Edit Titles"), this);
-    editTitles->setShortcut( QKeySequence(Qt::META + Qt::Key_T) );
-    actionCollection()->addAction("edit_titles", editTitles);
+    ac->addAction("edit_titles", editTitles);
+    ac->setDefaultShortcut(editTitles, Qt::META + Qt::Key_T);
     connect(editTitles, SIGNAL(triggered()), d->view, SLOT(slotRightSideBarActivateTitles()));
 
     QAction* const editComments = new QAction(i18n("Edit Comments"), this);
-    editComments->setShortcut( QKeySequence(Qt::META + Qt::Key_C) );
-    actionCollection()->addAction("edit_comments", editComments);
+    ac->addAction("edit_comments", editComments);
+    ac->setDefaultShortcut(editComments, Qt::META + Qt::Key_C);
     connect(editComments, SIGNAL(triggered()), d->view, SLOT(slotRightSideBarActivateComments()));
 
     QAction* const assignedTags = new QAction(i18n("Show Assigned Tags"), this);
-    assignedTags->setShortcut( QKeySequence(Qt::META + Qt::Key_A) );
-    actionCollection()->addAction("assigned _tags", assignedTags);
+    ac->addAction("assigned _tags", assignedTags);
+    ac->setDefaultShortcut(assignedTags, Qt::META + Qt::Key_A);
     connect(assignedTags, SIGNAL(triggered()), d->view, SLOT(slotRightSideBarActivateAssignedTags()));
 }
 
 void DigikamApp::setupActions()
 {
+    KActionCollection *ac = actionCollection();
+
     d->solidCameraActionGroup = new QActionGroup(this);
     connect(d->solidCameraActionGroup, SIGNAL(triggered(QAction*)),
             this, SLOT(slotOpenSolidCamera(QAction*)));
@@ -708,8 +707,8 @@ void DigikamApp::setupActions()
 
     d->backwardActionMenu = new KToolBarPopupAction(QIcon::fromTheme("go-previous"), i18n("&Back"), this);
     d->backwardActionMenu->setEnabled(false);
-    d->backwardActionMenu->setShortcut(QKeySequence(Qt::ALT+Qt::Key_Left));
-    actionCollection()->addAction("album_back", d->backwardActionMenu);
+    ac->addAction("album_back", d->backwardActionMenu);
+    ac->setDefaultShortcut(d->backwardActionMenu, Qt::ALT+Qt::Key_Left);
 
     connect(d->backwardActionMenu->menu(), SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShowBackwardMenu()));
@@ -730,8 +729,8 @@ void DigikamApp::setupActions()
 
     d->forwardActionMenu = new KToolBarPopupAction(QIcon::fromTheme("go-next"), i18n("Forward"), this);
     d->forwardActionMenu->setEnabled(false);
-    d->forwardActionMenu->setShortcut(QKeySequence(Qt::ALT+Qt::Key_Right));
-    actionCollection()->addAction("album_forward", d->forwardActionMenu);
+    ac->addAction("album_forward", d->forwardActionMenu);
+    ac->setDefaultShortcut(d->forwardActionMenu, Qt::ALT+Qt::Key_Right);
 
     connect(d->forwardActionMenu->menu(), SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShowForwardMenu()));
@@ -747,10 +746,10 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------------
 
     d->refreshAction = new QAction(QIcon::fromTheme("view-refresh"), i18n("Refresh"), this);
-    d->refreshAction->setShortcut(QKeySequence(Qt::Key_F5));
     d->refreshAction->setWhatsThis(i18n("Refresh the current contents."));
     connect(d->refreshAction, SIGNAL(triggered()), d->view, SLOT(slotRefresh()));
-    actionCollection()->addAction("view_refresh", d->refreshAction);
+    ac->addAction("view_refresh", d->refreshAction);
+    ac->setDefaultShortcut(d->refreshAction, Qt::Key_F5);
 
     // -----------------------------------------------------------------
 
@@ -764,8 +763,8 @@ void DigikamApp::setupActions()
         qCDebug(DIGIKAM_GENERAL_LOG) << actionName;
 
         QAction* const action = new QAction(leftWidget->getIcon(), leftWidget->getCaption(), this);
-        action->setShortcut(QKeySequence(leftWidget->property("Shortcut").toInt()));
-        actionCollection()->addAction(actionName, action);
+        ac->addAction(actionName, action);
+        ac->setDefaultShortcut(action, QKeySequence(leftWidget->property("Shortcut").toInt()));
         connect(action, SIGNAL(triggered()), browseActionsMapper, SLOT(map()));
         browseActionsMapper->setMapping(action, leftWidget);
     }
@@ -773,38 +772,38 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------------
 
     d->newAction = new QAction(QIcon::fromTheme("albumfolder-new"), i18n("&New..."), this);
-    d->newAction->setShortcuts(KStandardShortcut::openNew());
     d->newAction->setWhatsThis(i18n("Creates a new empty Album in the collection."));
     connect(d->newAction, SIGNAL(triggered()), d->view, SLOT(slotNewAlbum()));
-    actionCollection()->addAction("album_new", d->newAction);
+    ac->addAction("album_new", d->newAction);
+    ac->setDefaultShortcuts(d->newAction, KStandardShortcut::openNew());
 
     // -----------------------------------------------------------------
 
     d->moveSelectionToAlbumAction = new QAction(QIcon::fromTheme("albumfolder-new"), i18n("&Move to Album..."), this);
     d->moveSelectionToAlbumAction->setWhatsThis(i18n("Move selected images into an album."));
     connect(d->moveSelectionToAlbumAction, SIGNAL(triggered()), d->view, SLOT(slotMoveSelectionToAlbum()));
-    actionCollection()->addAction("move_selection_to_album", d->moveSelectionToAlbumAction);
+    ac->addAction("move_selection_to_album", d->moveSelectionToAlbumAction);
 
     // -----------------------------------------------------------------
 
     d->deleteAction = new QAction(QIcon::fromTheme("albumfolder-user-trash"), i18n("Delete Album"), this);
     connect(d->deleteAction, SIGNAL(triggered()), d->view, SLOT(slotDeleteAlbum()));
-    actionCollection()->addAction("album_delete", d->deleteAction);
+    ac->addAction("album_delete", d->deleteAction);
 
     // -----------------------------------------------------------------
 
     d->renameAction = new QAction(QIcon::fromTheme("edit-rename"), i18n("Rename..."), this);
-    d->renameAction->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_F2));
     connect(d->renameAction, SIGNAL(triggered()), d->view, SLOT(slotRenameAlbum()));
-    actionCollection()->addAction("album_rename", d->renameAction);
+    ac->addAction("album_rename", d->renameAction);
+    ac->setDefaultShortcut(d->renameAction, Qt::SHIFT + Qt::Key_F2);
 
     // -----------------------------------------------------------------
 
     d->propsEditAction = new QAction(QIcon::fromTheme("albumfolder-properties"), i18n("Properties"), this);
-    d->propsEditAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_Return));
     d->propsEditAction->setWhatsThis(i18n("Edit album properties and collection information."));
     connect(d->propsEditAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumPropsEdit()));
-    actionCollection()->addAction("album_propsEdit", d->propsEditAction);
+    ac->addAction("album_propsEdit", d->propsEditAction);
+    ac->setDefaultShortcut(d->propsEditAction, Qt::ALT + Qt::Key_Return);
 
     // -----------------------------------------------------------------
 
@@ -814,7 +813,7 @@ void DigikamApp::setupActions()
                                                    "(image metadata will be overwritten with data from "
                                                    "the database)."));
     connect(d->writeAlbumMetadataAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumWriteMetadata()));
-    actionCollection()->addAction("album_write_metadata", d->writeAlbumMetadataAction);
+    ac->addAction("album_write_metadata", d->writeAlbumMetadataAction);
 
     // -----------------------------------------------------------------
 
@@ -824,139 +823,139 @@ void DigikamApp::setupActions()
                                                   "(information in the database will be overwritten with data from "
                                                   "the files' metadata)."));
     connect(d->readAlbumMetadataAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumReadMetadata()));
-    actionCollection()->addAction("album_read_metadata", d->readAlbumMetadataAction);
+    ac->addAction("album_read_metadata", d->readAlbumMetadataAction);
 
     // -----------------------------------------------------------------
 
     d->openInFileManagerAction = new QAction(QIcon::fromTheme("folder-open"), i18n("Open in File Manager"), this);
     connect(d->openInFileManagerAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumOpenInFileManager()));
-    actionCollection()->addAction("album_openinfilemanager", d->openInFileManagerAction);
+    ac->addAction("album_openinfilemanager", d->openInFileManagerAction);
 
     // -----------------------------------------------------------
 
     d->openInTerminalAction = new QAction(QIcon::fromTheme("utilities-terminal"), i18n("Open in Terminal"), this);
     connect(d->openInTerminalAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumOpenInTerminal()));
-    actionCollection()->addAction("album_openinterminal", d->openInTerminalAction);
+    ac->addAction("album_openinterminal", d->openInTerminalAction);
 
     // -----------------------------------------------------------
 
     d->openTagMngrAction = new QAction(QIcon::fromTheme("tag"), i18n("Open Tag Manager"), this);
     connect(d->openTagMngrAction, SIGNAL(triggered()), d->view, SLOT(slotOpenTagsManager()));
-    actionCollection()->addAction("open_tag_mngr", d->openTagMngrAction);
+    ac->addAction("open_tag_mngr", d->openTagMngrAction);
 
     // -----------------------------------------------------------
 
     d->newTagAction = new QAction(QIcon::fromTheme("tag-new"), i18nc("new tag", "N&ew..."), this);
     connect(d->newTagAction, SIGNAL(triggered()), d->view, SLOT(slotNewTag()));
-    actionCollection()->addAction("tag_new", d->newTagAction);
+    ac->addAction("tag_new", d->newTagAction);
 
     // -----------------------------------------------------------
 
     d->editTagAction = new QAction(QIcon::fromTheme("tag-properties"), i18n("Properties"), this);
     connect(d->editTagAction, SIGNAL(triggered()), d->view, SLOT(slotEditTag()));
-    actionCollection()->addAction("tag_edit", d->editTagAction);
+    ac->addAction("tag_edit", d->editTagAction);
 
     // -----------------------------------------------------------
 
     d->deleteTagAction = new QAction(QIcon::fromTheme("user-trash"), i18n("Delete"), this);
     connect(d->deleteTagAction, SIGNAL(triggered()), d->view, SLOT(slotDeleteTag()));
-    actionCollection()->addAction("tag_delete", d->deleteTagAction);
+    ac->addAction("tag_delete", d->deleteTagAction);
 
     // -----------------------------------------------------------
 
     d->assignTagAction = new QAction(QIcon::fromTheme("tag-new"), i18n("Assign Tag"), this);
-    d->assignTagAction->setShortcut(QKeySequence(Qt::Key_T));
     connect(d->assignTagAction, SIGNAL(triggered()), d->view, SLOT(slotAssignTag()));
-    actionCollection()->addAction("tag_assign", d->assignTagAction);
+    ac->addAction("tag_assign", d->assignTagAction);
+    ac->setDefaultShortcut(d->assignTagAction, Qt::Key_T);
 
     // -----------------------------------------------------------
 
     d->imageViewSelectionAction = new KSelectAction(QIcon::fromTheme("viewimage"), i18n("Views"), this);
     //d->imageViewSelectionAction->setDelayed(false);
-    actionCollection()->addAction("view_selection", d->imageViewSelectionAction);
+    ac->addAction("view_selection", d->imageViewSelectionAction);
 
     d->imageIconViewAction = new KToggleAction(QIcon::fromTheme("view-list-icons"),
                                                i18nc("@action Go to thumbnails (icon) view", "Thumbnails"), this);
-    actionCollection()->addAction("icon_view", d->imageIconViewAction);
+    ac->addAction("icon_view", d->imageIconViewAction);
     connect(d->imageIconViewAction, SIGNAL(triggered()), d->view, SLOT(slotIconView()));
     d->imageViewSelectionAction->addAction(d->imageIconViewAction);
 
     d->imagePreviewAction = new KToggleAction(QIcon::fromTheme("viewimage"), i18nc("View the selected image", "Preview Image"), this);
-    d->imagePreviewAction->setShortcut(QKeySequence(Qt::Key_F3));
-    actionCollection()->addAction("image_view", d->imagePreviewAction);
+    ac->addAction("image_view", d->imagePreviewAction);
+    ac->setDefaultShortcut(d->imagePreviewAction, Qt::Key_F3);
     connect(d->imagePreviewAction, SIGNAL(triggered()), d->view, SLOT(slotImagePreview()));
     d->imageViewSelectionAction->addAction(d->imagePreviewAction);
 
 #ifdef HAVE_KGEOMAP
     d->imageMapViewAction = new KToggleAction(QIcon::fromTheme("applications-internet"),
                                               i18nc("@action Switch to map view", "Map"), this);
-    actionCollection()->addAction("map_view", d->imageMapViewAction);
+    ac->addAction("map_view", d->imageMapViewAction);
     connect(d->imageMapViewAction, SIGNAL(triggered()), d->view, SLOT(slotMapWidgetView()));
     d->imageViewSelectionAction->addAction(d->imageMapViewAction);
 #endif // HAVE_KGEOMAP
 
     d->imageTableViewAction = new KToggleAction(QIcon::fromTheme("view-list-details"),
                                                 i18nc("@action Switch to table view", "Table"), this);
-    actionCollection()->addAction("table_view", d->imageTableViewAction);
+    ac->addAction("table_view", d->imageTableViewAction);
     connect(d->imageTableViewAction, SIGNAL(triggered()), d->view, SLOT(slotTableView()));
     d->imageViewSelectionAction->addAction(d->imageTableViewAction);
 
     // -----------------------------------------------------------
 
     d->imageViewAction = new QAction(QIcon::fromTheme("quickopen-file"), i18n("Open..."), this);
-    d->imageViewAction->setShortcut(QKeySequence(Qt::Key_F4));
     d->imageViewAction->setWhatsThis(i18n("Open the selected item."));
     connect(d->imageViewAction, SIGNAL(triggered()), d->view, SLOT(slotImageEdit()));
-    actionCollection()->addAction("image_edit", d->imageViewAction);
+    ac->addAction("image_edit", d->imageViewAction);
+    ac->setDefaultShortcut(d->imageViewAction, Qt::Key_F4);
 
     QAction* const openWithAction = new QAction(QIcon::fromTheme("preferences-desktop-filetype-association"), i18n("Open With Default Application"), this);
-    openWithAction->setShortcut(QKeySequence(Qt::META + Qt::Key_F4));
     openWithAction->setWhatsThis(i18n("Open the selected item with default assigned application."));
     connect(openWithAction, SIGNAL(triggered()), d->view, SLOT(slotFileWithDefaultApplication()));
-    actionCollection()->addAction("open_with_default_application", openWithAction);
+    ac->addAction("open_with_default_application", openWithAction);
+    ac->setDefaultShortcut(openWithAction, Qt::META + Qt::Key_F4);
 
     QAction* const ieAction = new QAction(QIcon::fromTheme("editimage"), i18n("Image Editor"), this);
     ieAction->setWhatsThis(i18n("Open the image editor."));
     connect(ieAction, SIGNAL(triggered()), d->view, SLOT(slotEditor()));
-    actionCollection()->addAction("imageeditor", ieAction);
+    ac->addAction("imageeditor", ieAction);
 
     // -----------------------------------------------------------
 
     QAction* const ltAction = new QAction(QIcon::fromTheme("lighttable"), i18n("Light Table"), this);
-    ltAction->setShortcut(QKeySequence(Qt::Key_L));
     connect(ltAction, SIGNAL(triggered()), d->view, SLOT(slotLightTable()));
-    actionCollection()->addAction("light_table", ltAction);
+    ac->addAction("light_table", ltAction);
+    ac->setDefaultShortcut(ltAction, Qt::Key_L);
 
     d->imageLightTableAction = new QAction(QIcon::fromTheme("lighttable"), i18n("Place onto Light Table"), this);
-    d->imageLightTableAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_L));
     d->imageLightTableAction->setWhatsThis(i18n("Place the selected items on the light table thumbbar."));
     connect(d->imageLightTableAction, SIGNAL(triggered()), d->view, SLOT(slotImageLightTable()));
-    actionCollection()->addAction("image_lighttable", d->imageLightTableAction);
+    ac->addAction("image_lighttable", d->imageLightTableAction);
+    ac->setDefaultShortcut(d->imageLightTableAction, Qt::CTRL+Qt::Key_L);
 
     d->imageAddLightTableAction = new QAction(QIcon::fromTheme("lighttableadd"), i18n("Add to Light Table"), this);
-    d->imageAddLightTableAction->setShortcut(QKeySequence(Qt::SHIFT+Qt::CTRL+Qt::Key_L));
     d->imageAddLightTableAction->setWhatsThis(i18n("Add selected items to the light table thumbbar."));
     connect(d->imageAddLightTableAction, SIGNAL(triggered()), d->view, SLOT(slotImageAddToLightTable()));
-    actionCollection()->addAction("image_add_to_lighttable", d->imageAddLightTableAction);
+    ac->addAction("image_add_to_lighttable", d->imageAddLightTableAction);
+    ac->setDefaultShortcut(d->imageAddLightTableAction, Qt::SHIFT+Qt::CTRL+Qt::Key_L);
 
     // -----------------------------------------------------------
 
     d->bqmAction = new QAction(QIcon::fromTheme("bqm-diff"), i18n("Batch Queue Manager"), this);
-    d->bqmAction->setShortcut(QKeySequence(Qt::Key_B));
     connect(d->bqmAction, SIGNAL(triggered()), d->view, SLOT(slotQueueMgr()));
-    actionCollection()->addAction("queue_manager", d->bqmAction);
+    ac->addAction("queue_manager", d->bqmAction);
+    ac->setDefaultShortcut(d->bqmAction, Qt::Key_B);
 
     d->imageAddCurrentQueueAction = new QAction(QIcon::fromTheme("bqm-commit"), i18n("Add to Current Queue"), this);
-    d->imageAddCurrentQueueAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_B));
     d->imageAddCurrentQueueAction->setWhatsThis(i18n("Add selected items to current queue from batch manager."));
     connect(d->imageAddCurrentQueueAction, SIGNAL(triggered()), d->view, SLOT(slotImageAddToCurrentQueue()));
-    actionCollection()->addAction("image_add_to_current_queue", d->imageAddCurrentQueueAction);
+    ac->addAction("image_add_to_current_queue", d->imageAddCurrentQueueAction);
+    ac->setDefaultShortcut(d->imageAddCurrentQueueAction, Qt::CTRL+Qt::Key_B);
 
     d->imageAddNewQueueAction = new QAction(QIcon::fromTheme("bqm-add"), i18n("Add to New Queue"), this);
-    d->imageAddNewQueueAction->setShortcut(QKeySequence(Qt::SHIFT+Qt::CTRL+Qt::Key_B));
     d->imageAddNewQueueAction->setWhatsThis(i18n("Add selected items to a new queue from batch manager."));
     connect(d->imageAddNewQueueAction, SIGNAL(triggered()), d->view, SLOT(slotImageAddToNewQueue()));
-    actionCollection()->addAction("image_add_to_new_queue", d->imageAddNewQueueAction);
+    ac->addAction("image_add_to_new_queue", d->imageAddNewQueueAction);
+    ac->setDefaultShortcut(d->imageAddNewQueueAction, Qt::SHIFT+Qt::CTRL+Qt::Key_B);
 
     // NOTE: see bug #252130 and #283281 : we need to disable these actions when BQM is running.
 
@@ -973,7 +972,7 @@ void DigikamApp::setupActions()
 
     d->quickImportMenu->setText(i18nc("@action Import photos from camera", "Import"));
     d->quickImportMenu->setIcon(QIcon::fromTheme("camera-photo"));
-    actionCollection()->addAction("import_auto", d->quickImportMenu);
+    ac->addAction("import_auto", d->quickImportMenu);
 
     // -----------------------------------------------------------------
 
@@ -983,7 +982,7 @@ void DigikamApp::setupActions()
                                                    "(image metadata will be overwritten with data from "
                                                    "the database)."));
     connect(d->imageWriteMetadataAction, SIGNAL(triggered()), d->view, SLOT(slotImageWriteMetadata()));
-    actionCollection()->addAction("image_write_metadata", d->imageWriteMetadataAction);
+    ac->addAction("image_write_metadata", d->imageWriteMetadataAction);
 
     // -----------------------------------------------------------------
 
@@ -993,30 +992,30 @@ void DigikamApp::setupActions()
                                                   "(information in the database will be overwritten with data from "
                                                   "the files' metadata)."));
     connect(d->imageReadMetadataAction, SIGNAL(triggered()), d->view, SLOT(slotImageReadMetadata()));
-    actionCollection()->addAction("image_read_metadata", d->imageReadMetadataAction);
+    ac->addAction("image_read_metadata", d->imageReadMetadataAction);
 
     // -----------------------------------------------------------
 
     d->imageFindSimilarAction = new QAction(QIcon::fromTheme("tools-wizard"), i18n("Find Similar..."), this);
     d->imageFindSimilarAction->setWhatsThis(i18n("Find similar images using selected item as reference."));
     connect(d->imageFindSimilarAction, SIGNAL(triggered()), d->view, SLOT(slotImageFindSimilar()));
-    actionCollection()->addAction("image_find_similar", d->imageFindSimilarAction);
+    ac->addAction("image_find_similar", d->imageFindSimilarAction);
 
     // -----------------------------------------------------------
 
     d->imageRenameAction = new QAction(QIcon::fromTheme("edit-rename"), i18n("Rename..."), this);
-    d->imageRenameAction->setShortcut(QKeySequence(Qt::Key_F2));
     d->imageRenameAction->setWhatsThis(i18n("Change the filename of the currently selected item."));
     connect(d->imageRenameAction, SIGNAL(triggered()), d->view, SLOT(slotImageRename()));
-    actionCollection()->addAction("image_rename", d->imageRenameAction);
+    ac->addAction("image_rename", d->imageRenameAction);
+    ac->setDefaultShortcut(d->imageRenameAction, Qt::Key_F2);
 
     // -----------------------------------------------------------
 
     // Pop up dialog to ask user whether to move to trash
     d->imageDeleteAction = new QAction(QIcon::fromTheme("user-trash"), i18nc("Non-pluralized", "Move to Trash"), this);
-    d->imageDeleteAction->setShortcut(QKeySequence(Qt::Key_Delete));
     connect(d->imageDeleteAction, SIGNAL(triggered()), d->view, SLOT(slotImageDelete()));
-    actionCollection()->addAction("image_delete", d->imageDeleteAction);
+    ac->addAction("image_delete", d->imageDeleteAction);
+    ac->setDefaultShortcut(d->imageDeleteAction, Qt::Key_Delete);
 
     // -----------------------------------------------------------
 
@@ -1026,9 +1025,9 @@ void DigikamApp::setupActions()
     //        Also note that we use the wrong icon for the default album delete action, which should have a thrashcan icon instead
     //        of a red cross, it confuses users.
     d->imageDeletePermanentlyAction = new QAction(QIcon::fromTheme("edit-delete"), i18n("Delete Permanently"), this);
-    d->imageDeletePermanentlyAction->setShortcut(QKeySequence(Qt::SHIFT+Qt::Key_Delete));
     connect(d->imageDeletePermanentlyAction, SIGNAL(triggered()), d->view, SLOT(slotImageDeletePermanently()));
-    actionCollection()->addAction("image_delete_permanently", d->imageDeletePermanentlyAction);
+    ac->addAction("image_delete_permanently", d->imageDeletePermanentlyAction);
+    ac->setDefaultShortcut(d->imageDeletePermanentlyAction, Qt::SHIFT+Qt::Key_Delete);
 
     // -----------------------------------------------------------
 
@@ -1038,7 +1037,7 @@ void DigikamApp::setupActions()
                                                           i18n("Delete permanently without confirmation"), this);
     connect(d->imageDeletePermanentlyDirectlyAction, SIGNAL(triggered()),
             d->view, SLOT(slotImageDeletePermanentlyDirectly()));
-    actionCollection()->addAction("image_delete_permanently_directly", d->imageDeletePermanentlyDirectlyAction);
+    ac->addAction("image_delete_permanently_directly", d->imageDeletePermanentlyDirectlyAction);
 
     // -----------------------------------------------------------
 
@@ -1046,14 +1045,14 @@ void DigikamApp::setupActions()
                                               i18n("Move to trash without confirmation"), this);
     connect(d->imageTrashDirectlyAction, SIGNAL(triggered()),
             d->view, SLOT(slotImageTrashDirectly()));
-    actionCollection()->addAction("image_trash_directly", d->imageTrashDirectlyAction);
+    ac->addAction("image_trash_directly", d->imageTrashDirectlyAction);
 
     // -----------------------------------------------------------------
 
     d->albumSortAction = new KSelectAction(i18n("&Sort Albums"), this);
     d->albumSortAction->setWhatsThis(i18n("Sort Albums in tree-view."));
     connect(d->albumSortAction, SIGNAL(triggered(int)), d->view, SLOT(slotSortAlbums(int)));
-    actionCollection()->addAction("album_sort", d->albumSortAction);
+    ac->addAction("album_sort", d->albumSortAction);
 
     // Use same list order as in applicationsettings enum
     QStringList sortActionList;
@@ -1068,13 +1067,13 @@ void DigikamApp::setupActions()
     d->recurseAlbumsAction->setWhatsThis(i18n("Activate this option to show all sub-albums below "
                                               "the current album."));
     connect(d->recurseAlbumsAction, SIGNAL(toggled(bool)), this, SLOT(slotRecurseAlbums(bool)));
-    actionCollection()->addAction("albums_recursive", d->recurseAlbumsAction);
+    ac->addAction("albums_recursive", d->recurseAlbumsAction);
 
     d->recurseTagsAction = new KToggleAction(i18n("Include Tag Sub-Tree"), this);
     d->recurseTagsAction->setWhatsThis(i18n("Activate this option to show all images marked by the given tag "
                                             "and all its sub-tags."));
     connect(d->recurseTagsAction, SIGNAL(toggled(bool)), this, SLOT(slotRecurseTags(bool)));
-    actionCollection()->addAction("tags_recursive", d->recurseTagsAction);
+    ac->addAction("tags_recursive", d->recurseTagsAction);
 
     // -----------------------------------------------------------
 
@@ -1082,7 +1081,7 @@ void DigikamApp::setupActions()
     d->imageSortAction->setWhatsThis(i18n("The value by which the images in one album are sorted in the thumbnail view"));
     QSignalMapper* const imageSortMapper = new QSignalMapper(this);
     connect(imageSortMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImages(int)));
-    actionCollection()->addAction("image_sort", d->imageSortAction);
+    ac->addAction("image_sort", d->imageSortAction);
 
     // map to ImageSortSettings enum
     QAction* const sortByNameAction        = d->imageSortAction->addAction(i18n("By Name"));
@@ -1115,7 +1114,7 @@ void DigikamApp::setupActions()
     d->imageSortOrderAction->setWhatsThis(i18n("Defines whether images are sorted in ascending or descending manner."));
     QSignalMapper* const imageSortOrderMapper = new QSignalMapper(this);
     connect(imageSortOrderMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImagesOrder(int)));
-    actionCollection()->addAction("image_sort_order", d->imageSortOrderAction);
+    ac->addAction("image_sort_order", d->imageSortOrderAction);
 
     QAction* const sortAscendingAction  = d->imageSortOrderAction->addAction(QIcon::fromTheme("view-sort-ascending"), i18n("Ascending"));
     QAction* const sortDescendingAction = d->imageSortOrderAction->addAction(QIcon::fromTheme("view-sort-descending"), i18n("Descending"));
@@ -1132,7 +1131,7 @@ void DigikamApp::setupActions()
     d->imageGroupAction->setWhatsThis(i18n("The categories in which the images in the thumbnail view are displayed"));
     QSignalMapper* const imageGroupMapper = new QSignalMapper(this);
     connect(imageGroupMapper, SIGNAL(mapped(int)), d->view, SLOT(slotGroupImages(int)));
-    actionCollection()->addAction("image_group", d->imageGroupAction);
+    ac->addAction("image_group", d->imageGroupAction);
 
     // map to ImageSortSettings enum
     QAction* const noCategoriesAction  = d->imageGroupAction->addAction(i18n("Flat List"));
@@ -1153,7 +1152,7 @@ void DigikamApp::setupActions()
     d->imageGroupSortOrderAction->setWhatsThis(i18n("The sort order of images groups"));
     QSignalMapper* const imageGroupSortOrderMapper = new QSignalMapper(this);
     connect(imageGroupSortOrderMapper, SIGNAL(mapped(int)), d->view, SLOT(slotSortImageGroupOrder(int)));
-    actionCollection()->addAction("image_group_sort_order", d->imageGroupSortOrderAction);
+    ac->addAction("image_group_sort_order", d->imageGroupSortOrderAction);
 
     QAction* const sortGroupsAscending  = d->imageGroupSortOrderAction->addAction(QIcon::fromTheme("view-sort-ascending"), i18n("Ascending"));
     QAction* const sortGroupsDescending = d->imageGroupSortOrderAction->addAction(QIcon::fromTheme("view-sort-descending"), i18n("Descending"));
@@ -1172,37 +1171,37 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------------
 
     d->selectAllAction = new QAction(i18n("Select All"), this);
-    d->selectAllAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_A));
     connect(d->selectAllAction, SIGNAL(triggered()), d->view, SLOT(slotSelectAll()));
-    actionCollection()->addAction("selectAll", d->selectAllAction);
+    ac->addAction("selectAll", d->selectAllAction);
+    ac->setDefaultShortcut(d->selectAllAction, Qt::CTRL+Qt::Key_A);
 
     // -----------------------------------------------------------------
 
     d->selectNoneAction = new QAction(i18n("Select None"), this);
-    d->selectNoneAction->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_A));
     connect(d->selectNoneAction, SIGNAL(triggered()), d->view, SLOT(slotSelectNone()));
-    actionCollection()->addAction("selectNone", d->selectNoneAction);
+    ac->addAction("selectNone", d->selectNoneAction);
+    ac->setDefaultShortcut(d->selectNoneAction, Qt::CTRL+Qt::SHIFT+Qt::Key_A);
 
     // -----------------------------------------------------------------
 
     d->selectInvertAction = new QAction(i18n("Invert Selection"), this);
-    d->selectInvertAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_I));
     connect(d->selectInvertAction, SIGNAL(triggered()), d->view, SLOT(slotSelectInvert()));
-    actionCollection()->addAction("selectInvert", d->selectInvertAction);
+    ac->addAction("selectInvert", d->selectInvertAction);
+    ac->setDefaultShortcut(d->selectInvertAction, Qt::CTRL+Qt::Key_I);
 
     // -----------------------------------------------------------
 
     d->showBarAction = new KToggleAction(QIcon::fromTheme("view-choose"), i18n("Show Thumbbar"), this);
-    d->showBarAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_T));
     connect(d->showBarAction, SIGNAL(triggered()), this, SLOT(slotToggleShowBar()));
-    actionCollection()->addAction("showthumbs", d->showBarAction);
+    ac->addAction("showthumbs", d->showBarAction);
+    ac->setDefaultShortcut(d->showBarAction, Qt::CTRL+Qt::Key_T);
 
-    d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
+    d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), ac);
 
-    KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          actionCollection());
-    KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      actionCollection());
-    KStandardAction::configureNotifications(this, SLOT(slotConfNotifications()), actionCollection());
-    KStandardAction::preferences(this,            SLOT(slotSetup()),             actionCollection());
+    KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          ac);
+    KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      ac);
+    KStandardAction::configureNotifications(this, SLOT(slotConfNotifications()), ac);
+    KStandardAction::preferences(this,            SLOT(slotSetup()),             ac);
 
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
@@ -1214,29 +1213,29 @@ void DigikamApp::setupActions()
 
     d->zoomPlusAction  = KStandardAction::zoomIn(d->view, SLOT(slotZoomIn()), this);
     QKeySequence keysPlus(d->zoomPlusAction->shortcut(), Qt::Key_Plus);
-    d->zoomPlusAction->setShortcut(keysPlus);
-    actionCollection()->addAction("album_zoomin", d->zoomPlusAction);
+    ac->addAction("album_zoomin", d->zoomPlusAction);
+    ac->setDefaultShortcut(d->zoomPlusAction, keysPlus);
 
     // -----------------------------------------------------------
 
     d->zoomMinusAction  = KStandardAction::zoomOut(d->view, SLOT(slotZoomOut()), this);
     QKeySequence keysMinus(d->zoomMinusAction->shortcut(), Qt::Key_Minus);
-    d->zoomMinusAction->setShortcut(keysMinus);
-    actionCollection()->addAction("album_zoomout", d->zoomMinusAction);
+    ac->addAction("album_zoomout", d->zoomMinusAction);
+    ac->setDefaultShortcut(d->zoomMinusAction, keysMinus);
 
     // -----------------------------------------------------------
 
     d->zoomTo100percents = new QAction(QIcon::fromTheme("zoom-original"), i18n("Zoom to 100%"), this);
-    d->zoomTo100percents->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Comma));
     connect(d->zoomTo100percents, SIGNAL(triggered()), d->view, SLOT(slotZoomTo100Percents()));
-    actionCollection()->addAction("album_zoomto100percents", d->zoomTo100percents);
+    ac->addAction("album_zoomto100percents", d->zoomTo100percents);
+    ac->setDefaultShortcut(d->zoomTo100percents, Qt::CTRL + Qt::Key_Comma);
 
     // -----------------------------------------------------------
 
     d->zoomFitToWindowAction = new QAction(QIcon::fromTheme("zoom-fit-best"), i18n("Fit to &Window"), this);
-    d->zoomFitToWindowAction->setShortcut(QKeySequence(Qt::ALT + Qt::CTRL + Qt::Key_E));
     connect(d->zoomFitToWindowAction, SIGNAL(triggered()), d->view, SLOT(slotFitToWindow()));
-    actionCollection()->addAction("album_zoomfit2window", d->zoomFitToWindowAction);
+    ac->addAction("album_zoomfit2window", d->zoomFitToWindowAction);
+    ac->setDefaultShortcut(d->zoomFitToWindowAction, Qt::ALT + Qt::CTRL + Qt::Key_E);
 
     // -----------------------------------------------------------
 
@@ -1247,37 +1246,37 @@ void DigikamApp::setupActions()
 
     d->slideShowAction = new KActionMenu(QIcon::fromTheme("view-presentation"), i18n("Slideshow"), this);
     d->slideShowAction->setDelayed(false);
-    actionCollection()->addAction("slideshow", d->slideShowAction);
+    ac->addAction("slideshow", d->slideShowAction);
 
     d->slideShowAllAction = new QAction(i18n("All"), this);
-    d->slideShowAllAction->setShortcut(QKeySequence(Qt::Key_F9));
     connect(d->slideShowAllAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowAll()));
-    actionCollection()->addAction("slideshow_all", d->slideShowAllAction);
+    ac->addAction("slideshow_all", d->slideShowAllAction);
+    ac->setDefaultShortcut(d->slideShowAllAction, Qt::Key_F9);
     d->slideShowAction->addAction(d->slideShowAllAction);
 
     d->slideShowSelectionAction = new QAction(i18n("Selection"), this);
-    d->slideShowSelectionAction->setShortcut(QKeySequence(Qt::ALT+Qt::Key_F9));
     connect(d->slideShowSelectionAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowSelection()));
-    actionCollection()->addAction("slideshow_selected", d->slideShowSelectionAction);
+    ac->addAction("slideshow_selected", d->slideShowSelectionAction);
+    ac->setDefaultShortcut(d->slideShowSelectionAction, Qt::ALT+Qt::Key_F9);
     d->slideShowAction->addAction(d->slideShowSelectionAction);
 
     d->slideShowRecursiveAction = new QAction(i18n("With All Sub-Albums"), this);
-    d->slideShowRecursiveAction->setShortcut(QKeySequence(Qt::SHIFT+Qt::Key_F9));
     connect(d->slideShowRecursiveAction, SIGNAL(triggered()), d->view, SLOT(slotSlideShowRecursive()));
-    actionCollection()->addAction("slideshow_recursive", d->slideShowRecursiveAction);
+    ac->addAction("slideshow_recursive", d->slideShowRecursiveAction);
+    ac->setDefaultShortcut(d->slideShowRecursiveAction, Qt::SHIFT+Qt::Key_F9);
     d->slideShowAction->addAction(d->slideShowRecursiveAction);
 
     // -----------------------------------------------------------
 
     d->viewCMViewAction = new KToggleAction(QIcon::fromTheme("video-display"), i18n("Color-Managed View"), this);
-    d->viewCMViewAction->setShortcut(QKeySequence(Qt::Key_F12));
     connect(d->viewCMViewAction, SIGNAL(triggered()), this, SLOT(slotToggleColorManagedView()));
-    actionCollection()->addAction("color_managed_view", d->viewCMViewAction);
+    ac->addAction("color_managed_view", d->viewCMViewAction);
+    ac->setDefaultShortcut(d->viewCMViewAction, Qt::Key_F12);
 
     // -----------------------------------------------------------
 
     d->quitAction = KStandardAction::quit(this, SLOT(slotExit()), this);
-    actionCollection()->addAction("app_exit", d->quitAction);
+    ac->addAction("app_exit", d->quitAction);
 
     // -----------------------------------------------------------
 
@@ -1287,53 +1286,53 @@ void DigikamApp::setupActions()
 
     d->kipiHelpAction = new QAction(QIcon::fromTheme("kipi"), i18n("Kipi Plugins Handbook"), this);
     connect(d->kipiHelpAction, SIGNAL(triggered()), this, SLOT(slotShowKipiHelp()));
-    actionCollection()->addAction("help_kipi", d->kipiHelpAction);
+    ac->addAction("help_kipi", d->kipiHelpAction);
 
     // -----------------------------------------------------------
 
-    d->tipAction = actionCollection()->addAction(KStandardAction::TipofDay, "help_tipofday",
+    d->tipAction = ac->addAction(KStandardAction::TipofDay, "help_tipofday",
                                                  this, SLOT(slotShowTip()));
 
     //------------------------------------------------------------
 
     QAction* const findAction = new QAction(QIcon::fromTheme("system-search"), i18n("Search..."), this);
-    findAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_F));
     connect(findAction, SIGNAL(triggered()), d->view, SLOT(slotNewKeywordSearch()));
-    actionCollection()->addAction("search_quick", findAction);
+    ac->addAction("search_quick", findAction);
+    ac->setDefaultShortcut(findAction, Qt::CTRL+Qt::Key_F);
 
     // -----------------------------------------------------------
 
     QAction* const advFindAction = new QAction(QIcon::fromTheme("system-search"), i18n("Advanced Search..."), this);
-    advFindAction->setShortcut(QKeySequence(Qt::CTRL+Qt::ALT+Qt::Key_F));
     connect(advFindAction, SIGNAL(triggered()), d->view, SLOT(slotNewAdvancedSearch()));
-    actionCollection()->addAction("search_advanced", advFindAction);
+    ac->addAction("search_advanced", advFindAction);
+    ac->setDefaultShortcut(advFindAction, Qt::CTRL+Qt::ALT+Qt::Key_F);
 
     // -----------------------------------------------------------
 
     QAction* const duplicatesAction = new QAction(QIcon::fromTheme("tools-wizard"), i18n("Find Duplicates..."), this);
-    duplicatesAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_D));
     connect(duplicatesAction, SIGNAL(triggered()), d->view, SLOT(slotNewDuplicatesSearch()));
-    actionCollection()->addAction("find_duplicates", duplicatesAction);
+    ac->addAction("find_duplicates", duplicatesAction);
+    ac->setDefaultShortcut(duplicatesAction, Qt::CTRL+Qt::Key_D);
 
     // -----------------------------------------------------------
 
 #ifdef HAVE_MYSQLSUPPORT
     QAction* const databaseMigrationAction = new QAction(QIcon::fromTheme("server-database"), i18n("Database Migration..."), this);
     connect(databaseMigrationAction, SIGNAL(triggered()), this, SLOT(slotDatabaseMigration()));
-    actionCollection()->addAction("database_migration", databaseMigrationAction);
+    ac->addAction("database_migration", databaseMigrationAction);
 #endif
 
     // -----------------------------------------------------------
 
     d->maintenanceAction = new QAction(QIcon::fromTheme("run-build-prune"), i18n("Maintenance..."), this);
     connect(d->maintenanceAction, SIGNAL(triggered()), this, SLOT(slotMaintenance()));
-    actionCollection()->addAction("maintenance", d->maintenanceAction);
+    ac->addAction("maintenance", d->maintenanceAction);
 
     // -----------------------------------------------------------
 
     QAction* const cameraAction = new QAction(i18n("Add Camera Manually..."), this);
     connect(cameraAction, SIGNAL(triggered()), this, SLOT(slotSetupCamera()));
-    actionCollection()->addAction("camera_add", cameraAction);
+    ac->addAction("camera_add", cameraAction);
 
     // -----------------------------------------------------------
 
@@ -1614,6 +1613,8 @@ void DigikamApp::cameraAutoDetect()
 
 void DigikamApp::loadCameras()
 {
+    KActionCollection *ac = actionCollection();
+
     d->cameraMenu->setText(i18n("Cameras"));
     d->cameraMenu->setIcon(QIcon::fromTheme("camera-photo"));
     d->usbMediaMenu->setText(i18n("USB Storage Devices"));
@@ -1621,24 +1622,24 @@ void DigikamApp::loadCameras()
     d->cardReaderMenu->setText(i18n("Card Readers"));
     d->cardReaderMenu->setIcon(QIcon::fromTheme("media-flash-smart-media"));
 
-    actionCollection()->addAction("cameras",     d->cameraMenu);
-    actionCollection()->addAction("usb_media",   d->usbMediaMenu);
-    actionCollection()->addAction("card_reader", d->cardReaderMenu);
+    ac->addAction("cameras",     d->cameraMenu);
+    ac->addAction("usb_media",   d->usbMediaMenu);
+    ac->addAction("card_reader", d->cardReaderMenu);
 
     // -----------------------------------------------------------------
 
     d->addImagesAction = new QAction(QIcon::fromTheme("albumfolder-importimages"), i18n("Add Images..."), this);
-    d->addImagesAction->setShortcut(QKeySequence(Qt::CTRL+Qt::ALT+Qt::Key_I));
     d->addImagesAction->setWhatsThis(i18n("Adds new items to an Album."));
     connect(d->addImagesAction, SIGNAL(triggered()), this, SLOT(slotImportAddImages()));
-    actionCollection()->addAction("import_addImages", d->addImagesAction);
+    ac->addAction("import_addImages", d->addImagesAction);
+    ac->setDefaultShortcut(d->addImagesAction, Qt::CTRL+Qt::ALT+Qt::Key_I);
 
     // -----------------------------------------------------------------
 
     d->addFoldersAction = new QAction(QIcon::fromTheme("albumfolder-importdir"), i18n("Add Folders..."), this);
     d->addFoldersAction->setWhatsThis(i18n("Adds new folders to Album library."));
     connect(d->addFoldersAction, SIGNAL(triggered()), this, SLOT(slotImportAddFolders()));
-    actionCollection()->addAction("import_addFolders", d->addFoldersAction);
+    ac->addAction("import_addFolders", d->addFoldersAction);
 
     // -- fill manually added cameras ----------------------------------
 
@@ -2771,6 +2772,8 @@ void DigikamApp::updateQuickImportAction()
 
 void DigikamApp::setupExifOrientationActions()
 {
+    KActionCollection *ac = actionCollection();
+
     QSignalMapper* const exifOrientationMapper = new QSignalMapper(d->view);
 
     connect(exifOrientationMapper, SIGNAL(mapped(int)),
@@ -2778,7 +2781,7 @@ void DigikamApp::setupExifOrientationActions()
 
     d->imageExifOrientationActionMenu = new KActionMenu(i18n("Adjust Exif Orientation Tag"), this);
     d->imageExifOrientationActionMenu->setDelayed(false);
-    actionCollection()->addAction("image_set_exif_orientation", d->imageExifOrientationActionMenu);
+    ac->addAction("image_set_exif_orientation", d->imageExifOrientationActionMenu);
 
     d->imageSetExifOrientation1Action = new KToggleAction(i18nc("normal exif orientation", "Normal"), this);
     d->imageSetExifOrientation2Action = new KToggleAction(i18n("Flipped Horizontally"), this);
@@ -2800,21 +2803,21 @@ void DigikamApp::setupExifOrientationActions()
     d->exifOrientationActionGroup->addAction(d->imageSetExifOrientation8Action);
     d->imageSetExifOrientation1Action->setChecked(true);
 
-    actionCollection()->addAction("image_set_exif_orientation_normal",
+    ac->addAction("image_set_exif_orientation_normal",
                                   d->imageSetExifOrientation1Action);
-    actionCollection()->addAction("image_set_exif_orientation_flipped_horizontal",
+    ac->addAction("image_set_exif_orientation_flipped_horizontal",
                                   d->imageSetExifOrientation2Action);
-    actionCollection()->addAction("image_set_exif_orientation_rotated_upside_down",
+    ac->addAction("image_set_exif_orientation_rotated_upside_down",
                                   d->imageSetExifOrientation3Action);
-    actionCollection()->addAction("image_set_exif_orientation_flipped_vertically",
+    ac->addAction("image_set_exif_orientation_flipped_vertically",
                                   d->imageSetExifOrientation4Action);
-    actionCollection()->addAction("image_set_exif_orientation_rotated_right_hor_flipped",
+    ac->addAction("image_set_exif_orientation_rotated_right_hor_flipped",
                                   d->imageSetExifOrientation5Action);
-    actionCollection()->addAction("image_set_exif_orientation_rotated_right",
+    ac->addAction("image_set_exif_orientation_rotated_right",
                                   d->imageSetExifOrientation6Action);
-    actionCollection()->addAction("image_set_exif_orientation_rotated_right_ver_flipped",
+    ac->addAction("image_set_exif_orientation_rotated_right_ver_flipped",
                                   d->imageSetExifOrientation7Action);
-    actionCollection()->addAction("image_set_exif_orientation_rotated_left",
+    ac->addAction("image_set_exif_orientation_rotated_left",
                                   d->imageSetExifOrientation8Action);
 
     d->imageExifOrientationActionMenu->addAction(d->imageSetExifOrientation1Action);
@@ -2912,45 +2915,47 @@ void DigikamApp::slotSetCheckedExifOrientationAction(const ImageInfo& info)
 
 void DigikamApp::setupImageTransformActions()
 {
-    d->imageRotateActionMenu = new KActionMenu(QIcon::fromTheme("object-rotate-right"), i18n("Rotate"), actionCollection());
+    KActionCollection *ac = actionCollection();
+
+    d->imageRotateActionMenu = new KActionMenu(QIcon::fromTheme("object-rotate-right"), i18n("Rotate"), ac);
     d->imageRotateActionMenu->setDelayed(false);
 
-    QAction* const left = actionCollection()->addAction("rotate_ccw");
+    QAction* const left = ac->addAction("rotate_ccw");
     left->setText(i18nc("rotate image left", "Left"));
-    left->setShortcut(QKeySequence(Qt::SHIFT+Qt::CTRL+Qt::Key_Left));
+    ac->setDefaultShortcut(left, Qt::SHIFT+Qt::CTRL+Qt::Key_Left);
     connect(left, SIGNAL(triggered(bool)),
             this, SLOT(slotTransformAction()));
     d->imageRotateActionMenu->addAction(left);
 
-    QAction* const right = actionCollection()->addAction("rotate_cw");
+    QAction* const right = ac->addAction("rotate_cw");
     right->setText(i18nc("rotate image right", "Right"));
-    right->setShortcut(QKeySequence(Qt::SHIFT+Qt::CTRL+Qt::Key_Right));
+    ac->setDefaultShortcut(right, Qt::SHIFT+Qt::CTRL+Qt::Key_Right);
     connect(right, SIGNAL(triggered(bool)),
             this, SLOT(slotTransformAction()));
     d->imageRotateActionMenu->addAction(right);
 
-    actionCollection()->addAction("image_rotate", d->imageRotateActionMenu);
+    ac->addAction("image_rotate", d->imageRotateActionMenu);
 
     // -----------------------------------------------------------------------------------
 
-    d->imageFlipActionMenu = new KActionMenu(QIcon::fromTheme("flip-horizontal"), i18n("Flip"), actionCollection());
+    d->imageFlipActionMenu = new KActionMenu(QIcon::fromTheme("flip-horizontal"), i18n("Flip"), ac);
     d->imageFlipActionMenu->setDelayed(false);
 
-    QAction* const hori = actionCollection()->addAction("flip_horizontal");
+    QAction* const hori = ac->addAction("flip_horizontal");
     hori->setText(i18n("Horizontally"));
-    hori->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Asterisk));
+    ac->setDefaultShortcut(hori, Qt::CTRL+Qt::Key_Asterisk);
     connect(hori, SIGNAL(triggered(bool)),
             this, SLOT(slotTransformAction()));
     d->imageFlipActionMenu->addAction(hori);
 
-    QAction* const verti = actionCollection()->addAction("flip_vertical");
+    QAction* const verti = ac->addAction("flip_vertical");
     verti->setText(i18n("Vertically"));
-    verti->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Slash));
+    ac->setDefaultShortcut(verti, Qt::CTRL+Qt::Key_Slash);
     connect(verti, SIGNAL(triggered(bool)),
             this, SLOT(slotTransformAction()));
     d->imageFlipActionMenu->addAction(verti);
 
-    actionCollection()->addAction("image_flip", d->imageFlipActionMenu);
+    ac->addAction("image_flip", d->imageFlipActionMenu);
 
     // -----------------------------------------------------------------------------------
 
@@ -2958,7 +2963,7 @@ void DigikamApp::setupImageTransformActions()
     connect(d->imageAutoExifActionMenu, SIGNAL(triggered(bool)),
             this, SLOT(slotTransformAction()));
 
-    actionCollection()->addAction("image_transform_exif", d->imageAutoExifActionMenu);
+    ac->addAction("image_transform_exif", d->imageAutoExifActionMenu);
 }
 
 void DigikamApp::slotTransformAction()
