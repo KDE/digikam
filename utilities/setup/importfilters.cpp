@@ -23,14 +23,6 @@
 
 #include "importfilters.moc"
 
-// KDE includes
-
-#include <kcombobox.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <ksqueezedtextlabel.h>
-#include <kmimetypechooser.h>
-
 // Qt includes
 
 #include <QtGui/QCheckBox>
@@ -40,6 +32,14 @@
 #include <QtGui/QLabel>
 #include <QtGui/QToolButton>
 #include <QtGui/QPainter>
+
+// KDE includes
+
+#include <kcombobox.h>
+#include <klocale.h>
+#include <kdebug.h>
+#include <ksqueezedtextlabel.h>
+#include <kmimetypechooser.h>
 
 // Local includes
 
@@ -106,7 +106,7 @@ ImportFilters::ImportFilters(QWidget* const parent)
     d->mimeLabel     = new KSqueezedTextLabel(this);
     horizontalLayout->addWidget(d->mimeLabel);
     d->mimeButton    = new QToolButton(this);
-    d->mimeButton->setText("...");
+    d->mimeButton->setText("Select Type Mime...");
     horizontalLayout->addWidget(d->mimeButton);
     verticalLayout->addLayout(horizontalLayout);
 
