@@ -433,7 +433,7 @@ void ShowFoto::setupActions()
                         this, SLOT(slotOpenFile()));
 
     d->openFilesInFolderAction = new QAction(QIcon::fromTheme("folder-image"), i18n("Open folder"), this);
-    d->openFilesInFolderAction->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_O));
+    actionCollection()->setDefaultShortcut(d->openFilesInFolderAction, Qt::CTRL+Qt::SHIFT+Qt::Key_O);
 
     connect(d->openFilesInFolderAction, &QAction::triggered,
             this, &ShowFoto::slotOpenFilesInFolder);

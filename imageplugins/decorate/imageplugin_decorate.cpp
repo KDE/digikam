@@ -72,8 +72,8 @@ ImagePlugin_Decorate::ImagePlugin_Decorate(QObject* const parent, const QVariant
     setComponentName("digikam", i18nc("to be displayed in shortcuts dialog", "Decoration plugins"));
 
     d->insertTextAction = new QAction(QIcon::fromTheme("insert-text"), i18n("Insert Text..."), this);
-    d->insertTextAction->setShortcut(QKeySequence(Qt::SHIFT+Qt::CTRL+Qt::Key_T));
     actionCollection()->addAction("imageplugin_inserttext", d->insertTextAction );
+    actionCollection()->setDefaultShortcut(d->insertTextAction, Qt::SHIFT+Qt::CTRL+Qt::Key_T);
     connect(d->insertTextAction, SIGNAL(triggered(bool)),
             this, SLOT(slotInsertText()));
 

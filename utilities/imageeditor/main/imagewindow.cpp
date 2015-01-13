@@ -429,20 +429,23 @@ void ImageWindow::setupActions()
 {
     setupStandardActions();
 
+    KActionCollection *ac = actionCollection();
+
     d->toMainWindowAction = new QAction(QIcon::fromTheme("view-list-icons"),
                                         i18nc("@action Finish editing, close editor, back to main window", "Close Editor"), this);
     connect(d->toMainWindowAction, SIGNAL(triggered()), this, SLOT(slotToMainWindow()));
-    actionCollection()->addAction("imageview_tomainwindow", d->toMainWindowAction);
+    ac->addAction("imageview_tomainwindow", d->toMainWindowAction);
+
 
     // -- Special Delete actions ---------------------------------------------------------------
 
     // Pop up dialog to ask user whether to permanently delete
 
     d->fileDeletePermanentlyAction = new QAction(QIcon::fromTheme("edit-delete"), i18n("Delete File Permanently"), this);
-    d->fileDeletePermanentlyAction->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Delete));
     connect(d->fileDeletePermanentlyAction, SIGNAL(triggered()),
             this, SLOT(slotDeleteCurrentItemPermanently()));
-    actionCollection()->addAction("image_delete_permanently", d->fileDeletePermanentlyAction);
+    ac->addAction("image_delete_permanently", d->fileDeletePermanentlyAction);
+    ac->setDefaultShortcut(d->fileDeletePermanentlyAction, Qt::SHIFT + Qt::Key_Delete);
 
     // These two actions are hidden, no menu entry, no toolbar entry, no shortcut.
     // Power users may add them.
@@ -451,35 +454,35 @@ void ImageWindow::setupActions()
                                                          i18n("Delete Permanently without Confirmation"), this);
     connect(d->fileDeletePermanentlyDirectlyAction, SIGNAL(triggered()),
             this, SLOT(slotDeleteCurrentItemPermanentlyDirectly()));
-    actionCollection()->addAction("image_delete_permanently_directly",
+    ac->addAction("image_delete_permanently_directly",
                                   d->fileDeletePermanentlyDirectlyAction);
 
     d->fileTrashDirectlyAction = new QAction(QIcon::fromTheme("user-trash"),
                                              i18n("Move to Trash without Confirmation"), this);
     connect(d->fileTrashDirectlyAction, SIGNAL(triggered()),
             this, SLOT(slotTrashCurrentItemDirectly()));
-    actionCollection()->addAction("image_trash_directly", d->fileTrashDirectlyAction);
+    ac->addAction("image_trash_directly", d->fileTrashDirectlyAction);
 
     // ---------------------------------------------------------------------------------
 
     createHelpActions();
 
     // Labels shortcuts must be registered here to be saved in XML GUI files if user customize it.
-    TagsActionMngr::defaultManager()->registerLabelsActions(actionCollection());
+    TagsActionMngr::defaultManager()->registerLabelsActions(ac);
 
     QAction* const editTitles = new QAction(i18n("Edit Titles"), this);
-    editTitles->setShortcut( QKeySequence(Qt::META + Qt::Key_T) );
-    actionCollection()->addAction("edit_titles", editTitles);
+    ac->addAction("edit_titles", editTitles);
+    ac->setDefaultShortcut(editTitles, Qt::META + Qt::Key_T);
     connect(editTitles, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateTitles()));
 
     QAction* const editComments = new QAction(i18n("Edit Comments"), this);
-    editComments->setShortcut( QKeySequence(Qt::META + Qt::Key_C) );
-    actionCollection()->addAction("edit_comments", editComments);
+    ac->addAction("edit_comments", editComments);
+    ac->setDefaultShortcut(editComments, Qt::META + Qt::Key_C);
     connect(editComments, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateComments()));
 
     QAction* const assignedTags = new QAction(i18n("Show Assigned Tags"), this);
-    assignedTags->setShortcut( QKeySequence(Qt::META + Qt::Key_A) );
-    actionCollection()->addAction("assigned _tags", assignedTags);
+    ac->addAction("assigned _tags", assignedTags);
+    ac->setDefaultShortcut(assignedTags, Qt::META + Qt::Key_A);
     connect(assignedTags, SIGNAL(triggered()), this, SLOT(slotRightSideBarActivateAssignedTags()));
 }
 
