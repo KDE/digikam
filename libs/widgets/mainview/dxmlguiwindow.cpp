@@ -186,37 +186,31 @@ void DXmlGuiWindow::createSidebarActions()
     QAction* const tlsb = new QAction(i18n("Toggle Left Side-bar"), this);
     connect(tlsb, SIGNAL(triggered()), this, SLOT(slotToggleLeftSideBar()));
     ac->addAction("toggle-left-sidebar", tlsb);
-    ac->setShortcutsConfigurable(tlsb, true);
     ac->setDefaultShortcut(tlsb, Qt::CTRL + Qt::META + Qt::Key_Left);
 
     QAction* const trsb = new QAction(i18n("Toggle Right Side-bar"), this);
     connect(trsb, SIGNAL(triggered()), this, SLOT(slotToggleRightSideBar()));
     ac->addAction("toggle-right-sidebar", trsb);
-    ac->setShortcutsConfigurable(trsb, true);
     ac->setDefaultShortcut(trsb, Qt::CTRL + Qt::META + Qt::Key_Right);
 
     QAction* const plsb = new QAction(i18n("Previous Left Side-bar Tab"), this);
     connect(plsb, SIGNAL(triggered()), this, SLOT(slotPreviousLeftSideBarTab()));
     ac->addAction("previous-left-sidebar-tab", plsb);
-    ac->setShortcutsConfigurable(plsb, true);
     ac->setDefaultShortcut(plsb, Qt::CTRL + Qt::META + Qt::Key_Home);
 
     QAction* const nlsb = new QAction(i18n("Next Left Side-bar Tab"), this);
     connect(nlsb, SIGNAL(triggered()), this, SLOT(slotNextLeftSideBarTab()));
     ac->addAction("next-left-sidebar-tab", nlsb);
-    ac->setShortcutsConfigurable(nlsb, true);
     ac->setDefaultShortcut(nlsb, Qt::CTRL + Qt::META + Qt::Key_End);
 
     QAction* const prsb = new QAction(i18n("Previous Right Side-bar Tab"), this);
     connect(prsb, SIGNAL(triggered()), this, SLOT(slotPreviousRightSideBarTab()));
     ac->addAction("previous-right-sidebar-tab", prsb);
-    ac->setShortcutsConfigurable(prsb, true);
     ac->setDefaultShortcut(prsb, Qt::CTRL + Qt::META + Qt::Key_PageUp);
 
     QAction* const nrsb = new QAction(i18n("Next Right Side-bar Tab"), this);
     connect(nrsb, SIGNAL(triggered()), this, SLOT(slotNextRightSideBarTab()));
     ac->addAction("next-right-sidebar-tab", nrsb);
-    ac->setShortcutsConfigurable(nrsb, true);
     ac->setDefaultShortcut(nrsb, Qt::CTRL + Qt::META + Qt::Key_PageDown);
 }
 
