@@ -29,10 +29,7 @@
 
 #include <QString>
 #include <QStringList>
-
-// KDE includes
-
-#include <kdialog.h>
+#include <QDialog>
 
 // Local includes
 
@@ -43,7 +40,7 @@ class QTreeWidgetItem;
 namespace Digikam
 {
 
-class CameraSelection : public KDialog
+class CameraSelection : public QDialog
 {
     Q_OBJECT
 
@@ -72,6 +69,7 @@ private:
 
 private Q_SLOTS:
 
+    void slotHelp();
     void slotPTPCameraLinkUsed();
     void slotUMSCameraLinkUsed();
     void slotSelectionChanged(QTreeWidgetItem*, int);

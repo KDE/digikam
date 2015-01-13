@@ -39,13 +39,16 @@
 #include <QComboBox>
 #include <QLineEdit>
 #include <QStandardPaths>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
+#include <QPushButton>
 
 // KDE includes
 
 #include <kglobalsettings.h>
-
 #include <klocalizedstring.h>
 #include <kurlrequester.h>
+#include <khelpclient.h>
 
 // Local includes
 
@@ -60,6 +63,7 @@ class CameraSelection::Private
 public:
 
     Private() :
+        buttons(0),
         portButtonGroup(0),
         usbButton(0),
         serialButton(0),
@@ -72,51 +76,53 @@ public:
     {
     }
 
-    QButtonGroup*  portButtonGroup;
+    QDialogButtonBox* buttons;
 
-    QRadioButton*  usbButton;
-    QRadioButton*  serialButton;
+    QButtonGroup*     portButtonGroup;
 
-    QLabel*        portPathLabel;
+    QRadioButton*     usbButton;
+    QRadioButton*     serialButton;
 
-    QComboBox*     portPathComboBox;
+    QLabel*           portPathLabel;
 
-    QString        UMSCameraNameActual;
-    QString        UMSCameraNameShown;
-    QString        PTPCameraNameShown;
+    QComboBox*        portPathComboBox;
 
-    QStringList    serialPortList;
+    QString           UMSCameraNameActual;
+    QString           UMSCameraNameShown;
+    QString           PTPCameraNameShown;
 
-    QTreeWidget*   listView;
+    QStringList       serialPortList;
 
-    QLineEdit*     titleEdit;
+    QTreeWidget*      listView;
 
-    KUrlRequester* umsMountURL;
+    QLineEdit*        titleEdit;
 
-    SearchTextBar* searchBar;
+    KUrlRequester*    umsMountURL;
+
+    SearchTextBar*    searchBar;
 };
 
 CameraSelection::CameraSelection(QWidget* const parent)
-    : KDialog(parent), d(new Private)
+    : QDialog(parent), d(new Private)
 {
     qApp->setOverrideCursor(Qt::WaitCursor);
-    setHelp("cameraselection.anchor", "digikam");
-    setCaption(i18n("Camera Configuration"));
-    setButtons(KDialog::Help | KDialog::Ok | KDialog::Cancel);
-    setDefaultButton(KDialog::Ok);
+
+    setWindowTitle(i18n("Camera Configuration"));
     setModal(true);
+
+    d->buttons = new QDialogButtonBox(QDialogButtonBox::Help | QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
+    d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
 
     d->UMSCameraNameActual = QString("Directory Browse");   // Don't be i18n!
     d->UMSCameraNameShown  = i18n("Mounted Camera");
     d->PTPCameraNameShown  = QString("USB PTP Class Camera");
 
-    setMainWidget(new QWidget(this));
-
-    QGridLayout* mainBoxLayout = new QGridLayout(mainWidget());
+    QWidget* const page        = new QWidget(this);
+    QGridLayout* mainBoxLayout = new QGridLayout(page);
 
     // --------------------------------------------------------------
 
-    d->listView = new QTreeWidget(mainWidget());
+    d->listView = new QTreeWidget(page);
     d->listView->setRootIsDecorated(false);
     d->listView->setSelectionMode(QAbstractItemView::SingleSelection);
     d->listView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -129,11 +135,11 @@ CameraSelection::CameraSelection(QWidget* const parent)
                                    "will be set automatically.</p><p>This list has been generated "
                                    "using the gphoto2 library installed on your computer.</p>"));
 
-    d->searchBar = new SearchTextBar(mainWidget(), "CameraSelectionSearchBar");
+    d->searchBar = new SearchTextBar(page, "CameraSelectionSearchBar");
 
     // --------------------------------------------------------------
 
-    QGroupBox* const titleBox   = new QGroupBox(i18n("Camera Title"), mainWidget());
+    QGroupBox* const titleBox   = new QGroupBox(i18n("Camera Title"), page);
     QVBoxLayout* const gLayout1 = new QVBoxLayout(titleBox);
     d->titleEdit                = new QLineEdit(titleBox);
     d->titleEdit->setWhatsThis(i18n("<p>Set here the name used in digiKam interface to "
@@ -145,7 +151,7 @@ CameraSelection::CameraSelection(QWidget* const parent)
 
     // --------------------------------------------------------------
 
-    QGroupBox* const portBox    = new QGroupBox(i18n("Camera Port Type"), mainWidget());
+    QGroupBox* const portBox    = new QGroupBox(i18n("Camera Port Type"), page);
     QVBoxLayout* const gLayout2 = new QVBoxLayout(portBox);
     d->portButtonGroup          = new QButtonGroup(portBox);
     d->portButtonGroup->setExclusive(true);
@@ -168,7 +174,7 @@ CameraSelection::CameraSelection(QWidget* const parent)
 
     // --------------------------------------------------------------
 
-    QGroupBox* const portPathBox = new QGroupBox(i18n("Camera Port Path"), mainWidget());
+    QGroupBox* const portPathBox = new QGroupBox(i18n("Camera Port Path"), page);
     QVBoxLayout* const gLayout3  = new QVBoxLayout(portPathBox);
 
     d->portPathLabel = new QLabel(portPathBox);
@@ -186,7 +192,7 @@ CameraSelection::CameraSelection(QWidget* const parent)
 
     // --------------------------------------------------------------
 
-    QGroupBox* const umsMountBox = new QGroupBox(i18n("Camera Mount Path"), mainWidget());
+    QGroupBox* const umsMountBox = new QGroupBox(i18n("Camera Mount Path"), page);
     QVBoxLayout* const gLayout4  = new QVBoxLayout(umsMountBox);
 
     QLabel* const umsMountLabel = new QLabel(umsMountBox);
@@ -205,7 +211,7 @@ CameraSelection::CameraSelection(QWidget* const parent)
 
     // --------------------------------------------------------------
 
-    QWidget* const box2   = new QWidget(mainWidget());
+    QWidget* const box2   = new QWidget(page);
     QGridLayout* gLayout5 = new QGridLayout(box2);
 
     QLabel* const logo = new QLabel(box2);
@@ -252,6 +258,11 @@ CameraSelection::CameraSelection(QWidget* const parent)
     mainBoxLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     mainBoxLayout->setMargin(0);
 
+    QVBoxLayout* const vbx = new QVBoxLayout(this);
+    vbx->addWidget(page);
+    vbx->addWidget(d->buttons);
+    setLayout(vbx);
+
     // Connections --------------------------------------------------
 
     connect(link, SIGNAL(linkActivated(QString)),
@@ -266,11 +277,17 @@ CameraSelection::CameraSelection(QWidget* const parent)
     connect(d->portButtonGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(slotPortChanged()));
 
-    connect(this, SIGNAL(okClicked()),
-            this, SLOT(slotOkClicked()));
-
     connect(d->searchBar, SIGNAL(signalSearchTextSettings(SearchTextSettings)),
             this, SLOT(slotSearchTextChanged(SearchTextSettings)));
+
+    connect(d->buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+            this, SLOT(slotOkClicked()));
+
+    connect(d->buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
+            this, SLOT(reject()));
+
+    connect(d->buttons->button(QDialogButtonBox::Help), SIGNAL(clicked()),
+            this, SLOT(slotHelp()));
 
     // Initialize  --------------------------------------------------
 
@@ -570,6 +587,11 @@ void CameraSelection::slotSearchTextChanged(const SearchTextSettings& settings)
     }
 
     d->searchBar->slotSearchResult(query);
+}
+
+void CameraSelection::slotHelp()
+{
+    KHelpClient::invokeHelp("cameraselection.anchor", "digikam");
 }
 
 }  // namespace Digikam
