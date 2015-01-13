@@ -34,10 +34,14 @@
 #include <QStandardPaths>
 #include <QApplication>
 #include <QStyle>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
+#include <QPushButton>
 
 // KDE includes
 
 #include <klocalizedstring.h>
+#include <khelpclient.h>
 
 // Local includes
 
@@ -57,9 +61,12 @@ public:
 
     Private()
     {
+        buttons   = 0;
         albumSel  = 0;
         searchBar = 0;
     }
+
+    QDialogButtonBox*  buttons;
 
     AlbumSelectWidget* albumSel;
 
@@ -67,18 +74,16 @@ public:
 };
 
 AlbumSelectDialog::AlbumSelectDialog(QWidget* const parent, PAlbum* const albumToSelect, const QString& header)
-    : KDialog(parent), d(new Private)
+    : QDialog(parent), d(new Private)
 {
-    setCaption(i18n("Select Album"));
-    setButtons(Help|Ok|Cancel);
-    setDefaultButton(Ok);
-    setHelp("targetalbumdialog.anchor", "digikam");
+    setWindowTitle(i18n("Select Album"));
+
+    d->buttons = new QDialogButtonBox(QDialogButtonBox::Help | QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
+    d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
 
     // -------------------------------------------------------------
 
     QWidget* const page     = new QWidget(this);
-    setMainWidget(page);
-
     QGridLayout* const grid = new QGridLayout(page);
     QLabel* const logo      = new QLabel(page);
     logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
@@ -102,10 +107,24 @@ AlbumSelectDialog::AlbumSelectDialog(QWidget* const parent, PAlbum* const albumT
     grid->setMargin(0);
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
+    QVBoxLayout* const vbx = new QVBoxLayout(this);
+    vbx->addWidget(page);
+    vbx->addWidget(d->buttons);
+    setLayout(vbx);
+
     // -------------------------------------------------------------
 
     connect(d->albumSel, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotSelectionChanged()));
+
+    connect(d->buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+            this, SLOT(accept()));
+
+    connect(d->buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
+            this, SLOT(reject()));
+
+    connect(d->buttons->button(QDialogButtonBox::Help), SIGNAL(clicked()),
+            this, SLOT(slotHelp()));
 
     // -------------------------------------------------------------
 
@@ -124,18 +143,18 @@ void AlbumSelectDialog::slotSelectionChanged()
 
     if (!currentAlbum || (currentAlbum->isRoot()))
     {
-        enableButtonOk(false);
+        d->buttons->button(QDialogButtonBox::Ok)->setEnabled(false);
         return;
     }
 
-    enableButtonOk(true);
+    d->buttons->button(QDialogButtonBox::Ok)->setEnabled(true);
 }
 
 PAlbum* AlbumSelectDialog::selectAlbum(QWidget* const parent, PAlbum* const albumToSelect, const QString& header)
 {
     QPointer<AlbumSelectDialog> dlg = new AlbumSelectDialog(parent, albumToSelect, header);
 
-    if (dlg->exec() != KDialog::Accepted)
+    if (dlg->exec() != QDialog::Accepted)
     {
         delete dlg;
         return 0;
@@ -152,6 +171,11 @@ PAlbum* AlbumSelectDialog::selectAlbum(QWidget* const parent, PAlbum* const albu
     delete dlg;
 
     return selectedAlbum;
+}
+
+void AlbumSelectDialog::slotHelp()
+{
+    KHelpClient::invokeHelp("targetalbumdialog.anchor", "digikam");
 }
 
 }  // namespace Digikam

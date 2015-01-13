@@ -29,10 +29,7 @@
 // Qt includes
 
 #include <QString>
-
-// KDE includes
-
-#include <kdialog.h>
+#include <QDialog>
 
 // Local includes
 
@@ -43,7 +40,7 @@ namespace Digikam
 
 class PAlbum;
 
-class AlbumSelectDialog : public KDialog
+class AlbumSelectDialog : public QDialog
 {
     Q_OBJECT
 
@@ -57,6 +54,7 @@ public:
 private Q_SLOTS:
 
     void slotSelectionChanged();
+    void slotHelp();
 
 private:
 
