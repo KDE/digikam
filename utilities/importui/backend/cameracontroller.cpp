@@ -437,6 +437,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
             if (result)
             {
+                d->camera->printSupportedFeatures();
                 sendLogMsg(i18n("Connection established."));
             }
             else

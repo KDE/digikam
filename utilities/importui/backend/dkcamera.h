@@ -107,6 +107,8 @@ public:
 
     QString mimeType(const QString& fileext) const;
 
+    void printSupportedFeatures();
+
 protected:
 
     void    fillItemInfoFromMetadata(CamItemInfo& item, const DMetadata& meta) const;

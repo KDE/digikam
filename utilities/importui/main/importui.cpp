@@ -649,11 +649,6 @@ void ImportUI::setupActions()
     createGUI(xmlFile());
 
     d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for bug #171080
-
-    // hide the unsupported actions
-    d->uploadAction->setVisible(d->controller->cameraUploadSupport());
-
-    d->cameraCaptureAction->setVisible(d->controller->cameraCaptureImageSupport());
 }
 
 void ImportUI::setupConnections()
@@ -1148,6 +1143,11 @@ void ImportUI::slotConnected(bool val)
     }
     else
     {
+        // disable unsupported actions
+        d->uploadAction->setEnabled(d->controller->cameraUploadSupport());
+
+        d->cameraCaptureAction->setEnabled(d->controller->cameraCaptureImageSupport());
+
         d->errorWidget->hide();
         refreshFreeSpace();
         // FIXME ugly c&p from slotFolderList

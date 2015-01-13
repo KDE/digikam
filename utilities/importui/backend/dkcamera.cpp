@@ -28,6 +28,9 @@
 
 #include "applicationsettings.h"
 #include "dmetadata.h"
+#include "digikam_debug.h"
+
+#include <QDebug>
 
 namespace Digikam
 {
@@ -170,6 +173,17 @@ void DKCamera::fillItemInfoFromMetadata(CamItemInfo& info, const DMetadata& meta
     info.width     = dims.width();
     info.height    = dims.height();
     info.photoInfo = meta.getPhotographInformation();
+}
+
+void DKCamera::printSupportedFeatures() {
+    qCDebug(LOG_IMPORTUI) << "Supported features for" << title();
+    qCDebug(LOG_IMPORTUI) << "  Thumbnails:" << thumbnailSupport();
+    qCDebug(LOG_IMPORTUI) << "  Delete:" << deleteSupport();
+    qCDebug(LOG_IMPORTUI) << "  Delete dir:" << delDirSupport();
+    qCDebug(LOG_IMPORTUI) << "  Upload:" << uploadSupport();
+    qCDebug(LOG_IMPORTUI) << "  Mkdir:" << mkDirSupport();
+    qCDebug(LOG_IMPORTUI) << "  Image capture:" << captureImageSupport();
+    qCDebug(LOG_IMPORTUI) << "  Image capture preview (liveview):" << captureImagePreviewSupport();
 }
 
 }  // namespace Digikam
