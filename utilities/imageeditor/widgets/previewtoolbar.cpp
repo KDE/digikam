@@ -194,7 +194,6 @@ void PreviewToolBar::registerMenuActionGroup(EditorWindow* const editor)
         ac->setIcon(btn->icon());
         ac->setCheckable(true);
         editor->actionCollection()->addAction(btn->objectName(), ac);
-        editor->actionCollection()->setShortcutsConfigurable(ac, true);
         d->actionsMenu->addAction(ac);
     }
 
