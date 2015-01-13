@@ -7,6 +7,7 @@
  * Description : a dialog to display image file save options.
  *
  * Copyright (C) 2009 by David Eriksson <meldavid at acc umu se>
+ * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,22 +24,37 @@
 
 #include "filesaveoptionsdlg.h"
 
+// Qt includes
+
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
+#include <QPushButton>
+
 // KDE includes
 
 #include <klocalizedstring.h>
-
-// Local includes
 
 namespace Digikam
 {
 
 FileSaveOptionsDlg::FileSaveOptionsDlg(QWidget* const parent, FileSaveOptionsBox* const options)
-    : KDialog(parent)
+    : QDialog(parent)
 {
-    setCaption(i18n("Settings for Saving Image File"));
-    setButtons(Cancel|Ok);
-    setDefaultButton(Ok);
-    setMainWidget(options);
+    setWindowTitle(i18n("Settings for Saving Image File"));
+
+    QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
+    buttons->button(QDialogButtonBox::Ok)->setDefault(true);    
+
+    QVBoxLayout* const vbx = new QVBoxLayout(this);
+    vbx->addWidget(options);
+    vbx->addWidget(buttons);
+    setLayout(vbx);
+
+    connect(buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+            this, SLOT(accept()));
+
+    connect(buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
+            this, SLOT(reject()));
 }
 
 FileSaveOptionsDlg::~FileSaveOptionsDlg()
