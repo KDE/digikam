@@ -26,6 +26,9 @@
 // Qt includes
 
 #include <QLabel>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
+#include <QPushButton>
 
 // KDE includes
 
@@ -35,12 +38,13 @@ namespace Digikam
 {
 
 SlideHelp::SlideHelp()
-    : KDialog(0)
+    : QDialog(0)
 {
-    setButtons(Ok);
-    setDefaultButton(Ok);
-    setCaption(i18n("Slideshow Usage"));
+    setWindowTitle(i18n("Slideshow Usage"));
 
+    QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Ok, this);
+    buttons->button(QDialogButtonBox::Ok)->setDefault(true);
+    
     // -------------------------------------------------------------------------------------------------------------------
 
     QLabel* const label = new QLabel(this);
@@ -80,7 +84,10 @@ SlideHelp::SlideHelp()
                    "</table>"
                    "</qt>");
 
-    setMainWidget(label);
+    QVBoxLayout* const vbx = new QVBoxLayout(this);
+    vbx->addWidget(label);
+    vbx->addWidget(buttons);
+    setLayout(vbx);
 
     // ---------------------------------------------------------------------------------------------------------------------
 

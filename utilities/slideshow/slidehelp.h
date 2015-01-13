@@ -24,9 +24,9 @@
 #ifndef SLIDE_HELP_H
 #define SLIDE_HELP_H
 
-// KDE includes
+// Qt includes
 
-#include <kdialog.h>
+#include <QDialog>
 
 // Local includes
 
@@ -35,7 +35,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT SlideHelp : public KDialog
+class DIGIKAM_EXPORT SlideHelp : public QDialog
 {
 
 public:
