@@ -31,14 +31,14 @@
 #include <QCheckBox>
 #include <QDateTime>
 #include <QString>
+#include <QUrl>
 
 // KDE includes
 
 #include <khelpmenu.h>
 #include <kselectaction.h>
 #include <ktoggleaction.h>
-#include <KActionMenu>
-#include <QUrl>
+#include <kactionmenu.h>
 
 // Libkdcraw includes
 

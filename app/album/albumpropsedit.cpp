@@ -108,7 +108,7 @@ public:
     }
 
     QDialogButtonBox* buttons;
-    
+
     QComboBox*        categoryCombo;
     QComboBox*        parentCombo;
     QLineEdit*        titleEdit;
@@ -246,7 +246,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
     grid->setMargin(0);
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     page->setLayout(grid);
-    
+
     QVBoxLayout* const vbx = new QVBoxLayout(this);
     vbx->addWidget(page);
     vbx->addWidget(d->buttons);

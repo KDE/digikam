@@ -6,7 +6,8 @@
  * Date        : 2010-12-16
  * Description : Import filters configuration dialog
  *
- * Copyright (C) 2010-2011 by Petri Damstén <petri.damsten@iki.fi>
+ * Copyright (C) 2010-2011 by Petri Damstén <petri dot damsten at iki dot fi>
+ * Copyright (C) 2012-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,9 +25,9 @@
 #ifndef IMPORTFILTERS_H
 #define IMPORTFILTERS_H
 
-// KDE includes
+// Qt includes
 
-#include <kdialog.h>
+#include <QDialog>
 
 // local includes
 
@@ -35,7 +36,7 @@
 namespace Digikam
 {
 
-class ImportFilters : public KDialog
+class ImportFilters : public QDialog
 {
     Q_OBJECT
 

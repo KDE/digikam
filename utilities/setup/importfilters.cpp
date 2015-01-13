@@ -6,7 +6,8 @@
  * Date        : 2010-12-16
  * Description : Import filters configuration dialog
  *
- * Copyright (C) 2010 by Petri Damstén <petri.damsten@iki.fi>
+ * Copyright (C) 2010-2011 by Petri Damstén <petri dot damsten at iki dot fi>
+ * Copyright (C) 2012-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,12 +24,6 @@
 
 #include "importfilters.h"
 
-// KDE includes
-
-#include <klocalizedstring.h>
-#include <ksqueezedtextlabel.h>
-#include <kmimetypechooser.h>
-
 // Qt includes
 
 #include <QCheckBox>
@@ -38,6 +33,15 @@
 #include <QLabel>
 #include <QToolButton>
 #include <QPainter>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
+#include <QPushButton>
+
+// KDE includes
+
+#include <klocalizedstring.h>
+#include <ksqueezedtextlabel.h>
+#include <kmimetypechooser.h>
 
 // Local includes
 
@@ -53,6 +57,7 @@ public:
 
     Private()
     {
+        buttons          = 0;
         filterName       = 0;
         mimeCheckBox     = 0;
         mimeLabel        = 0;
@@ -63,6 +68,8 @@ public:
         pathEdit         = 0;
         newFilesCheckBox = 0;
     }
+
+    QDialogButtonBox*   buttons;
 
     QLineEdit*          filterName;
     QCheckBox*          mimeCheckBox;
@@ -78,62 +85,74 @@ public:
 // ----------------------------------------------------------------------------------------
 
 ImportFilters::ImportFilters(QWidget* const parent)
-    : KDialog(parent), d(new Private)
+    : QDialog(parent), d(new Private)
 {
-    setButtons(KDialog::Cancel | KDialog::Ok);
-    setDefaultButton(KDialog::Ok);
-    resize(QSize(400, 200));
     setWindowTitle(i18n("Edit Import Filters"));
 
-    QVBoxLayout* verticalLayout   = new QVBoxLayout(this->mainWidget());
-    QHBoxLayout* horizontalLayout = 0;
-    QSpacerItem* spacer           = 0;
-    QLabel* label                 = 0;
+    d->buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
+    d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
 
-    label            = new QLabel(this);
+    QWidget* const page = new QWidget(this);
+    QVBoxLayout* const verticalLayout   = new QVBoxLayout(page);
+    QLabel* label                       = 0;
+    QHBoxLayout* horizontalLayout       = 0;
+    QSpacerItem* spacer                 = 0;
+
+    label            = new QLabel(page);
     label->setText(i18n("Name:"));
     verticalLayout->addWidget(label);
-    d->filterName    = new QLineEdit(this);
+    d->filterName    = new QLineEdit(page);
     verticalLayout->addWidget(d->filterName);
 
-    d->mimeCheckBox  = new QCheckBox(this);
+    d->mimeCheckBox  = new QCheckBox(page);
     d->mimeCheckBox->setText(i18n("Mime filter:"));
     verticalLayout->addWidget(d->mimeCheckBox);
     horizontalLayout = new QHBoxLayout();
     spacer           = new QSpacerItem(20, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
     horizontalLayout->addItem(spacer);
-    d->mimeLabel     = new KSqueezedTextLabel(this);
+    d->mimeLabel     = new KSqueezedTextLabel(page);
     horizontalLayout->addWidget(d->mimeLabel);
-    d->mimeButton    = new QToolButton(this);
-    d->mimeButton->setText("...");
+    d->mimeButton    = new QToolButton(page);
+    d->mimeButton->setText("Select Type Mime...");
     horizontalLayout->addWidget(d->mimeButton);
     verticalLayout->addLayout(horizontalLayout);
 
-    d->fileNameCheckBox = new QCheckBox(this);
+    d->fileNameCheckBox = new QCheckBox(page);
     d->fileNameCheckBox->setText(i18n("File name filter:"));
     verticalLayout->addWidget(d->fileNameCheckBox);
-    horizontalLayout = new QHBoxLayout();
-    spacer           = new QSpacerItem(20, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+    horizontalLayout    = new QHBoxLayout();
+    spacer              = new QSpacerItem(20, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
     horizontalLayout->addItem(spacer);
-    d->fileNameEdit  = new QLineEdit(this);
+    d->fileNameEdit     = new QLineEdit(page);
     horizontalLayout->addWidget(d->fileNameEdit);
     verticalLayout->addLayout(horizontalLayout);
 
-    d->pathCheckBox  = new QCheckBox(this);
+    d->pathCheckBox  = new QCheckBox(page);
     d->pathCheckBox->setText(i18n("Path filter:"));
     verticalLayout->addWidget(d->pathCheckBox);
     horizontalLayout = new QHBoxLayout();
     spacer           = new QSpacerItem(20, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
     horizontalLayout->addItem(spacer);
-    d->pathEdit      = new QLineEdit(this);
+    d->pathEdit      = new QLineEdit(page);
     horizontalLayout->addWidget(d->pathEdit);
     verticalLayout->addLayout(horizontalLayout);
 
-    d->newFilesCheckBox = new QCheckBox(this);
+    d->newFilesCheckBox = new QCheckBox(page);
     d->newFilesCheckBox->setText(i18n("Show only new files"));
     verticalLayout->addWidget(d->newFilesCheckBox);
-    spacer           = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    spacer              = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
     verticalLayout->addItem(spacer);
+
+    QVBoxLayout* const vbx = new QVBoxLayout(this);
+    vbx->addWidget(page);
+    vbx->addWidget(d->buttons);
+    setLayout(vbx);
+
+    connect(d->buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+            this, SLOT(accept()));
+
+    connect(d->buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
+            this, SLOT(reject()));
 
     connect(d->mimeCheckBox, SIGNAL(clicked(bool)), 
             d->mimeButton, SLOT(setEnabled(bool)));
@@ -155,6 +174,8 @@ ImportFilters::ImportFilters(QWidget* const parent)
 
     connect(d->pathCheckBox, SIGNAL(clicked()),
             this, SLOT(pathCheckBoxClicked()));
+
+    adjustSize();
 }
 
 ImportFilters::~ImportFilters()
@@ -192,7 +213,7 @@ void ImportFilters::mimeButtonClicked()
     QStringList list = d->mimeLabel->text().split(';', QString::SkipEmptyParts);
     KMimeTypeChooserDialog dlg(i18n("Select Mime Types"), text, list, "image", this);
 
-    if (dlg.exec() == KDialog::Accepted)
+    if (dlg.exec() == QDialog::Accepted)
     {
         d->mimeLabel->setText(dlg.chooser()->mimeTypes().join(";"));
     }

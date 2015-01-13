@@ -6,7 +6,7 @@
  * Date        : 2010-12-16
  * Description : Filter combobox
  *
- * Copyright (C) 2010-2011 by Petri Damstén <petri.damsten@iki.fi>
+ * Copyright (C) 2010-2011 by Petri Damstén <petri dot damsten at iki dot fi>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
