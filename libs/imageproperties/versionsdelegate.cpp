@@ -35,10 +35,8 @@
 
 #include <kcategorydrawer.h>
 #include <kcolorscheme.h>
-
 #include <klocalizedstring.h>
 #include <kpixmapsequence.h>
-
 
 // Local includes
 
@@ -73,7 +71,7 @@ public:
     int                 animationState;
     QPropertyAnimation* animation;
     KPixmapSequence     workingPixmap;
-    KCategoryDrawer*  categoryDrawer;
+    KCategoryDrawer*    categoryDrawer;
     int                 thumbnailSize;
 
     int                 thumbsWaitingFor;
@@ -98,6 +96,7 @@ public:
 VersionsDelegate::VersionsDelegate(QObject* const parent)
     : QStyledItemDelegate(parent), d(new Private)
 {
+#pragma message("PORT QT5")
     d->workingPixmap = KPixmapSequence("process-working", 22);
 
     d->animation     = new QPropertyAnimation(this, "animationState", this);

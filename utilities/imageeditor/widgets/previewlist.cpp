@@ -33,18 +33,15 @@
 
 // KDE includes
 
-
-
 #include <klocalizedstring.h>
 #include <kpixmapsequence.h>
-
-#include "digikam_debug.h"
 
 // Local includes
 
 #include "dimg.h"
 #include "dimgthreadedfilter.h"
 #include "imageiface.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -216,7 +213,7 @@ class PreviewList::Private
 {
 
 public:
-
+#pragma message("PORT QT5")
     Private() :
         progressCount(0),
         progressTimer(0),

@@ -262,6 +262,7 @@ public:
         toolTip         = 0;
         toolTipItem     = 0;
         thumbLoadThread = ThumbnailLoadThread::defaultThread();
+#pragma message("PORT QT5")
         progressPix     = KPixmapSequence("process-working", 22);
     }
 

@@ -45,10 +45,7 @@
 
 // KDE includes
 
-
 #include <klocalizedstring.h>
-
-#include "digikam_debug.h"
 #include <kpixmapsequence.h>
 
 // Local includes
@@ -57,6 +54,7 @@
 #include "imagehistogram.h"
 #include "imagecurves.h"
 #include "digikam_globals.h"
+#include "digikam_debug.h"
 #include "histogrampainter.h"
 
 namespace Digikam
@@ -94,6 +92,7 @@ public:
         clearFlag        = HistogramNone;
         progressCount    = 0;
         progressTimer    = 0;
+#pragma message("PORT QT5")
         progressPix      = KPixmapSequence("process-working", 32);
     }
 

@@ -59,6 +59,7 @@ WorkingWidget::WorkingWidget(QWidget* const parent)
 {
     QPixmap pix = QIcon::fromTheme("process-working.png").pixmap(48);
 
+#pragma message("PORT QT5 (is this supposed to work?!)")
     d->pixmaps = KPixmapSequence(pix);
 
     connect(&d->timer, SIGNAL(timeout()),

@@ -41,15 +41,13 @@
 
 // KDE includes
 
-
 #include <klocalizedstring.h>
-
 #include <kpixmapsequence.h>
-#include "digikam_debug.h"
 
 // Local includes
 
 #include "digikam_config.h"
+#include "digikam_debug.h"
 #include "iccprofile.h"
 
 namespace Digikam
@@ -174,6 +172,7 @@ public:
         hMonitorProfile(0),
         hXFORM(0)
     {
+#pragma message("PORT QT5")
         progressPix = KPixmapSequence("process-working", 22);
     }
 
