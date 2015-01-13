@@ -39,14 +39,15 @@
 #include <QHeaderView>
 #include <QApplication>
 #include <QStyle>
-#include <QPushButton>
 #include <QStandardPaths>
 #include <QIcon>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
+#include <QPushButton>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kstandardguiitem.h>
 
 // Local includes
 
@@ -467,39 +468,48 @@ public:
         saveShouldDeleteUserPreference = true;
         saveDoNotShowAgainTrash        = false;
         saveDoNotShowAgainPermanent    = false;
-        trashGuiItem                   = KGuiItem(i18n("&Move to Trash"), "user-trash-full");
-        widget                         = 0;
+        page                           = 0;
+        buttons                        = 0;
     }
 
-    bool          saveShouldDeleteUserPreference;
-    bool          saveDoNotShowAgainTrash;
-    bool          saveDoNotShowAgainPermanent;
+    bool              saveShouldDeleteUserPreference;
+    bool              saveDoNotShowAgainTrash;
+    bool              saveDoNotShowAgainPermanent;
 
-    KGuiItem      trashGuiItem;
+    DeleteWidget*     page;
 
-    DeleteWidget* widget;
+    QDialogButtonBox* buttons;
 };
 
 DeleteDialog::DeleteDialog(QWidget* const parent)
-    : KDialog(parent), d(new Private)
+    : QDialog(parent), d(new Private)
 {
-    setButtons(User1 | Cancel);
-    setButtonFocus(User1);
     setModal(true);
-    d->widget = new DeleteWidget(this);
-    setMainWidget(d->widget);
+    
+    d->buttons = new QDialogButtonBox(QDialogButtonBox::Apply | QDialogButtonBox::Cancel, this);
+    d->buttons->button(QDialogButtonBox::Apply)->setDefault(true);
 
-    d->widget->setMinimumSize(400, 300);
+    d->page = new DeleteWidget(this);
+    d->page->setMinimumSize(400, 300);
+
+    QVBoxLayout* const vbx = new QVBoxLayout(this);
+    vbx->addWidget(d->page);
+    vbx->addWidget(d->buttons);
+    setLayout(vbx);
+
     setMinimumSize(410, 326);
     adjustSize();
-
+    
     slotShouldDelete(shouldDelete());
 
-    connect(d->widget->d->shouldDelete, SIGNAL(toggled(bool)),
+    connect(d->page->d->shouldDelete, SIGNAL(toggled(bool)),
             this, SLOT(slotShouldDelete(bool)));
 
-    connect(this, SIGNAL(user1Clicked()),
+    connect(d->buttons->button(QDialogButtonBox::Apply), SIGNAL(clicked()),
             this, SLOT(slotUser1Clicked()));
+
+    connect(d->buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
+            this, SLOT(reject()));
 }
 
 DeleteDialog::~DeleteDialog()
@@ -535,7 +545,7 @@ bool DeleteDialog::confirmDeleteList(const QList<QUrl>& condemnedFiles,
 
 void DeleteDialog::setUrls(const QList<QUrl>& urls)
 {
-    d->widget->setUrls(urls);
+    d->page->setUrls(urls);
 }
 
 void DeleteDialog::slotUser1Clicked()
@@ -550,24 +560,24 @@ void DeleteDialog::slotUser1Clicked()
 
     if (d->saveDoNotShowAgainTrash)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "setShowTrashDeleteDialog " << !d->widget->d->doNotShowAgain->isChecked();
-        settings->setShowTrashDeleteDialog(!d->widget->d->doNotShowAgain->isChecked());
+        qCDebug(DIGIKAM_GENERAL_LOG) << "setShowTrashDeleteDialog " << !d->page->d->doNotShowAgain->isChecked();
+        settings->setShowTrashDeleteDialog(!d->page->d->doNotShowAgain->isChecked());
     }
 
     if (d->saveDoNotShowAgainPermanent)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "setShowPermanentDeleteDialog " << !d->widget->d->doNotShowAgain->isChecked();
-        settings->setShowPermanentDeleteDialog(!d->widget->d->doNotShowAgain->isChecked());
+        qCDebug(DIGIKAM_GENERAL_LOG) << "setShowPermanentDeleteDialog " << !d->page->d->doNotShowAgain->isChecked();
+        settings->setShowPermanentDeleteDialog(!d->page->d->doNotShowAgain->isChecked());
     }
 
     settings->saveSettings();
 
-    KDialog::accept();
+    QDialog::accept();
 }
 
 bool DeleteDialog::shouldDelete() const
 {
-    return d->widget->d->shouldDelete->isChecked();
+    return d->page->d->shouldDelete->isChecked();
 }
 
 void DeleteDialog::slotShouldDelete(bool shouldDelete)
@@ -575,7 +585,9 @@ void DeleteDialog::slotShouldDelete(bool shouldDelete)
     // This is called once from constructor, and then when the user changed the checkbox state.
     // In that case, save the user's preference.
     d->saveShouldDeleteUserPreference = true;
-    setButtonGuiItem(User1, shouldDelete ? KStandardGuiItem::del() : d->trashGuiItem);
+    
+    d->buttons->button(QDialogButtonBox::Apply)->setText(shouldDelete ? i18n("&Delete")                 : i18n("&Move to Trash"));
+    d->buttons->button(QDialogButtonBox::Apply)->setIcon(shouldDelete ? QIcon::fromTheme("edit-delete") : QIcon::fromTheme("user-trash-full"));
 }
 
 void DeleteDialog::presetDeleteMode(DeleteDialogMode::DeleteMode mode)
@@ -585,17 +597,17 @@ void DeleteDialog::presetDeleteMode(DeleteDialogMode::DeleteMode mode)
         case DeleteDialogMode::NoChoiceTrash:
         {
             // access the widget directly, signals will be fired to DeleteDialog and DeleteWidget
-            d->widget->d->shouldDelete->setChecked(false);
-            d->widget->d->checkBoxStack->setCurrentWidget(d->widget->d->doNotShowAgain);
+            d->page->d->shouldDelete->setChecked(false);
+            d->page->d->checkBoxStack->setCurrentWidget(d->page->d->doNotShowAgain);
             d->saveDoNotShowAgainTrash = true;
             break;
         }
         case DeleteDialogMode::NoChoiceDeletePermanently:
         {
-            d->widget->d->shouldDelete->setChecked(true);
-            d->widget->d->checkBoxStack->setCurrentWidget(d->widget->d->doNotShowAgain);
+            d->page->d->shouldDelete->setChecked(true);
+            d->page->d->checkBoxStack->setCurrentWidget(d->page->d->doNotShowAgain);
             d->saveDoNotShowAgainPermanent = true;
-            //d->widget->d->checkBoxStack->hide();
+            //d->page->d->checkBoxStack->hide();
             break;
         }
         case DeleteDialogMode::UserPreference:
@@ -606,7 +618,7 @@ void DeleteDialog::presetDeleteMode(DeleteDialogMode::DeleteMode mode)
         case DeleteDialogMode::DeletePermanently:
         {
             // toggles signals which do the rest
-            d->widget->d->shouldDelete->setChecked(mode == DeleteDialogMode::DeletePermanently);
+            d->page->d->shouldDelete->setChecked(mode == DeleteDialogMode::DeletePermanently);
 
             // the preference set by this preset method will be ignored
             // for the next DeleteDialog instance and not stored as user preference.
@@ -619,17 +631,17 @@ void DeleteDialog::presetDeleteMode(DeleteDialogMode::DeleteMode mode)
 
 void DeleteDialog::setListMode(DeleteDialogMode::ListMode mode)
 {
-    d->widget->setListMode(mode);
+    d->page->setListMode(mode);
 
     switch (mode)
     {
         case DeleteDialogMode::Files:
-            setCaption(i18n("About to delete selected items"));
+            setWindowTitle(i18n("About to delete selected items"));
             break;
 
         case DeleteDialogMode::Albums:
         case DeleteDialogMode::Subalbums:
-            setCaption(i18n("About to delete selected albums"));
+            setWindowTitle(i18n("About to delete selected albums"));
             break;
     }
 }
@@ -640,22 +652,22 @@ void DeleteDialog::keyPressEvent(QKeyEvent* e)
     {
         if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return)
         {
-            if (button(User1)->hasFocus())
+            if (d->buttons->button(QDialogButtonBox::Apply)->hasFocus())
             {
                 e->accept();
-                button(User1)->animateClick();
+                d->buttons->button(QDialogButtonBox::Apply)->animateClick();
                 return;
             }
-            else if (button(Cancel)->hasFocus())
+            else if (d->buttons->button(QDialogButtonBox::Cancel)->hasFocus())
             {
                 e->accept();
-                button(Cancel)->animateClick();
+                d->buttons->button(QDialogButtonBox::Cancel)->animateClick();
                 return;
             }
         }
     }
 
-    KDialog::keyPressEvent(e);
+    QDialog::keyPressEvent(e);
 }
 
 } // namespace Digikam

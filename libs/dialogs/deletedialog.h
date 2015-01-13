@@ -32,11 +32,8 @@
 
 #include <QWidget>
 #include <QTreeWidget>
-
-// KDE includes
-
-#include <kdialog.h>
 #include <QUrl>
+#include <QDialog>
 
 // Local includes
 
@@ -147,7 +144,7 @@ private:
 
 // -----------------------------------------------------------
 
-class DeleteDialog : public KDialog
+class DeleteDialog : public QDialog
 {
     Q_OBJECT
 
