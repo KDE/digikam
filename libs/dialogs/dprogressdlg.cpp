@@ -126,12 +126,12 @@ void DProgressDlg::slotCancel()
 {
     d->cancelled = true;
 
+    emit signalCancelPressed();
+
     if (d->allowCancel)
     {
         close();
     }
-
-    emit signalCancelPressed();
 }
 
 void DProgressDlg::setButtonText(const QString& text)
