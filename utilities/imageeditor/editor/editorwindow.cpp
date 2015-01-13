@@ -332,44 +332,46 @@ void EditorWindow::setupStandardActions()
 {
     // -- Standard 'File' menu actions ---------------------------------------------
 
+    KActionCollection *ac = actionCollection();
+
     m_backwardAction = KStandardAction::back(this, SLOT(slotBackward()), this);
-    actionCollection()->addAction("editorwindow_backward", m_backwardAction);
-    m_backwardAction->setShortcut(QKeySequence(Qt::Key_PageUp, Qt::Key_Backspace));
+    ac->addAction("editorwindow_backward", m_backwardAction);
+    ac->setDefaultShortcuts(m_backwardAction, QList<QKeySequence>() << Qt::Key_PageUp << Qt::Key_Backspace);
 
     m_forwardAction = KStandardAction::forward(this, SLOT(slotForward()), this);
-    actionCollection()->addAction("editorwindow_forward", m_forwardAction);
-    m_forwardAction->setShortcut(QKeySequence(Qt::Key_PageDown, Qt::Key_Space));
+    ac->addAction("editorwindow_forward", m_forwardAction);
+    ac->setDefaultShortcuts(m_forwardAction, QList<QKeySequence>() << Qt::Key_PageDown << Qt::Key_Space);
 
     m_firstAction = new QAction(QIcon::fromTheme("go-first"), i18n("&First"), this);
-    m_firstAction->setShortcuts(KStandardShortcut::begin());
     connect(m_firstAction, SIGNAL(triggered()), this, SLOT(slotFirst()));
-    actionCollection()->addAction("editorwindow_first", m_firstAction);
+    ac->addAction("editorwindow_first", m_firstAction);
+    ac->setDefaultShortcuts(m_firstAction, KStandardShortcut::begin());
 
     m_lastAction = new QAction(QIcon::fromTheme("go-last"), i18n("&Last"), this);
-    m_lastAction->setShortcuts(KStandardShortcut::end());
     connect(m_lastAction, SIGNAL(triggered()), this, SLOT(slotLast()));
-    actionCollection()->addAction("editorwindow_last", m_lastAction);
+    ac->addAction("editorwindow_last", m_lastAction);
+    ac->setDefaultShortcuts(m_lastAction, KStandardShortcut::end());
 
     m_openVersionAction = new QAction(QIcon::fromTheme("image-loading"),
                                       i18nc("@action", "Open Original"), this);
-    m_openVersionAction->setShortcuts(KStandardShortcut::end());
     connect(m_openVersionAction, SIGNAL(triggered()), this, SLOT(slotOpenOriginal()));
-    actionCollection()->addAction("editorwindow_openversion", m_openVersionAction);
+    ac->addAction("editorwindow_openversion", m_openVersionAction);
+    ac->setDefaultShortcuts(m_openVersionAction, KStandardShortcut::end());
 
     m_saveAction = KStandardAction::save(this, SLOT(save()), this);
-    actionCollection()->addAction("editorwindow_save", m_saveAction);
+    ac->addAction("editorwindow_save", m_saveAction);
 
     m_saveCurrentVersionAction = new QAction(QIcon::fromTheme("dialog-ok-apply"),
                                              i18nc("@action Save changes to current version", "Save Changes"), this);
     m_saveCurrentVersionAction->setToolTip(i18nc("@info:tooltip", "Save the modifications to the current version of the file"));
     connect(m_saveCurrentVersionAction, SIGNAL(triggered()), this, SLOT(saveCurrentVersion()));
-    actionCollection()->addAction("editorwindow_savecurrentversion", m_saveCurrentVersionAction);
+    ac->addAction("editorwindow_savecurrentversion", m_saveCurrentVersionAction);
 
     m_saveNewVersionAction = new KToolBarPopupAction(QIcon::fromTheme("list-add"),
                                                      i18nc("@action Save changes to a newly created version", "Save As New Version"), this);
     m_saveNewVersionAction->setToolTip(i18nc("@info:tooltip", "Save the current modifications to a new version of the file"));
     connect(m_saveNewVersionAction, SIGNAL(triggered()), this, SLOT(saveNewVersion()));
-    actionCollection()->addAction("editorwindow_savenewversion", m_saveNewVersionAction);
+    ac->addAction("editorwindow_savenewversion", m_saveNewVersionAction);
 
     QAction * m_saveNewVersionAsAction = new QAction(QIcon::fromTheme("document-save-as"),
                                                     i18nc("@action Save changes to a newly created version, specifying the filename and format",
@@ -377,7 +379,7 @@ void EditorWindow::setupStandardActions()
     m_saveNewVersionAsAction->setToolTip(i18nc("@info:tooltip", "Save the current modifications to a new version of the file, "
                                                "specifying the filename and format"));
     connect(m_saveNewVersionAsAction, SIGNAL(triggered()), this, SLOT(saveNewVersionAs()));
-    //actionCollection()->addAction("editorwindow_savenewversionas", m_saveNewVersionAsAction);
+    //ac->addAction("editorwindow_savenewversionas", m_saveNewVersionAsAction);
 
     m_saveNewVersionInFormatAction = new KActionMenu(QIcon::fromTheme("image-x-generic"),
                                                      i18nc("@action Save As New Version...Save in format...",
@@ -393,27 +395,27 @@ void EditorWindow::setupStandardActions()
     m_saveNewVersionAction->menu()->addAction(m_saveNewVersionInFormatAction);
 
     m_saveAction = KStandardAction::save(this, SLOT(save()), this);
-    actionCollection()->addAction("editorwindow_save", m_saveAction);
+    ac->addAction("editorwindow_save", m_saveAction);
 
     m_saveAsAction = KStandardAction::saveAs(this, SLOT(saveAs()), this);
-    actionCollection()->addAction("editorwindow_saveas", m_saveAsAction);
+    ac->addAction("editorwindow_saveas", m_saveAsAction);
 
     // This also triggers saveAs, but in the context of non-destructive we want a slightly different appearance
     m_exportAction = new QAction(QIcon::fromTheme("document-export"),
                                  i18nc("@action", "Export"), this);
     m_exportAction->setToolTip(i18nc("@info:tooltip", "Save the file in a folder outside your collection"));
-    m_exportAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_E));  // NOTE: Gimp shortcut
     connect(m_exportAction, SIGNAL(triggered()), this, SLOT(saveAs()));
-    actionCollection()->addAction("editorwindow_export", m_exportAction);
+    ac->addAction("editorwindow_export", m_exportAction);
+    ac->setDefaultShortcut(m_exportAction, Qt::CTRL + Qt::SHIFT + Qt::Key_E); // NOTE: Gimp shortcut
 
     m_revertAction = KStandardAction::revert(this, SLOT(slotRevert()), this);
-    actionCollection()->addAction("editorwindow_revert", m_revertAction);
+    ac->addAction("editorwindow_revert", m_revertAction);
 
     m_discardChangesAction = new QAction(QIcon::fromTheme("task-reject"),
                                          i18nc("@action", "Discard Changes"), this);
     m_discardChangesAction->setToolTip(i18nc("@info:tooltip", "Discard all current changes to this file"));
     connect(m_discardChangesAction, SIGNAL(triggered()), this, SLOT(slotDiscardChanges()));
-    actionCollection()->addAction("editorwindow_discardchanges", m_discardChangesAction);
+    ac->addAction("editorwindow_discardchanges", m_discardChangesAction);
 
     m_openVersionAction->setEnabled(false);
     m_saveAction->setEnabled(false);
@@ -424,34 +426,34 @@ void EditorWindow::setupStandardActions()
     m_discardChangesAction->setEnabled(false);
 
     d->filePrintAction = new QAction(QIcon::fromTheme("document-print-frame"), i18n("Print Image..."), this);
-    d->filePrintAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_P));
     connect(d->filePrintAction, SIGNAL(triggered()), this, SLOT(slotFilePrint()));
-    actionCollection()->addAction("editorwindow_print", d->filePrintAction);
+    ac->addAction("editorwindow_print", d->filePrintAction);
+    ac->setDefaultShortcut(d->filePrintAction, Qt::CTRL + Qt::Key_P);
 
     QAction * const openWithAction = new QAction(QIcon::fromTheme("preferences-desktop-filetype-association"), i18n("Open With Default Application"), this);
-    openWithAction->setShortcut(QKeySequence(Qt::META + Qt::Key_F4));
     openWithAction->setWhatsThis(i18n("Open the item with default assigned application."));
     connect(openWithAction, SIGNAL(triggered()), this, SLOT(slotFileWithDefaultApplication()));
-    actionCollection()->addAction("open_with_default_application", openWithAction);
+    ac->addAction("open_with_default_application", openWithAction);
+    ac->setDefaultShortcut(openWithAction, Qt::META + Qt::Key_F4);
 
     m_fileDeleteAction = new QAction(QIcon::fromTheme("user-trash"), i18nc("Non-pluralized", "Move to Trash"), this);
-    m_fileDeleteAction->setShortcut(QKeySequence(Qt::Key_Delete));
     connect(m_fileDeleteAction, SIGNAL(triggered()), this, SLOT(slotDeleteCurrentItem()));
-    actionCollection()->addAction("editorwindow_delete", m_fileDeleteAction);
+    ac->addAction("editorwindow_delete", m_fileDeleteAction);
+    ac->setDefaultShortcut(m_fileDeleteAction, Qt::Key_Delete);
 
     QAction* const closeAction = KStandardAction::close(this, SLOT(close()), this);
-    actionCollection()->addAction("editorwindow_close", closeAction);
+    ac->addAction("editorwindow_close", closeAction);
 
     // -- Standard 'Edit' menu actions ---------------------------------------------
 
     d->copyAction = KStandardAction::copy(m_canvas, SLOT(slotCopy()), this);
-    actionCollection()->addAction("editorwindow_copy", d->copyAction);
+    ac->addAction("editorwindow_copy", d->copyAction);
     d->copyAction->setEnabled(false);
 
     m_undoAction = new KToolBarPopupAction(QIcon::fromTheme("edit-undo"), i18n("Undo"), this);
-    m_undoAction->setShortcuts(KStandardShortcut::undo());
     m_undoAction->setEnabled(false);
-    actionCollection()->addAction("editorwindow_undo", m_undoAction);
+    ac->addAction("editorwindow_undo", m_undoAction);
+    ac->setDefaultShortcuts(m_undoAction, KStandardShortcut::undo());
 
     connect(m_undoAction->menu(), SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShowUndoMenu()));
@@ -468,9 +470,9 @@ void EditorWindow::setupStandardActions()
     d->undoSignalMapper->setMapping(m_undoAction, 1);
 
     m_redoAction = new KToolBarPopupAction(QIcon::fromTheme("edit-redo"), i18n("Redo"), this);
-    m_redoAction->setShortcuts(KStandardShortcut::redo());
     m_redoAction->setEnabled(false);
-    actionCollection()->addAction("editorwindow_redo", m_redoAction);
+    ac->addAction("editorwindow_redo", m_redoAction);
+    ac->setDefaultShortcuts(m_redoAction, KStandardShortcut::redo());
 
     connect(m_redoAction->menu(), SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShowRedoMenu()));
@@ -484,41 +486,41 @@ void EditorWindow::setupStandardActions()
     d->redoSignalMapper->setMapping(m_redoAction, 1);
 
     d->selectAllAction = new QAction(i18nc("Create a selection containing the full image", "Select All"), this);
-    d->selectAllAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_A));
     connect(d->selectAllAction, SIGNAL(triggered()), m_canvas, SLOT(slotSelectAll()));
-    actionCollection()->addAction("editorwindow_selectAll", d->selectAllAction);
+    ac->addAction("editorwindow_selectAll", d->selectAllAction);
+    ac->setDefaultShortcut(d->selectAllAction, Qt::CTRL + Qt::Key_A);
 
     d->selectNoneAction = new QAction(i18n("Select None"), this);
-    d->selectNoneAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_A));
     connect(d->selectNoneAction, SIGNAL(triggered()), m_canvas, SLOT(slotSelectNone()));
-    actionCollection()->addAction("editorwindow_selectNone", d->selectNoneAction);
+    ac->addAction("editorwindow_selectNone", d->selectNoneAction);
+    ac->setDefaultShortcut(d->selectNoneAction, Qt::CTRL + Qt::SHIFT + Qt::Key_A);
 
     // -- Standard 'View' menu actions ---------------------------------------------
 
     d->zoomPlusAction     = KStandardAction::zoomIn(this, SLOT(slotIncreaseZoom()), this);
     QKeySequence keysPlus(d->zoomPlusAction->shortcut(), Qt::Key_Plus);
-    d->zoomPlusAction->setShortcut(keysPlus);
-    actionCollection()->addAction("editorwindow_zoomplus", d->zoomPlusAction);
+    ac->addAction("editorwindow_zoomplus", d->zoomPlusAction);
+    ac->setDefaultShortcut(d->zoomPlusAction, keysPlus);
 
     d->zoomMinusAction  = KStandardAction::zoomOut(this, SLOT(slotDecreaseZoom()), this);
     QKeySequence keysMinus(d->zoomMinusAction->shortcut(), Qt::Key_Minus);
-    d->zoomMinusAction->setShortcut(keysMinus);
-    actionCollection()->addAction("editorwindow_zoomminus", d->zoomMinusAction);
+    ac->addAction("editorwindow_zoomminus", d->zoomMinusAction);
+    ac->setDefaultShortcut(d->zoomMinusAction, keysMinus);
 
     d->zoomTo100percents = new QAction(QIcon::fromTheme("zoom-original"), i18n("Zoom to 100%"), this);
-    d->zoomTo100percents->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Comma));
     connect(d->zoomTo100percents, SIGNAL(triggered()), this, SLOT(slotZoomTo100Percents()));
-    actionCollection()->addAction("editorwindow_zoomto100percents", d->zoomTo100percents);
+    ac->addAction("editorwindow_zoomto100percents", d->zoomTo100percents);
+    ac->setDefaultShortcut(d->zoomTo100percents, Qt::CTRL + Qt::Key_Comma);
 
     d->zoomFitToWindowAction = new KToggleAction(QIcon::fromTheme("zoom-fit-best"), i18n("Fit to &Window"), this);
-    d->zoomFitToWindowAction->setShortcut(QKeySequence(Qt::ALT + Qt::CTRL + Qt::Key_E));
     connect(d->zoomFitToWindowAction, SIGNAL(triggered()), this, SLOT(slotToggleFitToWindow()));
-    actionCollection()->addAction("editorwindow_zoomfit2window", d->zoomFitToWindowAction);
+    ac->addAction("editorwindow_zoomfit2window", d->zoomFitToWindowAction);
+    ac->setDefaultShortcut(d->zoomFitToWindowAction, Qt::ALT + Qt::CTRL + Qt::Key_E);
 
     d->zoomFitToSelectAction = new QAction(QIcon::fromTheme("zoom-select-fit"), i18n("Fit to &Selection"), this);
-    d->zoomFitToSelectAction->setShortcut(QKeySequence(Qt::ALT + Qt::CTRL + Qt::Key_S));   // NOTE: Photoshop 7 use ALT+CTRL+0
     connect(d->zoomFitToSelectAction, SIGNAL(triggered()), this, SLOT(slotFitToSelect()));
-    actionCollection()->addAction("editorwindow_zoomfit2select", d->zoomFitToSelectAction);
+    ac->addAction("editorwindow_zoomfit2select", d->zoomFitToSelectAction);
+    ac->setDefaultShortcut(d->zoomFitToSelectAction, Qt::ALT + Qt::CTRL + Qt::Key_S); // NOTE: Photoshop 7 use ALT+CTRL+0
     d->zoomFitToSelectAction->setEnabled(false);
     d->zoomFitToSelectAction->setWhatsThis(i18n("This option can be used to zoom the image to the "
                                                 "current selection area."));
@@ -529,95 +531,95 @@ void EditorWindow::setupStandardActions()
     createSidebarActions();
 
     d->slideShowAction = new QAction(QIcon::fromTheme("view-presentation"), i18n("Slideshow"), this);
-    d->slideShowAction->setShortcut(QKeySequence(Qt::Key_F9));
     connect(d->slideShowAction, SIGNAL(triggered()), this, SLOT(slotToggleSlideShow()));
-    actionCollection()->addAction("editorwindow_slideshow", d->slideShowAction);
+    ac->addAction("editorwindow_slideshow", d->slideShowAction);
+    ac->setDefaultShortcut(d->slideShowAction, Qt::Key_F9);
 
     d->viewUnderExpoAction = new KToggleAction(QIcon::fromTheme("underexposure"), i18n("Under-Exposure Indicator"), this);
-    d->viewUnderExpoAction->setShortcut(QKeySequence(Qt::Key_F10));
     d->viewUnderExpoAction->setWhatsThis(i18n("Set this option to display black "
                                               "overlaid on the image. This will help you to avoid "
                                               "under-exposing the image."));
     connect(d->viewUnderExpoAction, SIGNAL(triggered(bool)), this, SLOT(slotSetUnderExposureIndicator(bool)));
-    actionCollection()->addAction("editorwindow_underexposure", d->viewUnderExpoAction);
+    ac->addAction("editorwindow_underexposure", d->viewUnderExpoAction);
+    ac->setDefaultShortcut(d->viewUnderExpoAction, Qt::Key_F10);
 
     d->viewOverExpoAction = new KToggleAction(QIcon::fromTheme("overexposure"), i18n("Over-Exposure Indicator"), this);
-    d->viewOverExpoAction->setShortcut(QKeySequence(Qt::Key_F11));
     d->viewOverExpoAction->setWhatsThis(i18n("Set this option to display white "
                                              "overlaid on the image. This will help you to avoid "
                                              "over-exposing the image."));
     connect(d->viewOverExpoAction, SIGNAL(triggered(bool)), this, SLOT(slotSetOverExposureIndicator(bool)));
-    actionCollection()->addAction("editorwindow_overexposure", d->viewOverExpoAction);
+    ac->addAction("editorwindow_overexposure", d->viewOverExpoAction);
+    ac->setDefaultShortcut(d->viewOverExpoAction, Qt::Key_F11);
 
     d->viewCMViewAction = new KToggleAction(QIcon::fromTheme("video-display"), i18n("Color-Managed View"), this);
-    d->viewCMViewAction->setShortcut(QKeySequence(Qt::Key_F12));
     connect(d->viewCMViewAction, SIGNAL(triggered()), this, SLOT(slotToggleColorManagedView()));
-    actionCollection()->addAction("editorwindow_cmview", d->viewCMViewAction);
+    ac->addAction("editorwindow_cmview", d->viewCMViewAction);
+    ac->setDefaultShortcut(d->viewCMViewAction, Qt::Key_F12);
 
     d->softProofOptionsAction = new QAction(QIcon::fromTheme("printer"), i18n("Soft Proofing Options..."), this);
     connect(d->softProofOptionsAction, SIGNAL(triggered()), this, SLOT(slotSoftProofingOptions()));
-    actionCollection()->addAction("editorwindow_softproofoptions", d->softProofOptionsAction);
+    ac->addAction("editorwindow_softproofoptions", d->softProofOptionsAction);
 
     d->viewSoftProofAction = new KToggleAction(QIcon::fromTheme("document-print-preview"), i18n("Soft Proofing View"), this);
     connect(d->viewSoftProofAction, SIGNAL(triggered()), this, SLOT(slotUpdateSoftProofingState()));
-    actionCollection()->addAction("editorwindow_softproofview", d->viewSoftProofAction);
+    ac->addAction("editorwindow_softproofview", d->viewSoftProofAction);
 
     // -- Standard 'Transform' menu actions ---------------------------------------------
 
     d->cropAction = new QAction(QIcon::fromTheme("transform-crop-and-resize"), i18nc("@action", "Crop to Selection"), this);
-    d->cropAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_X));
     connect(d->cropAction, SIGNAL(triggered()), m_canvas, SLOT(slotCrop()));
-    actionCollection()->addAction("editorwindow_crop", d->cropAction);
     d->cropAction->setEnabled(false);
     d->cropAction->setWhatsThis(i18n("This option can be used to crop the image. "
                                      "Select a region of the image to enable this action."));
+    ac->addAction("editorwindow_crop", d->cropAction);
+    ac->setDefaultShortcut(d->cropAction, Qt::CTRL + Qt::Key_X);
 
     d->autoCropAction = new QAction(QIcon::fromTheme("transform-crop"), i18nc("@action", "Auto-Crop"), this);
-    d->autoCropAction->setShortcut(QKeySequence(Qt::SHIFT + Qt::CTRL + Qt::Key_X));
-    connect(d->autoCropAction, SIGNAL(triggered()), m_canvas, SLOT(slotAutoCrop()));
-    actionCollection()->addAction("editorwindow_autocrop", d->autoCropAction);
     d->autoCropAction->setWhatsThis(i18n("This option can be used to crop automatically the image."));
+    connect(d->autoCropAction, SIGNAL(triggered()), m_canvas, SLOT(slotAutoCrop()));
+    ac->addAction("editorwindow_autocrop", d->autoCropAction);
+    ac->setDefaultShortcut(d->autoCropAction, Qt::SHIFT + Qt::CTRL + Qt::Key_X);
 
     // -- Standard 'Flip' menu actions ---------------------------------------------
 
     d->flipHorizAction = new QAction(QIcon::fromTheme("object-flip-horizontal"), i18n("Flip Horizontally"), this);
-    d->flipHorizAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Asterisk));
     connect(d->flipHorizAction, SIGNAL(triggered()), m_canvas, SLOT(slotFlipHoriz()));
-    actionCollection()->addAction("editorwindow_flip_horiz", d->flipHorizAction);
+    ac->addAction("editorwindow_flip_horiz", d->flipHorizAction);
+    ac->setDefaultShortcut(d->flipHorizAction, Qt::CTRL + Qt::Key_Asterisk);
     d->flipHorizAction->setEnabled(false);
 
     d->flipVertAction = new QAction(QIcon::fromTheme("object-flip-vertical"), i18n("Flip Vertically"), this);
-    d->flipVertAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Slash));
     connect(d->flipVertAction, SIGNAL(triggered()), m_canvas, SLOT(slotFlipVert()));
-    actionCollection()->addAction("editorwindow_flip_vert", d->flipVertAction);
+    ac->addAction("editorwindow_flip_vert", d->flipVertAction);
+    ac->setDefaultShortcut(d->flipVertAction, Qt::CTRL + Qt::Key_Slash);
     d->flipVertAction->setEnabled(false);
 
     // -- Standard 'Rotate' menu actions ----------------------------------------
 
     d->rotateLeftAction = new QAction(QIcon::fromTheme("object-rotate-left"), i18n("Rotate Left"), this);
-    d->rotateLeftAction->setShortcut(QKeySequence(Qt::SHIFT + Qt::CTRL + Qt::Key_Left));
     connect(d->rotateLeftAction, SIGNAL(triggered()), m_canvas, SLOT(slotRotate270()));
-    actionCollection()->addAction("editorwindow_rotate_left", d->rotateLeftAction);
+    ac->addAction("editorwindow_rotate_left", d->rotateLeftAction);
+    ac->setDefaultShortcut(d->rotateLeftAction, Qt::SHIFT + Qt::CTRL + Qt::Key_Left);
     d->rotateLeftAction->setEnabled(false);
 
     d->rotateRightAction = new QAction(QIcon::fromTheme("object-rotate-right"), i18n("Rotate Right"), this);
-    d->rotateRightAction->setShortcut(QKeySequence(Qt::SHIFT + Qt::CTRL + Qt::Key_Right));
     connect(d->rotateRightAction, SIGNAL(triggered()), m_canvas, SLOT(slotRotate90()));
-    actionCollection()->addAction("editorwindow_rotate_right", d->rotateRightAction);
+    ac->addAction("editorwindow_rotate_right", d->rotateRightAction);
+    ac->setDefaultShortcut(d->rotateRightAction, Qt::SHIFT + Qt::CTRL + Qt::Key_Right);
     d->rotateRightAction->setEnabled(false);
 
     // -- Standard 'Configure' menu actions ----------------------------------------
 
     m_showBarAction = thumbBar()->getToggleAction(this);
-    actionCollection()->addAction("editorwindow_showthumbs", m_showBarAction);
+    ac->addAction("editorwindow_showthumbs", m_showBarAction);
 
-    d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
+    d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), ac);
     d->showMenuBarAction->setChecked(!menuBar()->isHidden());  // NOTE: workaround for bug #171080
 
-    KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          actionCollection());
-    KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      actionCollection());
-    KStandardAction::configureNotifications(this, SLOT(slotConfNotifications()), actionCollection());
-    KStandardAction::preferences(this,            SLOT(setup()),                 actionCollection());
+    KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          ac);
+    KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      ac);
+    KStandardAction::configureNotifications(this, SLOT(slotConfNotifications()), ac);
+    KStandardAction::preferences(this,            SLOT(setup()),                 ac);
 
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
@@ -635,8 +637,8 @@ void EditorWindow::setupStandardActions()
     // -- Keyboard-only actions --------------------------------------------------------
 
     QAction * altBackwardAction = new QAction(i18n("Previous Image"), this);
-    actionCollection()->addAction("editorwindow_backward_shift_space", altBackwardAction);
-    altBackwardAction->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Space));
+    ac->addAction("editorwindow_backward_shift_space", altBackwardAction);
+    ac->setDefaultShortcut(altBackwardAction, Qt::SHIFT + Qt::Key_Space);
     connect(altBackwardAction, SIGNAL(triggered()), this, SLOT(slotBackward()));
 
     d->addPageUpDownActions(this, this);
@@ -647,17 +649,17 @@ void EditorWindow::setupStandardActions()
                                           i18nc("@action Select image editor tool/filter", "Select Tool"), this);
     m_selectToolsAction->setDelayed(false);
     m_selectToolsAction->setVisible(false);
-    actionCollection()->addAction("editorwindow_selecttool", m_selectToolsAction);
+    ac->addAction("editorwindow_selecttool", m_selectToolsAction);
     // setup is done after image plugins are loaded
 
     m_applyToolAction = new QAction(KStandardGuiItem::ok().icon(), i18n("OK"), this);
-    actionCollection()->addAction("editorwindow_applytool", m_applyToolAction);
-    m_applyToolAction->setShortcut(QKeySequence(Qt::Key_Return));
+    ac->addAction("editorwindow_applytool", m_applyToolAction);
+    ac->setDefaultShortcut(m_applyToolAction, Qt::Key_Return);
     connect(m_applyToolAction, SIGNAL(triggered()), this, SLOT(slotApplyTool()));
 
     m_closeToolAction = new QAction(KStandardGuiItem::cancel().icon(), i18n("Cancel"), this);
-    actionCollection()->addAction("editorwindow_closetool", m_closeToolAction);
-    m_closeToolAction->setShortcut(QKeySequence(Qt::Key_Escape));
+    ac->addAction("editorwindow_closetool", m_closeToolAction);
+    ac->setDefaultShortcut(m_closeToolAction, Qt::Key_Escape);
     connect(m_closeToolAction, SIGNAL(triggered()), this, SLOT(slotCloseTool()));
 
     toggleNonDestructiveActions();
