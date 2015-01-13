@@ -29,11 +29,11 @@
 #include <QList>
 #include <QPair>
 #include <QTreeWidgetItem>
+#include <QUrl>
 
 // KDE includes
 
 #include <kdialog.h>
-#include <QUrl>
 
 // Local includes
 

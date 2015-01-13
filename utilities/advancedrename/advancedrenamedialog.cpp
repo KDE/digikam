@@ -41,7 +41,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <QUrl>
 
 // Local includes
 
@@ -178,6 +177,7 @@ public:
     AdvancedRenameWidget*  advancedRenameWidget;
     NewNamesList           newNamesList;
 };
+
 const QString AdvancedRenameDialog::Private::configGroupName("AdvancedRename Dialog");
 const QString AdvancedRenameDialog::Private::configLastUsedRenamePatternEntry("Last Used Rename Pattern");
 const QString AdvancedRenameDialog::Private::configDialogSizeEntry("Dialog Size");
@@ -281,7 +281,7 @@ void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
 
     while (*it)
     {
-        AdvancedRenameListItem* item = dynamic_cast<AdvancedRenameListItem*>((*it));
+        AdvancedRenameListItem* const item = dynamic_cast<AdvancedRenameListItem*>((*it));
 
         if (item)
         {
@@ -314,12 +314,14 @@ void AdvancedRenameDialog::slotAddImages(const QList<QUrl>& urls)
     d->listView->clear();
     d->advancedRenameManager->reset();
     QList<ParseSettings> files;
+
     foreach(const QUrl& url, urls)
     {
         ParseSettings ps;
         ps.fileUrl = url;
         files << ps;
     }
+
     d->advancedRenameManager->addFiles(files);
 
     initDialog();
@@ -405,7 +407,7 @@ bool AdvancedRenameDialog::checkNewNames()
 
     while (*it)
     {
-        AdvancedRenameListItem* item = dynamic_cast<AdvancedRenameListItem*>((*it));
+        AdvancedRenameListItem* const item = dynamic_cast<AdvancedRenameListItem*>((*it));
 
         if (item)
         {
@@ -441,7 +443,7 @@ NewNamesList AdvancedRenameDialog::filterNewNames()
 
     while (*it)
     {
-        AdvancedRenameListItem* item = dynamic_cast<AdvancedRenameListItem*>((*it));
+        AdvancedRenameListItem* const item = dynamic_cast<AdvancedRenameListItem*>((*it));
 
         if (item && !item->isNameEqual())
         {
@@ -456,15 +458,15 @@ NewNamesList AdvancedRenameDialog::filterNewNames()
 
 void AdvancedRenameDialog::setupWidgets()
 {
-    d->advancedRenameManager  = new AdvancedRenameManager();
-    d->advancedRenameWidget   = new AdvancedRenameWidget(this);
+    d->advancedRenameManager = new AdvancedRenameManager();
+    d->advancedRenameWidget  = new AdvancedRenameWidget(this);
     d->advancedRenameManager->setWidget(d->advancedRenameWidget);
 
     // --------------------------------------------------------
 
-    d->sortActionName  = new QAction(i18n("By Name"), this);
-    d->sortActionDate  = new QAction(i18n("By Date"), this);
-    d->sortActionSize  = new QAction(i18n("By File Size"), this);
+    d->sortActionName = new QAction(i18n("By Name"), this);
+    d->sortActionDate = new QAction(i18n("By Date"), this);
+    d->sortActionSize = new QAction(i18n("By File Size"), this);
 
     d->sortActionName->setCheckable(true);
     d->sortActionDate->setCheckable(true);
@@ -511,8 +513,8 @@ void AdvancedRenameDialog::setupWidgets()
 
     // --------------------------------------------------------
 
-    QWidget* mainWidget     = new QWidget(this);
-    QGridLayout* mainLayout = new QGridLayout;
+    QWidget* const mainWidget     = new QWidget(this);
+    QGridLayout* const mainLayout = new QGridLayout;
     mainLayout->addWidget(d->listView,             0, 0, 1, 1);
     mainLayout->addWidget(d->advancedRenameWidget, 1, 0, 1, 1);
     mainLayout->setRowStretch(0, 10);
