@@ -32,7 +32,6 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QPointer>
-#include <QPushButton>
 #include <QRegExp>
 #include <QValidator>
 #include <QApplication>
@@ -41,6 +40,9 @@
 #include <QLineEdit>
 #include <QStandardPaths>
 #include <QMessageBox>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
+#include <QPushButton>
 
 // KDE includes
 
@@ -48,6 +50,7 @@
 #include <klocalizedstring.h>
 #include <ktextedit.h>
 #include <kseparator.h>
+#include <khelpclient.h>
 
 // Libkdcraw includes
 
@@ -94,6 +97,7 @@ class AlbumPropsEdit::Private
 public:
 
     Private() :
+        buttons(0),
         categoryCombo(0),
         parentCombo(0),
         titleEdit(0),
@@ -103,24 +107,26 @@ public:
     {
     }
 
-    QComboBox*   categoryCombo;
-    QComboBox*   parentCombo;
-    QLineEdit*   titleEdit;
-    KTextEdit*   commentsEdit;
+    QDialogButtonBox* buttons;
+    
+    QComboBox*        categoryCombo;
+    QComboBox*        parentCombo;
+    QLineEdit*        titleEdit;
+    KTextEdit*        commentsEdit;
 
-    DDatePicker* datePicker;
+    DDatePicker*      datePicker;
 
-    PAlbum*      album;
+    PAlbum*           album;
 };
 
 AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
-    : KDialog(0), d(new Private)
+    : QDialog(0), d(new Private)
 {
-    setCaption(create ? i18n("New Album") : i18n("Edit Album"));
-    setButtons(Help|Ok|Cancel);
-    setDefaultButton(Ok);
     setModal(true);
-    setHelp("albumpropsedit.anchor", "digikam");
+    setWindowTitle(create ? i18n("New Album") : i18n("Edit Album"));
+
+    d->buttons = new QDialogButtonBox(QDialogButtonBox::Help | QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
+    d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
 
     d->album            = album;
     QWidget* const page = new QWidget(this);
@@ -240,6 +246,11 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
     grid->setMargin(0);
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     page->setLayout(grid);
+    
+    QVBoxLayout* const vbx = new QVBoxLayout(this);
+    vbx->addWidget(page);
+    vbx->addWidget(d->buttons);
+    setLayout(vbx);
 
     // Initialize ---------------------------------------------
 
@@ -290,9 +301,14 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
     connect(dateHighButton, SIGNAL(clicked()),
             this, SLOT(slotDateHighButtonClicked()));
 
-    // --------------------------------------------------------
+    connect(d->buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+            this, SLOT(accept()));
 
-    setMainWidget(page);
+    connect(d->buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
+            this, SLOT(reject()));
+
+    connect(d->buttons->button(QDialogButtonBox::Help), SIGNAL(clicked()),
+            this, SLOT(slotHelp()));
 }
 
 AlbumPropsEdit::~AlbumPropsEdit()
@@ -398,7 +414,7 @@ void AlbumPropsEdit::slotTitleChanged(const QString& newtitle)
 {
     QRegExp emptyTitle = QRegExp("^\\s*$");
     bool enable        = (!emptyTitle.exactMatch(newtitle) && !newtitle.isEmpty());
-    enableButtonOk(enable);
+    d->buttons->button(QDialogButtonBox::Ok)->setEnabled(enable);
 }
 
 void AlbumPropsEdit::slotDateLowButtonClicked()
@@ -447,6 +463,11 @@ void AlbumPropsEdit::slotDateAverageButtonClicked()
                                     i18n("Could not calculate date average for this album."));
 
     }
+}
+
+void AlbumPropsEdit::slotHelp()
+{
+    KHelpClient::invokeHelp("albumpropsedit.anchor", "digikam");
 }
 
 }  // namespace Digikam

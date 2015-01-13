@@ -30,17 +30,14 @@
 
 #include <QString>
 #include <QStringList>
-
-// KDE includes
-
-#include <kdialog.h>
+#include <QDialog>
 
 namespace Digikam
 {
 
 class PAlbum;
 
-class AlbumPropsEdit : public KDialog
+class AlbumPropsEdit : public QDialog
 {
     Q_OBJECT
 
@@ -77,6 +74,7 @@ private Q_SLOTS:
     void slotDateLowButtonClicked();
     void slotDateAverageButtonClicked();
     void slotDateHighButtonClicked();
+    void slotHelp();
 
 private:
 
