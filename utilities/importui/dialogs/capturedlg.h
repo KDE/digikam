@@ -27,10 +27,7 @@
 // Qt includes
 
 #include <QCloseEvent>
-
-// KDE includes
-
-#include <kdialog.h>
+#include <QDialog>
 
 // Local includes
 
@@ -43,7 +40,7 @@ namespace Digikam
 
 class CameraController;
 
-class CaptureDlg : public KDialog
+class CaptureDlg : public QDialog
 {
     Q_OBJECT
 
@@ -63,6 +60,7 @@ private Q_SLOTS:
     void slotPreviewDone(const QImage&);
     void slotCapture();
     void slotCancel();
+    void slotHelp();
 
 private:
 

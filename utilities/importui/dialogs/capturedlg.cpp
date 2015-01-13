@@ -26,6 +26,9 @@
 // Qt includes
 
 #include <QTimer>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
+#include <QPushButton>
 
 // KDE includes
 
@@ -33,6 +36,7 @@
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
 #include <kwindowconfig.h>
+#include <khelpclient.h>
 
 // Local includes
 
@@ -49,6 +53,7 @@ public:
     Private() :
         stopPreview(false),
         timer(0),
+        buttons(0),
         controller(0),
         captureWidget(0)
     {
@@ -57,6 +62,7 @@ public:
     bool              stopPreview;
 
     QTimer*           timer;
+    QDialogButtonBox* buttons;
 
     CameraController* controller;
 
@@ -65,36 +71,44 @@ public:
 
 CaptureDlg::CaptureDlg(QWidget* const parent, CameraController* const controller,
                        const QString& cameraTitle)
-    : KDialog(parent), d(new Private)
+    : QDialog(parent), d(new Private)
 {
     d->controller = controller;
-    setCaption(i18nc("@title:window %1: name of the camera", "Capture from %1", cameraTitle));
-    setButtons(Help | Cancel | Ok);
-    setDefaultButton(Ok);
-    setButtonText(Ok, i18nc("@action:button", "Capture"));
+
+    setWindowTitle(i18nc("@title:window %1: name of the camera", "Capture from %1", cameraTitle));
     setModal(true);
-    setHelp("camerainterface.anchor", "digikam");
+
+    d->buttons = new QDialogButtonBox(QDialogButtonBox::Help | QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
+    d->buttons->button(QDialogButtonBox::Cancel)->setDefault(true);
+    d->buttons->button(QDialogButtonBox::Ok)->setText(i18nc("@action:button", "Capture"));
 
     d->captureWidget = new CaptureWidget(this);
-    setMainWidget(d->captureWidget);
+
+    QVBoxLayout* const vbx = new QVBoxLayout(this);
+    vbx->addWidget(d->captureWidget);
+    vbx->addWidget(d->buttons);
+    setLayout(vbx);
 
     KConfigGroup group = KSharedConfig::openConfig()->group("Capture Tool Dialog");
     KWindowConfig::restoreWindowSize(windowHandle(), group);
 
     // -------------------------------------------------------------
 
-    connect(this, SIGNAL(cancelClicked()),
+    connect(d->buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+            this, SLOT(slotCapture()));
+
+    connect(d->buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
             this, SLOT(slotCancel()));
 
-    connect(this, SIGNAL(okClicked()),
-            this, SLOT(slotCapture()));
+    connect(d->buttons->button(QDialogButtonBox::Help), SIGNAL(clicked()),
+            this, SLOT(slotHelp()));
 
     connect(d->controller, SIGNAL(signalPreview(QImage)),
             this, SLOT(slotPreviewDone(QImage)));
 
     // -------------------------------------------------------------
 
-    if(d->controller->cameraCaptureImagePreviewSupport())
+    if (d->controller->cameraCaptureImagePreviewSupport())
     {
         d->timer = new QTimer(this);
 
@@ -117,7 +131,7 @@ void CaptureDlg::closeEvent(QCloseEvent* e)
 {
     d->stopPreview = true;
 
-    if(d->timer)
+    if (d->timer)
     {
         d->timer->stop();
     }
@@ -132,7 +146,7 @@ void CaptureDlg::slotCancel()
 {
     d->stopPreview = true;
 
-    if(d->timer)
+    if (d->timer)
     {
         d->timer->stop();
     }
@@ -140,7 +154,7 @@ void CaptureDlg::slotCancel()
     KConfigGroup group = KSharedConfig::openConfig()->group("Capture Tool Dialog");
     KWindowConfig::saveWindowSize(windowHandle(), group);
 
-    done(Cancel);
+    reject();
 }
 
 void CaptureDlg::slotPreview()
@@ -152,7 +166,7 @@ void CaptureDlg::slotCapture()
 {
     d->stopPreview = true;
 
-    if(d->timer)
+    if (d->timer)
     {
         d->timer->stop();
     }
@@ -164,7 +178,7 @@ void CaptureDlg::slotCapture()
     KWindowConfig::saveWindowSize(windowHandle(), group);
     d->controller->capture();
 
-    done(Ok);
+    accept();
 }
 
 void CaptureDlg::slotPreviewDone(const QImage& preview)
@@ -175,6 +189,11 @@ void CaptureDlg::slotPreviewDone(const QImage& preview)
     {
         d->timer->start(0);
     }
+}
+
+void CaptureDlg::slotHelp()
+{
+    KHelpClient::invokeHelp("camerainterface.anchor", "digikam");
 }
 
 }  // namespace Digikam
