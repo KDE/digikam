@@ -27,6 +27,7 @@
 
 #include <QPixmap>
 #include <QTimer>
+#include <QDialogButtonBox>
 
 // KDE includes
 
@@ -79,7 +80,7 @@ AdvancedRenameProcessDialog::AdvancedRenameProcessDialog(const NewNamesList& lis
 
     setModal(true);
     setValue(0);
-    setCaption(i18n("Renaming images"));
+    setWindowTitle(i18n("Renaming images"));
     setLabel(i18n("<b>Renaming images. Please wait...</b>"));
     setButtonText(i18n("&Abort"));
 
@@ -118,7 +119,7 @@ void AdvancedRenameProcessDialog::processOne()
 
 void AdvancedRenameProcessDialog::complete()
 {
-    done(Cancel);
+    done(QDialogButtonBox::Cancel);
 }
 
 void AdvancedRenameProcessDialog::slotGotThumbnail(const LoadingDescription& desc, const QPixmap& pix)
@@ -143,7 +144,7 @@ void AdvancedRenameProcessDialog::slotGotThumbnail(const LoadingDescription& des
 void AdvancedRenameProcessDialog::slotCancel()
 {
     abort();
-    done(Cancel);
+    done(QDialogButtonBox::Cancel);
 }
 
 void AdvancedRenameProcessDialog::slotRenameSuccess(const QUrl& src)

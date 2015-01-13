@@ -26,14 +26,16 @@
 // Qt includes
 
 #include <QHeaderView>
+#include <QStyle>
 #include <QLabel>
 #include <QImage>
-#include <QPushButton>
 #include <QGridLayout>
-#include <QVBoxLayout>
 #include <QProgressBar>
 #include <QTreeWidget>
 #include <QStandardPaths>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
+#include <QPushButton>
 
 // KDE includes
 
@@ -48,19 +50,15 @@ class DProgressDlg::Private
 public:
 
     Private() :
-        allowCancel(true),
-        cancelled(false),
         logo(0),
         title(0),
         label(0),
         actionPix(0),
         actionLabel(0),
-        progress(0)
+        progress(0),
+        buttons(0)
     {
     }
-
-    bool                allowCancel;
-    bool                cancelled;
 
     QLabel*             logo;
     QLabel*             title;
@@ -70,20 +68,21 @@ public:
     KSqueezedTextLabel* actionLabel;
 
     QProgressBar*       progress;
+    
+    QDialogButtonBox*   buttons;
 };
 
 DProgressDlg::DProgressDlg(QWidget* const parent, const QString& caption)
-    : KDialog(parent), d(new Private)
+    : QDialog(parent), d(new Private)
 {
-    setCaption(caption);
-    setButtons(Cancel);
-    setDefaultButton(Cancel);
     setModal(true);
+    setWindowTitle(caption);
 
-    QWidget* page     = new QWidget(this);
-    setMainWidget(page);
+    d->buttons = new QDialogButtonBox(QDialogButtonBox::Cancel, this);
+    d->buttons->button(QDialogButtonBox::Cancel)->setDefault(true);
 
-    QGridLayout* grid = new QGridLayout(page);
+    QWidget* const page     = new QWidget(this);
+    QGridLayout* const grid = new QGridLayout(page);
 
     d->actionPix      = new QLabel(page);
     d->actionLabel    = new KSqueezedTextLabel(page);
@@ -103,15 +102,19 @@ DProgressDlg::DProgressDlg(QWidget* const parent, const QString& caption)
     grid->addWidget(d->actionLabel, 1, 2, 1, 1);
     grid->addWidget(d->progress,    2, 1, 1, 2);
     grid->addWidget(d->title,       3, 1, 1, 2);
-    grid->setSpacing(spacingHint());
+    grid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     grid->setMargin(0);
     grid->setColumnStretch(2, 10);
 
-    setInitialSize(QSize(500, 150));
+    QVBoxLayout* const vbx = new QVBoxLayout(this);
+    vbx->addWidget(page);
+    vbx->addWidget(d->buttons);
+    setLayout(vbx);
 
-    connect(this, SIGNAL(cancelClicked()),
+    connect(d->buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
             this, SLOT(slotCancel()));
-
+    
+    adjustSize();
     reset();
 }
 
@@ -122,24 +125,14 @@ DProgressDlg::~DProgressDlg()
 
 void DProgressDlg::slotCancel()
 {
-    d->cancelled = true;
-
-    if (d->allowCancel)
-    {
-        close();
-    }
-
     emit signalCancelPressed();
+
+    close();
 }
 
 void DProgressDlg::setButtonText(const QString& text)
 {
-    KDialog::setButtonText(Cancel, text);
-}
-
-void DProgressDlg::setButtonGuiItem(const KGuiItem& item)
-{
-    KDialog::setButtonGuiItem(Cancel, item);
+    d->buttons->button(QDialogButtonBox::Cancel)->setText(text);
 }
 
 void DProgressDlg::addedAction(const QPixmap& itemPix, const QString& text)
@@ -197,27 +190,6 @@ void DProgressDlg::setLabel(const QString& text)
 void DProgressDlg::setTitle(const QString& text)
 {
     d->title->setText(text);
-}
-
-void DProgressDlg::showCancelButton(bool show)
-{
-    showButton(Cancel, show);
-}
-
-void DProgressDlg::setAllowCancel(bool allowCancel)
-{
-    d->allowCancel = allowCancel;
-    showButton(Cancel, allowCancel);
-}
-
-bool DProgressDlg::allowCancel() const
-{
-    return d->allowCancel;
-}
-
-bool DProgressDlg::wasCancelled() const
-{
-    return d->cancelled;
 }
 
 }  // namespace Digikam

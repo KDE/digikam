@@ -27,10 +27,7 @@
 // Qt includes
 
 #include <QPixmap>
-
-// KDE includes
-
-#include <kdialog.h>
+#include <QDialog>
 
 // Local includes
 
@@ -39,7 +36,7 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DProgressDlg : public KDialog
+class DIGIKAM_EXPORT DProgressDlg : public QDialog
 {
     Q_OBJECT
 
@@ -50,12 +47,8 @@ public:
 
     void setLabel(const QString& text);
     void setTitle(const QString& text);
-    void showCancelButton(bool show);
-    void setAllowCancel(bool allowCancel);
-
-    bool wasCancelled() const;
-    bool allowCancel()  const;
-    int  value()        const;
+    
+    int  value() const;
 
 Q_SIGNALS:
 
@@ -67,9 +60,8 @@ public Q_SLOTS:
     void incrementMaximum(int added);
     void advance(int offset);
     void setValue(int value);
-
     void setButtonText(const QString& text);
-    void setButtonGuiItem(const KGuiItem& item);
+
     void addedAction(const QPixmap &icon, const QString& text);
     void reset();
 
