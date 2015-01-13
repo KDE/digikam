@@ -35,14 +35,12 @@
 #include <QPaintEvent>
 #include <QTimer>
 #include <QWheelEvent>
+#include <QApplication>
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusMessage>
 #include <QtDBus/QDBusReply>
-#include <QApplication>
 
 // KDE includes
-
-#include <kdialog.h>
 
 #include <klocalizedstring.h>
 
@@ -95,7 +93,7 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
     setWindowFlags(Qt::FramelessWindowHint);
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowState(windowState() | Qt::WindowFullScreen);
-    setWindowTitle(KDialog::makeStandardCaption(i18n("Slideshow")));
+    setWindowTitle(i18n("Slideshow"));
     setContextMenuPolicy(Qt::PreventContextMenu);
     setMouseTracking(true);
 
