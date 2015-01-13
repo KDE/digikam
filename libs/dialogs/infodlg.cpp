@@ -37,11 +37,14 @@
 #include <QApplication>
 #include <QStyle>
 #include <QStandardPaths>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
+#include <QPushButton>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-
+#include <khelpclient.h>
 
 // Local includes
 
@@ -55,31 +58,31 @@ class InfoDlg::Private
 public:
 
     Private() :
-        listView(0)
+        listView(0),
+        page(0)
     {
     }
 
     QTreeWidget* listView;
+    QWidget*     page;
 };
 
 InfoDlg::InfoDlg(QWidget* const parent)
-    : KDialog(parent), d(new Private)
+    : QDialog(parent), d(new Private)
 {
-    setButtons(Help|User1|Ok);
-    setDefaultButton(Ok);
-    setButtonFocus(Ok);
     setModal(false);
-    setHelp("digikam");
-    setCaption(i18n("Shared Libraries and Components Information"));
-    setButtonText(User1, i18n("Copy to Clipboard"));
+    setWindowTitle(i18n("Shared Libraries and Components Information"));
 
-    QWidget* const page     = new QWidget(this);
-    setMainWidget(page);
-    QGridLayout* const grid = new QGridLayout(page);
+    QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Help | QDialogButtonBox::Apply | QDialogButtonBox::Ok, this);
+    buttons->button(QDialogButtonBox::Ok)->setDefault(true);
+    buttons->button(QDialogButtonBox::Apply)->setText(i18n("Copy to Clipboard"));
+
+    d->page     = new QWidget(this);
+    QGridLayout* const grid = new QGridLayout(d->page);
 
     // --------------------------------------------------------
 
-    QLabel* const logo      = new QLabel(page);
+    QLabel* const logo      = new QLabel(d->page);
 
     if (QApplication::applicationName() == QString("digikam"))
     {
@@ -94,7 +97,7 @@ InfoDlg::InfoDlg(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QLabel* const header    = new QLabel(page);
+    QLabel* const header    = new QLabel(d->page);
     header->setWordWrap(true);
     header->setText(i18n("<font size=\"5\">%1</font><br/><b>Version %2</b>"
                          "<p>%3</p>",
@@ -104,7 +107,7 @@ InfoDlg::InfoDlg(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    d->listView = new QTreeWidget(page);
+    d->listView = new QTreeWidget(d->page);
     d->listView->setSortingEnabled(false);
     d->listView->setRootIsDecorated(false);
     d->listView->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -124,10 +127,21 @@ InfoDlg::InfoDlg(QWidget* const parent)
     grid->setMargin(0);
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
+    QVBoxLayout* const vbx = new QVBoxLayout(this);
+    vbx->addWidget(d->page);
+    vbx->addWidget(buttons);
+    setLayout(vbx);
+
     // --------------------------------------------------------
 
-    connect(this, SIGNAL(user1Clicked()),
+    connect(buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+            this, SLOT(accept()));
+
+    connect(buttons->button(QDialogButtonBox::Apply), SIGNAL(clicked()),
             this, SLOT(slotCopy2ClipBoard()));
+
+    connect(buttons->button(QDialogButtonBox::Help), SIGNAL(clicked()),
+            this, SLOT(slotHelp()));
 
     resize(400, 500);
 }
@@ -140,6 +154,11 @@ InfoDlg::~InfoDlg()
 QTreeWidget* InfoDlg::listView() const
 {
     return d->listView;
+}
+
+QWidget* InfoDlg::mainWidget() const
+{
+    return d->page;
 }
 
 void InfoDlg::setInfoMap(const QMap<QString, QString>& list)
@@ -173,6 +192,11 @@ void InfoDlg::slotCopy2ClipBoard()
     QMimeData* const mimeData = new QMimeData();
     mimeData->setText(textInfo);
     QApplication::clipboard()->setMimeData(mimeData, QClipboard::Clipboard);
+}
+
+void InfoDlg::slotHelp()
+{
+    KHelpClient::invokeHelp("digikam");
 }
 
 }  // namespace Digikam

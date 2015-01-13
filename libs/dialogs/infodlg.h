@@ -27,11 +27,8 @@
 
 // Qt includes
 
-#include <QtCore/QMap>
-
-// KDE includes
-
-#include <kdialog.h>
+#include <QMap>
+#include <QDialog>
 
 // Local includes
 
@@ -42,7 +39,7 @@ class QTreeWidget;
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT InfoDlg : public KDialog
+class DIGIKAM_EXPORT InfoDlg : public QDialog
 {
     Q_OBJECT
 
@@ -52,10 +49,13 @@ public:
     virtual ~InfoDlg();
 
     virtual void setInfoMap(const QMap<QString, QString>& list);
-    QTreeWidget* listView() const;
+
+    QTreeWidget* listView()   const;
+    QWidget*     mainWidget() const;
 
 private Q_SLOTS:
 
+    void slotHelp();
     virtual void slotCopy2ClipBoard();
 
 private:

@@ -26,11 +26,7 @@
 
 // Qt includes
 
-#include <QtCore/QMap>
-
-// KDE includes
-
-
+#include <QMap>
 
 // Local includes
 

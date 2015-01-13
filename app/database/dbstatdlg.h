@@ -24,13 +24,6 @@
 #ifndef DBSTATDLG_H
 #define DBSTATDLG_H
 
-// Qt includes
-
-
-// KDE includes
-
-
-
 // Local includes
 
 #include "infodlg.h"

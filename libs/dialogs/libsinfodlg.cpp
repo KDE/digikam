@@ -96,7 +96,8 @@ namespace Digikam
 LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
     : InfoDlg(parent)
 {
-    setCaption(i18n("Shared Libraries and Components Information"));
+    setWindowTitle(i18n("Shared Libraries and Components Information"));
+
     // --------------------------------------------------------
     // By default set a list of common components information used by Showfoto and digiKam.
 

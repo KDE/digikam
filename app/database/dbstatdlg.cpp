@@ -35,9 +35,6 @@
 
 #include <klocalizedstring.h>
 
-
-#include <kaboutdata.h>
-
 // Local includes
 
 #include "daboutdata.h"
@@ -54,7 +51,7 @@ DBStatDlg::DBStatDlg(QWidget* const parent)
 {
     qApp->setOverrideCursor(Qt::WaitCursor);
 
-    setCaption(i18n("Database Statistics"));
+    setWindowTitle(i18n("Database Statistics"));
     listView()->setHeaderLabels(QStringList() << i18n("Format") << i18n("Count"));
 
     // get image format statistics

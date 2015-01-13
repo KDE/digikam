@@ -37,10 +37,6 @@
 
 #include <klocalizedstring.h>
 
-
-
-#include <kaboutdata.h>
-
 // Libkdcraw includes
 
 #include <libkdcraw_version.h>
@@ -66,7 +62,7 @@ public:
 RawCameraDlg::RawCameraDlg(QWidget* const parent)
     : InfoDlg(parent), d(new Private)
 {
-    setCaption(i18n("List of supported RAW cameras"));
+    setWindowTitle(i18n("List of supported RAW cameras"));
 
     QStringList list = KDcrawIface::KDcraw::supportedCamera();
 
@@ -88,7 +84,7 @@ RawCameraDlg::RawCameraDlg(QWidget* const parent)
     // --------------------------------------------------------
 
     QGridLayout* grid = dynamic_cast<QGridLayout*>(mainWidget()->layout());
-    grid->addWidget(d->header,       1, 0, 1, -1);
+    grid->addWidget(d->header,    1, 0, 1, -1);
     grid->addWidget(d->searchBar, 3, 0, 1, -1);
 
     // --------------------------------------------------------
