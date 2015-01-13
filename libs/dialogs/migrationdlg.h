@@ -29,10 +29,7 @@
 
 #include <QThread>
 #include <QProgressBar>
-
-// KDE includes
-
-#include <kdialog.h>
+#include <QDialog>
 
 // Local includes
 
@@ -67,7 +64,7 @@ private:
 
 // --------------------------------------------------------------------
 
-class MigrationDlg : public KDialog
+class MigrationDlg : public QDialog
 {
     Q_OBJECT
 

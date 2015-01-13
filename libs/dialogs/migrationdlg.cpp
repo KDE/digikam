@@ -26,8 +26,8 @@
 
 // QT includes
 
+#include <QApplication>
 #include <QGridLayout>
-#include <QPushButton>
 #include <QProgressBar>
 #include <QWidget>
 #include <QList>
@@ -36,11 +36,14 @@
 #include <QSqlError>
 #include <QLabel>
 #include <QGroupBox>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
+#include <QPushButton>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 
 // Local includes
 
@@ -103,6 +106,7 @@ public:
         overallStepTitle(0),
         progressBar(0),
         progressBarSmallStep(0),
+        buttons(0),
         copyThread(0)
     {
     }
@@ -114,11 +118,12 @@ public:
     QLabel*             overallStepTitle;
     QProgressBar*       progressBar;
     QProgressBar*       progressBarSmallStep;
+    QDialogButtonBox*   buttons;
     DatabaseCopyThread* copyThread;
 };
 
 MigrationDlg::MigrationDlg(QWidget* const parent)
-    : KDialog(parent), d(new Private)
+    : QDialog(parent), d(new Private)
 {
     setupMainArea();
 }
@@ -131,6 +136,9 @@ MigrationDlg::~MigrationDlg()
 
 void MigrationDlg::setupMainArea()
 {
+    d->buttons = new QDialogButtonBox(QDialogButtonBox::Close, this);
+    d->buttons->button(QDialogButtonBox::Close)->setDefault(true);
+    
     d->copyThread                      = new DatabaseCopyThread(this);
     d->fromDatabaseWidget              = new DatabaseWidget(this);
     d->toDatabaseWidget                = new DatabaseWidget(this);
@@ -163,12 +171,16 @@ void MigrationDlg::setupMainArea()
     layout->addWidget(d->cancelButton,         2, 1);
     layout->addWidget(d->toDatabaseWidget,     0, 2, 4, 1);
     layout->addWidget(progressBox,             4, 0, 1, 3);
+    
+    QVBoxLayout* const vbx = new QVBoxLayout(this);
+    vbx->addWidget(mainWidget);
+    vbx->addWidget(d->buttons);
+    setLayout(vbx);
 
-    setMainWidget(mainWidget);
     dataInit();
 
-    // setup dialog
-    setButtons(Close);
+    connect(d->buttons->button(QDialogButtonBox::Close), SIGNAL(clicked()),
+            this, SLOT(accept()));
 
     connect(d->migrateButton, SIGNAL(clicked()),
             this, SLOT(performCopy()));
@@ -230,15 +242,15 @@ void MigrationDlg::handleFinish(int finishState, const QString& errorMsg)
     switch (finishState)
     {
         case DatabaseCopyManager::failed:
-            KMessageBox::error(this, errorMsg );
+            QMessageBox::critical(this, qApp->applicationName(), errorMsg);
             unlockInputFields();
             break;
         case DatabaseCopyManager::success:
-            KMessageBox::information(this, i18n("Database copied successfully.") );
+            QMessageBox::information(this, qApp->applicationName(), i18n("Database copied successfully."));
             unlockInputFields();
             break;
         case DatabaseCopyManager::canceled:
-            KMessageBox::information(this, i18n("Database conversion canceled.") );
+            QMessageBox::information(this, qApp->applicationName(), i18n("Database conversion canceled."));
             unlockInputFields();
             break;
     }
