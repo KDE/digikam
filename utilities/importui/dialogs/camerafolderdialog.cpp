@@ -31,10 +31,13 @@
 #include <QStandardPaths>
 #include <QApplication>
 #include <QStyle>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
+#include <QPushButton>
 
 // KDE includes
 
-
+#include <khelpclient.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -51,29 +54,31 @@ class CameraFolderDialog::Private
 public:
 
     Private() :
+        buttons(0),
         folderView(0)
     {
     }
 
     QString           rootPath;
+    QDialogButtonBox* buttons;
 
     CameraFolderView* folderView;
 };
 
 CameraFolderDialog::CameraFolderDialog(QWidget* const parent, const QMap<QString, int>& map,
                                        const QString& cameraName, const QString& rootPath)
-    : KDialog(parent), d(new Private)
+    : QDialog(parent),
+      d(new Private)
 {
-    setHelp("camerainterface.anchor", "digikam");
-    setCaption(i18nc("@title:window %1: name of the camera", "%1 - Select Camera Folder", cameraName));
-    setButtons(Help | Ok | Cancel);
-    setDefaultButton(Ok);
-    enableButtonOk(false);
     setModal(true);
+    setWindowTitle(i18nc("@title:window %1: name of the camera", "%1 - Select Camera Folder", cameraName));
+
+    d->buttons = new QDialogButtonBox(QDialogButtonBox::Help | QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
+    d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
+    d->buttons->button(QDialogButtonBox::Ok)->setEnabled(false);
 
     d->rootPath        = rootPath;
     QFrame* const page = new QFrame(this);
-    setMainWidget(page);
 
     QGridLayout* const grid = new QGridLayout(page);
     d->folderView           = new CameraFolderView(page);
@@ -93,6 +98,11 @@ CameraFolderDialog::CameraFolderDialog(QWidget* const parent, const QMap<QString
     grid->setRowStretch(2, 10);
     grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+
+    QVBoxLayout* const vbx = new QVBoxLayout(this);
+    vbx->addWidget(page);
+    vbx->addWidget(d->buttons);
+    setLayout(vbx);
 
     d->folderView->addVirtualFolder(cameraName);
     d->folderView->addRootFolder(QString("/"));
@@ -127,10 +137,19 @@ CameraFolderDialog::CameraFolderDialog(QWidget* const parent, const QMap<QString
     connect(d->folderView, SIGNAL(signalFolderChanged(CameraFolderItem*)),
             this, SLOT(slotFolderPathSelectionChanged(CameraFolderItem*)));
 
-    resize(500, 500);
+    connect(d->buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+            this, SLOT(accept()));
+
+    connect(d->buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
+            this, SLOT(reject()));
+
+    connect(d->buttons->button(QDialogButtonBox::Help), SIGNAL(clicked()),
+            this, SLOT(slotHelp()));
+
+    adjustSize();
 
     // make sure the ok button is properly set up
-    enableButtonOk(d->folderView->currentItem() != 0);
+    d->buttons->button(QDialogButtonBox::Ok)->setEnabled(d->folderView->currentItem() != 0);
 }
 
 CameraFolderDialog::~CameraFolderDialog()
@@ -165,20 +184,25 @@ QString CameraFolderDialog::selectedFolderPath() const
         return(folderItem->folderPath());
     }
 
-    return(d->rootPath + folderItem->folderPath());
+    return (d->rootPath + folderItem->folderPath());
 }
 
 void CameraFolderDialog::slotFolderPathSelectionChanged(CameraFolderItem* item)
 {
     if (item)
     {
-        enableButtonOk(true);
+        d->buttons->button(QDialogButtonBox::Ok)->setEnabled(true);
         qCDebug(LOG_IMPORTUI) << "Camera folder path: " << selectedFolderPath();
     }
     else
     {
-        enableButtonOk(false);
+        d->buttons->button(QDialogButtonBox::Ok)->setEnabled(false);
     }
+}
+
+void CameraFolderDialog::slotHelp()
+{
+    KHelpClient::invokeHelp("camerainterface.anchor", "digikam");
 }
 
 }  // namespace Digikam

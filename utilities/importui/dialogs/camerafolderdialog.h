@@ -27,17 +27,14 @@
 // Qt includes
 
 #include <QString>
-
-// KDE includes
-
-#include <kdialog.h>
+#include <QDialog>
 
 namespace Digikam
 {
 
 class CameraFolderItem;
 
-class CameraFolderDialog : public KDialog
+class CameraFolderDialog : public QDialog
 {
     Q_OBJECT
 
@@ -52,6 +49,7 @@ public:
 private Q_SLOTS:
 
     void slotFolderPathSelectionChanged(CameraFolderItem* item);
+    void slotHelp();
 
 private:
 
