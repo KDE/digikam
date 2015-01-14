@@ -24,6 +24,9 @@
 
 // Qt includes
 
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
+#include <QPushButton>
 
 // KDE includes
 
@@ -48,12 +51,16 @@ public:
 
     Private()
       : columnIndex(0),
+        buttons(0),
         columnObject(0),
         columnConfigurationWidget(0)
     {
     }
 
     int                                 columnIndex;
+
+    QDialogButtonBox*                   buttons;
+
     TableViewColumn*                    columnObject;
     TableViewColumnConfigurationWidget* columnConfigurationWidget;
 };
@@ -61,15 +68,30 @@ public:
 TableViewConfigurationDialog::TableViewConfigurationDialog(TableViewShared* const sharedObject,
                                                            const int columnIndex,
                                                            QWidget* const parentWidget)
-    : KDialog(parentWidget), d(new Private()), s(sharedObject)
+    : QDialog(parentWidget),
+      d(new Private()),
+      s(sharedObject)
 {
-    d->columnIndex  = columnIndex;
-    d->columnObject = s->tableViewModel->getColumnObject(d->columnIndex);
-
     setWindowTitle(i18n("Configure column \"%1\"", d->columnObject->getTitle()));
 
+    d->buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
+    d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
+
+    d->columnIndex               = columnIndex;
+    d->columnObject              = s->tableViewModel->getColumnObject(d->columnIndex);
     d->columnConfigurationWidget = d->columnObject->getConfigurationWidget(this);
-    setMainWidget(d->columnConfigurationWidget);
+
+    QVBoxLayout* const vbx = new QVBoxLayout(this);
+    vbx->addWidget(d->columnConfigurationWidget);
+    vbx->addWidget(d->buttons);
+    setLayout(vbx);
+
+
+    connect(d->buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+            this, SLOT(accept()));
+
+    connect(d->buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
+            this, SLOT(reject()));
 }
 
 TableViewConfigurationDialog::~TableViewConfigurationDialog()

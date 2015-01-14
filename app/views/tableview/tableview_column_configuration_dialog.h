@@ -25,7 +25,7 @@
 
 // KDE includes
 
-#include <kdialog.h>
+#include <QDialog>
 
 // local includes
 
@@ -38,7 +38,7 @@ class QContextMenuEvent;
 namespace Digikam
 {
 
-class TableViewConfigurationDialog : public KDialog
+class TableViewConfigurationDialog : public QDialog
 {
     Q_OBJECT
 
