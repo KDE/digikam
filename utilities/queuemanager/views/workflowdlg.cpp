@@ -35,10 +35,13 @@
 #include <QStyle>
 #include <QLineEdit>
 #include <QStandardPaths>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
+#include <QPushButton>
 
 // KDE includes
 
-
+#include <khelpclient.h>
 #include <kseparator.h>
 #include <klocalizedstring.h>
 
@@ -51,24 +54,26 @@ class WorkflowDlg::Private
 public:
 
     Private() :
+        buttons(0),
         titleEdit(0),
         descEdit(0)
     {
     }
 
-    QLineEdit* titleEdit;
-    QLineEdit* descEdit;
+    QDialogButtonBox* buttons;
+    QLineEdit*        titleEdit;
+    QLineEdit*        descEdit;
 };
 
 WorkflowDlg::WorkflowDlg(const Workflow& wf, bool create)
-    : KDialog(0),
+    : QDialog(0),
       d(new Private)
 {
-    setCaption(create ? i18n("New Workflow") : i18n("Edit Workflow"));
-    setButtons(Help|Ok|Cancel);
-    setDefaultButton(Ok);
     setModal(true);
-    setHelp("workflowdlg.anchor", "digikam");
+    setWindowTitle(create ? i18n("New Workflow") : i18n("Edit Workflow"));
+
+    d->buttons = new QDialogButtonBox(QDialogButtonBox::Help | QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
+    d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
 
     QWidget* const page    = new QWidget(this);
     QLabel* const logo     = new QLabel(page);
@@ -130,6 +135,11 @@ WorkflowDlg::WorkflowDlg(const Workflow& wf, bool create)
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     page->setLayout(grid);
 
+    QVBoxLayout* const vbx = new QVBoxLayout(this);
+    vbx->addWidget(page);
+    vbx->addWidget(d->buttons);
+    setLayout(vbx);
+    
     if (create)
     {
         d->titleEdit->setText(i18n("New Workflow"));
@@ -144,10 +154,15 @@ WorkflowDlg::WorkflowDlg(const Workflow& wf, bool create)
 
     connect(d->titleEdit, SIGNAL(textChanged(QString)),
             this, SLOT(slotTitleChanged(QString)));
+    
+    connect(d->buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+            this, SLOT(accept()));
 
-    // --------------------------------------------------------
+    connect(d->buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
+            this, SLOT(reject()));
 
-    setMainWidget(page);
+    connect(d->buttons->button(QDialogButtonBox::Help), SIGNAL(clicked()),
+            this, SLOT(slotHelp()));
 }
 
 WorkflowDlg::~WorkflowDlg()
@@ -199,7 +214,12 @@ void WorkflowDlg::slotTitleChanged(const QString& text)
 {
     Workflow wf = WorkflowManager::instance()->findByTitle(text);
     bool enable = (wf.title.isEmpty() && !text.isEmpty());
-    enableButtonOk(enable);
+    d->buttons->button(QDialogButtonBox::Ok)->setEnabled(enable);
+}
+
+void WorkflowDlg::slotHelp()
+{
+    KHelpClient::invokeHelp("workflowdlg.anchor", "digikam");
 }
 
 }  // namespace Digikam

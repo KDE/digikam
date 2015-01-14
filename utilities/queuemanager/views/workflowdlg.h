@@ -29,10 +29,7 @@
 #include <QDateTime>
 #include <QString>
 #include <QStringList>
-
-// KDE includes
-
-#include <kdialog.h>
+#include <QDialog>
 
 // Locale includes
 
@@ -41,7 +38,7 @@
 namespace Digikam
 {
 
-class WorkflowDlg : public KDialog
+class WorkflowDlg : public QDialog
 {
     Q_OBJECT
 
@@ -61,6 +58,7 @@ public:
 private Q_SLOTS:
 
     void slotTitleChanged(const QString& text);
+    void slotHelp();
 
 private:
 
