@@ -7,6 +7,7 @@
  * Description : a rename dialog for the AdvancedRename utility
  *
  * Copyright (C) 2009-2012 by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C) 2013-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,10 +31,7 @@
 #include <QPair>
 #include <QTreeWidgetItem>
 #include <QUrl>
-
-// KDE includes
-
-#include <kdialog.h>
+#include <QDialog>
 
 // Local includes
 
@@ -75,7 +73,7 @@ public:
     QString newName() const;
 
     void markInvalid(bool invalid);
-    bool isNameEqual();
+    bool isNameEqual() const;
 
 private:
 
@@ -93,7 +91,7 @@ private:
 typedef QPair<QUrl, QString> NewNameInfo;
 typedef QList<NewNameInfo>   NewNamesList;
 
-class AdvancedRenameDialog : public KDialog
+class AdvancedRenameDialog : public QDialog
 {
     Q_OBJECT
 
@@ -102,7 +100,7 @@ public:
     explicit AdvancedRenameDialog(QWidget* parent = 0);
     ~AdvancedRenameDialog();
 
-    NewNamesList newNames();
+    NewNamesList newNames() const;
 
 public Q_SLOTS:
 
@@ -117,6 +115,7 @@ private Q_SLOTS:
     void slotSortDirectionTriggered(QAction*);
 
     void slotShowContextMenu(const QPoint&);
+    void slotHelp();
 
 private:
 
@@ -129,9 +128,9 @@ private:
     void initDialog();
     void readSettings();
     void writeSettings();
-    bool checkNewNames();
+    bool checkNewNames() const;
 
-    NewNamesList filterNewNames();
+    NewNamesList filterNewNames() const;
 
 private:
 
