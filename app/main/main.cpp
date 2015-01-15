@@ -95,10 +95,10 @@ int main(int argc, char* argv[])
     parser.process(app);
     aboutData.processCommandLine(&parser);
 
-    parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("from"),          i18n("Open camera dialog at <path>"), QLatin1String("path")));
-    parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("udi"),           i18n("Open camera dialog for the device with Solid UDI <udi>"), QLatin1String("udi")));
-    parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("detect-camera"), i18n("Automatically detect and open a connected gphoto2 camera")));
-    parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("directory"),     i18n("Start digikam with the SQLite database file found in the directory <dir>"), QLatin1String("dir")));
+    parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("download-from"),      i18n("Open camera dialog at <path>"), QLatin1String("path")));
+    parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("download-from-udi"),  i18n("Open camera dialog for the device with Solid UDI <udi>"), QLatin1String("udi")));
+    parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("detect-camera"),      i18n("Automatically detect and open a connected gphoto2 camera")));
+    parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("database-directory"), i18n("Start digikam with the SQLite database file found in the directory <dir>"), QLatin1String("dir")));
 
     KExiv2Iface::KExiv2::initializeExiv2();
 
