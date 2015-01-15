@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 2005-04-02
- * Description : showFoto setup dialog.
+ * Description : setup Misc tab.
  *
- * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,53 +21,38 @@
  *
  * ============================================================ */
 
-#ifndef SETUP_H
-#define SETUP_H
+#ifndef SETUPMISC_H
+#define SETUPMISC_H
 
-// KDE includes
+// Qt includes
 
-#include <kpagedialog.h>
+#include <QScrollArea>
 
 namespace ShowFoto
 {
 
-class Setup : public KPageDialog
+class SetupMisc : public QScrollArea
 {
-    Q_OBJECT
 
 public:
 
-    enum Page
+    enum SortOrder
     {
-        LastPageUsed = -1,
-
-        EditorPage = 0,
-        MetadataPage,
-        ToolTipPage,
-        RawPage,
-        IOFilesPage,
-        SlideshowPage,
-        ICCPage,
-        MiscellaneousPage,
-
-        SetupPageEnumLast
+        SortByDate = 0,
+        SortByName,
+        SortByFileSize
     };
 
 public:
 
-    explicit Setup(QWidget* const parent=0, Page page=LastPageUsed);
-    ~Setup();
+    explicit SetupMisc(QWidget* const parent = 0);
+    ~SetupMisc();
 
-    static bool execMetadataFilters(QWidget* const parent, int tab);
-
-private Q_SLOTS:
-
-    void slotOkClicked();
+    void applySettings();
 
 private:
 
-    Setup::Page activePageIndex();
-    void showPage(Setup::Page page);
+    void readSettings();
 
 private:
 
@@ -77,4 +62,4 @@ private:
 
 }   // namespace ShowFoto
 
-#endif  /* SETUP_H  */
+#endif /* SETUPMISC_H */

@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2010-2014, Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2010-2015, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -906,14 +906,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideshowsettings.cpp
        )
 
-    set(libsetupshowfoto_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupeditor.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupiofiles.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupraw.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupicc.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupslideshow.cpp
-       )
-
     set(libeditorwidgets_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imageguidewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imagepreviewitem.cpp
@@ -969,16 +961,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/workerobject.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/dynamicthread.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/parallelworkers.cpp
-       )
-
-    # ==================================================================================================
-    # Showfoto target parts
-
-    set(libshowfotosetup_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setuptooltip.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setupmisc.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setupmetadata.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/showfoto/setup/setup.cpp
        )
 
     # ==================================================================================================

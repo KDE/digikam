@@ -6,7 +6,7 @@
  * Date        : 2005-04-02
  * Description : showFoto setup dialog.
  *
- * Copyright (C) 2005-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "setup.moc"
+#include "showfotosetup.moc"
 
 // Qt includes
 
@@ -40,12 +40,12 @@
 
 #include "setupraw.h"
 #include "setupeditor.h"
-#include "setupmisc.h"
 #include "setupicc.h"
 #include "setupiofiles.h"
-#include "setupmetadata.h"
 #include "setupslideshow.h"
-#include "setuptooltip.h"
+#include "showfotosetupmisc.h"
+#include "showfotosetupmetadata.h"
+#include "showfotosetuptooltip.h"
 
 namespace ShowFoto
 {
