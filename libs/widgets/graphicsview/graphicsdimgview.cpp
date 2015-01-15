@@ -500,9 +500,9 @@ QRect GraphicsDImgView::visibleArea() const
     return (mapToScene(viewport()->geometry()).boundingRect().toRect());
 }
 
-void GraphicsDImgView::toggleFitToWindow()
+void GraphicsDImgView::fitToWindow()
 {
-    layout()->toggleFitToWindow();
+    layout()->fitToWindow();
     update();
 }
 

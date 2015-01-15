@@ -132,7 +132,7 @@ void EditorToolIface::loadTool(EditorTool* const tool)
 
         if (d->editor->editorStackView()->canvas()->layout()->isFitToWindow())
         {
-            view2->toggleFitToWindow();
+            view2->fitToWindow();
         }
         else
         {
@@ -173,7 +173,7 @@ void EditorToolIface::unLoadTool()
     {
         if (view2->layout()->isFitToWindow())
         {
-            d->editor->editorStackView()->canvas()->toggleFitToWindow();
+            d->editor->editorStackView()->canvas()->fitToWindow();
         }
         else
         {
