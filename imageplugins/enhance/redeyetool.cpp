@@ -41,15 +41,9 @@
 
 // KDE includes
 
-#include <kcolorvalueselector.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-
-
-#include <khuesaturationselect.h>
-
 #include <klocalizedstring.h>
-
 
 // Libkdcraw includes
 
@@ -57,6 +51,8 @@
 
 // Local includes
 
+#include "dcolorvalueselector.h"
+#include "dhuesaturationselect.h"
 #include "colorgradientwidget.h"
 #include "dimg.h"
 #include "blurfilter.h"
@@ -103,8 +99,8 @@ public:
     QLabel*                 thresholdLabel;
     QLabel*                 smoothLabel;
 
-    KHueSaturationSelector* HSSelector;
-    KColorValueSelector*    VSelector;
+    DHueSaturationSelector* HSSelector;
+    DColorValueSelector*    VSelector;
 
     RIntNumInput*           tintLevel;
     RIntNumInput*           redThreshold;
@@ -168,13 +164,13 @@ RedEyeTool::RedEyeTool(QObject* const parent)
 
     QLabel* label3 = new QLabel(i18n("Coloring Tint:"));
 
-    d->HSSelector  = new KHueSaturationSelector();
+    d->HSSelector  = new DHueSaturationSelector();
     d->HSSelector->setWhatsThis(i18n("Sets a custom color when re-colorizing the eyes."));
     d->HSSelector->setMinimumSize(200, 142);
     d->HSSelector->setChooserMode(ChooserValue);
     d->HSSelector->setColorValue(255);
 
-    d->VSelector   = new KColorValueSelector();
+    d->VSelector   = new DColorValueSelector();
     d->VSelector->setChooserMode(ChooserValue);
     d->VSelector->setMinimumSize(26, 142);
     d->VSelector->setIndent(false);

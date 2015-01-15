@@ -46,8 +46,6 @@
 
 // KDE includes
 
-#include <kcolorvalueselector.h>
-#include <khuesaturationselect.h>
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
 
@@ -77,6 +75,8 @@
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
 #include "fingerprintsgenerator.h"
+#include "dhuesaturationselect.h"
+#include "dcolorvalueselector.h"
 
 using namespace KDcrawIface;
 
@@ -167,9 +167,9 @@ public:
 
     QTabWidget*               tabWidget;
 
-    KHueSaturationSelector*   hsSelector;
+    DHueSaturationSelector*   hsSelector;
 
-    KColorValueSelector*      vSelector;
+    DColorValueSelector*      vSelector;
 
     KSqueezedTextLabel*       labelFile;
     KSqueezedTextLabel*       labelFolder;
@@ -353,13 +353,13 @@ QWidget* FuzzySearchView::setupSketchPanel() const
 
     QString tooltip(i18n("Set here the brush color used to draw sketch."));
 
-    d->hsSelector = new KHueSaturationSelector();
+    d->hsSelector = new DHueSaturationSelector();
     d->hsSelector->setMinimumSize(200, 96);
     d->hsSelector->setChooserMode(ChooserValue);
     d->hsSelector->setColorValue(255);
     d->hsSelector->setWhatsThis(tooltip);
 
-    d->vSelector  = new KColorValueSelector();
+    d->vSelector  = new DColorValueSelector();
     d->vSelector->setMinimumSize(26, 96);
     d->vSelector->setChooserMode(ChooserValue);
     d->vSelector->setIndent(false);

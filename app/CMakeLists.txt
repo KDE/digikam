@@ -27,6 +27,7 @@ set(digikamcore_LIB_SRCS
 
     # widgets and dialogs
     ${libcommonwidgets_SRCS}
+    ${libcolorchooserwidgets_SRCS}
     ${libnotificationmanager_SRCS}
     ${libmainview_SRCS}
     ${libitemview_SRCS}

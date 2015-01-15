@@ -610,6 +610,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
                         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles
                         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata
                         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/imagehistory
+                        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/colorchooser
                         ${CMAKE_CURRENT_SOURCE_DIR}/tests
                         ${CMAKE_CURRENT_SOURCE_DIR}/tests/modeltest
                         ${CMAKE_CURRENT_SOURCE_DIR}/utilities
@@ -1048,6 +1049,12 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/ratingwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/colorlabelwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/picklabelwidget.cpp
+       )
+
+    set(libcolorchooserwidgets_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/colorchooser/dcolorchoosermode.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/colorchooser/dcolorvalueselector.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/colorchooser/dhuesaturationselect.cpp
        )
 
     set(libslideshow_SRCS

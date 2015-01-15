@@ -35,11 +35,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-
-
 #include <kglobalsettings.h>
-
-#include <khuesaturationselect.h>
 
 // Libkdcraw includes
 
@@ -50,6 +46,7 @@
 #include "digikam_debug.h"
 #include "colorgradientwidget.h"
 #include "hspreviewwidget.h"
+#include "dhuesaturationselect.h"
 
 using namespace KDcrawIface;
 
@@ -75,7 +72,7 @@ public:
     static const QString    configVibranceAdjustmentEntry;
     static const QString    configLighnessAdjustmentEntry;
 
-    KHueSaturationSelector* HSSelector;
+    DHueSaturationSelector* HSSelector;
 
     RDoubleNumInput*        hInput;
     RDoubleNumInput*        sInput;
@@ -98,7 +95,7 @@ HSLSettings::HSLSettings(QWidget* const parent)
 {
     QGridLayout* const grid = new QGridLayout(parent);
 
-    d->HSSelector = new KHueSaturationSelector();
+    d->HSSelector = new DHueSaturationSelector();
     d->HSSelector->setWhatsThis(i18n("Select the hue and saturation adjustments of the image."));
     d->HSSelector->setMinimumSize(256, 142);
 
