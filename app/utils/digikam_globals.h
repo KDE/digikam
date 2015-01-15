@@ -27,7 +27,6 @@
 
 // Qt includes
 
-#include <QShortcut>
 #include <QStringList>
 #include <QIODevice>
 #include <QKeySequence>
@@ -38,6 +37,7 @@
 
 class QWidget;
 class QObject;
+class QShortcut;
 
 /** Macros for image filters.
  */
