@@ -39,7 +39,7 @@
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "widgets_debug.h"
 #include "thememanager.h"
 #include "ditemdelegate.h"
 #include "abstractitemdragdrophandler.h"
@@ -517,7 +517,7 @@ void DCategorizedView::layoutAboutToBeChanged()
     }
     else
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Called without selection model, check whether the models are ok..";
+        qCWarning(LOG_WIDGETS) << "Called without selection model, check whether the models are ok..";
     }
 
     QModelIndex current      = currentIndex();

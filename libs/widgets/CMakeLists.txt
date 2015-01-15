@@ -17,8 +17,6 @@ set(libcommonwidgets_SRCS
     common/widgets_debug.cpp
 )
 
-message(INFO "ugly hack for digikam_debug and globals")
-
 set(libmainview_SRCS
     mainview/dxmlguiwindow.cpp
     mainview/daboutdata.cpp
@@ -30,8 +28,7 @@ set(libmainview_SRCS
     mainview/thumbbardock.cpp
     mainview/thememanager.cpp
     mainview/sidebar.cpp
-    ../app/utils/digikam_debug.cpp
-    ../app/utils/digikam_globals.cpp
+    ../../app/utils/digikam_globals.cpp
    )
 
 set(libitemview_SRCS
@@ -80,8 +77,10 @@ set(libiccprofileswidgets_SRCS
     iccprofiles/iccprofilescombobox.cpp
 )
 
-add_library(digikamwidgets ${libcommonwidgets_SRCS} ${libgraphicsviewwidgets_SRCS} ${libiccprofileswidgets_SRCS} ${libitemview_SRCS} ${libmetadatawidgets_SRCS})
+add_library(digikamwidgets ${libmainview_SRCS} ${libcommonwidgets_SRCS} ${libgraphicsviewwidgets_SRCS} ${libiccprofileswidgets_SRCS} ${libitemview_SRCS} ${libmetadatawidgets_SRCS})
 target_link_libraries(digikamwidgets
+                      digikamcore
+                      digikamdialogs
                       dimg
                       
                       Qt5::Core

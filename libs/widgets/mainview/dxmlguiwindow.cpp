@@ -58,7 +58,7 @@
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "widgets_debug.h"
 #include "daboutdata.h"
 
 namespace Digikam
@@ -321,7 +321,7 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
 
     if (!set)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "TURN OFF fullscreen";
+        qCDebug(LOG_WIDGETS) << "TURN OFF fullscreen";
 
         // restore menubar
 
@@ -360,7 +360,7 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
     }
     else
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "TURN ON fullscreen";
+        qCDebug(LOG_WIDGETS) << "TURN ON fullscreen";
 
         // hide menubar
 
@@ -426,7 +426,7 @@ bool DXmlGuiWindow::fullScreenIsActive() const
     if (d->fullScreenAction)
         return d->fullScreenAction->isChecked();
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "FullScreenAction is not initialized";
+    qCDebug(LOG_WIDGETS) << "FullScreenAction is not initialized";
     return false;
 }
 

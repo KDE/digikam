@@ -36,7 +36,7 @@
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "widgets_debug.h"
 #include "iccprofilewidget.h"
 
 namespace Digikam
@@ -65,12 +65,12 @@ void ICCPreviewWidget::showPreview( const QUrl& url)
 
     if ( url.isLocalFile() && fInfo.isFile() && fInfo.isReadable() )
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << url << " is a readable local file";
+        qCDebug(LOG_WIDGETS) << url << " is a readable local file";
         m_iccProfileWidget->loadFromURL(url);
     }
     else
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << url << " is not a readable local file";
+        qCDebug(LOG_WIDGETS) << url << " is not a readable local file";
     }
 }
 

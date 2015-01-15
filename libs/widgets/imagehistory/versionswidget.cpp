@@ -42,7 +42,7 @@
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "widgets_debug.h"
 #include "applicationsettings.h"
 #include "dimagehistory.h"
 #include "imagehistorygraphmodel.h"

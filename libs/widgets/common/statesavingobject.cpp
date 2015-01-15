@@ -29,7 +29,7 @@
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "widgets_debug.h"
 
 namespace Digikam
 {
@@ -53,8 +53,8 @@ public:
 
         if (host->objectName().isEmpty())
         {
-            qCWarning(DIGIKAM_GENERAL_LOG) << "Object name for " << host
-                                           << " is empty. Returning the default config group";
+            qCWarning(LOG_WIDGETS) << "Object name for " << host
+                       << " is empty. Returning the default config group";
         }
 
         return config->group(host->objectName());
@@ -106,7 +106,7 @@ public:
 
         if (depth == StateSavingObject::DIRECT_CHILDREN)
         {
-            //qCDebug(DIGIKAM_GENERAL_LOG) << "Also restoring " << action << " of direct children";
+            //qCDebug(LOG_WIDGETS) << "Also restoring " << action << " of direct children";
             for (QObjectList::const_iterator childIt = host->children().begin();
                  childIt != host->children().end(); ++childIt)
             {
@@ -127,7 +127,7 @@ public:
         }
         else if (depth == StateSavingObject::RECURSIVE)
         {
-            //qCDebug(DIGIKAM_GENERAL_LOG) << "Also " << action << " state of all children (recursive)";
+            //qCDebug(LOG_WIDGETS) << "Also " << action << " state of all children (recursive)";
             recurse(host->children(), save);
         }
     }
@@ -167,7 +167,7 @@ void StateSavingObject::setStateSavingDepth(const StateSavingObject::StateSaving
 
 void StateSavingObject::setConfigGroup(const KConfigGroup& group)
 {
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "received new config group: " << group.name();
+    //qCDebug(LOG_WIDGETS) << "received new config group: " << group.name();
     d->group    = group;
     d->groupSet = true;
 }
@@ -179,7 +179,7 @@ void StateSavingObject::setEntryPrefix(const QString& prefix)
 
 void StateSavingObject::loadState()
 {
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "Loading state";
+    //qCDebug(LOG_WIDGETS) << "Loading state";
 
     doLoadState();
 
@@ -188,7 +188,7 @@ void StateSavingObject::loadState()
 
 void StateSavingObject::saveState()
 {
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "Saving state";
+    //qCDebug(LOG_WIDGETS) << "Saving state";
 
     doSaveState();
 
@@ -199,7 +199,7 @@ KConfigGroup StateSavingObject::getConfigGroup() const
 {
     if (!d->groupSet)
     {
-        //qCDebug(DIGIKAM_GENERAL_LOG) << "No config group set, returning one based on object name";
+        //qCDebug(LOG_WIDGETS) << "No config group set, returning one based on object name";
         return d->getGroupFromObjectName();
     }
 
