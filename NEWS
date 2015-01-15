@@ -17,4 +17,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 009 ==> 340384 - Segmentation fault when creating new album.
 010 ==> 338785 - digiKam face detection finds no faces.
 011 ==> 342602 - Restore toggle fit to window and last zoom in the image editor [patch].
-012 ==> 
+012 ==> 342708 - A little less image shift in the mouse over preview mode [patch].
+013 ==> 
