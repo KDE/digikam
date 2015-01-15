@@ -59,6 +59,10 @@ protected Q_SLOTS:
     void updateGamutCheckState();
     void updateOkButtonState();
 
+private Q_SLOTS:
+
+    void slotProfileInfo();
+
 private:
 
     class Private;

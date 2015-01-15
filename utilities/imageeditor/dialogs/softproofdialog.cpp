@@ -36,12 +36,14 @@
 #include <kcolorbutton.h>
 #include <klocale.h>
 #include <kseparator.h>
+#include <kmessagebox.h>
 
 // Local includes
 
 #include "iccprofilescombobox.h"
 #include "iccsettingscontainer.h"
 #include "iccsettings.h"
+#include "iccprofileinfodlg.h"
 
 namespace Digikam
 {
@@ -160,6 +162,9 @@ SoftProofDialog::SoftProofDialog(QWidget* const parent)
     connect(d->gamutCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(updateGamutCheckState()));
 
+    connect(d->infoProofProfiles, SIGNAL(clicked()),
+            this, SLOT(slotProfileInfo()));
+
     readSettings();
     updateOkButtonState();
     updateGamutCheckState();
@@ -212,6 +217,20 @@ void SoftProofDialog::accept()
 
     d->switchOn = true;
     writeSettings();
+}
+
+void SoftProofDialog::slotProfileInfo()
+{
+    IccProfile profile = d->deviceProfileBox->currentProfile();
+
+    if (profile.isNull())
+    {
+        KMessageBox::error(this, i18n("No profile is selected."), i18n("Profile Error"));
+        return;
+    }
+
+    ICCProfileInfoDlg infoDlg(this, profile.filePath(), profile);
+    infoDlg.exec();
 }
 
 } // namespace Digikam
