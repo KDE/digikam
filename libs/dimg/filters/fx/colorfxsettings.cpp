@@ -32,12 +32,8 @@
 
 // Libkdcraw includes
 
-#include <rnuminput.h>
-#include <rcombobox.h>
-
-// Local includes
-
-#include "digikam_debug.h"
+#include <KDCraw/RNumInput>
+#include <KDCraw/RComboBox>
 
 namespace Digikam
 {

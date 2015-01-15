@@ -33,7 +33,7 @@
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 
 namespace Digikam
 {
@@ -200,7 +200,7 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
         }
         else
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Radius too small..."; 
+            qCDebug(LOG_DIMG) << "Radius too small..."; 
         }
 
         progress = (int)( ( (double)y * (100.0 / QThreadPool::globalInstance()->maxThreadCount()) ) / (stop-start));
@@ -225,7 +225,7 @@ void BlurFilter::filterImage()
 {
     if (d->radius < 1)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Radius out of range..."; 
+        qCDebug(LOG_DIMG) << "Radius out of range..."; 
         return;
     }
 

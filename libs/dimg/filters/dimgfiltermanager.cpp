@@ -36,7 +36,7 @@
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 #include "digikam_config.h"
 #include "dimgfiltergenerator.h"
 #include "dimgbuiltinfilter.h"
@@ -245,7 +245,7 @@ void DImgFilterManager::Private::addGenerator(const ImgFilterPtr& generator)
     {
         if (filterMap.contains(id))
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Attempt to register filter identifier" << id << "twice. Ignoring.";
+            qCDebug(LOG_DIMG) << "Attempt to register filter identifier" << id << "twice. Ignoring.";
             continue;
         }
 
@@ -479,7 +479,7 @@ bool DImgFilterManager::isRawConversion(const QString& filterIdentifier)
 DImgThreadedFilter* DImgFilterManager::createFilter(const QString& filterIdentifier, int version)
 {
     QMutexLocker lock(&d->mutex);
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Creating filter " << filterIdentifier;
+    qCDebug(LOG_DIMG) << "Creating filter " << filterIdentifier;
     DImgFilterGenerator* gen = d->filterMap.value(filterIdentifier).data();
 
     if (gen)

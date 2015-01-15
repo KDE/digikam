@@ -25,8 +25,8 @@
 
 // Local includes
 
-#include "digikam_debug.h"
 #include "dimg.h"
+#include "dimg_debug.h"
 
 namespace Digikam
 {
@@ -57,7 +57,7 @@ void AutoExpoFilter::filterImage()
 
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Ref. image and Org. have different bits depth";
+        qCDebug(LOG_DIMG) << "Ref. image and Org. have different bits depth";
         return;
     }
 

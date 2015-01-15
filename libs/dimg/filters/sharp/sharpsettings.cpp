@@ -52,7 +52,7 @@
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 #include "digikam_config.h"
 
 #ifdef HAVE_EIGEN3

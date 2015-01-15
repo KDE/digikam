@@ -32,8 +32,8 @@
 
 // Local includes
 
-#include "digikam_debug.h"
 #include "dimg.h"
+#include "dimg_debug.h"
 #include "digikam_globals.h"
 
 namespace Digikam
@@ -87,7 +87,7 @@ void TextureFilter::filterImage()
     int bytesDepth  = m_orgImage.bytesDepth();
     bool sixteenBit = m_orgImage.sixteenBit();
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Texture File: " << m_texturePath;
+    qCDebug(LOG_DIMG) << "Texture File: " << m_texturePath;
     DImg texture(m_texturePath);
 
     if (texture.isNull())

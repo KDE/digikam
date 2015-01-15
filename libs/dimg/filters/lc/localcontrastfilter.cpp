@@ -34,7 +34,7 @@
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 #include "randomnumbergenerator.h"
 
 namespace Digikam
@@ -363,8 +363,8 @@ void LocalContrastFilter::processRgbImage(float* const img, int sizex, int sizey
 
     if ((d->par.highSaturation != 100) || (d->par.lowSaturation != 100))
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "highSaturation : " << d->par.highSaturation;
-        qCDebug(DIGIKAM_GENERAL_LOG) << "lowSaturation : "  << d->par.lowSaturation;
+        qCDebug(LOG_DIMG) << "highSaturation : " << d->par.highSaturation;
+        qCDebug(LOG_DIMG) << "lowSaturation : "  << d->par.lowSaturation;
 
         QList <QFuture<void> > tasks;
 

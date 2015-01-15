@@ -31,7 +31,6 @@
 
 // Local includes
 
-#include "digikam_debug.h"
 #include "dimg.h"
 #include "dcolor.h"
 

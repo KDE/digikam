@@ -38,7 +38,7 @@
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 #include "dimg_p.h"
 #include "dmetadata.h"
 #include "dimgloaderobserver.h"
@@ -165,7 +165,7 @@ qint64 DImgLoader::checkAllocation(qint64 fullSize)
 {
     if (fullSize > std::numeric_limits<int>::max())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot allocate buffer of size" << fullSize;
+        qCDebug(LOG_DIMG) << "Cannot allocate buffer of size" << fullSize;
         return 0;
     }
 
@@ -179,12 +179,12 @@ qint64 DImgLoader::checkAllocation(qint64 fullSize)
 
         if (res == -1)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Not a recognized platform to get memory information";
+            qCDebug(LOG_DIMG) << "Not a recognized platform to get memory information";
             return -1;
         }
         else if (res == 0)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Error to get physical memory information form a recognized platform";
+            qCDebug(LOG_DIMG) << "Error to get physical memory information form a recognized platform";
             return 0;
         }
 
@@ -192,8 +192,8 @@ qint64 DImgLoader::checkAllocation(qint64 fullSize)
 
         if (fullSize > available)
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Not enough memory to allocate buffer of size " << fullSize;
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Available memory size is " << available;
+            qCDebug(LOG_DIMG) << "Not enough memory to allocate buffer of size " << fullSize;
+            qCDebug(LOG_DIMG) << "Available memory size is " << available;
             return 0;
         }
     }
