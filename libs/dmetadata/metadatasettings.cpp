@@ -25,7 +25,6 @@
 
 // Qt includes
 
-#include <QApplication>
 #include <QDir>
 #include <QFileInfo>
 #include <QMutex>
