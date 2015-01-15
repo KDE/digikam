@@ -148,11 +148,13 @@ void ImageRegionWidget::slotPreviewModeChanged(int mode)
 
 QRect ImageRegionWidget::getOriginalImageRegionToRender() const
 {
-    QRect r = d_ptr->item->getImageRegion();
-    int x   = (int)((double)r.x()      / layout()->zoomFactor());
-    int y   = (int)((double)r.y()      / layout()->zoomFactor());
-    int w   = (int)((double)r.width()  / layout()->zoomFactor());
-    int h   = (int)((double)r.height() / layout()->zoomFactor());
+    QRect  r = d_ptr->item->getImageRegion();
+    double z = layout()->zoomFactor();
+
+    int x    = qRound((double)r.x()      / z);
+    int y    = qRound((double)r.y()      / z);
+    int w    = qRound((double)r.width()  / z);
+    int h    = qRound((double)r.height() / z);
 
     QRect rect(x, y, w, h);
     return (rect);
