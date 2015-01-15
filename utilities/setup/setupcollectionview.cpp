@@ -23,6 +23,8 @@
  *
  * ============================================================ */
 
+#define INTERNALID 65535
+
 #include "setupcollectionview.h"
 
 // Qt includes
@@ -353,7 +355,7 @@ void SetupCollectionTreeView::modelLoadedCollections()
 // ------------- Model ----------------- //
 
 SetupCollectionModel::Item::Item()
-    : parentId(-1), deleted(false)
+    : parentId(INTERNALID), deleted(false)
 {
 }
 
@@ -371,8 +373,8 @@ SetupCollectionModel::Item::Item(const QString& path, const QString& label, Setu
 /*
     Internal data structure:
 
-    The category entries get a model index with internalId -1 and are identified by their row().
-    The item entries get the index in m_collections as internalId.
+    The category entries get a model index with INTERNALID and are identified by their row().
+    The item entries get the index in m_collections as INTERNALID.
     No item is ever removed from m_collections, deleted entries are only marked as such.
 
     Items have a location, a parentId, and a name and label field.
@@ -746,7 +748,7 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    if (index.internalId() == -1)
+    if (index.internalId() == INTERNALID)
     {
         if (index.column() == 0)
         {
@@ -959,7 +961,7 @@ int SetupCollectionModel::rowCount(const QModelIndex& parent) const
         return 0;
     }
 
-    if (parent.internalId() != -1)
+    if (parent.internalId() != INTERNALID)
     {
         return 0;    // Level 2: no children
     }
@@ -991,7 +993,7 @@ Qt::ItemFlags SetupCollectionModel::flags(const QModelIndex& index) const
         return Qt::NoItemFlags;
     }
 
-    if (index.internalId() == -1)
+    if (index.internalId() == INTERNALID)
     {
         return Qt::ItemIsEnabled;
     }
@@ -1011,7 +1013,7 @@ Qt::ItemFlags SetupCollectionModel::flags(const QModelIndex& index) const
 bool SetupCollectionModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
     // only editable in one case
-    if (index.isValid() && index.internalId() != -1 && index.column() == ColumnName && role == Qt::EditRole)
+    if (index.isValid() && index.internalId() != INTERNALID && index.column() == ColumnName && role == Qt::EditRole)
     {
         Item& item = m_collections[index.internalId()];
         item.label = value.toString();
@@ -1027,7 +1029,7 @@ QModelIndex SetupCollectionModel::index(int row, int column, const QModelIndex& 
     {
         if (row < NumberOfCategories && row >= 0 && column == 0)
         {
-            return createIndex(row, 0, -1);
+            return createIndex(row, 0, INTERNALID);
         }
     }
     else if (row >= 0 && column < 4)
@@ -1063,14 +1065,14 @@ QModelIndex SetupCollectionModel::parent(const QModelIndex& index) const
         return QModelIndex();
     }
 
-    if (index.internalId() == -1)
+    if (index.internalId() == INTERNALID)
     {
         return QModelIndex();    // one of the three toplevel items
     }
 
     const Item& item = m_collections.at(index.internalId());
 
-    return createIndex(item.parentId, 0, -1);
+    return createIndex(item.parentId, 0, INTERNALID);
 }
 
 QModelIndex SetupCollectionModel::indexForCategory(Category category) const
@@ -1133,7 +1135,7 @@ int SetupCollectionModel::categoryButtonMapId(const QModelIndex& index) const
 {
     if (!index.isValid() || index.parent().isValid())
     {
-        return -1;
+        return INTERNALID;
     }
 
     return index.row();
@@ -1141,9 +1143,9 @@ int SetupCollectionModel::categoryButtonMapId(const QModelIndex& index) const
 
 int SetupCollectionModel::buttonMapId(const QModelIndex& index) const
 {
-    if (!index.isValid() || index.internalId() == -1)
+    if (!index.isValid() || index.internalId() == INTERNALID)
     {
-        return -1;
+        return INTERNALID;
     }
 
     return index.internalId();
