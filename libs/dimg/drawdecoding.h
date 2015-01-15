@@ -30,8 +30,6 @@
 
 #include <QList>
 #include <QMetaType>
-#include <QPolygon>
-#include <QDomElement>
 
 // Libkdcraw includes
 
@@ -44,6 +42,8 @@
 #include "bcgcontainer.h"
 #include "wbcontainer.h"
 #include "curvescontainer.h"
+
+class QDomElement;
 
 using namespace KDcrawIface;
 

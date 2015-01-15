@@ -31,7 +31,6 @@
 
 // Qt includes
 
-#include <QDomDocument>
 #include <QFile>
 #include <QFileInfo>
 
@@ -52,6 +51,7 @@
 #include "template.h"
 #include "digikam_version.h"
 #include "digikam_globals.h"
+#include "dimg.h"
 
 using namespace KDcrawIface;
 
