@@ -204,7 +204,6 @@ void SinglePhotoPreviewLayout::setZoomFactor(double z, const QPoint& givenAnchor
     }
 
     d->isFitToWindow = false;
-    d->previousZoom  = d->zoomSettings()->zoomFactor();
 
     double minZoom   = qMin(z, 0.1);
     double maxZoom   = qMax(z, maxZoomFactor());
@@ -247,8 +246,12 @@ void SinglePhotoPreviewLayout::fitToWindow()
         return;
     }
 
+    if (!d->isFitToWindow)
+    {
+        d->previousZoom  = d->zoomSettings()->zoomFactor();
+    }
+
     d->isFitToWindow = true;
-    d->previousZoom  = d->zoomSettings()->zoomFactor();
 
     d->zoomSettings()->fitToSize(d->frameSize(), ImageZoomSettings::OnlyScaleDown);
     d->item->sizeHasChanged();

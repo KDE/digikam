@@ -74,7 +74,7 @@ public:
     int   contentsY()   const;
     QRect visibleArea() const;
     void  setContentsPos(int x, int y);
-    void  toggleFitToWindow();
+    void  fitToWindow();
     void  toggleFullScreen(bool set);
 
 Q_SIGNALS:
