@@ -31,6 +31,9 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QIcon>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
+#include <QPushButton>
 
 // KDE includes
 
@@ -55,6 +58,7 @@ public:
         switchOn(false),
         deviceProfileBox(0),
         infoProofProfiles(0),
+        buttons(0),
         gamutCheckBox(0),
         maskColorLabel(0),
         maskColorButton(0),
@@ -66,7 +70,7 @@ public:
 
     IccProfilesComboBox*        deviceProfileBox;
     QPushButton*                infoProofProfiles;
-
+    QDialogButtonBox*           buttons;
     QCheckBox*                  gamutCheckBox;
     QLabel*                     maskColorLabel;
     KColorButton*               maskColorButton;
@@ -75,23 +79,21 @@ public:
 };
 
 SoftProofDialog::SoftProofDialog(QWidget* const parent)
-    : KDialog(parent), d(new Private)
+    : QDialog(parent),
+      d(new Private)
 {
-    setCaption(i18n("Soft Proofing Options"));
-
-    setButtons(Ok | Cancel);
-    setDefaultButton(Ok);
-    setButtonFocus(Ok);
     setModal(true);
-    //TODO setHelp("softproofing.anchor", "digikam");
-    setButtonText(Ok,        i18n("Soft Proofing On"));
-    setButtonToolTip(Ok,     i18n("Enable soft-proofing color managed view"));
-    setButtonText(Cancel,    i18n("Soft Proofing Off"));
-    setButtonToolTip(Cancel, i18n("Disable soft-proofing color managed view"));
+    setWindowTitle(i18n("Soft Proofing Options"));
+
+    d->buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
+    d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
+    d->buttons->button(QDialogButtonBox::Ok)->setText(i18n("Soft Proofing On"));
+    d->buttons->button(QDialogButtonBox::Ok)->setToolTip(i18n("Enable soft-proofing color managed view"));
+    d->buttons->button(QDialogButtonBox::Cancel)->setText(i18n("Soft Proofing Off"));
+    d->buttons->button(QDialogButtonBox::Cancel)->setToolTip(i18n("Disable soft-proofing color managed view"));
 
     QWidget* const page           = new QWidget(this);
     QVBoxLayout* const mainLayout = new QVBoxLayout(page);
-    setMainWidget(page);
 
     // ---
 
@@ -128,13 +130,12 @@ SoftProofDialog::SoftProofDialog(QWidget* const parent)
     QGroupBox* const optionsBox    = new QGroupBox;
     QGridLayout* const optionsGrid = new QGridLayout;
 
-    QLabel* const intentLabel = new QLabel(i18n("Rendering intent:"));
-    d->proofingIntentBox      = new IccRenderingIntentComboBox;
+    QLabel* const intentLabel      = new QLabel(i18n("Rendering intent:"));
+    d->proofingIntentBox           = new IccRenderingIntentComboBox;
     //TODO d->proofingIntentBox->setWhatsThis(i18n(""));
     intentLabel->setBuddy(d->proofingIntentBox);
 
     d->gamutCheckBox   = new QCheckBox(i18n("Highlight out-of-gamut colors"));
-
     d->maskColorLabel  = new QLabel(i18n("Highlighting color:"));
     d->maskColorButton = new KColorButton;
     d->maskColorLabel->setBuddy(d->maskColorButton);
@@ -155,11 +156,22 @@ SoftProofDialog::SoftProofDialog(QWidget* const parent)
     mainLayout->addLayout(profileGrid);
     mainLayout->addWidget(optionsBox);
 
+    QVBoxLayout* const vbx = new QVBoxLayout(this);
+    vbx->addWidget(page);
+    vbx->addWidget(d->buttons);
+    setLayout(vbx);
+
     connect(d->deviceProfileBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(updateOkButtonState()));
 
     connect(d->gamutCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(updateGamutCheckState()));
+
+    connect(d->buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+            this, SLOT(slotOk()));
+
+    connect(d->buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
+            this, SLOT(reject()));
 
     readSettings();
     updateOkButtonState();
@@ -185,7 +197,7 @@ void SoftProofDialog::updateGamutCheckState()
 
 void SoftProofDialog::updateOkButtonState()
 {
-    enableButtonOk(d->deviceProfileBox->currentIndex() != -1);
+    d->buttons->button(QDialogButtonBox::Ok)->setEnabled(d->deviceProfileBox->currentIndex() != -1);
 }
 
 void SoftProofDialog::readSettings()
@@ -207,12 +219,11 @@ void SoftProofDialog::writeSettings()
     IccSettings::instance()->setSettings(settings);
 }
 
-void SoftProofDialog::accept()
+void SoftProofDialog::slotOk()
 {
-    KDialog::accept();
-
     d->switchOn = true;
     writeSettings();
+    accept();
 }
 
 } // namespace Digikam

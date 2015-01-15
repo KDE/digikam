@@ -26,7 +26,7 @@
 
 // KDE includes
 
-#include <kdialog.h>
+#include <QDialog>
 
 // Local includes
 
@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class SoftProofDialog : public KDialog
+class SoftProofDialog : public QDialog
 {
     Q_OBJECT
 
@@ -52,12 +52,11 @@ protected:
     void readSettings();
     void writeSettings();
 
-    virtual void accept();
-
 protected Q_SLOTS:
 
     void updateGamutCheckState();
     void updateOkButtonState();
+    void slotOk();
 
 private:
 
