@@ -38,7 +38,7 @@
 
 // Local includes
 
-#include "dimg.h"
+//#include "dimg.h"
 #include "captionvalues.h"
 #include "metadatasettingscontainer.h"
 #include "infocontainer.h"
