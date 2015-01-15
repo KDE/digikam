@@ -39,7 +39,7 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 
 // Local includes
 
@@ -156,7 +156,7 @@ void UnsharpMaskFilter::filterImage()
 
     if (m_orgImage.isNull())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "No image data available!";
+        qCWarning(LOG_DIMG) << "No image data available!";
         return;
     }
 

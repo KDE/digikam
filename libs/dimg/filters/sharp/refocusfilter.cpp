@@ -35,7 +35,7 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 
 // Local includes
 
@@ -177,7 +177,7 @@ void RefocusFilter::refocusImage(uchar* const data, int width, int height, bool 
     CMat* matrix = 0;
 
     // Compute matrix
-    qCDebug(DIGIKAM_GENERAL_LOG) << "RefocusFilter::Compute matrix...";
+    qCDebug(LOG_DIMG) << "RefocusFilter::Compute matrix...";
 
     CMat circle, gaussian, convolution;
 
@@ -193,7 +193,7 @@ void RefocusFilter::refocusImage(uchar* const data, int width, int height, bool 
     RefocusMatrix::finish_c_mat(&circle);
 
     // Apply deconvolution kernel to image.
-    qCDebug(DIGIKAM_GENERAL_LOG) << "RefocusFilter::Apply Matrix to image...";
+    qCDebug(LOG_DIMG) << "RefocusFilter::Apply Matrix to image...";
 
     Args prm;
     prm.orgData    = data;

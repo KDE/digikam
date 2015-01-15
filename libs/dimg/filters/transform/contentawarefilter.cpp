@@ -35,7 +35,7 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 
 namespace Digikam
 {
@@ -258,13 +258,13 @@ void ContentAwareFilter::progressCallback(int progress)
         postProgress(progress);
     }
 
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "Content Aware Resizing: " << progress << " %";
+    //qCDebug(LOG_DIMG) << "Content Aware Resizing: " << progress << " %";
 }
 
 void ContentAwareFilter::cancelFilter()
 {
     // Handle cancel operations with lqr library.
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Stop LibLqr computation...";
+    qCDebug(LOG_DIMG) << "Stop LibLqr computation...";
     lqr_carver_cancel(d->carver);
     DImgThreadedFilter::cancelFilter();
 }

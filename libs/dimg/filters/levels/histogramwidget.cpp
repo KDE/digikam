@@ -50,7 +50,7 @@
 #include "ditemtooltip.h"
 #include "imagehistogram.h"
 #include "digikam_globals.h"
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 #include "histogrampainter.h"
 
 namespace Digikam
@@ -225,7 +225,7 @@ void HistogramWidget::updateData(const DImg& img, const DImg& sel, bool showProg
     }
     else
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Current histogram is null";
+        qCWarning(LOG_DIMG) << "Current histogram is null";
     }
 }
 
@@ -257,7 +257,7 @@ void HistogramWidget::setRenderingType(HistogramRenderingType type)
 
         if (!nowUsedHistogram)
         {
-            qCWarning(DIGIKAM_GENERAL_LOG) << "Current histogram is null";
+            qCWarning(LOG_DIMG) << "Current histogram is null";
             return;
         }
 

@@ -52,7 +52,7 @@
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 #include "iccprofile.h"
 #include "icctransform.h"
 
@@ -199,7 +199,7 @@ IccProfile IccSettings::Private::profileFromWindowSystem(QWidget* const widget)
 
     if (!desktop)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "No desktop widget available for application";
+        qCDebug(LOG_DIMG) << "No desktop widget available for application";
         return IccProfile();
     }
 
@@ -249,11 +249,11 @@ IccProfile IccSettings::Private::profileFromWindowSystem(QWidget* const widget)
             profile = bytes;
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Found X.org XICC monitor profile " << profile.description();
+        qCDebug(LOG_DIMG) << "Found X.org XICC monitor profile " << profile.description();
     }
     else
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "No X.org XICC profile installed for screen " << screenNumber;
+        qCDebug(LOG_DIMG) << "No X.org XICC profile installed for screen " << screenNumber;
     }
 
     // insert to cache even if null
@@ -410,7 +410,7 @@ QList<IccProfile> IccSettings::Private::scanDirectories(const QStringList& dirs)
     QList<IccProfile> profiles;
     QStringList       filters;
     filters << "*.icc" << "*.icm";
-    qCDebug(DIGIKAM_GENERAL_LOG) << dirs;
+    qCDebug(LOG_DIMG) << dirs;
 
     foreach(const QString& dirPath, dirs)
     {
@@ -438,7 +438,7 @@ void IccSettings::Private::scanDirectory(const QString& path, const QStringList&
     {
         if (info.isFile())
         {
-            //qCDebug(DIGIKAM_GENERAL_LOG) << info.filePath() << (info.exists() && info.isReadable());
+            //qCDebug(LOG_DIMG) << info.filePath() << (info.exists() && info.isReadable());
             IccProfile profile(info.filePath());
 
             if (profile.open())

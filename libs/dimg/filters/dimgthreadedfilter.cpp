@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 
 namespace Digikam
 {
@@ -179,7 +179,7 @@ void DImgThreadedFilter::startFilter()
     else  // No image data
     {
         emit finished(false);
-        qCDebug(DIGIKAM_GENERAL_LOG) << m_name << "::No valid image data !!! ...";
+        qCDebug(LOG_DIMG) << m_name << "::No valid image data !!! ...";
     }
 }
 
@@ -195,12 +195,12 @@ void DImgThreadedFilter::startFilterDirectly()
         {
             QDateTime now = QDateTime::currentDateTime();
             filterImage();
-            qCDebug(DIGIKAM_GENERAL_LOG) << m_name << ":: excecution time : " << now.msecsTo(QDateTime::currentDateTime()) << " ms";
+            qCDebug(LOG_DIMG) << m_name << ":: excecution time : " << now.msecsTo(QDateTime::currentDateTime()) << " ms";
         }
         catch (std::bad_alloc& ex)
         {
             //TODO: User notification
-            qCCritical(DIGIKAM_GENERAL_LOG) << "Caught out-of-memory exception! Aborting operation" << ex.what();
+            qCCritical(LOG_DIMG) << "Caught out-of-memory exception! Aborting operation" << ex.what();
             emit finished(false);
             return;
         }
@@ -210,7 +210,7 @@ void DImgThreadedFilter::startFilterDirectly()
     else  // No image data
     {
         emit finished(false);
-        qCDebug(DIGIKAM_GENERAL_LOG) << m_name << "::No valid image data !!! ...";
+        qCDebug(LOG_DIMG) << m_name << "::No valid image data !!! ...";
     }
 }
 

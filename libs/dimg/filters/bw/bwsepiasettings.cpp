@@ -52,7 +52,7 @@
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 #include "previewlist.h"
 #include "curvesbox.h"
 #include "curveswidget.h"

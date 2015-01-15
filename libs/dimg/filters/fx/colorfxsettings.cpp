@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 
 
 #include <rnuminput.h>

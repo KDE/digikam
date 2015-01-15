@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 
 // Local includes
 
@@ -90,7 +90,7 @@ void TextureFilter::filterImage()
     int bytesDepth  = m_orgImage.bytesDepth();
     bool sixteenBit = m_orgImage.sixteenBit();
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Texture File: " << m_texturePath;
+    qCDebug(LOG_DIMG) << "Texture File: " << m_texturePath;
     DImg texture(m_texturePath);
 
     if (texture.isNull())

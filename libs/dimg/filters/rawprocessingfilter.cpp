@@ -26,7 +26,7 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 
 // KDcraw includes
 

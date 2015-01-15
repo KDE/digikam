@@ -45,7 +45,7 @@
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 #include "iccprofilescombobox.h"
 #include "iccprofileinfodlg.h"
 #include "iccsettings.h"

@@ -30,10 +30,9 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
-
 // Local includes
 
+#include "dimg_debug.h"
 #include "digikam_export.h"
 #include "dimgbuiltinfilter.h"
 #include "dimgfiltermanager.h"
@@ -182,7 +181,7 @@ void FilterActionFilter::filterImage()
 
     foreach(const FilterAction& action, d->actions)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Replaying action" << action.identifier();
+        qCDebug(LOG_DIMG) << "Replaying action" << action.identifier();
 
         if (action.isNull())
         {

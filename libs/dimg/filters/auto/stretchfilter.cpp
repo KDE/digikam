@@ -30,7 +30,7 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 
 // Local includes
 
@@ -76,7 +76,7 @@ void StretchFilter::stretchContrastImage()
 {
     if (m_orgImage.sixteenBit() != m_refImage.sixteenBit())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Ref. image and Org. has different bits depth";
+        qCDebug(LOG_DIMG) << "Ref. image and Org. has different bits depth";
         return;
     }
 
@@ -90,7 +90,7 @@ void StretchFilter::stretchContrastImage()
     QScopedPointer<ImageHistogram> histogram(new ImageHistogram(m_refImage));
     if (histogram.isNull())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << ("Unable to allocate memory!");
+        qCWarning(LOG_DIMG) << ("Unable to allocate memory!");
         return;
     }
     histogram->calculate();
@@ -100,7 +100,7 @@ void StretchFilter::stretchContrastImage()
 
     if (normalize_map.isNull())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << ("Unable to allocate memory!");
+        qCWarning(LOG_DIMG) << ("Unable to allocate memory!");
         return;
     }
 

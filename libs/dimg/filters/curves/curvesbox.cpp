@@ -46,7 +46,7 @@
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 #include "colorgradientwidget.h"
 #include "curveswidget.h"
 #include "editortoolsettings.h"

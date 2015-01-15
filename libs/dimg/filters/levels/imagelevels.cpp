@@ -46,7 +46,7 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 
 // Local includes
 
@@ -742,14 +742,14 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(const QUrl& fileUrl)
 
         if (fields != 4)
         {
-            qCWarning(DIGIKAM_GENERAL_LOG) <<  "Invalid Gimp levels file!";
+            qCWarning(LOG_DIMG) <<  "Invalid Gimp levels file!";
             fclose(file);
             return false;
         }
 
         if (!fgets(buf, 50, file))
         {
-            qCWarning(DIGIKAM_GENERAL_LOG) <<  "Invalid Gimp levels file!";
+            qCWarning(LOG_DIMG) <<  "Invalid Gimp levels file!";
             fclose(file);
             return false;
         }
@@ -758,7 +758,7 @@ bool ImageLevels::loadLevelsFromGimpLevelsFile(const QUrl& fileUrl)
 
         if (buf == nptr || errno == ERANGE)
         {
-            qCWarning(DIGIKAM_GENERAL_LOG) <<  "Invalid Gimp levels file!";
+            qCWarning(LOG_DIMG) <<  "Invalid Gimp levels file!";
             fclose(file);
             return false;
         }

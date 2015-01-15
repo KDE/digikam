@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 
 // Local includes
 
@@ -61,7 +61,7 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver* const obser
 
     if (image.isNull())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Can not load \"" << filePath << "\" using DImg::QImageLoader!";
+        qCDebug(LOG_DIMG) << "Can not load \"" << filePath << "\" using DImg::QImageLoader!";
         loadingFailed();
         return false;
     }
@@ -108,7 +108,7 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver* const obser
 
     if (!data)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to allocate memory for loading" << filePath;
+        qCDebug(LOG_DIMG) << "Failed to allocate memory for loading" << filePath;
         loadingFailed();
         return false;
     }

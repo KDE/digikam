@@ -38,7 +38,7 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 
 // Local includes
 
@@ -96,7 +96,7 @@ void CharcoalFilter::filterImage()
 {
     if (m_orgImage.isNull())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "No image data available!";
+        qCWarning(LOG_DIMG) << "No image data available!";
         return;
     }
 
@@ -113,7 +113,7 @@ void CharcoalFilter::filterImage()
 
     if ((int)m_orgImage.width() < kernelWidth)
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Image is smaller than radius!";
+        qCWarning(LOG_DIMG) << "Image is smaller than radius!";
         return;
     }
 
@@ -121,7 +121,7 @@ void CharcoalFilter::filterImage()
 
     if (kernel.isNull())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Unable to allocate memory!";
+        qCWarning(LOG_DIMG) << "Unable to allocate memory!";
         return;
     }
 
@@ -259,7 +259,7 @@ bool CharcoalFilter::convolveImage(const unsigned int order, const double* kerne
 
     if ((kernelWidth % 2) == 0)
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Kernel width must be an odd number!";
+        qCWarning(LOG_DIMG) << "Kernel width must be an odd number!";
         return false;
     }
 
@@ -270,7 +270,7 @@ bool CharcoalFilter::convolveImage(const unsigned int order, const double* kerne
 
     if (!normal_kernel)
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Unable to allocate memory!";
+        qCWarning(LOG_DIMG) << "Unable to allocate memory!";
         return false;
     }
 

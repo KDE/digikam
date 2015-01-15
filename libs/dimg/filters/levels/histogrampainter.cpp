@@ -37,7 +37,7 @@
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 
 #define HISTOGRAM_CALC_CUTOFF_MIN    0.1
 #define HISTOGRAM_CALC_CUTOFF_MAX    0.9
@@ -98,7 +98,7 @@ public:
                         break;
 
                     default:
-                        qCDebug(DIGIKAM_GENERAL_LOG) << "Untreated channel type " << channelType << ". Using luminosity as default.";
+                        qCDebug(LOG_DIMG) << "Untreated channel type " << channelType << ". Using luminosity as default.";
                         max = qMin(histogram->getMaximum(LuminosityChannel, startSeg, endSeg) / HISTOGRAM_CALC_CUTOFF_HEIGHT,
                                    histogram->getMaximum(LuminosityChannel, 0, segments - 1));
                         break;
@@ -125,7 +125,7 @@ public:
                         break;
 
                     default:
-                        qCDebug(DIGIKAM_GENERAL_LOG) << "Untreated channel type " << channelType << ". Using luminosity as default.";
+                        qCDebug(LOG_DIMG) << "Untreated channel type " << channelType << ". Using luminosity as default.";
                         max = histogram->getMaximum(LuminosityChannel, 0, segments - 1);
                         break;
                 }
@@ -142,7 +142,7 @@ public:
                 break;
 
             default:
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Untreated histogram scale " << scale << ". Using linear as default.";
+                qCDebug(LOG_DIMG) << "Untreated histogram scale " << scale << ". Using linear as default.";
                 break;
         }
 
@@ -172,7 +172,7 @@ public:
 
                 if (value < 0.0)
                 {
-                    qCWarning(DIGIKAM_GENERAL_LOG) << "Scaling value < 0: " << value << ". Assuming 0.";
+                    qCWarning(LOG_DIMG) << "Scaling value < 0: " << value << ". Assuming 0.";
                     return 0;
                 }
 
@@ -181,7 +181,7 @@ public:
 
             default:
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Unknown scale type " << scale;
+                qCDebug(LOG_DIMG) << "Unknown scale type " << scale;
                 return 0;
             }
         }
@@ -547,13 +547,13 @@ void HistogramPainter::setSelection(double selectionMin, double selectionMax)
 {
     if (selectionMin < 0.0 || selectionMin > 1.0)
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "selectionMin out of range: " << selectionMin << ". Clamping value";
+        qCWarning(LOG_DIMG) << "selectionMin out of range: " << selectionMin << ". Clamping value";
         selectionMin = qMax(0.0, qMin(1.0, selectionMin));
     }
 
     if (selectionMax < 0.0 || selectionMax > 1.0)
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "selectionMax out of range: " << selectionMax << ". Clamping value";
+        qCWarning(LOG_DIMG) << "selectionMax out of range: " << selectionMax << ". Clamping value";
         selectionMax = qMax(0.0, qMin(1.0, selectionMax));
     }
 
@@ -586,7 +586,7 @@ void HistogramPainter::render(QPixmap& bufferPixmap)
 {
     if (!d->histogram)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot render because the histogram is missing";
+        qCDebug(LOG_DIMG) << "Cannot render because the histogram is missing";
         return;
     }
 

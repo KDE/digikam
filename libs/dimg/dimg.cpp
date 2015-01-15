@@ -85,7 +85,7 @@ extern "C"
 #include "dmetadata.h"
 #include "dimgloaderobserver.h"
 #include "randomnumbergenerator.h"
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 
 #ifdef HAVE_JASPER
 #include "jp2kloader.h"
@@ -187,10 +187,10 @@ DImg::~DImg()
 
 DImg& DImg::operator=(const DImg& image)
 {
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "Original image: " << m_priv->imageHistory.entries().count() << " | " << &m_priv;
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "New image: " << image.m_priv->imageHistory.entries().count() << " | " << &(image.m_priv);
+    //qCDebug(LOG_DIMG) << "Original image: " << m_priv->imageHistory.entries().count() << " | " << &m_priv;
+    //qCDebug(LOG_DIMG) << "New image: " << image.m_priv->imageHistory.entries().count() << " | " << &(image.m_priv);
     m_priv = image.m_priv;
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "Original new image: " << m_priv->imageHistory.entries().count() << " | " << &m_priv;
+    //qCDebug(LOG_DIMG) << "Original new image: " << m_priv->imageHistory.entries().count() << " | " << &m_priv;
     return *this;
 }
 
@@ -421,13 +421,13 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
     {
         case (NONE):
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << filePath << " : Unknown image format !!!";
+            qCDebug(LOG_DIMG) << filePath << " : Unknown image format !!!";
             return false;
         }
 
         case (JPEG):
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << filePath << " : JPEG file identified";
+            qCDebug(LOG_DIMG) << filePath << " : JPEG file identified";
             JPEGLoader loader(this);
             loader.setLoadFlags(loadFlags);
 
@@ -445,7 +445,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
 
         case (TIFF):
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << filePath << " : TIFF file identified";
+            qCDebug(LOG_DIMG) << filePath << " : TIFF file identified";
             TIFFLoader loader(this);
             loader.setLoadFlags(loadFlags);
 
@@ -463,7 +463,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
 
         case (PNG):
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << filePath << " : PNG file identified";
+            qCDebug(LOG_DIMG) << filePath << " : PNG file identified";
             PNGLoader loader(this);
             loader.setLoadFlags(loadFlags);
 
@@ -481,7 +481,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
 
         case (PPM):
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << filePath << " : PPM file identified";
+            qCDebug(LOG_DIMG) << filePath << " : PPM file identified";
             PPMLoader loader(this);
             loader.setLoadFlags(loadFlags);
 
@@ -499,7 +499,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
 
         case (RAW):
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << filePath << " : RAW file identified";
+            qCDebug(LOG_DIMG) << filePath << " : RAW file identified";
             RAWLoader loader(this, rawDecodingSettings);
             loader.setLoadFlags(loadFlags);
 
@@ -519,7 +519,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
 #ifdef HAVE_JASPER
         case (JP2K):
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << filePath << " : JPEG2000 file identified";
+            qCDebug(LOG_DIMG) << filePath << " : JPEG2000 file identified";
             JP2KLoader loader(this);
             loader.setLoadFlags(loadFlags);
 
@@ -538,7 +538,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
 
         case (PGF):
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << filePath << " : PGF file identified";
+            qCDebug(LOG_DIMG) << filePath << " : PGF file identified";
             PGFLoader loader(this);
             loader.setLoadFlags(loadFlags);
 
@@ -556,7 +556,7 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
 
         default:
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << filePath << " : QIMAGE file identified";
+            qCDebug(LOG_DIMG) << filePath << " : QIMAGE file identified";
             QImageLoader loader(this);
             loader.setLoadFlags(loadFlags);
 
@@ -645,7 +645,7 @@ bool DImg::save(const QString& filePath, FORMAT frm, DImgLoaderObserver* const o
 
 bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserver* const observer)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Saving to " << filePath << " with format: " << format;
+    qCDebug(LOG_DIMG) << "Saving to " << filePath << " with format: " << format;
     if (isNull())
     {
         return false;
@@ -739,7 +739,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 
     if (!fileInfo.exists())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "File \"" << filePath << "\" does not exist";
+        qCDebug(LOG_DIMG) << "File \"" << filePath << "\" does not exist";
         return NONE;
     }
 
@@ -783,7 +783,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 
     if (!f)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to open file \"" << filePath << "\"";
+        qCDebug(LOG_DIMG) << "Failed to open file \"" << filePath << "\"";
         return NONE;
     }
 
@@ -793,7 +793,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 
     if (fread(&header, headerLen, 1, f) != 1)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to read header of file \"" << filePath << "\"";
+        qCDebug(LOG_DIMG) << "Failed to read header of file \"" << filePath << "\"";
         fclose(f);
         return NONE;
     }
@@ -1561,7 +1561,7 @@ DImg DImg::copy(int x, int y, int w, int h) const
 {
     if (isNull() || w <= 0 || h <= 0)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << " : return null image!";
+        qCDebug(LOG_DIMG) << " : return null image!";
         return DImg();
     }
 
@@ -1598,7 +1598,7 @@ void DImg::bitBltImage(const DImg* const src, int sx, int sy, int w, int h, int 
 
     if (src->sixteenBit() != sixteenBit())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Blitting from 8-bit to 16-bit or vice versa is not supported";
+        qCWarning(LOG_DIMG) << "Blitting from 8-bit to 16-bit or vice versa is not supported";
         return;
     }
 
@@ -1622,7 +1622,7 @@ void DImg::bitBltImage(const uchar* const src, int sx, int sy, int w, int h, int
 
     if (bytesDepth() != sdepth)
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Blitting from 8-bit to 16-bit or vice versa is not supported";
+        qCWarning(LOG_DIMG) << "Blitting from 8-bit to 16-bit or vice versa is not supported";
         return;
     }
 
@@ -1752,7 +1752,7 @@ void DImg::bitBlendImage(DColorComposer* const composer, const DImg* const src,
 
     if (src->sixteenBit() != sixteenBit())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Blending from 8-bit to 16-bit or vice versa is not supported";
+        qCWarning(LOG_DIMG) << "Blending from 8-bit to 16-bit or vice versa is not supported";
         return;
     }
 
@@ -1897,7 +1897,7 @@ QImage DImg::copyQImage() const
 
     if (img.isNull())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to allocate memory to copy DImg of size" << size() << "to QImage";
+        qCDebug(LOG_DIMG) << "Failed to allocate memory to copy DImg of size" << size() << "to QImage";
         return QImage();
     }
 
@@ -2731,7 +2731,7 @@ void DImg::convertDepth(int depth)
 
     if (depth != 32 && depth != 64)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << " : wrong color depth!";
+        qCDebug(LOG_DIMG) << " : wrong color depth!";
         return;
     }
 
@@ -2847,7 +2847,7 @@ QByteArray DImg::getUniqueHash() const
 
     if (!m_priv->attributes.contains("originalFilePath"))
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "DImg::getUniqueHash called without originalFilePath property set!";
+        qCWarning(LOG_DIMG) << "DImg::getUniqueHash called without originalFilePath property set!";
         return QByteArray();
     }
 
@@ -2880,7 +2880,7 @@ QByteArray DImg::getUniqueHashV2() const
 
     if (!m_priv->attributes.contains("originalFilePath"))
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "DImg::getUniqueHash called without originalFilePath property set!";
+        qCWarning(LOG_DIMG) << "DImg::getUniqueHash called without originalFilePath property set!";
         return QByteArray();
     }
 

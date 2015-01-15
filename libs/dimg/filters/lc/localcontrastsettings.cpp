@@ -60,7 +60,7 @@
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 
 using namespace KDcrawIface;
 

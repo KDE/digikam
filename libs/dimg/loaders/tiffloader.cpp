@@ -56,7 +56,7 @@ extern "C"
 
 // KDE includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 
 // Local includes
 
@@ -76,7 +76,7 @@ void TIFFLoader::dimg_tiff_warning(const char* module, const char* format, va_li
 #ifdef USE_IMGLOADERDEBUGMSG
     char message[4096];
     vsnprintf(message, 4096, format, warnings);
-    qCDebug(DIGIKAM_GENERAL_LOG) << module <<  "::" <<  message;
+    qCDebug(LOG_DIMG) << module <<  "::" <<  message;
 #else
     Q_UNUSED(module);
     Q_UNUSED(format);
@@ -89,7 +89,7 @@ void TIFFLoader::dimg_tiff_error(const char* module, const char* format, va_list
 #ifdef USE_IMGLOADERDEBUGMSG
     char message[4096];
     vsnprintf(message, 4096, format, errors);
-    qCDebug(DIGIKAM_GENERAL_LOG) << module << "::" << message;
+    qCDebug(LOG_DIMG) << module << "::" << message;
 #else
     Q_UNUSED(module);
     Q_UNUSED(format);
@@ -122,7 +122,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
     if (!tif)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot open image file.";
+        qCDebug(LOG_DIMG) << "Cannot open image file.";
         loadingFailed();
         return false;
     }
@@ -153,7 +153,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     if (TIFFGetFieldDefaulted(tif, TIFFTAG_ROWSPERSTRIP, &rows_per_strip) == 0
         || rows_per_strip == 0 || rows_per_strip == (unsigned int) - 1)
     {
-        qCWarning(DIGIKAM_GENERAL_LOG)  << "TIFF loader: Cannot handle non-stripped images. Loading file "
+        qCWarning(LOG_DIMG)  << "TIFF loader: Cannot handle non-stripped images. Loading file "
                     << filePath;
         TIFFClose(tif);
         loadingFailed();
@@ -166,7 +166,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         //        || rows_per_strip    >  h
        )
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "TIFF loader: Encountered invalid value in image." << endl
+        qCWarning(LOG_DIMG) << "TIFF loader: Encountered invalid value in image." << endl
                    << " bits_per_sample   : " << bits_per_sample  << endl
                    << " samples_per_pixel : " << samples_per_pixel << endl
                    << " rows_per_strip    : " << rows_per_strip << endl
@@ -189,7 +189,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         photometric != PHOTOMETRIC_PALETTE &&
         (m_loadFlags & LoadImageData))
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Can not handle image without RGB color-space: "
+        qCWarning(LOG_DIMG) << "Can not handle image without RGB color-space: "
                    << photometric;
         TIFFClose(tif);
         loadingFailed();
@@ -299,7 +299,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
             if (!data || strip.isNull())
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to allocate memory for TIFF image" << filePath;
+                qCDebug(LOG_DIMG) << "Failed to allocate memory for TIFF image" << filePath;
                 TIFFClose(tif);
                 loadingFailed();
                 return false;
@@ -330,7 +330,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
                 if (bytesRead == -1)
                 {
-                    qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to read strip";
+                    qCDebug(LOG_DIMG) << "Failed to read strip";
                     TIFFClose(tif);
                     loadingFailed();
                     return false;
@@ -463,7 +463,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
             if (!data || strip.isNull())
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to allocate memory for TIFF image" << filePath;
+                qCDebug(LOG_DIMG) << "Failed to allocate memory for TIFF image" << filePath;
                 TIFFClose(tif);
                 loadingFailed();
                 return false;
@@ -483,7 +483,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
             if (!TIFFRGBAImageOK(tif, emsg) || !TIFFRGBAImageBegin(&img, tif, 0, emsg))
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to set up RGBA reading of image, filename "
+                qCDebug(LOG_DIMG) << "Failed to set up RGBA reading of image, filename "
                          << TIFFFileName(tif) <<  " error message from Libtiff: " << emsg;
                 TIFFClose(tif);
                 loadingFailed();
@@ -527,7 +527,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
                 if (TIFFRGBAImageGet(&img, reinterpret_cast<uint32*>(strip.data()), img.width, rows_to_read) == -1)
                 {
-                    qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to read image data";
+                    qCDebug(LOG_DIMG) << "Failed to read image data";
                     TIFFClose(tif);
                     loadingFailed();
                     return false;
@@ -600,7 +600,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver* const observe
 
     if (!tif)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot open target image file.";
+        qCDebug(LOG_DIMG) << "Cannot open target image file.";
         return false;
     }
 
@@ -728,7 +728,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver* const observe
 
     if (!buf)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot allocate memory buffer for main image.";
+        qCDebug(LOG_DIMG) << "Cannot allocate memory buffer for main image.";
         TIFFClose(tif);
         return false;
     }
@@ -822,7 +822,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver* const observe
 
         if (!TIFFWriteScanline(tif, buf, y, 0))
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot write main image to target file.";
+            qCDebug(LOG_DIMG) << "Cannot write main image to target file.";
             _TIFFfree(buf);
             TIFFClose(tif);
             return false;
@@ -854,7 +854,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver* const observe
 
     if (!bufThumb)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot allocate memory buffer for thumbnail.";
+        qCDebug(LOG_DIMG) << "Cannot allocate memory buffer for thumbnail.";
         TIFFClose(tif);
         return false;
     }
@@ -875,7 +875,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver* const observe
 
         if (!TIFFWriteScanline(tif, bufThumb, y, 0))
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot write thumbnail to target file.";
+            qCDebug(LOG_DIMG) << "Cannot write thumbnail to target file.";
             _TIFFfree(bufThumb);
             TIFFClose(tif);
             return false;

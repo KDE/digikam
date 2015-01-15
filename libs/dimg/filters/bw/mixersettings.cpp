@@ -54,7 +54,7 @@
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 
 using namespace KDcrawIface;
 
@@ -691,7 +691,7 @@ void MixerSettings::saveAsSettings()
                 break;
 
             default:
-                qCWarning(DIGIKAM_GENERAL_LOG) <<  "Unknown Color channel gains";
+                qCWarning(LOG_DIMG) <<  "Unknown Color channel gains";
                 break;
         }
 

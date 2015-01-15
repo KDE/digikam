@@ -32,7 +32,7 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
+#include "dimg_debug.h"
 
 // Local includes
 
@@ -151,7 +151,7 @@ void WBFilter::autoWBAdjustementFromColor(const QColor& tc, double& temperature,
 
     float mr=0.0, mg=0.0, mb=0.0;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Sums:  R:" << tc.red() << " G:" << tc.green() << " B:" << tc.blue();
+    qCDebug(LOG_DIMG) << "Sums:  R:" << tc.red() << " G:" << tc.green() << " B:" << tc.blue();
 
     /* This is a dichotomic search based on Blue and Red layers ratio
        to find the matching temperature
@@ -164,7 +164,7 @@ void WBFilter::autoWBAdjustementFromColor(const QColor& tc, double& temperature,
 
     for (temperature = (tmin + tmax) / 2; tmax - tmin > 10; temperature = (tmin + tmax) / 2)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Intermediate Temperature (K):" << temperature;
+        qCDebug(LOG_DIMG) << "Intermediate Temperature (K):" << temperature;
         setRGBmult(temperature, green, mr, mg, mb);
 
         if (mr / mb > mBR)
@@ -180,8 +180,8 @@ void WBFilter::autoWBAdjustementFromColor(const QColor& tc, double& temperature,
     // Calculate the green level to neutralize picture
     green = (mr / mg) / ((double)tc.green() / (double)tc.red());
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Temperature (K):" << temperature;
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Green component:" << green;
+    qCDebug(LOG_DIMG) << "Temperature (K):" << temperature;
+    qCDebug(LOG_DIMG) << "Green component:" << green;
 }
 
 void WBFilter::autoExposureAdjustement(const DImg* const img, double& black, double& expo)
@@ -207,7 +207,7 @@ void WBFilter::autoExposureAdjustement(const DImg* const img, double& black, dou
     }
 
     expo = -log((float)(i + 1) / rgbMax) / log(2);
-    qCDebug(DIGIKAM_GENERAL_LOG) << "White level at:" << i;
+    qCDebug(LOG_DIMG) << "White level at:" << i;
 
     for (i = 1, sum = 0; (i < (int)rgbMax) && (sum < stop); ++i)
     {
@@ -217,7 +217,7 @@ void WBFilter::autoExposureAdjustement(const DImg* const img, double& black, dou
     black = (double)i / rgbMax;
     black /= 2;
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Black:" << black << "  Exposition:" << expo;
+    qCDebug(LOG_DIMG) << "Black:" << black << "  Exposition:" << expo;
 
     delete histogram;
 }
@@ -390,7 +390,7 @@ void WBFilter::setLUTv()
         d->WP = d->BP + 1;
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "T(K): " << m_settings.temperature
+    qCDebug(LOG_DIMG) << "T(K): " << m_settings.temperature
              << " => R:" << d->mr
              << " G:   " << d->mg
              << " B:   " << d->mb
