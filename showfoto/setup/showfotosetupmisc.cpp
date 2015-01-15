@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "setupmisc.h"
+#include "showfotosetupmisc.h"
 
 // Qt includes
 

@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "setuptooltip.h"
+#include "showfotosetuptooltip.h"
 
 // Qt includes
 

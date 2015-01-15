@@ -16,26 +16,34 @@ include_directories(BEFORE
 kde_enable_exceptions()
 
 set(showfoto_SRCS
-    ${libsetupshowfoto_SRCS}
-    ${libshowfotosetup_SRCS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupeditor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupiofiles.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupraw.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupicc.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupslideshow.cpp
 
-    thumbbar/showfotoiteminfo.cpp
-    thumbbar/showfotoimagemodel.cpp
-    thumbbar/showfotothumbnailmodel.cpp
-    thumbbar/showfotofiltermodel.cpp
-    thumbbar/showfotodragdrophandler.cpp
-    thumbbar/showfotokineticscroller.cpp
-    thumbbar/showfotoitemsortsettings.cpp
-    thumbbar/showfotocoordinatesoverlay.cpp
-    thumbbar/itemviewshowfotodelegate.cpp
-    thumbbar/showfotodelegate.cpp
-    thumbbar/showfototooltipfiller.cpp
-    thumbbar/showfotocategorizedview.cpp
-    thumbbar/showfotothumbnailbar.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/setup/showfotosetuptooltip.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/setup/showfotosetupmisc.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/setup/showfotosetupmetadata.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/setup/showfotosetup.cpp
 
-    main/showfotosettings.cpp
-    main/main.cpp
-    main/showfoto.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar/showfotoiteminfo.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar/showfotoimagemodel.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar/showfotothumbnailmodel.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar/showfotofiltermodel.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar/showfotodragdrophandler.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar/showfotokineticscroller.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar/showfotoitemsortsettings.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar/showfotocoordinatesoverlay.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar/itemviewshowfotodelegate.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar/showfotodelegate.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar/showfototooltipfiller.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar/showfotocategorizedview.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/thumbbar/showfotothumbnailbar.cpp
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/main/showfotosettings.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/main/main.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/main/showfoto.cpp
 )
 
 KDE4_ADD_APP_ICON(showfoto_SRCS "../data/icons/apps/hi*-app-showfoto.png")

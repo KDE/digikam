@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "setupmetadata.h"
+#include "showfotosetupmetadata.h"
 
 // Qt includes
 

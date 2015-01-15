@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "setup.h"
+#include "showfotosetup.h"
 
 // Qt includes
 
@@ -41,12 +41,12 @@
 
 #include "setupraw.h"
 #include "setupeditor.h"
-#include "setupmisc.h"
 #include "setupicc.h"
 #include "setupiofiles.h"
-#include "setupmetadata.h"
 #include "setupslideshow.h"
-#include "setuptooltip.h"
+#include "showfotosetupmisc.h"
+#include "showfotosetupmetadata.h"
+#include "showfotosetuptooltip.h"
 
 namespace ShowFoto
 {
