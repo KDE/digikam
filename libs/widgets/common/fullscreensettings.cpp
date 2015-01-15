@@ -30,7 +30,7 @@
 // KDE includes
 
 #include <kglobalsettings.h>
-#include "digikam_debug.h"
+#include "widgets_debug.h"
 
 #include <klocalizedstring.h>
 #include <QApplication>

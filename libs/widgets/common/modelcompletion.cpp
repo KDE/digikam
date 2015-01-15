@@ -32,7 +32,7 @@
 // KDE includes
 
 
-#include "digikam_debug.h"
+#include "widgets_debug.h"
 
 namespace Digikam
 {
@@ -122,7 +122,7 @@ QAbstractItemModel* ModelCompletion::model() const
 
 void ModelCompletion::slotRowsInserted(const QModelIndex& parent, int start, int end)
 {
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "rowInserted in parent " << parent << ", start = " << start
+    //qCDebug(LOG_WIDGETS) << "rowInserted in parent " << parent << ", start = " << start
     //         << ", end = " << end;
 
     for (int i = start; i <= end; ++i)
@@ -138,7 +138,7 @@ void ModelCompletion::slotRowsInserted(const QModelIndex& parent, int start, int
         }
         else
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "inserted rows are not valid for parent " << parent
+            qCDebug(LOG_WIDGETS) << "inserted rows are not valid for parent " << parent
                      << parent.data(d->displayRole).toString() << "and child"
                      << child;
         }
@@ -147,7 +147,7 @@ void ModelCompletion::slotRowsInserted(const QModelIndex& parent, int start, int
 
 void ModelCompletion::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
 {
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "rows of parent " << parent << " removed, start = " << start
+    //qCDebug(LOG_WIDGETS) << "rows of parent " << parent << " removed, start = " << start
     //         << ", end = " << end;
     for (int i = start; i <= end; ++i)
     {
@@ -155,7 +155,7 @@ void ModelCompletion::slotRowsAboutToBeRemoved(const QModelIndex& parent, int st
 
         if (!index.isValid())
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Received an invalid index to be removed";
+            qCDebug(LOG_WIDGETS) << "Received an invalid index to be removed";
             continue;
         }
 
@@ -175,7 +175,7 @@ void ModelCompletion::slotRowsAboutToBeRemoved(const QModelIndex& parent, int st
         }
         else
         {
-            qCWarning(DIGIKAM_GENERAL_LOG) << "idToTextMap seems to be out of sync with the model. "
+            qCWarning(LOG_WIDGETS) << "idToTextMap seems to be out of sync with the model. "
                        << "There is no entry for model index " << index;
         }
     }
@@ -192,7 +192,7 @@ void ModelCompletion::slotDataChanged(const QModelIndex& topLeft, const QModelIn
     {
         if (!d->model->hasIndex(row, topLeft.column(), topLeft.parent()))
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Got wrong change event for index with row " << row
+            qCDebug(LOG_WIDGETS) << "Got wrong change event for index with row " << row
                      << ", column " << topLeft.column()
                      << " and parent " << topLeft.parent()
                      << " in model " << d->model << ". Ignoring it.";
@@ -203,7 +203,7 @@ void ModelCompletion::slotDataChanged(const QModelIndex& topLeft, const QModelIn
 
         if (!index.isValid())
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "illegal index in changed data";
+            qCDebug(LOG_WIDGETS) << "illegal index in changed data";
             continue;
         }
 
@@ -225,7 +225,7 @@ void ModelCompletion::slotDataChanged(const QModelIndex& topLeft, const QModelIn
             // operations needs a data change which is emitted as a dataChanged
             // signal which then will arrive at this class before the original
             // inserted signal arrived at this class.
-            //qCDebug(DIGIKAM_GENERAL_LOG) << "idToTextMap did not contain an entry for index "
+            //qCDebug(LOG_WIDGETS) << "idToTextMap did not contain an entry for index "
             //         << index << itemName;
         }
 
@@ -241,7 +241,7 @@ void ModelCompletion::disconnectFromModel(QAbstractItemModel* const model)
 
 void ModelCompletion::sync(QAbstractItemModel* const model)
 {
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "Starting sync with model " << model
+    //qCDebug(LOG_WIDGETS) << "Starting sync with model " << model
     //         << ", rowCount for parent: " << model->rowCount();
 
     clear();
@@ -257,7 +257,7 @@ void ModelCompletion::sync(QAbstractItemModel* const model)
 void ModelCompletion::sync(QAbstractItemModel* const model, const QModelIndex& index)
 {
     QString itemName = index.data(d->displayRole).toString();
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "sync adding item '" << itemName << "' for index " << index;
+    //qCDebug(LOG_WIDGETS) << "sync adding item '" << itemName << "' for index " << index;
     addItem(itemName);
     d->idToTextMap.insert(index.data(d->uniqueIdRole).toInt(), itemName);
 

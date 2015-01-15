@@ -46,7 +46,7 @@
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "widgets_debug.h"
 #include "digikam_config.h"
 #include "databaseparameters.h"
 #include "databaseserverstarter.h"
@@ -370,7 +370,7 @@ void DatabaseWidget::setParametersFromSettings(const ApplicationSettings* const 
 
     for (int i = 0; i < databaseType->count(); ++i)
     {
-        //qCDebug(DIGIKAM_GENERAL_LOG) << "Comparing comboboxentry on index ["<< i <<"] [" << databaseType->itemData(i)
+        //qCDebug(LOG_WIDGETS) << "Comparing comboboxentry on index ["<< i <<"] [" << databaseType->itemData(i)
         //              << "] with ["<< settings->getDatabaseType() << "]";
         if (databaseType->itemData(i).toString() == settings->getDatabaseType())
         {

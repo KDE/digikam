@@ -42,7 +42,7 @@
 
 // Local includes
 
-#include "digikam_debug.h"
+#include "widgets_debug.h"
 #include "albumfiltermodel.h"
 #include "modelcompletion.h"
 
@@ -206,7 +206,7 @@ SearchTextBar::HighlightState SearchTextBar::getCurrentHighlightState() const
         return NO_RESULT;
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Impossible highlighting state";
+    qCDebug(LOG_WIDGETS) << "Impossible highlighting state";
 
     return NEUTRAL;
 }

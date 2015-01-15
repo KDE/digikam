@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include "digikam_debug.h"
+#include "widgets_debug.h"
 
 // Local includes
 
@@ -190,7 +190,7 @@ void ClickDragReleaseItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* e)
 
 void ClickDragReleaseItem::keyPressEvent(QKeyEvent* e)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << e;
+    qCDebug(LOG_WIDGETS) << e;
 
     switch (e->key())
     {

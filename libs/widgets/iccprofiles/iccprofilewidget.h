@@ -31,6 +31,7 @@
 
 // Local includes
 
+#include "iccprofile.h"
 #include "metadatawidget.h"
 #include "digikam_export.h"
 
@@ -59,6 +60,7 @@ public:
     void    setDataLoading();
     void    setUncalibratedColor();
 
+#pragma message("TODO it's a bad idea to pass a call to constructor in a header file, which forces include for iccprofile")
     bool  setProfile(const IccProfile& profile = IccProfile());
     IccProfile getProfile() const;
 
