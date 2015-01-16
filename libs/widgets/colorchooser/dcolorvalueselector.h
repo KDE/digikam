@@ -6,7 +6,7 @@
  * Date        : 1997-02-20
  * Description : color chooser widgets
  *
- * Copyright (C) 1997 by Martin Jones (mjones at kde dot org)
+ * Copyright (C) 1997 by Martin Jones <mjones at kde dot org>
  * Copyright (C) 2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -44,110 +44,112 @@ namespace Digikam
 class DIGIKAM_EXPORT DColorValueSelector : public KSelector
 {
     Q_OBJECT
-    Q_PROPERTY( int hue READ hue WRITE setHue )
-    Q_PROPERTY( int saturation READ saturation WRITE setSaturation )
-    Q_PROPERTY( int colorValue READ colorValue WRITE setColorValue )
+    Q_PROPERTY( int hue        READ hue        WRITE setHue)
+    Q_PROPERTY( int saturation READ saturation WRITE setSaturation)
+    Q_PROPERTY( int colorValue READ colorValue WRITE setColorValue)
 
 public:
 
-  /**
-   * Constructs a widget for color selection.
-   */
-  explicit DColorValueSelector( QWidget *parent=0 );
-  /**
-   * Constructs a widget for color selection with a given orientation
-   */
-  explicit DColorValueSelector( Qt::Orientation o, QWidget *parent = 0 );
+    /**
+    * Constructs a widget for color selection.
+    */
+    explicit DColorValueSelector(QWidget* const parent=0);
 
-  ~DColorValueSelector();
-  
-  /**
-   * Updates the widget's contents.
-   */
-  void updateContents();
+    /**
+    * Constructs a widget for color selection with a given orientation
+    */
+    explicit DColorValueSelector(Qt::Orientation o, QWidget* const parent = 0);
 
-  /**
-   * Returns the current hue value.
-   * 
-   * @return               The hue value (0-359)
-   */
-  int hue() const;
-  
-  /**
-   * Sets the hue value. Doesn't automatically update the widget;
-   * you have to call updateContents manually.
-   * 
-   * @param		hue			Sets the hue value (0-359)
-   */
-  void setHue( int hue );
+    ~DColorValueSelector();
 
-  /**
-   * Returns the current saturation value.
-   * 
-   * @return				The saturation value (0-255)
-   */  
-  int saturation() const;
-  
-  /**
-   * Sets the saturation value. Doesn't automatically update the widget;
-   * you have to call updateContents manually.
-   * 
-   * @param		saturation		Sets the saturation value (0-255)
-   */  
-  void setSaturation( int saturation );
-  
-  /**
-   * Returns the current color value.
-   * 
-   * @return				The color value (0-255)
-   */    
-  int colorValue() const;
-  
-  /**
-   * Sets the color value. Doesn't automatically update the widget;
-   * you have to call updateContents manually.
-   * 
-   * @param		colorValue		Sets the color value (0-255)
-   */    
-  void setColorValue( int colorValue );
+    /**
+    * Updates the widget's contents.
+    */
+    void updateContents();
 
-  /**
-   * Sets the chooser mode. Doesn't automatically update the widget;
-   * you have to call updateContents manually.
-   * 
-   * @param		chooserMode		Sets the chooser mode (one of the DColorChooserMode constants)
-   */    
-  void setChooserMode (DColorChooserMode chooserMode);
+    /**
+    * Returns the current hue value.
+    * 
+    * @return The hue value (0-359)
+    */
+    int hue() const;
 
-  /**
-   * Returns the current chooser mode.
-   * 
-   * @return				The chooser mode (one of the DColorChooserMode constants)
-   */   
-  DColorChooserMode chooserMode () const;
-	
+    /**
+    * Sets the hue value. Doesn't automatically update the widget;
+    * you have to call updateContents manually.
+    * 
+    * @param hue Sets the hue value (0-359)
+    */
+    void setHue(int hue);
+
+    /**
+    * Returns the current saturation value.
+    * 
+    * @return The saturation value (0-255)
+    */  
+    int saturation() const;
+
+    /**
+    * Sets the saturation value. Doesn't automatically update the widget;
+    * you have to call updateContents manually.
+    * 
+    * @param saturation Sets the saturation value (0-255)
+    */
+    void setSaturation(int saturation);
+
+    /**
+    * Returns the current color value.
+    * 
+    * @return The color value (0-255)
+    */
+    int colorValue() const;
+
+    /**
+    * Sets the color value. Doesn't automatically update the widget;
+    * you have to call updateContents manually.
+    * 
+    * @param colorValue Sets the color value (0-255)
+    */
+    void setColorValue(int colorValue);
+
+    /**
+    * Sets the chooser mode. Doesn't automatically update the widget;
+    * you have to call updateContents manually.
+    *
+    * @param chooserMode Sets the chooser mode (one of the DColorChooserMode constants)
+    */
+    void setChooserMode(DColorChooserMode chooserMode);
+
+    /**
+    * Returns the current chooser mode.
+    * 
+    * @return The chooser mode (one of the DColorChooserMode constants)
+    */
+    DColorChooserMode chooserMode() const;
+
 protected:
-  /**
-   * Draws the contents of the widget on a pixmap,
-   * which is used for buffering.
-   */
-  virtual void drawPalette( QPixmap *pixmap );
-  virtual void resizeEvent( QResizeEvent * );
 
-  /**
-   * Reimplemented from KSelector. The drawing is
-   * buffered in a pixmap here. As real drawing
-   * routine, drawPalette() is used.
-   */
-  virtual void drawContents( QPainter *painter );
+    /**
+    * Draws the contents of the widget on a pixmap,
+    * which is used for buffering.
+    */
+    virtual void drawPalette(QPixmap* pixmap);
+    virtual void resizeEvent(QResizeEvent*);
+
+    /**
+    * Reimplemented from KSelector. The drawing is
+    * buffered in a pixmap here. As real drawing
+    * routine, drawPalette() is used.
+    */
+    virtual void drawContents(QPainter* painter);
 
 private:
-  class Private;
-  friend class Private;
-  
-  Private *const d;
 
-  Q_DISABLE_COPY(DColorValueSelector)
+    class Private;
+    friend class Private;
+    Private *const d;
+
+    Q_DISABLE_COPY(DColorValueSelector)
 };
 
 }  // namespace Digikam

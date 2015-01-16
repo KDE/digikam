@@ -36,37 +36,50 @@ class QColor;
 namespace Digikam
 {
 
-// get/set color component
-extern qreal getComponentValue(const QColor &color, DColorChooserMode chooserMode);
-extern void setComponentValue(QColor &color, DColorChooserMode chooserMode, qreal value);
+/** get/set color component
+ */
+extern qreal getComponentValue(const QColor& color, DColorChooserMode chooserMode);
+extern void  setComponentValue(QColor& color, DColorChooserMode chooserMode, qreal value);
 
-// number of linear gradient ranges needed for color component
+/** number of linear gradient ranges needed for color component
+ */
 static inline int componentValueSteps(DColorChooserMode chooserMode)
 {
-    if (chooserMode == ChooserHue) {
+    if (chooserMode == ChooserHue)
+    {
         return 6;
-    } else {
+    }
+    else
+    {
         return 1;
     }
 }
 
-// color component that is used for X in the XY selector
+/** color component that is used for X in the XY selector
+ */
 static inline DColorChooserMode chooserXMode(DColorChooserMode chooserMode)
 {
-    if (chooserMode >= ChooserRed) {
-        return chooserMode == ChooserRed ? ChooserGreen : ChooserRed;
-    } else {
-        return chooserMode == ChooserHue ? ChooserSaturation : ChooserHue;
+    if (chooserMode >= ChooserRed)
+    {
+        return (chooserMode == ChooserRed ? ChooserGreen : ChooserRed);
+    }
+    else
+    {
+        return (chooserMode == ChooserHue ? ChooserSaturation : ChooserHue);
     }
 }
 
-// color component that is used for Y in the XY selector
+/** color component that is used for Y in the XY selector
+ */
 static inline DColorChooserMode chooserYMode(DColorChooserMode chooserMode)
 {
-    if (chooserMode >= ChooserRed) {
-        return chooserMode == ChooserBlue ? ChooserGreen : ChooserBlue;
-    } else {
-        return chooserMode == ChooserValue ? ChooserSaturation : ChooserValue;
+    if (chooserMode >= ChooserRed)
+    {
+        return (chooserMode == ChooserBlue ? ChooserGreen : ChooserBlue);
+    }
+    else
+    {
+        return (chooserMode == ChooserValue ? ChooserSaturation : ChooserValue);
     }
 }
 
@@ -80,22 +93,22 @@ static inline int componentYSteps(DColorChooserMode chooserMode)
     return componentValueSteps(chooserYMode(chooserMode));
 }
 
-static inline qreal getComponentX(const QColor &color, DColorChooserMode chooserMode)
+static inline qreal getComponentX(const QColor& color, DColorChooserMode chooserMode)
 {
     return getComponentValue(color, chooserXMode(chooserMode));
 }
 
-static inline qreal getComponentY(const QColor &color, DColorChooserMode chooserMode)
+static inline qreal getComponentY(const QColor& color, DColorChooserMode chooserMode)
 {
     return getComponentValue(color, chooserYMode(chooserMode));
 }
 
-static inline void setComponentX(QColor &color, DColorChooserMode chooserMode, qreal x)
+static inline void setComponentX(QColor& color, DColorChooserMode chooserMode, qreal x)
 {
     setComponentValue(color, chooserXMode(chooserMode), x);
 }
 
-static inline void setComponentY(QColor &color, DColorChooserMode chooserMode, qreal y)
+static inline void setComponentY(QColor& color, DColorChooserMode chooserMode, qreal y)
 {
     setComponentValue(color, chooserYMode(chooserMode), y);
 }

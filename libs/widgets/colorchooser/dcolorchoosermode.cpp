@@ -31,44 +31,62 @@
 namespace Digikam
 {
 
-qreal getComponentValue(const QColor &color, DColorChooserMode chooserMode)
+qreal getComponentValue(const QColor& color, DColorChooserMode chooserMode)
 {
-    switch (chooserMode) {
-    case ChooserRed:
-        return color.redF();
-    case ChooserGreen:
-        return color.greenF();
-    case ChooserBlue:
-        return color.blueF();
-    case ChooserHue:
-        return color.hueF();
-    case ChooserSaturation:
-        return color.saturationF();
-    default:
-        return color.valueF();
+    switch (chooserMode)
+    {
+        case ChooserRed:
+            return color.redF();
+        case ChooserGreen:
+            return color.greenF();
+        case ChooserBlue:
+            return color.blueF();
+        case ChooserHue:
+            return color.hueF();
+        case ChooserSaturation:
+            return color.saturationF();
+        default:
+            return color.valueF();
     }
 }
 
-void setComponentValue(QColor &color, DColorChooserMode chooserMode, qreal value)
+void setComponentValue(QColor& color, DColorChooserMode chooserMode, qreal value)
 {
-    if (chooserMode >= ChooserRed) {
-        if (chooserMode == ChooserRed) {
+    if (chooserMode >= ChooserRed)
+    {
+        if (chooserMode == ChooserRed)
+        {
             color.setRedF(value);
-        } else if (chooserMode == ChooserGreen) {
+        }
+        else if (chooserMode == ChooserGreen)
+        {
             color.setGreenF(value);
-        } else { // chooserMode == ChooserBlue
+        }
+        else
+        {
+            // chooserMode == ChooserBlue
             color.setBlueF(value);
         }
-    } else {
-        qreal h, s, v, a;
+    }
+    else
+    {
+        qreal h=0, s=0, v=0, a=0;
         color.getHsvF(&h, &s, &v, &a);
-        if (chooserMode == ChooserHue) {
+
+        if (chooserMode == ChooserHue)
+        {
             h = value;
-        } else if (chooserMode == ChooserSaturation) {
+        }
+        else if (chooserMode == ChooserSaturation)
+        {
             s = value;
-        } else { // chooserMode == ChooserValue
+        }
+        else
+        {
+            // chooserMode == ChooserValue
             v = value;
         }
+
         color.setHsvF(h, s, v, a);
     }
 }

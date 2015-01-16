@@ -42,10 +42,11 @@ class DIGIKAM_EXPORT DHueSaturationSelector : public KXYSelector
     Q_OBJECT
 
 public:
+
     /**
      * Constructs a hue/saturation selection widget.
      */
-    explicit DHueSaturationSelector( QWidget *parent = 0 );
+    explicit DHueSaturationSelector(QWidget* const parent = 0);
 
     /**
      * Destructor.
@@ -58,14 +59,14 @@ public:
      * 
      * @param    The chooser mode as defined in DColorChooserMode
      */
-    void setChooserMode ( DColorChooserMode chooserMode );
+    void setChooserMode(DColorChooserMode chooserMode);
 
     /**
      * Returns the chooser mode.
      * 
      * @return   The chooser mode (defined in DColorChooserMode)
      */
-    DColorChooserMode chooserMode () const;
+    DColorChooserMode chooserMode() const;
 
 
     /**
@@ -80,7 +81,7 @@ public:
      * 
      * @param  hue  The hue value (0-360)
      */
-    void setHue( int hue );
+    void setHue(int hue);
 
     /**
      * Returns the saturation (0-255)
@@ -94,7 +95,7 @@ public:
      * 
      * @param  saturation   The saturation (0-255)
      */
-    void setSaturation( int saturation );
+    void setSaturation(int saturation);
 
     /**
      * Returns the color value (also known as lumniousity, 0-255)
@@ -108,8 +109,7 @@ public:
      * 
      * @param  colorValue  The color value (0-255)
      */
-    void setColorValue( int colorValue );
-
+    void setColorValue(int color);
 
     /**
      * Updates the contents
@@ -117,27 +117,28 @@ public:
     void updateContents();
 
 protected:
+
     /**
      * Draws the contents of the widget on a pixmap,
      * which is used for buffering.
      */
-    virtual void drawPalette( QPixmap *pixmap );
-    virtual void resizeEvent( QResizeEvent * );
+    virtual void drawPalette(QPixmap* pixmap);
+    virtual void resizeEvent(QResizeEvent*);
 
     /**
      * Reimplemented from KXYSelector. This drawing is
      * buffered in a pixmap here. As real drawing
      * routine, drawPalette() is used.
      */
-    virtual void drawContents( QPainter *painter );
+    virtual void drawContents(QPainter* painter);
 
 private:
 
     class Private;
     friend class Private;
-    Private * const d;
+    Private* const d;
 
-    Q_DISABLE_COPY( DHueSaturationSelector )
+    Q_DISABLE_COPY(DHueSaturationSelector)
 };
 
 }  // namespace Digikam

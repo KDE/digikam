@@ -6,7 +6,7 @@
  * Date        : 1997-02-20
  * Description : color chooser widgets
  *
- * Copyright (C) 1997 by Martin Jones (mjones at kde dot org)
+ * Copyright (C) 1997 by Martin Jones <mjones at kde dot org>
  * Copyright (C) 2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -39,26 +39,35 @@ class DColorValueSelector::Private
 {
 public:
 
-    Private(DColorValueSelector *q): q(q), _hue(0), _sat(0), _colorValue(0), _mode(ChooserClassic) {}
+    Private(DColorValueSelector* const q)
+        : q(q),
+          hue(0),
+          saturation(0),
+          color(0),
+          mode(ChooserClassic)
+    {
+    }
 
-    DColorValueSelector *q;
-    int _hue;
-    int _sat;
-    int _colorValue;
-    DColorChooserMode _mode;
-    QPixmap pixmap;
+    DColorValueSelector* q;
+    int                  hue;
+    int                  saturation;
+    int                  color;
+    DColorChooserMode    mode;
+    QPixmap              pixmap;
 };
 
-DColorValueSelector::DColorValueSelector( QWidget *parent )
-        : KSelector( Qt::Vertical, parent ), d( new Private( this ) )
+DColorValueSelector::DColorValueSelector(QWidget* const parent)
+    : KSelector(Qt::Vertical, parent),
+      d(new Private(this))
 {
-    setRange( 0, 255 );
+    setRange(0, 255);
 }
 
-DColorValueSelector::DColorValueSelector( Qt::Orientation o, QWidget *parent )
-        : KSelector( o, parent ), d( new Private( this ) )
+DColorValueSelector::DColorValueSelector(Qt::Orientation o, QWidget* const parent)
+    : KSelector(o, parent),
+      d(new Private(this))
 {
-    setRange( 0, 255 );
+    setRange(0, 255);
 }
 
 DColorValueSelector::~DColorValueSelector()
@@ -68,87 +77,101 @@ DColorValueSelector::~DColorValueSelector()
 
 int DColorValueSelector::hue() const
 {
-    return d->_hue;
+    return d->hue;
 }
 
-void DColorValueSelector::setHue( int hue )
+void DColorValueSelector::setHue(int hue)
 {
-    d->_hue = hue;
+    d->hue = hue;
 }
 
 int DColorValueSelector::saturation() const
 {
-    return d->_sat;
+    return d->saturation;
 }
 
-void DColorValueSelector::setSaturation( int saturation )
+void DColorValueSelector::setSaturation(int saturation)
 {
-    d->_sat = saturation;
+    d->saturation = saturation;
 }
 
-int DColorValueSelector::colorValue () const
+int DColorValueSelector::colorValue() const
 {
-    return d->_colorValue;
+    return d->color;
 }
 
-void DColorValueSelector::setColorValue ( int colorValue )
+void DColorValueSelector::setColorValue(int colorValue)
 {
-    d->_colorValue = colorValue;
+    d->color = colorValue;
 }
 
 void DColorValueSelector::updateContents()
 {
-    drawPalette( &d->pixmap );
+    drawPalette(&d->pixmap);
 }
 
-void DColorValueSelector::resizeEvent( QResizeEvent * )
+void DColorValueSelector::resizeEvent(QResizeEvent*)
 {
     updateContents();
 }
 
-void DColorValueSelector::drawContents( QPainter *painter )
+void DColorValueSelector::drawContents(QPainter* painter)
 {
-    painter->drawPixmap( contentsRect().x(), contentsRect().y(), d->pixmap );
+    painter->drawPixmap(contentsRect().x(), contentsRect().y(), d->pixmap);
 }
 
-void DColorValueSelector::setChooserMode( DColorChooserMode c )
+void DColorValueSelector::setChooserMode(DColorChooserMode c)
 {
-    if ( c == ChooserHue ) {
-        setRange( 0, 360 );
-    } else {
+    if (c == ChooserHue)
+    {
+        setRange(0, 360);
+    }
+    else
+    {
         setRange( 0, 255 );
     }
-    d->_mode = c;
+
+    d->mode = c;
 
     //really needed?
     //emit modeChanged();
 }
 
-DColorChooserMode DColorValueSelector::chooserMode () const
+DColorChooserMode DColorValueSelector::chooserMode() const
 {
-    return d->_mode;
+    return d->mode;
 }
 
-void DColorValueSelector::drawPalette( QPixmap *pixmap )
+void DColorValueSelector::drawPalette(QPixmap* pixmap)
 {
     QColor color;
-    if (chooserMode() == ChooserHue) {
+
+    if (chooserMode() == ChooserHue)
+    {
         color.setHsv(hue(), 255, 255);
-    } else {
+    }
+    else
+    {
         color.setHsv(hue(), saturation(), colorValue());
     }
 
     QLinearGradient gradient;
-    if (orientation() == Qt::Vertical) {
+
+    if (orientation() == Qt::Vertical)
+    {
         gradient.setStart(0, contentsRect().height());
         gradient.setFinalStop(0, 0);
-    } else {
+    }
+    else
+    {
         gradient.setStart(0, 0);
         gradient.setFinalStop(contentsRect().width(), 0);
     }
 
     const int steps = componentValueSteps(chooserMode());
-    for (int v = 0; v <= steps; ++v) {
+ 
+    for (int v = 0; v <= steps; ++v)
+    {
         setComponentValue(color, chooserMode(), v * (1.0 / steps));
         gradient.setColorAt(v * (1.0 / steps), color);
     }
