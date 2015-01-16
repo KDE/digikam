@@ -35,6 +35,11 @@
 #include <cstdio>
 #include <cstdlib>
 
+// Digikam includes
+
+#include <dimg.h>
+#include <dmetadata.h>
+
 // C ANSI includes
 
 extern "C"
