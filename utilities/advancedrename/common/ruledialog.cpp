@@ -31,6 +31,9 @@
 #include <QLabel>
 #include <QRegExp>
 #include <QWidget>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
+#include <QPushButton>
 
 // Local includes
 
@@ -44,6 +47,8 @@ class RuleDialog::Private
 public:
 
     Private() :
+        buttons(0),
+        container(0),
         dialogTitle(0),
         dialogDescription(0),
         dialogIcon(0),
@@ -51,16 +56,21 @@ public:
     {
     }
 
-    QLabel*  dialogTitle;
-    QLabel*  dialogDescription;
-    QLabel*  dialogIcon;
-    QWidget* settingsWidget;
+    QDialogButtonBox* buttons;
+    QWidget*          container;
+    QLabel*           dialogTitle;
+    QLabel*           dialogDescription;
+    QLabel*           dialogIcon;
+    QWidget*          settingsWidget;
 };
 
 RuleDialog::RuleDialog(Rule* const parent)
-    : KDialog(0),
+    : QDialog(0),
       d(new Private)
 {
+    d->buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
+    d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
+    
     d->dialogTitle       = new QLabel(this);
     d->dialogDescription = new QLabel(this);
     d->dialogIcon        = new QLabel(this);
@@ -77,7 +87,7 @@ RuleDialog::RuleDialog(Rule* const parent)
     line->setFrameShape(QFrame::HLine);
     line->setFrameShadow(QFrame::Sunken);
 
-    QWidget* const header           = new QWidget(this);
+    QWidget* const header     = new QWidget(this);
     QGridLayout* headerLayout = new QGridLayout(this);
     headerLayout->addWidget(d->dialogIcon,        0, 0, 4, 1);
     headerLayout->addWidget(d->dialogTitle,       1, 1, 1, 1);
@@ -86,14 +96,25 @@ RuleDialog::RuleDialog(Rule* const parent)
     headerLayout->setColumnStretch(1, 10);
     header->setLayout(headerLayout);
 
-    QWidget* const container           = new QWidget(this);
+    d->container                       = new QWidget(this);
     QGridLayout* const containerLayout = new QGridLayout(this);
     containerLayout->addWidget(header,            0, 0, 1, 1);
     containerLayout->addWidget(d->settingsWidget, 1, 0, 1, 1);
     containerLayout->setRowStretch(1, 10);
-    container->setLayout(containerLayout);
-    setMainWidget(container);
+    d->container->setLayout(containerLayout);
+
+    QVBoxLayout* const vbx = new QVBoxLayout(this);
+    vbx->addWidget(d->container);
+    vbx->addWidget(d->buttons);
+    setLayout(vbx);
+    
     setMinimumWidth(300);
+    
+    connect(d->buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+            this, SLOT(accept()));
+
+    connect(d->buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
+            this, SLOT(reject()));
 }
 
 RuleDialog::~RuleDialog()
@@ -108,7 +129,7 @@ void RuleDialog::setDialogTitle(const QString& title)
     _title.remove(QRegExp("\\.{3,}")).replace("&&", "&");
 
     d->dialogTitle->setText(QString("<b>%1</b>").arg(_title));
-    setCaption(_title);
+    setWindowTitle(_title);
 }
 
 void RuleDialog::setDialogDescription(const QString& description)
@@ -131,7 +152,7 @@ void RuleDialog::setSettingsWidget(QWidget* const settingsWidget)
     l->setSpacing(0);
     l->setMargin(0);
     d->settingsWidget->setLayout(l);
-    mainWidget()->layout()->addWidget(d->settingsWidget);
+    d->container->layout()->addWidget(d->settingsWidget);
 }
 
 } // namespace Digikam
