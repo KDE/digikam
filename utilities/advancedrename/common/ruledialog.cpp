@@ -32,10 +32,6 @@
 #include <QRegExp>
 #include <QWidget>
 
-// KDE includes
-
-
-
 // Local includes
 
 #include "rule.h"
@@ -61,8 +57,9 @@ public:
     QWidget* settingsWidget;
 };
 
-RuleDialog::RuleDialog(Rule* parent)
-    : KDialog(0), d(new Private)
+RuleDialog::RuleDialog(Rule* const parent)
+    : KDialog(0),
+      d(new Private)
 {
     d->dialogTitle       = new QLabel(this);
     d->dialogDescription = new QLabel(this);
@@ -76,11 +73,11 @@ RuleDialog::RuleDialog(Rule* parent)
     d->dialogDescription->setAlignment(Qt::AlignHCenter);
     d->dialogDescription->setWordWrap(true);
 
-    QFrame* line = new QFrame(this);
+    QFrame* const line = new QFrame(this);
     line->setFrameShape(QFrame::HLine);
     line->setFrameShadow(QFrame::Sunken);
 
-    QWidget* header           = new QWidget(this);
+    QWidget* const header           = new QWidget(this);
     QGridLayout* headerLayout = new QGridLayout(this);
     headerLayout->addWidget(d->dialogIcon,        0, 0, 4, 1);
     headerLayout->addWidget(d->dialogTitle,       1, 1, 1, 1);
@@ -89,8 +86,8 @@ RuleDialog::RuleDialog(Rule* parent)
     headerLayout->setColumnStretch(1, 10);
     header->setLayout(headerLayout);
 
-    QWidget* container           = new QWidget(this);
-    QGridLayout* containerLayout = new QGridLayout(this);
+    QWidget* const container           = new QWidget(this);
+    QGridLayout* const containerLayout = new QGridLayout(this);
     containerLayout->addWidget(header,            0, 0, 1, 1);
     containerLayout->addWidget(d->settingsWidget, 1, 0, 1, 1);
     containerLayout->setRowStretch(1, 10);
@@ -124,12 +121,12 @@ void RuleDialog::setDialogIcon(const QPixmap& icon)
     d->dialogIcon->setPixmap(icon);
 }
 
-void RuleDialog::setSettingsWidget(QWidget* settingsWidget)
+void RuleDialog::setSettingsWidget(QWidget* const settingsWidget)
 {
     delete d->settingsWidget;
 
-    d->settingsWidget = new QWidget(this);
-    QGridLayout* l    = new QGridLayout(this);
+    d->settingsWidget    = new QWidget(this);
+    QGridLayout* const l = new QGridLayout(this);
     l->addWidget(settingsWidget);
     l->setSpacing(0);
     l->setMargin(0);

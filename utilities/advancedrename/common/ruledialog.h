@@ -40,10 +40,10 @@ class RuleDialog : public KDialog
 
 public:
 
-    explicit RuleDialog(Rule* parent);
+    explicit RuleDialog(Rule* const parent);
     virtual ~RuleDialog();
 
-    void setSettingsWidget(QWidget* settingsWidget);
+    void setSettingsWidget(QWidget* const settingsWidget);
 
 private:
 
