@@ -24,14 +24,14 @@
 #ifndef TOOLTIPDIALOG_H
 #define TOOLTIPDIALOG_H
 
-// KDE includes
+// Qt includes
 
-#include <kdialog.h>
+#include <QDialog>
 
 namespace Digikam
 {
 
-class TooltipDialog : public KDialog
+class TooltipDialog : public QDialog
 {
     Q_OBJECT
 

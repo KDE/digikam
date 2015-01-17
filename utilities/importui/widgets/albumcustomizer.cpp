@@ -40,6 +40,7 @@
 
 #include <ksqueezedtextlabel.h>
 #include <klocalizedstring.h>
+#include <kconfiggroup.h>
 
 // Libkdcraw includes
 
