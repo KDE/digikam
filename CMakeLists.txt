@@ -1083,6 +1083,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
     set(libeditordlg_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/dialogs/colorcorrectiondlg.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/dialogs/softproofdialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/dialogs/versioningpromptusersavedlg.cpp
        )
 
     set(libeditorplugin_SRCS

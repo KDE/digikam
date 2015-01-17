@@ -150,7 +150,7 @@
 #include "thememanager.h"
 #include "thumbnailsize.h"
 #include "thumbnailloadthread.h"
-#include "triplechoicedialog.h"
+#include "versioningpromptusersavedlg.h"
 #include "undostate.h"
 #include "versionmanager.h"
 
@@ -1306,77 +1306,6 @@ DImageHistory EditorWindow::resolvedImageHistory(const DImageHistory& history)
 
     return r;
 }
-
-// --------------------------------------------------------------------------------
-
-class VersioningPromptUserSaveDialog : public TripleChoiceDialog
-{
-public:
-
-    VersioningPromptUserSaveDialog(QWidget* parent, bool allowCancel = true)
-        : TripleChoiceDialog(parent)
-    {
-        setPlainCaption(i18nc("@title:window", "Save?"));
-        setShowCancelButton(allowCancel);
-
-        QWidget* const mainWidget = new QWidget;
-
-        // -- Icon and Header --
-
-        QLabel* const warningIcon = new QLabel;
-        warningIcon->setPixmap(QIcon::fromTheme("dialog-warning").pixmap(64));
-        QLabel* const editIcon = new QLabel;
-        editIcon->setPixmap(QIcon::fromTheme("document-edit").pixmap(iconSize()));
-        QLabel* const question = new QLabel;
-        question->setText(i18nc("@label", "The current image has been changed.<nl/>"
-                                "Do you wish to save your changes?"));
-
-        QHBoxLayout* const headerLayout = new QHBoxLayout;
-        headerLayout->addWidget(question);
-        headerLayout->addWidget(editIcon);
-
-        // -- Central buttons --
-
-        QToolButton* const saveCurrent = addChoiceButton(Ok, "dialog-ok-apply",
-                                                         i18nc("@action:button", "Save Changes"));
-        saveCurrent->setToolTip(i18nc("@info:tooltip",
-                                      "Save the current changes. Note: The original image will never be overwritten."));
-        QToolButton* const saveVersion = addChoiceButton(Apply, "list-add",
-                                                         i18nc("@action:button", "Save Changes as a New Version"));
-        saveVersion->setToolTip(i18nc("@info:tooltip",
-                                      "Save the current changes as a new version. "
-                                      "The loaded file will remain unchanged, a new file will be created."));
-        QToolButton* const discard     = addChoiceButton(User1, "task-reject",
-                                                         i18nc("@action:button", "Discard Changes"));
-        discard->setToolTip(i18nc("@info:tooltip",
-                                  "Discard the changes applied to the image during this editing session."));
-
-        // -- Layout --
-
-        QGridLayout* const mainLayout = new QGridLayout;
-        mainLayout->addWidget(warningIcon, 0, 0, 2, 1, Qt::AlignTop);
-        mainLayout->addLayout(headerLayout, 0, 1);
-        //mainLayout->addLayout(buttonLayout);
-        mainLayout->addWidget(buttonContainer(), 1, 1);
-        //mainLayout->addWidget(new KSeparator(Qt::Horizontal));
-
-        mainWidget->setLayout(mainLayout);
-        setMainWidget(mainWidget);
-    }
-
-    bool shallSave() const
-    {
-        return clickedButton() == Ok;
-    }
-    bool newVersion() const
-    {
-        return clickedButton() == Apply;
-    }
-    bool shallDiscard() const
-    {
-        return clickedButton() == User1;
-    }
-};
 
 bool EditorWindow::promptUserSave(const QUrl& url, SaveAskMode mode, bool allowCancel)
 {
