@@ -28,10 +28,7 @@
 // Qt includes
 
 #include <QList>
-
-// KDE includes
-
-#include <kdialog.h>
+#include <QDialog>
 
 // Local includes
 
@@ -41,7 +38,7 @@
 namespace Digikam
 {
 
-class FaceScanDialog : public KDialog, public StateSavingObject
+class FaceScanDialog : public QDialog, public StateSavingObject
 {
     Q_OBJECT
 
@@ -56,7 +53,6 @@ protected:
 
     void doLoadState();
     void doSaveState();
-    void accept();
 
 protected Q_SLOTS:
 
@@ -68,6 +64,12 @@ private:
 
     void setupUi();
     void setupConnections();
+    void adjustDetailsButton(bool on);
+
+private Q_SLOTS:
+
+    void slotDetails();
+    void slotOk();
 
 private:
 

@@ -37,15 +37,16 @@
 #include <QKeyEvent>
 #include <QRadioButton>
 #include <QToolButton>
-#include <QVBoxLayout>
 #include <QTabWidget>
 #include <QIcon>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
+#include <QPushButton>
 
 // KDE includes
 
 #include <klocalizedstring.h>
 #include <kseparator.h>
-#include <kstandardguiitem.h>
 
 // Libkdcraw includes
 
@@ -114,6 +115,7 @@ public:
           configUseFullCpu("Use Full CPU"),
           configSettingsVisible("Settings Widget Visible")
     {
+        buttons                  = 0;
         optionGroupBox           = 0;
         detectAndRecognizeButton = 0;
         detectButton             = 0;
@@ -128,6 +130,8 @@ public:
         benchmarkDetectionButton   = 0;
         benchmarkRecognitionButton = 0;
     }
+
+    QDialogButtonBox*            buttons;
 
     QGroupBox*                   optionGroupBox;
     QRadioButton*                detectAndRecognizeButton;
@@ -158,16 +162,15 @@ public:
 };
 
 FaceScanDialog::FaceScanDialog(QWidget* const parent)
-    : KDialog(parent), StateSavingObject(this),
+    : QDialog(parent),
+      StateSavingObject(this),
       d(new Private)
 {
-    setButtons(Ok | Cancel | Details);
-    setDefaultButton(Ok);
-    setCaption(i18nc("@title:window", "Scanning faces"));
-    setButtonText(Ok, i18nc("@action:button", "Scan"));
-    setButtonGuiItem(Details, KStandardGuiItem::configure());
-    setButtonText(Details, i18nc("@action:button", "Options"));
-    showButtonSeparator(true);
+    setWindowTitle(i18nc("@title:window", "Scanning faces"));
+
+    d->buttons = new QDialogButtonBox(QDialogButtonBox::Reset | QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
+    d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
+    d->buttons->button(QDialogButtonBox::Ok)->setText(i18nc("@action:button", "Scan"));
 
     setupUi();
     setupConnections();
@@ -179,12 +182,6 @@ FaceScanDialog::FaceScanDialog(QWidget* const parent)
 FaceScanDialog::~FaceScanDialog()
 {
     delete d;
-}
-
-void FaceScanDialog::accept()
-{
-    KDialog::accept();
-    saveState();
 }
 
 void FaceScanDialog::setDetectionDefaultParameters()
@@ -237,7 +234,8 @@ void FaceScanDialog::doLoadState()
 
     // do not load retrainAllButton and benchmarkDetectionButton state from config, dangerous
 
-    setDetailsWidgetVisible(group.readEntry(entryName(d->configSettingsVisible), false));
+    d->tabWidget->setVisible(group.readEntry(entryName(d->configSettingsVisible), false));
+    adjustDetailsButton(d->tabWidget->isVisible());
 }
 
 void FaceScanDialog::doSaveState()
@@ -283,7 +281,7 @@ void FaceScanDialog::doSaveState()
     d->albumSelectors->saveState();
 
     group.writeEntry(entryName(d->configUseFullCpu), d->useFullCpuButton->isChecked());
-    group.writeEntry(entryName(d->configSettingsVisible), isDetailsWidgetVisible());
+    group.writeEntry(entryName(d->configSettingsVisible), d->tabWidget->isVisible());
 }
 
 void FaceScanDialog::setupUi()
@@ -299,11 +297,11 @@ void FaceScanDialog::setupUi()
     personIcon->setPixmap(QIcon::fromTheme("edit-image-face-show").pixmap(48));
 
     QLabel* const introduction = new QLabel;
+    introduction->setTextFormat(Qt::RichText);
     introduction->setText(i18nc("@info",
-                                "digiKam can search for faces in your photos.<nl/> "
-                                "When you have identified your friends on a number of photos,<nl/> "
-                                "it can also recognize the people shown on your photos."));
-    //introduction->setWordWrap(true);
+                                "<qt>digiKam can search for faces in your photos.<br> "
+                                "When you have identified your friends on a number of photos,<br> "
+                                "it can also recognize the people shown on your photos.</qt>"));
 
     // ---- Main option box ----
 
@@ -314,13 +312,13 @@ void FaceScanDialog::setupUi()
     d->detectAndRecognizeButton                        = new QRadioButton(i18nc("@option:radio", "Detect and recognize faces (experimental)"));
     ButtonExtendedLabel* const detectAndRecognizeLabel = new ButtonExtendedLabel;
     ButtonExtendedLabel* const detectLabel             = new ButtonExtendedLabel;
+    detectLabel->setTextFormat(Qt::RichText);
     detectAndRecognizeLabel->setText(i18nc("@info",
-                                           "Find all faces in your photos<nl/> and try to recognize "
-                                           "which person is depicted"));
+                                           "<qt>Find all faces in your photos <br>"
+                                           "and try to recognize which person is depicted</qt>"));
     //detectAndRecognizeLabel->setWordWrap(true);
     detectLabel->setButton(d->detectButton);
-    detectLabel->setText(i18nc("@info",
-                                "Find all faces in your photos"));
+    detectLabel->setText(i18nc("@info", "Find all faces in your photos"));
     detectAndRecognizeLabel->setButton(d->detectAndRecognizeButton);
     ButtonExtendedLabel* const detectAndRecognizeIcon  = new ButtonExtendedLabel;
     ButtonExtendedLabel* const detectIcon              = new ButtonExtendedLabel;
@@ -339,8 +337,10 @@ void FaceScanDialog::setupUi()
 
     d->reRecognizeButton                        = new QRadioButton(i18nc("@option:radio", "Recognize faces (experimental)"));
     ButtonExtendedLabel* const reRecognizeLabel = new ButtonExtendedLabel;
+    reRecognizeLabel->setTextFormat(Qt::RichText);
     reRecognizeLabel->setText(i18nc("@info",
-                                    "Try again to recognize the people depicted<nl/> on marked but yet unconfirmed faces."));
+                                    "<qt>Try again to recognize the people depicted <br>"
+                                    "on marked but yet unconfirmed faces.</qt>"));
     //reRecognizeLabel->setWordWrap(true);
     reRecognizeLabel->setButton(d->reRecognizeButton);
     ButtonExtendedLabel* const reRecognizeIcon = new ButtonExtendedLabel;
@@ -373,9 +373,7 @@ void FaceScanDialog::setupUi()
     mainLayout->setColumnStretch(1, 1);
     mainLayout->setRowStretch(2, 1);
     mainWidget->setLayout(mainLayout);
-
-    setMainWidget(mainWidget);
-
+    
     // --- Tab Widget ---
 
     d->tabWidget = new QTabWidget;
@@ -451,7 +449,7 @@ void FaceScanDialog::setupUi()
                                          "with the known faces, which are taken as ground truth. "
                                          "For some recognition modes, this procedure does not make sense. "
                                          "At the end, benchmark results will be presented. "));
-    QButtonGroup* benchmarkGroup = new QButtonGroup(this);
+    QButtonGroup* const benchmarkGroup = new QButtonGroup(this);
     benchmarkGroup->setExclusive(true);
     benchmarkGroup->addButton(d->benchmarkDetectionButton);
     benchmarkGroup->addButton(d->benchmarkRecognitionButton);
@@ -468,7 +466,11 @@ void FaceScanDialog::setupUi()
 
     // ---
 
-    setDetailsWidget(d->tabWidget);
+    QVBoxLayout* const vbx = new QVBoxLayout(this);
+    vbx->addWidget(mainWidget);
+    vbx->addWidget(d->tabWidget);
+    vbx->addWidget(d->buttons);
+    setLayout(vbx);
 }
 
 void FaceScanDialog::setupConnections()
@@ -490,6 +492,35 @@ void FaceScanDialog::setupConnections()
 
     connect(d->benchmarkRecognitionButton, SIGNAL(toggled(bool)),
             this, SLOT(benchmarkButtonToggled(bool)));
+    
+    connect(d->buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+            this, SLOT(accept()));
+
+    connect(d->buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
+            this, SLOT(reject()));
+
+    connect(d->buttons->button(QDialogButtonBox::Reset), SIGNAL(clicked()),
+            this, SLOT(slotDetails()));
+}
+
+void FaceScanDialog::slotDetails()
+{
+    bool on = !d->tabWidget->isVisible();
+    d->tabWidget->setVisible(on);
+    adjustSize();
+    adjustDetailsButton(on);
+}
+
+void FaceScanDialog::adjustDetailsButton(bool on)
+{
+    d->buttons->button(QDialogButtonBox::Reset)->setText(on ? i18nc("@action:button", "Options <<")
+                                                            : i18nc("@action:button", "Options >>"));
+}
+
+void FaceScanDialog::slotOk()
+{
+    accept();
+    saveState();
 }
 
 void FaceScanDialog::retrainAllButtonToggled(bool on)
