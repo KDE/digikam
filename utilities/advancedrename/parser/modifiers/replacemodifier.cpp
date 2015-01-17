@@ -76,7 +76,7 @@ void ReplaceModifier::slotTokenTriggered(const QString& token)
 
     QPointer<ReplaceDialog> dlg = new ReplaceDialog(this);
 
-    if (dlg->exec() == KDialog::Accepted)
+    if (dlg->exec() == QDialog::Accepted)
     {
         QString oldStr = dlg->ui->source->text();
         QString newStr = dlg->ui->destination->text();

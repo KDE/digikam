@@ -356,7 +356,7 @@ void DateOption::slotTokenTriggered(const QString& token)
 
     QString dateString;
 
-    if (dlg->exec() == KDialog::Accepted)
+    if (dlg->exec() == QDialog::Accepted)
     {
         DateFormat df;
         int index = dlg->ui->dateFormatPicker->currentIndex();

@@ -124,7 +124,7 @@ void DatabaseOption::slotTokenTriggered(const QString& token)
     QPointer<DatabaseOptionDialog> dlg = new DatabaseOptionDialog(this);
     dlg->dbkeySelectorView->setKeysMap(m_map);
 
-    if (dlg->exec() == KDialog::Accepted)
+    if (dlg->exec() == QDialog::Accepted)
     {
         QStringList checkedKeys = dlg->dbkeySelectorView->checkedKeysList();
 

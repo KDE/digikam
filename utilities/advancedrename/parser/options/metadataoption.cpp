@@ -131,7 +131,7 @@ void MetadataOption::slotTokenTriggered(const QString& token)
 
     QPointer<MetadataOptionDialog> dlg = new MetadataOptionDialog(this);
 
-    if (dlg->exec() == KDialog::Accepted)
+    if (dlg->exec() == QDialog::Accepted)
     {
         QStringList checkedTags = dlg->metadataPanel->getAllCheckedTags();
 

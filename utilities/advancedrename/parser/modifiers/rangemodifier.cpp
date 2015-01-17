@@ -85,7 +85,7 @@ void RangeModifier::slotTokenTriggered(const QString& token)
 
     QPointer<RangeDialog> dlg = new RangeDialog(this);
 
-    if (dlg->exec() == KDialog::Accepted)
+    if (dlg->exec() == QDialog::Accepted)
     {
         int start = dlg->ui->startInput->value();
         int stop  = dlg->ui->stopInput->value();

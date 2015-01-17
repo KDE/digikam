@@ -91,7 +91,7 @@ void DefaultValueModifier::slotTokenTriggered(const QString& token)
 
     QPointer<DefaultValueDialog> dlg = new DefaultValueDialog(this);
 
-    if (dlg->exec() == KDialog::Accepted)
+    if (dlg->exec() == QDialog::Accepted)
     {
         QString valueStr = dlg->valueInput->text();
 

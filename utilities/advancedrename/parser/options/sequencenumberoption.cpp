@@ -79,7 +79,7 @@ void SequenceNumberOption::slotTokenTriggered(const QString& token)
 
     QString result;
 
-    if (dlg->exec() == KDialog::Accepted)
+    if (dlg->exec() == QDialog::Accepted)
     {
         int digits          = dlg->ui->digits->value();
         int start           = dlg->ui->start->value();
