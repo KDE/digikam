@@ -33,16 +33,18 @@
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QLabel>
-#include <QPushButton>
 #include <QRadioButton>
-#include <QVBoxLayout>
 #include <QStandardPaths>
 #include <QIcon>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
+#include <QPushButton>
 
 // KDE includes
 
 #include <klocalizedstring.h>
 #include <kseparator.h>
+#include <khelpclient.h>
 
 // Local includes
 
@@ -71,6 +73,7 @@ public:
         imageSRGB(0),
         imageWorkingSpace(0),
         imageOtherSpace(0),
+        buttons(0),
         otherProfileBox(0),
         imageProfileBox(0),
         mode(ColorCorrectionDlg::ProfileMismatch)
@@ -93,6 +96,8 @@ public:
     QRadioButton*            imageWorkingSpace;
     QRadioButton*            imageOtherSpace;
 
+    QDialogButtonBox*        buttons;
+
     IccProfilesComboBox*     otherProfileBox;
     IccProfilesComboBox*     imageProfileBox;
 
@@ -105,8 +110,16 @@ public:
 
 ColorCorrectionDlg::ColorCorrectionDlg(Mode mode, const DImg& preview,
                                        const QString& file, QWidget* const parent)
-    : KDialog(parent), d(new Private)
+    : QDialog(parent),
+      d(new Private)
 {
+    setModal(true);
+
+    d->buttons = new QDialogButtonBox(QDialogButtonBox::Help | QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
+    d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
+    d->buttons->button(QDialogButtonBox::Cancel)->setText(i18n("Don't know"));
+    d->buttons->button(QDialogButtonBox::Cancel)->setToolTip(i18n("Take the safest and most appropriate action"));
+    
     d->mode                          = mode;
     d->preview                       = preview;
     d->filePath                      = file;
@@ -134,21 +147,11 @@ ColorCorrectionDlg::ColorCorrectionDlg(Mode mode, const DImg& preview,
         caption = i18nc("<Problem> - <filename>", "%1 - %2", caption, fi.fileName());
     }
 
-    setCaption(caption);
-
-    setButtons(Help | Ok | Cancel);
-    setDefaultButton(Ok);
-    setButtonFocus(Ok);
-    setModal(true);
-    setHelp("iccprofile.anchor", "digikam");
-    setButtonText(Cancel,    i18n("Don't know"));
-    setButtonToolTip(Cancel, i18n("Take the safest and most appropriate action"));
+    setWindowTitle(caption);
 
     QWidget* const page     = new QWidget(this);
     QGridLayout* const grid = new QGridLayout(page);
-    setMainWidget(page);
-
-
+        
     if (d->mode == ProfileMismatch)
     {
         grid->addLayout(createHeading(),       0, 0, 1, 2);
@@ -180,6 +183,20 @@ ColorCorrectionDlg::ColorCorrectionDlg(Mode mode, const DImg& preview,
 
     page->setLayout(grid);
 
+    QVBoxLayout* const vbx = new QVBoxLayout(this);
+    vbx->addWidget(page);
+    vbx->addWidget(d->buttons);
+    setLayout(vbx);
+
+    connect(d->buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+            this, SLOT(slotOk()));
+
+    connect(d->buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
+            this, SLOT(reject()));
+
+    connect(d->buttons->button(QDialogButtonBox::Help), SIGNAL(clicked()),
+            this, SLOT(slotHelp()));
+
     readSettings();
     updateImageProfileUI();
     updateUsedProfileUI();
@@ -189,6 +206,12 @@ ColorCorrectionDlg::ColorCorrectionDlg(Mode mode, const DImg& preview,
 ColorCorrectionDlg::~ColorCorrectionDlg()
 {
     delete d;
+}
+
+void ColorCorrectionDlg::slotOk()
+{
+    accept();
+    setSettings();
 }
 
 QLayout* ColorCorrectionDlg::createHeading() const
@@ -236,7 +259,7 @@ QLayout* ColorCorrectionDlg::createHeading() const
 
 QLayout* ColorCorrectionDlg::createProfilesInfo() const
 {
-    QVBoxLayout* vbox = new QVBoxLayout;
+    QVBoxLayout* const vbox = new QVBoxLayout;
 
     if (d->mode == ProfileMismatch || d->mode == UncalibratedColor)
     {
@@ -419,7 +442,7 @@ QWidget* ColorCorrectionDlg::createOptions() const
     else if (d->mode == UncalibratedColor)
     {
         // empty
-        /*
+/*
         d->convertToWorkingSpace = new QRadioButton(i18n("Convert to working color space"));
         d->thirdOption         = new QRadioButton(i18n("Convert to this profile:"));
         d->otherProfileBox       = new IccProfilesComboBox;
@@ -428,7 +451,7 @@ QWidget* ColorCorrectionDlg::createOptions() const
         vbox->addWidget(d->convertToWorkingSpace);
         vbox->addWidget(d->thirdOption);
         vbox->addWidget(d->otherProfileBox);
-        */
+*/
     }
 
     return box;
@@ -836,11 +859,9 @@ void ColorCorrectionDlg::setSettings()
     IccSettings::instance()->setSettings(settings);
 }
 
-void ColorCorrectionDlg::accept()
+void ColorCorrectionDlg::slotHelp()
 {
-    KDialog::accept();
-
-    setSettings();
+    KHelpClient::invokeHelp("iccprofile.anchor", "digikam");
 }
 
 }  // namespace Digikam
