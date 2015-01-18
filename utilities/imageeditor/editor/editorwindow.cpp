@@ -1353,8 +1353,8 @@ bool EditorWindow::promptUserSave(const QUrl& url, SaveAskMode mode, bool allowC
             {
                 QString boxMessage;
                 boxMessage = i18nc("@info",
-                                   "The image <filename>%1</filename> has been modified.<nl/>"
-                                   "Do you want to save it?", url.fileName());
+                                   "<qt>The image <filename>%1</filename> has been modified.<br>"
+                                   "Do you want to save it?</qt>", url.fileName());
 
                 int result;
 

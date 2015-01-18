@@ -101,12 +101,12 @@ SetupDatabase::SetupDatabase(KPageDialog* const dialog, QWidget* const parent)
 
         d->hashesButton                 = new QPushButton(i18nc("@action:button", "Update File Hashes"));
         d->hashesButton->setWhatsThis(i18nc("@info:tooltip",
-                                            "File hashes are used to identify identical files and to display thumbnails. "
+                                            "<qt>File hashes are used to identify identical files and to display thumbnails. "
                                             "A new, improved algorithm to create the hash is now used. "
                                             "The old algorithm, though, still works quite well, so it is recommended to "
-                                            "carry out this upgrade, but not required.<nl/> "
-                                            "<note>After the upgrade you cannot use your database with a digiKam version "
-                                            "prior to 2.0.</note>"));
+                                            "carry out this upgrade, but not required.<br> "
+                                            "After the upgrade you cannot use your database with a digiKam version "
+                                            "prior to 2.0.</qt>"));
 
         QPushButton* const infoHash     = new QPushButton;
         infoHash->setIcon(QIcon::fromTheme("dialog-information"));

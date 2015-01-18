@@ -457,6 +457,7 @@ void ImageHistoryGraphModel::Private::buildCombinedTree(const HistoryGraph::Vert
         // Any other egdes off the main path?
         QList<HistoryGraph::Vertex> branches = graph().adjacentVertices(v, HistoryGraph::EdgesToLeaf);
         QList<HistoryGraph::Vertex> subgraph;
+
         foreach(const HistoryGraph::Vertex& branch, branches)
         {
             if (branch != next)
@@ -464,6 +465,7 @@ void ImageHistoryGraphModel::Private::buildCombinedTree(const HistoryGraph::Vert
                 subgraph << graph().verticesDominatedByDepthFirstSorted(branch, v, sortBy(oldestInfoFirst));
             }
         }
+
         addItemSubgroup(item, subgraph, i18nc("@title", "More Derived Images"));
 */
 
@@ -759,11 +761,11 @@ QVariant ImageHistoryGraphModel::data(const QModelIndex& index, int role) const
                 {
                     if (vertexItem->category & HistoryImageId::Original)
                     {
-                        return i18nc("@item filename", "%1<nl/>(Original Image)", data.toString());
+                        return i18nc("@item filename", "<qt>%1<br>(Original Image)</qt>", data.toString());
                     }
                     if (vertexItem->category & HistoryImageId::Source)
                     {
-                        return i18nc("@item filename", "%1<nl/>(Source Image)", data.toString());
+                        return i18nc("@item filename", "<qt>%1<br>(Source Image)</qt>", data.toString());
                     }
                     break;
                 }

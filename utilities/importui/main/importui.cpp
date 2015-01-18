@@ -1343,8 +1343,8 @@ void ImportUI::slotUploadItems(const QList<QUrl>& urls)
 
         while (d->view->hasImage(uploadInfo))
         {
-            QString msg(i18nc("@info", "Camera Folder <resource>%1</resource> already contains the item <resource>%2</resource>.<nl>"
-                             "Please enter a new filename (without extension):",
+            QString msg(i18nc("@info", "<qt>Camera Folder <resource>%1</resource> already contains the item <resource>%2</resource>.<br>"
+                             "Please enter a new filename (without extension):</qt>",
                              cameraFolder, fi.fileName()));
             uploadInfo.name = QInputDialog::getText(this, 
                                                     i18nc("@title:window", "File already exists"),
