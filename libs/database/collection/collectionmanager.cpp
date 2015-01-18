@@ -641,7 +641,7 @@ QString CollectionManagerPrivate::technicalDescription(const AlbumRootLocation* 
     {
         if (!(queryItem =  QUrlQuery(url).queryItemValue("mountpath")).isNull())
         {
-            return i18nc("@info", "Shared directory mounted at <filename>%1</filename>", QDir::toNativeSeparators(queryItem));
+            return i18nc("@info", "Shared directory mounted at <b>%1</b>", QDir::toNativeSeparators(queryItem));
         }
     }
 

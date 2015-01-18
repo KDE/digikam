@@ -2328,7 +2328,7 @@ void ImportUI::slotImageSelected(const CamItemInfoList& selection, const CamItem
 
                 d->statusProgressBar->progressBarMode(StatusProgressBar::TextMode,
                                                       i18nc("@info:status Filename of first selected item of number of items",
-                                                            "<filename>%1</filename> (%2 of %3)",
+                                                            "<b>%1</b> (%2 of %3)",
                                                             selection.first().url().fileName(), index, num_images));
             }
             else
@@ -2442,7 +2442,7 @@ bool ImportUI::createAutoAlbum(const QUrl& parentURL, const QString& sub,
         }
         else
         {
-            errMsg = i18nc("@info", "A file with the same name (<filename>%1</filename>) already exists in folder <resource>%2</resource>.",
+            errMsg = i18nc("@info", "A file with the same name (<b>%1</b>) already exists in folder <resource>%2</resource>.",
                           sub, parentURL.toLocalFile());
             return false;
         }
@@ -2454,7 +2454,7 @@ bool ImportUI::createAutoAlbum(const QUrl& parentURL, const QString& sub,
 
     if (!parent)
     {
-        errMsg = i18nc("@info", "Failed to find Album for path <filename>%1</filename>.", parentURL.toLocalFile());
+        errMsg = i18nc("@info", "Failed to find Album for path <b>%1</b>.", parentURL.toLocalFile());
         return false;
     }
 

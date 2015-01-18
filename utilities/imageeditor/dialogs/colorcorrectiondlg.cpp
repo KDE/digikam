@@ -144,7 +144,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(Mode mode, const DImg& preview,
     if (!file.isNull())
     {
         QFileInfo fi(file);
-        caption = i18nc("<Problem> - <filename>", "%1 - %2", caption, fi.fileName());
+        caption = i18nc("<Problem> - <b>", "%1 - %2", caption, fi.fileName());
     }
 
     setWindowTitle(caption);

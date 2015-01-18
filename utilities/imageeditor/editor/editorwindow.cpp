@@ -1353,7 +1353,7 @@ bool EditorWindow::promptUserSave(const QUrl& url, SaveAskMode mode, bool allowC
             {
                 QString boxMessage;
                 boxMessage = i18nc("@info",
-                                   "<qt>The image <filename>%1</filename> has been modified.<br>"
+                                   "<qt>The image <b>%1</b> has been modified.<br>"
                                    "Do you want to save it?</qt>", url.fileName());
 
                 int result;
@@ -2013,7 +2013,7 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
     if (!newURL.isValid())
     {
         QMessageBox::critical(this, qApp->applicationName(),
-                              i18n("Cannot Save: Found file path <filename>%1</filename> is invalid.", newURL.toDisplayString()));
+                              i18n("Cannot Save: Found file path <b>%1</b> is invalid.", newURL.toDisplayString()));
         qCWarning(DIGIKAM_GENERAL_LOG) << "target URL is not valid !";
         return false;
     }
@@ -2376,8 +2376,8 @@ bool EditorWindow::startingSaveVersion(const QUrl& url, bool fork, bool saveAs, 
     {
         QMessageBox::critical(this, qApp->applicationName(),
                               i18nc("@info",
-                                    "Cannot save file <filename>%1</filename> to "
-                                    "the suggested version file name <filename>%2</filename>",
+                                    "Cannot save file <b>%1</b> to "
+                                    "the suggested version file name <b>%2</b>",
                                     url.fileName(),
                                     newURL.fileName()));
         qCWarning(DIGIKAM_GENERAL_LOG) << "target URL is not valid !";

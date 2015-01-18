@@ -223,7 +223,7 @@ bool DatabaseConfigElementLoader::readConfig()
 
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        errorMessage = i18n("Could not open dbconfig.xml file <filename>%1</filename>", filepath);
+        errorMessage = i18n("Could not open dbconfig.xml file <b>%1</b>", filepath);
         return false;
     }
 
@@ -232,7 +232,7 @@ bool DatabaseConfigElementLoader::readConfig()
     if (!doc.setContent(&file))
     {
         file.close();
-        errorMessage = i18n("The XML in the dbconfig.xml file <filename>%1</filename> is invalid and cannot be read.", filepath);
+        errorMessage = i18n("The XML in the dbconfig.xml file <b>%1</b> is invalid and cannot be read.", filepath);
         return false;
     }
 
@@ -242,7 +242,7 @@ bool DatabaseConfigElementLoader::readConfig()
 
     if (element.isNull())
     {
-        errorMessage = i18n("The XML in the dbconfig.xml file <filename>%1</filename> "
+        errorMessage = i18n("The XML in the dbconfig.xml file <b>%1</b> "
                             "is missing the required element <icode>%2</icode>",
                             filepath, element.tagName());
         return false;
@@ -252,7 +252,7 @@ bool DatabaseConfigElementLoader::readConfig()
 
     if (defaultDB.isNull())
     {
-        errorMessage = i18n("The XML in the dbconfig.xml file <filename>%1</filename> "
+        errorMessage = i18n("The XML in the dbconfig.xml file <b>%1</b> "
                             "is missing the required element <icode>%2</icode>",
                             filepath, element.tagName());
         return false;
@@ -270,7 +270,7 @@ bool DatabaseConfigElementLoader::readConfig()
 
     if (version < dbconfig_xml_version)
     {
-        errorMessage = i18n("An old version of the dbconfig.xml file <filename>%1</filename> "
+        errorMessage = i18n("An old version of the dbconfig.xml file <b>%1</b> "
                             "is found. Please ensure that the version released "
                             "with the running version of digiKam is installed. ",
                             filepath);
