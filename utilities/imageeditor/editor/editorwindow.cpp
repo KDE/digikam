@@ -231,21 +231,21 @@ void EditorWindow::setupContextMenu()
     m_contextMenu = new QMenu(this);
 
     addAction2ContextMenu("editorwindow_fullscreen", true);
-    addAction2ContextMenu("options_show_menubar", true);
+    addAction2ContextMenu("options_show_menubar",    true);
     m_contextMenu->addSeparator();
 
     // --------------------------------------------------------
 
     addAction2ContextMenu("editorwindow_backward", true);
-    addAction2ContextMenu("editorwindow_forward", true);
+    addAction2ContextMenu("editorwindow_forward",  true);
     m_contextMenu->addSeparator();
 
     // --------------------------------------------------------
 
-    addAction2ContextMenu("editorwindow_slideshow", true);
-    addAction2ContextMenu("editorwindow_rotate_left", true);
+    addAction2ContextMenu("editorwindow_slideshow",    true);
+    addAction2ContextMenu("editorwindow_rotate_left",  true);
     addAction2ContextMenu("editorwindow_rotate_right", true);
-    addAction2ContextMenu("editorwindow_crop", true);
+    addAction2ContextMenu("editorwindow_crop",         true);
     m_contextMenu->addSeparator();
 
     // --------------------------------------------------------
@@ -1081,7 +1081,7 @@ void EditorWindow::saveStandardSettings()
 
     group.writeEntry("Show Thumbbar", thumbBar()->shouldBeVisible());
     group.writeEntry(d->configUnderExposureIndicatorEntry, d->exposureSettings->underExposureIndicator);
-    group.writeEntry(d->configOverExposureIndicatorEntry, d->exposureSettings->overExposureIndicator);
+    group.writeEntry(d->configOverExposureIndicatorEntry,  d->exposureSettings->overExposureIndicator);
     d->previewToolBar->writeSettings(group);
     config->sync();
 }
@@ -1239,13 +1239,14 @@ bool EditorWindow::promptForOverWrite()
 
         QFileInfo fi(m_canvas->currentImageFilePath());
         QString warnMsg(i18n("About to overwrite file \"%1\"\nAre you sure?", QDir::toNativeSeparators(fi.fileName())));
+
         return (KMessageBox::warningContinueCancel(this,
                                                    warnMsg,
                                                    i18n("Warning"),
                                                    KGuiItem(i18n("Overwrite")),
                                                    KStandardGuiItem::cancel(),
-                                                   QString("editorWindowSaveOverwrite"))
-                ==  KMessageBox::Continue);
+                                                   QString("editorWindowSaveOverwrite")
+                                                  ) ==  KMessageBox::Continue);
 
     }
     else
