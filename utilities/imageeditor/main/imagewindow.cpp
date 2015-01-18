@@ -1583,12 +1583,9 @@ void ImageWindow::slotOpenOriginal()
     if (originals.isEmpty())
     {
         //TODO: point to remote collection
-        KMessageBox::sorry(this,
-                           i18nc("@info",
-                                 "The original file (<filename>%1</filename>) is currently not available",
-                                 originalId.m_fileName),
-                           i18nc("@title",
-                                 "File Not Available"));
+        QMessageBox::warning(this, i18nc("@title", "File Not Available"),
+                             i18nc("@info", "<qt>The original file (<b>%1</b>) is currently not available</qt>",
+                                   originalId.m_fileName));
         return;
     }
 
