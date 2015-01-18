@@ -967,7 +967,7 @@ void ImportUI::moveEvent(QMoveEvent* e)
 
 void ImportUI::slotClose()
 {
-    /*FIXME
+/* FIXME
     if (dialogClosed())
         reject();
 */
@@ -982,10 +982,11 @@ bool ImportUI::dialogClosed()
 
     if (isBusy())
     {
-        if (KMessageBox::questionYesNo(this,
-                                       i18nc("@info", "Do you want to close the dialog "
-                                            "and cancel the current operation?"))
-                == KMessageBox::No)
+        if (QMessageBox::question(this, qApp->applicationName(),
+                                  i18nc("@info", "Do you want to close the dialog "
+                                        "and cancel the current operation?"),
+                                  QMessageBox::Yes | QMessageBox::No
+                                 ) == QMessageBox::No)
         {
             return false;
         }

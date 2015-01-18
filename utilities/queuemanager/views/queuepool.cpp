@@ -354,12 +354,13 @@ void QueuePool::removeTab(int index)
 
     if (count > 0)
     {
-        int ret = KMessageBox::questionYesNo(this,
-                                             i18np("There is still 1 unprocessed item in \"%2\". Do you want to close this queue?",
-                                                   "There are still %1 unprocessed items in \"%2\". Do you want to close this queue?",
-                                                   count, queueTitle(index)));
+        int ret = QMessageBox::question(this, qApp->applicationName(),
+                                        i18np("There is still 1 unprocessed item in \"%2\".\nDo you want to close this queue?",
+                                              "There are still %1 unprocessed items in \"%2\".\nDo you want to close this queue?",
+                                              count, queueTitle(index)),
+                                        QMessageBox::Yes | QMessageBox::No);
 
-        if (ret == KMessageBox::No)
+        if (ret == QMessageBox::No)
         {
             return;
         }
