@@ -464,13 +464,15 @@ void AlbumManager::checkDatabaseDirsAfterFirstRun(const QString& dbPath, const Q
         {
             KGuiItem startFresh(i18n("Create New Database"), "document-new");
             KGuiItem upgrade(i18n("Upgrade Database"), "view-refresh");
-            int result = KMessageBox::warningYesNo(0,
+
+            int result = KMessageBox::warningYesNo(qApp->activeWindow(),
                                                    i18n("<p>You have chosen the folder \"%1\" as the place to store the database. "
                                                         "A database file from an older version of digiKam is found in this folder.</p> "
                                                         "<p>Would you like to upgrade the old database file - confirming "
                                                         "that this database file was indeed created for the pictures located in the folder \"%2\" - "
                                                         "or ignore the old file and start with a new database?</p> ",
-                                                        QDir::toNativeSeparators(newDir.path()), QDir::toNativeSeparators(albumDir.path())),
+                                                        QDir::toNativeSeparators(newDir.path()),
+                                                        QDir::toNativeSeparators(albumDir.path())),
                                                    i18n("Database Folder"),
                                                    upgrade, startFresh);
 
@@ -511,13 +513,13 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
             if (digikam3DB.exists() || digikamVeryOldDB.exists())
             {
                 KGuiItem copyCurrent(i18n("Copy Current Database"), "edit-copy");
-                KGuiItem startFresh(i18n("Create New Database"), "document-new");
-                KGuiItem upgrade(i18n("Upgrade Database"), "view-refresh");
+                KGuiItem startFresh(i18n("Create New Database"),    "document-new");
+                KGuiItem upgrade(i18n("Upgrade Database"),          "view-refresh");
                 int result = -1;
 
                 if (params.isSQLite())
                 {
-                    result = KMessageBox::warningYesNoCancel(0,
+                    result = KMessageBox::warningYesNoCancel(qApp->activeWindow(),
                                                              i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
                                                                   "A database file from an older version of digiKam is found in this folder.</p> "
                                                                   "<p>Would you like to upgrade the old database file, start with a new database, "
@@ -528,7 +530,7 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
                 }
                 else
                 {
-                    result = KMessageBox::warningYesNo(0,
+                    result = KMessageBox::warningYesNo(qApp->activeWindow(),
                                                        i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
                                                             "A database file from an older version of digiKam is found in this folder.</p> "
                                                             "<p>Would you like to upgrade the old database file or start with a new database?</p>",
@@ -568,8 +570,9 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
                 if (params.isSQLite())
                 {
                     KGuiItem copyCurrent(i18n("Copy Current Database"), "edit-copy");
-                    KGuiItem startFresh(i18n("Create New Database"), "document-new");
-                    result = KMessageBox::warningYesNo(0,
+                    KGuiItem startFresh(i18n("Create New Database"),    "document-new");
+
+                    result = KMessageBox::warningYesNo(qApp->activeWindow(),
                                                        i18n("<p>You have chosen the folder \"%1\" as the new place to store the database.</p>"
                                                             "<p>Would you like to copy the current database to this location "
                                                             "and continue using it, or start with a new database?</p> ",
@@ -594,7 +597,8 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
             {
                 KGuiItem replaceItem(i18n("Copy Current Database"), "edit-copy");
                 KGuiItem useExistingItem(i18n("Use Existing File"), "document-open");
-                result = KMessageBox::warningYesNo(0,
+
+                result = KMessageBox::warningYesNo(qApp->activeWindow(),
                                                    i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
                                                         "There is already a database file in this location.</p> "
                                                         "<p>Would you like to use this existing file as the new database, or remove it "
@@ -820,22 +824,8 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
     {
         // TODO it would be better to replace all yes/no confirmation dialogs with ones that has custom
         // buttons that denote the actions directly, i.e.:  ["Ignore and Continue"]  ["Adjust locale"]
-        int result =
-            KMessageBox::warningYesNo(0,
-                                      i18n("Your locale has changed since this "
-                                           "album was last opened.\n"
-                                           "Old locale: %1, new locale: %2\n"
-                                           "If you have recently changed your locale, you need not be concerned.\n"
-                                           "Please note that if you switched to a locale "
-                                           "that does not support some of the filenames in your collection, "
-                                           "these files may no longer be found in the collection. "
-                                           "If you are sure that you want to "
-                                           "continue, click 'Yes'. "
-                                           "Otherwise, click 'No' and correct your "
-                                           "locale setting before restarting digiKam.",
-                                           dbLocale, currLocale));
-            
-            QMessageBox::warning(qApp->activeWindow(), qApp->applicationName(),
+
+        int result = QMessageBox::warning(qApp->activeWindow(), qApp->applicationName(),
                                  i18n("Your locale has changed since this "
                                       "album was last opened.\n"
                                       "Old locale: %1, new locale: %2\n"
