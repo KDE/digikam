@@ -25,6 +25,7 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QDrag>
 #include <QHeaderView>
 #include <QMap>
@@ -286,14 +287,13 @@ void WorkflowList::slotContextMenu()
             WorkflowItem* const item = dynamic_cast<WorkflowItem*>(list.first());
             if (item)
             {
-                int result = KMessageBox::warningYesNo(0,
-                                                    i18n("Are you sure you want to "
-                                                            "delete the selected workflow "
-                                                            "\"%1\"?", item->title()),
-                                                    i18n("Delete Workflow?"),
-                                                    KGuiItem(i18n("Delete")),
-                                                    KStandardGuiItem::cancel());
-                if (result == KMessageBox::Yes)
+                int result = QMessageBox::warning(qApp->activeWindow(), i18n("Delete Workflow?"),
+                                          i18n("Are you sure you want to "
+                                               "delete the selected workflow "
+                                               "\"%1\"?", item->title()),
+                                          QMessageBox::Yes | QMessageBox::Cancel);
+
+                if (result == QMessageBox::Yes)
                 {
                     WorkflowManager* const mngr = WorkflowManager::instance();
                     Workflow wf                 = mngr->findByTitle(item->title());
