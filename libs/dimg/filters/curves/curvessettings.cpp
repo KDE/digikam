@@ -42,16 +42,13 @@
 #include <QStyle>
 #include <QFileDialog>
 #include <QUrl>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-
 #include <kglobalsettings.h>
-#include <kmessagebox.h>
-
 #include <kseparator.h>
-
 
 // Libkdcraw includes
 
@@ -263,8 +260,8 @@ void CurvesSettings::loadSettings()
 
     if (d->curvesBox->curves()->loadCurvesFromGimpCurvesFile(loadCurvesFile) == false)
     {
-        KMessageBox::error(qApp->activeWindow(),
-                           i18n("Cannot load from the Gimp curves text file."));
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("Cannot load from the Gimp curves text file."));
         return;
     }
 }
@@ -284,8 +281,8 @@ void CurvesSettings::saveAsSettings()
 
     if (d->curvesBox->curves()->saveCurvesToGimpCurvesFile(saveCurvesFile) == false)
     {
-        KMessageBox::error(qApp->activeWindow(),
-                           i18n("Cannot save to the Gimp curves text file."));
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("Cannot save to the Gimp curves text file."));
         return;
     }
 }

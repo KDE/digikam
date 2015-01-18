@@ -1709,9 +1709,10 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
         {
             if (!m_savingContext.abortingSaving)
             {
-                KMessageBox::error(this, i18n("Failed to save file\n\"%1\"\nto\n\"%2\".",
-                                              m_savingContext.destinationURL.fileName(),
-                                              m_savingContext.destinationURL.toLocalFile()));
+                QMessageBox::critical(this, qApp->applicationName(),
+                                      i18n("Failed to save file\n\"%1\"\nto\n\"%2\".",
+                                           m_savingContext.destinationURL.fileName(),
+                                           m_savingContext.destinationURL.toLocalFile()));
             }
 
             finishSaving(false);
@@ -1837,9 +1838,10 @@ void EditorWindow::setupTempSaveFile(const QUrl& url)
 
     if (!m_savingContext.saveTempFile->open())
     {
-        KMessageBox::error(this, i18n("Could not open a temporary file in the folder \"%1\": %2 (%3)",
-                                      QDir::toNativeSeparators(tempDir), m_savingContext.saveTempFile->errorString(),
-                                      m_savingContext.saveTempFile->error()));
+        QMessageBox::critical(this, qApp->applicationName(),
+                              i18n("Could not open a temporary file in the folder \"%1\": %2 (%3)",
+                                   QDir::toNativeSeparators(tempDir), m_savingContext.saveTempFile->errorString(),
+                                   m_savingContext.saveTempFile->error()));
         return;
     }
 
@@ -2003,13 +2005,15 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
 
     if (m_savingContext.format.isNull())
     {
-        KMessageBox::error(this, i18n("Unable to determine the format to save the target image with."));
+        QMessageBox::critical(this, qApp->applicationName(),
+                              i18n("Unable to determine the format to save the target image with."));
         return false;
     }
 
     if (!newURL.isValid())
     {
-        KMessageBox::error(this, i18n("Cannot Save: Found file path <filename>%1</filename> is invalid.", newURL.toDisplayString()));
+        QMessageBox::critical(this, qApp->applicationName(),
+                              i18n("Cannot Save: Found file path <filename>%1</filename> is invalid.", newURL.toDisplayString()));
         qCWarning(DIGIKAM_GENERAL_LOG) << "target URL is not valid !";
         return false;
     }
@@ -2370,11 +2374,12 @@ bool EditorWindow::startingSaveVersion(const QUrl& url, bool fork, bool saveAs, 
 
     if (!newURL.isValid())
     {
-        KMessageBox::error(this, i18nc("@info",
-                                       "Cannot save file <filename>%1</filename> to "
-                                       "the suggested version file name <filename>%2</filename>",
-                                       url.fileName(),
-                                       newURL.fileName()));
+        QMessageBox::critical(this, qApp->applicationName(),
+                              i18nc("@info",
+                                    "Cannot save file <filename>%1</filename> to "
+                                    "the suggested version file name <filename>%2</filename>",
+                                    url.fileName(),
+                                    newURL.fileName()));
         qCWarning(DIGIKAM_GENERAL_LOG) << "target URL is not valid !";
         return false;
     }
@@ -2492,9 +2497,8 @@ bool EditorWindow::moveLocalFile(const QString& org, const QString& dst)
 
     if (!FileOperation::localFileRename(source, org, dst))
     {
-        KMessageBox::error(this,
-                           i18n("Failed to overwrite original file"),
-                           i18n("Error Saving File"));
+        QMessageBox::critical(this, i18n("Error Saving File"),
+                              i18n("Failed to overwrite original file"));
         return false;
     }
 
@@ -2565,8 +2569,8 @@ void EditorWindow::slotKioMoveFinished(KJob* job)
 {
     if (job->error())
     {
-        KMessageBox::error(this, i18n("Failed to save file: %1", job->errorString()),
-                           i18n("Error Saving File"));
+        QMessageBox::critical(this, i18n("Error Saving File"),
+                              i18n("Failed to save file: %1", job->errorString()));
     }
 
     movingSaveFileFinished(!job->error());

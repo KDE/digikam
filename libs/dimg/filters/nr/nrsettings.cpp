@@ -37,13 +37,12 @@
 #include <QStyle>
 #include <QFileDialog>
 #include <QStandardPaths>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-
 #include <kglobalsettings.h>
-#include <kmessagebox.h>
 
 // Libkdcraw includes
 
@@ -393,9 +392,9 @@ void NRSettings::loadSettings()
 
         if (stream.readLine() != "# Photograph Wavelets Noise Reduction Configuration File V2")
         {
-            KMessageBox::error(qApp->activeWindow(),
-                               i18n("\"%1\" is not a Photograph Noise Reduction settings text file.",
-                                    loadRestorationFile.fileName()));
+            QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                                  i18n("\"%1\" is not a Photograph Noise Reduction settings text file.",
+                                       loadRestorationFile.fileName()));
             file.close();
             return;
         }
@@ -413,7 +412,8 @@ void NRSettings::loadSettings()
     }
     else
     {
-        KMessageBox::error(qApp->activeWindow(), i18n("Cannot load settings from the Photograph Noise Reduction text file."));
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("Cannot load settings from the Photograph Noise Reduction text file."));
     }
 
     file.close();
@@ -445,7 +445,8 @@ void NRSettings::saveAsSettings()
     }
     else
     {
-        KMessageBox::error(qApp->activeWindow(), i18n("Cannot save settings to the Photograph Noise Reduction text file."));
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("Cannot save settings to the Photograph Noise Reduction text file."));
     }
 
     file.close();

@@ -38,12 +38,12 @@
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QStandardPaths>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 #include <kurllabel.h>
 
 // Local includes
@@ -375,9 +375,9 @@ void RestorationTool::slotLoadSettings()
     {
         if (!d->settingsWidget->loadSettings(file, QString("# Photograph Restoration Configuration File V2")))
         {
-            KMessageBox::error(qApp->activeWindow(),
-                               i18n("\"%1\" is not a Photograph Restoration settings text file.",
-                                    loadRestorationFile.fileName()));
+            QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                                  i18n("\"%1\" is not a Photograph Restoration settings text file.",
+                                       loadRestorationFile.fileName()));
             file.close();
             return;
         }
@@ -386,7 +386,8 @@ void RestorationTool::slotLoadSettings()
     }
     else
     {
-        KMessageBox::error(qApp->activeWindow(), i18n("Cannot load settings from the Photograph Restoration text file."));
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("Cannot load settings from the Photograph Restoration text file."));
     }
 
     file.close();
@@ -415,7 +416,8 @@ void RestorationTool::slotSaveAsSettings()
     }
     else
     {
-        KMessageBox::error(qApp->activeWindow(), i18n("Cannot save settings to the Photograph Restoration text file."));
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("Cannot save settings to the Photograph Restoration text file."));
     }
 
     file.close();

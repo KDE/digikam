@@ -38,10 +38,9 @@
 #include <QAction>
 #include <QStandardPaths>
 #include <QDirIterator>
+#include <QMessageBox>
 
 // KDE includes
-
-#include <kmessagebox.h>
 
 #include <klocalizedstring.h>
 #include <kcolorscheme.h>
@@ -248,7 +247,8 @@ void ThemeManager::slotConfigColors()
 
     if (ret > 0)
     {
-        KMessageBox::error(0, i18n("Cannot start Colors Settings panel from KDE Control Center. "
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("Cannot start Colors Settings panel from KDE Control Center. "
                                    "Please check your system..."));
     }
 }

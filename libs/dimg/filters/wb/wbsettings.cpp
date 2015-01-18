@@ -42,16 +42,13 @@
 #include <QStyle>
 #include <QUrl>
 #include <QFileDialog>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-
 #include <kglobalsettings.h>
-#include <kmessagebox.h>
-
 #include <kseparator.h>
-
 
 // Libkdcraw includes
 
@@ -548,9 +545,9 @@ void WBSettings::loadSettings()
 
         if (stream.readLine() != "# White Color Balance Configuration File V2")
         {
-            KMessageBox::error(qApp->activeWindow(),
-                               i18n("\"%1\" is not a White Color Balance settings text file.",
-                                    loadWhiteBalanceFile.fileName()));
+            QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                                  i18n("\"%1\" is not a White Color Balance settings text file.",
+                                       loadWhiteBalanceFile.fileName()));
             file.close();
             return;
         }
@@ -569,8 +566,8 @@ void WBSettings::loadSettings()
     }
     else
     {
-        KMessageBox::error(qApp->activeWindow(),
-                           i18n("Cannot load settings from the White Color Balance text file."));
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("Cannot load settings from the White Color Balance text file."));
     }
 
     file.close();
@@ -604,8 +601,8 @@ void WBSettings::saveAsSettings()
     }
     else
     {
-        KMessageBox::error(qApp->activeWindow(),
-                           i18n("Cannot save settings to the White Color Balance text file."));
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("Cannot save settings to the White Color Balance text file."));
     }
 
     file.close();

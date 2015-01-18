@@ -37,14 +37,12 @@
 #include <QStandardPaths>
 #include <QApplication>
 #include <QStyle>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-
 #include <kglobalsettings.h>
-#include <kmessagebox.h>
-
 #include <kseparator.h>
 
 // Libkdcraw includes
@@ -501,9 +499,9 @@ void SharpSettings::loadSettings()
 
         if (stream.readLine() != "# Photograph Refocus Configuration File")
         {
-            KMessageBox::error(qApp->activeWindow(),
-                               i18n("\"%1\" is not a Photograph Refocus settings text file.",
-                                    loadRestorationFile.fileName()));
+            QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                                  i18n("\"%1\" is not a Photograph Refocus settings text file.",
+                                       loadRestorationFile.fileName()));
             file.close();
             return;
         }
@@ -520,7 +518,8 @@ void SharpSettings::loadSettings()
     }
     else
     {
-        KMessageBox::error(qApp->activeWindow(), i18n("Cannot load settings from the Photograph Refocus text file."));
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("Cannot load settings from the Photograph Refocus text file."));
     }
 
     file.close();
@@ -553,7 +552,8 @@ void SharpSettings::saveAsSettings()
     }
     else
     {
-        KMessageBox::error(qApp->activeWindow(), i18n("Cannot save settings to the Photograph Refocus text file."));
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("Cannot save settings to the Photograph Refocus text file."));
     }
 
     file.close();

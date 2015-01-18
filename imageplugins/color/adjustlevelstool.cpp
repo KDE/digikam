@@ -42,16 +42,13 @@
 #include <QIcon>
 #include <QStandardPaths>
 #include <QFileDialog>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <kconfig.h>
-
 #include <kglobalsettings.h>
-
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
-
 
 // Libkdcraw includes
 
@@ -908,8 +905,8 @@ void AdjustLevelsTool::slotLoadSettings()
 
     if ( d->levels->loadLevelsFromGimpLevelsFile( loadLevelsFile ) == false )
     {
-        KMessageBox::error(qApp->activeWindow(),
-                           i18n("Cannot load from the Gimp levels text file."));
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("Cannot load from the Gimp levels text file."));
         return;
     }
 
@@ -934,8 +931,8 @@ void AdjustLevelsTool::slotSaveAsSettings()
 
     if ( d->levels->saveLevelsToGimpLevelsFile( saveLevelsFile ) == false )
     {
-        KMessageBox::error(qApp->activeWindow(),
-                           i18n("Cannot save to the Gimp levels text file."));
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("Cannot save to the Gimp levels text file."));
         return;
     }
 

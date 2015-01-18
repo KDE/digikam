@@ -50,12 +50,12 @@
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QStandardPaths>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 #include <kseparator.h>
 #include <kurllabel.h>
 
@@ -588,17 +588,17 @@ void ResizeTool::slotLoadSettings()
     {
         if (!d->settingsWidget->loadSettings(file, QString("# Photograph Resizing Configuration File")))
         {
-            KMessageBox::error(qApp->activeWindow(),
-                               i18n("\"%1\" is not a Photograph Resizing settings text file.",
-                                    loadBlowupFile.fileName()));
+            QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                                  i18n("\"%1\" is not a Photograph Resizing settings text file.",
+                                       loadBlowupFile.fileName()));
             file.close();
             return;
         }
     }
     else
     {
-        KMessageBox::error(qApp->activeWindow(),
-                           i18n("Cannot load settings from the Photograph Resizing text file."));
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("Cannot load settings from the Photograph Resizing text file."));
     }
 
     file.close();
@@ -623,7 +623,8 @@ void ResizeTool::slotSaveAsSettings()
     }
     else
     {
-        KMessageBox::error(qApp->activeWindow(), i18n("Cannot save settings to the Photograph Resizing text file."));
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("Cannot save settings to the Photograph Resizing text file."));
     }
 
     file.close();

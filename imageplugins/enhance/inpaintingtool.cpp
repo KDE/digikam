@@ -51,12 +51,12 @@
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QStandardPaths>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 #include <kurllabel.h>
 
 // Local includes
@@ -488,16 +488,17 @@ void InPaintingTool::slotLoadSettings()
     {
         if (!d->settingsWidget->loadSettings(file, QString("# Photograph Inpainting Configuration File V2")))
         {
-            KMessageBox::error(qApp->activeWindow(),
-                               i18n("\"%1\" is not a Photograph In-Painting settings text file.",
-                                    loadInpaintingFile.fileName()));
+            QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                                  i18n("\"%1\" is not a Photograph In-Painting settings text file.",
+                                       loadInpaintingFile.fileName()));
             file.close();
             return;
         }
     }
     else
     {
-        KMessageBox::error(qApp->activeWindow(), i18n("Cannot load settings from the Photograph In-Painting text file."));
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("Cannot load settings from the Photograph In-Painting text file."));
     }
 
     file.close();
@@ -526,7 +527,8 @@ void InPaintingTool::slotSaveAsSettings()
     }
     else
     {
-        KMessageBox::error(qApp->activeWindow(), i18n("Cannot save settings to the Photograph In-Painting text file."));
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("Cannot save settings to the Photograph In-Painting text file."));
     }
 
     file.close();

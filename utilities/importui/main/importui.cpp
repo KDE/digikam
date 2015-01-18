@@ -1289,12 +1289,13 @@ void ImportUI::slotUploadItems(const QList<QUrl>& urls)
 
         if (totalKbSize >= d->cameraFreeSpace->kBAvail())
         {
-            KMessageBox::error(this, i18nc("@info", "There is not enough free space on the Camera Medium "
-                                          "to upload pictures.\n\n"
-                                          "Space require: %1\n"
-                                          "Available free space: %2",
-                                          KIO::convertSizeFromKiB(totalKbSize),
-                                          KIO::convertSizeFromKiB(d->cameraFreeSpace->kBAvail())));
+            QMessageBox::critical(this, qApp->applicationName(),
+                                  i18nc("@info", "There is not enough free space on the Camera Medium "
+                                        "to upload pictures.\n\n"
+                                        "Space require: %1\n"
+                                        "Available free space: %2",
+                                        KIO::convertSizeFromKiB(totalKbSize),
+                                        KIO::convertSizeFromKiB(d->cameraFreeSpace->kBAvail())));
             return;
         }
     }
@@ -2125,7 +2126,7 @@ bool ImportUI::createSubAlbum(QUrl& downloadUrl, const QString& subalbum, const 
 
     if (!createAutoAlbum(downloadUrl, subalbum, date, errMsg))
     {
-        KMessageBox::error(this, errMsg);
+        QMessageBox::critical(this, qApp->applicationName(), errMsg);
         return false;
     }
 

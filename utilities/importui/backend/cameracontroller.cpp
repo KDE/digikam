@@ -965,7 +965,7 @@ void CameraController::slotDownloadFailed(const QString& folder, const QString& 
     {
         if (queueIsEmpty())
         {
-            KMessageBox::error(d->parent, xi18n("Failed to download file <filename>%1</filename>.", file));
+            QMessageBox::critical(d->parent, qApp->applicationName(), xi18n("Failed to download file <filename>%1</filename>.", file));
         }
         else
         {
@@ -991,7 +991,7 @@ void CameraController::slotUploadFailed(const QString& folder, const QString& fi
     {
         if (queueIsEmpty())
         {
-            KMessageBox::error(d->parent, xi18n("Failed to upload file <filename>%1</filename>.", file));
+            QMessageBox::critical(d->parent, qApp->applicationName(), xi18n("Failed to upload file <filename>%1</filename>.", file));
         }
         else
         {
@@ -1015,7 +1015,7 @@ void CameraController::slotDeleteFailed(const QString& folder, const QString& fi
     {
         if (queueIsEmpty())
         {
-            KMessageBox::error(d->parent, xi18n("Failed to delete file <filename>%1</filename>.", file));
+            QMessageBox::critical(d->parent, qApp->applicationName(), xi18n("Failed to delete file <filename>%1</filename>.", file));
         }
         else
         {
@@ -1039,7 +1039,7 @@ void CameraController::slotLockFailed(const QString& folder, const QString& file
     {
         if (queueIsEmpty())
         {
-            KMessageBox::error(d->parent, xi18n("Failed to toggle lock file <filename>%1</filename>.", file));
+            QMessageBox::critical(d->parent, qApp->applicationName(), xi18n("Failed to toggle lock file <filename>%1</filename>.", file));
         }
         else
         {

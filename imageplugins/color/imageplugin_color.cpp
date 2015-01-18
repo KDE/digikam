@@ -27,17 +27,16 @@
 // Qt includes
 
 #include <QApplication>
+#include <QKeySequence>
+#include <QAction>
 
 // KDE includes
 
-#include <QAction>
 #include <kactioncollection.h>
-
 #include <kgenericfactory.h>
 #include <klibloader.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
-#include <QKeySequence>
 
 // Local includes
 
@@ -256,7 +255,8 @@ void ImagePlugin_Color::slotConvertTo8Bits()
 
     if (!iface.originalSixteenBit())
     {
-        KMessageBox::error(qApp->activeWindow(), i18n("This image is already using a depth of 8 bits / color / pixel."));
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("This image is already using a depth of 8 bits / color / pixel."));
         return;
     }
     else
@@ -283,7 +283,8 @@ void ImagePlugin_Color::slotConvertTo16Bits()
 
     if (iface.originalSixteenBit())
     {
-        KMessageBox::error(qApp->activeWindow(), i18n("This image is already using a depth of 16 bits / color / pixel."));
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("This image is already using a depth of 16 bits / color / pixel."));
         return;
     }
 
@@ -298,7 +299,8 @@ void ImagePlugin_Color::slotConvertToColorSpace(const IccProfile& profile)
 
     if (iface.originalIccProfile().isNull())
     {
-        KMessageBox::error(qApp->activeWindow(), i18n("This image is not color managed."));
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("This image is not color managed."));
         return;
     }
 

@@ -411,7 +411,7 @@ void TagsManager::slotDeleteAction()
 
             if (!AlbumManager::instance()->deleteTAlbum(it.value(), errMsg))
             {
-                KMessageBox::error(0, errMsg);
+                QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(), errMsg);
             }
         }
     }
@@ -432,7 +432,7 @@ void TagsManager::slotResetTagIcon()
         {
             if (!AlbumManager::instance()->updateTAlbumIcon(tag, icon, 0, errMsg))
             {
-                KMessageBox::error(0, errMsg);
+                QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(), errMsg);
             }
         }
     }
@@ -604,7 +604,7 @@ void TagsManager::slotWipeAll()
 
         if (!AlbumManager::instance()->deleteTAlbum(*it, errMsg))
         {
-            KMessageBox::error(0, errMsg);
+            QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(), errMsg);
         }
     }
 
