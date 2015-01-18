@@ -834,8 +834,23 @@ bool AlbumManager::setDatabase(const DatabaseParameters& params, bool priority, 
                                            "Otherwise, click 'No' and correct your "
                                            "locale setting before restarting digiKam.",
                                            dbLocale, currLocale));
+            
+            QMessageBox::warning(qApp->activeWindow(), qApp->applicationName(),
+                                 i18n("Your locale has changed since this "
+                                      "album was last opened.\n"
+                                      "Old locale: %1, new locale: %2\n"
+                                      "If you have recently changed your locale, you need not be concerned.\n"
+                                      "Please note that if you switched to a locale "
+                                      "that does not support some of the filenames in your collection, "
+                                      "these files may no longer be found in the collection. "
+                                      "If you are sure that you want to "
+                                      "continue, click 'Yes'. "
+                                      "Otherwise, click 'No' and correct your "
+                                      "locale setting before restarting digiKam.",
+                                      dbLocale, currLocale),
+                                  QMessageBox::Yes | QMessageBox::No);
 
-        if (result != KMessageBox::Yes)
+        if (result != QMessageBox::Yes)
         {
             exit(0);
         }
