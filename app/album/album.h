@@ -39,7 +39,7 @@
 // Local includes
 
 #include "albuminfo.h"
-#include "databaseurl.h"
+//#include "databaseurl.h"
 
 namespace Digikam
 {
@@ -48,6 +48,8 @@ namespace Digikam
  */
 class Album;
 typedef QList<Album*> AlbumList;
+
+class DatabaseUrl;
 
 /**
  * \class Album

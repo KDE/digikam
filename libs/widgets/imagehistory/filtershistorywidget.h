@@ -42,6 +42,8 @@
 namespace Digikam
 {
 
+class DImageHistory;
+
 class RemoveFilterAction : public QAction
 {
     Q_OBJECT

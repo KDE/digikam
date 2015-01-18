@@ -13,6 +13,5 @@ add_library(dmetadata STATIC ${libdmetadata_SRCS})
 
 target_link_libraries(dmetadata
                       Qt5::Core
-                      #Qt5::Xml
                       dimg
 )
