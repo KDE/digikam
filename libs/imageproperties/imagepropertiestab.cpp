@@ -6,7 +6,7 @@
  * Date        : 2006-04-19
  * Description : A tab to display general image information
  *
- * Copyright (C) 2006-2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2013      by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
@@ -946,7 +946,7 @@ bool ImagePropertiesTab::aspectRatioToString(int width, int height, QString& arS
     }
 
     long   num=0, den=0;
-    doubleToHumanReadableFraction((double)nw / (double)nh, &num, &den);
+    doubleToHumanReadableFraction((double)nw / (double)nh, &num, &den, 4);
 
     const QString awidth  = QString::number(num);
     const QString aheight = QString::number(den);
