@@ -148,14 +148,19 @@ endif()
 
 add_library(dimg STATIC ${libdimgloaders_SRCS} ${libdimgfilters_SRCS} ${libdimg_SRCS})
 
-message(INFO "remove dependencies for digikamcore")
-
 if(X11_FOUND)
     target_link_libraries(dimg Qt5::X11Extras ${X11_LIBRARIES})
 endif()
 
+if(JASPER_FOUND)
+    target_link_libraries(dimg ${JASPER_LIBRARIES})
+endif()
+
+
 target_link_libraries(dimg
                       dmetadata
+                      dthread
+                      jpegutils
                       
                       Qt5::Core
                       Qt5::Gui
@@ -163,10 +168,12 @@ target_link_libraries(dimg
                       Qt5::Widgets
                       Qt5::Xml
 
-
                       KF5::KDELibs4Support # required for KColorButton
                       
                       ${LCMS_LIBRARIES} # filters
+                      
+                      ${TIFF_LIBRARIES}
+                      ${PNG_LIBRARIES}
                       
                       KF5::KExiv2
                       KF5::KDcraw

@@ -77,7 +77,7 @@ set(libiccprofileswidgets_SRCS
     iccprofiles/iccprofilescombobox.cpp
 )
 
-add_library(digikamwidgets ${libmainview_SRCS} ${libcommonwidgets_SRCS} ${libgraphicsviewwidgets_SRCS} ${libiccprofileswidgets_SRCS} ${libitemview_SRCS} ${libmetadatawidgets_SRCS})
+add_library(digikamwidgets STATIC ${libmainview_SRCS} ${libcommonwidgets_SRCS} ${libgraphicsviewwidgets_SRCS} ${libiccprofileswidgets_SRCS} ${libitemview_SRCS} ${libmetadatawidgets_SRCS})
 target_link_libraries(digikamwidgets
                       digikamcore
                       digikamdialogs

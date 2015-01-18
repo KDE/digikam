@@ -26,8 +26,10 @@ ki18n_wrap_ui(libadvancedrename_SRCS ${libadvancedrename_UI})
 add_library(advancedrename STATIC ${libadvancedrename_SRCS})
 
 target_link_libraries(advancedrename
-                      digikamdatabase
+                      Qt5::Widgets
+                      Qt5::Sql
+                      
+                      KF5::KExiv2
+                      KF5::KDcraw
                       KF5::KDELibs4Support
-                      ${KF5KExiv2_LIBRARIES}
-                      ${KF5KDcraw_LIBRARIES}
                      )

@@ -15,6 +15,13 @@ include_directories(BEFORE
 #Require by Greycstoration algorithm (CImg.h)
 kde_enable_exceptions()
 
+set(libshowfotosetup_SRCS
+    setup/setuptooltip.cpp
+    setup/setupmisc.cpp
+    setup/setupmetadata.cpp
+    setup/setup.cpp
+)
+
 set(showfoto_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupeditor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/setup/setupiofiles.cpp

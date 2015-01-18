@@ -498,3 +498,11 @@ target_link_libraries(testdatabase
                       ${KF5KDcraw_LIBRARIES}
                       ${OpenCV_LIBRARIES}
 )
+
+if(ENABLE_DIGIKAM_MODELTEST)
+    message(STATUS "Modeltest enabled")
+    set(libdigikamgui_SRCS ${libdigikamgui_SRCS}
+        modeltest/modeltest.cpp
+       )
+    add_definitions(-DENABLE_DIGIKAM_MODELTEST)
+endif()
