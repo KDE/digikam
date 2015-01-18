@@ -136,6 +136,7 @@ endif()
 find_package(KF5 REQUIRED COMPONENTS
              KDELibs4Support
              NotifyConfig
+             WidgetsAddons
 )
 
 # ==================================================================================================
@@ -744,592 +745,21 @@ if(DIGIKAM_CAN_BE_COMPILED)
     # ==================================================================================================
     # Common targets parts
 
-    set(libdimg_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/dimg.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/drawdecoding.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/dimgscale.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/dcolor.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/dcolorcomposer.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/imagehistory/dimagehistory.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/imagehistory/filteraction.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/imagehistory/historyimageid.cpp
-       )
-
-    set(libdimgloaders_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/dimgloader.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/pngloader.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/jpegloader.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/tiffloader.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/rawloader.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/ppmloader.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/qimageloader.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/pgfloader.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/jpegsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/pngsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/tiffsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/pgfsettings.cpp
-       )
-
-    if(JASPER_FOUND)
-        set(libdimgloaders_SRCS
-            ${libdimgloaders_SRCS}
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/jp2kloader.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/loaders/jp2ksettings.cpp
-           )
-    endif()
-
-    set(libdimgfilters_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dklcms/digikam-lcms.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgbuiltinfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgthreadedfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgthreadedanalyser.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgfiltermanager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/dimgfiltergenerator.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/filteractionfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/randomnumbergenerator.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/rawprocessingfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/decorate/borderfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/decorate/bordersettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/decorate/texturefilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/film/filmfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/blurfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/blurfxfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/colorfxfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/colorfxsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/distortionfxfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/charcoalfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/embossfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/filmgrainfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/filmgrainsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/invertfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/pixelsaliasfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/oilpaintfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/fx/raindropfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/auto/autolevelsfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/auto/autoexpofilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/auto/equalizefilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/auto/stretchfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/auto/normalizefilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/cb/cbfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/cb/cbsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bcg/bcgfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bcg/bcgsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bw/bwsepiafilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bw/bwsepiasettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bw/tonalityfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bw/infraredfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bw/mixerfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/bw/mixersettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/hsl/hslfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/hsl/hslsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/hsl/hspreviewwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/iccmanager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/iccprofile.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/iccprofilesettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/icctransform.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/icctransformfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/iccsettingscontainer.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/icc/iccsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lc/localcontrastfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lc/localcontrastsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lc/localcontrastcontainer.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/nr/nrfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/nr/nrestimate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/nr/nrsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/sharpenfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/unsharpmaskfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/sharpsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels/imagelevels.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels/levelsfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels/imagehistogram.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels/histogrambox.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels/histogramwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/levels/histogrampainter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/curvescontainer.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/imagecurves.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/curvesfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/curvessettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/curveswidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/curves/curvesbox.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/wb/wbcontainer.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/wb/wbfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/wb/wbsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/freerotationfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/freerotationsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/shearfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/autocrop.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/greycstoration/greycstorationfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/greycstoration/greycstorationsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/antivignettingfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/antivignettingsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensdistortionfilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/pixelaccess.cpp
-       )
-
-    if(LQR-1_FOUND)
-        set(libdimgfilters_SRCS
-            ${libdimgfilters_SRCS}
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/transform/contentawarefilter.cpp
-           )
-    endif()
-
-    if(LENSFUN_FOUND)
-        set(libdimgfilters_SRCS
-            ${libdimgfilters_SRCS}
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfunfilter.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfuncameraselector.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfuniface.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/lens/lensfunsettings.cpp
-           )
-    endif()
-
-    if(EIGEN3_FOUND)
-        set(libdimgfilters_SRCS
-            ${libdimgfilters_SRCS}
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/refocusfilter.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/dimg/filters/sharp/matrix.cpp
-           )
-    endif()
-
-    set(libdmetadata_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/metadatasettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/metadatasettingscontainer.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/metadatainfo.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/infocontainer.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/dmetadata.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/geodetictools.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/template.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dmetadata/captionvalues.cpp
-       )
-
-    set(libversionmanager_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/versionmanager/versionmanager.cpp
-       )
-
-    set(libimageproperties_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiessidebar.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiestab.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesmetadatatab.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiescolorstab.cpp
-       )
-
-    if(${KF5KGeoMap_FOUND})
-        set(libkgeomaphelper_SRCS
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/kgeomaphelper/digikam2kgeomap.cpp
-           )
-
-        set(libimageproperties_SRCS
-            ${libimageproperties_SRCS}
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiesgpstab.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagegpsmodelhelper.cpp
-           )
-    endif()
-
-    # Define libjpeg_EXPORTS: kde-win emerged libjpeg uses this define to
-    # decide wether to make dllimport (by default) or dllexport. So, we need to export.
-    add_definitions(-Dlibjpeg_EXPORTS)
-
-    set(libjpegutils_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/jpegutils.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/iccjpeg.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/${DIGIKAM_LIBJPEG_DIR}/transupp.c
-       )
-
-    if(MSVC)
-        set(libjpegutils_SRCS
-            ${libjpegutils_SRCS}
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/jpegutils/jpegwin.cpp
-           )
-    endif()
-
-    set(libthreadimageio_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/filereadwritelock.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/loadsavethread.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/managedloadsavethread.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/sharedloadsavethread.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/loadingdescription.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/loadingcache.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/loadingcacheinterface.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/loadsavetask.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/previewloadthread.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/previewtask.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/previewsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/thumbnailbasic.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/thumbnailcreator.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/thumbnailloadthread.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/thumbnailtask.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threadimageio/thumbnailsize.cpp
-       )
-
-    set(libcommonwidgets_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/abstractitemdragdrophandler.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/buttonicondisabler.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/colorgradientwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/comboboxutilities.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dfontselect.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dgradientslider.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/dragdropimplementations.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/filesaveoptionsbox.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/fullscreensettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/modelcompletion.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/searchtextbar.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/splashscreen.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/statesavingobject.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/visibilitycontroller.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/workingwidget.cpp
-       )
-
-    set(libnotificationmanager_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/notificationmanager/dnotificationwrapper.cpp
-       )
-
-    if(APPLE)
-        set(libnotificationmanager_SRCS
-            ${libnotificationmanager_SRCS}
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/notificationmanager/macnotification.mm
-           )
-    endif()
-
-    set(libmainview_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/dmessagebox.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/dxmlguiwindow.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/daboutdata.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/dzoombar.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/dlogoaction.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/ditemtooltip.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/dhistoryview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/dcursortracker.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/thumbbardock.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/thememanager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/sidebar.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/utils/digikam_debug.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/app/utils/digikam_globals.cpp
-       )
-
-    set(libitemview_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/digikamkcategorizedview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/dcategorizedview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/ditemdelegate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/imagedelegateoverlay.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/itemviewhoverbutton.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/itemviewimagedelegate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/itemview/itemviewtooltip.cpp
-       )
-
-    set(libgraphicsviewwidgets_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/clickdragreleaseitem.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/dimgchilditem.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/dimgpreviewitem.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/regionframeitem.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/graphicsdimgitem.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/graphicsdimgview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/imagezoomsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/previewlayout.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/paniconwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/graphicsview/itemvisibilitycontroller.cpp
-       )
-
-    set(libiccprofileswidgets_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles/iccpreviewwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles/iccprofilewidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles/cietonguewidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/iccprofiles/iccprofilescombobox.cpp
-       )
-
-    set(libmetadatawidgets_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/mdkeylistviewitem.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/metadatalistview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/metadatalistviewitem.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/metadatawidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/metadataselector.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/metadatapanel.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/iptcwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/exifwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/makernotewidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/xmpwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/ratingwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/colorlabelwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/metadata/picklabelwidget.cpp
-       )
-
-    set(libcolorchooserwidgets_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/colorchooser/dcolorchoosermode.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/colorchooser/dcolorvalueselector.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/colorchooser/dhuesaturationselect.cpp
-       )
-
-    set(libslideshow_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slidetoolbar.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideosd.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideproperties.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideimage.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideerror.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideend.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideshow.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slidehelp.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/slideshow/slideshowsettings.cpp
-       )
-
-    set(libeditorwidgets_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imageguidewidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imagepreviewitem.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/previewtoolbar.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/previewlist.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imageregionwidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/imageregionitem.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/rubberitem.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/widgets/canvas.cpp
-       )
-
-    set(libeditordlg_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/dialogs/colorcorrectiondlg.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/dialogs/softproofdialog.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/dialogs/versioningpromptusersavedlg.cpp
-       )
-
-    set(libeditorplugin_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/plugin/imageiface.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/plugin/imageplugin.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/plugin/imagepluginloader.cpp
-       )
-
-    set(libeditorcore_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core/undocache.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core/undoaction.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core/undomanager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core/editorcore.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core/fileoperation.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/core/iccpostloadingmanager.cpp
-       )
-
-    set(libeditorprintiface_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/printiface/printhelper.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/printiface/printoptionspage.cpp
-       )
-
-    set(libeditorrawimport_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport/rawimport.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport/rawpreview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/rawimport/rawsettingsbox.cpp
-       )
-
-    set(libprogressmanager_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/overlaywidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/progressview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/progressmanager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/statusbarprogresswidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/progressmanager/statusprogressbar.cpp
-       )
-
-    set(libtthread_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/threadmanager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/workerobject.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/dynamicthread.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/threads/parallelworkers.cpp
-       )
+    add_subdirectory(libs)
 
     # ==================================================================================================
     # digiKam target parts
-
-    set(libtemplate_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templatemanager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templatelist.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templateselector.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templateviewer.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/templatepanel.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/template/subjectedit.cpp
-       )
-
-    set(libdialogs_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/dprogressdlg.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/dbusydlg.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/filesaveoptionsdlg.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/iccprofileinfodlg.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/imagedialog.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/infodlg.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/libsinfodlg.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/rawcameradlg.cpp
-       )
-
-    set(libdeletedialog_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/dialogs/deletedialog.cpp
-       )
-
-    set(libsetup_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupicc.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupcollections.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupcollectionview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupcategory.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupalbumview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setup.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setuptooltip.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setuptemplate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupmime.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupslideshow.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupmetadata.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupeditor.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupmisc.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setuplighttable.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupiofiles.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupraw.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupcamera.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameraselection.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameralist.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/cameratype.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupdatabase.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupversioning.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/importfilters.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/setup/setupimagequalitysorter.cpp
-       )
-
-    if(${KF5Kipi_FOUND})
-        set(libkipiiface_SRCS
-            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiimagecollection.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiimagecollectionselector.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiuploadwidget.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiinterface.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipiimageinfo.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/kipiiface/kipipluginloader.cpp
-           )
-    endif()
 
     set(libbaloowrap_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/utilities/baloo/baloowrap.cpp
        )
 
-    if(${KF5KFace_FOUND})
-        set(libfacemanagement_SRCS
-            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/faceutils.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/facegroup.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/facepipeline.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/facescandialog.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/facemanagement/assignnamewidget.cpp
-           )
-    endif()
+
 
     set(libimgqsort_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imgqsort/imgqsort.cpp
        )
 
-    set(libfirstrun_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/assistantdlg.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/assistantdlgpage.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/welcomepage.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/collectionpage.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/rawpage.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/tooltipspage.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/previewpage.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/openfilepage.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/metadatapage.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/firstrun/startscanpage.cpp
-       )
-
-    set(libimagepropertiesdigikam_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiessidebarcamgui.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagepropertiessidebardb.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/cameraitempropertiestab.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/imagedescedittab.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/imageproperties/captionedit.cpp
-       )
-
-    set(libeditoriface_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editortool.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editortooliface.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorstackview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editortoolsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/editorwindow.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/editor/actioncategorizedview.cpp
-       )
-
-    set(libeditorgui_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/imageeditor/main/imagewindow.cpp
-       )
-
-    set(libmaintenance_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/imageinfojob.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/imageinfoalbumsjob.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/metadatatask.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/metadatasynchronizer.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/duplicatesfinder.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/newitemsfinder.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/thumbsgenerator.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/thumbstask.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/fingerprintsgenerator.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/fingerprintstask.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/imagequalitysorter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/imagequalitysettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/imagequalitytask.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancedlg.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancemngr.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancetool.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancesettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/maintenancethread.cpp
-       )
-
-    if(${KF5KFace_FOUND})
-        set(libmaintenance_SRCS
-            ${libmaintenance_SRCS}
-            ${CMAKE_CURRENT_SOURCE_DIR}/utilities/maintenance/facesdetector.cpp
-           )
-    endif()
-
-    set(libdatabasecore_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core/databasecorebackend.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core/databaseparameters.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core/databaseerrorhandler.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core/thumbnaildatabaseaccess.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core/thumbnaildb.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core/thumbnailschemaupdater.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core/databaseconfigelement.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core/sqlquery.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core/dbactiontype.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/core/tagregion.cpp
-       )
-
-    set(libdatabase_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/album/albumdb.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collection/collectionscanner.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collection/collectionmanager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collection/collectionlocation.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/collection/collectionscannerhints.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/framework/databaseaccess.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/framework/databasewatch.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/framework/databasewatchadaptor.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/framework/databasebackend.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/framework/databaseoperationgroup.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/framework/databasetransaction.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/framework/databaseurl.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/framework/databasechangesets.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/framework/databaseconstants.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/framework/databasethumbnailinfoprovider.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/framework/databasechecker.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/framework/databasecopymanager.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/framework/databaseserverstarter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/framework/databaseservererror.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imagecomments.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imageextendedproperties.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imageinfo.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imageinfolist.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imageinfocache.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imagelister.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imagelisterreceiver.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imageposition.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imagecopyright.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imagequerybuilder.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imagescanner.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/item/imagetagpair.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagehistory/imagehistorygraph.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/imagehistory/imagehistorygraphmodel.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/faces/databaseface.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/faces/facetags.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/faces/facetagseditor.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/utils/downloadhistory.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/utils/namefilter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/utils/searchxml.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/utils/schemaupdater.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/utils/tagproperties.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/utils/tagscache.cpp
-       )
 
     set(libdatabaseui_SRCS
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/common/databasewidget.cpp
@@ -1346,62 +776,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/3rdparty/kinotify/kinotify.cpp
        )
 
-    set(libhaar_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/haar/haar.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/haar/haariface.cpp
-       )
-
-    set(libgenericmodels_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/categorizeditemmodel.cpp
-       )
-
-    set(libdatabasemodels_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagemodel.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagefiltermodel.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagefiltermodelpriv.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagefiltermodelthreads.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagefiltersettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagelistmodel.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagesortsettings.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagethumbnailmodel.cpp
-       )
-
-    set(libalbummodels_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagealbummodel.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/imagealbumfiltermodel.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/abstractalbummodel.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/albummodel.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/albumfiltermodel.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/models/albummodeldragdrophandler.cpp
-       )
-
-    set(liblighttable_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablepreview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttableview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablethumbbar.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/lighttable/lighttablewindow.cpp
-       )
-
-    set(libsearchwindow_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/searchwindow.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/searchview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/searchgroup.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/searchfieldgroup.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/searchfields.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/searchutilities.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/ratingsearchutilities.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/choicesearchutilities.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/searchfolderview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/searchwindow/searchtabheader.cpp
-       )
-
-    set(libfuzzysearch_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch/fuzzysearchview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch/findduplicatesview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch/findduplicatesalbum.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch/findduplicatesalbumitem.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/utilities/fuzzysearch/sketchwidget.cpp
-       )
 
     if(${KF5KGeoMap_FOUND})
         set(libgpssearch_SRCS
@@ -1556,6 +930,32 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/app/tags/tagsactionmngr.cpp
        )
 
+    add_library(digikamgui STATIC ${libdigikamgui_SRCS})
+    
+    target_link_libraries(digikamgui
+                          digikamcore
+                          digikamwidgets
+                          digikamdatabase
+                          dimg
+                          dthread
+                          threadimageio
+                          setup
+                          imagepropertiesdigikam
+                          advancedrename
+                          queuemanager
+                          importui
+                          imageeditor
+                          searchwindow
+                          firstrun
+                          lighttable
+                          
+                          Qt5::Core
+                          Qt5::Gui
+                          Qt5::Widgets
+                          Qt5::Sql
+                          Qt5::WebKitWidgets
+                          
+    )
     if(ENABLE_MEDIAPLAYER)
         set(libdigikamgui_SRCS
             ${libdigikamgui_SRCS}
@@ -1583,20 +983,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
         ${CMAKE_CURRENT_SOURCE_DIR}/app/utils/uifilevalidator.cpp
        )
 
-    set(libalbumsqlite2_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/album/albumdb_sqlite2.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/database/utils/upgradedb_sqlite2tosqlite3.cpp
-       )
-
-
-    if(ENABLE_DIGIKAM_MODELTEST)
-        message(STATUS "Modeltest enabled")
-        set(libdigikamgui_SRCS ${libdigikamgui_SRCS}
-            ${CMAKE_CURRENT_SOURCE_DIR}/tests/modeltest/modeltest.cpp
-           )
-        add_definitions(-DENABLE_DIGIKAM_MODELTEST)
-    endif()
-
     add_subdirectory(data)
     add_subdirectory(utilities)
     add_subdirectory(app)
@@ -1609,7 +995,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
     endif()
 
     if(BUILD_TESTING)
-        ADD_SUBDIRECTORY(tests)
+        add_subdirectory(tests)
     endif()
 
     if(NOT WIN32)
