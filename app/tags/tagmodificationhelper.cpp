@@ -233,19 +233,22 @@ void TagModificationHelper::slotTagDelete(TAlbum* t)
     // ask for deletion of children
     if (children)
     {
-        int result = KMessageBox::warningContinueCancel(d->dialogParent,
-                                                        i18np("Tag '%2' has one subtag. "
-                                                              "Deleting this will also delete "
-                                                              "the subtag. "
-                                                              "Do you want to continue?",
-                                                              "Tag '%2' has %1 subtags. "
-                                                              "Deleting this will also delete "
-                                                              "the subtags. "
-                                                              "Do you want to continue?",
-                                                              children,
-                                                              tag->title()));
+        int result = QMessageBox::warning(d->dialogParent, qApp->applicationName(), 
+                                          i18np("Tag '%2' has one subtag. "
+                                                "Deleting this will also delete "
+                                                "the subtag.\n"
+                                                "Do you want to continue?",
+                                                "Tag '%2' has %1 subtags. "
+                                                "Deleting this will also delete "
+                                                "the subtags.\n"
+                                                "Do you want to continue?",
+                                                children,
+                                                tag->title()),
+                                          QMessageBox::Yes | QMessageBox::Cancel);
+       
+        
 
-        if (result != KMessageBox::Continue || !tag)
+        if (result != QMessageBox::Yes || !tag)
         {
             return;
         }
@@ -267,12 +270,11 @@ void TagModificationHelper::slotTagDelete(TAlbum* t)
         message = i18n("Delete '%1' tag?", tag->title());
     }
 
-    int result = KMessageBox::warningContinueCancel(0, message,
-                                                    i18n("Delete Tag"),
-                                                    KGuiItem(i18n("Delete"),
-                                                             "edit-delete"));
-
-    if (result == KMessageBox::Continue && tag)
+    int result = QMessageBox::warning(qApp->activeWindow(), i18n("Delete Tag"),
+                                      message,
+                                      QMessageBox::Yes | QMessageBox::Cancel);
+    
+    if (result == QMessageBox::Yes && tag)
     {
         emit aboutToDeleteTag(tag);
         QString errMsg;
@@ -346,14 +348,15 @@ void TagModificationHelper::slotMultipleTagDel(QList<TAlbum* >& tags)
 
     if (!tagWithChildrens.isEmpty())
     {
-        int result = KMessageBox::warningContinueCancel(0,
-                                                        i18n("Tags '%1' have one or more subtags. "
-                                                             "Deleting them will also delete "
-                                                             "the subtags. "
-                                                             "Do you want to continue?",
-                                                             tagWithChildrens));
-
-        if (result != KMessageBox::Continue)
+        int result = QMessageBox::warning(qApp->activeWindow(), qApp->applicationName(),
+                                          i18n("Tags '%1' have one or more subtags. "
+                                               "Deleting them will also delete "
+                                               "the subtags.\n"
+                                               "Do you want to continue?",
+                                               tagWithChildrens),
+                                          QMessageBox::Yes | QMessageBox::Cancel);
+        
+        if (result != QMessageBox::Yes)
         {
             return;
         }
@@ -372,12 +375,11 @@ void TagModificationHelper::slotMultipleTagDel(QList<TAlbum* >& tags)
         message = i18n("Delete '%1' tag(s)?", tagWithImages);
     }
 
-    int result = KMessageBox::warningContinueCancel(0, message,
-                                                    i18n("Delete Tag"),
-                                                    KGuiItem(i18n("Delete"),
-                                                            "edit-delete"));
+    int result = QMessageBox::warning(qApp->activeWindow(), i18n("Delete Tag"),
+                                      message,
+                                      QMessageBox::Yes | QMessageBox::Cancel);
 
-    if (result == KMessageBox::Continue)
+    if (result == QMessageBox::Yes)
     {
         QMultiMap<int, TAlbum*>::iterator it;
         /**

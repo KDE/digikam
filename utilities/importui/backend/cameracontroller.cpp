@@ -52,11 +52,11 @@ extern "C"
 #include <QFutureWatcher>
 #include <QUrl>
 #include <QDir>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 #include <kprocess.h>
 #include <kmacroexpander.h>
 
@@ -969,10 +969,10 @@ void CameraController::slotDownloadFailed(const QString& folder, const QString& 
         }
         else
         {
-            const QString msg = xi18n("Failed to download file <filename>%1</filename>. Do you want to continue?", file);
-            int result        = KMessageBox::warningContinueCancel(d->parent, msg);
+            const QString msg = xi18n("<qt>Failed to download file <b>%1</b>. Do you want to continue?</qt>", file);
+            int result        = QMessageBox::warning(d->parent, qApp->applicationName(), msg, QMessageBox::Yes | QMessageBox::Cancel);
 
-            if (result != KMessageBox::Continue)
+            if (result != QMessageBox::Yes)
             {
                 slotCancel();
             }
@@ -995,10 +995,10 @@ void CameraController::slotUploadFailed(const QString& folder, const QString& fi
         }
         else
         {
-            const QString msg = xi18n("Failed to upload file <filename>%1</filename>. Do you want to continue?", file);
-            int result        = KMessageBox::warningContinueCancel(d->parent, msg);
+            const QString msg = xi18n("<qt>Failed to upload file <b>%1</b>. Do you want to continue?</qt>", file);
+            int result        = QMessageBox::warning(d->parent, qApp->applicationName(), msg, QMessageBox::Yes | QMessageBox::Cancel);
 
-            if (result != KMessageBox::Continue)
+            if (result != QMessageBox::Yes)
             {
                 slotCancel();
             }
@@ -1019,10 +1019,10 @@ void CameraController::slotDeleteFailed(const QString& folder, const QString& fi
         }
         else
         {
-            const QString msg = xi18n("Failed to delete file <filename>%1</filename>. Do you want to continue?", file);
-            int result        = KMessageBox::warningContinueCancel(d->parent, msg);
+            const QString msg = xi18n("<qt>Failed to delete file <b>%1</b>. Do you want to continue?</qt>", file);
+            int result        = QMessageBox::warning(d->parent, qApp->applicationName(), msg, QMessageBox::Yes | QMessageBox::Cancel);
 
-            if (result != KMessageBox::Continue)
+            if (result != QMessageBox::Yes)
             {
                 slotCancel();
             }
@@ -1043,10 +1043,10 @@ void CameraController::slotLockFailed(const QString& folder, const QString& file
         }
         else
         {
-            const QString msg = xi18n("Failed to toggle lock file <filename>%1</filename>. Do you want to continue?", file);
-            int result        = KMessageBox::warningContinueCancel(d->parent, msg);
+            const QString msg = xi18n("<qt>Failed to toggle lock file <b>%1</b>. Do you want to continue?</qt>", file);
+            int result        = QMessageBox::warning(d->parent, qApp->applicationName(), msg, QMessageBox::Yes | QMessageBox::Cancel);
 
-            if (result != KMessageBox::Continue)
+            if (result != QMessageBox::Yes)
             {
                 slotCancel();
             }
