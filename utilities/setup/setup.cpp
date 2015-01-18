@@ -28,14 +28,12 @@
 
 #include <QPointer>
 #include <QApplication>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <kconfig.h>
-
-
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 #include <kwindowconfig.h>
 #include <khelpclient.h>
 
@@ -436,7 +434,7 @@ bool Setup::execDialog(QWidget* const parent, Page page)
 {
     QPointer<Setup> setup = new Setup(parent);
     setup->showPage(page);
-    bool success          = setup->KPageDialog::exec() == QDialog::Accepted;
+    bool success          = (setup->KPageDialog::exec() == QDialog::Accepted);
     delete setup;
     return success;
 }
@@ -451,7 +449,7 @@ bool Setup::execSinglePage(QWidget* const parent, Page page)
     QPointer<Setup> setup = new Setup(parent);
     setup->showPage(page);
     setup->setFaceType(Plain);
-    bool success          = setup->KPageDialog::exec() == QDialog::Accepted;
+    bool success          = (setup->KPageDialog::exec() == QDialog::Accepted);
     delete setup;
     return success;
 }
@@ -462,7 +460,7 @@ bool Setup::execTemplateEditor(QWidget* const parent, const Template& t)
     setup->showPage(TemplatePage);
     setup->setFaceType(Plain);
     setup->setTemplate(t);
-    bool success          = setup->KPageDialog::exec() == QDialog::Accepted;
+    bool success          = (setup->KPageDialog::exec() == QDialog::Accepted);
     delete setup;
     return success;
 }
@@ -482,7 +480,7 @@ bool Setup::execMetadataFilters(QWidget* const parent, int tab)
     widget->setActiveMainTab(SetupMetadata::Display);
     widget->setActiveSubTab(tab);
 
-    bool success                = setup->KPageDialog::exec() == QDialog::Accepted;
+    bool success                = (setup->KPageDialog::exec() == QDialog::Accepted);
     delete setup;
     return success;
 }
@@ -542,9 +540,11 @@ void Setup::slotOkClicked()
                            "Do you want to rebuild all albums' items' thumbnails now?\n\n"
                            "Note: thumbnail processing can take a while. You can start "
                            "this job later from the \"Tools-Maintenance\" menu.");
-        int result = KMessageBox::warningYesNo(this, msg);
 
-        if (result != KMessageBox::Yes)
+        int result = QMessageBox::warning(this, qApp->applicationName(), msg,
+                                          QMessageBox::Yes | QMessageBox::Cancel);
+
+        if (result != QMessageBox::Yes)
         {
             return;
         }
