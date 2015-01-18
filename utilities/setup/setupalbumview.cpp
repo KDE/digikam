@@ -36,11 +36,12 @@
 #include <QApplication>
 #include <QStyle>
 #include <QComboBox>
+#include <QApplication>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 
 // Local includes
 
@@ -285,7 +286,6 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     d->previewFastPreview->setChecked(true);
     d->previewRawMode->setCurrentIndex(0);
     d->previewRawMode->setEnabled(false);
-    connect(d->previewFullView, SIGNAL(toggled(bool)), d->previewRawMode, SLOT(setEnabled(bool)));
 
     // --------------------------------------------------------
 
@@ -307,6 +307,9 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     adjustSize();
 
     // --------------------------------------------------------
+
+    connect(d->previewFullView, SIGNAL(toggled(bool)),
+            d->previewRawMode, SLOT(setEnabled(bool)));
 
     connect(d->largeThumbsBox, SIGNAL(toggled(bool)),
             this, SLOT(slotUseLargeThumbsToggled(bool)));
@@ -442,7 +445,8 @@ void SetupAlbumView::slotUseLargeThumbsToggled(bool b)
     if (b && d->useLargeThumbsShowedInfo && useLargeThumbsHasChanged())
     {
         d->useLargeThumbsShowedInfo = true;
-        KMessageBox::information(this, i18nc("@info",
+        QMessageBox::information(this, qApp->applicationName(),
+                                 i18nc("@info",
                                        "This option changes the size in which thumbnails are generated. "
                                        "You need to restart digiKam for this option to take effect. "
                                        "Furthermore, you need to regenerate all already stored thumbnails via "
