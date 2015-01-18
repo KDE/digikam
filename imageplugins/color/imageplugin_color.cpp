@@ -113,7 +113,7 @@ ImagePlugin_Color::ImagePlugin_Color(QObject* const parent, const QVariantList&)
     //-------------------------------
     // Colors menu actions
 
-    KActionCollection *ac = actionCollection();
+    KActionCollection* const ac = actionCollection();
 
     d->BCGAction = new QAction(QIcon::fromTheme("contrast"), i18n("Brightness/Contrast/Gamma..."), this);
     ac->addAction("imageplugin_bcg", d->BCGAction );
@@ -261,12 +261,13 @@ void ImagePlugin_Color::slotConvertTo8Bits()
     }
     else
     {
-        if (KMessageBox::warningContinueCancel(
-                qApp->activeWindow(),
-                i18n("Performing this operation will reduce image color quality. "
-                     "Do you want to continue?"), QString(),
-                KStandardGuiItem::cont(), KStandardGuiItem::cancel(),
-                QString("ImagePluginColor16To8Bits")) == KMessageBox::Cancel)
+        if (KMessageBox::warningContinueCancel(qApp->activeWindow(),
+                                               i18n("Performing this operation will reduce image color quality. "
+                                               "Do you want to continue?"),
+                                               QString(),
+                                               KStandardGuiItem::cont(), KStandardGuiItem::cancel(),
+                                               QString("ImagePluginColor16To8Bits")
+                                              ) == KMessageBox::Cancel)
         {
             return;
         }
