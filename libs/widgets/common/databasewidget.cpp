@@ -37,10 +37,10 @@
 #include <QTemporaryFile>
 #include <QApplication>
 #include <QStyle>
+#include <QMessageBox>
 
 // KDE includes
 
-#include <kmessagebox.h>
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
 
@@ -213,8 +213,9 @@ void DatabaseWidget::slotChangeDatabasePath(const QUrl& result)
     if (!result.isEmpty() && !targetPath.isWritable())
 #endif
     {
-        KMessageBox::information(0, i18n("You do not seem to have write access to this database folder.\n"
-                                         "Without this access, the caption and tag features will not work."));
+        QMessageBox::information(0, qApp->applicationName(),
+                                 i18n("You do not seem to have write access to this database folder.\n"
+                                      "Without this access, the caption and tag features will not work."));
     }
 
     checkDBPath();
@@ -311,12 +312,14 @@ void DatabaseWidget::checkDatabaseConnection()
 
     if (result)
     {
-        KMessageBox::information(0, i18n("Database connection test successful."), i18n("Database connection test"));
+        QMessageBox::information(0, i18n("Database connection test"),
+                                 i18n("Database connection test successful."));
     }
     else
     {
-        KMessageBox::error(0, i18n("Database connection test was not successful. <p>Error was: %1</p>",
-                                   testDatabase.lastError().text()), i18n("Database connection test") );
+        QMessageBox::critical(0, i18n("Database connection test"),
+                              i18n("Database connection test was not successful. <p>Error was: %1</p>",
+                                   testDatabase.lastError().text()) );
     }
 
     testDatabase.close();
