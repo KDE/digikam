@@ -1639,7 +1639,7 @@ void EditorWindow::colorManage()
                                "No color transformation will be applied. "
                                "Please check the color management "
                                "configuration in digiKam's setup.", IccSettings::instance()->settings().workspaceProfile);
-        KMessageBox::information(this, message);
+        QMessageBox::information(this, qApp->applicationName(), message);
     }
 
     // Show dialog and get transform from user choice

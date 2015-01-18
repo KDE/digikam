@@ -54,13 +54,10 @@
 #include <kactioncollection.h>
 #include <kcategorizedview.h>
 #include <kconfig.h>
-
-
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kselectaction.h>
 #include <kstandardaction.h>
-
 #include <kstatusbar.h>
 #include <ktoggleaction.h>
 #include <ktoolbar.h>
@@ -1232,10 +1229,9 @@ void ImageWindow::removeCurrent()
     {
         // No image in the current Album -> Quit ImageEditor...
 
-        KMessageBox::information(this,
+        QMessageBox::information(this, i18n("No Image in Current Album"),
                                  i18n("There is no image to show in the current album.\n"
-                                      "The image editor will be closed."),
-                                 i18n("No Image in Current Album"));
+                                      "The image editor will be closed."));
 
         close();
     }

@@ -1412,7 +1412,8 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
     if (d->albumCustomizer->folderDateFormat() == AlbumCustomizer::CustomDateFormat &&
         !d->albumCustomizer->customDateFormatIsValid())
     {
-        KMessageBox::information(this, i18nc("@info", "Your custom target album date format is not valid. Please check your settings..."));
+        QMessageBox::information(this, qApp->applicationName(), 
+                                 i18nc("@info", "Your custom target album date format is not valid. Please check your settings..."));
         return;
     }
 
@@ -1451,17 +1452,19 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 
                 if (!cl.isAvailable() || cl.isNull())
                 {
-                    KMessageBox::information(this, i18nc("@info", "Collection which host your default target album set to process "
-                                                        "download from camera device is not available. Please select another one from "
-                                                        "camera configuration dialog."));
+                    QMessageBox::information(this,qApp->applicationName(), 
+                                             i18nc("@info", "Collection which host your default target album set to process "
+                                                   "download from camera device is not available. Please select another one from "
+                                                   "camera configuration dialog."));
                     return;
                 }
             }
             else
             {
-                KMessageBox::information(this, i18nc("@info", "Your default target album set to process download "
-                                                    "from camera device is not available. Please select another one from "
-                                                    "camera configuration dialog."));
+                QMessageBox::information(this, qApp->applicationName(), 
+                                         i18nc("@info", "Your default target album set to process download "
+                                               "from camera device is not available. Please select another one from "
+                                               "camera configuration dialog."));
                 return;
             }
 
@@ -1470,13 +1473,14 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
         else
         {
             AlbumList list = man->currentAlbums();
+            int albumId    = 0;
 
-            int albumId = 0;
             if (!list.isEmpty())
             {
                 albumId = group.readEntry(d->configLastTargetAlbum, list.first()->globalID());
             }
-            album          = man->findAlbum(albumId);
+
+            album = man->findAlbum(albumId);
 
             if (album && album->type() != Album::PHYSICAL)
             {

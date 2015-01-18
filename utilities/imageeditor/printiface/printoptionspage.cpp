@@ -33,14 +33,13 @@
 #include <QApplication>
 #include <QStyle>
 #include <QHBoxLayout>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <kconfigdialogmanager.h>
 #include <kconfig.h>
-
 #include <kglobalsettings.h>
-#include <kmessagebox.h>
 
 // Local includes
 
@@ -347,7 +346,7 @@ void PrintOptionsPage::slotAlertSettings(bool t)
     {
         QString message = i18n("<p>Color Management is disabled.</p> "
                                "<p>You can enable it now by clicking on the \"Settings\" button.</p>");
-        KMessageBox::information(this, message);
+        QMessageBox::information(this, qApp->applicationName(), message);
         d->colorManaged->setChecked(!t);
     }
 }
