@@ -950,7 +950,7 @@ bool ImagePropertiesTab::aspectRatioToString(int width, int height, QString& arS
     }
 
     long   num=0, den=0;
-    doubleToHumanReadableFraction((double)nw / (double)nh, &num, &den);
+    doubleToHumanReadableFraction((double)nw / (double)nh, &num, &den, 4);
 
     const QString awidth  = QString::number(num);
     const QString aheight = QString::number(den);
