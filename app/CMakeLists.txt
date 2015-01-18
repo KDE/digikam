@@ -11,47 +11,44 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/database/dbconfigversion.h.cmake.in $
 
 set(digikamcore_LIB_SRCS
     # basic libs
-    ${libdimg_SRCS}
-    ${libdimgloaders_SRCS}
-    ${libdimgfilters_SRCS}
-    ${libdmetadata_SRCS}
+#    ${libdimg_SRCS}
+#    ${libdimgloaders_SRCS}
+#    ${libdimgfilters_SRCS}
+#    ${libdmetadata_SRCS}
     ${libjpegutils_SRCS}
-    ${libprogressmanager_SRCS}
-    ${libdatabasecore_SRCS}
-    ${libthreadimageio_SRCS}
+#    ${libprogressmanager_SRCS}
+#    ${libdatabasecore_SRCS}
+#    ${libthreadimageio_SRCS}
     ${pgfutils_SRCS}
     ${libdigikamhelpers_SRCS}
-    ${libtthread_SRCS}
-    ${libversionmanager_SRCS}
+#    ${libtthread_SRCS}
+#    ${libversionmanager_SRCS}
     ${libkde3rdparty_SRCS}
 
     # widgets and dialogs
-    ${libcommonwidgets_SRCS}
     ${libcolorchooserwidgets_SRCS}
-    ${libnotificationmanager_SRCS}
-    ${libmainview_SRCS}
-    ${libitemview_SRCS}
-    ${libeditorwidgets_SRCS}
-    ${libiccprofileswidgets_SRCS}
-    ${libmetadatawidgets_SRCS}
-    ${libdialogs_SRCS}
-    ${libimageproperties_SRCS}
-    ${libgraphicsviewwidgets_SRCS}
-    ${libgenericmodels_SRCS}
+#    ${libcommonwidgets_SRCS}
+#    ${libnotificationmanager_SRCS}
+#    ${libmainview_SRCS}
+#    ${libitemview_SRCS}
+#    ${libeditorwidgets_SRCS}
+#    ${libiccprofileswidgets_SRCS}
+#    ${libmetadatawidgets_SRCS}
+#    ${libdialogs_SRCS}
+#    ${libimageproperties_SRCS}
+#    ${libgraphicsviewwidgets_SRCS}
+#    ${libgenericmodels_SRCS}
 
     # utilities
     ${libslideshow_SRCS}
-    ${libeditorcore_SRCS}
-    ${libeditordlg_SRCS}
-    ${libeditorprintiface_SRCS}
-    ${libeditorrawimport_SRCS}
-    ${libeditoriface_SRCS}
-    ${libeditorplugin_SRCS}
+#    ${libeditorcore_SRCS}
+#    ${libeditordlg_SRCS}
+#    ${libeditorprintiface_SRCS}
+#    ${libeditorrawimport_SRCS}
+#    ${libeditoriface_SRCS}
+#    ${libeditorplugin_SRCS}
 )
 
-if(KF5KGeoMap_FOUND)
-    set(digikamcore_LIB_SRCS ${digikamcore_LIB_SRCS} ${libkgeomaphelper_SRCS})
-endif()
 
 ki18n_wrap_ui(digikamcore_LIB_SRCS
               ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/printiface/printoptionspage.ui
@@ -61,22 +58,31 @@ kconfig_add_kcfg_files(digikamcore_LIB_SRCS
                        ${CMAKE_CURRENT_SOURCE_DIR}/../utilities/imageeditor/printiface/digikamconfig.kcfgc
 )
 
-add_library(digikamcore SHARED ${digikamcore_LIB_SRCS})
+add_library(digikamcore STATIC ${digikamcore_LIB_SRCS})
 
 add_dependencies(digikamcore digikam-gitversion)
 
 target_link_libraries(digikamcore
+                      digikammodels
+                      digikamdatabase
+                      digikamwidgets
+                      
+                      digikamdialogs
+                      digikamtemplate
+                      
+                      threadimageio
+                      
+                      dthread
+                      dmetadata
+                      dimg
+                      
+                      Qt5::Core
                       Qt5::Sql
                       Qt5::Concurrent
 
                       KF5::KDELibs4Support
-                      KF5::KIOCore
                       KF5::NotifyConfig
 
-                      ${JPEG_LIBRARIES}
-                      ${TIFF_LIBRARIES}
-                      ${PNG_LIBRARIES}
-                      ${LCMS_LIBRARIES}
                       ${OpenCV_LIBRARIES}
                       ${PGF_LIBRARIES}
 
@@ -91,9 +97,9 @@ if(ENABLE_MEDIAPLAYER)
     target_link_libraries(digikamcore Qt5::Multimedia)
 endif()
 
-if(X11_FOUND)
-    target_link_libraries(digikamcore Qt5::X11Extras ${X11_LIBRARIES})
-endif()
+#if(X11_FOUND)
+#    target_link_libraries(digikamcore Qt5::X11Extras ${X11_LIBRARIES})
+#endif()
 
 if(APPLE)
     target_link_libraries(digikamcore /System/Library/Frameworks/AppKit.framework)
@@ -104,9 +110,9 @@ if(GLIB2_FOUND)
     target_link_libraries(digikamcore ${GLIB2_LIBRARIES})
 endif()
 
-if(JASPER_FOUND)
-    target_link_libraries(digikamcore ${JASPER_LIBRARIES})
-endif()
+#if(JASPER_FOUND)
+#    target_link_libraries(digikamcore ${JASPER_LIBRARIES})
+#endif()
 
 if(LENSFUN_FOUND)
    target_link_libraries(digikamcore ${LENSFUN_LIBRARIES})
@@ -120,13 +126,6 @@ if(KF5Kipi_FOUND)
    target_link_libraries(digikamcore ${KF5Kipi_LIBRARIES})
 endif()
 
-if(KF5KFace_FOUND)
-   target_link_libraries(digikamcore ${KF5KFace_LIBRARIES})
-endif()
-
-if(KF5KGeoMap_FOUND)
-   target_link_libraries(digikamcore ${KF5KGeoMap_LIBRARIES})
-endif()
 
 set_target_properties(digikamcore PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
 
@@ -137,79 +136,14 @@ endif()
 
 install(TARGETS digikamcore ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-# Shared libdigikamdatabase ########################################################
-
-set(digikamdatabase_LIB_SRCS
-        ${libdatabase_SRCS}
-        ${libdatabasemodels_SRCS}
-        ${libhaar_SRCS}
-        ${pgfutils_SRCS}
-)
-
-if(Baloo_FOUND)
-    set(digikamdatabase_LIB_SRCS ${digikamdatabase_LIB_SRCS} ${libbaloowrap_SRCS})
-endif()
-
-if(SQLITE2_FOUND)
-    set(digikamdatabase_LIB_SRCS ${digikamdatabase_LIB_SRCS} ${libalbumsqlite2_SRCS})
-endif()
-
-add_library(digikamdatabase SHARED ${digikamdatabase_LIB_SRCS})
-
-target_link_libraries(digikamdatabase
-                      digikamcore
-                      Qt5::Core
-                      Qt5::Gui
-                      Qt5::Sql
-
-                      KF5::KIOCore
-                      KF5::KDELibs4Support
-
-                      ${KF5KExiv2_LIBRARIES}
-                      ${KF5KDcraw_LIBRARIES}
-
-                      ${PGF_LIBRARIES}
-)
-
-if(KF5KFace_FOUND)
-    target_link_libraries(digikamdatabase ${KF5KFace_LIBRARIES})
-endif()
-
-if(KF5KGeoMap_FOUND)
-    target_link_libraries(digikamdatabase ${KF5KGeoMap_LIBRARIES})
-endif()
-
-if(Baloo_FOUND)
-    target_link_libraries(digikamdatabase KF5::BalooCore KF5::BalooFiles KF5::FileMetaData)
-endif()
-
-if(SQLITE2_FOUND)
-    target_link_libraries(digikamdatabase ${SQLITE2_LIBRARIES})
-endif()
-
-set_target_properties(digikamdatabase PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
-
-install(TARGETS digikamdatabase ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 # digiKam binary progam #########################################################
 
 set(digikam_SRCS ${libeditorgui_SRCS}
-                 ${libdeletedialog_SRCS}
-                 ${libimagepropertiesdigikam_SRCS}
                  ${libimageversionssidebar_SRCS}
-                 ${libsetup_SRCS}
-                 ${libimportui_SRCS}
-                 ${liblighttable_SRCS}
-                 ${libmaintenance_SRCS}
-                 ${libsearchwindow_SRCS}
                  ${libfuzzysearch_SRCS}
-                 ${libqueuemanager_SRCS}
                  ${libalbummodels_SRCS}
-                 ${libfirstrun_SRCS}
-                 ${libtemplate_SRCS}
-                 ${libdatabaseui_SRCS}
                  ${libimgqsort_SRCS}
-                 ${libdigikamgui_SRCS}
                  main/main.cpp
 )
 
@@ -243,23 +177,23 @@ set_target_properties(digikam PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURREN
 
 
 target_link_libraries(digikam
+                      digikamcore
+                      digikamgui
+                      
+
+                      progressmanager
+                      notificationmanager
+                      maintenance
+                      slideshow
+
+                      kipiiface
+
+
                       Qt5::Sql
                       Qt5::Test
                       Qt5::WebKitWidgets
 
-                      KF5::NotifyConfig
-                      KF5::KDELibs4Support
-                      ${KF5KExiv2_LIBRARIES}
-                      ${KF5KDcraw_LIBRARIES}
-
-                      ${LCMS_LIBRARIES}
-
-                      digikamcore
-                      digikamdatabase
-                      advancedrename
-                      queuemanager
-                      importui
-
+                      
                       ${OpenCV_LIBRARIES}
 )
 if(ENABLE_MEDIAPLAYER)
@@ -270,9 +204,6 @@ if(KDEPIMLIBS_FOUND)
   target_link_libraries(digikam ${KDE4_KABC_LIBS} KF5::AkonadiCore KF5::AkonadiContact)
 endif()
 
-if(KF5Kipi_FOUND)
-   target_link_libraries(digikam ${KF5Kipi_LIBRARIES})
-endif()
 
 if(KF5KFace_FOUND)
    target_link_libraries(digikam ${KF5KFace_LIBRARIES})
