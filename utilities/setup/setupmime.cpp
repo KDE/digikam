@@ -284,8 +284,8 @@ void SetupMime::applySettings()
                                                "with these formats, they will be removed from the database and you will "
                                                "lose all information about them, including rating and tags.</p>"
                                                "<p>Are you sure you want to apply your changes and lose the support for these formats?</p>",
-                                               removedImageFormats.join(" "))
-                                              );
+                                               removedImageFormats.join(" ")),
+                                          QMessageBox::Yes | QMessageBox::No);
 
         if (result != QMessageBox::Yes)
         {

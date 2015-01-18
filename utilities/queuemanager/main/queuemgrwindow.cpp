@@ -617,8 +617,9 @@ bool QueueMgrWindow::queryClose()
 {
     if (isBusy())
     {
-        int result = QMessageBox::question(this, i18n("Processing under progress"),
-                                           i18n("Batch Queue Manager is running. Do you want to cancel current job?"));
+        int result = QMessageBox::warning(this, i18n("Processing under progress"),
+                                          i18n("Batch Queue Manager is running. Do you want to cancel current job?"),
+                                          QMessageBox::Yes | QMessageBox::No);
 
         if (result == QMessageBox::Yes)
         {

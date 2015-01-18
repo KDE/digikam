@@ -272,7 +272,7 @@ CameraType* CameraList::autoDetect(bool& retry)
                                            "please make sure it is connected "
                                            "properly and is turned on. "
                                            "Would you like to try again?"),
-                                      QMessageBox::Yes | QMessageBox::Cancel)
+                                      QMessageBox::Yes | QMessageBox::No)
                  == QMessageBox::Yes);
         return 0;
     }

@@ -1947,21 +1947,17 @@ bool ImportUI::checkDiskSpace(PAlbum *pAlbum)
 
     if (dSize >= kBAvail)
     {
-        KGuiItem cont   = KStandardGuiItem::cont();
-        cont.setText(i18nc("@action:button Not enough disk-space warning", "Try Anyway"));
-        KGuiItem cancel = KStandardGuiItem::cancel();
-        cancel.setText(i18nc("@action:button Not enough disk-space warning", "Cancel Download"));
-        int result     = KMessageBox::warningYesNo(this,
-                                                   i18nc("@info", "There is not enough free space on the disk of the album you selected "
-                                                         "to download and process the selected pictures from the camera.\n\n"
-                                                         "Estimated space required: %1\n"
-                                                         "Available free space: %2",
-                                                         KIO::convertSizeFromKiB(dSize),
-                                                         KIO::convertSizeFromKiB(kBAvail)),
-                                                  i18nc("@title:window", "Insufficient Disk Space"),
-                                                  cont, cancel);
+        int result     = QMessageBox::warning(this, i18nc("@title:window", "Insufficient Disk Space"),
+                                              i18nc("@info", "There is not enough free space on the disk of the album you selected "
+                                                    "to download and process the selected pictures from the camera.\n\n"
+                                                    "Estimated space required: %1\n"
+                                                    "Available free space: %2\n\n"
+                                                    "Try Anyway?",
+                                                    KIO::convertSizeFromKiB(dSize),
+                                                    KIO::convertSizeFromKiB(kBAvail)),
+                                              QMessageBox::Yes | QMessageBox::No);
 
-        if (result == KMessageBox::No)
+        if (result == QMessageBox::No)
         {
             return false;
         }

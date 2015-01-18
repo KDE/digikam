@@ -526,7 +526,6 @@ void Setup::slotOkClicked()
     d->pluginsPage->apply();
 #endif /* HAVE_KIPI */
 
-    //d->faceTagsPage->applySettings();
     d->versioningPage->applySettings();
 
     ApplicationSettings::instance()->emitSetupChanged();
@@ -542,7 +541,7 @@ void Setup::slotOkClicked()
                            "this job later from the \"Tools-Maintenance\" menu.");
 
         int result = QMessageBox::warning(this, qApp->applicationName(), msg,
-                                          QMessageBox::Yes | QMessageBox::Cancel);
+                                          QMessageBox::Yes | QMessageBox::No);
 
         if (result != QMessageBox::Yes)
         {
