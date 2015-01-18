@@ -1360,23 +1360,17 @@ bool EditorWindow::promptUserSave(const QUrl& url, SaveAskMode mode, bool allowC
 
                 if (allowCancel)
                 {
-                    result = KMessageBox::warningYesNoCancel(this,
-                                                             boxMessage,
-                                                             QString(),
-                                                             KStandardGuiItem::save(),
-                                                             KStandardGuiItem::discard());
+                    result = QMessageBox::warning(this, qApp->applicationName(), boxMessage,
+                                                  QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
                 }
                 else
                 {
-                    result = KMessageBox::warningYesNo(this,
-                                                       boxMessage,
-                                                       QString(),
-                                                       KStandardGuiItem::save(),
-                                                       KStandardGuiItem::discard());
+                    result = QMessageBox::warning(this, qApp->applicationName(), boxMessage,
+                                                  QMessageBox::Save | QMessageBox::Discard);
                 }
 
-                shallSave    = (result == KMessageBox::Yes);
-                shallDiscard = (result == KMessageBox::No);
+                shallSave    = (result == QMessageBox::Save);
+                shallDiscard = (result == QMessageBox::Discard);
             }
         }
 
@@ -1498,14 +1492,15 @@ bool EditorWindow::waitForSavingToComplete()
     {
         // Waiting for asynchronous image file saving operation running in separate thread.
         m_savingContext.synchronizingState = SavingContext::SynchronousSaving;
-        /*QFrame processFrame;
+/*
+        QFrame processFrame;
         StatusProgressBar *pb = m_nameLabel;
         pb->setParent(&processFrame);
-        processFrame.show();*/
-        /*      KMessageBox::queuedMessageBox(this,
-                                              KMessageBox::Information,
-                                              i18n("Please wait while the image is being saved..."));
-        */
+        processFrame.show();
+        KMessageBox::queuedMessageBox(this,
+                                      KMessageBox::Information,
+                                      i18n("Please wait while the image is being saved..."));
+*/
         enterWaitingLoop();
         m_savingContext.synchronizingState = SavingContext::NormalSaving;
     }
@@ -2445,18 +2440,15 @@ bool EditorWindow::checkPermissions(const QUrl& url)
 
     if (fi.exists() && !fi.isWritable())
     {
-        int result =
+        int result = QMessageBox::warning(this, i18n("Overwrite File?"),
+                                          i18n("You do not have write permissions "
+                                               "for the file named \"%1\". "
+                                               "Are you sure you want "
+                                               "to overwrite it?",
+                                               url.fileName()),
+                                          QMessageBox::Save | QMessageBox::Cancel);
 
-            KMessageBox::warningYesNo(this, i18n("You do not have write permissions "
-                                                 "for the file named \"%1\". "
-                                                 "Are you sure you want "
-                                                 "to overwrite it?",
-                                                 url.fileName()),
-                                      i18n("Overwrite File?"),
-                                      KStandardGuiItem::overwrite(),
-                                      KStandardGuiItem::cancel());
-
-        if (result != KMessageBox::Yes)
+        if (result != QMessageBox::Save)
         {
             return false;
         }
@@ -2467,17 +2459,14 @@ bool EditorWindow::checkPermissions(const QUrl& url)
 
 bool EditorWindow::checkOverwrite(const QUrl& url)
 {
-    int result =
+    int result = QMessageBox::warning(this, i18n("Overwrite File?"),
+                                      i18n("A file named \"%1\" already "
+                                           "exists. Are you sure you want "
+                                           "to overwrite it?",
+                                           url.fileName()),
+                                      QMessageBox::Save | QMessageBox::Cancel);
 
-        KMessageBox::warningYesNo(this, i18n("A file named \"%1\" already "
-                                             "exists. Are you sure you want "
-                                             "to overwrite it?",
-                                             url.fileName()),
-                                  i18n("Overwrite File?"),
-                                  KStandardGuiItem::overwrite(),
-                                  KStandardGuiItem::cancel());
-
-    return result == KMessageBox::Yes;
+    return (result == QMessageBox::Save);
 }
 
 bool EditorWindow::moveLocalFile(const QString& org, const QString& dst)
