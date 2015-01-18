@@ -46,7 +46,6 @@
 
 #include <klocalizedstring.h>
 #include <kpagedialog.h>
-#include <kmessagebox.h>
 #include <kurlrequester.h>
 
 // Local includes

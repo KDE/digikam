@@ -35,7 +35,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 
 // Libkipi includes
 

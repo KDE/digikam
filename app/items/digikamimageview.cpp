@@ -40,7 +40,6 @@
 
 #include <kactionmenu.h>
 #include <kactioncollection.h>
-#include <kmessagebox.h>
 #include <kmimetype.h>
 #include <krun.h>
 #include <kservice.h>

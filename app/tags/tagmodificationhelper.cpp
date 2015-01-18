@@ -28,11 +28,11 @@
 
 #include <QApplication>
 #include <QAction>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 
 // Local includes
 

@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <QIcon>
 #include <QGridLayout>
 #include <QApplication>
 #include <QStyle>
@@ -35,7 +36,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 
 // Local includes
 
@@ -164,8 +164,9 @@ AlbumSelectWidget::AlbumSelectWidget(QWidget* const parent, PAlbum* const albumT
     d->searchBar->setConfigGroup(group);
     d->albumTreeView->setEntryPrefix("AlbumTreeView");
 
-    d->newAlbumBtn = new QPushButton(this);
-    KGuiItem::assign(d->newAlbumBtn, KGuiItem(i18n("&New Album"), "albumfolder-new", i18n("Create new album")));
+    d->newAlbumBtn = new QPushButton(i18n("&New Album"), this);
+    d->newAlbumBtn->setToolTip(i18n("Create new album"));
+    d->newAlbumBtn->setIcon(QIcon::fromTheme("albumfolder-new"));
 
     grid->addWidget(d->albumTreeView, 0, 0, 1, 2);
     grid->addWidget(d->searchBar,     1, 0, 1, 1);

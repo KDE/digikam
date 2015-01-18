@@ -43,10 +43,6 @@
 #include <QImageReader>
 #include <QPainter>
 
-// KDE includes
-
-#include <kmessagebox.h>
-
 // Local includes
 
 #include "digikam_debug.h"

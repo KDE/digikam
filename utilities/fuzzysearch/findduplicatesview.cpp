@@ -32,15 +32,12 @@
 #include <QPushButton>
 #include <QSpinBox>
 #include <QLabel>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
-
-
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
-#include <QApplication>
-#include <QStyle>
 
 // Local includes
 

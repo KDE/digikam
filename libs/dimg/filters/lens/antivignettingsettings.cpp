@@ -33,26 +33,24 @@
 #include <QCheckBox>
 #include <QPainter>
 #include <QPixmap>
+#include <QUrl>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
-#include "digikam_debug.h"
-#include <QUrl>
-
 #include <klocalizedstring.h>
-
 #include <kseparator.h>
-
 #include <kglobalsettings.h>
-#include <kmessagebox.h>
-
 
 // Libkdcraw includes
 
 #include <rnuminput.h>
 #include <rexpanderbox.h>
-#include <QApplication>
-#include <QStyle>
+
+// Local includes
+
+#include "digikam_debug.h"
 
 using namespace KDcrawIface;
 

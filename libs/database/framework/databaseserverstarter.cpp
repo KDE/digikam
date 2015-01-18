@@ -50,8 +50,6 @@
 
 // KDE includes
 
-
-#include <kmessagebox.h>
 #include <klocalizedstring.h>
 
 // Local includes

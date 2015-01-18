@@ -46,9 +46,7 @@
 
 // KDE includes
 
-
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 #include <ktoggleaction.h>
 
 // Local includes

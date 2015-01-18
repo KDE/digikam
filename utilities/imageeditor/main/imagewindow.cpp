@@ -47,6 +47,7 @@
 #include <QAction>
 #include <QMenu>
 #include <QMenuBar>
+#include <QMessageBox>
 
 // KDE includes
 
@@ -55,7 +56,6 @@
 #include <kcategorizedview.h>
 #include <kconfig.h>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 #include <kselectaction.h>
 #include <kstandardaction.h>
 #include <kstatusbar.h>
