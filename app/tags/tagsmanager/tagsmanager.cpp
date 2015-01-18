@@ -34,6 +34,7 @@
 #include <QSplitter>
 #include <QApplication>
 #include <QAction>
+#include <QMessageBox>
 
 // KDE includes
 
@@ -42,7 +43,6 @@
 #include <kmainwindow.h>
 #include <kmultitabbar.h>
 #include <kactionmenu.h>
-#include <kmessagebox.h>
 
 // local includes
 
@@ -341,24 +341,21 @@ void TagsManager::slotDeleteAction()
     // ask for deletion of children
     if (!tagsWithChildren.isEmpty())
     {
-        const int result = KMessageBox::warningContinueCancel(
-                this,
-                i18ncp(
-                        "%2 is a comma separated list of tags to be deleted.",
-                        "Tag %2 has one or more subtags. "
-                        "Deleting it will also delete "
-                        "the subtags. "
-                        "Do you want to continue?",
-                        "Tags %2 have one or more subtags. "
-                        "Deleting them will also delete "
-                        "the subtags. "
-                        "Do you want to continue?",
-                        tagsWithChildren.count(),
-                        JoinTagNamesToList(tagsWithChildren)
-                    )
-            );
-
-        if (result != KMessageBox::Continue)
+        const int result = QMessageBox::warning(this, qApp->applicationName(),
+                                                i18ncp("%2 is a comma separated list of tags to be deleted.",
+                                                       "Tag %2 has one or more subtags. "
+                                                       "Deleting it will also delete "
+                                                       "the subtags. "
+                                                       "Do you want to continue?",
+                                                       "Tags %2 have one or more subtags. "
+                                                       "Deleting them will also delete "
+                                                       "the subtags. "
+                                                       "Do you want to continue?",
+                                                       tagsWithChildren.count(),
+                                                       JoinTagNamesToList(tagsWithChildren),
+                                                QMessageBox::Yes | QMessageBox::Cancel));
+        
+        if (result != QMessageBox::Yes)
         {
             return;
         }
@@ -389,15 +386,10 @@ void TagsManager::slotDeleteAction()
             );
     }
 
-    const int result = KMessageBox::warningContinueCancel(
-            0,
-            message,
-            i18np("Delete tag", "Delete tags", tagNames.count()),
-            KGuiItem(i18n("Delete"),
-            "edit-delete")
-        );
-
-    if (result == KMessageBox::Continue)
+    const int result = QMessageBox::warning(this, i18np("Delete tag", "Delete tags", tagNames.count()),
+                                            message, QMessageBox::Yes | QMessageBox::Cancel);
+    
+    if (result == QMessageBox::Yes)
     {
         QMultiMap<int, TAlbum*>::iterator it;
 
@@ -496,31 +488,25 @@ void TagsManager::slotInvertSel()
 
 void TagsManager::slotWriteToImg()
 {
-    int result = KMessageBox::warningContinueCancel(
-            this,
-            i18n(
-                    "digiKam will clean up tag metadata before setting "
-                    "tags from database.<br> You may <b>lose tags</b> if you did not "
-                    "read tags before (by calling Read Tags from Image).<br> "
-                    "Do you want to continue?"
-                )
-        );
-
-    if (result != KMessageBox::Continue)
+    int result = QMessageBox::warning(this, qApp->applicationName(),
+                                      i18n("<qt>digiKam will clean up tag metadata before setting "
+                                           "tags from database.<br> You may <b>lose tags</b> if you did not "
+                                           "read tags before (by calling Read Tags from Image).<br> "
+                                           "Do you want to continue?<qt>"),
+                                      QMessageBox::Yes | QMessageBox::Cancel);
+    
+    if (result != QMessageBox::Yes)
     {
         return;
     }
 
-    result = KMessageBox::warningContinueCancel(
-            this,
-            i18n(
-                    "This operation can take long time "
-                    "depending on collection size.\n"
-                    "Do you want to continue?"
-                )
-        );
+    result = QMessageBox::warning(this, qApp->applicationName(),
+                                  i18n("This operation can take long time "
+                                       "depending on collection size.\n"
+                                       "Do you want to continue?"),
+                                  QMessageBox::Yes | QMessageBox::Cancel);
 
-    if (result != KMessageBox::Continue)
+    if (result != QMessageBox::Yes)
     {
         return;
     }
@@ -533,16 +519,13 @@ void TagsManager::slotWriteToImg()
 
 void TagsManager::slotReadFromImg()
 {
-    int result = KMessageBox::warningContinueCancel(
-            this,
-            i18n(
-                    "This operation can take long time "
-                    "depending on collection size.\n"
-                    "Do you want to continue?"
-                )
-        );
+    int result = QMessageBox::warning(this, qApp->applicationName(),
+                                      i18n("This operation can take long time "
+                                           "depending on collection size.\n"
+                                           "Do you want to continue?"),
+                                      QMessageBox::Yes | QMessageBox::Cancel);
 
-    if (result != KMessageBox::Continue)
+    if (result != QMessageBox::Yes)
     {
         return;
     }
@@ -556,17 +539,14 @@ void TagsManager::slotReadFromImg()
 
 void TagsManager::slotWipeAll()
 {
-    const int result = KMessageBox::warningContinueCancel(
-            this,
-            i18n(
-                    "This operation will wipe all tags from database only.\n"
-                    "To apply changes to files, "
-                    "you must choose write metadata to file later.\n"
-                    "Do you want to continue?"
-                )
-        );
-
-    if (result != KMessageBox::Continue)
+    const int result = QMessageBox::warning(this, qApp->applicationName(),
+                                            i18n("This operation will wipe all tags from database only.\n"
+                                                 "To apply changes to files, "
+                                                 "you must choose write metadata to file later.\n"
+                                                 "Do you want to continue?"),
+                                            QMessageBox::Yes | QMessageBox::Cancel);
+    
+    if (result != QMessageBox::Yes)
     {
         return;
     }
@@ -619,16 +599,13 @@ void TagsManager::slotRemoveTagsFromImgs()
 {
     const QModelIndexList selList = d->tagMngrView->selectionModel()->selectedIndexes();
 
-    const int result = KMessageBox::warningContinueCancel(
-            this,
-            i18np(
-                    "Do you really want to remove the selected tag from all images?",
-                    "Do you really want to remove the selected tags from all images?",
-                    selList.count()
-                )
-        );
+    const int result = QMessageBox::warning(this, qApp->applicationName(),
+                                            i18np("Do you really want to remove the selected tag from all images?",
+                                                  "Do you really want to remove the selected tags from all images?",
+                                                  selList.count()),
+                                            QMessageBox::Yes | QMessageBox::Cancel);
 
-    if (result != KMessageBox::Continue)
+    if (result != QMessageBox::Yes)
     {
         return;
     }
@@ -706,14 +683,14 @@ void TagsManager::setupActions()
                                    "Current tag is last clicked tag."));
 
     setHelpText(d->delAction, i18n("Delete selected items. "
-                                  "Also work with multiple items, "
-                                  "but won't delete the root tag."));
+                                   "Also work with multiple items, "
+                                   "but won't delete the root tag."));
 
     setHelpText(resetIcon, i18n("Reset icon to selected tags. "
-                               "Works with multiple selection." ));
+                                "Works with multiple selection." ));
 
     setHelpText(invSel, i18n("Invert selection. "
-                            "Only visible items will be selected"));
+                             "Only visible items will be selected"));
 
     setHelpText(expandTree, i18n("Expand tag tree by one level"));
 
@@ -812,7 +789,9 @@ void TagsManager::setHelpText(QAction *action, const QString &text)
 {
     action->setStatusTip(text);
     action->setToolTip(text);
-    if(action->whatsThis().isEmpty()) {
+    
+    if(action->whatsThis().isEmpty())
+    {
         action->setWhatsThis(text);
     }
 }
