@@ -121,8 +121,8 @@ public Q_SLOTS:
      *                            user for a new name
      */
     SAlbum* slotCreateTimeLineSearch(const QString& desiredName,
-                                  const DateRangeList& dateRanges,
-                                  bool overwriteIfExisting = false);
+                                     const DateRangeList& dateRanges,
+                                     bool overwriteIfExisting = false);
 
     /**
      * Creates a new fuzzy search based on a sketch created by the user and

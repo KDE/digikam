@@ -59,7 +59,8 @@ public:
 };
 
 SearchModificationHelper::SearchModificationHelper(QObject* const parent, QWidget* const dialogParent)
-    : QObject(parent), d(new Private)
+    : QObject(parent),
+      d(new Private)
 {
     d->dialogParent = dialogParent;
 }
@@ -98,7 +99,7 @@ bool SearchModificationHelper::checkAlbum(const QString& name) const
 
     for (AlbumList::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
     {
-        SAlbum* album = (SAlbum*)(*it);
+        SAlbum* const album = (SAlbum*)(*it);
 
         if (album->title() == name)
         {
@@ -163,13 +164,12 @@ void SearchModificationHelper::slotSearchRename(SAlbum* searchAlbum)
         return;
     }
 
-    AlbumManager::instance()->updateSAlbum(searchAlbum, searchAlbum->query(),
-                                           name);
+    AlbumManager::instance()->updateSAlbum(searchAlbum, searchAlbum->query(), name);
 }
 
 SAlbum* SearchModificationHelper::slotCreateTimeLineSearch(const QString& desiredName,
-                                                        const DateRangeList& dateRanges,
-                                                        bool overwriteIfExisting)
+                                                           const DateRangeList& dateRanges,
+                                                           bool overwriteIfExisting)
 {
     QString name = desiredName;
 
@@ -207,7 +207,7 @@ SAlbum* SearchModificationHelper::slotCreateTimeLineSearch(const QString& desire
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Date search XML:\n" << writer.xml();
 
-    SAlbum* album = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::TimeLineSearch, writer.xml());
+    SAlbum* const album = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::TimeLineSearch, writer.xml());
     AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << album);
     return album;
 }
@@ -247,8 +247,7 @@ SAlbum* SearchModificationHelper::createFuzzySearchFromSketch(const QString& pro
     writer.finishField();
     writer.finishGroup();
 
-    SAlbum* salbum = AlbumManager::instance()->createSAlbum(name,
-                                                            DatabaseSearch::HaarSearch, writer.xml());
+    SAlbum* const salbum = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::HaarSearch, writer.xml());
     AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << salbum);
 
     return salbum;
@@ -295,8 +294,7 @@ SAlbum* SearchModificationHelper::createFuzzySearchFromImage(const QString& prop
     writer.finishField();
     writer.finishGroup();
 
-    SAlbum* salbum = AlbumManager::instance()->createSAlbum(name,
-                                                            DatabaseSearch::HaarSearch, writer.xml());
+    SAlbum* const salbum = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::HaarSearch, writer.xml());
     AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << salbum);
 
     return salbum;
