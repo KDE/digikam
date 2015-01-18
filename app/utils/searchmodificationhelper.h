@@ -26,7 +26,7 @@
 
 // Qt includes
 
-#include <qobject.h>
+#include <QObject>
 
 // Local inclues
 
@@ -66,7 +66,7 @@ public:
      * @param parent parent for qt parent child mechanism
      * @param dialogParent paret widget for dialogs displayed by this object
      */
-    SearchModificationHelper(QObject* parent, QWidget* dialogParent);
+    SearchModificationHelper(QObject* const parent, QWidget* const dialogParent);
 
     /**
      * Destructor.
@@ -120,8 +120,8 @@ public Q_SLOTS:
      *                            user for a new name
      */
     SAlbum* slotCreateTimeLineSearch(const QString& desiredName,
-                                  const DateRangeList& dateRanges,
-                                  bool overwriteIfExisting = false);
+                                     const DateRangeList& dateRanges,
+                                     bool overwriteIfExisting = false);
 
     /**
      * Creates a new fuzzy search based on a sketch created by the user and
@@ -162,8 +162,8 @@ private:
 
 private:
 
-    class SearchModificationHelperPriv;
-    SearchModificationHelperPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

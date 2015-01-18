@@ -43,11 +43,11 @@
 namespace Digikam
 {
 
-class SearchModificationHelper::SearchModificationHelperPriv
+class SearchModificationHelper::Private
 {
 public:
 
-    SearchModificationHelperPriv() :
+    Private() :
         dialogParent(0)
     {
     }
@@ -55,8 +55,8 @@ public:
     QWidget* dialogParent;
 };
 
-SearchModificationHelper::SearchModificationHelper(QObject* parent, QWidget* dialogParent)
-    : QObject(parent), d(new SearchModificationHelperPriv)
+SearchModificationHelper::SearchModificationHelper(QObject* const parent, QWidget* const dialogParent)
+    : QObject(parent), d(new Private)
 {
     d->dialogParent = dialogParent;
 }
