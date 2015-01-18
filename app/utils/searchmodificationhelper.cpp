@@ -26,13 +26,11 @@
 // Qt includes
 
 #include <QInputDialog>
+#include <QMessageBox>
 
 // KDE includes
 
-
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
-#include <kstandardguiitem.h>
 
 // Local includes
 
@@ -78,15 +76,14 @@ void SearchModificationHelper::slotSearchDelete(SAlbum* searchAlbum)
     }
 
     // Make sure that a complicated search is not deleted accidentally
-    int result = KMessageBox::warningYesNo(d->dialogParent,
-                                           i18n("Are you sure you want to "
-                                                "delete the selected search "
-                                                "\"%1\"?", searchAlbum->title()),
-                                           i18n("Delete Search?"),
-                                           KGuiItem(i18n("Delete")),
-                                           KStandardGuiItem::cancel());
+    int result = QMessageBox::warning(d->dialogParent, i18n("Delete Search?"),
+                                      i18n("Are you sure you want to "
+                                           "delete the selected search "
+                                           "\"%1\"?", searchAlbum->title()),
+                                           QMessageBox::Yes | QMessageBox::Cancel);
+   
 
-    if (result != KMessageBox::Yes)
+    if (result != QMessageBox::Yes)
     {
         return;
     }
