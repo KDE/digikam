@@ -19,4 +19,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 011 ==> 342602 - Restore toggle fit to window and last zoom in the image editor [patch].
 012 ==> 342708 - A little less image shift in the mouse over preview mode [patch].
 013 ==> 342448 - Compile issues in origin/master Jan/2015.
-014 ==> 
+014 ==> 342931 - Wrong apect ratio in item properties and in item view.
+015 ==> 
