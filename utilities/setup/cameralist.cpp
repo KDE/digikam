@@ -33,11 +33,12 @@
 #include <QString>
 #include <QTextCodec>
 #include <QTextStream>
+#include <QApplication>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 
 // Local includes
 
@@ -266,11 +267,13 @@ CameraType* CameraList::autoDetect(bool& retry)
 
     if (GPCamera::autoDetect(model, port) != 0)
     {
-        retry = (KMessageBox::warningYesNo(0, i18n("Failed to auto-detect camera; "
-                                                   "please make sure it is connected "
-                                                   "properly and is turned on. "
-                                                   "Would you like to try again?"))
-                 == KMessageBox::Yes);
+        retry = (QMessageBox::warning(qApp->activeWindow(), qApp->applicationName(),
+                                      i18n("Failed to auto-detect camera; "
+                                           "please make sure it is connected "
+                                           "properly and is turned on. "
+                                           "Would you like to try again?"),
+                                      QMessageBox::Yes | QMessageBox::Cancel)
+                 == QMessageBox::Yes);
         return 0;
     }
 
