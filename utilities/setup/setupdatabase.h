@@ -29,8 +29,6 @@
 
 #include <QScrollArea>
 
-class KPageDialog;
-
 namespace Digikam
 {
 
@@ -40,7 +38,7 @@ class SetupDatabase : public QScrollArea
 
 public:
 
-    explicit SetupDatabase(KPageDialog* const dialog, QWidget* const parent = 0);
+    explicit SetupDatabase(QWidget* const parent = 0);
     ~SetupDatabase();
 
     void applySettings();

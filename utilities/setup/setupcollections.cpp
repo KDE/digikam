@@ -45,7 +45,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kpagedialog.h>
 #include <kurlrequester.h>
 
 // Local includes
@@ -64,8 +63,7 @@ public:
     Private() :
         rootsPathChanged(false),
         collectionView(0),
-        collectionModel(0),
-        mainDialog(0)
+        collectionModel(0)
     {
     }
 
@@ -73,34 +71,31 @@ public:
 
     SetupCollectionTreeView* collectionView;
     SetupCollectionModel*    collectionModel;
-
-    KPageDialog*             mainDialog;
 };
 
-SetupCollections::SetupCollections(KPageDialog* const dialog, QWidget* const parent)
+SetupCollections::SetupCollections(QWidget* const parent)
     : QScrollArea(parent), d(new Private)
 {
-    d->mainDialog       = dialog;
-    QWidget* panel      = new QWidget;
+    QWidget* const panel = new QWidget;
 
-    QVBoxLayout* layout = new QVBoxLayout(panel);
+    QVBoxLayout* const layout = new QVBoxLayout(panel);
 
     // --------------------------------------------------------
 
-    QGroupBox* albumPathBox = new QGroupBox(i18n("Root Album Folders"), panel);
+    QGroupBox* const albumPathBox = new QGroupBox(i18n("Root Album Folders"), panel);
 
 #ifndef _WIN32
-    QLabel* albumPathLabel  = new QLabel(i18n("<p>Below are the locations of your root albums used to store "
+    QLabel* const albumPathLabel  = new QLabel(i18n("<p>Below are the locations of your root albums used to store "
                                               "your images. Write access is necessary to be able "
                                               "to edit images in these albums.</p>"
                                               "<p>Note: Removable media (such as USB drives or DVDs) and remote file systems "
                                               "(such as NFS, or Samba mounted with cifs/smbfs) are supported.</p><p></p>"),
-                                         albumPathBox);
+                                              albumPathBox);
 #else
-    QLabel* albumPathLabel  = new QLabel(i18n("<p>Below are the locations of your root albums used to store "
+    QLabel* const albumPathLabel  = new QLabel(i18n("<p>Below are the locations of your root albums used to store "
                                               "your images. Write access is necessary to be able "
                                               "to edit images in these albums.</p><p></p>"),
-                                         albumPathBox);
+                                              albumPathBox);
 #endif
     albumPathLabel->setWordWrap(true);
     
@@ -108,7 +103,7 @@ SetupCollections::SetupCollections(KPageDialog* const dialog, QWidget* const par
     d->collectionModel = new SetupCollectionModel(panel);
     d->collectionView->setModel(d->collectionModel);
 
-    QVBoxLayout* albumPathBoxLayout = new QVBoxLayout;
+    QVBoxLayout* const albumPathBoxLayout = new QVBoxLayout;
     albumPathBoxLayout->addWidget(albumPathLabel);
     albumPathBoxLayout->addWidget(d->collectionView);
     albumPathBox->setLayout(albumPathBoxLayout);

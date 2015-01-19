@@ -71,23 +71,20 @@ class SetupDatabase::Private
 public:
 
     Private() :
-        mainDialog(0),
         databaseWidget(0),
         updateBox(0),
         hashesButton(0)
     {
     }
 
-    KPageDialog*    mainDialog;
     DatabaseWidget* databaseWidget;
     QGroupBox*      updateBox;
     QPushButton*    hashesButton;
 };
 
-SetupDatabase::SetupDatabase(KPageDialog* const dialog, QWidget* const parent)
+SetupDatabase::SetupDatabase(QWidget* const parent)
     : QScrollArea(parent), d(new Private)
 {
-    d->mainDialog           = dialog;
     QWidget* const page     = new QWidget;
     QVBoxLayout* mainLayout = new QVBoxLayout;
 
@@ -218,8 +215,8 @@ void SetupDatabase::upgradeUniqueHashes()
                                       i18nc("@info",
                                             "<p>The process of updating the file hashes takes a few minutes.</p> "
                                             "<p>Please ensure that any important collections on removable media are connected. "
-                                            "<note>After the upgrade you cannot use your database with a digiKam version "
-                                            "prior to 2.0.</note></p> "
+                                            "<i>After the upgrade you cannot use your database with a digiKam version "
+                                            "prior to 2.0.</i></p> "
                                             "<p>Do you want to begin the update?</p>"));
 
     if (result == QMessageBox::Yes)

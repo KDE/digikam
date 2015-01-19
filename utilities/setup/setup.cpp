@@ -193,13 +193,13 @@ Setup::Setup(QWidget* const parent)
     setFaceType(List);
     setModal(true);
 
-    d->databasePage     = new SetupDatabase(this);
+    d->databasePage     = new SetupDatabase();
     d->page_database    = addPage(d->databasePage, i18n("Database"));
     d->page_database->setHeader(i18n("<qt>Database Settings<br/>"
                                      "<i>Customize database settings</i></qt>"));
     d->page_database->setIcon(QIcon::fromTheme("server-database"));
 
-    d->collectionsPage  = new SetupCollections(this);
+    d->collectionsPage  = new SetupCollections();
     d->page_collections = addPage(d->collectionsPage, i18n("Collections"));
     d->page_collections->setHeader(i18n("<qt>Collections Settings<br/>"
                                         "<i>Set root albums and database locations</i></qt>"));
