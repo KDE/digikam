@@ -116,11 +116,12 @@ public:
     }
 
     PAlbumPath(int albumRootId, const QString& albumPath)
-        : albumRootId(albumRootId), albumPath(albumPath)
+        : albumRootId(albumRootId),
+          albumPath(albumPath)
     {
     }
 
-    PAlbumPath(PAlbum* album)
+    PAlbumPath(PAlbum* const album)
     {
         if (album->isRoot())
         {
@@ -135,7 +136,8 @@ public:
 
     bool operator==(const PAlbumPath& other) const
     {
-        return other.albumRootId == albumRootId && other.albumPath == albumPath;
+        return (other.albumRootId == albumRootId &&
+                other.albumPath   == albumPath);
     }
 
 public:
@@ -148,7 +150,7 @@ public:
 
 uint qHash(const PAlbumPath& id)
 {
-    return ::qHash(id.albumRootId) ^ ::qHash(id.albumPath);
+    return ( ::qHash(id.albumRootId) ^ ::qHash(id.albumPath) );
 }
 
 // -----------------------------------------------------------------------------------

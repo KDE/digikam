@@ -757,7 +757,8 @@ class AlbumPointer
 {
 public:
 
-    AlbumPointer() : album(0)
+    AlbumPointer()
+        : album(0)
     {
     }
 
