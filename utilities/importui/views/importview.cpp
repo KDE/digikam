@@ -25,6 +25,7 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QTimer>
 #include <QShortcut>
 
@@ -822,7 +823,7 @@ void ImportView::slotImageChangeFailed(const QString& message, const QStringList
         return;
     }
 
-    KMessageBox::errorList(0, message, fileNames);
+    KMessageBox::errorList(qApp->activeWindow(), message, fileNames);
 }
 
 bool ImportView::hasCurrentItem() const

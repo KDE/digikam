@@ -2161,7 +2161,7 @@ void DigikamView::slotImageChangeFailed(const QString& message, const QStringLis
         return;
     }
 
-    KMessageBox::errorList(0, message, fileNames);
+    KMessageBox::errorList(qApp->activeWindow(), message, fileNames);
 }
 
 void DigikamView::slotLeftSideBarActivateAlbums()

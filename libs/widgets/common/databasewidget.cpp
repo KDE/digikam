@@ -213,7 +213,7 @@ void DatabaseWidget::slotChangeDatabasePath(const QUrl& result)
     if (!result.isEmpty() && !targetPath.isWritable())
 #endif
     {
-        QMessageBox::information(0, qApp->applicationName(),
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
                                  i18n("You do not seem to have write access to this database folder.\n"
                                       "Without this access, the caption and tag features will not work."));
     }
@@ -312,12 +312,12 @@ void DatabaseWidget::checkDatabaseConnection()
 
     if (result)
     {
-        QMessageBox::information(0, i18n("Database connection test"),
+        QMessageBox::critical(qApp->activeWindow(), i18n("Database connection test"),
                                  i18n("Database connection test successful."));
     }
     else
     {
-        QMessageBox::critical(0, i18n("Database connection test"),
+        QMessageBox::critical(qApp->activeWindow(), i18n("Database connection test"),
                               i18n("Database connection test was not successful. <p>Error was: %1</p>",
                                    testDatabase.lastError().text()) );
     }

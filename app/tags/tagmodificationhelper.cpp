@@ -184,7 +184,7 @@ void TagModificationHelper::slotTagEdit(TAlbum* t)
 
         if (!AlbumManager::instance()->renameTAlbum(tag, title, errMsg))
         {
-            QMessageBox::critical(0, qApp->applicationName(), errMsg);
+            QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(), errMsg);
         }
     }
 
@@ -194,7 +194,7 @@ void TagModificationHelper::slotTagEdit(TAlbum* t)
 
         if (!AlbumManager::instance()->updateTAlbumIcon(tag, icon, 0, errMsg))
         {
-            QMessageBox::critical(0, qApp->applicationName(), errMsg);
+            QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(), errMsg);
         }
     }
 
@@ -281,7 +281,7 @@ void TagModificationHelper::slotTagDelete(TAlbum* t)
 
         if (!AlbumManager::instance()->deleteTAlbum(tag, errMsg))
         {
-            QMessageBox::critical(0, qApp->applicationName(), errMsg);
+            QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(), errMsg);
         }
     }
 }
@@ -393,7 +393,7 @@ void TagModificationHelper::slotMultipleTagDel(QList<TAlbum* >& tags)
 
             if (!AlbumManager::instance()->deleteTAlbum(it.value(), errMsg))
             {
-                QMessageBox::critical(0, qApp->applicationName(), errMsg);
+                QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(), errMsg);
             }
         }
     }

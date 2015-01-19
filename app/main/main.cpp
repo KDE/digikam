@@ -38,7 +38,6 @@
 // KDE includes
 
 #include <kconfig.h>
-
 #include <klocalizedstring.h>
 #include <ktip.h>
 #include <kaboutdata.h>
@@ -109,18 +108,22 @@ int main(int argc, char* argv[])
     {
         if (QSqlDatabase::drivers().isEmpty())
         {
-            QMessageBox::critical(0, qApp->applicationName(),
+            QMessageBox::critical(qApp->activeWindow(),
+                                  qApp->applicationName(),
                                   i18n("Run-time Qt SQLite or MySQL database plugin is not available. "
                                        "please install it.\n"
                                        "There is no database plugin installed on your computer."));
         }
         else
         {
-            QMessageBox errorList(QMessageBox::Warning, qApp->applicationName(),
+            QMessageBox errorList(QMessageBox::Warning,
+                                  qApp->applicationName(),
                                   i18n("Run-time Qt SQLite or MySQL database plugin is not available. "
                                        "Please install it.\n"
                                        "Press Details button to list database plugins installed on your computer."),
-                                  QMessageBox::Ok);
+                                  QMessageBox::Ok,
+                                  qApp->activeWindow());
+            
             errorList.setDetailedText(QSqlDatabase::drivers().join("\n"));
             errorList.exec();
         }
