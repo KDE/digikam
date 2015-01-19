@@ -66,14 +66,40 @@ public:
 
     /** Show List of items into an informative message box.
      */
-    static void showList(QMessageBox::Icon icon,
-                         QWidget* const parent,
-                         const QString& caption,
-                         const QString& text,
-                         const QStringList& items,
-                         const QString& dontShowAgainName = QString());
+    static void showInformationList(QMessageBox::Icon icon,
+                                    QWidget* const parent,
+                                    const QString& caption,
+                                    const QString& text,
+                                    const QStringList& items,
+                                    const QString& dontShowAgainName = QString());
 
-    /** Show a message box and wait user feedback.
+public:
+
+    /** Show a message box with Yes, No and Cancel buttons, and wait user feedback.
+     *  Return QMessageBox::Yes, QMessageBox::No or QMessageBox::Cancel.
+     */
+    static int showYesNoCancel(QMessageBox::Icon icon,
+                               QWidget* const parent,
+                               const QString& caption,
+                               const QString& text,
+                               const QString& dontAskAgainName = QString(),
+                               bool showCancelButton = false);
+
+    /** Show List of items to processs into a message box with Yes, No and Cancel buttons,
+     *  and wait user feedback.
+     *  Return QMessageBox::Yes, QMessageBox::No or QMessageBox::Cancel.
+     */
+    static int showYesNoCancelList(QMessageBox::Icon icon,
+                                   QWidget* const parent,
+                                   const QString& caption,
+                                   const QString& text,
+                                   const QStringList& items,
+                                   const QString& dontAskAgainName = QString(),
+                                   bool showCancelButton = false);
+
+public:
+
+    /** Show a message box with Continue and Cancel buttons, and wait user feedback.
      *  Return QMessageBox::Yes or QMessageBox::Cancel
      */
     static int showContinueCancel(QMessageBox::Icon icon,
@@ -82,7 +108,8 @@ public:
                                   const QString& text,
                                   const QString& dontAskAgainName = QString());
    
-    /** Show List of items to processs into a message box and wait user feedback.
+    /** Show List of items to processs into a message box with Continue and Cancel buttons,
+     *  and wait user feedback.
      *  Return QMessageBox::Yes or QMessageBox::Cancel
      */
     static int showContinueCancelList(QMessageBox::Icon icon,

@@ -67,10 +67,7 @@ extern "C"
 // KDE includes
 
 #include <kmessagebox.h>
-#include <kconfiggroup.h>
-#include <kdirwatch.h>
 #include <klocalizedstring.h>
-#include <kwindowsystem.h>
 #include <kjobwidgets.h>
 
 #include <kio/global.h>
@@ -462,21 +459,27 @@ void AlbumManager::checkDatabaseDirsAfterFirstRun(const QString& dbPath, const Q
 
         if (digikam3DB.exists() || digikamVeryOldDB.exists())
         {
-            KGuiItem startFresh(i18n("Create New Database"), "document-new");
-            KGuiItem upgrade(i18n("Upgrade Database"), "view-refresh");
+            QMessageBox msgBox(QMessageBox::Warning,
+                               i18n("Database Folder"),
+                               i18n("<p>You have chosen the folder \"%1\" as the place to store the database. "
+                                    "A database file from an older version of digiKam is found in this folder.</p> "
+                                    "<p>Would you like to upgrade the old database file - confirming "
+                                    "that this database file was indeed created for the pictures located in the folder \"%2\" - "
+                                    "or ignore the old file and start with a new database?</p> ",
+                                    QDir::toNativeSeparators(newDir.path()),
+                                    QDir::toNativeSeparators(albumDir.path())),
+                               QMessageBox::Yes | QMessageBox::No,
+                               qApp->activeWindow());
+            
+            msgBox.button(QMessageBox::Yes)->setText(i18n("Upgrade Database"));
+            msgBox.button(QMessageBox::Yes)->setIcon(QIcon::fromTheme("view-refresh"));
+            msgBox.button(QMessageBox::No)->setText(i18n("Create New Database"));
+            msgBox.button(QMessageBox::No)->setIcon(QIcon::fromTheme("document-new"));
+            msgBox.setDefaultButton(QMessageBox::Yes);
+            
+            int result = msgBox.exec();
 
-            int result = KMessageBox::warningYesNo(qApp->activeWindow(),
-                                                   i18n("<p>You have chosen the folder \"%1\" as the place to store the database. "
-                                                        "A database file from an older version of digiKam is found in this folder.</p> "
-                                                        "<p>Would you like to upgrade the old database file - confirming "
-                                                        "that this database file was indeed created for the pictures located in the folder \"%2\" - "
-                                                        "or ignore the old file and start with a new database?</p> ",
-                                                        QDir::toNativeSeparators(newDir.path()),
-                                                        QDir::toNativeSeparators(albumDir.path())),
-                                                   i18n("Database Folder"),
-                                                   upgrade, startFresh);
-
-            if (result == KMessageBox::Yes)
+            if (result == QMessageBox::Yes)
             {
                 // SchemaUpdater expects Album Path to point to the album root of the 0.9 db file.
                 // Restore this situation.
@@ -485,7 +488,7 @@ void AlbumManager::checkDatabaseDirsAfterFirstRun(const QString& dbPath, const Q
                 group.writeEntry("Album Path", albumDir.path());
                 group.sync();
             }
-            else if (result == KMessageBox::No)
+            else if (result == QMessageBox::No)
             {
                 moveToBackup(digikam3DB);
                 moveToBackup(digikamVeryOldDB);
@@ -560,7 +563,8 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
                     copyToNewLocation(oldFile, newFile, i18n("Failed to copy the old database file (\"%1\") "
                                                              "to its new location (\"%2\"). "
                                                              "Trying to upgrade old databases.",
-                                                             QDir::toNativeSeparators(oldFile.filePath()), QDir::toNativeSeparators(newFile.filePath())));
+                                                             QDir::toNativeSeparators(oldFile.filePath()),
+                                                             QDir::toNativeSeparators(newFile.filePath())));
                 }
             }
             else

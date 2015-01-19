@@ -95,8 +95,8 @@ int main(int argc, char* argv[])
     parser.process(app);
     aboutData.processCommandLine(&parser);
 
-    parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("download-from"),      i18n("Open camera dialog at <path>"), QLatin1String("path")));
-    parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("download-from-udi"),  i18n("Open camera dialog for the device with Solid UDI <udi>"), QLatin1String("udi")));
+    parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("download-from"),      i18n("Open camera dialog at <path>"),                                             QLatin1String("path")));
+    parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("download-from-udi"),  i18n("Open camera dialog for the device with Solid UDI <udi>"),                   QLatin1String("udi")));
     parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("detect-camera"),      i18n("Automatically detect and open a connected gphoto2 camera")));
     parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("database-directory"), i18n("Start digikam with the SQLite database file found in the directory <dir>"), QLatin1String("dir")));
 
@@ -117,13 +117,13 @@ int main(int argc, char* argv[])
         }
         else
         {
-            DMessageBox::showList(QMessageBox::Warning,
-                                  qApp->activeWindow(),
-                                  qApp->applicationName(),
-                                  i18n("Run-time Qt SQLite or MySQL database plugin is not available. "
-                                       "Please install it.\n"
-                                       "Database plugins installed on your computer are listed below."),
-                                  QSqlDatabase::drivers());
+            DMessageBox::showInformationList(QMessageBox::Warning,
+                                             qApp->activeWindow(),
+                                             qApp->applicationName(),
+                                             i18n("Run-time Qt SQLite or MySQL database plugin is not available. "
+                                                  "Please install it.\n"
+                                                  "Database plugins installed on your computer are listed below."),
+                                             QSqlDatabase::drivers());
         }
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "QT Sql drivers list: " << QSqlDatabase::drivers();

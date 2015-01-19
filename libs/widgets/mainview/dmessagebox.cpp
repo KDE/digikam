@@ -73,7 +73,7 @@ void DMessageBox::saveMsgBoxShouldBeShown(const QString& dontShowAgainName, bool
 
 // --------------------------------------------------------------------------------------------------------
 
-void DMessageBox::showList(QMessageBox::Icon icon,
+void DMessageBox::showInformationList(QMessageBox::Icon icon,
                            QWidget* const parent,
                            const QString& caption,
                            const QString& text,
@@ -86,8 +86,8 @@ void DMessageBox::showList(QMessageBox::Icon icon,
     }
 
     QDialog* const dialog = new QDialog(parent, Qt::Dialog);
-    dialog->setWindowTitle(caption.isEmpty() ? i18n("Information") : caption);
-    dialog->setObjectName("information");
+    dialog->setWindowTitle(caption);
+    dialog->setObjectName("showInformation");
     dialog->setModal(true);
 
     QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Ok, dialog);
@@ -104,6 +104,77 @@ void DMessageBox::showList(QMessageBox::Icon icon,
                      &checkboxResult);
 
     saveMsgBoxShouldBeShown(dontShowAgainName, checkboxResult);
+}
+
+int DMessageBox::showYesNoCancel(QMessageBox::Icon icon,
+                                 QWidget* const parent,
+                                 const QString& caption,
+                                 const QString& text,
+                                 const QString& dontAskAgainName,
+                                 bool showCancelButton)
+{
+    return (showYesNoCancelList(icon, parent, caption, text, QStringList(), dontAskAgainName, showCancelButton));
+}
+
+int DMessageBox::showYesNoCancelList(QMessageBox::Icon icon,
+                                     QWidget* const parent,
+                                     const QString& caption,
+                                     const QString& text,
+                                     const QStringList& items,
+                                     const QString& dontAskAgainName,
+                                     bool showCancelButton)
+{
+    if (!readMsgBoxShouldBeShown(dontAskAgainName))
+    {
+        return QMessageBox::Yes;
+    }
+
+    QDialog* const dialog = new QDialog(parent, Qt::Dialog);
+    dialog->setWindowTitle(caption);
+    dialog->setObjectName("showYesNoCancel");
+    dialog->setModal(true);
+
+    QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Yes | QDialogButtonBox::No, dialog);
+
+    QObject::connect(buttons->button(QDialogButtonBox::Yes), SIGNAL(clicked()),
+                     dialog, SLOT(done(QDialogButtonBox::Yes)));
+    
+    QObject::connect(buttons->button(QDialogButtonBox::No), SIGNAL(clicked()),
+                     dialog, SLOT(done(QDialogButtonBox::No)));
+    
+    if (showCancelButton)
+    {
+        buttons->addButton(QDialogButtonBox::Cancel);
+        buttons->button(QDialogButtonBox::Cancel)->setDefault(true);
+        buttons->button(QDialogButtonBox::Cancel)->setShortcut(Qt::Key_Escape);
+        
+        QObject::connect(buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
+                         dialog, SLOT(done(QDialogButtonBox::Cancel)));
+    }
+    else
+    {
+        buttons->button(QDialogButtonBox::No)->setDefault(true);
+        buttons->button(QDialogButtonBox::No)->setShortcut(Qt::Key_Escape);
+    }
+    
+    bool checkboxResult = false;
+    int result          = createMessageBox(dialog, buttons, messageBoxIcon(icon), text, items,
+                                           dontAskAgainName.isEmpty() ? QString() : i18n("Do not ask again"),
+                                           &checkboxResult);
+
+    
+    if (result == QDialogButtonBox::Yes)
+    {
+        saveMsgBoxShouldBeShown(dontAskAgainName, checkboxResult);
+        return QMessageBox::Yes;
+    }
+    else if (result == QDialogButtonBox::No)
+    {
+        saveMsgBoxShouldBeShown(dontAskAgainName, checkboxResult);
+        return QMessageBox::No;
+    }
+
+    return QMessageBox::Cancel;
 }
 
 int DMessageBox::showContinueCancel(QMessageBox::Icon icon,
@@ -128,8 +199,8 @@ int DMessageBox::showContinueCancelList(QMessageBox::Icon icon,
     }
 
     QDialog* const dialog = new QDialog(parent, Qt::Dialog);
-    dialog->setWindowTitle(caption.isEmpty() ? i18n("Warning") : caption);
-    dialog->setObjectName("warningYesNo");
+    dialog->setWindowTitle(caption);
+    dialog->setObjectName("showContinueCancel");
     dialog->setModal(true);
 
     QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Yes | QDialogButtonBox::Cancel, dialog);

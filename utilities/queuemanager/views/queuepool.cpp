@@ -418,12 +418,12 @@ bool QueuePool::customRenamingRulesAreValid() const
 
     if (!list.isEmpty())
     {
-        DMessageBox::showList(QMessageBox::Critical,
-                              qApp->activeWindow(),
-                              qApp->applicationName(),
-                              i18n("Custom renaming rules are invalid for Queues listed below. "
-                                   "Please fix them."),
-                              list);
+        DMessageBox::showInformationList(QMessageBox::Critical,
+                                         qApp->activeWindow(),
+                                         qApp->applicationName(),
+                                         i18n("Custom renaming rules are invalid for Queues listed below. "
+                                              "Please fix them."),
+                                         list);
         return false;
     }
 
@@ -449,12 +449,12 @@ bool QueuePool::assignedBatchToolsListsAreValid() const
 
     if (!list.isEmpty())
     {
-        DMessageBox::showList(QMessageBox::Critical,
-                              qApp->activeWindow(),
-                              qApp->applicationName(),
-                              i18n("Assigned batch tools list is empty for Queues listed below. "
-                                   "Please assign tools."),
-                              list);
+        DMessageBox::showInformationList(QMessageBox::Critical,
+                                         qApp->activeWindow(),
+                                         qApp->applicationName(),
+                                         i18n("Assigned batch tools list is empty for Queues listed below. "
+                                              "Please assign tools."),
+                                         list);
         return false;
     }
 

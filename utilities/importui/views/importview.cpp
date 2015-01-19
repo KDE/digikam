@@ -820,11 +820,11 @@ void ImportView::slotImageChangeFailed(const QString& message, const QStringList
         return;
     }
 
-    DMessageBox::showList(QMessageBox::Critical,
-                          qApp->activeWindow(),
-                          qApp->applicationName(),
-                          message,
-                          fileNames);
+    DMessageBox::showInformationList(QMessageBox::Critical,
+                                     qApp->activeWindow(),
+                                     qApp->applicationName(),
+                                     message,
+                                     fileNames);
 }
 
 bool ImportView::hasCurrentItem() const

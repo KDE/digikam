@@ -2161,11 +2161,11 @@ void DigikamView::slotImageChangeFailed(const QString& message, const QStringLis
         return;
     }
 
-    DMessageBox::showList(QMessageBox::Critical, 
-                          qApp->activeWindow(),
-                          qApp->applicationName(),
-                          message,
-                          fileNames);
+    DMessageBox::showInformationList(QMessageBox::Critical, 
+                                     qApp->activeWindow(),
+                                     qApp->applicationName(),
+                                     message,
+                                     fileNames);
 }
 
 void DigikamView::slotLeftSideBarActivateAlbums()

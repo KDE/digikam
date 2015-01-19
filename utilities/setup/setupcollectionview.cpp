@@ -491,11 +491,11 @@ void SetupCollectionModel::apply()
             failedPaths << QDir::toNativeSeparators(item.path);
         }
 
-        DMessageBox::showList(QMessageBox::Critical, 
-                              m_dialogParentWidget,
-                              qApp->applicationName(),
-                              i18n("It was not possible to add a collection for the following paths:"),
-                              failedPaths);
+        DMessageBox::showInformationList(QMessageBox::Critical, 
+                                         m_dialogParentWidget,
+                                         qApp->applicationName(),
+                                         i18n("It was not possible to add a collection for the following paths:"),
+                                         failedPaths);
     }
 
     // Trigger collection scan
