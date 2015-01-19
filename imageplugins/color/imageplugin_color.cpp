@@ -36,12 +36,12 @@
 #include <kgenericfactory.h>
 #include <klibloader.h>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 
 // Local includes
 
 #include "digikam_debug.h"
 #include "dimg.h"
+#include "dmessagebox.h"
 #include "invertfilter.h"
 #include "imageiface.h"
 #include "editortooliface.h"
@@ -255,19 +255,20 @@ void ImagePlugin_Color::slotConvertTo8Bits()
 
     if (!iface.originalSixteenBit())
     {
-        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+        QMessageBox::critical(qApp->activeWindow(),
+                              qApp->applicationName(),
                               i18n("This image is already using a depth of 8 bits / color / pixel."));
         return;
     }
     else
     {
-        if (KMessageBox::warningContinueCancel(qApp->activeWindow(),
-                                               i18n("Performing this operation will reduce image color quality. "
-                                               "Do you want to continue?"),
-                                               QString(),
-                                               KStandardGuiItem::cont(), KStandardGuiItem::cancel(),
-                                               QString("ImagePluginColor16To8Bits")
-                                              ) == KMessageBox::Cancel)
+        if (DMessageBox::showContinueCancel(QMessageBox::Warning,
+                                            qApp->activeWindow(),
+                                            qApp->applicationName(),
+                                            i18n("Performing this operation will reduce image color quality. "
+                                            "Do you want to continue?"),
+                                            QString("ImagePluginColor16To8Bits"))
+            == QMessageBox::Cancel)
         {
             return;
         }

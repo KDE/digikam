@@ -98,39 +98,29 @@ void DMessageBox::showList(QMessageBox::Icon icon,
                      dialog, SLOT(accept()));
 
     bool  checkboxResult = false;
-    QIcon tmpIcon;
 
-    switch (icon)
-    {
-        case QMessageBox::Information:
-            tmpIcon = dialog->style()->standardIcon(QStyle::SP_MessageBoxInformation, 0, dialog);
-            break;
-        case QMessageBox::Warning:
-            tmpIcon = dialog->style()->standardIcon(QStyle::SP_MessageBoxWarning, 0, dialog);
-            break;
-        case QMessageBox::Critical:
-            tmpIcon = dialog->style()->standardIcon(QStyle::SP_MessageBoxCritical, 0, dialog);
-            break;
-        case QMessageBox::Question:
-            tmpIcon = dialog->style()->standardIcon(QStyle::SP_MessageBoxQuestion, 0, dialog);
-        default:
-            break;
-    }
-    
-    int iconSize = dialog->style()->pixelMetric(QStyle::PM_MessageBoxIconSize, 0, dialog);
-
-    createMessageBox(dialog, buttons, tmpIcon.pixmap(iconSize), text, items,
+    createMessageBox(dialog, buttons, messageBoxIcon(icon), text, items,
                      dontShowAgainName.isEmpty() ? QString() : i18n("Do not show this message again"),
                      &checkboxResult);
 
     saveMsgBoxShouldBeShown(dontShowAgainName, checkboxResult);
 }
 
-int DMessageBox::warningContinueCancelList(QWidget* const parent,
-                                           const QString& caption,
-                                           const QString& text,
-                                           const QStringList& items,
-                                           const QString& dontAskAgainName)
+int DMessageBox::showContinueCancel(QMessageBox::Icon icon,
+                                    QWidget* const parent,
+                                    const QString& caption,
+                                    const QString& text,
+                                    const QString& dontAskAgainName)
+{
+    return (showContinueCancelList(icon, parent, caption, text, QStringList(), dontAskAgainName));
+}
+
+int DMessageBox::showContinueCancelList(QMessageBox::Icon icon,
+                                        QWidget* const parent,
+                                        const QString& caption,
+                                        const QString& text,
+                                        const QStringList& items,
+                                        const QString& dontAskAgainName)
 {
     if (!readMsgBoxShouldBeShown(dontAskAgainName))
     {
@@ -154,7 +144,7 @@ int DMessageBox::warningContinueCancelList(QWidget* const parent,
                      dialog, SLOT(reject()));
 
     bool checkboxResult = false;
-    const int result    = createMessageBox(dialog, buttons, QIcon::fromTheme("dialog-warning"), text, items,
+    const int result    = createMessageBox(dialog, buttons, messageBoxIcon(icon), text, items,
                                            dontAskAgainName.isEmpty() ? QString() : i18n("Do not ask again"),
                                            &checkboxResult);
 
@@ -213,10 +203,13 @@ int DMessageBox::createMessageBox(QDialog* const dialog,
 
     //--------------------------------------------------------------------------------
 
-    QListWidget* const listWidget = new QListWidget(mainWidget);
-    listWidget->addItems(items);
-    mainLayout->addWidget(listWidget, 50);
-
+    if (!items.isEmpty())
+    {
+        QListWidget* const listWidget = new QListWidget(mainWidget);
+        listWidget->addItems(items);
+        mainLayout->addWidget(listWidget, 50);
+    }
+   
     //--------------------------------------------------------------------------------
 
     QPointer<QCheckBox> checkbox = 0;
@@ -255,5 +248,32 @@ int DMessageBox::createMessageBox(QDialog* const dialog,
     return result;
 }
 
+QIcon DMessageBox::messageBoxIcon(QMessageBox::Icon icon)
+{
+    QIcon tmpIcon;
+
+    switch (icon)
+    {
+        case QMessageBox::Warning:
+            tmpIcon = qApp->style()->standardIcon(QStyle::SP_MessageBoxWarning, 0, qApp->activeWindow());
+            break;
+
+        case QMessageBox::Critical:
+            tmpIcon = qApp->style()->standardIcon(QStyle::SP_MessageBoxCritical, 0, qApp->activeWindow());
+            break;
+
+        case QMessageBox::Question:
+            tmpIcon = qApp->style()->standardIcon(QStyle::SP_MessageBoxQuestion, 0, qApp->activeWindow());
+
+        case QMessageBox::Information:
+        default:
+            tmpIcon = qApp->style()->standardIcon(QStyle::SP_MessageBoxInformation, 0, qApp->activeWindow());
+            break;
+    }
+    
+    int iconSize = qApp->style()->pixelMetric(QStyle::PM_MessageBoxIconSize, 0, qApp->activeWindow());
+
+    return tmpIcon.pixmap(iconSize);
+}
 
 }  // namespace Digikam

@@ -73,7 +73,6 @@
 #include <kfileitemdelegate.h>
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 #include <kopenwithdialog.h>
 #include <knotifyconfigwidget.h>
 #include <kprotocolinfo.h>
@@ -109,6 +108,7 @@
 #include "digikam_debug.h"
 #include "digikam_config.h"
 #include "digikam_globals.h"
+#include "dmessagebox.h"
 #include "applicationsettings.h"
 #include "actioncategorizedview.h"
 #include "buttonicondisabler.h"
@@ -636,7 +636,7 @@ void EditorWindow::setupStandardActions()
 
     // -- Keyboard-only actions --------------------------------------------------------
 
-    QAction * altBackwardAction = new QAction(i18n("Previous Image"), this);
+    QAction* const altBackwardAction = new QAction(i18n("Previous Image"), this);
     ac->addAction("editorwindow_backward_shift_space", altBackwardAction);
     ac->setDefaultShortcut(altBackwardAction, Qt::SHIFT + Qt::Key_Space);
     connect(altBackwardAction, SIGNAL(triggered()), this, SLOT(slotBackward()));
@@ -650,14 +650,15 @@ void EditorWindow::setupStandardActions()
     m_selectToolsAction->setDelayed(false);
     m_selectToolsAction->setVisible(false);
     ac->addAction("editorwindow_selecttool", m_selectToolsAction);
-    // setup is done after image plugins are loaded
+    
+    // NOTE: setup is done after image plugins are loaded
 
-    m_applyToolAction = new QAction(KStandardGuiItem::ok().icon(), i18n("OK"), this);
+    m_applyToolAction = new QAction(QIcon::fromTheme("dialog-ok"), i18n("Ok"), this);
     ac->addAction("editorwindow_applytool", m_applyToolAction);
     ac->setDefaultShortcut(m_applyToolAction, Qt::Key_Return);
     connect(m_applyToolAction, SIGNAL(triggered()), this, SLOT(slotApplyTool()));
 
-    m_closeToolAction = new QAction(KStandardGuiItem::cancel().icon(), i18n("Cancel"), this);
+    m_closeToolAction = new QAction(QIcon::fromTheme("dialog-cancel"), i18n("Cancel"), this);
     ac->addAction("editorwindow_closetool", m_closeToolAction);
     ac->setDefaultShortcut(m_closeToolAction, Qt::Key_Escape);
     connect(m_closeToolAction, SIGNAL(triggered()), this, SLOT(slotCloseTool()));
@@ -1240,13 +1241,12 @@ bool EditorWindow::promptForOverWrite()
         QFileInfo fi(m_canvas->currentImageFilePath());
         QString warnMsg(i18n("About to overwrite file \"%1\"\nAre you sure?", QDir::toNativeSeparators(fi.fileName())));
 
-        return (KMessageBox::warningContinueCancel(this,
-                                                   warnMsg,
-                                                   i18n("Warning"),
-                                                   KGuiItem(i18n("Overwrite")),
-                                                   KStandardGuiItem::cancel(),
-                                                   QString("editorWindowSaveOverwrite")
-                                                  ) ==  KMessageBox::Continue);
+        return (DMessageBox::showContinueCancel(QMessageBox::Warning,
+                                                this,
+                                                i18n("Warning"),
+                                                warnMsg,
+                                                QString("editorWindowSaveOverwrite"))
+                ==  QMessageBox::Yes);
 
     }
     else

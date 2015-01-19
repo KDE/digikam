@@ -73,14 +73,24 @@ public:
                          const QStringList& items,
                          const QString& dontShowAgainName = QString());
 
+    /** Show a message box and wait user feedback.
+     *  Return QMessageBox::Yes or QMessageBox::Cancel
+     */
+    static int showContinueCancel(QMessageBox::Icon icon,
+                                  QWidget* const parent,
+                                  const QString& caption,
+                                  const QString& text,
+                                  const QString& dontAskAgainName = QString());
+   
     /** Show List of items to processs into a message box and wait user feedback.
      *  Return QMessageBox::Yes or QMessageBox::Cancel
      */
-    static int warningContinueCancelList(QWidget* const parent,
-                                         const QString& caption,
-                                         const QString& text,
-                                         const QStringList& items,
-                                         const QString& dontAskAgainName = QString());
+    static int showContinueCancelList(QMessageBox::Icon icon,
+                                      QWidget* const parent,
+                                      const QString& caption,
+                                      const QString& text,
+                                      const QStringList& items,
+                                      const QString& dontAskAgainName = QString());
 
 private:
 
@@ -92,6 +102,8 @@ private:
                                 const QString& ask,
                                 bool* checkboxReturn
                                );
+    
+    static QIcon messageBoxIcon(QMessageBox::Icon icon);
 };
 
 }  // namespace Digikam
