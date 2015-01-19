@@ -208,9 +208,6 @@ void CameraItemList::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const
 
 // --------------------------------------------------------------------------------------------------------
 
-/** These methods are simplified version from KMessageBox class implementation
- */
-
 void CameraMessageBox::informationList(CameraThumbsCtrl* const ctrl,
                                        QWidget* const parent,
                                        const QString& text,
@@ -280,7 +277,7 @@ int CameraMessageBox::warningContinueCancelList(CameraThumbsCtrl* const ctrl,
                                            dontAskAgainName.isEmpty() ? QString() : i18n("Do not ask again"),
                                            &checkboxResult);
 
-    if (result != QDialogButtonBox::Yes)
+    if (result != QDialog::Accepted)
     {
         return QMessageBox::Cancel;
     }

@@ -93,6 +93,8 @@ class CameraMessageBox
 
 public:
 
+    /** Show List of camera items into an informative message box.
+     */
     static void informationList(CameraThumbsCtrl* const ctrl,
                                 QWidget* const parent,
                                 const QString& text,
@@ -100,6 +102,9 @@ public:
                                 const QString& caption = QString(),
                                 const QString& dontShowAgainName = QString());
 
+    /** Show List of camera items to processs into a message box and wait user feedback.
+     *  Return QMessageBox::Yes or QMessageBox::Cancel
+     */
     static int warningContinueCancelList(CameraThumbsCtrl* const ctrl,
                                          QWidget* const parent,
                                          const QString& text,
