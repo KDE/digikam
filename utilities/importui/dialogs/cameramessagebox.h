@@ -29,15 +29,12 @@
 #include <QWidget>
 #include <QTreeWidget>
 
-// KDE includes
-
-#include <kstandardguiitem.h>
-
 // Local includes
 
 #include "camerathumbsctrl.h"
 
 class QDialog;
+class QDialogButtonBox;
 
 namespace Digikam
 {
@@ -108,14 +105,13 @@ public:
                                          const QString& text,
                                          const CamItemInfoList& items,
                                          const QString& caption = QString(),
-                                         const KGuiItem& buttonContinue = KStandardGuiItem::cont(),
-                                         const KGuiItem& buttonCancel = KStandardGuiItem::cancel(),
                                          const QString& dontAskAgainName = QString());
 
 private:
 
     static int createMessageBox(CameraThumbsCtrl* const ctrl,
-                                QDialog* const dlg,
+                                QDialog* const dialog,
+                                QDialogButtonBox* const buttons,
                                 const QIcon& icon,
                                 const QString& text,
                                 const CamItemInfoList& items,

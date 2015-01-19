@@ -36,13 +36,14 @@
 #include <QStyle>
 #include <QUrl>
 #include <QIcon>
+#include <QDialog>
+#include <QPushButton>
 
 // KDE includes
 
 #include <kmessagebox.h>
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
-#include <kdialog.h>
 
 // Libkdcraw includes
 
@@ -222,17 +223,21 @@ void CameraMessageBox::informationList(CameraThumbsCtrl* const ctrl,
         return;
     }
 
-    KDialog* const dialog = new KDialog(parent, Qt::Dialog);
-    dialog->setCaption(caption.isEmpty() ? i18n("Information") : caption);
-    dialog->setButtons(KDialog::Ok);
+    QDialog* const dialog = new QDialog(parent, Qt::Dialog);
+    dialog->setWindowTitle(caption.isEmpty() ? i18n("Information") : caption);
     dialog->setObjectName("information");
     dialog->setModal(true);
-    dialog->setDefaultButton(KDialog::Ok);
-    dialog->setEscapeButton(KDialog::Ok);
+
+    QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Ok, dialog);
+    buttons->button(QDialogButtonBox::Ok)->setDefault(true);
+    buttons->button(QDialogButtonBox::Ok)->setShortcut(Qt::Key_Escape);
+
+    QObject::connect(buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+                     dialog, SLOT(accept()));
 
     bool checkboxResult = false;
 
-    createMessageBox(ctrl, dialog, QIcon::fromTheme("dialog-information"), text, items,
+    createMessageBox(ctrl, dialog, buttons, QIcon::fromTheme("dialog-information"), text, items,
                      dontShowAgainName.isEmpty() ? QString() : i18n("Do not show this message again"),
                      &checkboxResult);
 
@@ -247,8 +252,6 @@ int CameraMessageBox::warningContinueCancelList(CameraThumbsCtrl* const ctrl,
                                                 const QString& text,
                                                 const CamItemInfoList& items,
                                                 const QString& caption,
-                                                const KGuiItem& buttonContinue,
-                                                const KGuiItem& buttonCancel,
                                                 const QString& dontAskAgainName)
 {
     if (!KMessageBox::shouldBeShownContinue(dontAskAgainName))
@@ -256,24 +259,30 @@ int CameraMessageBox::warningContinueCancelList(CameraThumbsCtrl* const ctrl,
         return KMessageBox::Continue;
     }
 
-    KDialog* const dialog = new KDialog(parent, Qt::Dialog);
-    dialog->setCaption(caption.isEmpty() ? i18n("Warning") : caption);
-    dialog->setButtons(KDialog::Yes | KDialog::No);
+    QDialog* const dialog = new QDialog(parent, Qt::Dialog);
+    dialog->setWindowTitle(caption.isEmpty() ? i18n("Warning") : caption);
     dialog->setObjectName("warningYesNo");
     dialog->setModal(true);
-    dialog->setButtonGuiItem(KDialog::Yes, buttonContinue);
-    dialog->setButtonGuiItem(KDialog::No, buttonCancel);
-    dialog->setDefaultButton(KDialog::Yes);
-    dialog->setEscapeButton(KDialog::No);
+
+    QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Yes | QDialogButtonBox::Cancel, dialog);
+    buttons->button(QDialogButtonBox::Yes)->setDefault(true);
+    buttons->button(QDialogButtonBox::Yes)->setText(i18n("Continue"));
+    buttons->button(QDialogButtonBox::Cancel)->setShortcut(Qt::Key_Escape);
+    
+    QObject::connect(buttons->button(QDialogButtonBox::Yes), SIGNAL(clicked()),
+                     dialog, SLOT(accept()));
+
+    QObject::connect(buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
+                     dialog, SLOT(reject()));
 
     bool checkboxResult = false;
-    const int result    = createMessageBox(ctrl, dialog, QIcon::fromTheme("dialog-warning"), text, items,
+    const int result    = createMessageBox(ctrl, dialog, buttons, QIcon::fromTheme("dialog-warning"), text, items,
                                            dontAskAgainName.isEmpty() ? QString() : i18n("Do not ask again"),
                                            &checkboxResult);
 
-    if (result != KDialog::Yes)
+    if (result != QDialogButtonBox::Yes)
     {
-        return KMessageBox::Cancel;
+        return QMessageBox::Cancel;
     }
 
     if (checkboxResult)
@@ -281,11 +290,12 @@ int CameraMessageBox::warningContinueCancelList(CameraThumbsCtrl* const ctrl,
         KMessageBox::saveDontShowAgainContinue(dontAskAgainName);
     }
 
-    return KMessageBox::Continue;
+    return QMessageBox::Yes;
 }
 
 int CameraMessageBox::createMessageBox(CameraThumbsCtrl* const ctrl,
-                                       QDialog* const dlg,
+                                       QDialog* const dialog,
+                                       QDialogButtonBox* const buttons,
                                        const QIcon& icon,
                                        const QString& text,
                                        const CamItemInfoList& items,
@@ -293,12 +303,10 @@ int CameraMessageBox::createMessageBox(CameraThumbsCtrl* const ctrl,
                                        bool* checkboxReturn
                                       )
 {
-    KDialog* const dialog = dynamic_cast<KDialog*>(dlg);
-
     QWidget* const mainWidget     = new QWidget(dialog);
     QVBoxLayout* const mainLayout = new QVBoxLayout(mainWidget);
-    mainLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing) * 2); // provide extra spacing
-    mainLayout->setMargin(0);
+    mainLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    mainLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     QHBoxLayout* const hLayout    = new QHBoxLayout();
     hLayout->setMargin(0);
@@ -352,21 +360,17 @@ int CameraMessageBox::createMessageBox(CameraThumbsCtrl* const ctrl,
         }
     }
 
-    dialog->setMainWidget(mainWidget);
-
     //--------------------------------------------------------------------------------
 
-    KDialog::ButtonCode defaultCode = dialog->defaultButton();
+    mainLayout->addWidget(buttons);
+    dialog->setLayout(mainLayout);
 
-    if (defaultCode != KDialog::NoDefault)
-    {
-        dialog->setButtonFocus(defaultCode);
-    }
+    //--------------------------------------------------------------------------------
 
     // We use a QPointer because the dialog may get deleted
     // during exec() if the parent of the dialog gets deleted.
     // In that case the QPointer will reset to 0.
-    QPointer<KDialog> guardedDialog = dialog;
+    QPointer<QDialog> guardedDialog = dialog;
 
     const int result = guardedDialog->exec();
 
@@ -375,7 +379,7 @@ int CameraMessageBox::createMessageBox(CameraThumbsCtrl* const ctrl,
         *checkboxReturn = checkbox->isChecked();
     }
 
-    delete(KDialog*) guardedDialog;
+    delete(QDialog*) guardedDialog;
     return result;
 }
 

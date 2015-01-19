@@ -59,6 +59,7 @@
 #include <QMenuBar>
 #include <QMenu>
 #include <QIcon>
+#include <QMessageBox>
 
 // KDE includes
 
@@ -67,7 +68,6 @@
 #include <kedittoolbar.h>
 #include <khelpmenu.h>
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
 #include <knotifyconfigwidget.h>
 #include <kshortcutsdialog.h>
 #include <kstatusbar.h>
@@ -1899,10 +1899,10 @@ void ImportUI::deleteItems(bool onlySelected, bool onlyDownloaded)
     }
 
     QString warnMsg(i18ncp("@info", "About to delete this image. "
-                          "<warning>Deleted file is unrecoverable.</warning> "
+                          "<b>Deleted file is unrecoverable.</b> "
                           "Are you sure?",
                           "About to delete these %1 images. "
-                          "<warning>Deleted files are unrecoverable.</warning> "
+                          "<b>Deleted files are unrecoverable.</b> "
                           "Are you sure?",
                           deleteList.count()));
 
@@ -1911,10 +1911,8 @@ void ImportUI::deleteItems(bool onlySelected, bool onlyDownloaded)
                                                     warnMsg,
                                                     deleteList,
                                                     i18n("Warning"),
-                                                    KGuiItem(i18n("Delete")),
-                                                    KStandardGuiItem::cancel(),
                                                     QString("DontAskAgainToDeleteItemsFromCamera"))
-        ==  KMessageBox::Continue)
+        ==  QMessageBox::Yes)
     {
         QStringList::const_iterator itFolder = folders.constBegin();
         QStringList::const_iterator itFile   = files.constBegin();
