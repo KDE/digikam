@@ -1493,15 +1493,7 @@ bool EditorWindow::waitForSavingToComplete()
     {
         // Waiting for asynchronous image file saving operation running in separate thread.
         m_savingContext.synchronizingState = SavingContext::SynchronousSaving;
-/*
-        QFrame processFrame;
-        StatusProgressBar *pb = m_nameLabel;
-        pb->setParent(&processFrame);
-        processFrame.show();
-        KMessageBox::queuedMessageBox(this,
-                                      KMessageBox::Information,
-                                      i18n("Please wait while the image is being saved..."));
-*/
+
         enterWaitingLoop();
         m_savingContext.synchronizingState = SavingContext::NormalSaving;
     }
@@ -1512,12 +1504,14 @@ bool EditorWindow::waitForSavingToComplete()
 void EditorWindow::enterWaitingLoop()
 {
     //d->waitingLoop->exec(QEventLoop::ExcludeUserInputEvents);
+
     execSavingProgressDialog();
 }
 
 void EditorWindow::quitWaitingLoop()
 {
     //d->waitingLoop->quit();
+
     if (m_savingProgressDialog)
     {
         m_savingProgressDialog->close();
@@ -1532,7 +1526,8 @@ void EditorWindow::slotSelected(bool val)
     d->copyAction->setEnabled(val);
 
     QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
-    foreach(ImagePlugin* plugin, pluginList)
+
+    foreach(ImagePlugin* const plugin, pluginList)
     {
         if (plugin)
         {
