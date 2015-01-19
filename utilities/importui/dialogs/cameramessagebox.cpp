@@ -45,16 +45,10 @@
 
 #include <klocalizedstring.h>
 
-// Libkdcraw includes
-
-#include <rwidgetutils.h>
-
 // Local includes
 
-#include "dmsgboxnotification.h"
+#include "dmessagebox.h"
 #include "digikam_debug.h"
-
-using namespace KDcrawIface;
 
 namespace Digikam
 {
@@ -211,12 +205,12 @@ void CameraItemList::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const
 
 void CameraMessageBox::informationList(CameraThumbsCtrl* const ctrl,
                                        QWidget* const parent,
+                                       const QString& caption,
                                        const QString& text,
                                        const CamItemInfoList& items,
-                                       const QString& caption,
                                        const QString& dontShowAgainName)
 {
-    if (!DMsgBoxNofification::readMsgBoxShouldBeShown(dontShowAgainName))
+    if (!DMessageBox::readMsgBoxShouldBeShown(dontShowAgainName))
     {
         return;
     }
@@ -239,17 +233,17 @@ void CameraMessageBox::informationList(CameraThumbsCtrl* const ctrl,
                      dontShowAgainName.isEmpty() ? QString() : i18n("Do not show this message again"),
                      &checkboxResult);
 
-    DMsgBoxNofification::saveMsgBoxShouldBeShown(dontShowAgainName, checkboxResult);
+    DMessageBox::saveMsgBoxShouldBeShown(dontShowAgainName, checkboxResult);
 }
 
 int CameraMessageBox::warningContinueCancelList(CameraThumbsCtrl* const ctrl,
                                                 QWidget* const parent,
+                                                const QString& caption,
                                                 const QString& text,
                                                 const CamItemInfoList& items,
-                                                const QString& caption,
                                                 const QString& dontAskAgainName)
 {
-    if (!DMsgBoxNofification::readMsgBoxShouldBeShown(dontAskAgainName))
+    if (!DMessageBox::readMsgBoxShouldBeShown(dontAskAgainName))
     {
         return QMessageBox::Yes;
     }
@@ -280,7 +274,7 @@ int CameraMessageBox::warningContinueCancelList(CameraThumbsCtrl* const ctrl,
         return QMessageBox::Cancel;
     }
 
-    DMsgBoxNofification::saveMsgBoxShouldBeShown(dontAskAgainName, checkboxResult);
+    DMessageBox::saveMsgBoxShouldBeShown(dontAskAgainName, checkboxResult);
 
     return QMessageBox::Yes;
 }
@@ -292,8 +286,7 @@ int CameraMessageBox::createMessageBox(CameraThumbsCtrl* const ctrl,
                                        const QString& text,
                                        const CamItemInfoList& items,
                                        const QString& ask,
-                                       bool* checkboxReturn
-                                      )
+                                       bool* checkboxReturn)
 {
     QWidget* const mainWidget     = new QWidget(dialog);
     QVBoxLayout* const mainLayout = new QVBoxLayout(mainWidget);

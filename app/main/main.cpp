@@ -49,6 +49,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "dmessagebox.h"
 #include "albummanager.h"
 #include "assistantdlg.h"
 #include "collectionlocation.h"
@@ -116,16 +117,13 @@ int main(int argc, char* argv[])
         }
         else
         {
-            QMessageBox errorList(QMessageBox::Warning,
+            DMessageBox::showList(QMessageBox::Warning,
+                                  qApp->activeWindow(),
                                   qApp->applicationName(),
                                   i18n("Run-time Qt SQLite or MySQL database plugin is not available. "
                                        "Please install it.\n"
-                                       "Press Details button to list database plugins installed on your computer."),
-                                  QMessageBox::Ok,
-                                  qApp->activeWindow());
-            
-            errorList.setDetailedText(QSqlDatabase::drivers().join("\n"));
-            errorList.exec();
+                                       "Database plugins installed on your computer are listed below."),
+                                  QSqlDatabase::drivers());
         }
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "QT Sql drivers list: " << QSqlDatabase::drivers();

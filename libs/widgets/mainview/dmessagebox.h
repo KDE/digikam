@@ -21,21 +21,26 @@
  *
  * ============================================================ */
 
-#ifndef DMSGBOXNOTIFICATION_H
-#define DMSGBOXNOTIFICATION_H
+#ifndef DMESSAGEBOX_H
+#define DMESSAGEBOX_H
 
 // Qt includes
 
+#include <QWidget>
 #include <QString>
+#include <QMessageBox>
 
 // Local includes
 
 #include "digikam_export.h"
 
+class QDialog;
+class QDialogButtonBox;
+
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DMsgBoxNofification
+class DIGIKAM_EXPORT DMessageBox
 {
 
 public:
@@ -56,8 +61,39 @@ public:
      * @param value the value chosen in the message box to show it again next time.
      */
     static void saveMsgBoxShouldBeShown(const QString& dontShowAgainName, bool value);
+
+public:
+
+    /** Show List of items into an informative message box.
+     */
+    static void showList(QMessageBox::Icon icon,
+                         QWidget* const parent,
+                         const QString& caption,
+                         const QString& text,
+                         const QStringList& items,
+                         const QString& dontShowAgainName = QString());
+
+    /** Show List of items to processs into a message box and wait user feedback.
+     *  Return QMessageBox::Yes or QMessageBox::Cancel
+     */
+    static int warningContinueCancelList(QWidget* const parent,
+                                         const QString& caption,
+                                         const QString& text,
+                                         const QStringList& items,
+                                         const QString& dontAskAgainName = QString());
+
+private:
+
+    static int createMessageBox(QDialog* const dialog,
+                                QDialogButtonBox* const buttons,
+                                const QIcon& icon,
+                                const QString& text,
+                                const QStringList& items,
+                                const QString& ask,
+                                bool* checkboxReturn
+                               );
 };
 
 }  // namespace Digikam
 
-#endif  // DMSGBOXNOTIFICATION_H
+#endif  // DMESSAGEBOX_H

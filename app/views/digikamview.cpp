@@ -36,7 +36,6 @@
 
 // KDE includes
 
-#include <kmessagebox.h>
 #include <ktoolinvocation.h>
 #include <krun.h>
 
@@ -45,6 +44,7 @@
 #include "digikam_debug.h"
 #include "digikam_config.h"
 #include "digikam_globals.h"
+#include "dmessagebox.h"
 #include "albumhistory.h"
 #include "applicationsettings.h"
 #include "metadatasynchronizer.h"
@@ -2161,7 +2161,11 @@ void DigikamView::slotImageChangeFailed(const QString& message, const QStringLis
         return;
     }
 
-    KMessageBox::errorList(qApp->activeWindow(), message, fileNames);
+    DMessageBox::showList(QMessageBox::Critical, 
+                          qApp->activeWindow(),
+                          qApp->applicationName(),
+                          message,
+                          fileNames);
 }
 
 void DigikamView::slotLeftSideBarActivateAlbums()

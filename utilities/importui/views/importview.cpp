@@ -29,15 +29,12 @@
 #include <QTimer>
 #include <QShortcut>
 
-// KDE includes
-
-#include <kmessagebox.h>
-
 // Local includes
 
 #include "digikam_debug.h"
 #include "digikam_config.h"
 #include "digikam_globals.h"
+#include "dmessagebox.h"
 #include "importui.h"
 #include "importiconview.h"
 #include "thumbnailsize.h"
@@ -823,7 +820,11 @@ void ImportView::slotImageChangeFailed(const QString& message, const QStringList
         return;
     }
 
-    KMessageBox::errorList(qApp->activeWindow(), message, fileNames);
+    DMessageBox::showList(QMessageBox::Critical,
+                          qApp->activeWindow(),
+                          qApp->applicationName(),
+                          message,
+                          fileNames);
 }
 
 bool ImportView::hasCurrentItem() const

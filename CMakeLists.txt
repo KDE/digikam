@@ -991,7 +991,7 @@ if(DIGIKAM_CAN_BE_COMPILED)
     endif()
 
     set(libmainview_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/dmsgboxnotification.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/dmessagebox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/dxmlguiwindow.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/daboutdata.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/libs/widgets/mainview/dzoombar.cpp

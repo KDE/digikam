@@ -35,17 +35,17 @@
 #include <QMenu>
 #include <QAction>
 #include <QIcon>
+#include <QMessageBox>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kmessagebox.h>
-#include <kstandardguiitem.h>
 
 // Local includes
 
 #include "workflowmanager.h"
 #include "workflowdlg.h"
+#include "dmessagebox.h"
 
 namespace Digikam
 {
@@ -118,11 +118,12 @@ WorkflowList::WorkflowList(QWidget* const parent)
 
     if (!failed.isEmpty())
     {
-        KMessageBox::informationList(qApp->activeWindow(),
-                                     i18n("Some Workflows cannot be loaded from your config file due to an incompatible "
-                                          "version of a tool."),
-                                     failed,
-                                     i18n("Batch Queue Manager"));
+        DMessageBox::showList(QMessageBox::Information,
+                              qApp->activeWindow(),
+                              i18n("Batch Queue Manager"),
+                              i18n("Some Workflows cannot be loaded from your config file due to an incompatible "
+                                   "version of a tool."),
+                              failed);
     }
 }
 
@@ -284,9 +285,11 @@ void WorkflowList::slotContextMenu()
     else if (choice == delAction)
     {
         QList<QTreeWidgetItem*> list = selectedItems();
+
         if (!list.isEmpty())
         {
             WorkflowItem* const item = dynamic_cast<WorkflowItem*>(list.first());
+
             if (item)
             {
                 int result = QMessageBox::warning(qApp->activeWindow(), i18n("Delete Workflow?"),

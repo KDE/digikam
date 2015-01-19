@@ -1890,7 +1890,7 @@ void ImportUI::deleteItems(bool onlySelected, bool onlyDownloaded)
         QString infoMsg(i18nc("@info", "The items listed below are locked by camera (read-only). "
                              "These items will not be deleted. If you really want to delete these items, "
                              "please unlock them and try again."));
-        CameraMessageBox::informationList(d->camThumbsCtrl, this, infoMsg, lockedList, i18n("Information"));
+        CameraMessageBox::informationList(d->camThumbsCtrl, this, i18n("Information"), infoMsg, lockedList);
     }
 
     if (folders.isEmpty())
@@ -1908,9 +1908,9 @@ void ImportUI::deleteItems(bool onlySelected, bool onlyDownloaded)
 
     if (CameraMessageBox::warningContinueCancelList(d->camThumbsCtrl, 
                                                     this,
+                                                    i18n("Warning"),
                                                     warnMsg,
                                                     deleteList,
-                                                    i18n("Warning"),
                                                     QString("DontAskAgainToDeleteItemsFromCamera"))
         ==  QMessageBox::Yes)
     {

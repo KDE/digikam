@@ -47,17 +47,18 @@
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
+#include <QApplication>
 
 // KDE includes
 
 #include <klocalizedstring.h>
 #include <kfiledialog.h>
-#include <kmessagebox.h>
 #include <kurlrequester.h>
 #include <kwidgetitemdelegate.h>
 
 // Local includes
 
+#include "dmessagebox.h"
 #include "applicationsettings.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
@@ -490,9 +491,11 @@ void SetupCollectionModel::apply()
             failedPaths << QDir::toNativeSeparators(item.path);
         }
 
-        KMessageBox::errorList(m_dialogParentWidget,
-                               i18n("It was not possible to add a collection for the following paths:"),
-                               failedPaths);
+        DMessageBox::showList(QMessageBox::Critical, 
+                              m_dialogParentWidget,
+                              qApp->applicationName(),
+                              i18n("It was not possible to add a collection for the following paths:"),
+                              failedPaths);
     }
 
     // Trigger collection scan
@@ -722,12 +725,11 @@ void SetupCollectionModel::deleteCollection(int internalId)
     Item& item = m_collections[index.internalId()];
 
     // Ask for confirmation
-    QString label       = data(indexForId(internalId, (int)ColumnName), Qt::DisplayRole).toString();
-    KGuiItem removeItem = KStandardGuiItem::cont();
-    removeItem.setText(i18n("Remove Collection"));
-    int result = QMessageBox::warning(m_dialogParentWidget, i18n("Remove Collection?"),
-                                      i18n("Do you want to remove the collection \"%1\" from your list of collections?", label),
-                                      QMessageBox::Yes | QMessageBox::No);
+    QString label = data(indexForId(internalId, (int)ColumnName), Qt::DisplayRole).toString();
+    int result    = QMessageBox::warning(m_dialogParentWidget,
+                                         i18n("Remove Collection?"),
+                                         i18n("Do you want to remove the collection \"%1\" from your list of collections?", label),
+                                         QMessageBox::Yes | QMessageBox::No);
 
     if (result == QMessageBox::Yes)
     {

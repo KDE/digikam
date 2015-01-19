@@ -97,9 +97,9 @@ public:
      */
     static void informationList(CameraThumbsCtrl* const ctrl,
                                 QWidget* const parent,
+                                const QString& caption,
                                 const QString& text,
                                 const CamItemInfoList& items,
-                                const QString& caption = QString(),
                                 const QString& dontShowAgainName = QString());
 
     /** Show List of camera items to processs into a message box and wait user feedback.
@@ -107,9 +107,9 @@ public:
      */
     static int warningContinueCancelList(CameraThumbsCtrl* const ctrl,
                                          QWidget* const parent,
+                                         const QString& caption,
                                          const QString& text,
                                          const CamItemInfoList& items,
-                                         const QString& caption = QString(),
                                          const QString& dontAskAgainName = QString());
 
 private:
