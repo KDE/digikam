@@ -734,11 +734,11 @@ private:
 public:
 
     // Declared public because it used in ChangingDB class.
-    class AlbumManagerPriv;
+    class Private;
 
 private:
 
-    AlbumManagerPriv* const d;
+    Private* const d;
 
     template <class T> friend class AlbumPointer;
     friend class Album;
@@ -823,6 +823,7 @@ private:
 // ------------------------------------------------------------------------------------
 
 template <class T = Album>
+
 class AlbumPointerList : public QList<AlbumPointer<T> >
 {
 public:

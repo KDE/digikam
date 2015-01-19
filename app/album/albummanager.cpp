@@ -153,11 +153,11 @@ uint qHash(const PAlbumPath& id)
 
 // -----------------------------------------------------------------------------------
 
-class AlbumManager::AlbumManagerPriv
+class AlbumManager::Private
 {
 public:
 
-    AlbumManagerPriv() :
+    Private() :
         changed(false),
         hasPriorizedDbPath(false),
         dbPort(0),
@@ -253,7 +253,7 @@ class ChangingDB
 {
 public:
 
-    explicit ChangingDB(AlbumManager::AlbumManagerPriv* d)
+    explicit ChangingDB(AlbumManager::Private* const d)
         : d(d)
     {
         d->changingDB = true;
@@ -264,7 +264,7 @@ public:
         d->changingDB = false;
     }
 
-    AlbumManager::AlbumManagerPriv* const d;
+    AlbumManager::Private* const d;
 };
 
 // -----------------------------------------------------------------------------------
@@ -289,7 +289,7 @@ AlbumManager* AlbumManager::instance()
 }
 
 AlbumManager::AlbumManager()
-    : d(new AlbumManagerPriv)
+    : d(new Private)
 {
     internalInstance = this;
     d->albumWatch = new AlbumWatch(this);
