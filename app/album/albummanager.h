@@ -34,9 +34,6 @@
 #include <QObject>
 #include <QString>
 #include <QMap>
-
-// KDE includes
-
 #include <QUrl>
 
 // Local includes
@@ -725,13 +722,14 @@ private:
 
     void handleKioNotification(const QUrl& url);
 
-    static AlbumManager* internalInstance;
     void addGuardedPointer(Album* a, Album** pointer);
     void removeGuardedPointer(Album* a, Album** pointer);
     void changeGuardedPointer(Album* oldAlbum, Album* a, Album** pointer);
     void invalidateGuardedPointers(Album* album);
 
     bool checkNepomukService();
+
+    static AlbumManager* internalInstance;
 
 public:
 
@@ -759,12 +757,18 @@ class AlbumPointer
 {
 public:
 
-    AlbumPointer() : album(0) {}
-    AlbumPointer(T* a) : album(a)
+    AlbumPointer() : album(0)
+    {
+    }
+
+    AlbumPointer(T* a)
+        : album(a)
     {
         AlbumManager::instance()->addGuardedPointer(album, &album);
     }
-    AlbumPointer(const AlbumPointer<T>& p) : album(p.album)
+
+    AlbumPointer(const AlbumPointer<T>& p)
+        : album(p.album)
     {
         AlbumManager::instance()->addGuardedPointer(album, &album);
     }
@@ -776,15 +780,16 @@ public:
 
     AlbumPointer<T>& operator=(T* a)
     {
-        Album* oldAlbum = album;
-        album           = a;
+        Album* const oldAlbum = album;
+        album                 = a;
         AlbumManager::instance()->changeGuardedPointer(oldAlbum, album, &album);
         return *this;
     }
+
     AlbumPointer<T>& operator=(const AlbumPointer<T>& p)
     {
-        Album* oldAlbum = album;
-        album           = p.album;
+        Album* const oldAlbum = album;
+        album                 = p.album;
         AlbumManager::instance()->changeGuardedPointer(oldAlbum, album, &album);
         return *this;
     }
@@ -793,14 +798,17 @@ public:
     {
         return static_cast<T*>(const_cast<Album*>(album));
     }
+
     T& operator*() const
     {
         return *static_cast<T*>(const_cast<Album*>(album));
     }
+
     operator T* () const
     {
         return static_cast<T*>(const_cast<Album*>(album));
     }
+
     bool operator!() const
     {
         return !album;
@@ -812,12 +820,22 @@ private:
     Album* album;
 };
 
+// ------------------------------------------------------------------------------------
+
 template <class T = Album>
 class AlbumPointerList : public QList<AlbumPointer<T> >
 {
 public:
-    AlbumPointerList() {}
-    AlbumPointerList(const AlbumPointerList<T>& list) : QList<AlbumPointer<T> >(list) {}
+
+    AlbumPointerList()
+    {
+    }
+
+    AlbumPointerList(const AlbumPointerList<T>& list)
+        : QList<AlbumPointer<T> >(list)
+    {
+    }
+
     explicit AlbumPointerList(const QList<T*>& list)
     {
         operator=(list);
@@ -830,10 +848,11 @@ public:
 
     AlbumPointerList<T>& operator=(const QList<T*>& list)
     {
-        foreach(T* t, list)
+        foreach(T* const t, list)
         {
             this->append(AlbumPointer<T>(t));
         }
+
         return *this;
     }
 };
