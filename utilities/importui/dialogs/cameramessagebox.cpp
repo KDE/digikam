@@ -38,11 +38,11 @@
 #include <QIcon>
 #include <QDialog>
 #include <QPushButton>
+#include <QMessageBox>
+#include <QDialogButtonBox>
 
 // KDE includes
 
-#include <kmessagebox.h>
-#include <kglobalsettings.h>
 #include <klocalizedstring.h>
 
 // Libkdcraw includes
@@ -51,6 +51,7 @@
 
 // Local includes
 
+#include "dmsgboxnotification.h"
 #include "digikam_debug.h"
 
 using namespace KDcrawIface;
@@ -215,7 +216,7 @@ void CameraMessageBox::informationList(CameraThumbsCtrl* const ctrl,
                                        const QString& caption,
                                        const QString& dontShowAgainName)
 {
-    if (!KMessageBox::shouldBeShownContinue(dontShowAgainName))
+    if (!DMsgBoxNofification::readMsgBoxShouldBeShown(dontShowAgainName))
     {
         return;
     }
@@ -238,10 +239,7 @@ void CameraMessageBox::informationList(CameraThumbsCtrl* const ctrl,
                      dontShowAgainName.isEmpty() ? QString() : i18n("Do not show this message again"),
                      &checkboxResult);
 
-    if (checkboxResult)
-    {
-        KMessageBox::saveDontShowAgainContinue(dontShowAgainName);
-    }
+    DMsgBoxNofification::saveMsgBoxShouldBeShown(dontShowAgainName, checkboxResult);
 }
 
 int CameraMessageBox::warningContinueCancelList(CameraThumbsCtrl* const ctrl,
@@ -251,9 +249,9 @@ int CameraMessageBox::warningContinueCancelList(CameraThumbsCtrl* const ctrl,
                                                 const QString& caption,
                                                 const QString& dontAskAgainName)
 {
-    if (!KMessageBox::shouldBeShownContinue(dontAskAgainName))
+    if (!DMsgBoxNofification::readMsgBoxShouldBeShown(dontAskAgainName))
     {
-        return KMessageBox::Continue;
+        return QMessageBox::Yes;
     }
 
     QDialog* const dialog = new QDialog(parent, Qt::Dialog);
@@ -282,10 +280,7 @@ int CameraMessageBox::warningContinueCancelList(CameraThumbsCtrl* const ctrl,
         return QMessageBox::Cancel;
     }
 
-    if (checkboxResult)
-    {
-        KMessageBox::saveDontShowAgainContinue(dontAskAgainName);
-    }
+    DMsgBoxNofification::saveMsgBoxShouldBeShown(dontAskAgainName, checkboxResult);
 
     return QMessageBox::Yes;
 }

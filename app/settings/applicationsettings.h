@@ -102,6 +102,23 @@ public:
 
     KConfigGroup generalConfigGroup() const;
 
+    // -- MessageBox Notification ---------------------------------------------------
+    
+    /**
+     * @return true if the corresponding message box should be shown.
+     * @param dontShowAgainName the name that identify the message box.
+     * @param result is set to the result that was chosen the last
+     * time the message box was shown.
+     */
+    bool readMsgBoxShouldBeShown(const QString& dontShowAgainName);
+    
+    /**
+     * Save the fact that the message box should not be shown again.
+     * @param dontShowAgainName the name that identify the message box. If
+     * empty, this method does nothing.
+     */
+    void saveMsgBoxShouldBeShown(const QString& dontShowAgainName);
+    
     // -- Database Settings ---------------------------------------------------------
 
     void setDatabaseFilePath(const QString& path);

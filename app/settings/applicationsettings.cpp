@@ -36,9 +36,6 @@
 
 #include <kconfig.h>
 
-
-
-
 // Local includes
 
 #include "digikam_config.h"
