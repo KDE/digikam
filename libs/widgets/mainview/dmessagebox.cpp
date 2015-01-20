@@ -25,7 +25,6 @@
 
 // Qt includes
 
-#include <QListWidget>
 #include <QPointer>
 #include <QCheckBox>
 #include <QGroupBox>
@@ -80,15 +79,7 @@ void DMessageBox::showInformationList(QMessageBox::Icon icon,
                                       const QStringList& items,
                                       const QString& dontShowAgainName)
 {
-    QListWidget* listWidget = 0;
-
-    if (!items.isEmpty())
-    {
-        listWidget = new QListWidget();
-        listWidget->addItems(items);
-    }
-    
-    showInformationWidget(icon, parent, caption, text, listWidget, dontShowAgainName);
+    showInformationWidget(icon, parent, caption, text, createWidgetList(items), dontShowAgainName);
 }
 
 void DMessageBox::showInformationWidget(QMessageBox::Icon icon,
@@ -117,7 +108,7 @@ void DMessageBox::showInformationWidget(QMessageBox::Icon icon,
 
     bool  checkboxResult = false;
 
-    createMessageBox(dialog, buttons, messageBoxIcon(icon), text, listWidget,
+    createMessageBox(dialog, buttons, createIcon(icon), text, listWidget,
                      dontShowAgainName.isEmpty() ? QString() : i18n("Do not show this message again"),
                      &checkboxResult);
 
@@ -142,15 +133,7 @@ int DMessageBox::showContinueCancelList(QMessageBox::Icon icon,
                                         const QStringList& items,
                                         const QString& dontAskAgainName)
 {
-    QListWidget* listWidget = 0;
-
-    if (!items.isEmpty())
-    {
-        listWidget = new QListWidget();
-        listWidget->addItems(items);
-    }
-
-    return (showContinueCancelWidget(icon, parent, caption, text, listWidget, dontAskAgainName));
+    return (showContinueCancelWidget(icon, parent, caption, text, createWidgetList(items), dontAskAgainName));
 }
 
 int DMessageBox::showContinueCancelWidget(QMessageBox::Icon icon,
@@ -182,7 +165,7 @@ int DMessageBox::showContinueCancelWidget(QMessageBox::Icon icon,
                      dialog, SLOT(reject()));
 
     bool checkboxResult = false;
-    const int result    = createMessageBox(dialog, buttons, messageBoxIcon(icon), text, listWidget,
+    const int result    = createMessageBox(dialog, buttons, createIcon(icon), text, listWidget,
                                            dontAskAgainName.isEmpty() ? QString() : i18n("Do not ask again"),
                                            &checkboxResult);
 
@@ -198,23 +181,31 @@ int DMessageBox::showContinueCancelWidget(QMessageBox::Icon icon,
 
 // --------------------------------------------------------------------------------------------------------
 
-int DMessageBox::showYesNoCancel(QMessageBox::Icon icon,
+int DMessageBox::showYesNo(QMessageBox::Icon icon,
+                           QWidget* const parent,
+                           const QString& caption,
+                           const QString& text,
+                           const QString& dontAskAgainName)
+{
+    return (showYesNoList(icon, parent, caption, text, QStringList(), dontAskAgainName));
+}
+
+int DMessageBox::showYesNoList(QMessageBox::Icon icon,
+                               QWidget* const parent,
+                               const QString& caption,
+                               const QString& text,
+                               const QStringList& items,
+                               const QString& dontAskAgainName)
+{
+    return (showYesNoWidget(icon, parent, caption, text, createWidgetList(items), dontAskAgainName));
+}
+
+int DMessageBox::showYesNoWidget(QMessageBox::Icon icon,
                                  QWidget* const parent,
                                  const QString& caption,
                                  const QString& text,
-                                 const QString& dontAskAgainName,
-                                 bool showCancelButton)
-{
-    return (showYesNoCancelList(icon, parent, caption, text, QStringList(), dontAskAgainName, showCancelButton));
-}
-
-int DMessageBox::showYesNoCancelList(QMessageBox::Icon icon,
-                                     QWidget* const parent,
-                                     const QString& caption,
-                                     const QString& text,
-                                     const QStringList& items,
-                                     const QString& dontAskAgainName,
-                                     bool showCancelButton)
+                                 QWidget* const listWidget,
+                                 const QString& dontAskAgainName)
 {
     if (!readMsgBoxShouldBeShown(dontAskAgainName))
     {
@@ -223,10 +214,12 @@ int DMessageBox::showYesNoCancelList(QMessageBox::Icon icon,
 
     QDialog* const dialog = new QDialog(parent, Qt::Dialog);
     dialog->setWindowTitle(caption);
-    dialog->setObjectName("showYesNoCancel");
+    dialog->setObjectName("showYesNo");
     dialog->setModal(true);
 
     QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Yes | QDialogButtonBox::No, dialog);
+    buttons->button(QDialogButtonBox::No)->setDefault(true);
+    buttons->button(QDialogButtonBox::No)->setShortcut(Qt::Key_Escape);
 
     QObject::connect(buttons->button(QDialogButtonBox::Yes), SIGNAL(clicked()),
                      dialog, SLOT(done(QDialogButtonBox::Yes)));
@@ -234,34 +227,10 @@ int DMessageBox::showYesNoCancelList(QMessageBox::Icon icon,
     QObject::connect(buttons->button(QDialogButtonBox::No), SIGNAL(clicked()),
                      dialog, SLOT(done(QDialogButtonBox::No)));
     
-    if (showCancelButton)
-    {
-        buttons->addButton(QDialogButtonBox::Cancel);
-        buttons->button(QDialogButtonBox::Cancel)->setDefault(true);
-        buttons->button(QDialogButtonBox::Cancel)->setShortcut(Qt::Key_Escape);
-        
-        QObject::connect(buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
-                         dialog, SLOT(done(QDialogButtonBox::Cancel)));
-    }
-    else
-    {
-        buttons->button(QDialogButtonBox::No)->setDefault(true);
-        buttons->button(QDialogButtonBox::No)->setShortcut(Qt::Key_Escape);
-    }
- 
-    QListWidget* listWidget = 0;
-
-    if (!items.isEmpty())
-    {
-        listWidget = new QListWidget();
-        listWidget->addItems(items);
-    }
-    
     bool checkboxResult = false;
-    int result          = createMessageBox(dialog, buttons, messageBoxIcon(icon), text, listWidget,
+    int result          = createMessageBox(dialog, buttons, createIcon(icon), text, listWidget,
                                            dontAskAgainName.isEmpty() ? QString() : i18n("Do not ask again"),
                                            &checkboxResult);
-
     
     if (result == QDialogButtonBox::Yes)
     {
@@ -368,7 +337,7 @@ int DMessageBox::createMessageBox(QDialog* const dialog,
     return result;
 }
 
-QIcon DMessageBox::messageBoxIcon(QMessageBox::Icon icon)
+QIcon DMessageBox::createIcon(QMessageBox::Icon icon)
 {
     QIcon tmpIcon;
 
@@ -394,6 +363,20 @@ QIcon DMessageBox::messageBoxIcon(QMessageBox::Icon icon)
     int iconSize = qApp->style()->pixelMetric(QStyle::PM_MessageBoxIconSize, 0, qApp->activeWindow());
 
     return tmpIcon.pixmap(iconSize);
+}
+
+
+QListWidget* DMessageBox::createWidgetList(const QStringList& items)
+{
+    QListWidget* listWidget = 0;
+
+    if (!items.isEmpty())
+    {
+        listWidget = new QListWidget();
+        listWidget->addItems(items);
+    }
+    
+    return listWidget;
 }
 
 }  // namespace Digikam

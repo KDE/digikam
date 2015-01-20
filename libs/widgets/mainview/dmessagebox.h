@@ -29,6 +29,7 @@
 #include <QWidget>
 #include <QString>
 #include <QMessageBox>
+#include <QListWidget>
 
 // Local includes
 
@@ -117,27 +118,36 @@ public:
 
 public:
 
-    /** Show a message box with Yes, No and Cancel buttons, and wait user feedback.
-     *  Return QMessageBox::Yes, QMessageBox::No or QMessageBox::Cancel.
+    /** Show a message box with Yes and No buttons, and wait user feedback.
+     *  Return QMessageBox::Yes or QMessageBox::No.
      */
-    static int showYesNoCancel(QMessageBox::Icon icon,
+    static int showYesNo(QMessageBox::Icon icon,
+                         QWidget* const parent,
+                         const QString& caption,
+                         const QString& text,
+                         const QString& dontAskAgainName = QString());
+
+    /** Show List of items to processs into a message box with Yes and No buttons,
+     *  and wait user feedback.
+     *  Return QMessageBox::Yes or QMessageBox::No.
+     */
+    static int showYesNoList(QMessageBox::Icon icon,
+                             QWidget* const parent,
+                             const QString& caption,
+                             const QString& text,
+                             const QStringList& items,
+                             const QString& dontAskAgainName = QString());
+
+    /** Show widget into a message box with Yes and No buttons,
+     *  and wait user feedback.
+     *  Return QMessageBox::Yes or QMessageBox::No.
+     */
+    static int showYesNoWidget(QMessageBox::Icon icon,
                                QWidget* const parent,
                                const QString& caption,
                                const QString& text,
-                               const QString& dontAskAgainName = QString(),
-                               bool showCancelButton = false);
-
-    /** Show List of items to processs into a message box with Yes, No and Cancel buttons,
-     *  and wait user feedback.
-     *  Return QMessageBox::Yes, QMessageBox::No or QMessageBox::Cancel.
-     */
-    static int showYesNoCancelList(QMessageBox::Icon icon,
-                                   QWidget* const parent,
-                                   const QString& caption,
-                                   const QString& text,
-                                   const QStringList& items,
-                                   const QString& dontAskAgainName = QString(),
-                                   bool showCancelButton = false);
+                               QWidget* const listWidget,
+                               const QString& dontAskAgainName = QString());
 
 private:
 
@@ -149,7 +159,9 @@ private:
                                 const QString& ask,
                                 bool* checkboxReturn);
     
-    static QIcon messageBoxIcon(QMessageBox::Icon icon);
+    static QIcon createIcon(QMessageBox::Icon icon);
+
+    static QListWidget* createWidgetList(const QStringList& items);
 };
 
 }  // namespace Digikam
