@@ -84,30 +84,6 @@ public:
 
 public:
 
-    /** Show a message box with Yes, No and Cancel buttons, and wait user feedback.
-     *  Return QMessageBox::Yes, QMessageBox::No or QMessageBox::Cancel.
-     */
-    static int showYesNoCancel(QMessageBox::Icon icon,
-                               QWidget* const parent,
-                               const QString& caption,
-                               const QString& text,
-                               const QString& dontAskAgainName = QString(),
-                               bool showCancelButton = false);
-
-    /** Show List of items to processs into a message box with Yes, No and Cancel buttons,
-     *  and wait user feedback.
-     *  Return QMessageBox::Yes, QMessageBox::No or QMessageBox::Cancel.
-     */
-    static int showYesNoCancelList(QMessageBox::Icon icon,
-                                   QWidget* const parent,
-                                   const QString& caption,
-                                   const QString& text,
-                                   const QStringList& items,
-                                   const QString& dontAskAgainName = QString(),
-                                   bool showCancelButton = false);
-
-public:
-
     /** Show a message box with Continue and Cancel buttons, and wait user feedback.
      *  Return QMessageBox::Yes or QMessageBox::Cancel.
      */
@@ -140,6 +116,30 @@ public:
                                         const QString& dontAskAgainName);
 
 public:
+
+    /** Show a message box with Yes, No and Cancel buttons, and wait user feedback.
+     *  Return QMessageBox::Yes, QMessageBox::No or QMessageBox::Cancel.
+     */
+    static int showYesNoCancel(QMessageBox::Icon icon,
+                               QWidget* const parent,
+                               const QString& caption,
+                               const QString& text,
+                               const QString& dontAskAgainName = QString(),
+                               bool showCancelButton = false);
+
+    /** Show List of items to processs into a message box with Yes, No and Cancel buttons,
+     *  and wait user feedback.
+     *  Return QMessageBox::Yes, QMessageBox::No or QMessageBox::Cancel.
+     */
+    static int showYesNoCancelList(QMessageBox::Icon icon,
+                                   QWidget* const parent,
+                                   const QString& caption,
+                                   const QString& text,
+                                   const QStringList& items,
+                                   const QString& dontAskAgainName = QString(),
+                                   bool showCancelButton = false);
+
+private:
 
     static int createMessageBox(QDialog* const dialog,
                                 QDialogButtonBox* const buttons,
