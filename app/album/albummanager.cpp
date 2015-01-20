@@ -63,13 +63,13 @@ extern "C"
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
+#include <QMessageBox>
 
 // KDE includes
 
-#include <kmessagebox.h>
 #include <klocalizedstring.h>
-#include <kjobwidgets.h>
 
+#include <kjobwidgets.h>
 #include <kio/global.h>
 #include <kio/job.h>
 #include <kio/netaccess.h>
@@ -517,34 +517,51 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
 
             if (digikam3DB.exists() || digikamVeryOldDB.exists())
             {
-                KGuiItem copyCurrent(i18n("Copy Current Database"), "edit-copy");
-                KGuiItem startFresh(i18n("Create New Database"),    "document-new");
-                KGuiItem upgrade(i18n("Upgrade Database"),          "view-refresh");
                 int result = -1;
 
                 if (params.isSQLite())
                 {
-                    result = KMessageBox::warningYesNoCancel(qApp->activeWindow(),
-                                                             i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
-                                                                  "A database file from an older version of digiKam is found in this folder.</p> "
-                                                                  "<p>Would you like to upgrade the old database file, start with a new database, "
-                                                                  "or copy the current database to this location and continue using it?</p> ",
-                                                                  QDir::toNativeSeparators(newDir.path())),
-                                                             i18n("New database folder"),
-                                                             upgrade, startFresh, copyCurrent);
+                    QMessageBox msgBox(QMessageBox::Warning,
+                                       i18n("New database folder"),
+                                       i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
+                                            "A database file from an older version of digiKam is found in this folder.</p> "
+                                            "<p>Would you like to upgrade the old database file, start with a new database, "
+                                            "or copy the current database to this location and continue using it?</p> ",
+                                            QDir::toNativeSeparators(newDir.path())),
+                                       QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
+                                       qApp->activeWindow());
+            
+                    msgBox.button(QMessageBox::Yes)->setText(i18n("Upgrade Database"));
+                    msgBox.button(QMessageBox::Yes)->setIcon(QIcon::fromTheme("view-refresh"));
+                    msgBox.button(QMessageBox::No)->setText(i18n("Create New Database"));
+                    msgBox.button(QMessageBox::No)->setIcon(QIcon::fromTheme("document-new"));
+                    msgBox.button(QMessageBox::Cancel)->setText(i18n("Copy Current Database"));
+                    msgBox.button(QMessageBox::Cancel)->setIcon(QIcon::fromTheme("edit-copy"));
+                    msgBox.setDefaultButton(QMessageBox::Yes);
+                    
+                    result = msgBox.exec();
                 }
                 else
                 {
-                    result = KMessageBox::warningYesNo(qApp->activeWindow(),
-                                                       i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
-                                                            "A database file from an older version of digiKam is found in this folder.</p> "
-                                                            "<p>Would you like to upgrade the old database file or start with a new database?</p>",
-                                                            QDir::toNativeSeparators(newDir.path())),
-                                                       i18n("New database folder"),
-                                                       upgrade, startFresh);
+                    QMessageBox msgBox(QMessageBox::Warning,
+                                       i18n("New database folder"),
+                                       i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
+                                            "A database file from an older version of digiKam is found in this folder.</p> "
+                                            "<p>Would you like to upgrade the old database file or start with a new database?</p>",
+                                            QDir::toNativeSeparators(newDir.path())),
+                                       QMessageBox::Yes | QMessageBox::No,
+                                       qApp->activeWindow());
+            
+                    msgBox.button(QMessageBox::Yes)->setText(i18n("Upgrade Database"));
+                    msgBox.button(QMessageBox::Yes)->setIcon(QIcon::fromTheme("view-refresh"));
+                    msgBox.button(QMessageBox::No)->setText(i18n("Create New Database"));
+                    msgBox.button(QMessageBox::No)->setIcon(QIcon::fromTheme("document-new"));
+                    msgBox.setDefaultButton(QMessageBox::Yes);
+                    
+                    result = msgBox.exec();
                 }
 
-                if (result == KMessageBox::Yes)
+                if (result == QMessageBox::Yes)
                 {
                     // SchemaUpdater expects Album Path to point to the album root of the 0.9 db file.
                     // Restore this situation.
@@ -553,12 +570,12 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
                     group.writeEntry("Album Path", newDir.path());
                     group.sync();
                 }
-                else if (result == KMessageBox::No)
+                else if (result == QMessageBox::No)
                 {
                     moveToBackup(digikam3DB);
                     moveToBackup(digikamVeryOldDB);
                 }
-                else if (result == KMessageBox::Cancel)
+                else if (result == QMessageBox::Cancel)
                 {
                     QDir oldDir(d->dbName);
                     QFileInfo oldFile(params.SQLiteDatabaseFile());
@@ -571,23 +588,29 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
             }
             else
             {
-                int result = KMessageBox::Yes;
+                int result = QMessageBox::Yes;
 
                 if (params.isSQLite())
                 {
-                    KGuiItem copyCurrent(i18n("Copy Current Database"), "edit-copy");
-                    KGuiItem startFresh(i18n("Create New Database"),    "document-new");
-
-                    result = KMessageBox::warningYesNo(qApp->activeWindow(),
-                                                       i18n("<p>You have chosen the folder \"%1\" as the new place to store the database.</p>"
-                                                            "<p>Would you like to copy the current database to this location "
-                                                            "and continue using it, or start with a new database?</p> ",
-                                                            QDir::toNativeSeparators(newDir.path())),
-                                                       i18n("New database folder"),
-                                                       startFresh, copyCurrent);
+                    QMessageBox msgBox(QMessageBox::Warning,
+                                       i18n("New database folder"),
+                                       i18n("<p>You have chosen the folder \"%1\" as the new place to store the database.</p>"
+                                            "<p>Would you like to copy the current database to this location "
+                                            "and continue using it, or start with a new database?</p> ",
+                                            QDir::toNativeSeparators(newDir.path())),
+                                       QMessageBox::Yes | QMessageBox::No,
+                                       qApp->activeWindow());
+            
+                    msgBox.button(QMessageBox::Yes)->setText(i18n("Create New Database"));
+                    msgBox.button(QMessageBox::Yes)->setIcon(QIcon::fromTheme("document-new"));
+                    msgBox.button(QMessageBox::No)->setText(i18n("Copy Current Database"));
+                    msgBox.button(QMessageBox::No)->setIcon(QIcon::fromTheme("edit-copy"));
+                    msgBox.setDefaultButton(QMessageBox::Yes);
+                    
+                    result = msgBox.exec();
                 }
 
-                if (result == KMessageBox::No)
+                if (result == QMessageBox::No)
                 {
                     QDir oldDir(d->dbName);
                     QFileInfo oldFile(params.SQLiteDatabaseFile());
@@ -597,24 +620,30 @@ void AlbumManager::changeDatabase(const DatabaseParameters& newParams)
         }
         else
         {
-            int result = KMessageBox::No;
+            int result = QMessageBox::No;
 
             if (params.isSQLite())
             {
-                KGuiItem replaceItem(i18n("Copy Current Database"), "edit-copy");
-                KGuiItem useExistingItem(i18n("Use Existing File"), "document-open");
-
-                result = KMessageBox::warningYesNo(qApp->activeWindow(),
-                                                   i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
-                                                        "There is already a database file in this location.</p> "
-                                                        "<p>Would you like to use this existing file as the new database, or remove it "
-                                                        "and copy the current database to this place?</p> ",
-                                                        QDir::toNativeSeparators(newDir.path())),
-                                                   i18n("New database folder"),
-                                                   replaceItem, useExistingItem);
+                QMessageBox msgBox(QMessageBox::Warning,
+                                   i18n("New database folder"),
+                                   i18n("<p>You have chosen the folder \"%1\" as the new place to store the database. "
+                                        "There is already a database file in this location.</p> "
+                                        "<p>Would you like to use this existing file as the new database, or remove it "
+                                        "and copy the current database to this place?</p> ",
+                                        QDir::toNativeSeparators(newDir.path())),
+                                   QMessageBox::Yes | QMessageBox::No,
+                                   qApp->activeWindow());
+        
+                msgBox.button(QMessageBox::Yes)->setText(i18n("Copy Current Database"));
+                msgBox.button(QMessageBox::Yes)->setIcon(QIcon::fromTheme("edit-copy"));
+                msgBox.button(QMessageBox::No)->setText(i18n("Use Existing File"));
+                msgBox.button(QMessageBox::No)->setIcon(QIcon::fromTheme("document-open"));
+                msgBox.setDefaultButton(QMessageBox::Yes);
+                
+                result = msgBox.exec();
             }
 
-            if (result == KMessageBox::Yes)
+            if (result == QMessageBox::Yes)
             {
                 // first backup
                 if (moveToBackup(newFile))
