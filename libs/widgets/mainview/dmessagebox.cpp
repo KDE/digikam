@@ -74,11 +74,11 @@ void DMessageBox::saveMsgBoxShouldBeShown(const QString& dontShowAgainName, bool
 // --------------------------------------------------------------------------------------------------------
 
 void DMessageBox::showInformationList(QMessageBox::Icon icon,
-                           QWidget* const parent,
-                           const QString& caption,
-                           const QString& text,
-                           const QStringList& items,
-                           const QString& dontShowAgainName)
+                                      QWidget* const parent,
+                                      const QString& caption,
+                                      const QString& text,
+                                      const QStringList& items,
+                                      const QString& dontShowAgainName)
 {
     if (!readMsgBoxShouldBeShown(dontShowAgainName))
     {
@@ -97,9 +97,17 @@ void DMessageBox::showInformationList(QMessageBox::Icon icon,
     QObject::connect(buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
                      dialog, SLOT(accept()));
 
+    QListWidget* listWidget = 0;
+
+    if (!items.isEmpty())
+    {
+        listWidget = new QListWidget(dialog);
+        listWidget->addItems(items);
+    }
+    
     bool  checkboxResult = false;
 
-    createMessageBox(dialog, buttons, messageBoxIcon(icon), text, items,
+    createMessageBox(dialog, buttons, messageBoxIcon(icon), text, listWidget,
                      dontShowAgainName.isEmpty() ? QString() : i18n("Do not show this message again"),
                      &checkboxResult);
 
@@ -156,9 +164,17 @@ int DMessageBox::showYesNoCancelList(QMessageBox::Icon icon,
         buttons->button(QDialogButtonBox::No)->setDefault(true);
         buttons->button(QDialogButtonBox::No)->setShortcut(Qt::Key_Escape);
     }
+ 
+    QListWidget* listWidget = 0;
+
+    if (!items.isEmpty())
+    {
+        listWidget = new QListWidget(dialog);
+        listWidget->addItems(items);
+    }
     
     bool checkboxResult = false;
-    int result          = createMessageBox(dialog, buttons, messageBoxIcon(icon), text, items,
+    int result          = createMessageBox(dialog, buttons, messageBoxIcon(icon), text, listWidget,
                                            dontAskAgainName.isEmpty() ? QString() : i18n("Do not ask again"),
                                            &checkboxResult);
 
@@ -214,8 +230,16 @@ int DMessageBox::showContinueCancelList(QMessageBox::Icon icon,
     QObject::connect(buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
                      dialog, SLOT(reject()));
 
+    QListWidget* listWidget = 0;
+
+    if (!items.isEmpty())
+    {
+        listWidget = new QListWidget(dialog);
+        listWidget->addItems(items);
+    }
+    
     bool checkboxResult = false;
-    const int result    = createMessageBox(dialog, buttons, messageBoxIcon(icon), text, items,
+    const int result    = createMessageBox(dialog, buttons, messageBoxIcon(icon), text, listWidget,
                                            dontAskAgainName.isEmpty() ? QString() : i18n("Do not ask again"),
                                            &checkboxResult);
 
@@ -229,11 +253,13 @@ int DMessageBox::showContinueCancelList(QMessageBox::Icon icon,
     return QMessageBox::Yes;
 }
 
+// --------------------------------------------------------------------------------------------------------
+
 int DMessageBox::createMessageBox(QDialog* const dialog,
                                   QDialogButtonBox* const buttons,
                                   const QIcon& icon,
                                   const QString& text,
-                                  const QStringList& items,
+                                  QWidget* const listWidget,
                                   const QString& ask,
                                   bool* checkboxReturn)
 {
@@ -274,10 +300,8 @@ int DMessageBox::createMessageBox(QDialog* const dialog,
 
     //--------------------------------------------------------------------------------
 
-    if (!items.isEmpty())
+    if (listWidget)
     {
-        QListWidget* const listWidget = new QListWidget(mainWidget);
-        listWidget->addItems(items);
         mainLayout->addWidget(listWidget, 50);
     }
    

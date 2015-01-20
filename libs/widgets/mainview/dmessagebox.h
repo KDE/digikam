@@ -125,7 +125,7 @@ private:
                                 QDialogButtonBox* const buttons,
                                 const QIcon& icon,
                                 const QString& text,
-                                const QStringList& items,
+                                QWidget* const listWidget,
                                 const QString& ask,
                                 bool* checkboxReturn
                                );
