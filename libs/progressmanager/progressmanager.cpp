@@ -35,6 +35,7 @@
 #include <QEventLoop>
 #include <QMessageBox>
 #include <QIcon>
+#include <QStyle>
 
 // KDE includes
 
@@ -188,14 +189,16 @@ void ProgressItem::setUsesBusyIndicator(bool useBusyIndicator)
 void ProgressItem::setThumbnail(const QIcon& icon)
 {
     if (!hasThumbnail()) return;
-#pragma message("hardcoded thumbsizes")
+
+    int iconSize = qApp->style()->pixelMetric(QStyle::PM_SmallIconSize);
+    
     if (icon.isNull())
     {
-        emit progressItemThumbnail(this, QIcon::fromTheme("image-missing").pixmap(22));
+        emit progressItemThumbnail(this, QIcon::fromTheme("image-missing").pixmap(iconSize));
         return;
     }
 
-    QPixmap pix = icon.pixmap(22);
+    QPixmap pix = icon.pixmap(iconSize);
 
     emit progressItemThumbnail(this, pix);
 }
