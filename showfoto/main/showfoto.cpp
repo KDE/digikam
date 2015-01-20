@@ -244,8 +244,6 @@ ShowFoto::~ShowFoto()
     Digikam::ThumbnailLoadThread::cleanUp();
     Digikam::LoadingCacheInterface::cleanUp();
 
-
-
     delete m_imagePluginLoader;
     delete d->model;
     delete d->filterModel;

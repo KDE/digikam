@@ -35,7 +35,6 @@
 
 // KDE includes
 
-#include <kglobal.h>
 #include <klocalizedstring.h>
 #include <kmimetype.h>
 #include <kio/previewjob.h>
@@ -150,9 +149,9 @@ public:
     int                       thumbnailSizeForPixmapSize(int pixmapSize) const;
 };
 
-K_GLOBAL_STATIC(ThumbnailLoadThread, defaultIconViewObject)
-K_GLOBAL_STATIC(ThumbnailLoadThread, defaultObject)
-K_GLOBAL_STATIC(ThumbnailLoadThread, defaultThumbBarObject)
+Q_GLOBAL_STATIC(ThumbnailLoadThread, defaultIconViewObject)
+Q_GLOBAL_STATIC(ThumbnailLoadThread, defaultObject)
+Q_GLOBAL_STATIC(ThumbnailLoadThread, defaultThumbBarObject)
 
 ThumbnailLoadThread::ThumbnailLoadThread(QObject* const parent)
     : ManagedLoadSaveThread(parent),
@@ -197,9 +196,7 @@ ThumbnailLoadThread* ThumbnailLoadThread::defaultThumbBarThread()
 
 void ThumbnailLoadThread::cleanUp()
 {
-    defaultIconViewObject.destroy();
-    defaultObject.destroy();
-    defaultThumbBarObject.destroy();
+    // NOTE : Nothing to do with Qt5 and Q_GLOBAL_STATIC. Qt clean up all automatically at end of application instance.
 }
 
 void ThumbnailLoadThread::initializeThumbnailDatabase(const DatabaseParameters& params, ThumbnailInfoProvider* const provider)
@@ -873,30 +870,6 @@ QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription& descripti
     {
         pix = QIcon::fromTheme(mimeType->iconName()).pixmap(128);
     }
-
-/*
-    No dependency on ApplicationSettings here please...
-    QString ext = QFileInfo(url.toLocalFile()).suffix();
-
-    ApplicationSettings* const settings = ApplicationSettings::instance();
-
-    if (settings)
-    {
-        if (settings->getImageFileFilter().toUpper().contains(ext.toUpper()) ||
-            settings->getRawFileFilter().toUpper().contains(ext.toUpper()))
-        {
-            pix = QIcon::fromTheme(("image").pixmap(128);
-        }
-        else if (settings->getMovieFileFilter().toUpper().contains(ext.toUpper()))
-        {
-            pix = QIcon::fromTheme(("video").pixmap(128);
-        }
-        else if (settings->getAudioFileFilter().toUpper().contains(ext.toUpper()))
-        {
-            pix = QIcon::fromTheme("sound").pixmap(128);
-        }
-    }
-*/
 
     if (pix.isNull())
     {
