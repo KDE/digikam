@@ -33,7 +33,6 @@
 
 // KDE includes
 
-
 #include <kseparator.h>
 #include <kassistantdialog.h>
 #include <kpagewidgetmodel.h>
@@ -52,12 +51,15 @@ class AssistantDlgPage::Private
 public:
 
     Private() :
+        iconSize(qApp->style()->pixelMetric(QStyle::PM_MessageBoxIconSize,  0, qApp->activeWindow())),
         logo(0),
         leftBottomPix(0),
         hlay(0),
         page(0)
     {
     }
+
+    int              iconSize;
 
     QLabel*          logo;
     QLabel*          leftBottomPix;
@@ -79,7 +81,7 @@ AssistantDlgPage::AssistantDlgPage(KAssistantDialog* const dlg, const QString& t
     d->logo           = new QLabel(vbox);
     d->logo->setAlignment(Qt::AlignCenter);
     d->logo->setPixmap(QPixmap(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "digikam/data/logo-digikam.png"))
-                       .scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                       .scaled(d->iconSize, d->iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     QLabel* const space = new QLabel(vbox);
     d->leftBottomPix    = new QLabel(vbox);
@@ -116,8 +118,7 @@ void AssistantDlgPage::setPageWidget(QWidget* const w)
 
 void AssistantDlgPage::setLeftBottomPix(const QIcon& icon)
 {
-#pragma message("hardcoded pixmap size")
-    d->leftBottomPix->setPixmap(icon.pixmap(128));
+    d->leftBottomPix->setPixmap(icon.pixmap(d->iconSize));
 }
 
 }   // namespace Digikam
