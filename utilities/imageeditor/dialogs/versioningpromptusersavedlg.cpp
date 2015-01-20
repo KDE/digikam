@@ -6,6 +6,7 @@
  * Date        : 2013-09-16
  * Description : Dialog to prompt users about versioning
  *
+ * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2013-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -29,6 +30,7 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QIcon>
+#include <QStyle>
 
 // KDE includes
 
@@ -48,10 +50,10 @@ VersioningPromptUserSaveDialog::VersioningPromptUserSaveDialog(QWidget* const pa
     // -- Icon and Header --
 
     QLabel* const warningIcon = new QLabel;
-    warningIcon->setPixmap(QIcon::fromTheme("dialog-warning").pixmap(64));
-    QLabel* const editIcon = new QLabel;
+    warningIcon->setPixmap(QIcon::fromTheme("dialog-warning").pixmap(style()->pixelMetric(QStyle::PM_MessageBoxIconSize, 0, this)));
+    QLabel* const editIcon    = new QLabel;
     editIcon->setPixmap(QIcon::fromTheme("document-edit").pixmap(iconSize()));
-    QLabel* const question = new QLabel;
+    QLabel* const question    = new QLabel;
     question->setTextFormat(Qt::RichText);
     question->setText(i18nc("@label", "<qt>The current image has been changed.<br>"
                             "Do you wish to save your changes?</qt>"));
@@ -62,30 +64,27 @@ VersioningPromptUserSaveDialog::VersioningPromptUserSaveDialog(QWidget* const pa
 
     // -- Central buttons --
 
-    QToolButton* const saveCurrent = addChoiceButton(Ok, "dialog-ok-apply",
-                                                        i18nc("@action:button", "Save Changes"));
+    QToolButton* const saveCurrent = addChoiceButton(Ok, "dialog-ok-apply", i18nc("@action:button", "Save Changes"));
     saveCurrent->setToolTip(i18nc("@info:tooltip",
-                                    "Save the current changes. Note: The original image will never be overwritten."));
-    QToolButton* const saveVersion = addChoiceButton(Apply, "list-add",
-                                                        i18nc("@action:button", "Save Changes as a New Version"));
+                                  "Save the current changes. Note: The original image will never be overwritten."));
+
+    QToolButton* const saveVersion = addChoiceButton(Apply, "list-add", i18nc("@action:button", "Save Changes as a New Version"));
     saveVersion->setToolTip(i18nc("@info:tooltip",
-                                    "Save the current changes as a new version. "
-                                    "The loaded file will remain unchanged, a new file will be created."));
-    QToolButton* const discard     = addChoiceButton(User1, "task-reject",
-                                                        i18nc("@action:button", "Discard Changes"));
+                                  "Save the current changes as a new version. "
+                                  "The loaded file will remain unchanged, a new file will be created."));
+
+    QToolButton* const discard     = addChoiceButton(User1, "task-reject", i18nc("@action:button", "Discard Changes"));
     discard->setToolTip(i18nc("@info:tooltip",
-                                "Discard the changes applied to the image during this editing session."));
+                              "Discard the changes applied to the image during this editing session."));
 
     // -- Layout --
 
     QGridLayout* const mainLayout = new QGridLayout;
-    mainLayout->addWidget(warningIcon, 0, 0, 2, 1, Qt::AlignTop);
-    mainLayout->addLayout(headerLayout, 0, 1);
-    //mainLayout->addLayout(buttonLayout);
+    mainLayout->addWidget(warningIcon,       0, 0, 2, 1, Qt::AlignTop);
+    mainLayout->addLayout(headerLayout,      0, 1);
     mainLayout->addWidget(buttonContainer(), 1, 1);
-    //mainLayout->addWidget(new KSeparator(Qt::Horizontal));
-
     mainWidget->setLayout(mainLayout);
+
     setMainWidget(mainWidget);
 }
 
@@ -95,17 +94,17 @@ VersioningPromptUserSaveDialog::~VersioningPromptUserSaveDialog()
 
 bool VersioningPromptUserSaveDialog::shallSave() const
 {
-    return clickedButton() == Ok;
+    return (clickedButton() == Ok);
 }
 
 bool VersioningPromptUserSaveDialog::newVersion() const
 {
-    return clickedButton() == Apply;
+    return (clickedButton() == Apply);
 }
 
 bool VersioningPromptUserSaveDialog::shallDiscard() const
 {
-    return clickedButton() == User1;
+    return (clickedButton() == User1);
 }
 
 } // namespace Digikam

@@ -7,6 +7,7 @@
  * Description : dialog which provides at least three choices, plus a cancel button
  *
  * Copyright (C) 2010-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2013-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -62,7 +63,7 @@ public:
      * Note: Call before addButton() or buttonContainer().
      */
     void setIconSize(int iconSize);
-    int iconSize() const;
+    int  iconSize() const;
 
     /**
      * Change the visibility of the Cancel button. Default: True.
@@ -77,9 +78,9 @@ public:
      * Each added button has a unique, associated keycode (see KDialog)
      * Note: The Ok button is automatically bound to the Return key press.
      */
-    QToolButton* addChoiceButton(int key, const QString& iconName, const QString& text);
-    QToolButton* addChoiceButton(int key, const QString& text);
-    QToolButton* choiceButton(int key) const;
+    QToolButton* addChoiceButton(int key, const QString& iconName, const QString& text) const;
+    QToolButton* addChoiceButton(int key, const QString& text)                          const;
+    QToolButton* choiceButton(int key)                                                  const;
 
     /**
      * Returns the button that was clicked
